@@ -407,6 +407,36 @@ def test_bind_cues_refuses_an_approved_or_watched_build_by_name_and_writes_nothi
     assert not (approved / G.CUE_PLAN_NAME).exists(), "and nothing else was written beside it"
 
 
+# The eighth pass' review, HIGH 1: `build-short*` was never the whole list. The project the whole-table
+# mode was generalised FOR keeps its APPROVED build in `build-oneshot-3`, and `lab_build.refuse_by_name`
+# already refuses every dir the BED's own `build_short.py` writes into (`lab_build.bed_output_dirs`, read
+# off the bed's source and never mapped by name). This writer carries the same list, off the same call.
+
+CALENDAR_PROJECT = ROOT / "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar"
+
+
+def test_bind_cues_refuses_the_beds_OWN_output_dir_and_the_approved_one_shot_is_byte_identical(capsys):
+    """`--bind-cues` REWRITES `<build>/<timeline>` and `<build>/SOUND-PLAN.json` in place, so pointed at
+    the calendar's `build-oneshot-3` it would drop cues out of the APPROVED one-shot's compiled timeline
+    under the operator (E99 s11, memory `review-link-frozen-copy`). Refused by NAME off the bed's own
+    output dirs - and every file it would have written is hashed before and after."""
+    import hashlib
+
+    import lab_build as LB
+    approved = CALENDAR_PROJECT / "build-oneshot-3"
+    assert "build-oneshot-3" in LB.bed_output_dirs(CALENDAR_PROJECT), "the dir the bed writes into itself"
+    tl = approved / "calendar-short.timeline.json"
+    plan = CALENDAR_PROJECT / LB.PROJECT_PLAN_REL
+    digest = {q: hashlib.sha256(q.read_bytes()).hexdigest() for q in (tl, plan) if q.is_file()}
+    assert tl in digest, tl
+    assert G.main([str(CALENDAR_PROJECT), str(approved), "--bind-cues", "--timeline", tl.name]) == 1
+    err = capsys.readouterr().err
+    assert "build-oneshot-3" in err and "the APPROVED build" in err, err
+    for q, before in digest.items():
+        assert hashlib.sha256(q.read_bytes()).hexdigest() == before, f"{q.name} was rewritten"
+    assert not (approved / G.CUE_PLAN_NAME).exists(), "and no cue plan was written beside it"
+
+
 def test_bind_cues_still_binds_a_private_build(bed, capsys):
     """The guard is by NAME - a private build dir is bound exactly as before."""
     project, build = bed
@@ -460,3 +490,73 @@ def test_the_kit_and_the_cli_carry_ONE_runtime_tolerance():
     resolver reconciles the clock and the build with it, and `check_outro` refuses past it."""
     from authoring import shapes as SH
     assert SH.OUTRO_RUNTIME_EPS == G.EPS_RUNTIME
+
+
+# --- THE FLOW READ (P66 T3 seventh pass, E99 s74 Apply 3; R26-189) --------------------------------
+
+def test_the_cli_prints_the_flow_read_under_the_mix_and_the_doc_carries_it(bed, capsys):
+    """s74 Apply 3 owes a flow read beside M46: *"the cut-and-dip share of a cut's world changes, each cut
+    and dip named with the transform refused"*. It is a READ and not a gate (R26-189), so the CLI prints
+    it under the mix line and `BASE-TABLE.md` carries the same numbers in a section of its own."""
+    project, build = bed
+    generate(project, build)
+    out = capsys.readouterr().out
+    line = next(l for l in out.splitlines() if l.startswith("flow: "))
+    assert "world changes - transforms " in line and "arrivals " in line and "last resort " in line
+    assert "tokens " in line and "cuts+dips " in line
+    doc = (build / G.BASE_DOC_NAME).read_text(encoding="utf-8")
+    assert "## The flow read (E99 s74 Apply 3)" in doc
+    assert line in doc, "the doc carries the CLI's own line, not a second opinion"
+    assert "| what carried it | how | count |" in doc
+    assert "| melt-then-splash | a continuous move between the two worlds |" in doc, doc
+    assert "the incoming world's own arrival (its token is a cut)" in doc
+    assert "cuts + dips" in doc
+
+
+# every transform the record carries for each pair - the same table the kit's own chain tries, so the DOC
+# can be read against the full set rather than against one literal (the seventh pass' review M3: this test
+# ran a `for ... else: return` and then asserted `"E99 s74" in doc`, never reading a row)
+PAIR_TRANSFORMS = {"page->page": ("recast", "rescale", "morph", "melt-then-splash"),
+                   "page->plate": ("melt-then-splash", "the door", "the suck"),
+                   "plate->page": (), "plate->plate": ()}
+
+
+def test_every_cut_and_every_dip_in_the_doc_names_the_transform_it_could_not_use(bed):
+    """s74 Apply 1: *"the `why` of every cut and every dip names the transform it could not use and why"*.
+    The rows section is where the operator reads it, so the refusal chain has to be ON THE ROW - this reads
+    each cut/dip row's own markdown line and asserts a `REFUSED` per transform of that row's pair."""
+    project, build = bed
+    # The bed's own plan takes every boundary with a transform or an arrival - which is the POINT of s74 -
+    # so the row this test exists for is MADE: a second narrative plate after the first, the pair E47's dip
+    # is for (`plate->plate`, where the continuity three are each the plan's to name).
+    plan_path = build / G.PLAN_NAME
+    beats = [json.loads(l) for l in plan_path.read_text(encoding="utf-8").splitlines() if l.strip()]
+    for b in beats:
+        if int(b.get("beat") or 0) == 13:      # the second sentence of the bed's own narrative-plate row
+            b["plate"], b["row"] = "plate-r-second-desk", 31
+    plan_path.write_text("".join(json.dumps(b) + "\n" for b in beats), encoding="utf-8")
+    table = generate(project, build)
+    rows = T.load_rows(table)
+    doc = (build / G.BASE_DOC_NAME).read_text(encoding="utf-8")
+    lines = {int(l.split("|")[1].strip()): l for l in doc.splitlines()
+             if l.startswith("| ") and l.split("|")[1].strip().isdigit()}
+    # the same rows, with their transition RECORDS - `compile_base` is what the CLI itself compiled
+    why = G.SH.rows_why(G.compile_base(build, "9:16", project)[1])
+    seen = 0
+    for n, (r, w) in enumerate(zip(rows, why), start=1):
+        token = str(r[EXIT_FIELD] or "").split(":")[0]
+        rec = w.get("transition") or {}
+        # an ARRIVAL's token is a cut and it refuses nothing - the mount IS the transition (E45), and s74
+        # Apply 1 asks the chain of a cut or a dip taken as the LAST RESORT
+        if n == 1 or token not in ("cut", "dip") or rec.get("kind") != G.SH.LAST_RESORT:
+            continue
+        pair = rec["pair"]
+        line = lines[n]
+        assert "REFUSED" in line, (n, line)
+        assert "DEFERRED" not in line, f"row {n} took a {token} while a transform stood deferred: {line}"
+        for name in PAIR_TRANSFORMS[pair]:
+            assert f"{name}: REFUSED" in line, (n, pair, name, line)
+        seen += 1
+    assert seen, "the bed's own base carries a cut or a dip - it is what this test reads"
+    assert "E99 s74" in doc
+

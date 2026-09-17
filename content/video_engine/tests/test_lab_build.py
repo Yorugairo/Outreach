@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import sys
+import types
 from pathlib import Path
 
 import pytest
@@ -993,6 +994,32 @@ def test_the_whole_table_mode_refuses_the_approved_build_dir_by_name(tmp_path, m
     assert not (tmp_path / "r.jsonl").exists()
 
 
+def test_the_whole_table_mode_refuses_the_beds_own_approved_build_dir_by_name(tmp_path, monkeypatch):
+    """The by-name guard was the string `build-short*` while the lab had ONE bed (the seventh pass' review
+    M4). The project the whole-table mode was generalised FOR keeps its approved cut in `build-oneshot-3`,
+    so `--into <that project>/build-oneshot-3` was refused by nothing but a `serve_player.py` happening to
+    answer - and `check_guard` watches only the approved `SHOT-TABLE-SHORT.py` and `sound/SOUND-PLAN.json`,
+    so the approved BUILD's `timeline.json` / `player.json` / `assets.json` would have gone under the
+    operator (E99 s11, memory `review-link-frozen-copy`). Every dir the bed's OWN `build_short.py` names as
+    an output is refused by name now, read off the source - no episode is mapped to a dir here."""
+    monkeypatch.setattr(LB, "run_tool", canned(CLEAN_ROWS))
+    projects = ROOT / "content/video_engine/projects/systems-and-blowups"
+    cal = projects / "memory-trades-the-calendar"
+    named = LB.bed_output_dirs(cal)
+    assert named == ["build-oneshot-3"], named        # its `CALENDAR_BUILD_DIR` default, off the source
+    assert LB.bed_output_dirs(projects / "tokyo-tea-break") == ["build-short"]
+    table = cal / "build-p66-cal" / LB.APPROVED_TABLE
+    for into in (cal / "build-oneshot-3", cal / "build-oneshot-3" / "sub"):
+        with pytest.raises(LB.LabBuildError) as exc:
+            LB.build_table(ROOT, table, into, "p66-t", True, str(tmp_path / "r.jsonl"))
+        assert "build-oneshot-3" in str(exc.value) and "review-link-frozen-copy" in str(exc.value), str(exc.value)
+        assert "APPROVED build" in str(exc.value), str(exc.value)
+    assert not (tmp_path / "r.jsonl").exists(), "the refusal comes before anything is written"
+    # ... and a PRIVATE dir of the same bed is not refused by name (the mode has to be usable)
+    LB.refuse_by_name(cal / "build-p66-cal", cal)
+    LB.refuse_by_name(cal / f"{LB.BUILD_PREFIX}b" / "cand", cal)
+
+
 def test_the_whole_table_mode_owes_into_and_label_and_takes_no_candidates(tmp_path, monkeypatch):
     monkeypatch.setattr(LB, "run_tool", canned(CLEAN_ROWS))
     assert LB.main(["--table", str(ANY_TABLE), "--dry-run"]) == 1
@@ -1002,12 +1029,22 @@ def test_the_whole_table_mode_owes_into_and_label_and_takes_no_candidates(tmp_pa
 
 
 def test_a_table_that_is_not_under_the_episode_is_refused_by_name(tmp_path, monkeypatch):
-    """`table.compile_timeline` hands the compiler a path RELATIVE to the episode dir."""
+    """`table.compile_timeline` hands the compiler a path RELATIVE to the episode dir.
+
+    CHANGED in P66 T3's seventh pass (E99 s72 Apply 6): the whole-table mode's bed is now the table's OWN
+    project (`bed_dir(repo, table)` walks up to the nearest `build_short.py`), so a stray table is refused
+    one step EARLIER and by the bed, not by the relative path - the same refusal, named better. Both
+    forms are pinned here."""
     monkeypatch.setattr(LB, "run_tool", canned(CLEAN_ROWS))
     stray = tmp_path / "SHOT-TABLE-SHORT.py"
     stray.write_bytes(ANY_TABLE.read_bytes())
     with pytest.raises(LB.LabBuildError) as exc:
         LB.build_table(ROOT, stray, tmp_path / "build-x", "p66-t", True, str(tmp_path / "r.jsonl"))
+    assert f"no `{LB.BED_SCRIPT}` above it" in str(exc.value), str(exc.value)
+    # ... and a table inside a project but outside its own dir still hits the relative-path refusal
+    assert "relative to the episode dir" in LB.table_rel.__doc__.lower()
+    with pytest.raises(LB.LabBuildError) as exc:
+        LB.table_rel(types.SimpleNamespace(HERE=LB.bed_dir(ROOT)), stray)
     assert "relative to the episode dir" in str(exc.value).lower()
     with pytest.raises(LB.LabBuildError) as exc:
         LB.build_table(ROOT, tmp_path / "no-such-table.py", tmp_path / "build-y", "p66-t", True, None)
@@ -1051,3 +1088,33 @@ def test_the_cue_plan_is_embedded_into_the_builds_own_compiled_timeline(tmp_path
     assets = json.loads((build / "assets.json").read_text(encoding="utf-8"))
     assert assets[LB.CUE_KEY.format(i=0, v="A")].startswith("data:"), "the player loads the cue through assets.json"
     assert LB.embed_cues(bed, build, [cue]) == [f"no {LB.TIMELINE_NAME} on disk - the cue plan was not written"]
+
+
+# --- THE BED IS THE TABLE'S OWN PROJECT (P66 T3 seventh pass, E99 s72 Apply 6) ---------------------
+
+def test_the_whole_table_mode_beds_on_the_tables_own_project_and_reads_its_build_env():
+    """E99 s72 Apply 6: *"the compiler's base is next judged on the Opus one-shot's own plan"*, so the base
+    must be built on THAT project's bed - its take, its words, its docks, its stills - and not on the
+    candidate lab's one bed. `bed_dir(repo, table)` walks up to the nearest `build_short.py` and
+    `bed_build_env` reads the `*_BUILD_DIR` variable off that script, so nothing here maps an episode name
+    to a variable name (the tool holds no episode list)."""
+    projects = ROOT / "content/video_engine/projects/systems-and-blowups"
+    for name in ("tokyo-tea-break", "memory-trades-the-calendar", "japan-tariff-trick"):
+        project = projects / name
+        table = project / "build-somewhere" / LB.APPROVED_TABLE
+        assert LB.bed_dir(ROOT, table) == project, name
+        env = LB.bed_build_env(project)
+        assert env.endswith("_BUILD_DIR"), (name, env)
+        assert f'os.environ.get("{env}"' in (project / LB.BED_SCRIPT).read_text(encoding="utf-8")
+    assert LB.bed_dir(ROOT) == projects / "tokyo-tea-break", "the candidate lab keeps its one bed"
+
+
+def test_the_compiled_base_carries_the_beds_own_episode_id_and_title():
+    """The timeline's `episode_id` is what the player, the gates and the probe key off, so a base built on
+    another project's bed must not be stamped with the lab bed's id (it was hard-coded to the lab bed's
+    until this pass)."""
+    bed = types.SimpleNamespace(HERE=ROOT / "content/video_engine/projects/systems-and-blowups/x-y",
+                               EP=types.SimpleNamespace(episode_id="an-episode"), TITLE="A Title")
+    assert LB.bed_id(bed) == ("an-episode", "A Title")
+    assert LB.bed_id(types.SimpleNamespace(HERE=Path("/tmp/a-project"), EP=None)) == ("a-project", "a-project")
+

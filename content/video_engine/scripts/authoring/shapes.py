@@ -28,11 +28,17 @@ THE APPROVED SHAPE, enforced BY CONSTRUCTION (E99 s67 Apply 1-6, E47, E65, R26-1
     (then the hook and that page are ONE row: a page never enters twice);
   * a page whose number lands `MOUNT_AT_OR_AFTER_S` (7.0 s) or more after its entry gets
     `mount=<s>`, never `built`; every other page enters by its axes;
-  * a world change exits by `dip` (E47), page to page by `suck` or `cut`, and NEVER into a mount -
-    the mount is itself the transition;
+  * at every boundary the chooser TRIES each transform the record carries for that PAIR of worlds and
+    REFUSES each by name where its own rules do not hold (E99 s74); a `cut`, and a `dip` (E47) at a
+    world change, is the LAST RESORT - what is left when every transform was refused - and the row's
+    `why` carries the whole chain. Nothing ever transitions INTO a mount: the mount is the transition;
   * a return uses `spiral`;
-  * a dock reads then parks in the page's own room (E65) and holds to the row's own end;
-  * no world plate row is shorter than `plate_hold_s` (M44 `PLATE_MIN_S`);
+  * a dock reads then PARKS in the page's own room (E65) and its leave clears the row's end by
+    `DOCK_CLEAR_S` (1.45 s), so the retract is over before the boundary instead of being snapped onto
+    it by the player (`DOCK_SNAP_S`); where the row is too short to pay, the shortfall is NAMED;
+  * a world plate row shorter than `plate_hold_s` (M44 `PLATE_MIN_S`) is DIAGNOSED by name in the
+    row's own `why` and never manufactured: the plan's window stands, the compiler steals no seconds
+    from the row after it, and a longer plate is the plan's to write (E99 s69);
   * at 9:16 no `badges` rail is emitted (R26-171); the PARK is emitted in both aspects - R26-172 is
     WITHDRAWN and a park is how a page makes room for a card (`place_cards`);
   * a light is emitted ONLY on a sentence that POINTS - the plan's own `capabilities` name a datum,
@@ -111,6 +117,17 @@ ANNOTATED_KINDS = MD.ANNOTATED_KINDS            # M11: the kinds that ANNOTATE a
 CHART_HOLD_MAX_S = MD.OPENING_CHART_HOLD_MAX_S  # M12 6.0: a chart is never held as homework
 PULSE_MAX_S = MD.SHORT_PULSE_MAX_S              # M16 2.5: MEASURED by `event_gaps`, never filled (no allocator)
 PLATE_MIN_S = MD.PLATE_MIN_S                    # M44 6.0: no world plate row under six seconds
+# A CARD COMPLETES ITS LEAVE BEFORE THE BOUNDARY (the parent's ruling on `build-p66-cal` v2, 2026-09-17:
+# *"the coin-flip page's card is still on stage at 41.16 s over the next page's title; a dock's `leave`
+# ends at or before its row's `t1` ... and a card never rides a `cut`/`axes` boundary"*). The two dials
+# are the PLAYER's, mirrored here by name as the gates' clocks are (`samples/scene-evidence-engine.mjs`):
+DOCK_LEAVE_S = 0.72     # `:5457` `const EXIT = 0.72` - a card's retract runs FROM its `exit`, over this
+DOCK_SNAP_S = 1.4       # `:6192-6201` "SNAP NEAR-BOUNDARY EXITS TO THE BOUNDARY" - an `exit` inside this of a
+                        # scene boundary is moved ONTO it ("an exit more than ~1.4s out is a deliberate early
+                        # clear and still fades"), so a card asked to be GONE by the boundary must clear this much
+DOCK_CLEAR_S = 1.45     # ... hence the deliberate early clear: the retract is over by `t1 - 0.73`
+LEAD_FLOOR_S = 1.0      # the least a narrative plate is left standing when the page after it takes its arrival's
+# LEAD out of the plate's tail: a world the eye is given less than a second of is a flash, not a beat (doc 29 Part 3)
 MOUNT_AT_OR_AFTER_S = 7.0                       # E99 s67 Apply 3; every skeleton states it as `rules.mount_at_or_after_s`
 
 DEFAULTS: dict = {
@@ -385,6 +402,15 @@ def docks_of(record) -> list[str]:
         if m.group(1) not in out:
             out.append(m.group(1))
     return out
+
+
+def beat_docks(record) -> list[str]:
+    """Every card a beat NAMES - the assets of its own `dock` moves (P66 T3b: what the author says the
+    sentence does) first, then the `{dock}` holes its `capabilities` name (`docks_of`). The door reads
+    this to answer the engine's evidence-free-boundary rule off the plan alone."""
+    out = [str(mv.get("asset")) for mv in moves_of(record)
+           if str(mv.get("kind")) == MOVE_DOCK and mv.get("asset")]
+    return out + [d for d in docks_of(record) if d not in out]
 
 
 def data_of(record) -> list[int]:
@@ -1255,6 +1281,21 @@ def page_land_offset(entry: str | None, mount_s: float) -> float:
     return PAGE_BUILD_END_S
 
 
+def entry_unwind(entry: str | None) -> float:
+    """Seconds a page's ENTRY takes before the page is ON THE STAGE at all - its LEAD (the parent's
+    ruling, 2026-09-17: *"an arrival keeps its lead ... its arrival LANDS by the sentence's t0"*).
+
+    This is not `page_land_offset`, which is the seconds to the CHART's landing: an `axes` page's board
+    and axes are there from its first frame and the DATA draws over the sentence (that is the entry's
+    whole point, E99 s67 Apply 6), and a `mount` page soaks in OVER the world before it, which is never
+    bare ground (E45 - the mount IS the transition). Only the SPIRAL unwinds from nothing: the player's
+    `spiralClocks` drains the field and the colours fully at `t = a` and unwinds them back over
+    `LP_RETRACT.IN` (mirrored as `gate_motion_density.LP_SPIRAL_IN_S`, *"a page declared enter=spiral
+    unwinds from its point over this (template LP_RETRACT.IN)"*), so at its own start the frame is the
+    bare ground. The approved cut's own spiral row leads its sentence by 1.14 s."""
+    return MD.LP_SPIRAL_IN_S if str(entry or "") == "spiral" else 0.0
+
+
 def _time(value, t0: float, t1: float) -> float:
     """A time hole (`{t0}`, `{t1}-3.0`) or a literal second, on this row's own window."""
     if isinstance(value, (int, float)):
@@ -1277,6 +1318,33 @@ def _text(template: str, fills: dict, beat, skeleton) -> str:
     return HOLE.sub(sub, str(template))
 
 
+def dock_leave(t_in: float, t1: float, options: dict, defaults: dict) -> tuple[float, str | None]:
+    """When a card's `exit` is written, so that its LEAVE is over before the row's own end.
+
+    THE RULING (the parent, on `build-p66-cal` v2): *"a dock's `leave` ends at or before its row's `t1`,
+    and a card never rides a `cut`/`axes` boundary"*. The player retracts a card FROM its `exit` over
+    `DOCK_LEAVE_S`, and it SNAPS an `exit` within `DOCK_SNAP_S` of a scene boundary onto that boundary -
+    so a card whose `exit` was the row's end (E65's "parks in the page's own room and stays") was still
+    fading 0.72 s into the next world, over its title, wherever the boundary was not a dip that hid it.
+    The deliberate early clear the player itself names is `DOCK_CLEAR_S` before the end.
+
+    Where the row has not got those seconds the card keeps its own READ + PARK clock instead and the
+    shortfall is NAMED (E99 s69 - a gate guides; the answer to a card with no room is a longer beat, and
+    that is the plan's to write)."""
+    C = compiler()
+    need = float(options.get("read_s") or C.DOCK_READ_S) + float(options.get("park_s") or C.DOCK_PARK_S)
+    clear = round(t1 - DOCK_CLEAR_S, 2)
+    if not defaults.get("card_in_page_room", True):
+        return round(min(t_in + need + CHART_HOLD_MAX_S, t1), 2), None
+    if clear >= round(t_in + need, 2) - EPS:
+        return clear, None
+    keep = round(min(t_in + need, t1), 2)
+    return keep, (f"the card lands at {t_in:.2f}s and this row ends at {t1:.2f}s, so it cannot both be READ "
+                  f"({need:.2f}s) and clear the boundary by the player's own {DOCK_CLEAR_S:.2f}s: it holds to "
+                  f"{keep:.2f}s and its {DOCK_LEAVE_S:.2f}s retract runs into the world after it. A card that reads is "
+                  f"worth more than a clean seam, and the answer is a longer beat - the plan's to write (E99 s69)")
+
+
 def _dock_tuple(spec, fills, beat, skeleton, t0, t1, defaults) -> tuple | None:
     """One dock of the row's 5th element: `(id, lane, in, out, options)`. E65: the card reads, then
     parks in the page's OWN room and holds to the row's end. A dock the plan names no asset for is
@@ -1290,8 +1358,7 @@ def _dock_tuple(spec, fills, beat, skeleton, t0, t1, defaults) -> tuple | None:
     for key in ("read_s", "park_s"):
         if spec.get(key) is not None:
             options[key] = spec[key]
-    t_out = t1 if defaults.get("card_in_page_room", True) else round(
-        t_in + float(spec.get("read_s") or 0) + float(spec.get("park_s") or 0) + CHART_HOLD_MAX_S, 2)
+    t_out, _note = dock_leave(t_in, t1, options, defaults)
     return (_text(spec["id"], fills, beat, skeleton), DOCK_LANE, t_in, round(min(t_out, t1), 2), options)
 
 
@@ -1427,57 +1494,462 @@ def _windows(gs: list[dict], ws: list | None, exits: list[str], hold_s: float,
     A page that arrives BY A CARD (`snap=` / `camera=`) arrives when that card has been READ, not when
     its own first sentence starts - `arrivals[i]`, measured in `_arrivals` off the card's own word.
 
-    M44: a world-plate row shorter than `hold_s` takes the seconds it is missing from the PREVIOUS
-    row's tail when that row can spare them, and from the next row's head when it cannot - the beat
-    moves, never the words (the gate-fit ruling).
+    THE COMPILER NEVER STEALS (the parent's ruling on `build-p66-cal` v2, 2026-09-17; E99 s69 - a gate
+    GUIDES, never dismisses, and *"a short plate is diagnosed, never manufactured"*). Every earlier pass
+    stretched a world plate toward M44's six-second floor by taking the seconds out of the row beside it,
+    and on the one-shot's own plan that single mechanism caused FOUR defects the frames found: the
+    chip-price page was pushed from the plan's 49.70 s to 54.42 s and squeezed to 3.2 s, so it lost its
+    docked plate card and its `span` move (M37's FAIL was that); the ring's page was left 1.5 s where the
+    cut plays 3.6 s. So the window is the PLAN's: the take's own cut point before the group's first
+    sentence, and nothing takes a seconds from a neighbour. A plate under the floor is NAMED in `why` and
+    reported in the flow read - a longer plate is the plan's to write, never the compiler's to steal.
+
+    AN ARRIVAL KEEPS ITS LEAD, and that is the one thing that moves a start EARLIER (the same ruling).
+    A page whose entry UNWINDS is not on the stage at its own start: the player drains a `spiral` page to
+    its point and unwinds it back over `LP_RETRACT.IN` (`spiralClocks`: at `t = a` the field and the
+    colours are both fully down the drain, so the frame is the bare ground), and the approved cut plays
+    its own spiral row from 67.82 s for a sentence that lands at 68.96 s - a 1.14 s lead. So the page
+    starts `entry_unwind` seconds before its first word, taken from the NARRATIVE PLATE before it and
+    from nothing else (never from a page, whose own words are running, and never from a clip), and the
+    row's `why` names the plate it was taken from. A mount takes no lead - the mount IS the transition,
+    over the world before it (E45) - and a roll-out's board is falling in from its first frame.
     """
     starts = [0.0]
     for i, g in enumerate(gs[1:], start=1):
         t = round(float(g["t0"]), 2)
         if ws:
             try:
-                t = W.cut_before(ws, " ".join(str(g["beats"][0]["sentence"]).split()[:4]), exit=exits[i - 1])
+                # E99 s74: `exits[i]` IS the transition into row i (the boundary belongs to the incoming
+                # row - `build_scene_timeline_f.py:2185`), so the cut point before it reads its own token
+                t = W.cut_before(ws, " ".join(str(g["beats"][0]["sentence"]).split()[:4]), exit=exits[i])
             except SystemExit:
                 pass
         starts.append(round(t, 2))
     for i, a in enumerate(arrivals or []):
         if i and a is not None and starts[i - 1] + EPS < round(float(a), 2) < starts[i] - EPS:
             starts[i] = round(float(a), 2)
+    for i, g in enumerate(gs):
+        if not i:
+            continue
+        lead = entry_unwind(g.get("entry"))
+        if not lead or g["world"] != "page":
+            continue
+        want = round(float(g["beats"][0]["t0"]) - lead, 2)
+        if want >= starts[i] - EPS:
+            continue                                     # the cut point already gives the arrival its room
+        prev = gs[i - 1]
+        if prev["world"] == "page" or world_of(prev["plate"]) == "clip":
+            g["lead_refused"] = (round(starts[i] - want, 2), plate_of(prev["plate"]),
+                                 "a page" if prev["world"] == "page" else "a clip", lead)
+            continue
+        # The lead is `min(what the arrival wants, what the plate can SPARE above its own floor)`, and never
+        # negative: an arrival keeps its lead and that is the one thing that moves a start EARLIER, so a
+        # plate with nothing to spare gives nothing and the page starts AT its own cut point (the eighth
+        # pass' review, HIGH 2 - the floor used to push the start LATER and the `why` then printed a
+        # negative lead that never happened).
+        owed = round(starts[i] - want, 2)
+        spare = round(starts[i] - starts[i - 1] - LEAD_FLOOR_S, 2)
+        took = round(min(owed, spare), 2)
+        if took <= EPS:
+            g["lead_short"] = (owed, plate_of(prev["plate"]), round(starts[i] - starts[i - 1], 2), lead)
+            continue
+        g["lead_from"] = (took, plate_of(prev["plate"]), lead, owed)
+        starts[i] = round(starts[i] - took, 2)
     ends = starts[1:] + [round(float(gs[-1]["t1"]), 2)]
     for i, g in enumerate(gs):
-        if g["world"] == "page" or ends[i] - starts[i] >= hold_s:
-            continue
-        need = round(hold_s - (ends[i] - starts[i]), 2)
-        room = round(starts[i] - starts[i - 1] - hold_s, 2) if i else -1.0
-        if room >= need:
-            starts[i] = round(starts[i] - need, 2)
-            ends[i - 1] = starts[i]
-        else:
-            ends[i] = round(ends[i] + need, 2)
-            if i + 1 < len(starts):
-                starts[i + 1] = ends[i]
+        if g["world"] != "page" and ends[i] - starts[i] < hold_s:
+            g["under_floor"] = (round(ends[i] - starts[i], 2), round(hold_s, 2))
     return list(zip(starts, ends))
 
 
-def _exit(g: dict, nxt: dict | None, skeleton: dict, next_entry: str | None) -> tuple[str, str]:
-    """How this world LEAVES, and the rule that says so (E47; the plan's Acceptance 2)."""
-    if nxt is None:
-        return "cut", "the cut is the last word"
-    if next_entry == "mount":
-        return "cut", "a cut, never into a mount - the mount IS the transition"
-    if g["world"] == "page" and nxt["world"] == "page":
-        skeleton_exit = str(main_row(skeleton)["exit"])
-        return ((skeleton_exit, "page to page: the suck, with no cream between them")
-                if skeleton_exit.startswith("suck") else ("cut", "page to page: a straight cut"))
-    if g["world"] != nxt["world"] or plate_of(g["plate"]) != plate_of(nxt["plate"]):
-        skeleton_exit = str(main_row(skeleton)["exit"])
-        if skeleton_exit.split(":")[0] == "door" and g.get("prev_entry") in ("snap", "camera"):
-            # E98 s7 / CAPABILITIES.md:38: the page before this one landed FLAT as a card, so it can
-            # swing open on its hinge onto this world instead of dipping to it - the transition that
-            # carries continuity rather than cutting it (E99 s70).
-            return skeleton_exit, "the door, because the page before this one landed flat as a card (E98 s7)"
-        return "dip", "the dip because the world changes (E47)"
-    return "cut", "a cut inside one world"
+# --------------------------------------------------------------------------- THE TRANSITION CHOOSER (E99 s74)
+# The operator, 2026-09-17: *"the whole point of creating them was to improve our ability to live with
+# less cuts and to be able to keep a directional flow"*. So at every boundary the compiler TRIES each
+# transform the record carries for that PAIR of worlds, in order, and REFUSES each by name where its own
+# rules do not hold (the pair's kinds, the plan's own arrival, an asset or a state the plan never names);
+# a cut or a dip is what is left when every one of them was refused, and the `why` carries the whole
+# chain (s74 Apply 1: "the `why` of every cut and every dip names the transform it could not use").
+#
+# THE BOUNDARY BELONGS TO THE INCOMING ROW. The engine's own convention, three times over:
+# `build_scene_timeline_f.py:5030` ("the row's EXIT (the transition INTO it, E47)"), `:2185` ("the
+# boundary between scenes[i-1] and scenes[i] is scenes[i]['exit']" - with the note that P53 T6 read it
+# the other way and P54 T9's seam measure caught it), `:2193` R26-60 ("the transition into scenes[i]
+# TAKES the outgoing world, scenes[i-1]"). The suck, the melt and the door all name the world they
+# CONSUME, so they can only live on the row after it: the reference door cut carries `door:right` on the
+# PLATE it opens onto (its own `s07`), the earliest short carries `suck:<x>,<y>` on the clip its page
+# spins into (that cut's own `s03`, `build_short.py:328`), and the sixth pass' own outro row carries
+# the dip INTO it (`outro_row`). Passes 1-6 put the token on the OUTGOING row, so every transition
+# landed one boundary early - the base played a dip INTO its own mount at 1.78 s, dropped the approved
+# suck, and could never emit a door at all.
+MELT_CHART = "melt:splash:chart"   # E88 / CAPABILITIES.md:37 - the ink balls up and the next CHART shows through the stains
+MELT_PLATE = "melt:splash:plate"   # ... and the next NARRATIVE PLATE springs up as if painted
+SUCK_EXIT = "suck"                 # P53 T2 / R26-60 - the outgoing page spins into a point (the approved `s03`)
+DOOR_EXIT = "door:right"           # E98 s7 / CAPABILITIES.md:38 - the hinge the door cut chose off its own 45.40s frame
+DIP_EXIT = "dip"
+CUT_EXIT = "cut"
+BUILT_ENTRY = "built"              # E88: a `splash:chart`'s page arrives OUT OF THE SPLATTER, not by its build
+PLANE_OPTS = ("depth=", "plane=")  # the page options a door and a melt are both refused over (CAPABILITIES.md:38, R26-132)
+TRANSFORM = "transform"            # how the flow read classes a boundary: a continuous move between two worlds
+ARRIVAL = "arrival"                # ... an arrival that carries the world in (its token is a cut; s74 Apply 2, tier 2)
+LAST_RESORT = "last resort"        # ... and a cut or a dip taken because every transform for the pair was refused
+
+
+def pair_of(prev: dict, g: dict) -> str:
+    """The PAIR of worlds a boundary joins - `page->page`, `page->plate`, `plate->page`, `plate->plate`.
+
+    A clip is a plate here: it is a world that is not a page, and every rule that names a plate (the
+    melt's board, the door's hinge, the dip) names it for exactly that reason."""
+    kind = lambda x: "page" if x["world"] == "page" else "plate"
+    return f"{kind(prev)}->{kind(g)}"
+
+
+def _has_plane(plate: str) -> bool:
+    """Does this plate stand at a depth or on a plane? A door and a melt are both refused over one
+    (CAPABILITIES.md:38: "refused by name with `depth=`/`plane=` on the outgoing page"; R26-132)."""
+    return any(opt in str(plate) for opt in PLANE_OPTS)
+
+
+def _leaves_on_the_cut(plate: str) -> str:
+    """How the outgoing page's own sheet behaves under a world-TAKING transition (the suck, the melt).
+
+    R26-60: a page that runs its RETRACT first has emptied the sheet before the boundary, so the suck
+    would spin blank cream into the point - but `cut` is the only exit a ledger plate may declare
+    (`build_scene_timeline_f.LEDGER_EXITS`) and the compiler STAMPS it on the outgoing page where the
+    row declares none (`stamp_transition_pages`: "the page a suck takes must not retract first"). So
+    this is never a refusal; it is a sentence on the row saying which of the two happened."""
+    head = str(plate).split(";", 1)[0]
+    return ("the outgoing page declares `:cut`, so its sheet is still full at the boundary (R26-60)"
+            if head.endswith(":cut") or ":cut:" in head else
+            "the outgoing page declares no exit, so the compiler stamps `exit=cut` on it - a page a suck "
+            "or a melt takes must not retract first (R26-60)")
+
+
+def _arrival_name(entry: str | None, g: dict) -> str | None:
+    """The ARRIVAL an incoming page plays, in the vocabulary's own word - None for a plate."""
+    if entry == "snap":
+        return "throw-then-zoom" if g.get("thrown_before") else "the snap"
+    return {"camera": "throw-then-push", "morph": "object-becomes-chart", "spiral": "the spiral return",
+            "mount": "the mount", "axes": "the axes open", "built": "the page arrives built"}.get(str(entry or ""))
+
+
+def _refuse_arrival(name: str, entry: str | None) -> str:
+    """Why the arrival this pair's chain reaches for is not the one the plan wrote."""
+    return (f"{name}: REFUSED - the incoming page arrives by `{entry or 'none'}`, not by "
+            f"{name.replace('the ', '')} (E99 s66 - the plan is the intelligence; an arrival the plan does not "
+            f"name would be invented, E99 s70 Apply 2)")
+
+
+def _melt_hold(prev: dict, g: dict, pair: str) -> tuple[str | None, str]:
+    """The melt-then-splash, or the refusal by name - E88 / CAPABILITIES.md:37 and the compiler's own
+    boundary rules (`build_scene_timeline_f._melt_boundary`): the outgoing world must be a ledger PAGE
+    (the whole-world melt is retired), a `splash:chart` hands the same board to a page and that page
+    arrives `built`, a `splash:plate` paints a plate and is refused onto a page.
+
+    THE VARIETY RULE IS NOT ONE OF THESE (the eighth pass; the seventh pass' review H1). It is a
+    PREFERENCE, not one of the melt's own rules, so it lives in the chain that RANKS the candidates
+    (`_run_chain`), where it DEFERS a repeat instead of refusing it. Refusing it here sent an admissible
+    melt's boundary to a dip - the one thing E99 s74 Apply 1 forbids ("a cut or a dip is the last resort,
+    taken only after every transform the record carries for that pair was refused by name")."""
+    name = "melt-then-splash"
+    if prev["world"] != "page":
+        return None, (f"{name}: REFUSED - a melt takes a CHART's ink and leaves the board (E88); the outgoing world "
+                      f"is {prev['plate']!r}, not a ledger page, and the whole-world melt is retired")
+    if _has_plane(prev["plate"]) or _has_plane(g["plate"]):
+        return None, f"{name}: REFUSED - a page at a `depth=`/`plane=` took the camera onto its own plane (R26-132)"
+    if pair == "page->plate":
+        if world_of(g["plate"]) == "clip":
+            return None, (f"{name}: REFUSED - a `splash:plate` paints a NARRATIVE PLATE up through its stains (E88) "
+                          f"and the incoming world is a clip; a video is not painted")
+        return MELT_PLATE, (f"melt-then-splash onto the plate: the page's ink sags, balls up and splashes, and "
+                            f"{plate_of(g['plate'])} springs up through the stains as if painted (E88, "
+                            f"CAPABILITIES.md:37) - a world change with no cut and no cream in it; "
+                            f"{_leaves_on_the_cut(prev['plate'])}")
+    declared = entry_token_in(g["plate"])
+    if declared:
+        return None, (f"{name}: REFUSED - a `splash:chart`'s page arrives out of the splatter, `built` (E88), and this "
+                      f"plan declares the page's own arrival `{declared}`; the compiler does not overwrite the "
+                      f"author's entry (E99 s66)")
+    return MELT_CHART, ("melt-then-splash into the chart: the page's ink balls up and the next chart shows THROUGH the "
+                        "stains, arriving `built` out of the splatter rather than by its own build (E88, "
+                        "CAPABILITIES.md:37)")
+
+
+def door_dock_error(prev: dict, g: dict, defaults: dict) -> str | None:
+    """THE ENGINE'S SECOND DOOR RULE, applied where the token is CHOSEN (the eighth pass; the seventh
+    pass' review M1). `build_scene_timeline_f.door_boundary_error:2030-2056` refuses a door on a
+    boundary that is not EVIDENCE-FREE (doc 29 Part 6) - *"a card belongs to the outgoing page when it
+    leaves within DOOR_DOCK_TOL of the boundary, and anything else up across the swing ... would float
+    over a world turning in space"*, and it raises a `ValueError` (*"let the card leave by the boundary
+    ... or land after the door has opened, or say dip"*). `shapes` places the cards itself, so a door it
+    emits onto such a boundary would die inside `compile_table` as a `[FAIL] compile` with an engine
+    message instead of standing in the chain as a named refusal. The words are the engine's.
+
+    The compiler knows the two answers here without the windows: the OUTGOING page's cards are cleared
+    before its own end by `dock_leave` (`card_in_page_room`), so they belong to the outgoing page the way
+    the engine's own tolerance means it; the INCOMING world's first card, where the plan names one on its
+    first beat, lands inside the swing."""
+    C = compiler()
+    secs, tol = float(C.DOOR_S), float(C.DOOR_DOCK_TOL)   # the engine's own two dials, never re-typed here
+    out = [c for b in (prev.get("beats") or []) for c in beat_docks(b)]
+    if out and not defaults.get("card_in_page_room", True):
+        return (f"the outgoing dock {', '.join(out)!r} is up across it - `card_in_page_room` is off, so a card holds "
+                f"its own read+park+hold clock past the boundary; let the card leave by the boundary (within "
+                f"{tol:g} s, the wipe's own rule) or land after the door has opened, or say dip")
+    inc = beat_docks((g.get("beats") or [{}])[0])
+    if inc:
+        return (f"the incoming dock {', '.join(inc)!r} lands inside the swing (0-{secs:g} s of it): the plan names it "
+                f"on this world's FIRST beat; let the card land after the door has opened, or say dip")
+    return None
+
+
+def _door_hold(prev: dict, g: dict, skeleton: dict, defaults: dict) -> tuple[str | None, str]:
+    """The evidence door, or the refusal by name (E98 s7 / CAPABILITIES.md:38, and the engine's own
+    `door_boundary_error` - both of its rules, the second one through `door_dock_error`)."""
+    name = "the door"
+    if str(prev.get("entry") or "") not in BUILT_ON_ARRIVAL:
+        return None, (f"{name}: REFUSED - a door swings a card that LANDED FLAT (E98 s7); the outgoing page arrived by "
+                      f"`{prev.get('entry') or 'none'}`, not a snap or the camera, so there is no card to open")
+    if _has_plane(prev["plate"]):
+        return None, (f"{name}: REFUSED - `depth=`/`plane=` on the outgoing page; the door IS the plane's motion "
+                      f"(CAPABILITIES.md:38, R26-132)")
+    err = door_dock_error(prev, g, defaults)
+    if err:
+        return None, (f"{name}: REFUSED - a door swings on an EVIDENCE-FREE boundary (doc 29 Part 6, the engine's own "
+                      f"`door_boundary_error`): {err}")
+    token = str(main_row(skeleton)["exit"] or "")
+    token = token if token.split(":")[0] == "door" else DOOR_EXIT
+    return token, (f"{name}: the page before this one landed flat as a card, so it swings open on its hinge onto "
+                   f"{plate_of(g['plate'])} instead of dipping to it (E98 s7, CAPABILITIES.md:38; the reference cut's "
+                   f"own `s07 exit:door:right`, whose own s06 and s07 carry no dock at all - the evidence-free "
+                   f"boundary the engine asks for)")
+
+
+def _suck_hold(prev: dict, g: dict, skeleton: dict) -> tuple[str | None, str]:
+    """The suck - the outgoing page spins into a point and the next world is standing there (the
+    approved `s03 exit:suck:<x>,<y>`, `build_short.py:328`; R26-60)."""
+    name = "the suck"
+    if prev["world"] != "page":
+        return None, f"{name}: REFUSED - a suck spins a PAGE into its point (R26-60); the outgoing world is not one"
+    token = str(main_row(skeleton)["exit"] or "")
+    token = token if token.split(":")[0] == "suck" else SUCK_EXIT
+    return token, (f"{name}: the outgoing page spins into its own point and {plate_of(g['plate'])} is standing there, "
+                   f"with no cream between them (the approved `s03 exit:suck:<x>,<y>`); "
+                   f"{_leaves_on_the_cut(prev['plate'])}")
+
+
+def _recast_hold(prev: dict, g: dict) -> tuple[str | None, str]:
+    """A recast is a `chart_to` INSIDE one row (CAPABILITIES.md:106): the page's own declared state
+    travels to the other form where it stands. Across a BOUNDARY it holds only where the incoming page is
+    a state the outgoing page declares - and there it is owed as a row, never as a transition."""
+    states = states_of(prev["plate"])
+    want = page_of(g["plate"])
+    if want and want in [page_of(s if str(s).startswith("ledger:") else f"ledger:{s}") for s in states]:
+        return None, ("recast: REFUSED (and OWED as a row, not a boundary) - the incoming page IS a state the outgoing "
+                      "page declares, so the recast belongs INSIDE that row as a `chart_to` on the word that turns "
+                      "(CAPABILITIES.md:106); two rows would CUT the chart the verb exists to carry")
+    return None, (f"recast: REFUSED - the incoming page is not a state the outgoing page declares (`;then=` names "
+                  f"{', '.join(states) or 'none'}), so a `chart_to {{to: recast}}` would redraw nothing "
+                  f"(CAPABILITIES.md:106; E99 s70 Apply 3)")
+
+
+def _rescale_hold(prev: dict, g: dict) -> tuple[str | None, str]:
+    """A rescale retargets THIS page's own axes to the window the sentence names (CAPABILITIES.md:106) -
+    one page, one row; a different page across a boundary is not a window of this one."""
+    if page_of(prev["plate"]) == page_of(g["plate"]):
+        return None, ("rescale: REFUSED (and OWED as a row, not a boundary) - it is the SAME page on both sides, so the "
+                      "window it retargets to belongs inside the row as a `chart_to {to: rescale, window}` "
+                      "(CAPABILITIES.md:106)")
+    return None, (f"rescale: REFUSED - a rescale retargets the axes of ONE page and the incoming page "
+                  f"({page_of(g['plate'])}) is a different page, not a window of {page_of(prev['plate'])} "
+                  f"(CAPABILITIES.md:106)")
+
+
+def _morph_hold() -> tuple[str | None, str]:
+    """`morph_to` is LIVE (CAPABILITIES.md:118) and no approved table plays it as a BEAT - the
+    survivorship read has it in no cut at all - so the library carries no skeleton for it and the
+    compiler refuses it BY NAME rather than inventing one (E99 s70 Apply 2)."""
+    return None, ("morph: REFUSED - no approved skeleton. `morph_to` is LIVE (CAPABILITIES.md:118 - the area under one "
+                  "line becomes another's by ARAP) but no approved table plays it as a beat (the survivorship audit, "
+                  "2026-09-17: in no cut), so a skeleton for it would be a vocabulary written from memory "
+                  "(E99 s70 Apply 2)")
+
+
+def open_transition() -> dict:
+    """The flow record the OPEN carries: no world precedes the first, so there is no transition into it
+    and the flow read never counts it as a cut (the fade-in is the author's, E41)."""
+    return {"pair": "-> the open", "taken": "the open", "kind": ARRIVAL, "exit": None, "chain": [], "entry": None}
+
+
+def last_transform_of(last) -> dict | None:
+    """The chooser's `last_transform`, normalised: `{name, world, at}` - the transform that carried the
+    PREVIOUS world change that took one, WHICH world change it was (the group's index, 1-based) and the
+    instant the plan puts it at. A bare name is still accepted (the sixth pass passed one) and reads as
+    "however many boundaries ago", which is what the seventh pass' `why` claimed falsely of a melt five
+    boundaries back (the review's H1.2)."""
+    if not last:
+        return None
+    if isinstance(last, str):
+        return {"name": last, "world": None, "at": None}
+    return dict(last)
+
+
+def variety_words(rec: dict) -> str:
+    """The variety rule's own sentence, naming the boundary it actually compares against.
+
+    E88's use-when (*"never as a mechanical wipe"*) through P66 T2. It is a PREFERENCE, not one of a
+    transform's own rules, so it DEFERS a candidate: the chain goes on to the next transform for the
+    pair, and if every one of those is refused by name the deferred repeat is taken anyway - a cut or a
+    dip is never what "do not play it twice" means (E99 s74 Apply 1, the seventh pass' review H1)."""
+    # the instant is the PLAN's own `t0` for that world: the chain is decided before any window is timed
+    # (the exit decides where the cut point before the next row lands, M13), so this is the truest number
+    # the chooser holds - the row's own start lands within one cut point of it
+    where = (f"the world change into world {rec['world']} at {rec['at']:.2f}s (the plan's own instant for it)"
+             if rec.get("world") is not None and rec.get("at") is not None else
+             "the last world change a transform carried")
+    return (f"a repeat of the transform that carried {where} - the previous world change that TOOK one, which may be "
+            f"several boundaries back (E88's own use-when, \"never as a mechanical wipe\"; the variety rule, P66 T2)")
+
+
+def _run_chain(candidates: list[tuple], chain: list[str], last: dict | None, take) -> tuple | None:
+    """Every transform the record carries for this pair, in the order s74 Apply 1-2 sets, and the first
+    one whose OWN rules hold. Returns the `take(...)` result, or None when the pair is out of transforms.
+
+    A candidate the variety rule wants to avoid is DEFERRED, never refused: the chain goes on, and the
+    deferral is only cashed when nothing else held (`_variety_kept`). The refusal chain the row carries
+    reads the same either way - the operator sees the deferral by name and, where it was taken, why."""
+    deferred: tuple | None = None
+    for name, fn in candidates:
+        token, note = fn()
+        if not token:
+            chain.append(note)
+            continue
+        if last and name == last.get("name"):
+            chain.append(f"{name}: DEFERRED - {variety_words(last)}")
+            if deferred is None:
+                deferred = (name, token, note)
+            continue
+        return take(name, token, note, entry_owed=BUILT_ENTRY if token == MELT_CHART else None)
+    if deferred:
+        name, token, note = deferred
+        return take(name, token, f"{note} - the variety rule DEFERRED it ({variety_words(last or {})}) and every other "
+                    f"transform the record carries for this pair was refused BY NAME above, so the repeat stands: a dip "
+                    f"is the last resort and a repeat of a transform is not one (E99 s74 Apply 1)",
+                    entry_owed=BUILT_ENTRY if token == MELT_CHART else None)
+    return None
+
+
+def choose_transition(prev: dict | None, g: dict, skeleton: dict,
+                      last_transform=None, defaults: dict | None = None) -> tuple[str | None, str, dict]:
+    """The transition INTO this row: `(the exit token, the rule in words, the flow record)`.
+
+    The chain is tried in the order E99 s74 Apply 1-2 sets for that PAIR; every candidate that does not
+    hold is refused BY NAME into the record, and the cut or the dip is reached only when all of them
+    were. The record is `{pair, taken, kind, exit, chain[], entry}` - `entry` is the arrival a transform
+    DEMANDS of the incoming page (a `splash:chart`'s page arrives `built`, E88) and is None otherwise.
+    """
+    if prev is None:
+        return None, "the open: no world precedes this one, so there is no transition into it", open_transition()
+    pair = pair_of(prev, g)
+    entry = g.get("entry")
+    arrival = _arrival_name(entry, g)
+    last = last_transform_of(last_transform)
+    d = {**DEFAULTS, **(defaults or {})}
+    chain: list[str] = []
+    rec: dict = {"pair": pair, "taken": None, "kind": LAST_RESORT, "exit": None, "chain": chain, "entry": None}
+
+    def take(name: str, token: str, note: str, kind: str = TRANSFORM, entry_owed: str | None = None):
+        # s74 Apply 1: the row's own `why` names every transform this boundary could NOT use, and why -
+        # so the operator reads the chain on the row, not only in the record
+        refused = list(chain)
+        chain.append(f"{name}: TAKEN - {note}")
+        rec.update(taken=name, kind=kind, exit=token, entry=entry_owed)
+        rule = f"{name}: {note}"
+        if refused:
+            rule += " - after every other transform the record carries for a " + pair + " was REFUSED: "                     + "; ".join(refused)
+        return token, rule, rec
+
+    # RUNG 0, every pair: the mount IS the transition (E45), and a continuity arrival carries the world
+    # that was there into this one (E99 s70) - neither is ever dipped into or cut away from.
+    if entry == "mount":
+        return take("the mount", CUT_EXIT, "the mount IS the transition, so the boundary is a cut and never a dip "
+                    "(E45; the approved cuts' own mount rows read `exit: cut` - `s02` on one, `s04`/`s08`/`s11` on the door cut)",
+                    ARRIVAL)
+    if entry in BUILT_ON_ARRIVAL or entry == "morph":
+        return take(str(arrival), CUT_EXIT, "the card the row before threw grows to the stage, so the arrival IS the "
+                    "transition and carries the world that was there into this one (E99 s70/s71, CAPABILITIES.md:76 "
+                    "and :84; the door cut's own `s02`/`s06` read `exit: cut`)", ARRIVAL)
+
+    if pair == "page->page":
+        got = _run_chain([("recast", lambda: _recast_hold(prev, g)),
+                          ("rescale", lambda: _rescale_hold(prev, g)),
+                          ("morph", _morph_hold),
+                          ("melt-then-splash", lambda: _melt_hold(prev, g, pair))], chain, last, take)
+        if got:
+            return got
+        if arrival in ("the spiral return", "the axes open"):
+            return take(str(arrival), CUT_EXIT, "the page draws itself in over the page before it - the arrival carries "
+                        "the boundary, so it is a cut and never a dip (E99 s67 Apply 6; the approved cuts' axes and "
+                        "spiral rows read `exit: cut`)", ARRIVAL)
+        chain.append(_refuse_arrival("the axes open", entry))
+        chain.append("the dip: REFUSED - two pages are one kind of world, and the dip means the WORLD changed (E47)")
+        return take("a straight cut", CUT_EXIT, "page to page: every transform for this pair was refused, so the cut is "
+                    "what is left (E99 s74 Apply 1 - the cut is the last resort)", LAST_RESORT)
+
+    if pair == "page->plate":
+        got = _run_chain([("melt-then-splash", lambda: _melt_hold(prev, g, pair)),
+                          ("the door", lambda: _door_hold(prev, g, skeleton, d)),
+                          ("the suck", lambda: _suck_hold(prev, g, skeleton))], chain, last, take)
+        if got:
+            return got
+        return take("the dip", DIP_EXIT, "the world changes and every transform for this pair was refused above, so "
+                    "the dip is what is left (E47; E99 s74 Apply 1 - the dip is the last resort)", LAST_RESORT)
+
+    if pair == "plate->page":
+        for name in ("the snap", "throw-then-zoom", "throw-then-push", "object-becomes-chart",
+                     "the spiral return", "the axes open"):
+            if arrival == name:
+                return take(name, CUT_EXIT, "the page arrives out of the plate on its own clock, so the arrival IS the "
+                            "transition and no dip is owed (E99 s74 Apply 1; every approved cut CUTS into its pages - "
+                            "`s02`/`s04` on one, `s02`/`s04`/`s06`/`s08`/`s11` on the door cut, `s05`/`s11` "
+                            "on the one-shot)", ARRIVAL)
+            chain.append(_refuse_arrival(name, entry))
+        return take("the dip", DIP_EXIT, "the world changes and this page names no arrival that could carry it, so the "
+                    "dip is what is left (E47; E99 s74 Apply 1)", LAST_RESORT)
+
+    chain.append("the continuity three: REFUSED - the plan names none of them for this pair. A mark threaded across "
+                 "(`;thread=`), the next region ARRIVING from the frame's edge, or a foreground occluder is what "
+                 "carries one plate into another without a dip (CAPABILITIES.md:108, E59, HF-15/16/17) - and each is "
+                 "the plan's to name, never the compiler's to invent (E99 s70 Apply 2)")
+    return take("the dip", DIP_EXIT, "the world itself changes, and plate to plate is the pair the dip is FOR (E47); "
+                "the continuity three were refused above", LAST_RESORT)
+
+
+def flow_count(why: list[dict]) -> dict:
+    """The FLOW READ s74 Apply 3 owes beside M46 (R26-189 - a READ, and no gate yet): how many world
+    changes the cut makes, how many a transform carries, how many an arrival carries and how many took a
+    cut or a dip as the last resort - each by name - plus the exit TOKENS the table actually writes."""
+    out: dict = {"boundaries": 0, "transforms": {}, "arrivals": {}, "last_resort": {}, "tokens": {}}
+    for rec in rows_why(why):
+        t = rec.get("transition")
+        if not isinstance(t, dict) or t.get("taken") == "the open":
+            continue
+        out["boundaries"] += 1
+        bucket = {TRANSFORM: "transforms", ARRIVAL: "arrivals"}.get(str(t.get("kind")), "last_resort")
+        name = str(t.get("taken"))
+        out[bucket][name] = out[bucket].get(name, 0) + 1
+        token = str(t.get("exit") or "none").split(":")[0]
+        out["tokens"][token] = out["tokens"].get(token, 0) + 1
+    out["cuts_and_dips"] = out["tokens"].get("cut", 0) + out["tokens"].get("dip", 0)
+    return out
+
+
+def flow_line(flow: dict) -> str:
+    """The flow read as ONE line, for the CLI and `BASE-TABLE.md` (s74 Apply 3)."""
+    part = lambda d: ", ".join(f"{k} {v}" for k, v in sorted(d.items())) or "none"
+    tr, ar, lr = (flow.get(k) or {} for k in ("transforms", "arrivals", "last_resort"))
+    return (f"flow: {flow.get('boundaries', 0)} world changes - transforms {sum(tr.values())} ({part(tr)}), "
+            f"arrivals {sum(ar.values())} ({part(ar)}), last resort {sum(lr.values())} ({part(lr)}); "
+            f"tokens {part(flow.get('tokens') or {})}; cuts+dips {flow.get('cuts_and_dips', 0)}")
 
 
 # --------------------------------------------------------------------------- the cut's TAIL (P66 T3e)
@@ -1581,7 +2053,13 @@ def outro_why(outro: dict, rec: dict) -> dict:
              "and never a script line" if line is not None else
              ". No brand line was resolved - E41 stitches one under the card when the channel has it")
     return {"beat": rec.get("beat"), "group": rec.get("group"), "skeleton": OUTRO_SKELETON,
-            "act": None, "rule": rule, "signature": OUTRO_SIGNATURE.get(exit_, "cut"), "outro": True}
+            "act": None, "rule": rule, "signature": OUTRO_SIGNATURE.get(exit_, "cut"), "outro": True,
+            # the outro card IS a world change and the project's own row says how it arrives (E41/E47) -
+            # the flow read counts it as the author's, never as a transform the compiler reached for
+            "transition": {"pair": "page->the outro card", "taken": "the project's own outro row",
+                           "kind": LAST_RESORT, "exit": exit_, "entry": None,
+                           "chain": [f"the project's own outro row: TAKEN - the `{exit_}` into the card is the "
+                                     "author's (E41, E99 s72 Apply 6; `build_short.py:443-446`)"]}}
 
 
 def with_idle(plate: str, kind: str = CLOSE_IDLE) -> tuple[str, bool]:
@@ -1696,6 +2174,45 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
     picks = _pick(gs, lib, d, ws)
     spans = _windows(gs, ws, [p["exit"] for p in picks], float(d.get("plate_hold_s", PLATE_MIN_S)),
                      _arrivals(gs, ws))
+    for g, pick in zip(gs, picks):
+        if g.get("under_floor"):
+            held, floor = g["under_floor"]
+            pick["notes"].append(
+                f"this plate is {held:.2f} s - under M44's {floor:.1f} s floor; the plan's window stands (E99 s69: a "
+                f"gate GUIDES, and a short plate is DIAGNOSED, never manufactured). The compiler does not lengthen it "
+                f"at the next row's expense - the steal cost the one-shot's base its chip-price page's card and its "
+                f"span move - so a longer plate is the plan's to write")
+        if g.get("lead_from"):
+            took, plate, lead, owed = g["lead_from"]
+            if took >= owed - EPS:
+                pick["notes"].append(
+                    f"this page's arrival keeps its LEAD: it starts {took:.2f} s before its own first word so the "
+                    f"{lead:.2f} s unwind has LANDED by the sentence (`spiralClocks` drains the page to its point at "
+                    f"the row's own start), and those seconds came out of the narrative plate before it ({plate}) - "
+                    f"the approved cut leads its own spiral row by 1.14 s the same way")
+            else:
+                pick["notes"].append(
+                    f"this page's arrival keeps PART of its LEAD: it starts {took:.2f} s before its own first word, "
+                    f"all the narrative plate before it ({plate}) could spare and still be a beat (it is left "
+                    f"standing at its {LEAD_FLOOR_S:.1f} s floor, doc 29 Part 3), against the {owed:.2f} s the "
+                    f"{lead:.2f} s unwind is owed - so {round(owed - took, 2):.2f} s of it still plays over the "
+                    f"sentence's own first words. A longer plate before it is the plan's to write")
+        if g.get("lead_short"):
+            owed, plate, held, lead = g["lead_short"]
+            pick["notes"].append(
+                f"this page's arrival is owed its {lead:.2f} s unwind and gets NONE of it: it would have to start "
+                f"{owed:.2f} s before its own cut point, and the narrative plate before it ({plate}) holds only "
+                f"{held:.2f} s - at or under the {LEAD_FLOOR_S:.1f} s a world is left standing (doc 29 Part 3), so it "
+                f"has nothing to spare. The page therefore starts AT its own cut point - a lead moves a start EARLIER "
+                f"or not at all, and never moves a start LATER - and the unwind plays over this row's own first word. "
+                f"A longer plate before it is the plan's to write")
+        if g.get("lead_refused"):
+            moved, plate, kind, lead = g["lead_refused"]
+            pick["notes"].append(
+                f"this page's arrival is owed its {lead:.2f} s unwind and does NOT get it: it would have to start "
+                f"{moved:.2f} s before its own cut point, and the world before it ({plate}) is {kind} - a lead is "
+                f"taken from a NARRATIVE PLATE only, never from a page whose own words are running, never from a clip. "
+                f"The unwind therefore plays over this row's own first word")
     rows, why = [], []
     for i, (g, pick, (t0, t1)) in enumerate(zip(gs, picks, spans)):
         made = _group_rows(g, pick, t0, t1, d, aspect, first=i == 0, ws=ws, pages=pages, worlds=worlds)
@@ -1782,7 +2299,8 @@ def _group_rows(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str,
     page_row = lambda a: (_row(g, pick, a, t1, d, aspect, first, ws=ws, pages=pages, worlds=worlds),
                           {"beat": int(g["beats"][0]["beat"]), "skeleton": pick["skeleton"]["id"],
                            "act": str(g["act"] or ""), "rule": "; ".join([pick["rule"], *pick["notes"]]),
-                           "signature": pick["skeleton"]["signature"]})
+                           "signature": pick["skeleton"]["signature"],
+                           "transition": pick.get("transition")})
     if not g.get("open_mounts"):
         return [page_row(t0)]
     at = mount_word_at(g, t0, t1)
@@ -1857,7 +2375,7 @@ def _world_row(g: dict, pick: dict, tpl: dict, t0: float, t1: float, d: dict, ws
         rule += "; " + "; ".join(notes)
     return ((t0, t1, plate, ken, docks, tpl.get("exit"), species or None),
             {"beat": int(beat["beat"]), "skeleton": pick["skeleton"]["id"], "act": str(beat.get("act") or ""),
-             "rule": rule, "signature": "hold"})
+             "rule": rule, "signature": "hold", "transition": open_transition()})
 
 
 def plain_recasts(species: list) -> list[float]:
@@ -2002,12 +2520,42 @@ def _pick(gs: list[dict], lib: list[dict], d: dict, ws=None) -> list[dict]:
         # the card the NEXT page grows out of: it is thrown on THIS row and the page after it becomes
         # it (`snap=` / `camera=`), so this row never gives it a room of its own (E99 s71)
         g["next_entry_card"] = gs[i + 1].get("entry_card") if i + 1 < len(gs) else None
+    # THE TRANSITION INTO EACH ROW (E99 s74). The boundary belongs to the INCOMING row (see
+    # `choose_transition`), so row i's token is chosen from the pair (gs[i-1] -> gs[i]) and the variety
+    # rule runs over the transform that carried the LAST boundary - a melt, a suck or a door is never
+    # played twice running (E88's own use-when; P66 T2's rule, by name).
+    # ... and it names WHICH boundary it compares against - the world change that took one, by index and
+    # by the instant the plan puts it at (the seventh pass said "the boundary before this one" of a melt
+    # five boundaries back; an evidence line that is not true is worse than no line - the review's H1.2).
+    last_transform: dict | None = None
     for i, pick in enumerate(picks):
-        nxt = gs[i + 1] if i + 1 < len(gs) else None
-        next_entry = entry_of(picks[i + 1]["skeleton"]) if nxt is not None else None
-        pick["exit"], exit_rule = _exit(gs[i], nxt, pick["skeleton"], next_entry)
+        prev = gs[i - 1] if i else _hook_world(gs[0])
+        pick["exit"], exit_rule, pick["transition"] = choose_transition(prev, gs[i], pick["skeleton"],
+                                                                       last_transform, d)
+        if str(pick["transition"].get("kind")) == TRANSFORM:
+            last_transform = {"name": pick["transition"].get("taken"), "world": i + 1,
+                              "at": round(float(gs[i]["t0"]), 2)}
+        owed = pick["transition"].get("entry")
+        if owed and gs[i].get("entry") != owed:
+            # the transform DEMANDS this arrival and the plan declared none: a `splash:chart`'s page
+            # arrives out of the splatter (E88), so the entry the clock would have written gives way to it
+            pick["notes"].append(f"the page arrives `{owed}` and not by {gs[i].get('entry')}: the transition into it "
+                                 f"is a {pick['transition'].get('taken')}, and a splash's chart shows THROUGH the "
+                                 f"stains rather than building under them (E88, CAPABILITIES.md:37)")
+            gs[i]["entry"], gs[i]["entry_token"] = owed, owed
         pick["rule"] += "; " + exit_rule
     return picks
+
+
+def _hook_world(g: dict) -> dict | None:
+    """The hook's own world as the group it is, for the boundary INSIDE the open's two rows - the page
+    MOUNTS over it (E99 s67 Apply 6), and that mount is a transition like any other (`exit: cut`, E45).
+    None for an open whose first frame is already the page: nothing precedes it."""
+    beats = g.get("under_beats")
+    if not g.get("open_mounts") or not beats:
+        return None
+    plate = str(beats[0]["plate"])
+    return {"world": world_of(plate), "plate": plate, "entry": None}
 
 
 def _entry(g: dict, shape: str, d: dict, ws=None) -> tuple:
@@ -2036,6 +2584,15 @@ def _entry(g: dict, shape: str, d: dict, ws=None) -> tuple:
         return head, declared, (f"the page arrives by the author's own `{declared}`: a continuity entry carries the "
                                 f"world that was there into this one and the clock never replaces it (E99 s70; the "
                                 f"clock alone would have written {entry})")
+    if head == "spiral":
+        # E99 s66 - the plan DECLARES the return: the page spins back in from its own point and its chart
+        # was built the first time the cut showed it. The clock decides how a page BUILDS (the mount when
+        # the number lands late, the axes otherwise); it never decides that a page the author brought back
+        # builds again. The one-shot's last beat is a `:spiral:` page the positional rule read as an
+        # ordinary page beat (its sentence names no callback), and the base dropped the return.
+        return head, declared, (f"the page arrives by the author's own `{declared}`: the plan declares the RETURN - "
+                                f"the spiral unwinds this page from its own point, and its chart was built the first "
+                                f"time the cut showed it (E99 s66; the clock alone would have written {entry})")
     light = first_light_move(g, ws) if ws else None
     if light is not None and head in BUILT_ON_ARRIVAL:
         land = page_land_offset(entry, _mount_s(g["plate"]))
@@ -2225,6 +2782,15 @@ def _move(mv: dict, beat, ws, t0: float, t1: float, ken, land, d: dict) -> tuple
         raise Refused(f"beat {n}: the take carries no {mv['at_word']!r} inside that beat's own window "
                       f"({float(beat['t0']):.2f}-{float(beat['t1']):.2f}s) - a move names a phrase of its own "
                       "sentence, and the compiler will not hunt for it elsewhere in the take")
+    # IS THE MOVE EVEN ON THIS ROW? This is asked FIRST (P66 T3 seventh pass): the window is the
+    # COMPILER's (M13's cut point, M44's six seconds - `_windows` moves a row's start to give a short
+    # plate its seconds), so a move whose word ended up outside the row it belongs to is DROPPED with its
+    # reason, exactly as this function's own docstring says - never refused. Asking the light clock first
+    # charged the AUTHOR for the compiler's window: the one-shot's last beat (a spotlight on the row's own
+    # first word) read as a light fired 3.1 s before a chart that lands after the row the beat left.
+    if not (t0 - EPS <= t < t1 - SPECIES_TAIL_S):
+        return None, (f"the {kind} on beat {n} ({mv['at_word']!r}, {t:.2f}s) falls outside the row its beat "
+                      f"landed on ({t0:.2f}-{t1:.2f}s): dropped, never re-timed")
     if kind in CAMERA_MOVES and ken and ken[0]:
         raise Refused(f"beat {n}: a {kind} over Ken Burns scale {ken[0]} - a camera move and a Ken Burns never "
                       "share a window (s9.28 C3); the move or the skeleton's ken has to give")
@@ -2232,14 +2798,12 @@ def _move(mv: dict, beat, ws, t0: float, t1: float, ken, land, d: dict) -> tuple
         raise Refused(f"beat {n}: the {kind} on {mv['at_word']!r} fires at {t:.2f}s, before this page's own chart "
                       f"lands at {t0 + land:.2f}s - a light is punctuation, not a cover for the build (E99 s67 "
                       "Apply 1-2). The compiler refuses it rather than move the author's beat.")
-    if not (t0 - EPS <= t < t1 - SPECIES_TAIL_S):
-        return None, (f"the {kind} on beat {n} ({mv['at_word']!r}, {t:.2f}s) falls outside the row its beat "
-                      f"landed on ({t0:.2f}-{t1:.2f}s): dropped, never re-timed")
     if kind == MOVE_DOCK:
         options = dict(mv.get("options") or {})
         lane = options.pop(MOVE_SLOT, DOCK_LANE)
-        out = t1 if d.get("card_in_page_room", True) else round(
-            t + float(options.get("read_s") or 0) + float(options.get("park_s") or 0) + CHART_HOLD_MAX_S, 2)
+        out, note = dock_leave(t, t1, options, d)
+        if note:
+            mv.setdefault("_leave_note", note)      # named on the row by `_row`, never silently trimmed
         return [str(mv["asset"]), lane, t, round(min(out, t1), 2), options], None
     sp: dict = {"kind": kind, "at": t}
     if mv.get("dur") is not None:

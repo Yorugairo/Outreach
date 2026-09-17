@@ -266,11 +266,32 @@ def base_doc(project: Path, build: Path, table: Path, rows: list[tuple], why: li
     else:
         lines += ["Every beat of the plan names at least one move.", ""]
     lines += ["## The signature mix", ""] + md_mix(signature_mix(why), approved_mix()) + [""]
+    lines += ["## The flow read (E99 s74 Apply 3)", ""] + md_flow(SH.flow_count(why)) + [""]
     lines += [f"## What M16 would MEASURE on the base ({len(gaps)} gaps over {SH.PULSE_MAX_S} s)", "",
               "`shapes.event_gaps` MEASURES; it never fills - a compiler that adds an event to close a gap is an "
               "allocator (`authoring/recipes.py:1-20`, `PIPELINE.md:33`). A gap here is the plan's own silence.", ""]
     lines += ([f"- after {a:.2f} s: {g:.2f} s" for a, g in gaps] if gaps else ["None."]) + [""]
     return "\n".join(lines)
+
+
+def md_flow(flow: dict) -> list[str]:
+    """THE FLOW READ (E99 s74 Apply 3, R26-189 - a read, never a gate yet). The operator: *"the whole
+    point of creating them was to improve our ability to live with less cuts and to be able to keep a
+    directional flow"*. So the base states, per world change, what CARRIED it: a transform (a continuous
+    move between the two worlds), an arrival (the incoming world's own entry - the mount, the snap, the
+    camera push, the axes, the spiral), or a cut or a dip taken as the LAST RESORT, with the transform it
+    could not use named on the row itself (`## The rows, and why each skeleton`)."""
+    out = [SH.flow_line(flow), "",
+           "| what carried it | how | count |", "|---|---|---|"]
+    for bucket, how in (("transforms", "a continuous move between the two worlds"),
+                        ("arrivals", "the incoming world's own arrival (its token is a cut)"),
+                        ("last_resort", "NOTHING carried it - every transform for the pair was refused by name")):
+        for name, n in sorted((flow.get(bucket) or {}).items()):
+            out.append(f"| {name} | {how} | {n} |")
+    out += ["", f"The exit TOKENS the table writes: "
+                + (", ".join(f"`{k}` {v}" for k, v in sorted((flow.get('tokens') or {}).items())) or "none")
+                + f" - **cuts + dips {flow.get('cuts_and_dips', 0)}** of {flow.get('boundaries', 0)} world changes."]
+    return out
 
 
 def write_base(project: Path, build: Path, table: Path, aspect: str,
@@ -309,15 +330,21 @@ OUTRO_CLIP_FN = "clip"                                # the bed's own `clip(<nam
 OUTRO_SUFFIX = ".mp4"                                 # what `docks.seekable_clip` writes into <build>/clips/
 
 
-def _const(node, project: Path):
+def _const(node, project: Path, seen: dict | None = None):
     """One module-level literal of a bed: a number, a string, or a path built off `HERE` (the project).
 
-    The two path shapes a bed writes are `HERE / "<rel>"` and `HERE.parents[<n>] / "<rel>"`; anything
-    else returns None and the caller names what it could not read rather than guessing at it."""
+    The path shapes a bed writes are `HERE / "<rel>"`, `HERE.parents[<n>] / "<rel>"`, `HERE.parent /
+    "<name>"` and a path built off an EARLIER constant of the same module (`SIBLING = HERE.parent /
+    "<a project>"`, then `OUTRO = SIBLING / "outro/<file>"` - how a project reuses a CHANNEL asset another
+    short documents). `seen` is what the reader has already evaluated, in the module's own order;
+    anything else returns None and the caller names what it could not read rather than guessing at it."""
     if isinstance(node, ast.Constant):
         return node.value
-    if isinstance(node, ast.Name) and node.id == "HERE":
-        return project
+    if isinstance(node, ast.Name):
+        return project if node.id == "HERE" else (seen or {}).get(node.id)
+    if isinstance(node, ast.Attribute) and node.attr == "parent":
+        got = _const(node.value, project, seen)
+        return got.parent if isinstance(got, Path) else None
     if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Attribute) \
             and node.value.attr == "parents" and isinstance(node.value.value, ast.Name) \
             and node.value.value.id == "HERE" and isinstance(node.slice, ast.Constant):
@@ -328,7 +355,7 @@ def _const(node, project: Path):
             # unreadable, like anything else this hand evaluator does not understand, and the caller
             # NAMES what it could not read rather than dying on a bed it only meant to parse
     if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
-        left, right = _const(node.left, project), _const(node.right, project)
+        left, right = _const(node.left, project, seen), _const(node.right, project, seen)
         if isinstance(left, Path) and isinstance(right, str):
             return left / right
     return None
@@ -339,6 +366,7 @@ def bed_constants(bed: Path, project: Path, names: tuple[str, ...]) -> dict:
     module writes it. A name the reader cannot evaluate is simply absent from the result."""
     tree = ast.parse(bed.read_text(encoding="utf-8"), filename=str(bed))
     out: dict = {}
+    seen: dict = {}      # every constant read so far, so a later one can be built off an earlier one
     for node in tree.body:
         if not isinstance(node, ast.Assign):
             continue
@@ -347,10 +375,14 @@ def bed_constants(bed: Path, project: Path, names: tuple[str, ...]) -> dict:
                      if isinstance(target, ast.Tuple) and isinstance(node.value, ast.Tuple)
                      else [(target, node.value)])
             for name, value in pairs:
-                if isinstance(name, ast.Name) and name.id in names:
-                    got = _const(value, project)
-                    if got is not None:
-                        out[name.id] = got
+                if not isinstance(name, ast.Name):
+                    continue
+                got = _const(value, project, seen)
+                if got is None:
+                    continue
+                seen[name.id] = got
+                if name.id in names:
+                    out[name.id] = got
     return out
 
 
@@ -461,25 +493,38 @@ def cue_audit(cues: list[dict], timeline: dict) -> list[str]:
     return out
 
 
-def refuse_by_name(build: Path) -> None:
-    """`build-short*`, by NAME - the same guard the sibling writer carries (`lab_build.refuse_by_name`,
-    `lab_build.py:683`), in the same words and off the same constant.
+def refuse_by_name(build: Path, bed: Path | None = None) -> None:
+    """`build-short*` AND every dir the BED's own `build_short.py` writes into, by NAME - the same guard the
+    sibling writer carries (`lab_build.refuse_by_name`), off the same constant and the same reader.
 
     `--bind-cues` REWRITES a timeline and a cue plan in place, and `build` is whatever the CLI is handed:
     pointed at the episode's `build-short/` with `--timeline timeline.json` it would drop cues out of the
-    APPROVED cut. Nothing is read and nothing is written before this."""
-    from lab_build import REFUSED_PREFIX        # the one place the name lives (`lab_build.py:138`)
+    APPROVED cut, and pointed at the calendar's `build-oneshot-3` out of the APPROVED one-shot (the eighth
+    pass' review, HIGH 1 - `build-short*` was never the whole list once the whole-table mode was
+    generalised). The second list is `lab_build.bed_output_dirs`, read off the bed's OWN source and never
+    re-typed here; the bed defaults to the build's parent, which is where a project keeps its builds.
+    Nothing is read and nothing is written before this."""
+    import lab_build as LB                     # the one place both names and the reader live
     build = Path(build)
-    if build.name.startswith(REFUSED_PREFIX) or any(q.name.startswith(REFUSED_PREFIX) for q in build.parents):
-        raise Refused(f"FAIL: {build.name}: this tool never binds cues inside `{REFUSED_PREFIX}*` - that is the "
+    if build.name.startswith(LB.REFUSED_PREFIX) or any(q.name.startswith(LB.REFUSED_PREFIX)
+                                                       for q in build.parents):
+        raise Refused(f"FAIL: {build.name}: this tool never binds cues inside `{LB.REFUSED_PREFIX}*` - that is the "
                       f"approved cut and every watched variant beside it, and a served build is never rewritten "
                       f"under the operator (memory `review-link-frozen-copy`, E99 s11). Bind the PRIVATE build "
                       f"the lab compiled (`lab_build.py --table ... --into ...`)")
+    bed = Path(bed) if bed is not None else build.parent
+    if not (bed / LB.BED_SCRIPT).is_file():
+        return                                 # no bed above it, so there are no bed output dirs to refuse
+    try:
+        LB.refuse_by_name(build, bed)          # the bed's own output dirs, read off its source (never run)
+    except LB.LabBuildError as exc:
+        raise Refused(f"FAIL: {exc} - and this tool never binds cues inside one either: `--bind-cues` rewrites "
+                      f"the timeline and the cue plan in place (memory `review-link-frozen-copy`, E99 s11)") from None
 
 
-def bind_build_cues(build: Path, timeline_name: str) -> int:
+def bind_build_cues(build: Path, timeline_name: str, project: Path | None = None) -> int:
     """The build's cues bound to its compiled timeline, in the plan AND in the timeline. Exit 0."""
-    refuse_by_name(build)
+    refuse_by_name(build, project)
     tl_path = build / timeline_name
     if not tl_path.is_file():
         raise Refused(f"FAIL: no {rel(tl_path)} - the cues are bound to what the COMPILED timeline plays, "
@@ -663,7 +708,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     try:
         if args.bind_cues:
-            return bind_build_cues(build, args.timeline)
+            return bind_build_cues(build, args.timeline, project)
         if args.departures:
             return report_departures(project, build, final_table_path(project, build, args.table), args.aspect)
         table = args.table if args.table is not None else project / TABLE_NAME
@@ -676,6 +721,7 @@ def main(argv: list[str] | None = None) -> int:
     print(rel(build / BASE_DOC_NAME))
     print(f"{len(rows)} rows | {len(SH.silent_why(why))} silent beats | mix: {mix} | "
           f"{len(SH.event_gaps(rows))} gaps over {SH.PULSE_MAX_S} s (MEASURED, never filled)")
+    print(SH.flow_line(SH.flow_count(why)))   # E99 s74 Apply 3 (R26-189): the flow read, beside the mix
     return 0
 
 

@@ -20,12 +20,16 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
+import gate_motion_density as MD  # noqa: E402  (the gates' own clocks, read by name - never re-typed)
 from authoring import shapes as SH  # noqa: E402
 from authoring import table as T  # noqa: E402
 
 PROJECTS = ROOT / "content/video_engine/projects/systems-and-blowups"
 TOKYO = PROJECTS / "tokyo-tea-break/build-short"
 JAPAN = PROJECTS / "japan-tariff-trick/build-short"
+# the one-shot's own plan and take (E99 s72 Apply 6: the compiler's base is judged on it, and the Tokyo
+# read-back stays the regression test). READ ONLY - nothing in this suite writes to an approved build.
+CALENDAR = PROJECTS / "memory-trades-the-calendar/build-oneshot-3"
 # The rebuilt choreography vocabulary (E99 s70 Apply 2) - read from the schema, never typed twice
 VOCABULARY = {w["const"] for w in json.loads(
     (ROOT / "content/video_engine/configs/shape_skeleton.schema.json").read_text(encoding="utf-8")
@@ -210,29 +214,50 @@ def test_the_return_comes_back_by_the_spiral(tokyo):
 
 
 def test_the_exits_are_the_approved_ones(tokyo):
-    """E47: the dip when the WORLD changes; page to page a suck or a cut, and never into a mount."""
+    """The transition INTO each row, read the way the engine reads it.
+
+    CHANGED in the seventh pass (E99 s74), and every changed assertion carries its doctrine:
+
+    1. `row[5]` is the transition INTO that row, not out of it - `build_scene_timeline_f.py:5030` (*"the
+       row's EXIT (the transition INTO it, E47)"*), `:2185` (*"the boundary between scenes[i-1] and
+       scenes[i] is scenes[i]['exit']"*), R26-60 `:2193` (*"the transition into scenes[i] TAKES the
+       outgoing world, scenes[i-1]"*). So the row before a mount is no longer the one that must read
+       `cut`: the MOUNTED row is.
+    2. `never into a mount` (E45) is read on the row's own entry, which is what the approved cuts carry
+       (their mount rows read `exit: cut`).
+    3. a world change is no longer asserted to be a DIP: s74 Apply 1 makes the dip the last resort, so
+       the assertion is that a dip appears only where the record's transforms for that pair were all
+       refused - the chain is in `why[i]["transition"]`, and `test_a_dip_is_never_chosen_...` reads it.
+    """
     _, rows, why = tokyo
     for i, r in enumerate(rows):
-        exit_, nxt = r[5], rows[i + 1] if i + 1 < len(rows) else None
-        if nxt is None:
-            assert exit_ == "cut"
+        exit_, prev = r[5], rows[i - 1] if i else None
+        if prev is None:
+            assert exit_ is None, "nothing precedes the first world, so it carries no transition (E47)"
             continue
         if exit_ is None:
-            # the world a page MOUNTS over hands over by the mount itself (E45), so it carries none
-            assert "mount=" in nxt[2] and i == 0, (i, r[2], nxt[2])
+            # the world a page MOUNTS over hands over by the mount itself (E45): the UNDER row of the
+            # open's pair is the only row past the first that carries no token
+            assert "mount=" in r[2] or "mount=" in rows[i + 1][2], (i, r[2])
             continue
-        if "mount=" in nxt[2]:
-            assert exit_ == "cut", f"row {i} exits {exit_!r} INTO a mount"
-        elif r[2].startswith("ledger:") and nxt[2].startswith("ledger:"):
-            assert exit_ == "cut" or exit_.startswith("suck"), f"page to page took {exit_!r}"
-        elif SH.plate_of(r[2]) != SH.plate_of(nxt[2]):
-            assert exit_ == "dip", f"the world changes at row {i} and it exits {exit_!r} (E47)"
+        if "mount=" in r[2]:
+            assert exit_ == "cut", f"row {i} is entered {exit_!r} INTO a mount (E45)"
+        elif r[2].startswith("ledger:") and prev[2].startswith("ledger:"):
+            assert exit_ == "cut" or exit_.split(":")[0] in ("suck", "melt"), f"page to page took {exit_!r}"
+        elif SH.plate_of(r[2]) != SH.plate_of(prev[2]):
+            assert exit_.split(":")[0] in ("cut", "dip", "suck", "melt", "door"),                 f"the world changes into row {i} on {exit_!r}, which is no transition the record carries (E99 s74)"
+            assert why[i]["transition"]["exit"] == exit_, (i, why[i]["transition"])
 
 
-def test_no_plate_row_is_shorter_than_six_seconds(tokyo):
-    """M44 / `PLATE_MIN_S`: the operator, on the balloon dock - "why do we have a plate less than 6
-    seconds long?" The seconds are taken from a neighbouring row, never from the words."""
+def test_a_plate_row_under_m44s_floor_keeps_the_plans_window_and_is_named(tokyo):
+    """RENAMED AND TURNED OVER (the eighth pass; this test read `>= PLATE_MIN_S` and so ASSERTED the
+    steal). M44 / `PLATE_MIN_S` is the operator's question on the balloon dock - "why do we have a plate
+    less than 6 seconds long?" - and the answer is a longer beat in the PLAN, never seconds taken from the
+    row beside it: E99 s69 (*"a gate GUIDES, never dismisses; a short plate is diagnosed, never
+    manufactured"*) and the parent's read of the one-shot's base, where the stretch cost the next page its
+    card and its span move. So a plate under the floor keeps the plan's own window and SAYS SO."""
     _, rows, why = tokyo
+    named = 0
     for n, r in enumerate(rows):
         if r[2].startswith("ledger:"):
             continue
@@ -242,7 +267,143 @@ def test_no_plate_row_is_shorter_than_six_seconds(tokyo):
             # M44 reads it - the author's answer is a longer hook, never a later mount
             assert "under M44's six seconds" in why[n]["rule"], why[n]["rule"]
             continue
-        assert round(r[1] - r[0], 2) >= SH.PLATE_MIN_S, r
+        if round(r[1] - r[0], 2) >= SH.PLATE_MIN_S:
+            continue
+        note = str(SH.rows_why(why)[n]["rule"])      # the row's notes are folded into its own rule
+        assert f"under M44's {SH.PLATE_MIN_S:.1f} s floor" in note, (r, note)
+        assert "the plan's window stands" in note and "E99 s69" in note, note
+        named += 1
+    assert named, "the regression bed carries a plate under the floor - it is what this test reads"
+
+
+def test_an_arrival_keeps_its_lead_and_takes_it_from_the_narrative_plate_before_it():
+    """THE PARENT'S RULING (2026-09-17): *"an arrival keeps its lead - a page entering by `spiral` starts
+    early enough that its arrival LANDS by the sentence's `t0`; the lead is taken from the plate before it
+    only where that plate is a narrative plate, and the `why` names it"*. Read on the ONE-SHOT's own plan
+    (E99 s72 Apply 6 - the base is judged on it), at the beat the plan declares `:spiral` on: the approved
+    cut plays that row from 67.82 s for a sentence at 68.96 s, a 1.14 s lead, and the base's row started
+    at the sentence, so the page was still unwinding when "trade it" landed."""
+    plan = SH.load_plan(CALENDAR / "BEAT-PLAN.jsonl")
+    rows, why = SH.compile(plan, _words(CALENDAR), SH.DEFAULTS, "9:16", pages=_pages(CALENDAR))
+    spiral = [b for b in plan if SH.entry_in(str(b["plate"])) == "spiral"]
+    assert len(spiral) == 1, "the one-shot's plan declares exactly one spiral page"
+    word_at = float(spiral[0]["t0"])
+    mine = [(i, r) for i, r in enumerate(rows) if SH.entry_in(str(r[2])) == "spiral"]
+    assert len(mine) == 1, [str(r[2]) for r in rows]
+    i, row = mine[0]
+    lead = SH.entry_unwind("spiral")
+    assert lead == MD.LP_SPIRAL_IN_S and lead > 0
+    assert round(row[0], 2) == round(word_at - lead, 2), (row[0], word_at, lead)
+    assert SH.world_of(str(rows[i - 1][2])) == "plate", rows[i - 1][2]   # a NARRATIVE plate, not a page
+    assert round(rows[i - 1][1], 2) == round(row[0], 2)                  # the seconds came out of its tail
+    rule = str(SH.rows_why(why)[i]["rule"])
+    assert "keeps its LEAD" in rule and "has LANDED by the sentence" in rule, rule
+    assert "plate-customs" in rule, rule
+
+
+def test_the_spirals_unwind_is_over_before_its_sentence_and_before_the_instants_the_parent_read():
+    """NO BARE CREAM OVER A SPOKEN WORD (the parent's B3). The player drains a `spiral` page to its point
+    at its row's own start (`spiralClocks`: `ui = (t - a) / LP_RETRACT.IN`, the field and the colours both
+    fully down the drain at `t = a`), so the first ~0.25 s of such a row IS the bare ground - in the
+    APPROVED cut too, measured: at its own boundary 67.82 s the approved frame's mean luminance is 220.49
+    and the base's at its own boundary is 220.62, the same frame 0.46 s apart. What the base got wrong was
+    WHERE that quarter-second fell: on the sentence. With the lead it is over before the first word, and
+    before every instant the parent read (69.4 / 69.7 / 70.0 s)."""
+    plan = SH.load_plan(CALENDAR / "BEAT-PLAN.jsonl")
+    rows, _why = SH.compile(plan, _words(CALENDAR), SH.DEFAULTS, "9:16", pages=_pages(CALENDAR))
+    i = next(n for n, r in enumerate(rows) if SH.entry_in(str(r[2])) == "spiral")
+    beat = next(b for b in plan if SH.entry_in(str(b["plate"])) == "spiral")
+    standing = round(rows[i][0] + MD.LP_SPIRAL_IN_S, 2)
+    assert standing <= float(beat["t0"]) + 1e-9, (standing, beat["t0"])
+    for t in (69.4, 69.7, 70.0):
+        assert rows[i][0] <= t <= rows[i][1], (t, rows[i][:2])
+        assert t >= standing, f"{t}s is inside the spiral's unwind ({rows[i][0]:.2f}-{standing:.2f}s)"
+
+
+def test_a_lead_is_refused_where_the_world_before_the_page_is_not_a_narrative_plate():
+    """The same ruling's second half: *"the lead is taken from the plate before it ONLY where that plate is
+    a narrative plate"* - never from a page (its own words are running) and never from a clip. Refused by
+    name on the row, never taken quietly."""
+    plan = [_rec(1, 0.0, 8.0, "ledger:ev-a-v1:line:12:right", sentence="The page says a number.", row=1),
+            _rec(2, 8.4, 16.4, "ledger:ev-b-v1:line:7:right:spiral:cut", sentence="A second page returns.", row=2)]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert SH.entry_in(str(rows[1][2])) == "spiral", rows[1][2]
+    assert round(rows[1][0], 2) >= 8.2, rows[1]          # the cut point, not a lead out of the page
+    rule = str(SH.rows_why(why)[1]["rule"])
+    assert "owed its 1.60 s unwind and does NOT get it" in rule, rule
+    assert "1.50 s before its own cut point" in rule, rule      # the cut point already gives it 0.10 s
+    assert "is a page" in rule and "never from a clip" in rule, rule
+
+
+def _short_plate_lead_plan():
+    """The eighth pass' review, HIGH 2, measured: a 0.5 s narrative plate before a `:spiral:` page whose
+    own cut point is 9.20 s. The plate cannot give a 1.60 s unwind and still be a beat."""
+    return [_rec(1, 0.0, 8.4, "ledger:ev-a-v1:line:12:right", sentence="The page says a number here.", row=1),
+            _rec(2, 8.4, 8.9, "plate-desk", sentence="July.", row=2),
+            _rec(3, 9.3, 17.3, "ledger:ev-b-v1:line:7:right:spiral:cut",
+                 sentence="A second page returns now.", row=3)]
+
+
+def test_a_lead_is_never_taken_from_a_plate_with_nothing_to_spare_and_never_moves_a_page_LATER():
+    """THE EIGHTH PASS' HIGH 2. The lead is `min(what the arrival wants, what the plate can spare above
+    its own LEAD_FLOOR_S)` and never negative: *"an arrival keeps its lead, and that is the one thing that
+    moves a start EARLIER"* - so where the plate before is shorter than the floor the page starts AT its
+    own cut point (9.20 s here) and NOT 0.10 s later, and the row's `why` says the plate had nothing to
+    spare instead of printing a `-0.10 s` lead that never happened."""
+    plan = _short_plate_lead_plan()
+    ws = _take(plan)
+    cut = SH.W.cut_before(SH._norm_words(ws), "A second page returns", exit="cut")
+    assert cut == pytest.approx(9.20), cut                 # the reviewer's measured cut point
+    rows, why = SH.compile(plan, ws, SH.DEFAULTS, "9:16")
+    assert SH.entry_in(str(rows[2][2])) == "spiral", rows[2][2]
+    assert rows[2][0] == pytest.approx(9.20), rows[2]      # AT the cut point, never 9.30
+    assert rows[1][1] == pytest.approx(rows[2][0]), (rows[1], rows[2])
+    rule = str(SH.rows_why(why)[2]["rule"])
+    assert "-0." not in rule, rule                         # no negative lead, anywhere in the evidence
+    assert "nothing to spare" in rule and "plate-desk" in rule, rule
+    assert "never moves a start LATER" in rule, rule
+    assert "keeps its LEAD" not in rule, rule
+
+
+def test_a_plate_that_can_only_spare_part_of_the_unwind_gives_exactly_that_and_the_why_says_so():
+    """The same `min`, on the middle case: the plate is longer than `LEAD_FLOOR_S` but not by the whole
+    unwind, so the arrival takes what is there, the plate is left standing at its floor, and the `why`
+    names the seconds of unwind that still play over the sentence - never a lead the plate did not give."""
+    plan = [_rec(1, 0.0, 8.0, "ledger:ev-a-v1:line:12:right", sentence="The page says a number here.", row=1),
+            _rec(2, 8.0, 8.9, "plate-desk", sentence="July.", row=2),
+            _rec(3, 9.3, 17.3, "ledger:ev-b-v1:line:7:right:spiral:cut",
+                 sentence="A second page returns now.", row=3)]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    held_before = round(rows[1][1] - rows[1][0], 2)
+    assert rows[1][0] + SH.LEAD_FLOOR_S == pytest.approx(rows[2][0]), (rows[1], rows[2])  # left AT its floor
+    assert held_before == pytest.approx(SH.LEAD_FLOOR_S), held_before
+    assert rows[2][0] > rows[1][0], rows                   # the page did move EARLIER, just not the whole way
+    rule = str(SH.rows_why(why)[2]["rule"])
+    assert "all the narrative plate before it (plate-desk) could spare" in rule, rule
+    assert "still plays over" in rule, rule
+    assert "-0." not in rule, rule
+
+
+def test_the_compiler_never_steals_a_page_s_seconds_to_lengthen_a_plate():
+    """THE PARENT'S RULING (2026-09-17, on `build-p66-cal` v2): *"the compiler never steals a page's
+    seconds to lengthen a plate; the plan's windows stand"*. A 1.3 s plate followed by a page: both rows
+    keep the plan's own `t0`s, the plate is NOT stretched to M44's floor, and the diagnosis is on its row.
+    On the one-shot's own plan this one mechanism pushed the chip-price page 4.7 s late, squeezed it to
+    3.2 s and cost it its docked card and its `span` move (M37's FAIL was that)."""
+    plan = [_rec(1, 0.0, 8.0, "ledger:ev-a-v1:line:12:right", sentence="The page says a number.", row=1),
+            _rec(2, 8.4, 9.7, "plate-desk", sentence="July.", row=2),
+            _rec(3, 10.2, 18.2, "ledger:ev-b-v1:bars:3:right:axes:cut", sentence="The second page counts it.",
+                 row=3)]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    # each row starts at the TAKE's own cut point before its first sentence (M13, `words.cut_before`) -
+    # the plan's window, to the frame the cut point sits on, and nothing borrowed either way
+    assert [round(r[0], 2) for r in rows] == [0.0, 8.3, 10.1], [(r[0], r[1]) for r in rows]
+    for r, b in zip(rows, plan):
+        assert abs(round(r[0], 2) - float(b["t0"])) <= 0.2, (r[0], b["t0"])
+    assert round(rows[1][1] - rows[1][0], 2) == 1.8, rows[1]     # the plan's own window, floor or no floor
+    note = str(SH.rows_why(why)[1]["rule"])
+    assert "this plate is 1.80 s - under M44's 6.0 s floor" in note, note
+    assert "a longer plate is the plan's to write" in note, note
 
 
 def test_portrait_emits_no_rail(tokyo, japan):
@@ -448,7 +609,9 @@ def test_every_row_carries_one_why_record(tokyo):
     _, rows, why = tokyo
     assert len(why) == len(rows)
     for w in why:
-        assert sorted(w) == ["act", "beat", "group", "rule", "signature", "skeleton"]
+        # `transition` added by the seventh pass (E99 s74 Apply 1): every row names the transform that
+        # carried the boundary INTO it, or the refusal chain that left a cut or a dip there
+        assert sorted(w) == ["act", "beat", "group", "rule", "signature", "skeleton", "transition"]
         assert w["rule"] and w["skeleton"] and isinstance(w["beat"], int)
         assert w["signature"] in VOCABULARY, w["signature"]
 
@@ -668,7 +831,34 @@ def test_a_dock_move_lands_on_its_word_and_parks_in_the_pages_own_room():
     asset, lane, t_in, t_out, options = mine[0]
     assert lane == SH.DOCK_LANE and options == {}
     assert t_in == SH.word_at(SH._norm_words(ws), "The record", 12.0, 24.0)
-    assert t_out == rows[0][1]
+    # ... and it LEAVES before the row does (the eighth pass; this line read `== rows[0][1]`): the player
+    # retracts a card from its `exit` over `DOCK_LEAVE_S` and snaps an exit within `DOCK_SNAP_S` of a
+    # boundary onto it, so a card that held to the row's end was still fading over the next world's title
+    assert t_out == round(rows[0][1] - SH.DOCK_CLEAR_S, 2), (t_out, rows[0][1])
+    assert t_out + SH.DOCK_LEAVE_S <= rows[0][1], (t_out, rows[0][1])
+
+
+def test_a_card_completes_its_leave_before_the_boundary_and_never_rides_a_cut():
+    """THE PARENT'S RULING (2026-09-17, on `build-p66-cal` v2): *"the coin-flip page's card is still on
+    stage at 41.16 s over the next page's title; a dock's `leave` ends at or before its row's `t1`, and a
+    card never rides a `cut`/`axes` boundary"*. The player's own two dials say what that costs: the
+    retract runs FROM `exit` over `EXIT = 0.72` (`samples/scene-evidence-engine.mjs:5457`) and an `exit`
+    inside 1.4 s of a boundary is SNAPPED onto it (`:6192-6201`), so the deliberate early clear is
+    `DOCK_CLEAR_S` before the row's end."""
+    page = "ledger:ev-a-v1:line:12:right"
+    plan = [_rec(1, 0.0, 12.0, page, sentence="The page draws its line to the print.",
+                 caps=["the page draws to datum 12"],
+                 moves=[{"kind": "dock", "at_word": "draws its", "asset": "dock-k-pledge"}]),
+            _rec(2, 12.4, 24.0, "ledger:ev-b-v1:bars:3:right:axes:cut", sentence="A second page counts it.")]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert rows[1][5] == SH.CUT_EXIT, rows[1][5]            # the boundary the card would have ridden
+    card = [d for d in rows[0][4] if d[0] == "dock-k-pledge"][0]
+    assert card[3] + SH.DOCK_LEAVE_S <= rows[0][1] + 1e-9, (card, rows[0][1])
+    assert rows[0][1] - card[3] > SH.DOCK_SNAP_S, \
+        "an exit inside the player's own 1.4 s snap window is moved back ONTO the boundary"
+    for r in rows:                                          # no card on any row rides its own end
+        for d in r[4] or []:
+            assert float(d[3]) + SH.DOCK_LEAVE_S <= float(r[1]) + 1e-9, (r[0], d)
 
 
 def test_every_beat_the_plan_leaves_silent_is_named_in_why():
@@ -1192,3 +1382,308 @@ def test_a_series_authored_in_its_sign_colour_is_not_warned_as_pre_e67():
         assert note and "WARN" not in note, (ink, note)
         assert ink in note, note
     assert "WARN" in (SH.ink_note({"series": [{"color": "#c0392b"}]}) or ""), "a raw hex is still named"
+
+
+# --- THE TRANSITION CHOOSER (P66 T3 seventh pass, E99 s74) ---------------------------------------
+# The operator, 2026-09-17: *"the whole point of creating them was to improve our ability to live with
+# less cuts and to be able to keep a directional flow"*. s74 Apply 1: between two worlds a cut or a dip
+# is the LAST RESORT, taken only after every transform the record carries for that pair was refused BY
+# NAME. These tests read the chain, not just the token.
+
+
+OPEN_PAGE = "ledger:ev-open-v1:line:0:right"    # every plan opens on a page: the open IS the chart (E99 s67 Apply 6)
+ACTS_BY_WORLD = {True: "QUOTES the figure", False: "EXPLAINS the mechanism"}
+
+
+def _pair_plan(a: str, b: str):
+    """A plan whose LAST boundary is the pair `a -> b`, and nothing else in the way.
+
+    The open is always a page (the open skeletons fill `{page}` and refuse a plan that names none), and
+    two beats on `a` keep it one row, so the boundary under test is the last one.
+    """
+    pre = [] if str(a).startswith("ledger:") else [_rec(1, 0.0, 8.0, OPEN_PAGE, sentence="The open is the chart.",
+                                                        act="QUOTES the figure", row=0)]
+    n = len(pre)
+    beats = pre + [
+        _rec(n + 1, 8.4 * (n + 0), 8.0 + 8.4 * n, a, sentence="The first world says a number.",
+             act=ACTS_BY_WORLD[str(a).startswith("ledger:")], row=1),
+        _rec(n + 2, 8.4 * (n + 1), 16.4 + 8.4 * n, b, sentence="And here is the other thing.",
+             act=ACTS_BY_WORLD[str(b).startswith("ledger:")], row=2)]
+    for i, r in enumerate(beats):      # one contiguous take, whatever the prefix
+        r["t0"], r["t1"] = round(i * 8.4, 2), round(i * 8.4 + 8.0, 2)
+    return beats
+
+
+def _chain_of(plan, i: int | None = None) -> tuple[dict, list[str]]:
+    """(the flow record of row i - the LAST row by default - and its refusal chain)."""
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    recs = SH.rows_why(why)
+    t = recs[len(recs) - 1 if i is None else i]["transition"]
+    return t, list(t["chain"])
+
+
+def test_the_boundary_belongs_to_the_incoming_row(tokyo):
+    """THE CONVENTION, `build_scene_timeline_f.py:2185`: *"`exit` names the transition INTO the scene it
+    sits on - so the boundary between scenes[i-1] and scenes[i] is scenes[i]['exit']"*; `:5030` (*"the
+    row's EXIT (the transition INTO it, E47)"*) and R26-60 `:2193` (*"the transition into scenes[i] TAKES
+    the outgoing world, scenes[i-1]"*). Passes 1-6 wrote the token on the OUTGOING row, so every
+    transition landed one boundary early (the base played a dip INTO its own mount). The row's `why` now
+    names the pair it joins, and row 0 carries no token at all."""
+    _, rows, why = tokyo
+    assert rows[0][5] is None, "nothing precedes the first world, so it carries no transition"
+    assert why[0]["transition"]["taken"] == "the open"
+    for i, (r, w) in enumerate(zip(rows, why)):
+        t = w["transition"]
+        if i == 0:
+            continue
+        assert t["exit"] == r[5], (i, t, r[5])
+        if t["taken"] != "the open":
+            assert t["pair"].endswith(SH.pair_of({"world": SH.world_of(str(rows[i - 1][2])), "plate": rows[i - 1][2]},
+                                                 {"world": SH.world_of(str(r[2])), "plate": r[2]}).split("->")[1]) \
+                   or "outro" in t["pair"], (i, t["pair"])
+
+
+# every transform the record carries for each pair, in the order the chain tries them - so a dip's own
+# record can be read against the FULL set rather than against "at least one refusal" (the seventh pass'
+# review M3: the old assertion passed on the very input that proved H1)
+PAIR_TRANSFORMS = {
+    "page->page": ("recast", "rescale", "morph", "melt-then-splash"),
+    "page->plate": ("melt-then-splash", "the door", "the suck"),
+    "plate->page": (),          # the arrivals carry this pair; the chain names each one it is not
+    "plate->plate": (),         # the continuity three, named as one line (each is the plan's to name)
+}
+
+
+def test_a_dip_is_never_chosen_while_a_transform_is_available(tokyo, japan):
+    """s74 Apply 1: the dip is the LAST RESORT, *"taken only after every transform the record carries for
+    that pair was refused BY NAME"*. So every dip owes a `REFUSED` line for EACH transform of its pair -
+    and a DEFERRED one (the variety rule's preference) is not a refusal: the chain that hits one goes on
+    and cashes it rather than dipping (the eighth pass, the review's H1)."""
+    for _, rows, why in (tokyo, japan):
+        for w in SH.rows_why(why):
+            t = w.get("transition") or {}
+            if str(t.get("exit") or "").split(":")[0] != "dip":
+                continue
+            assert t["kind"] == SH.LAST_RESORT, t
+            chain = list(t["chain"])
+            assert not any("DEFERRED" in line for line in chain), \
+                f"a dip was taken while a transform stood deferred by the variety rule: {chain}"
+            for name in PAIR_TRANSFORMS[t["pair"]]:
+                assert any(line.startswith(f"{name}: REFUSED") for line in chain), (name, chain)
+            if not PAIR_TRANSFORMS[t["pair"]]:
+                assert any("REFUSED" in line for line in chain), chain
+
+
+def test_the_variety_rule_never_sends_an_admissible_transform_to_a_dip():
+    """THE REVIEWER'S OWN FAILING INPUT (the seventh pass' review H1), as a test. Two page -> clip
+    boundaries with a page between them: the melt is refused by name both times (a video is not painted)
+    and the door has no card to open, so the suck is the only transform the record carries for the pair -
+    and the variety rule refused it outright, which sent the second boundary to a DIP while the suck was
+    admissible by every rule R26-60/E88 state. s74 Apply 1: *"a cut or a dip is the last resort"* - the
+    answer to "do not play it twice" is never "then dip"."""
+    plan = [_rec(1, 0.0, 8.0, "ledger:ev-a-v1:line:12:right", sentence="The page says a number.", row=1),
+            _rec(2, 8.4, 16.4, "clip:c-one.mp4", sentence="And here is the first clip.", row=2),
+            _rec(3, 16.8, 24.8, "ledger:ev-b-v1:bars:3:right:axes:cut", sentence="The second page counts it.", row=3),
+            _rec(4, 25.2, 33.2, "clip:c-two.mp4", sentence="And here is the second clip.", row=4)]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    recs = [w["transition"] for w in SH.rows_why(why)]
+    assert [r["taken"] for r in recs[1:]] == ["the suck", "the axes open", "the suck"], recs
+    assert str(rows[3][5]).split(":")[0] == "suck", rows[3][5]
+    for r in recs:
+        assert str(r["exit"] or "") != SH.DIP_EXIT, r
+    # ... and the deferral names the boundary it actually compares against - the world change that TOOK a
+    # transform, by index and by instant. The seventh pass said "the boundary before this one" of a melt
+    # five boundaries back (the review's H1.2); boundary 2 here was an arrival, not a suck.
+    deferred = [c for c in recs[3]["chain"] if c.startswith("the suck: DEFERRED")]
+    assert len(deferred) == 1, recs[3]["chain"]
+    assert "the world change into world 2 at 8.40s" in deferred[0], deferred[0]
+    assert "the boundary before this one" not in " ".join(recs[3]["chain"])
+    assert any("the suck: TAKEN" in c and "the repeat stands" in c for c in recs[3]["chain"]), recs[3]["chain"]
+
+
+def test_the_pair_of_pages_refuses_recast_rescale_and_morph_by_name():
+    """s74 Apply 1 names the chain for a page-to-page boundary: recast, rescale, morph, then
+    melt-then-splash. Each refusal is BY NAME with its own reason - CAPABILITIES.md:106 for the two
+    chart verbs (they retarget or re-form ONE page, inside its row), and no approved skeleton for the
+    morph (E99 s70 Apply 2)."""
+    plan = _pair_plan("ledger:ev-a-v1:line:12:right", "ledger:ev-b-v1:bars:0:right")
+    t, chain = _chain_of(plan)
+    assert t["pair"] == "page->page", t
+    assert [c.split(":")[0] for c in chain[:4]] == ["recast", "rescale", "morph", "melt-then-splash"], chain
+    assert "REFUSED" in chain[0] and "CAPABILITIES.md:106" in chain[0]
+    assert "REFUSED" in chain[1] and "CAPABILITIES.md:106" in chain[1]
+    assert "REFUSED - no approved skeleton" in chain[2] and "CAPABILITIES.md:118" in chain[2]
+
+
+def test_morph_is_refused_by_name_and_never_emitted(tokyo, japan):
+    """E99 s70 Apply 2 (*"a vocabulary written from memory is refused"*) and the survivorship audit
+    (2026-09-17: `morph` is in NO cut): `morph_to` is LIVE, has no approved skeleton and is therefore
+    named in the chain and never written as a token."""
+    seen = 0
+    for _, rows, why in (tokyo, japan):
+        for r in rows:
+            assert str(r[5] or "").split(":")[0] != "morph", r
+        for w in SH.rows_why(why):
+            seen += sum(1 for c in (w.get("transition") or {}).get("chain", [])
+                        if c.startswith("morph: REFUSED - no approved skeleton"))
+    assert seen, "a page-to-page boundary owes the morph's refusal by name"
+
+
+def test_the_melt_holds_onto_a_plate_and_is_refused_onto_a_clip():
+    """E88 / CAPABILITIES.md:37: a `splash:plate` paints the next NARRATIVE PLATE up through its stains,
+    so it holds page -> plate; a clip is not painted, and that refusal is by name."""
+    t, chain = _chain_of(_pair_plan("ledger:ev-a-v1:line:12:right", "plate-desk"))
+    assert t["pair"] == "page->plate" and t["exit"] == SH.MELT_PLATE, t
+    assert t["kind"] == SH.TRANSFORM
+    # ... and onto a CLIP the melt is refused by name and the chain falls through to the suck, which is
+    # exactly what the approved cut plays there (its own `s03`: the page spins into a point and a CLIP is
+    # standing behind it) - the boundary still costs no dip
+    t2, chain2 = _chain_of(_pair_plan("ledger:ev-a-v1:line:12:right", "clip:a-clip.mp4"))
+    assert t2["taken"] == "the suck" and t2["exit"].split(":")[0] == "suck", t2
+    assert any("a video is not painted" in c for c in chain2), chain2
+    assert any(c.startswith("the door: REFUSED") for c in chain2), chain2
+
+
+def test_the_melt_into_a_chart_is_refused_where_the_plan_declares_the_page_s_own_arrival():
+    """E88: a `splash:chart`'s page arrives out of the splatter, `built`. E99 s66: the plan is the
+    intelligence - so where the plan DECLARES the incoming page's arrival the melt is refused by name
+    rather than overwriting it, and where the plan declares none the compiler takes the melt and the
+    page arrives `built` (the record says so on the row)."""
+    declared = _pair_plan("ledger:ev-a-v1:line:12:right", "ledger:ev-b-v1:line:3:right:axes:cut")
+    t, chain = _chain_of(declared)
+    assert t["exit"] == SH.CUT_EXIT and t["taken"] == "the axes open", t
+    assert any("declares the page's own arrival" in c for c in chain), chain
+    plain = _pair_plan("ledger:ev-a-v1:line:12:right", "ledger:ev-b-v1:line:3:right")
+    rows, why = SH.compile(plain, _take(plain), SH.DEFAULTS, "9:16")
+    t2 = SH.rows_why(why)[1]["transition"]
+    assert t2["exit"] == SH.MELT_CHART, t2
+    assert t2["entry"] == SH.BUILT_ENTRY
+    assert SH.entry_in(rows[1][2]) == "built", rows[1][2]
+
+
+def test_a_plate_to_page_boundary_is_carried_by_the_arrival_and_never_by_a_dip():
+    """s74 Apply 1-2 and the approved cuts themselves: every one of them CUTS into its pages (the mount,
+    the snap, the camera push, the axes, the spiral), so a plate -> page boundary is the arrival's and a
+    dip there is the compiler's own invention. The refusal chain names each arrival it is not."""
+    t, chain = _chain_of(_pair_plan("plate-desk", "ledger:ev-b-v1:line:3:right:axes:cut"))
+    assert t["pair"] == "plate->page" and t["exit"] == SH.CUT_EXIT and t["kind"] == SH.ARRIVAL, t
+    assert t["taken"] == "the axes open"
+    assert [c.split(":")[0] for c in chain] == ["the snap", "throw-then-zoom", "throw-then-push",
+                                               "object-becomes-chart", "the spiral return", "the axes open"], chain
+    assert all("REFUSED" in c for c in chain[:-1]) and "TAKEN" in chain[-1]
+
+
+def test_a_plate_to_plate_boundary_keeps_the_dip_and_names_the_continuity_three():
+    """E47 - the dip is the transition when the WORLD actually changes, and plate to plate is the pair it
+    is for. CAPABILITIES.md:108 (HF-15/16/17, the continuity three) is what could carry one plate into
+    another instead, and each of the three is the PLAN's to name (E99 s70 Apply 2) - so the dip's own
+    record names them as refused rather than pretending none exist."""
+    t, chain = _chain_of(_pair_plan("plate-desk", "plate-vault"))
+    assert t["pair"] == "plate->plate" and t["exit"] == SH.DIP_EXIT and t["kind"] == SH.LAST_RESORT, t
+    assert any("the continuity three: REFUSED" in c and "CAPABILITIES.md:108" in c for c in chain), chain
+
+
+def test_the_variety_rule_defers_the_same_transform_twice_running_and_the_chain_goes_on():
+    """E88's own use-when (*"never as a mechanical wipe"*) through P66 T2's variety rule: the transform
+    that carried the last world change a transform carried is DEFERRED where another one holds, so a run
+    of page -> plate boundaries alternates instead of melting every time. It defers rather than refuses
+    (the eighth pass): a preference may reorder the chain, never end it at a dip."""
+    plan = [_rec(1, 0.0, 8.0, "ledger:ev-a-v1:line:12:right", sentence="The page says a number.", row=1),
+            _rec(2, 8.4, 16.4, "plate-desk", sentence="And here is the desk.", row=2),
+            _rec(3, 16.8, 24.8, "ledger:ev-b-v1:line:3:right:axes:cut", sentence="The second page counts it.", row=3),
+            _rec(4, 25.2, 33.2, "plate-vault", sentence="And here is the vault.", row=4)]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    taken = [(w["transition"]["taken"], w["transition"]["exit"]) for w in SH.rows_why(why)]
+    assert taken[1][1] == SH.MELT_PLATE, taken
+    assert taken[3][0] == "the suck", taken
+    chain = SH.rows_why(why)[3]["transition"]["chain"]
+    assert any(c.startswith("melt-then-splash: DEFERRED - a repeat of the transform that carried the world change "
+                            "into world 2 at 8.40s") for c in chain), chain
+
+
+def _engine_scenes(rows: list[tuple]) -> list[dict]:
+    """The compiler's rows as the SCENE dicts `build_scene_timeline_f.door_boundary_error` reads - its
+    span, its exit and its docks' own `enter`/`exit`, the three fields that rule touches. Built here
+    rather than through `compile_table` so the assertion is on the engine's rule, not on a whole build."""
+    return [{"span": [round(float(r[0]), 2), round(float(r[1]), 2)], "exit": r[5],
+             "docks": [{"slide": d[0], "enter": round(float(d[2]), 2), "exit": round(float(d[3]), 2)}
+                       for d in (r[4] or [])]} for r in rows]
+
+
+def _door_plan():
+    """A plan the door HOLDS on: a page, a plate that throws a card, the page that IS that card
+    (`snap=`), then the plate the card swings open onto. The reference door cut has exactly this shape -
+    its `s07 exit:door:right` sits on the PLATE row that consumes the page before it, and neither its
+    s06 nor its s07 carries a dock (the evidence-free boundary, doc 29 Part 6)."""
+    return [_rec(1, 0.0, 8.0, "ledger:ev-a-v1:line:12:right", sentence="The page says a number.", row=1),
+            _rec(2, 8.4, 16.4, "plate-desk", sentence="And here is the desk in July.", row=2,
+                 moves=[{"kind": "dock", "asset": "dock-x-receipt", "at_word": "July",
+                         "options": {"arrive": "throw"}}]),
+            _rec(3, 16.8, 24.8, "ledger:ev-b-v1:bars:3:right:snap=dock-x-receipt",
+                 sentence="The second page counts it.", row=3),
+            _rec(4, 25.2, 33.2, "plate-vault", sentence="Down in the vault it is counted.", row=4)]
+
+
+def test_the_door_is_taken_on_the_plate_row_that_consumes_the_page_the_card_became():
+    """E98 s7 / CAPABILITIES.md:38 and the reference cut's own `s07 exit:door:right`. The TAKEN branch was
+    unexercised by every earlier pass (the seventh pass' review M1): the only door assertion was a
+    refusal. Here the outgoing page arrived by a SNAP, so there is a card to swing, and the door lands on
+    the PLATE row - the row that consumes the page - never on the page's own row."""
+    plan = _door_plan()
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    recs = [w["transition"] for w in SH.rows_why(why)]
+    assert [r["taken"] for r in recs] == ["the open", "melt-then-splash", "throw-then-zoom", "the door"], recs
+    assert rows[3][5] == SH.DOOR_EXIT and SH.world_of(str(rows[3][2])) == "plate", rows[3]
+    assert SH.entry_in(str(rows[2][2])) == "snap", rows[2][2]        # the page the door's card became
+    assert recs[3]["kind"] == SH.TRANSFORM and recs[3]["pair"] == "page->plate"
+    assert any(c.startswith("the door: TAKEN") and "swings open on its hinge" in c for c in recs[3]["chain"])
+    # ... and the engine would ACCEPT it: its own `door_boundary_error` reads None on that boundary
+    scenes = _engine_scenes(rows)
+    assert SH.compiler().door_boundary_error(scenes[2], scenes[3]) is None, scenes[2:4]
+
+
+def test_a_door_is_refused_by_name_where_the_engine_s_own_boundary_rule_would_refuse_it():
+    """`build_scene_timeline_f.door_boundary_error` rule 2 (doc 29 Part 6): a door swings on an
+    EVIDENCE-FREE boundary, and a card landing inside the swing is a `ValueError` - *"let the card leave
+    by the boundary ... or land after the door has opened, or say dip"*. `shapes` places the cards itself,
+    so a door it emitted onto such a boundary died inside `compile_table` as a `[FAIL] compile` with an
+    engine message instead of standing in the chain as a named refusal (the review's M1). Now the chain
+    refuses it in the engine's own words and falls through to the suck - the boundary still costs no dip."""
+    plan = _door_plan()
+    plan[3] = _rec(4, 25.2, 33.2, "plate-vault", sentence="Down in the vault it is counted.", row=4,
+                   moves=[{"kind": "dock", "asset": "dock-y-ledger", "at_word": "Down"}])
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    t = SH.rows_why(why)[3]["transition"]
+    assert t["taken"] == "the suck" and str(rows[3][5]).split(":")[0] == "suck", (t["taken"], rows[3][5])
+    door = [c for c in t["chain"] if c.startswith("the door: REFUSED")]
+    assert door and "EVIDENCE-FREE boundary (doc 29 Part 6" in door[0], t["chain"]
+    assert "lands inside the swing" in door[0] and "dock-y-ledger" in door[0], door[0]
+    assert "or say dip" in door[0], door[0]
+
+
+def test_the_flow_read_counts_the_world_changes_by_what_carried_them(tokyo):
+    """s74 Apply 3 (R26-189, a READ and no gate yet): the cut-and-dip share of the cut's world changes,
+    each named with the transform that carried it or the refusal that left a cut. The line is what
+    `generate_base_table.py` prints under the mix and `BASE-TABLE.md` carries."""
+    _, rows, why = tokyo
+    flow = SH.flow_count(why)
+    assert flow["boundaries"] == len(rows) - 1, flow
+    assert sum(flow["transforms"].values()) + sum(flow["arrivals"].values()) + sum(flow["last_resort"].values()) \
+           == flow["boundaries"]
+    assert sum(flow["tokens"].values()) == flow["boundaries"]
+    assert flow["cuts_and_dips"] == flow["tokens"].get("cut", 0) + flow["tokens"].get("dip", 0)
+    line = SH.flow_line(flow)
+    assert line.startswith(f"flow: {flow['boundaries']} world changes - transforms ")
+    assert "cuts+dips" in line and "tokens" in line
+
+
+def test_the_read_back_base_carries_fewer_cuts_and_dips_than_it_did(tokyo, japan):
+    """The measure s74 Apply 3 asks for, on the two regression beds: before this pass the compiler wrote
+    a dip at every world change that was not a page pair (Tokyo 2, Japan 7) and one of them was a dip
+    INTO a mount. The transforms and the arrivals now carry them."""
+    tok = SH.flow_count(tokyo[2])
+    jap = SH.flow_count(japan[2])
+    assert tok["tokens"].get("dip", 0) == 0, tok
+    assert jap["tokens"].get("dip", 0) == 1, jap          # the one plate -> plate pair: E47's own
+    assert tok["tokens"].get("melt", 0) == 1 and jap["tokens"].get("melt", 0) == 2
+    assert jap["tokens"].get("suck", 0) == 2

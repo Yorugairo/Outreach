@@ -122,13 +122,15 @@ import recipe_walk as RW  # noqa: E402  (events / match / flatten: what a FIRE i
 import self_watch as SW  # noqa: E402  (parse_gate: the `[LEVEL] Mxx` protocol's own reader)
 from authoring import table as T  # noqa: E402  (the rows go through the kit's door, never a hand-written literal)
 
-BED_REL = "content/video_engine/projects/systems-and-blowups/tokyo-tea-break"
+BED_REL = "content/video_engine/projects/systems-and-blowups/tokyo-tea-break"   # the CANDIDATE lab's bed
+BED_SCRIPT = "build_short.py"      # ... and the file that makes any project a bed (the whole-table mode walks to it)
 BEAT_PLAN_REL = "build-short/BEAT-PLAN.jsonl"      # P66 T7: the approved cut read back, one record per sentence
 APPROVED_TABLE = "SHOT-TABLE-SHORT.py"             # the approved rows, as the kit last wrote them (--dry-run reads these)
 BATCHES_REL = "content/video_engine/effects/lab/batches"   # NOT `runs/`: .gitignore's bare `runs/` rule swallows
                                                           # any directory of that name, and the record is tracked
 SHOT_TABLE_NAME = "SHOT-TABLE-LAB.py"              # written INSIDE the private build, never over the episode's own
 TIMELINE_NAME = "tokyo-lab.timeline.json"
+TIMELINE_JSON = "timeline.json"                     # the take's own words + runtime, as every bed writes it
 TABLE_TIMELINE_NAME = "base.timeline.json"         # the whole-table mode's compiled timeline, beside the bed's own
 CUE_PLAN_NAME = "SOUND-PLAN.json"                  # the re-derived plan, in the PRIVATE build - never the project's
 PROJECT_PLAN_REL = "sound/SOUND-PLAN.json"         # the APPROVED plan `build_short.main` writes; read-only here
@@ -240,8 +242,41 @@ class LabBuildError(ValueError):
 
 # --------------------------------------------------------------------------- the bed
 
-def bed_dir(repo: Path) -> Path:
+def bed_dir(repo: Path, table: Path | None = None) -> Path:
+    """THE BED IS THE TABLE'S OWN PROJECT (P66 T3 seventh pass, E99 s72 Apply 6).
+
+    The candidate lab has ONE bed (`BED_REL`) and keeps it: a shape's window is read off that cut's beat
+    plan and its members are bound to its own docks. The WHOLE-TABLE mode has no window and no members -
+    it builds a generated BASE, and s72 Apply 6 puts the next base on the one-shot's own plan, so its bed
+    must be the project the table was generated for (its take, its words, its docks, its stills). The
+    project is the nearest directory above the table that carries a `build_short.py` - the same walk the
+    kit's own `Project` makes, and no map of episode names anywhere."""
+    if table is not None:
+        for parent in [Path(table).resolve(), *Path(table).resolve().parents]:
+            if (parent / BED_SCRIPT).is_file():
+                return parent
+        raise LabBuildError(f"{table}: no `{BED_SCRIPT}` above it - the whole-table mode builds a base on the "
+                            f"project's OWN bed (its take, its words, its docks), so the table has to live under one")
     return Path(repo) / BED_REL
+
+
+BED_ENV = re.compile(r"""os\.environ\.get\(\s*["']([A-Z0-9_]*BUILD_DIR)["']""")
+# ... and the DIRS that script writes into, by name: the `*_BUILD_DIR` call's own default (the approved
+# build of that project - `build-short` on two beds, `build-oneshot-3` on the one-shot's) and any other
+# `HERE / "<dir>"` it names as an output. `refuse_by_name` refuses every one of them.
+BED_OUT_ENV = re.compile(r"""os\.environ\.get\(\s*["'][A-Z0-9_]*BUILD_DIR["']\s*,\s*["']([^"']+)["']""")
+BED_OUT_HERE = re.compile(r"""^\s*(?:BUILD|OUT|OUTPUT|PUBLISH)\w*\s*=\s*HERE\s*/\s*["']([^"']+)["']""", re.M)
+
+
+def bed_build_env(bed: Path) -> str:
+    """The environment variable the project's own build script reads its BUILD dir from - read off the
+    source, never mapped by episode name. Every short's bed carries one (`<NAME>_BUILD_DIR`) exactly so a
+    cut under review can build beside the watched one and never over it (P48 T7)."""
+    m = BED_ENV.search((Path(bed) / BED_SCRIPT).read_text(encoding="utf-8"))
+    if not m:
+        raise LabBuildError(f"{Path(bed).name}/{BED_SCRIPT} reads no `*_BUILD_DIR` from the environment, so this tool "
+                            f"cannot point it at a PRIVATE build dir - and it never writes into the approved one")
+    return m.group(1)
 
 
 def load_beats(repo: Path | str = REPO) -> list[dict]:
@@ -253,15 +288,18 @@ def load_beats(repo: Path | str = REPO) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
-def import_bed(repo: Path, build: Path):
-    """`build_short.py` imported with TOKYO_BUILD_DIR pointed at the PRIVATE build - the bed's own facts, in memory.
+def import_bed(repo: Path, build: Path, bed: Path | None = None):
+    """`build_short.py` imported with its own `*_BUILD_DIR` pointed at the PRIVATE build - the bed's own
+    facts, in memory.
 
     The module is loaded fresh per candidate (its `BUILD`, `EP` and dock registrations are module state), and its
     `main()` is never called: `main` writes the episode's own `SHOT-TABLE-SHORT.py` and `sound/SOUND-PLAN.json`, and
-    a lab build never writes into the episode dir."""
-    path = bed_dir(Path(repo)) / "build_short.py"
-    os.environ["TOKYO_BUILD_DIR"] = str(Path(build).resolve())
-    spec = importlib.util.spec_from_file_location(f"tokyo_bed_{abs(hash(str(build)))}", path)
+    a lab build never writes into the episode dir. `bed` is the project to import (the whole-table mode hands
+    the table's own; the candidate lab's is `BED_REL`)."""
+    root = Path(bed) if bed is not None else bed_dir(Path(repo))
+    path = root / BED_SCRIPT
+    os.environ[bed_build_env(root)] = str(Path(build).resolve())
+    spec = importlib.util.spec_from_file_location(f"bed_{root.name.replace('-', '_')}_{abs(hash(str(build)))}", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
@@ -280,10 +318,19 @@ def approved_rows(bed, dry_run: bool) -> tuple[list[tuple], list[dict], float]:
         rows = T.load_rows(bed.HERE / APPROVED_TABLE)
         return rows, ws, max(float(r[1]) for r in rows)
     bed.EP.mkdirs()
-    shutil.copy2(bed.TAKE / "scene_1.mp3", bed.EP.audio_master)
+    # the take's own file, from the bed's own stem (a project may hold several candidate cuts of one take:
+    # `Project.take_stem`, `authoring/__init__.py:34`) - never a file name this tool typed
+    shutil.copy2(bed.TAKE / f"{getattr(bed, 'TAKE_STEM', None) or bed.EP.take_stem}.mp3", bed.EP.audio_master)
     W.write_timeline(bed.EP, ws, A.probe_duration(bed.EP.audio_master))
-    tl = W.apply_edit_pauses(bed.EP, bed.EDIT_PAUSES)
-    ws = W.shifted_words(bed.EP)
+    # THE EDIT PAUSES ARE THE BED'S, NOT THIS TOOL'S (P66 T3 seventh pass): a project whose take was
+    # TIGHTENED before it was recorded declares no `EDIT_PAUSES` (doc 37 s14's dead space killed by
+    # `retime_take.py`) and its own `main()` writes the timeline straight off the take. Inserting pauses
+    # into a take that has none would move every word the plan is clocked on.
+    pauses = getattr(bed, "EDIT_PAUSES", None)
+    tl = (W.apply_edit_pauses(bed.EP, pauses) if pauses is not None
+          else json.loads((Path(bed.EP.build) / TIMELINE_JSON).read_text(encoding="utf-8")))
+    if pauses is not None:
+        ws = W.shifted_words(bed.EP)
     line_s = A.probe_duration(bed.BRAND_LINE)
     t_outro, _t_line, runtime_s = A.outro_clock(tl["runtime_s"], line_s, outro_lead=bed.OUTRO_LEAD,
                                                 outro_s=bed.OUTRO_S, brand_gap=bed.BRAND_GAP,
@@ -293,6 +340,12 @@ def approved_rows(bed, dry_run: bool) -> tuple[list[tuple], list[dict], float]:
     tl["runtime_s"] = runtime_s
     W.save_timeline(bed.EP, tl)
     T.caption_pages(bed.BUILD, char_budget=28, max_words=6)
+    # THE BED REGISTERS (the mode's own promise, above): a project that keeps its plate and card
+    # registrations in a `register_assets()` of its own calls it from `main()`, which this tool never
+    # calls - so it is called here where the bed has one, and the compiler can resolve that project's
+    # own stills. Without it the base compiles to "no plate asset found" on the bed's own plate.
+    if callable(getattr(bed, "register_assets", None)):
+        bed.register_assets()
     rows = bed.shot_table(ws, runtime_s, t_outro)
     (bed.BUILD / "evidence-dock.json").write_text(json.dumps(bed.DOCK_META, indent=1), encoding="utf-8")
     return rows, ws, runtime_s
@@ -679,13 +732,47 @@ def served_port(build: Path) -> int | None:
     return None
 
 
-def refuse_by_name(build: Path) -> None:
-    """`build-short*`, by NAME: the approved cut and every cut watched beside it."""
+def bed_output_dirs(bed: Path) -> list[str]:
+    """Every dir name the BED's own `build_short.py` writes into - read off the source, never mapped by
+    episode name (the seventh pass' review M4).
+
+    `build-short*` was the whole by-name guard while the lab had one bed, and the project the whole-table
+    mode was generalised FOR keeps its approved cut in `build-oneshot-3`: `--into <that>` was refused by
+    nothing but a `serve_player.py` happening to answer, and `check_guard` watches only the approved
+    `SHOT-TABLE-SHORT.py` and `sound/SOUND-PLAN.json` - so the approved BUILD's `timeline.json` /
+    `player.json` / `assets.json` would have been overwritten under the operator (E99 s11, memory
+    `review-link-frozen-copy`). The dirs are the `*_BUILD_DIR` default (`bed_build_env` reads the variable
+    off the same call) and any other `HERE / "<dir>"` the script writes to."""
+    src = (Path(bed) / BED_SCRIPT).read_text(encoding="utf-8")
+    out: list[str] = []
+    for pat in (BED_OUT_ENV, BED_OUT_HERE):
+        for m in pat.finditer(src):
+            name = m.group(1).strip().strip("/")
+            if not name or "." in name or "/" in name:
+                continue          # an asset the script READS (`HERE / "outro/outro-v2.mov"`), not a dir it writes
+            if name not in out:
+                out.append(name)
+    return out
+
+
+def refuse_by_name(build: Path, bed: Path | None = None) -> None:
+    """`build-short*` and, where the bed is known, every dir the BED's own script writes into - by NAME:
+    the approved cut, every cut watched beside it, and the approved BUILD of any project."""
     build = Path(build)
     if build.name.startswith(REFUSED_PREFIX) or any(p.name.startswith(REFUSED_PREFIX) for p in build.parents):
         raise LabBuildError(f"{build.name}: the lab never builds into `{REFUSED_PREFIX}*` - that is the approved cut "
                             f"and the cuts watched beside it, and a served build is never rebuilt under the operator "
                             f"(memory `review-link-frozen-copy`, E99 s11)")
+    if bed is None:
+        return
+    named = bed_output_dirs(bed)
+    parts = [build.name] + [p.name for p in build.parents]
+    for name in named:
+        if name in parts and not build.name.startswith(BUILD_PREFIX):
+            raise LabBuildError(f"{build.name}: `{name}` is a dir {Path(bed).name}/{BED_SCRIPT} writes into itself "
+                                f"(its own `*_BUILD_DIR` default or an output it names), so it is the APPROVED build - "
+                                f"the lab never builds into one, and a served build is never rebuilt under the operator "
+                                f"(memory `review-link-frozen-copy`, E99 s11). Point `--into` at a private dir")
 
 
 def refuse_if_served(build: Path) -> None:
@@ -2318,14 +2405,24 @@ def write_cue_plan(bed, build: Path, rows: list[tuple], table: Path) -> tuple[Pa
     return out, cues
 
 
+def bed_id(bed) -> tuple[str, str]:
+    """`(the episode id, the title)` the BED's own module declares - never this tool's opinion. The base is
+    compiled for the project the table was generated for (E99 s72 Apply 6), so the timeline carries that
+    episode's id: the player, the gates and the probe all key off it."""
+    ep = getattr(bed, "EP", None)
+    episode = str(getattr(ep, "episode_id", "") or Path(bed.HERE).name)
+    return episode, str(getattr(bed, "TITLE", "") or episode)
+
+
 def compile_table(bed, build: Path, label: str, shot_table_file: str, no_receipt: str) -> tuple[int, str | None]:
     """The kit's compile door on a WHOLE table. Returns (rc, the refusal text or None), as `compile_candidate` does:
     the door's and the compiler's own refusals become a `[FAIL] compile` row in the record, never a crash."""
+    episode, title = bed_id(bed)
     try:
         rc = T.compile_timeline(
             bed.HERE, build, timeline_name=TABLE_TIMELINE_NAME, shot_table_file=shot_table_file,
-            title="Tokyo Tea Break", subtitle=f"Money Physics - base {label}",
-            episode_id="tokyo-tea-break", aspect="9:16", caption_style="phrase",
+            title=title, subtitle=f"Money Physics - base {label}",
+            episode_id=episode, aspect="9:16", caption_style="phrase",
             kinetics=dict(BED_KINETICS), no_receipt=no_receipt)
     except BaseException as exc:                     # SystemExit is a refusal, not a crash: it becomes the row
         return 1, f"{type(exc).__name__}: {' '.join(str(exc).split())[:600]}"
@@ -2363,14 +2460,14 @@ def build_table(repo: Path, table: Path, into: Path, label: str, dry_run: bool, 
     if not table.is_file():
         raise LabBuildError(f"{table} is not a file - --table takes a shot table the kit wrote "
                             f"(`generate_base_table.py <project> <build> --table <path>` writes one)")
-    refuse_by_name(into)
+    refuse_by_name(into, bed_dir(repo, table))   # ... including the TABLE's own bed's approved build dir (M4)
     refuse_if_served(into)
     into.mkdir(parents=True, exist_ok=True)
     rows = T.load_rows(table)
     if not rows:
         raise LabBuildError(f"{table} carries no rows - a base is a whole table, and an empty one is not a cut")
     end_s = max(float(r[1]) for r in rows)
-    bed = import_bed(repo, into)
+    bed = import_bed(repo, into, bed_dir(repo, table))   # the table's OWN project is the bed (E99 s72 Apply 6)
     rel = table_rel(bed, table)
     before = guarded(bed)
     no_receipt = f"P66 HG1 base: {label}"
