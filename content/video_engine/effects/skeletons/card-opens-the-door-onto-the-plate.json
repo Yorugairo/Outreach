@@ -1,0 +1,38 @@
+{
+  "schema_version": "shape_skeletons.v1",
+  "id": "card-opens-the-door-onto-the-plate",
+  "shape": "plate-carries-a-card",
+  "does": "The page that landed flat as a card swings open on its hinge, away from the viewer, and the plate behind it is the world - the transition IS the continuity, and the eye stays on the side the hinge holds.",
+  "acts": [
+    "TURNS",
+    "NAMES",
+    "EXPLAINS",
+    "BREAKS"
+  ],
+  "signature": "door",
+  "rows": [
+    {
+      "start": "{t0}",
+      "end": "{t1}",
+      "plate": "{plate};idle=drift;drift=35",
+      "ken": [
+        0.06,
+        6,
+        -4
+      ],
+      "docks": [],
+      "exit": "door:right"
+    }
+  ],
+  "rules": {
+    "mount_at_or_after_s": 7.0,
+    "plate_min_s": 6.0,
+    "event_gap_max_s": 2.5,
+    "light_after_build": true
+  },
+  "source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short_door.py:53-59",
+  "aspect_limits": {
+    "no_badge_rail_at_9_16": true,
+    "no_park_at_9_16": true
+  }
+}

@@ -35,7 +35,7 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import derive_approved_mix as MIX  # noqa: E402
-from authoring import table as T  # noqa: E402
+from authoring import shapes as SH, table as T  # noqa: E402
 
 SKELETONS = ROOT / "content/video_engine/effects/skeletons"
 SCHEMA = ROOT / "content/video_engine/configs/shape_skeleton.schema.json"
@@ -52,13 +52,28 @@ PLAN_LIST = {"open-on-the-chart-axes", "open-page-mounts-the-world", "page-mount
 SHAPES = {"open-on-the-chart", "page-number-lands-at-n", "page-to-page-transform", "return",
           "plate-carries-a-card", "held-page-hosts-the-docks"}
 
+PROJECTS = "content/video_engine/projects/systems-and-blowups"
+
 # The three APPROVED tables a skeleton may cite (the plan's Mandatory Reads).
 TABLES = {
-    "tokyo-tea-break": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py",
-    "japan-tariff-trick": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py",
-    "memory-trades": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build_short.py",
+    "tokyo-tea-break": f"{PROJECTS}/tokyo-tea-break/build_short.py",
+    "japan-tariff-trick": f"{PROJECTS}/japan-tariff-trick/build_short.py",
+    "memory-trades": f"{PROJECTS}/memory-trades-the-calendar/build_short.py",
 }
 
+# ... and the two PROOF tables (E99 s70 Apply 2: the vocabulary is rebuilt from the RECORD, and two of the
+# mechanisms the operator named live in an operator-WATCHED proof cut rather than in one of the three approved
+# shorts. Each is a real shot table on a real bed - never a fixture, never a golden (E99 s60: a proof is a scene).
+PROOF_TABLES = {
+    # E98 s7, the evidence door's first instance - the operator, 2026-09-14: "the door effect works well"
+    "japan-door": f"{PROJECTS}/japan-tariff-trick/build_short_door.py",
+    # P61 T3d, the planted morph on a real scene: the object becomes the chart (CAPABILITIES.md:121)
+    "tokyo-planted": f"{PROJECTS}/tokyo-tea-break/build-p61-planted/build_planted.py",
+}
+ALL_TABLES = {**TABLES, **PROOF_TABLES}
+
+# The grep token per signature - the word the cited line must still say. The vocabulary is
+# `configs/shape_skeleton.schema.json` `$defs.signature`, rebuilt from the record by E99 s70 Apply 2.
 SIGNATURE_TOKENS = {
     "axes": ("axes",),
     "mount": ("mount",),
@@ -68,7 +83,23 @@ SIGNATURE_TOKENS = {
     "dip": ("dip",),
     "card": ("card", "dock"),
     "hold": ("hold", "held", "holds", "stays", "stands"),
+    "snap": ("snap",),
+    "throw-then-zoom": ("snap", "throw"),
+    "throw-then-push": ("camera", "throw"),
+    "door": ("door",),
+    "rescale": ("rescale", "window"),
+    "recast": ("recast", "then="),
+    "park": ("park",),
+    "unpark": ("park", "1.0"),
+    "melt": ("melt", "compare"),
+    "morph": ("morph",),
+    "remake": ("remake",),
+    "object-becomes-chart": ("morph",),
 }
+
+# The words the record names that NO table on disk plays as a beat - they carry their word and their citations
+# and NO skeleton, because a skeleton is transcribed, never invented (E99 s70 Apply 2).
+WORDS_WITHOUT_A_SKELETON = {"morph", "remake"}
 
 # The holes a build fills: the plan's five, plus the three a row cannot express without (the mount's own seconds,
 # and the beat's datum / second dock). T3's compiler resolves exactly these.
@@ -118,6 +149,14 @@ def cited_text(source: str) -> tuple[Path, int, int, str]:
 
 # --------------------------------------------------------------------------- the library itself
 
+def signature_vocabulary() -> dict:
+    """The schema's `$defs.signature` as `{word: its description}` - the vocabulary, with its citations."""
+    return {w["const"]: w["description"] for w in _load(SCHEMA)["$defs"]["signature"]["oneOf"]}
+
+
+CITE_RE = re.compile(r"(record|cut)=([A-Za-z0-9_./-]+\.(?:md|py)):(\d+)(?:-(\d+))?")
+
+
 def test_the_library_is_not_empty():
     assert len(SKELETON_FILES) >= 12, IDS
 
@@ -155,11 +194,66 @@ def test_two_skeletons_per_shape():
 
 # --------------------------------------------------------------------------- the source, opened and grepped
 
+# --------------------------------------------------------------------------- the VOCABULARY (E99 s70 Apply 2)
+
+def test_the_vocabulary_carries_every_word_the_record_names():
+    """The operator's own list in E99 s70 Apply 2, plus the throw pair E99 s71 added - none may be missing."""
+    owed = {"axes", "mount", "spiral", "suck", "cut", "dip", "card", "hold", "snap", "door", "morph", "remake",
+            "recast", "park", "melt", "object-becomes-chart", "throw-then-zoom", "throw-then-push"}
+    assert owed <= set(signature_vocabulary()), sorted(owed - set(signature_vocabulary()))
+
+
+@pytest.mark.parametrize("word", sorted(signature_vocabulary()))
+def test_every_word_cites_the_record_and_a_table_and_both_still_say_it(word: str):
+    """A vocabulary written from memory is refused (E99 s70): every word opens its own two citations.
+
+    `record=` is the CAPABILITIES row (or the ruling) that marks the mechanism LIVE or WIRED, `cut=` the line of a
+    real shot table that PLAYS it - both are opened at the line and grepped, as `effects_catalog_check.check_anchors`
+    greps a card's `lives`.
+    """
+    text = signature_vocabulary()[word]
+    cites = {kind: (rel, int(lo), int(hi or lo)) for kind, rel, lo, hi in CITE_RE.findall(text)}
+    assert set(cites) == {"record", "cut"}, f"{word}: {sorted(cites)} - a word with no citation is refused"
+    tokens = SIGNATURE_TOKENS[word]
+    for kind, (rel, lo, hi) in cites.items():
+        body = (ROOT / rel).read_text(encoding="utf-8").splitlines()
+        assert lo <= len(body), f"{word}: {kind}={rel}:{lo} is past the end of the file"
+        cited = "\n".join(body[lo - 1:hi]).lower()
+        assert any(tok in cited for tok in tokens), f"{word}: {kind}={rel}:{lo}-{hi} no longer says {tokens}"
+
+
+def test_a_word_with_no_skeleton_says_so_in_its_own_description():
+    """E99 s70: a mechanism the record marks LIVE that no table plays gets its WORD and no skeleton, and says so."""
+    have = {_load(p)["signature"] for p in SKELETON_FILES}
+    vocab = signature_vocabulary()
+    for word, text in vocab.items():
+        if word in have:
+            continue
+        assert word in WORDS_WITHOUT_A_SKELETON, f"{word} has no skeleton and is not declared as one that cannot"
+        assert "NO SKELETON" in text, f"{word}: the description does not say it has no skeleton"
+    assert WORDS_WITHOUT_A_SKELETON.isdisjoint(have), sorted(WORDS_WITHOUT_A_SKELETON & have)
+    assert set(vocab) - have == WORDS_WITHOUT_A_SKELETON, sorted((set(vocab) - have) ^ WORDS_WITHOUT_A_SKELETON)
+
+
+def test_every_word_the_record_names_and_a_table_plays_has_a_skeleton():
+    have = {_load(p)["signature"] for p in SKELETON_FILES}
+    assert set(signature_vocabulary()) - WORDS_WITHOUT_A_SKELETON == have, sorted(have)
+
+
+def test_the_deriver_counts_exactly_the_schemas_vocabulary():
+    """E99 s70 Apply 5: M46 counts the REBUILT vocabulary - the gate's word list is the schema's, not a second one."""
+    assert set(MIX.SIGNATURES) == set(signature_vocabulary())
+    assert set(MIX.ARRIVALS) | set(MIX.TRANSFORMS) == set(MIX.SIGNATURES)
+    assert not set(MIX.ARRIVALS) & set(MIX.TRANSFORMS)
+
+
+# --------------------------------------------------------------------------- the source, opened and grepped
+
 @pytest.mark.parametrize("path", SKELETON_FILES, ids=IDS)
 def test_the_source_resolves_to_an_approved_table(path: Path):
     rec = _load(path)
     rel = rec["source"].rpartition(":")[0]
-    assert rel in TABLES.values(), rec["source"]
+    assert rel in ALL_TABLES.values(), rec["source"]
     cited, first, last, _text = cited_text(rec["source"])
     assert cited.exists(), cited
     lo, hi = shot_table_span(cited)
@@ -186,8 +280,19 @@ def test_no_rail_and_no_park(path: Path):
     for row in rec["rows"]:
         for sp in row.get("species") or []:
             to = str((sp.get("options") or {}).get("to", ""))
-            assert not (sp["kind"] == "chart_to" and to == "park"), rec["id"]
+            if sp["kind"] == "chart_to" and to == "park":
+                # R26-172 is an ASPECT rule, not a ban: the park and the un-park are approved mechanisms
+                # (CAPABILITIES.md:120) and E99 s70 put their words back in the vocabulary. A skeleton whose
+                # whole signature is one of them carries it, and `shapes.usable_library` never offers it at 9:16.
+                assert rec["signature"] in ("park", "unpark"), rec["id"]
     assert rec["aspect_limits"] == {"no_badge_rail_at_9_16": True, "no_park_at_9_16": True}
+
+
+def test_no_park_skeleton_is_offered_in_portrait():
+    """R26-172, enforced where it belongs: the compiler never offers a park skeleton at 9:16."""
+    lib = [_load(p) for p in SKELETON_FILES]
+    assert {s["signature"] for s in SH.usable_library(lib, "9:16")}.isdisjoint({"park", "unpark"})
+    assert len(SH.usable_library(lib, "16:9")) == len(lib)
 
 
 @pytest.mark.parametrize("path", SKELETON_FILES, ids=IDS)

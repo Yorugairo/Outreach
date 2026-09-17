@@ -526,20 +526,31 @@ def test_m46_is_warn_free_on_both_approved_cuts_and_exempts_japans_card_pair() -
     japan, tokyo = floor_rows(JAPAN)["M46"], floor_rows(TOKYO_APPROVED)["M46"]
 
     assert japan.level == "PASS" and tokyo.level == "PASS"
-    assert "signature mix over 12 scenes: card 0.33, cut 0.33, mount 0.25, dip 0.08" in japan.message
-    assert "signature mix over 7 scenes: mount 0.29, cut 0.29" in tokyo.message
-    assert "scenes: card, card, cut, mount, card, card, cut, mount, cut, dip, mount, cut" in japan.message
-    assert "CONSECUTIVE" not in japan.message                 # the throw -> snap pair is the approved mix's own
+    # MEASURED AGAIN after E99 s70 rebuilt the vocabulary (the throw pair, the door, the transforms) and corrected
+    # the classifier: a compiled scene carries the transition that BROUGHT it on itself, not on the one before.
+    assert "signature mix over 12 scenes: dip 0.42, mount 0.25, card 0.17, throw-then-zoom 0.17" in japan.message
+    assert "signature mix over 7 scenes: mount 0.29" in tokyo.message
+    assert "scenes: card, throw-then-zoom, dip, mount, card, throw-then-zoom, dip, mount, dip, dip, mount, dip"         in japan.message
+    assert "scenes: hold, mount, suck, spiral, mount, throw-then-push, dip" in tokyo.message
+    assert "CONSECUTIVE" not in japan.message                 # the dip pair at 9-10 is the approved mix's own
     assert f"the ceiling is {FLOOR.M46_MAX_SHARE:.2f} a signature" in japan.message
+    # E99 s70 Apply 5: M46 counts the REBUILT vocabulary - the approved Tokyo cut plays ten of its words
+    assert "vocabulary (10/4 the narrowest approved): mount, spiral, throw-then-push, suck, dip, hold, "            "rescale, recast, park, unpark" in tokyo.message
+    assert "vocabulary (4/4 the narrowest approved): mount, throw-then-zoom, dip, card" in japan.message
+    assert "VOCABULARY" not in japan.message and "VOCABULARY" not in tokyo.message
 
 
 def test_the_ceiling_is_the_approved_mixs_own_measured_maximum_share() -> None:
     """M46's number is not typed: it is `approved-mix.json`'s measured maximum, rounded up (HG1 confirms it)."""
     measured_max = FLOOR.approved_mix()["max_share"]["value"]
 
-    assert measured_max == 0.3333 and FLOOR.M46_MAX_SHARE == 0.34
+    assert measured_max == 0.4167 and FLOOR.M46_MAX_SHARE == 0.42
     assert measured_max <= FLOOR.M46_MAX_SHARE < measured_max + 0.01
-    assert FLOOR.exempt_repeats(FLOOR.approved_mix()) == {"card"}
+    assert FLOOR.exempt_repeats(FLOOR.approved_mix()) == {"dip"}
+    # and the vocabulary floor is measured the same way - the NARROWEST vocabulary an approved cut plays
+    vocab = FLOOR.approved_mix()["vocabulary"]
+    assert vocab["min_distinct"] == min(len(v) for v in vocab["per_cut"].values())
+    assert set(vocab["union"]) == set().union(*(set(v) for v in vocab["per_cut"].values()))
 
 
 # --- the rework, pinned AS MEASURED (E99 s67's regression case, P66 T5) -------------------------------------
@@ -556,8 +567,10 @@ def test_m45_and_m46_on_the_reworked_one_shot_three_as_measured() -> None:
     assert lines[11][0] == "not owed"                         # nothing in the plan names a NEW mechanism to blend
     assert "owed by 24 beat(s)" in lines[10][1]               # the lights: 24 of its 32 beats carry one
     assert r["M46"].level == "WARN"                           # the variety, not the mechanisms, is what it lacks
-    assert "axes 0.33, dip 0.33" in r["M46"].message
-    assert "CONSECUTIVE: scenes 2-3 dip, scenes 5-6 axes - the approved cuts repeat only card" in r["M46"].message
+    assert "axes 0.33, dip 0.25" in r["M46"].message
+    assert "CONSECUTIVE: scenes 5-6 axes - the approved cuts repeat only dip" in r["M46"].message
+    # E99 s70 Apply 5: seven words against the approved Tokyo cut's ten - the transform half is one melt
+    assert "vocabulary (7/4 the narrowest approved): axes, mount, spiral, dip, cut, card, melt" in r["M46"].message
 
 
 # --- the arithmetic, on synthetic cuts ----------------------------------------------------------------------
@@ -655,24 +668,27 @@ def test_m46_warns_on_a_signature_over_the_ceiling_and_on_an_unapproved_repeat(t
 
     # Assert: a WARN, never a FAIL (E96: variety is JUDGE-adjacent)
     assert gate.level == "WARN"
-    assert "OVER 0.34: axes 1.00" in gate.message
+    assert f"OVER {FLOOR.M46_MAX_SHARE:.2f}: axes 1.00" in gate.message
     assert "CONSECUTIVE: scenes 1-2 axes, scenes 2-3 axes, scenes 3-4 axes" in gate.message
     assert "scenes: axes, axes, axes, axes" in gate.message
 
 
 def test_m46_exempts_exactly_the_pairs_the_approved_mix_itself_records(tmp_path: Path) -> None:
     # Arrange: two scenes a dock arrives over - the classifier reads card, card, Japan's own approved pair
-    scenes = [plate("s1", [0, 10], docks=[dock("ev-a", 0.0, 10.0)]),
-              plate("s2", [10, 20], docks=[dock("ev-b", 10.0, 20.0)]),
-              plate("s3", [20, 30]), plate("s4", [30, 40])]
-    m = measured(tmp_path / "b", scenes, [(0, 40)], evidence={"ev-a": {"species": "chart"},
+    scenes = [plate("s1", [0, 10], docks=[dock("ev-a", 0.0, 10.0)], exit="dip"),
+              plate("s2", [10, 20], docks=[dock("ev-b", 10.0, 20.0)], exit="dip"),
+              plate("s3", [20, 30], exit="dip"), plate("s4", [30, 40], exit="dip"),
+              plate("s5", [40, 50]), plate("s6", [50, 60])]
+    m = measured(tmp_path / "b", scenes, [(0, 60)], evidence={"ev-a": {"species": "chart"},
                                                               "ev-b": {"species": "chart"}})
 
     # Act
     gate = row(FLOOR.rows(m, None, predates=False), "M46")
 
-    # Assert: the card pair passes, the cut, cut pair does not - and both are read from approved-mix.json
-    assert "CONSECUTIVE: scenes 3-4 cut" in gate.message and "scenes 1-2" not in gate.message
+    # Assert: the DIP pair (the approved mix's own, Japan's scenes 9-10) passes, the cut, cut pair does not -
+    # and both are read from approved-mix.json, never from a typed exception
+    assert "scenes 1-2 card" in gate.message and "scenes 5-6 cut" in gate.message
+    assert "scenes 3-4" not in gate.message      # the DIP pair: the approved mix records one, so it is exempt
     assert gate.level == "WARN"
 
 

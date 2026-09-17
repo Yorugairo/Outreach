@@ -1,0 +1,63 @@
+{
+  "schema_version": "shape_skeletons.v1",
+  "id": "page-parks-to-make-room-for-the-card",
+  "shape": "held-page-hosts-the-docks",
+  "does": "The standing chart shrinks toward the top of its own box on one affine transform - every mark in place - and the card lands in the room it just made, beside the chart and over nothing.",
+  "acts": [
+    "QUOTES",
+    "EXPLAINS",
+    "NAMES",
+    "SETS"
+  ],
+  "signature": "park",
+  "rows": [
+    {
+      "start": "{t0}",
+      "end": "{t1}",
+      "plate": "ledger:{page}:cut;idle=live",
+      "ken": [
+        0,
+        0,
+        0
+      ],
+      "docks": [
+        {
+          "id": "{dock}",
+          "at": "{t0}+2.0",
+          "read_s": 1.41,
+          "park_s": 0.7,
+          "options": {
+            "centre": true,
+            "centre_w": 0.4,
+            "centre_x": 0.77,
+            "centre_y": 0.335
+          }
+        }
+      ],
+      "exit": "cut",
+      "species": [
+        {
+          "kind": "chart_to",
+          "at": "{t0}+1.6",
+          "dur": 0.9,
+          "options": {
+            "to": "park",
+            "scale": 0.52,
+            "anchor": "top"
+          }
+        }
+      ]
+    }
+  ],
+  "rules": {
+    "mount_at_or_after_s": 7.0,
+    "plate_min_s": 6.0,
+    "event_gap_max_s": 2.5,
+    "light_after_build": true
+  },
+  "source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:361-367",
+  "aspect_limits": {
+    "no_badge_rail_at_9_16": true,
+    "no_park_at_9_16": true
+  }
+}

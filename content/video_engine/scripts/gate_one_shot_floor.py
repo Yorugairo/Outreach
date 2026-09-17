@@ -129,7 +129,7 @@ SRC_M39 = "E96: narrative : chart at least 1:1 - \"mixing of narrative panels an
 SRC_M40 = "E96: JUDGE keeps sequence and taste, read against the best approved short, never against the gates - the reference measured at run time, Bravos quoted"
 SRC_M41 = "P56 (E96): the comparator + capability + recipe plan per beat is written BEFORE the rows; a beat with no record, an empty comparator.compared_to, or a null recipe with no why_none is a gap"
 SRC_M45 = "E99 s67 Apply 7 + R26-177: the cut is read MECHANISM by mechanism against its OWN beat plan (the list of 2026-09-16, docs/content-video-engine/CRITIC-REPORT.md) - present / absent / replaced by <mechanism> / not owed; a mechanism is owed only where a beat's shape calls for it, and an absence with nothing in its place is the E99 s67 regression"
-SRC_M46 = "P66 T2 + E96: the cut's signature mix beside the approved shorts' MEASURED mix (effects/skeletons/approved-mix.json) - no signature over 0.34 of the scenes and no two consecutive scenes on a signature the approved cuts do not themselves repeat; variety is JUDGE-adjacent and never FAILs"
+SRC_M46 = "P66 T2 + E99 s70 Apply 5 + E96: the cut's signature mix and its VOCABULARY beside the approved shorts' MEASURED ones (effects/skeletons/approved-mix.json, the twenty words of configs/shape_skeleton.schema.json $defs.signature) - no signature over the approved maximum share, no two consecutive scenes on a signature the approved cuts do not themselves repeat, and no vocabulary narrower than the narrowest approved cut's; variety is JUDGE-adjacent and never FAILs"
 SRC_M42 = "E96 (3): events per minute is NOT a floor - the thin cut would have passed it (17.9/min, as busy as Tokyo's 18.2); it is reported beside compositions/min and builds:compositions and can never FAIL"
 
 ROW_ORDER = ("M35", "M36", "M37", "M38", "M39", "M40", "M41", "M42", "M45", "M46")
@@ -671,8 +671,10 @@ MECHANISMS_2026_09_16 = (
 
 APPROVED_MIX_REL = "content/video_engine/effects/skeletons/approved-mix.json"
 MOUNT_LANDS_S = 7.0        # E99 s67 Apply 5-6: a number landing this far after the page's entry owes the MOUNT
-M46_MAX_SHARE = 0.34       # approved-mix.json `max_share.value` (0.3333 - Japan's card and cut) rounded up; HG1
-                           # confirms it. Over this share of the scenes, one signature is the cut's only move.
+M46_MAX_SHARE = 0.42       # approved-mix.json `max_share.value` (0.4167 - Japan's five dips over twelve scenes,
+                           # measured after E99 s70 corrected the classifier: the compiled schema carries a
+                           # transition on the INCOMING scene, so a scene's own `exit` token is how it ARRIVED)
+                           # rounded up; HG1 confirms it. Over this share, one signature is the cut's only move.
 
 PAGE_PREFIX, CLIP_PREFIX = "ledger:", "clip:"
 # What a plan record's `plate` row token says the beat's page DOES - the plan's own statement of the mechanism.
@@ -1038,13 +1040,26 @@ def exempt_repeats(mix: Mapping[str, Any]) -> set:
     return {str(sig) for cut in (mix.get("approved") or []) for _, sig in (cut.get("consecutive_repeats") or [])}
 
 
-def row_m46(m: Measures) -> Gate:
-    """The cut's signature mix beside the approved shorts' MEASURED mix - JUDGE-adjacent, so it never FAILs.
+def cut_vocabulary(timeline: Mapping[str, Any]) -> list:
+    """Every signature word this cut PLAYS - its arrivals and its chart transforms, in the vocabulary's own order.
 
-    The classifier is `derive_approved_mix.scene_signatures` itself (one signature per scene, the rung order in its
-    docstring): the target and the reading come out of the same function, so they cannot drift apart.
+    E99 s70 Apply 5: M46 counts the REBUILT vocabulary. An arrival mix alone cannot see the door, the recast, the
+    park or the compare melt - the choreography the operator said was dropped - because those are not how a world
+    arrives, they are what it DOES. Both halves come from the deriver, so the gate and the target never drift.
     """
-    sigs = MIX.scene_signatures(json.loads(m.timeline_path.read_text(encoding="utf-8")))
+    words = set(MIX.scene_signatures(timeline)) | {w for scene in MIX.scene_transforms(timeline) for w in scene}
+    return sorted(words, key=MIX.SIGNATURES.index)
+
+
+def row_m46(m: Measures) -> Gate:
+    """The cut's signature mix and its VOCABULARY beside the approved shorts' - JUDGE-adjacent, so it never FAILs.
+
+    The classifier is `derive_approved_mix.scene_signatures` / `.scene_transforms` themselves (one ARRIVAL per
+    scene by the rung order in that module's docstring, plus the chart transforms the scenes carry): the target
+    and the reading come out of the same functions, so they cannot drift apart.
+    """
+    timeline = json.loads(m.timeline_path.read_text(encoding="utf-8"))
+    sigs = MIX.scene_signatures(timeline)
     if not sigs:
         return Gate("M46", "PASS", "no scene carries a signature - nothing to read against the approved mix",
                     SRC_M46)
@@ -1059,14 +1074,25 @@ def row_m46(m: Measures) -> Gate:
     over = [f"{sig} {shares[sig]:.2f}" for sig, _ in counts.most_common() if shares[sig] > M46_MAX_SHARE]
     repeats = [f"scenes {i}-{i + 1} {sigs[i]}" for i in range(1, len(sigs))
                if sigs[i] == sigs[i - 1] and sigs[i] not in exempt]
+    # E99 s70 Apply 5: the VOCABULARY - every word the cut plays, arrivals AND chart transforms, against the
+    # NARROWEST vocabulary an approved cut plays (measured in approved-mix.json, never typed here).
+    vocab = cut_vocabulary(timeline)
+    floor = int(((mix or {}).get("vocabulary") or {}).get("min_distinct") or 0)
+    union = list(((mix or {}).get("vocabulary") or {}).get("union") or [])
+    thin = floor and len(vocab) < floor
     note = "; ".join(([f"OVER {M46_MAX_SHARE:.2f}: {', '.join(over)}"] if over else [])
                      + ([f"CONSECUTIVE: {', '.join(repeats)} - the approved cuts repeat only "
-                         + (", ".join(sorted(exempt)) or "nothing")] if repeats else []))
-    return Gate("M46", "WARN" if over or repeats else "PASS",
+                         + (", ".join(sorted(exempt)) or "nothing")] if repeats else [])
+                     + ([f"VOCABULARY {len(vocab)} words against the narrowest approved cut's {floor} - the words "
+                         "the approved cuts play and this one does not: "
+                         + (", ".join(w for w in union if w not in vocab) or "none")] if thin else []))
+    return Gate("M46", "WARN" if over or repeats or thin else "PASS",
                 f"signature mix over {len(sigs)} scenes: {mine} - the approved cuts measure {theirs} "
                 f"(approved-mix.json, {target.get('scenes', '-')} scenes); the ceiling is "
                 f"{M46_MAX_SHARE:.2f} a signature" + (f" - {note}" if note else "")
-                + "\n          | scenes: " + ", ".join(sigs), SRC_M46)
+                + "\n          | scenes: " + ", ".join(sigs)
+                + f"\n          | vocabulary ({len(vocab)}/{floor or '-'} the narrowest approved): "
+                + (", ".join(vocab) or "none"), SRC_M46)
 
 
 def rows(m: Measures, ref: Measures | None = None, predates: bool | None = None,

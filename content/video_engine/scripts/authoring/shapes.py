@@ -144,7 +144,21 @@ LIGHT_KINDS = ("spotlight", "callout", "focus_zoom", "ring", "punch", "figure", 
 # its cap as the annotation), and a callout, a figure or a note on the number's word is the sentence's
 # own mark, which the approved cuts write at the word and not a beat later (P66 T3c, the third pass).
 LIGHT_AFTER_BUILD_KINDS = ("spotlight", "focus_zoom")
-ENTRY_SUFFIX = re.compile(r":(axes|spiral|built|(?:mount|snap|camera)=(?:[A-Za-z0-9_.-]+|\{[a-z0-9_]+\}))")
+ENTRY_SUFFIX = re.compile(r":(axes|spiral|built|morph|(?:mount|snap|camera)=(?:[A-Za-z0-9_.-]+|\{[a-z0-9_]+\}))")
+THEN_OPT = re.compile(r";then=([^;]+)")          # the page's CHAIN of other chart states (build_scene_timeline_f:112)
+
+# --- THE CHART_TO VERBS (E99 s70 Apply 3) -------------------------------------------------------
+# The three that TRAVEL to a state the plate id declares as `;then=<series>:<variant>`, the two the
+# compiler DERIVES from the page's own series, and the two that name no state at all. A move whose
+# state does not exist redraws nothing - the first base's six chart_to moves all came out as no-ops
+# because the translation dropped the chain (the critic of 2026-09-17, mechanism 7 / table-2 row 3).
+CHART_TO_TO_STATE = ("recast", "morph", "remake")
+CHART_TO_DERIVED = ("rescale", "extend")
+CHART_TO_NO_STATE = ("park", "compare")
+CHART_TO_KINDS = CHART_TO_TO_STATE + CHART_TO_DERIVED + CHART_TO_NO_STATE
+LINE_VARIANTS = ("line", "dense-line", "lines", "tiers")
+BARS_VARIANTS = ("bars", "signed-bars", "breakthrough")
+UNPARK_SCALE = 1.0               # CAPABILITIES.md:120 - a park to 1.0 is the UN-PARK: the chart re-takes the stage
 TIME_HOLE = re.compile(r"^\{(t[01])\}([+-][0-9.]+)?$")
 HOLE = re.compile(r"\{([a-z0-9_]+)\}")
 DOCK_ID = re.compile(r"(?<!recipe:)\b(dock-[a-z0-9-]+)")   # `recipe:dock-...` is a RECIPE name, never a dock asset
@@ -170,6 +184,11 @@ LABEL_FIELD = {"figure": "text", "note": "text", "retitle": "text", "stamp": "te
                "callout": "label", "bracket": "label", "span": "label", "chip": "label",
                "ring": "label", "peel": "label"}   # where a kind carries THE WORDS it writes on the page
 DEFAULT_LABEL_FIELD = "label"
+CONTINUITY_ENTRIES = ("snap", "camera", "morph")   # E99 s70: the entries that CARRY the world that was there into
+                                                  # this one - the card becomes the page, the camera pushes to it, the
+                                                  # object becomes the chart. They are the continuity the operator said
+                                                  # was dropped, and the CLOCK never replaces one with a bare axes: an
+                                                  # authored continuity entry STANDS (the plan is the intelligence, s66)
 BUILT_ON_ARRIVAL = ("snap", "camera")   # the two entries whose chart is ALREADY on the page when it arrives
                                         # (`page_land_offset` reads 0.0 for both): the page snaps to a card, or the
                                         # camera does. A page the AUTHOR gave one of these is a page whose light may
@@ -258,6 +277,95 @@ def page_of(plate: str) -> str:
 def plate_of(plate: str) -> str:
     """`{plate}`: the plate or clip id, with its `;options` tail stripped."""
     return str(plate).split(";", 1)[0]
+
+
+# --------------------------------------------------------------------------- the page's own CHAIN of states
+
+def states_of(plate: str) -> list[str]:
+    """The `;then=<series>:<variant>[:<emphasize>]` CHAIN a plate id declares, in order.
+
+    `build_scene_timeline_f:112`: every `then=` is another full `ledger_page.v1` spec on
+    `world.page_states`, built at load and hidden until a `chart_to` reaches it. A `recast`, a
+    `morph` or a `remake` names one of them as `state: <n>`; WITHOUT the chain the move redraws
+    nothing and the frame never changes (E99 s70 Apply 3 - the chain IS the transition, doc 29
+    Part 3 - so a transform that would render nothing is refused at compile, by name).
+    """
+    return [s.strip() for s in THEN_OPT.findall(str(plate or "")) if s.strip()]
+
+
+def variant_of(spec: str) -> str:
+    """The page VARIANT a `<series>:<variant>[:<emphasize>]` spec (or a resolved `{page}`) names."""
+    parts = [p for p in str(spec or "").split(":") if p]
+    return parts[1] if len(parts) > 1 else ""
+
+
+def with_states(plate: str, states: list[str]) -> str:
+    """The AUTHOR's `;then=` chain carried onto a resolved ledger plate.
+
+    `page_of` strips a plate's `;options` tail to fill `{page}`, so a skeleton's template rebuilds
+    the id WITHOUT the chain - which is exactly how the first base's `chart_to recast` moves came out
+    as no-ops. The chain belongs to the PLAN's page and never to a skeleton (a skeleton names no
+    episode, `authoring/__init__.py:12-15`), so it is carried across here.
+    """
+    if not states or not str(plate).startswith("ledger:"):
+        return plate
+    have = states_of(plate)
+    return str(plate) + "".join(f";then={s}" for s in states if s not in have)
+
+
+def group_states(g: dict) -> list[str]:
+    """Every `;then=` state the beats of one group declare, in the order they declare them."""
+    out: list[str] = []
+    for b in g.get("beats") or []:
+        for s in states_of(b.get("plate", "")):
+            if s not in out:
+                out.append(s)
+    return out
+
+
+def chart_to_error(sp: dict, plate: str, beat_n) -> str | None:
+    """Why this `chart_to` would render NOTHING on this page - the message, or None (E99 s70 Apply 3).
+
+    A transform is a REFUSAL, never a silent no-op: a `to` the compiler does not know; a verb that
+    travels to a page state on a plate declaring no `;then=` chain (or fewer states than the move
+    asks for); a pair the page's own FORM does not admit (a morph is line to line, a remake is line
+    to bars); a derived verb with nothing to derive from; a `state` on a verb that has none.
+    """
+    to = str(sp.get("to") or "")
+    where = f"beat {beat_n}: the chart_to {to or '<unnamed>'} at {sp.get('at')}"
+    if not str(plate).startswith("ledger:"):
+        return f"{where} - only a LEDGER PAGE has chart states, and this row's world is {plate!r}"
+    if to not in CHART_TO_KINDS:
+        return f"{where} - `to` is not one of {'|'.join(CHART_TO_KINDS)} (the verbs the compiler knows)"
+    states, here = states_of(plate), variant_of(page_of(plate))
+    if to in CHART_TO_TO_STATE:
+        k = sp.get("state")
+        if isinstance(k, bool) or not isinstance(k, int) or k < 1:
+            return (f"{where} - a {to} travels to one of the page's OTHER chart states and names it `state: <n>` "
+                    f"(n >= 1); this move names {k!r}")
+        if k > len(states):
+            head = str(plate).split(";", 1)[0]
+            return (f"{where} - the page declares {len(states)} `;then=` state(s) and the move asks for state {k}: "
+                    f"it would redraw NOTHING. Declare the chain on the plate id ({head};then=<series>:<variant>) "
+                    "or drop the move - a transform that renders nothing is refused (E99 s70 Apply 3)")
+        there = variant_of(states[k - 1])
+        if to == "morph" and not (here in LINE_VARIANTS and there in LINE_VARIANTS):
+            return (f"{where} - a morph hands ONE LINE's area to another's; this page is {here!r} and state {k} is "
+                    f"{there!r} (CAPABILITIES.md:118 - the compiler refuses any other pair and points at the recast)")
+        if to == "remake" and not ({here, there} & set(LINE_VARIANTS) and {here, there} & set(BARS_VARIANTS)):
+            return (f"{where} - a remake is admitted on a line <-> bars pair ONLY; this page is {here!r} and state "
+                    f"{k} is {there!r} (CAPABILITIES.md:119)")
+        return None
+    if "state" in sp:
+        return f"{where} - `state` is not named on a {to}: the compiler derives it, or the verb has none"
+    if to == "rescale" and not any(sp.get(k) is not None for k in ("ymin", "ymax", "window")):
+        return f"{where} - a rescale names the target domain: ymin and/or ymax, and/or window [from_x, to_x]"
+    if to == "extend" and len([k for k in ("to_index", "series") if sp.get(k) is not None]) != 1:
+        return f"{where} - an extend names exactly one of to_index (the datum the window grows to) or series"
+    if to == "compare" and not (sp.get("metric") or sp.get("comparator") or sp.get("form")):
+        return (f"{where} - a compare names the quoted METRIC and the COMPARATOR it becomes (E76); a bare compare "
+                "melts nothing")
+    return None
 
 
 def docks_of(record) -> list[str]:
@@ -705,6 +813,88 @@ def _needs(skeleton: dict, hole: str) -> bool:
     return hole in json.dumps(skeleton["rows"])
 
 
+# THE MECHANISM A SIGNATURE DEMANDS (E99 s70 Apply 2). The library now carries a skeleton for every
+# word of the rebuilt vocabulary, and a skeleton that plays a mechanism the beat's PLAN does not name
+# would be an invention - so a demanding skeleton is a candidate only where the plan names its move,
+# and where it does it is PREFERRED (rung 0). The plan is the intelligence (E99 s66); the library
+# only offers the shape.
+SIGNATURE_ENTRY = {"snap": "snap", "throw-then-zoom": "snap", "throw-then-push": "camera",
+                   "object-becomes-chart": "morph"}
+SIGNATURE_CHART_TO = {"recast": "recast", "rescale": "rescale", "morph": "morph", "remake": "remake",
+                      "melt": "compare", "park": "park", "unpark": "park"}
+SIGNATURE_EXIT = {"door": "door"}
+
+
+def _chart_to_moves(g: dict) -> list[dict]:
+    """Every `chart_to` the beats of one group NAME, as the plan wrote them."""
+    out: list[dict] = []
+    for b in g.get("beats") or []:
+        for mv in moves_of(b):
+            if str(mv.get("kind")) == "chart_to":
+                out.append({**(mv.get("options") or {}), "kind": "chart_to"})
+    return out
+
+
+def signature_named(g: dict, skeleton: dict) -> bool | None:
+    """Does the GROUP's own plan name the mechanism this skeleton's signature IS?
+
+    `True` the plan names it, `False` the plan does not (the skeleton is not offered), `None` the
+    signature demands nothing of the plan (every arrival and every transition word: axes, mount,
+    spiral, suck, cut, dip, card, hold - the shape alone decides those).
+    """
+    sig = str(skeleton["signature"])
+    if sig in SIGNATURE_ENTRY:
+        head = str(entry_token_in(g.get("plate", ""))).split("=", 1)[0]
+        if head != SIGNATURE_ENTRY[sig]:
+            return False
+        if sig == "throw-then-zoom":
+            return any(str(mv.get("kind")) == MOVE_DOCK and (mv.get("options") or {}).get("arrive") == "throw"
+                       for b in g.get("beats") or [] for mv in moves_of(b)) or bool(g.get("thrown_before"))
+        if sig == "throw-then-push":
+            return True
+        return True
+    if sig in SIGNATURE_CHART_TO:
+        want = SIGNATURE_CHART_TO[sig]
+        for sp in _chart_to_moves(g):
+            if str(sp.get("to")) != want:
+                continue
+            if sig == "unpark" and float(sp.get("scale", 0.72) or 0.72) != UNPARK_SCALE:
+                continue
+            if sig == "park" and float(sp.get("scale", 0.72) or 0.72) == UNPARK_SCALE:
+                continue
+            return True
+        return False
+    if sig in SIGNATURE_EXIT:
+        # THE EVIDENCE DOOR opens a card that landed FLAT (E98 s7): the page before this one has to
+        # have arrived by a snap or the camera, and this world has to be the thing behind it.
+        return bool(g.get("prev_entry") in ("snap", "camera") and g.get("world") != "page")
+    return None
+
+
+def _needs_states(skeleton: dict) -> int:
+    """The highest `chart_to` state index this skeleton's own rows travel to (0 = none)."""
+    out = 0
+    for row in skeleton["rows"]:
+        for sp in row.get("species") or []:
+            if str(sp.get("kind")) == "chart_to":
+                k = (sp.get("options") or {}).get("state")
+                if isinstance(k, int) and not isinstance(k, bool):
+                    out = max(out, k)
+    return out
+
+
+NO_PARK_SIGNATURES = ("park", "unpark")
+
+
+def usable_library(lib: list[dict], aspect: str) -> list[dict]:
+    """The skeletons this ASPECT may be offered - R26-172: no `chart_to park` at 9:16, so a skeleton
+    whose whole signature is the park (or the un-park out of one) is not offered in portrait at all,
+    rather than offered and then stripped to an empty row."""
+    if str(aspect) != "9:16":
+        return list(lib)
+    return [s for s in lib if s["signature"] not in NO_PARK_SIGNATURES]
+
+
 def choose(beat, history: list, library: list[dict]) -> tuple[dict, str]:
     """The skeleton this beat gets, and the rung of the fallback that chose it.
 
@@ -729,16 +919,23 @@ def choose(beat, history: list, library: list[dict]) -> tuple[dict, str]:
     entry = beat.get("entry")
     clocked = [s for s in pool if entry_of(s) == entry] if entry else list(pool)
     clocked = clocked or list(pool)
-    have = len(beat.get("docks") or [])
+    have = len(beat.get("docks") or []) + (1 if beat.get("entry_card") else 0)
     fillable = [s for s in clocked
                 if (have >= 1 or not _needs(s, "{dock}")) and (have >= 2 or not _needs(s, "{dock_b}"))]
+    # E99 s70 Apply 3: a skeleton that travels to a page state the plan's plate never declared would
+    # redraw nothing, so it is never offered; and a skeleton whose signature IS a mechanism the plan
+    # does not name would be an invention.
+    states = len(beat.get("states") or [])
+    fillable = [s for s in fillable if _needs_states(s) <= states and signature_named(beat, s) is not False]
+    clocked = [s for s in clocked if _needs_states(s) <= states and signature_named(beat, s) is not False]
     acts = beat.get("acts") if beat.get("acts") is not None else acts_of(beat)
     by_act = [s for s in fillable if acts & set(s["acts"])] if acts else []
+    named = [s for s in by_act if signature_named(beat, s)] or [s for s in fillable if signature_named(beat, s)]
     prev = history[-1] if history else None
-    for rung, cands in ((1, by_act), (2, fillable), (3, clocked)):
+    for rung, cands in ((0, named), (1, by_act), (2, fillable), (3, clocked)):
         fresh = [s for s in cands if s["id"] != prev]
         if fresh:
-            return fresh[0], f"rung {rung}"
+            return fresh[0], ("rung 0 (the plan itself names this beat's mechanism)" if rung == 0 else f"rung {rung}")
     return pool[0], "rung 4 (the only skeleton left for this shape - the shape outranks variety)"
 
 
@@ -751,7 +948,9 @@ def page_land_offset(entry: str | None, mount_s: float) -> float:
         return round(mount_s + PAGE_BUILD_END_S - MD.LP_ROLL_S - MD.LP_SAVOR_S - MD.LP_FIELD_S, 2)
     if entry == "spiral":
         return MD.LP_SPIRAL_IN_S
-    if entry == "axes":
+    if entry in ("axes", "morph"):
+        # E99 s70 / CAPABILITIES.md:121: an `enter=morph` page is on screen from frame 0 as the
+        # traced silhouette it grew out of, and it is the DATA that builds - the axes entry's clock
         return MD.LP_BUILD_S
     if entry in ("built", "snap", "camera"):
         return 0.0
@@ -971,6 +1170,12 @@ def _exit(g: dict, nxt: dict | None, skeleton: dict, next_entry: str | None) -> 
         return ((skeleton_exit, "page to page: the suck, with no cream between them")
                 if skeleton_exit.startswith("suck") else ("cut", "page to page: a straight cut"))
     if g["world"] != nxt["world"] or plate_of(g["plate"]) != plate_of(nxt["plate"]):
+        skeleton_exit = str(skeleton["rows"][0]["exit"])
+        if skeleton_exit.split(":")[0] == "door" and g.get("prev_entry") in ("snap", "camera"):
+            # E98 s7 / CAPABILITIES.md:38: the page before this one landed FLAT as a card, so it can
+            # swing open on its hinge onto this world instead of dipping to it - the transition that
+            # carries continuity rather than cutting it (E99 s70).
+            return skeleton_exit, "the door, because the page before this one landed flat as a card (E98 s7)"
         return "dip", "the dip because the world changes (E47)"
     return "cut", "a cut inside one world"
 
@@ -997,7 +1202,7 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
     """
     plan = load_plan(plan) if isinstance(plan, (str, Path)) else list(plan)
     check_plan(plan)
-    lib = library if library is not None else load_library()
+    lib = usable_library(library if library is not None else load_library(), aspect)
     d = {**DEFAULTS, **(defaults or {})}
     ws = _norm_words(words)
     gs = groups(plan)
@@ -1009,23 +1214,85 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
         why.append({"beat": int(g["beats"][0]["beat"]), "skeleton": pick["skeleton"]["id"],
                     "act": str(g["act"] or ""), "rule": "; ".join([pick["rule"], *pick["notes"]]),
                     "signature": pick["skeleton"]["signature"]})
-        why.extend(silent_record(b) for b in g["beats"] if not moves_of(b))
+        why.extend(silent_record(b) for b in g["beats"] if is_silent(b))
+    floats = chart_cards_that_float(rows)
+    if floats:
+        raise Refused("a thrown chart card floats over the world: " + "; ".join(floats))
     if ws:
         T.hold_until(rows, ws)
     return rows, why
 
 
+CARD_SLOT = re.compile(r"^dock-[a-z0-9]+-(.+)$")
+
+
+def chart_cards_that_float(rows: list[tuple]) -> list[str]:
+    """Every thrown FULL CHART CARD that nothing takes to the stage - one message each.
+
+    E99 s71 (the operator, on the first base's 76.3 s frame: a portrait chart page thrown as a card,
+    bleeding off the top and the bottom of the frame and over the caption): a thrown full-page card
+    must then ZOOM (`:snap=<dock>`) or the camera must PUSH to it (`:camera=<dock>`) - it never
+    floats over the plate. E99 s67 Apply 5 is the other half: a DOCK is an evidence still, never a
+    chart page thrown on the open.
+
+    Which cards are chart cards is DERIVED, never guessed - the kit names no episode: a dock whose
+    name after its slot letter appears inside a LEDGER page id this cut carries is that page's own
+    card (`dock-<slot>-<name>` against `ledger:ev-<name>-v1:<variant>:...`).
+    """
+    pages = [str(r[2]) for r in rows if str(r[2]).startswith("ledger:")]
+    taken = {str(entry_token_in(p) or "").split("=", 1)[1]
+             for p in pages if str(entry_token_in(p) or "").split("=", 1)[0] in BUILT_ON_ARRIVAL}
+    out: list[str] = []
+    for n, r in enumerate(rows, 1):
+        for dock in r[4] or []:
+            asset, opts = str(dock[0]), (dock[4] if len(dock) > 4 else {}) or {}
+            m = CARD_SLOT.match(asset)
+            if not m or asset in taken or str(opts.get("arrive")) != "throw":
+                continue
+            page = next((p for p in pages if m.group(1) in p), None)
+            if page is None:
+                continue
+            out.append(f"row {n}: `{asset}` is the FULL CHART CARD of {page_of(page)} thrown onto the world at "
+                       f"{float(dock[2]):.2f}s and nothing takes it to the stage - a thrown chart card ZOOMS "
+                       f"(`:snap={asset}`) or the camera PUSHES to it (`:camera={asset}`) on the page it becomes, "
+                       "never floats over the world (E99 s71). Name the entry on that page's own plate in the plan, "
+                       "or dock an evidence still instead (E99 s67 Apply 5).")
+    return out
+
+
 SILENT_NOTE = "the plan names no move for this sentence - the author's to add or to leave"
+LIGHT_ONLY_NOTE = (
+    "the plan names only a LIGHT on this sentence, and a light is never the move (E99 s71, the operator: a spotlight "
+    "is never the move - when a sentence names a thing, the THING ARRIVES): a badge or pill springing with its "
+    "callout, a stamped prop or icon, a docked screenshot, a flight. The move this act asks for is in "
+    "docs/content-video-engine/SPECIES-BY-SENTENCE.md under the act below, and in the capability's own `Use when:` "
+    "line (docs/content-video-engine/CAPABILITIES.md)")
+# The species that only PUNCTUATE what is already on screen - they darken, ring, or push the eye at
+# a thing, and none of them is a thing arriving. A beat whose whole plan is one of these is silent.
+LIGHT_ONLY_KINDS = ("spotlight", "callout", "focus_zoom", "ring", "relight", "punch", "pull_back", "vignette")
+
+
+def is_silent(beat) -> bool:
+    """Does the plan leave this beat with nothing the viewer can NAME? (E99 s71.)
+
+    A beat with no moves is silent, and so is a beat whose every move is a light: the light is
+    punctuation on a move that is not there yet. Naming it is not a refusal - the author may have
+    meant the sentence to play under a held world - it is written into `why` because a base nobody
+    can see the holes in is read as a cut (E99 s68).
+    """
+    moves = moves_of(beat)
+    return not moves or all(str(m.get("kind")) in LIGHT_ONLY_KINDS for m in moves)
 
 
 def silent_record(beat) -> dict:
-    """A beat the plan leaves SILENT, named in `why` so the agent sees where to modify (E99 s68).
-
-    It is not a refusal and not a hole: the author may have meant the sentence to play under a held
-    world. It is written down because a base nobody can see the gaps in is read as a cut.
-    """
-    return {"beat": int(beat["beat"]), "silent": True, "sentence": str(beat.get("sentence") or ""),
-            "note": SILENT_NOTE}
+    """A beat the plan leaves SILENT, named in `why` so the agent sees where to modify (E99 s68)."""
+    moves = moves_of(beat)
+    lights = [str(m.get("kind")) for m in moves]
+    note = SILENT_NOTE if not moves else (
+        LIGHT_ONLY_NOTE + f" - this beat carries {', '.join(lights)} and nothing else; its act is "
+        f"{str(beat.get('act') or 'unnamed')!r}")
+    return {"beat": int(beat["beat"]), "silent": True, "lights_only": bool(moves),
+            "sentence": str(beat.get("sentence") or ""), "note": note}
 
 
 def rows_why(why: list[dict]) -> list[dict]:
@@ -1059,7 +1326,18 @@ def _pick(gs: list[dict], lib: list[dict], d: dict, ws=None) -> list[dict]:
         if g["world"] == "page":
             seen_pages.append(page_of(g["plate"]))
         g["shape"], g["acts"] = shape, acts_of({"act": g["act"]})
+        g["states"] = group_states(g)                       # the `;then=` chain this page declares
+        g["prev_entry"] = gs[i - 1].get("entry") if i else None
+        g["thrown_before"] = bool(i and any(str(mv.get("kind")) == MOVE_DOCK
+                                            and (mv.get("options") or {}).get("arrive") == "throw"
+                                            for b in gs[i - 1]["beats"] for mv in moves_of(b)))
         g["entry"], g["entry_token"], entry_rule = _entry(g, shape, d, ws)
+        # THE CARD THE PAGE CAME OUT OF (E99 s70 / s71). A `snap=<dock>` or `camera=<dock>` entry
+        # names the card on the plate id itself, not in the beat's `capabilities` - so it is the
+        # group's `{dock}` where the plan names no other, and it is never docked AGAIN onto the page
+        # it became.
+        tok = str(g.get("entry_token") or "")
+        g["entry_card"] = tok.split("=", 1)[1] if "=" in tok and tok.split("=", 1)[0] in BUILT_ON_ARRIVAL else None
         skeleton, rung = choose(g, history, lib)
         history.append(skeleton["id"])
         picks.append({"skeleton": skeleton, "notes": [],
@@ -1089,8 +1367,17 @@ def _entry(g: dict, shape: str, d: dict, ws=None) -> tuple:
         return None, None, ""
     entry, rule = _clock_entry(g, shape, d)
     declared = entry_token_in(g["plate"])
+    head = str(declared).split("=", 1)[0]
+    if head in CONTINUITY_ENTRIES:
+        # E99 s70 (the operator: "you dropped most of the continuity building transitions like
+        # morphs, transformation, and 'the door'"): the snap, the camera arrival and the object
+        # that becomes the chart CARRY the previous world into this one. The clock decides between
+        # a mount and an axes entry - it never overwrites a continuity transition the author wrote.
+        return head, declared, (f"the page arrives by the author's own `{declared}`: a continuity entry carries the "
+                                f"world that was there into this one and the clock never replaces it (E99 s70; the "
+                                f"clock alone would have written {entry})")
     light = first_light_move(g, ws) if ws else None
-    if light is not None and str(declared).split("=", 1)[0] in BUILT_ON_ARRIVAL:
+    if light is not None and head in BUILT_ON_ARRIVAL:
         land = page_land_offset(entry, _mount_s(g["plate"]))
         if light < float(g["t0"]) + land - EPS:
             return (str(declared).split("=", 1)[0], declared,
@@ -1139,9 +1426,10 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
     NAMED MOVES realised on it, each timed on the word it belongs to."""
     skeleton, beat, notes = pick["skeleton"], g["beats"][0], pick["notes"]
     tpl = copy.deepcopy(skeleton["rows"][0])
+    cards = list(g["docks"]) or ([g["entry_card"]] if g.get("entry_card") else [])
     fills = {"page": page_of(g["plate"]) if g["world"] == "page" else "",
              "plate": plate_of(g["plate"]), "mount_s": _mount_s(g["plate"]),
-             **{k: v for k, v in zip(("dock", "dock_b"), g["docks"])},
+             **{k: v for k, v in zip(("dock", "dock_b"), cards)},
              **{k: v for k, v in zip(("datum", "datum_b"), _data(g))}}
     plate = _text(tpl["plate"], fills, beat, skeleton)
     if plate.startswith("ledger:") and g.get("entry"):
@@ -1149,10 +1437,22 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
         if moved:
             notes.append(f"the skeleton's own entry gives way to the clock's: {g['entry']} "
                          "(the approved shape is enforced on the page, not left to the skeleton)")
+    # E99 s70 Apply 3: the page's own CHAIN of states travels with it. `{page}` is the plate id with
+    # its `;options` tail stripped, so without this the skeleton rebuilds the page WITHOUT the
+    # `;then=` states its own `chart_to` moves travel to - and every one of them renders nothing.
+    chain = group_states(g)
+    if chain and plate.startswith("ledger:"):
+        plate = with_states(plate, chain)
+        notes.append("the page's own `;then=` chain travels with it (" + ", ".join(chain) +
+                     "): a chart_to that reaches a state the plate never declared redraws nothing (E99 s70 Apply 3)")
     land = page_land_offset(entry_in(plate), float(fills["mount_s"])) if plate.startswith("ledger:") else None
     docks = []
     for spec in tpl.get("docks") or []:
         dock = _dock_tuple(spec, fills, beat, skeleton, t0, t1, d)
+        if dock and str(dock[0]) == str(g.get("entry_card") or ""):
+            notes.append(f"no card on this row: `{dock[0]}` is the card this page GREW OUT OF, and a page never "
+                         "docks the card it became (E99 s71)")
+            continue
         (docks.append(list(dock)) if dock else
          notes.append("no card on this row: the plan names no dock for the beat (evidence is never invented)"))
     species = []
@@ -1177,12 +1477,27 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
                 species.append(made)
     # the SAME card twice on one row is not two cards: where the plan lands a card the skeleton also
     # filled from the group's capabilities, the plan's own wins - it carries the word and the options
+    # ... and the same for a TRANSFORM: where the plan's own beats name a `chart_to`, the skeleton's
+    # template one is the shape's suggestion of a move the author has already made, on their own word
+    if any(str(sp.get("kind")) == "chart_to" for sp in species[len(tpl.get("species") or []):]):
+        keep = [sp for i, sp in enumerate(species)
+                if not (i < len(tpl.get("species") or []) and str(sp.get("kind")) == "chart_to")]
+        if len(keep) != len(species):
+            notes.append("the plan's own chart_to replaces the skeleton's: the beat names the transform and the "
+                         "word it lands on (E99 s66 - the plan is the intelligence)")
+        species = keep
     named = {str(x[0]) for x in made_docks}
     kept = [x for x in docks if str(x[0]) not in named]
     if len(kept) != len(docks):
         notes.append(f"the plan's own card on {', '.join(sorted(named & {str(x[0]) for x in docks}))} replaces the "
                      "skeleton's fill of the same asset (the beat named the word it lands on)")
     docks = kept + made_docks
+    for sp in species:   # E99 s70 Apply 3: a transform that would render nothing is refused, by name
+        if str(sp.get("kind")) != "chart_to":
+            continue
+        err = chart_to_error(sp, plate, _beat_at(g, float(sp["at"])).get("beat", "?"))
+        if err:
+            raise Refused(err)
     docks, species, aspect_notes = _aspect_clean(docks, species, aspect, d)
     notes.extend(aspect_notes)
     docks.sort(key=lambda x: (float(x[2]), str(x[0])))

@@ -23,17 +23,110 @@
       "description": "the 11 sentence acts as docs/content-video-engine/SPECIES-BY-SENTENCE.md spells them (section 0 at a glance, section 1 rows 1-10, section 2 row 11 BREAKS); the same 11 as effect_card.schema.json `serves` and effect_recipe.schema.json `acts`"
     },
     "signature": {
-      "enum": [
-        "axes",
-        "mount",
-        "spiral",
-        "suck",
-        "cut",
-        "dip",
-        "card",
-        "hold"
-      ],
-      "description": "the ONE word M46 counts for this skeleton - the move a viewer would name; M46 refuses the same signature on two consecutive beats and WARNs over the approved maximum share"
+      "title": "the ONE word M46 counts for this skeleton - the move a viewer would name",
+      "description": "THE CHOREOGRAPHY VOCABULARY, REBUILT FROM THE RECORD (E99 s70 Apply 2, 2026-09-17; the operator: \"you completely dropped all of the choreography that gave life to our shorts, you dropped most of the continuity building transitions like morphs, transformation, and 'the door'\"). The first eight words (axes, mount, spiral, suck, cut, dip, card, hold) were written from memory and the record refused them: the door, the snap, the throw-then-zoom and throw-then-push pair, park and un-park, the recast, the rescale, the compare melt, the morph, the remake and the object that becomes the chart had no name here and so no skeleton. EVERY word below carries TWO citations the test opens and greps: record= a line of CAPABILITIES.md or OPERATOR-RULINGS.md that marks the mechanism LIVE or WIRED, and cut= the line of a REAL shot table on disk that plays it. A word with no citation is refused. M46 refuses the same skeleton on two consecutive beats and WARNs over the approved maximum share (content/video_engine/effects/skeletons/approved-mix.json, MEASURED).",
+      "oneOf": [
+        {
+          "const": "axes",
+          "title": "the page enters ON ITS AXES",
+          "description": "The charcoal page lands with its ground, ruled line, title, labels and axes already drawn and the chart draws from the first frame - the open's own signature (E99 s67 Apply 6: the open STARTS ON THE CHART). record=docs/portable/OPERATOR-RULINGS.md:3252 cut=content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build_short.py:138"
+        },
+        {
+          "const": "mount",
+          "title": "the page MOUNTS over the world that was there",
+          "description": "No roll-out and no savor: the cream is the ground at once, the soak opens on the first frame and runs mount_s, then ink then punch then build; the mount IS the transition, so nothing dips into it. record=docs/content-video-engine/CAPABILITIES.md:64 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:285"
+        },
+        {
+          "const": "spiral",
+          "title": "the page RETURNS by the spiral, unwound from its point",
+          "description": "The page vortex run backwards: a page already drawn comes back by unwinding from the point it was sucked into, never drawn like new (E40 s4; E56 - the ring's one use). record=docs/content-video-engine/CAPABILITIES.md:57 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:338"
+        },
+        {
+          "const": "snap",
+          "title": "the thrown chart CARD becomes the page",
+          "description": "enter=snap=<dock>: the page grows from the landed card's own rectangle to the stage over SNAP_S 0.45 with a velocity-envelope blur and a whoosh - the card the viewer already read IS the world now. record=docs/content-video-engine/CAPABILITIES.md:76 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:416-420"
+        },
+        {
+          "const": "throw-then-zoom",
+          "title": "a full chart card is THROWN, then ZOOMS up to the whole stage",
+          "description": "The card-becomes-the-chart pair, both halves on one beat: the page's own card is thrown onto the standing world on the stop-action throw a second early, and the page then snaps up out of it. A thrown full-page card never floats over the plate - it zooms, or it pushes. record=docs/content-video-engine/CAPABILITIES.md:76 cut=content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:281-285"
+        },
+        {
+          "const": "throw-then-push",
+          "title": "a full chart card is THROWN, then the CAMERA pushes to it",
+          "description": "The same pair by the camera arrival: the card lands on the previous scene and over 0.45 s the camera zooms the outgoing world and the card together until the card's box fills the stage - the eye goes to the card instead of the card growing. record=docs/content-video-engine/CAPABILITIES.md:84 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:403-420"
+        },
+        {
+          "const": "door",
+          "title": "the landed card swings OPEN onto the world beneath it",
+          "description": "THE EVIDENCE DOOR: a card that landed flat swings open on a hinge edge through the page plane's own projection until it is edge-on, onto the world mounted beneath it - min-jerk over DOOR.S 0.9 s, ending at 180 minus atan(d/h) so its back never shows. record=docs/content-video-engine/CAPABILITIES.md:38 cut=content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short_door.py:41-59"
+        },
+        {
+          "const": "suck",
+          "title": "the world COLLAPSES into a point and the next opens in its place",
+          "description": "The page (or the plate) is sucked into a stage point, spinning SUCK_TURN while it scales away - page to page with no cream between them, and never into a mount. record=docs/content-video-engine/CAPABILITIES.md:57 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:328"
+        },
+        {
+          "const": "dip",
+          "title": "the world CHANGES, and the dip says so",
+          "description": "E47's world-change transition, 0.47 s: the one transition that means the world itself changed - never a dock's, never into a mount. record=docs/content-video-engine/CAPABILITIES.md:70 cut=content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:289"
+        },
+        {
+          "const": "cut",
+          "title": "a straight CUT, chart to chart",
+          "description": "A cut cuts: the world that left is gone on the new scene's first frame and the arriving page is on its axes, never empty cream. record=docs/content-video-engine/CAPABILITIES.md:26 cut=content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build_short.py:223-227"
+        },
+        {
+          "const": "card",
+          "title": "EVIDENCE arrives over the standing world",
+          "description": "A dock: a still, a document or a cutout thrown or landed over the world, read at its reading box and parked in the page's own room (E45, E65) - an evidence still, never a full chart page (E99 s67 Apply 5). record=docs/content-video-engine/CAPABILITIES.md:87 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:291"
+        },
+        {
+          "const": "hold",
+          "title": "the page STAYS and hosts what arrives over it",
+          "description": "The page rolls out on the hook and holds: the clips stop being scenes and arrive as docks over it, and the page is the constant the beat is argued on. record=docs/content-video-engine/CAPABILITIES.md:69 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:221-222"
+        },
+        {
+          "const": "rescale",
+          "title": "the chart's AXES retarget to the window the sentence is about",
+          "description": "chart_to {to: rescale, ymin?, ymax?, window?}: the compiler derives the target state from the page's own series and the axes travel to it on one clock - the sell-off the sentence is about standing at full width. record=docs/content-video-engine/CAPABILITIES.md:115 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:312-313"
+        },
+        {
+          "const": "recast",
+          "title": "the SAME data changes FORM on the page",
+          "description": "chart_to {to: recast, state} on a page whose plate id declares the state as ;then=<series>:<variant>: the line un-draws by history, each keyed datum carries its place to the top of its bar, the categories write under the bars and the AXES HAND OVER across the clock. E64: a chart re-writes itself, it never just cuts to a new one. record=docs/content-video-engine/CAPABILITIES.md:27 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:383"
+        },
+        {
+          "const": "park",
+          "title": "the chart makes ROOM by one affine transform",
+          "description": "chart_to {to: park, scale, anchor}: the active chart shrinks toward a corner of its own box on the min-jerk clock and holds - one transform on the whole svg, every mark in place, so the next thing has room beside it. Never emitted at 9:16 (R26-172). record=docs/content-video-engine/CAPABILITIES.md:120 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:314"
+        },
+        {
+          "const": "unpark",
+          "title": "the chart RE-TAKES centre stage",
+          "description": "The park to scale 1.0: as the cards leave, the chart grows back to full from the standing park and its result holds large under the sentence that turns (the operator: the chart should re-take center stage). record=docs/content-video-engine/CAPABILITIES.md:120 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:394"
+        },
+        {
+          "const": "melt",
+          "title": "the quoted metric MELTS into the number the viewer feels",
+          "description": "The compare verb's melt form - chart_to {to: compare, form: melt, then: splash}: the quoted figure sags, balls up and splashes into the comparator the sentence turns on (E76 / E99 s56). record=docs/content-video-engine/CAPABILITIES.md:28 cut=content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build_short.py:217-218"
+        },
+        {
+          "const": "morph",
+          "title": "one LINE's area hands over to another's by ARAP",
+          "description": "chart_to {to: morph, state} between two LINE pages: the standing line un-draws by length while its area fills, the filled strip morphs into the target's area as the axes hand over, and the target builds on its own law. record=docs/content-video-engine/CAPABILITIES.md:118 cut=content/video_engine/scripts/proof_chart_transitions.py:81 NO APPROVED CUT CARRIES IT: the only realisation on disk is the P48 proof surface, so this word has NO SKELETON - the record names the mechanism and a skeleton is never invented (E99 s70)."
+        },
+        {
+          "const": "remake",
+          "title": "the WHOLE chart becomes the whole other chart on one clock",
+          "description": "The seventh verb, chart_to {to: remake, state}, admitted on a line to bars pair only: every series, datum, axis, label and the title transform together (E99 s34 - a morph must prove the WHOLE chart). record=docs/content-video-engine/CAPABILITIES.md:119 cut=content/video_engine/scripts/render_baseline.py:253 NO APPROVED CUT CARRIES IT: the only realisation on disk is the remake-line-to-bars proof surface, so this word has NO SKELETON."
+        },
+        {
+          "const": "object-becomes-chart",
+          "title": "the OBJECT in the picture becomes the chart",
+          "description": "enter=morph on a ledger page whose world.morph.poly is a PLANTED element's own traced silhouette: the prop the sentence just named becomes the area under the series, the ground soaking out from it, and the chart builds on the shape it became. record=docs/content-video-engine/CAPABILITIES.md:121 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/build_planted.py:119-133 The table it is transcribed from is a PROOF BUILD on the Tokyo bed (P61 T3d; E99 s60 - a proof is a scene), not one of the three approved shorts."
+        }
+      ]
     },
     "time_hole": {
       "oneOf": [

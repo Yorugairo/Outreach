@@ -1,0 +1,38 @@
+{
+  "schema_version": "shape_skeletons.v1",
+  "id": "world-changes-by-the-dip",
+  "shape": "plate-carries-a-card",
+  "does": "The world itself changes: the frame dips to black for its 0.47 s and a new place is standing there, alive on its own drift - the one transition that means the world, not the evidence, moved.",
+  "acts": [
+    "TURNS",
+    "BREAKS",
+    "NAMES",
+    "SETS"
+  ],
+  "signature": "dip",
+  "rows": [
+    {
+      "start": "{t0}",
+      "end": "{t1}",
+      "plate": "{plate};idle=drift;drift=35",
+      "ken": [
+        0.06,
+        6,
+        -4
+      ],
+      "docks": [],
+      "exit": "dip"
+    }
+  ],
+  "rules": {
+    "mount_at_or_after_s": 7.0,
+    "plate_min_s": 6.0,
+    "event_gap_max_s": 2.5,
+    "light_after_build": true
+  },
+  "source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:289",
+  "aspect_limits": {
+    "no_badge_rail_at_9_16": true,
+    "no_park_at_9_16": true
+  }
+}

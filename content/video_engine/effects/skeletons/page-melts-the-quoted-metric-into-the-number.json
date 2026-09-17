@@ -1,0 +1,52 @@
+{
+  "schema_version": "shape_skeletons.v1",
+  "id": "page-melts-the-quoted-metric-into-the-number",
+  "shape": "page-number-lands-at-n",
+  "does": "The quoted figure on the page sags, balls up and splashes into the number the sentence turns on - the metric the viewer read becomes the number they are meant to feel.",
+  "acts": [
+    "QUOTES",
+    "TURNS",
+    "COMPARES",
+    "BREAKS"
+  ],
+  "signature": "melt",
+  "rows": [
+    {
+      "start": "{t0}",
+      "end": "{t1}",
+      "plate": "ledger:{page}:axes:cut;idle=live",
+      "ken": [
+        0,
+        0,
+        0
+      ],
+      "docks": [],
+      "exit": "cut",
+      "species": [
+        {
+          "kind": "spotlight",
+          "at": "{t0}+3.4",
+          "dur": "hold",
+          "target": {
+            "kind": "datum",
+            "index": "{datum}"
+          },
+          "options": {
+            "until": "{t1}"
+          }
+        }
+      ]
+    }
+  ],
+  "rules": {
+    "mount_at_or_after_s": 7.0,
+    "plate_min_s": 6.0,
+    "event_gap_max_s": 2.5,
+    "light_after_build": true
+  },
+  "source": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build_short.py:217-218",
+  "aspect_limits": {
+    "no_badge_rail_at_9_16": true,
+    "no_park_at_9_16": true
+  }
+}

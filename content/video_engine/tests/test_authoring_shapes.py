@@ -26,6 +26,10 @@ from authoring import table as T  # noqa: E402
 PROJECTS = ROOT / "content/video_engine/projects/systems-and-blowups"
 TOKYO = PROJECTS / "tokyo-tea-break/build-short"
 JAPAN = PROJECTS / "japan-tariff-trick/build-short"
+# The rebuilt choreography vocabulary (E99 s70 Apply 2) - read from the schema, never typed twice
+VOCABULARY = {w["const"] for w in json.loads(
+    (ROOT / "content/video_engine/configs/shape_skeleton.schema.json").read_text(encoding="utf-8")
+)["$defs"]["signature"]["oneOf"]}
 LIGHTS = SH.LIGHT_KINDS
 CLOCKED = SH.LIGHT_AFTER_BUILD_KINDS   # P66 T3c: the lights the "after the build" clock binds - and only those
 
@@ -128,20 +132,19 @@ def test_no_page_ever_arrives_built_and_the_clock_picks_the_entry(tokyo):
     """E99 s67 Apply 3: a page whose number lands 7 s or more after its entry mounts; every other
     page enters by its axes (a return by its spiral). `built` is never emitted.
 
-    P66 T3b widened the list by ONE case, and only where the plan forces it: a page whose AUTHOR's
-    own plate declares a `snap` or a `camera` (its chart already on it as it arrives) keeps that
-    entry when the plan's first light is spoken before the clock's entry would have finished
-    drawing - because the compiler will not fire a light over a build and will not move the
-    author's beat either (see `shapes._entry`)."""
+    P66 T3b widened the list by ONE case and E99 s70 widened it to the rule it should always have
+    been: a CONTINUITY entry the author wrote (`snap`, `camera`, `morph` - the entries that carry the
+    world that was there into this one) STANDS. The clock chooses between a mount and an axes entry;
+    it never overwrites the continuity transitions the operator said had been dropped."""
     _, rows, why = tokyo
     pages = [(r, w) for r, w in zip(rows, why) if r[2].startswith("ledger:")]
     assert pages, "the Tokyo bed is a page cut"
     for r, w in pages:
         entry = SH.entry_in(r[2])
         assert entry != "built" and ":built" not in r[2], r[2]
-        assert entry in ("axes", "mount", "spiral") or entry in SH.BUILT_ON_ARRIVAL, r[2]
-        if entry in SH.BUILT_ON_ARRIVAL:
-            assert "the author's own" in w["rule"] and "before a" in w["rule"], w["rule"]
+        assert entry in ("axes", "mount", "spiral") or entry in SH.CONTINUITY_ENTRIES, r[2]
+        if entry in SH.CONTINUITY_ENTRIES:
+            assert "the author's own" in w["rule"], w["rule"]
             continue
         if "the number lands at +" in w["rule"]:
             late = float(w["rule"].split("the number lands at +")[1].split("s")[0])
@@ -151,12 +154,19 @@ def test_no_page_ever_arrives_built_and_the_clock_picks_the_entry(tokyo):
 
 
 def test_the_return_comes_back_by_the_spiral(tokyo):
-    """The Tokyo bed's holdings page has been on screen, and the beat plan says it returns."""
+    """The bed's page has been on screen, and the beat plan says it returns.
+
+    The SPIRAL is the entry (the clock's, enforced by construction). The row's SIGNATURE is the
+    skeleton's, and since E99 s70 a skeleton whose signature is a mechanism the PLAN itself names -
+    the recast, the park, the melt - is preferred on that beat (rung 0), so the signature word may
+    be the transform the page plays rather than the arrival it made. Both are the return's.
+    """
     _, rows, why = tokyo
     spirals = [(r, w) for r, w in zip(rows, why) if SH.entry_in(r[2] or "") == "spiral"]
-    assert spirals, "the Tokyo bed carries a return"
+    assert spirals, "the bed carries a return"
     for r, w in spirals:
-        assert w["signature"] == "spiral" and "returns" in w["rule"]
+        assert "returns" in w["rule"]
+        assert w["signature"] in ("spiral",) or "rung 0" in w["rule"], w["rule"]
 
 
 def test_the_exits_are_the_approved_ones(tokyo):
@@ -336,7 +346,7 @@ def test_every_row_carries_one_why_record(tokyo):
     for w in why:
         assert sorted(w) == ["act", "beat", "rule", "signature", "skeleton"]
         assert w["rule"] and w["skeleton"] and isinstance(w["beat"], int)
-        assert w["signature"] in ("axes", "mount", "spiral", "suck", "cut", "dip", "card", "hold")
+        assert w["signature"] in VOCABULARY, w["signature"]
 
 
 # ---------------------------------------------------------------- the variety rule and the chooser
@@ -358,9 +368,12 @@ def test_choose_refuses_the_previous_skeleton_and_falls_back_in_the_documented_o
     # rung 2: no skeleton of the shape carries this act, so the ACT filter is dropped
     _, rung2 = SH.choose({**beat, "act": "RETRACTS the announcement"}, [], lib)
     assert rung2 in ("rung 1", "rung 2")
-    # rung 3: the plan names no dock, so a skeleton that needs one is not fillable
+    # the plan names no dock, so a skeleton that NEEDS one is not fillable - whichever rung answers,
+    # the skeleton that comes back never asks for a card the plan does not have (E99 s70 widened the
+    # library, so a dockless skeleton of this shape now answers on rung 1 where it once fell to 3)
     third, rung3 = SH.choose({**beat, "docks": []}, [], lib)
-    assert rung3 == "rung 3"
+    assert rung3.startswith("rung")
+    assert "{dock}" not in str(third["rows"])
     # rung 4: the shape has one skeleton and it was the last one used - the shape outranks variety
     one = [s for s in lib if s["id"] == first["id"]]
     again, rung4 = SH.choose(beat, [first["id"]], one)
@@ -559,10 +572,130 @@ def test_every_beat_the_plan_leaves_silent_is_named_in_why():
     rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
     silent = SH.silent_why(why)
     assert [w["beat"] for w in silent] == [1]
-    assert sorted(silent[0]) == ["beat", "note", "sentence", "silent"]
+    assert sorted(silent[0]) == ["beat", "lights_only", "note", "sentence", "silent"]
     assert silent[0]["sentence"] == plan[0]["sentence"]
+    assert silent[0]["lights_only"] is False
     assert "the author's to add or to leave" in silent[0]["note"]
     assert len(SH.rows_why(why)) == len(rows)
+
+
+def test_a_beat_that_carries_only_a_light_is_SILENT():
+    """E99 s71 (the operator, 2026-09-17): *a spotlight is never the move.* When a sentence names a
+    thing, the THING ARRIVES - a badge or pill springing with its callout, a stamped prop or icon, a
+    docked screenshot, a flight. A beat whose whole plan is one light is a hole in the base and the
+    `why` says so, with the act and where the move it wants is written down."""
+    plan = [_rec(1, 0.0, 12.0, "ledger:ev-a-v1:line:3:right:axes:cut",
+                 sentence="The print that matters is the one they filed in February.", act="QUOTES a number",
+                 caps=["spotlight on datum 3"],
+                 moves=[{"kind": "spotlight", "at_word": "February", "target": {"kind": "datum", "index": 3},
+                         "dur": 1.2}]),
+            _rec(2, 12.5, 24.0, "plate-desk;idle=drift", sentence="And the desk it landed on.")]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    silent = {w["beat"]: w for w in SH.silent_why(why)}
+    assert set(silent) == {1, 2}, sorted(silent)
+    assert silent[1]["lights_only"] is True and "spotlight" in silent[1]["note"]
+    assert "a light is never the move" in silent[1]["note"]
+    assert "SPECIES-BY-SENTENCE.md" in silent[1]["note"] and "QUOTES" in silent[1]["note"]
+    assert silent[2]["lights_only"] is False
+    # and the light itself is still emitted - the rule names the hole, it never drops the author's move
+    assert any(sp["kind"] == "spotlight" for sp in (rows[0][6] or []))
+
+
+# ---------------------------------------------------------------- the page's own CHAIN (E99 s70 Apply 3)
+
+def _chained(state: str = "ev-b-v1:bars:3", **moves):
+    plate = f"ledger:ev-a-v1:line:3:right:axes:cut;then={state}" if state else "ledger:ev-a-v1:line:3:right:axes:cut"
+    return [_rec(1, 0.0, 14.0, plate, sentence="The same data, month by month, is what it did.",
+                 act="COMPARES two series", caps=["datum 3"], **moves),
+            _rec(2, 14.5, 26.0, "plate-desk;idle=drift", sentence="And the desk it landed on.")]
+
+
+def test_the_pages_then_chain_travels_onto_the_generated_row():
+    """The bug E99 s70 names: `{page}` is the plate id with its `;options` tail stripped, so without
+    `with_states` the base rebuilds the page WITHOUT the states its own chart_to moves travel to -
+    and every transform renders nothing while the gates count the tokens and read PASS."""
+    plan = _chained(moves=[{"kind": "chart_to", "at_word": "month", "dur": 1.4,
+                            "options": {"to": "recast", "state": 1}}])
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert SH.states_of(rows[0][2]) == ["ev-b-v1:bars:3"], rows[0][2]
+    assert any("`;then=` chain travels with it" in w["rule"] for w in SH.rows_why(why))
+    assert [sp["to"] for sp in (rows[0][6] or []) if sp["kind"] == "chart_to"] == ["recast"]
+
+
+def test_a_transform_that_would_render_nothing_is_refused_by_name():
+    """E99 s70 Apply 3: never a silent no-op - the beat and the move are named."""
+    plan = _chained(state="", moves=[{"kind": "chart_to", "at_word": "month", "dur": 1.4,
+                                      "options": {"to": "recast", "state": 1}}])
+    with pytest.raises(SH.Refused) as e:
+        SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert "beat 1" in str(e.value) and "recast" in str(e.value)
+    assert "declares 0 `;then=` state(s)" in str(e.value) and "redraw NOTHING" in str(e.value)
+
+
+def test_a_transform_the_pages_form_does_not_admit_is_refused():
+    """CAPABILITIES.md:118 - a morph hands one LINE's area to another's; a line -> bars pair is the recast."""
+    plan = _chained(moves=[{"kind": "chart_to", "at_word": "month", "dur": 1.4,
+                            "options": {"to": "morph", "state": 1}}])
+    with pytest.raises(SH.Refused) as e:
+        SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert "a morph hands ONE LINE's area" in str(e.value) and "'bars'" in str(e.value)
+
+
+def test_a_rescale_with_no_domain_and_a_park_with_a_state_are_refused():
+    for options, says in (({"to": "rescale"}, "names the target domain"),
+                          ({"to": "park", "state": 1}, "`state` is not named on a park")):
+        plan = _chained(moves=[{"kind": "chart_to", "at_word": "month", "dur": 1.4, "options": options}])
+        with pytest.raises(SH.Refused) as e:
+            SH.compile(plan, _take(plan), SH.DEFAULTS, "16:9")
+        assert says in str(e.value), str(e.value)
+
+
+def test_the_park_is_never_offered_in_portrait_and_is_in_landscape():
+    """R26-172 where it belongs: the library the ASPECT may use, not a species stripped after the fact."""
+    lib = SH.load_library()
+    assert {s["signature"] for s in SH.usable_library(lib, "9:16")}.isdisjoint({"park", "unpark"})
+    assert {"park", "unpark"} <= {s["signature"] for s in SH.usable_library(lib, "16:9")}
+
+
+# ---------------------------------------------------------------- the thrown chart card (E99 s71)
+
+def _thrown_card_plan(entry: str):
+    """Three beats: the open on its chart, a plate the page's own CARD is thrown onto, and the page.
+
+    Three and not two because the compiler's own open rule makes the hook and the page that mounts
+    over it ONE row when the first beat's world is a plate - so the card's beat has to be the second.
+    """
+    return [_rec(1, 0.0, 10.0, "ledger:ev-open-v1:line:0:right:axes:cut", sentence="It opens on the chart."),
+            _rec(2, 10.5, 20.0, "plate-desk;idle=drift", sentence="The desk it landed on.",
+                 moves=[{"kind": "dock", "at_word": "desk", "asset": "dock-a-fed-rate",
+                         "options": {"arrive": "throw", "mass": "paper"}}]),
+            _rec(3, 20.5, 32.0, f"ledger:ev-fed-rate-v1:line:3:right:{entry}:cut",
+                 sentence="And the rate it never moved.")]
+
+
+def test_a_thrown_chart_card_that_nothing_takes_to_the_stage_is_refused():
+    """E99 s71: a thrown full-page card ZOOMS or the camera PUSHES to it - it never floats over the
+    world. The card is recognised without naming an episode: its name after the slot letter appears
+    inside a ledger page id this same cut carries."""
+    plan = _thrown_card_plan("axes")
+    with pytest.raises(SH.Refused) as e:
+        SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert "dock-a-fed-rate" in str(e.value) and "FULL CHART CARD" in str(e.value)
+    assert ":snap=dock-a-fed-rate" in str(e.value) and ":camera=dock-a-fed-rate" in str(e.value)
+
+
+def test_the_same_card_is_fine_once_the_page_snaps_up_out_of_it():
+    plan = _thrown_card_plan("snap=dock-a-fed-rate")
+    rows, _ = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert SH.entry_in(rows[-1][2]) == "snap", rows[-1][2]
+
+
+def test_an_evidence_still_may_be_thrown_and_left_to_read():
+    """E99 s67 Apply 5's other half: a DOCK is an evidence still, and a still is not a chart page."""
+    plan = _thrown_card_plan("axes")
+    plan[1]["moves"][0]["asset"] = "dock-c-blue-ties-panel"
+    rows, _ = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert [str(d[0]) for d in rows[1][4]] == ["dock-c-blue-ties-panel"]
 
 
 def test_a_move_kind_and_a_cards_options_are_the_compilers_own_vocabulary():

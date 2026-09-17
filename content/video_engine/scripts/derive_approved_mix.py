@@ -20,18 +20,36 @@ A build dir holds TWO timelines: `timeline.json` is the take's words and sentenc
 `scene_evidence_timeline.v1` is `<stem>.timeline.json` (tokyo-short / japan-short / calendar-short). The walk
 reads the COMPILED one, found the way `gate_one_shot_floor.timeline_path` finds it.
 
-THE CLASSIFICATION (`method` in the file, verbatim). M46 counts ONE signature per BEAT - the move a viewer would
-name - so the walk's events are grouped by scene and the scene takes the first rung it matches:
+THE VOCABULARY (E99 s70 Apply 2 and 5, 2026-09-17). The first eight words - axes, mount, spiral, suck, cut, dip,
+card, hold - were written from memory, so the door, the snap, the throw-then-zoom / throw-then-push pair, park and
+the un-park, the recast, the rescale and the compare melt had no name here and M46 could not count them. The list
+below is `configs/shape_skeleton.schema.json` `$defs.signature`, where every word carries the CAPABILITIES row and
+the shot-table line it was read off.
+
+THE CLASSIFICATION (`method` in the file, verbatim). M46 counts ONE ARRIVAL per scene - how this world got here,
+the move a viewer would name - so the walk's events are grouped by scene and the scene takes the first rung it
+matches:
 
   1. the page enters by SPIRAL (`page_enter:spiral`)                            -> spiral
   2. the page enters by MOUNT (`page_enter:mount`)                              -> mount
   3. the page enters ON ITS AXES (`page_enter:axes`)                            -> axes
-  4. the page arrives FROM A CARD (`page_enter:{snap,camera,built,throw}`)      -> card
-  5. no page, but a dock arrives over the world (`cls == "dock_enter"`)         -> card
-  6. no page and no dock: the transition that BROUGHT this world - the previous
-     scene's own exit (`exit:suck` -> suck, `exit:dip` -> dip, anything else,
-     including the schema's `wipe_left` default -> cut)                         -> suck | dip | cut
-  7. nothing brought it (the first frame)                                       -> hold
+  4. the page enters by MORPH - the object became the chart                     -> object-becomes-chart
+  5. the page GROWS OUT OF a card (`page_enter:snap`): the card was THROWN in
+     the scene before it -> throw-then-zoom, else -> snap
+  6. the CAMERA pushes to the card (`page_enter:camera`): thrown before it
+     -> throw-then-push, else -> snap; `page_enter:{built,throw}`  -> card
+  7. THIS scene's own `exit` is the transition that BROUGHT it (the compiled
+     schema puts the transition on the INCOMING scene - `door_boundary_error(prev, sc)`
+     reads `sc["exit"]` and `prev` is the world that leaves): `door` -> door
+  8. no page: a dock arrives over the world (`cls == "dock_enter"`)             -> card
+  9. this scene's own exit: `suck` -> suck, `dip` -> dip, every other token
+     including the schema's `wipe_left` default                                 -> cut
+ 10. nothing brought it (the first frame, exit `cut`)                           -> hold
+
+AND THE TRANSFORM VOCABULARY, counted BESIDE the arrivals (never instead of them): every `chart_to` the scenes
+carry - rescale, recast, park, the un-park (a park to scale 1.0), morph, remake and the compare MELT - read from
+the scenes' own species. `vocabulary` in the file is the DISTINCT words a cut plays, arrivals and transforms
+together; it is the number M46's own vocabulary line leans on, and it is why the mix is not just seven arrivals.
 
 Stdlib + `recipe_walk`; no episode facts beyond the three build dirs named above.
 """
@@ -54,18 +72,36 @@ APPROVED = [f"{PROJECTS}/tokyo-tea-break/build-short", f"{PROJECTS}/japan-tariff
 BESIDE = [f"{PROJECTS}/memory-trades-the-calendar/build-oneshot-3"]
 BESIDE_NOTE = "reworked to E99 s67, on the queue"
 
-SIGNATURES = ["axes", "mount", "spiral", "suck", "cut", "dip", "card", "hold"]
+SCHEMA_REL = "content/video_engine/configs/shape_skeleton.schema.json"
+
+# The ARRIVALS: how a world got onto the stage. One per scene.
+ARRIVALS = ["axes", "mount", "spiral", "snap", "throw-then-zoom", "throw-then-push", "door",
+            "object-becomes-chart", "suck", "dip", "cut", "card", "hold"]
+# The TRANSFORMS: what the page DID while it stood there. Counted beside the arrivals.
+TRANSFORMS = ["rescale", "recast", "park", "unpark", "morph", "remake", "melt"]
+SIGNATURES = ARRIVALS + TRANSFORMS
 PAGE_ENTER_SIGNATURE = {"spiral": "spiral", "mount": "mount", "axes": "axes",
-                        "snap": "card", "camera": "card", "built": "card", "throw": "card"}
-EXIT_SIGNATURE = {"suck": "suck", "dip": "dip"}          # anything else that brought a world reads as a cut
+                        "morph": "object-becomes-chart", "built": "card", "throw": "card"}
+THROWN_ENTER = {"snap": ("throw-then-zoom", "snap"), "camera": ("throw-then-push", "snap")}
+EXIT_SIGNATURE = {"suck": "suck", "dip": "dip", "door": "door"}   # anything else that brought a world reads as a cut
+CHART_TO_SIGNATURE = {"rescale": "rescale", "recast": "recast", "morph": "morph",
+                      "remake": "remake", "compare": "melt"}
+UNPARK_SCALE = 1.0
 METHOD = (
-    "one signature per SCENE (the beat M46 counts), from recipe_walk.events grouped by scene, first rung wins: "
+    "one ARRIVAL per SCENE (how this world got here), from recipe_walk.events grouped by scene, first rung wins: "
     "(1) page_enter:spiral -> spiral; (2) page_enter:mount -> mount; (3) page_enter:axes -> axes; "
-    "(4) page_enter:{snap,camera,built,throw} (the page arrives from a card the viewer already met) -> card; "
-    "(5) no page but a dock arrives over the world (cls dock_enter) -> card; "
-    "(6) no page and no dock: the transition that brought this world - the PREVIOUS scene's exit "
-    "(exit:suck -> suck, exit:dip -> dip, every other token including the schema default wipe_left -> cut); "
-    "(7) nothing brought it (the first frame) -> hold."
+    "(4) page_enter:morph (the object became the chart) -> object-becomes-chart; "
+    "(5) page_enter:snap -> throw-then-zoom when a card was THROWN in the scene before it, else snap; "
+    "(6) page_enter:camera -> throw-then-push when a card was thrown before it, else snap; "
+    "page_enter:{built,throw} -> card; "
+    "(7) THIS scene's own exit token is the transition that brought it (the compiled schema carries the "
+    "transition on the INCOMING scene): exit:door -> door; "
+    "(8) no page but a dock arrives over the world (cls dock_enter) -> card; "
+    "(9) this scene's own exit: suck -> suck, dip -> dip, every other token including the schema default "
+    "wipe_left -> cut; (10) nothing brought it (the first frame) -> hold. "
+    "BESIDE the arrivals, the TRANSFORM words are read from the scenes' own chart_to species: rescale, recast, "
+    "morph, remake, compare -> melt, park, and a park at scale 1.0 -> unpark (CAPABILITIES.md:120, the UN-PARK). "
+    "`vocabulary` is the DISTINCT words a cut plays, arrivals and transforms together (E99 s70 Apply 5)."
 )
 
 
@@ -77,30 +113,61 @@ def timeline_path(build: Path) -> Path:
     return named[0]
 
 
+def _thrown_in(events: list) -> bool:
+    """Did a card ARRIVE over the world in this scene? (The throw half of the throw-then-zoom pair.)"""
+    return any(ev.cls == "dock_enter" for ev in events)
+
+
 def scene_signatures(timeline: dict) -> list[str]:
-    """The signature of every scene, in order - the ladder in this module's docstring."""
+    """The ARRIVAL of every scene, in order - the ladder in this module's docstring."""
     events = RW.events(timeline)
     by_scene: dict[int, list] = {}
     for ev in events:
         by_scene.setdefault(ev.i, []).append(ev)
     scenes = timeline.get("scenes") or []
     out: list[str] = []
-    for i, _scene in enumerate(scenes):
+    for i, scene in enumerate(scenes):
         sig = None
         for ev in by_scene.get(i, []):
-            if ev.cls == "page_enter" and ev.card:
-                sig = PAGE_ENTER_SIGNATURE.get(ev.card.split(":", 1)[1])
-                if sig:
-                    break
+            if ev.cls != "page_enter" or not ev.card:
+                continue
+            enter = ev.card.split(":", 1)[1]
+            if enter in THROWN_ENTER:
+                pair, alone = THROWN_ENTER[enter]
+                sig = pair if (i and _thrown_in(by_scene.get(i - 1, []))) else alone
+            else:
+                sig = PAGE_ENTER_SIGNATURE.get(enter)
+            if sig:
+                break
+        token = str((scene or {}).get("exit") or RW.DEFAULT_EXIT).split(":")[0]
+        if sig is None and token == "door":
+            sig = "door"
         if sig is None and any(ev.cls == "dock_enter" for ev in by_scene.get(i, [])):
             sig = "card"
         if sig is None:
-            if i == 0:
-                sig = "hold"
-            else:
-                token = str((scenes[i - 1] or {}).get("exit") or RW.DEFAULT_EXIT)
-                sig = EXIT_SIGNATURE.get(token.split(":")[0], "cut")
+            sig = "hold" if i == 0 and token == "cut" else EXIT_SIGNATURE.get(token, "cut")
         out.append(sig)
+    return out
+
+
+def scene_transforms(timeline: dict) -> list[list[str]]:
+    """The TRANSFORM words every scene plays, in scene order - what the page DID while it stood.
+
+    Read off the scenes' own `chart_to` species rather than off `recipe_walk`'s cards, because the
+    un-park is a park at `scale: 1.0` (CAPABILITIES.md:120) and only the species carries the scale.
+    """
+    out: list[list[str]] = []
+    for scene in timeline.get("scenes") or []:
+        words: list[str] = []
+        for sp in scene.get("species") or []:
+            if str(sp.get("kind")) != "chart_to":
+                continue
+            to = str(sp.get("to") or "")
+            word = ("unpark" if float(sp.get("scale", 0.72) or 0.72) == UNPARK_SCALE else "park") \
+                if to == "park" else CHART_TO_SIGNATURE.get(to)
+            if word and word not in words:
+                words.append(word)
+        out.append(words)
     return out
 
 
@@ -110,14 +177,21 @@ def measure(build_rel: str) -> dict:
     path = timeline_path(build)
     timeline = json.loads(path.read_text(encoding="utf-8"))
     sigs = scene_signatures(timeline)
+    moves = scene_transforms(timeline)
     counts = {s: sigs.count(s) for s in SIGNATURES if sigs.count(s)}
+    flat = [w for scene in moves for w in scene]
+    transforms = {s: flat.count(s) for s in TRANSFORMS if flat.count(s)}
     total = len(sigs)
+    vocabulary = sorted(set(sigs) | set(flat), key=SIGNATURES.index)
     return {
         "build": build_rel,
         "timeline": path.relative_to(REPO).as_posix(),
         "scenes": total,
         "per_scene": sigs,
+        "per_scene_transforms": moves,
         "counts": counts,
+        "transforms": transforms,
+        "vocabulary": vocabulary,
         "shares": {s: round(n / total, 4) for s, n in counts.items()},
         "consecutive_repeats": [[i, sigs[i]] for i in range(1, total) if sigs[i] == sigs[i - 1]],
     }
@@ -133,9 +207,12 @@ def build_record() -> dict:
     peaks = sorted(((cut["shares"][s], s, cut["build"], cut["counts"][s], cut["scenes"])
                     for cut in approved for s in cut["shares"]), key=lambda item: (-item[0], item[1], item[2]))
     top = peaks[0][0]
+    vocabularies = [set(cut["vocabulary"]) for cut in approved]
     return {
         "schema_version": "approved_mix.v1",
         "generated_by": "content/video_engine/scripts/derive_approved_mix.py",
+        "vocabulary_source": SCHEMA_REL + " $defs.signature (E99 s70 Apply 2: every word cites its CAPABILITIES "
+                                          "row and the shot-table line it was read off)",
         "measured_with": "content/video_engine/scripts/recipe_walk.py events()",
         "measured": "the APPROVED cuts' own compiled timelines; never typed (P66 T2)",
         "signatures": SIGNATURES,
@@ -145,6 +222,15 @@ def build_record() -> dict:
             "scenes": scenes,
             "counts": counts,
             "shares": {s: round(n / scenes, 4) for s, n in counts.items()},
+        },
+        "vocabulary": {
+            "arrivals": ARRIVALS,
+            "transforms": TRANSFORMS,
+            "per_cut": {cut["build"]: cut["vocabulary"] for cut in approved},
+            "union": sorted(set().union(*vocabularies) if vocabularies else [], key=SIGNATURES.index),
+            "min_distinct": min((len(v) for v in vocabularies), default=0),
+            "note": "min_distinct is the NARROWEST vocabulary an approved cut plays - the floor M46's vocabulary "
+                    "line leans on (E99 s70 Apply 5). Measured, never typed.",
         },
         "max_share": {
             "value": top,

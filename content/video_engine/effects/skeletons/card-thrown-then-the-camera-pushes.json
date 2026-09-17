@@ -1,0 +1,49 @@
+{
+  "schema_version": "shape_skeletons.v1",
+  "id": "card-thrown-then-the-camera-pushes",
+  "shape": "held-page-hosts-the-docks",
+  "does": "The card lands on the world that is standing and the CAMERA pushes to it until its box fills the stage - the eye travels to the card instead of the card growing; the page then holds and hosts what arrives over it.",
+  "acts": [
+    "SPANS",
+    "TURNS",
+    "RETRACTS",
+    "SETS"
+  ],
+  "signature": "throw-then-push",
+  "rows": [
+    {
+      "start": "{t0}",
+      "end": "{t1}",
+      "plate": "ledger:{page}:camera={dock}:cut;idle=live",
+      "ken": [
+        0,
+        0,
+        0
+      ],
+      "docks": [],
+      "exit": "cut",
+      "species": [
+        {
+          "kind": "callout",
+          "at": "{t0}+0.35",
+          "dur": 2.2,
+          "target": {
+            "kind": "datum",
+            "index": "{datum}"
+          }
+        }
+      ]
+    }
+  ],
+  "rules": {
+    "mount_at_or_after_s": 7.0,
+    "plate_min_s": 6.0,
+    "event_gap_max_s": 2.5,
+    "light_after_build": true
+  },
+  "source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:403-420",
+  "aspect_limits": {
+    "no_badge_rail_at_9_16": true,
+    "no_park_at_9_16": true
+  }
+}
