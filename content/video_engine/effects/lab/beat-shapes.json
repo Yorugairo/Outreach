@@ -1,18 +1,22 @@
 {
   "schema_version": "lab_beat_shapes.v1",
-  "description": "THE BEAT SHAPES - the finite combination space the lab enumerates, as DATA (P65 T2; R26-176, E99 s67). A shape is a beat's skeleton: ordered member SLOTS, each naming the catalogue AXES it accepts, the candidate cards it can actually carry (resolved at generation through authoring/effects.py against docs/EFFECTS-CATALOG.jsonl, so no candidate can name a token the compiler refuses), and the offset it sits at in whole steps of the gates' own clocks. A NEW SHAPE OR A NEW SLOT ENTRY IS A DATA CHANGE HERE - lab_enumerate.py holds no shape of its own and invents no member. The slot tables are kept SMALL and principled on purpose: a slot lists the members the shape can actually carry, never every card on the axis, because the product is capped by MAX_CANDIDATES in content/video_engine/scripts/lab_enumerate.py (400 today; the space is expected in the low hundreds) and a shape whose slot table pushes the product past that ceiling is REFUSED BY NAME - a batch the operator cannot read in one sitting is not a batch. The five clock values are never typed here either: they are read from content/video_engine/scripts/gate_motion_density.py by name (see `clocks` below) and every offset is an expression over them.",
+  "description": "THE BEAT SHAPES - the finite combination space the lab enumerates, as DATA (P65 T2; R26-176, E99 s67). A shape is a beat's skeleton: ordered member SLOTS, each naming the catalogue AXES it accepts, the candidate cards it can actually carry (resolved at generation through authoring/effects.py against docs/EFFECTS-CATALOG.jsonl, so no candidate can name a token the compiler refuses), and the offset it sits at in whole steps of the gates' own clocks. A NEW SHAPE OR A NEW SLOT ENTRY IS A DATA CHANGE HERE - lab_enumerate.py holds no shape of its own and invents no member. The slot tables are kept SMALL and principled on purpose: a slot lists the members the shape can actually carry, never every card on the axis, because the product is capped by MAX_CANDIDATES in content/video_engine/scripts/lab_enumerate.py (400 today; the space is expected in the low hundreds) and a shape whose slot table pushes the product past that ceiling is REFUSED BY NAME - a batch the operator cannot read in one sitting is not a batch. The clock values are never typed here either: six are read from content/video_engine/scripts/gate_motion_density.py by name and two are LANDINGS read by calling its own _page_land_offset (see `clocks` and `entry_clock` below), and every offset is an expression over them.",
   "ceiling": "MAX_CANDIDATES in content/video_engine/scripts/lab_enumerate.py (400): the enumerated space, summed over every shape, may not pass it. A shape whose slot table pushes the product past the ceiling is refused by name, with its own product printed.",
   "clocks": {
     "m44_plate_s": "gate_motion_density.PLATE_MIN_S - M44: a world plate the eye can take in (6.0)",
     "m16_gap_s": "gate_motion_density.SHORT_PULSE_MAX_S - M16: the longest gap between visual events on a short (2.5)",
     "m12_dock_s": "gate_motion_density.OPENING_CHART_HOLD_MAX_S - M12/E25: a dock on a chart is the proof, not homework (6.0)",
     "m11_first_light_s": "gate_motion_density.ANNOTATE_TOL_S - M11/E24: the targeted species fires within this of the page's build landing, never over the build (1.5)",
-    "page_build_end_s": "gate_motion_density.PAGE_BUILD_END_S - E99 s67: the second a ledger page finishes BUILDING and holds built (7.4)"
+    "page_build_end_s": "gate_motion_density.PAGE_BUILD_END_S - E99 s67: the second a ROLLED-OUT ledger page finishes BUILDING and holds built (7.4)",
+    "lp_build_s": "gate_motion_density.LP_BUILD_S - P65 T3: an `axes` entry's page is on screen at frame 0 and its DATA is what builds, so its chart lands one BUILD in (3.0), not at 7.4",
+    "lp_spiral_in_s": "gate_motion_density._page_land_offset(spiral) - a spiral entry's page unwinds from its point and its chart lands there (1.6)",
+    "mount_land_s": "gate_motion_density._page_land_offset(mount) - a mount's chart lands at mount_s + page_build_end_s - the roll, the savor and the field beat it skips (5.9 at the player's default mount_s, 5.5 on a page carrying mount_s = 2.0)"
   },
-  "offset_grammar": "An offset is an expression over the clock names above, in whole steps: `0`, `m16_gap_s`, `2 * m16_gap_s`, `page_build_end_s + m16_gap_s`. Terms are joined by + or -; a term is a number, a clock name, or <int> * <clock name>. Anything else is refused by name. A slot carries `offsets_s` as a LIST: one entry is a fixed offset, several entries are the range of offsets the slot may sit at and each is enumerated.",
+  "entry_clock": "entry_landing is a PER-CANDIDATE clock, not one of the eight recorded ones: it is the instant M11 itself takes as `the build landed` for the candidate's OWN entry member. THE LANDING COMES FROM THE GATE - lab_enumerate CALLS gate_motion_density._page_land_offset (:1170-1188), the one place a page's landing per entry is defined, and never re-types its arithmetic; lab_enumerate.ENTRY_LANDINGS only says which `enter` the compiled scene carries into it. So: lp_build_s 3.0 for axes (and for the compiler's stamped entry, which build_scene_timeline_f rewrites onto its axes before the gate ever measures), lp_spiral_in_s 1.6 for a spiral, mount_land_s 5.9 for a mount at the player's default mount_s, 0 for an entry that arrives built, and page_build_end_s 7.4 for anything else. A shape that declares `entry_slot` may write its offsets against it, and THE LIGHT FOLLOWS THE ENTRY: batch smoke-r1 lit an axes-entered open at 7.4 and M11 read the chart as `full and unannotated`, 4.4 s late (P65 T3, 2026-09-17; the mount corrected from 7.4 to the gate's own 5.9 in T3c).",
+  "offset_grammar": "An offset is an expression over the clock names above (and, in a shape that declares `entry_slot`, over entry_landing), in whole steps: `0`, `m16_gap_s`, `2 * m16_gap_s`, `entry_landing + m16_gap_s`. Terms are joined by + or -; a term is a number, a clock name, or <int> * <clock name>. Anything else is refused by name. A slot carries `offsets_s` as a LIST: one entry is a fixed offset, several entries are the range of offsets the slot may sit at and each is enumerated.",
   "rules": {
     "plate_min_s": "the seconds from `slot` to `until` (a slot name, or `window`) are at least m44_plate_s - a plate slot is never under M44's floor",
-    "after_build_s": "`slot` sits at least page_build_end_s after `after`, and no later than page_build_end_s + m11_first_light_s - the light lands after the page has BUILT (E99 s67), inside M11's tolerance, never on arrival and never over the build",
+    "after_build_s": "`slot` sits at least `clock` after `after`, and no later than `clock` + m11_first_light_s - the light lands after the page has BUILT (E99 s67), inside M11's tolerance, never on arrival and never over the build. In a shape with an `entry_slot` the clock is entry_landing, the ENTRY's own landing, because that is the instant M11 measures the first light from",
     "gap_max_s": "consecutive events are never further apart than m16_gap_s; with `from`, the pulse is measured from that instant on (the span before it is the page BUILDING on screen, which is continuous motion, E99 s67) and the instant itself counts as an event",
     "dock_hold_max_s": "a dock on a chart page is never held past m12_dock_s, measured from `slot` to `until` (E25: the chart is the proof, not the homework)"
   },
@@ -87,7 +91,8 @@
       "id": "page-number-lands-at-n",
       "title": "A page whose number lands at +N s",
       "does": "A ledger page enters on its own signature, BUILDS on screen, holds built, and its number is lit at +N - after the build, never on arrival.",
-      "window_s": "page_build_end_s + 2 * m16_gap_s",
+      "entry_slot": "enter",
+      "window_s": "entry_landing + 2 * m16_gap_s",
       "slots": [
         {
           "name": "enter",
@@ -114,9 +119,9 @@
         {
           "name": "light",
           "axes": ["species"],
-          "role": "the light on the number, at +N after the build lands - or none at all",
+          "role": "the light on the number, at +N after the ENTRY's own build lands - or none at all",
           "optional": true,
-          "offsets_s": ["page_build_end_s", "page_build_end_s + m11_first_light_s"],
+          "offsets_s": ["entry_landing", "entry_landing + m11_first_light_s"],
           "members": [
             {"card": "species:spotlight"},
             {"card": "species:focus_zoom"}
@@ -126,7 +131,7 @@
           "name": "hold",
           "axes": ["page_species"],
           "role": "the number written on the page while it is said - the page holds BUILT and does not go still (E99 s67)",
-          "offsets_s": ["page_build_end_s + m16_gap_s"],
+          "offsets_s": ["entry_landing + m16_gap_s"],
           "members": [
             {"card": "page_species:figure"}
           ]
@@ -135,7 +140,7 @@
           "name": "exit",
           "axes": ["page_exit"],
           "role": "how the page leaves once its number has been said",
-          "offsets_s": ["page_build_end_s + 2 * m16_gap_s"],
+          "offsets_s": ["entry_landing + 2 * m16_gap_s"],
           "members": [
             {"card": "page_exit:retract"},
             {"card": "page_exit:cut"}
@@ -143,16 +148,17 @@
         }
       ],
       "clocks": [
-        {"rule": "after_build_s", "clock": "page_build_end_s", "tolerance": "m11_first_light_s", "slot": "light", "after": "enter",
-         "note": "E99 s67: the page builds with the effects and only then is lit - the light lands inside M11's 1.5 s of the build's end, never over it"},
-        {"rule": "gap_max_s", "clock": "m16_gap_s", "from": "page_build_end_s",
-         "note": "the span before the build's end is the page BUILDING on screen (continuous motion); from the build's end the 2.5 s pulse binds again"}
+        {"rule": "after_build_s", "clock": "entry_landing", "tolerance": "m11_first_light_s", "slot": "light", "after": "enter",
+         "note": "E99 s67: the page builds with the effects and only then is lit - the light lands inside M11's 1.5 s of the ENTRY's own build landing (axes 3.0, spiral 1.6, mount 5.9 - the gate's own numbers), never over it"},
+        {"rule": "gap_max_s", "clock": "m16_gap_s", "from": "entry_landing",
+         "note": "the span before the entry's build landing is the page BUILDING on screen (continuous motion); from that landing the 2.5 s pulse binds again"}
       ]
     },
     {
       "id": "page-to-page-transform",
       "title": "A page-to-page transform",
       "does": "One page becomes the next through the chart itself - the change is the transition, with no cream between.",
+      "entry_note": "this shape has no `entry_slot`: the page the viewer is already reading entered in an earlier beat, so its offsets stay on page_build_end_s, the rolled-out page's own clock (P65 T3)",
       "window_s": "page_build_end_s + 3 * m16_gap_s",
       "slots": [
         {
@@ -210,7 +216,8 @@
       "id": "return",
       "title": "A return",
       "does": "The world comes back to a page it already showed, and the thing that was said about it has changed.",
-      "window_s": "3 * m16_gap_s",
+      "entry_slot": "enter",
+      "window_s": "entry_landing + 2 * m16_gap_s",
       "slots": [
         {
           "name": "enter",
@@ -225,8 +232,8 @@
         {
           "name": "mark",
           "axes": ["page_species"],
-          "role": "what is different this time - the mark that makes the return worth making",
-          "offsets_s": ["m16_gap_s"],
+          "role": "what is different this time - the mark that makes the return worth making, at the ENTRY's own build landing",
+          "offsets_s": ["entry_landing"],
           "members": [
             {"card": "page_species:retitle"},
             {"card": "page_species:relight"},
@@ -238,7 +245,7 @@
           "name": "light",
           "axes": ["species"],
           "role": "the light on the changed thing - punctuation for the sentence that points at it",
-          "offsets_s": ["2 * m16_gap_s"],
+          "offsets_s": ["entry_landing + m16_gap_s"],
           "members": [
             {"card": "species:spotlight"},
             {"card": "species:callout"}
@@ -248,7 +255,7 @@
           "name": "exit",
           "axes": ["page_exit"],
           "role": "how the returned page leaves the second time",
-          "offsets_s": ["3 * m16_gap_s"],
+          "offsets_s": ["entry_landing + 2 * m16_gap_s"],
           "members": [
             {"card": "page_exit:retract"},
             {"card": "page_exit:cut"}
@@ -256,15 +263,16 @@
         }
       ],
       "clocks": [
-        {"rule": "gap_max_s", "clock": "m16_gap_s",
-         "note": "a return carries no build to hide inside - the page is back on its first frame, so M16's pulse binds from 0"}
+        {"rule": "gap_max_s", "clock": "m16_gap_s", "from": "entry_landing",
+         "note": "a spiral is back on its first frame and lands 1.6 s in; the compiler's stamped entry arrives on its AXES and its data still builds (3.0 s), so the pulse binds from the entry's own landing either way"}
       ]
     },
     {
       "id": "open-on-the-chart",
       "title": "The open ON the chart",
       "does": "The first frame IS the chart on its axes, drawing - one of the few places a chart may stand fully drawn (E99 s67).",
-      "window_s": "page_build_end_s + m16_gap_s + m12_dock_s",
+      "entry_slot": "enter",
+      "window_s": "entry_landing + m16_gap_s + m12_dock_s",
       "slots": [
         {
           "name": "enter",
@@ -291,8 +299,8 @@
         {
           "name": "first_move",
           "axes": ["species"],
-          "role": "the first thing said about the chart, pointed at once the page has built",
-          "offsets_s": ["page_build_end_s"],
+          "role": "the first thing said about the chart, pointed at once the ENTRY's own build has landed (axes 3.0, built 0.0)",
+          "offsets_s": ["entry_landing"],
           "members": [
             {"card": "species:callout"},
             {"card": "species:punch"},
@@ -304,7 +312,7 @@
           "axes": ["dock_kind"],
           "role": "the evidence still that lands on the built page and is read - or none",
           "optional": true,
-          "offsets_s": ["page_build_end_s + m16_gap_s"],
+          "offsets_s": ["entry_landing + m16_gap_s"],
           "members": [
             {"card": "dock_kind:image"},
             {"card": "dock_kind:cutout"}
@@ -312,10 +320,10 @@
         }
       ],
       "clocks": [
-        {"rule": "after_build_s", "clock": "page_build_end_s", "tolerance": "m11_first_light_s", "slot": "first_move", "after": "enter",
-         "note": "even on the open the point is made after the chart has drawn itself - M11's window, never over the build"},
-        {"rule": "gap_max_s", "clock": "m16_gap_s", "from": "page_build_end_s",
-         "note": "the chart draws from the first frame; from its landing the pulse binds"},
+        {"rule": "after_build_s", "clock": "entry_landing", "tolerance": "m11_first_light_s", "slot": "first_move", "after": "enter",
+         "note": "even on the open the point is made after the chart has drawn itself - M11's window on the ENTRY's own landing, never over the build"},
+        {"rule": "gap_max_s", "clock": "m16_gap_s", "from": "entry_landing",
+         "note": "the chart draws from the first frame; from the entry's own landing the pulse binds"},
         {"rule": "dock_hold_max_s", "clock": "m12_dock_s", "slot": "dock", "until": "window",
          "note": "E25: a dock on the chart is the proof, not the homework - it is not held past M12's six seconds"}
       ]

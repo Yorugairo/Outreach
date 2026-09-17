@@ -62,3 +62,33 @@ The operator: "you basically just started shining lights everywhere to call it a
 - the gates at v9e: script PASS, viewer PASS, floor M35 3 forms / M36 1 transform / M39 1.00 / M41 32 of 32 PASS, M37 0.34-0.38 (the floor 0.36), M38 0.09; motion 17 PASS / 3 FAIL (M25 the weak page's axis labels 10.6 px; M28 the same page; M34 the spiral return's ticks on its lines at one instant) / 1 WARN (M44: the desk 2.1 s and the quay 1.3 s turns, as Japan's ship). Signatures present: the page on the hook (drawing), the mount, the spiral return, the dip, the suck, the dock that reads then parks, the callout on a chart, the compare melt, the peel, the retitle, the span, build_to.
 - what the operator's four messages taught (the runbook and the backlog carry them): recall the motion doctrine and the approved shorts' MECHANISMS before authoring (R26-177; the runbook's step 0); the parity table owes a row per mechanism (E99 s67 Apply 7); better defaults come from the combination space enumerated and proven on the test bed (R26-176, the recipe lab, its own plan).
 - 2026-09-16 late: the operator watched the queue's clip - "without audio i can't watch the short and understand what's happening. The captions are wrong". Two faults: the queue's clips are rendered SILENT by design (review_queue_proofs), so the card now carries the frozen player on :8768 with the voice; and the caption pages ran past sentence ends ("the news. They trade the" | "calendar. Around the") because a retimed take caps its sentence gaps at 0.50 s, under the page builder's 0.60 s break, and the builder never read the punctuation E41 #3 says it is built from - fixed in `build_caption_pages.py` (a sentence end always closes a page; a clause mark closes one that holds three words) with `test_build_caption_pages.py`; the cut rebuilt (62 pages: "Memory stocks don't trade" | "the news." | "They trade the calendar." | ...), the clip re-rendered.
+
+## Recall (verified, P67 T7 - 2026-09-17)
+
+The receipt this pass should have carried, typed after the fact as P67's CALIBRATION case (E99 s68 Q3 = C: a
+verified per-stage receipt) - the block above stays as recorded (memory `script-changes-go-to-the-next-letter`).
+What the 2026-09-16 pass actually read is the block above: the seeds, the series, E96, the capabilities, the
+catalogue, the plate library, Japan's table, the voice pack, E99 s65, the runbook. It did NOT open the package
+playbook, the script kit's strip rule, the plate-production doctrine, the sound-sourcing rules or the cross-posting
+row before authoring - the four layers the operator named (E99 s67; R26-177) - and it read the motion doctrine
+only through the floor. The lines below cite the record it should have read, and the verifier
+(`content/video_engine/scripts/recall_verify.py`) reads THIS block, the last `## Recall` heading in the file.
+
+- Recall(package): docs/portable/PACKAGING-PLAYBOOK.md:1 "PACKAGING PLAYBOOK — titles & thumbnails, portable" (not read on 2026-09-16; the title and thumbnail were locked from the seed alone)
+- Recall(package): docs/portable/OPERATOR-RULINGS.md:868 "the first 1:30 is the unit of proof" (E27 addendum - the package first)
+- Recall(script): docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md:1 "SCRIPT PATTERN KIT" (the runner and the short's S01-S08 - read through run_script_gates.py)
+- Recall(script): docs/portable/OPERATOR-RULINGS.md:1292 "Sentences break for the strip" (E41 #3 - the caption pages are built from the punctuation; the caption fix of 2026-09-16 came from re-reading this line)
+- Recall(voice): docs/portable/VOICE-PACK.md:23 "The calibration pair (read before writing anything)" (read on 2026-09-16)
+- Recall(voice): docs/portable/OPERATOR-RULINGS.md:2264 "Chirp does not ship on YouTube" (E70 - the scratch take is the clock, never the ship)
+- Recall(world): docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:1 "Timestamped Plate Production" (not read on 2026-09-16; the four Flow stills were ordered from the host pack alone)
+- Recall(world): docs/portable/OPERATOR-RULINGS.md:3248 "A plate's life is DIRECTIONAL" (E99 s65 - read on 2026-09-16)
+- Recall(world): docs/content-video-engine/CAPABILITIES.md:182 "326 plates indexed by SEMANTIC" (the plate library - read on 2026-09-16)
+- Recall(evidence): docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:1 "Evidence Chart System" (the five pages' forms; read only as the builders' arguments on 2026-09-16)
+- Recall(evidence): docs/portable/OPERATOR-RULINGS.md:761 "The chart is the proof, not the homework" (E25 - a chart proves one sentence and leaves)
+- Recall(motion): docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:185 "Linked-evidence choreography (the chain is the transition)" (Part 3 - NOT read before the first pass; the operator named the missing mechanisms, E99 s67)
+- Recall(motion): docs/portable/MOTION-GRAMMAR.md:1 "narration-locked choreography, portable" (not read before the first pass)
+- Recall(motion): docs/portable/OPERATOR-RULINGS.md:2797 "recipes are the unit of authoring" (E96 - read on 2026-09-16, through the floor)
+- Recall(sound): docs/portable/SOUND-SOURCING.md:1 "SOUND SOURCING — portable" (not read on 2026-09-16; the bed at -20 LU and the page cues came from the kit's defaults)
+- Recall(sound): docs/portable/SOUND-SOURCING.md:22 "Licensing rules (hard gates)" (not read on 2026-09-16)
+- Recall(publish): docs/content-video-engine/BACKLOG.md:431 "Cross-posting from one master" (R26-8 - not read on 2026-09-16; the render was 9:16 by the runbook, not by this row)
+- Recall(rulings): docs/portable/OPERATOR-RULINGS.md:3252 "A light is not animation, and a chart never lands fully built" (E99 s67 - the ruling this pass earned; the rework obeys it)

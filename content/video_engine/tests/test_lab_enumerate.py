@@ -2,12 +2,19 @@
 
 The committed `candidates.jsonl` is the cross product of `beat-shapes.json` and nothing else: its count equals the
 product computed from the slot tables here (no sampling, no `--n`, no `--fill`), every member resolves to a card the
-catalogue carries (with an option that card lists), every record validates against `lab_candidates.v1`, and the five
-clocks on every record ARE `gate_motion_density.py`'s own constants.
+catalogue carries (with an option that card lists), every record validates against `lab_candidates.v1`, and the
+eight clocks on every record ARE `gate_motion_density.py`'s own - six constants, and the spiral's and the mount's
+LANDINGS, which are `_page_land_offset`'s.
 
 Each refusal is proved on a tmp copy of the table, the way `test_effects_catalog_drift.py` proves the drift gate: a
 plate under M44's six seconds, a light before the page has built, a gap past M16's 2.5 s, a slot table past
 MAX_CANDIDATES, a card the catalogue does not carry and an option it does not list. Nothing here renders anything.
+
+P65 T3 adds the ENTRY's own clock: a shape that declares `entry_slot` places its light, its hold and its leave
+against the instant M11 itself measures the first light from for THAT entry, and T3c makes that instant the gate's
+own - `gate_motion_density._page_land_offset` is CALLED, never re-typed. So the four entry kinds (axes 3.0,
+spiral 1.6, mount 5.9, built 0.0) are pinned against the gate's own function, against the clocks the record names
+(`lp_build_s`, `lp_spiral_in_s`, `mount_land_s`) and against the emitted candidates.
 """
 from __future__ import annotations
 
@@ -28,6 +35,15 @@ from authoring import effects as FX  # noqa: E402
 
 SHAPE_IDS = ("plate-carries-a-card", "page-number-lands-at-n", "page-to-page-transform", "return",
              "open-on-the-chart")
+
+
+def land(enter: str | None, mount_s: float | None = None) -> float:
+    """THE JUDGE of every landing in this file: `gate_motion_density._page_land_offset` (:1170-1188) itself, called
+    on a page that enters this way - never a number typed here and never the lab's own arithmetic."""
+    page: dict = {"enter": enter}
+    if mount_s is not None:
+        page["mount_s"] = mount_s
+    return round(G._page_land_offset({"world": {"page": page}}), 3)
 
 
 # --------------------------------------------------------------------------- fixtures
@@ -94,7 +110,9 @@ def test_the_table_carries_the_five_shapes_and_names_its_ceiling(table: dict) ->
         assert shape["clocks"], f"{shape['id']} names no clock that binds it"
         for rule in shape["clocks"]:
             assert rule["rule"] in LE.RULES
-            assert rule["clock"] in LE.CLOCK_CONSTANTS
+            assert rule["clock"] in LE.CLOCK_CONSTANTS or rule["clock"] == LE.ENTRY_TOKEN
+            if rule["clock"] == LE.ENTRY_TOKEN or LE.ENTRY_TOKEN in str(rule.get("from") or ""):
+                assert shape.get("entry_slot"), f"{shape['id']} measures from the entry and declares no entry_slot"
 
 
 def test_the_count_is_the_product_of_the_slot_tables_and_under_the_ceiling(table: dict, emitted: list[dict]) -> None:
@@ -160,10 +178,91 @@ def test_the_clocks_on_every_record_are_the_gate_constants(emitted: list[dict]) 
         "m12_dock_s": G.OPENING_CHART_HOLD_MAX_S,
         "m11_first_light_s": G.ANNOTATE_TOL_S,
         "page_build_end_s": round(G.PAGE_BUILD_END_S, 3),
+        "lp_build_s": round(G.LP_BUILD_S, 3),
+        # the two LANDINGS (P65 T3c): not constants, but the gate's own function, at the player's default mount_s
+        "lp_spiral_in_s": land("spiral"),
+        "mount_land_s": land("mount"),
     }
     assert LE.clocks() == want
     for record in emitted:
         assert record["clocks"] == want, record["id"]
+
+
+# --------------------------------------------------------------------------- the light follows the ENTRY (T3)
+
+# the slot each shape lights its ENTRY's landing with (the light / the mark), and the entry slot it follows
+LIGHT_SLOT = {"page-number-lands-at-n": "light", "open-on-the-chart": "first_move", "return": "mark"}
+
+
+def test_the_entry_landings_are_the_ones_m11_measures() -> None:
+    """Each entry's landing IS `gate_motion_density._page_land_offset` (:1170-1188) - the gate is the judge, and
+    the lab holds no second copy of its arithmetic (P65 T3c)."""
+    assert LE.entry_landing_s("page_enter:axes") == land("axes") == round(G.LP_BUILD_S, 3) == 3.0    # :1187-1188
+    assert LE.entry_landing_s("page_enter:spiral") == land("spiral") == round(G.LP_SPIRAL_IN_S, 3) == 1.6  # :1183
+    assert LE.entry_landing_s("page_enter:built") == land("built") == 0.0                            # :1185-1186
+    # :1178-1180 - the mount's landing is mount_s + PAGE_BUILD_END_S - ROLL - SAVOR - FIELD: 5.9 s at the player's
+    # default mount_s, 5.5 s on a page carrying mount_s = 2.0. T3 encoded 7.4 here and the thirty mount candidates
+    # would have been judged 1.5 s outside M11's tolerance; T3c takes the gate's own number.
+    assert LE.entry_landing_s("page_enter:mount") == land("mount") == 5.9
+    assert LE.entry_landing_s("page_enter:mount", 2.0) == land("mount", 2.0) == 5.5
+    # the compiler stamps a page that follows a page onto its AXES (build_scene_timeline_f.py:2197-2200), and the
+    # `return` shape is planted between two pages - so `stamped` lands one BUILD in, like `axes`.
+    assert LE.entry_landing_s("page_enter:stamped") == land("axes") == 3.0
+
+
+def test_the_record_names_the_clock_each_entrys_landing_came_from(emitted: list[dict]) -> None:
+    """A candidate is judged on the clocks its RECORD carries (R26-168), so every entry's landing is one of them:
+    axes -> lp_build_s, spiral -> lp_spiral_in_s, mount -> mount_land_s, built -> 0.0 (it arrives drawn)."""
+    cl = LE.clocks()
+    assert cl["lp_spiral_in_s"] == land("spiral") and cl["mount_land_s"] == land("mount")
+    assert {"lp_spiral_in_s", "mount_land_s"} <= set(emitted[0]["clocks"])
+    for card, clock in (("page_enter:axes", "lp_build_s"), ("page_enter:spiral", "lp_spiral_in_s"),
+                        ("page_enter:mount", "mount_land_s"), ("page_enter:stamped", "lp_build_s")):
+        assert LE.entry_clock(card) == clock
+        assert cl[clock] == LE.entry_landing_s(card)
+    assert LE.entry_clock("page_enter:built") is None and LE.entry_landing_s("page_enter:built") == 0.0
+
+
+def test_an_entry_card_with_no_landing_is_refused_by_name() -> None:
+    with pytest.raises(LE.LabError) as exc:
+        LE.entry_landing_s("page_enter:morph")
+    assert "_page_land_offset" in str(exc.value) and "ENTRY_LANDINGS" in str(exc.value)
+
+
+def test_the_light_follows_the_entrys_own_build_clock(table: dict, emitted: list[dict]) -> None:
+    """One candidate per ENTRY KIND, of each shape that has an entry: its light sits AT that entry's landing."""
+    seen: set[str] = set()
+    for shape in table["shapes"]:
+        slot_name = LIGHT_SLOT.get(shape["id"])
+        if slot_name is None:
+            assert "entry_slot" not in shape, f"{shape['id']} has an entry slot and no light following it"
+            continue
+        light_cards = {m["card"] for m in slot_of(table, shape["id"], slot_name)["members"]}
+        for entry in slot_of(table, shape["id"], shape["entry_slot"])["members"]:
+            card = entry["card"]
+            want = land("axes" if card == "page_enter:stamped" else card.split(":")[-1])
+            lit = [r for r in emitted if r["shape"] == shape["id"]
+                   and any(m["card"] == card and m["offset_s"] == 0.0 for m in r["members"])
+                   and any(m["card"] in light_cards and m["offset_s"] == want for m in r["members"])]
+            assert lit, f"{shape['id']}: no candidate lights {card} at its own landing {want:.2f}s"
+            seen.add(card)
+            for record in emitted:                       # and no candidate of the shape lights before that landing
+                if record["shape"] != shape["id"] or not any(m["card"] == card for m in record["members"]):
+                    continue
+                early = [m for m in record["members"] if m["card"] in light_cards and m["offset_s"] < want - 1e-6]
+                assert not early, f"{record['id']} lights at {early[0]['offset_s']}s, before {card} has built"
+    assert seen == {"page_enter:axes", "page_enter:mount", "page_enter:spiral", "page_enter:built",
+                    "page_enter:stamped"}, "every entry kind the table carries is proved"
+
+
+def test_a_shape_that_measures_from_the_entry_without_one_is_refused_by_name(tmp_path: Path) -> None:
+    """`entry_landing` is a clock only where an `entry_slot` says which member it is measured from."""
+    path = shapes_copy(tmp_path, lambda d: shape_of(d, "page-to-page-transform")["clocks"]
+                       .append({"rule": "after_build_s", "clock": "entry_landing", "slot": "light",
+                                "after": "from_page", "note": "a rule with no entry to measure from"}))
+    with pytest.raises(LE.LabError) as exc:
+        LE.build(ROOT, shapes=path)
+    assert "entry_landing" in str(exc.value) and "entry_slot" in str(exc.value)
 
 
 # --------------------------------------------------------------------------- the refusals
@@ -182,7 +281,10 @@ def test_a_light_before_the_build_ends_is_refused_by_name(tmp_path: Path) -> Non
                        .__setitem__("offsets_s", ["m16_gap_s"]))
     with pytest.raises(LE.LabError) as exc:
         LE.build(ROOT, shapes=path)
-    assert "BEFORE the page has built" in str(exc.value) and "page_build_end_s = 7.40s" in str(exc.value)
+    said = str(exc.value)
+    assert "BEFORE the page has built" in said
+    # the clock the light is judged against is the ENTRY's own landing, not one number for every page (P65 T3)
+    assert f"entry_landing = {land('axes'):.2f}s" in said and f"entry_landing = {land('mount'):.2f}s" in said
 
 
 def test_a_gap_over_m16s_two_and_a_half_seconds_is_refused_by_name(tmp_path: Path) -> None:
@@ -195,7 +297,7 @@ def test_a_gap_over_m16s_two_and_a_half_seconds_is_refused_by_name(tmp_path: Pat
 
 def test_a_dock_held_past_m12_is_refused_by_name(tmp_path: Path) -> None:
     path = shapes_copy(tmp_path, lambda d: shape_of(d, "open-on-the-chart")
-                       .__setitem__("window_s", "page_build_end_s + m16_gap_s + 2 * m12_dock_s"))
+                       .__setitem__("window_s", "entry_landing + m16_gap_s + 2 * m12_dock_s"))
     with pytest.raises(LE.LabError) as exc:
         LE.build(ROOT, shapes=path)
     assert "is held 12.00s" in str(exc.value) and "m12_dock_s = 6.00s" in str(exc.value)

@@ -3431,6 +3431,181 @@
       "ruling": "",
       "was_kind": "",
       "owed": ""
+    },
+    {
+      "id": "p66-hg1-the-first-generated-base",
+      "status": "open",
+      "kind": "watch",
+      "title": "P66 HG1 - the FIRST generated base: the Tokyo bed's own beat plan run through the shape compiler, read beside the approved Tokyo cut",
+      "ids": [
+        "P66 HG1",
+        "E99 s68",
+        "E99 s38"
+      ],
+      "judge": "E99 s68 said the compiler's outcome is a BASE the agent then modifies. This is the first one: the Tokyo short's own AUTHORED beat plan (read back from the approved cut) compiled to rows by `authoring/shapes.py` and written by `generate_base_table.py` - 5 rows, the skeletons `open-page-mounts-the-world`, `plate-carries-a-card`, `spiral-return-holds-the-evidence`, `page-to-page-cut`, `held-page-hosts-the-docks`, no skeleton twice running, ten of the twenty-five sentences left SILENT because the plan names no move for them. WATCH IT BESIDE THE APPROVED TOKYO CUT AT THE SAME INSTANTS. The question is E99 s38's: is there a VISIBLE DIFFERENCE - and is this base the right starting point for the next one-shot, or does it already read as TEMPLATED at one cut? The rows, the act that chose each skeleton and the rule that applied are in BASE-TABLE.md below; the base is NOT the Tokyo cut and is not offered as one.",
+      "where": [
+        {
+          "label": "the generated base: per row the skeleton, the act that chose it and the rule; the silent beats; the signature mix beside the approved cuts' measured target",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p66-base/BASE-TABLE.md"
+        },
+        {
+          "label": "the generated rows themselves (the kit's own literal, the first door the agent edits)",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p66-base/SHOT-TABLE-SHORT.py"
+        },
+        {
+          "label": "the plan, its Human Gates section and the skeleton list",
+          "path": ".claude/PRPs/plans/P66-THE-SHAPE-COMPILER.plan.md"
+        }
+      ],
+      "proofs": [
+        {
+          "type": "player",
+          "label": "THE COMPILED BASE WITH ITS AUDIO - the frozen player on a private port, beside the approved Tokyo cut (the parent serves it after compiling the base; a whole-cut watch needs the voice)",
+          "url": "http://127.0.0.1:8769/player.html",
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p66-base",
+          "confirmed": false
+        }
+      ],
+      "options": [
+        "Take the base as the default opening move for the next one-shot",
+        "Take it only for named beat shapes",
+        "Send the skeleton library back for more variety"
+      ],
+      "recommendation": "Take the base as the default opening move for the next one-shot: it puts the approved shape on the page before a word is typed and the author still edits every row (the two doors) with each departure named in the ledger. The agent's recommendation, not a ruling.",
+      "blocks": "P66 T5's M46 threshold (the maximum share one signature may reach is set by your answer) and the Opus one-shot that runs on the compiler's base (E99 s66 step 2)",
+      "sources": [
+        ".claude/PRPs/plans/P66-THE-SHAPE-COMPILER.plan.md (Human Gates - HG1)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s68, E99 s38, E99 s66)",
+        "docs/content-video-engine/GRILL-AGENTS-HARNESS-EFFECTS-2026-09-16.md:10-19"
+      ],
+      "ruling": "",
+      "was_kind": "",
+      "owed": ""
+    },
+    {
+      "id": "lab-smoke-r2-plate-carries-a-card",
+      "status": "open",
+      "kind": "batch",
+      "title": "P65 HG1 - the first batch: plate-carries-a-card, 1 candidate(s) side by side (batch smoke-r2)",
+      "ids": [
+        "P65 HG1",
+        "E99 s68",
+        "R26-176"
+      ],
+      "judge": "Which of these beats earns its place, and why not the others? Each candidate below is ONE beat - the shape `plate-carries-a-card` - built on the Tokyo bed inside the approved cut and left standing by the gates and the probe (1 of 1 built for this shape survived). Give each its own bit and its own reason: an approve carries `good`, a deny carries the one of the eight that killed it. The gates FILTERED; nothing here is judged, ranked or scored by an agent. AND THE GRAMMAR ITSELF IS ON TRIAL: one card per beat shape with a bit + a reason per candidate - does this work for you, or do you want one card per candidate at a lower rate? Answer that on the card's own control below.",
+      "where": [
+        {
+          "label": "the probe sheet for 9b5531bf - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-smoke-r2/plate-carries-a-card-9b5531bf/lab-sheet.png"
+        },
+        {
+          "label": "the run record: every gate row that decided each candidate of batch smoke-r2",
+          "path": "content/video_engine/effects/lab/batches/smoke-r2.jsonl"
+        },
+        {
+          "label": "the enumerated space these candidates were drawn from (members, offsets, clocks)",
+          "path": "content/video_engine/effects/lab/candidates.jsonl"
+        },
+        {
+          "label": "the plan, its Human Gates and the batch's queue grammar",
+          "path": ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md"
+        }
+      ],
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card 9b5531bf - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-smoke-r2/plate-carries-a-card-9b5531bf",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "lab:plate-carries-a-card:9b5531bf",
+          "label": "9b5531bf - plate-carries-a-card",
+          "one_line": "plate_option:ken +0s, dock_kind:image +2.5s, arrival:land +2.5s, species:plate_life +5s, exit:cut +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card 9b5531bf - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-smoke-r2/plate-carries-a-card-9b5531bf",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        }
+      ],
+      "options": [
+        "the batch grammar works - keep one card per beat shape",
+        "one card per candidate instead, at a lower rate"
+      ],
+      "recommendation": "None on which beat wins - that is your bit, not the agent's (E99 s68). The agent recommends only what the record shows: no candidate is marked exploration here (the draw is 25% of 1, which rounds to none). On the grammar: keep one card per beat shape - it is the only form in which a denial carries a reason, which is what E99 s68 asked for. The agent's recommendation, not a ruling.",
+      "blocks": "P65 T5 (the approval log has nothing to derive until an answer exists) and every later batch",
+      "sources": [
+        ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md (T4, the batch's queue grammar)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s68: present as batches, track approvals AND denials)",
+        "docs/content-video-engine/BACKLOG.md (R26-176: the space is finite; the lab enumerates it)",
+        "content/video_engine/effects/lab/batches/smoke-r2.jsonl (the gate rows behind every survivor)"
+      ],
+      "ruling": "",
+      "was_kind": "",
+      "owed": "",
+      "draw": {
+        "seed": "smoke-r2:plate-carries-a-card",
+        "share": 0.25,
+        "n": 1,
+        "k": 0,
+        "drawn": [],
+        "why": "drawn with random.Random(seed) over the sorted survivor ids and NO reference to any learner - no approval-rate table, no predicted bit, no ordering (Gao et al. 2022: a quarter of each batch is watched whatever the table expects, or the table only ever learns what it already believed)"
+      }
+    },
+    {
+      "id": "p65-hg2-the-reproved-set-and-m38",
+      "status": "open",
+      "kind": "owed",
+      "title": "P65 HG2 - the fifteen proven recipes re-proved on today's clocks, and M38's restoration",
+      "ids": [
+        "P65 HG2",
+        "R26-168",
+        "E99 s67"
+      ],
+      "judge": "Which of the fifteen `proven` recipes survive as proven on TODAY's clocks - six-second plates (M44), pages that BUILD then hold built (E99 s67), no rails and no park at 9:16 (R26-171 / R26-172) - which are retired, and which are replaced by a combination the lab found? And with that answer: does M38 go back to FAIL at 0.60, or does the number move? Three of the fifteen are already known to contradict the clocks (`card-becomes-the-chart` is proven on a 3-5 s plate, `emphasized-bar-lit` on a light 7.55 s after a build, the badge ladder's rails are illegible at 9:16). You will see the survivors and the casualties side by side, a clip each, when the re-proof run below has built them.",
+      "where": [
+        {
+          "label": "the plan, its Human Gates (HG2) and the re-proof slice T8",
+          "path": ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md"
+        },
+        {
+          "label": "the fifteen proven recipes as they stand today (45 files, 15 proven)",
+          "path": "content/video_engine/effects/recipes"
+        },
+        {
+          "label": "M38's interim WARN and the sentence naming R26-168 (it stops no cut until this gate is answered)",
+          "path": "content/video_engine/scripts/gate_one_shot_floor.py"
+        },
+        {
+          "label": "the re-proof run's record - not on disk until T8 has built it",
+          "missing": true
+        }
+      ],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "the promotion of the re-proved set (P65 T6), the closure of R26-168, and M38's restoration to a FAIL at 0.60 in gate_one_shot_floor.py",
+      "sources": [
+        ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md (Human Gates - HG2; T8)",
+        "docs/content-video-engine/BACKLOG.md (R26-168: the floor and the proven set contradict each other)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s67: the page builds then holds built; E99 s68)",
+        "docs/content-video-engine/GRILL-AGENTS-HARNESS-EFFECTS-2026-09-16.md:54-55 (gotcha 5, the interim)"
+      ],
+      "ruling": "",
+      "was_kind": "",
+      "owed": "the re-proof run P65 T8 is building now: each of the fifteen `proven` recipes rebuilt on the Tokyo bed through `lab_build.py` under today's clocks into `content/video_engine/effects/lab/batches/reproof-r1.jsonl` - per recipe, survives as proven / needs an amended offset (named) / is unreachable under the clocks (with the gate row that kills it). This row is flipped to kind `batch` - the survivors and the casualties side by side, a clip each, a bit and a reason on every one - by T8 when that run lands. It is not yours until then."
     }
   ]
 }

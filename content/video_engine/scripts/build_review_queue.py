@@ -12,6 +12,20 @@ rendered by `review_queue_proofs.py --clips` (slow); crops are computed here (ch
 The page saves answers only through `serve_review_queue.py` (POST /answer, appended to review-answers.jsonl). Applying
 an answer - a ruling, its backlog row, `status: ruled` - stays the parent's; neither the page nor the server rules.
 
+E99 s68 (P67 T5): an OPEN `watch` card whose proof shows the WHOLE cut - a player link, or a clip at least
+`WHOLE_CUT_S` long - owes a director-critic report (`<build>/CRITIC.md`, `docs/content-video-engine/CRITIC-REPORT.md`):
+a whole cut reaches the operator only after a DIFFERENT reader has read it. The rule lands in two steps - while
+`CRITIC_REQUIRED` is False it WARNs by name (both `--write` and `--check` still exit 0); P67 T7 flips it to True in the
+commit that gives the live card its `critic` path, and then `validate` refuses by name. `critic` is not a REQUIRED
+field; that the named report EXISTS and lives under the proof's build is the writer's check, not `validate`'s.
+
+A `batch` card (P65 T4, the recipe lab) is the one card that asks about MORE THAN ONE thing: it carries `candidates`,
+each with its own clip proof, asks the card's single plain question once, and gives every candidate an approve / deny
++ reason control of its own. Each of those controls POSTs through the SAME /answer door as
+`{item: "<card-id>#<candidate-id>", choice: "approve"|"deny", note: "<reason>: <free text>"}` - the answers file
+already carries repeated `item` keys, so nothing downstream changes shape. The nine reason categories are NOT written
+here: they are read from `content/video_engine/configs/lab_judgement.schema.json` (P65 T1), the one place they live.
+
     python content/video_engine/scripts/build_review_queue.py --write | --check | --answers
         [--data PATH] [--md PATH] [--out DIR] [--answers-file PATH] [--root DIR]
 
@@ -43,17 +57,25 @@ CROPS_SUBDIR = "crops"
 CLIPS_SUBDIR = "clips"
 NO_PROOF_MARKER = "no proof yet"
 OTHER = "other"
-ANSWERABLE_KINDS = ("watch", "look", "rule", "approve")
+ANSWERABLE_KINDS = ("watch", "look", "rule", "approve", "batch")
 KINDS = (*ANSWERABLE_KINDS, "owed")
 PROOF_KINDS = ("watch", "look")        # E99 s14: these reach the operator only with a proof
 PROOF_TYPES = ("clip", "player", "crop")
 KIND_TITLES = {"watch": "Watch", "look": "Look", "rule": "Rule", "approve": "Approve / push",
-               "owed": "Owed by the agent before it comes back to you"}
+               "batch": "Batches - candidate by candidate", "owed": "Owed by the agent before it comes back to you"}
+BATCH_SEP = "#"                        # one candidate's answer is item <card-id>#<candidate-id> (P65 T4)
+BATCH_CHOICES = ("approve", "deny")    # a candidate takes a BIT; the reason carries the why (P65 T1)
+CANDIDATE_REQUIRED = ("id", "label", "one_line", "proof")
+REASON_SCHEMA_REL = "content/video_engine/configs/lab_judgement.schema.json"
 STATUSES = ("open", "ruled")
 REQUIRED = ("id", "ids", "kind", "title", "judge", "where", "options", "recommendation", "blocks", "sources", "status",
             "ruling")
 PROOF_FIELDS = {"clip": ("label", "t0", "t1", "route"), "player": ("label", "url", "build", "confirmed"),
                 "crop": ("label", "before", "after")}
+WHOLE_CUT_S = 30.0          # P67 T5: a clip this long or longer shows the whole cut, not a beat (one-shot #3: 77.6 s)
+CRITIC_REQUIRED = False     # P67 T5 ships the critic rule as a WARN; P67 T7 flips it to True with the live card's path
+CRITIC_REPORT_NAME = "CRITIC.md"       # what the director-critic writes into the build it read (CRITIC-REPORT.md)
+WARNINGS: list[str] = []               # what validate() warned about on the last load; the cli prints it by name
 WHERE_TARGETS = ("path", "url", "missing", "command")
 SERVE_CMD = "python content/video_engine/scripts/serve_player.py {build} --port {port}"
 RULED_HEADING = "Ruled since the last pass"
@@ -62,6 +84,27 @@ OWED_HEADING = KIND_TITLES["owed"]
 
 class QueueError(ValueError):
     """A record the schema refuses; the message names the record and the field."""
+
+
+def load_reasons(root: Path = ROOT) -> tuple[str, ...]:
+    """The fixed reason categories a batch's candidate control offers, read from `lab_judgement.schema.json`: P65 T1
+    put them in the schema ONCE and every tool reads them from there rather than restating the list."""
+    path = root / REASON_SCHEMA_REL
+    try:
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        return tuple(schema["$defs"]["judgement"]["properties"]["reason"]["enum"])
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        raise QueueError(f"the reason list is {REASON_SCHEMA_REL} $defs.judgement.properties.reason.enum "
+                         f"and it did not load: {exc}") from exc
+
+
+REASONS = load_reasons()
+
+
+def note_reason(note: object) -> str:
+    """The reason a candidate's note opens with (the text before the first ':'), or '' when it opens with none."""
+    head = note.split(":", 1)[0].strip() if isinstance(note, str) else ""
+    return head if head in REASONS else ""
 
 
 # ---------------------------------------------------------------- data
@@ -74,6 +117,86 @@ def validate_proof(name: str, proof: object) -> None:
         raise QueueError(f"{name}: a {proof['type']} proof is missing {', '.join(missing)}")
     if proof["type"] == "clip" and not (proof.get("surface") or proof.get("build") or proof.get("mp4")):
         raise QueueError(f"{name}: a clip proof names its surface, its build, or an mp4 already on disk")
+
+
+def whole_cut_proof(rec: dict) -> dict | None:
+    """The proof that shows the WHOLE cut rather than one beat: a player link (the operator watches it end to end) or
+    a clip at least `WHOLE_CUT_S` long. The first such proof, or None when every proof is a beat."""
+    for proof in rec.get("proofs") or []:
+        if not isinstance(proof, dict):
+            continue
+        if proof.get("type") == "player":
+            return proof
+        if proof.get("type") == "clip":
+            try:
+                if float(proof["t1"]) - float(proof["t0"]) >= WHOLE_CUT_S:
+                    return proof
+            except (KeyError, TypeError, ValueError):
+                continue
+    return None
+
+
+def critic_owed(name: str, rec: dict) -> None:
+    """E99 s68: an OPEN watch card carrying a whole-cut proof owes a director-critic report - a whole cut reaches the
+    operator after a DIFFERENT reader has read it (one-shot #3 was CLEAN by its own builder's read and refused in four
+    messages). A present `critic` is checked here only as a repo-relative name; that the file EXISTS and lives under
+    the proof's build is the writer's check (`check_critic_files`), so the fixtures keep working."""
+    critic = rec.get("critic")
+    if critic is not None:
+        if not isinstance(critic, str) or not critic.strip() or Path(critic).is_absolute():
+            raise QueueError(f"{name}: 'critic' names the director-critic report repo-relative "
+                             f"(e.g. <build>/{CRITIC_REPORT_NAME}), not {critic!r}")
+        return
+    if rec["status"] != "open" or rec["kind"] != "watch":
+        return
+    proof = whole_cut_proof(rec)
+    if proof is None:
+        return
+    build = str(proof.get("build") or "<build>").rstrip("/")
+    message = (f"{name}: a whole-cut watch owes a critic report ({build}/{CRITIC_REPORT_NAME}) - E99 s68; "
+               f"run the director-critic pass or make the proof a clip of the beat")
+    if CRITIC_REQUIRED:
+        raise QueueError(message)
+    WARNINGS.append(f"WARN {message}")
+
+
+def validate_candidate(name: str, cand: object, n: int, seen: set[str]) -> None:
+    """One candidate of a batch card: an id the item grammar can carry, a label, its one line, and a CLIP proof - a
+    beat a short could carry (E99 s60), never a player link or a crop."""
+    if not isinstance(cand, dict):
+        raise QueueError(f"{name}: candidate {n} is not an object")
+    missing = [k for k in CANDIDATE_REQUIRED if k not in cand]
+    if missing:
+        raise QueueError(f"{name}: candidate {n} is missing {', '.join(missing)}")
+    cid = cand["id"]
+    if not isinstance(cid, str) or not cid.strip() or BATCH_SEP in cid:
+        raise QueueError(f"{name}: a candidate id is a non-empty string with no {BATCH_SEP!r} in it (an answer's item "
+                         f"is <card-id>{BATCH_SEP}<candidate-id>): {cid!r}")
+    if cid in seen:
+        raise QueueError(f"{name}: duplicate candidate id {cid!r}")
+    seen.add(cid)
+    validate_proof(f"{name} candidate {cid}", cand["proof"])
+    if cand["proof"]["type"] != "clip":
+        raise QueueError(f"{name}: candidate {cid} needs a CLIP proof - a beat a short could carry (E99 s60) - "
+                         f"not a {cand['proof']['type']} proof")
+    if cand.get("reason") is not None and cand["reason"] not in REASONS:
+        raise QueueError(f"{name}: candidate {cid} carries a reason off the list: {cand['reason']!r} "
+                         f"(one of {', '.join(REASONS)})")
+
+
+def validate_batch(name: str, rec: dict) -> None:
+    """A batch card carries its candidates side by side, and its `proofs` MIRRORS them in order: the page and
+    `review_queue_proofs.py --clips` both name a clip by its index, so the two lists may never drift apart."""
+    cands = rec.get("candidates")
+    if not isinstance(cands, list) or not cands:
+        raise QueueError(f"{name}: a batch card has no candidates - 'candidates' is a non-empty list "
+                         "(one record per beat shape, its survivors side by side)")
+    seen: set[str] = set()
+    for n, cand in enumerate(cands):
+        validate_candidate(name, cand, n, seen)
+    if list(rec.get("proofs") or []) != [c["proof"] for c in cands]:
+        raise QueueError(f"{name}: a batch's 'proofs' mirrors its candidates' clips in order (the page and "
+                         "review_queue_proofs.py --clips name a clip by its index) - write it with lab_batch.py")
 
 
 def validate_record(rec: object, n: int, seen: set[str]) -> None:
@@ -97,9 +220,14 @@ def validate_record(rec: object, n: int, seen: set[str]) -> None:
         raise QueueError(f"{name}: an owed item says what it owes (its E99 section or its missing proof) in 'owed'")
     for proof in rec.get("proofs") or []:
         validate_proof(name, proof)
+    if rec["kind"] == "batch":
+        validate_batch(name, rec)
+    elif rec.get("candidates"):
+        raise QueueError(f"{name}: only a batch card carries candidates (this one is kind {rec['kind']!r})")
     if rec["status"] == "open" and rec["kind"] in PROOF_KINDS and not rec.get("proofs"):
         raise QueueError(f"{name}: an open {rec['kind']} item has no proof entry (E99 s14) - "
                          "give it a clip, a player or a crop, or move it to kind owed")
+    critic_owed(name, rec)
     for w in rec["where"]:
         if not isinstance(w, dict) or "label" not in w or not any(t in w for t in WHERE_TARGETS):
             raise QueueError(f"{name}: a where entry needs a label and one of {', '.join(WHERE_TARGETS)}")
@@ -107,9 +235,12 @@ def validate_record(rec: object, n: int, seen: set[str]) -> None:
 
 def validate(items: list) -> list[dict]:
     """Refuse by name: a missing field, an unknown kind or status, a duplicate id, a where entry with no target, an
-    open watch / look item with no proof, an owed item that does not say what it owes."""
+    open watch / look item with no proof, an owed item that does not say what it owes, a batch with no candidates, a
+    candidate with no clip proof, a duplicate candidate id, a candidate reason off the fixed list, and (once
+    `CRITIC_REQUIRED` is True) an open whole-cut watch with no critic report. WARNINGS carries what only warned."""
     if not isinstance(items, list):
         raise QueueError("the queue's items must be a list of records")
+    WARNINGS.clear()
     seen: set[str] = set()
     for n, rec in enumerate(items):
         validate_record(rec, n, seen)
@@ -192,10 +323,22 @@ def md_proof(item_id: str, n: int, p: dict) -> str:
     return f"crop - {p['label']}: `{p['before']}` vs `{p['after']}`"
 
 
+def md_candidate(item_id: str, n: int, cand: dict) -> str:
+    tags = " ".join(f"**{t}**" for t in ("exploration", "calibration") if cand.get(t))
+    prior = f" (judged before: {cand['reason']})" if cand.get("reason") else ""
+    return (f"`{cand['id']}` {tags} {cand['label']} - {cand['one_line']}{prior} - "
+            f"{md_proof(item_id, n, cand['proof'])}")
+
+
 def md_row(rec: dict) -> str:
-    proofs = "<br>".join(md_proof(rec["id"], n, p) for n, p in enumerate(rec.get("proofs") or [])) or "the documents below"
+    if rec["kind"] == "batch":
+        proofs = "<br>".join(md_candidate(rec["id"], n, c) for n, c in enumerate(rec["candidates"]))
+    else:
+        proofs = "<br>".join(md_proof(rec["id"], n, p) for n, p in enumerate(rec.get("proofs") or [])) or "the documents below"
     where = "<br>".join(md_where(w) for w in rec["where"])
     options = " / ".join(rec["options"]) or "free answer"
+    if rec["kind"] == "batch":
+        options = f"per candidate: {' / '.join(BATCH_CHOICES)} + a reason; on the card: {options}"
     rec_text = rec["recommendation"] if rec["recommendation"] is not None else "none recorded"
     answer = f" Answer so far ({rec['answer']['ruling']}): \"{rec['answer']['quote']}\"" if rec.get("answer") else ""
     return "| " + " | ".join(cell(c) for c in (
@@ -351,11 +494,44 @@ def page_proofs(rec: dict, root: Path, live: dict | None) -> str:
     return f'<h4>The proof</h4><div class="proofs">{"".join(parts)}</div>' if parts else ""
 
 
+def candidate_tags(cand: dict) -> str:
+    """Why this candidate is in front of you when the table did not ask for it - the card says so (Gao et al. 2022)."""
+    return "".join(f'<span class="tag {t}">{t}</span>' for t in ("exploration", "calibration") if cand.get(t))
+
+
+def page_candidate(rec: dict, n: int, c: int, cand: dict, root: Path) -> str:
+    """One candidate: its clip, its one line, and its own approve / deny + reason control. The control POSTs
+    {item: "<card>#<candidate>", choice, note: "<reason>: <free text>"} through the SAME /answer door."""
+    item = f'{rec["id"]}{BATCH_SEP}{cand["id"]}'
+    radios = "".join(f'<label><input type="radio" name="b{n}-{c}" value="{esc(ch)}"> {esc(ch)}</label>'
+                     for ch in BATCH_CHOICES)
+    reasons = "".join(f'<option value="{esc(r)}">{esc(r)}</option>' for r in REASONS)
+    prior = f'<p class="small">judged before: <b>{esc(cand["reason"])}</b></p>' if cand.get("reason") else ""
+    return (
+        f'<div class="cand" data-cand="{esc(cand["id"])}">'
+        f'<p class="plabel"><b>{esc(cand["label"])}</b> {candidate_tags(cand)}<br>'
+        f'<span class="small">{esc(cand["one_line"])}</span><br><code>{esc(cand["id"])}</code></p>'
+        f'{proof_clip(rec, c, cand["proof"], root)}{prior}'
+        f'<form class="cand" data-item="{esc(item)}"><fieldset><legend>Your bit on this one</legend>{radios}</fieldset>'
+        f'<label class="notelabel" for="r{n}-{c}">Why</label>'
+        f'<select class="reason" id="r{n}-{c}"><option value="" disabled selected>choose a reason</option>{reasons}</select>'
+        f'<textarea rows="2" placeholder="in your words (optional)"></textarea>'
+        f'<div class="row"><button type="submit">Save</button><span class="saved" role="status"></span></div>'
+        f'</form></div>')
+
+
+def page_candidates(rec: dict, n: int, root: Path) -> str:
+    cands = "".join(page_candidate(rec, n, c, cand, root) for c, cand in enumerate(rec["candidates"]))
+    return (f'<h4>The candidates ({len(rec["candidates"])}) - a bit and a reason on each</h4>'
+            f'<div class="cands">{cands}</div>')
+
+
 def page_controls(rec: dict, n: int) -> str:
     choices = [*rec["options"], OTHER]
     radios = "".join(
         f'<label><input type="radio" name="c{n}" value="{esc(c)}"> {esc(c)}</label>' for c in choices)
-    return (f'<form class="answer"><fieldset><legend>Your answer</legend>{radios}</fieldset>'
+    legend = "Your answer on the card itself" if rec["kind"] == "batch" else "Your answer"
+    return (f'<form class="answer" data-item="{esc(rec["id"])}"><fieldset><legend>{legend}</legend>{radios}</fieldset>'
             f'<label class="notelabel" for="note{n}">Note</label><textarea id="note{n}" rows="3"></textarea>'
             f'<div class="row"><button type="submit">Save</button><span class="saved" role="status"></span></div></form>')
 
@@ -370,7 +546,8 @@ def page_card(rec: dict, n: int, root: Path, live: dict | None) -> str:
         f'<article class="card" data-id="{esc(rec["id"])}" data-kind="{esc(rec["kind"])}"'
         + (f' data-applied-at="{esc(rec["answer"]["at"])}"' if rec.get("answer") else "") + '>'
         f'<h3>{esc(rec["title"])}</h3><p class="ids">{esc(" / ".join(rec["ids"]))}</p>'
-        f'{answer}<p class="q">{esc(rec["judge"])}</p>{page_proofs(rec, root, live)}'
+        f'{answer}<p class="q">{esc(rec["judge"])}</p>'
+        + (page_candidates(rec, n, root) if rec["kind"] == "batch" else page_proofs(rec, root, live)) +
         f'<p class="agent"><b>The agent\'s recommendation:</b> {recommendation}</p>'
         + (f'<h4>Documents</h4><ul class="where">{where}</ul>' if where else "") +
         f'<p><b>Blocks:</b> {esc(rec["blocks"])}</p>'
@@ -391,7 +568,12 @@ button{background:#25313C;color:#F4E6C7;border:0;padding:6px 16px;border-radius:
 .card.answered{border-left:8px solid #2f6b3a}.ids{margin:0;font-size:.85em;opacity:.8}.q{font-size:1.08em;font-weight:600}
 .sofar{background:#fff;border-left:6px solid #2f6b3a;padding:6px 10px}
 .agent{background:#25313C;color:#F4E6C7;padding:8px 12px;border-radius:4px}
-.proofs{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;align-items:start}
+.proofs,.cands{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;align-items:start}
+.cand{background:#fff;border:2px solid #25313C;padding:8px}.cand .proof{border:1px solid #c9b58f;padding:0}
+.cand form{margin-top:6px}.cand select.reason{width:100%;margin-bottom:4px}
+.tag{background:#25313C;color:#F4E6C7;padding:0 6px;border-radius:8px;font-size:.78em}
+.tag.exploration{background:#B8402A}.tag.calibration{background:#2f6b3a}
+form.answered fieldset{border-left:6px solid #2f6b3a}
 .proof{background:#fff;border:2px solid #25313C;padding:8px}.proof video{display:block;width:100%;max-height:70vh;
 background:#000}.plabel{margin:0 0 6px}.pair{display:flex;gap:8px;flex-wrap:wrap}.pair figure{margin:0;flex:1 1 140px}
 .pair img{display:block;width:100%;height:auto;border:1px solid #25313C}.proof.crop{grid-column:1/-1}
@@ -415,10 +597,15 @@ table.ruled,table.ruled tbody,table.ruled tr,table.ruled td{display:block}}
 JS = """
 (function(){
 var answers={},cards=[].slice.call(document.querySelectorAll('article.card'));
-function show(card){var a=answers[card.dataset.id],s=card.querySelector('.saved');card.classList.toggle('answered',!!a);
+function forms(card){return [].slice.call(card.querySelectorAll('form[data-item]'));}
+function showForm(form){var a=answers[form.dataset.item],s=form.querySelector('.saved');
+form.classList.toggle('answered',!!a);
 if(!a){s.textContent='';return;}s.className='saved';s.textContent='saved '+a.at+' - '+a.choice;
-card.querySelectorAll('input[type=radio]').forEach(function(r){r.checked=(r.value===a.choice);});
-card.querySelector('textarea').value=a.note||'';}
+form.querySelectorAll('input[type=radio]').forEach(function(r){r.checked=(r.value===a.choice);});
+var sel=form.querySelector('select.reason'),ta=form.querySelector('textarea'),note=a.note||'';
+if(sel){var i=note.indexOf(': ');if(i>0){sel.value=note.slice(0,i);note=note.slice(i+2);}}
+if(ta)ta.value=note;}
+function show(card){card.classList.toggle('answered',!!answers[card.dataset.id]);forms(card).forEach(showForm);}
 function progress(){var n=cards.filter(function(c){return answers[c.dataset.id];}).length;
 document.getElementById('progress').textContent=n+' of '+cards.length+' answered';}
 function filter(){var k=document.getElementById('fkind').value,st=document.getElementById('fstate').value;
@@ -429,16 +616,21 @@ document.querySelectorAll('section.kind').forEach(function(s){s.classList.toggle
 function refresh(){cards.forEach(show);progress();filter();}
 document.getElementById('fkind').addEventListener('change',filter);
 document.getElementById('fstate').addEventListener('change',filter);
-cards.forEach(function(card){card.querySelector('form').addEventListener('submit',function(ev){ev.preventDefault();
-var r=card.querySelector('input[type=radio]:checked'),s=card.querySelector('.saved');
+cards.forEach(function(card){forms(card).forEach(function(form){form.addEventListener('submit',function(ev){
+ev.preventDefault();
+var r=form.querySelector('input[type=radio]:checked'),s=form.querySelector('.saved'),
+sel=form.querySelector('select.reason'),ta=form.querySelector('textarea');
 if(!r){s.className='saved err';s.textContent='pick a choice first';return;}
-var body=JSON.stringify({item:card.dataset.id,choice:r.value,note:card.querySelector('textarea').value});
+if(sel&&!sel.value){s.className='saved err';s.textContent='pick a reason first';return;}
+var note=ta?ta.value:'';if(sel)note=sel.value+': '+note;
+var body=JSON.stringify({item:form.dataset.item,choice:r.value,note:note});
 s.className='saved';s.textContent='saving...';
 fetch('answer',{method:'POST',headers:{'Content-Type':'application/json'},body:body}).then(function(res){
 return res.json().then(function(j){if(!res.ok||!j.ok)throw new Error(j.error||res.status);answers[j.answer.item]=j.answer;
-refresh();});}).catch(function(e){s.className='saved err';s.textContent='not saved: '+e.message;});});});
+refresh();});}).catch(function(e){s.className='saved err';s.textContent='not saved: '+e.message;});});});});
 fetch('answers',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
-.then(function(j){answers={};Object.keys(j).forEach(function(k){var c=document.querySelector('article.card[data-id="'+k+'"]');
+.then(function(j){answers={};Object.keys(j).forEach(function(k){var id=k.split('#')[0],c=null;
+cards.forEach(function(x){if(x.dataset.id===id)c=x;});
 if(c&&!(c.dataset.appliedAt&&j[k].at<=c.dataset.appliedAt))answers[k]=j[k];});refresh();})
 .catch(function(){document.getElementById('offline').classList.remove('hidden');progress();});
 progress();
@@ -511,7 +703,28 @@ def _sync_dir(target: Path, wanted: dict[str, Path]) -> None:
             shutil.copyfile(src, target / name)
 
 
+def check_critic_files(data: dict, root: Path) -> None:
+    """The DISK half of the critic rule, the writer's alone (P67 T5): a named report exists and lives under the build
+    its whole-cut proof names - a card may not ship a path to a report nobody wrote, nor to one written about another
+    cut. `validate` never touches the disk, so the fixtures and the schema tests stay path-free."""
+    for rec in open_items(data):
+        critic = rec.get("critic")
+        if not critic:
+            continue
+        path = root / critic
+        if not path.is_file():
+            raise QueueError(f"{rec['id']}: the critic report {critic} is not on disk - run the director-critic pass "
+                             f"(docs/content-video-engine/CRITIC-REPORT.md) before the card reaches the operator")
+        build = (whole_cut_proof(rec) or {}).get("build")
+        if build:
+            build_dir = (root / str(build).rstrip("/")).resolve()
+            if not path.resolve().is_relative_to(build_dir):
+                raise QueueError(f"{rec['id']}: the critic report {critic} lives outside the proof's build {build} - "
+                                 f"the report rides with the cut it read")
+
+
 def build_page(data: dict, root: Path, out_dir: Path, live: dict | None = None) -> Path:
+    check_critic_files(data, root)
     out_dir.mkdir(parents=True, exist_ok=True)
     _sync_dir(out_dir / FRAMES_SUBDIR, {frame_name(p): root / p for p in frames_to_copy(data, root)})
     crops = out_dir / CROPS_SUBDIR
@@ -582,6 +795,8 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError) as exc:
         print(f"review queue data refused: {exc}", file=sys.stderr)
         return 2
+    for line in WARNINGS:                                  # P67 T5: named, not fatal, until CRITIC_REQUIRED flips
+        print(line)
     if args.answers:
         print_answers(data, args.answers_file)
         return 0

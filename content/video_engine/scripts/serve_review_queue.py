@@ -15,6 +15,11 @@ Mirrors serve_player.py's write door: one POST route, a validated body, a JSON a
 file is append-only - never rewritten, never truncated; the latest line per item is its answer. The server never
 writes a ruling. Stdlib only.
 
+ONE item grammar beyond a record id (P65 T4): `<batch-card-id>#<candidate-id>` answers ONE candidate of a `batch`
+card - its choices are approve / deny and its note opens with a reason from the fixed list (P65 T1, read from
+`lab_judgement.schema.json` through build_review_queue.REASONS). Everything else is unchanged: one POST route, the
+same append-only file, repeated `item` keys already a tested shape, and the server still rules nothing.
+
 The item index is RE-READ whenever review-queue.v1.json changes on disk (its mtime), so a card the assembly pass
 converts from owed to watch while the server runs is answerable at once - on 2026-09-15 the operator's Save on
 r26-133 was refused as 'owed by the agent' by a server started the day before, on a copy read once at start.
@@ -42,9 +47,32 @@ BODY_MAX = 64_000        # bytes in one POST body
 ANSWER_KEYS = {"item", "choice", "note"}
 
 
+def refuse_candidate(item: str, body: object, items_by_id: dict[str, dict]) -> str | None:
+    """The named reason ONE candidate's answer is refused (P65 T4). The item is `<batch-card-id>#<candidate-id>`: the
+    card resolves to an OPEN batch, the candidate to one of its `candidates`, the choice is approve or deny, and the
+    note opens with a reason from the fixed nine (the free text after it qualifies the reason, never replaces it)."""
+    card_id, _, cand_id = item.partition(BRQ.BATCH_SEP)
+    rec = items_by_id.get(card_id)
+    if rec is None or rec["kind"] != "batch":
+        return (f"unknown batch {card_id!r} in item {item!r}: an item with {BRQ.BATCH_SEP!r} answers one candidate "
+                "of an open batch card in review-queue.v1.json")
+    cands = [c["id"] for c in rec.get("candidates") or []]
+    if cand_id not in cands:
+        return f"unknown candidate {cand_id!r} for {card_id}: one of {', '.join(cands)}"
+    choice = body.get("choice")
+    if choice not in BRQ.BATCH_CHOICES:
+        return f"invalid choice {choice!r} for {item}: one of {', '.join(BRQ.BATCH_CHOICES)}"
+    note = body.get("note")
+    if not isinstance(note, str) or not BRQ.note_reason(note):
+        return (f"the note for {item} opens with a reason from the list and a colon "
+                f"(\"<reason>: <free text>\"): one of {', '.join(BRQ.REASONS)}")
+    return None
+
+
 def refuse_reason(body: object, items_by_id: dict[str, dict], owed_by_id: dict[str, dict] | None = None) -> str | None:
     """The named reason a POST /answer body is refused, or None when it is a valid answer. `items_by_id` holds only the
-    answerable items; an owed item is refused by name (E99 s14: it is the agent's work, never the operator's)."""
+    answerable items; an owed item is refused by name (E99 s14: it is the agent's work, never the operator's). An item
+    carrying BATCH_SEP is one candidate of a batch card and takes the branch above."""
     if not isinstance(body, dict):
         return "the body is not one JSON object: send {\"item\": ..., \"choice\": ..., \"note\": ...}"
     extra = sorted(set(body) - ANSWER_KEYS)
@@ -53,12 +81,17 @@ def refuse_reason(body: object, items_by_id: dict[str, dict], owed_by_id: dict[s
     item = body.get("item")
     if isinstance(item, str) and item in (owed_by_id or {}):
         return f"{item} is owed by the agent, not open for an answer: {owed_by_id[item]['owed']}"
-    if not isinstance(item, str) or item not in items_by_id:
-        return f"unknown item {item!r}: not an id in review-queue.v1.json"
-    choices = [*items_by_id[item]["options"], BRQ.OTHER]
-    choice = body.get("choice")
-    if choice not in choices:
-        return f"invalid choice {choice!r} for {item}: one of {', '.join(choices)}"
+    if isinstance(item, str) and BRQ.BATCH_SEP in item:
+        refusal = refuse_candidate(item, body, items_by_id)
+        if refusal:
+            return refusal
+    else:
+        if not isinstance(item, str) or item not in items_by_id:
+            return f"unknown item {item!r}: not an id in review-queue.v1.json"
+        choices = [*items_by_id[item]["options"], BRQ.OTHER]
+        choice = body.get("choice")
+        if choice not in choices:
+            return f"invalid choice {choice!r} for {item}: one of {', '.join(choices)}"
     note = "" if body.get("note") is None else body.get("note")
     if not isinstance(note, str):
         return "the note is not a string"

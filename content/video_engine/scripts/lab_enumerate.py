@@ -20,10 +20,24 @@ Three truths are PULLED, never typed:
      or a slot entry is added (that file's own `description` says so and names the ceiling);
   2. the CARDS - `authoring/effects.py` over the generated `docs/EFFECTS-CATALOG.jsonl`, so no candidate can name a
      token the compiler refuses, and an option a card does not list is refused by name;
-  3. the CLOCKS - `gate_motion_density.py`'s own constants (`CLOCK_CONSTANTS` below): M44's plate floor, M16's event
-     gap, M12's dock clock, M11's first-light tolerance and the page's build end. They are recorded on every
-     candidate, because a candidate is only ever judged on the clocks it was generated against (R26-168: fifteen
-     recipes are `proven` against clocks that no longer exist).
+  3. the CLOCKS - `gate_motion_density.py`'s own: six constants read by name (`CLOCK_CONSTANTS` - M44's plate
+     floor, M16's event gap, M12's dock clock, M11's first-light tolerance, the page's build end and `LP_BUILD_S`)
+     and two LANDINGS read by calling `_page_land_offset` (`CLOCK_LANDINGS` - the spiral's and the mount's). All
+     eight are recorded on every candidate, because a candidate is only ever judged on the clocks it was generated
+     against (R26-168: fifteen recipes are `proven` against clocks that no longer exist).
+
+THE LIGHT FOLLOWS THE ENTRY, AS M11 MEASURES IT (P65 T3, the first smoke batch's own finding). A page's chart does
+not land at one number, and `gate_motion_density._page_land_offset` (`:1170-1188`) is the ONE place that landing is
+defined: axes `LP_BUILD_S` 3.0 s, spiral `LP_SPIRAL_IN_S` 1.6 s, 0.0 for an entry that ARRIVES_BUILT, a mount
+`mount_s + PAGE_BUILD_END_S - LP_ROLL_S - LP_SAVOR_S - LP_FIELD_S` (5.9 s at the player's default `mount_s`), and
+`PAGE_BUILD_END_S` 7.4 s for anything else. Batch `smoke-r1` lit an `axes`-entered open at 7.4 s (the ROLLED-OUT
+page's clock) and M11 read the chart as "full and unannotated", 4.4 s late. So the lab CALLS that function
+(`page_land_s`) instead of re-typing its arithmetic - the mount's landing alone is four constants, and the lab and
+the gate must not be able to disagree about it. A shape may declare an `entry_slot` and write its offsets against
+`entry_landing` (`ENTRY_TOKEN`): a PER-CANDIDATE clock resolved from that candidate's OWN entry member
+(`ENTRY_LANDINGS`). The record names the landing it was generated against - `lp_build_s` for an axes entry,
+`lp_spiral_in_s` for a spiral, `mount_land_s` for a mount, 0.0 for one that arrives built, `page_build_end_s` for
+anything else - which is why `clocks` is EIGHT keys and no longer six (P65 T3c widened the schema).
 
 A candidate that violates its own shape's clocks is REFUSED BY NAME at generation - never silently skipped: the run
 prints the candidate, the rule, the slots and the numbers, and writes nothing. A shape whose slot table pushes the
@@ -65,16 +79,58 @@ DIGEST_LEN = 8                 # the id's members-digest, as the schema's patter
 TABLE_DIGEST_LEN = 12          # beat-shapes.json's digest, carried in `source`
 EPS = 1e-6
 
-# The five clocks, each the NAME of a constant in gate_motion_density.py - never a number written here.
+# The six clocks that are gate CONSTANTS, each the NAME of one in gate_motion_density.py - never a number here.
 CLOCK_CONSTANTS = {
     "m44_plate_s": "PLATE_MIN_S",                 # M44: a world plate the eye can take in
     "m16_gap_s": "SHORT_PULSE_MAX_S",             # M16: the longest gap between visual events on a short
     "m12_dock_s": "OPENING_CHART_HOLD_MAX_S",     # M12 / E25: the chart is the proof, not the homework
     "m11_first_light_s": "ANNOTATE_TOL_S",        # M11 / E24: the species fires within this of the build landing
-    "page_build_end_s": "PAGE_BUILD_END_S",       # E99 s67: the second the page finishes BUILDING and holds built
+    "page_build_end_s": "PAGE_BUILD_END_S",       # E99 s67: the second a ROLLED-OUT page finishes BUILDING
+    "lp_build_s": "LP_BUILD_S",                   # P65 T3: an `axes` entry's chart lands one BUILD in, not at 7.4
+}
+
+# The two clocks that are LANDINGS rather than constants (P65 T3c). `mount_land_s` is arithmetic over four gate
+# constants and `lp_spiral_in_s` is a branch of the same function, so both are read by CALLING the gate's own
+# `_page_land_offset` - the value recorded is the landing at the player's DEFAULT mount_s (LP_FIELD_S).
+CLOCK_LANDINGS = {
+    "lp_spiral_in_s": "spiral",   # :1183 - the page UNWINDS from its point over LP_SPIRAL_IN_S (1.6)
+    "mount_land_s": "mount",      # :1178-1180 - the soak on the page's own clock, then ink -> punch -> build (5.9)
 }
 RULES = ("plate_min_s", "after_build_s", "gap_max_s", "dock_hold_max_s")
 WINDOW = "window"              # what a rule's `until` says when it means the shape's own window
+
+# THE ENTRY'S OWN LANDING (P65 T3, corrected in T3c). `entry_landing` is not one of the recorded clocks: it is
+# resolved per candidate from that candidate's entry member. Each entry names the `enter` the COMPILED scene
+# carries into M11, which is what `_page_land_offset` reads - so the landing is always the gate's own number.
+ENTRY_TOKEN = "entry_landing"
+ENTRY_LANDINGS: dict[str, str] = {
+    # :1187-1188 - "the page is there on frame 0 and the DATA is what builds - the chart lands one build later"
+    "page_enter:axes": "axes",
+    # :1178-1180 - the mount is the SOAK on the page's own clock (R26-50): mount_s + PAGE_BUILD_END_S - ROLL -
+    # SAVOR - FIELD, which is 5.9 s at the player's default mount_s and 5.5 s on a page carrying mount_s = 2.0.
+    # T3 encoded 7.4 here on the dispatch's word; T3c takes M11's own number, so the thirty mount candidates are
+    # no longer generated 1.5 s outside the tolerance they are judged by.
+    "page_enter:mount": "mount",
+    # :1183 - "the page UNWINDS from its point over LP_SPIRAL_IN_S" (the probe measured it mid-vortex at 0.0)
+    "page_enter:spiral": "spiral",
+    # :1185-1186 - ARRIVES_BUILT: the page is DRAWN on its first frame, so its chart has already landed
+    "page_enter:built": "built",
+    # build_scene_timeline_f.stamp_transition_pages:2197-2200 - a ledger page that follows a ledger page and
+    # declares no enter "arrives on its axes, whatever the transition" (the hook's page too). The gate never sees
+    # the word `stamped`: the compiler has already rewritten it to `axes` by the time M11 measures, so that is the
+    # enter this asks the gate about. The `return` shape is planted between two pages (lab_build.SHAPE_BEATS).
+    "page_enter:stamped": "axes",
+}
+# Which RECORDED clock holds that landing, by the enter the gate reads - so a candidate is judged on a clock its
+# own record names. `built` lands at 0.0 and needs none; anything else is the ROLLED-OUT page's, which is
+# `_page_land_offset`'s own fallback. `shape_clocks` refuses by name if the named clock and the gate ever disagree.
+ENTRY_LANDING_CLOCK: dict[str, str | None] = {
+    "axes": "lp_build_s",
+    "spiral": "lp_spiral_in_s",
+    "mount": "mount_land_s",
+    "built": None,
+}
+DEFAULT_LANDING_CLOCK = "page_build_end_s"
 
 _TERM = re.compile(r"^(?:(\d+)\s*\*\s*)?([a-z_][a-z0-9_]*)$")
 
@@ -88,8 +144,89 @@ class LabError(ValueError):
 # --------------------------------------------------------------------------- the three sources
 
 def clocks() -> dict[str, float]:
-    """The five gate constants, by name - the value a candidate is generated and judged against."""
-    return {name: round(float(getattr(G, const)), 3) for name, const in CLOCK_CONSTANTS.items()}
+    """The gate's own values, by name - what a candidate is generated and judged against: six constants read by
+    name, and the two LANDINGS read by calling `_page_land_offset` (the spiral's, and the mount's at the default)."""
+    cl = {name: round(float(getattr(G, const)), 3) for name, const in CLOCK_CONSTANTS.items()}
+    cl.update({name: page_land_s(enter) for name, enter in CLOCK_LANDINGS.items()})
+    return cl
+
+
+def page_land_s(enter: str | None, mount_s: float | None = None) -> float:
+    """The instant M11 takes as *the build landed* for a page that enters this way - `_page_land_offset`'s own
+    answer (`gate_motion_density.py:1170-1188`), CALLED and never re-typed here: it is the one place the landing
+    per entry is defined, and a second copy of the mount's four-constant arithmetic is a disagreement waiting."""
+    page: dict[str, object] = {"enter": enter}
+    if mount_s is not None:
+        page["mount_s"] = float(mount_s)
+    return round(float(G._page_land_offset({"world": {"page": page}})), 3)
+
+
+def entry_landing_s(card: str, mount_s: float | None = None) -> float:
+    """That instant for this entry CARD - the landing its light follows (P65 T3), the gate's own number."""
+    return page_land_s(entry_enter(card), mount_s)
+
+
+def entry_enter(card: str) -> str:
+    """The `enter` the compiled scene carries into M11 for this entry card - refused by name when it is unknown."""
+    if card not in ENTRY_LANDINGS:
+        raise LabError(f"{card!r} has no landing: M11 measures the first light from "
+                       f"gate_motion_density._page_land_offset (:1170-1188), and ENTRY_LANDINGS carries "
+                       f"{', '.join(sorted(ENTRY_LANDINGS))} - read the gate and add the entry there")
+    return ENTRY_LANDINGS[card]
+
+
+def entry_clock(card: str) -> str | None:
+    """The RECORDED clock that carries this entry's landing, so a candidate is judged on a clock the record names:
+    axes -> lp_build_s, spiral -> lp_spiral_in_s, mount -> mount_land_s, built -> None (it lands at 0.0),
+    anything else -> page_build_end_s, the rolled-out page's own."""
+    return ENTRY_LANDING_CLOCK.get(entry_enter(card), DEFAULT_LANDING_CLOCK)
+
+
+def entry_slot(shape: dict) -> dict | None:
+    """The shape's ENTRY slot (the one `entry_slot` names), or None when the shape has no entry at all."""
+    name = shape.get("entry_slot")
+    if name is None:
+        return None
+    slot = next((s for s in shape.get("slots") or [] if s.get("name") == name), None)
+    if slot is None:
+        raise LabError(f"beat-shapes.json {shape.get('id')}: entry_slot names {name!r}, which is not one of its "
+                       f"slots ({', '.join(str(s.get('name')) for s in shape.get('slots') or [])})")
+    if slot.get("optional"):
+        raise LabError(f"beat-shapes.json {shape.get('id')}: the ENTRY slot {name!r} is never optional - every "
+                       f"offset written against {ENTRY_TOKEN} is measured from it")
+    return slot
+
+
+def entry_cards(shape: dict) -> list[str | None]:
+    """The entry cards a candidate of this shape can carry - `[None]` when the shape declares no entry slot."""
+    slot = entry_slot(shape)
+    if slot is None:
+        return [None]
+    return [str(m["card"]) for m in slot.get("members") or []]
+
+
+def shape_clocks(shape: dict, cl: dict[str, float], card: str | None) -> dict[str, float]:
+    """The clocks ONE candidate is resolved against: the recorded ones, plus its own entry's landing, which is the
+    GATE's (`entry_landing_s`). The clock the record names for that entry must hold the same number - when it does
+    not, the candidate would be judged on a clock its record does not carry, and that is refused by name."""
+    if card is None:
+        return dict(cl)
+    land, clock = entry_landing_s(card), entry_clock(card)
+    named = 0.0 if clock is None else float(cl[clock])
+    if abs(named - land) > EPS:
+        raise LabError(f"{card!r} lands at {land:.2f}s (gate_motion_density._page_land_offset) but the record would "
+                       f"name {clock} = {named:.2f}s - a candidate is only ever judged on the clocks its record "
+                       f"carries (R26-168): add the landing to CLOCK_LANDINGS and name it in ENTRY_LANDING_CLOCK")
+    return {**cl, ENTRY_TOKEN: land}
+
+
+def candidate_entry_card(shape: dict, members: list[dict]) -> str | None:
+    """The entry card a candidate carries (lab_build reads its window through this), or None."""
+    slot = entry_slot(shape)
+    if slot is None:
+        return None
+    known = {str(m["card"]) for m in slot.get("members") or []}
+    return next((str(m["card"]) for m in members if str(m["card"]) in known), None)
 
 
 def load_shapes(path: Path) -> tuple[dict, str]:
@@ -148,11 +285,13 @@ def _term(token: str, cl: dict[str, float], where: str, expr) -> float:
 
 # --------------------------------------------------------------------------- the slot table
 
-def slot_choices(shape: dict, slot: dict, cards: dict[str, dict], cl: dict[str, float]) -> list[dict | None]:
+def slot_choices(shape: dict, slot: dict, cards: dict[str, dict], cl: dict[str, float],
+                 only: str | None = None) -> list[dict | None]:
     """Every member this slot can carry (a card x its offsets), plus None when the slot is optional.
 
     Each entry is resolved against the CATALOGUE here, at generation: an id it does not carry, an axis the slot does
-    not accept and an option the card does not list are each refused by name."""
+    not accept and an option the card does not list are each refused by name. `only` is the ENTRY slot's own card:
+    a shape's table is built once PER ENTRY, because every `entry_landing` offset is measured from that member."""
     where = f"beat-shapes.json {shape['id']}/{slot.get('name')}"
     axes = tuple(slot.get("axes") or ())
     if not axes:
@@ -166,6 +305,8 @@ def slot_choices(shape: dict, slot: dict, cards: dict[str, dict], cl: dict[str, 
     choices: list[dict | None] = []
     for entry in slot.get("members") or []:
         card_id = entry.get("card")
+        if only is not None and card_id != only:
+            continue
         card = cards.get(card_id)
         if card is None:
             raise LabError(f"{where}: {card_id!r} is not a card in {FX.CATALOG_REL} - a member is drawn from the "
@@ -191,15 +332,29 @@ def slot_choices(shape: dict, slot: dict, cards: dict[str, dict], cl: dict[str, 
     return choices
 
 
-def slot_table(shape: dict, cards: dict[str, dict], cl: dict[str, float]) -> list[tuple[str, list[dict | None]]]:
-    """(slot name, its choices) in table order - the shape's own cross product, and nothing else."""
+def slot_table(shape: dict, cards: dict[str, dict], cl: dict[str, float],
+               entry_card: str | None = None) -> list[tuple[str, list[dict | None]]]:
+    """(slot name, its choices) in table order - the shape's cross product for ONE entry, and nothing else."""
     slots = shape.get("slots") or []
     if not slots:
         raise LabError(f"beat-shapes.json {shape['id']}: the shape carries no slots")
     names = [str(s.get("name") or "") for s in slots]
     if len(set(names)) != len(names) or "" in names:
         raise LabError(f"beat-shapes.json {shape['id']}: every slot needs its own name ({', '.join(names)})")
-    return [(str(s["name"]), slot_choices(shape, s, cards, cl)) for s in slots]
+    entry_name = (entry_slot(shape) or {}).get("name") if entry_card else None
+    return [(str(s["name"]),
+             slot_choices(shape, s, cards, cl, only=entry_card if s["name"] == entry_name else None))
+            for s in slots]
+
+
+def shape_count(shape: dict, cards: dict[str, dict], cl: dict[str, float]) -> tuple[int, str]:
+    """(the shape's whole product, summed over its entries; the slot counts as text) - the ceiling's own number."""
+    total, said = 0, []
+    for card in entry_cards(shape):
+        table = slot_table(shape, cards, shape_clocks(shape, cl, card), entry_card=card)
+        total += math.prod(len(choices) for _, choices in table)
+        said.append(product_text(table) + (f" [{str(card).split(':')[-1]}]" if card else ""))
+    return total, "; ".join(said)
 
 
 def product_text(table: list[tuple[str, list]]) -> str:
@@ -236,7 +391,9 @@ def clock_refusals(shape: dict, placed: dict[str, dict | None], cl: dict[str, fl
         clock = rule.get("clock")
         if clock not in cl:
             raise LabError(f"{where}: rule {kind!r} names the clock {clock!r}, which is not one of "
-                           f"{', '.join(sorted(cl))}")
+                           f"{', '.join(sorted(cl))}"
+                           + (f" - {ENTRY_TOKEN} is a clock only in a shape that declares an `entry_slot`"
+                              if clock == ENTRY_TOKEN else ""))
         value = cl[clock]
         if kind in ("plate_min_s", "dock_hold_max_s"):
             start = _instant(rule.get("slot"), placed, window, shape_id, rule)
@@ -291,29 +448,32 @@ def member_digest(members: list[dict]) -> str:
 
 
 def shape_candidates(shape: dict, cards: dict[str, dict], cl: dict[str, float], table_digest: str,
-                     ) -> tuple[list[dict], list[str], list[tuple[str, list]]]:
-    """(the shape's candidates, the clock refusals they earned, its slot table)."""
-    table = slot_table(shape, cards, cl)
-    names = [name for name, _ in table]
+                     ) -> tuple[list[dict], list[str]]:
+    """(the shape's candidates, the clock refusals they earned) - one cross product PER ENTRY, because a shape with
+    an `entry_slot` places its light, its hold and its leave against that entry's own build landing (P65 T3)."""
     records, refusals = [], []
-    for combination in itertools.product(*[choices for _, choices in table]):
-        placed = dict(zip(names, combination))
-        seated = [(i, dict(m)) for i, m in enumerate(combination) if m]      # the slot's own order, then its offset
-        members = [m for _, m in sorted(seated, key=lambda seat: (float(seat[1]["offset_s"]), seat[0]))]
-        cid = f"lab:{shape['id']}:{member_digest(members)}"
-        bad = clock_refusals(shape, placed, cl, cid)
-        if bad:
-            refusals += bad
-            continue
-        records.append({
-            "id": cid,
-            "shape": shape["id"],
-            "members": members,
-            "clocks": dict(cl),
-            "status": STATUS,
-            "source": f"lab_enumerate beat-shapes.json {table_digest} {shape['id']}",
-        })
-    return records, refusals, table
+    for entry_card in entry_cards(shape):
+        cl_c = shape_clocks(shape, cl, entry_card)
+        table = slot_table(shape, cards, cl_c, entry_card=entry_card)
+        names = [name for name, _ in table]
+        for combination in itertools.product(*[choices for _, choices in table]):
+            placed = dict(zip(names, combination))
+            seated = [(i, dict(m)) for i, m in enumerate(combination) if m]  # the slot's order, then its offset
+            members = [m for _, m in sorted(seated, key=lambda seat: (float(seat[1]["offset_s"]), seat[0]))]
+            cid = f"lab:{shape['id']}:{member_digest(members)}"
+            bad = clock_refusals(shape, placed, cl_c, cid)
+            if bad:
+                refusals += bad
+                continue
+            records.append({
+                "id": cid,
+                "shape": shape["id"],
+                "members": members,
+                "clocks": dict(cl),
+                "status": STATUS,
+                "source": f"lab_enumerate beat-shapes.json {table_digest} {shape['id']}",
+            })
+    return records, refusals
 
 
 def validate(records: list[dict], repo: Path) -> None:
@@ -343,15 +503,14 @@ def build(repo: Path | str = REPO, shapes: Path | str | None = None) -> list[dic
         if not re.fullmatch(r"[a-z0-9-]+", str(shape.get("id") or "")):
             raise LabError(f"beat-shapes.json: {shape.get('id')!r} is not a shape slug ([a-z0-9-]+) - the "
                            f"candidate id is lab:<shape>:<digest>")
-        slots = slot_table(shape, cards, cl)
-        count = math.prod(len(choices) for _, choices in slots)
+        count, said = shape_count(shape, cards, cl)
         if total + count > MAX_CANDIDATES:
             raise LabError(f"{shape['id']} pushes the space past MAX_CANDIDATES ({MAX_CANDIDATES}): that shape "
-                           f"alone is {count} ({product_text(slots)}), {total + count} in all - shrink its slot "
+                           f"alone is {count} ({said}), {total + count} in all - shrink its slot "
                            f"table to the members the shape can actually carry, or raise the ceiling on purpose "
                            f"(a batch the operator cannot read in one sitting is not a batch)")
         total += count
-        rows, bad, _ = shape_candidates(shape, cards, cl, table_digest)
+        rows, bad = shape_candidates(shape, cards, cl, table_digest)
         refusals += bad
         records += rows
     if refusals:

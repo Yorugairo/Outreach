@@ -221,13 +221,13 @@ commits allowlisted paths; nothing is pushed without the operator's fresh word.
 - Evidence: `docs/content-video-engine/CRITIC-REPORT.md` (new: what the critic reads, table 1 with the eleven-mechanism list of 2026-09-16 and the `not owed` rule, table 2 claim-level attribution, the two score lines, what it never does, the brief); `patterns/CHECK-RESPONSIBILITIES.md` section 4 (the scores are JUDGE, never a mechanical result); `.claude/agents/reviewer.md` "The director-critic pass". `build_docs_layers.py --ensure` exit 0 (layers rebuilt); `docs_find.py "director-critic"` hits the new page at :1 and :114; `rg CRITIC-REPORT` hits `CHECK-RESPONSIBILITIES.md:279` and `reviewer.md:34`.
 
 ### T5: THE QUEUE REFUSES A WHOLE-CUT WATCH WITH NO CRITIC
-- Status: pending
+- Status: done
 - Owner: `implementation_luna`
 - Depends on: T4
 - Write set: `content/video_engine/scripts/build_review_queue.py`, `content/video_engine/tests/test_review_queue.py`
 - Acceptance: a module constant `WHOLE_CUT_S = 30.0` (the live data calibrates it: one-shot #3's whole-cut clip is 77.6 s, the beat clips are far under 30 s - measured in the slice, not quoted). The live card `one-shot-3-fable-memory-calendar` is an open whole-cut watch with no critic yet, so the rule lands in two steps: T5 ships it as a WARN printed by name (`--write` and `--check` still exit 0), and T7 flips the constant `CRITIC_REQUIRED = True` in the same commit that gives the live card its `critic` path - the live data never fails validation on main. At full strength `validate_record` refuses, by name, an OPEN `watch` record carrying a whole-cut proof (a `player` proof, or a `clip` with `t1 - t0 >= WHOLE_CUT_S`) that has no `critic` field naming a repo-relative report path - the message says why (E99 s68: a whole cut reaches the operator after a different reader has read it) and how to get past it (run the pass, or make the proof a clip of the beat it is about); `critic` is NOT added to `REQUIRED`, so the 79 records on disk are untouched; the DISK check (the named path exists and lives under the proof's `build`) runs in the writer, not in `validate`, so the fixture tests keep working. Tests: the WARN (and, with the constant flipped, the refusal) on a player proof and on a 77.6 s clip, a short clip unaffected, a `ruled` record unaffected, the live queue data still validating, and the writer refusing a `critic` path that is not on disk (`tmp_path`).
 - Validate: `python -m pytest content/video_engine/tests/test_review_queue.py -q`
-- Evidence: pending
+- Evidence: `build_review_queue.py` `WHOLE_CUT_S = 30.0`, `CRITIC_REQUIRED = False` (T7 flips it), `CRITIC_REPORT_NAME`, `critic_owed` in `validate_record` (WARN now, the same text as a refusal), `check_critic_files` in the writer (the disk check), the WARNs printed by `main`; 7 new tests, 59 pass (the parent re-ran); `--check` exit 0 printing exactly two WARNs: `one-shot-3-fable-memory-calendar` and `p66-hg1-the-first-generated-base` both owe a critic report. T7 must give BOTH cards a critic (or a beat clip) in the commit that flips the constant.
 
 ### T6: THE RUNBOOK AND THE DOCS - step 0's grammar, step 9's critic, the capability row, the backlog
 - Status: pending
@@ -239,13 +239,13 @@ commits allowlisted paths; nothing is pushed without the operator's fresh word.
 - Evidence: pending
 
 ### T7: HG1 - the calibration case: one-shot #3's receipt, verified, and the first critic pass, nothing rebuilt
-- Status: pending
+- Status: running (the receipt half done; the critic pass and the card's `critic` field wait on T5)
 - Owner: parent
 - Depends on: T1, T4, T5, T6
 - Write set: `content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/PRODUCTION-LEDGER.md`, `content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-oneshot-3/CRITIC.md` (untracked artifact), `docs/content-video-engine/review-queue.v1.json`, `docs/content-video-engine/REVIEW-QUEUE.md` (generated), `content/video_engine/scripts/build_review_queue.py` (the one constant)
 - Acceptance: the ledger gains a DATED block `## Recall (verified, P67)` BELOW the original thirteen lines - the original stays as recorded (memory `script-changes-go-to-the-next-letter`) - carrying the nine stages with spans, and saying in one line which stages that pass did NOT read (a stage it never opened is cited now from the record it should have read, and the ledger says so, so the calibration case does not fabricate history); `recall_verify.py` exits 0 on it; a `reviewer` dispatch (brief per PRP_EXECUTION "The brief": this plan, T7, read-only, the mechanism list, `CRITIC-REPORT.md` as the contract, the frozen player, the exact validation) writes `build-oneshot-3/CRITIC.md` with the two tables and the two fractions; the queue card `one-shot-3-fable-memory-calendar` gains its `critic` path, `CRITIC_REQUIRED` flips to `True` in the same commit (T5), and ONE new line in `judge` naming the two scores as INFO and the operator's one question. THE CUT IS NOT REBUILT, NOT RE-SERVED AND NOT RE-RENDERED (E99 s11): the critic reads the frozen build read-only, through `probe.Probe` and the served copy.
 - Validate: `python content/video_engine/scripts/recall_verify.py content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar` (exit 0, unpiped); `python content/video_engine/scripts/build_review_queue.py --write --no-probe` then `python content/video_engine/scripts/build_review_queue.py --check`; `python -m pytest content/video_engine/tests/test_review_queue.py -q`
-- Evidence: pending
+- Evidence: (receipt half, 2026-09-17) `memory-trades-the-calendar/PRODUCTION-LEDGER.md` gains `## Recall (verified, P67 T7 - 2026-09-17)` BELOW the original thirteen lines: eighteen `Recall(<stage>)` lines across the nine stages with verbatim spans, and one paragraph naming what the 2026-09-16 pass did NOT read (the package playbook, the strip rule, the plate-production doctrine, the sound-sourcing rules, the cross-posting row; the motion doctrine only through the floor). `recall_verify.py` on the project: `Read: "## Recall (verified, P67 T7 - 2026-09-17)" at line 66 (the last of 2 headings) - 18 Recall line(s)` ... `PASS - 18 citation(s) verified across 9 stages.` (exit 0). Nothing rebuilt.
 
 ## Verification
 
