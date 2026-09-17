@@ -122,3 +122,25 @@ list before and after, never the count.
 
 Tool: `scripts/hooks/test_deletions.py` (`--message "<msg>" --staged` to check by hand).
 Tests: `content/video_engine/tests/test_hook_test_deletions.py`.
+
+## The third receipt, at the compile door - the BUILD receipt (P67, 2026-09-17)
+
+The commit receipt (s2) asks one thing of a mechanism commit: a `Recall:` line naming a record that exists. The BUILD
+receipt asks nine things of a cut, and verifies each: the project's `PRODUCTION-LEDGER.md` carries, under its last
+`## Recall` heading, `- Recall(<stage>): <path>:<line> "<verbatim span>" (<note>)` lines (or `docs_find 0 hits for
+"<term>"`) for every stage of `docs/runbooks/ONE-SHOT.md` step 0 - package, script, voice, world, evidence, motion,
+sound, publish, rulings. `content/video_engine/scripts/recall_verify.py <project>` re-reads every cited path and line
+and matches the span verbatim on the EXACT line (a one-line window would double the false-accept surface for the
+short spans that are easiest to fabricate, and the layers are build output that move by digest - so the strict check
+repairs itself instead: "the span moved to `<path>:<N>` - cite that"), refuses a stage with no citation, a span under
+12 characters, a path not in the repo, a line past the end, and a zero-hit claim `docs_find.py` answers with a hit;
+a legacy `- Recall: <path>:<line> (note)` line is reported UNSTAGED, never dropped. `authoring/table.py`
+`compile_timeline` runs it on a build dir's FIRST compile and refuses without a pass; `no_receipt="<reason>"` is the
+lab's and the test bed's escape and prints itself into `player.json`'s `compile.recall_receipt`; a recompile of an
+existing build carries its block; a build made before P67 is stamped `legacy build (pre-P67)`. The commit hook grew
+with it: `build_caption_pages.py` and `authoring/` are mechanisms, `Recall(<stage>):` parses, and a `Recall:` line
+that carries a quoted span is checked against its line (a spanless line keeps the path-exists check - older commits
+carry none). Why a verifier and not a reminder: "document-level citation may hide unsupported or partially supported
+claims" (arXiv 2606.04990) - a text-only receipt was rejected as a fabrication surface (E99 s68, the grill's Q6 A);
+the critic (`docs/content-video-engine/CRITIC-REPORT.md`) then scores whether the rows obey the lines cited, claim by
+claim, as a second reader. s1-s6 above stand as written; this receipt is the order's proof, not its replacement.

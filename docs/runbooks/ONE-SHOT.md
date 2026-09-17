@@ -29,6 +29,21 @@ Every command below was run with `--help` on 2026-09-14. Paths are repo-relative
   Apply 7). `docs_find.py "<term>"` reaches every layer. A number parity (M40) let a cut through that used none of the mechanisms; one-shot #3
   recalled the script, voice, motion and ruling layers and skipped the world, style, sound and packaging ones.
 
+**The receipt the build refuses without (P67, E99 s68 Q3 = C).** What step 0 read is WRITTEN, per stage, in the project's
+`PRODUCTION-LEDGER.md` under a `## Recall` heading (the verifier reads the LAST such heading), one line per citation:
+
+    - Recall(<stage>): <path>:<line> "<verbatim span>" (<note>)
+    - Recall(<stage>): docs_find 0 hits for "<term>"
+
+The nine stages, each owed at least one line: `package script voice world evidence motion sound publish rulings`. The span
+is at least 12 characters, quoted off the EXACT line (whitespace runs collapsed, case-sensitive); `recall_verify.py <project>`
+re-reads every path and line, refuses a stage with no citation, a path not in the repo, a line past the end, a span not on
+that line ("the span moved to `<path>:<N>` - cite that" when it finds it elsewhere), and re-runs a zero-hit claim through
+`docs_find.py` (a hit refuses it). `table.compile_timeline` runs the verifier on a build dir's FIRST compile and refuses
+without a pass; a test-bed or lab build passes `no_receipt="<reason>"` and the manifest prints the reason for the rest of
+that cut's life (`player.json` `compile.recall_receipt`); a recompile of an existing build carries its block. A citation
+is not grounding: the verifier matches the span, the critic (step 9) scores whether the rows actually obey the lines cited.
+
 ## The loop
 
 | # | Step | Do | Check (a FAIL stops you) |
@@ -42,7 +57,7 @@ Every command below was run with `--help` on 2026-09-14. Paths are repo-relative
 | 6 | **The build** - in a PRIVATE directory | The project's build-dir variable (`TARIFF_BUILD_DIR`, `TOKYO_BUILD_DIR`) or a new build script beside `build_short.py`; `table.compile_timeline(..., aspect="9:16", caption_style="phrase")`. The build ends by running the self-watch bar | Never build into a directory the operator is watching (`review-link-frozen-copy`) |
 | 7 | **The gates on the build** | `probe.py <build> --gate`; `gate_motion_density.py <build>`; `gate_one_shot_floor.py <build>`; `self_watch.py <build>` | Motion rows M01/M08/M10/M16 (stillness), M12 (chart held as homework), M25-M28 (layout), M31/M32 (empty stage, black seam) FAIL. The floor: M35 at least 3 chart forms, M36 at least 1 chart-to-chart transform, M37 docks on at least a third of the beats, M38 recipe coverage 0.60, M39 narrative-to-chart 1.0, M41 the plan. `NOT CLEAN` on the self-watch is a stop |
 | 8 | **Serve a frozen copy** | `python content/video_engine/projects/systems-and-blowups/tokyo-tea-break/serve_player.py <build> --port <private port>` (no-store); `self_watch.py <build> --html --player-url <url>` | A port nobody else is serving; never `--watch` on a link the operator holds |
-| 9 | **Read the frames, then hand over** (RECALL-RECEIPT s4, E71) | Read the self-watch sheets and the recipe audit sheet as a viewer; measure the geometry behind anything you call fixed; fill O1-O11 | "CLEAN" is your word after reading. `approved` is the operator's word only |
+| 9 | **Read the frames, then the CRITIC reads them, then hand over** (RECALL-RECEIPT s4, E71; P67 E99 s68 Q6 = C) | Read the self-watch sheets and the recipe audit sheet as a viewer; measure the geometry behind anything you call fixed; fill O1-O11. Your read is not the critic's: dispatch `reviewer` with `docs/content-video-engine/CRITIC-REPORT.md` as the contract (the frozen build, the table, the receipt, the beat plan) - it writes `<build>/CRITIC.md`, two tables and two fractions (mechanisms present p/owed, rows attributed a/rows), never a verdict; a whole-cut watch card names it in `critic` (`build_review_queue.py` refuses one without it) and the scores ride the card as INFO | "CLEAN" is your word after reading. `approved` is the operator's word only |
 
 ## The rules agents break (each cost a cut)
 
