@@ -13,12 +13,21 @@ Every command below was run with `--help` on 2026-09-14. Paths are repo-relative
   `sed -n <line>p docs/content-video-engine/CAPABILITIES.md`.
 - **An effect or a recipe by name:** `python content/video_engine/scripts/effects_card.py "<name>"` (for example `"badge ladder"`).
 - **The rulings override everything:** `docs/portable/OPERATOR-RULINGS.md`.
-- **The motion doctrine and the approved shorts, BEFORE step 4** (the operator, 2026-09-16, after one-shot #3: "did you recall research and
-  knowledge on video generation/animation/processes before building the one shot?"): read `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
-  Parts 3 / 8 / 9 (§9.15), `docs/portable/MOTION-GRAMMAR.md`, `docs/research/runs/p56-recipe-seeds/measures.md`, and the approved shorts' OWN
-  tables and sheets - `japan-tariff-trick/build_short.py` + `build-short/SELF-WATCH.md`, `tokyo-tea-break/build_short.py` - and write the
-  parity BY MECHANISM (the page on the hook, the mount's build, the spiral return, the dock that reads then parks, the callout on a chart):
-  present / absent / replaced by what (E99 s67 Apply 7). A number parity (M40) let a cut through that used none of them.
+- **THE DOCTRINE, PER STAGE, BEFORE ANYTHING IS AUTHORED** (the operator, 2026-09-16, after one-shot #3: "did you recall research and knowledge on
+  video generation/animation/processes before building the one shot?" and "doesn't it need to recall more than doc 29? isn't the idea basically that all
+  of the docs provide the knowledge of how to build our episode/worlds/voice?"): the docs ARE the knowledge, one layer per stage the loop runs, and
+  every layer is read before its stage - `docs/content-video-engine/PIPELINE.md` (the stage map and the capability index it opens with) first, then:
+  the PACKAGE - `docs/portable/PACKAGING-PLAYBOOK.md`, E24 / E27; the SCRIPT - `patterns/SCRIPT-PATTERN-KIT.md`, `patterns/FULL-VIDEO-MAP.md`,
+  `patterns/CHECK-RESPONSIBILITIES.md`, doc 51 (the shorts shape), the blind viewer (P36); the VOICE - `docs/portable/VOICE-PACK.md`, docs 32 / 33 /
+  36 / 37 (delivery and the take), E70; the WORLD - the style spine (`style-spine.woodblock-vox-newsprint.v2.md`), the plate doctrine (docs 17 / 21 / 45; E39 / E40:
+  stills are the asset; the host's identity pack; `PLATE-LIBRARY.json` and its approved rows; E99 s65 plate life); the EVIDENCE - doc 39, E25 / E28 / E50-E53 (chart
+  form is law), the research tiers, `CAPABILITIES.md` rows 19-31 (the pages and their species); the MOTION - doc 29 Parts 3 / 8 / 9 (§9.15),
+  `docs/portable/MOTION-GRAMMAR.md`, `docs/research/runs/p56-recipe-seeds/measures.md`, the effects catalogue; the SOUND - `docs/portable/SOUND-SOURCING.md` and the beds' levels in
+  the approved builds; the PUBLISH - R26-8; and the RULINGS over all of it. Then the approved shorts' OWN tables and sheets -
+  `japan-tariff-trick/build_short.py` + `build-short/SELF-WATCH.md`, `tokyo-tea-break/build_short.py` - and the parity BY MECHANISM (the page on the
+  hook, the mount's build, the spiral return, the dock that reads then parks, the callout on a chart): present / absent / replaced by what (E99 s67
+  Apply 7). `docs_find.py "<term>"` reaches every layer. A number parity (M40) let a cut through that used none of the mechanisms; one-shot #3
+  recalled the script, voice, motion and ruling layers and skipped the world, style, sound and packaging ones.
 
 ## The loop
 
