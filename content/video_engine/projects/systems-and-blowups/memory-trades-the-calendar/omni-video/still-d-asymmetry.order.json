@@ -1,0 +1,15 @@
+{
+  "_contract": "still-d: the reflection's own world (E99 s67: no borrowed footage - the two-fingers clip was Japan's gesture). Dispatch: python omni-video/dispatch_order.py still-d-asymmetry.order.json",
+  "_beat": "B9 (0:58-1:05): 'In finance, we call this asymmetry. Good news is priced before it lands. Bad news is the only surprise left.'",
+  "prompt": "9:16 vertical, full bleed. A light application of woodblock print and vox newspaper meets rich anime colors, cream paper ground, charcoal contour ink. THE CHARACTER IS EXACTLY THE REFERENCE: a hollow stick-figure man with a plain solid black featureless head, round purple-framed glasses, spiky black hair, thin stick limbs, indigo suit, copper tie - never a realistic human. He stands facing the viewer in the Korean customs office from before (the wall calendar with the 15th circled in red behind him on the left, the port cranes in the window on the right), holding up two sheets of paper: in his raised right hand a SMALL sheet, pale teal, with one tiny upward arrow; in his lowered left hand a LARGE sheet, crimson red, with one big downward arrow. Deadpan. Generous empty cream wall above his head. No text. A single still frame.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "ratio": "9:16",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/omni-video/stills/still-d-asymmetry.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro"
+  },
+  "review_state": "quarantined until the operator approves the frame"
+}

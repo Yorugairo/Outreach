@@ -62,5 +62,8 @@
    "accent": "sunflower"
   }
  ],
- "ymin": -18
+ "domain": [
+  -30,
+  15
+ ]
 }

@@ -26,10 +26,10 @@
  ],
  "inputs": {
   "build:timeline.json": "5f93b6bb65c76e44",
-  "build:calendar-short.timeline.json": "50aa823a9e112403"
+  "build:calendar-short.timeline.json": "7dfa6f96584cbcfd",
+  "project:EVIDENCE-DOSSIER.md": "2c6dd7ab3a808429"
  },
  "missing": [
-  "the evidence dossier (EVIDENCE-DOSSIER.md)",
   "the channel's own words (channel-assets/money-physics-short/CHANNEL-DESCRIPTION.md)",
   "the fetched sources' links (evidence/sources/*)",
   "the 1440p master (render/)",
@@ -41,6 +41,6 @@
   "close": 2,
   "dossier_sources": 0,
   "links": 0,
-  "onscreen_sources": 6
+  "onscreen_sources": 5
  }
 }

@@ -1,9 +1,9 @@
 {
  "title": "One soft print, and the stocks dropped",
- "sub": "hynix + Micron daily (100 = 1 May 2026); the bars are each customs print as it LANDS, month over month - July's was the soft one",
+ "sub": "hynix + Micron daily (100 = 1 May 2026); each customs print lands mid-month - July's was the soft one",
  "src": "Yahoo Finance - 000660.KS, MU (100 = 1 May 2026); Korean customs HS 8542.32 via SCML monitor; KCS mid-month schedule",
  "yfmt": "none",
- "ylabel": "paper: index, 100 = 1 May",
+ "ylabel": "",
  "xticks": [
   [
    2026.335,
@@ -24,8 +24,8 @@
  ],
  "series": [
   {
-   "label": "-33%",
-   "name": "THE PAPER - hynix + Micron",
+   "label": "",
+   "name": "STOCKS",
    "color": "crimson",
    "pts": [
     [
@@ -366,18 +366,6 @@
   }
  ],
  "marks": [],
- "badges": [
-  {
-   "label": "AFTER THE JULY PRINT",
-   "value": "−14%",
-   "tag": "in two weeks",
-   "accent": "coral"
-  },
-  {
-   "label": "THE AUGUST PRINT",
-   "value": "+16.4%",
-   "tag": "the chip price, a month later",
-   "accent": "teal"
-  }
- ]
+ "badges": [],
+ "name_clear": false
 }

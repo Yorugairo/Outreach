@@ -329,7 +329,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 3.08,
@@ -354,7 +354,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 4.22,
@@ -385,7 +385,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 5.64,
@@ -416,7 +416,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 6.84,
@@ -447,7 +447,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 7.76,
@@ -484,7 +484,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 9.3,
@@ -942,7 +942,7 @@
      "k": true
     }
    ],
-   "cap_mode": "stage"
+   "cap_mode": "anchor"
   },
   {
    "s": 28.34,
@@ -979,7 +979,7 @@
      "k": false
     }
    ],
-   "cap_mode": "stage"
+   "cap_mode": "anchor"
   },
   {
    "s": 29.88,
@@ -1010,7 +1010,7 @@
      "k": false
     }
    ],
-   "cap_mode": "stage"
+   "cap_mode": "anchor"
   },
   {
    "s": 32.14,
@@ -1035,7 +1035,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 33.62,
@@ -1066,7 +1066,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 34.84,
@@ -1455,7 +1455,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 51.48,
@@ -1486,7 +1486,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 52.48,
@@ -1548,7 +1548,7 @@
      "k": false
     }
    ],
-   "cap_mode": "stage"
+   "cap_mode": "anchor"
   },
   {
    "s": 55.56,
@@ -1579,7 +1579,7 @@
      "k": false
     }
    ],
-   "cap_mode": "stage"
+   "cap_mode": "anchor"
   },
   {
    "s": 56.76,
@@ -1616,7 +1616,7 @@
      "k": false
     }
    ],
-   "cap_mode": "stage"
+   "cap_mode": "anchor"
   },
   {
    "s": 58.66,
@@ -1641,7 +1641,7 @@
      "k": false
     }
    ],
-   "cap_mode": "stage"
+   "cap_mode": "anchor"
   },
   {
    "s": 60.22,
@@ -1918,7 +1918,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 70.04,
@@ -1961,7 +1961,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   }
  ],
  "caption_modes": [
@@ -1970,8 +1970,8 @@
  ],
  "sound": [
   {
-   "slot": "page enter 2 (snap)",
-   "at": 8.97,
+   "slot": "page enter 11 (spiral)",
+   "at": 67.82,
    "gain": 0.12,
    "fade_in": 0.0,
    "env": [],
@@ -1986,40 +1986,7 @@
    "at": 0.0,
    "gain": 0.0376,
    "fade_in": 1.5,
-   "env": [
-    [
-     1.26,
-     0.0
-    ],
-    [
-     1.56,
-     4.0
-    ],
-    [
-     9.42,
-     4.0
-    ],
-    [
-     10.22,
-     0.0
-    ],
-    [
-     48.85,
-     0.0
-    ],
-    [
-     49.15,
-     4.0
-    ],
-    [
-     54.45,
-     4.0
-    ],
-    [
-     55.25,
-     0.0
-    ]
-   ],
+   "env": [],
    "variants": {
     "A": "__snd_1_A__",
     "B": "__snd_1_B__"
@@ -2038,13 +2005,13 @@
   }
  ],
  "evidence": {
-  "dock-b-calendar": {
-   "title": "They trade the calendar",
-   "source": "Yahoo Finance 000660.KS, MU; Korean customs HS 8542.32 via SCML",
-   "species": "chart",
+  "dock-h-calendar-wall": {
+   "title": "The print lands mid-month",
+   "source": "HollowStickMike - Money Physics",
+   "species": "deck",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\build-oneshot-3\\docks\\dock-b-calendar.png",
-    "sha256": "6bd9bed08ce01d5a543a381b2528b1501e2b88c8147760f1de6ca9cd603f1a7e"
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\build-oneshot-3\\docks\\dock-h-calendar-wall.png",
+    "sha256": "f61dda4737a9ba70baa9388d878a98f8272bac9610d4c744f3693679f887843c"
    },
    "badges": []
   },
@@ -2057,39 +2024,6 @@
     "sha256": "c7bae304ab42ad0ed4108c40e9ad20b6f23682c0321427e7b443bf7a381faeef"
    },
    "badges": []
-  },
-  "dock-m-metronome": {
-   "title": "One soft print, and the stocks dropped",
-   "source": "Yahoo Finance 000660.KS, MU; Korean customs HS 8542.32 via SCML",
-   "species": "chart",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\build-oneshot-3\\docks\\dock-m-metronome.png",
-    "sha256": "b7925f52fe781036daf759b29d03ae7152177b620979aae05b6c09da747537e3"
-   },
-   "badges": []
-  },
-  "dock-stack": {
-   "title": "Good news is priced before it lands",
-   "source": "the two charts of this short that were docked, each shown with its own source above",
-   "species": "stack",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\build-oneshot-3\\docks\\dock-b-calendar.png",
-    "sha256": "6bd9bed08ce01d5a543a381b2528b1501e2b88c8147760f1de6ca9cd603f1a7e"
-   },
-   "badges": [],
-   "stack": {
-    "items": [
-     {
-      "id": "dock-b-calendar",
-      "at": 60.22
-     },
-     {
-      "id": "dock-m-metronome",
-      "at": 62.36
-     }
-    ],
-    "clear_at": 63.31
-   }
   },
   "dock-g-july-host": {
    "title": "July's page",
@@ -2105,84 +2039,6 @@
  "scenes": [
   {
    "scene_id": "s01",
-   "world": {
-    "asset_id": "plate-customs",
-    "sha256": "0386e449c8f26fe4b1e22075f3d2fc9087178f1babee0823a4a1fa9430309506",
-    "ken_burns": {
-     "scale": 0.06,
-     "x": 6,
-     "y": -4
-    },
-    "idle_drift_px": 35.0,
-    "idle": "drift"
-   },
-   "exit": "dip",
-   "span": [
-    0.0,
-    8.97
-   ],
-   "docks": [
-    {
-     "id": "s01.dock.dock-b-calendar",
-     "slide": "dock-b-calendar",
-     "slot": 0,
-     "enter": 1.56,
-     "exit": 8.97,
-     "badge_at": [],
-     "arrive": "throw",
-     "mass": "paper",
-     "caption_band": null
-    }
-   ],
-   "species": [
-    {
-     "kind": "spotlight",
-     "at": 4.22,
-     "dur": 2.06,
-     "until": 6.28,
-     "target": {
-      "kind": "point",
-      "x": 0.2,
-      "y": 0.52
-     },
-     "id": "s01.species.0",
-     "held": true
-    },
-    {
-     "kind": "spotlight",
-     "at": 6.28,
-     "dur": 1.48,
-     "until": 7.76,
-     "target": {
-      "kind": "point",
-      "x": 0.2,
-      "y": 0.82
-     },
-     "id": "s01.species.1",
-     "held": true
-    },
-    {
-     "kind": "spotlight",
-     "at": 7.76,
-     "dur": 1.21,
-     "until": 8.97,
-     "target": {
-      "kind": "point",
-      "x": 0.8,
-      "y": 0.42
-     },
-     "id": "s01.species.2",
-     "held": true
-    }
-   ],
-   "camera": {
-    "keys": [],
-    "attention": "locked",
-    "id": "s01.camera"
-   }
-  },
-  {
-   "scene_id": "s02",
    "world": {
     "kind": "ledger",
     "page": {
@@ -3012,8 +2868,7 @@
      "judge": [],
      "badges": [],
      "emphasize": 1,
-     "enter": "snap",
-     "snap_from": "dock-b-calendar",
+     "enter": "axes",
      "exit": "cut"
     },
     "ken_burns": {
@@ -3025,6 +2880,52 @@
    },
    "exit": "dip",
    "span": [
+    0.0,
+    8.97
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 3.3,
+     "dur": 5.67,
+     "until": 8.97,
+     "target": {
+      "kind": "datum",
+      "index": 1,
+      "series": 0
+     },
+     "id": "s01.species.0",
+     "held": true
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s01.camera"
+   },
+   "build_windows": [
+    [
+     0.0,
+     3.0
+    ]
+   ]
+  },
+  {
+   "scene_id": "s02",
+   "world": {
+    "asset_id": "plate-customs",
+    "sha256": "0386e449c8f26fe4b1e22075f3d2fc9087178f1babee0823a4a1fa9430309506",
+    "ken_burns": {
+     "scale": 0.06,
+     "x": 6,
+     "y": -4
+    },
+    "idle_drift_px": 35.0,
+    "idle": "drift"
+   },
+   "exit": "dip",
+   "span": [
     8.97,
     14.78
    ],
@@ -3032,35 +2933,15 @@
    "species": [
     {
      "kind": "spotlight",
-     "at": 9.82,
-     "dur": 2.0,
-     "until": 15.28,
-     "target": {
-      "kind": "datum",
-      "index": 1,
-      "series": 0
-     },
-     "id": "s02.species.0",
-     "held": true
-    },
-    {
-     "kind": "retitle",
-     "at": 11.82,
-     "dur": 1.4,
-     "text": "They move around the print",
-     "id": "s02.species.1"
-    },
-    {
-     "kind": "spotlight",
-     "at": 13.52,
-     "dur": 1.26,
+     "at": 10.86,
+     "dur": 3.92,
      "until": 14.78,
      "target": {
-      "kind": "datum",
-      "index": 177,
-      "series": 1
+      "kind": "point",
+      "x": 0.17,
+      "y": 0.72
      },
-     "id": "s02.species.2",
+     "id": "s02.species.0",
      "held": true
     }
    ],
@@ -3083,18 +2964,18 @@
     "idle_drift_px": 35.0,
     "idle": "drift"
    },
-   "exit": "dip",
+   "exit": "cut",
    "span": [
     14.78,
-    22.5
+    16.91
    ],
    "docks": [],
    "species": [
     {
      "kind": "spotlight",
      "at": 15.86,
-     "dur": 1.9,
-     "until": 17.76,
+     "dur": 1.05,
+     "until": 16.91,
      "target": {
       "kind": "point",
       "x": 0.27,
@@ -3102,22 +2983,6 @@
      },
      "id": "s03.species.0",
      "held": true
-    },
-    {
-     "kind": "ticker",
-     "at": 17.76,
-     "dur": 4.64,
-     "target": {
-      "kind": "region",
-      "x0": 0.09,
-      "y0": 0.43,
-      "x1": 0.41,
-      "y1": 0.58
-     },
-     "density": 0.22,
-     "paper": "#16222E",
-     "tilt": 0,
-     "id": "s03.species.1"
     }
    ],
    "camera": {
@@ -3171,7 +3036,8 @@
       }
      ],
      "emphasize": 0,
-     "enter": "built",
+     "enter": "mount",
+     "mount_s": 0.79,
      "exit": "cut"
     },
     "ken_burns": {
@@ -3181,17 +3047,38 @@
     },
     "idle": "live"
    },
-   "exit": "cut",
+   "exit": "suck:0.5,0.5",
    "span": [
-    22.5,
+    16.91,
     30.7
    ],
-   "docks": [],
+   "docks": [
+    {
+     "id": "s04.dock.dock-h-calendar-wall",
+     "slide": "dock-h-calendar-wall",
+     "slot": 0,
+     "enter": 25.65,
+     "exit": 30.7,
+     "badge_at": [],
+     "place": {
+      "x": 378,
+      "y": 1190,
+      "w": 324,
+      "h": 232
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true,
+     "place_room": "outside",
+     "centre": true,
+     "caption_band": null
+    }
+   ],
    "species": [
     {
      "kind": "spotlight",
-     "at": 22.9,
-     "dur": 2.44,
+     "at": 24.55,
+     "dur": 1.1,
      "until": 26.16,
      "target": {
       "kind": "datum",
@@ -3203,7 +3090,7 @@
     },
     {
      "kind": "figure",
-     "at": 25.34,
+     "at": 25.75,
      "dur": 1.2,
      "target": {
       "kind": "datum",
@@ -3260,7 +3147,13 @@
     "keys": [],
     "attention": "locked",
     "id": "s04.camera"
-   }
+   },
+   "build_windows": [
+    [
+     16.91,
+     21.2
+    ]
+   ]
   },
   {
    "scene_id": "s05",
@@ -3305,7 +3198,7 @@
      "judge": [],
      "badges": [],
      "emphasize": 0,
-     "enter": "built",
+     "enter": "axes",
      "exit": "cut"
     },
     "ken_burns": {
@@ -3325,7 +3218,7 @@
      "id": "s05.dock.dock-f-desk-host",
      "slide": "dock-f-desk-host",
      "slot": 0,
-     "enter": 32.14,
+     "enter": 34.3,
      "exit": 41.16,
      "badge_at": [],
      "place": {
@@ -3349,9 +3242,9 @@
    "species": [
     {
      "kind": "spotlight",
-     "at": 31.1,
-     "dur": 1.04,
-     "until": 36.88,
+     "at": 36.88,
+     "dur": 1.32,
+     "until": 38.2,
      "target": {
       "kind": "datum",
       "index": 0,
@@ -3361,37 +3254,30 @@
      "held": true
     },
     {
-     "kind": "spotlight",
-     "at": 36.88,
-     "dur": 1.32,
-     "until": 38.2,
-     "target": {
-      "kind": "datum",
-      "index": 0,
-      "series": 0
-     },
-     "id": "s05.species.1",
-     "held": true
-    },
-    {
      "kind": "peel",
      "at": 38.2,
      "dur": 1.6,
-     "id": "s05.species.2"
+     "id": "s05.species.1"
     },
     {
      "kind": "retitle",
      "at": 39.7,
      "dur": 1.2,
      "text": "A coin flip with drift",
-     "id": "s05.species.3"
+     "id": "s05.species.2"
     }
    ],
    "camera": {
     "keys": [],
     "attention": "locked",
     "id": "s05.camera"
-   }
+   },
+   "build_windows": [
+    [
+     30.7,
+     33.7
+    ]
+   ]
   },
   {
    "scene_id": "s06",
@@ -3447,7 +3333,10 @@
       "crimson"
      ],
      "axes": {
-      "ymin": -18
+      "domain": [
+       -30,
+       15
+      ]
      },
      "unit": "%",
      "judge": [],
@@ -3468,7 +3357,7 @@
       }
      ],
      "emphasize": 7,
-     "enter": "built",
+     "enter": "axes",
      "exit": "cut"
     },
     "ken_burns": {
@@ -3487,9 +3376,9 @@
    "species": [
     {
      "kind": "spotlight",
-     "at": 41.56,
-     "dur": 2.76,
-     "until": 44.32,
+     "at": 44.46,
+     "dur": 1.06,
+     "until": 46.58,
      "target": {
       "kind": "datum",
       "index": 5,
@@ -3499,24 +3388,11 @@
      "held": true
     },
     {
-     "kind": "spotlight",
-     "at": 45.32,
-     "dur": 1.26,
-     "until": 46.58,
-     "target": {
-      "kind": "datum",
-      "index": 7,
-      "series": 0
-     },
-     "id": "s06.species.1",
-     "held": true
-    },
-    {
      "kind": "retitle",
-     "at": 44.32,
+     "at": 45.52,
      "dur": 1.4,
      "text": "Seven of the eight fell",
-     "id": "s06.species.2"
+     "id": "s06.species.1"
     },
     {
      "kind": "figure",
@@ -3531,14 +3407,20 @@
      "sub": "the half-month after a weak print",
      "color": "neg",
      "dy": -0.9,
-     "id": "s06.species.3"
+     "id": "s06.species.2"
     }
    ],
    "camera": {
     "keys": [],
     "attention": "locked",
     "id": "s06.camera"
-   }
+   },
+   "build_windows": [
+    [
+     41.16,
+     44.16
+    ]
+   ]
   },
   {
    "scene_id": "s07",
@@ -3553,52 +3435,13 @@
     "idle_drift_px": 35.0,
     "idle": "drift"
    },
-   "exit": "dip",
+   "exit": "cut",
    "span": [
     48.42,
-    57.62
+    49.7
    ],
-   "docks": [
-    {
-     "id": "s07.dock.dock-m-metronome",
-     "slide": "dock-m-metronome",
-     "slot": 0,
-     "enter": 49.15,
-     "exit": 54.0,
-     "badge_at": [],
-     "arrive": "throw",
-     "mass": "paper",
-     "caption_band": null
-    }
-   ],
-   "species": [
-    {
-     "kind": "spotlight",
-     "at": 52.08,
-     "dur": 3.48,
-     "until": 55.56,
-     "target": {
-      "kind": "point",
-      "x": 0.42,
-      "y": 0.82
-     },
-     "id": "s07.species.1",
-     "held": true
-    },
-    {
-     "kind": "spotlight",
-     "at": 55.56,
-     "dur": 2.06,
-     "until": 57.62,
-     "target": {
-      "kind": "point",
-      "x": 0.14,
-      "y": 0.8
-     },
-     "id": "s07.species.2",
-     "held": true
-    }
-   ],
+   "docks": [],
+   "species": [],
    "camera": {
     "keys": [],
     "attention": "locked",
@@ -3608,14 +3451,511 @@
   {
    "scene_id": "s08",
    "world": {
-    "kind": "clip",
-    "asset_id": "clip-two-fingers",
-    "sha256": "99fca9a2578c29af624f30b5d70f21df53ec0930ddfed23e2b7142f308b36426",
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "dense-line",
+     "variant": "line",
+     "title": "One soft print, and the stocks dropped",
+     "sub": "hynix + Micron daily (100 = 1 May 2026); each customs print lands mid-month - July's was the soft one",
+     "source": "Yahoo Finance - 000660.KS, MU (100 = 1 May 2026); Korean customs HS 8542.32 via SCML monitor; KCS mid-month schedule",
+     "quiet_zone": "right",
+     "labels": [
+      "STOCKS"
+     ],
+     "values": [],
+     "value_strings": [],
+     "colors": [],
+     "series": [
+      {
+       "label": "",
+       "name": "STOCKS",
+       "color": "crimson",
+       "pts": [
+        [
+         "2026.3368",
+         "100.0"
+        ],
+        [
+         "2026.3422",
+         "113.1"
+        ],
+        [
+         "2026.345",
+         "113.2"
+        ],
+        [
+         "2026.3477",
+         "123.0"
+        ],
+        [
+         "2026.3559",
+         "133.9"
+        ],
+        [
+         "2026.3587",
+         "129.9"
+        ],
+        [
+         "2026.3614",
+         "138.0"
+        ],
+        [
+         "2026.3641",
+         "135.4"
+        ],
+        [
+         "2026.3669",
+         "125.7"
+        ],
+        [
+         "2026.3751",
+         "122.7"
+        ],
+        [
+         "2026.3778",
+         "120.9"
+        ],
+        [
+         "2026.3806",
+         "123.8"
+        ],
+        [
+         "2026.3833",
+         "133.1"
+        ],
+        [
+         "2026.386",
+         "132.2"
+        ],
+        [
+         "2026.397",
+         "148.6"
+        ],
+        [
+         "2026.3997",
+         "158.0"
+        ],
+        [
+         "2026.4025",
+         "159.2"
+        ],
+        [
+         "2026.4052",
+         "164.9"
+        ],
+        [
+         "2026.4134",
+         "171.5"
+        ],
+        [
+         "2026.4162",
+         "173.9"
+        ],
+        [
+         "2026.4216",
+         "165.8"
+        ],
+        [
+         "2026.4244",
+         "146.5"
+        ],
+        [
+         "2026.4326",
+         "148.4"
+        ],
+        [
+         "2026.4353",
+         "157.7"
+        ],
+        [
+         "2026.4381",
+         "148.1"
+        ],
+        [
+         "2026.4408",
+         "159.0"
+        ],
+        [
+         "2026.4435",
+         "159.4"
+        ],
+        [
+         "2026.4517",
+         "173.4"
+        ],
+        [
+         "2026.4545",
+         "170.9"
+        ],
+        [
+         "2026.4572",
+         "177.6"
+        ],
+        [
+         "2026.46",
+         "191.2"
+        ],
+        [
+         "2026.4709",
+         "206.0"
+        ],
+        [
+         "2026.4736",
+         "179.5"
+        ],
+        [
+         "2026.4764",
+         "181.5"
+        ],
+        [
+         "2026.4791",
+         "206.1"
+        ],
+        [
+         "2026.4819",
+         "190.6"
+        ],
+        [
+         "2026.4901",
+         "190.2"
+        ],
+        [
+         "2026.4928",
+         "191.7"
+        ],
+        [
+         "2026.4956",
+         "178.0"
+        ],
+        [
+         "2026.4983",
+         "160.2"
+        ],
+        [
+         "2026.5092",
+         "166.4"
+        ],
+        [
+         "2026.512",
+         "157.5"
+        ],
+        [
+         "2026.5147",
+         "154.1"
+        ],
+        [
+         "2026.5175",
+         "161.6"
+        ],
+        [
+         "2026.5202",
+         "160.3"
+        ],
+        [
+         "2026.5284",
+         "145.0"
+        ],
+        [
+         "2026.5311",
+         "151.4"
+        ],
+        [
+         "2026.5339",
+         "150.4"
+        ],
+        [
+         "2026.5366",
+         "137.7"
+        ],
+        [
+         "2026.5476",
+         "136.0"
+        ],
+        [
+         "2026.5503",
+         "147.7"
+        ],
+        [
+         "2026.553",
+         "146.5"
+        ],
+        [
+         "2026.5558",
+         "152.2"
+        ],
+        [
+         "2026.5585",
+         "140.7"
+        ],
+        [
+         "2026.5667",
+         "140.9"
+        ],
+        [
+         "2026.5695",
+         "124.7"
+        ],
+        [
+         "2026.5722",
+         "112.5"
+        ],
+        [
+         "2026.5749",
+         "121.6"
+        ],
+        [
+         "2026.5777",
+         "130.8"
+        ],
+        [
+         "2026.5859",
+         "126.1"
+        ],
+        [
+         "2026.5886",
+         "131.9"
+        ],
+        [
+         "2026.5914",
+         "135.1"
+        ],
+        [
+         "2026.5941",
+         "128.1"
+        ],
+        [
+         "2026.5969",
+         "125.3"
+        ],
+        [
+         "2026.6051",
+         "123.8"
+        ],
+        [
+         "2026.6078",
+         "124.6"
+        ],
+        [
+         "2026.6105",
+         "131.0"
+        ],
+        [
+         "2026.6133",
+         "137.5"
+        ],
+        [
+         "2026.616",
+         "141.1"
+        ],
+        [
+         "2026.627",
+         "139.1"
+        ],
+        [
+         "2026.6297",
+         "133.1"
+        ],
+        [
+         "2026.6324",
+         "143.0"
+        ],
+        [
+         "2026.6352",
+         "143.7"
+        ],
+        [
+         "2026.6434",
+         "136.7"
+        ],
+        [
+         "2026.6461",
+         "138.9"
+        ],
+        [
+         "2026.6489",
+         "139.7"
+        ],
+        [
+         "2026.6516",
+         "140.9"
+        ],
+        [
+         "2026.6543",
+         "138.1"
+        ]
+       ]
+      }
+     ],
+     "axes": {
+      "ylabel": "",
+      "xticks": [
+       [
+        "2026.335",
+        "May"
+       ],
+       [
+        "2026.42",
+        "Jun"
+       ],
+       [
+        "2026.5",
+        "Jul"
+       ],
+       [
+        "2026.585",
+        "Aug"
+       ]
+      ],
+      "marks": [],
+      "eventbars": [
+       {
+        "x": "2026.3669",
+        "v": "20.5",
+        "label": "May"
+       },
+       {
+        "x": "2026.4517",
+        "v": "16.7",
+        "label": "Jun"
+       },
+       {
+        "x": "2026.5339",
+        "v": "-3.7",
+        "label": "Jul"
+       },
+       {
+        "x": "2026.616",
+        "v": "16.4",
+        "label": "Aug"
+       }
+      ],
+      "name_clear": false,
+      "yfmt": "none"
+     },
+     "unit": "",
+     "judge": [],
+     "badges": [],
+     "emphasize": 0,
+     "enter": "axes",
+     "exit": "cut"
+    },
     "ken_burns": {
      "scale": 0,
      "x": 0,
      "y": 0
+    },
+    "idle": "live"
+   },
+   "exit": "dip",
+   "span": [
+    49.7,
+    57.62
+   ],
+   "docks": [
+    {
+     "id": "s08.dock.dock-g-july-host",
+     "slide": "dock-g-july-host",
+     "slot": 0,
+     "enter": 52.3,
+     "exit": 57.62,
+     "badge_at": [],
+     "place": {
+      "x": 378,
+      "y": 1228,
+      "w": 324,
+      "h": 232
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true,
+     "place_room": "outside",
+     "centre": true,
+     "caption_band": null
     }
+   ],
+   "species": [
+    {
+     "kind": "build_to",
+     "at": 49.8,
+     "dur": 2.0,
+     "target": {
+      "kind": "datum",
+      "index": 47,
+      "series": 0
+     },
+     "id": "s08.species.0"
+    },
+    {
+     "kind": "span",
+     "at": 52.0,
+     "dur": 1.4,
+     "from": 47,
+     "to": 57,
+     "label": "\u221214% in two weeks",
+     "color": "neg",
+     "id": "s08.species.1"
+    },
+    {
+     "kind": "build_to",
+     "at": 54.0,
+     "dur": 1.2,
+     "target": {
+      "kind": "datum",
+      "index": 77,
+      "series": 0
+     },
+     "id": "s08.species.2"
+    },
+    {
+     "kind": "figure",
+     "at": 55.56,
+     "dur": 1.4,
+     "target": {
+      "kind": "datum",
+      "index": 68,
+      "series": 0
+     },
+     "text": "+16.4%",
+     "sub": "the August print",
+     "color": "pos",
+     "dy": -0.9,
+     "id": "s08.species.3"
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s08.camera"
+   },
+   "build_windows": [
+    [
+     49.7,
+     52.7
+    ],
+    [
+     49.8,
+     51.8
+    ],
+    [
+     54.0,
+     55.2
+    ]
+   ]
+  },
+  {
+   "scene_id": "s09",
+   "world": {
+    "asset_id": "plate-reflect",
+    "sha256": "4cb4029f964e9e5d9edd435e36092828ab0471f6106cc7a03b303643fed86466",
+    "ken_burns": {
+     "scale": 0.06,
+     "x": 6,
+     "y": -4
+    },
+    "idle_drift_px": 35.0,
+    "idle": "drift"
    },
    "exit": "dip",
    "span": [
@@ -3624,98 +3964,25 @@
    ],
    "docks": [
     {
-     "id": "s08.dock.dock-stack",
-     "slide": "dock-stack",
+     "id": "s09.dock.dock-h-calendar-wall",
+     "slide": "dock-h-calendar-wall",
      "slot": 0,
-     "enter": 59.72,
+     "enter": 58.12,
+     "exit": 64.54,
+     "badge_at": [],
+     "caption_band": null
+    },
+    {
+     "id": "s09.dock.dock-g-july-host",
+     "slide": "dock-g-july-host",
+     "slot": 1,
+     "enter": 62.36,
      "exit": 64.54,
      "badge_at": [],
      "caption_band": null
     }
    ],
-   "species": [
-    {
-     "kind": "life",
-     "at": 57.62,
-     "dur": 6.92,
-     "id": "s08.species.0"
-    }
-   ],
-   "camera": {
-    "keys": [],
-    "attention": "locked",
-    "id": "s08.camera"
-   }
-  },
-  {
-   "scene_id": "s09",
-   "world": {
-    "asset_id": "plate-customs",
-    "sha256": "0386e449c8f26fe4b1e22075f3d2fc9087178f1babee0823a4a1fa9430309506",
-    "ken_burns": {
-     "scale": 0,
-     "x": 0,
-     "y": 0
-    },
-    "idle_drift_px": 35.0,
-    "idle": "drift"
-   },
-   "exit": "dip",
-   "span": [
-    64.54,
-    71.44
-   ],
-   "docks": [
-    {
-     "id": "s09.dock.dock-g-july-host",
-     "slide": "dock-g-july-host",
-     "slot": 0,
-     "enter": 68.96,
-     "exit": 71.44,
-     "badge_at": [],
-     "caption_band": null
-    }
-   ],
-   "species": [
-    {
-     "kind": "spotlight",
-     "at": 65.36,
-     "dur": 2.46,
-     "until": 67.82,
-     "target": {
-      "kind": "point",
-      "x": 0.2,
-      "y": 0.82
-     },
-     "id": "s09.species.0",
-     "held": true
-    },
-    {
-     "kind": "punch",
-     "at": 67.82,
-     "dur": 1.1,
-     "target": {
-      "kind": "point",
-      "x": 0.2,
-      "y": 0.52
-     },
-     "id": "s09.species.1"
-    },
-    {
-     "kind": "spotlight",
-     "at": 69.56,
-     "dur": 1.88,
-     "until": 71.444,
-     "idle": "live",
-     "target": {
-      "kind": "point",
-      "x": 0.2,
-      "y": 0.52
-     },
-     "id": "s09.species.2",
-     "held": true
-    }
-   ],
+   "species": [],
    "camera": {
     "keys": [],
     "attention": "locked",
@@ -3724,6 +3991,920 @@
   },
   {
    "scene_id": "s10",
+   "world": {
+    "asset_id": "plate-customs",
+    "sha256": "0386e449c8f26fe4b1e22075f3d2fc9087178f1babee0823a4a1fa9430309506",
+    "ken_burns": {
+     "scale": 0.06,
+     "x": 6,
+     "y": -4
+    },
+    "idle_drift_px": 35.0,
+    "idle": "drift"
+   },
+   "exit": "dip",
+   "span": [
+    64.54,
+    67.82
+   ],
+   "docks": [],
+   "species": [],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s10.camera"
+   }
+  },
+  {
+   "scene_id": "s11",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "dense-line",
+     "variant": "line",
+     "title": "They trade the calendar",
+     "sub": "The chip price (Korean customs, $/kg) vs hynix + Micron, indexed to 1 Dec 2025 - each print lands mid-month",
+     "source": "Yahoo Finance - 000660.KS, MU; Korean customs HS 8542.32 via SCML monitor; KCS release schedule",
+     "quiet_zone": "right",
+     "labels": [
+      "CHIPS",
+      "STOCKS"
+     ],
+     "values": [],
+     "value_strings": [],
+     "colors": [],
+     "series": [
+      {
+       "label": "+267%",
+       "name": "CHIPS",
+       "color": "teal",
+       "pts": [
+        [
+         "2025.9583",
+         "100.0"
+        ],
+        [
+         "2026.0417",
+         "149.7"
+        ],
+        [
+         "2026.125",
+         "203.0"
+        ],
+        [
+         "2026.2083",
+         "232.5"
+        ],
+        [
+         "2026.2917",
+         "280.2"
+        ],
+        [
+         "2026.375",
+         "326.9"
+        ],
+        [
+         "2026.4583",
+         "314.8"
+        ],
+        [
+         "2026.5417",
+         "366.6"
+        ]
+       ]
+      },
+      {
+       "label": "\u221234%",
+       "name": "STOCKS",
+       "color": "crimson",
+       "delay": "1.2",
+       "pts": [
+        [
+         "2025.9144",
+         "100.0"
+        ],
+        [
+         "2025.9172",
+         "101.7"
+        ],
+        [
+         "2025.9199",
+         "100.0"
+        ],
+        [
+         "2025.9227",
+         "97.5"
+        ],
+        [
+         "2025.9254",
+         "99.9"
+        ],
+        [
+         "2025.9336",
+         "105.0"
+        ],
+        [
+         "2025.9363",
+         "105.1"
+        ],
+        [
+         "2025.9391",
+         "109.4"
+        ],
+        [
+         "2025.9418",
+         "106.3"
+        ],
+        [
+         "2025.9446",
+         "103.2"
+        ],
+        [
+         "2025.9528",
+         "100.9"
+        ],
+        [
+         "2025.9555",
+         "97.6"
+        ],
+        [
+         "2025.9582",
+         "98.1"
+        ],
+        [
+         "2025.961",
+         "103.0"
+        ],
+        [
+         "2025.9637",
+         "106.1"
+        ],
+        [
+         "2025.9719",
+         "111.4"
+        ],
+        [
+         "2025.9747",
+         "111.7"
+        ],
+        [
+         "2025.9774",
+         "114.3"
+        ],
+        [
+         "2025.9829",
+         "114.9"
+        ],
+        [
+         "2025.9911",
+         "120.7"
+        ],
+        [
+         "2025.9938",
+         "121.4"
+        ],
+        [
+         "2026.0027",
+         "128.5"
+        ],
+        [
+         "2026.011",
+         "129.6"
+        ],
+        [
+         "2026.0137",
+         "138.9"
+        ],
+        [
+         "2026.0164",
+         "139.6"
+        ],
+        [
+         "2026.0192",
+         "138.3"
+        ],
+        [
+         "2026.0219",
+         "140.9"
+        ],
+        [
+         "2026.0301",
+         "141.6"
+        ],
+        [
+         "2026.0329",
+         "138.9"
+        ],
+        [
+         "2026.0356",
+         "138.3"
+        ],
+        [
+         "2026.0383",
+         "139.6"
+        ],
+        [
+         "2026.0411",
+         "145.7"
+        ],
+        [
+         "2026.052",
+         "145.0"
+        ],
+        [
+         "2026.0548",
+         "149.7"
+        ],
+        [
+         "2026.0575",
+         "152.9"
+        ],
+        [
+         "2026.0602",
+         "154.4"
+        ],
+        [
+         "2026.0684",
+         "149.3"
+        ],
+        [
+         "2026.0712",
+         "159.7"
+        ],
+        [
+         "2026.0739",
+         "168.7"
+        ],
+        [
+         "2026.0767",
+         "170.7"
+        ],
+        [
+         "2026.0794",
+         "170.8"
+        ],
+        [
+         "2026.0876",
+         "168.2"
+        ],
+        [
+         "2026.0903",
+         "171.5"
+        ],
+        [
+         "2026.0931",
+         "162.6"
+        ],
+        [
+         "2026.0958",
+         "157.9"
+        ],
+        [
+         "2026.0986",
+         "160.1"
+        ],
+        [
+         "2026.1068",
+         "162.2"
+        ],
+        [
+         "2026.1095",
+         "159.1"
+        ],
+        [
+         "2026.1123",
+         "165.3"
+        ],
+        [
+         "2026.115",
+         "168.6"
+        ],
+        [
+         "2026.1177",
+         "167.4"
+        ],
+        [
+         "2026.1342",
+         "169.9"
+        ],
+        [
+         "2026.1369",
+         "177.3"
+        ],
+        [
+         "2026.1451",
+         "176.0"
+        ],
+        [
+         "2026.1478",
+         "180.4"
+        ],
+        [
+         "2026.1506",
+         "183.8"
+        ],
+        [
+         "2026.1533",
+         "188.8"
+        ],
+        [
+         "2026.1561",
+         "184.6"
+        ],
+        [
+         "2026.167",
+         "166.4"
+        ],
+        [
+         "2026.1697",
+         "162.4"
+        ],
+        [
+         "2026.1725",
+         "170.2"
+        ],
+        [
+         "2026.1752",
+         "163.1"
+        ],
+        [
+         "2026.1834",
+         "158.8"
+        ],
+        [
+         "2026.1862",
+         "171.2"
+        ],
+        [
+         "2026.1889",
+         "176.0"
+        ],
+        [
+         "2026.1916",
+         "170.9"
+        ],
+        [
+         "2026.1944",
+         "173.4"
+        ],
+        [
+         "2026.2026",
+         "182.6"
+        ],
+        [
+         "2026.2053",
+         "186.4"
+        ],
+        [
+         "2026.2081",
+         "194.4"
+        ],
+        [
+         "2026.2108",
+         "186.7"
+        ],
+        [
+         "2026.2136",
+         "181.7"
+        ],
+        [
+         "2026.2218",
+         "171.0"
+        ],
+        [
+         "2026.2245",
+         "174.1"
+        ],
+        [
+         "2026.2272",
+         "172.1"
+        ],
+        [
+         "2026.23",
+         "160.8"
+        ],
+        [
+         "2026.2327",
+         "161.2"
+        ],
+        [
+         "2026.2409",
+         "148.3"
+        ],
+        [
+         "2026.2437",
+         "145.4"
+        ],
+        [
+         "2026.2464",
+         "160.1"
+        ],
+        [
+         "2026.2491",
+         "153.5"
+        ],
+        [
+         "2026.2601",
+         "161.1"
+        ],
+        [
+         "2026.2628",
+         "163.9"
+        ],
+        [
+         "2026.2656",
+         "180.8"
+        ],
+        [
+         "2026.2683",
+         "180.6"
+        ],
+        [
+         "2026.271",
+         "183.1"
+        ],
+        [
+         "2026.2793",
+         "185.6"
+        ],
+        [
+         "2026.282",
+         "199.6"
+        ],
+        [
+         "2026.2847",
+         "200.7"
+        ],
+        [
+         "2026.2875",
+         "202.7"
+        ],
+        [
+         "2026.2902",
+         "199.7"
+        ],
+        [
+         "2026.2984",
+         "201.9"
+        ],
+        [
+         "2026.3012",
+         "207.5"
+        ],
+        [
+         "2026.3039",
+         "215.3"
+        ],
+        [
+         "2026.3066",
+         "214.3"
+        ],
+        [
+         "2026.3094",
+         "217.1"
+        ],
+        [
+         "2026.3176",
+         "229.5"
+        ],
+        [
+         "2026.3203",
+         "226.0"
+        ],
+        [
+         "2026.3231",
+         "228.3"
+        ],
+        [
+         "2026.3258",
+         "227.4"
+        ],
+        [
+         "2026.3368",
+         "254.7"
+        ],
+        [
+         "2026.3422",
+         "287.8"
+        ],
+        [
+         "2026.345",
+         "288.6"
+        ],
+        [
+         "2026.3477",
+         "312.4"
+        ],
+        [
+         "2026.3559",
+         "340.6"
+        ],
+        [
+         "2026.3587",
+         "330.4"
+        ],
+        [
+         "2026.3614",
+         "351.2"
+        ],
+        [
+         "2026.3641",
+         "344.9"
+        ],
+        [
+         "2026.3669",
+         "320.2"
+        ],
+        [
+         "2026.3751",
+         "313.2"
+        ],
+        [
+         "2026.3778",
+         "307.9"
+        ],
+        [
+         "2026.3806",
+         "314.8"
+        ],
+        [
+         "2026.3833",
+         "339.2"
+        ],
+        [
+         "2026.386",
+         "337.0"
+        ],
+        [
+         "2026.397",
+         "377.5"
+        ],
+        [
+         "2026.3997",
+         "402.0"
+        ],
+        [
+         "2026.4025",
+         "405.4"
+        ],
+        [
+         "2026.4052",
+         "419.3"
+        ],
+        [
+         "2026.4134",
+         "435.5"
+        ],
+        [
+         "2026.4162",
+         "441.2"
+        ],
+        [
+         "2026.4216",
+         "421.3"
+        ],
+        [
+         "2026.4244",
+         "372.6"
+        ],
+        [
+         "2026.4326",
+         "375.5"
+        ],
+        [
+         "2026.4353",
+         "401.0"
+        ],
+        [
+         "2026.4381",
+         "376.3"
+        ],
+        [
+         "2026.4408",
+         "402.9"
+        ],
+        [
+         "2026.4435",
+         "404.5"
+        ],
+        [
+         "2026.4517",
+         "439.5"
+        ],
+        [
+         "2026.4545",
+         "434.2"
+        ],
+        [
+         "2026.4572",
+         "451.9"
+        ],
+        [
+         "2026.46",
+         "486.0"
+        ],
+        [
+         "2026.4709",
+         "523.9"
+        ],
+        [
+         "2026.4736",
+         "456.8"
+        ],
+        [
+         "2026.4764",
+         "462.3"
+        ],
+        [
+         "2026.4791",
+         "524.2"
+        ],
+        [
+         "2026.4819",
+         "484.6"
+        ],
+        [
+         "2026.4901",
+         "483.1"
+        ],
+        [
+         "2026.4928",
+         "487.0"
+        ],
+        [
+         "2026.4956",
+         "453.2"
+        ],
+        [
+         "2026.4983",
+         "406.7"
+        ],
+        [
+         "2026.5092",
+         "423.2"
+        ],
+        [
+         "2026.512",
+         "400.3"
+        ],
+        [
+         "2026.5147",
+         "390.8"
+        ],
+        [
+         "2026.5175",
+         "410.0"
+        ],
+        [
+         "2026.5202",
+         "406.8"
+        ],
+        [
+         "2026.5284",
+         "366.8"
+        ],
+        [
+         "2026.5311",
+         "382.8"
+        ],
+        [
+         "2026.5339",
+         "382.1"
+        ],
+        [
+         "2026.5366",
+         "349.1"
+        ],
+        [
+         "2026.5476",
+         "344.4"
+        ],
+        [
+         "2026.5503",
+         "373.0"
+        ],
+        [
+         "2026.553",
+         "370.1"
+        ],
+        [
+         "2026.5558",
+         "384.8"
+        ],
+        [
+         "2026.5585",
+         "355.5"
+        ],
+        [
+         "2026.5667",
+         "356.5"
+        ],
+        [
+         "2026.5695",
+         "315.1"
+        ],
+        [
+         "2026.5722",
+         "284.3"
+        ],
+        [
+         "2026.5749",
+         "305.2"
+        ],
+        [
+         "2026.5777",
+         "331.3"
+        ],
+        [
+         "2026.5859",
+         "318.6"
+        ],
+        [
+         "2026.5886",
+         "332.7"
+        ],
+        [
+         "2026.5914",
+         "341.2"
+        ],
+        [
+         "2026.5941",
+         "322.7"
+        ],
+        [
+         "2026.5969",
+         "315.1"
+        ],
+        [
+         "2026.6051",
+         "311.4"
+        ],
+        [
+         "2026.6078",
+         "313.5"
+        ],
+        [
+         "2026.6105",
+         "329.7"
+        ],
+        [
+         "2026.6133",
+         "346.0"
+        ],
+        [
+         "2026.616",
+         "355.4"
+        ],
+        [
+         "2026.627",
+         "350.6"
+        ],
+        [
+         "2026.6297",
+         "334.7"
+        ],
+        [
+         "2026.6324",
+         "360.3"
+        ],
+        [
+         "2026.6352",
+         "362.3"
+        ],
+        [
+         "2026.6434",
+         "345.1"
+        ],
+        [
+         "2026.6461",
+         "350.4"
+        ],
+        [
+         "2026.6489",
+         "352.5"
+        ],
+        [
+         "2026.6516",
+         "355.8"
+        ],
+        [
+         "2026.6543",
+         "348.1"
+        ]
+       ]
+      }
+     ],
+     "axes": {
+      "xticks": [
+       [
+        "2025.92",
+        "Dec"
+       ],
+       [
+        "2026.12",
+        "Feb"
+       ],
+       [
+        "2026.29",
+        "Apr"
+       ],
+       [
+        "2026.46",
+        "Jun"
+       ],
+       [
+        "2026.62",
+        "Aug"
+       ]
+      ],
+      "marks": [
+       {
+        "x": "2026.1232",
+        "y": "167.4",
+        "label": "January print: +50%",
+        "sub": "the explosion, confirmed"
+       },
+       {
+        "x": "2026.4928",
+        "y": "524.2",
+        "label": "the paper's top: +424%",
+        "sub": "then the July slide"
+       },
+       {
+        "x": "2026.616",
+        "y": "355.4",
+        "label": "July print: +16.4%",
+        "sub": "steel at new highs - paper hasn't followed"
+       }
+      ],
+      "name_clear": true,
+      "yfmt": "none"
+     },
+     "unit": "",
+     "judge": [],
+     "badges": [],
+     "emphasize": 1,
+     "enter": "spiral",
+     "exit": "cut",
+     "tip_mark": [
+      1
+     ]
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "idle": "live"
+   },
+   "exit": "cut",
+   "span": [
+    67.82,
+    71.44
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 68.96,
+     "dur": 1.38,
+     "until": 70.34,
+     "target": {
+      "kind": "datum",
+      "index": 7,
+      "series": 0
+     },
+     "id": "s11.species.0",
+     "held": true
+    },
+    {
+     "kind": "callout",
+     "at": 70.34,
+     "dur": 1.3,
+     "target": {
+      "kind": "datum",
+      "index": 177,
+      "series": 1
+     },
+     "id": "s11.species.1"
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s11.camera"
+   },
+   "build_windows": [
+    [
+     67.82,
+     69.42
+    ]
+   ]
+  },
+  {
+   "scene_id": "s12",
    "world": {
     "kind": "clip",
     "asset_id": "outro-v2",
@@ -3745,26 +4926,27 @@
      "kind": "life",
      "at": 71.444,
      "dur": 6.2,
-     "id": "s10.species.0"
+     "id": "s12.species.0"
     }
    ],
    "camera": {
     "keys": [],
     "attention": "locked",
-    "id": "s10.camera"
+    "id": "s12.camera"
    }
   }
  ],
  "species": [
   "ledger",
   "spotlight",
-  "retitle",
-  "ticker",
   "figure",
   "chart_to",
   "peel",
-  "life",
-  "punch"
+  "retitle",
+  "build_to",
+  "span",
+  "callout",
+  "life"
  ],
  "kinetics": {
   "idle": true,

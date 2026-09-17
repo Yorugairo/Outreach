@@ -13,7 +13,7 @@ In the half-month into the print, the stocks average plus six point eight percen
 
 You have to know the calendar: the day the print lands is the day the stocks trade it.
 
-On screen: Yahoo Finance 000660.KS, MU; Korean customs HS 8542.32 via SCML; HollowStickMike - Money Physics; the two charts of this short that were docked, each shown with its own source above; Yahoo Finance - 000660.KS, MU; Korean customs HS 8542.32 via SCML monitor; KCS release schedule; Operator backtest 2026-08-30 (EPISODE-SEEDS act three): hynix + Micron vs the KCS print calendar, 25 months Aug '24 - Aug '26; n = 25, one regime; Korean customs HS 8542.32 via SCML monitor; hynix + Micron basket, Yahoo Finance - 8 weak prints in 25 months
+On screen: HollowStickMike - Money Physics; Yahoo Finance - 000660.KS, MU; Korean customs HS 8542.32 via SCML monitor; KCS release schedule; Operator backtest 2026-08-30 (EPISODE-SEEDS act three): hynix + Micron vs the KCS print calendar, 25 months Aug '24 - Aug '26; n = 25, one regime; Korean customs HS 8542.32 via SCML monitor; hynix + Micron basket, Yahoo Finance - 8 weak prints in 25 months; Yahoo Finance - 000660.KS, MU (100 = 1 May 2026); Korean customs HS 8542.32 via SCML monitor; KCS mid-month schedule
 
 #MoneyPhysicsShort #MemoryStocksTradeTheCalendarNotTheNews #Reels
 ```

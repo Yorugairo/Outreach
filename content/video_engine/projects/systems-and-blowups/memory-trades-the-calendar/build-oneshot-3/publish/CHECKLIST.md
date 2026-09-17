@@ -15,7 +15,6 @@
 **In this folder:** `DESCRIPTION-YOUTUBE.md`, `DESCRIPTION-FACEBOOK.md`, `PINNED-COMMENT.md`, `SOURCES.md`, `TAGS.txt`, `MANIFEST.json`, `first-frame.png`.
 
 **Not on disk when this was written** (the package is thinner for it):
-- the evidence dossier (EVIDENCE-DOSSIER.md)
 - the channel's own words (channel-assets/money-physics-short/CHANNEL-DESCRIPTION.md)
 - the fetched sources' links (evidence/sources/*)
 - the 1440p master (render/)

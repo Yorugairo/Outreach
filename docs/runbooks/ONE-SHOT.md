@@ -13,6 +13,12 @@ Every command below was run with `--help` on 2026-09-14. Paths are repo-relative
   `sed -n <line>p docs/content-video-engine/CAPABILITIES.md`.
 - **An effect or a recipe by name:** `python content/video_engine/scripts/effects_card.py "<name>"` (for example `"badge ladder"`).
 - **The rulings override everything:** `docs/portable/OPERATOR-RULINGS.md`.
+- **The motion doctrine and the approved shorts, BEFORE step 4** (the operator, 2026-09-16, after one-shot #3: "did you recall research and
+  knowledge on video generation/animation/processes before building the one shot?"): read `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
+  Parts 3 / 8 / 9 (§9.15), `docs/portable/MOTION-GRAMMAR.md`, `docs/research/runs/p56-recipe-seeds/measures.md`, and the approved shorts' OWN
+  tables and sheets - `japan-tariff-trick/build_short.py` + `build-short/SELF-WATCH.md`, `tokyo-tea-break/build_short.py` - and write the
+  parity BY MECHANISM (the page on the hook, the mount's build, the spiral return, the dock that reads then parks, the callout on a chart):
+  present / absent / replaced by what (E99 s67 Apply 7). A number parity (M40) let a cut through that used none of them.
 
 ## The loop
 

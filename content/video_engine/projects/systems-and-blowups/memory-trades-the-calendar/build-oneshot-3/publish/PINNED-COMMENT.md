@@ -8,10 +8,9 @@ Written by `publish_package.py` from `build-oneshot-3`'s own artifacts - the tak
 
 ```
 Every figure in this video, with its source:
-- Yahoo Finance 000660.KS, MU; Korean customs HS 8542.32 via SCML
 - HollowStickMike - Money Physics
-- the two charts of this short that were docked, each shown with its own source above
 - Yahoo Finance - 000660.KS, MU; Korean customs HS 8542.32 via SCML monitor; KCS release schedule
 - Operator backtest 2026-08-30 (EPISODE-SEEDS act three): hynix + Micron vs the KCS print calendar, 25 months Aug '24 - Aug '26; n = 25, one regime
 - Korean customs HS 8542.32 via SCML monitor; hynix + Micron basket, Yahoo Finance - 8 weak prints in 25 months
+- Yahoo Finance - 000660.KS, MU (100 = 1 May 2026); Korean customs HS 8542.32 via SCML monitor; KCS mid-month schedule
 ```
