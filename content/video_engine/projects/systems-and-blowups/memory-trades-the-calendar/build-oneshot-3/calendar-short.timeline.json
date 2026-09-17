@@ -18,113 +18,133 @@
   },
   {
    "at": 1.76,
-   "until": 3.08,
-   "text": "the news. They trade the"
+   "until": 2.24,
+   "text": "the news."
   },
   {
-   "at": 3.08,
-   "until": 4.22,
-   "text": "calendar. Around the"
+   "at": 2.52,
+   "until": 3.48,
+   "text": "They trade the calendar."
   },
   {
-   "at": 4.22,
-   "until": 5.36,
-   "text": "fifteenth of every month,"
+   "at": 3.98,
+   "until": 4.8,
+   "text": "Around the fifteenth of"
   },
   {
-   "at": 5.64,
-   "until": 6.84,
-   "text": "Korean customs prints the"
+   "at": 4.8,
+   "until": 6.28,
+   "text": "every month, Korean customs"
   },
   {
-   "at": 6.84,
-   "until": 7.76,
-   "text": "price of memory chips"
+   "at": 6.28,
+   "until": 7.46,
+   "text": "prints the price of memory"
   },
   {
-   "at": 7.76,
-   "until": 9.3,
-   "text": "crossing its border. If you"
+   "at": 7.46,
+   "until": 8.68,
+   "text": "chips crossing its border."
   },
   {
-   "at": 9.3,
-   "until": 10.56,
-   "text": "own the stocks, that print"
+   "at": 9.04,
+   "until": 9.88,
+   "text": "If you own the stocks,"
   },
   {
-   "at": 10.56,
-   "until": 12.24,
-   "text": "is your metronome. Hynix and"
+   "at": 10.18,
+   "until": 10.86,
+   "text": "that print is your"
   },
   {
-   "at": 12.24,
-   "until": 13.64,
-   "text": "Micron move around it, not"
+   "at": 10.86,
+   "until": 11.32,
+   "text": "metronome."
   },
   {
-   "at": 13.64,
-   "until": 15.46,
-   "text": "after it. But here's the"
+   "at": 11.82,
+   "until": 13.18,
+   "text": "Hynix and Micron move around"
   },
   {
-   "at": 15.46,
-   "until": 16.54,
-   "text": "part the headline hides:"
+   "at": 13.18,
+   "until": 14.3,
+   "text": "it, not after it."
   },
   {
-   "at": 17.0,
-   "until": 17.9,
-   "text": "when does the month's gain"
+   "at": 14.9,
+   "until": 15.86,
+   "text": "But here's the part the"
   },
   {
-   "at": 17.9,
-   "until": 19.36,
-   "text": "actually land? Twenty-five"
+   "at": 15.86,
+   "until": 17.2,
+   "text": "headline hides: when does"
   },
   {
-   "at": 19.36,
-   "until": 20.4,
-   "text": "months of prints, August"
+   "at": 17.2,
+   "until": 18.44,
+   "text": "the month's gain actually"
   },
   {
-   "at": 20.4,
-   "until": 21.44,
-   "text": "twenty-four to August"
+   "at": 18.44,
+   "until": 18.82,
+   "text": "land?"
   },
   {
-   "at": 21.44,
-   "until": 22.76,
-   "text": "twenty-six. In the"
+   "at": 19.32,
+   "until": 19.76,
+   "text": "Twenty-five months of"
   },
   {
-   "at": 22.76,
-   "until": 23.8,
-   "text": "half-month into the print,"
+   "at": 19.76,
+   "until": 20.96,
+   "text": "prints, August twenty-four"
   },
   {
-   "at": 23.98,
-   "until": 25.04,
-   "text": "the stocks average plus six"
+   "at": 20.96,
+   "until": 22.0,
+   "text": "to August twenty-six."
   },
   {
-   "at": 25.04,
-   "until": 26.78,
-   "text": "point eight percent. In the"
+   "at": 22.5,
+   "until": 23.58,
+   "text": "In the half-month into the"
   },
   {
-   "at": 26.78,
-   "until": 28.34,
-   "text": "half-month after: plus two"
+   "at": 23.58,
+   "until": 24.58,
+   "text": "print, the stocks average"
   },
   {
-   "at": 28.34,
-   "until": 29.88,
-   "text": "point two. The move is"
+   "at": 24.58,
+   "until": 25.38,
+   "text": "plus six point eight"
   },
   {
-   "at": 29.88,
+   "at": 25.38,
+   "until": 25.62,
+   "text": "percent."
+  },
+  {
+   "at": 26.16,
+   "until": 27.58,
+   "text": "In the half-month after:"
+  },
+  {
+   "at": 27.9,
+   "until": 29.12,
+   "text": "plus two point two."
+  },
+  {
+   "at": 29.12,
+   "until": 30.3,
+   "text": "The move is front-run."
+  },
+  {
+   "at": 30.8,
    "until": 31.54,
-   "text": "front-run. A strong print?"
+   "text": "A strong print?"
   },
   {
    "at": 32.14,
@@ -148,33 +168,43 @@
   },
   {
    "at": 37.47,
+   "until": 37.7,
+   "text": "four."
+  },
+  {
+   "at": 38.2,
    "until": 39.12,
-   "text": "four. Eight of fourteen up."
+   "text": "Eight of fourteen up."
   },
   {
    "at": 39.7,
-   "until": 41.4,
-   "text": "A coin flip with drift. But"
+   "until": 40.76,
+   "text": "A coin flip with drift."
   },
   {
-   "at": 41.4,
-   "until": 42.8,
-   "text": "now the weak prints. Eight"
+   "at": 41.26,
+   "until": 42.14,
+   "text": "But now the weak prints."
   },
   {
-   "at": 42.8,
+   "at": 42.68,
    "until": 43.54,
-   "text": "of them in twenty-five"
+   "text": "Eight of them in twenty-five"
   },
   {
    "at": 43.54,
-   "until": 45.14,
-   "text": "months. After seven of the"
+   "until": 43.88,
+   "text": "months."
   },
   {
-   "at": 45.14,
+   "at": 44.32,
+   "until": 45.3,
+   "text": "After seven of the eight,"
+  },
+  {
+   "at": 45.36,
    "until": 46.0,
-   "text": "eight, the stocks fell."
+   "text": "the stocks fell."
   },
   {
    "at": 46.32,
@@ -183,28 +213,38 @@
   },
   {
    "at": 47.74,
-   "until": 49.4,
-   "text": "nine. The latest landed in"
+   "until": 48.02,
+   "text": "nine."
   },
   {
-   "at": 49.4,
-   "until": 51.48,
-   "text": "July. One soft print, and"
+   "at": 48.52,
+   "until": 49.7,
+   "text": "The latest landed in July."
   },
   {
-   "at": 51.48,
-   "until": 52.48,
-   "text": "the stocks dropped fourteen"
+   "at": 49.7,
+   "until": 50.98,
+   "text": "One soft print,"
   },
   {
-   "at": 52.48,
-   "until": 54.1,
-   "text": "percent in two weeks. The"
+   "at": 51.38,
+   "until": 52.08,
+   "text": "and the stocks dropped"
   },
   {
-   "at": 54.1,
+   "at": 52.08,
+   "until": 53.2,
+   "text": "fourteen percent in two"
+  },
+  {
+   "at": 53.2,
+   "until": 53.48,
+   "text": "weeks."
+  },
+  {
+   "at": 54.0,
    "until": 54.96,
-   "text": "chip price itself?"
+   "text": "The chip price itself?"
   },
   {
    "at": 55.56,
@@ -213,13 +253,18 @@
   },
   {
    "at": 56.76,
-   "until": 58.66,
-   "text": "month later. In finance, we"
+   "until": 57.22,
+   "text": "month later."
   },
   {
-   "at": 58.66,
+   "at": 57.72,
+   "until": 59.02,
+   "text": "In finance, we call this"
+  },
+  {
+   "at": 59.02,
    "until": 59.62,
-   "text": "call this asymmetry."
+   "text": "asymmetry."
   },
   {
    "at": 60.22,
@@ -228,38 +273,53 @@
   },
   {
    "at": 61.46,
-   "until": 63.2,
-   "text": "it lands. Bad news is the"
+   "until": 61.84,
+   "text": "it lands."
   },
   {
-   "at": 63.2,
-   "until": 64.92,
-   "text": "only surprise left. So you"
+   "at": 62.36,
+   "until": 63.42,
+   "text": "Bad news is the only"
   },
   {
-   "at": 64.92,
-   "until": 65.92,
-   "text": "don't have to read the print"
+   "at": 63.42,
+   "until": 64.14,
+   "text": "surprise left."
   },
   {
-   "at": 65.92,
-   "until": 67.56,
-   "text": "faster than the market. You"
+   "at": 64.64,
+   "until": 65.52,
+   "text": "So you don't have to read"
   },
   {
-   "at": 67.56,
-   "until": 68.44,
-   "text": "have to know the calendar:"
+   "at": 65.52,
+   "until": 66.64,
+   "text": "the print faster than the"
   },
   {
-   "at": 68.96,
-   "until": 70.04,
-   "text": "the day the print lands is"
+   "at": 66.64,
+   "until": 66.88,
+   "text": "market."
   },
   {
-   "at": 70.04,
+   "at": 67.38,
+   "until": 68.06,
+   "text": "You have to know the"
+  },
+  {
+   "at": 68.06,
+   "until": 69.5,
+   "text": "calendar: the day the print"
+  },
+  {
+   "at": 69.5,
+   "until": 70.78,
+   "text": "lands is the day the stocks"
+  },
+  {
+   "at": 70.78,
    "until": 71.22,
-   "text": "the day the stocks trade it."
+   "text": "trade it."
   }
  ],
  "caption_pages": [
@@ -296,7 +356,7 @@
   },
   {
    "s": 1.76,
-   "e": 3.08,
+   "e": 2.24,
    "t": [
     {
      "w": "the",
@@ -309,7 +369,14 @@
      "s": 1.92,
      "e": 2.24,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 2.52,
+   "e": 3.48,
+   "t": [
     {
      "w": "They",
      "s": 2.52,
@@ -327,20 +394,20 @@
      "s": 2.92,
      "e": 3.08,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 3.08,
-   "e": 4.22,
-   "t": [
+    },
     {
      "w": "calendar.",
      "s": 3.08,
      "e": 3.48,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 3.98,
+   "e": 4.8,
+   "t": [
     {
      "w": "Around",
      "s": 3.98,
@@ -352,14 +419,7 @@
      "s": 4.06,
      "e": 4.22,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 4.22,
-   "e": 5.36,
-   "t": [
+    },
     {
      "w": "fifteenth",
      "s": 4.22,
@@ -371,7 +431,14 @@
      "s": 4.76,
      "e": 4.8,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 4.8,
+   "e": 6.28,
+   "t": [
     {
      "w": "every",
      "s": 4.8,
@@ -383,14 +450,7 @@
      "s": 5.06,
      "e": 5.36,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 5.64,
-   "e": 6.84,
-   "t": [
+    },
     {
      "w": "Korean",
      "s": 5.64,
@@ -402,7 +462,14 @@
      "s": 5.9,
      "e": 6.28,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 6.28,
+   "e": 7.46,
+   "t": [
     {
      "w": "prints",
      "s": 6.28,
@@ -414,14 +481,7 @@
      "s": 6.62,
      "e": 6.84,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 6.84,
-   "e": 7.76,
-   "t": [
+    },
     {
      "w": "price",
      "s": 6.84,
@@ -439,20 +499,20 @@
      "s": 7.24,
      "e": 7.46,
      "k": false
-    },
-    {
-     "w": "chips",
-     "s": 7.46,
-     "e": 7.76,
-     "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 7.76,
-   "e": 9.3,
+   "s": 7.46,
+   "e": 8.68,
    "t": [
+    {
+     "w": "chips",
+     "s": 7.46,
+     "e": 7.76,
+     "k": false
+    },
     {
      "w": "crossing",
      "s": 7.76,
@@ -470,7 +530,14 @@
      "s": 8.36,
      "e": 8.68,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 9.04,
+   "e": 9.88,
+   "t": [
     {
      "w": "If",
      "s": 9.04,
@@ -482,14 +549,7 @@
      "s": 9.12,
      "e": 9.3,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 9.3,
-   "e": 10.56,
-   "t": [
+    },
     {
      "w": "own",
      "s": 9.3,
@@ -507,7 +567,14 @@
      "s": 9.64,
      "e": 9.88,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 10.18,
+   "e": 10.86,
+   "t": [
     {
      "w": "that",
      "s": 10.18,
@@ -519,14 +586,7 @@
      "s": 10.38,
      "e": 10.56,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 10.56,
-   "e": 12.24,
-   "t": [
+    },
     {
      "w": "is",
      "s": 10.56,
@@ -538,13 +598,27 @@
      "s": 10.74,
      "e": 10.86,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 10.86,
+   "e": 11.32,
+   "t": [
     {
      "w": "metronome.",
      "s": 10.86,
      "e": 11.32,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 11.82,
+   "e": 13.18,
+   "t": [
     {
      "w": "Hynix",
      "s": 11.82,
@@ -556,14 +630,7 @@
      "s": 11.98,
      "e": 12.24,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 12.24,
-   "e": 13.64,
-   "t": [
+    },
     {
      "w": "Micron",
      "s": 12.24,
@@ -581,7 +648,14 @@
      "s": 12.84,
      "e": 13.18,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 13.18,
+   "e": 14.3,
+   "t": [
     {
      "w": "it,",
      "s": 13.18,
@@ -593,14 +667,7 @@
      "s": 13.52,
      "e": 13.64,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 13.64,
-   "e": 15.46,
-   "t": [
+    },
     {
      "w": "after",
      "s": 13.64,
@@ -612,7 +679,14 @@
      "s": 13.98,
      "e": 14.3,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 14.9,
+   "e": 15.86,
+   "t": [
     {
      "w": "But",
      "s": 14.9,
@@ -630,14 +704,7 @@
      "s": 15.32,
      "e": 15.46,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 15.46,
-   "e": 16.54,
-   "t": [
+    },
     {
      "w": "part",
      "s": 15.46,
@@ -649,7 +716,14 @@
      "s": 15.64,
      "e": 15.86,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 15.86,
+   "e": 17.2,
+   "t": [
     {
      "w": "headline",
      "s": 15.86,
@@ -661,14 +735,7 @@
      "s": 16.14,
      "e": 16.54,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 17.0,
-   "e": 17.9,
-   "t": [
+    },
     {
      "w": "when",
      "s": 17.0,
@@ -680,7 +747,14 @@
      "s": 17.06,
      "e": 17.2,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 17.2,
+   "e": 18.44,
+   "t": [
     {
      "w": "the",
      "s": 17.2,
@@ -698,39 +772,39 @@
      "s": 17.76,
      "e": 17.9,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 17.9,
-   "e": 19.36,
-   "t": [
+    },
     {
      "w": "actually",
      "s": 17.9,
      "e": 18.44,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 18.44,
+   "e": 18.82,
+   "t": [
     {
      "w": "land?",
      "s": 18.44,
      "e": 18.82,
-     "k": false
-    },
-    {
-     "w": "Twenty-five",
-     "s": 19.32,
-     "e": 19.36,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 19.36,
-   "e": 20.4,
+   "s": 19.32,
+   "e": 19.76,
    "t": [
+    {
+     "w": "Twenty-five",
+     "s": 19.32,
+     "e": 19.36,
+     "k": false
+    },
     {
      "w": "months",
      "s": 19.36,
@@ -742,7 +816,14 @@
      "s": 19.56,
      "e": 19.76,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 19.76,
+   "e": 20.96,
+   "t": [
     {
      "w": "prints,",
      "s": 19.76,
@@ -754,20 +835,20 @@
      "s": 20.26,
      "e": 20.4,
      "k": true
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 20.4,
-   "e": 21.44,
-   "t": [
+    },
     {
      "w": "twenty-four",
      "s": 20.4,
      "e": 20.96,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 20.96,
+   "e": 22.0,
+   "t": [
     {
      "w": "to",
      "s": 20.96,
@@ -779,20 +860,20 @@
      "s": 21.2,
      "e": 21.44,
      "k": true
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 21.44,
-   "e": 22.76,
-   "t": [
+    },
     {
      "w": "twenty-six.",
      "s": 21.44,
      "e": 22.0,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 22.5,
+   "e": 23.58,
+   "t": [
     {
      "w": "In",
      "s": 22.5,
@@ -804,14 +885,7 @@
      "s": 22.66,
      "e": 22.76,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 22.76,
-   "e": 23.8,
-   "t": [
+    },
     {
      "w": "half-month",
      "s": 22.76,
@@ -829,20 +903,20 @@
      "s": 23.4,
      "e": 23.58,
      "k": false
-    },
-    {
-     "w": "print,",
-     "s": 23.58,
-     "e": 23.8,
-     "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 23.98,
-   "e": 25.04,
+   "s": 23.58,
+   "e": 24.58,
    "t": [
+    {
+     "w": "print,",
+     "s": 23.58,
+     "e": 23.8,
+     "k": false
+    },
     {
      "w": "the",
      "s": 23.98,
@@ -860,7 +934,14 @@
      "s": 24.24,
      "e": 24.58,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 24.58,
+   "e": 25.38,
+   "t": [
     {
      "w": "plus",
      "s": 24.58,
@@ -872,14 +953,7 @@
      "s": 24.94,
      "e": 25.04,
      "k": true
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 25.04,
-   "e": 26.78,
-   "t": [
+    },
     {
      "w": "point",
      "s": 25.04,
@@ -891,13 +965,27 @@
      "s": 25.21,
      "e": 25.38,
      "k": true
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 25.38,
+   "e": 25.62,
+   "t": [
     {
      "w": "percent.",
      "s": 25.38,
      "e": 25.62,
      "k": true
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 26.16,
+   "e": 27.58,
+   "t": [
     {
      "w": "In",
      "s": 26.16,
@@ -909,14 +997,7 @@
      "s": 26.68,
      "e": 26.78,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 26.78,
-   "e": 28.34,
-   "t": [
+    },
     {
      "w": "half-month",
      "s": 26.78,
@@ -928,7 +1009,14 @@
      "s": 27.12,
      "e": 27.58,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 27.9,
+   "e": 29.12,
+   "t": [
     {
      "w": "plus",
      "s": 27.9,
@@ -940,14 +1028,7 @@
      "s": 28.04,
      "e": 28.34,
      "k": true
-    }
-   ],
-   "cap_mode": "anchor"
-  },
-  {
-   "s": 28.34,
-   "e": 29.88,
-   "t": [
+    },
     {
      "w": "point",
      "s": 28.34,
@@ -959,7 +1040,14 @@
      "s": 28.82,
      "e": 29.12,
      "k": true
-    },
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 29.12,
+   "e": 30.3,
+   "t": [
     {
      "w": "The",
      "s": 29.12,
@@ -977,20 +1065,20 @@
      "s": 29.56,
      "e": 29.88,
      "k": false
-    }
-   ],
-   "cap_mode": "anchor"
-  },
-  {
-   "s": 29.88,
-   "e": 31.54,
-   "t": [
+    },
     {
      "w": "front-run.",
      "s": 29.88,
      "e": 30.3,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 30.8,
+   "e": 31.54,
+   "t": [
     {
      "w": "A",
      "s": 30.8,
@@ -1010,7 +1098,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 32.14,
@@ -1138,14 +1226,21 @@
   },
   {
    "s": 37.47,
-   "e": 39.12,
+   "e": 37.7,
    "t": [
     {
      "w": "four.",
      "s": 37.47,
      "e": 37.7,
      "k": true
-    },
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 38.2,
+   "e": 39.12,
+   "t": [
     {
      "w": "Eight",
      "s": 38.2,
@@ -1175,7 +1270,7 @@
   },
   {
    "s": 39.7,
-   "e": 41.4,
+   "e": 40.76,
    "t": [
     {
      "w": "A",
@@ -1206,20 +1301,20 @@
      "s": 40.5,
      "e": 40.76,
      "k": false
-    },
-    {
-     "w": "But",
-     "s": 41.26,
-     "e": 41.4,
-     "k": false
     }
    ],
    "cap_mode": "anchor"
   },
   {
-   "s": 41.4,
-   "e": 42.8,
+   "s": 41.26,
+   "e": 42.14,
    "t": [
+    {
+     "w": "But",
+     "s": 41.26,
+     "e": 41.4,
+     "k": false
+    },
     {
      "w": "now",
      "s": 41.4,
@@ -1243,20 +1338,20 @@
      "s": 41.86,
      "e": 42.14,
      "k": false
-    },
-    {
-     "w": "Eight",
-     "s": 42.68,
-     "e": 42.8,
-     "k": true
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 42.8,
+   "s": 42.68,
    "e": 43.54,
    "t": [
+    {
+     "w": "Eight",
+     "s": 42.68,
+     "e": 42.8,
+     "k": true
+    },
     {
      "w": "of",
      "s": 42.8,
@@ -1286,14 +1381,21 @@
   },
   {
    "s": 43.54,
-   "e": 45.14,
+   "e": 43.88,
    "t": [
     {
      "w": "months.",
      "s": 43.54,
      "e": 43.88,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 44.32,
+   "e": 45.3,
+   "t": [
     {
      "w": "After",
      "s": 44.32,
@@ -1317,20 +1419,20 @@
      "s": 45.02,
      "e": 45.14,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 45.14,
-   "e": 46.0,
-   "t": [
+    },
     {
      "w": "eight,",
      "s": 45.14,
      "e": 45.3,
      "k": true
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 45.36,
+   "e": 46.0,
+   "t": [
     {
      "w": "the",
      "s": 45.36,
@@ -1385,14 +1487,21 @@
   },
   {
    "s": 47.74,
-   "e": 49.4,
+   "e": 48.02,
    "t": [
     {
      "w": "nine.",
      "s": 47.74,
      "e": 48.02,
      "k": true
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 48.52,
+   "e": 49.7,
+   "t": [
     {
      "w": "The",
      "s": 48.52,
@@ -1416,20 +1525,20 @@
      "s": 49.16,
      "e": 49.4,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 49.4,
-   "e": 51.48,
-   "t": [
+    },
     {
      "w": "July.",
      "s": 49.4,
      "e": 49.7,
      "k": true
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 49.7,
+   "e": 50.98,
+   "t": [
     {
      "w": "One",
      "s": 49.7,
@@ -1447,20 +1556,20 @@
      "s": 50.72,
      "e": 50.98,
      "k": false
-    },
-    {
-     "w": "and",
-     "s": 51.38,
-     "e": 51.48,
-     "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 51.48,
-   "e": 52.48,
+   "s": 51.38,
+   "e": 52.08,
    "t": [
+    {
+     "w": "and",
+     "s": 51.38,
+     "e": 51.48,
+     "k": false
+    },
     {
      "w": "the",
      "s": 51.48,
@@ -1478,20 +1587,20 @@
      "s": 51.8,
      "e": 52.08,
      "k": false
-    },
-    {
-     "w": "fourteen",
-     "s": 52.08,
-     "e": 52.48,
-     "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 52.48,
-   "e": 54.1,
+   "s": 52.08,
+   "e": 53.2,
    "t": [
+    {
+     "w": "fourteen",
+     "s": 52.08,
+     "e": 52.48,
+     "k": false
+    },
     {
      "w": "percent",
      "s": 52.48,
@@ -1509,26 +1618,33 @@
      "s": 53.04,
      "e": 53.2,
      "k": true
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 53.2,
+   "e": 53.48,
+   "t": [
     {
      "w": "weeks.",
      "s": 53.2,
      "e": 53.48,
-     "k": false
-    },
-    {
-     "w": "The",
-     "s": 54.0,
-     "e": 54.1,
      "k": false
     }
    ],
    "cap_mode": "anchor"
   },
   {
-   "s": 54.1,
+   "s": 54.0,
    "e": 54.96,
    "t": [
+    {
+     "w": "The",
+     "s": 54.0,
+     "e": 54.1,
+     "k": false
+    },
     {
      "w": "chip",
      "s": 54.1,
@@ -1583,7 +1699,7 @@
   },
   {
    "s": 56.76,
-   "e": 58.66,
+   "e": 57.22,
    "t": [
     {
      "w": "month",
@@ -1596,7 +1712,14 @@
      "s": 56.88,
      "e": 57.22,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 57.72,
+   "e": 59.02,
+   "t": [
     {
      "w": "In",
      "s": 57.72,
@@ -1614,14 +1737,7 @@
      "s": 58.58,
      "e": 58.66,
      "k": false
-    }
-   ],
-   "cap_mode": "anchor"
-  },
-  {
-   "s": 58.66,
-   "e": 59.62,
-   "t": [
+    },
     {
      "w": "call",
      "s": 58.66,
@@ -1633,7 +1749,14 @@
      "s": 58.82,
      "e": 59.02,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 59.02,
+   "e": 59.62,
+   "t": [
     {
      "w": "asymmetry.",
      "s": 59.02,
@@ -1682,7 +1805,7 @@
   },
   {
    "s": 61.46,
-   "e": 63.2,
+   "e": 61.84,
    "t": [
     {
      "w": "it",
@@ -1695,7 +1818,14 @@
      "s": 61.6,
      "e": 61.84,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 62.36,
+   "e": 63.42,
+   "t": [
     {
      "w": "Bad",
      "s": 62.36,
@@ -1719,20 +1849,20 @@
      "s": 63.06,
      "e": 63.2,
      "k": false
-    }
-   ],
-   "cap_mode": "anchor"
-  },
-  {
-   "s": 63.2,
-   "e": 64.92,
-   "t": [
+    },
     {
      "w": "only",
      "s": 63.2,
      "e": 63.42,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 63.42,
+   "e": 64.14,
+   "t": [
     {
      "w": "surprise",
      "s": 63.42,
@@ -1744,7 +1874,14 @@
      "s": 63.76,
      "e": 64.14,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 64.64,
+   "e": 65.52,
+   "t": [
     {
      "w": "So",
      "s": 64.64,
@@ -1756,14 +1893,7 @@
      "s": 64.8,
      "e": 64.92,
      "k": false
-    }
-   ],
-   "cap_mode": "anchor"
-  },
-  {
-   "s": 64.92,
-   "e": 65.92,
-   "t": [
+    },
     {
      "w": "don't",
      "s": 64.92,
@@ -1787,7 +1917,14 @@
      "s": 65.36,
      "e": 65.52,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 65.52,
+   "e": 66.64,
+   "t": [
     {
      "w": "the",
      "s": 65.52,
@@ -1799,14 +1936,7 @@
      "s": 65.7,
      "e": 65.92,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 65.92,
-   "e": 67.56,
-   "t": [
+    },
     {
      "w": "faster",
      "s": 65.92,
@@ -1824,26 +1954,33 @@
      "s": 66.54,
      "e": 66.64,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 66.64,
+   "e": 66.88,
+   "t": [
     {
      "w": "market.",
      "s": 66.64,
      "e": 66.88,
-     "k": false
-    },
-    {
-     "w": "You",
-     "s": 67.38,
-     "e": 67.56,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 67.56,
-   "e": 68.44,
+   "s": 67.38,
+   "e": 68.06,
    "t": [
+    {
+     "w": "You",
+     "s": 67.38,
+     "e": 67.56,
+     "k": false
+    },
     {
      "w": "have",
      "s": 67.56,
@@ -1867,20 +2004,20 @@
      "s": 67.92,
      "e": 68.06,
      "k": false
-    },
-    {
-     "w": "calendar:",
-     "s": 68.06,
-     "e": 68.44,
-     "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 68.96,
-   "e": 70.04,
+   "s": 68.06,
+   "e": 69.5,
    "t": [
+    {
+     "w": "calendar:",
+     "s": 68.06,
+     "e": 68.44,
+     "k": false
+    },
     {
      "w": "the",
      "s": 68.96,
@@ -1904,7 +2041,14 @@
      "s": 69.32,
      "e": 69.5,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 69.5,
+   "e": 70.78,
+   "t": [
     {
      "w": "lands",
      "s": 69.5,
@@ -1916,14 +2060,7 @@
      "s": 69.8,
      "e": 70.04,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 70.04,
-   "e": 71.22,
-   "t": [
+    },
     {
      "w": "the",
      "s": 70.04,
@@ -1947,7 +2084,14 @@
      "s": 70.46,
      "e": 70.78,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 70.78,
+   "e": 71.22,
+   "t": [
     {
      "w": "trade",
      "s": 70.78,

@@ -21,6 +21,9 @@ BUILD = REPO / ("content/video_engine/projects/systems-and-blowups/"
 CHAR_BUDGET = 34   # a build may override these (the Tokyo short: 28 / 6 - two lines of 25-28 chars on the 800 px strip, operator 2026-09-05)
 MAX_WORDS = 6
 GAP_BREAK = 0.60
+SENTENCE_END = (".", "!", "?")   # E41 #3 (2026-09-05): "the caption pages are built from the punctuation" - a page never runs past a sentence's end
+CLAUSE_MARK = (",", ":", ";")    # ... and breaks at the clause once it holds a phrase (CLAUSE_MIN_WORDS), so a page is one readable phrase
+CLAUSE_MIN_WORDS = 3
 NUM = {"one", "two", "three", "four", "five", "six", "seven", "eight",
        "nine", "ten", "eleven", "twelve", "twenty", "thirty", "forty",
        "fifty", "sixty", "seventy", "eighty", "ninety", "hundred",
@@ -50,8 +53,15 @@ def main() -> int:
     for w in tl["words"]:
         gap = (w["start"] - prev_end) if prev_end is not None else 0.0
         cur_len = sum(len(t["w"]) + 1 for t in cur)
+        last = cur[-1]["w"].rstrip('"”') if cur else ""
+        # one-shot #3 (the operator, 2026-09-16: "the captions are wrong"): a retimed take caps its sentence gaps under
+        # GAP_BREAK, so the pages ran across sentence ends ("the news. They trade the" | "calendar. Around the") - the
+        # punctuation IS the break (E41 #3), the gap only its fallback
+        at_sentence_end = last.endswith(SENTENCE_END)
+        at_clause = last.endswith(CLAUSE_MARK) and len(cur) >= CLAUSE_MIN_WORDS
         if cur and (cur_len + len(w["w"]) > CHAR_BUDGET
-                    or len(cur) >= MAX_WORDS or gap > GAP_BREAK):
+                    or len(cur) >= MAX_WORDS or gap > GAP_BREAK
+                    or at_sentence_end or at_clause):
             pages.append({"s": cur[0]["s"], "e": cur[-1]["e"], "t": cur})
             cur = []
         cur.append({"w": w["w"], "s": round(w["start"], 2),

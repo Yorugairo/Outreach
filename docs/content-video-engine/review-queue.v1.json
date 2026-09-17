@@ -3378,7 +3378,7 @@
         "E99 s67",
         "E96"
       ],
-      "judge": "The Fable parent's own one-shot, REWORKED after your four messages (E99 s67): the open is the chart page drawing under the hook; no chart card is thrown - the docks are evidence stills of this story's world; the into/after page mounts over the desk turn and builds under the setup sentence; the slices arrive; the eight bars grow as they are counted; the daily line draws to the July print; the reflection stands on its own still (the small good-news sheet up, the big bad-news sheet down); the calendar page returns by the spiral with the ring on the chart; the filler lights are gone. Still named: the weak page's eight labels crowd (the builder's negative-bar layout, R26-170); recipes 0.09 and docks 0.34-0.38 by the floor's count. Watch it as a viewer.",
+      "judge": "The Fable parent's own one-shot, REWORKED after your four messages (E99 s67): the open is the chart page drawing under the hook; no chart card is thrown - the docks are evidence stills of this story's world; the into/after page mounts over the desk turn and builds under the setup sentence; the slices arrive; the eight bars grow as they are counted; the daily line draws to the July print; the reflection stands on its own still (the small good-news sheet up, the big bad-news sheet down); the calendar page returns by the spiral with the ring on the chart; the filler lights are gone. Still named: the weak page's eight labels crowd (the builder's negative-bar layout, R26-170); recipes 0.09 and docks 0.34-0.38 by the floor's count. Watch it as a viewer. WATCH IT ON THE PLAYER LINK (with the audio) - the clip below is silent by the queue's design, and the caption pages were running past sentence ends (a retimed take caps its gaps under the page builder's break; fixed: pages break at the punctuation, E41 #3).",
       "where": [
         {
           "label": "the cut's ledger: every decision taken without you, and eight findings about the system",
@@ -3407,6 +3407,13 @@
           "t0": 0.0,
           "t1": 77.6,
           "route": "review_queue_proofs.py --clips: the private build's player served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "player",
+          "label": "THE SHORT WITH ITS AUDIO - the frozen player on a private port (the queue's clips are rendered silent by design; a whole-cut watch needs the voice)",
+          "url": "http://127.0.0.1:8768/player.html",
+          "build": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-oneshot-3",
+          "confirmed": "GET 200 on 2026-09-14 19:19 (-07:00)"
         }
       ],
       "options": [
