@@ -34,6 +34,8 @@ cannot surface a component you don't know exists.
 
 **This is the step that was replaced with a loop and broke the build.**
 
+*E99 s68 (2026-09-16, P66): the SHAPE COMPILER (`authoring/shapes.py`, `generate_base_table.py`) does not change this - it consumes an AUTHORED per-sentence beat plan (the intelligence work E99 s66 reserves to an agent or the operator), emits the approved skeleton as a BASE the author edits through the table or the sidecar, refuses a plan M41 would fail and a beat it cannot fill, measures its own gaps (`event_gaps`) and never fills one by count; the author still decides every beat, and now edits a base instead of a blank page.*
+
 Every prior episode was built from a hand-written window table — see
 `projects/*/steel-and-paper/build_scene_evidence_cut.py`:
 

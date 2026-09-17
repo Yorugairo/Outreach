@@ -213,3 +213,4 @@ docs/DOCS-STANDARD.md
 
 # P65 the recipe lab: private test-bed builds (the tracked record is effects/lab/batches/<batch>.jsonl)
 content/video_engine/projects/**/build-lab-*/
+content/video_engine/projects/**/build-p66-*/
