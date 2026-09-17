@@ -638,6 +638,89 @@ def test_m16_is_info_on_long_form():
     assert _by_id(G.run(tl, docks, mp)[0])["M16"].level == "INFO"
 
 
+
+# ---- E99 s69: the HELD-BUILT window after a page's chart lands ------------------------------
+#
+# The operator, 2026-09-17: *"a 5.7s hold might be acceptable after a chart finishes"* - and E99 s67 had already
+# asked the page to BUILD and then hold built while its number is spoken. A gate that counts that hold as a dead gap
+# contradicts the hold it asked for. The allowance is NOT a licence: it starts at the landing and it is bounded.
+
+
+def _held_build(runtime: float, page: bool = True, event_at: float = 7.4):
+    """A 9:16 short of ONE scene whose only long gap is the one under test.
+
+    As a PAGE: the ledger page rolls out, its chart lands at `PAGE_BUILD_END_S`, and nothing happens until the end -
+    the held-built window. As a PLATE: the same silence, from a card landing at the same instant, which is NOT a
+    page's landing. The stage caption at 5.9 s fills the page's own build beats so the gap under test is the only
+    one over the pulse."""
+    if page:
+        world = {"kind": "ledger", "page": {"surface": "page", "exit": "cut", "series": [], "labels": []}}
+        docks = []
+    else:
+        world = {"asset_id": "plate"}
+        docks = [{"slide": "c", "slot": 0, "enter": event_at, "exit": runtime, "badge_at": []}]
+    scenes = [{"scene_id": "s01", "span": [0.0, runtime], "world": world, "docks": docks, "species": []}]
+    pages = [{"s": 5.9, "e": 6.5, "cap_mode": "stage", "t": [{"w": "x", "s": 5.9, "e": 6.4}]}]
+    if not page:                                   # the plate has no build beats to fill, so it needs the early ones
+        pages = [{"s": t, "e": t + 0.5, "cap_mode": "stage", "t": [{"w": "x", "s": t, "e": t + 0.4}]}
+                 for t in (1.5, 3.5, 5.9)]
+    return {"runtime_s": runtime, "aspect": "9:16", "scenes": scenes, "caption_pages": pages, "rows": []}, [], {"cues": []}
+
+
+def test_m16_exempts_a_hold_that_starts_at_the_charts_landing():
+    """3.9 s of silence that OPENS on the landing is the beat's punctuation (E99 s67's own hold), not a hole."""
+    tl, docks, mp = _held_build(11.3)
+    A = G.analyse(tl, docks, mp)
+    assert A["landings"] == [G.PAGE_BUILD_END_S], A["landings"]
+    assert (G.PAGE_BUILD_END_S, 3.9) == (A["still"][0][0], round(A["still"][0][1], 1)), A["still"][:3]
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M16"].level == "PASS", g["M16"]
+    assert "held built 3.9s at 0:07 after the chart landed at 7.4s - exempt (E99 s69)" in g["M16"].message
+
+
+def test_m16_still_fails_the_same_gap_when_no_chart_landed_there():
+    """The allowance is the CHART's, not the clock's: the same 3.9 s after a card lands on a plate is a hole."""
+    tl, docks, mp = _held_build(11.3, page=False)
+    A = G.analyse(tl, docks, mp)
+    assert A["landings"] == [] and round(A["still"][0][1], 1) == 3.9
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M16"].level == "FAIL" and "0:07+3.9s" in g["M16"].message, g["M16"]
+    assert "exempt" not in g["M16"].message
+
+
+def test_m16_gives_the_held_built_window_no_more_than_its_own_seconds():
+    """The operator's 5.7 s: past `HELD_BUILT_S` the hold is a gap again, for its whole length. The threshold is not
+    fitted to our own work - it is E99 s67's "a few seconds", and HG2 may move it."""
+    tl, docks, mp = _held_build(13.1)
+    assert round(G.analyse(tl, docks, mp)["still"][0][1], 1) == 5.7
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M16"].level == "FAIL" and "0:07+5.7s" in g["M16"].message, g["M16"]
+    assert G.HELD_BUILT_S == 4.0 and "E99 s67" in G.SRC_M16 or "E99 s69" in G.SRC_M16
+    assert G._held_built(7.4, 3.9, [7.4]) == 7.4                      # opens on the landing, inside the window
+    assert G._held_built(7.4, 5.7, [7.4]) is None                     # ... and no licence past it
+    assert G._held_built(9.0, 3.9, [7.4]) is None                     # a gap that merely CONTAINS one is a gap
+
+
+def test_m05_reads_the_same_allowance_as_m16():
+    """E99 s69: a hold after a build is the beat's punctuation, so M05's liveness exempts it the same way."""
+    tl, docks, mp = _held_build(24.0)                                  # past the 20 s hold ceiling
+    A = G.analyse(tl, docks, mp)
+    worst = A["over_hold"][0]
+    assert worst[4] > G.SHORT_PULSE_MAX_S and worst[5] == G.PAGE_BUILD_END_S, A["over_hold"]
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M05"].level == "FAIL", g["M05"]                          # 16.6 s dead is far past the allowance
+    tl2, docks2, mp2 = _held_build(11.4)
+    tl2["scenes"][0]["span"] = [0.0, 21.0]
+    tl2["scenes"].append({"scene_id": "s02", "span": [21.0, 24.0], "world": {"asset_id": "plate"},
+                          "docks": [{"slide": "c", "slot": 0, "enter": 21.0, "exit": 24.0, "badge_at": []}],
+                          "species": []})
+    tl2["runtime_s"] = 24.0
+    tl2["caption_pages"] += [{"s": t, "e": t + 0.5, "cap_mode": "stage",
+                              "t": [{"w": "x", "s": t, "e": t + 0.4}]} for t in (11.4, 13.4, 15.4, 17.4, 19.4)]
+    g = _by_id(G.run(tl2, docks2, mp2)[0])
+    assert g["M05"].level == "PASS", g["M05"]
+    assert "held built" in g["M05"].message and "E99 s69" in g["M05"].message, g["M05"]
+
 # ---- E44 / R26-7: a VIDEO dock is moving pictures, an IMAGE dock is a still card ------------
 
 

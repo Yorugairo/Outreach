@@ -7,8 +7,9 @@ ffmpeg is called and nothing is written outside `tmp_path`.
 
 What is pinned: the `build-short*` refusal (`review-link-frozen-copy`), the shape -> beat map citing a real beat of
 `build-short/BEAT-PLAN.jsonl`, the member -> row translation for one candidate of EACH shape, the row protocol's
-parsing, the record's shape, `survivor` false on a FAIL row INSIDE the candidate's window, the E99 s60 refusal (a
-window no sentence covers), and `--check` exiting 1 on a record whose sheet is not on disk.
+parsing, the record's shape, the DIAGNOSIS a FAIL row INSIDE the candidate's window earns (E99 s69: the lab
+diagnoses, it never kills), the E99 s60 refusal (a window no sentence covers), and `--check` exiting 1 on a record
+whose sheet is not on disk.
 
 P65 T3 (second pass) adds the window rule: only the rows whose own instants fall inside `[t0, t1]` decide, the
 whole-cut floors (`gate_one_shot_floor.ROW_ORDER`) and the rows firing elsewhere in the approved cut are `context`,
@@ -289,8 +290,8 @@ def test_the_record_carries_the_beat_the_clip_the_sheet_and_the_receipt(tmp_path
     rc, runs = run(tmp_path, monkeypatch, [cid], batch="rec")
     assert rc == 0
     record = records_of(runs)[0]
-    assert set(record) >= {"id", "shape", "beat", "build", "survivor", "decided_by", "context", "clip", "sheet",
-                           "no_receipt", "at"}
+    assert set(record) >= {"id", "shape", "beat", "build", "survivor", "diagnosis", "sheets", "decided_by",
+                           "context", "clip", "sheet", "no_receipt", "at"}
     assert record["id"] == cid and record["shape"] == "open-on-the-chart"
     assert record["no_receipt"] == f"recipe lab candidate {cid}"
     assert record["beat"]["n"] == 1 and record["beat"]["sentence"] == "Tokyo took a tea break."
@@ -298,18 +299,20 @@ def test_the_record_carries_the_beat_the_clip_the_sheet_and_the_receipt(tmp_path
     assert record["sheet"].endswith(LB.SHEET_NAME) and LB.short_id(cid) in record["build"]
     # M02's stretch runs 41.1-49.9s - a minute away from this candidate's beat, so it is CONTEXT and decides nothing
     assert record["decided_by"] == [] and record["context"] == ["[WARN] M02 one stretch over 8s: 41.1-49.9"]
-    assert record["survivor"] is True
+    assert record["diagnosis"] == LB.DIAG_AS_IS and record["survivor"] is True
 
 
-def test_survivor_is_false_when_a_fail_row_INSIDE_the_window_decided_it(tmp_path, monkeypatch):
-    """A candidate a gate FAILs is RECORDED with the row that killed it, never dropped - and the whole-cut floor
-    that fired on the approved cut around it is carried as context, not as its verdict (P65 T3)."""
+def test_a_fail_row_INSIDE_the_window_is_a_hole_in_the_beat_never_a_kill(tmp_path, monkeypatch):
+    """E99 s69: a candidate a gate FAILs is RECORDED with what that row ASKS FOR and where - and the whole-cut floor
+    that fired on the approved cut around it is still carried as context, not as its verdict (P65 T3)."""
     cid = ONE_PER_SHAPE["page-to-page-transform"]
     rc, runs = run(tmp_path, monkeypatch, [cid], text=FAILING_ROWS, batch="f")
     assert rc == 0
     record = records_of(runs)[0]
     assert record["clip"]["t0"] <= 50.0 <= record["clip"]["t1"]          # 0:50 is inside this candidate's beat
-    assert record["survivor"] is False and record["fails"] == ["M27"]
+    assert record["fails"] == ["M27"]
+    assert record["diagnosis"].startswith(LB.DIAG_COMPANION) and "M27" in record["diagnosis"]
+    assert record["survivor"] is True, "E99 s69: a gate never dismisses a candidate, it says what to build"
     assert any(line.startswith("[FAIL] M27 1 card(s)") for line in record["decided_by"])
     assert any(line.startswith("[FAIL] M38 proven-recipe coverage 0.03") for line in record["context"])
 
@@ -391,11 +394,15 @@ def test_check_exits_1_on_a_missing_sheet_and_0_when_both_are_on_disk(tmp_path, 
     fake = tmp_path / "repo"
     (fake / record["build"]).mkdir(parents=True)
     (fake / record["sheet"]).write_bytes(b"png")
+    (fake / record["sheets"]["members"]).write_bytes(b"png")
     (fake / record["build"] / "timeline.json").write_text(json.dumps({"runtime_s": 120.0}), encoding="utf-8")
     assert LB.check(fake, "c", [cid], str(runs)) == []
+    (fake / record["sheets"]["members"]).unlink()
+    bad = LB.check(fake, "c", [cid], str(runs))
+    assert len(bad) == 1 and "the member sheet" in bad[0] and cid in bad[0]
     (fake / record["sheet"]).unlink()
     bad = LB.check(fake, "c", [cid], str(runs))
-    assert len(bad) == 1 and "is not on disk" in bad[0] and cid in bad[0]
+    assert len(bad) == 2 and any("is not on disk" in line for line in bad)
 
 
 def test_check_names_a_candidate_with_no_record(tmp_path, monkeypatch):
@@ -412,6 +419,7 @@ def test_check_refuses_a_clip_window_past_the_builds_runtime(tmp_path, monkeypat
     fake = tmp_path / "short"
     (fake / record["build"]).mkdir(parents=True)
     (fake / record["sheet"]).write_bytes(b"png")
+    (fake / record["sheets"]["members"]).write_bytes(b"png")
     (fake / record["build"] / "timeline.json").write_text(json.dumps({"runtime_s": 1.0}), encoding="utf-8")
     bad = LB.check(fake, "w", [cid], str(runs))
     assert len(bad) == 1 and "is not inside the build's own 1.00s runtime" in bad[0]
@@ -497,17 +505,32 @@ def test_the_beat_is_chosen_by_the_recipes_own_acts_and_the_reason_is_carried(pr
     assert "ACT_SHAPES" in str(exc.value) and "E99 s66" in str(exc.value)
 
 
-def test_the_rail_is_dropped_at_9_16_and_the_record_says_which_member_and_why(tmp_path, monkeypatch, proven):
-    """R26-171: a badge rail on any card at 9:16 sits at 13 stage px (M25). The badge ladder is built WITHOUT its
-    rails - four of its five members - and each drop is recorded with the member and the reason."""
+def test_the_badge_rail_is_realised_on_the_charts_own_card_never_dropped(tmp_path, monkeypatch, proven):
+    """R26-171 AMENDED (2026-09-17): *the rail is SCALED to the stage, never dropped* - dropping it at 9:16 left the
+    badge ladder a still card for five seconds, the recipe's whole point gone (E99 s71: a badge or a pill springing
+    with its callout IS the move). The four `dock_option:badge` members are one RAIL on ONE card, never four cards,
+    and the card is the bed's own CHART card, because a badge numeral appears verbatim in the document behind it
+    (B3) - which is what the recipe's PROOF cut carries (Steel's ev-divergence-v1 and its four pills)."""
     rc, runs = recipes(tmp_path, monkeypatch, ["recipe:badge-ladder"], batch="rail")
     assert rc == 0
     record = records_of(runs)[0]
-    assert len(record["dropped"]) == 4 and all("dock_option:badge" in d for d in record["dropped"])
-    assert all("R26-171" in d and "13 stage px" in d and "DROPPED" in d for d in record["dropped"])
+    assert "dock_option:badge" not in LB.MEMBER_DROPS, "the amendment retires the drop"
     rows = T.load_rows(tmp_path / "build-lab-rail" / LB.short_id("recipe:badge-ladder") / LB.SHOT_TABLE_NAME)
     planted = [r for r in rows if abs(float(r[0]) - record["clip"]["t0"]) < 0.01]
-    assert planted and not any("badge" in json.dumps(r[4] or []) for r in planted)
+    assert len(planted) == 1 and len(planted[0][4]) == 1, "one card, one rail - never a card per pill"
+    assert planted[0][4][0][0].startswith(LB.LAB_CARD.format(series="")), planted[0][4][0]
+    # the bed's richest series carries three pills; the fourth is NOT on this bed and the record says so, because a
+    # badge numeral is the document's own and is never typed here
+    assert any("dock_option:badge" in d and "never typed" in d for d in record["dropped"]), record["dropped"]
+
+
+def test_the_stamp_clock_is_the_compilers_own(tmp_path, monkeypatch):
+    """The ladder's 2.05 / 1.30 offsets ARE `build_scene_timeline_f.dock_entry`'s own stamp clock
+    (`enter + 0.75 + 1.3 n`), so the rail is stamped by the compiler and the lab authors no badge instant."""
+    members = LB.load_proven(ROOT)["recipe:badge-ladder"]["members"]
+    ats = [LB.member_offset(m, 6.0) for m in members if m["card"] == "dock_option:badge"]
+    enter = LB.member_offset(next(m for m in members if m["card"] == "dock_kind:image"), 6.0)
+    assert ats == [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(len(ats))]
 
 
 def test_park_is_dropped_at_9_16_too_and_a_bed_bind_that_is_missing_is_named():
@@ -546,7 +569,12 @@ def test_a_world_change_inside_a_recipe_is_its_own_row_so_m44_can_measure_it(tmp
     assert len(mine) == 2
     plate, page = mine
     assert float(plate[1]) - float(plate[0]) < LB.GMD.PLATE_MIN_S, "the proven plate is UNDER M44's six seconds"
-    assert plate[5] == "dip" and "snap=dock-c-blue-ties-panel" in str(page[2])
+    # THE THROWN CARD IS THE PAGE'S OWN CHART CARD (the parent, 2026-09-17): the proof cut throws `dock-b-holdings`,
+    # the hook page rendered as a card, and the page grows out of THAT. Never an arbitrary bed still, and never one
+    # of the bed's clips (the player measures the rect off the card's `img`; a video card's img is empty)
+    card = LB.LAB_CARD.format(series=LB.parse_ledger(str(page[2]))["series"])
+    assert plate[5] == "dip" and f"snap={card}" in str(page[2])
+    assert plate[4][-1][0] == card, "the dock the snap names is the page's own card"
     assert float(page[1]) - float(page[0]) >= LB.GMD.PLATE_MIN_S - 0.01, "the last world of a beat is never a flash"
 
 
@@ -599,6 +627,8 @@ SEGS_CBTC = [{"at": 0.0, "kind": "plate"}, {"at": 5.12, "kind": "page"}]
 MEMBERS_EBL = [(0.0, {"card": "page_builder:bars", "offset_s": 0.0}),
                (7.56, {"card": "species:spotlight", "offset_s": [7.55, 7.56]})]
 SEGS_EBL = [{"at": 0.0, "kind": "page"}]
+# `badge-ladder` as this bed builds it: the four rails are dropped (R26-171), so one card at +2.05s is the whole beat
+MEMBERS_BL = [(2.05, {"card": "dock_kind:image", "offset_s": 2.05})]
 
 
 def test_m44_on_a_short_plate_asks_for_the_member_that_closes_it_to_move():
@@ -622,23 +652,103 @@ def test_a_row_no_offset_of_this_recipe_can_answer_is_not_an_amendment():
 
 
 def test_the_verdict_is_one_of_the_three_and_the_deciding_row_is_named():
-    """survives / needs an amended offset / unreachable - decided on the rows INSIDE the window and on the walk."""
+    """survives / needs an amended offset / the DIAGNOSIS - decided on the rows INSIDE the window and on the walk.
+
+    E99 s69 retired the fourth answer: a gate never dismisses a recipe, so what was `unreachable under the clocks`
+    is now the diagnosis itself - what to build after the recipe, or which member this bed has not got."""
     fired = {"decided_by": ["[WARN] M06 60 caption pages"], "fires": {"count": 1, "members_at": [0.0, 0.12, 3.88]}}
     assert LB.recipe_verdict(fired, MEMBERS_EBL, SEGS_EBL) == "survives as proven"
-    killed = {"decided_by": ["[FAIL] M29 1 transient cue(s) marking nothing inside the drop window"],
-              "fires": {"count": 0, "why": "x"}}
-    assert LB.recipe_verdict(killed, MEMBERS_EBL, SEGS_EBL) == ("unreachable under the clocks: [FAIL] M29 1 "
-                                                               "transient cue(s) marking nothing inside the drop "
-                                                               "window")
+    held = {"clip": {"t0": 0.0}, "fires": {"count": 0, "why": "x"},
+            "decided_by": ["[FAIL] M29 1 transient cue(s) marking nothing inside the drop window"]}
+    assert LB.recipe_verdict(held, MEMBERS_EBL, SEGS_EBL).startswith(LB.DIAG_COMPANION + " - M29:")
     late = {"decided_by": ["[FAIL] M11 first chart enters full and unannotated"], "fires": {"count": 0, "why": "x"}}
     assert LB.recipe_verdict(late, MEMBERS_EBL, SEGS_EBL).startswith("needs an amended offset: species:spotlight")
     absent = {"decided_by": [], "fires": {"count": 0, "why": "dock_payload:stack never fired inside 38.96-65.05s "
                                                              "- the member is not on the built timeline at all"}}
-    assert LB.recipe_verdict(absent, MEMBERS_EBL, SEGS_EBL).startswith("unreachable under the clocks: "
-                                                                       "dock_payload:stack never fired")
+    assert LB.recipe_verdict(absent, MEMBERS_EBL, SEGS_EBL).startswith(LB.DIAG_NOT_ON_BED + " - dock_payload:stack "
+                                                                       "never fired")
     drifted = {"decided_by": [], "fires": {"count": 0, "why": "species:callout, from 42.84 -> 45.10"}}
     assert LB.recipe_verdict(drifted, MEMBERS_EBL, SEGS_EBL) == ("needs an amended offset: species:callout, from "
                                                                  "42.84 -> 45.10")
+    assert "unreachable" not in Path(LB.__file__).read_text(encoding="utf-8"), \
+        "E99 s69 retires the word from the lab's vocabulary - the record says which of the three it is"
+
+
+# --------------------------------------------------------------------------- E99 s69: the lab DIAGNOSES, never kills
+
+def test_the_three_diagnoses_name_the_row_the_hole_and_the_missing_member():
+    """The ruling's own three answers: `buildable as-is`, `buildable with a companion - <what and where>`, and
+    `not on this bed - <the missing member>`. Never a kill, never the word `unreachable`."""
+    clean = {"clip": {"t0": 38.96}, "decided_by": ["[WARN] M02 one stretch over 8s: 41.1-49.9"]}
+    assert LB.diagnose(clean, MEMBERS_EBL) == LB.DIAG_AS_IS
+    # M16's own row, as the gate prints it: the gap opens at 0:39 and RUNS past the recipe's last landing (41.76s
+    # = the beat's 38.96 + the card's +2.05 offset + the player's own CARD_IN 0.75)
+    m16 = {"clip": {"t0": 38.96},
+           "decided_by": ["[FAIL] M16 longest gap between visual events 5.7s at 0:39; 1 gap(s) over 2.5s: "
+                          "0:39+5.7s - add motion there (a species, a caption pop, plate life); never cut motion "
+                          "to pass"]}
+    said = LB.diagnose(m16, MEMBERS_BL)
+    assert said.startswith(LB.DIAG_COMPANION + " - M16: the hole opens at 0:39 and runs 5.7 s, past the recipe's "
+                           "last member landing at 41.76s - slot the next beat there:")
+    assert "a badge or a pill springing with its callout" in said, "E99 s71: a companion is a thing ARRIVING"
+    assert "never a light" in said and "add motion there (a species, a caption pop, plate life)" in said
+    layout = {"clip": {"t0": 44.88},
+              "decided_by": ["[FAIL] M25 4 layout fault(s): an axis label under dock-k-pledge-record at 0:55, "
+                             "3,577 px, 100 % of the ink"]}
+    assert LB.diagnose(layout, MEMBERS_EBL).startswith(LB.DIAG_COMPANION + " - M25: the card sits over the page's "
+                                                       "ink at 0:55 - place it in the page's room")
+    dropped = {"clip": {"t0": 38.96}, "decided_by": [],
+               "dropped": [f"dock_payload:stack at +0.00s {LB.NOT_ON_BED_MARK}the Tokyo bed carries no stack "
+                           f"payload"]}
+    assert LB.diagnose(dropped) == LB.DIAG_NOT_ON_BED + " - dock_payload:stack at +0.00s the Tokyo bed carries no " \
+                                                        "stack payload"
+
+
+def test_a_candidate_whose_only_event_is_a_light_is_named_by_e99_s71():
+    """*A spotlight is never the move; when a sentence names a thing, the thing arrives* - so a candidate whose only
+    event inside its window is a light is diagnosed as that, with no gate row firing at all."""
+    light = [(0.0, {"card": "plate_option:world", "offset_s": 0.0}),
+             (1.2, {"card": "species:spotlight", "offset_s": 1.2})]
+    assert LB.only_a_light(light) is True
+    assert LB.diagnose({"clip": {"t0": 0.0}, "decided_by": []}, light) == LB.DIAG_LIGHT_ONLY
+    arrives = light + [(2.0, {"card": "dock_kind:image", "offset_s": 2.0})]
+    assert LB.only_a_light(arrives) is False
+    assert LB.diagnose({"clip": {"t0": 0.0}, "decided_by": []}, arrives) == LB.DIAG_AS_IS
+    assert LB.only_a_light(MEMBERS_EBL) is False, "a page that BUILDS is a thing arriving, light or no light"
+
+
+def test_a_thrown_page_sized_card_that_goes_nowhere_is_named(tmp_path):
+    """E99 s71: the throw is a signature event and a thrown full-page card zooms or pushes to full screen."""
+    thrown = ("dock-c-blue-ties-panel", 0, 4.12, 5.12, {"arrive": "throw", "mass": "paper", "centre_w": 0.58})
+    plate = (0.0, 5.12, "world-tokyo-customs-dock-v1-alive", (0, 0, 0), [thrown], "dip", [])
+    page = (5.12, 11.12, "ledger:ev-japan-holdings-v1:line:315:right:snap=dock-c-blue-ties-panel", (0, 0, 0), [],
+            None, [])
+    assert LB.throw_notes([plate, page], 0.0, 11.12) == [], "the card the page GROWS out of went to full screen"
+    floats = (5.12, 11.12, "plate-p-viewers-desk", (0, 0, 0), [], None, [])
+    said = LB.throw_notes([plate, floats], 0.0, 11.12)
+    assert len(said) == 1 and "nothing takes it to full screen" in said[0] and "E99 s71" in said[0]
+    small = plate[:4] + ([thrown[:4] + ({**thrown[4], "centre_w": 0.2},)],) + plate[5:]
+    assert LB.throw_notes([small, floats], 0.0, 11.12) == [], "a hand-sized prop is not a page"
+
+
+def test_a_member_todays_clocks_drop_is_not_a_bed_that_lacks_it(tmp_path, monkeypatch):
+    """`badge-ladder`'s rails are dropped by R26-171 (13 stage px at 9:16) - that is TODAY'S CLOCK refusing a
+    member, not a bind the bed has not got, so the candidate is still buildable and the record says so."""
+    rc, runs = recipes(tmp_path, monkeypatch, ["recipe:badge-ladder"], batch="bl")
+    assert rc == 0
+    record = records_of(runs)[0]
+    assert not record["diagnosis"].startswith(LB.DIAG_NOT_ON_BED)
+    assert record["survivor"] is True
+    # ... and the WALK missing the member it dropped does not turn a clock into a bed either (batch reproof-r2)
+    walked = {"clip": {"t0": 38.96}, "decided_by": [],
+              "fires": {"count": 0, "why": "chart_to:park never fired inside 38.96-45.05s - the member is not "
+                                           "on the built timeline at all"}}
+    assert LB.missing_member(walked) is None
+    assert LB.diagnose(walked) == LB.DIAG_AS_IS
+    bed_miss = {"clip": {"t0": 38.96}, "decided_by": [],
+                "fires": {"count": 0, "why": "chart_dock:checklist never fired inside 38.96-49.05s - the member is "
+                                             "not on the built timeline at all"}}
+    assert LB.diagnose(bed_miss).startswith(LB.DIAG_NOT_ON_BED)
 
 
 def test_a_range_offset_takes_its_high_end_while_that_still_fits_the_recipes_window():
@@ -654,6 +764,82 @@ def test_a_recipe_that_is_not_proven_is_refused_by_name(tmp_path, monkeypatch):
                   "--runs", str(tmp_path / "x.jsonl"), "--builds", str(tmp_path / "build-lab-x")])
     assert rc == 1
 
+
+
+# --------------------------------------------------------------------------- the member -> row translation, judged
+# by what the PLAYER does with the row (the parent's read of batch-r1 and of reproof-r1, 2026-09-17)
+
+def test_the_card_a_page_snaps_from_is_held_across_the_boundary(tmp_path, monkeypatch):
+    """`card-becomes-the-chart`: the player MEASURES the card's rectangle off the card's own element at the instant
+    the page grows out of it, so a dock tuple that ends ON the boundary leaves the page nothing to grow from - the
+    page just appears. The card rides the veil into the page's row, for the snap's own clock."""
+    rc, runs = recipes(tmp_path, monkeypatch, ["recipe:card-becomes-the-chart"], batch="snap")
+    assert rc == 0
+    rows = T.load_rows(tmp_path / "build-lab-snap" / LB.short_id("recipe:card-becomes-the-chart")
+                       / LB.SHOT_TABLE_NAME)
+    plate = next(r for r in rows if r[4] and any(d[4].get("arrive") == "throw" for d in r[4]))
+    page = next(r for r in rows if float(r[0]) >= float(plate[1]) - 0.01 and str(r[2]).startswith("ledger:"))
+    card = plate[4][-1]
+    assert f"snap={card[0]}" in str(page[2]), "the page names the card the viewer was just shown"
+    assert abs(float(card[3]) - (float(page[0]) + LB.SNAP_HOLD_S)) < 0.01, \
+        "the card is HELD ACROSS the boundary, for the player's own SNAP_S"
+    assert float(card[3]) > float(plate[1]), "a card that leaves on the boundary is a page with nothing to grow from"
+    assert LB.SNAP_HOLD_S == 0.45, "the player's own SNAP_S (player.html:2612), mirrored and never re-dialled"
+
+
+def test_a_page_with_no_landed_card_before_it_says_the_bed_has_not_got_the_member(tmp_path, monkeypatch):
+    """`spotlight-held-past-the-cut` opens ON the snap, and the approved row before its beat carries no dock: the
+    member is not realised, and E99 s69's third answer says exactly that instead of pretending the page snapped."""
+    rc, runs = recipes(tmp_path, monkeypatch, ["recipe:spotlight-held-past-the-cut"], batch="nosnap")
+    assert rc == 0
+    record = records_of(runs)[0]
+    assert any(LB.NOT_ON_BED_MARK in line and "page_enter:snap" in line for line in record["dropped"])
+    assert record["diagnosis"].startswith(LB.DIAG_NOT_ON_BED) and "page_enter:snap" in record["diagnosis"]
+    assert record["survivor"] is False
+
+
+def test_a_dip_puts_black_on_the_boundary_so_the_window_opens_after_it():
+    """E47 #1 as the compiler writes it: both halves of the dip reach 1 AT the boundary, so the boundary frame is
+    black. A window that opens there opens on the veil - three of batch-r1's sheets did (2026-09-17)."""
+    dipped = [(30.0, 38.96, "plate-p-viewers-desk", (0, 0, 0), [], "dip", []),
+              (38.96, 45.05, "plate-p-viewers-desk", (0, 0, 0), [], "cut", [])]
+    assert LB.veil_s(dipped, 38.96) == round(LB.GMD.DIP_S / 2, 2)
+    lo, hi = LB.readable_window(dipped, 38.96, 45.05)
+    assert lo == round(38.96 + LB.veil_s(dipped, 38.96), 2) and lo > 38.96 and hi < 45.05
+    cut = [(30.0, 38.96, "plate-p-viewers-desk", (0, 0, 0), [], "cut", [])] + dipped[1:]
+    assert LB.veil_s(cut, 38.96) == 0.0 and LB.readable_window(cut, 38.96, 45.05)[0] == 38.96
+
+
+def test_the_instants_are_the_members_own_landings_inside_the_window():
+    """A thrown card authored at 41.46s is in the AIR until 41.91s, and 45.05s is the next row's first frame: the
+    three tiles batch-r1's sheets were read at were a black frame, an empty plate and a card on the next page."""
+    rows = [(30.0, 38.96, "plate-p-viewers-desk", (0, 0, 0), [], "dip", []),
+            (38.96, 45.05, "plate-p-viewers-desk", (0, 0, 0), [], "cut", [])]
+    members = [(2.5, {"card": "arrival:throw", "offset_s": 2.5}),
+               (5.0, {"card": "species:plate_life", "offset_s": 5.0})]
+    at = LB.sheet_instants(members, rows, 38.96, 45.05)
+    lo, hi = LB.readable_window(rows, 38.96, 45.05)
+    assert at[0] == lo and at[-1] == hi and 45.05 not in at
+    assert round(38.96 + 2.5 + LB.CARD_FLIGHT_S, 2) in at, "the card is read where it LANDS, not where it was thrown"
+    assert all(lo - 0.01 <= t <= hi + 0.01 for t in at)
+
+
+def test_a_card_that_would_land_outside_its_row_is_refused_by_name():
+    """"A member that would land outside the window is a refusal at build time, named" (the parent, 2026-09-17)."""
+    LB.check_lands("lab:x:1", "dock_kind:image", 41.46, LB.CARD_FLIGHT_S, 45.05)      # lands at 41.91: inside
+    with pytest.raises(LB.LabBuildError) as exc:
+        LB.check_lands("lab:x:1", "dock_kind:image", 44.9, LB.CARD_FLIGHT_S, 45.05)
+    assert "lands at 45.35" in str(exc.value) and "DOCK_RETRACT_S" in str(exc.value)
+
+
+def test_a_chart_to_travels_to_a_state_the_page_actually_declares():
+    """E58 / E99 s70: the transform is the page's `;then=` chain, and a `state` index the chain cannot answer renders
+    nothing at all. The approved cut's own row carries two states and moves to both."""
+    bare = {"opts": ""}
+    sp = LB.chart_to_for(None, "recast", 2.0, bare)
+    assert sp["state"] == 1 and bare["opts"].startswith("then=")
+    two = {"opts": "then=ev-japan-selling-v1:bars:3;then=ev-bonds-vs-chips-10y-v1:bars:1"}
+    assert LB.chart_to_for(None, "recast", 2.0, two)["state"] == 2 and two["opts"].count("then=") == 2
 
 # --------------------------------------------------------------------------- the WHOLE TABLE (P66 HG1)
 #

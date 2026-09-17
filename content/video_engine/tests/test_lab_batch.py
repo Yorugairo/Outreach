@@ -405,3 +405,18 @@ def test_hg2_check_passes_on_what_it_wrote_and_fails_on_a_drifted_card(tmp_path,
 def test_a_verdict_the_run_record_does_not_use_is_refused_by_name(tmp_path):
     with pytest.raises(LB.BatchError, match="the verdict is none of"):
         LB.verdict_class({"id": "recipe:x", "verdict": "looks fine to me"})
+
+
+def test_the_card_reads_the_diagnosis_vocabulary_and_the_word_it_replaced():
+    """E99 s69: the lab DIAGNOSES, so a record's third answer is a diagnosis - and this module is a READER of
+    records on disk, so batch reproof-r1's retired word still reads. Nothing is re-decided here."""
+    assert LB.verdict_class({"id": "r", "diagnosis": "buildable as-is"}) == "as-is"
+    said = {"id": "r", "verdict": "buildable with a companion - M16: the hole opens at 0:39 and runs 5.7 s, past "
+                                 "the recipe's last member landing at 41.76s - slot the next beat there"}
+    assert LB.verdict_class(said) == "companion"
+    assert LB.killing_row(said).startswith("M16: the hole opens at 0:39")
+    assert LB.verdict_class({"id": "r", "diagnosis": "not on this bed - dock_payload:stack"}) == "not on this bed"
+    assert LB.verdict_class({"id": "r", "diagnosis": "a light is not a move - the named thing should arrive "
+                                                     "(E99 s71)"}) == "light-only"
+    assert LB.verdict_class({"id": "r", "verdict": "unreachable under the clocks: [FAIL] M05"}) == "unreachable"
+    assert "companion" in LB.STANDING and "unreachable" not in LB.STANDING

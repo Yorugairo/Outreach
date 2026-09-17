@@ -295,7 +295,18 @@ def cards(batch: str, records: list[dict], members: dict[str, list[dict]], root:
 HG2_CARD_ID = "p65-hg2-the-reproved-set-and-m38"
 PROVEN = "survives as proven"
 AMENDED = "needs an amended offset"
-UNREACHABLE = "unreachable under the clocks"
+# E99 s69 (2026-09-17): the lab DIAGNOSES, it never kills, so a run record's third answer is now one of the
+# diagnoses `lab_build` writes (`DIAG_COMPANION` / `DIAG_NOT_ON_BED` / `DIAG_LIGHT_ONLY`, E99 s71). This module
+# READS records off disk, so it reads both vocabularies: the ruling's, and the one batch reproof-r1 was written in
+# before the ruling. Nothing here re-decides a verdict - the record's own words are the card's.
+COMPANION = "buildable with a companion"
+AS_IS = "buildable as-is"
+NOT_ON_BED = "not on this bed"
+LIGHT_ONLY = "a light is not a move"
+UNREACHABLE = "unreachable under the clocks"      # LEGACY: batch reproof-r1's word, retired by E99 s69
+VERDICTS = ((PROVEN, "proven"), (AMENDED, "amended"), (AS_IS, "as-is"), (COMPANION, "companion"),
+            (NOT_ON_BED, "not on this bed"), (LIGHT_ONLY, "light-only"), (UNREACHABLE, "unreachable"))
+STANDING = ("proven", "amended", "as-is", "companion")   # the answers that still put a beat in front of the operator
 HG2_QUESTION = ("Which of these survive as proven on today's clocks - and does M38 return to a FAIL at 0.60, move, "
                 "or stay the interim WARN?")
 HG2_OPTIONS = ["restore M38 to a FAIL at 0.60, with the re-proved set below as the proven set",
@@ -305,18 +316,23 @@ ROW_MAX = 200                     # a killing row is named in the judge text; th
 
 
 def verdict_class(rec: dict) -> str:
-    """proven / amended / unreachable - read from the run record's own verdict, never re-decided here."""
-    verdict = str(rec.get("verdict") or "")
-    for prefix, name in ((PROVEN, "proven"), (AMENDED, "amended"), (UNREACHABLE, "unreachable")):
+    """The record's own answer, named - never re-decided here: proven / amended / as-is / companion / not on this
+    bed / light-only, and `unreachable` for a record written before E99 s69 retired the word."""
+    verdict = str(rec.get("verdict") or rec.get("diagnosis") or "")
+    for prefix, name in VERDICTS:
         if verdict.startswith(prefix):
             return name
-    raise BatchError(f"{rec.get('id')}: the verdict is none of {PROVEN!r} / {AMENDED!r} / {UNREACHABLE!r}: "
-                     f"{verdict[:80]!r} - re-run lab_build.py --batch")
+    raise BatchError(f"{rec.get('id')}: the verdict is none of "
+                     f"{', '.join(repr(prefix) for prefix, _ in VERDICTS)}: {verdict[:80]!r} - re-run "
+                     f"lab_build.py --batch")
 
 
 def killing_row(rec: dict) -> str:
-    """The gate row that killed a casualty: its verdict's own row, first clause, capped - the whole row is on disk."""
-    row = str(rec["verdict"])[len(UNREACHABLE) + 1:].strip().split(";")[0].strip()
+    """The row a candidate's own answer names, first clause, capped - the whole row is on disk. E99 s69: on a record
+    written since the ruling this is what the candidate ASKS FOR, not what killed it."""
+    said = str(rec.get("verdict") or rec.get("diagnosis") or "")
+    prefix = next((p for p, _n in VERDICTS if said.startswith(p)), "")
+    row = said[len(prefix):].lstrip(" -:").strip().split(";")[0].strip()
     if len(row) > ROW_MAX:
         row = row[:ROW_MAX].rsplit(" ", 1)[0] + " ..."
     return row
@@ -328,7 +344,7 @@ def hg2_candidate(rec: dict, root: Path) -> dict:
         raise BatchError(f"{rec['id']}: the run record names no recipe - the HG2 card cards the proven set by id")
     sentence = (rec.get("beat") or {}).get("sentence")
     label = rec["recipe"] + (f' - the beat on "{sentence}"' if sentence else "")
-    return {"id": rec["id"], "label": rec["recipe"], "one_line": rec["verdict"],
+    return {"id": rec["id"], "label": rec["recipe"], "one_line": rec.get("verdict") or rec["diagnosis"],
             "proof": clip_proof(rec, root, label=label)}
 
 
@@ -336,8 +352,8 @@ def hg2_card(batch: str, records: list[dict], root: Path) -> dict:
     """R26-168's answer as ONE card: the re-proved recipes side by side with a clip each, the casualties named with
     the row that killed each (their builds carry that row, not a beat a short could carry - E99 s60), and the one
     question that restores M38. No exploration draw and no calibration probe: this is the FIXED proven set."""
-    kept = [r for r in records if verdict_class(r) in ("proven", "amended")]
-    gone = [r for r in records if verdict_class(r) == "unreachable"]
+    kept = [r for r in records if verdict_class(r) in STANDING]
+    gone = [r for r in records if verdict_class(r) not in STANDING]
     if not kept:
         raise BatchError(f"batch {batch}: not one recipe survives the re-proof - a card with nothing standing is not "
                          "a card; read the run record's rows before re-running")

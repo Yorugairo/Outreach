@@ -41,19 +41,26 @@ THE FILTER runs four tools, in this order, and RE-IMPLEMENTS NONE of them - each
 THE FILTER DECIDES ON THE WINDOW (P65 T3, the first smoke batch's own finding). A candidate is ONE beat spliced into
 an APPROVED cut, so the rows that fire in the rest of that cut are the BED's, not the candidate's: batch `smoke-r1`
 killed both of its candidates on M35 / M37 / M39 (whole-cut floors), on M28 at 0:25 and on M34 at 1:10 - none of
-them inside either beat. So `survivor` is decided ONLY by the rows whose own instants fall inside the candidate's
-window `[t0, t1]`: a FAIL inside the window KILLS it, a WARN inside the window is RECORDED and is not fatal, and
+them inside either beat. So the DIAGNOSIS is decided ONLY by the rows whose own instants fall inside the candidate's
+window `[t0, t1]`: a FAIL inside the window names the HOLE IN THE BEAT, a WARN inside the window is RECORDED, and
 everything else - the one-shot floors (`gate_one_shot_floor.ROW_ORDER`, read over the whole cut by definition) and
 every row whose instants land elsewhere - is carried under `context` and decides nothing. A row's instants are the
 ones it PRINTS (`row_instants`: `t=` / `at 9.51s`, an `m:ss` stamp, a `41.1-49.9` span, and the span of any scene it
 names off the build's own timeline); a row that prints none is whole-cut. A TOOL row (`compile`, `probe`, the bar)
 always decides: a build that did not compile or render is not a candidate at all.
 
+THE FILTER DIAGNOSES, IT NEVER KILLS (E99 s69, the operator 2026-09-17: *"they shouldn't be dismissing our
+effects/recipes, they should be guiding us on how to build with them"*). Every record carries a `diagnosis`:
+`buildable as-is` (no row decided), `buildable with a companion - <what the row asks for and where>` (a row fires
+after the recipe's last member has LANDED, or a layout row whose fix is placement - the hole in the beat, named),
+or `not on this bed - <the missing member>` (a bind this bed has not got). `survivor` stays as a DERIVED field for
+the readers written against it, true for both buildable answers.
+
 `batches/<batch>.jsonl` then carries one record per candidate: the beat it was planted in with its sentence, the
-build dir, the clip window a card would show, the sheet, the `no_receipt` reason, `survivor`, `decided_by` (every
-FAIL / WARN row INSIDE the window, verbatim) and `context` (every one that is not). A candidate a gate FAILs is
-recorded with the row that killed it, never dropped; a compile the door or the compiler refuses is recorded the
-same way, as a `[FAIL] compile` row. The record dir is `effects/lab/batches/` and not `runs/`: `.gitignore` carries
+build dir, the clip window a card would show, the sheets, the `no_receipt` reason, the `diagnosis`, `decided_by`
+(every FAIL / WARN row INSIDE the window, verbatim) and `context` (every one that is not). A candidate a gate FAILs
+is recorded with the row it names, never dropped; a compile the door or the compiler refuses is recorded the same
+way, as a `[FAIL] compile` row. The record dir is `effects/lab/batches/` and not `runs/`: `.gitignore` carries
 a bare `runs/` rule that swallows any directory of that name, and the batch record is a TRACKED artifact of this
 plan (acceptance 2, and T8 leans on it).
 
@@ -109,6 +116,7 @@ import gate_motion_density as GMD  # noqa: E402  (_is_bed / CUE_TOL_S / PLATE_MI
                                    #  world clocks - the lab never keeps a second opinion about a threshold)
 import gate_one_shot_floor as OSF  # noqa: E402  (ROW_ORDER: the WHOLE-CUT floors, named by the gate itself)
 import lab_enumerate as LE  # noqa: E402  (the shapes, the clocks and the offset grammar - one source, never a copy)
+import ledger_page as LPG  # noqa: E402  (badges_for: a badge is the SERIES' own, never typed here)
 import recipe_walk as RW  # noqa: E402  (events / match / flatten: what a FIRE is, shared with the floor gate)
 import self_watch as SW  # noqa: E402  (parse_gate: the `[LEVEL] Mxx` protocol's own reader)
 from authoring import table as T  # noqa: E402  (the rows go through the kit's door, never a hand-written literal)
@@ -141,7 +149,24 @@ KEN_BURNS = (0.04, 14, -10)      # `plate_option:ken`: the compiler's own KEN pr
 ALIVE_PLATE = "world-tokyo-customs-dock-v1-alive;idle=drift;drift=20"   # P61 T14 / E99 s63: the bed's own alive plate
 DESK_REGION = {"kind": "region", "x0": 0.117, "y0": 0.39, "x1": 0.26, "y1": 0.485}   # the bed's own desk region (row 3)
 SUCK_POINT = "suck:0.49,0.55"    # the bed's own suck target (build_short.py row 3)
-DOCK_TAIL_S = 0.2                # a card leaves before the window does, never on its cut (E40 #5)
+# THE PLAYER'S OWN CLOCKS, mirrored here and nowhere else (the lab never keeps a second opinion about a dial): a
+# member is only REALISED when the row gives the player the seconds its mechanism takes. Each line names its source.
+CARD_FLIGHT_S = 0.45             # STOP.FLIGHT_S (player.html:1041): a thrown card's time in the air
+CARD_DROP_S = 0.32               # STOP.ANTIC_S + STOP.DROP_S (player.html:1044-1048): a dropped card's fall
+CARD_IN_S = 0.75                 # CARD_IN (player.html:1644): a plain dock's lift in
+CARD_LEAVE_S = 0.35              # DOCK_RETRACT_S (player.html:1672): the retract has to FINISH inside the row - under
+                                 # it the card is still leaving while the next row is on screen, and the parent read
+                                 # exactly that on batch-r1 (2026-09-17: "the card floats on the next page's cream")
+SNAP_HOLD_S = 0.45               # SNAP_S (player.html:2612): the page grows out of the card's rectangle over these
+                                 # seconds and the player MEASURES that rectangle off the card's own element
+                                 # (player.html:5310), so a page that snaps needs its card still in the dock list at
+                                 # the page's first frames - the landed card riding the veil (E99 s69's re-read of
+                                 # recipe:card-becomes-the-chart; `held-dock-across-the-cut` holds a card the same way)
+ARRIVAL_LANDS_S = {"throw": CARD_FLIGHT_S, "land": CARD_DROP_S, "drop": CARD_DROP_S}
+FRAME_S = 0.033                  # one frame at the reference's 30 fps (GMD.DIP_S's own measurement)
+SPECIES_READ_S = 0.3             # a species is READ a moment after it fires, never on the frame it starts
+DOCK_TAIL_S = CARD_LEAVE_S       # a card leaves before the window does, never on its cut (E40 #5), and its retract
+                                 # finishes inside the row that carries it
 MIN_REMNANT_S = 0.5              # a remnant of an approved row shorter than this is a FLASH, not a plate (M44)
 BRACKET_LABEL = "-$122.6B"       # the bed's own bracket label (build_short.py, the V3 bracket) - never a new figure
 ARRIVAL_MASS = {"throw": "paper", "land": "metal"}   # the mass each arrival card's own `author.example` carries
@@ -279,6 +304,80 @@ def beat_window(beats: list[dict], numbers: tuple[int, ...], window_s: float, ci
 
 # --------------------------------------------------------------------------- the member -> row translation
 
+def exit_kind(row: tuple) -> tuple[str, float | None]:
+    """A row's own exit as (name, its declared length): `dip`, `dip:0.6`, `suck:0.49,0.55` -> ("suck", None)."""
+    token = str(row[5] or "")
+    name, _, rest = token.partition(":")
+    try:
+        return name, float(rest)
+    except ValueError:
+        return name, None
+
+
+def veil_s(rows: list[tuple], t: float) -> float:
+    """The seconds of BLACK a dip puts on the boundary at `t` - its incoming half.
+
+    E47 #1 as the compiler writes it (`build_scene_timeline_f.py:5147`): "a plain LINEAR ramp to black over the last
+    DIP_S/2 of the outgoing scene and back over the first DIP_S/2 of the incoming one. Both halves reach 1 at the
+    boundary, so the boundary frame IS black". A window that opens on that boundary opens on the veil, which is what
+    the parent read on batch-r1's sheets (2026-09-17: "three candidates open on a BLACK frame")."""
+    for r in rows:
+        name, own = exit_kind(r)
+        if abs(float(r[1]) - t) < EPS and name == "dip":
+            return round((own if own else GMD.TRANSITION_S["dip"]) / 2, 2)
+    return 0.0
+
+
+def readable_window(rows: list[tuple], t0: float, t1: float) -> tuple[float, float]:
+    """The window's own READABLE bounds: after the veil the boundary at `t0` puts on the frame, and the last frame
+    that is still this candidate's (`t1` is the NEXT row's first frame, and a dip takes the ones before it)."""
+    lo = round(t0 + veil_s(rows, t0), 2)
+    hi = round(t1 - max(veil_s(rows, t1), FRAME_S), 2)
+    return lo, max(lo, hi)
+
+
+def member_lands_s(card: Any, options: Mapping | None = None) -> float:
+    """The seconds between a member being AUTHORED and its mechanism being on the frame - the player's own clocks.
+
+    A thrown card authored at 41.46 s is in the air until 41.91 s, so a frame read at 41.46 s carries an empty plate:
+    the parent's "two candidates show no card inside the window at all" was the sheet reading the instant the card
+    was thrown rather than the instant it landed (2026-09-17)."""
+    axis, token = member_axis(card), member_token(card)
+    if axis == "arrival":
+        return ARRIVAL_LANDS_S.get(token, CARD_FLIGHT_S)
+    if axis in DOCK_AXES:
+        return float((options or {}).get("lands_s") or CARD_IN_S)
+    if axis == "page_enter":
+        # AN ARRIVAL IS READ MID-ARRIVAL: a page that SNAPS is the card's rectangle growing into the page, and the
+        # only frames that carry that mechanism are the snap's own (`SNAP_S`). A page that mounts or draws its axes
+        # carries no such move, so it is read where its chart LANDS (E99 s67: it builds, then holds built).
+        return SNAP_HOLD_S / 2 if token in ("snap", "camera") else float(LE.clocks()["lp_build_s"])
+    if axis in ("species", "page_species", "chart_to"):
+        return SPECIES_READ_S
+    if axis == "exit":
+        # a transition is read on the last frame that still carries the outgoing world: the boundary frame itself is
+        # the veil (a dip reaches full black exactly there - `build_scene_timeline_f.py:5147`)
+        return -(GMD.TRANSITION_S.get(token, 0.0) / 2 + FRAME_S)
+    return 0.0
+
+
+def sheet_instants(members: list[tuple[float, dict]], rows: list[tuple], t0: float, t1: float) -> list[float]:
+    """The instants the probe reads on a candidate: the window's first READABLE frame, every member where its own
+    mechanism has LANDED, and the last frame still inside the window. Sorted, de-duplicated, clamped to the window.
+
+    Nothing here is a judgement - it is where a member can be SEEN, which is what a sheet is for (E99 s60)."""
+    lo, hi = readable_window(rows, t0, t1)
+    out = [lo, hi]
+    for at, m in members:
+        lands = member_lands_s(str(m["card"]), m.get("options"))
+        out.append(round(min(max(t0 + at + lands, lo), hi), 2))
+    return sorted({round(t, 2) for t in out})
+
+
+def mmss(t: float) -> str:
+    return f"{int(t // 60)}:{int(t % 60):02d}"
+
+
 def parse_ledger(plate: str) -> dict | None:
     """A ledger plate id into its parts: `ledger:<series>:<variant>:<emphasize>:<quiet>[:<enter>[:<exit>]][;opts]`."""
     head, _, opts = str(plate).partition(";")
@@ -346,9 +445,16 @@ def chart_to_for(bed, verb: str, at: float, page: dict) -> dict:
     elif verb == "extend":
         sp["to_index"] = bed.LAST_IDX
     else:                                            # morph / recast / remake travel to a declared page STATE
-        if "then=" not in (page.get("opts") or ""):
-            page["opts"] = ";".join(p for p in [page.get("opts") or "", "then=ev-japan-selling-v1:bars:3"] if p)
-        sp["state"] = 1
+        # THE STATE IS THE `;then=` CHAIN, and the verb is only realised when the page HAS the state it travels to
+        # (E58; the approved cut's own rows: `...;then=ev-japan-selling-v1:bars:3;then=ev-bonds-vs-chips-10y-v1:bars:1`
+        # with `chart_to state 1` and `state 2`). A `state` index the chain cannot answer is a chart_to that plays as
+        # nothing on the frame - the defect class the parent named on 2026-09-17 - so the chain is EXTENDED here and
+        # the index always names a state that exists.
+        states = [x for x in (page.get("opts") or "").split(";") if x.startswith("then=")]
+        if not states:
+            page["opts"] = ";".join(x for x in [page.get("opts") or "", "then=ev-japan-selling-v1:bars:3"] if x)
+            states = ["then=ev-japan-selling-v1:bars:3"]
+        sp["state"] = len(states)                    # the page's own last declared state: 1 for one `then=`, 2 for two
     return sp
 
 
@@ -373,6 +479,20 @@ def dock_for(bed, kind: str, arrival: dict | None, enter: float, leave: float, w
     if arrival:
         opts.update(arrival)
     return (aid, 0, round(enter, 2), round(leave, 2), opts)
+
+
+def check_lands(cid: str, card: str, at: float, lands: float, end: float) -> None:
+    """A card whose mechanism would land OUTSIDE the row that carries it is refused BY NAME, at build time.
+
+    The parent's read of batch-r1 (2026-09-17): "two candidates show no card inside the window at all - the arrival
+    lands after t1 or never". A member the window cannot hold is not a candidate the operator can judge, and the lab
+    records the refusal rather than building a beat whose mechanism happens off screen (E99 s60)."""
+    if at + lands > end - CARD_LEAVE_S + EPS:
+        raise LabBuildError(f"{cid}: {card} is authored at {at:.2f}s and its own mechanism lands at "
+                            f"{at + lands:.2f}s, past the last instant this row can hold it "
+                            f"({end - CARD_LEAVE_S:.2f}s = the row's end {end:.2f}s less the card's retract "
+                            f"{CARD_LEAVE_S:.2f}s, player.html DOCK_RETRACT_S) - a member that would land outside "
+                            f"the window is a refusal, never a beat with nothing in it")
 
 
 def candidate_rows(bed, cand: dict, beat: dict, ws: list[dict], dry_run: bool, binds: dict) -> list[tuple]:
@@ -417,6 +537,8 @@ def candidate_rows(bed, cand: dict, beat: dict, ws: list[dict], dry_run: bool, b
             raise LabBuildError(f"{cand['id']}: the axis {axis!r} has no place in a shot row - lab_build.py binds "
                                 f"the axes beat-shapes.json carries, and this one is new")
     if dock_kind is not None:
+        lands = (ARRIVAL_LANDS_S.get(str(arrival["arrive"]), CARD_FLIGHT_S) if arrival else CARD_IN_S)
+        check_lands(str(cand["id"]), f"dock_kind:{dock_kind}", dock_at, lands, t1)
         docks.append(dock_for(bed, dock_kind, arrival, dock_at, t1 - DOCK_TAIL_S, ws, dry_run))
     if on_page:
         plate = ledger_id(page)
@@ -848,10 +970,14 @@ ACT_SHAPES: dict[str, tuple[str, str]] = {
 
 # THE MEMBERS THIS BUILD DROPS, each with the reason, each RECORDED (never silently skipped). The first two are
 # today's 9:16 clocks; the last two are binds the Tokyo bed does not carry, and a bind is filled from the bed's own
-# assets or not at all.
+# assets or not at all. Only the second kind is `not on this bed` (E99 s69): a member today's clocks refuse is still
+# the recipe's, and the candidate around it is still buildable.
+NOT_ON_BED: frozenset = frozenset({"dock_payload:stack", "chart_dock:checklist"})   # binds this BED has not got
+
 MEMBER_DROPS: dict[str, str] = {
-    "dock_option:badge": "R26-171: a badge rail on any card at 9:16 sits at 13 stage px (M25) - the portrait stage "
-                         "carries no rails, so the member is dropped rather than built illegible",
+    # R26-171 is AMENDED (2026-09-17, the parent's read of the badge-ladder rendition under E99 s71): *the rail is
+    # SCALED to the stage, never dropped - dropping it at 9:16 left the badge ladder a still card for five seconds,
+    # the recipe's whole point gone.* So `dock_option:badge` is no longer a drop; it is realised (see `badge_card`).
     "chart_to:park": "R26-172: `chart_to park` shrinks the page's pills under 11 px at any scale below ~0.85 (M25) "
                      "- parking is not how room is made on 9:16; the page's own empty room is (E65)",
     "dock_payload:stack": "the Tokyo bed carries no stack payload - the verdict wall is Steel's (steel-and-paper/"
@@ -986,12 +1112,78 @@ def video_dock(bed, n: int, dry_run: bool) -> str:
 
 
 DOCK_AXES = ("dock_kind", "dock_payload", "dock_option")
-DOCK_RANK = {"dock_payload": 0, "dock_kind": 1, "dock_option": 2}   # the most specific member names the card
+DOCK_RANK = {"lab_card": -1, "dock_payload": 0, "dock_kind": 1, "dock_option": 2}   # the most specific member names
+# the card, and a card the LAB registered for a rail or a snap is the most specific of all: it is already the series'
+# own page rendered once, and the other members on that instant only merge their options into it
+
+
+LAB_CARD = "dock-lab-{series}"    # a card the LAB registers on the bed: the SERIES' own page, rendered once
+CARD_ASPECT = "9:16"              # the stage the bed is authored at - the card is rendered for the stage it lands on
+
+
+def series_obj(bed, series: str) -> dict:
+    """The evidence OBJECT the bed carries for this series - the file `docks.chart_card` renders from."""
+    path = Path(bed.HERE) / "evidence/objects" / f"{series}.series.json"
+    if not path.is_file():
+        raise LabBuildError(f"the Tokyo bed carries no evidence object for {series} ({path.name}) - a card is "
+                            f"rendered from the bed's own series file, never invented")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def series_variant(obj: Mapping, want: str) -> str:
+    """The variant this series file is AUTHORED for - the card is the series' own page, not the page's variant
+    forced onto it. Measured on the bed: `ledger_page.py` refuses `ev-bonds-vs-chips-10y-v1 --variant line` with
+    "overflow is a BARS page's device (E60); this page is 'line'" - a bars file is a bars page, and only a file with
+    no bars of its own takes the variant the page row names."""
+    return "bars" if obj.get("bars") else (want or "line")
+
+
+def write_dock_meta(bed) -> None:
+    """The PRIVATE build's `evidence-dock.json`, rewritten after the lab has registered a card of its own. The
+    compiler reads it from the build dir (`build_scene_timeline_f.py:5118`); the episode's own copy is never
+    touched, because `bed.BUILD` is the lab's private dir for the whole run."""
+    (bed.BUILD / "evidence-dock.json").write_text(json.dumps(bed.DOCK_META, indent=1), encoding="utf-8")
+
+
+def lab_chart_card(bed, series: str, variant: str, dry_run: bool, badges: bool = False) -> str:
+    """`authoring.docks.chart_card` of the SERIES a page row names - the card that page grows out of (the parent,
+    2026-09-17: the proof cut throws the chart's own card, not an arbitrary bed still), with the series' OWN badges
+    when a recipe asks for a rail. Every string is the series file's: nothing is typed here and no figure is made.
+
+    The card's meta entry joins `DOCK_META` (title, source, species `chart`, badges) and the private
+    `evidence-dock.json` is rewritten, because the badges a card carries live on the EVIDENCE record - the dock
+    tuple only says WHEN each is stamped (`build_scene_timeline_f.dock_entry`: enter + 0.75 + 1.3 n)."""
+    obj = series_obj(bed, series)
+    aid = LAB_CARD.format(series=series)
+    entry = {"asset": aid, "title": str(obj.get("title") or ""), "source": str(obj.get("source") or ""),
+             "species": "chart", "badges": LPG.badges_for(obj) if badges else []}
+    meta = [m for m in bed.DOCK_META if m.get("asset") != aid] + [entry]
+    bed.DOCK_META[:] = meta
+    if not dry_run:
+        bed.dock_chart(aid, series, variant=series_variant(obj, variant), aspect=CARD_ASPECT)
+        write_dock_meta(bed)
+    return aid
+
+
+def badge_series(bed, want: int) -> tuple[str, int]:
+    """(the bed's own series that carries the most badges, how many) - a badge rail is a CHART's conclusions, and
+    B3 is why a drawn still can never carry one: a badge numeral must appear verbatim in the document behind it."""
+    best, n = "", 0
+    for path in sorted((Path(bed.HERE) / "evidence/objects").glob("*.series.json")):
+        obj = json.loads(path.read_text(encoding="utf-8"))
+        k = len(LPG.badges_for(obj))
+        if k > n:
+            best, n = path.name.replace(".series.json", ""), k
+        if n >= want:
+            break
+    return best, n
 
 
 def recipe_dock(bed, card: str, at: float, leave: float, ws: list[dict], dry_run: bool, n: int) -> tuple:
     """One dock member as the row's dock tuple `(asset_id, slot, enter, exit, opts)` - the BED's own cards only."""
     axis, token = member_axis(card), member_token(card)
+    if axis == "lab_card":                           # a card the LAB registered on the bed (a chart card of a series)
+        return (token, 0, round(at, 2), round(leave, 2), {"arrive": "land", "mass": "paper"})
     if axis == "dock_kind" and token == "video":
         return (video_dock(bed, n, dry_run), 0, round(at, 2), round(leave, 2),
                 {"centre": True, "card_aspect": 0.5911, "centre_w": bed.FAB_W, "centre_x": bed.FAB_CX,
@@ -1027,7 +1219,8 @@ def recipe_rows(bed, rec: Mapping, beat: dict, ws: list[dict], dry_run: bool, ro
         reason = MEMBER_DROPS.get(card)
         at = member_offset(m, window_s)
         if reason:
-            drops.append(f"{card} at +{at:.2f}s DROPPED - {reason}")
+            mark = NOT_ON_BED_MARK if card in NOT_ON_BED else "DROPPED - "
+            drops.append(f"{card} at +{at:.2f}s {mark}{reason}")
             continue
         members.append((at, dict(m)))
     members.sort(key=lambda x: x[0])
@@ -1044,6 +1237,11 @@ def recipe_rows(bed, rec: Mapping, beat: dict, ws: list[dict], dry_run: bool, ro
         s = round(t0 + seg["at"], 2)
         e = round(t0 + segs[k + 1]["at"], 2) if k + 1 < len(segs) else round(t1, 2)
         mine = [(at, m) for at, m in members if segment_of(at, m, segs, end_rel) == k]
+        # R26-171 AMENDED (2026-09-17): a `dock_option:badge` member is one PILL ON THE RAIL of the card that is
+        # standing - never a card of its own. The compiler stamps them on its own clock (`dock_entry`: the card's
+        # enter + 0.75 + 1.3 n = +2.05, +3.35, +4.65, +5.95), which is where the recipe's own offsets come from.
+        badge_ats = [at for at, m in mine if str(m["card"]) == "dock_option:badge"]
+        mine = [(at, m) for at, m in mine if str(m["card"]) != "dock_option:badge"]
         docks: list[tuple] = []
         species: list[dict] = []
         ken, row_exit, world = (0, 0, 0), None, None
@@ -1095,9 +1293,28 @@ def recipe_rows(bed, rec: Mapping, beat: dict, ws: list[dict], dry_run: bool, ro
         # rest merge their options into it. A card's exit is the next card's ENTER when a later one takes its box
         # (`held-page-hosts-the-docks`: "the second moving card replaces the first in the same box").
         ats = sorted(dock_members)
+        if badge_ats and ats:
+            # THE RAIL IS A CHART'S CONCLUSIONS (B3: a badge numeral appears verbatim in the document behind it), so
+            # the card the ladder stamps is the bed's own CHART card - which is what the recipe's PROOF cut carries
+            # (steel-and-paper/build-f: ev-divergence-v1 with four badges at 52.45 / 53.75 / 55.05 / 56.35).
+            series, have = badge_series(bed, len(badge_ats))
+            if not series:
+                drops.append(f"dock_option:badge x{len(badge_ats)} {NOT_ON_BED_MARK}no series on this bed carries a "
+                             f"badge of its own, and a badge numeral is the document's, never typed (B3)")
+            else:
+                if have < len(badge_ats):
+                    drops.append(f"dock_option:badge: the ladder asks {len(badge_ats)} pills and the bed's richest "
+                                 f"series ({series}) carries {have} - {have} are stamped, the rest are NOT on this "
+                                 f"bed (a badge is the document's own, never typed)")
+                badge_card = lab_chart_card(bed, series, page.get("variant") or "line", dry_run, badges=True)
+                dock_members[ats[0]] = [c for c in dock_members[ats[0]] if member_axis(c) != "dock_kind"]
+                dock_members[ats[0]].insert(0, f"lab_card:{badge_card}")
         for j, at in enumerate(ats):
             until = round(min(ats[j + 1], e - DOCK_TAIL_S), 2) if j + 1 < len(ats) else round(e - DOCK_TAIL_S, 2)
             cards = sorted(dock_members[at], key=lambda c: DOCK_RANK.get(member_axis(c), 9))
+            lands = next((ARRIVAL_LANDS_S.get(str(a["arrive"]), CARD_FLIGHT_S) for a_at, a in arrivals
+                          if abs(a_at - at) < EPS), CARD_IN_S)
+            check_lands(str(rec.get("id")), cards[0], at, lands, e)
             dock = recipe_dock(bed, cards[0], at, until, ws, dry_run, j)
             for extra in cards[1:]:
                 dock = dock[:4] + ({**dock[4], **recipe_dock(bed, extra, at, until, ws, dry_run, j)[4]},)
@@ -1106,22 +1323,47 @@ def recipe_rows(bed, rec: Mapping, beat: dict, ws: list[dict], dry_run: bool, ro
             if docks:
                 i = min(range(len(docks)), key=lambda j: abs(float(docks[j][2]) - at))
                 docks[i] = docks[i][:4] + ({**docks[i][4], **arrival},)
-            else:                       # a recipe that throws a card without naming one: the bed's own thrown still
-                aid = "dock-c-blue-ties-panel" if dry_run else bed.dock_still("dock-c-blue-ties-panel")
-                docks.append((aid, 0, round(at, 2), round(e - DOCK_TAIL_S, 2), dict(arrival)))
+            else:
+                # A RECIPE THAT THROWS A CARD WITHOUT NAMING ONE, into a page that SNAPS, throws THE PAGE'S OWN
+                # CHART CARD (the parent, 2026-09-17: "in the proof cut the thrown card IS the chart's own card" -
+                # japan-tariff-trick throws `dock-b-holdings`, the hook page rendered as a card, and the page grows
+                # out of it). `authoring.docks.chart_card` of the series the page row names is that card. It is also
+                # an IMAGE card, which is what the snap needs: the player measures the rectangle off the card's
+                # `img` element, and on a VIDEO card that img is the empty `#i1` placeholder (`offsetHeight` 0,
+                # measured on this bed), so the rect is never recorded and the page simply appears.
+                snapping = any(str(s.get("kind")) == "page" for s in segs[k + 1:])
+                if snapping and page.get("series"):
+                    aid = lab_chart_card(bed, str(page["series"]), page.get("variant") or "line", dry_run)
+                    dock = (aid, 0, round(at, 2), round(e - DOCK_TAIL_S, 2), dict(arrival))
+                else:
+                    dock = dock_for(bed, "image", arrival, at, e - DOCK_TAIL_S, ws, dry_run)
+                docks.append(dock)
         if seg["kind"] == "page":
             if page["enter"].startswith("snap") and "=" not in page["enter"]:
-                # `snap_from` names the dock the viewer was just shown, so the card must still be standing when the
-                # page grows out of its rectangle: the previous row's last dock is extended to that row's own end.
+                # `snap_from` names the dock the viewer was just shown, and the PLAYER measures that dock's rectangle
+                # off the card's own element (player.html:5310) at the instant the page grows out of it. A card whose
+                # dock tuple ENDS on the boundary has left the dock list by the page's first frame, so the rect is
+                # never taken and the page simply appears - which is what the parent read on the r1 build of
+                # `card-becomes-the-chart` (2026-09-17). The card is therefore HELD ACROSS the boundary, into the
+                # page's own row, for the snap's own clock: the landed card rides the veil (the member's role text),
+                # exactly as `held-dock-across-the-cut` holds a card past its scene in the proof cut.
                 prev = out[-1] if out and (out[-1][4] or []) else None
-                if prev is not None:
-                    dock = prev[4][-1]
+                # ... and it must be a card the player can MEASURE: a video card's `img` is the empty placeholder
+                # (`#i1`), so `SNAP_RECT` is never filled for it and the page has no rectangle to grow from
+                clips = set(getattr(bed, "DOCK_STILLS", {}) or {})
+                i = next((k for k in range(len(prev[4]) - 1, -1, -1) if str(prev[4][k][0]) not in clips),
+                         None) if prev is not None else None
+                if prev is not None and i is not None:
+                    dock = prev[4][i]
                     page["enter"] = f"snap={dock[0]}"
-                    prev[4][-1] = dock[:3] + (round(float(prev[1]), 2),) + tuple(dock[4:])
+                    prev[4][i] = dock[:3] + (round(s + SNAP_HOLD_S, 2),) + tuple(dock[4:])
                 else:
-                    drops.append(f"page_enter:snap at +{seg['at']:.2f}s ENTERED BY `{DEFAULT_ENTER}` INSTEAD - no "
-                                 f"landed card stands in this beat for the page to grow out of, and E99 s67 says a "
-                                 f"page enters by axes or mount and BUILDS")
+                    why = ("carries no dock" if prev is None else "carries only VIDEO cards, whose rectangle "
+                           "the player cannot measure (player.html:5310)")
+                    drops.append(f"page_enter:snap at +{seg['at']:.2f}s {NOT_ON_BED_MARK}no landed card stands "
+                                 f"before this page for it to grow out of (the row that ends at {s:.2f}s {why}), "
+                                 f"so the page is entered by `{DEFAULT_ENTER}` and the member is NOT realised - "
+                                 f"the mechanism needs a still card on the veil")
                     page["enter"] = DEFAULT_ENTER
             plate = ledger_id(page)
         else:
@@ -1252,12 +1494,134 @@ def amend_for(row: str, members: list[tuple[float, dict]], segs: list[dict]) -> 
     return None
 
 
-def recipe_verdict(record: Mapping, members: list[tuple[float, dict]], segs: list[dict]) -> str:
-    """The re-proof's own three answers (P65 T8), decided on the rows INSIDE the window and on the walk:
+# --------------------------------------------------------------------------- the lab DIAGNOSES, never kills (E99 s69)
+#
+# THE RULING (the operator, 2026-09-17): *"it seems like our gates don't work right. they shouldn't be dismissing our
+# effects/recipes, they should be guiding us on how to build with them. if a recipe is 'short' on length, that's not a
+# reason to not use it, that's a reason to slot in something else after it."* A recipe is a proven combination of a few
+# seconds; the gates' clocks measure the WHOLE beat, and a beat is a recipe PLUS what follows it. So a row that fires
+# after the recipe's last member has landed is a HOLE IN THE BEAT - the author's next move, named - and never a verdict
+# on the recipe. Three answers, and none of them is a kill:
+DIAG_AS_IS = "buildable as-is"                  # no row decided inside the window
+DIAG_COMPANION = "buildable with a companion"   # a row asks for the next beat, or for a placement
+DIAG_NOT_ON_BED = "not on this bed"             # a member whose bind this bed has not got
+# E99 s71 (the operator, 2026-09-17): *a spotlight is never the move; when a sentence names a thing, the THING
+# ARRIVES.* So the companion a hole is answered with is an ARRIVAL, never a light, and a candidate whose only event
+# inside its window is a light is not a beat at all - it is a light on a still frame.
+DIAG_LIGHT_ONLY = "a light is not a move - the named thing should arrive (E99 s71)"
+COMPANION_MOVES = ("a badge or a pill springing with its callout, a stamped prop or icon, a docked screenshot, a "
+                   "flight - the thing the sentence names, arriving (E99 s71); never a light")
+LIGHT_ONLY_KINDS = frozenset({"spotlight", "relight"})     # the species that only LIGHT what is already on the frame
+MOVELESS_AXES = frozenset({"idle", "plate_option", "exit", "page_exit"})   # they dress a row, they are not its move
+NOT_ON_BED_MARK = "NOT ON THIS BED - "          # how a dropped member says the bed cannot carry it
+LAYOUT_IDS = frozenset({"M25", "M26"})          # the layout probe's rows: their fix is PLACEMENT, never a member
+TOOL_FAILS = frozenset({"compile", "probe"})    # not gate rows: a build that did not compile or render is no beat
+ASK_MAX = 220                                   # the row's own ask, trimmed; the WHOLE row is in `decided_by`
+
+
+def row_ask(row: str) -> str:
+    """The move the gate row itself names ("add motion there (a species, a caption pop, plate life)") - the operator's
+    words are the gate's job (E99 s69), so they are quoted here rather than re-written."""
+    tail = str(row).rsplit(" - ", 1)[-1] if " - " in str(row) else str(row)
+    return tail[:ASK_MAX].strip()
+
+
+_RUN = re.compile(r"\+(\d+(?:\.\d+)?)\s*s\b")      # `0:39+5.7s` - how long the gap the row found RUNS
+
+
+def row_hole(row: str, spans: dict[str, tuple[float, float]] | None = None) -> tuple[float, float] | None:
+    """(where the hole opens, how long it runs) - both read off what the row PRINTS, nothing inferred.
+
+    `row_instants` reads the four forms the gates use; the length is the `+5.7s` a gap row prints after its stamp
+    (`_pulse_gate`: `0:39+5.7s`). A row that prints no instant at all is a whole-cut row and has no hole."""
+    ins = row_instants(str(row), spans)
+    if not ins:
+        return None
+    at = min(a for a, _b in ins)
+    end = max(b for _a, b in ins)
+    runs = [float(x) for x in _RUN.findall(str(row))]
+    return at, round(max(end - at, max(runs) if runs else 0.0), 2)
+
+
+def last_landing(members: list[tuple[float, dict]], t0: float) -> float | None:
+    """The instant the recipe's LAST member has landed on the frame - after it, the beat is the author's to fill."""
+    if not members:
+        return None
+    return round(max(t0 + at + member_lands_s(m["card"], m.get("options")) for at, m in members), 2)
+
+
+def companion_ask(row: str, last: float | None, spans: dict[str, tuple[float, float]] | None = None) -> str:
+    """What this row asks the author to BUILD, and where - never a verdict on the recipe (E99 s69).
+
+    The hole is an interval: a row whose gap RUNS past the recipe's last landing is the beat's next move, named,
+    however early it opened. A layout row is answered by PLACEMENT, whenever it fired."""
+    rid = row_id(row) or "the row"
+    hole = row_hole(row, spans)
+    at, runs = hole if hole else (None, 0.0)
+    where = f" at {mmss(at)}" if at is not None else ""
+    if rid in LAYOUT_IDS:
+        return f"{rid}: the card sits over the page's ink{where} - place it in the page's room ({row_ask(row)})"
+    ran = f" and runs {runs:.1f} s" if runs else ""
+    if last is not None and at is not None and at + runs >= last - EPS:
+        return (f"{rid}: the hole opens{where}{ran}, past the recipe's last member landing at {last:.2f}s - slot "
+                f"the next beat there: {COMPANION_MOVES}. The row's own words: {row_ask(row)}")
+    if last is not None:
+        return (f"{rid}: the row fires{where}, inside the recipe's own span (its last member lands at {last:.2f}s) - "
+                f"answer it with {COMPANION_MOVES}. The row's own words: {row_ask(row)}")
+    return f"{rid}: the row fires{where}{ran} - answer it with {COMPANION_MOVES}. The row's own words: {row_ask(row)}"
+
+
+def only_a_light(members: "list[tuple[float, dict]] | tuple") -> bool:
+    """E99 s71: is the candidate's ONLY event inside its window a light? Then the thing the sentence names never
+    arrives, and no gate row has to fire for that to be the finding."""
+    moves = [(member_axis(m["card"]), member_token(m["card"])) for _at, m in members
+             if member_axis(m["card"]) not in MOVELESS_AXES]
+    return bool(moves) and all(axis in ("species", "page_species") and token in LIGHT_ONLY_KINDS
+                               for axis, token in moves)
+
+
+def missing_member(record: Mapping) -> str | None:
+    """The member this BED has not got, when one decided: a dropped bind, or a member the walk never saw fire."""
+    for line in record.get("dropped") or []:
+        if NOT_ON_BED_MARK in str(line):
+            return str(line).replace(NOT_ON_BED_MARK, "")
+    why = str((record.get("fires") or {}).get("why") or "")
+    if "never fired" in why:
+        # ... unless every member the walk missed is one TODAY'S CLOCKS dropped (a badge rail at 9:16, R26-171):
+        # that is a clock refusing a member, not a bind the bed has not got, and the beat around it still builds
+        cards = [c for c in MEMBER_DROPS if c in why]
+        if cards and all(c not in NOT_ON_BED for c in cards):
+            return None
+        return why
+    return None
+
+
+def diagnose(record: Mapping, members: "list[tuple[float, dict]] | tuple" = (),
+             spans: dict[str, tuple[float, float]] | None = None) -> str:
+    """The candidate's DIAGNOSIS - one of the three, and the row and the hole it names (E99 s69). Never a kill."""
+    miss = missing_member(record)
+    if miss:
+        return f"{DIAG_NOT_ON_BED} - {miss}"
+    if only_a_light(list(members)):
+        return DIAG_LIGHT_ONLY
+    fails = [r for r in (record.get("decided_by") or []) if str(r).startswith("[FAIL]")]
+    tool = next((r for r in fails if row_id(r) in TOOL_FAILS), None)
+    if tool:           # a build that did not compile or render is not a beat this bed can show the operator at all
+        return f"{DIAG_NOT_ON_BED} - {tool}"
+    if not fails:
+        return DIAG_AS_IS
+    last = last_landing(list(members), float((record.get("clip") or {}).get("t0") or 0.0))
+    return f"{DIAG_COMPANION} - {companion_ask(fails[0], last, spans)}"
+
+
+def recipe_verdict(record: Mapping, members: list[tuple[float, dict]], segs: list[dict],
+                   spans: dict[str, tuple[float, float]] | None = None) -> str:
+    """The re-proof's own answers (P65 T8) as E99 s69 leaves them - the third IS the diagnosis, because a gate never
+    dismisses a recipe:
 
       survives as proven          - nothing inside the window failed and the recipe fired at its own offsets
       needs an amended offset     - a clock row names an offset that has to move, or the members fired out of band
-      unreachable under the clocks- a FAIL inside the window, or a member that is not on the built timeline at all
+      <the diagnosis>             - `buildable with a companion - ...` / `not on this bed - ...`
     """
     rows_in = list(record.get("decided_by") or [])
     for row in rows_in:
@@ -1265,15 +1629,13 @@ def recipe_verdict(record: Mapping, members: list[tuple[float, dict]], segs: lis
         if amend:
             return f"needs an amended offset: {amend}"
     fails = [r for r in rows_in if r.startswith("[FAIL]")]
-    if fails:
-        return f"unreachable under the clocks: {fails[0]}"
     fires = record.get("fires") or {}
-    if fires.get("count"):
+    if not fails and fires.get("count"):
         return "survives as proven"
-    why = str(fires.get("why") or "the recipe did not fire on its own built timeline")
-    if "never fired" in why or "did not compile" in why:
-        return f"unreachable under the clocks: {why}"
-    return f"needs an amended offset: {why}"
+    if not fails and not missing_member(record):
+        why = str(fires.get("why") or "the recipe did not fire on its own built timeline")
+        return f"needs an amended offset: {why}"
+    return diagnose(record, members, spans)
 
 
 # --------------------------------------------------------------------------- the filter decides on the WINDOW
@@ -1419,6 +1781,98 @@ def compile_candidate(bed, build: Path, batch: str, no_receipt: str) -> tuple[in
     return rc, None
 
 
+# --------------------------------------------------------------------------- the side-by-side sheet (the parent, 2026-09-17)
+#
+# A RECORD SAYS THE MEMBERS FIRED; A SHEET SAYS THE MECHANISM IS THERE. `recipe_walk` counts TOKENS on the built
+# timeline, so a card thrown, a dip and a page that simply appears count as `card-becomes-the-chart` firing once -
+# and the parent read exactly that on the r1 build. So every recipe candidate is drawn beside the cut its recipe was
+# PROVEN in (`proof.timeline` / `proof.members_at`, read where it lies and never rebuilt - `review-link-frozen-copy`),
+# and every shape candidate is drawn against its own window's bounds. The pieces are `self_watch`'s own audit-sheet
+# pieces (`recipe_sheet`, `proof_frames`); nothing here re-implements a probe or a sheet.
+
+MEMBERS_SHEET = "lab-members.png"          # <build>/lab-members.png - the members over the proof (or over the bounds)
+
+
+def proof_dir_of(rec: Mapping, repo: Path) -> Path | None:
+    """The PROOF cut's build dir, off the recipe's own `proof.timeline` - None when it is not on disk."""
+    proof = (rec or {}).get("proof") or {}
+    rel = str(proof.get("timeline") or "")
+    if not rel:
+        return None
+    path = Path(repo) / rel
+    return path.parent if path.is_file() else None
+
+
+def member_sheets(repo: Path, build: Path, rec: Mapping | None, members: list[tuple[float, dict]], beat: dict,
+                  rows: list[tuple], dry_run: bool) -> dict:
+    """`<build>/lab-members.png`: this build's frames at the members' own LANDINGS over the proof cut's frames at its
+    `members_at` (a recipe), or over the window's own readable bounds (a shape candidate). Returns the record's
+    `sheets` entry - the path, the instants of both rows, and any warning, never a raised exception: a sheet that
+    could not be drawn is a NOTE on the record, not a dead batch."""
+    out: dict = {"members": os.path.relpath(Path(build) / MEMBERS_SHEET, repo).replace("\\", "/"),
+                 "at": [], "proof_at": [], "warn": ""}
+    t0, t1 = float(beat["t0"]), float(beat["t1"])
+    lo, hi = readable_window(rows, t0, t1)
+    at = sheet_instants(members, rows, t0, t1)
+    out.update({"at": at, "bounds": [lo, hi]})
+    if dry_run:
+        out["warn"] = "--dry-run: no player to read, no sheet drawn"
+        return out
+    pdir = proof_dir_of(rec, repo) if rec is not None else None
+    proof_at = [float(t) for t in ((rec or {}).get("proof") or {}).get("members_at") or []] if rec is not None else []
+    out["proof_at"] = proof_at
+    try:
+        import probe as P                                   # imported here: the batch's other modes need no browser
+        with P.Probe(Path(build), TIMELINE_NAME) as q:
+            top = [(t, q.png(t)) for t in at]
+            bottom = [(t, q.png(t)) for t in (lo, hi)] if pdir is None else []
+        if pdir is not None:
+            shots = [{"recipe": str(rec.get("id")), "proof_dir": pdir, "proof_at": proof_at}]
+            frames, warns = SW.proof_frames(shots, {}, P.Probe)
+            bottom = frames.get(str(rec.get("id"))) or []
+            out["warn"] = "; ".join(warns)
+            out["proof"] = os.path.relpath(pdir, repo).replace("\\", "/")
+        labels = ("this cut's members", "the proof cut" if pdir is not None else "the window's own bounds")
+        head = (f"{str((rec or {}).get('id') or beat.get('sentence') or '')} - beat {beat['n']} "
+                f"{t0:.2f}-{t1:.2f}s - readable {lo:.2f}-{hi:.2f}s - {labels[0]} over {labels[1]}")
+        if not bottom:
+            out["warn"] = (out["warn"] + "; " if out["warn"] else "") + "no frames for the lower row"
+        path = SW.recipe_sheet(top, bottom, Path(build) / MEMBERS_SHEET, SW.TILE_PX, head, labels)
+        out["members"] = os.path.relpath(path, repo).replace("\\", "/") if path is not None else ""
+    except (Exception, SystemExit) as exc:                   # a browser that will not start is a NOTE, never a crash
+        out["warn"] = f"{type(exc).__name__}: {' '.join(str(exc).split())[:300]}"
+    return out
+
+
+PAGE_CARD_W = 0.55          # a card wider than this share of the stage is PAGE-SIZED: more than half the frame
+GROWS = ("snap=", "camera=")   # the page enters the thrown card grows into (`ledger:...:snap=<dock>`)
+ZOOMS = ("focus_zoom", "chart_to", "punch")   # ... or the move that takes it to full screen inside its own row
+
+
+def throw_notes(rows: list[tuple], t0: float, t1: float) -> list[str]:
+    """E99 s71 (the operator, 2026-09-17): *the throw is a signature event, and a thrown full-page card zooms or
+    pushes to full screen.* A translation that throws a page-sized card and then leaves it floating over the plate
+    is a defect, and it is NAMED here rather than left for the frame to show."""
+    out: list[str] = []
+    for i, r in enumerate(rows):
+        if float(r[1]) <= t0 + EPS or float(r[0]) >= t1 - EPS:
+            continue
+        nxt = str(rows[i + 1][2]) if i + 1 < len(rows) else ""
+        for d in r[4] or []:
+            opts = d[4] if len(d) > 4 else {}
+            if not (t0 - EPS <= float(d[2]) <= t1 + EPS):     # the CANDIDATE's own cards; the cut's are the cut's
+                continue
+            if str(opts.get("arrive") or "") != "throw" or float(opts.get("centre_w") or 0.0) < PAGE_CARD_W:
+                continue
+            grown = any(g + str(d[0]) in nxt for g in GROWS) or any(
+                str(s.get("kind")) in ZOOMS and float(s.get("at", 0)) >= float(d[2]) for s in (r[6] or []))
+            if not grown:
+                out.append(f"{d[0]} is THROWN at {float(d[2]):.2f}s at {float(opts['centre_w']):.2f} of the stage "
+                           f"(page-sized) and nothing takes it to full screen - E99 s71: a thrown full-page card "
+                           f"zooms or pushes to full screen; this translation leaves it floating over the plate")
+    return out
+
+
 def build_one(repo: Path, batch: str, cand: dict, beats: list[dict], batch_root: Path, dry_run: bool) -> dict:
     """One candidate, built as a beat on the bed and filtered. Returns its run record - a refused compile is a record
     carrying the row that killed it, never a dropped candidate."""
@@ -1471,11 +1925,17 @@ def build_one(repo: Path, batch: str, cand: dict, beats: list[dict], batch_root:
         record["segments"] = segs
     else:
         planted = candidate_rows(bed, cand, beat, ws, dry_run, bed_binds(rows))
+        members = sorted(((float(m["offset_s"]), dict(m)) for m in cand.get("members") or []), key=lambda x: x[0])
     table_rows = splice(rows, planted, beat["t0"], beat["t1"])
     T.write_shot_table(build / SHOT_TABLE_NAME, table_rows,
                        f'"""P65 T3 - the recipe lab: {cid} planted in beat {beat["n"]} of the Tokyo cut '
                        f'({beat["t0"]:.2f}-{beat["t1"]:.2f}s). Written by lab_build.py; do not hand-edit."""\n')
-    instants = [beat["t0"], round(beat["t0"] + LE.clocks()["m16_gap_s"], 2), beat["t1"]]
+    # THE INSTANTS ARE THE MEMBERS' OWN LANDINGS, inside the window's READABLE bounds - never the boundary frame a
+    # dip paints black, never the next row's first frame, and never the instant a card was thrown (the parent's read
+    # of batch-r1, 2026-09-17: a black tile, a card floating on the next page's cream, and two windows with no card
+    # in them at all - all three were the sheet reading the wrong three instants).
+    instants = sheet_instants(members, table_rows, beat["t0"], beat["t1"])
+    record["clip"] = {"t0": readable_window(table_rows, beat["t0"], beat["t1"])[0], "t1": beat["t1"]}
     gate_rows: list[dict] = []
     if dry_run:                                      # the compile and the four tools are stubbed; the rows are canned
         _rc, out = run_tool(["--dry-run", str(build)])
@@ -1494,14 +1954,22 @@ def build_one(repo: Path, batch: str, cand: dict, beats: list[dict], batch_root:
             for line in record["sound"]["notes"]:
                 print(f"      [sound] {line}")
             gate_rows += run_filter(build, bed.HERE, instants, build / SHEET_NAME)
-    deciding, context = partition(gate_rows, beat["t0"], beat["t1"], scene_spans(build))
+    spans = scene_spans(build)
+    deciding, context = partition(gate_rows, beat["t0"], beat["t1"], spans)
     record["decided_by"] = decided_by(deciding)          # the rows INSIDE the candidate's own window
     record["context"] = decided_by(context)              # the whole-cut floors and the approved cut's own rows
     record["fails"] = sorted({r["id"] for r in deciding if r["level"] == "FAIL"})
-    record["survivor"] = not record["fails"]
     if rec is not None:
         record["fires"] = recipe_fires(repo, build, rec, beat["t0"], beat["t1"])
-        record["verdict"] = recipe_verdict(record, members, segs)
+    # E99 s69: the filter DIAGNOSES, it never kills. `survivor` stays as a DERIVED field for the readers written
+    # against it (`lab_batch.survivors`) - true for both buildable answers, false only when the bed has not got
+    # the member, because a beat whose member is missing is not this bed's beat to judge.
+    record["notes"] = throw_notes(table_rows, beat["t0"], beat["t1"])
+    record["sheets"] = member_sheets(repo, build, rec, members, beat, table_rows, dry_run)
+    record["diagnosis"] = diagnose(record, members, spans)
+    record["survivor"] = not record["diagnosis"].startswith(DIAG_NOT_ON_BED)
+    if rec is not None:
+        record["verdict"] = recipe_verdict(record, members, segs, spans)
     return record
 
 
@@ -1532,13 +2000,19 @@ def run_batch(repo: Path, batch: str, ids: list[str], dry_run: bool, runs: str |
     for cid in ids:
         record = build_one(repo, batch, known[cid], beats, root, dry_run)
         print(f"  {record['id']}  beat {record['beat']['n']} "
-              f"{record['clip']['t0']:.2f}-{record['clip']['t1']:.2f}s  survivor={record['survivor']}"
+              f"{record['clip']['t0']:.2f}-{record['clip']['t1']:.2f}s  {record['diagnosis']}"
               + (f"  fails={', '.join(record['fails'])}" if record["fails"] else ""))
+        sheets = record.get("sheets") or {}
+        print(f"      sheet   {sheets.get('members') or 'none'}"
+              + (f"  ({sheets['warn']})" if sheets.get("warn") else "")
+              + f"  at {', '.join(f'{t:.2f}' for t in sheets.get('at') or [])}")
         if record.get("verdict"):
             print(f"      VERDICT {record['verdict']}")
             print(f"      fires   {json.dumps(record.get('fires') or {}, sort_keys=True)[:400]}")
             for line in record.get("dropped") or []:
                 print(f"      dropped {line}")
+        for line in record.get("notes") or []:
+            print(f"      [E99 s71] {line}")
         for line in record["decided_by"]:
             print(f"      {line}")
         for line in record.get("context") or []:
@@ -1551,9 +2025,12 @@ def run_batch(repo: Path, batch: str, ids: list[str], dry_run: bool, runs: str |
     return records, path
 
 
+DIAGNOSES = (DIAG_AS_IS, DIAG_COMPANION, DIAG_NOT_ON_BED, DIAG_LIGHT_ONLY)
+
+
 def check(repo: Path, batch: str, ids: list[str], runs: str | None) -> list[str]:
-    """T8 leans on this: every candidate of the batch has a record, and every record's sheet and clip window are on
-    disk. The defects come back as named lines - one per defect."""
+    """T8 leans on this: every candidate of the batch has a record, a DIAGNOSIS in the ruling's own vocabulary, its
+    member sheet and its clip window on disk. The defects come back as named lines - one per defect."""
     path = record_path(repo, batch, runs)
     if not path.is_file():
         return [f"{path} is missing - the batch has not been built"]
@@ -1567,6 +2044,14 @@ def check(repo: Path, batch: str, ids: list[str], runs: str | None) -> list[str]
         cid = r.get("id", "(no id)")
         if not (Path(repo) / str(r.get("sheet") or "")).is_file():
             bad.append(f"{cid}: the sheet {r.get('sheet')} is not on disk")
+        diagnosis = str(r.get("diagnosis") or "")
+        if not any(diagnosis.startswith(d) for d in DIAGNOSES):
+            bad.append(f"{cid}: the diagnosis {diagnosis[:60]!r} is none of {', '.join(DIAGNOSES)} - E99 s69: the "
+                       f"lab DIAGNOSES, it never kills (re-run lab_build.py --batch)")
+        sheets = r.get("sheets") or {}
+        if not (Path(repo) / str(sheets.get("members") or "")).is_file():
+            bad.append(f"{cid}: the member sheet {sheets.get('members') or '(none)'} is not on disk"
+                       + (f" - {sheets.get('warn')}" if sheets.get("warn") else ""))
         timeline = Path(repo) / str(r.get("build") or "") / "timeline.json"
         if not timeline.is_file():
             bad.append(f"{cid}: the build {r.get('build')} has no timeline.json - there is no clip to show")
@@ -1810,13 +2295,16 @@ def main(argv: list[str] | None = None) -> int:
                 raise LabBuildError(f"not in {LE.CANDIDATES_REL}: {', '.join(unknown)} - a candidate is enumerated "
                                     f"before it is built ({LE.BUILD_CMD})")
         records, path = run_batch(repo, a.batch, sorted(dict.fromkeys(ids)), a.dry_run, a.runs, a.builds, known)
-        survivors = sum(1 for r in records if r["survivor"])
-        for verdict in ("survives as proven", "needs an amended offset", "unreachable under the clocks"):
+        for name in (DIAG_AS_IS, DIAG_COMPANION, DIAG_NOT_ON_BED):
+            n = sum(1 for r in records if str(r.get("diagnosis") or "").startswith(name))
+            if n:
+                print(f"  {name}: {n}")
+        for verdict in ("survives as proven", "needs an amended offset"):
             n = sum(1 for r in records if str(r.get("verdict") or "").startswith(verdict))
             if n:
                 print(f"  {verdict}: {n}")
         print(f"  wrote {os.path.relpath(path, repo)}")
-        print(f"RESULT: {a.batch} {survivors}/{len(records)} survivor(s)")
+        print(f"RESULT: {a.batch} {len(records)} candidate(s) DIAGNOSED - the lab never kills one (E99 s69)")
         return 0
     except LabBuildError as exc:
         print(f"FAIL: {exc}")

@@ -453,13 +453,19 @@ def test_an_exploration_or_calibration_candidate_says_so_on_the_card(data):
 def test_the_live_queue_carries_both_of_p65s_human_gate_rows():
     """T4's own evidence: HG1 is a real batch card with a clip, HG2 is owed until T8's re-proof run lands."""
     live = {i["id"]: i for i in BRQ.load_data(DATA)["items"]}
-    hg1 = live["lab-smoke-r2-plate-carries-a-card"]
-    assert hg1["kind"] == "batch" and hg1["status"] == "open" and "P65 HG1" in hg1["ids"]
-    assert hg1["candidates"] and all(c["proof"]["type"] == "clip" for c in hg1["candidates"])
+    # a card the parent PULLS is `owed` with the reason in `owed` (2026-09-17: the renditions were read on their sheets
+    # and were not the mechanisms); a live card is therefore a real batch OR an owed one, never anything else
+    for cid in ("lab-smoke-r2-plate-carries-a-card", "lab-batch-r1-plate-carries-a-card"):
+        hg1 = live[cid]
+        assert hg1["kind"] in ("batch", "owed") and hg1["status"] == "open" and "P65 HG1" in hg1["ids"]
+        if hg1["kind"] == "batch":
+            assert hg1["candidates"] and all(c["proof"]["type"] == "clip" for c in hg1["candidates"])
+        else:
+            assert hg1["owed"].strip()
     hg2 = live["p65-hg2-the-reproved-set-and-m38"]
     assert hg2["kind"] in ("owed", "batch") and "P65 HG2" in hg2["ids"]
     if hg2["kind"] == "owed":
-        assert "reproof-r1" in hg2["owed"]
+        assert "reproof" in hg2["owed"] or "PULLED" in hg2["owed"]
 
 
 def test_a_candidates_answer_posts_through_the_same_door(tmp_path):
@@ -707,7 +713,7 @@ def test_the_constants_are_the_calibrated_whole_cut_and_the_warn_first_switch():
     live = BRQ.load_data(DATA)
     beats = [p["t1"] - p["t0"] for i in BRQ.open_items(live) for p in i.get("proofs") or []
              if p["type"] == "clip" and p["t1"] - p["t0"] < BRQ.WHOLE_CUT_S]
-    assert beats and max(beats) < BRQ.WHOLE_CUT_S
+    assert all(b < BRQ.WHOLE_CUT_S for b in beats)   # every live beat clip, when any is carded, sits under the whole-cut line
 
 
 @pytest.mark.parametrize("proof", [PLAYER_PROOF, WHOLE_CUT_CLIP], ids=["player", "77.6s-clip"])

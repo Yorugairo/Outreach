@@ -222,7 +222,20 @@ SAFE_WARN_SHARE = 0.10     # a settled card with more than a tenth of itself ins
 STILL_WARN_S = 8.0         # s9.25 working target
 SHORT_PULSE_MAX_S = 2.5    # doc 49 s49.6: a short needs a visual event every 1.2-2.5 s. THE GATE IS THE PULSE (operator, 2026-09-05):
                            # a floor on motion, never a ceiling - 'we could have much more animation and it would be fine'
-SRC_M16 = "doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling"
+HELD_BUILT_S = 4.0         # E99 s69 (the operator, 2026-09-17: "a 5.7s hold might be acceptable after a chart finishes"): the
+                           # seconds a page may hold BUILT after its chart lands without the pulse counting them as a gap. The
+                           # number is E99 s67's own - "the page holds built for a few seconds while its number is spoken" - and
+                           # a few seconds is read here as four. THE ALLOWANCE IS NOT A LICENCE: a gap that does not START at a
+                           # page's landing is a gap, and one that runs longer than this is a gap for its whole length. HG2 may
+                           # move the number; nothing else about the pulse changes.
+HELD_BUILT_TOL_S = 0.05    # the landing and the event list agree to `_page_events`' own 2 dp rounding, no closer
+SRC_M16 = ("doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no "
+           "ceiling. E99 s69 (2026-09-17): the HELD-BUILT window is exempt - a gap that starts at a page's chart LANDING and runs "
+           f"no longer than {HELD_BUILT_S:g}s is the beat's punctuation, not a hole (E99 s67 asked for that hold; HG2 may move the number)")
+SRC_M05 = ("doc 29 s9.13 as amended by E69 (2026-09-12): the hold is legal while the FRAME LIVES - the ceiling's "
+           "two-dock condition was written when a world was a still and only a card could move on it. E99 s69 "
+           f"(2026-09-17): the liveness reads the same allowance as M16 - a dead stretch that starts at a page's "
+           f"chart landing and runs no longer than {HELD_BUILT_S:g}s is the chart's own hold, not a dead frame")
 EVIDENCE_GAP_MAX_S = 45.0  # doc 29: evidence every 15-45s
 PLATE_SECONDS = 12.0       # s9.13: runtime / 12s distinct plates
 PLATE_HOLD_MAX_S = 20.0    # s9.13: past this a hold is READ for liveness (E69, 2026-09-12) - it was "unless two docks over it"
@@ -544,6 +557,26 @@ def _page_events(scenes: list[dict]) -> tuple[list[float], list[float]]:
         beats += [round(a + PAGE_BEAT_OFFSETS[-1] + LP_BADGE0_S + LP_BADGE_STEP_S * k, 2) for k in range(n_badges)
                   if a + PAGE_BEAT_OFFSETS[-1] + LP_BADGE0_S + LP_BADGE_STEP_S * k < z]
     return beats, starts
+
+
+def _chart_landings(scenes: list[dict]) -> list[float]:
+    """Every instant a ledger page's CHART LANDS: the page's own enter plus `_page_land_offset` (its enter's clock).
+
+    The bare instants of `_page_landings`' "chart lands" half (that one is read for the SOUND, and carries a label).
+
+    E99 s67 asks a page to BUILD and then hold built while its number is spoken; E99 s69 says a gate that counts
+    that hold as a dead gap contradicts the hold it asked for. This is the list both M16 and M05 read."""
+    return [round(float(s["span"][0]) + _page_land_offset(s), 2) for s in scenes if _is_page(s) and s.get("span")]
+
+
+def _held_built(at: float, dur: float, landings: list[float]) -> float | None:
+    """The landing a gap STARTS at, when the gap is no longer than `HELD_BUILT_S` - else None (E99 s69).
+
+    Two conditions, both necessary: the gap opens ON a page's landing (the seconds after the chart finished), and it
+    is no longer than the hold E99 s67 asked for. A gap that merely CONTAINS a landing is still a gap."""
+    if dur > HELD_BUILT_S + HELD_BUILT_TOL_S:
+        return None
+    return next((land for land in landings if abs(at - land) <= HELD_BUILT_TOL_S), None)
 
 
 def _species_events(scenes: list[dict]) -> list[float]:
@@ -978,6 +1011,7 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
             over_hold.append((a, d, pid, n, round(gap, 2), round(at, 2)))
     wc = [len(p.get("t", [])) for p in pages]
     return {"runtime": runtime, "events": ev, "still": still, "ev_gaps": ev_gaps, "plates": plate_ids,
+            "landings": _chart_landings(scenes),
             "over_hold": over_hold, "wc": wc, "pages": pages, "dens": _per_minute(runtime, ev, entries),
             "spans": spans, "dock_source": dock_source, "n_pages": len(page_starts),
             "camera_clashes": _camera_clashes(scenes),
@@ -1011,7 +1045,10 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     add("M04", "WARN" if n_plates < want else "PASS", f"{n_plates} distinct plates; target runtime/12s = {want}", "doc 29 s9.13 plate density")
     oh = A["over_hold"]
     live_max = SHORT_PULSE_MAX_S if _is_short(tl, R) else STILL_WARN_S
-    dead = sorted((h for h in oh if h[4] > live_max), key=lambda h: -h[4])
+    # E99 s69: M05's liveness reads M16's allowance - a stretch that starts at a page's landing and runs no longer
+    # than the held-built window is the chart's own hold, and the page is not a dead frame across it
+    held_h = [h for h in oh if h[4] > live_max and _held_built(h[5], h[4], A.get("landings") or []) is not None]
+    dead = sorted((h for h in oh if h[4] > live_max and h not in held_h), key=lambda h: -h[4])
     add("M05", "FAIL" if dead else "PASS",
         (f"{len(dead)} plate(s) held > {PLATE_HOLD_MAX_S:.0f}s with the frame DEAD: worst {dead[0][2]} "
          f"{dead[0][1]:.0f}s at {mm(dead[0][0])} - {dead[0][4]:.1f}s with no visual event at {mm(dead[0][5])}, "
@@ -1019,9 +1056,10 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
          f"captions in stage mode) or cut it") if dead
         else (f"{len(oh)} plate(s) over the {PLATE_HOLD_MAX_S:.0f}s hold, every one LIVE across it "
               f"(worst gap {max(h[4] for h in oh):.1f}s of {live_max:.1f}s allowed)" if oh
-              else f"no plate over the {PLATE_HOLD_MAX_S:.0f}s hold"),
-        "doc 29 s9.13 as amended by E69 (2026-09-12): the hold is legal while the FRAME LIVES - the ceiling's "
-        "two-dock condition was written when a world was a still and only a card could move on it")
+              else f"no plate over the {PLATE_HOLD_MAX_S:.0f}s hold")
+        + "".join(f"; held built {h[4]:.1f}s at {mm(h[5])} after the chart landed - exempt (E99 s69)"
+                  for h in held_h[:3]),
+        SRC_M05)
     if A["wc"]:
         ppm = len(A["pages"]) / (R / 60)
         mean_w = st.mean(A["wc"])
@@ -1257,13 +1295,19 @@ def _pulse_gate(tl: dict, A: dict) -> Gate:
     if not still:
         return Gate("M16", "INFO", "no events to measure a pulse from", SRC_M16)
     at, gap = still[0]
-    slow = sorted((a, d) for a, d in still if d > SHORT_PULSE_MAX_S)
+    landings = A.get("landings") or []
+    over = [(a, d) for a, d in still if d > SHORT_PULSE_MAX_S]
+    # E99 s69: the seconds a page holds BUILT after its chart lands are the beat's punctuation, not a hole
+    held = [(a, d, land) for a, d in over if (land := _held_built(a, d, landings)) is not None]
+    slow = sorted((a, d) for a, d in over if _held_built(a, d, landings) is None)
     msg = f"longest gap between visual events {gap:.1f}s at {_mm(at)}; {len(slow)} gap(s) over {SHORT_PULSE_MAX_S:.1f}s"
+    note = "".join(f"; held built {d:.1f}s at {_mm(a)} after the chart landed at {land:.1f}s - exempt (E99 s69)"
+                   for a, d, land in held[:3])
     if not _is_short(tl, A["runtime"]):
-        return Gate("M16", "INFO", msg + " - a long-form build; the pulse law binds shorts", SRC_M16)
+        return Gate("M16", "INFO", msg + " - a long-form build; the pulse law binds shorts" + note, SRC_M16)
     if slow:
-        return Gate("M16", "FAIL", msg + ": " + ", ".join(f"{_mm(a)}+{d:.1f}s" for a, d in slow[:6]) + " - add motion there (a species, a caption pop, plate life); never cut motion to pass", SRC_M16)
-    return Gate("M16", "PASS", msg, SRC_M16)
+        return Gate("M16", "FAIL", msg + ": " + ", ".join(f"{_mm(a)}+{d:.1f}s" for a, d in slow[:6]) + " - add motion there (a species, a caption pop, plate life); never cut motion to pass" + note, SRC_M16)
+    return Gate("M16", "PASS", msg + note, SRC_M16)
 
 
 SRC_M32 = ("P54 T9 (the operator, 2026-09-13: 'it's really the flash before or a second black frame that we're looking for'): "
