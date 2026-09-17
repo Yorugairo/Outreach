@@ -106,18 +106,47 @@ def page_resolver(project: Path):
     return pages
 
 
+CLIP_DIRS = ("clips", "omni-video/stills", "comfy-video", ".")   # where an episode keeps the clips a plan names
+
+
+def world_resolver(project: Path, build: Path):
+    """The kit's WORLD resolver: the id the plan names -> the id the BUILD can open.
+
+    A read-back plan names the hook's world as the cut recorded it (`clip:clip-a-counter-tab-v2.mp4`),
+    and `build_scene_timeline_f` opens a `clip:<path>` relative to the EPISODE (`:3619-3623`). Where a
+    clip lives is the episode's business, not the kit's, so the lookup is here: the build's own
+    `clips/` first (that is where the seekable copy the cut used is written), then the project's, and
+    the id is written back RELATIVE TO THE PROJECT so the table stays portable. An id the project does
+    not carry is handed back unchanged - the build then names the file it cannot find, which is the
+    honest failure."""
+    def worlds(plate: str) -> str:
+        pid = str(plate)
+        if not pid.startswith("clip:"):
+            return pid
+        name = pid[len("clip:"):].split(";", 1)[0]
+        for root in (build, project):
+            for where in CLIP_DIRS:
+                p = (root / where / Path(name).name)
+                if p.is_file():
+                    return "clip:" + p.resolve().relative_to(project.resolve()).as_posix()
+        return pid
+    return worlds
+
+
 def compile_base(build: Path, aspect: str, project: Path | None = None) -> tuple[list[tuple], list[dict]]:
     """The build's AUTHORED plan as the approved skeleton. Refusals keep `shapes`' own words.
 
-    With `project`, every card on a page is placed by that page's OWN geometry (`page_resolver`);
-    without it the compiler's placer decides at compile time and each row's `why` says so."""
+    With `project`, every card on a page is placed by that page's OWN geometry (`page_resolver`) and
+    every world the plan names is resolved to a file this build can open (`world_resolver`); without
+    it the compiler's placer decides at compile time and each row's `why` says so."""
     plan = build / PLAN_NAME
     if not plan.is_file():
         raise Refused(f"FAIL: no {PLAN_NAME} in {rel(build)} - the compiler's INPUT is AUTHORED (E99 s66, M41); "
                       "this tool never writes one")
     try:
         return SH.compile(SH.load_plan(plan), read_words(build), SH.DEFAULTS, aspect,
-                          pages=page_resolver(project) if project is not None else None)
+                          pages=page_resolver(project) if project is not None else None,
+                          worlds=world_resolver(project, build) if project is not None else None)
     except SH.Refused as exc:
         raise Refused(f"FAIL: {rel(plan)}: {exc}") from None
 

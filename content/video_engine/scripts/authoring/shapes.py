@@ -33,7 +33,8 @@ THE APPROVED SHAPE, enforced BY CONSTRUCTION (E99 s67 Apply 1-6, E47, E65, R26-1
   * a return uses `spiral`;
   * a dock reads then parks in the page's own room (E65) and holds to the row's own end;
   * no world plate row is shorter than `plate_hold_s` (M44 `PLATE_MIN_S`);
-  * at 9:16 no `badges` rail (R26-171) and no `chart_to park` (R26-172) is emitted;
+  * at 9:16 no `badges` rail is emitted (R26-171); the PARK is emitted in both aspects - R26-172 is
+    WITHDRAWN and a park is how a page makes room for a card (`place_cards`);
   * a light is emitted ONLY on a sentence that POINTS - the plan's own `capabilities` name a datum,
     an index, a point or a region - and never before the page's chart LANDS (Apply 1-2). The landing
     is the page's own (`gate_motion_density`): `PAGE_BUILD_END_S` on a roll-out, `LP_BUILD_S` on an
@@ -117,9 +118,17 @@ DEFAULTS: dict = {
     "light_after_build": True,    # E99 s67 Apply 1-2: no light over the build
     "card_in_page_room": True,    # E65: a dock reads, then parks in the page's own room and stays
     "no_rails_9_16": True,        # R26-171
-    "no_park_9_16": True,         # R26-172
     "plate_hold_s": PLATE_MIN_S,  # M44
+    "park_scale": 0.52,           # the park a page makes room with, measured on the approved cut:
+    "park_anchor": "top",         # (the skeleton `page-parks-to-make-room-for-the-card` cites the table's own line)
 }
+# R26-172 ("no `chart_to park` at 9:16") is WITHDRAWN - the parent's read of base v3 beside the approved
+# cut, 2026-09-17: at 56.72 / 57.52 s the APPROVED PORTRAIT cut parks its page small at the top and the
+# clipping and the wafer card take the room below, while the base left the page full size and dropped both
+# cards over its ink. THE PARK IS HOW A PAGE MAKES ROOM FOR A CARD (`build_short.py:314` 0.55 for the two
+# fingers, `:361-367` 0.52 for the record and the fab, `:394` 1.0 - the UN-PARK as the cards leave). So no
+# default strips one, no library filter hides the park skeletons, and `place_cards` MAKES one when a card
+# lands on a page with no room (`park_scale` / `park_anchor` above).
 
 ACTS = ("QUOTES", "RANKS", "COMPARES", "DIVIDES", "NAMES", "EXPLAINS",
         "TURNS", "BREAKS", "SPANS", "SETS", "RETRACTS", "COUNTS")
@@ -459,11 +468,62 @@ def _meets(a: dict, b: dict, pad: float = 0.0) -> bool:
             and a["y"] < b["y"] + b["h"] + pad and a["y"] + a["h"] > b["y"] - pad)
 
 
-def page_ink(page: dict, aspect: str) -> list[dict]:
+# --- THE PARK'S OWN ROOM (E99 s70 / the parent's read of the approved cut, 2026-09-17) ----------
+PARK_LEAD_S = 0.4        # the park starts before the card lands (`build_short.py:361`: `t_pledge - 0.4`)
+PARK_DUR_S = 0.9         # the affine transform's own clock (`:314`, `:361`, `:394` - all 0.9)
+UNPARK_LAG_S = 0.3       # ... and the page re-takes the stage after the cards leave (`:394`: `+ 0.3`)
+
+
+def park_scale_at(species: list, t: float) -> float:
+    """The scale the page's chart is PARKED to at `t` - 1.0 while it stands full size. The last
+    `chart_to park` at or before `t` decides, and a park to 1.0 is the UN-PARK (CAPABILITIES.md:120)."""
+    scale = UNPARK_SCALE
+    for sp in sorted((s for s in (species or []) if s.get("kind") == "chart_to" and s.get("to") == "park"),
+                     key=lambda s: float(s["at"])):
+        if float(sp["at"]) <= t + EPS:
+            scale = float(sp.get("scale", UNPARK_SCALE))
+    return scale
+
+
+def _shrink(box: dict, ox: float, oy: float, s: float) -> dict:
+    """One box under an affine park of `s` about `(ox, oy)` - every mark in place, nothing re-laid out."""
+    return {**box, "x": ox + (box["x"] - ox) * s, "y": oy + (box["y"] - oy) * s,
+            "w": box["w"] * s, "h": box["h"] * s}
+
+
+def parked_boxes(boxes: dict, scale: float) -> dict:
+    """The page's boxes as a `chart_to park` DRAWS them, not as they are laid out.
+
+    Measured on the approved cut rather than modelled here: *"the chart svg is 800x851 at (80,374),
+    parked at 0.55 it holds x 80-520, y 374-842"* (the approved portrait cut's own table, at the line the
+    skeleton `page-parks-to-make-room-for-the-card` cites as its `source`) - the same
+    corner, the width and the height times the scale, the axis labels riding with it - and the card the
+    park makes room for lands *"626x370 at (0.5, 0.55) = y 871-1241, above the source line (1249)"*
+    (`:340-345`), so the title, the sub and the SOURCE LINE stay where they are. The measured
+    `data_mask` is dropped: the data's own holes park with the plot and are no longer where it says.
+    """
+    plot = boxes.get("plot")
+    if not plot or scale >= UNPARK_SCALE - EPS:
+        return boxes
+    ox, oy = float(plot["x"]), float(plot["y"])
+    out = {k: v for k, v in boxes.items() if k != "data_mask"}
+    out["plot"] = _shrink(plot, ox, oy, scale)
+    axis = boxes.get("axis") or {}
+    if axis:
+        out["axis"] = {k: (_shrink(b, ox, oy, scale) if isinstance(b, dict) else b) for k, b in axis.items()}
+    return out
+
+
+def _boxes(page: dict, aspect: str, park: float = UNPARK_SCALE) -> dict:
+    """One page's boxes, through the page builder's own report, as the park at this instant draws them."""
+    return parked_boxes(pager().page_boxes(page, aspect), float(park))
+
+
+def page_ink(page: dict, aspect: str, park: float = UNPARK_SCALE) -> list[dict]:
     """Every rectangle of a page a card may NOT settle on: its type (the title, the sub, the source
     line, the badge rail), its axis labels, and the DATA's own cells - the boxes M25 scores
     (`gate_motion_density` LAYOUT_INK + `page.data`), read from the page builder's own report."""
-    boxes = pager().page_boxes(page, aspect)
+    boxes = _boxes(page, aspect, park)
     out = [boxes[k] for k in ("title", "sub", "source", "rail") if boxes.get(k) and boxes[k]["h"] > 0]
     out += [b for b in ((boxes.get("axis") or {}).get("x"), (boxes.get("axis") or {}).get("y")) if b]
     return out
@@ -486,41 +546,46 @@ def clear_strips(band: dict, ink: list[dict]) -> list[dict]:
     return out
 
 
-def rooms_of(page: dict, aspect: str) -> list[dict]:
+def rooms_of(page: dict, aspect: str, park: float = UNPARK_SCALE) -> list[dict]:
     """Every rectangle on this page a card may settle in, largest first: the plot's own empty rooms
     (E65's `mask_rooms`, read off the page's measured mask) and the strips of the bands outside the
-    plot that carry no ink (`clear_strips`). One list, one order, no episode named."""
+    plot that carry no ink (`clear_strips`). One list, one order, no episode named.
+
+    Under a PARK the mask's rooms are gone (the data's holes shrank with the plot) and the room is the
+    band the park freed - which is what the approved cut puts its cards in (`build_short.py:340-345`)."""
     C = compiler()
-    boxes = pager().page_boxes(page, aspect)
+    boxes = _boxes(page, aspect, park)
     if not boxes.get("plot"):
         return []
-    ink = page_ink(page, aspect)
+    ink = page_ink(page, aspect, park)
     out = list(C.mask_rooms(boxes))
     for band in C.free_bands(boxes):
         out += clear_strips(band, ink)
     return sorted(out, key=lambda r: -(r["w"] * r["h"]))
 
 
-def card_rooms(page: dict, aspect: str, n: int) -> list[dict]:
+def card_rooms(page: dict, aspect: str, n: int, park: float = UNPARK_SCALE) -> list[dict]:
     """`n` boxes a card can settle in on this page, none of them sharing a pixel with another or
     with the page's ink - E65's own rooms, largest first, at the quiet-zone end.
 
-    E65 and R26-172 together: *"parking is not a way to make room for a card on 9:16; the page's own
-    empty room is"*. The rooms are the rectangles the DATA's ink does not touch
+    E65: the card takes a room of the page's own. (E65 also said *"parking is not a way to make room
+    for a card on 9:16"* - R26-172, WITHDRAWN 2026-09-17 on the approved cut's own 56.72 s frame: the
+    page parks and the cards take the room below. `park` is the second answer, not the first: a page
+    with a room of its own still uses it.) The rooms are the rectangles the DATA's ink does not touch
     (`build_scene_timeline_f.mask_rooms`, read off the page's measured mask), and the card takes the
     end of its room the plate's own `quiet_zone` token names (`right` / `left`). Fewer than `n` boxes
     come back when the page has not got the room - the caller leaves those cards to the compiler's
     placer and says so. Pure: the page spec is never mutated."""
-    C, LPG = compiler(), pager()
-    boxes = LPG.page_boxes(page, aspect)
+    C = compiler()
+    boxes = _boxes(page, aspect, park)
     if not boxes.get("plot"):
         return []
     stage, pad = boxes["stage"], C.DOCK_PLACE_PAD
     want = round(C.DOCK_ON_PAGE_W * stage["w"])
     floor = C.PLACE_FLOOR_H.get(aspect, C.PLACE_FLOOR_H["16:9"])
-    quiet, ink = boxes.get("quiet_zone"), page_ink(page, aspect)
+    quiet, ink = boxes.get("quiet_zone"), page_ink(page, aspect, park)
     out: list[dict] = []
-    for room in rooms_of(page, aspect):
+    for room in rooms_of(page, aspect, park):
         if len(out) >= n:
             break
         room_h = room["h"] - 2 * pad
@@ -560,40 +625,93 @@ def placed(options) -> bool:
     return any(k in (options or {}) for k in CARD_PLACE_KEYS)
 
 
-def place_cards(docks: list, page: dict | None, aspect: str, notes: list) -> list:
+def _slots(free: list) -> list[int]:
+    """The room INDEX each card takes: the first one no card live at the same instant already holds,
+    so two cards over one page never share a rectangle."""
+    slots: list[int] = []
+    for i, d in enumerate(free):
+        taken = {slots[j] for j, o in enumerate(free[:i]) if float(o[3]) > float(d[2]) and float(o[2]) < float(d[3])}
+        slots.append(next(k for k in range(len(free)) if k not in taken))
+    return slots
+
+
+def make_room(card: list, species: list, t1: float, d: dict, notes: list) -> float:
+    """THE PARK THAT MAKES THE ROOM - emitted onto the row, and the scale it parks the page to.
+
+    The approved cut's own answer to a card with nowhere to go: *"the monthly bars PARK up-left on
+    'pledged' and the fab card takes the band the park frees"* (the park 0.4 s before the card, at
+    `scale` / `anchor: top`), and when the cards leave the page UN-PARKS - *"the chart UN-PARKS - grows
+    back to full size from the parked slot"* (a park to 1.0, 0.3 s after the card's exit). Both are
+    transcribed from the approved cut's own rows, which the skeletons
+    `page-parks-to-make-room-for-the-card` and `page-unparks-and-retakes-the-stage` cite as their
+    `source`; never invented here. R26-172, which used to strip them in portrait, is WITHDRAWN."""
+    scale, anchor = float(d.get("park_scale", 0.52)), str(d.get("park_anchor", "top"))
+    at = round(max(float(card[2]) - PARK_LEAD_S, 0.0), 2)
+    species.append({"kind": "chart_to", "at": at, "dur": PARK_DUR_S, "to": "park", "scale": scale, "anchor": anchor})
+    notes.append(f"the page PARKS to {scale} at {at:.2f}s to make the room `{card[0]}` lands in: the page had no room "
+                 "of its own clear of its ink, and a card is never dropped over a page's ink (the approved cut's own "
+                 "move, transcribed in `page-parks-to-make-room-for-the-card`; R26-172 WITHDRAWN)")
+    out = round(float(card[3]) + UNPARK_LAG_S, 2)
+    if out < t1 - EPS:
+        species.append({"kind": "chart_to", "at": out, "dur": PARK_DUR_S, "to": "park",
+                        "scale": UNPARK_SCALE, "anchor": anchor})
+        notes.append(f"the page UN-PARKS at {out:.2f}s, as the card leaves: the chart re-takes the stage rather than "
+                     "standing small under nothing (`build_short.py:394`; CAPABILITIES.md:120)")
+    return scale
+
+
+def place_cards(docks: list, page: dict | None, aspect: str, notes: list,
+                species: list | None = None, t1: float | None = None, defaults: dict | None = None) -> list:
     """Every card on one page row, placed in the page's own room - and never two of them in one box.
 
-    A card the plan placed itself (`centre_x` / `centre_y` / `centre_w`) is untouched. Every other
-    card on a LEDGER page takes a room of its own: the rooms are ordered by size, and a card is
-    given the first room no card LIVE AT THE SAME INSTANT already holds, so two cards over one page
-    never share a rectangle. A page with fewer rooms than cards leaves the rest to the compiler's
-    own placer, and the row's `why` says which and why."""
+    A card the plan placed itself (`centre_x` / `centre_y` / `centre_w`) is untouched. Every other card
+    on a LEDGER page takes a room of its own: the rooms are ordered by size, and a card is given the
+    first room no card LIVE AT THE SAME INSTANT already holds.
+
+    The rooms are read AS THE PAGE STANDS AT THAT INSTANT - under a `chart_to park` the room is the band
+    the park freed (`parked_boxes`). When a card lands on a page that stands full size and has no room
+    for it, the page PARKS to make one (`make_room`) instead of the card sitting on the page's ink or
+    losing its box to the stage's centre - the approved cut's own move at 56.7 s."""
     if page is None or not docks:
         return docks
     free = [d for d in docks if not placed(d[4])]
     if not free:
         return docks
-    slots: list[int] = []
-    for i, d in enumerate(free):
-        taken = {slots[j] for j, o in enumerate(free[:i]) if float(o[3]) > float(d[2]) and float(o[2]) < float(d[3])}
-        slots.append(next(k for k in range(len(free)) if k not in taken))
-    rooms = card_rooms(page, aspect, max(slots) + 1)
-    for d, k in zip(free, slots):
-        if k < len(rooms):
-            d[4] = {**d[4], **room_options(rooms[k], aspect)}
-        elif d[4].get("centre"):
-            d[4] = {key: v for key, v in d[4].items() if key != "centre"}
-            notes.append(f"{d[0]} loses its bare `centre`: the page has no {k + 1}th room clear of its ink, and a "
-                         "centred card with no box of its own reads at the stage's centre, over the page (E65 / "
-                         "R26-172 - the page's own room is how room is made at 9:16, never the stage's middle)")
+    d = {**DEFAULTS, **(defaults or {})}
+    slots = _slots(free)
+    parks = {i: park_scale_at(species or [], float(card[2])) for i, card in enumerate(free)}
+    rooms: dict[float, list[dict]] = {}
+    for scale in sorted(set(parks.values())):
+        n = max([k for i, k in enumerate(slots) if parks[i] == scale] or [0]) + 1
+        rooms[scale] = card_rooms(page, aspect, n, park=scale)
+    for i, (card, k) in enumerate(zip(free, slots)):
+        scale = parks[i]
+        if k >= len(rooms[scale]) and species is not None and t1 is not None and scale >= UNPARK_SCALE - EPS:
+            scale = make_room(card, species, float(t1), d, notes)
+            parks[i] = scale
+            rooms.setdefault(scale, card_rooms(page, aspect, max(slots) + 1, park=scale))
+        if k < len(rooms[scale]):
+            popped = [key for key in ("read", "read_s", "park_s") if key in card[4]]
+            card[4] = {**{key: v for key, v in card[4].items() if key not in popped},
+                       **room_options(rooms[scale][k], aspect)}
+            if popped:
+                notes.append(f"{card[0]} drops its {', '.join(popped)}: a card given a room of the page's own lands "
+                             "IN it - the read-then-park pop would put it at the stage's centre over the page's ink "
+                             "first, which is what M25 and E63 score (`room_options`: a centred card with no `read` "
+                             "has no pop at all)")
+            notes.append(f"{card[0]} takes the page's own room "
+                         f"{'x'.join(str(rooms[scale][k][v]) for v in ('w', 'h'))} at "
+                         f"({rooms[scale][k]['x']}, {rooms[scale][k]['y']})"
+                         + (f", the band the park to {scale} frees" if scale < UNPARK_SCALE - EPS else "")
+                         + " (E65)")
+        elif card[4].get("centre"):
+            card[4] = {key: v for key, v in card[4].items() if key != "centre"}
+            notes.append(f"{card[0]} loses its bare `centre`: the page has no {k + 1}th room clear of its ink, not "
+                         "even parked, and a centred card with no box of its own reads at the stage's centre, over "
+                         "the page (E65)")
         else:
-            notes.append(f"{d[0]} keeps the compiler's own placer: the page has no {k + 1}th room clear of its "
-                         "ink for a card (E65's ladder decides it at compile time)")
-    if rooms:
-        notes.append(f"{len(free)} card(s) placed in the page's own room, off its ink (E65; R26-172: parking is "
-                     "not how room is made at 9:16) - " + ", ".join(
-                         f"{d[0]} {'x'.join(str(rooms[k][v]) for v in ('w', 'h'))} at ({rooms[k]['x']}, {rooms[k]['y']})"
-                         for d, k in zip(free, slots) if k < len(rooms)))
+            notes.append(f"{card[0]} keeps the compiler's own placer: the page has no {k + 1}th room clear of its "
+                         "ink for a card, not even parked (E65's ladder decides it at compile time)")
     return docks
 
 
@@ -611,9 +729,16 @@ def bound_by_state(docks: list, species: list, notes: list) -> list:
     park (leaving would make it a flash), and the row's `why` names that risk instead."""
     C = compiler()
     states = sorted(float(s["at"]) for s in species if s.get("kind") in CHART_STATE_KINDS)
+    # ... and while the page is PARKED the card's room is the band the park freed, OUTSIDE the plot:
+    # the chart redraws inside its parked box and the room is untouched, so only the next park (or the
+    # un-park) changes it. The approved cut holds its two cards straight through a recast and lands the
+    # un-park as they leave (`page-unparks-and-retakes-the-stage`).
+    parks = sorted(float(s["at"]) for s in species
+                   if s.get("kind") == "chart_to" and s.get("to") == "park")
     for d in docks:
         t_in, t_out = float(d[2]), float(d[3])
-        nxt = next((t for t in states if t > t_in + EPS), None)
+        mine = parks if park_scale_at(species, t_in) < UNPARK_SCALE - EPS else states
+        nxt = next((t for t in mine if t > t_in + EPS), None)
         if nxt is None or nxt >= t_out - EPS:
             continue
         opts = d[4] or {}
@@ -720,6 +845,10 @@ def groups(plan: list[dict]) -> list[dict]:
             out.append({"key": key, "beats": [r]})
     if len(out) > 1 and world_of(out[0]["beats"][0]["plate"]) != "page" \
             and world_of(out[1]["beats"][0]["plate"]) == "page":
+        # the hook's world is NOT absorbed away: it is kept, and the page mounts OVER it (E99 s67
+        # Apply 6, the approved open - `build_short.py:281-285`). A mount with no world under it is
+        # bare cream where the hook should be, which is what base v3 played at 0.20 s.
+        out[1]["under_beats"] = list(out[0]["beats"])
         out[1]["beats"] = out[0]["beats"] + out[1]["beats"]
         out[1]["open_mounts"] = True
         out = out[1:]
@@ -772,10 +901,27 @@ def shape_of(g: dict, index: int, nxt: dict | None, seen: tuple = ()) -> tuple[s
 
 # --------------------------------------------------------------------------- the chooser
 
+def main_row(skeleton: dict) -> dict:
+    """The skeleton's OWN row - the world the beat is about.
+
+    A skeleton whose page mounts over the hook's world declares that world FIRST, because the approved
+    open is TWO rows and that is the order the table writes them in
+    (the approved open's own pair: the hook's clip from frame 0 to the mount word, then the page with
+    `mount=<s>` over it - `open-page-mounts-the-world` cites the table's line as its `source`). So the
+    beat's own row is the LAST, and every skeleton with one row is unchanged by this reading."""
+    return skeleton["rows"][-1]
+
+
+def under_rows(skeleton: dict) -> list[dict]:
+    """The row(s) this skeleton's own row arrives OVER - the hook's world under the page that mounts.
+    Empty for every skeleton whose shape is one world."""
+    return list(skeleton["rows"][:-1])
+
+
 def entry_of(skeleton: dict) -> str | None:
-    """The entry a skeleton's own first row declares: axes / mount / spiral / snap / built / camera,
+    """The entry a skeleton's own row declares: axes / mount / spiral / snap / built / camera,
     or None for a skeleton whose world is a plate."""
-    m = ENTRY_SUFFIX.search(str(skeleton["rows"][0]["plate"]).split(";", 1)[0])
+    m = ENTRY_SUFFIX.search(str(main_row(skeleton)["plate"]).split(";", 1)[0])
     return m.group(1).split("=", 1)[0] if m else None
 
 
@@ -883,16 +1029,13 @@ def _needs_states(skeleton: dict) -> int:
     return out
 
 
-NO_PARK_SIGNATURES = ("park", "unpark")
-
-
 def usable_library(lib: list[dict], aspect: str) -> list[dict]:
-    """The skeletons this ASPECT may be offered - R26-172: no `chart_to park` at 9:16, so a skeleton
-    whose whole signature is the park (or the un-park out of one) is not offered in portrait at all,
-    rather than offered and then stripped to an empty row."""
-    if str(aspect) != "9:16":
-        return list(lib)
-    return [s for s in lib if s["signature"] not in NO_PARK_SIGNATURES]
+    """The skeletons this ASPECT may be offered - every one of them, in both aspects.
+
+    R26-172 kept the park and the un-park out of portrait until the parent read the approved cut's own
+    56.72 s frame: the page parks small at the top and the cards take the room below. The ruling is
+    WITHDRAWN and the two skeletons are offered in portrait exactly as they are in landscape."""
+    return list(lib)
 
 
 def choose(beat, history: list, library: list[dict]) -> tuple[dict, str]:
@@ -1107,7 +1250,7 @@ def drop_flashes(species: list, docks: list, t1: float, notes: list) -> list:
 
 
 def _aspect_clean(row_docks: list, row_species: list, aspect: str, defaults: dict) -> tuple[list, list, list]:
-    """R26-171 / R26-172: at 9:16 no `badges` rail and no `chart_to park` leaves this module."""
+    """R26-171: at 9:16 no `badges` rail leaves this module. The park does (R26-172 WITHDRAWN)."""
     notes: list[str] = []
     if str(aspect) != "9:16":
         return row_docks, row_species, notes
@@ -1116,19 +1259,18 @@ def _aspect_clean(row_docks: list, row_species: list, aspect: str, defaults: dic
             if "badges" in d[4]:
                 d[4].pop("badges")
                 notes.append("the badges rail is not emitted at 9:16 (R26-171)")
-    if defaults.get("no_park_9_16", True):
-        kept = [s for s in row_species if not (s.get("kind") == "chart_to" and s.get("to") == "park")]
-        if len(kept) != len(row_species):
-            notes.append("no `chart_to park` at 9:16 (R26-172)")
-        row_species = kept
     return row_docks, row_species, notes
 
 
 # --------------------------------------------------------------------------- the windows
 
-def _windows(gs: list[dict], ws: list | None, exits: list[str], hold_s: float) -> list[tuple]:
+def _windows(gs: list[dict], ws: list | None, exits: list[str], hold_s: float,
+             arrivals: list | None = None) -> list[tuple]:
     """Each row's (start, end): the take's own cut point before the group's first sentence
     (`words.cut_before`, M13), the rows contiguous, the first row on frame 0.
+
+    A page that arrives BY A CARD (`snap=` / `camera=`) arrives when that card has been READ, not when
+    its own first sentence starts - `arrivals[i]`, measured in `_arrivals` off the card's own word.
 
     M44: a world-plate row shorter than `hold_s` takes the seconds it is missing from the PREVIOUS
     row's tail when that row can spare them, and from the next row's head when it cannot - the beat
@@ -1143,6 +1285,9 @@ def _windows(gs: list[dict], ws: list | None, exits: list[str], hold_s: float) -
             except SystemExit:
                 pass
         starts.append(round(t, 2))
+    for i, a in enumerate(arrivals or []):
+        if i and a is not None and starts[i - 1] + EPS < round(float(a), 2) < starts[i] - EPS:
+            starts[i] = round(float(a), 2)
     ends = starts[1:] + [round(float(gs[-1]["t1"]), 2)]
     for i, g in enumerate(gs):
         if g["world"] == "page" or ends[i] - starts[i] >= hold_s:
@@ -1166,11 +1311,11 @@ def _exit(g: dict, nxt: dict | None, skeleton: dict, next_entry: str | None) -> 
     if next_entry == "mount":
         return "cut", "a cut, never into a mount - the mount IS the transition"
     if g["world"] == "page" and nxt["world"] == "page":
-        skeleton_exit = str(skeleton["rows"][0]["exit"])
+        skeleton_exit = str(main_row(skeleton)["exit"])
         return ((skeleton_exit, "page to page: the suck, with no cream between them")
                 if skeleton_exit.startswith("suck") else ("cut", "page to page: a straight cut"))
     if g["world"] != nxt["world"] or plate_of(g["plate"]) != plate_of(nxt["plate"]):
-        skeleton_exit = str(skeleton["rows"][0]["exit"])
+        skeleton_exit = str(main_row(skeleton)["exit"])
         if skeleton_exit.split(":")[0] == "door" and g.get("prev_entry") in ("snap", "camera"):
             # E98 s7 / CAPABILITIES.md:38: the page before this one landed FLAT as a card, so it can
             # swing open on its hinge onto this world instead of dipping to it - the transition that
@@ -1183,12 +1328,14 @@ def _exit(g: dict, nxt: dict | None, skeleton: dict, next_entry: str | None) -> 
 # --------------------------------------------------------------------------- the compiler
 
 def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9",
-            library: list[dict] | None = None, pages=None) -> tuple[list[tuple], list[dict]]:
+            library: list[dict] | None = None, pages=None, worlds=None) -> tuple[list[tuple], list[dict]]:
     """The AUTHORED beat plan as the approved skeleton: `(rows, why)`.
 
     `rows` are the kit's own tuples - what `table.write_shot_table` takes and `table.load_rows`
-    reads back. `why` carries ONE record per row: `{beat, skeleton, act, rule, signature}` - the
-    skeleton chosen, the act (or the shape) that chose it, and the rule that applied.
+    reads back. `why` carries ONE record per row: `{beat, skeleton, act, rule, signature, group}` - the
+    skeleton chosen, the act (or the shape) that chose it, the rule that applied, and the index of the
+    GROUP the row came from (a group is a run of beats over one world, and it plays TWO rows where the
+    page mounts over the hook's own world - the approved open).
 
     `plan` is the records (or the path to `BEAT-PLAN.jsonl`), `words` the take's words (either the
     aligner's `start_s` / `end_s` or `timeline.json`'s `start` / `end`), `defaults` the six
@@ -1199,6 +1346,11 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
     episode's own `evidence/objects/`, so the CLI hands the resolver in (`generate_base_table.py`).
     With it, every card on a page is placed in the page's OWN room, off its ink (E65, `place_cards`);
     without it the compiler's placer decides at compile time and the row's `why` says so.
+
+    `worlds` is the caller's WORLD resolver - `worlds(<a plate or clip id>) -> the id the table should
+    carry`. The plan names the hook's world as the cut recorded it (`clip:<name>`), and where that file
+    lives is the EPISODE's business, not the kit's, so the CLI hands the resolver in
+    (`generate_base_table.world_resolver`). Without it the plan's own id is written through unchanged.
     """
     plan = load_plan(plan) if isinstance(plan, (str, Path)) else list(plan)
     check_plan(plan)
@@ -1207,20 +1359,186 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
     ws = _norm_words(words)
     gs = groups(plan)
     picks = _pick(gs, lib, d, ws)
-    spans = _windows(gs, ws, [p["exit"] for p in picks], float(d.get("plate_hold_s", PLATE_MIN_S)))
+    spans = _windows(gs, ws, [p["exit"] for p in picks], float(d.get("plate_hold_s", PLATE_MIN_S)),
+                     _arrivals(gs, ws))
     rows, why = [], []
     for i, (g, pick, (t0, t1)) in enumerate(zip(gs, picks, spans)):
-        rows.append(_row(g, pick, t0, t1, d, aspect, first=i == 0, ws=ws, pages=pages))
-        why.append({"beat": int(g["beats"][0]["beat"]), "skeleton": pick["skeleton"]["id"],
-                    "act": str(g["act"] or ""), "rule": "; ".join([pick["rule"], *pick["notes"]]),
-                    "signature": pick["skeleton"]["signature"]})
+        made = _group_rows(g, pick, t0, t1, d, aspect, first=i == 0, ws=ws, pages=pages, worlds=worlds)
+        rows.extend(r for r, _ in made)
+        why.extend({**w, "group": i} for _, w in made)
         why.extend(silent_record(b) for b in g["beats"] if is_silent(b))
     floats = chart_cards_that_float(rows)
     if floats:
         raise Refused("a thrown chart card floats over the world: " + "; ".join(floats))
+    orphans = camera_entries_with_no_card(rows)
+    if orphans:
+        raise Refused("a page arrives by a card no row carries: " + "; ".join(orphans))
     if ws:
         T.hold_until(rows, ws)
     return rows, why
+
+
+def _arrivals(gs: list[dict], ws) -> list:
+    """When each group's page ARRIVES, for the groups that arrive BY A CARD - else None.
+
+    E99 s70 / CAPABILITIES.md:76 and :84: a `snap=<dock>` or `camera=<dock>` page is the card that was
+    thrown a moment ago, grown or pushed to the stage. The approved cut throws the Fed card on
+    *"The Fed still"* and lands the page on *"moved"* - `t_fed_still` / `t_moved`,
+    the two words the approved cut's own table names (the skeleton `card-thrown-then-the-camera-pushes`
+    cites its rows) - 1.11 s apart on that take, which is the
+    card's own READ clock (`DOCK_READ_S`), not the next sentence's first word. Base v3 started that row
+    at the next beat instead, so the camera's 0.45 s arrival (`build_scene_timeline_f.CAMERA_ARRIVAL_S`)
+    was still in flight at 77.80 s: the parent read it as a blurred page with no card.
+    """
+    C = compiler()
+    out: list = []
+    for i, g in enumerate(gs):
+        card = str(g.get("entry_card") or "")
+        prev = gs[i - 1] if i else None
+        if not card or prev is None or not ws:
+            out.append(None)
+            continue
+        when = [t for b in prev["beats"] for mv in moves_of(b)
+                if str(mv.get("kind")) == MOVE_DOCK and str(mv.get("asset")) == card
+                for t in [word_at(ws, str(mv.get("at_word") or ""), float(b["t0"]), float(b["t1"]))]
+                if t is not None
+                for t in [t + float((mv.get("options") or {}).get("read_s") or C.DOCK_READ_S)]]
+        out.append(round(min(when), 2) if when else None)
+    return out
+
+
+def camera_entries_with_no_card(rows: list[tuple]) -> list[str]:
+    """Every `camera=<dock>` / `snap=<dock>` page whose card NO row carries - one message each.
+
+    The parent's read of base v3 at 77.80 s: *"the base is a blurred page and no card"*. The entry is a
+    read-back token and the compiler emitted it whatever the rows held, so a page could arrive by a
+    card that was never thrown - a camera pushing to nothing. The approved cut always carries it: the
+    card is thrown on the row BEFORE and lives to that row's end (`build_short.py:403-420`), and the
+    timeline then holds it through the arrival (`build_scene_timeline_f.extend_camera_cards`). So the
+    card is owed on this row or on the one before it, live at this row's start."""
+    out: list[str] = []
+    for n, r in enumerate(rows):
+        head, _, card = str(entry_token_in(str(r[2])) or "").partition("=")
+        if head not in BUILT_ON_ARRIVAL or not card:
+            continue
+        mine = [x for x in (r[4] or []) if str(x[0]) == card]
+        before = [x for x in (rows[n - 1][4] or []) if str(x[0]) == card
+                  and float(x[3]) >= float(r[0]) - EPS] if n else []
+        if mine or before:
+            continue
+        out.append(f"row {n + 1}: `{page_of(str(r[2]))}` arrives by `{head}={card}` at {float(r[0]):.2f}s and no row "
+                   f"carries `{card}` - the camera pushes to a card that was never thrown, which renders as a page "
+                   "mid-transition and nothing else (E99 s70/s71). Throw the card on the beat before (the approved "
+                   "cut does: the card lands on one sentence and the page arrives on the next word), or give the "
+                   "page an entry of its own (`axes`, `mount`, `spiral`).")
+    return out
+
+
+def _group_rows(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first: bool,
+                ws=None, pages=None, worlds=None) -> list[tuple]:
+    """One group as the row(s) it plays, each with its own `why` record.
+
+    Two rows where the page MOUNTS over the hook's world, because that is what the approved open is -
+    the clip from frame 0 to the mount word, then the page mounting over it
+    (the approved open's own pair). One row for everything else."""
+    page_row = lambda a: (_row(g, pick, a, t1, d, aspect, first, ws=ws, pages=pages, worlds=worlds),
+                          {"beat": int(g["beats"][0]["beat"]), "skeleton": pick["skeleton"]["id"],
+                           "act": str(g["act"] or ""), "rule": "; ".join([pick["rule"], *pick["notes"]]),
+                           "signature": pick["skeleton"]["signature"]})
+    if not g.get("open_mounts"):
+        return [page_row(t0)]
+    at = mount_word_at(g, t0, t1)
+    world = _world_row(g, pick, (under_rows(pick["skeleton"]) or [WORLD_ROW])[-1], t0, at, d, ws, worlds)
+    made = page_row(at)
+    made[1]["beat"] = int(g["beats"][len(g.get("under_beats") or [])]["beat"])
+    return [world, made]
+
+
+# The hook's world as a row, for an open whose own skeleton does not declare one: the plan's plate,
+# still, no cards, and NO exit - the page's arrival is the transition (E45; `build_short.py:281-282`).
+WORLD_ROW = {"start": "{t0}", "end": "{t1}", "plate": "{plate}", "ken": [0, 0, 0], "docks": [],
+             "exit": None, "species": []}
+
+
+MOUNT_WORLD_MIN_S = 1.0   # the hook's world gets a second of its own before the cream rises over it
+
+
+def mount_word_at(g: dict, t0: float, t1: float) -> float:
+    """When the page MOUNTS over the hook's world - the hook's LAST sentence.
+
+    Two hook sentences or more: the LAST one - one approved cut mounts on the opening words of its last
+    hook sentence, and its two rows split exactly there. ONE hook sentence: its last word - the other
+    approved open mounts on the hook's final word, with the card it snaps from thrown a second before
+    it. (Both tables are cited by the open skeletons' own `source`.) Never closer than
+    `MOUNT_WORLD_MIN_S` to frame 0: a world with no seconds of its own is the bare cream this rule
+    exists to end."""
+    under = g.get("under_beats") or []
+    rest = g["beats"][len(under):]
+    page_t0 = float(rest[0]["t0"]) if rest else t1
+    if not under:
+        return round(t0, 2)
+    at = float(under[-1]["t0"]) if len(under) > 1 else float(under[-1]["t1"])
+    return round(min(max(at, t0 + MOUNT_WORLD_MIN_S), page_t0), 2)
+
+
+def _world_row(g: dict, pick: dict, tpl: dict, t0: float, t1: float, d: dict, ws, worlds) -> tuple:
+    """The hook's OWN world, held under the page that mounts over it - the approved open's first row.
+
+    E99 s67 Apply 6 as the approved cuts play it: the hook is a world (a clip, a plate) and the page
+    RISES OVER IT on the hook's last sentence. Base v3 absorbed the hook into the page's row and
+    played bare cream at 0.20 s where the approved cut plays the tea-break counter; a mount with no
+    world under it is a refusal. The row carries NO exit: the mount IS the transition (E45)."""
+    beats = g.get("under_beats") or g["beats"][:1]
+    beat = beats[0]
+    # the plan's own id, options and all: the hook's world is the world the CUT was spoken over and
+    # its idle (`;idle=drift;drift=35`) is part of it - a plate that stops drifting is a still (E49)
+    plate = _text(tpl["plate"], {"plate": str(beat["plate"]), "page": ""}, beat, pick["skeleton"])
+    plate = str(worlds(plate)) if worlds else plate
+    ken = tuple(tpl["ken"]) if isinstance(tpl["ken"], list) else tpl["ken"]
+    notes, species, docks = [], [], []
+    for b in beats:
+        for mv in moves_of(b):
+            made, why = _move(mv, b, ws, t0, t1, ken, None, d)
+            if made is None:
+                notes.append(why)
+            elif mv.get("kind") == MOVE_DOCK:
+                docks.append(tuple(made))
+            else:
+                species.append(made)
+    species.sort(key=lambda x: (float(x["at"]), str(x["kind"])))
+    if round(t1 - t0, 2) + 1e-9 < float(d.get("plate_hold_s", PLATE_MIN_S)):
+        notes.append(f"the hook's world holds {t1 - t0:.2f}s, under M44's six seconds - which is what both approved "
+                     "opens do (the hook is spoken over it and the page mounts on the hook's last sentence); the gate "
+                     "WARNs on a short plate and FAILs one that carries a card, and the author's answer is a longer "
+                     "hook, not a later mount")
+    rule = ("the hook's own world holds under the page that mounts over it at " + f"{t1:.2f}s"
+            + " - the open keeps the world the hook is spoken over and the cream rises on the hook's last "
+              "sentence (E99 s67 Apply 6, the approved opens' own first row). A mount with no world "
+              "under it is bare cream, which is what base v3 played at 0.20s")
+    if notes:
+        rule += "; " + "; ".join(notes)
+    return ((t0, t1, plate, ken, docks, tpl.get("exit"), species or None),
+            {"beat": int(beat["beat"]), "skeleton": pick["skeleton"]["id"], "act": str(beat.get("act") or ""),
+             "rule": rule, "signature": "hold"})
+
+
+def plain_recasts(species: list) -> list[float]:
+    """Every `chart_to recast` the author left un-keyed made PLAIN, and the instants, for the row's `why`.
+
+    E99 s67 Apply 2: *"every page BUILDS with the effects and then holds built ... there should be 0 reason
+    why you cant build the chart using the effects"*. A recast's plain form is the hand-over - the standing
+    chart leaves by length and the named state draws on ITS OWN BUILD ENVELOPE (`effects/cards/chart_to.json`,
+    phase "target builds") - and that is what the approved portrait cut's own table writes, and plays:
+    measured at 52.00 s on the approved build, one bar growing; on base v3, all four standing. `keyed: false`
+    is the grammar's own word for it (`build_scene_timeline_f.py:388`: *"false / absent is the hand-over"*).
+    An author who NAMES a key keeps it - a keyed recast is the same data travelling (E64), not a build.
+    """
+    out = []
+    for sp in species:
+        if sp.get("kind") == "chart_to" and sp.get("to") == "recast" and "keyed" not in sp:
+            sp["keyed"] = False
+            out.append(round(float(sp["at"]), 2))
+    return out
 
 
 CARD_SLOT = re.compile(r"^dock-[a-z0-9]+-(.+)$")
@@ -1342,6 +1660,10 @@ def _pick(gs: list[dict], lib: list[dict], d: dict, ws=None) -> list[dict]:
         history.append(skeleton["id"])
         picks.append({"skeleton": skeleton, "notes": [],
                       "rule": "; ".join(x for x in (rule, entry_rule, rung) if x)})
+    for i, g in enumerate(gs):
+        # the card the NEXT page grows out of: it is thrown on THIS row and the page after it becomes
+        # it (`snap=` / `camera=`), so this row never gives it a room of its own (E99 s71)
+        g["next_entry_card"] = gs[i + 1].get("entry_card") if i + 1 < len(gs) else None
     for i, pick in enumerate(picks):
         nxt = gs[i + 1] if i + 1 < len(gs) else None
         next_entry = entry_of(picks[i + 1]["skeleton"]) if nxt is not None else None
@@ -1421,17 +1743,19 @@ def _page_spec(plate: str, pages, notes: list) -> dict | None:
 
 
 def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first: bool,
-         ws: list[dict] | None = None, pages=None) -> tuple:
+         ws: list[dict] | None = None, pages=None, worlds=None) -> tuple:
     """One skeleton's template row, resolved onto one group's window - then the group's beats' own
     NAMED MOVES realised on it, each timed on the word it belongs to."""
     skeleton, beat, notes = pick["skeleton"], g["beats"][0], pick["notes"]
-    tpl = copy.deepcopy(skeleton["rows"][0])
+    tpl = copy.deepcopy(main_row(skeleton))
     cards = list(g["docks"]) or ([g["entry_card"]] if g.get("entry_card") else [])
     fills = {"page": page_of(g["plate"]) if g["world"] == "page" else "",
              "plate": plate_of(g["plate"]), "mount_s": _mount_s(g["plate"]),
              **{k: v for k, v in zip(("dock", "dock_b"), cards)},
              **{k: v for k, v in zip(("datum", "datum_b"), _data(g))}}
     plate = _text(tpl["plate"], fills, beat, skeleton)
+    if worlds and not plate.startswith("ledger:"):
+        plate = str(worlds(plate))          # the episode's own file for the world the plan names
     if plate.startswith("ledger:") and g.get("entry"):
         plate, moved = set_entry(plate, g.get("entry_token") or g["entry"], float(fills["mount_s"]))
         if moved:
@@ -1500,6 +1824,14 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
             raise Refused(err)
     docks, species, aspect_notes = _aspect_clean(docks, species, aspect, d)
     notes.extend(aspect_notes)
+    plain = plain_recasts(species)
+    if plain:
+        notes.append("the recast(s) at " + ", ".join(f"{t:.2f}s" for t in plain) + " carry the approved table's own "
+                     "PLAIN hand-over (`keyed: false`, the grammar's word for it - build_scene_timeline_f.py:388): "
+                     "the standing chart leaves by length and the arriving state DRAWS ON ITS OWN BUILD ENVELOPE "
+                     "(effects/cards/chart_to.json, phase \"target builds\"), which is E99 s67 Apply 2 - a chart "
+                     "never lands fully built - and what the approved cut plays (`build_short.py:386`, read at "
+                     "52.00s: one bar growing, not four standing)")
     docks.sort(key=lambda x: (float(x[2]), str(x[0])))
     species.sort(key=lambda x: (float(x["at"]), str(x["kind"])))
     # E65: every card that did not place itself takes a room of the PAGE's own, and never a room a
@@ -1507,7 +1839,21 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
     # over the page's ink, because a bare `centre: True` is a stage placement and not a page one)
     if land is not None:
         docks = bound_by_state(docks, species, notes)   # E65: the room is the page as it stands ...
-    docks = place_cards(docks, _page_spec(plate, pages, notes), aspect, notes)   # ... and then it is given
+    becomes = str(g.get("next_entry_card") or "")
+    thrown = [x for x in docks if str(x[0]) == becomes]
+    if thrown:
+        notes.append(f"`{becomes}` keeps the throw the plan gave it and takes no room of this page's: it is the card "
+                     "the NEXT world grows out of - the camera pushes to it, or it snaps up, on the row after this "
+                     "one (E99 s71; CAPABILITIES.md:76 and :84; `build_short.py:403-420`)")
+    docks = place_cards([x for x in docks if str(x[0]) != becomes],   # ... and then it is given -
+                        _page_spec(plate, pages, notes), aspect, notes,
+                        species, t1, d) + thrown        # ... and the page PARKS when it has none to give
+    for sp in species:                                  # the parks the placer just made are checked like the rest
+        if str(sp.get("kind")) == "chart_to":
+            err = chart_to_error(sp, plate, _beat_at(g, float(sp["at"])).get("beat", "?"))
+            if err:
+                raise Refused(err)
+    species.sort(key=lambda x: (float(x["at"]), str(x["kind"])))
     if first and land is not None:
         annotate_first_chart(species, docks, t0, t1, land, notes)   # M11: the open is annotated as it lands
     species = drop_flashes(species, docks, t1, notes)               # ... and the base says what the cut will carry

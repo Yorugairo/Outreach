@@ -116,16 +116,56 @@ def _take(plan, word_s: float = 0.35):
 
 
 # ---------------------------------------------------------------- the approved shape, on the Tokyo bed
+def _first_page(rows):
+    """The row the open's PAGE is on - rows[0] when the page is the first frame, rows[1] when it
+    mounts over the hook's own world (the approved open's two rows)."""
+    return next(i for i, r in enumerate(rows) if str(r[2]).startswith("ledger:"))
+
+
 def test_the_open_is_the_chart(tokyo):
-    """E99 s67 Apply 6: the first row is the PAGE - on its axes, or mounting the hook's world on its
-    last word when the plan's first beat carries a clip world (the Tokyo bed's does)."""
+    """E99 s67 Apply 6: the open is the PAGE - on its axes from frame 0, or mounting over the hook's
+    own world, which is what the Tokyo bed's clip hook asks for."""
     _, rows, why = tokyo
-    assert rows[0][0] == 0.0 and rows[0][2].startswith("ledger:")
-    assert SH.entry_in(rows[0][2]) in ("axes", "mount")
-    assert why[0]["skeleton"] in ("open-on-the-chart-axes", "open-page-mounts-the-world")
-    assert "the open IS the chart" in why[0]["rule"]
+    p = _first_page(rows)
+    assert rows[0][0] == 0.0
+    assert SH.entry_in(rows[p][2]) in ("axes", "mount")
+    assert why[p]["skeleton"] in ("open-on-the-chart-axes", "open-page-mounts-the-world")
+    assert "the open IS the chart" in why[p]["rule"]
     # the Tokyo bed's hook is a clip, so the page MOUNTS over it - and `why` says exactly that
-    assert SH.entry_in(rows[0][2]) == "mount" and "mounts the hook's world" in why[0]["rule"]
+    assert SH.entry_in(rows[p][2]) == "mount" and "mounts the hook's world" in why[p]["rule"]
+
+
+def test_the_open_keeps_the_hooks_world(tokyo):
+    """THE FOURTH PASS, defect 1 (the parent, reading base v3 at 0.20 s beside the approved cut): the
+    approved frame is the tea-break clip with the page mounting over it 2 s in; the base was BARE
+    CREAM, because the compiler absorbed the hook's beats into the page that mounts over them. A
+    mount with no world under it is a refusal - so the open is TWO rows, the hook's own world from
+    frame 0 to the mount word and the page over it, exactly as the approved table writes the pair."""
+    _, rows, why = tokyo
+    world, page = rows[0], rows[1]
+    assert not str(world[2]).startswith("ledger:") and world[0] == 0.0, world
+    assert SH.world_of(world[2]) == "clip", "the Tokyo bed's hook is the counter clip"
+    assert world[5] is None, "the mount IS the transition - the world under it carries no exit (E45)"
+    assert page[0] == world[1] > 0.0 and "mount=" in page[2], (world, page)
+    assert why[0]["signature"] == "hold" and "the hook's own world holds under the page" in why[0]["rule"]
+    assert why[0]["group"] == why[1]["group"], "one group, two rows - the open's pair"
+    # the mount lands on the hook's LAST sentence (the approved cut: `t_mount = at("left America")`)
+    assert page[0] == pytest.approx(1.78, abs=0.01), page[0]
+
+
+def test_a_mount_over_a_world_the_plan_names_is_always_two_rows():
+    """The rule, on a synthetic plan: whatever skeleton the open takes, the world the hook is spoken
+    over reaches the table. (Before the fourth pass the hook's beats were absorbed and the row began
+    with the page.)"""
+    page = "ledger:ev-a-v1:line:12:right"
+    plan = [_rec(1, 0.0, 3.0, "plate-desk;idle=drift", caps=["the hook's plate world"]),
+            _rec(2, 3.2, 6.0, "plate-desk;idle=drift", caps=["still the hook"]),
+            _rec(3, 6.4, 20.0, page, caps=["the page draws to datum 12"])]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert [SH.world_of(r[2]) for r in rows] == ["plate", "page"], [r[2] for r in rows]
+    assert rows[0][2].startswith("plate-desk") and rows[0][1] == pytest.approx(3.2), rows[0]
+    assert rows[1][2].startswith("ledger:") and "mount=" in rows[1][2]
+    assert SH.rows_why(why)[0]["signature"] == "hold"
 
 
 def test_no_page_ever_arrives_built_and_the_clock_picks_the_entry(tokyo):
@@ -177,6 +217,10 @@ def test_the_exits_are_the_approved_ones(tokyo):
         if nxt is None:
             assert exit_ == "cut"
             continue
+        if exit_ is None:
+            # the world a page MOUNTS over hands over by the mount itself (E45), so it carries none
+            assert "mount=" in nxt[2] and i == 0, (i, r[2], nxt[2])
+            continue
         if "mount=" in nxt[2]:
             assert exit_ == "cut", f"row {i} exits {exit_!r} INTO a mount"
         elif r[2].startswith("ledger:") and nxt[2].startswith("ledger:"):
@@ -188,19 +232,43 @@ def test_the_exits_are_the_approved_ones(tokyo):
 def test_no_plate_row_is_shorter_than_six_seconds(tokyo):
     """M44 / `PLATE_MIN_S`: the operator, on the balloon dock - "why do we have a plate less than 6
     seconds long?" The seconds are taken from a neighbouring row, never from the words."""
-    _, rows, _ = tokyo
-    for r in rows:
-        if not r[2].startswith("ledger:"):
-            assert round(r[1] - r[0], 2) >= SH.PLATE_MIN_S, r
+    _, rows, why = tokyo
+    for n, r in enumerate(rows):
+        if r[2].startswith("ledger:"):
+            continue
+        if r[5] is None:
+            # the hook's own world under the page that mounts over it: both approved opens hold it
+            # for about two seconds and mount on the hook's last sentence, and the row's `why` says
+            # M44 reads it - the author's answer is a longer hook, never a later mount
+            assert "under M44's six seconds" in why[n]["rule"], why[n]["rule"]
+            continue
+        assert round(r[1] - r[0], 2) >= SH.PLATE_MIN_S, r
 
 
-def test_portrait_emits_no_rail_and_no_park(tokyo, japan):
-    """R26-171 and R26-172: at 9:16 no `badges` rail and no `chart_to park` leaves the compiler."""
+def test_portrait_emits_no_rail(tokyo, japan):
+    """R26-171: at 9:16 no `badges` rail leaves the compiler. (R26-172, which stood beside it - no
+    `chart_to park` at 9:16 - is WITHDRAWN: see the park's own pin below.)"""
     for _, rows, _ in (tokyo, japan):
         for r in rows:
             assert all("badges" not in (d[4] or {}) for d in r[4] or [])
-            assert all(not (s.get("kind") == "chart_to" and s.get("to") == "park") for s in r[6] or [])
-        assert "badges" not in repr(rows) and "'park'" not in repr(rows)
+        assert "badges" not in repr(rows)
+
+
+def test_the_parks_the_plan_names_are_emitted_in_portrait(tokyo):
+    """THE FOURTH PASS, defect 3 (the parent, at 56.72 / 57.52 s): the APPROVED PORTRAIT cut parks its
+    page small at the top and the clipping and the wafer card take the room below; base v3 left the
+    page full size and dropped both cards over its ink, because R26-172 stripped every park at 9:16.
+    The ruling is WITHDRAWN and the three parks the Tokyo plan names (beats 10, 16 and 17 - the park
+    for the fingers, the park for the record and the fab, the UN-PARK as they leave) are on the base."""
+    plan, rows, _ = tokyo
+    named = [(b["beat"], m["options"]["scale"]) for b in plan for m in SH.moves_of(b)
+             if m.get("kind") == "chart_to" and (m.get("options") or {}).get("to") == "park"]
+    assert [n for n, _ in named] == [10, 16, 17], named
+    made = [(float(s["at"]), float(s["scale"])) for r in rows for s in r[6] or []
+            if s.get("kind") == "chart_to" and s.get("to") == "park"]
+    assert len(made) == len(named), (made, named)
+    assert [s for _, s in made] == [s for _, s in named]
+    assert SH.UNPARK_SCALE in [s for _, s in made], "the un-park is the park to 1.0 (CAPABILITIES.md:120)"
 
 
 def _is_page_build(sp: dict, row) -> bool:
@@ -217,9 +285,10 @@ def test_a_light_only_points_and_only_after_the_page_has_built(tokyo, japan):
     P66 T3c narrowed WHICH species the clock binds: the LIGHT proper (the lamp that darkens the page
     around a point - `LIGHT_AFTER_BUILD_KINDS`). A `build_to` IS the build and a callout, a figure or
     a note is the sentence's own mark - both land on their word (M11 counts the build's cap)."""
-    for plan, rows, _ in (tokyo, japan):
+    for plan, rows, why in (tokyo, japan):
         gs = SH.groups(plan)
-        for r, g in zip(rows, gs):
+        for r, w in zip(rows, why):
+            g = gs[w["group"]]              # one group may play TWO rows (the open's world and page)
             for sp in r[6] or []:
                 if r[2].startswith("ledger:") and sp["kind"] in CLOCKED:
                     assert sp["at"] + 1e-6 >= r[0] + _land(r[2]), (sp, r[2])
@@ -232,7 +301,7 @@ def test_the_first_chart_is_annotated_with_its_own_landing(tokyo):
     one of `ANNOTATED_KINDS` inside [the landing, the landing + `ANNOTATE_TOL_S`], **or** a `build_to`
     whose CAP lands there - the line ending ON the datum is the annotation (P47 T2)."""
     _, rows, _ = tokyo
-    first = rows[0]
+    first = rows[_first_page(rows)]
     assert first[2].startswith("ledger:")
     land = first[0] + _land(first[2])
     marks = [s for s in first[6] or []
@@ -247,10 +316,12 @@ def test_the_opens_build_lands_with_the_page_and_not_on_its_own_word(tokyo):
     and unannotated (M11 FAIL on the first generated base). The build is placed to END on the landing
     instead, and the row's `why` says so."""
     _, rows, why = tokyo
-    land = rows[0][0] + _land(rows[0][2])
-    build = next(s for s in rows[0][6] if s["kind"] == "build_to")
+    p = _first_page(rows)
+    land = rows[p][0] + _land(rows[p][2])
+    build = next(s for s in rows[p][6] if s["kind"] == "build_to")
     assert abs(build["at"] + build["dur"] - land) <= 1e-6, build
-    assert "END on the page's landing" in why[0]["rule"]
+    # ... which is the annotation M11 counts: the line ends ON the datum as the page lands (P47 T2)
+    assert _is_page_build(build, rows[p]), (build, rows[p][2])
 
 
 def test_no_held_light_the_compiler_would_drop_as_a_flash_is_emitted(tokyo, japan):
@@ -271,21 +342,49 @@ def test_every_card_on_a_page_is_placed_in_the_pages_own_room(tokyo):
     STAGE's centre, over the chart - never leaves the compiler."""
     _, rows, _ = tokyo
     seen = 0
-    for r in rows:
+    for n, r in enumerate(rows):
         page = _page(TOKYO, r[2])
         if page is None:
             continue
-        ink = SH.page_ink(page, "9:16")
-        boxes = SH.pager().page_boxes(page, "9:16")
         for d in r[4] or []:
             if not SH.placed(d[4]):
-                assert not d[4].get("centre"), d      # never the stage's centre over a page
+                # the one card that keeps its own throw is the card the NEXT page grows out of
+                assert not d[4].get("centre") or d[4].get("arrive") == "throw", d
                 continue
+            # the room is the page AS IT STANDS when the card lands: under a park, the band the park
+            # freed (the approved cut's own answer at 56.7 s - E65 + the park, R26-172 withdrawn)
+            park = SH.park_scale_at(r[6] or [], float(d[2]))
+            ink = SH.page_ink(page, "9:16", park)
+            boxes = SH.parked_boxes(SH.pager().page_boxes(page, "9:16"), park)
             box = _card_box(d[4])
             seen += 1
             assert all(not SH._meets(box, b) for b in ink), (d[0], box, ink)
             assert SH.compiler().mask_is_clear(boxes, box) or not boxes.get("data_mask"), (d[0], box)
     assert seen >= 4, "the Tokyo bed docks five cards on its pages"
+
+
+def test_a_card_with_no_room_parks_the_page_to_make_one():
+    """THE FOURTH PASS, defect 3, the other half: when the page has no room of its own, the card is
+    not dropped over its ink and does not fall back to the stage's centre - THE PAGE PARKS, the card
+    takes the band the park frees, and the page UN-PARKS when the card leaves. The approved cut's own
+    move (`page-parks-to-make-room-for-the-card` / `page-unparks-and-retakes-the-stage`)."""
+    page = {"schema_version": "ledger_page.v1", "surface": "page", "builder": "story", "variant": "bars",
+            "title": "A page with no room", "sub": "every cell of its plot carries ink",
+            "source": "a fixture", "quiet_zone": "right",
+            "labels": ["a", "b", "c", "d"], "values": [-47.7, 18.3, -66.8, -26.4],
+            "colors": ["crimson", "teal", "crimson", "crimson"], "unit": "$"}
+    boxes = SH.pager().page_boxes(page, "9:16")
+    full = ["1" * len(boxes["data_mask"])] * len(boxes["data_mask"]) if boxes.get("data_mask") else None
+    if full:
+        page = {**page, "data_mask": full}
+    docks, species, notes = [["dock-x", 0, 10.0, 16.0, {"centre": True}]], [], []
+    out = SH.place_cards(docks, page, "9:16", notes, species, 30.0, SH.DEFAULTS)
+    parks = [s for s in species if s.get("kind") == "chart_to" and s.get("to") == "park"]
+    assert [s["to"] for s in parks] == ["park", "park"], species
+    assert parks[0]["at"] == pytest.approx(10.0 - SH.PARK_LEAD_S) and parks[0]["scale"] < 1.0
+    assert parks[1]["at"] == pytest.approx(16.0 + SH.UNPARK_LAG_S) and parks[1]["scale"] == SH.UNPARK_SCALE
+    assert SH.placed(out[0][4]), "the card took the room the park made"
+    assert any("PARKS" in n for n in notes) and any("UN-PARKS" in n for n in notes)
 
 
 def test_two_cards_live_at_one_instant_never_share_a_box(tokyo):
@@ -314,10 +413,11 @@ def test_a_card_leaves_when_the_chart_is_redrawn_under_it(tokyo):
     """E65: the room is the page's empty room AS THE PAGE STANDS. The panel card was parked in it at
     0:09 and read over the RESCALED line from 0:22 - nine of M25's twenty-nine faults."""
     _, rows, why = tokyo
-    panel = next(d for d in rows[0][4] if d[0] == "dock-c-blue-ties-panel")
-    rescale = next(s["at"] for s in rows[0][6] if s["kind"] == "chart_to")
+    p = _first_page(rows)
+    panel = next(d for d in rows[p][4] if d[0] == "dock-c-blue-ties-panel")
+    rescale = next(s["at"] for s in rows[p][6] if s["kind"] == "chart_to")
     assert float(panel[3]) == pytest.approx(rescale), (panel, rescale)
-    assert "leaves at the chart's state change" in why[0]["rule"]
+    assert "leaves at the chart's state change" in why[p]["rule"]
 
 
 # ---------------------------------------------------------------- the row grammar
@@ -344,7 +444,7 @@ def test_every_row_carries_one_why_record(tokyo):
     _, rows, why = tokyo
     assert len(why) == len(rows)
     for w in why:
-        assert sorted(w) == ["act", "beat", "rule", "signature", "skeleton"]
+        assert sorted(w) == ["act", "beat", "group", "rule", "signature", "skeleton"]
         assert w["rule"] and w["skeleton"] and isinstance(w["beat"], int)
         assert w["signature"] in VOCABULARY, w["signature"]
 
@@ -354,7 +454,8 @@ def test_no_two_rows_running_use_the_same_skeleton(tokyo, japan):
     """The variety rule, counted on SKELETON IDS (P66 T2: the approved cuts carry consecutive
     signature WORDS - Japan's throw -> snap pair reads card, card - so the word cannot be the rule)."""
     for _, _, why in (tokyo, japan):
-        ids = [w["skeleton"] for w in why]
+        # one per GROUP: the open's two rows (the hook's world and the page over it) are one choice
+        ids = [w["skeleton"] for i, w in enumerate(why) if not i or w["group"] != why[i - 1]["group"]]
         assert all(a != b for a, b in zip(ids, ids[1:])), ids
 
 
@@ -400,10 +501,11 @@ def test_a_plan_whose_sentences_play_none_of_the_acts_still_compiles():
     assert all(SH.acts_of(r) == set() for r in plan), "the fixture plays none of the twelve acts"
     rows, why = SH.compile(plan, None, SH.DEFAULTS, "9:16")
     why = SH.rows_why(why)
-    assert len(rows) == 3, [r[2] for r in rows]                 # the hook is absorbed into the page it mounts
-    assert "the open IS the chart" in why[0]["rule"] and rows[0][2].startswith("ledger:")
-    assert not rows[1][2].startswith("ledger:") and "narrative plate" in why[1]["rule"]
-    assert SH.entry_in(rows[2][2]) == "spiral" and why[2]["signature"] == "spiral"
+    assert len(rows) == 4, [r[2] for r in rows]                 # the hook's world, then the page that mounts over it
+    assert rows[0][2].startswith("clip:") and why[0]["signature"] == "hold"
+    assert "the open IS the chart" in why[1]["rule"] and rows[1][2].startswith("ledger:")
+    assert not rows[2][2].startswith("ledger:") and "narrative plate" in why[2]["rule"]
+    assert SH.entry_in(rows[3][2]) == "spiral" and why[3]["signature"] == "spiral"
 
 
 def test_a_page_the_cut_has_never_shown_cannot_return():
@@ -650,11 +752,12 @@ def test_a_rescale_with_no_domain_and_a_park_with_a_state_are_refused():
         assert says in str(e.value), str(e.value)
 
 
-def test_the_park_is_never_offered_in_portrait_and_is_in_landscape():
-    """R26-172 where it belongs: the library the ASPECT may use, not a species stripped after the fact."""
+def test_the_park_is_offered_in_both_aspects():
+    """R26-172 WITHDRAWN (the parent, 2026-09-17, on the approved PORTRAIT cut's own 56.72 s frame):
+    the park is how a page makes room for a card, in portrait as in landscape."""
     lib = SH.load_library()
-    assert {s["signature"] for s in SH.usable_library(lib, "9:16")}.isdisjoint({"park", "unpark"})
-    assert {"park", "unpark"} <= {s["signature"] for s in SH.usable_library(lib, "16:9")}
+    for aspect in ("9:16", "16:9"):
+        assert {"park", "unpark"} <= {s["signature"] for s in SH.usable_library(lib, aspect)}
 
 
 # ---------------------------------------------------------------- the thrown chart card (E99 s71)
@@ -682,6 +785,77 @@ def test_a_thrown_chart_card_that_nothing_takes_to_the_stage_is_refused():
         SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
     assert "dock-a-fed-rate" in str(e.value) and "FULL CHART CARD" in str(e.value)
     assert ":snap=dock-a-fed-rate" in str(e.value) and ":camera=dock-a-fed-rate" in str(e.value)
+
+
+def test_a_camera_entry_whose_card_no_row_carries_is_refused():
+    """THE FOURTH PASS, defect 5 (the parent, at 77.80 s): the base played a blurred page and no card
+    where the approved cut plays the Fed page with its ring. `camera=<dock>` is a read-back token and
+    the compiler emitted it whatever the rows held, so the camera could push to a card nobody threw."""
+    plan = _thrown_card_plan("camera=dock-a-fed-rate")
+    plan[1]["moves"] = []                      # nobody throws the card the page arrives by
+    with pytest.raises(SH.Refused) as e:
+        SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert "arrives by `camera=dock-a-fed-rate`" in str(e.value), str(e.value)
+    assert "no row carries" in str(e.value) and "never thrown" in str(e.value)
+
+
+def test_a_camera_entry_carries_the_card_thrown_on_the_row_before(tokyo):
+    """... and where the card IS thrown, the compiler keeps it: the card the next page grows out of
+    takes no room of this page's (it is not evidence parked in a corner - it is the page to be), and
+    the row it becomes STARTS WHEN THE CARD HAS BEEN READ, as the approved cut does (the card lands on
+    "The Fed still" and the page arrives on "moved"). Base v3 started that row on the next beat, so
+    the camera's 0.45 s arrival was still in flight at the instant the parent read."""
+    _, rows, _ = tokyo
+    page = rows[-1]
+    head, _, card = str(SH.entry_token_in(page[2]) or "").partition("=")
+    assert head == "camera" and card == "dock-h-fed-vs-yields", page[2]
+    thrown = next(d for d in rows[-2][4] if str(d[0]) == card)
+    assert not SH.placed(thrown[4]) and thrown[4].get("arrive") == "throw", thrown
+    assert float(thrown[3]) >= float(page[0]) - 1e-6, "the card lives to the page's arrival"
+    read_s = float(thrown[4].get("read_s") or SH.compiler().DOCK_READ_S)
+    assert float(page[0]) == pytest.approx(float(thrown[2]) + read_s, abs=0.01), (page[0], thrown)
+    # ... and the eye's arrival is over before the instant the parent read the base at
+    assert float(page[0]) + SH.compiler().CAMERA_ARRIVAL_S < 77.8
+
+
+def test_a_recast_arrives_building(tokyo):
+    """THE FOURTH PASS, defect 2 (the parent, at 52.00 s): the approved recast grows its FIRST bar
+    there; base v3 stood all four. E99 s67 Apply 2 - a chart never lands fully built - so a recast the
+    author left un-keyed is emitted as the PLAIN hand-over the approved table writes (`keyed: false`,
+    `build_scene_timeline_f.py:388`), and the arriving state draws on its own build envelope."""
+    _, rows, why = tokyo
+    casts = [(n, s) for n, r in enumerate(rows) for s in r[6] or []
+             if s.get("kind") == "chart_to" and s.get("to") == "recast"]
+    assert len(casts) == 2, casts
+    for n, s in casts:
+        assert s["keyed"] is False, s
+        assert isinstance(s.get("dur"), (int, float)) and s["dur"] > 0, s
+        assert "DRAWS ON ITS OWN BUILD ENVELOPE" in why[n]["rule"]
+
+
+def test_a_recast_the_author_keys_keeps_its_key():
+    """E64 stands where the AUTHOR asks for it: a keyed recast is the same data travelling, and the
+    compiler never overwrites the key the plan names."""
+    plan = _chained(moves=[{"kind": "chart_to", "at_word": "month", "dur": 1.4,
+                            "options": {"to": "recast", "state": 1, "keyed": True}}])
+    rows, _ = SH.compile(plan, _take(plan), SH.DEFAULTS, "16:9")
+    cast = next(s for r in rows for s in r[6] or [] if s.get("kind") == "chart_to")
+    assert cast["keyed"] is True, cast
+
+
+def test_the_carried_retitle_reaches_the_returning_page(tokyo):
+    """THE FOURTH PASS, defect 4 (the parent, at 50.30 s): the approved page reads "The opponent: a
+    balance sheet" and the base still read the first title, because the deriver skipped the cut's
+    CARRIED retitle - fired three seconds before its own scene, so the page ARRIVES retitled. The plan
+    now names it on that scene's first word and the compiler realises it there."""
+    plan, rows, _ = tokyo
+    carried = [m for b in plan for m in SH.moves_of(b)
+               if m.get("kind") == "retitle" and m.get("label") == "The opponent: a balance sheet"]
+    assert len(carried) == 2, "the title is rewritten once on the page and carried onto its return"
+    spiral = next(r for r in rows if SH.entry_in(r[2]) == "spiral")
+    titles = [s for s in spiral[6] or [] if s.get("kind") == "retitle"]
+    assert titles and titles[0]["text"] == "The opponent: a balance sheet", titles
+    assert float(titles[0]["at"]) < 50.3, "the page reads the retitle by the instant the parent read"
 
 
 def test_the_same_card_is_fine_once_the_page_snaps_up_out_of_it():

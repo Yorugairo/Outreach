@@ -46,7 +46,6 @@
   },
   "source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:416-420",
   "aspect_limits": {
-    "no_badge_rail_at_9_16": true,
-    "no_park_at_9_16": true
+    "no_badge_rail_at_9_16": true
   }
 }

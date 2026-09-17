@@ -10,6 +10,11 @@ writes the `moves` field into such a plan from THE SPECIES AND DOCKS THAT CUT AC
   * a species whose `at` falls inside its own scene's span is attributed to the BEAT that is
     speaking at that instant, and becomes a move anchored on the WORD spoken there (the take's own
     words, `<build>/timeline.json`) with its `target`, its `dur` and its own remaining fields copied;
+  * a species the cut fires BEFORE its own scene's span is that scene's ARRIVAL STATE - a returning
+    page whose title is already rewritten when it comes back ("a species before its scene is a state",
+    the approved cut's own comment on the carried retitle) - so it is read at the SCENE'S START, on
+    the first word spoken over it, and named as carried. It was skipped until 2026-09-17, which is why
+    the base still read the page's first title where the approved cut reads the retitle;
   * a dock whose `enter` falls inside its scene is a `dock` move naming the same asset id, with the
     options the compiler admits (`build_scene_timeline_f.DOCK_OPTS`) copied and nothing else;
   * a record the cut left empty keeps NO `moves` key - a silent beat is the author's to fill, and
@@ -142,15 +147,17 @@ def derive(build: Path, timeline=None) -> tuple:
     allowed = tuple(k for k in SH.dock_option_keys() if k != SH.MOVE_SLOT)
     out = {}
     skipped = []
+    carried = []
 
     def place(t: float, what: str, beats: list, make) -> None:
         beat = beat_at(beats, t)
         if beat is None:
-            skipped.append(f"{what} at {t:.2f}s: no sentence is spoken over that scene")
+            skipped.append(f"skipped: {what} at {t:.2f}s: no sentence is spoken over that scene")
             return
         phrase = anchor(ws, beat, t)
         if phrase is None:
-            skipped.append(f"{what} at {t:.2f}s: no unambiguous phrase of beat {beat['beat']}'s sentence opens there")
+            skipped.append(f"skipped: {what} at {t:.2f}s: no unambiguous phrase of beat {beat['beat']}'s "
+                           "sentence opens there")
             return
         out.setdefault(int(beat["beat"]), []).append(make(phrase))
 
@@ -160,18 +167,27 @@ def derive(build: Path, timeline=None) -> tuple:
         for sp in scene.get("species") or []:
             t = round(float(sp["at"]), 2)
             what = f"the {sp['kind']} of {scene['scene_id']}"
-            if not (s0 - EPS <= t < s1 + EPS):
-                skipped.append(f"{what} at {t:.2f}s: outside its own scene's span ({s0:.2f}-{s1:.2f}s)")
+            if t < s0 - EPS:
+                # the CARRIED species: the cut fires it before the scene so the world ARRIVES with it
+                # already done. The beat that speaks at that instant belongs to the world BEFORE this
+                # one (a plate has no title to rewrite), so it is read at this scene's own start.
+                carried.append(f"carried: {what} at {t:.2f}s: fired before its own scene ({s0:.2f}-{s1:.2f}s) - the scene "
+                               f"ARRIVES with it, so the plan reads it at {s0:.2f}s, on that scene's first word")
+                place(s0, what, beats, lambda phrase, sp=sp: species_move(sp, phrase))
+                continue
+            if t > s1 + EPS:
+                skipped.append(f"skipped: {what} at {t:.2f}s: past its own scene's span ({s0:.2f}-{s1:.2f}s)")
                 continue
             place(t, what, beats, lambda phrase, sp=sp: species_move(sp, phrase))
         for dock in scene.get("docks") or []:
             t = round(float(dock[DOCK_ENTER]), 2)
             what = f"the card {dock.get(DOCK_SLIDE)} of {scene['scene_id']}"
             if not (s0 - EPS <= t < s1 + EPS):
-                skipped.append(f"{what} at {t:.2f}s: enters outside its own scene's span ({s0:.2f}-{s1:.2f}s)")
+                skipped.append(f"skipped: {what} at {t:.2f}s: enters outside its own scene's span "
+                               f"({s0:.2f}-{s1:.2f}s)")
                 continue
             place(t, what, beats, lambda phrase, dock=dock: dock_move(dock, phrase, allowed))
-    return {n: moves for n, moves in sorted(out.items())}, skipped
+    return {n: moves for n, moves in sorted(out.items())}, carried + skipped
 
 
 def render(build: Path, moves: dict) -> tuple:
@@ -212,7 +228,7 @@ def main(argv=None) -> int:
     print(f"{build.parent.name}/{build.name}: {total} moves on {len(moves)} beats "
           f"({', '.join(f'{k} {n}' for k, n in sorted(kinds.items()))})")
     for line in skipped:
-        print(f"  skipped: {line}")
+        print(f"  {line}")
     if args.check:
         if was == now:
             print(f"  {PLAN_NAME} is in sync with the cut")

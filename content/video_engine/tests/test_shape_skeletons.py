@@ -273,26 +273,23 @@ def test_the_cited_line_still_says_the_mechanism(path: Path):
 
 @pytest.mark.parametrize("path", SKELETON_FILES, ids=IDS)
 def test_no_rail_and_no_park(path: Path):
-    """R26-171 / R26-172: no `badges` rail and no `chart_to park` is emitted at 9:16 - so none is written at all."""
+    """R26-171: no `badges` rail is emitted at 9:16 - so none is written at all.
+
+    R26-172 stood beside it ("no `chart_to park` at 9:16") and is WITHDRAWN (the parent, 2026-09-17, on the
+    approved PORTRAIT cut's own 56.72 s frame: the page parks small at the top and the cards take the room
+    below). A park in a skeleton is now ordinary, and the key is gone from `aspect_limits`."""
     rec = _load(path)
     raw = json.dumps(rec["rows"])
     assert "badge" not in raw.lower(), rec["id"]
-    for row in rec["rows"]:
-        for sp in row.get("species") or []:
-            to = str((sp.get("options") or {}).get("to", ""))
-            if sp["kind"] == "chart_to" and to == "park":
-                # R26-172 is an ASPECT rule, not a ban: the park and the un-park are approved mechanisms
-                # (CAPABILITIES.md:120) and E99 s70 put their words back in the vocabulary. A skeleton whose
-                # whole signature is one of them carries it, and `shapes.usable_library` never offers it at 9:16.
-                assert rec["signature"] in ("park", "unpark"), rec["id"]
-    assert rec["aspect_limits"] == {"no_badge_rail_at_9_16": True, "no_park_at_9_16": True}
+    assert rec["aspect_limits"] == {"no_badge_rail_at_9_16": True}
 
 
-def test_no_park_skeleton_is_offered_in_portrait():
-    """R26-172, enforced where it belongs: the compiler never offers a park skeleton at 9:16."""
+def test_the_park_skeletons_are_offered_in_both_aspects():
+    """R26-172 WITHDRAWN: the park and the un-park are how a page makes room, in portrait as in landscape."""
     lib = [_load(p) for p in SKELETON_FILES]
-    assert {s["signature"] for s in SH.usable_library(lib, "9:16")}.isdisjoint({"park", "unpark"})
-    assert len(SH.usable_library(lib, "16:9")) == len(lib)
+    for aspect in ("9:16", "16:9"):
+        assert len(SH.usable_library(lib, aspect)) == len(lib)
+        assert {"park", "unpark"} <= {s["signature"] for s in SH.usable_library(lib, aspect)}
 
 
 @pytest.mark.parametrize("path", SKELETON_FILES, ids=IDS)

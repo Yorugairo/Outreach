@@ -2,7 +2,7 @@
   "schema_version": "shape_skeletons.v1",
   "id": "open-page-mounts-the-world",
   "shape": "open-on-the-chart",
-  "does": "The page MOUNTS over the hook's world on its last word - the cream rises where the roll-out would have been - and the line builds to the beat's datum.",
+  "does": "The hook's own world holds - the clip or plate its first sentences are spoken over - and the page MOUNTS over it on the hook's last sentence, the cream rising where the roll-out would have been.",
   "acts": [
     "QUOTES",
     "COMPARES",
@@ -10,6 +10,19 @@
   ],
   "signature": "mount",
   "rows": [
+    {
+      "start": "{t0}",
+      "end": "{t1}",
+      "plate": "{plate}",
+      "ken": [
+        0,
+        0,
+        0
+      ],
+      "docks": [],
+      "exit": null,
+      "species": []
+    },
     {
       "start": "{t0}",
       "end": "{t1}",
@@ -52,9 +65,8 @@
     "event_gap_max_s": 2.5,
     "light_after_build": true
   },
-  "source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:235",
+  "source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:281-285",
   "aspect_limits": {
-    "no_badge_rail_at_9_16": true,
-    "no_park_at_9_16": true
+    "no_badge_rail_at_9_16": true
   }
 }

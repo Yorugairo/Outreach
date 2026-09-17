@@ -319,9 +319,17 @@
           "description": "the row's 5th element - the evidence that arrives over the world; may be empty"
         },
         "exit": {
-          "type": "string",
-          "minLength": 3,
-          "pattern": "^(cut|dip|blurzoom|dissolve|wipe|wipe_right|suck|melt|slide|door)(:[A-Za-z0-9_.,{}+-]+)*$",
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 3,
+              "pattern": "^(cut|dip|blurzoom|dissolve|wipe|wipe_right|suck|melt|slide|door)(:[A-Za-z0-9_.,{}+-]+)*$"
+            },
+            {
+              "type": "null",
+              "description": "NO transition: the world under a page that MOUNTS over it hands over by the mount itself (E45 - the mount IS the roll-out), which is how the approved open writes its first row: `tokyo-tea-break/build_short.py:281-282`, a 6th element of None"
+            }
+          ],
           "description": "how the world leaves (build_scene_timeline_f.SCENE_EXITS): `dip` when the world CHANGES (E47), `suck` or `cut` page to page and never into a mount; a suffix carries its length or point (dip:<s>, suck:<x>,<y>) and may itself carry a hole"
         },
         "species": {
@@ -374,22 +382,16 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "no_badge_rail_at_9_16",
-        "no_park_at_9_16"
+        "no_badge_rail_at_9_16"
       ],
       "properties": {
         "no_badge_rail_at_9_16": {
           "type": "boolean",
           "const": true,
           "description": "R26-171: no `badges` rail is emitted at 9:16"
-        },
-        "no_park_at_9_16": {
-          "type": "boolean",
-          "const": true,
-          "description": "R26-172: no `chart_to park` is emitted at 9:16"
         }
       },
-      "description": "what the skeleton may NOT emit in portrait; both are const true - a skeleton that wants otherwise is not a skeleton"
+      "description": "what the skeleton may NOT emit in portrait; the rail's const is true - a skeleton that wants otherwise is not a skeleton. R26-172 ('no `chart_to park` at 9:16') stood here as a second const until the parent read the APPROVED portrait cut beside the base (2026-09-17): at 56.72 s the page parks small at the top and the cards take the room below. The ruling is WITHDRAWN and the key is gone - the park is how a page makes room for a card, in both aspects"
     },
     "skeleton": {
       "type": "object",

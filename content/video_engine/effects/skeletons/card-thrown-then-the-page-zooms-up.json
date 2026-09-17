@@ -47,7 +47,6 @@
   },
   "source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:281-285",
   "aspect_limits": {
-    "no_badge_rail_at_9_16": true,
-    "no_park_at_9_16": true
+    "no_badge_rail_at_9_16": true
   }
 }
