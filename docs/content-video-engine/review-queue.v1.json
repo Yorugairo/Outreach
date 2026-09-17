@@ -3533,78 +3533,50 @@
     {
       "id": "p65-hg2-the-reproved-set-and-m38",
       "status": "open",
-      "kind": "owed",
-      "title": "P65 HG2 - the fifteen proven recipes re-proved on today's clocks: 8 standing, 7 unreachable, and M38's restoration",
+      "kind": "batch",
+      "title": "P65 HG2 - the proven set re-proved on today's bed: six carry their mechanism, two are not on this bed, and M38's restoration",
       "ids": [
         "P65 HG2",
         "R26-168",
         "E99 s68"
       ],
-      "judge": "Owed. See `owed`.",
+      "judge": "The fifteen `proven` recipes were rebuilt on the Tokyo bed under TODAY's clocks - six-second plates (M44), pages that BUILD then hold built (E99 s67), no rails and no park at 9:16 (R26-171 / R26-172) - and this is the eight that reached a frame, read a fourth time. Each rendition was read by the parent ON ITS OWN SHEET (`build-lab-reproof-r2/<recipe>/lab-members.png`, this cut's members over the cut the recipe was PROVEN in), not by a gate row and not by a clip alone: that is what the operator's read asked for - the mechanisms, beside the cuts they came from. Six carry their mechanism and are below with a clip each, in the order they were read: card-becomes-the-chart (the thrown card is the holdings chart's own card at 4.57 s and the page grows out of it through the veil at 5.34 s), dock-lands-page-renames (the clipping lands and the title rewrites to 'The opponent' at 55.5 s), plate-dock-wipe (the wipe at 21.1 s), spotlight-held-past-the-cut (the light on -9.9 % persists across the boundary at 56.4 -> 57.0 s), read-park-build-write (the park member restored, the page written after it), badge-ladder (no pill at 39.7 s, one at 41.4, two at 42.7, three at 44.0, the rail clear of the caption strip). TWO ARE NOT CARDED, and correctly: test-card-rows needs the member `chart_dock:checklist` and this bed has no checklist chart card - the procedure table is Steel's (steel-and-paper/build-f); verdict-recap needs `dock_payload:stack` and this bed has no stack payload - the verdict wall is Steel's too. Their clips would show a bare plate and would mislead (E99 s60, a proof is a scene), so they carry NO clip and are named here instead; they are owed a bed that can carry them, not a verdict. The word 'unreachable' is WITHDRAWN (E99 s69 / s70): a gate row diagnoses what a beat asks for, it never kills a recipe, and a 31-second beat measured against a three-second recipe was the bed's reading, not the mechanism's. So: do these six carry the mechanisms as proven, on today's bed - and does M38 return to a FAIL at 0.60, move, or stay the interim WARN (the gates now diagnose, E99 s69)? Give each candidate below its own bit and its own reason (an approve carries `good`, a deny the one of the eight that killed it), and answer M38 on the card's own control. NOTE: this card carries NO exploration draw and NO calibration probe - it is the fixed proven set re-proved, not a drawn batch. The gates and the probe DIAGNOSED; nothing here is judged, ranked or scored by an agent (E99 s68).",
       "where": [
         {
-          "label": "the probe sheet for recipe:badge-ladder (unreachable) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-badge-ladder/lab-sheet.png"
+          "label": "the probe sheet for recipe:card-becomes-the-chart (companion) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-card-becomes-the-chart/lab-sheet.png"
         },
         {
-          "label": "the probe sheet for recipe:card-becomes-the-chart (amended) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-card-becomes-the-chart/lab-sheet.png"
+          "label": "the probe sheet for recipe:dock-lands-page-renames (companion) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-dock-lands-page-renames/lab-sheet.png"
         },
         {
-          "label": "the probe sheet for recipe:dock-lands-page-renames (unreachable) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-dock-lands-page-renames/lab-sheet.png"
+          "label": "the probe sheet for recipe:plate-dock-wipe (companion) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-plate-dock-wipe/lab-sheet.png"
         },
         {
-          "label": "the probe sheet for recipe:emphasized-bar-lit (amended) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-emphasized-bar-lit/lab-sheet.png"
+          "label": "the probe sheet for recipe:spotlight-held-past-the-cut (companion) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-spotlight-held-past-the-cut/lab-sheet.png"
         },
         {
-          "label": "the probe sheet for recipe:held-dock-across-the-cut (proven) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-held-dock-across-the-cut/lab-sheet.png"
+          "label": "the probe sheet for recipe:read-park-build-write (as-is) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-read-park-build-write/lab-sheet.png"
         },
         {
-          "label": "the probe sheet for recipe:held-page-hosts-the-docks (amended) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-held-page-hosts-the-docks/lab-sheet.png"
+          "label": "the probe sheet for recipe:badge-ladder (as-is) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-badge-ladder/lab-sheet.png"
         },
         {
-          "label": "the probe sheet for recipe:outro-clip-life (proven) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-outro-clip-life/lab-sheet.png"
+          "label": "the probe sheet for recipe:test-card-rows (not on this bed) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-test-card-rows/lab-sheet.png"
         },
         {
-          "label": "the probe sheet for recipe:plate-dock-wipe (unreachable) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-plate-dock-wipe/lab-sheet.png"
-        },
-        {
-          "label": "the probe sheet for recipe:punch-then-callout (proven) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-punch-then-callout/lab-sheet.png"
-        },
-        {
-          "label": "the probe sheet for recipe:read-park-build-write (unreachable) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-read-park-build-write/lab-sheet.png"
-        },
-        {
-          "label": "the probe sheet for recipe:spotlight-held-past-the-cut (unreachable) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-spotlight-held-past-the-cut/lab-sheet.png"
-        },
-        {
-          "label": "the probe sheet for recipe:still-life-breather (proven) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-still-life-breather/lab-sheet.png"
-        },
-        {
-          "label": "the probe sheet for recipe:test-card-rows (unreachable) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-test-card-rows/lab-sheet.png"
-        },
-        {
-          "label": "the probe sheet for recipe:trace-callout-ladder (proven) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-trace-callout-ladder/lab-sheet.png"
-        },
-        {
-          "label": "the probe sheet for recipe:verdict-recap (unreachable) - the candidate's own instants",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-verdict-recap/lab-sheet.png"
+          "label": "the probe sheet for recipe:verdict-recap (not on this bed) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-verdict-recap/lab-sheet.png"
         },
         {
           "label": "the run record: every gate row that decided each of the fifteen",
-          "path": "content/video_engine/effects/lab/batches/reproof-r1.jsonl"
+          "path": "content/video_engine/effects/lab/batches/reproof-r2.jsonl"
         },
         {
           "label": "M38's interim WARN and the sentence naming R26-168 - your word restores the FAIL at 0.60 or moves the number",
@@ -3615,24 +3587,176 @@
           "path": ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md"
         }
       ],
-      "proofs": [],
-      "candidates": [],
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "recipe:card-becomes-the-chart - the beat on \"Tokyo took a tea break.\"",
+          "t0": 0.0,
+          "t1": 11.12,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-card-becomes-the-chart",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:dock-lands-page-renames - the beat on \"Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile.\"",
+          "t0": 44.88,
+          "t1": 56.0,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-dock-lands-page-renames",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:plate-dock-wipe - the beat on \"The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February.\"",
+          "t0": 21.09,
+          "t1": 52.09,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-plate-dock-wipe",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:spotlight-held-past-the-cut - the beat on \"Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile.\"",
+          "t0": 45.14,
+          "t1": 57.0,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-spotlight-held-past-the-cut",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:read-park-build-write - the beat on \"Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile.\"",
+          "t0": 45.14,
+          "t1": 54.09,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-read-park-build-write",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:badge-ladder - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 39.22,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-badge-ladder",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "recipe:card-becomes-the-chart",
+          "label": "recipe:card-becomes-the-chart",
+          "one_line": "buildable with a companion - M11: the hole opens at 0:05 and runs 4.9 s, past the recipe's last member landing at 5.34s - slot the next beat there: a badge or a pill springing with its callout, a stamped prop or icon, a docked screenshot, a flight - the thing the sentence names, arriving (E99 s71); never a light. The row's own words: the chart is the mechanism by 0:10) The r2 measurement also asks one amended offset: exit:dip, from 5.12 -> 6.00 (M44: a world plate the eye can take in; the proven offset leaves 5.12 s). | the parent's read of lab-members.png (2026-09-17): the card becomes the chart",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:card-becomes-the-chart - the beat on \"Tokyo took a tea break.\"",
+            "t0": 0.0,
+            "t1": 11.12,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-card-becomes-the-chart",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:dock-lands-page-renames",
+          "label": "recipe:dock-lands-page-renames",
+          "one_line": "buildable with a companion - M25: the card sits over the page's ink at 0:55 - place it in the page's room ([FAIL] M25 4 layout fault(s) over 61 instants probed: dock-k-pledge-record over the chart's data at 0:55, 15,232 px, 14 % of the card; a series name under dock-k-pledge-record at 0:55, 9,400 px, 74 % of the ink; an axis) | the parent's read of lab-members.png (2026-09-17): the title rewrites on landing",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:dock-lands-page-renames - the beat on \"Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile.\"",
+            "t0": 44.88,
+            "t1": 56.0,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-dock-lands-page-renames",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:plate-dock-wipe",
+          "label": "recipe:plate-dock-wipe",
+          "one_line": "buildable with a companion - M01: the row fires at 0:24, inside the recipe's own span (its last member lands at 51.06s) - answer it with a badge or a pill springing with its callout, a stamped prop or icon, a docked screenshot, a flight - the thing the sentence names, arriving (E99 s71); never a light. The row's own words: [FAIL] M01 1 stretches > 12s with no visual event beyond Ken Burns/anchor captions (27s = 31% of runtime); worst 27.3s at 0:24 | the parent's read of lab-members.png (2026-09-17): the wipe is on frame",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:plate-dock-wipe - the beat on \"The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February.\"",
+            "t0": 21.09,
+            "t1": 52.09,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-plate-dock-wipe",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:spotlight-held-past-the-cut",
+          "label": "recipe:spotlight-held-past-the-cut",
+          "one_line": "buildable with a companion - the parent read the frame and the mechanism is on it: the light on -9.9 % persists across the boundary at 56.4 -> 57.0 s. The build's own automated diagnosis is kept verbatim and superseded (E99 s69, the gates diagnose, they never kill): \"not on this bed - page_enter:snap at +0.00s no landed card stands before this page for it to grow out of (the row that ends at 44.88s carries no dock), so the page is entered by `axes` and the member is NOT realised - the mechanism needs a still card on the veil\" | the parent's read of lab-members.png (2026-09-17): the light crosses the cut",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:spotlight-held-past-the-cut - the beat on \"Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile.\"",
+            "t0": 45.14,
+            "t1": 57.0,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-spotlight-held-past-the-cut",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:read-park-build-write",
+          "label": "recipe:read-park-build-write",
+          "one_line": "buildable as-is | the parent's read of lab-members.png (2026-09-17): reads, parks, builds, writes",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:read-park-build-write - the beat on \"Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile.\"",
+            "t0": 45.14,
+            "t1": 54.09,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-read-park-build-write",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:badge-ladder",
+          "label": "recipe:badge-ladder",
+          "one_line": "buildable as-is | the parent's read of lab-members.png (2026-09-17): pills stamp one by one",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:badge-ladder - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 39.22,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-badge-ladder",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        }
+      ],
       "options": [
         "restore M38 to a FAIL at 0.60, with the re-proved set below as the proven set",
         "move the number (say which) and restore the FAIL there",
         "keep the interim WARN until a second batch has re-proved more"
       ],
-      "recommendation": "None on which recipe keeps its name - that is your bit, not the agent's (E99 s68). On M38 the agent recommends the first reading: restore the FAIL at 0.60 with these 8 as the proven set (5 unchanged, 3 at the amended offset), and let the 7 unreachable ones out of the count until they are rebuilt on a bed that can carry them. The agent's recommendation, not a ruling.",
+      "recommendation": "None on which recipe keeps its name - that is your bit, not the agent's (E99 s68). On M38 the agent recommends the first reading: RESTORE THE FAIL AT 0.60 with these six as the proven set, and leave test-card-rows and verdict-recap out of the count until a bed that carries a checklist card and a stack payload re-proves them. The agent's recommendation, not a ruling.",
       "blocks": "the promotion of the re-proved set (P65 T6), the closure of R26-168, and M38's restoration to a FAIL at 0.60 in gate_one_shot_floor.py",
       "sources": [
         ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md (Human Gates - HG2; T8, the re-proof run)",
         "docs/content-video-engine/BACKLOG.md (R26-168: the floor and the proven set contradict each other)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s68: present as batches, track approvals AND denials; s67: the page BUILDS then holds built)",
-        "content/video_engine/effects/lab/batches/reproof-r1.jsonl (the gate rows behind every one of the fifteen verdicts)"
+        "content/video_engine/effects/lab/batches/reproof-r2.jsonl (the gate rows behind every one of the fifteen verdicts)"
       ],
       "ruling": "",
       "was_kind": "owed",
-      "owed": "PULLED 2026-09-17 on the operator's read: the eight clips were the lab's RENDITIONS of the proven recipes, never read against the cuts they were proven in - card-becomes-the-chart was a card thrown, a dip, a page that appeared (the card did not ride the veil; the walker counted tokens). The recipes stand as proven. The card returns when the parent has read each rendition beside its proof cut, and its question becomes: which gate clocks bend to the proven set (E99 s69)."
+      "owed": ""
     },
     {
       "id": "lab-batch-r1-plate-carries-a-card",
@@ -3736,6 +3860,460 @@
         ],
         "why": "drawn with random.Random(seed) over the sorted survivor ids and NO reference to any learner - no approval-rate table, no predicted bit, no ordering (Gao et al. 2022: a quarter of each batch is watched whatever the table expects, or the table only ever learns what it already believed)"
       }
+    },
+    {
+      "id": "lab-batch-r2-plate-carries-a-card",
+      "status": "open",
+      "kind": "batch",
+      "title": "P65 HG1 - the first batch: plate-carries-a-card, 12 candidate(s) side by side (batch batch-r2)",
+      "ids": [
+        "P65 HG1",
+        "E99 s68",
+        "R26-176"
+      ],
+      "judge": "Which of these beats earns its place, and why not the others? Each candidate below is ONE beat - the shape `plate-carries-a-card` - built on the Tokyo bed inside the approved cut and left standing by the gates and the probe (12 of 12 built for this shape survived). Give each its own bit and its own reason: an approve carries `good`, a deny carries the one of the eight that killed it. The gates FILTERED; nothing here is judged, ranked or scored by an agent. AND THE GRAMMAR ITSELF IS ON TRIAL: one card per beat shape with a bit + a reason per candidate - does this work for you, or do you want one card per candidate at a lower rate? Answer that on the card's own control below. The parent read all twelve on their sheets (2026-09-17) before this card opened: every first tile lit, each card arriving inside its window and leaving with its row; what differs between them is the combination - the plate, the card, the arrival, the exit - and that is yours to judge (E99 s68: approve or deny each, with a reason).",
+      "where": [
+        {
+          "label": "the probe sheet for 001fc567 - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-001fc567/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for 30e85d2c - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-30e85d2c/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for 3a46626c - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-3a46626c/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for 5273c649 - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-5273c649/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for 52a80b58 - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-52a80b58/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for 5e0a6324 - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-5e0a6324/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for 79425019 - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-79425019/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for 9b5531bf - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-9b5531bf/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for a5adc1f4 - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-a5adc1f4/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for bef6bb12 - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-bef6bb12/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for c7171c3c - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-c7171c3c/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for f2aeadd0 - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-f2aeadd0/lab-sheet.png"
+        },
+        {
+          "label": "the run record: every gate row that decided each candidate of batch batch-r2",
+          "path": "content/video_engine/effects/lab/batches/batch-r2.jsonl"
+        },
+        {
+          "label": "the enumerated space these candidates were drawn from (members, offsets, clocks)",
+          "path": "content/video_engine/effects/lab/candidates.jsonl"
+        },
+        {
+          "label": "the plan, its Human Gates and the batch's queue grammar",
+          "path": ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md"
+        }
+      ],
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card 001fc567 - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 39.22,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-001fc567",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card 30e85d2c - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 39.22,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-30e85d2c",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card 3a46626c - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-3a46626c",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card 5273c649 - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 39.22,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-5273c649",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card 52a80b58 - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-52a80b58",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card 5e0a6324 - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-5e0a6324",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card 79425019 - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-79425019",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card 9b5531bf - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-9b5531bf",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card a5adc1f4 - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-a5adc1f4",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card bef6bb12 - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-bef6bb12",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card c7171c3c - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 39.22,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-c7171c3c",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "plate-carries-a-card f2aeadd0 - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-f2aeadd0",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "lab:plate-carries-a-card:001fc567",
+          "label": "001fc567 - plate-carries-a-card",
+          "one_line": "plate_option:alive +0s, dock_kind:cutout +2.5s, arrival:throw +2.5s, species:plate_life +5s, exit:dip +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card 001fc567 - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 39.22,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-001fc567",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "lab:plate-carries-a-card:30e85d2c",
+          "label": "30e85d2c - plate-carries-a-card",
+          "one_line": "plate_option:ken +0s, dock_kind:cutout +2.5s, arrival:throw +2.5s, species:plate_life +5s, exit:dip +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card 30e85d2c - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 39.22,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-30e85d2c",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "lab:plate-carries-a-card:3a46626c",
+          "label": "3a46626c - plate-carries-a-card",
+          "one_line": "plate_option:alive +0s, dock_kind:cutout +2.5s, arrival:throw +2.5s, species:plate_life +5s, exit:cut +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card 3a46626c - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-3a46626c",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "lab:plate-carries-a-card:5273c649",
+          "label": "5273c649 - plate-carries-a-card",
+          "one_line": "plate_option:alive +0s, dock_kind:image +2.5s, arrival:throw +2.5s, species:plate_life +5s, exit:dip +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card 5273c649 - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 39.22,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-5273c649",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          },
+          "exploration": true
+        },
+        {
+          "id": "lab:plate-carries-a-card:52a80b58",
+          "label": "52a80b58 - plate-carries-a-card",
+          "one_line": "plate_option:ken +0s, dock_kind:press +2.5s, arrival:throw +2.5s, species:plate_life +5s, exit:suck +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card 52a80b58 - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-52a80b58",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "lab:plate-carries-a-card:5e0a6324",
+          "label": "5e0a6324 - plate-carries-a-card",
+          "one_line": "plate_option:ken +0s, dock_kind:image +2.5s, arrival:throw +2.5s, species:plate_life +5s, exit:cut +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card 5e0a6324 - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-5e0a6324",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "lab:plate-carries-a-card:79425019",
+          "label": "79425019 - plate-carries-a-card",
+          "one_line": "plate_option:ken +0s, dock_kind:cutout +2.5s, arrival:throw +2.5s, species:plate_life +5s, exit:suck +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card 79425019 - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-79425019",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          },
+          "exploration": true
+        },
+        {
+          "id": "lab:plate-carries-a-card:9b5531bf",
+          "label": "9b5531bf - plate-carries-a-card",
+          "one_line": "plate_option:ken +0s, dock_kind:image +2.5s, arrival:land +2.5s, species:plate_life +5s, exit:cut +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card 9b5531bf - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-9b5531bf",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          },
+          "exploration": true
+        },
+        {
+          "id": "lab:plate-carries-a-card:a5adc1f4",
+          "label": "a5adc1f4 - plate-carries-a-card",
+          "one_line": "plate_option:alive +0s, dock_kind:image +2.5s, arrival:throw +2.5s, species:plate_life +5s, exit:cut +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card a5adc1f4 - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-a5adc1f4",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "lab:plate-carries-a-card:bef6bb12",
+          "label": "bef6bb12 - plate-carries-a-card",
+          "one_line": "plate_option:ken +0s, dock_kind:cutout +2.5s, arrival:throw +2.5s, species:plate_life +5s, exit:suck +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card bef6bb12 - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-bef6bb12",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "lab:plate-carries-a-card:c7171c3c",
+          "label": "c7171c3c - plate-carries-a-card",
+          "one_line": "plate_option:alive +0s, dock_kind:image +2.5s, arrival:land +2.5s, species:plate_life +5s, exit:dip +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card c7171c3c - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 39.22,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-c7171c3c",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "lab:plate-carries-a-card:f2aeadd0",
+          "label": "f2aeadd0 - plate-carries-a-card",
+          "one_line": "plate_option:alive +0s, dock_kind:press +2.5s, arrival:throw +2.5s, species:plate_life +5s, exit:suck +6s",
+          "proof": {
+            "type": "clip",
+            "label": "plate-carries-a-card f2aeadd0 - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-batch-r2/plate-carries-a-card-f2aeadd0",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        }
+      ],
+      "options": [
+        "the batch grammar works - keep one card per beat shape",
+        "one card per candidate instead, at a lower rate"
+      ],
+      "recommendation": "None on which beat wins - that is your bit, not the agent's (E99 s68). The agent recommends only what the record shows: 3 of 12 are marked exploration and are in front of you whatever a learner would predict. On the grammar: keep one card per beat shape - it is the only form in which a denial carries a reason, which is what E99 s68 asked for. The agent's recommendation, not a ruling.",
+      "blocks": "P65 T5 (the approval log has nothing to derive until an answer exists) and every later batch",
+      "sources": [
+        ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md (T4, the batch's queue grammar)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s68: present as batches, track approvals AND denials)",
+        "docs/content-video-engine/BACKLOG.md (R26-176: the space is finite; the lab enumerates it)",
+        "content/video_engine/effects/lab/batches/batch-r2.jsonl (the gate rows behind every survivor)"
+      ],
+      "ruling": "",
+      "was_kind": "",
+      "owed": "",
+      "draw": {
+        "seed": "batch-r2:plate-carries-a-card",
+        "share": 0.25,
+        "n": 12,
+        "k": 3,
+        "drawn": [
+          "lab:plate-carries-a-card:5273c649",
+          "lab:plate-carries-a-card:79425019",
+          "lab:plate-carries-a-card:9b5531bf"
+        ],
+        "why": "drawn with random.Random(seed) over the sorted survivor ids and NO reference to any learner - no approval-rate table, no predicted bit, no ordering (Gao et al. 2022: a quarter of each batch is watched whatever the table expects, or the table only ever learns what it already believed)"
+      }
+    },
+    {
+      "id": "p66-hg1-the-generated-base-v7",
+      "status": "open",
+      "kind": "watch",
+      "title": "P66 HG1, second read - the generated base for the Tokyo bed, version 7 (after E99 s70/s71: the vocabulary from the record, the chains that render, the park, the closing row)",
+      "ids": [
+        "P66 HG1",
+        "E99 s68",
+        "E99 s38"
+      ],
+      "judge": "Your first read (E99 s71): 'this isn't really close -- you missed most of the life and choreography'. Since then: the vocabulary rebuilt from the record (20 words, 22 skeletons citing the approved cuts), the open on its clip with the page mounting over it, the rescale and the recast that BUILD (an engine line: an authored keyed:false is respected), the spiral return with its bracket, the retitle, the page that PARKS to make room for its cards, the throw-then-push that becomes the Fed page, the closing row held alive to the runtime. The parent read the base beside the approved cut at eleven instants: ten the same, one a row boundary. INFO from the director-critic (v5, before the last two rows were fixed): mechanisms present 10/11, rows attributed 5/6; its two first rows - the frozen tail and the tea-cup card over the Fed plot - are fixed on v7 by the parent's probe (79.5 s parked beside the note; 82.9-88.5 s alive); its third stands: a light on 'it's on your phone' where the thing should arrive - the plan's own read-back of the approved cut, the base's silent beat to fill. The one question: is this base the right starting point beside the approved cut - or does it still read as templated?",
+      "where": [
+        {
+          "label": "the base table - the skeleton, act and rule per row; the silent beats",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p66-base/BASE-TABLE.md"
+        },
+        {
+          "label": "the base beside the approved cut at eleven instants (the probe's numbers)",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p66-base/s70-sheets/base-v4-vs-approved-diff.md"
+        }
+      ],
+      "proofs": [
+        {
+          "type": "player",
+          "label": "the base, frozen, with its audio",
+          "url": "http://127.0.0.1:8769/player.html",
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p66-base",
+          "confirmed": "served 2026-09-17 by serve_player.py --no-check (HTTP 200)"
+        }
+      ],
+      "options": [
+        "The base is the right starting point - the Opus one-shot runs on it",
+        "Right for named beat shapes only - say which",
+        "Still templated - the library goes back again, say what is missing"
+      ],
+      "recommendation": "The base is the right starting point - the Opus one-shot runs on it",
+      "blocks": "P66 T5's M46 threshold (the maximum share one signature may reach is set by your answer) and the Opus one-shot that runs on the compiler's base (E99 s66 step 2)",
+      "sources": [
+        ".claude/PRPs/plans/P66-THE-SHAPE-COMPILER.plan.md (Human Gates - HG1)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s68, E99 s38, E99 s66)",
+        "docs/content-video-engine/GRILL-AGENTS-HARNESS-EFFECTS-2026-09-16.md:10-19"
+      ],
+      "ruling": null,
+      "was_kind": "",
+      "critic": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p66-base/CRITIC.md"
     }
   ]
 }
