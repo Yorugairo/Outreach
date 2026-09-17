@@ -1,6 +1,6 @@
 ---
 name: recall-system
-description: "The three recall surfaces - CAPABILITIES.md, PLATE-LIBRARY, docs/WORKTREE-REGISTER.md - check them BEFORE building or searching; capabilities update in the same commit"
+description: "The three recall surfaces - CAPABILITIES.md, PLATE-LIBRARY, survey_worktrees.py - check them BEFORE building or searching; capabilities update in the same commit"
 metadata: 
   node_type: memory
   type: project
@@ -19,11 +19,9 @@ The recall surfaces, in check-first order:
    capability added or retired updates this file IN THE SAME COMMIT.
 2. **`content/video_engine/sources/PLATE-LIBRARY.json`** — 134 plates by
    semantic, rebuilt by `build_plate_library.py` after any wave.
-3. **`docs/WORKTREE-REGISTER.md`** — every checkout, its branch, owner, purpose,
-   live slice, engine lock, claimed ruling numbers, last merge (P62, 2026-09-16;
-   replaced the survey script and STATE-OF-WORK.md, stale since 2026-09-03). Read it
-   whenever the question is "where is X / what is unfinished"; `git worktree list`
-   and `git log main..<branch>` are the facts behind it.
+3. **`content/video_engine/scripts/survey_worktrees.py`** — regenerates
+   `docs/STATE-OF-WORK.md` from git+filesystem; never hand-edited, cannot
+   rot. Run it whenever the question is "where is X / what is unfinished."
 
 **Why:** the [worktree-read-scope](worktree-read-scope.md) rule already said search everywhere;
 these make searching unnecessary for known classes. The bjjregistry lesson

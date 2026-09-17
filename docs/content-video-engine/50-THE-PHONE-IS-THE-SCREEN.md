@@ -143,3 +143,30 @@ Operator-supplied YouTube Studio analytics, 2026-09-04 (funnel Sep 2–3; traffi
 and device lifetime). Scale arithmetic computed against
 `scene-evidence-player.template.html`'s declared font sizes. Retention-curve context:
 `SCRIPT-G-VIEWER-CALIBRATION.md`.
+
+## 50.7 The lifetime curve and the intent cohort (read 2026-09-07; promoted from the parent's memory 2026-09-17, E99 s73)
+
+**ep1 at lifetime** (the operator: *"we just gave it time to breathe"*): 13:27 long, 6:01 average view duration,
+44.7 % average percentage viewed. The shape, not the average:
+
+| window | what the curve does |
+|---|---|
+| 0:00 - ~1:30 | **the bleed** - ~95 % down to the low 40s; more than half the audience leaves in ninety seconds |
+| ~2:00 - ~11:00 | **flat**, 40-48 % with only small jitter - everyone who got past the entrance stayed |
+| ~11:00 - 13:27 | a gentle fade to the mid 30s |
+
+It confirms E21 and E25 on data: E25 put the drop-off on the charts held 0:09-0:50 and 0:50-1:11, E21 named 0:57 as
+the first-drop point, and the curve's steep section is the same window arrived at independently. What the curve ADDS:
+the body was never the problem, so all of ep1's loss is the first ninety seconds and E24/E25's first-minute rules
+(the promise by 0:45, the 6 s chart ceiling in the opening minute) point at exactly the right place. None of the
+engine work after 0:90 is tested by this curve.
+
+**The intent cohort** (the first YouTube-search breakdown, same day): search overall 19 views, 10:42 average view
+duration, 79.7 % viewed. Inside it, *"ai bubble"* - 5 views, 1:15, 9.4 % viewed (a broad topical query; five
+people, one consistent bounce - the statistically meaningful row, and the negative one); *"bravos research"* - 1
+view, 12:56, 96.2 % viewed (an intent query; the person the video was for watched essentially all of it). The
+operator: *"the youtube video got minimal traction, and had a high bounce rate. But the one person so far who found
+the video from searching for Bravos Research, who was our target audience for the video, watched for 13 minutes."*
+**Apply:** judge a video on the intent cohort, never the blended retention number; a topical query's bounce reads
+"the package answered a question that viewer was not asking", not "the video is weak". Sits with 50.3's cold-cohort
+read and E27 (the package first).

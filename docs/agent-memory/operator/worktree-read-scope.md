@@ -22,3 +22,5 @@ rename/move another project's assets; worktrees are isolation, not
 storage - durable output merges to main when its stage completes.
 
 Related: [worktree-sprawl](worktree-sprawl.md), [recall-system](recall-system.md).
+
+**2026-09-16 (P62):** every checkout has a row in `docs/WORKTREE-REGISTER.md`; read it at start. The four August worktrees are dormant (their unmerged counts on the rows); the parent's session cwd (sweet-villani) is one of them - its work lands in main. See [worktree-sprawl](worktree-sprawl.md).

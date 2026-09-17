@@ -15,9 +15,13 @@ merges. Worktrees are isolation, not storage.
 
 Counts of unmerged work go stale fast - `git worktree list` and
 `git log main..<branch>` are the census, `docs/WORKTREE-REGISTER.md`
-the board (P62, 2026-09-16); never trust a remembered census. (2026-08-29 harvest: sweet-villani + p31 + p16
+the board (P62); never trust a remembered census. (2026-08-29 harvest: sweet-villani + p31 + p16
 merged to main; big player.html blobs must be STRIPPED before pushing -
 filter-branch was needed once for 81-367MB blobs; keep build outputs
 out of pushes.)
 
 Related: [recall-system](recall-system.md), [worktree-read-scope](worktree-read-scope.md).
+
+**AMENDED 2026-09-15 (E99 s47):** the operator: "work has to be parallel ... worktrees with both agents aware of each worktree, and accept that there will be sprawl at times until things get sent back to main." Worktrees are allowed for a second agent on its own episode or an adversarial pass; the cost is paid with AWARENESS - a tracked worktree register (path, branch, base, engine sha, owner, purpose, last merge) every agent reads at start and updates at every commit - and a merge-back cadence. P62 = that register, not saved states. Sprawl is accepted when the register names it.
+
+**P62 SHIPPED 2026-09-16 - the simple form.** The operator on the eight-slice draft (a generated board, a claim hook, union merges, hardlinks): *"this is sounding way too complex. isn't a better way to just check git before pushing to main and always preferring non-destructive methods?"* So: the lane register became the hand table `docs/WORKTREE-REGISTER.md` (one row per checkout, a ruling number claimed there before it is written), the six-step merge-before-main checklist lives in `PRP_EXECUTION.md` "Worktrees and lanes" and the steward (merge main in, run the register + golden tests, keep both sides on record-file conflicts, fast-forward; never force / amend-after-push / delete without the word), and `test_worktree_register.py` fails a merge on a duplicate number or an unregistered worktree. A second agent (Astra) gets `git worktree add <path> -b <lane>/<slug> main` - a worktree, never a clone. The rejected draft and its 18-finding review: session scratchpad `assembly/P62-REVIEW.md`.
