@@ -3443,7 +3443,7 @@
         "E99 s68",
         "E99 s38"
       ],
-      "judge": "E99 s68 said the compiler's outcome is a BASE the agent then modifies. This is the first one: the Tokyo short's own AUTHORED beat plan (read back from the approved cut) compiled to rows by `authoring/shapes.py` and written by `generate_base_table.py` - 5 rows, the skeletons `open-page-mounts-the-world`, `plate-carries-a-card`, `spiral-return-holds-the-evidence`, `page-to-page-cut`, `held-page-hosts-the-docks`, no skeleton twice running, ten of the twenty-five sentences left SILENT because the plan names no move for them. WATCH IT BESIDE THE APPROVED TOKYO CUT AT THE SAME INSTANTS. The question is E99 s38's: is there a VISIBLE DIFFERENCE - and is this base the right starting point for the next one-shot, or does it already read as TEMPLATED at one cut? The rows, the act that chose each skeleton and the rule that applied are in BASE-TABLE.md below; the base is NOT the Tokyo cut and is not offered as one.",
+      "judge": "E99 s68 said the compiler's outcome is a BASE the agent then modifies. This is the first one: the Tokyo short's own AUTHORED beat plan (read back from the approved cut) compiled to rows by `authoring/shapes.py` and written by `generate_base_table.py` - 5 rows, the skeletons `open-page-mounts-the-world`, `plate-carries-a-card`, `spiral-return-holds-the-evidence`, `page-to-page-cut`, `held-page-hosts-the-docks`, no skeleton twice running, ten of the twenty-five sentences left SILENT because the plan names no move for them. WATCH IT BESIDE THE APPROVED TOKYO CUT AT THE SAME INSTANTS. The question is E99 s38's: is there a VISIBLE DIFFERENCE - and is this base the right starting point for the next one-shot, or does it already read as TEMPLATED at one cut? The rows, the act that chose each skeleton and the rule that applied are in BASE-TABLE.md below; the base is NOT the Tokyo cut and is not offered as one. INFO from the director-critic (P67, a different reader - never a verdict): mechanisms present 10/11 (list of 2026-09-16), rows attributed 4/5. Its three rows first: the open runs 2.6 s on bare cream - the base keeps `mount=2.0` but compiles no clip row under it (M45 read the token and called it present; the critic read the frame); the spiral return lands the page on its full 2000-2026 scale so the -$122.6B bracket is a 3 px sliver, and the two `chart_to recast` species render nothing (only the 21.09 s rescale lands); the fed-vs-yields chart card is thrown full-frame over the caption at 76.3 s - the read-back plan's own `camera=<dock>` entry, what the approved Tokyo cut did before E99 s67. The base is a BASE (E99 s68): the question is whether it is the right starting point beside the approved cut, or reads as templated already.",
       "where": [
         {
           "label": "the generated base: per row the skeleton, the act that chose it and the rule; the silent beats; the signature mix beside the approved cuts' measured target",
@@ -3464,7 +3464,7 @@
           "label": "THE COMPILED BASE WITH ITS AUDIO - the frozen player on a private port, beside the approved Tokyo cut (the parent serves it after compiling the base; a whole-cut watch needs the voice)",
           "url": "http://127.0.0.1:8769/player.html",
           "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p66-base",
-          "confirmed": false
+          "confirmed": "served 2026-09-17 by serve_player.py --no-check (the frozen base, HTTP 200)"
         }
       ],
       "options": [
@@ -3481,7 +3481,8 @@
       ],
       "ruling": "",
       "was_kind": "",
-      "owed": ""
+      "owed": "",
+      "critic": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p66-base/CRITIC.md"
     },
     {
       "id": "lab-smoke-r2-plate-carries-a-card",

@@ -64,7 +64,7 @@ def write_data(path: Path, payload: dict) -> Path:
 
 
 def run_cli(tmp: Path, data_path: Path, *mode: str) -> int:
-    extra = ["--no-probe"] if "--write" in mode else []
+    extra = ["--no-probe", "--no-critic-check"] if "--write" in mode else []   # the fixture's builds and reports are not on this disk
     return BRQ.main([*mode, *extra, "--data", str(data_path), "--md", str(tmp / "REVIEW-QUEUE.md"),
                      "--out", str(tmp / "page")])
 
@@ -700,10 +700,10 @@ def run_write(tmp: Path, data_path: Path, root: Path) -> int:
 
 
 def test_the_constants_are_the_calibrated_whole_cut_and_the_warn_first_switch():
-    """P67 T5 ships the rule as a WARN; P67 T7 flips CRITIC_REQUIRED to True in the commit that gives the live card
-    its critic path. 30 s sits between one-shot #3's 77.6 s whole cut and every beat clip in the live data."""
+    """P67 T5 shipped the rule as a WARN; P67 T7 flipped CRITIC_REQUIRED to True (2026-09-17) in the commit that gave
+    both live whole-cut cards their critic paths. 30 s sits between one-shot #3's 77.6 s whole cut and every beat clip."""
     assert BRQ.WHOLE_CUT_S == 30.0
-    assert BRQ.CRITIC_REQUIRED is False
+    assert BRQ.CRITIC_REQUIRED is True
     live = BRQ.load_data(DATA)
     beats = [p["t1"] - p["t0"] for i in BRQ.open_items(live) for p in i.get("proofs") or []
              if p["type"] == "clip" and p["t1"] - p["t0"] < BRQ.WHOLE_CUT_S]
@@ -775,9 +775,9 @@ def test_the_live_queue_still_validates_and_warns_on_exactly_its_whole_cut_watch
                 and any(pr.get("type") == "player" or (pr.get("type") == "clip" and float(pr.get("t1", 0)) - float(pr.get("t0", 0)) >= BRQ.WHOLE_CUT_S)
                         for pr in (r.get("proofs") or []))]
     warned = [line.split(":", 1)[0].removeprefix("WARN ") for line in BRQ.WARNINGS]
-    assert warned == expected and expected, (warned, expected)
+    assert warned == expected, (warned, expected)   # empty once every live whole-cut card carries its critic (2026-09-17)
     assert "one-shot-3-fable-memory-calendar" not in warned, "its critic landed on 2026-09-17 (P67 T7)"
     assert all("CRITIC.md) - E99 s68" in line for line in BRQ.WARNINGS)
-    assert BRQ.main(["--check"]) == 0, "a WARN never fails the check while CRITIC_REQUIRED is False"
+    assert BRQ.main(["--check"]) == 0, "the live data validates: with CRITIC_REQUIRED True nothing may be owed"
     out = capsys.readouterr().out
     assert out.count("WARN ") == len(expected)

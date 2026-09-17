@@ -73,7 +73,7 @@ REQUIRED = ("id", "ids", "kind", "title", "judge", "where", "options", "recommen
 PROOF_FIELDS = {"clip": ("label", "t0", "t1", "route"), "player": ("label", "url", "build", "confirmed"),
                 "crop": ("label", "before", "after")}
 WHOLE_CUT_S = 30.0          # P67 T5: a clip this long or longer shows the whole cut, not a beat (one-shot #3: 77.6 s)
-CRITIC_REQUIRED = False     # P67 T5 ships the critic rule as a WARN; P67 T7 flips it to True with the live card's path
+CRITIC_REQUIRED = True   # P67 T7 (2026-09-17): both live whole-cut cards carry their critic - a new one is refused without     # P67 T5 ships the critic rule as a WARN; P67 T7 flips it to True with the live card's path
 CRITIC_REPORT_NAME = "CRITIC.md"       # what the director-critic writes into the build it read (CRITIC-REPORT.md)
 WARNINGS: list[str] = []               # what validate() warned about on the last load; the cli prints it by name
 WHERE_TARGETS = ("path", "url", "missing", "command")
@@ -723,8 +723,11 @@ def check_critic_files(data: dict, root: Path) -> None:
                                  f"the report rides with the cut it read")
 
 
-def build_page(data: dict, root: Path, out_dir: Path, live: dict | None = None) -> Path:
-    check_critic_files(data, root)
+def build_page(data: dict, root: Path, out_dir: Path, live: dict | None = None, check_critic: bool = True) -> Path:
+    if check_critic:   # the disk half of the critic rule (P67 T5/T7); `--no-critic-check` is for fixture data whose
+        check_critic_files(data, root)   # builds and reports were never on this disk - never for a live write
+    else:
+        WARNINGS.append("WARN the critic reports were not checked against their builds (--no-critic-check)")
     out_dir.mkdir(parents=True, exist_ok=True)
     _sync_dir(out_dir / FRAMES_SUBDIR, {frame_name(p): root / p for p in frames_to_copy(data, root)})
     crops = out_dir / CROPS_SUBDIR
@@ -785,6 +788,7 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
     ap.add_argument("--answers-file", type=Path, default=ROOT / ANSWERS_REL)
     ap.add_argument("--root", type=Path, default=ROOT, help="where the where-to-look paths resolve")
     ap.add_argument("--no-probe", action="store_true", help="do not GET the player links (tests)")
+    ap.add_argument("--no-critic-check", action="store_true", help="do not check the critic reports against their builds on disk (fixture tests)")
     return ap.parse_args(argv)
 
 
@@ -812,7 +816,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     live = None if args.no_probe else probe_players(data)
     try:
-        index = build_page(data, args.root, args.out, live)
+        index = build_page(data, args.root, args.out, live, check_critic=not args.no_critic_check)
     except QueueError as exc:
         print(f"review queue page refused: {exc}", file=sys.stderr)
         return 2

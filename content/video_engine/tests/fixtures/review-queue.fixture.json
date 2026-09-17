@@ -54,7 +54,8 @@
           "build": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-p58-2-5d/",
           "confirmed": "GET 200 on 2026-09-14 19:19 (-07:00)"
         }
-      ]
+      ],
+      "critic": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-p58-2-5d/CRITIC.md"
     },
     {
       "id": "r26-133-drift-idle-paints-nothing",
@@ -292,7 +293,8 @@
           "build": "content/video_engine/review/gates-2026-09-13/species-proof-player/",
           "confirmed": "GET 200 on 2026-09-14 19:19 (-07:00)"
         }
-      ]
+      ],
+      "critic": "content/video_engine/review/gates-2026-09-13/species-proof-player/CRITIC.md"
     },
     {
       "id": "p51-editor-gates-2-3",
@@ -331,7 +333,8 @@
           "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t7/",
           "confirmed": "GET 200 on 2026-09-14 19:19 (-07:00)"
         }
-      ]
+      ],
+      "critic": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t7/CRITIC.md"
     },
     {
       "id": "p48-hg3-morph-onto-planted",

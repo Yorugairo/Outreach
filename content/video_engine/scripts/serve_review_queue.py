@@ -200,7 +200,7 @@ def make_server(port: int, data_path: Path, out_dir: Path, answers_path: Path, r
                 quiet: bool = False, probe: bool = True) -> ThreadingHTTPServer:
     """Regenerate the page from the data, then bind 127.0.0.1:port (0 = a free port). Not yet serving."""
     data = BRQ.load_data(data_path)
-    BRQ.build_page(data, root, out_dir, BRQ.probe_players(data) if probe else None)
+    BRQ.build_page(data, root, out_dir, BRQ.probe_players(data) if probe else None, check_critic=probe)   # the critic disk check is a live fact like the probe; a test's fixture builds are not on this disk
     lock = threading.Lock()
     index = QueueIndex(data_path, lock)
     index.current()   # the first read happens now, so a data file that does not load refuses the start by name
