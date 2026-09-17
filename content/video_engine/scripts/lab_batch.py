@@ -423,9 +423,15 @@ def merge(data: dict, new: list[dict]) -> dict:
     return {**data, "items": items}
 
 
+GENERATED_FIELDS = ("kind", "candidates", "proofs", "options", "blocks", "where", "sources", "status")
+# the fields this tool GENERATES from the run record; `judge`, `title` and `recommendation` are prose the parent may
+# amend by hand on the live card (the supersession sentence, a note on a one_line) without the card reading stale
+
+
 def stale(data: dict, new: list[dict]) -> list[str]:
     by_id = {rec["id"]: rec for rec in data["items"]}
-    return [rec["id"] for rec in new if by_id.get(rec["id"]) != rec]
+    return [rec["id"] for rec in new
+            if any((by_id.get(rec["id"]) or {}).get(k) != rec.get(k) for k in GENERATED_FIELDS)]
 
 
 # ---------------------------------------------------------------- cli

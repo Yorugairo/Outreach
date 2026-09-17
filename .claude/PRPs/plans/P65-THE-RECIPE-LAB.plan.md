@@ -157,7 +157,7 @@ Approved by the operator 2026-09-16: *"yes, run them in parallel /prp-implement"
 
 ## Human Gates
 
-**HG1 - the first batch (operator, after T4).** One batch of survivors on the queue: one card per beat shape, the
+**HG1 - the first batch (operator, after T4).** *On the queue 2026-09-17: `lab-batch-r1-plate-carries-a-card` - twelve `plate-carries-a-card` candidates drawn uniformly (seed 20260917; the anchor `9b5531bf` kept; no learner exists, so the batch is exploration in effect, three marked `exploration` by the tool's own draw; no calibration probe yet), all twelve built on the Tokyo bed's beat 12, all twelve survived (not one gate row fired inside the window; the eleven whole-cut rows are identical context), twelve clips side by side. It supersedes the one-candidate `lab-smoke-r2-plate-carries-a-card`, which stays open for you to close. The gates discriminated between none of them: the whole distinction is yours - that is the point of the lab.*  One batch of survivors on the queue: one card per beat shape, the
 candidates side by side, each a clip that plays. Two things are being proved at once - the combinations, and the
 **grammar**: does an approve / deny + reason per candidate, inside one card that asks one plain question, work for
 the operator, or does he want one card per candidate at a lower rate? Blocks T5 (the log has nothing to derive until
