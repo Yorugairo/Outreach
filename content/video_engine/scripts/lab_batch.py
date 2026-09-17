@@ -2,6 +2,7 @@
 
     python content/video_engine/scripts/lab_batch.py --batch smoke-r2 --write
     python content/video_engine/scripts/lab_batch.py --batch smoke-r2 --check
+    python content/video_engine/scripts/lab_batch.py --batch reproof-r1 --hg2 --write   # P65 HG2 (T8)
 
 THE RECONCILIATION, and this module's only licence (`authoring/recipes.py:1-20`, `PIPELINE.md:33`): **the lab presents
 CANDIDATES built on a TEST BED for the operator's judgement; it authors no episode, it fills no slot by count, and
@@ -118,17 +119,19 @@ def build_aspect(root: Path, build_rel: str) -> str:
 
 # ---------------------------------------------------------------- the candidates on a card
 
-def clip_proof(rec: dict, root: Path) -> dict:
-    """The clip a card shows for one candidate: its OWN window of its OWN private build (E99 s60, a proof is a scene)."""
+def clip_proof(rec: dict, root: Path, label: str | None = None) -> dict:
+    """The clip a card shows for one candidate: its OWN window of its OWN private build (E99 s60, a proof is a scene).
+    `label` overrides the shape+digest name (HG2 names a re-proved candidate by its recipe id)."""
     clip = rec.get("clip") or {}
     if "t0" not in clip or "t1" not in clip:
         raise BatchError(f"{rec['id']}: the run record carries no clip window - re-run lab_build.py --batch")
     if not rec.get("build"):
         raise BatchError(f"{rec['id']}: the run record names no build dir - re-run lab_build.py --batch")
     beat = rec.get("beat") or {}
-    label = f"{rec['shape']} {digest(rec['id'])}"
-    if beat.get("sentence"):
-        label += f' - the beat on "{beat["sentence"]}"'
+    if label is None:
+        label = f"{rec['shape']} {digest(rec['id'])}"
+        if beat.get("sentence"):
+            label += f' - the beat on "{beat["sentence"]}"'
     return {"type": "clip", "label": label, "t0": round(float(clip["t0"]), 2), "t1": round(float(clip["t1"]), 2),
             "build": rec["build"], "page": "player.html", "aspect": build_aspect(root, rec["build"]),
             "route": CLIP_ROUTE}
@@ -287,6 +290,108 @@ def cards(batch: str, records: list[dict], members: dict[str, list[dict]], root:
     return out
 
 
+# ---------------------------------------------------------------- HG2: the fifteen re-proved (P65 T8)
+
+HG2_CARD_ID = "p65-hg2-the-reproved-set-and-m38"
+PROVEN = "survives as proven"
+AMENDED = "needs an amended offset"
+UNREACHABLE = "unreachable under the clocks"
+HG2_QUESTION = ("Which of these survive as proven on today's clocks - and does M38 return to a FAIL at 0.60, move, "
+                "or stay the interim WARN?")
+HG2_OPTIONS = ["restore M38 to a FAIL at 0.60, with the re-proved set below as the proven set",
+               "move the number (say which) and restore the FAIL there",
+               "keep the interim WARN until a second batch has re-proved more"]
+ROW_MAX = 200                     # a killing row is named in the judge text; the WHOLE row is in the run record
+
+
+def verdict_class(rec: dict) -> str:
+    """proven / amended / unreachable - read from the run record's own verdict, never re-decided here."""
+    verdict = str(rec.get("verdict") or "")
+    for prefix, name in ((PROVEN, "proven"), (AMENDED, "amended"), (UNREACHABLE, "unreachable")):
+        if verdict.startswith(prefix):
+            return name
+    raise BatchError(f"{rec.get('id')}: the verdict is none of {PROVEN!r} / {AMENDED!r} / {UNREACHABLE!r}: "
+                     f"{verdict[:80]!r} - re-run lab_build.py --batch")
+
+
+def killing_row(rec: dict) -> str:
+    """The gate row that killed a casualty: its verdict's own row, first clause, capped - the whole row is on disk."""
+    row = str(rec["verdict"])[len(UNREACHABLE) + 1:].strip().split(";")[0].strip()
+    if len(row) > ROW_MAX:
+        row = row[:ROW_MAX].rsplit(" ", 1)[0] + " ..."
+    return row
+
+
+def hg2_candidate(rec: dict, root: Path) -> dict:
+    """One re-proved recipe on the HG2 card: labelled by its recipe id, its one line the run record's own verdict."""
+    if not rec.get("recipe"):
+        raise BatchError(f"{rec['id']}: the run record names no recipe - the HG2 card cards the proven set by id")
+    sentence = (rec.get("beat") or {}).get("sentence")
+    label = rec["recipe"] + (f' - the beat on "{sentence}"' if sentence else "")
+    return {"id": rec["id"], "label": rec["recipe"], "one_line": rec["verdict"],
+            "proof": clip_proof(rec, root, label=label)}
+
+
+def hg2_card(batch: str, records: list[dict], root: Path) -> dict:
+    """R26-168's answer as ONE card: the re-proved recipes side by side with a clip each, the casualties named with
+    the row that killed each (their builds carry that row, not a beat a short could carry - E99 s60), and the one
+    question that restores M38. No exploration draw and no calibration probe: this is the FIXED proven set."""
+    kept = [r for r in records if verdict_class(r) in ("proven", "amended")]
+    gone = [r for r in records if verdict_class(r) == "unreachable"]
+    if not kept:
+        raise BatchError(f"batch {batch}: not one recipe survives the re-proof - a card with nothing standing is not "
+                         "a card; read the run record's rows before re-running")
+    cands = [hg2_candidate(rec, root) for rec in kept]
+    n_proven = sum(1 for r in kept if verdict_class(r) == "proven")
+    casualties = "; ".join(f"{r['recipe']} - {killing_row(r)}" for r in gone)
+    judge = (f"The fifteen `proven` recipes were rebuilt on the Tokyo bed under TODAY's clocks - six-second plates "
+             f"(M44), pages that BUILD then hold built (E99 s67), no rails and no park at 9:16 (R26-171 / R26-172). "
+             f"{HG2_QUESTION} {len(cands)} of {len(records)} are below with a clip each: {n_proven} survive as proven "
+             f"unchanged and {len(kept) - n_proven} need the amended offset their own line names. The other "
+             f"{len(gone)} are UNREACHABLE under the clocks and carry NO clip - their builds hold the row that killed "
+             f"them, not a beat a short could carry (E99 s60): {casualties}. Give each candidate below its own bit "
+             f"and its own reason (an approve carries `good`, a deny the one of the eight that killed it), and answer "
+             f"M38 on the card's own control. NOTE: this card carries NO exploration draw and NO calibration probe - "
+             f"it is the fixed proven set re-proved, not a drawn batch. The gates and the probe FILTERED; nothing "
+             f"here is judged, ranked or scored by an agent (E99 s68).")
+    where = [{"label": f"the probe sheet for {r['recipe']} ({verdict_class(r)}) - the candidate's own instants",
+              "path": r["sheet"]} for r in records if r.get("sheet")]
+    where.append({"label": "the run record: every gate row that decided each of the fifteen",
+                  "path": f"{BATCHES_REL}/{batch}.jsonl"})
+    where.append({"label": "M38's interim WARN and the sentence naming R26-168 - your word restores the FAIL at 0.60 "
+                           "or moves the number", "path": "content/video_engine/scripts/gate_one_shot_floor.py"})
+    where.append({"label": "the plan, its Human Gates (HG2) and the re-proof slice T8", "path": PLAN_REL})
+    return {
+        "id": HG2_CARD_ID,
+        "status": "open",
+        "kind": "batch",
+        "title": f"P65 HG2 - the fifteen proven recipes re-proved on today's clocks: {len(cands)} standing, "
+                 f"{len(gone)} unreachable, and M38's restoration",
+        "ids": ["P65 HG2", "R26-168", "E99 s68"],
+        "judge": judge,
+        "where": where,
+        "proofs": [c["proof"] for c in cands],
+        "candidates": cands,
+        "options": HG2_OPTIONS,
+        "recommendation": ("None on which recipe keeps its name - that is your bit, not the agent's (E99 s68). On "
+                           f"M38 the agent recommends the first reading: restore the FAIL at 0.60 with these "
+                           f"{len(cands)} as the proven set ({n_proven} unchanged, {len(kept) - n_proven} at the "
+                           f"amended offset), and let the {len(gone)} unreachable ones out of the count until they are "
+                           "rebuilt on a bed that can carry them. The agent's recommendation, not a ruling."),
+        "blocks": ("the promotion of the re-proved set (P65 T6), the closure of R26-168, and M38's restoration to a "
+                   "FAIL at 0.60 in gate_one_shot_floor.py"),
+        "sources": [f"{PLAN_REL} (Human Gates - HG2; T8, the re-proof run)",
+                    "docs/content-video-engine/BACKLOG.md (R26-168: the floor and the proven set contradict each "
+                    "other)",
+                    "docs/portable/OPERATOR-RULINGS.md (E99 s68: present as batches, track approvals AND denials; "
+                    "s67: the page BUILDS then holds built)",
+                    f"{BATCHES_REL}/{batch}.jsonl (the gate rows behind every one of the fifteen verdicts)"],
+        "ruling": "",
+        "was_kind": "owed",
+        "owed": "",
+    }
+
+
 # ---------------------------------------------------------------- the queue file
 
 def load_queue(path: Path) -> dict:
@@ -331,7 +436,11 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
     mode.add_argument("--write", action="store_true", help="write the batch's cards into the review queue")
     mode.add_argument("--check", action="store_true", help="exit 1 when a card on the queue is not what this batch says")
     ap.add_argument("--batch", required=True, help="the batch id: effects/lab/batches/<batch>.jsonl")
-    ap.add_argument("--hg1", action="store_true", help="frame these cards as P65 HG1 (the grammar is on trial too)")
+    gate = ap.add_mutually_exclusive_group()
+    gate.add_argument("--hg1", action="store_true", help="frame these cards as P65 HG1 (the grammar is on trial too)")
+    gate.add_argument("--hg2", action="store_true",
+                      help=f"write the ONE P65 HG2 card ({HG2_CARD_ID}) from a re-proof run: the recipes still "
+                           "standing side by side, the casualties named in the judge text, M38's question")
     ap.add_argument("--record", type=Path, help=f"the run record (default {BATCHES_REL}/<batch>.jsonl)")
     ap.add_argument("--candidates", type=Path, default=ROOT / CANDIDATES_REL)
     ap.add_argument("--judgements", type=Path, default=ROOT / JUDGEMENTS_REL)
@@ -347,6 +456,8 @@ def build_cards(args: argparse.Namespace) -> list[dict]:
     now = datetime.fromisoformat(args.now) if args.now else datetime.now(timezone.utc)
     if now.tzinfo is None:
         now = now.replace(tzinfo=timezone.utc)
+    if args.hg2:
+        return [hg2_card(args.batch, read_jsonl(record), args.root)]
     return cards(args.batch, read_jsonl(record), load_members(args.candidates), args.root,
                  load_judgements(args.judgements), now, hg1=args.hg1, batches_dir=args.batches_dir)
 
@@ -371,8 +482,9 @@ def main(argv: list[str] | None = None) -> int:
     for rec in new:
         marks = sum(1 for c in rec["candidates"] if c.get("exploration"))
         cal = sum(1 for c in rec["candidates"] if c.get("calibration"))
+        draw = rec.get("draw") or {"seed": "no draw - the fixed proven set, re-proved"}
         print(f"{rec['id']}: {len(rec['candidates'])} candidate(s), {marks} exploration, {cal} calibration "
-              f"(seed {rec['draw']['seed']})")
+              f"(seed {draw['seed']})")
     print(f"{args.queue} - now run: python content/video_engine/scripts/review_queue_proofs.py --clips --only "
           f"{new[0]['id']} && python content/video_engine/scripts/build_review_queue.py --write")
     return 0

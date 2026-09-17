@@ -303,3 +303,105 @@ def test_every_reason_the_page_offers_is_accepted_by_the_server(items_by_id):
     for reason in BRQ.REASONS:
         body = {"item": item_of(1), "choice": "approve" if reason == "good" else "deny", "note": f"{reason}: why"}
         assert SRQ.refuse_reason(body, items_by_id) is None, reason
+
+
+# ---------------------------------------------------------------- HG2: the fifteen re-proved (P65 T8)
+
+REPROOF = "reproof-r1"
+REPROOF_RECORD = ROOT / "content/video_engine/effects/lab/batches" / f"{REPROOF}.jsonl"
+HG2_OWED = {"id": LB.HG2_CARD_ID, "status": "open", "kind": "owed", "ids": ["P65 HG2"], "title": "P65 HG2 - owed",
+            "judge": "the re-proof run has not built yet", "where": [{"label": "the plan", "path": "x.md"}],
+            "proofs": [], "options": [], "recommendation": "", "blocks": "P65 T6", "sources": ["the plan"],
+            "ruling": "", "was_kind": "", "owed": "the re-proof run P65 T8 is building now"}
+
+
+def a_queue_holding_the_owed_row(tmp_path: Path) -> Path:
+    queue = tmp_path / "queue-hg2.json"
+    queue.write_text(json.dumps({"schema": "review_queue.v1", "as_of": "2026-09-17", "head": "abc1234",
+                                 "items": [dict(HG2_OWED)]}, indent=2) + "\n", encoding="utf-8")
+    return queue
+
+
+def run_hg2(queue: Path, *mode: str) -> int:
+    return LB.main([*mode, "--batch", REPROOF, "--hg2", "--record", str(REPROOF_RECORD),
+                    "--queue", str(queue), "--root", str(ROOT)])
+
+
+def reproof_records() -> list[dict]:
+    return LB.read_jsonl(REPROOF_RECORD)
+
+
+def hg2_of(queue: Path) -> dict:
+    items = json.loads(queue.read_text(encoding="utf-8"))["items"]
+    assert len(items) == 1, "the flip replaces the owed row in place; it never appends a second one"
+    return items[0]
+
+
+def test_hg2_flips_the_owed_row_in_place_to_a_batch(tmp_path):
+    queue = a_queue_holding_the_owed_row(tmp_path)
+    assert run_hg2(queue, "--write") == 0
+    card = hg2_of(queue)
+    assert card["id"] == LB.HG2_CARD_ID and card["kind"] == "batch" and card["was_kind"] == "owed"
+    assert card["owed"] == "" and card["status"] == "open"
+    assert LB.HG2_QUESTION in card["judge"] and card["options"] == LB.HG2_OPTIONS
+    assert "0.60" in card["recommendation"] and "R26-168" in card["blocks"]
+
+
+def test_hg2_cards_only_the_recipes_still_standing(tmp_path):
+    queue = a_queue_holding_the_owed_row(tmp_path)
+    assert run_hg2(queue, "--write") == 0
+    card = hg2_of(queue)
+    standing = [r for r in reproof_records() if LB.verdict_class(r) in ("proven", "amended")]
+    assert [c["id"] for c in card["candidates"]] == [r["id"] for r in standing]
+    assert [c["label"] for c in card["candidates"]] == [r["recipe"] for r in standing]
+    assert [c["one_line"] for c in card["candidates"]] == [r["verdict"] for r in standing]
+
+
+def test_hg2_names_every_casualty_in_the_judge_text_and_cards_none_of_them(tmp_path):
+    queue = a_queue_holding_the_owed_row(tmp_path)
+    assert run_hg2(queue, "--write") == 0
+    card = hg2_of(queue)
+    gone = [r for r in reproof_records() if LB.verdict_class(r) == "unreachable"]
+    carded = json.dumps(card["candidates"])
+    for rec in gone:
+        assert rec["recipe"] in card["judge"], f"{rec['recipe']} is retired without being named"
+        assert LB.killing_row(rec) in card["judge"], f"{rec['recipe']} is named without the row that killed it"
+        assert rec["recipe"] not in carded, "a casualty's build carries the killing row, not a beat (E99 s60)"
+    assert str(len(gone)) in card["judge"]
+
+
+def test_hg2_carries_no_exploration_draw_and_no_calibration_probe(tmp_path):
+    queue = a_queue_holding_the_owed_row(tmp_path)
+    assert run_hg2(queue, "--write") == 0
+    card = hg2_of(queue)
+    assert "draw" not in card
+    assert not any(c.get("exploration") or c.get("calibration") for c in card["candidates"])
+    assert "NO exploration draw and NO calibration probe" in card["judge"]
+
+
+def test_the_hg2_card_validates_as_a_batch_record_with_its_proofs_mirroring(tmp_path):
+    queue = a_queue_holding_the_owed_row(tmp_path)
+    assert run_hg2(queue, "--write") == 0
+    card = hg2_of(queue)
+    BRQ.validate_batch(card["id"], card)
+    BRQ.validate(json.loads(queue.read_text(encoding="utf-8"))["items"])
+    assert card["proofs"] == [c["proof"] for c in card["candidates"]]
+    for cand in card["candidates"]:
+        assert cand["proof"]["type"] == "clip" and cand["proof"]["build"].endswith(cand["id"].replace(":", "-"))
+        assert cand["proof"]["label"].startswith(cand["label"])
+
+
+def test_hg2_check_passes_on_what_it_wrote_and_fails_on_a_drifted_card(tmp_path, capsys):
+    queue = a_queue_holding_the_owed_row(tmp_path)
+    assert run_hg2(queue, "--write") == 0
+    assert run_hg2(queue, "--check") == 0
+    data = json.loads(queue.read_text(encoding="utf-8"))
+    data["items"][0]["candidates"].pop()
+    queue.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    assert run_hg2(queue, "--check") == 1
+    assert LB.HG2_CARD_ID in capsys.readouterr().err
+
+
+def test_a_verdict_the_run_record_does_not_use_is_refused_by_name(tmp_path):
+    with pytest.raises(LB.BatchError, match="the verdict is none of"):
+        LB.verdict_class({"id": "recipe:x", "verdict": "looks fine to me"})

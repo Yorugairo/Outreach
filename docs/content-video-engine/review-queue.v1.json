@@ -3378,7 +3378,7 @@
         "E99 s67",
         "E96"
       ],
-      "judge": "The Fable parent's own one-shot, REWORKED after your four messages (E99 s67): the open is the chart page drawing under the hook; no chart card is thrown - the docks are evidence stills of this story's world; the into/after page mounts over the desk turn and builds under the setup sentence; the slices arrive; the eight bars grow as they are counted; the daily line draws to the July print; the reflection stands on its own still (the small good-news sheet up, the big bad-news sheet down); the calendar page returns by the spiral with the ring on the chart; the filler lights are gone. Still named: the weak page's eight labels crowd (the builder's negative-bar layout, R26-170); recipes 0.09 and docks 0.34-0.38 by the floor's count. Watch it as a viewer. WATCH IT ON THE PLAYER LINK (with the audio) - the clip below is silent by the queue's design, and the caption pages were running past sentence ends (a retimed take caps its gaps under the page builder's break; fixed: pages break at the punctuation, E41 #3).",
+      "judge": "The Fable parent's own one-shot, REWORKED after your four messages (E99 s67): the open is the chart page drawing under the hook; no chart card is thrown - the docks are evidence stills of this story's world; the into/after page mounts over the desk turn and builds under the setup sentence; the slices arrive; the eight bars grow as they are counted; the daily line draws to the July print; the reflection stands on its own still (the small good-news sheet up, the big bad-news sheet down); the calendar page returns by the spiral with the ring on the chart; the filler lights are gone. Still named: the weak page's eight labels crowd (the builder's negative-bar layout, R26-170); recipes 0.09 and docks 0.34-0.38 by the floor's count. Watch it as a viewer. WATCH IT ON THE PLAYER LINK (with the audio) - the clip below is silent by the queue's design, and the caption pages were running past sentence ends (a retimed take caps its gaps under the page builder's break; fixed: pages break at the punctuation, E41 #3). INFO from the director-critic (P67, a different reader - never a verdict): mechanisms present 10/11 (list of 2026-09-16), rows attributed 10/12. The one question for you beside the cut: do those two scores say something the gates did not? Its three rows first: the compare melt at 29.3-30.0 s shows nothing at its instants (absent); the reflection's two evidence stills sit over the host's face (unattributed); the spiral page's light fires inside its build window at 68.96 s.",
       "where": [
         {
           "label": "the cut's ledger: every decision taken without you, and eight findings about the system",
@@ -3430,7 +3430,8 @@
       ],
       "ruling": "",
       "was_kind": "",
-      "owed": ""
+      "owed": "",
+      "critic": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-oneshot-3/CRITIC.md"
     },
     {
       "id": "p66-hg1-the-first-generated-base",
@@ -3567,45 +3568,308 @@
     {
       "id": "p65-hg2-the-reproved-set-and-m38",
       "status": "open",
-      "kind": "owed",
-      "title": "P65 HG2 - the fifteen proven recipes re-proved on today's clocks, and M38's restoration",
+      "kind": "batch",
+      "title": "P65 HG2 - the fifteen proven recipes re-proved on today's clocks: 8 standing, 7 unreachable, and M38's restoration",
       "ids": [
         "P65 HG2",
         "R26-168",
-        "E99 s67"
+        "E99 s68"
       ],
-      "judge": "Which of the fifteen `proven` recipes survive as proven on TODAY's clocks - six-second plates (M44), pages that BUILD then hold built (E99 s67), no rails and no park at 9:16 (R26-171 / R26-172) - which are retired, and which are replaced by a combination the lab found? And with that answer: does M38 go back to FAIL at 0.60, or does the number move? Three of the fifteen are already known to contradict the clocks (`card-becomes-the-chart` is proven on a 3-5 s plate, `emphasized-bar-lit` on a light 7.55 s after a build, the badge ladder's rails are illegible at 9:16). You will see the survivors and the casualties side by side, a clip each, when the re-proof run below has built them.",
+      "judge": "The fifteen `proven` recipes were rebuilt on the Tokyo bed under TODAY's clocks - six-second plates (M44), pages that BUILD then hold built (E99 s67), no rails and no park at 9:16 (R26-171 / R26-172). Which of these survive as proven on today's clocks - and does M38 return to a FAIL at 0.60, move, or stay the interim WARN? 8 of 15 are below with a clip each: 5 survive as proven unchanged and 3 need the amended offset their own line names. The other 7 are UNREACHABLE under the clocks and carry NO clip - their builds hold the row that killed them, not a beat a short could carry (E99 s60): recipe:badge-ladder - [FAIL] M16 longest gap between visual events 5.7s at 0:39; recipe:dock-lands-page-renames - [FAIL] M25 4 layout fault(s) over 61 instants probed: dock-k-pledge-record over the chart's data at 0:55, 15,232 px, 14 % of the card; recipe:plate-dock-wipe - [FAIL] M05 1 plate(s) held > 20s with the frame DEAD: worst plate-p-viewers-desk 31s at 0:21 - 30.4s with no visual event at 0:21, over the 2.5s liveness ceiling. Live in the frame (a species, a page ...; recipe:read-park-build-write - [FAIL] M25 5 layout fault(s) over 67 instants probed: an axis label under dock-k-pledge-record at 0:46, 3,957 px, 100 % of the ink; recipe:spotlight-held-past-the-cut - page_enter:snap never fired inside 44.88-57.00s - the member is not on the built timeline at all; recipe:test-card-rows - chart_dock:checklist never fired inside 38.96-49.05s - the member is not on the built timeline at all; recipe:verdict-recap - dock_payload:stack never fired inside 38.96-65.05s - the member is not on the built timeline at all. Give each candidate below its own bit and its own reason (an approve carries `good`, a deny the one of the eight that killed it), and answer M38 on the card's own control. NOTE: this card carries NO exploration draw and NO calibration probe - it is the fixed proven set re-proved, not a drawn batch. The gates and the probe FILTERED; nothing here is judged, ranked or scored by an agent (E99 s68).",
       "where": [
         {
-          "label": "the plan, its Human Gates (HG2) and the re-proof slice T8",
-          "path": ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md"
+          "label": "the probe sheet for recipe:badge-ladder (unreachable) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-badge-ladder/lab-sheet.png"
         },
         {
-          "label": "the fifteen proven recipes as they stand today (45 files, 15 proven)",
-          "path": "content/video_engine/effects/recipes"
+          "label": "the probe sheet for recipe:card-becomes-the-chart (amended) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-card-becomes-the-chart/lab-sheet.png"
         },
         {
-          "label": "M38's interim WARN and the sentence naming R26-168 (it stops no cut until this gate is answered)",
+          "label": "the probe sheet for recipe:dock-lands-page-renames (unreachable) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-dock-lands-page-renames/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:emphasized-bar-lit (amended) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-emphasized-bar-lit/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:held-dock-across-the-cut (proven) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-held-dock-across-the-cut/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:held-page-hosts-the-docks (amended) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-held-page-hosts-the-docks/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:outro-clip-life (proven) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-outro-clip-life/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:plate-dock-wipe (unreachable) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-plate-dock-wipe/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:punch-then-callout (proven) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-punch-then-callout/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:read-park-build-write (unreachable) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-read-park-build-write/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:spotlight-held-past-the-cut (unreachable) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-spotlight-held-past-the-cut/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:still-life-breather (proven) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-still-life-breather/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:test-card-rows (unreachable) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-test-card-rows/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:trace-callout-ladder (proven) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-trace-callout-ladder/lab-sheet.png"
+        },
+        {
+          "label": "the probe sheet for recipe:verdict-recap (unreachable) - the candidate's own instants",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-verdict-recap/lab-sheet.png"
+        },
+        {
+          "label": "the run record: every gate row that decided each of the fifteen",
+          "path": "content/video_engine/effects/lab/batches/reproof-r1.jsonl"
+        },
+        {
+          "label": "M38's interim WARN and the sentence naming R26-168 - your word restores the FAIL at 0.60 or moves the number",
           "path": "content/video_engine/scripts/gate_one_shot_floor.py"
         },
         {
-          "label": "the re-proof run's record - not on disk until T8 has built it",
-          "missing": true
+          "label": "the plan, its Human Gates (HG2) and the re-proof slice T8",
+          "path": ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md"
         }
       ],
-      "proofs": [],
-      "options": [],
-      "recommendation": "",
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "recipe:card-becomes-the-chart - the beat on \"Tokyo took a tea break.\"",
+          "t0": 0.0,
+          "t1": 11.12,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-card-becomes-the-chart",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:emphasized-bar-lit - the beat on \"Tokyo took a tea break.\"",
+          "t0": 0.0,
+          "t1": 8.0,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-emphasized-bar-lit",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:held-dock-across-the-cut - the beat on \"The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February.\"",
+          "t0": 21.09,
+          "t1": 43.09,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-held-dock-across-the-cut",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:held-page-hosts-the-docks - the beat on \"Tokyo took a tea break.\"",
+          "t0": 0.0,
+          "t1": 35.0,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-held-page-hosts-the-docks",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:outro-clip-life - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.55,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-outro-clip-life",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:punch-then-callout - the beat on \"Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile.\"",
+          "t0": 44.88,
+          "t1": 54.09,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-punch-then-callout",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:still-life-breather - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-still-life-breather",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        },
+        {
+          "type": "clip",
+          "label": "recipe:trace-callout-ladder - the beat on \"a Treasury page, and your phone.\"",
+          "t0": 38.96,
+          "t1": 45.05,
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-trace-callout-ladder",
+          "page": "player.html",
+          "aspect": "9:16",
+          "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "recipe:card-becomes-the-chart",
+          "label": "recipe:card-becomes-the-chart",
+          "one_line": "needs an amended offset: exit:dip, from 5.12 -> 6.00 (M44: a world plate the eye can take in; the proven offset leaves 5.12s)",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:card-becomes-the-chart - the beat on \"Tokyo took a tea break.\"",
+            "t0": 0.0,
+            "t1": 11.12,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-card-becomes-the-chart",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:emphasized-bar-lit",
+          "label": "recipe:emphasized-bar-lit",
+          "one_line": "needs an amended offset: species:spotlight, from 7.56 -> 3.00 (M11 / E99 s67: the light lands within 1.5s of the page's own build landing at 3.00s, not 7.56s after it)",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:emphasized-bar-lit - the beat on \"Tokyo took a tea break.\"",
+            "t0": 0.0,
+            "t1": 8.0,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-emphasized-bar-lit",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:held-dock-across-the-cut",
+          "label": "recipe:held-dock-across-the-cut",
+          "one_line": "survives as proven",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:held-dock-across-the-cut - the beat on \"The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February.\"",
+            "t0": 21.09,
+            "t1": 43.09,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-held-dock-across-the-cut",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:held-page-hosts-the-docks",
+          "label": "recipe:held-page-hosts-the-docks",
+          "one_line": "needs an amended offset: species:callout, from 8.80 -> 3.00 (M11 / E99 s67: the light lands within 1.5s of the page's own build landing at 3.00s, not 8.80s after it)",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:held-page-hosts-the-docks - the beat on \"Tokyo took a tea break.\"",
+            "t0": 0.0,
+            "t1": 35.0,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-held-page-hosts-the-docks",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:outro-clip-life",
+          "label": "recipe:outro-clip-life",
+          "one_line": "survives as proven",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:outro-clip-life - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.55,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-outro-clip-life",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:punch-then-callout",
+          "label": "recipe:punch-then-callout",
+          "one_line": "survives as proven",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:punch-then-callout - the beat on \"Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile.\"",
+            "t0": 44.88,
+            "t1": 54.09,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-punch-then-callout",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:still-life-breather",
+          "label": "recipe:still-life-breather",
+          "one_line": "survives as proven",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:still-life-breather - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-still-life-breather",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        },
+        {
+          "id": "recipe:trace-callout-ladder",
+          "label": "recipe:trace-callout-ladder",
+          "one_line": "survives as proven",
+          "proof": {
+            "type": "clip",
+            "label": "recipe:trace-callout-ladder - the beat on \"a Treasury page, and your phone.\"",
+            "t0": 38.96,
+            "t1": 45.05,
+            "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r1/recipe-trace-callout-ladder",
+            "page": "player.html",
+            "aspect": "9:16",
+            "route": "review_queue_proofs.py --clips: the lab's PRIVATE build served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the candidate planted into the approved Tokyo cut, which is never rebuilt (E45, memory review-link-frozen-copy)"
+          }
+        }
+      ],
+      "options": [
+        "restore M38 to a FAIL at 0.60, with the re-proved set below as the proven set",
+        "move the number (say which) and restore the FAIL there",
+        "keep the interim WARN until a second batch has re-proved more"
+      ],
+      "recommendation": "None on which recipe keeps its name - that is your bit, not the agent's (E99 s68). On M38 the agent recommends the first reading: restore the FAIL at 0.60 with these 8 as the proven set (5 unchanged, 3 at the amended offset), and let the 7 unreachable ones out of the count until they are rebuilt on a bed that can carry them. The agent's recommendation, not a ruling.",
       "blocks": "the promotion of the re-proved set (P65 T6), the closure of R26-168, and M38's restoration to a FAIL at 0.60 in gate_one_shot_floor.py",
       "sources": [
-        ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md (Human Gates - HG2; T8)",
+        ".claude/PRPs/plans/P65-THE-RECIPE-LAB.plan.md (Human Gates - HG2; T8, the re-proof run)",
         "docs/content-video-engine/BACKLOG.md (R26-168: the floor and the proven set contradict each other)",
-        "docs/portable/OPERATOR-RULINGS.md (E99 s67: the page builds then holds built; E99 s68)",
-        "docs/content-video-engine/GRILL-AGENTS-HARNESS-EFFECTS-2026-09-16.md:54-55 (gotcha 5, the interim)"
+        "docs/portable/OPERATOR-RULINGS.md (E99 s68: present as batches, track approvals AND denials; s67: the page BUILDS then holds built)",
+        "content/video_engine/effects/lab/batches/reproof-r1.jsonl (the gate rows behind every one of the fifteen verdicts)"
       ],
       "ruling": "",
-      "was_kind": "",
-      "owed": "the re-proof run P65 T8 is building now: each of the fifteen `proven` recipes rebuilt on the Tokyo bed through `lab_build.py` under today's clocks into `content/video_engine/effects/lab/batches/reproof-r1.jsonl` - per recipe, survives as proven / needs an amended offset (named) / is unreachable under the clocks (with the gate row that kills it). This row is flipped to kind `batch` - the survivors and the casualties side by side, a clip each, a bit and a reason on every one - by T8 when that run lands. It is not yours until then."
+      "was_kind": "owed",
+      "owed": ""
     }
   ]
 }

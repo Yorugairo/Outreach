@@ -764,11 +764,20 @@ def test_the_writer_refuses_a_critic_path_that_is_not_on_disk_or_not_under_the_b
             in capsys.readouterr().err)
 
 
-def test_the_live_queue_still_validates_and_warns_on_exactly_its_two_whole_cut_watches(capsys):
-    BRQ.load_data(DATA)
-    assert ([line.split(":", 1)[0].removeprefix("WARN ") for line in BRQ.WARNINGS]
-            == ["one-shot-3-fable-memory-calendar", "p66-hg1-the-first-generated-base"])
+def test_the_live_queue_still_validates_and_warns_on_exactly_its_whole_cut_watches_without_a_critic(capsys):
+    """The RULE, not a count (the parent, 2026-09-17): every open watch record whose proof is a whole cut and that names
+    no `critic` warns, and nothing else does - the set shrinks as the cards get their reports (one-shot #3's landed
+    first; P66's base is next)."""
+    data = BRQ.load_data(DATA)
+    items = data["items"] if isinstance(data, dict) and "items" in data else data
+    expected = [r["id"] for r in items
+                if r.get("kind") == "watch" and r.get("status") == "open" and not r.get("critic")
+                and any(pr.get("type") == "player" or (pr.get("type") == "clip" and float(pr.get("t1", 0)) - float(pr.get("t0", 0)) >= BRQ.WHOLE_CUT_S)
+                        for pr in (r.get("proofs") or []))]
+    warned = [line.split(":", 1)[0].removeprefix("WARN ") for line in BRQ.WARNINGS]
+    assert warned == expected and expected, (warned, expected)
+    assert "one-shot-3-fable-memory-calendar" not in warned, "its critic landed on 2026-09-17 (P67 T7)"
     assert all("CRITIC.md) - E99 s68" in line for line in BRQ.WARNINGS)
     assert BRQ.main(["--check"]) == 0, "a WARN never fails the check while CRITIC_REQUIRED is False"
     out = capsys.readouterr().out
-    assert out.count("WARN ") == 2 and "one-shot-3-fable-memory-calendar" in out
+    assert out.count("WARN ") == len(expected)
