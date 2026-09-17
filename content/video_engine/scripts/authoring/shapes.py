@@ -546,25 +546,94 @@ def clear_strips(band: dict, ink: list[dict]) -> list[dict]:
     return out
 
 
-def rooms_of(page: dict, aspect: str, park: float = UNPARK_SCALE) -> list[dict]:
+# --- THE MARKS THE ROW ITSELF WRITES (P66 T3e, the v5 critic's row 3) ---------------------------
+# E65's room is the page AS IT STANDS, and what stands on a page is not only its ink: a callout
+# rings a datum and writes its label beside it, a bracket spans two, a figure writes a number at its
+# spot, a spread bleeds the region between two series. None of those are in the page builder's own
+# report (`page_boxes` measures the PAGE, not the row), so the plot's empty rooms read as free while
+# the beat's whole argument is being drawn in them. Measured on base v5 at 79.50 s: the tea-cup card
+# parked INSIDE the Fed page's plot and covered the right half of the callout's own label
+# *"3.97% - the February low"* - the one thing that beat exists to say (M25 FAIL, the same instant).
+# So a card whose window overlaps a mark of the row's own takes no room inside the plot: the bands
+# outside it, or the park that makes one, are what is left - the same ladder `make_room` already
+# walks, and the same argument `bound_by_state` makes for a `chart_to` redrawing under a card.
+PLOT_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "undraw", "span", "ring")
+# ... and the QUIET ZONE is written in too: a `note` is *"a line of handwriting in the page's quiet
+# zone"* (`build_scene_timeline_f.SPECIES_WHEN`), which is the band a card sent out of the plot is
+# otherwise given. The first fifth-pass build measured exactly that: the cup, out of the plot, landed
+# on all three of the Fed page's notes (84 %, 45 % and 100 % of them). So while a note of the row's
+# own is up, the quiet-zone side is the handwriting's and the card takes another band.
+QUIET_MARKS = ("note",)
+
+
+def _span_of(sp: dict, t_out: float) -> tuple[float, float]:
+    """One species' (start, end) as the room finder reads it. A mark with no readable end stands to
+    the card's own exit: what the approved cuts write on a page STAYS written."""
+    at, until, dur = float(sp.get("at", 0.0)), sp.get("until"), sp.get("dur")
+    if isinstance(until, (int, float)) and not isinstance(until, bool):
+        return at, float(until)
+    if isinstance(dur, (int, float)) and not isinstance(dur, bool):
+        return at, at + float(dur)
+    return at, float(t_out)
+
+
+def quiet_live(species: list, t_in: float, t_out: float) -> list[str]:
+    """The row's own handwriting in the page's QUIET ZONE while a card is on screen (`QUIET_MARKS`)."""
+    return [f"{sp.get('kind')} at {_span_of(sp, t_out)[0]:.2f}s" for sp in species or []
+            if str(sp.get("kind")) in QUIET_MARKS
+            and _span_of(sp, t_out)[1] > t_in + EPS and _span_of(sp, t_out)[0] < t_out - EPS]
+
+
+def marks_live(species: list, t_in: float, t_out: float) -> list[str]:
+    """The row's own marks standing over the plot while a card is on screen, named for the `why`.
+
+    A mark with no readable end stands to the card's own exit: what the approved cuts write on a
+    page's chart STAYS written (a callout's label, a bracket, a figure, a spread's fill)."""
+    out: list[str] = []
+    for sp in species or []:
+        if str(sp.get("kind")) not in PLOT_MARKS:
+            continue
+        at, until, dur = float(sp.get("at", 0.0)), sp.get("until"), sp.get("dur")
+        if isinstance(until, (int, float)) and not isinstance(until, bool):
+            end = float(until)
+        elif isinstance(dur, (int, float)) and not isinstance(dur, bool):
+            end = at + float(dur)
+        else:
+            end = float(t_out)
+        if end > t_in + EPS and at < t_out - EPS:
+            out.append(f"{sp.get('kind')} at {at:.2f}s")
+    return out
+
+
+def rooms_of(page: dict, aspect: str, park: float = UNPARK_SCALE, marked: bool = False,
+             quiet_taken: bool = False) -> list[dict]:
     """Every rectangle on this page a card may settle in, largest first: the plot's own empty rooms
     (E65's `mask_rooms`, read off the page's measured mask) and the strips of the bands outside the
     plot that carry no ink (`clear_strips`). One list, one order, no episode named.
 
     Under a PARK the mask's rooms are gone (the data's holes shrank with the plot) and the room is the
-    band the park freed - which is what the approved cut puts its cards in (`build_short.py:340-345`)."""
+    band the park freed - which is what the approved cut puts its cards in (`build_short.py:340-345`).
+
+    `marked` says the row is writing MARKS of its own inside the plot while the card is up
+    (`marks_live`): the plot's holes are not room then, and only the bands outside it are offered.
+    `quiet_taken` says the row is writing in the page's QUIET ZONE (`quiet_live`): that side's band is
+    the handwriting's, and no card is offered it."""
     C = compiler()
     boxes = _boxes(page, aspect, park)
     if not boxes.get("plot"):
         return []
     ink = page_ink(page, aspect, park)
-    out = list(C.mask_rooms(boxes))
+    out = [] if marked else list(C.mask_rooms(boxes))
+    quiet = str(boxes.get("quiet_zone") or "") if quiet_taken else ""
     for band in C.free_bands(boxes):
+        if quiet and str(band.get("band") or "") == quiet:
+            continue
         out += clear_strips(band, ink)
     return sorted(out, key=lambda r: -(r["w"] * r["h"]))
 
 
-def card_rooms(page: dict, aspect: str, n: int, park: float = UNPARK_SCALE) -> list[dict]:
+def card_rooms(page: dict, aspect: str, n: int, park: float = UNPARK_SCALE, marked: bool = False,
+               quiet_taken: bool = False) -> list[dict]:
     """`n` boxes a card can settle in on this page, none of them sharing a pixel with another or
     with the page's ink - E65's own rooms, largest first, at the quiet-zone end.
 
@@ -575,7 +644,8 @@ def card_rooms(page: dict, aspect: str, n: int, park: float = UNPARK_SCALE) -> l
     (`build_scene_timeline_f.mask_rooms`, read off the page's measured mask), and the card takes the
     end of its room the plate's own `quiet_zone` token names (`right` / `left`). Fewer than `n` boxes
     come back when the page has not got the room - the caller leaves those cards to the compiler's
-    placer and says so. Pure: the page spec is never mutated."""
+    placer and says so. `marked` drops the plot's own holes: while the row writes marks inside the
+    plot the room is a band outside it (`rooms_of`). Pure: the page spec is never mutated."""
     C = compiler()
     boxes = _boxes(page, aspect, park)
     if not boxes.get("plot"):
@@ -585,7 +655,7 @@ def card_rooms(page: dict, aspect: str, n: int, park: float = UNPARK_SCALE) -> l
     floor = C.PLACE_FLOOR_H.get(aspect, C.PLACE_FLOOR_H["16:9"])
     quiet, ink = boxes.get("quiet_zone"), page_ink(page, aspect, park)
     out: list[dict] = []
-    for room in rooms_of(page, aspect, park):
+    for room in rooms_of(page, aspect, park, marked, quiet_taken):
         if len(out) >= n:
             break
         room_h = room["h"] - 2 * pad
@@ -671,7 +741,11 @@ def place_cards(docks: list, page: dict | None, aspect: str, notes: list,
     The rooms are read AS THE PAGE STANDS AT THAT INSTANT - under a `chart_to park` the room is the band
     the park freed (`parked_boxes`). When a card lands on a page that stands full size and has no room
     for it, the page PARKS to make one (`make_room`) instead of the card sitting on the page's ink or
-    losing its box to the stage's centre - the approved cut's own move at 56.7 s."""
+    losing its box to the stage's centre - the approved cut's own move at 56.7 s.
+
+    The page as it stands includes THE MARKS THIS ROW WRITES (`marks_live`): while a callout, a
+    bracket, a figure or a spread of the card's own row is up, the plot's holes are not room and the
+    card takes a band outside the plot - or the page parks (P66 T3e; base v5 at 79.50 s)."""
     if page is None or not docks:
         return docks
     free = [d for d in docks if not placed(d[4])]
@@ -680,28 +754,46 @@ def place_cards(docks: list, page: dict | None, aspect: str, notes: list,
     d = {**DEFAULTS, **(defaults or {})}
     slots = _slots(free)
     parks = {i: park_scale_at(species or [], float(card[2])) for i, card in enumerate(free)}
-    rooms: dict[float, list[dict]] = {}
-    for scale in sorted(set(parks.values())):
-        n = max([k for i, k in enumerate(slots) if parks[i] == scale] or [0]) + 1
-        rooms[scale] = card_rooms(page, aspect, n, park=scale)
+    # ... and the row's OWN marks decide whether the plot's holes are room at all (P66 T3e)
+    marks = {i: marks_live(species or [], float(card[2]), float(card[3])) for i, card in enumerate(free)}
+    quiet = {i: quiet_live(species or [], float(card[2]), float(card[3])) for i, card in enumerate(free)}
+    keys = {i: (parks[i], bool(marks[i]), bool(quiet[i])) for i in range(len(free))}
+    rooms: dict[tuple, list[dict]] = {}
+    for key in sorted(set(keys.values())):
+        n = max([k for i, k in enumerate(slots) if keys[i] == key] or [0]) + 1
+        rooms[key] = card_rooms(page, aspect, n, park=key[0], marked=key[1], quiet_taken=key[2])
     for i, (card, k) in enumerate(zip(free, slots)):
-        scale = parks[i]
-        if k >= len(rooms[scale]) and species is not None and t1 is not None and scale >= UNPARK_SCALE - EPS:
+        scale, marked, quiet_taken = keys[i]
+        no_room = k >= len(rooms[keys[i]])
+        if no_room and species is not None and t1 is not None and scale >= UNPARK_SCALE - EPS:
             scale = make_room(card, species, float(t1), d, notes)
             parks[i] = scale
-            rooms.setdefault(scale, card_rooms(page, aspect, max(slots) + 1, park=scale))
-        if k < len(rooms[scale]):
+            keys[i] = (scale, marked, quiet_taken)
+            rooms.setdefault(keys[i], card_rooms(page, aspect, max(slots) + 1, park=scale, marked=marked,
+                                                 quiet_taken=quiet_taken))
+        if quiet[i]:
+            notes.append(f"{card[0]} takes no room in the page's quiet zone: this row writes there while the card is "
+                         f"up ({', '.join(quiet[i])}) - a note is a line of handwriting in the quiet zone "
+                         "(`build_scene_timeline_f.SPECIES_WHEN`), and the fifth pass' first build landed the card on "
+                         "all three of them")
+        if marks[i]:
+            notes.append(f"{card[0]} takes no room inside the plot: this row writes its own marks over it while the "
+                         f"card is up ({', '.join(marks[i])}) - a callout's label, a bracket, a figure or a spread "
+                         "is not in the page's measured ink, and E65's room is the page AS IT STANDS (base v5 at "
+                         "79.50s: the card covered the callout's own label)")
+        if k < len(rooms[keys[i]]):
+            room = rooms[keys[i]][k]
             popped = [key for key in ("read", "read_s", "park_s") if key in card[4]]
             card[4] = {**{key: v for key, v in card[4].items() if key not in popped},
-                       **room_options(rooms[scale][k], aspect)}
+                       **room_options(room, aspect)}
             if popped:
                 notes.append(f"{card[0]} drops its {', '.join(popped)}: a card given a room of the page's own lands "
                              "IN it - the read-then-park pop would put it at the stage's centre over the page's ink "
                              "first, which is what M25 and E63 score (`room_options`: a centred card with no `read` "
                              "has no pop at all)")
             notes.append(f"{card[0]} takes the page's own room "
-                         f"{'x'.join(str(rooms[scale][k][v]) for v in ('w', 'h'))} at "
-                         f"({rooms[scale][k]['x']}, {rooms[scale][k]['y']})"
+                         f"{'x'.join(str(room[v]) for v in ('w', 'h'))} at "
+                         f"({room['x']}, {room['y']})"
                          + (f", the band the park to {scale} frees" if scale < UNPARK_SCALE - EPS else "")
                          + " (E65)")
         elif card[4].get("centre"):
@@ -1325,10 +1417,78 @@ def _exit(g: dict, nxt: dict | None, skeleton: dict, next_entry: str | None) -> 
     return "cut", "a cut inside one world"
 
 
+# --------------------------------------------------------------------------- the cut's TAIL (P66 T3e)
+# The v5 critic, reading the base at 83.00 s and 88.50 s: *"the frames are pixel-identical - the Fed
+# page frozen, no caption after 'still ours.', no species, no idle (6.1 s)"*. The last row's window
+# ends on the take's LAST WORD and the compiled scene runs to the build's runtime - the timeline
+# compiler gives the last row `tl["runtime_s"]` for its end whatever the table says
+# (`build_scene_timeline_f.py:5162`) - so every second between them plays a still page. The approved
+# cut does not: it ends on an OUTRO CLIP row over exactly those seconds (`build_short.py:443-446`,
+# `t_outro` from `authoring.audio.outro_clock`: the card dissolves in over the ring with `life`
+# declared for the clip's own seconds, and the row before it ends at `t_outro`, not at the last word).
+# The base's answer, in the order the AUTHOR's own record decides it - the mirror of the open, which
+# keeps the world the hook is spoken over because the plan names it:
+#   1. the plan names a closing world (its last beat's plate is a world of its own, as the open's
+#      first beat names the hook's) - it compiles as a row like any other, and the `why` names it;
+#   2. the caller hands the build's own `runtime` - the last row is HELD to it and carries its idle,
+#      so the table says what the timeline will actually play;
+#   3. neither - the `why` hands the tail back by name: THE OUTRO IS THE AUTHOR'S. The compiler will
+#      not invent a world (no clip is in the plan, and the kit names no episode's file), and a base
+#      that silently ends on a frozen page is what this note exists to stop.
+IDLE_OPT = ";idle="        # the plate id's own idle option, as the compiler writes it (`build_scene_timeline_f.py:87`)
+CLOSE_IDLE = "live"        # E49 - what a world held past its last word carries: breath + drift, never a still
+OUTRO_IS_THE_AUTHORS = ("the outro is the author's - the approved cut ends on its outro clip "
+                        "(`build_short.py:443-446`: the outro row from `t_outro` to the runtime, `life` "
+                        "declared for the clip's own seconds, the dip into it)")
+
+
+def with_idle(plate: str, kind: str = CLOSE_IDLE) -> tuple[str, bool]:
+    """`(the plate id carrying an idle, whether one was added)` - E49: nothing ever goes truly still."""
+    return ((plate, False) if IDLE_OPT in str(plate)
+            else (f"{plate}{IDLE_OPT}{kind}", True))
+
+
+def close_the_cut(rows: list[tuple], why: list[dict], runtime: float | None = None) -> list[tuple]:
+    """The cut's LAST row, read against the runtime the build will play - and named in `why`.
+
+    Nothing is invented: a closing world is emitted only where the plan names one, the hold only
+    where the caller names a runtime, and otherwise the tail is handed back to the author in words.
+    The rows are given back (the last one replaced when it is held)."""
+    recs = rows_why(why)
+    if not rows or not recs:
+        return rows
+    last, rec = list(rows[-1]), recs[-1]
+    end = round(float(last[1]), 2)
+    if world_of(str(last[2])) != "page":
+        rec["rule"] += (f"; the cut ends on the closing world the plan's last beat names, held to {end:.2f}s - "
+                        "a world of its own carries the seconds after the last word, which is what the approved "
+                        "cuts' outro row is for")
+        return rows
+    if runtime is not None and round(float(runtime), 2) > end + EPS:
+        plate, added = with_idle(str(last[2]))
+        last[1], last[2] = round(float(runtime), 2), plate
+        rows[-1] = tuple(last)
+        rec["rule"] += (f"; the last row is HELD to the build's own runtime ({float(runtime):.2f}s) from the take's "
+                        f"last word at {end:.2f}s"
+                        + (f", and carries an idle (`{IDLE_OPT}{CLOSE_IDLE}`, E49)" if added else " at its own idle")
+                        + f" - the timeline gives the last row the runtime for its end whatever the table says "
+                          f"(`build_scene_timeline_f.py:5162`), so a row that stops at the last word leaves "
+                          f"{round(float(runtime) - end, 2):.2f}s of frozen world no row admits to. "
+                        + OUTRO_IS_THE_AUTHORS)
+        return rows
+    rec["rule"] += (f"; the row ends on the take's last word at {end:.2f}s and the compiled scene runs to the "
+                    "build's runtime, so whatever the build's runtime is past that instant plays THIS world (the "
+                    "timeline gives the last row the runtime for its end - `build_scene_timeline_f.py:5162`). No "
+                    "runtime was handed to the compiler and the plan names no closing world, so the base cannot "
+                    "hold the row to it: " + OUTRO_IS_THE_AUTHORS)
+    return rows
+
+
 # --------------------------------------------------------------------------- the compiler
 
 def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9",
-            library: list[dict] | None = None, pages=None, worlds=None) -> tuple[list[tuple], list[dict]]:
+            library: list[dict] | None = None, pages=None, worlds=None,
+            runtime: float | None = None) -> tuple[list[tuple], list[dict]]:
     """The AUTHORED beat plan as the approved skeleton: `(rows, why)`.
 
     `rows` are the kit's own tuples - what `table.write_shot_table` takes and `table.load_rows`
@@ -1346,6 +1506,12 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
     episode's own `evidence/objects/`, so the CLI hands the resolver in (`generate_base_table.py`).
     With it, every card on a page is placed in the page's OWN room, off its ink (E65, `place_cards`);
     without it the compiler's placer decides at compile time and the row's `why` says so.
+
+    `runtime` is the build's own runtime (the take's `timeline.json` `runtime_s`) when the caller
+    has one. The cut plays PAST the last word - the outro's seconds - and the timeline gives the last
+    row the runtime for its end whatever the table says, so with it the last row is held to the
+    runtime and the table says what will play; without it the tail is named in `why` and handed back
+    to the author (`close_the_cut`).
 
     `worlds` is the caller's WORLD resolver - `worlds(<a plate or clip id>) -> the id the table should
     carry`. The plan names the hook's world as the cut recorded it (`clip:<name>`), and where that file
@@ -1373,6 +1539,7 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
     orphans = camera_entries_with_no_card(rows)
     if orphans:
         raise Refused("a page arrives by a card no row carries: " + "; ".join(orphans))
+    rows = close_the_cut(rows, why, runtime)
     if ws:
         T.hold_until(rows, ws)
     return rows, why

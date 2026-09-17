@@ -260,15 +260,19 @@ def test_the_parks_the_plan_names_are_emitted_in_portrait(tokyo):
     page full size and dropped both cards over its ink, because R26-172 stripped every park at 9:16.
     The ruling is WITHDRAWN and the three parks the Tokyo plan names (beats 10, 16 and 17 - the park
     for the fingers, the park for the record and the fab, the UN-PARK as they leave) are on the base."""
-    plan, rows, _ = tokyo
+    plan, rows, why = tokyo
     named = [(b["beat"], m["options"]["scale"]) for b in plan for m in SH.moves_of(b)
              if m.get("kind") == "chart_to" and (m.get("options") or {}).get("to") == "park"]
     assert [n for n, _ in named] == [10, 16, 17], named
     made = [(float(s["at"]), float(s["scale"])) for r in rows for s in r[6] or []
             if s.get("kind") == "chart_to" and s.get("to") == "park"]
-    assert len(made) == len(named), (made, named)
-    assert [s for _, s in made] == [s for _, s in named]
+    assert [s for _, s in made][:len(named)] == [s for _, s in named], (made, named)
     assert SH.UNPARK_SCALE in [s for _, s in made], "the un-park is the park to 1.0 (CAPABILITIES.md:120)"
+    # ... and any park BEYOND the plan's own is the placer making a room for a card that has none
+    # (P66 T3e, the last row's tea cup): the row's `why` names every one it makes.
+    extra = [t for t, _ in made[len(named):]]
+    for t in extra:
+        assert any("PARKS to" in w["rule"] and f"at {t:.2f}s" in w["rule"] for w in why), t
 
 
 def _is_page_build(sp: dict, row) -> bool:
@@ -912,3 +916,116 @@ def test_the_deriver_is_byte_stable_on_both_read_back_plans():
         assert was == now, f"{build.name}: the plan has drifted from its cut"
         assert D.main([str(build), "--check"]) == 0
         assert moves, "the approved cut carries species and cards, and the plan now names them"
+# ---------------------------------------------------------------- the fifth pass (P66 T3e)
+def _tail_plan():
+    """A page beat, then a second page beat: a plan whose cut ends on a PAGE, as the Tokyo bed's does."""
+    page = "ledger:ev-a-v1:line:12:right"
+    return [_rec(1, 0.0, 12.0, page, sentence="The page draws its line to the print.",
+                 caps=["the page draws to datum 12"], row=1),
+            _rec(2, 12.0, 20.0, page, sentence="And that is the number we live with.",
+                 caps=["datum 12 holds"], row=1)]
+
+
+def test_without_a_runtime_the_frozen_tail_is_named_in_why():
+    """The v5 critic's tail row: the last row ends on the take's last word and the compiled scene
+    runs to the build's runtime, so the seconds between play a still world no row admits to. With no
+    runtime to hold to and no closing world in the plan, the compiler NAMES it and invents nothing."""
+    plan = _tail_plan()
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert rows[-1][1] == pytest.approx(20.0), rows[-1]
+    rule = SH.rows_why(why)[-1]["rule"]
+    assert "the outro is the author's - the approved cut ends on its outro clip" in rule
+    assert "build_scene_timeline_f.py:5162" in rule
+
+
+def test_the_last_row_is_held_to_the_runtime_it_is_given_and_carries_an_idle():
+    """The approved cut ends on an outro CLIP over exactly the seconds past the last word
+    (`build_short.py:443-446`). A base whose plan names no outro at least says what will play: the
+    last row is held to the build's own runtime and carries an idle (E49), rather than stopping at
+    the last word while the timeline plays the world on to the runtime anyway."""
+    plan = _tail_plan()
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16", runtime=26.2)
+    assert rows[-1][1] == pytest.approx(26.2), rows[-1]
+    assert SH.IDLE_OPT in rows[-1][2], rows[-1][2]
+    rule = SH.rows_why(why)[-1]["rule"]
+    assert "HELD to the build's own runtime (26.20s)" in rule and "6.20s of frozen world" in rule
+    # ... and a runtime the row already reaches changes nothing
+    same, _ = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16", runtime=20.0)
+    assert same[-1][1] == pytest.approx(20.0), same[-1]
+
+
+def test_a_closing_world_the_plan_names_is_the_cuts_last_row():
+    """The mirror of the open: the hook's world reaches the table because the plan names it, and so
+    does the outro's. Where the plan carries a closing world beat the row is the world, and the
+    `why` says the cut ends on it - the compiler never invents one (the kit names no episode file)."""
+    page = "ledger:ev-a-v1:line:12:right"
+    plan = [_rec(1, 0.0, 12.0, page, sentence="The page draws its line to the print.",
+                 caps=["the page draws to datum 12"], row=1),
+            _rec(2, 12.0, 20.0, page, sentence="And that is the number we live with.", caps=["datum 12"], row=1),
+            _rec(3, 20.0, 26.2, "clip:an-outro.mp4", sentence="It's not magic. It's mechanics.",
+                 caps=["the outro card dissolves in"], row=2)]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert SH.world_of(rows[-1][2]) == "clip" and rows[-1][1] == pytest.approx(26.2), rows[-1]
+    assert "the cut ends on the closing world the plan's last beat names" in SH.rows_why(why)[-1]["rule"]
+
+
+def test_a_card_after_a_camera_push_keeps_the_pages_room(tokyo):
+    """THE FIFTH PASS, the v5 critic's row 3 (79.50 s): `dock-j-tea-cup` parked INSIDE the Fed page's
+    plot and covered the right half of the callout's own label *"3.97% - the February low"* - the one
+    thing that beat exists to say. The page arrives by the camera pushing to a card
+    (`camera=<dock>`), and after the push THE PAGE IS THE WORLD: the room rule binds exactly as it
+    does on any page row. What the third pass missed is that a page's room is the page AS IT STANDS -
+    and this row writes its own marks inside the plot while the card is up, none of which are in the
+    page builder's measured ink. So the plot's holes are not room: the card takes a band outside it,
+    or the page parks to make one (E65, the approved cut's own move)."""
+    _, rows, why = tokyo
+    row = rows[-1]
+    assert SH.entry_in(row[2]).startswith("camera") or SH.entry_in(row[2]) == "camera", row[2]
+    card = next(d for d in row[4] if d[0] == "dock-j-tea-cup")
+    t_in = float(card[2])
+    # the marks this row writes while the card is up, named - the callouts and the spread
+    named = SH.marks_live(row[6] or [], t_in, float(card[3]))
+    assert [n.split()[0] for n in named].count("callout") == 2 and any(n.startswith("spread") for n in named), named
+    # ... so the page parks to make the room, and the card lands in the band the park frees
+    park = [sp for sp in row[6] if sp.get("kind") == "chart_to" and sp.get("to") == "park"]
+    assert park and float(park[0]["at"]) == pytest.approx(t_in - SH.PARK_LEAD_S, abs=0.01), park
+    box = _card_box(card[4])
+    page = _page(TOKYO, row[2])
+    boxes = SH._boxes(page, "9:16", SH.park_scale_at(row[6], t_in))
+    assert box and not SH._meets(box, boxes["plot"]), (box, boxes["plot"])
+    for k in ("title", "sub", "source"):
+        if boxes.get(k):
+            assert not SH._meets(box, boxes[k]), (k, box, boxes[k])
+    assert "takes no room inside the plot" in why[-1]["rule"]
+    # ... and not on the page's HANDWRITING either: this row writes three notes in the quiet zone,
+    # two of them still writing as the cup lands, and the fifth pass' first build landed the card on
+    # all three of them (the probe at 79.50 s: 84 %, 45 % and 100 % of `page.note`).
+    assert len(SH.quiet_live(row[6] or [], t_in, float(card[3]))) == 2, row[6]
+    assert "takes no room in the page's quiet zone" in why[-1]["rule"]
+    # the handwriting runs down the quiet zone beside the chart, so what is left is the band UNDER
+    # the parked chart - and that is where the card lands (measured on the build at 79.50 s: the
+    # probe reports no overlap between `dock-j-tea-cup` and `page.note`)
+    assert box["y"] >= boxes["plot"]["y"] + boxes["plot"]["h"] - 1, (box, boxes["plot"])
+
+
+def test_the_plots_holes_are_not_room_while_the_row_marks_them():
+    """`rooms_of` itself: with a mark of the row's own live over the plot, the plot's empty rooms are
+    off the table and only the bands outside it are offered (and a page with no free band then has
+    no room at all, which is what sends the ladder to the park)."""
+    page = _page(TOKYO, "ledger:ev-fed-vs-yields-v1:line:0:right")
+    plain = SH.rooms_of(page, "9:16")
+    marked = SH.rooms_of(page, "9:16", marked=True)
+    assert plain and len(marked) < len(plain), (plain, marked)
+    boxes = SH._boxes(page, "9:16")
+    assert all(not SH._meets(r, boxes["plot"]) for r in marked), marked
+    assert SH.marks_live([{"kind": "callout", "at": 1.0, "dur": 2.0}], 2.0, 4.0) == ["callout at 1.00s"]
+    assert SH.marks_live([{"kind": "callout", "at": 1.0, "dur": 2.0}], 3.5, 6.0) == []
+    assert SH.marks_live([{"kind": "retitle", "at": 1.0, "dur": 9.0}], 2.0, 4.0) == [], "a retitle is not a plot mark"
+    # ... and the quiet zone is the note's while a note is up: that side's band is not offered
+    note = [{"kind": "note", "at": 1.0, "dur": 2.0}]
+    assert SH.quiet_live(note, 2.0, 4.0) == ["note at 1.00s"] and SH.quiet_live(note, 3.5, 6.0) == []
+    hushed = SH.rooms_of(page, "9:16", marked=True, quiet_taken=True)
+    band = next(b for b in SH.compiler().free_bands(boxes) if str(b.get("band")) == boxes["quiet_zone"])
+    strips = SH.clear_strips(band, SH.page_ink(page, "9:16"))
+    assert strips, "the quiet zone has room on this page when nothing is written in it"
+    assert all(r in marked and r not in hushed for r in strips), (strips, hushed)

@@ -93,6 +93,16 @@ def read_words(build: Path) -> list | None:
     return json.loads(path.read_text(encoding="utf-8")).get("words")
 
 
+def read_runtime(build: Path) -> float | None:
+    """The build's own runtime (`timeline.json` `runtime_s`) - the compiler HOLDS the last row to it with its idle
+    (`shapes.close_the_cut`), so no frame after the last row is frozen (the v5 critic: 82.72-88.82 s pixel-identical)."""
+    path = build / WORDS_NAME
+    if not path.is_file():
+        return None
+    value = json.loads(path.read_text(encoding="utf-8")).get("runtime_s")
+    return float(value) if value else None
+
+
 def page_resolver(project: Path):
     """`pages(<a resolved ledger plate id>) -> that page's `ledger_page.v1` spec` for `shapes.compile`.
 
@@ -144,7 +154,7 @@ def compile_base(build: Path, aspect: str, project: Path | None = None) -> tuple
         raise Refused(f"FAIL: no {PLAN_NAME} in {rel(build)} - the compiler's INPUT is AUTHORED (E99 s66, M41); "
                       "this tool never writes one")
     try:
-        return SH.compile(SH.load_plan(plan), read_words(build), SH.DEFAULTS, aspect,
+        return SH.compile(SH.load_plan(plan), read_words(build), SH.DEFAULTS, aspect, runtime=read_runtime(build),
                           pages=page_resolver(project) if project is not None else None,
                           worlds=world_resolver(project, build) if project is not None else None)
     except SH.Refused as exc:
