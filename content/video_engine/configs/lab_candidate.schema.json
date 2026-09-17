@@ -49,7 +49,8 @@
         "m16_gap_s",
         "m12_dock_s",
         "m11_first_light_s",
-        "page_build_end_s"
+        "page_build_end_s",
+        "lp_build_s"
       ],
       "description": "every gate value this candidate was generated against, as it stood at generation - a candidate is only ever judged on the clocks recorded here (R26-168: the fifteen proven recipes were proved against clocks that no longer exist)",
       "properties": {
@@ -72,6 +73,11 @@
         "page_build_end_s": {
           "type": "number",
           "description": "the second the page finishes BUILDING and holds built (E99 s67); the light and the card are placed against it (7.4 today)"
+        },
+        "lp_build_s": {
+          "type": "number",
+          "minimum": 0,
+          "description": "LP_BUILD_S (gate_motion_density.py:242) - an axes entry's chart lands here (3.0 s); the mount's lands at page_build_end_s (7.4 s). The light slot follows the ENTRY (P65 T3, the smoke run's M11 refusal)."
         }
       }
     },

@@ -1,0 +1,987 @@
+"""The authoring kit - SHAPES: the AUTHORED beat plan in, the approved skeleton out (P66 T3).
+
+    from authoring import shapes as SH, table as T
+    plan = SH.load_plan(build / "BEAT-PLAN.jsonl")          # M41's schema, written by the AUTHOR
+    rows, why = SH.compile(plan, words, SH.DEFAULTS, "9:16")
+    T.write_shot_table(path, rows, header)                   # the kit's own row grammar, unchanged
+
+THE DOCTRINE LINE, in one sentence: `authoring/recipes.py:1-20` ("NOT AN ALLOCATOR") and
+`docs/content-video-engine/PIPELINE.md:33` ("Stage 7 is AUTHORED. There is no allocator") both
+STAND, because this module consumes an AUTHORED beat plan - the intelligence work E99 s66 reserved
+to an agent or the operator - and fills nothing by count; E99 s68 outranks the older reading of
+"authored" as "every row typed by hand": the author still decides every beat, and now edits a BASE
+instead of a blank page. **The output is a BASE, never a cut.** Nothing here is chosen to hit a
+rate: M16's pulse is MEASURED (`event_gaps`) and never filled, because a loop that fills slots by
+count answers "how many fit" instead of "which one belongs".
+
+It never invents. A plan M41 would fail (a beat with no record, an empty `comparator.compared_to`,
+a null recipe with no `why_none`) is REFUSED by name, and a hole the plan cannot fill is refused
+naming the beat, the skeleton and the hole. The ONE softer case, named in `why` rather than raised:
+a SECOND mark or card (`{datum_b}`, `{dock_b}`) is the skeleton's extra, not the beat's claim, so a
+plan that names one gets the row without the extra - and the same for a `{dock}` on a beat whose
+plan names no evidence at all. Less than the skeleton asked for is never MORE than the plan said.
+
+THE APPROVED SHAPE, enforced BY CONSTRUCTION (E99 s67 Apply 1-6, E47, E65, R26-171/172, M44):
+
+  * the first beat is the page ON ITS AXES drawing under the hook - the open IS the chart; the page
+    MOUNTS over the hook's world instead when the plan's first beat carries a clip or plate world
+    (then the hook and that page are ONE row: a page never enters twice);
+  * a page whose number lands `MOUNT_AT_OR_AFTER_S` (7.0 s) or more after its entry gets
+    `mount=<s>`, never `built`; every other page enters by its axes;
+  * a world change exits by `dip` (E47), page to page by `suck` or `cut`, and NEVER into a mount -
+    the mount is itself the transition;
+  * a return uses `spiral`;
+  * a dock reads then parks in the page's own room (E65) and holds to the row's own end;
+  * no world plate row is shorter than `plate_hold_s` (M44 `PLATE_MIN_S`);
+  * at 9:16 no `badges` rail (R26-171) and no `chart_to park` (R26-172) is emitted;
+  * a light is emitted ONLY on a sentence that POINTS - the plan's own `capabilities` name a datum,
+    an index, a point or a region - and never before the page's chart LANDS (Apply 1-2). The landing
+    is the page's own (`gate_motion_density`): `PAGE_BUILD_END_S` on a roll-out, `LP_BUILD_S` on an
+    axes entry, `mount_s + PAGE_BUILD_END_S - ROLL - SAVOR - FIELD` on a mount, `LP_SPIRAL_IN_S` on
+    a spiral - a flat 7.4 s would put every axes page's light four seconds past its own chart.
+
+THE BEAT'S NAMED MOVES (P66 T3 continued, 2026-09-17). One skeleton row per authored GROUP leaves a
+long group with ONE event - a read-back plan's eleven-beat opening group measured a 32 s gap on M16.
+The answer is not to fill by count (there is no allocator here) and not a looser gate: THE BEAT PLAN
+IS THE INTELLIGENCE (E99 s66) and it already names, per sentence, what the cut does. A plan record
+MAY carry:
+
+    "moves": [{"kind": "<a species kind, or `dock`>", "at_word": "<a phrase of THIS beat's sentence>",
+               "target": {...}, "label": "...", "dur": 1.2, "asset": "dock-x", "options": {...}}]
+
+and `compile` realises each beat's moves on its group's row, timed by `at_word` INSIDE that beat's
+own `[t0, t1]` - the take is the clock (`words`), never a stopwatch, and a phrase the beat's own
+sentence does not carry is refused by name. `kind` is the COMPILER's own vocabulary
+(`build_scene_timeline_f.SPECIES_KINDS`) and a card's options are the compiler's own (`DOCK_OPTS`),
+so a move that is legal here is legal there. `label` is written into the field that kind carries its
+words in (`LABEL_FIELD`: a figure's `text`, a callout's `label`); `options` is the species' or the
+card's OWN remaining fields, copied verbatim - the compiler writes them and invents none. Every rule
+above still holds over a move, and a move is REFUSED rather than silently moved: a light asked for
+before its page's chart lands names the beat and the rule, and so does a camera move over a Ken
+Burns (s9.28 C3).
+
+A beat with NO moves contributes nothing - and SAYS so: `why` gains one record per silent beat
+(`{beat, silent, sentence, note}`), so the agent reads where the base is a base and not a cut
+(E99 s68: the base the agent modifies). `event_gaps` still MEASURES whatever results.
+
+THE POSITIONAL RULE. Twelve of the twenty-five records in an approved read-back plan carry
+`act: "none of the 11 - <what it does>"`: the sentence plays none of the twelve acts
+(SPECIES-BY-SENTENCE.md). Such a beat is NEVER refused - it is chosen by its SHAPE and its
+POSITION, in this order:
+
+  1. the FIRST beat is the open;
+  2. a beat whose `act` or `capabilities` name a RETURN (the spiral, the ring, a callback, the page
+     coming back) is the return;
+  3. a beat whose world is a ledger PAGE is a page beat - the page-to-page transform when the next
+     world is a page too, the held page when the plan names a dock over it, else the page whose
+     number lands at N;
+  4. every other beat is a narrative PLATE.
+
+THE VARIETY RULE is counted on SKELETON IDS, not on signature words (P66 T2: the approved cuts
+themselves carry consecutive signature words - Japan's throw -> snap pair reads card, card).
+
+Nothing in this module names an episode (`authoring/__init__.py:12-15`): the plan, the words, the
+defaults and the aspect all arrive as ARGUMENTS.
+"""
+from __future__ import annotations
+
+import copy
+import json
+import re
+import sys
+from pathlib import Path
+
+SCRIPTS = Path(__file__).resolve().parents[1]
+REPO = Path(__file__).resolve().parents[4]
+if str(SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS))
+
+import gate_motion_density as MD  # noqa: E402  (the gates' own clocks, by name - never re-typed here)
+
+from . import table as T, words as W  # noqa: E402
+
+SKELETON_DIR = "content/video_engine/effects/skeletons"
+MIX_NAME = "approved-mix.json"
+
+# --- the gates' constants, imported and never re-typed -----------------------------------------
+PAGE_BUILD_END_S = MD.PAGE_BUILD_END_S          # 7.4: a rolled-out page's chart lands here (M11's annotation clock)
+ANNOTATE_TOL_S = MD.ANNOTATE_TOL_S              # M11 1.5: the first chart's species fires WITH its landing
+CHART_HOLD_MAX_S = MD.OPENING_CHART_HOLD_MAX_S  # M12 6.0: a chart is never held as homework
+PULSE_MAX_S = MD.SHORT_PULSE_MAX_S              # M16 2.5: MEASURED by `event_gaps`, never filled (no allocator)
+PLATE_MIN_S = MD.PLATE_MIN_S                    # M44 6.0: no world plate row under six seconds
+MOUNT_AT_OR_AFTER_S = 7.0                       # E99 s67 Apply 3; every skeleton states it as `rules.mount_at_or_after_s`
+
+DEFAULTS: dict = {
+    "page_entry": "axes",         # E99 s67 Apply 6: a page enters by its axes unless its number lands late
+    "light_after_build": True,    # E99 s67 Apply 1-2: no light over the build
+    "card_in_page_room": True,    # E65: a dock reads, then parks in the page's own room and stays
+    "no_rails_9_16": True,        # R26-171
+    "no_park_9_16": True,         # R26-172
+    "plate_hold_s": PLATE_MIN_S,  # M44
+}
+
+ACTS = ("QUOTES", "RANKS", "COMPARES", "DIVIDES", "NAMES", "EXPLAINS",
+        "TURNS", "BREAKS", "SPANS", "SETS", "RETRACTS", "COUNTS")
+NO_ACT = "none of the"           # how a read-back plan says the sentence plays none of the twelve
+
+SHAPE_OPEN = "open-on-the-chart"
+SHAPE_PAGE = "page-number-lands-at-n"
+SHAPE_HELD = "held-page-hosts-the-docks"
+SHAPE_TRANSFORM = "page-to-page-transform"
+SHAPE_PLATE = "plate-carries-a-card"
+SHAPE_RETURN = "return"
+
+RETURN_TOKENS = ("spiral", "returns", "the return", "callback", "call back", "comes back",
+                 "the ring", "ring's")
+POINTS_AT = ("datum", "index", "region", "point", "bracket", "spread", "peak",
+             "the low", "the bar", "callout", "spotlight", "build_to", "figure")
+NUMBER_WORDS = ("percent", "billion", "trillion", "million", "thousand", "hundred", "dollars",
+                "half", "twice", "double", "a tenth")
+LIGHT_KINDS = ("spotlight", "callout", "focus_zoom", "ring", "punch", "figure", "note")
+ENTRY_SUFFIX = re.compile(r":(axes|spiral|built|(?:mount|snap|camera)=(?:[A-Za-z0-9_.-]+|\{[a-z0-9_]+\}))")
+TIME_HOLE = re.compile(r"^\{(t[01])\}([+-][0-9.]+)?$")
+HOLE = re.compile(r"\{([a-z0-9_]+)\}")
+DOCK_ID = re.compile(r"(?<!recipe:)\b(dock-[a-z0-9-]+)")   # `recipe:dock-...` is a RECIPE name, never a dock asset
+DATUM_ID = re.compile(r"\b(?:datum|index|from_index|to_index)[ _]*(?:index )?(\d+)")
+MOUNT_S = re.compile(r"mount=([0-9.]+)")
+DOCK_LANE = 0                    # the dock tuple's second element: the lane a card arrives on
+SPECIES_TAIL_S = 0.3             # a species with less than this left on the row has no room to read: it is dropped
+MOUNT_S_DEFAULT = MD.LP_FIELD_S  # the player's own default when a spec carries no mount_s (gate_motion_density:1179)
+
+# --- the beat's named MOVES (P66 T3 continued) --------------------------------------------------
+MOVE_DOCK = "dock"               # the one move kind that is not a species: a CARD arrives over the world
+MOVE_SLOT = "slot"               # a dock move's lane, the dock tuple's 2nd element - an option here, not a DOCK_OPT
+MOVE_KEYS = ("kind", "at_word", "target", "label", "dur", "asset", "options")
+CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")   # s9.28 C3: one per row, and never over a Ken Burns
+LABEL_FIELD = {"figure": "text", "note": "text", "retitle": "text", "stamp": "text",
+               "callout": "label", "bracket": "label", "span": "label", "chip": "label",
+               "ring": "label", "peel": "label"}   # where a kind carries THE WORDS it writes on the page
+DEFAULT_LABEL_FIELD = "label"
+BUILT_ON_ARRIVAL = ("snap", "camera")   # the two entries whose chart is ALREADY on the page when it arrives
+                                        # (`page_land_offset` reads 0.0 for both): the page snaps to a card, or the
+                                        # camera does. A page the AUTHOR gave one of these is a page whose light may
+                                        # land on the first word of its own sentence - and both approved cuts do it.
+EPS = 0.005                      # the closed-interval slack, as the gates use it
+
+
+class Refused(ValueError):
+    """The plan cannot be compiled AS WRITTEN - named, never guessed around."""
+
+
+# --------------------------------------------------------------------------- the library and the plan
+
+def load_library(repo: Path | str | None = None) -> list[dict]:
+    """Every skeleton file under `effects/skeletons/`, ordered by id - the order every fallback and
+    every tie is resolved in, so a second compile of one plan is byte-identical to the first."""
+    root = Path(repo) if repo is not None else REPO
+    d = root / SKELETON_DIR
+    out = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(d.glob("*.json")) if p.name != MIX_NAME]
+    if not out:
+        raise Refused(f"no skeleton library at {d} - P66 T2 writes it")
+    return sorted(out, key=lambda s: s["id"])
+
+
+def load_plan(path: Path | str) -> list[dict]:
+    """`<build>/BEAT-PLAN.jsonl` as records (M41's schema). The AUTHOR wrote it; this reads it."""
+    text = Path(path).read_text(encoding="utf-8")
+    return [json.loads(line) for line in text.splitlines() if line.strip()]
+
+
+def check_plan(plan: list[dict]) -> None:
+    """The three gaps M41 names, refused BY NAME before a single row is shaped
+    (`gate_one_shot_floor.plan_gaps`; SRC_M41 - "a beat with no record, an empty
+    comparator.compared_to, or a null recipe with no why_none is a gap")."""
+    if not plan:
+        raise Refused("M41: the beat plan is empty - the compiler's input is AUTHORED (E99 s66), never generated")
+    gaps: list[str] = []
+    numbers = [int(r["beat"]) for r in plan if isinstance(r.get("beat"), (int, float))]
+    if len(numbers) != len(plan):
+        gaps.append("a record carries no `beat` number")
+    for n in range(1, (max(numbers) if numbers else 0) + 1):
+        if n not in numbers:
+            gaps.append(f"beat {n} has no record")
+    for r in plan:
+        n = r.get("beat", "?")
+        if not str((r.get("comparator") or {}).get("compared_to") or "").strip():
+            gaps.append(f"beat {n} compares to nothing")
+        if not r.get("recipe") and not str(r.get("why_none") or "").strip():
+            gaps.append(f"beat {n} has no recipe and no why_none")
+        for key in ("t0", "t1", "sentence", "plate"):
+            if r.get(key) in (None, ""):
+                gaps.append(f"beat {n} names no {key}")
+    if gaps:
+        raise Refused(f"M41: the beat plan has {len(gaps)} gaps and is not compilable: "
+                      + "; ".join(gaps[:12]) + (f"; +{len(gaps) - 12} more" if len(gaps) > 12 else ""))
+    for r in plan:
+        check_moves(r)   # the beat's NAMED moves: the kind, the phrase, the card's asset and its options
+
+
+# --------------------------------------------------------------------------- reading one beat
+
+def acts_of(record) -> set:
+    """The acts a record names. A record that says `none of the 11 - ...` names NONE: its own prose
+    may quote an act word (the classifier's BREAKS hit), and the positional rule owns that beat."""
+    act = str((record or {}).get("act") or "")
+    if act.strip().lower().startswith(NO_ACT):
+        return set()
+    return {a for a in ACTS if re.search(rf"\b{a}\b", act)}
+
+
+def world_of(plate: str) -> str:
+    """The KIND of world a plate id names: `page` (a ledger page), `clip`, or `plate`."""
+    p = str(plate or "")
+    return "page" if p.startswith("ledger:") else "clip" if p.startswith("clip:") else "plate"
+
+
+def page_of(plate: str) -> str:
+    """`{page}`: the series and variant a ledger plate names, with its entry suffix, its `:cut` and
+    its `;options` tail stripped - `ledger:ev-x-v1:line:315:right:mount=2.0:cut` -> `ev-x-v1:line:315:right`."""
+    body = str(plate).split(";", 1)[0]
+    body = body[len("ledger:"):] if body.startswith("ledger:") else body
+    body = ENTRY_SUFFIX.sub("", body)
+    return body[:-len(":cut")] if body.endswith(":cut") else body
+
+
+def plate_of(plate: str) -> str:
+    """`{plate}`: the plate or clip id, with its `;options` tail stripped."""
+    return str(plate).split(";", 1)[0]
+
+
+def docks_of(record) -> list[str]:
+    """`{dock}` / `{dock_b}`: the dock ids the plan's own `capabilities` name, in the order named."""
+    text = " ".join(str(c) for c in (record or {}).get("capabilities") or [])
+    out: list[str] = []
+    for m in DOCK_ID.finditer(text):
+        if m.group(1) not in out:
+            out.append(m.group(1))
+    return out
+
+
+def data_of(record) -> list[int]:
+    """`{datum}` / `{datum_b}`: the datum indices the `capabilities` name, then the page's own
+    emphasize index (the author's mark on the plate) - never a number this module made up."""
+    text = " ".join(str(c) for c in (record or {}).get("capabilities") or [])
+    out: list[int] = []
+    for m in DATUM_ID.finditer(text):
+        if int(m.group(1)) not in out:
+            out.append(int(m.group(1)))
+    for part in page_of((record or {}).get("plate", "")).split(":"):
+        if part.isdigit() and int(part) not in out:
+            out.append(int(part))
+    return out
+
+
+def points(record) -> bool:
+    """Does this sentence POINT? E99 s67 Apply 1: a light is punctuation, not filler - it is
+    emitted only where the plan's own capabilities name a datum, an index, a point or a region."""
+    text = " ".join(str(c) for c in (record or {}).get("capabilities") or []).lower()
+    return any(tok in text for tok in POINTS_AT)
+
+
+def names_a_number(record) -> bool:
+    """Does this sentence land a NUMBER? A digit, a number word, or an act that turns on one."""
+    text = str((record or {}).get("sentence") or "")
+    if re.search(r"\d", text) or any(w in text.lower() for w in NUMBER_WORDS):
+        return True
+    return bool({"TURNS", "COUNTS", "RANKS"} & acts_of(record))
+
+
+# --------------------------------------------------------------------------- the beat's named moves
+
+_COMPILER = None
+
+
+def compiler():
+    """The compiler module, imported LAZILY and once - the kit's habit (`table.apply_sidecar`).
+
+    Two vocabularies live there and are never re-typed here: `SPECIES_KINDS` (what a row's species
+    list may carry) and `DOCK_OPTS` (what a card's option dict may carry). A move checked against
+    them is a move the compiler will accept.
+    """
+    global _COMPILER
+    if _COMPILER is None:
+        import build_scene_timeline_f as C
+        _COMPILER = C
+    return _COMPILER
+
+
+def move_kinds() -> tuple:
+    """Every `kind` a move may name: the compiler's species kinds, and `dock` for a card."""
+    return tuple(compiler().SPECIES_KINDS) + (MOVE_DOCK,)
+
+
+def dock_option_keys() -> tuple:
+    """Every option a `dock` move may carry: the compiler's own `DOCK_OPTS`, plus the lane."""
+    return tuple(compiler().DOCK_OPTS) + (MOVE_SLOT,)
+
+
+def moves_of(record) -> list[dict]:
+    """The moves a plan record names, in the order the author wrote them. An absent or empty list
+    is a SILENT beat - it contributes nothing, and `compile` says so in `why`."""
+    return [m for m in ((record or {}).get("moves") or [])]
+
+
+def check_moves(record) -> None:
+    """One record's moves, refused BY NAME - the kind, the phrase, the card's asset, the options.
+
+    The phrase is checked against the beat's OWN sentence here (a plan is readable without a take);
+    `compile` then resolves it on the take's words inside the beat's window, and refuses there when
+    the take does not carry it where the sentence says.
+    """
+    n = record.get("beat", "?")
+    kinds, opts = move_kinds(), dock_option_keys()
+    for m in moves_of(record):
+        if not isinstance(m, dict):
+            raise Refused(f"beat {n}: a move is an object {{{', '.join(MOVE_KEYS)}}}, not {m!r}")
+        kind = m.get("kind")
+        if kind not in kinds:
+            raise Refused(f"beat {n}: the move kind {kind!r} is not one the compiler carries - "
+                          f"{MOVE_DOCK}, or one of {'|'.join(sorted(k for k in kinds if k != MOVE_DOCK))}")
+        phrase = str(m.get("at_word") or "").strip()
+        if not phrase:
+            raise Refused(f"beat {n}: the {kind} move names no `at_word` - a move lands on a WORD of its own "
+                          "sentence, never on a stopwatch (authoring/words.py)")
+        if not _phrase_in(str(record.get("sentence") or ""), phrase):
+            raise Refused(f"beat {n}: {phrase!r} is not a phrase of that beat's own sentence "
+                          f"({str(record.get('sentence') or '')!r}) - a move belongs to the sentence it punctuates")
+        for key in ("target", "options"):
+            if m.get(key) is not None and not isinstance(m[key], dict):
+                raise Refused(f"beat {n}: the {kind} move's `{key}` is an object, not {m[key]!r}")
+        if m.get("dur") is not None and not isinstance(m["dur"], (int, float)) and m["dur"] != "hold":
+            raise Refused(f"beat {n}: the {kind} move's `dur` is seconds or \"hold\", not {m['dur']!r}")
+        if kind == MOVE_DOCK:
+            if not str(m.get("asset") or "").strip():
+                raise Refused(f"beat {n}: a {MOVE_DOCK} move names no `asset` - the card is the project's "
+                              "registered evidence still, and the compiler never invents one")
+            bad = [k for k in (m.get("options") or {}) if k not in opts]
+            if bad:
+                raise Refused(f"beat {n}: the {MOVE_DOCK} move's option(s) {', '.join(sorted(bad))} are not "
+                              f"the compiler's ({'|'.join(opts)})")
+        elif m.get("asset") is not None:
+            raise Refused(f"beat {n}: the {kind} move names an `asset` - only a {MOVE_DOCK} move carries one")
+
+
+def _phrase_in(sentence: str, phrase: str) -> bool:
+    """Is `phrase` a run of words of `sentence`? The kit's own normaliser, so a phrase reads here
+    exactly as `words.at` reads it (punctuation-insensitive, case-insensitive)."""
+    toks = [W._norm(x) for x in str(phrase).split()]
+    said = [W._norm(x) for x in str(sentence).split()]
+    return bool(toks) and any(said[i:i + len(toks)] == toks for i in range(len(said) - len(toks) + 1))
+
+
+def word_at(ws: list[dict], phrase: str, t0: float, t1: float) -> float | None:
+    """The instant `phrase` OPENS inside `[t0, t1)` - the beat's own window, so a one-word anchor is
+    unambiguous within the sentence it belongs to (`words.at` searches the whole take). None when
+    the take does not carry the phrase there. The window is HALF-OPEN on purpose: a word that opens
+    exactly on the next beat's start belongs to that beat, and no instant is claimed by two."""
+    toks = [W._norm(x) for x in str(phrase).split()]
+    if not toks or not ws:
+        return None
+    for i, w in enumerate(ws):
+        if not (t0 - EPS <= float(w["start_s"]) < t1):
+            continue
+        if [W._norm(x["w"]) for x in ws[i:i + len(toks)]] == toks:
+            return round(float(w["start_s"]), 2)
+    return None
+
+
+# --------------------------------------------------------------------------- the groups
+
+def groups(plan: list[dict]) -> list[dict]:
+    """The plan's beats as ROWS-to-be: consecutive beats that share a world are one row.
+
+    The grouping is the AUTHOR's, read two ways and never invented: the record's own `row` when
+    every record carries one, else a run of consecutive beats naming the same `plate`. A page never
+    enters twice, so when the hook's world is a clip or a plate and the very next group is a page,
+    the hook is ABSORBED into that page's row - the page mounts over the hook's world on its last
+    word (E99 s67 Apply 6), which is the open the approved cuts play.
+    """
+    keyed = [r.get("row") for r in plan]
+    use_row = all(k is not None for k in keyed)
+    out: list[dict] = []
+    for i, r in enumerate(plan):
+        key = keyed[i] if use_row else plate_of(r.get("plate", ""))
+        if out and out[-1]["key"] == key:
+            out[-1]["beats"].append(r)
+        else:
+            out.append({"key": key, "beats": [r]})
+    if len(out) > 1 and world_of(out[0]["beats"][0]["plate"]) != "page" \
+            and world_of(out[1]["beats"][0]["plate"]) == "page":
+        out[1]["beats"] = out[0]["beats"] + out[1]["beats"]
+        out[1]["open_mounts"] = True
+        out = out[1:]
+    for g in out:
+        g["t0"] = float(g["beats"][0]["t0"])
+        g["t1"] = float(g["beats"][-1]["t1"])
+        g["plate"] = g["beats"][-1]["plate"] if g.get("open_mounts") else g["beats"][0]["plate"]
+        g["world"] = world_of(g["plate"])
+        seen: list[str] = []
+        for b in g["beats"]:
+            seen += [x for x in docks_of(b) if x not in seen]
+        g["docks"] = seen
+        g["act"] = next((b.get("act") for b in g["beats"] if acts_of(b)), g["beats"][0].get("act", ""))
+    return out
+
+
+def first_light_move(g: dict, ws) -> float | None:
+    """The instant the group's first LIGHT move lands, on the take's own words - or None when the
+    plan names none. The CLOCK reads the plan's moves too: a page whose first light is already
+    spoken while an axes build would still be drawing cannot enter on its axes (see `_entry`)."""
+    out = [t for b in g["beats"] for m in moves_of(b) if m.get("kind") in LIGHT_KINDS
+           for t in [word_at(ws, str(m.get("at_word") or ""), float(b["t0"]), float(b["t1"]))] if t is not None]
+    return min(out) if out else None
+
+
+def _is_return(g: dict) -> bool:
+    text = " ".join(str(b.get("act", "")) + " " + " ".join(str(c) for c in b.get("capabilities") or [])
+                    for b in g["beats"]).lower()
+    return any(tok in text for tok in RETURN_TOKENS)
+
+
+def shape_of(g: dict, index: int, nxt: dict | None, seen: tuple = ()) -> tuple[str, str]:
+    """The beat shape this group plays, and the rule that says so - the POSITIONAL rule above, which
+    is what carries a beat whose sentence plays none of the twelve acts. `seen` is the pages already
+    on screen: a page the cut has never shown cannot RETURN (a spiral unwinds a page from its own
+    point), so a beat that talks like a return over a new page is an ordinary page beat."""
+    if index == 0:
+        return SHAPE_OPEN, ("the page mounts the hook's world on its last word - the open IS the chart (E99 s67 Apply 6)"
+                            if g.get("open_mounts") else "the page on the hook, on its axes (E99 s67 Apply 6)")
+    if _is_return(g) and g["world"] == "page" and page_of(g["plate"]) in seen:
+        return SHAPE_RETURN, "the spiral because the beat returns (the plan names the return, and the page has been here)"
+    if g["world"] != "page":
+        return SHAPE_PLATE, "a narrative plate: the world is not a page, so the plate carries the card"
+    if nxt is not None and nxt["world"] == "page":
+        return SHAPE_TRANSFORM, "page to page: the next world is a page too, so this page transforms into it"
+    if g["docks"]:
+        return SHAPE_HELD, "the page holds while its evidence arrives over it (the plan names a dock)"
+    return SHAPE_PAGE, "a page beat: the page enters and its number lands on it"
+
+
+# --------------------------------------------------------------------------- the chooser
+
+def entry_of(skeleton: dict) -> str | None:
+    """The entry a skeleton's own first row declares: axes / mount / spiral / snap / built / camera,
+    or None for a skeleton whose world is a plate."""
+    m = ENTRY_SUFFIX.search(str(skeleton["rows"][0]["plate"]).split(";", 1)[0])
+    return m.group(1).split("=", 1)[0] if m else None
+
+
+def entry_token_in(plate: str) -> str | None:
+    """The WHOLE entry token a resolved plate declares - `mount=2.0`, `camera=dock-x`, `axes` - where
+    `entry_in` gives only its head. The author's own token is what `set_entry` writes back."""
+    m = ENTRY_SUFFIX.search(str(plate).split(";", 1)[0])
+    return m.group(1) if m else None
+
+
+def entry_in(plate: str) -> str | None:
+    """The entry a resolved ledger plate declares (`axes`, `mount`, `spiral`, `snap`, `camera`)."""
+    m = ENTRY_SUFFIX.search(str(plate).split(";", 1)[0])
+    return m.group(1).split("=", 1)[0] if m else None
+
+
+def set_entry(plate: str, entry: str, mount_s: float) -> tuple[str, bool]:
+    """The page's entry, written onto a resolved plate id - and whether it MOVED.
+
+    The entry is the compiler's, never the skeleton's: the skeleton owns the choreography over the
+    page (its docks, its lights, its exit), the approved shape owns how the page arrives (E99 s67
+    Apply 3 and 6 - the mount when the number lands late, the axes otherwise, never `built`).
+    """
+    head, sep, tail = str(plate).partition(";")
+    token = f"mount={round(mount_s, 2)}" if entry == "mount" else entry
+    m = ENTRY_SUFFIX.search(head)
+    if m and m.group(1) == token:
+        return plate, False
+    head = (head[:m.start()] + ":" + token + head[m.end():] if m else
+            head[:-len(":cut")] + ":" + token + ":cut" if head.endswith(":cut") else head + ":" + token)
+    return head + sep + tail, True
+
+
+def _needs(skeleton: dict, hole: str) -> bool:
+    return hole in json.dumps(skeleton["rows"])
+
+
+def choose(beat, history: list, library: list[dict]) -> tuple[dict, str]:
+    """The skeleton this beat gets, and the rung of the fallback that chose it.
+
+    `beat` is a mapping carrying `shape` and `act` (a plan record, or one of `groups`' groups, which
+    also carry `entry` and `docks`). `history` is the skeleton ids already emitted, in order.
+
+    Candidates are the skeletons whose `shape` matches and whose `acts` include the beat's act - by
+    SHAPE ALONE when the sentence plays none of the twelve. THE VARIETY RULE: the previous beat's
+    skeleton id is refused (ids, not signature words - P66 T2). The fallback order, in full:
+
+      1. the shape's skeletons whose acts carry this beat's act, whose entry the CLOCK allows and
+         whose docks the plan can fill - minus the previous skeleton - first by id;
+      2. the same, without the ACT filter (same shape, any act);
+      3. the same, without the dock filter either;
+      4. the shape's first skeleton by id, even when it repeats - the approved shape outranks
+         variety, and `why` says which rung was used.
+    """
+    shape = beat.get("shape")
+    pool = [s for s in library if s["shape"] == shape]
+    if not pool:
+        raise Refused(f"beat {beat.get('beat', '?')}: no skeleton in the library carries the shape {shape!r}")
+    entry = beat.get("entry")
+    clocked = [s for s in pool if entry_of(s) == entry] if entry else list(pool)
+    clocked = clocked or list(pool)
+    have = len(beat.get("docks") or [])
+    fillable = [s for s in clocked
+                if (have >= 1 or not _needs(s, "{dock}")) and (have >= 2 or not _needs(s, "{dock_b}"))]
+    acts = beat.get("acts") if beat.get("acts") is not None else acts_of(beat)
+    by_act = [s for s in fillable if acts & set(s["acts"])] if acts else []
+    prev = history[-1] if history else None
+    for rung, cands in ((1, by_act), (2, fillable), (3, clocked)):
+        fresh = [s for s in cands if s["id"] != prev]
+        if fresh:
+            return fresh[0], f"rung {rung}"
+    return pool[0], "rung 4 (the only skeleton left for this shape - the shape outranks variety)"
+
+
+# --------------------------------------------------------------------------- resolving one skeleton
+
+def page_land_offset(entry: str | None, mount_s: float) -> float:
+    """Seconds from a page's ENTRY to its chart LANDING - `gate_motion_density._page_land_offset`'s
+    own arithmetic, by name: the flat `PAGE_BUILD_END_S` is the ROLL-OUT's landing only."""
+    if entry == "mount":
+        return round(mount_s + PAGE_BUILD_END_S - MD.LP_ROLL_S - MD.LP_SAVOR_S - MD.LP_FIELD_S, 2)
+    if entry == "spiral":
+        return MD.LP_SPIRAL_IN_S
+    if entry == "axes":
+        return MD.LP_BUILD_S
+    if entry in ("built", "snap", "camera"):
+        return 0.0
+    return PAGE_BUILD_END_S
+
+
+def _time(value, t0: float, t1: float) -> float:
+    """A time hole (`{t0}`, `{t1}-3.0`) or a literal second, on this row's own window."""
+    if isinstance(value, (int, float)):
+        return round(float(value), 2)
+    m = TIME_HOLE.match(str(value).strip())
+    if not m:
+        raise Refused(f"{value!r} is not a time: a second, or {{t0}} / {{t1}} with an offset")
+    return round((t0 if m.group(1) == "t0" else t1) + (float(m.group(2)) if m.group(2) else 0.0), 2)
+
+
+def _text(template: str, fills: dict, beat, skeleton) -> str:
+    """A template string with its holes filled - or a refusal naming the beat, the skeleton and the
+    hole. The module never invents a page, a plate, a dock or a datum."""
+    def sub(m):
+        key = m.group(1)
+        if fills.get(key) in (None, ""):
+            raise Refused(f"beat {beat.get('beat', '?')}: the skeleton {skeleton['id']!r} needs {{{key}}} and the "
+                          f"plan names none - the compiler never invents one (the plan is the author's: E99 s66)")
+        return str(fills[key])
+    return HOLE.sub(sub, str(template))
+
+
+def _dock_tuple(spec, fills, beat, skeleton, t0, t1, defaults) -> tuple | None:
+    """One dock of the row's 5th element: `(id, lane, in, out, options)`. E65: the card reads, then
+    parks in the page's OWN room and holds to the row's end. A dock the plan names no asset for is
+    DROPPED, never invented - the caller records it in `why`."""
+    spec = {"id": spec} if isinstance(spec, str) else dict(spec)
+    holes = [h for h in HOLE.findall(str(spec["id"])) if h.startswith("dock")]
+    if any(fills.get(h) in (None, "") for h in holes):
+        return None
+    t_in = _time(spec.get("at", "{t0}"), t0, t1)
+    options = dict(spec.get("options") or {})
+    for key in ("read_s", "park_s"):
+        if spec.get(key) is not None:
+            options[key] = spec[key]
+    t_out = t1 if defaults.get("card_in_page_room", True) else round(
+        t_in + float(spec.get("read_s") or 0) + float(spec.get("park_s") or 0) + CHART_HOLD_MAX_S, 2)
+    return (_text(spec["id"], fills, beat, skeleton), DOCK_LANE, t_in, round(min(t_out, t1), 2), options)
+
+
+def _species(spec, fills, beat, skeleton, t0, t1, land, defaults) -> tuple[dict | None, str | None]:
+    """One species of the row's 7th element - or (None, the reason it was dropped).
+
+    E99 s67 Apply 1-2: a light is emitted only where the sentence POINTS, and never before the
+    page's own chart lands. A `build_to` IS the build: it is placed to END on the landing.
+    """
+    out = {"kind": spec["kind"], "at": _time(spec.get("at", "{t0}"), t0, t1)}
+    target = dict(spec.get("target") or {})
+    holes = [h for v in target.values() for h in HOLE.findall(str(v))]
+    if holes:
+        if not points(beat):
+            return None, f"no light on beat {beat.get('beat', '?')}: the sentence points at nothing (E99 s67 Apply 1)"
+        # a SECOND mark (`{datum_b}`) is the skeleton's extra, not the beat's claim: when the plan
+        # names one datum the extra species is DROPPED, and only a missing FIRST mark is a refusal
+        extra = [h for h in holes if h.endswith("_b") and fills.get(h) in (None, "")]
+        if extra:
+            return None, (f"the {out['kind']} on beat {beat.get('beat', '?')} wanted a second mark "
+                          f"({', '.join('{%s}' % h for h in extra)}) and the plan names one: dropped, never invented")
+        target = {k: (int(_text(str(v), fills, beat, skeleton)) if HOLE.search(str(v)) else v)
+                  for k, v in target.items()}
+    dur = spec.get("dur")
+    if isinstance(dur, (int, float)):
+        out["dur"] = round(float(dur), 2)
+    elif dur is not None:
+        out["dur"] = dur
+    if target:
+        out["target"] = target
+    for k, v in (spec.get("options") or {}).items():
+        out[k] = _time(v, t0, t1) if isinstance(v, str) and TIME_HOLE.match(v) else v
+    if land is not None and out["kind"] == "build_to" and isinstance(out.get("dur"), float):
+        out["at"] = round(max(t0, t0 + land - out["dur"]), 2)
+    elif land is not None and out["kind"] in LIGHT_KINDS and defaults.get("light_after_build", True):
+        out["at"] = round(max(out["at"], t0 + land), 2)
+    if out["at"] >= t1 - SPECIES_TAIL_S:
+        return None, (f"the {out['kind']} on beat {beat.get('beat', '?')} has no room left on this row after the "
+                      f"page's chart lands: dropped rather than fired over the build (E99 s67 Apply 2)")
+    return out, None
+
+
+def _aspect_clean(row_docks: list, row_species: list, aspect: str, defaults: dict) -> tuple[list, list, list]:
+    """R26-171 / R26-172: at 9:16 no `badges` rail and no `chart_to park` leaves this module."""
+    notes: list[str] = []
+    if str(aspect) != "9:16":
+        return row_docks, row_species, notes
+    if defaults.get("no_rails_9_16", True):
+        for d in row_docks:
+            if "badges" in d[4]:
+                d[4].pop("badges")
+                notes.append("the badges rail is not emitted at 9:16 (R26-171)")
+    if defaults.get("no_park_9_16", True):
+        kept = [s for s in row_species if not (s.get("kind") == "chart_to" and s.get("to") == "park")]
+        if len(kept) != len(row_species):
+            notes.append("no `chart_to park` at 9:16 (R26-172)")
+        row_species = kept
+    return row_docks, row_species, notes
+
+
+# --------------------------------------------------------------------------- the windows
+
+def _windows(gs: list[dict], ws: list | None, exits: list[str], hold_s: float) -> list[tuple]:
+    """Each row's (start, end): the take's own cut point before the group's first sentence
+    (`words.cut_before`, M13), the rows contiguous, the first row on frame 0.
+
+    M44: a world-plate row shorter than `hold_s` takes the seconds it is missing from the PREVIOUS
+    row's tail when that row can spare them, and from the next row's head when it cannot - the beat
+    moves, never the words (the gate-fit ruling).
+    """
+    starts = [0.0]
+    for i, g in enumerate(gs[1:], start=1):
+        t = round(float(g["t0"]), 2)
+        if ws:
+            try:
+                t = W.cut_before(ws, " ".join(str(g["beats"][0]["sentence"]).split()[:4]), exit=exits[i - 1])
+            except SystemExit:
+                pass
+        starts.append(round(t, 2))
+    ends = starts[1:] + [round(float(gs[-1]["t1"]), 2)]
+    for i, g in enumerate(gs):
+        if g["world"] == "page" or ends[i] - starts[i] >= hold_s:
+            continue
+        need = round(hold_s - (ends[i] - starts[i]), 2)
+        room = round(starts[i] - starts[i - 1] - hold_s, 2) if i else -1.0
+        if room >= need:
+            starts[i] = round(starts[i] - need, 2)
+            ends[i - 1] = starts[i]
+        else:
+            ends[i] = round(ends[i] + need, 2)
+            if i + 1 < len(starts):
+                starts[i + 1] = ends[i]
+    return list(zip(starts, ends))
+
+
+def _exit(g: dict, nxt: dict | None, skeleton: dict, next_entry: str | None) -> tuple[str, str]:
+    """How this world LEAVES, and the rule that says so (E47; the plan's Acceptance 2)."""
+    if nxt is None:
+        return "cut", "the cut is the last word"
+    if next_entry == "mount":
+        return "cut", "a cut, never into a mount - the mount IS the transition"
+    if g["world"] == "page" and nxt["world"] == "page":
+        skeleton_exit = str(skeleton["rows"][0]["exit"])
+        return ((skeleton_exit, "page to page: the suck, with no cream between them")
+                if skeleton_exit.startswith("suck") else ("cut", "page to page: a straight cut"))
+    if g["world"] != nxt["world"] or plate_of(g["plate"]) != plate_of(nxt["plate"]):
+        return "dip", "the dip because the world changes (E47)"
+    return "cut", "a cut inside one world"
+
+
+# --------------------------------------------------------------------------- the compiler
+
+def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9",
+            library: list[dict] | None = None) -> tuple[list[tuple], list[dict]]:
+    """The AUTHORED beat plan as the approved skeleton: `(rows, why)`.
+
+    `rows` are the kit's own tuples - what `table.write_shot_table` takes and `table.load_rows`
+    reads back. `why` carries ONE record per row: `{beat, skeleton, act, rule, signature}` - the
+    skeleton chosen, the act (or the shape) that chose it, and the rule that applied.
+
+    `plan` is the records (or the path to `BEAT-PLAN.jsonl`), `words` the take's words (either the
+    aligner's `start_s` / `end_s` or `timeline.json`'s `start` / `end`), `defaults` the six
+    documented keys of `DEFAULTS`, `aspect` `"16:9"` or `"9:16"`.
+    """
+    plan = load_plan(plan) if isinstance(plan, (str, Path)) else list(plan)
+    check_plan(plan)
+    lib = library if library is not None else load_library()
+    d = {**DEFAULTS, **(defaults or {})}
+    ws = _norm_words(words)
+    gs = groups(plan)
+    picks = _pick(gs, lib, d, ws)
+    spans = _windows(gs, ws, [p["exit"] for p in picks], float(d.get("plate_hold_s", PLATE_MIN_S)))
+    rows, why = [], []
+    for i, (g, pick, (t0, t1)) in enumerate(zip(gs, picks, spans)):
+        rows.append(_row(g, pick, t0, t1, d, aspect, first=i == 0, ws=ws))
+        why.append({"beat": int(g["beats"][0]["beat"]), "skeleton": pick["skeleton"]["id"],
+                    "act": str(g["act"] or ""), "rule": "; ".join([pick["rule"], *pick["notes"]]),
+                    "signature": pick["skeleton"]["signature"]})
+        why.extend(silent_record(b) for b in g["beats"] if not moves_of(b))
+    if ws:
+        T.hold_until(rows, ws)
+    return rows, why
+
+
+SILENT_NOTE = "the plan names no move for this sentence - the author's to add or to leave"
+
+
+def silent_record(beat) -> dict:
+    """A beat the plan leaves SILENT, named in `why` so the agent sees where to modify (E99 s68).
+
+    It is not a refusal and not a hole: the author may have meant the sentence to play under a held
+    world. It is written down because a base nobody can see the gaps in is read as a cut.
+    """
+    return {"beat": int(beat["beat"]), "silent": True, "sentence": str(beat.get("sentence") or ""),
+            "note": SILENT_NOTE}
+
+
+def rows_why(why: list[dict]) -> list[dict]:
+    """The ROW records of `why` - one per emitted row, in row order."""
+    return [w for w in why if not w.get("silent")]
+
+
+def silent_why(why: list[dict]) -> list[dict]:
+    """The SILENT-beat records of `why`, in beat order - what the plan left the base nothing to do."""
+    return [w for w in why if w.get("silent")]
+
+
+def _norm_words(words) -> list[dict] | None:
+    """The take's words in `words.py`'s shape, from either the aligner's or `timeline.json`'s."""
+    if not words:
+        return None
+    ws = words.get("words") if isinstance(words, dict) else words
+    return [{"w": w["w"], "start_s": float(w.get("start_s", w.get("start"))),
+             "end_s": float(w.get("end_s", w.get("end")))} for w in ws]
+
+
+def _pick(gs: list[dict], lib: list[dict], d: dict, ws=None) -> list[dict]:
+    """The skeleton, the entry and the exit each group gets - decided before any window is timed,
+    because the exit decides where the boundary before the NEXT row lands (M13)."""
+    picks: list[dict] = []
+    history: list[str] = []
+    seen_pages: list[str] = []
+    for i, g in enumerate(gs):
+        nxt = gs[i + 1] if i + 1 < len(gs) else None
+        shape, rule = shape_of(g, i, nxt, tuple(seen_pages))
+        if g["world"] == "page":
+            seen_pages.append(page_of(g["plate"]))
+        g["shape"], g["acts"] = shape, acts_of({"act": g["act"]})
+        g["entry"], g["entry_token"], entry_rule = _entry(g, shape, d, ws)
+        skeleton, rung = choose(g, history, lib)
+        history.append(skeleton["id"])
+        picks.append({"skeleton": skeleton, "notes": [],
+                      "rule": "; ".join(x for x in (rule, entry_rule, rung) if x)})
+    for i, pick in enumerate(picks):
+        nxt = gs[i + 1] if i + 1 < len(gs) else None
+        next_entry = entry_of(picks[i + 1]["skeleton"]) if nxt is not None else None
+        pick["exit"], exit_rule = _exit(gs[i], nxt, pick["skeleton"], next_entry)
+        pick["rule"] += "; " + exit_rule
+    return picks
+
+
+def _entry(g: dict, shape: str, d: dict, ws=None) -> tuple:
+    """The entry the CLOCK demands of a page - `(its head, the whole token, the rule in words)`.
+
+    The mount when the beat's number lands `MOUNT_AT_OR_AFTER_S` or more after the page's entry, the
+    axes otherwise (never `built`); the clock outranks the variety rule - the approved shape is not
+    traded for variety.
+
+    ONE thing outranks the clock, and it is the plan (E99 s66): when the AUTHOR's own plate declares
+    an entry whose chart is already on the page as it arrives (`BUILT_ON_ARRIVAL`) and the plan's
+    first LIGHT move is spoken before the clock's entry would have finished drawing, the author's
+    entry stands. The alternative is a light over a build, and the compiler will not fire one (E99
+    s67 Apply 2) and will not move the author's beat either - so it stops manufacturing the conflict.
+    """
+    if g["world"] != "page":
+        return None, None, ""
+    entry, rule = _clock_entry(g, shape, d)
+    declared = entry_token_in(g["plate"])
+    light = first_light_move(g, ws) if ws else None
+    if light is not None and str(declared).split("=", 1)[0] in BUILT_ON_ARRIVAL:
+        land = page_land_offset(entry, _mount_s(g["plate"]))
+        if light < float(g["t0"]) + land - EPS:
+            return (str(declared).split("=", 1)[0], declared,
+                    f"the page arrives by the author's own `{declared}` and not by {entry}: the plan's first light "
+                    f"lands at +{light - float(g['t0']):.1f}s, before a {entry} build would have finished at "
+                    f"+{land:.1f}s (E99 s66 - the plan is the intelligence; the compiler neither fires a light over "
+                    "a build nor moves the author's beat)")
+    return entry, entry, rule
+
+
+def _clock_entry(g: dict, shape: str, d: dict) -> tuple[str, str]:
+    """The entry the clock alone would write, and why."""
+    if shape == SHAPE_RETURN:
+        return "spiral", "the spiral because the beat returns"
+    if g.get("open_mounts"):
+        return "mount", "the mount because the hook's world is not a page (the page mounts over it)"
+    late = next((round(float(b["t0"]) - g["t0"], 2) for b in g["beats"] if names_a_number(b)), None)
+    if late is not None and late >= MOUNT_AT_OR_AFTER_S:
+        return "mount", f"the mount because the number lands at +{late:.1f}s, never built (E99 s67 Apply 3)"
+    return str(d.get("page_entry", "axes")), (
+        f"the axes because the number lands at +{late:.1f}s" if late is not None
+        else "the axes because no number lands on this page (E99 s67 Apply 6)")
+
+
+def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first: bool,
+         ws: list[dict] | None = None) -> tuple:
+    """One skeleton's template row, resolved onto one group's window - then the group's beats' own
+    NAMED MOVES realised on it, each timed on the word it belongs to."""
+    skeleton, beat, notes = pick["skeleton"], g["beats"][0], pick["notes"]
+    tpl = copy.deepcopy(skeleton["rows"][0])
+    fills = {"page": page_of(g["plate"]) if g["world"] == "page" else "",
+             "plate": plate_of(g["plate"]), "mount_s": _mount_s(g["plate"]),
+             **{k: v for k, v in zip(("dock", "dock_b"), g["docks"])},
+             **{k: v for k, v in zip(("datum", "datum_b"), _data(g))}}
+    plate = _text(tpl["plate"], fills, beat, skeleton)
+    if plate.startswith("ledger:") and g.get("entry"):
+        plate, moved = set_entry(plate, g.get("entry_token") or g["entry"], float(fills["mount_s"]))
+        if moved:
+            notes.append(f"the skeleton's own entry gives way to the clock's: {g['entry']} "
+                         "(the approved shape is enforced on the page, not left to the skeleton)")
+    land = page_land_offset(entry_in(plate), float(fills["mount_s"])) if plate.startswith("ledger:") else None
+    docks = []
+    for spec in tpl.get("docks") or []:
+        dock = _dock_tuple(spec, fills, beat, skeleton, t0, t1, d)
+        (docks.append(list(dock)) if dock else
+         notes.append("no card on this row: the plan names no dock for the beat (evidence is never invented)"))
+    species = []
+    for spec in tpl.get("species") or []:
+        # a light lands on the SENTENCE it points with, so it is judged against the beat that is
+        # speaking at that instant - not against the row's first beat (E99 s67 Apply 1)
+        on = _beat_at(g, _time(spec.get("at", "{t0}"), t0, t1))
+        out, why = _species(spec, {**fills, **_datum_fills(on, g)}, on, skeleton, t0, t1, land, d)
+        (species.append(out) if out else notes.append(why))
+    if first and land is not None and species:
+        species[0]["at"] = round(min(species[0]["at"], t0 + land + ANNOTATE_TOL_S), 2)
+        notes.append(f"the first chart's light lands with its build, +{land:.1f}s (M11)")
+    ken = tuple(tpl["ken"]) if isinstance(tpl["ken"], list) else tpl["ken"]
+    # THE BEAT'S NAMED MOVES, after the skeleton's own: the plan is the intelligence, and it already
+    # says what this sentence does. The skeleton gives the row its SHAPE; the moves give it its beats.
+    made_docks: list = []
+    for b in g["beats"]:
+        for mv in moves_of(b):
+            made, why = _move(mv, b, ws, t0, t1, ken, land, d)
+            if made is None:
+                notes.append(why)
+            elif mv.get("kind") == MOVE_DOCK:
+                made_docks.append(list(made))
+            else:
+                species.append(made)
+    # the SAME card twice on one row is not two cards: where the plan lands a card the skeleton also
+    # filled from the group's capabilities, the plan's own wins - it carries the word and the options
+    named = {str(x[0]) for x in made_docks}
+    kept = [x for x in docks if str(x[0]) not in named]
+    if len(kept) != len(docks):
+        notes.append(f"the plan's own card on {', '.join(sorted(named & {str(x[0]) for x in docks}))} replaces the "
+                     "skeleton's fill of the same asset (the beat named the word it lands on)")
+    docks = kept + made_docks
+    docks, species, aspect_notes = _aspect_clean(docks, species, aspect, d)
+    notes.extend(aspect_notes)
+    if g["world"] != "page" and round(t1 - t0, 2) + 1e-9 < float(d.get("plate_hold_s", PLATE_MIN_S)):
+        notes.append("the plate could not reach its six seconds (M44)")
+    docks.sort(key=lambda x: (float(x[2]), str(x[0])))
+    species.sort(key=lambda x: (float(x["at"]), str(x["kind"])))
+    return (t0, t1, plate, ken, [tuple(x) for x in docks], pick["exit"], species)
+
+
+def _move(mv: dict, beat, ws, t0: float, t1: float, ken, land, d: dict) -> tuple:
+    """One named move as what it is on the row - `(a species dict or a dock list, None)`, or
+    `(None, the reason it was dropped)`.
+
+    REFUSED, never silently moved (the move is the AUTHOR's): a phrase the take does not carry
+    inside the beat's own window; a light asked for before the page's chart lands (E99 s67
+    Apply 1-2); a camera move over a Ken Burns (s9.28 C3). DROPPED with its reason in `why`: a move
+    whose word falls outside the row the beat ended up on - the window is the compiler's (M13, M44),
+    so the author is told rather than refused.
+    """
+    kind, n = mv["kind"], beat.get("beat", "?")
+    if ws is None:
+        raise Refused(f"beat {n}: the {kind} move lands on {mv['at_word']!r} and this compile has no take - "
+                      "a move is timed on the WORD it belongs to (the take is the clock), never from a stopwatch")
+    t = word_at(ws, str(mv["at_word"]), float(beat["t0"]), float(beat["t1"]))
+    if t is None:
+        raise Refused(f"beat {n}: the take carries no {mv['at_word']!r} inside that beat's own window "
+                      f"({float(beat['t0']):.2f}-{float(beat['t1']):.2f}s) - a move names a phrase of its own "
+                      "sentence, and the compiler will not hunt for it elsewhere in the take")
+    if kind in CAMERA_MOVES and ken and ken[0]:
+        raise Refused(f"beat {n}: a {kind} over Ken Burns scale {ken[0]} - a camera move and a Ken Burns never "
+                      "share a window (s9.28 C3); the move or the skeleton's ken has to give")
+    if land is not None and kind in LIGHT_KINDS and d.get("light_after_build", True) and t < t0 + land - EPS:
+        raise Refused(f"beat {n}: the {kind} on {mv['at_word']!r} fires at {t:.2f}s, before this page's own chart "
+                      f"lands at {t0 + land:.2f}s - a light is punctuation, not a cover for the build (E99 s67 "
+                      "Apply 1-2). The compiler refuses it rather than move the author's beat.")
+    if not (t0 - EPS <= t < t1 - SPECIES_TAIL_S):
+        return None, (f"the {kind} on beat {n} ({mv['at_word']!r}, {t:.2f}s) falls outside the row its beat "
+                      f"landed on ({t0:.2f}-{t1:.2f}s): dropped, never re-timed")
+    if kind == MOVE_DOCK:
+        options = dict(mv.get("options") or {})
+        lane = options.pop(MOVE_SLOT, DOCK_LANE)
+        out = t1 if d.get("card_in_page_room", True) else round(
+            t + float(options.get("read_s") or 0) + float(options.get("park_s") or 0) + CHART_HOLD_MAX_S, 2)
+        return [str(mv["asset"]), lane, t, round(min(out, t1), 2), options], None
+    sp: dict = {"kind": kind, "at": t}
+    if mv.get("dur") is not None:
+        sp["dur"] = round(float(mv["dur"]), 2) if isinstance(mv["dur"], (int, float)) else mv["dur"]
+    if mv.get("target"):
+        sp["target"] = copy.deepcopy(mv["target"])
+    if mv.get("label") is not None:
+        sp[LABEL_FIELD.get(kind, DEFAULT_LABEL_FIELD)] = mv["label"]
+    for k, v in (mv.get("options") or {}).items():
+        sp[k] = copy.deepcopy(v)
+    return sp, None
+
+
+def _beat_at(g: dict, t: float):
+    """The beat that is SPEAKING at `t` - the row's own first beat when the instant sits outside
+    every beat's window (a species placed before the first word of the row)."""
+    return next((b for b in g["beats"] if float(b["t0"]) <= t < float(b["t1"])),
+                next((b for b in g["beats"] if float(b["t0"]) >= t), g["beats"][0]))
+
+
+def _datum_fills(beat, g: dict) -> dict:
+    """`{datum}` / `{datum_b}` for one beat: the indices that beat's own capabilities name, and the
+    group's marks behind them - the author's, never the compiler's."""
+    data = data_of(beat) + [i for i in _data(g) if i not in data_of(beat)]
+    return {k: v for k, v in zip(("datum", "datum_b"), data)}
+
+
+def _mount_s(plate: str) -> float:
+    """`{mount_s}`: the soak the AUTHOR's own plate names, else the player's own default
+    (`gate_motion_density` LP_FIELD_S, the value the player uses when a spec carries none)."""
+    m = MOUNT_S.search(str(plate))
+    return float(m.group(1)) if m else MOUNT_S_DEFAULT
+
+
+def _data(g: dict) -> list[int]:
+    out: list[int] = []
+    for b in g["beats"]:
+        out += [i for i in data_of(b) if i not in out]
+    return out
+
+
+# --------------------------------------------------------------------------- what is MEASURED, never filled
+
+def event_gaps(rows: list[tuple]) -> list[tuple]:
+    """Every gap over M16's `PULSE_MAX_S` between two events on the emitted rows, as
+    `(after_s, gap_s)` - MEASURED for the author to read, never FILLED. A compiler that adds an
+    event to close a gap is an allocator (`recipes.py:1-20`; PIPELINE.md:33), and this one is not.
+    """
+    ts: list[float] = []
+    for r in rows:
+        ts += [float(r[0]), float(r[1])]        # a row's own boundaries are events: the world arrives, the world leaves
+        ts += [float(dk[2]) for dk in (r[4] or [])]
+        ts += [float(s["at"]) for s in ((r[6] if len(r) > 6 else None) or [])]
+    ts = sorted({round(t, 2) for t in ts})
+    return [(a, round(b - a, 2)) for a, b in zip(ts, ts[1:]) if b - a > PULSE_MAX_S]

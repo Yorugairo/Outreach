@@ -743,7 +743,7 @@ def main(argv: list[str] | None = None) -> int:
     r_warns += w
     gate = run_gate(build)
     floor = run_floor(build, project)              # ONE subprocess of the floor gate; its rows are parsed, not redone
-    lint_lines, lint_counts = L.report(project, build=build.name, long=(fmt == "long"))
+    lint_lines, lint_counts = L.report(project, build=str(build), long=(fmt == "long"))   # the full path: a nested private build (the recipe lab's build-lab-*/<id>/) resolves as it stands (lint_species_choice.build_dir)
     viewer = verdict_line(project / f"{args.script}-VIEWER.md")
     sgates = verdict_line(project / f"{args.script}-GATES.md")
     rows = section1(gate, lint_lines, lint_counts, viewer, sgates, fmt, floor)

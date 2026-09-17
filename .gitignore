@@ -210,3 +210,6 @@ docs/CRAFT-MAP.md
 docs/DOC-OVERLAP.jsonl
 docs/DOC-OVERLAP.md
 docs/DOCS-STANDARD.md
+
+# P65 the recipe lab: private test-bed builds (the tracked record is effects/lab/batches/<batch>.jsonl)
+content/video_engine/projects/**/build-lab-*/

@@ -19,9 +19,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from . import audio, docks, effects, recipes, table, words
+from . import audio, docks, effects, recipes, shapes, table, words
 
-__all__ = ["Project", "audio", "docks", "effects", "recipes", "table", "words"]
+__all__ = ["Project", "audio", "docks", "effects", "recipes", "shapes", "table", "words"]
 
 
 @dataclass(frozen=True)

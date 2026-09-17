@@ -569,8 +569,9 @@ def test_the_kit_holds_no_episode_fact():
 
 def test_the_kit_is_the_five_modules_the_plan_names():
     # P55 T8 (2026-09-13) added `effects.py` - the effects-catalogue resolver - and P56 T5 (2026-09-13) `recipes.py` - the
-    # recipe presets (a beat as a proven combination, E96) - to the kit by design; the pin moves with them
-    assert sorted(p.name for p in KIT.glob("*.py")) == ["__init__.py", "audio.py", "docks.py", "effects.py", "recipes.py", "table.py", "words.py"]
+    # recipe presets (a beat as a proven combination, E96) - and P66 T3 (2026-09-17) `shapes.py` - the shape compiler
+    # (the approved skeleton as the BASE the agent modifies, E99 s68) - to the kit by design; the pin moves with them
+    assert sorted(p.name for p in KIT.glob("*.py")) == ["__init__.py", "audio.py", "docks.py", "effects.py", "recipes.py", "shapes.py", "table.py", "words.py"]
 
 
 def test_tr13_the_onset_rule_is_the_default_and_places_a_cut_three_frames_before_the_word():
