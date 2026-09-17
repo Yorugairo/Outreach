@@ -2608,9 +2608,16 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
                                      + ", ".join(str(i) for i in bare) + f" of {n_lines} carries no name or label to hand over - "
                                      "name every line at its end (E53 s8), or use keyed: true (the datum hands over instead)")
         elif world.get("kind") == SPECIES_LEDGER:   # E64: no key asked for - derive the one the data already say
+            where = f"{sid or 'row'} chart_to recast at {sp.get('at')}"
+            if "keyed" in sp:
+                # P66 T3 (the parent, 2026-09-17), with E99 s67 Apply 2 (a chart never lands fully built): an AUTHORED
+                # `keyed: false` is the author's EXPLICIT hand-over, in the grammar's own word above ("false / absent is
+                # the hand-over"), and it is RESPECTED - the arriving state draws on its own build envelope. E64 derives
+                # the key NOBODY asked for, so the derivation runs only where the key is ABSENT from the species.
+                print(f"  {where}: no key - the plain recast (authored: keyed false)")
+                continue
             derived, key_map, _why = derive_recast_key(A, Bs)
             sp["keyed"] = derived
-            where = f"{sid or 'row'} chart_to recast at {sp.get('at')}"
             if derived:
                 sp["keyed_derived"] = True
                 if key_map:

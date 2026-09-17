@@ -262,3 +262,62 @@ def test_a_recast_on_a_world_with_no_page_is_left_alone():
     sp2 = [{"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "recast", "state": 9}]
     B.derive_rescale_states({"kind": "ledger", "page": {"builder": "dense-line"}}, sp2, "ledger:x:line", TOKYO)
     assert "keyed" not in sp2[0], "a state the page does not have is validate_species' refusal, not the key's"
+
+
+# ---- P66 T3: an AUTHORED `keyed: false` is the author's hand-over, and the derivation stands aside ------
+
+
+def _ledger_world(values=(10.0, -5.0), labels=("Feb", "Mar")):
+    """A ledger world whose two states DO share their data - the pair E64's derivation keys on data."""
+    A, Bs = _pair(list(values), labels=labels)
+    return {"kind": B.SPECIES_LEDGER, "page": A, "page_states": [Bs]}
+
+
+def _recast(**extra) -> list[dict]:
+    sp = {"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "recast", "state": 1}
+    sp.update(extra)
+    return [sp]
+
+
+def test_an_authored_keyed_false_is_respected_and_the_data_key_is_not_derived(capsys):
+    """The parent on P66 T3 (2026-09-17): `keyed: false` is the author's EXPLICIT hand-over - the arriving state
+    draws on its own build envelope - so E64 derives nothing over it, and the compile says whose word it was."""
+    sp = _recast(keyed=False)
+    B.derive_rescale_states(_ledger_world(), sp, "ledger:x:line", TOKYO, sid="s02")
+    assert sp[0]["keyed"] is False, "the author's word stands"
+    assert "key_map" not in sp[0] and "keyed_derived" not in sp[0], "nothing travels: the bars build themselves"
+    out = capsys.readouterr().out
+    assert "s02 chart_to recast at 1.0: no key - the plain recast (authored: keyed false)" in out, out
+
+
+def test_an_absent_key_on_the_same_states_still_derives_the_data_key(capsys):
+    """The other half of the same pair of states, pinned: with `keyed` ABSENT, E64 is unchanged - the key the data
+    already say is derived, flagged and mapped."""
+    sp = _recast()
+    B.derive_rescale_states(_ledger_world(), sp, "ledger:x:line", TOKYO, sid="s02")
+    assert sp[0]["keyed"] == "data" and sp[0]["keyed_derived"] is True
+    assert sp[0]["key_map"] == [{"datum": 1, "bar": 0, "from": 0}, {"datum": 2, "bar": 1, "from": 1}]
+    out = capsys.readouterr().out
+    assert 's02 chart_to recast at 1.0: keyed "data" (derived - E64)' in out, out
+
+
+@pytest.mark.parametrize("key", [True, "tags"])
+def test_the_two_mark_keys_are_untouched_by_the_hand_over_rule(key):
+    """`true` and `"tags"` take today's paths: the pair is checked, the key is kept as the author wrote it, and no
+    map is written (only the DATA key writes one)."""
+    world = _ledger_world(values=(10.0,), labels=("Feb",))
+    sp = _recast(keyed=key)
+    B.derive_rescale_states(world, sp, "ledger:x:line", TOKYO, sid="s02")
+    assert sp[0]["keyed"] == key and "keyed_derived" not in sp[0] and "key_map" not in sp[0]
+
+
+@needs_objects
+def test_an_authored_keyed_false_survives_the_tokyo_row_the_operator_approved(rows, capsys):
+    """On the real 0:50 row - the pair whose data the compiler CAN key - an authored false is still the plain
+    recast, which is what the approved cut renders: the bars arrive building, not travelled."""
+    sid, row = recast_row(rows)
+    _world, species = compiled(row, sid, patch={"at": DERIVED_AT, "set": {"keyed": False}})
+    first = next(e for e in recasts(species) if e["at"] == DERIVED_AT)
+    assert first["keyed"] is False and "key_map" not in first and "keyed_derived" not in first
+    out = capsys.readouterr().out
+    assert f"{sid} chart_to recast at {DERIVED_AT}: no key - the plain recast (authored: keyed false)" in out, out
