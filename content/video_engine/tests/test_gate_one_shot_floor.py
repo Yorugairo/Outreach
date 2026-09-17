@@ -7,6 +7,11 @@ forms and `0` chart-to-chart transforms as INFO rows that say `predates E96`, `d
 Tokyo `2 / 0 / 0.28` (FAIL, under both 1/3 and the reference's own) `/ 1.00`. Those numbers are T2's
 (`docs/research/runs/p56-recipe-seeds/measures.md`), re-derived here by the gate's own functions.
 
+P66 T5 adds M45 (parity by mechanism) and M46 (signature variety). Their calibration is the REFERENCE first
+(`thresholds-from-the-reference`): the approved Japan and Tokyo cuts read `present` or `not owed` on EVERY M45 line
+and WARN-free on M46 before the rows bind anything, and the reworked one-shot #3 is pinned as measured, never
+adjusted.
+
 M38's exact coverage on the real builds is NOT pinned: three of the 15 proven recipes (badge-ladder,
 plate-dock-wipe, held-dock-across-the-cut) carry proofs whose members are still being re-membered (T8 adds the
 `dock_option:badge` and `plate_option:*` cards), so the number moves under this file. What is pinned is the row's
@@ -170,7 +175,7 @@ def test_m38_coverage_is_the_share_of_beats_a_fire_overlaps(tmp_path: Path) -> N
     m = measured(tmp_path / "b", scenes, [(0, 10), (10, 20), (20, 30)], recipes=[PUNCH])
     assert len(m.fires["recipe:test-punch"]) == 1 and m.recipe_beats == {0} and m.coverage == 0.33
     gate = row(FLOOR.rows(m, None), "M38")
-    assert gate.level == "FAIL"
+    assert gate.level == "WARN"        # under the floor; the R26-168 interim reading (P65 T7) holds it off FAIL
     assert f"the floor is {FLOOR.MIN_RECIPE_COVERAGE:.2f}" in gate.message
     assert "recipe:test-punch x1 (a decoration)" in gate.message
     # both readings in the one row (the P56 review): the floor is the spanning number, the other is printed beside it
@@ -193,8 +198,63 @@ def test_m38_prints_the_references_own_coverage_beside_the_threshold(tmp_path: P
     ref = measured(tmp_path / "ref", [plate("s1", [0, 30], species=[{"kind": "punch", "at": 1.0}])],
                    [(0, 30)], recipes=[PUNCH])
     gate = row(FLOOR.rows(thin, ref), "M38")
-    assert gate.level == "FAIL" and "no proven recipe fires" in gate.message
+    assert gate.level == "WARN" and "no proven recipe fires" in gate.message   # R26-168 interim (P65 T7)
     assert "measures 1.00" in gate.message
+
+
+# ---------------------------------------------------------------- M38: the R26-168 interim reading (P65 T7)
+
+INTERIM_SENTENCE = ("interim (R26-168): the proven set is being re-proved on today's clocks by the recipe lab; "
+                    "this row does not stop a cut until P65 HG2, and M45 (parity by mechanism) is the floor "
+                    "meanwhile")
+
+
+def thirty_three_beats(tmp: Path) -> FLOOR.Measures:
+    """One-shot #3's number: a single fire over 33 beats is a coverage of 0.03."""
+    scenes = [plate("s1", [0, 330], species=[{"kind": "punch", "at": 1.0}])]
+    beats = [(i * 10, (i + 1) * 10) for i in range(33)]
+    return measured(tmp / "b", scenes, beats, recipes=[PUNCH])
+
+
+def test_m38_reads_warn_not_fail_at_one_shot_threes_own_coverage(tmp_path: Path) -> None:
+    m = thirty_three_beats(tmp_path)
+    assert m.coverage == 0.03 and FLOOR.M38_INTERIM_WARN is True
+    gate = row(FLOOR.rows(m, None), "M38")
+    assert gate.level == "WARN"
+    # both readings survive the interim, unchanged (the P56 review)
+    assert "coverage 0.03 spanning / 0.03 by the beat a fire starts in" in gate.message
+    assert f"the floor is {FLOOR.MIN_RECIPE_COVERAGE:.2f}" in gate.message
+
+
+def test_m38_interim_sentence_is_worded_as_the_ruling_states_it(tmp_path: Path) -> None:
+    gate = row(FLOOR.rows(thirty_three_beats(tmp_path), None), "M38")
+    assert INTERIM_SENTENCE in gate.message
+    assert "R26-168" in FLOOR.SRC_M38 and "M45" in FLOOR.SRC_M38
+
+
+@pytest.mark.parametrize("coverage", [0.0, 0.03, 0.25, 0.5, 0.59])
+def test_m38_can_never_fail_while_the_interim_flag_is_set(tmp_path: Path, monkeypatch, coverage: float) -> None:
+    m = thirty_three_beats(tmp_path)
+    monkeypatch.setattr(FLOOR.Measures, "coverage", property(lambda self: coverage))
+    gate = row(FLOOR.rows(m, None), "M38")
+    assert gate.level == "WARN" and gate.level != "FAIL"
+    assert INTERIM_SENTENCE in gate.message
+
+
+def test_m38_returns_to_the_floor_when_the_one_constant_is_flipped(tmp_path: Path, monkeypatch) -> None:
+    m = thirty_three_beats(tmp_path)
+    monkeypatch.setattr(FLOOR, "M38_INTERIM_WARN", False)
+    gate = row(FLOOR.rows(m, None), "M38")
+    assert gate.level == "FAIL"
+    assert INTERIM_SENTENCE not in gate.message
+    assert "coverage 0.03 spanning / 0.03 by the beat a fire starts in" in gate.message
+
+
+def test_m38_still_passes_at_the_floor_with_the_interim_flag_set(tmp_path: Path, monkeypatch) -> None:
+    m = thirty_three_beats(tmp_path)
+    monkeypatch.setattr(FLOOR.Measures, "coverage", property(lambda self: 0.60))
+    gate = row(FLOOR.rows(m, None), "M38")
+    assert gate.level == "PASS" and INTERIM_SENTENCE not in gate.message
 
 
 # ---------------------------------------------------------------- M39: narrative : chart
@@ -321,7 +381,8 @@ def test_a_re_authored_timeline_in_the_same_dir_stops_predating(tmp_path: Path) 
 def test_only_m35_and_m36_go_info_on_a_predating_build(tmp_path: Path) -> None:
     m = measured(tmp_path / "b", [plate("s1", [0, 30])], [(0, 30)])
     info = {g.id for g in FLOOR.rows(m, None, predates=True) if g.level == "INFO"}
-    assert info == {"M35", "M36", "M42"}                      # M42 is INFO by its own rule, always
+    # M42 is INFO by its own rule, always; M45 because this fixture has no beat plan to owe a mechanism (P66 T5)
+    assert info == {"M35", "M36", "M42", "M45"}
 
 
 # ---------------------------------------------------------------- the four cuts on disk
@@ -343,7 +404,8 @@ def test_japan_the_reference_reproduces_t2s_measures() -> None:
     assert r["M37"].level == "PASS" and "docks on 0.36 of 25 beats" in r["M37"].message
     assert r["M39"].level == "PASS" and "narrative : chart 1.00" in r["M39"].message
     assert r["M42"].level == "INFO" and "28.1 events/min" in r["M42"].message
-    assert r["M41"].level == "WARN" and "no beat plan on disk" in r["M41"].message
+    # P66 T7 wrote the approved cuts' beat plans back from the cuts, so M41 reads PASS on the reference now
+    assert r["M41"].level == "PASS" and "the beat plan covers all 25 beats" in r["M41"].message
 
 
 def test_japans_m38_row_carries_the_threshold_and_its_own_measured_coverage() -> None:
@@ -374,7 +436,8 @@ def test_the_thin_one_shot_fails_the_floors_and_exits_one() -> None:
     assert "1 chart forms" in r["M35"].message and "0 chart-to-chart" in r["M36"].message
     assert r["M37"].level == "FAIL" and "docks on 0.00 of 19 beats" in r["M37"].message
     assert r["M39"].level == "FAIL" and "narrative : chart 0.20" in r["M39"].message
-    assert r["M38"].level == "FAIL" and "no proven recipe fires" in r["M38"].message
+    # R26-168 interim (P65 T7): the recipe row WARNs under the floor; M37 and M39 still carry the exit 1
+    assert r["M38"].level == "WARN" and "no proven recipe fires" in r["M38"].message
     assert "17.9 events/min" in r["M42"].message
     done = subprocess.run([sys.executable, str(ROOT / "content/video_engine/scripts/gate_one_shot_floor.py"),
                            str(THIN)], capture_output=True, text=True, encoding="utf-8", errors="replace")
@@ -391,8 +454,231 @@ def test_every_printed_row_parses_under_self_watchs_own_pattern() -> None:
     parsed = {mt.group(2) for mt in (ROW_RE.match(line) for line in text.splitlines()) if mt}
     assert parsed == set(FLOOR.ROW_ORDER)
     result = [l for l in text.splitlines() if l.startswith("RESULT:")]
-    assert len(result) == 1 and re.match(r"^RESULT: \d+ FAIL / 1 WARN / \d+ PASS / 1 JUDGE / 3 INFO$", result[0])
+    assert len(result) == 1 and re.match(r"^RESULT: \d+ FAIL / \d+ WARN / \d+ PASS / 1 JUDGE / 3 INFO$",
+                                         result[0])
     assert sum(int(n) for n in re.findall(r"(\d+) (?:FAIL|WARN|PASS|JUDGE|INFO)", result[0])) == len(FLOOR.ROW_ORDER)
+
+
+# ---------------------------------------------------------------- M45 / M46: the approved shape (P66 T5)
+
+TOKYO_APPROVED = PROJECTS / "tokyo-tea-break/build-short"          # the approved 09-09 cut (the one T2 measured)
+ONESHOT3 = PROJECTS / "memory-trades-the-calendar/build-oneshot-3"  # the REWORK E99 s67 sent back
+VERDICTS = ("not owed", "present", "absent", "replaced")
+
+
+def m45_lines(gate) -> dict:
+    """{mechanism number -> (verdict, the rest of its line)} from M45's printed body."""
+    out = {}
+    for line in gate.message.splitlines()[1:]:
+        body = line.strip().lstrip("|").strip()
+        n, rest = int(body.split()[0]), body.split(None, 1)[1]
+        out[n] = (next(v for v in VERDICTS if v in rest), rest)
+    return out
+
+
+def plan_record(beat: int, t0: float, t1: float, plate: str, caps: tuple = ()) -> dict:
+    """One M41-shaped plan record - `plate` is the row token M45 reads the beat's SHAPE out of."""
+    return {"beat": beat, "t0": t0, "t1": t1, "sentence": f"beat {beat}", "row": beat,
+            "act": "none of the 11 - a fixture", "comparator": {"compared_to": "this against that"},
+            "capabilities": list(caps), "recipe": None, "why_none": "a fixture, nothing fires", "plate": plate}
+
+
+def test_the_mechanism_list_is_the_critic_report_list_of_2026_09_16() -> None:
+    """The critic and the gate read the SAME list, so a cut cannot pass one and fail the other (P66 T5)."""
+    assert [m.n for m in FLOOR.MECHANISMS_2026_09_16] == list(range(1, 12))
+    critic = (ROOT / "docs/content-video-engine/CRITIC-REPORT.md").read_text(encoding="utf-8")
+    assert "The mechanism list until M45 lands" in critic and "list of 2026-09-16" in critic
+
+
+# --- the reference first (`thresholds-from-the-reference`): the approved cuts before the row is turned on ----
+
+def test_m45_reads_present_or_not_owed_on_every_line_of_the_approved_japan_cut() -> None:
+    """The calibration: the approved reference owes nine mechanisms and carries every one it owes."""
+    r = floor_rows(JAPAN)
+    lines = m45_lines(r["M45"])
+
+    assert r["M45"].level == "PASS"
+    assert set(lines) == set(range(1, 12))
+    assert {n for n, (v, _) in lines.items() if v not in ("present", "not owed")} == set()
+    assert "7 present, 4 not owed, 0 replaced, 0 absent" in r["M45"].message
+    assert lines[1] == ("present", lines[1][1]) and "at 1.82 s (beat 1)" in lines[1][1]   # the card becomes the chart
+    assert "at 17.42 s" in lines[3][1]                       # the parts page MOUNTS over the crossings map
+    assert "at 1.82 s" in lines[5][1]                        # the dip carries the podium into the page
+    assert lines[4][0] == "not owed" and "no beat's row token enters on its axes" in lines[4][1]
+    assert lines[7][0] == "not owed" and "returns by the spiral" in lines[7][1]
+
+
+def test_m45_reads_present_or_not_owed_on_every_line_of_the_approved_tokyo_cut() -> None:
+    r = floor_rows(TOKYO_APPROVED)
+    lines = m45_lines(r["M45"])
+
+    assert r["M45"].level == "PASS"
+    assert {n for n, (v, _) in lines.items() if v not in ("present", "not owed")} == set()
+    assert "9 present, 2 not owed, 0 replaced, 0 absent" in r["M45"].message
+    assert "the plan holds 21 page beats (camera x2, mount x14, spiral x5), 2 plate beats, 2 clip beats" \
+        in r["M45"].message
+    assert "at 44.88 s" in lines[7][1]                        # the holdings page RETURNS by the spiral
+    assert "at 38.96 s" in lines[9][1]                        # the viewer's desk carries steam, ticker and trace
+    assert [lines[n][0] for n in (4, 11)] == ["not owed", "not owed"]
+
+
+def test_m46_is_warn_free_on_both_approved_cuts_and_exempts_japans_card_pair() -> None:
+    japan, tokyo = floor_rows(JAPAN)["M46"], floor_rows(TOKYO_APPROVED)["M46"]
+
+    assert japan.level == "PASS" and tokyo.level == "PASS"
+    assert "signature mix over 12 scenes: card 0.33, cut 0.33, mount 0.25, dip 0.08" in japan.message
+    assert "signature mix over 7 scenes: mount 0.29, cut 0.29" in tokyo.message
+    assert "scenes: card, card, cut, mount, card, card, cut, mount, cut, dip, mount, cut" in japan.message
+    assert "CONSECUTIVE" not in japan.message                 # the throw -> snap pair is the approved mix's own
+    assert f"the ceiling is {FLOOR.M46_MAX_SHARE:.2f} a signature" in japan.message
+
+
+def test_the_ceiling_is_the_approved_mixs_own_measured_maximum_share() -> None:
+    """M46's number is not typed: it is `approved-mix.json`'s measured maximum, rounded up (HG1 confirms it)."""
+    measured_max = FLOOR.approved_mix()["max_share"]["value"]
+
+    assert measured_max == 0.3333 and FLOOR.M46_MAX_SHARE == 0.34
+    assert measured_max <= FLOOR.M46_MAX_SHARE < measured_max + 0.01
+    assert FLOOR.exempt_repeats(FLOOR.approved_mix()) == {"card"}
+
+
+# --- the rework, pinned AS MEASURED (E99 s67's regression case, P66 T5) -------------------------------------
+
+def test_m45_and_m46_on_the_reworked_one_shot_three_as_measured() -> None:
+    """One-shot #3 after the rework: every mechanism its plan owes is on screen, and M46 holds the variety."""
+    r = floor_rows(ONESHOT3)
+    lines = m45_lines(r["M45"])
+
+    assert r["M45"].level == "PASS"
+    assert "10 present, 1 not owed, 0 replaced, 0 absent" in r["M45"].message
+    assert "the plan holds 23 page beats (axes x16, mount x6, spiral x1), 9 plate beats, 0 clip beats" \
+        in r["M45"].message
+    assert lines[11][0] == "not owed"                         # nothing in the plan names a NEW mechanism to blend
+    assert "owed by 24 beat(s)" in lines[10][1]               # the lights: 24 of its 32 beats carry one
+    assert r["M46"].level == "WARN"                           # the variety, not the mechanisms, is what it lacks
+    assert "axes 0.33, dip 0.33" in r["M46"].message
+    assert "CONSECUTIVE: scenes 2-3 dip, scenes 5-6 axes - the approved cuts repeat only card" in r["M46"].message
+
+
+# --- the arithmetic, on synthetic cuts ----------------------------------------------------------------------
+
+def test_m45_fails_naming_the_mechanism_and_the_beat_when_nothing_stands_in_its_place(tmp_path: Path) -> None:
+    # Arrange: the plan says beat 2 RETURNS by the spiral; the cut lands the same page built instead
+    scenes = [page("s1", [0, 10], enter="axes"), page("s2", [10, 20], enter="built")]
+    m = measured(tmp_path / "b", scenes, [(0, 10), (10, 20)], plan=[
+        plan_record(1, 0.0, 10.0, "ledger:ev-a:line:0:right:axes:cut"),
+        plan_record(2, 10.0, 20.0, "ledger:ev-a:line:0:right:spiral:cut")])
+
+    # Act
+    gate = row(FLOOR.rows(m, None, predates=False), "M45")
+
+    # Assert
+    assert gate.level == "FAIL"
+    assert "ABSENT: 5 the dip; 7 the spiral return" in gate.message    # the world changes on a cut, too
+    assert m45_lines(gate)[7][0] == "absent"
+    assert "owed by beat(s) 2, nothing stands in its place" in m45_lines(gate)[7][1]
+
+
+def test_m45_warns_naming_both_when_the_cut_carries_another_mechanism_in_its_place(tmp_path: Path) -> None:
+    # Arrange: the plan says beat 2 returns by the spiral; the cut goes page to page by a cut instead
+    scenes = [page("s1", [0, 10], enter="axes"), page("s2", [10, 20], enter="mount")]
+    m = measured(tmp_path / "b", scenes, [(0, 10), (10, 20)], plan=[
+        plan_record(1, 0.0, 10.0, "ledger:ev-a:line:0:right:axes:cut"),
+        plan_record(2, 10.0, 20.0, "ledger:ev-b:line:0:right:spiral:cut")])
+
+    # Act
+    gate = row(FLOOR.rows(m, None, predates=False), "M45")
+
+    # Assert: both names, and a WARN - a named replacement is a decision, not a hole
+    assert gate.level == "WARN" and "7 the spiral return" in gate.message.splitlines()[0]
+    assert "REPLACED: 5 the dip; 7 the spiral return" in gate.message and "0 absent" in gate.message
+    verdict, detail = m45_lines(gate)[7]
+    assert verdict == "replaced" and "by 6 the page-to-page transform at 10.00 s on beat 2" in detail
+
+
+def test_m45_owes_the_mount_when_a_pages_number_lands_seven_seconds_after_its_entry(tmp_path: Path) -> None:
+    # Arrange: one page, entered on its axes, whose figure lands 8 s later - E99 s67's mount rule, from the CUT
+    scenes = [page("s1", [0, 20], enter="axes", species=[{"kind": "figure", "at": 8.0}])]
+    m = measured(tmp_path / "b", scenes, [(0, 10), (10, 20)], plan=[
+        plan_record(1, 0.0, 10.0, "ledger:ev-a:line:0:right:axes:cut"),
+        plan_record(2, 10.0, 20.0, "ledger:ev-a:line:0:right:axes:cut")])
+
+    # Act
+    gate = row(FLOOR.rows(m, None, predates=False), "M45")
+    verdict, detail = m45_lines(gate)[3]
+
+    # Assert: the beat the number lands on OWES the mount, which this cut never performs - the page's own
+    # build stands in its place, so the row WARNs with both names instead of FAILing
+    assert FLOOR.MOUNT_LANDS_S == 7.0
+    assert verdict == "replaced" and "owed by beat(s) 1" in detail
+    assert "by 2 the page builds at 0.00 s on beat 1" in detail
+
+
+def test_a_mechanism_no_beat_calls_for_is_not_owed_and_never_fails(tmp_path: Path) -> None:
+    # Arrange: two plate beats and nothing else - no page, so no page mechanism is owed
+    scenes = [plate("s1", [0, 10], species=[{"kind": "steam", "at": 1.0}], exit="dip"),
+              plate("s2", [10, 20], species=[{"kind": "steam", "at": 11.0}])]
+    m = measured(tmp_path / "b", scenes, [(0, 10), (10, 20)], plan=[
+        plan_record(1, 0.0, 10.0, "plate-a"), plan_record(2, 10.0, 20.0, "plate-b")])
+
+    # Act
+    gate = row(FLOOR.rows(m, None, predates=False), "M45")
+    lines = m45_lines(gate)
+
+    # Assert
+    assert gate.level == "PASS"                               # the dip carries the one world change (s1 exits dip)
+    assert [lines[n][0] for n in (1, 2, 3, 4, 6, 7, 8)] == ["not owed"] * 7
+    assert lines[2][1].endswith("no beat stands on a ledger page")
+    assert lines[9] == ("present", lines[9][1])               # the plates DO carry their life
+    assert "the plan holds 0 page beats (none), 2 plate beats, 0 clip beats" in gate.message
+
+
+def test_m45_reads_nothing_without_a_plan_because_a_mechanism_is_owed_by_a_beat(tmp_path: Path) -> None:
+    # Arrange: no BEAT-PLAN.jsonl on disk - M41 is the row that names that
+    m = measured(tmp_path / "b", [page("s1", [0, 20], enter="built")], [(0, 20)])
+
+    # Act
+    gates = FLOOR.rows(m, None, predates=False)
+
+    # Assert
+    assert row(gates, "M45").level == "INFO" and "no beat plan on disk" in row(gates, "M45").message
+    assert row(gates, "M41").level == "WARN"
+
+
+def test_m46_warns_on_a_signature_over_the_ceiling_and_on_an_unapproved_repeat(tmp_path: Path) -> None:
+    # Arrange: four scenes, every one of them entering on its axes
+    scenes = [page(f"s{i}", [i * 10, i * 10 + 10], enter="axes") for i in range(4)]
+    m = measured(tmp_path / "b", scenes, [(0, 40)], plan=[plan_record(1, 0.0, 40.0, "ledger:ev-a:line:0:right:axes")])
+
+    # Act
+    gate = row(FLOOR.rows(m, None, predates=False), "M46")
+
+    # Assert: a WARN, never a FAIL (E96: variety is JUDGE-adjacent)
+    assert gate.level == "WARN"
+    assert "OVER 0.34: axes 1.00" in gate.message
+    assert "CONSECUTIVE: scenes 1-2 axes, scenes 2-3 axes, scenes 3-4 axes" in gate.message
+    assert "scenes: axes, axes, axes, axes" in gate.message
+
+
+def test_m46_exempts_exactly_the_pairs_the_approved_mix_itself_records(tmp_path: Path) -> None:
+    # Arrange: two scenes a dock arrives over - the classifier reads card, card, Japan's own approved pair
+    scenes = [plate("s1", [0, 10], docks=[dock("ev-a", 0.0, 10.0)]),
+              plate("s2", [10, 20], docks=[dock("ev-b", 10.0, 20.0)]),
+              plate("s3", [20, 30]), plate("s4", [30, 40])]
+    m = measured(tmp_path / "b", scenes, [(0, 40)], evidence={"ev-a": {"species": "chart"},
+                                                              "ev-b": {"species": "chart"}})
+
+    # Act
+    gate = row(FLOOR.rows(m, None, predates=False), "M46")
+
+    # Assert: the card pair passes, the cut, cut pair does not - and both are read from approved-mix.json
+    assert "CONSECUTIVE: scenes 3-4 cut" in gate.message and "scenes 1-2" not in gate.message
+    assert gate.level == "WARN"
+
+
+def test_both_new_rows_print_through_the_existing_bar_after_m42() -> None:
+    assert FLOOR.ROW_ORDER[-2:] == ("M45", "M46")
+    assert FLOOR.ROW_ORDER.index("M45") == FLOOR.ROW_ORDER.index("M42") + 1
 
 
 # ---------------------------------------------------------------- the P56 review (2026-09-13)
@@ -433,7 +719,8 @@ def test_an_unreadable_reference_warns_on_every_reference_row_and_holds_the_rule
     gates = FLOOR.rows(m, None, predates=False, ref_warn="content/video_engine/projects/nope/build-x")
 
     # Assert
-    assert {g.id for g in gates if g.level == "WARN"} == {"M37", "M38", "M39", "M41"}   # M41: no beat plan
+    # M41: no beat plan. M46: two scenes, both `card` - one signature over the ceiling on a two-scene fixture
+    assert {g.id for g in gates if g.level == "WARN"} == {"M37", "M38", "M39", "M41", "M46"}
     for rid in ("M37", "M38", "M39"):
         message = row(gates, rid).message
         assert "not readable" in message and "floor held at the rule's own number" in message

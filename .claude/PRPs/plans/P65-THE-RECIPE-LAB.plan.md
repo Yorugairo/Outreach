@@ -311,13 +311,13 @@ pushed without the operator's word. Every gated step runs UNPIPED.
 - Evidence: pending
 
 ### T7: M38's interim reading - a WARN that prints both numbers and names R26-168
-- Status: pending
+- Status: done
 - Owner: `junior_developer`
 - Depends on: T1; and P66 T5 AS LANDED (M45 with its provisional constant) - not on P66 HG1's answer (reading (b), resolved above)
 - Write set: `content/video_engine/scripts/gate_one_shot_floor.py` (`row_m38` and `SRC_M38` only), `content/video_engine/tests/test_gate_one_shot_floor.py`, `docs/GATES-REGISTRY.md`, `docs/GATES-REGISTRY.jsonl`
 - Acceptance: `row_m38` returns `WARN` instead of `FAIL` below `MIN_RECIPE_COVERAGE`, keeps both readings in the one row (the spanning share and the beat a fire opens in - the existing text unchanged), and appends one sentence: the proven set is being re-proved on today's clocks (R26-168) so this row does not stop a cut until P65 HG2, and the parity row (M45) is the floor in the interim. A build at or above 0.60 still reads `PASS`. The test pins the level at a coverage of 0.03 (one-shot #3's number), the wording of the interim sentence, that the row can never read `FAIL` while the interim flag is set, and that one constant flips it back to the floor. `build_gates_registry.py --write` regenerates both registry files from the source; neither is hand-edited.
 - Validate: `python -m pytest content/video_engine/tests/test_gate_one_shot_floor.py -q` then `python content/video_engine/scripts/build_gates_registry.py --check`
-- Evidence: pending
+- Evidence: `gate_one_shot_floor.py` `M38_INTERIM_WARN = True` beside `MIN_RECIPE_COVERAGE`; `row_m38` WARNs below 0.60 with both readings and the interim sentence (R26-168; M45 the floor meanwhile), PASSes at 0.60, FAILs again with the constant False (tests pin all four; 52 -> 57 test names, none removed); `SRC_M38` carries the clause; registry `--check` in sync (gitignored build output). One-shot #3 reads `[WARN ] M38 proven-recipe coverage 0.09 spanning / 0.00 by the beat a fire starts in, of 32 beats ... interim (R26-168) ...` and the build exits 0 FAIL / 2 WARN. 62 passed (the parent re-ran).
 
 ### T8: R26-168 - the fifteen proven recipes re-proved on today's clocks
 - Status: pending

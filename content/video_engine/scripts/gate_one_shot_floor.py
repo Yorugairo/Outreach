@@ -19,6 +19,8 @@ they live:
   M40  parity with the best approved short + Bravos          JUDGE        (never FAIL - E96)
   M41  the beat plan covers every beat                      FAIL / PASS  (WARN when there is no plan on disk)
   M42  events/min, compositions/min, builds:compositions    INFO         (never a floor - E96 (3))
+  M45  parity by MECHANISM, read against the beat plan       FAIL / WARN / PASS  (INFO with no plan on disk)
+  M46  the signature mix beside the approved cuts' own       WARN / PASS  (variety never FAILs - E96)
 
 The catalogue M38 reads is BUILD OUTPUT (P63): `run` ensures `docs/EFFECTS-CATALOG.jsonl` (by the digest of the
 cards, the recipes and the modules behind them) before it reads it, so a recipe added since the last build is in
@@ -69,7 +71,7 @@ import json
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any, Iterable, Mapping, NamedTuple, Sequence
 
 SCRIPTS = Path(__file__).resolve().parent
 REPO = SCRIPTS.parents[2]
@@ -79,6 +81,7 @@ if str(SCRIPTS) not in sys.path:
 import docs_layers as DL  # noqa: E402  (the catalogue is build output; this gate ensures it, P63 T2)
 import lint_species_choice as LSC  # noqa: E402  (`load_sentences` - the sentence shape lives once, there)
 import recipe_walk as RW  # noqa: E402  (the walk and the co-occurrence matcher live once, there)
+import derive_approved_mix as MIX  # noqa: E402  (M46's classifier is the DERIVER's own - P66 T2, never a second one)
 
 CATALOG_REL = "docs/EFFECTS-CATALOG.jsonl"
 CATALOG_LAYER = "effects-catalog"      # docs_layers' name for the builder that writes CATALOG_REL
@@ -91,6 +94,8 @@ MIN_FORMS = 3                  # E96: at least three distinct chart forms in one
 MIN_CHART_TO = 1               # E96: at least one chart-to-chart transform
 MIN_DOCKS_PER_BEAT = 1 / 3     # E96: docks on at least a third of the beats
 MIN_RECIPE_COVERAGE = 0.60     # E96 + HG1: kept as the new reference's target, Japan's own printed beside it
+M38_INTERIM_WARN = True        # R26-168 - the fifteen proven recipes are being re-proved on today's clocks
+                               # by the recipe lab, P65 HG2 flips this back to False
 MIN_NARR_CHART = 1.0           # E96: the narrative surfaces at least match the chart surfaces
 EPS = 0.005                    # the closed-interval slack
 BEAT_T_TOL = 0.05              # how near a beat's start a beat-plan record's `t0` must sit to BE that beat
@@ -119,13 +124,15 @@ BRAVOS_SRC = ("docs/agent-memory/operator/bravos-reference.md (6.0 events/min, 2
 SRC_M35 = "E96 (2026-09-13): a cut carries at least 3 DISTINCT chart forms - the thin one-shot shipped 1 (\"you mostly changed words and used only 2 charts\"); a form is a ledger page's (builder, variant) or a chart dock's own discriminator"
 SRC_M36 = "E96: at least 1 chart-to-chart TRANSFORM - a chart changes state instead of being replaced (E50, E45); a snap from a dock is a card-to-chart hand-off, not a transform"
 SRC_M37 = "E96 + P56 HG1 (A): docks on at least 1/3 of the beats, ON SCREEN (a dock's [enter, exit] intersects the beat) and never under the reference's own share - Bravos' lesson is builds inside a HELD frame (bravos-reference)"
-SRC_M38 = "E96: a beat is a RECIPE - at least 0.60 of the beats carry a proven combination from docs/EFFECTS-CATALOG.jsonl; HG1 keeps 0.60 as the new reference's target with the reference's own coverage printed beside it"
+SRC_M38 = "E96: a beat is a RECIPE - at least 0.60 of the beats carry a proven combination from docs/EFFECTS-CATALOG.jsonl; HG1 keeps 0.60 as the new reference's target with the reference's own coverage printed beside it; INTERIM (R26-168, P65 T7): while the proven set is re-proved on today's clocks by the recipe lab this row WARNs instead of FAILing below 0.60 - it does not stop a cut until P65 HG2 restores the floor, and M45 (parity by mechanism) is the floor meanwhile"
 SRC_M39 = "E96: narrative : chart at least 1:1 - \"mixing of narrative panels and charts\"; held to the reference's own ratio too (thresholds-from-the-reference)"
 SRC_M40 = "E96: JUDGE keeps sequence and taste, read against the best approved short, never against the gates - the reference measured at run time, Bravos quoted"
 SRC_M41 = "P56 (E96): the comparator + capability + recipe plan per beat is written BEFORE the rows; a beat with no record, an empty comparator.compared_to, or a null recipe with no why_none is a gap"
+SRC_M45 = "E99 s67 Apply 7 + R26-177: the cut is read MECHANISM by mechanism against its OWN beat plan (the list of 2026-09-16, docs/content-video-engine/CRITIC-REPORT.md) - present / absent / replaced by <mechanism> / not owed; a mechanism is owed only where a beat's shape calls for it, and an absence with nothing in its place is the E99 s67 regression"
+SRC_M46 = "P66 T2 + E96: the cut's signature mix beside the approved shorts' MEASURED mix (effects/skeletons/approved-mix.json) - no signature over 0.34 of the scenes and no two consecutive scenes on a signature the approved cuts do not themselves repeat; variety is JUDGE-adjacent and never FAILs"
 SRC_M42 = "E96 (3): events per minute is NOT a floor - the thin cut would have passed it (17.9/min, as busy as Tokyo's 18.2); it is reported beside compositions/min and builds:compositions and can never FAIL"
 
-ROW_ORDER = ("M35", "M36", "M37", "M38", "M39", "M40", "M41", "M42")
+ROW_ORDER = ("M35", "M36", "M37", "M38", "M39", "M40", "M41", "M42", "M45", "M46")
 
 
 @dataclass(frozen=True)
@@ -547,11 +554,14 @@ def row_m38(m: Measures, ref: Measures | None, warn: str | None = None) -> Gate:
     ok = m.coverage + EPS >= MIN_RECIPE_COVERAGE
     ref_text = (f"the reference {ref.name} measures {ref.coverage:.2f}" if ref
                 else _ref_text(warn, "the reference is not on disk"))
-    return Gate("M38", "FAIL" if not ok else "WARN" if warn else "PASS",
+    interim = "" if ok or not M38_INTERIM_WARN else (
+        " - interim (R26-168): the proven set is being re-proved on today's clocks by the recipe lab; "
+        "this row does not stop a cut until P65 HG2, and M45 (parity by mechanism) is the floor meanwhile")
+    return Gate("M38", "PASS" if ok and not warn else "WARN" if ok or M38_INTERIM_WARN else "FAIL",
                 f"proven-recipe coverage {m.coverage:.2f} spanning / {m.coverage_start:.2f} by the beat a fire "
                 f"starts in, of {m.n_beats} beats ({len(m.recipe_beats)} carry a recipe, "
                 f"{len(m.recipe_start_beats)} open one) - the floor is {MIN_RECIPE_COVERAGE:.2f} on the spanning "
-                f"number; {ref_text} - {_recipe_text(m)}", SRC_M38)
+                f"number; {ref_text} - {_recipe_text(m)}{interim}", SRC_M38)
 
 
 def row_m39(m: Measures, ref: Measures | None, warn: str | None = None) -> Gate:
@@ -611,14 +621,462 @@ def row_m42(m: Measures) -> Gate:
                 f"builds:compositions {m.builds_per_comp:.2f} - reported, never a floor", SRC_M42)
 
 
+# --------------------------------------------------------------------------- M45 / M46: the approved shape (P66 T5)
+#
+# M45 is PARITY BY MECHANISM and M46 is SIGNATURE VARIETY. Both read the cut the way the critic does, and neither
+# invents a checklist: **the list is read against the cut's own beat plan**. A mechanism is OWED only where a beat's
+# SHAPE calls for it - the plan's `plate` row token names the entry the beat intends (`mount=`, `:axes`, `:spiral`,
+# `snap=`, `camera=`), so the PLAN says what is owed and the COMPILED timeline says what was done. A mechanism no
+# beat calls for prints `not owed`; it is never a FAIL for a shape the cut never promised (the parent, P66 T5).
+#
+# Measured on the reference first (`thresholds-from-the-reference`): the approved Japan and Tokyo cuts read `present`
+# or `not owed` on every line, and `test_gate_one_shot_floor.py` pins both rows' text on both cuts.
+
+
+class Mechanism(NamedTuple):
+    """One row of the mechanism list of 2026-09-16 (`docs/content-video-engine/CRITIC-REPORT.md`, table 1).
+
+    The field is `says`, not `rule`: `build_gates_registry.ROLE_FIELDS` reads a class with a `rule` field as a ROW
+    TYPE, and every entry of this list would then land in the registry as a gate of its own. This is data.
+    """
+    n: int
+    name: str
+    says: str
+
+
+# The list the CRITIC and the GATE share, by its date - the critic cites it as `list of 2026-09-16`. Adding a row
+# here changes what every cut is read against: it is a ruling (E99 s67 Apply 7), not a configuration knob.
+MECHANISMS_2026_09_16 = (
+    Mechanism(1, "the open on the chart", "the ledger page is the first frame, on its axes or mounting the world, "
+                                          "drawing under the hook (s67 Apply 6; P53 T1)"),
+    Mechanism(2, "the page builds", "a page BUILDS with the effects and holds built while its number is spoken; "
+                                    "enter=built is not an answer (s67 Apply 2)"),
+    Mechanism(3, "the mount", "a page whose number lands 7 s or more after its entry MOUNTS over the world and "
+                              "builds under the setup sentence (s67 Apply 5-6; E45)"),
+    Mechanism(4, "the axes entry", "a page enters by its own signature (:axes), never zoomed up from a card "
+                                   "(s67 Apply 5)"),
+    Mechanism(5, "the dip", "the dip only on a WORLD change - never a dock's transition (E47)"),
+    Mechanism(6, "the page-to-page transform", "page to page by suck or cut with no empty cream between (E96 M36)"),
+    Mechanism(7, "the spiral return", "the return by the SPIRAL, the page unwound, the ring on the chart (E40 s4; "
+                                      "E56)"),
+    Mechanism(8, "the dock that reads and parks", "a dock is an evidence still that READS then PARKS in the page's "
+                                                  "own room (s67 Apply 5; E65)"),
+    Mechanism(9, "the plate that carries a card", "a plate carries its card with directional life, never a bare "
+                                                  "still (M44; E99 s65)"),
+    Mechanism(10, "the light as punctuation", "a light lands on a sentence that POINTS, after the page's build - "
+                                              "never filler for M16 (s67 Apply 1, 3)"),
+    Mechanism(11, "old and new blend", "a NEW mechanism sits inside the approved shape and does not replace it "
+                                       "(s67 Apply 8)"),
+)
+
+APPROVED_MIX_REL = "content/video_engine/effects/skeletons/approved-mix.json"
+MOUNT_LANDS_S = 7.0        # E99 s67 Apply 5-6: a number landing this far after the page's entry owes the MOUNT
+M46_MAX_SHARE = 0.34       # approved-mix.json `max_share.value` (0.3333 - Japan's card and cut) rounded up; HG1
+                           # confirms it. Over this share of the scenes, one signature is the cut's only move.
+
+PAGE_PREFIX, CLIP_PREFIX = "ledger:", "clip:"
+# What a plan record's `plate` row token says the beat's page DOES - the plan's own statement of the mechanism.
+ENTRY_TOKENS = (("mount", "mount="), ("axes", ":axes"), ("spiral", ":spiral"), ("snap", "snap="),
+                ("camera", "camera="), ("throw", "throw="), ("built", ":built"))
+LIGHT_CARDS = ("species:spotlight", "species:relight")
+RETURN_CARDS = ("page_enter:spiral", "species:ring")
+PAGE_TO_PAGE_CARDS = ("exit:suck", "exit:cut")
+NUMBER_LANDS_CARDS = ("page_species:build_to", "page_species:figure", "species:callout", "species:ring",
+                      "species:spotlight")     # where a page's NUMBER lands (the mount's 7 s clock, mechanism 3)
+NEW_MECHANISM_MARK = "new mechanism"           # what a plan record says when it brings one (mechanism 11)
+# What may stand in a missing mechanism's PLACE: a move the cut made instead. 1 is bound to the first beat (a
+# position, not a move) and 11 is the blend marker, so neither can replace anything - the other nine can.
+REPLACEMENT_CANDIDATES = (2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+
+@dataclass(frozen=True)
+class Shape:
+    """One beat as its PLAN record describes it, tied to the scene the compiled cut plays under it."""
+    beat: int                 # 1-based - what a row names
+    start: float
+    end: float
+    plate: str                # the plan's `plate`: the row token, which NAMES the entry (mount=, :axes, :spiral)
+    caps: str                 # the record's `capabilities`, joined and lowercased
+    scene: int | None         # the index of the scene the beat's middle sits in
+
+    @property
+    def page(self) -> bool:
+        return self.plate.startswith(PAGE_PREFIX)
+
+    @property
+    def clip(self) -> bool:
+        return self.plate.startswith(CLIP_PREFIX)
+
+    @property
+    def still(self) -> bool:
+        """A PLATE beat - neither a ledger page nor a clip (M44 owns its six seconds)."""
+        return bool(self.plate) and not self.page and not self.clip
+
+    @property
+    def entry(self) -> str | None:
+        """The entry this beat's row token names: mount, axes, spiral, snap, camera, throw or built."""
+        return next((name for name, token in ENTRY_TOKENS if token in self.plate), None)
+
+    @property
+    def page_id(self) -> str | None:
+        """The evidence id of the page the beat plays on (`ledger:ev-x-v1:line:315:right:...` -> `ev-x-v1`)."""
+        parts = self.plate.split(":")
+        return parts[1] if self.page and len(parts) > 1 else None
+
+
+@dataclass(frozen=True)
+class Parity:
+    """What M45 read for ONE mechanism: the verdict, the instant it was read at, and the beat it was read on."""
+    n: int
+    name: str
+    verdict: str                  # present | absent | replaced | not owed
+    detail: str
+
+    @property
+    def text(self) -> str:
+        return f"{self.n:>2} {self.name:<30} {self.verdict:<9} {self.detail}"
+
+
+def plan_records_by_beat(records: Sequence[Mapping[str, Any]], beats: Sequence[Mapping[str, Any]]) -> dict:
+    """{beat index -> its plan record}, matched on `t0` (+- BEAT_T_TOL) and then on the 1-based `beat` number.
+
+    M41's `plan_gaps` matches the same way inline and stays untouched (P66 T5 changes nothing in M35-M42); this is
+    M45's own reader. A beat with no record is simply not a shape - M41 is the row that names that gap.
+    """
+    by_beat: dict = {}
+    for record in records:
+        index = next((i for i, b in enumerate(beats)
+                      if record.get("t0") is not None
+                      and abs(float(record["t0"]) - float(b["start"])) <= BEAT_T_TOL), None)
+        if index is None:
+            number = record.get("beat")
+            index = int(number) - 1 if isinstance(number, (int, float)) else None
+            if index is not None and not 0 <= index < len(beats):
+                index = None
+        if index is not None:
+            by_beat.setdefault(index, record)
+    return by_beat
+
+
+def scene_span(scene: Mapping[str, Any]) -> tuple:
+    """A scene's [start, end], read with the timeline schema's own defaults (a partial timeline still reads)."""
+    span = list(scene.get("span") or [0.0, 0.0])
+    start = float(span[0] if span else 0.0)
+    return start, float(span[1] if len(span) > 1 else start)
+
+
+# --- the evidence: what the COMPILED timeline must show for a mechanism to read `present` ---------------------
+
+def _ev_open(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    """The page lands under the hook - on its axes or mounting the world in scene 1, or arriving inside beat 1."""
+    return ev.cls == "page_enter"
+
+
+def _ev_build(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    """The page BUILDS: a page species (build_to, the bracket, the recast, the figure) or the axes entry's draw."""
+    return ev.cls == "page_species" or ev.card == "page_enter:axes"
+
+
+def _ev_mount(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    return ev.card == "page_enter:mount"
+
+
+def _ev_axes(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    return ev.card == "page_enter:axes"
+
+
+def _ev_dip(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    return ev.card == "exit:dip"
+
+
+def _ev_page_to_page(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    """A suck or a cut AT the boundary this beat's world arrives on - no empty cream between the two pages."""
+    if ev.card not in PAGE_TO_PAGE_CARDS or s.scene is None:
+        return False
+    return abs(ev.t - scene_span(r.scenes[s.scene])[0]) <= EPS
+
+
+def _ev_return(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    return ev.card in RETURN_CARDS
+
+
+def _ev_dock_enters(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    return ev.cls == "dock_enter"
+
+
+def _ev_dock_reads(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    """The dock READS then PARKS: `read_s` / `park_s` on the dock, not a card thrown and cut away."""
+    return ev.card == "dock_option:read"
+
+
+def _ev_plate_life(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    """The plate is not a bare still: a named idle, the Ken Burns move, the CARD it carries, or a living species.
+
+    E99 s65 (plate life is directional) and the two approved cuts read together: Japan's plates carry `idle=drift`
+    and a docked card, Tokyo's viewer's desk carries the steam, the ticker and the trace over a still whose
+    `ken_burns.scale` is 0. Both are the mechanism; M44 owns the six-second clock, not this row.
+    """
+    return ev.cls in ("idle", "species", "dock_enter") or ev.card == RW.KEN_CARD
+
+
+def _ev_light(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    return ev.card in LIGHT_CARDS
+
+
+def _ev_light_after_build(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    """A light that is PUNCTUATION: after its own page's build, or on a world with no build to wait for."""
+    if ev.card not in LIGHT_CARDS:
+        return False
+    built = r.first_build(ev.i)
+    return built is None or ev.t + EPS >= built
+
+
+def _ev_new_mechanism(r: "ShapeReader", ev: RW.Event, s: Shape) -> bool:
+    return ev.cls in ("species", "page_species")
+
+
+class ShapeReader:
+    """M45's reader: what each beat's PLAN owes against what the COMPILED timeline did.
+
+    OWED comes from the plan (the `plate` row token and the record's capabilities), PRESENT from
+    `recipe_walk.events` - never the other way round. A mechanism reads `present` when it fires inside ANY beat that
+    owes it: the window searched is the beat's own [t0, t1] UNION the span of the scene the beat plays under, because
+    the transition that brings a world (the mount over the outgoing shot, the dip, the suck) lands a breath before
+    the sentence that stands on it - Tokyo's holdings page mounts at 1.99 under beat 2 and is the shape of beats 3-11.
+    """
+
+    def __init__(self, m: Measures, records: Sequence[Mapping[str, Any]]) -> None:
+        self.timeline = json.loads(m.timeline_path.read_text(encoding="utf-8"))
+        self.scenes = list(self.timeline.get("scenes") or [])
+        self.events = RW.events(self.timeline)
+        by_beat = plan_records_by_beat(records, m.beats)
+        self.shapes: list = []
+        for i, beat in enumerate(m.beats):
+            record = by_beat.get(i)
+            if record is None:
+                continue
+            start, end = float(beat["start"]), float(beat["end"])
+            self.shapes.append(Shape(
+                beat=i + 1, start=start, end=end, plate=str(record.get("plate") or ""),
+                caps=" ".join(str(c) for c in (record.get("capabilities") or [])).lower(),
+                scene=self._scene_at((start + end) / 2.0)))
+
+    # --- the cut's own geometry ----------------------------------------------------------------------------
+
+    def _scene_at(self, t: float) -> int | None:
+        for i, scene in enumerate(self.scenes):
+            start, end = scene_span(scene)
+            if start - EPS <= t <= end + EPS:
+                return i
+        return None
+
+    def windows(self, shape: Shape) -> list:
+        """The beat's own window UNION its scene's span - the class docstring says why the scene is in it."""
+        out = [(shape.start, shape.end)]
+        if shape.scene is not None:
+            out.append(scene_span(self.scenes[shape.scene]))
+        return out
+
+    def first(self, want, shapes: Sequence[Shape]) -> tuple | None:
+        """(the instant, the beat) the first event `want` accepts fires at, inside one of those beats' windows."""
+        for shape in shapes:
+            spans = self.windows(shape)
+            for ev in self.events:
+                if any(a - EPS <= ev.t <= b + EPS for a, b in spans) and want(self, ev, shape):
+                    return ev.t, shape.beat
+        return None
+
+    def shapes_with(self, want) -> list:
+        """Every beat whose window carries such an event - what the CUT puts on a beat (docks, lights, rings)."""
+        return [s for s in self.shapes if self.first(want, [s])]
+
+    def first_build(self, scene: int) -> float | None:
+        """When the page in this scene first builds - what a light has to land after to be punctuation."""
+        return next((ev.t for ev in self.events if ev.i == scene and ev.cls == "page_species"), None)
+
+    def late_number_shapes(self) -> list:
+        """Every beat a page's NUMBER lands on 7 s or more after that page entered - E99 s67's mount rule."""
+        out: list = []
+        for i, scene in enumerate(self.scenes):
+            if not ((scene.get("world") or {}).get("page")):
+                continue
+            entered = next((ev.t for ev in self.events if ev.i == i and ev.cls == "page_enter"),
+                           scene_span(scene)[0])
+            landed = next((ev.t for ev in self.events if ev.i == i and ev.card in NUMBER_LANDS_CARDS), None)
+            if landed is None or landed - entered < MOUNT_LANDS_S:
+                continue
+            out += [s for s in self.shapes if s.start - EPS <= landed <= s.end + EPS]
+        return out
+
+    def world_changes(self, shape: Shape) -> bool:
+        """The plan says the WORLD changes at this beat: its row token is not the one the beat before stood on."""
+        index = self.shapes.index(shape)
+        return index > 0 and self.shapes[index - 1].plate != shape.plate
+
+    # --- what each mechanism is OWED by --------------------------------------------------------------------
+
+    def owed(self, n: int) -> list:
+        """The beats whose SHAPE calls for mechanism `n` - read from the plan, never from what the cut did."""
+        if n == 1:
+            first = self.shapes[0] if self.shapes else None
+            return [first] if first is not None and (first.page or self.first(_ev_open, [first])) else []
+        if n == 2:
+            return [s for s in self.shapes if s.page]
+        if n == 3:
+            declared = [s for s in self.shapes if s.page and s.entry == "mount"]
+            late = [s for s in self.late_number_shapes() if s not in declared]
+            return sorted(declared + late, key=lambda s: s.beat)
+        if n == 4:
+            return [s for s in self.shapes if s.page and s.entry == "axes"]
+        if n == 5:
+            return [s for s in self.shapes if self.world_changes(s)]
+        if n == 6:
+            return [b for a, b in zip(self.shapes, self.shapes[1:])
+                    if a.page and b.page and a.page_id != b.page_id]
+        if n == 7:
+            declared = [s for s in self.shapes if s.page and s.entry == "spiral"]
+            return declared or self.shapes_with(_ev_return)
+        if n == 8:
+            return self.shapes_with(_ev_dock_enters)
+        if n == 9:
+            return [s for s in self.shapes if s.still]
+        if n == 10:
+            return self.shapes_with(_ev_light)
+        return [s for s in self.shapes if NEW_MECHANISM_MARK in s.caps]
+
+    def evidence(self, n: int):
+        """The event that shows mechanism `n` was actually performed."""
+        return {1: _ev_open, 2: _ev_build, 3: _ev_mount, 4: _ev_axes, 5: _ev_dip, 6: _ev_page_to_page,
+                7: _ev_return, 8: _ev_dock_reads, 9: _ev_plate_life, 10: _ev_light_after_build,
+                11: _ev_new_mechanism}[n]
+
+    def why_not_owed(self, n: int) -> str:
+        """Why no beat calls for it - the sentence a `not owed` line owes the reader."""
+        first = self.shapes[0] if self.shapes else None
+        return {
+            1: (f"beat 1 stands on `{first.plate}`, not a page, and no page lands under the hook"
+                if first is not None else "the plan names no beat this gate can read"),
+            2: "no beat stands on a ledger page",
+            3: f"no beat's row token mounts, and no page's number lands {MOUNT_LANDS_S:.0f} s after its entry",
+            4: "no beat's row token enters on its axes",
+            5: "no beat changes the world the beat before stood on",
+            6: "no two consecutive beats stand on different pages",
+            7: "no beat's row token returns by the spiral, and no ring fires",
+            8: "no beat carries a dock",
+            9: "the plan holds no plate beat",
+            10: "no light fires in this cut",
+            11: "no beat names a new mechanism to blend",
+        }[n]
+
+    # --- the verdict ---------------------------------------------------------------------------------------
+
+    def parity(self, mech: Mechanism) -> Parity:
+        """`present` / `absent` / `replaced by <mechanism>` / `not owed`, for one mechanism, on this cut."""
+        owed = self.owed(mech.n)
+        if not owed:
+            return Parity(mech.n, mech.name, "not owed", f"- {self.why_not_owed(mech.n)}")
+        hit = self.first(self.evidence(mech.n), owed)
+        if hit:
+            return Parity(mech.n, mech.name, "present",
+                          f"at {hit[0]:.2f} s (beat {hit[1]}), owed by {len(owed)} beat(s)")
+        owed_at = ", ".join(str(s.beat) for s in owed[:6]) + ("..." if len(owed) > 6 else "")
+        for other in MECHANISMS_2026_09_16:
+            if other.n == mech.n or other.n not in REPLACEMENT_CANDIDATES:
+                continue
+            found = self.first(self.evidence(other.n), [owed[0]])
+            if found and self.owed(other.n):
+                return Parity(mech.n, mech.name, "replaced",
+                              f"by {other.n} {other.name} at {found[0]:.2f} s on beat {owed[0].beat} "
+                              f"- owed by beat(s) {owed_at}")
+        return Parity(mech.n, mech.name, "absent",
+                      f"- owed by beat(s) {owed_at}, nothing stands in its place - {mech.says}")
+
+    def census(self) -> str:
+        """Which shapes the plan holds - what every `not owed` line is read against."""
+        pages = [s for s in self.shapes if s.page]
+        entries = collections.Counter(s.entry or "no entry named" for s in pages)
+        return (f"the plan holds {len(pages)} page beats ("
+                + (", ".join(f"{k} x{v}" for k, v in sorted(entries.items())) or "none") + "), "
+                f"{sum(1 for s in self.shapes if s.still)} plate beats, "
+                f"{sum(1 for s in self.shapes if s.clip)} clip beats")
+
+
+def row_m45(m: Measures) -> Gate:
+    """One line per mechanism of the list of 2026-09-16, read against THIS cut's own beat plan."""
+    records = beat_plan(m.build)
+    if records is None:
+        return Gate("M45", "INFO", f"no beat plan on disk ({BEAT_PLAN_NAME} absent in {m.build.name}) - a mechanism "
+                                   f"is owed by a BEAT, so nothing is read here; M41 carries the missing plan",
+                    SRC_M45)
+    reader = ShapeReader(m, records)
+    read = [reader.parity(mech) for mech in MECHANISMS_2026_09_16]
+    counts = collections.Counter(p.verdict for p in read)
+    absent = [f"{p.n} {p.name}" for p in read if p.verdict == "absent"]
+    replaced = [f"{p.n} {p.name}" for p in read if p.verdict == "replaced"]
+    head = (f"{len(read)} mechanisms read against the plan's {len(reader.shapes)} beats: {counts['present']} "
+            f"present, {counts['not owed']} not owed, {len(replaced)} replaced, {len(absent)} absent"
+            + (f" - ABSENT: {'; '.join(absent)}" if absent else "")
+            + (f" - REPLACED: {'; '.join(replaced)}" if replaced else "")
+            + f" - {reader.census()}")
+    body = "\n".join(f"          | {p.text}" for p in read)
+    return Gate("M45", "FAIL" if absent else "WARN" if replaced else "PASS", f"{head}\n{body}", SRC_M45)
+
+
+def approved_mix(path: Path | None = None) -> dict | None:
+    """The MEASURED mix of the approved cuts (`derive_approved_mix.py`'s artifact), or None when it is not on disk."""
+    try:
+        return json.loads(Path(path or REPO / APPROVED_MIX_REL).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+def exempt_repeats(mix: Mapping[str, Any]) -> set:
+    """The signatures the APPROVED cuts repeat back to back - Japan's throw -> snap pair reads card, card.
+
+    M46 exempts exactly those pairs: the approved mix is the evidence, never a typed exception.
+    """
+    return {str(sig) for cut in (mix.get("approved") or []) for _, sig in (cut.get("consecutive_repeats") or [])}
+
+
+def row_m46(m: Measures) -> Gate:
+    """The cut's signature mix beside the approved shorts' MEASURED mix - JUDGE-adjacent, so it never FAILs.
+
+    The classifier is `derive_approved_mix.scene_signatures` itself (one signature per scene, the rung order in its
+    docstring): the target and the reading come out of the same function, so they cannot drift apart.
+    """
+    sigs = MIX.scene_signatures(json.loads(m.timeline_path.read_text(encoding="utf-8")))
+    if not sigs:
+        return Gate("M46", "PASS", "no scene carries a signature - nothing to read against the approved mix",
+                    SRC_M46)
+    mix = approved_mix()
+    counts = collections.Counter(sigs)
+    shares = {sig: n / len(sigs) for sig, n in counts.items()}
+    mine = ", ".join(f"{sig} {shares[sig]:.2f}" for sig, _ in counts.most_common())
+    target = (mix or {}).get("target") or {}
+    theirs = ", ".join(f"{sig} {share:.2f}" for sig, share in
+                       sorted((target.get("shares") or {}).items(), key=lambda kv: -kv[1])) or "not on disk"
+    exempt = exempt_repeats(mix) if mix else set()
+    over = [f"{sig} {shares[sig]:.2f}" for sig, _ in counts.most_common() if shares[sig] > M46_MAX_SHARE]
+    repeats = [f"scenes {i}-{i + 1} {sigs[i]}" for i in range(1, len(sigs))
+               if sigs[i] == sigs[i - 1] and sigs[i] not in exempt]
+    note = "; ".join(([f"OVER {M46_MAX_SHARE:.2f}: {', '.join(over)}"] if over else [])
+                     + ([f"CONSECUTIVE: {', '.join(repeats)} - the approved cuts repeat only "
+                         + (", ".join(sorted(exempt)) or "nothing")] if repeats else []))
+    return Gate("M46", "WARN" if over or repeats else "PASS",
+                f"signature mix over {len(sigs)} scenes: {mine} - the approved cuts measure {theirs} "
+                f"(approved-mix.json, {target.get('scenes', '-')} scenes); the ceiling is "
+                f"{M46_MAX_SHARE:.2f} a signature" + (f" - {note}" if note else "")
+                + "\n          | scenes: " + ", ".join(sigs), SRC_M46)
+
+
 def rows(m: Measures, ref: Measures | None = None, predates: bool | None = None,
          ref_warn: str | None = None) -> list:
-    """The eight rows of one build, in id order. `predates` defaults to the enumerated HG1 (A) set; `ref_warn` to the
+    """The ten rows of one build, in id order. `predates` defaults to the enumerated HG1 (A) set; `ref_warn` to the
     reference this run could not read (`m.ref_warn`), which turns the three reference rows from PASS to WARN."""
     old = predates_e96(m.build, m.timeline_path) if predates is None else predates
     warn = None if ref is not None else (m.ref_warn if ref_warn is None else ref_warn)
     return [row_m35(m, old), row_m36(m, old), row_m37(m, ref, warn), row_m38(m, ref, warn),
-            row_m39(m, ref, warn), row_m40(m, ref), row_m41(m), row_m42(m)]
+            row_m39(m, ref, warn), row_m40(m, ref), row_m41(m), row_m42(m), row_m45(m), row_m46(m)]
 
 
 # --------------------------------------------------------------------------- the report
@@ -709,7 +1167,7 @@ def run(build: Path, project: Path | None = None, reference: Path | None = None,
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="the one-shot floor (M35-M42) on a compiled build (P56, E96)")
+    ap = argparse.ArgumentParser(description="the one-shot floor (M35-M42, M45-M46) on a compiled build (P56, P66, E96)")
     ap.add_argument("build", type=Path, help="the build dir holding the compiled *.timeline.json")
     ap.add_argument("--project", type=Path, help="the project dir (only to resolve narration.words_path)")
     ap.add_argument("--reference", type=Path, help=f"the reference build (default {REFERENCE_REL})")
