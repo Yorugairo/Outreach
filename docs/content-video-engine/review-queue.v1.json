@@ -3370,7 +3370,7 @@
     },
     {
       "id": "one-shot-3-fable-memory-calendar",
-      "status": "open",
+      "status": "ruled",
       "kind": "watch",
       "title": "ONE-SHOT #3 (the Fable parent's own), reworked after E99 s67: Memory stocks trade the calendar, not the news - 72 s",
       "ids": [
@@ -3428,15 +3428,15 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s66, E96)",
         "docs/runbooks/ONE-SHOT.md"
       ],
-      "ruling": "",
+      "ruling": "E99 s71 (2026-09-17): \"The floors need the recipe lab first (R26-176)\" - a spotlight is never the move; the named thing arrives (a badge/pill with its callout, a stamped prop, a docked screenshot, a flight); the throw is a signature event and a thrown full-page card zooms or pushes to full screen (s67 Apply 5 corrected); the rework stands as measured, not rebuilt.",
       "was_kind": "",
       "owed": "",
       "critic": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-oneshot-3/CRITIC.md"
     },
     {
       "id": "p66-hg1-the-first-generated-base",
-      "status": "open",
-      "kind": "owed",
+      "status": "ruled",
+      "kind": "watch",
       "title": "P66 HG1 - the FIRST generated base: the Tokyo bed's own beat plan run through the shape compiler, read beside the approved Tokyo cut",
       "ids": [
         "P66 HG1",
@@ -3471,7 +3471,7 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s68, E99 s38, E99 s66)",
         "docs/content-video-engine/GRILL-AGENTS-HARNESS-EFFECTS-2026-09-16.md:10-19"
       ],
-      "ruling": "",
+      "ruling": "E99 s71 (2026-09-17): \"Send the skeleton library back for more variety - this isn't really close -- you missed most of the life and choreography\" - the vocabulary is rebuilt from the record (E99 s70) and the base returns only after the parent reads its frames beside the approved cut.",
       "was_kind": "",
       "owed": "PULLED 2026-09-17 (E99 s70): the base dropped the approved cut's choreography - the compiler's signature vocabulary had no word for the door, the morph, the transforms or the snap, and the six chart_to moves the plan carries rendered nothing (the page's state chain was dropped). The card returns when the vocabulary is rebuilt from the record, the chains render, and the parent has read the base's frames beside the approved cut's."
     },
