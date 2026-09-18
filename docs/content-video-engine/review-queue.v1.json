@@ -4518,6 +4518,78 @@
       "ruling": "E99 s78 applied (2026-09-18): \"v3b is being uploaded\" - the slot, the chart whole. The render `build-v3-frozen-b/render/tokyo-v3b-full-1440p.mp4` is the file of record; v3 (the parked chart) is superseded.",
       "was_kind": "",
       "owed": ""
+    },
+    {
+      "id": "p68-steel-and-paper-h-hg1",
+      "status": "open",
+      "kind": "owed",
+      "title": "STEEL AND PAPER H - HG1: the script gate-clean and the package re-locked (title, thumbnail, sentence 1)",
+      "ids": [
+        "E99 s81",
+        "E27",
+        "E74"
+      ],
+      "judge": "The H script at 0 FAIL on its own scratch clock, the WARNs judged, the blind viewer folded; the package as one object (E27). Owed by T1.",
+      "where": [],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "T4 the treatment; the take the cut is built on",
+      "sources": [
+        ".claude/PRPs/plans/P68-STEEL-AND-PAPER-H.plan.md",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s81)"
+      ],
+      "ruling": "",
+      "was_kind": "watch",
+      "owed": "P68 HG1 - the parent builds it before the row opens"
+    },
+    {
+      "id": "p68-steel-and-paper-h-hg3",
+      "status": "open",
+      "kind": "owed",
+      "title": "STEEL AND PAPER H - HG3: the 1:30 unit of proof, read beside build-f, with the voice takes auditioned on it",
+      "ids": [
+        "E99 s81",
+        "E27",
+        "E21"
+      ],
+      "judge": "The first 1:30 as a frozen copy on its own port, contact sheets beside build-f at the same instants, the critic, and the voice candidates on the same 90 s. Owed by T5.",
+      "where": [],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "T6 the body and the whole cut",
+      "sources": [
+        ".claude/PRPs/plans/P68-STEEL-AND-PAPER-H.plan.md",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s81)"
+      ],
+      "ruling": "",
+      "was_kind": "watch",
+      "owed": "P68 HG3 - the parent builds it before the row opens"
+    },
+    {
+      "id": "p68-steel-and-paper-h-hg4",
+      "status": "open",
+      "kind": "owed",
+      "title": "STEEL AND PAPER H - HG4: the whole cut with the 1440p render - the Facebook file and the YouTube question",
+      "ids": [
+        "E99 s81",
+        "E99 s36",
+        "E61"
+      ],
+      "judge": "The full cut frozen and served, gates clean or each FAIL named with its ruling, the critic's fractions, the 09-18 doctrine rows counted, the render beside it. Owed by T6/T7.",
+      "where": [],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "the Facebook post and the YouTube re-upload (the operator's)",
+      "sources": [
+        ".claude/PRPs/plans/P68-STEEL-AND-PAPER-H.plan.md",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s81)"
+      ],
+      "ruling": "",
+      "was_kind": "watch",
+      "owed": "P68 HG4 - the parent builds it before the row opens"
     }
   ]
 }
