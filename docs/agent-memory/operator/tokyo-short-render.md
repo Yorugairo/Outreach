@@ -1,6 +1,6 @@
 ---
 name: tokyo-short-render
-description: "Tokyo Tea Break - v2 (the hand rebuild on the approved cut's structure, E99 s77) RENDERED 2026-09-17 at 1440x2560 / 24 fps from the frozen copy c; the file of record is build-v2-frozen-c/render/tokyo-v2-full-1440p.mp4 (88.83 s, -15.1 LUFS), awaiting the operator's watch of the render and the post; the 09-09 render is the previous file of record"
+description: "Tokyo Tea Break - v2 (the hand rebuild on the approved cut's structure, E99 s77) RENDERED 2026-09-17 at 1440x2560 / 24 fps from the frozen copy c; the file of record is build-v2-frozen-c/render/tokyo-v2-full-1440p.mp4 (88.83 s, -15.1 LUFS), APPROVED TO UPLOAD by the operator (E99 s78: 'yes, it's to upload and I think the line is fine' - E67's history dial stays); the 09-09 render is superseded on the post"
 metadata: 
   node_type: memory
   type: project
@@ -27,6 +27,8 @@ the queue with the critic (9/10, 5/7) and the render path.
 **Known and named:** the history of the holdings line renders `#875843` at 2.22:1 (E67's 0.45 history dial) - the
 operator's dial, asked on the card; the mount at 1.99-4.0 s shows the soak's stains on cream because a cut CUTS
 (R26-50, 2026-09-11 - the approved player predates it); the melt has no cue in the map (s37, nothing invented).
+
+**2026-09-17, later:** the operator on the render: *"ea link, and yes, it's to upload and I think the line is fine"* - E99 s78: v2 is the new Tokyo, approved to upload; E67's history dial STAYS (the question is closed - never raise the 0.45 history again as a dial); the way v2 was made is the next short's way (s78 Apply 3). The direct link that served it: http://127.0.0.1:8772/render/tokyo-v2-full-1440p.mp4.
 
 **Servers:** :8771 frozen b (the watched copy), :8772 frozen c (the rendered copy), :8766 the queue.
 
