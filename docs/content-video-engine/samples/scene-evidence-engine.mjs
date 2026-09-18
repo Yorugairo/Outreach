@@ -8766,6 +8766,44 @@ async function mount(doc) {
       el.style.translate = d[0].toFixed(2) + "px " + d[1].toFixed(2) + "px";
     });
   };
+  /* R26-226 (E99 s82) - A MULTI-LINE PAGE BUILDS LINE BY LINE. The operator, on frozen copy d: "the crawl drawing
+     on the chart looks weird. The lines draw well while we're moving them, but drawing the first few years then
+     stopping for seemingly no reason is weird ... A better way to do this is to draw the first line completely, label
+     it, badge it, draw the 2nd line completely, badge it, draw the 3rd line completely, badge it, draw the 4th line
+     completely, badge it. Everything can be purposeful, and with rhythm and direction without having to completely
+     stop." A dense-line page has always drawn every series on ONE clock (`fr` below, staggered by a third), so N
+     lines crawl side by side and all N land together; the only way to put one line before another was a `build_to`
+     per spoken phrase - the crawl that stops. Under this mode each series takes its OWN share of the page's build
+     window, in the page's own series order, and lands whole: its end tag (and the inline badge chip on it, which IS
+     a keyed badge - `ledger_page.badges_for` makes one `inline`) writes on its own f, and its lead point stays and
+     sparks from that moment (R26-228) because the line is landed and live. `lines` is the only mode, and the
+     compiler refuses any other word by name (`build_scene_timeline_f.PAGE_BUILD_MODES`); a page that authors none
+     carries no `lineBuild` and paints through the expression every golden was captured through. */
+  const LP_BUILD_LINES = "lines";
+  const pgBuildLines = (pg) => !!pg && pg.build === LP_BUILD_LINES;
+  /* R26-226, the reviewer's round: A SERIES A `build_to` HOLDS AT INDEX 0 TAKES NO TURN. The build beat is spent on
+     the first cap (`prev = capFrac(pp, index); f = f * prev`), and `capFrac` at index 0 is 0 (`:10021`-`:10025`), so a
+     series staged for a later reveal would draw NOTHING through a whole slot - a dead beat of still axes at the open,
+     which is the exact thing the ruling is about. The slots are therefore the series that actually DRAW when the page
+     opens; a held one joins later on its own cap clock. Each turn keeps its own length (the page's build over the
+     page's series COUNT), so the lines that draw come earlier and the build ends earlier - never a pause inside it. */
+  const lpFirstCapIndex = (caps, si) => {
+    let best = null;
+    for (const sp of caps || []) {
+      if (!sp || !sp.target) continue;
+      const ss = sp.series ?? sp.tier ?? (sp.target || {}).series;   /* a cap naming no series applies to every one (the paint's own `forMe`) */
+      if (ss != null && (ss | 0) !== (si | 0)) continue;
+      if (!best || sp.at < best.at) best = sp;
+    }
+    return best ? (best.target.index | 0) : null;
+  };
+  const lineBuildNow = (cs, caps) => {
+    const LB = cs && cs.lineBuild;
+    if (!LB) return null;
+    const draws = LB.slots.filter((si) => lpFirstCapIndex(caps, si) !== 0);
+    const order = draws.length ? draws : LB.slots;   /* every series held at 0 = nothing to sequence; each is 0 anyway */
+    return { n: Math.max(1, LB.slots.length), of: (si) => { const k = order.indexOf(si | 0); return k < 0 ? null : k; } };
+  };
   const buildLedgerLine = (st, pg) => {
     const ax = pg.axes || {}, series = pg.series || [];
     const PAL = LP_INK;   /* E67: ONE table, read by every builder that paints on the field */
@@ -8932,6 +8970,15 @@ async function mount(doc) {
     if (over > 0) for (const pp of order) pp.ny -= over;
     for (const pp of order) { pp.name.setAttribute("y", pp.ny.toFixed(1));
       lpMark(st, "name:s" + pp.si + (pp.muted ? ":h" : ""), "name", pp.name, { x: +pp.name.getAttribute("x"), y: pp.ny }, pp); }   /* the name's geom is its SETTLED y, after the push-apart */
+    /* R26-226: the page's SERIES, in its own order, resolved once at load - which of them take a turn is the paint's
+       (`lineBuildNow`: a series a `build_to` holds at index 0 takes none). A slot is a SERIES, not a path: a
+       highlighted page splits one series into a muted history and a live tail (two paths, one si, one slot, so the
+       pair draws together as the one line it is) - defensive rather than reachable through the compiler, which needs
+       exactly ONE series for the highlight split and at least TWO for this mode. */
+    if (pgBuildLines(pg)) {
+      const slots = [...new Set(st.paths.map((pp) => pp.si | 0))].sort((a, b) => a - b);
+      st.lineBuild = { slots };
+    }
     /* P50 T11 / R26-34 - THE TIP-RIDING PILL, opt-in per page (`;pill=yes|<datum>` on the plate id). A drawing line
        says nothing until it stops; the pill is what it says while it is still being drawn, and at the end of the draw
        it settles onto the terminal tag's place and the TAG takes over (E53 s8 unchanged - one name, in one place).
@@ -11509,8 +11556,15 @@ async function mount(doc) {
          chart's own user units, so 16:9 and 9:16 draw the same size. */
       const pageLive = pgLive(scene, ((scene && scene.world) || {}).page);
       const ctmL = pageLive ? lpCtmScale(cs.chart) : 0;
+      const LB = lineBuildNow(cs, caps);   /* R26-226: this page draws its series one at a time - `null` is the shared clock */
       cs.paths.forEach((pp) => {
-        const fr = clamp01((c - pp.stagger * 0.3) / 0.7);
+        /* R26-226: a drawing series owns one turn of the clock - the page's build over its series COUNT - and draws
+           WHOLE over it (the pen law below is unchanged, so a line still draws the way a hand draws). A series held
+           at index 0 takes no turn: `fr` 1 is its full clock, which its own cap (0) then holds at nothing until the
+           word that reveals it. With no mode the one shared clock stands, staggered by a third. */
+        const lb = LB ? LB.of(pp.si | 0) : null;
+        const fr = LB ? (lb == null ? 1 : clamp01((c - lb / LB.n) * LB.n))
+                      : clamp01((c - pp.stagger * 0.3) / 0.7);
         /* DRAWING runs on the pen (strokeFrac, the two-thirds law): the hand hurries through a smooth stretch and slows
            through a jagged one. LEAVING must not - on a dense series the pen is already deep in the jagged tail at
            two-thirds of the clock, so a backwards pen looks like a line that stands still and then disappears. A line

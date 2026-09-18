@@ -2919,6 +2919,57 @@ SURFACES.update({   # R26-228 / E99 s82 (e): the page's interior, still and live
 })
 FRAME_T["page-life-still"] = PAGE_LIFE_T
 FRAME_T["page-life-live"] = PAGE_LIFE_T
+
+
+# ---- R26-226 / E99 s82: A MULTI-LINE PAGE BUILDS LINE BY LINE -------------------------------------
+# The same four-series page `page-life-*` and `ledger-page-mid-build` draw, with the ROW's build mode on it:
+# `;build=lines:1.2` (`build_scene_timeline_f.page_build_spec`, which writes exactly the two keys below - the
+# mode and the page's whole build, 4 x 1.2 s). Series 0 draws over 4.4-5.6, series 1 over 5.6-6.8, series 2
+# over 6.8-8.0 and series 3 over 8.0-9.2, each WHOLE, its end tag and inline badge chip landing with it.
+# `idle: "live"` is on the row because the ruling's own next line is the lead point that STAYS on a landed
+# live line (R26-228): the frame is the sequence AND what each landed line keeps.
+PAGE_BUILD_LINES_S = 1.2       # one SERIES' seconds, as the row authors them
+# The two instants, MEASURED not guessed: the build's easing is `expoOut` (the pen law `strokeFrac` answers null
+# unless `curvature_stroke` is on) and it is heavily front-loaded - at HALF of a series' own window the line is
+# already 96.9 % drawn (1 - 2^-5; measured on the served page, dashoffset 37 of 1183). A line reads as DRAWING at
+# u = 0.125 of its window, 1 - 2^-1.25 = 0.580 of its length, which is 0.15 s into a 1.2 s series window.
+PAGE_BUILD_LINES_T = 5.75      # inside SERIES 1's window (5.6-6.8): series 0 landed and tagged, series 1 0.58 drawn
+                               # with no tag, series 2 and 3 not begun - the ruling in one frame
+PAGE_BUILD_LINES_T4 = 8.15     # inside SERIES 3's window (8.0-9.2): three lines landed and tagged, the fourth drawing
+
+
+def _page_build_lines() -> tuple[dict, dict]:
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", 0, "right")
+    page["build"] = "lines"      # the two keys the token writes; test_page_builds_line_by_line pins them to the compiler
+    page["build_s"] = round(PAGE_BUILD_LINES_S * len(page["series"]), 3)
+    world = {"kind": "ledger", "page": page, "idle": "live", "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    tl = _timeline("Golden: the page builds line by line", scenes, {}, None)
+    tl["kinetics"] = {"idle": True}   # as `page-life-live`: E49 is on for every compiled timeline, and a source says so
+    return tl, _base_uris()
+
+
+def page_build_lines() -> tuple[dict, dict]:
+    """R26-226 - at SERIES 1's midpoint: line 1 whole and labelled, line 2 half drawn, lines 3 and 4 not begun."""
+    return _page_build_lines()
+
+
+def page_build_lines_4th() -> tuple[dict, dict]:
+    """R26-226 - the same page at SERIES 3's midpoint: three lines whole and labelled, the fourth drawing.
+
+    The same timeline as `page-build-lines`, read 2.4 s later. Two SURFACES rather than one surface and a
+    second instant because a second instant of one surface lives in `render_baseline.PROOF_FRAMES`, which
+    R26-226's write set does not include."""
+    return _page_build_lines()
+
+
+SURFACES.update({
+    "page-build-lines": page_build_lines,
+    "page-build-lines-4th": page_build_lines_4th,
+})
+FRAME_T["page-build-lines"] = PAGE_BUILD_LINES_T
+FRAME_T["page-build-lines-4th"] = PAGE_BUILD_LINES_T4
 FRAME_T["plate-alive"] = PLATE_ALIVE_T
 
 

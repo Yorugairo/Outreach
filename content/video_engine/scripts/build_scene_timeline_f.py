@@ -108,7 +108,7 @@ MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain")   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain", "build")   # R26-226 (E99 s82): build=lines[:<s>] - a MULTI-LINE page's series draw one at a time, each whole, its end tag and inline badge landing as it lands (the operator: "draw the first line completely, label it, badge it, draw the 2nd line completely, badge it"); `lines:<s>` names ONE series' seconds, so the page's whole build is N x s   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -3061,6 +3061,9 @@ def _check_opt(key: str, value, where: str) -> None:
     if key == "domain":   # R26-223: the pair is the row's own grammar; the fit to the page's BUILDER needs the page,
         page_domain_spec(value, None, where)   # and is checked where the page is read (world_for_plate), as form='s is
         return
+    if key == "build":   # R26-226: the mode and its seconds are the row's own grammar; the fit to the page's BUILDER
+        page_build_spec(value, None, None, where)   # and to its SERIES COUNT needs the page, and is checked where the
+        return                                      # page is read (world_for_plate), as domain='s is
     allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES,
                "card": ("yes", "no"), "use": PLATE_USES, "path": RACE_PATHS}[key]
     if value not in allowed:
@@ -3612,6 +3615,154 @@ def page_domain_spec(value, builder: str | None, where: str) -> list[float]:
     return [lo, hi]
 
 
+# ---- R26-226: A MULTI-LINE PAGE BUILDS LINE BY LINE (2026-09-18, E99 s82) ---------------------------
+# The operator, on frozen copy d of the Steel and Paper H unit: *"the crawl drawing on the chart looks weird.
+# The lines draw well while we're moving them, but drawing the first few years then stopping for seemingly no
+# reason is weird - it would be different if we were stopping to talk about each section but that's not what
+# the chart does. A better way to do this is to draw the first line completely, label it, badge it, draw the
+# 2nd line completely, badge it, draw the 3rd line completely, badge it, draw the 4th line completely, badge
+# it. Everything can be purposeful, and with rhythm and direction without having to completely stop."*
+#
+# A dense-line page draws every series TOGETHER on the page's one build clock (the engine's
+# `fr = clamp01((c - pp.stagger * 0.3) / 0.7)`), so N lines crawl side by side and all N land at once. The
+# only way to put one line before another was a `build_to` per spoken phrase, which is the crawl that stops.
+#
+# THE TOKEN IS `;build=lines`, or `;build=lines:<s>`, and that form for three reasons:
+#   * it names a page-level BUILD MODE, not a species. The sequence is how this page draws at all - not a
+#     thing that happens on a word - so it belongs on the plate id beside `;domain=` and `;form=`, and a
+#     `build_to` stays what it is: the authored stop the ruling allows ("if we were stopping to talk about
+#     each section"), which still caps its own series inside that series' own window.
+#   * the optional setting is ONE series' seconds, not the page's total, because the author is timing a
+#     LINE against a sentence; the page's total is arithmetic (N x s) and the compiler does it, writing it
+#     to `build_s` - the key the engine's `buildDur` and the motion gate's landing already read. One truth.
+#   * the mode is a WORD, so a second mode (a bars page's own order, say) joins `PAGE_BUILD_MODES` without
+#     a second token, and anything else is refused by name here.
+# A row that names none writes nothing: every page compiled before this row is byte-identical.
+PAGE_BUILD_MODES = ("lines",)
+LINE_BUILD_BUILDERS = ("dense-line",)   # the ONE builder whose `st.paths` ARE the page's series, so a sequence
+    # over them is a sequence over the lines the operator counted (the engine's `buildLedgerLine`,
+    # `scene-evidence-engine.mjs:8769`).
+    #   This is the CONSERVATIVE bound, not an exhaustive one, and for the reason R26-223's `DOMAIN_BUILDERS`
+    # states: `tiers` draws line BANDS and `combo` draws a line over its bars, so both have paths a sequence could
+    # technically run, and the engine's builder dispatch falls back to the bars builder for a kind it has no painter
+    # mapped for. Refusing them is the choice - a build clock honoured by accident, on a page whose own painter never
+    # asked for one, is a rhythm the author cannot predict and a gate cannot read. A builder joins this tuple when
+    # its OWN paint step reads the mode.
+PAGE_BUILD_LINE_MIN_S = 0.25   # a series' draw, floored: 0.25 s is 6 frames at the 24 fps we render, the
+                               # fewest a pen can be seen moving through. Under it a line pops, and the
+                               # ruling is about a line DRAWING ("the lines draw well while we're moving them")
+PAGE_BUILD_LINES_MIN_N = 2     # "a MULTI-LINE page": one line has no sequence in it
+
+
+def page_build_spec(value, builder: str | None, n_series: int | None, where: str,
+                    page_build_s: float | None = None) -> dict:
+    """``;build=lines[:<s>]`` -> ``{"mode": "lines"[, "series_s", "build_s"]}`` (R26-226).
+
+    The row's GRAMMAR is checked with no page in hand (`builder` and `n_series` None, from `_check_opt`); the
+    fit to this page's builder, its series COUNT and - for the bare mode, which divides a window it did not
+    choose - the window it would be dividing (`page_build_s`) is checked where the page is read, exactly as
+    `form=`'s and `domain=`'s are. ValueError names the option; the caller names the row."""
+    text = str(value).strip()
+    mode, sep, rest = text.partition(":")
+    if mode not in PAGE_BUILD_MODES:
+        raise ValueError(f"{where}: build={text!r} is not one of {'|'.join(PAGE_BUILD_MODES)} - `lines` is the "
+                         "page's series drawn ONE AT A TIME, each whole, its end tag and badge landing as it "
+                         "lands (E99 s82). `lines:<s>` names one series' seconds (R26-226)")
+    if sep and ":" in rest:
+        raise ValueError(f"{where}: build={text!r} takes one setting - build={mode}:<s>, the seconds ONE series "
+                         "draws over (the page's whole build is that times the number of series)")
+    out: dict = {"mode": mode}
+    if sep:
+        try:
+            s = float(rest)
+        except ValueError:
+            raise ValueError(f"{where}: build={text!r} is not a number of seconds - build={mode}:<s>, the seconds "
+                             "ONE series draws over") from None
+        if not (math.isfinite(s) and s > 0):   # `inf` and `nan` pass every `>` guard below and would reach the
+            # page's own `build_s` for the player to divide the clock by. A length is a finite number of seconds.
+            raise ValueError(f"{where}: build={text!r} is not a number of seconds - build={mode}:<s>, the seconds "
+                             "ONE series draws over")
+        if s < PAGE_BUILD_LINE_MIN_S:
+            raise ValueError(f"{where}: build={mode}:{s:g} gives one line {s:g} s to draw, under the floor "
+                             f"{PAGE_BUILD_LINE_MIN_S:g} s - which is 6 frames at 24 fps, the fewest a pen can be "
+                             "seen moving through. Under it a line pops instead of drawing, and the ruling is about "
+                             'a line DRAWING ("the lines draw well while we\'re moving them", E99 s82)')
+        out["series_s"] = s
+    if builder is not None and builder not in LINE_BUILD_BUILDERS:
+        raise ValueError(f"{where}: build={mode} draws a page's SERIES line by line and this page is {builder!r} - "
+                         f"the builder whose paths are its series is {' and '.join(LINE_BUILD_BUILDERS)} "
+                         "(a bars, share or story page has no lines to put in turn; R26-226)")
+    if n_series is not None:
+        if int(n_series) < PAGE_BUILD_LINES_MIN_N:
+            raise ValueError(f"{where}: build={mode} is the MULTI-LINE page's build and this page draws "
+                             f"{int(n_series)} series - there is no sequence in one line, and the mode would "
+                             "silently re-time its draw. Drop build=, or name the page's other series (R26-226)")
+        if "series_s" in out:
+            out["build_s"] = round(out["series_s"] * int(n_series), 3)
+        elif page_build_s:
+            # THE BARE MODE divides a window it did not choose - the page's own `build_s`, or LP.BUILD - so the
+            # floor has to be checked on the SHARE, not only on a length the row named. Without this a page of
+            # many lines (or a short authored `build_s`) would give each line a draw nobody can see, and the
+            # token would be the cause with nothing said about it.
+            share = float(page_build_s) / int(n_series)
+            if share < PAGE_BUILD_LINE_MIN_S:
+                raise ValueError(f"{where}: build={out['mode']} shares this page's {float(page_build_s):g} s build "
+                                 f"between {int(n_series)} series - {share:.3g} s each, under the floor "
+                                 f"{PAGE_BUILD_LINE_MIN_S:g} s (6 frames at 24 fps). Name the seconds a line draws "
+                                 f"over instead - build={out['mode']}:<s> - or give the page a longer build")
+    return out
+
+
+def page_builds_lines(world: dict | None) -> bool:
+    """Is this world a ledger page that draws its series one at a time (R26-226)?"""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return False
+    return ((world.get("page") or {}).get("build")) in PAGE_BUILD_MODES
+
+
+def line_build_first_cap(species: list[dict] | None, si: int) -> int | None:
+    """The datum index the EARLIEST `build_to` caps series `si` at, or None when none does (R26-226).
+
+    The player's own reading, written once here so the stamped windows and the painted ones cannot disagree: a
+    cap naming no series applies to every one (the paint's `forMe`), and the first one by `at` is the cap the
+    build beat is spent on."""
+    best = None
+    for sp in species or []:
+        if sp.get("kind") != "build_to" or not isinstance(sp.get("target"), dict):
+            continue
+        ss = sp.get("series", sp.get("tier", (sp.get("target") or {}).get("series")))
+        if ss is not None and int(ss) != int(si):
+            continue
+        if best is None or float(sp.get("at") or 0.0) < float(best.get("at") or 0.0):
+            best = sp
+    return int((best["target"] or {}).get("index") or 0) if best else None
+
+
+def page_line_windows(world: dict | None, species: list[dict] | None,
+                      scene_start: float) -> list[tuple[float, float]]:
+    """Every DRAWING series' own turn - (from, to) in seconds - on a page that builds line by line; empty for
+    every other page and every plate (R26-226).
+
+    The page's build ends where the motion gate says its chart lands (`MG._page_land_offset`, which reads the
+    same `build_s` the engine's `buildDur` does) and opens one build length before it; a turn is that build over
+    the page's series COUNT, and the turns are taken back to back in the page's own series order. A series a
+    `build_to` HOLDS AT INDEX 0 takes no turn - it would draw nothing through a whole one (`capFrac` at index 0
+    is 0), which is a dead beat at the open - so the lines that do draw come earlier and the build ends earlier.
+    Stamped on the scene as `build_lines` so a gate reads the clocks the player paints rather than deriving a
+    second copy of them."""
+    if not page_builds_lines(world):
+        return []
+    page = world["page"]
+    n = len(page.get("series") or [])
+    if n < PAGE_BUILD_LINES_MIN_N:
+        return []
+    draws = [i for i in range(n) if line_build_first_cap(species, i) != 0] or list(range(n))
+    total = float(page.get("build_s") or MG.LP_BUILD_S)
+    end = float(scene_start) + MG._page_land_offset({"world": world})
+    start, share = end - total, total / n
+    return [(start + k * share, start + (k + 1) * share) for k, _si in enumerate(draws)]
+
+
 def page_form_spec(value: str, builder: str, where: str) -> dict:
     """The row's form, refused BY NAME when this page's builder cannot draw it (`ledger_page.form_error`)."""
     name = str(value).partition(":")[0]
@@ -3903,6 +4054,23 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
                              "(R26-223); a plate is a picture and carries no scale")
         page = world["page"]
         page.setdefault("axes", {})["domain"] = page_domain_spec(dom, str(page.get("builder") or "?"), repr(plate_id))
+    bld = opts.pop("build", None)
+    if bld is not None:
+        # R26-226: HOW this page's chart builds - its series one at a time, each whole. A LEDGER PAGE option
+        # (a plate is a picture and has nothing to build), and the ROW's word rather than the object's: the
+        # data is the object's, the rhythm this shot draws it at is the row's, exactly as `;domain=` is. The
+        # seconds are one SERIES' - the compiler turns them into the page's own `build_s`, the single key the
+        # engine's `buildDur` and the motion gate's landing both read, so the row's clock outranks the
+        # object's. A row that names none writes nothing.
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError(f"{plate_id!r}: build= is a LEDGER PAGE option - it is how a page's CHART BUILDS "
+                             "(R26-226); a plate is a picture and has no series to draw")
+        page = world["page"]
+        spec = page_build_spec(bld, str(page.get("builder") or "?"), len(page.get("series") or []), repr(plate_id),
+                               page_build_s=float(page.get("build_s") or MG.LP_BUILD_S))
+        page["build"] = spec["mode"]
+        if "build_s" in spec:
+            page["build_s"] = spec["build_s"]
     room = opts.pop("room", None)
     if room is not None:
         # R26-221: the rectangle of this PICTURE PLATE a card may stand in - the plate's answer to a page's
@@ -5872,6 +6040,9 @@ def main() -> int:
         bw = page_build_windows(world, row_species, a)
         if bw:
             scene["build_windows"] = [[round(x, 2), round(y, 2)] for x, y in bw]
+        lw = page_line_windows(world, row_species, a)   # R26-226: one window per DRAWING series (a series a build_to holds at index 0 takes no turn)
+        if lw:
+            scene["build_lines"] = [[round(x, 2), round(y, 2)] for x, y in lw]
         scenes.append(scene)
 
     # P53 T2 / R26-60: the two defaults a world-taking transition implies, stamped now that both sides of every
