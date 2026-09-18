@@ -210,6 +210,9 @@ LABEL_FIELD = {"figure": "text", "note": "text", "retitle": "text", "stamp": "te
                "callout": "label", "bracket": "label", "span": "label", "chip": "label",
                "ring": "label", "peel": "label"}   # where a kind carries THE WORDS it writes on the page
 DEFAULT_LABEL_FIELD = "label"
+DEPARTURE_MARK = "BASE DEPARTURE"   # the fixed mark a departure from the plan is written under, the CLI's own
+# (`generate_base_table.DEPARTURE_MARK` / `DEPARTURE_FORM`) - there for an AUTHOR's edit of the base, and here for
+# the compiler's own: a move the plan named that the base could not keep (E99 s74 Apply 4)
 CONTINUITY_ENTRIES = ("snap", "camera", "morph")   # E99 s70: the entries that CARRY the world that was there into
                                                   # this one - the card becomes the page, the camera pushes to it, the
                                                   # object becomes the chart. They are the continuity the operator said
@@ -498,6 +501,9 @@ def _meets(a: dict, b: dict, pad: float = 0.0) -> bool:
 PARK_LEAD_S = 0.4        # the park starts before the card lands (`build_short.py:361`: `t_pledge - 0.4`)
 PARK_DUR_S = 0.9         # the affine transform's own clock (`:314`, `:361`, `:394` - all 0.9)
 UNPARK_LAG_S = 0.3       # ... and the page re-takes the stage after the cards leave (`:394`: `+ 0.3`)
+SPECIES_DUR_S = 1.0      # the seconds a species with no `dur` of its own runs - the ENGINE's own default, read by
+                         # name and never a compiler guess (`scene-evidence-engine.mjs`: `const d = Math.max(0.001,
+                         # sp.dur || 1)` in `lpPaintStates`, and the same `|| 1` in every other species painter)
 
 
 def park_scale_at(species: list, t: float) -> float:
@@ -731,8 +737,131 @@ def _slots(free: list) -> list[int]:
     return slots
 
 
-def make_room(card: list, species: list, t1: float, d: dict, notes: list) -> float:
-    """THE PARK THAT MAKES THE ROOM - emitted onto the row, and the scale it parks the page to.
+# --- A PARK NEVER OVERLAPS A TRANSFORM THE PLAN NAMED (P66 T3 ninth pass) -----------------------
+# The director-critic's row 11 on base v4: the plan's own `chart_to compare` (E76 / E99 s56 - "+6.8 %
+# melts and splashes into 3x") compiled at 29.12 s for 0.90 s and NOTHING PLAYED - *"the same parked
+# bars, un-parking"* at every instant from 28.82 to 30.40. The cause is here: the placer had PARKED the
+# page to 0.52 at 24.98 s to make a room for `dock-h-calendar-wall` and UN-PARKED it at 29.42 s, so the
+# melt was asked to run on a chart that was a stamp mid-transform. A card's room is the compiler's own
+# convenience; a transform is the PLAN's sentence (E99 s66 - the plan is the intelligence), so the
+# transform keeps its instant and the CARD moves: after the transform has finished drawing, or before it
+# begins where the card's word comes first and the un-park can land by its start. A card that fits
+# neither side is DROPPED with its reason - never the transform, and never a card over the page's ink
+# (E65).
+def chart_to_settle(sp: dict) -> float:
+    """Seconds a `chart_to` is still DRAWING after its own window closes - the ENGINE's own clock.
+
+    A state change hands over on the transform's window and the arriving state then runs its own build
+    envelope (`scene-evidence-engine.mjs` `lpPaintStates`: `cCur = clamp01((t - (sp.at + d)) /
+    (states[k].buildDur || LP.BUILD))`), mirrored by name as `gate_motion_density.LP_BUILD_S`. The two
+    verbs that change no state - the park and the compare - land INSIDE their own window (the compare's
+    own note: *"compareGlyph ... lands the last letter exactly as the window ends"*), so they settle in 0.
+    """
+    return 0.0 if str(sp.get("to")) in CHART_TO_NO_STATE else MD.LP_BUILD_S
+
+
+def transform_guards(species: list) -> list[tuple[float, float, dict]]:
+    """Every `chart_to` on this row that is not a park, as `(its instant, the instant it has finished
+    drawing, the species)` - the windows a park may not touch."""
+    out: list[tuple[float, float, dict]] = []
+    for sp in sorted((s for s in species or [] if str(s.get("kind")) == "chart_to"
+                      and str(s.get("to")) != "park"), key=lambda s: float(s.get("at", 0.0))):
+        dur = sp.get("dur")
+        dur = float(dur) if isinstance(dur, (int, float)) and not isinstance(dur, bool) else SPECIES_DUR_S
+        out.append((float(sp["at"]), round(float(sp["at"]) + dur + chart_to_settle(sp), 2), sp))
+    return out
+
+
+def park_covers(at: float, out: float, guards: list) -> tuple | None:
+    """The first transform a park at `at`, un-parked at `out`, would still be standing over - or None.
+
+    The page is not back at full size until the un-park's own 0.9 s has run, so the parked STATE is
+    `[at, out + PARK_DUR_S]` and that is what is measured against the transform's window."""
+    lo, hi = at, round(out + PARK_DUR_S, 2)
+    return next(((a, z, sp) for a, z, sp in guards if a < hi - EPS and lo < z - EPS), None)
+
+
+def card_need(card: list, d: dict) -> float:
+    """The seconds a card needs on screen to READ and PARK - the engine's own dock clock, by name
+    (`build_scene_timeline_f.DOCK_READ_S` + `DOCK_PARK_S`, or this card's own where it names them)."""
+    C, opts = compiler(), card[4] or {}
+    return float(opts.get("read_s") or C.DOCK_READ_S) + float(opts.get("park_s") or C.DOCK_PARK_S)
+
+
+def park_beside(card: list, hit: tuple, guards: list, t1: float, d: dict, notes: list) -> tuple | None:
+    """The card's window moved CLEAR of the transform its park would have covered - `(the park, the
+    un-park)` - or None where it fits neither side and the card is dropped (E65; never the transform).
+
+    BEFORE, where the card's word comes first: the card leaves early enough that the un-park LANDS as
+    the transform begins. AFTER, otherwise: the card arrives `PARK_LEAD_S` after the transform has
+    finished drawing, keeping its own length, and it still has to read and park inside the row.
+    """
+    a, z, sp = hit
+    name = f"chart_to {sp.get('to')}"
+    need, t_in = card_need(card, d), float(card[2])
+    if t_in + EPS < a:
+        out_at = round(a - UNPARK_LAG_S - PARK_DUR_S, 2)          # the un-park ENDS as the transform starts
+        park_at = round(max(t_in - PARK_LEAD_S, 0.0), 2)
+        if (out_at - t_in >= need - EPS
+                and park_covers(park_at, round(out_at + UNPARK_LAG_S, 2), guards) is None):
+            notes.append(f"`{card[0]}` leaves at {out_at:.2f}s so its UN-PARK lands as the {name} at {a:.2f}s "
+                         f"begins: the card's word comes first ({t_in:.2f}s) and it still has its {need:.2f}s to "
+                         "read and park - a page mid-park cannot melt, and the transform the plan named keeps its "
+                         "own instant (E99 s66; E76 / E99 s56)")
+            card[3] = out_at
+            return park_at, round(out_at + UNPARK_LAG_S, 2)
+    length = round(float(card[3]) - t_in, 2)
+    t_in_after = round(z + PARK_LEAD_S, 2)
+    t_out_after = round(min(t_in_after + max(length, need), t1), 2)
+    park_at, out_at = round(t_in_after - PARK_LEAD_S, 2), round(t_out_after + UNPARK_LAG_S, 2)
+    if t_out_after - t_in_after >= need - EPS and park_covers(park_at, out_at, guards) is None:
+        notes.append(f"`{card[0]}` lands at {t_in_after:.2f}s, after the {name} at {a:.2f}s has finished drawing "
+                     f"({z:.2f}s - the transform's own window plus the engine's settle), and not at {t_in:.2f}s: "
+                     "the page is never parked for a card while the plan's own transform runs on it (E99 s66; E65)")
+        card[2], card[3] = t_in_after, t_out_after
+        return park_at, out_at
+    notes.append(f"`{card[0]}` is DROPPED: the page has no room clear of its ink for it, and the park that would make "
+                 f"one covers the {name} at {a:.2f}s - it fits neither before it (the card's word is at {t_in:.2f}s "
+                 f"and it needs {need:.2f}s to read and park) nor after it ({z:.2f}s, with the row ending at "
+                 f"{t1:.2f}s). The transform is the plan's own sentence and is never moved for a card (E99 s66, E65)")
+    return None
+
+
+def unpark_inside_the_row(card: list, at: float, out: float, guards: list, t1: float, d: dict,
+                          notes: list) -> tuple | None:
+    """`(the park, the un-park)` with the UN-PARK landing WHOLE inside the row - or None where it cannot
+    and the card is dropped by name.
+
+    CAPABILITIES.md:120 / `build_short.py:394`: the un-park is how the chart RE-TAKES the stage. A page
+    whose un-park falls past its row's end is left standing at `park_scale` into the boundary - the row's
+    own exit played on a stamp, and the next world handed a parked chart (the T3j review's MEDIUM 5, on
+    arithmetic that clamps the card's exit to `t1` and then adds the lag to it). So the card LEAVES early
+    enough for the page to grow back, keeping its own read and park; and where even that does not fit, the
+    park is refused and the CARD goes - a card's room is the compiler's convenience and the page is the
+    cut's own world (E65: never the page for a card, and never the plan's transform either).
+    """
+    if out + PARK_DUR_S <= t1 + EPS:
+        return at, out
+    leave = round(t1 - UNPARK_LAG_S - PARK_DUR_S, 2)
+    need = card_need(card, d)
+    if (leave - float(card[2]) >= need - EPS
+            and park_covers(at, round(leave + UNPARK_LAG_S, 2), guards) is None):
+        notes.append(f"`{card[0]}` leaves at {leave:.2f}s and not at {float(card[3]):.2f}s, so the page's UN-PARK "
+                     f"lands whole inside the row (it ends at {t1:.2f}s): the card still has its {need:.2f}s to read "
+                     "and park, and a page is never left standing parked into its own exit (CAPABILITIES.md:120)")
+        card[3] = leave
+        return at, round(leave + UNPARK_LAG_S, 2)
+    notes.append(f"`{card[0]}` is DROPPED: the page has no room clear of its ink for it, and the park that would make "
+                 f"one could not UN-PARK inside the row - the card lands at {float(card[2]):.2f}s and needs "
+                 f"{need:.2f}s to read and park, so the page would still be at `park_scale` when the row ends at "
+                 f"{t1:.2f}s. A page left parked hands the next world a stamp, so the card goes and the page keeps "
+                 "the stage (CAPABILITIES.md:120; E65)")
+    return None
+
+
+def make_room(card: list, species: list, t1: float, d: dict, notes: list) -> float | None:
+    """THE PARK THAT MAKES THE ROOM - emitted onto the row, and the scale it parks the page to (None
+    where the card was dropped instead: a park that would have covered the plan's own transform).
 
     The approved cut's own answer to a card with nowhere to go: *"the monthly bars PARK up-left on
     'pledged' and the fab card takes the band the park frees"* (the park 0.4 s before the card, at
@@ -743,16 +872,27 @@ def make_room(card: list, species: list, t1: float, d: dict, notes: list) -> flo
     `source`; never invented here. R26-172, which used to strip them in portrait, is WITHDRAWN."""
     scale, anchor = float(d.get("park_scale", 0.52)), str(d.get("park_anchor", "top"))
     at = round(max(float(card[2]) - PARK_LEAD_S, 0.0), 2)
+    out = round(float(card[3]) + UNPARK_LAG_S, 2)
+    guards = transform_guards(species)
+    hit = park_covers(at, out, guards)
+    if hit is not None:
+        moved = park_beside(card, hit, guards, t1, d, notes)
+        if moved is None:
+            return None
+        at, out = moved
+    fits = unpark_inside_the_row(card, at, out, guards, t1, d, notes)   # ... and it always un-parks (MEDIUM 5)
+    if fits is None:
+        return None
+    at, out = fits
     species.append({"kind": "chart_to", "at": at, "dur": PARK_DUR_S, "to": "park", "scale": scale, "anchor": anchor})
     notes.append(f"the page PARKS to {scale} at {at:.2f}s to make the room `{card[0]}` lands in: the page had no room "
                  "of its own clear of its ink, and a card is never dropped over a page's ink (the approved cut's own "
                  "move, transcribed in `page-parks-to-make-room-for-the-card`; R26-172 WITHDRAWN)")
-    out = round(float(card[3]) + UNPARK_LAG_S, 2)
-    if out < t1 - EPS:
-        species.append({"kind": "chart_to", "at": out, "dur": PARK_DUR_S, "to": "park",
-                        "scale": UNPARK_SCALE, "anchor": anchor})
-        notes.append(f"the page UN-PARKS at {out:.2f}s, as the card leaves: the chart re-takes the stage rather than "
-                     "standing small under nothing (`build_short.py:394`; CAPABILITIES.md:120)")
+    species.append({"kind": "chart_to", "at": out, "dur": PARK_DUR_S, "to": "park",
+                    "scale": UNPARK_SCALE, "anchor": anchor})
+    notes.append(f"the page UN-PARKS at {out:.2f}s, as the card leaves, and is back at full size by {out + PARK_DUR_S:.2f}s "
+                 f"- inside the row's own end ({t1:.2f}s): the chart re-takes the stage rather than standing small "
+                 "under nothing (`build_short.py:394`; CAPABILITIES.md:120)")
     return scale
 
 
@@ -788,13 +928,29 @@ def place_cards(docks: list, page: dict | None, aspect: str, notes: list,
     for key in sorted(set(keys.values())):
         n = max([k for i, k in enumerate(slots) if keys[i] == key] or [0]) + 1
         rooms[key] = card_rooms(page, aspect, n, park=key[0], marked=key[1], quiet_taken=key[2])
-    for i, (card, k) in enumerate(zip(free, slots)):
+    dropped: list[int] = []
+    for i, card in enumerate(free):
+        # the room index is read HERE and not once before the loop: a card whose window moved (`make_room`
+        # re-times one clear of the plan's own transform) is live at instants it was not, and two cards on
+        # one instant never share a rectangle - the docstring's own rule (E65; the T3j review's MEDIUM 4)
+        k = slots[i]
         scale, marked, quiet_taken = keys[i]
         no_room = k >= len(rooms[keys[i]])
         if no_room and species is not None and t1 is not None and scale >= UNPARK_SCALE - EPS:
-            scale = make_room(card, species, float(t1), d, notes)
+            made = make_room(card, species, float(t1), d, notes)
+            if made is None:      # the park would have covered the plan's own transform: the card goes, not the move
+                dropped.append(i)
+                continue
+            scale = made
+            # the card's own window may have MOVED clear of that transform, so what this row writes over
+            # the plot while it is up is re-read on the window it ended up with (E65, P66 T3e)
+            marks[i], quiet[i] = (marks_live(species, float(card[2]), float(card[3])),
+                                  quiet_live(species, float(card[2]), float(card[3])))
+            marked, quiet_taken = bool(marks[i]), bool(quiet[i])
             parks[i] = scale
             keys[i] = (scale, marked, quiet_taken)
+            slots = _slots(free)                       # ... and so is the room the moved card takes
+            k = slots[i]
             rooms.setdefault(keys[i], card_rooms(page, aspect, max(slots) + 1, park=scale, marked=marked,
                                                  quiet_taken=quiet_taken))
         if quiet[i]:
@@ -830,7 +986,8 @@ def place_cards(docks: list, page: dict | None, aspect: str, notes: list,
         else:
             notes.append(f"{card[0]} keeps the compiler's own placer: the page has no {k + 1}th room clear of its "
                          "ink for a card, not even parked (E65's ladder decides it at compile time)")
-    return docks
+    gone = {id(free[i]) for i in dropped}
+    return [x for x in docks if id(x) not in gone]
 
 
 # --- E67: THE CHART'S INKS ARE ELECTRIC; THE CHART IS THE THUMBNAIL -----------------------------
@@ -1664,11 +1821,9 @@ def _melt_hold(prev: dict, g: dict, pair: str) -> tuple[str | None, str]:
                             f"{plate_of(g['plate'])} springs up through the stains as if painted (E88, "
                             f"CAPABILITIES.md:37) - a world change with no cut and no cream in it; "
                             f"{_leaves_on_the_cut(prev['plate'])}")
-    declared = entry_token_in(g["plate"])
-    if declared:
-        return None, (f"{name}: REFUSED - a `splash:chart`'s page arrives out of the splatter, `built` (E88), and this "
-                      f"plan declares the page's own arrival `{declared}`; the compiler does not overwrite the "
-                      f"author's entry (E99 s66)")
+    # ... and where the plan DECLARES this page's own arrival the splash is refused - by `_run_chain`, which
+    # asks it of every candidate that DEMANDS an arrival (`entry_owed`), so the rule lives in one place and
+    # the next transform to demand one cannot forget it (the T3j review's HIGH 1)
     return MELT_CHART, ("melt-then-splash into the chart: the page's ink balls up and the next chart shows THROUGH the "
                         "stains, arriving `built` out of the splatter rather than by its own build (E88, "
                         "CAPABILITIES.md:37)")
@@ -1810,7 +1965,14 @@ def variety_words(rec: dict) -> str:
             f"several boundaries back (E88's own use-when, \"never as a mechanical wipe\"; the variety rule, P66 T2)")
 
 
-def _run_chain(candidates: list[tuple], chain: list[str], last: dict | None, take) -> tuple | None:
+def entry_owed(token: str) -> str | None:
+    """The arrival a transform DEMANDS of the incoming page - `built` for a `splash:chart` (E88: the chart
+    shows THROUGH the stains rather than building under them), None for every other exit token."""
+    return BUILT_ENTRY if token == MELT_CHART else None
+
+
+def _run_chain(candidates: list[tuple], chain: list[str], last: dict | None, take,
+               declared: str | None = None) -> tuple | None:
     """Every transform the record carries for this pair, in the order s74 Apply 1-2 sets, and the first
     one whose OWN rules hold. Returns the `take(...)` result, or None when the pair is out of transforms.
 
@@ -1823,18 +1985,29 @@ def _run_chain(candidates: list[tuple], chain: list[str], last: dict | None, tak
         if not token:
             chain.append(note)
             continue
+        owed = entry_owed(token)
+        if owed and declared is not None:
+            # THE ENTRY THE PLAN WROTE STANDS (E99 s66 - the plan is the intelligence). A transform that
+            # demands its own arrival is REFUSED for this pair and the chain goes on; it is never taken and
+            # then made to fit by writing its arrival over the plan's token (the T3j review's HIGH 1: that
+            # write left no departure line, and the landing clock then ran on a token the plan never wrote).
+            chain.append(f"{name}: REFUSED - it demands the incoming page arrive `{owed}` (E88 - a splash's chart "
+                         f"shows THROUGH the stains rather than building under them) and this plan declares the "
+                         f"page's own arrival `{declared}`; the entry the plan WROTE stands, and the compiler "
+                         f"refuses the transform rather than overwrite it (E99 s66)")
+            continue
         if last and name == last.get("name"):
             chain.append(f"{name}: DEFERRED - {variety_words(last)}")
             if deferred is None:
                 deferred = (name, token, note)
             continue
-        return take(name, token, note, entry_owed=BUILT_ENTRY if token == MELT_CHART else None)
+        return take(name, token, note, entry_owed=entry_owed(token))
     if deferred:
         name, token, note = deferred
         return take(name, token, f"{note} - the variety rule DEFERRED it ({variety_words(last or {})}) and every other "
                     f"transform the record carries for this pair was refused BY NAME above, so the repeat stands: a dip "
                     f"is the last resort and a repeat of a transform is not one (E99 s74 Apply 1)",
-                    entry_owed=BUILT_ENTRY if token == MELT_CHART else None)
+                    entry_owed=entry_owed(token))
     return None
 
 
@@ -1883,7 +2056,8 @@ def choose_transition(prev: dict | None, g: dict, skeleton: dict,
         got = _run_chain([("recast", lambda: _recast_hold(prev, g)),
                           ("rescale", lambda: _rescale_hold(prev, g)),
                           ("morph", _morph_hold),
-                          ("melt-then-splash", lambda: _melt_hold(prev, g, pair))], chain, last, take)
+                          ("melt-then-splash", lambda: _melt_hold(prev, g, pair))], chain, last, take,
+                         entry_token_in(g["plate"]))
         if got:
             return got
         if arrival in ("the spiral return", "the axes open"):
@@ -1898,7 +2072,8 @@ def choose_transition(prev: dict | None, g: dict, skeleton: dict,
     if pair == "page->plate":
         got = _run_chain([("melt-then-splash", lambda: _melt_hold(prev, g, pair)),
                           ("the door", lambda: _door_hold(prev, g, skeleton, d)),
-                          ("the suck", lambda: _suck_hold(prev, g, skeleton))], chain, last, take)
+                          ("the suck", lambda: _suck_hold(prev, g, skeleton))], chain, last, take,
+                         entry_token_in(g["plate"]))
         if got:
             return got
         return take("the dip", DIP_EXIT, "the world changes and every transform for this pair was refused above, so "
@@ -2300,7 +2475,10 @@ def _group_rows(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str,
                           {"beat": int(g["beats"][0]["beat"]), "skeleton": pick["skeleton"]["id"],
                            "act": str(g["act"] or ""), "rule": "; ".join([pick["rule"], *pick["notes"]]),
                            "signature": pick["skeleton"]["signature"],
-                           "transition": pick.get("transition")})
+                           "transition": pick.get("transition"),
+                           # the plan's own move the compiler could NOT keep, named for the table and for
+                           # M45's `replaced` line (E99 s74 Apply 4) - absent on every clean row
+                           **({"departure": g["departure"]} if g.get("departure") else {})})
     if not g.get("open_mounts"):
         return [page_row(t0)]
     at = mount_word_at(g, t0, t1)
@@ -2502,6 +2680,9 @@ def _pick(gs: list[dict], lib: list[dict], d: dict, ws=None) -> list[dict]:
         g["shape"], g["acts"] = shape, acts_of({"act": g["act"]})
         g["states"] = group_states(g)                       # the `;then=` chain this page declares
         g["prev_entry"] = gs[i - 1].get("entry") if i else None
+        # the world UNDER this row - the row before it, or the hook's own world for an open whose page
+        # mounts over it. None means nothing precedes this world, which is what a mount cannot have (E45)
+        g["under_world"] = gs[i - 1]["world"] if i else (_hook_world(g) or {}).get("world")
         g["thrown_before"] = bool(i and any(str(mv.get("kind")) == MOVE_DOCK
                                             and (mv.get("options") or {}).get("arrive") == "throw"
                                             for b in gs[i - 1]["beats"] for mv in moves_of(b)))
@@ -2536,13 +2717,28 @@ def _pick(gs: list[dict], lib: list[dict], d: dict, ws=None) -> list[dict]:
             last_transform = {"name": pick["transition"].get("taken"), "world": i + 1,
                               "at": round(float(gs[i]["t0"]), 2)}
         owed = pick["transition"].get("entry")
+        declared = entry_token_in(gs[i]["plate"])
+        if owed and declared is not None:
+            # UNREACHABLE BY CONSTRUCTION, and said out loud rather than trusted: `_run_chain` refuses a
+            # transform that demands an arrival where the plan declared one, so nothing reaches here with
+            # both. If a transform ever does, the PLAN's token stands and the transition loses its demand -
+            # never the other way round (the T3j review's HIGH 1; E99 s66).
+            pick["transition"]["entry"], owed = None, None
+            pick["notes"].append(f"the {pick['transition'].get('taken')} keeps no arrival of its own on this row: the "
+                                 f"plan declares the page's own `{declared}`, and an entry the plan WROTE is never "
+                                 "overwritten to make a transform fit (E99 s66; E99 s74 Apply 4)")
         if owed and gs[i].get("entry") != owed:
-            # the transform DEMANDS this arrival and the plan declared none: a `splash:chart`'s page
-            # arrives out of the splatter (E88), so the entry the clock would have written gives way to it
+            # the transform DEMANDS this arrival and the plan declared none: a `splash:chart`'s page arrives
+            # out of the splatter (E88), so the entry the clock would have written gives way to it - and the
+            # entry is THE COMPILER's, marked as such: the landing clock refuses a move that would fire before
+            # it rather than holding one to it, which it does only for an entry the PLAN wrote (`_move`)
             pick["notes"].append(f"the page arrives `{owed}` and not by {gs[i].get('entry')}: the transition into it "
                                  f"is a {pick['transition'].get('taken')}, and a splash's chart shows THROUGH the "
-                                 f"stains rather than building under them (E88, CAPABILITIES.md:37)")
+                                 f"stains rather than building under them (E88, CAPABILITIES.md:37). This entry is "
+                                 "the COMPILER's own, not the plan's - the plan declares none on this page - so a "
+                                 "move that would fire before its landing is refused, not held to it (E99 s66)")
             gs[i]["entry"], gs[i]["entry_token"] = owed, owed
+            gs[i]["entry_compiler"] = True
         pick["rule"] += "; " + exit_rule
     return picks
 
@@ -2558,24 +2754,87 @@ def _hook_world(g: dict) -> dict | None:
     return {"world": world_of(plate), "plate": plate, "entry": None}
 
 
+def entry_beat(g: dict) -> dict:
+    """The beat whose OWN PLATE carried this row's entry token - the beat a departure from it is recorded
+    on, and the beat `gate_one_shot_floor`'s M45 owes the mechanism to and reads the reason off
+    (`base_departures`, keyed by beat). ONE KEY ON BOTH SIDES (the T3j review's MEDIUM 3).
+
+    It is the row's first beat everywhere except the absorbed open, where the page MOUNTS over the hook's
+    own world and the row's plate is the LAST beat's (`groups`): there the row's first beat is the hook's,
+    which declares no entry at all, and a departure keyed on it is a line M45 never finds."""
+    return g["beats"][-1] if g.get("open_mounts") else g["beats"][0]
+
+
+def entry_is_authored(g: dict) -> bool:
+    """Did the PLAN write the entry this row carries, and did it stand? The one reading the landing clock
+    turns on (`_move`): a move that would fire before an AUTHORED entry's landing is HELD to it (the
+    compiler adjusts its moves around the plan's entry, E99 s66), and one that would fire before the
+    COMPILER's own entry is refused (the compiler never moves the author's beat to cover its own choice).
+
+    False for three things, and the third is why this is a function: no token on the plate at all, a token
+    whose own rules refused it (`g["departure"]`), and a token the BOUNDARY took where the plan wrote none
+    (`g["entry_compiler"]` - a `splash:chart`'s `built`, E88)."""
+    return (entry_token_in(g["plate"]) is not None
+            and not g.get("departure") and not g.get("entry_compiler"))
+
+
+def entry_refused(g: dict, head: str) -> str | None:
+    """Why an AUTHORED entry cannot be kept on this row - None where its own rules hold.
+
+    The one case the record carries: a MOUNT rises over the world that was there (E45 - the mount IS
+    the transition; `shapes` own note, *"a `mount` page soaks in OVER the world before it, which is
+    never bare ground"*), so a mount with no world under it would soak cream over cream. Every other
+    authored entry stands: the compiler adjusts the row's MOVES around it and never the entry itself.
+    """
+    if head == "mount" and g.get("under_world") is None:
+        return ("a mount rises OVER the world that was there and this row has none under it - the mount IS the "
+                "transition (E45), and cream soaking over cream is the bare-ground open the fourth pass removed")
+    return None
+
+
 def _entry(g: dict, shape: str, d: dict, ws=None) -> tuple:
-    """The entry the CLOCK demands of a page - `(its head, the whole token, the rule in words)`.
+    """The page's entry - `(its head, the whole token, the rule in words)`.
 
-    The mount when the beat's number lands `MOUNT_AT_OR_AFTER_S` or more after the page's entry, the
-    axes otherwise (never `built`); the clock outranks the variety rule - the approved shape is not
-    traded for variety.
+    THE AUTHOR'S OWN ENTRY STANDS (P66 T3 ninth pass; E99 s66 - the plan is the intelligence). Any
+    entry token the plan WRITES on its plate - `mount=<s>`, `snap=<dock>`, `camera=<dock>`, `:spiral`,
+    `:axes` - is the plan's statement of how that world arrives, and the compiler's landing clock
+    adjusts the row's MOVES around it (a light or a number that would land before the entry has
+    finished drawing is held to the entry's own landing, `_move`), never the entry. This generalises
+    the second pass' accepted deviation - *"an AUTHORED snap=/camera= entry stands when the plan's
+    first light is spoken before the clock's own entry would finish drawing - the compiler never
+    overwrites an authored entry to manufacture a rule violation"* - to every token, because the
+    narrower rule is what let the clock write `:axes` over the calendar plan's own `mount=0.79` and
+    replace the cut's one mount with a hard cut (the director-critic's rows 3 and 11, world change 3
+    at 16.90 s: *"the page replaces a room instead of rising over it"*).
 
-    ONE thing outranks the clock, and it is the plan (E99 s66): when the AUTHOR's own plate declares
-    an entry whose chart is already on the page as it arrives (`BUILT_ON_ARRIVAL`) and the plan's
-    first LIGHT move is spoken before the clock's entry would have finished drawing, the author's
-    entry stands. The alternative is a light over a build, and the compiler will not fire one (E99
-    s67 Apply 2) and will not move the author's beat either - so it stops manufacturing the conflict.
+    WHERE THE CLOCK DECIDES: only a page whose plate declares NO entry at all. The mount when the
+    beat's number lands `MOUNT_AT_OR_AFTER_S` or more after the page's entry, the axes otherwise
+    (never `built`); the clock outranks the variety rule - the approved shape is not traded for variety.
+
+    WHERE THE AUTHORED ENTRY CANNOT BE KEPT (`entry_refused` - its own rules refuse it), the clock's
+    entry is written and the row owes a `BASE DEPARTURE` line naming the plan's token and the reason
+    (E99 s74 Apply 4: a base that reaches a world change by another move than the plan named owes one).
     """
     if g["world"] != "page":
         return None, None, ""
     entry, rule = _clock_entry(g, shape, d)
     declared = entry_token_in(g["plate"])
+    if declared is None:
+        return entry, entry, rule
     head = str(declared).split("=", 1)[0]
+    refused = entry_refused(g, head)
+    if refused:
+        # the clock's own entry may be refused by the same rule (a first row whose number lands late: the
+        # clock wants a mount too, and there is still no world under it) - then the AXES entry is written,
+        # the one entry that asks nothing of the world before it (E99 s67 Apply 6)
+        wrote, clock_too = ((entry, "") if entry_refused(g, entry) is None else
+                            ("axes", f", and the clock's own `{entry}` is refused by the same rule"))
+        on_beat = entry_beat(g).get("beat", "?")        # the beat whose own plate declared it (MEDIUM 3)
+        g["departure"] = {"token": declared, "why": refused, "wrote": wrote, "beat": on_beat}
+        return wrote, wrote, (f"{DEPARTURE_MARK} - the plan's own `{declared}` on beat "
+                              f"{on_beat} could not stand: {refused}{clock_too}; the compiler "
+                              f"wrote `{wrote}` instead ({rule}), and an authored entry is replaced nowhere else "
+                              "(E99 s74 Apply 4 - the departure is NAMED, never silent; E99 s66)")
     if head in CONTINUITY_ENTRIES:
         # E99 s70 (the operator: "you dropped most of the continuity building transitions like
         # morphs, transformation, and 'the door'"): the snap, the camera arrival and the object
@@ -2593,16 +2852,18 @@ def _entry(g: dict, shape: str, d: dict, ws=None) -> tuple:
         return head, declared, (f"the page arrives by the author's own `{declared}`: the plan declares the RETURN - "
                                 f"the spiral unwinds this page from its own point, and its chart was built the first "
                                 f"time the cut showed it (E99 s66; the clock alone would have written {entry})")
+    # EVERY OTHER AUTHORED TOKEN - the mount and the axes entry included (the ninth pass). The clock's
+    # own reading is kept in the `why` beside it, so the operator reads what the compiler would have
+    # written and what the plan said instead.
+    land = page_land_offset(head, _mount_s(g["plate"]))
     light = first_light_move(g, ws) if ws else None
-    if light is not None and head in BUILT_ON_ARRIVAL:
-        land = page_land_offset(entry, _mount_s(g["plate"]))
-        if light < float(g["t0"]) + land - EPS:
-            return (str(declared).split("=", 1)[0], declared,
-                    f"the page arrives by the author's own `{declared}` and not by {entry}: the plan's first light "
-                    f"lands at +{light - float(g['t0']):.1f}s, before a {entry} build would have finished at "
-                    f"+{land:.1f}s (E99 s66 - the plan is the intelligence; the compiler neither fires a light over "
-                    "a build nor moves the author's beat)")
-    return entry, entry, rule
+    clash = (f"; the plan's first light lands at +{light - float(g['t0']):.1f}s and this entry's chart lands at "
+             f"+{land:.1f}s, so the light is HELD to the landing rather than fired over the build (E99 s67 Apply 2)"
+             if light is not None and light < float(g["t0"]) + land - EPS else "")
+    return head, declared, (f"the page arrives by the author's own `{declared}`: an entry the plan WRITES is its "
+                            f"statement of how this world arrives, and the compiler's clock adjusts this row's moves "
+                            f"around it - never the entry (E99 s66 - the plan is the intelligence; the clock alone "
+                            f"would have written {entry}){clash}")
 
 
 def _clock_entry(g: dict, shape: str, d: dict) -> tuple[str, str]:
@@ -2665,6 +2926,9 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
         notes.append("the page's own `;then=` chain travels with it (" + ", ".join(chain) +
                      "): a chart_to that reaches a state the plate never declared redraws nothing (E99 s70 Apply 3)")
     land = page_land_offset(entry_in(plate), float(fills["mount_s"])) if plate.startswith("ledger:") else None
+    # did the PLAN write this page's entry, and did it stand? Then the landing clock holds this row's
+    # moves to the entry's own landing instead of refusing them (the ninth pass; E99 s66)
+    authored = entry_is_authored(g)
     docks = []
     for spec in tpl.get("docks") or []:
         dock = _dock_tuple(spec, fills, beat, skeleton, t0, t1, d)
@@ -2687,7 +2951,7 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
     made_docks: list = []
     for b in g["beats"]:
         for mv in moves_of(b):
-            made, why = _move(mv, b, ws, t0, t1, ken, land, d)
+            made, why = _move(mv, b, ws, t0, t1, ken, land, d, notes, authored)
             if made is None:
                 notes.append(why)
             elif mv.get("kind") == MOVE_DOCK:
@@ -2763,7 +3027,15 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
     return (t0, t1, plate, ken, [tuple(x) for x in docks], pick["exit"], species)
 
 
-def _move(mv: dict, beat, ws, t0: float, t1: float, ken, land, d: dict) -> tuple:
+# The moves the page's own landing binds: a light is punctuation after the build (E99 s67 Apply 1-2) and
+# a FIGURE is a number written at a datum (E50) - neither can happen on a chart that is not drawn yet. The
+# hold that binds them is itself bounded by the move's OWN SENTENCE: a light lives with the sentence it
+# points with, so a landing past that sentence's end drops the move instead of moving it off its word.
+HELD_TO_THE_LANDING = LIGHT_AFTER_BUILD_KINDS + ("figure",)
+
+
+def _move(mv: dict, beat, ws, t0: float, t1: float, ken, land, d: dict,
+          notes: list | None = None, authored: bool = False) -> tuple:
     """One named move as what it is on the row - `(a species dict or a dock list, None)`, or
     `(None, the reason it was dropped)`.
 
@@ -2794,10 +3066,41 @@ def _move(mv: dict, beat, ws, t0: float, t1: float, ken, land, d: dict) -> tuple
     if kind in CAMERA_MOVES and ken and ken[0]:
         raise Refused(f"beat {n}: a {kind} over Ken Burns scale {ken[0]} - a camera move and a Ken Burns never "
                       "share a window (s9.28 C3); the move or the skeleton's ken has to give")
-    if land is not None and kind in LIGHT_AFTER_BUILD_KINDS and d.get("light_after_build", True) and t < t0 + land - EPS:
-        raise Refused(f"beat {n}: the {kind} on {mv['at_word']!r} fires at {t:.2f}s, before this page's own chart "
-                      f"lands at {t0 + land:.2f}s - a light is punctuation, not a cover for the build (E99 s67 "
-                      "Apply 1-2). The compiler refuses it rather than move the author's beat.")
+    # THE LANDING CLOCK, against a move that would fire before the page's chart lands. Where the page's
+    # entry is the AUTHOR's own the entry stands and the MOVE is held to the landing (the ninth pass:
+    # the clock adjusts the moves around an authored entry, never the entry - E99 s66, s74 Apply 4); a
+    # light over a build is still never fired (E99 s67 Apply 1-2), and a number is never written on a
+    # chart that is not there yet (E50). Where the entry is the COMPILER's own the move is refused, as
+    # it always was: the compiler will not move the author's beat to cover its own choice.
+    if (land is not None and d.get("light_after_build", True) and t < t0 + land - EPS
+            and (kind in LIGHT_AFTER_BUILD_KINDS or (authored and kind in HELD_TO_THE_LANDING))):
+        if not authored:
+            raise Refused(f"beat {n}: the {kind} on {mv['at_word']!r} fires at {t:.2f}s, before this page's own chart "
+                          f"lands at {t0 + land:.2f}s - a light is punctuation, not a cover for the build (E99 s67 "
+                          "Apply 1-2). The compiler refuses it rather than move the author's beat.")
+        held = round(t0 + land, 2)
+        until = (mv.get("options") or {}).get("until")
+        # THE HOLD IS BOUNDED BY ITS OWN BEAT, never by the row (the T3j review's HIGH 2). A light lands on
+        # the SENTENCE it points with and a figure is a number written as it is spoken (E50; E99 s67 Apply 1 -
+        # and this file enforces the same rule on the skeleton's own species through `_beat_at`), so a hold
+        # that would cross into the NEXT sentence is dropped by name: held there, the light points at a word
+        # that has already gone by. Measured: a spotlight on a 6.4-8.6 s sentence held to 11.50 s.
+        if held >= float(beat["t1"]) - EPS:
+            return None, (f"the {kind} on beat {n} ({mv['at_word']!r}, {t:.2f}s) is DROPPED: this page's chart lands "
+                          f"at {held:.2f}s on the author's own entry and the entry lands after its sentence "
+                          f"({float(beat['t0']):.2f}-{float(beat['t1']):.2f}s) - the {kind} would point at nothing, "
+                          f"and it is never held across into the next beat (E50 - a light lives with its own "
+                          f"sentence; E99 s67 Apply 1)")
+        if held >= t1 - SPECIES_TAIL_S or (isinstance(until, (int, float)) and held >= float(until) - EPS):
+            return None, (f"the {kind} on beat {n} ({mv['at_word']!r}, {t:.2f}s) fires before this page's chart lands "
+                          f"at {held:.2f}s on the author's own entry, and there is no room left for it after the "
+                          f"landing: dropped rather than fired over the build (E99 s67 Apply 2)")
+        if notes is not None:
+            notes.append(f"the {kind} on beat {n} ({mv['at_word']!r}) is HELD from {t:.2f}s to {held:.2f}s, still "
+                         f"inside its own sentence ({float(beat['t0']):.2f}-{float(beat['t1']):.2f}s): this page's "
+                         "chart lands there on the entry the PLAN named, and the compiler's clock adjusts the move "
+                         "around the author's entry rather than the entry around its clock (E99 s66; s74 Apply 4)")
+        t = held
     if kind == MOVE_DOCK:
         options = dict(mv.get("options") or {})
         lane = options.pop(MOVE_SLOT, DOCK_LANE)

@@ -32,7 +32,9 @@ saying so.
 
 THE TABLE'S PATH. `<project>/SHOT-TABLE-SHORT.py` is where a project's `build_short.py` writes it and where
 `table.apply_sidecar` and the compiler read it. A PRIVATE build never writes over the project's approved table
-(`lab_build.py:96` writes its own inside the build): pass `--table <build>/SHOT-TABLE-SHORT.py` for one.
+(`lab_build.py:96` writes its own inside the build): pass `--table <build>/SHOT-TABLE-SHORT.py` for one. The
+BARE form is REFUSED where the project's table already exists (E99 s11) - it is kept only for a project that has
+none yet.
 
 THE CUT'S CLOSE (E41 / E99 s72). Where the project defines an outro - the Remotion-kit card and the brand line
 stitched under it - the base's closing row IS that row: `outro_resolver` READS the project's own `build_short.py`
@@ -226,6 +228,29 @@ def md_rows(rows: list[tuple], why: list[dict]) -> list[str]:
     return out
 
 
+def md_base_departures(why: list[dict]) -> list[str]:
+    """THE COMPILER'S OWN DEPARTURES - every move the PLAN named that the base could not keep, one line
+    each, naming the row, the beat, the plan's token, the reason and what was written instead.
+
+    E99 s74 Apply 4: *a base that reaches a world change by another move than the plan named owes a
+    DEPARTURE line*. The row's `why` carries it too (the last column above); this section is where a
+    reader - and M45's `replaced` verdict - finds it without reading twelve rules. A clean base carries
+    no section at all: there is nothing to name.
+    """
+    found = [(n, w) for n, w in enumerate(SH.rows_why(why), start=1) if w.get("departure")]
+    if not found:
+        return []
+    out = [f"## {DEPARTURE_MARK}S the COMPILER took ({len(found)})", "",
+           "The plan named a move this base could not keep. Each line is the compiler's own, not an "
+           "author's edit of the table (those are the ones `--departures` reads back against the "
+           f"project's `{LEDGER_NAME}`).", ""]
+    for n, w in found:
+        dep = w["departure"]
+        out.append(f"- **{DEPARTURE_MARK} - row {n}** (beat {dep['beat']}): the plan's own "
+                   f"`{dep['token']}` could not stand - {dep['why']}; the compiler wrote `{dep['wrote']}`.")
+    return out + [""]
+
+
 def md_mix(mix: dict, approved: dict) -> list[str]:
     """The base's mix beside the approved shorts' measured target (M46's input, never its verdict)."""
     target = approved.get("target") or {}
@@ -258,6 +283,7 @@ def base_doc(project: Path, build: Path, table: Path, rows: list[tuple], why: li
         lines += ["**--force**: the table on disk was newer than the plan and was overwritten anyway. "
                   f"The reason given: *{forced}*", ""]
     lines += ["## The rows, and why each skeleton", ""] + md_rows(rows, why) + [""]
+    lines += md_base_departures(why)
     lines += [f"## The beats the plan leaves silent ({len(silent)})", ""]
     if silent:
         lines += ["No move is named for these sentences - the base carries the held world under them. The author's to "
@@ -566,6 +592,21 @@ def final_table_path(project: Path, build: Path, explicit: Path | None) -> Path:
     return inside if inside.is_file() else project / TABLE_NAME
 
 
+def bare_table(project: Path, explicit: Path | None) -> Path:
+    """WHERE THE BARE FORM MAY WRITE. Without `--table` the path resolved to `<project>/SHOT-TABLE-SHORT.py` -
+    which on a shipped project is the APPROVED cut's table (E99 s11): two passes wrote a base over one by
+    accident and restored it with git. The bare form is kept for a project that has no table YET; where one
+    already stands it is REFUSED by name, before any write, naming the path to pass instead."""
+    if explicit is not None:
+        return explicit
+    table = project / TABLE_NAME
+    if table.is_file():
+        raise Refused(f"FAIL: {rel(table)} already exists - the project's {TABLE_NAME} is the approved cut's "
+                      f"(E99 s11), and the bare form would write the base over it. "
+                      f"Pass --table <build>/{TABLE_NAME} to write the build's own.")
+    return table
+
+
 def final_rows(project: Path, build: Path, table: Path, aspect: str) -> list[tuple]:
     """The build's rows AS COMPILED: the table's literal with `overrides.json` layered over it - the compiler's own
     `apply_overrides` (the reading half of `table.apply_sidecar`: nothing is written here)."""
@@ -711,7 +752,7 @@ def main(argv: list[str] | None = None) -> int:
             return bind_build_cues(build, args.timeline, project)
         if args.departures:
             return report_departures(project, build, final_table_path(project, build, args.table), args.aspect)
-        table = args.table if args.table is not None else project / TABLE_NAME
+        table = bare_table(project, args.table)
         rows, why = write_base(project, build, table.resolve(), args.aspect, args.force)
     except Refused as exc:
         print(str(exc), file=sys.stderr)

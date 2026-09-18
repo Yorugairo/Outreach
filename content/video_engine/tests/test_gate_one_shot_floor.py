@@ -876,3 +876,71 @@ def test_a_builder_that_fails_is_named_and_the_floor_still_runs(fake_repo: Path,
     assert [r["id"] for r in FLOOR.load_recipes(fake_repo / FLOOR.CATALOG_REL)] == ["recipe:stale"]
     assert capsys.readouterr().err.strip().endswith(
         "[layers] effects-catalog failed to rebuild: fake: the card is malformed")
+
+
+# ---------------------------------------------------------------- P66 T3 ninth pass: the REASON on a replacement
+
+def test_m45_replaced_carries_the_bases_own_departure_reason(tmp_path: Path) -> None:
+    """E99 s74 Apply 4: a base that reaches a world change by another move than the plan named owes a
+    DEPARTURE line - so where the base carries one, M45's `replaced` verdict READS it instead of leaving
+    the operator to guess whether the compiler chose or could not choose (the director-critic's row 3 on
+    the calendar base: the plan's `mount=0.79` became an axes cut and no line said why)."""
+    # Arrange: the plan says beat 2 returns by the spiral; the cut mounts instead, and the base says why
+    scenes = [page("s1", [0, 10], enter="axes"), page("s2", [10, 20], enter="mount")]
+    b = build(tmp_path / "b", scenes, [(0, 10), (10, 20)], plan=[
+        plan_record(1, 0.0, 10.0, "ledger:ev-a:line:0:right:axes:cut"),
+        plan_record(2, 10.0, 20.0, "ledger:ev-b:line:0:right:spiral:cut")])
+    (b / FLOOR.BASE_TABLE_NAME).write_text(
+        "# BASE TABLE - b\n\n## BASE DEPARTURES the COMPILER took (1)\n\n"
+        "- **BASE DEPARTURE - row 2** (beat 2): the plan's own `spiral` could not stand - this page has "
+        "never been on screen, so there is nothing to unwind; the compiler wrote `mount`.\n", encoding="utf-8")
+    m = FLOOR.measure(b, recipes=[])
+
+    # Act
+    gate = row(FLOOR.rows(m, None, predates=False), "M45")
+    verdict, detail = m45_lines(gate)[7]
+
+    # Assert: the replacement, and the base's own reason for it, on one line
+    assert verdict == "replaced", detail
+    assert FLOOR.DEPARTURE_MARK in detail and "never been on screen" in detail, detail
+    assert FLOOR.base_departures(b)["2"].startswith("the plan's own `spiral` could not stand")
+
+
+def test_m45_says_a_replacement_with_no_departure_line_owes_one(tmp_path: Path) -> None:
+    """The same rule from the other side: a base with no `BASE DEPARTURE` for a replaced mechanism is
+    the state the critic found, and the row says so rather than reading as a considered decision."""
+    scenes = [page("s1", [0, 10], enter="axes"), page("s2", [10, 20], enter="mount")]
+    m = measured(tmp_path / "b", scenes, [(0, 10), (10, 20)], plan=[
+        plan_record(1, 0.0, 10.0, "ledger:ev-a:line:0:right:axes:cut"),
+        plan_record(2, 10.0, 20.0, "ledger:ev-b:line:0:right:spiral:cut")])
+    detail = m45_lines(row(FLOOR.rows(m, None, predates=False), "M45"))[7][1]
+    assert "names no BASE DEPARTURE for it" in detail and "E99 s74 Apply 4" in detail
+
+
+# ---------------------------------------------------------------- P66 T3 tenth pass: ONE key on both sides
+
+def test_m45_reads_the_departure_on_the_beat_the_mechanism_is_owed_by(tmp_path: Path) -> None:
+    """ONE KEY ON BOTH SIDES (the T3j review's MEDIUM 3). The compiler writes its departure on the beat
+    whose OWN PLATE declared the move (`authoring.shapes.entry_beat`) and M45 looks it up on the beat the
+    mechanism is OWED by - the same beat - so on a row spanning several beats the reason still reaches the
+    verdict. Keyed on the row's FIRST beat instead, M45 read *"the base names no BASE DEPARTURE for it"*
+    while the base carried one two lines above it."""
+    # Arrange: three beats, and the `spiral` the plan named is on the LAST of them (the row's third)
+    scenes = [page("s1", [0, 10], enter="axes"), page("s2", [10, 30], enter="mount")]
+    b = build(tmp_path / "b", scenes, [(0, 10), (10, 20), (20, 30)], plan=[
+        plan_record(1, 0.0, 10.0, "ledger:ev-a:line:0:right:axes:cut"),
+        plan_record(2, 10.0, 20.0, "ledger:ev-a:line:0:right:axes:cut"),
+        plan_record(3, 20.0, 30.0, "ledger:ev-b:line:0:right:spiral:cut")])
+    (b / FLOOR.BASE_TABLE_NAME).write_text(
+        "# BASE TABLE - b\n\n## BASE DEPARTURES the COMPILER took (1)\n\n"
+        "- **BASE DEPARTURE - row 2** (beat 3): the plan's own `spiral` could not stand - this page has "
+        "never been on screen, so there is nothing to unwind; the compiler wrote `mount`.\n", encoding="utf-8")
+    m = FLOOR.measure(b, recipes=[])
+
+    # Act
+    verdict, detail = m45_lines(row(FLOOR.rows(m, None, predates=False), "M45"))[7]
+
+    # Assert: the line is keyed on beat 3 - the beat M7 is owed by - and its reason is read
+    assert list(FLOOR.base_departures(b)) == ["3"], FLOOR.base_departures(b)
+    assert [s.beat for s in FLOOR.ShapeReader(m, FLOOR.beat_plan(b) or []).owed(7)] == [3]
+    assert verdict == "replaced" and "never been on screen" in detail, detail

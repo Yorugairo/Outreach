@@ -560,3 +560,68 @@ def test_every_cut_and_every_dip_in_the_doc_names_the_transform_it_could_not_use
     assert seen, "the bed's own base carries a cut or a dip - it is what this test reads"
     assert "E99 s74" in doc
 
+
+# ---------------------------------------------------------------- P66 T3 ninth pass: the COMPILER's departures
+
+def test_the_compilers_own_departures_are_a_section_of_their_own(bed, capsys):
+    """E99 s74 Apply 4: a move the PLAN named that the base could not keep is a `BASE DEPARTURE` line -
+    the row, the beat, the plan's token, the reason and what was written instead - and it is where a
+    reader (and M45's `replaced` verdict) finds it without reading the rule column of twelve rows.
+
+    A CLEAN base carries no section at all: the Tokyo bed keeps every entry its plan writes."""
+    project, build = bed
+    generate(project, build)
+    doc = (build / G.BASE_DOC_NAME).read_text(encoding="utf-8")
+    assert G.DEPARTURE_MARK + "S the COMPILER took" not in doc, "the bed's plan keeps every move it names"
+    # ... and the renderer writes one line per departure when there is one to write
+    why = [{"beat": 1, "skeleton": "s", "act": "", "rule": "r", "signature": "axes", "group": 0},
+           {"beat": 7, "skeleton": "s", "act": "", "rule": "r", "signature": "cut", "group": 1,
+            "departure": {"token": "mount=0.79", "why": "a mount rises OVER the world that was there",
+                          "wrote": "axes", "beat": 7}}]
+    lines = G.md_base_departures(why)
+    assert lines and f"## {G.DEPARTURE_MARK}S the COMPILER took (1)" == lines[0]
+    assert any(f"**{G.DEPARTURE_MARK} - row 2** (beat 7)" in ln and "`mount=0.79`" in ln
+               and "a mount rises OVER the world that was there" in ln and "`axes`" in ln for ln in lines), lines
+    assert G.md_base_departures(why[:1]) == [], "no departure, no section"
+
+
+# ---------------------------------------------------------------- the bare form never writes a project's table
+
+def test_the_bare_form_refuses_a_project_that_already_has_a_table(bed, capsys):
+    """`generate_base_table.py <project> <build>` without `--table` resolved to `<project>/SHOT-TABLE-SHORT.py` -
+    the APPROVED cut's table (E99 s11). Two passes wrote one there by accident and restored it with git. The
+    bare form now REFUSES by name before any write, and says which path to pass instead."""
+    import hashlib
+
+    project, build = bed
+    project.mkdir(parents=True, exist_ok=True)
+    table = project / G.TABLE_NAME
+    table.write_text("# the approved cut's table\nROWS = []\n", encoding="utf-8")
+    before = hashlib.sha256(table.read_bytes()).hexdigest()
+    assert G.main([str(project), str(build)]) == 1
+    err = capsys.readouterr().err
+    assert G.TABLE_NAME in err and "--table" in err and "approved" in err, err
+    assert hashlib.sha256(table.read_bytes()).hexdigest() == before, "the project's table was rewritten"
+
+
+def test_the_bare_form_refuses_the_calendar_projects_own_table(capsys):
+    """The live case: the calendar project's table is the approved one-shot's. Its sha256 is read before
+    and after - the refusal happens before any write."""
+    import hashlib
+
+    table = CALENDAR_PROJECT / G.TABLE_NAME
+    assert table.is_file(), table
+    before = hashlib.sha256(table.read_bytes()).hexdigest()
+    assert G.main([str(CALENDAR_PROJECT), str(CALENDAR_PROJECT / "build-p66-cal")]) == 1
+    err = capsys.readouterr().err
+    assert G.TABLE_NAME in err and "--table" in err and "approved" in err, err
+    assert hashlib.sha256(table.read_bytes()).hexdigest() == before, "the approved cut's table was rewritten"
+
+
+def test_the_bare_form_still_writes_where_no_table_exists_yet(bed):
+    """The guard is on an EXISTING table only: a project with none is written exactly as before."""
+    project, build = bed
+    project.mkdir(parents=True, exist_ok=True)
+    assert not (project / G.TABLE_NAME).exists()
+    assert G.main([str(project), str(build)]) == 0
+    assert (project / G.TABLE_NAME).is_file()

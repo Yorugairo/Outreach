@@ -68,6 +68,7 @@ import argparse
 import collections
 import hashlib
 import json
+import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -89,6 +90,11 @@ PROJECTS_REL = "content/video_engine/projects/systems-and-blowups"
 REFERENCE_REL = f"{PROJECTS_REL}/japan-tariff-trick/build-short"   # the best approved short (09-09), the reference
 BEAT_PLAN_NAME = "BEAT-PLAN.jsonl"
 WORDS_NAME = "timeline.json"
+BASE_TABLE_NAME = "BASE-TABLE.md"          # the generated base's own read-out (`generate_base_table.py`)
+DEPARTURE_MARK = "BASE DEPARTURE"          # ... and the mark a departure from the plan is written under
+# ... and the compiler's own departure line in it: `- **BASE DEPARTURE - row 4** (beat 7): <what>` (P66 T3
+# ninth pass; E99 s74 Apply 4 - a base that reaches a world change by another move owes the line)
+DEPARTURE_LINE = re.compile(r"BASE DEPARTURE - row \d+\*{0,2} \(beat (?P<beat>[^)]+)\):(?P<what>.+)$")
 
 MIN_FORMS = 3                  # E96: at least three distinct chart forms in one cut
 MIN_CHART_TO = 1               # E96: at least one chart-to-chart transform
@@ -464,6 +470,30 @@ def beat_plan(build: Path) -> list | None:
     if not path.is_file():
         return None
     return [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
+
+
+def base_departures(build: Path) -> dict[str, str]:
+    """The compiler's own `BASE DEPARTURE` lines off the generated base's table, keyed by BEAT.
+
+    ONE KEY ON BOTH SIDES (P66 T3 tenth pass, the T3j review's MEDIUM 3): the key is the beat whose OWN
+    PLATE declared the move - `authoring.shapes.entry_beat`, which is the row's first beat everywhere
+    except the absorbed open, where it is the page's - and that is the beat this gate owes the mechanism
+    to (`ShapeReader.owed` reads each beat's own row token) and looks the reason up on (`parity`).
+
+    P66 T3 ninth pass (E99 s74 Apply 4): where a base reaches a world change by another move than the
+    plan named, `generate_base_table.py` writes the reason into `BASE-TABLE.md` - the row, the beat, the
+    plan's own token and what was written instead. M45 reads them so a `replaced` verdict carries the
+    REASON instead of leaving the operator to guess whether the compiler chose or could not choose.
+    """
+    path = Path(build) / BASE_TABLE_NAME
+    if not path.is_file():
+        return {}
+    out: dict[str, str] = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        m = DEPARTURE_LINE.search(line)
+        if m:
+            out[m.group("beat")] = m.group("what").strip().rstrip(".")
+    return out
 
 
 def plan_gaps(records: Sequence[Mapping[str, Any]], beats: Sequence[Mapping[str, Any]]) -> list:
@@ -851,6 +881,7 @@ class ShapeReader:
         self.timeline = json.loads(m.timeline_path.read_text(encoding="utf-8"))
         self.scenes = list(self.timeline.get("scenes") or [])
         self.events = RW.events(self.timeline)
+        self.departures = base_departures(m.build)   # the base's own record of a move it could not keep
         by_beat = plan_records_by_beat(records, m.beats)
         self.shapes: list = []
         for i, beat in enumerate(m.beats):
@@ -987,9 +1018,17 @@ class ShapeReader:
                 continue
             found = self.first(self.evidence(other.n), [owed[0]])
             if found and self.owed(other.n):
+                # ... and WHY it was replaced, where the base itself says so (E99 s74 Apply 4): the
+                # compiler's own departure line off `BASE-TABLE.md`, on the beat this mechanism is owed by -
+                # which is the beat whose own plate declared the move, the key the compiler writes it under
+                # (`authoring.shapes.entry_beat`; `base_departures` above, and never the row's first beat)
+                said = self.departures.get(str(owed[0].beat))
                 return Parity(mech.n, mech.name, "replaced",
                               f"by {other.n} {other.name} at {found[0]:.2f} s on beat {owed[0].beat} "
-                              f"- owed by beat(s) {owed_at}")
+                              f"- owed by beat(s) {owed_at}"
+                              + (f" - {DEPARTURE_MARK}:{said}" if said else
+                                 " - the base names no BASE DEPARTURE for it: the replacement is the "
+                                 "compiler's own choice and owes one (E99 s74 Apply 4)"))
         return Parity(mech.n, mech.name, "absent",
                       f"- owed by beat(s) {owed_at}, nothing stands in its place - {mech.says}")
 

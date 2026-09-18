@@ -1518,9 +1518,20 @@ def test_the_pair_of_pages_refuses_recast_rescale_and_morph_by_name():
 def test_morph_is_refused_by_name_and_never_emitted(tokyo, japan):
     """E99 s70 Apply 2 (*"a vocabulary written from memory is refused"*) and the survivorship audit
     (2026-09-17: `morph` is in NO cut): `morph_to` is LIVE, has no approved skeleton and is therefore
-    named in the chain and never written as a token."""
+    named in the chain and never written as a token.
+
+    THE CALENDAR PLAN IS READ HERE TOO, and it is the bed that carries the claim (the ninth pass): an
+    AUTHORED entry now stands on every page (E99 s66), and the mount, the snap, the camera arrival and
+    the spiral are all rung 0 of `choose_transition` - the arrival IS the transition (E45, E99 s70), so a
+    boundary between two of them never reaches the chain at all. Tokyo's and Japan's plans declare a
+    continuity entry on every page, so the pair that owes the refusal chain is the calendar's own
+    page-to-page (`:axes` to `:axes`), where the clock's entry and the plan's agree.
+    """
+    plan = SH.load_plan(CALENDAR / "BEAT-PLAN.jsonl")
+    rows, raw = SH.compile(plan, _words(CALENDAR), SH.DEFAULTS, "9:16", pages=_pages(CALENDAR))
+    calendar = (plan, rows, SH.rows_why(raw))
     seen = 0
-    for _, rows, why in (tokyo, japan):
+    for _, rows, why in (tokyo, japan, calendar):
         for r in rows:
             assert str(r[5] or "").split(":")[0] != "morph", r
         for w in SH.rows_why(why):
@@ -1687,3 +1698,257 @@ def test_the_read_back_base_carries_fewer_cuts_and_dips_than_it_did(tokyo, japan
     assert jap["tokens"].get("dip", 0) == 1, jap          # the one plate -> plate pair: E47's own
     assert tok["tokens"].get("melt", 0) == 1 and jap["tokens"].get("melt", 0) == 2
     assert jap["tokens"].get("suck", 0) == 2
+
+
+# ---------------------------------------------------------------- P66 T3 NINTH PASS: the authored entry
+# stands, and a park never covers the plan's own transform (E99 s66; s74 Apply 4; E45; E76 / E99 s56)
+
+def test_an_authored_entry_stands_over_the_clocks_own():
+    """E99 s66 - the plan is the intelligence. The plan writes `mount=0.79` on a page whose number lands
+    at +0.0 s, where the CLOCK would write the axes entry, and the mount stands: the page rises over the
+    plate that was there (E45 - the mount IS the transition) and the row's `why` names what the clock
+    would have written instead.
+
+    This is the director-critic's world change 3 on the calendar base (16.90 s): *"the page replaces a
+    room instead of rising over it"*, and its cause was the compiler's landing clock overwriting the
+    plan's own token.
+    """
+    page = "ledger:ev-b-v1:bars:0:right:mount=0.79:cut"
+    plan = [_rec(1, 0.0, 6.0, OPEN_PAGE, sentence="The open is the chart itself.", act="QUOTES the figure"),
+            _rec(2, 6.4, 12.0, "plate-desk;idle=drift", caps=["the world the page mounts over"]),
+            _rec(3, 12.4, 15.0, page, sentence="The number is right here now.", act="QUOTES the figure"),
+            _rec(4, 15.4, 22.0, page, sentence="And it stands there for a while.", act="QUOTES the figure")]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert SH.entry_in(rows[2][2]) == "mount" and "mount=0.79" in rows[2][2], rows[2][2]
+    rule = SH.rows_why(why)[2]["rule"]
+    assert "the author's own `mount=0.79`" in rule and "the clock alone would have written axes" in rule
+    assert SH.DEPARTURE_MARK not in rule, "the entry STOOD - a departure is owed only where it cannot"
+    # E45: the mount IS the transition into that row, and it is never dipped into
+    assert rows[2][5] == "cut", rows[2]
+    assert SH.rows_why(why)[2]["transition"]["taken"] == "the mount"
+
+
+def test_an_authored_axes_entry_stands_where_the_clock_wants_the_mount():
+    """The same rule the other way round: the plan writes `:axes` on a page whose number lands 7 s or
+    more after its entry, where the clock would write a mount, and the AUTHORED axes stands. The clock
+    decides only where the plan declares nothing at all."""
+    page = "ledger:ev-a-v1:bars:0:right:axes:cut"
+    plan = [_rec(1, 0.0, 9.0, page, sentence="The page opens on nothing much at all.",
+                 act="none of the 11 - it states the claim"),
+            _rec(2, 9.4, 18.0, page, sentence="Now the number is twelve percent.", act="QUOTES the figure")]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    assert SH.entry_in(rows[0][2]) == "axes", rows[0][2]
+    rule = SH.rows_why(why)[0]["rule"]
+    assert "the author's own `axes`" in rule and "the clock alone would have written mount" in rule
+
+
+def test_an_authored_mount_with_no_world_under_it_is_a_named_departure():
+    """s74 Apply 4: where the authored entry's OWN rules refuse it the compiler writes the clock's and
+    the row owes a `BASE DEPARTURE` line naming the plan's token and the reason - never a silent
+    replacement. A mount rises over the world that was there (E45), and the cut's first frame has none."""
+    page = "ledger:ev-a-v1:bars:0:right:mount=0.79:cut"
+    plan = [_rec(1, 0.0, 9.0, page, sentence="The page opens on the chart itself.",
+                 act="none of the 11 - it states the claim"),
+            _rec(2, 9.4, 18.0, page, sentence="Now the number is twelve percent.", act="QUOTES the figure")]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    rec = SH.rows_why(why)[0]
+    assert SH.entry_in(rows[0][2]) != "mount", rows[0][2]
+    assert SH.DEPARTURE_MARK in rec["rule"] and "mount=0.79" in rec["rule"], rec["rule"]
+    assert "none under it" in rec["rule"] and "E45" in rec["rule"]
+    assert rec["departure"]["token"] == "mount=0.79" and rec["departure"]["beat"] == 1
+    assert rec["departure"]["wrote"] in ("axes", "mount", "spiral")
+
+
+def test_a_move_before_an_authored_entrys_landing_is_held_to_it():
+    """The other half of the rule: the clock adjusts the MOVES around the author's entry, never the
+    entry. A light or a number that would fire before the page's chart lands is HELD to the landing -
+    a light is never fired over a build (E99 s67 Apply 2) and a number is never written on a chart that
+    is not drawn (E50) - and the row's `why` says so."""
+    page = "ledger:ev-a-v1:bars:0:right:mount=2.0:cut"
+    plan = [_rec(1, 0.0, 6.0, "plate-desk;idle=drift", caps=["the world the page mounts over"]),
+            _rec(2, 6.4, 20.0, page, sentence="The number here is worth a long look indeed.",
+                 act="QUOTES the figure",
+                 moves=[{"kind": "spotlight", "at_word": "number", "target": {"kind": "datum", "index": 0},
+                         "dur": 1.1}])]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    t0, land = rows[1][0], SH.page_land_offset("mount", 2.0)
+    lights = [s for s in rows[1][6] if s["kind"] == "spotlight"]
+    assert lights, rows[1][6]
+    assert min(float(s["at"]) for s in lights) >= round(t0 + land, 2) - 1e-6, (t0, land, lights)
+    assert "is HELD from" in SH.rows_why(why)[1]["rule"]
+
+
+def test_a_park_never_covers_the_transform_the_plan_named():
+    """THE CRITIC's row 11 on the calendar base: the plan's `chart_to compare` (E76 / E99 s56 - the melt
+    that splashes into 3x) compiled at its own instant and NOTHING PLAYED, because the placer had parked
+    the page for a card and un-parked it 0.30 s after the transform began. A transform is the plan's own
+    sentence and keeps its instant; the card's room moves around it (E99 s66), and the page stands full
+    size for the whole of it - the un-park LANDS as the transform starts."""
+    page = "ledger:ev-into-vs-after-v1:bars:0:right:axes:cut"   # a REAL page (the calendar's own), read-only
+    plan = [_rec(1, 0.0, 9.0, page, sentence="The open is the chart and it says a number.",
+                 act="QUOTES the figure"),
+            _rec(2, 9.4, 24.0, page, sentence="The card lands here and the chart turns later on.",
+                 act="TURNS on the reveal",
+                 moves=[{"kind": "dock", "at_word": "card", "asset": "dock-a-thing",
+                         "options": {"centre": True, "read_s": 1.2, "park_s": 0.7}},
+                        {"kind": "chart_to", "at_word": "later", "dur": 0.9,
+                         "options": {"to": "compare", "form": "melt", "then": "splash", "hold": "gone",
+                                     "metric": {"value": 6.8, "text": "+6.8%", "label": "into it"},
+                                     "comparator": {"value": 3.0909, "text": "3x", "label": "what it means"},
+                                     "inputs": {"a": 6.8, "b": 2.2}, "derive": "a / b",
+                                     "source": "[DERIVED: a fixture's own arithmetic, 6.8 / 2.2]"}}])]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16", pages=_pages(CALENDAR))
+    row = next(r for r in rows if any(s.get("to") == "compare" for s in r[6]))
+    melt = next(s for s in row[6] if s.get("to") == "compare")
+    a, z = float(melt["at"]), round(float(melt["at"]) + float(melt["dur"]) + SH.chart_to_settle(melt), 2)
+    parks = [s for s in row[6] if s.get("to") == "park"]
+    assert parks, "the fixture's card has no room of its own, so the page parks to make one"
+    assert not [s for s in parks if a - 1e-6 <= float(s["at"]) <= z + 1e-6], (a, z, parks)
+    # ... and the page is back at full size BY the transform's own start
+    assert SH.park_scale_at(row[6], a) == SH.UNPARK_SCALE, parks
+    assert all(float(s["at"]) + SH.PARK_DUR_S <= a + 1e-6 for s in parks), parks
+
+
+def test_the_engines_own_settle_is_read_and_never_re_typed():
+    """`chart_to_settle` is the ENGINE's clock: a state change is still drawing its target's build after
+    its window (`scene-evidence-engine.mjs` lpPaintStates, mirrored as `gate_motion_density.LP_BUILD_S`),
+    and the two verbs that change no state land inside their own window."""
+    assert SH.chart_to_settle({"to": "recast"}) == MD.LP_BUILD_S
+    for kind in SH.CHART_TO_NO_STATE:
+        assert SH.chart_to_settle({"to": kind}) == 0.0
+
+
+# ------------------------------------------------------------- P66 T3 TENTH PASS: the entry the plan
+# wrote stands at EVERY boundary, a held light never outlives its own sentence, and a park that cannot
+# un-park is refused (the T3j review's two HIGH and four MEDIUM findings)
+
+def test_the_splash_never_writes_over_the_entry_the_plan_wrote():
+    """E88 asks a `splash:chart`'s page to arrive out of the splatter, `built`; E99 s66 says the entry the
+    PLAN wrote is the plan's statement of how that world arrives. So the transform that DEMANDS an arrival
+    is refused BY NAME where the plan already named one - the chain goes on - and where the plan named
+    none the compiler takes `built` and marks it as the COMPILER's own, so the landing clock treats it as
+    its own choice (a move before that landing is refused, never held to it).
+
+    The T3j review's HIGH 1: the boundary wrote the owed entry over the row's on a comment that said *"and
+    the plan declared none"* and never checked it - no departure line, and the landing clock then ran on a
+    token the plan never wrote.
+    """
+    declared = _pair_plan("ledger:ev-a-v1:line:12:right", "ledger:ev-b-v1:line:3:right:axes:cut")
+    rows, why = SH.compile(declared, _take(declared), SH.DEFAULTS, "9:16")
+    rec = SH.rows_why(why)[-1]
+    assert SH.entry_in(rows[-1][2]) == "axes", rows[-1][2]
+    assert SH.BUILT_ENTRY not in str(rows[-1][2]), rows[-1][2]
+    assert rec["transition"]["entry"] is None, rec["transition"]
+    assert any("melt-then-splash: REFUSED" in c and "declares the page's own arrival" in c
+               for c in rec["transition"]["chain"]), rec["transition"]["chain"]
+    # ... and where the plan wrote NO entry the `built` is taken, and named as the COMPILER's
+    plain = _pair_plan("ledger:ev-a-v1:line:12:right", "ledger:ev-b-v1:line:3:right")
+    rows2, why2 = SH.compile(plain, _take(plain), SH.DEFAULTS, "9:16")
+    assert SH.entry_in(rows2[-1][2]) == SH.BUILT_ENTRY, rows2[-1][2]
+    assert "the COMPILER's own" in SH.rows_why(why2)[-1]["rule"], SH.rows_why(why2)[-1]["rule"]
+    # the one reading both sides share: the landing clock holds a move only for an entry the PLAN wrote
+    assert SH.entry_is_authored({"plate": "ledger:ev-b-v1:line:3:right:axes:cut"}) is True
+    assert SH.entry_is_authored({"plate": "ledger:ev-b-v1:line:3:right"}) is False
+    assert SH.entry_is_authored({"plate": "ledger:ev-b-v1:line:3:right",
+                                 "entry": SH.BUILT_ENTRY, "entry_compiler": True}) is False
+
+
+def test_a_light_held_to_the_landing_never_outlives_the_sentence_it_points_with():
+    """E50 / E99 s67 Apply 1: a light lives with the SENTENCE it points with, and a figure is a number
+    written at the instant it is spoken. So the hold to an authored entry's landing is bounded by the
+    move's OWN BEAT, never by the row: where the entry lands after the sentence ends, the move is dropped
+    BY NAME rather than fired at a word that has already gone by.
+
+    The T3j review's HIGH 2, measured: a spotlight on beat 2 (6.4-8.6 s) held to 11.50 s - 2.9 s past its
+    own sentence, inside beat 3's - on a `mount=2.0` page whose chart lands 5.5 s after the row's start.
+    """
+    page = "ledger:ev-a-v1:bars:0:right:mount=2.0:cut"
+    plan = [_rec(1, 0.0, 6.0, "plate-desk;idle=drift", caps=["the world the page mounts over"]),
+            _rec(2, 6.4, 8.6, page, sentence="The number is right here.", act="QUOTES the figure",
+                 moves=[{"kind": "spotlight", "at_word": "number", "target": {"kind": "datum", "index": 0},
+                         "dur": 1.1}]),
+            _rec(3, 9.0, 20.0, page, sentence="And the rest of it takes a while to say indeed.",
+                 act="QUOTES the figure")]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16")
+    row = rows[_first_page(rows)]
+    land = round(float(row[0]) + SH.page_land_offset("mount", 2.0), 2)
+    assert land > 8.6, ("the fixture only bites where the landing is past the sentence", land)
+    lights = [s for s in row[6] if s["kind"] in SH.LIGHT_KINDS]
+    assert not [s for s in lights if float(s["at"]) >= 8.6], (land, lights)
+    rule = SH.rows_why(why)[_first_page(rows)]["rule"]
+    assert "its own sentence" in rule and "point at nothing" in rule, rule
+
+
+def test_the_departure_is_keyed_by_the_beat_whose_own_plate_declared_the_entry():
+    """One key on both sides (the T3j review's MEDIUM 3): the compiler records a departure on the beat
+    whose OWN PLATE carried the token - which is the beat `gate_one_shot_floor`'s M45 owes the mechanism
+    to and looks the reason up on (`base_departures`) - and never on the row's first beat, which on the
+    absorbed open is the HOOK's beat and declares nothing."""
+    absorbed = [_rec(1, 0.0, 6.0, "plate-desk;idle=drift", caps=["the world the page mounts over"]),
+                _rec(2, 6.4, 14.0, "ledger:ev-a-v1:bars:0:right:mount=0.79:cut", act="QUOTES the figure")]
+    g = SH.groups(absorbed)[0]
+    assert [b["beat"] for b in g["beats"]] == [1, 2] and g.get("open_mounts")
+    assert SH.entry_beat(g)["beat"] == 2, "the page's own beat declared the mount, not the hook's"
+    # ... and on an ordinary row it is the row's own first beat, which is where the plate is read
+    plain = [_rec(1, 0.0, 9.0, "ledger:ev-a-v1:bars:0:right:mount=0.79:cut", act="QUOTES the figure"),
+             _rec(2, 9.4, 18.0, "ledger:ev-a-v1:bars:0:right:mount=0.79:cut", act="QUOTES the figure")]
+    rows, why = SH.compile(plain, _take(plain), SH.DEFAULTS, "9:16")
+    assert SH.rows_why(why)[0]["departure"]["beat"] == SH.entry_beat(SH.groups(plain)[0])["beat"] == 1
+
+
+def test_two_cards_moved_onto_one_instant_never_share_a_room():
+    """The placer's own docstring - *"never two of them in one box"* (E65) - AFTER a card moves. A card
+    whose park would have covered the plan's transform is re-timed clear of it (the ninth pass), and the
+    room index is *the first no card live at the same instant already holds*, so it is re-read on the
+    windows the cards ENDED UP with: the T3j review's MEDIUM 4, the stale-slot case, on the calendar's own
+    page (whose only room is the band a park frees, so both cards want it)."""
+    page = _page(CALENDAR, "ledger:ev-into-vs-after-v1:bars:0:right")
+    assert SH.card_rooms(page, "9:16", 3) == [] and len(SH.card_rooms(page, "9:16", 3, park=0.52)) == 1
+    notes, species = [], [{"kind": "chart_to", "at": 8.6, "dur": 0.9, "to": "compare"}]
+    cards = [["card-a", "lane", 8.0, 10.0, {"centre": True}], ["card-b", "lane", 11.0, 13.0, {"centre": True}]]
+    out = SH.place_cards([list(c) for c in cards], page, "9:16", notes, species, 16.0, SH.DEFAULTS)
+
+    a, b = out
+    assert (float(a[2]), float(a[3])) == (9.9, 11.9), "card-a moved clear of the transform the plan named"
+    assert float(a[3]) > float(b[2]), "... and now it is live while card-b is: one instant, two cards"
+    assert SH.placed(a[4]) and not SH.placed(b[4]), (a[4], b[4])
+    assert any("no 2th room" in n for n in notes), notes
+
+
+def test_a_page_is_never_left_parked_at_the_end_of_its_row():
+    """CAPABILITIES.md:120 - the un-park is how the chart RE-TAKES the stage; a page left at `park_scale`
+    when its row ends plays the row's own exit on a stamp and hands the next world a parked chart. So the
+    card LEAVES early enough for the un-park to land whole inside the row (it keeps its read and its park),
+    and where even that does not fit the park is refused and the card is dropped BY NAME (the T3j review's
+    MEDIUM 5, on arithmetic that clamped the card's exit to `t1` and then added the lag to it)."""
+    page = "ledger:ev-into-vs-after-v1:bars:0:right:axes:cut"      # the calendar's own page, read-only
+    plan = [_rec(1, 0.0, 7.0, page, sentence="The open is the chart and it says a number.",
+                 act="QUOTES the figure"),
+            _rec(2, 7.4, 13.0, page, sentence="It turns and then at the very end the card lands.",
+                 act="TURNS on the reveal",
+                 moves=[{"kind": "dock", "at_word": "card", "asset": "dock-a-thing",
+                         "options": {"centre": True, "read_s": 1.2, "park_s": 0.7}}])]
+    rows, why = SH.compile(plan, _take(plan), SH.DEFAULTS, "9:16", pages=_pages(CALENDAR))
+    row, rule = rows[0], SH.rows_why(why)[0]["rule"]
+    assert not row[4] and not [s for s in row[6] if s.get("to") == "park"], (row[4], row[6])
+    assert "`dock-a-thing` is DROPPED" in rule and "could not UN-PARK inside the row" in rule, rule
+    # ... and the arm that KEEPS the card: the un-park lands whole inside the row and the card still reads
+    notes, card = [], ["card-a", "lane", 8.0, 16.0, {"read_s": 1.2, "park_s": 0.7}]
+    at, out = SH.unpark_inside_the_row(card, 7.6, 16.3, [], 16.0, SH.DEFAULTS, notes)
+    assert (at, out) == (7.6, round(16.0 - SH.PARK_DUR_S, 2)) and float(card[3]) == round(16.0 - 1.2, 2)
+    assert out + SH.PARK_DUR_S <= 16.0 + 1e-9 and "lands whole inside the row" in notes[0], notes
+    # ... and where the card cannot read inside what is left, the park is refused and the card goes
+    late = ["card-b", "lane", 14.6, 16.0, {"read_s": 1.2, "park_s": 0.7}]
+    assert SH.unpark_inside_the_row(late, 14.2, 16.3, [], 16.0, SH.DEFAULTS, notes) is None
+    assert "is DROPPED" in notes[-1] and "hands the next world a stamp" in notes[-1], notes[-1]
+
+
+def test_the_engines_own_default_species_duration_is_read_and_never_typed():
+    """MEDIUM 6: the `chart_to` a plan gives no `dur` runs the ENGINE's own default, read by name
+    (`scene-evidence-engine.mjs`: `const d = Math.max(0.001, sp.dur || 1)` in `lpPaintStates`) - the one
+    typed number a pass that reads every other clock by name had left in `transform_guards`."""
+    assert SH.SPECIES_DUR_S == 1.0
+    (a, z, _sp), = SH.transform_guards([{"kind": "chart_to", "at": 4.0, "to": "recast"}])
+    assert (a, z) == (4.0, round(4.0 + SH.SPECIES_DUR_S + MD.LP_BUILD_S, 2)), (a, z)
+    (a2, z2, _sp2), = SH.transform_guards([{"kind": "chart_to", "at": 4.0, "to": "recast", "dur": 0.5}])
+    assert (a2, z2) == (4.0, round(4.5 + MD.LP_BUILD_S, 2)), (a2, z2)
