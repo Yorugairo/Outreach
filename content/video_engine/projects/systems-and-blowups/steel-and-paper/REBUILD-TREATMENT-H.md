@@ -166,3 +166,18 @@ callouts point without the camera everywhere else.
 - **The voice** is the scratch take. Every timing above moves when the 1:30 unit's voice is chosen
   (HG3) and the whole cut is re-taken - the rows anchor on WORDS (`at(ws, phrase)`), not seconds.
 - **The one-shot floor's reference** is a short; its rows on this cut are read as INFO (T3 (b)).
+
+## Amended 2026-09-18 after the operator's read of the 1:30 unit (E99 s82)
+
+The operator on frozen copy d: the docked card of the same chart is nonsense; the chart's text must be sized for the
+phone; the take sounds slow (it measured 167 wpm, not 170-180); the crawl draw - a line moving then stopping for no
+reason - is wrong: *"draw the first line completely, label it, badge it, draw the 2nd line completely, badge it..."*
+
+| row | was | now |
+|---|---|---|
+| 3 (0:21-0:29 "his fourth copy of the same chart") | Bravos' chart as a docked still taking the certificate's slot | NO CARD - the page IS the chart; the retitle "AI is 1845 again" carries the beat; the certificate leaves on its sentence and the slot stays empty |
+| 1 + 4 (the lines) | each series staged one `build_to` per spoken phrase; the memory line staged on "Here's the layer" | LINE BY LINE (R26-226): mega-cap draws whole -> its label and badge land -> the S&P draws whole -> label, badge -> the semis draw whole -> label, badge; the memory line draws whole on "Here's the layer it never drew" -> its +613 % label and "our layer" badge; no stop inside a line unless the sentence names a datum |
+| every page row | the page parks to 0.64 to keep its tags out of the STAGE caption's room (labels 5.5 css) | FULL STAGE: the caption on a page row in the anchored bottom strip (R26-205 - the first engine door, before the body); the page parks only as a breath for a card or the agenda (E61), never as a resting size; labels sized for the phone (doc 50: the chart reads at a glance on a 6-inch screen) |
+| the take | Kokoro at rate 1.075 = 167 wpm measured | re-taken at rate 1.14 (~177 wpm measured and written on the card - R26-227); every row anchors on words, so the rows stand |
+
+The unit rebuilds on these once R26-205 and R26-226 are in the engine; the treatment's other rows are unchanged.
