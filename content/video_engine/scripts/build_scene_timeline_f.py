@@ -108,7 +108,7 @@ MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field")   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain")   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -2473,7 +2473,7 @@ def rescale_state(plate_id: str, ep_dir: Path, sp: dict, reveal: int | None = No
             raise ValueError(f"chart_to extend: series {reveal} is not a later: true series of {path.name}")
         ser_list[reveal].pop("later", None)
     builder = LPG.pick_builder(series, variant)   # the PAGE's builder - a windowed series must not re-decide it by its point count
-    if builder not in ("dense-line", "story"):
+    if builder not in DOMAIN_BUILDERS:   # R26-223: ONE tuple - the builders a rescale admits are the builders a born domain admits
         raise ValueError(f"chart_to rescale: only a line or a bars page rescales (this page is {builder}); recast or cut")
     window = sp.get("window")
     axes = {}
@@ -2931,6 +2931,40 @@ def plate_drift_px(value, where: str) -> float:
     return px
 
 
+PLATE_ROOM_KEYS = ("x", "y", "w", "h")   # the four fractions a plate's declared room is written in, in this order
+
+
+def plate_room_spec(value, where: str) -> list[float]:
+    """``;room=<x>,<y>,<w>,<h>`` -> the four fractions, validated (R26-221).
+
+    A PICTURE PLATE's answer to a page's `quiet_zone`: the rectangle of THIS plate a card may stand in. Fractions
+    of the stage rather than pixels, because a world is authored once and the compiler instantiates the same
+    timeline at either aspect - the same reason a species' `target` is written in fractions. ValueError names the
+    option; the caller names the row."""
+    parts = [v.strip() for v in str(value).split(",")]
+    if len(parts) != 4 or not all(parts):
+        raise ValueError(f"{where}: room {str(value)!r} is not {','.join(PLATE_ROOM_KEYS)} - four fractions of the "
+                         "stage (0..1) naming the rectangle of this plate a card may stand in, the way a page "
+                         "declares its quiet zone (R26-221)")
+    try:
+        box = [float(v) for v in parts]
+    except ValueError:
+        raise ValueError(f"{where}: room {str(value)!r} is not four numbers - "
+                         f"{','.join(PLATE_ROOM_KEYS)} as fractions of the stage (0..1)") from None
+    if not all(math.isfinite(v) for v in box):   # `float("nan")` passes every `>` guard below and `float("inf")`
+        # passes three of them; both then reach `plate_room_px` and die there with no row named. A fraction is finite.
+        raise ValueError(f"{where}: room {str(value)!r} is not four numbers - "
+                         f"{','.join(PLATE_ROOM_KEYS)} as fractions of the stage (0..1)")
+    x, y, w, h = box
+    if not (w > 0 and h > 0):
+        raise ValueError(f"{where}: room {str(value)!r} is empty - w and h are fractions of the stage and both must "
+                         "be greater than 0")
+    if min(x, y) < 0 or x + w > 1 + 1e-9 or y + h > 1 + 1e-9:
+        raise ValueError(f"{where}: room {str(value)!r} runs off the stage - x, y, w, h are fractions in 0..1 and "
+                         "x+w and y+h are at most 1")
+    return box
+
+
 def _check_opt(key: str, value, where: str) -> None:
     if key == "thread":   # HF-16: the shape here, the page before it in `thread_mark_error` (which needs that page)
         if THREAD_KEY_RE.match(str(value)):
@@ -2958,6 +2992,12 @@ def _check_opt(key: str, value, where: str) -> None:
         return
     if key == "field":   # E99 s35: the NAME is the row's own grammar; whether `plates` HAS its two plates needs the
         page_field_spec(str(value), None, where)   # page, and is checked where the page is read (ledger_world)
+        return
+    if key == "room":   # R26-221: the four fractions are the row's own grammar; that the world IS a picture plate
+        plate_room_spec(value, where)   # needs the world, and is checked where the world is read (world_for_plate)
+        return
+    if key == "domain":   # R26-223: the pair is the row's own grammar; the fit to the page's BUILDER needs the page,
+        page_domain_spec(value, None, where)   # and is checked where the page is read (world_for_plate), as form='s is
         return
     allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES,
                "card": ("yes", "no"), "use": PLATE_USES, "path": RACE_PATHS}[key]
@@ -3452,6 +3492,64 @@ def page_field_spec(value: str, page: dict | None, where: str) -> str:
     return name
 
 
+# ---- R26-223: A PAGE IS BORN WITH ITS DOMAIN (2026-09-18, the Steel and Paper H unit) ---------------
+# A page's OPENING state was built from the evidence object alone (`ledger_world` -> `LPG.build_spec`), so the
+# only way to open on a subset of a series' range was to let the page arrive on the object's own scale and
+# `chart_to rescale` off it - and a rescale may not fire at 0.00 (M23: never over a build, never at a page's
+# edge), so the H unit's hook stood four seconds on the wrong scale before the first word after the build.
+#
+# THE TOKEN IS `;domain=<ymin>,<ymax>`, and that form for three reasons:
+#   * it names the key it WRITES. `axes.domain` is what the page spec carries, what a derived rescale state
+#     carries (`rescale_state`: `axes["domain"] = [ymin, ymax]`) and what the player reads - so the born state
+#     and the derived state are described by ONE word instead of two spellings of one idea.
+#   * a domain is an indivisible PAIR. `;ymin=..;ymax=..` is two plate options for one scale, and a
+#     half-declared scale is a new ambiguity nobody asked for; the plate-option grammar already spells a
+#     compound value as a comma list inside one token (`plane=quad:<8 numbers>`, `throw=<grow>,<from>,<s>`).
+#   * BOTH ends are required. The line builder tolerates a null end; the bars builder does not
+#     (`scene-evidence-engine.mjs:8445` reads `dom[0]` and `dom[1]` straight into its scale), so a one-sided
+#     born domain would be a silent NaN on a bars page. It is refused by name here instead.
+# The OBJECT's own domain stays the default: a row that names none writes nothing, and every page that named
+# none compiles to exactly the bytes it did.
+DOMAIN_BUILDERS = ("dense-line", "story")   # the two builders that read `axes.domain` ON PURPOSE - the line
+    # (`scene-evidence-engine.mjs:8679`) and the bars (`:8431`) - and the two `rescale_state` admits, so the born
+    # domain and the rescale that moves off it are one door answering to one set.
+    #   This is the CONSERVATIVE bound, not an exhaustive one: the engine's builder dispatch falls back to the bars
+    # builder for a kind it has no painter mapped for, so a page whose builder is (say) `object` would in fact read
+    # the domain through that fall-back. Refusing it here is the choice, and the reason is legibility of intent: a
+    # scale honoured by accident, on a page whose own builder never asked for one, is a number the author cannot
+    # predict and a gate cannot read. A third builder joins this tuple when its OWN painter reads the key - never
+    # because a fall-back happened to.
+
+
+def page_domain_spec(value, builder: str | None, where: str) -> list[float]:
+    """``;domain=<ymin>,<ymax>`` -> ``[ymin, ymax]``, the y scale the page is BORN on (R26-223).
+
+    The row's GRAMMAR is checked with no page in hand (`builder` None, from `_check_opt`); the fit to this page's
+    builder is checked where the page is read, exactly as `form=`'s and `field=`'s are. ValueError names the
+    option; the caller names the row."""
+    parts = [p.strip() for p in str(value).split(",")]
+    if len(parts) != 2 or not all(parts):
+        raise ValueError(f"{where}: domain {str(value)!r} is not <ymin>,<ymax> - the two ends of the y scale this "
+                         "page OPENS on, in the series' own unit. Both ends: a bars page's scale reads them both, "
+                         "so a half-declared domain is a scale with a hole in it (R26-223)")
+    try:
+        lo, hi = float(parts[0]), float(parts[1])
+    except ValueError:
+        raise ValueError(f"{where}: domain {str(value)!r} is not two numbers - <ymin>,<ymax> in the series' own "
+                         "unit (the same pair a `chart_to rescale` names as ymin / ymax)") from None
+    if not (math.isfinite(lo) and math.isfinite(hi)):   # `nan` passes `hi > lo` and `inf` satisfies it, and either
+        # would be written onto the page's own axes for the player to divide by. A scale has two FINITE ends.
+        raise ValueError(f"{where}: domain {str(value)!r} is not two numbers - <ymin>,<ymax> in the series' own "
+                         "unit (the same pair a `chart_to rescale` names as ymin / ymax)")
+    if not hi > lo:
+        raise ValueError(f"{where}: domain {str(value)!r} is empty or inverted - ymin < ymax")
+    if builder is not None and builder not in DOMAIN_BUILDERS:
+        raise ValueError(f"{where}: domain= is a LINE or BARS page's y scale and this page is {builder!r} - the two "
+                         f"builders that read it are {' and '.join(DOMAIN_BUILDERS)}, which are the two a "
+                         "`chart_to rescale` admits for the same reason (R26-223)")
+    return [lo, hi]
+
+
 def page_form_spec(value: str, builder: str, where: str) -> dict:
     """The row's form, refused BY NAME when this page's builder cannot draw it (`ledger_page.form_error`)."""
     name = str(value).partition(":")[0]
@@ -3732,6 +3830,30 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
             raise ValueError(f"{plate_id!r}: field= is a LEDGER PAGE option - it names the GROUND a page's charcoal "
                              "arrives on (E99 s35); a plate is a picture and is its own ground")
         world["page"]["field"] = page_field_spec(str(fld), world["page"], repr(plate_id))
+    dom = opts.pop("domain", None)
+    if dom is not None:
+        # R26-223: the y scale the page is BORN on. A LEDGER PAGE option - a plate is a picture and has no scale -
+        # and written onto the page's own `axes` only when the row names one, so a page that names none is
+        # byte-identical and the OBJECT's domain stays the default. The player needs nothing new: `axes.domain` is
+        # the key a derived rescale state already carries and the line and bars builders already read.
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError(f"{plate_id!r}: domain= is a LEDGER PAGE option - it is the y scale a page OPENS on "
+                             "(R26-223); a plate is a picture and carries no scale")
+        page = world["page"]
+        page.setdefault("axes", {})["domain"] = page_domain_spec(dom, str(page.get("builder") or "?"), repr(plate_id))
+    room = opts.pop("room", None)
+    if room is not None:
+        # R26-221: the rectangle of this PICTURE PLATE a card may stand in - the plate's answer to a page's
+        # quiet zone. A PLATE option, the mirror of the ledger page's own `field=` / `form=`: a page's room is
+        # computed from its own ink (`page_place`), so a page naming one would be two truths about one space.
+        # Kept as FRACTIONS on the world (the compiler turns them into stage px for the aspect it is building),
+        # and written only when the row names one.
+        kind = world.get("kind")
+        if kind in (SPECIES_LEDGER, VECMAP_KIND, SPECIES_CLIP):
+            raise ValueError(f"{plate_id!r}: room= is a PICTURE PLATE option - it declares the rectangle a card may "
+                             f"stand in (R26-221). A {kind} world computes its own room from its own ink "
+                             "(page_place / E65), so declaring one here would be two truths about one space")
+        world["room"] = plate_room_spec(room, repr(plate_id))
     drift_px = opts.pop(PLATE_DRIFT_OPT, None)
     if drift_px is not None:
         # E99 s55: the AMPLITUDE of this scene's plate idle walk. A PLATE option, the mirror of the ledger page's
@@ -4156,6 +4278,86 @@ def dock_place(world: dict, aspect: str | None, reserve: list[dict] | None = Non
     if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
         return None
     return page_place(world["page"], aspect or "16:9", reserve)
+
+
+# ---- R26-221: A CARD TAKES AN AUTHORED SLOT ON A PICTURE PLATE (2026-09-18, the Steel and Paper H unit) ----
+# `dock_place` answers None for a plate - E45's "a dock on a plain plate keeps the solo card" - and that one answer
+# was also swallowing the ROW's own box: `centre / centre_w / centre_x / centre_y / read / read_s / park_s` are all
+# gated behind `place`, so the unit's solo card on the studio plate landed at the template's `.dock.solo` rectangle
+# ([758, 167, 1068, 515] on a 1920x1080 stage), straight across the host's face, and "never over the host" could
+# only be obeyed by docking nothing at all.
+#
+# THE PLAYER NEEDS NOTHING. `dockGeom` and `dockReadRect` read `d.place` and `d.read_place` for any world, and the
+# `camera-layers` / `dock-depth` goldens have handed a hand-written place to a card on a PLATE since P58 T3
+# (`build_golden_sources.py` CAMERA_LAYERS_PLACE = {"x": 1160, "y": 600, "w": 640, "h": 400}). The shut door is the
+# compiler's alone - which is why this row moves no engine line, no mirrored module and no golden pixel.
+#
+# TWO WAYS A CARD IS PLACED ON A PLATE:
+#   (a) THE ROW'S OWN BOX - the same fields a page row takes (E99 s80: a card takes the outgoing card's box, and the
+#       H unit's page rows are authored exactly this way): `centre_x` / `centre_y` place the card's CENTRE as a
+#       fraction of the stage, `centre_w` its width, `card_aspect` its shape; `centre: True` alone is the stage's
+#       own centre. One function decides it for a page and for a plate - `centred_place` with no page - so the two
+#       can never drift apart.
+#   (b) THE PLATE'S DECLARED ROOM - `;room=x,y,w,h` (`plate_room_spec`), the plate's answer to a page's quiet zone:
+#       the card takes the reading width the room holds, centred in it, with `DOCK_PLACE_PAD` of air on every side
+#       through `_fit_in` - the same fitter `page_place` uses on a page's free band. The host plates were generated
+#       with a clear third for exactly this.
+# The row's own box outranks the declared room (the author has named the slot; the room is where the compiler is
+# asked to find one), and a row that authors neither on a plate that declares neither gets None - E45's solo card,
+# to the byte.
+PLATE_PLACE_FIELDS = ("centre", "centre_x", "centre_y", "centre_w")   # the dock fields that SAY "place this card";
+                              # `card_aspect` is the shape of a box, never the reason for one, so it triggers nothing
+PLATE_PLACE_POINT = ("centre", "centre_x", "centre_y")   # ... and the ones that say WHERE, which is what outranks a
+                              # plate's declared room (E99 s80: the author names the slot). `centre_w` and
+                              # `card_aspect` SIZE a card rather than place one, so a room honours them inside itself
+PLATE_BOX_PLACED = "plate-box"     # `place_room` on the entry: the ROW named the box
+PLATE_ROOM_PLACED = "plate-room"   # ... the PLATE declared the room and the card was fitted into it
+
+
+def plate_room_px(room: list | None, aspect: str | None) -> dict | None:
+    """A plate's declared room (four fractions, `plate_room_spec`) as a rectangle in stage px, or None."""
+    if not room:
+        return None
+    sw, sh = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])
+    x, y, w, h = (float(v) for v in room)
+    return {"x": round(x * sw), "y": round(y * sh), "w": round(w * sw), "h": round(h * sh)}
+
+
+def plate_dock_place(room: dict | None, aspect: str | None, dopt: dict, where: str = "dock") -> dict | None:
+    """The parked rectangle for a card on a PICTURE PLATE, in stage px, or None when nothing placed it (R26-221).
+
+    `{"x", "y", "w", "h", "room"}` - `room` is which of the two placed it (`plate-box` | `plate-room`), the way a
+    page's card records which of E65's four rooms it took. ValueError when the plate's declared room cannot hold a
+    legible card: a room that has been named and cannot be used is an authoring fault, not a silent fall-back (the
+    same call `;drift=` under E49's floor makes). Pure: nothing is mutated.
+
+    THE ORDER, pinned: a row that names WHERE - `centre`, `centre_x`, `centre_y` (`PLATE_PLACE_POINT`) - outranks
+    the plate's declared room, INCLUDING a bare `centre: True`, which is the stage's own centre and not the room's.
+    E99 s80: the author names the slot, and a room is where the compiler is asked to FIND one. `centre_w` and
+    `card_aspect` name no place - they SIZE a card - so on a room-declaring plate they are honoured inside the room,
+    and on a plate without one they size the stage-centred box."""
+    authored = any(dopt.get(k) is not None for k in PLATE_PLACE_FIELDS)
+    if not room and not authored:
+        return None
+    card_aspect = dopt.get("card_aspect")
+    named_place = any(dopt.get(k) is not None for k in PLATE_PLACE_POINT)
+    if not room or named_place:
+        # the row placed the card itself: the page's own door, with no page - `centred_place` falls through to the
+        # stage's centre for a `centre: True` that names no point, which is what a picture plate's centre is
+        box = centred_place(None, aspect, card_aspect, None, dopt.get("centre_w"), None,
+                            dopt.get("centre_y"), dopt.get("centre_x"))
+        return {**box, "room": PLATE_BOX_PLACED}
+    sw = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])[0]
+    want = round(float(dopt.get("centre_w") or DOCK_ON_PAGE_W) * sw)
+    fit = _fit_in(room, want, _floor_h(aspect), card_aspect)
+    if fit is None:
+        raise ValueError(f"{where}: the plate's declared room [{room['x']}, {room['y']}, {room['w']}, {room['h']}] "
+                         f"cannot hold a card {want} px wide at the legibility floor ({_floor_h(aspect)} px tall, "
+                         f"{DOCK_PLACE_PAD} px of air on every side) - widen `;room=`, or name a smaller "
+                         "`centre_w` on the dock (R26-221)")
+    w, h = fit
+    return {"x": round(room["x"] + (room["w"] - w) / 2), "y": round(room["y"] + (room["h"] - h) / 2),
+            "w": w, "h": h, "room": PLATE_ROOM_PLACED}
 
 
 def centred_place(place: dict, aspect: str | None, card_aspect: float | None = None, page: dict | None = None,
@@ -5431,6 +5633,7 @@ def main() -> int:
         # page's own geometry. Only the SOLO card (slot 0) is placed - a paired/stacked dock keeps
         # the layout its slot declares, and a plain plate keeps the solo card entirely.
         place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT))   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
+        plate_room = plate_room_px(world.get("room"), ASPECT)   # R26-221: the rectangle THIS picture plate declares a card may stand in
         for aid, slot, enter, exitt, *dextra in ds:   # P47 T1: an optional 5th element names how the card arrives
             try:
                 dopt = dock_opts(dextra[0] if dextra else None)
@@ -5441,6 +5644,11 @@ def main() -> int:
             auto_centre = solo_centre_by_clock(world, ASPECT, len(ds), slot, enter, a, dopt)   # R26-22: E50's clock centres a solo card on a MEASURED page
             centred = bool(dopt.get("centre")) or auto_centre
             dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (place and centred) else place   # the third watch: a card centred on the page
+            if place is None:   # R26-221: a PICTURE PLATE - the row's own box, or the room the plate declared (None = E45's solo card)
+                try:
+                    dplace = plate_dock_place(plate_room, ASPECT, dopt, f"shot row {i + 1} ({a}-{b}s) dock {aid}")
+                except ValueError as exc:
+                    raise SystemExit(f"FAIL: {exc}") from exc
             if centred and isinstance(dplace, dict) and isinstance(place, dict) and "room" not in dplace:
                 dplace = dict(dplace, room=place.get("room"))   # E65: the room the PAGE offered travels with the centred box
             if dopt.get("press"):   # P50 T3: E45 - the pile has one box, and it is the stage's centre
@@ -5467,12 +5675,16 @@ def main() -> int:
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
-            rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (place and rd) else None
+            # R26-221: `dplace` rather than `place` is the test - a card on a picture plate is placed by its own box
+            # (the page's `place` is None there), and a read the compiler drops is a card that never pops
+            rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (dplace and rd) else None
             # E63 (widened): a card never READS over the page's plot, drawing or finished. The read box is the row's
             # own when it named one, the card's solo CSS box otherwise; a centred card with no `read` has no pop at all
             # (it takes its parked box from its first frame), so there is nothing to move and the entry is untouched.
             # The build windows are still handed over - for the RECORD in `why`, never for the decision.
-            eplace = dplace if (slot == 0 or centred) else None
+            # R26-221: ... and on a picture plate the BOX is the slot - a row that authored one (or a plate that
+            # declared the room) has already said where this card goes, on either slot, so it is never dropped here
+            eplace = dplace if (slot == 0 or centred or (place is None and dplace)) else None
             _rs = float(dopt["read_s"]) if dopt.get("read_s") else DOCK_READ_S
             _ps = float(dopt["park_s"]) if dopt.get("park_s") else DOCK_PARK_S
             _aspect_of_card = rd.get("card_aspect", dopt.get("card_aspect")) if rd else dopt.get("card_aspect")

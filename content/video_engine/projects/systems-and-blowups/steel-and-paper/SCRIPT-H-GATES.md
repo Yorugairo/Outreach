@@ -1,7 +1,7 @@
 # SCRIPT GATES - SCRIPT-H-VO.txt
 
 script: SCRIPT-H-VO.txt
-generated: 2026-09-18T10:36:20+00:00
+generated: 2026-09-18T15:25:12+00:00
 script_hash: 0582cfff9c850200268660d6a71f9a4d956bf8d99b26c91f597e4e6a4b91b8b8
 timing_source: measured
 
@@ -63,42 +63,42 @@ exit 0
 
 ```
 === OPENING STRUCTURE GATE: SCRIPT-H-VO.txt ===
-           runtime: 13:58
+           runtime: 13:25
             timing: measured (take)
-          geometry: P1 0:00-1:11 (beat 5 from 0:47), P2 -2:48 (phase guides)
+          geometry: P1 0:00-1:10 (beat 5 from 0:47), P2 -2:45 (phase guides)
      density_bands: loops (3, 4), new-info (5, 7)
-         a3_anchor: 1:23
-             cycle: checked 0:00-13:58; longest gap 55s from 12:22
-      unit_windows: ['P3 unit 1 2:22-4:19', 'P3 unit 2 4:19-6:17', 'P5 unit 3 7:41-9:55', 'P5 unit 4 9:55-12:09']
+         a3_anchor: 1:20
+             cycle: checked 0:00-13:25; longest gap 53s from 11:53
+      unit_windows: ['P3 unit 1 2:16-4:09', 'P3 unit 2 4:09-6:02', 'P5 unit 3 7:22-9:31', 'P5 unit 4 9:31-11:40']
       counterparty: Bravos Research
               ring: certificate
          packaging: title='The AI Bubble Is Real. What Survives Is Steel.' thumb=None thumb_file=content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png
     not_gated_here: Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)
-    beats_declared: {'ring': ['0:00', '7:05', '11:47'], 'tricolon': ['0:04'], 'stakes': ['0:09'], 'archetype': ['0:21'], 'payoff': ['0:29'], 'reflect': ['0:40'], 'promise': ['0:44'], 'desire': ['0:51'], 'map': ['0:55'], 'opponent': ['0:57'], 'rehook': ['1:06', '4:14', '5:37', '8:01', '9:53', '10:29', '11:30', '12:22'], 'foreshadow': ['1:14', '6:31'], 'new': ['1:23', '1:29', '1:39', '1:52', '2:00', '2:07', '2:35', '3:05', '3:45', '4:31', '5:19', '5:42', '9:22'], 'catalyst': ['1:29'], 'loop': ['1:29', '2:14', '2:19'], 'head-fake': ['1:33'], 'debate': ['2:19'], 'loop-close': ['2:28'], 'dip': ['2:35'], 'signpost': ['2:38', '6:17', '10:54'], 'anaphora': ['2:46', '6:09', '8:44', '13:17'], 'turn': ['3:26'], 'concede': ['4:00']}
+    beats_declared: {'ring': ['0:00', '6:48', '11:19'], 'tricolon': ['0:04'], 'stakes': ['0:09'], 'archetype': ['0:20'], 'payoff': ['0:28'], 'reflect': ['0:38'], 'promise': ['0:42'], 'desire': ['0:49'], 'map': ['0:53'], 'opponent': ['0:55'], 'rehook': ['1:03', '4:04', '5:24', '7:42', '9:30', '10:04', '11:03', '11:53'], 'foreshadow': ['1:12', '6:15'], 'new': ['1:20', '1:26', '1:36', '1:48', '1:55', '2:02', '2:29', '2:58', '3:36', '4:20', '5:06', '5:28', '9:00'], 'catalyst': ['1:26'], 'loop': ['1:26', '2:09', '2:13'], 'head-fake': ['1:30'], 'debate': ['2:13'], 'loop-close': ['2:22'], 'dip': ['2:29'], 'signpost': ['2:31', '6:02', '10:28'], 'anaphora': ['2:39', '5:55', '8:24', '12:46'], 'turn': ['3:18'], 'concede': ['3:50']}
 
   [WARN ] G31 0 dabs for 3 loops
           Glass alternation, P2 70/30: two loops with no reflection = listing (P2)
   [WARN ] G43 2/9 declared beats open on a gap/consequence connector
           McKee gap: beats connect by BUT/THEREFORE - a beat that could swap places is filler (P2 / doc 32 s4)
-  [WARN ] G48 14 publication-relative anchor(s) - re-screen each at publish and at any re-upload (a re-upload is a new assertion date): 0:17 'today' in 'Hold an index fund and you own both halves today.'; 1:14 'today' in 'Railways in the 1840s drew a quarter-billion pounds, more th'; 3:09 'Today' in 'Today it's twenty-eight, the most it has ever been.'; 4:37 'Last year' in 'Last year: a hundred and twenty-one billion.'; 4:40 'This year' in 'This year they're tracking toward a hundred and fifty.'; 6:40 'today' in 'And Bravos Research's own number tells you where that paper '; 7:33 'Today' in 'Today's compute doesn't sit.'; 7:37 'next year' in 'And the builders are already sold out into next year — the o'; 8:17 'tonight' in 'Three: if the hype died tonight, would the asset still get u'; 8:17 'tomorrow' in 'Three: if the hype died tonight, would the asset still get u'; 8:52 'tonight' in 'Run your top five tonight.'; 9:22 'last year' in 'Over the last year the stock is up more than five hundred pe'; 9:49 'this year' in 'That's why the memory in a new laptop costs what it does thi'; 10:06 'tomorrow' in 'Used tomorrow morning?'
+  [WARN ] G48 14 publication-relative anchor(s) - re-screen each at publish and at any re-upload (a re-upload is a new assertion date): 0:16 'today' in 'Hold an index fund and you own both halves today.'; 1:12 'today' in 'Railways in the 1840s drew a quarter-billion pounds, more th'; 3:02 'Today' in 'Today it's twenty-eight, the most it has ever been.'; 4:26 'Last year' in 'Last year: a hundred and twenty-one billion.'; 4:29 'This year' in 'This year they're tracking toward a hundred and fifty.'; 6:25 'today' in 'And Bravos Research's own number tells you where that paper '; 7:15 'Today' in 'Today's compute doesn't sit.'; 7:19 'next year' in 'And the builders are already sold out into next year — the o'; 7:57 'tonight' in 'Three: if the hype died tonight, would the asset still get u'; 7:57 'tomorrow' in 'Three: if the hype died tonight, would the asset still get u'; 8:31 'tonight' in 'Run your top five tonight.'; 9:00 'last year' in 'Over the last year the stock is up more than five hundred pe'; 9:26 'this year' in 'That's why the memory in a new laptop costs what it does thi'; 9:42 'tomorrow' in 'Used tomorrow morning?'
           Perishable time anchors: every publication-relative phrase ('this week', 'last month', 'yesterday', 'two weeks ago', 'right now', 'this year') listed with its clock and re-screened at publish and at any re-upload - a false time anchor is the same class of defect as a false figure (C09-R013, ledger 8eb3d01c6196, 7e61f43b1162: 'a re-upload renews them at today's date.')
-  [PASS ] G01 first sentence 1.71s
+  [PASS ] G01 first sentence 1.64s
           PLATFORM 3s microhook (38 B1 / P1 QC)
-  [PASS ] G02 first word at 0.33s in the edit clock
+  [PASS ] G02 first word at 0.30s in the edit clock
           Humes pre-opener, bent visual: the plate breathes 0.5-0.8s before the first word (38 B1 / doc 32 s7)
-  [PASS ] G03 paid at 3.58s, settle at 7.00s
+  [PASS ] G03 paid at 3.42s, settle at 6.67s
           McKee gap paid WRONG by 0:08 + Humes post-key ON the boundary (38 B2)
   [PASS ] G04 clean
           PLATFORM ban list: no greeting, no 'in this video', no channel talk (38 B2)
-  [PASS ] G05 'you' at 0:17
+  [PASS ] G05 'you' at 0:16
           Direct address: 'you' by 0:30 (38 B3 / doc 32 s1)
   [PASS ] G06 clean
           Biography as the twist - AFTER the paradox, never before (38 B3)
   [PASS ] G07 [stakes] at 0:09
           Hook anatomy: stakes named by ~0:25 (38 B3)
-  [PASS ] G08 [payoff] at 0:29
+  [PASS ] G08 [payoff] at 0:28
           One Minute Wall: real value FIRST, before the ask (38 B4)
-  [PASS ] G09 promise at 0:44
+  [PASS ] G09 promise at 0:42
           F1 + A1 + macro-loop-1 SETUP: the dated promise in 0:30-0:45 (38 B4 / MAP s3 / CLK; E24 roadmap by 0:45)
   [PASS ] G10 placed
           Humes pre-key immediately before the promise (P1 pause marks)
@@ -106,9 +106,9 @@ exit 0
           The promise carries a date or number and is calculable (38 B4 / doc 35)
   [PASS ] G12 1 declared in P1
           Rhetoric: ONE tricolon on the thesis line, none elsewhere in P1 (P1 B4 / doc 32 s3)
-  [PASS ] G13 A1 at 0:44 ([promise]); A2 at 1:06 ([rehook])
+  [PASS ] G13 A1 at 0:42 ([promise]); A2 at 1:03 ([rehook])
           PLATFORM rehook slots A1 ~0:30 and A2 ~1:00 by FUNCTION, a line that re-justifies the next stretch: a declared [rehook] or [promise], the dated promise, a forward promise with a time or sequence anchor, or a template-family line - the families are one signal, not the definition (38 B4 / 38 B5 / P1 QC / MAP s3; C04-R016 + C07-R007, ledger b1f8c3fc2999: 'check the function doctrine specifies, not the phrasing it happens to illustrate')
-  [PASS ] G14 [opponent] at 0:57
+  [PASS ] G14 [opponent] at 0:55
           Truby Opponent / McKee antagonism: the opponent named, a MECHANISM never a villain (38 B5)
   [PASS ] G15 'certificate' planted at 0:09
           Ring composition: the ring token PLANTED in P1 (38 B5 / doc 32 s5)
@@ -120,9 +120,9 @@ exit 0
           HARD GATE attribution-first; [verify] never in hook/promise (P1/P2 / doc 32 s1)
   [PASS ] G18 2 marks in P1 (1.7/min)
           Humes pauses rationed: ~three per minute maximum (P1)
-  [PASS ] G19 closed by [loop] at 1:29
+  [PASS ] G19 closed by [loop] at 1:26
           The catalyst is a micro loop CLOSED inside 30-60s, not exposition (P2)
-  [PASS ] G20 longest gap 28s
+  [PASS ] G20 longest gap 27s
           PLATFORM new-info cadence: something genuinely new every 15-30s (P2)
   [PASS ] G21 3 [loop] in P2
           L2 loops: 3-4 micro-loop closes at this runtime (P2 geometry / MAP s0)
@@ -130,17 +130,17 @@ exit 0
           PLATFORM density: 5-7 new-info beats at this runtime (P2 geometry)
   [PASS ] G23 clean
           McKee gap, sentence-level: BUT/THEREFORE only - zero AND-THEN chains (P2 / doc 32 s4)
-  [PASS ] G24 [head-fake] at 1:33
+  [PASS ] G24 [head-fake] at 1:30
           Truby Plan v1 / head-fake #1 planted STRAIGHT, early-mid P2 (P2 MANDATORY / MAP s4)
-  [PASS ] G25 A3 at 1:06
-          PLATFORM rehook A3 at ~10% of runtime = 1:23 (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)
-  [PASS ] G26 [foreshadow] at 1:14
+  [PASS ] G25 A3 at 1:03
+          PLATFORM rehook A3 at ~10% of runtime = 1:20 (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)
+  [PASS ] G26 [foreshadow] at 1:12
           Foreshadow schedule F2 at ~10%: the promise sighted again, none of it delivered (P2 / MAP s2)
   [PASS ] G27 'certificate' 1x in P2
           Ring composition: token TOUCHED exactly once in P2, unresolved (P2 / doc 32 s5)
-  [PASS ] G28 [loop-close] at 2:28
+  [PASS ] G28 [loop-close] at 2:22
           Macro loop 1 CLOSES on a partial answer that opens the bigger question (P2 / MAP s4, LIFO ledger)
-  [PASS ] G29 [dip] at 2:35
+  [PASS ] G29 [dip] at 2:29
           PLATFORM breathing dip IMMEDIATELY after the macro close - 2-3 beats of room tone (P2)
   [PASS ] G30 none
           PLATFORM: the ONLY mid-video CTA slot is the 15-30s after the macro payoff (P2)
@@ -152,33 +152,33 @@ exit 0
           U6 / E20 concession budget: an agreement run never exceeds 2 sentences or 10s without a claim of ours
   [PASS ] G35 clean
           U6 / E20: a delivered proof is never hedged in the next sentence
-  [PASS ] G36 longest stretch without a cycle beat: 55s from 12:22
-          CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-13:58 (E23: whole runtime)
-  [PASS ] G37 [archetype] at 0:21
+  [PASS ] G36 longest stretch without a cycle beat: 53s from 11:53
+          CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-13:25 (E23: whole runtime)
+  [PASS ] G37 [archetype] at 0:20
           Truby Weakness/Need planted AS PEOPLE: an archetype-in-a-setting enters 0:08-0:30 (38 B3 / MAP s3)
-  [PASS ] G38 [desire] at 0:51
+  [PASS ] G38 [desire] at 0:49
           Truby Desire named: the goal the video pursues (38 B5)
-  [PASS ] G39 [map] at 0:55
+  [PASS ] G39 [map] at 0:53
           Auditory handrail: map-not-territory signpost - tease the WHAT, hold the HOW (38 B5 / doc 32 s1)
-  [PASS ] G40 [catalyst] at 1:29
+  [PASS ] G40 [catalyst] at 1:26
           Snyder Catalyst / McKee inciting incident: lands as a story beat in P2's first ~60s (P2)
-  [PASS ] G41 [debate] at 2:19
+  [PASS ] G41 [debate] at 2:13
           Snyder Debate / Truby Plan v1 FAILS: the obvious answer tried and found wanting, after the head-fake, mid-late P2 (P2 / MAP s4)
-  [PASS ] G42 [signpost] at 2:38
+  [PASS ] G42 [signpost] at 2:31
           Auditory handrail: exit P2 on a transition signpost into the Gap (P2 / doc 32 s1)
   [PASS ] G44 all 4 unit windows rehook out
           PLATFORM rehook per unit: one template-family line or [rehook] inside every P3/P5 unit window (P3.md u5 / P5 / MAP s9 '1 per unit'; E23)
   [PASS ] G45 title-word proxy: ['ai', 'bubble', 'real'] echoed in sentence 1
           E24 / doc 29 s9.29: proxy for 'the first sentence answers the thumbnail' - the title is the words packaged with it
-  [PASS ] G46 runtime 13:58 (measured) clears the 8:00 floor
+  [PASS ] G46 runtime 13:25 (measured) clears the 8:00 floor
           E74: long form is never under 8 minutes (the operator, 2026-09-13: 'yes, longform should never be under 8 minutes'; 2026-08-29: 'i dont think we make vdieos shorter than 8 minutes') - a cut under 8:00 is extended with substance or run as a short (under 3:00, G2), never shipped as a long form in between
   [PASS ] G47 no self-referential runtime claim
           A script's promises about itself: a self-referential runtime ('the next eight minutes', 'this ten-minute video') agrees with the clock within max(60 s, 15%) - FAIL on a measured take, WARN on the estimate; a deadline ('in the next N minutes') breaks only past the end (C03-R011, ledger e319a9d02fe4: 'The script promised eight minutes and ran twelve.')
   [PASS ] G47b 1 counted promise(s) agree with what the script names
           A script's promises about itself: a counted promise ('the five', 'three questions') agrees with the items the script names - the nearest named list, or the ordinals it walks - heuristic, so WARN (C03-R011, ledger e319a9d02fe4: 'A viewer counts four and then hears five.')
-  [JUDGE] J01 read the [opponent] line at 0:57
+  [JUDGE] J01 read the [opponent] line at 0:55
           McKee antagonism: the opponent is a mechanism, not a villain
-  [JUDGE] J02 read the line at 1:33
+  [JUDGE] J02 read the line at 1:30
           P2: the head-fake is offered STRAIGHT, no wink; demolition reserved for the pivot
   [JUDGE] J03 'The AI bubble is real.'
           Rhetoric: microhook concrete, terminal stress on the surprising word (38 B1)
@@ -192,11 +192,11 @@ exit 0
           A/V contextual mapping: plates carry the archive, the voice carries motive and cost; a line that captions its visual fails (P2 / doc 32 s6) - check the plate plan
   [JUDGE] J08 read the promise line
           Rhetoric: phonetic anchor only on the promise/payoff/tell (doc 32 s3)
-  [JUDGE] J09 read the line at 0:21
+  [JUDGE] J09 read the line at 0:20
           McKee archetype, not stereotype: a universal experience in a specific setting (doc 32 s4)
-  [JUDGE] J10 read the line at 0:55
+  [JUDGE] J10 read the line at 0:53
           38 B5: the map is a journey tease, never a table of contents
-  [JUDGE] J11 read the line at 2:19
+  [JUDGE] J11 read the line at 2:13
           McKee: the plan fails as a GAP (an action whose result violates expectation), never as a lecture
   [JUDGE] J12 open content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png; sentence 1: 'The AI bubble is real.'
           E24 / doc 29 s9.29: the first sentence answers what the thumbnail poses - open the thumbnail and read sentence 1 against it
