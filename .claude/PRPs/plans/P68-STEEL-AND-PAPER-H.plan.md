@@ -1,7 +1,7 @@
 ---
 id: P68-STEEL-AND-PAPER-H
 title: Steel and Paper H - the long-form shakedown on today's engine
-status: approved
+status: running
 operation: feature
 risk: standard
 owner: parent
@@ -237,7 +237,7 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
 ## Task Slices
 
 ### T1: Script H to gate-clean, and the package re-locked
-- Status: pending
+- Status: complete
 - Owner: parent
 - Route: parent - the writing is the parent's (E99 s72 and the gate-fit lesson both make
   prose-under-a-gate a judgement slice); `docs_researcher` may be dispatched read-only for a
@@ -257,10 +257,10 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
   package is one object - title, thumbnail, sentence 1 - and J12 is verdicted by hand against
   the file the runner prints
 - Validate: `python content/video_engine/scripts/run_script_gates.py content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt --ring certificate --counterparty "Bravos Research" --title "<the locked title>" --thumb-file content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/<the locked thumb>.png --long`
-- Evidence: pending
+- Evidence: 6e78106 (the pass), then the viewer rounds and the final take in wave 4: `SCRIPT-H-GATES.md` VERDICT PASS on `vo-h-scratch/timeline.json` (13:58; the promise at 0:44; 0 FAIL / 3 WARN / 47 PASS; the VIEWER line advisory), `SCRIPT-H-JUDGE.md` (the R2 table, the WARNs, the twelve JUDGE rows, the four viewer reads 79 -> 87 % with each miss judged), `SCRIPT-H-VIEWER.md`; HG1 open on the queue as `p68-steel-and-paper-h-hg1`
 
 ### T2: The H scratch record - the Kokoro take at ~175 wpm, the words, the clock (E99 s81)
-- Status: pending
+- Status: complete (the scratch clock; the voice itself is HG3's)
 - Owner: parent
 - Route: parent for the spend and the join listen; `junior_developer` for the mechanical
   stages (whisper gate, word timeline, edit pauses) once the audio exists
@@ -276,10 +276,10 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
   clock (a second short prose pass is allowed and stays in T1's write set); G02's 0.5-0.8 s
   breath exists in the edit clock
 - Validate: `python content/video_engine/scripts/verify_take_whisper.py content/video_engine/projects/systems-and-blowups/steel-and-paper --take vo-h` then `python content/video_engine/scripts/master_vo_tone.py --verify` then `python content/video_engine/scripts/run_script_gates.py content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt --ring certificate --counterparty "Bravos Research" --timeline content/video_engine/projects/systems-and-blowups/steel-and-paper/build-h/timeline.json --long`
-- Evidence: pending
+- Evidence: `vo-h-scratch/` (Kokoro am_michael at rate 1.075 - `scratch_take.py --rate` reaches Kokoro since 6e78106; 13:58; words.json + timeline.json + SCRATCH-INDEX.md; the mp3 gitignored); the tone chain and the whisper gate are owed on the CHOSEN voice after HG3, not on a scratch
 
 ### T3: The long-form capability audit - the either-format proof, BEFORE the table
-- Status: pending
+- Status: complete
 - Owner: junior_developer
 - Route: `junior_developer` on Opus writes the audit and the table; `explorer` is read-only by
   the dispatch mapping (`PRP_EXECUTION.md:69`) and cannot land the file, so it is dispatched
@@ -309,10 +309,10 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
   verdict** (blocks T4 / blocks T6 / informational), listed at the foot of the file ready to
   paste. No engine file is touched
 - Validate: `python content/video_engine/scripts/docs_find.py "caption strip 16:9"` and `python content/video_engine/scripts/lint_species_choice.py content/video_engine/projects/systems-and-blowups/steel-and-paper --build build-f --long` - both outputs quoted verbatim in the audit, and every `path:line` in the table re-opened by the parent before acceptance
-- Evidence: pending
+- Evidence: 3a9d82e: `docs/research/LONG-FORM-CAPABILITY-AUDIT-2026-09-18.md` - 82 rows (12 CUT / 45 GOLDEN / 25 NONE at 16:9), five verdict sections, thirteen gaps
 
 ### T3b: The gaps filed as backlog rows
-- Status: pending
+- Status: complete
 - Owner: parent
 - Route: parent - `BACKLOG.md` is a shared integration point, and two agents in it corrupt it
 - Depends on: T3
@@ -326,7 +326,7 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
   floor has no long-form reference; R26-201's caption-under-a-camera-key order is re-scoped to
   16:9 pages
 - Validate: `python scripts/prp_status.py` and `git diff --stat docs/content-video-engine/BACKLOG.md`
-- Evidence: pending
+- Evidence: 3a9d82e: BACKLOG R26-205..R26-217 (audit G-01..G-13), R26-204 the pointer; R26-210 BUILT in wave 4 (the 16:9 outro)
 
 ### T4: REBUILD-TREATMENT-H.md - the new shot table, row by row, with its cites
 - Status: pending
@@ -360,7 +360,7 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
 - Evidence: pending
 
 ### T5: The first 1:30 built - the unit of proof
-- Status: pending
+- Status: complete (the unit built and read; HG3 owed the critic and the card)
 - Owner: implementation_luna
 - Route: `implementation_luna` on Opus builds to the treatment; the parent reads the frames and
   owns the frozen copy, the link and the critic
@@ -382,7 +382,7 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
   two tables and two fractions, including the three 09-18 rows (idle tokens counted, the camera
   on named things, the open on the axes)
 - Validate: `python content/video_engine/scripts/self_watch.py content/video_engine/projects/systems-and-blowups/steel-and-paper/build-h --project content/video_engine/projects/systems-and-blowups/steel-and-paper --script SCRIPT-H` - section 3 reads CLEAN only after the parent's read of the sheets
-- Evidence: pending
+- Evidence: `build_episode_h.py` (the door through `authoring/`, receipt PASS 12/9), `SHOT-TABLE-H.md`, `build-h/` (gitignored; `GATES-MOTION.md` 1 FAIL M34 the recast's own hand-over + M11 by name / 3 WARN; frozen frames none over 0.5 s; every plate names its use; `self-watch/opening.1-4.png`), `build-h/BUILD-NOTES-H.md` (ten departures), `PARENT-READ-H.md` (two passes beside build-f), the frozen copy `build-h-frozen-a/` on :8775; BACKLOG R26-218..221 (the engine doors the unit found missing)
 
 ### T6: The body, the outro, the whole cut
 - Status: pending
