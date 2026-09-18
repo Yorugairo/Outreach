@@ -6,6 +6,7 @@ never blocks a slice."""
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -23,10 +24,30 @@ needs_ep1 = pytest.mark.skipif(not (BUILD / "steel-and-paper.timeline.json").exi
 
 # ---- write_report -----------------------------------------------------------
 
+def _ep1_bed(tmp_path: Path) -> Path:
+    """A PRIVATE copy of build-f's gate inputs (R26-225).
+
+    `write_report` writes `GATES-MOTION.md` beside the timeline, so running it on the real build dirtied
+    episode one's committed record on every full suite run (the lane reverted it by hand twice). The copy
+    keeps the dir name `build-f`, so the report header and the stats are the ones ep1's own build produces;
+    every file the gate reads is a top-level `*.json` beside the timeline, plus `player.html` when one of
+    the hash-keyed measurement files is there to be judged stale against it.
+    """
+    bed = tmp_path / BUILD.name
+    bed.mkdir(parents=True)
+    for src in sorted(BUILD.glob("*.json")):
+        shutil.copy2(src, bed / src.name)
+    keyed = list(bed.glob("frame-hashes*.json")) + [q for q in (bed / "morph-invariants.json", bed / "layout-probe.json") if q.exists()]
+    if keyed and (BUILD / "player.html").exists():
+        shutil.copy2(BUILD / "player.html", bed / "player.html")
+    return bed
+
+
 @needs_ep1
-def test_ep1_report_is_the_four_fail_baseline():
-    path, n_fail = G.write_report(BUILD, "steel-and-paper.timeline.json")
-    assert path == BUILD / "GATES-MOTION.md" and path.exists()
+def test_ep1_report_is_the_four_fail_baseline(tmp_path: Path):
+    bed = _ep1_bed(tmp_path)
+    path, n_fail = G.write_report(bed, "steel-and-paper.timeline.json")
+    assert path == bed / "GATES-MOTION.md" and path.exists()
     assert n_fail in (7, 8)   # 4 before caption modes were declared; 5 once M08 enforces on the rebuilt ep1; +3 for E24/E25
     text = path.read_text(encoding="utf-8")
     assert text.splitlines()[0] == "# MOTION GATE — build-f"

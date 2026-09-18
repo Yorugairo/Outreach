@@ -12658,6 +12658,15 @@ async function mount(doc) {
                SQUIG_DRAW: 0.45, LIFE_FPS: 12, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7,   /* LIFE_FPS 10 -> 12, E99 s36 (P61 T12): plate life on the 2s grid of the 24 fps render */
                STEAM_PERIOD: 2.6, TICK_STEP: 0.5 };   /* STILL LIFE (2026-09-05): steam and the ticker (the trace carries its own two in species/trace.mjs, the light its dim and its portrait radius in species/spotlight.mjs) */
   const CAMERA = new Set(["punch", "focus_zoom", "pull_back"]);
+  const CAP_YIELD = "caption_yield";   /* R26-201: the compiler's per-move caption band on a scene (read in the caption block below) */
+  /* R26-220 (E99 s80 (2), 2026-09-18): the FOCUS ZOOM's magnification is the ROW's, not the engine's. `zoom` on the
+     species entry, validated at compile time against the page's own reachable zoom (`page_zoom_ceiling`) - at 16:9
+     SP.FOCUS_SCALE cut the Steel and Paper H page's title (its top edge leaves the stage at 1.089) and pushed the y
+     tick column off (1.102), so the unit authored a 1.06 key pair instead of the move it wanted. ABSENT = SP.FOCUS_SCALE,
+     so every timeline compiled before this row draws exactly the frames it drew. The punch and the pull-back keep the
+     engine's own dials: a species' scale is a mechanism, and only the focus zoom's was asked for. */
+  const spZoom = (sp) => (sp && sp.kind === "focus_zoom" && typeof sp.zoom === "number" && sp.zoom > 1 ? sp.zoom : SP.FOCUS_SCALE);
+  const spCamP = (sp) => (spZoom(sp) === SP.FOCUS_SCALE ? SP : Object.assign({}, SP, { FOCUS_SCALE: spZoom(sp) }));
   const spTop = $("species"), spUnder = $("species-under"), plife = $("plife");
   let spSvg = spTop;   /* the layer the species painter draws into - chosen per species in paintSpecies */
   const spEase = (k) => 1 - Math.pow(1 - clamp01(k), 3);
@@ -12736,8 +12745,8 @@ async function mount(doc) {
         const tin = SP.PUNCH_IN / (sp.dur || 1), tout = SP.PUNCH_OUT / (sp.dur || 1);
         const a = k < tin ? spEase(k / tin) : k > 1 - tout ? 1 - spEase((k - (1 - tout)) / tout) : 1;
         xf = { s: 1 + (SP.PUNCH_SCALE - 1) * a, ox: cx, oy: cy };
-      } else if (sp.kind === "focus_zoom") { /* zoom + pan to the anchor, then dead still (servo law) */
-        xf = { s: 1 + (SP.FOCUS_SCALE - 1) * spIO(Math.min(1, k * 1.8)), ox: cx, oy: cy };
+      } else if (sp.kind === "focus_zoom") { /* zoom + pan to the anchor, then dead still (servo law) - at the row's own zoom (R26-220) */
+        xf = { s: 1 + (spZoom(sp) - 1) * spIO(Math.min(1, k * 1.8)), ox: cx, oy: cy };
       } else {                             /* pull-back: opens ON the number, one decelerating pull */
         xf = { s: SP.PULL_FROM + (1 - SP.PULL_FROM) * spEase(k), ox: cx, oy: cy };
       }
@@ -12768,7 +12777,7 @@ async function mount(doc) {
         if (!CAMERA.has(sp.kind)) continue;
         const k = (t - sp.at) / Math.max(0.001, sp.dur || 1); if (k < 0 || k > 1) continue;
         const b = resolveTarget(sp.target); if (!b) continue; const { cx, cy } = centre(b);
-        const s2 = camSpeciesState(sp.kind, k, [cx, cy], sp.dur || 1, SP); if (s2) st = s2;
+        const s2 = camSpeciesState(sp.kind, k, [cx, cy], sp.dur || 1, spCamP(sp)); if (s2) st = s2;   /* R26-220: the row's own zoom rides the module's own dial door (its 5th argument) */
       }
       if (!st) st = camIdentity(STAGE_W, STAGE_H);
     }
@@ -16158,9 +16167,21 @@ async function mount(doc) {
        those builds paint exactly as they did. The TOPMOST band wins when two cards are up; each was
        already cut clear of the cards beside it, so the strip does not dance when the second enters. */
     const carded = active.length > 0;
-    const capBand = carded && active.every((d) => d.caption_band && typeof d.caption_band.y === "number")
+    let capBand = carded && active.every((d) => d.caption_band && typeof d.caption_band.y === "number")
       ? active.map((d) => d.caption_band).reduce((a, b) => (b.y < a.y ? b : a)) : null;
-    const quiet = carded && !capBand;
+    /* R26-201 / E99 s80 (3) (2026-09-18): THE CAPTION YIELDS UNDER A CAMERA MOVE AS IT YIELDS UNDER A CARD. The
+       compiler writes one `caption_yield` window per camera move on a page whose caption holds the stage
+       (`stamp_camera_caption_bands`), with E62's own band cut against the page WHERE THE FRAME PUTS IT under the
+       move - the caption is the viewer's layer and never rides the camera (E59), so a zoom moves the page's cite
+       and pill row and the strip has to be cut against that. Read exactly like a card's band: the topmost wins,
+       and a window with a null band takes the quiet anchor (Tokyo v3's two punches were dropped for the want of
+       this - the cite read 34 px inside the strip at zoom 1.08). Absent = every timeline compiled before the row. */
+    const capY = (sc[CAP_YIELD] || []).find((w) => t >= w.from && t < w.to) || null;
+    if (capY) {
+      const yb = capY.caption_band && typeof capY.caption_band.y === "number" ? capY.caption_band : null;
+      capBand = !carded ? yb : (yb && capBand ? (yb.y < capBand.y ? yb : capBand) : null);
+    }
+    const quiet = (carded || !!capY) && !capBand;
     /* STAGE (s9.25 #2): the timeline declares it; the anchor is the shared-stage position only */
     /* a ledger page may pin its captions to the anchor (page.caption === "anchor"): a host plate's quiet zone is the host's (C5 addendum) */
     const capPinned = sc.world.kind === "ledger" && sc.world.page && sc.world.page.caption === "anchor";

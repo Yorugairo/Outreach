@@ -656,6 +656,187 @@ def validate_camera_row(cam, row_species, plate_id: str, aspect: str | None = No
     elif isinstance(cam, dict) and cam.get("attention") == "landings" and moves:
         errs.append(f"{plate_id}: attention landings and a {moves[0]} species on one row - the landing IS the camera's move (E51, s9.28 C3)")
     return errs
+
+
+# ---- R26-220 / R26-201: THE REACHABLE ZOOM ON A PAGE (E99 s80 (2), 2026-09-18) -----------------
+# `focus_zoom` was a FIXED 1.32 (`kinetics/camera.mjs` CAM.FOCUS_SCALE) and at 16:9 that zoom cut the
+# Steel and Paper H page's own title and pushed its y tick column off the frame, so the unit authored a
+# 1.06 camera KEY pair instead of the move it wanted. The dial is now the author's (`zoom` on the
+# species; a key has always carried its own) and THIS is what bounds it.
+#
+# THE LAW, and why it is arithmetic and not taste. E99 s80 (2): *"a punch or a camera move may crop the
+# page; its crop line falls between elements - each of the title, sub, cite, axis, pill row fully in or
+# fully out of the stage at every instant - never through a glyph"*. A zoom is continuous, so an element
+# that starts ON the stage cannot reach "fully out" without straddling the edge on the way: "at every
+# instant" reduces to EVERY GLYPH WHOLLY ON THE STAGE at the move's deepest zoom. What may be cropped is
+# the page's field - the cream, the board, the chart's own ink - which is the thing a punch moves INTO.
+# So the ceiling is per element, and one element binds it:
+#     screen = at + s * (p - look)      (the camera's own similarity, kinetics/camera.mjs)
+#   left   s <= at_x / (look_x - box.x)         right   s <= (W - at_x) / (box.right - look_x)
+#   top    s <= at_y / (look_y - box.y)         bottom  s <= (H - at_y) / (box.bottom - look_y)
+# A glyph already off the stage at rest cannot be the move's fault and does not bind (the ESTIMATED tag
+# column of a dense-line page runs past the frame - `LAND_TAG_REACH` is an upper bound by construction);
+# the page's own geometry is R26-205's row, never the camera's.
+#
+# MEASURED, the H unit's page at 16:9 (`build-h-frozen-g` s01, read read-only; the estimate's boxes,
+# looking at the datum's proxy 624,538): the TITLE's top edge binds at 1.089, the y tick column's left
+# edge at 1.102, the sub / source / x ticks at 1.120 - so the reachable zoom is 1.08, the authored 1.06
+# holds, and the engine's own 1.32 is refused by name. Tokyo v3b measured the same law off the DOM by
+# hand (`build_short_v3.py:194-197`: "the left edge binds at S_MAX 1.110 / 1.106"); this is that
+# measurement as a compile-time refusal, so no build has to find it on a frame again.
+CAMERA_GLYPH_KEYS = ("title", "sub", "source", "rail", "tags")   # the page's own type; `plot` is the field a punch moves INTO
+FOCUS_ZOOM_DEFAULT = 1.32   # the engine's own CAM.FOCUS_SCALE (`kinetics/camera.mjs`), mirrored so a refusal can name it and
+                            # so `zoom` absent means EXACTLY what every build on disk already renders (test_camera pins the pair)
+CAMERA_MOVE_FLOOR = 1.06   # E99 s80 (3): "a zoom under ~1.06 is not a move and stays out" - said in the refusal, never enforced as taste
+
+
+def page_glyph_boxes(page: dict, aspect: str) -> dict[str, dict]:
+    """The page's GLYPH boxes in stage px - what E99 s80 (2) names, and nothing else.
+
+    `page_boxes` reports the page's ink; the chart's two label banks live inside its `plot` box (the y
+    tick column left of the data, the x tick labels under it - `_portrait_boxes` and
+    `_landscape_full_boxes` both run the plot from the y label down to the tick foot), so they are cut
+    back out here by the two constants the box model itself uses. The DATA is not a glyph."""
+    boxes = LPG.page_boxes(page, aspect)
+    out = {k: dict(boxes[k]) for k in CAMERA_GLYPH_KEYS
+           if isinstance(boxes.get(k), dict) and boxes[k]["w"] > 0 and boxes[k]["h"] > 0}
+    plot, chart = boxes.get("plot"), boxes.get("chart")
+    if plot and chart and plot["x"] > chart["x"]:
+        out["y tick column"] = {"x": chart["x"], "y": plot["y"], "w": plot["x"] - chart["x"], "h": plot["h"]}
+    if plot and plot["h"] > LPG.XTICK_H:
+        out["x tick labels"] = {"x": plot["x"], "y": plot["y"] + plot["h"] - LPG.XTICK_H,
+                                "w": plot["w"], "h": LPG.XTICK_H}
+    return out
+
+
+def zoom_ceiling(box: dict, look, at, sw: float, sh: float) -> tuple[float, str]:
+    """The largest zoom that keeps `box` WHOLLY on the stage under a camera looking at `look` and landing
+    that point at `at` (both stage px; `at == look` is a zoom in place), and the edge that binds it.
+    `inf` when no edge does; a box already off the stage returns its own number below 1."""
+    lx, ly = float(look[0]), float(look[1])
+    ax, ay = float(at[0]), float(at[1])
+    caps: list[tuple[float, str]] = []
+    if lx > box["x"]:
+        caps.append((ax / (lx - box["x"]), "left"))
+    if box["x"] + box["w"] > lx:
+        caps.append(((sw - ax) / (box["x"] + box["w"] - lx), "right"))
+    if ly > box["y"]:
+        caps.append((ay / (ly - box["y"]), "top"))
+    if box["y"] + box["h"] > ly:
+        caps.append(((sh - ay) / (box["y"] + box["h"] - ly), "bottom"))
+    return min(caps) if caps else (math.inf, "-")
+
+
+def page_zoom_ceiling(page: dict, aspect: str, look, at=None) -> tuple[float, str, str, list]:
+    """The reachable zoom for a camera move on this page: (zoom, the element that binds it, its edge, the
+    whole table). A glyph already off the stage at rest is carried in the table with `at_rest` False and
+    does not bind - what the page already does with no camera is not the move's doing."""
+    sw, sh = LPG.STAGE_PX[aspect]
+    at = tuple(at) if at is not None else tuple(look)
+    table = []
+    for name, box in page_glyph_boxes(page, aspect).items():
+        z, edge = zoom_ceiling(box, look, at, sw, sh)
+        table.append({"element": name, "zoom": z, "edge": edge, "box": box, "at_rest": z >= 1.0})
+    live = [r for r in table if r["at_rest"]]
+    table.sort(key=lambda r: r["zoom"])
+    if not live:
+        return math.inf, "-", "-", table
+    best = min(live, key=lambda r: r["zoom"])
+    return best["zoom"], best["element"], best["edge"], table
+
+
+def page_crop_line_ceiling(page: dict, aspect: str, look, at=None) -> tuple[float, str]:
+    """E99 s80 (3) at 16:9: the largest zoom before the page's own CROP LINE lands in the anchored strip.
+
+    At 9:16 the caption YIELDS under the move (`stamp_camera_caption_bands`, E62 for the camera), so the
+    strip is not a ceiling there - it moves. At 16:9 the strip is already out of the plot and the caption
+    has nowhere to go, so the rule is the page's own: the bottom edge of its drawn extent may sit ABOVE
+    the strip (the caption reads under the page) or BELOW its foot (the page covers the strip, which is
+    what a full-stage page does), never INSIDE it, where a deckle edge cuts the caption's own band. A page
+    whose edge is already in the strip with no camera at all is not the move's fault."""
+    if aspect != "16:9":
+        return math.inf, "-"
+    boxes = LPG.page_boxes(page, aspect)
+    strip = boxes["caption_anchor"]
+    inked = [boxes.get(k) for k in CAMERA_GLYPH_KEYS + ("chart", "plot")]
+    inked = [b for b in inked if isinstance(b, dict) and b["w"] > 0 and b["h"] > 0]
+    if not inked:
+        return math.inf, "-"
+    bottom = max(b["y"] + b["h"] for b in inked)
+    ly = float(look[1])
+    ay = float(at[1]) if at is not None else ly
+    if bottom <= ly or bottom > strip["y"]:
+        return math.inf, "-"          # above the look (a zoom cannot walk it down), or already at the strip
+    cap = (strip["y"] - ay) / (bottom - ly)
+    return (cap, "the page's own bottom edge") if cap >= 1.0 else (math.inf, "-")
+
+
+def camera_zoom_errors(world, row_species, cam, plate_id: str, aspect: str | None = None) -> list[str]:
+    """R26-220: every zoom authored on a LEDGER PAGE row - the `focus_zoom`'s own dial and each camera
+    key's - against the reachable zoom, refused BY NAME with the number (E99 s80 (2) and, at 16:9, (3)).
+
+    Nothing is claimed where the compiler cannot place the look (a `span` target, a page the box model
+    cannot estimate): the rule `camera_edge_errors` already keeps. A DATUM is placed by the plot's centre,
+    the motion gate's own proxy for it (`_cam_point`), so the number is the PAGE's and the refusal prints
+    the anchor it read - the engine's resolved mark can only be read off a frame (`window.__camera`)."""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return []
+    page = world.get("page")
+    if not isinstance(page, dict):
+        return []
+    asp = aspect or "16:9"
+    if asp not in LPG.STAGE_PX:
+        return []
+    sw, sh = LPG.STAGE_PX[asp]
+    try:
+        plot = LPG.page_boxes(page, asp).get("plot")
+    except Exception:       # a page the box model cannot place: there is nothing to measure a zoom against
+        return []
+    errs: list[str] = []
+
+    def _check(zoom: float, look, at, door: str) -> None:
+        if not (zoom > 1.0):
+            return
+        z_glyph, element, edge, _table = page_zoom_ceiling(page, asp, look, at)
+        z_crop, crop_name = page_crop_line_ceiling(page, asp, look, at)
+        z, name = ((z_glyph, f"the {element}'s {edge} edge") if z_glyph <= z_crop else (z_crop, crop_name))
+        if z == math.inf or zoom <= z + 1e-9:
+            return
+        reach = math.floor(z * 100) / 100
+        landed = "" if tuple(at) == tuple(look) else f", landed at ({float(at[0]):.0f}, {float(at[1]):.0f})"
+        errs.append(
+            f"{plate_id}: {door} is past the reachable zoom {reach:.2f} on this page at {asp} - {name} leaves the "
+            f"stage at {z:.3f}, looking at ({float(look[0]):.0f}, {float(look[1]):.0f}){landed}. E99 s80 (2): a move "
+            "may crop the page - its crop line falls between elements, never through a glyph"
+            + (f"; and {reach:.2f} is under the ~{CAMERA_MOVE_FLOOR:.2f} floor, so this page carries no move at this "
+               "anchor - park it (E61), or look at something the page has room around"
+               if reach < CAMERA_MOVE_FLOOR else ""))
+
+    for e in row_species or []:
+        if not isinstance(e, dict) or e.get("kind") != "focus_zoom":
+            continue
+        z = e.get("zoom")
+        if isinstance(z, bool) or not isinstance(z, (int, float)):
+            continue        # the dial's own shape is `_validate_entry`'s; an absent dial is the engine's 1.32
+        c = MG._cam_point(e.get("target"), sw, sh, plot)
+        if c is None:
+            continue
+        _check(float(z), c, c, f"focus_zoom zoom {float(z):.4g}")
+    if isinstance(cam, dict):
+        for i, k in enumerate(cam.get("keys") or []):
+            if not isinstance(k, dict):
+                continue
+            z = k.get("zoom", 1)
+            if isinstance(z, bool) or not isinstance(z, (int, float)):
+                continue
+            look = MG._cam_point(k.get("look"), sw, sh, plot)
+            if look is None:
+                continue
+            at = MG._cam_point(k.get("at"), sw, sh, plot) if k.get("at") is not None else look
+            _check(float(z), look, at or look, f"camera key {i} (t={float(k.get('t', 0.0)):.2f}s) zoom {float(z):.4g}")
+    return errs
+
+
 TARGET_KINDS = ("datum", "point", "region", "span")
 COUNTRY_TARGET, MAPPOINT_TARGET = "country", "mappoint"   # P50 T5: a place on the VECTOR MAP - {"kind": "country", "id": "IRN"} (the
 MAP_TARGETS = (COUNTRY_TARGET, MAPPOINT_TARGET)           # outline's own centroid) or {"kind": "mappoint", "x": 640, "y": 165} in MAP BOX
@@ -1713,6 +1894,17 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
                 errs.append("trace: hop.draw_s must be > 0")
     if "idle" in entry and entry["idle"] not in IDLE_KINDS:   # a held light's idle (E49 on the spotlight, 2026-09-09)
         errs.append(f"{kind}: idle {entry['idle']!r} is not one of {'|'.join(IDLE_KINDS)}")
+    if "zoom" in entry:   # R26-220: the FOCUS ZOOM's own dial - the magnification the move lands on (E99 s80 (2))
+        z = entry["zoom"]
+        if kind != "focus_zoom":
+            errs.append(f"{kind}: 'zoom' is the focus zoom's dial - a {kind}'s scale is the engine's own "
+                        "(CAM.PUNCH_SCALE / CAM.PULL_FROM), and a dial that does nothing is worse than no dial")
+        elif isinstance(z, bool) or not isinstance(z, (int, float)):
+            errs.append("focus_zoom: 'zoom' must be a number - the magnification the move lands on "
+                        f"(absent = the engine's {FOCUS_ZOOM_DEFAULT})")
+        elif z <= 1.0:
+            errs.append(f"focus_zoom: zoom {z:g} does not zoom - a camera move magnifies (> 1.0); absent = the "
+                        f"engine's {FOCUS_ZOOM_DEFAULT}, and what this page can take is `page_zoom_ceiling`")
     if kind == "callout":   # E56 and P50 T3's one exception - see _validate_callout
         errs += _validate_callout(entry, press_docks)
     allowed = SPECIES_TARGETS[kind]
@@ -5042,6 +5234,10 @@ CAPTION_STAGE_PX = 64          # the stage caption's type, both aspects (the tem
 CAPTION_LINE_H = 1.12          # its line box (the template's `#caption.stage` line-height)
 CAPTION_LINES = 2              # a caption page is cut to two lines on a short (build_caption_pages.py)
 CAPTION_BAND_ORDER = ("below", "above", "quiet")
+# R26-201: the page boxes a CAMERA moves - the page's own ink, and nothing the frame owns (`stage`, `safe`,
+# `caption_anchor` are the stage's; `quiet_zone` / `measured` are words). `free_bands` reads both kinds, which is
+# why the list is named rather than inferred: a transformed safe box would move the band's own walls with the page.
+CAPTION_PAGE_INK_KEYS = ("title", "sub", "chart", "plot", "source", "rail", LPG.TAGS_KEY)
 CAPTION_HOME_BOTTOM = 480      # 9:16: the strip sits on `bottom: 480px` (G-l, y 1297-1440)
 CAPTION_HOME_TOP = 0.40        # 16:9: the stage caption's own 40% band
 CAPTION_SIDE_PAD = 120         # the stage caption's near margin beside a declared quiet zone
@@ -5115,16 +5311,24 @@ def _rects_meet(a: dict, b: dict, pad: float = 0.0) -> bool:
             and a["y"] < b["y"] + b["h"] + pad and a["y"] + a["h"] > b["y"] - pad)
 
 
-def caption_band(page: dict, aspect: str, cards: list[dict] | None) -> dict | None:
+def caption_band(page: dict, aspect: str, cards: list[dict] | None, xf=None) -> dict | None:
     """The band this page leaves free for the caption under `cards` (E62), or None.
 
     ``{"y", "h", "band"}`` in stage pixels - the strip's own rectangle and the candidate it came
     from. `cards` is every card box live in the dock's window (its parked `place`, and the reading
     box when the row named one); None means a card whose box the compiler does not know, and the
-    answer is None - the caption takes the quiet anchor rather than guess. Pure: nothing is mutated."""
+    answer is None - the caption takes the quiet anchor rather than guess. Pure: nothing is mutated.
+
+    R26-201 / E99 s80 (3): `xf` is the CAMERA, as a map from a page box to where the frame puts it -
+    the caption is the viewer's layer and never rides the camera (E59), so under a move the page's ink
+    is somewhere else and the band has to be cut against WHAT THE FRAME HOLDS. Absent (every caller
+    before that row) nothing is transformed and the bytes are the bytes. The STAGE, the safe box and
+    the anchored strip are never mapped: they are the frame's own, not the page's."""
     if cards is None:
         return None
     boxes = LPG.page_boxes(page, aspect)
+    if xf is not None:
+        boxes = {**boxes, **{k: xf(boxes[k]) for k in CAPTION_PAGE_INK_KEYS if isinstance(boxes.get(k), dict)}}
     h = caption_strip_h()
     x, w = caption_strip_x(aspect, boxes.get("quiet_zone"))
     margin = round(CAPTION_STAGE_PX * CAPTION_LINE_H)         # one line of clear air beside a card
@@ -5325,6 +5529,176 @@ def stamp_caption_bands(scenes: list[dict], pages: list[dict], aspect: str | Non
             band = newsreel_caption_band(band, sc.get("species"), asp, d["enter"], d["exit"])   # P52 T6: a crawl in this window may own the strip
             d["caption_band"] = band
             placed += bool(band)
+    return placed
+
+
+# ---- R26-201: THE CAPTION YIELDS UNDER A CAMERA MOVE (E62 for the camera; E99 s80 (3)) ---------
+# Tokyo v3's two punches were DROPPED because of this hole: E62's demotion is written on DOCK entries
+# only (`stamp_caption_bands`, `_dock_live_at`), so a page punch had no way to move the caption and the
+# page's own cite and pill row were pushed into the strip - measured at 34 px and 23 px deep at zoom
+# 1.08, with the shipped cut already touching it by 2 px at zoom 1.00. The operator, E99 s80: *"the
+# CAPTION YIELDS under a camera move as it yields under a card (E62: the demotion is in position, not
+# size) so no page element lands in the strip"*.
+#
+# THE MECHANISM IS E62's, UNCHANGED - the below / above / quiet ladder off `free_bands`, the strip two
+# lines at the stage size, the first candidate that holds clear wins, `null` meaning "keep the anchor".
+# ONE thing is new: the page's ink is read WHERE THE FRAME PUTS IT. The caption is the viewer's layer and
+# never rides the camera (E59), so under a zoom of s about `look`, landed at `at`, a page box is
+# `at + s * (p - look)` - the camera's own similarity (`kinetics/camera.mjs`), and `caption_band`'s `xf`.
+# The band is cut at the move's DEEPEST zoom and held for the whole window: a band that moved with the
+# zoom would be a caption sliding under a camera, which is exactly what E62 refused ("a layout move on
+# the dock's enter clock, no transition").
+#
+# WHOSE CAPTION YIELDS: a caption that HOLDS THE STAGE. A 16:9 page row's caption is already in the
+# anchored strip (R26-205), out of the plot and with nowhere to go, so at that aspect the rule is the
+# page's instead - `page_crop_line_ceiling` refuses a zoom whose crop line lands in the strip, and
+# `page_zoom_ceiling` refuses one that cuts a glyph. A 9:16 page's stage caption is the one that moves.
+CAPTION_YIELD_KEY = "caption_yield"
+# the three camera SPECIES' own zooms, mirrored from `kinetics/camera.mjs` CAM so the compiler can read the
+# frame a species will draw (test_camera_zoom_and_caption_yield pins the three against the module itself)
+CAMERA_SPECIES_ZOOM = {"punch": 1.14, "focus_zoom": FOCUS_ZOOM_DEFAULT, "pull_back": 1.9}
+
+
+def camera_move_windows(scene: dict, aspect: str) -> list[dict]:
+    """Every window of this scene in which the camera MAGNIFIES the world, with the deepest state in it.
+
+    ``[{"from", "to", "zoom", "look", "at", "move"}]`` in timeline seconds and stage px. Keys: the window
+    runs from the first key to the last, and on to the scene's end when the last key still holds a zoom
+    (`camKeyState` holds after the last key). A species: its own `at` .. `at + dur`, at the zoom the
+    engine draws it with - the authored `zoom` for a focus zoom, the engine's dial for the other two
+    (a pull-back is deepest at its FIRST frame, which is where its look is read).
+
+    A window whose look the compiler cannot place is left out - the same rule `camera_edge_errors` keeps."""
+    sw, sh = LPG.STAGE_PX[aspect]
+    page = (scene.get("world") or {}).get("page") if isinstance(scene.get("world"), dict) else None
+    plot = None
+    if isinstance(page, dict):
+        try:
+            plot = LPG.page_boxes(page, aspect).get("plot")
+        except Exception:
+            plot = None
+    out: list[dict] = []
+    keys = [k for k in ((scene.get("camera") or {}).get("keys") or []) if isinstance(k, dict)]
+    if keys:
+        deep = max(keys, key=lambda k: float(k.get("zoom", 1) or 1))
+        if float(deep.get("zoom", 1) or 1) > 1.0:
+            look = MG._cam_point(deep.get("look"), sw, sh, plot)
+            at = MG._cam_point(deep.get("at"), sw, sh, plot) if deep.get("at") is not None else look
+            end = float(keys[-1].get("t", 0.0))
+            if float(keys[-1].get("zoom", 1) or 1) > 1.0:
+                end = float((scene.get("span") or [0.0, end])[1])
+            if look is not None and end > float(keys[0].get("t", 0.0)):
+                out.append({"from": float(keys[0]["t"]), "to": end, "zoom": float(deep["zoom"]),
+                            "look": look, "at": at or look, "move": f"camera keys (zoom {float(deep['zoom']):.4g})"})
+    for e in scene.get("species", []):
+        if not isinstance(e, dict) or e.get("kind") not in CAMERA_MOVES:
+            continue
+        z = e.get("zoom") if isinstance(e.get("zoom"), (int, float)) and not isinstance(e.get("zoom"), bool) \
+            else CAMERA_SPECIES_ZOOM.get(e["kind"], 1.0)
+        c = MG._cam_point(e.get("target"), sw, sh, plot)
+        if c is None or not (float(z) > 1.0) or not isinstance(e.get("at"), (int, float)):
+            continue
+        out.append({"from": float(e["at"]), "to": float(e["at"]) + float(e.get("dur") or 0.0), "zoom": float(z),
+                    "look": c, "at": c, "move": f"{e['kind']} (zoom {float(z):.4g})"})
+    return [w for w in out if w["to"] > w["from"]]
+
+
+def camera_frame_xf(win: dict):
+    """The camera of `win` as a map from a page box to WHERE THE FRAME PUTS IT: `at + s * (p - look)`.
+
+    Rounded to whole pixels because `page_boxes` is (`ledger_page._box`): the band ladder cuts its
+    candidates flush to a box's edge and then asks whether they meet, so a fractional box makes a strip
+    0.4 px into the plot and the caption falls to the anchor for a pixel it cannot see."""
+    z = float(win["zoom"])
+    lx, ly = float(win["look"][0]), float(win["look"][1])
+    ax, ay = float(win["at"][0]), float(win["at"][1])
+    return lambda b: LPG._box(ax + z * (b["x"] - lx), ay + z * (b["y"] - ly), b["w"] * z, b["h"] * z)
+
+
+def camera_caption_band(page: dict, aspect: str, win: dict, cards: list[dict] | None) -> dict | None:
+    """E62's band, cut against the page AS THE FRAME HOLDS IT under `win` (R26-201)."""
+    return caption_band(page, aspect, cards if cards is not None else [], xf=camera_frame_xf(win))
+
+
+def caption_live_box(band: dict | None, aspect: str) -> dict:
+    """Where the caption's strip actually IS under this window - the band it took, or the quiet anchor."""
+    x, y, w, h = LPG.CAPTION_ANCHOR[aspect]
+    if band is None:
+        return {"x": x, "y": y, "w": w, "h": h}
+    bx, bw = caption_strip_x(aspect, None)
+    return {"x": bx, "y": band["y"], "w": bw, "h": band["h"]}
+
+
+def caption_strip_intrusion(page: dict, aspect: str, win: dict, band: dict | None) -> dict | None:
+    """The page element that reads INSIDE the caption's strip under this move, and how deep (E99 s80 (3)).
+
+    The yield is the door; this is what is left when the page has no band to give. A 9:16 page whose
+    chart fills the frame leaves 44 px under its plot and 136 px over it - neither holds a two-line
+    strip - so the caption stays at its anchor and the page's own cite is pushed into it (Tokyo,
+    measured: 34 px at zoom 1.08). The compiler says so with the number; the ways out are the ruling's
+    own - ANCHOR the move (a key's `at`, lifting the look so the foot clears) or PARK the page (E61) -
+    and both are the author's, not the compiler's."""
+    strip = caption_live_box(band, aspect)
+    xf = camera_frame_xf(win)
+    worst = None
+    for name, box in page_glyph_boxes(page, aspect).items():
+        b = xf(box)
+        deep = min(b["y"] + b["h"], strip["y"] + strip["h"]) - max(b["y"], strip["y"])
+        wide = min(b["x"] + b["w"], strip["x"] + strip["w"]) - max(b["x"], strip["x"])
+        if deep <= 0 or wide <= 0:
+            continue
+        if worst is None or deep > worst["px"]:
+            worst = {"element": name, "px": round(deep), "box": b}
+    return worst
+
+
+def page_caption_holds_the_stage(world: dict | None, aspect: str | None) -> bool:
+    """Is this page's caption the one that HOLDS THE STAGE - the caption E62 moves rather than shrinks?
+
+    False for an anchored caption (a 16:9 full-stage page row, R26-205, or a page that declares
+    `caption: "anchor"` itself - a host plate's, C5): there is no band for it to take, the engine reads
+    a null band as "keep the anchor", and at 16:9 the ceiling is the page's instead."""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return False
+    page = world.get("page")
+    if not isinstance(page, dict) or page.get("caption") == "anchor":
+        return False
+    return not page_is_full_stage(world, aspect)
+
+
+def stamp_camera_caption_bands(scenes: list[dict], pages: list[dict], aspect: str | None) -> int:
+    """R26-201: write `caption_yield` onto every page scene whose CAMERA moves under a caption. In place.
+
+    One entry per camera window - `{from, to, caption_band, move}` - and the band is E62's own (`null`
+    when no band holds a two-line strip clear of the page as the frame holds it, which the engine reads
+    as the quiet anchor, exactly as it reads a card with no band). Returns how many windows took a band.
+
+    Nothing is written where nothing yields: a plate row, an anchored caption, a window with no caption
+    page on screen, a locked camera. A timeline compiled before this row carries no such key, so every
+    committed golden and both approved shorts paint precisely what they painted."""
+    asp = aspect or "16:9"
+    if asp not in LPG.STAGE_PX:
+        return 0
+    placed = 0
+    for sc in scenes:
+        if not page_caption_holds_the_stage(sc.get("world"), asp):
+            continue
+        page = sc["world"]["page"]
+        out = []
+        for win in camera_move_windows(sc, asp):
+            if not _caption_in_window(pages, win["from"], win["to"]):
+                continue
+            cards = dock_card_boxes(sc.get("docks", []), win["from"], win["to"])
+            band = camera_caption_band(page, asp, win, cards)
+            entry = {"from": round(win["from"], 2), "to": round(win["to"], 2),
+                     "caption_band": band, "move": win["move"]}
+            intruder = caption_strip_intrusion(page, asp, win, band)
+            if intruder:   # the yield had no band to give: named with its number, never shipped in silence
+                entry["in_strip"] = {"element": intruder["element"], "px": intruder["px"]}
+            out.append(entry)
+            placed += bool(band)
+        if out:
+            sc[CAPTION_YIELD_KEY] = out
     return placed
 
 
@@ -5998,6 +6372,12 @@ def main() -> int:
             derive_rescale_states(world, row_species, plate, EP, sid=sid)   # P48 T2: each `chart_to rescale` gets its own derived page state; E64: and each recast its derived KEY
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        # R26-220 / E99 s80 (2): the row's ZOOMS against what this page can take. It lands here and not beside
+        # `validate_species` because the ceiling is the PAGE's, and the page only exists once `world_for_plate`
+        # has read its series and `stamp_full_stage` has said which geometry it takes at this aspect.
+        zoom_errors = camera_zoom_errors(world, row_species, row_camera, plate, ASPECT)
+        if zoom_errors:
+            raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(zoom_errors))
         _thread = ((world.get("page") or {}).get("thread") or {}) if world.get("kind") == SPECIES_LEDGER else {}
         if _thread:   # HF-16: the wire names the scene BEFORE this one, and that scene has to own the mark
             _prev = scenes[-1] if scenes else None
@@ -6276,6 +6656,23 @@ def main() -> int:
             chosen[key] = chosen.get(key, 0) + 1
         print(f"  caption band: {banded}/{len(stamped)} dock window(s) keep the stage caption "
               f"({', '.join(f'{k} x{v}' for k, v in sorted(chosen.items()))})")
+    # R26-201 / E99 s80 (3): and the band a CAMERA MOVE leaves the caption free - the same demotion, for the
+    # move. A 16:9 page row's caption is already anchored (R26-205), so this speaks on a 9:16 page's stage
+    # caption; at 16:9 the ceiling is the page's (`camera_zoom_errors`, refused at the row).
+    yielded = stamp_camera_caption_bands(scenes, pages, ASPECT)
+    yield_windows = [w for sc in scenes for w in sc.get(CAPTION_YIELD_KEY, [])]
+    if yield_windows:
+        print(f"  caption yield: {yielded}/{len(yield_windows)} camera window(s) move the caption rather than shrink it - "
+              + "; ".join(f"{w['move']} {w['from']}-{w['to']}s -> "
+                          + (f"band {w['caption_band']['band']} y{w['caption_band']['y']}" if w["caption_band"]
+                             else "the quiet anchor (no band holds)") for w in yield_windows[:4]))
+        intruded = [w for w in yield_windows if w.get("in_strip")]
+        if intruded:
+            print(f"  [WARN] E99 s80 (3): {len(intruded)} camera window(s) still push a page element into the caption's "
+                  "strip - " + "; ".join(f"{w['move']} at {w['from']}s: the {w['in_strip']['element']} "
+                                         f"{w['in_strip']['px']}px in" for w in intruded[:4])
+                  + ". The caption has no band to yield to on this page: ANCHOR the move (a key's `at`, lifting the "
+                  "look until the foot clears) or PARK the page (E61) - or the move stays out.")
     uris["__audio__"] = data_uri(audio)
 
     # SOUND REVIEW LAYER (operator, 2026-08-31: "i can't judge the audio
