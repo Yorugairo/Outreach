@@ -256,6 +256,51 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
     return [tuple(r) for r in rows]
 
 
+BEAT_PLAN = "BEAT-PLAN.jsonl"
+
+
+def _restamp_beat_plan(build: Path, rows: list[tuple]) -> str:
+    """THE PLAN'S WORLD FIELDS, RE-STAMPED FROM THIS CUT'S OWN TABLE (the director-critic, 2026-09-17).
+
+    `build-short/BEAT-PLAN.jsonl` is the approved cut READ BACK (P66 T7) and is the seed for this build's plan;
+    `derive_beat_moves.py` then fills each record's `moves` from the compiled timeline and TOUCHES NOTHING ELSE - so
+    the frozen `row` / `plate` fields still named the approved cut's worlds at every row v2 changed (beat 12's plate
+    carried no `;idle=drift`, beats 19-23 still carried `mount=2.43`). This stamps `row`, `plate` and `exit` off THIS
+    table, by the beat's own t0, and says so in `source`.
+
+    What it does NOT do: rewrite the prose `capabilities` / `act` / `comparator`. Those are the AUTHOR's (E99 s66 keeps
+    the plan's intelligence with an agent or the operator), and a tool that paraphrased them would be inventing a plan,
+    not transcribing one. Where the prose still describes the approved cut's mechanism the record now carries
+    `v2_changed` naming the row's real world and transition, so nothing in the file reads as v2's without being v2's.
+    `derive_beat_moves.py` is UNCHANGED - this runs in the build that owns the plan."""
+    path = build / BEAT_PLAN
+    if not path.is_file():
+        src = HERE / "build-short" / BEAT_PLAN
+        if not src.is_file():
+            return f"no {BEAT_PLAN} to stamp (and none to seed from at {src})"
+        path.write_bytes(src.read_bytes())
+    spans = [(float(r[0]), float(r[1]), str(r[2]), r[5]) for r in rows]
+    out, changed = [], 0
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        rec = json.loads(line)
+        t0 = float(rec.get("t0") or 0.0)
+        i = next((n for n, (a, b, _p, _e) in enumerate(spans) if a - 1e-6 <= t0 < b), len(spans) - 1)
+        a, b, plate, exit_id = spans[i]
+        was = (rec.get("row"), rec.get("plate"))
+        rec["row"], rec["plate"], rec["exit"] = i + 1, plate, exit_id
+        if was != (rec["row"], rec["plate"]):
+            changed += 1
+            rec["v2_changed"] = (f"row {was[0]} -> {rec['row']}; plate {was[1]!r} -> {plate!r}; the transition INTO "
+                                 f"this row is {exit_id!r}. The prose fields above are the APPROVED cut's read-back.")
+        rec["source"] = ("read back from the approved cut (P66 T7); row/plate/exit re-stamped from build_short_v2.py's "
+                         "own table, moves from the compiled v2 timeline (derive_beat_moves.py)")
+        out.append(json.dumps(rec, ensure_ascii=False))
+    path.write_text("\n".join(out) + "\n", encoding="utf-8")
+    return f"{BEAT_PLAN}: {len(out)} records, {changed} re-stamped off the v2 table"
+
+
 def _assert_evidence_unchanged() -> None:
     """`build_short.main` re-copies `evidence/<s>.series.json` into `evidence/objects/`; nothing outside the build is
     written here, so the copy is ASSERTED instead (the door cut's step)."""
@@ -332,6 +377,7 @@ def main() -> int:
     for note in LB.embed_cues(B, BUILD, cues, TIMELINE_NAME):
         print(f"  [sound] {note}")
     print(f"  cue plan    : {len(cues)} cues re-derived into {plan_path.name} and embedded in {TIMELINE_NAME}")
+    print(f"  beat plan   : {_restamp_beat_plan(BUILD, rows)}")
     return 0
 
 
