@@ -19,9 +19,20 @@ firing on a scene (s9.27 MOTION MENU "Gate treatment" column: a punch at
 its punch, a focus zoom at departure and arrival, plate life stepping at
 10 fps, ...), or a VIDEO DOCK holding the card (E44 / R26-7: a docked clip
 is moving pictures, credited one event per second it is on screen - an
-IMAGE dock is a still card and credits only its enter and exit). A page
-START is an EVIDENCE ENTRY (D2). Ken Burns and lower-third (anchor-mode)
-captions do NOT count - they are what a viewer reads as stillness.
+IMAGE dock is a still card and credits only its enter and exit), or a
+CAPTION PAGE turning over WHEREVER THE PAGE PUTS IT (R26-232 (1),
+2026-09-18: the stage register, and the anchored strip a full-stage 16:9
+page row pins it to - R26-205; `_caption_page_rows` carries the whole
+reading and why a lower-third page over a plate still counts as nothing). A page
+START is an EVIDENCE ENTRY (D2). Ken Burns does NOT count - it is what a
+viewer reads as stillness.
+
+A LEDGER PAGE whose resolved idle is `live` (R26-228) renders a continuous
+interior life - the lead point's spark and halo, the stroke's bloom pulse
+(the electric E99 s83 keeps) - and contributes a SUSTAINED-LIFE term of one
+event every PAGE_LIFE_STEP_S inside its own span. The PULSE ROWS ONLY read that term
+(M05, M10, M16); M01/M02/M03/M07 count the frame's own events, unchanged
+(R26-232 (2)).
 
   M01  no stretch > 12s without a visual event            FAIL   (s8.19 / s9.25)
   M02  stretches > 8s (working target)                    WARN
@@ -30,8 +41,9 @@ captions do NOT count - they are what a viewer reads as stillness.
   M05  no plate held > 20s with the frame DEAD             FAIL   (s9.13 + E69: live in the frame)
   M06  caption cadence: 4-6 words a page, >= 20 pages/min WARN   (s9.15 r7 / build_caption_pages)
   M07  the opening minute is not the thinnest minute      FAIL   (E21: P1 densest, never thinnest)
-  M08  stage-mode captions declared on every still stretch FAIL once the timeline carries cap_mode;
-       until then INFO listing where stage captions are REQUIRED + a JUDGE row
+  M08  a caption page on every still stretch - stage mode,   FAIL once the timeline carries cap_mode;
+       or pinned to the anchor by a full-stage page row             until then INFO listing where stage
+       (R26-232 (1) / R26-205)                                      captions are REQUIRED + a JUDGE row
   M09  one camera move per window: no scene stacks two of   FAIL   (s9.27 precedence / s9.28 C3)
   M14  a camera move never overlaps an evidence build      FAIL   (47 s2 G-a / doc 07 Pillar 4; P49 T6: an authored
        key segment is a move too)
@@ -146,7 +158,7 @@ DEPLOY_MIN_S = 6.0   # ... and 6 s is E50's own LOWER bound, enforced ONLY on a 
                      # that is what the 6 s buys. A page that builds is exempt.
 PUSH_TIE_BEFORE_S, PUSH_TIE_AFTER_S = 1.5, 0.3   # [DERIVED] a push is TIED when a landing on its scene falls inside (at - 1.5 s, at + 0.3 s)
 SRC_M22 = "E51 (operator 2026-09-07): a push-in is only used tied to something - pushing into a newly landed badge or data series; a zoom on a thing that just sits there is filler"
-SRC_M23 = "P48 (operator 2026-09-07): chart-to-chart transitions are a first-rate feature - a chart changes STATE and never cuts; E45/E50: never over a build, never inside the last 0.5 s of a page's life"
+SRC_M23 = "P48 (operator 2026-09-07): chart-to-chart transitions are a first-rate feature - a chart changes STATE and never cuts; E45/E50: never over a build, never inside the last 0.5 s of a page's life. R26-233 (2026-09-18): a `chart_to rescale` that carries `follow` is EXEMPT from the over-a-build check - a followed rescale runs on the followed LINE's own clock (the domain's top is that series' drawn extremum frame by frame, `build_scene_timeline_f.py:3796`), so the line's `build_to` IS its clock and \"over the build\" is the shape the move is FOR (the breakthrough bars' shape on a line page). The edge check still binds."
 TRANSITION_EDGE_S = 0.5    # a transition that ends inside the last half second of its page is a cut wearing a verb [DERIVED: E50, P48 Patterns]
 TRANSITION_DATA_KINDS = ("recast", "rescale", "extend", "morph")   # the verbs that change the chart's DATA state: their end is a data mark and a landing; a park moves the chart and changes nothing
 SRC_M21 = "E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing"
@@ -229,13 +241,35 @@ HELD_BUILT_S = 4.0         # E99 s69 (the operator, 2026-09-17: "a 5.7s hold mig
                            # page's landing is a gap, and one that runs longer than this is a gap for its whole length. HG2 may
                            # move the number; nothing else about the pulse changes.
 HELD_BUILT_TOL_S = 0.05    # the landing and the event list agree to `_page_events`' own 2 dp rounding, no closer
+PAGE_LIFE_STEP_S = 1.613   # R26-232 (2): a LEDGER PAGE whose resolved idle is `live` never lets the frame go still, so the PULSE
+                           # ROWS credit its own life one event every 1.613 s inside its span. THE NUMBER IS MEASURED, not chosen
+                           # for a pass: it is the period of the SLOWEST named cycle of that life - R26-228 built the lead point's
+                           # spark at "0.40 @ 0.62 Hz" and wrote the rate's derivation down ("0.62 Hz (period 1.613 s) is
+                           # incommensurate with the 2 s tile window, the 12 fps frozen-frames grid and the 24 fps render", so no
+                           # probe pair samples it at one phase) - tests/R26-228-NOTE.md:194. Every other element of the life is
+                           # FASTER (the stroke's bloom pulses with the tip), and the gate's existing continuous term is one
+                           # event per LIFE_CONTINUOUS_S = 1.0 s (steam, a video dock). Taking the slowest cycle is therefore the
+                           # conservative reading: one full pulse of the lead point per credited event. It clears
+                           # SHORT_PULSE_MAX_S (2.5 s) with 0.9 s of room and nothing more - a live page's span passes the pulse,
+                           # a gap a live page does not cover still FAILs.
+                           # THE TERM RESTS ON THE ELECTRIC, which is what the operator KEPT: E99 s83 (2026-09-18, on this same
+                           # bed's copy f) removes R26-228's per-word interior walk ("remove the interior drift, keep the
+                           # electric/glow etc let that carry the life") and holds "the lead point's spark and halo on a drawing
+                           # and a landed live line, the stroke's bloom pulse" - BACKLOG R26-234. The spark is the cycle this
+                           # number is the period of, so R26-234 lands without moving it.
 SRC_M16 = ("doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no "
            "ceiling. E99 s69 (2026-09-17): the HELD-BUILT window is exempt - a gap that starts at a page's chart LANDING and runs "
-           f"no longer than {HELD_BUILT_S:g}s is the beat's punctuation, not a hole (E99 s67 asked for that hold; HG2 may move the number)")
+           f"no longer than {HELD_BUILT_S:g}s is the beat's punctuation, not a hole (E99 s67 asked for that hold; HG2 may move the number). "
+           "R26-232 (2026-09-18): a caption page a full-stage 16:9 page row PINNED to the anchored strip counts as a stage page does (R26-205), "
+           f"and inside the span of a page whose resolved idle is `live` (R26-228) the page's own life is an event every {PAGE_LIFE_STEP_S:g}s "
+           "- the period of the lead point's measured 0.62 Hz spark; the row names the term that fired")
 SRC_M05 = ("doc 29 s9.13 as amended by E69 (2026-09-12): the hold is legal while the FRAME LIVES - the ceiling's "
            "two-dock condition was written when a world was a still and only a card could move on it. E99 s69 "
            f"(2026-09-17): the liveness reads the same allowance as M16 - a dead stretch that starts at a page's "
-           f"chart landing and runs no longer than {HELD_BUILT_S:g}s is the chart's own hold, not a dead frame")
+           f"chart landing and runs no longer than {HELD_BUILT_S:g}s is the chart's own hold, not a dead frame. R26-232 "
+           f"(2026-09-18): a live page's own life is a sustained event every {PAGE_LIFE_STEP_S:g}s inside its span (R26-228's "
+           "0.62 Hz lead-point spark), and a caption page a full-stage row pinned to the anchor counts exactly as a stage page "
+           "does - the row names the term")
 EVIDENCE_GAP_MAX_S = 45.0  # doc 29: evidence every 15-45s
 PLATE_SECONDS = 12.0       # s9.13: runtime / 12s distinct plates
 PLATE_HOLD_MAX_S = 20.0    # s9.13: past this a hold is READ for liveness (E69, 2026-09-12) - it was "unless two docks over it"
@@ -390,7 +424,15 @@ ANNOTATE_TOL_S = 1.5             # E24 / doc 29 s9.29: the targeted species fire
 CUE_TOL_S = 1.5                  # E24 / doc 29 s9.29: a sound cue lands with the enter (absent = WARN)
 CHART_HOLD_MAX_S = 10.0          # E25 / doc 29 s9.30: the chart is the proof, not the homework - hold ceiling anywhere
 OPENING_CHART_HOLD_MAX_S = 6.0   # E25 / doc 29 s9.30: ... and inside the opening minute
-SRC_M10 = "E24 / doc 29 s9.29: stillness inside the opening minute - 4-6s in the first 30-60s"
+SRC_M08 = ("doc 29 s9.25 caption STAGE mode (E21: captions ARE the motion when nothing else moves). R26-232 (1) "
+           "(2026-09-18): a caption page is an event wherever the PAGE puts it - a page a full-stage 16:9 page row PINNED "
+           "to the anchored strip (R26-205) counts exactly as a stage page does, because there the anchor is the only "
+           "register the player can paint; a lower-third page over a plate the page does not own counts as nothing still "
+           "(E21, episode one's verdict - the cut this row is calibrated on)")
+SRC_M10 = ("E24 / doc 29 s9.29: stillness inside the opening minute - 4-6s in the first 30-60s. R26-232 (2026-09-18): the "
+           "opening's stillness is read with the same two terms as M05 and M16 - a caption page pinned to the anchor by a "
+           "full-stage page row counts as a stage "
+           f"page does, and a live page's own life is an event every {PAGE_LIFE_STEP_S:g}s inside its span (R26-228)")
 SRC_M11 = "E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue"
 SRC_M12 = "E25 / doc 29 s9.30: the chart is the proof, not the homework"
 # THE CUT'S SOUND, and the DROP WINDOW (ruling E44 s2a / backlog R26-5, 2026-09-06, on the Tokyo read
@@ -653,6 +695,173 @@ def _video_dock_events(scenes: list[dict], docks: list[dict]) -> list[float]:
         n = int(max(0.0, z - a) // VIDEO_DOCK_STEP_S)
         out += [round(a + k * VIDEO_DOCK_STEP_S, 2) for k in range(n + 1)]
     return out
+
+
+def _pinned_page_at(scenes: list[dict], t: float) -> str | None:
+    """The FULL-STAGE ledger page on stage at `t` whose caption the compiler PINNED to the anchor, else None.
+
+    R26-205: at 16:9 a ledger page row is stamped `full_stage: true` + `caption: "anchor"` and every
+    caption page over it is stamped `cap_mode: "anchor"`, because the page IS the plate and there is no
+    stage left for the strip to take (`build_scene_timeline_f.py`'s `page_is_full_stage` /
+    `_full_stage_page_at` / `stamp_caption_bands`; the player's own read is `capPinned = sc.world.kind ===
+    "ledger" && sc.world.page && sc.world.page.caption === "anchor"`,
+    docs/content-video-engine/samples/scene-evidence-engine.mjs:16195). On such a row the anchor is not a
+    register the author chose over the stage - it is the only one the player can paint."""
+    for sc in scenes:
+        if not _is_page(sc) or not sc.get("span"):
+            continue
+        page = (sc.get("world") or {}).get("page") or {}
+        if page.get("caption") != "anchor" and page.get("full_stage") is not True:
+            continue
+        if float(sc["span"][0]) - HELD_BUILT_TOL_S <= t < float(sc["span"][1]) + HELD_BUILT_TOL_S:
+            return str(sc.get("scene_id") or "?")
+    return None
+
+
+def _caption_page_rows(tl: dict, pages: list[dict]) -> tuple[list[dict], dict]:
+    """The visual events a CAPTION PAGE contributes - IN EITHER REGISTER where the register is the page's
+    own (R26-232 (1), 2026-09-18).
+
+    A CAPTION PAGE IS AN EVENT WHEREVER IT SITS, and since R26-205 it sits in the ANCHORED STRIP whenever
+    the row under it is a full-stage 16:9 ledger page: the compiler stamps that page `caption: "anchor"`
+    and every caption page over it `cap_mode: "anchor"`, because the page IS the plate. Until R26-232 this
+    work was inlined in `analyse` behind `cap_mode == "stage"` (the two comparisons this function
+    replaces read the mode), so those pages counted as NOTHING: the H bed's 24 anchored pages, one every
+    ~1.75 s across a page that was alive the whole time, read as 42 s of stillness and FAILed M05 / M10 /
+    M16 on 6.2 / 7.0 / 8.3 s gaps.
+
+    WHAT THE PLAYER PAINTS in the anchored register, measured in the engine, never assumed
+    (docs/content-video-engine/samples/scene-evidence-engine.mjs):
+      - the PAGE TURN is motion: on `pi !== cap._pi` the group takes `opacity 0 -> 1`,
+        `translateY(12px) -> 0`, `scale(1.14) -> 1` over .28-.34 s - the `if (g && !quiet && !stage)`
+        branch at :16220-:16230, which is the branch a pinned caption falls into.
+      - each WORD still changes on its own spoken time: `ws[j].classList.toggle("on", on)` (:16238) fires
+        in every register and the template's `#caption .cw.on { color: #fff }` /
+        `.cw.ck.on { color: #e9a020 }` (scene-evidence-player.template.html:517/:518) are not scoped to
+        `.stage`. What the anchor does NOT get is the per-word POP: `#caption.quiet .cw { transform: none
+        !important }` (:515) kills the scale and the pop / fade-up / phrase branches all stand behind
+        `stage` (:16236 / :16262, :16279, :16297). A word's onset is a weaker beat here - a colour change, not a
+        punch - and on a pinned page it counts as one all the same, because the page under it owns the
+        stage and carries its own life (R26-228).
+      - the ENVELOPE is a stage-register device: `fuArrive = stage && ((pg.cap_arrive ||
+        TL.caption_arrive) === "fade_up")` (:16236). An anchored page reads its RAW onsets, never
+        `_stagger_starts`: the gate credits motion when the player moves it, not when the build declared
+        a register the player skipped.
+
+    WHY THE PIN IS THE DOOR, and not the word "anchor" alone. The dispatch asked for "an anchored page
+    counts exactly as a stage page does", which it does - on the row R26-205 pins. Credited on EVERY
+    anchored page it also greens episode one (`build-f`: 354 lower-third pages over Ken Burns plates, no
+    ledger page in the cut), whose stillness the operator himself ruled on - E21, "ep1 died of VISUAL
+    stillness", the verdict M01 / M08 / M10 are calibrated against (their ep1-red tests in
+    test_gate_motion_density.py). A lower-third strip punching over a still plate is what a viewer reads
+    as stillness; a pinned strip under a living full-stage page is the page's own sentence turning over.
+    So the register is credited where the PAGE forced it, and nowhere else - if the operator widens it to
+    every anchored page, this is the one predicate to open (and ep1's three red rows go with it).
+
+    Returns (rows, counts): the rows `_collect_events` consumes, and the tally the report prints so a
+    reader can see what was counted (R26-232 (3)).
+    """
+    scenes = tl.get("scenes", [])
+    rows: list[dict] = []
+    tl_rows = tl.get("rows", tl.get("timeline", []))
+    tl_arrive = tl.get("caption_arrive")
+    n_words, modes, skipped = 0, {}, 0
+    # the legacy row form (a timeline declaring the mode on its own rows, P34 T5)
+    for r in tl_rows:
+        if not isinstance(r, dict) or not r.get("cap_mode") or r.get("t") is None:
+            continue
+        if str(r["cap_mode"]) == "stage" or _pinned_page_at(scenes, float(r["t"])):
+            rows.append({"t": float(r["t"])})
+    for pg in pages:
+        if not isinstance(pg, dict) or pg.get("s") is None:
+            continue
+        mode = str(pg.get("cap_mode") or "")
+        if not mode:
+            continue
+        if mode != "stage" and not _pinned_page_at(scenes, float(pg["s"])):
+            skipped += 1        # a lower-third strip over a plate the page does not own: E21's stillness
+            continue
+        modes[mode] = modes.get(mode, 0) + 1
+        rows.append({"t": float(pg["s"])})                    # the page turns over: the group's own arrival
+        toks = [tok for tok in (pg.get("t") or []) if isinstance(tok, dict)]
+        if mode == "stage" and (pg.get("cap_arrive") or tl_arrive) == CAP_ARRIVE_FADE:
+            # P52 T10: under the envelope a word arrives at its own offset into ONE stagger, not at its onset
+            starts = _stagger_starts([float(tok["s"]) if tok.get("s") is not None else None for tok in toks],
+                                     float(pg["s"]))
+            rows += [{"t": t} for t in starts]
+            n_words += len(starts)
+        else:
+            onsets = [float(tok["s"]) for tok in toks if tok.get("s") is not None]
+            rows += [{"t": t} for t in onsets]
+            n_words += len(onsets)
+    return rows, {"pages": sum(modes.values()), "modes": modes, "words": n_words,
+                  "instants": len(rows), "unpinned_anchor": skipped}
+
+
+def _page_idle_live(tl: dict, scene: dict) -> bool:
+    """Does this LEDGER PAGE's resolved idle read `live`? The player's own resolution, mirrored.
+
+    `pgIdleKind = (pg && pg.idle) || scene.world.idle` and `pgLive = idleOf("page", kind) === "live"`,
+    where `idleOf` returns "none" unless the timeline's kinetics carry `idle: true`
+    (scene-evidence-engine.mjs:7584 / :7594 / :7598 - R26-228 built all three). The PAGE's own word
+    first, then the ROW's; no class default is ever `live`, so a page that does not ask for it
+    contributes nothing here."""
+    if (tl.get("kinetics") or {}).get("idle") is not True:
+        return False
+    world = scene.get("world") or {}
+    page = world.get("page") or {}
+    return str(page.get("idle") or world.get("idle") or "") == "live"
+
+
+def _live_page_spans(tl: dict) -> list[tuple[float, float, str]]:
+    """(start, end, scene_id) of every LEDGER PAGE scene whose resolved idle is `live` (R26-232 (2))."""
+    return [(float(s["span"][0]), float(s["span"][1]), str(s.get("scene_id") or "?"))
+            for s in tl.get("scenes", []) if _is_page(s) and s.get("span") and _page_idle_live(tl, s)]
+
+
+def _page_life_events(tl: dict) -> list[float]:
+    """The SUSTAINED-LIFE term of a live page: one event every PAGE_LIFE_STEP_S inside its own span.
+
+    R26-228 measured what `idle=live` paints once it reached the painter: the lead point stays on its
+    landed line and sparks at 0.40 amplitude, 0.62 Hz, and the stroke's glow pulses with it (drawn radii
+    12.17-15.32 px, each series on its own phase). That is a frame that never goes still, and before
+    R26-232 the gate had no term for it: the H bed FAILed M05 / M10 / M16 on 6.2 / 7.0 / 8.3 s "dead"
+    gaps inside a page that was alive across all three. (R26-228 also walked every word of the page's
+    text; E99 s83 removes that walk and keeps the electric - R26-234 - which is why the term's step is
+    the SPARK's period and not the walk's.)
+
+    The step is the period of the SLOWEST named cycle of that life (see PAGE_LIFE_STEP_S); the span is
+    the page's own - its words walk from the page's arrival, its tip from its line's landing."""
+    out: list[float] = []
+    for a, z, _sid in _live_page_spans(tl):
+        n = int(max(0.0, z - a) // PAGE_LIFE_STEP_S)
+        out += [round(a + k * PAGE_LIFE_STEP_S, 2) for k in range(n + 1) if a + k * PAGE_LIFE_STEP_S < z]
+    return out
+
+
+def _inside_live(a: float, z: float, spans: list[tuple[float, float, str]]) -> str | None:
+    """The live page a gap sits INSIDE (its scene id), else None - the pulse rows' term naming."""
+    return next((sid for sa, sz, sid in spans if sa - HELD_BUILT_TOL_S <= a and z <= sz + HELD_BUILT_TOL_S), None)
+
+
+def _life_term(A: dict, ceiling: float) -> str:
+    """WHICH TERM FIRED (R26-232 (2)): the gaps over this row's own ceiling that a live page's life covers."""
+    spans = A.get("live_spans") or []
+    if not spans:
+        return ""
+    covered = []
+    for a, d in A["still"]:
+        sid = _inside_live(a, a + d, spans) if d > ceiling else None
+        if sid:
+            covered.append((a, d, sid))
+    if not covered:
+        return ""
+    covered.sort(key=lambda x: -x[1])
+    return ("; TERM page_life (R26-232 (2)): the live page's own life covers "
+            + ", ".join(f"{_mm(a)}+{d:.1f}s in {sid}" for a, d, sid in covered[:6])
+            + (" ..." if len(covered) > 6 else "")
+            + f" - one event every {PAGE_LIFE_STEP_S:g}s inside a page whose idle resolves to `live` "
+              f"(R26-228 / E99 s83: the lead point's 0.62 Hz spark and halo, the stroke's bloom pulse)")
 
 
 def _transition_events(scenes: list[dict]) -> list[float]:
@@ -923,7 +1132,7 @@ def _build_gate(clashes: list[tuple[str, str]]) -> Gate:
     return Gate("M14", "FAIL" if clashes else "PASS", msg, SRC_M14)
 
 
-def _collect_events(tl: dict, mp: dict, spans: list, badges: list, page_beats: list, stage_rows: list,
+def _collect_events(tl: dict, mp: dict, spans: list, badges: list, page_beats: list, cap_rows: list,
                     species_events: list = (), video_dock_events: list = ()) -> set[float]:
     events: set[float] = set()
     events.update(video_dock_events)
@@ -936,9 +1145,28 @@ def _collect_events(tl: dict, mp: dict, spans: list, badges: list, page_beats: l
     for c in mp.get("cues", []):
         if c.get("kind") != "plate":
             events.add(float(c["in"])); events.add(float(c.get("out", c["in"])))
-    for r in stage_rows:
+    for r in cap_rows:                       # R26-232 (1): a caption page's own instants, in either register
         events.add(float(r["t"]))
     return events
+
+
+def _sentinelled(events, runtime: float) -> tuple[list[float], list[tuple[float, float]]]:
+    """The event list inside [0, runtime] with the two sentinels, and the gaps between them, longest first.
+
+    One reading for two event sets since R26-232 (2): the frame's own events, and those plus a live
+    page's sustained life (the pulse rows'). The sentinels are not events - M07 subtracts them by name."""
+    ev = sorted(t for t in events if 0.0 <= t <= runtime)
+    if not ev or ev[0] > 0:
+        ev.insert(0, 0.0)
+    if ev[-1] < runtime:
+        ev.append(runtime)
+    return ev, sorted(((a, b - a) for a, b in zip(ev, ev[1:])), key=lambda x: -x[1])
+
+
+def _worst_gap_in(ev: list[float], a: float, d: float) -> tuple[float, float]:
+    """The longest gap between events inside a hold [a, a+d], and where it starts."""
+    edges = [a] + [t for t in ev if a < t < a + d] + [a + d]
+    return max(((b - x, x) for x, b in zip(edges, edges[1:])), default=(d, a))
 
 
 def _per_minute(runtime: float, ev: list[float], entries: list[float]) -> list[tuple[float, float, float]]:
@@ -962,35 +1190,23 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     pages = tl.get("caption_pages", [])
     spans, badges, dock_source = _dock_clock(scenes, docks)
     page_beats, page_starts = _page_events(scenes)
-    # stage-mode captions count as events when the timeline declares them
+    # a caption page is a visual event WHEREVER IT SITS - the stage register and the anchored strip
+    # alike (R26-232 (1); s9.25 #1 "captions in stage mode" as widened by R26-205's anchored page).
+    # P34 T5: the build declares the mode per caption page (cap_mode at the page's first word), and the
+    # page's start plus each word's own arrival are the events - `_caption_page_rows` carries the whole
+    # reading and the measured basis for the anchored register.
     tl_rows = tl.get("rows", tl.get("timeline", []))
-    # P34 T5: the build declares the mode per caption page (cap_mode at the page's first word);
-    # a stage page is a visual event at its start (s9.25 #1: "captions in stage mode")
-    stage_rows = [r for r in tl_rows if isinstance(r, dict) and r.get("cap_mode") == "stage"]
-    stage_rows += [{"t": pg["s"]} for pg in pages if isinstance(pg, dict) and pg.get("cap_mode") == "stage"]
-    # a stage page's WORDS each pop in on their own spoken time (the golden set; E21: captions ARE the motion) - every word with a
-    # clock is a visual event, not only the page's start (a sentence-sized page would otherwise read as a hold, 2026-09-05).
-    # P52 T10: on a page that declares `fade_up` the arrival is ONE staggered envelope, so the event is the word's
-    # envelope start (>= its onset), read by the module's own law - the gate credits motion when it happens, not when it was said.
     tl_arrive = tl.get("caption_arrive")
-    for pg in pages:
-        if not isinstance(pg, dict) or pg.get("cap_mode") != "stage":
-            continue
-        toks = [tok for tok in (pg.get("t") or []) if isinstance(tok, dict)]
-        if (pg.get("cap_arrive") or tl_arrive) == CAP_ARRIVE_FADE:
-            onsets = [float(tok["s"]) if tok.get("s") is not None else None for tok in toks]
-            stage_rows += [{"t": t} for t in _stagger_starts(onsets, float(pg["s"]))]
-        else:
-            stage_rows += [{"t": float(tok["s"])} for tok in toks if tok.get("s") is not None]
+    cap_rows, cap_counts = _caption_page_rows(tl, pages)
     # P35 T7: targeted species fire as tabled in SPECIES_EVENTS (s9.27 gate column)
-    events = _collect_events(tl, mp, spans, badges, page_beats, stage_rows, _species_events(scenes) + _arrival_events(scenes),   # P47 T1: a throw / a landing is motion
+    events = _collect_events(tl, mp, spans, badges, page_beats, cap_rows, _species_events(scenes) + _arrival_events(scenes),   # P47 T1: a throw / a landing is motion
                              _video_dock_events(scenes, docks))   # E44: a live video dock is continuous motion
-    ev = sorted(t for t in events if 0.0 <= t <= runtime)
-    if not ev or ev[0] > 0:
-        ev.insert(0, 0.0)
-    if ev[-1] < runtime:
-        ev.append(runtime)
-    still = sorted(((a, b - a) for a, b in zip(ev, ev[1:])), key=lambda x: -x[1])
+    ev, still = _sentinelled(events, runtime)
+    # R26-232 (2): the PULSE ROWS (M05, M10, M16) read one term more - the sustained life of a page whose
+    # resolved idle is `live`. It is kept out of `events` on purpose: M01/M02/M03/M07 count the frame's own
+    # events and are not touched by this row (the count they read is the one the summary prints first).
+    life = _page_life_events(tl)
+    pulse_ev, pulse_still = _sentinelled(set(events) | set(life), runtime)
     # evidence entry gaps, whole runtime: a dock entering or a page starting (D2)
     entries = sorted([a for a, _ in spans] + page_starts)
     pts = [0.0] + entries + [runtime]
@@ -1006,17 +1222,19 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     for a, d, pid in holds:
         if d > PLATE_HOLD_MAX_S:
             n = sum(1 for x, z in spans if x < a + d and z > a)
-            edges = [a] + [t for t in ev if a < t < a + d] + [a + d]
-            gap, at = max(((b - x, x) for x, b in zip(edges, edges[1:])), default=(d, a))
-            over_hold.append((a, d, pid, n, round(gap, 2), round(at, 2)))
+            gap, at = _worst_gap_in(pulse_ev, a, d)          # M05 is a pulse row: the live page's life counts inside it
+            raw, raw_at = _worst_gap_in(ev, a, d)            # ... and the frame's own events alone, so the row can name the term
+            over_hold.append((a, d, pid, n, round(gap, 2), round(at, 2), round(raw, 2), round(raw_at, 2)))
     wc = [len(p.get("t", [])) for p in pages]
     return {"runtime": runtime, "events": ev, "still": still, "ev_gaps": ev_gaps, "plates": plate_ids,
+            "pulse_events": pulse_ev, "pulse_still": pulse_still,          # R26-232 (2): M05 / M10 / M16 only
+            "page_life": life, "live_spans": _live_page_spans(tl), "cap_counts": cap_counts,
             "landings": _chart_landings(scenes),
             "over_hold": over_hold, "wc": wc, "pages": pages, "dens": _per_minute(runtime, ev, entries),
             "spans": spans, "dock_source": dock_source, "n_pages": len(page_starts),
             "camera_clashes": _camera_clashes(scenes),
             "cap_arrive": next((pg["cap_arrive"] for pg in pages if isinstance(pg, dict) and pg.get("cap_arrive")), tl_arrive),
-            "has_cap_mode": bool(stage_rows) or any(isinstance(r, dict) and "cap_mode" in r for r in tl_rows)
+            "has_cap_mode": bool(cap_rows) or any(isinstance(r, dict) and "cap_mode" in r for r in tl_rows)
                             or any(isinstance(pg, dict) and "cap_mode" in pg for pg in pages)}
 
 
@@ -1031,7 +1249,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     still_warn = [(a, d) for a, d in A["still"] if d > STILL_WARN_S]
     tot = sum(d for _, d in still_fail)
     add("M01", "FAIL" if still_fail else "PASS",
-        (f"{len(still_fail)} stretches > {STILL_FAIL_S:.0f}s with no visual event beyond Ken Burns/anchor captions "
+        (f"{len(still_fail)} stretches > {STILL_FAIL_S:.0f}s with no visual event beyond Ken Burns "
+         "(a caption page counts in either register since R26-232; a live page's own life is the PULSE rows' term, not this one) "
          f"({tot:.0f}s = {100 * tot / R:.0f}% of runtime); worst {still_fail[0][1]:.1f}s at {mm(still_fail[0][0])}") if still_fail
         else f"longest still stretch {A['still'][0][1]:.1f}s at {mm(A['still'][0][0])}",
         "doc 29 s8.19 / s9.25 stillness ceiling")
@@ -1045,6 +1264,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     add("M04", "WARN" if n_plates < want else "PASS", f"{n_plates} distinct plates; target runtime/12s = {want}", "doc 29 s9.13 plate density")
     oh = A["over_hold"]
     live_max = SHORT_PULSE_MAX_S if _is_short(tl, R) else STILL_WARN_S
+    life_m05 = _life_term(A, live_max)   # R26-232 (2): which term carried the hold - printed in the row's own text
     # E99 s69: M05's liveness reads M16's allowance - a stretch that starts at a page's landing and runs no longer
     # than the held-built window is the chart's own hold, and the page is not a dead frame across it
     held_h = [h for h in oh if h[4] > live_max and _held_built(h[5], h[4], A.get("landings") or []) is not None]
@@ -1058,7 +1278,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
               f"(worst gap {max(h[4] for h in oh):.1f}s of {live_max:.1f}s allowed)" if oh
               else f"no plate over the {PLATE_HOLD_MAX_S:.0f}s hold")
         + "".join(f"; held built {h[4]:.1f}s at {mm(h[5])} after the chart landed - exempt (E99 s69)"
-                  for h in held_h[:3]),
+                  for h in held_h[:3])
+        + life_m05,
         SRC_M05)
     if A["wc"]:
         ppm = len(A["pages"]) / (R / 60)
@@ -1089,15 +1310,24 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         add("M07", "INFO", f"runtime {R:.0f}s has no full minute to rank - M07 not run (no silent skip)", "E21")
     req = [(a, d) for a, d in A["still"] if d > STILL_WARN_S]
     if A["has_cap_mode"]:
-        # ENFORCED (P34 T5): stage pages already count as events, so any stretch still over the
-        # ceiling is one the captions did not take - the shot table must author stage rows there
+        # ENFORCED (P34 T5): caption pages already count as events, so any stretch still over the ceiling
+        # is one the captions did not take - the shot table must author a page there. R26-232 (1) widens
+        # WHICH pages count: a page PINNED to the anchor by a full-stage 16:9 page row counts exactly as
+        # a stage page does, because there the anchor is the only register the player can paint (R26-205)
+        # and demanding the stage mode asked for a thing that cannot exist. A lower-third page over a
+        # plate the page does not own is still nothing here - E21's ep1 verdict (`_caption_page_rows`).
         bare = [(a, d) for a, d in A["still"] if d > STILL_FAIL_S]
+        cc = A["cap_counts"]
+        counted = ", ".join(f"{n} {k}" for k, n in sorted(cc["modes"].items())) or "none"
+        tally = (f"; counted: {counted} page(s), {cc['words']} word arrival(s)"
+                 + (f", {cc['unpinned_anchor']} unpinned anchored page(s) passed over (R26-232)" if cc.get("unpinned_anchor") else ""))
         add("M08", "FAIL" if bare else "PASS",
-            (f"{len(bare)} still stretches > {STILL_FAIL_S:.0f}s carry no stage-mode caption: "
-             + ", ".join(f"{mm(a)}+{d:.0f}s" for a, d in sorted(bare)[:12]) + (" ..." if len(bare) > 12 else "")) if bare
-            else "timeline declares cap_mode; every stretch over the ceiling carries stage captions (counted as events above)"
-                 + (f"; the words arrive on the {A['cap_arrive']} envelope, each on its own offset (P52 T10)" if A["cap_arrive"] else ""),
-            "doc 29 s9.25 caption STAGE mode (E21: captions ARE the motion when nothing else moves)")
+            ((f"{len(bare)} still stretches > {STILL_FAIL_S:.0f}s carry no stage-mode caption and no pinned anchored page: "
+              + ", ".join(f"{mm(a)}+{d:.0f}s" for a, d in sorted(bare)[:12]) + (" ..." if len(bare) > 12 else "")) if bare
+             else "timeline declares cap_mode; every stretch over the ceiling carries captions (counted as events above)"
+                  + (f"; the words arrive on the {A['cap_arrive']} envelope, each on its own offset (P52 T10)" if A["cap_arrive"] else ""))
+            + tally,
+            SRC_M08)
     else:
         add("M08", "INFO", f"timeline carries no cap_mode yet - stage captions REQUIRED on {len(req)} stretches: "
             + ", ".join(f"{mm(a)}+{d:.0f}s" for a, d in sorted(req)[:12]) + (" ..." if len(req) > 12 else ""),
@@ -1108,7 +1338,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g.append(_retract_gate(tl.get("scenes", [])))                         # M15 (E40 #5)
     g.append(_pulse_gate(tl, A))                                           # M16 (49 s49.6, shorts)
     # E24 / E25: the opening minute and the chart-as-proof rule
-    g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
+    g += [_opening_still_gate(A["pulse_still"], _life_term(A, OPENING_STILL_MAX_S)),   # R26-232 (2): a pulse row
+          _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
     g.append(_frozen_gate(frames, frame_layers, layer_windows(A)))        # M18 (E49: nothing ever goes truly still; R26-13: per layer)
     if (sg := _drop_window_sound_gate(tl, mp)) is not None:
         g.append(sg)                                                      # M29 (E44 s2a / R26-5: a transient inside 0:05-0:12 needs a page landing; E83: or a dock's)
@@ -1194,13 +1425,17 @@ def _cue_near(t: float, tl: dict, mp: dict) -> bool | None:
     return any(abs(a - t) <= CUE_TOL_S for a in ats)
 
 
-def _opening_still_gate(still: list[tuple[float, float]]) -> Gate:
-    """M10 (E24): no still stretch over OPENING_STILL_MAX_S begins inside the opening minute."""
+def _opening_still_gate(still: list[tuple[float, float]], life: str = "") -> Gate:
+    """M10 (E24): no still stretch over OPENING_STILL_MAX_S begins inside the opening minute.
+
+    A pulse row since R26-232 (2): `still` is the reading that carries a live page's sustained life, and
+    `life` names the term when it is what covered a stretch."""
     bad = sorted((a, d) for a, d in still if a < OPENING_S and d > OPENING_STILL_MAX_S)
     if bad:
         return Gate("M10", "FAIL", f"{len(bad)} still stretches > {OPENING_STILL_MAX_S:.0f}s begin in the first "
-                    f"{OPENING_S:.0f}s: " + ", ".join(f"{_mm(a)}+{d:.0f}s" for a, d in bad), SRC_M10)
-    return Gate("M10", "PASS", f"no still stretch > {OPENING_STILL_MAX_S:.0f}s begins in the first {OPENING_S:.0f}s", SRC_M10)
+                    f"{OPENING_S:.0f}s: " + ", ".join(f"{_mm(a)}+{d:.0f}s" for a, d in bad) + life, SRC_M10)
+    return Gate("M10", "PASS", f"no still stretch > {OPENING_STILL_MAX_S:.0f}s begins in the first {OPENING_S:.0f}s"
+                + life, SRC_M10)
 
 
 
@@ -1291,7 +1526,7 @@ def _is_short(tl: dict, runtime: float) -> bool:
 def _pulse_gate(tl: dict, A: dict) -> Gate:
     """M16: on a short the gate is the PULSE - the longest gap between visual events is a floor on motion (2.5 s), and
     there is no ceiling. Long-form builds report the pulse as INFO (their law is M01/M02's stillness)."""
-    still = A["still"]
+    still = A["pulse_still"]      # R26-232 (2): the pulse reads a live page's own life as a sustained event
     if not still:
         return Gate("M16", "INFO", "no events to measure a pulse from", SRC_M16)
     at, gap = still[0]
@@ -1302,7 +1537,7 @@ def _pulse_gate(tl: dict, A: dict) -> Gate:
     slow = sorted((a, d) for a, d in over if _held_built(a, d, landings) is None)
     msg = f"longest gap between visual events {gap:.1f}s at {_mm(at)}; {len(slow)} gap(s) over {SHORT_PULSE_MAX_S:.1f}s"
     note = "".join(f"; held built {d:.1f}s at {_mm(a)} after the chart landed at {land:.1f}s - exempt (E99 s69)"
-                   for a, d, land in held[:3])
+                   for a, d, land in held[:3]) + _life_term(A, SHORT_PULSE_MAX_S)
     if not _is_short(tl, A["runtime"]):
         return Gate("M16", "INFO", msg + " - a long-form build; the pulse law binds shorts" + note, SRC_M16)
     if slow:
@@ -2617,8 +2852,20 @@ def _transitions(scenes: list[dict]) -> list[dict]:
             if sp.get("kind") != "chart_to":
                 continue
             at, dur = float(sp.get("at", 0.0)), float(sp.get("dur", 0.0))
+            # R26-233: a RESCALE THAT FOLLOWS A LINE runs on that line's own clock - the domain's top is the
+            # followed series' DRAWN extremum, frame by frame, so the landed ink yields exactly as the new line
+            # climbs past the old top (`build_scene_timeline_f.py:3796`; the key is resolved to the series' index
+            # at `:2816`, and index 0 is a legal answer - which is why the test is `is not None and is not False`
+            # and NOT the compiler's `not in (None, False)` at `:1117`: `0 in (None, False)` is True in Python, so
+            # that form drops series 0). Its window is the line's `build_to` window BY CONSTRUCTION, so E45's "never over a build"
+            # cannot be asked of it: over the build is the shape this verb exists for (the breakthrough bars'
+            # shape on a line page). Everything else about M23 is unchanged - the edge check still binds, and a
+            # rescale that names no `follow` is exactly the rescale it was.
+            fol = sp.get("follow")
+            followed = str(sp.get("to")) == "rescale" and fol is not None and fol is not False
             out.append({"scene": str(s.get("scene_id", "?")), "to": sp.get("to"), "at": round(at, 2), "dur": round(dur, 2), "end": round(at + dur, 2),
-                        "in_build": at < land - 1e-6, "at_edge": at + dur > z - TRANSITION_EDGE_S + 1e-6})
+                        "follows": followed,
+                        "in_build": at < land - 1e-6 and not followed, "at_edge": at + dur > z - TRANSITION_EDGE_S + 1e-6})
     return out
 
 
@@ -2645,6 +2892,10 @@ def _transition_gate(scenes: list[dict]) -> Gate | None:
         return Gate("M23", "FAIL", "; ".join(orphans) + " - a second chart state is built to be moved to (chart_to recast|rescale|extend), or it is a card", SRC_M23)
     bad = [x for x in xs if x["in_build"] or x["at_edge"]]
     listing = ", ".join(f"{x['scene']} {x['to']} {_mm(x['at'])}+{x['dur']:.1f}s" for x in xs[:10]) + (" ..." if len(xs) > 10 else "")
+    fol = [x for x in xs if x.get("follows")]
+    listing += ("".join(f"; {x['scene']} rescale at {_mm(x['at'])} FOLLOWS its line - on the line's own clock, so the "
+                        "over-a-build check does not apply to it (R26-233)" for x in fol[:3])
+                + (" ..." if len(fol) > 3 else ""))
     if bad:
         why = "; ".join(f"{x['scene']} {x['to']} at {_mm(x['at'])}" + (" fires inside the page's build beat" if x["in_build"] else "") + (" ends inside the last 0.5 s of its page" if x["at_edge"] else "") for x in bad[:6])
         return Gate("M23", "WARN", f"{len(xs)} transition(s): {listing} - {why} (E45: never over a build; E50: a transition is how a chart leaves, not a cut wearing a verb)", SRC_M23)
@@ -2816,7 +3067,19 @@ def _morph_gate(scenes: list[dict], inv: dict | str | None) -> Gate | None:
 def _stats(A: dict, still_total: float) -> dict:
     R = A["runtime"]
     mm = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
+    cc = A.get("cap_counts") or {"pages": 0, "modes": {}, "words": 0, "instants": 0}
+    modes = ", ".join(f"{n} {k}" for k, n in sorted(cc["modes"].items())) or "none"
+    spans = A.get("live_spans") or []
+    life = A.get("page_life") or []
     return {"runtime": mm(R), "visual_events": f"{len(A['events'])} ({len(A['events']) / (R / 60):.1f}/min)",
+            # R26-232 (3): the two terms stated separately, so a reader sees what was counted
+            "caption_page_events": f"{cc['instants']} from {cc['pages']} page(s) ({modes}) + {cc['words']} word arrival(s)"
+                                   " - the stage register plus the pages a full-stage row PINNED to the"
+                                   f" anchor{(', %d unpinned anchored page(s) not counted' % cc['unpinned_anchor']) if cc.get('unpinned_anchor') else ''} (R26-232)",
+            "live_page_life": (f"{len(life)} event(s) every {PAGE_LIFE_STEP_S:g}s inside "
+                               + ", ".join(f"{sid} {mm(a)}-{mm(z)}" for a, z, sid in spans[:4])
+                               + " - the PULSE rows M05/M10/M16 only (R26-232)") if spans
+                              else "no page with idle=live - the pulse rows read the frame's own events alone",
             "docks": len(A["spans"]), "dock_source": A["dock_source"], "ledger_pages": A["n_pages"],
             "still_over_12s_share": f"{100 * still_total / R:.0f}%",
             "per_minute": " ".join(f"{mm(lo)}:{n:.0f}/{nd:.0f}" for lo, n, nd in A["dens"])}

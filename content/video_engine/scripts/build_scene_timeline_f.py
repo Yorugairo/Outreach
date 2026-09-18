@@ -707,6 +707,12 @@ TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
 FRACTION_FIELDS = ("x", "y", "x0", "y0", "x1", "y1")   # plate coordinates as fractions of the frame, 0..1
 
 
+def _follow_set(v) -> bool:
+    """R26-233: is `follow` authored? `0` is a series index, so never `v not in (None, False)` - in Python `0 in
+    (None, False)` is True and that form silently dropped the commonest target (the R26-232 lane's finding)."""
+    return v is not None and v is not False
+
+
 def _validate_target(kind: str, target, allowed: tuple) -> list[str]:
     """Errors for one species' target against the kinds it may take (s9.27 targeting law)."""
     if not isinstance(target, dict) or target.get("kind") not in TARGET_KINDS_ALL:
@@ -1114,6 +1120,9 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
                 errs.append(f"chart_to morph: method must be one of {'|'.join(MORPH_METHODS)} "
                             "(a = the vertex lerp of doc 43 s43.5 Method A, arap = Method B's triangle solve); "
                             "absent, the compiler chooses by the pair's measured rotation")
+        if _follow_set(entry.get("follow")) and entry.get("to") != "rescale":
+            errs.append(f"chart_to {entry.get('to')}: 'follow' belongs to the RESCALE - the verb that moves the page's "
+                        "own SCALE, and the only one whose clock a drawing line can be (R26-233)")
         if entry.get("to") == "compare":
             # P57 T11: E76's mechanism. Nothing is derived into a page state - the metric and the comparator are the
             # two states, and the arithmetic between them is the author's, checked here rather than trusted (E77).
@@ -1155,6 +1164,23 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             w = entry.get("window")
             if w is not None and not (isinstance(w, (list, tuple)) and len(w) == 2 and all(isinstance(v, (int, float)) for v in w) and w[0] < w[1]):
                 errs.append("chart_to rescale: window must be [from_x, to_x] with from < to (the page's own x units)")
+            fol = entry.get("follow")
+            if _follow_set(fol):
+                # R26-233: WHICH line the domain follows. `true` is resolved where the page and the row's own species
+                # are in hand (`rescale_follow_series`), exactly as a keyed recast's key is; the grammar here is the
+                # shape of the word and the two keys it cannot be written without.
+                if fol is not True and not (isinstance(fol, int) and not isinstance(fol, bool) and fol >= 0) \
+                        and not (isinstance(fol, str) and fol.strip()):
+                    errs.append("chart_to rescale: follow must be true (the series this row's build_to draws), the "
+                                "series' NAME, or its non-negative index - the line whose drawn extremum the y "
+                                "domain's top tracks frame by frame (R26-233)")
+                if entry.get("ymax") is None:
+                    errs.append("chart_to rescale: follow needs ymax - the domain's TOP is the end the line pushes "
+                                "the scale to, and without it there is nothing for the climb to reach (R26-233)")
+                if entry.get("window") is not None:
+                    errs.append("chart_to rescale: follow and window on ONE verb - a followed rescale's clock is the "
+                                "line's own climb, so an x window would open on that clock for a reason nothing said. "
+                                "Move the window to its own rescale (R26-233)")
             if "state" in entry:
                 errs.append("chart_to rescale: 'state' is derived from the domain, not named")
             return errs
@@ -2793,6 +2819,9 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
         if len(states) + 1 >= STATE_MAX:
             raise ValueError(f"chart_to {sp['to']}: {len(states) + 2} chart states is past STATE_MAX ({STATE_MAX}): a fourth chart is a new page or a card")
         if sp["to"] == "rescale":
+            if _follow_set(sp.get("follow")):   # R26-233: the LINE the domain's top tracks, resolved to its index
+                sp["follow"] = rescale_follow_series(world, sp, row_species,
+                                                     f"{sid or 'row'} chart_to rescale at {sp.get('at')}")
             states.append(rescale_state(plate_id, ep_dir, sp))
             if sp.get("window") is not None:
                 cur_window = [float(sp["window"][0]), float(sp["window"][1])]
@@ -3761,6 +3790,151 @@ def page_line_windows(world: dict | None, species: list[dict] | None,
     end = float(scene_start) + MG._page_land_offset({"world": world})
     start, share = end - total, total / n
     return [(start + k * share, start + (k + 1) * share) for k, _si in enumerate(draws)]
+
+
+# ---- R26-233 / E99 s82: THE AXIS YIELDS TO THE LINE THAT PUSHES IT -----------------------------
+# Measured by the critic on the H unit's copy e (`build-h-frozen-f/BUILD-NOTES-H.md` s8c): the reveal's
+# `chart_to rescale` opened the y domain 80..277 -> 640 over its OWN eased clock while the memory line was
+# still drawing, so the three LANDED lines slid 253 px down beside it and the low ticks went with them -
+# the class of move the operator refused at 0:05 (E99 s82: *"the movement on screen drags down the values
+# somehow at 0:05, that can't happen"*; INK NEVER MOVES UNLESS THE SENTENCE MOVES IT). The words DO name
+# the reveal, so the rescale belongs; what was wrong was its CLOCK.
+#   `follow: <series>` (or `follow: true` - the series this row's own `build_to` draws) puts the domain on
+# the LINE's clock: frame by frame the top is that series' DRAWN extremum with the page's own air above it,
+# and the landed ink yields exactly as the new line climbs past the old top - never before it, and never
+# after it lands. It is the BREAKTHROUGH bars' shape (CAPABILITIES:88, the bar shoots WHILE the axis
+# rescales) on a line page. A rescale that names no `follow` is exactly the rescale it was.
+FOLLOW_HEADROOM = 1.06   # the air the climbing tip keeps above the domain's top, as a FACTOR on the value: the
+                         # 6 % the LINE BUILDER itself pads a page's data by (`scene-evidence-engine.mjs:8821`,
+                         # `pad = (y1 - y0) * 0.06`). A factor rather than a share of the range because the
+                         # compiler has to answer "does this line ever reach that ymax?" from the series' own
+                         # numbers, and the player applies it as one offset in log space (`XF_FOLLOW.HEAD`).
+FOLLOW_BUILDERS = ("dense-line",)   # the CONSERVATIVE bound R26-223's `DOMAIN_BUILDERS` and R26-226's
+    # `LINE_BUILD_BUILDERS` state, for the same reason: this is the one builder whose `st.paths` ARE the page's
+    # series, so "the followed series' drawn extremum" is a thing the player can read off the ink. `story`
+    # rescales (it is in DOMAIN_BUILDERS) but draws no series to follow, and a bars page's own version of this
+    # move is the breakthrough. A builder joins this tuple when its OWN paint step reads the key.
+
+
+def series_caps(species: list[dict] | None, si: int) -> list[dict]:
+    """Every `build_to` that applies to series `si`, in time order (R26-233).
+
+    A cap naming no series applies to every one - the paint's own `forMe` - which is the reading
+    `line_build_first_cap` already writes once for R26-226."""
+    out = []
+    for sp in species or []:
+        if sp.get("kind") != "build_to" or not isinstance(sp.get("target"), dict):
+            continue
+        ss = sp.get("series", sp.get("tier", (sp.get("target") or {}).get("series")))
+        if ss is not None and int(ss) != int(si):
+            continue
+        out.append(sp)
+    return sorted(out, key=lambda sp: float(sp.get("at") or 0.0))
+
+
+def follow_draw_windows(species: list[dict] | None, si: int) -> list[tuple[float, float]]:
+    """Every window in which series `si` is DRAWING while a transition is on it (R26-233).
+
+    Not every clock a line draws on survives a rescale, and this is the measurement the row turns on: a
+    rescale paints the standing chart FULLY BUILT (`lpPaintRescale`'s own `lpPaintChart(A, 1, ...)`), so the
+    page's build fraction - and with it `;build=lines`' turn - is 1 for the whole transition. What still
+    moves under it is the CAP SEQUENCE, which runs on absolute t (`scene-evidence-engine.mjs:11587`), and
+    the FIRST cap by `at` is the level the build LANDS at (`f = f * capFrac(first)`, a constant while c is
+    1), never a draw. So the windows a domain can follow are the caps AFTER the first, each over its own
+    `at` -> `at + dur`."""
+    return [(float(sp.get("at") or 0.0), float(sp.get("at") or 0.0) + max(0.001, float(sp.get("dur") or 1.0)))
+            for sp in series_caps(species, si)[1:]]
+
+
+def rescale_follow_series(world: dict, sp: dict, species: list[dict] | None, where: str) -> int:
+    """`follow` on a `chart_to rescale` -> the SERIES INDEX whose drawn extremum the y domain's top tracks.
+
+    Resolves `true` (the series this row's own `build_to` draws), a series NAME, or an index - and refuses,
+    by name and with the numbers, every shape in which the domain would not in fact be following the line:
+    a page with no line to read, a series that is not drawing over the rescale's own window, a rescale that
+    ends before the line does (the domain would be handed over mid-climb - a snap), a target top the series'
+    own numbers never reach (the last of the move would happen after the line stopped, which is the drag
+    this row exists to end), and a target that does not OPEN the domain upward at all."""
+    page = (world or {}).get("page") or {}
+    builder = page.get("builder")
+    if builder not in FOLLOW_BUILDERS:
+        raise ValueError(f"{where}: follow tracks a DRAWING LINE and this page is {builder!r} - the builder whose "
+                         f"paths are its series is {' and '.join(FOLLOW_BUILDERS)}. A bars page's own version of this "
+                         "move is the BREAKTHROUGH: the bar shoots while the axis rescales (E60)")
+    sers = list(page.get("series") or [])
+    names = [str(s.get("name") or s.get("label") or "").strip() for s in sers]
+    want = sp.get("follow")
+    if want is True:
+        caps = [e for e in (species or []) if e.get("kind") == "build_to" and isinstance(e.get("target"), dict)]
+        if not caps:
+            raise ValueError(f"{where}: follow: true is \"the series this row's build_to draws\" and the row has no "
+                             "build_to at all. Name the line (follow: <name|index>), or stage it with a build_to on "
+                             "the word that draws it - which is also the only clock a rescale leaves running (R26-233)")
+        named = {e.get("series", e.get("tier", (e.get("target") or {}).get("series"))) for e in caps}
+        if None in named:
+            raise ValueError(f"{where}: follow: true - a build_to that names no series applies to EVERY series (the "
+                             "paint's own `forMe`), so it names no ONE line to follow. Write follow: <name|index>")
+        if len(named) != 1:
+            raise ValueError(f"{where}: follow: true - this row's build_to species name {len(named)} different series "
+                             f"({', '.join(str(int(v)) for v in sorted(named))}), so which line the domain follows is "
+                             "the row's to say. Write follow: <name|index>")
+        idx = int(next(iter(named)))
+    elif isinstance(want, str):
+        hits = [i for i, nm in enumerate(names) if nm.lower() == want.strip().lower()]
+        if not hits:
+            raise ValueError(f"{where}: follow={want!r} - the page has no series by that name. Its series are "
+                             + ", ".join(f"{i}: {nm or '(unnamed)'}" for i, nm in enumerate(names)))
+        if len(hits) > 1:
+            raise ValueError(f"{where}: follow={want!r} names {len(hits)} of the page's series - name the index instead")
+        idx = hits[0]
+    else:
+        idx = int(want)
+    if not 0 <= idx < len(sers):
+        raise ValueError(f"{where}: follow={want!r}: the page draws {len(sers)} series "
+                         f"({'0..%d' % (len(sers) - 1) if sers else 'none'})")
+    # A `later: true` series needs no check here and that is worth writing down: `LPG.build_spec` leaves it OUT of
+    # the page's series list altogether (it arrives by `chart_to extend`), so a follow that names one is refused
+    # above as a name - or an index - the page does not have. Measured in
+    # `test_a_later_series_is_not_on_the_page_to_follow`.
+    vals = [float(v) for _x, v in (sers[idx].get("pts") or [])]
+    if not vals:
+        raise ValueError(f"{where}: follow={want!r}: series {idx} ({names[idx] or 'unnamed'}) carries no data")
+    ymax = float(sp["ymax"])
+    dom = (page.get("axes") or {}).get("domain") or []
+    standing = dom[1] if len(dom) == 2 and isinstance(dom[1], (int, float)) else None
+    if standing is not None and ymax <= float(standing):
+        raise ValueError(f"{where}: follow={want!r}: the page stands on a domain whose top is {float(standing):g} and "
+                         f"ymax is {ymax:g} - a followed rescale OPENS the domain upward (the landed ink yields as the "
+                         "line climbs PAST the old top). Name a higher ymax, or drop follow")
+    top = max(vals)
+    if top <= 0:
+        raise ValueError(f"{where}: follow={want!r}: series {idx} ({names[idx] or 'unnamed'}) tops out at {top:g} and "
+                         f"the air above the tip is a FACTOR on the value (x{FOLLOW_HEADROOM:g}) - a factor holds no "
+                         "air above a number at or below zero. Follow a series that climbs in positive values")
+    reach = top * FOLLOW_HEADROOM
+    if reach < ymax - 1e-9:
+        raise ValueError(f"{where}: follow={want!r}: series {idx} ({names[idx] or 'unnamed'}) tops out at {top:g}, so "
+                         f"with the page's own air (x{FOLLOW_HEADROOM:g}) it pushes the domain to {reach:.6g} and no "
+                         f"further - ymax {ymax:g} would be reached after the line had stopped, which is the drag this "
+                         f"row exists to end. Name ymax at or under {reach:.6g}, or follow the line that does reach it")
+    wins = follow_draw_windows(species, idx)
+    rs_at = float(sp.get("at") or 0.0)
+    rs_to = rs_at + max(0.001, float(sp.get("dur") or 1.0))
+    over = [w for w in wins if w[1] > rs_at + 1e-6 and w[0] < rs_to - 1e-6]
+    if not over:
+        drawn = ", ".join(f"[{a:g}, {b:g}]" for a, b in wins) or "none"
+        raise ValueError(f"{where}: follow={want!r}: series {idx} ({names[idx] or 'unnamed'}) is not DRAWING over the "
+                         f"rescale's own window [{rs_at:g}, {rs_to:g}] - the windows a domain can follow on this row "
+                         f"are {drawn}. A rescale paints the standing chart fully built, so what draws under it is the "
+                         "cap sequence: a build_to AFTER the first (the first is the level the build lands at). Stage "
+                         "the line with a build_to on the word that climbs, and give the rescale that window")
+    draw_end = max(b for _a, b in over)
+    if rs_to < draw_end - 1e-6:
+        raise ValueError(f"{where}: follow={want!r}: the rescale ends at {rs_to:g} and series {idx} "
+                         f"({names[idx] or 'unnamed'}) draws until {draw_end:g} - the domain would be handed to the "
+                         f"target state while the line was still climbing, which is a snap. Give the rescale the "
+                         f"line's own clock (dur {draw_end - rs_at:g})")
+    return idx
 
 
 def page_form_spec(value: str, builder: str, where: str) -> dict:

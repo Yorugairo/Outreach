@@ -2973,6 +2973,96 @@ FRAME_T["page-build-lines-4th"] = PAGE_BUILD_LINES_T4
 FRAME_T["plate-alive"] = PLATE_ALIVE_T
 
 
+# ---- R26-233 / E99 s82: THE AXIS YIELDS TO THE LINE THAT PUSHES IT -------------------------------
+# The H unit's own shape, on a page of its own so the claim is readable in one frame: THREE lines that
+# land on the scale the page is born on (`;domain=80,320`, R26-223) and a FOURTH - "Memory" - held at
+# nothing through the build by a `build_to` at index 0 (R26-226's own reading: a cap at 0 draws
+# nothing) and then drawn WHOLE on its word, climbing to 600, far above the standing top. The reveal's
+# `chart_to rescale` opens the domain to [80, 630] over that same window with `follow: "Memory"`, so
+# the top is the drawn extremum x 1.06 frame by frame and the landed ink yields exactly as the climb
+# passes 320 - never before it (the operator, E99 s82: *"the movement on screen drags down the values
+# somehow at 0:05, that can't happen"*).
+#   Both instants are INSIDE the followed line's own window, and both are measured: the cap runs on
+# `segEase`, which is minimum-jerk here (the flag every compiled cut carries), so the climb is slow at
+# each end and quickest in the middle. FOLLOW_T is the frame where the memory line is climbing and the
+# domain has NOT begun to open - the landed lines standing exactly where they landed - and FOLLOW_T2 is
+# mid-yield: the top opened by the line, the three tags lower, the low ticks still lit and re-spaced.
+FOLLOW_ID = "ev-follow-v1"
+FOLLOW_BORN = [80.0, 320.0]      # the scale the three landed lines are read on
+FOLLOW_TARGET = [80.0, 630.0]    # ... and the one the memory line pushes to (600 x 1.06 = 636, so it reaches it)
+FOLLOW_AT = 11.0                 # the word: the cap and the rescale open together
+FOLLOW_S = 2.2                   # ... on ONE clock - the memory line's own draw (the H unit's own 2.2 s)
+FOLLOW_OBJECT = {
+    "title": "The layer it never drew",
+    "sub": "index, 100 = the first period",
+    "src": "the test bed",
+    "unit": "",
+    "series": [
+        {"name": "Steel", "color": "crimson", "pts": [[2020, 100], [2021, 118], [2022, 132], [2023, 146], [2024, 150]]},
+        {"name": "Paper", "color": "cobalt", "pts": [[2020, 100], [2021, 140], [2022, 175], [2023, 198], [2024, 210]]},
+        {"name": "Rails", "color": "amber", "pts": [[2020, 100], [2021, 165], [2022, 205], [2023, 240], [2024, 260]]},
+        {"name": "Memory", "color": "teal", "pts": [[2020, 100], [2021, 150], [2022, 205], [2023, 300], [2024, 600]]},
+    ],
+}
+# the memory line held at nothing while the other three build (the first cap is the level the build lands
+# at - never a draw), then drawn whole on its word. `follow_draw_windows` reads the SECOND cap alone.
+FOLLOW_HOLD = {"kind": "build_to", "at": 4.4, "dur": 0.4, "series": 3,
+               "target": {"kind": "datum", "index": 0, "series": 3}}
+FOLLOW_DRAW = {"kind": "build_to", "at": FOLLOW_AT, "dur": FOLLOW_S, "series": 3,
+               "target": {"kind": "datum", "index": 4, "series": 3}}
+FOLLOW_RESCALE = {"kind": "chart_to", "at": FOLLOW_AT, "dur": FOLLOW_S, "to": "rescale",
+                  "ymin": FOLLOW_TARGET[0], "ymax": FOLLOW_TARGET[1], "follow": "Memory"}
+FOLLOW_T = 11.95    # MEASURED (tests/R26-233-NOTE.md): the memory line 0.374 drawn and climbing at 225, its extremum
+                    # with the air (238.5) still under the standing top - the domain has not moved one pixel and the
+                    # three landed lines' paths are byte-for-byte the ones they landed as
+FOLLOW_T2 = 12.30   # ... and MID-YIELD (u 0.479): the climb at 385.6 asks for 408.7 and the live top IS 408.8 - the
+                    # tip on screen because the ceiling gave way to it, the landed tag 33.8 px lower, all five ticks lit
+
+
+def _page_rescale_follow() -> tuple[dict, dict]:
+    import copy
+    import json
+    import tempfile
+    import build_scene_timeline_f as BST
+    plate = "ledger:%s:line;domain=%g,%g" % (FOLLOW_ID, FOLLOW_BORN[0], FOLLOW_BORN[1])
+    species = [copy.deepcopy(e) for e in (FOLLOW_HOLD, FOLLOW_DRAW, FOLLOW_RESCALE)]
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / ("evidence/objects/%s.series.json" % FOLLOW_ID)).write_text(json.dumps(FOLLOW_OBJECT), encoding="utf-8")
+        world = BST.world_for_plate(plate, (0, 0, 0), ep)
+        BST.derive_rescale_states(world, species, plate, ep, sid="s01")   # the derived state AND `follow`'s own index
+    world["ken_burns"] = {"scale": 0, "x": 0, "y": 0}   # nothing of the world moves: the frame is the page's own
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: the domain follows the line that pushes it", scenes, {}, None)
+    tl["kinetics"] = {"idle": True, "min_jerk": True}   # both flags a compiled cut carries; `segEase` is the cap's clock
+    return tl, _base_uris()
+
+
+def page_rescale_follow() -> tuple[dict, dict]:
+    """R26-233 - the followed rescale BEFORE the yield: the memory line drawing under the standing top, the three
+    landed lines exactly where they landed, every tick of the born scale in its place."""
+    return _page_rescale_follow()
+
+
+def page_rescale_follow_yield() -> tuple[dict, dict]:
+    """R26-233 - the same page MID-YIELD: the domain opened by the climb itself, the landed ink lower than it was
+    and the low ticks still lit and re-spaced.
+
+    The same timeline as `page-rescale-follow`, read 0.35 s later. Two SURFACES rather than one surface at two
+    instants because a second instant of one surface lives in `render_baseline.PROOF_FRAMES`, which R26-233's
+    write set does not include (R26-226's pair was split for the same reason)."""
+    return _page_rescale_follow()
+
+
+SURFACES.update({
+    "page-rescale-follow": page_rescale_follow,
+    "page-rescale-follow-yield": page_rescale_follow_yield,
+})
+FRAME_T["page-rescale-follow"] = FOLLOW_T
+FRAME_T["page-rescale-follow-yield"] = FOLLOW_T2
+
+
 # ---- P61 T9 (b): THE EFFECTS GALLERY'S OWN PAGE ------------------------------------------------
 # The gallery is not a timeline. It is the static review page `build_effects_gallery.py` generates
 # from docs/EFFECTS-CATALOG.jsonl, so it has no (timeline, uris) pair and it is deliberately NOT a

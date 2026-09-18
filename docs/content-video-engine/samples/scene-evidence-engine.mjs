@@ -11655,14 +11655,99 @@ async function mount(doc) {
     }
     S.xfDirty = false;
   };
+  /* R26-233 / E99 s82 - THE FOLLOWED RESCALE: THE AXIS YIELDS TO THE LINE THAT PUSHES IT. A rescale's clock is an
+     EASING, so a domain that opened while a line was still drawing dragged the landed ink down beside it - measured on
+     the H unit at 0:28: three landed lines slid 253 px over 2.2 s and the low ticks went with them. That is the move
+     the operator refused at 0:05 ("the movement on screen drags down the values somehow, that can't happen"; INK NEVER
+     MOVES UNLESS THE SENTENCE MOVES IT, E99 s82). The words DO name a reveal, so the rescale belongs - its CLOCK was
+     wrong. `follow: <series index>` on the species (the compiler resolves the name or the row's own build_to to one
+     index) puts the domain on the LINE's clock: every frame the top it asks for is that series' DRAWN extremum with
+     the page's own air above it, and `u` is the place on the A -> B blend that puts the top exactly there. So the
+     landed ink yields as the new line climbs past the old top - never before it, never after it lands - and a tick
+     fades only once the LIVE domain has left it behind. It is the breakthrough bars' shape (the bar shoots WHILE the
+     axis rescales, E60) on a line page. Every expression below is the one it was when no species names a follow. */
+  const XF_FOLLOW = Object.freeze({
+    HEAD: 1.06,   /* the air above the drawn tip, as a FACTOR on the value: the 6 % the line builder pads a page's own data by (`pad = (y1 - y0) * 0.06`) [DERIVED: the page's own rule, so a followed domain keeps exactly the air the page would have given the data itself] */
+    AIR: 0.06,    /* ... and, as a band of the LIVE domain, the travel a standing tick fades over once the domain has left it behind [DERIVED: the same 6 %; a tick still inside the scale the page is drawing on may not disappear - the low ticks vanishing was half of what the critic read at 0:28] */
+  });
+  const followSi = (sp) => (sp && sp.follow != null && Number.isFinite(+sp.follow) ? (+sp.follow | 0) : null);   /* series 0 is a legal follow, so the test is against null and never falsiness */
+  /* the drawn extremum of ONE path, in the page's own Y units (log applied), at the length fraction the cap wrote:
+     the POLYLINE's own metric, which is the metric `capFrac` measures a cap in. Inside the segment the nib is in, the
+     value is interpolated in Y - the segment is drawn straight between two projected points, so that is exactly the
+     value the nib has reached. Nothing drawn (f <= 0) has no extremum, and the domain then has nothing to follow. */
+  const lpDrawnMaxY = (pp, f, yv) => {
+    const pts = pp.pts || [], data = pp.data || [];
+    if (pts.length < 2 || data.length !== pts.length || !(f > 0)) return null;
+    const tot = polyLenTo(pts, pts.length - 1);
+    if (!(tot > 0)) return yv(+data[data.length - 1][1]);
+    const want = tot * Math.min(1, f);
+    let acc = 0, best = yv(+data[0][1]);
+    for (let k = 1; k < pts.length; k++) {
+      const seg = Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]);
+      const ya = yv(+data[k - 1][1]), yb = yv(+data[k][1]);
+      if (acc + seg <= want) { best = Math.max(best, yb); acc += seg; continue; }
+      best = Math.max(best, ya + (yb - ya) * (seg > 0 ? clamp01((want - acc) / seg) : 0));
+      break;
+    }
+    return best;
+  };
+  const lpFollowNeedY = (A, si) => {   /* the domain TOP the followed series asks for this frame, in Y units (null: it has drawn nothing) */
+    const sa = A.scale; if (!sa) return null;
+    let best = null;
+    for (const pp of A.paths || []) {
+      if ((pp.si | 0) !== (si | 0)) continue;   /* a highlighted series is two paths and ONE si: the further-drawn of the pair is the line's own extremum */
+      const f = 1 - parseFloat(pp.p.getAttribute("stroke-dashoffset") || "0") / (pp.len || 1);
+      const y = lpDrawnMaxY(pp, f, sa.yv);
+      if (y != null && (best == null || y > best)) best = y;
+    }
+    if (best == null) return null;
+    return (A.plot && A.plot.log) ? best + Math.log10(XF_FOLLOW.HEAD) : best * XF_FOLLOW.HEAD;   /* the factor on the VALUE: the product in linear Y, one offset in log Y */
+  };
+  /* THE DOMAIN THE BLEND ACTUALLY DRAWS. A rescale lerps the two MAPS - every mark's pixel place - and a lerp of two
+     affine maps is affine, but the domain it implies is NOT the lerp of the two domains: with S = (1-u)/ra + u/rb and
+     C = (1-u)y0a/ra + u.y0b/rb the blend is y -> B - k(yS - C), whose bottom is C/S and whose range is 1/S. Both ends
+     exact, which is what lets the top be solved for rather than approached. */
+  const lpXfDomain = (sa, sb, u) => {
+    const ra = sa.y1 - sa.y0, rb = sb.y1 - sb.y0;
+    if (!(ra > 0) || !(rb > 0)) return [sa.y0, sa.y1];
+    const S = (1 - u) / ra + u / rb, C = (1 - u) * sa.y0 / ra + u * sb.y0 / rb;
+    if (!(Math.abs(S) > 1e-12)) return [sa.y0, sa.y1];
+    return [C / S, C / S + 1 / S];
+  };
+  /* ... and its inverse: the u whose blend puts the domain's TOP at needY. y1(u) = (1 + C)/S is linear over linear in
+     u, and its pole (S = 0) lies outside [0, 1] for any two ranges at all - so on [0, 1] it runs monotonically from
+     A's top to B's, and the clamp IS "until it reaches the target domain": under A's top nothing moves (u 0), past
+     B's top the target stands (u 1). */
+  const lpFollowU = (sa, sb, needY) => {
+    const ra = sa.y1 - sa.y0, rb = sb.y1 - sb.y0;
+    if (!(ra > 0) || !(rb > 0)) return null;
+    const S0 = 1 / ra, C0 = sa.y0 / ra, dS = 1 / rb - S0, dC = sb.y0 / rb - C0, den = needY * dS - dC;
+    if (!(Math.abs(den) > 1e-12)) return null;
+    return clamp01((1 + C0 - needY * S0) / den);
+  };
   const lpPaintRescale = (states, xf, t3, scene, t) => {
-    const A = states[xf.from], Bs = states[xf.to], u = xf.u;
+    const A = states[xf.from], Bs = states[xf.to];
+    let u = xf.u;
     for (let i = 0; i < states.length; i++) if (i !== xf.from && i !== xf.to) lpPaintChart(states[i], 0, t3, scene, t);
     lpPaintChart(A, 1, t3, scene, t);        /* the standing chart, fully built: the transition moves its marks */
     lpPaintChart(Bs, 0, t3, scene, t);       /* the target's furniture only - its series stay undrawn until the clock ends */
-    const sa = A.scale, sb = Bs.scale; if (!sa || !sb) return;
+    const sa = A.scale, sb = Bs.scale; if (!sa || !sb) return u;
+    /* R26-233: THE DOMAIN, READ OFF THE INK. A is painted first and fully built, so what the cap sequence has drawn
+       of the followed series is already on its path - the top is read from the line, never from the clock. A followed
+       series that has drawn nothing yet moves nothing (u 0), which is the whole of "never before". */
+    const FW = followSi(xf);
+    if (FW != null) { const uf = lpFollowNeedY(A, FW); const u2 = uf == null ? null : lpFollowU(sa, sb, uf); u = u2 == null ? 0 : u2; }
+    const dom = FW == null ? null : lpXfDomain(sa, sb, u);
+    A.followNow = dom ? { si: FW, u, y0: dom[0], y1: dom[1], log: !!(A.plot && A.plot.log) } : null;   /* what the probe reads: the live domain, in the page's own Y units */
     A.xfDirty = true; Bs.xfDirty = true;
-    const vIn = (v) => xfInside(sa.yv(v), sb.y0, sb.y1), xIn = (x) => sb.x0 === undefined || xfInside(x, sb.x0, sb.x1);
+    const vIn = (v) => xfInside(sa.yv(v), dom ? dom[0] : sb.y0, dom ? dom[1] : sb.y1), xIn = (x) => sb.x0 === undefined || xfInside(x, sb.x0, sb.x1);
+    /* a standing tick's opacity: under a follow it is the LIVE domain that decides, and a tick the domain has left
+       behind fades over one air-band of travel rather than over a clock it is no longer on. Without a follow this is
+       `xfFade(vIn(v), false, u)` - the expression every golden rescale was captured through. */
+    const air = dom ? Math.max(1e-9, (dom[1] - dom[0]) * XF_FOLLOW.AIR) : 0;
+    const fadeOut = (v) => { if (!dom) return xfFade(vIn(v), false, u);
+      const y = sa.yv(v), d = Math.max(dom[0] - y, y - dom[1]);
+      return d <= 0 ? 1 : clamp01(1 - d / air); };
     const aVals = new Set((A.marks || []).filter((m) => m.role === "tick").map((m) => m.geom.v));
     if (sa.kind === "line" && sb.kind === "line") {
       const mapA = (x, v) => [sa.mx(x), sa.my(v)], mapB = (x, v) => [sb.mx(x), sb.my(v)];
@@ -11674,17 +11759,33 @@ async function mount(doc) {
         pp.p.setAttribute("d", d);
         const len2 = pp.p.getTotalLength ? pp.p.getTotalLength() : pp.len; pp.len = len2;
         pp.p.setAttribute("stroke-dasharray", len2); pp.p.setAttribute("stroke-dashoffset", (len2 * (1 - f)).toFixed(1));
+        /* R26-233: THE NIB RIDES ITS OWN INK. The tip was placed by lpPaintChart on the scale the page was built on
+           and left there while the path moved beneath it - so a line DRAWING under a transition (which is what
+           `follow` makes ordinary) wore its lead point at the old scale. Measured on the golden's own page at 12.30:
+           the path's drawn end at (653, 290) and the dot at (653, -78), above the plot and under the title. */
+        if (pp.tip && +pp.tip.getAttribute("opacity") > 0 && pp.p.getPointAtLength) {
+          const q = pp.p.getPointAtLength(len2 * clamp01(f));
+          pp.tip.setAttribute("cx", q.x); pp.tip.setAttribute("cy", q.y);
+        }
       }
     }
     const nameB = (k) => (Bs.markBy || {})[k];
     for (const m of A.marks || []) {
       const g = m.geom || {}, e = m.el; if (!e) continue;
-      if (m.role === "tick" || m.role === "rule") { const y = xfLerp(g.y, sb.my(g.v), u); e.setAttribute("y1", y.toFixed(1)); e.setAttribute("y2", y.toFixed(1)); e.style.opacity = xfFade(vIn(g.v), false, u).toFixed(3); }
-      else if (m.role === "ylabel" || m.role === "rulelabel") { const y = xfLerp(g.y, sb.my(g.v) + (g.y - sa.my(g.v)), u); e.setAttribute("y", y.toFixed(1)); e.style.opacity = xfFade(vIn(g.v), false, u).toFixed(3); }
+      if (m.role === "tick" || m.role === "rule") { const y = xfLerp(g.y, sb.my(g.v), u); e.setAttribute("y1", y.toFixed(1)); e.setAttribute("y2", y.toFixed(1)); e.style.opacity = fadeOut(g.v).toFixed(3); }
+      else if (m.role === "ylabel" || m.role === "rulelabel") { const y = xfLerp(g.y, sb.my(g.v) + (g.y - sa.my(g.v)), u); e.setAttribute("y", y.toFixed(1)); e.style.opacity = fadeOut(g.v).toFixed(3); }
       else if (m.role === "xtick" && sb.mx) { const x = xfLerp(g.x, sb.mx(g.v), u); e.setAttribute("x", x.toFixed(1)); e.style.opacity = xfFade(xIn(g.v), false, u).toFixed(3); }
       else if (m.role === "name") { const nb = nameB(m.key); if (nb) { e.setAttribute("x", xfLerp(g.x, nb.geom.x, u).toFixed(1)); e.setAttribute("y", xfLerp(g.y, nb.geom.y, u).toFixed(1)); } }
       else if (m.role === "bar" && sa.kind === "bars") { const nb = nameB(m.key); if (nb) { const r = xfRect(g, nb.geom, u); e.setAttribute("x", r.x.toFixed(1)); e.setAttribute("y", r.y.toFixed(1)); e.setAttribute("width", r.w.toFixed(1)); e.setAttribute("height", r.h.toFixed(1)); e.style.transformOrigin = "0 " + xfLerp(g.base, nb.geom.base, u).toFixed(1) + "px"; } }
       else if ((m.role === "value" || m.role === "xlabel") && sa.kind === "bars") { const nb = nameB(m.key); if (nb) { e.setAttribute("x", xfLerp(g.x, nb.geom.x, u).toFixed(1)); e.setAttribute("y", xfLerp(g.y, nb.geom.y, u).toFixed(1)); } }
+    }
+    /* ... and the target's own SERIES stay undrawn until the clock ends: the furniture loop below hides each path
+       (role "line"), and R26-233 hides what hangs off one - the nib and the tip-riding pill. A cap sequence runs on
+       absolute t, so the target's copy of a mid-draw line is drawn exactly as far as the standing one (measured:
+       f 0.667 on both at 12.30) and was showing a SECOND lead point at its own scale: two dots for one pen. */
+    for (const pp of Bs.paths || []) {
+      if (pp.tip) pp.tip.setAttribute("opacity", 0);
+      if (pp.pill && pp.pill.g) pp.pill.g.setAttribute("opacity", 0);
     }
     /* the target's furniture: a tick the standing chart already has stays hidden (its twin is travelling); a NEW one arrives */
     Bs.chart.style.opacity = u > 0 ? 1 : 0;
@@ -11694,6 +11795,7 @@ async function mount(doc) {
       else if (m.role === "xtick" || m.role === "rule" || m.role === "rulelabel" || m.role === "axislabel") e.style.opacity = xfFade(true, true, u).toFixed(3);
       else if (m.role === "name" || m.role === "line" || m.role === "bar" || m.role === "value" || m.role === "xlabel") e.style.opacity = "0";
     }
+    return u;   /* R26-233: the clock the frame was actually painted on - the caller's `xfNow` carries it to the perform layer */
   };
   /* P48 T3 - EXTEND. Two phases on one clock: the shared marks RESCALE to the target's scale over the first XF_EXTEND.RESCALE
      share (the standing line moves, the target's furniture arrives), then the target stands with its shared points drawn and
@@ -12239,7 +12341,7 @@ async function mount(doc) {
                         (E60 Tokyo, 2026-09-10: the ten-year bars recast into the parked monthly bars' slot and burst there, the plant beneath them; a park to scale 1 un-parks) */
       const d = Math.max(0.001, sp.dur || 1), k = Math.max(0, Math.min(states.length - 1, sp.state | 0));
       if (sp.to === "rescale") {   /* P48 T2: the axes retarget on one clock; the chart never leaves, and the target stands built */
-        if (t < sp.at + d) { xf = { from: cur, to: k, u: segEase(clamp01((t - sp.at) / d)) }; break; }
+        if (t < sp.at + d) { xf = { from: cur, to: k, u: segEase(clamp01((t - sp.at) / d)), follow: sp.follow }; break; }   /* R26-233: ... and with `follow` the clock is the followed line's own climb, read in lpPaintRescale off the ink */
         cur = k; cCur = 1; continue;
       }
       if (sp.to === "extend") {   /* P48 T3: the axes retarget, then the new points draw on at the pen */
@@ -12273,7 +12375,8 @@ async function mount(doc) {
     else if (xf && xf.extend) { lpPaintExtend(states, xf, t3, scene, t); }
     else if (xf && xf.morph) { for (const S of states) { lpRestoreState(S); S.extendCap = null; } lpPaintMorphTo(st, states, xf, t3, scene, t); }
     else if (xf && xf.keyed) { for (const S of states) lpRestoreState(S); (xf.keyed === "data" ? lpPaintRecastData : lpPaintRecastKeyed)(states, xf, t3, scene, t); }
-    else if (xf) { lpPaintRescale(states, xf, t3, scene, t); }
+    else if (xf) { const uP = lpPaintRescale(states, xf, t3, scene, t);
+      if (st.xfNow && uP != null && Number.isFinite(uP)) st.xfNow.u = uP; }   /* R26-233: a followed rescale's clock is the line's, so the anchors the perform layer lerps ride the same u the marks did */
     else {
       for (const S of states) { lpRestoreState(S); S.extendCap = null; }   /* no transition on: every state exactly as built (a seek is the play) */
       for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === cur ? cCur : 0, t3, scene, t, i === cur && leaving);
