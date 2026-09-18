@@ -330,3 +330,128 @@ plate as a world (no engine change); the numbered agenda; the flow diagram with 
   `SCRIPT-H-*` files, `evidence/`, `sound/`, `host/` and `packaging/` before the build and asserts them
   unchanged after it.
 - This build was never served and no frozen copy was made (the parent's, E99 s75 / R26-193).
+
+---
+
+## 8. THE 30-SECOND BED on the three doors (E99 s82 (b), 2026-09-18)
+
+The build is now the FIRST WORLD ROW ONLY - 0:00 to the dip into the studio, 52.85 s on the new take
+(rate 1.14). The rows after it are T6's. What the doors replaced, and what they measure:
+
+| the door | the token this row writes | what it retired |
+|---|---|---|
+| R26-223 | `;domain=80,277` - the page is BORN on the hook's scale | the 0:04 `chart_to rescale` (ink that moved while no word named a move) |
+| R26-226 | `;build=lines:1.2` - `build_s` 4.8, the windows `[[0,1.2],[1.2,2.4],[2.4,3.6]]` | fifteen per-phrase `build_to` species (the crawl that stops) |
+| R26-205 | nothing - a 16:9 page row is stamped `full_stage: true`, `caption: "anchor"` | the 0.64 park that kept the tags out of the caption's room |
+| R26-228 | `plate_idle_paints: true`, `plate_idle_drift_px: 20` in the build's kinetics | an authored `;drift=` that painted 0 px |
+
+**The slot fix (the held series takes no turn) is in**: `build_lines` is THREE windows, not four - the
+drawing lines start at 0.00 and the build ends a turn early, the memory series joining on its own
+reveal cap at 0:29.
+
+**Each line lands whole, with its own tag and badge** (probe, this build):
+
+| t | what is whole | its tag |
+|---|---|---|
+| 0.60 | semis drawing (`drawn 0.49`) | - |
+| **1.20** | semis WHOLE (`marks n 1, drawn 1`) | `+105% SEMICONDUCTOR STOCKS` + "their divergence" |
+| **2.40** | mega-cap whole (`n 2`) | `+21% MEGA-CAP TECH STOCKS` + "matches the market" |
+| **3.60** | S&P whole (`n 3`) | `+21% S&P 500 (the market)` + "the market" |
+| 29.25-31.5 | the memory line whole on "Here's the layer it never drew" | `+613% MEMORY MAKERS (hynix+Micron)` + "our layer" |
+
+**The lead points**: three on the three landed lines at 0:24 - teal at the semis' end, blue at the
+mega-cap's, grey at the S&P's, each with its own bloom; the held memory line has none (R26-228's rule).
+
+**The geometry, measured**: plot `[140, 247, 958, 580]` (958 px = 49.9 % of the stage width, the lane's
+own ceiling), chart `[45, 193, 1350, 756]`, parked for the agenda at 0.80 -> `[52, 194, 1072, 600]`.
+**Type in CSS px at 16:9** (doc 49 s49.1's floor is 12): caption **14.6**, title **17.4**, end tags
+**14.2**, ticks **13.0**, source 11.3, sub 10.8 - against 5.4 / 5.9 / 6.4 under the old 0.64 park. At the
+agenda's 0.80 park the ticks fall to 10.4 and the tags to 11.3.
+
+**The card**: the placer found NO room on a full-stage page and took the emptiest corner at the
+legibility floor (101 x 102 px), so the row names the rectangle the page leaves - x 1400-1900, y 700-910,
+between the lowest end tag (y 685) and the anchored strip (y 919). The card is `[1421, 687, 230, 210]`
+and its overlaps are **0 px on the ink, 0 px on the tags, 0 px on the caption**. A card on a full-stage
+page is SMALL, and that is R26-205's geometry, not a choice.
+
+**The gate**: `RESULT: 4 FAIL / 4 WARN / 14 PASS / 1 JUDGE / 9 INFO`, `visual_events: 27 (30.7/min)`.
+M28 and the card's M25 are gone with the rescale and the park. The four are M11 (unchanged: the only
+mark the engine can aim lands on series 0, the undrawn memory line) and **M05 / M10 / M16** - and that
+trio is a GATE ROW, not a cut fault: the previous cut counted 243 visual events, this one 27, because
+R26-205 moved every page caption to the anchored strip (M08 counts STAGE caption pages as events and
+counts nothing in the strip) and E99 s82 struck the fifteen staging species. The gate reads a page whose
+life is exactly what R26-228 built - the tip spark, the bloom, the per-word breath - as a dead frame.
+No species was invented to fill it (that is the crawl the operator refused).
+
+**The sheet**: `build-h/self-watch/bed.png` - eight tiles at 0:02, 0:06, 0:12, 0:18, 0:24, 0:30, 0:38, 0:46.
+
+### 8b. The 0:46 collision, fixed with the operator's own shape (R26-229 b)
+
+The agenda's rows were landing on the PARKED page's end tags. A page parks for nothing, so the park is
+gone and the beat is the operator's: on "One test," the whole chart **MELTS TO A BALL and is thrown off**
+(`exit: "melt:throw:1.0"` on the page row - a melt takes the world, so it is the row's exit, E88 /
+CAPABILITIES:37), and the board it clears for is **`world-three-notch-slate-v1`** - build-f's own plate at
+this beat, dark enough for white type, and literally the three questions as an object. The agenda lands
+CENTRED on its face, one row per word: "three questions" / "thirty seconds" / "and it sorts".
+
+- **The melt's length is 1.0 s** so the board is there ON "three questions": the page row ends at 43.04.
+- **The rows sit on 0 px of ink and 0 px of tag** - measured at 44.0, 46.0 and 50.0 s, the probe reports
+  `page {}`, `labels []`, `overlaps []`: there is no page ink or tag left on the stage at all.
+- **The block sits above the caption**: on a PLATE row the caption is back in STAGE mode (the anchored
+  strip is the page rule) at `[192, 432, 1535, 72]`, 64-65 px / **28.4 CSS px**, so the block was lifted to
+  y 0.10-0.37 (108-400 px) - 32 px clear of the caption's top edge. Read on the frame at 0:46: the three
+  numbered rows across the slate's own three notches, the caption under them.
+- **No value stamp beside the rows**: the `stamp` species is admitted for the VECTOR MAP's three species
+  alone (`build_scene_timeline_f.py:671`), so there is no stamp at hand for a list on a plate. None drawn.
+- The bed is now TWO rows - the page 0.00-43.04, the slate 43.04-52.85 - `visual_events: 48 (54.5/min)`,
+  up from 27, and M16's 0:44 gap is gone with the park.
+
+### 8c. Copy e's two, and R26-233 measured
+
+**1. THE MELT IS IN THE CUT NOW.** A row's `exit` is the transition **INTO** that row
+(`door_boundary_error`'s own docstring, `build_scene_timeline_f.py:2186`: "may the door INTO `sc` open
+here?", with the predecessor passed beside it), and s01 has no predecessor - so the melt authored on the
+PAGE row did nothing and the slate's empty exit fell to the mechanical dip. The melt now sits on the
+SLATE row. Two things the engine then taught, both by refusal and both kept:
+
+- `melt:throw` into a plate is refused **by name**: *"a throw hands the same board to the next chart
+  (E88) - the incoming world is not a ledger page; say melt:splash:plate to paint a plate"*. So the
+  ending is `melt:splash:plate:1.0` - the ball splashes onto the slate, the operator's own second ending
+  (E76 s5, "splatter it back on to the canvas").
+- the boundary moved one melt-length earlier (`t_melt = t_three_q - MELT_S_H`) so the melt RUNS over
+  "One test," and ENDS as the slate lands on "three questions" - the agenda's first row fires on the
+  slate, never inside the transition.
+
+MEASURED on the frames (mean luma of the whole frame; the dip this replaced cored at luma 5):
+
+| t | mean luma | what is on stage |
+|---|---|---|
+| 42.00 | 60.2 | the page, whole |
+| 42.50 | 51.6 | **the ball** - the chart melted into one orange sphere with its shadow, on the page's own charcoal, under "One test," |
+| 43.00 | 121.8 | the slate, landed |
+| 43.10 | 121.8 | the slate |
+| 43.30 | 122.2 | the slate, the first row firing on it |
+
+**No black core anywhere** and the agenda's rows still measure `page {}`, `labels []`, `overlaps []` at
+43.2 / 44.5 / 46.0 - 0 px on any remaining ink or tag.
+
+**2. THE CERTIFICATE HAS ITS FACE.** The old rectangle took an empty cartouche and a neighbour's corner.
+The new one is `CERT_CROP = (282, 238, 296, 146)` - **w 282, h 238, x 296, y 146** on the plate's own
+1536x1024 frame - picked by eye off the plate and checked for the blue light shaft pixel by pixel. It is
+the only certificate on that wall whose four borders, crest medallion, ruled signature line and engraved
+vignette are all visible at once; the plate's blue light shaft clips its lower-left corner, which is the
+plate's own light and not the crop's edge. The room and the 0 px are unchanged (`[1421, 695, 230, 194]`).
+
+**3. R26-233 - the drop, measured.** The rescale's only dial on a row is its `dur`, so it is now the
+memory line's own window: `RESCALE_S = MEMORY_DRAW_S = 2.2`, both opening on "Here's the layer it never
+drew". The ink still moves, but it moves WITH the line's climb instead of in a 1.0 s hand-over beside it:
+
+| t | the semis tag's y | the drop since 28.0 |
+|---|---|---|
+| 28.00 | 369 | - |
+| 28.70 | 390 | 21 px |
+| 29.25 | 483 | 114 px |
+| 30.20 | 622 | 253 px over 2.2 s (~115 px/s; it was ~215 px/s in the 1.0 s hand-over) |
+
+An axis whose EASING is the line's own climb - the breakthrough shape the critic names - is not a row's
+to write: `chart_to rescale` takes a domain and a length and nothing else. That part stays R26-233's.

@@ -101,3 +101,48 @@ The sheets: `build-h/self-watch/opening.1-4.png` (0:00-1:30 at 2 s steps, the FI
   mega-cap line's low of 93.94, so the baseline stays in the y label's words.
 - Read on sheet 2: 0:24 the two-line copy card, 0:28 the retitle, 0:30 the page un-parking and the axis opening
   as the memory line draws, 0:34 the spread, 0:38-0:40 the +613 % figure, 0:44 the agenda. Clean.
+
+## Sixth pass - THE 30-SECOND BED on every door (E99 s82; read on `build-h/self-watch/bed.png`, eight tiles)
+
+The doors under it: R26-218/219 (marks name their series; species leave with the page), R26-221/223 (the card's
+box; the page born on `;domain=80,277`), R26-228 (the interior lives - the lead points, the bloom, the per-word
+breath), R26-205 (the page IS the plate at 16:9; the caption in the anchored strip), R26-226 (`;build=lines:1.2`
+- each line whole, then its tag and badge; a series held at 0 takes no turn).
+
+- 0:02 the page full stage on its own scale (ticks 80 / 160), the semis line already drawing whole; 0:06 the
+  three hook lines landed with their tags and badges (semis at 1.20 s, mega-cap 2.40, S&P 3.60) - no crawl;
+  0:12 the certificate in the plot's low-right room, small, 0 px on the ink, the tags and the caption; 0:18 gone.
+- 0:24 three lead points, one per landed line, each with its bloom; the caption in the anchored strip.
+- 0:30 "AI is 1845 again" - the axis opens to 640 as the memory line draws whole on "Here's the layer"; 0:38
+  +613 % and the crimson spread. The reveal is the one rescale left and the words name it.
+- The type at 16:9 in CSS px: caption 14.6, title 17.4, end tags 14.2, ticks 13.0 (doc 49's floor 12) - the
+  first time the page's type has cleared the phone rule; source 11.3 and sub 10.8 under it.
+- 0:46 ONE COLLISION: the agenda's rows land over the parked page's end tags. Sent back as R26-229's shape (the
+  chart melts to a ball and is tossed, the agenda centred on the board, no park).
+- The gate: 4 FAIL - M11 (the first chart unannotated: the only mark the engine aims lands on series 0, the
+  held memory line) and M05/M10/M16, the pulse rows reading 27 events where the old cut counted 243 - the
+  anchored caption counts as nothing and the staging is gone while the page's life runs (R26-232, a gate row).
+- What the operator judges: the card on a full-stage page is small (230 x 210); the page's own title names
+  "the layer it needed" 28 s before the reveal (the object's title - a retitle at the open is the fix); the caption
+  at 33 px in the strip (E62 - on the card); the plot at 49.9 % of the stage width (the end tags' reach - on the
+  card).
+
+## Seventh pass - the bed with the melt-toss agenda (frozen copy e on :8780, the copy the card shows)
+
+- 0:46: the page melts to a ball and is thrown off on "One test"; the slate plate (build-f's own
+  `world-three-notch-slate-v1`) is the world by "three questions"; the agenda lands centred on the slate's three
+  notches, one row per word, 0 px on any ink or tag (there is none left), 32 px clear of the STAGE caption. No park
+  anywhere in the bed. The rows' type reads small on the slate - the operator's eye.
+- The gate: 48 visual events (from 27); M16's 0:44 gap gone with the park; the four FAILs unchanged and all in the
+  page's first 20 s (M11 the first chart unannotated; M05/M10/M16 the pulse rows over the anchored caption -
+  R26-232).
+- Two rows, idle 2/2; the slate's drift paints now that the dial is on.
+
+## Eighth pass - frozen copy f on :8781, the copy the card shows
+
+- The melt is in the cut: the page melts to a ball over "One test" and splashes onto the slate (`melt:splash:plate`
+  on the slate row's exit - the law: a row's exit is the move INTO it), no black core (luma 52 at the ball, 122 on
+  the slate); the three questions on the slate's notches by "three questions". The certificate shows its face at
+  0:12 (`CERT_CROP` 282 x 238 at 296,146 on the plate). The reveal's rescale runs on the memory line's own 2.2 s
+  clock; the landed lines still slide (253 px over 2.2 s, from 215 px/s) - R26-233's door.
+- Read on the tiles: clean at every instant; the slate's three-question type reads small - the operator's eye.

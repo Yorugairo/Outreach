@@ -43,13 +43,13 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
 - Recall(voice): content/video_engine/projects/systems-and-blowups/steel-and-paper/vo-h-scratch/SCRATCH-INDEX.md:1 "SCRATCH INDEX - jump points for the ear pass" (the scratch take is the build clock and is re-made as the script moves; HG3 auditions the voice on this 1:30)
 - Recall(world): docs/portable/OPERATOR-RULINGS.md:3248 "A plate's life is DIRECTIONAL" (E99 s65 - the host plate carries the ken push and the 20 px drift, the long-form setting)
 - Recall(evidence): content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:120 "seven percent of GDP in two thousand" (the dossier routes this sentence to the PIMCO equipment-and-software series - the page rings its own numbers, never a 7 or an 8 that is not in the data)
-- Recall(motion): docs/content-video-engine/CAPABILITIES.md:43 "THE NUMBERED AGENDA (P52 T8)" (row 6 - two to four numbered rows revealed one per word, in the room the park frees)
+- Recall(motion): docs/content-video-engine/CAPABILITIES.md:44 "THE NUMBERED AGENDA (P52 T8)" (row 6 - two to four numbered rows revealed one per word, in the room the park frees)
 - Recall(sound): content/video_engine/scripts/authoring/audio.py:429 "the cues the frame plays, the cues dropped" (R26-198 - the cues are bound to what the compiled timeline fires BEFORE the gate report is stamped)
 - Recall(publish): docs/portable/OPERATOR-RULINGS.md:3280 "1440p confirmed" (E99 s81 - this build renders nothing and serves nothing; the frozen copy, the link and the render are the parent's)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:2342 "The hook opens on its axes" (E73 - row 1 is the page on its axes from the first frame)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:1494 "Nothing ever goes truly still" (E49 - `;idle=live` on every page row, `;idle=drift;drift=20` on the plate)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:3278 "A second card takes the outgoing card's slot" (E99 s80 - the certificate card hands its slot to the Bravos chart card)
-- Recall(rulings): docs/content-video-engine/CAPABILITIES.md:90 "The AUTHORING KIT - one door for both formats, WIRED" (R26-17 step 0 - this door imports the kit and nothing from the F door)
+- Recall(rulings): docs/content-video-engine/CAPABILITIES.md:92 "The AUTHORING KIT - one door for both formats, WIRED" (R26-17 step 0 - this door imports the kit and nothing from the F door)
 """
 from __future__ import annotations
 
@@ -87,6 +87,7 @@ ASPECT = "16:9"
 # lands as one readable phrase, only k-words punctuated - build_scene_timeline_f.py:65). The long form keeps the
 # per-word caption the STAGE mode was built on (CAPABILITIES:23).
 CAPTION_BUDGET, CAPTION_MAX_WORDS, CAPTION_STYLE = 34, 6, None
+PLATE_DRIFT_PX = 20.0    # E99 s65 / R26-228: the long form's plate drift, and the dial that makes it paint
 
 EP = Project(here=HERE, build=BUILD, take=TAKE, take_stem=TAKE_STEM,
              script_name=SCRIPT.name, episode_id=EPISODE_ID, take_name="vo-h-scratch")
@@ -125,7 +126,9 @@ def _assert_read_only(before: dict) -> None:
 
 # ---------------------------------------------------------------- THE UNIT (the treatment's rows 1-9, to 1:30)
 
-UNIT_CUT_PHRASE = "So the obvious move"     # P12 - the head-fake; the unit stops at the cut BEFORE it (~1:30)
+# THE 30-SECOND BED (E99 s82 (b)): the first world row only - 0:00 to the dip into the studio. The rows
+# after it (the host window, the railway page) are T6's; this build proves the page.
+UNIT_CUT_PHRASE = "The three questions read"   # the dip into the studio; the bed stops at the cut BEFORE it
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -238,9 +241,22 @@ CERT_PLATE = REPO / ("content/video_engine/projects/systems-and-blowups/review/c
 # crop a full-width BAND ((top, height) fractions - authoring/docks.py:85), which on this plate is five certificates
 # and the blue shaft; `docks.dock_still(..., still=True, frame_crop=(w, h, x, y))` (authoring/docks.py:70) is the
 # kit's only x-aware crop and it reads a PNG as happily as a clip. MEASURED on the plate's own 1536x1024 frame.
-CERT_CROP = (248, 226, 566, 442)              # w, h, x, y - the certificate right of the blue shaft, deckle intact
+# ONE WHOLE CERTIFICATE WITH ITS PRINTED FACE (the critic's read of copy e: the old rectangle took an
+# empty cartouche and a neighbour's corner). Picked by eye off the plate's own 1536x1024 frame and checked
+# for the blue light shaft pixel by pixel: this is the ONLY certificate on the wall whose four borders,
+# crest medallion, ruled signature line and engraved vignette are all visible at once. The plate's blue
+# light shaft clips its lower-left corner - that is the plate's own light, not the crop's edge.
+CERT_CROP = (282, 238, 296, 146)              # w, h, x, y
 CERT_ASPECT = round(CERT_CROP[1] / CERT_CROP[0], 4)
 CERT_CARD = "dock-h-certificate-1845"
+# THE ROOM A FULL-STAGE PAGE LEAVES, measured on this build's own probe at 11.15 s: the chart's box is
+# [45, 193, 1350, 756], its ink [137, 289, 964, 465], its three end tags run x 1110-1883 at y 372 / 612 /
+# 649, and the anchored caption strip starts at y 919. The free rectangle is therefore x 1400-1900,
+# y 700-910 - right of the plot, under the lowest tag, above the strip. The PLACER could not find it (it
+# took the emptiest corner at the legibility floor, 101 x 102 px), so the row names it: 0.12 of the stage
+# wide at (0.80, 0.745) -> x 1420-1880, y 700-910. A card at full stage is SMALL, and that is the
+# geometric consequence of R26-205, not a choice - the notes carry the number.
+CERT_ROOM = {"centre": True, "centre_w": 0.12, "centre_x": 0.80, "centre_y": 0.733}   # 0.745 clipped the caption strip by 505 px
 # "his fourth copy of the same chart" is a card of the TWO-LINE chart - the page as it stands at that
 # instant - never the finished four-line png (the critic's spoiler row: `ev-divergence-v1.png` carries the
 # memory line, its legend and +613 %, five seconds before the sentence that reveals them). The kit's door
@@ -290,6 +306,17 @@ LAYER_RECAST = 1                              # the `;then=` state index row 4's
 GDP_RECAST = 1                                # ... and row 9's
 
 
+# THE PAGE IS BORN ON THE HOOK'S DOMAIN (R26-223) and DRAWS LINE BY LINE (R26-226). Both are plate-id
+# options now, so the two workarounds they replace are gone: the 0:04 `chart_to rescale` (ink that moved
+# while no word named a move - E99 s82) and the per-phrase `build_to` staging (the crawl that stops).
+PAGE_DOMAIN = ";domain=%g,%g"
+PAGE_BUILD = ";build=lines:%g"
+# <s> is ONE series' seconds and the page's build is s x N (R26-226-NOTE.md). Each line gets 1.2 s of pen -
+# five times the 0.25 s floor - and the measured windows are in the notes: the last hook line lands well
+# before "This certificate".
+LINE_BUILD_S = 1.2
+
+
 def page_open() -> str:
     """Rows 1-6's world: the VERIFIED divergence page on its axes at 0.00, one state, no recast.
 
@@ -298,8 +325,9 @@ def page_open() -> str:
     scene-evidence-engine.mjs:11362), so the line the sentence calls "the layer it never drew" is held at
     its first datum from 0.00 and drawn on the words that name it. That is better than the recast it
     replaces: one page, one attribution, and no label hand-over."""
-    return ("ledger:%s:line:%d:right:%s%s%s"
-            % (OPEN_PAGE, ORIG_LAST, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE))
+    return ("ledger:%s:line:%d:right:%s%s%s%s%s"
+            % (OPEN_PAGE, ORIG_LAST, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE,
+               PAGE_DOMAIN % (HOOK_YMIN, HOOK_YMAX), PAGE_BUILD % LINE_BUILD_S))
 
 
 def page_rail() -> str:
@@ -324,7 +352,35 @@ AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}
 # y 0.26-0.72 and the caption was written straight through the rows (read on the sheet at 0:48-0:54) - fixed here,
 # not noted (R26-191).
 AGENDA_BOX = {"kind": "region", "x0": 0.58, "y0": 0.585, "x1": 0.96, "y1": 0.90}
-PARK_SCALE, PARK_ANCHOR = 0.52, "left"        # the chart parks KEEPING ITS LEFT, and the agenda lands in the room
+# THE CHART MELTS AND THE AGENDA LANDS ON THE BOARD (R26-229 b, the operator's own shape). The agenda's
+# rows were landing on the parked page's end tags; a page parks for nothing, so the page does not park at
+# all - on "One test" the whole chart MELTS TO A BALL and is thrown off (`melt:throw`, E88 / CAPABILITIES:37,
+# the row's EXIT because a melt takes the world), and the board it clears for is the SLATE WITH THREE
+# NOTCHES - build-f's own plate at this beat, dark enough for white type and literally the three questions
+# as an object. The agenda lands CENTRED on its face, one row per word, on nothing but slate.
+# A ROW'S `exit` IS THE TRANSITION **INTO** THAT ROW (the law: `door_boundary_error`'s own docstring,
+# "may the door INTO `sc` open here?", build_scene_timeline_f.py:2186, with the predecessor passed beside
+# it). The melt was authored on the PAGE row, which has no predecessor, so nothing melted and the slate's
+# empty exit fell to the mechanical DIP - near-black at the boundary with the agenda's first row firing in
+# it (the critic's read of copy e). It belongs to the SLATE row: the page melts to the ball, the ball is
+# thrown, the slate lands.
+# ... and the ENDING is the one the engine names for this boundary: a THROW hands the board to the next
+# CHART, so into a plate it is refused by name ("a throw hands the same board to the next chart (E88) - the
+# incoming world is not a ledger page; say melt:splash:plate to paint a plate"). The ball splashes onto the
+# slate - the operator's own second ending (E76 s5: "splatter it back on to the canvas").
+MELT_EXIT = "melt:splash:plate:%g"
+MELT_S_H = 1.0            # the melt's own length: it opens on "One test," and the board is there on "three questions"
+SLATE_PLATE = "world-three-notch-slate-v1;use=landing;idle=drift;drift=20"   # E61 the use, E49 / E99 s65 the life
+SLATE_KEN = (0.04, 10, -6)   # the ken push (the drift paints now - R26-228's dial is on in the kinetics)
+# the slate's own face, measured on the plate: x 0.17-0.72, y 0.07-0.68 of the frame. The block sits inside it.
+# ... and ABOVE the caption: on a PLATE row the caption is back in STAGE mode (the anchored strip is the
+# page rule, R26-205), box [192, 432, 1535, 72] measured - so the block sits in the slate's upper face,
+# y 0.10-0.37 (108-400 px), thirty-two pixels clear of the caption's top edge.
+AGENDA_SLATE_BOX = {"kind": "region", "x0": 0.21, "y0": 0.10, "x1": 0.69, "y1": 0.37}
+# NO VALUE STAMP beside the rows: the `stamp` species is admitted for the VECTOR MAP's three species alone
+# (build_scene_timeline_f.py:671, SPECIES_TARGETS), so there is no stamp at hand for a list on a plate.
+PARK_SCALE, PARK_ANCHOR = 0.80, "left"   # the ONE park in the bed - the agenda's breath (E61), ~20 % (the
+                                        # operator). A page never parks for a caption or for a card that fits        # the chart parks KEEPING ITS LEFT, and the agenda lands in the room
 # THE TAGS AND THE CAPTION SHARE ONE ROOM AT 16:9, AND THE PARK IS THE ONLY DOOR. Measured on this build's
 # own probe: the stage caption's box is [1111, 432, 692, 144] and the page's terminal tags start at x 1005
 # and run to x 1527 ("+613% MEMORY MAKERS (hynix+Micron)", 518 px) - so from the moment the lines finish
@@ -336,7 +392,12 @@ PARK_SCALE, PARK_ANCHOR = 0.52, "left"        # the chart parks KEEPING ITS LEFT
 # 271 px). The tag's right edge is 140 + (1527 - 140) * scale, so it clears the caption's left edge minus one
 # line (1111 - 72) at any scale under 0.648 - hence 0.64, the largest park that clears.
 PARK_TAGS_SCALE = 0.64
-RESCALE_S = 1.0       # the axis hand-over's own length: while it runs, BOTH tick sets are on the page (the
+MEMORY_DRAW_S = 2.2   # the memory line's own build window on "Here's the layer it never drew"
+RESCALE_S = MEMORY_DRAW_S   # R26-233: the axis yields to the line as it draws - ONE clock, not a hand-over
+                            # beside it. The rescale's `dur` is the only dial a row has here, so it is set to
+                            # the memory `build_to`'s own window and both open on t_layer; the drop is measured
+                            # in the notes. A rescale whose EASING is the line's own climb is the row's.
+_RESCALE_S_WAS = 1.0       # the axis hand-over's own length: while it runs, BOTH tick sets are on the page (the
                       # engine writes the arriving axis before the standing one has left), so the shorter it
                       # is the shorter that overlap - measured at 1.6 s it peaked at 13 ticks, at 1.0 s the
                       # critic's four instants are all inside one axis' worth
@@ -428,74 +489,46 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_test = at("One test")                             # row 6 - the park and the agenda
     t_three_q = at("three questions")
     t_thirty = at("thirty seconds")
+    # the boundary is one MELT_S_H before "three questions", so the melt RUNS over "One test," and ENDS as
+    # the slate lands on the word the first row fires on - the row never fires inside the transition
+    t_melt = round(t_three_q - MELT_S_H, 2)
+    t_sorts = at("and it sorts")                        # ... and the third row lands on the clause that sorts
     t_top_five = at("By the end")                       # ... and the note under it
-    t_host = cut("The three questions read")            # row 7 - HOST WINDOW 1 (the dip into the studio)
-    t_not_bravos = any_at("isn't Bravos Research", "Not Bravos Research")         # ... the Bravos card thrown onto the desk (the TAKE's wording)
-    t_nvidia = any_at("isn't Nvidia", "Not Nvidia")                      # ... and put down on the desk as the sentence turns
-    t_capital = any_at("capital arriving faster", "Capital arriving faster")         # ... the flow diagram
-    t_paper_trail = cut("But capital that fast")        # row 8 - the dip back to the page
-    t_over = at("Every transformative")                 # row 9 - the index climbs from the dip ...
-    t_rail = at("Railways in the 1840s")                # ... through the sentence that names the overshoot
-    t_quarter = at("a quarter-billion pounds")
-    t_crashed = at("crashed by nearly two-thirds")
-    t_2000 = at("In two thousand")                      # ... the recast to the share-of-GDP page
-    t_eight = at("just crossed eight")
+    # (the bed stops at the dip into the studio: the host window and the railway page are T6's, and their
+    # anchors live past this build's own words, so they are not read here.)
 
     return [
         # -- ROWS 1-6: THE PAGE IS THE WORLD (E58 / E61). One world, two chart states, two cards in one slot.
-        (0.0, t_host, page_open(), (0, 0, 0), [
-            # row 2: the 1845 certificate ARRIVES - a thrown still card in the page's own low room (E99 s71, E65)
+        (0.0, t_melt, page_open(), (0, 0, 0), [
+            # THE 1845 CERTIFICATE ARRIVES - a thrown still card in the page's OWN room (E99 s71, E65).
+            # THE PLACER CHOOSES IT: the authored slot was the caption workaround's companion, and with the
+            # page full stage (R26-205) and the caption in the anchored strip the page's own measured empty
+            # room is free. The notes carry the measurement (0 px on the ink, 0 px on the tags).
             (CERT_CARD, 0, t_cert, t_hold,
-             dict(SLOT, arrive="throw", mass="paper", card_aspect=CERT_ASPECT)),
-            # row 3: the certificate leaves and THEIR chart takes the same slot (E99 s80) - the fourth copy of it.
-            # It leaves on the retitle: a CHART card that holds past 6 s is homework (E25 / M12), so its window is
-            # the sentence that names it, never the whole beat.
-            (BRAVOS_CARD, 0, t_two_lines, round(t_layer - CARD_CLEAR_S, 2),
-             dict(SLOT, arrive=SLOT_HANDOFF_ARRIVE, mass="paper", card_aspect=BRAVOS_ASPECT)),
-        ], "dip", [
-            # row 1: the page draws from 0.00 on its axes and is capped at the DIVERGENCE, which the first
-            # annotation then names - M11 (the first chart never enters full and unannotated)
+             dict(CERT_ROOM, arrive="throw", mass="paper", card_aspect=CERT_ASPECT)),
+            # (NO CARD AT 0:21-0:29. The operator, E99 s82: a docked card of the same chart is nonsense -
+            # the page IS the chart; the retitle "AI is 1845 again" carries the beat and the certificate's
+            # slot stays empty after it leaves.)
+        ], None, [
+            # THE MEMORY LINE IS STILL THE REVEAL, and it is the ONE authored stop the ruling keeps.
+            # `;build=lines` draws the four series in the PAGE'S OWN ORDER (R26-226-NOTE.md: `;order=` is
+            # not built and the object is read-only), and memory is series 0 - so without this the page
+            # would open on the very line the payoff is about. A `build_to` naming datum 0 caps that series
+            # at nothing through its own window; the other three draw WHOLE in turn, each with its tag and
+            # its badge as it lands; and the memory line draws whole on "Here's the layer it never drew".
+            # Its window is the first of the four, so the build's first LINE_BUILD_S seconds draw nothing -
+            # the axes, the title and the ruled line are the open (E73) and the first line arrives as the
+            # first sentence lands.
             {"kind": "build_to", "at": 0.0, "dur": 0.4, "series": DIV_MEMORY, "target": datum(0)},
-            # the page opens on the HOOK's own scale - two lines filling the plot, not flat under the tick
-            {"kind": "chart_to", "at": t_chips, "dur": 0.9, "to": "rescale", "ymin": HOOK_YMIN, "ymax": HOOK_YMAX},
-            # (NO RING HERE: "not the chips, not the models, not the machines" names nothing ON this chart,
-            # and a mark cannot reach the chip line anyway - E99 s76. M11 therefore FAILs by name, and the
-            # parent's ruling outranks it: a ring on nothing is worse than an unannotated first chart.)
-            # row 2: the certificate holds and THE LINE KEEPS BUILDING under it, one step per phrase (E21: the
-            # frame is never still while a card is up)
-            *[{"kind": "build_to", "at": 0.0, "dur": 3.0, "series": si, "target": datum(ORIG_DIVERGE)}
-              for si in STAGED_SERIES],
-            *[{"kind": "build_to", "at": t_cert, "dur": 1.6, "series": si, "target": datum(ORIG_STEPS[0])}
-              for si in STAGED_SERIES],
-            *[{"kind": "build_to", "at": t_sold, "dur": 1.6, "series": si, "target": datum(ORIG_STEPS[1])}
-              for si in STAGED_SERIES],
-            *[{"kind": "build_to", "at": t_paid, "dur": 1.6, "series": si, "target": datum(ORIG_STEPS[2])}
-              for si in STAGED_SERIES],
-            *[{"kind": "build_to", "at": t_trains, "dur": 1.8, "series": si, "target": datum(ORIG_LAST)}
-              for si in STAGED_SERIES],
-            # THE PAGE MAKES ROOM AS THE CARD ARRIVES. Measured on the divergence page: unparked, the
-            # "+21% MEGA-CAP TECH STOCKS" tag runs x 1005-1624 and the card lands at x 1354-1680, so the tag
-            # ran under the card for 6.7 s (M25, 7,992 px, 44 % of the ink). Parked to PARK_TAGS_SCALE the
-            # tags end at x ~1091 - clear of the card AND of the caption strip that starts at 1111.
-            # (the lines are done and their tags are written: the page makes room for the words and for the
-            # card already in it) by PARKING to PARK_TAGS_SCALE. A park stands until the next park, so it
-            # carries through the recast and is only tightened again for the agenda (Tokyo's own rule).
-            {"kind": "chart_to", "at": t_cert, "dur": 0.9, "to": "park",
-             "scale": PARK_TAGS_SCALE, "anchor": PARK_ANCHOR},
-            # (no ring on "two lines, one warning" either: the mark lands on series 0 whatever the row says)
+            # (NO RESCALE AT 0:04 and NO PARK AT 0:10 - E99 s82 amended: ink never moves unless the sentence
+            # moves it, and a page parks only for something that needs its room. The page is BORN on the
+            # hook's domain and stays full stage; the agenda's breath at 0:44 is the bed's one park.)
             {"kind": "retitle", "at": t_1845, "dur": 2.4, "text": "AI is 1845 again"},
             # row 4: THE LAYER IT NEVER DREW - the page becomes the divergence (E58 / E64), then the three ends write
-            # THE PAGE UN-PARKS FIRST, THEN THE AXIS RESCALES. Measured on the pass before this one: the
-            # rescale fired on a PARKED page and the chart box jumped 693 -> 1086 -> 700 px while a second
-            # full-width axis drew under the parked one (the label count went 9 -> 16). The memory line
-            # needs the room anyway, so the park is released UNPARK_LEAD_S before the rescale and the
-            # derived state arrives on a full-size page; the agenda's own park takes the room back at 0:43.
-            {"kind": "chart_to", "at": round(t_layer - UNPARK_LEAD_S, 2), "dur": 0.7, "to": "park",
-             "scale": 1.0, "anchor": PARK_ANCHOR},
             # THE AXIS RESCALES AS THE LAYER ARRIVES: the ticks open from the hook's scale to the memory
             # line's on the same clock the line draws on - the rescale the operator named, on a line page.
             {"kind": "chart_to", "at": t_layer, "dur": RESCALE_S, "to": "rescale", "ymin": FULL_YMIN, "ymax": FULL_YMAX},
-            {"kind": "build_to", "at": t_layer, "dur": 2.2, "series": DIV_MEMORY, "target": datum(DIV_LAST)},
+            {"kind": "build_to", "at": t_layer, "dur": MEMORY_DRAW_S, "series": DIV_MEMORY, "target": datum(DIV_LAST)},
             # THE THREE ENDS, each on its own word - AND THE ENGINE CAN POINT AT ONLY ONE LINE. MEASURED twice on
             # this build's own frames (36.6 s and 39.6 s, `build-h/logs/`): a mark whose target names `series: 2`
             # or `series: 1` is drawn on SERIES 0's stroke - the page's `linePts` carries one series, so
@@ -513,68 +546,21 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"kind": "retitle", "at": t_warning, "dur": 2.0, "text": "Right warning. Wrong address."},
             # (and no ring on "The address is wrong": the sentence names the MEMORY line and the engine drew
             # the ring on the S&P / mega-cap tip - the parent read it on the frame at 0:42)
-            # row 6: the page PARKS left and the numbered agenda lands in the room it frees (CAPABILITIES:43, E61)
-            {"kind": "chart_to", "at": round(t_test - 0.5, 2), "dur": 0.9, "to": "park",
-             "scale": PARK_SCALE, "anchor": PARK_ANCHOR},
-            {"kind": "agenda", "at": t_test, "dur": round(t_top_five - t_test + 3.0, 2), "target": AGENDA_BOX,
-             "rows": [dict(AGENDA_ROWS_H[0], at=t_test), dict(AGENDA_ROWS_H[1], at=t_three_q),
-                      dict(AGENDA_ROWS_H[2], at=t_thirty)]},
-            {"kind": "note", "at": t_top_five, "dur": 2.4, "text": "run it on your own top five"},
+            # (the page neither parks nor carries the list any more: the chart melts on "One test" and the
+            # agenda lands on the slate - the row below.)
         ], {"keys": [
             {"t": round(t_613 - 0.2, 2), "zoom": 1.0, "look": datum(DIV_LAST, DIV_MEMORY), "ease": "inout"},
             {"t": round(t_613 + CAMERA_IN_S, 2), "zoom": CAMERA_ZOOM, "look": datum(DIV_LAST, DIV_MEMORY), "ease": "inout"},
             {"t": round(t_613 + CAMERA_IN_S + CAMERA_HOLD_S, 2), "zoom": 1.0, "look": datum(DIV_LAST, DIV_MEMORY), "ease": "inout"},
         ]}),
-        # -- ROW 7: HOST WINDOW 1 - the studio (E61 landing surface; E99 s81 the host)
-        (t_host, t_paper_trail, HOST_PLATE, HOST_KEN, [
-            # (no card on this plate - see HOST_CARD_REFUSED above)
-        ], "dip", [
-            dict(NVIDIA_CHIP, at=t_nvidia, dur=round(t_capital - t_nvidia + 1.0, 2),
-                 cross_at=round(t_nvidia + CHIP_CROSS_S, 2)),
-            dict(CAPITAL_FLOW, kind="flow", at=t_capital, dur=4.0, target=FLOW_BOX),
+        # -- THE BOARD: the slate the melt clears for, and the three questions on it, one row per word.
+        (t_melt, unit_end, SLATE_PLATE, SLATE_KEN, [], MELT_EXIT % MELT_S_H, [
+            {"kind": "agenda", "at": t_three_q, "dur": round(unit_end - t_three_q - 0.4, 2),
+             "target": AGENDA_SLATE_BOX,
+             "rows": [dict(AGENDA_ROWS_H[0], at=t_three_q), dict(AGENDA_ROWS_H[1], at=t_thirty),
+                      dict(AGENDA_ROWS_H[2], at=t_sorts)]},
         ]),
-        # -- ROWS 8-9: THE DIP BACK TO THE PAGE (E47) - the paper trail, then the catalyst
-        (t_paper_trail, unit_end, page_rail(), (0, 0, 0), [], "dip", [
-            # THE LINE DRAWS FROM THE DIP (the critic's stillness row: the axes stood bare for 10.2 s).
-            # The page arrives with its title, its rule and its axes, and the index CLIMBS through the
-            # sentence that says every technology overshoots - then takes the peak on "quarter-billion"
-            # and the crash on "two-thirds". RAIL_STEPS are the 1843-45 bull, one step per phrase.
-            {"kind": "build_to", "at": t_paper_trail, "dur": 2.0, "series": 0, "target": datum(RAIL_STEPS[0])},
-            {"kind": "build_to", "at": t_over, "dur": 2.0, "series": 0, "target": datum(RAIL_STEPS[1])},
-            {"kind": "build_to", "at": t_rail, "dur": 2.0, "series": 0, "target": datum(RAIL_STEPS[2])},
-            {"kind": "build_to", "at": t_quarter, "dur": 2.2, "target": datum(RAIL_PEAK)},
-            {"kind": "note", "at": t_rail, "dur": 3.0, "text": RAIL_NOTE},   # it NAMES its subject: a note the page
-            # writes stays written - measured, it was still in the quiet zone eight seconds after the recast
-            # "crashed by nearly two-thirds" - the line runs on to the trough and the drop writes itself
-            {"kind": "build_to", "at": t_crashed, "dur": 1.6, "target": datum(RAIL_TROUGH)},
-            # THE DROP IS WRITTEN IN WORDS, and here is why - two measured refusals on this one beat:
-            #  - a `figure` the hand writes STAYS written (the red "-64%" was still standing on the US
-            #    share-of-GDP chart at 1:32, a number pinned to data it does not belong to);
-            #  - a `bracket` drew as a NAKED RED SPAN at the plot's right edge with no room for its label
-            #    (measured at 83.0 s) - the same fault Tokyo's own row records ("the bracket on this page drew a
-            #    naked vertical span at the plot's edge ... and read as an artifact", build_short.py), because the
-            #    gutter beside a 16:9 plot belongs to the terminal tags.
-            # So the page writes it as a line in its quiet zone, naming its subject, as Tokyo's row did.
-            {"kind": "note", "at": round(t_crashed + 0.8, 2), "dur": 2.4,
-             "text": "then " + RAIL_DROP + " by 1850 - the 1843 level, twice over"},
-            # the recast to the share-of-GDP page. TWO measured lessons on this beat's own frames:
-            #  - a recast carries the OUTGOING page's TITLE across (the railway title stood over the US GDP-share
-            #    chart from 0:84 to 0:90 on the first sheet), so the hand re-titles it to the object's own;
-            #  - a `callout` on the ARRIVED state's datum landed outside the plot entirely (0:86, a ring on
-            #    nothing - E99 s76 refuses that), so the page's own numbers are written as NOTES in its quiet
-            #    zone instead. The 7 % and 8 % the script says are not in any object on disk: this page states
-            #    what it measures and nothing else (E77; the dossier's own routing, EVIDENCE-DOSSIER.md:120).
-            # ... and nothing is recast under "seven percent" / "eight" (see page_rail's docstring). Without
-            # the recast the page's own notes and its series name stay on the page they belong to - the stale
-            # ink the parent read at 1:24-1:30 (two railway notes and the "741 RAILWAY SHARE PRICES" tag
-            # standing on a US GDP chart) cannot happen, because the page does not change.
-            # ... and NOTHING ELSE IS DRAWN ON IT. The two stretches the sentence names were authored as SPANS
-            # (E56's own alternative to a number: a span names time) and measured on the frame at 1:30: the two
-            # span names landed on the page's own hline label ("Q2 2000 peak - 11.54%") and on the line itself
-            # (M28 x2, M34 x1 - the hline sits at the top of this plot, which is where a span writes its name).
-            # The page already names the peak on its own rule; the caption carries the sentence in STAGE mode,
-            # which is the motion here (E21). No number for the seven or the eight exists on disk (E77).
-        ]),
+        # (-- ROWS 7-9 are T6's: the host window and the railway page. The bed is the page.)
     ]
 
 
@@ -716,7 +702,10 @@ def main() -> int:
         title=TITLE, subtitle=SUBTITLE, episode_id=EPISODE_ID,
         aspect=ASPECT, caption_style=CAPTION_STYLE,
         kinetics={"analytic_spring": True, "min_jerk": True, "area_squash": True, "km_ink": False,
-                  "curvature_stroke": True})
+                  "curvature_stroke": True,
+                  # R26-228: an authored `;drift=` paints 0 px unless this dial is on. The bed carries no
+                  # plate, but the dial is set here so the whole cut inherits it (E99 s65: 20 px long form).
+                  "plate_idle_paints": True, "plate_idle_drift_px": PLATE_DRIFT_PX})
     if rc:
         return rc
 

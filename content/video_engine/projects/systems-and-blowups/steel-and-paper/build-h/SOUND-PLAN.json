@@ -1,0 +1,55 @@
+{
+ "note": "derived by build_episode_h.py; the project's sound/SOUND-PLAN.json is untouched",
+ "cues": [
+  {
+   "slot": "page enter 1 (axes)",
+   "at": 0.0,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   }
+  },
+  {
+   "slot": "landing 1 (throw, paper)",
+   "at": 9.62,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 9.66s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "hook bed",
+   "at": 0.0,
+   "gain": 0.0073,
+   "fade_in": 1.5,
+   "env": [
+    [
+     8.9,
+     0.0
+    ],
+    [
+     9.2,
+     4.0
+    ],
+    [
+     10.4,
+     4.0
+    ],
+    [
+     11.2,
+     0.0
+    ]
+   ],
+   "variants": {
+    "A": "suno-hook-B.mp3",
+    "B": "suno-hook-A.mp3"
+   },
+   "note": "-28 LU under the VO (-28.0 LUFS measured); the long form's calibration"
+  }
+ ],
+ "bound": "bound to steel-and-paper-h.timeline.json by lab_build.py after the embed (E99 s72): every cue whose effect does not fire at its instant is dropped; 0 dropped"
+}
