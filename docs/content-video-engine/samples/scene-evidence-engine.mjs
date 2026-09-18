@@ -7910,6 +7910,8 @@ async function mount(doc) {
     ROW_DY: 1.15,      /* the second row's lift, in ems of the fitted size: odd bars' values ride one line out */
     ASC: 0.92,         /* the type's ascent above its baseline as a share of the size (Arial .905, Inter .97 rounded
                           in): what the BOX reaches, which is what an overlap gate measures - cap height is only the ink */
+    LAB_DESC: 0.18,    /* ... and what it reaches BELOW the baseline [DERIVED: the boxes the probe reads off the page are
+                          1.10 em of the type - 44 px at 40 - and ASC is 0.92 of it; the rest hangs under the line] */
     PILL_TOP: 6,       /* the risen pill keeps this much of the chart box clear above it */
     FIT_STEPS: 4,      /* how many half-unit corrections the fit may make after re-measuring (it needs 0 or 1) */
   });
@@ -7927,6 +7929,34 @@ async function mount(doc) {
     for (const ch of s) w += (LP_ADV[ch] != null ? LP_ADV[ch] : 0.56) * fs;
     return w;
   };
+  /* R26-191: THE PAGE'S OWN LABEL BOXES, in the chart's own units - every tick label, x label, series name and
+     value the builders wrote. Measured ONCE, at BUILD, off each element's own x / y / text-anchor / size and the
+     page's own advance (lpInkW measures in the live document, or answers the face's metric when the page is not
+     laid out yet - the same degradation the value fit and the pill accept), so the list is a pure function of the
+     strings and the geometry and the painter can be handed the very same list: a cold seek lands where a play
+     does (R26-28). The figure's step-off (species/figure.mjs `figClearY`) refuses a place that meets one of them -
+     the 09-14 step-off knew only its own series' ink and the chart's box, and walked onto the month row. */
+  const lpLabelBox = (el) => {
+    const w = lpInkW(el);
+    if (!(w > 0)) return null;
+    let fs = parseFloat(el.style && el.style.fontSize) || 0;
+    if (!(fs > 0)) { try { fs = parseFloat(getComputedStyle(el).fontSize) || 0; } catch (e) { fs = 0; } }
+    if (!(fs > 0)) return null;
+    const x = parseFloat(el.getAttribute("x")) || 0, y = parseFloat(el.getAttribute("y")) || 0;
+    const a = el.getAttribute("text-anchor") || "start";
+    return [a === "middle" ? x - w / 2 : a === "end" ? x - w : x, y - LPVAL.ASC * fs, w,
+            (LPVAL.ASC + LPVAL.LAB_DESC) * fs];
+  };
+  const lpLabelBoxes = (st) => {
+    const out = [];
+    if (!st || !st.chart || !st.chart.querySelectorAll) return out;
+    for (const el of st.chart.querySelectorAll("text.lab, text.sname, text.val")) {
+      const b = lpLabelBox(el);
+      if (b) out.push(b);
+    }
+    return out;
+  };
+
   /* LAW 1. Fit the page's whole value row into its slots and return what it took:
      { size, rows, gut, room }. `slot` is the bar PITCH - a value is centred on its bar and the air
      it may use is its own column, whoever its neighbour is. Measured, applied, re-measured: the
@@ -9657,6 +9687,11 @@ async function mount(doc) {
     return true;
   };
 
+  /* R26-191: do two boxes MEET, with `pad` of daylight between them? The step-off asks this of the page's own
+     labels exactly as segMeetsBox asks it of the series' stroke - the same daylight, no second dial. */
+  const boxMeetsBox = (a, b, pad) => (a[0] - pad < b[0] + b[2] && b[0] - pad < a[0] + a[2]
+                                          && a[1] - pad < b[1] + b[3] && b[1] - pad < a[1] + a[3]);
+
   /* the figure's text box for a baseline at (x, y): the advance, and the glyph box either side of the baseline
      (a sub hangs under it by its own line) - the box the eye reads, in the chart's own viewBox units */
   const figBox = (x, y, w, fs, anchor, subH) => [anchor === "end" ? x - w : x, y - FIGURE.FIGURE_UP * fs, w,
@@ -9671,9 +9706,19 @@ async function mount(doc) {
      figure steps away in quanta of FIGURE.FIGURE_STEP * fs - the side the authored `dy` already chose FIRST, then
      the other - capped at FIGURE.FIGURE_STEPS and at the chart's own box. A pure function of the datum, the
      series' live points, `dy` and the measured width: a re-read frame on a changed chart state lands identically
-     and a cold seek lands where a play does (R26-28). Nowhere clear = the authored place, and the gate still says so. */
-  const figClearY = (x, yA, w, fs, anchor, dy, ptsNow, subH, H) => {
-    const pts = ptsNow || [];
+     and a cold seek lands where a play does (R26-28). Nowhere clear = the authored place, and the gate still says so.
+
+     R26-191 (the operator, 2026-09-17: *"our labels were clean until we rebuilt in the last few days"*). The step
+     off the ink walked onto the page's OWN LABELS, because the chart's box (`inBox`) was the only other thing it
+     asked: on Tokyo's customs page the figure "$1,116.7B" took all four steps DOWN - 4 x 0.6 x 40 = 96 px - clear
+     of its line's ink and straight onto the month tick "Jun '26" (1,550 px of overlap, M28) and the series name
+     (340 px), where the approved 2026-09-11 cut had it clear at the authored place. So a candidate must clear the
+     page's labels TOO: `avoid` carries their boxes in the chart's own units (the engine measures them once, at
+     build, and hands the same list to the painter). Nothing else moves - only INK triggers a step, a label never
+     pushes a figure, and when no candidate is clear of both the figure keeps the AUTHORED place, which is exactly
+     where it stood before R26-71. */
+  const figClearY = (x, yA, w, fs, anchor, dy, ptsNow, subH, H, avoid) => {
+    const pts = ptsNow || [], keep = Array.isArray(avoid) ? avoid : [];
     if (pts.length < 2 || !(w > 0)) return yA;
     const onInk = (yy) => {
       const b = figBox(x, yy, w, fs, anchor, subH);
@@ -9681,11 +9726,18 @@ async function mount(doc) {
       return false;
     };
     if (!onInk(yA)) return yA;   /* the authored place is only ever left for ink - never for the chart's edge */
+    /* R26-191: ... and a step never lands ON one of the page's own labels */
+    const onLabel = (yy) => {
+      if (!keep.length) return false;
+      const b = figBox(x, yy, w, fs, anchor, subH);
+      for (const q of keep) if (q && q.length === 4 && boxMeetsBox(b, q, FIGURE.FIGURE_PAD)) return true;
+      return false;
+    };
     const inBox = (yy) => { const b = figBox(x, yy, w, fs, anchor, subH); return b[1] >= 0 && b[1] + b[3] <= (H || Infinity); };
     const first = (Number(dy) || 0) <= 0 ? -1 : 1;   /* `dy` lifted it off the datum: it keeps lifting */
     for (const side of [first, -first]) for (let k = 1; k <= FIGURE.FIGURE_STEPS; k++) {
       const yy = yA + side * k * FIGURE.FIGURE_STEP * fs;
-      if (inBox(yy) && !onInk(yy)) return yy;
+      if (inBox(yy) && !onInk(yy) && !onLabel(yy)) return yy;
     }
     return yA;
   };
@@ -9727,7 +9779,7 @@ async function mount(doc) {
       const D = ctx.markDatum(st, fg.si, fg.idx);
       if (!D) { fg.g.setAttribute("opacity", 0); return; }
       const q = figurePlace(D, fg.fs, sp.dy, fg.W, ctx.PS.BRACKET_GAP, ctx.PS.BRACKET_ROOM);
-      const y = figClearY(q.x, q.yA, fg.tw, fg.fs, q.anchor, sp.dy, ctx.pointsNow(st, fg.si).map((e) => e.p), fg.subH || 0, fg.H);   /* R26-71: the same step-off on the ACTIVE state's own points */
+      const y = figClearY(q.x, q.yA, fg.tw, fg.fs, q.anchor, sp.dy, ctx.pointsNow(st, fg.si).map((e) => e.p), fg.subH || 0, fg.H, st.labBoxes);   /* R26-71: the same step-off on the ACTIVE state's own points - and R26-191's labels, the list the BUILD measured (pure in t) */
       fg.label.setAttribute("x", q.x.toFixed(1)); fg.label.setAttribute("y", y.toFixed(1)); fg.label.setAttribute("text-anchor", q.anchor);
       if (fg.sub) { fg.sub.setAttribute("x", q.x.toFixed(1)); fg.sub.setAttribute("y", (y + fg.fss * FIGURE.SUB_DY).toFixed(1)); fg.sub.setAttribute("text-anchor", q.anchor); }
       fg.D = D; fg.x = q.x; fg.y = y; fg.fits = q.fits;   /* the record species/compare.mjs reads (PF.figures) - the same fields, in the same place */
@@ -10541,6 +10593,9 @@ async function mount(doc) {
     /* E50 (P47 T6): a FIGURE - the number the sentence turns to, pinned to its datum by a dot and written by the hand beside
        it (to the right when the chart has room there, else to the left - a peak at the right edge writes leftward); `dy` moves
        it by lines of its own size; `sub` writes under it at the small size. The chart's next thing after an undraw. */
+    /* R26-191: the page's own labels, measured once here, before the first figure asks where it may stand - and
+       kept on the state so the PAINTER's re-run of the step-off reads the same list (pure in t). */
+    st.labBoxes = lpLabelBoxes(st);
     const figures = pageSpecies(scene, "figure").map((sp, fi) => {
       const pts = (st.linePts || [])[sp.series | 0] || [];
       if (!pts.length) return null;
@@ -10560,7 +10615,7 @@ async function mount(doc) {
       /* R26-71: the step-off, HERE - the glyphs exist, so the advance is the written one, and the points are the
          series' own. A figure with nothing in its way does not move by a thousandth. */
       const subH = sp.sub ? fss * FIGURE.SUB_DY : 0, tw = figWidth(label, sp.text, fs);
-      const y = figClearY(x, yA, tw, fs, anchor, sp.dy, pts, subH, G.H);
+      const y = figClearY(x, yA, tw, fs, anchor, sp.dy, pts, subH, G.H, st.labBoxes);
       if (y !== yA) { label.setAttribute("y", y.toFixed(1)); if (sub) sub.setAttribute("y", (y + fss * FIGURE.SUB_DY).toFixed(1)); }
       return { sp, D, x, y, fits, g, label, lg, sub, sg, fi, fs, fss, W: G.W, H: G.H, tw, subH, si: sp.series | 0, idx: i };
     }).filter(Boolean);

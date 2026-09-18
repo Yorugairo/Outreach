@@ -6,7 +6,7 @@
 // on recorders with no DOM: it reaches the engine only through its page ctx (markDatum, pointsNow, PS).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { FIGURE, segMeetsBox, figBox, figWidth, figClearY, figurePlace, figureGlyph, figureSubGlyph,
+import { FIGURE, segMeetsBox, boxMeetsBox, figBox, figWidth, figClearY, figurePlace, figureGlyph, figureSubGlyph,
          paintFigure } from "../../scripts/species/figure.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
@@ -122,6 +122,60 @@ test("the step is capped at the chart's own box, and nowhere clear leaves the au
   assert.equal(y, yA, "nowhere clear = the authored place, and the collision gate still says so");
   assert.equal(figClearY(300, 380, 140, 26, "start", -0.9, [[0, 0]], 0, 560), 380, "one point is not a stroke");
   assert.equal(figClearY(300, 380, 0, 26, "start", -0.9, CLIMB, 0, 560), 380, "an unmeasured width is no box");
+});
+
+// ------------------------------------------------- R26-191: the step-off never lands on the page's own labels
+// TOKYO, THE TWO FRAMES. The approved 2026-09-11 cut and a 2026-09-15 rebuild of the same beat differ in ONE
+// box: the figure "$1,116.7B" on the customs page at t=25.56, [594, 1032, 145, 64] approved and [594, 1128,
+// 146, 64] rebuilt - 96 px lower, 4 x FIGURE_STEP x 40, the whole ladder - where the month tick "Jun '26"
+// stands at [690, 1161, 128, 44] and the series name at [374, 1089, 254, 49]. The step-off had walked off its
+// own ink onto the axis. The numbers below are those boxes; the ink is a stroke that blocks every candidate but
+// the last, which is the case that broke.
+const TOKYO = {
+  x: 594, fs: 40, tw: 145, anchor: "start", dy: -0.9, H: 1920,
+  yA: 1032 + FIGURE.FIGURE_UP * 40,        // the approved cut's box TOP is the baseline less the glyph box
+  tick: [690, 1161, 128, 44],              // tick:Jun '26, as probe.py measured it on both builds
+  ink: [[600, 980], [700, 1120]],          // the series' stroke across every candidate place but the fourth down
+};
+const tokyoY = (avoid) => figClearY(TOKYO.x, TOKYO.yA, TOKYO.tw, TOKYO.fs, TOKYO.anchor, TOKYO.dy,
+                                    TOKYO.ink, 0, TOKYO.H, avoid);
+
+test("two boxes MEET when they overlap on both axes, with the stroke's own daylight between them", () => {
+  assert.equal(boxMeetsBox([0, 0, 10, 10], [20, 0, 10, 10], 0), false, "clear on x");
+  assert.equal(boxMeetsBox([0, 0, 10, 10], [0, 20, 10, 10], 0), false, "clear on y");
+  assert.equal(boxMeetsBox([0, 0, 10, 10], [9, 9, 10, 10], 0), true, "a corner is a meeting");
+  assert.equal(boxMeetsBox([0, 0, 10, 10], [12, 0, 10, 10], 0), false, "2 px of air, no pad: clear");
+  assert.equal(boxMeetsBox([0, 0, 10, 10], [12, 0, 10, 10], FIGURE.FIGURE_PAD), true,
+               "the same 2 px inside the pad: the eye reads them as one");
+});
+
+test("R26-191: the step off the ink refuses a place that lands on one of the page's own labels", () => {
+  const regression = tokyoY(null);   // the 09-14 step-off: ink and the chart's box, nothing else
+  assert.ok(near(regression - TOKYO.yA, 4 * FIGURE.FIGURE_STEP * TOKYO.fs),
+            `the ladder's last rung is the only one clear of ink (moved ${regression - TOKYO.yA})`);
+  assert.equal(boxMeetsBox(figBox(TOKYO.x, regression, TOKYO.tw, TOKYO.fs, TOKYO.anchor, 0), TOKYO.tick,
+                           FIGURE.FIGURE_PAD), true, "... and it is ON the month tick - the rebuilt frame");
+  const y = tokyoY([TOKYO.tick]);
+  assert.equal(boxMeetsBox(figBox(TOKYO.x, y, TOKYO.tw, TOKYO.fs, TOKYO.anchor, 0), TOKYO.tick,
+                           FIGURE.FIGURE_PAD), false, "the restored step-off keeps off the label");
+  assert.equal(y, TOKYO.yA, "nowhere clear of BOTH = the authored place, which is the approved 09-11 frame");
+  assert.equal(figBox(TOKYO.x, y, TOKYO.tw, TOKYO.fs, TOKYO.anchor, 0)[1], 1032,
+               "the box top the approved cut measured, to the pixel");
+});
+
+test("R26-191: a label never PUSHES a figure - only ink moves one, exactly as before", () => {
+  const onTheLabel = [figBox(200, 300, 140, 26, "start", 0)];   // a label squarely at the authored place
+  assert.equal(figClearY(200, 300, 140, 26, "start", -0.9, FLAT, 0, 560, onTheLabel), 300,
+               "the authored place is still only ever left for INK (R26-71's trigger, unchanged)");
+  assert.equal(figClearY(200, 300, 140, 26, "start", -0.9, FLAT, 0, 560, []), 300, "an empty list is no list");
+  assert.equal(figClearY(200, 300, 140, 26, "start", -0.9, FLAT, 0, 560, [[1, 2, 3]]), 300,
+               "a malformed box is ignored, never thrown on");
+});
+
+test("R26-191: a figure with a clear rung TAKES it - the step-off still steps", () => {
+  const y = figClearY(300, 400, 140, 26, "start", -0.9, CLIMB, 0, 560, [[0, 0, 1, 1]]);
+  assert.notEqual(y, 400, "a label nowhere near the ladder changes nothing");
+  assert.equal(y, figClearY(300, 400, 140, 26, "start", -0.9, CLIMB, 0, 560), "the same rung as before R26-191");
 });
 
 // ---------------------------------------------------------------- the hand's clock
