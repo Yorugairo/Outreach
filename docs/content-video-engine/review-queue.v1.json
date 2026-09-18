@@ -4317,7 +4317,7 @@
   },
   {
    "id": "p66-hg1-the-calendar-base-v7",
-   "status": "open",
+   "status": "ruled",
    "kind": "watch",
    "title": "P66 HG1, third read - the first base generated from the calendar cut's OWN plan (E99 s72 Apply 6) under s74: a cut or a dip is the compiler's last resort - cuts+dips 8 of 11 world changes where the cut plays 11",
    "ids": [
@@ -4330,36 +4330,36 @@
    "where": [
     {
      "label": "the base table - the skeleton, act and rule per row; the refusal chain on every cut and dip; the flow read",
-     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal/BASE-TABLE.md"
+     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal-frozen-v7/BASE-TABLE.md"
     },
     {
      "label": "the base at 43 instants (every world change at -0.3 / 0 / +0.6 s, the chip-price page, the ring's page) - sheet 1 of 7 (read on v3; every row byte-identical on v7)",
-     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal/s74-sheets/cal-base-v3.1.1.png"
+     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal-frozen-v7/s74-sheets/cal-base-v3.1.1.png"
     },
     {
      "label": "the calendar cut at the SAME instants - sheet 1 of 7 (the rest sit beside it in s74-sheets/)",
-     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal/s74-sheets/cal-approved-v3-instants.1.1.png"
+     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal-frozen-v7/s74-sheets/cal-approved-v3-instants.1.1.png"
     },
     {
      "label": "the melt at 58.22 s and the ring's page 67.80-71.00 s (base, sheet 3.1)",
-     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal/s74-sheets/cal-base-v3.3.1.png"
+     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal-frozen-v7/s74-sheets/cal-base-v3.3.1.png"
     },
     {
      "label": "the mount at 16.60-18.82 s and the compare instant 28.82-30.40 s (base; v5 = v7 at these instants)",
-     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal/s74-sheets/cal-base-v5-mount-melt.png"
+     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal-frozen-v7/s74-sheets/cal-base-v5-mount-melt.png"
     },
     {
      "label": "the director-critic's report - two tables, two fractions, INFO",
-     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal/CRITIC.md"
+     "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal-frozen-v7/CRITIC.md"
     }
    ],
    "proofs": [
     {
      "type": "player",
-     "label": "THE BASE WITH ITS AUDIO - the frozen player on a private port (E45: never rebuilt under you)",
+     "label": "THE BASE WITH ITS AUDIO - a FROZEN copy of v7 on a private port (E45: this dir is never rebuilt; the working build was rebuilt under the earlier link, the parent's fault)",
      "url": "http://127.0.0.1:8770/player.html",
-     "build": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal",
-     "confirmed": "served 2026-09-17 by serve_player.py --no-check (HTTP 200)"
+     "build": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal-frozen-v7",
+     "confirmed": "frozen copy served 2026-09-17 evening by serve_player.py --no-check on :8770 (HTTP 200)"
     }
    ],
    "options": [
@@ -4374,8 +4374,8 @@
     "docs/portable/OPERATOR-RULINGS.md (E99 s72 Apply 6, E99 s73, E99 s74)",
     "docs/research/SURVIVORSHIP-AND-MEMORY-AUDIT-2026-09-17.md (the vocabulary's survival across the five cuts)"
    ],
-   "critic": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal/CRITIC.md",
-   "ruling": "",
+   "critic": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal-frozen-v7/CRITIC.md",
+   "ruling": "E99 s77 (2026-09-17): \"yes, i think the idea of the compiler doesn't work. we were trying to use it to force the agent to access all of our docs and information to build the episode but i dontt hink this is the right way\" - and on the weak-prints page: \"why are we still colliding ont he charts with labels and axes?\" (a regression of the last days' rebuilds - R26-191), \"Why do we have short plates? that doesn't make sense.\", \"why is it still being applied os often\" (the spotlight), \"this script isn't great, especially the ending ... but the creation itself is better than before.\" P66 stopped.",
    "was_kind": "",
    "owed": ""
   }
