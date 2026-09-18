@@ -2868,6 +2868,57 @@ def plate_alive() -> tuple[dict, dict]:
 SURFACES.update({   # P61 T14 / E99 s55: the alive wall, the planes, the camera and the drift, composing
     "plate-alive": plate_alive,
 })
+
+
+# ---- R26-228 / E99 s82 (e): THE PAGE'S INTERIOR AT ITS IDLE --------------------------------------
+# The operator, 2026-09-18, on frozen copy d: *"You also missed the sparking lead points from the line chart
+# reference, which add chart life ... our chart lines have no glow/pulse ... We also have no ken burns or drift or
+# life/breathing going on"*, and the ruling drawn from it: *"LIFE IS SEEN, NOT PASSED: a page's `idle=live` must
+# render the tip spark (E67's live ink), the line's glow/pulse and the labels' breath"* (OPERATOR-RULINGS:3286).
+# The pair below is ONE key apart - `world.idle` absent against `"live"` - and it is the whole of R26-228's proof:
+#   * the STILL half is the page every cut has drawn. The row's `;idle=live` was written as `world["idle"]` by the
+#     compiler and read as `world.page.idle` by the engine, a key nothing writes, so every page in every cut has
+#     held at IDLE_CLASS.page ("breath"): ONE rigid scale about the page's centre, the drift half writing
+#     translate(0.00px,0.00px) at every t (measured at both aspects - tests/R26-228-NOTE.md).
+#   * the LIVE half is the same page with the kind the row authored: the lead point STAYS at the drawn end of each
+#     live series and sparks, the stroke's glow is the share of the frame the approved 9:16 page draws and pulses on
+#     the tip's own clock, and the title, sub, citation, tick labels and end tags each walk at their OWN phase.
+# `ken_burns` is ZERO on both, so the world contributes nothing and the pair isolates the page's own life; the
+# instants are the page LANDED (the state the divergence page holds for ~45 of its 54.9 s) and the same page 2 s
+# later - the two tiles the ruling asks a life to be visible across.
+PAGE_LIFE_T = 9.0     # roll + savor + field 3.9 + punch 0.5 + build 3.0 = 7.4: every series drawn and standing
+PAGE_LIFE_T2 = 11.0   # ... and 2 s on (render_baseline.PROOF_FRAMES carries this half of each pair)
+
+
+def _page_life(idle: str | None) -> tuple[dict, dict]:
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", 0, "right")
+    world: dict = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    if idle:
+        world["idle"] = idle
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    tl = _timeline("Golden: the page's interior at its idle", scenes, {}, None)
+    tl["kinetics"] = {"idle": True}   # E49 is ON for every compiled timeline; a golden source has to say so (`plate-drift` says the same), and `idleOf` answers "none" when it does not
+    return tl, _base_uris()
+
+
+def page_life_still() -> tuple[dict, dict]:
+    """R26-228 - the STILL half: no `world.idle`, so the page holds at the class default and nothing inside it moves
+    against anything else. This is the frame the operator read as dead."""
+    return _page_life(None)
+
+
+def page_life_live() -> tuple[dict, dict]:
+    """R26-228 - the LIVE half: `world.idle = "live"`, the kind the shot row authors and the engine never read."""
+    return _page_life("live")
+
+
+SURFACES.update({   # R26-228 / E99 s82 (e): the page's interior, still and live - one key apart
+    "page-life-still": page_life_still,
+    "page-life-live": page_life_live,
+})
+FRAME_T["page-life-still"] = PAGE_LIFE_T
+FRAME_T["page-life-live"] = PAGE_LIFE_T
 FRAME_T["plate-alive"] = PLATE_ALIVE_T
 
 

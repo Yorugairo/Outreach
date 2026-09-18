@@ -1765,6 +1765,16 @@ def _dock_live_at(scenes: list, t: float) -> bool:
     return any(d["enter"] <= t < d["exit"] for sc in scenes for d in sc.get("docks", []))
 
 
+def _full_stage_page_at(scenes: list, t: float, aspect: str | None) -> bool:
+    """R26-205: a 16:9 LEDGER PAGE holds the stage at t -> the caption takes the anchor too.
+
+    The page's chart is the whole stage at 16:9 (`stamp_full_stage`), so the quiet zone the stage
+    caption used to sit in is the plot. A plate row is untouched - it has no plot - and so is every
+    9:16 build, where a portrait page's stage caption has its own strip under the page."""
+    return any(float(sc["span"][0]) <= t < float(sc["span"][1]) for sc in scenes
+               if sc.get("span") and page_is_full_stage(sc.get("world"), aspect))
+
+
 def sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
@@ -2456,7 +2466,10 @@ def _page_state(spec_id: str, ep_dir: Path, where: str) -> dict:
     errors = LPG.validate(series, variant)
     if errors:
         raise ValueError(f"{where}: then={spec_id!r} is not a page ({variant}): " + "; ".join(errors))
-    return LPG.build_spec(series, variant, emph)
+    # R26-205: a chart STATE is drawn in the first state's own <svg> box (the engine copies its cssText),
+    # so it is the same plate and carries the same stamp - otherwise `page_boxes` would read one geometry
+    # for the page and another for the chart it becomes.
+    return stamp_full_stage(LPG.build_spec(series, variant, emph))
 
 
 def rescale_state(plate_id: str, ep_dir: Path, sp: dict, reveal: int | None = None) -> dict:
@@ -2512,7 +2525,7 @@ def rescale_state(plate_id: str, ep_dir: Path, sp: dict, reveal: int | None = No
     if axes.get("window_offsets"):
         spec["window_offsets"] = axes.pop("window_offsets")
         spec["axes"].pop("window_offsets", None)
-    return spec
+    return stamp_full_stage(spec)   # R26-205: a derived state is the same plate as the page it comes from
 
 
 MONTH_ABBR = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
@@ -2810,6 +2823,54 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
         sp["state"] = len(states)
 
 
+# ---- R26-205 / E99 s82: THE PAGE IS THE PLATE AT 16:9 ------------------------------------------
+# The operator, on a bare frame of the H unit's copy d: *"why is the ledger being used at like 20%
+# size? the whole point of a ledger plate is that the chart IS the world, you have it restricted to
+# this square even when bare, it should be the whole plate."* Measured: the bare page's plot ran
+# `[180, 236, 403, 244]` of a 1920x1080 stage. TWO reservations made that square, and the ruling
+# closes both:
+#   (a) THE CAPTION'S COLUMN. A landscape page's chart box is `(0.6 if quiet_zone else 0.9) * cb.w`
+#       because the STAGE caption sits in the page's declared quiet zone (`caption_strip_x`, the
+#       engine's `cap.style.left = qz === "right" ? "58%"`). At 16:9 a page row's caption goes to the
+#       ANCHORED strip instead (`ledger_page.CAPTION_ANCHOR["16:9"]`, x[145,1775] y[878,960]) - the
+#       strip that has existed since E62 and that only a live dock ever demoted a caption to - so no
+#       column is needed and the chart takes the stage (`ledger_page.LAND_FULL`).
+#   (b) THE CARD'S COLUMN. E65's placer gives a card the plot's own room, so a page never needed one
+#       kept empty either; `page_place` is unchanged by this row.
+# STAGE mode is untouched everywhere else: a PLATE row keeps it at both aspects (a plate has no plot
+# to be in the column of), and a 9:16 page keeps it because a portrait page's caption already sits in
+# its own strip under the page (`#caption.stage.onpage`, the template's `left: 80 / right: 200`).
+#
+# WHY `caption: "anchor"` AND NOT A NEW KEY: the engine has read `page.caption === "anchor"` since the
+# host-plate proof (C5) - it is the one door that puts the caption in the anchored strip and keeps it
+# there under a card. This row makes a 16:9 page row take that door by default. `full_stage` is the
+# geometry half and is separate on purpose: a host plate is anchored and is NOT full stage.
+def stamp_full_stage(page: dict) -> dict:
+    """R26-205: at 16:9, stamp this page as the plate - the chart on the whole stage, the caption in
+    the anchored strip. In place, and the page is returned for chaining.
+
+    Nothing is written at 9:16 (the page already fills the frame) nor on a HOST PLATE (a page that
+    declares its own `board` / `chart_box` / `punch: False` had its board measured around a hand), so
+    a portrait build and the host-plate proof compile the bytes they compiled before this row. A page
+    that already declares `caption` keeps what it declared."""
+    if ASPECT not in (None, "16:9"):
+        return page
+    if page.get("board") or page.get("chart_box") or page.get("punch") is False:
+        return page
+    page["full_stage"] = True
+    page.setdefault("caption", "anchor")
+    return page
+
+
+def page_is_full_stage(world: dict | None, aspect: str | None) -> bool:
+    """Is this scene's world a page whose chart is the whole stage (R26-205)? One reader for the
+    caption pass and the band stamp, so neither can disagree with `ledger_page.full_stage`."""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return False
+    page = world.get("page")
+    return isinstance(page, dict) and LPG.full_stage(page, aspect or "16:9")
+
+
 def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | None = None) -> dict:
     """The LEDGER PAGE world for a ``ledger:`` plate id: ``world.page`` is the
     ``ledger_page.v1`` spec from ``<ep_dir>/evidence/objects/<series>.series.json``
@@ -2857,6 +2918,7 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
         if conflicts:
             raise ValueError(f"{plate_id!r}: " + "; ".join(conflicts))
         page["badges"] = LPG.badges_for(series, dock_badges)
+    stamp_full_stage(page)
     return {"kind": SPECIES_LEDGER, "page": page,
             "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
 
@@ -4035,12 +4097,17 @@ def free_bands(boxes: dict, reserve: list[dict] | None = None) -> list[dict]:
     floor_y = min([cap["y"]] + [r["y"] for r in (reserve or []) if isinstance(r, dict)])
     foot = min(safe["y"] + safe["h"], floor_y)
     ink_foot = max(src["y"] + src["h"], rail["y"] + rail["h"])
+    # R26-205: the species' INLINE END NAMES are ink, and on a full-stage page they are the only thing
+    # between the plot and the frame - so the `right` band starts after them, not after the plot. A page
+    # that reports no `tags` box (every page compiled before this row, and every 9:16 page) is unchanged.
+    tags = boxes.get(LPG.TAGS_KEY)
+    plot_r = max(plot["x"] + plot["w"], tags["x"] + tags["w"] if tags else 0)
     bands = {
         "above": (left, head, right - left, plot["y"] - head),
         "below": (left, plot["y"] + plot["h"], right - left, src["y"] - plot["y"] - plot["h"]),
         "foot": (left, ink_foot, right - left, foot - ink_foot),
         "left": (left, head, plot["x"] - left, foot - head),
-        "right": (plot["x"] + plot["w"], head, right - plot["x"] - plot["w"], foot - head),
+        "right": (plot_r, head, right - plot_r, foot - head),
     }
     return [{"band": name, "x": x, "y": y, "w": w, "h": h}
             for name, (x, y, w, h) in bands.items() if w > 0 and h > 0]
@@ -4907,7 +4974,12 @@ def stamp_caption_bands(scenes: list[dict], pages: list[dict], aspect: str | Non
         for d in sc.get("docks", []):
             if not _caption_in_window(pages, d["enter"], d["exit"]):
                 continue
-            band = caption_band(page, asp, dock_card_boxes(sc.get("docks", []), d["enter"], d["exit"])) if page else None
+            # R26-205: a FULL-STAGE page's caption is pinned to the anchored strip (`page.caption`), so there
+            # is no band to choose - E62 moves a STAGE caption out of a card's way, and this one never held the
+            # stage. Stamped `null` like a dock on a plain plate, which is what the engine already reads as
+            # "keep the anchor".
+            band = (caption_band(page, asp, dock_card_boxes(sc.get("docks", []), d["enter"], d["exit"]))
+                    if page and not page_is_full_stage(world, asp) else None)
             band = newsreel_caption_band(band, sc.get("species"), asp, d["enter"], d["exit"])   # P52 T6: a crawl in this window may own the strip
             d["caption_band"] = band
             placed += bool(band)
@@ -5832,8 +5904,12 @@ def main() -> int:
                   "the legibility floor - " + "; ".join(f"{rid} on {title!r}" for rid, title in floored)
                   + ". Give the page room (a shorter title, a parked chart) or place the card by hand.")
 
-    # caption STAGE mode: stamp each page with the mode it takes at its first word (after the scenes exist)
-    pages = [{**pg, "cap_mode": "anchor" if _dock_live_at(scenes, pg["s"]) else "stage"} for pg in pages]
+    # caption STAGE mode: stamp each page with the mode it takes at its first word (after the scenes exist).
+    # R26-205: a dock holding the stage anchors it as it always has, and at 16:9 so does a LEDGER PAGE row -
+    # the page's chart is the whole stage there, so there is no column left to put a stage caption in.
+    pages = [{**pg, "cap_mode": "anchor" if (_dock_live_at(scenes, pg["s"])
+                                             or _full_stage_page_at(scenes, pg["s"], ASPECT)) else "stage"}
+             for pg in pages]
     # P52 T10: and the ARRIVAL each page's words take, beside the mode - absent when the build says nothing,
     # which is the pop (the field cannot appear in a timeline compiled before this slice, nor in one after it
     # that never asks; that absence is the byte-identity of every golden and both shorts)

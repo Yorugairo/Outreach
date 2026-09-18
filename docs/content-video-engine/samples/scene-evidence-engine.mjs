@@ -7540,7 +7540,15 @@ async function mount(doc) {
   const markBox = (c, a) => "linear-gradient(135deg, rgba(" + c[0].join(",") + "," + a.toFixed(3) + ") 0%, rgba(" + c[1].join(",") + "," + a.toFixed(3) + ") 100%)";
   const stagePop = (u) => { const c1 = 1.70158, c3 = c1 + 1; const x = u - 1; return 1 + c3 * x * x * x + c1 * x * x; };
   const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
-               PUNCH_SCALE: 1.16, FOCUS_DUR: 3.0 };
+               PUNCH_SCALE: 1.16, FOCUS_DUR: 3.0,
+               /* R26-205 / E99 s82 ("the whole point of a ledger plate is that the chart IS the world ... it should be
+                  the whole plate"): the 16:9 chart box of a page the compiler stamped `full_stage`, in RENDERED stage
+                  fractions - the punch is already in them, so `buildLedger` undoes it to write the CSS box. The same
+                  four numbers are `ledger_page.LAND_FULL`, where the derivation of each is written out: the box carries
+                  the viewBox's own 1000:560 aspect (no letterbox), its width is capped so the species' INLINE END TAGS
+                  stay on the stage, its foot puts the x tick labels above the anchored caption's strip and the source
+                  line under it. Every one of the three was measured on the served player. */
+               FULL: { X: 0.0300, Y: 0.1824, W: 0.6948, H: 0.6917 } };
   const LP_FOCUS_AT = LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH + LP.BUILD;   /* 7.4s: the focus action fires here */
   /* BADGES on the page (operator, 2026-09-03: 'we need the badges back'): the dock's own pills - verbatim label /
      value / tag with the series' accent as the key - spring in one at a time AFTER the build (the callout is the
@@ -7575,6 +7583,19 @@ async function mount(doc) {
   const IDLE_CLASS = Object.freeze({ page: "breath", plate: "breath", dock: "breath", pill: "breath", caption: "breath" });
   const idleOf = (cls, override) => (kin("idle") ? (override || IDLE_CLASS[cls] || "none") : "none");
   const idleCssFor = (cls, override, t, seed, salt) => { const k = idleOf(cls, override); return k === "none" ? "" : idleCss(idleXf(k, t, lpHash(seed | 0, salt | 0, 977))); };
+  /* R26-228 (E99 s82's (e), "LIFE IS SEEN, NOT PASSED: a page's `idle=live` must render the tip spark (E67's live ink),
+     the line's glow/pulse and the labels' breath"): THE PAGE'S OWN IDLE KIND. The compiler writes a row's `;idle=<kind>`
+     as `world["idle"]` (build_scene_timeline_f.py:3824 - "the player reads it for the page or the plate") and the page
+     painter below read `world.page.idle`, a key nothing writes: so `;idle=live` on a ledger row has always resolved to
+     IDLE_CLASS.page ("breath") and the DRIFT half of `live` wrote translate(0.00px,0.00px) at every t - measured on
+     build-h-frozen-d at 16:9 and on the APPROVED Tokyo v3b at 9:16 alike (tests/R26-228-NOTE.md). The world's own rest
+     term cannot supply it either: a LEDGER is hard-zeroed there, on the stated ground that the page carries its own
+     motion. The page's idle is the PAGE's word first, then the ROW's, then the class default. */
+  const pgIdleKind = (scene, pg) => (pg && pg.idle) || ((scene && scene.world) || {}).idle || undefined;
+  /* ... and whether this page's resolved idle is `live` - the gate every interior life stands behind, because `live` is
+     the kind the ruling named. No golden authors `world.idle` on a PAGE (only plate-drift and plate-alive, both plates),
+     so a page that does not ask for it paints exactly the string it has always painted. */
+  const pgLive = (scene, pg) => idleOf("page", pgIdleKind(scene, pg)) === "live";
   /* pure hash of (seed, index, salt) -> [0,1): the only source of jitter (handwriting-text rule 2) */
   const lpHash = (seed, i, salt) => {
     let h = (seed ^ Math.imul(i + 1, 0x9E3779B1) ^ Math.imul(salt + 1, 0x85EBCA77)) >>> 0;
@@ -7811,24 +7832,39 @@ async function mount(doc) {
     if (PORTRAIT) {
       geom = lpPortraitLayout({ title, subEl, src, chart, rail });
     } else {
-      title.style.left = (Math.max(bd.x + 0.027, vis.x + 0.03) * 100).toFixed(2) + "%"; title.style.top = (Math.max(bd.y + 0.024, vis.y + 0.035) * 100).toFixed(2) + "%";
+      const tL = Math.max(bd.x + 0.027, vis.x + 0.03);
+      title.style.left = (tL * 100).toFixed(2) + "%"; title.style.top = (Math.max(bd.y + 0.024, vis.y + 0.035) * 100).toFixed(2) + "%";
       subEl.style.left = title.style.left; subEl.style.top = (parseFloat(title.style.top) + 5.6).toFixed(2) + "%";
       src.style.left = (Math.max(0.06, vis.x + 0.03) * 100).toFixed(2) + "%";
       /* the chart box lives inside the punched region (with room for the title above and the source below) */
       /* the chart box is the BOARD clipped to the punched region (a host plate's board is only part of the page) */
       const reg = pg.punch === false ? bd : { x: Math.max(bd.x, vis.x), y: Math.max(bd.y, vis.y), w: Math.min(bd.x + bd.w, vis.x + vis.w) - Math.max(bd.x, vis.x), h: Math.min(bd.y + bd.h, vis.y + vis.h) - Math.max(bd.y, vis.y) };
+      /* R26-205 / E99 s82: THE PAGE IS THE PLATE AT 16:9. A page the compiler stamped `full_stage` takes the whole
+         stage for its chart - no column kept for the caption (which is anchored: `page.caption === "anchor"`, read by
+         the caption pass) and none kept for a card (E65 gives a card the plot's own room). LP.FULL is in RENDERED
+         stage fractions, so `un` undoes the punch to get the page's own CSS box; `ledger_page._landscape_full_boxes`
+         is the same law in Python, down to the SVG's own letterbox (viewBox 1000x560, default preserveAspectRatio).
+         A HOST PLATE is never one of these: its board was measured around a hand, so its own box wins. */
+      const FULL = !!pg.full_stage && !pg.chart_box && !pg.board && pg.punch !== false;
+      const un = (f) => 0.5 + (f - 0.5) / ps;
       /* a host plate may declare the chart box outright (page.chart_box, measured clear of the host's hand) */
-      const cb = pg.chart_box ? { x: pg.chart_box.x + 0.02 * pg.chart_box.w, y: pg.chart_box.y + 0.15 * pg.chart_box.h, w: 0.96 * pg.chart_box.w, h: 0.74 * pg.chart_box.h }
+      const cb = FULL ? { x: un(LP.FULL.X), y: un(LP.FULL.Y), w: LP.FULL.W / ps, h: LP.FULL.H / ps }
+               : pg.chart_box ? { x: pg.chart_box.x + 0.02 * pg.chart_box.w, y: pg.chart_box.y + 0.15 * pg.chart_box.h, w: 0.96 * pg.chart_box.w, h: 0.74 * pg.chart_box.h }
                               : { x: reg.x + 0.03 * reg.w, y: reg.y + 0.15 * reg.h, w: 0.94 * reg.w, h: 0.74 * reg.h };
       /* a page whose captions are pinned to the anchor (a host plate, C5) keeps its chart and source above the
-         caption band: the chart ends at 79% of the frame so the source line under it never meets a caption */
-      if (pg.caption === "anchor") cb.h = Math.max(0.2, Math.min(cb.h, 0.79 - cb.y));
-      chart.style.width = ((qz ? 0.6 : 0.9) * cb.w * 100).toFixed(2) + "%"; chart.style.height = (cb.h * 100).toFixed(2) + "%";
-      chart.style.left = ((cb.x + (qz === "left" ? 0.4 : 0.05) * cb.w) * 100).toFixed(2) + "%"; chart.style.top = (cb.y * 100).toFixed(2) + "%";
-      /* the sub wraps inside the chart's width; the source writes directly under the chart box (never in the caption band) */
-      subEl.style.width = chart.style.width; subEl.style.left = chart.style.left;
-      src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = chart.style.left;
-      rail.style.left = chart.style.left; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = chart.style.width;
+         caption band: the chart ends at 79% of the frame so the source line under it never meets a caption. A
+         FULL-stage page already ends where its own tick labels clear that strip (LP.FULL.H), so the clamp - which
+         would take 5.8 % off the box it was just given - is not applied to it. */
+      if (!FULL && pg.caption === "anchor") cb.h = Math.max(0.2, Math.min(cb.h, 0.79 - cb.y));
+      chart.style.width = ((FULL ? 1 : (qz ? 0.6 : 0.9)) * cb.w * 100).toFixed(2) + "%"; chart.style.height = (cb.h * 100).toFixed(2) + "%";
+      chart.style.left = ((cb.x + (FULL ? 0 : qz === "left" ? 0.4 : 0.05) * cb.w) * 100).toFixed(2) + "%"; chart.style.top = (cb.y * 100).toFixed(2) + "%";
+      /* the sub wraps inside the chart's width; the source writes directly under the chart box (never in the caption band).
+         On a FULL-stage page the ink keeps the TITLE's own column - the one column a 9:16 page has - because the chart's
+         letterbox moves with the data's shape and the heading would drift with it. */
+      const inkL = FULL ? title.style.left : chart.style.left, inkW = FULL ? ((cb.x + cb.w - tL) * 100).toFixed(2) + "%" : chart.style.width;
+      subEl.style.width = inkW; subEl.style.left = inkL;
+      src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = inkL;
+      rail.style.left = inkL; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = inkW;
     }
     const inlineBadges = {}; (pg.badges || []).forEach((bd) => { if (bd.inline) inlineBadges[LP_BADGE_COL[bd.accent]] = bd; });
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, soakFx, soakFk: fk, seed, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src], kind: pg.builder || "story",
@@ -8656,8 +8692,80 @@ async function mount(doc) {
   /* THE NEON BLOOM (E67): a blurred copy of the stroke UNDER the crisp one, in the line's own colour. It is a filter on
      the path itself, so it rides the drawn length (the dasharray) exactly - a line drawing on blooms only where drawn -
      and every existing re-projection (build_to, rescale, morph) carries it for free. LINE_BLOOM = 0 leaves no halo at all. */
-  const lpBloom = (st, p, col) => { if (!(LINE_BLOOM > 0)) return;
-    p.style.filter = "drop-shadow(0 0 " + (st && st.portrait ? LP_BLOOM_PX * 2 : LP_BLOOM_PX) + "px " + lpInkA(lpVarHex(col), LINE_BLOOM) + ")"; };
+  const lpBloom = (st, p, col, r) => { if (!(LINE_BLOOM > 0)) return;
+    /* R26-228: `r` is an explicit radius in the chart's own user units - the pulsing halo a LIVE page writes per frame.
+       Absent (every page that does not author `;idle=live`), the string is byte-for-byte the one E67 shipped. */
+    const rad = r != null ? r.toFixed(2) : (st && st.portrait ? LP_BLOOM_PX * 2 : LP_BLOOM_PX);
+    p.style.filter = "drop-shadow(0 0 " + rad + "px " + lpInkA(lpVarHex(col), LINE_BLOOM) + ")"; };
+  /* R26-228 (E99 s82's (e); the operator: "You also missed the sparking lead points from the line chart reference, which
+     add chart life ... our chart lines have no glow/pulse") - THE PAGE'S INTERIOR AT ITS IDLE. Measured on frozen copy d
+     at 16:9 against the approved 9:16 page (tests/R26-228-NOTE.md): the interior at 16:9 already moved MORE than the
+     approved one (the title 10.42 px against ~6.8 px, the tick labels 3.60-8.31 px against ~2.05 px over 2 s) and the
+     operator read it as dead - because ALL of it is one rigid breath about the page's centre, so no word moves against
+     its neighbour; the lead point is drawn at 4.16 px (0.85 CSS px on a 390 px phone) and VANISHES the instant its line
+     lands, which is ~45 of the divergence page's 54.9 s; and the bloom is 0.217 % of the frame's width against the
+     approved page's 1.181 %. Every dial below is a STAGE-px number divided by the chart's own screen CTM when it is
+     written, so 16:9 and 9:16 draw the SAME life - the aspect stops being the dial.
+     The harvest note this finally takes: REMOTION-UI-HARVEST.md:7, "line-chart-draw: the tip head ... A glowing dot
+     rides the drawing line's tip", 2026-08-31, never built; the reference it came from, Bravos REPORT.md:60. */
+  const LP_LIFE = Object.freeze({
+    WORD_PX: 5.0,     /* [DERIVED: R26-228, measured] a word's own walk, half-width in STAGE px. E49's IDLE.DRIFT_PX 2.0 is
+                         the declared FLOOR and E99 s38 refused it ("8 frames to move 1 pixel"); 5.0 px is a quarter of a
+                         19 px tick label's height and a quarter of E99 s65's 20 px plate rule - seen, because each word
+                         walks on its OWN phase, and not drunk, because reading matter may not swim */
+    TIP_R: 7.0,       /* the lead point's radius in STAGE px: today's draws 4.16 at 16:9 and 6.37 at 9:16 */
+    TIP_AMP: 0.40,    /* the SPARK: the radius rises this share above rest ... */
+    TIP_HZ: 0.62,     /* ... at this rate. Period 1.613 s - a spark, not a breath - and deliberately INCOMMENSURATE with
+                         the 2 s tile window, with the 12 fps frozen-frames grid and with the 24 fps render, so no probe
+                         pair and no render cadence can sample it at one phase. Measured, not guessed: at 0.55 Hz two
+                         tiles 2 s apart are 1.1 cycles apart and the spark read as FROZEN across the pair (r 6.52 ->
+                         6.46 px); every quarter rate (0.25, 0.75, 1.25) samples cos at its own zeros at t = 9 and
+                         t = 11 alike, and every k/20 rate is mirror-symmetric across a 2 s window (cos is even) */
+    HALO_K: 2.6,      /* the glow round the point, as a multiple of its own radius [DERIVED: the engine's own dock chartbox
+                         has drawn halo r 9 at alpha 0.18 against a core r 4.2 since 2026-08-30 - 2.14x; lifted for the
+                         page's charcoal, which is darker than a card's paper] */
+    HALO_A: 0.22,     /* ... and its alpha at rest */
+    BLOOM_PX: 12.0,   /* the stroke's halo in STAGE px - exactly the 12.75 px the APPROVED 9:16 page draws today */
+    BLOOM_AMP: 0.30,  /* the glow PULSES with the tip, on TIP_HZ: one clock, never a second rate (a chart with two
+                         rhythms reads as two mechanisms) */
+  });
+  /* the chart's own WORDS, by the role its mark list already carries: the y tick labels, the x tick labels (a dense-line
+     page marks them `xtick` - the element IS the text; a bars page marks them `xlabel`), the axis caption, a rule's
+     label, a series' END TAG (= an inline datum badge, R26-228 (d)) and a bar's number. Lines, bars, wedges and paths
+     are not words. The page's own title / sub / citation are marks too but they are the DIVS lpPaintWordLife owns -
+     excluded here, so exactly one writer ever touches one element. */
+  const LP_LIFE_ROLES = new Set(["ylabel", "xlabel", "xtick", "axislabel", "rulelabel", "name", "value"]);
+  const LP_LIFE_PH = new WeakMap();   /* an element's phase, stable for its lifetime and derived from its creation order: lpHash is the only source of jitter, and a seek is the play */
+  const lpLifePhase = (el, i) => { let v = LP_LIFE_PH.get(el); if (v == null) { v = lpHash(i + 1, 41, 977); LP_LIFE_PH.set(el, v); } return v; };
+  /* ONE walk, written as the CSS `translate` property rather than onto `transform`: `translate` composes in FRONT of the
+     `transform` attribute, so a builder that owns an element's transform (the tag growing into its bar, the remake's
+     apex draw, the vortex) is never clobbered - and an element a builder IS transforming right now is skipped by name
+     and its life cleared, so the two mechanisms never argue. Fixed decimals: two seeks to one t write one string. */
+  const lpLifeWalk = (el, t, ph, px) => {
+    if (!el) return;
+    if (!(px > 0) || el.getAttribute("transform") || el.style.transform) { if (el.style.translate) el.style.translate = ""; return; }
+    const d = drift(t, ph, { DRIFT_PX: px });
+    el.style.translate = d[0].toFixed(2) + "px " + d[1].toFixed(2) + "px";
+  };
+  const lpCtmScale = (svg) => { const m = svg && svg.getScreenCTM ? svg.getScreenCTM() : null; return m && m.a ? m.a : 0; };
+  /* the CHART's words at their own phases (R26-228 (c) / (d)) */
+  const lpPaintChartLife = (cs, t, live) => {
+    if (!cs || !cs.marks) return;
+    const k = live ? lpCtmScale(cs.chart) : 0;
+    const px = k ? LP_LIFE.WORD_PX / k : 0;   /* stage px -> the chart's own user units */
+    cs.marks.forEach((m, i) => { if (m && m.el && LP_LIFE_ROLES.has(m.role)) lpLifeWalk(m.el, t, lpLifePhase(m.el, i), px); });
+  };
+  /* the PAGE's words - the title, the sub, the citation - at theirs (R26-228 (c)). These are divs in stage px, so the
+     dial is the dial. Re-queried each frame: a retitle and a note add their own div mid-scene (P47 T2). */
+  const lpPaintWordLife = (st, t, live) => {
+    if (!st || !st.page) return;
+    const ws = st.page.querySelectorAll(".lp-title, .lp-sub, .lp-src");
+    ws.forEach((el, i) => {
+      if (!live || el.style.transform) { if (el.style.translate) el.style.translate = ""; return; }
+      const d = drift(t, lpLifePhase(el, i), { DRIFT_PX: LP_LIFE.WORD_PX });
+      el.style.translate = d[0].toFixed(2) + "px " + d[1].toFixed(2) + "px";
+    });
+  };
   const buildLedgerLine = (st, pg) => {
     const ax = pg.axes || {}, series = pg.series || [];
     const PAL = LP_INK;   /* E67: ONE table, read by every builder that paints on the field */
@@ -11396,6 +11504,11 @@ async function mount(doc) {
       if (cs.bt) lpPaintBreakthrough(cs, bts);   /* R26-39: negative secs = the BUILD phase - the bar's rest is the comparator's level, so the
                                                 bars law above scales a bar like the others (E60); the laid-out rect is the value on the stated scale */
       const caps = pageSpecies(scene, "build_to");   /* P47 T2: the line draws to a datum on a word, the rest on the next word */
+      /* R26-228: is this page's idle `live`? Read once, and it gates everything the ruling named - the lead point that
+         stays and sparks, the stroke's pulsing glow, the words' own phases. `ctmL` turns a STAGE-px dial into this
+         chart's own user units, so 16:9 and 9:16 draw the same size. */
+      const pageLive = pgLive(scene, ((scene && scene.world) || {}).page);
+      const ctmL = pageLive ? lpCtmScale(cs.chart) : 0;
       cs.paths.forEach((pp) => {
         const fr = clamp01((c - pp.stagger * 0.3) / 0.7);
         /* DRAWING runs on the pen (strokeFrac, the two-thirds law): the hand hurries through a smooth stretch and slows
@@ -11431,8 +11544,24 @@ async function mount(doc) {
         pp.p.setAttribute("stroke-dashoffset", (pp.len * (1 - f)).toFixed(1));
         pp.p.style.opacity = f > 0.004 ? "" : "0";   /* E50 (the third watch: "dots that linger"): a zero-length round-capped dash paints a dot at the path's start - an un-drawn line shows nothing */
         const drawing = f > 0.01 && f < 0.995;
-        if (drawing && pp.p.getPointAtLength) { const q = pp.p.getPointAtLength(pp.len * f); pp.tip.setAttribute("cx", q.x); pp.tip.setAttribute("cy", q.y); }
-        pp.tip.setAttribute("opacity", drawing ? 1 : 0);
+        /* R26-228 (a): THE LEAD POINT. It rode the pen and vanished the instant the line landed - and a page holds its
+           landed lines for most of its life (the divergence page: 54.9 s, ~45 of them landed), so E67's live ink had
+           nothing on screen left to be live on. Under `live` the point STAYS at the drawn end of a live series, at a
+           radius set in STAGE px, and it SPARKS: the radius rises TIP_AMP above rest at TIP_HZ and the glow round it
+           rides the same clock. The history never sparks, as it never blooms (E67). */
+        const lead = pageLive && !pp.muted && f > 0.01;
+        if ((drawing || lead) && pp.p.getPointAtLength) { const q = pp.p.getPointAtLength(pp.len * Math.min(1, f)); pp.tip.setAttribute("cx", q.x); pp.tip.setAttribute("cy", q.y); }
+        pp.tip.setAttribute("opacity", drawing || lead ? 1 : 0);
+        if (lead && ctmL) {
+          /* each series sparks at its OWN phase - E49's law, the one the pills have always kept ("two pills never
+             breathe in step"); four lead points pulsing together would read as one mechanism blinking. */
+          const sph = lpLifePhase(pp.tip, pp.si | 0), ink = lpVarHex(pp.p.getAttribute("stroke"));
+          const rTip = (LP_LIFE.TIP_R / ctmL) * breath(t, sph, { BREATH_AMP: LP_LIFE.TIP_AMP, BREATH_HZ: LP_LIFE.TIP_HZ });
+          pp.tip.setAttribute("r", rTip.toFixed(2));
+          pp.tip.style.filter = "drop-shadow(0 0 " + (rTip * LP_LIFE.HALO_K).toFixed(2) + "px " + lpInkA(ink, LP_LIFE.HALO_A) + ")";
+          /* R26-228 (b): the glow, at the share of the frame the APPROVED 9:16 page draws, pulsing on the tip's own clock */
+          lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * breath(t, sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ }));
+        }
         pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
         if (pp.pill) lpPaintPill(pp, f, drawing);   /* P50 T11: the pill rides this same f - one clock, no second state */
       });
@@ -11443,6 +11572,7 @@ async function mount(doc) {
         for (const sp of pageSpecies(scene, "peel")) pu = Math.max(pu, (t - sp.at) / Math.max(0.001, sp.dur || 1));
         lpPeelTo(cs, pu);
       }
+      lpPaintChartLife(cs, t, pageLive);   /* R26-228 (c)/(d): the tick labels, the end tags and the values at their own phases - LAST, so a mark a transition owns is skipped with its transform already written */
   };
   /* P48 T2 - RESCALE. The standing chart never leaves: on one min-jerk clock every mark that exists under both scales moves
      from its place under A to its place under B (a line's path is re-projected from its DATA, a bar's rect and every tick,
@@ -12354,7 +12484,8 @@ async function mount(doc) {
     const depthK = pageDepthOf(pg);
     const depthCss = depthK ? camCssAt(camNow(scene, t), depthK) + " " : "";
     st.page.style.transform = depthCss + planeCss + snapCss + throwCss + cardCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
-      + idleCssFor("page", pg.idle, t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence */
+      + idleCssFor("page", pgIdleKind(scene, pg), t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence (R26-228: at the kind the ROW named) */
+    lpPaintWordLife(st, t, pgLive(scene, pg));   /* R26-228 (c): the page's own words, each at its own phase */
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
     const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
     /* P48 T4: a page may carry more than one chart. `lpPaintChart` is the build beat for ONE of them, at its own
@@ -12370,7 +12501,7 @@ async function mount(doc) {
         const tp = tb - bd.at, bi = (st.badges || []).indexOf(bd);
         const sx = arrP === "throw" ? throwXf({ x: -(STOP_THROW_DX + 80 * bi), y: -STOP_THROW_DY }, massP, tp) : landXf(massP, tp);
         bd.el.style.opacity = tp >= 0 ? "1" : "0";
-        bd.el.style.transform = stopCss(sx) + idleCssFor("pill", pg.idle === "none" ? "none" : undefined, t, st.seed, 20 + bi);
+        bd.el.style.transform = stopCss(sx) + idleCssFor("pill", pgIdleKind(scene, pg), t, st.seed, 20 + bi);   /* R26-228: the ROW's kind, so a `live` page's badges drift at their own phase and a `none` page's are still */
         continue;
       }
       const ub = clamp01((tb - bd.at) / LP_BADGE_IN), e = (kin("analytic_spring") ? springPop : stagePop)(ub);
@@ -12380,7 +12511,7 @@ async function mount(doc) {
       const sq = kin("area_squash") && kin("analytic_spring") && ub > 0 && ub < 1
         ? " matrix(" + squashMatrix(Math.PI / 2, springSquash(ub, POP, 18, LP_BADGE_IN)).map((v) => v.toFixed(4)).join(",") + ",0,0)" : "";
       bd.el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")" + sq
-        + idleCssFor("pill", pg.idle === "none" ? "none" : undefined, t, st.seed, 20 + (st.badges || []).indexOf(bd));   /* E49: each pill at its own phase */
+        + idleCssFor("pill", pgIdleKind(scene, pg), t, st.seed, 20 + (st.badges || []).indexOf(bd));   /* E49: each pill at its own phase (R26-228: at the kind the ROW named) */
     }
     paintPerform(st, scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word */
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */

@@ -1167,6 +1167,124 @@ LAND_BOARD = (0.06, 0.08, 0.88, 0.84)   # s9.26 default board; the punch crops t
 PUNCH_SCALE = 1.16
 LAND_PLOT = {"L": 0.070, "R": 0.220, "T": 0.071, "B": 0.839}   # dense-line margins / the 1000x560 viewBox
 
+# ---- THE PAGE IS THE PLATE AT 16:9 (R26-205 / E99 s82, 2026-09-18) ----------------------------
+# The operator, on a bare frame of the H unit's copy d: *"why is the ledger being used at like 20%
+# size? the whole point of a ledger plate is that the chart IS the world, you have it restricted to
+# this square even when bare, it should be the whole plate."* Measured: the bare page's plot was
+# `[180, 236, 403, 244]` of a 1920x1080 stage - 21 % of the stage's width - because the landscape
+# chart box is `(0.6 if quiet_zone else 0.9) * cb.w`: a COLUMN was kept for the stage caption
+# (`build_scene_timeline_f.caption_strip_x`) and for the card that lands in the quiet zone.
+#
+# At 16:9 a page that carries `full_stage` takes this box instead, and its caption goes to the
+# anchored strip (`CAPTION_ANCHOR["16:9"]`), where it can never be in the plot's column. The numbers
+# are in RENDERED stage fractions - the punch is already in them - because every one of them was
+# read off a frame:
+# THE BOX CARRIES THE viewBox's OWN ASPECT (1000:560), so the chart is drawn at the box's size with
+# no letterbox and this estimate is exact. Its four numbers are the largest box whose THREE feet all
+# land on the stage - each measured on the served player, not reasoned about:
+#   (1) THE END TAGS. The dense-line species writes each series' name BESIDE its last point, inside
+#       the chart's own units, so the tag grows with the chart. Measured on the `ledger-page-mid-build`
+#       golden (the longest names and tags in the repo - "+613% MEMORY MAKERS (hynix+Micron) our
+#       layer"): the widest ends `LAND_TAG_REACH` of the chart's own width from its left edge. The
+#       first pass put the box on the whole stage and those tags ran 305 px off the right of the
+#       frame (measured). So `X + LAND_TAG_REACH * W <= 0.979` - the stage less a hair - which is what
+#       caps W at 1334 px. X is not free either: at X = 0.010 the y tick column landed 36 px outside
+#       the 16:9 SAFE_BOX, and every pixel X gains costs `LAND_TAG_REACH` of W.
+#   (2) THE X TICK LABELS clear the anchored caption. Their foot is `LAND_TICK_B` of the box's own
+#       height, so 197 + 0.911 * 747 = 878 - level with `CAPTION_ANCHOR["16:9"]`'s top, and 39 px
+#       clear of the caption's own one-line box, which sits at the strip's FOOT (measured: y 919-960).
+#   (3) THE SOURCE LINE clears the strip's foot. Written `LAND_SRC_GAP` under the box, it runs
+#       959-1000, under the strip's 960 - which is where the landscape source line sits today.
+# (2) and (3) pull against each other (a taller box drops the ticks into the strip, a shorter one
+# lifts the source into it): together they hold the box's height inside 4 px, and Y is the value that
+# satisfies both. Nothing here is free to be rounded.
+#
+# MEASURED on the `ledger-page-mid-build` golden at 16:9, t = 20 s (the served player, the probe
+# `measure_page_boxes.READ_BOXES`): the plot goes 784 -> 966 px, 40.8 % -> 50.3 % of the stage width;
+# the widest end tag ends at 1896 of 1920; the y tick column starts at x 67, inside the safe box; the
+# x ticks' foot is 880 against the caption's box at 919; the source line runs 967-1008, under it.
+#
+# WHAT THIS DOES NOT REACH, and the arithmetic, because the row asked for 70 % of the stage: the plot
+# is `(1 - L - R) = 0.710` of the chart, so 1344 px of plot needs a chart 1893 px wide and - at this
+# aspect - 1060 px tall, which is the whole stage. Two things stand in the way and neither is this
+# row's: the inline END TAG would need portrait's treatment (right-anchored above the line's end,
+# `buildLedgerLine`'s `P` branch) instead of its own column, and the chart's viewBox would have to
+# follow the box's aspect rather than letterbox inside it, which is seven landscape builders' own
+# absolute margins. R26-205-NOTE.md carries the table.
+LAND_FULL = {"X": 0.0300, "Y": 0.1824, "W": 0.6948, "H": 0.6917}
+LAND_TAG_REACH = 1.365   # how far past the chart's own left edge the widest end tag reaches, in chart widths [MEASURED: ledger-page-mid-build at 16:9, the tag at x 1006-1638 with the chart drawn 1105 wide from x 131]
+# THE END TAG COLUMN, per page. `LAND_TAG_REACH` is the RENDERED worst case and sizes the BOX; this
+# sizes the page's OWN column, so a card is refused the room this page's names actually take and no
+# other.
+#
+# TWO ADVANCES, because the element is TWO type sizes: the series' NAME in the big bold, then the
+# badge's tag in its own smaller type (E22's dynamic label - one reveal, one real estate). One advance
+# cannot bound both: fitted on a short mixed-case name alone it is 14.8 units a glyph, on an all-caps
+# name 18.8, and on a name diluted by a long badge tag 13.0 - so a single number either puts a card on
+# a name or keeps it off half the stage. These two are an UPPER BOUND on every tag measured, which is
+# the side to be wrong on [MEASURED at 16:9 on the dense-line golden's own four tags and on a short-name
+# page: (34 name, 9 tag) 561 units, (26, 16) 554, (25, 18) 560, (25, 10) 411, (12, 0) 178; this model
+# gives 691, 574, 565, 525, 228]. The column starts `LAND_TAG_GAP` past the last datum
+# (`buildLedgerLine` writes the name at `mx(last) + 12`). Only the builders that write an inline end
+# name have a column at all.
+LAND_TAG_NAME_U, LAND_TAG_BADGE_U, LAND_TAG_GAP = 19.0, 5.0, 12
+LAND_TAG_BUILDERS = ("dense-line", "combo")
+BADGE_ACCENT_COL = {"coral": "crimson", "teal": "teal", "cobalt": "cobalt", "ink": "deemph", "sunflower": "amber"}
+"""A badge's accent -> the SERIES COLOUR it keys: the mirror of the engine's `LP_BADGE_COL`, one law in
+two languages. An inline badge rides that series' end name inside the same element (the dynamic label,
+E22: one reveal, one real estate), so the compiler cannot size the tag column without it."""
+
+
+def tag_units(spec: dict) -> float:
+    """The widest inline end name this page will write, in the chart's own 1000 units.
+
+    Per series: `<label> <name>` as `buildLedgerLine` composes it, at `LAND_TAG_NAME_U` a glyph, plus
+    the tag of the INLINE BADGE that keys it (matched by `BADGE_ACCENT_COL`, as the player matches it)
+    at `LAND_TAG_BADGE_U`. 0 when this page's builder writes no inline name, or when every series is
+    muted history (which carries none)."""
+    if str(spec.get("builder")) not in LAND_TAG_BUILDERS:
+        return 0.0
+    rides = {BADGE_ACCENT_COL.get(str(b.get("accent"))): str(b.get("tag") or "")
+             for b in spec.get("badges") or [] if b.get("inline")}
+    out = 0.0
+    for s in spec.get("series") or []:
+        if s.get("muted"):
+            continue
+        tag = rides.get(str(s.get("color")), "")
+        name = ((s.get("label") or "") + " " + (s.get("name") or "")).strip()
+        out = max(out, len(name) * LAND_TAG_NAME_U + (len(tag) + 1) * LAND_TAG_BADGE_U if tag
+                  else len(name) * LAND_TAG_NAME_U)
+    return out
+# the x tick labels' FOOT as a fraction of the chart's viewBox height: the line builder writes them
+# at `B + 52` of its 560 units and they are 40 px type, so 510/560 - read off the dense-line entry
+# (plot bottom 806 with the chart drawn from y 258.5 at scale 1.083: (806 - 258.5) / 1.083 = 506).
+LAND_TICK_B = 0.911
+# the RENDERED heights of the landscape page's ink, off the dense-line entry's measured boxes (the
+# type is the template's and does not move with the chart box): a one-line title, sub and source,
+# and one badge row. `_landscape_boxes` models the CSS box and leaves the punch to the player; the
+# full-stage branch reports what the FRAME holds, so these are the punched numbers.
+LAND_FULL_INK = {"title": 63, "sub": 30, "src": 41, "pill": 56}
+LAND_SRC_GAP, LAND_RAIL_GAP = 0.012, 0.044   # the source / rail tops under the chart box (the engine's own 1.2 % / 4.4 %)
+
+
+def _punch_pt(f: float) -> float:
+    """A point's RENDERED stage fraction from its CSS one.
+
+    The punch (E22 addendum 6) scales the page by `PUNCH_SCALE` about the BOARD's centre, which for
+    the s9.26 default board is the stage's own centre - so a page that declares its own `board` or
+    `chart_box` (a host plate) is never a full-stage page and never comes through here."""
+    return 0.5 + (f - 0.5) * PUNCH_SCALE
+
+
+def full_stage(spec: dict, aspect: str) -> bool:
+    """Does this page's chart fill the STAGE (R26-205)? 16:9 only, and never a HOST PLATE.
+
+    The compiler stamps `full_stage` on a 16:9 ledger page row; a page that declares its own
+    `board`, `chart_box` or `punch: False` is a host plate whose board was measured around a hand
+    (`proofs/ledger/derive_host_boards.py`), so its chart box is the host's and not the stage's."""
+    return bool(spec.get("full_stage")) and aspect == "16:9" and not (
+        spec.get("board") or spec.get("chart_box") or spec.get("punch") is False)
+
 
 def _ink_lines(text: str, size_px: float, box_w: float, advance: float) -> int:
     """Greedy word wrap at `advance` ems per character - the line count the page will write."""
@@ -1264,6 +1382,53 @@ def _landscape_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     }
 
 
+def _landscape_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
+    """R26-205: the 16:9 page whose CHART IS THE WORLD - its boxes in RENDERED stage pixels.
+
+    `_landscape_boxes` models the page's CSS box and leaves the punch to the player, which is why its
+    estimate of a chart box is `PUNCH_SCALE` short of the frame's. Every number here is where the
+    FRAME puts it: the chart box is declared in rendered fractions (`LAND_FULL`) and the page's ink
+    is carried through `_punch_pt`, so these boxes can be read straight against a probe.
+
+    The plot is a fraction of the DRAWN chart, not of the box: the chart's SVG is 1000x560 under the
+    default preserveAspectRatio, so it is fit inside the box and centred (the same letterbox
+    `treemap_plot` has had to do since P50 T9), and the box's spare width is air."""
+    bx, by, bw, bh = LAND_BOARD
+    half = 0.5 / PUNCH_SCALE
+    vx, vy = bx + bw / 2 - half, by + bh / 2 - half
+    F, L, I = LAND_FULL, LAND_PLOT, LAND_FULL_INK
+    cx, cy, cw, ch = F["X"] * w_s, F["Y"] * h_s, F["W"] * w_s, F["H"] * h_s
+    # the title and the sub keep the places they have always had at 16:9 - the same two CSS
+    # expressions the engine writes - read through the punch. The ink's own column is the title's,
+    # as the 9:16 page's one column is (`PORTRAIT_LAYOUT["X"]`): nothing is aligned to the chart's
+    # letterbox, which moves with the data's shape.
+    ink_x = _punch_pt(max(bx + 0.027, vx + 0.03)) * w_s
+    title_y = _punch_pt(max(by + 0.024, vy + 0.035)) * h_s
+    sub_y = _punch_pt(max(by + 0.024, vy + 0.035) + 0.056) * h_s
+    ink_w = cx + cw - ink_x
+    src_y = cy + ch + LAND_SRC_GAP * PUNCH_SCALE * h_s
+    rail = [b for b in spec.get("badges") or [] if not b.get("inline")]
+    vw, vh = LAND_VIEWBOX
+    s = min(cw / vw, ch / vh)
+    ox, oy = cx + (cw - vw * s) / 2, cy + (ch - vh * s) / 2
+    ylab = YLABEL_H if (spec.get("axes") or {}).get("ylabel") else 0
+    return {
+        "title": _box(ink_x, title_y, ink_w, I["title"]),
+        "sub": _box(ink_x, sub_y, ink_w, I["sub"]),
+        "chart": _box(cx, cy, cw, ch),
+        "plot": _box(ox + L["L"] * vw * s, oy + L["T"] * vh * s - ylab,
+                     (1 - L["L"] - L["R"]) * vw * s, (LAND_TICK_B - L["T"]) * vh * s + ylab),
+        "source": _box(ink_x, src_y, ink_w, I["src"]),
+        "rail": _box(ink_x, cy + ch + LAND_RAIL_GAP * PUNCH_SCALE * h_s, ink_w,
+                     I["pill"] * -(-len(rail) // PORTRAIT_PILLS_PER_ROW) if rail else 0),
+        # the END TAG COLUMN: the page's own inline names, beside the plot and part of the chart's ink.
+        # It was air while a quiet zone kept the chart to 60 % of its board; at full stage it is the
+        # only thing between the plot and the frame, so `free_bands` has to know it is there.
+        "tags": _box(ox + (1 - L["R"]) * vw * s + LAND_TAG_GAP * s, oy + L["T"] * vh * s,
+                     tag_units(spec) * s, (L["B"] - L["T"]) * vh * s),
+    }
+
+
 LAND_VIEWBOX = (1000, 560)   # the landscape chart's viewBox; a portrait chart's viewBox IS its pixel box (the template: "builders draw in stage px")
 
 
@@ -1309,6 +1474,7 @@ _REPO = Path(__file__).resolve().parents[3]
 PAGE_BOXES_FIXTURE = _REPO / "content/video_engine/assets/page-boxes.v1.json"
 PAGE_BOXES_SCHEMA = "page_boxes.v1"
 BOX_KEYS = ("title", "sub", "chart", "plot", "source", "rail")
+TAGS_KEY = "tags"   # R26-205: the end tag column, on a full-stage page only (the fixture measures the six above)
 INK_KEYS = ("builder", "title", "sub", "source", "quiet_zone")
 
 
@@ -1372,6 +1538,14 @@ def measured_entry(spec: dict, aspect: str) -> dict | None:
 
     The ink-keyed `pages` section first (this very page, measured by name), then the per-builder
     representative - either way the entry is used only when its `ink` is this page's own."""
+    # R26-205: a FULL-STAGE page lays out nothing like the same ink in the old landscape box, so it is
+    # never served a measurement of that box. The refusal is HERE and not in `page_ink_key`, because
+    # the flag is not INK - it is a geometry the same ink takes at ONE aspect, and the key does not
+    # know the aspect. (It was in the key for one round, and it re-keyed every 9:16 page any caller
+    # stamped with the compiler's ASPECT unset: the Tokyo cut's measured pages fell back to the
+    # estimate and E65's placer lost the plot's own room - `test_dock_over_build.py` caught it.)
+    if full_stage(spec, aspect):
+        return None
     key = page_ink_key(spec)
     entry = (measured_pages().get(key) or {}).get(aspect)
     if not isinstance(entry, dict):
@@ -1428,7 +1602,10 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
     if aspect not in STAGE_PX:
         raise ValueError(f"aspect must be one of {'|'.join(STAGE_PX)}")
     w_s, h_s = STAGE_PX[aspect]
-    boxes = (_portrait_boxes if aspect == "9:16" else _landscape_boxes)(spec, w_s, h_s)
+    # R26-205: at 16:9 a page stamped `full_stage` puts its chart on the whole stage, so its boxes
+    # come from the full-stage law rather than from the board's inner box with a column kept out
+    boxes = (_portrait_boxes if aspect == "9:16" else
+             _landscape_full_boxes if full_stage(spec, aspect) else _landscape_boxes)(spec, w_s, h_s)
     if spec.get("builder") == "object":
         boxes["plot"] = _box(boxes["chart"]["x"], boxes["chart"]["y"], 0, 0)
     if spec.get("builder") == "tiers":
@@ -1437,7 +1614,10 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
         boxes["plot"] = treemap_plot(boxes["chart"], aspect)
     measured = measured_boxes(spec, aspect)
     if measured:                      # the player's own numbers for this ink win over every estimate above
+        tags = boxes.get(TAGS_KEY)    # ... except the end tag column, which the fixture does not measure
         boxes.update(measured)
+        if tags is not None:
+            boxes[TAGS_KEY] = tags
         boxes.update(measured_room(spec, aspect))   # E65: the plot's empty room and the axis bands travel with them
         if spec.get("builder") == "tiers":   # the tier bands are a law over the PLOT: re-cut them on the measured one
             boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))

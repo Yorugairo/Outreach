@@ -961,7 +961,7 @@
    }
   }
  },
- "measured": "2026-09-16",
+ "measured": "2026-09-18",
  "note": "measured by scripts/measure_page_boxes.py - do not hand-edit",
  "pages": {
   "1fc04e19c40debcb": {
@@ -1503,7 +1503,7 @@
    }
   }
  },
- "player_sha256": "a17feace2805e17c9855e7a47f4a0ca9c09d12e893b04210cef9e579dfa7775e",
+ "player_sha256": "43f21d504ae1e7e0587d43fb043991d9ac46f4bd9979bd68a3979d7dfc0cad00",
  "projects": [
   "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t0/tokyo-short.timeline.json"
  ],

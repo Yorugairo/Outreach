@@ -60,6 +60,13 @@ FLAG_FRAMES = {
 # named idle runs either way. On the two bare-plate scenes the flag changes no pixel (a flat plate breathing is a
 # flat plate), which is exactly why these are PROOF frames and not FLAG frames.
 PROOF_FRAMES = {
+    # R26-228 / E99 s82 (e) - THE PAGE'S INTERIOR AT ITS IDLE, at the SECOND instant of each pair: the same page 2 s
+    # later, which is the window the ruling asks a life to be visible across ("a plate's drift + Ken Burns must be
+    # visible on two tiles 2 s apart"). The KIND is authored on the ROW, not here - the still half authors none and the
+    # live half authors `live`; `idle` is named only because a flag map REPLACES the source's own kinetics (an empty
+    # map is not None), and an idle-less page has no interior to read.
+    "page-life-still@proof-plus2": ("page-life-still", {"idle": True}, 11.0),
+    "page-life-live@proof-plus2": ("page-life-live", {"idle": True}, 11.0),
     # P58 T3 - THE CAMERA OVER PLANES, at the two instants the landed frame cannot show. The card lands at 5.0 and
     # the eye follows it in over 6.0 -> 8.0 (E51: a push is tied to a landing; E59's module is ON, as on the base
     # frame). No flag makes the depth happen: a plate that ships in planes takes the authored move at four factors.
