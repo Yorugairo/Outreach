@@ -87,7 +87,7 @@ async function mount(doc) {
        it walks - the half-width in stage px, the number E99 s38's "i don't even notice it" was about. Read by
        `idleDriftPx` BELOW the scene's own `;drift=<px>`, so a row outranks the build and a build that names neither
        renders at IDLE.DRIFT_PX (2.0) - E49's floor, and exactly the string every approved cut was rendered with.
-       30 is the named long-form setting, 40 the shorts one; a value under the floor is raised to it here and
+       20 is the named long-form setting (E99 s64 / s65), 30-40 the shorts one; a value under the floor is raised to it here and
        refused by name in the compiler. */
     plate_idle_drift_px: "the plate idle drift's half-width in stage px (absent = IDLE.DRIFT_PX 2.0, the floor; 30 long form, 40 shorts)",
   });
@@ -1557,7 +1557,7 @@ async function mount(doc) {
      render through their frozen players and must not move under this), and DRIFT_PX 2.0 is the FLOOR, never a setting
      to go under - it is E49's "nothing ever goes truly still", which no dial may switch off. A value under the floor is
      refused by the compiler by name; here it is raised to the floor, so the two sides can never disagree about what a
-     too-small number means. 30 px is the named long-form setting, 40 the shorts one. */
+     too-small number means. 20 px is the named long-form setting (E99 s64 / s65 amended s55's 30), 30-40 the shorts one; PLATE_DRIFT_LONG 20. */
   const idleDriftPx = (...asked) => {
     for (const a of asked) {
       const n = +a;

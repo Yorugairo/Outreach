@@ -93,10 +93,12 @@ Three Flow orders, character + image prompt, the bound character (MP host identi
 | H-2 | 7:52–8:20 | `world-spike-desk-v1` (the desk) | Mike leaning over the desk with the spike and a slate, counting three on his fingers |
 | H-3 | 12:30–12:50 | `world-broadcast-set-v2` (the newsroom) | Mike standing, the newsroom behind, a certificate in hand |
 
-Each window is a plate row with `;use=landing`, the ken push and the 20 px drift, Mike as the docked
-character card (a cutout still, `dock_png`), the caption in STAGE mode on the plate's quiet zone.
-**Until an order lands, the window builds with the plate alone and the caption on stage** - a named
-departure, not a silent one; the card at HG3 says which of the three stills exist.
+Each window is a plate row with `;use=landing`, the ken push and the 20 px drift, the caption in STAGE
+mode on the plate's quiet zone. **Amended 2026-09-18 after the orders landed** (`host/HOST-NOTES-H.md`):
+Flow returned full 16:9 scenes WITH Mike in them (`host/H-1-studio.png`, `H-2-desk.png`,
+`H-3-newsroom.png`), so the plate IS the host window - one world, the cards land on it - rather than a
+cutout docked on a bare set. The plates are quarantined until the operator approves the frames; H-3
+carries printed text on the certificate and is a re-roll candidate before HG4.
 
 ## The props (the goal: stamps for DIRECT matches only)
 

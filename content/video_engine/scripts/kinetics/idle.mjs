@@ -134,7 +134,7 @@ export const idleDriftCss = (x, k = 1) => {
    render through their frozen players and must not move under this), and DRIFT_PX 2.0 is the FLOOR, never a setting
    to go under - it is E49's "nothing ever goes truly still", which no dial may switch off. A value under the floor is
    refused by the compiler by name; here it is raised to the floor, so the two sides can never disagree about what a
-   too-small number means. 30 px is the named long-form setting, 40 the shorts one. */
+   too-small number means. 20 px is the named long-form setting (E99 s64 / s65 amended s55's 30), 30-40 the shorts one; PLATE_DRIFT_LONG 20. */
 export const idleDriftPx = (...asked) => {
   for (const a of asked) {
     const n = +a;

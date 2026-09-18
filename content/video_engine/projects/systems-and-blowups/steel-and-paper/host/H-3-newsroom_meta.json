@@ -1,0 +1,13 @@
+{
+ "schema_version": "google_flow_output.v1",
+ "created_at": "2026-09-18T02:55:04",
+ "order": "H-3",
+ "prompt": "full bleed edge-to-edge 16:9 horizontal. the character standing in a quiet newsroom after hours, holding a single antique share certificate up to the viewer with one hand, the other in his jacket pocket; rows of empty desks and dark screens behind him, one window with city light at the far right; wide composition with the left third of the frame empty for a card to land. A light application of woodblock print and vox newspaper with rich anime colors. Negative: no borders, no margins, no outer frame, no paper matting, no photorealism, no 3D render, no text, no numbers, no words, no letters, no logos, no captions.",
+ "references": [
+  "Mike"
+ ],
+ "ratio": "16:9",
+ "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+ "beat": "12:30-12:50 'Decide for yourself which of those you believe. More worried: the index they sold you as the safe version...' HOST WINDOW 3 - the newsroom (row 23).",
+ "review_state": "quarantined until the operator approves the frame"
+}

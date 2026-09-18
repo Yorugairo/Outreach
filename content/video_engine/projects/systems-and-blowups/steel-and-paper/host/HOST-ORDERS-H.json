@@ -1,0 +1,29 @@
+{
+ "H-1": {
+  "_beat": "0:54-1:09 'The three questions read for one thing. Not Bravos Research... Capital arriving faster than the value it's chasing.' HOST WINDOW 1 - the studio (REBUILD-TREATMENT-H.md row 7).",
+  "prompt": "full bleed edge-to-edge 16:9 horizontal. the character seated at the anchor desk of an empty finance broadcast studio between takes, three-quarter view, calm and direct, one hand resting on a printed chart on the desk, the other gesturing toward the viewer; dark studio monitors switched off behind him, a single key light from the left, the rest of the set in shadow; wide composition with the desk's left third empty for a card to land. A light application of woodblock print and vox newspaper with rich anime colors. Negative: no borders, no margins, no outer frame, no paper matting, no photorealism, no 3D render, no text, no numbers, no words, no letters, no logos, no captions.",
+  "references": [
+   "Mike"
+  ],
+  "ratio": "16:9",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/steel-and-paper/host/H-1-studio.png"
+ },
+ "H-2": {
+  "_beat": "7:52-8:20 'Now the test - the one I promised at the top. Take any holding and ask it three questions.' HOST WINDOW 2 - the desk (row 20).",
+  "prompt": "full bleed edge-to-edge 16:9 horizontal. the character leaning over a heavy wooden workbench, an old iron railway spike and a slate chalkboard on the bench, holding up three fingers, half-smiling, looking at the viewer; warm lamp light from above, a brick wall far behind in shadow; the bench's right half kept clear for a list to land. A light application of woodblock print and vox newspaper with rich anime colors. Negative: no borders, no margins, no outer frame, no paper matting, no photorealism, no 3D render, no text, no numbers, no words, no letters, no logos, no captions.",
+  "references": [
+   "Mike"
+  ],
+  "ratio": "16:9",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/steel-and-paper/host/H-2-desk.png"
+ },
+ "H-3": {
+  "_beat": "12:30-12:50 'Decide for yourself which of those you believe. More worried: the index they sold you as the safe version...' HOST WINDOW 3 - the newsroom (row 23).",
+  "prompt": "full bleed edge-to-edge 16:9 horizontal. the character standing in a quiet newsroom after hours, holding a single antique share certificate up to the viewer with one hand, the other in his jacket pocket; rows of empty desks and dark screens behind him, one window with city light at the far right; wide composition with the left third of the frame empty for a card to land. A light application of woodblock print and vox newspaper with rich anime colors. Negative: no borders, no margins, no outer frame, no paper matting, no photorealism, no 3D render, no text, no numbers, no words, no letters, no logos, no captions.",
+  "references": [
+   "Mike"
+  ],
+  "ratio": "16:9",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/steel-and-paper/host/H-3-newsroom.png"
+ }
+}
