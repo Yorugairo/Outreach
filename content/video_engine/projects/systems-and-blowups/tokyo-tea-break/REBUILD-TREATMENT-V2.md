@@ -63,3 +63,23 @@ M25 and M28 clean on every page (the figure restore 9e30f2a is in; Tokyo's bars 
 three seconds; no light without a named target; cues bound to what fires; the outro attached; every world change
 probed at -0.3 / 0 / +0.6 s beside the approved cut at the same instants and READ by the parent; then the frozen
 copy, then the link.
+
+
+## v3 - the second look (E99 s79, 2026-09-18)
+
+The operator on the v2 render, with VidIQ's pre-publish read beside it: *"we actually are missing a lot of the life
+mechanics - the charts don't have life, the titles/labels don't have life, we aren't using much/if any pans/camera
+work/kens burns. also, the short should probably open on the chart axes, we can easily dock the tea clip in the
+chart's empty space."* Measured on v2's table: one idle token in the whole cut. v3 keeps every row of v2 and adds:
+
+| row | v2 | v3 | the record |
+|---|---|---|---|
+| 1 + 2 | the counter clip 0.00-1.99, the page mounts over it at 2.0 | ONE row from 0.00: the holdings page OPENS ON ITS AXES (`:axes`), the line builds at 4.5 s as before; the TEA CLIP is DOCKED as a video card in the plot's empty room from 0.00 ("Tokyo took a tea break.") and leaves at 5.18 ("The Fed hasn't moved"); the captions "Tokyo" / "unfunded bar tab" sit on the charcoal page | E73 (the hook opens on its axes); E44 (dock the animation videos over the ledger, c0c6a17 the video dock); E65 (the room); VidIQ 1 + 2 |
+| every page | no idle token | `;idle=live` on rows 2, 4, 5, 6 - the board and its titles, labels and figures alive | E49; the door and calendar cuts carry it on every page |
+| every plate | the desk plate `idle=drift;drift=35` + ken | unchanged (the only plate) | s65 |
+| the camera | the push into the Fed card (row 6) | a FOCUS on the named datum where the sentence names it: "-9.9% Japan" at "our biggest lender" (19.71), the $1,116.7B print at 50.30-54.09, the -$122B bracket at 45.00, the 21.5x at 71.22; the push stays; no pan on nothing | s76; CAPABILITIES:85 (the camera), :124 (declared targets); VidIQ 3 |
+| the captions | phrase / stage+anchor as approved | unchanged tokens; the opening captions now on the charcoal page (contrast); any caption over a light plate carries the strip's box | doc 29 caption tokens; E62 |
+
+The count does not move (the mount's cut becomes the axes open - still an arrival; cuts+dips 3 of 6). The hard bar
+is v2's plus: the idle tokens counted (every page live, every plate drifting), the four focuses on named things, the
+clip card in the room with nothing under it, and the first 2 s read as the chart with the cup on it.
