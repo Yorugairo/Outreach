@@ -455,3 +455,36 @@ drew". The ink still moves, but it moves WITH the line's climb instead of in a 1
 
 An axis whose EASING is the line's own climb - the breakthrough shape the critic names - is not a row's
 to write: `chart_to rescale` takes a domain and a length and nothing else. That part stays R26-233's.
+
+### 8d. The three doors of copy f, recompiled
+
+**R26-232 - the gate now sees the page.** `RESULT: 1 FAIL / 2 WARN / 19 PASS / 1 JUDGE / 10 INFO`,
+`visual_events: 151 (171.4/min)` against 49 on the same rows an hour ago: with the anchored caption pages
+and the live page's own life credited, **M05, M10 and M16 all PASS** and M11 is the one FAIL - the row it
+has been since the rings came off (the only mark the engine can aim lands on series 0, the undrawn memory
+line). The two WARNs are M04 (2 plates) and M25's safe-zone (the card's FLIGHT clips the bottom band at
+0:09-0:10; the landed box is clear).
+
+**R26-234 - the words hold still.** Measured through the player's own DOM at 0:30 (the reveal, the busiest
+instant on the page): **410 word elements inside the ledger world, 0 carrying a translate**. The life is
+the lead point, the halo and the bloom, as the ruling says.
+
+**R26-233 - the followed axis.** `"follow": True` on the reveal rescale, beside the `build_to` that stages
+the memory line. The compiler refused the first attempt by name and the refusal was the measurement: the
+memory series tops at 1074.29 and the page keeps x1.06 of air, so the highest a follow can push is
+**1138.75** - `FULL_YMAX` is now that number exactly (it was 1139, "reached after the line had stopped,
+which is the drag this row exists to end"). What the landed ink does:
+
+| t | semis tag y | drop | y ticks |
+|---|---|---|---|
+| 28.00 | 369 | **0 px** | 80, 160 |
+| 28.70 | 371 | **2 px** | 80, 160 |
+| 29.25 | 481 | 112 px | 80, 160 |
+| 30.20 | 623 | 254 px | 160, 320, 640 |
+| 30.50 | 623 | 254 px (landed) | 160, 320, 640 |
+
+**The 2 px at 28.70 is not the rescale**: the same tag reads 371 / 372 / 371 / 368 / 369 at 24 / 25 / 26 /
+27 / 28 s with the domain unchanged at 80,160 - that is `;idle=live`'s own breath, a +/-2 px band. The
+ticks are still the hook's at 29.25, so the axis has not yielded while the line is inside the born top;
+it yields as the line passes it, and lands on the same frame as the plain rescale did (it was 21 px down
+at 28.70 before the follow).

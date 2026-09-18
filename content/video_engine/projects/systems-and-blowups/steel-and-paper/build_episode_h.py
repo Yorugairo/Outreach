@@ -49,7 +49,7 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:2342 "The hook opens on its axes" (E73 - row 1 is the page on its axes from the first frame)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:1494 "Nothing ever goes truly still" (E49 - `;idle=live` on every page row, `;idle=drift;drift=20` on the plate)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:3278 "A second card takes the outgoing card's slot" (E99 s80 - the certificate card hands its slot to the Bravos chart card)
-- Recall(rulings): docs/content-video-engine/CAPABILITIES.md:92 "The AUTHORING KIT - one door for both formats, WIRED" (R26-17 step 0 - this door imports the kit and nothing from the F door)
+- Recall(rulings): docs/content-video-engine/CAPABILITIES.md:93 "The AUTHORING KIT - one door for both formats, WIRED" (R26-17 step 0 - this door imports the kit and nothing from the F door)
 """
 from __future__ import annotations
 
@@ -204,7 +204,10 @@ _hook_max = max(v for i in (DIV_SEMIS, DIV_MEGA, 3) for _x, v in DIVERGENCE["ser
 _hook_min = min(v for i in (DIV_SEMIS, DIV_MEGA, 3) for _x, v in DIVERGENCE["series"][i]["pts"])
 HOOK_YMIN, HOOK_YMAX = 80.0, float(round(_hook_max * 1.06))
 _all_max = max(v for sr in DIVERGENCE["series"] for _x, v in sr["pts"])
-FULL_YMIN, FULL_YMAX = 95.0, float(round(_all_max * 1.06))    # ... and the scale the memory line needs, off the data
+# the followed top is the line's own reach: the memory series tops at 1074.29 and the page keeps x1.06 of
+# air above its data, so the highest a follow can push is 1138.75 - a ymax above it would be reached after
+# the line had stopped, which is the drag the follow exists to end (the compiler refuses it by name).
+FULL_YMIN, FULL_YMAX = 95.0, float(int(_all_max * 1.06 * 100) / 100)    # ... and the scale the memory line needs, off the data
                                                               # (a rescale must NAME its bounds: the compiler refuses
                                                               # `chart_to rescale` with neither domain nor window)
 STAGED_SERIES = (DIV_SEMIS, DIV_MEGA, 3)  # every line the hook draws is STAGED, so no end tag prints at 0:03:
@@ -394,6 +397,9 @@ PARK_SCALE, PARK_ANCHOR = 0.80, "left"   # the ONE park in the bed - the agenda'
 PARK_TAGS_SCALE = 0.64
 MEMORY_DRAW_S = 2.2   # the memory line's own build window on "Here's the layer it never drew"
 RESCALE_S = MEMORY_DRAW_S   # R26-233: the axis yields to the line as it draws - ONE clock, not a hand-over
+# ... and  is the door that lane built: the domain yields exactly as the followed series - the
+# one this row stages with a  - climbs past the born top, so the landed ink does not move at all
+# until the memory line exceeds 277 (the hook domain's own top), and then tracks the climb to the digit.
                             # beside it. The rescale's `dur` is the only dial a row has here, so it is set to
                             # the memory `build_to`'s own window and both open on t_layer; the drop is measured
                             # in the notes. A rescale whose EASING is the line's own climb is the row's.
@@ -527,7 +533,8 @@ def shot_table(ws: list, unit_end: float) -> list:
             # row 4: THE LAYER IT NEVER DREW - the page becomes the divergence (E58 / E64), then the three ends write
             # THE AXIS RESCALES AS THE LAYER ARRIVES: the ticks open from the hook's scale to the memory
             # line's on the same clock the line draws on - the rescale the operator named, on a line page.
-            {"kind": "chart_to", "at": t_layer, "dur": RESCALE_S, "to": "rescale", "ymin": FULL_YMIN, "ymax": FULL_YMAX},
+            {"kind": "chart_to", "at": t_layer, "dur": RESCALE_S, "to": "rescale",
+             "ymin": FULL_YMIN, "ymax": FULL_YMAX, "follow": True},
             {"kind": "build_to", "at": t_layer, "dur": MEMORY_DRAW_S, "series": DIV_MEMORY, "target": datum(DIV_LAST)},
             # THE THREE ENDS, each on its own word - AND THE ENGINE CAN POINT AT ONLY ONE LINE. MEASURED twice on
             # this build's own frames (36.6 s and 39.6 s, `build-h/logs/`): a mark whose target names `series: 2`

@@ -146,3 +146,16 @@ breath), R26-205 (the page IS the plate at 16:9; the caption in the anchored str
   0:12 (`CERT_CROP` 282 x 238 at 296,146 on the plate). The reveal's rescale runs on the memory line's own 2.2 s
   clock; the landed lines still slide (253 px over 2.2 s, from 215 px/s) - R26-233's door.
 - Read on the tiles: clean at every instant; the slate's three-question type reads small - the operator's eye.
+
+## Ninth pass - frozen copy g on :8782, the copy the card shows
+
+- The interior word walk is gone (s83): 410 words inside the page, none moving at the reveal; the lead points, halos
+  and bloom carry the life; the page's exterior breath stays.
+- The reveal's rescale follows the memory line (`follow: true`): the semis tag holds at 369 / 371 (the breath's own
+  band) at 28.0 / 28.7, the ticks the hook's 80/160 until the line passes 277, then the axis opens with the line and
+  lands on the same frame as before. The compiler refused the first target by name (1139 > the reachable 1138.75) -
+  the refusal was the measurement.
+- The gate: 1 FAIL (M11 - the one mark the engine aims lands on the held memory line) / 2 WARN, 151 events -
+  M05/M10/M16 PASS on the page's own life (R26-232).
+- Read on the eight tiles: clean at every instant. Open for the operator: the caption size (A), the end tags' form
+  (B), the small three-question type on the slate, the plot title naming the layer before the reveal.
