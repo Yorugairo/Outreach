@@ -8961,6 +8961,19 @@ async function mount(doc) {
        dropped resolves to nothing (a species on it does not fire), never to the wrong point */
     return lpMarkDatumOn((st.states && st.states[st.active | 0]) || st, si, i);
   };
+  /* R26-218 (2026-09-18, the Steel and Paper H unit) - THE DATUM INDICES ONE SERIES HAS, on one chart state, in
+     the PAGE's own index space (`windowOffsets[si]` + what that state drew, the stroke mark's own `k0` included so
+     a highlighted line's muted history counts). `resolveTarget` shipped with the clamp `Math.min(index, pts.length - 1)`
+     over `linePts[series]` - a list in DRAW order, one entry per stroke, which is not the series index the moment a
+     page draws a history beside its tail or carries a second chart state. The clamp is the same law, asked of the
+     series the target NAMES: a target past the end is that series' last datum, and never another line's tip. */
+  const lpSeriesRange = (S, si) => {
+    if (!S) return null;
+    const str = (S.markBy || {})["s" + si], off = (S.windowOffsets || [])[si] | 0;
+    const n = Math.max(str && str.geom && str.geom.pts ? (str.geom.k0 | 0) + str.geom.pts.length : 0,
+                       ((S.linePts || [])[si] || []).length);
+    return n > 0 ? { lo: off, hi: off + n - 1 } : null;
+  };
   /* stylesheet rules beat SVG presentation attributes, so colour/size overrides on text go through `style` */
   const lpText = (parent, cls, x, y, anchor, text, at) => {
     const e = lpEl("text", cls, parent, { x: (+x).toFixed(1), y: (+y).toFixed(1), "text-anchor": anchor, ...(at || {}) });
@@ -10848,7 +10861,15 @@ async function mount(doc) {
        kept on the state so the PAINTER's re-run of the step-off reads the same list (pure in t). */
     st.labBoxes = lpLabelBoxes(st);
     const figures = pageSpecies(scene, "figure").map((sp, fi) => {
-      const pts = (st.linePts || [])[sp.series | 0] || [];
+      /* R26-218: the series the figure NAMES, resolved by the perform layer's own rule VERBATIM - `sp.series ??
+         sp.tier ?? sp.target.series` (`forMe`, below). Three ways to get this wrong, and the builder had all three:
+         it read `sp.series` alone, so `target: {kind: "datum", series: n, index: i}` - how the H unit authored its
+         `-64%` - was written at series 0's datum, which on a multi-line page is another line's ink; it dropped
+         `tier`, the author's word for a series index on a TIERS page (P50 T9), so a figure on the third band was
+         written on the first; and `| 0` turned an authored `null` or `""` into 0 instead of leaving it undeclared.
+         A figure that names no series in any of the three IS series 0, as it always was. */
+      const fsi = (sp.series ?? sp.tier ?? (sp.target || {}).series) | 0;
+      const pts = (st.linePts || [])[fsi] || [];
       if (!pts.length) return null;
       const i = Math.max(0, Math.min(pts.length - 1, ((sp.target || {}).index | 0))), D = pts[i];
       /* a figure is ink on the page: the chalk unless a colour is named (an emphasised page's unmuted stroke is its coral tail) */
@@ -10868,7 +10889,7 @@ async function mount(doc) {
       const subH = sp.sub ? fss * FIGURE.SUB_DY : 0, tw = figWidth(label, sp.text, fs);
       const y = figClearY(x, yA, tw, fs, anchor, sp.dy, pts, subH, G.H, st.labBoxes);
       if (y !== yA) { label.setAttribute("y", y.toFixed(1)); if (sub) sub.setAttribute("y", (y + fss * FIGURE.SUB_DY).toFixed(1)); }
-      return { sp, D, x, y, fits, g, label, lg, sub, sg, fi, fs, fss, W: G.W, H: G.H, tw, subH, si: sp.series | 0, idx: i };
+      return { sp, D, x, y, fits, g, label, lg, sub, sg, fi, fs, fss, W: G.W, H: G.H, tw, subH, si: fsi, idx: i };
     }).filter(Boolean);
     /* NOTES (the third watch: "the page has plenty of space on the side to write things"): a line of handwriting in the page's
        QUIET ZONE beside the chart - the column the chart leaves free (the dock's band) - stacked in order, each written on its
@@ -11024,6 +11045,19 @@ async function mount(doc) {
      where every helper it names already exists, and handed to every page painter by paintPerform. A pure bag: a
      painter that wants something new is given it here by name, and never as an identifier only the engine has. */
   const PAGE_CTX = { pointsNow: lpPointsNow, datumNow: lpDatumNow, markDatum: lpMarkDatum, clamp: clamp01, el: lpEl, PS };
+  /* R26-219 (2026-09-18, the Steel and Paper H unit: the railway page's two notes and its -64% figure were still
+     standing on the GDP page eight seconds after the recast) - THE PAGE'S OWN LEAVE, for what the hand WROTE on it.
+     A note, a figure, a retitle, a bracket and a spread belong to the page they were written on, and a `chart_to`
+     that REPLACES that page (recast / morph / remake - never a rescale, an extend or a park, which keep the page)
+     takes them with it. The COMPILER decides whose page was replaced and when (`leave_at` / `leave_s`, and
+     `keep: true` on the species refuses it - build_scene_timeline_f.py `stamp_page_leave`), so this is the clock
+     and nothing else: eased over the page's own 1.0 s (LP_RETRACT.COLOURS) so nothing pops, a pure function of t,
+     and 0 - it stands - for every species nothing replaced the page of, which is every species in every golden. */
+  const pageLeave = (sp, t) => {
+    if (!sp || typeof sp.leave_at !== "number" || !Number.isFinite(sp.leave_at)) return 0;   /* only the compiler's own number is a clock */
+    const s = +sp.leave_s > 0 ? +sp.leave_s : LP_RETRACT.COLOURS;
+    return segEase(clamp01((t - +sp.leave_at) / s));
+  };
   const paintPerform = (st, scene, t, pg) => {
     if (!st.perform) st.perform = buildPerform(st, scene, pg);
     const PF = st.perform;
@@ -11031,22 +11065,30 @@ async function mount(doc) {
       const A = st.states[st.active | 0]; st.performSvg.style.transformOrigin = A.chart.style.transformOrigin; st.performSvg.style.transform = A.chart.style.transform;
     }
     const undrawAll = [...pageSpecies(scene, "undraw").filter((sp) => (sp.series ?? (sp.target || {}).series) == null),
-                       ...pageSpecies(scene, "chart_to").filter((sp) => sp.to === "recast" || sp.to === "morph")];   /* P48 T7: a recast or morph takes the line - the bracket leaves with it, on the same clock */
-    for (const b of PF.brackets) paintBracket(b, t, undrawAll.find((sp) => sp.at >= b.sp.at), st);
-    for (const sd of PF.spreads || []) paintSpread(sd, t, st);   /* the fifth watch: the gap between the lines, bled full; R26-28: on the active state */
+                       ...pageSpecies(scene, "chart_to").filter((sp) => sp.to === "recast" || sp.to === "morph" || sp.to === "remake")];   /* P48 T7: a recast or morph takes the line - the bracket leaves with it, on the same clock; R26-219 adds the remake, which re-writes the whole chart */
+    /* R26-219: the bracket is the one page-bound species that already left with its page - on the replacing verb's
+       OWN clock, which is tighter than the page's leave and is kept. `keep: true` is the new word, and it holds. */
+    for (const b of PF.brackets) paintBracket(b, t, b.sp.keep === true ? null : undrawAll.find((sp) => sp.at >= b.sp.at), st);
+    for (const sd of PF.spreads || []) { paintSpread(sd, t, st);   /* the fifth watch: the gap between the lines, bled full; R26-28: on the active state */
+      const lv = pageLeave(sd.sp, t);   /* R26-219: the bled gap was measured between THAT page's lines */
+      if (lv > 0) sd.path.setAttribute("fill-opacity", ((+sd.path.getAttribute("fill-opacity") || 0) * (1 - lv)).toFixed(3)); }
     /* THE PAGE REGISTRY HOOK (P52 T5; R26-41) - the only page painting written in this layer. The kind comes off the
        DECLARATION, so the registry routes it; `span` (P50 T4: the named stretch of time, shaded behind the chart on the
        live scale) was the first page species through it and `figure` (P57 T20 / R26-98: E50's number, written by the hand
        at its datum) is the second - species/figure.mjs, its BUILDER still below in buildPerform, where its DOM belongs.
        NEXT, in this order: `bracket`, `spread` - paintBracket and paintSpread still sit above as engine code. */
     for (const sd of PF.spans || []) { const p = PAGE_PAINTERS[sd.sp.kind || "span"]; if (p) p(sd, t, st, PAGE_CTX); }
-    for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) PAGE_PAINTERS.figure(fg, t, st, PAGE_CTX);   /* E50: the chart's next thing - species/figure.mjs, named as the compare's dispatch names its own: ONE hook reads the registry by key (the span's), and it is the span's */
+    for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) { PAGE_PAINTERS.figure(fg, t, st, PAGE_CTX);
+      const lv = pageLeave(fg.sp, t);   /* R26-219: the hand wrote it at a datum of the page that has just been replaced */
+      if (lv > 0) fg.g.setAttribute("opacity", ((+fg.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3)); }   /* E50: the chart's next thing - species/figure.mjs, named as the compare's dispatch names its own: ONE hook reads the registry by key (the span's), and it is the span's */
     /* P57 T12 / R26-70b / E76 - THE CHART_TO COMPARE, DISPATCHED: the quoted figure the page has already written becomes the
        number the viewer feels. The law, the dials and the DOM are species/compare.mjs; this is the call, and it runs AFTER the
        figures so the morph owns the glyphs its own clock is writing. */
     for (const sp of pageSpecies(scene, "chart_to")) if (sp.to === "compare" && PAGE_PAINTERS.compare) PAGE_PAINTERS.compare({ sp, figures: PF.figures || [] }, t, st, PAGE_CTX);
     for (const cr of PF.crosses || []) paintCross(cr, t);        /* P50 T6: the census's X marks and the share they cross */
-    for (const nt of PF.notes || []) { nt.div.style.opacity = t >= nt.sp.at ? "" : "0"; writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }
+    for (const nt of PF.notes || []) { const lv = pageLeave(nt.sp, t);   /* R26-219: a note in the page's quiet zone is the page's */
+      nt.div.style.opacity = t < nt.sp.at ? "0" : (lv > 0 ? (1 - lv).toFixed(3) : "");
+      writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
     for (const b of PF.brackets) b.glow.g.setAttribute("opacity", "0");
     for (const rl of PF.relights) {
@@ -11067,6 +11109,18 @@ async function mount(doc) {
           c.glyphs.forEach((g, j) => g.style.setProperty("--w", ((g.__w != null ? g.__w : parseFloat(g.style.getPropertyValue("--w")) || 0) * eraseFactor(n, j, ue)).toFixed(3)));
         }
       });
+      /* R26-219: a retitle is a title the hand wrote ABOUT THIS PAGE. When the page is replaced the arriving state
+         writes its own, so the standing one un-writes on the page's leave - the same glyph-by-glyph erase the chain
+         uses when the next retitle fires, run on the leave's clock.
+         THE READ-BACK IS DELIBERATE, and it is the one place in this layer that reads `--w` instead of `__w`: the
+         leave COMPOSES with the chain's own erase above (a retitle can be both erased by the next title and taken
+         by the page), and the chain writes `--w` from `__w` every frame as a pure function of t - so multiplying
+         what this frame wrote is still pure in t (paint the same instant twice, the same bits), where multiplying
+         `__w` would throw the chain's erase away. R26-46's integrator is the case where the READ FEEDS ITSELF
+         across frames; this factor never writes `__w`, so it cannot. */
+      for (const r of PF.retitles) { const lv = pageLeave(r.sp, t); if (lv <= 0) continue;
+        const n = r.glyphs.length;
+        r.glyphs.forEach((g, j) => g.style.setProperty("--w", ((parseFloat(g.style.getPropertyValue("--w")) || 0) * eraseFactor(n, j, lv)).toFixed(3))); }
     }
   };
   /* ================= THE MORPH (P47 T3; 43 s43.5 method B; E48 s4: the tab as the protagonist) =================
@@ -12357,16 +12411,30 @@ async function mount(doc) {
     if (tg.kind === "region") return { x: tg.x0 * STAGE_W, y: tg.y0 * STAGE_H, w: (tg.x1 - tg.x0) * STAGE_W, h: (tg.y1 - tg.y0) * STAGE_H };
     if (tg.kind === "datum") {   /* the ledger page's bar, or a point on its dense line */
       const world = wB.classList.contains("ledger") ? wB : wA;
-      const bars = world.querySelectorAll(".lp-chart .bar");
+      /* R26-218 (2026-09-18, the Steel and Paper H unit: a callout naming the third line rang the first one's tip) -
+         A MARK NAMES ITS SERIES, and it names it on the page THE EYE IS LOOKING AT. Two things were wrong here and
+         both were the same mistake - asking the DOM, or a draw-order list, for a thing the page indexes by name:
+           1. `linePts[series]` is one entry per STROKE in draw order (a muted history is a stroke of its own, and so
+              is every later chart state's line), so the n-th entry is not series n. `lpDatumNow` keys a datum by its
+              series' own mark (`s<si>`) and lerps it across a rescale / extend, which is the page's own resolution -
+              the one brackets and spreads have read since R26-28.
+           2. every `querySelectorAll` below spanned the WHOLE world: every state's `svg.lp-chart` plus the perform,
+              morph and remake overlays. So the first `.bar` could belong to the state that has not arrived yet, and
+              the n-th `.ser` to another state's first line. Scoped to the ACTIVE state's chart, which is the page. */
+      const lpst = world.__lp;
+      const S0 = lpst ? ((lpst.states && lpst.states[lpst.active | 0]) || lpst) : null;
+      const chart = S0 ? S0.chart : null;
+      const bars = chart ? chart.querySelectorAll(".bar") : world.querySelectorAll(".lp-chart .bar");
       if (bars.length) return stageBox(bars[Math.min(tg.index | 0, bars.length - 1)]);
       /* viewBox -> stage px under the default xMidYMid meet (the landscape chart is letterboxed in its box) */
       const vbMap = (svg, q) => { const b = stageBox(svg), vb = svg.viewBox.baseVal, k = Math.min(b.w / vb.width, b.h / vb.height);
         return { x: b.x + (b.w - vb.width * k) / 2 + q.x * k, y: b.y + (b.h - vb.height * k) / 2 + q.y * k, w: 0, h: 0 }; };
-      const lpst = world.__lp, pts = lpst && lpst.linePts ? lpst.linePts[tg.series | 0] : null;
-      if (pts && pts.length) {   /* the exact datum (P41): the builder's own point, never a length fraction */
-        const q = pts[Math.max(0, Math.min(tg.index | 0, pts.length - 1))]; return vbMap(lpst.chart, { x: q[0], y: q[1] });
+      const rng = lpSeriesRange(S0, tg.series | 0);
+      if (rng) {   /* the exact datum (P41): the builder's own point, never a length fraction - and its own series' */
+        const q = lpDatumNow(lpst, tg.series | 0, Math.max(rng.lo, Math.min(tg.index | 0, rng.hi)));
+        if (q) return vbMap(chart, { x: q[0], y: q[1] });
       }
-      const ser = world.querySelectorAll(".lp-chart .ser")[tg.series | 0];
+      const ser = (chart ? chart.querySelectorAll(".ser") : world.querySelectorAll(".lp-chart .ser"))[tg.series | 0];
       if (ser && ser.getPointAtLength) {
         const q = ser.getPointAtLength(ser.getTotalLength() * clamp01((tg.index | 0) / Math.max(1, (tg.count || 100) - 1)));
         return vbMap(ser.ownerSVGElement, q);

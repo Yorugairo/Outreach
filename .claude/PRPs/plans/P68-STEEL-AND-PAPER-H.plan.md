@@ -384,6 +384,16 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
 - Validate: `python content/video_engine/scripts/self_watch.py content/video_engine/projects/systems-and-blowups/steel-and-paper/build-h --project content/video_engine/projects/systems-and-blowups/steel-and-paper --script SCRIPT-H` - section 3 reads CLEAN only after the parent's read of the sheets
 - Evidence: `build_episode_h.py` (the door through `authoring/`, receipt PASS 12/9), `SHOT-TABLE-H.md`, `build-h/` (gitignored; `GATES-MOTION.md` 1 FAIL M34 the recast's own hand-over + M11 by name / 3 WARN; frozen frames none over 0.5 s; every plate names its use; `self-watch/opening.1-4.png`), `build-h/BUILD-NOTES-H.md` (ten departures), `PARENT-READ-H.md` (two passes beside build-f), the frozen copy `build-h-frozen-a/` on :8775; BACKLOG R26-218..221 (the engine doors the unit found missing)
 
+### T5b: The engine doors the unit found missing, built before the body (parent's amendment 2026-09-18)
+- Status: running
+- Owner: parent
+- Route: `implementation_luna` per pair of rows, each with a test, the source and the mirrored kinetics module edited together (`test_kinetics_sync`), reviewed before integration; the parent files the rows and orders them by what the body hits first
+- Depends on: T5
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/scripts/kinetics/**`, `content/video_engine/scripts/species/**`, `content/video_engine/scripts/build_scene_timeline_f.py`, `content/video_engine/tests/**` (new tests only), `docs/content-video-engine/BACKLOG.md` (the rows' status)
+- Acceptance: R26-218 (a mark names its series on a multi-line page) and R26-219 (page-bound species retract with the page at a `chart_to` unless `keep`) proven by tests with the existing suites green; then R26-221 (a card takes an authored box on a picture plate), R26-223 (a page born with a domain), R26-222 (M28 ignores a label paired with its identical copy), R26-205 (the 16:9 caption geometry - the largest, its own card) in the order the body's rows need them. The plan's "engine code is outside every slice" stands for T5-T7's build scripts: the doors are built as engine work with tests, never as workarounds in `build_episode_h.py`
+- Validate: `python -m pytest content/video_engine/tests -q -x` and the node kinetics tests, tails to a file, never piped
+- Evidence: R26-218 and R26-219 BUILT (wave 6): `scene-evidence-engine.mjs` (lpSeriesRange :8970, the figure's `sp.series ?? sp.tier ?? target.series` :10871, pageLeave :11056), `build_scene_timeline_f.py` (`_validate_target` bound :730, `check_target_series` :964, `stamp_page_leave` + `page_species_end` clamping `dur` :882-:944, wired :5335), `CAPABILITIES.md:74` (the leave and `keep`), tests `test_datum_names_its_series.py` (23) + `test_page_species_leave.py` (23), the note `tests/R26-218-219-NOTE.md` (33 spans verified); reviewed by `reviewer` (three findings, all applied); four-suite 287 passed, node 629/629, goldens byte-identical, the whole suite's 15 pre-existing failures unchanged (R26-224). Owed next: R26-221, R26-223, R26-222, R26-205
+
 ### T6: The body, the outro, the whole cut
 - Status: pending
 - Owner: implementation_luna

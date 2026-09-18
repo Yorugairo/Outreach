@@ -363,6 +363,18 @@ AGENDA_STEP, AGENDA_ROW_S = 0.34, 0.54
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to",
                  SPECIES_SPAN, SPECIES_CROSS)   # P50 T4: a span is a page species - it is shaded behind the page's own chart, on the page's own clock and live scale (R26-28)
+# ---- R26-219: A NOTE OR FIGURE THE PAGE WROTE LEAVES WITH THE PAGE (2026-09-18, the Steel and Paper H unit) ----
+# Measured on the H unit: the railway page's two `note`s and its `-64%` `figure` were still standing on the GDP page
+# eight seconds after the recast. A note, a figure, a retitle, a bracket and a spread are PAGE-BOUND - the hand wrote
+# them on one page, about that page's marks - so a `chart_to` that REPLACES the page takes them with it. The verbs
+# that replace it are the three that re-write the chart into another state; a rescale (the axes retarget), an extend
+# (the window grows), a park (the chart makes room) and a compare (a figure the page already wrote becomes the number
+# the viewer feels) all keep the SAME page, and nothing leaves on them. The leave is the page's own - PAGE_LEAVE_S,
+# the 1.0 s of the vortex's first phase (the engine's LP_RETRACT.COLOURS; CAPABILITIES, the page VORTEX row) - so
+# nothing pops. `keep: true` on the species refuses the leave: the note is about the argument, not the page.
+PAGE_BOUND_SPECIES = ("note", "figure", "retitle", "bracket", "spread")
+PAGE_REPLACING_VERBS = ("recast", "morph", "remake")
+PAGE_LEAVE_S = 1.0
 CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph", "compare", "remake")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP); compare (P57 T11 / R26-70: the quoted metric becomes the comparator, E76); remake (P61 T2 / E99 s34: the WHOLE chart becomes the whole chart - the seventh verb, and the only one under which every series, datum, axis, label and the title transform on one clock)
 # P61 T2 - THE WHOLE-CHART REMAKE. The six verbs above each transform PART of a chart: a rescale moves its scale, an
 # extend its window, a recast hands its axes over while its series are re-written, a morph moves the area under ONE
@@ -713,8 +725,12 @@ def _validate_target(kind: str, target, allowed: tuple) -> list[str]:
             errs.append(f"{kind}: target {tk} {f}={v!r} is not a non-negative integer index")
     if tk == EMBED_TARGET and not (isinstance(target.get("name"), str) and target["name"].strip()):
         errs.append(f"{kind}: target embed must NAME one of the plate's surfaces ({{'kind': 'embed', 'name': 'poster'}})")
-    if tk == "datum" and "series" in target and not isinstance(target["series"], int):
-        errs.append(f"{kind}: target datum 'series' must be an integer series index")
+    if tk == "datum" and "series" in target and (isinstance(target["series"], bool)
+                                                 or not isinstance(target["series"], int) or target["series"] < 0):
+        # R26-218: `not isinstance(v, int)` let `True` through (a bool IS an int in python) and let a negative
+        # index through as well. The UPPER bound needs the page's own series count, which this function has not
+        # read - that is `check_target_series`, run from `derive_rescale_states` where the page spec is in hand.
+        errs.append(f"{kind}: target datum 'series' must be a non-negative integer series index")
     if tk == "span" and not errs and target["from_word"] > target["to_word"]:
         errs.append(f"{kind}: target span from_word > to_word")
     return errs
@@ -863,11 +879,141 @@ def _validate_metric_comparator(entry: dict) -> list[str]:
     return errs
 
 
+def stamp_page_leave(row_species: list, leave_s: float = PAGE_LEAVE_S) -> tuple[list, list, list]:
+    """R26-219: stamp the LEAVE of every page-bound species whose page the row's own `chart_to` replaces.
+
+    A `note`, `figure`, `retitle`, `bracket` or `spread` is written on ONE page. The first `chart_to` at or after
+    its word whose verb is in `PAGE_REPLACING_VERBS` re-writes that page into another state, so what the hand put
+    on the old one retracts with it: the species takes `leave_at` (that row's `at`) and `leave_s` (the page's own
+    1.0 s leave), and the player fades it over that clock - one law, decided here, run there.
+
+    Three things happen HERE and not in the player, because a player clock no gate can read is a lie in the
+    timeline (the shot table, `gate_motion_density` and M21's deployed life all credit a species for its `dur`):
+
+      * the DUR IS CLAMPED to `page_species_end(e) - at`, so an authored duration never outlasts the page. A note
+        authored `dur: 10` under a recast 1.0 s later reads 2.0 s - its 1.0 s on the page plus the page's own
+        leave - and the hand writes it inside that.
+      * a species whose replacing verb fires on its OWN WORD is DROPPED, not written-then-retracted, the way
+        `HOLD_MIN_S` refuses a flash (2026-09-08): the page is gone on the frame the hand would start writing.
+      * `keep: true` refuses the whole thing (an authored note that is about the argument, not the page).
+
+    A species already stamped is left alone, and the FIRST replacing verb wins - a second recast cannot revive
+    what the first one took. Mutates `row_species` in place (a dropped entry is REMOVED from it) and returns
+    ``(stamped, clamped, dropped)``: the entries that took a leave, one ``(kind, authored dur, clamped dur)`` per
+    duration the leave shortened, and the entries the page went out from under.
+    """
+    verbs = [e for e in row_species
+             if isinstance(e, dict) and e.get("kind") == "chart_to" and e.get("to") in PAGE_REPLACING_VERBS
+             and isinstance(e.get("at"), (int, float)) and not isinstance(e.get("at"), bool)]
+    stamped: list = []
+    clamped: list = []
+    dropped: list = []
+    if not verbs:
+        return stamped, clamped, dropped
+    verbs.sort(key=lambda e: float(e["at"]))
+
+    def is_num(v) -> bool:
+        return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+    for e in row_species:
+        if not isinstance(e, dict) or e.get("kind") not in PAGE_BOUND_SPECIES or e.get("keep") is True:
+            continue
+        if "leave_at" in e or not is_num(e.get("at")):
+            continue
+        ct = next((v for v in verbs if float(v["at"]) >= float(e["at"]) - 1e-9), None)
+        if ct is None:
+            continue
+        if float(ct["at"]) <= float(e["at"]) + 1e-9:   # the page goes on the species' own word: nothing to write
+            dropped.append(e)
+            continue
+        e["leave_at"] = round(float(ct["at"]), 3)
+        e["leave_s"] = round(float(leave_s), 3)
+        end = page_species_end(e)
+        room = None if end is None else end - float(e["at"])
+        if is_num(e.get("dur")) and room is not None and float(e["dur"]) > room + 1e-9:
+            was, now = float(e["dur"]), round(room, 2)
+            e["dur"] = now
+            e["leave_clamped"] = True   # the record of why the duration is what it is (the hold pass's `held`)
+            clamped.append((e.get("kind"), was, now))
+        stamped.append(e)
+    for e in dropped:
+        row_species.remove(e)
+    return stamped, clamped, dropped
+
+
+def page_series_count(spec: dict) -> int:
+    """How many SERIES a ledger page spec draws - what a `series`, a `tier` or a datum target's `series` may name.
+    A line page's `series`, a tiers page's `tiers` (P50 T9: a tier IS a series index). 0 means this function cannot
+    bound the page - a bars or share page's marks are not series - and nothing is refused on it."""
+    if not isinstance(spec, dict):
+        return 0
+    for key in ("series", "tiers"):
+        v = spec.get(key)
+        if isinstance(v, list):   # `tiers: true` is the two-band combo's bool key, never a band list
+            return len(v)
+    return 0
+
+
+TARGET_SERIES_FIELDS = ("series", "tier")   # the species' own words for the index; the third is target.series
+# ... and the kinds whose `series` / `tier` IS a mark index. `chart_to` is the counter-example that earned this set:
+# `chart_to extend {series: n, later: true}` names a series the page has NOT drawn yet - the verb reveals it from the
+# evidence object - so its `series` is a verb argument, not an index into the page's standing marks.
+SERIES_NAMING_SPECIES = TIER_SPECIES + (SPECIES_SPAN,)   # build_to, undraw, figure, bracket + the span
+
+
+def check_target_series(world: dict, row_species: list) -> None:
+    """R26-218: a species may only name a series the PAGE HAS - refused here, where the page's series are known.
+
+    Since R26-218 the player resolves a datum on the series the target NAMES, on the page's active state, and a
+    series the page does not have resolves to nothing: the species draws no pixel. That is the right player
+    behaviour (never the wrong point - P48 T2) and the wrong build behaviour, because an off-by-one `series` used
+    to land on the first line and now lands nowhere at all, silently. So the bound is a build error naming the
+    number, the way `chart_to extend`'s `to_index` is.
+
+    The bound is the WIDEST of the page's own chart states, so a recast into a page with more series is not
+    refused. A page this function cannot count (a bars or a share page) bounds nothing."""
+    if (world or {}).get("kind") != SPECIES_LEDGER:
+        return
+    states = [(world.get("page") or {})] + list(world.get("page_states") or [])
+    n = max([page_series_count(s) for s in states] or [0])
+    if n <= 0:
+        return
+    for sp in (row_species or []):
+        if not isinstance(sp, dict):
+            continue
+        named = ([(f, sp.get(f)) for f in TARGET_SERIES_FIELDS if f in sp]
+                 if sp.get("kind") in SERIES_NAMING_SPECIES else [])
+        tgt = sp.get("target")
+        if isinstance(tgt, dict) and tgt.get("kind") == "datum" and "series" in tgt:
+            named.append(("target series", tgt["series"]))
+        for field, v in named:
+            if isinstance(v, bool) or not isinstance(v, int) or v < 0:
+                raise ValueError(f"{sp.get('kind')}: {field} {v!r} is not a non-negative integer series index")
+            if v >= n:
+                raise ValueError(f"{sp.get('kind')}: {field} {v} is past the page's last series ({n - 1}) - the "
+                                 f"page draws {n} series, and since R26-218 a series the page does not have "
+                                 "resolves to nothing at all rather than to the first line")
+
+
+def page_species_end(entry: dict) -> float | None:
+    """R26-219: when a page-bound species is off the page, in seconds - `leave_at` plus the page's leave, or None
+    for one that stands (nothing replaced its page, or it carries `keep: true`). The number a gate or a test reads."""
+    if not isinstance(entry, dict) or not isinstance(entry.get("leave_at"), (int, float)) or isinstance(entry.get("leave_at"), bool):
+        return None
+    s = entry.get("leave_s")
+    return round(float(entry["leave_at"]) + (float(s) if isinstance(s, (int, float)) and not isinstance(s, bool) else PAGE_LEAVE_S), 3)
+
+
 def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     """P47 T2: the page species' own fields. bracket: integer `from`/`to` (data indices), a `label`, optional `sub`,
     `series`, `color`; retitle: a non-empty `text`; relight: `ref` bracket|title, optional `index`."""
     errs: list[str] = []
     is_idx = lambda v: isinstance(v, int) and not isinstance(v, bool) and v >= 0
+    if "keep" in entry:   # R26-219: the opt-out of the page's leave, and only a page-bound species has one
+        if not isinstance(entry["keep"], bool):
+            errs.append(f"{kind}: keep must be true or false (R26-219: true holds the species through a chart_to that replaces its page)")
+        elif kind not in PAGE_BOUND_SPECIES:
+            errs.append(f"{kind}: keep is only for a page-bound species ({'|'.join(PAGE_BOUND_SPECIES)}) - nothing else leaves with the page")
     if kind == "bracket":
         for f in ("from", "to"):
             if not is_idx(entry.get(f)):
@@ -2480,6 +2626,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
     `to_index`, or reveals a `later: true` series; the species carries `from_index` (the last shared datum) so the
     player caps the draw there."""
+    check_target_series(world, row_species)   # R26-218: a series the page does not have, refused before it draws nothing
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
             if world.get("kind") != SPECIES_LEDGER:
@@ -5183,6 +5330,19 @@ def main() -> int:
             row_species.remove(e)
         if dropped:
             print(f"  hold: dropped {len(dropped)} {'/'.join(e['kind'] for e in dropped)} on row {i + 1} - under {HOLD_MIN_S}s of room before the next event")
+        # R26-219: a page-bound species LEAVES with the page it was written on. Stamped here, beside the hold pass
+        # that decides the other end of a species' life, so the player and the gates see plain seconds either way.
+        left, clamped, page_dropped = stamp_page_leave(row_species)
+        if left:
+            print(f"  page leave: {len(left)} page-bound species retract with their page on row {i + 1} "
+                  f"({'/'.join(sorted({e['kind'] for e in left}))}) - R26-219")
+        if clamped:
+            print(f"  page leave: dur clamped to the leave on row {i + 1}: "
+                  + ", ".join(f"{k} {was:g}s -> {now:g}s" for k, was, now in clamped))
+        if page_dropped:
+            print(f"  page leave: dropped {len(page_dropped)} "
+                  f"{'/'.join(sorted({e['kind'] for e in page_dropped}))} on row {i + 1} - the chart_to that "
+                  "replaces the page fires on the species' own word, so there is nothing to write")
         # P50 T3: the row's PRESS docks, read BEFORE the species are validated - a callout's `phrase` target
         # names one of them, and the targeting law cannot check a name it has not read yet. A malformed option
         # is ignored here and raised by the dock pass below, which names the dock in its error.
