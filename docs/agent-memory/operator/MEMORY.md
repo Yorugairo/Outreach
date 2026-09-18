@@ -46,7 +46,7 @@
 - [Three-lane harness](three-lane-harness.md) — Gemini research/Flow, Codex/Astra→Luna implementation, Claude/Fable→Opus doctrine; pipeline raw…
 - [Docs layers and registries](docs-layers-and-registries.md) — docs_find.py first, build_docs_layers.py rebuilds/checks 8 generated layers (index, manifest…
 - [P46 bridge state](p46-bridge-state.md) — bridge built + pushed; P45 complete (E42); open: HG1 Astra queue, HG2 first live order, scheduler entry
-- [Tokyo short render](tokyo-short-render.md) — 09-06 render superseded by the 09-09 remake build (fab dock + two lights + bed −20, gates clean) on :8738 awaiting the watch + the render word; portrait needs RENDER_ASPECT=9:16
+- [Tokyo short render](tokyo-short-render.md) — v2 (the hand rebuild) RENDERED 2026-09-17 at 1440x2560/24 fps from build-v2-frozen-c (88.83 s, -15.1 LUFS); the file of record awaits the operator's watch and post; the 09-09 render is the previous one
 - [Nothing ever goes truly still](nothing-ever-goes-truly-still.md) — E49: every held thing carries a named subtle idle; Ken Burns/parallax were the blunt cure; P47 T5
 - [Judge the frame, not the diff](judge-the-frame-not-the-diff.md) — after a visual change, read the rendered frame as a viewer; verifying your own change is a different check and misses everything you didn't touch
 - [Chart form rulings E50–E53](chart-form-rulings-e50-e53.md) — the deployed clock (6–8s from the last data mark), a push is tied to a landing, a page cites not footnotes, and chart form is law (one unit before two; a policy rate is a rule)
