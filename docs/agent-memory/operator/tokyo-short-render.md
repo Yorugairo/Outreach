@@ -30,7 +30,9 @@ operator's dial, asked on the card; the mount at 1.99-4.0 s shows the soak's sta
 
 **2026-09-17, later:** the operator on the render: *"ea link, and yes, it's to upload and I think the line is fine"* - E99 s78: v2 is the new Tokyo, approved to upload; E67's history dial STAYS (the question is closed - never raise the 0.45 history again as a dial); the way v2 was made is the next short's way (s78 Apply 3). The direct link that served it: http://127.0.0.1:8772/render/tokyo-v2-full-1440p.mp4.
 
-**Servers:** :8771 frozen b (the watched copy), :8772 frozen c (the rendered copy), :8766 the queue.
+**2026-09-18:** the operator's second look with VidIQ's forecast (E99 s79): the life mechanics were missing (v2 had ONE idle token), the open goes to the axes with the tea clip docked, the camera on named things; then s80 (a second card takes the outgoing card's slot; a punch may crop the page, the caption yields). Built by hand as `build_short_v3.py`: v3 (`build-v3-frozen-a`, the panel in the left room by a park) and v3b (`build-v3-frozen-b`, the panel in the tea card's slot, the chart whole) - BOTH rendered 1440x2560 / 24 fps / 88.83 s / -15.1 LUFS and copied to Downloads (`tokyo-tea-break-v3-1440p.mp4`, `-v3b-`); the punches measured OUT (a 9:16 page's foot sits 13 px above the caption strip; no caption door for a camera key - R26-201's engine order); the 21.5x arrives as a ring on its bar (R26-190 - a figure on a bars page never renders). The critic on v3: 8/10, 4/6; its re-read on v3b pending. The upload waits on the operator's pick (v3b recommended).
+
+**Servers:** :8771 v2 frozen b, :8772 v2 frozen c, :8773 v3 frozen a, :8774 v3b frozen b, :8766 the queue.
 
 **The 09-09 render** (`build-short/render/`, the posted Tokyo) is superseded once the operator posts v2 - never
 rebuilt (E45). See [fewer-cuts-directional-flow](fewer-cuts-directional-flow.md), [rebuild-is-not-a-base](rebuild-is-not-a-base.md), [resume-2026-09-17](resume-2026-09-17.md).

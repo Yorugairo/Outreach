@@ -46,7 +46,7 @@
 - [Three-lane harness](three-lane-harness.md) — Gemini research/Flow, Codex/Astra→Luna implementation, Claude/Fable→Opus doctrine; pipeline raw…
 - [Docs layers and registries](docs-layers-and-registries.md) — docs_find.py first, build_docs_layers.py rebuilds/checks 8 generated layers (index, manifest…
 - [P46 bridge state](p46-bridge-state.md) — bridge built + pushed; P45 complete (E42); open: HG1 Astra queue, HG2 first live order, scheduler entry
-- [Tokyo short render](tokyo-short-render.md) — v2 (the hand rebuild) RENDERED 2026-09-17 at 1440x2560/24 fps from build-v2-frozen-c (88.83 s, -15.1 LUFS); APPROVED TO UPLOAD (E99 s78, the history dial stays); supersedes the 09-09 render on the post
+- [Tokyo short render](tokyo-short-render.md) — v2 (the hand rebuild) RENDERED 2026-09-17 at 1440x2560/24 fps from build-v2-frozen-c (88.83 s, -15.1 LUFS); v2 approved (s78) then superseded by v3/v3b on the operator's second look (s79/s80 - the life, the axes open, the slot); both rendered 09-18 and in Downloads; the upload waits on the pick
 - [Nothing ever goes truly still](nothing-ever-goes-truly-still.md) — E49: every held thing carries a named subtle idle; Ken Burns/parallax were the blunt cure; P47 T5
 - [Judge the frame, not the diff](judge-the-frame-not-the-diff.md) — after a visual change, read the rendered frame as a viewer; verifying your own change is a different check and misses everything you didn't touch
 - [Chart form rulings E50–E53](chart-form-rulings-e50-e53.md) — the deployed clock (6–8s from the last data mark), a push is tied to a landing, a page cites not footnotes, and chart form is law (one unit before two; a policy rate is a rule)
