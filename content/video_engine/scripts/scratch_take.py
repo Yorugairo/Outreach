@@ -127,7 +127,8 @@ def merge_punct(words: list[dict]) -> list[dict]:
     return out
 
 
-def run_kokoro() -> None:
+def run_kokoro(rate: float = 1.0) -> None:
+    """E99 s81: `--rate` reaches Kokoro too (KPipeline's `speed`); before 2026-09-18 the flag was accepted and ignored on this branch."""
     import numpy as np
     import soundfile as sf
     from kokoro import KPipeline
@@ -141,7 +142,7 @@ def run_kokoro() -> None:
     for pi, para in enumerate(paras):
         index.append({"para": pi + 1, "at": round(offset, 2),
                       "head": para[:70]})
-        for r in pipe(para, voice=KOKORO_VOICE):
+        for r in pipe(para, voice=KOKORO_VOICE, speed=rate):
             for tok in (r.tokens or []):
                 if tok.start_ts is None:
                     continue
@@ -168,7 +169,7 @@ def run_kokoro() -> None:
     (OUT / "scratch-kokoro.wav").unlink()
     dur = len(wav) / SR
     (OUT / "scratch-kokoro.words.json").write_text(
-        json.dumps({"engine": "kokoro-82M", "voice": KOKORO_VOICE,
+        json.dumps({"engine": "kokoro-82M", "voice": KOKORO_VOICE, "rate": rate,
                     "duration_s": round(dur, 2), "words": words},
                    indent=1), encoding="utf-8")
     # navigable ear-pass index + estimator comparison
@@ -211,7 +212,7 @@ def main() -> int:
     if a.engine in ("chirp", "both"):
         run_chirp(rate=a.rate)
     if a.engine in ("kokoro", "both"):
-        run_kokoro()
+        run_kokoro(rate=a.rate)
     return 0
 
 

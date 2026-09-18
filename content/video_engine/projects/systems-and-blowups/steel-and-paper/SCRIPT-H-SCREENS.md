@@ -8,12 +8,12 @@ invalid — the enumeration IS the review.
 ## X1 — antecedent pairs (76)
 
 - [2] `…Just not in the steel.` → **Not the chips, not the models, not the machines.**
-- [4] `…The paper wrapped around them.` → **This certificate is what the last bubble actually was: paper sold as safety, whi**
+- [4] `…The paper wrapped around them.` → **This certificate is what the last bubble was: paper sold as safety, while the st**
 - [15] `…By the end you'll run it on your own top five.` → **That's what the questions read for.**
 - [16] `…That's what the questions read for.` → **Not Bravos Research, whose chart this is.**
 - [17] `…Not Bravos Research, whose chart this is.` → **Not Nvidia.**
 - [19] `…Capital arriving faster than the value it's chasing.` → **But capital that fast leaves a paper trail, and paper you can read.**
-- [24] `…By Bravos' math, AI spending just crossed eight.` → **So the obvious move looks obvious: sell the steel before the certificate catches**
+- [24] `…By Bravos' math, AI spending just crossed eight.` → **So the obvious move looks obvious: sell the steel before the paper catches up wi**
 - [26] `… textbook profit-taking, and any adviser would sign it.` → **But walk Bravos' own evidence like a claims adjuster and it gets strange.**
 - [29] `…e annual AI budget by April, four months into the year.` → **And their COO: if you can't draw a direct line to what you're shipping, the spen**
 - [31] `…e — he's reaching for question three without having it.` → **And that isn't the peak of inflated expectations.**
@@ -86,7 +86,7 @@ invalid — the enumeration IS the review.
 
 ## P6 — deixis openers (29)
 
-- [4] This certificate is what the last bubble actually was: paper sold as safety, while the ste
+- [4] This certificate is what the last bubble was: paper sold as safety, while the steel it pai
 - [15] That's what the questions read for.
 - [32] It's the trough already doing its job, the tourists finding out one budget at a time.
 - [35] It was the steel, not the certificate.
@@ -141,7 +141,7 @@ invalid — the enumeration IS the review.
 
 ## P5A — phonetic-anchor candidates (50) — legal ONLY at promise / payoff / tell
 
-- [4] (s×) This certificate is what the last bubble actually was: paper sold as safety, while the s
+- [4] (s×) This certificate is what the last bubble was: paper sold as safety, while the steel it p
 - [13] (t×) One test, three questions, thirty seconds a holding, and it sorts everything you own int
 - [21] (t×) Railways in the 1840s drew a quarter-billion pounds, more than a trillion in today's mon
 - [22] (t×) In two thousand the internet crossed seven percent of GDP, then the tower came down.
@@ -196,8 +196,8 @@ invalid — the enumeration IS the review.
 
 - ¶1: [5, 5]
 - ¶2: [9, 5]
-- ¶3: [23, 10]
-- ¶4: [23]
+- ¶3: [22, 10]
+- ¶4: [19]
 - ¶5: [6, 6, 7, 5] ← FLAT?
 - ¶6: [4, 4]
 - ¶7: [18]
@@ -221,7 +221,7 @@ invalid — the enumeration IS the review.
 - ¶25: [19, 20, 3, 8, 4, 10, 12, 12, 14, 11, 14, 9, 10, 7, 8, 10, 21, 8, 26, 6, 14]
 - ¶26: [4, 4, 8, 11, 21, 7, 14, 24, 19, 15]
 
-## DECLARED — beat tags (43)
+## DECLARED — beat tags (52)
 
 One row per tag, script order. `window` is the opening gate's verdict
 for the tag's owning gate (R1: final, never re-derived). `verdict` is
@@ -230,44 +230,53 @@ the agent's, per tag: **true / laundered** (CHECK-RESPONSIBILITIES R2,
 
 - [ring]@0:00  window: PASS — G15  "The AI bubble is real."  → verdict: ____
 - [tricolon]@0:03  window: PASS — G12  "Not the chips, not the models, not the machines."  → verdict: ____
-- [stakes]@0:09  window: PASS — G07  "This certificate is what the last bubble actually was: paper sold as safety, while the steel it paid for is s…"  → verdict: ____
-- [archetype]@0:21  window: PASS — G37  "Somewhere a guy on his lunch break is watching his fourth copy of the same chart: two lines, one warning, AI …"  → verdict: ____
-- [payoff]@0:30  window: PASS — G08  "Here's the layer it never drew."  → verdict: ____
-- [reflect]@0:37  window: PASS — G16  "The warning is right."  → verdict: ____
-- [promise]@0:39  window: PASS — G09  "One test, three questions, thirty seconds a holding, and it sorts everything you own into steel or paper."  → verdict: ____
-- [desire]@0:46  window: PASS — G38  "By the end you'll run it on your own top five."  → verdict: ____
-- [map]@0:51  window: PASS — G39  "That's what the questions read for."  → verdict: ____
-- [opponent]@0:53  window: PASS — G14  "Not Bravos Research, whose chart this is."  → verdict: ____
-- [rehook]@0:59  window: PASS — G25  "But capital that fast leaves a paper trail, and paper you can read."  → verdict: ____
-- [catalyst]@1:03  window: PASS — G40  "Every transformative technology overshoots."  → verdict: ____
-- [foreshadow]@1:05  window: PASS — G26  "Railways in the 1840s drew a quarter-billion pounds, more than a trillion in today's money, then crashed by n…"  → verdict: ____
-- [new]@1:15  window: PASS — G20, PASS — G22  "In two thousand the internet crossed seven percent of GDP, then the tower came down."  → verdict: ____
-- [new]@1:19  window: PASS — G20, PASS — G22  "By Bravos' math, AI spending just crossed eight."  → verdict: ____
-- [head-fake]@1:22  window: PASS — G24  "So the obvious move looks obvious: sell the steel before the certificate catches up with it."  → verdict: ____
-- [debate]@1:34  window: PASS — G41  "But walk Bravos' own evidence like a claims adjuster and it gets strange."  → verdict: ____
-- [new]@1:38  window: PASS — G20, PASS — G22  "Alex Karp of Palantir says enterprises are paying for tokens that create no value, and that something has gon…"  → verdict: ____
-- [new]@1:45  window: PASS — G20, PASS — G22  "Uber's CTO says they burned their entire annual AI budget by April, four months into the year."  → verdict: ____
-- [new]@1:50  window: PASS — G20, PASS — G22  "And their COO: if you can't draw a direct line to what you're shipping, the spend gets harder to justify."  → verdict: ____
-- [loop]@1:56  window: PASS — G19, PASS — G21  "Remember that line — he's reaching for question three without having it."  → verdict: ____
-- [loop]@2:00  window: PASS — G19, PASS — G21  "And that isn't the peak of inflated expectations."  → verdict: ____
-- [loop-close]@2:10  window: PASS — G28  "Which flips the question: not when the disappointment arrives, because it's arriving, but what survives it."  → verdict: ____
-- [dip]@2:15  window: n/a — outside opening window (P2 ends 2:01)  "And in 1849 the answer wasn't the paper."  → verdict: ____
-- [signpost]@2:17  window: PASS — G42  "It was the steel, not the certificate."  → verdict: ____
-- [anaphora]@2:26  window: n/a — outside opening window (P2 ends 2:01)  "The steel kept working."  → verdict: ____
-- [new]@2:42  window: n/a — outside opening window (P2 ends 2:01)  "At the dot-com peak it hit twenty-three cents on the dollar."  → verdict: ____
-- [turn]@3:03  window: n/a — no owning gate  "Bravos' sharpest line is the trigger."  → verdict: ____
-- [new]@3:21  window: n/a — outside opening window (P2 ends 2:01)  "Bank of England above six percent: railways rolled over."  → verdict: ____
-- [concede]@3:37  window: n/a — no owning gate  "Put my agreement on the record, because the cycle is real and so is the threshold."  → verdict: ____
-- [rehook]@3:52  window: n/a — outside opening window (P2 ends 2:01)  "But here's the question that decides it: who is paying for the steel this time?"  → verdict: ____
-- [new]@4:08  window: n/a — outside opening window (P2 ends 2:01)  "Between 2020 and 2024, the biggest builders borrowed about twenty-eight billion dollars a year."  → verdict: ____
-- [new]@4:57  window: n/a — outside opening window (P2 ends 2:01)  "Go into the filings and there's another eight hundred and twenty-two billion in lease commitments."  → verdict: ____
-- [rehook]@5:19  window: n/a — outside opening window (P2 ends 2:01)  "So put it together, because this is where the arithmetic gets tight."  → verdict: ____
-- [new]@5:23  window: n/a — outside opening window (P2 ends 2:01)  "Over the next two years, PIMCO has this buildout consuming ninety-four percent of every dollar these companie…"  → verdict: ____
-- [anaphora]@5:53  window: n/a — outside opening window (P2 ends 2:01)  "The steel kept building."  → verdict: ____
-- [signpost]@6:01  window: n/a — outside opening window (P2 ends 2:01)  "And that's the part everyone repeating this chart missed — including, just this once, the people who drew it."  → verdict: ____
-- [foreshadow]@6:15  window: n/a — outside opening window (P2 ends 2:01)  "What broke England in 1845 wasn't rail."  → verdict: ____
-- [ring]@6:52  window: n/a — outside opening window (P2 ends 2:01)  "So look at that certificate again."  → verdict: ____
-- [anaphora]@7:23  window: n/a — outside opening window (P2 ends 2:01)  "Steel answers scarce, cash, used."  → verdict: ____
-- [new]@7:23  window: n/a — outside opening window (P2 ends 2:01)  "Over the last year the stock is up more than five hundred percent."  → verdict: ____
-- [ring]@7:23  window: n/a — outside opening window (P2 ends 2:01)  "So — the certificate, one more time: paper sold as safety, while the steel it paid for kept carrying trains."  → verdict: ____
-- [anaphora]@7:23  window: n/a — outside opening window (P2 ends 2:01)  "The steel gets used."  → verdict: ____
+- [stakes]@0:09  window: PASS — G07  "This certificate is what the last bubble was: paper sold as safety, while the steel it paid for is still carr…"  → verdict: ____
+- [archetype]@0:20  window: PASS — G37  "Somewhere a guy is watching his fourth copy of the same chart: two lines, one warning, AI is 1845 again."  → verdict: ____
+- [payoff]@0:28  window: PASS — G08  "Here's the layer it never drew."  → verdict: ____
+- [reflect]@0:35  window: PASS — G16  "The warning is right."  → verdict: ____
+- [promise]@0:37  window: PASS — G09  "One test, three questions, thirty seconds a holding, and it sorts everything you own into steel or paper."  → verdict: ____
+- [desire]@0:44  window: PASS — G38  "By the end you'll run it on your own top five."  → verdict: ____
+- [map]@0:49  window: PASS — G39  "That's what the questions read for."  → verdict: ____
+- [opponent]@0:51  window: PASS — G14  "Not Bravos Research, whose chart this is."  → verdict: ____
+- [rehook]@0:57  window: PASS — G25  "But capital that fast leaves a paper trail, and paper you can read."  → verdict: ____
+- [foreshadow]@1:03  window: PASS — G26  "Railways in the 1840s drew a quarter-billion pounds, more than a trillion in today's money, then crashed by n…"  → verdict: ____
+- [new]@1:13  window: PASS — G20, PASS — G22  "In two thousand the internet crossed seven percent of GDP, then the tower came down."  → verdict: ____
+- [catalyst]@1:18  window: PASS — G40  "By Bravos' math, AI spending just crossed eight."  → verdict: ____
+- [new]@1:18  window: PASS — G20, PASS — G22  "By Bravos' math, AI spending just crossed eight."  → verdict: ____
+- [loop]@1:18  window: PASS — G19, PASS — G21  "By Bravos' math, AI spending just crossed eight."  → verdict: ____
+- [head-fake]@1:20  window: PASS — G24  "So the obvious move looks obvious: sell the steel before the paper catches up with it."  → verdict: ____
+- [new]@1:26  window: PASS — G20, PASS — G22  "Chipmakers doubling while their customers sit flat at the index is textbook profit-taking, and any adviser wo…"  → verdict: ____
+- [new]@1:37  window: PASS — G20, PASS — G22  "Alex Karp of Palantir says enterprises are paying for tokens that create no value, and that something has gon…"  → verdict: ____
+- [new]@1:43  window: PASS — G20, PASS — G22  "Uber's CTO says they burned their entire annual AI budget by April, four months into the year."  → verdict: ____
+- [new]@1:49  window: PASS — G20, PASS — G22  "And their COO: if you can't draw a direct line to what you're shipping, the spend gets harder to justify."  → verdict: ____
+- [loop]@1:55  window: PASS — G19, PASS — G21  "Remember that line — he's reaching for question three without having it."  → verdict: ____
+- [debate]@1:58  window: PASS — G41  "And that isn't the peak of inflated expectations."  → verdict: ____
+- [loop]@1:58  window: PASS — G19, PASS — G21  "And that isn't the peak of inflated expectations."  → verdict: ____
+- [loop-close]@2:08  window: PASS — G28  "Which flips the question: not when the disappointment arrives, because it's arriving, but what survives it."  → verdict: ____
+- [dip]@2:13  window: n/a — outside opening window (P2 ends 2:01)  "And in 1849 the answer wasn't the paper."  → verdict: ____
+- [new]@2:13  window: n/a — outside opening window (P2 ends 2:01)  "And in 1849 the answer wasn't the paper."  → verdict: ____
+- [signpost]@2:16  window: PASS — G42  "It was the steel, not the certificate."  → verdict: ____
+- [anaphora]@2:24  window: n/a — outside opening window (P2 ends 2:01)  "The steel kept working."  → verdict: ____
+- [new]@2:41  window: n/a — outside opening window (P2 ends 2:01)  "At the dot-com peak it hit twenty-three cents on the dollar."  → verdict: ____
+- [turn]@3:02  window: n/a — no owning gate  "Bravos' sharpest line is the trigger."  → verdict: ____
+- [new]@3:19  window: n/a — outside opening window (P2 ends 2:01)  "Bank of England above six percent: railways rolled over."  → verdict: ____
+- [concede]@3:35  window: n/a — no owning gate  "Put my agreement on the record, because the cycle is real and so is the threshold."  → verdict: ____
+- [rehook]@3:50  window: n/a — outside opening window (P2 ends 2:01)  "But here's the question that decides it: who is paying for the steel this time?"  → verdict: ____
+- [new]@4:06  window: n/a — outside opening window (P2 ends 2:01)  "Between 2020 and 2024, the biggest builders borrowed about twenty-eight billion dollars a year."  → verdict: ____
+- [new]@4:56  window: n/a — outside opening window (P2 ends 2:01)  "Go into the filings and there's another eight hundred and twenty-two billion in lease commitments."  → verdict: ____
+- [rehook]@5:18  window: n/a — outside opening window (P2 ends 2:01)  "So put it together, because this is where the arithmetic gets tight."  → verdict: ____
+- [new]@5:21  window: n/a — outside opening window (P2 ends 2:01)  "Over the next two years, PIMCO has this buildout consuming ninety-four percent of every dollar these companie…"  → verdict: ____
+- [anaphora]@5:51  window: n/a — outside opening window (P2 ends 2:01)  "The steel kept building."  → verdict: ____
+- [signpost]@5:59  window: n/a — outside opening window (P2 ends 2:01)  "And that's the part everyone repeating this chart missed — including, just this once, the people who drew it."  → verdict: ____
+- [foreshadow]@6:13  window: n/a — outside opening window (P2 ends 2:01)  "What broke England in 1845 wasn't rail."  → verdict: ____
+- [ring]@6:51  window: n/a — outside opening window (P2 ends 2:01)  "So look at that certificate again."  → verdict: ____
+- [rehook]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "Now the test — the one from the top."  → verdict: ____
+- [anaphora]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "Steel answers scarce, cash, used."  → verdict: ____
+- [new]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "Over the last year the stock is up more than five hundred percent."  → verdict: ____
+- [rehook]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "So ask it the three questions."  → verdict: ____
+- [rehook]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "Bravos put their tripwire on the record: the Fed back above five and a half."  → verdict: ____
+- [signpost]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "The threshold is the release itself: the first month customs shows memory getting cheaper while the buildout …"  → verdict: ____
+- [rehook]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "The flip: if memory breaks while the buildout holds, the scarcity story is wrong — and so am I."  → verdict: ____
+- [ring]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "So — the certificate, one more time: paper sold as safety, while the steel it paid for kept carrying trains."  → verdict: ____
+- [rehook]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "Which is why I'll go further than Bravos — in both directions."  → verdict: ____
+- [anaphora]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "The steel gets used."  → verdict: ____
