@@ -3532,7 +3532,7 @@
     },
     {
       "id": "p65-hg2-the-reproved-set-and-m38",
-      "status": "open",
+      "status": "ruled",
       "kind": "batch",
       "title": "P65 HG2 - the proven set re-proved on today's bed: six carry their mechanism, two are not on this bed, and M38's restoration",
       "ids": [
@@ -3754,7 +3754,7 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s68: present as batches, track approvals AND denials; s67: the page BUILDS then holds built)",
         "content/video_engine/effects/lab/batches/reproof-r2.jsonl (the gate rows behind every one of the fifteen verdicts)"
       ],
-      "ruling": "",
+      "ruling": "RULED AS ANSWERED (E99 s82 process; the operator, 2026-09-18: \"you're carrying the candidate by candidate drafts etc even though i've already answered those on p65 hg2 to the best of my ability, and until resolved i dont think i can actually answer P65 HG1.\") - the operator's reads on HG2 stand as given; the parent resolves them into the recipes (P65 T8's re-proof rows) before any further card; no candidate-by-candidate card returns.",
       "was_kind": "owed",
       "owed": ""
     },
@@ -3863,7 +3863,7 @@
     },
     {
       "id": "lab-batch-r2-plate-carries-a-card",
-      "status": "open",
+      "status": "ruled",
       "kind": "batch",
       "title": "P65 HG1 - the first batch: plate-carries-a-card, 12 candidate(s) side by side (batch batch-r2)",
       "ids": [
@@ -4253,7 +4253,7 @@
         "docs/content-video-engine/BACKLOG.md (R26-176: the space is finite; the lab enumerates it)",
         "content/video_engine/effects/lab/batches/batch-r2.jsonl (the gate rows behind every survivor)"
       ],
-      "ruling": "",
+      "ruling": "CLOSED PENDING RESOLUTION (the operator, 2026-09-18: \"you're carrying the candidate by candidate drafts etc even though i've already answered those on p65 hg2 to the best of my ability, and until resolved i dont think i can actually answer P65 HG1.\") - P65 HG1's batch cannot be answered until HG2's answers are resolved; the parent resolves first and re-frames ONE card, not twelve candidates.",
       "was_kind": "",
       "owed": "",
       "draw": {
