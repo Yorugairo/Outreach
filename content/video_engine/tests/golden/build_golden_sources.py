@@ -2881,8 +2881,14 @@ SURFACES.update({   # P61 T14 / E99 s55: the alive wall, the planes, the camera 
 #     held at IDLE_CLASS.page ("breath"): ONE rigid scale about the page's centre, the drift half writing
 #     translate(0.00px,0.00px) at every t (measured at both aspects - tests/R26-228-NOTE.md).
 #   * the LIVE half is the same page with the kind the row authored: the lead point STAYS at the drawn end of each
-#     live series and sparks, the stroke's glow is the share of the frame the approved 9:16 page draws and pulses on
-#     the tip's own clock, and the title, sub, citation, tick labels and end tags each walk at their OWN phase.
+#     live series and sparks, and the stroke's glow is the share of the frame the approved 9:16 page draws, pulsing
+#     on the tip's own clock. R26-234 / E99 s83 took the fourth life away: the title, sub, citation, tick labels and
+#     end tags no longer walk at their own phases - *"remove the interior drift, keep the electric/glow etc let that
+#     carry the life instead of drift which just reads as chaos"* - so the only thing that separates the halves
+#     INSIDE the page is the electric, and the only thing that separates them at all besides it is the page's own
+#     exterior drift (`live` = breath + drift). That is what the pair's bands are read against in
+#     `test_golden_frames.test_the_live_page_keeps_its_electric_and_holds_its_words_still`: every band, word or
+#     electric, fits the SAME page-wide offset, and only the electric bands carry a difference no offset explains.
 # `ken_burns` is ZERO on both, so the world contributes nothing and the pair isolates the page's own life; the
 # instants are the page LANDED (the state the divergence page holds for ~45 of its 54.9 s) and the same page 2 s
 # later - the two tiles the ruling asks a life to be visible across.

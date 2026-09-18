@@ -29,7 +29,7 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "press-stack",  # P50 T3: three press cards stacked, the newest lit, the underline drawn on its phrase
             "flow-swap",    # P50 T4: the three-node diagram after its swap - the new node in place, both clothoid arrows standing, the year stamped
             "span-decade",  # P50 T4: a ledger line page with a named stretch of time shaded behind it
-            "page-life-still", "page-life-live",   # R26-228 / E99 s82 (e): the page's INTERIOR at its idle - one key apart (`world.idle` absent against "live"). The still half is the page every cut has drawn (the row's kind never reached it); the live half carries the lead point that stays and sparks, the glow at the approved 9:16 page's share of the frame pulsing on the tip's clock, and the title / sub / citation / tick labels / end tags each at their own phase (their +2 s halves ride PROOF_FRAMES)
+            "page-life-still", "page-life-live",   # R26-228 / E99 s82 (e), re-rendered by R26-234 / E99 s83: the page's INTERIOR at its idle - one key apart (`world.idle` absent against "live"). The still half is the page every cut has drawn (the row's kind never reached it); the live half carries the ELECTRIC and nothing else - the lead point that stays and sparks, the glow at the approved 9:16 page's share of the frame pulsing on the tip's clock - while every word holds still inside the page's own exterior breath (s83 took the per-word walk out; the bands are read by `test_the_live_page_keeps_its_electric_and_holds_its_words_still`). Their +2 s halves ride PROOF_FRAMES
             "page-build-lines", "page-build-lines-4th",   # R26-226 / E99 s82: A MULTI-LINE PAGE BUILDS LINE BY LINE - the same four-series page as `page-life-*` with `;build=lines:1.2` on the row, read at series 1's midpoint (line 1 whole and labelled, line 2 half drawn, lines 3 and 4 not begun) and at series 3's (three whole and labelled, the fourth drawing). The operator: "draw the first line completely, label it, badge it, draw the 2nd line completely, badge it" - the crawl that stopped is gone and no line pauses mid-draw
             "page-rescale-follow", "page-rescale-follow-yield",   # R26-233 / E99 s82: THE AXIS YIELDS TO THE LINE THAT PUSHES IT - three landed lines on the scale the page was born on and a fourth drawn on its word with `chart_to rescale follow: "Memory"`, read BEFORE the yield (the climb at 225, its extremum with the air still under the standing top: the landed ink has not moved a pixel) and MID-YIELD (the climb at 385.6 asking for 408.7, the live top 408.8, the three tags 33.8 px lower, all five ticks lit). The critic on the H unit: the reveal's rescale slid the landed lines 253 px down beside the line instead of with it
             "plate-drift",  # R26-133, re-authored by P61 T14 to the ruling that closed it (E99 s55): the plate world authored `idle: "drift"`, the dial PAINTING it at `;drift=30` - the amplitude the operator named for long form, after E99 s38 refused the 2 px walk as a motion nobody can see
@@ -190,3 +190,172 @@ def test_harness_catches_a_one_value_css_change() -> None:
             "a one-value CSS change rendered identically - the harness is not looking at the template")
         diff = RB.write_diff("dock-pair-16x9.perturbed", golden, actual)
         assert diff.exists()
+
+
+# ---- R26-234 / E99 s83: THE ELECTRIC CARRIES THE LIFE; THE WORDS HOLD STILL ----------------------
+# The operator, on the H bed's copy f: *"way too much interior drift now, it causes us to draw the
+# memory line wrong, there's 2 different pointers there, and makes people probably get eye fatigue
+# trying to follow, i think we keep the exterior drift, remove the interior drift, keep the
+# electric/glow etc let that carry the life instead of drift which just reads as chaos kind of."*
+# R26-228 had given the page's interior FOUR lives at once; s83 keeps the two that belong to the line
+# (the lead point's spark + halo, the stroke's bloom pulse) and deletes the per-word walk.
+#
+# The pair is the proof, and it is read as BANDS rather than as one hash, because the halves are not
+# the same page in the same place: `live` = breath + drift, so the live half's whole page is offset by
+# its own exterior drift (`.lp-page` matrix translate -1.879, -1.137 px at t = 9 and -1.694, -0.070 at
+# t = 11 - measured; nothing else differs outside the electric). A word band therefore cannot be
+# pixel-identical between the halves; what it CAN be - and now is - is the still band moved rigidly by
+# that one page-wide number and nothing more. So each band is matched at every whole-pixel offset
+# within +/-8 and asked two questions: which offset fits best, and how much still differs after it.
+#   * every band, word or electric, fits best at the PAGE's own drift - one mechanism moves the page.
+#     Before s83 the word bands each fitted a DIFFERENT offset (the y ticks -7,-4; the title +4,-1; the
+#     citation -4,-1; the sub -1,+1 - each word on its own phase, which is what read as chaos).
+#   * a WORD band is then explained: at most 16.3 % of it still differs (measured; the ceiling is 25 %),
+#     and that residue is the sub-pixel part of the offset on high-contrast ink.
+#   * an ELECTRIC band is NOT explained by any offset: 41.7 % to 79.2 % of it still differs (measured;
+#     the floor is 35 %), because the still half has no lead point at all and its bloom is 6 px against
+#     the live half's 11.2 - 14.1.
+PAGE_LIFE_DRIFT = {"": (-2, -1), "@proof-plus2": (-2, 0)}   # the page's exterior drift at t = 9 / t = 11, to the whole pixel
+ELECTRIC_BANDS = {   # (x, y, w, h) in stage px on the 1920x1080 frame
+    "lead point / orange": (960, 365, 61, 61),       # the MEMORY MAKERS series' landed tip + its halo
+    "lead point / teal": (960, 578, 61, 61),         # SEMICONDUCTORS
+    "lead point / blue + grey": (960, 666, 61, 61),   # MEGA-CAP over the S&P, two tips a hair apart
+    "the stroke": (300, 690, 400, 50),               # a strip across the two flattest lines: the bloom's own width
+}
+WORD_BANDS = {
+    "y tick labels": (154, 388, 70, 286),
+    "x tick labels": (232, 766, 716, 50),
+    "end tag / memory makers": (1030, 374, 590, 40),   # from x 1030: clear of the orange tip's halo
+    "end tag / semiconductors": (1030, 588, 590, 40),
+    "title": (58, 34, 1024, 80),
+    "sub": (138, 106, 1102, 48),
+    "citation": (134, 958, 522, 56),
+}
+BAND_PAD = 8            # the offsets tried, in whole px, each way
+WORD_CEILING = 25.0     # a word band's share still differing after the best offset (measured max 16.3 %)
+ELECTRIC_FLOOR = 35.0   # an electric band's, which no offset explains (measured min 41.7 %)
+
+
+def _band_fit(still, live, rect: tuple[int, int, int, int]) -> tuple[float, tuple[int, int], float]:
+    """(share differing at rest, the best whole-px offset, the share still differing after it)."""
+    import numpy as np
+    x, y, w, h = rect
+    A = still[y:y + h, x:x + w].astype(np.int16)
+    rest = 100.0 * (np.abs(A - live[y:y + h, x:x + w].astype(np.int16)).max(axis=2) > 2).sum() / (w * h)
+    best = None
+    for dy in range(-BAND_PAD, BAND_PAD + 1):
+        for dx in range(-BAND_PAD, BAND_PAD + 1):
+            B = live[y + dy:y + dy + h, x + dx:x + dx + w].astype(np.int16)
+            if B.shape != A.shape:
+                continue
+            d = np.abs(A - B)
+            if best is None or d.mean() < best[0]:
+                best = (float(d.mean()), (dx, dy), 100.0 * (d.max(axis=2) > 2).sum() / (w * h))
+    return rest, best[1], best[2]
+
+
+def _page_life_halves(suffix: str):
+    import numpy as np
+    from PIL import Image
+    return [np.asarray(Image.open(RB.FRAMES / f"page-life-{half}{suffix}.png").convert("RGB"))
+            for half in ("still", "live")]
+
+
+@pytest.mark.parametrize("suffix", sorted(PAGE_LIFE_DRIFT))
+def test_the_live_page_keeps_its_electric_and_holds_its_words_still(suffix: str) -> None:
+    shift = PAGE_LIFE_DRIFT[suffix]
+    still, live = _page_life_halves(suffix)
+    for name, rect in WORD_BANDS.items():
+        rest, fit, after = _band_fit(still, live, rect)
+        assert fit == shift, (
+            f"{name}{suffix}: fits best at {fit}, not the page's own drift {shift} - something inside "
+            f"the page is moving on its own again (E99 s83: the interior word walk is gone)")
+        assert after <= WORD_CEILING, (
+            f"{name}{suffix}: {after:.2f} % of the band still differs once the page's drift is taken "
+            f"out ({rest:.2f} % before it) - the words are not holding still inside the breath")
+    for name, rect in ELECTRIC_BANDS.items():
+        rest, fit, after = _band_fit(still, live, rect)
+        assert rest > 0, f"{name}{suffix}: still and live are identical here - the electric is gone (E99 s83)"
+        assert fit == shift, f"{name}{suffix}: fits best at {fit}, not the page's own drift {shift}"
+        assert after >= ELECTRIC_FLOOR, (
+            f"{name}{suffix}: only {after:.2f} % of the band differs once the page's drift is taken out "
+            f"- the lead point's spark / halo and the stroke's bloom pulse are what carry the life now")
+
+
+# ---- R26-234 / E99 s83, at the REVEAL: a line's pointer is ONE thing ------------------------------
+# The bands above read the page LANDED. The ruling's fourth clause is about the page DRAWING - *"a
+# line's pointer is ONE thing - the lead point; nothing else on the line moves while it draws"* - and
+# that is read off the DOM, because it is a claim about what moves RELATIVE to what: every box is taken
+# against `.lp-page`'s own box, so the page's exterior breath and drift are divided out and what is
+# left is the interior alone.
+PAGE_LIFE_REVEAL = (5.8, 6.0)   # mid-draw on both halves: all four series drawing (stroke-dashoffset 15.7 / 24.5 / 37.3 / 70.9, then 8.1 / 12.6 / 19.3 / 36.6)
+REVEAL_WORD_CEILING = 2.5       # px a word may travel between those instants: the page's own BREATH carries it radially (measured max 1.97, and it grows with the word's radius from the page centre - one rigid scale, E99 s65's "attributable" motion)
+REVEAL_TIP_FLOOR = 5.0          # px the lead point travels over the same 0.2 s (measured 7.4 - 34.7): the pointer, and the only thing moving on the line
+INTERIOR_JS = """
+() => {
+  const pg = document.querySelector('.lp-page');
+  const pb = pg.getBoundingClientRect();
+  const rel = (el) => { const b = el.getBoundingClientRect(); return [+(b.x - pb.x).toFixed(3), +(b.y - pb.y).toFixed(3)]; };
+  const out = { words: [], tips: [], translates: [] };
+  pg.querySelectorAll('.lp-title, .lp-sub, .lp-src').forEach((el) => out.words.push(['div:' + el.className, rel(el)]));
+  pg.querySelectorAll('svg text').forEach((el) => { if (!el.getBoundingClientRect().width) return;
+    out.words.push(['text:' + (el.getAttribute('class') || '') + ':' + (el.textContent || '').slice(0, 12), rel(el)]); });
+  pg.querySelectorAll('*').forEach((el) => { if (el.style && el.style.translate) out.translates.push(el.tagName + ' ' + el.style.translate); });
+  pg.querySelectorAll('svg circle').forEach((el) => { if (el.getAttribute('opacity') === '0') return;
+    out.tips.push([el.getAttribute('r'), el.style.filter || '', rel(el)]); });
+  return out;
+}
+"""
+
+
+def _page_interior(surface: str, ts: tuple[float, ...]) -> dict:
+    """The page's interior at each t, every box relative to the page's own: {t: {words, tips, translates}}."""
+    from playwright.sync_api import sync_playwright
+    tl, uris, _t, aspect = RB.load_surface(surface)
+    tl = dict(tl, kinetics={"idle": True})
+    w, h = RB.STAGE[aspect]
+    out: dict = {}
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / f"{surface}.html"
+        html.write_text(RB.instantiate(tl, uris, RB.TEMPLATE), encoding="utf-8")
+        srv, port = RB.serve(html.parent)
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+                page = browser.new_context(viewport={"width": w, "height": h}).new_page()
+                page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+                RB.prepare_page(page, w, h)
+                for t in ts:
+                    page.evaluate("t => { const s = document.getElementById('scrub');"
+                                  " s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+                    out[t] = page.evaluate(INTERIOR_JS)
+                browser.close()
+        finally:
+            srv.shutdown()
+    return out
+
+
+def test_at_the_reveal_only_the_lead_point_moves_on_a_live_line() -> None:
+    still = _page_interior("page-life-still", PAGE_LIFE_REVEAL)
+    live = _page_interior("page-life-live", PAGE_LIFE_REVEAL)
+    for t in PAGE_LIFE_REVEAL:
+        assert live[t]["translates"] == [], (
+            f"t={t}: {live[t]['translates']} - an interior element is walking again; E99 s83 deleted the "
+            f"per-word walk (`lpPaintWordLife` / `lpPaintChartLife`), it was not left on a dial")
+        assert still[t]["translates"] == [], f"t={t}: {still[t]['translates']}"
+        for (kl, pl), (ks, ps) in zip(live[t]["words"], still[t]["words"]):
+            assert kl == ks, (kl, ks)
+            assert abs(pl[0] - ps[0]) < 0.01 and abs(pl[1] - ps[1]) < 0.01, (
+                f"t={t}: {kl} sits at {pl} inside the live page and {ps} inside the still one - the words "
+                f"do not hold their place inside the breathing page (E99 s83)")
+        assert len(live[t]["tips"]) == 4 and all("drop-shadow" in f for _r, f, _p in live[t]["tips"]), (
+            f"t={t}: the drawing lines' lead points lost their halo - the ELECTRIC is what carries the life")
+        assert all(f == "" for _r, f, _p in still[t]["tips"]), f"t={t}: the still half grew a halo"
+    a, b = (live[t] for t in PAGE_LIFE_REVEAL)
+    for (_ka, pa), (_kb, pb) in zip(a["words"], b["words"]):
+        assert abs(pa[0] - pb[0]) <= REVEAL_WORD_CEILING and abs(pa[1] - pb[1]) <= REVEAL_WORD_CEILING, (
+            f"a word travelled {pa} -> {pb} inside the page between the two instants - more than the page's "
+            f"own breath carries it ({REVEAL_WORD_CEILING} px)")
+    for (_ra, _fa, pa), (_rb, _fb, pb) in zip(a["tips"], b["tips"]):
+        assert ((pa[0] - pb[0]) ** 2 + (pa[1] - pb[1]) ** 2) ** 0.5 >= REVEAL_TIP_FLOOR, (
+            f"the lead point moved {pa} -> {pb}: the pointer is the thing that moves on a drawing line")

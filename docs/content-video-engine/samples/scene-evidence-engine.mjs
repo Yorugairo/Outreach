@@ -7596,6 +7596,10 @@ async function mount(doc) {
      the kind the ruling named. No golden authors `world.idle` on a PAGE (only plate-drift and plate-alive, both plates),
      so a page that does not ask for it paints exactly the string it has always painted. */
   const pgLive = (scene, pg) => idleOf("page", pgIdleKind(scene, pg)) === "live";
+  /* R26-234 (E99 s83): the page's INTERIOR does not drift. A badge pill keeps E49's breath and a `none` row's badges
+     stay still (R26-228's own win), but the DRIFT half of `live` belongs to the page's EXTERIOR alone - the operator:
+     "keep the exterior drift, remove the interior drift". So a live page hands its pills `breath`, never `live`. */
+  const pgPillKind = (scene, pg) => { const k = pgIdleKind(scene, pg); return k === "live" ? "breath" : k; };
   /* pure hash of (seed, index, salt) -> [0,1): the only source of jitter (handwriting-text rule 2) */
   const lpHash = (seed, i, salt) => {
     let h = (seed ^ Math.imul(i + 1, 0x9E3779B1) ^ Math.imul(salt + 1, 0x85EBCA77)) >>> 0;
@@ -8709,10 +8713,6 @@ async function mount(doc) {
      The harvest note this finally takes: REMOTION-UI-HARVEST.md:7, "line-chart-draw: the tip head ... A glowing dot
      rides the drawing line's tip", 2026-08-31, never built; the reference it came from, Bravos REPORT.md:60. */
   const LP_LIFE = Object.freeze({
-    WORD_PX: 5.0,     /* [DERIVED: R26-228, measured] a word's own walk, half-width in STAGE px. E49's IDLE.DRIFT_PX 2.0 is
-                         the declared FLOOR and E99 s38 refused it ("8 frames to move 1 pixel"); 5.0 px is a quarter of a
-                         19 px tick label's height and a quarter of E99 s65's 20 px plate rule - seen, because each word
-                         walks on its OWN phase, and not drunk, because reading matter may not swim */
     TIP_R: 7.0,       /* the lead point's radius in STAGE px: today's draws 4.16 at 16:9 and 6.37 at 9:16 */
     TIP_AMP: 0.40,    /* the SPARK: the radius rises this share above rest ... */
     TIP_HZ: 0.62,     /* ... at this rate. Period 1.613 s - a spark, not a breath - and deliberately INCOMMENSURATE with
@@ -8729,43 +8729,16 @@ async function mount(doc) {
     BLOOM_AMP: 0.30,  /* the glow PULSES with the tip, on TIP_HZ: one clock, never a second rate (a chart with two
                          rhythms reads as two mechanisms) */
   });
-  /* the chart's own WORDS, by the role its mark list already carries: the y tick labels, the x tick labels (a dense-line
-     page marks them `xtick` - the element IS the text; a bars page marks them `xlabel`), the axis caption, a rule's
-     label, a series' END TAG (= an inline datum badge, R26-228 (d)) and a bar's number. Lines, bars, wedges and paths
-     are not words. The page's own title / sub / citation are marks too but they are the DIVS lpPaintWordLife owns -
-     excluded here, so exactly one writer ever touches one element. */
-  const LP_LIFE_ROLES = new Set(["ylabel", "xlabel", "xtick", "axislabel", "rulelabel", "name", "value"]);
+  /* R26-234 (E99 s83, 2026-09-18): HERE STOOD THE INTERIOR WORD WALK - `LP_LIFE.WORD_PX`, `LP_LIFE_ROLES`, `lpLifeWalk`,
+     `lpPaintChartLife` and `lpPaintWordLife`, R26-228 (c)/(d): the title, sub, citation, tick labels and end tags each
+     walking 5 stage px at their own phase. The operator, on the H bed's copy f: "way too much interior drift now, it
+     causes us to draw the memory line wrong, there's 2 different pointers there ... keep the exterior drift, remove the
+     interior drift, keep the electric/glow etc let that carry the life instead of drift which just reads as chaos". A
+     line's pointer is ONE thing - the lead point - and the words hold still INSIDE the page's own exterior breath
+     (`idleCssFor("page", ...)` below, untouched). Deleted, not dialled: there is no number that turns it back on. */
   const LP_LIFE_PH = new WeakMap();   /* an element's phase, stable for its lifetime and derived from its creation order: lpHash is the only source of jitter, and a seek is the play */
   const lpLifePhase = (el, i) => { let v = LP_LIFE_PH.get(el); if (v == null) { v = lpHash(i + 1, 41, 977); LP_LIFE_PH.set(el, v); } return v; };
-  /* ONE walk, written as the CSS `translate` property rather than onto `transform`: `translate` composes in FRONT of the
-     `transform` attribute, so a builder that owns an element's transform (the tag growing into its bar, the remake's
-     apex draw, the vortex) is never clobbered - and an element a builder IS transforming right now is skipped by name
-     and its life cleared, so the two mechanisms never argue. Fixed decimals: two seeks to one t write one string. */
-  const lpLifeWalk = (el, t, ph, px) => {
-    if (!el) return;
-    if (!(px > 0) || el.getAttribute("transform") || el.style.transform) { if (el.style.translate) el.style.translate = ""; return; }
-    const d = drift(t, ph, { DRIFT_PX: px });
-    el.style.translate = d[0].toFixed(2) + "px " + d[1].toFixed(2) + "px";
-  };
   const lpCtmScale = (svg) => { const m = svg && svg.getScreenCTM ? svg.getScreenCTM() : null; return m && m.a ? m.a : 0; };
-  /* the CHART's words at their own phases (R26-228 (c) / (d)) */
-  const lpPaintChartLife = (cs, t, live) => {
-    if (!cs || !cs.marks) return;
-    const k = live ? lpCtmScale(cs.chart) : 0;
-    const px = k ? LP_LIFE.WORD_PX / k : 0;   /* stage px -> the chart's own user units */
-    cs.marks.forEach((m, i) => { if (m && m.el && LP_LIFE_ROLES.has(m.role)) lpLifeWalk(m.el, t, lpLifePhase(m.el, i), px); });
-  };
-  /* the PAGE's words - the title, the sub, the citation - at theirs (R26-228 (c)). These are divs in stage px, so the
-     dial is the dial. Re-queried each frame: a retitle and a note add their own div mid-scene (P47 T2). */
-  const lpPaintWordLife = (st, t, live) => {
-    if (!st || !st.page) return;
-    const ws = st.page.querySelectorAll(".lp-title, .lp-sub, .lp-src");
-    ws.forEach((el, i) => {
-      if (!live || el.style.transform) { if (el.style.translate) el.style.translate = ""; return; }
-      const d = drift(t, lpLifePhase(el, i), { DRIFT_PX: LP_LIFE.WORD_PX });
-      el.style.translate = d[0].toFixed(2) + "px " + d[1].toFixed(2) + "px";
-    });
-  };
   /* R26-226 (E99 s82) - A MULTI-LINE PAGE BUILDS LINE BY LINE. The operator, on frozen copy d: "the crawl drawing
      on the chart looks weird. The lines draw well while we're moving them, but drawing the first few years then
      stopping for seemingly no reason is weird ... A better way to do this is to draw the first line completely, label
@@ -11626,7 +11599,6 @@ async function mount(doc) {
         for (const sp of pageSpecies(scene, "peel")) pu = Math.max(pu, (t - sp.at) / Math.max(0.001, sp.dur || 1));
         lpPeelTo(cs, pu);
       }
-      lpPaintChartLife(cs, t, pageLive);   /* R26-228 (c)/(d): the tick labels, the end tags and the values at their own phases - LAST, so a mark a transition owns is skipped with its transform already written */
   };
   /* P48 T2 - RESCALE. The standing chart never leaves: on one min-jerk clock every mark that exists under both scales moves
      from its place under A to its place under B (a line's path is re-projected from its DATA, a bar's rect and every tick,
@@ -12642,7 +12614,6 @@ async function mount(doc) {
     const depthCss = depthK ? camCssAt(camNow(scene, t), depthK) + " " : "";
     st.page.style.transform = depthCss + planeCss + snapCss + throwCss + cardCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
       + idleCssFor("page", pgIdleKind(scene, pg), t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence (R26-228: at the kind the ROW named) */
-    lpPaintWordLife(st, t, pgLive(scene, pg));   /* R26-228 (c): the page's own words, each at its own phase */
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
     const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
     /* P48 T4: a page may carry more than one chart. `lpPaintChart` is the build beat for ONE of them, at its own
@@ -12658,7 +12629,7 @@ async function mount(doc) {
         const tp = tb - bd.at, bi = (st.badges || []).indexOf(bd);
         const sx = arrP === "throw" ? throwXf({ x: -(STOP_THROW_DX + 80 * bi), y: -STOP_THROW_DY }, massP, tp) : landXf(massP, tp);
         bd.el.style.opacity = tp >= 0 ? "1" : "0";
-        bd.el.style.transform = stopCss(sx) + idleCssFor("pill", pgIdleKind(scene, pg), t, st.seed, 20 + bi);   /* R26-228: the ROW's kind, so a `live` page's badges drift at their own phase and a `none` page's are still */
+        bd.el.style.transform = stopCss(sx) + idleCssFor("pill", pgPillKind(scene, pg), t, st.seed, 20 + bi);   /* R26-228: the ROW's kind, so a `none` page's badges are still (R26-234: and a `live` page's BREATHE - they never drift) */
         continue;
       }
       const ub = clamp01((tb - bd.at) / LP_BADGE_IN), e = (kin("analytic_spring") ? springPop : stagePop)(ub);
@@ -12668,7 +12639,7 @@ async function mount(doc) {
       const sq = kin("area_squash") && kin("analytic_spring") && ub > 0 && ub < 1
         ? " matrix(" + squashMatrix(Math.PI / 2, springSquash(ub, POP, 18, LP_BADGE_IN)).map((v) => v.toFixed(4)).join(",") + ",0,0)" : "";
       bd.el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")" + sq
-        + idleCssFor("pill", pgIdleKind(scene, pg), t, st.seed, 20 + (st.badges || []).indexOf(bd));   /* E49: each pill at its own phase (R26-228: at the kind the ROW named) */
+        + idleCssFor("pill", pgPillKind(scene, pg), t, st.seed, 20 + (st.badges || []).indexOf(bd));   /* E49: each pill at its own phase (R26-228: at the kind the ROW named; R26-234: a live page's pills breathe, they do not drift) */
     }
     paintPerform(st, scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word */
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
