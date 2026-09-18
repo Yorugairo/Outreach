@@ -1537,22 +1537,29 @@ def test_a_row_that_fits_keeps_the_stylesheets_own_size_untouched(tmp_path):
 
 
 @needs_browser
-def test_a_row_that_cannot_fit_even_at_the_floor_splits_in_two(tmp_path):
+def test_a_row_that_cannot_fit_even_at_the_floor_thins_to_the_sentence(tmp_path):
     """The floor is the floor: the same four slots asked to carry SIX-glyph values ("$665.0") cannot, at any
-    size a viewer could read. So the row takes the page's own tick-label size and splits - odd bars' values
-    one line further out - and every box is still disjoint from its neighbour's."""
+    size a viewer could read - and these bars are 102 units wide against a ~130-unit number, so no number can
+    stand INSIDE its own bar either. R26-191b (2026-09-17, the parent's refusal of the mirror): the row then
+    THINS rather than riding one line further out - out is the tick band for a drop and the badge's band for
+    a rise, which is what the weak-prints page showed at 0:44. The page keeps the MAXIMUM, the MINIMUM and
+    the LAST bar, each exactly where the unsplit path put it - on its own side of the zero line, E28 - and
+    prints nothing on the rest; the axis still carries the scale (E25: a chart proves one sentence)."""
     ep, plate = _vals_ep(tmp_path, values=[665.0, 633.0, 604.0, 577.0], name="fx-wide")
     at, errs, close = _vals_player(ep, plate)
     try:
         d = at(VF_BUILD_END)
         fit = d["fit"]
-        assert fit["fitted"] is True and fit["rows"] == 2, "six glyphs over a 155-unit slot: the row had to split"
+        assert fit["fitted"] is True and fit["rows"] == 1, "nothing fits, so nothing splits - the row thins"
+        assert fit["thinned"] == 2, "two of the four numbers are not printed at all"
         assert {v["fs"] for v in d["vals"]} == {40.0}, "at the floor, and still ONE size for the whole row"
+        shown = [v for v in sorted(d["vals"], key=lambda v: v["x"]) if not v["hidden"]]
+        assert [v["t"] for v in shown] == ["$665.0", "$577.0"], "the maximum, and the minimum which is also the last bar"
         ys = [v["y"] for v in sorted(d["vals"], key=lambda v: v["x"])]
-        assert ys[1] < ys[0] and ys[3] < ys[2], "the odd bars' values ride one line higher than their neighbours'"
-        boxes = sorted((v["box"] for v in d["vals"]), key=lambda b: b[0])
+        assert ys == sorted(ys), "every value still rides its own bar's far end - nothing was pushed out of line"
+        boxes = sorted((v["box"] for v in shown), key=lambda b: b[0])
         for a, b in zip(boxes, boxes[1:]):
-            assert _disjoint(a, b), f"two rows and the boxes still cross: {a} {b}"
+            assert _disjoint(a, b), f"the thinned row still crosses: {a} {b}"
         assert not errs, errs
     finally:
         close()
