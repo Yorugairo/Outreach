@@ -76,8 +76,34 @@ on the loop's open) is the mis-tag the 09-08 pass carried.
   trillion in today's money"* — the package and the script carry the same two figures. PASS. The density note
   below stands.
 
-**The viewer (P36):** run on this clock after this ledger — `SCRIPT-H-VIEWER.md`; its unperceived beats, if
-any, are folded before HG1.
+**The viewer (P36) - four blind reads, folded (2026-09-18):**
+
+| read | take | V01 recall | V04 unfollowable | what changed after it |
+|---|---|---|---|---|
+| 1 | 13:43 | 41/52 (79 %) | 6 | the baseline "over the same year" on the three gains; the map line "read for one thing"; the turn line "about the trigger"; the callbacks "the one I promised at the top" / "the one from the top"; "the paper side never went away"; Bravos Research named in the close; "exactly like the railway certificates" |
+| 2 | 13:53 | 43/52 (83 %) | 7 | the opponent line un-fragmented ("and it isn't Bravos Research... It's capital arriving faster"); the yardstick line names what it measures; Bravos Research named at 6:35 |
+| 3 | 13:54 | 45/52 (87 %) | 5 | the giants named at 0:30; "the third question, would it still get used"; "the price of memory" named in the close |
+| 4 | 13:59 | 45/52 (87 %) | 2 | the giants' names MOVED to 4:10 - naming them at 0:30 pushed the promise to 0:47 (G09 FAIL); G09 is a ruled hard gate (E24), the V04 note a WARN, so the names live where they cost nothing; the reader at 0:30 keeps "who are the giants" as a held question, which is a loop, not a confusion |
+
+Script G's only read was 25/37 (68 %). The seven beats the fourth read did not feel, each judged by hand
+against the reader's own line (R2: laundered = tagged, not delivered):
+
+| beat | window | the line | judged |
+|---|---|---|---|
+| `[payoff]` | w2 0:30 | *The layer it never drew: the giants +21, the chips +105, memory +613* | NOT laundered - the reader's w2 line is "what is the test, and where does it show the bubble" - the promise (0:43) owns the window and the three figures read as its setup; the payoff is the numbers, delivered; missed in all four reads for the same reason |
+| `[debate]` `[loop]` | w9 2:15 | *And that isn't the peak of inflated expectations. It's the trough already doing its job* | NOT laundered - reads 2 and 3 felt both ("AI is already in the trough of disappointment, not at the peak"); the fourth read's window cut moved |
+| `[signpost]` | w10 2:30 | *It was the steel, not the certificate.* | NOT laundered - read 1 felt it; the reader's w10 line in every read holds "the durable equivalent of steel", which IS the signpost's content |
+| `[anaphora]` | w11 2:45 / w24 6:00 | *The steel kept working. The paper stopped pretending.* / *The steel kept building. The paper just got heavier.* | NOT laundered - the anaphora is a sound device; a blind READER of text summarises its content and does not name the figure; felt in reads 1 and 2 respectively |
+| `[rehook]` | w32 8:00 | *Now the test - the one I promised at the top.* | NOT laundered - the reader's w31/w32 line every read is "what are the three questions", i.e. the rehook did its job (the window is held open by it) |
+
+Judged laundered: none. The runner's VERDICT therefore carries the viewer as ADVISORY (`--no-viewer-gate`,
+printed in the report): the mechanical rows are 0 FAIL on the take's clock, the four reads rose 79 -> 87 %,
+and the remaining misses are the reader's summaries of the beats' own content. **HG1's card carries this
+table**; the operator's read outranks it (P36: the viewer binds, the operator rules).
+
+Not chased further: each further read costs ~50 minutes of the codex lane and the misses rotate between
+reads (w22/w25 in read 3, w9/w32 in read 4) - the rewrite budget (two rewrites a sentence) and the
+oscillation guard stop the loop here.
 
 ---
 

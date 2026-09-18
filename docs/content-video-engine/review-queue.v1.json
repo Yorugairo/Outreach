@@ -4522,26 +4522,55 @@
     {
       "id": "p68-steel-and-paper-h-hg1",
       "status": "open",
-      "kind": "owed",
-      "title": "STEEL AND PAPER H - HG1: the script gate-clean and the package re-locked (title, thumbnail, sentence 1)",
+      "kind": "rule",
+      "title": "STEEL AND PAPER H - HG1: the script gate-clean on its own take (13:58) and the package re-locked - read the script, rule the package",
       "ids": [
         "E99 s81",
         "E27",
         "E74"
       ],
-      "judge": "The H script at 0 FAIL on its own scratch clock, the WARNs judged, the blind viewer folded; the package as one object (E27). Owed by T1.",
-      "where": [],
+      "judge": "Script H on its own Kokoro take at ~175 wpm: the runner PASS - lint 0, audit 0, the opening gate 0 FAIL / 3 WARN (judged in SCRIPT-H-JUDGE.md) / 47 PASS, the promise at 0:44, runtime 13:58 over the 8:00 floor. What changed from the 09-08 draft: the promise brought under 0:45 (two fillers out of P1), the ring token once in P2, the catalyst on the crossing fact, the tags the gate wanted each delivered in the text (the R2 table), and nine comprehension edits from the blind viewer's four reads (79 -> 87 % recall; the misses judged one by one, none laundered; the viewer is ADVISORY on the report and its table is in the judge ledger). The 7:26 on the old report was Script G's take borrowed by position (R26-203). The package: the locked title and the FINAL thumbnail (STEEL or PAPER?, $1T+ against $690B) - sentence 1 answers it (J12 PASS). Two questions: (1) does the script read as yours - any line to send back goes to the next letter, not a patch; (2) does the package stand for the Facebook post and the YouTube re-upload, or is a new thumbnail owed (the density note in the ledger)?",
+      "where": [
+        {
+          "label": "the script (the letter in progress)",
+          "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt"
+        },
+        {
+          "label": "the gate report on the take's clock - VERDICT PASS",
+          "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-GATES.md"
+        },
+        {
+          "label": "the judge ledger - the R2 table, the WARNs, the twelve JUDGE rows, the viewer's four reads folded",
+          "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-JUDGE.md"
+        },
+        {
+          "label": "the blind viewer's fourth read",
+          "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VIEWER.md"
+        },
+        {
+          "label": "the thumbnail (FINAL, locked 2026-09-01)",
+          "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png"
+        },
+        {
+          "label": "the scratch take (Kokoro; listen for the read, not the voice - the voice is HG3's)",
+          "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/vo-h-scratch/scratch-kokoro.mp3"
+        }
+      ],
       "proofs": [],
-      "options": [],
-      "recommendation": "",
-      "blocks": "T4 the treatment; the take the cut is built on",
+      "options": [
+        "The script stands; the package stands - build on it",
+        "The script stands; a new thumbnail is owed for the two posts",
+        "Send lines back - name them (the next letter)"
+      ],
+      "recommendation": "The script stands; the package stands - build on it",
+      "blocks": "T4's treatment is built on it already (the rows anchor on words); the record of the voice at HG3",
       "sources": [
         ".claude/PRPs/plans/P68-STEEL-AND-PAPER-H.plan.md",
         "docs/portable/OPERATOR-RULINGS.md (E99 s81)"
       ],
       "ruling": "",
-      "was_kind": "watch",
-      "owed": "P68 HG1 - the parent builds it before the row opens"
+      "was_kind": "owed",
+      "owed": ""
     },
     {
       "id": "p68-steel-and-paper-h-hg3",
