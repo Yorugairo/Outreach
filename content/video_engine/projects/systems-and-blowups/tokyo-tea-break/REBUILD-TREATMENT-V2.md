@@ -53,7 +53,7 @@ ink (every card in the page's room, the park where the room is short).
 
 ## What stays exactly as recorded
 
-The take (`scene_1-tight`), the script, the caption pages (phrase / stage+anchor), the seven worlds, the plates and
+The take (`scene_1` - Tokyo's take was never tightened; `scene_1-tight` is the calendar cut's), the script, the caption pages (phrase / stage+anchor), the seven worlds, the plates and
 their stills, the outro, the beds. The approved `build-short/` is never touched (E45); v2 builds into its own dir,
 and the served link is a frozen copy.
 

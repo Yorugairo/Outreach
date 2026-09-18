@@ -131,7 +131,7 @@ BED_SWELL_DB = 4.0   # the bed BREATHES +4 dB from a card's throw through its la
 SNAP_S_BED = 0.45
 TURN_BED_AT = 40.0   # the turn bed fades in under the hook bed here and runs to the end
 PLATFORM = "youtube"
-VO_LUFS = -17.9   # vo-short/audio/scene_1.mp3, measured 2026-09-05
+VO_LUFS = -20.5   # vo-short/audio/scene_1.mp3, post-tone (chain G, E99 s54 - master_vo_tone.py, scene_1.tone.json), measured 2026-09-17; was -17.9 measured 2026-09-05 on the untoned take the approved build-short/ master still carries
 BEDS = {"suno-hook-A.mp3": -13.2, "suno-hook-B.mp3": -13.0, "suno-pivot-A.mp3": -13.0, "suno-pivot-B.mp3": -13.0}   # the copies in sound/, matched to -14 then limited at -1 dBFS: MEASURED integrated LUFS (SOURCES.md), so one gain fits both variants
 bed_gain = lambda f: A.bed_gain(VO_LUFS, BED_LU[PLATFORM], BEDS[f])
 
