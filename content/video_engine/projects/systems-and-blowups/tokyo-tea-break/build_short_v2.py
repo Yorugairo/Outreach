@@ -55,8 +55,14 @@ import sys
 from pathlib import Path
 
 BUILD_DIR = "build-v2"
-if os.environ.setdefault("TOKYO_BUILD_DIR", BUILD_DIR) != BUILD_DIR:
-    raise SystemExit(f"FAIL: the v2 rebuild builds {BUILD_DIR} only (TOKYO_BUILD_DIR={os.environ['TOKYO_BUILD_DIR']!r})")
+# THE GUARD (E45; widened 2026-09-18 for build_short_v3.py). This module refuses to write into the APPROVED cut's dir
+# or into any served FROZEN copy - those are never rebuilt. It no longer refuses a DESCENDANT that named its own build
+# dir before importing this one (v3 takes v2's rows exactly as v2 takes the approved script's), because the refusal is
+# all this line does: run with no TOKYO_BUILD_DIR and it still builds build-v2, byte for byte as it did for the render.
+_ASKED = os.environ.setdefault("TOKYO_BUILD_DIR", BUILD_DIR)
+if _ASKED.startswith("build-short") or "frozen" in _ASKED:
+    raise SystemExit(f"FAIL: build_short_v2.py never writes the approved cut or a served frozen copy "
+                     f"(TOKYO_BUILD_DIR={_ASKED!r})")
 os.environ.setdefault("SELF_WATCH", "0")   # the one-shot bar is the parent's read here; this module compiles and gates
 
 HERE = Path(__file__).resolve().parent
