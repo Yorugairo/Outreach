@@ -294,6 +294,133 @@
         "today": true,
         "why": null
       }
+    },
+    {
+      "id": "arrival:stamp",
+      "axis": "arrival",
+      "token": "stamp",
+      "title": "The stamp arrival",
+      "aliases": [
+        {
+          "name": "badge stamp (RU-2)",
+          "source": "docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md"
+        },
+        {
+          "name": "stamped on",
+          "source": "docs/portable/OPERATOR-RULINGS.md"
+        }
+      ],
+      "does": "The thing comes DOWN onto the page from 2.1x on a clamped scale spring while a free rotation spring is still unwinding, so it rests OFF-SQUARE; an impact ring radiates from the contact and leaves. Carries anything: a card, a badge or a bare prop.",
+      "when": "a named thing is ADDED TO THE WORLD with weight - a direct-match prop, a verdict, a seal (E99 s85); never a card that should fly (throw) or simply appear (spring)",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md E99 s85",
+      "author": {
+        "key": "dock opts {\"arrive\": \"stamp\"} - refused on a page's pills and with embed",
+        "example": "{'prop': True, 'arrive': 'stamp', 'mass': 'ink', 'ink': 'own'}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:3254",
+        "check": "arrival"
+      },
+      "phases": [
+        {
+          "name": "approach",
+          "does": "down from 2.1x in AREA space (Remotion's perceptual-scale), capped by the room",
+          "trigger": "the dock's `enter`",
+          "dials": {
+            "SCALE_FROM": "2.1"
+          }
+        },
+        {
+          "name": "contact",
+          "does": "the clamped scale spring reaches exactly 1 while the rotation is still off-axis",
+          "trigger": "0.1542 s",
+          "dials": {
+            "SCALE_SPRING": "d14 k220 m0.9 clamped",
+            "ROT_SPRING": "d11 k120 m1 free"
+          }
+        },
+        {
+          "name": "ring",
+          "does": "the impact ring: linear life, eased expansion toward 2x, CAPPED to the room (floor 1.6x), never clipped",
+          "trigger": "contact",
+          "dials": {
+            "RING_LIFE_S": "0.4667",
+            "RING_TO": "2.0 (floor 1.6)"
+          }
+        },
+        {
+          "name": "rest",
+          "does": "the mark rests at -9 deg - a stamp never lands square",
+          "trigger": "the rotation settles",
+          "dials": {
+            "REST_DEG": "-9"
+          }
+        },
+        {
+          "name": "exit",
+          "does": "ease-in cubic fade (E50: a landed mark owes an exit)",
+          "trigger": "the dock's `exit`",
+          "dials": {
+            "EXIT_S": "0.5333"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "remotion-ui badge-stamp (RU-2)",
+          "became": "the two springs, the ring, the exit",
+          "record": "content/video_engine/remotion-ui/src/remotion/primitives/badge-stamp.tsx:78",
+          "tie": "recorded"
+        },
+        {
+          "source": "REMOTION-UI-INTAKE RU-2 (the two-spring offset is the weight cue)",
+          "became": "the whole arrival",
+          "record": "docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md",
+          "tie": "recorded"
+        },
+        {
+          "source": "Stop-action mechanics (P47 T1)",
+          "became": "the contact shadow and the mass",
+          "record": "content/video_engine/scripts/kinetics/stopaction.mjs:286",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "prop",
+          "means": "the payload is BARE - a cutout added to the world, no card chrome (dock_kind:prop)",
+          "source_set": "DOCK_OPTS"
+        },
+        {
+          "token": "ink",
+          "means": "own = the art's own colour; page = laid down in the page's ink (the operator picks)",
+          "source_set": "DOCK_OPTS"
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "object": "STAMP_ARRIVAL"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "symbol": "stampXf",
+        "note": "the room fit is build_scene_timeline_f.py `stamp_dock_place` + `stamp_ring_fit`: the ring's peak and the 2.1x approach are fitted to the page's room, capped never clipped, refused by name when blind"
+      },
+      "doctrine": [
+        "E99 s85",
+        "E50",
+        "E65",
+        "R26-20"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "prop-stamp",
+        "test": "content/video_engine/tests/test_the_stamp_arrival.py",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "a 16:9 ledger page that reports its end-name box; REFUSED by name on 9:16 line pages and host-plate pages; not yet a landing to the gate/cues/camera (R26-247)"
+      }
     }
   ]
 }

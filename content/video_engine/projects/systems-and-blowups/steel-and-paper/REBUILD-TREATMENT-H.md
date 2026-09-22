@@ -116,8 +116,26 @@ not an object on screen - the page is the open); `prop-bigtech-capital-tower-v1`
 builders borrowed" (no tower is named); `prop-gpu-accelerator-card-v1` / `prop-ai-server-rack-cabinet-v1`
 on "the orders are in, the slots are gone" (neither is named); `prop-treasury-yield-gauge-5pct-v1` on
 the tripwire (the gauge reads 5%, the sentence says five and a half - a wrong number on screen).
-A stamp ARRIVES (s71): a short throw to a point beside the datum, `mass: paper`, then its idle; it
-never floats over the axes or the title (E65's room).
+**CORRECTED 2026-09-22, before the body is built: "stamp" above is MY word and it collides with the
+engine's.** `stamp` in the compiler is one of the VECTOR MAP's three species (`build_scene_timeline_f.py:319-320`:
+"the three species of the VECTOR MAP world, and of no other world") and it writes a NUMBER or a name at a
+country's centroid. It cannot carry a picture and it cannot sit on a ledger page; authoring one on a page row is
+refused. The buildable form of what these six rows mean is a **docked prop card**: the cutout is a transparent
+PNG (measured: `prop-federal-reserve-building-v1` 282x259 RGBA, 98 % clear at its corners; the others alike), so
+it docks through `docks.dock_png` like any still, lands in the page's OWN room (E65) beside the datum the sentence
+names, arrives on that word (`arrive: throw, mass: paper`) and holds - which is exactly E99 s71's "a named thing
+ARRIVES", and is what the treatment meant. **Corrected again the same day by E99 s85, and this is the version the body builds:** a docked card
+that throws and lands is our single-spring landing, which the remotion-ui RU-2 triage names as the thing that
+*lacks* weight - so it is the carrier, not the motion. These six rows are props **STAMPED ON**, unframed: a prop is never
+put in a card because the point of a prop is to join the WORLD - its own alpha is its shape, no frame, no border,
+no room, and on a page it is page content that parks, rescales and leaves WITH the page (R26-219). `stamp` is the
+ARRIVAL and carries whatever the author names (a card may be stamped too); a prop's other way in is simply thrown
+on, also unframed. Stamped, it lands by RU-2's mechanism - a clamped scale spring settling while a free
+trailing ROTATION spring is still unwinding under it, an impact ring on split shock curves out to about twice its
+radius, and an exit owed on the landed mark (E50). Our look, never the reference's: charcoal on cream, drawn in
+our hand, no gold ring. The engine's own `stamp` SPECIES is the vector map's number-at-a-centroid and is a
+different thing entirely; these are arrivals, so the two never meet. The six direct matches and the five refusals
+below stand unchanged. No prop has ever landed in a shipped cut, so the first one comes to the operator on a card.
 
 ## The camera (E99 s76 - only where the sentence names the thing)
 
