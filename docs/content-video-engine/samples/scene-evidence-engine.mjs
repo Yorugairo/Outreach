@@ -1993,6 +1993,196 @@ async function mount(doc) {
   };
   /* KINETICS:END */
 
+  /* KINETICS:BEGIN page_surface */
+  /* page_surface.mjs - T19's pure page-surface geometry.
+     This is deliberately a standalone helper, not a renderer or an inlined engine region. The later player slice can
+     consume its returned stage quad, native host, chart box, viewBox and plane homography without measuring the DOM.
+     The registered surface is supplied by the caller; no page profile layout lives here. */
+
+  const SURFACE_PAGE = Object.freeze({
+    VIEW_H: 560,
+    GROW_S: 0.45,
+    ASPECT_TOL: 0.001,       /* 0.1%: CSS chart box and SVG viewBox must agree. */
+  });
+
+  const psFinite = (value) => typeof value === "number" && Number.isFinite(value);
+  const psFail = (what, detail) => { throw new TypeError(`page-surface: ${what} ${detail}`); };
+  const psNumber = (value, what) => {
+    const out = +value;
+    if (!psFinite(out)) psFail(what, "must be finite");
+    return out;
+  };
+
+  const psPointQuad = (quad, what, normalized = false) => {
+    if (!Array.isArray(quad) || quad.length !== 4) psFail(what, "must contain four [x, y] points");
+    const out = quad.map((point, i) => {
+      if (!Array.isArray(point) || point.length < 2) psFail(`${what}[${i}]`, "must be [x, y]");
+      const x = psNumber(point[0], `${what}[${i}].x`), y = psNumber(point[1], `${what}[${i}].y`);
+      if (normalized && (x < 0 || x > 1 || y < 0 || y > 1)) {
+        psFail(`${what}[${i}]`, "must be normalized to [0, 1]");
+      }
+      return [x, y];
+    });
+    const area = Math.abs(out.reduce((sum, p, i) => {
+      const q = out[(i + 1) % out.length];
+      return sum + p[0] * q[1] - q[0] * p[1];
+    }, 0)) / 2;
+    if (out.some((p, i) => psEdgeLength(p, out[(i + 1) % out.length]) <= 1e-12)) {
+      psFail(what, "must not repeat adjacent corners");
+    }
+    if (!(area > 1e-12)) psFail(what, "must be non-degenerate");
+    return out;
+  };
+
+  const psStageOf = (stage) => {
+    let w, h;
+    if (Array.isArray(stage)) [w, h] = stage;
+    else if (stage && typeof stage === "object") {
+      w = stage.w ?? stage.width ?? stage.W;
+      h = stage.h ?? stage.height ?? stage.H;
+    }
+    w = psNumber(w, "stage.width");
+    h = psNumber(h, "stage.height");
+    if (!(w > 0) || !(h > 0)) psFail("stage", "width and height must be positive");
+    return { w, h };
+  };
+
+  const psEdgeLength = (a, b) => Math.hypot(b[0] - a[0], b[1] - a[1]);
+  const psEdgeMeans = (quad, what) => {
+    const w = (psEdgeLength(quad[0], quad[1]) + psEdgeLength(quad[3], quad[2])) / 2;
+    const h = (psEdgeLength(quad[0], quad[3]) + psEdgeLength(quad[1], quad[2])) / 2;
+    if (!(w > 0) || !(h > 0) || !psFinite(w) || !psFinite(h)) psFail(what, "has no finite positive edge lengths");
+    return { w, h };
+  };
+
+  const psToStageQuad = (normalized, stage) => normalized.map(([x, y]) => [x * stage.w, y * stage.h]);
+  const psFullStageQuad = (stage) => [[0, 0], [stage.w, 0], [stage.w, stage.h], [0, stage.h]];
+  const psCopyQuad = (quad) => quad.map(([x, y]) => [x, y]);
+  const psLerp = (a, b, u) => a + (b - a) * u;
+  const psLerpQuad = (a, b, u) => a.map((p, i) => [psLerp(p[0], b[i][0], u), psLerp(p[1], b[i][1], u)]);
+  const psPick = (...values) => values.find((value) => value != null);
+
+  /* A public conversion is useful to the renderer and makes the normalized -> stage boundary explicit. */
+  const surfaceStageQuad = (normalizedQuad, stage) => {
+    const S = psStageOf(stage), Qn = psPointQuad(normalizedQuad, "registered quad", true);
+    return psToStageQuad(Qn, S);
+  };
+
+  /* The source state: the registered quad in stage pixels and a native host whose aspect is the measured surface.
+     `viewH` is positional to mirror the compiler's surface_plot_geometry(quad, stage_size, view_h=560) law. */
+  const surfacePlotGeometry = (normalizedQuad, stage, viewH = SURFACE_PAGE.VIEW_H) => {
+    if (viewH && typeof viewH === "object") viewH = viewH.viewH ?? viewH.height;
+    const S = psStageOf(stage), Qn = psPointQuad(normalizedQuad, "registered quad", true);
+    const viewHeight = psNumber(viewH, "viewH");
+    if (!(viewHeight > 0)) psFail("viewH", "must be positive");
+    const quad = psToStageQuad(Qn, S), fullQuad = psFullStageQuad(S), host = psEdgeMeans(quad, "registered quad");
+    const viewWidth = viewHeight * host.w / host.h;
+    return {
+      registeredQuad: psCopyQuad(Qn),
+      stage: { w: S.w, h: S.h },
+      quad: psCopyQuad(quad),
+      fullQuad: psCopyQuad(fullQuad),
+      hostW: host.w,
+      hostH: host.h,
+      viewW: viewWidth,
+      viewH: viewHeight,
+      chart: { x: 0, y: 0, w: host.w, h: host.h },
+      viewBox: { x: 0, y: 0, w: viewWidth, h: viewHeight },
+    };
+  };
+
+  const psDestinationProfile = (destination, viewH) => {
+    if (!destination || typeof destination !== "object") psFail("destination", "geometry/profile is required");
+    const box = destination.chartBox || destination.chart || destination.box || destination;
+    if (!box || typeof box !== "object") psFail("destination.chart", "must be a geometry object");
+    const x = psNumber(psPick(box.x, box.X), "destination.x");
+    const y = psNumber(psPick(box.y, box.Y), "destination.y");
+    const w = psNumber(psPick(box.w, box.W), "destination.w");
+    const h = psNumber(psPick(box.h, box.H), "destination.h");
+    if (!(w > 0) || !(h > 0)) psFail("destination", "chart width and height must be positive");
+
+    const vb = destination.viewBox || destination.viewbox || {};
+    const destViewH = psNumber(psPick(vb.h, vb.height, destination.vh, destination.viewH, destination.VH, viewH), "destination.viewH");
+    const destViewWValue = psPick(vb.w, vb.width, destination.vw, destination.viewW, destination.VW);
+    const destViewW = destViewWValue == null ? destViewH * w / h : psNumber(destViewWValue, "destination.viewW");
+    if (!(destViewW > 0) || !(destViewH > 0)) psFail("destination", "viewBox dimensions must be positive");
+    if (Math.abs(destViewH - viewH) > 1e-9) {
+      psFail("destination.viewH", `must equal source viewH ${viewH}`);
+    }
+    const aspectDelta = Math.abs((w / h) / (destViewW / destViewH) - 1);
+    if (aspectDelta > SURFACE_PAGE.ASPECT_TOL) {
+      psFail("destination", `chart/viewBox aspect mismatch ${(aspectDelta * 100).toFixed(4)}%`);
+    }
+    return {
+      chart: { x, y, w, h },
+      viewBox: { x: 0, y: 0, w: destViewW, h: destViewH },
+    };
+  };
+
+  const psSourceProfile = (source) => {
+    if (!source || typeof source !== "object") psFail("source", "surfacePlotGeometry output is required");
+    const normalized = psPointQuad(source.registeredQuad, "source.registeredQuad", true);
+    const viewH = psNumber(source.viewH, "source.viewH");
+    return surfacePlotGeometry(normalized, source.stage, viewH);
+  };
+
+  const psProgressFor = (time, duration) => {
+    const t = psNumber(time, "time"), d = psNumber(duration, "duration");
+    if (!(d > 0)) psFail("duration", "must be positive");
+    return { time: t, duration: d, progress: Math.min(1, Math.max(0, t / d)) };
+  };
+
+  /* One seek -> one frame. `destination` is the actual selected page/profile geometry supplied by the caller, e.g.
+     `{x, y, w, h, vw, vh}` from the readability profile. Intermediate CSS height is derived from the current width and
+     viewBox aspect, so no browser `meet` letterbox or anisotropic scale is introduced. */
+  const surfaceGeometryAt = (source, destination, time, options = {}) => {
+    const base = psSourceProfile(source);
+    const duration = options.duration == null ? SURFACE_PAGE.GROW_S : options.duration;
+    const clock = psProgressFor(time, duration), dest = psDestinationProfile(destination, base.viewH);
+    const u = minJerk(clock.progress);
+    const endpoint = clock.progress <= 0 ? 0 : (clock.progress >= 1 ? 1 : null);
+    const quad = endpoint === 0 ? psCopyQuad(base.quad) : (endpoint === 1 ? psCopyQuad(base.fullQuad) : psLerpQuad(base.quad, base.fullQuad, u));
+    const host = psEdgeMeans(quad, "surface quad");
+    const matrix = planeMatrix(quad, host.w, host.h, 0, 0);
+    if (!matrix) psFail("surface quad", "cannot produce a homography");
+
+    let chart, viewBox;
+    if (endpoint === 0) {
+      chart = { ...base.chart };
+      viewBox = { ...base.viewBox };
+    } else if (endpoint === 1) {
+      chart = { ...dest.chart };
+      viewBox = { ...dest.viewBox };
+    } else {
+      const viewW = psLerp(base.viewW, dest.viewBox.w, u);
+      const width = psLerp(base.hostW, dest.chart.w, u);
+      chart = {
+        x: psLerp(0, dest.chart.x, u),
+        y: psLerp(0, dest.chart.y, u),
+        w: width,
+        h: width * base.viewH / viewW,
+      };
+      viewBox = { x: 0, y: 0, w: viewW, h: base.viewH };
+    }
+
+    return {
+      time: clock.time,
+      duration: clock.duration,
+      progress: clock.progress,
+      eased: u,
+      quad,
+      hostW: host.w,
+      hostH: host.h,
+      host: { x: 0, y: 0, w: host.w, h: host.h },
+      matrix,
+      chart,
+      viewBox,
+      chartAspect: chart.w / chart.h,
+      viewBoxAspect: viewBox.w / viewBox.h,
+    };
+  };
+  /* KINETICS:END */
+
   /* KINETICS:BEGIN arap */
   /* kinetics/arap.mjs - THE MORPH (P47 T3 / P38 T5; 43 s43.5; the brief B4). SOURCE OF TRUTH, inlined into the scene-evidence
      player by sync_kinetics.py between KINETICS:BEGIN arap and KINETICS:END. Self-contained (no template symbol).
@@ -7549,6 +7739,38 @@ async function mount(doc) {
                   stay on the stage, its foot puts the x tick labels above the anchored caption's strip and the source
                   line under it. Every one of the three was measured on the served player. */
                FULL: { X: 0.0300, Y: 0.1824, W: 0.6948, H: 0.6917 } };
+  /* T17: a closed, page-scoped landscape phone profile. The vertical viewBox stays 560 units
+     because the anchored caption fixes the chart's rendered height; the horizontal viewBox and
+     CSS box grow together, so the browser's default xMidYMid meet remains uniform rather than
+     letterboxing a wider outer box. The line builder keeps its numeric domains and fixed margins. */
+  const LP_READABILITY = Object.freeze({ LANDSCAPE_PHONE: "landscape-phone" });
+  const LP_PHONE = Object.freeze({ VIEW_H: 560, MIN_W: 1000, SAFE_RIGHT: 0.979, PLOT_L: 120,
+                                  NAME_U: 19 * 46 / 24, BADGE_U: 5 * 46 / 18, FONT_PX: 46, TEXT_PX: 52, TAG_GAP: 12 });
+  const lpReadability = (pg) => String(((pg || {}).axes || {}).readability || "");
+  const lpPhoneTagUnits = (pg) => {
+    if (String((pg || {}).builder || "") !== "dense-line") return 0;
+    const rides = {};
+    for (const b of (pg.badges || [])) if (b && b.inline) rides[LP_BADGE_COL[b.accent] || ""] = String(b.tag || "");
+    let out = 0;
+    for (const s of (pg.series || [])) {
+      if (!s || s.muted) continue;
+      const tag = rides[String(s.color || "") ] || "";
+      const name = ((s.label || "") + " " + (s.name || "")).trim();
+      out = Math.max(out, name.length * LP_PHONE.NAME_U + (tag ? (tag.length + 1) * LP_PHONE.BADGE_U : 0));
+    }
+    return out;
+  };
+  const lpPhoneFullGeometry = (pg) => {
+    if (PORTRAIT || lpReadability(pg) !== LP_READABILITY.LANDSCAPE_PHONE
+        || String((pg || {}).builder || "") !== "dense-line" || !pg.full_stage
+        || pg.chart_box || pg.board || pg.punch === false) return null;
+    const cx = LP.FULL.X * STAGE_W, cy = LP.FULL.Y * STAGE_H, ch = LP.FULL.H * STAGE_H;
+    const scale = ch / LP_PHONE.VIEW_H, tags = lpPhoneTagUnits(pg);
+    const maxW = (LP_PHONE.SAFE_RIGHT * STAGE_W - cx) / scale + 220 - LP_PHONE.TAG_GAP - tags;
+    if (!(maxW >= LP_PHONE.MIN_W)) return null;   /* the compiler rejects this profile before a page is shipped */
+    const vw = Math.max(LP_PHONE.MIN_W, Math.round(maxW * 1000) / 1000);
+    return { vw, vh: LP_PHONE.VIEW_H, scale, x: cx, y: cy, w: vw * scale, h: ch, tags };
+  };
   const LP_FOCUS_AT = LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH + LP.BUILD;   /* 7.4s: the focus action fires here */
   /* BADGES on the page (operator, 2026-09-03: 'we need the badges back'): the dock's own pills - verbatim label /
      value / tag with the series' accent as the key - spring in one at a time AFTER the build (the callout is the
@@ -7850,11 +8072,26 @@ async function mount(doc) {
          is the same law in Python, down to the SVG's own letterbox (viewBox 1000x560, default preserveAspectRatio).
          A HOST PLATE is never one of these: its board was measured around a hand, so its own box wins. */
       const FULL = !!pg.full_stage && !pg.chart_box && !pg.board && pg.punch !== false;
+      const phoneGeom = FULL ? lpPhoneFullGeometry(pg) : null;
       const un = (f) => 0.5 + (f - 0.5) / ps;
       /* a host plate may declare the chart box outright (page.chart_box, measured clear of the host's hand) */
-      const cb = FULL ? { x: un(LP.FULL.X), y: un(LP.FULL.Y), w: LP.FULL.W / ps, h: LP.FULL.H / ps }
+      const cb = FULL ? { x: un(LP.FULL.X), y: un(LP.FULL.Y),
+                         w: phoneGeom ? phoneGeom.w / STAGE_W / ps : LP.FULL.W / ps,
+                         h: LP.FULL.H / ps }
                : pg.chart_box ? { x: pg.chart_box.x + 0.02 * pg.chart_box.w, y: pg.chart_box.y + 0.15 * pg.chart_box.h, w: 0.96 * pg.chart_box.w, h: 0.74 * pg.chart_box.h }
                               : { x: reg.x + 0.03 * reg.w, y: reg.y + 0.15 * reg.h, w: 0.94 * reg.w, h: 0.74 * reg.h };
+      if (phoneGeom) {
+        chart.setAttribute("viewBox", "0 0 " + phoneGeom.vw + " " + phoneGeom.vh);
+        page.classList.add("lp-readability-landscape-phone");
+        /* The closed profile raises the outside-SVG heading, subtitle and source on this page only.
+           The caption remains the template's own surface; legacy pages keep their stylesheet sizes. */
+        title.style.fontSize = LP_PHONE.TEXT_PX + "px";
+        subEl.style.fontSize = LP_PHONE.TEXT_PX + "px";
+        src.style.fontSize = LP_PHONE.TEXT_PX + "px";
+        title.style.lineHeight = "1.1";
+        subEl.style.lineHeight = "1.1";
+        src.style.lineHeight = "1.1";
+      }
       /* a page whose captions are pinned to the anchor (a host plate, C5) keeps its chart and source above the
          caption band: the chart ends at 79% of the frame so the source line under it never meets a caption. A
          FULL-stage page already ends where its own tick labels clear that strip (LP.FULL.H), so the clamp - which
@@ -7862,6 +8099,7 @@ async function mount(doc) {
       if (!FULL && pg.caption === "anchor") cb.h = Math.max(0.2, Math.min(cb.h, 0.79 - cb.y));
       chart.style.width = ((FULL ? 1 : (qz ? 0.6 : 0.9)) * cb.w * 100).toFixed(2) + "%"; chart.style.height = (cb.h * 100).toFixed(2) + "%";
       chart.style.left = ((cb.x + (FULL ? 0 : qz === "left" ? 0.4 : 0.05) * cb.w) * 100).toFixed(2) + "%"; chart.style.top = (cb.y * 100).toFixed(2) + "%";
+      if (phoneGeom) geom = { W: phoneGeom.vw, H: phoneGeom.vh };
       /* the sub wraps inside the chart's width; the source writes directly under the chart box (never in the caption band).
          On a FULL-stage page the ink keeps the TITLE's own column - the one column a 9:16 page has - because the chart's
          letterbox moves with the data's shape and the heading would drift with it. */
@@ -7871,7 +8109,8 @@ async function mount(doc) {
       rail.style.left = inkL; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = inkW;
     }
     const inlineBadges = {}; (pg.badges || []).forEach((bd) => { if (bd.inline) inlineBadges[LP_BADGE_COL[bd.accent]] = bd; });
-    const st = { root, page, edge, blobs, strokes, nib, rect, goo, soakFx, soakFk: fk, seed, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src], kind: pg.builder || "story",
+    const st = { root, page, edge, blobs, strokes, nib, rect, goo, soakFx, soakFk: fk, seed, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src],
+                 readability: lpReadability(pg), kind: pg.builder || "story",
                  scene: scene.scene_id || null,   /* R26-37: the page's own name, so a probe says WHICH page it answered for */
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
@@ -7897,13 +8136,18 @@ async function mount(doc) {
       const ch2 = lpEl("svg", "lp-chart", page, { viewBox: chart.getAttribute("viewBox") });
       ch2.style.cssText = chart.style.cssText; ch2.style.opacity = 0;
       const s2 = { root, page, chart: ch2, geom, portrait: PORTRAIT, seed, edge, field, rail,
+                   readability: st.readability,
                    bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: {}, linePts: [],
                    marks: [], markBy: {}, badges: [], inkEls: [],
                    vals: pg2.values || [], vstr: pg2.value_strings || [],
                    emph: Number.isInteger(pg2.emphasize) ? pg2.emphasize : -1, kind: pg2.builder || "story",
                    titleText: pg2.title == null ? null : String(pg2.title),   /* P61 T2: the state's own TITLE, as a string - its ink is built only if a verb re-writes it (lpStateTitle), so no page grows a hidden run it never uses */
                    windowOffsets: pg2.window_offsets || null };   /* P48 T2: a derived (windowed) state maps the page's datum indices */
-      (builders[s2.kind] || buildLedgerBars)(s2, pg2);
+      /* A surface/full-stage page owns one presentation profile.  State rows are source data,
+         not a second authoring surface; give the builder a render-only presentation copy so a
+         phone state keeps the native inset/type and the cream palette without mutating pg2. */
+      const pg2Render = pg.surface_from ? { ...pg2, surface_from: pg.surface_from } : pg2;
+      (builders[s2.kind] || buildLedgerBars)(s2, pg2Render);
       /* ... and its own SUB and SOURCE. A caption that goes on describing the chart that left is a lie on the page, so a
          recast rewrites them with the same hand that rewrites the title: the old run erases glyph by glyph, the new one
          writes. They sit exactly where the page's own sit, and carry nothing until the recast reaches them. */
@@ -8484,7 +8728,10 @@ async function mount(doc) {
     const pad = Math.max(1e-9, (hi0 - lo0) * 0.14);
     const lo = dom ? Math.min(dom[0], lo0) : lo0 - (lo0 < 0 ? pad : 0), hi = dom ? dom[1] : hi0 + (hi0 > 0 ? pad : 0);
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px, 40px labels below, 59px values and pill above */
-    const bottom = P ? G.H - 70 : 440, top = P ? 150 : 90, x0 = P ? 150 : 60, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
+    const defaultGutter = P ? 150 : 60;
+    const requestedGutter = Number((pg.axes || {}).left_gutter);
+    const leftGutter = Number.isFinite(requestedGutter) ? Math.max(defaultGutter, requestedGutter) : defaultGutter;
+    const bottom = P ? G.H - 70 : 440, top = P ? 150 : 90, x0 = leftGutter, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
@@ -8779,9 +9026,12 @@ async function mount(doc) {
   };
   const buildLedgerLine = (st, pg) => {
     const ax = pg.axes || {}, series = pg.series || [];
-    const PAL = LP_INK;   /* E67: ONE table, read by every builder that paints on the field */
-    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px; no right margin for an inline name - it sits above the line's end */
-    const L = P ? 150 : 70, R = P ? 70 : 220, T = P ? 90 : 40, B = P ? G.H - 80 : 470, W = G.W;
+    const PAL = pg.surface_from ? { ...LP_INK, cobalt: "#1769C2", teal: "#087D68", crimson: "#B53A28" } : LP_INK;
+    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;
+    const PHONE = !P && st.readability === LP_READABILITY.LANDSCAPE_PHONE;
+    /* portrait (P41): stage px; no right margin for an inline name - it sits above the line's end.
+       T17 changes only the closed phone profile's local face/box law; legacy values stay byte-stable. */
+    const L = P ? 150 : PHONE ? LP_PHONE.PLOT_L : 70, R = P ? 70 : 220, T = P ? 90 : 40, B = P ? G.H - 80 : (PHONE ? 458 : 470), W = G.W;
     const Y = (v) => ax.log ? Math.log10(v) : v;
     /* REFERENCE RULES (the fifth watch, 2026-09-07). A POLICY rate is a constant, not a series: drawn as a line it is a step,
        and a step at this scale reads as a fault. `axes.hlines: [{y, label, color}]` draws it as what it is - a labelled rule
@@ -8826,7 +9076,7 @@ async function mount(doc) {
       const line = lpEl("line", "hrule", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1), stroke: col });
       const pe = PJ ? tiltRule(line, pj, L, y, W - R, y) : null;   /* the comparator is a rule ON the page: it lies on the plane too (E53 s6) */
       const ry = pe ? pe[1][1] : y;                                /* ... and its name stands upright at its projected right end */
-      const lab = h.label ? lpText(st.chart, "sname", pe ? pe[1][0] : W - R, ry - (P ? 18 : 12), "end", String(h.label), { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : "") }) : null;
+      const lab = h.label ? lpText(st.chart, "sname", pe ? pe[1][0] : W - R, ry - (P ? 18 : PHONE ? 22 : 12), "end", String(h.label), { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : PHONE ? ";font-size:" + LP_PHONE.FONT_PX + "px" : "") }) : null;
       lpMark(st, "rule:" + hix, "rule", line, { y, v: +h.y, x1: L, x2: W - R });
       if (lab) lpMark(st, "rulelab:" + hix, "rulelabel", lab, { x: pe ? pe[1][0] : W - R, y: ry - (P ? 18 : 12) });
       return { h, y, line, lab, col };
@@ -8839,11 +9089,13 @@ async function mount(doc) {
         const gl = lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1) });
         const pe = PJ ? tiltRule(gl, pj, L, y, W - R, y) : null;   /* P58 T5: the decade rules lie on the plane; their numbers stay upright at the left end */
         lpMark(st, "tick:" + n, "tick", gl, { v: tv, y, x1: L, x2: W - R });
-        lpMark(st, "ylab:" + n, "ylabel", lpText(st.chart, "lab", pe ? L - 10 + (pe[0][0] - L) : L - 10, pe ? pe[0][1] + 8 : y + 8, "end", lpTick(tv) + (ax.unit || "")), { v: tv, x: pe ? L - 10 + (pe[0][0] - L) : L - 10, y: pe ? pe[0][1] + 8 : y + 8 }); n++; } tv *= 2; }
+        lpMark(st, "ylab:" + n, "ylabel", lpText(st.chart, "lab", pe ? L - 10 + (pe[0][0] - L) : L - 10, pe ? pe[0][1] + 8 : y + 8, "end", lpTick(tv) + (ax.unit || ""),
+          st.readability === LP_READABILITY.LANDSCAPE_PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : undefined), { v: tv, x: pe ? L - 10 + (pe[0][0] - L) : L - 10, y: pe ? pe[0][1] + 8 : y + 8 }); n++; } tv *= 2; }
     } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10, undefined, PJ ? pj : null);
     lpYLabel(st, pg, L, T - 12);
     (ax.xticks || []).forEach(([x, lab], i) => { const pe = PJ ? pj(mx(x), B) : null;   /* P58 T5: the x label stands at its own place ON the baseline, and upright */
-      const tx = lpEl("text", "lab", st.chart, { x: (pe ? pe[0] : mx(x)).toFixed(1), y: pe ? pe[1] + (P ? 52 : 32) : B + (P ? 52 : 32), "text-anchor": "middle" }); tx.textContent = lab;
+      const tx = lpEl("text", "lab", st.chart, { x: (pe ? pe[0] : mx(x)).toFixed(1), y: pe ? pe[1] + (P ? 52 : 32) : B + (P ? 52 : 32), "text-anchor": "middle",
+        ...(st.readability === LP_READABILITY.LANDSCAPE_PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : {}) }); tx.textContent = lab;
       lpMark(st, "xtick:" + i, "xtick", tx, { v: x, x: pe ? pe[0] : mx(x), y: pe ? pe[1] + (P ? 52 : 32) : B + (P ? 52 : 32) }); });
     /* HIGHLIGHT (operator, 2026-09-05, the since-2000 holdings page): axes.highlight_from = an x; the points from there
        are the STORY'S window and take the sign colour, the history before it is drawn muted and thinner beneath - a
@@ -8920,14 +9172,15 @@ async function mount(doc) {
       }
       /* E53: the label at the LINE'S END - so on a tilted plane it stands at the end the line actually has, and
          upright (the text is never turned; only the marks lie on the plane). */
-      const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
-                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr).toFixed(1), y: ((PJ ? PE[1] : my(last[1])) + 8).toFixed(1), fill: col, opacity: 0 });
+      const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0, ...(PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : {}) }
+                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr).toFixed(1), y: ((PJ ? PE[1] : my(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : {}) });
       st.linePts.push(PT.map((q) => [q[0], q[1]]));   /* the exact datum positions, for the species' targets */
       name.textContent = s.muted ? "" : (s.label ? s.label + " " : "") + (s.name || "");   /* the muted history carries no name */
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
          reveal, one real estate (operator, 2026-09-03) */
       const ib = (st.inlineBadges || {})[s.color];
-      if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
+      if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col,
+        ...(PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : {}) }); tg.textContent = ib.tag; }
       const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : my(last[1])) + 8,
                      pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
@@ -8936,7 +9189,7 @@ async function mount(doc) {
       lpMark(st, "s" + rec.si + (rec.muted ? ":h" : ""), "line", p, { pts: rec.pts, vals: s.pts.map(([, v]) => +v), len, k0: rec.k0, muted: rec.muted, col }, rec);
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
-    const order = [...st.paths].sort((a, b) => a.ny - b.ny), gap = P ? 50 : 28;   /* one line = the face's own size (44 px portrait), not the landscape 24 */
+    const order = [...st.paths].sort((a, b) => a.ny - b.ny), gap = P ? 50 : PHONE ? 50 : 28;   /* one line = the face's own size (44 px portrait), not the landscape 24 */
     for (let i = 1; i < order.length; i++)
       if (order[i].ny - order[i - 1].ny < gap) order[i].ny = order[i - 1].ny + gap;
     const over = order.length ? order[order.length - 1].ny - (B - 12) : 0;   /* a name never sits on the axis line: lift the group */
@@ -9122,7 +9375,8 @@ async function mount(doc) {
       const gl = lpEl("line", v === 0 ? "ax" : "grid", st.chart, { x1: xa, x2: xb, y1: y.toFixed(1), y2: y.toFixed(1) });
       const pe = pj ? tiltRule(gl, pj, xa, y, xb, y) : null;
       const lx = pe ? labX + (pe[0][0] - xa) : labX, ly = pe ? pe[0][1] + (st.portrait ? 14 : 8) : y + (st.portrait ? 14 : 8);
-      const tl = lpText(st.chart, "lab", lx, ly, "end", lpWithUnit(lpTick(v), unit));
+      const tl = lpText(st.chart, "lab", lx, ly, "end", lpWithUnit(lpTick(v), unit),
+                        st.readability === LP_READABILITY.LANDSCAPE_PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : undefined);
       out.push(gl); out.push(tl);
       lpMark(st, "tick:" + n, "tick", gl, { v, y, x1: xa, x2: xb });   /* P48 T1: a rescale retargets ticks by value, so the value rides with the mark */
       lpMark(st, "ylab:" + n, "ylabel", tl, { v, x: lx, y: ly });
@@ -9131,7 +9385,8 @@ async function mount(doc) {
     return out;
   };
   const lpYLabel = (st, pg, x, y, at) => { const t = (pg.axes || {}).ylabel; if (!t) return null;
-    const e = lpText(st.chart, "lab", x, y, "start", String(t), { style: "font-size:" + (st.portrait ? 40 : 22) + "px;fill:#aeb6be", ...(at || {}) });
+    const size = st.portrait ? 40 : (st.readability === LP_READABILITY.LANDSCAPE_PHONE ? LP_PHONE.FONT_PX : 22);
+    const e = lpText(st.chart, "lab", x, y, "start", String(t), { style: "font-size:" + size + "px;fill:#aeb6be", ...(at || {}) });
     lpMark(st, "axislabel", "axislabel", e, { x, y }); return e; };
   /* RACE (bar-chart-race): ranked horizontal bars per period. EVERYTHING is a smooth function of u (period units):
      a value eases (smoothstep) between consecutive period values over the WHOLE period - exact at every period,
@@ -10914,6 +11169,37 @@ async function mount(doc) {
      inlining keeps it and node - where no registry exists - still imports the file for the math. */
   if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.compare = paintCompare;
   /* KINETICS:END */
+  /* T19: keep the surface projection as one affine layer around every chart-owned node. The
+     state painters continue to own their data and transitions; this layer only carries their
+     destination user-space into the native-wide surface viewBox (and carries the perform layer
+     with the same map). Text gets a local inverse-x scale below, so the surface's wider user
+     space moves its anchor without stretching the authored face. */
+  const surfaceLayerOf = (svg) => {
+    if (!svg) return null;
+    let layer = svg.__surfaceLayer;
+    if (!layer) { layer = lpEl("g", "lp-surface-content", svg, {}); svg.__surfaceLayer = layer; }
+    for (const child of [...svg.children]) {
+      if (child === layer || String(child.tagName || "").toLowerCase() === "defs") continue;
+      layer.appendChild(child);
+    }
+    return layer;
+  };
+  const surfaceTextCorrect = (layer, ratio) => {
+    if (!layer) return;
+    for (const text of layer.querySelectorAll("text")) {
+      let wrap = text.__surfaceTextLayer;
+      if (!wrap) {
+        wrap = lpEl("g", "lp-surface-text", text.parentNode, {});
+        text.parentNode.insertBefore(wrap, text);
+        wrap.appendChild(text);
+        text.__surfaceTextLayer = wrap;
+      }
+      let x = Number(text.getAttribute("x"));
+      if (!Number.isFinite(x)) { try { x = text.getBBox().x; } catch (_) { x = 0; } }
+      const inv = 1 / Math.max(1e-9, ratio);
+      wrap.setAttribute("transform", `translate(${x.toFixed(4)} 0) scale(${inv.toFixed(4)} 1) translate(${-x.toFixed(4)} 0)`);
+    }
+  };
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -10925,7 +11211,7 @@ async function mount(doc) {
       st.performSvg.style.cssText = st.chart.style.cssText; st.performSvg.style.pointerEvents = "none";
       st.performSvg.style.opacity = ""; st.performSvg.style.transform = ""; st.performSvg.style.transformOrigin = "";   /* the box, not the chart's current state (a cold seek past a rescale copied opacity 0) */
     }
-    const surf = st.performSvg || st.chart;
+    const surf = st.surfaceMode ? surfaceLayerOf(st.performSvg || st.chart) : (st.performSvg || st.chart);
     const brackets = pageSpecies(scene, "bracket").map((sp, bi) => {
       const pts = (st.linePts || [])[sp.series | 0] || [];
       if (pts.length < 2) return null;
@@ -10978,6 +11264,7 @@ async function mount(doc) {
     const retitles = pageSpecies(scene, "retitle").map((sp, ri) => {
       const div = lpEl("div", "lp-ink lp-title lp-retitle", st.page);
       if (st.titleEl && st.titleEl.getAttribute("style")) div.setAttribute("style", st.titleEl.getAttribute("style"));   /* the title's inline geometry (portrait sets it): the rewrite sits exactly where the title sat */
+      div.style.opacity = "1";   /* clone geometry, not the surface arrival's transient opacity; glyph widths own the retitle clock */
       const glyphs = P ? lpGlyphsWrap(div, String(sp.text || ""), st.seed + 40 + ri) : lpGlyphs(div, String(sp.text || ""), st.seed + 40 + ri);
       (st.rtGlyphs || (st.rtGlyphs = [])).push(...glyphs);
       return { sp, div, glyphs };
@@ -11504,7 +11791,7 @@ async function mount(doc) {
     P.lead.setAttribute("opacity", s.leaderOpacity.toFixed(2));
     P.g.setAttribute("opacity", Math.min(1, Math.max(0, 1 - s.handover)).toFixed(2));
   };
-  const lpPaintChart = (cs, c, t3, scene, t, leaving) => {
+  const lpPaintChart = (cs, c, t3, scene, t, leaving, reverseBuild = false) => {
       cs.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
       /* a breakthrough page's build is longer than LP.BUILD: the ordinary bars law runs on the first LP.BUILD seconds of it (cb),
          the run on the seconds after (bts); a page without one is exactly what it was (cb === c) */
@@ -11555,14 +11842,43 @@ async function mount(doc) {
            author writes and the compiler refuses it beside a disagreeing `series` */
         const forMe = (sp) => { const ss = sp.series ?? sp.tier ?? (sp.target || {}).series, pk = sp.paths || "all";
           return pp.pts && (ss == null || (ss | 0) === (pp.si | 0)) && (pk === "all" || (pk === "tail" ? (pp.k0 | 0) > 0 : (pp.k0 | 0) === 0)); };
-        const evs = [...caps.filter((sp) => forMe(sp) && !!sp.target).map((sp) => ({ sp, kind: "build" })), ...pageSpecies(scene, "undraw").filter(forMe).map((sp) => ({ sp, kind: "undraw" }))].sort((a, b) => a.sp.at - b.sp.at);
-        let prev = 1;
-        if (evs.length && evs[0].kind === "build") { prev = capFrac(pp, evs[0].sp.target.index); f = f * prev; evs.shift(); }   /* the build beat is spent on the first cap */
-        for (const ev of evs) {
-          const u = (t - ev.sp.at) / Math.max(0.001, ev.sp.dur || 1); if (u <= 0) break;
-          const to = capFrac(pp, (ev.sp.target || {}).index | 0), lvl = prev + (to - prev) * segEase(clamp01(u));
-          f = ev.kind === "build" ? Math.max(Math.min(f, prev), lvl) : Math.min(f, lvl);
-          if (u >= 1) prev = to;
+        /* A replacing chart_to runs this chart's build law backwards. Its c clock is
+           already the authoritative reverse clock; replaying absolute build_to times
+           here would see a completed cap and clamp the line back to full ink (the
+           minute recast at 11.85s exposed this at 14s). A reverse must still snapshot
+           the cap level at the instant it starts, though: a partially completed
+           build_to is history too, not permission to pop the line back to full. */
+        const buildEvs = caps.filter((sp) => forMe(sp) && !!sp.target).map((sp) => ({ sp, kind: "build" }));
+        const undrawEvs = pageSpecies(scene, "undraw").filter(forMe).map((sp) => ({ sp, kind: "undraw" }));
+        const reverseAt = reverseBuild && typeof reverseBuild === "object" ? Number(reverseBuild.at) : null;
+        if (reverseAt != null && Number.isFinite(reverseAt)) {
+          const capLevel = (start, clock, includeBuild) => {
+            const evs = [...(includeBuild ? buildEvs : []), ...undrawEvs].sort((a, b) => a.sp.at - b.sp.at);
+            let level = start, prev = 1;
+            if (evs.length && evs[0].kind === "build") { prev = capFrac(pp, evs[0].sp.target.index); level *= prev; evs.shift(); }
+            for (const ev of evs) {
+              const u = (clock - ev.sp.at) / Math.max(0.001, ev.sp.dur || 1); if (u <= 0) break;
+              const to = capFrac(pp, (ev.sp.target || {}).index | 0), lvl = prev + (to - prev) * segEase(clamp01(u));
+              level = ev.kind === "build" ? Math.max(Math.min(level, prev), lvl) : Math.min(level, lvl);
+              if (u >= 1) prev = to;
+            }
+            return level;
+          };
+          const full = strokeFrac(pp.p, pp.len, 1) ?? 1;
+          const atStart = capLevel(full, reverseAt, true);
+          const held = capLevel(atStart, t, false);   /* only later undraws may change a captured level */
+          const reverseC = leaving ? clamp01((c - pp.stagger) / Math.max(0.2, 1 - pp.stagger)) : clamp01(c);
+          f = held * reverseC;
+        } else {
+          const evs = [...buildEvs, ...undrawEvs].sort((a, b) => a.sp.at - b.sp.at);
+          let prev = 1;
+          if (evs.length && evs[0].kind === "build") { prev = capFrac(pp, evs[0].sp.target.index); f = f * prev; evs.shift(); }   /* the build beat is spent on the first cap */
+          for (const ev of evs) {
+            const u = (t - ev.sp.at) / Math.max(0.001, ev.sp.dur || 1); if (u <= 0) break;
+            const to = capFrac(pp, (ev.sp.target || {}).index | 0), lvl = prev + (to - prev) * segEase(clamp01(u));
+            f = ev.kind === "build" ? Math.max(Math.min(f, prev), lvl) : Math.min(f, lvl);
+            if (u >= 1) prev = to;
+          }
         }
         if (cs.extendCap && (!cs.extendCap.bySeries || (pp.si | 0) === (cs.extendCap.si | 0))) {   /* P48 T3: a window that grows grows for EVERY series (the golden's four lines caught a cap on the first alone); a later series caps itself. The muted history and the highlighted tail alike are drawn to the pen: the shared part stands, the new part follows the nib */
           const c0 = cs.extendCap.bySeries ? 0 : capFrac(pp, cs.extendCap.idx), pen = strokeFrac(pp.p, pp.len, cs.extendCap.u2);
@@ -11721,6 +12037,21 @@ async function mount(doc) {
       const y = sa.yv(v), d = Math.max(dom[0] - y, y - dom[1]);
       return d <= 0 ? 1 : clamp01(1 - d / air); };
     const aVals = new Set((A.marks || []).filter((m) => m.role === "tick").map((m) => m.geom.v));
+    /* R26-222: a y-only rescale has no x-axis work to do. The standing x ticks are
+       already at the target's places, so let that one set own the hand-over and keep
+       the target twins hidden until the state settles. Match the value, text and box,
+       not just the domain: a changed/new tick still takes the ordinary fade path. */
+    const aX = (A.marks || []).filter((m) => m.role === "xtick" && m.el), bX = (Bs.marks || []).filter((m) => m.role === "xtick" && m.el);
+    const tickText = (m) => m.el.__full != null ? m.el.__full : (m.el.textContent || "");
+    const sameXTick = (a, b) => {
+      const av = +a.geom.v, bv = +b.geom.v, ax = +a.geom.x, bx = +b.geom.x, ay = +a.geom.y, by = +b.geom.y;
+      return Number.isFinite(av) && Number.isFinite(bv) && Number.isFinite(ax) && Number.isFinite(bx)
+        && Number.isFinite(ay) && Number.isFinite(by) && Math.abs(av - bv) < 1e-9
+        && Math.abs(ax - bx) < 0.5 && Math.abs(ay - by) < 0.5 && tickText(a) === tickText(b);
+    };
+    const unchangedXTicks = aX.length > 0 && aX.length === bX.length
+      && aX.every((a) => bX.some((b) => sameXTick(a, b)))
+      && bX.every((b) => aX.some((a) => sameXTick(a, b)));
     if (sa.kind === "line" && sb.kind === "line") {
       const mapA = (x, v) => [sa.mx(x), sa.my(v)], mapB = (x, v) => [sb.mx(x), sb.my(v)];
       for (const pp of A.paths || []) {
@@ -11746,7 +12077,7 @@ async function mount(doc) {
       const g = m.geom || {}, e = m.el; if (!e) continue;
       if (m.role === "tick" || m.role === "rule") { const y = xfLerp(g.y, sb.my(g.v), u); e.setAttribute("y1", y.toFixed(1)); e.setAttribute("y2", y.toFixed(1)); e.style.opacity = fadeOut(g.v).toFixed(3); }
       else if (m.role === "ylabel" || m.role === "rulelabel") { const y = xfLerp(g.y, sb.my(g.v) + (g.y - sa.my(g.v)), u); e.setAttribute("y", y.toFixed(1)); e.style.opacity = fadeOut(g.v).toFixed(3); }
-      else if (m.role === "xtick" && sb.mx) { const x = xfLerp(g.x, sb.mx(g.v), u); e.setAttribute("x", x.toFixed(1)); e.style.opacity = xfFade(xIn(g.v), false, u).toFixed(3); }
+      else if (m.role === "xtick" && sb.mx) { const x = xfLerp(g.x, sb.mx(g.v), u); e.setAttribute("x", x.toFixed(1)); e.style.opacity = unchangedXTicks ? "" : xfFade(xIn(g.v), false, u).toFixed(3); }
       else if (m.role === "name") { const nb = nameB(m.key); if (nb) { e.setAttribute("x", xfLerp(g.x, nb.geom.x, u).toFixed(1)); e.setAttribute("y", xfLerp(g.y, nb.geom.y, u).toFixed(1)); } }
       else if (m.role === "bar" && sa.kind === "bars") { const nb = nameB(m.key); if (nb) { const r = xfRect(g, nb.geom, u); e.setAttribute("x", r.x.toFixed(1)); e.setAttribute("y", r.y.toFixed(1)); e.setAttribute("width", r.w.toFixed(1)); e.setAttribute("height", r.h.toFixed(1)); e.style.transformOrigin = "0 " + xfLerp(g.base, nb.geom.base, u).toFixed(1) + "px"; } }
       else if ((m.role === "value" || m.role === "xlabel") && sa.kind === "bars") { const nb = nameB(m.key); if (nb) { e.setAttribute("x", xfLerp(g.x, nb.geom.x, u).toFixed(1)); e.setAttribute("y", xfLerp(g.y, nb.geom.y, u).toFixed(1)); } }
@@ -11764,7 +12095,8 @@ async function mount(doc) {
     for (const m of Bs.marks || []) {
       const e = m.el; if (!e) continue;
       if (m.role === "tick" || m.role === "ylabel") e.style.opacity = xfFade(true, true, aVals.has(m.geom.v) ? 0 : u).toFixed(3);
-      else if (m.role === "xtick" || m.role === "rule" || m.role === "rulelabel" || m.role === "axislabel") e.style.opacity = xfFade(true, true, u).toFixed(3);
+      else if (m.role === "xtick") e.style.opacity = unchangedXTicks ? "0" : xfFade(true, true, u).toFixed(3);
+      else if (m.role === "rule" || m.role === "rulelabel" || m.role === "axislabel") e.style.opacity = xfFade(true, true, u).toFixed(3);
       else if (m.role === "name" || m.role === "line" || m.role === "bar" || m.role === "value" || m.role === "xlabel") e.style.opacity = "0";
     }
     return u;   /* R26-233: the clock the frame was actually painted on - the caller's `xfNow` carries it to the perform layer */
@@ -11820,6 +12152,7 @@ async function mount(doc) {
      on over the back half of the same clock. The lines cross-fade where they already coincide, so the swap has nothing
      left to show. Every number the hand writes is the page's own: nothing here invents a tick. */
   const AXIS_HAND = Object.freeze({ OUT: 0.55, IN: 0.35, CROSS: 0.6 });   /* the shares of the clock the standing labels take to be un-written, the arriving ones to start, and the gridlines to change hands once they coincide [DERIVED: the erase reads before the write begins, as a retitle's does (PS.ERASE_S); a line that faded before it arrived would hide the slide this exists to show] */
+  const PLAIN_AXIS_HANDOFF = 0.90;   /* a plain recast's target axis must wait for the outgoing line's final ink, not merely for the midpoint of its clock */
   const AXIS_LINES = ["tick", "rule", "axis"];     /* what SLIDES: the gridlines, the zero, a reference rule */
   const AXIS_LABELS = ["ylabel", "rulelabel", "xtick", "axislabel"];   /* what is WRITTEN: every string on the axes */
   const lpTickRanks = (S) => (S.marks || []).filter((m) => m.role === "tick" && m.el).sort((a, b) => (a.geom.y || 0) - (b.geom.y || 0));
@@ -11828,10 +12161,20 @@ async function mount(doc) {
      place - on both sides. A held label is not erased and re-written for nothing: the standing one stays WHOLE and its
      twin stays empty until the clock ends, which is the same-string hand-over `keyed: "tags"` already ships
      (KEYED_TAG_HAND). No caller that passes nothing sees any difference. */
-  const lpAxisHandOver = (A, Bs, u, hold) => {
-    const ta = lpTickRanks(A), tb = lpTickRanks(Bs), k = segEase(clamp01(u));
-    const out = clamp01(u / AXIS_HAND.OUT), inn = clamp01((u - AXIS_HAND.IN) / (1 - AXIS_HAND.IN));
-    const cross = clamp01((u - AXIS_HAND.CROSS) / (1 - AXIS_HAND.CROSS));
+  const lpAxisHandOver = (A, Bs, u, hold, plain = false) => {
+    const pu = clamp01(u);
+    /* Plain replacement is the one case where target furniture cannot lead the
+       data hand-off. The line painter has already set its dash offset this frame;
+       use that native state as the gate, with a late-clock floor for non-line
+       builders. Keyed/rescale/morph callers keep the original clock byte-for-byte. */
+    const lineGone = !plain || (A.paths || []).filter((pp) => pp.p && !pp.muted).every((pp) => {
+      const off = parseFloat(pp.p.getAttribute("stroke-dashoffset"));
+      return !Number.isFinite(off) || off >= (pp.len || 0) * 0.995;
+    });
+    const phase = plain && lineGone ? clamp01((pu - PLAIN_AXIS_HANDOFF) / (1 - PLAIN_AXIS_HANDOFF)) : (plain ? 0 : pu);
+    const ta = lpTickRanks(A), tb = lpTickRanks(Bs), k = segEase(phase);
+    const out = clamp01(pu / AXIS_HAND.OUT), inn = plain ? phase : clamp01((pu - AXIS_HAND.IN) / (1 - AXIS_HAND.IN));
+    const cross = plain ? phase : clamp01((pu - AXIS_HAND.CROSS) / (1 - AXIS_HAND.CROSS));
     const toY = (i) => {   /* the i-th standing gridline's place under the target's scale, by rank */
       if (!tb.length) return ta[i].geom.y;
       if (ta.length < 2 || tb.length < 2) return tb[Math.min(i, tb.length - 1)].geom.y;
@@ -11855,18 +12198,18 @@ async function mount(doc) {
       if (AXIS_LABELS.includes(m.role)) {   /* the hand takes the label away one glyph at a time - a fade would hide the writing this rule is about */
         if (m.role === "ylabel") { const d = dy["tick:" + String(m.key).split(":")[1]] || 0; e.setAttribute("y", ((+m.geom.y) + d).toFixed(1)); }
       } else if (AXIS_LINES.includes(m.role)) e.style.opacity = (1 - cross).toFixed(3);   /* lit all the way to the target's place, then handed over where the two coincide */
-      else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(false, false, u).toFixed(3);
+      else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(false, false, plain ? phase : pu).toFixed(3);
     }
     sweep(A, out, false, hold && hold.a);
     /* the target's furniture is what the eye reads through the hand-over; its data wait for their own law. A target
        that HAS no axes (a pie, a treemap) has nothing to hand over and its layer is not raised for it: the recast into
        one is the hand-over it always was. */
-    if ((Bs.marks || []).some((m) => m.el && (AXIS_LINES.includes(m.role) || AXIS_LABELS.includes(m.role)))) Bs.chart.style.opacity = 1;
+    if ((Bs.marks || []).some((m) => m.el && (AXIS_LINES.includes(m.role) || AXIS_LABELS.includes(m.role)))) Bs.chart.style.opacity = plain && !lineGone ? 0 : 1;
     for (const m of Bs.marks || []) {
       const e = m.el; if (!e) continue;
       if (AXIS_LABELS.includes(m.role)) continue;
       else if (AXIS_LINES.includes(m.role)) e.style.opacity = cross.toFixed(3);
-      else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(true, true, u).toFixed(3);
+      else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(true, true, plain ? phase : pu).toFixed(3);
     }
     sweep(Bs, inn, true, hold && hold.b);
     A.xfDirty = true; Bs.xfDirty = true;
@@ -12336,7 +12679,7 @@ async function mount(doc) {
         if (t < sp.at + dk) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / dk), keyed: sp.keyed, key_map: sp.key_map }; break; }   /* P50 T11: true = the datum hands over, "tags" = the terminal tag does; E64: "data" = the datum whose CHANGE is the bar */
         cur = k; cCur = 1; continue;
       }
-      if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; plain = { from: cur, to: k, u: clamp01((t - sp.at) / d) }; break; }   /* the standing chart is leaving - E64: with its axes handing over to the one arriving */
+      if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; plain = { from: cur, to: k, verb: sp.to === "morph" ? "recast" : sp.to, at: sp.at, dur: d, u: clamp01((t - sp.at) / d) }; break; }   /* the standing chart is leaving - E64: with its axes handing over to the one arriving */
       cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
     }
     st.active = xf ? ((xf.extend && xf.u >= XF_EXTEND.RESCALE) || (xf.morph && xf.u >= XF_MORPH.LEAVE) || (xf.remake && xf.u >= (xf.line_at === "to" ? REMAKE_LINE.HOLD : REMAKE.TRAVEL)) ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2; P61 T2: a remake's marks are in flight until they land; T2b: a bars -> line run's target is drawable when the point has handed over to the drawn line) */
@@ -12351,32 +12694,51 @@ async function mount(doc) {
       if (st.xfNow && uP != null && Number.isFinite(uP)) st.xfNow.u = uP; }   /* R26-233: a followed rescale's clock is the line's, so the anchors the perform layer lerps ride the same u the marks did */
     else {
       for (const S of states) { lpRestoreState(S); S.extendCap = null; }   /* no transition on: every state exactly as built (a seek is the play) */
-      for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === cur ? cCur : 0, t3, scene, t, i === cur && leaving);
+      for (let i = 0; i < states.length; i++) {
+        const leavingThis = i === cur && leaving;
+        lpPaintChart(states[i], i === cur ? cCur : 0, t3, scene, t, leavingThis, leavingThis && plain && plain.verb === "recast" ? { at: plain.at } : false);
+      }
       /* E64: the PLAIN recast (the compiler found no key) still un-draws and re-draws - but its axes hand over rather
          than swapping in one frame, so the page reads as re-writing itself. The state it is leaving to is otherwise
          untouched: nothing of the target's data is drawn before its own build. */
-      if (plain && states[plain.to] && states[plain.from]) lpAxisHandOver(states[plain.from], states[plain.to], plain.u);
+      if (plain && states[plain.to] && states[plain.from]) lpAxisHandOver(states[plain.from], states[plain.to], plain.u, undefined, plain.verb === "recast");
       if (hold) lpPaintMorphHold(st, hold, cCur);
     }
     for (let i = 0; i < states.length; i++) if (!park || i !== (st.active | 0)) lpUnpark(states[i]);
     if (park && !xf) lpPaintPark(states[st.active | 0], park, t, parkFrom);
     /* the words that describe the chart move with it: the standing sub and source erase over the transition's first
        PS.ERASE_S, the arriving state's write over the rest. State 0's are the page's own, written by the page's build. */
-    let ink = 0, ue = 0, uw = 1, titleHand = false;
+    const plainDataGone = !plain || plain.verb !== "recast" || (states[plain.from].paths || []).filter((pp) => pp.p && !pp.muted).every((pp) => {
+      const off = parseFloat(pp.p.getAttribute("stroke-dashoffset"));
+      return !Number.isFinite(off) || off >= (pp.len || 0) * 0.995;
+    });
+    let ink = 0, ue = 0, uw = 1, titleHand = false, plainMeta = null;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
       if (sp.to === "rescale" || sp.to === "extend" || sp.to === "park" || sp.to === "compare") continue;   /* P48 T2/T3/T2b + P57 T12: the words stay - it is the same chart */
       const d = Math.max(PS.ERASE_S + 0.01, sp.dur || 1);
       ue = clamp01((t - sp.at) / PS.ERASE_S);
       uw = clamp01((t - sp.at - PS.ERASE_S) / (d - PS.ERASE_S));
+      if (plain && plain.verb === "recast" && (sp.to === "recast" || (sp.to === "morph" && !kin("arap_morph"))) && !sp.keyed && sp.at === plain.at) {
+        const pu = clamp01((t - sp.at) / d);
+        ue = plainDataGone ? clamp01((pu - PLAIN_AXIS_HANDOFF) / (1 - PLAIN_AXIS_HANDOFF)) : 0;
+        uw = 0;
+      }
       ink = Math.max(0, Math.min(states.length - 1, sp.state | 0));
+      if ((sp.to === "recast" || (sp.to === "morph" && !kin("arap_morph"))) && !sp.keyed) plainMeta = { state: ink, end: sp.at + d };
       titleHand = sp.to === "remake";   /* P61 T2 / E99 s34: the title is part of the chart, and only the verb that transforms the WHOLE chart touches it */
     }
     for (let i = 1; i < states.length; i++) {
       const on = i === ink;
       /* the write runs PAST the last glyph (writeGlyphs gives each one 1.6 slots): a run that stops exactly at n leaves
          its final letters half-inked, which reads as a typo rather than as handwriting */
-      for (const r of [states[i].subInk, states[i].srcInk]) if (r) writeGlyphs(r.glyphs, on ? uw * (r.glyphs.length + 2) : -1, r.glyphs.length);
+      /* A plain recast's outgoing data owns the first clock. The arriving
+         source/subtitle starts with the target chart's own build, after the
+         transition has removed the old ink; keyed and other verbs retain uw. */
+      const write = on && plainMeta && plainMeta.state === i
+        ? clamp01((t - plainMeta.end) / (states[i].buildDur || LP.BUILD))
+        : (on ? uw : -1);
+      for (const r of [states[i].subInk, states[i].srcInk]) if (r) writeGlyphs(r.glyphs, write * (r.glyphs.length + 2), r.glyphs.length);
     }
     if (ink > 0) for (const r of [{ glyphs: st.subGlyphs || [] }, { glyphs: st.srcGlyphs || [] }]) {
       const n = r.glyphs.length;
@@ -12429,6 +12791,90 @@ async function mount(doc) {
     st.chart.insertBefore(p, st.chart.firstChild);   /* the wire is GROUND: the new page's ink reads on top of it */
     lpMark(st, "thread:" + th.key, "line", p, { pts, vals: mk.geom.vals || [], len: 0, k0: 0, muted: true, col: mk.geom.col, thread: true });
     st.thread.el = p;
+  };
+  /* T19: one native chart owns both the mounted-paper and full-stage states.
+     Only its data coordinates and host geometry move; no raster or second path set. */
+  const paintSurfaceFrame = (st, frame) => {
+    const plot = st.plot || { L: 0, R: 0, W: st.geom.W || frame.viewBox.w };
+    const den = Math.max(1e-9, plot.W - plot.L - plot.R);
+    const ratio = (frame.viewBox.w - plot.L - plot.R) / den;
+    const tx = plot.L * (1 - ratio), viewBox = `0 0 ${frame.viewBox.w} ${frame.viewBox.h}`;
+    const transform = `translate(${tx.toFixed(4)} 0) scale(${ratio.toFixed(4)} 1)`;
+    for (const cs of st.states || [st]) {
+      if (!cs.chart) continue;
+      cs.chart.setAttribute("viewBox", viewBox);
+      Object.assign(cs.chart.style, { left: frame.chart.x + "px", top: frame.chart.y + "px",
+        width: frame.chart.w + "px", height: frame.chart.h + "px" });
+      const layer = surfaceLayerOf(cs.chart);
+      if (layer) { layer.setAttribute("transform", transform); surfaceTextCorrect(layer, ratio); }
+    }
+    if (st.performSvg) {
+      st.performSvg.setAttribute("viewBox", viewBox);
+      Object.assign(st.performSvg.style, { left: frame.chart.x + "px", top: frame.chart.y + "px",
+        width: frame.chart.w + "px", height: frame.chart.h + "px" });
+      const layer = surfaceLayerOf(st.performSvg);
+      if (layer) { layer.setAttribute("transform", transform); surfaceTextCorrect(layer, ratio); }
+    }
+    return { ratio, tx };
+  };
+  const paintSurfaceLedger = (el, scene, t) => {
+    const pg = scene.world.page, meta = pg.surface_from;
+    const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
+    if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
+    el.__lp = st;
+    st.surfaceMode = true;
+    if (!st.surfaceGeometry) {
+      const phone = lpPhoneFullGeometry(pg);
+      const destination = { x: LP.FULL.X * STAGE_W, y: LP.FULL.Y * STAGE_H,
+        w: phone ? phone.w : LP.FULL.W * STAGE_W, h: LP.FULL.H * STAGE_H,
+        vw: st.geom.W, vh: st.geom.H };
+      st.surfaceGeometry = { source: surfacePlotGeometry(meta.quad, [STAGE_W, STAGE_H]), destination };
+      st.page.classList.add("surface-page-cream");
+      st.surfaceBaseText = [...(st.states || [st]).flatMap((cs) => [...cs.chart.querySelectorAll("text")])];
+      /* Normal full-stage pages compensate for their punch. This host has no punch:
+         restore the same final ink positions and type size, once at construction. */
+      const surfaceInk = [...st.inkEls, ...(st.states || []).slice(1).flatMap(cs =>
+        [cs.subInk && cs.subInk.div, cs.srcInk && cs.srcInk.div].filter(Boolean))];
+      for (const ink of surfaceInk) {
+        const cs = getComputedStyle(ink), p = LP.PUNCH_SCALE;
+        for (const [key, size] of [["left", STAGE_W], ["top", STAGE_H]]) {
+          const value = parseFloat(cs[key]);
+          if (Number.isFinite(value)) ink.style[key] = (size / 2 + (value - size / 2) * p) + "px";
+        }
+        ink.style.fontSize = (parseFloat(cs.fontSize) * p) + "px";
+        ink.style.width = (parseFloat(cs.width) * p) + "px";
+        if (st.inkEls.includes(ink)) ink.querySelectorAll(".g").forEach(g => g.style.setProperty("--w", "1"));
+      }
+    }
+    const { source, destination } = st.surfaceGeometry;
+    const frame = surfaceGeometryAt(source, destination, t - scene.span[0], { duration: meta.grow_s });
+    const u = frame.eased, page = st.page, chart = st.chart;
+    page.style.inset = "auto"; page.style.left = "0"; page.style.top = "0";
+    page.style.width = frame.hostW + "px"; page.style.height = frame.hostH + "px";
+    page.style.transformOrigin = "0 0"; page.style.transform = cssMatrix3d(frame.matrix);
+    page.style.backgroundColor = frame.progress > 0 ? "rgb(244,230,199)" : "transparent";
+    page.style.backgroundImage = "none"; page.style.opacity = "1";
+    /* Paint all states first. Their native destination coordinates are then carried by
+       paintSurfaceFrame's single affine layer; no second path/data set is introduced. */
+    paintSurfaceFrame(st, frame);
+    lpPaintStates(st, scene, 1, LP_FOCUS_AT, t);
+    paintSurfaceFrame(st, frame);
+    /* Compact orientation is not the reading hold. Reveal each existing text node,
+       never delete labels or build a duplicate full-stage text layer. */
+    const labelAlpha = clamp01((u - 0.55) / 0.45);
+    /* The surface reveal must not overwrite a state painter's axis handover.
+       Multiply at the glyph-preserving wrapper, leaving native node opacity owned
+       by lpPaintStates (otherwise both tick sets appear during a rescale). */
+    st.surfaceBaseText.forEach(node => {
+      if (node.__surfaceTextLayer) node.__surfaceTextLayer.style.opacity = String(labelAlpha);
+    });
+    for (const ink of st.inkEls) ink.style.opacity = String(labelAlpha);
+    /* Page annotations keep their authored clock after the landing. Paint on
+       reverse seeks too so later figures disappear; never overwrite their glyph
+       opacity with the base-axis reveal above. */
+    paintPerform(st, scene, t, pg);
+    paintSurfaceFrame(st, frame);
+    page.dataset.surfaceProgress = String(frame.progress);
   };
   const paintLedger = (el, scene, t) => {
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
@@ -12903,12 +13349,31 @@ async function mount(doc) {
     RX: 22,           /* the rounded corner (the dock card's 14px radius, scaled to the smaller card) */
     GLYPH: 92,        /* the glyph's box inside the card: a little over half the side, so the card reads as a card */
     LABEL_DY: 46,     /* the label's baseline below the card's bottom edge */
+    PHONE_LABEL_SIZE: 45,      /* opt-in landscape-phone text, shared visually with flow's phone treatment */
+    PHONE_LABEL_DY: 52,        /* the first phone baseline below the card */
+    PHONE_LABEL_LINE_H: 48,    /* explicit newline-separated baseline step */
+    PHONE_MAX_LINES: 3,        /* a chip label is a bounded caption, never a paragraph */
     LAND_S: 0.55,     /* the landing's wall clock - the dock's DOCK_POP_S 0.45 plus a beat: a chip is lighter than a card and travels further */
     POP_FROM: 0.82,   /* the scale it springs from (the dock's DOCK_POP_FROM is 0.85) */
     DROP_PX: 34,      /* ... and how far above its place it falls from, on the same spring */
     FADE_S: 0.14,     /* the opacity ramp, the dock's DOCK_FADE_S 0.12 - never a pop out of nothing */
     CROSS_S: 0.5,     /* the X's two strokes together */
     DIM: 0.55,        /* what a crossed chip dims to - struck through, still legible (it is still one of the set) */
+  });
+
+  /* OPT-IN STAMP FORM (P62): an approved woodblock raster prop freely placed on a
+     plate or ledger page. It keeps the chip's spring landing and authored `dur`,
+     but has no card, generic glyph, border or constant boil. */
+  const CHIP_STAMP = Object.freeze({
+    SIZE: 260,         /* default art box in stage px */
+    MIN_SIZE: 180,
+    ICON_MAX_SIZE: 420, /* the compiler keeps sourced icon stamps at the original bound */
+    MAX_SIZE: 700,     /* approved finance-prop cutouts may carry a full narrative beat */
+    LABEL_SIZE: 48,
+    LABEL_GAP: 28,
+    LABEL_LINE_H: 52,
+    MAX_LINES: 3,
+    INK: Object.freeze({ cream: "#F4E6C7", charcoal: "#25313C" }),
   });
 
   const chip01 = (v) => Math.min(1, Math.max(0, v));
@@ -12942,6 +13407,59 @@ async function mount(doc) {
     try { const g = JSON.parse(raw); return Array.isArray(g && g.el) && g.el.length ? g : null; } catch (e) { return null; }
   };
 
+  /* Phone labels use authored newlines as real SVG lines. If a caller supplies more than the
+     bounded caption can hold, preserve the words by joining the overflow into the final line;
+     vertical overflow is never silently allowed. Legacy labels do not pass through this helper. */
+  const chipLabelLines = (label, maxLines = CHIP.PHONE_MAX_LINES) => {
+    const limit = Math.max(1, Math.floor(+maxLines || CHIP.PHONE_MAX_LINES));
+    const lines = String(label == null ? "" : label).split(/\r?\n/);
+    if (lines.length <= limit) return lines;
+    return lines.slice(0, limit - 1).concat(lines.slice(limit - 1).join(" "));
+  };
+
+  /* Stamp labels are compiler-bounded to three authored lines; unlike the phone
+     profile, this helper never joins or drops authored words. */
+  const chipStampLabelLines = (label) => String(label == null ? "" : label).split(/\r?\n/);
+
+  const chipStampInk = (ink) => CHIP_STAMP.INK[ink] || CHIP_STAMP.INK.cream;
+  const chipStampSize = (size) => {
+    const n = Number(size);
+    return Number.isFinite(n) ? Math.max(CHIP_STAMP.MIN_SIZE, Math.min(CHIP_STAMP.MAX_SIZE, n)) : CHIP_STAMP.SIZE;
+  };
+
+  function paintChipStamp(ctx, b) {
+    const { sp, t, svg, el, A, idle, hash, seed, si } = ctx;
+    const src = A && A["prop:" + sp.icon];
+    if (!src) return; /* approved catalogue URI is mandatory; never fall back to a generic icon */
+    const pose = chipPose(sp, t);
+    const ix = sp.idle && sp.idle !== "none" ? idle(sp.idle, t, hash(seed | 0, si | 0, 997)) : { scale: 1, dx: 0, dy: 0 };
+    const cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+    const requested = chipStampSize(sp.size);
+    const side = Math.min(requested, b.w > 0 ? b.w : requested, b.h > 0 ? b.h : requested);
+    const s = pose.scale * ix.scale;
+    const g = el("g", "chipstamp", svg, { opacity: pose.fade.toFixed(3),
+      transform: "translate(" + (cx + ix.dx).toFixed(1) + " " + (cy + pose.dy + ix.dy).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
+    el("image", "chipstampart", g, {
+      x: (-side / 2).toFixed(1), y: (-side / 2).toFixed(1), width: side.toFixed(1), height: side.toFixed(1),
+      href: src, preserveAspectRatio: "xMidYMid meet",
+    });
+    if (sp.label) {
+      const lines = chipStampLabelLines(sp.label);
+      const lab = el("text", "chipstamplab", g, {
+        x: 0, y: (side / 2 + CHIP_STAMP.LABEL_GAP).toFixed(1), "text-anchor": "middle",
+        style: "font-family:Kalam,cursive;font-size:" + CHIP_STAMP.LABEL_SIZE + "px;font-weight:700;fill:" + chipStampInk(sp.ink)
+          + ";paint-order:stroke;stroke:" + chipStampInk(sp.ink === "charcoal" ? "cream" : "charcoal")
+          + ";stroke-width:4px;stroke-linejoin:round",
+      });
+      if (lines.length > 1) {
+        lines.forEach((line, index) => {
+          const ts = el("tspan", "", lab, { x: 0, dy: index ? CHIP_STAMP.LABEL_LINE_H : 0 });
+          ts.textContent = line;
+        });
+      } else lab.textContent = lines[0];
+    }
+  }
+
   /* THE PAINTER. ctx is the template's species context (see SPECIES_PAINTERS in the player): the declaration,
      the clock, the layer and the shared helpers by name. Draws into one group whose transform carries the
      landing and the idle, so every child is written in the card's own centred coordinates. */
@@ -12949,6 +13467,11 @@ async function mount(doc) {
     const { sp, t, svg, el, A, resolveTarget, drawOn, hash, idle, seed, si } = ctx;
     const b = resolveTarget(sp.target);
     if (!b) return;   /* the targeting law: no resolved target, nothing painted */
+    if (sp.form === "stamp") {
+      paintChipStamp(ctx, b);
+      return;
+    }
+    const phone = sp.readability === "landscape-phone";
     const pose = chipPose(sp, t);
     const ix = sp.idle && sp.idle !== "none" ? idle(sp.idle, t, hash(seed | 0, si | 0, 991)) : { scale: 1, dx: 0, dy: 0 };
     const cx = b.x + b.w / 2, cy = b.y + b.h / 2;   /* a point resolves to w = h = 0; a region centres the chip in it */
@@ -12956,20 +13479,36 @@ async function mount(doc) {
     const g = el("g", "", svg, { opacity: pose.fade.toFixed(3),
                                  transform: "translate(" + (cx + ix.dx).toFixed(1) + " " + (cy + pose.dy + ix.dy).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
     const body = el("g", "", g, { opacity: pose.dim.toFixed(3) });   /* the card dims under its own X; the X does not */
-    const h = CHIP.SIZE / 2;
-    el("rect", "chipcard", body, { x: (-h).toFixed(1), y: (-h).toFixed(1), width: CHIP.SIZE, height: CHIP.SIZE, rx: CHIP.RX });
+    const cardSize = phone ? 110 : CHIP.SIZE;
+    const h = cardSize / 2;
+    const cardAttrs = { x: (-h).toFixed(1), y: (-h).toFixed(1), width: cardSize, height: cardSize, rx: CHIP.RX };
+    if (phone) cardAttrs.style = "fill:#F4E6C7;stroke:#25313C;stroke-width:3";
+    el("rect", "chipcard", body, cardAttrs);
     const geo = chipGeometry(A ? A["icon:" + sp.icon] : null);
     if (geo) {
-      const vb = geo.vb || [0, 0, 24, 24], k = CHIP.GLYPH / Math.max(vb[2] || 1, vb[3] || 1);
-      const gg = el("g", "chipglyph", body, { transform: "translate(" + (-CHIP.GLYPH / 2).toFixed(1) + " " + (-CHIP.GLYPH / 2).toFixed(1) + ") scale(" + k.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" });
-      geo.el.forEach((n) => el(n.t, "", gg, n.a));   /* the sourced geometry verbatim - the compiler already kept only shapes */
+      const glyphSize = phone ? 60 : CHIP.GLYPH;
+      const vb = geo.vb || [0, 0, 24, 24], k = glyphSize / Math.max(vb[2] || 1, vb[3] || 1);
+      const glyphAttrs = { transform: "translate(" + (-glyphSize / 2).toFixed(1) + " " + (-glyphSize / 2).toFixed(1) + ") scale(" + k.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" };
+      if (phone) glyphAttrs.style = "fill:none;stroke:#25313C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round";
+      const gg = el("g", "chipglyph", body, glyphAttrs);
+      geo.el.forEach((n) => el(n.t, "", gg, phone
+        ? Object.assign({}, n.a, { style: "fill:none;stroke:#25313C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" })
+        : n.a));   /* the sourced geometry verbatim - the compiler already kept only shapes */
     }
     if (sp.label) {
-      const lab = el("text", "chiplab", body, { x: 0, y: (h + CHIP.LABEL_DY).toFixed(1) });
-      lab.textContent = sp.label;
+      const lines = phone ? chipLabelLines(sp.label) : [sp.label];
+      const labelAttrs = { x: 0, y: (h + (phone ? CHIP.PHONE_LABEL_DY : CHIP.LABEL_DY)).toFixed(1) };
+      if (phone) labelAttrs.style = "font-size:" + CHIP.PHONE_LABEL_SIZE + "px;font-weight:700;font-family:Inter,Arial,sans-serif;fill:#25313C;paint-order:stroke;stroke:#F4E6C7;stroke-width:5px";
+      const lab = el("text", "chiplab", body, labelAttrs);
+      if (phone && lines.length > 1) {
+        lines.forEach((line, index) => {
+          const ts = el("tspan", "", lab, { x: 0, dy: index ? CHIP.PHONE_LABEL_LINE_H : 0 });
+          ts.textContent = line;
+        });
+      } else lab.textContent = lines[0];
     }
     if (pose.cross > 0) {   /* the two-stroke X, drawn by the curvature stroke over the card's diagonals */
-      const a = CHIP.SIZE * 0.34;
+      const a = cardSize * 0.34;
       [["M" + (-a).toFixed(1) + " " + (-a).toFixed(1) + " L" + a.toFixed(1) + " " + a.toFixed(1), pose.strokes[0]],
        ["M" + a.toFixed(1) + " " + (-a).toFixed(1) + " L" + (-a).toFixed(1) + " " + a.toFixed(1), pose.strokes[1]]]
         .forEach(([d, f]) => { if (f > 0) drawOn(el("path", "sq", g, { d }), f); });
@@ -13298,6 +13837,8 @@ async function mount(doc) {
     NODE_STEP: 0.2,    /* one node after the last: a beat under the eye's own saccade, so three read as a sequence and not a flash */
     EDGE_LAG: 0.1,     /* the breath between the last chip landing and the first arrow leaving it */
     EDGE_S: 0.34,      /* one arrow, drawn by length; arrows go one at a time - the mechanism is read in its order */
+    EDGE_RETRACT_S: 0.30, /* an authored edge-state change retracts its standing arrows before drawing the replacement */
+    STATE_RETRACT_S: 0.30, /* named alias for the schema's state-fit clock; kept equal to EDGE_RETRACT_S */
     BOW: 0.42,         /* the exit tangent's turn off the chord, in radians: enough curve to read as a hand's arrow, not a hoop */
     ENTER_K: 0.45,     /* ... and the entry tangent's turn as a share of it. UNEQUAL: equal angles are a circular arc and waste the fitter */
     EDGE_GAP: 16,      /* the air between a card's edge and the arrow that leaves it */
@@ -13315,6 +13856,13 @@ async function mount(doc) {
     CROSS_K: 1.15,     /* ... and ACROSS it, over card + label: a breath above and below */
     MIN_K: 0.4,        /* the smallest the diagram may be scaled to before it stops being read - under it the author gave it too small a box */
     LABEL_H: 34,       /* the label's own line, for the block's height (the chip writes it at CHIP.LABEL_DY below the card) */
+    PHONE_LABEL_SIZE: 45, /* opt-in landscape-phone text; explicit because inherited CSS is too small at phone scale */
+    PHONE_LABEL_DY: 52, /* the gap below a card before a phone-profile label starts */
+    PHONE_LABEL_LINE_H: 48, /* baseline step for newline-separated phone labels */
+    PHONE_TAG_SIZE: 48, /* opt-in landscape-phone tag size */
+    PHONE_TAG_PAD: 32,
+    OPERATOR_SIZE: 30, /* connector-minus length in stage px */
+    PHONE_OPERATOR_SIZE: 36,
   });
 
   const flow01 = (v) => Math.min(1, Math.max(0, v));
@@ -13322,18 +13870,27 @@ async function mount(doc) {
   /* THE LAYOUT: where each node stands inside the declared box, and how big the whole diagram is drawn.
      A row inside the box; a COLUMN when the box is taller than it is wide (a portrait build's box is), which
      is the same rule read from the geometry rather than from the aspect. */
-  const flowLayout = (box, n) => {
+  const flowLayout = (box, n, options = null) => {
     const N = Math.max(1, n | 0), column = box.h > box.w;
     const pitch = (column ? box.h : box.w) / N, across = column ? box.w : box.h;
-    const block = CHIP.SIZE + CHIP.LABEL_DY + FLOW.LABEL_H;
+    const phone = !!(options && options.readability === "landscape-phone");
+    let labelLines = 1;
+    if (phone && Array.isArray(options.labels)) {
+      for (const label of options.labels) labelLines = Math.max(labelLines, String(label == null ? "" : label).split(/\r?\n/).length);
+    }
+    const labelDy = phone ? FLOW.PHONE_LABEL_DY : CHIP.LABEL_DY;
+    const labelH = phone ? FLOW.PHONE_LABEL_LINE_H * labelLines : FLOW.LABEL_H;
+    const block = CHIP.SIZE + labelDy + labelH;
     const k = Math.max(FLOW.MIN_K, Math.min(1, pitch / (CHIP.SIZE * FLOW.PITCH_K), across / (block * FLOW.CROSS_K)));
-    const lift = (CHIP.LABEL_DY + FLOW.LABEL_H) * k / 2;   /* the card sits above centre so card + label are centred together */
+    const lift = (labelDy + labelH) * k / 2;   /* the card sits above centre so card + label are centred together */
     const cells = [];
     for (let i = 0; i < N; i++) {
       cells.push(column ? { x: box.x + box.w / 2, y: box.y + pitch * (i + 0.5) - lift }
-                        : { x: box.x + pitch * (i + 0.5), y: box.y + box.h / 2 - lift });
+                         : { x: box.x + pitch * (i + 0.5), y: box.y + box.h / 2 - lift });
     }
-    return { k, column, cells, half: CHIP.SIZE * k / 2 };
+    const out = { k, column, cells, half: CHIP.SIZE * k / 2 };
+    if (phone) Object.assign(out, { phone: true, labelDy, labelH, labelLines, labelLineH: FLOW.PHONE_LABEL_LINE_H });
+    return out;
   };
 
   /* THE CLOCK: every instant the declaration implies, in episode seconds. One place, so the painter, the tests
@@ -13444,6 +14001,86 @@ async function mount(doc) {
     return (sp.edges || []).map((e) => [ids.indexOf(e && e[0]), ids.indexOf(e && e[1])]);
   };
 
+  /* A validated edge row for the pure edge clock. Invalid declarations are left for the compiler to report and are
+     omitted here so a diagnostic painter cannot draw an arrow to a made-up node. `index` remains the declaration index
+     because the initial legacy clock is indexed by the original `edges` array, not by the filtered rows. */
+  const flowEdgeRows = (sp, edges) => {
+    const ids = (sp.nodes || []).map((n) => n && n.id);
+    if (!Array.isArray(edges)) return [];
+    return edges.map((edge, index) => {
+      if (!Array.isArray(edge) || edge.length !== 2) return null;
+      const fromIndex = ids.indexOf(edge[0]), toIndex = ids.indexOf(edge[1]);
+      if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return null;
+      return { edge: [edge[0], edge[1]], from: edge[0], to: edge[1], fromIndex, toIndex, index };
+    }).filter(Boolean);
+  };
+
+  const flowEdgeRecord = (sp, row, fraction, phase, stateIndex = -1) => ({
+    edge: row.edge.slice(), from: row.from, to: row.to,
+    fromIndex: row.fromIndex, toIndex: row.toIndex, index: row.index,
+    fraction: flow01(fraction), phase, stateIndex,
+    kind: Array.isArray(sp.operators) ? "operator" : "arrow",
+    operator: Array.isArray(sp.operators) ? sp.operators[row.index] : undefined,
+  });
+
+  /* Build the absolute, non-overlapping windows that the compiler's state-fit rule describes. The first window starts
+     after the existing diagram's tagEnd; a bad/partial declaration is a compiler concern, so the pure helper falls
+     back to the legacy edge clock rather than inventing a recovery schedule. */
+  const flowStateWindows = (sp) => {
+    const states = Array.isArray(sp.edge_states) && sp.edge_states.length ? sp.edge_states : [];
+    const initial = flowEdgeRows(sp, sp.edges);
+    if (!states.length) return { initial, windows: [], final: initial, valid: true };
+    let previous = initial, previousEnd = flowClock(sp).tagEnd;
+    const windows = [];
+    for (let i = 0; i < states.length; i++) {
+      const state = states[i];
+      const at = state && +state.at, rows = state && flowEdgeRows(sp, state.edges);
+      if (!Number.isFinite(at) || at < previousEnd || !Array.isArray(state && state.edges) || !state.edges.length || rows.length !== state.edges.length) {
+        return { initial, windows: [], final: initial, valid: false };
+      }
+      const retractEnd = at + FLOW.EDGE_RETRACT_S;
+      const drawEnd = retractEnd + rows.length * FLOW.EDGE_S;
+      windows.push({ stateIndex: i, at, retractEnd, drawEnd, old: previous, next: rows });
+      previous = rows;
+      previousEnd = drawEnd;
+    }
+    return { initial, windows, final: previous, valid: true };
+  };
+
+  const flowInitialEdgesAt = (sp, t, rows) => ({
+    phase: "initial", stateIndex: -1,
+    edges: rows.map((row) => flowEdgeRecord(sp, row, flowEdgeF(sp, row.index, t), "initial", -1)),
+  });
+
+  const flowSteadyEdges = (sp, rows, stateIndex) => ({
+    phase: "steady", stateIndex,
+    edges: rows.map((row) => flowEdgeRecord(sp, row, 1, "steady", stateIndex)),
+  });
+
+  /* The complete edge state at episode time t. This is deliberately data-only: no DOM, clock, random source or
+     retained transition state. During retraction the old set runs backwards as a whole; during drawing the new set
+     appears one edge at a time at EDGE_S. Absolute `state.at` values are never offset by the row's own `at`. */
+  const flowEdgesAt = (sp, t) => {
+    const raw = +t, now = Number.isFinite(raw) ? raw : -Infinity, schedule = flowStateWindows(sp || {});
+    if (!Number.isFinite(now) || !schedule.valid || !schedule.windows.length) return flowInitialEdgesAt(sp || {}, now, schedule.initial);
+    let previous = null;
+    for (const win of schedule.windows) {
+      if (now < win.at) return previous ? flowSteadyEdges(sp, previous.next, previous.stateIndex) : flowInitialEdgesAt(sp, now, schedule.initial);
+      if (now < win.retractEnd) {
+        const f = 1 - flow01((now - win.at) / FLOW.EDGE_RETRACT_S);
+        return { phase: "retract", stateIndex: win.stateIndex, at: win.at, retractEnd: win.retractEnd, drawEnd: win.drawEnd,
+          edges: win.old.map((row) => flowEdgeRecord(sp, row, f, "retract", win.stateIndex)) };
+      }
+      if (now < win.drawEnd) {
+        const elapsed = now - win.retractEnd;
+        return { phase: "draw", stateIndex: win.stateIndex, at: win.at, retractEnd: win.retractEnd, drawEnd: win.drawEnd,
+          edges: win.next.map((row, j) => flowEdgeRecord(sp, row, (elapsed - j * FLOW.EDGE_S) / FLOW.EDGE_S, "draw", win.stateIndex)) };
+      }
+      previous = win;
+    }
+    return flowSteadyEdges(sp, schedule.final, previous ? previous.stateIndex : -1);
+  };
+
   /* THE PAINTER. ctx is the template's species context (see SPECIES_PAINTERS in the player). Everything is
      drawn in STAGE px into one group, in reading order: the frame, the arrows (under the cards, so their ends
      tuck beneath), the cards, the stamp. */
@@ -13451,28 +14088,68 @@ async function mount(doc) {
     const { sp, t, svg, el, A, resolveTarget, drawOn, hash, idle, seed, si } = ctx;
     const box = resolveTarget(sp.target);
     if (!box || !(box.w > 0 && box.h > 0)) return;   /* the targeting law: a flow needs its room declared */
-    const nodes = sp.nodes || [], lay = flowLayout(box, nodes.length), C = flowClock(sp);
+    const nodes = sp.nodes || [], phone = sp.readability === "landscape-phone";
+    const labels = phone ? nodes.map((node) => node && node.label).concat(sp.swap && sp.swap.label ? [sp.swap.label] : []) : null;
+    const lay = flowLayout(box, nodes.length, phone ? { readability: "landscape-phone", labels } : null), C = flowClock(sp);
     const g = el("g", "flow", svg, {});
+    const phoneBoxStyle = "fill:none;stroke:#25313C;stroke-width:3;stroke-linecap:round";
+    const phoneArrowStyle = "fill:none;stroke:#25313C;stroke-width:5;stroke-linecap:round;stroke-linejoin:round";
+    const pathAttrs = (d, style) => phone ? { d, style: style || phoneArrowStyle } : { d };
     /* the frame, dash by dash, under the nib */
     const bf = flowBoxF(sp, t);
     if (bf > 0) {
       for (const d of flowDashes(box)) {
         const f = flow01((bf - d.t0) / Math.max(1e-6, d.t1 - d.t0));
         if (f <= 0) continue;
-        const p = el("path", "flowbox", g, { d: "M" + d.a.x.toFixed(1) + " " + d.a.y.toFixed(1) + " L" + d.b.x.toFixed(1) + " " + d.b.y.toFixed(1) });
+         const p = el("path", "flowbox", g, pathAttrs("M" + d.a.x.toFixed(1) + " " + d.a.y.toFixed(1) + " L" + d.b.x.toFixed(1) + " " + d.b.y.toFixed(1), phoneBoxStyle));
         if (f < 1) drawOn(p, f);
       }
     }
-    /* the arrows, drawn by length with the nib */
-    flowEdgeIndex(sp).forEach(([ia, ib], j) => {
-      if (ia < 0 || ib < 0 || ia === ib) return;
-      const f = flowEdgeF(sp, j, t);
-      if (f <= 0) return;
-      const an = flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
-      const pts = clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
-      drawOn(el("path", "flowarrow", g, { d: clothoidPath(pts) }), Math.min(1, f / FLOW.HEAD_F));
-      if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, { d: flowHead(pts) }), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
-    });
+    /* The absent-extension branch is intentionally the old loop: legacy declarations keep the same element order,
+       classes, paths and draw fractions. Opt-in states reverse the fitted polyline from its head, then draw the new
+       set in declaration order. Operators are a separate short minus at the connector midpoint - no arrow path/head. */
+    const stateMode = Array.isArray(sp.edge_states) && sp.edge_states.length;
+    const operatorMode = !stateMode && Array.isArray(sp.operators) && sp.operators.length;
+    if (stateMode || operatorMode) {
+      const state = flowEdgesAt(sp, t);
+      state.edges.forEach((entry) => {
+        const f = entry.fraction, ia = entry.fromIndex, ib = entry.toIndex;
+        if (!(f > 0) || ia < 0 || ib < 0 || ia === ib || !lay.cells[ia] || !lay.cells[ib]) return;
+        if (operatorMode) {
+          // Arithmetic uses the terms' shared centerline, not a transfer arrow's bowed path.
+          const mid = { x: (lay.cells[ia].x + lay.cells[ib].x) / 2, y: (lay.cells[ia].y + lay.cells[ib].y) / 2 };
+          const size = (phone ? FLOW.PHONE_OPERATOR_SIZE : FLOW.OPERATOR_SIZE) * lay.k;
+          const style = "fill:none;stroke:" + (phone ? "#25313C" : "#F5B72E") + ";stroke-width:5;stroke-linecap:round;stroke-linejoin:round";
+          const p = el("path", "flowoperator", g, { d: "M" + (mid.x - size / 2).toFixed(2) + " " + mid.y.toFixed(2)
+            + " L" + (mid.x + size / 2).toFixed(2) + " " + mid.y.toFixed(2), style });
+          drawOn(p, f);
+          return;
+        }
+        const an = flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
+        const pts = clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
+        if (entry.phase === "retract") {
+          drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts.slice().reverse()))), f);
+          const head = flowHead(pts);
+          if (head) {
+            const hp = el("path", "flowarrow", g, Object.assign(pathAttrs(head), { opacity: f.toFixed(3) }));
+            drawOn(hp, 1);
+          }
+        } else {
+          drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts))), Math.min(1, f / FLOW.HEAD_F));
+          if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, pathAttrs(flowHead(pts))), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
+        }
+      });
+    } else {
+      flowEdgeIndex(sp).forEach(([ia, ib], j) => {
+        if (ia < 0 || ib < 0 || ia === ib) return;
+        const f = flowEdgeF(sp, j, t);
+        if (f <= 0) return;
+        const an = flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
+        const pts = clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
+        drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts))), Math.min(1, f / FLOW.HEAD_F));
+        if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, pathAttrs(flowHead(pts))), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
+      });
+    }
     /* the cards */
     nodes.forEach((node, i) => {
       const st = flowNodeAt(sp, i, t);
@@ -13483,21 +14160,37 @@ async function mount(doc) {
       const ng = el("g", "", g, { opacity: (pose.fade * st.alpha).toFixed(3),
                                   transform: "translate(" + (c.x + ix.dx).toFixed(1) + " " + (c.y + (pose.dy + ix.dy) * lay.k).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
       const h = CHIP.SIZE / 2;
-      el("rect", "chipcard", ng, { x: (-h).toFixed(1), y: (-h).toFixed(1), width: CHIP.SIZE, height: CHIP.SIZE, rx: CHIP.RX });
+      const cardAttrs = { x: (-h).toFixed(1), y: (-h).toFixed(1), width: CHIP.SIZE, height: CHIP.SIZE, rx: CHIP.RX };
+      if (phone) cardAttrs.style = "fill:#F4E6C7;stroke:#25313C;stroke-width:3";
+      el("rect", "chipcard", ng, cardAttrs);
       const geo = chipGeometry(A ? A["icon:" + st.icon] : null);
       if (geo) {
         const vb = geo.vb || [0, 0, 24, 24], gk = CHIP.GLYPH / Math.max(vb[2] || 1, vb[3] || 1);
-        const gg = el("g", "chipglyph", ng, { transform: "translate(" + (-CHIP.GLYPH / 2).toFixed(1) + " " + (-CHIP.GLYPH / 2).toFixed(1) + ") scale(" + gk.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" });
-        geo.el.forEach((q) => el(q.t, "", gg, q.a));   /* the sourced geometry verbatim */
+        const glyphAttrs = { transform: "translate(" + (-CHIP.GLYPH / 2).toFixed(1) + " " + (-CHIP.GLYPH / 2).toFixed(1) + ") scale(" + gk.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" };
+        if (phone) glyphAttrs.style = "fill:none;stroke:#25313C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round";
+        const gg = el("g", "chipglyph", ng, glyphAttrs);
+        geo.el.forEach((q) => el(q.t, "", gg, phone ? Object.assign({}, q.a, { style: "fill:none;stroke:#25313C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" }) : q.a));   /* the sourced geometry verbatim */
       }
-      if (st.label) { const lab = el("text", "chiplab", ng, { x: 0, y: (h + CHIP.LABEL_DY).toFixed(1) }); lab.textContent = st.label; }
+      if (st.label) {
+        const labelDy = lay.labelDy || CHIP.LABEL_DY;
+        const attrs = { x: 0, y: (h + labelDy).toFixed(1) };
+        if (phone) attrs.style = "font-size:" + FLOW.PHONE_LABEL_SIZE + "px;font-weight:700;font-family:Inter,Arial,sans-serif;fill:#25313C;paint-order:stroke;stroke:#F4E6C7;stroke-width:5px";
+        const lab = el("text", "chiplab", ng, attrs), lines = phone ? String(st.label).split(/\r?\n/) : [st.label];
+        if (phone && lines.length > 1) {
+          const lineH = lay.labelLineH || FLOW.PHONE_LABEL_LINE_H;
+          lines.forEach((line, j) => { const ts = el("tspan", "", lab, { x: 0, dy: j ? lineH : 0 }); ts.textContent = line; });
+        } else lab.textContent = st.label;
+      }
     });
     /* the year stamp in the box's corner */
     if (sp.tag && t >= C.tagAt) {
       const u = flow01((t - C.tagAt) / FLOW.TAG_S), e = springPop(u);
-      const tx = el("text", "flowtag", g, { x: (box.x + box.w - FLOW.TAG_PAD).toFixed(1),
-                                            y: (box.y + FLOW.TAG_PAD + FLOW.TAG_SIZE * (1.4 - 0.4 * e)).toFixed(1),
-                                            opacity: flow01(u / 0.4).toFixed(3), style: "font-size:" + FLOW.TAG_SIZE + "px" });
+      const tagSize = phone ? FLOW.PHONE_TAG_SIZE : FLOW.TAG_SIZE, tagPad = phone ? FLOW.PHONE_TAG_PAD : FLOW.TAG_PAD;
+      const attrs = { x: (box.x + box.w - tagPad).toFixed(1),
+        y: (box.y + tagPad + tagSize * (1.4 - 0.4 * e)).toFixed(1),
+        opacity: flow01(u / 0.4).toFixed(3), style: "font-size:" + tagSize + "px" };
+      if (phone) attrs.style += ";font-weight:700;font-family:Inter,Arial,sans-serif;fill:#25313C;paint-order:stroke;stroke:#F4E6C7;stroke-width:6px";
+      const tx = el("text", "flowtag", g, attrs);
       tx.textContent = sp.tag;
     }
   }
@@ -15599,7 +16292,17 @@ async function mount(doc) {
       if (!isLedger) el.__lp = null;   /* R26-38: the page's ink is removed below - the state that described it goes with it */
       el.classList.toggle("vecmap", isVecmap);
       if (!isVecmap) el.querySelectorAll("svg.vm").forEach((x) => x.remove());
-      if (isLedger) { el.style.backgroundImage = "none"; paintLedger(el, scene, t); }
+      const surfaceArrival = isLedger && scene.world.page && scene.world.page.surface_from;
+      const surfaceDestination = !isLedger && scene.surface_page && t >= scene.surface_page.span[0]
+        && t < scene.span[1] ? TL.scenes.find(s => s.scene_id === scene.surface_page.to_scene) : null;
+      el.classList.toggle("surfaceworld", !!surfaceArrival);
+      if (surfaceArrival) {
+        const prior = TL.scenes.find(s => s.scene_id === surfaceArrival.scene);
+        el.style.backgroundImage = prior ? `url("${A[prior.world.asset_id]}")` : "none";
+        el.style.setProperty("--surface-world-image", el.style.backgroundImage);
+        paintSurfaceLedger(el, scene, t);
+      }
+      else if (isLedger) { el.style.backgroundImage = "none"; paintLedger(el, scene, t); }
       else if (isClip) {
         el.style.backgroundImage = "none";
         el.querySelectorAll(".lp").forEach((x) => x.remove());
@@ -15615,6 +16318,7 @@ async function mount(doc) {
       else {
         el.style.backgroundImage = plies.length ? "none" : `url("${A[scene.world.asset_id]}")`;   /* P58 T3: the planes ARE the picture */
         el.querySelectorAll(".lp").forEach((x) => x.remove());
+        if (surfaceDestination) paintSurfaceLedger(el, surfaceDestination, t);
       }
       if (!isClip) parkClips(el);   /* back to the pool, never destroyed */
       const kb0 = scene.world.ken_burns || { scale: 0, x: 0, y: 0 };
@@ -16184,9 +16888,18 @@ async function mount(doc) {
     const quiet = (carded || !!capY) && !capBand;
     /* STAGE (s9.25 #2): the timeline declares it; the anchor is the shared-stage position only */
     /* a ledger page may pin its captions to the anchor (page.caption === "anchor"): a host plate's quiet zone is the host's (C5 addendum) */
-    const capPinned = sc.world.kind === "ledger" && sc.world.page && sc.world.page.caption === "anchor";
-    const stage = !quiet && !capPinned && (TL.caption_modes || []).includes("stage");
     const PG = TL.caption_pages, CAP_LAST_HOLD_S = 0.4;
+    /* R26-235: `caption_pages` selects the latest page whose onset has passed, then holds
+       that page until the NEXT onset. The final page has the same .4s tail as the
+       caption painter below. Reserve the rail for that actual display lifetime, not
+       the page's last spoken word, so a readable species entering during an
+       interphrase hold cannot put a stage caption back underneath its labels. */
+    const readableCaptionPinned = (PG || []).some((p, i, pages) => {
+      const displayEnd = i + 1 < pages.length ? pages[i + 1].s : p.e + CAP_LAST_HOLD_S;
+      return p.cap_reserve === "readable-species" && t >= p.s && t < displayEnd;
+    });
+    const capPinned = readableCaptionPinned || (sc.world.kind === "ledger" && sc.world.page && sc.world.page.caption === "anchor");
+    const stage = !quiet && !capPinned && (TL.caption_modes || []).includes("stage");
     if (PG) {
       /* KINETIC (doc 29 Part 5): 2-4 word groups punch into the fixed anchor,
          power3.out, scale 1.14 -> 1.0, y 12 -> 0; keywords in the accent.

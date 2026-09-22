@@ -362,8 +362,9 @@ def test_species_edges_are_events_per_the_gate_column():
     tl, docks, mp = _bare_plate(species=species)
     ev = G.analyse(tl, docks, mp)["events"]
     assert 3.0 in ev and 3.8 not in ev                                      # punch: one event at the punch
-    assert 10.0 in ev and 12.5 in ev                                        # spotlight: departure and arrival of the glide
+    assert 10.0 not in ev and 12.5 not in ev                                # spotlight annotates; it never earns motion credit
     assert 20.0 not in ev and 21.0 not in ev                                # squiggle: a caption event in stage mode only - none of its own
+    assert G.SPECIES_EVENTS["spotlight"] == ()
     assert G.SPECIES_EVENTS["focus_zoom"] == ("at", "end") and G.SPECIES_EVENTS["plate_life"] == "stepping"
 
 
@@ -551,7 +552,38 @@ def test_m11_long_form_keeps_the_e24_window_and_the_short_window_is_declared():
     early = [{**docks[0], "at": 3.3, "end": 8.3}] + docks[1:]                # E44's short window, on long form
     g = _by_id(G.run(tl, early, mp)[0])
     assert g["M11"].level == "FAIL" and "enters at 3.3s - outside 8-20s" in g["M11"].message, g["M11"]
+
+
+def test_m11_narrative_led_long_form_binds_chart_to_first_quantitative_claim():
+    tl, docks, mp = _short_build(page_at=92.8, spot_at=101.2, runtime=240.0)
+    tl["kinetics"] = {
+        "first_chart_policy": "first_quant_claim",
+        "first_quant_claim_at": 98.4,
+    }
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level in ("PASS", "WARN"), g["M11"]
+    assert "declared quantitative claim at 98.4s" in g["M11"].message, g["M11"]
+
+
+def test_m11_invalid_narrative_led_claim_keeps_legacy_window():
+    tl, docks, mp = _short_build(page_at=92.8, spot_at=101.2, runtime=240.0)
+    tl["kinetics"] = {"first_chart_policy": "first_quant_claim", "first_quant_claim_at": "later"}
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level == "FAIL", g["M11"]
+    assert "outside 8-20s" in g["M11"].message, g["M11"]
     assert G.FIRST_CHART_SHORT == (0.0, 10.0)                                # E44
+
+
+def test_m11_opening_ledger_action_accepts_long_form_chart_at_zero():
+    tl, docks, mp = _short_build(page_at=0.0, spot_at=3.2, runtime=240.0)
+    tl["form"] = "long"
+    tl["kinetics"] = {"first_chart_policy": "opening_ledger_action"}
+    tl["scenes"][3]["world"]["page"]["enter"] = "axes"
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level in ("PASS", "WARN"), g["M11"]
+    assert "enters at 0.0s" in g["M11"].message, g["M11"]
+    assert "build lands at 3.0s" in g["M11"].message, g["M11"]
+    assert "opening action by 0:03" in g["M11"].message, g["M11"]
 
 
 def test_m07_on_a_short_is_an_info_row_with_both_rates():

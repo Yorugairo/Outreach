@@ -494,7 +494,7 @@ class Watch:
                     timeline_name=c["timeline_name"], shot_table_file=c["shot_table_file"],
                     title=c["title"], subtitle=c["subtitle"], episode_id=c["episode_id"],
                     aspect=c["aspect"], caption_style=c["caption_style"], kinetics=dict(c["kinetics"]),
-                    render=bool(c.get("render")))
+                    render=bool(c.get("render")), form=c.get("form"))
         except (Exception, SystemExit) as e:   # a bad sidecar or a broken row must not kill the server -
             # and the compiler refuses a bad sidecar with SystemExit, which threading swallows in silence
             return False, f"{type(e).__name__}: {e}", int((time.perf_counter() - t0) * 1000)

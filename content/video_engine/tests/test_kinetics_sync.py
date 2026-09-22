@@ -32,7 +32,7 @@ import sync_kinetics as SK  # noqa: E402
 
 MODULES = ["ease", "spring", "stagger",   # P52 T10: the caption's stagger envelope - after spring, before the caption block uses it
            "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "homography", "chartxf",
-           "camera", "arap",   # P50 T7 (homography): the planar projection that lands a card on a plate's declared surface - it imports nothing, and its region sits after the stop action whose impact it composes with
+           "camera", "arap", "page_surface",   # Registered paper-to-page handoff is also an inlined kinetics module.
            "morph_a",   # P43 T1
            "drop",      # P57 R26-118 / E88 s7: THE LIVING DROP - Rayleigh surface modes damped by Lamb, area-renormalised every frame and never still (E49); a kinetics law, no painter, its region BEFORE melt's because melt imports it
            "contour",   # P57 T12c / R26-70: MARCHING SQUARES - a thresholded bitmap in, closed rings out, so the engine can measure a glyph's own outline off the ink the page draws instead of parsing a font (E76 s5, "it's just math"); a kinetics law, no painter, its region beside morph_a's because it feeds it

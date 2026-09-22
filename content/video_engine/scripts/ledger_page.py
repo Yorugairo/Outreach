@@ -48,8 +48,10 @@ import copy
 import functools
 import hashlib
 import json
+import math
 import re
 import sys
+from numbers import Real
 from pathlib import Path
 from typing import Any
 
@@ -76,8 +78,11 @@ TIERS_MIN, TIERS_MAX = 2, 4
 # plate change (RULE-the-page-is-the-ground, 2026-09-04).
 PROP_PLACEMENTS = ("centre", "left", "right", "datum")
 QUIET_ZONES = ("left", "right")
+READABILITY_PROFILES = ("landscape-phone",)
 AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
              "name_clear",   # lift the inline series name clear of the data it would otherwise be written across
+             "readability",  # R26-? closed, page-scoped chart typography/geometry profile
+             "left_gutter",  # native story-bars y-axis reservation; absent preserves legacy geometry
              "ymin", "ymax", "yfmt", "yunit", "panels",
              "domain", "xdomain",   # P48 T2: a derived rescale state names its exact y domain and x window
              "overflow_placeholder", "overflow_capsule", "break_cadence",   # P50 T10 / T13: the breakthrough's furniture (E60)
@@ -236,9 +241,42 @@ def form_error(form: str, builder: str, where: str) -> str | None:
     return None
 
 
+def _validate_readability(series: dict, variant: str) -> list[str]:
+    """Validate the closed chart-readability profile before it can enter ``page.axes``.
+
+    The profile is intentionally a source-level option, like ``ylabel`` and ``name_clear``;
+    the renderer narrows its effect to the stamped 16:9 full-stage dense-line route.  Rejecting
+    unknown values here keeps a typo from silently selecting legacy geometry or typography.
+    """
+    value = series.get("readability")
+    if value is None:
+        return []
+    if value not in READABILITY_PROFILES:
+        return [f"readability {value!r} is not one of {'|'.join(READABILITY_PROFILES)}"]
+    builder = pick_builder(series, variant)
+    if builder != "dense-line":
+        return [f"readability={value!r} is only supported by the dense-line builder; this page uses {builder!r}"]
+    # `full_stage` is a compiler stamp, not a series-file field: the normal 16:9 page route adds it
+    # after this source validation, while portrait leaves it absent.  Explicit host-plate geometry
+    # is nevertheless incompatible and must not silently accept an option the renderer ignores.
+    if series.get("board") or series.get("chart_box") or series.get("punch") is False:
+        return ["readability='landscape-phone' is only supported by a 16:9 full_stage dense-line page"]
+    fit_error = _readability_fit_error(series)
+    if fit_error:
+        return [fit_error]
+    return []
+
+
 def validate(series: dict, variant: str) -> list[str]:
     """Error strings; empty means the series is a page for this variant. Pure."""
     errors: list[str] = []
+    errors += _validate_readability(series, variant)
+    if "left_gutter" in series:
+        gutter = series["left_gutter"]
+        if isinstance(gutter, bool) or not isinstance(gutter, int) or not 60 <= gutter <= 300:
+            errors.append("left_gutter must be an integer from 60 to 300 SVG units")
+        if not series.get("bars") or pick_builder(series, variant) != "story":
+            errors.append("left_gutter requires a story/bar chart")
     if series.get("form") is not None:   # P58 T5: an OBJECT naming a form is held to the same one rule the row is
         err = form_error(str(series["form"]), pick_builder(series, variant), "form")
         if err:
@@ -1157,6 +1195,7 @@ STAGE_PX = {"16:9": (1920, 1080), "9:16": (1080, 1920)}
 SAFE_BOX = {"9:16": (80, 280, 800, 1060), "16:9": (64, 64, 1792, 814)}
 # the anchored caption's strip - a dock demotes the caption to it, so a dock may never sit there
 CAPTION_ANCHOR = {"9:16": (80, 1290, 800, 150), "16:9": (145, 878, 1630, 82)}
+FULL_STAGE_BANDS_KEY = "full_stage_bands"
 PORTRAIT_LAYOUT = {"TOP": 150, "X": 80, "W": 800, "TITLE_W": 920, "BOTTOM": 1280, "GAP": 24, "CHART_MIN": 320}
 PORTRAIT_INK = {"title": (68, 1.12, 0.52, 920), "sub": (40, 1.25, 0.44, 800), "src": (40, 1.25, 0.44, 800)}
 PORTRAIT_PLOT = {"L": 150, "R": 70, "T": 90, "B": 80}
@@ -1321,6 +1360,24 @@ def _box(x: float, y: float, w: float, h: float) -> dict:
     return {"x": round(x), "y": round(y), "w": round(w), "h": round(h)}
 
 
+def _full_stage_bands(w_s: int, h_s: int) -> dict:
+    """R26-230's explicit 16:9 bands, derived from the page and caption constants.
+
+    The evidence rectangle is the vertical area in which the page's PLOT ink may live. The chart
+    box itself can extend below it for SVG letterbox air; the boundary protects the ink, not an
+    empty chart canvas. The top and bottom bands are full-stage strips so a long-form page can be
+    re-staged as a 9:16 layout instead of cropped into one.
+    """
+    safe_x, _safe_y, safe_w, _safe_h = SAFE_BOX["16:9"]
+    caption_top = CAPTION_ANCHOR["16:9"][1]
+    evidence_top = LAND_FULL["Y"] * h_s
+    return {
+        "top": _box(0, 0, w_s, evidence_top),
+        "bottom": _box(0, caption_top, w_s, h_s - caption_top),
+        "evidence_safe": _box(safe_x, evidence_top, safe_w, caption_top - evidence_top),
+    }
+
+
 TIER_GAP = 0.20   # the gutter between two bands, as a share of a band's own height [DERIVED, read off the first frame: at 0.10 a band's NAME sat on the floor tick label of the band above it; 0.20 is one line of type between them and still leaves four bands ~230 px each on a 9:16 plot]
 
 
@@ -1390,14 +1447,25 @@ def _landscape_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     FRAME puts it: the chart box is declared in rendered fractions (`LAND_FULL`) and the page's ink
     is carried through `_punch_pt`, so these boxes can be read straight against a probe.
 
-    The plot is a fraction of the DRAWN chart, not of the box: the chart's SVG is 1000x560 under the
-    default preserveAspectRatio, so it is fit inside the box and centred (the same letterbox
-    `treemap_plot` has had to do since P50 T9), and the box's spare width is air."""
+    The plot is a fraction of the DRAWN chart, not of the box. Legacy pages use the 1000x560 SVG
+    under the default preserveAspectRatio and retain its measured letterbox law. T17's opt-in
+    changes both the chart width and the SVG viewBox width, so the matched profile has no spare
+    horizontal air and the actual plot grows."""
     bx, by, bw, bh = LAND_BOARD
     half = 0.5 / PUNCH_SCALE
     vx, vy = bx + bw / 2 - half, by + bh / 2 - half
     F, L, I = LAND_FULL, LAND_PLOT, LAND_FULL_INK
-    cx, cy, cw, ch = F["X"] * w_s, F["Y"] * h_s, F["W"] * w_s, F["H"] * h_s
+    profile = _landscape_profile_geometry(spec, w_s, h_s)
+    cx, cy = F["X"] * w_s, F["Y"] * h_s
+    if profile:
+        cw, ch = profile["w"], profile["h"]
+        vw, vh, s = profile["vw"], profile["vh"], profile["scale"]
+        ox, oy = cx, cy
+    else:
+        cw, ch = F["W"] * w_s, F["H"] * h_s
+        vw, vh = LAND_VIEWBOX
+        s = min(cw / vw, ch / vh)
+        ox, oy = cx + (cw - vw * s) / 2, cy + (ch - vh * s) / 2
     # the title and the sub keep the places they have always had at 16:9 - the same two CSS
     # expressions the engine writes - read through the punch. The ink's own column is the title's,
     # as the 9:16 page's one column is (`PORTRAIT_LAYOUT["X"]`): nothing is aligned to the chart's
@@ -1408,28 +1476,120 @@ def _landscape_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     ink_w = cx + cw - ink_x
     src_y = cy + ch + LAND_SRC_GAP * PUNCH_SCALE * h_s
     rail = [b for b in spec.get("badges") or [] if not b.get("inline")]
-    vw, vh = LAND_VIEWBOX
-    s = min(cw / vw, ch / vh)
-    ox, oy = cx + (cw - vw * s) / 2, cy + (ch - vh * s) / 2
-    ylab = YLABEL_H if (spec.get("axes") or {}).get("ylabel") else 0
+    # The phone profile increases the SVG label face, so mirror the renderer's local face
+    # height and its slightly lifted baseline here.  Legacy pages keep the measured values.
+    ylab = (LAND_PHONE_FONT_PX * s if profile else YLABEL_H) if (spec.get("axes") or {}).get("ylabel") else 0
+    tick_b = LAND_PHONE_TICK_B if profile else LAND_TICK_B
+    tag_b = profile["B"] if profile else L["B"]
+    title_h = I["title"] * LAND_PHONE_TEXT_PX / 34 if profile else I["title"]
+    sub_h = I["sub"] * LAND_PHONE_TEXT_PX / 21 if profile else I["sub"]
+    src_h = I["src"] * LAND_PHONE_TEXT_PX / 22 if profile else I["src"]
+    # The native dense-line margins are SVG units, not fractions of the variable
+    # phone viewBox. Multiplying legacy fractions by vw misplaces both plot/tags.
+    plot_left = LAND_PHONE_PLOT_L if profile else L["L"] * vw
+    if spec.get("builder") == "story" and "left_gutter" in (spec.get("axes") or {}):
+        plot_left = max(plot_left, float(spec["axes"]["left_gutter"]))
+    plot_right = LAND_PLOT["R"] * LAND_VIEWBOX[0] if profile else L["R"] * vw
     return {
-        "title": _box(ink_x, title_y, ink_w, I["title"]),
-        "sub": _box(ink_x, sub_y, ink_w, I["sub"]),
+        "title": _box(ink_x, title_y, ink_w, title_h),
+        "sub": _box(ink_x, sub_y, ink_w, sub_h),
         "chart": _box(cx, cy, cw, ch),
-        "plot": _box(ox + L["L"] * vw * s, oy + L["T"] * vh * s - ylab,
-                     (1 - L["L"] - L["R"]) * vw * s, (LAND_TICK_B - L["T"]) * vh * s + ylab),
-        "source": _box(ink_x, src_y, ink_w, I["src"]),
+        "plot": _box(ox + plot_left * s, oy + L["T"] * vh * s - ylab,
+                     (vw - plot_left - plot_right) * s, (tick_b - L["T"]) * vh * s + ylab),
+        "source": _box(ink_x, src_y, ink_w, src_h),
         "rail": _box(ink_x, cy + ch + LAND_RAIL_GAP * PUNCH_SCALE * h_s, ink_w,
                      I["pill"] * -(-len(rail) // PORTRAIT_PILLS_PER_ROW) if rail else 0),
         # the END TAG COLUMN: the page's own inline names, beside the plot and part of the chart's ink.
         # It was air while a quiet zone kept the chart to 60 % of its board; at full stage it is the
         # only thing between the plot and the frame, so `free_bands` has to know it is there.
-        "tags": _box(ox + (1 - L["R"]) * vw * s + LAND_TAG_GAP * s, oy + L["T"] * vh * s,
-                     tag_units(spec) * s, (L["B"] - L["T"]) * vh * s),
+        "tags": _box(ox + (vw - plot_right + LAND_TAG_GAP) * s, oy + L["T"] * vh * s,
+                     (profile["tag_units"] if profile else tag_units(spec)) * s,
+                     (tag_b - L["T"]) * vh * s),
     }
 
 
 LAND_VIEWBOX = (1000, 560)   # the landscape chart's viewBox; a portrait chart's viewBox IS its pixel box (the template: "builders draw in stage px")
+
+# T17: this is deliberately a geometry profile, not a global type dial. The chart keeps the
+# existing 560-unit vertical viewBox and fixed line-builder margins; only its horizontal user
+# extent follows the page's safe rendered width. `sname` and its inline `tagchip` are 46px in the
+# opt-in renderer (44px was the starting point; the browser floor required a two-pixel margin),
+# so both advances are scaled from the existing 24px/18px bounds.
+LAND_PHONE_VIEWBOX_H = LAND_VIEWBOX[1]
+LAND_PHONE_NAME_U = LAND_TAG_NAME_U * 46.0 / 24.0
+LAND_PHONE_BADGE_U = LAND_TAG_BADGE_U * 46.0 / 18.0
+LAND_PHONE_MIN_VIEWBOX_W = LAND_VIEWBOX[0]
+LAND_PHONE_SAFE_RIGHT = 0.979
+LAND_PHONE_FONT_PX = 46
+LAND_PHONE_PLOT_L = 120
+LAND_PHONE_TEXT_PX = 52
+LAND_PHONE_B = 458
+LAND_PHONE_TICK_B = (LAND_PHONE_B + 32) / LAND_PHONE_VIEWBOX_H
+
+
+def _readability_profile(spec: dict) -> str | None:
+    """The page-scoped profile carried by the dense page's axes, if any."""
+    value = (spec.get("axes") or {}).get("readability")
+    return value if value in READABILITY_PROFILES else None
+
+
+def _profile_tag_units(spec: dict, profile: str | None = None) -> float:
+    """Inline end-tag width in the profile's chart user units.
+
+    ``spec`` may be the normalized page or the source series passed through validation. The
+    profile is only called for a dense-line page; an absent builder on source is therefore valid.
+    """
+    if profile != "landscape-phone":
+        return tag_units(spec)
+    builder = spec.get("builder")
+    if builder is not None and str(builder) not in LAND_TAG_BUILDERS:
+        return 0.0
+    raw = spec.get("series") or []
+    if not isinstance(raw, list):
+        return 0.0
+    rides = {BADGE_ACCENT_COL.get(str(b.get("accent"))): str(b.get("tag") or "")
+             for b in spec.get("badges") or [] if isinstance(b, dict) and b.get("inline")}
+    out = 0.0
+    for s in raw:
+        if not isinstance(s, dict) or s.get("muted"):
+            continue
+        tag = rides.get(str(s.get("color")), "")
+        name = ((s.get("label") or "") + " " + (s.get("name") or "")).strip()
+        out = max(out, len(name) * LAND_PHONE_NAME_U
+                  + ((len(tag) + 1) * LAND_PHONE_BADGE_U if tag else 0.0))
+    return out
+
+
+def _readability_fit_error(series: dict) -> str | None:
+    """Refuse a profile whose enlarged end tags cannot fit without stage clipping."""
+    value = series.get("readability") or (series.get("axes") or {}).get("readability")
+    if value != "landscape-phone":
+        return None
+    stage_w, stage_h = STAGE_PX["16:9"]
+    scale = LAND_FULL["H"] * stage_h / LAND_PHONE_VIEWBOX_H
+    max_vw = ((LAND_PHONE_SAFE_RIGHT * stage_w - LAND_FULL["X"] * stage_w) / scale
+              + LAND_PLOT["R"] * LAND_VIEWBOX[0] - LAND_TAG_GAP
+              - _profile_tag_units(series, "landscape-phone"))
+    if max_vw < LAND_PHONE_MIN_VIEWBOX_W:
+        return ("readability='landscape-phone' cannot fit its enlarged inline end tags inside the "
+                f"16:9 stage (maximum viewBox width {max_vw:.1f} < {LAND_PHONE_MIN_VIEWBOX_W})")
+    return None
+
+
+def _landscape_profile_geometry(spec: dict, w_s: int, h_s: int) -> dict | None:
+    """Return the rendered chart/viewBox geometry for T17, or None for legacy geometry."""
+    if _readability_profile(spec) != "landscape-phone" or not full_stage(spec, "16:9"):
+        return None
+    cx, cy = LAND_FULL["X"] * w_s, LAND_FULL["Y"] * h_s
+    ch = LAND_FULL["H"] * h_s
+    scale = ch / LAND_PHONE_VIEWBOX_H
+    max_vw = ((LAND_PHONE_SAFE_RIGHT * w_s - cx) / scale
+              + LAND_PLOT["R"] * LAND_VIEWBOX[0] - LAND_TAG_GAP
+              - _profile_tag_units(spec, "landscape-phone"))
+    vw = max(LAND_PHONE_MIN_VIEWBOX_W, round(max_vw, 3))
+    return {"vw": vw, "vh": LAND_PHONE_VIEWBOX_H, "scale": scale, "B": LAND_PHONE_B / LAND_PHONE_VIEWBOX_H,
+            "x": cx, "y": cy, "w": vw * scale, "h": ch,
+            "tag_units": _profile_tag_units(spec, "landscape-phone")}
 
 
 def treemap_plot(chart: dict, aspect: str) -> dict:
@@ -1476,6 +1636,10 @@ PAGE_BOXES_SCHEMA = "page_boxes.v1"
 BOX_KEYS = ("title", "sub", "chart", "plot", "source", "rail")
 TAGS_KEY = "tags"   # R26-205: the end tag column, on a full-stage page only (the fixture measures the six above)
 INK_KEYS = ("builder", "title", "sub", "source", "quiet_zone")
+FULL_STAGE_VARIANT = "full_stage"
+_PLAYER_TEMPLATE = _REPO / "docs/content-video-engine/samples/scene-evidence-player.template.html"
+_PLAYER_ENGINE = _REPO / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+_PLAYER_SHA_CACHE: tuple[tuple[int, int, int, int], str] | None = None
 
 
 def page_ink_key(spec: dict) -> str:
@@ -1492,6 +1656,13 @@ def page_ink_key(spec: dict) -> str:
         "ylabel": (spec.get("axes") or {}).get("ylabel"),
         "tiers_n": len(spec.get("tiers")) if isinstance(spec.get("tiers"), list) else 0,
     }
+    # Keep the absent-profile fingerprint byte-compatible; only an opted-in geometry is a new ink
+    # variant.  A profile's value must still be keyed because it changes the chart/viewBox and boxes.
+    readability = (spec.get("axes") or {}).get("readability")
+    if readability is not None:
+        ink["readability"] = readability
+    if "left_gutter" in (spec.get("axes") or {}):
+        ink["left_gutter"] = spec["axes"]["left_gutter"]
     blob = json.dumps(ink, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 
@@ -1520,6 +1691,68 @@ def _section(name: str, path: Path | None = None) -> dict:
     return section if isinstance(section, dict) else {}
 
 
+def _fixture_document(path: Path | None = None) -> dict:
+    """The decoded fixture document, including its player freshness marker."""
+    p = Path(path or PAGE_BOXES_FIXTURE)
+    try:
+        mtime = p.stat().st_mtime
+    except OSError:
+        return {}
+    return _doc(str(p), mtime)
+
+
+def _player_sha256() -> str | None:
+    """Hash the player pair once per file-mtime tuple; full-stage reads are the only caller."""
+    global _PLAYER_SHA_CACHE
+    try:
+        template = _PLAYER_TEMPLATE.stat()
+        engine = _PLAYER_ENGINE.stat()
+    except OSError:
+        return None
+    key = (template.st_mtime_ns, template.st_size, engine.st_mtime_ns, engine.st_size)
+    if _PLAYER_SHA_CACHE is not None and _PLAYER_SHA_CACHE[0] == key:
+        return _PLAYER_SHA_CACHE[1]
+    try:
+        digest = hashlib.sha256(_PLAYER_TEMPLATE.read_bytes() + _PLAYER_ENGINE.read_bytes()).hexdigest()
+    except OSError:
+        return None
+    _PLAYER_SHA_CACHE = (key, digest)
+    return digest
+
+
+def _full_stage_fixture_is_fresh(path: Path | None = None) -> bool:
+    marker = _fixture_document(path).get("player_sha256")
+    current = _player_sha256()
+    return isinstance(marker, str) and current is not None and marker == current
+
+
+def _valid_full_stage_entry(entry: object, ink: str) -> bool:
+    boxes = entry.get("boxes") if isinstance(entry, dict) else None
+
+    def finite_real(value: object) -> bool:
+        if not isinstance(value, Real) or isinstance(value, bool):
+            return False
+        try:
+            return math.isfinite(value)
+        except (OverflowError, TypeError):
+            return False
+
+    def valid_box(value: object) -> bool:
+        if not isinstance(value, dict):
+            return False
+        if not all(dimension in value for dimension in ("x", "y", "w", "h")):
+            return False
+        return (finite_real(value["x"]) and finite_real(value["y"])
+                and finite_real(value["w"]) and value["w"] >= 0
+                and finite_real(value["h"]) and value["h"] >= 0)
+
+    return (isinstance(entry, dict) and entry.get("ink") == ink
+            and entry.get("variant") == FULL_STAGE_VARIANT
+            and entry.get("full_stage") is True
+            and isinstance(boxes, dict)
+            and all(valid_box(boxes.get(key)) for key in BOX_KEYS))
+
+
 def fixture(path: Path | None = None) -> dict:
     """builder -> aspect -> entry, from `assets/page-boxes.v1.json` (or `path`): ONE representative
     page per builder, the fallback for any page carrying that representative's ink."""
@@ -1537,16 +1770,25 @@ def measured_entry(spec: dict, aspect: str) -> dict | None:
     """The fixture entry that measured THIS page's ink at this aspect, or None.
 
     The ink-keyed `pages` section first (this very page, measured by name), then the per-builder
-    representative - either way the entry is used only when its `ink` is this page's own."""
-    # R26-205: a FULL-STAGE page lays out nothing like the same ink in the old landscape box, so it is
-    # never served a measurement of that box. The refusal is HERE and not in `page_ink_key`, because
-    # the flag is not INK - it is a geometry the same ink takes at ONE aspect, and the key does not
-    # know the aspect. (It was in the key for one round, and it re-keyed every 9:16 page any caller
-    # stamped with the compiler's ASPECT unset: the Tokyo cut's measured pages fell back to the
-    # estimate and E65's placer lost the plot's own room - `test_dock_over_build.py` caught it.)
-    if full_stage(spec, aspect):
-        return None
+    representative - either way the entry is used only when its `ink` is this page's own. A 16:9
+    full-stage page is a named geometry variant under that aspect; it is accepted only when its
+    marker is explicit and the fixture was measured from the current player pair."""
     key = page_ink_key(spec)
+    if full_stage(spec, aspect):
+        # R26-235: full-stage boxes are not interchangeable with the legacy 16:9 entry, and an old
+        # fixture must fail closed rather than quietly placing a card by stale player geometry.
+        if not _full_stage_fixture_is_fresh():
+            return None
+        page_by_ink = measured_pages().get(key)
+        page_aspect = page_by_ink.get(aspect) if isinstance(page_by_ink, dict) else None
+        page_variant = page_aspect.get(FULL_STAGE_VARIANT) if isinstance(page_aspect, dict) else None
+        if _valid_full_stage_entry(page_variant, key):
+            return page_variant
+        builder = fixture().get(str(spec.get("builder")))
+        builder_aspect = builder.get(aspect) if isinstance(builder, dict) else None
+        builder_variant = (builder_aspect.get(FULL_STAGE_VARIANT)
+                           if isinstance(builder_aspect, dict) else None)
+        return builder_variant if _valid_full_stage_entry(builder_variant, key) else None
     entry = (measured_pages().get(key) or {}).get(aspect)
     if not isinstance(entry, dict):
         entry = (fixture().get(str(spec.get("builder"))) or {}).get(aspect)
@@ -1623,9 +1865,12 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
             boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
     sx, sy, sw, sh = SAFE_BOX[aspect]
     cx, cy, cw, ch = CAPTION_ANCHOR[aspect]
-    return {"aspect": aspect, "stage": _box(0, 0, w_s, h_s), "safe": _box(sx, sy, sw, sh),
-            "caption_anchor": _box(cx, cy, cw, ch), "quiet_zone": spec.get("quiet_zone"),
-            "measured": bool(measured), **boxes}
+    out = {"aspect": aspect, "stage": _box(0, 0, w_s, h_s), "safe": _box(sx, sy, sw, sh),
+           "caption_anchor": _box(cx, cy, cw, ch), "quiet_zone": spec.get("quiet_zone"),
+           "measured": bool(measured), **boxes}
+    if full_stage(spec, aspect):
+        out[FULL_STAGE_BANDS_KEY] = _full_stage_bands(w_s, h_s)
+    return out
 
 
 def load_series(path: Path) -> dict:

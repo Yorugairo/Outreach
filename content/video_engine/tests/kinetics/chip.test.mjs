@@ -4,7 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { SPRING, springPop } from "../../scripts/kinetics/spring.mjs";
-import { CHIP, chipLand, chipCrossF, chipStrokes, chipPose, chipGeometry, paintChip } from "../../scripts/species/chip.mjs";
+import { CHIP, CHIP_STAMP, chipLand, chipCrossF, chipStrokes, chipPose, chipGeometry, chipStampLabelLines, paintChip } from "../../scripts/species/chip.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 const chip = (o = {}) => Object.assign({ kind: "chip", at: 4, dur: 6, icon: "factory", label: "STEEL" }, o);
@@ -145,4 +145,53 @@ test("the painter draws nothing when the target does not resolve, and one group 
   assert.equal(xs.length, 2, "the two-stroke X");
   assert.equal(xs[0].at["stroke-dashoffset"], "1.000");
   assert.ok(+xs[1].at["stroke-dashoffset"] > 0 && +xs[1].at["stroke-dashoffset"] < 1);
+});
+
+test("the opt-in stamp uses an approved raster prop, spring landing and no generic card", () => {
+  const made = [];
+  const el = (tag, cls, parent, at) => { const e = { tag, cls, at: at || {}, kids: [], textContent: "", setAttribute(k, v) { this.at[k] = v; } };
+    made.push(e); if (parent && parent.kids) parent.kids.push(e); return e; };
+  const sp = { kind: "chip", form: "stamp", at: 4, dur: 6, size: 260,
+    icon: "prop-badge-dram-memory-etf-v1", label: "DRAM\nETF", ink: "charcoal", target: { kind: "point", x: .5, y: .5 } };
+  paintChip({ sp, t: 4.2, svg: { kids: [] }, el,
+    A: { "prop:prop-badge-dram-memory-etf-v1": "data:image/png;base64,approved" },
+    resolveTarget: () => ({ x: 960, y: 540, w: 0, h: 0 }), hash: () => .5,
+    idle: () => ({ scale: 1, dx: 0, dy: 0 }), seed: 1, si: 0 });
+  assert.deepEqual(made.map((e) => e.tag), ["g", "image", "text", "tspan", "tspan"]);
+  assert.equal(made[1].cls, "chipstampart");
+  assert.equal(made[1].at.href, "data:image/png;base64,approved");
+  assert.equal(made[1].at.preserveAspectRatio, "xMidYMid meet");
+  assert.equal(made[1].at.width, String(CHIP_STAMP.SIZE.toFixed(1)));
+  assert.match(made[2].at.style, /font-family:Kalam/);
+  assert.match(made[2].at.style, /font-size:48px/);
+  assert.match(made[2].at.style, /fill:#25313C/);
+  assert.match(made[2].at.style, /paint-order:stroke;stroke:#F4E6C7;stroke-width:4px/,
+    "printed labels need a narrow contrast keyline over narrative artwork");
+  assert.deepEqual(made.slice(3).map((e) => e.textContent), ["DRAM", "ETF"]);
+  assert.deepEqual(chipStampLabelLines("A\nB\nC"), ["A", "B", "C"]);
+  assert.ok(!made.some((e) => e.tag === "rect"), "stamp has no generic card background");
+});
+
+test("a finance prop stamp admits the larger narrative art box", () => {
+  const made = [];
+  const el = (tag, cls, parent, at) => { const e = { tag, cls, at: at || {}, kids: [], textContent: "", setAttribute(k, v) { this.at[k] = v; } };
+    made.push(e); if (parent && parent.kids) parent.kids.push(e); return e; };
+  paintChip({ sp: { kind: "chip", form: "stamp", at: 4, dur: 6, size: 640,
+    icon: "prop-liquidity-drain-pump-v1", label: "LIQUIDITY DRAIN", target: { kind: "point", x: .5, y: .5 } },
+    t: 4.2, svg: { kids: [] }, el,
+    A: { "prop:prop-liquidity-drain-pump-v1": "data:image/png;base64,approved-prop" },
+    resolveTarget: () => ({ x: 960, y: 540, w: 0, h: 0 }), hash: () => .5,
+    idle: () => ({ scale: 1, dx: 0, dy: 0 }), seed: 1, si: 0 });
+  assert.equal(CHIP_STAMP.ICON_MAX_SIZE, 420);
+  assert.equal(CHIP_STAMP.MAX_SIZE, 700);
+  assert.equal(made.find((e) => e.cls === "chipstampart").at.width, "640.0");
+});
+
+test("the stamp fails closed when the approved raster URI is absent", () => {
+  const made = [];
+  const el = (tag, cls, parent, at) => { const e = { tag, cls, at: at || {}, kids: [], textContent: "" }; made.push(e); return e; };
+  paintChip({ sp: { kind: "chip", form: "stamp", at: 4, dur: 6, icon: "unapproved", label: "THING", target: { kind: "point", x: .5, y: .5 } },
+    t: 4.2, svg: { kids: [] }, el, A: {}, resolveTarget: () => ({ x: 960, y: 540, w: 0, h: 0 }),
+    hash: () => .5, idle: () => ({ scale: 1, dx: 0, dy: 0 }), seed: 1, si: 0 });
+  assert.equal(made.length, 0);
 });

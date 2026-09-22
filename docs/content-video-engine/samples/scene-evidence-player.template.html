@@ -49,6 +49,16 @@
   .lp { position: absolute; left: 4.545%; top: 4.545%; width: 90.91%; height: 90.91%; overflow: hidden;
         --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #3DDC84; --lp-neg: #FF4D4D;   /* chart SIGN colours (operator, 2026-09-03): green up, red down - the sunflower callout is the only yellow. E67 (2026-09-12) made them electric so a line reads at thumbnail scale [DERIVED: WCAG vs #25313C] pos 7.4:1 (was 3.9), neg 4.1:1 (was 1.9 - invisible) */ --lp-brand: #1769C2; }
   .lp-page { position: absolute; inset: 0; background: var(--lp-cream); will-change: transform; overflow: hidden; }
+  .world.ledger.surfaceworld { background-color: transparent !important; }
+  .world.ledger.surfaceworld { background-image: var(--surface-world-image) !important; }
+  .surface-page-cream { --lp-chalk: #25313C; }
+  .surface-page-cream .lp-field, .surface-page-cream .lp-fieldplate,
+  .surface-page-cream .lp-grain, .surface-page-cream .lp-edge,
+  .surface-page-cream .lp-rail { display: none; }
+  .surface-page-cream .lp-chart .ax { stroke: #25313C; }
+  .surface-page-cream .lp-chart .grid { stroke: rgba(37,49,60,.18); }
+  .surface-page-cream .lp-chart .lab { fill: #25313C !important; }
+  .surface-page-cream .lp-chart .val { fill: var(--lp-char); }
   /* THE CARD PAGE (operator, 2026-09-08: "keep the edges of the card rounded like this where it's more like a phone ... everything
      should have a shadow instead of a border"): a page declared `card` keeps the thrown card's rounded corners at full size and sits
      on the world with doc 29 s1.2's hard-edge paper shadow (14px 14px 0 ink at 1080p, scaled) and NO border - the world stays visible

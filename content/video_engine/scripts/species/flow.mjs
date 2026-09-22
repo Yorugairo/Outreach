@@ -39,6 +39,8 @@ export const FLOW = Object.freeze({
   NODE_STEP: 0.2,    /* one node after the last: a beat under the eye's own saccade, so three read as a sequence and not a flash */
   EDGE_LAG: 0.1,     /* the breath between the last chip landing and the first arrow leaving it */
   EDGE_S: 0.34,      /* one arrow, drawn by length; arrows go one at a time - the mechanism is read in its order */
+  EDGE_RETRACT_S: 0.30, /* an authored edge-state change retracts its standing arrows before drawing the replacement */
+  STATE_RETRACT_S: 0.30, /* named alias for the schema's state-fit clock; kept equal to EDGE_RETRACT_S */
   BOW: 0.42,         /* the exit tangent's turn off the chord, in radians: enough curve to read as a hand's arrow, not a hoop */
   ENTER_K: 0.45,     /* ... and the entry tangent's turn as a share of it. UNEQUAL: equal angles are a circular arc and waste the fitter */
   EDGE_GAP: 16,      /* the air between a card's edge and the arrow that leaves it */
@@ -56,6 +58,13 @@ export const FLOW = Object.freeze({
   CROSS_K: 1.15,     /* ... and ACROSS it, over card + label: a breath above and below */
   MIN_K: 0.4,        /* the smallest the diagram may be scaled to before it stops being read - under it the author gave it too small a box */
   LABEL_H: 34,       /* the label's own line, for the block's height (the chip writes it at CHIP.LABEL_DY below the card) */
+  PHONE_LABEL_SIZE: 45, /* opt-in landscape-phone text; explicit because inherited CSS is too small at phone scale */
+  PHONE_LABEL_DY: 52, /* the gap below a card before a phone-profile label starts */
+  PHONE_LABEL_LINE_H: 48, /* baseline step for newline-separated phone labels */
+  PHONE_TAG_SIZE: 48, /* opt-in landscape-phone tag size */
+  PHONE_TAG_PAD: 32,
+  OPERATOR_SIZE: 30, /* connector-minus length in stage px */
+  PHONE_OPERATOR_SIZE: 36,
 });
 
 const flow01 = (v) => Math.min(1, Math.max(0, v));
@@ -63,18 +72,27 @@ const flow01 = (v) => Math.min(1, Math.max(0, v));
 /* THE LAYOUT: where each node stands inside the declared box, and how big the whole diagram is drawn.
    A row inside the box; a COLUMN when the box is taller than it is wide (a portrait build's box is), which
    is the same rule read from the geometry rather than from the aspect. */
-export const flowLayout = (box, n) => {
+export const flowLayout = (box, n, options = null) => {
   const N = Math.max(1, n | 0), column = box.h > box.w;
   const pitch = (column ? box.h : box.w) / N, across = column ? box.w : box.h;
-  const block = CHIP.SIZE + CHIP.LABEL_DY + FLOW.LABEL_H;
+  const phone = !!(options && options.readability === "landscape-phone");
+  let labelLines = 1;
+  if (phone && Array.isArray(options.labels)) {
+    for (const label of options.labels) labelLines = Math.max(labelLines, String(label == null ? "" : label).split(/\r?\n/).length);
+  }
+  const labelDy = phone ? FLOW.PHONE_LABEL_DY : CHIP.LABEL_DY;
+  const labelH = phone ? FLOW.PHONE_LABEL_LINE_H * labelLines : FLOW.LABEL_H;
+  const block = CHIP.SIZE + labelDy + labelH;
   const k = Math.max(FLOW.MIN_K, Math.min(1, pitch / (CHIP.SIZE * FLOW.PITCH_K), across / (block * FLOW.CROSS_K)));
-  const lift = (CHIP.LABEL_DY + FLOW.LABEL_H) * k / 2;   /* the card sits above centre so card + label are centred together */
+  const lift = (labelDy + labelH) * k / 2;   /* the card sits above centre so card + label are centred together */
   const cells = [];
   for (let i = 0; i < N; i++) {
     cells.push(column ? { x: box.x + box.w / 2, y: box.y + pitch * (i + 0.5) - lift }
-                      : { x: box.x + pitch * (i + 0.5), y: box.y + box.h / 2 - lift });
+                       : { x: box.x + pitch * (i + 0.5), y: box.y + box.h / 2 - lift });
   }
-  return { k, column, cells, half: CHIP.SIZE * k / 2 };
+  const out = { k, column, cells, half: CHIP.SIZE * k / 2 };
+  if (phone) Object.assign(out, { phone: true, labelDy, labelH, labelLines, labelLineH: FLOW.PHONE_LABEL_LINE_H });
+  return out;
 };
 
 /* THE CLOCK: every instant the declaration implies, in episode seconds. One place, so the painter, the tests
@@ -185,6 +203,86 @@ export const flowEdgeIndex = (sp) => {
   return (sp.edges || []).map((e) => [ids.indexOf(e && e[0]), ids.indexOf(e && e[1])]);
 };
 
+/* A validated edge row for the pure edge clock. Invalid declarations are left for the compiler to report and are
+   omitted here so a diagnostic painter cannot draw an arrow to a made-up node. `index` remains the declaration index
+   because the initial legacy clock is indexed by the original `edges` array, not by the filtered rows. */
+const flowEdgeRows = (sp, edges) => {
+  const ids = (sp.nodes || []).map((n) => n && n.id);
+  if (!Array.isArray(edges)) return [];
+  return edges.map((edge, index) => {
+    if (!Array.isArray(edge) || edge.length !== 2) return null;
+    const fromIndex = ids.indexOf(edge[0]), toIndex = ids.indexOf(edge[1]);
+    if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return null;
+    return { edge: [edge[0], edge[1]], from: edge[0], to: edge[1], fromIndex, toIndex, index };
+  }).filter(Boolean);
+};
+
+const flowEdgeRecord = (sp, row, fraction, phase, stateIndex = -1) => ({
+  edge: row.edge.slice(), from: row.from, to: row.to,
+  fromIndex: row.fromIndex, toIndex: row.toIndex, index: row.index,
+  fraction: flow01(fraction), phase, stateIndex,
+  kind: Array.isArray(sp.operators) ? "operator" : "arrow",
+  operator: Array.isArray(sp.operators) ? sp.operators[row.index] : undefined,
+});
+
+/* Build the absolute, non-overlapping windows that the compiler's state-fit rule describes. The first window starts
+   after the existing diagram's tagEnd; a bad/partial declaration is a compiler concern, so the pure helper falls
+   back to the legacy edge clock rather than inventing a recovery schedule. */
+const flowStateWindows = (sp) => {
+  const states = Array.isArray(sp.edge_states) && sp.edge_states.length ? sp.edge_states : [];
+  const initial = flowEdgeRows(sp, sp.edges);
+  if (!states.length) return { initial, windows: [], final: initial, valid: true };
+  let previous = initial, previousEnd = flowClock(sp).tagEnd;
+  const windows = [];
+  for (let i = 0; i < states.length; i++) {
+    const state = states[i];
+    const at = state && +state.at, rows = state && flowEdgeRows(sp, state.edges);
+    if (!Number.isFinite(at) || at < previousEnd || !Array.isArray(state && state.edges) || !state.edges.length || rows.length !== state.edges.length) {
+      return { initial, windows: [], final: initial, valid: false };
+    }
+    const retractEnd = at + FLOW.EDGE_RETRACT_S;
+    const drawEnd = retractEnd + rows.length * FLOW.EDGE_S;
+    windows.push({ stateIndex: i, at, retractEnd, drawEnd, old: previous, next: rows });
+    previous = rows;
+    previousEnd = drawEnd;
+  }
+  return { initial, windows, final: previous, valid: true };
+};
+
+const flowInitialEdgesAt = (sp, t, rows) => ({
+  phase: "initial", stateIndex: -1,
+  edges: rows.map((row) => flowEdgeRecord(sp, row, flowEdgeF(sp, row.index, t), "initial", -1)),
+});
+
+const flowSteadyEdges = (sp, rows, stateIndex) => ({
+  phase: "steady", stateIndex,
+  edges: rows.map((row) => flowEdgeRecord(sp, row, 1, "steady", stateIndex)),
+});
+
+/* The complete edge state at episode time t. This is deliberately data-only: no DOM, clock, random source or
+   retained transition state. During retraction the old set runs backwards as a whole; during drawing the new set
+   appears one edge at a time at EDGE_S. Absolute `state.at` values are never offset by the row's own `at`. */
+export const flowEdgesAt = (sp, t) => {
+  const raw = +t, now = Number.isFinite(raw) ? raw : -Infinity, schedule = flowStateWindows(sp || {});
+  if (!Number.isFinite(now) || !schedule.valid || !schedule.windows.length) return flowInitialEdgesAt(sp || {}, now, schedule.initial);
+  let previous = null;
+  for (const win of schedule.windows) {
+    if (now < win.at) return previous ? flowSteadyEdges(sp, previous.next, previous.stateIndex) : flowInitialEdgesAt(sp, now, schedule.initial);
+    if (now < win.retractEnd) {
+      const f = 1 - flow01((now - win.at) / FLOW.EDGE_RETRACT_S);
+      return { phase: "retract", stateIndex: win.stateIndex, at: win.at, retractEnd: win.retractEnd, drawEnd: win.drawEnd,
+        edges: win.old.map((row) => flowEdgeRecord(sp, row, f, "retract", win.stateIndex)) };
+    }
+    if (now < win.drawEnd) {
+      const elapsed = now - win.retractEnd;
+      return { phase: "draw", stateIndex: win.stateIndex, at: win.at, retractEnd: win.retractEnd, drawEnd: win.drawEnd,
+        edges: win.next.map((row, j) => flowEdgeRecord(sp, row, (elapsed - j * FLOW.EDGE_S) / FLOW.EDGE_S, "draw", win.stateIndex)) };
+    }
+    previous = win;
+  }
+  return flowSteadyEdges(sp, schedule.final, previous ? previous.stateIndex : -1);
+};
+
 /* THE PAINTER. ctx is the template's species context (see SPECIES_PAINTERS in the player). Everything is
    drawn in STAGE px into one group, in reading order: the frame, the arrows (under the cards, so their ends
    tuck beneath), the cards, the stamp. */
@@ -192,28 +290,68 @@ export function paintFlow(ctx) {
   const { sp, t, svg, el, A, resolveTarget, drawOn, hash, idle, seed, si } = ctx;
   const box = resolveTarget(sp.target);
   if (!box || !(box.w > 0 && box.h > 0)) return;   /* the targeting law: a flow needs its room declared */
-  const nodes = sp.nodes || [], lay = flowLayout(box, nodes.length), C = flowClock(sp);
+  const nodes = sp.nodes || [], phone = sp.readability === "landscape-phone";
+  const labels = phone ? nodes.map((node) => node && node.label).concat(sp.swap && sp.swap.label ? [sp.swap.label] : []) : null;
+  const lay = flowLayout(box, nodes.length, phone ? { readability: "landscape-phone", labels } : null), C = flowClock(sp);
   const g = el("g", "flow", svg, {});
+  const phoneBoxStyle = "fill:none;stroke:#25313C;stroke-width:3;stroke-linecap:round";
+  const phoneArrowStyle = "fill:none;stroke:#25313C;stroke-width:5;stroke-linecap:round;stroke-linejoin:round";
+  const pathAttrs = (d, style) => phone ? { d, style: style || phoneArrowStyle } : { d };
   /* the frame, dash by dash, under the nib */
   const bf = flowBoxF(sp, t);
   if (bf > 0) {
     for (const d of flowDashes(box)) {
       const f = flow01((bf - d.t0) / Math.max(1e-6, d.t1 - d.t0));
       if (f <= 0) continue;
-      const p = el("path", "flowbox", g, { d: "M" + d.a.x.toFixed(1) + " " + d.a.y.toFixed(1) + " L" + d.b.x.toFixed(1) + " " + d.b.y.toFixed(1) });
+       const p = el("path", "flowbox", g, pathAttrs("M" + d.a.x.toFixed(1) + " " + d.a.y.toFixed(1) + " L" + d.b.x.toFixed(1) + " " + d.b.y.toFixed(1), phoneBoxStyle));
       if (f < 1) drawOn(p, f);
     }
   }
-  /* the arrows, drawn by length with the nib */
-  flowEdgeIndex(sp).forEach(([ia, ib], j) => {
-    if (ia < 0 || ib < 0 || ia === ib) return;
-    const f = flowEdgeF(sp, j, t);
-    if (f <= 0) return;
-    const an = flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
-    const pts = clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
-    drawOn(el("path", "flowarrow", g, { d: clothoidPath(pts) }), Math.min(1, f / FLOW.HEAD_F));
-    if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, { d: flowHead(pts) }), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
-  });
+  /* The absent-extension branch is intentionally the old loop: legacy declarations keep the same element order,
+     classes, paths and draw fractions. Opt-in states reverse the fitted polyline from its head, then draw the new
+     set in declaration order. Operators are a separate short minus at the connector midpoint - no arrow path/head. */
+  const stateMode = Array.isArray(sp.edge_states) && sp.edge_states.length;
+  const operatorMode = !stateMode && Array.isArray(sp.operators) && sp.operators.length;
+  if (stateMode || operatorMode) {
+    const state = flowEdgesAt(sp, t);
+    state.edges.forEach((entry) => {
+      const f = entry.fraction, ia = entry.fromIndex, ib = entry.toIndex;
+      if (!(f > 0) || ia < 0 || ib < 0 || ia === ib || !lay.cells[ia] || !lay.cells[ib]) return;
+      if (operatorMode) {
+        // Arithmetic uses the terms' shared centerline, not a transfer arrow's bowed path.
+        const mid = { x: (lay.cells[ia].x + lay.cells[ib].x) / 2, y: (lay.cells[ia].y + lay.cells[ib].y) / 2 };
+        const size = (phone ? FLOW.PHONE_OPERATOR_SIZE : FLOW.OPERATOR_SIZE) * lay.k;
+        const style = "fill:none;stroke:" + (phone ? "#25313C" : "#F5B72E") + ";stroke-width:5;stroke-linecap:round;stroke-linejoin:round";
+        const p = el("path", "flowoperator", g, { d: "M" + (mid.x - size / 2).toFixed(2) + " " + mid.y.toFixed(2)
+          + " L" + (mid.x + size / 2).toFixed(2) + " " + mid.y.toFixed(2), style });
+        drawOn(p, f);
+        return;
+      }
+      const an = flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
+      const pts = clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
+      if (entry.phase === "retract") {
+        drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts.slice().reverse()))), f);
+        const head = flowHead(pts);
+        if (head) {
+          const hp = el("path", "flowarrow", g, Object.assign(pathAttrs(head), { opacity: f.toFixed(3) }));
+          drawOn(hp, 1);
+        }
+      } else {
+        drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts))), Math.min(1, f / FLOW.HEAD_F));
+        if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, pathAttrs(flowHead(pts))), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
+      }
+    });
+  } else {
+    flowEdgeIndex(sp).forEach(([ia, ib], j) => {
+      if (ia < 0 || ib < 0 || ia === ib) return;
+      const f = flowEdgeF(sp, j, t);
+      if (f <= 0) return;
+      const an = flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
+      const pts = clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
+      drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts))), Math.min(1, f / FLOW.HEAD_F));
+      if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, pathAttrs(flowHead(pts))), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
+    });
+  }
   /* the cards */
   nodes.forEach((node, i) => {
     const st = flowNodeAt(sp, i, t);
@@ -224,21 +362,37 @@ export function paintFlow(ctx) {
     const ng = el("g", "", g, { opacity: (pose.fade * st.alpha).toFixed(3),
                                 transform: "translate(" + (c.x + ix.dx).toFixed(1) + " " + (c.y + (pose.dy + ix.dy) * lay.k).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
     const h = CHIP.SIZE / 2;
-    el("rect", "chipcard", ng, { x: (-h).toFixed(1), y: (-h).toFixed(1), width: CHIP.SIZE, height: CHIP.SIZE, rx: CHIP.RX });
+    const cardAttrs = { x: (-h).toFixed(1), y: (-h).toFixed(1), width: CHIP.SIZE, height: CHIP.SIZE, rx: CHIP.RX };
+    if (phone) cardAttrs.style = "fill:#F4E6C7;stroke:#25313C;stroke-width:3";
+    el("rect", "chipcard", ng, cardAttrs);
     const geo = chipGeometry(A ? A["icon:" + st.icon] : null);
     if (geo) {
       const vb = geo.vb || [0, 0, 24, 24], gk = CHIP.GLYPH / Math.max(vb[2] || 1, vb[3] || 1);
-      const gg = el("g", "chipglyph", ng, { transform: "translate(" + (-CHIP.GLYPH / 2).toFixed(1) + " " + (-CHIP.GLYPH / 2).toFixed(1) + ") scale(" + gk.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" });
-      geo.el.forEach((q) => el(q.t, "", gg, q.a));   /* the sourced geometry verbatim */
+      const glyphAttrs = { transform: "translate(" + (-CHIP.GLYPH / 2).toFixed(1) + " " + (-CHIP.GLYPH / 2).toFixed(1) + ") scale(" + gk.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" };
+      if (phone) glyphAttrs.style = "fill:none;stroke:#25313C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round";
+      const gg = el("g", "chipglyph", ng, glyphAttrs);
+      geo.el.forEach((q) => el(q.t, "", gg, phone ? Object.assign({}, q.a, { style: "fill:none;stroke:#25313C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" }) : q.a));   /* the sourced geometry verbatim */
     }
-    if (st.label) { const lab = el("text", "chiplab", ng, { x: 0, y: (h + CHIP.LABEL_DY).toFixed(1) }); lab.textContent = st.label; }
+    if (st.label) {
+      const labelDy = lay.labelDy || CHIP.LABEL_DY;
+      const attrs = { x: 0, y: (h + labelDy).toFixed(1) };
+      if (phone) attrs.style = "font-size:" + FLOW.PHONE_LABEL_SIZE + "px;font-weight:700;font-family:Inter,Arial,sans-serif;fill:#25313C;paint-order:stroke;stroke:#F4E6C7;stroke-width:5px";
+      const lab = el("text", "chiplab", ng, attrs), lines = phone ? String(st.label).split(/\r?\n/) : [st.label];
+      if (phone && lines.length > 1) {
+        const lineH = lay.labelLineH || FLOW.PHONE_LABEL_LINE_H;
+        lines.forEach((line, j) => { const ts = el("tspan", "", lab, { x: 0, dy: j ? lineH : 0 }); ts.textContent = line; });
+      } else lab.textContent = st.label;
+    }
   });
   /* the year stamp in the box's corner */
   if (sp.tag && t >= C.tagAt) {
     const u = flow01((t - C.tagAt) / FLOW.TAG_S), e = springPop(u);
-    const tx = el("text", "flowtag", g, { x: (box.x + box.w - FLOW.TAG_PAD).toFixed(1),
-                                          y: (box.y + FLOW.TAG_PAD + FLOW.TAG_SIZE * (1.4 - 0.4 * e)).toFixed(1),
-                                          opacity: flow01(u / 0.4).toFixed(3), style: "font-size:" + FLOW.TAG_SIZE + "px" });
+    const tagSize = phone ? FLOW.PHONE_TAG_SIZE : FLOW.TAG_SIZE, tagPad = phone ? FLOW.PHONE_TAG_PAD : FLOW.TAG_PAD;
+    const attrs = { x: (box.x + box.w - tagPad).toFixed(1),
+      y: (box.y + tagPad + tagSize * (1.4 - 0.4 * e)).toFixed(1),
+      opacity: flow01(u / 0.4).toFixed(3), style: "font-size:" + tagSize + "px" };
+    if (phone) attrs.style += ";font-weight:700;font-family:Inter,Arial,sans-serif;fill:#25313C;paint-order:stroke;stroke:#F4E6C7;stroke-width:6px";
+    const tx = el("text", "flowtag", g, attrs);
     tx.textContent = sp.tag;
   }
 }

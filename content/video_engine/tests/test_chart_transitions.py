@@ -25,6 +25,8 @@ import render_baseline as RB  # noqa: E402
 
 EP = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break"
 PLATE = "ledger:ev-japan-holdings-v1:line;then=ev-top-holders-v1:share"
+FED_EP = ROOT / "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure"
+FED_PLATE = "ledger:fed-on-rrp-history:line;then=debt-wall-2025-2027:bars"
 XF_AT, XF_S = 11.0, 1.3
 RT_AT, RT_S = 11.0, 2.0
 
@@ -32,6 +34,11 @@ needs_objects = pytest.mark.skipif(
     not ((EP / "evidence/objects/ev-japan-holdings-v1.series.json").exists()
          and (EP / "evidence/objects/ev-top-holders-v1.series.json").exists()),
     reason="the Tokyo evidence objects are not on disk",
+)
+needs_fed_objects = pytest.mark.skipif(
+    not ((FED_EP / "evidence/objects/fed-on-rrp-history.series.json").exists()
+         and (FED_EP / "evidence/objects/debt-wall-2025-2027.series.json").exists()),
+    reason="the Fed liquidity evidence objects are not on disk",
 )
 
 
@@ -121,16 +128,17 @@ PROBE = """() => {
     charts: S.map(s => +(s.chart.style.opacity || 0)),
     lineDrawn: drawn(S[0]),
     sweep: S[1] && S[1].share ? S[1].share.wedges.map(x => +x.lab.getAttribute('opacity')) : null,
-    subOld: ink(st.subGlyphs), subNew: S[1] && S[1].subInk ? ink(S[1].subInk.glyphs) : null,
+    subOld: ink(st.subGlyphs), srcOld: ink(st.srcGlyphs), subNew: S[1] && S[1].subInk ? ink(S[1].subInk.glyphs) : null,
     srcNew: S[1] && S[1].srcInk ? ink(S[1].srcInk.glyphs) : null,
+    axes: S.map(s => (s.marks || []).filter(m => ["tick", "ylabel", "xtick", "axislabel"].includes(m.role)).map(m => ({role: m.role, text: m.el.textContent, opacity: m.el.style.opacity || ""}))),
   };
 }"""
 
 
-def _player(species):
+def _player(species, plate=PLATE, ep=EP):
     from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
-    world = B.world_for_plate(PLATE, (0, 0, 0), EP)
+    world = B.world_for_plate(plate, (0, 0, 0), ep)
     sc = tl["scenes"][0]
     scene = dict(sc, species=species, span=[0.0, 26.0],
                  world=dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}))
@@ -159,6 +167,27 @@ SPECIES = [
     {"kind": "peel", "at": 17.4, "dur": 1.6},
 ]
 
+# A completed build_to must not override the standing chart's reverse recast
+# clock. The authored events deliberately finish well before the hand-over.
+SPECIES_BUILD_TO_RECAST = [
+    {"kind": "build_to", "at": 4.0, "dur": 0.5, "target": {"kind": "datum", "index": 0, "series": 0}},
+    {"kind": "build_to", "at": 6.0, "dur": 2.0, "target": {"kind": "datum", "index": 315, "series": 0}},
+    {"kind": "chart_to", "at": XF_AT, "dur": XF_S, "to": "recast", "state": 1},
+]
+
+# The second cap is still in flight when the replacement starts. The reverse
+# clock must preserve that partial history instead of restoring a full line.
+SPECIES_PARTIAL_BUILD_RECAST = [
+    {"kind": "build_to", "at": 4.0, "dur": 0.5, "target": {"kind": "datum", "index": 0, "series": 0}},
+    {"kind": "build_to", "at": 6.0, "dur": 10.0, "target": {"kind": "datum", "index": 100, "series": 0}},
+    {"kind": "chart_to", "at": XF_AT, "dur": XF_S, "to": "recast", "state": 1},
+]
+
+FED_XF_AT, FED_XF_S = 11.0, 2.0
+SPECIES_FED_PLAIN_RECAST = [
+    {"kind": "chart_to", "at": FED_XF_AT, "dur": FED_XF_S, "to": "recast", "state": 1},
+]
+
 
 def _at(page, t: float) -> dict:
     page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
@@ -178,7 +207,7 @@ def test_the_line_leaves_and_the_pie_arrives_on_one_page_with_no_cut():
         mid = _at(page, XF_AT + XF_S * 0.55)
         assert all(f < 0.95 for f in mid["lineDrawn"]), "the standing chart is leaving, not standing"
         assert mid["charts"][1] == 0, "and the next chart has not started: a recast is a hand-over, not a dissolve"
-        assert mid["subOld"] < 0.2, "the words that described the old chart have been erased"
+        assert mid["subOld"] > 0.9, "the outgoing words stay with the outgoing data until the line is gone"
 
         after = _at(page, XF_AT + XF_S + 3.4)
         assert after["charts"][0] == 0 and after["charts"][1] == 1
@@ -201,6 +230,56 @@ def test_a_recast_seeks_exactly() -> None:
             _at(page, 2.0)
             b = _at(page, t)
             assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), t
+    finally:
+        close()
+
+
+@needs_objects
+@needs_browser
+def test_a_plain_recast_reverse_clock_is_not_overridden_by_completed_build_to() -> None:
+    """A completed build_to is history, not a second clock during the line's reverse hand-over."""
+    page, errs, close = _player(SPECIES_BUILD_TO_RECAST)
+    try:
+        before = _at(page, XF_AT - 0.5)
+        assert all(f > 0.99 for f in before["lineDrawn"]), "the authored caps finish before the recast"
+
+        mid = _at(page, XF_AT + XF_S * 0.55)
+        assert all(f < 0.95 for f in mid["lineDrawn"]), "recast c, not a completed build_to, controls the leaving line"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_objects
+@needs_browser
+def test_a_plain_recast_preserves_a_partial_build_to_cap() -> None:
+    """A cap in flight at recast start remains partial while the line leaves."""
+    page, errs, close = _player(SPECIES_PARTIAL_BUILD_RECAST)
+    try:
+        before = _at(page, XF_AT - 0.1)
+        mid = _at(page, XF_AT + XF_S * 0.05)
+        assert max(before["lineDrawn"]) < 0.6, before["lineDrawn"]
+        assert max(mid["lineDrawn"]) < 0.6, "reverse must not pop the partial cap to full ink"
+        assert max(mid["lineDrawn"]) > 0.01, "the partial history remains visible at recast start"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_fed_objects
+@needs_browser
+def test_plain_recast_holds_target_identity_until_outgoing_data_is_gone() -> None:
+    """A line-to-bars handover does not mix old data with new axes or source ink."""
+    page, errs, close = _player(SPECIES_FED_PLAIN_RECAST, FED_PLATE, FED_EP)
+    try:
+        mid = _at(page, FED_XF_AT + FED_XF_S * 0.65)
+        late = _at(page, FED_XF_AT + FED_XF_S * 0.96)
+        assert mid["charts"][1] == 0, "target chart axes stay hidden while the old line remains"
+        assert mid["subOld"] > 0.9 and mid["srcOld"] > 0.9, "outgoing identity stays with the outgoing data"
+        assert mid["subNew"] == 0 and mid["srcNew"] == 0, "target identity waits for the target build"
+        assert late["charts"][1] == 1, "target axes appear only after the outgoing line is removed"
+        assert any(a["role"] in ("ylabel", "xtick", "axislabel") and a["text"] for a in late["axes"][1])
+        assert not errs, errs
     finally:
         close()
 
@@ -953,13 +1032,18 @@ def test_a_morph_to_seeks_exactly(tmp_path):
 def test_with_the_flag_off_a_morph_to_is_the_recast_hand_over_byte_for_byte(tmp_path):
     """kinetics.arap_morph off: a morph_to degrades to the plain recast of the same length - the frames are identical."""
     import hashlib
+    import io
+    from PIL import Image
     ep, plate = _line_to_line_ep(tmp_path)
     hashes = []
     for verb in ("morph", "recast"):
         species = [{"kind": "chart_to", "at": MT_AT, "dur": MT_S, "to": verb, "state": 1}]
         _at, frame, _page, errs, close = _morph_player(ep, plate, species, kinetics={"arap_morph": False})
         try:
-            hashes.append([hashlib.sha256(frame(t)).hexdigest() for t in (MT_AT + 0.6, MT_AT + MT_S + 0.5, MT_AT + MT_S + 3.0)])
+            # Chromium may choose different PNG row filters for separate pages;
+            # compare decoded pixels, which is the actual frame contract.
+            hashes.append([hashlib.sha256(Image.open(io.BytesIO(frame(t))).convert("RGBA").tobytes()).hexdigest()
+                           for t in (MT_AT + 0.6, MT_AT + MT_S + 0.5, MT_AT + MT_S + 3.0)])
             assert not errs, errs
         finally:
             close()
@@ -1413,9 +1497,11 @@ def test_the_plain_recasts_axes_hand_over_too(tmp_path):
     try:
         mid = at(DK_AT + DK_S * 0.5)
         assert all(len(a) < len(b) for a, b in zip(mid["yA"], mid["yAfull"])), "the standing labels are being un-written"
-        assert any(0 < len(a) < len(b) for a, b in zip(mid["yB"], mid["yBfull"])), "the arriving ones are being written"
-        assert any(abs(t[0] - t[1]) > 1 for t in mid["tickA"]), "the gridlines have slid toward the new scale"
-        assert all(t[2] > 0.3 for t in mid["tickA"]), "and none of them blinked out to do it"
+        assert all(not a for a in mid["yB"]), "the arriving axes wait while outgoing data remains"
+        late = at(DK_AT + DK_S * 0.94)
+        assert any(0 < len(a) < len(b) for a, b in zip(late["yB"], late["yBfull"])), "the arriving ones write after data removal"
+        assert any(abs(t[0] - t[1]) > 1 for t in late["tickA"]), "the gridlines slide after the outgoing data is gone"
+        assert all(t[2] > 0.3 for t in late["tickA"]), "and none of them blink out to do it"
         assert all(d[2] == 0 for d in mid["dots"]) if mid["dots"] else True, "no datum travels on a plain recast"
         assert all("scaleY(0" in s or s == "" for s in mid["barScale"]), "and no bar grows before the target's own build"
         a = at(DK_AT + DK_S * 0.5); at(2.0); b = at(DK_AT + DK_S * 0.5)

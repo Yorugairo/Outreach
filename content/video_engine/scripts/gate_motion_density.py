@@ -123,6 +123,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import sys as _sys
 from pathlib import Path as _P
 _sys.path.insert(0, str(_P(__file__).resolve().parent))
@@ -275,6 +276,7 @@ PLATE_SECONDS = 12.0       # s9.13: runtime / 12s distinct plates
 PLATE_HOLD_MAX_S = 20.0    # s9.13: past this a hold is READ for liveness (E69, 2026-09-12) - it was "unless two docks over it"
 CAP_WORDS = (4, 6)         # build_caption_pages: MAX_WORDS 6, 4-6 target
 CAP_PAGES_PER_MIN_MIN = 20.0
+CAP_RESERVE_READABLE_SPECIES = "readable-species"
 OPENING_S = 60.0           # E21: the opening minute
 WINDOW_S = 60.0
 
@@ -294,6 +296,8 @@ PAGE_BEAT_OFFSETS = (0.0, LP_ROLL_S, LP_ROLL_S + LP_SAVOR_S,
 # = (0.0, 0.7, 1.5, 3.9, 4.4, 7.4): roll-out, savor start, field start, punch, build start, build end + focus
 PAGE_BUILD_END_S = PAGE_BEAT_OFFSETS[-1]   # a LEDGER PAGE's chart LANDS here (7.4s after the page enters): M11's annotation clock for a page - the
                                            # operator's ruling (2026-09-04) is no highlight over the charcoal build, so the species fires after the build, never with the roll-out
+SURFACE_GROW_S = 0.45                     # build_scene_timeline_f.CAMERA_ARRIVAL_S and player SURFACE_PAGE.GROW_S; the native surface clock
+TIMELINE_FORMS = frozenset(("short", "long"))
 SHORT_FULL_MINUTES = 3                     # M07 ranks whole minutes; with fewer full minutes than this (a short) there is no distribution to rank in -
                                            # the row reports both rates as INFO (P41, 2026-09-05) instead of failing the opening against a 22s tail
 ARRIVES_BUILT = ("spiral", "snap", "built", "throw", "drop", "camera")   # the enters whose page is DRAWN on its first frame: one beat, no roll-out (P53 T1 named the set the landing and the beats had each spelled out)
@@ -304,6 +308,9 @@ SRC_M31 = ("R26-66 / P53 T2, measured with measure_stage_gaps.py: a transition t
            "a 69 s short. The DIP is the one transition licensed to empty the stage (a dip is a world change); everything "
            "else hands off, and the page that follows an inked arrival (enter=axes / built) measures 0.")
 SRC_M15 = "E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract"
+SRC_M00 = ("Timeline form contract: an explicit top-level form is exactly 'short' or 'long'; absent preserves the legacy "
+           "aspect/runtime read. A long form cannot claim a portrait 9:16 aspect. Invalid or inconsistent declarations fail "
+           "closed and never relax a motion threshold.")
 LP_BADGE0_S, LP_BADGE_STEP_S = 0.4, 0.9   # page badges spring in after the build: build end + 0.4 + 0.9k (template LP.BADGE0 / BADGE_STEP)
 CAP_ARRIVE_FADE = "fade_up"    # P52 T10: the page's arrival kind (page.cap_arrive / timeline.caption_arrive); absent = the pop
 CAP_STAGGER_S = 0.055          # kinetics/stagger.mjs FADE_UP.STAGGER_S - keep in step with the module, as the LP constants above are kept in step with the template
@@ -335,7 +342,10 @@ DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that ca
 # table says which edges of each are visual events: "at" = one event at the
 # firing, "end" = one at at+dur. Camera punch: "one event at the punch". Scribble
 # callout: "event at draw". Focus zoom: "event at departure and arrival".
-# Feathered spotlight: "events per glide" (each glide is a row). Pull-back
+# A spotlight is an annotation, not motion.  Its light may move while locating
+# a datum, but that cannot rescue an otherwise static edit.  It remains in
+# ANNOTATED_KINDS below so it can satisfy the separate chart-clarity rule.
+# Pull-back
 # reveal: "events across the pull" (departure and arrival). Beat-freeze exit:
 # "events at hit and cut". Radial reveal: "scene event". Push hand-off: "event".
 # "stepping" = plate life, "events while stepping": the stop-motion cadence is
@@ -344,7 +354,7 @@ DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that ca
 # mode only": the stage page under them already counts (M08), so they add no
 # event of their own for now.
 SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "end"),
-                  "spotlight": ("at", "end"), "squiggle": (), "pull_back": ("at", "end"),
+                  "spotlight": (), "squiggle": (), "pull_back": ("at", "end"),
                   "plate_life": "stepping", "beat_freeze": ("at", "end"),
                   "radial": ("at",), "push": ("at",),
                   "steam": "continuous", "trace": ("at", "end"), "ticker": "stepping",   # STILL LIFE (2026-09-05)
@@ -433,7 +443,9 @@ SRC_M10 = ("E24 / doc 29 s9.29: stillness inside the opening minute - 4-6s in th
            "opening's stillness is read with the same two terms as M05 and M16 - a caption page pinned to the anchor by a "
            "full-stage page row counts as a stage "
            f"page does, and a live page's own life is an event every {PAGE_LIFE_STEP_S:g}s inside its span (R26-228)")
-SRC_M11 = "E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue"
+SRC_M11 = ("E24 / doc 29 s9.29 (long form) + E44 (short) + operator 2026-09-20: "
+           "the first chart enters 0:08-0:20, 0:00-0:10 on a short, or 0:00-0:03 "
+           "when explicitly authored as an opening ledger action; it is annotated on its divergence, with a sound cue")
 SRC_M12 = "E25 / doc 29 s9.30: the chart is the proof, not the homework"
 # THE CUT'S SOUND, and the DROP WINDOW (ruling E44 s2a / backlog R26-5, 2026-09-06, on the Tokyo read
 # ANALYTICS-2026-09-06.md n = 8: the step at 0:11): "the press / flash cue at a cut is not a hook device; at 0:09 it
@@ -621,6 +633,93 @@ def _held_built(at: float, dur: float, landings: list[float]) -> float | None:
     return next((land for land in landings if abs(at - land) <= HELD_BUILT_TOL_S), None)
 
 
+def _finite_clock(value) -> bool:
+    """A declared episode clock is numeric, finite, and never a JSON boolean."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+
+
+def _flow_edge_graph(edges, node_ids: frozenset[str] | None = None):
+    """Canonical directed edge set for one flow state; malformed checks fail closed."""
+    if not isinstance(edges, list) or not edges:
+        return None
+    graph = set()
+    for edge in edges:
+        if (not isinstance(edge, (list, tuple)) or len(edge) != 2
+                or not all(isinstance(endpoint, str) and endpoint.strip() for endpoint in edge)
+                or edge[0] == edge[1]
+                or (node_ids is not None and any(endpoint not in node_ids for endpoint in edge))):
+            return None
+        graph.add((edge[0], edge[1]))
+    return frozenset(graph)
+
+
+def _flow_edge_state_events(sp: dict, scene_start: float | None, scene_end: float | None) -> list[float]:
+    """One gate event per real directed-graph reversal, not per edge or draw second.
+
+    The compiler owns the complete schema validation. The gate mirrors the renderer's complete-schedule fallback
+    because it reads compiled JSON: any malformed/unknown edge, invalid clock, pre-tag change, overlap, or unfinished
+    change invalidates the whole schedule and contributes no edge-state events. Graph equality is set-based, so a
+    held state, reordered edge list, or duplicate edge is not a new visual reversal. Valid states outside this scene
+    still advance the standing graph for a later in-scene state; an onset exactly at the scene end has no rendered
+    interval and is not credited.
+    """
+    if not isinstance(sp, dict) or scene_start is None or scene_end is None:
+        return []
+    diagram_at, dur = sp.get("at"), sp.get("dur")
+    if not _finite_clock(diagram_at) or not _finite_clock(dur) or dur <= 0:
+        return []
+    if not _finite_clock(scene_start) or not _finite_clock(scene_end) or scene_start > scene_end:
+        return []
+    states = sp.get("edge_states")
+    if not isinstance(states, list):
+        return []
+    if not states or "operators" in sp:
+        return []
+    nodes = sp.get("nodes")
+    if not isinstance(nodes, list) or not nodes:
+        return []
+    node_ids: list[str] = []
+    for node in nodes:
+        node_id = node.get("id") if isinstance(node, dict) else None
+        if not isinstance(node_id, str) or not node_id.strip() or node_id in node_ids:
+            return []
+        node_ids.append(node_id)
+    known_ids = frozenset(node_ids)
+    initial_edges = sp.get("edges")
+    standing = _flow_edge_graph(initial_edges, known_ids)
+    if standing is None:
+        return []
+    diagram_end = diagram_at + dur
+    if not _finite_clock(diagram_end):
+        return []
+    # Mirror flowClock.tagEnd: box lead, sequential node landing, final edge draw, tag lag, and tag write.
+    previous_end = (diagram_at + .9 * .55 + (len(nodes) - 1) * .2 + .55 + .1
+                    + len(initial_edges) * .34 + .12 + .5)
+    if not _finite_clock(previous_end):
+        return []
+    events: list[float] = []
+    for state in states:
+        if not isinstance(state, dict):
+            return []
+        state_edges = state.get("edges")
+        state_at = state.get("at")
+        graph = _flow_edge_graph(state_edges, known_ids)
+        if graph is None or not _finite_clock(state_at):
+            return []
+        if state_at < previous_end:
+            return []
+        retract_end = state_at + .30
+        draw_end = retract_end + len(state_edges) * .34
+        if not _finite_clock(draw_end) or draw_end > diagram_end:
+            return []
+        changed = graph != standing
+        standing = graph
+        if changed and scene_start <= state_at < scene_end:
+            events.append(round(float(state_at), 2))
+        previous_end = draw_end
+    return events
+
+
 def _species_events(scenes: list[dict]) -> list[float]:
     """Visual events contributed by targeted species rows, per SPECIES_EVENTS (s9.27)."""
     out: list[float] = []
@@ -672,6 +771,8 @@ def _species_events(scenes: list[dict]) -> list[float]:
                     v = v.get(_part) if isinstance(v, dict) else None
                 if isinstance(v, (int, float)) and not isinstance(v, bool) and keep(float(v)):
                     out.append(round(float(v), 2))
+            if sp.get("kind") == "flow":
+                out.extend(_flow_edge_state_events(sp, a, z))
     return out
 
 
@@ -776,12 +877,17 @@ def _caption_page_rows(tl: dict, pages: list[dict]) -> tuple[list[dict], dict]:
         if not isinstance(pg, dict) or pg.get("s") is None:
             continue
         mode = str(pg.get("cap_mode") or "")
-        if not mode:
+        # The compiler's readable-species reserve is a PLAYER pin, not a synonym for
+        # cap_mode.  Mirror scene-evidence-engine's exact value so a malformed or
+        # invented reserve never creates motion in the gate.
+        reserve_pinned = pg.get("cap_reserve") == CAP_RESERVE_READABLE_SPECIES
+        if not mode and not reserve_pinned:
             continue
-        if mode != "stage" and not _pinned_page_at(scenes, float(pg["s"])):
+        if mode != "stage" and not (reserve_pinned or _pinned_page_at(scenes, float(pg["s"]))):
             skipped += 1        # a lower-third strip over a plate the page does not own: E21's stillness
             continue
-        modes[mode] = modes.get(mode, 0) + 1
+        mode_key = mode or "anchor"
+        modes[mode_key] = modes.get(mode_key, 0) + 1
         rows.append({"t": float(pg["s"])})                    # the page turns over: the group's own arrival
         toks = [tok for tok in (pg.get("t") or []) if isinstance(tok, dict)]
         if mode == "stage" and (pg.get("cap_arrive") or tl_arrive) == CAP_ARRIVE_FADE:
@@ -1240,11 +1346,14 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
 
 def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None = None, morph: dict | str | None = None,
         layout: dict | str | None = None, frame_layers: dict[str, list[dict] | str] | None = None) -> tuple[list[Gate], dict]:
+    form_error = _timeline_form_error(tl)
     A = analyse(tl, docks, mp)
     R = A["runtime"]
     mm = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
     g: list[Gate] = []
     add = lambda i, lvl, m, s: g.append(Gate(i, lvl, m, s))
+    if form_error:
+        add("M00", "FAIL", form_error, SRC_M00)
     still_fail = [(a, d) for a, d in A["still"] if d > STILL_FAIL_S]
     still_warn = [(a, d) for a, d in A["still"] if d > STILL_WARN_S]
     tot = sum(d for _, d in still_fail)
@@ -1440,11 +1549,26 @@ def _opening_still_gate(still: list[tuple[float, float]], life: str = "") -> Gat
 
 
 def _page_land_offset(scene: dict) -> float:
-    """Seconds from a ledger page's enter to its chart landing: PAGE_BUILD_END_S on a roll-out; on a mount
+    """Seconds from a ledger page's enter to its chart landing.
+
+    A registered ``enter=surface`` page is not a normal ledger roll-out: the
+    compiler binds ``surface_from.grow_s`` from the player's
+    ``CAMERA_ARRIVAL_S`` clock, and the player passes that value to
+    ``surfaceGeometryAt``.  Read that bound value here so M11/M23 and the
+    compiled/player surface share the same landing.  Other pages remain
+    ``PAGE_BUILD_END_S`` on a roll-out; on a mount
     (R26-50, 2026-09-11: the mount is the SOAK on the page's own clock - the cream at once, the soak over mount_s, then ink
     -> punch -> build; a mount skips the roll, the savor and the field beat) mount_s + PAGE_BUILD_END_S - ROLL - SAVOR - FIELD
     (the player defaults mount_s to the FIELD beat when the spec carries none)."""
     page = ((scene or {}).get("world") or {}).get("page") or {}
+    if page.get("enter") == "surface":
+        # build_scene_timeline_f.bind_surface_page_arrivals is the owner of
+        # this value; during the compiler's pre-bind pass the metadata does
+        # not carry grow_s yet, so use the same native clock rather than
+        # treating the page as already built.  Once bound, read the stamped
+        # value to keep the gate on the registered surface's exact clock.
+        meta = page.get("surface_from") or {}
+        return float(meta.get("grow_s", SURFACE_GROW_S))
     # a page may draw over its own seconds (page.build_s); the gate's landing must move with the player's, or the two
     # disagree about when the chart is finished and the deployed life is measured against the wrong mark
     extra = max(0.0, float(page.get("build_s") or LP_BUILD_S) - LP_BUILD_S)
@@ -1464,10 +1588,27 @@ def _page_land_offset(scene: dict) -> float:
 def _first_chart_window(tl: dict) -> tuple[float, float, str]:
     """M11's window and the mode that set it: 0:00-0:10 on a SHORT (E44 - the first ledger page rolls
     out on the hook line, the chart IS the mechanism), 0:08-0:20 on long form (E24 / doc 29 s9.29).
-    The short read is _is_short's, the tool's own (9:16 or runtime < 180s)."""
+    The short read is _is_short's: an explicit timeline form wins; absent keeps the
+    tool's legacy read (9:16 or runtime < 180s)."""
     runtime = float(tl.get("runtime_s") or max((float(s["span"][1]) for s in tl.get("scenes", [])), default=0.0))
     if _is_short(tl, runtime):
         return (*FIRST_CHART_SHORT, "E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10")
+    # Narrative-led long form may open on a human consequence before it makes
+    # its first quantitative claim. In that case the chart must arrive around
+    # the declared claim—not decoratively during the human setup—and M11 still
+    # enforces the same build landing, targeted annotation and cue rules.
+    kinetics = tl.get("kinetics") if isinstance(tl.get("kinetics"), dict) else {}
+    if kinetics.get("first_chart_policy") == "opening_ledger_action":
+        return 0.0, 3.0, (
+            "operator-directed long-form cold open: the ledger is the opening action by 0:03"
+        )
+    if kinetics.get("first_chart_policy") == "first_quant_claim":
+        claim = kinetics.get("first_quant_claim_at")
+        if isinstance(claim, (int, float)) and not isinstance(claim, bool) and float(claim) >= 0:
+            claim = float(claim)
+            return max(0.0, claim - 8.0), claim + 4.0, (
+                f"narrative-led long form: first chart surrounds the declared quantitative claim at {claim:.1f}s"
+            )
     return PARADOX_S, FIRST_CHART_MAX_S, "E24 long form: the 8s paradox is paid before the chart enters"
 
 
@@ -1518,8 +1659,46 @@ def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
     return Gate("M11", "PASS" if cue else "WARN", msg + sound + note + win, SRC_M11)
 
 
+_INVALID_TIMELINE_FORM = object()
+
+
+def _timeline_form(tl: dict):
+    """Return the explicit form, ``None`` when absent, or an invalid sentinel.
+
+    Keep the absent branch byte-for-byte compatible with older timelines.  The
+    sentinel lets callers fail closed without treating a malformed declaration as
+    an omitted one.
+    """
+    if "form" not in tl:
+        return None
+    value = tl.get("form")
+    return value if isinstance(value, str) and value in TIMELINE_FORMS else _INVALID_TIMELINE_FORM
+
+
+def _timeline_form_error(tl: dict) -> str | None:
+    form = _timeline_form(tl)
+    if form is _INVALID_TIMELINE_FORM:
+        return f"invalid timeline form {tl.get('form')!r}; expected exactly 'short' or 'long'"
+    if form == "long" and str(tl.get("aspect") or "16:9") == "9:16":
+        return "inconsistent timeline form 'long' with portrait aspect '9:16'"
+    return None
+
+
 def _is_short(tl: dict, runtime: float) -> bool:
-    """A short: the build declares 9:16, or it runs under three full minutes (M07's short read)."""
+    """Resolve short/long mode: explicit form wins; absent keeps the legacy read.
+
+    Invalid forms intentionally take the stricter short branch until M00 rejects
+    the timeline, so a malformed declaration cannot relax any motion gate.
+    """
+    form = _timeline_form(tl)
+    if form == "short":
+        return True
+    if form == "long":
+        if str(tl.get("aspect") or "16:9") == "9:16":
+            return True
+        return False
+    if form is _INVALID_TIMELINE_FORM:
+        return True
     return str(tl.get("aspect") or "16:9") == "9:16" or runtime < SHORT_FULL_MINUTES * WINDOW_S
 
 

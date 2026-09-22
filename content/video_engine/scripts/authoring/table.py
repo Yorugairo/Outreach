@@ -115,13 +115,15 @@ def caption_pages(build: Path, char_budget: int, max_words: int) -> None:
 def compile_timeline(ep: Path, build: Path, *, timeline_name: str, shot_table_file: str,
                      title: str, subtitle: str, episode_id: str, aspect: str,
                      caption_style: str | None, kinetics: dict, render: bool = False,
-                     no_receipt: str | None = None) -> int:
+                     no_receipt: str | None = None, form: str | None = None) -> int:
     """Stage 6-8's hand-off: point the compiler at this episode's build and run it. `render` also
     points the render door at the same pair (a build whose assets are resolved by id).
 
     P67 T2: the receipt is decided BEFORE the compiler is touched - a first compile without a
     passing `## Recall` block (and without a named `no_receipt` reason) raises and writes nothing."""
     receipt = recall_receipt_block(ep, build, no_receipt)
+    if form not in (None, "long", "short"):
+        raise ValueError("form must be long, short, or absent")
     import build_scene_timeline_f as C
     if render:
         import build_render_f as R
@@ -133,12 +135,14 @@ def compile_timeline(ep: Path, build: Path, *, timeline_name: str, shot_table_fi
     C.ASPECT = aspect
     C.CAPTION_STYLE = caption_style
     C.KINETICS = dict(kinetics)
+    C.CONTENT_FORM = form
     apply_sidecar(ep, build, shot_table_file)   # P51 T5: the edit sidecar, over the literal, before the compiler reads it
     rc = C.main()
     if rc == 0:
         write_compile_manifest(ep, build, timeline_name=timeline_name, shot_table_file=shot_table_file,
                                title=title, subtitle=subtitle, episode_id=episode_id, aspect=aspect,
                                caption_style=caption_style, kinetics=dict(kinetics), render=render,
+                               **({"form": form} if form is not None else {}),
                                **{RECEIPT_KEY: receipt})
     return rc
 

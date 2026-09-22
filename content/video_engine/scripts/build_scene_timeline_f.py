@@ -55,7 +55,7 @@ import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, do
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
 LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
-LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built", "throw", "drop", "camera", "axes")   # enter=axes (P53 T1, the operator 2026-09-12): the charcoal page lands with its ground, its ruled line, its title, its labels and its AXES already drawn, and the CHART draws from the first frame - "that gives us the first initial frame of motion". `built` is its still sibling: the whole page, data included, at frame 0.   # enter=camera=<dock>: P49 T5 - the page arrives BUILT and the EYE goes to the landed card (the camera zooms the outgoing world and the card until the card fills the stage, then the world is the page) - the snap's opposite number, opt-in until HG2   # enter=drop: the page FALLS into the frame from above and lands as the world (the dock's landXf) - "is falling down into the frame easier?" (operator, 2026-09-08)   # enter=throw (2026-09-08): the whole page is THROWN onto the world and arrives built - the transition IS the plate entering the world   # enter=built: the page ARRIVES with its chart already drawn, by the row's own transition - it NEVER mounts (operator, 2026-09-08: mount is cream coming through over the scene, then drawing).
+LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built", "throw", "drop", "camera", "axes", "surface")   # enter=axes (P53 T1, the operator 2026-09-12): the charcoal page lands with its ground, its ruled line, its title, its labels and its AXES already drawn, and the CHART draws from the first frame - "that gives us the first initial frame of motion". `built` is its still sibling: the whole page, data included, at frame 0.   # enter=camera=<dock>: P49 T5 - the page arrives BUILT and the EYE goes to the landed card (the camera zooms the outgoing world and the card until the card fills the stage, then the world is the page) - the snap's opposite number, opt-in until HG2   # enter=drop: the page FALLS into the frame from above and lands as the world (the dock's landXf) - "is falling down into the frame easier?" (operator, 2026-09-08)   # enter=throw (2026-09-08): the whole page is THROWN onto the world and arrives built - the transition IS the plate entering the world   # enter=built: the page ARRIVES with its chart already drawn, by the row's own transition - it NEVER mounts (operator, 2026-09-08: mount is cream coming through over the scene, then drawing). `surface=<paper>,<lead_s>` is the registered paper handoff; the binder supplies its destination spec and native-wide geometry.
 # The build is a device, not an obligation - five builds in one short is repetition, and a page that arrives complete spends
 # its whole span being read instead of being drawn (operator, 2026-09-08: "maybe chart 1 doesn't actually need a build, it
 # could enter built, the deconstruction/transformation is its own thing"). E49 keeps it alive; the transformation is the
@@ -145,6 +145,7 @@ TIMELINE_NAME = "steel-and-paper.timeline.json"  # the compiled scene_evidence_t
 # sets these, and calls main() - the compiler stays ONE thing rather than a fork per episode.
 SHOT_TABLE_FILE = "SHOT-TABLE-F.py"
 TITLE, SUBTITLE, EPISODE_ID = "Steel and Paper", "Money Physics · answer to Bravos Research", "steel-and-paper"
+CONTENT_FORM = None  # Explicit long-form prefixes must not be classified by their short review runtime.
 ASPECT = None                      # "9:16" for a short: the template reads timeline.aspect (html[data-aspect])
 CLIP_PREFIX = "clip:"              # shot-table plate id for a CLIP world: clip:<path to a silent mp4>
 # THE VECTOR MAP (P50 T5; the Bravos world map, shots 57-80). A shot-table plate id `vecmap[:<A3 list>]` is a
@@ -186,6 +187,11 @@ ICON_NAME = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 ICON_TAGS = ("path", "circle", "rect", "line", "polyline", "polygon", "ellipse")
 ICON_ATTRS = ("d", "cx", "cy", "r", "rx", "ry", "x", "y", "width", "height", "x1", "y1", "x2", "y2", "points")
 CHIP_STATES = ("on", "crossed")   # a chip lands lit, or lands already crossed (a board read back after the fact)
+CHIP_FORMS = ("stamp",)            # opt-in raster prop form; absent keeps the sourced SVG chip contract
+STAMP_INKS = ("cream", "charcoal")
+STAMP_SIZE_MIN, STAMP_SIZE_MAX, STAMP_SIZE_DEFAULT = 180, 420, 260  # stage px
+STAMP_PROP_SIZE_MAX = 700  # approved finance-prop cutouts can occupy a full narrative beat
+STAMP_MAX_LINES = 3
 
 # P61 T8 (E93 / E94): THE OPERATOR'S OWN ICON CATALOGUE - the 44 woodblock cutouts, `review_state:
 # operator_approved`, `render_eligible: true`. A catalogued cutout is a PICTURE, not geometry, so it rides the
@@ -193,8 +199,11 @@ CHIP_STATES = ("on", "crossed")   # a chip lands lit, or lands already crossed (
 # the count array carry. The engine reads the same key by name (species/agenda.mjs AGENDA.PROP_KEY).
 PROP_PREFIX = "prop:"
 ICON_CATALOG = ICONS_DIR / "finance_icons_catalog.v1.json"
+PROPS_DIR = REPO / "content/video_engine/assets/props"
+PROP_CATALOG = PROPS_DIR / "manifest.json"
 PROP_ID = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 _CATALOG_CACHE: dict[str, dict] | None = None
+_PROP_CATALOG_CACHE: dict[str, dict] | None = None
 
 
 def icon_file(name: str) -> Path:
@@ -259,7 +268,7 @@ def catalogue_icon(asset_id: str) -> dict:
     sha = hashlib.sha256(p.read_bytes()).hexdigest()
     if entry.get("sha256") and sha != entry["sha256"]:
         raise ValueError(f"icon {asset_id!r}: {p.name} hashes {sha[:12]} and the catalogue recorded {str(entry['sha256'])[:12]} - the record and the file disagree")
-    return dict(entry, file=p, sha256_measured=sha)
+    return dict(entry, file=p, sha256_measured=sha, _catalogue="icons")
 
 
 def catalogue_icon_uri(asset_id: str) -> str:
@@ -268,14 +277,105 @@ def catalogue_icon_uri(asset_id: str) -> str:
     return data_uri(catalogue_icon(asset_id)["file"])
 
 
+def prop_catalog() -> dict[str, dict]:
+    """The approved 24-cutout ``finance_props_catalog.v1`` registry, keyed by id.
+
+    E99 s31 approves this catalog as a whole; unlike the icon catalog it has no
+    per-entry review flags. The committed manifest is the approval record, while
+    ``catalogue_prop`` still refuses malformed IDs, paths, missing files and
+    byte/hash drift before a prop reaches the asset map.
+    """
+    global _PROP_CATALOG_CACHE
+    if _PROP_CATALOG_CACHE is None:
+        if not PROP_CATALOG.is_file():
+            raise ValueError(f"the props catalogue is not on disk at {PROP_CATALOG} - E99 s31's approved cutouts are what a stamp may name")
+        try:
+            data = json.loads(PROP_CATALOG.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ValueError(f"the props catalogue at {PROP_CATALOG} is not readable JSON: {exc}") from exc
+        if data.get("schema") != "finance_props_catalog.v1" or not isinstance(data.get("props"), list):
+            raise ValueError(f"the props catalogue at {PROP_CATALOG} is not finance_props_catalog.v1")
+        rows = {}
+        for entry in data["props"]:
+            if isinstance(entry, dict) and entry.get("id"):
+                rows[entry["id"]] = entry
+        _PROP_CATALOG_CACHE = rows
+    return _PROP_CATALOG_CACHE
+
+
+def catalogue_prop(asset_id: str) -> dict:
+    """One approved finance prop from ``assets/props/manifest.json``.
+
+    The manifest's path must remain inside the registered cutout directory and
+    its recorded SHA-256 must match the on-disk cutout. E99 s31 is the
+    catalog-level operator approval; no unrecorded per-entry approval is
+    invented here.
+    """
+    if not (isinstance(asset_id, str) and PROP_ID.match(asset_id)):
+        raise ValueError(f"prop {asset_id!r}: a prop id is lowercase letters, digits and hyphens")
+    entry = prop_catalog().get(asset_id)
+    if entry is None:
+        raise ValueError(f"prop {asset_id!r}: not in {PROP_CATALOG.name} - name one of E99 s31's approved cutouts, never invent an image")
+    if entry.get("tier") not in ("prop", "mechanism"):
+        raise ValueError(f"prop {asset_id!r}: tier {entry.get('tier')!r} is not a registered prop/mechanism cutout")
+    raw_path = entry.get("path")
+    filename = entry.get("filename")
+    if not isinstance(raw_path, str) or not raw_path.startswith("assets/props/cutouts/"):
+        raise ValueError(f"prop {asset_id!r}: catalogue path {raw_path!r} is not under assets/props/cutouts")
+    if not isinstance(filename, str) or Path(raw_path).name != filename:
+        raise ValueError(f"prop {asset_id!r}: catalogue filename {filename!r} does not match path {raw_path!r}")
+    # The manifest paths are rooted at content/video_engine (the same
+    # resolution used by build_asset_index), not at the repository root.
+    p = (REPO / "content/video_engine" / raw_path).resolve()
+    root = (PROPS_DIR / "cutouts").resolve()
+    try:
+        p.relative_to(root)
+    except ValueError:
+        raise ValueError(f"prop {asset_id!r}: catalogue path {raw_path!r} escapes {root}") from None
+    if not p.is_file():
+        raise ValueError(f"prop {asset_id!r}: the catalogue's path {raw_path!r} is not on disk at {p}")
+    recorded = entry.get("sha256")
+    if not isinstance(recorded, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", recorded):
+        raise ValueError(f"prop {asset_id!r}: the catalogue must record a 64-character sha256")
+    measured = hashlib.sha256(p.read_bytes()).hexdigest()
+    if measured.lower() != recorded.lower():
+        raise ValueError(f"prop {asset_id!r}: {p.name} hashes {measured[:12]} and the catalogue recorded {recorded[:12]} - the record and file disagree")
+    return dict(entry, file=p, sha256_measured=measured, _catalogue="props")
+
+
+def catalogue_stamp_asset(asset_id: str) -> dict:
+    """Resolve a stamp asset from the approved icon or finance-prop catalog."""
+    if not (isinstance(asset_id, str) and PROP_ID.match(asset_id)):
+        return catalogue_icon(asset_id)  # preserve the legacy icon error wording for malformed IDs
+    icons = icon_catalog()
+    if asset_id in icons:
+        return catalogue_icon(asset_id)
+    props = prop_catalog()
+    if asset_id in props:
+        return catalogue_prop(asset_id)
+    # Preserve the established error for an unknown icon/asset (and avoid a
+    # generic fallback), while the prop loader remains explicit above.
+    return catalogue_icon(asset_id)
+
+
+def catalogue_stamp_uri(asset_id: str) -> str:
+    """Embed an approved icon or finance prop as the stamp's raw image URI."""
+    return data_uri(catalogue_stamp_asset(asset_id)["file"])
+
+
 def species_props(entry) -> list[str]:
-    """Every CATALOGUED cutout one species entry carries, in declaration order: the page-form agenda's one icon
-    per row (P61 T8 / E93). The asset map is keyed ``prop:<asset_id>`` - the picture travels in the player."""
-    if not isinstance(entry, dict) or entry.get("kind") != SPECIES_AGENDA:
+    """Every CATALOGUED raster prop a species carries, in declaration order.
+
+    Agenda-page rows and the opt-in chip ``form: \"stamp\"`` both use the
+    operator-approved catalogue; the asset map is keyed ``prop:<asset_id>``.
+    """
+    if not isinstance(entry, dict):
         return []
-    if entry.get("form") not in AGENDA_FORMS:
-        return []
-    return [r["icon"] for r in (entry.get("rows") or []) if isinstance(r, dict) and isinstance(r.get("icon"), str)]
+    if entry.get("kind") == SPECIES_CHIP and entry.get("form") == "stamp":
+        return [entry["icon"]] if isinstance(entry.get("icon"), str) else []
+    if entry.get("kind") == SPECIES_AGENDA and entry.get("form") in AGENDA_FORMS:
+        return [r["icon"] for r in (entry.get("rows") or []) if isinstance(r, dict) and isinstance(r.get("icon"), str)]
+    return []
 
 
 # Ken Burns: doc 29 §1.4 — the world plate drifts while evidence holds locked,
@@ -1451,8 +1551,38 @@ def _validate_vecmap_species(entry: dict) -> list[str]:
 
 
 def _validate_chip(entry: dict) -> list[str]:
-    """P50 T2: a chip carries a SOURCED glyph and a label, and its cross falls on a LATER word."""
+    """P50 T2 chip grammar plus the opt-in approved raster ``stamp`` form."""
     errs: list[str] = []
+    form = entry.get("form")
+    if form is not None and form not in CHIP_FORMS:
+        errs.append(f"chip: form {form!r} is not one of {' | '.join(CHIP_FORMS)} (absent is the sourced SVG chip)")
+    if form == "stamp":
+        icon = entry.get("icon")
+        asset = None
+        try:
+            asset = catalogue_stamp_asset(icon)
+        except (TypeError, ValueError) as exc:
+            errs.append(f"chip stamp: {exc}")
+        label = entry.get("label")
+        if not isinstance(label, str) or not label.strip():
+            errs.append("chip stamp: 'label' must be a non-empty string - the prop names the thing it stands for")
+        elif len(label.splitlines()) > STAMP_MAX_LINES:
+            errs.append(f"chip stamp: 'label' must be at most {STAMP_MAX_LINES} lines")
+        size = entry.get("size", STAMP_SIZE_DEFAULT)
+        size_max = STAMP_PROP_SIZE_MAX if asset and asset.get("_catalogue") == "props" else STAMP_SIZE_MAX
+        if isinstance(size, bool) or not isinstance(size, (int, float)) or not math.isfinite(size) \
+                or not STAMP_SIZE_MIN <= size <= size_max:
+            errs.append(f"chip stamp: 'size' must be stage px in [{STAMP_SIZE_MIN}, {size_max}]")
+        ink = entry.get("ink")
+        if ink is not None and ink not in STAMP_INKS:
+            errs.append(f"chip stamp: 'ink' must be one of {' | '.join(STAMP_INKS)}")
+        if "readability" in entry:
+            errs.append("chip stamp: 'readability' is not supported - use ink: 'cream' or 'charcoal'")
+        if "state" in entry or "cross_at" in entry:
+            errs.append("chip stamp: state/cross_at are not supported - the prop leaves with its authored dur")
+        return errs
+    if "readability" in entry and entry["readability"] != "landscape-phone":
+        errs.append("chip: readability must be 'landscape-phone'")
     icon = entry.get("icon")
     if not isinstance(icon, str) or not ICON_NAME.match(icon):
         errs.append("chip: 'icon' names a sourced glyph under content/video_engine/assets/icons "
@@ -1523,6 +1653,7 @@ def _validate_flow(entry: dict) -> list[str]:
                 errs.append(f"flow: edge {j} runs from {e[0]!r} to itself")
     if "tag" in entry and (not isinstance(entry["tag"], str) or not entry["tag"].strip()):
         errs.append("flow: 'tag' must be a non-empty string - the year the diagram is stamped with")
+    errs += _validate_flow_extensions(entry, ids)
     sw = entry.get("swap")
     if sw is None:
         return errs
@@ -1540,6 +1671,65 @@ def _validate_flow(entry: dict) -> list[str]:
     errs += _validate_icon("flow: swap", sw.get("icon"))
     if not isinstance(sw.get("label"), str) or not sw["label"].strip():
         errs.append("flow: swap 'label' must be a non-empty string - the new part names itself")
+    return errs
+
+
+def _validate_flow_extensions(entry: dict, ids: list[str]) -> list[str]:
+    """Opt-in formula/connectivity clocks; absent fields retain legacy behavior.
+
+    Timing mirrors species/flow.mjs: initial tag must finish before a change;
+    each change retracts for .30s then draws each new edge for .34s.
+    """
+    errs: list[str] = []
+    if "readability" in entry and entry["readability"] != "landscape-phone":
+        errs.append("chip: readability must be 'landscape-phone'")
+    finite = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
+    if "readability" in entry and entry["readability"] != "landscape-phone":
+        errs.append("flow: readability must be 'landscape-phone'")
+    edges = entry.get("edges")
+    if "operators" in entry:
+        ops = entry["operators"]
+        if not isinstance(ops, list) or not isinstance(edges, list) or len(ops) != len(edges) or not ops or any(op != "-" for op in ops):
+            errs.append("flow: operators must contain one '-' per edge")
+        ordered = [[a, b] for a, b in zip(ids, ids[1:])]
+        if edges != ordered:
+            errs.append("flow: formula edges must join adjacent nodes in declared order")
+        if "edge_states" in entry:
+            errs.append("flow: operators and edge_states are mutually exclusive")
+    if "edge_states" not in entry:
+        return errs
+    states = entry["edge_states"]
+    if not isinstance(states, list) or not states:
+        return errs + ["flow: edge_states must be a non-empty list of {at, edges}"]
+    at, dur = entry.get("at"), entry.get("dur")
+    if not finite(at) or not finite(dur) or dur <= 0:
+        return errs + ["flow: edge_states requires finite at and positive finite dur"]
+    # flowClock.tagEnd, including CHIP.LAND_S=.55 and the optional tag's clock.
+    previous_end = at + .9 * .55 + (len(entry["nodes"]) - 1) * .2 + .55 + .1 + (len(edges) if isinstance(edges, list) else 0) * .34 + .12 + .5
+    for i, state in enumerate(states):
+        prefix = f"flow: edge_states[{i}]"
+        if not isinstance(state, dict):
+            errs.append(f"{prefix} must be a dict {{at, edges}}")
+            continue
+        stamp, changed = state.get("at"), state.get("edges")
+        valid_edges = isinstance(changed, list) and bool(changed)
+        if not valid_edges:
+            errs.append(f"{prefix} edges must be a non-empty list of [from, to]")
+        else:
+            for j, edge in enumerate(changed):
+                if not isinstance(edge, (list, tuple)) or len(edge) != 2:
+                    errs.append(f"{prefix} edge {j} must be [from, to]")
+                elif any(endpoint not in ids for endpoint in edge) or edge[0] == edge[1]:
+                    errs.append(f"{prefix} edge {j} must connect two distinct known node ids")
+        if not finite(stamp):
+            errs.append(f"{prefix} at must be finite episode seconds")
+            continue
+        if stamp < previous_end:
+            errs.append(f"{prefix} must follow the previous build/change (earliest {previous_end:.3f}s)")
+        end = stamp + .30 + (len(changed) if valid_edges else 0) * .34
+        if stamp <= at or end > at + dur:
+            errs.append(f"{prefix} complete change must fit inside the diagram window")
+        previous_end = end
     return errs
 
 
@@ -1586,7 +1776,7 @@ def species_icons(entry) -> list[str]:
     never a path to a file on disk."""
     if not isinstance(entry, dict):
         return []
-    if entry.get("kind") == SPECIES_CHIP:
+    if entry.get("kind") == SPECIES_CHIP and entry.get("form") != "stamp":
         return [entry["icon"]] if isinstance(entry.get("icon"), str) else []
     if entry.get("kind") == SPECIES_COUNT_ARRAY:   # P52 T7: the field's ONE glyph, drawn N times
         return [entry["icon"]] if isinstance(entry.get("icon"), str) else []
@@ -1983,6 +2173,32 @@ def _dock_live_at(scenes: list, t: float) -> bool:
     return any(d["enter"] <= t < d["exit"] for sc in scenes for d in sc.get("docks", []))
 
 
+def _readable_species_during(scenes: list, start: float, end: float) -> bool:
+    """Opt-in phone-sized labels reserve the caption rail for the whole phrase.
+
+    Legacy species retain their old caption treatment. A raster chip stamp has
+    no landscape-phone profile (its label is part of the prop contract), but a
+    non-empty stamp label is still readable evidence and reserves the same
+    quiet bottom rail. Testing interval overlap, not only the first word,
+    prevents a label entering underneath stage captions.
+    """
+    return any(
+        (
+            (sp.get("readability") == "landscape-phone" and sp.get("kind") in ("chip", "flow"))
+            or (sp.get("kind") == "chip" and sp.get("form") == "stamp"
+                and isinstance(sp.get("label"), str) and bool(sp["label"].strip()))
+        )
+        and max(start, float(sc["span"][0]), float(sp["at"]))
+        < min(end, float(sc["span"][1]), float(sp["at"]) + float(sp["dur"]))
+        for sc in scenes for sp in sc.get("species", [])
+    )
+
+
+def _caption_display_end(pages: list, index: int) -> float:
+    """Match the player's held phrase: next onset, or final word plus 0.4s."""
+    return float(pages[index + 1]["s"]) if index + 1 < len(pages) else float(pages[index]["e"]) + 0.4
+
+
 def _full_stage_page_at(scenes: list, t: float, aspect: str | None) -> bool:
     """R26-205: a 16:9 LEDGER PAGE holds the stage at t -> the caption takes the anchor too.
 
@@ -1997,15 +2213,33 @@ def sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
+def _parse_surface_entry(enter: str, plate_id: str, series_id: str, variant: str, path: Path) -> dict:
+    """Parse the one cross-row page handoff form and bind it to its source file."""
+    payload = enter[len("surface="):] if enter.startswith("surface=") else ""
+    parts = payload.split(",")
+    if len(parts) != 2 or not parts[0] or parts[0].strip() != parts[0]:
+        raise ValueError(f"{plate_id!r}: surface= must be <paper-name>,<lead-seconds>")
+    surface = parts[0]
+    try:
+        lead_s = float(parts[1])
+    except (TypeError, ValueError, OverflowError):
+        raise ValueError(f"{plate_id!r}: surface lead {parts[1]!r} must be a finite positive number of seconds") from None
+    if not math.isfinite(lead_s) or lead_s <= 0:
+        raise ValueError(f"{plate_id!r}: surface lead {parts[1]!r} must be a finite positive number of seconds")
+    return {"surface": surface, "lead_s": lead_s,
+            "source_ref": {"series_id": series_id, "variant": variant, "sha256": sha(path)}}
+
+
 def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | None, str | None]:
     """``ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]`` -> its parts.
     enter: ``spiral`` (the page returns by the vortex) or ``mount=<seconds>`` (the world fades above the page while its
-    cream builds beneath, for that long, then the page draws - doc 29 s9.31); exit: ``cut`` (no retract).
+    cream builds beneath, for that long, then the page draws - doc 29 s9.31), or
+    ``surface=<paper-name>,<lead-seconds>`` (a registered paper handoff); exit: ``cut`` (no retract).
     ValueError names the id; the caller names the row."""
     parts = plate_id.split(":")
     lo, hi = LEDGER_ID_PARTS
     if parts[0] != LEDGER_PREFIX[:-1] or not (lo <= len(parts) <= hi) or not parts[1]:
-        raise ValueError(f"{plate_id!r}: expected ledger:<series-id>:<variant>[:<emphasize>[:<quiet_zone>[:spiral|mount=<s>[:cut]]]]")
+        raise ValueError(f"{plate_id!r}: expected ledger:<series-id>:<variant>[:<emphasize>[:<quiet_zone>[:spiral|mount=<s>|surface=<paper>,<lead_s>[:cut]]]]")
     series_id, variant = parts[1], parts[2]
     if variant not in LPG.VARIANTS:
         raise ValueError(f"{plate_id!r}: variant {variant!r} is not one of {'|'.join(LPG.VARIANTS)}")
@@ -3110,7 +3344,23 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
         raise ValueError(f"{plate_id!r}: {path.name} is not a page ({variant}): " + "; ".join(errors))
     page = LPG.build_spec(series, variant, emphasize, quiet_zone)
     if enter:
-        page["enter"] = enter.split("=")[0]   # the player: a returning page unwinds from its point (LP_RETRACT.IN); a mount builds its cream first
+        if enter == "surface":
+            raise ValueError(f"{plate_id!r}: surface= must name a paper surface and positive lead seconds")
+        if enter.startswith("surface="):
+            if ASPECT not in (None, "16:9"):
+                raise ValueError(f"{plate_id!r}: surface= is 16:9-only; portrait page surfaces need an explicit "
+                                 "aspect-specific registration")
+            if page.get("builder") != "dense-line":
+                raise ValueError(f"{plate_id!r}: surface= is only allowed on a dense-line page (this page is "
+                                 f"{page.get('builder')!r})")
+            page["enter"] = "surface"
+            surface_meta = _parse_surface_entry(enter, plate_id, series_id, variant, path)
+            page["surface_from"] = surface_meta
+            # Keep the destination's source binding independent of the public handoff
+            # record; the binder removes this private check key before serialization.
+            page["_surface_source_ref"] = copy.deepcopy(surface_meta["source_ref"])
+        else:
+            page["enter"] = enter.split("=")[0]   # the player: a returning page unwinds from its point (LP_RETRACT.IN); a mount builds its cream first
         if "=" in enter and (enter.startswith("snap") or enter.startswith("camera")):
             page["snap_from"] = enter.split("=", 1)[1]   # the dock asset the page grows from - or, for enter=camera, the card the eye goes to (P49 T5)
         elif "=" in enter and enter.startswith("throw"):   # throw=<grow>[,<from>[,<s>]] - the growth law (snap | growth), the side, the flight
@@ -3127,7 +3377,7 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
                 page["throw_from"] = rest[0]
             if len(rest) > 1 and rest[1]:
                 page["throw_s"] = float(rest[1])
-        elif "=" in enter:
+        elif "=" in enter and not enter.startswith("surface="):
             key = "morph_s" if enter.startswith("morph") else "mount_s"   # the mount phase (world fades, cream builds) before the page's own clock starts; a morph's seconds
             page[key] = float(enter.split("=", 1)[1])
     if exit_:
@@ -3640,6 +3890,262 @@ def page_plane_error(plane: dict, where: str) -> str | None:
                .replace("a card projected onto it", "a page projected onto it"))
 
 
+def surface_plot_geometry(quad, stage_size, view_h=560) -> dict:
+    """Derive a native-wide dense-line viewBox from the registered surface quad."""
+    pts = _quad_points(quad)
+    if pts is None:
+        raise ValueError("surface quad must be four [x, y] corners")
+    if not isinstance(stage_size, (list, tuple)) or len(stage_size) != 2:
+        raise ValueError("surface stage_size must be [width, height]")
+    try:
+        stage_w, stage_h = float(stage_size[0]), float(stage_size[1])
+        height = float(view_h)
+    except (TypeError, ValueError, OverflowError):
+        raise ValueError("surface stage_size and view_h must be finite positive numbers") from None
+    if not (math.isfinite(stage_w) and math.isfinite(stage_h) and stage_w > 0 and stage_h > 0
+            and math.isfinite(height) and height > 0):
+        raise ValueError("surface stage_size and view_h must be finite positive numbers")
+    def edge(a, b):
+        return math.hypot((b[0] - a[0]) * stage_w, (b[1] - a[1]) * stage_h)
+    horizontal = (edge(pts[0], pts[1]) + edge(pts[3], pts[2])) / 2.0
+    vertical = (edge(pts[0], pts[3]) + edge(pts[1], pts[2])) / 2.0
+    if not (math.isfinite(horizontal) and math.isfinite(vertical) and horizontal > 0 and vertical > 0):
+        raise ValueError("surface quad must have positive horizontal and vertical spans")
+    return {"kind": "wide-dense-line", "view_w": height * horizontal / vertical, "view_h": height}
+
+
+def surface_page_error(previous_world: dict, surface: dict, page: dict, lead_s, camera: dict | None,
+                       where: str) -> str | None:
+    """Return the first refusal for a page surface handoff, or ``None``."""
+    if not isinstance(surface, dict) or surface.get("kind") != "paper":
+        return f"{where}: surface must be a registered paper surface (kind='paper')"
+    if not isinstance(page, dict) or page.get("enter") != "surface":
+        return f"{where}: surface handoff page must enter with surface="
+    if page.get("builder") != "dense-line":
+        return f"{where}: surface= requires a dense-line page (this page is {page.get('builder')!r})"
+    try:
+        lead = float(lead_s)
+    except (TypeError, ValueError, OverflowError):
+        return f"{where}: surface lead must be a finite positive number of seconds"
+    if not math.isfinite(lead) or lead <= 0:
+        return f"{where}: surface lead must be a finite positive number of seconds"
+    points = _quad_points(surface.get("quad"))
+    if points is None or any(not math.isfinite(value) for point in points for value in point):
+        return f"{where}: surface quad must contain finite [x, y] corners"
+    quad_error = embed_quad_error(str((page.get("surface_from") or {}).get("surface") or "surface"), surface, where)
+    if quad_error:
+        return quad_error
+    if not isinstance(previous_world, dict) or not previous_world.get("asset_id") \
+            or previous_world.get("kind") in (SPECIES_LEDGER, VECMAP_KIND, SPECIES_CLIP):
+        return f"{where}: surface handoff needs the immediately preceding world to be a static image plate"
+    ken = previous_world.get("ken_burns") or {}
+    if not isinstance(ken, dict):
+        return f"{where}: preceding image plate Ken Burns must be identity for surface="
+    for key in ("scale", "x", "y"):
+        try:
+            value = float(ken.get(key, 0.0))
+        except (TypeError, ValueError, OverflowError):
+            return f"{where}: preceding image plate Ken Burns must be finite and identity for surface="
+        if not math.isfinite(value) or abs(value) > 1e-9:
+            return f"{where}: preceding image plate must have zero Ken Burns for surface="
+    idle = previous_world.get("idle")
+    try:
+        idle_drift = float(previous_world.get("idle_drift_px", 0.0) or 0.0)
+    except (TypeError, ValueError, OverflowError):
+        return f"{where}: preceding image plate must have no idle drift for surface="
+    if idle not in (None, "none") or not math.isfinite(idle_drift) or abs(idle_drift) > 1e-9:
+        return f"{where}: preceding image plate must have no idle drift for surface="
+    if camera is not None:
+        if not isinstance(camera, dict) or camera.get("keys"):
+            return f"{where}: preceding camera must be identity for surface="
+        if camera.get("attention") not in (None, "locked"):
+            return f"{where}: preceding camera must be identity for surface="
+    competing = ("plane", "depth", "form", "snap_from", "throw_grow", "throw_from", "throw_s",
+                 "morph_s", "mount_s", "arrival")
+    names = [key for key in competing if key in page]
+    if names:
+        return f"{where}: surface= cannot combine with {', '.join(names)} - the handoff has one arrival"
+    return None
+
+
+def _surface_sidecar_spec(path: Path | None, name: str, where: str) -> tuple[dict | None, str | None]:
+    """Resolve and gate one registered paper surface without changing the sidecar."""
+    if path is None or not Path(path).is_file():
+        return None, f"{where}: surface plate asset is missing"
+    side = Path(path).with_suffix(FG_LAYERS_SUFFIX)
+    try:
+        data = json.loads(side.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None, f"{where}: surface sidecar is missing or invalid: {side.name}"
+    if not isinstance(data, dict):
+        return None, f"{where}: surface sidecar is not an object: {side.name}"
+    status = str(data.get("status") or "")
+    if data.get("render_eligible") is not True or "quarant" in status.lower():
+        return None, f"{where}: surface sidecar is quarantined or not render-eligible ({status or 'render_eligible=false'})"
+    embeds = plate_embeds(Path(path))
+    if name not in embeds:
+        named = ", ".join(sorted(embeds)) if embeds else "none"
+        return None, f"{where}: surface={name!r} is not registered on {Path(path).name!r} (declares {named})"
+    surface = embeds[name]
+    if surface.get("kind") != "paper":
+        return None, f"{where}: surface={name!r} must be a registered paper surface (kind='paper')"
+    error = embed_quad_error(name, surface, where)
+    if error:
+        return None, error
+    plane_error = page_plane_error({"kind": "quad", "quad": surface.get("quad")}, where)
+    if plane_error:
+        return None, plane_error
+    return surface, None
+
+
+def _surface_grow_camera_error(camera: dict | None, boundary: float, grow_s: float, where: str) -> str | None:
+    """Reject authored camera motion that would move the page during its grow."""
+    if camera is None:
+        return None
+    if not isinstance(camera, dict):
+        return f"{where}: incoming camera must be identity during surface grow"
+    if camera.get("attention") not in (None, "locked"):
+        return f"{where}: incoming camera must be identity during surface grow"
+    keys = camera.get("keys")
+    if not isinstance(keys, list):
+        return f"{where}: incoming camera must be identity during surface grow"
+    until = boundary + grow_s
+    for key in keys:
+        if not isinstance(key, dict):
+            return f"{where}: incoming camera must be identity during surface grow"
+        try:
+            at = float(key.get("t"))
+        except (TypeError, ValueError, OverflowError):
+            return f"{where}: incoming camera must be identity during surface grow"
+        if not math.isfinite(at) or at <= until + 1e-9:
+            return f"{where}: incoming camera must be identity during surface grow"
+    return None
+
+
+def _surface_idle_error(world: dict | None, where: str) -> str | None:
+    if not isinstance(world, dict):
+        return f"{where}: surface grow needs a ledger world"
+    idle = world.get("idle")
+    drift = world.get("idle_drift_px", 0.0)
+    try:
+        drift_value = float(drift or 0.0)
+    except (TypeError, ValueError, OverflowError):
+        return f"{where}: world must have no idle drift during surface grow"
+    if idle not in (None, "none") or not math.isfinite(drift_value) or abs(drift_value) > 1e-9:
+        return f"{where}: world must have no idle drift during surface grow"
+    return None
+
+
+def bind_surface_page_arrivals(scenes: list[dict], ep_dir: Path) -> list[str]:
+    """Bind each surface page to its immediately preceding static plate."""
+    bindings: list[tuple[dict, dict, dict, dict, float, dict, dict, dict]] = []
+    notes: list[str] = []
+    for index, scene in enumerate(scenes):
+        world = scene.get("world") if isinstance(scene, dict) else None
+        page = world.get("page") if isinstance(world, dict) else None
+        if not isinstance(page, dict) or page.get("enter") != "surface":
+            continue
+        where = f"scene {scene.get('scene_id', f'row-{index + 1}')!r} surface="
+        if index == 0:
+            raise ValueError(f"{where}: no immediately preceding static image plate")
+        previous = scenes[index - 1]
+        previous_world = previous.get("world") if isinstance(previous, dict) else None
+        meta = page.get("surface_from")
+        if not isinstance(meta, dict):
+            raise ValueError(f"{where}: missing surface handoff metadata")
+        name = meta.get("surface")
+        if not isinstance(name, str) or not name:
+            raise ValueError(f"{where}: surface name is missing")
+        try:
+            lead_s = float(meta.get("lead_s"))
+        except (TypeError, ValueError, OverflowError):
+            raise ValueError(f"{where}: surface lead must be a finite positive number of seconds") from None
+        if not math.isfinite(lead_s) or lead_s <= 0:
+            raise ValueError(f"{where}: surface lead must be a finite positive number of seconds")
+        try:
+            prev_start, prev_end = (float(value) for value in previous.get("span", ()))
+            boundary, current_end = (float(value) for value in scene.get("span", ()))
+        except (TypeError, ValueError, OverflowError):
+            raise ValueError(f"{where}: preceding and incoming spans must have two finite numbers") from None
+        if not all(math.isfinite(value) for value in (prev_start, prev_end, boundary, current_end)):
+            raise ValueError(f"{where}: preceding and incoming spans must have two finite numbers")
+        if prev_end - prev_start + 1e-9 < lead_s or prev_end + 1e-9 < boundary \
+                or prev_start > boundary - lead_s + 1e-9:
+            raise ValueError(f"{where}: insufficient incoming span for lead {lead_s:g}s")
+        grow_s = CAMERA_ARRIVAL_S
+        if current_end - boundary + 1e-9 < grow_s:
+            raise ValueError(f"{where}: insufficient incoming span for the {grow_s:g}s surface grow")
+        source_ref = meta.get("source_ref")
+        if not isinstance(source_ref, dict) or set(source_ref) != {"series_id", "variant", "sha256"}:
+            raise ValueError(f"{where}: source_ref must preserve series_id, variant, and series file sha256")
+        bound_ref = page.get("_surface_source_ref")
+        if bound_ref is not None and (not isinstance(bound_ref, dict) or bound_ref != source_ref):
+            raise ValueError(f"{where}: source_ref was changed after ledger_world bound the destination page")
+        series_id = source_ref.get("series_id")
+        variant = source_ref.get("variant")
+        if not isinstance(series_id, str) or not series_id or not isinstance(variant, str) or not variant:
+            raise ValueError(f"{where}: source_ref must preserve series_id and variant")
+        series_path = Path(ep_dir) / "evidence/objects" / f"{series_id}.series.json"
+        if not series_path.is_file():
+            raise ValueError(f"{where}: source series file missing: {series_path}")
+        expected_ref = {"series_id": series_id, "variant": variant, "sha256": sha(series_path)}
+        if source_ref != expected_ref or page.get("variant") != variant:
+            raise ValueError(f"{where}: source_ref does not match the destination page's registered series file")
+        if "scene" in meta and meta.get("scene") != previous.get("scene_id"):
+            raise ValueError(f"{where}: surface_from.scene does not name the immediately preceding scene")
+        existing_surface = previous.get("surface_page") if isinstance(previous, dict) else None
+        if isinstance(existing_surface, dict) and existing_surface.get("to_scene") != scene.get("scene_id"):
+            raise ValueError(f"{where}: surface_page.to_scene does not name the destination scene")
+        plate_id = previous_world.get("asset_id") if isinstance(previous_world, dict) else None
+        plate_path = R.find_asset(plate_id) if plate_id else None
+        surface, error = _surface_sidecar_spec(plate_path, name, where)
+        if error:
+            raise ValueError(error)
+        motion_error = surface_page_error(previous_world, surface, page, lead_s, previous.get("camera"), where)
+        if motion_error:
+            raise ValueError(motion_error)
+        grow_camera_error = _surface_grow_camera_error(scene.get("camera"), boundary, grow_s, where)
+        if grow_camera_error:
+            raise ValueError(grow_camera_error)
+        grow_ken = world.get("ken_burns") or {}
+        if not isinstance(grow_ken, dict):
+            raise ValueError(f"{where}: incoming page must have zero Ken Burns during surface grow")
+        for key in ("scale", "x", "y"):
+            try:
+                value = float(grow_ken.get(key, 0.0))
+            except (TypeError, ValueError, OverflowError):
+                raise ValueError(f"{where}: incoming page must have zero Ken Burns during surface grow") from None
+            if not math.isfinite(value) or abs(value) > 1e-9:
+                raise ValueError(f"{where}: incoming page must have zero Ken Burns during surface grow")
+        idle_error = _surface_idle_error(world, where)
+        if idle_error:
+            raise ValueError(idle_error)
+        if isinstance(previous_world, dict) and previous_world.get("sha256") and plate_path is not None \
+                and previous_world["sha256"] != sha(plate_path):
+            raise ValueError(f"{where}: preceding plate sha256 does not match the resolved static image")
+        try:
+            layout = surface_plot_geometry(surface.get("quad"), (STAGE_W, 1080), view_h=560)
+        except ValueError as exc:
+            raise ValueError(f"{where}: {exc}") from None
+        quad = copy.deepcopy(surface["quad"])
+        ref = copy.deepcopy(expected_ref)
+        establish = {"to_scene": scene.get("scene_id"), "surface": name, "quad": quad,
+                     "surface_layout": copy.deepcopy(layout),
+                     "span": [round(boundary - lead_s, 2), round(boundary, 2)],
+                     "presentation": "establish", "source_ref": ref}
+        incoming = {"scene": previous.get("scene_id"), "surface": name, "quad": copy.deepcopy(quad),
+                    "surface_layout": copy.deepcopy(layout), "lead_s": lead_s, "grow_s": grow_s,
+                    "source_ref": copy.deepcopy(ref)}
+        bindings.append((previous, scene, page, establish, lead_s, incoming, layout, ref))
+        notes.append(f"{previous.get('scene_id', '?')}: surface {name} -> {scene.get('scene_id', '?')} "
+                     f"({lead_s:g}s lead, {layout['view_w']:g}x{layout['view_h']:g})")
+    for previous, scene, page, establish, _lead_s, incoming, _layout, _ref in bindings:
+        previous["surface_page"] = establish
+        page.pop("_surface_source_ref", None)
+        page["surface_from"] = incoming
+    return notes
+
+
 def page_depth_k(value: str, where: str) -> float:
     """``depth=<k>`` -> the page's parallax factor, refused BY NAME outside the camera's own range."""
     if not _is_number(value):
@@ -3932,6 +4438,184 @@ def page_build_spec(value, builder: str | None, n_series: int | None, where: str
                                  f"{PAGE_BUILD_LINE_MIN_S:g} s (6 frames at 24 fps). Name the seconds a line draws "
                                  f"over instead - build={out['mode']}:<s> - or give the page a longer build")
     return out
+
+
+PAGE_INTRINSIC_BUILDERS = {
+    "decline": 3.6,
+    "combo": 4.5,
+    "share": 3.2,
+    "tiers": 4.5,
+    "treemap": 3.6,
+}
+# These are the player's LPX clocks (`scene-evidence-engine.mjs:8985-9014`).  The
+# compiler cannot import the browser module, so the intrinsic builders' clocks
+# are mirrored here; dense/story/object use the authored page build instead.
+PAGE_RACE_IN_S, PAGE_RACE_PERIOD_S = 0.6, 1.2
+PAGE_BREAK_HOLD_S, PAGE_BREAK_RUN_S, PAGE_BREAK_SETTLE_S = 0.5, 0.6, 0.3
+PAGE_BREAK_STEP_S = 0.06
+
+
+def _positive_page_seconds(value) -> float | None:
+    """Return a finite authored duration, excluding bools and non-positive values."""
+    if isinstance(value, bool):
+        return None
+    try:
+        seconds = float(value)
+    except (TypeError, ValueError):
+        return None
+    return seconds if math.isfinite(seconds) and seconds > 0 else None
+
+
+def _page_build_is_authored(page: dict) -> bool:
+    """Whether this page opted into the row-span check (R26-231).
+
+    Unauthored pages keep the shipped default timing.  A page that names
+    `build=lines` is authored even when the bare mode leaves its default
+    `build_s` implicit; a source `build_s` opts in for every applicable builder.
+    """
+    return "build_s" in page or page.get("build") in PAGE_BUILD_MODES
+
+
+def _breakthrough_build_duration(page: dict, base: float) -> float:
+    """Mirror the bars player's optional breakthrough envelope when it exists.
+
+    The bars painter is the fallback for story/object pages.  Ordinary bars
+    still use `base`; only an overflow mode with a value above its declared
+    domain gets the hold/run/settle clock written by the player.
+    """
+    axes = page.get("axes") if isinstance(page.get("axes"), dict) else {}
+    mode = axes.get("overflow")
+    domain = axes.get("domain")
+    values = page.get("values")
+    if mode not in ("burst", "break", "stack"):
+        return base
+    if not (isinstance(domain, list) and len(domain) == 2):
+        if mode == "stack":
+            raise ValueError("stack breakthrough requires a two-number domain")
+        return base
+    hi = _positive_page_seconds(domain[1])
+    if hi is None:
+        try:
+            hi = float(domain[1])
+        except (TypeError, ValueError, OverflowError):
+            if mode == "stack":
+                raise ValueError("stack breakthrough domain upper bound must be a finite positive number") from None
+            return base
+        if not math.isfinite(hi) or (mode == "stack" and hi <= 0):
+            if mode == "stack":
+                raise ValueError("stack breakthrough domain upper bound must be a finite positive number")
+            return base
+    if not isinstance(values, list):
+        return base
+    vals = []
+    for value in values:
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            return base
+        if not math.isfinite(number):
+            return base
+        vals.append(number)
+    over = [value for value in vals if value > hi]
+    if not over:
+        return base
+    honest = [value for value in vals if value <= hi]
+    comparator = max(honest) if honest else hi
+    if mode in ("burst", "break"):
+        return base + PAGE_BREAK_HOLD_S + PAGE_BREAK_RUN_S + PAGE_BREAK_SETTLE_S
+    if comparator <= 0:
+        raise ValueError("stack breakthrough comparator must be positive")
+    return base + PAGE_BREAK_HOLD_S + PAGE_BREAK_STEP_S * (math.ceil(max(vals) / comparator - 1e-9) + 1)
+
+
+def page_build_duration_s(page: dict) -> float:
+    """The player's actual chart-build clock for an authored page.
+
+    Intrinsic builders own their `st.buildDur` and ignore `pg.build_s`; the
+    line/story/object family reads `pg.build_s` (or LP.BUILD).  Keeping that
+    distinction here prevents the motion-gate mirror from treating a short
+    authored clock as the three-second default or inventing a longer race.
+    """
+    builder = str(page.get("builder") or "story")
+    if builder == "race":
+        periods = page.get("periods")
+        count = len(periods) if isinstance(periods, list) else 0
+        return PAGE_RACE_IN_S + max(0, count - 1) * PAGE_RACE_PERIOD_S
+    if builder in PAGE_INTRINSIC_BUILDERS:
+        return PAGE_INTRINSIC_BUILDERS[builder]
+    base = _positive_page_seconds(page.get("build_s")) or float(MG.LP_BUILD_S)
+    return _breakthrough_build_duration(page, base) if builder in ("story", "object") else base
+
+
+def _page_entry_build_s(page: dict, build_s: float) -> float:
+    """Return the gate's entry-to-build landing using the actual player clock."""
+    enter = page.get("enter")
+    if enter in (None, "axes", "mount", "morph"):
+        # MG owns mount/morph/axes offsets and the default page beats.  Its
+        # `extra` intentionally floors short authored builds at LP.BUILD, so
+        # apply the actual renderer delta explicitly for those entry modes.
+        baseline = dict(page)
+        baseline["build_s"] = float(MG.LP_BUILD_S)
+        return float(MG._page_land_offset({"world": {"page": baseline}})) + build_s - float(MG.LP_BUILD_S)
+    # Arrives-built entries (including spiral's 1.6s unwind) have no chart
+    # build to add; MG already returns the entry's own clock for them.
+    return float(MG._page_land_offset({"world": {"page": dict(page)}}))
+
+
+def page_build_envelope_s(scene: dict) -> float | None:
+    """The authored page's required row span: entry + actual build + leave."""
+    world = scene.get("world") if isinstance(scene, dict) else None
+    page = world.get("page") if isinstance(world, dict) else None
+    if not isinstance(page, dict) or world.get("kind") != SPECIES_LEDGER or not _page_build_is_authored(page):
+        return None
+    build_s = page_build_duration_s(page)
+    entry_build = _page_entry_build_s(page, build_s)
+    no_leave = str(page.get("exit") or "").split(":", 1)[0] == "cut"
+    leave_s = 0.0 if no_leave else sum(float(value) for value in MG.LP_RETRACT_S)
+    return entry_build + leave_s
+
+
+def page_build_span_error(scene: dict) -> str | None:
+    """Return a named R26-231 row error, or ``None`` when the row fits."""
+    try:
+        need = page_build_envelope_s(scene)
+    except ValueError as exc:
+        world = scene.get("world") if isinstance(scene, dict) else None
+        page = world.get("page") if isinstance(world, dict) else None
+        title = page.get("title") if isinstance(page, dict) else None
+        return (f"{scene.get('scene_id', '?')}: page {title or 'ledger page'!r} "
+                f"has an invalid build clock: {exc}")
+    if need is None:
+        return None
+    span = scene.get("span") if isinstance(scene, dict) else None
+    if not (isinstance(span, (list, tuple)) and len(span) == 2):
+        return f"{scene.get('scene_id', '?')}: page build has no two-number row span"
+    try:
+        start_s, end_s = float(span[0]), float(span[1])
+    except (TypeError, ValueError, OverflowError):
+        return f"{scene.get('scene_id', '?')}: page build row span is not numeric"
+    if not (math.isfinite(start_s) and math.isfinite(end_s)):
+        return f"{scene.get('scene_id', '?')}: page build row span endpoints must be finite numbers"
+    row_s = end_s - start_s
+    if not math.isfinite(row_s):
+        return f"{scene.get('scene_id', '?')}: page build row span delta must be finite"
+    if row_s < 0:
+        return f"{scene.get('scene_id', '?')}: page build row span delta must be non-negative"
+    if row_s + 1e-9 >= need:
+        return None
+    page = (scene.get("world") or {}).get("page") or {}
+    title = page.get("title") or page.get("builder") or "ledger page"
+    return (f"{scene.get('scene_id', '?')}: page {title!r} build envelope is {need:g}s "
+            f"(entry/build/leave), but its row span is {row_s:g}s")
+
+
+def validate_page_build_spans(scenes: list[dict]) -> None:
+    """Reject the first authored page build that overruns its finalized row."""
+    for index, scene in enumerate(scenes):
+        error = page_build_span_error(scene)
+        if error:
+            sid = scene.get("scene_id", f"row-{index + 1}")
+            raise ValueError(f"shot row {index + 1} ({sid}): {error}")
 
 
 def page_builds_lines(world: dict | None) -> bool:
@@ -4341,6 +5025,13 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
     as ``world["idle"]`` (the player reads it for the page or the plate; absent = the class default)."""
     bare, opts = split_plate_opts(plate_id)
     world = _world_for_bare_plate(bare, ken, ep_dir, meta)
+    page = world.get("page") if isinstance(world, dict) else None
+    if isinstance(page, dict) and page.get("enter") == "surface":
+        competing = [key for key in ("depth", "plane", "form", "arrive") if key in opts]
+        if competing:
+            raise ValueError(f"{plate_id!r}: surface= cannot combine with "
+                             f"{', '.join(key + '=' for key in competing)} - the handoff has one registered "
+                             "paper plane and one arrival")
     thens = opts.pop("then", [])
     card = opts.pop("card", None)
     if card is not None:   # card=yes|no is a LEDGER PAGE option: the page keeps the card's rounded corners and a hard-edge shadow at full size
@@ -6359,7 +7050,7 @@ def main() -> int:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
             for _prop in species_props(e):   # P61 T8 / E93: the page-form agenda's stamped cutouts, the same route
                 try:
-                    uris[PROP_PREFIX + _prop] = catalogue_icon_uri(_prop)
+                    uris[PROP_PREFIX + _prop] = catalogue_stamp_uri(_prop)
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         # a ledger page is drawn, not embedded (doc 29 s9.26); a bad or
@@ -6603,6 +7294,20 @@ def main() -> int:
     # boundary are visible - and printed, because a default nobody can see is a default nobody can argue with
     for _note in stamp_transition_pages(scenes) + stamp_tip_marks(scenes):
         print(f"  transition  : {_note}")
+    # R26-231: page exits and chart-to-chart continuity are final only after the
+    # transition pass.  Reject an authored page clock here, before anything is
+    # written, so an exit=cut stamp can legitimately remove the retract only.
+    try:
+        validate_page_build_spans(scenes)
+    except ValueError as exc:
+        raise SystemExit(f"FAIL: {exc}") from exc
+    # T19: a surface page is bound only after every row has its finalized span and
+    # camera. Ordinary pages take the empty path and remain byte-identical.
+    try:
+        for _note in bind_surface_page_arrivals(scenes, EP):
+            print(f"  surface    : {_note}")
+    except ValueError as exc:
+        raise SystemExit(f"FAIL: {exc}") from exc
 
     # P50 T16: the build says whose numbers it placed by. A page the fixture has not measured is placed
     # by `ledger_page`'s ESTIMATE of the player's layout - good enough to park a card against the plot's
@@ -6633,8 +7338,12 @@ def main() -> int:
     # R26-205: a dock holding the stage anchors it as it always has, and at 16:9 so does a LEDGER PAGE row -
     # the page's chart is the whole stage there, so there is no column left to put a stage caption in.
     pages = [{**pg, "cap_mode": "anchor" if (_dock_live_at(scenes, pg["s"])
-                                             or _full_stage_page_at(scenes, pg["s"], ASPECT)) else "stage"}
-             for pg in pages]
+                                             or _full_stage_page_at(scenes, pg["s"], ASPECT)
+                                             or (ASPECT == "16:9" and _readable_species_during(scenes, pg["s"], _caption_display_end(pages, i)))) else "stage"}
+             for i, pg in enumerate(pages)]
+    pages = [{**pg, **({"cap_reserve": "readable-species"}
+                      if ASPECT == "16:9" and _readable_species_during(scenes, pg["s"], _caption_display_end(pages, i))
+                      else {})} for i, pg in enumerate(pages)]
     # P52 T10: and the ARRIVAL each page's words take, beside the mode - absent when the build says nothing,
     # which is the pop (the field cannot appear in a timeline compiled before this slice, nor in one after it
     # that never asks; that absence is the byte-identity of every golden and both shorts)
@@ -6705,6 +7414,7 @@ def main() -> int:
         "title": TITLE,
         "subtitle": SUBTITLE,
         "episode_id": EPISODE_ID, "project_id": "systems-and-blowups",
+        **({"form": CONTENT_FORM} if CONTENT_FORM is not None else {}),
         **({"aspect": ASPECT} if ASPECT else {}),
         "narration": {"canonical_hash": sha(audio),
                       "words_path": f"{BUILD.name}/timeline.json"},
