@@ -6,8 +6,8 @@ edit `build_episode_h.shot_table`. Every anchor is a PHRASE off the take (`autho
 | # | window | world | options | cards | what fires |
 |---|---|---|---|---|---|
 | 1 | 0.00-42.04 | `ledger:ev-divergence-v1:line:234:right:axes:cut` | `idle=live;domain=80,277;build=lines:1.2` | `dock-h-certificate-1845` 9.20-16.64 | build_to @0.00; retitle @24.96; chart_to @28.23; build_to @28.23; spread @31.88; retitle @34.50; figure @36.39; retitle @38.85 |
-| 2 | 42.04-52.85 | `world-three-notch-slate-v1` | `use=landing;idle=drift;drift=20` | - | agenda @43.04 |
+| 2 | 42.04-52.85 | `world-three-notch-slate-v1` | `use=landing` | - | agenda @43.04 |
 
-**Idle tokens: 2 of 2 rows** - row 1 `idle=live;domain=80,277;build=lines:1.2`; row 2 `use=landing;idle=drift;drift=20` (E49; E99 s65 the 20 px long-form drift).
+**Idle tokens: 1 of 2 rows** - row 1 `idle=live;domain=80,277;build=lines:1.2` (E49; E99 s65 the 20 px long-form drift).
 
 **Flow count (E99 s74):** 0 cuts, 0 dips, each at a world change (E47): a chart cannot recast into a photograph plate and a plate cannot recast into a chart.
