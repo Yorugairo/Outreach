@@ -53,6 +53,9 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import script_review_contract as SRC  # noqa: E402
+
 # --- constants, cited ---------------------------------------------------------
 SCHEMA_VERSION = "viewer_reports.v1"
 WINDOWS_SCHEMA_VERSION = "viewer_windows.v1"
@@ -269,6 +272,13 @@ def load_windows(script: Path, explicit: Path | None) -> dict:
     doc = json.loads(path.read_text(encoding="utf-8"))
     if doc.get("schema_version") != WINDOWS_SCHEMA_VERSION:
         raise SystemExit(f"viewer_run: {path.name} is not {WINDOWS_SCHEMA_VERSION}")
+    text = script.read_text(encoding="utf-8")
+    expected = SRC.spoken_hash(text)
+    annotated = SRC.annotated_hash(text)
+    if doc.get("script_hash") != expected or doc.get("annotated_script_hash") != annotated:
+        raise SystemExit(
+            f"viewer_run: {path.name} is stale or lacks script custody; "
+            "regenerate it with viewer_windows.py")
     return doc
 
 
@@ -291,6 +301,7 @@ def run(opts: argparse.Namespace) -> int:
     rd = make_run_dirs(opts.run_dir or Path(tempfile.gettempdir()) / "viewer-runs"
                        / f"{artifact_stem(opts.script)}-{stamp}")
     out = opts.out or opts.script.with_name(artifact_stem(opts.script) + REPORTS_SUFFIX)
+    windows_file = opts.windows or windows_path(opts.script)
     thumb = Path(opts.thumb_file) if opts.thumb_file else None
     print(f"=== VIEWER RUN: {opts.script.name} ===")
     print(f"  windows : {len(windows)} of {len(doc.get('windows') or [])} "
@@ -302,6 +313,12 @@ def run(opts: argparse.Namespace) -> int:
     package = package_note(opts, thumb)
     report = {"schema_version": SCHEMA_VERSION, "prompt_version": cfg.version,
               "script": opts.script.name, "windows_file": (opts.windows or windows_path(opts.script)).name,
+              "script_hash": doc["script_hash"],
+              "annotated_script_hash": doc["annotated_script_hash"],
+              "windows_hash": SRC.sha256_bytes(windows_file.read_bytes()),
+              "timeline_hash": doc.get("timeline_hash", ""),
+              "timing_source": doc.get("timing_source", "unknown"),
+              "expected_windows": len(doc.get("windows") or []),
               "model": opts.model or "(codex default)", "effort": opts.effort, "lane": opts.lane,
               "started_at": now_iso(), "finished_at": "", "windows_run": 0,
               "package": package, "reports": []}

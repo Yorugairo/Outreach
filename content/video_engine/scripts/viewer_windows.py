@@ -58,6 +58,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import audit_script_doctrine as A          # noqa: E402
 import beat_tags                            # noqa: E402
 import kit_spec                             # noqa: E402
+import script_review_contract as SRC        # noqa: E402
 
 # P36 click 2026-09-03; doc 31 retention clock (new information every 15-30s).
 WINDOW_S = 15.0
@@ -304,7 +305,24 @@ def estimated_words(text: str) -> list[dict]:
 def load_timeline(path: Path) -> list[dict]:
     """A build timeline's word list - `gate_opening_structure.load_timeline`."""
     d = json.loads(path.read_text(encoding="utf-8"))
-    return d["words"] if isinstance(d, dict) and "words" in d else d
+    rows = d["words"] if isinstance(d, dict) and "words" in d else d
+    if not isinstance(rows, list):
+        raise ValueError("timeline words must be a JSON array")
+    normalized = []
+    previous = -1.0
+    for index, row in enumerate(rows):
+        if not isinstance(row, dict) or "w" not in row:
+            raise ValueError(f"timeline word {index} must contain w")
+        start = row.get("start", row.get("start_s", row.get("s")))
+        end = row.get("end", row.get("end_s", row.get("e")))
+        if start is None or end is None:
+            raise ValueError(f"timeline word {index} needs start/end or start_s/end_s")
+        start, end = float(start), float(end)
+        if start < previous or end < start:
+            raise ValueError(f"timeline word {index} is not monotonic")
+        normalized.append({"w": row["w"], "start": start, "end": end})
+        previous = start
+    return normalized
 
 
 def resolve_words(script: Path, text: str, timeline: Path | None = None) -> tuple[list[dict], str]:
@@ -382,15 +400,25 @@ def build_document(script: Path, text: str, timeline: Path | None = None,
                    window_s: float = WINDOW_S,
                    memory_windows: int = MEMORY_WINDOWS,
                    screens: Path | None = None,
-                   no_screens: bool = False) -> dict:
+                   no_screens: bool = False,
+                   require_measured: bool = False) -> dict:
     """The whole `viewer_windows.v1` payload for one script."""
     words, source = resolve_words(script, text, timeline)
+    if require_measured and source != "measured":
+        raise ValueError("measured viewer review requested but no valid measured word clock was available")
     shown, screens_source = resolve_screens(timeline, screens, no_screens)
     windows = build_windows(words, window_s, memory_windows, shown)
     runtime = max((w["end"] for w in words), default=0.0)
+    timeline_path = Path(timeline) if timeline is not None else None
+    screen_path = scene_timeline_path(screens if screens is not None else timeline)
     return {
         "schema_version": SCHEMA_VERSION,
         "script": script.name,
+        "script_hash": SRC.spoken_hash(text),
+        "annotated_script_hash": SRC.annotated_hash(text),
+        "timeline_hash": (SRC.sha256_bytes(timeline_path.read_bytes())
+                          if timeline_path is not None and timeline_path.is_file() else ""),
+        "screens_hash": (SRC.sha256_bytes(screen_path.read_bytes()) if screen_path is not None else ""),
         "window_s": float(window_s),
         "memory_windows": int(memory_windows),
         "timing_source": source,
@@ -420,13 +448,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--memory", type=int, default=MEMORY_WINDOWS,
                     help=f"windows of rolling memory (default {MEMORY_WINDOWS})")
     ap.add_argument("--out", type=Path, help="output path (default <script>-VIEWER-WINDOWS.json)")
+    ap.add_argument("--require-measured", action="store_true",
+                    help="refuse estimated fallback (required for recording-stage review)")
     args = ap.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     text = args.script.read_text(encoding="utf-8")
     doc = build_document(args.script, text, args.timeline, args.window, args.memory,
-                         args.screens, args.no_screens)
+                         args.screens, args.no_screens, args.require_measured)
     if not doc["windows"]:
         print(f"=== VIEWER WINDOWS: {args.script.name} ===")
         print("  no spoken words in this script - nothing to show a viewer")

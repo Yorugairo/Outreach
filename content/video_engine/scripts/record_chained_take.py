@@ -105,7 +105,7 @@ def main() -> int:
     # THIS spoken text, and carry VERDICT: PASS. `--force "<reason>"`
     # records anyway and the reason lands in the take manifest.
     import run_script_gates as RG
-    gates_meta = RG.recording_preflight(VO_TEXT, sys.argv, fails)
+    gates_meta = RG.recording_preflight(VO_TEXT, [*sys.argv, "--long"], fails)
     if gates_meta is None:
         return _report(fails, go)
     # Structural beat tags ([promise], [head-fake], ...) are authoring
@@ -260,7 +260,7 @@ def run_probe(go: bool) -> int:
     import beat_tags
     import run_script_gates as RG
     fails: list[str] = []
-    if RG.recording_preflight(VO_TEXT, sys.argv, fails) is None:
+    if RG.recording_preflight(VO_TEXT, [*sys.argv, "--long"], fails) is None:
         return _report(fails, go)
     text = beat_tags.strip_beat_tags(VO_TEXT.read_text(encoding="utf-8"))
     est = int(PROBE_SPEECH_S * CHARS_PER_S)

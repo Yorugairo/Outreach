@@ -3,7 +3,7 @@ opening at the same geometry.
 
 doc 40 MEDIA-TDD: a gate is validated against a known-real failure before it
 is trusted. The known-real case is Steel and Paper as recorded: promise after
-0:60, a proof hedged next-line at 2:44, a concession run 3:10-3:24, no visual
+0:60, a proof hedged next-line at 2:44, a concession run beginning at 3:08, no visual
 breath before the first word, and none of the declared classical beats
 present.
 """
@@ -85,7 +85,9 @@ def test_red_steel_and_paper_measured_failures():
     assert stats["timing"].startswith("measured")
     assert g["G09"].level == "FAIL" and "AFTER" in g["G09"].message, g["G09"]    # promise after 0:60
     assert g["G02"].level == "FAIL", g["G02"]                                     # no visual breath
-    assert g["G34"].level == "FAIL" and "3:1" in g["G34"].message, g["G34"]      # concession run
+    # Actual take: "So Bravos' tripwire" begins at 188.33s; token-count drift
+    # previously reported 3:10. The concession remains a genuine failure.
+    assert g["G34"].level == "FAIL" and "3:08" in g["G34"].message, g["G34"]
     assert g["G35"].level == "FAIL" and "2:4" in g["G35"].message, g["G35"]      # hedged proof
     assert g["G03"].level == "PASS", g["G03"]      # post-key at 5.57s IS on the 8s boundary
     assert g["G15"].level == "PASS", g["G15"]      # the spike IS planted in P1
@@ -161,6 +163,20 @@ def test_green_declared_opening_passes_every_gate():
     assert any(g.level == "JUDGE" for g in gates)
 
 
+def test_j13_j14_are_explicit_judges_not_semantic_passes():
+    gates, _ = G.run(_conforming_opening(), None, counterparty="Bravos", ring="spike")
+    g = _by_id(gates)
+    assert g["J13"].level == "JUDGE", g["J13"]
+    assert g["J14"].level == "JUDGE", g["J14"]
+    assert "human consequence" in g["J13"].src and "0:30" in g["J13"].src
+    assert "deliverable" in g["J14"].src and "0:45" in g["J14"].src
+    assert "read" in g["J13"].message and "exact quote" in g["J13"].message
+    assert "read" in g["J14"].message and "exact quote" in g["J14"].message
+    # The presence of [stakes]/[promise] and mechanical G07/G09 checks does
+    # not silently turn either semantic obligation into PASS.
+    assert g["G07"].level == "PASS" and g["G09"].level == "PASS"
+
+
 def test_promise_after_60s_fails_even_when_declared():
     s = _pad_to("The safest thing you own looks like this. An iron spike. ", 75.0)
     s += "`[pre-key]` [promise] By the end you'll run one test yourself. "
@@ -171,8 +187,9 @@ def test_promise_after_60s_fails_even_when_declared():
 def test_undeclared_required_beats_fail():
     s = _pad_to("The safest thing you own looks like this. An iron spike. ", 805.0)
     g = _by_id(G.run(s, None, ring="spike")[0])
-    for gid in ("G37", "G07", "G08", "G12", "G38", "G14", "G39", "G16", "G40", "G20", "G24", "G41", "G26", "G28", "G42"):
+    for gid in ("G37", "G07", "G08", "G12", "G38", "G14", "G39", "G16", "G40", "G24", "G41", "G26", "G28", "G42"):
         assert g[gid].level == "FAIL", (gid, g[gid])
+    assert g["G20"].level == "WARN"  # operator 2026-09-20: cadence is advisory
 
 
 def test_concession_run_fails_and_turn_within_two_sentences_passes():
@@ -464,6 +481,19 @@ def _timed(lines):
         for i, w in enumerate(re.findall(r"[A-Za-z0-9'%$]+", beat_tags.strip_marks(s))):
             tl.append({"w": w, "start": start + 0.3 * i, "end": start + 0.3 * i + 0.25})
     return text, tl
+
+
+def test_measured_hook_allows_only_the_operator_accepted_clock_epsilon():
+    """A 3.06-second measured hook is a pass; the epsilon must not turn a materially late hook green."""
+    text, tl = _timed([
+        (0.0, "America's debt trap can cost you a raise right now."),
+        (500.0, "The ending keeps the measured take in long-form mode."),
+    ])
+    first_sentence_words = len(re.findall(r"[A-Za-z0-9'%$]+", "America's debt trap can cost you a raise right now."))
+    tl[first_sentence_words - 1]["end"] = 3.06
+    assert _by_id(G.run(text, tl, short=False)[0])["G01"].level == "PASS"
+    tl[first_sentence_words - 1]["end"] = 3.11
+    assert _by_id(G.run(text, tl, short=False)[0])["G01"].level == "FAIL"
 
 
 A2_TEMPLATE = (62.0, "But here's where their own chart gets strange.")

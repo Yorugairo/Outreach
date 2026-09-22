@@ -131,6 +131,7 @@ def test_measured_when_a_timeline_is_given(tmp_path):
     tl.write_text(json.dumps({"words": _ticking(20)}), encoding="utf-8")
     doc = V.build_document(script, script.read_text(encoding="utf-8"), tl)
     assert doc["timing_source"] == "measured"
+    assert len(doc["timeline_hash"]) == 64
     assert [w["i"] for w in doc["windows"]] == [0, 1]
     assert doc["windows"][0]["text"].startswith("w0 w1")
 
@@ -140,6 +141,29 @@ def test_unreadable_timeline_falls_back_to_the_estimate(tmp_path):
     script.write_text("One test that sorts every holding you own.", encoding="utf-8")
     doc = V.build_document(script, script.read_text(encoding="utf-8"), tmp_path / "missing.json")
     assert doc["timing_source"] == "estimated"
+
+
+def test_recording_review_refuses_estimated_fallback(tmp_path):
+    script = tmp_path / "SCRIPT-T-VO.txt"
+    script.write_text("One test that sorts every holding you own.", encoding="utf-8")
+    with pytest.raises(ValueError, match="measured viewer review"):
+        V.build_document(script, script.read_text(encoding="utf-8"),
+                         tmp_path / "missing.json", require_measured=True)
+
+
+def test_scratch_timeline_schema_is_normalized_and_bound(tmp_path):
+    script = tmp_path / "SCRIPT-T-VO.txt"
+    script.write_text("One test.", encoding="utf-8")
+    tl = tmp_path / "scratch.words.json"
+    tl.write_text(json.dumps({"words": [
+        {"w": "One", "start_s": 0.0, "end_s": 0.2},
+        {"w": "test.", "start_s": 0.3, "end_s": 0.7},
+    ]}), encoding="utf-8")
+    doc = V.build_document(script, script.read_text(encoding="utf-8"), tl,
+                           require_measured=True)
+    assert doc["timing_source"] == "measured"
+    assert doc["windows"][0]["text"] == "One test."
+    assert len(doc["timeline_hash"]) == 64
 
 
 # ---- the file and its determinism ----------------------------------------
@@ -159,6 +183,7 @@ def test_written_json_is_byte_identical_across_runs(tmp_path):
     assert doc["window_s"] == 15.0 and doc["memory_windows"] == 2
     assert set(doc["windows"][0]) == {"i", "start_s", "end_s", "span", "text",
                                       "memory", "screens"}
+    assert len(doc["script_hash"]) == 64 and len(doc["annotated_script_hash"]) == 64
     assert doc["windows"][0]["screens"] == [] and doc["screens_source"] == "none (no build given)"
 
 

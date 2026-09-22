@@ -76,7 +76,7 @@ def main() -> int:
 
     # the same refusal the long-form recorders use: a current, passing gates report, or a reason
     argv = list(sys.argv) if args.force is None else [*sys.argv, "--force", args.force]
-    gates_meta = RG.recording_preflight(args.script, argv, fails)
+    gates_meta = RG.recording_preflight(args.script, [*argv, "--short"], fails)
     if gates_meta is None:
         return _report(fails)
 

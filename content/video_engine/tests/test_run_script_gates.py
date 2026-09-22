@@ -60,11 +60,12 @@ def test_red_episode_one_report_fails(tmp_path):
     assert RG.main(argv) == 1
 
     report = (tmp_path / "SCRIPT-G-GATES.md").read_text(encoding="utf-8")
-    assert "VERDICT: FAIL" in report
+    assert "MECHANICAL: FAIL" in report
+    assert "CLEARANCE[diagnostic]: FAIL" in report
     assert "\nTOOLS      lint: exit " in report
     assert "opening gate: exit 1, " in report
     assert (tmp_path / "SCRIPT-G-SCREENS.md").exists()
-    assert RG.check_report(copy)[0] == "fail"
+    assert RG.check_report(copy)[0] == "incomplete"  # no recording-stage clearance exists
 
 
 # ---- the hash and the report states ----------------------------------------
@@ -83,7 +84,7 @@ def test_check_report_missing_then_ok_or_fail_then_stale(tmp_path):
     code = RG.main([str(script), *GATE_ARGS])
     state, path = RG.check_report(script)
     assert Path(path) == tmp_path / "CONFORM-GATES.md"
-    assert state == ("ok" if code == 0 else "fail")
+    assert state == "incomplete"  # diagnostic success is not recording clearance
 
     script.write_text(script.read_text(encoding="utf-8").replace("iron spike", "iron nail", 1),
                       encoding="utf-8")
@@ -97,12 +98,14 @@ def test_green_conforming_script_passes(tmp_path):
     code = RG.main([str(script), *GATE_ARGS])
     report = (tmp_path / "CONFORM-GATES.md").read_text(encoding="utf-8")
     assert code == 0, report
-    assert "VERDICT: PASS" in report
+    assert "MECHANICAL: PASS" in report
+    assert "REVIEW COMPLETENESS: INCOMPLETE" in report
+    assert "CLEARANCE[diagnostic]: INCOMPLETE" in report
     assert "script_hash: " + RG.script_hash(script.read_text(encoding="utf-8")) in report
     for name in ("lint_script_pattern.py", "audit_script_doctrine.py",
                  "gate_opening_structure.py", "enumerate_strength_screens.py"):
         assert f"## {name}" in report
-    assert RG.check_report(script)[0] == "ok"
+    assert RG.check_report(script)[0] == "incomplete"
 
 
 # ---- the recorders refuse ----------------------------------------------------
@@ -131,18 +134,18 @@ def test_recorder_refuses_when_report_missing(monkeypatch, capsys, tmp_path, mod
     _isolate(monkeypatch, module, tmp_path, [])
     assert module.main() == 1
     out = capsys.readouterr().out
-    assert "[FAIL] gates report missing" in out
+    assert "[FAIL] recording clearance missing" in out
     assert "run_script_gates.py" in out
     assert "[FORCED]" not in out
 
 
 @pytest.mark.parametrize("module", [RM, RC], ids=["master", "chained"])
-def test_recorder_force_with_reason_continues(monkeypatch, capsys, tmp_path, module):
+def test_recorder_force_with_reason_cannot_bypass_long_opening_review(monkeypatch, capsys, tmp_path, module):
     _isolate(monkeypatch, module, tmp_path, ["--force", "test reason"])
-    module.main()                       # still fails later on env/key - not asserted
+    assert module.main() == 1
     out = capsys.readouterr().out
-    assert "[FORCED] gates report missing - reason: test reason" in out
-    assert "[FAIL] gates report" not in out
+    assert "[FORCED]" not in out
+    assert "recording clearance missing" in out
 
 
 @pytest.mark.parametrize("module", [RM, RC], ids=["master", "chained"])
@@ -177,7 +180,7 @@ def test_an_unparsed_tool_result_is_never_a_pass():
     # reviewer 2026-09-03: a checker whose RESULT line did not parse scored -1 fails, and -1 > 0 is False
     assert RG.ToolResult("x", 0, "", {"fail": -1}, "x: exit 0, ? fails").failing
     assert not RG.ToolResult("x", 0, "", {"fail": 0}, "x").failing
-    assert RG.verdict_line([RG.ToolResult("x", 0, "", {"fail": -1}, "x")]).startswith("VERDICT: FAIL")
+    assert RG.verdict_line([RG.ToolResult("x", 0, "", {"fail": -1}, "x")]).startswith("MECHANICAL: FAIL")
 
 
 # ---- P36 T4: the VIEWER block (advisory until Human Gate 1) ------------------
@@ -218,6 +221,15 @@ def test_no_viewer_gate_reports_without_binding(tmp_path):
     assert "V01" in block[1]
 
 
+def test_no_viewer_gate_cannot_create_required_stage_clearance(tmp_path):
+    script = _conforming_script(tmp_path)
+    code = RG.main([str(script), *GATE_ARGS, "--stage", "text-review", "--no-viewer-gate"])
+    report = RG.report_path(script).read_text(encoding="utf-8")
+    assert code == 1
+    assert "MECHANICAL: PASS" in report
+    assert "CLEARANCE[text-review]: INCOMPLETE" in report
+
+
 def test_the_viewer_binds_by_default_since_human_gate_1(tmp_path):
     # operator granted P36 HG1 on the ep1 calibration, 2026-09-03
     import argparse
@@ -242,10 +254,10 @@ def test_viewer_absent_says_how_to_run_it(tmp_path):
 
 def test_verdict_line_counts_viewer_fails_only_when_gated():
     ok = [RG.ToolResult("x", 0, "", {"fail": 0}, "x")]
-    assert RG.verdict_line(ok, 0) == "VERDICT: PASS"
-    assert RG.verdict_line(ok, 2) == "VERDICT: FAIL (2 viewer)"
+    assert RG.verdict_line(ok, 0) == "MECHANICAL: PASS"
+    assert RG.verdict_line(ok, 2) == "MECHANICAL: FAIL (2 viewer)"
     bad = [RG.ToolResult("x", 1, "", {"fail": 1}, "x")]
-    assert RG.verdict_line(bad, 1) == "VERDICT: FAIL (1 failing tools, 1 viewer)"
+    assert RG.verdict_line(bad, 1) == "MECHANICAL: FAIL (1 failing tools, 1 viewer)"
 
 
 def test_a_viewer_fail_reaches_the_written_report_not_just_stdout(tmp_path):
@@ -253,8 +265,10 @@ def test_a_viewer_fail_reaches_the_written_report_not_just_stdout(tmp_path):
     script = _script_with_viewer(tmp_path)
     ok = [RG.ToolResult("x", 0, "", {"fail": 0}, "x")] * 4
     body = RG.render_report(script, ok, "measured", stamp="s", viewer=["VIEWER x"], viewer_fails=1)
-    assert "VERDICT: FAIL (1 viewer)" in body
-    assert "VERDICT: PASS" in RG.render_report(script, ok, "measured", stamp="s", viewer=["VIEWER x"])
+    assert "MECHANICAL: FAIL (1 viewer)" in body
+    clean = RG.render_report(script, ok, "measured", stamp="s", viewer=["VIEWER x"])
+    assert "MECHANICAL: PASS" in clean
+    assert "CLEARANCE[diagnostic]: INCOMPLETE" in clean
 
 
 # ---- G2: --short reaches the audit and the opening gate; a measured clock under 3:00 routes by itself -------------
@@ -271,6 +285,7 @@ def test_short_mode_reaches_both_checkers(tmp_path):
     code = RG.main([str(script), "--ring", "tea break", "--short"])
     report = (tmp_path / "SHORT-GATES.md").read_text(encoding="utf-8")
     assert code == 0, report
+    assert "form: short" in report
     assert "[PASS ] S02" in report and "[JUDGE] J50" in report and "G01" not in report.split("## gate_opening_structure.py")[1]
     assert "[INFO] doc 35 rule 2: short (G2)" in report                 # the flip block does not bind on a short
     assert "[FAIL] doc 35 rule 2" not in report
@@ -281,6 +296,7 @@ def test_long_form_still_binds_the_flip_rule(tmp_path):
     code = RG.main([str(script), "--ring", "tea break", "--long"])
     report = (tmp_path / "SHORT-GATES.md").read_text(encoding="utf-8")
     assert code == 1
+    assert "form: long" in report
     assert "[FAIL] doc 35 rule 2" in report and "[FAIL ] G0" in report
 
 

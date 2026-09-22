@@ -85,6 +85,48 @@ def test_a_beat_felt_one_window_late_still_counts():
     assert next(r for r in res["recall"] if r["tag"] == "rehook")["perceived"]
 
 
+def test_singular_possessives_match_their_plain_noun_in_both_apostrophe_forms():
+    assert V.content_tokens("the company's report") == {"company", "report"}
+    assert V.content_tokens("the company’s report") == {"company", "report"}
+    assert V.overlap_hit("the company's report", "the company report")
+    assert V.overlap_hit("the company’s report", "the company report")
+
+
+def test_contractions_and_negations_keep_their_existing_tokens():
+    assert "it's" in V.content_tokens("it's not ready")
+    assert "that’s" in V.content_tokens("that’s not the answer")
+    assert "isn't" in V.content_tokens("isn't ready")
+    assert "doesn't" in V.content_tokens("doesn't work")
+
+
+def test_possessive_fix_does_not_lower_the_two_token_or_empty_response_floor():
+    beat = "Now put a real company's report beside that example."
+    assert not V.overlap_hit(beat, "The company is here.")
+    assert not V.overlap_hit(beat, "")
+
+
+def test_equivalent_rehook_is_recovered_but_the_actual_desire_stays_missed():
+    script = (
+        "`[desire]` I want to know what they gave up to make it. "
+        "`[rehook]` Now put a real company's report beside that example."
+    )
+    windows = {"windows": [
+        {"i": 0, "text": "I want to know what they gave up to make it. Refinancing replaces an old loan with a new one.", "memory": ""},
+        {"i": 1, "text": "Now put a real company's report beside that example. NVIDIA is the real company being introduced, using its July balance sheet.", "memory": "I want to know what they gave up to make it. Refinancing replaces an old loan with a new one."},
+    ]}
+    reports = {"reports": [
+        {"i": 0, "new_things": ["Refinancing replaces an old loan with a new one."], "held_question": "", "asked_of_me": ""},
+        {"i": 1, "new_things": ["NVIDIA is the real company being introduced, using its July balance sheet."], "held_question": "", "asked_of_me": ""},
+    ]}
+
+    res = V.score(windows, reports, script)
+    by_tag = {r["tag"]: r for r in res["recall"]}
+    assert by_tag["rehook"]["perceived"]
+    assert not by_tag["desire"]["perceived"]
+    assert res["recall_pct"] == 50.0
+    assert len([r for r in res["recall"] if r["window"] is not None]) == 2
+
+
 # --- gain, dead runs, loops, confusion ---------------------------------------
 def test_two_windows_with_nothing_concrete_are_a_dead_run(scored):
     assert scored["dead"] == [1, 2]
@@ -130,6 +172,8 @@ def test_render_is_deterministic_and_carries_the_result_line(scored):
     b = V.render(V.score(_windows(), _reports(), SCRIPT), "X-VO.txt")
     assert a == b
     assert "RESULT: 1 FAIL / 2 WARN" in a and "| `[rehook]` |" in a and "**NO**" in a
+    assert scored["scorer_contract"] == V.SCORER_CONTRACT
+    assert f"Scorer contract: {V.SCORER_CONTRACT}." in a
 
 
 def test_paths_strip_the_vo_suffix(tmp_path):
@@ -142,11 +186,59 @@ def test_paths_strip_the_vo_suffix(tmp_path):
 def test_main_writes_the_report(tmp_path, capsys):
     script = tmp_path / "T-VO.txt"
     script.write_text(SCRIPT, encoding="utf-8")
-    (tmp_path / "T-VIEWER-WINDOWS.json").write_text(json.dumps(_windows()), encoding="utf-8")
-    (tmp_path / "T-VIEWER-REPORTS.json").write_text(json.dumps(_reports()), encoding="utf-8")
+    windows = _windows()
+    windows["script_hash"] = V.SRC.spoken_hash(SCRIPT)
+    windows["annotated_script_hash"] = V.SRC.annotated_hash(SCRIPT)
+    windows["timeline_hash"] = ""
+    windows_path = tmp_path / "T-VIEWER-WINDOWS.json"
+    windows_path.write_text(json.dumps(windows), encoding="utf-8")
+    reports = _reports()
+    reports["script_hash"] = windows["script_hash"]
+    reports["annotated_script_hash"] = windows["annotated_script_hash"]
+    reports["timeline_hash"] = ""
+    reports["windows_hash"] = V.SRC.sha256_bytes(windows_path.read_bytes())
+    reports["expected_windows"] = len(windows["windows"])
+    (tmp_path / "T-VIEWER-REPORTS.json").write_text(json.dumps(reports), encoding="utf-8")
     assert V.main([str(script)]) == 0
     assert "RESULT:" in capsys.readouterr().out
     assert (tmp_path / "T-VIEWER.md").exists()
+
+
+def test_custody_rejects_partial_and_stale_viewer_runs():
+    windows = _windows()
+    reports = _reports()
+    errors = V.validate_custody(SCRIPT, windows, reports, b"{}")
+    assert any("script hash" in error for error in errors)
+    assert any("windows hash" in error for error in errors)
+
+    windows["script_hash"] = V.SRC.spoken_hash(SCRIPT)
+    windows["annotated_script_hash"] = V.SRC.annotated_hash(SCRIPT)
+    windows["timeline_hash"] = ""
+    reports["script_hash"] = windows["script_hash"]
+    reports["annotated_script_hash"] = windows["annotated_script_hash"]
+    reports["timeline_hash"] = ""
+    reports["windows_hash"] = V.SRC.sha256_bytes(b"{}")
+    reports["expected_windows"] = len(windows["windows"])
+    reports["reports"] = reports["reports"][:-1]
+    errors = V.validate_custody(SCRIPT, windows, reports, b"{}")
+    assert errors == ["viewer run is partial: 3/4 windows"]
+
+
+def test_custody_rejects_a_self_consistent_but_truncated_window_document():
+    windows = _windows()
+    windows["windows"] = windows["windows"][:1]
+    windows["script_hash"] = V.SRC.spoken_hash(SCRIPT)
+    windows["annotated_script_hash"] = V.SRC.annotated_hash(SCRIPT)
+    windows["timeline_hash"] = ""
+    reports = _reports()
+    reports["reports"] = reports["reports"][:1]
+    reports["script_hash"] = windows["script_hash"]
+    reports["annotated_script_hash"] = windows["annotated_script_hash"]
+    reports["timeline_hash"] = ""
+    reports["windows_hash"] = V.SRC.sha256_bytes(b"{}")
+    reports["expected_windows"] = 1
+    errors = V.validate_custody(SCRIPT, windows, reports, b"{}")
+    assert "viewer windows do not reach the declared runtime" in errors
 
 
 def test_main_refuses_without_the_inputs(tmp_path, capsys):

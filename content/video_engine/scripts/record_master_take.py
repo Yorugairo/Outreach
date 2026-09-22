@@ -88,7 +88,7 @@ def main() -> int:
     # THIS spoken text, and carry VERDICT: PASS. `--force "<reason>"`
     # records anyway and the reason lands in the take manifest.
     import run_script_gates as RG
-    gates_meta = RG.recording_preflight(VO_TEXT, sys.argv, fails) if text else None
+    gates_meta = RG.recording_preflight(VO_TEXT, [*sys.argv, "--long"], fails) if text else None
     if gates_meta is None:
         print("\nPREFLIGHT FAILED — nothing spent:")
         for f in fails:

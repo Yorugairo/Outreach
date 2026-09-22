@@ -65,8 +65,9 @@ OPENING-MINUTE GATES (ruling E24, doc 29 s9.29 - an analyst's drop-off review th
 operator verified against analytics): G45 the packaging echo - the first spoken
 sentence must ANSWER THE THUMBNAIL; the title's content words are the mechanical
 proxy (the title ships with the thumbnail), J12 prints the thumbnail path so the
-agent reads sentence 1 against it; G09 WARNs a promise after 0:45 (DECISION R7
-against doc 38's window to 0:60). The screen-side rows M10/M11 live in
+agent reads sentence 1 against it; G09 FAILs a missing promise or one after
+0:45 and WARNs before 0:30. J13/J14 require human consequence and useful stay
+promise reads; they never infer semantic PASS from tags. The screen-side rows M10/M11 live in
 gate_motion_density.py.
 
     python gate_opening_structure.py SCRIPT.txt [--timeline build-f/timeline.json]
@@ -93,8 +94,10 @@ P2_GUIDE = DOCS / "patterns/phase-guides/P2.md"
 
 # ---- constants quoted from the docs ---------------------------------------
 GRAB_S = 3.0                    # 38 B1 / P1 QC
+MEASURED_HOOK_EPSILON_S = 0.10  # measured aligners/providers quantize boundaries; 3.06s is operator-accepted, >3.10s is not
 BREATH_S = (0.5, 0.8)           # 38 B1: plate breathes before the first word (Humes pre-opener, bent visual)
 BREATH_TOL = 0.2
+BEAT_WINDOW_TOL_S = 0.25       # measured word/tag alignment can straddle a displayed second at a phase boundary
 PARADOX_BY_S = 8.0              # 38 B2: [post-key] ON the 8-second boundary
 ARCHETYPE_WIN = (8.0, 30.0)     # 38 B3: the world opens 0:08-0:30; W&N as people
 YOU_BY_S = 30.0                 # 38 B3 / P1 QC
@@ -174,6 +177,13 @@ PACKAGING_PREFIX_MIN = 4        # E24 G45: crude stems match by prefix ("surviv"
 SRC_G45 = ("E24 / doc 29 s9.29: proxy for 'the first sentence answers the thumbnail' - "
            "the title is the words packaged with it")
 SRC_J12 = "E24 / doc 29 s9.29: the first sentence answers what the thumbnail poses - open the thumbnail and read sentence 1 against it"
+# Human-stakes and useful-stay checks are deliberately JUDGE rows.  The gate
+# can locate the timed beats, but it cannot decide whether the consequence or
+# deliverable is concrete to a viewer; a tag or keyword is not that decision.
+SRC_J13 = ("Human-stakes read: by 0:30 the opening names a concrete human consequence "
+           "(who is affected, what changes, and what is at risk); cite the spoken line and clock")
+SRC_J14 = ("Useful-stay read: by 0:45 the opening promises a specific viewer-verifiable "
+           "deliverable, test, check, or source; cite the spoken line and clock")
 # G13 (C04-R016 + C07-R007): the rehook is a FUNCTION - a line that re-justifies the next stretch (38 B4 "rehook slot #1",
 # 38 B5 "re-justifying the next 60 seconds"). The five template families illustrate how it usually sounds; they are one
 # sufficient signal, never the definition. The dated promise IS A1 (MAP s3) - the regex-only check reported A1 missing at 41.5 s.
@@ -295,7 +305,12 @@ def _sentences_timed(text: str, timeline: list[dict] | None):
             bounds.append((m.start(), clean))
     out = []
     if timeline:
-        words = [w for w in timeline if re.search(r"[A-Za-z0-9]", w["w"])]
+        # Match the sentence counter's lexical units on both sides. A take can
+        # store "twenty-two" as one timed word while the script counts two;
+        # counting only the script side progressively shifts every later beat.
+        words = [dict(w, w=token) for w in timeline
+                 for token in re.findall(r"[A-Za-z0-9'%$]+", w["w"])
+                 if re.search(r"[A-Za-z0-9]", token)]
         wi = 0
         for off, s in bounds:
             n = len(re.findall(r"[A-Za-z0-9'%$]+", s))
@@ -559,7 +574,8 @@ def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | 
     # S01 the hook: the claim in the first 3 s, and it answers the packaging (G45 / J12 shared)
     if sents:
         d = sents[0][1] - sents[0][0]
-        add("S01", "51.2 HOOK 0:00-0:03: the claim, spoken and on screen, no throat-clearing", "FAIL" if d > SHORT_HOOK_S * tol else "PASS", f"first sentence {d:.2f}s")
+        hook_limit = SHORT_HOOK_S + MEASURED_HOOK_EPSILON_S if timeline else SHORT_HOOK_S * tol
+        add("S01", "51.2 HOOK 0:00-0:03: the claim, spoken and on screen, no throat-clearing", "FAIL" if d > hook_limit else "PASS", f"first sentence {d:.2f}s")
     g += _packaging_gates(sents, title, thumb, thumb_file)
     ban = [st for st, _, s_, _ in sents if st <= YOU_BY_S and (re.search("|".join(A.GREETINGS), s_, re.I) or CHANNEL_TALK.search(s_))]
     add("G04", "PLATFORM ban list: no greeting, no 'in this video', no channel talk (38 B2)", "FAIL" if ban else "PASS", f"banned construction at {mmss(ban[0])}" if ban else "clean")
@@ -676,7 +692,8 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     # ================= P1 - THE OPEN =================
     if sents:
         d = sents[0][1] - sents[0][0]
-        add("G01", "PLATFORM 3s microhook (38 B1 / P1 QC)", "FAIL" if d > GRAB_S * tol else "PASS", f"first sentence {d:.2f}s")
+        hook_limit = GRAB_S + MEASURED_HOOK_EPSILON_S if timeline else GRAB_S * tol
+        add("G01", "PLATFORM 3s microhook (38 B1 / P1 QC)", "FAIL" if d > hook_limit else "PASS", f"first sentence {d:.2f}s")
         add("J03", "Rhetoric: microhook concrete, terminal stress on the surprising word (38 B1)", "JUDGE", f"'{sents[0][2][:80]}'")
     g += _packaging_gates(sents, title, thumb, thumb_file)      # E24: G45 proxy + J12
     if timeline:
@@ -725,6 +742,8 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     ts = first_beat("stakes")
     add("G07", "Hook anatomy: stakes named by ~0:25 (38 B3)", "PASS" if ts is not None and ts <= STAKES_BY_S * tol else "FAIL",
         f"[stakes] at {mmss(ts)}" if ts is not None else "no [stakes] declared by 0:30")
+    add("J13", SRC_J13, "JUDGE",
+        "read the stakes line; record the human consequence, exact quote, and clock (by 0:30)")
     t_pr_tag = first_beat("promise")
     t_pr_rx = next((st for st, _, s, _ in sents if re.search(A.A1_PROMISE, s, re.I)), None)
     t_pr = t_pr_tag if t_pr_tag is not None else t_pr_rx
@@ -745,6 +764,8 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         add("G09", src9, "WARN", f"promise at {mmss(t_pr)} - before the mini-payoff window opens")
     else:
         add("G09", src9, "PASS", f"promise at {mmss(t_pr)}")
+    add("J14", SRC_J14, "JUDGE",
+        "read the promise line; record the specific deliverable/test/source, exact quote, and clock (by 0:45)")
     if pr_sent:
         has_prekey = any(m == "pre-key" and pr_sent[3] - 20 <= o < _first_alnum(text, pr_sent[3]) for m, o in marks)
         add("G10", "Humes pre-key immediately before the promise (P1 pause marks)", "PASS" if has_prekey else "FAIL", "placed" if has_prekey else "missing")
@@ -762,7 +783,8 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         "; ".join(f"{k} at {mmss(h[0])} ({h[1]})" if h else f"{k} missing - no line re-justifies {mmss(w[0])}-{mmss(w[1])}"
                   for k, (w, h) in slots.items()))
     # Truby Desire + Opponent, the map signpost - beat 5
-    tdes = [t for t in tag_times("desire") if beat5_lo / tol <= t <= p1_end * tol]
+    tdes = [t for t in tag_times("desire")
+            if beat5_lo / tol - BEAT_WINDOW_TOL_S <= t <= p1_end * tol + BEAT_WINDOW_TOL_S]
     add("G38", "Truby Desire named: the goal the video pursues (38 B5)", "PASS" if tdes else "FAIL",
         f"[desire] at {mmss(tdes[0])}" if tdes else f"no [desire] declared in {mmss(beat5_lo)}-{mmss(p1_end)}")
     top = [t for t in tag_times("opponent") if in_p1(t)]
@@ -771,7 +793,8 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     else:
         add("G14", "Truby Opponent / McKee antagonism: the opponent named, a MECHANISM never a villain (38 B5)", "PASS", f"[opponent] at {mmss(top[0])}")
         add("J01", "McKee antagonism: the opponent is a mechanism, not a villain", "JUDGE", f"read the [opponent] line at {mmss(top[0])}")
-    tmap = [t for t in tag_times("map") if beat5_lo / tol <= t <= p1_end * tol]
+    tmap = [t for t in tag_times("map")
+            if beat5_lo / tol - BEAT_WINDOW_TOL_S <= t <= p1_end * tol + BEAT_WINDOW_TOL_S]
     add("G39", "Auditory handrail: map-not-territory signpost - tease the WHAT, hold the HOW (38 B5 / doc 32 s1)",
         "PASS" if tmap else "FAIL", f"[map] at {mmss(tmap[0])}" if tmap else "no [map] declared in beat 5")
     if tmap:
@@ -831,9 +854,12 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     if news:
         pts = [p1_end] + news
         worst = max(b - a for a, b in zip(pts, pts[1:]))
-        add("G20", "PLATFORM new-info cadence: something genuinely new every 15-30s (P2)", "FAIL" if worst > NEW_INFO_MAX_GAP_S * tol else "PASS", f"longest gap {worst:.0f}s")
+        # Operator 2026-09-20: cadence is advisory. Tags approximate semantic
+        # information gain; a catalyst can introduce facts without a [new] tag.
+        # Preserve the timing diagnostic, not a blocking prose-rewrite demand.
+        add("G20", "PLATFORM new-info cadence: something genuinely new every 15-30s (P2; advisory)", "WARN" if worst > NEW_INFO_MAX_GAP_S * tol else "PASS", f"longest gap {worst:.0f}s; review information gain against narration")
     else:
-        add("G20", "PLATFORM new-info cadence: something genuinely new every 15-30s (P2)", "FAIL", "no [new] beats declared in P2")
+        add("G20", "PLATFORM new-info cadence: something genuinely new every 15-30s (P2; advisory)", "WARN", "no [new] beats declared in P2; review information gain against narration")
     lo_l, hi_l = geo["loops"]; lo_n, hi_n = geo["new"]
     if lo_l is not None:
         add("G21", f"L2 loops: {lo_l}-{hi_l} micro-loop closes at this runtime (P2 geometry / MAP s0)", "PASS" if lo_l <= len(loops) <= hi_l else "FAIL", f"{len(loops)} [loop] in P2")
@@ -963,7 +989,7 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     pts = [0.0] + cycle + [cycle_end]
     gaps = [(a, b - a) for a, b in zip(pts, pts[1:])]
     wg = max(gaps, key=lambda x: x[1]) if gaps else (0, 0)
-    add("G36", f"CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-{mmss(cycle_end)} (E23: whole runtime)",
+    add("G36", f"CLK broad beat-activity spacing - declared beats keep the argument active but do not certify an intentional hook or STR loop; no >60s without a cycle beat, 0:00-{mmss(cycle_end)} (E23: whole runtime)",
         "FAIL" if wg[1] > CYCLE_MAX_GAP_S * tol else "PASS",
         f"longest stretch without a cycle beat: {wg[1]:.0f}s from {mmss(wg[0])}")
     # E23 / P3.md u5 / MAP s9 "1/unit": every P3 and P5 unit window rehooks out

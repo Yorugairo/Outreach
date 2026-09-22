@@ -1,0 +1,16 @@
+{
+  "schema": "narrative_map.v1",
+  "script_hash": "af4b91efae96a850d83542214feb6814e955ef07336e64b509dd6133ef811a32",
+  "runtime_s": 240,
+  "micro_loops": [
+    {"id": "loop-opening", "setup": {"start_s": 0, "end_s": 12}, "tension": {"start_s": 12, "end_s": 24}, "advance": {"start_s": 24, "end_s": 34}, "payoff": {"start_s": 34, "end_s": 45}, "next_loop": "loop-lender", "shared_object_or_person": "workshop-owner"},
+    {"id": "loop-lender", "setup": {"start_s": 45, "end_s": 58}, "tension": {"start_s": 58, "end_s": 72}, "advance": {"start_s": 72, "end_s": 88}, "payoff": {"start_s": 88, "end_s": 100}, "next_loop": "loop-worker", "shared_object_or_person": "renewal-letter"},
+    {"id": "loop-worker", "setup": {"start_s": 100, "end_s": 122}, "tension": {"start_s": 122, "end_s": 138}, "advance": {"start_s": 138, "end_s": 156}, "payoff": {"start_s": 156, "end_s": 180}, "next_loop": "loop-capacity", "shared_object_or_person": "worker"},
+    {"id": "loop-capacity", "setup": {"start_s": 180, "end_s": 198}, "tension": {"start_s": 198, "end_s": 212}, "advance": {"start_s": 212, "end_s": 226}, "payoff": {"start_s": 226, "end_s": 240}, "next_loop": "end", "shared_object_or_person": "machine-order"}
+  ],
+  "macro_phases": [
+    {"id": "phase-personal", "start_s": 0, "end_s": 60, "intent": "Make the refinancing deadline personal", "callbacks": [{"from": "loop-opening", "to": "loop-lender"}], "foreshadows": [{"from": "loop-opening", "to": "loop-worker"}]},
+    {"id": "phase-price", "start_s": 60, "end_s": 150, "intent": "Show the lender's competing price", "callbacks": [{"from": "loop-lender", "to": "loop-capacity"}], "foreshadows": [{"from": "loop-lender", "to": "loop-capacity"}]},
+    {"id": "phase-consequence", "start_s": 150, "end_s": 240, "intent": "Deliver the downstream consequence", "callbacks": [{"from": "loop-worker", "to": "loop-capacity"}], "foreshadows": []}
+  ]
+}

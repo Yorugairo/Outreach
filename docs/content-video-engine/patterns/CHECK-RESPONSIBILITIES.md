@@ -20,7 +20,7 @@ Every check in the kit is exactly one of these. The kind decides the owner.
 
 | Kind | Meaning | Owner | Example |
 |---|---|---|---|
-| **mechanical** | decidable from text + timing: a count, a position, a duration, an adjacency | **tool** — final | promise lands after 0:60 (G09); AND-THEN chain (G23); pivot outside 45–55% (audit) |
+| **mechanical** | decidable from text + timing: a count, a position, a duration, an adjacency | **tool** — final | promise lands after 0:45 (G09); AND-THEN chain (G23); pivot outside 45–55% (audit) |
 | **declared** | the beat has no textual signature, so the writer TAGS it; the tool checks presence and window | **tool** checks the claim exists and sits in its window; **agent** verifies the claim is TRUE | `[catalyst]` present in P2's first 60s (G40) — the agent confirms the tagged line is an inciting event told as anecdote, not exposition wearing a tag |
 | **PERCEIVED** | did a reader who knows NOTHING actually feel it? | **the viewer** (P36) — a blind agent reports, a deterministic scorer judges | a declared `[rehook]` that never shows up in the blind reader's new information or held question is *laundered*: tagged, not delivered |
 | **JUDGE** | only a reader can decide | **agent** — every row verdicted individually, with the quoted line | opponent is a mechanism not a villain (J01); the head-fake is offered straight (J02); the image tensions the line (J06) |
@@ -100,15 +100,21 @@ before you grep; read before you claim.
 
 ## 2. The tools and what each decides
 
+G20 cadence is advisory (operator, 2026-09-20): an over-target gap or missing
+`[new]` annotations produces WARN, not FAIL. The tag clock cannot determine
+whether another beat, such as a catalyst, introduces genuinely new information.
+Retain the timing diagnostic and review the actual narration; do not rewrite
+or relabel prose just to clear it. G22 density and other hard gates are unchanged.
+
 | Tool | Command | Decides (mechanical) | Checks presence of (declared) | Prints for the agent (JUDGE) |
 |---|---|---|---|---|
 | `lint_script_pattern.py` | `lint …py <script>` | sentence stats, passive scan, CTA count, mark ration, stage-direction ↔ narration **tautology**, crude ring echo, rehook-family presence | — | — |
 | `audit_script_doctrine.py` | `… <script> --pivot "<line>"` | unknown marks, break ration, digit numerals, carrying mean / spread / over-20 share, trailing attribution, 3s hook + 8s paradox (measured if a take exists), greetings, "you" by 0:30, promise regex in 60s (WARN), CTA count + windows, A1–A3 anchors (**3:00 absolute — conflict R7**), break tags per paragraph, tell presence (doc 35), **pivot pin 45–55%** | — | hook concreteness (named in the WARN) |
-| `gate_opening_structure.py` | `… <script> --ring <token> --counterparty <name> [--timeline …] [--title "<t>" --thumb "<words>" --thumb-file <png>]` | G01–G06, G09–G11 (G09 WARNs a promise past 0:45 — E24, DECISION R7 vs doc 38's 0:60; the FAIL past 0:60 stands), G13, G15 (with `--ring`), G17–G18, G23, G25, G27 (with `--ring`), G29 (with timeline), G30, G33–G36, G43 (WARN), G45 packaging echo (with `--title`/`--thumb`: the title-word proxy for "the first sentence answers the thumbnail" — E24 / doc 29 §9.29; INFO when no title is given); **short mode (G2, 2026-09-05)**: a measured clock under 3:00 or `--short` replaces the long-form geometry with S01–S03, S05–S08 (+ G04/G05, G45) and prints J50/J51 — read them; the runner passes the same decision to the audit (`--short`: doc 35 rule 2 and the P1 pin are INFO) | G07 stakes · G08 payoff · G12/G32 tricolon · G14 opponent · G16/G31 reflect · G19/G21 loop · G20/G22 new · G24 head-fake · G26 foreshadow · G28 loop-close · G37 archetype · G38 desire · G39 map · G40 catalyst · G41 debate · G42 signpost · anaphora · dip | J01 mechanism · J02 head-fake straight · J03 hook concrete/terminal stress · J04 context-dump · J05 gap opens · J06 irony counterpoint · J07 contextual mapping · J08 phonetic anchor · J09 archetype not stereotype · J10 map not TOC · J11 debate as gap · J12 the first sentence answers what the thumbnail poses (prints the `--thumb-file` path to open — E24) |
+| `gate_opening_structure.py` | `… <script> --ring <token> --counterparty <name> [--timeline …] [--title "<t>" --thumb "<words>" --thumb-file <png>]` | G01–G06, G09–G11 (G09 FAILs a missing promise or one past 0:45; a promise before 0:30 is WARN), G13, G15 (with `--ring`), G17–G18, G23, G25, G27 (with `--ring`), G29 (with timeline), G30, G33–G36, G43 (WARN), G45 packaging echo (with `--title`/`--thumb`: the title-word proxy for "the first sentence answers the thumbnail" — E24 / doc 29 §9.29; INFO when no title is given); **short mode (G2, 2026-09-05)**: a measured clock under 3:00 or `--short` replaces the long-form geometry with S01–S03, S05–S08 (+ G04/G05, G45) and prints J50/J51 — read them; the runner passes the same decision to the audit (`--short`: doc 35 rule 2 and the P1 pin are INFO) | G07 stakes · G08 payoff · G12/G32 tricolon · G14 opponent · G16/G31 reflect · G19/G21 loop · G20/G22 new · G24 head-fake · G26 foreshadow · G28 loop-close · G37 archetype · G38 desire · G39 map · G40 catalyst · G41 debate · G42 signpost · anaphora · dip | J01 mechanism · J02 head-fake straight · J03 hook concrete/terminal stress · J04 context-dump · J05 gap opens · J06 irony counterpoint · J07 contextual mapping · J08 phonetic anchor · J09 archetype not stereotype · J10 map not TOC · J11 debate as gap · J12 the first sentence answers what the thumbnail poses (prints the `--thumb-file` path to open — E24) · J13 concrete human consequence by 0:30 · J14 useful stay promise by 0:45 |
 | `enumerate_strength_screens.py` | `… <VO>` → `<script>-SCREENS.md` | *enumerates only*: X1 connective/pronoun openers with predecessors, deixis openers, additive junctions, phonetic-anchor candidates, per-paragraph cadence runs | — | every listed item — the agent verdicts each (ok / FIXED / licensed / carryover) |
-| `run_script_gates.py` (**the runner — stages 3–4**) | `… <script> --pivot "<line>" --ring <t> --counterparty <n> [--timeline …] [--title … --thumb … --thumb-file …]` | *decides nothing itself*: runs the four rows above in order through their own `main()`, cites each exit + RESULT line, and writes `<script>-GATES.md` (the §5 TOOLS block, every tool's stdout verbatim, `script_hash` of the spoken text, `VERDICT`); exit 1 on any FAIL. `record_*_take.py` refuse a script whose report is missing / stale / FAIL (`--force "<reason>"` overrides, reason into the take manifest) | — | — |
+| `run_script_gates.py` (**the runner — stages 3–4**) | `… <script> --stage <stage> [--review <receipt> --narrative-map <map> --viewer-artifact <VIEWER.md>] --pivot "<line>" --ring <t> --counterparty <n> [--timeline … --scratch-take …]` | *decides no prose itself*: retains the four raw tool outputs, validates the versioned receipt/map/viewer and writes separate `MECHANICAL`, `REVIEW COMPLETENESS`, and `CLEARANCE[stage]` lines. Diagnostic may be mechanically clean and still `INCOMPLETE`; required stages exit nonzero unless `CLEAR`. Prefix binds an exact measured full-form range. Recording revalidates receipt, map, complete viewer windows/raw reports/score chain, measured original/normalized clock and scratch hashes. Free-text force cannot authorize provider work; scoped exceptions fail closed until backed by a validated operator-decision artifact | — | — |
 | `gate_motion_density.py` (**stage 7/8, on the BUILT timeline**) | `… <build-dir>` | M01 no stretch > 12s without a visual event (a LEDGER PAGE's build beats — scene start +0 / 0.7 / 1.5 / 3.9 / 4.7 / 5.2 / 8.2s: roll-out, savor, field, line, punch, build start, build end + focus (§9.26, E22 addendum 6) — count; its hold does not, §9.28 C5 / D1) · M02 > 8s (WARN) · M03 evidence enters ≤ 45s apart, every phase (a page START counts as an entry, D2) · M04 plates ≥ runtime/12s (a page is its own plate) · M05 20s hold ceiling · M06 caption cadence · M07 the opening minute is not the thinnest · M08 stage captions on every still stretch (once the timeline carries `cap_mode`) · M09 one camera move per window (§9.27 / §9.28 C3) · M10 no still stretch > 6s begins in the first 60s (E24 / §9.29) · M11 the first chart (chart/data dock, or ledger page; any dock when the timeline carries no evidence species) enters 0:08–0:20 with a spotlight / callout / punch / focus_zoom declared within 1.5s of the enter; a sound cue (motion-plan cue or timeline `sound` entry) within 1.5s or WARN (E24 / §9.29) · M12 a chart dock never spans a scene boundary and holds ≤ 10s (≤ 6s inside the opening minute) — re-enter it spotlit on the new datum instead (E25 / §9.30: the chart is the proof, not the homework). The dock clock is the timeline's own `scenes[].docks`; `evidence-dock.json` only when the timeline carries none (`dock_source` in the stats) | — | J01 savor beats keep their picture · J02 stage captions centred/large/explosive (until the template carries the mode) |
-| `viewer_windows.py` + `viewer_run.py` + `viewer_score.py` (**stage 4b, the VIEWER**) | `viewer_windows.py <script> [--timeline …]` → `viewer_run.py <script> [--thumb-file …] [--title …]` → `viewer_score.py <script>` → `<script>-VIEWER.md` | V01 beat recall (every declared beat felt within ±1 window, citing the reader's line), V02 dead-runs, V03 open-loop coverage, V04 confusion, V05 gain per window | *nothing* — the viewer is never shown a tag; if it can see the doctrine the test is void | **binds since P36 HG1 (2026-09-03)**: V01 recall is a FAIL, V04 confusion a WARN, V05 gain INFO-only (it read green on the episode we know failed); `--no-viewer-gate` reports without binding |
+| `viewer_windows.py` + `viewer_run.py` + `viewer_score.py` (**stage 4b, the VIEWER**) | `viewer_windows.py <script> [--timeline …] [--require-measured]` → `viewer_run.py <script> [--thumb-file …] [--title …]` → `viewer_score.py <script>` → `<script>-VIEWER.md` | V01 beat recall (every declared beat felt within ±1 window, citing the reader's line), V02 dead-runs, V03 open-loop coverage, V04 confusion, V05 gain per window; the chain binds annotated/spoken/window/timeline identity and refuses partial/errored runs | *nothing* — the viewer is never shown a tag; if it can see the doctrine the test is void | **binds since P36 HG1 (2026-09-03)**: V01 recall is a FAIL, V04 confusion a WARN, V05 gain INFO-only. `--no-viewer-gate` can keep raw diagnostic rows advisory, but cannot satisfy missing V01–V05 receipt obligations or create clearance |
 
 The opening gate covers **P1–P2 only** and says so in its header. Nothing
 mechanical exists for P3–P6 beyond the audit's pivot pin, CTA windows, tell
@@ -136,6 +142,10 @@ the plan fails instead of showing it fail; a `[reflect]` that is anecdote;
 a `[catalyst]` that is exposition.
 
 ### 3b. Verdict the JUDGE rows (R3)
+
+**Opening human consequence and stay promise (Fed production correction, 2026-09-18).** J13 asks who is affected, what changes, and what they stand to lose by 0:30; a mechanism/topic tagged `[stakes]` is insufficient. J14 asks what usable check, deliverable or source the viewer will receive by 0:45. G07/G09 retain their timing checks; the new rows remain human JUDGE decisions, never keyword-based PASSes.
+
+Record these two reads in `<script-stem>-OPENING-REVIEW.json` using `opening_review.v1`: canonical spoken `script_hash`, `review_kind: estimated_draft`, and exactly J13/J14 rows with explicit `PASS`, exact canonical quote, rationale, completion `clock`, and `clock_basis: estimated`. `opening_review.py` validates custody and structure, not the truth of the reader's judgment. The runner reports this legacy sidecar as a **partial opening read**; it never upgrades two rows into full script clearance. J13/J14 (or short-form J50/J51) also receive individual rows in the complete `script_review.v1` receipt. Estimated draft review is not measured timing, ear approval, recording clearance or release approval.
 J01–J11 from the opening gate, each with the quoted line. J06/J07 need the
 plate plan or shot table open — they judge picture against voice.
 
@@ -227,18 +237,64 @@ stable key (`rg -i "<device>" docs/CRAFT-MAP.md`). §4 step 2 reads
 
 ## 4. The runtime sequence
 
+### Stage-aware clearance (E99 s86, 2026-09-20)
+
+The four checker outputs are a **mechanical result**, not complete script
+clearance. `script_review_contract.py` inventories the semantic work already
+owned by §3 and the current generated craft map. The aggregate states are:
+
+- `CLEAR`: every obligation due at the requested stage is present, current and
+  non-failing;
+- `INCOMPLETE`: required evidence is missing, partial, stale or unverifiable;
+- `FAIL`: at least one applicable tool or reviewed semantic row fails;
+- `EXCEPTION`: a scoped operator ruling permits one named action while the raw
+  finding remains visible.
+
+`diagnostic` may execute successfully with incomplete review, but it must say
+so and may not report an unqualified final PASS. `scratch` preserves that
+diagnostic boundary. `text-review` requires the declared-beat, JUDGE, blind
+viewer, map, roster and craft receipts. `prefix-preview` additionally binds the
+exact full-form prefix and its visual decisions; it is never reclassified as a
+short. `recording` additionally requires measured timing and the ear review.
+Release/art approval remains outside script clearance.
+
+Every emitted X1/P6/P1J/P5A/P4C candidate in `<script>-SCREENS.md` becomes
+its own `screen:<family>:<item>` obligation and the receipt binds the screen
+artifact hash; an aggregate "screens reviewed" row cannot replace them. Judge,
+blind-viewer and independent-continuity rows require their corresponding
+reviewer roles, exact bounded source spans and obligation-specific findings.
+Applicable inventory rows cannot be cleared with `NA`; an unsupported N/A is
+retained as incomplete rather than treated as omission or PASS.
+
+G36 is the **broad beat-activity clock**. Its inputs include many declared
+beats, so it cannot certify an intentional hook, an open question or an STR
+loop. Those relationships belong in the source-bound narrative map and its
+independent semantic review. This distinction preserves the timing diagnostic
+without creating a fixed rehook quota.
+
+The narrative map itself fails closed: full-runtime micro-loop coverage may
+not contain a middle gap or endpoint tail; each span stays inside the measured
+runtime; and `next_loop` forms one forward, acyclic chain from the opening loop
+through every declared loop to exactly one `end`. Coverage diagnostics are not
+merely decorative clearance output.
+
 ```
-1. run_script_gates.py <script> --pivot "<line>" --ring <t> --counterparty <n> [--timeline …]
+1. Author/validate `<script-stem>-NARRATIVE-MAP.json`, then run
+   `run_script_gates.py <script> --stage diagnostic --pivot "<line>" --ring <t> --counterparty <n> [--timeline …]`
        runs, in order:  lint_script_pattern.py          -> exit + FAIL count
                         audit_script_doctrine.py        -> exit + FAIL/WARN + timing source
                         gate_opening_structure.py       -> exit + FAIL/WARN/PASS/JUDGE counts
                         enumerate_strength_screens.py   -> <script>-SCREENS.md + item counts
-       writes <script>-GATES.md: the §5 TOOLS line, each tool's stdout verbatim,
-       script_hash, VERDICT; exit 1 on any FAIL. Recording refuses without a
-       current PASS report (--force "<reason>" overrides, reason into the take manifest).
-2. AGENT: 3a declared-beat verdicts · 3b JUDGE rows · 3c–3i by name
-3. Fix; re-run 1 (X2–X4 are re-runs, not memory); loop to a fixpoint
-4. Report per §5
+       writes raw diagnostics plus MECHANICAL / REVIEW COMPLETENESS /
+       CLEARANCE[diagnostic]. Clean execution is not semantic clearance.
+2. AGENT JUDGE: 3a declared-beat verdicts · 3b JUDGE rows · 3c–3i by name;
+   independent reviewer validates narrative continuity; BLIND VIEWER sees only
+   package + narration windows. Gather exact rows in `script_review.v1`.
+3. Run `--stage text-review --review <receipt> --narrative-map <map>`; fix and
+   repeat to a fixpoint (X2–X4 are reruns, not memory).
+4. Make a free scratch. For recording, rerun with `--stage recording`, the
+   complete receipt/map/viewer, `--timeline <measured-clock>` and
+   `--scratch-take <audio>`. Recorders accept only current CLEAR custody.
 ```
 
 ## 5. The report contract
@@ -258,6 +314,9 @@ LOOP       L1/L2/L3/L6 findings; X1 from screens (K verdicted); X2–X4 re-run
 L0         log: original -> gates failed -> final, every rewrite
 EVIDENCE   figures traced: n/n; quotes verbatim: y/n
 DECISIONS  tool-vs-doc conflicts and rewrite-budget stops, with recommendation
+MECHANICAL PASS|FAIL
+REVIEW COMPLETENESS COMPLETE|INCOMPLETE
+CLEARANCE[stage] CLEAR|INCOMPLETE|FAIL|EXCEPTION
 ```
 
 "Linter clean" on its own means the review did not run (script-writer

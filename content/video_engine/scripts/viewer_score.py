@@ -42,8 +42,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import beat_tags  # noqa: E402
+import script_review_contract as SRC  # noqa: E402
 
 SCHEMA = "viewer_score.v1"
+SCORER_CONTRACT = "viewer_score.v1/content_tokens.singular_possessive.v1"
 
 # ---- constants, each with the rule it comes from ---------------------------
 RECALL_SLACK_WINDOWS = 1      # a beat may be felt one window early or late (P36 plan: "within +-1 window")
@@ -70,6 +72,10 @@ STOP = {
 }
 
 WORD_RE = re.compile(r"[A-Za-z][A-Za-z'’-]*|\d[\d.,%$]*")
+SINGULAR_POSSESSIVE_RE = re.compile(r"^(?P<stem>[a-z][a-z'’-]*)['’]s$", re.I)
+S_CONTRACTION_BASES = frozenset({
+    "he", "here", "how", "it", "let", "she", "that", "there", "what", "when", "where", "who", "why",
+})
 SENT_END_RE = re.compile(r"[.!?](?=\s|$)")
 # R26-0: `viewer_windows.py` ends a window with one `[screen]` line per screen.
 # They are what the reader SAW; the words are what it heard, and beat placement
@@ -87,7 +93,17 @@ def tokens(text: str) -> list[str]:
 
 def content_tokens(text: str) -> set[str]:
     """Tokens that carry meaning: stopwords and one-character noise removed."""
-    return {t for t in tokens(text) if t and t not in STOP and len(t) > 1}
+    out = set()
+    for token in tokens(text):
+        if not token:
+            continue
+        match = SINGULAR_POSSESSIVE_RE.fullmatch(token)
+        if match and match.group("stem") not in S_CONTRACTION_BASES:
+            token = match.group("stem")
+        if token in STOP or len(token) <= 1:
+            continue
+        out.add(token)
+    return out
 
 
 def overlap_hit(beat_sentence: str, viewer_line: str) -> bool:
@@ -348,7 +364,8 @@ def score(windows_doc: dict, reports_doc: dict, script_text: str) -> dict:
                      f"{len(dead)} dead of {len(answered)} reported") if gains else "no reports",
                     CONCRETE_RULE))
 
-    return {"schema_version": SCHEMA, "windows": len(windows), "reported": len(answered),
+    return {"schema_version": SCHEMA, "scorer_contract": SCORER_CONTRACT,
+            "windows": len(windows), "reported": len(answered),
             "timing_source": windows_doc.get("timing_source", "unknown"),
             "prompt_version": reports_doc.get("prompt_version", ""), "model": reports_doc.get("model", ""),
             "recall": recall, "recall_pct": pct, "per_window": per_window,
@@ -363,10 +380,16 @@ def result_line(res: dict) -> str:
 
 def render(res: dict, script_name: str) -> str:
     """`<script>-VIEWER.md` - the blind read, and what it did and did not reach."""
-    out = [f"# VIEWER — {script_name}", "",
+    out = [f"# VIEWER — {script_name}", ""]
+    if res.get("script_hash"):
+        out += [f"script_hash: {res['script_hash']}",
+                f"annotated_script_hash: {res['annotated_script_hash']}",
+                f"windows_hash: {res['windows_hash']}", ""]
+    out += [
            f"A blind reader, {res['windows']} windows, two-window memory, "
            f"{res['reported']} reported ({res['timing_source']} timings"
            + (f", model {res['model']}, prompt {res['prompt_version']}" if res.get("model") else "") + ").",
+           f"Scorer contract: {res.get('scorer_contract', 'unknown')}.",
            "It was never asked when it would leave. The judging is this file's, and it is deterministic.", "",
            "```text"]
     for r in sorted(res["rows"], key=lambda r: (LEVEL_ORDER[r["level"]], r["id"])):
@@ -403,6 +426,70 @@ def paths_for(script: Path) -> tuple[Path, Path, Path]:
             script.with_name(stem + "-VIEWER.md"))
 
 
+def validate_custody(script_text: str, windows_doc: dict, reports_doc: dict,
+                     windows_bytes: bytes | None = None) -> list[str]:
+    """Reject stale, legacy or partial viewer artifacts before they can clear review."""
+    errors: list[str] = []
+    if windows_doc.get("schema_version") != "viewer_windows.v1":
+        errors.append("windows schema is missing or unsupported")
+    if reports_doc.get("schema_version") != "viewer_reports.v1":
+        errors.append("reports schema is missing or unsupported")
+    spoken = SRC.spoken_hash(script_text)
+    annotated = SRC.annotated_hash(script_text)
+    for label, doc in (("windows", windows_doc), ("reports", reports_doc)):
+        if doc.get("script_hash") != spoken:
+            errors.append(f"{label} spoken script hash is missing or stale")
+        if doc.get("annotated_script_hash") != annotated:
+            errors.append(f"{label} annotated script hash is missing or stale")
+    if windows_bytes is not None and reports_doc.get("windows_hash") != SRC.sha256_bytes(windows_bytes):
+        errors.append("reports windows hash is missing or stale")
+    if reports_doc.get("timeline_hash", "") != windows_doc.get("timeline_hash", ""):
+        errors.append("reports timeline hash does not match windows")
+    expected = len(windows_doc.get("windows") or [])
+    window_rows = windows_doc.get("windows") or []
+    window_s = windows_doc.get("window_s")
+    runtime_s = windows_doc.get("runtime_s")
+    if not isinstance(window_s, (int, float)) or window_s <= 0 or not isinstance(runtime_s, (int, float)) or runtime_s < 0:
+        errors.append("windows timing metadata is missing or invalid")
+    elif window_rows:
+        for index, row in enumerate(window_rows):
+            start = row.get("start_s") if isinstance(row, dict) else None
+            if (not isinstance(row, dict) or row.get("i") != index or
+                    not isinstance(start, (int, float)) or
+                    abs(float(start) - index * float(window_s)) > 0.001):
+                errors.append("viewer windows are truncated or non-contiguous")
+                break
+        last_end = window_rows[-1].get("end_s") if isinstance(window_rows[-1], dict) else None
+        if not isinstance(last_end, (int, float)) or float(last_end) + 0.001 < float(runtime_s):
+            errors.append("viewer windows do not reach the declared runtime")
+    reported_rows = reports_doc.get("reports")
+    if not isinstance(reported_rows, list):
+        errors.append("reports must be a JSON array")
+        reported_rows = []
+    indices = [row.get("i") for row in reported_rows if isinstance(row, dict)]
+    if expected == 0 or reports_doc.get("expected_windows") != expected:
+        errors.append("reports expected-window count is missing or stale")
+    if sorted(indices) != list(range(expected)):
+        errors.append(f"viewer run is partial: {len(indices)}/{expected} windows")
+    if any(isinstance(row, dict) and row.get("error") for row in reported_rows):
+        errors.append("viewer run contains errored windows")
+    required_answer_keys = {"new_things", "held_question", "asked_of_me", "could_not_follow"}
+    for index, row in enumerate(reported_rows):
+        if not isinstance(row, dict):
+            errors.append(f"viewer report {index} must be an object")
+            continue
+        missing_keys = required_answer_keys - set(row)
+        if missing_keys:
+            errors.append(f"viewer report {index} is missing answer fields")
+            continue
+        if (not isinstance(row.get("new_things"), list) or
+                not isinstance(row.get("could_not_follow"), list) or
+                not isinstance(row.get("held_question"), str) or
+                not isinstance(row.get("asked_of_me"), str)):
+            errors.append(f"viewer report {index} has invalid answer fields")
+    return errors
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="score the viewer's blind reports (P36)")
     ap.add_argument("script", type=Path)
@@ -417,9 +504,20 @@ def main(argv: list[str] | None = None) -> int:
         if not p.exists():
             print(f"viewer_score: missing {p.name} - run {how} first", file=sys.stderr)
             return 2
-    res = score(json.loads(wp.read_text(encoding="utf-8")),
-                json.loads(rp.read_text(encoding="utf-8")),
-                args.script.read_text(encoding="utf-8"))
+    windows_bytes = wp.read_bytes()
+    windows_doc = json.loads(windows_bytes.decode("utf-8"))
+    reports_doc = json.loads(rp.read_text(encoding="utf-8"))
+    script_text = args.script.read_text(encoding="utf-8")
+    errors = validate_custody(script_text, windows_doc, reports_doc, windows_bytes)
+    if errors:
+        print("viewer_score: custody incomplete", file=sys.stderr)
+        for error in errors:
+            print(f"  - {error}", file=sys.stderr)
+        return 2
+    res = score(windows_doc, reports_doc, script_text)
+    res["script_hash"] = windows_doc["script_hash"]
+    res["annotated_script_hash"] = windows_doc["annotated_script_hash"]
+    res["windows_hash"] = reports_doc["windows_hash"]
     op.write_text(render(res, args.script.name), encoding="utf-8")
     print(render(res, args.script.name).split("```text")[1].split("```")[0].strip())
     print(f"\nreport: {op}")
