@@ -199,6 +199,41 @@ delivery vehicle for exactly that.
 
 ---
 
+## 10. Operator-approved worldview and delivery correction — 2026-09-20
+
+Source: the operator's Debt Trap script discussion and explicit approval to
+update source record, persona, voice and research routing. These corrections
+supersede conflicting earlier summaries; historic research is not automatically
+current financial evidence or a sample of the operator's spoken style.
+
+- Accretive burn: "it just has to be able to sustain the burn long enough to
+  earn its spot at the table and reach growth." Immediate earnings or value
+  growth faster than spending is NOT the required definition.
+- Leadership and funding determine whether a business can build through
+  volatility. The sailboat-versus-wind framework distinguishes active creation
+  of a stronger position from merely benefiting from favorable conditions.
+- The acquisition argument concerns physical AI infrastructure: data centers,
+  power, networking and photonics, not primarily AI developer equity stakes.
+  A downturn can transfer useful assets to buyers able to finance the wait.
+- The operator's WULF/APLD/CRDO/NBIS examples are proposed downturn targets,
+  not announced transactions. Proposed drawdowns are scenarios, not forecasts
+  certified by this voice profile. Useful assets and unchanged valuations are
+  different claims.
+- "You definitely make too many qualifications" and "you seem to suffer
+  from repetition" are explicit delivery corrections. State the interpretation,
+  show the mechanism and consequence; do not narrate every research boundary.
+- Show consequences for both people and businesses. Do not retreat into a
+  neutral good-and-bad summary when the episode has a defensible argument.
+- Sources ordinarily belong in the evidence ledger and description. Wealth
+  Logic is a presentation reference, not a financial authority. Spoken source
+  attribution is selective, not a mandatory roster.
+
+Approved synthesis route: [36-WRITER-PERSONA.md](36-WRITER-PERSONA.md)
+and [38-WORLDVIEW-RESEARCH-MAP.md](38-WORLDVIEW-RESEARCH-MAP.md).
+Research prose supplies ideas to test; approved narration and direct operator
+corrections supply the speaking voice. Do not copy dossier superlatives,
+guarantees or institutional language into narration.
+
 ## How to use this
 
 Fed to `brand-voice`; the resulting profile lives at

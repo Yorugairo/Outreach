@@ -338,6 +338,14 @@ the board of every checkout and who is writing what in it (P62; `git worktree li
 
 ## The recall rule
 
+### Fed production additions — 2026-09-19 (working tree, not release approval)
+
+- **Landscape phone-readable dense lines:** source `readability: "landscape-phone"` is closed/validated in `ledger_page.py`; only eligible full-stage 16:9 dense-line pages use matched dynamic SVG/layout geometry. Page-scoped 46px SVG labels and 52px title/source text; legacy and portrait routes unchanged. Actual Fed candidate-A v2 endpoint values measure12.523px at390px. Proof: `fed-liquidity-pressure/build-opening-chart-proof-v2/candidate-a/render/fed-chart-v2-silent.mp4`; tests `test_fed_chart_readability.py`. Settled readability is not continuous-transition or caption acceptance.
+- **Opening human-read evidence:** long-form J13 (human consequence by30s) and J14 (useful stay promise by45s) are JUDGE rows. `opening_review.py` validates explicit hash/quote/clock-bound JSON reviews; `run_script_gates.py` displays separate OPENING REVIEW status and recognized-long-form recording preflight refuses missing/invalid reviews. Estimated draft review is not measured timing/ear approval; actual-clock readiness remains unavailable pending retained word-timeline binding. Tests `test_opening_review.py`, `test_opening_review_wiring.py`; G07/G09 thresholds unchanged, shorts unchanged. G09's current code hard-fails after45s; older WARN/60s prose is obsolete.
+- **Voice-only audio mix:** `render_episode.mix_audio` joins filter chains without an empty leading segment when SOUND-PLAN has no cues. Existing cue gains/envelopes/loudness policy preserved. `test_render_audio_mix.py` verifies actual ffmpeg voice-only and cue mixes; no alternate mux is necessary for that defect.
+
+### Recall checklist
+
 1. `ls` and read the index before searching (PIPELINE.md, this file, PLATE-LIBRARY, CHOREOGRAPHY).
 2. When a doc cites a source artifact, the audit reads the artifact.
 3. A capability added or retired updates this file **in the same commit**.

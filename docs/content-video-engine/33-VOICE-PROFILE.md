@@ -27,7 +27,9 @@ Author:      Faceless finance channel — first-person narrator with a
              is not anonymous.
 Goal:        Spoken narration for long-form finance explainers that earns
              attention on mechanism and verifiability rather than hype.
-Confidence:  HIGH on what is rejected (one full worked example plus seven
+Confidence:  HIGH on the operator-approved 2026-09-20 worldview and delivery
+             corrections (doc 30 §10). Historic research informs interpretation,
+             not spoken diction. HIGH on what is rejected (one full worked example plus seven
              in-session rejections). MEDIUM on breadth — the corpus is one
              approved 3:00 script and one hook; widen after 3-4 more.
 
@@ -78,17 +80,26 @@ Claim Style
   A stronger claim is never worth a small truth-bend.
 - Biography arrives as the twist after the paradox, not as credentials up
   front.
-- Attribution comes first, not trailing: "The Fed's own data shows…" not
-  "…, according to the Fed."
+- When spoken attribution earns its place, put it first, not trailing.
+  Sources ordinarily live in the ledger and description; do not narrate a
+  roster of source names. Keep any qualification that changes the meaning.
 - Claims are self-contained arithmetic or tagged for the research gate.
   An unsourced national statistic is a defect, not a flourish.
 - Characters are people from real worlds — the banker, the budtender —
   never demographics ("someone earning $95k"). Archetype in a specific
   setting.
-- One bigger adjacent authority named per video, primary source cited.
+- Name an adjacent authority only when credit or the argument benefits.
+  Wealth Logic is a presentation reference, not a financial authority.
 - Sharp, dry, blunt. Comfortable saying a thing is wrong. Hedges are
   marked explicitly when real ("I think", "probably"), never used to soften
   a claim the narrator actually holds.
+- Lead with a defensible interpretation, demonstrate the mechanism, then
+  land the consequence. A balanced summary is not a substitute for an argument.
+- State a scenario boundary once where it matters; do not repeat the same
+  caveat after each sentence. Sources verify facts; the narrator owns inference.
+- Each spoken sentence carries a clear subject and a complete idea, except
+  an occasional deliberate impact fragment. Vary vocabulary without changing
+  the identity of a financial account or hiding who acts on whom.
 
 Personality (faceless — the words carry it)
 - Reaction asides in the operator's dry register: "yeah — that's the whole
@@ -121,6 +132,8 @@ Never
 - Production scaffolding on screen — deck names, slot indices, approval
   states.
 - Padding to hit a runtime.
+- Repeating an explanation or slogan without advancing the argument.
+- Copying institutional research prose, superlatives or guarantees as voice.
 - Narration that captions the visual it sits on (tautology).
 - Stock AI register: "not X, just Y", "no fluff", "the secret to",
   "in today's world", colon-stacking, the "Most people believe…" opener.
@@ -150,6 +163,11 @@ example before writing a new hook; it carries the line more reliably than
 any rule list above.
 
 ## Maintenance
+
+Before drafting, apply doc 36 and its
+[worldview research map](38-WORLDVIEW-RESEARCH-MAP.md) alongside this profile.
+The operator-approved corrections in doc 30 §10 take precedence over older
+skill summaries requiring a spoken source roster or immediate accretion.
 
 Widen the corpus after three or four more approved scripts and re-derive —
 `Confidence` on breadth stays MEDIUM until then. When a new rejection

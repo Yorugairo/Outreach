@@ -43,7 +43,41 @@ Rules while a lane is live:
 | `C:/Users/Snipe/Downloads/Outreach Program/.claude/worktrees/content-generation-system-52f077` | `claude/spark-animations-marketing-cc6738` | Claude, August | DORMANT - unmerged: 0, 1173 behind main; 8,893 untracked / 20,620 ignored files never inventoried | none | none | none | none | merged (0 ahead) |
 | `C:/Users/Snipe/Downloads/Outreach Program/.claude/worktrees/sweet-villani-1c3a16` | `claude/content-generation-system-52f077` | Claude - the P61 / P62 parent's session cwd | DORMANT as a checkout - every edit and commit of the parent lands in main; unmerged: 2 commits on the branch (the CLAUDE.md / AGENTS.md stabilisation, superseded on main), 703 behind; flattened into main 2026-09-08; removable only from a session not sitting in it, on the operator's word | none | none | none | none | 2026-09-08 (flattened) |
 
+## MP-FED-LIQUIDITY execution — 2026-09-18
+
+Current lease amendment: T14 renderer and T15 compiler leases released. T14 passed parent107 focused/158 golden-worktree checks; T15 passed parent123 tests after independent review and finite-span/stack-comparator fixes. No active shared engine writer; no golden repin. This supersedes historical T14/T15 leases below.
+
+Actual checkout branch is `codex/Astra` at `C:/Users/Snipe/Downloads/Outreach Program`; the older rows' `main` labels above are historical. Astra parent owns the approved MP-FED-LIQUIDITY episode slice and its queue/plan records. Engine lease: Astra parent, MP-FED-LIQUIDITY T14 only (`build_scene_timeline_f.py` and new `test_fed_axis_handoff.py`); T11/T12 code reviewed with 76 focused tests PASS, three existing skips; T13 reviewed with 51 tests PASS including browser probes. Fixture integration pending representative build. Subsequent engine slices are sequential. Parent verified production files clean before T11 and prior engine row FREE; the existing fixture's hash-only dirty change is preserved. Baseline: 158 worktree/golden tests and 123 page/chart tests PASS. E99 s85 written for the operator's explicit `$prp-implement mp-fed-liquidity` authorization; E99 s86 written for `$prp-implement` SCRIPT-REVIEW-CLEARANCE; next free s87. No commits or merges authorized.
+
+### Astra current engine lease — Fed T17
+
+Supersedes the T14-only lease above: parent owns integration; delegated implementation is limited to `ledger_page.py`, `samples/scene-evidence-engine.mjs` and a new focused readability test. T14/T15 writers are finished. T17 adds opt-in full-stage landscape line geometry and readable axes through matched SVG/Python layout; no caption policy, gate, portrait or legacy chart redesign. Operator explicitly authorized necessary engine/framework enhancement during the script clarity review. No commit/push authority is added.
+
+### Astra sequential integration — Fed opening review and silent-bed mux
+
+T17 implementation is finished; parent review and episode integration remain parent-owned. The disjoint T18 opening-review worker owns `gate_opening_structure.py`, its focused test, and new `opening_review.py`/test only. Parent retains runner/recorder wiring and documentation. Parent separately owns the verified no-cue filter-chain fix in `render_episode.py` and new `test_render_audio_mix.py`: preserve existing cue gains/envelopes and loudness policy, prove both zero-cue and cue mixes through actual ffmpeg. No other engine writes, global audio policy changes, commits or pushes are authorized by this entry.
+
+### Astra T20 module/compiler split
+
+2026-09-19: T19 workers have returned and released their leases. `fed_flow_extension` owns only `scripts/species/flow.mjs` and its new Node extension test/receipt. Parent owns compiler validation, Python extension tests and final engine sync; no concurrent engine writer. Existing declarations retain their behavior. No source-value changes, asset promotion, gate relaxation, commit or push.
+
 ## Hand-off 2026-09-18 - the stable point for Astra's worktree (the parent's usage expiring)
+
+### Astra sequential engine lease — Fed T19 compiler contract
+
+2026-09-19: prior T17/T18 production writers are finished. Parent owns T19 architecture and integration under the operator's explicit evidence-stage and engine-enhancement instructions. Sole delegated engine writer is `fed_surface_compiler`, limited to `build_scene_timeline_f.py` and new `test_page_surface_handoff.py`; renderer/template/gates remain read-only until this slice returns. Existing dirty engine edits preserved. Scope is source-bound live dense-line page handoff from a registered cream surface, not chart-card embedding; B1 default refusal and width floor unchanged. No asset promotion, commit or push authorized.
+
+T19 sequential handoff: compiler worker returned and released its files; parent independently ran the named90-test suite PASS and inspected binding/parser/geometry code. Sole next engine writer is `fed_surface_player`, limited to `samples/scene-evidence-engine.mjs`, `samples/scene-evidence-player.template.html`, new `test_page_surface_player.py` and an episode-local review diagnostic builder/output. Compiler and shared gates are read-only for that writer. Follow `.context/fed-hall-renderer-layout.md` including parent constraints: aspect-matched source host, cream/dark ink scoped to surface pages, actual destination profile, and no pixel/label duplication. No real asset eligibility change or production render is authorized by this lease.
+
+T19 checkpoint: `fed_surface_player` returned no edits and no live tool handles; that broad lease is released. Next bounded writer `fed_surface_geometry` owns only new `content/video_engine/scripts/kinetics/page_surface.mjs` and new `content/video_engine/tests/test_page_surface_geometry.py`, plus its receipt. Underscore filename matches sync_kinetics region/import grammar. Pure geometry helpers reuse existing homography; engine/template remain unchanged until the later painting slice. Parent independently owns episode source-presentation integration; source figures/raw evidence stay unchanged.
+
+T19 painting lease: parent reviewed geometry helper and independently ran10tests PASS. `fed_surface_paint` may now edit only `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `docs/content-video-engine/samples/scene-evidence-player.template.html`, new `content/video_engine/tests/test_page_surface_player.py`, and `.context/fed-surface-paint-receipt.md`. Integrate the helper region using existing sync tooling; geometry module/test remain with geometry worker until receipt. No compiler, gate, source, asset approval or narration edits. Synthetic browser proof only; actual media review follows parent integration.
+
+T19 parent takeover: painting worker interrupted and returned authoritative checkpoint: only page_surface kinetics region registered/populated; no live tool/session handles. Worker lease released. Parent now owns renderer/template integration and focused player test, preserving pre-existing dirty changes. No concurrent engine writer.
+
+T19 state continuation lease: parent hands sole engine write access to `surface_renderer_review` for existing chart-state/perform integration only; worker also owns new `test_page_surface_states.py` and `.context/fed-surface-states-receipt.md`. Parent owns separate safe-margin regression/planning, ledger and plan; no simultaneous engine edits. Existing synthetic MP4 capture worker has no engine write access. Lease ends on reviewed handback.
+
+T19 state handback: worker interrupted for checkpoint and returned engine-only edits, no tests, no live handles. Lease released; parent reviewed changes, authored `test_page_surface_states.py`, fixed reveal-wrapper opacity ownership and derived source/subtitle sizing, and resumed sole engine integration ownership. Initial five surface/state browser tests PASS15.63s; broader verification and real fixture remeasurement follow.
 
 **Branch from `main` at the sha the last wave printed (26c406a or later - `git log --oneline -1`); every wave of the night is committed, nothing pushed (70+ ahead; push only on the operator's word).** The working tree of the main checkout may carry ONE lane's uncommitted edits (R26-224, the fifteen failing tests - `content/video_engine/tests/R26-224-NOTE.md` when it lands); a new worktree branches from HEAD and does not carry them.
 

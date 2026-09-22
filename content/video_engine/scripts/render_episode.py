@@ -79,9 +79,10 @@ def mix_audio(dur: float) -> Path:
         delay = int(round(c["at"] * 1000))
         chains.append(f"[{i}:a]volume={_env_volume(c)}{fade},adelay={delay}|{delay}[c{i}]")
         mix.append(f"[c{i}]")
-    fc = (";".join(chains) + ";" + "".join(mix)
+    chains.append("".join(mix)
           + f"amix=inputs={len(mix)}:duration=first:normalize=0,"
           + "loudnorm=I=-14:TP=-1:LRA=11,aresample=48000[out]")
+    fc = ";".join(chains)
     out = OUT / "episode-mix.m4a"
     subprocess.run(["ffmpeg", "-y", "-v", "error", *inputs,
                     "-filter_complex", fc, "-map", "[out]", "-t", f"{dur:.3f}",

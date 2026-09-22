@@ -101,7 +101,18 @@ def stretch(seg: np.ndarray, rate: float,
     scale = len(out) / max(1, len(seg))
     h = int(round(pre * scale))
     t = int(round(post * scale))
-    return out[h:len(out) - t if t else len(out)]
+    trimmed = out[h:len(out) - t if t else len(out)]
+    # ffmpeg's atempo is perceptually stable but its emitted sample count can
+    # drift by several milliseconds per chunk. Across a long narration those
+    # rounding tails accumulate and the authored word clock walks away from
+    # the rendered audio. Each rate boundary already sits inside measured
+    # silence, so trim/pad that silent tail to the exact requested duration.
+    target = max(1, int(round((len(seg) - pre - post) / rate)))
+    if len(trimmed) > target:
+        trimmed = trimmed[:target]
+    elif len(trimmed) < target:
+        trimmed = np.pad(trimmed, (0, target - len(trimmed)))
+    return trimmed
 
 
 def xfade_join(pieces: list[np.ndarray]) -> np.ndarray:
@@ -175,7 +186,17 @@ def build(words, plan, audio):
             att.append((gap_mid(t, is_after), p["s"]))
     marks = [t for t, _ in att]
     tag_sites = []
-    vo = (EP / "SCRIPT-G-VO.txt").read_text(encoding="utf-8")
+    # The tempo editor is shared across episodes; the pause plan owns the
+    # narration source.  Older plans omit it and retain the Steel/Paper name.
+    script_ref = Path(plan.get("script") or "SCRIPT-G-VO.txt")
+    script_candidates = ([script_ref] if script_ref.is_absolute() else
+                         [EP / script_ref, REPO / script_ref])
+    script_path = next((p for p in script_candidates if p.is_file()), None)
+    if script_path is None:
+        raise FileNotFoundError(
+            "tempo plan script not found: " + ", ".join(str(p) for p in script_candidates)
+        )
+    vo = script_path.read_text(encoding="utf-8")
     for m in re.finditer(r"`\[[a-z-]+\]`", vo):
         pre = norm(re.sub(r"`\[[a-z-]+\]`", " ", vo[:m.start()])).split()[-4:]
         t = find(" ".join(pre), True)
@@ -762,7 +783,7 @@ def run_verify_mode(a) -> int:
 
 
 def main() -> int:
-    global EP
+    global EP, RUN_RATE, INTRA, INTRAT, INTER, INTERT, HOOK_HOLD_S, TAIL_HOLD_S
     ap = argparse.ArgumentParser()
     ap.add_argument("--probe", action="store_true")
     ap.add_argument("--take", action="store_true")
@@ -780,7 +801,33 @@ def main() -> int:
                     help="--verify: words sampled by G4")
     ap.add_argument("--strict-rate-step", action="store_true",
                     help="--verify: G5c FAILs instead of WARNs")
+    ap.add_argument("--run-rate", type=float, default=RUN_RATE,
+                    help="tempo-field cruise multiplier (default: %(default)s)")
+    ap.add_argument("--hook-hold-s", type=float, default=HOOK_HOLD_S,
+                    help="seconds held at 1.0x before the tempo field may accelerate")
+    ap.add_argument("--tail-hold-s", type=float, default=TAIL_HOLD_S,
+                    help="seconds held at 1.0x before the final spoken word")
+    ap.add_argument("--inter-cap", type=float, default=INTER,
+                    help="compress sentence gaps longer than this many seconds")
+    ap.add_argument("--inter-target", type=float, default=INTERT,
+                    help="surviving sentence-gap duration after compression")
+    ap.add_argument("--intra-cap", type=float, default=INTRA,
+                    help="compress intra-sentence gaps longer than this many seconds")
+    ap.add_argument("--intra-target", type=float, default=INTRAT,
+                    help="surviving intra-sentence gap after compression")
     a = ap.parse_args()
+    if not 1.0 <= a.run_rate <= 1.20:
+        ap.error("--run-rate must be between 1.0 and 1.20")
+    if min(a.hook_hold_s, a.tail_hold_s, a.inter_cap, a.inter_target,
+           a.intra_cap, a.intra_target) < 0:
+        ap.error("tempo holds and gap values must be non-negative")
+    if a.inter_target > a.inter_cap or a.intra_target > a.intra_cap:
+        ap.error("each gap target must be less than or equal to its cap")
+    RUN_RATE = a.run_rate
+    HOOK_HOLD_S = a.hook_hold_s
+    TAIL_HOLD_S = a.tail_hold_s
+    INTER, INTERT = a.inter_cap, a.inter_target
+    INTRA, INTRAT = a.intra_cap, a.intra_target
     if a.ep:
         EP = Path(a.ep)
     if a.verify:

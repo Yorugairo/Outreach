@@ -206,12 +206,13 @@ and carry `[verify]` before any on-screen use.**
 
 ### "Accretive burn"
 
-A capital-allocation dynamic where a company — typically early-stage — runs
-negative operational cash flow to fund physical capacity, M&A, or technology
-that compounds contracted backlogs and long-term per-share value
-significantly faster than cash is depleted. Big-tech AI capex is the same
-dynamic at scale, "and that is causing fear" — which is the content angle:
-the market reads accretive burn as bleeding.
+A capital-allocation thesis where a company funds physical capacity, M&A,
+or technology and can sustain the burn long enough to earn a valuable market
+position. Current earnings or value growth need not exceed spending today.
+Judge leadership, available funding, execution milestones and what the spending
+builds. Burn alone proves neither success nor failure. This definition follows
+the operator's 2026-09-20 correction and supersedes the earlier faster-than-cash
+test. Big-tech AI capex can express the same dynamic at scale.
 
 - **Exemplars:** IonQ ($IONQ) — burns cash and issues stock for strategic
   M&A (SkyWater Technology, Oxford Ionics) to secure a captive domestic
@@ -221,8 +222,8 @@ the market reads accretive burn as bleeding.
   multi-billions via non-dilutive project-level financing.
 - **The fence (failing case):** Laser Photonics ($LASE) — heavy burn against
   a ~$2.5M backlog and deeply negative ROIC (cited: −71.86%). Dilution
-  without a compounding pipeline. **Burn without backlog is just burn** —
-  the counterexample is what keeps the term from stretching.
+  without a credible path to a valuable position is the failure case. Backlog
+  is one form of evidence, not a universal prerequisite for early research.
 
 ### "Sovereign compute"
 
@@ -303,8 +304,31 @@ world-model and the long-term positions that make sense today AND in 30
 years (the young see those better than the old do).
 
 The frame that unifies the channel: **the youth lane IS accretive burn
-applied to a person** — run negative cash flow into capacity that compounds
-faster than the cash depletes.
+applied to a person** — fund skills and productive capacity while preserving
+enough runway for them to become useful and earn income.
+
+### Research-grounded worldview — operator approved 2026-09-20
+
+Use [38-WORLDVIEW-RESEARCH-MAP.md](38-WORLDVIEW-RESEARCH-MAP.md) for bounded
+retrieval. The recurring question is: who can finance the wait, what are they
+building while they wait, and who gains control when somebody else cannot?
+
+- **Sailboat versus wind:** examine what leadership does with favorable or
+  hostile conditions, not just whether the sector is rising.
+- **Bottlenecks:** trace the physical dependency that makes a growth story
+  possible: power, energized sites, cooling, memory, networking or photonics.
+- **Sovereign compute:** policy and domestic control reshape who funds, owns
+  and can access infrastructure. Policy can also keep rivals independent.
+- **Downturn ownership:** cash-rich incumbents and funded challengers may gain
+  capacity, assets or negotiating power when other owners cannot finance the
+  wait. An AI developer stake is not a substitute for this physical-chain story.
+- **Human consequence:** connect the same financing pressure to a household
+  bill or lost opportunity and a business decision. Use only what the episode
+  needs; no mandatory inventory of all frameworks.
+
+Standing theses are the author's interpretations to test, not verified facts
+by virtue of appearing here. Current operator corrections govern over historic
+dossier formulations. Preserve disagreements and verify episode-level claims.
 
 ## 4. Temperament directives
 
@@ -369,7 +393,10 @@ Applied to any skeleton (ours or `write_script_v2` output):
 1. **Install the narrator.** Add the identity beats a generated script
    lacks: the reason THIS person tells THIS story, biography as twist,
    the standing proof-point where it earns its place.
-2. **Run the thesis lens.** Find where the topic touches T1–T12 and argue
+2. **Run the thesis lens.** Load the relevant framework in doc 38 and its
+   source section. State the episode's specific argument, mechanism, consequence
+   and what would change the interpretation. Do not force the same conclusion
+   onto every topic. Find where the topic touches T1–T12 and argue
    through them, so every video compounds the same worldview instead of
    starting from zero. The lock-in script (Run 1) touches T2 (the advice
    that says "buy a starter home" ignores the structure), T4 (owners

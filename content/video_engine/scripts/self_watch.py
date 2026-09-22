@@ -67,6 +67,7 @@ FLOOR = HERE / "gate_one_shot_floor.py"           # the one-shot floor (M35-M42)
 FLOOR_ID_RE = re.compile(r"^M(?:3[5-9]|4[0-6])$")  # the ids the floor prints (M45/M46 since P66 T5); the M40 table lines are not rows
 FLOOR_NAME = "the one-shot floor"                  # the section-1 row name, and what the verdict says
 REPORT_NAME = "SELF-WATCH.md"
+MANIFEST_NAME = "player.json"
 SHEET_DIR = "self-watch"
 RECIPE_DIR = "recipes"                             # <build>/self-watch/recipes/<beat>-<recipe>.png (the audit sheets)
 MAX_RECIPE_SHEETS = 24                             # sheets are frames: bounded, and the row says when it capped
@@ -395,6 +396,55 @@ def publish_row(build: Path, project: Path) -> tuple[str, str, str]:
         return ("the publish package (R26-8)", level, trim(detail, 900))
     except Exception as e:                                  # a build with no timeline, a dossier mid-edit: say so, do not die
         return ("the publish package (R26-8)", "WARN", f"not written: {type(e).__name__}: {trim(str(e), 240)}")
+
+
+def manifest_shot_table(build: Path, project: Path) -> Path | None:
+    """Resolve the compiled shot table, or preserve the linter's historical default.
+
+    A build without a compile manifest predates the manifest contract, so ``None`` lets
+    ``lint_species_choice`` use ``<project>/SHOT-TABLE-SHORT.py``. Once a manifest names
+    a table, malformed, missing, or project-escaping paths fail closed rather than linting
+    a different cut than the player compiled.
+    """
+    manifest = Path(build) / MANIFEST_NAME
+    if not manifest.is_file():
+        return None
+    try:
+        document = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise ValueError(f"{MANIFEST_NAME} is not readable in {Path(build).name}: {exc}") from None
+    if not isinstance(document, dict):
+        raise ValueError(f"{MANIFEST_NAME} top level is not an object")
+    compile_block = document.get("compile")
+    if compile_block is None:
+        return None
+    if not isinstance(compile_block, dict):
+        raise ValueError(f"{MANIFEST_NAME} compile block is not an object")
+    episode_dir = compile_block.get("episode_dir")
+    shot_table_file = compile_block.get("shot_table_file")
+    if not isinstance(episode_dir, str) or not episode_dir.strip():
+        raise ValueError(f"{MANIFEST_NAME} compile.episode_dir is missing")
+    if not isinstance(shot_table_file, str) or not shot_table_file.strip():
+        raise ValueError(f"{MANIFEST_NAME} compile.shot_table_file is missing")
+    episode_path = Path(episode_dir)
+    table_path = Path(shot_table_file)
+    if episode_path.is_absolute() or table_path.is_absolute():
+        raise ValueError(f"{MANIFEST_NAME} compile shot-table paths must be relative")
+    project_root = Path(project).resolve()
+    resolved = (Path(build) / episode_path / table_path).resolve()
+    try:
+        resolved.relative_to(project_root)
+    except ValueError:
+        raise ValueError(f"{MANIFEST_NAME} compile.shot_table_file escapes project: {resolved}") from None
+    if not resolved.is_file():
+        raise FileNotFoundError(f"compiled shot table is not on disk: {resolved}")
+    return resolved
+
+
+def lint_report(project: Path, build: Path, fmt: str) -> tuple[list[str], dict]:
+    """Run sentence lint against the compiled table named by the build, when present."""
+    table = manifest_shot_table(build, project)
+    return L.report(project, build=str(build), table=table, long=(fmt == "long"))
 
 
 def floor_id(name: str) -> str:
@@ -743,7 +793,7 @@ def main(argv: list[str] | None = None) -> int:
     r_warns += w
     gate = run_gate(build)
     floor = run_floor(build, project)              # ONE subprocess of the floor gate; its rows are parsed, not redone
-    lint_lines, lint_counts = L.report(project, build=str(build), long=(fmt == "long"))   # the full path: a nested private build (the recipe lab's build-lab-*/<id>/) resolves as it stands (lint_species_choice.build_dir)
+    lint_lines, lint_counts = lint_report(project, build, fmt)   # the manifest binds lint to the table the player compiled
     viewer = verdict_line(project / f"{args.script}-VIEWER.md")
     sgates = verdict_line(project / f"{args.script}-GATES.md")
     rows = section1(gate, lint_lines, lint_counts, viewer, sgates, fmt, floor)
