@@ -12313,7 +12313,7 @@ async function mount(doc) {
      on over the back half of the same clock. The lines cross-fade where they already coincide, so the swap has nothing
      left to show. Every number the hand writes is the page's own: nothing here invents a tick. */
   const AXIS_HAND = Object.freeze({ OUT: 0.55, IN: 0.35, CROSS: 0.6 });   /* the shares of the clock the standing labels take to be un-written, the arriving ones to start, and the gridlines to change hands once they coincide [DERIVED: the erase reads before the write begins, as a retitle's does (PS.ERASE_S); a line that faded before it arrived would hide the slide this exists to show] */
-  const PLAIN_AXIS_HANDOFF = 0.90;   /* a plain recast's target axis must wait for the outgoing line's final ink, not merely for the midpoint of its clock */
+  const PLAIN_AXIS_HANDOFF = 0.90;   /* the opt-in landscape-phone profile waits for the outgoing line's final ink before its target axes arrive */
   const AXIS_LINES = ["tick", "rule", "axis"];     /* what SLIDES: the gridlines, the zero, a reference rule */
   const AXIS_LABELS = ["ylabel", "rulelabel", "xtick", "axislabel"];   /* what is WRITTEN: every string on the axes */
   const lpTickRanks = (S) => (S.marks || []).filter((m) => m.role === "tick" && m.el).sort((a, b) => (a.geom.y || 0) - (b.geom.y || 0));
@@ -12843,6 +12843,8 @@ async function mount(doc) {
       if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; plain = { from: cur, to: k, verb: sp.to === "morph" ? "recast" : sp.to, at: sp.at, dur: d, u: clamp01((t - sp.at) / d) }; break; }   /* the standing chart is leaving - E64: with its axes handing over to the one arriving */
       cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
     }
+    const fedPlainRecast = !!(plain && plain.verb === "recast" && states[plain.from]
+      && states[plain.from].readability === LP_READABILITY.LANDSCAPE_PHONE);
     st.active = xf ? ((xf.extend && xf.u >= XF_EXTEND.RESCALE) || (xf.morph && xf.u >= XF_MORPH.LEAVE) || (xf.remake && xf.u >= (xf.line_at === "to" ? REMAKE_LINE.HOLD : REMAKE.TRAVEL)) ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2; P61 T2: a remake's marks are in flight until they land; T2b: a bars -> line run's target is drawable when the point has handed over to the drawn line) */
     st.xfNow = xf ? { from: xf.from, to: xf.to, u: xf.u, extend: !!xf.extend, keyed: !!xf.keyed, morph: !!xf.morph, remake: !!xf.remake } : null;   /* R26-28: the perform layer lerps its anchors on this clock. P61 T2 (T1's gap 8): the WHOLE-CHART phase is named here, so a species anchored to the chart resolves against the state that is actually drawable and never lerps across a pair the page keyed mark by mark */
     if (!(xf && (xf.morph || xf.remake)) && !(!xf && hold)) lpHideMorphs(st, null);   /* P48 T5: a morph's strip (P61 T2: a remake's rings) shows only while it morphs or holds under the target's build */
@@ -12862,14 +12864,14 @@ async function mount(doc) {
       /* E64: the PLAIN recast (the compiler found no key) still un-draws and re-draws - but its axes hand over rather
          than swapping in one frame, so the page reads as re-writing itself. The state it is leaving to is otherwise
          untouched: nothing of the target's data is drawn before its own build. */
-      if (plain && states[plain.to] && states[plain.from]) lpAxisHandOver(states[plain.from], states[plain.to], plain.u, undefined, plain.verb === "recast");
+      if (plain && states[plain.to] && states[plain.from]) lpAxisHandOver(states[plain.from], states[plain.to], plain.u, undefined, fedPlainRecast);
       if (hold) lpPaintMorphHold(st, hold, cCur);
     }
     for (let i = 0; i < states.length; i++) if (!park || i !== (st.active | 0)) lpUnpark(states[i]);
     if (park && !xf) lpPaintPark(states[st.active | 0], park, t, parkFrom);
     /* the words that describe the chart move with it: the standing sub and source erase over the transition's first
        PS.ERASE_S, the arriving state's write over the rest. State 0's are the page's own, written by the page's build. */
-    const plainDataGone = !plain || plain.verb !== "recast" || (states[plain.from].paths || []).filter((pp) => pp.p && !pp.muted).every((pp) => {
+    const plainDataGone = fedPlainRecast && (states[plain.from].paths || []).filter((pp) => pp.p && !pp.muted).every((pp) => {
       const off = parseFloat(pp.p.getAttribute("stroke-dashoffset"));
       return !Number.isFinite(off) || off >= (pp.len || 0) * 0.995;
     });
@@ -12880,13 +12882,13 @@ async function mount(doc) {
       const d = Math.max(PS.ERASE_S + 0.01, sp.dur || 1);
       ue = clamp01((t - sp.at) / PS.ERASE_S);
       uw = clamp01((t - sp.at - PS.ERASE_S) / (d - PS.ERASE_S));
-      if (plain && plain.verb === "recast" && (sp.to === "recast" || (sp.to === "morph" && !kin("arap_morph"))) && !sp.keyed && sp.at === plain.at) {
+      if (fedPlainRecast && (sp.to === "recast" || (sp.to === "morph" && !kin("arap_morph"))) && !sp.keyed && sp.at === plain.at) {
         const pu = clamp01((t - sp.at) / d);
         ue = plainDataGone ? clamp01((pu - PLAIN_AXIS_HANDOFF) / (1 - PLAIN_AXIS_HANDOFF)) : 0;
         uw = 0;
       }
       ink = Math.max(0, Math.min(states.length - 1, sp.state | 0));
-      if ((sp.to === "recast" || (sp.to === "morph" && !kin("arap_morph"))) && !sp.keyed) plainMeta = { state: ink, end: sp.at + d };
+      if (fedPlainRecast && (sp.to === "recast" || (sp.to === "morph" && !kin("arap_morph"))) && !sp.keyed) plainMeta = { state: ink, end: sp.at + d };
       titleHand = sp.to === "remake";   /* P61 T2 / E99 s34: the title is part of the chart, and only the verb that transforms the WHOLE chart touches it */
     }
     for (let i = 1; i < states.length; i++) {
@@ -13590,7 +13592,10 @@ async function mount(doc) {
 
   function paintChipStamp(ctx, b) {
     const { sp, t, svg, el, A, idle, hash, seed, si } = ctx;
-    if (String(sp.icon || "").startsWith("prop-") && !String(sp.icon).startsWith("prop-badge-")) {
+    const icon = String(sp.icon || ""), catalogue = sp._catalogue;
+    const badgeIcon = icon.startsWith("prop-badge-"), legacyIcon = badgeIcon || icon.startsWith("prop-icon-");
+    if ((catalogue === "props" && !badgeIcon)
+        || (catalogue == null && icon.startsWith("prop-") && !legacyIcon)) {
       throw new Error("chip stamp: " + sp.icon + " is a non-badge prop; E99 s87 requires a bare prop with arrive: stamp or throw");
     }
     const src = A && A["prop:" + sp.icon];

@@ -207,7 +207,7 @@ def test_the_line_leaves_and_the_pie_arrives_on_one_page_with_no_cut():
         mid = _at(page, XF_AT + XF_S * 0.55)
         assert all(f < 0.95 for f in mid["lineDrawn"]), "the standing chart is leaving, not standing"
         assert mid["charts"][1] == 0, "and the next chart has not started: a recast is a hand-over, not a dissolve"
-        assert mid["subOld"] > 0.9, "the outgoing words stay with the outgoing data until the line is gone"
+        assert mid["subOld"] < 0.2, "the words that described the old chart have been erased"
 
         after = _at(page, XF_AT + XF_S + 3.4)
         assert after["charts"][0] == 0 and after["charts"][1] == 1
@@ -269,7 +269,9 @@ def test_a_plain_recast_preserves_a_partial_build_to_cap() -> None:
 @needs_fed_objects
 @needs_browser
 def test_plain_recast_holds_target_identity_until_outgoing_data_is_gone() -> None:
-    """A line-to-bars handover does not mix old data with new axes or source ink."""
+    """The Fed landscape-phone profile keeps its old data and identity until they leave."""
+    world = B.world_for_plate(FED_PLATE, (0, 0, 0), FED_EP)
+    assert world["page"]["axes"]["readability"] == "landscape-phone", "the delayed hand-over is opted in by the page profile"
     page, errs, close = _player(SPECIES_FED_PLAIN_RECAST, FED_PLATE, FED_EP)
     try:
         mid = _at(page, FED_XF_AT + FED_XF_S * 0.65)
@@ -1489,19 +1491,20 @@ def test_a_data_keyed_recast_seeks_exactly(tmp_path):
 @needs_browser
 def test_the_plain_recasts_axes_hand_over_too(tmp_path):
     """E64: a recast the compiler could NOT key keeps its un-draw-then-draw, but its axes re-write rather than
-    swapping in one frame - the standing labels un-written, the arriving ones written, the gridlines lit and moved."""
+    swapping in one frame - the standing labels un-written, the arriving ones written, the gridlines lit and moved
+    on the default clock."""
     ep, plate, _changes = _data_ep(tmp_path, bars_over=[3.0, 4.0, 5.0, 6.0])   # bars that are not the line's changes
     species = _data_species(ep, plate)
     assert species[0]["keyed"] is None and "key_map" not in species[0], "the compiler found no key - this is the plain recast"
+    world = B.world_for_plate(plate, (0, 0, 0), ep)
+    assert world["page"]["axes"].get("readability") != "landscape-phone", "this fixture exercises E64's default path"
     at, errs, close = _keyed_player(ep, plate, species, probe=DK_PROBE)
     try:
         mid = at(DK_AT + DK_S * 0.5)
         assert all(len(a) < len(b) for a, b in zip(mid["yA"], mid["yAfull"])), "the standing labels are being un-written"
-        assert all(not a for a in mid["yB"]), "the arriving axes wait while outgoing data remains"
-        late = at(DK_AT + DK_S * 0.94)
-        assert any(0 < len(a) < len(b) for a, b in zip(late["yB"], late["yBfull"])), "the arriving ones write after data removal"
-        assert any(abs(t[0] - t[1]) > 1 for t in late["tickA"]), "the gridlines slide after the outgoing data is gone"
-        assert all(t[2] > 0.3 for t in late["tickA"]), "and none of them blink out to do it"
+        assert any(0 < len(a) < len(b) for a, b in zip(mid["yB"], mid["yBfull"])), "the arriving axes write on E64's default clock"
+        assert any(abs(t[0] - t[1]) > 1 for t in mid["tickA"]), "the gridlines have slid toward the new scale"
+        assert all(t[2] > 0.3 for t in mid["tickA"]), "and none of them blinked out to do it"
         assert all(d[2] == 0 for d in mid["dots"]) if mid["dots"] else True, "no datum travels on a plain recast"
         assert all("scaleY(0" in s or s == "" for s in mid["barScale"]), "and no bar grows before the target's own build"
         a = at(DK_AT + DK_S * 0.5); at(2.0); b = at(DK_AT + DK_S * 0.5)
