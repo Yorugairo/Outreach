@@ -36,3 +36,16 @@ over-stepped and ruined what was good about what we had."*
   refinement outranks the demo it refined.*
 
 Related: [remotion-ui-registry](remotion-ui-registry.md), [production-standards-universal](production-standards-universal.md)
+
+**The other half of this failure, named 2026-09-22 (E99 s85): the harvest that never happens.** The first rule is
+about porting badly; this one is about never porting and keeping the name. Twice in a fortnight: `REMOTION-UI-INTAKE-2026-09-07.md`
+triaged **RU-2 badge-stamp** as PRIORITY and named its mechanism exactly (the two-spring offset - a clamped scale
+spring landing while a free rotation spring still unwinds - "the weight cue our single-spring landings lack"), and
+R26-20 stood HALF from 09-11 with the rotation spring deferred in its own words, "port it when a stamp asks for it";
+meanwhile `stamp` in the compiler became the vector map's number-at-a-centroid, and the parent later "proved" a prop
+could be a stamp by docking a card that throws and lands - the very landing the triage calls weightless. Same week,
+`REMOTION-UI-HARVEST.md` (the operator's 2026-08-31 review) said the line's tip is "One gesture instead of overlapping
+animations"; R26-228 built a lead point AND halo AND spark AND bloom AND a per-word walk, and the operator read it on
+the frame as "2 different pointers" and "chaos" (s83). **Read the harvest note and the intake triage BEFORE building
+anything they name, and port the mechanism, not the look.** The note usually already contains the answer and the
+failure mode.
