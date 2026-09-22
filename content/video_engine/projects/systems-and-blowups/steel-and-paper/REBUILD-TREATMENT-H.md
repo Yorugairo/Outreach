@@ -124,7 +124,7 @@ refused. The buildable form of what these six rows mean is a **docked prop card*
 PNG (measured: `prop-federal-reserve-building-v1` 282x259 RGBA, 98 % clear at its corners; the others alike), so
 it docks through `docks.dock_png` like any still, lands in the page's OWN room (E65) beside the datum the sentence
 names, arrives on that word (`arrive: throw, mass: paper`) and holds - which is exactly E99 s71's "a named thing
-ARRIVES", and is what the treatment meant. **Corrected again the same day by E99 s85, and this is the version the body builds:** a docked card
+ARRIVES", and is what the treatment meant. **Corrected again the same day by E99 s87, and this is the version the body builds:** a docked card
 that throws and lands is our single-spring landing, which the remotion-ui RU-2 triage names as the thing that
 *lacks* weight - so it is the carrier, not the motion. These six rows are props **STAMPED ON**, unframed: a prop is never
 put in a card because the point of a prop is to join the WORLD - its own alpha is its shape, no frame, no border,

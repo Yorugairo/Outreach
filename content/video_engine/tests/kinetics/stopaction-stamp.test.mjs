@@ -1,4 +1,4 @@
-/* R26-20's other half (E99 s85) - THE STAMP, ported from remotion-ui's badge-stamp. The source is ON DISK at
+/* R26-20's other half (E99 s87) - THE STAMP, ported from remotion-ui's badge-stamp. The source is ON DISK at
    content/video_engine/remotion-ui/src/remotion/primitives/badge-stamp.tsx (+ lib/motion-tokens.ts, lib/timing.ts),
    so these are not assertions about a description: every number here is read off the source's own lines, named in
    the assertion. What is pinned is the MECHANISM the intake triaged and the ruling ordered:

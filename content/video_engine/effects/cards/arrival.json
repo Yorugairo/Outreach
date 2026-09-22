@@ -310,9 +310,9 @@
           "source": "docs/portable/OPERATOR-RULINGS.md"
         }
       ],
-      "does": "The thing comes DOWN onto the page from 2.1x on a clamped scale spring while a free rotation spring is still unwinding, so it rests OFF-SQUARE; an impact ring radiates from the contact and leaves. Carries anything: a card, a badge or a bare prop.",
-      "when": "a named thing is ADDED TO THE WORLD with weight - a direct-match prop, a verdict, a seal (E99 s85); never a card that should fly (throw) or simply appear (spring)",
-      "when_source": "docs/portable/OPERATOR-RULINGS.md E99 s85",
+      "does": "The thing comes down from above its size and lands off-square - the scale settles while the rotation still unwinds - with an impact ring hugging it; it carries a card, a badge or a bare prop.",
+      "when": "a named thing is ADDED TO THE WORLD with weight - a direct-match prop, a verdict, a seal (E99 s87); never a card that should fly (throw) or simply appear (spring)",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md E99 s87",
       "author": {
         "key": "dock opts {\"arrive\": \"stamp\"} - refused on a page's pills and with embed",
         "example": "{'prop': True, 'arrive': 'stamp', 'mass': 'ink', 'ink': 'own'}",
@@ -406,7 +406,7 @@
         "note": "the room fit is build_scene_timeline_f.py `stamp_dock_place` + `stamp_ring_fit`: the ring's peak and the 2.1x approach are fitted to the page's room, capped never clipped, refused by name when blind"
       },
       "doctrine": [
-        "E99 s85",
+        "E99 s87",
         "E50",
         "E65",
         "R26-20"

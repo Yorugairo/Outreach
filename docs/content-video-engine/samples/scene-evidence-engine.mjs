@@ -1812,7 +1812,7 @@ async function mount(doc) {
              ground: 0, shake: { x: 0, y: 0 } };
   };
 
-  /* ================= THE STAMP (R26-20's other half; E99 s85) =================
+  /* ================= THE STAMP (R26-20's other half; E99 s87) =================
      PORTED, not invented, from remotion-ui's own primitive, which is on disk at
      content/video_engine/remotion-ui/src/remotion/primitives/badge-stamp.tsx (its curves are quoted per dial below,
      by line). The intake triaged it into "Priority integration" and named the gap in our vocabulary exactly
@@ -1842,14 +1842,14 @@ async function mount(doc) {
          (lib/timing.ts:9 EASING_EXIT = Easing.in(Easing.cubic), "Never ease-out an exit"): E50's shape, a landed mark
          owes an exit, authored from the first build.
      WHAT DOES NOT PORT: the seal's gold ring, its two curved texts, its double border - a look. Ours is charcoal on
-     cream drawn in our hand, and the PAYLOAD is whatever the mark is: E99 s85 (3) puts a PROP CUTOUT under it (a
+     cream drawn in our hand, and the PAYLOAD is whatever the mark is: E99 s87 (3) puts a PROP CUTOUT under it (a
      docked card that keeps its RGBA), so the ink strength is a PRESSURE cue under the picture, never a wash over it.
      WHAT THIS MODULE KEEPS OF OURS: the receiver. A stamp's contact is at its own t = 0 (the mark is already on its
      spot; the scale over 1 is the height), so the page DIPS by the material's own spring and takes the hit's squash
      frame - groundDip / impactSquash, the same two the throw and the landing answer with. Pure in t; it paints
      nothing. Added with NO change to anything this module already painted. */
   /* NAMED `STAMP_ARRIVAL`, not `STAMP`: the engine inlines every module into ONE name space and the VECTOR
-     MAP's own species dials already own that identifier (species/vecmap.mjs:60). E99 s85 (4) keeps `stamp` the
+     MAP's own species dials already own that identifier (species/vecmap.mjs:60). E99 s87 (4) keeps `stamp` the
      vector map's SPECIES and makes this an `arrive:` value; the two never meet, and this name says so. */
   const STAMP_ARRIVAL = Object.freeze({
     FROM: 2.1,          /* badge-stamp.tsx:88-91 interpolate(land, [0, 1], [2.1, 1], { output: "perceptual-scale" }) - the mark arrives oversized,
@@ -1969,7 +1969,7 @@ async function mount(doc) {
   const stopCss = (s) => {
     const a = Math.abs(s.alpha || 0), th = (s.alpha || 0) < 0 ? (s.theta || 0) + Math.PI / 2 : (s.theta || 0);
     const m = a > 1e-6 ? " matrix(" + squashMatrix(th, a).map((v) => v.toFixed(4)).join(",") + ",0,0)" : "";
-    /* the STAMP's scale (R26-20 / E99 s85), written ONLY when the state carries one - every throwXf / landXf /
+    /* the STAMP's scale (R26-20 / E99 s87), written ONLY when the state carries one - every throwXf / landXf /
        pickUpXf state there has ever been carries none, so their CSS is byte-for-byte what it was */
     const sc = s.scale != null && Math.abs(s.scale - 1) > 1e-6 ? " scale(" + s.scale.toFixed(4) + ")" : "";
     return " translate(" + (s.x || 0).toFixed(2) + "px," + (s.y || 0).toFixed(2) + "px)" + ((s.rot || 0) ? " rotate(" + s.rot.toFixed(2) + "deg)" : "") + sc + m;
@@ -5642,7 +5642,7 @@ async function mount(doc) {
      above; a LANDED card drops onto its spot (STOP.DROP_PX) after selling its weight. Both behind kinetics.stop_action
      and only when the dock entry declares `arrive`; the shadow of either reads the clock one frame late (HF-2). */
   const STOP_THROW_DX = 240, STOP_THROW_DY = 160;
-  /* R26-20 / E99 s85: ... and a STAMPED one comes down onto its spot oversized and over-rotated, its clamped scale
+  /* R26-20 / E99 s87: ... and a STAMPED one comes down onto its spot oversized and over-rotated, its clamped scale
      spring settling while the free rotation spring is still unwinding under it (kinetics/stopaction.mjs stampXf,
      ported from remotion-ui badge-stamp.tsx). A stamp says nothing about what it carries - a card, a badge or a
      bare prop may each be stamped - so it reads the same switch and the same `mass`. */
@@ -6837,8 +6837,8 @@ async function mount(doc) {
        clip the previous slide left in this card's frame. */
     const isVideo = dockIsVideo(aid);
     dockEl.classList.toggle("video", isVideo);
-    dockEl.classList.toggle("cutout", dockIsBare(aid));   /* P53 T7: no card, no paper, no border - and E99 s85: a PROP is bare on the same four declarations */
-    { const pim = dockEl.querySelector(".slide-frame img");   /* E99 s85: a prop keeps its whole picture - the cutout's foot dissolve is a BUST's cue and would fade the base off a building */
+    dockEl.classList.toggle("cutout", dockIsBare(aid));   /* P53 T7: no card, no paper, no border - and E99 s87: a PROP is bare on the same four declarations */
+    { const pim = dockEl.querySelector(".slide-frame img");   /* E99 s87: a prop keeps its whole picture - the cutout's foot dissolve is a BUST's cue and would fade the base off a building */
       if (pim) { const off = dockIsProp(aid); pim.style.maskImage = off ? "none" : ""; pim.style.webkitMaskImage = off ? "none" : ""; } }
     if (!isVideo) parkDockClips(dockEl);
     $("i" + n).src = (ev.record || ev.chart || isVideo) ? "" : (A[aid] || "");
@@ -12932,7 +12932,7 @@ async function mount(doc) {
       const K = keys.map((k) => ({ t: k.t, zoom: k.zoom, ease: k.ease, look: camLook(k.look) || [STAGE_W / 2, STAGE_H / 2], at: k.at != null ? (camLook(k.at) || undefined) : undefined }));
       st = camKeyState(K, t, STAGE_W, STAGE_H);
     } else if ((sc.camera || {}).attention === "landings") {   /* P49 T4: a landing pulls the eye; the contact frame is the stop-action clock's */
-      st = camAttentionState(sc.docks, t, (d) => +d.enter + (d.arrive === "throw" ? STOP.FLIGHT_S : d.arrive === "stamp" ? 0 : STOP.ANTIC_S + STOP.DROP_S), ATTN) || camIdentity(STAGE_W, STAGE_H);   /* E99 s85: a STAMP is already on its spot - its contact IS its enter, which is why the ring is thrown from that frame */
+      st = camAttentionState(sc.docks, t, (d) => +d.enter + (d.arrive === "throw" ? STOP.FLIGHT_S : d.arrive === "stamp" ? 0 : STOP.ANTIC_S + STOP.DROP_S), ATTN) || camIdentity(STAGE_W, STAGE_H);   /* E99 s87: a STAMP is already on its spot - its contact IS its enter, which is why the ring is thrown from that frame */
     } else {
       for (const sp of (sc.species || [])) {
         if (!CAMERA.has(sp.kind)) continue;
@@ -15622,13 +15622,13 @@ async function mount(doc) {
   /* P53 T7 / R26-59: a CUTOUT dock is a person, not a document - the card's chrome stands down (`.dock.cutout`).
      Read exactly where the video kind is read, so a build with no cutout is untouched. */
   const dockIsCutout = (aid) => ((TL.evidence || {})[aid] || {}).kind === "cutout";
-  /* R26-246 (b) / E99 s85: a PROP dock is ART ADDED TO THE WORLD, not evidence in a card (the operator: "the whole
+  /* R26-246 (b) / E99 s87: a PROP dock is ART ADDED TO THE WORLD, not evidence in a card (the operator: "the whole
      point of a prop is for it to get added to the world; we would either stamp it or throw it on"). It takes the
      cutout's chrome-down - the same four absent declarations - and NOT the cutout's foot mask, which dissolves a
      bust into its band and would fade the base off a building: that one is undone on the image below. */
   const dockIsProp = (aid) => ((TL.evidence || {})[aid] || {}).kind === "prop";
   const dockIsBare = (aid) => dockIsCutout(aid) || dockIsProp(aid);
-  /* ... and HOW the art is laid down (E99 s85, the dial the operator judges on the frame): `own` is the woodblock as
+  /* ... and HOW the art is laid down (E99 s87, the dial the operator judges on the frame): `own` is the woodblock as
      it was generated; `page` lays it down in the page's OWN ink the way a real impression would - one ink, the
      ground deciding which (the ledger page is charcoal, so its ink is chalk; a light ground takes the charcoal). */
   const propInkCss = (d, onLedger) => (d && d.ink === "page")
@@ -16237,7 +16237,7 @@ async function mount(doc) {
       el.classList.toggle("arriving", arr !== "spring");
       let contact = el.parentNode ? el.parentNode.querySelector("#dock-contact-" + s) : null;
       if (arr !== "spring") {   /* P47 T1: the card ARRIVES by a throw or a landing, then the park choreography (dockGeom) is untouched */
-        /* R26-20 / E99 s85 - THE STAMP. Three differences from the throw and the landing, and no fourth:
+        /* R26-20 / E99 s87 - THE STAMP. Three differences from the throw and the landing, and no fourth:
              (a) the TWO-SPRING OFFSET is the pose - `stampXf` carries a `scale` (the clamped spring) beside the `rot`
                  (the free trailing one), and `stopCss` writes both, so the mark comes to rest OFF-SQUARE;
              (b) the mark turns about its OWN CENTRE - the source's own pivot (badge-stamp.tsx:166 "60px 60px"); the
@@ -16256,7 +16256,10 @@ async function mount(doc) {
         const sfit = Object.assign({}, opts, d.ring_to ? { RING_TO: +d.ring_to } : {}, d.from_to ? { FROM: +d.from_to } : {});   /* ... and the approach it comes down from */
         const sx = stamped ? stampXf(d.mass || "ink", t - d.enter, sfit)
           : arr === "throw" ? throwXf(from, d.mass || "paper", t - d.enter, opts) : landXf(d.mass || "paper", t - d.enter, opts);
-        if (stamped) el.style.transformOrigin = "50% 50%";
+        /* the mark turns about its PAINTED centre (the compiler's `paint`, fractions of the canvas - R26-20, the operator's
+           round: the ring's centre, its radius and every overlap test are the painted extent, not the file's canvas) */
+        const pbx = stamped && Array.isArray(d.paint) && d.paint.length === 4 ? d.paint : [0, 0, 1, 1];
+        if (stamped) el.style.transformOrigin = (50 * (pbx[0] + pbx[2])).toFixed(3) + "% " + (50 * (pbx[1] + pbx[3])).toFixed(3) + "%";
         el.style.transform = stopCss(sx) + (stamped ? "" : " scale(" + (1 - (1 - DOCK_POP_FROM) * rk).toFixed(4) + ")")
           + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);
         if (!swept) el.style.opacity = (stamped ? (sx.opacity || 0) * (1 - ex) : clamp01(1 - rk)) * (t >= d.enter ? 1 : 0);
@@ -16279,7 +16282,7 @@ async function mount(doc) {
            darkness, 1 -> 0.86 as the seal settles. Every other arrival multiplies by exactly 1. */
         contact.style.opacity = (t >= d.enter && sx.phase !== "settled" ? cs.alpha * (stamped ? sx.ink : 1) * clamp01(1 - rk) * (1 - ex) : 0).toFixed(3);
         contact.style.visibility = el.style.visibility;   /* a card hidden for a snap takes its shadow with it */
-        /* THE IMPACT RING (E99 s85; badge-stamp.tsx:98-117, :152-162) on its two curves - a LINEAR life that fades and
+        /* THE IMPACT RING (E99 s87; badge-stamp.tsx:98-117, :152-162) on its two curves - a LINEAR life that fades and
            thins it and an EASED expansion to twice the mark's own radius, "because a shockwave leaves the impact fast
            and decelerates" and a ring that stops short "is under it the whole time it is worth seeing". It radiates
            from the CONTACT POINT on the surface (the centre of the landed box, in the dock layer under the mark), it
@@ -16290,7 +16293,8 @@ async function mount(doc) {
         let ring = el.parentNode ? el.parentNode.querySelector("#dock-ring-" + s) : null;
         if (stamped) {
           if (!ring) { ring = document.createElement("div"); ring.className = "dock-ring"; ring.id = "dock-ring-" + s; el.parentNode.insertBefore(ring, el); }
-          const rg = sx.ring, r0 = 0.5 * Math.hypot(Wd, Hd), cx = L + Wd / 2, cy = T0 + Hd / 2;
+          const rg = sx.ring, r0 = 0.5 * Math.hypot(Wd * (pbx[2] - pbx[0]), Hd * (pbx[3] - pbx[1]));   /* the PAINTED half-diagonal */
+          const cx = L + Wd * (pbx[0] + pbx[2]) / 2, cy = T0 + Hd * (pbx[1] + pbx[3]) / 2;   /* ... about the painted centre */
           if (rg && t >= d.enter && !(t > d.exit)) {
             const r = r0 * rg.r;
             ring.style.cssText = "position:absolute;pointer-events:none;border-radius:50%;box-sizing:border-box;"
@@ -16335,8 +16339,8 @@ async function mount(doc) {
       const sh = 12 * shk * (swept ? (1 - wk) : 1);   // light leaves with the page
       /* P53 T7: a CUTOUT casts no card's lift - the hard offset shadow drew a ghost card edge down the right and along the
          foot of a person (gate 1's second read, 2026-09-12); a cutout sits on its world (or on the band) with no box at all */
-      el.style.boxShadow = dockIsBare(d.slide) ? "none" : sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";   /* E99 s85: a prop is art in the world and casts no card's lift either */
-      /* E99 s85's open dial, read every frame from the row: the prop's own colour, or the page's own ink. The
+      el.style.boxShadow = dockIsBare(d.slide) ? "none" : sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";   /* E99 s87: a prop is art in the world and casts no card's lift either */
+      /* E99 s87's open dial, read every frame from the row: the prop's own colour, or the page's own ink. The
          filter is on the PICTURE, never on the dock element (that one carries the camera's blur). */
       { const pimg = el.querySelector(".slide-frame img"); if (pimg) pimg.style.filter = propInkCss(d, onLedgerWorld); }
       if (embedOf(d)) {   /* P50 T7: a STILL card on a declared surface. The reading pop and the park above are

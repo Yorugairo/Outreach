@@ -3208,7 +3208,7 @@ FRAME_T["remake-bars-to-line"] = REMAKE_AT + 0.15 * REMAKE_S   # 12.36 - P61 T2b
 
 
 
-# ---- R26-20's other half / E99 s85: THE STAMPED PROP -------------------------------------------
+# ---- R26-20's other half / E99 s87: THE STAMPED PROP -------------------------------------------
 # The operator, 2026-09-22: *"for props, it doesnt make sense to put them in a card, the whole point of a prop is
 # for it to get added to the world; we would either stamp it or throw it on."* So the surface is a PROP - one of
 # the 24 catalogued cutouts - landing BARE on a built ledger page by the ported badge-stamp arrival: the clamped
@@ -3217,7 +3217,7 @@ FRAME_T["remake-bars-to-line"] = REMAKE_AT + 0.15 * REMAKE_S   # 12.36 - P61 T2b
 # WHERE it lands is the compiler's own answer, not a hand-written box: `stamp_dock_place`, the door the row loop
 # calls (send-back #2), searching E65's room for the centre its ring fits round. `centre: True` holds it at that
 # box from its first frame - a stamp never pops and slides to a park.
-# THE INK IS THE OPEN QUESTION (E99 s85, the operator's own): the prop in its own colour, or laid down in the
+# THE INK IS THE OPEN QUESTION (E99 s87, the operator's own): the prop in its own colour, or laid down in the
 # page's own ink the way a real impression would be. Both are surfaces here, identical in every other byte, so the
 # two frames are a straight comparison and the operator picks on the frame.
 # THE PICTURE IS A PROXY, for the reason the icon proxy is one (E99 s31: an approved cutout never enters git) -
@@ -3232,7 +3232,7 @@ PROP_STAMP_EXIT = 26.0      # ... and it is told to leave here, on its own ease-
 def _prop_stamp(ink: str) -> tuple[dict, dict]:
     """R26-20 send-back #2: the stamp is placed by the COMPILER'S OWN DOOR, the one the row loop calls -
     `stamp_dock_place` - on the page a real 16:9 build compiles (`stamp_full_stage`, which is what makes the page
-    report its measured end-name box), with the PICTURE's own aspect (`image_aspect` of the cutout, as the loop reads
+    report its measured end-name box), with the PICTURE's own PAINTED box (`painted_box` of the cutout, as the loop reads
     it off the dock's asset). No hand-clipped room and no `extra`: the first two cuts carried both, and the reviewer
     showed the real row loop answering a box whose ring ran through all four end names. The entry is then written
     exactly as the loop writes it - `centre: True` (a stamp lands at its fitted box from its first frame), and the
@@ -3252,11 +3252,11 @@ def _prop_stamp(ink: str) -> tuple[dict, dict]:
     page["field"] = "scribble"
     world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
     opts = BST.dock_opts({"prop": True, "arrive": "stamp", "mass": "ink", "ink": ink})   # the row's options, validated as a build's are
-    fit = BST.stamp_dock_place(world, "16:9", opts, BST.image_aspect(PROP_CUTOUT), None, None, "golden prop-stamp")
+    fit = BST.stamp_dock_place(world, "16:9", opts, BST.painted_box(PROP_CUTOUT), None, None, "golden prop-stamp")   # the PAINTED mark, as the loop reads it off the dock's asset
     place = {k: fit[k] for k in ("x", "y", "w", "h", "room")}
     dock = BST.dock_entry(aid, 0, PROP_STAMP_ENTER, PROP_STAMP_EXIT, 0, BST.DOCK_KIND_PROP, place,
                           opts.get("arrive"), opts.get("mass"), True,
-                          prop=bool(opts.get("prop")), ink=opts.get("ink"), ring_to=fit["ring_to"], from_to=fit["from_to"])
+                          prop=bool(opts.get("prop")), ink=opts.get("ink"), ring_to=fit["ring_to"], from_to=fit["from_to"], paint=fit["paint"])
     ev = {aid: {"title": "The Federal Reserve", "source": "the operator's own cutout", "species": "prop",
                 "document": {"path": str(PROP_CUTOUT.relative_to(REPO)), "sha256": "0" * 64}, "badges": [],
                 "kind": BST.DOCK_KIND_PROP}}
@@ -3270,7 +3270,7 @@ def _prop_stamp(ink: str) -> tuple[dict, dict]:
 
 
 SURFACES.update({
-    "prop-stamp": lambda: _prop_stamp("own"),        # E99 s85: the woodblock in its own colour
+    "prop-stamp": lambda: _prop_stamp("own"),        # E99 s87: the woodblock in its own colour
     "prop-stamp-ink": lambda: _prop_stamp("page"),   # ... and laid down in the page's own ink
 })
 FRAME_T.update({

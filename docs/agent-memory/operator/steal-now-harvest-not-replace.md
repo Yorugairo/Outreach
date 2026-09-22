@@ -37,7 +37,7 @@ over-stepped and ruined what was good about what we had."*
 
 Related: [remotion-ui-registry](remotion-ui-registry.md), [production-standards-universal](production-standards-universal.md)
 
-**The other half of this failure, named 2026-09-22 (E99 s85): the harvest that never happens.** The first rule is
+**The other half of this failure, named 2026-09-22 (E99 s87): the harvest that never happens.** The first rule is
 about porting badly; this one is about never porting and keeping the name. Twice in a fortnight: `REMOTION-UI-INTAKE-2026-09-07.md`
 triaged **RU-2 badge-stamp** as PRIORITY and named its mechanism exactly (the two-spring offset - a clamped scale
 spring landing while a free rotation spring still unwinds - "the weight cue our single-spring landings lack"), and

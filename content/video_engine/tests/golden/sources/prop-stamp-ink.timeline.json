@@ -354,21 +354,27 @@
      "centre": true,
      "enter": 10.0,
      "exit": 26.0,
-     "from_to": 1.6706,
+     "from_to": 1.2104,
      "ink": "page",
      "kind": "prop",
      "mass": "ink",
+     "paint": [
+      0.0035,
+      0.0039,
+      0.9965,
+      0.9961
+     ],
      "park": true,
      "park_s": 0.7,
      "place": {
-      "h": 123,
-      "w": 134,
-      "x": 228,
-      "y": 338
+      "h": 191,
+      "w": 208,
+      "x": 252,
+      "y": 308
      },
      "place_room": "empty",
      "read_s": 1.2,
-     "ring_to": 1.6178,
+     "ring_to": 1.1037,
      "slide": "ev-prop-fed",
      "slot": 0
     }

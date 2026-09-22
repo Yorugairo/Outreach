@@ -244,7 +244,7 @@ export const pickUpXf = (mass, t, S, o = {}) => {
            ground: 0, shake: { x: 0, y: 0 } };
 };
 
-/* ================= THE STAMP (R26-20's other half; E99 s85) =================
+/* ================= THE STAMP (R26-20's other half; E99 s87) =================
    PORTED, not invented, from remotion-ui's own primitive, which is on disk at
    content/video_engine/remotion-ui/src/remotion/primitives/badge-stamp.tsx (its curves are quoted per dial below,
    by line). The intake triaged it into "Priority integration" and named the gap in our vocabulary exactly
@@ -274,14 +274,14 @@ export const pickUpXf = (mass, t, S, o = {}) => {
        (lib/timing.ts:9 EASING_EXIT = Easing.in(Easing.cubic), "Never ease-out an exit"): E50's shape, a landed mark
        owes an exit, authored from the first build.
    WHAT DOES NOT PORT: the seal's gold ring, its two curved texts, its double border - a look. Ours is charcoal on
-   cream drawn in our hand, and the PAYLOAD is whatever the mark is: E99 s85 (3) puts a PROP CUTOUT under it (a
+   cream drawn in our hand, and the PAYLOAD is whatever the mark is: E99 s87 (3) puts a PROP CUTOUT under it (a
    docked card that keeps its RGBA), so the ink strength is a PRESSURE cue under the picture, never a wash over it.
    WHAT THIS MODULE KEEPS OF OURS: the receiver. A stamp's contact is at its own t = 0 (the mark is already on its
    spot; the scale over 1 is the height), so the page DIPS by the material's own spring and takes the hit's squash
    frame - groundDip / impactSquash, the same two the throw and the landing answer with. Pure in t; it paints
    nothing. Added with NO change to anything this module already painted. */
 /* NAMED `STAMP_ARRIVAL`, not `STAMP`: the engine inlines every module into ONE name space and the VECTOR
-   MAP's own species dials already own that identifier (species/vecmap.mjs:60). E99 s85 (4) keeps `stamp` the
+   MAP's own species dials already own that identifier (species/vecmap.mjs:60). E99 s87 (4) keeps `stamp` the
    vector map's SPECIES and makes this an `arrive:` value; the two never meet, and this name says so. */
 export const STAMP_ARRIVAL = Object.freeze({
   FROM: 2.1,          /* badge-stamp.tsx:88-91 interpolate(land, [0, 1], [2.1, 1], { output: "perceptual-scale" }) - the mark arrives oversized,
@@ -401,7 +401,7 @@ export const stampXf = (mass, t, o = {}) => {
 export const stopCss = (s) => {
   const a = Math.abs(s.alpha || 0), th = (s.alpha || 0) < 0 ? (s.theta || 0) + Math.PI / 2 : (s.theta || 0);
   const m = a > 1e-6 ? " matrix(" + squashMatrix(th, a).map((v) => v.toFixed(4)).join(",") + ",0,0)" : "";
-  /* the STAMP's scale (R26-20 / E99 s85), written ONLY when the state carries one - every throwXf / landXf /
+  /* the STAMP's scale (R26-20 / E99 s87), written ONLY when the state carries one - every throwXf / landXf /
      pickUpXf state there has ever been carries none, so their CSS is byte-for-byte what it was */
   const sc = s.scale != null && Math.abs(s.scale - 1) > 1e-6 ? " scale(" + s.scale.toFixed(4) + ")" : "";
   return " translate(" + (s.x || 0).toFixed(2) + "px," + (s.y || 0).toFixed(2) + "px)" + ((s.rot || 0) ? " rotate(" + s.rot.toFixed(2) + "deg)" : "") + sc + m;

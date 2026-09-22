@@ -1,4 +1,4 @@
-"""R26-20's other half (E99 s85) - THE STAMP ARRIVAL, measured ON THE RENDERED FRAME.
+"""R26-20's other half (E99 s87) - THE STAMP ARRIVAL, measured ON THE RENDERED FRAME.
 
 The ruling: *"THE STAMP is remotion-ui RU-2's: a verdict arriving with WEIGHT - a clamped scale spring landing
 while a free trailing ROTATION spring is still unwinding - and a prop arrives BY it"*, with the impact ring on
@@ -52,7 +52,7 @@ T_EXIT = 26.40          # 0.4 s into the owed exit
 
 
 def test_stamp_is_an_arrival_and_the_vector_maps_stamp_is_a_species_and_they_never_meet():
-    """E99 s85 (4): *"the vector map's `stamp` species keeps its name where it is - the arrival is an `arrive:`
+    """E99 s87 (4): *"the vector map's `stamp` species keeps its name where it is - the arrival is an `arrive:`
     value, so the two never collide."* Both words exist; they live in two registries with nothing in common."""
     assert "stamp" in B.ARRIVALS, "the arrival"
     assert B.SPECIES_STAMP == "stamp" and B.SPECIES_STAMP in B.VECMAP_SPECIES, "the vector map's species, untouched"
@@ -242,6 +242,30 @@ def _scale_and_deg(css: str) -> tuple[float, float]:
     return math.sqrt(abs(a * d - b * c)), math.degrees(math.atan2(b, a))
 
 
+def _painted(dock: dict, box: dict | None = None) -> tuple[float, float, float]:
+    """(painted centre x, y, painted half-diagonal) of a stamp entry, on `box` (the landed layout) or its place."""
+    b = box or dock["place"]
+    p0, p1, p2, p3 = dock.get("paint") or (0, 0, 1, 1)
+    return (b["x"] + b["w"] * (p0 + p2) / 2, b["y"] + b["h"] * (p1 + p3) / 2,
+            0.5 * math.hypot(b["w"] * (p2 - p0), b["h"] * (p3 - p1)))
+
+
+def _disc_hits(ring_box: dict, e: dict) -> float:
+    """How much of `e` the RING touches. Over its life the ring's stroke sweeps every radius out to its widest, so what
+    it must not touch is the whole DISC of its widest radius (the engine draws a border-box circle: its stroke is
+    inside `w / 2`). A line is its sampled points (with half its stroke); a word is its box, touched when the box's
+    nearest point is within the radius. The disc, not its bounding square: the square's corners are page it never
+    reaches - the compiler fits the same disc (`disc_clearance`)."""
+    cx, cy, r = ring_box["x"] + ring_box["w"] / 2, ring_box["y"] + ring_box["h"] / 2, ring_box["w"] / 2
+    if e.get("pts") is not None:
+        hw = e.get("half", 1.0)
+        return float(sum(1 for (px, py) in e["pts"] if math.hypot(px - cx, py - cy) <= r + hw))
+    b = e["box"]
+    dx = max(b["x"] - cx, 0.0, cx - (b["x"] + b["w"]))
+    dy = max(b["y"] - cy, 0.0, cy - (b["y"] + b["h"]))
+    return 1.0 if math.hypot(dx, dy) < r else 0.0
+
+
 def _hits(box: dict, e: dict) -> float:
     """How much of `e` is inside `box`: a word's box overlap in px^2, or for a LINE the number of its sampled points
     (inflated by half its drawn stroke) that fall inside - a polyline's client rect is most of the plot and would
@@ -304,7 +328,7 @@ def test_a_the_scale_spring_is_SETTLED_while_the_rotation_is_still_OFF_AXIS(fram
     # and the arrival is still oversized one frame after the contact - it comes DOWN onto the page
     early, _ = _scale_and_deg(frames[T_EARLY]["dock"]["matrix"])
     from_to = RB.load_surface(SURFACE)[0]["scenes"][0]["docks"][0]["from_to"]
-    assert 1.4 < early < from_to, f"one frame in it is still coming down from {from_to}x: scale {early:.4f}"
+    assert B.STAMP_APPROACH_MIN <= from_to and 1.0 < early <= from_to, f"one frame in it is still coming down from {from_to}x: scale {early:.4f}"
 
 
 @needs_browser
@@ -319,22 +343,20 @@ def test_b_the_impact_ring_is_DRAWN_and_expands_to_twice_the_marks_radius(frames
         assert r["colour"] not in ("rgba(0, 0, 0, 0)", "transparent"), f"... in our ink at {when}: {r['colour']}"
     assert early["colour"] == "rgb(242, 242, 242)", "chalk on the charcoal page - never a gold ring"
     assert frames[T_WIDEST]["ring"]["opacity"] > 0, "the widest frame is a DRAWN frame"
-    # the mark's own circumscribed radius, from the landed box
-    box = frames[T_REST]["dock"]["layout"]
-    r0 = 0.5 * math.hypot(box["w"], box["h"])   # the mark's own circumscribed circle, off its own box (its client rect is the hull of the TURNED mark and is larger)
-    r_early, r_late = early["box"]["w"] / 2, late["box"]["w"] / 2
-    # the ROOM capped this ring (R26-20 send-back): the compiler fitted its peak to 1.60x, not the source's 2x, and
-    # the entry carries the number it reached - so these are 1 + 0.6 k(life), k the source's own eased expansion
+    # THE RING HUGS THE MARK (the operator's round): its base radius is the mark's PAINTED half-diagonal, and its
+    # peak is whatever the room leaves between a floor just outside that edge and the source's 2x
     dock = RB.load_surface(SURFACE)[0]["scenes"][0]["docks"][0]
+    _cx, _cy, r0 = _painted(dock)   # off the PLACE, exactly as the engine takes it (Wd = place w, Hd = w * place h / w)
+    r_early, r_late = early["box"]["w"] / 2, late["box"]["w"] / 2
     cap = dock["ring_to"]
-    assert B.STAMP_RING_FLOOR <= cap < B.STAMP_RING_TO, f"the room capped the ring at {cap}x, above the floor"
+    assert (r0 + B.STAMP_RING_GAP_PX) / r0 - 1e-3 <= cap <= B.STAMP_RING_TO, f"the ring's peak {cap}x sits between its floor and 2x"
     # the source's eased expansion k(life) at 0.04 s and 0.20 s is 0.4402 and 0.9512 (stopaction-stamp.test.mjs)
-    assert abs(r_early / r0 - (1 + (cap - 1) * 0.4402)) < 0.02, f"at 0.04 s the ring stands at {r_early / r0:.4f} of the mark's radius ({r_early:.1f} px)"
+    assert abs(r_early / r0 - (1 + (cap - 1) * 0.4402)) < 0.02, f"at 0.04 s the ring stands at {r_early / r0:.4f} of the painted radius ({r_early:.1f} px)"
     assert abs(r_late / r0 - (1 + (cap - 1) * 0.9512)) < 0.02, f"at 0.20 s it has reached {r_late / r0:.4f} ({r_late:.1f} px)"
-    assert r_late / r_early > 1.2, "the expansion is the point: it clears the mark it came off"
+    assert r_late > r_early, "it expands"
     widest = frames[T_WIDEST]["ring"]["box"]["w"] / 2
     assert widest / r0 <= cap + 1e-3, f"at its widest it reaches {widest / r0:.4f} - the cap, never past it"
-    assert abs(widest / r0 - cap) < 0.02
+    assert widest >= r0 + B.STAMP_RING_GAP_PX - 0.5, f"and it stands OUTSIDE the painted edge: {widest:.1f} vs {r0:.1f} + {B.STAMP_RING_GAP_PX}"
     # SPLIT curves: the life is linear while the radius is eased, so the ring is thinner and fainter as it grows
     assert late["width"] < early["width"] and late["opacity"] < early["opacity"]
     assert frames[T_REST]["ring"]["opacity"] == 0, "an impact ring is never held (E56 stays the annotation ring's law)"
@@ -351,10 +373,10 @@ def test_c_the_landed_box_is_in_the_pages_own_room_with_0_px_over_the_ink_and_th
     for k in ("x", "y", "w", "h"):
         assert abs(box[k] - place[k]) < 1.5, f"the landed box IS the placed box in {k}: {box[k]:.1f} vs {place[k]}"
     world = G.SURFACES[SURFACE]()[0]["scenes"][0]["world"]
-    room = B.dock_place(world, "16:9")
-    cx, cy = box["x"] + box["w"] / 2, box["y"] + box["h"] / 2
-    assert room["x"] <= cx <= room["x"] + room["w"] and room["y"] <= cy <= room["y"] + room["h"], \
-        f"the mark's centre is inside the page's own room {room}: ({cx}, {cy})"
+    plot = LPG.page_boxes(world["page"], "16:9")["plot"]
+    cx, cy, _r = _painted(tl["scenes"][0]["docks"][0], box)
+    assert plot["x"] <= cx <= plot["x"] + plot["w"] and plot["y"] <= cy <= plot["y"] + plot["h"], \
+        f"the mark's painted centre is inside the plot's own empty area: ({cx}, {cy})"
     ink = frames[T_REST]["ink"] + frames[T_REST]["words"]
     assert len(ink) >= 8, f"the page's own marks and end names were found: {len(ink)}"
     over = [(e["cls"], e["text"], round(_hits(hull, e), 1)) for e in ink if _hits(hull, e) > 0]
@@ -385,8 +407,9 @@ def test_the_mark_turns_about_its_OWN_CENTRE_not_about_the_ground_contact(frames
     is a falling card's cue. A stamp overrides it, or the mark would swing about its foot."""
     box_at_rest = frames[T_REST]["dock"]["layout"]
     ox, oy = (float(v.replace("px", "")) for v in frames[T_REST]["dock"]["origin"].split()[:2])
-    assert abs(ox - box_at_rest["w"] / 2) < 2.0, f"the pivot is the mark's own centre across: {ox}"
-    assert abs(oy - box_at_rest["h"] / 2) < 2.0, f"... and down: {oy}"
+    p0, p1, p2, p3 = RB.load_surface(SURFACE)[0]["scenes"][0]["docks"][0]["paint"]
+    assert abs(ox - box_at_rest["w"] * (p0 + p2) / 2) < 1.0, f"the pivot is the mark's PAINTED centre across: {ox}"
+    assert abs(oy - box_at_rest["h"] * (p1 + p3) / 2) < 1.0, f"... and down: {oy}"
 
 
 @needs_browser
@@ -427,7 +450,7 @@ def test_the_RING_at_its_widest_crosses_none_of_the_page(frames):
     things = frames[T_WIDEST]["ink"] + frames[T_WIDEST]["words"]
     kinds = {c for e in things for c in e["cls"].split()}
     assert {"ser", "sname", "lab", "lp-title", "lp-sub", "lp-src"} <= kinds, f"every kind of page ink was found: {kinds}"
-    over = [(e["cls"], e["text"], round(_hits(box, e), 1)) for e in things if _hits(box, e) > 0]
+    over = [(e["cls"], e["text"], round(_disc_hits(box, e), 1)) for e in things if _disc_hits(box, e) > 0]
     assert over == [], f"0 px of ring over the page, and it is over: {over}"
     assert box["x"] >= 0 and box["y"] >= 0 and box["x"] + box["w"] <= 1920 and box["y"] + box["h"] <= 1080, box
 
@@ -442,39 +465,65 @@ def test_the_compilers_ring_dials_are_the_modules():
     assert f"RING_TO: {B.STAMP_RING_TO}," in src and f"RING_W_PX: {B.STAMP_RING_W_PX}," in src
 
 
+FED = None
+
+
+def _fed() -> dict:
+    global FED
+    FED = FED or B.painted_box(G.PROP_CUTOUT)
+    return dict(FED)
+
+
+def test_the_Feds_PAINTED_box_is_measured_off_its_alpha_and_the_cutouts_are_trimmed():
+    """The operator's round measures the mark by its painted pixels. The Fed cutout: canvas 282 x 259, painted (alpha
+    > 8) 280 x 257 at (1, 1) - every one of the 24 cutouts is trimmed to its alpha box with a 1 px margin, so the Fed
+    'reading small' was the fit's priority, never padding. The mechanism still measures it, for the cutout that has."""
+    fed = _fed()
+    assert fed["canvas"] == [282, 259] and fed["painted"] == [280, 257]
+    assert abs(fed["x0"] - 1 / 282) < 1e-9 and abs(fed["y1"] - 258 / 259) < 1e-9
+
+
 def test_a_room_that_holds_the_full_ring_is_not_capped():
-    fit = B.stamp_ring_fit({"x": 900, "y": 480, "w": 120, "h": 120}, [], STAGE)
-    assert fit["ring_to"] == 2.0 and fit["ring_capped"] is False
-    assert (fit["x"], fit["y"], fit["w"], fit["h"]) == (900, 480, 120, 120)
+    room = {"x": 400, "y": 200, "w": 900, "h": 600}
+    fit = B.stamp_dock_place({"asset_id": "plate-plain"}, "16:9", {"prop": True, "arrive": "stamp", "centre_w": 0.1},
+                             _fed(), room, None, "t")
+    assert fit["ring_to"] == 2.0 and fit["ring_capped"] is False and fit["from_to"] == 2.1, fit["why"]
 
 
-def test_a_room_that_cannot_hold_2x_CAPS_the_ring_and_says_so():
-    """A 100 px mark (r0 70.7) with a wall 130 px from its centre: the peak may be 130 - 4.8 = 125.2 px = 1.77x."""
-    place = {"x": 950, "y": 490, "w": 100, "h": 100}
-    fit = B.stamp_ring_fit(place, [{"x": 1130, "y": 0, "w": 20, "h": 1080}], STAGE)
-    assert fit["ring_capped"] is True and abs(fit["ring_to"] - 125.2 / (50 * 2 ** 0.5)) < 1e-3
-    assert fit["why"].startswith(f"ring capped at {fit['ring_to']:.2f}x by the room")
-    assert abs(fit["from_to"] - 130 / (50 * 2 ** 0.5)) < 1e-3, "the approach is held by the same clearance (no stroke)"
-    assert fit["w"] == 100, "a cap at or above the floor keeps the mark's size"
+def test_THE_MARK_TAKES_THE_ROOM_the_largest_mark_that_fits_and_a_larger_one_collides():
+    """The operator: *"Use the space."* The mark is sized FIRST - the largest painted mark the place holds with its
+    turned hull (at its least approach) and its ring's floor clear - and a mark 2 % larger at the same centre
+    collides. On the golden's page that is 206 x 190 painted px, where the ring-first fit gave 134 x 123."""
+    world = G.SURFACES[SURFACE]()[0]["scenes"][0]["world"]
+    fit = B.stamp_dock_place(world, "16:9", {"prop": True, "arrive": "stamp"}, _fed(), None, None, "t")
+    obs, bounds = B.ring_obstacles(world["page"], "16:9")
+    (cx, cy), (pw, ph) = fit["centre"], fit["painted"]
+    assert B._stamp_scale(cx, cy, pw, ph, obs, bounds) >= 1.0, "the mark it wrote fits"
+    assert B._stamp_scale(cx, cy, pw * 1.02, ph * 1.02, obs, bounds) < 1.0, "and a mark 2 % larger at the same centre does not"
+    assert pw > 134 * 1.4, f"it takes the room: {pw:.0f} px painted, against the 134 px the ring-first fit left"
 
 
-def test_under_the_floor_the_MARK_shrinks_about_its_centre_and_below_the_mark_floor_it_is_refused():
-    place = {"x": 900, "y": 450, "w": 200, "h": 180}          # centre (1000, 540), r0 134.5
-    wall_y = 700                                             # 160 px under the centre: peak 155.2 = 1.15x - under the floor
-    tight = B.stamp_ring_fit(place, [{"x": 900, "y": wall_y, "w": 400, "h": 20}], STAGE)
-    assert B.STAMP_RING_FLOOR <= tight["ring_to"] < B.STAMP_RING_FLOOR + 0.05, tight["ring_to"]
-    assert tight["ring_capped"] and tight["shrunk_from"] == [200, 180]
-    assert abs(tight["x"] + tight["w"] / 2 - 1000) <= 1 and abs(tight["y"] + tight["h"] / 2 - 540) <= 1, "about its centre"
-    r0 = 0.5 * (tight["w"] ** 2 + tight["h"] ** 2) ** 0.5
-    assert abs(B.STAMP_RING_FLOOR * r0 - (wall_y - 540 - B.STAMP_RING_W_PX)) < 1.5, "the floor fits exactly"
-    assert "mark shrunk 200x180 ->" in tight["why"]
+def test_the_RING_HUGS_THE_MARK_and_no_floor_can_refuse_it():
+    """The 1.6x floor and the mark-shrink step are DELETED: the ring's floor is just outside the painted edge and is
+    reserved when the mark is sized, so across rooms of every size the ring is never refused - only a room too small
+    for the MARK is."""
+    assert not hasattr(B, "STAMP_RING_FLOOR") and not hasattr(B, "stamp_ring_fit"), "the ring-first API is gone"
+    src = (ROOT / "content/video_engine/scripts/build_scene_timeline_f.py").read_text(encoding="utf-8")
+    assert "so the floor fits" not in src, "no mark-shrink step remains"
+    for w, h in ((300, 260), (500, 300), (900, 700), (1600, 800)):
+        fit = B.stamp_dock_place({"asset_id": "plate-plain"}, "16:9", {"prop": True, "arrive": "stamp"}, _fed(),
+                                 {"x": 100, "y": 70, "w": w, "h": h}, None, "t")
+        assert fit["ring_to"] >= fit["ring_floor"] > 1.0, (w, h, fit["why"])
+        assert fit["ring_floor"] * 0.5 * math.hypot(*fit["painted"]) >= 0.5 * math.hypot(*fit["painted"]) + B.STAMP_RING_GAP_PX - 0.1   # floored to 4 places (L3)
     with pytest.raises(ValueError, match="under the 120 px mark floor"):
-        B.stamp_ring_fit(place, [{"x": 900, "y": 600, "w": 400, "h": 20}], STAGE)   # 60 px of room: no stamp fits
+        B.stamp_dock_place({"asset_id": "plate-plain"}, "16:9", {"prop": True, "arrive": "stamp"}, _fed(),
+                           {"x": 800, "y": 400, "w": 40, "h": 40}, [{"x": 700, "y": 520, "w": 400, "h": 20}], "t")
 
 
 def test_a_mark_whose_centre_is_ON_the_ink_is_refused():
-    with pytest.raises(ValueError, match="name another room"):
-        B.stamp_ring_fit({"x": 900, "y": 450, "w": 200, "h": 180}, [{"x": 950, "y": 500, "w": 100, "h": 100}], STAGE)
+    with pytest.raises(ValueError, match="mark floor"):
+        B.stamp_dock_place({"asset_id": "plate-plain"}, "16:9", {"prop": True, "arrive": "stamp", "centre_x": 0.5, "centre_y": 0.5},
+                           _fed(), None, [{"x": 900, "y": 500, "w": 120, "h": 80}], "t")
 
 
 def test_the_title_and_the_sub_ARE_obstacles_for_a_ring_though_a_card_may_park_over_them():
@@ -508,16 +557,16 @@ def test_the_row_loop_calls_ONE_door_for_every_stamp_before_the_slot_rule():
 
 def _loop_dock(world: dict, opts: dict, slot: int = 0, plate_room: dict | None = None) -> dict:
     """ONE STAMP ROW, the way the row loop compiles it (build_scene_timeline_f.py main(), the dock pass): the row's
-    options through `dock_opts`, the painted aspect off the dock's own asset (`image_aspect`), `stamp_dock_place` with
+    options through `dock_opts`, the PAINTED box off the dock's own asset (`painted_box`), `stamp_dock_place` with
     the scene's plate room and newsreel reserve, then `dock_entry` with `centred` True and the fitted peaks. No hand
     box, no hand-clipped room, no `extra`."""
     dopt = B.dock_opts(opts)
-    fit = B.stamp_dock_place(world, "16:9", dopt, B.image_aspect(G.PROP_CUTOUT) if dopt.get("prop") else None,
+    fit = B.stamp_dock_place(world, "16:9", dopt, B.painted_box(G.PROP_CUTOUT) if dopt.get("prop") else B.painted_box(None, dopt.get("card_aspect")),
                              plate_room, B.newsreel_boxes([], "16:9"), "shot row 1 (0-30s) dock ev-prop-fed")
     place = {k: fit[k] for k in ("x", "y", "w", "h", "room")}
     return B.dock_entry("ev-prop-fed", slot, 10.0, 26.0, 0, B.DOCK_KIND_PROP if dopt.get("prop") else B.DOCK_KIND_IMAGE,
                         place, dopt.get("arrive"), dopt.get("mass"), True, prop=bool(dopt.get("prop")),
-                        ink=dopt.get("ink"), ring_to=fit["ring_to"], from_to=fit["from_to"])
+                        ink=dopt.get("ink"), ring_to=fit["ring_to"], from_to=fit["from_to"], paint=fit["paint"])
 
 
 def _golden_page(full_stage: bool) -> dict:
@@ -556,14 +605,15 @@ def test_a_stamp_OFF_a_ledger_page_is_fitted_against_the_caption_band_and_the_sa
     low = _loop_dock({"asset_id": "plate-plain"}, {"prop": True, "arrive": "stamp"},
                      plate_room={"x": 700, "y": 600, "w": 520, "h": 300})
     cap = B.FRAME_BANDS["16:9"]["caption"]
-    r = low["ring_to"] * 0.5 * math.hypot(low["place"]["w"], low["place"]["h"]) + B.STAMP_RING_W_PX
-    assert low["place"]["y"] + low["place"]["h"] / 2 + r <= cap["y"] + 0.01, "the ring stops above the caption band"
+    _cx, cy, rp = _painted(low)
+    assert cy + low["ring_to"] * rp + B.STAMP_RING_W_PX <= cap["y"] + 0.5, "the ring stops above the caption band"
 
 
 def test_the_painted_aspect_is_the_pictures_not_a_cards():
     """H1 (d): the entry's box is the Fed cutout's own 259 / 282, so the rect the engine rings is the rect it paints."""
     d = _loop_dock(_golden_page(True), {"prop": True, "arrive": "stamp", "mass": "ink"})
     assert abs(d["place"]["h"] / d["place"]["w"] - 259 / 282) < 0.01, d["place"]
+    assert d["paint"] == [round(1 / 282, 4), round(1 / 259, 4), round(281 / 282, 4), round(258 / 259, 4)], "and its PAINTED part"
     assert d["centre"] is True and "read_place" not in d, "H1 (b): one box for the whole arrival"
 
 
@@ -592,10 +642,11 @@ def test_A_REAL_STAMP_ROW_through_the_loops_door_lands_with_0_px_of_ring_or_mark
         things = r["ink"] + r["words"]
         shapes = [("mark", r["dock"]["box"])] + ([("ring", r["ring"]["box"])] if r["ring"] and r["ring"]["opacity"] > 0 else [])
         for what, box in shapes:
-            over = [(e["cls"], e["text"], _hits(box, e)) for e in things if _hits(box, e) > 0]
+            hit = _disc_hits if what == "ring" else _hits
+            over = [(e["cls"], e["text"], hit(box, e)) for e in things if hit(box, e) > 0]
             assert over == [], f"at {t} the {what} {box} is over the page: {over}"
     widest = reads[T_WIDEST]["ring"]["box"]
-    r0 = 0.5 * math.hypot(dock["place"]["w"], dock["place"]["h"])
+    _cx, _cy, r0 = _painted(dock)
     assert abs(widest["w"] / 2 / r0 - dock["ring_to"]) < 0.02, "the drawn ring IS the fitted one"
     assert widest["w"] / 2 <= dock["ring_to"] * r0 + 0.1, "and never larger (L3)"
     assert dock == RB.load_surface(SURFACE)[0]["scenes"][0]["docks"][0], \

@@ -60,7 +60,7 @@ FLAG_FRAMES = {
 # named idle runs either way. On the two bare-plate scenes the flag changes no pixel (a flat plate breathing is a
 # flat plate), which is exactly why these are PROOF frames and not FLAG frames.
 PROOF_FRAMES = {
-    # R26-20 / E99 s85 - THE STAMPED PROP, at the two instants the settled frame cannot show, and at its owed exit.
+    # R26-20 / E99 s87 - THE STAMPED PROP, at the two instants the settled frame cannot show, and at its owed exit.
     # The flags map REPLACES the source's own kinetics, so P47 T1's switch is named here as the source names it.
     "prop-stamp@proof-land": ("prop-stamp", {"stop_action": True}, 10.17),          # 0.17 s after the contact (the scrub's own step is 0.01): THE OFFSET - the scale spring is settled (it crossed 1 at 0.1542 s and is clamped there) while the free rotation spring is still 3.39 deg off the angle it lands at (the mark stands at -5.61 deg of its -9.00 deg landing); the impact ring, CAPPED by the room at the entry's ring_to 1.6178, stands at 1.5697 of the mark's own radius with 64 % of its life left (life 0.364 of 0.4667 s)
     "prop-stamp-ink@proof-land": ("prop-stamp-ink", {"stop_action": True}, 10.17),    # ... the same instant of the same arrival, the art laid down in the page's own ink: the one byte of difference between the two surfaces is `ink`, so the pair is the operator's straight comparison

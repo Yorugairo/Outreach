@@ -273,9 +273,9 @@
           "source": "docs/content-video-engine/BACKLOG.md"
         }
       ],
-      "does": "A catalogued prop cutout ADDED TO THE WORLD - no paper, border, shadow or badge rail. A prop is never framed: it is stamped on or thrown on (E99 s85).",
+      "does": "A catalogued prop cutout added to the world bare - no paper, border, shadow or rail - stamped on or thrown on, never framed.",
       "when": "a DIRECT match only - the prop is the thing the sentence names (the operator's standing instruction)",
-      "when_source": "docs/portable/OPERATOR-RULINGS.md E99 s85",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md E99 s87",
       "author": {
         "key": "dock opts {\"prop\": True} with arrive stamp or throw",
         "example": "{'prop': True, 'arrive': 'stamp', 'mass': 'ink', 'ink': 'own'}",
@@ -290,7 +290,7 @@
         "note": "the bare chrome is the engine's dockIsBare; the prop's own aspect is image_aspect"
       },
       "doctrine": [
-        "E99 s85",
+        "E99 s87",
         "E99 s71",
         "R26-246"
       ],
