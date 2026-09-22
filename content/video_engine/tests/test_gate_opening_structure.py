@@ -189,7 +189,6 @@ def test_undeclared_required_beats_fail():
     g = _by_id(G.run(s, None, ring="spike")[0])
     for gid in ("G37", "G07", "G08", "G12", "G38", "G14", "G39", "G16", "G40", "G24", "G41", "G26", "G28", "G42"):
         assert g[gid].level == "FAIL", (gid, g[gid])
-    assert g["G20"].level == "WARN"  # operator 2026-09-20: cadence is advisory
 
 
 def test_concession_run_fails_and_turn_within_two_sentences_passes():
@@ -481,6 +480,57 @@ def _timed(lines):
         for i, w in enumerate(re.findall(r"[A-Za-z0-9'%$]+", beat_tags.strip_marks(s))):
             tl.append({"w": w, "start": start + 0.3 * i, "end": start + 0.3 * i + 0.25})
     return text, tl
+
+
+def _g20_measured(lines):
+    text, timeline = _timed(lines)
+    return _by_id(G.run(text, timeline, short=False)[0])["G20"]
+
+
+def test_g20_catalyst_only_cadence_passes():
+    g20 = _g20_measured([
+        (0.0, "The safest thing you own looks like this."),
+        (5.0, "An iron spike ruined almost everyone who touched it."),
+        (80.0, "[catalyst] The first fact changes the question."),
+        (105.0, "[catalyst] The second fact raises the cost."),
+        (130.0, "[catalyst] The third fact shifts the stakes."),
+        (155.0, "[catalyst] The fourth fact points to the answer."),
+        (800.0, "The iron spike still carries the whole argument."),
+    ])
+    assert g20.level == "PASS", g20
+
+
+def test_g20_closed_loop_does_not_count_as_new_information():
+    g20 = _g20_measured([
+        (0.0, "The safest thing you own looks like this."),
+        (5.0, "An iron spike ruined almost everyone who touched it."),
+        (80.0, "[new] The first fact changes the question."),
+        (100.0, "[loop] That closes the first question."),
+        (125.0, "[new] The next fact raises the stakes."),
+        (800.0, "The iron spike still carries the whole argument."),
+    ])
+    assert g20.level == "FAIL" and "45s" in g20.message, g20
+
+
+def test_g20_31_second_gap_fails_on_measured_timing():
+    g20 = _g20_measured([
+        (0.0, "The safest thing you own looks like this."),
+        (5.0, "An iron spike ruined almost everyone who touched it."),
+        (80.0, "[new] The first fact changes the question."),
+        (111.0, "[rehook] Here is why the next stretch matters."),
+        (800.0, "The iron spike still carries the whole argument."),
+    ])
+    assert g20.level == "FAIL" and "31s" in g20.message, g20
+
+
+def test_g20_fails_without_a_qualifying_p2_tag_even_with_a_figure():
+    g20 = _g20_measured([
+        (0.0, "The safest thing you own looks like this."),
+        (5.0, "An iron spike ruined almost everyone who touched it."),
+        (80.0, "The figure on the page is twenty percent."),
+        (800.0, "The iron spike still carries the whole argument."),
+    ])
+    assert g20.level == "FAIL" and "no [new], [catalyst], or [rehook]" in g20.message, g20
 
 
 def test_measured_hook_allows_only_the_operator_accepted_clock_epsilon():

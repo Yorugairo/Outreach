@@ -128,7 +128,7 @@ BEAT5_START = 60.0              # 38 B5: the map, desire, opponent, A2, ring - 0
 A2_ANCHOR = 60.0                # 38 B5 / P1 QC
 # A3 = kit_spec.a3_anchor_s(runtime): P2.md / MAP s4 QC, A3 + F2 at ~10% of runtime (E23; shared with the audit)
 REHOOK_TOL = A.REHOOK_TOLERANCE_S
-NEW_INFO_MAX_GAP_S = 30.0       # P2: something genuinely new every 15-30s
+NEW_INFO_MAX_GAP_S = 30.0       # E99 s89: declared new/catalyst/rehook beats every 15-30s in P2
 CATALYST_WITHIN_S = 60.0        # P2: catalyst lands in the phase's first ~60s, closed inside 30-60s
 DEBATE_FROM = 0.40              # P2: "the debate (mid-late phase)"
 SIGNPOST_FROM = 0.75            # P2: "exit on a transition signpost into the gap phase"
@@ -851,15 +851,19 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         add("G40", "Snyder Catalyst / McKee inciting incident: lands as a story beat in P2's first ~60s (P2)", "PASS", f"[catalyst] at {mmss(tcat[0])}")
         add("G19", "The catalyst is a micro loop CLOSED inside 30-60s, not exposition (P2)", "PASS" if closed else "FAIL",
             f"closed by [loop] at {mmss(closed[0])}" if closed else f"no [loop] within 60s of the catalyst at {mmss(tcat[0])}")
-    if news:
-        pts = [p1_end] + news
+    new_info = sorted({t for tag in ("new", "catalyst", "rehook")
+                       for t in tag_times(tag) if in_p2(t)})
+    if new_info:
+        pts = [p1_end] + new_info
         worst = max(b - a for a, b in zip(pts, pts[1:]))
-        # Operator 2026-09-20: cadence is advisory. Tags approximate semantic
-        # information gain; a catalyst can introduce facts without a [new] tag.
-        # Preserve the timing diagnostic, not a blocking prose-rewrite demand.
-        add("G20", "PLATFORM new-info cadence: something genuinely new every 15-30s (P2; advisory)", "WARN" if worst > NEW_INFO_MAX_GAP_S * tol else "PASS", f"longest gap {worst:.0f}s; review information gain against narration")
+        # E99 s89: only declared [new], [catalyst], and [rehook] beats count.
+        # A [loop] close or a spoken figure cannot stand in for a new idea.
+        add("G20", "PLATFORM new-info cadence: declared [new]/[catalyst]/[rehook] every 15-30s (P2)",
+            "FAIL" if worst > NEW_INFO_MAX_GAP_S * tol else "PASS",
+            f"longest declared new-info gap {worst:.0f}s; limit {NEW_INFO_MAX_GAP_S:.0f}s")
     else:
-        add("G20", "PLATFORM new-info cadence: something genuinely new every 15-30s (P2; advisory)", "WARN", "no [new] beats declared in P2; review information gain against narration")
+        add("G20", "PLATFORM new-info cadence: declared [new]/[catalyst]/[rehook] every 15-30s (P2)",
+            "FAIL", "no [new], [catalyst], or [rehook] beats declared in P2")
     lo_l, hi_l = geo["loops"]; lo_n, hi_n = geo["new"]
     if lo_l is not None:
         add("G21", f"L2 loops: {lo_l}-{hi_l} micro-loop closes at this runtime (P2 geometry / MAP s0)", "PASS" if lo_l <= len(loops) <= hi_l else "FAIL", f"{len(loops)} [loop] in P2")
