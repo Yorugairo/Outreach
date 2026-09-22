@@ -99,8 +99,12 @@ def _timeline_player(*, window: list[float] | None, aspect: str, relabel: bool =
         # player reads either state, so this is an actual full-stage render rather than a
         # landscape viewport around the legacy page.
         pages = [world.get("page") or {}] + list(world.get("page_states") or [])
-        for page in pages:
-            B.stamp_full_stage(page)
+        # A prior short compile can leave this module global at 9:16. Pin the
+        # landscape stamp for this render and restore the previous value.
+        with pytest.MonkeyPatch.context() as patch:
+            patch.setattr(B, "ASPECT", "16:9")
+            for page in pages:
+                B.stamp_full_stage(page)
         assert pages and all(page.get("full_stage") is True for page in pages)
     if relabel:
         target_ticks = world["page_states"][0]["axes"]["xticks"]
