@@ -392,8 +392,10 @@ def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bo
 
 
 def template_sha() -> str:
-    """P51 T1: the player is two files now - the fixture is stale when EITHER changes."""
-    return hashlib.sha256(RB.TEMPLATE.read_bytes() + RB.ENGINE.read_bytes()).hexdigest()
+    """P51 T1: bind both player files after normalizing checkout line endings."""
+    template = RB.TEMPLATE.read_bytes().replace(b"\r\n", b"\n")
+    engine = RB.ENGINE.read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(template + engine).hexdigest()
 
 
 def recorded_projects() -> list[str]:

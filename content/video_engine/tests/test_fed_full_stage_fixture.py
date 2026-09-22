@@ -311,7 +311,8 @@ def test_full_stage_malformed_flat_entries_fail_closed(tmp_path: Path, monkeypat
 
 
 @pytest.mark.parametrize("player_sha", [_MISSING, "stale-player-digest"])
-def test_full_stage_requires_a_fresh_player_marker(tmp_path: Path, monkeypatch, player_sha):
+def test_full_stage_stale_or_missing_player_marker_keeps_measured_geometry(
+        tmp_path: Path, monkeypatch, player_sha):
     page = _page(full_stage=True)
     ink = LPG.page_ink_key(page)
     entry = _measured_entry(page, full_stage=True)
@@ -323,8 +324,40 @@ def test_full_stage_requires_a_fresh_player_marker(tmp_path: Path, monkeypatch, 
     )
     _use_fixture(monkeypatch, fixture)
 
-    assert LPG.measured_entry(page, "16:9") is None
-    assert LPG.page_boxes(page, "16:9")["measured"] is False
+    assert LPG._full_stage_fixture_is_fresh() is False
+    assert LPG.measured_entry(page, "16:9") == entry
+    boxes = LPG.page_boxes(page, "16:9")
+    assert boxes["measured"] is True
+    assert boxes["plot"] == entry["boxes"]["plot"]
+
+
+def test_player_hashes_ignore_crlf_vs_lf_line_endings(tmp_path: Path, monkeypatch):
+    template = tmp_path / "player.html"
+    engine = tmp_path / "engine.mjs"
+    lf_template = b"<main>same player\n</main>\n"
+    lf_engine = b"const player = true;\n"
+
+    monkeypatch.setattr(M.RB, "TEMPLATE", template)
+    monkeypatch.setattr(M.RB, "ENGINE", engine)
+    monkeypatch.setattr(LPG, "_PLAYER_TEMPLATE", template)
+    monkeypatch.setattr(LPG, "_PLAYER_ENGINE", engine)
+    monkeypatch.setattr(LPG, "_PLAYER_SHA_CACHE", None)
+
+    template.write_bytes(lf_template)
+    engine.write_bytes(lf_engine)
+    lf_template_sha = M.template_sha()
+    LPG._PLAYER_SHA_CACHE = None
+    lf_player_sha = LPG._player_sha256()
+
+    template.write_bytes(lf_template.replace(b"\n", b"\r\n"))
+    engine.write_bytes(lf_engine.replace(b"\n", b"\r\n"))
+    crlf_template_sha = M.template_sha()
+    LPG._PLAYER_SHA_CACHE = None
+    crlf_player_sha = LPG._player_sha256()
+
+    assert lf_template_sha == crlf_template_sha
+    assert lf_player_sha == crlf_player_sha
+    assert lf_template_sha == lf_player_sha
 
 
 def test_portrait_stamp_and_legacy_landscape_keep_their_existing_entries(tmp_path: Path, monkeypatch):

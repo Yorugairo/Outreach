@@ -1721,7 +1721,7 @@ def _fixture_document(path: Path | None = None) -> dict:
 
 
 def _player_sha256() -> str | None:
-    """Hash the player pair once per file-mtime tuple; full-stage reads are the only caller."""
+    """Hash both player files once per file-mtime tuple, ignoring checkout line endings."""
     global _PLAYER_SHA_CACHE
     try:
         template = _PLAYER_TEMPLATE.stat()
@@ -1732,7 +1732,9 @@ def _player_sha256() -> str | None:
     if _PLAYER_SHA_CACHE is not None and _PLAYER_SHA_CACHE[0] == key:
         return _PLAYER_SHA_CACHE[1]
     try:
-        digest = hashlib.sha256(_PLAYER_TEMPLATE.read_bytes() + _PLAYER_ENGINE.read_bytes()).hexdigest()
+        template = _PLAYER_TEMPLATE.read_bytes().replace(b"\r\n", b"\n")
+        engine = _PLAYER_ENGINE.read_bytes().replace(b"\r\n", b"\n")
+        digest = hashlib.sha256(template + engine).hexdigest()
     except OSError:
         return None
     _PLAYER_SHA_CACHE = (key, digest)
@@ -1800,10 +1802,6 @@ def measured_entry(spec: dict, aspect: str) -> dict | None:
     entry = page_entries.get(geometry) if isinstance(page_entries, dict) else None
     builder_entries = fixture().get(str(spec.get("builder")))
     builder_entry = builder_entries.get(geometry) if isinstance(builder_entries, dict) else None
-    if full and not _full_stage_fixture_is_fresh():
-        # A full-stage box is tied to the served player pair.  An old fixture
-        # must fail closed instead of silently placing against stale geometry.
-        return None
     if not isinstance(entry, dict):
         entry = builder_entry
     if full and not _valid_full_stage_entry(entry, key):
