@@ -370,6 +370,19 @@ def catalogue_stamp_uri(asset_id: str) -> str:
     return data_uri(catalogue_stamp_asset(asset_id)["file"])
 
 
+def _with_stamp_catalogue(entry: dict) -> tuple[dict, dict | None]:
+    """Carry the resolver's source catalogue into a compiled chip-stamp species.
+
+    The player only sees the compiled species and its asset URI map. Preserve the
+    resolver's distinction there so both runtime guards can apply the same prop
+    refusal without guessing from an asset id.
+    """
+    if entry.get("kind") == "chip" and entry.get("form") == "stamp":
+        asset = catalogue_stamp_asset(entry.get("icon"))
+        return {**entry, "_catalogue": asset["_catalogue"]}, asset
+    return entry, None
+
+
 def species_props(entry) -> list[str]:
     """Every CATALOGUED raster prop a species carries, in declaration order.
 
@@ -1566,13 +1579,14 @@ def _validate_chip(entry: dict) -> list[str]:
     if form == "stamp":
         icon = entry.get("icon")
         asset = None
-        if isinstance(icon, str) and icon.startswith("prop-") and not icon.startswith("prop-badge-"):
-            errs.append(f"chip stamp: {icon!r} is a non-badge prop; E99 s87 requires a bare prop "
-                        "with arrive: stamp or throw, not the chip form")
         try:
             asset = catalogue_stamp_asset(icon)
         except (TypeError, ValueError) as exc:
             errs.append(f"chip stamp: {exc}")
+        if (asset and asset.get("_catalogue") == "props"
+                and not (isinstance(icon, str) and icon.startswith("prop-badge-"))):
+            errs.append(f"chip stamp: {icon!r} is a non-badge prop; E99 s87 requires a bare prop "
+                        "with arrive: stamp or throw, not the chip form")
         label = entry.get("label")
         if not isinstance(label, str) or not label.strip():
             errs.append("chip stamp: 'label' must be a non-empty string - the prop names the thing it stands for")
@@ -1691,8 +1705,6 @@ def _validate_flow_extensions(entry: dict, ids: list[str]) -> list[str]:
     each change retracts for .30s then draws each new edge for .34s.
     """
     errs: list[str] = []
-    if "readability" in entry and entry["readability"] != "landscape-phone":
-        errs.append("chip: readability must be 'landscape-phone'")
     finite = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
     if "readability" in entry and entry["readability"] != "landscape-phone":
         errs.append("flow: readability must be 'landscape-phone'")
@@ -6987,6 +6999,13 @@ def build_kinetics() -> dict:
     with them at the ruled default (``KINETICS["span_tone"] = "light"`` puts one build back to the chalk wash)."""
     k = {"idle": True, "stop_action": True, "arap_morph": True, "camera": True,
          **SPAN_DIAL_DEFAULTS, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens; P49 T2: the camera is one state per frame (the species pixel-identical)
+    if "first_quant_claim_at" in k:
+        claim_at = k["first_quant_claim_at"]
+        if (isinstance(claim_at, bool) or not isinstance(claim_at, (int, float))
+                or claim_at < 0 or claim_at > 60 or not math.isfinite(claim_at)):
+            raise ValueError(
+                "KINETICS['first_quant_claim_at'] must be a finite number from 0 through 60 seconds (opening minute)"
+            )
     # E99 s55: the drift's amplitude has NO global default here on purpose - unset, the player takes
     # kinetics/idle.mjs IDLE.DRIFT_PX, which is the string every approved cut was rendered with (E45). A build that
     # names one is checked by the SAME refusal a row's `;drift=` gets, so the two ways of asking cannot disagree.
@@ -7385,6 +7404,14 @@ def main() -> int:
                           + validate_newsreel_strip(row_species, ASPECT, bool(ds)))   # P52 T6: the strip law (gate 1)
         if species_errors:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))
+        resolved_chip_stamps = {}
+        for n, e in enumerate(row_species):
+            if isinstance(e, dict) and e.get("kind") == SPECIES_CHIP and e.get("form") == "stamp":
+                try:
+                    row_species[n], stamp_asset = _with_stamp_catalogue(e)
+                except (TypeError, ValueError) as exc:
+                    raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): chip stamp: {exc}") from exc
+                resolved_chip_stamps[e["icon"]] = stamp_asset
         # P50 T2: a chip's SOURCED glyph rides the asset map exactly as a plate or a dock still does,
         # keyed `icon:<name>` - the geometry travels in the player, never a path to a file on disk.
         for e in row_species:
@@ -7395,7 +7422,8 @@ def main() -> int:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
             for _prop in species_props(e):   # P61 T8 / E93: the page-form agenda's stamped cutouts, the same route
                 try:
-                    uris[PROP_PREFIX + _prop] = catalogue_stamp_uri(_prop)
+                    stamp_asset = resolved_chip_stamps.get(_prop)
+                    uris[PROP_PREFIX + _prop] = data_uri(stamp_asset["file"]) if stamp_asset else catalogue_stamp_uri(_prop)
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         # a ledger page is drawn, not embedded (doc 29 s9.26); a bad or

@@ -13,6 +13,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
+import build_scene_timeline_f as B  # noqa: E402
 import gate_motion_density as G  # noqa: E402
 
 EP = ROOT / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
@@ -555,14 +556,34 @@ def test_m11_long_form_keeps_the_e24_window_and_the_short_window_is_declared():
 
 
 def test_m11_narrative_led_long_form_binds_chart_to_first_quantitative_claim():
-    tl, docks, mp = _short_build(page_at=92.8, spot_at=101.2, runtime=240.0)
+    tl, docks, mp = _short_build(page_at=51.4, spot_at=59.8, runtime=240.0)
     tl["kinetics"] = {
         "first_chart_policy": "first_quant_claim",
-        "first_quant_claim_at": 98.4,
+        "first_quant_claim_at": 57.0,
     }
     g = _by_id(G.run(tl, docks, mp)[0])
     assert g["M11"].level in ("PASS", "WARN"), g["M11"]
-    assert "declared quantitative claim at 98.4s" in g["M11"].message, g["M11"]
+    assert "declared quantitative claim at 57.0s" in g["M11"].message, g["M11"]
+
+
+@pytest.mark.parametrize("claim", [None, True, "57", float("nan"), float("inf"), -0.01, 60.01, 10**1000])
+def test_build_kinetics_refuses_invalid_first_quant_claim_at(claim, monkeypatch):
+    monkeypatch.setattr(B, "KINETICS", {
+        "first_chart_policy": "first_quant_claim",
+        "first_quant_claim_at": claim,
+    })
+    with pytest.raises(ValueError) as exc:
+        B.build_kinetics()
+    assert "KINETICS['first_quant_claim_at']" in str(exc.value)
+
+
+@pytest.mark.parametrize("claim", [0, 60])
+def test_build_kinetics_accepts_first_quant_claim_at_opening_minute_boundaries(claim, monkeypatch):
+    monkeypatch.setattr(B, "KINETICS", {
+        "first_chart_policy": "first_quant_claim",
+        "first_quant_claim_at": claim,
+    })
+    assert B.build_kinetics()["first_quant_claim_at"] == claim
 
 
 def test_m11_invalid_narrative_led_claim_keeps_legacy_window():

@@ -15,6 +15,7 @@ import build_scene_timeline_f as B  # noqa: E402
 PLATE = "world-spike-desk-v1"
 STILL = (0, 0, 0)
 APPROVED = "prop-badge-dram-memory-etf-v1"
+APPROVED_ICON = "prop-icon-bear-market-v1"
 APPROVED_PROP = "prop-liquidity-drain-pump-v1"
 
 
@@ -39,7 +40,19 @@ def test_stamp_accepts_catalogued_raster_and_registers_prop_uri():
     assert B.species_icons(entry) == []
 
 
-def test_stamp_accepts_approved_finance_prop_and_allows_full_narrative_size():
+def test_stamp_accepts_approved_prop_icon_from_icons_catalogue():
+    entry = _stamp(icon=APPROVED_ICON, label="BEAR MARKET")
+    resolved = B.catalogue_stamp_asset(APPROVED_ICON)
+    compiled, asset = B._with_stamp_catalogue(entry)
+    assert B.validate_species([entry], STILL, PLATE) == []
+    assert resolved["_catalogue"] == asset["_catalogue"] == compiled["_catalogue"] == "icons"
+    assert compiled["icon"] == APPROVED_ICON
+    assert "_catalogue" not in entry, "compiled provenance must not mutate the authored shot-table species"
+    assert B.species_props(entry) == [APPROVED_ICON]
+    assert B.catalogue_stamp_uri(APPROVED_ICON).startswith("data:image/png;base64,")
+
+
+def test_stamp_refuses_approved_non_badge_finance_prop():
     entry = _stamp(icon=APPROVED_PROP, label="LIQUIDITY DRAIN", size=500)
     errors = B.validate_species([entry], STILL, PLATE)
     assert any(APPROVED_PROP in error and "E99 s87" in error for error in errors)

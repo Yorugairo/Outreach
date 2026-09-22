@@ -152,7 +152,7 @@ test("the opt-in stamp uses an approved raster prop, spring landing and no gener
   const el = (tag, cls, parent, at) => { const e = { tag, cls, at: at || {}, kids: [], textContent: "", setAttribute(k, v) { this.at[k] = v; } };
     made.push(e); if (parent && parent.kids) parent.kids.push(e); return e; };
   const sp = { kind: "chip", form: "stamp", at: 4, dur: 6, size: 260,
-    icon: "prop-badge-dram-memory-etf-v1", label: "DRAM\nETF", ink: "charcoal", target: { kind: "point", x: .5, y: .5 } };
+    icon: "prop-badge-dram-memory-etf-v1", _catalogue: "icons", label: "DRAM\nETF", ink: "charcoal", target: { kind: "point", x: .5, y: .5 } };
   paintChip({ sp, t: 4.2, svg: { kids: [] }, el,
     A: { "prop:prop-badge-dram-memory-etf-v1": "data:image/png;base64,approved" },
     resolveTarget: () => ({ x: 960, y: 540, w: 0, h: 0 }), hash: () => .5,
@@ -172,12 +172,27 @@ test("the opt-in stamp uses an approved raster prop, spring landing and no gener
   assert.ok(!made.some((e) => e.tag === "rect"), "stamp has no generic card background");
 });
 
+test("an icons-catalogue prop-icon stamp is allowed by the painter", () => {
+  const made = [];
+  const el = (tag, cls, parent, at) => { const e = { tag, cls, at: at || {}, kids: [], textContent: "", setAttribute(k, v) { this.at[k] = v; } };
+    made.push(e); if (parent && parent.kids) parent.kids.push(e); return e; };
+  const icon = "prop-icon-bear-market-v1";
+  paintChip({ sp: { kind: "chip", form: "stamp", at: 4, dur: 6, size: 260,
+    icon, _catalogue: "icons", label: "BEAR MARKET", target: { kind: "point", x: .5, y: .5 } },
+    t: 4.2, svg: { kids: [] }, el,
+    A: { ["prop:" + icon]: "data:image/png;base64,approved-icon" },
+    resolveTarget: () => ({ x: 960, y: 540, w: 0, h: 0 }), hash: () => .5,
+    idle: () => ({ scale: 1, dx: 0, dy: 0 }), seed: 1, si: 0 });
+  assert.deepEqual(made.map((e) => e.tag), ["g", "image", "text"]);
+  assert.equal(made[1].at.href, "data:image/png;base64,approved-icon");
+});
+
 test("a non-badge finance prop refuses the chip path by name under E99 s87", () => {
   const made = [];
   const el = (tag, cls, parent, at) => { const e = { tag, cls, at: at || {}, kids: [], textContent: "", setAttribute(k, v) { this.at[k] = v; } };
     made.push(e); if (parent && parent.kids) parent.kids.push(e); return e; };
   assert.throws(() => paintChip({ sp: { kind: "chip", form: "stamp", at: 4, dur: 6, size: 640,
-    icon: "prop-liquidity-drain-pump-v1", label: "LIQUIDITY DRAIN", target: { kind: "point", x: .5, y: .5 } },
+    icon: "prop-liquidity-drain-pump-v1", _catalogue: "props", label: "LIQUIDITY DRAIN", target: { kind: "point", x: .5, y: .5 } },
     t: 4.2, svg: { kids: [] }, el,
     A: { "prop:prop-liquidity-drain-pump-v1": "data:image/png;base64,approved-prop" },
     resolveTarget: () => ({ x: 960, y: 540, w: 0, h: 0 }), hash: () => .5,
