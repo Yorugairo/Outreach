@@ -112,6 +112,9 @@ const chipStampSize = (size) => {
 
 function paintChipStamp(ctx, b) {
   const { sp, t, svg, el, A, idle, hash, seed, si } = ctx;
+  if (String(sp.icon || "").startsWith("prop-") && !String(sp.icon).startsWith("prop-badge-")) {
+    throw new Error("chip stamp: " + sp.icon + " is a non-badge prop; E99 s87 requires a bare prop with arrive: stamp or throw");
+  }
   const src = A && A["prop:" + sp.icon];
   if (!src) return; /* approved catalogue URI is mandatory; never fall back to a generic icon */
   const pose = chipPose(sp, t);

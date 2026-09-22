@@ -261,6 +261,49 @@
         "today": true,
         "why": "compiles for any .mp4/.webm dock asset"
       }
+    },
+    {
+      "id": "dock_kind:prop",
+      "axis": "dock_kind",
+      "token": "prop",
+      "title": "The bare prop",
+      "aliases": [
+        {
+          "name": "prop stamp",
+          "source": "docs/content-video-engine/BACKLOG.md"
+        }
+      ],
+      "does": "A catalogued prop cutout added to the world bare - no paper, border, shadow or rail - stamped on or thrown on, never framed.",
+      "when": "a DIRECT match only - the prop is the thing the sentence names (the operator's standing instruction)",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md E99 s87",
+      "author": {
+        "key": "dock opts {\"prop\": True} with arrive stamp or throw",
+        "example": "{'prop': True, 'arrive': 'stamp', 'mass': 'ink', 'ink': 'own'}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:3254",
+        "check": "dock"
+      },
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "content/video_engine/scripts/build_scene_timeline_f.py",
+        "symbol": "DOCK_KIND_PROP",
+        "note": "the bare chrome is the engine's dockIsBare; the prop's own aspect is image_aspect"
+      },
+      "doctrine": [
+        "E99 s87",
+        "E99 s71",
+        "R26-246"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "prop-stamp",
+        "test": "content/video_engine/tests/test_the_stamp_arrival.py",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "the 24 cutouts in assets/props/cutouts; six direct matches in REBUILD-TREATMENT-H.md"
+      }
     }
   ]
 }

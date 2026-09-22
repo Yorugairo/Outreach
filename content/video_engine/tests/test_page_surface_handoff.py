@@ -19,6 +19,17 @@ FED_FLAT = "ledger:fed-on-rrp-history:line"
 QUAD = [[0.25, 0.20], [0.75, 0.20], [0.75, 0.50], [0.25, 0.50]]
 
 
+@pytest.fixture(autouse=True)
+def _landscape_surface_contract(monkeypatch):
+    """Surface grammar tests model the default landscape compiler input.
+
+    Other compiler tests intentionally exercise a short and leave the module
+    global at ``9:16``.  Keep that process history from changing the default
+    contract tests; the final test below explicitly covers the portrait guard.
+    """
+    monkeypatch.setattr(B, "ASPECT", None)
+
+
 def _fixture(tmp_path: Path, *, render_eligible: bool = True, status: str = "approved",
              kind: str = "paper", quad=None) -> tuple[Path, Path]:
     plate = tmp_path / "hall.png"
@@ -236,3 +247,12 @@ def test_surface_is_explicitly_16_by_9_only(monkeypatch):
     monkeypatch.setattr(B, "ASPECT", "9:16")
     with pytest.raises(ValueError, match="16:9-only"):
         B.world_for_plate(FED_PAGE, (0, 0, 0), FED_EP)
+
+
+def test_surface_validation_keeps_lead_and_option_errors_ahead_of_portrait_guard(monkeypatch):
+    monkeypatch.setattr(B, "ASPECT", "9:16")
+    invalid_lead = "ledger:fed-on-rrp-history:line::right:surface=center-paper,0:cut"
+    with pytest.raises(ValueError, match="surface.*lead"):
+        B.world_for_plate(invalid_lead, (0, 0, 0), FED_EP)
+    with pytest.raises(ValueError, match="surface=.*cannot combine"):
+        B.world_for_plate(f"{FED_PAGE};depth=1", (0, 0, 0), FED_EP)

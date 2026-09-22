@@ -645,7 +645,13 @@ def test_the_chain_cut_the_research_side_orphans(real) -> None:
 def test_the_shipped_kinetics_symbols_carry_their_flag_and_their_tests(real) -> None:
     min_jerk = _named(real, "code", "minJerk")[0]
     spring_pop = _named(real, "code", "springPop")[0]
+    surface_stage_quad = _named(real, "code", "surfaceStageQuad")[0]
 
     assert min_jerk["flag"] == "min_jerk" and len(min_jerk["tests"]) >= 1
     assert spring_pop["flag"] == "analytic_spring"
+    # T19's public normalized-to-stage conversion is part of the shipped page-surface API and
+    # must remain visible to the registry's test evidence, even though the player consumes the
+    # richer surfacePlotGeometry result for the current handoff.
+    assert surface_stage_quad["status"] == "implemented"
+    assert surface_stage_quad["tests"] == ["content/video_engine/tests/test_build_animation_registry.py"]
     assert min_jerk["status"] == spring_pop["status"] == "implemented"

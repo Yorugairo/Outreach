@@ -60,6 +60,11 @@ FLAG_FRAMES = {
 # named idle runs either way. On the two bare-plate scenes the flag changes no pixel (a flat plate breathing is a
 # flat plate), which is exactly why these are PROOF frames and not FLAG frames.
 PROOF_FRAMES = {
+    # R26-20 / E99 s87 - THE STAMPED PROP, at the two instants the settled frame cannot show, and at its owed exit.
+    # The flags map REPLACES the source's own kinetics, so P47 T1's switch is named here as the source names it.
+    "prop-stamp@proof-land": ("prop-stamp", {"stop_action": True}, 10.17),          # 0.17 s after the contact (the scrub's own step is 0.01): THE OFFSET - the scale spring is settled (it crossed 1 at 0.1542 s and is clamped there) while the free rotation spring is still 3.39 deg off the angle it lands at (the mark stands at -5.61 deg of its -9.00 deg landing); the impact ring, CAPPED by the room at the entry's ring_to 1.6178, stands at 1.5697 of the mark's own radius with 64 % of its life left (life 0.364 of 0.4667 s)
+    "prop-stamp-ink@proof-land": ("prop-stamp-ink", {"stop_action": True}, 10.17),    # ... the same instant of the same arrival, the art laid down in the page's own ink: the one byte of difference between the two surfaces is `ink`, so the pair is the operator's straight comparison
+    "prop-stamp@proof-exit": ("prop-stamp", {"stop_action": True}, 26.40),          # E50: the landed mark LEAVES - 0.4 s into the source's own ease-IN cubic over 0.5333 s (u 0.75, opacity 0.578), the mark still off-square at -9.00 deg
     # R26-228 / E99 s82 (e) - THE PAGE'S INTERIOR AT ITS IDLE, at the SECOND instant of each pair: the same page 2 s
     # later, which is the window the ruling asks a life to be visible across ("a plate's drift + Ken Burns must be
     # visible on two tiles 2 s apart"). The KIND is authored on the ROW, not here - the still half authors none and the

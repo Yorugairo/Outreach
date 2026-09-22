@@ -517,11 +517,12 @@ def test_ON_THE_FRAME_the_reachable_zoom_keeps_the_title_and_the_y_labels_on_sta
     assert frames_16x9["reach"] == 1.08, frames_16x9["reach"]
     ok, bad, rest = frames_16x9["ok"], frames_16x9["bad"], frames_16x9["still"]["boxes"]
     assert not ok["errs"] and not bad["errs"], (ok["errs"], bad["errs"])
-    # THE ESTIMATE'S OWN y ERROR (R26-27: "the x maths is exact, only y is off"). A 16:9 FULL-STAGE page is
-    # never served the measured fixture (`measured_entry` refuses it - R26-205's own open item), so its
-    # ceiling is `ledger_page`'s estimate of where the ink lands, and the frame is allowed to be that far
-    # out. Measured here rather than assumed, so the number is in the record and shrinks when the fixture
-    # is measured: `measure_page_boxes.py --write`, which is outside this lane's write set.
+    # THE SLACK IS THE PAGE'S KEN BURNS, NOT THE BOX MODEL - corrected 2026-09-22 by R26-235, which
+    # measured the full-stage layout and found the reach UNCHANGED at 1.08 (raw 1.0891 estimated vs
+    # 1.0885 measured, the title's top edge binding both). The estimate and the frame put the title at
+    # the same y; what moves it is the page's own ken (scale 0.04, no pan), which `page_boxes` models at
+    # neither aspect and the fixture zeroes in order to measure layout. So this number does not shrink
+    # when the fixture is measured - it was never the estimate's y error. The ken has no row yet.
     est = LPG.page_boxes(_golden_page(), "16:9")
     err = {k: est[k]["y"] - rest[k]["y"] for k in ("title", "sub", "source")}
     assert max(err.values()) < 8, ("the estimate is further out than this row can carry", err)

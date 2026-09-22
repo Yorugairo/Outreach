@@ -103,8 +103,9 @@ PLATE_DRIFT_SHORTS = 40.0   # E99 s55: "it might work really well for shorts and
 # three-way proof (`review/assembly/r26-133-drift-idle-paints-nothing/`).
 PLATE_DRIFT_MAX = 90.0
 DRIFT_IDLES = ("drift", "live")   # the two idle kinds whose pose HAS a dx/dy for an amplitude to size
-ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)
+ARRIVALS = ("spring", "throw", "land", "stamp")   # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)   # R26-20 / E99 s87: `stamp` is remotion-ui RU-2's badge-stamp, PORTED (kinetics/stopaction.mjs `stampXf`) - a clamped scale spring landing while a FREE trailing rotation spring is still unwinding, so the mark rests slightly OFF-SQUARE, with the impact ring on its split shock curves and the exit E50 owes it. It is a MOTION and says nothing about what it carries: a card, a badge or a bare prop may each be stamped. The vector map's `stamp` SPECIES (`SPECIES_STAMP` in `VECMAP_SPECIES`, "and of no other world") keeps its own name: one is an `arrive:` value, the other a species kind, and `test_the_stamp_arrival.py` pins that they never meet
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
+DOCK_INKS = ("own", "page")   # E99 s87, OPEN ON THE OPERATOR'S EYE: how a stamped PROP's art is laid down - `own` is the woodblock as it was generated, `page` lays it down in the page's own ink the way a real impression would (the page's ground decides which ink that is: chalk on the charcoal page, charcoal on cream). Both render; neither is the default until the frame is judged - a row that names none gets `own`, the art untouched
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
@@ -114,7 +115,7 @@ PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use",
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind", "embed", "cutout", "fit", "depth")   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink")   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -172,6 +173,12 @@ VIDEO_SUFFIXES = (".mp4", ".webm")
 DOCK_KIND_VIDEO = "video"          # written onto the dock entry and the evidence map for a clip asset
 DOCK_KIND_IMAGE = "image"          # the default - never written, so an all-image build compiles byte-identically
 DOCK_KIND_CUTOUT = "cutout"        # P53 T7 / R26-59: the dock is a CUTOUT - no card, no paper, no border (a head above the crawl is a person, not a document; the chrome is the template's `.dock.cutout`)
+DOCK_KIND_PROP = "prop"            # R26-246 owed (b) / E99 s87: the dock is a PROP - a catalogued cutout added to the WORLD as art,
+                                   # not evidence in a card. The operator, 2026-09-22: "for props, it doesnt make sense to put them in a
+                                   # card, the whole point of a prop is for it to get added to the world; we would either stamp it or throw
+                                   # it on." So a prop is BARE - the cutout's chrome-down (no paper, no border, no radius, no padding, no
+                                   # backdrop blur, no rail, no card shadow) and NOT its foot mask, which dissolves a bust into its band and
+                                   # would fade the base off a building. It arrives by `stamp` or by `throw`, never in a box.
 DOCK_KIND_PRESS = "press"          # P50 T3: the card is a HEADLINE cut from a screenshot - it carries its source line and its quoted phrase,
                                    # and the player paints it in the press pass (a fanned stack), never in the two-slot dock loop
 
@@ -1559,6 +1566,9 @@ def _validate_chip(entry: dict) -> list[str]:
     if form == "stamp":
         icon = entry.get("icon")
         asset = None
+        if isinstance(icon, str) and icon.startswith("prop-") and not icon.startswith("prop-badge-"):
+            errs.append(f"chip stamp: {icon!r} is a non-badge prop; E99 s87 requires a bare prop "
+                        "with arrive: stamp or throw, not the chip form")
         try:
             asset = catalogue_stamp_asset(icon)
         except (TypeError, ValueError) as exc:
@@ -3347,14 +3357,18 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
         if enter == "surface":
             raise ValueError(f"{plate_id!r}: surface= must name a paper surface and positive lead seconds")
         if enter.startswith("surface="):
-            if ASPECT not in (None, "16:9"):
-                raise ValueError(f"{plate_id!r}: surface= is 16:9-only; portrait page surfaces need an explicit "
-                                 "aspect-specific registration")
             if page.get("builder") != "dense-line":
                 raise ValueError(f"{plate_id!r}: surface= is only allowed on a dense-line page (this page is "
                                  f"{page.get('builder')!r})")
-            page["enter"] = "surface"
+            # Parse the handoff before checking the build aspect.  The lead is
+            # part of the surface grammar and must retain its established
+            # refusal when a previous compile left the module-level ASPECT at
+            # 9:16.  A valid surface still receives the 16:9-only refusal.
             surface_meta = _parse_surface_entry(enter, plate_id, series_id, variant, path)
+            if ASPECT not in (None, "16:9"):
+                raise ValueError(f"{plate_id!r}: surface= is 16:9-only; portrait page surfaces need an explicit "
+                                 "aspect-specific registration")
+            page["enter"] = "surface"
             page["surface_from"] = surface_meta
             # Keep the destination's source binding independent of the public handoff
             # record; the binder removes this private check key before serialization.
@@ -3541,6 +3555,9 @@ def _check_opt(key: str, value, where: str) -> None:
         raise ValueError(f"{where}: {key} {value!r} is not one of {'|'.join(allowed)}")
 
 
+PLATE_ARRIVALS_REFUSED = ("stamp",)   # R26-20 send-back #2 (M1): the page's PILLS land or are thrown; no pill painter stamps, and a stamped pill rendered silently as a landing
+
+
 def split_plate_opts(plate_id: str) -> tuple[str, dict]:
     """``<plate id>[;idle=<kind>][;arrive=<how>][;mass=<material>]`` -> (the bare plate id, the options). E49's idle and
     P47 T1's arrivals are NAMED per plate on the shot row; ValueError names the option, the caller names the row."""
@@ -3556,6 +3573,9 @@ def split_plate_opts(plate_id: str) -> tuple[str, dict]:
             opts.setdefault("then", []).append(v)
             continue
         _check_opt(k, v, repr(plate_id))
+        if k == "arrive" and v in PLATE_ARRIVALS_REFUSED:   # M1: refused by name rather than painted as another arrival
+            raise ValueError(f"{plate_id!r}: arrive={v} is a DOCK's arrival - a page's pills land or are thrown, and no "
+                             "pill painter stamps (put the stamp on a dock: `arrive: stamp` in the row's dock options)")
         opts[k] = v
     return bare, opts
 
@@ -4952,6 +4972,16 @@ def dock_opts(raw) -> dict:
             if v is not True:
                 raise ValueError("dock: cutout must be True - the dock is a cutout, no card")
             continue
+        if k == "prop":   # R26-246 (b) / E99 s87: the dock is a PROP added to the world - checked against press/stack/embed/fit/cutout below
+            if v is not True:
+                raise ValueError("dock: prop must be True - the dock is a prop added to the world, no card")
+            continue
+        if k == "ink":   # ... and how its art is laid down: its own colour, or the page's own ink (E99 s87, open on the operator's eye)
+            if v not in DOCK_INKS:
+                raise ValueError(f"dock: ink must be {'|'.join(DOCK_INKS)} - the prop's own colour, or the page's own ink")
+            if not raw.get("prop"):
+                raise ValueError("dock: ink is a PROP's option - a card in a frame is evidence and is never re-inked")
+            continue
         if k == "card_aspect":
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
                 raise ValueError("dock: card_aspect must be a positive number (the card's height over its width)")
@@ -4995,6 +5025,23 @@ def dock_opts(raw) -> dict:
                            ("fit", "fit is how a picture takes a surface")):
             if other in raw:
                 raise ValueError(f"dock: cutout and {other} cannot be combined - a cutout has no card ({why})")
+    if raw.get("arrive") == "stamp":   # R26-20 send-back #2: a stamp lands at ONE fitted box, and only a dock's own painter stamps
+        for other, why in (("read", "a stamp lands where its ring is fitted - it never pops at a reading size and slides to a park"),
+                           ("read_s", "a stamp has no reading hold: it lands at its fitted box"),
+                           ("park_s", "a stamp has no park: it lands at its fitted box"),
+                           ("centre_band", "a stamp's room is searched for its ring, not chosen by a card's band"),
+                           ("embed", "the surface's projection repaints the dock over the stamp's own transform, and its ring would be drawn round the unprojected box")):
+            if other in raw:
+                raise ValueError(f"dock: arrive=stamp and {other} cannot be combined ({why})")
+    if raw.get("prop"):   # E99 s87: a PROP is art in the world - it is not a document, not a person above a crawl, and not on a surface
+        for other, why in (("press", "a press card's kind overwrites the prop's and the pile keys on it"),
+                           ("stack", "the press stack is a pile of cards"),
+                           ("embed", "a prop joins the world, it is not projected onto a poster in it"),
+                           ("fit", "fit is how a picture takes a surface"),
+                           ("cutout", "both stand the chrome down and only one kind reaches the evidence map - "
+                                      "a prop keeps its whole picture, a cutout dissolves its foot into the band")):
+            if other in raw:
+                raise ValueError(f"dock: prop and {other} cannot be combined - a prop is art added to the world ({why})")
     out = dict(raw)
     if "press" in out:
         out["press"] = press_meta(out["press"])   # a path resolves here, so every caller downstream sees the dict
@@ -5024,6 +5071,18 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
     """A scene's ``world`` for a shot-table plate id, with E49's ``;idle=<kind>`` option stripped off and carried
     as ``world["idle"]`` (the player reads it for the page or the plate; absent = the class default)."""
     bare, opts = split_plate_opts(plate_id)
+    # Check the authored surface handoff's mutually exclusive options before
+    # loading the world.  This preserves the option refusal when a prior
+    # compile left ASPECT at 9:16; a valid surface still reaches ledger_world's
+    # 16:9-only guard below.
+    if bare.startswith(LEDGER_PREFIX):
+        _surface_enter = parse_ledger_id(bare)[4]
+        if isinstance(_surface_enter, str) and _surface_enter.startswith("surface="):
+            competing = [key for key in ("depth", "plane", "form", "arrive") if key in opts]
+            if competing:
+                raise ValueError(f"{plate_id!r}: surface= cannot combine with "
+                                 f"{', '.join(key + '=' for key in competing)} - the handoff has one registered "
+                                 "paper plane and one arrival")
     world = _world_for_bare_plate(bare, ken, ep_dir, meta)
     page = world.get("page") if isinstance(world, dict) else None
     if isinstance(page, dict) and page.get("enter") == "surface":
@@ -5571,6 +5630,282 @@ def dock_place(world: dict, aspect: str | None, reserve: list[dict] | None = Non
         return None
     return page_place(world["page"], aspect or "16:9", reserve)
 
+
+# ---- R26-20 (2026-09-22): A STAMP IS INK ON THE PAGE - THE MARK TAKES THE ROOM, THE RING HUGS THE MARK ----------
+# Three rounds on the record. (1) The parent's frame read: the ring ran through the "+613%" end name while the mark sat
+# clear of it - the ring and the approach are ink too (R26-191: a collision is fixed before a card, never named).
+# (2) The reviewer: through the real row loop the fit was blind to the end names and fitted a box the engine did not
+# draw - one door (`stamp_dock_place`), every stamp, the page's measured names, one fitted box. (3) THE OPERATOR, on
+# the committed goldens: *"if the ring is going to be that big the image should be stamped bigger, we're just wasting
+# space. The fed reads small. Use the space. ... There's no reason a bigger prop needs a sparser chart. look how much
+# room is inside of the stamp."* The fit's PRIORITY was backwards - it protected the ring (a 1.6x floor of our own) and
+# shrank the mark to make it fit. Now:
+#   THE MARK FIRST: the largest mark at the picture's own aspect the page holds - measured by its PAINTED pixels (the
+#     cutout's alpha box), turned through the whole arrival's rotation, at rest AND coming down from its approach -
+#     searched over EVERY free place on the page (the plot's empty area, the bands round it), chosen by painted area.
+#   THE RING YIELDS: its peak is the largest the room allows up to the source's 2x, down to a floor just OUTSIDE the
+#     mark's painted edge (its painted half-diagonal + STAMP_RING_GAP_PX); that floor is reserved when the mark is
+#     sized, so the ring can never be refused. The 1.6x floor and the mark-shrink step are DELETED.
+#   The only refusal left: a place too small for the mark at a legible size (STAMP_MARK_FLOOR_PX, painted).
+# Only a dock that arrives by `stamp` is fitted, so every other build compiles byte-for-byte what it was.
+STAMP_FROM = 2.1           # kinetics/stopaction.mjs STAMP_ARRIVAL.FROM (badge-stamp.tsx:88-91): the scale the mark comes DOWN from - its hull at that scale is ink on the page too
+STAMP_RING_TO = 2.0        # kinetics/stopaction.mjs STAMP_ARRIVAL.RING_TO (badge-stamp.tsx:156) - one dial written twice; test_the_stamp_arrival holds the pair
+STAMP_RING_W_PX = 4.8      # ... STAMP_ARRIVAL.RING_W_PX, the stroke at its widest (life 0) - counted OUTSIDE the radius, which over-counts (the engine draws it inside)
+STAMP_RING_GAP_PX = 12     # the ring's FLOOR: this far outside the mark's painted half-diagonal, before the stroke. 12 px is 2.5 stroke widths - the least page between a mark's corner and the ring at which the ring reads as its own line rather than a border drawn on the mark (the operator's "just outside the painted edge"; ~4 CSS px on a 360 px phone)
+STAMP_APPROACH_MIN = 1.2   # the least the approach may be capped to: the source comes down from 2.1x and the DESCENT is the weight cue (the clamped scale spring); at 1.2x the mark still falls a tenth of its size on each side, the least that reads as coming down onto the page rather than fading in [DERIVED, a dial]
+STAMP_TURN_RANGE = (-11.6, 7.0)   # degrees the mark turns through over its arrival: it starts at LAND_DEG + WIND_DEG = +7 and the FREE spring overshoots its -9 landing to -11.58 (stopaction-stamp.test.mjs); the mark is fitted at every angle in it
+STAMP_MARK_FLOOR_PX = 120  # the least a stamped mark's PAINTED long side may be [DERIVED: three quarters of the agenda page's drawn stamp, ~159 px at rest - below it a prop stops reading as an object]. Against painted pixels it still holds: every one of the 24 cutouts is trimmed to its alpha box with a 1 px margin (measured 2026-09-22), so painted and canvas differ by 2 px
+STAMP_SEARCH_PX = (16, 4)  # the centre is searched on a 16 px grid over every free place, then on a 4 px grid round the best
+STAMP_ALPHA_MIN = 8        # a pixel is PAINTED above this alpha (of 255) - the cutouts' anti-aliased fringe starts at 1
+
+
+# THE FRAME'S OWN BANDS where no page reports them (a picture plate): the ledger page's `safe` and `caption_anchor`,
+# which `page_boxes` documents as "the frame's own bands" - the same rectangles on every page of an aspect, so a stamp
+# on a plate is held to exactly what a stamp on a page is. test_the_stamp_arrival pins the two against page_boxes.
+FRAME_BANDS = {
+    "16:9": {"safe": {"x": 64, "y": 64, "w": 1792, "h": 814}, "caption": {"x": 145, "y": 878, "w": 1630, "h": 82}},
+}
+
+
+def ring_obstacles(page: dict | None, aspect: str | None, extra: list[dict] | None = None) -> tuple[list[dict], dict]:
+    """(everything a stamp may not cross, the bounds it must stay inside), in stage px. ValueError when it cannot
+    be known - a stamp is never fitted blind (R26-20 send-back #2).
+
+    On a LEDGER PAGE: the title, the sub, the source line, the badge rail, both axis bands, every INK cell of the
+    page's data mask (the plot itself when the page has no mask), the anchored caption's band, and the page's INLINE
+    END NAMES - which `page_boxes` measures as its `tags` box on a full-stage 16:9 page (R26-205; the compiler stamps
+    every 16:9 row full-stage, `stamp_full_stage`). A page that WRITES end names (`ledger_page.tag_units` > 0) but
+    reports no box for them is REFUSED by name: the first cut fitted such a page silently and its ring ran through
+    all four names. Unlike `free_bands`, the title and the sub are obstacles: E45 lets a CARD park over a heading
+    once read, but a ring through it is a mark drawn through its words. The bounds are the safe box.
+    Anywhere else (a picture plate): the frame's own caption band and `extra`, inside the frame's safe box.
+    `extra` is a band the caller measured and the boxes do not carry (a newsreel strip)."""
+    if not page:
+        bands = FRAME_BANDS.get(aspect or "16:9")
+        if bands is None:
+            raise ValueError(f"a stamp off a ledger page at {aspect}: the frame's safe box and caption band are not "
+                             "recorded for this aspect (FRAME_BANDS) - its ring cannot be fitted")
+        return [bands["caption"], *(extra or [])], dict(bands["safe"])
+    boxes = LPG.page_boxes(page, aspect or "16:9")
+    if not boxes.get(LPG.TAGS_KEY) and LPG.tag_units(page) > 0:
+        raise ValueError(f"this page writes inline end names (tag_units {LPG.tag_units(page):g}) but reports no "
+                         f"measured `{LPG.TAGS_KEY}` box (R26-205 measures one on a full-stage 16:9 page) - a stamp's "
+                         "ring cannot be fitted blind against names it cannot see")
+    out = [boxes[k] for k in ("title", "sub", "source", "rail", "caption_anchor")
+           if isinstance(boxes.get(k), dict) and boxes[k].get("w", 0) > 0 and boxes[k].get("h", 0) > 0]
+    axis = boxes.get("axis") or {}
+    out += [axis[k] for k in ("x", "y") if isinstance(axis.get(k), dict)]
+    if boxes.get(LPG.TAGS_KEY):
+        out.append(boxes[LPG.TAGS_KEY])
+    plot, mask = boxes["plot"], boxes.get("data_mask")
+    # THE BASIS LABEL (`axes.ylabel`, "index - 100 = Aug 2025, log scale"): `page_boxes` folds it into `plot`'s own top
+    # ("plot is the DATA box plus the ink that lives inside it - the basis label above it"), so it has no box of its
+    # own and the data mask does not carry it. It is written in the tick labels' own `lab` face, so it is taken as the
+    # plot's top strip, one tick-label line high (the page's measured `axis.x` height), across the plot's width -
+    # measured on the served full-stage page 2026-09-22: the label at (151, 208, 435 x 33) inside that strip
+    # (151, 208, 947 x 36). Without it the send-back #2 fit put the ring straight through it.
+    if (page.get("axes") or {}).get("ylabel"):
+        out.append({"x": plot["x"], "y": plot["y"], "w": plot["w"], "h": (axis.get("x") or {}).get("h") or 36})
+    if mask:
+        rows, cols = len(mask), len(mask[0])
+        cw, ch = plot["w"] / cols, plot["h"] / rows
+        out += [{"x": plot["x"] + c * cw, "y": plot["y"] + r * ch, "w": cw, "h": ch}
+                for r in range(rows) for c in range(cols) if mask[r][c] == "1"]
+    else:
+        out.append(plot)
+    return out + list(extra or []), boxes["safe"]
+
+
+def disc_clearance(cx: float, cy: float, obstacles: list[dict], bounds: dict) -> float:
+    """The radius of the largest DISC centred on (cx, cy) that touches no obstacle and stays inside the bounds: the
+    Euclidean distance to the nearest obstacle rectangle, and to the bounds' edges. This is the ring's own test - over
+    its life the stroke SWEEPS every radius from the mark out to its peak, so the whole peak disc (the mark aside) must
+    be clear, and a disc is exact where a square would over-count its corners."""
+    d = min(cx - bounds["x"], bounds["x"] + bounds["w"] - cx, cy - bounds["y"], bounds["y"] + bounds["h"] - cy)
+    for o in obstacles:
+        dx = max(o["x"] - cx, 0.0, cx - (o["x"] + o["w"]))
+        dy = max(o["y"] - cy, 0.0, cy - (o["y"] + o["h"]))
+        d = min(d, math.hypot(dx, dy))
+    return d
+
+
+def rect_scale(cx: float, cy: float, hx: float, hy: float, obstacles: list[dict], bounds: dict) -> float:
+    """The largest k for which the axis-aligned box of half-extents (k hx, k hy) centred on (cx, cy) touches no obstacle
+    and stays inside the bounds. Closed form: a box collides with a rectangle only when it overlaps it on BOTH axes, so
+    each obstacle allows k up to max(dx / hx, dy / hy)."""
+    k = min((cx - bounds["x"]) / hx, (bounds["x"] + bounds["w"] - cx) / hx,
+            (cy - bounds["y"]) / hy, (bounds["y"] + bounds["h"] - cy) / hy)
+    for o in obstacles:
+        dx = max(o["x"] - cx, 0.0, cx - (o["x"] + o["w"]))
+        dy = max(o["y"] - cy, 0.0, cy - (o["y"] + o["h"]))
+        k = min(k, max(dx / hx, dy / hy))
+    return k
+
+
+def turned_half_extents(w: float, h: float, turns: tuple[float, float] = STAMP_TURN_RANGE) -> tuple[float, float]:
+    """The half-extents of a w x h box's axis-aligned hull over EVERY angle it turns through (sampled each 0.25 deg)."""
+    lo, hi = turns
+    n = max(1, int((hi - lo) / 0.25))
+    hx = hy = 0.0
+    for i in range(n + 1):
+        t = math.radians(lo + (hi - lo) * i / n)
+        c, sn = abs(math.cos(t)), abs(math.sin(t))
+        hx, hy = max(hx, w / 2 * c + h / 2 * sn), max(hy, w / 2 * sn + h / 2 * c)
+    return hx, hy
+
+
+_PAINTED: dict = {}
+
+
+def painted_box(src: Path | None, card_aspect: float | None = None) -> dict:
+    """What a mark PAINTS, as fractions of its own canvas plus the canvas aspect: ``{aspect, x0, y0, x1, y1}``.
+
+    A PROP's picture is measured by its alpha (STAMP_ALPHA_MIN) - the ring's radius and every overlap test use the
+    painted extent, not the file's canvas. A card (no picture to read, or a framed document) paints its whole box, at
+    `card_aspect` or the dock card's own shape."""
+    if src is not None:
+        key = str(src)
+        if key not in _PAINTED:
+            from PIL import Image
+            with Image.open(src) as im:
+                im = im.convert("RGBA")
+                W, H = im.size
+                bb = im.getchannel("A").point(lambda v: 255 if v > STAMP_ALPHA_MIN else 0).getbbox() or (0, 0, W, H)
+            _PAINTED[key] = {"aspect": H / W, "x0": bb[0] / W, "y0": bb[1] / H, "x1": bb[2] / W, "y1": bb[3] / H,
+                             "canvas": [W, H], "painted": [bb[2] - bb[0], bb[3] - bb[1]]}
+        return dict(_PAINTED[key])
+    a = card_aspect or dock_card_h(1000) / 1000
+    return {"aspect": a, "x0": 0.0, "y0": 0.0, "x1": 1.0, "y1": 1.0}
+
+
+def _floor4(v: float) -> float:
+    """Round DOWN to 4 places - a fitted peak written to the timeline can never be larger than the one fitted (L3)."""
+    return math.floor(v * 1e4) / 1e4
+
+
+def _stamp_scale(cx: float, cy: float, pw: float, ph: float, obstacles: list[dict], bounds: dict) -> float:
+    """The largest PAINTED size (as a multiple of pw x ph) a mark centred on (cx, cy) may take: its turned hull clear
+    at its least approach (STAMP_APPROACH_MIN, which contains it at rest), and the ring's floor disc - the painted
+    half-diagonal + STAMP_RING_GAP_PX + the stroke - clear, so the ring can always be drawn."""
+    hx, hy = turned_half_extents(pw, ph)
+    k_mark = rect_scale(cx, cy, hx * STAMP_APPROACH_MIN, hy * STAMP_APPROACH_MIN, obstacles, bounds)
+    k_ring = (disc_clearance(cx, cy, obstacles, bounds) - STAMP_RING_GAP_PX - STAMP_RING_W_PX) / (0.5 * math.hypot(pw, ph))
+    return min(k_mark, k_ring)
+
+
+def stamp_fit(cx: float, cy: float, k: float, paint: dict, obstacles: list[dict], bounds: dict) -> dict:
+    """The stamp at painted scale `k` about the painted centre (cx, cy), written as the engine draws it: the CANVAS box
+    (rounded), the painted fractions, and the ring and approach fitted to what the room leaves AT THAT ROUNDED BOX -
+    `ring_to` = min(2, disc / painted half-diagonal), `from_to` = min(2.1, what the turned hull allows). Both rounded
+    DOWN (L3). Pure."""
+    fw, fh = paint["x1"] - paint["x0"], paint["y1"] - paint["y0"]
+    cw = k / fw                                   # canvas px per unit width: painted width = k, canvas width = k / fw
+    W, H = cw, cw * paint["aspect"]
+    box = {"x": round(cx - W * (paint["x0"] + fw / 2)), "y": round(cy - H * (paint["y0"] + fh / 2)),
+           "w": round(W), "h": round(H)}
+    pcx = box["x"] + box["w"] * (paint["x0"] + fw / 2)          # the drawn painted centre and size, off the rounded box
+    pcy = box["y"] + box["h"] * (paint["y0"] + fh / 2)
+    pw, ph = box["w"] * fw, box["h"] * fh
+    rp = 0.5 * math.hypot(pw, ph)
+    hx, hy = turned_half_extents(pw, ph)
+    ring = _floor4(min(STAMP_RING_TO, (disc_clearance(pcx, pcy, obstacles, bounds) - STAMP_RING_W_PX) / rp))
+    frm = _floor4(min(STAMP_FROM, rect_scale(pcx, pcy, hx, hy, obstacles, bounds)))
+    return {**box, "paint": [round(paint["x0"], 4), round(paint["y0"], 4), round(paint["x1"], 4), round(paint["y1"], 4)],
+            "painted": [round(pw, 1), round(ph, 1)], "centre": [round(pcx, 1), round(pcy, 1)],
+            "ring_to": ring, "ring_capped": ring < STAMP_RING_TO - 1e-9, "ring_floor": _floor4((rp + STAMP_RING_GAP_PX) / rp),
+            "from_to": frm, "from_capped": frm < STAMP_FROM - 1e-9}
+
+
+def _stamp_room_name(cx: float, cy: float, page: dict | None, aspect: str | None) -> str:
+    """Which of the page's places the chosen centre stands in: E65's `empty` room inside the plot, else the free band
+    (`free_bands`) it lies in - named on the entry for the record, never used to decide."""
+    if not page:
+        return "plate"
+    boxes = LPG.page_boxes(page, aspect or "16:9")
+    pl = boxes["plot"]
+    if pl["x"] <= cx <= pl["x"] + pl["w"] and pl["y"] <= cy <= pl["y"] + pl["h"]:
+        return "empty"
+    for b in free_bands(boxes):
+        if b["x"] <= cx <= b["x"] + b["w"] and b["y"] <= cy <= b["y"] + b["h"]:
+            return b["band"]
+    return "outside"
+
+
+def stamp_dock_place(world: dict | None, aspect: str | None, dopt: dict, paint: dict | float | None,
+                     plate_room: dict | None = None, reserve: list[dict] | None = None, where: str = "stamp") -> dict:
+    """WHERE A STAMP LANDS AND HOW BIG: the door every `arrive: stamp` dock goes through (the row loop calls it before
+    the slot rule; R26-20). THE MARK TAKES THE ROOM, THE RING HUGS THE MARK (the operator's round):
+
+    ONE BOX FOR THE WHOLE ARRIVAL: the entry is written `centre: True` - the engine's own "box from the first frame"
+    switch (`dockGeom`) - and `read` / `read_s` / `park_s` / `centre_band` are refused on a stamp, so the fitted, rung
+    and landed rect is one rect.
+    WHERE: the row's own centre (`centre_x` / `centre_y`) when it names one; else EVERY free place the world offers -
+    on a ledger page the whole safe box against its ink (the plot's empty area, the bands round it: E65's rooms, all of
+    them at once), on a picture plate its declared `room` - searched for the centre that holds the LARGEST PAINTED
+    MARK (`_stamp_scale`), the page's own E65 answer breaking a tie. A plate stamp with neither room nor centre is
+    refused by name.
+    SIZE: the largest the place holds (`centre_w` caps it when the row names one). Refused only when that largest is
+    under STAMP_MARK_FLOOR_PX on its painted long side.
+    `paint`: the mark's painted box (`painted_box`), or a bare aspect for a framed card. Returns `stamp_fit` + `room`
+    + `why`; ValueError names the row."""
+    sw, sh = (1080, 1920) if (aspect or "16:9") == "9:16" else (1920, 1080)
+    page = (world or {}).get("page") if (world or {}).get("kind") == SPECIES_LEDGER else None
+    if not isinstance(paint, dict):
+        paint = painted_box(None, paint)
+    try:
+        obs, bounds = ring_obstacles(page, aspect, reserve)
+    except ValueError as exc:
+        raise ValueError(f"{where}: {exc}") from None
+    if not page and plate_room:   # a picture plate's declared room IS where a card may stand: the mark and its ring stay inside it
+        x0, y0 = max(bounds["x"], plate_room["x"]), max(bounds["y"], plate_room["y"])
+        x1 = min(bounds["x"] + bounds["w"], plate_room["x"] + plate_room["w"])
+        y1 = min(bounds["y"] + bounds["h"], plate_room["y"] + plate_room["h"])
+        bounds = {"x": x0, "y": y0, "w": max(0, x1 - x0), "h": max(0, y1 - y0)}
+    unit = (1.0, paint["aspect"] * (paint["y1"] - paint["y0"]) / (paint["x1"] - paint["x0"]))   # painted w : h
+    cap = (dopt.get("centre_w") or 0) * sw * (paint["x1"] - paint["x0"]) or math.inf               # a named width caps it
+    if dopt.get("centre_x") is not None or dopt.get("centre_y") is not None:
+        cx = dopt["centre_x"] * sw if dopt.get("centre_x") is not None else sw / 2
+        cy = dopt["centre_y"] * sh if dopt.get("centre_y") is not None else sh / 2
+        k = _stamp_scale(cx, cy, *unit, obs, bounds)
+    else:
+        region = bounds if (page or plate_room) else None
+        if not region:
+            raise ValueError(f"{where}: a stamp on a picture plate needs the plate's `room` or the row's own "
+                             "centre_x / centre_y - there is nowhere to fit it")
+        e65 = dock_place(world, aspect, reserve) if page else region
+        ecx, ecy = e65["x"] + e65["w"] / 2, e65["y"] + e65["h"] / 2
+        best = None
+        coarse, fine = STAMP_SEARCH_PX
+        pts = [(gx, gy) for gx in range(int(region["x"]), int(region["x"] + region["w"]) + 1, coarse)
+               for gy in range(int(region["y"]), int(region["y"] + region["h"]) + 1, coarse)]
+        for _pass in (0, 1):
+            for gx, gy in pts:
+                key = (min(_stamp_scale(gx, gy, *unit, obs, bounds), cap), -math.hypot(gx - ecx, gy - ecy))
+                if best is None or key > best[0]:
+                    best = (key, gx, gy)
+            pts = [(best[1] + dx, best[2] + dy) for dx in range(-coarse, coarse + 1, fine) for dy in range(-coarse, coarse + 1, fine)]
+        (k, _tie), cx, cy = best
+    k = min(k, cap)
+    long_side = max(k, k * unit[1])
+    if long_side < STAMP_MARK_FLOOR_PX:
+        raise ValueError(f"{where}: the largest mark this {'place' if page else 'room'} holds at ({cx:.0f}, {cy:.0f}) paints "
+                         f"{long_side:.0f} px on its long side, under the {STAMP_MARK_FLOOR_PX} px mark floor - name "
+                         "another room for it (R26-191: a collision is fixed, never shipped)")
+    fit = None
+    for _ in range(12):   # L3: the ROUNDED box must still hold the mark; step down a pixel until it does
+        fit = stamp_fit(cx, cy, k, paint, obs, bounds)
+        pw, ph = fit["painted"]
+        if (_stamp_scale(fit["centre"][0], fit["centre"][1], pw, ph, obs, bounds) >= 1.0
+                and fit["from_to"] >= STAMP_APPROACH_MIN and fit["ring_to"] >= fit["ring_floor"]):
+            break
+        k -= 1.0
+    fw = fit["painted"][0]
+    why = (f"mark {fit['painted'][0]:.0f}x{fit['painted'][1]:.0f} painted px ({100 * fw / sw:.1f}% of the stage width); "
+           f"ring {'capped at ' + format(fit['ring_to'], '.2f') + 'x by the room' if fit['ring_capped'] else 'reaches 2.00x'}"
+           f" (floor {fit['ring_floor']:.2f}x, just outside the painted edge); "
+           f"approach {'capped ' + format(STAMP_FROM, '.2f') + 'x -> ' + format(fit['from_to'], '.2f') + 'x' if fit['from_capped'] else 'from 2.10x'}")
+    return {**fit, "room": "authored" if (dopt.get("centre_x") is not None or dopt.get("centre_y") is not None)
+            else _stamp_room_name(cx, cy, page, aspect), "why": why}
 
 # ---- R26-221: A CARD TAKES AN AUTHORED SLOT ON A PICTURE PLATE (2026-09-18, the Steel and Paper H unit) ----
 # `dock_place` answers None for a plate - E45's "a dock on a plain plate keeps the solo card" - and that one answer
@@ -6503,6 +6838,8 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
                centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,
                press: dict | None = None, stack: bool = False, behind: str | None = None, fg: str | None = None,
+               prop: bool = False, ink: str | None = None, ring_to: float | None = None, from_to: float | None = None,
+               paint: list | None = None,
                rid: str | None = None, read_moved: dict | None = None, read_deferred: bool = False,
                embed: dict | None = None, cutout: bool = False, depth: float | None = None) -> dict:
     """One dock on a compiled scene.
@@ -6540,6 +6877,14 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         # P53 T7 / R26-59: a CUTOUT dock - the card's chrome stands down. Written only when the row asks, so every
         # build that docks a document is byte-for-byte what it was.
         **({"kind": DOCK_KIND_CUTOUT} if cutout else {}),
+        # R26-246 (b) / E99 s87: a PROP dock - the payload is art added to the world, bare, and `ink` says whether it
+        # keeps its own colour. Written only when the row asks, so every build that docks a card is byte-for-byte what it was.
+        **({"kind": DOCK_KIND_PROP} if prop else {}), **({"ink": ink} if (prop and ink) else {}),
+        # R26-20 send-back: a STAMP's ring peak as the room allows it (stamp_ring_fit). Written only for a stamp that was
+        # fitted, so every other entry is byte-for-byte what it was.
+        **({"ring_to": ring_to} if (ring_to is not None and arrive == "stamp") else {}),
+        **({"from_to": from_to} if (from_to is not None and arrive == "stamp") else {}),   # ... and its approach
+        **({"paint": paint} if (paint is not None and arrive == "stamp") else {}),   # ... and the part of its box the mark PAINTS (fractions): the ring's centre, radius and the turn's pivot
         # P50 T3: a PRESS card carries its source line and its quoted phrase onto the stage; `_stack` is the
         # scene's own bookkeeping and is replaced by stack_index / stack_n once every dock on the scene is known.
         # R26-55: and the phrase's WORDS and the card's own aspect when the card was cut with them - the player
@@ -7134,6 +7479,16 @@ def main() -> int:
                     dplace = plate_dock_place(plate_room, ASPECT, dopt, f"shot row {i + 1} ({a}-{b}s) dock {aid}")
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: {exc}") from exc
+            stamp_fit = None
+            if dopt.get("arrive") == "stamp":   # R26-20 send-back #2: every stamp is fitted to the box the engine draws, or the row fails
+                try:
+                    _paint = painted_box(dock_asset_path(aid, EP)) if dopt.get("prop") else painted_box(None, dopt.get("card_aspect"))   # the PAINTED mark: a prop's alpha box, a card's whole box
+                    stamp_fit = stamp_dock_place(world, ASPECT, dopt, _paint, plate_room, newsreel_boxes(row_species, ASPECT),
+                                                 f"shot row {i + 1} ({a}-{b}s) dock {aid}")
+                except ValueError as exc:
+                    raise SystemExit(f"FAIL: {exc}") from exc
+                dplace, centred = {k: stamp_fit[k] for k in ("x", "y", "w", "h", "room")}, True
+                print(f"  stamp: {sid}.{aid} - {stamp_fit['room']}: {stamp_fit['why']}")
             if centred and isinstance(dplace, dict) and isinstance(place, dict) and "room" not in dplace:
                 dplace = dict(dplace, room=place.get("room"))   # E65: the room the PAGE offered travels with the centred box
             if dopt.get("press"):   # P50 T3: E45 - the pile has one box, and it is the stage's centre
@@ -7162,7 +7517,7 @@ def main() -> int:
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
             # R26-221: `dplace` rather than `place` is the test - a card on a picture plate is placed by its own box
             # (the page's `place` is None there), and a read the compiler drops is a card that never pops
-            rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (dplace and rd) else None
+            rplace = None if stamp_fit else centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (dplace and rd) else None
             # E63 (widened): a card never READS over the page's plot, drawing or finished. The read box is the row's
             # own when it named one, the card's solo CSS box otherwise; a centred card with no `read` has no pop at all
             # (it takes its parked box from its first frame), so there is nothing to move and the entry is untouched.
@@ -7183,6 +7538,7 @@ def main() -> int:
                 read_moves.append(f"{sid}.{aid} -> {e63['read_moved']['to']}")
             elif e63.get("read_deferred"):
                 read_defers.append(f"{sid}.{aid}")
+            ring_fit = stamp_fit   # the fit above; a stamp with no place never reaches here (it failed the row)
             if isinstance(eplace, dict) and eplace.get("room"):   # E65: the room every placed card took
                 card_rooms.append((f"{sid}.{aid}", eplace["room"],
                                    [eplace["x"], eplace["y"], eplace["w"], eplace["h"]],
@@ -7197,7 +7553,8 @@ def main() -> int:
                         # a VIDEO dock (E44 / R26-7): the card carries moving pictures, seeked to
                         # the scene clock by the player's one seek. Declared here so the player
                         # mounts a <video> instead of an <img> and the gate can see it.
-                        **({"kind": DOCK_KIND_CUTOUT} if dopt.get("cutout")
+                        **({"kind": DOCK_KIND_PROP} if dopt.get("prop")   # E99 s87: a prop is art in the world, and the row says so
+                           else {"kind": DOCK_KIND_CUTOUT} if dopt.get("cutout")
                            else {"kind": DOCK_KIND_VIDEO} if is_video_asset(ap) else {}),   # P53 T7: the row's intent, not the asset's nature
                         # Authored in the dock - a machine-mangled asset id is
                         # not a title, and empty badges leave the card's whole
@@ -7249,7 +7606,11 @@ def main() -> int:
                                         behind=dopt.get("behind"), fg=fg_key, embed=embed, rid=dock_row_id(sid, aid),
                                         depth=dopt.get("depth"),   # P58 T6 (a): the plane the card stands on
                                         read_moved=e63.get("read_moved"), read_deferred=bool(e63.get("read_deferred")),
-                                        cutout=bool(dopt.get("cutout"))))
+                                        cutout=bool(dopt.get("cutout")),
+                                        prop=bool(dopt.get("prop")), ink=dopt.get("ink"),   # E99 s87: the bare payload and how its art is laid down
+                                        ring_to=ring_fit["ring_to"] if ring_fit else None,   # R26-20 send-back: the ring as the room holds it
+                                        from_to=ring_fit["from_to"] if ring_fit else None,   # ... and the approach
+                                        paint=ring_fit["paint"] if ring_fit else None))   # ... and its painted extent
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         try:
             _pg = (world or {}).get("page") if isinstance((world or {}).get("page"), dict) else None

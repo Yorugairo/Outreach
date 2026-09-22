@@ -172,19 +172,19 @@ test("the opt-in stamp uses an approved raster prop, spring landing and no gener
   assert.ok(!made.some((e) => e.tag === "rect"), "stamp has no generic card background");
 });
 
-test("a finance prop stamp admits the larger narrative art box", () => {
+test("a non-badge finance prop refuses the chip path by name under E99 s87", () => {
   const made = [];
   const el = (tag, cls, parent, at) => { const e = { tag, cls, at: at || {}, kids: [], textContent: "", setAttribute(k, v) { this.at[k] = v; } };
     made.push(e); if (parent && parent.kids) parent.kids.push(e); return e; };
-  paintChip({ sp: { kind: "chip", form: "stamp", at: 4, dur: 6, size: 640,
+  assert.throws(() => paintChip({ sp: { kind: "chip", form: "stamp", at: 4, dur: 6, size: 640,
     icon: "prop-liquidity-drain-pump-v1", label: "LIQUIDITY DRAIN", target: { kind: "point", x: .5, y: .5 } },
     t: 4.2, svg: { kids: [] }, el,
     A: { "prop:prop-liquidity-drain-pump-v1": "data:image/png;base64,approved-prop" },
     resolveTarget: () => ({ x: 960, y: 540, w: 0, h: 0 }), hash: () => .5,
-    idle: () => ({ scale: 1, dx: 0, dy: 0 }), seed: 1, si: 0 });
+    idle: () => ({ scale: 1, dx: 0, dy: 0 }), seed: 1, si: 0 }), /prop-liquidity-drain-pump-v1.*E99 s87/);
   assert.equal(CHIP_STAMP.ICON_MAX_SIZE, 420);
   assert.equal(CHIP_STAMP.MAX_SIZE, 700);
-  assert.equal(made.find((e) => e.cls === "chipstampart").at.width, "640.0");
+  assert.equal(made.length, 0);
 });
 
 test("the stamp fails closed when the approved raster URI is absent", () => {

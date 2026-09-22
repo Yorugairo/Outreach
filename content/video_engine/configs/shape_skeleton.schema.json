@@ -54,7 +54,7 @@
         {
           "const": "throw-then-push",
           "title": "a full chart card is THROWN, then the CAMERA pushes to it",
-          "description": "The same pair by the camera arrival: the card lands on the previous scene and over 0.45 s the camera zooms the outgoing world and the card together until the card's box fills the stage - the eye goes to the card instead of the card growing. record=docs/content-video-engine/CAPABILITIES.md:87 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:403-420"
+"description": "The same pair by the camera arrival: the card lands on the previous scene and over 0.45 s the camera zooms the outgoing world and the card together until the card's box fills the stage - the eye goes to the card instead of the card growing. record=docs/content-video-engine/CAPABILITIES.md:88 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:403-420"
         },
         {
           "const": "door",
@@ -124,7 +124,7 @@
         {
           "const": "object-becomes-chart",
           "title": "the OBJECT in the picture becomes the chart",
-          "description": "enter=morph on a ledger page whose world.morph.poly is a PLANTED element's own traced silhouette: the prop the sentence just named becomes the area under the series, the ground soaking out from it, and the chart builds on the shape it became. record=docs/content-video-engine/CAPABILITIES.md:124 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/build_planted.py:119-133 The table it is transcribed from is a PROOF BUILD on the Tokyo bed (P61 T3d; E99 s60 - a proof is a scene), not one of the three approved shorts."
+          "description": "enter=morph on a ledger page whose world.morph.poly is a PLANTED element's own traced silhouette: the prop the sentence just named becomes the area under the series, the ground soaking out from it, and the chart builds on the shape it became. record=docs/content-video-engine/CAPABILITIES.md:125 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/build_planted.py:119-133 The table it is transcribed from is a PROOF BUILD on the Tokyo bed (P61 T3d; E99 s60 - a proof is a scene), not one of the three approved shorts."
         }
       ]
     },

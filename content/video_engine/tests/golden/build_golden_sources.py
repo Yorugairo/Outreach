@@ -3207,6 +3207,81 @@ FRAME_T["remake-bars-to-line"] = REMAKE_AT + 0.15 * REMAKE_S   # 12.36 - P61 T2b
 
 
 
+
+# ---- R26-20's other half / E99 s87: THE STAMPED PROP -------------------------------------------
+# The operator, 2026-09-22: *"for props, it doesnt make sense to put them in a card, the whole point of a prop is
+# for it to get added to the world; we would either stamp it or throw it on."* So the surface is a PROP - one of
+# the 24 catalogued cutouts - landing BARE on a built ledger page by the ported badge-stamp arrival: the clamped
+# scale spring settling while the free rotation spring is still unwinding under it, the impact ring on its split
+# shock curves, and the exit E50 owes the landed mark (authored here, at 26.0, so the frame can prove it).
+# WHERE it lands is the compiler's own answer, not a hand-written box: `stamp_dock_place`, the door the row loop
+# calls (send-back #2), searching E65's room for the centre its ring fits round. `centre: True` holds it at that
+# box from its first frame - a stamp never pops and slides to a park.
+# THE INK IS THE OPEN QUESTION (E99 s87, the operator's own): the prop in its own colour, or laid down in the
+# page's own ink the way a real impression would be. Both are surfaces here, identical in every other byte, so the
+# two frames are a straight comparison and the operator picks on the frame.
+# THE PICTURE IS A PROXY, for the reason the icon proxy is one (E99 s31: an approved cutout never enters git) -
+# the same integer box filter, at a cap well under the drawn size, and it says so. A BUILD still embeds the
+# full-resolution file through `catalogue_icon_uri` / `dock_uri`; this is a test fixture's proxy.
+PROP_CUTOUT = REPO / "content/video_engine/assets/props/cutouts/prop-federal-reserve-building-v1.png"
+PROP_PROXY_PX = 160         # the file is 282x259 RGBA; at cap 160 the integer factor is 2 and the proxy is 141x129
+PROP_STAMP_ENTER = 10.0     # the page is built by ~7.4 s (ROLL+SAVOR+FIELD 3.9 + PUNCH 0.5 + BUILD 3.0), so the mark lands on a page that has been read
+PROP_STAMP_EXIT = 26.0      # ... and it is told to leave here, on its own ease-IN cubic over STAMP_ARRIVAL.EXIT_S (0.5333 s)
+
+
+def _prop_stamp(ink: str) -> tuple[dict, dict]:
+    """R26-20 send-back #2: the stamp is placed by the COMPILER'S OWN DOOR, the one the row loop calls -
+    `stamp_dock_place` - on the page a real 16:9 build compiles (`stamp_full_stage`, which is what makes the page
+    report its measured end-name box), with the PICTURE's own PAINTED box (`painted_box` of the cutout, as the loop reads
+    it off the dock's asset). No hand-clipped room and no `extra`: the first two cuts carried both, and the reviewer
+    showed the real row loop answering a box whose ring ran through all four end names. The entry is then written
+    exactly as the loop writes it - `centre: True` (a stamp lands at its fitted box from its first frame), and the
+    fitted `ring_to` / `from_to`."""
+    import build_scene_timeline_f as BST
+    aid = "ev-prop-fed"
+    series = LPG.load_series(SERIES)
+    # the page a real 16:9 row compiles - with the compiler's ASPECT PINNED, because `stamp_full_stage` reads that
+    # module global and every earlier compile in the process leaves it set (`authoring.table.compile_timeline`); a
+    # 9:16 short compiled first left it "9:16", the page stayed unstamped, reported no end-name box and the stamp was
+    # refused - in the full suite only (the same pin as `measure_page_boxes.full_stage_variant`, R26-235)
+    _aspect, BST.ASPECT = BST.ASPECT, "16:9"
+    try:
+        page = BST.stamp_full_stage(LPG.build_spec(series, "line", 0, "right"))
+    finally:
+        BST.ASPECT = _aspect
+    page["field"] = "scribble"
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    opts = BST.dock_opts({"prop": True, "arrive": "stamp", "mass": "ink", "ink": ink})   # the row's options, validated as a build's are
+    fit = BST.stamp_dock_place(world, "16:9", opts, BST.painted_box(PROP_CUTOUT), None, None, "golden prop-stamp")   # the PAINTED mark, as the loop reads it off the dock's asset
+    place = {k: fit[k] for k in ("x", "y", "w", "h", "room")}
+    dock = BST.dock_entry(aid, 0, PROP_STAMP_ENTER, PROP_STAMP_EXIT, 0, BST.DOCK_KIND_PROP, place,
+                          opts.get("arrive"), opts.get("mass"), True,
+                          prop=bool(opts.get("prop")), ink=opts.get("ink"), ring_to=fit["ring_to"], from_to=fit["from_to"], paint=fit["paint"])
+    ev = {aid: {"title": "The Federal Reserve", "source": "the operator's own cutout", "species": "prop",
+                "document": {"path": str(PROP_CUTOUT.relative_to(REPO)), "sha256": "0" * 64}, "badges": [],
+                "kind": BST.DOCK_KIND_PROP}}
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME],
+               "docks": [dock], "species": []}]
+    uris = _base_uris()
+    uris[aid] = uri("image/png", png_proxy(PROP_CUTOUT, PROP_PROXY_PX))
+    tl = _timeline(f"Golden: the stamped prop ({ink} ink)", scenes, ev, None)
+    tl["kinetics"] = {"stop_action": True}   # P47 T1's switch: an authored `arrive` is the row's intent, the flag guards the goldens
+    return tl, uris
+
+
+SURFACES.update({
+    "prop-stamp": lambda: _prop_stamp("own"),        # E99 s87: the woodblock in its own colour
+    "prop-stamp-ink": lambda: _prop_stamp("page"),   # ... and laid down in the page's own ink
+})
+FRAME_T.update({
+    # THE SETTLED FRAME: 1.30 s after the contact, past the rotation spring's own rest (6 / (zeta w0) = 1.0909 s).
+    # Both springs are done and the mark stands OFF-SQUARE at -8.99 deg of its -9 deg landing - a stamp never lands
+    # square, and that residual angle is the tell. The ring is long gone (its life is 0.4667 s).
+    "prop-stamp": PROP_STAMP_ENTER + 1.30,
+    "prop-stamp-ink": PROP_STAMP_ENTER + 1.30,
+})
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

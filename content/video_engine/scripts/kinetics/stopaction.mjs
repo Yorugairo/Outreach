@@ -244,10 +244,165 @@ export const pickUpXf = (mass, t, S, o = {}) => {
            ground: 0, shake: { x: 0, y: 0 } };
 };
 
+/* ================= THE STAMP (R26-20's other half; E99 s87) =================
+   PORTED, not invented, from remotion-ui's own primitive, which is on disk at
+   content/video_engine/remotion-ui/src/remotion/primitives/badge-stamp.tsx (its curves are quoted per dial below,
+   by line). The intake triaged it into "Priority integration" and named the gap in our vocabulary exactly
+   (REMOTION-UI-INTAKE-2026-09-07.md:41): "(ii) the TWO-SPRING OFFSET: a clamped scale spring landing while a free
+   rotation spring is still unwinding ... The offset is the weight cue our single-spring landings lack", plus "the
+   split shock curves (linear life, eased expansion to 2x radius) fix a failure the source names - an impact ring
+   nobody sees", plus "exitAtInFrames ships the E50 shape: a landed mark owes an exit", and the boundary: "Look
+   does not port: charcoal-on-cream, drawn in our hand, not a gold ring."
+   WHAT THE SOURCE'S OWN COMMENT SAYS IT IS (badge-stamp.tsx:43-49): "it comes in oversized and over-rotated, hits
+   its mark, and settles back with the rotation still unwinding after the scale has stopped - the offset between the
+   two is what sells the weight. The shockwave is thrown from the impact frame, not from the start, so it cannot
+   arrive before the thing that caused it."
+   THE PORT, three things and no more:
+     THE TWO SPRINGS   Remotion's spring({config:{damping, stiffness, mass}}) is this module's own mass-spring-damper
+       in the same variables (zeta = c / (2 sqrt(k m)), w0 = sqrt(k / m)), so the source's two configs come across as
+       numbers and spring.mjs's closed form evaluates them - stateless, so a seek IS the play. The SCALE spring
+       carries overshootClamping: true (:72-74: "an overshoot past 1 dips the settled seal under its own size, which
+       reads as a wobble rather than as weight"), which Remotion implements by ENDING the spring at its target: here
+       the crossing time is solved in closed form (tc) and the value is exactly 1 from it on. The ROTATION spring is
+       free (:80-81: "the seal is still turning fractionally after it has stopped moving toward the page").
+     THE IMPACT RING   two curves, never one (:98-113): life LINEAR over SHOCK_S (it fades and thins evenly) and the
+       EXPANSION eased out on the source's entrance curve to RING_TO x the mark's own radius, "because a shockwave
+       leaves the impact fast and decelerates ... a ring that only grows to 1.55x is under it the whole time it is
+       worth seeing". Drawn only while 0 < life < 1 (:152), so it can never be held: this is an IMPACT cue, not E56's
+       annotation ring (which circles a number or a point on a chart and is the compiler's own `ring` species).
+     THE EXIT          exitAtInFrames / exitInFrames (:61-62, :119-125) on the source's exit curve, ease-IN cubic
+       (lib/timing.ts:9 EASING_EXIT = Easing.in(Easing.cubic), "Never ease-out an exit"): E50's shape, a landed mark
+       owes an exit, authored from the first build.
+   WHAT DOES NOT PORT: the seal's gold ring, its two curved texts, its double border - a look. Ours is charcoal on
+   cream drawn in our hand, and the PAYLOAD is whatever the mark is: E99 s87 (3) puts a PROP CUTOUT under it (a
+   docked card that keeps its RGBA), so the ink strength is a PRESSURE cue under the picture, never a wash over it.
+   WHAT THIS MODULE KEEPS OF OURS: the receiver. A stamp's contact is at its own t = 0 (the mark is already on its
+   spot; the scale over 1 is the height), so the page DIPS by the material's own spring and takes the hit's squash
+   frame - groundDip / impactSquash, the same two the throw and the landing answer with. Pure in t; it paints
+   nothing. Added with NO change to anything this module already painted. */
+/* NAMED `STAMP_ARRIVAL`, not `STAMP`: the engine inlines every module into ONE name space and the VECTOR
+   MAP's own species dials already own that identifier (species/vecmap.mjs:60). E99 s87 (4) keeps `stamp` the
+   vector map's SPECIES and makes this an `arrive:` value; the two never meet, and this name says so. */
+export const STAMP_ARRIVAL = Object.freeze({
+  FROM: 2.1,          /* badge-stamp.tsx:88-91 interpolate(land, [0, 1], [2.1, 1], { output: "perceptual-scale" }) - the mark arrives oversized,
+                         at the scale it was thrown from, and comes down in AREA space (see stampSprings) */
+  LAND_DEG: -9,       /* :58 rotation - the angle it lands at (ours to author per mark; this is the source's default) */
+  WIND_DEG: 16,       /* :59 windUp - "how much further round it starts", in degrees */
+  LAND: { m: 0.9, k: 220, c: 14 },   /* :78 the CLAMPED scale spring: damping 14, stiffness 220, mass 0.9 -> zeta 0.4975, w0 15.635 rad/s */
+  TURN: { m: 1.0, k: 120, c: 11 },   /* :85 the FREE trailing rotation spring: damping 11, stiffness 120, mass 1 -> zeta 0.5021, w0 10.954 rad/s - slower, so it is still ringing when the scale is done */
+  FADE: 0.35,         /* :93 opacity = interpolate(land, [0, 0.35], [0, 1]) - never a cut and never a dissolve: the fade rides the scale spring's own first third */
+  INK: [1, 0.86],     /* :96 "Ink strength: heavy on impact, easing back as the pressure comes off", over land 0.35 -> 1 */
+  SHOCK_S: 14 / 30,   /* :106 [delayInFrames, delayInFrames + 14] at the source's DEFAULT_FPS 30 (lib/timing.ts:3) = 0.4667 s of ring */
+  RING_TO: 2.0,       /* :156 r * (1 + shock): the ring reaches TWICE the mark's own radius - the number the source's comment defends */
+  RING_W_PX: 4.8,     /* :159 strokeWidth 2.6 of a 120-unit viewBox drawn at size 220 = 4.77 px of real stroke */
+  RING_W_FADE: 0.7,   /* :159 2.6 * (1 - shockLife * 0.7) - it thins on the LINEAR curve, not the eased one */
+  RING_A: 0.55,       /* :160 0.55 * (1 - shockLife) - and fades on the linear curve too */
+  EXIT_S: 16 / 30,    /* :62 exitInFrames = 16 at DEFAULT_FPS 30 = 0.5333 s */
+  SETTLE_Z: 6,        /* SPRING.SETTLE's own convention (spring.mjs:11): the envelope at e^-6 is rest, so a stamp is
+                         settled at 6 / (zeta w0) of its SLOWEST spring - the rotation's, which is the whole point */
+});
+
+/* a mass-spring-damper config -> the closed form's parameters, plus tc, the first instant a 0 -> 1 step response
+   reaches 1 (x = 1 when cos(wd t) + (z w / wd) sin(wd t) = 0, i.e. wd t = pi - atan(wd / (z w))). tc is how
+   overshootClamping is honoured exactly rather than by watching a value go past its target. */
+const stampSpring = (g) => {
+  const z = g.c / (2 * Math.sqrt(g.k * g.m)), w = Math.sqrt(g.k / g.m);
+  const wd = z < 1 ? w * Math.sqrt(1 - z * z) : 0;
+  return { z, w, wd, tc: wd > 0 ? (Math.PI - Math.atan2(wd, z * w)) / wd : Infinity, ts: STAMP_ARRIVAL.SETTLE_Z / (z * w) };
+};
+export const STAMP_LAND = stampSpring(STAMP_ARRIVAL.LAND);
+export const STAMP_TURN = stampSpring(STAMP_ARRIVAL.TURN);
+
+/* the source's ENTRANCE curve, cubic-bezier(0.16, 1, 0.3, 1) (lib/timing.ts:6 EASING_ENTER, reached as
+   motion-tokens.ts:44 EASING.enter): the standard CSS form - x solved by Newton, then y. Local on purpose; this
+   module is self-contained (it carries its own min-jerk and ease-in for the same reason). */
+const saBez = (x1, y1, x2, y2) => {
+  const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+  const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+  const fx = (u) => ((ax * u + bx) * u + cx) * u, dfx = (u) => (3 * ax * u + 2 * bx) * u + cx;
+  return (x) => {
+    x = sa01(x);
+    let u = x;
+    for (let i = 0; i < 10; i++) {
+      const e = fx(u) - x, d = dfx(u);
+      if (Math.abs(e) < 1e-9 || !(Math.abs(d) > 1e-12)) break;
+      u = Math.min(1, Math.max(0, u - e / d));
+    }
+    return ((ay * u + by) * u + cy) * u;
+  };
+};
+const saEnter = saBez(0.16, 1, 0.3, 1);
+
+/* THE TWO-SPRING OFFSET, on its own: land is the CLAMPED scale spring (exactly 1 from tc), turn the FREE one.
+   off_deg is what the offset IS - how far the mark is still off the angle it lands at, at an instant when scale
+   may already be 1.0000. Everything else here is read off those two. */
+export const stampSprings = (t, o = {}) => {
+  const P = Object.assign({}, STAMP_ARRIVAL, o);
+  const L = P.LAND === STAMP_ARRIVAL.LAND ? STAMP_LAND : stampSpring(P.LAND);
+  const R = P.TURN === STAMP_ARRIVAL.TURN ? STAMP_TURN : stampSpring(P.TURN);
+  const ts = Math.max(0, t);
+  const land = ts >= L.tc ? 1 : Math.min(1, springEval(ts, L).x);
+  const turn = springEval(ts, R).x;
+  /* PERCEPTUAL SCALE (badge-stamp.tsx:90 `output: "perceptual-scale"`): Remotion 4.0.502 interpolates it in SIGNED
+     AREA, not in scale - `toSignedArea(s) = sign(s) s^2`, the mix, then `fromSignedArea(a) = sign(a) sqrt|a|`
+     (remotion/dist/cjs/interpolate.js:272-283, :327-330, read in the main checkout's remotion-kit/node_modules; the
+     harvest pinned no node_modules of its own). Both ends are 2.1 and 1 as before; mid-approach the area eases, so at
+     land 0.5 the mark is sqrt((2.1^2 + 1) / 2) = 1.645 where a linear mix read 1.55. */
+  const scale = Math.sqrt(P.FROM * P.FROM + (1 - P.FROM * P.FROM) * land);
+  return { land, turn, scale, deg: P.LAND_DEG + P.WIND_DEG * (1 - turn),
+           off_deg: P.WIND_DEG * (1 - turn), opacity: sa01(land / Math.max(1e-6, P.FADE)),
+           ink: P.INK[0] + (P.INK[1] - P.INK[0]) * sa01((land - P.FADE) / Math.max(1e-6, 1 - P.FADE)),
+           settled: ts >= R.ts, land_at: L.tc, rest_at: R.ts };
+};
+
+/* THE IMPACT RING on its SPLIT curves: life linear (the fade and the thinning), the expansion eased out to RING_TO
+   x the mark's own radius. r is a MULTIPLIER of that radius, so the painter supplies the mark's own geometry.
+   null before the contact and once the life is spent - the source draws it only while 0 < life < 1 (:152). */
+export const stampRing = (ts, o = {}) => {
+  const P = Object.assign({}, STAMP_ARRIVAL, o), S = Math.max(1e-6, P.SHOCK_S);
+  if (!(ts > 0)) return null;
+  const life = ts / S;
+  if (life >= 1) return null;
+  const k = saEnter(life);
+  return { life, k, r: 1 + (P.RING_TO - 1) * k, width: P.RING_W_PX * (1 - life * P.RING_W_FADE),
+           alpha: P.RING_A * (1 - life) };
+};
+
+/* THE EXIT the landed mark owes (E50; the source's exitAtInFrames): 0 -> 1 on the ease-IN cubic, over EXIT_S from
+   the instant the mark is told to leave. 1 - stampExit is the opacity, as :134 / :169 have it. */
+export const stampExit = (ts, o = {}) => {
+  const P = Object.assign({}, STAMP_ARRIVAL, o);
+  return saEaseIn(sa01(Math.max(0, ts) / Math.max(1e-6, P.EXIT_S)));
+};
+
+/* STAMP: the whole arrival as one pure function of t (seconds from the CONTACT - a stamp is already on its spot, so
+   its contact is its own zero and the ring is thrown from it). scale, rot, ink and opacity are the mark's;
+   y / ground / alpha are the RECEIVER's answer in this module's own vocabulary (the surface dips by the material's
+   spring, the hit takes its squash frame); h is the height the contact shadow reads, taken off the scale still to
+   come [DERIVED: the mark's oversize IS its distance from the page - the source has no shadow at all]. */
+export const stampXf = (mass, t, o = {}) => {
+  const P = Object.assign({}, STAMP_ARRIVAL, o);
+  const sp = stampSprings(t, o), still = { x: 0, y: 0 };
+  /* the contact shadow's height dial is STOP's (SHADOW_H_PX), not the stamp's: P is STAMP_ARRIVAL + o, and reading
+     P.SHADOW_H_PX made h NaN on every call, so the shadow stood in its at-contact state before the mark had arrived
+     (R26-20 review H2). An `o` may still override it, as every other STOP dial can be. */
+  const H = P.SHADOW_H_PX != null ? P.SHADOW_H_PX : STOP.SHADOW_H_PX;
+  const h = H * sa01((sp.scale - 1) / Math.max(1e-6, P.FROM - 1));
+  if (t < 0) return { x: 0, y: 0, rot: P.LAND_DEG + P.WIND_DEG, scale: P.FROM, off_deg: P.WIND_DEG, ink: P.INK[0],
+                      opacity: 0, alpha: 0, theta: Math.PI / 2, phase: "waiting", u: 0, h, ground: 0, shake: still, ring: null };
+  const st = settle(t, 0, mass, P, 1);   /* h0 = 0: a stamp does not fall and does not hop - the source clamps the scale so the seal never dips under its own size */
+  return { x: 0, y: st.y, rot: sp.deg, scale: sp.scale, off_deg: sp.off_deg, ink: sp.ink, opacity: sp.opacity,
+           alpha: st.alpha, theta: Math.PI / 2, phase: sp.settled ? "settled" : "stamp", u: sp.land, h,
+           ground: st.ground, shake: P.violent ? groundShake(t, mass) : still, ring: stampRing(t, o) };
+};
+
 /* the CSS a painter appends: translate, the tumble, the area-preserving squash - fixed decimals. A negative alpha is a
    clamp (compress along the axis, stretch across it) and goes through the same tensor with the axis turned. */
 export const stopCss = (s) => {
   const a = Math.abs(s.alpha || 0), th = (s.alpha || 0) < 0 ? (s.theta || 0) + Math.PI / 2 : (s.theta || 0);
   const m = a > 1e-6 ? " matrix(" + squashMatrix(th, a).map((v) => v.toFixed(4)).join(",") + ",0,0)" : "";
-  return " translate(" + (s.x || 0).toFixed(2) + "px," + (s.y || 0).toFixed(2) + "px)" + ((s.rot || 0) ? " rotate(" + s.rot.toFixed(2) + "deg)" : "") + m;
+  /* the STAMP's scale (R26-20 / E99 s87), written ONLY when the state carries one - every throwXf / landXf /
+     pickUpXf state there has ever been carries none, so their CSS is byte-for-byte what it was */
+  const sc = s.scale != null && Math.abs(s.scale - 1) > 1e-6 ? " scale(" + s.scale.toFixed(4) + ")" : "";
+  return " translate(" + (s.x || 0).toFixed(2) + "px," + (s.y || 0).toFixed(2) + "px)" + ((s.rot || 0) ? " rotate(" + s.rot.toFixed(2) + "deg)" : "") + sc + m;
 };

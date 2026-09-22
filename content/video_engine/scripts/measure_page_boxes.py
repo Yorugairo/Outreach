@@ -43,6 +43,20 @@ THE PAGES. Four are the committed golden sources' own (the cheapest pages in the
 instantiate - they are already JSON on disk); `share` has no golden and carries its own synthetic
 series here, deterministic and stdlib-only like `build_golden_sources.py`'s.
 
+THE FULL-STAGE PAGE (R26-235, 2026-09-18). At 16:9 the compiler stamps a ledger page row `full_stage`
+(R26-205: the page IS the plate) and its ink goes into a different box - `ledger_page.
+_landscape_full_boxes` instead of `_landscape_boxes`. That geometry was never measured, so
+`measured_entry` refused the fixture to a full-stage page and the compiler placed every card and every
+camera move on it by the ESTIMATE: the estimate puts the dense-line page's title at y 44 where the frame
+draws 39.2 (R26-27's own error, 5 px), so the reachable zoom came out 1.3 px short and E65's `empty` /
+`axis` rooms - which need the measured `data_mask` - fell through to `corner` at the legibility floor.
+So every 16:9 page is measured TWICE here: as it is declared, and stamped as the compiler stamps it
+(`full_stage_variant` calls `build_scene_timeline_f.stamp_full_stage` itself, so the fixture can only
+carry a geometry the compiler actually writes). The two are filed under `16:9` and `16:9|full_stage` -
+`ledger_page.box_key`, the aspect key with the flag on it - and an entry records its own `full_stage`,
+so a page can only ever be served the geometry it is drawn in. A page that is never stamped (a host
+plate: its board was measured around a hand) has one 16:9 entry exactly as before.
+
 THE TREEMAP'S ONE LOOP. `ledger_page.treemap_cells` squarifies into `page_boxes`' plot, so writing a
 treemap entry changes the layout of the NEXT treemap page built - which changes the plot the player
 fits it into. `--passes` re-measures until the numbers stop moving (2 is enough in practice); a
@@ -51,6 +65,7 @@ single pass plus `--check` says the same thing more cheaply.
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import sys
@@ -195,33 +210,12 @@ def project_timeline(path: Path) -> Path:
     return max(found, key=lambda f: f.stat().st_mtime)
 
 
-def _legacy_page(page: dict) -> dict:
-    """Return the same page's old landscape geometry without changing its ink identity."""
-    legacy = dict(page)
-    legacy.pop("full_stage", None)
-    return legacy
-
-
-def _timeline_variants(page: dict, aspect: str) -> dict[str, dict]:
-    """Group one compiled page by geometry while keeping ``page_ink_key`` as the identity.
-
-    The full-stage stamp is a 16:9 geometry switch, not ink.  A 16:9 timeline therefore retains
-    both the legacy page and the stamped page under one ink key; a 9:16 timeline has only its old
-    portrait identity even if a compiler-side page carries the landscape stamp.
-    """
-    spec = _strip(page)
-    if aspect == "16:9" and spec.get("full_stage") is True:
-        return {"legacy": _legacy_page(spec), FULL_STAGE_VARIANT: spec}
-    return {"legacy": spec}
-
-
 def timeline_pages(path: Path) -> tuple[str, dict]:
-    """`(aspect, {ink: page})` for legacy pages, with a named family for full-stage 16:9 pages.
+    """`(aspect, {ink: page})` for every ledger page a compiled timeline names.
 
-    The world's page and every `page_states` entry are read in draw order and deduplicated by ink
-    within each geometry variant.  A full-stage 16:9 value is instead
-    ``{"legacy": page, "full_stage": page}``, so both geometries remain available under one ink
-    identity.  Portrait pages and legacy landscape pages keep the original value shape.
+    The world's page and every `page_states` entry are read in draw order and deduplicated by ink.
+    `variant_pages` expands a representative into the flat geometry keys used by the fixture; this
+    reader stays a source-timeline view and never invents a nested full-stage family.
     """
     tl = json.loads(Path(path).read_text(encoding="utf-8"))
     if not isinstance(tl.get("scenes"), list):
@@ -229,23 +223,44 @@ def timeline_pages(path: Path) -> tuple[str, dict]:
     aspect = tl.get("aspect") or "16:9"
     if aspect not in ASPECTS:
         raise SystemExit(f"{path}: aspect {aspect!r} is not one of {'|'.join(ASPECTS)}")
-    pages: dict[str, dict[str, dict]] = {}
+    pages: dict[str, dict] = {}
     for scene in tl["scenes"]:
         world = scene.get("world") or {}
         found = ([world["page"]] if isinstance(world.get("page"), dict) else []) + \
                 [p for p in (world.get("page_states") or []) if isinstance(p, dict)]
         for page in found:
             spec = _strip(page)
-            family = pages.setdefault(LPG.page_ink_key(spec), {})
-            for variant, candidate in _timeline_variants(spec, aspect).items():
-                family.setdefault(variant, candidate)
-    # Keep the pre-R26-235 value shape for every family that has no landscape variant.  This is
-    # important for callers that read a legacy page directly rather than going through build_pages.
-    result = {
-        ink: family["legacy"] if set(family) == {"legacy"} else family
-        for ink, family in pages.items()
-    }
-    return aspect, result
+            pages.setdefault(LPG.page_ink_key(spec), spec)
+    return aspect, pages
+
+
+def full_stage_variant(page: dict) -> dict | None:
+    """This page as the COMPILER stamps it at 16:9 (`build_scene_timeline_f.stamp_full_stage`), or None
+    for a page that is never stamped - a host plate, whose board was measured around a hand. The stamp
+    is the compiler's own and is not re-derived here, so the fixture cannot hold a geometry no build
+    writes; `ASPECT` is pinned around the call because the stamp reads that global (a 9:16 build leaves
+    it set, and this tool measures both aspects in one process)."""
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        stamped = BST.stamp_full_stage(copy.deepcopy(page))
+    finally:
+        BST.ASPECT = saved
+    return stamped if stamped.get("full_stage") else None
+
+
+def variant_pages(page: dict, aspect: str) -> dict[str, dict]:
+    """`{fixture key: the page as the player draws it}` - every GEOMETRY this page's ink takes at this
+    aspect (R26-235). At 9:16 there is one; at 16:9 there are the page as declared and the full-stage
+    page the compiler stamps, keyed `16:9` and `16:9|full_stage` by `ledger_page.box_key`. A page that
+    already carries the stamp (a 16:9 project's compiled page) measures once, under its own key: the
+    fixture records the geometry the timeline draws, never one it does not."""
+    out = {LPG.box_key(page, aspect): copy.deepcopy(page)}
+    if aspect == "16:9":
+        stamped = full_stage_variant(page)
+        if stamped is not None:
+            out.setdefault(LPG.box_key(stamped, aspect), stamped)
+    return out
 
 
 def representative(builder: str) -> dict:
@@ -356,12 +371,11 @@ def _silence() -> str:
     return BGS.uri("audio/wav", BGS.silent_wav(2.0))
 
 
-def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bool | None = None,
-          variant: str | None = None) -> dict:
+def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bool | None = None) -> dict:
     """One fixture entry: the ink it is valid for, the measured boxes, and the free bands they leave.
 
-    ``full_stage`` is kept out of ``page_ink_key`` by design.  The optional variant metadata makes
-    the nested 16:9 record self-describing for the subsequent fixture reader (T12).
+    ``full_stage`` is kept out of ``page_ink_key`` by design.  The flat fixture key carries the
+    geometry, while the entry's boolean marker makes a mismatched hand-edited record fail closed.
     """
     if full_stage is None:
         got = measure(builder, aspect, page)
@@ -372,11 +386,8 @@ def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bo
     bands = {b["band"]: {k: round(b[k]) for k in ("x", "y", "w", "h")} for b in BST.free_bands(full)}
     out = {"ink": LPG.page_ink_key(got["page"]), "title": got["page"].get("title"),
            "boxes": boxes, "bands": bands, "axis": got["axis"], "data_mask": got["data_mask"]}
-    if variant is None and full_stage is True:
-        variant = FULL_STAGE_VARIANT
-    if variant is not None:
-        out["variant"] = variant
-        out["full_stage"] = variant == FULL_STAGE_VARIANT
+    if LPG.full_stage(got["page"], aspect):   # R26-235: the GEOMETRY this entry was measured in, on the entry itself
+        out["full_stage"] = True
     return out
 
 
@@ -415,37 +426,12 @@ def build_pages(timelines: list[str]) -> tuple[dict, list[str]]:
         tl = project_timeline(Path(path))
         aspect, found = timeline_pages(tl)
         read.append(_rel(tl))
-        for ink, variants in found.items():
-            # `timeline_pages` has always been ink keyed.  A legacy-only family is still accepted
-            # here so old callers or hand-built probes do not turn measurement into a build error.
-            if not isinstance(variants, dict) or not any(
-                    isinstance(variants.get(k), dict) for k in ("legacy", FULL_STAGE_VARIANT)):
-                variants = {"legacy": variants}
-            bucket = pages.setdefault(ink, {}).setdefault(aspect, None)
-            legacy = variants.get("legacy")
-            if isinstance(legacy, dict) and bucket is None:
-                got = entry(str(legacy.get("builder")), aspect, legacy, full_stage=False)
-                bucket = dict(got, builder=legacy.get("builder"), timeline=_rel(tl))
-                pages[ink][aspect] = bucket
-                print(f"  {str(legacy.get('builder')):11} {aspect}  {ink}  plot={got['boxes']['plot']}"
-                      f"  {str(legacy.get('title'))[:40]!r}")
-            full = variants.get(FULL_STAGE_VARIANT)
-            if aspect == "16:9" and isinstance(full, dict):
-                got = entry(str(full.get("builder")), aspect, full, full_stage=True,
-                            variant=FULL_STAGE_VARIANT)
-                if bucket is None:
-                    # `_timeline_variants` normally synthesises this copy.  Keep the guard for
-                    # direct callers that provide only a full-stage variant.
-                    legacy_page = _legacy_page(full)
-                    legacy_got = entry(str(legacy_page.get("builder")), aspect, legacy_page,
-                                       full_stage=False)
-                    bucket = dict(legacy_got, builder=legacy_page.get("builder"), timeline=_rel(tl))
-                    pages[ink][aspect] = bucket
-                bucket[FULL_STAGE_VARIANT] = dict(
-                    got, builder=full.get("builder"), timeline=_rel(tl),
-                    variant=FULL_STAGE_VARIANT, full_stage=True)
-                print(f"  {str(full.get('builder')):11} {aspect}  {ink}  {FULL_STAGE_VARIANT}"
-                      f" plot={got['boxes']['plot']}  {str(full.get('title'))[:40]!r}")
+        for ink, page in found.items():
+            for key, drawn in variant_pages(page, aspect).items():   # R26-235: both 16:9 geometries
+                got = entry(str(page.get("builder")), aspect, drawn)
+                pages.setdefault(ink, {})[key] = dict(got, builder=page.get("builder"), timeline=_rel(tl))
+                print(f"  {str(page.get('builder')):11} {key:16}  {ink}  plot={got['boxes']['plot']}"
+                      f"  {str(page.get('title'))[:40]!r}")
     return pages, read
 
 
@@ -453,16 +439,13 @@ def build(builders: list[str], timelines: list[str] | None = None) -> dict:
     out: dict[str, dict] = {}
     for builder in builders:
         page = representative(builder)
-        out[builder] = {aspect: entry(builder, aspect, page, full_stage=False) for aspect in ASPECTS}
-        # The legacy 16:9 record remains the fallback.  The stamped page is a same-ink variant,
-        # measured through the same player with the flag present, and lives inside that bucket.
-        out[builder]["16:9"][FULL_STAGE_VARIANT] = entry(
-            builder, "16:9", page, full_stage=True, variant=FULL_STAGE_VARIANT)
+        out[builder] = {}
         for aspect in ASPECTS:
-            print(f"  {builder:11} {aspect}  plot={out[builder][aspect]['boxes']['plot']}"
-                  f"  bands={ {k: v['y'] for k, v in out[builder][aspect]['bands'].items()} }")
-        print(f"  {builder:11} 16:9  {FULL_STAGE_VARIANT}"
-              f" plot={out[builder]['16:9'][FULL_STAGE_VARIANT]['boxes']['plot']}")
+            for key, drawn in variant_pages(page, aspect).items():   # R26-235: both 16:9 geometries
+                out[builder][key] = entry(builder, aspect, drawn)
+        for key, got in out[builder].items():
+            print(f"  {builder:11} {key:16}  plot={got['boxes']['plot']}"
+                  f"  bands={ {k: v['y'] for k, v in got['bands'].items()} }")
     pages, read = build_pages(list(timelines or []))
     return {"schema": LPG.PAGE_BOXES_SCHEMA, "measured": str(date.today()),
             "player_sha256": template_sha(), "stage": {a: list(RB.STAGE[a]) for a in ASPECTS},
@@ -491,12 +474,10 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{b:11} {representative(b).get('title')}")
         return 0
     if args.builder and not (args.write or args.check):
+        page = representative(args.builder)
         for aspect in ([args.aspect] if args.aspect else list(ASPECTS)):
-            bucket = entry(args.builder, aspect, full_stage=False)
-            if aspect == "16:9":
-                bucket[FULL_STAGE_VARIANT] = entry(
-                    args.builder, aspect, full_stage=True, variant=FULL_STAGE_VARIANT)
-            print(json.dumps({args.builder: {aspect: bucket}}, indent=1, sort_keys=True))
+            for key, drawn in variant_pages(page, aspect).items():
+                print(json.dumps({args.builder: {key: entry(args.builder, aspect, drawn)}}, indent=1, sort_keys=True))
         return 0
     builders = [args.builder] if args.builder else list(BUILDERS)
     timelines = [_rel(Path(p)) for p in args.project] + recorded_projects()
@@ -510,11 +491,13 @@ def main(argv: list[str] | None = None) -> int:
         if was != now:
             print(f"DRIFT: {FIXTURE.relative_to(REPO)} is not what the player draws - run --write", file=sys.stderr)
             return 1
-        print(f"PASS {len(builders)} builders x {len(ASPECTS)} aspects measured identical")
+        print(f"PASS {len(builders)} builders x "
+              f"{sum(len(v) for v in doc['builders'].values())} geometr(ies) measured identical")
         return 0
     FIXTURE.parent.mkdir(parents=True, exist_ok=True)
     FIXTURE.write_text(dumps(doc), encoding="utf-8")
-    print(f"{FIXTURE.relative_to(REPO)}  {len(builders)} builders x {len(ASPECTS)} aspects"
+    print(f"{FIXTURE.relative_to(REPO)}  {len(builders)} builders x "
+          f"{sum(len(v) for v in doc['builders'].values())} geometr(ies)"
           f"  + {len(doc['pages'])} project page(s) from {len(doc['projects'])} timeline(s)"
           f"  player {doc['player_sha256'][:12]}")
     return 0

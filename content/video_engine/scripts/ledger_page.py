@@ -1636,10 +1636,29 @@ PAGE_BOXES_SCHEMA = "page_boxes.v1"
 BOX_KEYS = ("title", "sub", "chart", "plot", "source", "rail")
 TAGS_KEY = "tags"   # R26-205: the end tag column, on a full-stage page only (the fixture measures the six above)
 INK_KEYS = ("builder", "title", "sub", "source", "quiet_zone")
+# Kept as a descriptive alias for callers that name the variant.  The fixture's
+# actual key is the main lane's geometry key, ``16:9|full_stage``.
 FULL_STAGE_VARIANT = "full_stage"
 _PLAYER_TEMPLATE = _REPO / "docs/content-video-engine/samples/scene-evidence-player.template.html"
 _PLAYER_ENGINE = _REPO / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
 _PLAYER_SHA_CACHE: tuple[tuple[int, int, int, int], str] | None = None
+# R26-235: a page's boxes are a function of its ink AND of the geometry that ink is drawn in. The ink
+# is the entry's key (`page_ink_key`); the geometry is the ASPECT, which is the level the fixture has
+# always been keyed at - and at 16:9 there are now TWO geometries, because a page the compiler stamps
+# `full_stage` puts the same ink in `_landscape_full_boxes` instead of `_landscape_boxes`. So the
+# geometry key gains the flag rather than the ink key: `16:9` and `16:9|full_stage` are measured
+# separately and a page is served the one it is drawn in. (The flag stays OUT of `page_ink_key` for
+# the reason R26-205 found the hard way: the key does not know the aspect, so a caller that stamps a
+# page with the compiler's `ASPECT` unset and then asks at 9:16 would re-key every portrait page it
+# has - `test_dock_over_build.py` caught exactly that. A KEY the aspect is already in cannot.)
+FULL_STAGE_SUFFIX = f"|{FULL_STAGE_VARIANT}"
+
+
+def box_key(spec: dict, aspect: str) -> str:
+    """The fixture key this page's boxes are measured under: the aspect, plus the full-stage flag when
+    this page takes the whole stage at it (R26-235). `9:16` and an unstamped 16:9 page are unchanged,
+    so every entry measured before this row still answers for the page it measured."""
+    return f"{aspect}{FULL_STAGE_SUFFIX}" if full_stage(spec, aspect) else aspect
 
 
 def page_ink_key(spec: dict) -> str:
@@ -1747,7 +1766,6 @@ def _valid_full_stage_entry(entry: object, ink: str) -> bool:
                 and finite_real(value["h"]) and value["h"] >= 0)
 
     return (isinstance(entry, dict) and entry.get("ink") == ink
-            and entry.get("variant") == FULL_STAGE_VARIANT
             and entry.get("full_stage") is True
             and isinstance(boxes, dict)
             and all(valid_box(boxes.get(key)) for key in BOX_KEYS))
@@ -1769,30 +1787,33 @@ def measured_pages(path: Path | None = None) -> dict:
 def measured_entry(spec: dict, aspect: str) -> dict | None:
     """The fixture entry that measured THIS page's ink at this aspect, or None.
 
-    The ink-keyed `pages` section first (this very page, measured by name), then the per-builder
-    representative - either way the entry is used only when its `ink` is this page's own. A 16:9
-    full-stage page is a named geometry variant under that aspect; it is accepted only when its
-    marker is explicit and the fixture was measured from the current player pair."""
+    The ink-keyed project page is tried first, then its builder representative. The entry is used
+    only when its `ink` is this page's own, and only
+    when it was measured in the GEOMETRY this page is drawn in (`box_key`: R26-235, a full-stage 16:9
+    page lays out nothing like the same ink in the old landscape box, so the two are measured apart).
+    An entry is also refused when its own `full_stage` flag disagrees with the key it is filed under -
+    the fixture is a measurement, and a measurement that has to be reinterpreted is not one."""
     key = page_ink_key(spec)
-    if full_stage(spec, aspect):
-        # R26-235: full-stage boxes are not interchangeable with the legacy 16:9 entry, and an old
-        # fixture must fail closed rather than quietly placing a card by stale player geometry.
-        if not _full_stage_fixture_is_fresh():
-            return None
-        page_by_ink = measured_pages().get(key)
-        page_aspect = page_by_ink.get(aspect) if isinstance(page_by_ink, dict) else None
-        page_variant = page_aspect.get(FULL_STAGE_VARIANT) if isinstance(page_aspect, dict) else None
-        if _valid_full_stage_entry(page_variant, key):
-            return page_variant
-        builder = fixture().get(str(spec.get("builder")))
-        builder_aspect = builder.get(aspect) if isinstance(builder, dict) else None
-        builder_variant = (builder_aspect.get(FULL_STAGE_VARIANT)
-                           if isinstance(builder_aspect, dict) else None)
-        return builder_variant if _valid_full_stage_entry(builder_variant, key) else None
-    entry = (measured_pages().get(key) or {}).get(aspect)
+    full = full_stage(spec, aspect)
+    geometry = box_key(spec, aspect)
+    page_entries = measured_pages().get(key)
+    entry = page_entries.get(geometry) if isinstance(page_entries, dict) else None
+    builder_entries = fixture().get(str(spec.get("builder")))
+    builder_entry = builder_entries.get(geometry) if isinstance(builder_entries, dict) else None
+    if full and not _full_stage_fixture_is_fresh():
+        # A full-stage box is tied to the served player pair.  An old fixture
+        # must fail closed instead of silently placing against stale geometry.
+        return None
     if not isinstance(entry, dict):
-        entry = (fixture().get(str(spec.get("builder"))) or {}).get(aspect)
-    if not isinstance(entry, dict) or entry.get("ink") != key:
+        entry = builder_entry
+    if full and not _valid_full_stage_entry(entry, key):
+        # A project-specific page may be malformed while its builder
+        # representative is still a valid measured fallback.  Validate both
+        # candidates before serving either one.
+        entry = builder_entry
+        if not _valid_full_stage_entry(entry, key):
+            return None
+    if not isinstance(entry, dict) or entry.get("ink") != key or bool(entry.get("full_stage")) != full:
         return None
     return entry
 

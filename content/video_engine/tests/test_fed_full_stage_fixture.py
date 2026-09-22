@@ -1,4 +1,9 @@
-"""R26-235: full-stage measurement is a 16:9 geometry variant, not new ink."""
+"""R26-235: full-stage measurement is a 16:9 geometry variant, not new ink.
+
+The fixture is keyed by the flat geometry names ``16:9`` and
+``16:9|full_stage``; malformed entries and stale player markers remain covered
+without reviving the old nested variant shape.
+"""
 from __future__ import annotations
 
 import json
@@ -14,6 +19,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import build_scene_timeline_f as B  # noqa: E402
 import ledger_page as LPG  # noqa: E402
 import measure_page_boxes as M  # noqa: E402
+
+FULL = "16:9|full_stage"
 
 
 def _page(*, full_stage: bool = False) -> dict:
@@ -43,13 +50,13 @@ def _timeline(path: Path, *, aspect: str, pages: list[dict]) -> Path:
 
 
 def _fake_entry(calls: list, builder: str, aspect: str, page: dict | None = None,
-                *, full_stage: bool | None = None, variant: str | None = None) -> dict:
+                *, full_stage: bool | None = None) -> dict:
     rendered = dict(page or _page())
     if full_stage is True:
         rendered["full_stage"] = True
     elif full_stage is False:
         rendered.pop("full_stage", None)
-    calls.append((builder, aspect, full_stage, bool(rendered.get("full_stage"))))
+    calls.append((builder, aspect, full_stage, LPG.full_stage(rendered, aspect)))
     out = {
         "ink": LPG.page_ink_key(rendered),
         "title": rendered.get("title"),
@@ -58,8 +65,8 @@ def _fake_entry(calls: list, builder: str, aspect: str, page: dict | None = None
         "axis": {"x": None, "y": None},
         "data_mask": ["0" * 16 for _ in range(16)],
     }
-    if variant is not None:
-        out.update(variant=variant, full_stage=variant == M.FULL_STAGE_VARIANT)
+    if LPG.full_stage(rendered, aspect):
+        out["full_stage"] = True
     return out
 
 
@@ -72,11 +79,9 @@ def test_timeline_reader_keeps_mixed_landscape_geometry_under_one_ink(tmp_path: 
     ink = LPG.page_ink_key(legacy)
     assert aspect == "16:9"
     assert sorted(pages) == [ink]
-    assert set(pages[ink]) == {"legacy", M.FULL_STAGE_VARIANT}
-    assert LPG.page_ink_key(pages[ink]["legacy"]) == ink
-    assert LPG.page_ink_key(pages[ink][M.FULL_STAGE_VARIANT]) == ink
-    assert "full_stage" not in pages[ink]["legacy"]
-    assert pages[ink][M.FULL_STAGE_VARIANT]["full_stage"] is True
+    assert LPG.page_ink_key(pages[ink]) == ink
+    assert "full_stage" not in pages[ink]
+    assert list(M.variant_pages(pages[ink], "16:9")) == ["16:9", "16:9|full_stage"]
 
     rendered = M._timeline(legacy, "16:9", True)
     assert rendered["aspect"] == "16:9"
@@ -108,15 +113,12 @@ def test_build_pages_routes_legacy_and_full_stage_entries_separately(tmp_path: P
     pages, read = M.build_pages([str(tl)])
 
     ink = LPG.page_ink_key(page)
-    bucket = pages[ink]["16:9"]
+    bucket = pages[ink]
     assert read == [M._rel(tl)]
-    assert bucket["ink"] == ink
-    assert bucket["full_stage"]["ink"] == ink
-    assert bucket["full_stage"]["variant"] == M.FULL_STAGE_VARIANT
-    assert bucket["full_stage"]["full_stage"] is True
-    assert [call[2] for call in calls] == [False, True]
-    assert calls[0][3] is False
-    assert calls[1][3] is True
+    assert bucket["16:9|full_stage"]["ink"] == ink
+    assert bucket["16:9|full_stage"]["full_stage"] is True
+    assert [call[1] for call in calls] == ["16:9"]
+    assert [call[3] for call in calls] == [True]
 
 
 def test_build_pages_keeps_a_portrait_stamp_and_legacy_landscape_page(tmp_path: Path, monkeypatch):
@@ -133,7 +135,8 @@ def test_build_pages_keeps_a_portrait_stamp_and_legacy_landscape_page(tmp_path: 
     assert "full_stage" not in pages[ink]["9:16"]
     assert pages[ink]["16:9"]["ink"] == ink
     assert "full_stage" not in pages[ink]["16:9"]
-    assert [call[1:3] for call in calls] == [("16:9", False), ("9:16", False)]
+    assert [(call[1], call[3]) for call in calls] == [
+        ("16:9", False), ("16:9", True), ("9:16", False)]
 
 
 def test_build_pages_merges_same_ink_across_timeline_files_in_either_order(tmp_path: Path, monkeypatch):
@@ -149,11 +152,10 @@ def test_build_pages_merges_same_ink_across_timeline_files_in_either_order(tmp_p
         monkeypatch.setattr(M, "entry", lambda *args, **kwargs: _fake_entry(calls, *args, **kwargs))
 
         pages, _read = M.build_pages([str(legacy), str(full)])
-        bucket = pages[ink]["16:9"]
-        assert bucket["ink"] == ink
-        assert bucket[M.FULL_STAGE_VARIANT]["ink"] == ink
-        assert bucket[M.FULL_STAGE_VARIANT]["variant"] == M.FULL_STAGE_VARIANT
-        assert [call[2] for call in calls] == [False, True]
+        bucket = pages[ink]
+        assert bucket[FULL]["ink"] == ink
+        assert True in [call[3] for call in calls]
+        assert False in [call[3] for call in calls]
 
 
 def test_default_build_preserves_legacy_buckets_and_adds_landscape_variant(monkeypatch):
@@ -165,19 +167,18 @@ def test_default_build_preserves_legacy_buckets_and_adds_landscape_variant(monke
     by_aspect = doc["builders"]["story"]
     ink = LPG.page_ink_key(_page())
 
-    assert set(by_aspect) == {"16:9", "9:16"}
+    assert set(by_aspect) == {"16:9", "16:9|full_stage", "9:16"}
     assert by_aspect["16:9"]["ink"] == ink
-    assert by_aspect["16:9"]["full_stage"]["ink"] == ink
-    assert by_aspect["16:9"]["full_stage"]["variant"] == M.FULL_STAGE_VARIANT
-    assert by_aspect["16:9"]["full_stage"]["full_stage"] is True
+    assert by_aspect["16:9|full_stage"]["ink"] == ink
+    assert by_aspect["16:9|full_stage"]["full_stage"] is True
     assert "full_stage" not in by_aspect["9:16"]
-    assert [call[1:3] for call in calls] == [("16:9", False), ("9:16", False), ("16:9", True)]
+    assert [(call[1], call[3]) for call in calls] == [("16:9", False), ("16:9", True), ("9:16", False)]
 
 
 _MISSING = object()
 
 
-def _measured_entry(page: dict, *, shift: int = 0, variant: str | None = None,
+def _measured_entry(page: dict, *, shift: int = 0, full_stage: bool = False,
                     ink: str | None = None) -> dict:
     """Shape-only fixture entry with deliberately distinguishable boxes."""
     base = 100 + shift
@@ -191,8 +192,8 @@ def _measured_entry(page: dict, *, shift: int = 0, variant: str | None = None,
         "axis": {"x": None, "y": None},
         "data_mask": ["0" * 16 for _ in range(16)],
     }
-    if variant is not None:
-        entry.update(variant=variant, full_stage=variant == M.FULL_STAGE_VARIANT)
+    if full_stage:
+        entry["full_stage"] = True
     return entry
 
 
@@ -212,13 +213,13 @@ def _use_fixture(monkeypatch, path: Path) -> None:
 def test_full_stage_exact_page_variant_drives_page_and_card_boxes(tmp_path: Path, monkeypatch):
     page = _page(full_stage=True)
     ink = LPG.page_ink_key(page)
-    exact = _measured_entry(page, shift=7, variant=M.FULL_STAGE_VARIANT)
+    exact = _measured_entry(page, shift=7, full_stage=True)
     legacy = _measured_entry(page, shift=70)
-    builder = _measured_entry(page, shift=700, variant=M.FULL_STAGE_VARIANT)
+    builder = _measured_entry(page, shift=700, full_stage=True)
     fixture = _fixture(
         tmp_path / "exact.json",
-        builders={"story": {"16:9": {"legacy": legacy, M.FULL_STAGE_VARIANT: builder}}},
-        pages={ink: {"16:9": {"legacy": legacy, M.FULL_STAGE_VARIANT: exact}}},
+        builders={"story": {"16:9": legacy, FULL: builder}},
+        pages={ink: {"16:9": legacy, FULL: exact}},
         player_sha=M.template_sha(),
     )
     _use_fixture(monkeypatch, fixture)
@@ -240,15 +241,15 @@ def test_full_stage_exact_page_variant_drives_page_and_card_boxes(tmp_path: Path
     assert seen and seen[0]["plot"] == exact["boxes"]["plot"]
 
 
-def test_full_stage_uses_same_ink_builder_variant_when_exact_page_is_invalid(tmp_path: Path, monkeypatch):
+def test_full_stage_uses_same_ink_builder_entry_when_exact_page_is_invalid(tmp_path: Path, monkeypatch):
     page = _page(full_stage=True)
     ink = LPG.page_ink_key(page)
-    invalid_exact = _measured_entry(page, shift=2, variant="legacy")
-    builder = _measured_entry(page, shift=31, variant=M.FULL_STAGE_VARIANT)
+    invalid_exact = _measured_entry(page, shift=2)
+    builder = _measured_entry(page, shift=31, full_stage=True)
     fixture = _fixture(
         tmp_path / "builder-fallback.json",
-        builders={"story": {"16:9": {"legacy": _measured_entry(page), M.FULL_STAGE_VARIANT: builder}}},
-        pages={ink: {"16:9": {M.FULL_STAGE_VARIANT: invalid_exact}}},
+        builders={"story": {"16:9": _measured_entry(page), FULL: builder}},
+        pages={ink: {FULL: invalid_exact}},
         player_sha=M.template_sha(),
     )
     _use_fixture(monkeypatch, fixture)
@@ -260,14 +261,14 @@ def test_full_stage_uses_same_ink_builder_variant_when_exact_page_is_invalid(tmp
 def test_full_stage_rejects_malformed_or_wrong_markers_before_legacy_fallback(tmp_path: Path, monkeypatch):
     page = _page(full_stage=True)
     ink = LPG.page_ink_key(page)
-    marker_only = {"ink": ink, "variant": M.FULL_STAGE_VARIANT, "full_stage": True}
-    scalar_box = _measured_entry(page, variant=M.FULL_STAGE_VARIANT)
+    marker_only = {"ink": ink, "full_stage": True}
+    scalar_box = _measured_entry(page, full_stage=True)
     scalar_box["boxes"]["plot"] = "not-a-box"
-    nonnumeric_box = _measured_entry(page, variant=M.FULL_STAGE_VARIANT)
+    nonnumeric_box = _measured_entry(page, full_stage=True)
     nonnumeric_box["boxes"]["title"]["x"] = "bad"
-    nonfinite_box = _measured_entry(page, variant=M.FULL_STAGE_VARIANT)
+    nonfinite_box = _measured_entry(page, full_stage=True)
     nonfinite_box["boxes"]["chart"]["w"] = float("nan")
-    negative_extent = _measured_entry(page, variant=M.FULL_STAGE_VARIANT)
+    negative_extent = _measured_entry(page, full_stage=True)
     negative_extent["boxes"]["source"]["h"] = -1
     invalid = [
         None,
@@ -276,16 +277,16 @@ def test_full_stage_rejects_malformed_or_wrong_markers_before_legacy_fallback(tm
         nonnumeric_box,
         nonfinite_box,
         negative_extent,
-        _measured_entry(page, ink="not-this-ink", variant=M.FULL_STAGE_VARIANT),
-        _measured_entry(page, variant="legacy"),
-        _measured_entry(page, variant=M.FULL_STAGE_VARIANT, ink=ink),
+        _measured_entry(page, ink="not-this-ink", full_stage=True),
+        _measured_entry(page),
+        _measured_entry(page, full_stage=True, ink=ink),
     ]
     invalid[-1]["full_stage"] = False
     for index, candidate in enumerate(invalid):
         fixture = _fixture(
             tmp_path / f"invalid-{index}.json",
             builders={"story": {"16:9": {"ink": ink, "boxes": {}}}},
-            pages={ink: {"16:9": {M.FULL_STAGE_VARIANT: candidate}}},
+            pages={ink: {FULL: candidate}},
             player_sha=M.template_sha(),
         )
         _use_fixture(monkeypatch, fixture)
@@ -293,14 +294,14 @@ def test_full_stage_rejects_malformed_or_wrong_markers_before_legacy_fallback(tm
         assert LPG.page_boxes(page, "16:9")["measured"] is False
 
 
-def test_full_stage_malformed_variant_families_fail_closed(tmp_path: Path, monkeypatch):
+def test_full_stage_malformed_flat_entries_fail_closed(tmp_path: Path, monkeypatch):
     page = _page(full_stage=True)
     ink = LPG.page_ink_key(page)
     malformed = [
         ({ink: ["x"]}, {"story": ["x"]}),
         ({ink: {"16:9": []}}, {"story": {"16:9": "not-a-family"}}),
-        ({ink: {"16:9": {M.FULL_STAGE_VARIANT: []}}},
-         {"story": {"16:9": {M.FULL_STAGE_VARIANT: "not-an-entry"}}}),
+        ({ink: {FULL: []}},
+         {"story": {FULL: "not-an-entry"}}),
     ]
     for index, (pages, builders) in enumerate(malformed):
         fixture = _fixture(tmp_path / f"families-{index}.json", builders=builders, pages=pages,
@@ -313,11 +314,11 @@ def test_full_stage_malformed_variant_families_fail_closed(tmp_path: Path, monke
 def test_full_stage_requires_a_fresh_player_marker(tmp_path: Path, monkeypatch, player_sha):
     page = _page(full_stage=True)
     ink = LPG.page_ink_key(page)
-    entry = _measured_entry(page, variant=M.FULL_STAGE_VARIANT)
+    entry = _measured_entry(page, full_stage=True)
     fixture = _fixture(
         tmp_path / ("missing-hash.json" if player_sha is _MISSING else "stale-hash.json"),
-        builders={"story": {"16:9": {M.FULL_STAGE_VARIANT: entry}}},
-        pages={ink: {"16:9": {M.FULL_STAGE_VARIANT: entry}}},
+        builders={"story": {FULL: entry}},
+        pages={ink: {FULL: entry}},
         player_sha=player_sha,
     )
     _use_fixture(monkeypatch, fixture)

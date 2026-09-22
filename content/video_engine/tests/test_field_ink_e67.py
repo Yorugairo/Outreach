@@ -87,7 +87,8 @@ def test_the_field_ink_is_one_table_and_not_a_set_of_copies():
     """E67: LP_PAL, the ledger line's PAL and the species palette all READ LP_INK - a copy would drift."""
     src = ENGINE.read_text(encoding="utf-8")
     assert re.search(r"const LP_PAL = LP_INK;", src), "LP_PAL must be the one table"
-    assert re.search(r"const PAL = LP_INK;", src), "the ledger line reads the one table"
+    assert re.search(r"const PAL = pg\.surface_from \? \{ \.\.\.LP_INK,.*\} : LP_INK;", src), \
+        "the ledger line reads the one table except for the explicit page-surface palette"
     assert re.search(r"const PS_PAL = \{ \.\.\.LP_INK,", src), "the species palette spreads the one table"
     assert len(re.findall(r"const LP_INK = \{", src)) == 1, "LP_INK is declared once"
     # re-pinned 2026-09-13: the engine now writes the old coral as a CSS custom-property FALLBACK,
@@ -98,8 +99,10 @@ def test_the_field_ink_is_one_table_and_not_a_set_of_copies():
         assert dead not in bare, f"{dead} is a bare literal in the engine - a copy of the old table survives"
     # the old cobalt survives in exactly ONE place: the dock tier's TPAL, which reads on #16181c and not on the field
     assert src.count("#8fb3f0") == 1, "the old cobalt is loose in the field's code again"
-    # the DOCK tier keeps its own pair of tables (PAL graphic + TPAL text) - it draws on #16181c, not on the field
-    assert len(re.findall(r"crimson:\s*\"#", src)) == 3, "only LP_INK and the dock tier's two tables carry a literal"
+    # The explicit page-surface branch adds one palette for a photographed surface; the default stays LP_INK.
+    # The DOCK tier keeps its own pair of tables (PAL graphic + TPAL text) on #16181c.
+    assert len(re.findall(r"crimson:\s*\"#", src)) == 4, \
+        "only LP_INK, the opt-in page surface, and the dock tier's two tables carry a literal"
 
 
 def test_every_field_ink_keeps_its_token_name_so_object_files_stay_valid():

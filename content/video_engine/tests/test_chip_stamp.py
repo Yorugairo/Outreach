@@ -41,7 +41,9 @@ def test_stamp_accepts_catalogued_raster_and_registers_prop_uri():
 
 def test_stamp_accepts_approved_finance_prop_and_allows_full_narrative_size():
     entry = _stamp(icon=APPROVED_PROP, label="LIQUIDITY DRAIN", size=500)
-    assert B.validate_species([entry], STILL, PLATE) == []
+    errors = B.validate_species([entry], STILL, PLATE)
+    assert any(APPROVED_PROP in error and "E99 s87" in error for error in errors)
+    # Asset provenance remains valid; only the chip presentation is refused.
     resolved = B.catalogue_stamp_asset(APPROVED_PROP)
     assert resolved["_catalogue"] == "props"
     assert resolved["file"].name == "prop-liquidity-drain-pump-v1.png"
@@ -51,7 +53,8 @@ def test_stamp_accepts_approved_finance_prop_and_allows_full_narrative_size():
 def test_icon_stamp_keeps_420px_bound_while_prop_reaches_700px():
     assert any("size" in error and "420" in error
                for error in B.validate_species([_stamp(size=421)], STILL, PLATE))
-    assert B.validate_species([_stamp(icon=APPROVED_PROP, size=700)], STILL, PLATE) == []
+    assert any("E99 s87" in error
+               for error in B.validate_species([_stamp(icon=APPROVED_PROP, size=700)], STILL, PLATE))
     assert any("size" in error and "700" in error
                for error in B.validate_species([_stamp(icon=APPROVED_PROP, size=701)], STILL, PLATE))
 

@@ -291,7 +291,8 @@ SLOT_HANDOFF_ARRIVE = "land"
 HOST_PLATE_ID = "world-h1-studio-v1"          # the Flow order H-1 still, registered by id (find_asset -> STAMPED)
 HOST_PLATE_FILE = HERE / "host/H-1-studio.png"
 HOST_KEN = (0.05, -12, 6)                     # the ken PUSH (E99 s65: Ken Burns + the 20 px drift IS the long form's plate life)
-HOST_PLATE = HOST_PLATE_ID + ";use=landing;idle=drift;drift=20"   # E61 the use, E49 / E99 s63 the idle and its amplitude
+HOST_PLATE = HOST_PLATE_ID + ";use=landing"   # E61 the use. E99 s84: KEN BURNS ALONE - the operator, "the drift is too random,
+#                                                  i think we should use ken burns instead of drift"; the 20 px drift of s65 is withdrawn for long form (R26-236)
 
 DOCK_META = [
     {"asset": CERT_CARD, "title": "An 1845 railway certificate",
@@ -373,8 +374,8 @@ AGENDA_BOX = {"kind": "region", "x0": 0.58, "y0": 0.585, "x1": 0.96, "y1": 0.90}
 # slate - the operator's own second ending (E76 s5: "splatter it back on to the canvas").
 MELT_EXIT = "melt:splash:plate:%g"
 MELT_S_H = 1.0            # the melt's own length: it opens on "One test," and the board is there on "three questions"
-SLATE_PLATE = "world-three-notch-slate-v1;use=landing;idle=drift;drift=20"   # E61 the use, E49 / E99 s65 the life
-SLATE_KEN = (0.04, 10, -6)   # the ken push (the drift paints now - R26-228's dial is on in the kinetics)
+SLATE_PLATE = "world-three-notch-slate-v1;use=landing"   # E61 the use; E99 s84 - the plate's life is its ken push alone (R26-236)
+SLATE_KEN = (0.04, 10, -6)   # the ken push - and under s84 it is the WHOLE of this plate's life, so its direction is the sentence's
 # the slate's own face, measured on the plate: x 0.17-0.72, y 0.07-0.68 of the frame. The block sits inside it.
 # ... and ABOVE the caption: on a PLATE row the caption is back in STAGE mode (the anchored strip is the
 # page rule, R26-205), box [192, 432, 1535, 72] measured - so the block sits in the slate's upper face,
@@ -652,9 +653,10 @@ def _shot_table_md(rows: list) -> str:
         species = "; ".join("%s @%.2f" % (e["kind"], e["at"]) for e in (r[6] or []) if isinstance(e, dict)) or "-"
         out.append("| %d | %.2f-%.2f | `%s` | `%s` | %s | %s |"
                    % (i + 1, r[0], r[1], bare, opts or "-", cards, species))
-    idle = [(i + 1, str(r[2]).partition(";")[2]) for i, r in enumerate(rows) if ";idle=" in str(r[2])]
-    out += ["", "**Idle tokens: %d of %d rows** - " % (len(idle), len(rows))
-            + "; ".join("row %d `%s`" % (n, o) for n, o in idle) + " (E49; E99 s65 the 20 px long-form drift).",
+    life = T.life_tokens(rows)   # R26-245: the ken counts as life and the row says which (E99 s84)
+    out += ["", "**Life: %d of %d rows** - " % (len(life), len(rows))
+            + "; ".join("row %d `%s`" % (n, what) for n, what in life)
+            + " (E49 nothing goes truly still; E99 s84 KEN BURNS ALONE on a long-form plate).",
             "", "**Flow count (E99 s74):** 0 cuts, %d dips, each at a world change (E47): a chart cannot recast "
             "into a photograph plate and a plate cannot recast into a chart."
             % sum(1 for r in rows if r[5] == "dip"), ""]
@@ -712,7 +714,7 @@ def main() -> int:
                   "curvature_stroke": True,
                   # R26-228: an authored `;drift=` paints 0 px unless this dial is on. The bed carries no
                   # plate, but the dial is set here so the whole cut inherits it (E99 s65: 20 px long form).
-                  "plate_idle_paints": True, "plate_idle_drift_px": PLATE_DRIFT_PX})
+                  "plate_idle_paints": False})   # E99 s84 / R26-236: Ken Burns alone; the painted drift is off for long form
     if rc:
         return rc
 
@@ -733,8 +735,11 @@ def main() -> int:
 
     report, n_fail = MG.write_report(BUILD, TIMELINE_NAME)
     print("  motion gate : %s - %d FAIL" % (report.name, n_fail))
-    idle = [i + 1 for i, r in enumerate(rows) if ";idle=" in str(r[2])]
-    print("  idle tokens : %d of %d rows (%s)" % (len(idle), len(rows), ", ".join(str(i) for i in idle)))
+    # R26-245: a KEN is life (E99 s84 - it is the whole of a long-form plate's life), so the counter
+    # reads the ken tuple as well as the `;idle=` token and NAMES which carries each row.
+    life = T.life_tokens(rows)
+    print("  life        : %d of %d rows (%s)"
+          % (len(life), len(rows), "; ".join("row %d %s" % (n, what) for n, what in life) or "NONE - E49"))
     _assert_read_only(read_only)
     return 0
 
