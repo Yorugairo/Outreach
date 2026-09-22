@@ -284,13 +284,15 @@ def test_the_stamp_is_not_INK_and_never_touches_the_fixtures_key():
 
 
 def test_the_measured_fixture_still_answers_for_the_page_it_measured():
-    """The dense-line representative in `assets/page-boxes.v1.json` IS this golden's own page. It is
-    still measured with the stamp absent, at both aspects; WITH the stamp it is a different layout and
-    the fixture is correctly silent rather than handing over the old box's numbers."""
+    """The dense-line representative in `assets/page-boxes.v1.json` IS this golden's own page, measured
+    with the stamp absent at both aspects. WITH the stamp it is a different layout, and since R26-235 the
+    fixture MEASURES that layout too and answers under its own key (`16:9|full_stage`) - it no longer
+    refuses. Silence was the defect, not the safeguard: it sent a full-stage page to the estimate, which
+    put a card in the emptiest corner at the legibility floor instead of the page's real room."""
     spec = json.loads((RB.SOURCES / f"{SURFACE}.timeline.json").read_text(encoding="utf-8"))["scenes"][0]["world"]["page"]
     for aspect in ("16:9", "9:16"):
         assert LPG.measured_boxes(spec, aspect) is not None, aspect
-    assert LPG.measured_boxes(dict(spec, full_stage=True), "16:9") is None
+    assert LPG.measured_boxes(dict(spec, full_stage=True), "16:9") is not None   # R26-235: measured, not refused
     assert LPG.page_boxes(spec, "16:9")["measured"] is True
 
 

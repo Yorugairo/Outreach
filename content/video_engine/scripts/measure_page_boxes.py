@@ -43,6 +43,20 @@ THE PAGES. Four are the committed golden sources' own (the cheapest pages in the
 instantiate - they are already JSON on disk); `share` has no golden and carries its own synthetic
 series here, deterministic and stdlib-only like `build_golden_sources.py`'s.
 
+THE FULL-STAGE PAGE (R26-235, 2026-09-18). At 16:9 the compiler stamps a ledger page row `full_stage`
+(R26-205: the page IS the plate) and its ink goes into a different box - `ledger_page.
+_landscape_full_boxes` instead of `_landscape_boxes`. That geometry was never measured, so
+`measured_entry` refused the fixture to a full-stage page and the compiler placed every card and every
+camera move on it by the ESTIMATE: the estimate puts the dense-line page's title at y 44 where the frame
+draws 39.2 (R26-27's own error, 5 px), so the reachable zoom came out 1.3 px short and E65's `empty` /
+`axis` rooms - which need the measured `data_mask` - fell through to `corner` at the legibility floor.
+So every 16:9 page is measured TWICE here: as it is declared, and stamped as the compiler stamps it
+(`full_stage_variant` calls `build_scene_timeline_f.stamp_full_stage` itself, so the fixture can only
+carry a geometry the compiler actually writes). The two are filed under `16:9` and `16:9|full_stage` -
+`ledger_page.box_key`, the aspect key with the flag on it - and an entry records its own `full_stage`,
+so a page can only ever be served the geometry it is drawn in. A page that is never stamped (a host
+plate: its board was measured around a hand) has one 16:9 entry exactly as before.
+
 THE TREEMAP'S ONE LOOP. `ledger_page.treemap_cells` squarifies into `page_boxes`' plot, so writing a
 treemap entry changes the layout of the NEXT treemap page built - which changes the plot the player
 fits it into. `--passes` re-measures until the numbers stop moving (2 is enough in practice); a
@@ -51,6 +65,7 @@ single pass plus `--check` says the same thing more cheaply.
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import sys
@@ -214,6 +229,35 @@ def timeline_pages(path: Path) -> tuple[str, dict]:
     return aspect, pages
 
 
+def full_stage_variant(page: dict) -> dict | None:
+    """This page as the COMPILER stamps it at 16:9 (`build_scene_timeline_f.stamp_full_stage`), or None
+    for a page that is never stamped - a host plate, whose board was measured around a hand. The stamp
+    is the compiler's own and is not re-derived here, so the fixture cannot hold a geometry no build
+    writes; `ASPECT` is pinned around the call because the stamp reads that global (a 9:16 build leaves
+    it set, and this tool measures both aspects in one process)."""
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        stamped = BST.stamp_full_stage(copy.deepcopy(page))
+    finally:
+        BST.ASPECT = saved
+    return stamped if stamped.get("full_stage") else None
+
+
+def variant_pages(page: dict, aspect: str) -> dict[str, dict]:
+    """`{fixture key: the page as the player draws it}` - every GEOMETRY this page's ink takes at this
+    aspect (R26-235). At 9:16 there is one; at 16:9 there are the page as declared and the full-stage
+    page the compiler stamps, keyed `16:9` and `16:9|full_stage` by `ledger_page.box_key`. A page that
+    already carries the stamp (a 16:9 project's compiled page) measures once, under its own key: the
+    fixture records the geometry the timeline draws, never one it does not."""
+    out = {LPG.box_key(page, aspect): copy.deepcopy(page)}
+    if aspect == "16:9":
+        stamped = full_stage_variant(page)
+        if stamped is not None:
+            out.setdefault(LPG.box_key(stamped, aspect), stamped)
+    return out
+
+
 def representative(builder: str) -> dict:
     """The page spec this builder is measured on - pure, and the same one the tests rebuild."""
     if builder == "share":
@@ -313,8 +357,11 @@ def entry(builder: str, aspect: str, page: dict | None = None) -> dict:
     boxes = got["boxes"]
     full = dict(LPG.page_boxes(got["page"], aspect), **boxes)   # safe / caption_anchor / stage, over the MEASURED ink
     bands = {b["band"]: {k: round(b[k]) for k in ("x", "y", "w", "h")} for b in BST.free_bands(full)}
-    return {"ink": LPG.page_ink_key(got["page"]), "title": got["page"].get("title"),
-            "boxes": boxes, "bands": bands, "axis": got["axis"], "data_mask": got["data_mask"]}
+    out = {"ink": LPG.page_ink_key(got["page"]), "title": got["page"].get("title"),
+           "boxes": boxes, "bands": bands, "axis": got["axis"], "data_mask": got["data_mask"]}
+    if LPG.full_stage(got["page"], aspect):   # R26-235: the GEOMETRY this entry was measured in, on the entry itself
+        out["full_stage"] = True
+    return out
 
 
 def template_sha() -> str:
@@ -353,10 +400,11 @@ def build_pages(timelines: list[str]) -> tuple[dict, list[str]]:
         aspect, found = timeline_pages(tl)
         read.append(_rel(tl))
         for ink, page in found.items():
-            got = entry(str(page.get("builder")), aspect, page)
-            pages.setdefault(ink, {})[aspect] = dict(got, builder=page.get("builder"), timeline=_rel(tl))
-            print(f"  {str(page.get('builder')):11} {aspect}  {ink}  plot={got['boxes']['plot']}"
-                  f"  {str(page.get('title'))[:40]!r}")
+            for key, drawn in variant_pages(page, aspect).items():   # R26-235: both 16:9 geometries
+                got = entry(str(page.get("builder")), aspect, drawn)
+                pages.setdefault(ink, {})[key] = dict(got, builder=page.get("builder"), timeline=_rel(tl))
+                print(f"  {str(page.get('builder')):11} {key:16}  {ink}  plot={got['boxes']['plot']}"
+                      f"  {str(page.get('title'))[:40]!r}")
     return pages, read
 
 
@@ -364,10 +412,13 @@ def build(builders: list[str], timelines: list[str] | None = None) -> dict:
     out: dict[str, dict] = {}
     for builder in builders:
         page = representative(builder)
-        out[builder] = {aspect: entry(builder, aspect, page) for aspect in ASPECTS}
+        out[builder] = {}
         for aspect in ASPECTS:
-            print(f"  {builder:11} {aspect}  plot={out[builder][aspect]['boxes']['plot']}"
-                  f"  bands={ {k: v['y'] for k, v in out[builder][aspect]['bands'].items()} }")
+            for key, drawn in variant_pages(page, aspect).items():   # R26-235: both 16:9 geometries
+                out[builder][key] = entry(builder, aspect, drawn)
+        for key, got in out[builder].items():
+            print(f"  {builder:11} {key:16}  plot={got['boxes']['plot']}"
+                  f"  bands={ {k: v['y'] for k, v in got['bands'].items()} }")
     pages, read = build_pages(list(timelines or []))
     return {"schema": LPG.PAGE_BOXES_SCHEMA, "measured": str(date.today()),
             "player_sha256": template_sha(), "stage": {a: list(RB.STAGE[a]) for a in ASPECTS},
@@ -396,8 +447,10 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{b:11} {representative(b).get('title')}")
         return 0
     if args.builder and not (args.write or args.check):
+        page = representative(args.builder)
         for aspect in ([args.aspect] if args.aspect else list(ASPECTS)):
-            print(json.dumps({args.builder: {aspect: entry(args.builder, aspect)}}, indent=1, sort_keys=True))
+            for key, drawn in variant_pages(page, aspect).items():
+                print(json.dumps({args.builder: {key: entry(args.builder, aspect, drawn)}}, indent=1, sort_keys=True))
         return 0
     builders = [args.builder] if args.builder else list(BUILDERS)
     timelines = [_rel(Path(p)) for p in args.project] + recorded_projects()
@@ -411,11 +464,13 @@ def main(argv: list[str] | None = None) -> int:
         if was != now:
             print(f"DRIFT: {FIXTURE.relative_to(REPO)} is not what the player draws - run --write", file=sys.stderr)
             return 1
-        print(f"PASS {len(builders)} builders x {len(ASPECTS)} aspects measured identical")
+        print(f"PASS {len(builders)} builders x "
+              f"{sum(len(v) for v in doc['builders'].values())} geometr(ies) measured identical")
         return 0
     FIXTURE.parent.mkdir(parents=True, exist_ok=True)
     FIXTURE.write_text(dumps(doc), encoding="utf-8")
-    print(f"{FIXTURE.relative_to(REPO)}  {len(builders)} builders x {len(ASPECTS)} aspects"
+    print(f"{FIXTURE.relative_to(REPO)}  {len(builders)} builders x "
+          f"{sum(len(v) for v in doc['builders'].values())} geometr(ies)"
           f"  + {len(doc['pages'])} project page(s) from {len(doc['projects'])} timeline(s)"
           f"  player {doc['player_sha256'][:12]}")
     return 0

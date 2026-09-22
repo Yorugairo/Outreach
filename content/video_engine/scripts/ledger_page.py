@@ -1476,6 +1476,23 @@ PAGE_BOXES_SCHEMA = "page_boxes.v1"
 BOX_KEYS = ("title", "sub", "chart", "plot", "source", "rail")
 TAGS_KEY = "tags"   # R26-205: the end tag column, on a full-stage page only (the fixture measures the six above)
 INK_KEYS = ("builder", "title", "sub", "source", "quiet_zone")
+# R26-235: a page's boxes are a function of its ink AND of the geometry that ink is drawn in. The ink
+# is the entry's key (`page_ink_key`); the geometry is the ASPECT, which is the level the fixture has
+# always been keyed at - and at 16:9 there are now TWO geometries, because a page the compiler stamps
+# `full_stage` puts the same ink in `_landscape_full_boxes` instead of `_landscape_boxes`. So the
+# geometry key gains the flag rather than the ink key: `16:9` and `16:9|full_stage` are measured
+# separately and a page is served the one it is drawn in. (The flag stays OUT of `page_ink_key` for
+# the reason R26-205 found the hard way: the key does not know the aspect, so a caller that stamps a
+# page with the compiler's `ASPECT` unset and then asks at 9:16 would re-key every portrait page it
+# has - `test_dock_over_build.py` caught exactly that. A KEY the aspect is already in cannot.)
+FULL_STAGE_SUFFIX = "|full_stage"
+
+
+def box_key(spec: dict, aspect: str) -> str:
+    """The fixture key this page's boxes are measured under: the aspect, plus the full-stage flag when
+    this page takes the whole stage at it (R26-235). `9:16` and an unstamped 16:9 page are unchanged,
+    so every entry measured before this row still answers for the page it measured."""
+    return f"{aspect}{FULL_STAGE_SUFFIX}" if full_stage(spec, aspect) else aspect
 
 
 def page_ink_key(spec: dict) -> str:
@@ -1537,20 +1554,18 @@ def measured_entry(spec: dict, aspect: str) -> dict | None:
     """The fixture entry that measured THIS page's ink at this aspect, or None.
 
     The ink-keyed `pages` section first (this very page, measured by name), then the per-builder
-    representative - either way the entry is used only when its `ink` is this page's own."""
-    # R26-205: a FULL-STAGE page lays out nothing like the same ink in the old landscape box, so it is
-    # never served a measurement of that box. The refusal is HERE and not in `page_ink_key`, because
-    # the flag is not INK - it is a geometry the same ink takes at ONE aspect, and the key does not
-    # know the aspect. (It was in the key for one round, and it re-keyed every 9:16 page any caller
-    # stamped with the compiler's ASPECT unset: the Tokyo cut's measured pages fell back to the
-    # estimate and E65's placer lost the plot's own room - `test_dock_over_build.py` caught it.)
-    if full_stage(spec, aspect):
-        return None
+    representative - either way the entry is used only when its `ink` is this page's own, and only
+    when it was measured in the GEOMETRY this page is drawn in (`box_key`: R26-235, a full-stage 16:9
+    page lays out nothing like the same ink in the old landscape box, so the two are measured apart).
+    An entry is also refused when its own `full_stage` flag disagrees with the key it is filed under -
+    the fixture is a measurement, and a measurement that has to be reinterpreted is not one."""
     key = page_ink_key(spec)
-    entry = (measured_pages().get(key) or {}).get(aspect)
+    full = full_stage(spec, aspect)
+    geometry = box_key(spec, aspect)
+    entry = (measured_pages().get(key) or {}).get(geometry)
     if not isinstance(entry, dict):
-        entry = (fixture().get(str(spec.get("builder"))) or {}).get(aspect)
-    if not isinstance(entry, dict) or entry.get("ink") != key:
+        entry = (fixture().get(str(spec.get("builder"))) or {}).get(geometry)
+    if not isinstance(entry, dict) or entry.get("ink") != key or bool(entry.get("full_stage")) != full:
         return None
     return entry
 
