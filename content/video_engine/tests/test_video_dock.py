@@ -120,9 +120,13 @@ def test_the_asset_resolver_reaches_a_docked_clip_so_the_motion_plan_never_calls
 
 
 def test_the_world_clip_and_the_video_dock_share_one_seek():
+    """R26-224 re-pin (2026-09-18): ONE seek definition and ONE awaited pool, now with THREE callers. The third
+    is the ALIVE PLANE (81210d8, P61 T14 / E99 s55): a layered plate whose background wall is a clip seeks on
+    the scene's own clock, looped, and JOINS `clipSeeks` - the engine says so at the call site. The invariant
+    this test exists for (one definition, one `seeked` listener, one `__clipsSeeked`) is unchanged."""
     html = RB.player_text()
     assert html.count("const seekVideo = (v, want) =>") == 1
-    assert html.count("seekVideo(v,") == 2, "paintClip and paintDockClip, and nothing else, seek"
+    assert html.count("seekVideo(v,") == 3, "paintClip, paintDockClip and the alive plane, and nothing else, seek"
     # the awaited-seek machinery the renderer waits on exists exactly once
     assert html.count('v.addEventListener("seeked", done);') == 1
     assert html.count("window.__clipsSeeked = () =>") == 1

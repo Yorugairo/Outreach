@@ -113,24 +113,41 @@ def test_every_compiled_timeline_turns_the_idle_on_unless_the_build_says_otherwi
 # the same reason. Every OTHER source stays flagless, which is what keeps the rest of the wall byte-identical.
 IDLE_IS_THE_SUBJECT = {"plate-drift", "plate-alive"}
 
+# R26-224 re-pin (2026-09-18): six PAGE goldens carry the same switch for the same reason, and none of them is a
+# plate drift. A ledger page's own life is behind E49's switch too - with `kinetics.idle` off there is no page
+# breath and no electric to render, so the pair that PINS that life cannot be authored without it:
+#   page-life-still / page-life-live    R26-228 + R26-234 (E99 s82 / s83) - the still control against the electric
+#   page-build-lines / -4th             R26-226 (E99 s82) - the sequential-whole build, authored `idle: live`
+#   page-rescale-follow / -yield        R26-233 (E99 s82) - the followed rescale, on a page that breathes
+# The rest of the wall stays flagless, which is what keeps it byte-identical - that is unchanged.
+PAGE_IDLE_IS_THE_SUBJECT = {"page-life-still", "page-life-live", "page-build-lines", "page-build-lines-4th",
+                            "page-rescale-follow", "page-rescale-follow-yield"}
+
 
 def test_golden_sources_carry_no_idle_flag_so_they_stay_byte_identical():
     for p in sorted(SOURCES.glob("*.timeline.json")):
-        if p.name[: -len(".timeline.json")] in IDLE_IS_THE_SUBJECT:
+        if p.name[: -len(".timeline.json")] in IDLE_IS_THE_SUBJECT | PAGE_IDLE_IS_THE_SUBJECT:
             continue
         tl = json.loads(p.read_text(encoding="utf-8"))
         assert not (tl.get("kinetics") or {}).get("idle"), p.name
 
 
 def test_the_two_drift_goldens_are_the_only_sources_the_idle_is_the_subject_of():
-    """The exception above, pinned the other way round: exactly those two carry it, and both PAINT it (E99 s55, at s63's 20 px)."""
+    """The exception above, pinned the other way round: exactly those carry it - the two PLATE goldens PAINT the
+    drift (E99 s55, at s63's 20 px), and the six PAGE goldens are ledger worlds whose own life is the subject
+    (R26-224 re-pin: R26-226 / R26-228 / R26-233 / R26-234, E99 s82-s83). The test name stays as it was."""
     carry = {p.name[: -len(".timeline.json")] for p in sorted(SOURCES.glob("*.timeline.json"))
              if (json.loads(p.read_text(encoding="utf-8")).get("kinetics") or {}).get("idle")}
-    assert carry == IDLE_IS_THE_SUBJECT
-    for name in sorted(carry):
+    assert carry == IDLE_IS_THE_SUBJECT | PAGE_IDLE_IS_THE_SUBJECT
+    for name in sorted(IDLE_IS_THE_SUBJECT):
         tl = json.loads((SOURCES / f"{name}.timeline.json").read_text(encoding="utf-8"))
         assert tl["kinetics"].get("plate_idle_paints") is True, f"{name}: the walk must PAINT (R26-133's cure)"
         assert tl["scenes"][0]["world"]["idle_drift_px"] == 20.0, f"{name}: at E99 s63's long-form amplitude (it amended s55's 30)"
+    for name in sorted(PAGE_IDLE_IS_THE_SUBJECT):
+        tl = json.loads((SOURCES / f"{name}.timeline.json").read_text(encoding="utf-8"))
+        world = tl["scenes"][0]["world"]
+        assert world.get("kind") == "ledger", f"{name}: a page golden carries the switch for the PAGE's own life"
+        assert not world.get("idle_drift_px"), f"{name}: a page golden is not a plate drift - no amplitude to paint"
 
 
 # ---- the gate: M18 frozen frames --------------------------------------------------------------

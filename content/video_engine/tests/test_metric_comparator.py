@@ -45,7 +45,10 @@ def compare_row(**over) -> dict:
 # ---- the verb exists, and the map says WHEN ------------------------------------------------------------------------
 
 def test_compare_is_the_sixth_chart_to_verb_and_carries_its_when():
-    assert B.CHART_TO_KINDS == ("recast", "rescale", "extend", "park", "morph", "compare")
+    """R26-224 re-pin (2026-09-18): `compare` is still the SIXTH verb (the name stays - a test is never renamed),
+    but the tuple is closed and `remake` joined it as the SEVENTH in d4294e2 (P61 T2, E99 s1 / s34 - the whole
+    chart becomes the whole other chart on one clock). The rest of the assertion is untouched."""
+    assert B.CHART_TO_KINDS == ("recast", "rescale", "extend", "park", "morph", "compare", "remake")
     assert set(B.CHART_TO_WHEN) == set(B.CHART_TO_KINDS), "every verb carries a when (P50 T1)"
     when = B.CHART_TO_WHEN["compare"]
     assert "E76" in when and "authored" in when, when

@@ -30,6 +30,13 @@ ALLOW = (
     "R_PORTRAIT: 960",                  # species/spotlight.mjs (P57 T19): the gradient's radius in userSpaceOnUse on the PORTRAIT stage -
                                         # half the landscape width, the value the approved Japan short was lit with (was the inline
                                         # module-scope `SPOT_R_PORTRAIT`, which sat behind an explicit portrait branch)
+    # R26-224 (2026-09-18): the PORTRAIT reference of the verdict stack's 9:16 form (5eb4fa3, P61 T7 / E99 s21).
+    # 1080x1920 is the portrait stage, so these are this lint's INTENT, not its offence: `VERDICT_9X16` is an
+    # explicit portrait branch (the same reason `PORTRAIT ?` is allowed above), and the two ORIGIN lines divide
+    # the portrait safe box by that stage's own width and height. The landscape pair `REF_W: 1920` / `REF_H: 1080`
+    # stays allowed on its own line above, for species/verdict.mjs's landscape normalisers.
+    "REF_W: 1080", "REF_H: 1920",
+    "_9X16",
 )
 
 

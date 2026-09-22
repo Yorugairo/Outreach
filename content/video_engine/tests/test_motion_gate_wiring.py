@@ -48,7 +48,15 @@ def test_ep1_report_is_the_four_fail_baseline(tmp_path: Path):
     bed = _ep1_bed(tmp_path)
     path, n_fail = G.write_report(bed, "steel-and-paper.timeline.json")
     assert path == bed / "GATES-MOTION.md" and path.exists()
-    assert n_fail in (7, 8)   # 4 before caption modes were declared; 5 once M08 enforces on the rebuilt ep1; +3 for E24/E25
+    # R26-224 re-pin (2026-09-18), the second half of R26-225: the gate grew a row the pin predates, so ep1's
+    # report is 9 FAIL, not 7-8. The ninth is M44 (3fb4783; GATES-REGISTRY.md:154, the operator 2026-08-29,
+    # ledger 69ff558bdf67 - "why do we have a plate less than 6 seconds long?"): 6 of ep1's 75 world plates are
+    # under 6 s AND carry a dock. The other eight are ep1's own long-ruled reds (M01, M03, M05, M07, M08, M10,
+    # M11, M12 - E21 / E24 / E25), and R26-232 (the anchored caption page counted, the live page's own life a
+    # sustained term) left all three of ep1's pulse rows red, which is the ruling that row was written under.
+    # STILL OPEN in R26-225: the COMMITTED build-f/GATES-MOTION.md is the stale one - re-stamping it is its own
+    # wave and no test's business (this test has read a private copy since R26-225).
+    assert n_fail == 9
     text = path.read_text(encoding="utf-8")
     assert text.splitlines()[0] == "# MOTION GATE — build-f"
     assert "[FAIL ] M01" in text and "> 12s" in text
@@ -59,11 +67,14 @@ def test_ep1_report_is_the_four_fail_baseline(tmp_path: Path):
     # P51 T2 adds M25 / M26 and E63 adds M27, each INFO "not measured" on ep1 (no layout probe), + M24 PASS: 5 PASS / 5 INFO
     # R26-53 adds M28 (text on text among a page's own labels), INFO "not measured" on ep1 too: 6 INFO
     # re-pinned 2026-09-13: the INFO count moved 6 -> 9 as further "not measured" rows landed on ep1 (no layout probe)
-    assert ("RESULT: 8 FAIL / 1 WARN / 5 PASS / 1 JUDGE / 9 INFO" in text
+    # re-pinned 2026-09-18 (R26-224): + M44's FAIL, measured on the bed - 9 FAIL / 1 WARN / 5 PASS / 1 JUDGE / 9 INFO
+    assert ("RESULT: 9 FAIL / 1 WARN / 5 PASS / 1 JUDGE / 9 INFO" in text
+            or "RESULT: 8 FAIL / 1 WARN / 5 PASS / 1 JUDGE / 9 INFO" in text
             or "RESULT: 8 FAIL / 1 WARN / 5 PASS / 1 JUDGE / 6 INFO" in text
             or "RESULT: 7 FAIL / 1 WARN / 4 PASS / 2 JUDGE / 1 INFO" in text
             or "RESULT: 8 FAIL / 1 WARN / 4 PASS / 1 JUDGE / 0 INFO" in text), text[-400:]
-    assert text.rstrip().splitlines()[-1] in ("VERDICT: FAIL (7 FAIL)", "VERDICT: FAIL (8 FAIL)")
+    assert text.rstrip().splitlines()[-1] in ("VERDICT: FAIL (7 FAIL)", "VERDICT: FAIL (8 FAIL)",
+                                              "VERDICT: FAIL (9 FAIL)")
 
 
 def _dense_build(runtime=180.0, scene_len=6.0, dock_every=18.0, stage=False):

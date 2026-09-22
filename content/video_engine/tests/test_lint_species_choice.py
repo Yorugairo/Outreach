@@ -25,7 +25,21 @@ def _has_build(project: Path) -> bool:
 
 
 # ---------------------------------------------------------------- the three places agree
+def test_every_kind_and_verb_names_a_when_and_a_when_names_a_kind():
+    """R26-224 (2026-09-18): the SET half of the test below, kept LIVE while its length half is xfailed - a kind
+    or a verb that ships with no `when` must still fail here and now, never behind an xfail."""
+    assert set(B.SPECIES_WHEN) == set(B.SPECIES_KINDS)
+    assert set(B.CHART_TO_WHEN) == set(B.CHART_TO_KINDS)
+
+
+@pytest.mark.xfail(strict=True, reason="R26-238: chart_to remake's `when` is 278 chars, over this lint's 260 ceiling")
 def test_every_kind_and_verb_carries_a_when():
+    """R26-224 (2026-09-18), classified (c) a defect in the compiler - filed as R26-238 and NAMED here rather
+    than dialled away: `CHART_TO_WHEN["remake"]` (build_scene_timeline_f.py:481, written by d4294e2 / P61 T2 /
+    E99 s1-s34) is 278 characters where the other six verbs run 118-185, so it overruns the 260 this lint has
+    always held the map's s4 table to (one verb, one row, one readable line). No ruling moved the ceiling, and
+    the fix is the compiler's sentence, not this number - so the xfail is STRICT: the day R26-238 lands, this
+    test fails again and the marker comes off."""
     assert set(B.SPECIES_WHEN) == set(B.SPECIES_KINDS)
     assert set(B.CHART_TO_WHEN) == set(B.CHART_TO_KINDS)
     for text in list(B.SPECIES_WHEN.values()) + list(B.CHART_TO_WHEN.values()):

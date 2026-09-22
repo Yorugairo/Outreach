@@ -112,8 +112,12 @@ def test_the_pin_catches_a_one_value_css_change(tmp_path, monkeypatch) -> None:
 
 # ---- (c) MOTION - an effect a still cannot show -------------------------------------------------
 
-MOTION_CARDS = ["chart_to:compare", "chart_to:remake", "exit:melt"]   # re-derived 2026-09-15 under the rule below: the remake
+MOTION_CARDS = ["chart_to:compare", "exit:melt", "chart_to:remake"]   # re-derived 2026-09-15 under the rule below: the remake
 # (7 phases, 2 instants) now outranks the melt and the stack (5 phases, 1 instant) drops out; the older clips stay beside the page
+# R26-224 re-derived 2026-09-18: the SET is the same three, the ORDER moved - the melt's card now carries 8 phases
+# (the gather 3fb4783 / E99 s2, the one closing 310c4e3 / E99 s53, the throw 7d07ff0 / E99 s51 "I want it to be
+# thrown"), so it ranks above the remake's 7 again. Measured by the rule itself: compare (10 phases, 3 pinned
+# instants), melt (8, 5), remake (7, 2), then stack (6, 1).
 
 
 def test_the_three_motion_cards_are_the_ones_the_rule_picks() -> None:

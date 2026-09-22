@@ -332,11 +332,19 @@ def test_with_the_options_off_the_burst_is_exactly_what_e60_shipped():
 @needs_browser
 def test_the_stepped_shoot_is_piecewise_constant_between_frames_and_monotone_across_them():
     """T13: the shoot, the counter, the rescale and the ticks' crossing read off ONE stepped clock, so they
-    step together. The cadence is the one the burst's own speed asks for through stopaction's rule."""
+    step together. The cadence is the one the burst's own speed asks for through stopaction's rule.
+
+    R26-224 re-pin (2026-09-18): the `why` string quotes `CADENCE.ON1_PX_S`, and that threshold is 154, not 250,
+    since e087ba3 (E99 s30; R26-64 / R26-85, P53 T5) - the cinema-parity reference (RED's pan rule, 1/7 picture
+    width per second on the 1080 stage at 24 fps), CONFIRMED in
+    docs/research/runs/strobe_stop_motion/VERIFICATION-2026-09-13.md, replacing the stop-motion brief's unsound
+    250. The shoot's own measured speed (359 px/s) and the verdict (hold 1, on 1s) did NOT move with it - which
+    is that commit's own claim ("every shipped throw runs 1188-2479 px/s, so no shipped hold changes") and is
+    what this line still pins."""
     page, errs, close = _player("burst", {"break_cadence": "stop"})
     try:
         p0 = _at(page, T_RUN0)
-        assert p0["cad"] == {"hold": 1, "fps": 24, "why": "359 px/s > 250: on 1s"}, p0["cad"]
+        assert p0["cad"] == {"hold": 1, "fps": 24, "why": "359 px/s > 154: on 1s"}, p0["cad"]
         fps = 24
         poses, prev = [], None
         for f in range(0, 15):
