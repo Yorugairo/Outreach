@@ -1,7 +1,7 @@
 name = "architect_sol"
 description = "Lead architect and planner for repository research and implementation-ready PRP drafts."
-model = "gpt-5.6-sol"
-model_reasoning_effort = "high"
+model = "gpt-6-sol"
+model_reasoning_effort = "xhigh"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

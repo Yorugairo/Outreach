@@ -43,6 +43,18 @@ Release management, workspace cleanup, broad infrastructure, unrelated industry 
 
 ## Named Agent Routing
 
+### Codex model policy — operator update 2026-09-22
+
+| Work | Default | After three failed attempts on the same task |
+| --- | --- | --- |
+| Implementation/execution: speedster, junior_developer, implementation_luna, release_steward | gpt-6-luna / max | execution_sol: gpt-6-sol / xhigh |
+| Planning/architecture: architect_sol and parent planning | gpt-6-sol / xhigh | Return evidence to parent; no further automatic tier |
+| Professional work, research/exploration/review, computer use | gpt-6-luna / max | professional_sol: gpt-6-sol / xhigh |
+
+Use `professional_worker` for bounded artifact work and `computer_use_worker` for browser/computer execution. Existing read-only roles remain read-only. The parent counts failed attempts in the task ledger against a stable task and acceptance criteria, including failed tool attempts; respawning does not reset the count. At three failures, stop Luna retries and hand off evidence, outputs, live handles, exact permissions, and the next runnable action. Reconcile uncertain external writes before retrying. Escalation never adds approval or write authority. This is an orchestrator instruction, not a native TOML retry setting.
+
+Loaded roles can retain stale pins for this session: reload configuration or use an available generic role with explicit model/effort and the complete original role contract. Do not claim active agents switched models. This policy supersedes older OpenAI model assignments only; Claude/Gemini definitions and their provider routing remain unchanged.
+
 - **Parent Task (Orchestrator):** Owns the critical path, architecture, shared-file integration, protected actions, human gates, final verification, and completion truth. Never drives interactive browser loops or status polling directly in the primary context.
 - **`flow-asset-producer`:** Isolated Google Flow worker subagent ([`.agents/agents/flow-asset-producer.md`](file:///c:/Users/Snipe/Downloads/Outreach%20Program/.agents/agents/flow-asset-producer.md)). Dispatched via `invoke_subagent` for executing asset generation work orders under strict context quarantine. Runs on the `flash` model tier with skills `google-flow-production` and `video-engine`. Drives MCP/CDP tools, executes `prepare_props.py --check`, and returns strictly a compact receipt JSON.
 - **`animation-video-researcher`:** Specialized research agent for animation math, drawing engine architecture, video production psychology, literary pacing, and programmatic video automation.

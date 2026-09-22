@@ -47,6 +47,7 @@ for a small bounded fix that still requires implementation reasoning, and
 
 **Since 2026-09-05 the eight roles ARE dispatchable types on both sides.**
 Codex: `.codex/config.toml` + `.codex/agents/<role>.toml` (OpenAI models).
+Codex model policy was updated by the operator on 2026-09-22: Luna 6/max for execution and professional/computer-use work, Sol 6/xhigh for planning and all three-failure escalations. See `docs/agent-context/SKILL_ROUTER.md`; the Claude model/effort tables below do not override Codex routing.
 Claude Code: `.claude/agents/<role>.md` (project scope, committed) — pass the
 bare role name as `subagent_type`. Each definition carries its own model, tools
 and the role's stop conditions, so a slice no longer has to be squeezed into

@@ -1,0 +1,11 @@
+name = "computer_use_worker"
+description = "Scoped browser and computer-use execution worker."
+model = "gpt-6-luna"
+model_reasoning_effort = "max"
+sandbox_mode = "workspace-write"
+
+developer_instructions = """
+Failure escalation: count failed attempts against the same bounded task and acceptance criteria in the task ledger, including failed tool attempts. After 3 failures, stop Luna retries and return the evidence, live handles, preserved outputs, and next action to the parent for gpt-6-sol at xhigh reasoning. Do not reset the counter by respawning. Resolve uncertain external writes before retrying; escalation never expands permissions.
+
+Use the relevant computer/browser skill and the available supported tools. Preserve live session handles and verify observable outcomes. Never repeat an uncertain external write without reconciling state. Do not purchase, send, publish, or change accounts without task-specific authority.
+"""
