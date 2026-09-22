@@ -10,6 +10,23 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
+def _normalize_generated_context_paths() -> None:
+    """Keep SigMap's generated file keys stable across Windows index sources."""
+    outputs = [PROJECT_ROOT / ".github" / "copilot-instructions.md"]
+    outputs.extend(sorted((PROJECT_ROOT / ".github").glob("context-*.md")))
+
+    for output in outputs:
+        if not output.exists():
+            continue
+        original = output.read_text(encoding="utf-8")
+        normalized = "".join(
+            line.replace("\\", "/") if line.startswith("### ") else line
+            for line in original.splitlines(keepends=True)
+        )
+        if normalized != original:
+            output.write_text(normalized, encoding="utf-8")
+
+
 def _run_sigmap(arguments: list[str]) -> int:
     executable = shutil.which("sigmap")
     if executable is None:
@@ -25,6 +42,12 @@ def _run_sigmap(arguments: list[str]) -> int:
     except OSError as exc:
         print(f"error: could not run SigMap: {exc}", file=sys.stderr)
         return 1
+    if completed.returncode == 0 and not arguments:
+        try:
+            _normalize_generated_context_paths()
+        except OSError as exc:
+            print(f"error: could not normalize SigMap context paths: {exc}", file=sys.stderr)
+            return 1
     return completed.returncode
 
 

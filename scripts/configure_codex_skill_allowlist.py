@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -84,6 +85,64 @@ def is_active(name: str, directory: Path) -> bool:
     return name in ACTIVE_NAMES or "/product-design/" in normalized
 
 
+def skill_fingerprint(directory: Path) -> str:
+    """Hash the complete skill folder so equal SKILL.md files do not hide richer refs."""
+    digest = hashlib.sha256()
+    for path in sorted(item for item in directory.rglob("*") if item.is_file()):
+        digest.update(path.relative_to(directory).as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def skill_richness(directory: Path) -> tuple[int, int]:
+    files = [path for path in directory.rglob("*") if path.is_file()]
+    return (sum(path.stat().st_size for path in files), len(files))
+
+
+def source_kind(directory: Path) -> str:
+    if directory.is_relative_to(REPO_ROOT / ".agents" / "skills"):
+        return "project"
+    if directory.is_relative_to(Path.home() / ".agents" / "skills"):
+        return "shared"
+    if directory.is_relative_to(Path.home() / ".codex" / "skills"):
+        return "personal"
+    return "plugin"
+
+
+def preferred_active(name: str, candidates: list[Path]) -> Path:
+    """Select one enabled copy, preserving the richest complete skill folder."""
+    fingerprints = {skill_fingerprint(directory) for directory in candidates}
+    identical = len(fingerprints) == 1
+
+    if identical:
+        preference = {"shared": 4, "project": 3, "personal": 2, "plugin": 1}
+    else:
+        preference = {"project": 4, "shared": 3, "personal": 2, "plugin": 1}
+
+    return max(
+        candidates,
+        key=lambda directory: (
+            (0, 0) if identical else skill_richness(directory),
+            preference[source_kind(directory)],
+            str(directory),
+        ),
+    )
+
+
+def active_skills(skills: list[tuple[str, Path]]) -> list[tuple[str, Path]]:
+    """Return one canonical enabled location per allowed skill name."""
+    grouped: dict[str, list[Path]] = {}
+    for name, directory in skills:
+        if is_active(name, directory):
+            grouped.setdefault(name, []).append(directory)
+    return sorted(
+        ((name, preferred_active(name, directories)) for name, directories in grouped.items()),
+        key=lambda item: (item[0], str(item[1])),
+    )
+
+
 def toml_literal(value: str) -> str:
     return "'" + value.replace("'", "''") + "'"
 
@@ -136,8 +195,9 @@ def main() -> int:
     args = parser.parse_args()
 
     skills = collect_skills()
-    active = [item for item in skills if is_active(*item)]
-    disabled = [item for item in skills if not is_active(*item)]
+    active = active_skills(skills)
+    active_paths = {directory for _, directory in active}
+    disabled = [item for item in skills if item[1] not in active_paths]
     current = CONFIG_PATH.read_text(encoding="utf-8")
     expected = replace_block(current, generated_block(disabled))
 

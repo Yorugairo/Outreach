@@ -52,7 +52,7 @@ def main() -> int:
     except json.JSONDecodeError:
         report = {}
     coverage = report.get("coverage", {})
-    record("sigmap:coverage", coverage.get("score", 0) >= 95, f"{coverage.get('score', 0)}%")
+    record("sigmap:coverage", coverage.get("score", 0) >= 97, f"{coverage.get('score', 0)}%")
     record("sigmap:grade", coverage.get("grade") == "A", coverage.get("grade"))
     record("sigmap:confidence", coverage.get("confidence") == "HIGH", coverage.get("confidence"))
     record("sigmap:budget-drops", report.get("droppedCount") == 0, report.get("droppedCount"))

@@ -43,6 +43,7 @@ Thumbs.db
 
 # Derived SigMap context
 /.github/copilot-instructions.md
+/.github/context-*.md
 /.sigmap-cache.json
 
 # SigMap configuration is source, not generated context.

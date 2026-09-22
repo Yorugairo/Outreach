@@ -7,6 +7,7 @@
     "src",
     "scripts",
     "content/video_engine/scripts",
+    "content/video_engine/scripts/kinetics",
     "content/video_engine/src",
     "content/video_engine/tests",
     "content/video_engine/projects/systems-and-blowups/steel-and-paper"
@@ -33,13 +34,14 @@
     "__init__.py",
     "static",
     "migrations",
-    "dataforseo_smoke_test.py"
+    "dataforseo_smoke_test.py",
+    "kinetics"
   ],
   "maxDepth": 6,
   "maxSigsPerFile": 25,
-  "maxTokens": 80000,
+  "maxTokens": 300000,
   "autoMaxTokens": false,
-  "strategy": "full",
+  "strategy": "per-module",
   "secretScan": true,
   "monorepo": false,
   "diffPriority": true,
