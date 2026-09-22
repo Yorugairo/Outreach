@@ -653,9 +653,10 @@ def _shot_table_md(rows: list) -> str:
         species = "; ".join("%s @%.2f" % (e["kind"], e["at"]) for e in (r[6] or []) if isinstance(e, dict)) or "-"
         out.append("| %d | %.2f-%.2f | `%s` | `%s` | %s | %s |"
                    % (i + 1, r[0], r[1], bare, opts or "-", cards, species))
-    idle = [(i + 1, str(r[2]).partition(";")[2]) for i, r in enumerate(rows) if ";idle=" in str(r[2])]
-    out += ["", "**Idle tokens: %d of %d rows** - " % (len(idle), len(rows))
-            + "; ".join("row %d `%s`" % (n, o) for n, o in idle) + " (E49; E99 s65 the 20 px long-form drift).",
+    life = T.life_tokens(rows)   # R26-245: the ken counts as life and the row says which (E99 s84)
+    out += ["", "**Life: %d of %d rows** - " % (len(life), len(rows))
+            + "; ".join("row %d `%s`" % (n, what) for n, what in life)
+            + " (E49 nothing goes truly still; E99 s84 KEN BURNS ALONE on a long-form plate).",
             "", "**Flow count (E99 s74):** 0 cuts, %d dips, each at a world change (E47): a chart cannot recast "
             "into a photograph plate and a plate cannot recast into a chart."
             % sum(1 for r in rows if r[5] == "dip"), ""]
@@ -734,8 +735,11 @@ def main() -> int:
 
     report, n_fail = MG.write_report(BUILD, TIMELINE_NAME)
     print("  motion gate : %s - %d FAIL" % (report.name, n_fail))
-    idle = [i + 1 for i, r in enumerate(rows) if ";idle=" in str(r[2])]
-    print("  idle tokens : %d of %d rows (%s)" % (len(idle), len(rows), ", ".join(str(i) for i in idle)))
+    # R26-245: a KEN is life (E99 s84 - it is the whole of a long-form plate's life), so the counter
+    # reads the ken tuple as well as the `;idle=` token and NAMES which carries each row.
+    life = T.life_tokens(rows)
+    print("  life        : %d of %d rows (%s)"
+          % (len(life), len(rows), "; ".join("row %d %s" % (n, what) for n, what in life) or "NONE - E49"))
     _assert_read_only(read_only)
     return 0
 

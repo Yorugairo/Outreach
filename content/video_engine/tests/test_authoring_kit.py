@@ -921,3 +921,38 @@ def test_the_unsounded_notes_are_the_fires_no_KEPT_cue_took():
     rep = A.bind_report([_cue("landing 1 (throw, paper)", _contacts(TWO_LANDINGS)[1])], TWO_LANDINGS)
     assert [f["at"] for f in rep["silent"] if f["kind"] == "landing"] == [_contacts(TWO_LANDINGS)[0]]
     assert sum(1 for r in rep["cues"] if r["fire"] is not None) == 1
+
+
+# ---------------------------------------------------------------- the row's LIFE (R26-245)
+
+def _row(world, ken):
+    """A minimal row in the kit's tuple shape: (start, end, world, ken, docks, exit)."""
+    return (0.0, 4.0, world, ken, [], "cut")
+
+
+def test_a_ken_push_IS_the_rows_life_and_the_reader_names_it():
+    """R26-245 / E99 s84: the operator withdrew the painted drift for long form ("i think we should
+    use ken burns instead of drift"), so a plate row carries `;use=landing`, a ken tuple and NO
+    `;idle=` token. The counter that read only the token called that row still, which contradicts
+    E49 on a row that is correct - and the report said `idle tokens: 1 of 2 rows` on a bed whose
+    every row was alive."""
+    rows = [_row("world-three-notch-slate-v1;use=landing", (0.04, 10, -6))]
+    assert T.life_tokens(rows) == [(1, "ken 0.04/10/-6")]
+
+
+def test_a_painted_idle_is_still_life_and_a_row_may_carry_BOTH():
+    rows = [_row("ledger:ev-divergence-v1:line:234:right:axes:cut;idle=live;domain=80,277", (0, 0, 0)),
+            _row("host-plate-v1;use=landing;idle=drift;drift=20", (0.05, -12, 6))]
+    assert T.life_tokens(rows) == [(1, "idle=live"), (2, "idle=drift + ken 0.05/-12/6")]
+
+
+def test_a_zero_ken_and_no_idle_is_NO_life_which_is_what_E49_refuses():
+    """The reader must still be able to say a row is dead - a ken of all zeros is no push."""
+    assert T.life_tokens([_row("world-three-notch-slate-v1;use=landing", (0, 0, 0))]) == []
+    assert T.life_tokens([_row("world-three-notch-slate-v1", None)]) == []
+
+
+def test_the_reader_survives_a_short_row_and_a_junk_ken():
+    """A row is a tuple that may stop at its exit, and a hand-written table can carry anything."""
+    assert T.life_tokens([(0.0, 4.0, "plate-v1;idle=live")]) == [(1, "idle=live")]
+    assert T.life_tokens([_row("plate-v1", ("x", 0, 0))]) == []

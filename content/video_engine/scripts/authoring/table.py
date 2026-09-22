@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROW_SPECIES = 6      # the row's 7th element: the species list
+ROW_KEN = 3          # the row's 4th element: the ken-burns push (scale, dx, dy)
 SHOT_TABLE_VAR = "W"
 OVERRIDES_NAME = "overrides.json"   # P51 T5: the edit sidecar, beside the build it belongs to
 
@@ -86,6 +87,39 @@ def row_line(row, show_docks: bool = False) -> str:
 def print_rows(rows: list[tuple], show_docks: bool = False) -> None:
     for r in rows:
         print(row_line(r, show_docks))
+
+
+def life_tokens(rows: list[tuple]) -> list[tuple[int, str]]:
+    """R26-245 (E49, E99 s84): which rows carry LIFE - and by WHAT, never a bare count.
+
+    A row's life is either the painted idle it names in its world options (`;idle=live` on a page,
+    `;idle=drift` on a plate) or its KEN PUSH. Under E99 s84 the ken is the WHOLE of a long-form
+    plate's life - the operator withdrew the painted drift ("the drift is too random, i think we
+    should use ken burns instead of drift"), so a plate row now carries `;use=landing`, a ken tuple
+    and no `;idle=` token at all. A counter that reads only the `;idle=` token therefore reads a
+    Ken-Burns plate as still and contradicts E49 on a row that is correct.
+
+    Returns (1-based row number, what carries it) for every row that carries any. A ken of all
+    zeros is no push and no life; the gate's own M18 reads this from the rendered frames instead
+    (`gate_motion_density._frozen_gate`) and needs no change - a ken moves pixels.
+    """
+    out: list[tuple[int, str]] = []
+    for i, r in enumerate(rows):
+        carries: list[str] = []
+        opts = str(r[2]).partition(";")[2]
+        for tok in opts.split(";"):
+            if tok.startswith("idle="):
+                carries.append(tok)
+        ken = r[ROW_KEN] if len(r) > ROW_KEN else None
+        try:
+            pushes = any(float(v) for v in (ken or ()))
+        except (TypeError, ValueError):
+            pushes = False
+        if pushes:
+            carries.append("ken " + "/".join("%g" % float(v) for v in ken))
+        if carries:
+            out.append((i + 1, " + ".join(carries)))
+    return out
 
 
 def hold_until(rows: list[tuple], ws: list[dict]) -> list[tuple]:
