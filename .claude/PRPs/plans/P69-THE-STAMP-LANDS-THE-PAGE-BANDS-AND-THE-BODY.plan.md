@@ -471,7 +471,7 @@ verbatim tails and are left pending.
 - Evidence: lane B, 2026-09-22/23 - v1 soft drop-shadow REJECTED by the operator; v2 cross-hatch `1d7fbf5` (primary 4.5 px / crossing 7 px, 29.3 / 112.4 levels line-vs-gap); the operator: "the cross hatching needs to be much tighter/finer" -> `041e2ff` (primary 2.25 / 0.7 px, crossing 3.75 / 0.5 px, TAPER_PX 3; +11.6 levels on charcoal, +40.4 on light, against the bare ground; reach 15.35 px inside the stamp fit's 16.8). Goldens re-pinned: prop-stamp 03c396dd.. -> f974a8c0.., prop-stamp-ink beb325d9.. -> 3698dbca.., prop-stamp@proof-exit d3646b8c.. -> 3e4d26c5..; every other golden byte-identical. Parent in place: node 654/654, pytest 259 passed. Open: thrown props' placement (R26-258), the hatch fixed while the prop's own camera moves it (R26-271)
 
 ### T6d: A prop keeps its alpha through the compiler; end tags boxed at their drawn size (found on T23's frames, 2026-09-23)
-- Status: pending
+- Status: done (lane B ff0ad89 + fixes4 1931431; on main 19144bb)
 - Owner: implementation_luna (LANE B, after the key-rail fixes)
 - Depends on: T6b, T10c, the key-rail fixes; lane B
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (`data_uri` / `dock_uri`), `content/video_engine/scripts/ledger_page.py` (`_landscape_full_boxes`, `page_boxes`), `content/video_engine/assets/page-boxes.v1.json`, `content/video_engine/tests/test_prop_alpha.py` (new), `content/video_engine/tests/test_page_boxes.py`
@@ -480,7 +480,7 @@ verbatim tails and are left pending.
 - Expected RED: the compiled asset map names `data:image/jpeg` for `prop-federal-reserve-building-v1.png`, and `page_boxes` on a measured two-series page returns one tag column
 - Validate: `node --check` the engine, `sync_kinetics.py --check`, `measure_page_boxes.py --check`, the regression, `test_golden_frames.py`
 - Frame acceptance: the parent reads the Fed stamped on T23's page: no black square, the hatch on the silhouette, parked in the right margin
-- Evidence: pending
+- Evidence: lane B ff0ad89, 2026-09-23 - a picture with real alpha embeds as PNG (the Fed compiles to data:image/png; opaque pictures keep their JPEG bytes); the fixture records each end tag's drawn rect (`tag_boxes`) and ONLY the stamp's ring fit reads them (the camera kept the estimate: the drawn union would refuse row 1's zoom - R26-281). Parent in place: 293 passed, no golden moved. Scope note (review 4 MN2): EVERY transparent dock asset now embeds with its alpha, not only props - any door rebuilt after the merge changes those pictures from squares to cutouts. Follow-ups in fixes4: colour-key transparency (MN1), a byte cap with WebP-alpha over it (MN2), tag_boxes limited to line end tags with a data fingerprint (MN3). T23 needs, AFTER the merge, `measure_page_boxes.py --write --project build-h` from the merged tree, then FED_STAMPED = True
 
 ### T6c: A bar is narrow - the cap at a five-bar page's width (E99 s96)
 - Status: done
@@ -571,7 +571,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T10b: A bar with rounded shoulders and a soft shadow - an option, read off/on (the operator, 2026-09-22)
-- Status: pending
+- Status: done (lane B 91de567)
 - Owner: implementation_luna
 - Depends on: T6b (the SAME one stage light and shadow dials as the prop's resting shadow); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the bars builder's bar rect only), `content/video_engine/scripts/ledger_page.py` (the option's validation), `content/video_engine/scripts/build_scene_timeline_f.py` (the row option in `PLATE_OPTS`), `content/video_engine/tests/test_bar_style.py` (new), `content/video_engine/assets/page-boxes.v1.json`
@@ -583,10 +583,10 @@ verbatim tails and are left pending.
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
-- Evidence: pending
+- Evidence: lane B 91de567, 2026-09-23 - `;bar_style=soft`: LPBAR_SOFT.SHOULDER_PX 14 on the corners away from zero, a square foot on zero, T6b's propHatchLines cut to each bar's thrown silhouette; the parent read halving / 94 / 1v3 soft vs off. Validation: node --check, sync in sync, boxes PASS, 47 passed. HG3 tunes the shoulder by eye
 
 ### T10c: A chart card is drawn for its own size - the whole card, bigger type, thicker lines (the operator, 2026-09-22)
-- Status: pending
+- Status: done (lane B b42d6dc + 11ed037)
 - Owner: implementation_luna
 - Depends on: T8 (the readability profiles it extends); lane B
 - Write set: `content/video_engine/scripts/chart_card.py` (and its caller `dock_card` wherever it lives), `content/video_engine/scripts/ledger_page.py` (a `card` readability profile), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the profile's reads), `content/video_engine/tests/test_chart_card_readable.py` (new), `content/video_engine/assets/page-boxes.v1.json`
@@ -598,7 +598,7 @@ verbatim tails and are left pending.
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
-- Evidence: pending
+- Evidence: lane B b42d6dc + 11ed037, 2026-09-23 - the `card` profile: every word at the s90 phone floor at the card's displayed size (59.08 px; was 7.93), lines 10.67 px (page 5.34), a `.card.json` sidecar so a push lays the full page on the card. The parent's read found two indistinguishable "+21%" tags -> 11ed037 names a line when two tags would read the same ("s&p", "mega-cap") and the time axis always states its span (both ends, or one range label "Oct '25 - Jul '26" - the parent's fix). Review 4 MJ1: the names were drawn at 0.5 of the floor and the test read no tspans -> fixes4 (names at the floor or stop and report)
 
 ### T11: P69-HG3 - the s90 page card (option off/on); the default flips only on the ruling
 - Status: pending
@@ -725,13 +725,13 @@ verbatim tails and are left pending.
 - Evidence: BLOCKED 2026-09-23 - `ev-tnx-two-eras-v3` keeps its data as two PANELS and a ledger page draws no panels (0 series; only the card chart does), and the Fed stamp is refused on it ("46 px on its long side, under the 120 px mark floor"). Unblock in flight: `ev-tnx-two-eras-v4` authored as ordinary series (the parent's call - keeps the page and the stamp); the draft is staged at `scratchpad/p69t23/door-t23-draft.py`. The Fed 6.5% / Bravos 5.5% as RULES on the yield page are E53 s5's form, not a unit mix UPDATE 2026-09-23 - the row BUILT on v4 (195.82-242.85, 16/16 cues bound, seams 8/0 faults, frozen-frame clean, spoken visuals 0 uncovered; motion gate 3 FAIL: M03 47 s wait while the Fed is withheld, M11 row 1's, M31 a 0.2 s probe blind spot at the melt's first frames) with `FED_STAMPED = False`. The parent's frame read found the title claiming a Bank of England 6% the page never draws -> retitled on "Fed" to "The Fed at 6.5% in 2000: the internet trade rolled over" (the page's own rule); the BoE stays spoken. PROP 1 is withheld by three blockers the row cannot fix: (1) the compiler flattens a prop cutout to JPEG (`dock_uri` -> `data_uri` `convert("RGB")`), so the Fed paints as a BLACK SQUARE - a card by another name; (2) the end tags are reserved as one solid column (`ledger_page._landscape_full_boxes`), so the empty right margin is unreachable; (3) v4 is not in `page-boxes.v1.json`. (1)+(2) are T6d (lane B); (3) is `measure_page_boxes.py --write --project build-h` after lane B merges; then `FED_STAMPED = True`, the re-run, and HG2's card
 
 ### T24: Row 16 (4:06-5:25) - who is paying; PROP 2 beside the leases record
-- Status: pending
+- Status: done (lane A ac38175)
 - Owner: implementation_luna
 - Depends on: T23, P69-HG2
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; the debt issuance beat as T14 settled it; `ev-ig-credit-weighting-v1` and `ev-capex-consensus-v1` recasts (E58); prop 2 `prop-hyperscale-datacenter-v1` stamped first with the `ev-doc-leases` record placed around it (T5), 0 px overlap, the parent's frame read
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: lane A ac38175, 2026-09-23 - row 16 (242.38-321.12): the debt line (T14's beat, 2026E a spread), E58's two recasts (IG index, capex consensus) as plain hand-overs, then the melt splashes onto the records' desk: `dock-h-leases-record` and PROP 2 stamped in the desk's room, 0 px overlap, contact 309.00, `landing 11 (stamp, ink)`. The stamp left the page because the three-state page refused it (70 px < 120 px floor) and the fit reads the FIRST state (R26-279). Gates: 19/19 cues; seams 10/0; M03 named (62 s - the gate never counts a recast, R26-280); M21 WARN capex 14.8 s. Owed: R26-282 (units, the capex sub)
 
 ### T25: Row 17 (5:25-6:04) - the arithmetic: the 94 bar with its figure
 - Status: pending
@@ -742,10 +742,33 @@ verbatim tails and are left pending.
 - Validate: the shared Validate
 - Evidence: pending
 
+### T26a: A bar changes its own value - the halving compare moves the bar, not only its number (R26-273; blocks T26)
+- Status: done (lane B af869b7; on main 19144bb)
+- Owner: implementation_luna (LANE B, after fixes4)
+- Depends on: T6, fixes4; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the `chart_to compare` bar branch), `content/video_engine/scripts/build_scene_timeline_f.py` (only if the compiler must carry the comparator value), `content/video_engine/tests/test_bar_value_morph.py` (new), `content/video_engine/tests/golden/**` (one new golden)
+- Acceptance: E28 - the geometry says what the number says. Today `chart_to compare` melts a bar's figure into the comparator ("20%" -> "10%") while the bar stays at 20% (the T10b halving frame: "10%" printed over a 20% bar). (1) On a compare to a value, the bar's height morphs to the comparator's value on the compare's own clock, its value label riding its top, the soft foot/hatch (T10b) and the extruded form following; (2) a compare with no value change is byte-identical; (3) the old value may stay as a ghost outline at its old height only if the row names it (`ghost=yes`), never by default; (4) one golden: the halving at rest after the morph. T26 builds on it
+- Regression: `python -m pytest content/video_engine/tests/test_bar_value_morph.py -q`
+- Expected RED: after the compare, the bar's rect height still maps to 20% while its label reads "10%"
+- Validate: `node --check` the engine, `sync_kinetics.py --check`, `measure_page_boxes.py --check`, the regression, `test_golden_frames.py`, `test_bar_style.py`
+- Frame acceptance: the parent reads the halving before / mid / after on the 1v1 halving page, soft and off
+- Evidence: lane B af869b7, 2026-09-23 - `lpBarMorphs`: the bar's height morphs to the comparator on the compare's clock, its value riding its top, the soft foot/hatch and the extruded form following; a no-value-change compare byte-identical (11/11 renders); golden `bar-value-morph` (pinned in test_bar_value_morph). The parent read the halving after: the bar at 10%, "10%" on its top, "20%" dimmed beside it. Open for T26: a ring/camera aimed at the bar's datum after the morph still reads the old top; a comparator across zero is unmoved
+
+### T26b: A camera push on a full-stage page keeps the title and the axes in frame (found on T23/T6d's Fed frame; blocks T23's re-stamp and T26's camera 3)
+- Status: done (lane B af869b7; on main 19144bb)
+- Owner: implementation_luna (LANE B, with T26a)
+- Depends on: T6d, fixes4; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the camera's reach on a ledger page), `content/video_engine/scripts/build_scene_timeline_f.py` (the camera key's reach check), `content/video_engine/tests/test_camera_keeps_the_page.py` (new)
+- Acceptance: with the Fed stamped on the two-eras page the camera's pull on the landing (218.66) took the title's left edge, the y ticks and the source line off the frame (`scratchpad/p69t6d/frames/t6d-fed-on-v4-held.png`). (1) A camera key on a full-stage ledger page is refused by name (or clamped, the row's choice written) when its framing would cut the page's title, y-tick column, source line or a measured end tag (`tag_boxes`), read from the page's measured boxes; (2) row 1's zoom 1.06 at (624, 541) - which the drawn "+613%" tag makes reachable only to 1.034 - is reported by the check (lane A re-aims it in T33); (3) every existing camera key that clears keeps its frames byte-identical
+- Regression: `python -m pytest content/video_engine/tests/test_camera_keeps_the_page.py -q`
+- Expected RED: the compiler accepts the stamp-landing pull that crops the title
+- Validate: as T26a, plus `test_the_stamp_arrival.py`
+- Evidence: lane B af869b7, 2026-09-23 - `camera_reach`: a full-stage page's camera key is refused by name when its framing (the page's breath included) cuts the title, y ticks, source or a measured tag; `"reach": "clamp"` writes `landing_zoom` (the Fed: 1.03; title and sub >= 12 px from the edge, y ticks >= 69 px - the parent read before vs clamped). Row 1's zoom 1.06 is REPORTED (WARN, reachable 1.02) for T33. Parent in place: 933 passed
+
 ### T26: Row 18 (6:04-7:13) - the turn: reset 2, PROP 3, camera 3, the halving compare
 - Status: pending
 - Owner: implementation_luna
-- Depends on: T25, P69-HG2
+- Depends on: T25, T26a, T26b, the lane-B merge (the prop's alpha), P69-HG2 (read at the end)
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; dips 4 and 5 at world changes; prop 3 `prop-tech-sp500-concentration-v1` with camera 3 on the 20 datum tied to the stamp's contact (E51); the `chart_to compare` halving on the bars page, built on R26-190 (T6); the certificate ring on its figure (E56)
 - Validate: the shared Validate
