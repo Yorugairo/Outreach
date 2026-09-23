@@ -1,0 +1,67 @@
+{
+  "title": "NET INTEREST IS 21.71% OF REVENUE",
+  "sub": "FY2026 October–August · preliminary CBO estimates · USD billions · ratio, not an earmark",
+  "src": "Congressional Budget Office · Monthly Budget Review, September 9, 2026 · Tables 1 and 3",
+  "src_style": "compact",
+  "unit": "USD billions",
+  "ylabel": "USD billions",
+  "from_zero": true,
+  "domain": [
+    0,
+    5200
+  ],
+  "left_gutter": 200,
+  "bars": [
+    {
+      "label": "Federal revenue",
+      "value": 4845,
+      "color": "cobalt"
+    },
+    {
+      "label": "Net interest",
+      "value": 1052,
+      "color": "crimson"
+    }
+  ],
+  "badges": [
+    {
+      "label": "SHARE OF REVENUE",
+      "value": "21.71%",
+      "tag": "about 22¢ / $1",
+      "accent": "crimson"
+    }
+  ],
+  "status": "DERIVED",
+  "facts": {
+    "budget_window": "FY2026 October–August",
+    "preliminary": true,
+    "revenue_usd_billions": 4845,
+    "outlays_usd_billions": 6812,
+    "deficit_usd_billions": 1967,
+    "net_interest_usd_billions": 1052,
+    "ratio_fraction": 0.2171310629514964,
+    "ratio_percent": 21.71,
+    "plain_language": "About 22 cents of every federal revenue dollar went to net interest through August.",
+    "denominator": "federal revenue",
+    "interpretation": "This is a ratio, not an earmarking claim."
+  },
+  "proof": [
+    {
+      "kind": "evidence_snapshot",
+      "publisher": "Current American Debt Trap evidence packet",
+      "path": "docs/research/markets/AMERICAN-DEBT-TRAP-CURRENT-EVIDENCE-2026-09-20.md",
+      "sha256": "decfe6d525c544b30277c30142e7dcc1968666356ec80b758cad05f8646321c9",
+      "locator": "Federal budget evidence; CBO September 9 review and PDF Tables 1 and 3",
+      "url": "https://www.cbo.gov/system/files/2026-09/61984-MBR.pdf",
+      "values": {
+        "revenue_usd_billions": 4845,
+        "net_interest_usd_billions": 1052
+      }
+    }
+  ],
+  "notes": [
+    "Revenue is the denominator: 1,052 / 4,845 = 21.71%, expressed as about 22 cents per revenue dollar.",
+    "These are preliminary fiscal-year-to-date estimates, not a completed annual total.",
+    "The ratio is not an earmarking claim; it compares net interest with total federal revenue."
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": "american_debt_trap_evidence_receipt.v1",
+  "episode_id": "american-debt-trap",
+  "snapshot_date": "2026-09-20",
+  "builder": "content/video_engine/projects/systems-and-blowups/american-debt-trap/build_evidence.py",
+  "inputs": {
+    "current_evidence": {
+      "path": "docs/research/markets/AMERICAN-DEBT-TRAP-CURRENT-EVIDENCE-2026-09-20.md",
+      "sha256": "decfe6d525c544b30277c30142e7dcc1968666356ec80b758cad05f8646321c9",
+      "bytes": 11110
+    },
+    "treasury_data": {
+      "path": "docs/research/runs/american-debt-trap-20260920/data/treasury-debt.json",
+      "sha256": "b9d3e0ae93cf09bcbbc41aaa286d056ebfb5aee3c6c8efdb8f596f26cc9b4ed6",
+      "bytes": 149769,
+      "expected_sha256": "b9d3e0ae93cf09bcbbc41aaa286d056ebfb5aee3c6c8efdb8f596f26cc9b4ed6",
+      "hash_match": true
+    },
+    "derived_evidence": {
+      "path": "docs/research/runs/american-debt-trap-20260920/derived-evidence.json",
+      "sha256": "ed22a968fb7dae83e843833d1b280795efcfe84356c69ad4cd5c3f0dfa591a3c",
+      "bytes": 1536
+    },
+    "dgs20_data": {
+      "path": "docs/research/runs/american-debt-trap-20260920/data/DGS20.csv",
+      "sha256": "5c1fd731c5c5ee89a28261981b83fd3e476961f2bbb52f10949525b490adfbea",
+      "bytes": 27751,
+      "expected_sha256": "5c1fd731c5c5ee89a28261981b83fd3e476961f2bbb52f10949525b490adfbea",
+      "hash_match": true
+    },
+    "fred_manifest": {
+      "path": "docs/research/runs/american-debt-trap-20260920/fred-manifest.json",
+      "sha256": "84b37f8ddd68d7247a7ce1d6595b438f0b007650ee102101689c78285fa16c91",
+      "bytes": 20482
+    }
+  },
+  "source_verification": {
+    "treasury": {
+      "source_path": "docs/research/runs/american-debt-trap-20260920/data/treasury-debt.json",
+      "expected_sha256": "b9d3e0ae93cf09bcbbc41aaa286d056ebfb5aee3c6c8efdb8f596f26cc9b4ed6",
+      "actual_sha256": "b9d3e0ae93cf09bcbbc41aaa286d056ebfb5aee3c6c8efdb8f596f26cc9b4ed6",
+      "manifest_binding": "derived-evidence.json treasury.sha256",
+      "status": "PASS"
+    },
+    "dgs20": {
+      "source_path": "docs/research/runs/american-debt-trap-20260920/data/DGS20.csv",
+      "expected_sha256": "5c1fd731c5c5ee89a28261981b83fd3e476961f2bbb52f10949525b490adfbea",
+      "actual_sha256": "5c1fd731c5c5ee89a28261981b83fd3e476961f2bbb52f10949525b490adfbea",
+      "manifest_binding": "fred-manifest.json series=DGS20 sha256",
+      "status": "PASS"
+    }
+  },
+  "outputs": [
+    {
+      "path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/evidence/objects/debt-gross-history.series.json",
+      "sha256": "0a65b968d2892e4d372fb31dd20518ffdb09a5f2e5043b006de07df6236aa9a1",
+      "bytes": 35121,
+      "status": "REAL"
+    },
+    {
+      "path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/evidence/objects/cbo-interest-revenue.series.json",
+      "sha256": "9458ab0037317111116fdc680f562de952bb1404e9abaef82259cf083b44ff00",
+      "bytes": 2185,
+      "status": "DERIVED"
+    },
+    {
+      "path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/evidence/objects/treasury-20y-yield.series.json",
+      "sha256": "aa770f0fdcce58b56c9a228446f2784f60ec06d936d88f72edcb641ab810cf15",
+      "bytes": 29354,
+      "status": "REAL"
+    }
+  ],
+  "ledger_page_checks": [
+    {
+      "path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/evidence/objects/debt-gross-history.series.json",
+      "variant": "line",
+      "status": "PASS"
+    },
+    {
+      "path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/evidence/objects/cbo-interest-revenue.series.json",
+      "variant": "bars",
+      "status": "PASS"
+    },
+    {
+      "path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/evidence/objects/treasury-20y-yield.series.json",
+      "variant": "line",
+      "status": "PASS"
+    }
+  ],
+  "source_gaps": [
+    "The cited CBO September 9 HTML/PDF is not retained as local hash-bound source bytes in this run; the CBO values are taken only from the dated current evidence snapshot, whose path and SHA-256 are recorded above.",
+    "No missing Treasury or DGS20 source bytes were found after manifest verification."
+  ],
+  "scope_notes": [
+    "The CBO comparison is a ratio of preliminary FY2026 October–August estimates; the denominator is total federal revenue, not an earmark.",
+    "All line points retain the source observation window and omit blank observations without interpolation."
+  ]
+}

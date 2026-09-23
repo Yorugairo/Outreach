@@ -1,0 +1,21 @@
+{
+  "schema_version": "edit_pauses.v1",
+  "script": "docs/research/runs/american-debt-trap-20260920/script-review/REVISED-V15-VO.txt",
+  "note": "Fast review clock. Model-generated gaps are compressed before these two earned editorial pauses; the former opening settle is removed because it stacked with the natural sentence boundary and stalled the hook.",
+  "pauses": [
+    {
+      "before": "Stay for three checks you can run against your own bills and public data to help protect your money from market mechanics.",
+      "s": 0.25,
+      "kind": "pre-key lead",
+      "phase": "P1",
+      "why": "A short separation between the workshop consequence and the viewer promise."
+    },
+    {
+      "after": "The quote still has to offer a price a lender will accept.",
+      "s": 0.6,
+      "kind": "macro-close dip",
+      "phase": "P2",
+      "why": "A compact dip before the maturity deadline pays the loop."
+    }
+  ]
+}

@@ -1,0 +1,343 @@
+{
+  "schema": "american-debt-trap.asset-candidates.v1",
+  "episode_id": "american-debt-trap",
+  "candidate_count": 19,
+  "approval_boundary": "Candidate inventory only. Parent selects use; no episode-wide approval is claimed.",
+  "items": [
+    {
+      "asset_id": "w2-owner-workshop-world-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/imagegen-complete-worlds-v1/w2-owner-workshop-world-v1.png",
+      "sha256": "066a00512921957934d685306eb6e5efad3ea2b5b89ebf0f0ffa4d60461e220d",
+      "semantic": "Complete fictional workshop world with its owner, workbench, machine and empty expansion bay",
+      "status": "selected-pilot-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/asset-approvals-20260919/w2-owner-workshop-world-v1.json",
+      "approval_sha256": "9ff18765574d6e5d9d4425ccfca8e27b45069cae83df0e3ed6a47673c7607d7b",
+      "approval_field": "operator_decision",
+      "approval_value": "approved_for_composition",
+      "approval_provenance": {
+        "by": "operator",
+        "recorded_at": "2026-09-19T21:04:41Z",
+        "response": "Approve all three for the pilot",
+        "scope": "Pilot composition only; not HG3 or release"
+      }
+    },
+    {
+      "asset_id": "w4-finance-evidence-hall-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/imagegen-complete-worlds-v1/finance-evidence-hall-hosted-v3-cream.png",
+      "sha256": "5c5e68ff73da5d5f1f16c1fb6739ecb8ac0bd46fab76b7f6d40b69dd97351d92",
+      "semantic": "Complete fictional finance evidence hall with a wide mounted cream center screen, two side screens and textured presenters at foreground desks",
+      "status": "selected-pilot-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/asset-approvals-20260919/w4-finance-evidence-hall-v1.json",
+      "approval_sha256": "2dc83076f43695a051d64d9b78ae9c252c67f557032a2c8f3c89d96d0f8656df",
+      "approval_field": "operator_decision",
+      "approval_value": "approved_for_composition",
+      "approval_provenance": {
+        "by": "operator",
+        "recorded_at": "2026-09-19T21:04:41Z",
+        "response": "Approve all three for the pilot",
+        "scope": "Pilot composition only; not HG3 or release"
+      }
+    },
+    {
+      "asset_id": "p2-owner-loan-folio-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/imagegen-pilot-v1/p2-owner-loan-folio-candidate-v1.png",
+      "sha256": "0a2615451066bf508ce86470714f4c8e43791a5f20961c4ca18c91c92d14cba5",
+      "semantic": "Blank workshop loan folio for code-authored financing terms",
+      "status": "selected-pilot-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/asset-approvals-20260919/p2-owner-loan-folio-v1.json",
+      "approval_sha256": "f0fcc4787d7c9600dae1c753aec5522129462b40f003989286ee9cb840e585f5",
+      "approval_field": "operator_decision",
+      "approval_value": "approved_for_composition",
+      "approval_provenance": {
+        "by": "operator",
+        "recorded_at": "2026-09-19T21:04:41Z",
+        "response": "Approve all three for the pilot",
+        "scope": "Pilot composition only; not HG3 or release"
+      }
+    },
+    {
+      "asset_id": "world-workbench-triad-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-1/objects/world-workbench-triad-v1.png",
+      "sha256": "01d08817c8e2a0d0a1e3ede3ba56cf98a792991824f8defbe1e52618ba22830c",
+      "semantic": "Workbench holding iron ingot, banded paper stack, lit oil lamp - the test",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-1/approvals.json",
+      "approval_sha256": "972955cf899cfad33c3627b2459ffbbb15cc85c2f870d7f3b08313d117454dc0",
+      "approval_field": "operator_approved",
+      "approval_value": "world-workbench-triad-v1",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-25",
+        "recorded_at": "2026-08-29",
+        "note": "host plates and BM plates approved",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-adviser-signature-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/objects/world-adviser-signature-v1.png",
+      "sha256": "02516ddf660bda77b9dc5cfa1956f056cc72d3ed8ea54910010df6f292a948a3",
+      "semantic": "An adviser sliding a form across a desk",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/approvals.json",
+      "approval_sha256": "13292d6d1c63d4bb762c5617dccfa1ea8dd9d5b9586ce367547db97470f14efa",
+      "approval_field": "operator_approved",
+      "approval_value": "world-adviser-signature-v1",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-26",
+        "recorded_at": "2026-08-29",
+        "note": "Reviewed plate by plate; rejected only world-index-weights-v1 and world-price-board-wiped-v1",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-dawn-factory-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/objects/world-dawn-factory-v1.png",
+      "sha256": "94619fcde7dcbd7b26c2fddda69da5173b78b4d632197eed6b04a1f3b0921ee2",
+      "semantic": "A works running at dawn",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/approvals.json",
+      "approval_sha256": "13292d6d1c63d4bb762c5617dccfa1ea8dd9d5b9586ce367547db97470f14efa",
+      "approval_field": "operator_approved",
+      "approval_value": "world-dawn-factory-v1",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-26",
+        "recorded_at": "2026-08-29",
+        "note": "Reviewed plate by plate; rejected only world-index-weights-v1 and world-price-board-wiped-v1",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-ledger-page-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/objects/world-ledger-page-v1.png",
+      "sha256": "6d64ccdeea464b6152301cc94d6641de7cf5c6eca6d0f0969bce54fad475aa4f",
+      "semantic": "A ledger page under lamplight",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/approvals.json",
+      "approval_sha256": "13292d6d1c63d4bb762c5617dccfa1ea8dd9d5b9586ce367547db97470f14efa",
+      "approval_field": "operator_approved",
+      "approval_value": "world-ledger-page-v1",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-26",
+        "recorded_at": "2026-08-29",
+        "note": "Reviewed plate by plate; rejected only world-index-weights-v1 and world-price-board-wiped-v1",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-internal-memo-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/objects/world-internal-memo-v1.png",
+      "sha256": "361b11c646d2db991b3ec7a27240379d3d15b6259483650e21ddd0ad47b9a3f8",
+      "semantic": "An internal memo face-up on a desk",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/approvals.json",
+      "approval_sha256": "13292d6d1c63d4bb762c5617dccfa1ea8dd9d5b9586ce367547db97470f14efa",
+      "approval_field": "operator_approved",
+      "approval_value": "world-internal-memo-v1",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-26",
+        "recorded_at": "2026-08-29",
+        "note": "Reviewed plate by plate; rejected only world-index-weights-v1 and world-price-board-wiped-v1",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-banker-apartment-v2",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-banker-apartment-v2.png",
+      "sha256": "5bb33068665db7bc1ba5856e42dac715d556ab5c1a3f3c6db83eaa1ffb35e0c3",
+      "semantic": "Overstuffed banker apartment, dense left / empty right",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/approvals.json",
+      "approval_sha256": "2d3c3c5e7d44097286eb254f066cf423a2707771dfc13c29b4173e234b698b5c",
+      "approval_field": "operator_approved",
+      "approval_value": "world-banker-apartment-v2",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-29",
+        "recorded_at": "2026-08-29",
+        "note": "Memory plates approved for Steel and Paper reuse; four reusable plates approved for this episode",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-trading-desk-dark",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/objects/world-trading-desk-dark.png",
+      "sha256": "7f08b99d0615e062070e966f442f658022ba6fc40335f9c8ef5b73edf954f8a5",
+      "semantic": "The modern room, after",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/approvals.json",
+      "approval_sha256": "a07c9664e87b0534a5481b3270460d3ba17ae9a4129bfe67062a31972202ec8b",
+      "approval_field": "operator_approved",
+      "approval_value": "world-trading-desk-dark",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-29",
+        "recorded_at": "2026-08-29",
+        "note": "Approved on the wave-5 plan, with the molten-pour swap",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-treasury-cash-count",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/objects/world-treasury-cash-count.png",
+      "sha256": "13515928ae8effe827115175b4e20070d674e0076ca989ca9231181b0986bb19",
+      "semantic": "The era this was paid for out of pocket",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/approvals.json",
+      "approval_sha256": "a07c9664e87b0534a5481b3270460d3ba17ae9a4129bfe67062a31972202ec8b",
+      "approval_field": "operator_approved",
+      "approval_value": "world-treasury-cash-count",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-29",
+        "recorded_at": "2026-08-29",
+        "note": "Approved on the wave-5 plan, with the molten-pour swap",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-bond-prospectus",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/objects/world-bond-prospectus.png",
+      "sha256": "fb85d6d517464fd31fd36198406bf5e7c0bf6fc79a104358c761fed8d7aff6e4",
+      "semantic": "The borrowing, as an object",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/approvals.json",
+      "approval_sha256": "a07c9664e87b0534a5481b3270460d3ba17ae9a4129bfe67062a31972202ec8b",
+      "approval_field": "operator_approved",
+      "approval_value": "world-bond-prospectus",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-29",
+        "recorded_at": "2026-08-29",
+        "note": "Approved on the wave-5 plan, with the molten-pour swap",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-lease-contracts-bound",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/objects/world-lease-contracts-bound.png",
+      "sha256": "d8e2f3040c6857c4be3afad41b317eb6e2ccf414da14a1d6c1045ba84a9f3bcb",
+      "semantic": "Commitments already signed",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/approvals.json",
+      "approval_sha256": "a07c9664e87b0534a5481b3270460d3ba17ae9a4129bfe67062a31972202ec8b",
+      "approval_field": "operator_approved",
+      "approval_value": "world-lease-contracts-bound",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-29",
+        "recorded_at": "2026-08-29",
+        "note": "Approved on the wave-5 plan, with the molten-pour swap",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-signature-close",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/objects/world-signature-close.png",
+      "sha256": "f0fece2618bd287d2ac77a49911842820f257e4562b1c29c6f08724efadc9f9a",
+      "semantic": "A promise made in a good year",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/approvals.json",
+      "approval_sha256": "a07c9664e87b0534a5481b3270460d3ba17ae9a4129bfe67062a31972202ec8b",
+      "approval_field": "operator_approved",
+      "approval_value": "world-signature-close",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-29",
+        "recorded_at": "2026-08-29",
+        "note": "Approved on the wave-5 plan, with the molten-pour swap",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-memory-fab-floor-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-memory-fab-floor-v1.png",
+      "sha256": "950cfc215705cb2ddded6bc806a58f24041b3110798f8f0e5438f0a8221e2e49",
+      "semantic": "High-fidelity semiconductor fabrication floor for the later capital-capacity callback",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/approvals.json",
+      "approval_sha256": "2d3c3c5e7d44097286eb254f066cf423a2707771dfc13c29b4173e234b698b5c",
+      "approval_field": "operator_approved",
+      "approval_value": "world-memory-fab-floor-v1",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-29",
+        "note": "Memory plates approved for Steel and Paper reuse",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-till-drawer-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-till-drawer-v1.png",
+      "sha256": "8d962cb3d7a4ee58e69bdd3fcd0667ea39469d1a8e20e0a4fd6169bda8a0c3e6",
+      "semantic": "Cash drawer world for the money-removed-before-default mechanism",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/approvals.json",
+      "approval_sha256": "2d3c3c5e7d44097286eb254f066cf423a2707771dfc13c29b4173e234b698b5c",
+      "approval_field": "operator_approved",
+      "approval_value": "world-till-drawer-v1",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-29",
+        "note": "Reusable finance plate approved",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-receipt-macro-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-receipt-macro-v1.png",
+      "sha256": "cb7503e750ebc2765040d426a9cf1cb8268c9ab110538bab4b64482c5808a622",
+      "semantic": "Macro receipt world for a concrete interest-cost handoff",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/approvals.json",
+      "approval_sha256": "2d3c3c5e7d44097286eb254f066cf423a2707771dfc13c29b4173e234b698b5c",
+      "approval_field": "operator_approved",
+      "approval_value": "world-receipt-macro-v1",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-29",
+        "note": "Reusable finance plate approved",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-signal-box-levers-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-signal-box-levers-v1.png",
+      "sha256": "7ff73b75cd273b701a0dbe81f2635ac1efa13c7fb22bdb6c1d058daa89e7228d",
+      "semantic": "Signal-box levers for the Fed-target versus long-rate distinction",
+      "status": "approved-library-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/approvals.json",
+      "approval_sha256": "2d3c3c5e7d44097286eb254f066cf423a2707771dfc13c29b4173e234b698b5c",
+      "approval_field": "operator_approved",
+      "approval_value": "world-signal-box-levers-v1",
+      "approval_provenance": {
+        "by": "operator",
+        "decision_date": "2026-08-29",
+        "note": "Reusable finance plate approved",
+        "scope": "Approved library source; parent selection required; not episode-wide approval"
+      }
+    },
+    {
+      "asset_id": "world-mike-risk-underwriting-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/review/imagegen-finance-world-v1/world-mike-risk-underwriting-v1.png",
+      "sha256": "2cb447be0827ac35f8dc81cdc8a3fede7609ac0724c24afa56bc7264406f85e5",
+      "semantic": "Mike reviewing a small-business renewal inside a deep, inhabited finance-risk office",
+      "status": "selected-pilot-source",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/review/imagegen-finance-world-v1/world-mike-risk-underwriting-v1.approval.json",
+      "approval_sha256": "3a3d3cdef143e0777c9007f27f208d184b1ea22cbf5bcf5ff686361d96028832",
+      "approval_field": "operator_decision",
+      "approval_value": "approved_for_composition",
+      "approval_provenance": {
+        "by": "operator",
+        "generated_by": "built-in image generation",
+        "generated_at": "2026-09-20",
+        "response": "that plate is good.",
+        "scope": "American Debt Trap pilot composition only; not HG3 or release approval"
+      }
+    }
+  ]
+}

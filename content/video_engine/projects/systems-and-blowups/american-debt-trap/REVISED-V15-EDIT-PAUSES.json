@@ -1,0 +1,28 @@
+{
+  "schema_version": "edit_pauses.v1",
+  "script": "REVISED-V15-VO.txt",
+  "note": "Measured-pilot delivery marks compiled as editor-owned timeline silence. The local scratch take remains unmodified; review-clock-v15-paused is the authoritative prefix clock.",
+  "pauses": [
+    {
+      "after": "Your employer can make every payment and still cancel your promotion.",
+      "s": 1.2,
+      "kind": "post-key settle",
+      "phase": "P1",
+      "why": "Let the opening paradox land before the mechanism begins."
+    },
+    {
+      "before": "Stay for three checks you can run against your own bills and public data to help protect your money from market mechanics.",
+      "s": 0.6,
+      "kind": "pre-key lead",
+      "phase": "P1",
+      "why": "Separate the earned workshop payoff from the viewer promise."
+    },
+    {
+      "after": "The quote still has to offer a price a lender will accept.",
+      "s": 2.0,
+      "kind": "macro-close dip",
+      "phase": "P2",
+      "why": "Make the declared dip audible before the maturity deadline pays the loop."
+    }
+  ]
+}

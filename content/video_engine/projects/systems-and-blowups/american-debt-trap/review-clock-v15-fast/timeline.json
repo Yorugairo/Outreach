@@ -1,0 +1,9683 @@
+{
+ "episode": "american-debt-trap",
+ "script": "REVISED-V15-VO.txt",
+ "take": "vo-short",
+ "runtime_s": 534.093,
+ "words": [
+  {
+   "w": "America's",
+   "start": 0.37,
+   "end": 0.951,
+   "part": 1
+  },
+  {
+   "w": "debt",
+   "start": 0.951,
+   "end": 1.222,
+   "part": 1
+  },
+  {
+   "w": "trap",
+   "start": 1.222,
+   "end": 1.58,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 1.58,
+   "end": 1.765,
+   "part": 1
+  },
+  {
+   "w": "cost",
+   "start": 1.765,
+   "end": 2.123,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 2.123,
+   "end": 2.271,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 2.271,
+   "end": 2.382,
+   "part": 1
+  },
+  {
+   "w": "raise.",
+   "start": 2.382,
+   "end": 3.394,
+   "part": 1
+  },
+  {
+   "w": "Your",
+   "start": 3.394,
+   "end": 3.579,
+   "part": 1
+  },
+  {
+   "w": "employer",
+   "start": 3.579,
+   "end": 4.245,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 4.245,
+   "end": 4.368,
+   "part": 1
+  },
+  {
+   "w": "make",
+   "start": 4.368,
+   "end": 4.64,
+   "part": 1
+  },
+  {
+   "w": "every",
+   "start": 4.64,
+   "end": 4.997,
+   "part": 1
+  },
+  {
+   "w": "payment",
+   "start": 4.997,
+   "end": 5.479,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 5.479,
+   "end": 5.602,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 5.602,
+   "end": 5.887,
+   "part": 1
+  },
+  {
+   "w": "cancel",
+   "start": 5.887,
+   "end": 6.343,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 6.343,
+   "end": 6.466,
+   "part": 1
+  },
+  {
+   "w": "promotion.",
+   "start": 6.466,
+   "end": 7.602,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 7.893,
+   "end": 7.961,
+   "part": 1
+  },
+  {
+   "w": "trouble",
+   "start": 7.961,
+   "end": 8.302,
+   "part": 1
+  },
+  {
+   "w": "starts",
+   "start": 8.302,
+   "end": 8.666,
+   "part": 1
+  },
+  {
+   "w": "before",
+   "start": 8.666,
+   "end": 9.041,
+   "part": 1
+  },
+  {
+   "w": "anyone",
+   "start": 9.041,
+   "end": 9.507,
+   "part": 1
+  },
+  {
+   "w": "goes",
+   "start": 9.507,
+   "end": 9.814,
+   "part": 1
+  },
+  {
+   "w": "broke.",
+   "start": 9.814,
+   "end": 10.643,
+   "part": 1
+  },
+  {
+   "w": "Imagine",
+   "start": 10.922,
+   "end": 11.399,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 11.399,
+   "end": 11.547,
+   "part": 1
+  },
+  {
+   "w": "own",
+   "start": 11.547,
+   "end": 11.728,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 11.728,
+   "end": 11.808,
+   "part": 1
+  },
+  {
+   "w": "workshop,",
+   "start": 11.808,
+   "end": 12.536,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 12.536,
+   "end": 12.637,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 12.637,
+   "end": 12.706,
+   "part": 1
+  },
+  {
+   "w": "machine",
+   "start": 12.706,
+   "end": 13.104,
+   "part": 1
+  },
+  {
+   "w": "loan",
+   "start": 13.104,
+   "end": 13.376,
+   "part": 1
+  },
+  {
+   "w": "comes",
+   "start": 13.376,
+   "end": 13.684,
+   "part": 1
+  },
+  {
+   "w": "due.",
+   "start": 13.684,
+   "end": 14.388,
+   "part": 1
+  },
+  {
+   "w": "Your",
+   "start": 14.388,
+   "end": 14.57,
+   "part": 1
+  },
+  {
+   "w": "crew",
+   "start": 14.57,
+   "end": 14.831,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 14.831,
+   "end": 15.025,
+   "part": 1
+  },
+  {
+   "w": "orders",
+   "start": 15.025,
+   "end": 15.411,
+   "part": 1
+  },
+  {
+   "w": "waiting,",
+   "start": 15.411,
+   "end": 16.104,
+   "part": 1
+  },
+  {
+   "w": "but",
+   "start": 16.104,
+   "end": 16.228,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 16.228,
+   "end": 16.308,
+   "part": 1
+  },
+  {
+   "w": "bank",
+   "start": 16.308,
+   "end": 16.604,
+   "part": 1
+  },
+  {
+   "w": "sends",
+   "start": 16.604,
+   "end": 16.843,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 16.843,
+   "end": 16.899,
+   "part": 1
+  },
+  {
+   "w": "more",
+   "start": 16.899,
+   "end": 17.104,
+   "part": 1
+  },
+  {
+   "w": "expensive",
+   "start": 17.104,
+   "end": 17.74,
+   "part": 1
+  },
+  {
+   "w": "renewal",
+   "start": 17.74,
+   "end": 18.138,
+   "part": 1
+  },
+  {
+   "w": "quote.",
+   "start": 18.138,
+   "end": 18.922,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 18.922,
+   "end": 19.07,
+   "part": 1
+  },
+  {
+   "w": "extra",
+   "start": 19.07,
+   "end": 19.445,
+   "part": 1
+  },
+  {
+   "w": "interest",
+   "start": 19.445,
+   "end": 19.808,
+   "part": 1
+  },
+  {
+   "w": "takes",
+   "start": 19.808,
+   "end": 20.058,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 20.058,
+   "end": 20.149,
+   "part": 1
+  },
+  {
+   "w": "money",
+   "start": 20.149,
+   "end": 20.422,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 20.422,
+   "end": 20.57,
+   "part": 1
+  },
+  {
+   "w": "set",
+   "start": 20.57,
+   "end": 20.752,
+   "part": 1
+  },
+  {
+   "w": "aside",
+   "start": 20.752,
+   "end": 21.195,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 21.195,
+   "end": 21.308,
+   "part": 1
+  },
+  {
+   "w": "another",
+   "start": 21.308,
+   "end": 21.649,
+   "part": 1
+  },
+  {
+   "w": "worker.",
+   "start": 21.649,
+   "end": 22.456,
+   "part": 1
+  },
+  {
+   "w": "You",
+   "start": 22.456,
+   "end": 22.604,
+   "part": 1
+  },
+  {
+   "w": "delay",
+   "start": 22.604,
+   "end": 22.967,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 22.967,
+   "end": 23.07,
+   "part": 1
+  },
+  {
+   "w": "hire.",
+   "start": 23.07,
+   "end": 23.888,
+   "part": 1
+  },
+  {
+   "w": "Your",
+   "start": 23.888,
+   "end": 24.07,
+   "part": 1
+  },
+  {
+   "w": "crew",
+   "start": 24.07,
+   "end": 24.388,
+   "part": 1
+  },
+  {
+   "w": "covers",
+   "start": 24.388,
+   "end": 24.752,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 24.752,
+   "end": 24.866,
+   "part": 1
+  },
+  {
+   "w": "extra",
+   "start": 24.866,
+   "end": 25.24,
+   "part": 1
+  },
+  {
+   "w": "orders.",
+   "start": 25.24,
+   "end": 26.036,
+   "part": 1
+  },
+  {
+   "w": "But",
+   "start": 26.036,
+   "end": 26.161,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 26.161,
+   "end": 26.24,
+   "part": 1
+  },
+  {
+   "w": "bank",
+   "start": 26.24,
+   "end": 26.513,
+   "part": 1
+  },
+  {
+   "w": "gets",
+   "start": 26.513,
+   "end": 26.751,
+   "part": 1
+  },
+  {
+   "w": "paid",
+   "start": 26.751,
+   "end": 27.195,
+   "part": 1
+  },
+  {
+   "w": "while",
+   "start": 27.195,
+   "end": 27.354,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 27.354,
+   "end": 27.502,
+   "part": 1
+  },
+  {
+   "w": "business",
+   "start": 27.502,
+   "end": 27.934,
+   "part": 1
+  },
+  {
+   "w": "loses",
+   "start": 27.934,
+   "end": 28.342,
+   "part": 1
+  },
+  {
+   "w": "room",
+   "start": 28.342,
+   "end": 28.626,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 28.626,
+   "end": 28.74,
+   "part": 1
+  },
+  {
+   "w": "grow.",
+   "start": 28.74,
+   "end": 29.604,
+   "part": 1
+  },
+  {
+   "w": "Stay",
+   "start": 29.604,
+   "end": 30.228,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 30.228,
+   "end": 30.409,
+   "part": 1
+  },
+  {
+   "w": "three",
+   "start": 30.409,
+   "end": 30.739,
+   "part": 1
+  },
+  {
+   "w": "checks",
+   "start": 30.739,
+   "end": 31.08,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 31.08,
+   "end": 31.171,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 31.171,
+   "end": 31.352,
+   "part": 1
+  },
+  {
+   "w": "run",
+   "start": 31.352,
+   "end": 31.534,
+   "part": 1
+  },
+  {
+   "w": "against",
+   "start": 31.534,
+   "end": 31.819,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 31.819,
+   "end": 31.954,
+   "part": 1
+  },
+  {
+   "w": "own",
+   "start": 31.954,
+   "end": 32.251,
+   "part": 1
+  },
+  {
+   "w": "bills",
+   "start": 32.251,
+   "end": 32.671,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 32.671,
+   "end": 32.795,
+   "part": 1
+  },
+  {
+   "w": "public",
+   "start": 32.795,
+   "end": 33.182,
+   "part": 1
+  },
+  {
+   "w": "data",
+   "start": 33.182,
+   "end": 33.545,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 33.545,
+   "end": 33.671,
+   "part": 1
+  },
+  {
+   "w": "help",
+   "start": 33.671,
+   "end": 33.921,
+   "part": 1
+  },
+  {
+   "w": "protect",
+   "start": 33.921,
+   "end": 34.272,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 34.272,
+   "end": 34.375,
+   "part": 1
+  },
+  {
+   "w": "money",
+   "start": 34.375,
+   "end": 34.648,
+   "part": 1
+  },
+  {
+   "w": "from",
+   "start": 34.648,
+   "end": 34.83,
+   "part": 1
+  },
+  {
+   "w": "market",
+   "start": 34.83,
+   "end": 35.136,
+   "part": 1
+  },
+  {
+   "w": "mechanics.",
+   "start": 35.136,
+   "end": 36.228,
+   "part": 1
+  },
+  {
+   "w": "Your",
+   "start": 36.648,
+   "end": 36.796,
+   "part": 1
+  },
+  {
+   "w": "own",
+   "start": 36.796,
+   "end": 37.091,
+   "part": 1
+  },
+  {
+   "w": "monthly",
+   "start": 37.091,
+   "end": 37.523,
+   "part": 1
+  },
+  {
+   "w": "bills",
+   "start": 37.523,
+   "end": 38.012,
+   "part": 1
+  },
+  {
+   "w": "will",
+   "start": 38.012,
+   "end": 38.171,
+   "part": 1
+  },
+  {
+   "w": "show",
+   "start": 38.171,
+   "end": 38.421,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 38.421,
+   "end": 38.614,
+   "part": 1
+  },
+  {
+   "w": "exactly",
+   "start": 38.614,
+   "end": 39.148,
+   "part": 1
+  },
+  {
+   "w": "where",
+   "start": 39.148,
+   "end": 39.319,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 39.319,
+   "end": 39.398,
+   "part": 1
+  },
+  {
+   "w": "start",
+   "start": 39.398,
+   "end": 39.716,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 39.716,
+   "end": 39.818,
+   "part": 1
+  },
+  {
+   "w": "first",
+   "start": 39.818,
+   "end": 40.136,
+   "part": 1
+  },
+  {
+   "w": "check.",
+   "start": 40.136,
+   "end": 40.898,
+   "part": 1
+  },
+  {
+   "w": "I",
+   "start": 41.177,
+   "end": 41.29,
+   "part": 1
+  },
+  {
+   "w": "worked",
+   "start": 41.29,
+   "end": 41.54,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 41.54,
+   "end": 41.688,
+   "part": 1
+  },
+  {
+   "w": "Business",
+   "start": 41.688,
+   "end": 42.098,
+   "part": 1
+  },
+  {
+   "w": "Risk",
+   "start": 42.098,
+   "end": 42.45,
+   "part": 1
+  },
+  {
+   "w": "at",
+   "start": 42.45,
+   "end": 42.597,
+   "part": 1
+  },
+  {
+   "w": "JPMorgan,",
+   "start": 42.597,
+   "end": 43.79,
+   "part": 1
+  },
+  {
+   "w": "where",
+   "start": 43.79,
+   "end": 43.927,
+   "part": 1
+  },
+  {
+   "w": "I",
+   "start": 43.927,
+   "end": 44.063,
+   "part": 1
+  },
+  {
+   "w": "learned",
+   "start": 44.063,
+   "end": 44.313,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 44.313,
+   "end": 44.438,
+   "part": 1
+  },
+  {
+   "w": "ask",
+   "start": 44.438,
+   "end": 44.722,
+   "part": 1
+  },
+  {
+   "w": "what",
+   "start": 44.722,
+   "end": 44.916,
+   "part": 1
+  },
+  {
+   "w": "each",
+   "start": 44.916,
+   "end": 45.166,
+   "part": 1
+  },
+  {
+   "w": "payment",
+   "start": 45.166,
+   "end": 45.551,
+   "part": 1
+  },
+  {
+   "w": "cost",
+   "start": 45.551,
+   "end": 45.87,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 45.87,
+   "end": 45.95,
+   "part": 1
+  },
+  {
+   "w": "person",
+   "start": 45.95,
+   "end": 46.359,
+   "part": 1
+  },
+  {
+   "w": "making",
+   "start": 46.359,
+   "end": 46.7,
+   "part": 1
+  },
+  {
+   "w": "it.",
+   "start": 46.7,
+   "end": 47.325,
+   "part": 1
+  },
+  {
+   "w": "Refinancing",
+   "start": 47.325,
+   "end": 48.018,
+   "part": 1
+  },
+  {
+   "w": "replaces",
+   "start": 48.018,
+   "end": 48.563,
+   "part": 1
+  },
+  {
+   "w": "an",
+   "start": 48.563,
+   "end": 48.689,
+   "part": 1
+  },
+  {
+   "w": "old",
+   "start": 48.689,
+   "end": 49.007,
+   "part": 1
+  },
+  {
+   "w": "loan",
+   "start": 49.007,
+   "end": 49.359,
+   "part": 1
+  },
+  {
+   "w": "with",
+   "start": 49.359,
+   "end": 49.484,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 49.484,
+   "end": 49.575,
+   "part": 1
+  },
+  {
+   "w": "new",
+   "start": 49.575,
+   "end": 49.813,
+   "part": 1
+  },
+  {
+   "w": "one,",
+   "start": 49.813,
+   "end": 50.393,
+   "part": 1
+  },
+  {
+   "w": "at",
+   "start": 50.393,
+   "end": 50.484,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 50.484,
+   "end": 50.574,
+   "part": 1
+  },
+  {
+   "w": "new",
+   "start": 50.574,
+   "end": 50.779,
+   "part": 1
+  },
+  {
+   "w": "price.",
+   "start": 50.779,
+   "end": 51.734,
+   "part": 1
+  },
+  {
+   "w": "That",
+   "start": 51.734,
+   "end": 51.972,
+   "part": 1
+  },
+  {
+   "w": "renewal",
+   "start": 51.972,
+   "end": 52.416,
+   "part": 1
+  },
+  {
+   "w": "letter",
+   "start": 52.416,
+   "end": 52.745,
+   "part": 1
+  },
+  {
+   "w": "changes",
+   "start": 52.745,
+   "end": 53.268,
+   "part": 1
+  },
+  {
+   "w": "what",
+   "start": 53.268,
+   "end": 53.404,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 53.404,
+   "end": 53.529,
+   "part": 1
+  },
+  {
+   "w": "whole",
+   "start": 53.529,
+   "end": 53.802,
+   "part": 1
+  },
+  {
+   "w": "business",
+   "start": 53.802,
+   "end": 54.2,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 54.2,
+   "end": 54.313,
+   "part": 1
+  },
+  {
+   "w": "afford.",
+   "start": 54.313,
+   "end": 55.29,
+   "part": 1
+  },
+  {
+   "w": "Follow",
+   "start": 55.29,
+   "end": 55.609,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 55.609,
+   "end": 55.734,
+   "part": 1
+  },
+  {
+   "w": "cutback",
+   "start": 55.734,
+   "end": 56.222,
+   "part": 1
+  },
+  {
+   "w": "from",
+   "start": 56.222,
+   "end": 56.37,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 56.37,
+   "end": 56.518,
+   "part": 1
+  },
+  {
+   "w": "owner",
+   "start": 56.518,
+   "end": 56.881,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 56.881,
+   "end": 56.995,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 56.995,
+   "end": 57.12,
+   "part": 1
+  },
+  {
+   "w": "worker,",
+   "start": 57.12,
+   "end": 57.813,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 57.813,
+   "end": 57.939,
+   "part": 1
+  },
+  {
+   "w": "customer",
+   "start": 57.939,
+   "end": 58.711,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 58.711,
+   "end": 58.848,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 58.848,
+   "end": 58.939,
+   "part": 1
+  },
+  {
+   "w": "supplier.",
+   "start": 58.939,
+   "end": 60.03,
+   "part": 1
+  },
+  {
+   "w": "Each",
+   "start": 60.03,
+   "end": 60.313,
+   "part": 1
+  },
+  {
+   "w": "one",
+   "start": 60.313,
+   "end": 60.518,
+   "part": 1
+  },
+  {
+   "w": "gives",
+   "start": 60.518,
+   "end": 60.711,
+   "part": 1
+  },
+  {
+   "w": "up",
+   "start": 60.711,
+   "end": 60.881,
+   "part": 1
+  },
+  {
+   "w": "something",
+   "start": 60.881,
+   "end": 61.245,
+   "part": 1
+  },
+  {
+   "w": "before",
+   "start": 61.245,
+   "end": 61.642,
+   "part": 1
+  },
+  {
+   "w": "anybody",
+   "start": 61.642,
+   "end": 62.21,
+   "part": 1
+  },
+  {
+   "w": "misses",
+   "start": 62.21,
+   "end": 62.586,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 62.586,
+   "end": 62.688,
+   "part": 1
+  },
+  {
+   "w": "payment.",
+   "start": 62.688,
+   "end": 63.609,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 63.888,
+   "end": 63.978,
+   "part": 1
+  },
+  {
+   "w": "need",
+   "start": 63.978,
+   "end": 64.228,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 64.228,
+   "end": 64.342,
+   "part": 1
+  },
+  {
+   "w": "refinance",
+   "start": 64.342,
+   "end": 64.99,
+   "part": 1
+  },
+  {
+   "w": "reaches",
+   "start": 64.99,
+   "end": 65.388,
+   "part": 1
+  },
+  {
+   "w": "beyond",
+   "start": 65.388,
+   "end": 65.762,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 65.762,
+   "end": 65.842,
+   "part": 1
+  },
+  {
+   "w": "workshop.",
+   "start": 65.842,
+   "end": 66.91,
+   "part": 1
+  },
+  {
+   "w": "Governments,",
+   "start": 66.91,
+   "end": 67.853,
+   "part": 1
+  },
+  {
+   "w": "businesses",
+   "start": 67.853,
+   "end": 68.501,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 68.501,
+   "end": 68.627,
+   "part": 1
+  },
+  {
+   "w": "households",
+   "start": 68.627,
+   "end": 69.297,
+   "part": 1
+  },
+  {
+   "w": "have",
+   "start": 69.297,
+   "end": 69.547,
+   "part": 1
+  },
+  {
+   "w": "old",
+   "start": 69.547,
+   "end": 69.877,
+   "part": 1
+  },
+  {
+   "w": "debt",
+   "start": 69.877,
+   "end": 70.138,
+   "part": 1
+  },
+  {
+   "w": "coming",
+   "start": 70.138,
+   "end": 70.489,
+   "part": 1
+  },
+  {
+   "w": "due,",
+   "start": 70.489,
+   "end": 71.148,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 71.148,
+   "end": 71.262,
+   "part": 1
+  },
+  {
+   "w": "they",
+   "start": 71.262,
+   "end": 71.421,
+   "part": 1
+  },
+  {
+   "w": "all",
+   "start": 71.421,
+   "end": 71.66,
+   "part": 1
+  },
+  {
+   "w": "need",
+   "start": 71.66,
+   "end": 71.922,
+   "part": 1
+  },
+  {
+   "w": "someone",
+   "start": 71.922,
+   "end": 72.239,
+   "part": 1
+  },
+  {
+   "w": "willing",
+   "start": 72.239,
+   "end": 72.569,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 72.569,
+   "end": 72.694,
+   "part": 1
+  },
+  {
+   "w": "finance",
+   "start": 72.694,
+   "end": 73.206,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 73.206,
+   "end": 73.297,
+   "part": 1
+  },
+  {
+   "w": "replacement.",
+   "start": 73.297,
+   "end": 74.468,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 74.468,
+   "end": 74.626,
+   "part": 1
+  },
+  {
+   "w": "owner",
+   "start": 74.626,
+   "end": 74.99,
+   "part": 1
+  },
+  {
+   "w": "plans",
+   "start": 74.99,
+   "end": 75.433,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 75.433,
+   "end": 75.524,
+   "part": 1
+  },
+  {
+   "w": "put",
+   "start": 75.524,
+   "end": 75.683,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 75.683,
+   "end": 75.808,
+   "part": 1
+  },
+  {
+   "w": "next",
+   "start": 75.808,
+   "end": 76.103,
+   "part": 1
+  },
+  {
+   "w": "purchase",
+   "start": 76.103,
+   "end": 76.547,
+   "part": 1
+  },
+  {
+   "w": "on",
+   "start": 76.547,
+   "end": 76.762,
+   "part": 1
+  },
+  {
+   "w": "hold",
+   "start": 76.762,
+   "end": 77.149,
+   "part": 1
+  },
+  {
+   "w": "until",
+   "start": 77.149,
+   "end": 77.49,
+   "part": 1
+  },
+  {
+   "w": "borrowing",
+   "start": 77.49,
+   "end": 77.956,
+   "part": 1
+  },
+  {
+   "w": "gets",
+   "start": 77.956,
+   "end": 78.194,
+   "part": 1
+  },
+  {
+   "w": "cheaper,",
+   "start": 78.194,
+   "end": 78.978,
+   "part": 1
+  },
+  {
+   "w": "then",
+   "start": 78.978,
+   "end": 79.194,
+   "part": 1
+  },
+  {
+   "w": "pick",
+   "start": 79.194,
+   "end": 79.421,
+   "part": 1
+  },
+  {
+   "w": "up",
+   "start": 79.421,
+   "end": 79.615,
+   "part": 1
+  },
+  {
+   "w": "where",
+   "start": 79.615,
+   "end": 79.739,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 79.739,
+   "end": 79.853,
+   "part": 1
+  },
+  {
+   "w": "business",
+   "start": 79.853,
+   "end": 80.251,
+   "part": 1
+  },
+  {
+   "w": "left",
+   "start": 80.251,
+   "end": 80.524,
+   "part": 1
+  },
+  {
+   "w": "off.",
+   "start": 80.524,
+   "end": 81.342,
+   "part": 1
+  },
+  {
+   "w": "Like",
+   "start": 81.621,
+   "end": 81.791,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 81.791,
+   "end": 81.871,
+   "part": 1
+  },
+  {
+   "w": "workshop,",
+   "start": 81.871,
+   "end": 82.746,
+   "part": 1
+  },
+  {
+   "w": "Washington",
+   "start": 82.746,
+   "end": 83.348,
+   "part": 1
+  },
+  {
+   "w": "must",
+   "start": 83.348,
+   "end": 83.609,
+   "part": 1
+  },
+  {
+   "w": "refinance",
+   "start": 83.609,
+   "end": 84.189,
+   "part": 1
+  },
+  {
+   "w": "maturing",
+   "start": 84.189,
+   "end": 84.677,
+   "part": 1
+  },
+  {
+   "w": "debt",
+   "start": 84.677,
+   "end": 84.939,
+   "part": 1
+  },
+  {
+   "w": "at",
+   "start": 84.939,
+   "end": 85.03,
+   "part": 1
+  },
+  {
+   "w": "current",
+   "start": 85.03,
+   "end": 85.326,
+   "part": 1
+  },
+  {
+   "w": "borrowing",
+   "start": 85.326,
+   "end": 85.768,
+   "part": 1
+  },
+  {
+   "w": "costs.",
+   "start": 85.768,
+   "end": 86.7,
+   "part": 1
+  },
+  {
+   "w": "In",
+   "start": 86.7,
+   "end": 86.859,
+   "part": 1
+  },
+  {
+   "w": "August,",
+   "start": 86.859,
+   "end": 87.632,
+   "part": 1
+  },
+  {
+   "w": "federal",
+   "start": 87.632,
+   "end": 88.018,
+   "part": 1
+  },
+  {
+   "w": "debt",
+   "start": 88.018,
+   "end": 88.28,
+   "part": 1
+  },
+  {
+   "w": "crossed",
+   "start": 88.28,
+   "end": 88.621,
+   "part": 1
+  },
+  {
+   "w": "forty",
+   "start": 88.621,
+   "end": 89.018,
+   "part": 1
+  },
+  {
+   "w": "trillion",
+   "start": 89.018,
+   "end": 89.462,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 89.462,
+   "end": 89.916,
+   "part": 1
+  },
+  {
+   "w": "as",
+   "start": 89.916,
+   "end": 90.064,
+   "part": 1
+  },
+  {
+   "w": "Washington",
+   "start": 90.064,
+   "end": 90.598,
+   "part": 1
+  },
+  {
+   "w": "kept",
+   "start": 90.598,
+   "end": 90.882,
+   "part": 1
+  },
+  {
+   "w": "borrowing",
+   "start": 90.882,
+   "end": 91.326,
+   "part": 1
+  },
+  {
+   "w": "across",
+   "start": 91.326,
+   "end": 91.644,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 91.644,
+   "end": 91.768,
+   "part": 1
+  },
+  {
+   "w": "gap",
+   "start": 91.768,
+   "end": 92.053,
+   "part": 1
+  },
+  {
+   "w": "between",
+   "start": 92.053,
+   "end": 92.382,
+   "part": 1
+  },
+  {
+   "w": "spending",
+   "start": 92.382,
+   "end": 92.848,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 92.848,
+   "end": 92.962,
+   "part": 1
+  },
+  {
+   "w": "revenue.",
+   "start": 92.962,
+   "end": 93.916,
+   "part": 1
+  },
+  {
+   "w": "Through",
+   "start": 93.916,
+   "end": 94.189,
+   "part": 1
+  },
+  {
+   "w": "August,",
+   "start": 94.189,
+   "end": 95.018,
+   "part": 1
+  },
+  {
+   "w": "estimated",
+   "start": 95.018,
+   "end": 95.609,
+   "part": 1
+  },
+  {
+   "w": "net",
+   "start": 95.609,
+   "end": 95.826,
+   "part": 1
+  },
+  {
+   "w": "interest",
+   "start": 95.826,
+   "end": 96.257,
+   "part": 1
+  },
+  {
+   "w": "exceeded",
+   "start": 96.257,
+   "end": 96.655,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 96.655,
+   "end": 96.723,
+   "part": 1
+  },
+  {
+   "w": "trillion",
+   "start": 96.723,
+   "end": 97.166,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 97.166,
+   "end": 97.621,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 97.621,
+   "end": 97.724,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 97.724,
+   "end": 97.814,
+   "part": 1
+  },
+  {
+   "w": "fiscal",
+   "start": 97.814,
+   "end": 98.178,
+   "part": 1
+  },
+  {
+   "w": "year.",
+   "start": 98.178,
+   "end": 98.95,
+   "part": 1
+  },
+  {
+   "w": "That",
+   "start": 98.95,
+   "end": 99.166,
+   "part": 1
+  },
+  {
+   "w": "was",
+   "start": 99.166,
+   "end": 99.303,
+   "part": 1
+  },
+  {
+   "w": "about",
+   "start": 99.303,
+   "end": 99.609,
+   "part": 1
+  },
+  {
+   "w": "twenty-two",
+   "start": 99.609,
+   "end": 100.121,
+   "part": 1
+  },
+  {
+   "w": "cents",
+   "start": 100.121,
+   "end": 100.485,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 100.485,
+   "end": 100.632,
+   "part": 1
+  },
+  {
+   "w": "every",
+   "start": 100.632,
+   "end": 100.95,
+   "part": 1
+  },
+  {
+   "w": "dollar",
+   "start": 100.95,
+   "end": 101.348,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 101.348,
+   "end": 101.485,
+   "part": 1
+  },
+  {
+   "w": "federal",
+   "start": 101.485,
+   "end": 101.894,
+   "part": 1
+  },
+  {
+   "w": "revenue.",
+   "start": 101.894,
+   "end": 102.791,
+   "part": 1
+  },
+  {
+   "w": "Interest",
+   "start": 102.791,
+   "end": 103.212,
+   "part": 1
+  },
+  {
+   "w": "itself",
+   "start": 103.212,
+   "end": 103.712,
+   "part": 1
+  },
+  {
+   "w": "adds",
+   "start": 103.712,
+   "end": 104.076,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 104.076,
+   "end": 104.166,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 104.166,
+   "end": 104.291,
+   "part": 1
+  },
+  {
+   "w": "budget",
+   "start": 104.291,
+   "end": 104.632,
+   "part": 1
+  },
+  {
+   "w": "Washington",
+   "start": 104.632,
+   "end": 105.303,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 105.303,
+   "end": 105.53,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 105.53,
+   "end": 105.655,
+   "part": 1
+  },
+  {
+   "w": "finance.",
+   "start": 105.655,
+   "end": 106.723,
+   "part": 1
+  },
+  {
+   "w": "Faster",
+   "start": 107.166,
+   "end": 107.576,
+   "part": 1
+  },
+  {
+   "w": "spending",
+   "start": 107.576,
+   "end": 107.985,
+   "part": 1
+  },
+  {
+   "w": "without",
+   "start": 107.985,
+   "end": 108.314,
+   "part": 1
+  },
+  {
+   "w": "matching",
+   "start": 108.314,
+   "end": 108.768,
+   "part": 1
+  },
+  {
+   "w": "revenue",
+   "start": 108.768,
+   "end": 109.564,
+   "part": 1
+  },
+  {
+   "w": "means",
+   "start": 109.564,
+   "end": 109.859,
+   "part": 1
+  },
+  {
+   "w": "more",
+   "start": 109.859,
+   "end": 110.086,
+   "part": 1
+  },
+  {
+   "w": "borrowing",
+   "start": 110.086,
+   "end": 110.768,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 110.768,
+   "end": 110.894,
+   "part": 1
+  },
+  {
+   "w": "more",
+   "start": 110.894,
+   "end": 111.098,
+   "part": 1
+  },
+  {
+   "w": "interest",
+   "start": 111.098,
+   "end": 111.507,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 111.507,
+   "end": 111.656,
+   "part": 1
+  },
+  {
+   "w": "future",
+   "start": 111.656,
+   "end": 112.03,
+   "part": 1
+  },
+  {
+   "w": "budgets.",
+   "start": 112.03,
+   "end": 112.939,
+   "part": 1
+  },
+  {
+   "w": "That",
+   "start": 113.218,
+   "end": 113.4,
+   "part": 1
+  },
+  {
+   "w": "puts",
+   "start": 113.4,
+   "end": 113.638,
+   "part": 1
+  },
+  {
+   "w": "Washington",
+   "start": 113.638,
+   "end": 114.161,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 114.161,
+   "end": 114.229,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 114.229,
+   "end": 114.309,
+   "part": 1
+  },
+  {
+   "w": "market",
+   "start": 114.309,
+   "end": 114.695,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 114.695,
+   "end": 114.843,
+   "part": 1
+  },
+  {
+   "w": "money",
+   "start": 114.843,
+   "end": 115.161,
+   "part": 1
+  },
+  {
+   "w": "alongside",
+   "start": 115.161,
+   "end": 115.911,
+   "part": 1
+  },
+  {
+   "w": "businesses",
+   "start": 115.911,
+   "end": 116.468,
+   "part": 1
+  },
+  {
+   "w": "like",
+   "start": 116.468,
+   "end": 116.638,
+   "part": 1
+  },
+  {
+   "w": "our",
+   "start": 116.638,
+   "end": 116.764,
+   "part": 1
+  },
+  {
+   "w": "workshop.",
+   "start": 116.764,
+   "end": 117.798,
+   "part": 1
+  },
+  {
+   "w": "On",
+   "start": 117.798,
+   "end": 118.002,
+   "part": 1
+  },
+  {
+   "w": "September",
+   "start": 118.002,
+   "end": 118.524,
+   "part": 1
+  },
+  {
+   "w": "seventeenth,",
+   "start": 118.524,
+   "end": 119.547,
+   "part": 1
+  },
+  {
+   "w": "twenty-year",
+   "start": 119.547,
+   "end": 120.071,
+   "part": 1
+  },
+  {
+   "w": "Treasury",
+   "start": 120.071,
+   "end": 120.479,
+   "part": 1
+  },
+  {
+   "w": "yields",
+   "start": 120.479,
+   "end": 120.923,
+   "part": 1
+  },
+  {
+   "w": "were",
+   "start": 120.923,
+   "end": 121.036,
+   "part": 1
+  },
+  {
+   "w": "above",
+   "start": 121.036,
+   "end": 121.377,
+   "part": 1
+  },
+  {
+   "w": "five",
+   "start": 121.377,
+   "end": 121.718,
+   "part": 1
+  },
+  {
+   "w": "percent.",
+   "start": 121.718,
+   "end": 122.615,
+   "part": 1
+  },
+  {
+   "w": "Put",
+   "start": 122.615,
+   "end": 122.786,
+   "part": 1
+  },
+  {
+   "w": "yourself",
+   "start": 122.786,
+   "end": 123.206,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 123.206,
+   "end": 123.274,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 123.274,
+   "end": 123.354,
+   "part": 1
+  },
+  {
+   "w": "lender's",
+   "start": 123.354,
+   "end": 123.741,
+   "part": 1
+  },
+  {
+   "w": "seat.",
+   "start": 123.741,
+   "end": 124.479,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 124.479,
+   "end": 124.638,
+   "part": 1
+  },
+  {
+   "w": "owner",
+   "start": 124.638,
+   "end": 125.014,
+   "part": 1
+  },
+  {
+   "w": "asks",
+   "start": 125.014,
+   "end": 125.377,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 125.377,
+   "end": 125.468,
+   "part": 1
+  },
+  {
+   "w": "bank",
+   "start": 125.468,
+   "end": 125.764,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 125.764,
+   "end": 125.877,
+   "part": 1
+  },
+  {
+   "w": "wait",
+   "start": 125.877,
+   "end": 126.104,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 126.104,
+   "end": 126.218,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 126.218,
+   "end": 126.332,
+   "part": 1
+  },
+  {
+   "w": "Fed",
+   "start": 126.332,
+   "end": 126.638,
+   "part": 1
+  },
+  {
+   "w": "cut,",
+   "start": 126.638,
+   "end": 127.286,
+   "part": 1
+  },
+  {
+   "w": "but",
+   "start": 127.286,
+   "end": 127.423,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 127.423,
+   "end": 127.536,
+   "part": 1
+  },
+  {
+   "w": "renewal",
+   "start": 127.536,
+   "end": 128.014,
+   "part": 1
+  },
+  {
+   "w": "letter",
+   "start": 128.014,
+   "end": 128.365,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 128.365,
+   "end": 128.65,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 128.65,
+   "end": 128.877,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 128.877,
+   "end": 129.002,
+   "part": 1
+  },
+  {
+   "w": "beat",
+   "start": 129.002,
+   "end": 129.297,
+   "part": 1
+  },
+  {
+   "w": "Washington's",
+   "start": 129.297,
+   "end": 129.956,
+   "part": 1
+  },
+  {
+   "w": "five-percent",
+   "start": 129.956,
+   "end": 130.525,
+   "part": 1
+  },
+  {
+   "w": "offer.",
+   "start": 130.525,
+   "end": 131.411,
+   "part": 1
+  },
+  {
+   "w": "Why",
+   "start": 131.411,
+   "end": 131.627,
+   "part": 1
+  },
+  {
+   "w": "accept",
+   "start": 131.627,
+   "end": 132.024,
+   "part": 1
+  },
+  {
+   "w": "less",
+   "start": 132.024,
+   "end": 132.241,
+   "part": 1
+  },
+  {
+   "w": "from",
+   "start": 132.241,
+   "end": 132.365,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 132.365,
+   "end": 132.456,
+   "part": 1
+  },
+  {
+   "w": "business",
+   "start": 132.456,
+   "end": 132.923,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 132.923,
+   "end": 133.104,
+   "part": 1
+  },
+  {
+   "w": "might",
+   "start": 133.104,
+   "end": 133.309,
+   "part": 1
+  },
+  {
+   "w": "not",
+   "start": 133.309,
+   "end": 133.547,
+   "part": 1
+  },
+  {
+   "w": "pay",
+   "start": 133.547,
+   "end": 133.809,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 133.809,
+   "end": 133.945,
+   "part": 1
+  },
+  {
+   "w": "back?",
+   "start": 133.945,
+   "end": 134.718,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 134.997,
+   "end": 135.099,
+   "part": 1
+  },
+  {
+   "w": "Fed",
+   "start": 135.099,
+   "end": 135.394,
+   "part": 1
+  },
+  {
+   "w": "sets",
+   "start": 135.394,
+   "end": 135.679,
+   "part": 1
+  },
+  {
+   "w": "an",
+   "start": 135.679,
+   "end": 135.838,
+   "part": 1
+  },
+  {
+   "w": "overnight",
+   "start": 135.838,
+   "end": 136.349,
+   "part": 1
+  },
+  {
+   "w": "target;",
+   "start": 136.349,
+   "end": 137.122,
+   "part": 1
+  },
+  {
+   "w": "investors",
+   "start": 137.122,
+   "end": 137.69,
+   "part": 1
+  },
+  {
+   "w": "set",
+   "start": 137.69,
+   "end": 137.872,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 137.872,
+   "end": 137.952,
+   "part": 1
+  },
+  {
+   "w": "price",
+   "start": 137.952,
+   "end": 138.247,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 138.247,
+   "end": 138.372,
+   "part": 1
+  },
+  {
+   "w": "lending",
+   "start": 138.372,
+   "end": 138.724,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 138.724,
+   "end": 138.872,
+   "part": 1
+  },
+  {
+   "w": "years.",
+   "start": 138.872,
+   "end": 139.735,
+   "part": 1
+  },
+  {
+   "w": "Those",
+   "start": 139.735,
+   "end": 139.997,
+   "part": 1
+  },
+  {
+   "w": "investors",
+   "start": 139.997,
+   "end": 140.542,
+   "part": 1
+  },
+  {
+   "w": "weigh",
+   "start": 140.542,
+   "end": 140.803,
+   "part": 1
+  },
+  {
+   "w": "inflation,",
+   "start": 140.803,
+   "end": 141.781,
+   "part": 1
+  },
+  {
+   "w": "time",
+   "start": 141.781,
+   "end": 142.247,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 142.247,
+   "end": 142.349,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 142.349,
+   "end": 142.462,
+   "part": 1
+  },
+  {
+   "w": "risk",
+   "start": 142.462,
+   "end": 142.758,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 142.758,
+   "end": 142.861,
+   "part": 1
+  },
+  {
+   "w": "nonpayment.",
+   "start": 142.861,
+   "end": 143.985,
+   "part": 1
+  },
+  {
+   "w": "An",
+   "start": 143.985,
+   "end": 144.144,
+   "part": 1
+  },
+  {
+   "w": "overnight",
+   "start": 144.144,
+   "end": 144.712,
+   "part": 1
+  },
+  {
+   "w": "cut",
+   "start": 144.712,
+   "end": 144.997,
+   "part": 1
+  },
+  {
+   "w": "does",
+   "start": 144.997,
+   "end": 145.179,
+   "part": 1
+  },
+  {
+   "w": "not",
+   "start": 145.179,
+   "end": 145.383,
+   "part": 1
+  },
+  {
+   "w": "erase",
+   "start": 145.383,
+   "end": 145.792,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 145.792,
+   "end": 145.917,
+   "part": 1
+  },
+  {
+   "w": "risks",
+   "start": 145.917,
+   "end": 146.224,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 146.224,
+   "end": 146.349,
+   "part": 1
+  },
+  {
+   "w": "lending",
+   "start": 146.349,
+   "end": 146.702,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 146.702,
+   "end": 146.849,
+   "part": 1
+  },
+  {
+   "w": "years.",
+   "start": 146.849,
+   "end": 147.747,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 147.747,
+   "end": 147.838,
+   "part": 1
+  },
+  {
+   "w": "quote",
+   "start": 147.838,
+   "end": 148.111,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 148.111,
+   "end": 148.383,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 148.383,
+   "end": 148.611,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 148.611,
+   "end": 148.747,
+   "part": 1
+  },
+  {
+   "w": "offer",
+   "start": 148.747,
+   "end": 149.065,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 149.065,
+   "end": 149.167,
+   "part": 1
+  },
+  {
+   "w": "price",
+   "start": 149.167,
+   "end": 149.497,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 149.497,
+   "end": 149.599,
+   "part": 1
+  },
+  {
+   "w": "lender",
+   "start": 149.599,
+   "end": 149.952,
+   "part": 1
+  },
+  {
+   "w": "will",
+   "start": 149.952,
+   "end": 150.156,
+   "part": 1
+  },
+  {
+   "w": "accept.",
+   "start": 150.156,
+   "end": 150.974,
+   "part": 1
+  },
+  {
+   "w": "But",
+   "start": 150.974,
+   "end": 151.675,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 151.675,
+   "end": 151.8,
+   "part": 1
+  },
+  {
+   "w": "existing",
+   "start": 151.8,
+   "end": 152.323,
+   "part": 1
+  },
+  {
+   "w": "loan",
+   "start": 152.323,
+   "end": 152.709,
+   "part": 1
+  },
+  {
+   "w": "comes",
+   "start": 152.709,
+   "end": 153.028,
+   "part": 1
+  },
+  {
+   "w": "due",
+   "start": 153.028,
+   "end": 153.209,
+   "part": 1
+  },
+  {
+   "w": "now.",
+   "start": 153.209,
+   "end": 153.948,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 153.948,
+   "end": 154.084,
+   "part": 1
+  },
+  {
+   "w": "debt",
+   "start": 154.084,
+   "end": 154.311,
+   "part": 1
+  },
+  {
+   "w": "trap",
+   "start": 154.311,
+   "end": 154.709,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 154.709,
+   "end": 154.846,
+   "part": 1
+  },
+  {
+   "w": "having",
+   "start": 154.846,
+   "end": 155.164,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 155.164,
+   "end": 155.3,
+   "part": 1
+  },
+  {
+   "w": "accept",
+   "start": 155.3,
+   "end": 155.664,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 155.664,
+   "end": 155.788,
+   "part": 1
+  },
+  {
+   "w": "new",
+   "start": 155.788,
+   "end": 155.993,
+   "part": 1
+  },
+  {
+   "w": "borrowing",
+   "start": 155.993,
+   "end": 156.493,
+   "part": 1
+  },
+  {
+   "w": "cost",
+   "start": 156.493,
+   "end": 156.868,
+   "part": 1
+  },
+  {
+   "w": "because",
+   "start": 156.868,
+   "end": 157.402,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 157.402,
+   "end": 157.538,
+   "part": 1
+  },
+  {
+   "w": "can't",
+   "start": 157.538,
+   "end": 157.778,
+   "part": 1
+  },
+  {
+   "w": "afford",
+   "start": 157.778,
+   "end": 158.187,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 158.187,
+   "end": 158.311,
+   "part": 1
+  },
+  {
+   "w": "wait.",
+   "start": 158.311,
+   "end": 159.118,
+   "part": 1
+  },
+  {
+   "w": "So",
+   "start": 159.397,
+   "end": 159.476,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 159.476,
+   "end": 159.625,
+   "part": 1
+  },
+  {
+   "w": "owner",
+   "start": 159.625,
+   "end": 159.976,
+   "part": 1
+  },
+  {
+   "w": "raises",
+   "start": 159.976,
+   "end": 160.443,
+   "part": 1
+  },
+  {
+   "w": "repair",
+   "start": 160.443,
+   "end": 160.852,
+   "part": 1
+  },
+  {
+   "w": "prices",
+   "start": 160.852,
+   "end": 161.284,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 161.284,
+   "end": 161.397,
+   "part": 1
+  },
+  {
+   "w": "cover",
+   "start": 161.397,
+   "end": 161.693,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 161.693,
+   "end": 161.817,
+   "part": 1
+  },
+  {
+   "w": "bigger",
+   "start": 161.817,
+   "end": 162.125,
+   "part": 1
+  },
+  {
+   "w": "interest",
+   "start": 162.125,
+   "end": 162.488,
+   "part": 1
+  },
+  {
+   "w": "bill.",
+   "start": 162.488,
+   "end": 163.238,
+   "part": 1
+  },
+  {
+   "w": "Imagine",
+   "start": 163.238,
+   "end": 163.784,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 163.784,
+   "end": 163.875,
+   "part": 1
+  },
+  {
+   "w": "delivery",
+   "start": 163.875,
+   "end": 164.306,
+   "part": 1
+  },
+  {
+   "w": "company",
+   "start": 164.306,
+   "end": 164.716,
+   "part": 1
+  },
+  {
+   "w": "gets",
+   "start": 164.716,
+   "end": 164.943,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 164.943,
+   "end": 165.17,
+   "part": 1
+  },
+  {
+   "w": "bill",
+   "start": 165.17,
+   "end": 165.397,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 165.397,
+   "end": 165.499,
+   "part": 1
+  },
+  {
+   "w": "its",
+   "start": 165.499,
+   "end": 165.681,
+   "part": 1
+  },
+  {
+   "w": "vans.",
+   "start": 165.681,
+   "end": 166.567,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 166.567,
+   "end": 166.67,
+   "part": 1
+  },
+  {
+   "w": "manager",
+   "start": 166.67,
+   "end": 167.125,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 167.125,
+   "end": 167.272,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 167.272,
+   "end": 167.375,
+   "part": 1
+  },
+  {
+   "w": "choice:",
+   "start": 167.375,
+   "end": 168.204,
+   "part": 1
+  },
+  {
+   "w": "buy",
+   "start": 168.204,
+   "end": 168.42,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 168.42,
+   "end": 168.488,
+   "part": 1
+  },
+  {
+   "w": "replacement",
+   "start": 168.488,
+   "end": 169.09,
+   "part": 1
+  },
+  {
+   "w": "van",
+   "start": 169.09,
+   "end": 169.499,
+   "part": 1
+  },
+  {
+   "w": "or",
+   "start": 169.499,
+   "end": 169.658,
+   "part": 1
+  },
+  {
+   "w": "keep",
+   "start": 169.658,
+   "end": 169.886,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 169.886,
+   "end": 170.011,
+   "part": 1
+  },
+  {
+   "w": "old",
+   "start": 170.011,
+   "end": 170.284,
+   "part": 1
+  },
+  {
+   "w": "one",
+   "start": 170.284,
+   "end": 170.488,
+   "part": 1
+  },
+  {
+   "w": "working.",
+   "start": 170.488,
+   "end": 171.306,
+   "part": 1
+  },
+  {
+   "w": "With",
+   "start": 171.306,
+   "end": 171.488,
+   "part": 1
+  },
+  {
+   "w": "repairs",
+   "start": 171.488,
+   "end": 172.056,
+   "part": 1
+  },
+  {
+   "w": "taking",
+   "start": 172.056,
+   "end": 172.42,
+   "part": 1
+  },
+  {
+   "w": "more",
+   "start": 172.42,
+   "end": 172.613,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 172.613,
+   "end": 172.681,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 172.681,
+   "end": 172.772,
+   "part": 1
+  },
+  {
+   "w": "budget,",
+   "start": 172.772,
+   "end": 173.306,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 173.306,
+   "end": 173.431,
+   "part": 1
+  },
+  {
+   "w": "manager",
+   "start": 173.431,
+   "end": 173.886,
+   "part": 1
+  },
+  {
+   "w": "postpones",
+   "start": 173.886,
+   "end": 174.602,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 174.602,
+   "end": 174.693,
+   "part": 1
+  },
+  {
+   "w": "purchase.",
+   "start": 174.693,
+   "end": 175.704,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 175.704,
+   "end": 175.84,
+   "part": 1
+  },
+  {
+   "w": "vehicle",
+   "start": 175.84,
+   "end": 176.226,
+   "part": 1
+  },
+  {
+   "w": "dealer",
+   "start": 176.226,
+   "end": 176.59,
+   "part": 1
+  },
+  {
+   "w": "loses",
+   "start": 176.59,
+   "end": 177.011,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 177.011,
+   "end": 177.147,
+   "part": 1
+  },
+  {
+   "w": "sale.",
+   "start": 177.147,
+   "end": 177.943,
+   "part": 1
+  },
+  {
+   "w": "If",
+   "start": 177.943,
+   "end": 178.147,
+   "part": 1
+  },
+  {
+   "w": "fewer",
+   "start": 178.147,
+   "end": 178.545,
+   "part": 1
+  },
+  {
+   "w": "orders",
+   "start": 178.545,
+   "end": 178.92,
+   "part": 1
+  },
+  {
+   "w": "mean",
+   "start": 178.92,
+   "end": 179.17,
+   "part": 1
+  },
+  {
+   "w": "less",
+   "start": 179.17,
+   "end": 179.408,
+   "part": 1
+  },
+  {
+   "w": "overtime,",
+   "start": 179.408,
+   "end": 180.193,
+   "part": 1
+  },
+  {
+   "w": "an",
+   "start": 180.193,
+   "end": 180.284,
+   "part": 1
+  },
+  {
+   "w": "employee",
+   "start": 180.284,
+   "end": 180.886,
+   "part": 1
+  },
+  {
+   "w": "takes",
+   "start": 180.886,
+   "end": 181.17,
+   "part": 1
+  },
+  {
+   "w": "home",
+   "start": 181.17,
+   "end": 181.488,
+   "part": 1
+  },
+  {
+   "w": "less",
+   "start": 181.488,
+   "end": 181.726,
+   "part": 1
+  },
+  {
+   "w": "pay.",
+   "start": 181.726,
+   "end": 182.556,
+   "part": 1
+  },
+  {
+   "w": "And",
+   "start": 182.835,
+   "end": 182.96,
+   "part": 1
+  },
+  {
+   "w": "this",
+   "start": 182.96,
+   "end": 183.085,
+   "part": 1
+  },
+  {
+   "w": "squeeze",
+   "start": 183.085,
+   "end": 183.449,
+   "part": 1
+  },
+  {
+   "w": "isn't",
+   "start": 183.449,
+   "end": 183.676,
+   "part": 1
+  },
+  {
+   "w": "just",
+   "start": 183.676,
+   "end": 183.904,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 183.904,
+   "end": 184.051,
+   "part": 1
+  },
+  {
+   "w": "businesses;",
+   "start": 184.051,
+   "end": 184.983,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 184.983,
+   "end": 185.108,
+   "part": 1
+  },
+  {
+   "w": "reaches",
+   "start": 185.108,
+   "end": 185.494,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 185.494,
+   "end": 185.642,
+   "part": 1
+  },
+  {
+   "w": "employee's",
+   "start": 185.642,
+   "end": 186.233,
+   "part": 1
+  },
+  {
+   "w": "own",
+   "start": 186.233,
+   "end": 186.483,
+   "part": 1
+  },
+  {
+   "w": "bills.",
+   "start": 186.483,
+   "end": 187.437,
+   "part": 1
+  },
+  {
+   "w": "Suppose",
+   "start": 187.437,
+   "end": 187.881,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 187.881,
+   "end": 188.074,
+   "part": 1
+  },
+  {
+   "w": "employee",
+   "start": 188.074,
+   "end": 188.733,
+   "part": 1
+  },
+  {
+   "w": "carries",
+   "start": 188.733,
+   "end": 189.142,
+   "part": 1
+  },
+  {
+   "w": "roughly",
+   "start": 189.142,
+   "end": 189.528,
+   "part": 1
+  },
+  {
+   "w": "sixty-six",
+   "start": 189.528,
+   "end": 190.108,
+   "part": 1
+  },
+  {
+   "w": "hundred",
+   "start": 190.108,
+   "end": 190.483,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 190.483,
+   "end": 190.937,
+   "part": 1
+  },
+  {
+   "w": "on",
+   "start": 190.937,
+   "end": 191.051,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 191.051,
+   "end": 191.119,
+   "part": 1
+  },
+  {
+   "w": "credit",
+   "start": 191.119,
+   "end": 191.483,
+   "part": 1
+  },
+  {
+   "w": "card",
+   "start": 191.483,
+   "end": 192.085,
+   "part": 1
+  },
+  {
+   "w": "charging",
+   "start": 192.085,
+   "end": 192.483,
+   "part": 1
+  },
+  {
+   "w": "twenty-two",
+   "start": 192.483,
+   "end": 193.005,
+   "part": 1
+  },
+  {
+   "w": "point",
+   "start": 193.005,
+   "end": 193.324,
+   "part": 1
+  },
+  {
+   "w": "four",
+   "start": 193.324,
+   "end": 193.54,
+   "part": 1
+  },
+  {
+   "w": "percent.",
+   "start": 193.54,
+   "end": 194.528,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 194.528,
+   "end": 194.687,
+   "part": 1
+  },
+  {
+   "w": "annual",
+   "start": 194.687,
+   "end": 195.063,
+   "part": 1
+  },
+  {
+   "w": "interest",
+   "start": 195.063,
+   "end": 195.494,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 195.494,
+   "end": 195.642,
+   "part": 1
+  },
+  {
+   "w": "roughly",
+   "start": 195.642,
+   "end": 196.04,
+   "part": 1
+  },
+  {
+   "w": "fifteen",
+   "start": 196.04,
+   "end": 196.494,
+   "part": 1
+  },
+  {
+   "w": "hundred",
+   "start": 196.494,
+   "end": 196.869,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 196.869,
+   "end": 197.358,
+   "part": 1
+  },
+  {
+   "w": "if",
+   "start": 197.358,
+   "end": 197.494,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 197.494,
+   "end": 197.596,
+   "part": 1
+  },
+  {
+   "w": "balance",
+   "start": 197.596,
+   "end": 198.017,
+   "part": 1
+  },
+  {
+   "w": "stays",
+   "start": 198.017,
+   "end": 198.414,
+   "part": 1
+  },
+  {
+   "w": "put.",
+   "start": 198.414,
+   "end": 199.267,
+   "part": 1
+  },
+  {
+   "w": "Losing",
+   "start": 199.267,
+   "end": 199.664,
+   "part": 1
+  },
+  {
+   "w": "overtime",
+   "start": 199.664,
+   "end": 200.29,
+   "part": 1
+  },
+  {
+   "w": "makes",
+   "start": 200.29,
+   "end": 200.54,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 200.54,
+   "end": 200.722,
+   "part": 1
+  },
+  {
+   "w": "existing",
+   "start": 200.722,
+   "end": 201.278,
+   "part": 1
+  },
+  {
+   "w": "bill",
+   "start": 201.278,
+   "end": 201.574,
+   "part": 1
+  },
+  {
+   "w": "harder",
+   "start": 201.574,
+   "end": 201.949,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 201.949,
+   "end": 202.074,
+   "part": 1
+  },
+  {
+   "w": "carry,",
+   "start": 202.074,
+   "end": 202.846,
+   "part": 1
+  },
+  {
+   "w": "even",
+   "start": 202.846,
+   "end": 203.119,
+   "part": 1
+  },
+  {
+   "w": "if",
+   "start": 203.119,
+   "end": 203.244,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 203.244,
+   "end": 203.369,
+   "part": 1
+  },
+  {
+   "w": "card's",
+   "start": 203.369,
+   "end": 203.801,
+   "part": 1
+  },
+  {
+   "w": "rate",
+   "start": 203.801,
+   "end": 204.085,
+   "part": 1
+  },
+  {
+   "w": "doesn't",
+   "start": 204.085,
+   "end": 204.392,
+   "part": 1
+  },
+  {
+   "w": "change.",
+   "start": 204.392,
+   "end": 205.358,
+   "part": 1
+  },
+  {
+   "w": "Your",
+   "start": 205.637,
+   "end": 205.784,
+   "part": 1
+  },
+  {
+   "w": "first",
+   "start": 205.784,
+   "end": 206.08,
+   "part": 1
+  },
+  {
+   "w": "check",
+   "start": 206.08,
+   "end": 206.364,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 206.364,
+   "end": 206.501,
+   "part": 1
+  },
+  {
+   "w": "what",
+   "start": 206.501,
+   "end": 206.66,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 206.66,
+   "end": 206.784,
+   "part": 1
+  },
+  {
+   "w": "debt",
+   "start": 206.784,
+   "end": 207.057,
+   "part": 1
+  },
+  {
+   "w": "costs",
+   "start": 207.057,
+   "end": 207.455,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 207.455,
+   "end": 207.602,
+   "part": 1
+  },
+  {
+   "w": "dollars.",
+   "start": 207.602,
+   "end": 208.66,
+   "part": 1
+  },
+  {
+   "w": "Multiply",
+   "start": 208.66,
+   "end": 209.205,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 209.205,
+   "end": 209.33,
+   "part": 1
+  },
+  {
+   "w": "balance",
+   "start": 209.33,
+   "end": 209.773,
+   "part": 1
+  },
+  {
+   "w": "by",
+   "start": 209.773,
+   "end": 209.921,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 209.921,
+   "end": 210.069,
+   "part": 1
+  },
+  {
+   "w": "annual",
+   "start": 210.069,
+   "end": 210.489,
+   "part": 1
+  },
+  {
+   "w": "rate",
+   "start": 210.489,
+   "end": 210.773,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 210.773,
+   "end": 210.91,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 210.91,
+   "end": 211.012,
+   "part": 1
+  },
+  {
+   "w": "rough",
+   "start": 211.012,
+   "end": 211.273,
+   "part": 1
+  },
+  {
+   "w": "interest",
+   "start": 211.273,
+   "end": 211.671,
+   "part": 1
+  },
+  {
+   "w": "bill,",
+   "start": 211.671,
+   "end": 212.342,
+   "part": 1
+  },
+  {
+   "w": "then",
+   "start": 212.342,
+   "end": 212.546,
+   "part": 1
+  },
+  {
+   "w": "compare",
+   "start": 212.546,
+   "end": 213.023,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 213.023,
+   "end": 213.16,
+   "part": 1
+  },
+  {
+   "w": "with",
+   "start": 213.16,
+   "end": 213.284,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 213.284,
+   "end": 213.421,
+   "part": 1
+  },
+  {
+   "w": "income",
+   "start": 213.421,
+   "end": 213.921,
+   "part": 1
+  },
+  {
+   "w": "paying",
+   "start": 213.921,
+   "end": 214.319,
+   "part": 1
+  },
+  {
+   "w": "it.",
+   "start": 214.319,
+   "end": 214.955,
+   "part": 1
+  },
+  {
+   "w": "Use",
+   "start": 214.955,
+   "end": 215.228,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 215.228,
+   "end": 215.387,
+   "part": 1
+  },
+  {
+   "w": "actual",
+   "start": 215.387,
+   "end": 215.875,
+   "part": 1
+  },
+  {
+   "w": "statement",
+   "start": 215.875,
+   "end": 216.319,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 216.319,
+   "end": 216.466,
+   "part": 1
+  },
+  {
+   "w": "payments",
+   "start": 216.466,
+   "end": 216.955,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 216.955,
+   "end": 217.069,
+   "part": 1
+  },
+  {
+   "w": "compounding.",
+   "start": 217.069,
+   "end": 218.171,
+   "part": 1
+  },
+  {
+   "w": "That",
+   "start": 218.171,
+   "end": 218.41,
+   "part": 1
+  },
+  {
+   "w": "comparison",
+   "start": 218.41,
+   "end": 219.057,
+   "part": 1
+  },
+  {
+   "w": "also",
+   "start": 219.057,
+   "end": 219.455,
+   "part": 1
+  },
+  {
+   "w": "helps",
+   "start": 219.455,
+   "end": 219.751,
+   "part": 1
+  },
+  {
+   "w": "explain",
+   "start": 219.751,
+   "end": 220.364,
+   "part": 1
+  },
+  {
+   "w": "why",
+   "start": 220.364,
+   "end": 220.592,
+   "part": 1
+  },
+  {
+   "w": "two",
+   "start": 220.592,
+   "end": 220.83,
+   "part": 1
+  },
+  {
+   "w": "businesses",
+   "start": 220.83,
+   "end": 221.387,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 221.387,
+   "end": 221.557,
+   "part": 1
+  },
+  {
+   "w": "face",
+   "start": 221.557,
+   "end": 221.864,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 221.864,
+   "end": 221.989,
+   "part": 1
+  },
+  {
+   "w": "same",
+   "start": 221.989,
+   "end": 222.307,
+   "part": 1
+  },
+  {
+   "w": "rates",
+   "start": 222.307,
+   "end": 222.705,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 222.705,
+   "end": 222.83,
+   "part": 1
+  },
+  {
+   "w": "head",
+   "start": 222.83,
+   "end": 223.182,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 223.182,
+   "end": 223.342,
+   "part": 1
+  },
+  {
+   "w": "opposite",
+   "start": 223.342,
+   "end": 223.773,
+   "part": 1
+  },
+  {
+   "w": "directions.",
+   "start": 223.773,
+   "end": 224.864,
+   "part": 1
+  },
+  {
+   "w": "This",
+   "start": 225.143,
+   "end": 225.348,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 225.348,
+   "end": 225.495,
+   "part": 1
+  },
+  {
+   "w": "why",
+   "start": 225.495,
+   "end": 225.813,
+   "part": 1
+  },
+  {
+   "w": "I",
+   "start": 225.813,
+   "end": 226.03,
+   "part": 1
+  },
+  {
+   "w": "watch",
+   "start": 226.03,
+   "end": 226.371,
+   "part": 1
+  },
+  {
+   "w": "decisions",
+   "start": 226.371,
+   "end": 226.961,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 226.961,
+   "end": 227.177,
+   "part": 1
+  },
+  {
+   "w": "never",
+   "start": 227.177,
+   "end": 227.439,
+   "part": 1
+  },
+  {
+   "w": "become",
+   "start": 227.439,
+   "end": 227.78,
+   "part": 1
+  },
+  {
+   "w": "transactions.",
+   "start": 227.78,
+   "end": 229.063,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 229.063,
+   "end": 229.177,
+   "part": 1
+  },
+  {
+   "w": "canceled",
+   "start": 229.177,
+   "end": 229.654,
+   "part": 1
+  },
+  {
+   "w": "hire",
+   "start": 229.654,
+   "end": 230.03,
+   "part": 1
+  },
+  {
+   "w": "doesn't",
+   "start": 230.03,
+   "end": 230.302,
+   "part": 1
+  },
+  {
+   "w": "appear",
+   "start": 230.302,
+   "end": 230.711,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 230.711,
+   "end": 230.791,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 230.791,
+   "end": 230.871,
+   "part": 1
+  },
+  {
+   "w": "default",
+   "start": 230.871,
+   "end": 231.325,
+   "part": 1
+  },
+  {
+   "w": "rate.",
+   "start": 231.325,
+   "end": 232.041,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 232.041,
+   "end": 232.154,
+   "part": 1
+  },
+  {
+   "w": "postponed",
+   "start": 232.154,
+   "end": 232.825,
+   "part": 1
+  },
+  {
+   "w": "machine",
+   "start": 232.825,
+   "end": 233.302,
+   "part": 1
+  },
+  {
+   "w": "doesn't",
+   "start": 233.302,
+   "end": 233.586,
+   "part": 1
+  },
+  {
+   "w": "show",
+   "start": 233.586,
+   "end": 233.825,
+   "part": 1
+  },
+  {
+   "w": "up",
+   "start": 233.825,
+   "end": 234.007,
+   "part": 1
+  },
+  {
+   "w": "as",
+   "start": 234.007,
+   "end": 234.121,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 234.121,
+   "end": 234.222,
+   "part": 1
+  },
+  {
+   "w": "bankrupt",
+   "start": 234.222,
+   "end": 234.666,
+   "part": 1
+  },
+  {
+   "w": "factory.",
+   "start": 234.666,
+   "end": 235.666,
+   "part": 1
+  },
+  {
+   "w": "Back",
+   "start": 235.945,
+   "end": 236.16,
+   "part": 1
+  },
+  {
+   "w": "at",
+   "start": 236.16,
+   "end": 236.229,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 236.229,
+   "end": 236.309,
+   "part": 1
+  },
+  {
+   "w": "workshop,",
+   "start": 236.309,
+   "end": 237.149,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 237.149,
+   "end": 237.297,
+   "part": 1
+  },
+  {
+   "w": "owner",
+   "start": 237.297,
+   "end": 237.639,
+   "part": 1
+  },
+  {
+   "w": "cancels",
+   "start": 237.639,
+   "end": 238.104,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 238.104,
+   "end": 238.218,
+   "part": 1
+  },
+  {
+   "w": "second",
+   "start": 238.218,
+   "end": 238.524,
+   "part": 1
+  },
+  {
+   "w": "machine",
+   "start": 238.524,
+   "end": 238.91,
+   "part": 1
+  },
+  {
+   "w": "planned",
+   "start": 238.91,
+   "end": 239.263,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 239.263,
+   "end": 239.365,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 239.365,
+   "end": 239.49,
+   "part": 1
+  },
+  {
+   "w": "expansion.",
+   "start": 239.49,
+   "end": 240.615,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 240.615,
+   "end": 240.763,
+   "part": 1
+  },
+  {
+   "w": "equipment",
+   "start": 240.763,
+   "end": 241.172,
+   "part": 1
+  },
+  {
+   "w": "supplier",
+   "start": 241.172,
+   "end": 241.718,
+   "part": 1
+  },
+  {
+   "w": "had",
+   "start": 241.718,
+   "end": 241.889,
+   "part": 1
+  },
+  {
+   "w": "set",
+   "start": 241.889,
+   "end": 242.069,
+   "part": 1
+  },
+  {
+   "w": "aside",
+   "start": 242.069,
+   "end": 242.399,
+   "part": 1
+  },
+  {
+   "w": "production",
+   "start": 242.399,
+   "end": 242.899,
+   "part": 1
+  },
+  {
+   "w": "time",
+   "start": 242.899,
+   "end": 243.195,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 243.195,
+   "end": 243.309,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 243.309,
+   "end": 243.536,
+   "part": 1
+  },
+  {
+   "w": "order.",
+   "start": 243.536,
+   "end": 244.309,
+   "part": 1
+  },
+  {
+   "w": "Now",
+   "start": 244.309,
+   "end": 244.627,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 244.627,
+   "end": 244.74,
+   "part": 1
+  },
+  {
+   "w": "needs",
+   "start": 244.74,
+   "end": 244.99,
+   "part": 1
+  },
+  {
+   "w": "another",
+   "start": 244.99,
+   "end": 245.331,
+   "part": 1
+  },
+  {
+   "w": "buyer.",
+   "start": 245.331,
+   "end": 246.207,
+   "part": 1
+  },
+  {
+   "w": "Imagine",
+   "start": 246.207,
+   "end": 246.751,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 246.751,
+   "end": 246.854,
+   "part": 1
+  },
+  {
+   "w": "competitor",
+   "start": 246.854,
+   "end": 247.457,
+   "part": 1
+  },
+  {
+   "w": "offers",
+   "start": 247.457,
+   "end": 247.831,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 247.831,
+   "end": 247.956,
+   "part": 1
+  },
+  {
+   "w": "multiyear",
+   "start": 247.956,
+   "end": 248.548,
+   "part": 1
+  },
+  {
+   "w": "purchase",
+   "start": 248.548,
+   "end": 248.968,
+   "part": 1
+  },
+  {
+   "w": "agreement",
+   "start": 248.968,
+   "end": 249.399,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 249.399,
+   "end": 249.49,
+   "part": 1
+  },
+  {
+   "w": "exchange",
+   "start": 249.49,
+   "end": 250.104,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 250.104,
+   "end": 250.218,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 250.218,
+   "end": 250.319,
+   "part": 1
+  },
+  {
+   "w": "better",
+   "start": 250.319,
+   "end": 250.639,
+   "part": 1
+  },
+  {
+   "w": "price",
+   "start": 250.639,
+   "end": 251.251,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 251.251,
+   "end": 251.365,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 251.365,
+   "end": 251.479,
+   "part": 1
+  },
+  {
+   "w": "guaranteed",
+   "start": 251.479,
+   "end": 252.149,
+   "part": 1
+  },
+  {
+   "w": "delivery",
+   "start": 252.149,
+   "end": 252.639,
+   "part": 1
+  },
+  {
+   "w": "slot.",
+   "start": 252.639,
+   "end": 253.479,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 253.479,
+   "end": 253.604,
+   "part": 1
+  },
+  {
+   "w": "supplier",
+   "start": 253.604,
+   "end": 254.149,
+   "part": 1
+  },
+  {
+   "w": "gets",
+   "start": 254.149,
+   "end": 254.377,
+   "part": 1
+  },
+  {
+   "w": "dependable",
+   "start": 254.377,
+   "end": 255.001,
+   "part": 1
+  },
+  {
+   "w": "orders.",
+   "start": 255.001,
+   "end": 255.956,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 255.956,
+   "end": 256.059,
+   "part": 1
+  },
+  {
+   "w": "competitor",
+   "start": 256.059,
+   "end": 256.627,
+   "part": 1
+  },
+  {
+   "w": "gets",
+   "start": 256.627,
+   "end": 256.854,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 256.854,
+   "end": 256.945,
+   "part": 1
+  },
+  {
+   "w": "machine",
+   "start": 256.945,
+   "end": 257.57,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 257.57,
+   "end": 257.763,
+   "part": 1
+  },
+  {
+   "w": "room",
+   "start": 257.763,
+   "end": 258.149,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 258.149,
+   "end": 258.24,
+   "part": 1
+  },
+  {
+   "w": "negotiate.",
+   "start": 258.24,
+   "end": 259.399,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 259.678,
+   "end": 259.769,
+   "part": 1
+  },
+  {
+   "w": "workshop's",
+   "start": 259.769,
+   "end": 260.303,
+   "part": 1
+  },
+  {
+   "w": "canceled",
+   "start": 260.303,
+   "end": 260.78,
+   "part": 1
+  },
+  {
+   "w": "order",
+   "start": 260.78,
+   "end": 261.383,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 261.383,
+   "end": 261.542,
+   "part": 1
+  },
+  {
+   "w": "another",
+   "start": 261.542,
+   "end": 261.906,
+   "part": 1
+  },
+  {
+   "w": "company's",
+   "start": 261.906,
+   "end": 262.417,
+   "part": 1
+  },
+  {
+   "w": "opening.",
+   "start": 262.417,
+   "end": 263.337,
+   "part": 1
+  },
+  {
+   "w": "When",
+   "start": 263.616,
+   "end": 263.73,
+   "part": 1
+  },
+  {
+   "w": "demand",
+   "start": 263.73,
+   "end": 264.185,
+   "part": 1
+  },
+  {
+   "w": "returns,",
+   "start": 264.185,
+   "end": 265.071,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 265.071,
+   "end": 265.275,
+   "part": 1
+  },
+  {
+   "w": "competitor",
+   "start": 265.275,
+   "end": 265.844,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 265.844,
+   "end": 266.048,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 266.048,
+   "end": 266.139,
+   "part": 1
+  },
+  {
+   "w": "capacity",
+   "start": 266.139,
+   "end": 266.73,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 266.73,
+   "end": 266.844,
+   "part": 1
+  },
+  {
+   "w": "take",
+   "start": 266.844,
+   "end": 267.116,
+   "part": 1
+  },
+  {
+   "w": "it.",
+   "start": 267.116,
+   "end": 267.764,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 267.764,
+   "end": 267.889,
+   "part": 1
+  },
+  {
+   "w": "workshop",
+   "start": 267.889,
+   "end": 268.366,
+   "part": 1
+  },
+  {
+   "w": "owner",
+   "start": 268.366,
+   "end": 268.673,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 268.673,
+   "end": 268.957,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 268.957,
+   "end": 269.185,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 269.185,
+   "end": 269.333,
+   "part": 1
+  },
+  {
+   "w": "old",
+   "start": 269.333,
+   "end": 269.594,
+   "part": 1
+  },
+  {
+   "w": "machine",
+   "start": 269.594,
+   "end": 270.435,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 270.435,
+   "end": 270.559,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 270.559,
+   "end": 270.662,
+   "part": 1
+  },
+  {
+   "w": "crew",
+   "start": 270.662,
+   "end": 271.105,
+   "part": 1
+  },
+  {
+   "w": "working",
+   "start": 271.105,
+   "end": 271.48,
+   "part": 1
+  },
+  {
+   "w": "around",
+   "start": 271.48,
+   "end": 271.809,
+   "part": 1
+  },
+  {
+   "w": "its",
+   "start": 271.809,
+   "end": 271.991,
+   "part": 1
+  },
+  {
+   "w": "limits.",
+   "start": 271.991,
+   "end": 272.866,
+   "part": 1
+  },
+  {
+   "w": "That",
+   "start": 273.145,
+   "end": 273.383,
+   "part": 1
+  },
+  {
+   "w": "contest",
+   "start": 273.383,
+   "end": 273.941,
+   "part": 1
+  },
+  {
+   "w": "over",
+   "start": 273.941,
+   "end": 274.133,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 274.133,
+   "end": 274.213,
+   "part": 1
+  },
+  {
+   "w": "next",
+   "start": 274.213,
+   "end": 274.486,
+   "part": 1
+  },
+  {
+   "w": "machine",
+   "start": 274.486,
+   "end": 275.043,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 275.043,
+   "end": 275.191,
+   "part": 1
+  },
+  {
+   "w": "how",
+   "start": 275.191,
+   "end": 275.373,
+   "part": 1
+  },
+  {
+   "w": "I",
+   "start": 275.373,
+   "end": 275.52,
+   "part": 1
+  },
+  {
+   "w": "look",
+   "start": 275.52,
+   "end": 275.736,
+   "part": 1
+  },
+  {
+   "w": "at",
+   "start": 275.736,
+   "end": 275.873,
+   "part": 1
+  },
+  {
+   "w": "AI",
+   "start": 275.873,
+   "end": 276.327,
+   "part": 1
+  },
+  {
+   "w": "infrastructure.",
+   "start": 276.327,
+   "end": 277.509,
+   "part": 1
+  },
+  {
+   "w": "Who",
+   "start": 277.509,
+   "end": 277.645,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 277.645,
+   "end": 277.804,
+   "part": 1
+  },
+  {
+   "w": "keep",
+   "start": 277.804,
+   "end": 278.043,
+   "part": 1
+  },
+  {
+   "w": "building",
+   "start": 278.043,
+   "end": 278.463,
+   "part": 1
+  },
+  {
+   "w": "while",
+   "start": 278.463,
+   "end": 278.645,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 278.645,
+   "end": 278.747,
+   "part": 1
+  },
+  {
+   "w": "rival",
+   "start": 278.747,
+   "end": 279.145,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 279.145,
+   "end": 279.373,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 279.373,
+   "end": 279.497,
+   "part": 1
+  },
+  {
+   "w": "stop?",
+   "start": 279.497,
+   "end": 280.406,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 280.406,
+   "end": 280.554,
+   "part": 1
+  },
+  {
+   "w": "same",
+   "start": 280.554,
+   "end": 280.883,
+   "part": 1
+  },
+  {
+   "w": "funding",
+   "start": 280.883,
+   "end": 281.247,
+   "part": 1
+  },
+  {
+   "w": "squeeze",
+   "start": 281.247,
+   "end": 281.736,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 281.736,
+   "end": 281.929,
+   "part": 1
+  },
+  {
+   "w": "costs",
+   "start": 281.929,
+   "end": 282.315,
+   "part": 1
+  },
+  {
+   "w": "someone",
+   "start": 282.315,
+   "end": 282.623,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 282.623,
+   "end": 282.724,
+   "part": 1
+  },
+  {
+   "w": "raise",
+   "start": 282.724,
+   "end": 283.429,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 283.429,
+   "end": 283.645,
+   "part": 1
+  },
+  {
+   "w": "change",
+   "start": 283.645,
+   "end": 284.145,
+   "part": 1
+  },
+  {
+   "w": "who",
+   "start": 284.145,
+   "end": 284.35,
+   "part": 1
+  },
+  {
+   "w": "owns",
+   "start": 284.35,
+   "end": 284.702,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 284.702,
+   "end": 284.827,
+   "part": 1
+  },
+  {
+   "w": "equipment",
+   "start": 284.827,
+   "end": 285.35,
+   "part": 1
+  },
+  {
+   "w": "their",
+   "start": 285.35,
+   "end": 285.532,
+   "part": 1
+  },
+  {
+   "w": "employer",
+   "start": 285.532,
+   "end": 286.077,
+   "part": 1
+  },
+  {
+   "w": "needs.",
+   "start": 286.077,
+   "end": 287.032,
+   "part": 1
+  },
+  {
+   "w": "Data",
+   "start": 287.311,
+   "end": 287.594,
+   "part": 1
+  },
+  {
+   "w": "centers",
+   "start": 287.594,
+   "end": 288.015,
+   "part": 1
+  },
+  {
+   "w": "need",
+   "start": 288.015,
+   "end": 288.231,
+   "part": 1
+  },
+  {
+   "w": "power,",
+   "start": 288.231,
+   "end": 288.935,
+   "part": 1
+  },
+  {
+   "w": "cooling",
+   "start": 288.935,
+   "end": 289.379,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 289.379,
+   "end": 289.492,
+   "part": 1
+  },
+  {
+   "w": "connections",
+   "start": 289.492,
+   "end": 290.038,
+   "part": 1
+  },
+  {
+   "w": "before",
+   "start": 290.038,
+   "end": 290.333,
+   "part": 1
+  },
+  {
+   "w": "they",
+   "start": 290.333,
+   "end": 290.47,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 290.47,
+   "end": 290.662,
+   "part": 1
+  },
+  {
+   "w": "serve",
+   "start": 290.662,
+   "end": 290.947,
+   "part": 1
+  },
+  {
+   "w": "customers.",
+   "start": 290.947,
+   "end": 291.958,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 291.958,
+   "end": 292.083,
+   "part": 1
+  },
+  {
+   "w": "chip",
+   "start": 292.083,
+   "end": 292.344,
+   "part": 1
+  },
+  {
+   "w": "can't",
+   "start": 292.344,
+   "end": 292.64,
+   "part": 1
+  },
+  {
+   "w": "do",
+   "start": 292.64,
+   "end": 292.811,
+   "part": 1
+  },
+  {
+   "w": "much",
+   "start": 292.811,
+   "end": 293.038,
+   "part": 1
+  },
+  {
+   "w": "sitting",
+   "start": 293.038,
+   "end": 293.379,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 293.379,
+   "end": 293.458,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 293.458,
+   "end": 293.549,
+   "part": 1
+  },
+  {
+   "w": "building",
+   "start": 293.549,
+   "end": 293.947,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 293.947,
+   "end": 294.083,
+   "part": 1
+  },
+  {
+   "w": "hasn't",
+   "start": 294.083,
+   "end": 294.356,
+   "part": 1
+  },
+  {
+   "w": "been",
+   "start": 294.356,
+   "end": 294.538,
+   "part": 1
+  },
+  {
+   "w": "connected",
+   "start": 294.538,
+   "end": 294.97,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 294.97,
+   "end": 295.061,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 295.061,
+   "end": 295.162,
+   "part": 1
+  },
+  {
+   "w": "grid.",
+   "start": 295.162,
+   "end": 296.003,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 296.003,
+   "end": 296.117,
+   "part": 1
+  },
+  {
+   "w": "builder",
+   "start": 296.117,
+   "end": 296.47,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 296.47,
+   "end": 296.651,
+   "part": 1
+  },
+  {
+   "w": "burn",
+   "start": 296.651,
+   "end": 296.958,
+   "part": 1
+  },
+  {
+   "w": "cash",
+   "start": 296.958,
+   "end": 297.39,
+   "part": 1
+  },
+  {
+   "w": "getting",
+   "start": 297.39,
+   "end": 297.697,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 297.697,
+   "end": 297.879,
+   "part": 1
+  },
+  {
+   "w": "capacity",
+   "start": 297.879,
+   "end": 298.503,
+   "part": 1
+  },
+  {
+   "w": "ready",
+   "start": 298.503,
+   "end": 298.856,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 298.856,
+   "end": 298.981,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 298.981,
+   "end": 299.311,
+   "part": 1
+  },
+  {
+   "w": "be",
+   "start": 299.311,
+   "end": 299.447,
+   "part": 1
+  },
+  {
+   "w": "worth",
+   "start": 299.447,
+   "end": 299.708,
+   "part": 1
+  },
+  {
+   "w": "backing.",
+   "start": 299.708,
+   "end": 300.617,
+   "part": 1
+  },
+  {
+   "w": "I",
+   "start": 300.617,
+   "end": 300.765,
+   "part": 1
+  },
+  {
+   "w": "call",
+   "start": 300.765,
+   "end": 300.992,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 300.992,
+   "end": 301.208,
+   "part": 1
+  },
+  {
+   "w": "strategy",
+   "start": 301.208,
+   "end": 301.811,
+   "part": 1
+  },
+  {
+   "w": "accretive",
+   "start": 301.811,
+   "end": 302.253,
+   "part": 1
+  },
+  {
+   "w": "burn:",
+   "start": 302.253,
+   "end": 303.049,
+   "part": 1
+  },
+  {
+   "w": "fund",
+   "start": 303.049,
+   "end": 303.253,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 303.253,
+   "end": 303.333,
+   "part": 1
+  },
+  {
+   "w": "build",
+   "start": 303.333,
+   "end": 303.606,
+   "part": 1
+  },
+  {
+   "w": "long",
+   "start": 303.606,
+   "end": 303.799,
+   "part": 1
+  },
+  {
+   "w": "enough",
+   "start": 303.799,
+   "end": 304.061,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 304.061,
+   "end": 304.185,
+   "part": 1
+  },
+  {
+   "w": "earn",
+   "start": 304.185,
+   "end": 304.447,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 304.447,
+   "end": 304.549,
+   "part": 1
+  },
+  {
+   "w": "valuable",
+   "start": 304.549,
+   "end": 305.083,
+   "part": 1
+  },
+  {
+   "w": "position.",
+   "start": 305.083,
+   "end": 306.071,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 306.071,
+   "end": 306.231,
+   "part": 1
+  },
+  {
+   "w": "earnings",
+   "start": 306.231,
+   "end": 306.685,
+   "part": 1
+  },
+  {
+   "w": "don't",
+   "start": 306.685,
+   "end": 306.901,
+   "part": 1
+  },
+  {
+   "w": "have",
+   "start": 306.901,
+   "end": 307.106,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 307.106,
+   "end": 307.231,
+   "part": 1
+  },
+  {
+   "w": "outrun",
+   "start": 307.231,
+   "end": 307.799,
+   "part": 1
+  },
+  {
+   "w": "spending",
+   "start": 307.799,
+   "end": 308.22,
+   "part": 1
+  },
+  {
+   "w": "immediately.",
+   "start": 308.22,
+   "end": 309.321,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 309.321,
+   "end": 309.458,
+   "part": 1
+  },
+  {
+   "w": "funding",
+   "start": 309.458,
+   "end": 309.833,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 309.833,
+   "end": 310.061,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 310.061,
+   "end": 310.185,
+   "part": 1
+  },
+  {
+   "w": "last",
+   "start": 310.185,
+   "end": 310.72,
+   "part": 1
+  },
+  {
+   "w": "until",
+   "start": 310.72,
+   "end": 311.026,
+   "part": 1
+  },
+  {
+   "w": "management",
+   "start": 311.026,
+   "end": 311.583,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 311.583,
+   "end": 311.742,
+   "part": 1
+  },
+  {
+   "w": "deliver.",
+   "start": 311.742,
+   "end": 312.685,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 313.106,
+   "end": 313.185,
+   "part": 1
+  },
+  {
+   "w": "company",
+   "start": 313.185,
+   "end": 313.662,
+   "part": 1
+  },
+  {
+   "w": "borrowing",
+   "start": 313.662,
+   "end": 314.435,
+   "part": 1
+  },
+  {
+   "w": "because",
+   "start": 314.435,
+   "end": 314.844,
+   "part": 1
+  },
+  {
+   "w": "customers",
+   "start": 314.844,
+   "end": 315.401,
+   "part": 1
+  },
+  {
+   "w": "are",
+   "start": 315.401,
+   "end": 315.515,
+   "part": 1
+  },
+  {
+   "w": "leaving",
+   "start": 315.515,
+   "end": 315.856,
+   "part": 1
+  },
+  {
+   "w": "faces",
+   "start": 315.856,
+   "end": 316.379,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 316.379,
+   "end": 316.47,
+   "part": 1
+  },
+  {
+   "w": "different",
+   "start": 316.47,
+   "end": 316.765,
+   "part": 1
+  },
+  {
+   "w": "problem.",
+   "start": 316.765,
+   "end": 317.742,
+   "part": 1
+  },
+  {
+   "w": "Your",
+   "start": 318.021,
+   "end": 318.169,
+   "part": 1
+  },
+  {
+   "w": "second",
+   "start": 318.169,
+   "end": 318.509,
+   "part": 1
+  },
+  {
+   "w": "check",
+   "start": 318.509,
+   "end": 318.794,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 318.794,
+   "end": 318.896,
+   "part": 1
+  },
+  {
+   "w": "who",
+   "start": 318.896,
+   "end": 318.999,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 318.999,
+   "end": 319.169,
+   "part": 1
+  },
+  {
+   "w": "finance",
+   "start": 319.169,
+   "end": 319.658,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 319.658,
+   "end": 319.782,
+   "part": 1
+  },
+  {
+   "w": "wait.",
+   "start": 319.782,
+   "end": 320.509,
+   "part": 1
+  },
+  {
+   "w": "Your",
+   "start": 320.509,
+   "end": 320.68,
+   "part": 1
+  },
+  {
+   "w": "loan",
+   "start": 320.68,
+   "end": 320.953,
+   "part": 1
+  },
+  {
+   "w": "agreement",
+   "start": 320.953,
+   "end": 321.339,
+   "part": 1
+  },
+  {
+   "w": "tells",
+   "start": 321.339,
+   "end": 321.635,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 321.635,
+   "end": 321.759,
+   "part": 1
+  },
+  {
+   "w": "when",
+   "start": 321.759,
+   "end": 321.873,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 321.873,
+   "end": 321.964,
+   "part": 1
+  },
+  {
+   "w": "rate",
+   "start": 321.964,
+   "end": 322.226,
+   "part": 1
+  },
+  {
+   "w": "resets",
+   "start": 322.226,
+   "end": 322.703,
+   "part": 1
+  },
+  {
+   "w": "or",
+   "start": 322.703,
+   "end": 322.805,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 322.805,
+   "end": 322.862,
+   "part": 1
+  },
+  {
+   "w": "balance",
+   "start": 322.862,
+   "end": 323.226,
+   "part": 1
+  },
+  {
+   "w": "comes",
+   "start": 323.226,
+   "end": 323.521,
+   "part": 1
+  },
+  {
+   "w": "due.",
+   "start": 323.521,
+   "end": 324.1,
+   "part": 1
+  },
+  {
+   "w": "For",
+   "start": 324.1,
+   "end": 324.237,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 324.237,
+   "end": 324.294,
+   "part": 1
+  },
+  {
+   "w": "public",
+   "start": 324.294,
+   "end": 324.658,
+   "part": 1
+  },
+  {
+   "w": "company,",
+   "start": 324.658,
+   "end": 325.441,
+   "part": 1
+  },
+  {
+   "w": "open",
+   "start": 325.441,
+   "end": 325.726,
+   "part": 1
+  },
+  {
+   "w": "its",
+   "start": 325.726,
+   "end": 325.919,
+   "part": 1
+  },
+  {
+   "w": "latest",
+   "start": 325.919,
+   "end": 326.328,
+   "part": 1
+  },
+  {
+   "w": "quarterly",
+   "start": 326.328,
+   "end": 326.896,
+   "part": 1
+  },
+  {
+   "w": "or",
+   "start": 326.896,
+   "end": 327.067,
+   "part": 1
+  },
+  {
+   "w": "annual",
+   "start": 327.067,
+   "end": 327.453,
+   "part": 1
+  },
+  {
+   "w": "report",
+   "start": 327.453,
+   "end": 327.828,
+   "part": 1
+  },
+  {
+   "w": "on",
+   "start": 327.828,
+   "end": 327.919,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 327.919,
+   "end": 328.021,
+   "part": 1
+  },
+  {
+   "w": "SEC's",
+   "start": 328.021,
+   "end": 328.635,
+   "part": 1
+  },
+  {
+   "w": "website.",
+   "start": 328.635,
+   "end": 329.544,
+   "part": 1
+  },
+  {
+   "w": "Search",
+   "start": 329.544,
+   "end": 329.862,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 329.862,
+   "end": 329.976,
+   "part": 1
+  },
+  {
+   "w": "liquidity",
+   "start": 329.976,
+   "end": 330.555,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 330.555,
+   "end": 330.68,
+   "part": 1
+  },
+  {
+   "w": "debt",
+   "start": 330.68,
+   "end": 330.885,
+   "part": 1
+  },
+  {
+   "w": "maturities.",
+   "start": 330.885,
+   "end": 331.919,
+   "part": 1
+  },
+  {
+   "w": "Add",
+   "start": 331.919,
+   "end": 332.123,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 332.123,
+   "end": 332.203,
+   "part": 1
+  },
+  {
+   "w": "company's",
+   "start": 332.203,
+   "end": 332.703,
+   "part": 1
+  },
+  {
+   "w": "construction-spending",
+   "start": 332.703,
+   "end": 333.646,
+   "part": 1
+  },
+  {
+   "w": "guidance",
+   "start": 333.646,
+   "end": 334.18,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 334.18,
+   "end": 334.294,
+   "part": 1
+  },
+  {
+   "w": "contractual",
+   "start": 334.294,
+   "end": 334.885,
+   "part": 1
+  },
+  {
+   "w": "commitments.",
+   "start": 334.885,
+   "end": 335.873,
+   "part": 1
+  },
+  {
+   "w": "Compare",
+   "start": 335.873,
+   "end": 336.271,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 336.271,
+   "end": 336.362,
+   "part": 1
+  },
+  {
+   "w": "money",
+   "start": 336.362,
+   "end": 336.68,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 336.68,
+   "end": 336.771,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 336.771,
+   "end": 336.964,
+   "part": 1
+  },
+  {
+   "w": "use",
+   "start": 336.964,
+   "end": 337.271,
+   "part": 1
+  },
+  {
+   "w": "with",
+   "start": 337.271,
+   "end": 337.396,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 337.396,
+   "end": 337.509,
+   "part": 1
+  },
+  {
+   "w": "bills",
+   "start": 337.509,
+   "end": 337.885,
+   "part": 1
+  },
+  {
+   "w": "arriving",
+   "start": 337.885,
+   "end": 338.317,
+   "part": 1
+  },
+  {
+   "w": "before",
+   "start": 338.317,
+   "end": 338.646,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 338.646,
+   "end": 338.726,
+   "part": 1
+  },
+  {
+   "w": "project",
+   "start": 338.726,
+   "end": 339.203,
+   "part": 1
+  },
+  {
+   "w": "earns",
+   "start": 339.203,
+   "end": 339.532,
+   "part": 1
+  },
+  {
+   "w": "anything.",
+   "start": 339.532,
+   "end": 340.509,
+   "part": 1
+  },
+  {
+   "w": "An",
+   "start": 340.509,
+   "end": 340.68,
+   "part": 1
+  },
+  {
+   "w": "undrawn",
+   "start": 340.68,
+   "end": 341.305,
+   "part": 1
+  },
+  {
+   "w": "credit",
+   "start": 341.305,
+   "end": 341.658,
+   "part": 1
+  },
+  {
+   "w": "line",
+   "start": 341.658,
+   "end": 342.078,
+   "part": 1
+  },
+  {
+   "w": "counts",
+   "start": 342.078,
+   "end": 342.521,
+   "part": 1
+  },
+  {
+   "w": "only",
+   "start": 342.521,
+   "end": 342.885,
+   "part": 1
+  },
+  {
+   "w": "if",
+   "start": 342.885,
+   "end": 343.009,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 343.009,
+   "end": 343.089,
+   "part": 1
+  },
+  {
+   "w": "company",
+   "start": 343.089,
+   "end": 343.532,
+   "part": 1
+  },
+  {
+   "w": "meets",
+   "start": 343.532,
+   "end": 343.794,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 343.794,
+   "end": 343.885,
+   "part": 1
+  },
+  {
+   "w": "conditions",
+   "start": 343.885,
+   "end": 344.43,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 344.43,
+   "end": 344.555,
+   "part": 1
+  },
+  {
+   "w": "use",
+   "start": 344.555,
+   "end": 344.839,
+   "part": 1
+  },
+  {
+   "w": "it.",
+   "start": 344.839,
+   "end": 345.43,
+   "part": 1
+  },
+  {
+   "w": "Imagine",
+   "start": 345.716,
+   "end": 346.216,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 346.216,
+   "end": 346.323,
+   "part": 1
+  },
+  {
+   "w": "builder",
+   "start": 346.323,
+   "end": 346.692,
+   "part": 1
+  },
+  {
+   "w": "needs",
+   "start": 346.692,
+   "end": 346.978,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 346.978,
+   "end": 347.085,
+   "part": 1
+  },
+  {
+   "w": "hundred",
+   "start": 347.085,
+   "end": 347.513,
+   "part": 1
+  },
+  {
+   "w": "million",
+   "start": 347.513,
+   "end": 347.907,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 347.907,
+   "end": 348.359,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 348.359,
+   "end": 348.49,
+   "part": 1
+  },
+  {
+   "w": "finish",
+   "start": 348.49,
+   "end": 349.05,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 349.05,
+   "end": 349.169,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 349.169,
+   "end": 349.645,
+   "part": 1
+  },
+  {
+   "w": "sixty",
+   "start": 349.645,
+   "end": 350.109,
+   "part": 1
+  },
+  {
+   "w": "million",
+   "start": 350.109,
+   "end": 350.478,
+   "part": 1
+  },
+  {
+   "w": "available.",
+   "start": 350.478,
+   "end": 351.561,
+   "part": 1
+  },
+  {
+   "w": "That",
+   "start": 351.561,
+   "end": 351.835,
+   "part": 1
+  },
+  {
+   "w": "leaves",
+   "start": 351.835,
+   "end": 352.169,
+   "part": 1
+  },
+  {
+   "w": "forty",
+   "start": 352.169,
+   "end": 352.513,
+   "part": 1
+  },
+  {
+   "w": "million",
+   "start": 352.513,
+   "end": 352.883,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 352.883,
+   "end": 353.013,
+   "part": 1
+  },
+  {
+   "w": "find",
+   "start": 353.013,
+   "end": 353.383,
+   "part": 1
+  },
+  {
+   "w": "before",
+   "start": 353.383,
+   "end": 353.632,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 353.632,
+   "end": 353.716,
+   "part": 1
+  },
+  {
+   "w": "project",
+   "start": 353.716,
+   "end": 354.216,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 354.216,
+   "end": 354.407,
+   "part": 1
+  },
+  {
+   "w": "earn",
+   "start": 354.407,
+   "end": 354.609,
+   "part": 1
+  },
+  {
+   "w": "its",
+   "start": 354.609,
+   "end": 354.799,
+   "part": 1
+  },
+  {
+   "w": "keep.",
+   "start": 354.799,
+   "end": 355.609,
+   "part": 1
+  },
+  {
+   "w": "My",
+   "start": 355.609,
+   "end": 355.799,
+   "part": 1
+  },
+  {
+   "w": "tripwire",
+   "start": 355.799,
+   "end": 356.407,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 356.407,
+   "end": 356.55,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 356.55,
+   "end": 356.871,
+   "part": 1
+  },
+  {
+   "w": "forty-million-dollar",
+   "start": 356.871,
+   "end": 358.013,
+   "part": 1
+  },
+  {
+   "w": "gap.",
+   "start": 358.013,
+   "end": 358.835,
+   "part": 1
+  },
+  {
+   "w": "Until",
+   "start": 358.835,
+   "end": 359.156,
+   "part": 1
+  },
+  {
+   "w": "committed",
+   "start": 359.156,
+   "end": 359.609,
+   "part": 1
+  },
+  {
+   "w": "funding",
+   "start": 359.609,
+   "end": 359.978,
+   "part": 1
+  },
+  {
+   "w": "closes",
+   "start": 359.978,
+   "end": 360.407,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 360.407,
+   "end": 360.526,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 360.526,
+   "end": 360.656,
+   "part": 1
+  },
+  {
+   "w": "zero,",
+   "start": 360.656,
+   "end": 361.431,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 361.431,
+   "end": 361.537,
+   "part": 1
+  },
+  {
+   "w": "project",
+   "start": 361.537,
+   "end": 362.026,
+   "part": 1
+  },
+  {
+   "w": "isn't",
+   "start": 362.026,
+   "end": 362.323,
+   "part": 1
+  },
+  {
+   "w": "fully",
+   "start": 362.323,
+   "end": 362.656,
+   "part": 1
+  },
+  {
+   "w": "funded.",
+   "start": 362.656,
+   "end": 363.585,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 363.585,
+   "end": 363.704,
+   "part": 1
+  },
+  {
+   "w": "rival",
+   "start": 363.704,
+   "end": 364.169,
+   "part": 1
+  },
+  {
+   "w": "with",
+   "start": 364.169,
+   "end": 364.299,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 364.299,
+   "end": 364.418,
+   "part": 1
+  },
+  {
+   "w": "money",
+   "start": 364.418,
+   "end": 364.728,
+   "part": 1
+  },
+  {
+   "w": "secured",
+   "start": 364.728,
+   "end": 365.311,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 365.311,
+   "end": 365.478,
+   "part": 1
+  },
+  {
+   "w": "keep",
+   "start": 365.478,
+   "end": 365.716,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 365.716,
+   "end": 365.823,
+   "part": 1
+  },
+  {
+   "w": "crews",
+   "start": 365.823,
+   "end": 366.251,
+   "part": 1
+  },
+  {
+   "w": "working;",
+   "start": 366.251,
+   "end": 367.085,
+   "part": 1
+  },
+  {
+   "w": "this",
+   "start": 367.085,
+   "end": 367.323,
+   "part": 1
+  },
+  {
+   "w": "builder",
+   "start": 367.323,
+   "end": 367.692,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 367.692,
+   "end": 367.931,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 367.931,
+   "end": 368.026,
+   "part": 1
+  },
+  {
+   "w": "negotiate",
+   "start": 368.026,
+   "end": 368.764,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 368.764,
+   "end": 368.907,
+   "part": 1
+  },
+  {
+   "w": "another",
+   "start": 368.907,
+   "end": 369.275,
+   "part": 1
+  },
+  {
+   "w": "cheque.",
+   "start": 369.275,
+   "end": 370.121,
+   "part": 1
+  },
+  {
+   "w": "Now",
+   "start": 370.407,
+   "end": 370.589,
+   "part": 1
+  },
+  {
+   "w": "put",
+   "start": 370.589,
+   "end": 370.725,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 370.725,
+   "end": 370.827,
+   "part": 1
+  },
+  {
+   "w": "real",
+   "start": 370.827,
+   "end": 371.089,
+   "part": 1
+  },
+  {
+   "w": "company's",
+   "start": 371.089,
+   "end": 371.589,
+   "part": 1
+  },
+  {
+   "w": "report",
+   "start": 371.589,
+   "end": 371.998,
+   "part": 1
+  },
+  {
+   "w": "beside",
+   "start": 371.998,
+   "end": 372.361,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 372.361,
+   "end": 372.509,
+   "part": 1
+  },
+  {
+   "w": "example.",
+   "start": 372.509,
+   "end": 373.44,
+   "part": 1
+  },
+  {
+   "w": "NVIDIA's",
+   "start": 373.44,
+   "end": 373.975,
+   "part": 1
+  },
+  {
+   "w": "July",
+   "start": 373.975,
+   "end": 374.293,
+   "part": 1
+  },
+  {
+   "w": "balance",
+   "start": 374.293,
+   "end": 374.68,
+   "part": 1
+  },
+  {
+   "w": "sheet",
+   "start": 374.68,
+   "end": 374.998,
+   "part": 1
+  },
+  {
+   "w": "showed",
+   "start": 374.998,
+   "end": 375.259,
+   "part": 1
+  },
+  {
+   "w": "about",
+   "start": 375.259,
+   "end": 375.531,
+   "part": 1
+  },
+  {
+   "w": "twenty-two",
+   "start": 375.531,
+   "end": 376.009,
+   "part": 1
+  },
+  {
+   "w": "billion",
+   "start": 376.009,
+   "end": 376.384,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 376.384,
+   "end": 376.816,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 376.816,
+   "end": 376.963,
+   "part": 1
+  },
+  {
+   "w": "cash",
+   "start": 376.963,
+   "end": 377.327,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 377.327,
+   "end": 377.418,
+   "part": 1
+  },
+  {
+   "w": "equivalents,",
+   "start": 377.418,
+   "end": 378.372,
+   "part": 1
+  },
+  {
+   "w": "against",
+   "start": 378.372,
+   "end": 378.713,
+   "part": 1
+  },
+  {
+   "w": "one",
+   "start": 378.713,
+   "end": 378.986,
+   "part": 1
+  },
+  {
+   "w": "billion",
+   "start": 378.986,
+   "end": 379.407,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 379.407,
+   "end": 379.554,
+   "part": 1
+  },
+  {
+   "w": "short-term",
+   "start": 379.554,
+   "end": 380.089,
+   "part": 1
+  },
+  {
+   "w": "debt.",
+   "start": 380.089,
+   "end": 380.895,
+   "part": 1
+  },
+  {
+   "w": "Those",
+   "start": 380.895,
+   "end": 381.111,
+   "part": 1
+  },
+  {
+   "w": "are",
+   "start": 381.111,
+   "end": 381.236,
+   "part": 1
+  },
+  {
+   "w": "two",
+   "start": 381.236,
+   "end": 381.463,
+   "part": 1
+  },
+  {
+   "w": "lines",
+   "start": 381.463,
+   "end": 381.839,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 381.839,
+   "end": 381.93,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 381.93,
+   "end": 382.1,
+   "part": 1
+  },
+  {
+   "w": "find",
+   "start": 382.1,
+   "end": 382.372,
+   "part": 1
+  },
+  {
+   "w": "yourself",
+   "start": 382.372,
+   "end": 382.759,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 382.759,
+   "end": 382.827,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 382.827,
+   "end": 382.907,
+   "part": 1
+  },
+  {
+   "w": "report",
+   "start": 382.907,
+   "end": 383.293,
+   "part": 1
+  },
+  {
+   "w": "linked",
+   "start": 383.293,
+   "end": 383.566,
+   "part": 1
+  },
+  {
+   "w": "below.",
+   "start": 383.566,
+   "end": 384.463,
+   "part": 1
+  },
+  {
+   "w": "Other",
+   "start": 384.463,
+   "end": 384.759,
+   "part": 1
+  },
+  {
+   "w": "bills",
+   "start": 384.759,
+   "end": 385.054,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 385.054,
+   "end": 385.157,
+   "part": 1
+  },
+  {
+   "w": "commitments",
+   "start": 385.157,
+   "end": 385.611,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 385.611,
+   "end": 385.872,
+   "part": 1
+  },
+  {
+   "w": "count,",
+   "start": 385.872,
+   "end": 386.554,
+   "part": 1
+  },
+  {
+   "w": "so",
+   "start": 386.554,
+   "end": 386.748,
+   "part": 1
+  },
+  {
+   "w": "check",
+   "start": 386.748,
+   "end": 386.998,
+   "part": 1
+  },
+  {
+   "w": "those",
+   "start": 386.998,
+   "end": 387.27,
+   "part": 1
+  },
+  {
+   "w": "before",
+   "start": 387.27,
+   "end": 387.6,
+   "part": 1
+  },
+  {
+   "w": "treating",
+   "start": 387.6,
+   "end": 387.918,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 387.918,
+   "end": 388.009,
+   "part": 1
+  },
+  {
+   "w": "difference",
+   "start": 388.009,
+   "end": 388.43,
+   "part": 1
+  },
+  {
+   "w": "as",
+   "start": 388.43,
+   "end": 388.554,
+   "part": 1
+  },
+  {
+   "w": "spending",
+   "start": 388.554,
+   "end": 388.998,
+   "part": 1
+  },
+  {
+   "w": "money.",
+   "start": 388.998,
+   "end": 389.804,
+   "part": 1
+  },
+  {
+   "w": "Then",
+   "start": 389.804,
+   "end": 390.145,
+   "part": 1
+  },
+  {
+   "w": "open",
+   "start": 390.145,
+   "end": 390.475,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 390.475,
+   "end": 390.577,
+   "part": 1
+  },
+  {
+   "w": "cash-flow",
+   "start": 390.577,
+   "end": 391.168,
+   "part": 1
+  },
+  {
+   "w": "table:",
+   "start": 391.168,
+   "end": 391.986,
+   "part": 1
+  },
+  {
+   "w": "NVIDIA",
+   "start": 391.986,
+   "end": 392.543,
+   "part": 1
+  },
+  {
+   "w": "generated",
+   "start": 392.543,
+   "end": 393.1,
+   "part": 1
+  },
+  {
+   "w": "about",
+   "start": 393.1,
+   "end": 393.395,
+   "part": 1
+  },
+  {
+   "w": "twenty-one",
+   "start": 393.395,
+   "end": 394.009,
+   "part": 1
+  },
+  {
+   "w": "billion",
+   "start": 394.009,
+   "end": 394.384,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 394.384,
+   "end": 394.839,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 394.839,
+   "end": 394.998,
+   "part": 1
+  },
+  {
+   "w": "free",
+   "start": 394.998,
+   "end": 395.259,
+   "part": 1
+  },
+  {
+   "w": "cash",
+   "start": 395.259,
+   "end": 395.645,
+   "part": 1
+  },
+  {
+   "w": "flow",
+   "start": 395.645,
+   "end": 395.975,
+   "part": 1
+  },
+  {
+   "w": "during",
+   "start": 395.975,
+   "end": 396.202,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 396.202,
+   "end": 396.43,
+   "part": 1
+  },
+  {
+   "w": "quarter.",
+   "start": 396.43,
+   "end": 397.304,
+   "part": 1
+  },
+  {
+   "w": "Its",
+   "start": 397.725,
+   "end": 397.94,
+   "part": 1
+  },
+  {
+   "w": "business",
+   "start": 397.94,
+   "end": 398.407,
+   "part": 1
+  },
+  {
+   "w": "was",
+   "start": 398.407,
+   "end": 398.589,
+   "part": 1
+  },
+  {
+   "w": "producing",
+   "start": 398.589,
+   "end": 399.1,
+   "part": 1
+  },
+  {
+   "w": "cash",
+   "start": 399.1,
+   "end": 399.52,
+   "part": 1
+  },
+  {
+   "w": "after",
+   "start": 399.52,
+   "end": 399.804,
+   "part": 1
+  },
+  {
+   "w": "capital",
+   "start": 399.804,
+   "end": 400.259,
+   "part": 1
+  },
+  {
+   "w": "spending,",
+   "start": 400.259,
+   "end": 401.134,
+   "part": 1
+  },
+  {
+   "w": "instead",
+   "start": 401.134,
+   "end": 401.463,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 401.463,
+   "end": 401.577,
+   "part": 1
+  },
+  {
+   "w": "needing",
+   "start": 401.577,
+   "end": 401.907,
+   "part": 1
+  },
+  {
+   "w": "investors",
+   "start": 401.907,
+   "end": 402.543,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 402.543,
+   "end": 402.668,
+   "part": 1
+  },
+  {
+   "w": "fund",
+   "start": 402.668,
+   "end": 403.02,
+   "part": 1
+  },
+  {
+   "w": "every",
+   "start": 403.02,
+   "end": 403.339,
+   "part": 1
+  },
+  {
+   "w": "next",
+   "start": 403.339,
+   "end": 403.6,
+   "part": 1
+  },
+  {
+   "w": "step.",
+   "start": 403.6,
+   "end": 404.566,
+   "part": 1
+  },
+  {
+   "w": "That's",
+   "start": 404.566,
+   "end": 404.884,
+   "part": 1
+  },
+  {
+   "w": "why",
+   "start": 404.884,
+   "end": 405.089,
+   "part": 1
+  },
+  {
+   "w": "I",
+   "start": 405.089,
+   "end": 405.236,
+   "part": 1
+  },
+  {
+   "w": "watch",
+   "start": 405.236,
+   "end": 405.509,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 405.509,
+   "end": 405.6,
+   "part": 1
+  },
+  {
+   "w": "company",
+   "start": 405.6,
+   "end": 406.066,
+   "part": 1
+  },
+  {
+   "w": "like",
+   "start": 406.066,
+   "end": 406.27,
+   "part": 1
+  },
+  {
+   "w": "NVIDIA",
+   "start": 406.27,
+   "end": 407.089,
+   "part": 1
+  },
+  {
+   "w": "as",
+   "start": 407.089,
+   "end": 407.225,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 407.225,
+   "end": 407.316,
+   "part": 1
+  },
+  {
+   "w": "potential",
+   "start": 407.316,
+   "end": 407.872,
+   "part": 1
+  },
+  {
+   "w": "buyer",
+   "start": 407.872,
+   "end": 408.236,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 408.236,
+   "end": 408.339,
+   "part": 1
+  },
+  {
+   "w": "capacity",
+   "start": 408.339,
+   "end": 409.281,
+   "part": 1
+  },
+  {
+   "w": "when",
+   "start": 409.281,
+   "end": 409.498,
+   "part": 1
+  },
+  {
+   "w": "somebody",
+   "start": 409.498,
+   "end": 409.861,
+   "part": 1
+  },
+  {
+   "w": "else",
+   "start": 409.861,
+   "end": 410.134,
+   "part": 1
+  },
+  {
+   "w": "needs",
+   "start": 410.134,
+   "end": 410.44,
+   "part": 1
+  },
+  {
+   "w": "financing.",
+   "start": 410.44,
+   "end": 411.566,
+   "part": 1
+  },
+  {
+   "w": "Remember",
+   "start": 411.845,
+   "end": 412.299,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 412.299,
+   "end": 412.424,
+   "part": 1
+  },
+  {
+   "w": "workshop",
+   "start": 412.424,
+   "end": 412.936,
+   "part": 1
+  },
+  {
+   "w": "owner",
+   "start": 412.936,
+   "end": 413.299,
+   "part": 1
+  },
+  {
+   "w": "who",
+   "start": 413.299,
+   "end": 413.447,
+   "part": 1
+  },
+  {
+   "w": "couldn't",
+   "start": 413.447,
+   "end": 413.754,
+   "part": 1
+  },
+  {
+   "w": "afford",
+   "start": 413.754,
+   "end": 414.151,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 414.151,
+   "end": 414.231,
+   "part": 1
+  },
+  {
+   "w": "next",
+   "start": 414.231,
+   "end": 414.504,
+   "part": 1
+  },
+  {
+   "w": "machine?",
+   "start": 414.504,
+   "end": 415.549,
+   "part": 1
+  },
+  {
+   "w": "Now",
+   "start": 415.549,
+   "end": 415.845,
+   "part": 1
+  },
+  {
+   "w": "put",
+   "start": 415.845,
+   "end": 416.004,
+   "part": 1
+  },
+  {
+   "w": "NVIDIA",
+   "start": 416.004,
+   "end": 416.595,
+   "part": 1
+  },
+  {
+   "w": "on",
+   "start": 416.595,
+   "end": 416.697,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 416.697,
+   "end": 416.81,
+   "part": 1
+  },
+  {
+   "w": "other",
+   "start": 416.81,
+   "end": 417.106,
+   "part": 1
+  },
+  {
+   "w": "side",
+   "start": 417.106,
+   "end": 417.447,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 417.447,
+   "end": 417.527,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 417.527,
+   "end": 417.731,
+   "part": 1
+  },
+  {
+   "w": "negotiation.",
+   "start": 417.731,
+   "end": 419.027,
+   "part": 1
+  },
+  {
+   "w": "Suppose",
+   "start": 419.306,
+   "end": 419.76,
+   "part": 1
+  },
+  {
+   "w": "NVIDIA's",
+   "start": 419.76,
+   "end": 420.351,
+   "part": 1
+  },
+  {
+   "w": "shares",
+   "start": 420.351,
+   "end": 420.726,
+   "part": 1
+  },
+  {
+   "w": "fall",
+   "start": 420.726,
+   "end": 421.01,
+   "part": 1
+  },
+  {
+   "w": "by",
+   "start": 421.01,
+   "end": 421.169,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 421.169,
+   "end": 421.271,
+   "part": 1
+  },
+  {
+   "w": "quarter,",
+   "start": 421.271,
+   "end": 421.874,
+   "part": 1
+  },
+  {
+   "w": "while",
+   "start": 421.874,
+   "end": 422.056,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 422.056,
+   "end": 422.18,
+   "part": 1
+  },
+  {
+   "w": "smaller",
+   "start": 422.18,
+   "end": 422.669,
+   "part": 1
+  },
+  {
+   "w": "infrastructure",
+   "start": 422.669,
+   "end": 423.306,
+   "part": 1
+  },
+  {
+   "w": "company's",
+   "start": 423.306,
+   "end": 423.816,
+   "part": 1
+  },
+  {
+   "w": "fall",
+   "start": 423.816,
+   "end": 424.124,
+   "part": 1
+  },
+  {
+   "w": "by",
+   "start": 424.124,
+   "end": 424.316,
+   "part": 1
+  },
+  {
+   "w": "two-thirds.",
+   "start": 424.316,
+   "end": 425.533,
+   "part": 1
+  },
+  {
+   "w": "Both",
+   "start": 425.533,
+   "end": 425.839,
+   "part": 1
+  },
+  {
+   "w": "stocks",
+   "start": 425.839,
+   "end": 426.316,
+   "part": 1
+  },
+  {
+   "w": "fell.",
+   "start": 426.316,
+   "end": 427.033,
+   "part": 1
+  },
+  {
+   "w": "But",
+   "start": 427.033,
+   "end": 427.169,
+   "part": 1
+  },
+  {
+   "w": "who",
+   "start": 427.169,
+   "end": 427.328,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 427.328,
+   "end": 427.556,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 427.556,
+   "end": 427.692,
+   "part": 1
+  },
+  {
+   "w": "sell,",
+   "start": 427.692,
+   "end": 428.237,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 428.237,
+   "end": 428.339,
+   "part": 1
+  },
+  {
+   "w": "who",
+   "start": 428.339,
+   "end": 428.465,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 428.465,
+   "end": 428.601,
+   "part": 1
+  },
+  {
+   "w": "afford",
+   "start": 428.601,
+   "end": 428.965,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 428.965,
+   "end": 429.078,
+   "part": 1
+  },
+  {
+   "w": "buy?",
+   "start": 429.078,
+   "end": 429.874,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 430.153,
+   "end": 430.255,
+   "part": 1
+  },
+  {
+   "w": "smaller",
+   "start": 430.255,
+   "end": 430.698,
+   "part": 1
+  },
+  {
+   "w": "company",
+   "start": 430.698,
+   "end": 431.141,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 431.141,
+   "end": 431.403,
+   "part": 1
+  },
+  {
+   "w": "needs",
+   "start": 431.403,
+   "end": 431.698,
+   "part": 1
+  },
+  {
+   "w": "money",
+   "start": 431.698,
+   "end": 431.971,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 431.971,
+   "end": 432.095,
+   "part": 1
+  },
+  {
+   "w": "finish",
+   "start": 432.095,
+   "end": 432.403,
+   "part": 1
+  },
+  {
+   "w": "its",
+   "start": 432.403,
+   "end": 432.573,
+   "part": 1
+  },
+  {
+   "w": "site.",
+   "start": 432.573,
+   "end": 433.368,
+   "part": 1
+  },
+  {
+   "w": "NVIDIA's",
+   "start": 433.368,
+   "end": 433.936,
+   "part": 1
+  },
+  {
+   "w": "cash",
+   "start": 433.936,
+   "end": 434.323,
+   "part": 1
+  },
+  {
+   "w": "flow",
+   "start": 434.323,
+   "end": 434.653,
+   "part": 1
+  },
+  {
+   "w": "gives",
+   "start": 434.653,
+   "end": 434.868,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 434.868,
+   "end": 434.959,
+   "part": 1
+  },
+  {
+   "w": "options:",
+   "start": 434.959,
+   "end": 435.903,
+   "part": 1
+  },
+  {
+   "w": "fund",
+   "start": 435.903,
+   "end": 436.141,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 436.141,
+   "end": 436.232,
+   "part": 1
+  },
+  {
+   "w": "project,",
+   "start": 436.232,
+   "end": 437.039,
+   "part": 1
+  },
+  {
+   "w": "negotiate",
+   "start": 437.039,
+   "end": 437.664,
+   "part": 1
+  },
+  {
+   "w": "access,",
+   "start": 437.664,
+   "end": 438.459,
+   "part": 1
+  },
+  {
+   "w": "or",
+   "start": 438.459,
+   "end": 438.63,
+   "part": 1
+  },
+  {
+   "w": "pursue",
+   "start": 438.63,
+   "end": 439.085,
+   "part": 1
+  },
+  {
+   "w": "an",
+   "start": 439.085,
+   "end": 439.175,
+   "part": 1
+  },
+  {
+   "w": "acquisition.",
+   "start": 439.175,
+   "end": 440.335,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 440.613,
+   "end": 440.693,
+   "part": 1
+  },
+  {
+   "w": "power",
+   "start": 440.693,
+   "end": 441.068,
+   "part": 1
+  },
+  {
+   "w": "connection",
+   "start": 441.068,
+   "end": 441.545,
+   "part": 1
+  },
+  {
+   "w": "doesn't",
+   "start": 441.545,
+   "end": 441.806,
+   "part": 1
+  },
+  {
+   "w": "become",
+   "start": 441.806,
+   "end": 442.147,
+   "part": 1
+  },
+  {
+   "w": "useless",
+   "start": 442.147,
+   "end": 442.773,
+   "part": 1
+  },
+  {
+   "w": "because",
+   "start": 442.773,
+   "end": 443.091,
+   "part": 1
+  },
+  {
+   "w": "its",
+   "start": 443.091,
+   "end": 443.295,
+   "part": 1
+  },
+  {
+   "w": "owner's",
+   "start": 443.295,
+   "end": 443.75,
+   "part": 1
+  },
+  {
+   "w": "shares",
+   "start": 443.75,
+   "end": 444.147,
+   "part": 1
+  },
+  {
+   "w": "fall.",
+   "start": 444.147,
+   "end": 445.033,
+   "part": 1
+  },
+  {
+   "w": "What",
+   "start": 445.033,
+   "end": 445.273,
+   "part": 1
+  },
+  {
+   "w": "changes",
+   "start": 445.273,
+   "end": 445.852,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 445.852,
+   "end": 446.238,
+   "part": 1
+  },
+  {
+   "w": "who",
+   "start": 446.238,
+   "end": 446.409,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 446.409,
+   "end": 446.545,
+   "part": 1
+  },
+  {
+   "w": "afford",
+   "start": 446.545,
+   "end": 446.932,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 446.932,
+   "end": 447.023,
+   "part": 1
+  },
+  {
+   "w": "control",
+   "start": 447.023,
+   "end": 447.5,
+   "part": 1
+  },
+  {
+   "w": "it.",
+   "start": 447.5,
+   "end": 448.091,
+   "part": 1
+  },
+  {
+   "w": "Your",
+   "start": 448.37,
+   "end": 448.551,
+   "part": 1
+  },
+  {
+   "w": "third",
+   "start": 448.551,
+   "end": 448.892,
+   "part": 1
+  },
+  {
+   "w": "check",
+   "start": 448.892,
+   "end": 449.188,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 449.188,
+   "end": 449.324,
+   "part": 1
+  },
+  {
+   "w": "what",
+   "start": 449.324,
+   "end": 449.461,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 449.461,
+   "end": 449.574,
+   "part": 1
+  },
+  {
+   "w": "runway",
+   "start": 449.574,
+   "end": 449.971,
+   "part": 1
+  },
+  {
+   "w": "buys.",
+   "start": 449.971,
+   "end": 450.835,
+   "part": 1
+  },
+  {
+   "w": "Write",
+   "start": 450.835,
+   "end": 451.074,
+   "part": 1
+  },
+  {
+   "w": "management's",
+   "start": 451.074,
+   "end": 451.597,
+   "part": 1
+  },
+  {
+   "w": "promised",
+   "start": 451.597,
+   "end": 451.983,
+   "part": 1
+  },
+  {
+   "w": "delivery",
+   "start": 451.983,
+   "end": 452.426,
+   "part": 1
+  },
+  {
+   "w": "date",
+   "start": 452.426,
+   "end": 452.733,
+   "part": 1
+  },
+  {
+   "w": "beside",
+   "start": 452.733,
+   "end": 453.062,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 453.062,
+   "end": 453.199,
+   "part": 1
+  },
+  {
+   "w": "funding",
+   "start": 453.199,
+   "end": 453.551,
+   "part": 1
+  },
+  {
+   "w": "calculation.",
+   "start": 453.551,
+   "end": 454.721,
+   "part": 1
+  },
+  {
+   "w": "In",
+   "start": 454.721,
+   "end": 454.812,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 454.812,
+   "end": 454.892,
+   "part": 1
+  },
+  {
+   "w": "next",
+   "start": 454.892,
+   "end": 455.165,
+   "part": 1
+  },
+  {
+   "w": "report,",
+   "start": 455.165,
+   "end": 455.915,
+   "part": 1
+  },
+  {
+   "w": "check",
+   "start": 455.915,
+   "end": 456.211,
+   "part": 1
+  },
+  {
+   "w": "whether",
+   "start": 456.211,
+   "end": 456.461,
+   "part": 1
+  },
+  {
+   "w": "customers",
+   "start": 456.461,
+   "end": 456.961,
+   "part": 1
+  },
+  {
+   "w": "could",
+   "start": 456.961,
+   "end": 457.108,
+   "part": 1
+  },
+  {
+   "w": "actually",
+   "start": 457.108,
+   "end": 457.517,
+   "part": 1
+  },
+  {
+   "w": "use",
+   "start": 457.517,
+   "end": 457.756,
+   "part": 1
+  },
+  {
+   "w": "what",
+   "start": 457.756,
+   "end": 457.881,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 457.881,
+   "end": 458.017,
+   "part": 1
+  },
+  {
+   "w": "built.",
+   "start": 458.017,
+   "end": 458.812,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 458.812,
+   "end": 458.938,
+   "part": 1
+  },
+  {
+   "w": "finished",
+   "start": 458.938,
+   "end": 459.301,
+   "part": 1
+  },
+  {
+   "w": "shell",
+   "start": 459.301,
+   "end": 459.62,
+   "part": 1
+  },
+  {
+   "w": "without",
+   "start": 459.62,
+   "end": 459.949,
+   "part": 1
+  },
+  {
+   "w": "power",
+   "start": 459.949,
+   "end": 460.324,
+   "part": 1
+  },
+  {
+   "w": "won't",
+   "start": 460.324,
+   "end": 460.529,
+   "part": 1
+  },
+  {
+   "w": "do",
+   "start": 460.529,
+   "end": 460.688,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 460.688,
+   "end": 460.812,
+   "part": 1
+  },
+  {
+   "w": "job.",
+   "start": 460.812,
+   "end": 461.631,
+   "part": 1
+  },
+  {
+   "w": "For",
+   "start": 461.631,
+   "end": 461.779,
+   "part": 1
+  },
+  {
+   "w": "NVIDIA,",
+   "start": 461.779,
+   "end": 462.551,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 462.551,
+   "end": 462.688,
+   "part": 1
+  },
+  {
+   "w": "same",
+   "start": 462.688,
+   "end": 463.006,
+   "part": 1
+  },
+  {
+   "w": "July",
+   "start": 463.006,
+   "end": 463.37,
+   "part": 1
+  },
+  {
+   "w": "report",
+   "start": 463.37,
+   "end": 463.756,
+   "part": 1
+  },
+  {
+   "w": "recorded",
+   "start": 463.756,
+   "end": 464.256,
+   "part": 1
+  },
+  {
+   "w": "eighty-nine",
+   "start": 464.256,
+   "end": 464.858,
+   "part": 1
+  },
+  {
+   "w": "billion",
+   "start": 464.858,
+   "end": 465.233,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 465.233,
+   "end": 465.688,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 465.688,
+   "end": 465.824,
+   "part": 1
+  },
+  {
+   "w": "data-center",
+   "start": 465.824,
+   "end": 466.426,
+   "part": 1
+  },
+  {
+   "w": "revenue,",
+   "start": 466.426,
+   "end": 467.176,
+   "part": 1
+  },
+  {
+   "w": "more",
+   "start": 467.176,
+   "end": 467.415,
+   "part": 1
+  },
+  {
+   "w": "than",
+   "start": 467.415,
+   "end": 467.585,
+   "part": 1
+  },
+  {
+   "w": "double",
+   "start": 467.585,
+   "end": 467.892,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 467.892,
+   "end": 467.983,
+   "part": 1
+  },
+  {
+   "w": "year",
+   "start": 467.983,
+   "end": 468.188,
+   "part": 1
+  },
+  {
+   "w": "before.",
+   "start": 468.188,
+   "end": 469.153,
+   "part": 1
+  },
+  {
+   "w": "Customers",
+   "start": 469.153,
+   "end": 469.711,
+   "part": 1
+  },
+  {
+   "w": "were",
+   "start": 469.711,
+   "end": 469.881,
+   "part": 1
+  },
+  {
+   "w": "already",
+   "start": 469.881,
+   "end": 470.29,
+   "part": 1
+  },
+  {
+   "w": "paying",
+   "start": 470.29,
+   "end": 470.711,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 470.711,
+   "end": 470.824,
+   "part": 1
+  },
+  {
+   "w": "what",
+   "start": 470.824,
+   "end": 470.949,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 470.949,
+   "end": 471.029,
+   "part": 1
+  },
+  {
+   "w": "company",
+   "start": 471.029,
+   "end": 471.415,
+   "part": 1
+  },
+  {
+   "w": "supplied.",
+   "start": 471.415,
+   "end": 472.403,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 472.403,
+   "end": 472.517,
+   "part": 1
+  },
+  {
+   "w": "new",
+   "start": 472.517,
+   "end": 472.733,
+   "part": 1
+  },
+  {
+   "w": "site",
+   "start": 472.733,
+   "end": 473.029,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 473.029,
+   "end": 473.29,
+   "part": 1
+  },
+  {
+   "w": "waiting",
+   "start": 473.29,
+   "end": 473.62,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 473.62,
+   "end": 473.767,
+   "part": 1
+  },
+  {
+   "w": "power",
+   "start": 473.767,
+   "end": 474.176,
+   "part": 1
+  },
+  {
+   "w": "hasn't",
+   "start": 474.176,
+   "end": 474.483,
+   "part": 1
+  },
+  {
+   "w": "reached",
+   "start": 474.483,
+   "end": 474.779,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 474.779,
+   "end": 475.017,
+   "part": 1
+  },
+  {
+   "w": "stage.",
+   "start": 475.017,
+   "end": 475.949,
+   "part": 1
+  },
+  {
+   "w": "If",
+   "start": 476.37,
+   "end": 476.494,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 476.494,
+   "end": 476.597,
+   "part": 1
+  },
+  {
+   "w": "funded",
+   "start": 476.597,
+   "end": 476.994,
+   "part": 1
+  },
+  {
+   "w": "builder",
+   "start": 476.994,
+   "end": 477.438,
+   "part": 1
+  },
+  {
+   "w": "repeatedly",
+   "start": 477.438,
+   "end": 478.12,
+   "part": 1
+  },
+  {
+   "w": "misses",
+   "start": 478.12,
+   "end": 478.438,
+   "part": 1
+  },
+  {
+   "w": "delivery",
+   "start": 478.438,
+   "end": 479.211,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 479.211,
+   "end": 479.347,
+   "part": 1
+  },
+  {
+   "w": "needs",
+   "start": 479.347,
+   "end": 479.676,
+   "part": 1
+  },
+  {
+   "w": "more",
+   "start": 479.676,
+   "end": 479.892,
+   "part": 1
+  },
+  {
+   "w": "money",
+   "start": 479.892,
+   "end": 480.12,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 480.12,
+   "end": 480.244,
+   "part": 1
+  },
+  {
+   "w": "finish,",
+   "start": 480.244,
+   "end": 481.085,
+   "part": 1
+  },
+  {
+   "w": "my",
+   "start": 481.085,
+   "end": 481.29,
+   "part": 1
+  },
+  {
+   "w": "growth",
+   "start": 481.29,
+   "end": 481.653,
+   "part": 1
+  },
+  {
+   "w": "thesis",
+   "start": 481.653,
+   "end": 482.12,
+   "part": 1
+  },
+  {
+   "w": "was",
+   "start": 482.12,
+   "end": 482.312,
+   "part": 1
+  },
+  {
+   "w": "wrong.",
+   "start": 482.312,
+   "end": 483.188,
+   "part": 1
+  },
+  {
+   "w": "These",
+   "start": 483.467,
+   "end": 483.728,
+   "part": 1
+  },
+  {
+   "w": "rising",
+   "start": 483.728,
+   "end": 484.182,
+   "part": 1
+  },
+  {
+   "w": "costs",
+   "start": 484.182,
+   "end": 484.637,
+   "part": 1
+  },
+  {
+   "w": "reach",
+   "start": 484.637,
+   "end": 484.944,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 484.944,
+   "end": 485.114,
+   "part": 1
+  },
+  {
+   "w": "through",
+   "start": 485.114,
+   "end": 485.308,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 485.308,
+   "end": 485.399,
+   "part": 1
+  },
+  {
+   "w": "decisions",
+   "start": 485.399,
+   "end": 485.921,
+   "part": 1
+  },
+  {
+   "w": "made",
+   "start": 485.921,
+   "end": 486.149,
+   "part": 1
+  },
+  {
+   "w": "around",
+   "start": 486.149,
+   "end": 486.558,
+   "part": 1
+  },
+  {
+   "w": "you.",
+   "start": 486.558,
+   "end": 487.114,
+   "part": 1
+  },
+  {
+   "w": "An",
+   "start": 487.114,
+   "end": 487.239,
+   "part": 1
+  },
+  {
+   "w": "employer",
+   "start": 487.239,
+   "end": 487.887,
+   "part": 1
+  },
+  {
+   "w": "gives",
+   "start": 487.887,
+   "end": 488.114,
+   "part": 1
+  },
+  {
+   "w": "up",
+   "start": 488.114,
+   "end": 488.228,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 488.228,
+   "end": 488.319,
+   "part": 1
+  },
+  {
+   "w": "hire.",
+   "start": 488.319,
+   "end": 489.159,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 489.159,
+   "end": 489.273,
+   "part": 1
+  },
+  {
+   "w": "customer",
+   "start": 489.273,
+   "end": 489.773,
+   "part": 1
+  },
+  {
+   "w": "cancels",
+   "start": 489.773,
+   "end": 490.285,
+   "part": 1
+  },
+  {
+   "w": "an",
+   "start": 490.285,
+   "end": 490.444,
+   "part": 1
+  },
+  {
+   "w": "order.",
+   "start": 490.444,
+   "end": 491.228,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 491.228,
+   "end": 491.341,
+   "part": 1
+  },
+  {
+   "w": "supplier",
+   "start": 491.341,
+   "end": 491.921,
+   "part": 1
+  },
+  {
+   "w": "accepts",
+   "start": 491.921,
+   "end": 492.33,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 492.33,
+   "end": 492.421,
+   "part": 1
+  },
+  {
+   "w": "different",
+   "start": 492.421,
+   "end": 492.728,
+   "part": 1
+  },
+  {
+   "w": "buyer's",
+   "start": 492.728,
+   "end": 493.182,
+   "part": 1
+  },
+  {
+   "w": "terms.",
+   "start": 493.182,
+   "end": 494.126,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 494.405,
+   "end": 494.518,
+   "part": 1
+  },
+  {
+   "w": "three",
+   "start": 494.518,
+   "end": 494.859,
+   "part": 1
+  },
+  {
+   "w": "checks",
+   "start": 494.859,
+   "end": 495.188,
+   "part": 1
+  },
+  {
+   "w": "fit",
+   "start": 495.188,
+   "end": 495.405,
+   "part": 1
+  },
+  {
+   "w": "together",
+   "start": 495.405,
+   "end": 495.814,
+   "part": 1
+  },
+  {
+   "w": "now.",
+   "start": 495.814,
+   "end": 496.552,
+   "part": 1
+  },
+  {
+   "w": "What",
+   "start": 496.552,
+   "end": 496.711,
+   "part": 1
+  },
+  {
+   "w": "does",
+   "start": 496.711,
+   "end": 496.882,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 496.882,
+   "end": 497.007,
+   "part": 1
+  },
+  {
+   "w": "debt",
+   "start": 497.007,
+   "end": 497.279,
+   "part": 1
+  },
+  {
+   "w": "cost",
+   "start": 497.279,
+   "end": 497.655,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 497.655,
+   "end": 497.802,
+   "part": 1
+  },
+  {
+   "w": "dollars?",
+   "start": 497.802,
+   "end": 498.746,
+   "part": 1
+  },
+  {
+   "w": "Who",
+   "start": 498.746,
+   "end": 498.882,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 498.882,
+   "end": 499.087,
+   "part": 1
+  },
+  {
+   "w": "finance",
+   "start": 499.087,
+   "end": 499.609,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 499.609,
+   "end": 499.734,
+   "part": 1
+  },
+  {
+   "w": "wait?",
+   "start": 499.734,
+   "end": 500.438,
+   "part": 1
+  },
+  {
+   "w": "What",
+   "start": 500.438,
+   "end": 500.609,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 500.609,
+   "end": 500.746,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 500.746,
+   "end": 500.984,
+   "part": 1
+  },
+  {
+   "w": "time",
+   "start": 500.984,
+   "end": 501.325,
+   "part": 1
+  },
+  {
+   "w": "buying?",
+   "start": 501.325,
+   "end": 502.2,
+   "part": 1
+  },
+  {
+   "w": "Use",
+   "start": 502.2,
+   "end": 502.473,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 502.473,
+   "end": 502.643,
+   "part": 1
+  },
+  {
+   "w": "statements",
+   "start": 502.643,
+   "end": 503.132,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 503.132,
+   "end": 503.246,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 503.246,
+   "end": 503.37,
+   "part": 1
+  },
+  {
+   "w": "household",
+   "start": 503.37,
+   "end": 503.996,
+   "part": 1
+  },
+  {
+   "w": "numbers",
+   "start": 503.996,
+   "end": 504.405,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 504.405,
+   "end": 504.507,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 504.507,
+   "end": 504.597,
+   "part": 1
+  },
+  {
+   "w": "public",
+   "start": 504.597,
+   "end": 504.984,
+   "part": 1
+  },
+  {
+   "w": "filings",
+   "start": 504.984,
+   "end": 505.507,
+   "part": 1
+  },
+  {
+   "w": "linked",
+   "start": 505.507,
+   "end": 505.814,
+   "part": 1
+  },
+  {
+   "w": "below",
+   "start": 505.814,
+   "end": 506.2,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 506.2,
+   "end": 506.314,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 506.314,
+   "end": 506.405,
+   "part": 1
+  },
+  {
+   "w": "businesses.",
+   "start": 506.405,
+   "end": 507.541,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 507.82,
+   "end": 507.888,
+   "part": 1
+  },
+  {
+   "w": "renewal",
+   "start": 507.888,
+   "end": 508.297,
+   "part": 1
+  },
+  {
+   "w": "letter",
+   "start": 508.297,
+   "end": 508.615,
+   "part": 1
+  },
+  {
+   "w": "changed",
+   "start": 508.615,
+   "end": 509.115,
+   "part": 1
+  },
+  {
+   "w": "which",
+   "start": 509.115,
+   "end": 509.331,
+   "part": 1
+  },
+  {
+   "w": "workshop",
+   "start": 509.331,
+   "end": 509.82,
+   "part": 1
+  },
+  {
+   "w": "could",
+   "start": 509.82,
+   "end": 509.922,
+   "part": 1
+  },
+  {
+   "w": "afford",
+   "start": 509.922,
+   "end": 510.275,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 510.275,
+   "end": 510.388,
+   "part": 1
+  },
+  {
+   "w": "grow.",
+   "start": 510.388,
+   "end": 511.195,
+   "part": 1
+  },
+  {
+   "w": "Your",
+   "start": 511.195,
+   "end": 511.376,
+   "part": 1
+  },
+  {
+   "w": "missing",
+   "start": 511.376,
+   "end": 511.695,
+   "part": 1
+  },
+  {
+   "w": "raise",
+   "start": 511.695,
+   "end": 512.184,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 512.184,
+   "end": 512.285,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 512.285,
+   "end": 512.365,
+   "part": 1
+  },
+  {
+   "w": "competitor's",
+   "start": 512.365,
+   "end": 512.967,
+   "part": 1
+  },
+  {
+   "w": "new",
+   "start": 512.967,
+   "end": 513.138,
+   "part": 1
+  },
+  {
+   "w": "machine",
+   "start": 513.138,
+   "end": 513.615,
+   "part": 1
+  },
+  {
+   "w": "came",
+   "start": 513.615,
+   "end": 513.808,
+   "part": 1
+  },
+  {
+   "w": "out",
+   "start": 513.808,
+   "end": 513.922,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 513.922,
+   "end": 513.99,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 513.99,
+   "end": 514.104,
+   "part": 1
+  },
+  {
+   "w": "same",
+   "start": 514.104,
+   "end": 514.422,
+   "part": 1
+  },
+  {
+   "w": "squeeze.",
+   "start": 514.422,
+   "end": 515.399,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 515.399,
+   "end": 515.513,
+   "part": 1
+  },
+  {
+   "w": "business",
+   "start": 515.513,
+   "end": 515.888,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 515.888,
+   "end": 516.07,
+   "part": 1
+  },
+  {
+   "w": "keeps",
+   "start": 516.07,
+   "end": 516.354,
+   "part": 1
+  },
+  {
+   "w": "paying",
+   "start": 516.354,
+   "end": 516.797,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 516.797,
+   "end": 516.956,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 516.956,
+   "end": 517.24,
+   "part": 1
+  },
+  {
+   "w": "lose",
+   "start": 517.24,
+   "end": 517.49,
+   "part": 1
+  },
+  {
+   "w": "its",
+   "start": 517.49,
+   "end": 517.672,
+   "part": 1
+  },
+  {
+   "w": "future",
+   "start": 517.672,
+   "end": 518.047,
+   "part": 1
+  },
+  {
+   "w": "customers",
+   "start": 518.047,
+   "end": 518.593,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 518.593,
+   "end": 518.672,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 518.672,
+   "end": 518.729,
+   "part": 1
+  },
+  {
+   "w": "competitor",
+   "start": 518.729,
+   "end": 519.275,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 519.275,
+   "end": 519.411,
+   "part": 1
+  },
+  {
+   "w": "keeps",
+   "start": 519.411,
+   "end": 519.695,
+   "part": 1
+  },
+  {
+   "w": "building.",
+   "start": 519.695,
+   "end": 520.604,
+   "part": 1
+  },
+  {
+   "w": "I",
+   "start": 520.604,
+   "end": 520.729,
+   "part": 1
+  },
+  {
+   "w": "want",
+   "start": 520.729,
+   "end": 520.876,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 520.876,
+   "end": 520.956,
+   "part": 1
+  },
+  {
+   "w": "know",
+   "start": 520.956,
+   "end": 521.206,
+   "part": 1
+  },
+  {
+   "w": "who",
+   "start": 521.206,
+   "end": 521.343,
+   "part": 1
+  },
+  {
+   "w": "will",
+   "start": 521.343,
+   "end": 521.456,
+   "part": 1
+  },
+  {
+   "w": "have",
+   "start": 521.456,
+   "end": 521.638,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 521.638,
+   "end": 521.729,
+   "part": 1
+  },
+  {
+   "w": "stop",
+   "start": 521.729,
+   "end": 522.058,
+   "part": 1
+  },
+  {
+   "w": "building",
+   "start": 522.058,
+   "end": 522.661,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 522.661,
+   "end": 522.763,
+   "part": 1
+  },
+  {
+   "w": "who",
+   "start": 522.763,
+   "end": 522.865,
+   "part": 1
+  },
+  {
+   "w": "can",
+   "start": 522.865,
+   "end": 522.979,
+   "part": 1
+  },
+  {
+   "w": "afford",
+   "start": 522.979,
+   "end": 523.343,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 523.343,
+   "end": 523.456,
+   "part": 1
+  },
+  {
+   "w": "buy",
+   "start": 523.456,
+   "end": 523.706,
+   "part": 1
+  },
+  {
+   "w": "what",
+   "start": 523.706,
+   "end": 523.843,
+   "part": 1
+  },
+  {
+   "w": "comes",
+   "start": 523.843,
+   "end": 524.138,
+   "part": 1
+  },
+  {
+   "w": "next.",
+   "start": 524.138,
+   "end": 525.058,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 525.058,
+   "end": 525.161,
+   "part": 1
+  },
+  {
+   "w": "next",
+   "start": 525.161,
+   "end": 525.434,
+   "part": 1
+  },
+  {
+   "w": "breakdown",
+   "start": 525.434,
+   "end": 525.934,
+   "part": 1
+  },
+  {
+   "w": "applies",
+   "start": 525.934,
+   "end": 526.411,
+   "part": 1
+  },
+  {
+   "w": "these",
+   "start": 526.411,
+   "end": 526.638,
+   "part": 1
+  },
+  {
+   "w": "checks",
+   "start": 526.638,
+   "end": 526.956,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 526.956,
+   "end": 527.035,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 527.035,
+   "end": 527.115,
+   "part": 1
+  },
+  {
+   "w": "companies",
+   "start": 527.115,
+   "end": 527.626,
+   "part": 1
+  },
+  {
+   "w": "building",
+   "start": 527.626,
+   "end": 527.99,
+   "part": 1
+  },
+  {
+   "w": "power,",
+   "start": 527.99,
+   "end": 528.763,
+   "part": 1
+  },
+  {
+   "w": "data",
+   "start": 528.763,
+   "end": 529.115,
+   "part": 1
+  },
+  {
+   "w": "centers",
+   "start": 529.115,
+   "end": 529.593,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 529.593,
+   "end": 529.706,
+   "part": 1
+  },
+  {
+   "w": "connections",
+   "start": 529.706,
+   "end": 530.297,
+   "part": 1
+  },
+  {
+   "w": "behind",
+   "start": 530.297,
+   "end": 530.752,
+   "part": 1
+  },
+  {
+   "w": "AI.",
+   "start": 530.752,
+   "end": 531.729,
+   "part": 1
+  },
+  {
+   "w": "Subscribe",
+   "start": 531.729,
+   "end": 532.365,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 532.365,
+   "end": 532.479,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 532.479,
+   "end": 532.706,
+   "part": 1
+  },
+  {
+   "w": "breakdown.",
+   "start": 532.706,
+   "end": 533.775,
+   "part": 1
+  }
+ ],
+ "sentences": [
+  {
+   "text": "America's debt trap can cost you a raise.",
+   "start": 0.37,
+   "end": 3.394,
+   "part": 1
+  },
+  {
+   "text": "Your employer can make every payment and still cancel your promotion.",
+   "start": 3.394,
+   "end": 7.602,
+   "part": 1
+  },
+  {
+   "text": "The trouble starts before anyone goes broke.",
+   "start": 7.893,
+   "end": 10.643,
+   "part": 1
+  },
+  {
+   "text": "Imagine you own a workshop, and the machine loan comes due.",
+   "start": 10.922,
+   "end": 14.388,
+   "part": 1
+  },
+  {
+   "text": "Your crew has orders waiting, but the bank sends a more expensive renewal quote.",
+   "start": 14.388,
+   "end": 18.922,
+   "part": 1
+  },
+  {
+   "text": "The extra interest takes the money you set aside for another worker.",
+   "start": 18.922,
+   "end": 22.456,
+   "part": 1
+  },
+  {
+   "text": "You delay the hire.",
+   "start": 22.456,
+   "end": 23.888,
+   "part": 1
+  },
+  {
+   "text": "Your crew covers the extra orders.",
+   "start": 23.888,
+   "end": 26.036,
+   "part": 1
+  },
+  {
+   "text": "But the bank gets paid while your business loses room to grow.",
+   "start": 26.036,
+   "end": 29.604,
+   "part": 1
+  },
+  {
+   "text": "Stay for three checks you can run against your own bills and public data to help protect your money from market mechanics.",
+   "start": 29.604,
+   "end": 36.228,
+   "part": 1
+  },
+  {
+   "text": "Your own monthly bills will show you exactly where to start the first check.",
+   "start": 36.648,
+   "end": 40.898,
+   "part": 1
+  },
+  {
+   "text": "I worked in Business Risk at JPMorgan, where I learned to ask what each payment cost the person making it.",
+   "start": 41.177,
+   "end": 47.325,
+   "part": 1
+  },
+  {
+   "text": "Refinancing replaces an old loan with a new one, at a new price.",
+   "start": 47.325,
+   "end": 51.734,
+   "part": 1
+  },
+  {
+   "text": "That renewal letter changes what the whole business can afford.",
+   "start": 51.734,
+   "end": 55.29,
+   "part": 1
+  },
+  {
+   "text": "Follow the cutback from the owner to the worker, the customer and the supplier.",
+   "start": 55.29,
+   "end": 60.03,
+   "part": 1
+  },
+  {
+   "text": "Each one gives up something before anybody misses a payment.",
+   "start": 60.03,
+   "end": 63.609,
+   "part": 1
+  },
+  {
+   "text": "The need to refinance reaches beyond the workshop.",
+   "start": 63.888,
+   "end": 66.91,
+   "part": 1
+  },
+  {
+   "text": "Governments, businesses and households have old debt coming due, and they all need someone willing to finance the replacement.",
+   "start": 66.91,
+   "end": 74.468,
+   "part": 1
+  },
+  {
+   "text": "The owner plans to put the next purchase on hold until borrowing gets cheaper, then pick up where the business left off.",
+   "start": 74.468,
+   "end": 81.342,
+   "part": 1
+  },
+  {
+   "text": "Like the workshop, Washington must refinance maturing debt at current borrowing costs.",
+   "start": 81.621,
+   "end": 86.7,
+   "part": 1
+  },
+  {
+   "text": "In August, federal debt crossed forty trillion dollars as Washington kept borrowing across the gap between spending and revenue.",
+   "start": 86.7,
+   "end": 93.916,
+   "part": 1
+  },
+  {
+   "text": "Through August, estimated net interest exceeded a trillion dollars for the fiscal year.",
+   "start": 93.916,
+   "end": 98.95,
+   "part": 1
+  },
+  {
+   "text": "That was about twenty-two cents for every dollar of federal revenue.",
+   "start": 98.95,
+   "end": 102.791,
+   "part": 1
+  },
+  {
+   "text": "Interest itself adds to the budget Washington has to finance.",
+   "start": 102.791,
+   "end": 106.723,
+   "part": 1
+  },
+  {
+   "text": "Faster spending without matching revenue means more borrowing and more interest for future budgets.",
+   "start": 107.166,
+   "end": 112.939,
+   "part": 1
+  },
+  {
+   "text": "That puts Washington in the market for money alongside businesses like our workshop.",
+   "start": 113.218,
+   "end": 117.798,
+   "part": 1
+  },
+  {
+   "text": "On September seventeenth, twenty-year Treasury yields were above five percent.",
+   "start": 117.798,
+   "end": 122.615,
+   "part": 1
+  },
+  {
+   "text": "Put yourself in the lender's seat.",
+   "start": 122.615,
+   "end": 124.479,
+   "part": 1
+  },
+  {
+   "text": "The owner asks the bank to wait for a Fed cut, but the renewal letter still has to beat Washington's five-percent offer.",
+   "start": 124.479,
+   "end": 131.411,
+   "part": 1
+  },
+  {
+   "text": "Why accept less from a business that might not pay you back?",
+   "start": 131.411,
+   "end": 134.718,
+   "part": 1
+  },
+  {
+   "text": "The Fed sets an overnight target; investors set the price of lending for years.",
+   "start": 134.997,
+   "end": 139.735,
+   "part": 1
+  },
+  {
+   "text": "Those investors weigh inflation, time and the risk of nonpayment.",
+   "start": 139.735,
+   "end": 143.985,
+   "part": 1
+  },
+  {
+   "text": "An overnight cut does not erase the risks of lending for years.",
+   "start": 143.985,
+   "end": 147.747,
+   "part": 1
+  },
+  {
+   "text": "The quote still has to offer a price a lender will accept.",
+   "start": 147.747,
+   "end": 150.974,
+   "part": 1
+  },
+  {
+   "text": "But the existing loan comes due now.",
+   "start": 150.974,
+   "end": 153.948,
+   "part": 1
+  },
+  {
+   "text": "The debt trap is having to accept the new borrowing cost because you can't afford to wait.",
+   "start": 153.948,
+   "end": 159.118,
+   "part": 1
+  },
+  {
+   "text": "So the owner raises repair prices to cover the bigger interest bill.",
+   "start": 159.397,
+   "end": 163.238,
+   "part": 1
+  },
+  {
+   "text": "Imagine a delivery company gets that bill for its vans.",
+   "start": 163.238,
+   "end": 166.567,
+   "part": 1
+  },
+  {
+   "text": "The manager has a choice:",
+   "start": 166.567,
+   "end": 168.204,
+   "part": 1
+  },
+  {
+   "text": "buy a replacement van or keep the old one working.",
+   "start": 168.204,
+   "end": 171.306,
+   "part": 1
+  },
+  {
+   "text": "With repairs taking more of the budget, the manager postpones the purchase.",
+   "start": 171.306,
+   "end": 175.704,
+   "part": 1
+  },
+  {
+   "text": "The vehicle dealer loses the sale.",
+   "start": 175.704,
+   "end": 177.943,
+   "part": 1
+  },
+  {
+   "text": "If fewer orders mean less overtime, an employee takes home less pay.",
+   "start": 177.943,
+   "end": 182.556,
+   "part": 1
+  },
+  {
+   "text": "And this squeeze isn't just for businesses; it reaches that employee's own bills.",
+   "start": 182.835,
+   "end": 187.437,
+   "part": 1
+  },
+  {
+   "text": "Suppose that employee carries roughly sixty-six hundred dollars on a credit card charging twenty-two point four percent.",
+   "start": 187.437,
+   "end": 194.528,
+   "part": 1
+  },
+  {
+   "text": "The annual interest is roughly fifteen hundred dollars if the balance stays put.",
+   "start": 194.528,
+   "end": 199.267,
+   "part": 1
+  },
+  {
+   "text": "Losing overtime makes that existing bill harder to carry, even if the card's rate doesn't change.",
+   "start": 199.267,
+   "end": 205.358,
+   "part": 1
+  },
+  {
+   "text": "Your first check is what the debt costs in dollars.",
+   "start": 205.637,
+   "end": 208.66,
+   "part": 1
+  },
+  {
+   "text": "Multiply the balance by the annual rate for a rough interest bill, then compare it with the income paying it.",
+   "start": 208.66,
+   "end": 214.955,
+   "part": 1
+  },
+  {
+   "text": "Use the actual statement for payments and compounding.",
+   "start": 214.955,
+   "end": 218.171,
+   "part": 1
+  },
+  {
+   "text": "That comparison also helps explain why two businesses can face the same rates and head in opposite directions.",
+   "start": 218.171,
+   "end": 224.864,
+   "part": 1
+  },
+  {
+   "text": "This is why I watch decisions that never become transactions.",
+   "start": 225.143,
+   "end": 229.063,
+   "part": 1
+  },
+  {
+   "text": "A canceled hire doesn't appear in the default rate.",
+   "start": 229.063,
+   "end": 232.041,
+   "part": 1
+  },
+  {
+   "text": "A postponed machine doesn't show up as a bankrupt factory.",
+   "start": 232.041,
+   "end": 235.666,
+   "part": 1
+  },
+  {
+   "text": "Back at the workshop, the owner cancels a second machine planned for the expansion.",
+   "start": 235.945,
+   "end": 240.615,
+   "part": 1
+  },
+  {
+   "text": "The equipment supplier had set aside production time for that order.",
+   "start": 240.615,
+   "end": 244.309,
+   "part": 1
+  },
+  {
+   "text": "Now it needs another buyer.",
+   "start": 244.309,
+   "end": 246.207,
+   "part": 1
+  },
+  {
+   "text": "Imagine a competitor offers a multiyear purchase agreement in exchange for a better price and a guaranteed delivery slot.",
+   "start": 246.207,
+   "end": 253.479,
+   "part": 1
+  },
+  {
+   "text": "The supplier gets dependable orders.",
+   "start": 253.479,
+   "end": 255.956,
+   "part": 1
+  },
+  {
+   "text": "The competitor gets the machine and room to negotiate.",
+   "start": 255.956,
+   "end": 259.399,
+   "part": 1
+  },
+  {
+   "text": "The workshop's canceled order is another company's opening.",
+   "start": 259.678,
+   "end": 263.337,
+   "part": 1
+  },
+  {
+   "text": "When demand returns, that competitor has the capacity to take it.",
+   "start": 263.616,
+   "end": 267.764,
+   "part": 1
+  },
+  {
+   "text": "The workshop owner still has the old machine and a crew working around its limits.",
+   "start": 267.764,
+   "end": 272.866,
+   "part": 1
+  },
+  {
+   "text": "That contest over the next machine is how I look at AI infrastructure.",
+   "start": 273.145,
+   "end": 277.509,
+   "part": 1
+  },
+  {
+   "text": "Who can keep building while a rival has to stop?",
+   "start": 277.509,
+   "end": 280.406,
+   "part": 1
+  },
+  {
+   "text": "The same funding squeeze that costs someone a raise can change who owns the equipment their employer needs.",
+   "start": 280.406,
+   "end": 287.032,
+   "part": 1
+  },
+  {
+   "text": "Data centers need power, cooling and connections before they can serve customers.",
+   "start": 287.311,
+   "end": 291.958,
+   "part": 1
+  },
+  {
+   "text": "A chip can't do much sitting in a building that hasn't been connected to the grid.",
+   "start": 291.958,
+   "end": 296.003,
+   "part": 1
+  },
+  {
+   "text": "A builder can burn cash getting that capacity ready and still be worth backing.",
+   "start": 296.003,
+   "end": 300.617,
+   "part": 1
+  },
+  {
+   "text": "I call that strategy accretive burn:",
+   "start": 300.617,
+   "end": 303.049,
+   "part": 1
+  },
+  {
+   "text": "fund the build long enough to earn a valuable position.",
+   "start": 303.049,
+   "end": 306.071,
+   "part": 1
+  },
+  {
+   "text": "The earnings don't have to outrun spending immediately.",
+   "start": 306.071,
+   "end": 309.321,
+   "part": 1
+  },
+  {
+   "text": "The funding has to last until management can deliver.",
+   "start": 309.321,
+   "end": 312.685,
+   "part": 1
+  },
+  {
+   "text": "A company borrowing because customers are leaving faces a different problem.",
+   "start": 313.106,
+   "end": 317.742,
+   "part": 1
+  },
+  {
+   "text": "Your second check is who can finance the wait.",
+   "start": 318.021,
+   "end": 320.509,
+   "part": 1
+  },
+  {
+   "text": "Your loan agreement tells you when a rate resets or a balance comes due.",
+   "start": 320.509,
+   "end": 324.1,
+   "part": 1
+  },
+  {
+   "text": "For a public company, open its latest quarterly or annual report on the SEC's website.",
+   "start": 324.1,
+   "end": 329.544,
+   "part": 1
+  },
+  {
+   "text": "Search for liquidity and debt maturities.",
+   "start": 329.544,
+   "end": 331.919,
+   "part": 1
+  },
+  {
+   "text": "Add the company's construction-spending guidance and contractual commitments.",
+   "start": 331.919,
+   "end": 335.873,
+   "part": 1
+  },
+  {
+   "text": "Compare the money it can use with the bills arriving before the project earns anything.",
+   "start": 335.873,
+   "end": 340.509,
+   "part": 1
+  },
+  {
+   "text": "An undrawn credit line counts only if the company meets the conditions to use it.",
+   "start": 340.509,
+   "end": 345.43,
+   "part": 1
+  },
+  {
+   "text": "Imagine a builder needs a hundred million dollars to finish and has sixty million available.",
+   "start": 345.716,
+   "end": 351.561,
+   "part": 1
+  },
+  {
+   "text": "That leaves forty million to find before the project can earn its keep.",
+   "start": 351.561,
+   "end": 355.609,
+   "part": 1
+  },
+  {
+   "text": "My tripwire is that forty-million-dollar gap.",
+   "start": 355.609,
+   "end": 358.835,
+   "part": 1
+  },
+  {
+   "text": "Until committed funding closes it to zero, the project isn't fully funded.",
+   "start": 358.835,
+   "end": 363.585,
+   "part": 1
+  },
+  {
+   "text": "A rival with the money secured can keep the crews working; this builder has to negotiate for another cheque.",
+   "start": 363.585,
+   "end": 370.121,
+   "part": 1
+  },
+  {
+   "text": "Now put a real company's report beside that example.",
+   "start": 370.407,
+   "end": 373.44,
+   "part": 1
+  },
+  {
+   "text": "NVIDIA's July balance sheet showed about twenty-two billion dollars in cash and equivalents, against one billion in short-term debt.",
+   "start": 373.44,
+   "end": 380.895,
+   "part": 1
+  },
+  {
+   "text": "Those are two lines you can find yourself in the report linked below.",
+   "start": 380.895,
+   "end": 384.463,
+   "part": 1
+  },
+  {
+   "text": "Other bills and commitments still count, so check those before treating the difference as spending money.",
+   "start": 384.463,
+   "end": 389.804,
+   "part": 1
+  },
+  {
+   "text": "Then open the cash-flow table:",
+   "start": 389.804,
+   "end": 391.986,
+   "part": 1
+  },
+  {
+   "text": "NVIDIA generated about twenty-one billion dollars in free cash flow during that quarter.",
+   "start": 391.986,
+   "end": 397.304,
+   "part": 1
+  },
+  {
+   "text": "Its business was producing cash after capital spending, instead of needing investors to fund every next step.",
+   "start": 397.725,
+   "end": 404.566,
+   "part": 1
+  },
+  {
+   "text": "That's why I watch a company like NVIDIA as a potential buyer of capacity when somebody else needs financing.",
+   "start": 404.566,
+   "end": 411.566,
+   "part": 1
+  },
+  {
+   "text": "Remember the workshop owner who couldn't afford the next machine?",
+   "start": 411.845,
+   "end": 415.549,
+   "part": 1
+  },
+  {
+   "text": "Now put NVIDIA on the other side of that negotiation.",
+   "start": 415.549,
+   "end": 419.027,
+   "part": 1
+  },
+  {
+   "text": "Suppose NVIDIA's shares fall by a quarter, while a smaller infrastructure company's fall by two-thirds.",
+   "start": 419.306,
+   "end": 425.533,
+   "part": 1
+  },
+  {
+   "text": "Both stocks fell.",
+   "start": 425.533,
+   "end": 427.033,
+   "part": 1
+  },
+  {
+   "text": "But who has to sell, and who can afford to buy?",
+   "start": 427.033,
+   "end": 429.874,
+   "part": 1
+  },
+  {
+   "text": "The smaller company still needs money to finish its site.",
+   "start": 430.153,
+   "end": 433.368,
+   "part": 1
+  },
+  {
+   "text": "NVIDIA's cash flow gives it options:",
+   "start": 433.368,
+   "end": 435.903,
+   "part": 1
+  },
+  {
+   "text": "fund the project, negotiate access, or pursue an acquisition.",
+   "start": 435.903,
+   "end": 440.335,
+   "part": 1
+  },
+  {
+   "text": "A power connection doesn't become useless because its owner's shares fall.",
+   "start": 440.613,
+   "end": 445.033,
+   "part": 1
+  },
+  {
+   "text": "What changes is who can afford to control it.",
+   "start": 445.033,
+   "end": 448.091,
+   "part": 1
+  },
+  {
+   "text": "Your third check is what the runway buys.",
+   "start": 448.37,
+   "end": 450.835,
+   "part": 1
+  },
+  {
+   "text": "Write management's promised delivery date beside your funding calculation.",
+   "start": 450.835,
+   "end": 454.721,
+   "part": 1
+  },
+  {
+   "text": "In the next report, check whether customers could actually use what it built.",
+   "start": 454.721,
+   "end": 458.812,
+   "part": 1
+  },
+  {
+   "text": "A finished shell without power won't do the job.",
+   "start": 458.812,
+   "end": 461.631,
+   "part": 1
+  },
+  {
+   "text": "For NVIDIA, the same July report recorded eighty-nine billion dollars in data-center revenue, more than double the year before.",
+   "start": 461.631,
+   "end": 469.153,
+   "part": 1
+  },
+  {
+   "text": "Customers were already paying for what the company supplied.",
+   "start": 469.153,
+   "end": 472.403,
+   "part": 1
+  },
+  {
+   "text": "A new site still waiting for power hasn't reached that stage.",
+   "start": 472.403,
+   "end": 475.949,
+   "part": 1
+  },
+  {
+   "text": "If a funded builder repeatedly misses delivery and needs more money to finish, my growth thesis was wrong.",
+   "start": 476.37,
+   "end": 483.188,
+   "part": 1
+  },
+  {
+   "text": "These rising costs reach you through the decisions made around you.",
+   "start": 483.467,
+   "end": 487.114,
+   "part": 1
+  },
+  {
+   "text": "An employer gives up a hire.",
+   "start": 487.114,
+   "end": 489.159,
+   "part": 1
+  },
+  {
+   "text": "A customer cancels an order.",
+   "start": 489.159,
+   "end": 491.228,
+   "part": 1
+  },
+  {
+   "text": "A supplier accepts a different buyer's terms.",
+   "start": 491.228,
+   "end": 494.126,
+   "part": 1
+  },
+  {
+   "text": "The three checks fit together now.",
+   "start": 494.405,
+   "end": 496.552,
+   "part": 1
+  },
+  {
+   "text": "What does the debt cost in dollars?",
+   "start": 496.552,
+   "end": 498.746,
+   "part": 1
+  },
+  {
+   "text": "Who can finance the wait?",
+   "start": 498.746,
+   "end": 500.438,
+   "part": 1
+  },
+  {
+   "text": "What is that time buying?",
+   "start": 500.438,
+   "end": 502.2,
+   "part": 1
+  },
+  {
+   "text": "Use your statements for the household numbers and the public filings linked below for the businesses.",
+   "start": 502.2,
+   "end": 507.541,
+   "part": 1
+  },
+  {
+   "text": "The renewal letter changed which workshop could afford to grow.",
+   "start": 507.82,
+   "end": 511.195,
+   "part": 1
+  },
+  {
+   "text": "Your missing raise and the competitor's new machine came out of the same squeeze.",
+   "start": 511.195,
+   "end": 515.399,
+   "part": 1
+  },
+  {
+   "text": "A business that keeps paying can still lose its future customers to a competitor that keeps building.",
+   "start": 515.399,
+   "end": 520.604,
+   "part": 1
+  },
+  {
+   "text": "I want to know who will have to stop building and who can afford to buy what comes next.",
+   "start": 520.604,
+   "end": 525.058,
+   "part": 1
+  },
+  {
+   "text": "The next breakdown applies these checks to the companies building power, data centers and connections behind AI.",
+   "start": 525.058,
+   "end": 531.729,
+   "part": 1
+  },
+  {
+   "text": "Subscribe for that breakdown.",
+   "start": 531.729,
+   "end": 533.775,
+   "part": 1
+  }
+ ],
+ "edit_pauses_applied": true,
+ "tempo_field_applied": true,
+ "dead_space_compressed": true,
+ "paused_audio": "audio/episode-paused.mp3",
+ "tempo_field": {
+  "chunks": 4,
+  "cuts": 27,
+  "inserts": 2,
+  "inserted_s": 0.85,
+  "rate_min": 1.013,
+  "rate_max": 1.1,
+  "max_rate_step": 0.087
+ }
+}

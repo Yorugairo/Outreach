@@ -1,0 +1,233 @@
+{
+  "schema": "american-debt-trap.v15.build-receipt.v1",
+  "episode_id": "american-debt-trap-v15",
+  "segment": "pilot",
+  "quarantine": true,
+  "visual_approval": {
+    "state": "pending",
+    "claim": "not visually approved"
+  },
+  "release": {
+    "published": false,
+    "final_voice": false,
+    "git_action": false
+  },
+  "script": {
+    "path": "docs/research/runs/american-debt-trap-20260920/script-review/REVISED-V15-VO.txt",
+    "spoken_sha256": "f734cea102074ce6201eac1458804991655883a1d54c66fc54e282738499eeac",
+    "token_aligned": true
+  },
+  "take": {
+    "words_path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/build-private/v15/_prepared-take/scratch-kokoro.words.json",
+    "words_sha256": "10389edc237b37d761472b27a125b83dd3cc678363f210be94ab1da4c03e27ac",
+    "audio_path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/build-private/v15/_prepared-take/scratch-kokoro.mp3",
+    "audio_sha256": "82b3b7e9056e6bd5620d05c48e9ec45c4d2edcb70451c00c5ed685413c352440",
+    "take_stem": "scratch-kokoro"
+  },
+  "boundary": {
+    "target_s": 180.975,
+    "end_s": 180.225,
+    "end_word_index": 450,
+    "closing_sentence": "The debt trap is having to accept the new borrowing cost because you can't afford to wait."
+  },
+  "opening_gate": {
+    "report_path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/build-private/v15/pilot-clean/GATES-OPENING-V15.md",
+    "report_sha256": "8a61f528c64431c0ecb3f4458b510030c5ed41f0260f45f23ec7b0cf2059d66b",
+    "exit_code": 0,
+    "fail": 0,
+    "warn": 2,
+    "pass": 48,
+    "judge": 14,
+    "force_used": false
+  },
+  "timelines": {
+    "full_measured_path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/build-private/v15/pilot-clean/gate-full-v13/timeline.json",
+    "full_measured_sha256": "01bd5a756feb8625a3bb94eecf243932b35270f85941f4680f7ac06555841caf",
+    "segment_path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/build-private/v15/pilot-clean/timeline.json",
+    "segment_sha256": "6f7d4f933848395893b86d3fef39185a8f4ecd4fa681c4b0ae2ccbdae3dfa7c4"
+  },
+  "shot_table": {
+    "path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/build-private/v15/pilot-clean/SHOT-TABLE-V15-EFFECTIVE.py",
+    "sha256": "b61454f15c1124584eb65db400cc1f10934399933a26c543929472abf7d54487",
+    "authored_path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/SHOT-TABLE-V15.py",
+    "authored_sha256": "7c85f164f1a5b0203836f181811506425329063e2b121d1b3f3f7ec21d0abc85"
+  },
+  "assets": [
+    {
+      "asset_id": "w2-owner-workshop-world-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/imagegen-complete-worlds-v1/w2-owner-workshop-world-v1.png",
+      "sha256": "066a00512921957934d685306eb6e5efad3ea2b5b89ebf0f0ffa4d60461e220d",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/asset-approvals-20260919/w2-owner-workshop-world-v1.json",
+      "approval_sha256": "9ff18765574d6e5d9d4425ccfca8e27b45069cae83df0e3ed6a47673c7607d7b",
+      "approval_field": "operator_decision",
+      "approval_value": "approved_for_composition"
+    },
+    {
+      "asset_id": "w4-finance-evidence-hall-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/imagegen-complete-worlds-v1/finance-evidence-hall-hosted-v3-cream.png",
+      "sha256": "5c5e68ff73da5d5f1f16c1fb6739ecb8ac0bd46fab76b7f6d40b69dd97351d92",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/asset-approvals-20260919/w4-finance-evidence-hall-v1.json",
+      "approval_sha256": "2dc83076f43695a051d64d9b78ae9c252c67f557032a2c8f3c89d96d0f8656df",
+      "approval_field": "operator_decision",
+      "approval_value": "approved_for_composition"
+    },
+    {
+      "asset_id": "p2-owner-loan-folio-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/imagegen-pilot-v1/p2-owner-loan-folio-candidate-v1.png",
+      "sha256": "0a2615451066bf508ce86470714f4c8e43791a5f20961c4ca18c91c92d14cba5",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/asset-approvals-20260919/p2-owner-loan-folio-v1.json",
+      "approval_sha256": "f0fcc4787d7c9600dae1c753aec5522129462b40f003989286ee9cb840e585f5",
+      "approval_field": "operator_decision",
+      "approval_value": "approved_for_composition"
+    },
+    {
+      "asset_id": "world-workbench-triad-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-1/objects/world-workbench-triad-v1.png",
+      "sha256": "01d08817c8e2a0d0a1e3ede3ba56cf98a792991824f8defbe1e52618ba22830c",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-1/approvals.json",
+      "approval_sha256": "972955cf899cfad33c3627b2459ffbbb15cc85c2f870d7f3b08313d117454dc0",
+      "approval_field": "operator_approved",
+      "approval_value": "world-workbench-triad-v1"
+    },
+    {
+      "asset_id": "world-adviser-signature-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/objects/world-adviser-signature-v1.png",
+      "sha256": "02516ddf660bda77b9dc5cfa1956f056cc72d3ed8ea54910010df6f292a948a3",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/approvals.json",
+      "approval_sha256": "13292d6d1c63d4bb762c5617dccfa1ea8dd9d5b9586ce367547db97470f14efa",
+      "approval_field": "operator_approved",
+      "approval_value": "world-adviser-signature-v1"
+    },
+    {
+      "asset_id": "world-dawn-factory-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/objects/world-dawn-factory-v1.png",
+      "sha256": "94619fcde7dcbd7b26c2fddda69da5173b78b4d632197eed6b04a1f3b0921ee2",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/approvals.json",
+      "approval_sha256": "13292d6d1c63d4bb762c5617dccfa1ea8dd9d5b9586ce367547db97470f14efa",
+      "approval_field": "operator_approved",
+      "approval_value": "world-dawn-factory-v1"
+    },
+    {
+      "asset_id": "world-ledger-page-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/objects/world-ledger-page-v1.png",
+      "sha256": "6d64ccdeea464b6152301cc94d6641de7cf5c6eca6d0f0969bce54fad475aa4f",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/approvals.json",
+      "approval_sha256": "13292d6d1c63d4bb762c5617dccfa1ea8dd9d5b9586ce367547db97470f14efa",
+      "approval_field": "operator_approved",
+      "approval_value": "world-ledger-page-v1"
+    },
+    {
+      "asset_id": "world-internal-memo-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/objects/world-internal-memo-v1.png",
+      "sha256": "361b11c646d2db991b3ec7a27240379d3d15b6259483650e21ddd0ad47b9a3f8",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-3/approvals.json",
+      "approval_sha256": "13292d6d1c63d4bb762c5617dccfa1ea8dd9d5b9586ce367547db97470f14efa",
+      "approval_field": "operator_approved",
+      "approval_value": "world-internal-memo-v1"
+    },
+    {
+      "asset_id": "world-banker-apartment-v2",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-banker-apartment-v2.png",
+      "sha256": "5bb33068665db7bc1ba5856e42dac715d556ab5c1a3f3c6db83eaa1ffb35e0c3",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/approvals.json",
+      "approval_sha256": "2d3c3c5e7d44097286eb254f066cf423a2707771dfc13c29b4173e234b698b5c",
+      "approval_field": "operator_approved",
+      "approval_value": "world-banker-apartment-v2"
+    },
+    {
+      "asset_id": "world-trading-desk-dark",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/objects/world-trading-desk-dark.png",
+      "sha256": "7f08b99d0615e062070e966f442f658022ba6fc40335f9c8ef5b73edf954f8a5",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/approvals.json",
+      "approval_sha256": "a07c9664e87b0534a5481b3270460d3ba17ae9a4129bfe67062a31972202ec8b",
+      "approval_field": "operator_approved",
+      "approval_value": "world-trading-desk-dark"
+    },
+    {
+      "asset_id": "world-treasury-cash-count",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/objects/world-treasury-cash-count.png",
+      "sha256": "13515928ae8effe827115175b4e20070d674e0076ca989ca9231181b0986bb19",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/approvals.json",
+      "approval_sha256": "a07c9664e87b0534a5481b3270460d3ba17ae9a4129bfe67062a31972202ec8b",
+      "approval_field": "operator_approved",
+      "approval_value": "world-treasury-cash-count"
+    },
+    {
+      "asset_id": "world-bond-prospectus",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/objects/world-bond-prospectus.png",
+      "sha256": "fb85d6d517464fd31fd36198406bf5e7c0bf6fc79a104358c761fed8d7aff6e4",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/approvals.json",
+      "approval_sha256": "a07c9664e87b0534a5481b3270460d3ba17ae9a4129bfe67062a31972202ec8b",
+      "approval_field": "operator_approved",
+      "approval_value": "world-bond-prospectus"
+    },
+    {
+      "asset_id": "world-lease-contracts-bound",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/objects/world-lease-contracts-bound.png",
+      "sha256": "d8e2f3040c6857c4be3afad41b317eb6e2ccf414da14a1d6c1045ba84a9f3bcb",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/approvals.json",
+      "approval_sha256": "a07c9664e87b0534a5481b3270460d3ba17ae9a4129bfe67062a31972202ec8b",
+      "approval_field": "operator_approved",
+      "approval_value": "world-lease-contracts-bound"
+    },
+    {
+      "asset_id": "world-signature-close",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/objects/world-signature-close.png",
+      "sha256": "f0fece2618bd287d2ac77a49911842820f257e4562b1c29c6f08724efadc9f9a",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-5/approvals.json",
+      "approval_sha256": "a07c9664e87b0534a5481b3270460d3ba17ae9a4129bfe67062a31972202ec8b",
+      "approval_field": "operator_approved",
+      "approval_value": "world-signature-close"
+    },
+    {
+      "asset_id": "world-memory-fab-floor-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-memory-fab-floor-v1.png",
+      "sha256": "950cfc215705cb2ddded6bc806a58f24041b3110798f8f0e5438f0a8221e2e49",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/approvals.json",
+      "approval_sha256": "2d3c3c5e7d44097286eb254f066cf423a2707771dfc13c29b4173e234b698b5c",
+      "approval_field": "operator_approved",
+      "approval_value": "world-memory-fab-floor-v1"
+    },
+    {
+      "asset_id": "world-till-drawer-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-till-drawer-v1.png",
+      "sha256": "8d962cb3d7a4ee58e69bdd3fcd0667ea39469d1a8e20e0a4fd6169bda8a0c3e6",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/approvals.json",
+      "approval_sha256": "2d3c3c5e7d44097286eb254f066cf423a2707771dfc13c29b4173e234b698b5c",
+      "approval_field": "operator_approved",
+      "approval_value": "world-till-drawer-v1"
+    },
+    {
+      "asset_id": "world-receipt-macro-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-receipt-macro-v1.png",
+      "sha256": "cb7503e750ebc2765040d426a9cf1cb8268c9ab110538bab4b64482c5808a622",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/approvals.json",
+      "approval_sha256": "2d3c3c5e7d44097286eb254f066cf423a2707771dfc13c29b4173e234b698b5c",
+      "approval_field": "operator_approved",
+      "approval_value": "world-receipt-macro-v1"
+    },
+    {
+      "asset_id": "world-signal-box-levers-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-signal-box-levers-v1.png",
+      "sha256": "7ff73b75cd273b701a0dbe81f2635ac1efa13c7fb22bdb6c1d058daa89e7228d",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/approvals.json",
+      "approval_sha256": "2d3c3c5e7d44097286eb254f066cf423a2707771dfc13c29b4173e234b698b5c",
+      "approval_field": "operator_approved",
+      "approval_value": "world-signal-box-levers-v1"
+    },
+    {
+      "asset_id": "world-mike-risk-underwriting-v1",
+      "path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/review/imagegen-finance-world-v1/world-mike-risk-underwriting-v1.png",
+      "sha256": "2cb447be0827ac35f8dc81cdc8a3fede7609ac0724c24afa56bc7264406f85e5",
+      "approval_path": "content/video_engine/projects/systems-and-blowups/american-debt-trap/review/imagegen-finance-world-v1/world-mike-risk-underwriting-v1.approval.json",
+      "approval_sha256": "3a3d3cdef143e0777c9007f27f208d184b1ea22cbf5bcf5ff686361d96028832",
+      "approval_field": "operator_decision",
+      "approval_value": "approved_for_composition"
+    }
+  ],
+  "compiled": {
+    "player_manifest": "d8e3f1bcce3b278b0f27387f779781f5b03976a0772a63815e7babc272c2126f",
+    "scene_timeline": "f9ea3b48d072f266a22fb5d4fdcd86eb8a3c460cfdd9e9b3f1184760a02dfeb3",
+    "review_only": true
+  }
+}
