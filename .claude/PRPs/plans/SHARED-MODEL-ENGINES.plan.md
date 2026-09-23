@@ -160,7 +160,7 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Evidence: `M/assets.py`, `M/importers.py`, `F/assets/`, `test_model_assets.py` and `.gitattributes` landed in `708b64d` after Sol escalation preserved the core from three bounded Luna failures. The independent reviewer found missing `.blend` dependency declarations, overly strict in-root glTF `../` handling, and unbounded bundle intake; fixes and follow-up URI-count hardening passed 26 focused tests (two Windows symlink skips), with the combined relevant suite at 143 passed, three skips. Parent hardened T2 render approval so review-only intake records cannot serve as approvals (`aa6b634`). No provider calls or Blender execution; `.blend` packed/dependency claims require later Blender inspection and the 80-byte fixture is diagnostic, not art.
 
 ### T4a: Native preset authoring tooling
-- Status: pending
+- Status: running (diagnostic editable preset family; no art approval)
 - Owner: implementation_luna for bounded Blender authoring; parent art direction/integration
 - Depends on: T3
 - Write set: `M/blender/authoring.py`, `M/blender/presets.py`; `content/video_engine/assets/modeling/native/`; `F/presets/`; `content/video_engine/tests/test_model_presets.py`; `B/art/`
