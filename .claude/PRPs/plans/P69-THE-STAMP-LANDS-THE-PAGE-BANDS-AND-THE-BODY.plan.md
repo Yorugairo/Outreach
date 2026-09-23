@@ -453,7 +453,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T7: R26-230, R26-222 and R26-231 closed on their tests; the one owed test added
-- Status: pending
+- Status: done
 - Owner: junior_developer (the test); parent (the rows)
 - Depends on: T2, T3, T4 merged (the H-bed rebuild imports the gate and the cues)
 - Write set: `content/video_engine/tests/test_restage_through_the_compiler.py` (new), `docs/content-video-engine/BACKLOG.md` (rows R26-230, R26-222, R26-231; R26-247's residual at T5's merge), `docs/content-video-engine/CAPABILITIES.md` (one line each)
@@ -462,9 +462,9 @@ verbatim tails and are left pending.
 - Expected RED: none - this characterizes code already on main; a failure is the finding and keeps the row open
 - Validate: `python -m pytest content/video_engine/tests/test_fed_full_stage_bands.py content/video_engine/tests/test_fed_page_build_span.py content/video_engine/tests/test_fed_axis_handoff.py content/video_engine/tests/test_restage_through_the_compiler.py content/video_engine/tests/test_full_stage_page_is_measured.py content/video_engine/tests/test_page_is_the_plate.py -q`
 - Red evidence: n/a (characterization)
-- Green evidence: pending
+- Green evidence: `test_restage_through_the_compiler.py` 6 passed; the six-file Validate `102 passed in 32.46s`; the H bed rebuilt into a private dir (`STEEL_H_BUILD_DIR`) compiles under `validate_page_build_spans` (door exit 0, cues 3 of 3 bound); `M28 PASS ... 789 label pair(s) checked`
 - Refactor evidence: n/a
-- Evidence: planning run 2026-09-22 (fable-p68, `4130942`): the three Astra files -> `46 passed in 20.78s`; the review re-ran them at `ff08213` -> `46 passed in 20.52s`
+- Evidence: rows R26-230/222/231 CLOSED in BACKLOG on the reviewer's read (`REVIEW-P69-T7-ASTRA-ROWS.md`) and this run, `75fc99f` named as origin; R26-231's scope follow-up filed. Found and fixed by the parent: the door's `## Recall` block cited `audio.py:429` and `CAPABILITIES.md:93`, stale after T3 - the P67 receipt refused the compile; now `:471` / `:94`. The door rewrites the tracked `SHOT-TABLE-H.md` on every run (restored after the private build). Planning run 2026-09-22 (fable-p68, `4130942`): the three Astra files -> `46 passed in 20.78s`; the review re-ran them at `ff08213` -> `46 passed in 20.52s`
 
 ### T8: s90 (a) - the phone type scale on every builder the body uses, as a row option (lane B)
 - Status: pending

@@ -44,12 +44,12 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
 - Recall(world): docs/portable/OPERATOR-RULINGS.md:3248 "A plate's life is DIRECTIONAL" (E99 s65 - the host plate carries the ken push and the 20 px drift, the long-form setting)
 - Recall(evidence): content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:120 "seven percent of GDP in two thousand" (the dossier routes this sentence to the PIMCO equipment-and-software series - the page rings its own numbers, never a 7 or an 8 that is not in the data)
 - Recall(motion): docs/content-video-engine/CAPABILITIES.md:44 "THE NUMBERED AGENDA (P52 T8)" (row 6 - two to four numbered rows revealed one per word, in the room the park frees)
-- Recall(sound): content/video_engine/scripts/authoring/audio.py:429 "the cues the frame plays, the cues dropped" (R26-198 - the cues are bound to what the compiled timeline fires BEFORE the gate report is stamped)
+- Recall(sound): content/video_engine/scripts/authoring/audio.py:471 "the cues the frame plays, the cues dropped" (R26-198 - the cues are bound to what the compiled timeline fires BEFORE the gate report is stamped)
 - Recall(publish): docs/portable/OPERATOR-RULINGS.md:3280 "1440p confirmed" (E99 s81 - this build renders nothing and serves nothing; the frozen copy, the link and the render are the parent's)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:2342 "The hook opens on its axes" (E73 - row 1 is the page on its axes from the first frame)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:1494 "Nothing ever goes truly still" (E49 - `;idle=live` on every page row, `;idle=drift;drift=20` on the plate)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:3278 "A second card takes the outgoing card's slot" (E99 s80 - the certificate card hands its slot to the Bravos chart card)
-- Recall(rulings): docs/content-video-engine/CAPABILITIES.md:93 "The AUTHORING KIT - one door for both formats, WIRED" (R26-17 step 0 - this door imports the kit and nothing from the F door)
+- Recall(rulings): docs/content-video-engine/CAPABILITIES.md:94 "The AUTHORING KIT - one door for both formats, WIRED" (R26-17 step 0 - this door imports the kit and nothing from the F door)
 """
 from __future__ import annotations
 
