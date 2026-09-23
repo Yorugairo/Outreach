@@ -12102,6 +12102,86 @@ async function mount(doc) {
     }
     return { D: [q.cx, q.end], i, rec, ink, inside: pl.inside, place: { fits: true, x, anchor: "middle", yA: pl.y } };
   };
+  /* P69 T26a / R26-273 (E28: the geometry says what the number says) - A BAR CHANGES ITS OWN VALUE. T6 let a `chart_to
+     compare` melt a bar's figure into its comparator while the bar stood still: the T10b halving frame printed "10%"
+     over a bar drawn to 20%. Now the BAR moves too: when the figure speaks for its bar (the metric's value IS the bar's
+     own, within the compiler's COMPARE_TOL) and the comparator is another value on the same side of zero, the bar's
+     height morphs to the comparator's value on the page's OWN scale (no axis moves), on the compare's own clock - the
+     counter's (COMPARE.COUNT of the window on min-jerk), so it lands while the comparator's label is still being read.
+       The height is the RECT's (y and height rewritten, the grow's scaleY untouched), so the soft shoulders (T10b) keep
+     their radius, the soft foot and the hatch silhouette follow it off the attributes (lpBarSoftPaint runs after this),
+     and the prism (`form=extruded_bar`) is re-set to the same tip. The figure's group, the bar's own value label (and
+     its text, past the swap) and an emphasised bar's pill ride the moved top by the same offset. The old height stays
+     as a dashed outline only when the row names it (`ghost: "yes"`), never by default.
+       Everything is keyed off the compare: a page with no compare, or a compare whose comparator is the metric's own
+     value (row 21's 3x -> "3 wafers"), writes nothing here - to the byte. Before the compare's instant every written
+     attribute is the built one. A pure function of t: the list and the ghost are built once, every value from `u`. */
+  const LPMORPH = Object.freeze({
+    TOL: 0.005,          /* build_scene_timeline_f.COMPARE_TOL, mirrored: the figure speaks for its bar only when the metric IS the bar's value */
+    GHOST_A: 0.55,       /* the old height's outline at rest - read as where the bar WAS, never as a second bar */
+    GHOST_W: 2,          /* its stroke, in the chart's own units */
+    GHOST_DASH: "7 6",   /* dashed: a solid rule is a comparator (E53 s6) */
+    GHOST_TICK: 24,      /* the corners' reach down the old sides, in the chart's units (capped at a quarter of the fall) */
+  });
+  const S0my = (st, v) => ((st.scale || {}).my ? st.scale.my(v) : 0);
+  const lpMorphNum = (v) => typeof v === "number" && Number.isFinite(v);
+  const lpMorphSame = (a, b) => Math.abs(a - b) <= LPMORPH.TOL * Math.max(Math.abs(a), Math.abs(b), 1e-12);
+  const lpBarMorphs = (st, scene, PF) => {
+    if (st.__barMorphs) return st.__barMorphs;
+    const out = [];
+    for (const sp of pageSpecies(scene, "chart_to")) {
+      if (sp.to !== "compare") continue;
+      const fg = compareFigure(PF.figures || [], sp), rec = fg && fg.bar;
+      if (!rec || !rec.bar || rec.over || st.bt) continue;   /* a breaking bar's height is the breakthrough's to write */
+      const m = (sp.metric || {}).value, c = (sp.comparator || {}).value;
+      if (!lpMorphNum(m) || !lpMorphNum(c) || !lpMorphNum(rec.v) || !lpMorphSame(m, rec.v) || lpMorphSame(m, c)) continue;
+      if (c !== 0 && (c < 0) !== (rec.v < 0)) continue;   /* a comparator across zero is another bar, not this one moved */
+      const bar = rec.bar, M = { sp, fg, rec, c, y0: bar.getAttribute("y"), h0: bar.getAttribute("height"),
+        vy0: rec.val ? rec.val.getAttribute("y") : null, vt0: rec.val ? rec.val.textContent : null,
+        pill: (st.bars[Math.min(st.emph, st.bars.length - 1)] === rec && st.callout) ? st.callout : null, ghost: null };
+      if (sp.ghost === "yes" || sp.ghost === true) {   /* the old far end and its two corners - never the whole outline, whose
+                                                          sides would run through the figure that rides down between them */
+        const x0 = +bar.getAttribute("x"), x1 = x0 + +bar.getAttribute("width"), e0 = rec.end;
+        const tick = Math.min(LPMORPH.GHOST_TICK, Math.abs(rec.h - Math.abs(S0my(st, c) - S0my(st, 0))) / 4) * (rec.neg ? -1 : 1);
+        M.ghost = lpEl("path", "lp-bar-ghost", st.chart, { d: "M" + x0.toFixed(1) + " " + (e0 + tick).toFixed(1) + "V" + e0.toFixed(1)
+            + "H" + x1.toFixed(1) + "V" + (e0 + tick).toFixed(1), fill: "none", stroke: lpFillOf(bar) || "var(--lp-chalk)",
+          "stroke-width": LPMORPH.GHOST_W, "stroke-dasharray": LPMORPH.GHOST_DASH, "stroke-linecap": "round", opacity: 0 });
+        st.chart.insertBefore(M.ghost, rec.foot || bar);   /* behind the bar it stood as */
+      }
+      out.push(M);
+    }
+    st.__barMorphs = out;
+    return out;
+  };
+  const lpPaintBarMorphs = (st, scene, t, PF) => {
+    const list = lpBarMorphs(st, scene, PF), S = st.scale || {};
+    if (!list.length || typeof S.my !== "function") return;
+    const base = S.my(0);
+    for (const M of list) {
+      const { sp, fg, rec } = M, bar = rec.bar, at = +sp.at || 0;
+      const u = cmp01((t - at) / Math.max(0.001, +sp.dur || 1)), w = t < at ? 0 : minJerk(cmp01(u / COMPARE.COUNT));
+      const k0 = /scaleY\(([-\d.e]+)\)/.exec(bar.style.transform || ""), k = k0 ? +k0[1] : 1;
+      if (M.ghost) { M.ghost.style.transformOrigin = bar.style.transformOrigin; M.ghost.style.transform = bar.style.transform;
+        M.ghost.setAttribute("opacity", (LPMORPH.GHOST_A * w).toFixed(3)); }
+      if (!(w > 0)) {   /* the page as it was built, to the attribute */
+        bar.setAttribute("y", M.y0); bar.setAttribute("height", M.h0);   /* (the prism: lpPaintChart set it this frame, on the built h) */
+        fg.g.removeAttribute("transform");
+        if (rec.val) { rec.val.setAttribute("y", M.vy0); rec.val.textContent = M.vt0; }
+        if (M.pill) M.pill.removeAttribute("transform");
+        continue;
+      }
+      const v = rec.v + (M.c - rec.v) * w, h = Math.max(3, Math.abs(S.my(v) - base)), y = rec.neg ? base : base - h;
+      bar.setAttribute("y", y.toFixed(1)); bar.setAttribute("height", h.toFixed(1));
+      if (rec.ex) rec.ex.set(k * h / Math.max(1e-9, rec.h));   /* the prism grows on its own `h`: the same tip */
+      const dy = (rec.neg ? base + h : base - h) - rec.end, xf = "translate(0 " + dy.toFixed(2) + ")";
+      fg.g.setAttribute("transform", xf);
+      if (M.pill) M.pill.setAttribute("transform", xf);
+      if (rec.val) {
+        rec.val.setAttribute("y", (parseFloat(M.vy0) + dy).toFixed(1));
+        rec.val.textContent = u >= COMPARE.SWAP ? String((sp.comparator || {}).text || M.vt0) : M.vt0;
+      }
+    }
+  };
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -12410,6 +12490,7 @@ async function mount(doc) {
        number the viewer feels. The law, the dials and the DOM are species/compare.mjs; this is the call, and it runs AFTER the
        figures so the morph owns the glyphs its own clock is writing. */
     for (const sp of pageSpecies(scene, "chart_to")) if (sp.to === "compare" && PAGE_PAINTERS.compare) PAGE_PAINTERS.compare({ sp, figures: PF.figures || [] }, t, st, PAGE_CTX);
+    lpPaintBarMorphs(st, scene, t, PF);   /* P69 T26a: ... and a bar whose figure the compare re-values moves to the comparator (E28) */
     for (const cr of PF.crosses || []) paintCross(cr, t);        /* P50 T6: the census's X marks and the share they cross */
     for (const nt of PF.notes || []) { const lv = pageLeave(nt.sp, t);   /* R26-219: a note in the page's quiet zone is the page's */
       nt.div.style.opacity = t < nt.sp.at ? "0" : (lv > 0 ? (1 - lv).toFixed(3) : "");
@@ -14146,7 +14227,8 @@ async function mount(doc) {
       const K = keys.map((k) => ({ t: k.t, zoom: k.zoom, ease: k.ease, look: camLook(k.look) || [STAGE_W / 2, STAGE_H / 2], at: k.at != null ? (camLook(k.at) || undefined) : undefined }));
       st = camKeyState(K, t, STAGE_W, STAGE_H);
     } else if ((sc.camera || {}).attention === "landings") {   /* P49 T4: a landing pulls the eye; the contact frame is the stop-action clock's */
-      st = camAttentionState(sc.docks, t, (d) => +d.enter + (d.arrive === "throw" ? STOP.FLIGHT_S : d.arrive === "stamp" ? STAMP_LAND.tc : STOP.ANTIC_S + STOP.DROP_S), ATTN) || camIdentity(STAGE_W, STAGE_H);   /* P69 T4 (R26-247): a STAMP pulls from its contact - STAMP_LAND.tc, the clamped scale spring's crossing, the instant the mark is its own size (the gate's STAMP_CONTACT_S); E99 s87 read its enter */
+      const lz = (sc.camera || {}).landing_zoom;   /* P69 T26b: the compiler clamped the pull to the page's reach on the row's word (reach: "clamp"); the gate's _attn_scale reads the same */
+      st = camAttentionState(sc.docks, t, (d) => +d.enter + (d.arrive === "throw" ? STOP.FLIGHT_S : d.arrive === "stamp" ? STAMP_LAND.tc : STOP.ANTIC_S + STOP.DROP_S), (typeof lz === "number" && Number.isFinite(lz)) ? Object.assign({}, ATTN, { SCALE: Math.max(1, lz) }) : ATTN) || camIdentity(STAGE_W, STAGE_H);   /* P69 T4 (R26-247): a STAMP pulls from its contact - STAMP_LAND.tc, the clamped scale spring's crossing, the instant the mark is its own size (the gate's STAMP_CONTACT_S); E99 s87 read its enter */
     } else {
       for (const sp of (sc.species || [])) {
         if (!CAMERA.has(sp.kind)) continue;

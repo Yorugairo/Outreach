@@ -736,6 +736,10 @@ def validate_camera(cam, plate_id: str, aspect: str | None = None) -> list[str]:
     errs: list[str] = []
     if cam.get("attention", "locked") not in CAMERA_ATTENTION:
         errs.append(f"{plate_id}: camera attention must be one of {'|'.join(CAMERA_ATTENTION)}")
+    if cam.get("reach", CAMERA_REACH[0]) not in CAMERA_REACH:   # P69 T26b: the row's choice on a full-stage page
+        errs.append(f"{plate_id}: camera reach must be one of {'|'.join(CAMERA_REACH)} (default \"refuse\": a move that "
+                    "would cut the page's title, y ticks, source line or a drawn end tag fails the row by name; "
+                    "\"clamp\": it moves only as far as the page allows)")
     keys = cam.get("keys", [])
     if not isinstance(keys, list):
         return errs + [f"{plate_id}: camera keys must be a list of {{t, zoom, look, at?, ease?}}"]
@@ -808,6 +812,19 @@ CAMERA_GLYPH_KEYS = ("title", "sub", "source", "rail", "tags", LPG.KEY_BOX)   # 
 FOCUS_ZOOM_DEFAULT = 1.32   # the engine's own CAM.FOCUS_SCALE (`kinetics/camera.mjs`), mirrored so a refusal can name it and
                             # so `zoom` absent means EXACTLY what every build on disk already renders (test_camera pins the pair)
 CAMERA_MOVE_FLOOR = 1.06   # E99 s80 (3): "a zoom under ~1.06 is not a move and stays out" - said in the refusal, never enforced as taste
+# P69 T26b: what a row does when its camera would cut a FULL-STAGE page (found on T23 / T6d's Fed frame: the landing
+# pull took the title's left edge, the y ticks and the source line off the frame). `refuse` (the default) fails the
+# row by name; `clamp` - written on the row's camera as `reach: "clamp"` - moves only as far as the page allows.
+CAMERA_REACH = ("refuse", "clamp")
+CAMERA_ATTN_ARRIVALS = ("throw", "land", "stamp")   # the arrivals a `landings` camera pulls toward (kinetics/camera.mjs camAttentionState)
+# ... and the page's own IDLE under the move (E49): a held page breathes about its centre up to BREATH_AMP and a `live` or
+# `drift` page walks DRIFT_PX, so a crop line measured on the page AT REST lands inside a glyph at the breath's peak -
+# measured on the clamped Fed frame (T26b): at 1.04 the title's T and the sub's O sat flush on x 0 at 219.06 and 11 px in
+# at 221.46, half a breath later. Mirrored from kinetics/idle.mjs IDLE; the engine's IDLE_CLASS.page is `breath`.
+PAGE_IDLE_BREATH_AMP = 0.012   # kinetics/idle.mjs IDLE.BREATH_AMP
+PAGE_IDLE_DRIFT_PX = 2.0       # kinetics/idle.mjs IDLE.DRIFT_PX (the page's drift takes no dial; `;drift=` is a plate's)
+PAGE_IDLE_BREATHES = ("breath", "live", "figure")
+PAGE_IDLE_DRIFTS = ("drift", "live")
 
 
 def page_glyph_boxes(page: dict, aspect: str) -> dict[str, dict]:
@@ -942,7 +959,7 @@ def camera_zoom_errors(world, row_species, cam, plate_id: str, aspect: str | Non
         if c is None:
             continue
         _check(float(z), c, c, f"focus_zoom zoom {float(z):.4g}")
-    if isinstance(cam, dict):
+    if isinstance(cam, dict) and cam.get("reach") != "clamp":   # P69 T26b: a row that chose the clamp is clamped by camera_reach
         for i, k in enumerate(cam.get("keys") or []):
             if not isinstance(k, dict):
                 continue
@@ -955,6 +972,164 @@ def camera_zoom_errors(world, row_species, cam, plate_id: str, aspect: str | Non
             at = MG._cam_point(k.get("at"), sw, sh, plot) if k.get("at") is not None else look
             _check(float(z), look, at or look, f"camera key {i} (t={float(k.get('t', 0.0)):.2f}s) zoom {float(z):.4g}")
     return errs
+
+
+def page_reach_boxes(page: dict, aspect: str) -> dict[str, dict]:
+    """P69 T26b: every box a camera move on this page must keep whole - the glyphs E99 s80 (2) names
+    (`page_glyph_boxes`: the title, sub, source, rail, key, the estimated tag column and the plot's two tick
+    banks) AND each end tag as the player DREW it (`tag_boxes`, served by `page_boxes` only for a measured page
+    whose tags match the ones measured - REVIEW-P69-LANE-B-MERGE-4 MN3). A drawn tag is named by its own words
+    when the tag fingerprint lines up with the boxes one for one."""
+    out = page_glyph_boxes(page, aspect)
+    drawn = LPG.page_boxes(page, aspect).get(LPG.TAG_BOXES_KEY) or []
+    ink = LPG.tag_ink(page)
+    for n, box in enumerate(drawn):
+        words = " ".join(str(w) for w in ink[n][:2]) if len(ink) == len(drawn) else ""
+        out[f'end tag "{words}"' if words else f"end tag {n + 1}"] = dict(box)
+    return out
+
+
+def _page_reach(page: dict, aspect: str, boxes: dict[str, dict], look, at) -> tuple[float, str]:
+    """(the reachable zoom, what binds it) over `boxes` and the page's crop line - `page_zoom_ceiling`'s law:
+    a box already off the stage at rest does not bind."""
+    sw, sh = LPG.STAGE_PX[aspect]
+    best = (math.inf, "-")
+    for name, box in boxes.items():
+        z, edge = zoom_ceiling(box, look, at, sw, sh)
+        if 1.0 <= z < best[0]:
+            best = (z, f"the {name}'s {edge} edge")
+    z_crop, crop_name = page_crop_line_ceiling(page, aspect, look, at)
+    return (z_crop, crop_name) if z_crop < best[0] else best
+
+
+def page_idle_boxes(boxes: dict[str, dict], world: dict, aspect: str) -> dict[str, dict]:
+    """Each box at the page's IDLE excursion: grown about the stage centre by the breath and padded by the drift, so a
+    move measured against these keeps every glyph on the stage at every phase of the held page's life (E49). The idle
+    is the page's word, then the row's (`world.idle`), then the engine's class default, `breath`; `none` holds still."""
+    page = world.get("page") or {}
+    kind = page.get("idle") or world.get("idle") or "breath"
+    k = 1 + PAGE_IDLE_BREATH_AMP if kind in PAGE_IDLE_BREATHES else 1.0
+    dx = PAGE_IDLE_DRIFT_PX if kind in PAGE_IDLE_DRIFTS else 0.0
+    dy = dx * 0.6   # idle.mjs drift: +-DRIFT_PX across, +-0.6 DRIFT_PX down
+    sw, sh = LPG.STAGE_PX[aspect]
+    cx, cy = sw / 2, sh / 2
+    return {name: {"x": cx + k * (b["x"] - cx) - dx, "y": cy + k * (b["y"] - cy) - dy,
+                   "w": k * b["w"] + 2 * dx, "h": k * b["h"] + 2 * dy} for name, b in boxes.items()}
+
+
+def _under_the_floor(reach: float) -> str:
+    return (f"; {reach:.2f} is under the ~{CAMERA_MOVE_FLOOR:.2f} floor, so this is no longer a move (E99 s80 (3))"
+            if reach < CAMERA_MOVE_FLOOR else "")
+
+
+def _landing_reach(page, asp, every, docks, clamp, plate_id) -> tuple[list[str], list[str], float | None]:
+    """camera_reach's first half: the pull of every arriving dock a `landings` camera pulls toward."""
+    errs: list[str] = []
+    notes: list[str] = []
+    lz = None
+    for d in docks or []:
+        if not isinstance(d, dict) or not isinstance(d.get("place"), dict) or d.get("arrive") not in CAMERA_ATTN_ARRIVALS:
+            continue
+        p = d["place"]
+        c = (float(p["x"]) + float(p["w"]) / 2, float(p["y"]) + float(p["h"]) / 2)
+        z, name = _page_reach(page, asp, every, c, c)
+        if MG.ATTN_SCALE <= z + 1e-9:
+            continue
+        reach = max(1.0, math.floor(z * 100) / 100)
+        what = (f"the landing pull on {d.get('slide')} (zoom {MG.ATTN_SCALE:.2f} about its card's centre "
+                f"({c[0]:.0f}, {c[1]:.0f}), from its contact)")
+        if clamp:
+            lz = reach if lz is None else min(lz, reach)
+            notes.append(f"{plate_id}: {what} CLAMPED to {reach:.2f} - {name} leaves the stage at {z:.3f} "
+                         f"(reach: \"clamp\", the row's choice){_under_the_floor(reach)}")
+        else:
+            errs.append(f"{plate_id}: {what} is past the reachable zoom {reach:.2f} on this full-stage page at {asp} - "
+                        f"{name} leaves the stage at {z:.3f}. E99 s80 (2): a move may crop the page - its crop line "
+                        "falls between elements, never through a glyph. Re-place the card, write `reach: \"clamp\"` "
+                        f"on the row's camera to pull only to {reach:.2f}, or lock the camera (P69 T26b)")
+    return errs, notes, lz
+
+
+def _key_reach(page, asp, glyphs, every, plot, keys, clamp, plate_id) -> tuple[list[str], list | None]:
+    """camera_reach's second half: each authored key over zoom 1. `glyphs` are R26-220's boxes AT REST (its refusal
+    law, unchanged); `every` adds the drawn end tags and the page's idle excursion (the reach this door measures)."""
+    sw, sh = LPG.STAGE_PX[asp]
+    notes: list[str] = []
+    new_keys = None
+    for i, k in enumerate(keys):
+        if not isinstance(k, dict):
+            continue
+        z0 = k.get("zoom", 1)
+        if isinstance(z0, bool) or not isinstance(z0, (int, float)) or not z0 > 1.0:
+            continue
+        look = MG._cam_point(k.get("look"), sw, sh, plot)
+        if look is None:
+            continue
+        at = (MG._cam_point(k.get("at"), sw, sh, plot) or look) if k.get("at") is not None else look
+        z, name = _page_reach(page, asp, every, look, at)
+        if z0 <= z + 1e-9:
+            continue
+        reach = max(1.0, math.floor(z * 100) / 100)
+        door = f"camera key {i} (t={float(k.get('t', 0.0)):.2f}s) zoom {float(z0):.4g}"
+        if clamp:
+            new_keys = new_keys or [dict(q) if isinstance(q, dict) else q for q in keys]
+            new_keys[i] = dict(new_keys[i], zoom=reach)
+            notes.append(f"{plate_id}: {door} CLAMPED to {reach:.2f} - {name} leaves the stage at {z:.3f} "
+                         f"(reach: \"clamp\", the row's choice){_under_the_floor(reach)}")
+            continue
+        z_glyph, _g = _page_reach(page, asp, glyphs, look, at)
+        if z0 <= z_glyph + 1e-9:   # R26-220 passes it: a DRAWN END TAG or the page's breath binds - reported, never refused
+            notes.append(f"WARN {plate_id}: {door} is past the reachable zoom {reach:.2f} once the drawn end tags and the "
+                         f"page's breath are measured - {name} leaves the stage at {z:.3f}, looking at ({look[0]:.0f}, "
+                         f"{look[1]:.0f}). REPORTED, not refused (P69 T26b): re-aim the key, lower it, or write "
+                         "`reach: \"clamp\"` on the row's camera")
+        # else a GLYPH binds it at rest: `camera_zoom_errors` has refused it by name already (R26-220)
+    return notes, new_keys
+
+
+def camera_reach(world, docks, cam, plate_id: str, aspect: str | None = None) -> tuple[list[str], list[str], dict | None]:
+    """P69 T26b - a camera push on a FULL-STAGE page keeps the title and the axes in frame.
+
+    Found on T23 / T6d's Fed frame: with the Fed stamped on the two-eras page, the `landings` camera's pull (P69 T4:
+    the player's ATTN.SCALE 1.06 about the card's centre, from its contact) took the title's left edge, the y tick
+    column and the source line off the frame. R26-220 bounds the row's KEYS and `focus_zoom` (`camera_zoom_errors`);
+    the landing pull was never measured, and neither was an end tag the page draws past its estimated column, nor the
+    held page's own breath under the move (`page_idle_boxes`: the boxes at the idle's excursion).
+
+    Returns (errors, notes, the camera to compile). On a full-stage ledger page only, against `page_reach_boxes`:
+      the LANDING PULL of every arriving dock (the player pulls only on a camera with no keys) - past the reach it is
+        refused by name, or, when the row wrote `reach: "clamp"`, clamped: `landing_zoom` (the smallest reach over
+        the scene's landings, floored to the hundredth) is written on the camera, and the player's landings branch and
+        the gate's `camera_state_at` both read it;
+      each KEY - past a reach set by a MEASURED END TAG alone it is REPORTED (a `WARN` note, never a refusal: lane A's
+        committed row 1, 1.06 at the divergence page's datum proxy, reaches only 1.034 once the drawn "+613%" binds
+        it - T33 re-aims it); past a glyph's reach `camera_zoom_errors` has already refused it; with `reach: "clamp"`
+        the key's zoom is clamped to the reach instead.
+    A camera that clears is returned AS GIVEN - no key rewritten, no `landing_zoom` - so its frames do not move."""
+    if not isinstance(cam, dict) or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return [], [], cam
+    page, asp = world.get("page"), aspect or "16:9"
+    if not isinstance(page, dict) or asp not in LPG.STAGE_PX or not LPG.full_stage(page, asp):
+        return [], [], cam
+    try:
+        glyphs = page_glyph_boxes(page, asp)
+        every = page_idle_boxes(page_reach_boxes(page, asp), world, asp)   # the drawn tags, at the page's idle excursion
+        plot = LPG.page_boxes(page, asp).get("plot")
+    except Exception:       # a page the box model cannot place: there is nothing to measure a move against
+        return [], [], cam
+    clamp = cam.get("reach") == "clamp"
+    out = cam
+    keys = cam.get("keys") or []
+    errs: list[str] = []
+    notes: list[str] = []
+    if not keys and cam.get("attention") == "landings":
+        errs, notes, lz = _landing_reach(page, asp, every, docks, clamp, plate_id)
+        if lz is not None:
+            out = dict(out, landing_zoom=lz)
+    key_notes, new_keys = _key_reach(page, asp, glyphs, every, plot, keys, clamp, plate_id)
+    if new_keys is not None:
+        out = dict(out, keys=new_keys)
+    return errs, notes + key_notes, out
 
 
 TARGET_KINDS = ("datum", "point", "region", "span")
@@ -7952,6 +8127,14 @@ def main() -> int:
                                         from_to=ring_fit["from_to"] if ring_fit else None,   # ... and the approach
                                         paint=ring_fit["paint"] if ring_fit else None))   # ... and its painted extent
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
+        # P69 T26b: the row's camera against the full-stage page it moves over, now that the docks it pulls toward are
+        # placed - a landing pull or a key that would cut the title, the y ticks, the source line or a drawn end tag is
+        # refused by name, reported, or clamped on the row's own word (`reach: "clamp"`)
+        reach_errs, reach_notes, row_camera = camera_reach(world, docks, row_camera, plate, ASPECT)
+        if reach_errs:
+            raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(reach_errs))
+        for _note in reach_notes:
+            print(f"  camera reach: row {i + 1}: {_note}")
         try:
             _pg = (world or {}).get("page") if isinstance((world or {}).get("page"), dict) else None
             _changed = world_key(world) != world_key(prev_world) if i > 0 else False   # the first row has no boundary

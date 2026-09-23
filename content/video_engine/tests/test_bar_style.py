@@ -46,7 +46,7 @@ import build_scene_timeline_f as B  # noqa: E402
 import build_golden_sources as G  # noqa: E402
 import ledger_page as LPG  # noqa: E402
 import render_baseline as RB  # noqa: E402
-from test_compare_on_bars import FIXTURES, LAND_T, OBJ_94  # noqa: E402
+from test_compare_on_bars import CMP_AT, FIXTURES, LAND_T, OBJ_94  # noqa: E402
 from test_longform_profile import CROSS, LINE, WORLD_PINS  # noqa: E402
 
 ASPECT = "16:9"
@@ -248,6 +248,8 @@ def painted(tmp_path_factory):
                         got["grow"] = page.evaluate(PROBE)
                         RB.frame_png(page, LAND_T, (w, h))
                         got["back"] = page.evaluate(PROBE)
+                        RB.frame_png(page, CMP_AT - 0.3, (w, h))   # P69 T26a: the page BUILT, before the compare re-values its bar
+                        got["held"] = page.evaluate(PROBE)
                     out[key] = got
                 finally:
                     page.context.close()
@@ -400,7 +402,7 @@ def test_the_shadow_follows_the_bar_as_it_grows_and_a_seek_lands_the_same(painte
     g, land, back = got["grow"], got["probe"], got["back"]
     dx, dy = _throw(prop_shadow)
     b, s = g["bars"][0], g["sil"][0]
-    assert b["box"][3] < land["bars"][0]["box"][3] - 20, "mid-build: the bar is still growing"
+    assert b["box"][3] < got["held"]["bars"][0]["box"][3] - 20, "mid-build: the bar is still growing (against the built bar - P69 T26a moves the halving's to 10 at LAND_T)"
     assert s["box"][1] == pytest.approx(b["box"][1] + dy, abs=GEOM_TOL), (b, s)
     assert s["box"][1] + s["box"][3] == pytest.approx(g["base"], abs=GEOM_TOL)
     assert [q["d"] for q in back["sil"]] == [q["d"] for q in land["sil"]], "a pure function of t"

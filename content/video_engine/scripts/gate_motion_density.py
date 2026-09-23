@@ -1143,6 +1143,13 @@ def _target_box(tg: dict, sw: float, sh: float, plot: dict | None) -> dict | Non
     return None
 
 
+def _attn_scale(s: dict) -> float:
+    """P69 T26b: the landing pull's depth - the player's ATTN.SCALE, or the scene's `landing_zoom` where the compiler
+    clamped it to the page's reach on the row's word (`reach: "clamp"`); the player's landings branch reads the same."""
+    lz = (s.get("camera") or {}).get("landing_zoom")
+    return max(1.0, float(lz)) if isinstance(lz, (int, float)) and not isinstance(lz, bool) else ATTN_SCALE
+
+
 def camera_state_at(s: dict, t: float, sw: float, sh: float, plot: dict | None) -> dict:
     """{s, look, at} at t from the scene's authored keys - identity before the first, lerp by the arriving key's ease,
     hold after the last; species windows are the player's and are not evaluated here (their target is their centre)."""
@@ -1163,7 +1170,7 @@ def camera_state_at(s: dict, t: float, sw: float, sh: float, plot: dict | None) 
                     continue
                 a = _cam_ease("inout", (t - tc) / ATTN_IN) * (1 - _cam_ease("inout", (t - out_t) / ATTN_OUT))
                 c = (float(d["place"]["x"]) + float(d["place"]["w"]) / 2, float(d["place"]["y"]) + float(d["place"]["h"]) / 2)
-                st = {"s": 1 + (ATTN_SCALE - 1) * a, "look": c, "at": c}
+                st = {"s": 1 + (_attn_scale(s) - 1) * a, "look": c, "at": c}
         return st
     K = []
     for k in keys:
