@@ -28,7 +28,7 @@ const PROFILES = {
     description: 'TypeScript, Next.js, Supabase, Design Engine, Content Engine, Deep Grilling, AST-grep.',
     skills: [
       'clean-code-guard', 'content-engine', 'council', 'design-engine', 'diagnosing-bugs',
-      'e2e-testing', 'exa-search', 'grill-me', 'grilling', 'market-research', 'marketing-campaign',
+      'e2e-testing', 'exa-search', 'grill-me', 'market-research', 'marketing-campaign',
       'motion-system', 'registry-core', 'research', 'seo-engine', 'social-distribution',
       'supabase', 'supabase-postgres-best-practices', 'taste', 'tavily-web', 'article-writing',
       'brand-discovery', 'brand-voice'
@@ -41,7 +41,7 @@ const PROFILES = {
       'asset-claim-and-quarantine', 'blender-motion-state-inspection', 'clean-code-guard',
       'content-engine', 'council', 'design-engine', 'diagnosing-bugs', 'e2e-testing',
       'evidence-motion-engine', 'exa-search', 'fal-ai-media', 'frontend-slides', 'grill-me',
-      'grilling', 'manim-video', 'marketing-campaign', 'motion-system', 'remotion-video-creation',
+      'manim-video', 'marketing-campaign', 'motion-system', 'remotion-video-creation',
       'research', 'social-distribution', 'taste', 'tavily-web', 'ui-demo', 'video-editing',
       'video-engine', 'video-script-architect', 'videodb', 'brand-voice'
     ]
@@ -51,7 +51,7 @@ const PROFILES = {
     description: 'Clean Code, Supabase, Database optimization, E2E Testing, Deep Grilling, Subagent Research.',
     skills: [
       'clean-code-guard', 'council', 'diagnosing-bugs', 'e2e-testing', 'exa-search',
-      'grill-me', 'grilling', 'market-research', 'research', 'supabase',
+      'grill-me', 'market-research', 'research', 'supabase',
       'supabase-postgres-best-practices', 'tavily-web'
     ]
   }

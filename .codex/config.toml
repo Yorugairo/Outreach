@@ -254,10 +254,6 @@ path = 'C:\Users\Snipe\.agents\skills\grill-me'
 enabled = false
 
 [[skills.config]]
-path = 'C:\Users\Snipe\.agents\skills\grilling'
-enabled = false
-
-[[skills.config]]
 path = 'C:\Users\Snipe\.codex\plugins\cache\openai-curated-remote\hyperframes\0.1.2\skills\gsap'
 enabled = false
 
