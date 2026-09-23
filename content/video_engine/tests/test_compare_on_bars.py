@@ -92,11 +92,21 @@ FIXTURES = {
                  "[DERIVED: from ev-hbm-wafer-ratio-bars-v1, hbm / dram]")], 1),
 }
 
+# P69 T6c: two SHAPES for the cap alone - synthetic rows, no figure, never an H beat. Four bars draw 202 px at their
+# natural pitch on the full stage (over the cap: they narrow, and their pitch cannot widen past the plot); five draw
+# 162 px (under it: built exactly as before).
+_SHAPE = {"title": "Shape", "sub": "Synthetic bars for the width cap; not a figure about the world",
+          "src": "Synthetic - the cap's own fixture", "unit": "%"}
+CAP_SHAPES = {
+    "cap-4": ("fx-cap-four-bars", dict(_SHAPE, bars=[{"label": f"Row {i + 1}", "value": 10 + 5 * i} for i in range(4)]), [], None),
+    "cap-5": ("fx-cap-five-bars", dict(_SHAPE, bars=[{"label": f"Row {i + 1}", "value": 10 + 5 * i} for i in range(5)]), [], None),
+}
+
 
 def fixture_world(name: str, tmp: Path, species: list[dict] | None = None) -> tuple[dict, str, list[dict]]:
     """The fixture's episode on disk under `tmp`, its world as the compiler builds it (stamped full-stage, as a
     16:9 build stamps every page), its plate id and its species (a copy)."""
-    oid, obj, authored, _bar = FIXTURES[name]
+    oid, obj, authored, _bar = {**FIXTURES, **CAP_SHAPES}[name]
     species = authored if species is None else species
     (tmp / "evidence/objects").mkdir(parents=True, exist_ok=True)
     (tmp / f"evidence/objects/{oid}.series.json").write_text(json.dumps(obj), encoding="utf-8")
@@ -141,7 +151,11 @@ PROBE = """() => {
              ink: Bl ? { d: d(Bl.ink), op: op(Bl.ink) } : null, drop: Bl ? { d: d(Bl.drop), op: op(Bl.drop) } : null };
   });
   const sc = st.scale || {};
-  return { kind: st.kind, linePts: (st.linePts || []).length, bars, vals, rules, figs, plot: [sc.x0, sc.x1] };
+  /* P69 T6c: each bar's width ON THE STAGE, and each category label's lines and box */
+  const barPx = (st.bars || []).map(b => b.bar.getBoundingClientRect().width);
+  const labs = (st.bars || []).map(b => ({ lines: b.lab.querySelectorAll('tspan').length || 1, box: box(b.lab),
+                                           text: (b.lab.textContent || '') }));
+  return { kind: st.kind, linePts: (st.linePts || []).length, bars, vals, rules, figs, plot: [sc.x0, sc.x1], barPx, labs };
 }"""
 
 
@@ -325,37 +339,104 @@ def test_on_the_94_page_the_number_stays_under_the_100_rule_inside_its_bar(figur
 
 
 ENGINE = ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
-BAR_GAP = 0.34   # buildLedgerBars' own `gap`: the share of a bar's pitch left as air
+BAR_GAP = 0.34   # buildLedgerBars' own `gap`: the share of a bar's pitch left as air on an uncapped page
 
 
-def _cap_n() -> int:
-    m = re.search(r"const LPBAR = Object\.freeze\(\{ CAP_N: (\d+) \}\)", ENGINE.read_text(encoding="utf-8"))
-    assert m, "the engine names its bar-width cap (LPBAR.CAP_N)"
-    return int(m.group(1))
+def _lpbar() -> dict:
+    """The engine's bar-width cap (P69 T6c / E99 s96): a width in STAGE px and the bar/pitch ratio, read off the
+    engine, never retyped."""
+    m = re.search(r"const LPBAR = Object\.freeze\(\{ W_PX: ([\d.]+), PITCH_RATIO: ([\d.]+) \}\)",
+                  ENGINE.read_text(encoding="utf-8"))
+    assert m, "the engine names its bar-width cap in stage px (LPBAR.W_PX, LPBAR.PITCH_RATIO)"
+    return {"W_PX": float(m.group(1)), "PITCH_RATIO": float(m.group(2))}
+
+
+def test_the_cap_is_bravos_measured_hero_bar():
+    """E99 s96: the cap is Bravos's MEASURED hero bar - 196 px on a 1920 stage at 0.44 of its pitch
+    (BRAVOS-LONGFORM-CHART-SPEC.md, bubbles 0008: 196 / 442 px)."""
+    cap = _lpbar()
+    assert cap["W_PX"] == 196 and cap["PITCH_RATIO"] == 0.44, cap
 
 
 @needs_browser
-@pytest.mark.parametrize("name", ["row17-94", "row18-halving", "row21-wafer"])
-def test_a_bar_is_never_wider_than_the_cap_and_a_short_row_stands_centred(name):
-    """The operator: "that bar can't be that wide, that doesn't read like a bar chart it reads like a giant block". A
-    bar is never wider than a CAP_N-bar page's bar; a page of fewer bars keeps that width and stands centred in the
-    plot as a group with even gaps. The label under each bar and the figure follow the bar."""
-    cap_n = _cap_n()
+@pytest.mark.parametrize("name", ["row17-94", "row18-halving", "row21-wafer", "cap-4"])
+def test_a_bar_is_capped_at_the_measured_width_and_a_short_row_stands_centred(name):
+    """The operator: "that bar can't be that wide ... it reads like a giant block", then "The two bar width is also
+    still way too much" (E99 s96). A bar is never wider than LPBAR.W_PX on the stage; a row that would draw wider
+    narrows to exactly that width, stands CENTRED in the plot as a group, with even gaps at the measured bar/pitch
+    ratio - or at the plot's own pitch when that ratio would not fit. The value, the figure and the category label
+    follow the bar."""
+    cap = _lpbar()
     P = Player(name)
     try:
         s = P.at(FIG_AT + FIG_S + 0.5)
         x0, x1 = s["plot"]
-        cap = (x1 - x0) / cap_n * (1 - BAR_GAP)
-        bars = s["bars"]
-        for b in bars:
-            assert b["w"] <= cap + 0.05, f"a bar {b['w']:.1f} wide, over the cap {cap:.1f}"
+        bars, n = s["bars"], len(s["bars"])
+        for px in s["barPx"]:
+            assert abs(px - cap["W_PX"]) < 0.5, f"a bar {px:.1f} px wide on the stage, the cap is {cap['W_PX']} px"
         left, right = min(b["x"] for b in bars), max(b["x"] + b["w"] for b in bars)
         assert abs((left + right) / 2 - (x0 + x1) / 2) < 0.5, f"the row [{left:.1f}, {right:.1f}] is centred in [{x0}, {x1}]"
-        if len(bars) > 1:
+        if n > 1:
             gaps = [b2["x"] - (b1["x"] + b1["w"]) for b1, b2 in zip(bars, bars[1:])]
             assert max(gaps) - min(gaps) < 0.5, f"even gaps: {gaps}"
-        fg, bar = s["figs"][0], bars[FIXTURES[name][3]]
-        assert abs((fg["box"][0] + fg["box"][2] / 2) - bar["cx"]) < 1.0, "the figure follows its bar's new rect"
+            pitch = bars[1]["x"] - bars[0]["x"]
+            want = min((x1 - x0) / n, bars[0]["w"] / cap["PITCH_RATIO"])
+            assert abs(pitch - want) < 0.1, f"the pitch {pitch:.2f}: the measured ratio's, or the plot's when it will not fit ({want:.2f})"
+            assert right - left <= x1 - x0 + 0.05, "the row never leaves its plot"
+        for b, v in zip(bars, s["vals"]):
+            if v["box"] and v["op"] > 0:
+                assert abs((v["box"][0] + v["box"][2] / 2) - b["cx"]) < 1.0, f"the value is centred on its bar: {v['box']} vs {b['cx']}"
+        for b, lab in zip(bars, s["labs"]):
+            assert lab["box"] and abs((lab["box"][0] + lab["box"][2] / 2) - b["cx"]) < 1.0, f"the name follows its bar: {lab}"
+        if FIXTURES.get(name):
+            fg, bar = s["figs"][0], bars[FIXTURES[name][3]]
+            assert abs((fg["box"][0] + fg["box"][2] / 2) - bar["cx"]) < 1.0, "the figure follows its bar's new rect"
+        assert not P.errs, P.errs
+    finally:
+        P.close()
+
+
+@needs_browser
+@pytest.mark.parametrize("name", ["row18-halving", "row21-wafer"])
+def test_a_category_label_wider_than_its_capped_bar_wraps_to_two_lines_and_meets_no_neighbour(name):
+    """E99 s96 (2): a category label wider than its narrowed bar is written on TWO lines, broken at a word, rather
+    than running into its neighbour's column; no two names meet."""
+    P = Player(name)
+    try:
+        s = P.at(FIG_AT + FIG_S + 0.5)
+        bars, labs = s["bars"], s["labs"]
+        wrapped = 0
+        for b, lab in zip(bars, labs):
+            if lab["lines"] == 2:
+                wrapped += 1
+                continue
+            assert lab["box"][2] <= b["w"] + 0.5 or " " not in lab["text"].strip(), \
+                f"a one-line name {lab['box'][2]:.1f} wide under a {b['w']:.1f} bar: it wraps ({lab['text']!r})"
+        assert wrapped, f"the fixture carries a name wider than its bar: {labs}"
+        for a, c in zip(labs, labs[1:]):
+            assert a["box"][0] + a["box"][2] <= c["box"][0], f"two names meet: {a} / {c}"
+        assert not P.errs, P.errs
+    finally:
+        P.close()
+
+
+@needs_browser
+def test_a_row_narrower_than_the_cap_is_built_as_before():
+    """Five bars draw 162 px at their natural pitch on the full stage: under the cap, so the row keeps the plot's
+    own pitch and the 0.34 gap, from the plot's left edge - exactly the layout it had before the cap (the goldens
+    hold the bytes of every such page)."""
+    cap = _lpbar()
+    P = Player("cap-5")
+    try:
+        s = P.at(FIG_AT + FIG_S + 0.5)
+        x0, x1 = s["plot"]
+        bars, n = s["bars"], len(s["bars"])
+        pitch = (x1 - x0) / n
+        assert all(px < cap["W_PX"] for px in s["barPx"]), s["barPx"]
+        for i, b in enumerate(bars):
+            assert abs(b["w"] - round(pitch * (1 - BAR_GAP), 1)) < 0.051, (i, b["w"], pitch)
+            assert abs(b["x"] - round(x0 + pitch * (i + BAR_GAP / 2), 1)) < 0.051, (i, b["x"])
+        assert all(lab["lines"] == 1 for lab in s["labs"]), "an uncapped page wraps no name"
         assert not P.errs, P.errs
     finally:
         P.close()

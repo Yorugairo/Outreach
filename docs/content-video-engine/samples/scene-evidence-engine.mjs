@@ -8318,6 +8318,7 @@ async function mount(doc) {
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
                  marks: [], markBy: {}, geom, portrait: PORTRAIT, linePts: [], titleEl: title, titleGlyphs: [...title.querySelectorAll(".g")], rtGlyphs: [], perform: null };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
+    st.stagePx = lpStagePx(chart, geom, PORTRAIT || pg.punch === false ? 1 : LP.PUNCH_SCALE);   /* P69 T6c: one chart unit in stage px at rest (the bar cap reads it) */
     st.subGlyphs = [...subEl.querySelectorAll(".g")]; st.srcGlyphs = [...src.querySelectorAll(".g")];   /* P48 T4: a recast erases the words that described the chart that left */
     lpMark(st, "title", "title", title, {}); lpMark(st, "sub", "sub", subEl, {}); lpMark(st, "src", "src", src, {});   /* P48 T1: the page's own ink is a mark too - a retitle and a recast both move it */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
@@ -8338,7 +8339,7 @@ async function mount(doc) {
     for (const pg2 of (scene.world.page_states || []).slice(0, LP_STATE_MAX - 1)) {
       const ch2 = lpEl("svg", "lp-chart", page, { viewBox: chart.getAttribute("viewBox") });
       ch2.style.cssText = chart.style.cssText; ch2.style.opacity = 0;
-      const s2 = { root, page, chart: ch2, geom, portrait: PORTRAIT, seed, edge, field, rail,
+      const s2 = { root, page, chart: ch2, geom, portrait: PORTRAIT, seed, edge, field, rail, stagePx: st.stagePx,   /* P69 T6c: the same box, the same scale */
                    readability: st.readability,
                    bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: {}, linePts: [],
                    marks: [], markBy: {}, badges: [], inkEls: [],
@@ -8568,6 +8569,7 @@ async function mount(doc) {
      say this once, for the pill: "a page not yet laid out measures 0 and keeps the dial"). */
   const LP_ADV = Object.freeze({ ".": 0.28, ",": 0.28, "-": 0.33, "\u2212": 0.58, "%": 0.89, " ": 0.28, "\u00a0": 0.28 });
   const lpInkW = (el) => {
+    if (el && el.__wrapLines) return Math.max(...el.__wrapLines.map(lpInkW));   /* P69 T6c: a name on two lines is as wide as its wider line */
     const m = el && el.getComputedTextLength ? el.getComputedTextLength() : 0;
     if (m > 0) return m;
     const s = (el && el.textContent) || "";
@@ -8592,7 +8594,7 @@ async function mount(doc) {
     const x = parseFloat(el.getAttribute("x")) || 0, y = parseFloat(el.getAttribute("y")) || 0;
     const a = el.getAttribute("text-anchor") || "start";
     return [a === "middle" ? x - w / 2 : a === "end" ? x - w : x, y - LPVAL.ASC * fs, w,
-            (LPVAL.ASC + LPVAL.LAB_DESC) * fs];
+            (LPVAL.ASC + LPVAL.LAB_DESC) * fs + (el.__wrapLines ? (el.__wrapLines.length - 1) * el.__wrapDy : 0)];   /* P69 T6c: and as tall as both lines */
   };
   const lpLabelBoxes = (st) => {
     const out = [];
@@ -8717,7 +8719,7 @@ async function mount(doc) {
     const touch = () => boxes.some((b, i) => i > 0 && b[0] - (boxes[i - 1][0] + boxes[i - 1][1]) < -LPVAL.TICK_HAIR);
     let yielded = null;
     if (touch()) {
-      const yr = lfTickYear(labs[0].textContent);
+      const yr = labs[0].__wrapLines ? null : lfTickYear(labs[0].textContent);   /* P69 T6c: a two-line name is not re-cut */
       const said = yr && [".lp-sub", ".lp-src"].some((sel) => {
         const el = st.page && st.page.querySelector ? st.page.querySelector(sel) : null;
         return !!el && (el.textContent || "").indexOf(yr.year) >= 0;
@@ -8951,13 +8953,48 @@ async function mount(doc) {
       if (m) m.geom.y = +b.val.getAttribute("y");
     }
   };
-  /* P69 T6 - THE BAR WIDTH CAP (the operator, 2026-09-22, on the lone 94 bar at 66 % of the plot: "that bar can't be that
-     wide, that doesn't read like a bar chart it reads like a giant block"). A bar is never wider than the bar a page of
-     CAP_N bars draws; a page of fewer keeps that width and that pitch, and the group stands CENTRED in the plot with the
-     same even gaps - it never stretches. [DERIVED: CAP_N is the fewest bars any committed golden draws on this builder -
-     `tags-to-bars`'s arriving page, two bars, 303.6 of a 920-unit plot at 16:9 - so no golden's bar is wider than the
-     cap and every golden builds to the byte; a 3- or 4-bar cap (202.4 / 151.8 units) would re-pin that golden.] */
-  const LPBAR = Object.freeze({ CAP_N: 2 });
+  /* P69 T6 / T6c - THE BAR WIDTH CAP (the operator, 2026-09-22, on the lone 94 bar at 66 % of the plot: "that bar can't
+     be that wide, that doesn't read like a bar chart it reads like a giant block"; then of T6's two-bar cap: "The two bar
+     width is also still way too much" - E99 s96). A bar is never wider than W_PX on the STAGE, at the page's rest pose;
+     a row that would draw wider narrows to exactly that width and stands CENTRED in the plot as a group, one bar per
+     pitch at PITCH_RATIO (bar / pitch) - or at the plot's own pitch when that ratio's row would not fit - so its gaps are
+     even and it never stretches. A row whose bars are already narrower builds exactly as it did (its pitch, its 0.34
+     gap, from the plot's left edge). The rounded shoulders stay (the operator's call over the reference's square
+     corners). [DERIVED: BRAVOS-LONGFORM-CHART-SPEC.md, "Bars, vertical hero (<=3)": 196 px on the 1920 stage (10.2 % of
+     the frame), w/pitch 196 / 442 = 0.44 - bubbles 0008; ours measured 405 px] */
+  const LPBAR = Object.freeze({ W_PX: 196, PITCH_RATIO: 0.44 });
+  /* ONE viewBox unit of a page's chart in STAGE px, at the page's rest pose: the chart's CSS box (a share of the page,
+     whose box IS the stage's - `.lp` is 90.91 % of a 110 % world - or stage px outright on a portrait page) fitted into
+     its viewBox the browser's way (uniform, `meet`), times the page's resting scale (the punch, `rest`). Pure in the
+     layout the page wrote, never in t or the camera, so a cold seek and a warm play build the same bars. Measured
+     2026-09-23 on the 94 page: 1.3340 against the chart's own screen CTM at rest, 1.3340. */
+  const lpStagePx = (chart, geom, rest) => {
+    const len = (v, full) => { const n = parseFloat(v); return !Number.isFinite(n) ? 0 : String(v).trim().endsWith("%") ? n / 100 * full : n; };
+    const w = len(chart && chart.style.width, STAGE_W), h = len(chart && chart.style.height, STAGE_H);
+    if (!(w > 0) || !(h > 0) || !geom || !(geom.W > 0) || !(geom.H > 0)) return 0;
+    return rest * Math.min(w / geom.W, h / geom.H);
+  };
+  /* ... and a category NAME wider than its capped bar (E99 s96 (2)) is written on TWO lines, broken at the word that
+     balances them best, each line centred on the bar - rather than running into its neighbour's column. The lines are
+     remembered on the element (`__wrapLines`), so every reader that measures a name (lpInkW, lpLabelBox) measures the
+     widest line and both lines' height. Only a capped row calls this: every other page's names stay one <text>. */
+  const LPBAR_LINE_H = 1.15;   /* a wrapped name's second line sits this many font sizes under its first [DERIVED: the page's own two-line reading leading] */
+  const lpWrapBarLabel = (lab, bw) => {
+    const text = (lab && lab.textContent) || "";
+    if (!lab || lab.firstElementChild || text.indexOf(" ") < 0 || !(lpInkW(lab) > bw)) return false;
+    const words = text.split(" ");
+    let best = null;
+    for (let k = 1; k < words.length; k++) {
+      const a = words.slice(0, k).join(" "), b = words.slice(k).join(" ");
+      lab.textContent = a; const wa = lpInkW(lab); lab.textContent = b; const wb = lpInkW(lab);
+      if (!best || Math.max(wa, wb) < best.w) best = { a, b, w: Math.max(wa, wb) };
+    }
+    const fs = parseFloat(getComputedStyle(lab).fontSize) || 26, x = lab.getAttribute("x"), dy = LPBAR_LINE_H * fs;
+    lab.textContent = "";
+    lab.__wrapLines = [best.a, best.b].map((s, j) => { const ts = lpEl("tspan", "", lab, { x, dy: j ? dy.toFixed(1) : 0 }); ts.textContent = s; return ts; });
+    lab.__wrapDy = dy;
+    return true;
+  };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
@@ -8995,9 +9032,14 @@ async function mount(doc) {
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
-    const capped = n < LPBAR.CAP_N, pitch = capped ? (x1 - x0) / LPBAR.CAP_N : (x1 - x0) / n;   /* the cap: a lone bar keeps a pair's pitch */
+    /* THE CAP (P69 T6c, E99 s96): W_PX on the stage, in this chart's units; a row whose natural bar is wider narrows to
+       it, at the measured bar/pitch ratio unless that row would leave the plot, and stands centred */
+    const nat = (x1 - x0) / n, capU = LPBAR.W_PX / (st.stagePx > 0 ? st.stagePx : 1);
+    const capped = nat * (1 - gap) > capU;
+    const pitch = capped ? Math.min(nat, capU / LPBAR.PITCH_RATIO) : nat;
     const lead = capped ? x0 + ((x1 - x0) - n * pitch) / 2 : x0;   /* ... and the group stands centred in the plot */
-    const bw = pitch * (1 - gap);
+    const bw = capped ? capU : pitch * (1 - gap);
+    const air = capped ? 1 - bw / pitch : gap;   /* the pitch's share left as air, half each side of its bar */
     /* both axes, always (operator, 2026-09-03): y ticks with the unit from the shared helper, the zero line as the axis */
     /* six divisions, not the default five: lpNiceStep's 1-2-5 ladder rounds 21.8 up to 50, which left the tariff
        short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
@@ -9006,7 +9048,7 @@ async function mount(doc) {
     /* the comparator: the tallest bar the stated scale holds - the breaking bar first stands at ITS level, a bar like the others */
     const honest = st.vals.filter((v) => !(brk && v > hi)), comp = honest.length ? Math.max(...honest) : hi;
     st.vals.forEach((v, i) => {
-      const over = brk && v > hi, x = lead + pitch * (i + gap / 2), yv = my(over ? comp : v), neg = v < 0;
+      const over = brk && v > hi, x = lead + pitch * (i + air / 2), yv = my(over ? comp : v), neg = v < 0;
       const h = Math.max(3, Math.abs(yv - base)), y = neg ? base : base - h;
       /* P50 T10: the placeholder's TRACK is laid in BEFORE the bar, so the bar grows in front of it. It is exactly
          the height the bar builds to - the comparator's level - because it is furniture, not data (E28: no frame of
@@ -9180,6 +9222,7 @@ async function mount(doc) {
       if (e.over && st.bt) { st.cfinalTrue = e.val.textContent; st.cnum = st.bt.comp; st.cfinal = lpWithUnit(lpFmt(st.bt.comp), unit); st.cpill = pr; st.cp = CP; }
       lpMark(st, "callout", "callout", cg, { x: e.x, y: py });
     }
+    if (capped) for (const b of st.bars) lpWrapBarLabel(b.lab, b.bw);   /* P69 T6c: a name wider than its capped bar takes two lines */
     st.tickFit = lpFitTicks(st);   /* R26-191b law 3, last: the callout's axis mount may have moved a month */
   };
   /* THE FIELD'S INK (E67, operator 2026-09-12): "we need to use bolder primary, high-contrast line colors for our default
