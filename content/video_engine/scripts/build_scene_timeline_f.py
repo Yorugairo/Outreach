@@ -109,7 +109,7 @@ DOCK_INKS = ("own", "page")   # E99 s87, OPEN ON THE OPERATOR'S EYE: how a stamp
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain", "build")   # R26-226 (E99 s82): build=lines[:<s>] - a MULTI-LINE page's series draw one at a time, each whole, its end tag and inline badge landing as it lands (the operator: "draw the first line completely, label it, badge it, draw the 2nd line completely, badge it"); `lines:<s>` names ONE series' seconds, so the page's whole build is N x s   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain", "build", "readability")   # P69 T8 (E99 s97): readability=longform[:bravos|middle|phone]|landscape-phone - the PAGE PROFILE a ledger page is drawn in, and a long form's type preset, the row's word (it wins over the series file's own field); legal on the builders ledger_page.READABILITY_BUILDERS names, refused by name elsewhere   # R26-226 (E99 s82): build=lines[:<s>] - a MULTI-LINE page's series draw one at a time, each whole, its end tag and inline badge landing as it lands (the operator: "draw the first line completely, label it, badge it, draw the 2nd line completely, badge it"); `lines:<s>` names ONE series' seconds, so the page's whole build is N x s   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -3558,6 +3558,11 @@ def _check_opt(key: str, value, where: str) -> None:
     if key == "domain":   # R26-223: the pair is the row's own grammar; the fit to the page's BUILDER needs the page,
         page_domain_spec(value, None, where)   # and is checked where the page is read (world_for_plate), as form='s is
         return
+    if key == "readability":   # P69 T8: the NAME (and a long form's preset) is the row's own grammar; the fit to the
+        if LPG.parse_readability(value) is None:   # page's builder needs the page, and is checked in world_for_plate
+            raise ValueError(f"{where}: readability {value!r} is not one of {LPG.LANDSCAPE_PHONE}|{LPG.LONGFORM}"
+                             f"[:{'|'.join(LPG.LONGFORM_PRESETS)}]")
+        return
     if key == "build":   # R26-226: the mode and its seconds are the row's own grammar; the fit to the page's BUILDER
         page_build_spec(value, None, None, where)   # and to its SERIES COUNT needs the page, and is checked where the
         return                                      # page is read (world_for_plate), as domain='s is
@@ -3565,6 +3570,26 @@ def _check_opt(key: str, value, where: str) -> None:
                "card": ("yes", "no"), "use": PLATE_USES, "path": RACE_PATHS}[key]
     if value not in allowed:
         raise ValueError(f"{where}: {key} {value!r} is not one of {'|'.join(allowed)}")
+
+
+# P69 T8 / R26-259 - THE LONG FORM'S FACE. The template NAMES Inter and never loads it (the spec found every
+# "Inter" on the page rendering as Arial), so a longform page carries the tracked, OFL Inter it is set in: the
+# variable font rides the ASSET MAP (as every plate does) under this key, only when a scene's page asks for the
+# profile, and the engine registers it as its own family (`LP_LONGFORM.FACE`) so nothing outside the profiled
+# page changes face. A build with no longform page carries no font and is byte-identical.
+LONGFORM_FONT_ASSET = "font:inter-longform"
+LONGFORM_FONT_FILE = REPO / "content/video_engine/src/assets/fonts/Inter-Variable.ttf"
+
+
+def longform_assets(timeline: dict) -> dict:
+    """``{LONGFORM_FONT_ASSET: data uri}`` when any scene's page (or chart state) is drawn under the
+    `longform` profile, else ``{}``. Pure apart from reading the tracked font file."""
+    for sc in timeline.get("scenes") or []:
+        world = sc.get("world") or {}
+        pages = [world.get("page")] + list(world.get("page_states") or [])
+        if any(isinstance(p, dict) and (p.get("axes") or {}).get("readability") == LPG.LONGFORM for p in pages):
+            return {LONGFORM_FONT_ASSET: "data:font/ttf;base64," + base64.b64encode(LONGFORM_FONT_FILE.read_bytes()).decode()}
+    return {}
 
 
 PLATE_ARRIVALS_REFUSED = ("stamp",)   # R26-20 send-back #2 (M1): the page's PILLS land or are thrown; no pill painter stamps, and a stamped pill rendered silently as a landing
@@ -5199,6 +5224,29 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         page["build"] = spec["mode"]
         if "build_s" in spec:
             page["build_s"] = spec["build_s"]
+    rd = opts.pop("readability", None)
+    if rd is not None:
+        # P69 T8 (E99 s97): the PAGE PROFILE this shot draws the page in - `longform` (the measured Bravos page) or
+        # T17's `landscape-phone`. A LEDGER PAGE option and the ROW's word, as `;domain=` is: the object carries the
+        # data, the row says how this shot draws it, so the row's profile wins over the series file's own field.
+        # Written onto the page's own `axes` only when the row names one - a row that names none is byte-identical.
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError(f"{plate_id!r}: readability= is a LEDGER PAGE option - it is the profile a page's chart "
+                             "is drawn in (P69 T8); a plate is a picture")
+        page = world["page"]
+        err = LPG.readability_error(page, rd, str(page.get("builder") or "?"))
+        if err:
+            raise ValueError(f"{plate_id!r}: {err}")
+        profile, preset = LPG.parse_readability(rd)
+        if profile == LPG.LONGFORM:   # the preset and, on a line page, the end-tag form that keeps every tag on the stage
+            LPG.apply_longform(page, preset)
+        else:
+            axes = page.setdefault("axes", {})
+            axes["readability"] = profile
+            for key in ("type_scale", "tag_form"):   # a series file's long form, overruled by the row
+                axes.pop(key, None)
+    elif isinstance(world.get("page"), dict) and (world["page"].get("axes") or {}).get("readability") == LPG.LONGFORM:
+        LPG.apply_longform(world["page"])   # the series file's own long form, re-fitted to the badges the row's dock gave it
     room = opts.pop("room", None)
     if room is not None:
         # R26-221: the rectangle of this PICTURE PLATE a card may stand in - the plate's answer to a page's
@@ -7941,6 +7989,7 @@ def main() -> int:
     # plus player.json naming the engine's sha - so a build dir holds a ~46 KB page, not a 32 MB one,
     # and a served build says which engine it is running.
     import render_baseline as _RB
+    uris = {**uris, **longform_assets(timeline)}   # P69 T8: the long form's face, only when a page asks for it
     out = _RB.write_split(BUILD, timeline, uris, TIMELINE_NAME, template=TEMPLATE)
 
     dur = float(subprocess.run(

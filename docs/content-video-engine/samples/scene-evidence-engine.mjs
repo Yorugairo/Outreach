@@ -7946,10 +7946,91 @@ async function mount(doc) {
      because the anchored caption fixes the chart's rendered height; the horizontal viewBox and
      CSS box grow together, so the browser's default xMidYMid meet remains uniform rather than
      letterboxing a wider outer box. The line builder keeps its numeric domains and fixed margins. */
-  const LP_READABILITY = Object.freeze({ LANDSCAPE_PHONE: "landscape-phone" });
+  const LP_READABILITY = Object.freeze({ LANDSCAPE_PHONE: "landscape-phone", LONGFORM: "longform" });
   const LP_PHONE = Object.freeze({ VIEW_H: 560, MIN_W: 1000, SAFE_RIGHT: 0.979, PLOT_L: 120,
                                   NAME_U: 19 * 46 / 24, BADGE_U: 5 * 46 / 18, FONT_PX: 46, TEXT_PX: 52, TAG_GAP: 12 });
   const lpReadability = (pg) => String(((pg || {}).axes || {}).readability || "");
+  /* P69 T8 (E99 s97) - THE LONG FORM'S PAGE, measured off Bravos's frames (docs/research/bravos-style/
+     BRAVOS-LONGFORM-CHART-SPEC.md (b)), opted in per row (`;readability=longform[:<preset>]`) on a dense-line or a bars
+     page. It OVERRIDES E22's cream rim, charcoal page and deckle (and its Kalam hand) ONLY under the option: a flat
+     ground (GROUND, the spec's t530 read, no vignette), the plot on a lighter PANEL inside a thin BORDER (t530), no
+     gridlines, a ZERO rule only where the data crosses zero (t1078), Inter for every word (R26-259: the template
+     named Inter and never loaded it - FACE is that font, carried in the asset map as FONT_ASSET), the title Inter
+     Bold in the spec's TITLE colour, the ticks in its TICK grey, the source dim (SOURCE).
+     ITS SCALE IS THE OPERATOR'S (P69-HG3): E99 s90's phone type and E99 s97's measured Bravos type pull opposite ways,
+     so TYPE_SCALE carries three named presets, each a FONT SIZE in px as RENDERED on the 1920 x 1080 stage (the page
+     ink through the punch, the chart's through its own rest scale). ledger_page.LONGFORM_TYPE_SCALE is the same table:
+       bravos [DERIVED: the spec's cap/digit heights / Inter's 0.727 cap ratio - title cap 28 (t530), tick digit 16.5
+              (t170 15 / t530 18), line-badge digits 14 (t170), value digits 31.5 (t1088), source cap 10.5 (t170/t530);
+              the sub, unmeasured on a chart page, at 24];
+       middle the working default (the parent's frame read, 2026-09-23): title 44, sub 26, ticks 26, tags 30, source 20;
+       phone  [DERIVED: E99 s90 / T17 - its 52 CSS px x the 1.16 punch, its 46 chart units x the 1.334 rest scale].
+     THE PAGE IS LAID OUT BY ITS OWN INK (lpLongformBox): the title, sub and source wrap in one column to the stage's
+     safe right edge, and the chart takes what is left - its plot top half a tick figure (M28's air) plus the ink it
+     carries above the plot under the sub's last line, its foot raised only when the source would leave the stage.
+     An END TAG that will not fit at its preset is shortened by the compiler (`axes.tag_form`: the value and its
+     chip, then the value alone); the long names wait for P69 T10's badge key. */
+  const LP_LONGFORM = Object.freeze({ GROUND: "#14181E", PANEL: "#222830", BORDER: "#696D73", BORDER_PX: 1.5,
+                                      ZERO: "#675C66", ZERO_PX: 3, TICK: "#9A9DA2", TITLE: "#DB8497", SOURCE: "#868A8F",
+                                      FACE: "Inter Longform", FONT_ASSET: "font:inter-longform",
+                                      SUB_GAP: 8, LINE_H: 1.1, YLAB_GAP_PX: 14, EDGE_PX: 16, CHIP_DX_PX: 12,
+                                      TAG_EM: Object.freeze({ NAME: 0.68, CHIP: 0.64 }),
+                                      PLOT_T: Object.freeze({ "dense-line": 40, story: 90 }),
+                                      CAPTION_TOP: 878,   /* ledger_page.CAPTION_ANCHOR["16:9"]: the anchored caption's strip */
+                                      DEFAULT: "middle",
+                                      TYPE_SCALE: Object.freeze({
+                                        bravos: Object.freeze({ title: 38.5, sub: 24, tick: 22.7, tag: 19.3, chip: 15.4, value: 43.3, src: 14.4 }),
+                                        middle: Object.freeze({ title: 44, sub: 26, tick: 26, tag: 30, chip: 24, value: 34, src: 20 }),
+                                        phone: Object.freeze({ title: 60.3, sub: 60.3, tick: 61.4, tag: 61.4, chip: 61.4, value: 61.4, src: 60.3 }) }) });
+  const lpLongformType = (pg) => LP_LONGFORM.TYPE_SCALE[(((pg || {}).axes) || {}).type_scale] || LP_LONGFORM.TYPE_SCALE[LP_LONGFORM.DEFAULT];
+  /* the chart-unit geometry for a chart box from `top` to `bot` (rendered px) - ledger_page.longform_geom, line for line:
+     the ticks' column and the names hang half a figure clear of the plot, whose floor rises until they clear the caption */
+  const lpLongformGeom = (T, top, bot) => {
+    const s = (bot - top) / 560, tick = T.tick / s, capU = (LP_LONGFORM.CAPTION_TOP - top) / s;
+    return { scale: s, tick, tag: T.tag / s, chip: T.chip / s, value: T.value / s,
+             plot_l: Math.max(70, 12 + 2.3 * tick), line_b: Math.min(458, capU - 5 - 1.5 * tick), xtick_dy: 1.25 * tick,
+             gutter: Math.max(60, 40 + 2.6 * tick), xlab_dy: 1.25 * tick, bars_b: Math.min(440, capU - 5 - 2.65 * tick),
+             ylab_gap: LP_LONGFORM.YLAB_GAP_PX / s, rule_dy: (8 + 0.25 * T.tag) / s };
+  };
+  /* ... the chart box: ledger_page.longform_chart_box, line for line */
+  const lpLongformBox = (pg, T, subBottom, srcH) => {
+    const top0 = LP.FULL.Y * STAGE_H, bot0 = (LP.FULL.Y + LP.FULL.H) * STAGE_H, ax = pg.axes || {};
+    const bot = Math.min(bot0, STAGE_H - LP_LONGFORM.EDGE_PX - 0.012 * LP.PUNCH_SCALE * STAGE_H - srcH);
+    const tu = LP_LONGFORM.PLOT_T[pg.builder] || LP_LONGFORM.PLOT_T.story;
+    const rules = (ax.hlines || (ax.hline ? [ax.hline] : [])).some((h) => h && h.label);
+    const above = Math.max(0.5 * T.tick, ax.ylabel ? LP_LONGFORM.YLAB_GAP_PX + T.tick : 0, rules ? 8 + 1.25 * T.tag : 0);   /* a label's box reaches its font's ascent (~1 em) above its baseline */
+    const need = subBottom + 0.5 * T.tick + above;
+    if (top0 + tu * (bot - top0) / 560 >= need) return { top: top0, bot };
+    return { top: (need - tu * bot / 560) / (1 - tu / 560), bot };
+  };
+  /* ... and a dense-line page's end tags at its preset and form (ledger_page.longform_tag_units), widening the viewBox the
+     way T17 does so every tag ends inside the stage's safe right edge */
+  const lpLongformTagUnits = (pg, T, form, scale) => {
+    const rides = {};
+    for (const b of (pg.badges || [])) if (b && b.inline) rides[LP_BADGE_COL[b.accent] || ""] = String(b.tag || "");
+    let out = 0;
+    for (const s of (pg.series || [])) {
+      if (!s || s.muted) continue;
+      const label = String(s.label || ""), name = String(s.name || ""), chip = rides[String(s.color || "")] || "";
+      const text = form === "full" ? (label + " " + name).trim() : (label || name);
+      out = Math.max(out, text.length * LP_LONGFORM.TAG_EM.NAME * T.tag
+        + (chip && form !== "value" ? LP_LONGFORM.CHIP_DX_PX + chip.length * LP_LONGFORM.TAG_EM.CHIP * T.chip : 0));
+    }
+    return out / scale;
+  };
+  const lpLongformVW = (pg, T, scale) => {
+    const maxW = (LP_PHONE.SAFE_RIGHT - LP.FULL.X) * STAGE_W / scale + 220 - LP_PHONE.TAG_GAP
+      - lpLongformTagUnits(pg, T, ((pg.axes || {}).tag_form) || "full", scale);
+    return Math.max(LP_PHONE.MIN_W, Math.round(maxW * 1000) / 1000);
+  };
+  /* one role's size on a built chart, in its units: T17's 46, or the long form's preset */
+  const lpTypeU = (st, role) => (st.lfType ? st.lfType[role] : LP_PHONE.FONT_PX);
+  /* the profiles that set E99 s90's phone type (T17's own, and the long form that carries it) */
+  const lpPhoneType = (r) => r === LP_READABILITY.LANDSCAPE_PHONE || r === LP_READABILITY.LONGFORM;
+  /* ... read off a built chart: T17's reads stay exactly as they were (they never asked the aspect); the long form
+     is a 16:9 page profile and never sets a portrait chart's type */
+  const lpPhoneTypeOf = (st) => st.readability === LP_READABILITY.LANDSCAPE_PHONE
+    || (!st.portrait && st.readability === LP_READABILITY.LONGFORM);
   const lpPhoneTagUnits = (pg) => {
     if (String((pg || {}).builder || "") !== "dense-line") return 0;
     const rides = {};
@@ -8036,6 +8117,16 @@ async function mount(doc) {
      portrait layout MEASURES its ink (P41), so the faces are fetched up front and every page is rebuilt once they land */
   const LP_FACES = ["700 68px Kalam", "400 40px Kalam", "500 40px Kalam", "700 34px Kalam"];
   if (document.fonts && document.fonts.load) Promise.all(LP_FACES.map((f) => document.fonts.load(f))).then(() => { if (PORTRAIT) ledgerState.clear(); }).catch(() => {});   /* landscape pages are laid out in %, never measured: a rebuild there only shifts chart text a sub-pixel against the goldens */
+  /* P69 T8 / R26-259 - THE LONG FORM'S FACE: Inter, loaded. The compiler puts the tracked Inter-Variable.ttf in the
+     asset map (build_scene_timeline_f.longform_assets) only when a page is drawn under the profile, and it is
+     registered here under its OWN family name, so the captions and species that name "Inter" keep the face they
+     always had and only the profiled page changes. A longform page lays its title out by MEASURING it, so every
+     longform page is rebuilt once the face lands (as a portrait page is for Kalam, above). No asset, nothing runs. */
+  if (A[LP_LONGFORM.FONT_ASSET] && typeof FontFace !== "undefined" && document.fonts) {
+    const face = new FontFace(LP_LONGFORM.FACE, 'url("' + A[LP_LONGFORM.FONT_ASSET] + '")', { weight: "100 900", style: "normal" });
+    document.fonts.add(face);
+    face.load().then(() => { for (const [key, S] of [...ledgerState]) if (S && S.readability === LP_READABILITY.LONGFORM) ledgerState.delete(key); }).catch(() => {});
+  }
   /* PORTRAIT LAYOUT (P41): one column in stage px, measured top-down inside doc 49's zones - the title from y=140
      (zone 1), the chart in zone 2, the caption strip from 1340 (two 64px caption lines reach up to ~1290, so the page
      ends at 1280); x inside the safe box 80..880 (G-l). FIELD is the charcoal's box: a 3.5% / 2% cream margin IS the deckle. */
@@ -8239,11 +8330,12 @@ async function mount(doc) {
     if (fieldPlate) { fieldPlate.style.backgroundImage = 'url("' + A[pg.field_plate] + '")'; field.style.display = "none"; }
     const title = lpEl("div", "lp-ink lp-title", page);
     const subEl = lpEl("div", "lp-ink lp-sub", page);
+    const LF = lpLongformPage(pg);   /* P69 T8: the long form's page - the ground, the panel, Inter at the phone floor */
     const src = lpEl("div", "lp-ink lp-src" + (pg.src_style === "compact" ? " compact" : ""), page);   /* the design pass: a citation takes minimal space */
     const subText = PORTRAIT ? lpFirstClause(pg.sub || "", true) : (pg.sub || ""), srcText = PORTRAIT ? lpFirstClause(pg.source || "", false) : (pg.source || "");
     const glyphs = PORTRAIT
       ? [...lpGlyphsWrap(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, subText, seed + 2), ...lpGlyphsWrap(src, srcText, seed + 1)]
-      : [...lpGlyphs(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, subText, seed + 2), ...lpGlyphs(src, srcText, seed + 1)];
+      : [...(LF ? lpGlyphsWrap : lpGlyphs)(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, subText, seed + 2), ...(LF ? lpGlyphsWrap : lpGlyphs)(src, srcText, seed + 1)];   /* LF: the title and the source WRAP in their column, by word */
     /* chart area inside the field, leaving the declared quiet zone for docks (s9.28 B3/C2) */
     const qz = pg.quiet_zone || null;
     const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
@@ -8257,7 +8349,7 @@ async function mount(doc) {
         '<span class="pill-tag" style="color:' + (ACCENT[bd.accent] || "var(--sunflower)") + '">' + bd.tag + '</span></span>';
       return { el, at: LP_BADGE0 + LP_BADGE_STEP * bi };
     });
-    let geom = { W: 1000, H: 560 };
+    let geom = { W: 1000, H: 560 }, lfGeom = null;   /* lfGeom: P69 T8, the long form's chart-unit geometry at its preset */
     if (PORTRAIT) {
       geom = lpPortraitLayout({ title, subEl, src, chart, rail });
     } else {
@@ -8295,6 +8387,24 @@ async function mount(doc) {
         subEl.style.lineHeight = "1.1";
         src.style.lineHeight = "1.1";
       }
+      if (LF) {   /* P69 T8: the long form lays its page out by MEASURING its own ink at its preset (lpLongformBox) */
+        const T = lpLongformType(pg), PH = page.offsetHeight || STAGE_H;
+        const rend = (y) => STAGE_H / 2 + (y - PH / 2) * ps;   /* a page CSS px -> a rendered stage px (the punch, about the centre) */
+        const col = ((un(LP_PHONE.SAFE_RIGHT) - tL) * 100).toFixed(2) + "%";
+        page.classList.add("lp-readability-longform");
+        for (const [el, px] of [[title, T.title], [subEl, T.sub], [src, T.src]]) {
+          el.style.fontSize = (px / ps).toFixed(3) + "px"; el.style.lineHeight = String(LP_LONGFORM.LINE_H);
+          el.style.width = col; el.style.whiteSpace = "normal"; el.style.left = title.style.left;
+        }
+        subEl.style.top = ((title.offsetTop + title.offsetHeight + LP_LONGFORM.SUB_GAP) / PH * 100).toFixed(3) + "%";
+        const subBottom = subText.trim() ? rend(subEl.offsetTop + subEl.offsetHeight) : rend(title.offsetTop + title.offsetHeight);
+        const box = lpLongformBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0);
+        lfGeom = lpLongformGeom(T, box.top, box.bot);
+        const vw = pg.builder === "dense-line" ? lpLongformVW(pg, T, lfGeom.scale) : 1000;   /* bars: the legacy viewBox, left-aligned, never letterboxed */
+        cb.y = un(box.top / STAGE_H); cb.h = (box.bot - box.top) / STAGE_H / ps; cb.w = vw * lfGeom.scale / STAGE_W / ps;
+        chart.setAttribute("viewBox", "0 0 " + vw + " 560");
+        geom = { W: vw, H: 560 };
+      }
       /* a page whose captions are pinned to the anchor (a host plate, C5) keeps its chart and source above the
          caption band: the chart ends at 79% of the frame so the source line under it never meets a caption. A
          FULL-stage page already ends where its own tick labels clear that strip (LP.FULL.H), so the clamp - which
@@ -8306,7 +8416,10 @@ async function mount(doc) {
       /* the sub wraps inside the chart's width; the source writes directly under the chart box (never in the caption band).
          On a FULL-stage page the ink keeps the TITLE's own column - the one column a 9:16 page has - because the chart's
          letterbox moves with the data's shape and the heading would drift with it. */
-      const inkL = FULL ? title.style.left : chart.style.left, inkW = FULL ? ((cb.x + cb.w - tL) * 100).toFixed(2) + "%" : chart.style.width;
+      /* P69 T8: a longform page's ink column ends at the stage's safe right edge - T17's widened chart box runs past it
+         (its right margin is the end tags' air), and the long form's floor-sized words WRAP in this column */
+      const inkR = LF ? un(LP_PHONE.SAFE_RIGHT) : cb.x + cb.w;
+      const inkL = FULL ? title.style.left : chart.style.left, inkW = FULL ? ((inkR - tL) * 100).toFixed(2) + "%" : chart.style.width;
       subEl.style.width = inkW; subEl.style.left = inkL;
       src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = inkL;
       rail.style.left = inkL; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = inkW;
@@ -8319,12 +8432,17 @@ async function mount(doc) {
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
                  marks: [], markBy: {}, geom, portrait: PORTRAIT, linePts: [], titleEl: title, titleGlyphs: [...title.querySelectorAll(".g")], rtGlyphs: [], perform: null };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
     st.stagePx = lpStagePx(chart, geom, PORTRAIT || pg.punch === false ? 1 : LP.PUNCH_SCALE);   /* P69 T6c: one chart unit in stage px at rest (the bar cap reads it) */
+    if (lfGeom) {   /* P69 T8: every size the builders write, in this chart's units; the stylesheet's read through variables */
+      st.lfType = Object.assign({}, lfGeom, { form: ((pg.axes || {}).tag_form) || "full" });
+      for (const k of ["tick", "tag", "chip", "value"]) chart.style.setProperty("--lf-" + k, lfGeom[k].toFixed(3) + "px");
+    }
     st.subGlyphs = [...subEl.querySelectorAll(".g")]; st.srcGlyphs = [...src.querySelectorAll(".g")];   /* P48 T4: a recast erases the words that described the chart that left */
     lpMark(st, "title", "title", title, {}); lpMark(st, "sub", "sub", subEl, {}); lpMark(st, "src", "src", src, {});   /* P48 T1: the page's own ink is a mark too - a retitle and a recast both move it */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo, share: buildLedgerShare,
                        tiers: buildLedgerTiers, treemap: buildLedgerTreemap };   /* P50 T9 / T6 */
     (builders[st.kind] || buildLedgerBars)(st, pg);
+    if (LF) lpLongformPlot(st);
     /* A page may declare its own BUILD length (operator, 2026-09-08: "the fix is to draw out the charts in a
        slower/more animated fashion"). Measured on the tariff short, M21 puts the deployed lives at 0.0-6.1 s
        against a 10-13 s span - the chart is not being HELD too long, it finishes drawing early and then waits.
@@ -8340,6 +8458,7 @@ async function mount(doc) {
       const ch2 = lpEl("svg", "lp-chart", page, { viewBox: chart.getAttribute("viewBox") });
       ch2.style.cssText = chart.style.cssText; ch2.style.opacity = 0;
       const s2 = { root, page, chart: ch2, geom, portrait: PORTRAIT, seed, edge, field, rail, stagePx: st.stagePx,   /* P69 T6c: the same box, the same scale */
+                   lfType: st.lfType,   /* P69 T8: ... and the long form's same type */
                    readability: st.readability,
                    bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: {}, linePts: [],
                    marks: [], markBy: {}, badges: [], inkEls: [],
@@ -8352,6 +8471,7 @@ async function mount(doc) {
          phone state keeps the native inset/type and the cream palette without mutating pg2. */
       const pg2Render = pg.surface_from ? { ...pg2, surface_from: pg.surface_from } : pg2;
       (builders[s2.kind] || buildLedgerBars)(s2, pg2Render);
+      if (LF) lpLongformPlot(s2);
       /* ... and its own SUB and SOURCE. A caption that goes on describing the chart that left is a lie on the page, so a
          recast rewrites them with the same hand that rewrites the title: the old run erases glyph by glyph, the new one
          writes. They sit exactly where the page's own sit, and carry nothing until the recast reaches them. */
@@ -8634,7 +8754,7 @@ async function mount(doc) {
     /* IT FITS: the page keeps the stylesheet's size to the bit - no style is written, so a page that
        never had this defect builds byte-identically to the frame it built before (the goldens). */
     if (!(room > 0) || w0 <= room) return { size: size0, rows: 1, gut, room, slot, fitted: false };
-    const floor = P ? LPVAL.FLOOR_P : LPVAL.FLOOR_L;
+    const floor = P ? LPVAL.FLOOR_P : (st.lfType ? Math.max(LPVAL.FLOOR_L, st.lfType.value) : LPVAL.FLOOR_L);   /* P69 T8: a long form's values never fit below their preset */
     let size = Math.max(floor, Math.floor(size0 * room / w0 / LPVAL.STEP) * LPVAL.STEP);
     for (let i = 0; i < LPVAL.FIT_STEPS; i++) {
       for (const b of vals) b.val.style.fontSize = size.toFixed(1) + "px";
@@ -8968,6 +9088,29 @@ async function mount(doc) {
      its viewBox the browser's way (uniform, `meet`), times the page's resting scale (the punch, `rest`). Pure in the
      layout the page wrote, never in t or the camera, so a cold seek and a warm play build the same bars. Measured
      2026-09-23 on the 94 page: 1.3340 against the chart's own screen CTM at rest, 1.3340. */
+  /* P69 T8: is this page drawn under the long form's profile? A 16:9 full-stage page (never a host plate), on the
+     builders the compiler admits it on (ledger_page.READABILITY_BUILDERS) - anything else is the page it was. */
+  const lpLongformPage = (pg) => !PORTRAIT && lpReadability(pg) === LP_READABILITY.LONGFORM && !!(pg && pg.full_stage)
+    && !pg.chart_box && !pg.board && pg.punch !== false && ["dense-line", "story"].indexOf(String(pg.builder || "story")) >= 0;
+  /* ... and its PLOT: the lighter panel inside the thin border (the spec's t530), laid UNDER every mark as the chart's
+     own ground, and the axis lines sorted - a rule on the panel's edge is the border's job and is hidden (CSS), a
+     rule strictly inside it is the ZERO line the data crosses (t1078) and is drawn at its measured weight. Widths
+     are stage px, carried into chart units by the page's own rest scale. */
+  const lpLongformPlot = (S) => {
+    const k = S.stagePx > 0 ? S.stagePx : 1, P0 = S.plot;
+    const box = S.lfPanel || (P0 ? { x: P0.L, y: P0.T, w: P0.W - P0.R - P0.L, h: P0.B - P0.T } : null);
+    if (!box || !(box.w > 0) || !(box.h > 0)) return;
+    const r = lpEl("rect", "lp-panel", S.chart, { x: box.x.toFixed(1), y: box.y.toFixed(1), width: box.w.toFixed(1), height: box.h.toFixed(1),
+                                                   fill: LP_LONGFORM.PANEL, stroke: LP_LONGFORM.BORDER, "stroke-width": (LP_LONGFORM.BORDER_PX / k).toFixed(4) });
+    S.chart.insertBefore(r, S.chart.firstChild);
+    for (const ax of S.chart.querySelectorAll("line.ax")) {
+      const y = parseFloat(ax.getAttribute("y1"));
+      if (Number.isFinite(y) && y > box.y + 1 && y < box.y + box.h - 1) {
+        ax.classList.add("lf-zero"); ax.style.stroke = LP_LONGFORM.ZERO; ax.style.strokeWidth = (LP_LONGFORM.ZERO_PX / k).toFixed(4);
+      }
+    }
+    S.lfPanelEl = r;
+  };
   const lpStagePx = (chart, geom, rest) => {
     const len = (v, full) => { const n = parseFloat(v); return !Number.isFinite(n) ? 0 : String(v).trim().endsWith("%") ? n / 100 * full : n; };
     const w = len(chart && chart.style.width, STAGE_W), h = len(chart && chart.style.height, STAGE_H);
@@ -9025,10 +9168,12 @@ async function mount(doc) {
     const pad = Math.max(1e-9, (hi0 - lo0) * 0.14);
     const lo = dom ? Math.min(dom[0], lo0) : lo0 - (lo0 < 0 ? pad : 0), hi = dom ? dom[1] : hi0 + (hi0 > 0 ? pad : 0);
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px, 40px labels below, 59px values and pill above */
-    const defaultGutter = P ? 150 : 60;
+    const LF = !P && st.lfType ? st.lfType : null;   /* P69 T8: the long form's bars - its preset's type, a gutter and a floor that fit it */
+    const defaultGutter = P ? 150 : LF ? LF.gutter : 60;
+    const XLAB = P ? 52 : LF ? LF.xlab_dy : 34;   /* the category names' baseline under the plot floor */
     const requestedGutter = Number((pg.axes || {}).left_gutter);
     const leftGutter = Number.isFinite(requestedGutter) ? Math.max(defaultGutter, requestedGutter) : defaultGutter;
-    const bottom = P ? G.H - 70 : 440, top = P ? 150 : 90, x0 = leftGutter, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
+    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : 90, x0 = leftGutter, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
@@ -9045,6 +9190,7 @@ async function mount(doc) {
        short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
        positive bar. Asking for six lands step 20 and five labelled ticks. */
     const ticks0 = lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26, 6);
+    if (LF) st.lfPanel = { x: x0 - 20, y: top, w: x1 - x0 + 40, h: bottom - top };   /* P69 T8: the panel spans the tick rules' own extent, the scale's top to its floor */
     /* the comparator: the tallest bar the stated scale holds - the breaking bar first stands at ITS level, a bar like the others */
     const honest = st.vals.filter((v) => !(brk && v > hi)), comp = honest.length ? Math.max(...honest) : hi;
     st.vals.forEach((v, i) => {
@@ -9072,7 +9218,7 @@ async function mount(doc) {
       if (dcol) bar.style.fill = dcol;
       if (dcol && ex) ex.tint(dcol);   /* P58 T5: the prism's faces are the bar's OWN ink at a ratio - a declared colour rules them too */
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
-      const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + (P ? 52 : 34), "text-anchor": "middle", opacity: 0 });
+      const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + XLAB, "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
       const vy = neg ? base + h + (P ? 62 : 26) : base - h - (P ? 22 : 14);
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
@@ -9084,7 +9230,7 @@ async function mount(doc) {
       }
       st.bars.push(rec);
       lpMark(st, "b:" + i, "bar", bar, { x, y, w: bw, h, base, cx: x + bw / 2, end: rec.end, neg, v }, rec);
-      lpMark(st, "xlab:" + i, "xlabel", lab, { x: x + bw / 2, y: bottom + (P ? 52 : 34) });
+      lpMark(st, "xlab:" + i, "xlabel", lab, { x: x + bw / 2, y: bottom + XLAB });
       lpMark(st, "val:b:" + i, "value", val, { x: x + bw / 2, y: vy, v });
     });
     /* R26-53 law 1: the whole row fits its slots, at ONE size, before anything reads a value's box */
@@ -9126,7 +9272,7 @@ async function mount(doc) {
     st.hlines = HLB.map((h, hi) => {
       const col = LP_PAL[h.color] || h.color || LP_INK.cobalt, hy = my(+h.y);
       const line = lpEl("line", "hrule", st.chart, { x1: x0, x2: x1, y1: hy.toFixed(1), y2: hy.toFixed(1), stroke: col });
-      const lab = h.label ? lpText(st.chart, "sname", x1, hy - (P ? 16 : 10), "end", String(h.label),
+      const lab = h.label ? lpText(st.chart, "sname", x1, hy - (P ? 16 : LF ? LF.rule_dy : 10), "end", String(h.label),
         { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : "") }) : null;
       lpMark(st, "rule:" + hi, "rule", line, { y: hy, v: +h.y, x1: x0, x2: x1 });
       return { h, y: hy, line, lab, col };
@@ -9136,11 +9282,12 @@ async function mount(doc) {
     if (e) {
       const cg = lpEl("g", "", st.chart, { opacity: 0 });
       let CP = P ? { w: 160, h: 84, ty: 61, up: 128, dn: 40, rx: 14 } : { w: 128, h: 42, ty: 30, up: 66, dn: 24, rx: 8 };   /* portrait pill: 59px type, narrower than a bar pitch so the neighbours' values stay clear */
+      if (LF) { const q = LF.value / 30; CP = { w: CP.w * q, h: CP.h * q, ty: CP.ty * q, up: CP.up * q, dn: CP.dn * q, rx: CP.rx * q }; }   /* P69 T8: the pill's box grows with its phone-floor number */
       /* the pill sits past the bar's far end - but NEVER in the x-label band. A negative bar that reaches the
          plot floor put its own pill straight over its own month name (measured on the tariff short: the pill at
          y 424-508, "May" at 429-473, fully buried). If there is no room below, the pill flips ABOVE the zero
          line at the same x, where a negative bar leaves the plot empty. s9.23b: a label never overprints. */
-      const labTop = bottom + (P ? 52 : 34) - (P ? 40 : 26);   /* the top of the month-label row */
+      const labTop = bottom + XLAB - (P ? 40 : LF ? LF.tick : 26);   /* the top of the month-label row */
       /* THE PILL'S BOX IS BUILT AND MEASURED FIRST (R26-53), because how wide it is decides where it may
          stand: a pill that fits its own slot has the pick of the laws below, and one that does not has
          exactly one place to go. The rect is created before the text so the text sits on it. */
@@ -9334,10 +9481,11 @@ async function mount(doc) {
     const ax = pg.axes || {}, series = pg.series || [];
     const PAL = pg.surface_from ? { ...LP_INK, cobalt: "#1769C2", teal: "#087D68", crimson: "#B53A28" } : LP_INK;
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;
-    const PHONE = !P && st.readability === LP_READABILITY.LANDSCAPE_PHONE;
+    const PHONE = !P && lpPhoneTypeOf(st);
     /* portrait (P41): stage px; no right margin for an inline name - it sits above the line's end.
        T17 changes only the closed phone profile's local face/box law; legacy values stay byte-stable. */
-    const L = P ? 150 : PHONE ? LP_PHONE.PLOT_L : 70, R = P ? 70 : 220, T = P ? 90 : 40, B = P ? G.H - 80 : (PHONE ? 458 : 470), W = G.W;
+    const LFT = P ? null : st.lfType;   /* P69 T8: the long form's preset geometry (null keeps T17's and the legacy page's) */
+    const L = P ? 150 : LFT ? LFT.plot_l : PHONE ? LP_PHONE.PLOT_L : 70, R = P ? 70 : 220, T = P ? 90 : 40, B = P ? G.H - 80 : LFT ? LFT.line_b : (PHONE ? 458 : 470), W = G.W;
     const Y = (v) => ax.log ? Math.log10(v) : v;
     /* REFERENCE RULES (the fifth watch, 2026-09-07). A POLICY rate is a constant, not a series: drawn as a line it is a step,
        and a step at this scale reads as a fault. `axes.hlines: [{y, label, color}]` draws it as what it is - a labelled rule
@@ -9382,7 +9530,7 @@ async function mount(doc) {
       const line = lpEl("line", "hrule", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1), stroke: col });
       const pe = PJ ? tiltRule(line, pj, L, y, W - R, y) : null;   /* the comparator is a rule ON the page: it lies on the plane too (E53 s6) */
       const ry = pe ? pe[1][1] : y;                                /* ... and its name stands upright at its projected right end */
-      const lab = h.label ? lpText(st.chart, "sname", pe ? pe[1][0] : W - R, ry - (P ? 18 : PHONE ? 22 : 12), "end", String(h.label), { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : PHONE ? ";font-size:" + LP_PHONE.FONT_PX + "px" : "") }) : null;
+      const lab = h.label ? lpText(st.chart, "sname", pe ? pe[1][0] : W - R, ry - (P ? 18 : LFT ? LFT.rule_dy : PHONE ? 22 : 12), "end", String(h.label), { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : PHONE ? ";font-size:" + lpTypeU(st, "tag") + "px" : "") }) : null;
       lpMark(st, "rule:" + hix, "rule", line, { y, v: +h.y, x1: L, x2: W - R });
       if (lab) lpMark(st, "rulelab:" + hix, "rulelabel", lab, { x: pe ? pe[1][0] : W - R, y: ry - (P ? 18 : 12) });
       return { h, y, line, lab, col };
@@ -9396,13 +9544,13 @@ async function mount(doc) {
         const pe = PJ ? tiltRule(gl, pj, L, y, W - R, y) : null;   /* P58 T5: the decade rules lie on the plane; their numbers stay upright at the left end */
         lpMark(st, "tick:" + n, "tick", gl, { v: tv, y, x1: L, x2: W - R });
         lpMark(st, "ylab:" + n, "ylabel", lpText(st.chart, "lab", pe ? L - 10 + (pe[0][0] - L) : L - 10, pe ? pe[0][1] + 8 : y + 8, "end", lpTick(tv) + (ax.unit || ""),
-          st.readability === LP_READABILITY.LANDSCAPE_PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : undefined), { v: tv, x: pe ? L - 10 + (pe[0][0] - L) : L - 10, y: pe ? pe[0][1] + 8 : y + 8 }); n++; } tv *= 2; }
+          lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : undefined), { v: tv, x: pe ? L - 10 + (pe[0][0] - L) : L - 10, y: pe ? pe[0][1] + 8 : y + 8 }); n++; } tv *= 2; }
     } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10, undefined, PJ ? pj : null);
-    lpYLabel(st, pg, L, T - 12);
+    lpYLabel(st, pg, L, T - (LFT ? LFT.ylab_gap : 12));
     (ax.xticks || []).forEach(([x, lab], i) => { const pe = PJ ? pj(mx(x), B) : null;   /* P58 T5: the x label stands at its own place ON the baseline, and upright */
-      const tx = lpEl("text", "lab", st.chart, { x: (pe ? pe[0] : mx(x)).toFixed(1), y: pe ? pe[1] + (P ? 52 : 32) : B + (P ? 52 : 32), "text-anchor": "middle",
-        ...(st.readability === LP_READABILITY.LANDSCAPE_PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : {}) }); tx.textContent = lab;
-      lpMark(st, "xtick:" + i, "xtick", tx, { v: x, x: pe ? pe[0] : mx(x), y: pe ? pe[1] + (P ? 52 : 32) : B + (P ? 52 : 32) }); });
+      const tx = lpEl("text", "lab", st.chart, { x: (pe ? pe[0] : mx(x)).toFixed(1), y: pe ? pe[1] + (P ? 52 : LFT ? LFT.xtick_dy : 32) : B + (P ? 52 : LFT ? LFT.xtick_dy : 32), "text-anchor": "middle",
+        ...(lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : {}) }); tx.textContent = lab;
+      lpMark(st, "xtick:" + i, "xtick", tx, { v: x, x: pe ? pe[0] : mx(x), y: pe ? pe[1] + (P ? 52 : LFT ? LFT.xtick_dy : 32) : B + (P ? 52 : LFT ? LFT.xtick_dy : 32) }); });
     /* HIGHLIGHT (operator, 2026-09-05, the since-2000 holdings page): axes.highlight_from = an x; the points from there
        are the STORY'S window and take the sign colour, the history before it is drawn muted and thinner beneath - a
        26-year line that is up overall must not paint the last four months' selling green, nor the history red */
@@ -9478,15 +9626,15 @@ async function mount(doc) {
       }
       /* E53: the label at the LINE'S END - so on a tilted plane it stands at the end the line actually has, and
          upright (the text is never turned; only the marks lie on the plane). */
-      const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0, ...(PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : {}) }
-                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr).toFixed(1), y: ((PJ ? PE[1] : my(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : {}) });
+      const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0, ...(PHONE ? { style: "font-size:" + lpTypeU(st, "tag") + "px" } : {}) }
+                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr).toFixed(1), y: ((PJ ? PE[1] : my(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(PHONE ? { style: "font-size:" + lpTypeU(st, "tag") + "px" } : {}) });
       st.linePts.push(PT.map((q) => [q[0], q[1]]));   /* the exact datum positions, for the species' targets */
-      name.textContent = s.muted ? "" : (s.label ? s.label + " " : "") + (s.name || "");   /* the muted history carries no name */
+      name.textContent = s.muted ? "" : LFT && LFT.form !== "full" ? (s.label || s.name || "") : (s.label ? s.label + " " : "") + (s.name || "");   /* P69 T8: a tag the stage cannot hold keeps its value (T10's key takes the name) */   /* the muted history carries no name */
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
          reveal, one real estate (operator, 2026-09-03) */
       const ib = (st.inlineBadges || {})[s.color];
-      if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col,
-        ...(PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : {}) }); tg.textContent = ib.tag; }
+      if (ib && ib.tag && !(LFT && LFT.form === "value")) { const tg = lpEl("tspan", "tagchip", name, { dx: LFT ? (LP_LONGFORM.CHIP_DX_PX / LFT.scale).toFixed(2) : 12, fill: col,
+        ...(PHONE ? { style: "font-size:" + lpTypeU(st, "chip") + "px" } : {}) }); tg.textContent = ib.tag; }
       const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : my(last[1])) + 8,
                      pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
@@ -9682,7 +9830,7 @@ async function mount(doc) {
       const pe = pj ? tiltRule(gl, pj, xa, y, xb, y) : null;
       const lx = pe ? labX + (pe[0][0] - xa) : labX, ly = pe ? pe[0][1] + (st.portrait ? 14 : 8) : y + (st.portrait ? 14 : 8);
       const tl = lpText(st.chart, "lab", lx, ly, "end", lpWithUnit(lpTick(v), unit),
-                        st.readability === LP_READABILITY.LANDSCAPE_PHONE ? { style: "font-size:" + LP_PHONE.FONT_PX + "px" } : undefined);
+                        lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : undefined);
       out.push(gl); out.push(tl);
       lpMark(st, "tick:" + n, "tick", gl, { v, y, x1: xa, x2: xb });   /* P48 T1: a rescale retargets ticks by value, so the value rides with the mark */
       lpMark(st, "ylab:" + n, "ylabel", tl, { v, x: lx, y: ly });
@@ -9691,7 +9839,7 @@ async function mount(doc) {
     return out;
   };
   const lpYLabel = (st, pg, x, y, at) => { const t = (pg.axes || {}).ylabel; if (!t) return null;
-    const size = st.portrait ? 40 : (st.readability === LP_READABILITY.LANDSCAPE_PHONE ? LP_PHONE.FONT_PX : 22);
+    const size = st.portrait ? 40 : (lpPhoneTypeOf(st) ? lpTypeU(st, "tick") : 22);
     const e = lpText(st.chart, "lab", x, y, "start", String(t), { style: "font-size:" + size + "px;fill:#aeb6be", ...(at || {}) });
     lpMark(st, "axislabel", "axislabel", e, { x, y }); return e; };
   /* RACE (bar-chart-race): ranked horizontal bars per period. EVERYTHING is a smooth function of u (period units):

@@ -210,6 +210,31 @@
   .lp-chart .lp-span { stroke: none; }                                                            /* P50 T4: the span's shade - ground under every line, its depth set per frame */
   .lp-chart .spanlab { font-family: Kalam, Inter, Arial, sans-serif; font-weight: 700; }           /* ... and the NAME it gives the stretch, in the same hand the bracket's label is written in */
   .lp-chart .tagchip { font-size: 18px; font-weight: 600; letter-spacing: .04em; opacity: .85; text-transform: lowercase; }
+  /* P69 T8 (E99 s97) - THE LONG FORM'S PAGE (`;readability=longform`), to the MEASURED spec
+     (docs/research/bravos-style/BRAVOS-LONGFORM-CHART-SPEC.md (b)). ONLY under the option, this OVERRIDES E22's cream
+     rim, charcoal page and deckle (a flat #14181E ground, no vignette - t530) and its Kalam hand (Inter for every word,
+     the face the engine loads as "Inter Longform"; R26-259); the title is Inter Bold in the spec's #DB8497 and the
+     source is dim #868A8F. No gridline is painted and an axis rule on the panel's edge gives way to the panel's own
+     border; a zero rule the data crosses is kept (the engine marks it `lf-zero`, 3 px #675C66). Sizes are the row's TYPE
+     PRESET (`longform:bravos|middle|phone`, the engine's LP_LONGFORM.TYPE_SCALE): the engine writes the page ink's and
+     hands the chart's to this sheet as --lf-tick / --lf-tag / --lf-chip / --lf-value, in the chart's own units. */
+  .lp-page.lp-readability-longform { background: #14181E; }
+  .lp-readability-longform .lp-grain, .lp-readability-longform .lp-edge,
+  .lp-readability-longform .lp-field, .lp-readability-longform .lp-fieldplate { display: none; }
+  .lp-readability-longform .lp-ink { font-family: "Inter Longform", Inter, Arial, sans-serif; letter-spacing: 0; }
+  .lp-readability-longform .lp-ink .g { transform: none; }   /* a set face, not a hand: no per-glyph tilt */
+  .lp-readability-longform .lp-title { color: #DB8497; font-weight: 700; }
+  .lp-readability-longform .lp-title .w, .lp-readability-longform .lp-src .w { display: inline-block; white-space: nowrap; }
+  .lp-readability-longform .lp-sub { font-weight: 400; }
+  .lp-readability-longform .lp-src { color: #868A8F; font-weight: 400; opacity: 1; }
+  .lp-readability-longform .lp-chart text { font-family: "Inter Longform", Inter, Arial, sans-serif; }
+  .lp-readability-longform .lp-chart .grid { display: none; }
+  .lp-readability-longform .lp-chart line.ax:not(.lf-zero) { display: none; }
+  .lp-readability-longform .lp-chart text.lab { fill: #9A9DA2; }
+  .lp-readability-longform .lp-chart .lab { font-size: var(--lf-tick); }
+  .lp-readability-longform .lp-chart .sname { font-size: var(--lf-tag); }
+  .lp-readability-longform .lp-chart .tagchip { font-size: var(--lf-chip); }
+  .lp-readability-longform .lp-chart .val, .lp-readability-longform .lp-chart .callout { font-size: var(--lf-value); }
   /* PORTRAIT (P41, doc 49 s49.1 amended 2026-09-05): in 9:16 the chart IS the world. The page fills the frame to
      its deckle, the charcoal fills the page to that edge, the series is re-laid for the tall frame in stage px
      (the chart's viewBox IS its pixel box, so every size below is a stage pixel), and the type clears doc 50's

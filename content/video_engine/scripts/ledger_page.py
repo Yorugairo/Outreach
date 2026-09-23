@@ -78,7 +78,15 @@ TIERS_MIN, TIERS_MAX = 2, 4
 # plate change (RULE-the-page-is-the-ground, 2026-09-04).
 PROP_PLACEMENTS = ("centre", "left", "right", "datum")
 QUIET_ZONES = ("left", "right")
-READABILITY_PROFILES = ("landscape-phone",)
+LANDSCAPE_PHONE = "landscape-phone"
+# P69 T8 (E99 s97): the LONG FORM's page, measured off Bravos's frames (`docs/research/bravos-style/
+# BRAVOS-LONGFORM-CHART-SPEC.md` (b)) - a flat ground, a framed plot panel, no gridlines, Inter - set in one of
+# three named type presets (`longform:bravos|middle|phone`, LONGFORM_TYPE_SCALE below); on a dense-line page it
+# widens the chart the way T17 does, for its own end tags.
+LONGFORM = "longform"
+READABILITY_PROFILES = (LANDSCAPE_PHONE, LONGFORM)
+# the builders each profile is legal on (T14's inventory: the body's pages are dense-line and bars/`story`)
+READABILITY_BUILDERS = {LANDSCAPE_PHONE: ("dense-line",), LONGFORM: ("dense-line", "story")}
 AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
              "name_clear",   # lift the inline series name clear of the data it would otherwise be written across
              "readability",  # R26-? closed, page-scoped chart typography/geometry profile
@@ -251,20 +259,41 @@ def _validate_readability(series: dict, variant: str) -> list[str]:
     value = series.get("readability")
     if value is None:
         return []
-    if value not in READABILITY_PROFILES:
-        return [f"readability {value!r} is not one of {'|'.join(READABILITY_PROFILES)}"]
-    builder = pick_builder(series, variant)
-    if builder != "dense-line":
-        return [f"readability={value!r} is only supported by the dense-line builder; this page uses {builder!r}"]
+    err = readability_error(series, value, pick_builder(series, variant))
+    return [err] if err else []
+
+
+def readability_error(page: dict, value: Any, builder: str) -> str | None:
+    """Is ``value`` a profile THIS page can take? The message, or None. Pure.
+
+    ONE rule, read by the series file's own field (`_validate_readability`) and by the shot row's
+    ``;readability=<profile>`` (the compiler, P69 T8): the profile is closed, each is legal only on the
+    builders `READABILITY_BUILDERS` names (refused by name elsewhere), never on a host plate (whose board
+    was measured around a hand), and a dense-line page must fit its enlarged end tags on the stage."""
+    parsed = parse_readability(value)
+    if parsed is None:
+        return (f"readability {value!r} is not one of {LANDSCAPE_PHONE}|{LONGFORM}"
+                f"[:{'|'.join(LONGFORM_PRESETS)}]")
+    value, preset = parsed
+    legal = READABILITY_BUILDERS[value]
+    if builder not in legal:
+        if value == LANDSCAPE_PHONE:
+            return f"readability={value!r} is only supported by the dense-line builder; this page uses {builder!r}"
+        return (f"readability={value!r} is only supported by the {' and '.join(legal)} builders "
+                f"(a line page and a bars page); this page uses {builder!r}")
     # `full_stage` is a compiler stamp, not a series-file field: the normal 16:9 page route adds it
     # after this source validation, while portrait leaves it absent.  Explicit host-plate geometry
     # is nevertheless incompatible and must not silently accept an option the renderer ignores.
-    if series.get("board") or series.get("chart_box") or series.get("punch") is False:
-        return ["readability='landscape-phone' is only supported by a 16:9 full_stage dense-line page"]
-    fit_error = _readability_fit_error(series)
-    if fit_error:
-        return [fit_error]
-    return []
+    if page.get("board") or page.get("chart_box") or page.get("punch") is False:
+        if value == LANDSCAPE_PHONE:
+            return "readability='landscape-phone' is only supported by a 16:9 full_stage dense-line page"
+        return f"readability={value!r} is only supported by a 16:9 full_stage page (a host plate keeps its own board)"
+    if builder == "dense-line" and value == LANDSCAPE_PHONE:
+        return _readability_fit_error(dict(page, readability=value))
+    if builder == "dense-line" and longform_tag_form(page, preset) is None:
+        return (f"readability={LONGFORM}:{preset} cannot keep even its end values inside the 16:9 stage "
+                "(a value alone is the shortest end tag there is)")
+    return None
 
 
 def validate(series: dict, variant: str) -> list[str]:
@@ -1102,6 +1131,9 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
     spec["badges"] = badges_for(series)
     count = len(spec["labels"])
     spec["emphasize"] = None if emphasize is None or not count else max(0, min(int(emphasize), count - 1))
+    parsed = parse_readability((spec.get("axes") or {}).get("readability"))
+    if parsed and parsed[0] == LONGFORM:   # P69 T8: the series file's own `readability: longform[:<preset>]`
+        apply_longform(spec, parsed[1])
     return spec
 
 
@@ -1451,6 +1483,8 @@ def _landscape_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     under the default preserveAspectRatio and retain its measured letterbox law. T17's opt-in
     changes both the chart width and the SVG viewBox width, so the matched profile has no spare
     horizontal air and the actual plot grows."""
+    if _readability_profile(spec) == LONGFORM:   # P69 T8: the long form lays its own page out (the engine measures it)
+        return _longform_full_boxes(spec, w_s, h_s)
     bx, by, bw, bh = LAND_BOARD
     half = 0.5 / PUNCH_SCALE
     vx, vy = bx + bw / 2 - half, by + bh / 2 - half
@@ -1525,7 +1559,177 @@ LAND_PHONE_PLOT_L = 120
 LAND_PHONE_TEXT_PX = 52
 LAND_PHONE_B = 458
 LAND_PHONE_TICK_B = (LAND_PHONE_B + 32) / LAND_PHONE_VIEWBOX_H
+# P69 T8 - THE LONG FORM'S TYPE SCALE (the parent's frame read, 2026-09-23: the look is right, the SCALE is the
+# operator's call). E99 s90 (B's roughly 12.5 px phone type) and E99 s97 (Bravos's measured 15-18 px ticks) pull
+# the page's type opposite ways, so the profile carries THREE named presets and the row picks one -
+# `;readability=longform:bravos|middle|phone` (plain `longform` is `middle`) - for P69-HG3 to rule on. Every size is
+# a FONT SIZE in px as RENDERED on the 1920 x 1080 stage (the page ink through the punch, the chart's through its
+# own rest scale); the engine's `LP_LONGFORM.TYPE_SCALE` is the same table.
+#   bravos  [DERIVED: BRAVOS-LONGFORM-CHART-SPEC.md (a)/(b), a cap or digit height / Inter's 0.727 cap ratio] - the
+#           title cap 28 (t530) -> 38.5; the tick digit 16.5 (t170 15 / t530 18) -> 22.7; the line badge's 14 px
+#           digits (t170) -> 19.3 for an end tag, its chip at 0.8 of it; the value beside a bar, 31.5 (t1088) ->
+#           43.3; the source cap 10.5 (t170/t530) -> 14.4; the sub, unmeasured on a chart page, sits at 24.
+#   middle  the working default (the parent, 2026-09-23): title 44, sub 26, ticks 26, end tags 30, source 20.
+#   phone   E99 s90's floor, T17's own render: the page ink 52 CSS px x the 1.16 punch = 60.3, the chart's 46 units
+#           x its 1.334 rest scale = 61.4 (~12.5 px on a 390 px phone).
+LONGFORM_PRESETS = ("bravos", "middle", "phone")
+LONGFORM_DEFAULT_PRESET = "middle"
+LONGFORM_TYPE_SCALE = {
+    "bravos": {"title": 38.5, "sub": 24.0, "tick": 22.7, "tag": 19.3, "chip": 15.4, "value": 43.3, "src": 14.4},
+    "middle": {"title": 44.0, "sub": 26.0, "tick": 26.0, "tag": 30.0, "chip": 24.0, "value": 34.0, "src": 20.0},
+    "phone": {"title": 60.3, "sub": 60.3, "tick": 61.4, "tag": 61.4, "chip": 61.4, "value": 61.4, "src": 60.3},
+}
+# The layout the engine MEASURES and this module ESTIMATES (the fixture outranks the estimate, as `PORTRAIT_INK`'s):
+# the title, sub and source wrap in one ink column (to the stage's safe right edge) at a 1.1 leading, the sub
+# LONGFORM_SUB_GAP CSS px under the title's last line. The chart box then takes the room that is left: its plot
+# top stands M28's half-figure of air (half the tick size) plus the ink it carries above the plot (the y label,
+# LONGFORM_YLAB_GAP_PX over the plot; a rule's name; half the top tick) under the sub - the chart moves DOWN,
+# never onto the sub - and its foot rises only when the wrapped source would leave the stage (LONGFORM_EDGE_PX).
+# Advances are Inter's in ems per character (Bold title and end tag, Regular sub and source, the 600 chip).
+LONGFORM_LINE_H = 1.1
+LONGFORM_SUB_GAP = 8
+LONGFORM_ADV = {"title": 0.56, "sub": 0.5, "source": 0.5}
+LONGFORM_TAG_EM = {"name": 0.68, "chip": 0.64}
+LONGFORM_CHIP_DX_PX = 12
+LONGFORM_YLAB_GAP_PX = 14
+LONGFORM_EDGE_PX = 16
+LONGFORM_PLOT_T = {"dense-line": 40.0, "story": 90.0}   # each builder's own plot top, in chart units
+# An END TAG that will not fit the stage at its preset gives up its long name for its badge (the value and the short
+# chip), then for its value alone - never a refusal (the parent, 2026-09-23). The long names belong in a key: that is
+# P69 T10's badge key, not built here; the spec keeps every name for it.
+LONGFORM_TAG_FORMS = ("full", "badge", "value")
 
+
+def parse_readability(value: Any) -> tuple[str, str | None] | None:
+    """``landscape-phone`` | ``longform`` | ``longform:<preset>`` -> (profile, preset), or None when not one."""
+    if not isinstance(value, str):
+        return None
+    profile, colon, preset = value.partition(":")
+    if profile == LANDSCAPE_PHONE and not colon:
+        return profile, None
+    if profile == LONGFORM and (not colon or preset in LONGFORM_PRESETS):
+        return profile, preset or LONGFORM_DEFAULT_PRESET
+    return None
+
+
+def longform_type(spec: dict) -> dict:
+    """The preset's sizes (rendered px) a longform page is set in."""
+    preset = (spec.get("axes") or {}).get("type_scale")
+    return LONGFORM_TYPE_SCALE[preset if preset in LONGFORM_TYPE_SCALE else LONGFORM_DEFAULT_PRESET]
+
+
+def longform_geom(t: dict, top: float, bot: float) -> dict:
+    """The chart-unit geometry a longform chart is drawn in, for a chart box from `top` to `bot` (rendered px): the
+    engine's `lpLongformGeom`, line for line. The x ticks and the bar names hang half a figure under the plot, and the
+    plot's floor rises until they clear the anchored caption's strip."""
+    s = (bot - top) / LAND_VIEWBOX[1]
+    tick, cap_u = t["tick"] / s, (CAPTION_ANCHOR["16:9"][1] - top) / s
+    return {"scale": s, "tick": tick, "plot_l": max(70.0, 12 + 2.3 * tick),
+            "line_b": min(458.0, cap_u - 5 - 1.5 * tick), "xtick_dy": 1.25 * tick,
+            "gutter": max(60.0, 40 + 2.6 * tick), "xlab_dy": 1.25 * tick,
+            "bars_b": min(440.0, cap_u - 5 - 2.65 * tick),
+            "ylab_gap": LONGFORM_YLAB_GAP_PX / s, "rule_dy": (8 + 0.25 * t["tag"]) / s}
+
+
+def longform_tag_units(spec: dict, t: dict, form: str, scale: float) -> float:
+    """The widest end tag of a longform dense-line page in `form`, in chart units at `scale` (estimated)."""
+    rides = {BADGE_ACCENT_COL.get(str(b.get("accent"))): str(b.get("tag") or "")
+             for b in spec.get("badges") or [] if isinstance(b, dict) and b.get("inline")}
+    out = 0.0
+    for s in spec.get("series") or []:
+        if not isinstance(s, dict) or s.get("muted"):
+            continue
+        label, name = str(s.get("label") or ""), str(s.get("name") or "")
+        text = (label + " " + name).strip() if form == "full" else (label or name)
+        px = len(text) * LONGFORM_TAG_EM["name"] * t["tag"]
+        chip = rides.get(str(s.get("color")), "")
+        if chip and form != "value":
+            px += LONGFORM_CHIP_DX_PX + len(chip) * LONGFORM_TAG_EM["chip"] * t["chip"]
+        out = max(out, px)
+    return out / scale
+
+
+def _longform_max_vw(tags_u: float, scale: float, w_s: int = 1920) -> float:
+    return ((LAND_PHONE_SAFE_RIGHT - LAND_FULL["X"]) * w_s / scale
+            + LAND_PLOT["R"] * LAND_VIEWBOX[0] - LAND_TAG_GAP - tags_u)
+
+
+def longform_tag_form(spec: dict, preset: str) -> str | None:
+    """The fullest end-tag form that keeps every tag on the stage at the unshifted chart scale (a chart the layout
+    moves down only shrinks its scale, which gives the tags more room), or None when not even the values fit."""
+    t, scale = LONGFORM_TYPE_SCALE[preset], LAND_FULL["H"] * STAGE_PX["16:9"][1] / LAND_VIEWBOX[1]
+    for form in LONGFORM_TAG_FORMS:
+        if _longform_max_vw(longform_tag_units(spec, t, form, scale), scale) >= LAND_PHONE_MIN_VIEWBOX_W:
+            return form
+    return None
+
+
+def apply_longform(page: dict, preset: str | None = None) -> dict:
+    """Stamp a page with the long form's profile: `axes.readability`, the preset it is set in (`type_scale`) and, on a
+    dense-line page, the end-tag form that fits (`tag_form`). In place; the page is returned."""
+    axes = page.setdefault("axes", {})
+    axes["readability"] = LONGFORM
+    axes["type_scale"] = preset if preset in LONGFORM_PRESETS else (
+        axes.get("type_scale") if axes.get("type_scale") in LONGFORM_PRESETS else LONGFORM_DEFAULT_PRESET)
+    if page.get("builder") == "dense-line":
+        axes["tag_form"] = longform_tag_form(page, axes["type_scale"]) or "value"
+    else:
+        axes.pop("tag_form", None)
+    return page
+
+
+def longform_chart_box(spec: dict, t: dict, sub_bottom: float, src_h: float, h_s: int = 1080) -> tuple[float, float]:
+    """(top, bottom) of a longform chart box in rendered px: the engine's `lpLongformBox`, line for line."""
+    top0, bot0 = LAND_FULL["Y"] * h_s, (LAND_FULL["Y"] + LAND_FULL["H"]) * h_s
+    bot = min(bot0, h_s - LONGFORM_EDGE_PX - LAND_SRC_GAP * PUNCH_SCALE * h_s - src_h)
+    tu, vh = LONGFORM_PLOT_T.get(str(spec.get("builder")), LONGFORM_PLOT_T["story"]), LAND_VIEWBOX[1]
+    axes = spec.get("axes") or {}
+    rules = [h for h in (axes.get("hlines") or ([axes["hline"]] if axes.get("hline") else [])) if isinstance(h, dict) and h.get("label")]
+    above = max(0.5 * t["tick"], LONGFORM_YLAB_GAP_PX + t["tick"] if axes.get("ylabel") else 0.0,   # a label's box
+                8 + 1.25 * t["tag"] if rules else 0.0)                                               # reaches ~1 em up
+    need = sub_bottom + 0.5 * t["tick"] + above
+    if top0 + tu * (bot - top0) / vh >= need:
+        return top0, bot
+    return (need - tu * bot / vh) / (1 - tu / vh), bot
+
+
+def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
+    """A longform page's boxes, ESTIMATED the way the engine lays it out (the fixture measures and outranks it)."""
+    t, dense = longform_type(spec), spec.get("builder") == "dense-line"
+    bx, by, bw, bh = LAND_BOARD
+    half = 0.5 / PUNCH_SCALE
+    vx, vy = bx + bw / 2 - half, by + bh / 2 - half
+    ink_x = _punch_pt(max(bx + 0.027, vx + 0.03)) * w_s
+    title_y = _punch_pt(max(by + 0.024, vy + 0.035)) * h_s
+    ink_w = LAND_PHONE_SAFE_RIGHT * w_s - ink_x
+    tall = lambda text, key, px: (max(1, _ink_lines(text, px, ink_w, LONGFORM_ADV[key])) if text else 0) * px * LONGFORM_LINE_H  # noqa: E731
+    title_h = tall(spec.get("title"), "title", t["title"])
+    sub_y = title_y + title_h + LONGFORM_SUB_GAP * PUNCH_SCALE
+    sub_h = tall(spec.get("sub"), "sub", t["sub"])
+    src_h = tall(spec.get("source"), "source", t["src"])
+    top, bot = longform_chart_box(spec, t, sub_y + sub_h, src_h, h_s)
+    g = longform_geom(t, top, bot)
+    s, cx, tu = g["scale"], LAND_FULL["X"] * w_s, LONGFORM_PLOT_T["dense-line" if dense else "story"]
+    if dense:
+        tags_u = longform_tag_units(spec, t, (spec.get("axes") or {}).get("tag_form") or "value", s)
+        vw, left, right = max(LAND_PHONE_MIN_VIEWBOX_W, _longform_max_vw(tags_u, s, w_s)), g["plot_l"], LAND_PLOT["R"] * LAND_VIEWBOX[0]
+        floor, foot = g["line_b"], g["line_b"] + g["xtick_dy"] + 0.25 * g["tick"]
+    else:
+        tags_u, vw, right = 0.0, float(LAND_VIEWBOX[0]), 20.0
+        left = max(g["gutter"], float((spec.get("axes") or {}).get("left_gutter") or 0))
+        floor, foot = g["bars_b"], g["bars_b"] + g["xlab_dy"] + 1.4 * g["tick"]
+    ylab = LONGFORM_YLAB_GAP_PX + t["tick"] if (spec.get("axes") or {}).get("ylabel") else 0.0
+    rail = [b for b in spec.get("badges") or [] if not b.get("inline")]
+    return {
+        "title": _box(ink_x, title_y, ink_w, title_h),
+        "sub": _box(ink_x, sub_y, ink_w, sub_h),
+        "chart": _box(cx, top, vw * s, bot - top),
+        "plot": _box(cx + left * s, top + tu * s - ylab, (vw - left - right) * s, (foot - tu) * s + ylab),
+        "source": _box(ink_x, bot + LAND_SRC_GAP * PUNCH_SCALE * h_s, ink_w, src_h),
+        "rail": _box(ink_x, bot + LAND_RAIL_GAP * PUNCH_SCALE * h_s, ink_w,
+                     LAND_FULL_INK["pill"] * -(-len(rail) // PORTRAIT_PILLS_PER_ROW) if rail else 0),
+        "tags": _box(cx + (vw - right + LAND_TAG_GAP) * s, top + tu * s, tags_u * s, (floor - tu) * s),
+    }
 
 def _readability_profile(spec: dict) -> str | None:
     """The page-scoped profile carried by the dense page's axes, if any."""
@@ -1680,6 +1884,9 @@ def page_ink_key(spec: dict) -> str:
     readability = (spec.get("axes") or {}).get("readability")
     if readability is not None:
         ink["readability"] = readability
+    for key in ("type_scale", "tag_form"):   # P69 T8: the long form's preset and end-tag form move its boxes
+        if (spec.get("axes") or {}).get(key) is not None:
+            ink[key] = spec["axes"][key]
     if "left_gutter" in (spec.get("axes") or {}):
         ink["left_gutter"] = spec["axes"]["left_gutter"]
     blob = json.dumps(ink, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
