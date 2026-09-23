@@ -1,0 +1,56 @@
+{
+  "fixture_id": "knockout-motion-shared-v1",
+  "provenance": {
+    "kind": "diagnostic_timing_fixture",
+    "path": "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/production/animated-variants/rig-foundation/timing.json",
+    "sha256": "a76353b56654cdb55acef794fd56a572d7d5e99b04891807173145cc1acc7ef4"
+  },
+  "scope_note": "Reuses only the diagnostic 24 fps event clock. Synthetic channel values exercise portable evaluation; this is not V12 timing, measured choreography, biomechanics truth, approved art, or a rendered scene.",
+  "scene": {
+    "scene_id": "knockout-motion-shared",
+    "duration_frames": 96,
+    "fps": {"numerator": 24, "denominator": 1},
+    "time_origin": {"scene_time_seconds": {"numerator": 0, "denominator": 1}},
+    "events": [
+      {"event_id": "right-straight-contact", "event_type": "strike_contact", "frame": 27, "binding_id": "fighter_a"},
+      {"event_id": "head-recoil", "event_type": "head_recoil", "frame": 28, "binding_id": "fighter_b"},
+      {"event_id": "attacker-step-release", "event_type": "step_release", "frame": 41, "binding_id": "fighter_a"},
+      {"event_id": "left-hook-contact", "event_type": "strike_contact", "frame": 50, "binding_id": "fighter_a"},
+      {"event_id": "victim-fall-release", "event_type": "fall_release", "frame": 54, "binding_id": "fighter_b"},
+      {"event_id": "victim-grounded", "event_type": "grounded", "frame": 85, "binding_id": "fighter_b"}
+    ],
+    "contacts": [
+      {"contact_id": "right-hand-to-head", "actor_binding_id": "fighter_a", "semantic_effector": "right_hand", "target_binding_id": "fighter_b", "target_semantic_joint": "head", "start_frame": 27, "end_frame": 28},
+      {"contact_id": "left-hand-to-head", "actor_binding_id": "fighter_a", "semantic_effector": "left_hand", "target_binding_id": "fighter_b", "target_semantic_joint": "head", "start_frame": 50, "end_frame": 51},
+      {"contact_id": "attacker-planted-foot", "actor_binding_id": "fighter_a", "semantic_effector": "left_foot", "target_binding_id": "environment", "target_surface_id": "mat-floor", "start_frame": 0, "end_frame": 41},
+      {"contact_id": "victim-on-mat", "actor_binding_id": "fighter_b", "semantic_effector": "back", "target_binding_id": "environment", "target_surface_id": "mat-floor", "start_frame": 85, "end_frame": 96}
+    ],
+    "motion_channels": [
+      {
+        "channel_id": "fighter-a-right-hand",
+        "binding_id": "fighter_a",
+        "target_kind": "semantic_joint",
+        "semantic_target": "right_hand",
+        "value_unit": "vector3_m",
+        "interpolation": "cubic",
+        "keyframes": [
+          {"frame": 0, "value": [0.4, -0.2, 1.2]},
+          {"frame": 27, "value": [0.0, 0.3, 1.2]},
+          {"frame": 29, "value": [0.1, 0.45, 1.25]}
+        ]
+      },
+      {
+        "channel_id": "fighter-b-head",
+        "binding_id": "fighter_b",
+        "target_kind": "semantic_joint",
+        "semantic_target": "head",
+        "value_unit": "vector3_m",
+        "interpolation": "linear",
+        "keyframes": [
+          {"frame": 27, "value": [0.0, 0.0, 1.7]},
+          {"frame": 35, "value": [0.22, 0.0, 1.62]}
+        ]
+      }
+    ]
+  }
+}
