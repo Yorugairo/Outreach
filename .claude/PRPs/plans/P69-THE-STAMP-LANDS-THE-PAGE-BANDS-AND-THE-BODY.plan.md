@@ -452,6 +452,21 @@ verbatim tails and are left pending.
 - Refactor evidence: pending
 - Evidence: pending
 
+### T6b: A bare prop carries a resting shadow - depth and weight (the operator, 2026-09-22)
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T6 merged; runs in LANE B (`claude/p69-s90`, the engine lane) FIRST, before T8 - so lane A's body rows never render on an engine mid-edit
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the dock painter's prop branch and the `.dock-contact` settle), `content/video_engine/scripts/kinetics/stopaction.mjs` (a `PROP_SHADOW` dial block only, synced), `content/video_engine/tests/kinetics/stopaction-stamp.test.mjs`, `content/video_engine/tests/test_prop_shadow.py` (new), `content/video_engine/tests/golden/**` (the `prop-stamp*` goldens re-pinned with the parent's frame read), `content/video_engine/effects/cards/dock_kind.json` (the `dock_kind:prop` card's `does` loses "no ... shadow"), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: the operator: "the props should have shadow added to them to give them some depth/weight" (a ruling, `E99 s??` at merge; it amends the bare-prop card's "no paper, border, shadow or rail" - a prop stays bare of PAPER, never of weight). (1) A `dock_kind:prop` cutout carries a RESTING drop shadow that follows its painted alpha (a CSS `drop-shadow` on the cutout, not a box under the element), cast from the engine's ONE stage light - the same direction as the extruded bar's cast shadow and the melt's highlight (find it; never a second light) - soft, short and dark enough to seat the prop on the page, on the charcoal page and on a light ground alike. (2) The stamp's CONTACT shadow hands over to the resting shadow at settle instead of vanishing (`sx.phase !== "settled"` today zeroes it), so the weight is continuous. (3) A card (paper) keeps its own shadow exactly as today - byte-identical card goldens. (4) The prop's box for placement and the stamp fit include the shadow's extent, so nothing lands on it. (5) The `prop-stamp` / `prop-stamp-ink` goldens re-pin in THIS commit, with the parent's frame read; every other golden byte-identical
+- Regression: `python -m pytest content/video_engine/tests/test_prop_shadow.py -q`
+- Expected RED: the served player shows no `drop-shadow` on a settled prop cutout, and the contact shadow's opacity reads 0 after settle
+- Validate: `node --test content/video_engine/tests/kinetics/stopaction-stamp.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then `python content/video_engine/scripts/measure_page_boxes.py --write` then `python -m pytest content/video_engine/tests/test_prop_shadow.py content/video_engine/tests/test_the_stamp_arrival.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`
+- Frame acceptance: the parent reads the settled Fed on the charcoal page and on a light ground, before and after; the operator reads it at P69-HG2 (the first stamped prop)
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
 ### T7: R26-230, R26-222 and R26-231 closed on their tests; the one owed test added
 - Status: done
 - Owner: junior_developer (the test); parent (the rows)
@@ -542,13 +557,13 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T14: The body's preflight - inventory, the departures named, the stamp slot's mass
-- Status: pending
+- Status: done
 - Owner: parent (with `explorer` for the inventory)
 - Depends on: T0 (Decision 2 recorded), T2-T7 merged
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py` (docstring, constants, and the cue slot's mass via `A.arrival_mass`), `.../evidence/objects/ev-debt-issuance-v2.series.json` (only if authored), `.../build-h/BUILD-NOTES-H.md`
 - Acceptance: (1) An inventory for rows 7-24 resolves every page object, card, plate (`find_asset`), prop, host still, cue file and outro part. (2) The `ev-debt-issuance-v2` page is authored from the dossier only at the tier its source earns: the dossier is secondary ("~$121B", MS ">$100B"), so the series is PLAUSIBLE unless a primary source is on disk. The 2026E range is drawn as a range, never a midpoint (E53, E77). Otherwise the row falls back to the PNG card, named as a departure. (3) `ev-three-manias` (a PNG only) is named as a card departure for row 12. (4) The door's constants cite what supersedes the treatment's wording: s84 (Ken Burns alone), s83, s91, E47, E50. (5) The stamp slot reads `landing N (stamp, ink)` unless the row names a mass. (6) `_assert_read_only` covers `REFERENCE-F.md` and `build-f/`. (7) The baseline for "the bed is unchanged" is taken after T7, by comparing `build-h/steel-and-paper-h.timeline.json` and `SHOT-TABLE-H.md` (not `player.html`, which embeds the engine)
 - Validate: `python content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, then the timeline and table compared byte-for-byte against the post-T7 baseline
-- Evidence: pending
+- Evidence: 2026-09-22 - the door carries `BODY_ASSETS` (rows 7-24, 0 missing paths), `BODY_DEPARTURES` (15, each with its fallback), `TREATMENT_SUPERSEDED` (E99 s84 `:3296`, s83 `:3294`, s91 `:3313`, E47 `:1419`/`:1444`, E50 `:1520`/`:1533`), `DEBT_PAGE` + `DEBT_SPREAD` + the "$130–150B"/"2026E" figure, `TWO_CLOCKS_PAGE`; the cue slot reads `A.arrival_mass` (`(stamp, ink)`); `READ_ONLY` covers `REFERENCE-F.md` and `build-f`; the stale `HOST_CARD_REFUSED` note fixed (R26-221 `plate_dock_place`). Bed unchanged: timeline sha `25203c15...` and table sha `a4e8d798...` identical before and after (private dir). PLAUSIBLE pages draw, each with its named fallback, pending the operator's end-of-run answer. The departures file is folded into `BUILD-NOTES-H.md` section 9
 
 ### T15: Row 7 (0:54-1:09) - host window 1: the studio, the Bravos card thrown, the NVIDIA chip crossed, the flow
 - Status: pending

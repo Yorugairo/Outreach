@@ -327,8 +327,8 @@ plate as a world (no engine change); the numbered agenda; the flow diagram with 
   which takes the first wording the take carries and refuses by name if none is there.
 - Nothing outside `build-h/` was written: `_assert_read_only` fingerprints `build-f/`, `SHOT-TABLE-F.py`,
   `build_scene_evidence_cut.py`, `vo-f/`, `vo/`, `vo-h-scratch/`, `REBUILD-TREATMENT-H.md`, the
-  `SCRIPT-H-*` files, `evidence/`, `sound/`, `host/` and `packaging/` before the build and asserts them
-  unchanged after it.
+  `SCRIPT-H-*` files, `evidence/`, `sound/`, `host/`, `packaging/` and (P69 T14) `REFERENCE-F.md` before
+  the build and asserts them unchanged after it.
 - This build was never served and no frozen copy was made (the parent's, E99 s75 / R26-193).
 
 ---
@@ -488,3 +488,115 @@ which is the drag this row exists to end"). What the landed ink does:
 ticks are still the hook's at 29.25, so the axis has not yielded while the line is inside the born top;
 it yields as the line passes it, and lands on the same frame as the plain rescale did (it was 21 px down
 at 28.70 before the follow).
+
+---
+
+## 9. The body's preflight: rows 7-24, the data departures (P69 T14, 2026-09-22)
+
+Folded in from `build-h/P69-DATA-DEPARTURES.md` (implementation_luna, P69 T14a; the text below is that file's,
+its headings renumbered). The door carries the same record as constants: `BODY_ASSETS` (every page object with
+its builder, card, plate, prop, host still, cue file and outro part, rows 7-24), `BODY_DEPARTURES`
+(row, item, fallback) and `TREATMENT_SUPERSEDED` (E99 s84, s83, s91, E47, E50, each quoted). Since the file
+was written: rows 16 and 19 are RESOLVED as pages (`ev-debt-issuance-line-v1` with `DEBT_SPREAD` and the
+figure `$130–150B` / `2026E`; `ev-two-clocks-bars-v1`), with no PNG fallback; the outro clip and the
+brand-line mp3 are now on disk in this worktree (gitignored media, copied 2026-09-22 21:01), so row 24 no
+longer waits on a copy; and the stale `HOST_CARD_REFUSED` note is replaced by `HOST_CARD_DOOR` (R26-221
+`plate_dock_place` places a card on a picture plate). The bed is unchanged by T14: the private-dir timeline
+and table are byte-identical before and after (the parent's evidence).
+
+
+Scope: every row 7-24 item that the treatment (`REBUILD-TREATMENT-H.md` rows 7-24) or the plan (T15-T32) wanted drawn
+as a page or a datum on a page, and that is not. The source for each item is `P69-T14-INVENTORY.md` (explorer),
+re-checked on disk. Tiers: CONFIRMED (a primary source on disk), PLAUSIBLE (a secondary dossier only), UNSOURCED (only
+the script says it), REJECTED (the sources conflict). A series takes the tier of its weakest figure.
+
+`P` = `content/video_engine/projects/systems-and-blowups/steel-and-paper`. `OBJ` = `P/evidence/objects`.
+Correction to the dispatch brief: `P/build-h/` is NOT gitignored. `git check-ignore -v` exits 1 for this file, and
+five files under `build-h/` are tracked (`BUILD-NOTES-H.md`, `GATES-MOTION.md`, `SHOT-TABLE-H.py`, `SOUND-PLAN.json`,
+`objects/ev-divergence-hook-v1.series.json`).
+
+### 9.1 What the bars builder can and cannot draw (the range finding)
+
+`ledger_page._story_block` (`content/video_engine/scripts/ledger_page.py:1153-1160`) carries one numeric value per bar
+(`labels / values / value_strings / colors` + `AXES_KEYS`). `_validate_values` refuses a non-numeric value
+(`validate(..., 'bars')` on `"value": "130-150"` -> `bars[2] value '130-150' is not numeric`). Extra `lo`/`hi` keys pass
+`validate` and are then DROPPED by `build_spec` (the 2026E bar compiles as `140.0`, a midpoint). The painter
+(`docs/content-video-engine/samples/scene-evidence-engine.mjs:8862-8990`, `buildLedgerBars`; the rules at `:8982`) draws each bar from zero to
+its one value. It has no range bar, whisker or band. Its only horizontal device is `axes.hlines`: a full-width labelled
+rule, the comparator rule (E53 s6). (The `span` band at `:729-945` is an x-period shade on line pages, not a y-range.)
+
+So:
+- **A range that is a REFERENCE** (a norm every bar is read against) can be drawn honestly as two rules bounding it,
+  never as a midpoint. `ev-index-concentration-bars-v1` does this for the historical 2-4%.
+- **A range that is a DATUM** (one bar's own value, such as 2026E $130-150B) cannot be drawn by this builder. Rules
+  across the whole plot would read as a reference for 2020-24 and 2025 too.
+
+### 9.2 Authored objects (new ids, nothing existing edited)
+
+| row | id | tier | validator (door path, 16:9, bars) | note |
+|---|---|---|---|---|
+| 14 | `ev-rail-vs-yardstick-bars-v1` | PLAUSIBLE | OK story, full_stage | 50 is dossier-only; 28 is CONFIRMED (FRED reading). Breakthrough: `domain [0,30]`, `overflow: burst` |
+| 17 | `ev-capex-ocf-94-bars-v1` | PLAUSIBLE | OK story, full_stage | PIMCO's forward two-year claim only (see row 17 below) |
+| 18 | `ev-index-concentration-bars-v1` | PLAUSIBLE | OK story, full_stage | the 20 bar; 2-4% drawn as two `hlines` (2 and 4), no midpoint |
+| 21 | `ev-hbm-wafer-ratio-bars-v1` | PLAUSIBLE | OK story, full_stage | 1x vs about 3x |
+| 23 | `ev-weight-check-bars-v1` | PLAUSIBLE | OK story, full_stage | 24.3 is CONFIRMED (iShares IWV file on disk, hashed); the 20 is Bravos-attributed |
+
+The quotes and paths behind each figure are in each object's `proof` / `src_full` / `provenance_note`.
+
+### 9.3 Departures
+
+| row | item | reason | tier | falls back to |
+|---|---|---|---|---|
+| 9 | 7% tick / 8% datum on `ev-equip-ipp-gdp-v1` | not on the object; the series is equipment + IP as a share of GDP (11.54% Q2 2000 peak). The 7/8 are Bravos' figures for a different measure (`docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:527`, "Internet 4%→7% GDP; ... AI ≈ 8% GDP \| Bravos video") | PLAUSIBLE (and a different series) | **cut** (the page rings its own 11.54% datum, T17). Already a named departure |
+| 11 | `ev-uber-adoption-v1` burndown | PNG only, no series | PLAUSIBLE (`evidence/EVIDENCE-DOSSIER.md:169-170`, "rising from **32% to 84%**", The Information, not on disk) | **PNG card** (`OBJ/ev-uber-adoption-v1.png`) |
+| 11 | the COO line as a record | `ev-doc-macdonald` has no record payload (CAPABILITIES:19) | PLAUSIBLE (`EVIDENCE-DOSSIER.md:172-175`, The Verge, not on disk) | **PNG card** (`OBJ/ev-doc-macdonald.png`); the caption strip carries the words |
+| 12 | `ev-three-manias` peak and trough markers | PNG only: a 4x3 comparison table, not a hype-cycle chart. "peak to trough" is cell text only | PLAUSIBLE (its -64% is `EVIDENCE-DOSSIER.md:86-91`, Campbell & Turner via the dossier) | **PNG card**; the peak-to-trough move is a callout on the card's own cell (T20) |
+| 15 | BoE 6% ring, Fed 6.5% ring, Bravos 5.5% tripwire on `ev-tnx-two-eras-v3` | no BoE or Fed-funds series on the page (it is the 10-year yield). A funds-rate datum on a 10-year page mixes two units (E53) | PLAUSIBLE (Bravos-attributed, `ANSWER-BRAVOS-HYPE-CYCLE.md:526-528`) | **badge** (the attributed figures as text, no ring) |
+| 16 | `ev-debt-issuance:bars` 28 -> 121 -> 2026E $130-150B | **RESOLVED 2026-09-22, no longer a departure.** Drawn as the dense-line page `ev-debt-issuance-line-v1` (`OBJ/ev-debt-issuance-line-v1.series.json`; `ledger_page.py --check --variant line` -> `OK ... dense-line line 3 values`). Three series: `issuance` (2020-24 flat at the $28B AVERAGE, then 2025 $121B), `$150B` and `$130B` (both leave 2025 $121B for 2026E). The 2025 -> 2026E stretch is a `spread` wedge between the two estimate series, `{kind:"spread", from:1, to:2}` (engine `docs/content-video-engine/samples/scene-evidence-engine.mjs:11485-11501`), with a `figure` reading "$130–150B", sub "2026E". Nothing is drawn at a midpoint; the old PNG (`vals = [28, 121, 140]`, `P/evidence/build_railway_documents.py:153`) stays NOT a fallback | PLAUSIBLE (`EVIDENCE-DOSSIER.md:129-131`, `:137`; quotes in the object's `proof`). Still not Bravos' "$150B '24–25, $244B '26 YTD" (`ANSWER-BRAVOS-HYPE-CYCLE.md:528`); never on the same page or badge | **page**: `ev-debt-issuance-line-v1` + spread + figure (draws once the operator says yes to a PLAUSIBLE page, as H1-H5) |
+| 17 | the other 94: `ev-capex-funding-v1` mark "94 cents of every dollar, operating cash consumed, Q1 '26" | a DIFFERENT claim from the script's: a realised single quarter (Epoch AI from company filings, 148.4 / 157.9 = 94.0%) vs PIMCO's two-year projection (`EVIDENCE-DOSSIER.md:117-118`). The script (`SCRIPT-H-VO.txt:37`) makes the PIMCO claim, so only that is authored (`ev-capex-ocf-94-bars-v1`) | the Epoch object is its own series (not re-tiered here) | stays on its own dense-line page as it is. It is **not** the row's 94 bar. **cut** from row 17's bar beat |
+| 17 | the PIMCO record ("`ev-doc-macdonald`" in the treatment) | mis-named: `ev-doc-macdonald` is the Uber COO quote. No PIMCO record object exists, and the PIMCO paper is not on disk | PLAUSIBLE | **badge** ("PIMCO, Figure 3"); the new page's source line already names PIMCO |
+| 18, 22, 23 | the certificate card's "-66%" figure, ringed | the crop carries no figure. The -66 is the treatment's; the railway object's arithmetic is -64 | PLAUSIBLE (Campbell & Turner via `EVIDENCE-DOSSIER.md:86-91`; the object `OBJ/ev-railway-index-v1.series.json` marks 2,062 and 741) | **badge** at `RAIL_DROP` (see the note below) |
+| 19 | breakthrough bars `20 years` vs `5 years` | **RESOLVED 2026-09-22, no longer a departure.** The 20 is SUPPORTED by the Gemini research lane (`content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/RAILWAY-LAG-20Y-FINDINGS.md`: Campbell 2012 EEH p. 238, "During the subsequent two decades the rises in dividends were modest and rates barely returned to their pre-Mania levels"; Odlyzko 2010 p. 181, 26 years to 1872); the 5 is the operator's word. Drawn as `ev-two-clocks-bars-v1` (`ledger_page.py --check --variant bars` -> `OK ... story bars 2 values`). SCRIPT NOTE for the next letter (never patched): the 1840s track was wrought iron, not steel (FINDINGS row 7) | PLAUSIBLE (academic quotes with DOI, papers not on disk); 5 years: operator | **page**: `ev-two-clocks-bars-v1`; the `sold out` pill stays |
+| 20 | the phone card | no phone icon among `assets/icons/*.svg` (5) or the 44 `icons/cutouts/prop-*`, and no phone prop | n/a (an asset, not a figure) | **cut** until an asset is generated (human decision H6) |
+| 22 | `chart_to ev-tripwire-board-v1` | a `checklist` object: `validate` refuses it as a page ("keep it a dock") | its own | **PNG card** / the checklist dock it already compiles to (`OBJ/ev-tripwire-board-v1.png`) |
+| 22 | "+17%" / "+14%" end figures on `ev-memory-monitor-v1` | not on the object; the script's basis is not stated (`SCRIPT-H-VO.txt:47`, "DRAM up seventeen percent, and the stacked memory ... up fourteen. That's the July release"). The object's own last month (the July release) reproduces neither cleanly: DRAM 74,686 -> 86,970 = +16.4%, HBM-CLASS 94,138 -> 95,408 = +1.3% | **UNSOURCED** on disk (the +14 may be a script/source conflict on a basis we do not hold; the parent should check before any figure is drawn) | **cut**; the page's end labels ($87.0k / $95.4k) carry the level |
+| 22 | the June datum ringed on `ev-june-print-v1` | that page's `marks` is empty; the June customs datum lives on `ev-memory-monitor-v1` ("Jun '26 print: -3.7%") | as its object | re-target, not a figure departure: ring the monitor's own June mark |
+| 23 | `ev-memory-arithmetic-v1:bars` ("a fab: 5 years; a chip generation: 2×") | the fab's duration is now **5 years on the operator's word** (2026-09-22, "5 years is the fab build out"; the script, `SCRIPT-H-VO.txt:49`: "A memory fab takes five years to build"), so reason (2) is closed; the record's "4-5 years" (`OBJ/ev-memory-arithmetic-v1.series.json:1`) is not the figure drawn. Two blockers remain. (1) Two units on one bars page, years and a multiple (E53: one unit before two). (2) The script's "doubles" vs the record's 80GB -> 192GB (2.4×) | 5 years: operator's word; the 80 -> 192GB is PLAUSIBLE (our src line only) | **PNG card** (`OBJ/ev-memory-arithmetic-v1.png`) or the checklist dock it already is, until the two-unit page and "doubles" vs 80 -> 192 GB are settled. A one-unit option for the parent: a bars page of H100 80 GB vs B200 192 GB (PLAUSIBLE, not authored) |
+
+### 9.4 Note: the certificate figure, a badge at `RAIL_DROP` (rows 18, 22, 23)
+
+Not an object. The certificate crop (`CERT_PLATE` + `CERT_CROP`, `P/build_episode_h.py:241-254`) carries no printed
+figure, so the ring (E56: a number on a card) needs one. That figure is a **badge** whose text is `RAIL_DROP`,
+`P/build_episode_h.py:222`:
+`RAIL_DROP = "−%d%%" % abs(round(100 * (RAIL["marks"][1]["y"] / RAIL["marks"][0]["y"] - 1)))`, which gives **"−64%"**
+(741 / 2,062 - 1 = -0.6406). The marks are `OBJ/ev-railway-index-v1.series.json` (`{"y": 2062, "sub": "6 Oct 1845"}`,
+`{"y": 741, "sub": "Apr 1850"}`), and the source is `EVIDENCE-DOSSIER.md:89-91`: "peak **2,062 on 6 October 1845** ...
+trough **741 in April 1850**. That is a **64.1% peak-to-trough decline**". Never the treatment's "−66%". The script's
+"the paper still lost two-thirds" (`SCRIPT-H-VO.txt:39`) is the dossier's allowed wording ("nearly two-thirds",
+`:93-94`). The badge must read the constant, not a typed string, so the certificate and the railway page cannot
+disagree.
+
+### 9.5 Human decisions (only the two kinds asked for)
+
+**May a PLAUSIBLE series draw as a page?** Each of these compiles. None draws until the operator says yes:
+- H1, row 14: `ev-rail-vs-yardstick-bars-v1`. The railway ~50% is dossier-only (Campbell & Turner via Focus-Economics).
+  If no, the row cuts the bars; `ev-capital-formation-v1` already carries the 50% as an amber rule.
+- H2, row 17: `ev-capex-ocf-94-bars-v1`. PIMCO Figure 3 is dossier-only.
+- H3, row 18: `ev-index-concentration-bars-v1`. Bravos-attributed; no transcript on disk. The operator's 2026-08-24
+  ruling (`ANSWER-BRAVOS-HYPE-CYCLE.md:534-536`) accepts Bravos as a primary source for this format, which may settle
+  this one. The same answer settles the 20 in H5.
+- H4, row 21: `ev-hbm-wafer-ratio-bars-v1`. Two dossiers agree on ~3:1; no disclosure on disk.
+- H5, row 23: `ev-weight-check-bars-v1`. The 24.3 is CONFIRMED; the 20 is Bravos (H3).
+
+**A missing asset that needs generation:**
+- H6, row 20: the phone card. There is no phone icon, cutout or prop.
+- H7, row 23: host still H-3 (`P/host/H-3-newsroom.png`). It prints legible certificate text. HOST-NOTES-H.md (the
+  H-3 row) says "RE-ROLL before HG4", a new order id.
+
+### 9.6 Not departures, listed so they are not re-asked
+
+- Rows 7, 20, 23 host stills H-1/H-2/H-3 resolve; they are quarantined until the operator approves (E10).
+- Row 11 `ev-doc-karp`, row 16 `ev-doc-leases`, row 20/21 `ev-test-scorecard-v1`: records and a checklist dock by design.
+- Row 16 `ev-ig-credit-weighting-v1`, row 21 `ev-dram-contract-v1`: the treatment says `:line`; both are bars (story) pages.
+- Row 24 outro clip and brand-line audio: present in the main checkout only
+  (`content/video_engine/channel-assets/money-physics/outro/`). They are a copy for the parent, not a generation.

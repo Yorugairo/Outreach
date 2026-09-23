@@ -5,7 +5,7 @@
 The first long-form build that runs through the AUTHORING KIT (`scripts/authoring/`, CAPABILITIES:90 -
 "the next long's door is the kit itself"). It is written BESIDE ep1's legacy door: `build_scene_evidence_cut.py`,
 `SHOT-TABLE-F.py`, `build-f/`, `vo-f/`, `vo/`, every `SCRIPT-*` file, `REBUILD-TREATMENT-H.md`, `evidence/`,
-`sound/`, `host/` and `vo-h-scratch/` are READ ONLY and are asserted so below (`_assert_read_only`); every write
+`sound/`, `host/`, `vo-h-scratch/` and `REFERENCE-F.md` are READ ONLY and are asserted so below (`_assert_read_only`); every write
 this module makes lands inside `build-h/` (and `SHOT-TABLE-H.md`, the human-readable table, beside this file).
 
 THE ROWS ARE THE TREATMENT'S (`REBUILD-TREATMENT-H.md` rows 1-9), anchored on WORDS - `at(ws, phrase)` off the
@@ -24,8 +24,8 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
         (a PIXEL crop, x and y - `docks.still_card` crops a full-width BAND only; the departure is in the notes).
   AGENDA_ROWS_H            row 6: the numbered agenda (CAPABILITIES:43) in the room the page's park frees.
   HOST_PLATE               row 7: HOST WINDOW 1 - the Flow plate `host/H-1-studio.png` as the landing surface
-        (`;use=landing;idle=drift;drift=20` + the ken push), the Bravos card thrown onto the desk's clear left
-        third on "Not Bravos Research", the caption in STAGE mode.
+        (`;use=landing` + the ken push ALONE - E99 s84 withdrew the 20 px drift for long form, R26-236), the
+        Bravos card thrown onto the desk's clear left third on "Not Bravos Research", the caption in STAGE mode.
   CAPITAL_FLOW             row 7: the flow diagram `capital -> value` on "Capital arriving faster" (CAPABILITIES:99).
   RAIL_PAGE / GDP_RECAST   rows 8-9: the dip back to the page, the railway index building on its own figures,
         then the recast to `ev-equip-ipp-gdp-v1`. THE 7 % AND 8 % TICKS THE TREATMENT NAMES DO NOT EXIST ON DISK
@@ -35,6 +35,17 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
   BED_LU                   -28 LU under the voice: the LONG FORM's calibration, the project's own locked plan
         (`sound/SOUND-PLAN.json` "Bed gains at VO-28 LU"), not the short's -20 (E55).
   UNIT_CUT_PHRASE          the unit is the take's own clock to the cut before "So the obvious move" (~1:30).
+
+THE BODY'S PREFLIGHT (P69 T14, rows 7-24) is three constant tables, read before any body row is authored:
+  BODY_ASSETS          every page object (with its builder), card, plate, prop, host still, cue file and outro part
+        a row names, resolved on disk (`P69-T14-INVENTORY.md`, re-checked). Row 16's debt issuance is the LINE page
+        `ev-debt-issuance-line-v1` with its 2026E range as a spread + figure (DEBT_SPREAD / DEBT_RANGE_*), row 19
+        is `ev-two-clocks-bars-v1`; neither falls back to a PNG.
+  BODY_DEPARTURES      (row, item, fallback) for everything the treatment names that is NOT on disk
+        (`build-h/P69-DATA-DEPARTURES.md`, folded into `build-h/BUILD-NOTES-H.md` section 9).
+  TREATMENT_SUPERSEDED the rulings that overrule the treatment's wording (E99 s84, s83, s91, E47, E50), quoted.
+The cue map's landing slot names the arrival's MASS through `A.arrival_mass` (`landing N (stamp, ink)` unless the
+row names one), and HOST_CARD_DOOR records that a card CAN now stand on a picture plate (R26-221).
 
 ## Recall
 
@@ -96,7 +107,7 @@ EP = Project(here=HERE, build=BUILD, take=TAKE, take_stem=TAKE_STEM,
 
 READ_ONLY = ("build-f", "SHOT-TABLE-F.py", "SHOT-TABLE-F.md", "build_scene_evidence_cut.py", "vo-f", "vo",
              "vo-h-scratch", "REBUILD-TREATMENT-H.md", "SCRIPT-H-VO.txt", "SCRIPT-H-GATES.md", "evidence",
-             "sound", "host", "packaging")
+             "sound", "host", "packaging", "REFERENCE-F.md")   # P69 T14 (6): ep1's reference note joins build-f/
 
 
 def _digest(path: Path) -> str:
@@ -428,16 +439,18 @@ BRAVOS_ON_DESK = {"centre": True, "centre_w": 0.30, "centre_x": 0.215, "centre_y
 # THE CARD READS, THEN IT IS PUT DOWN (E63 / the Tokyo pledge row's `read` + `park_s`): thrown big over the dark
 # wall while the sentence says whose chart it is, then parked onto the desk's clear third on "and it isn't
 # Nvidia". Two beats instead of one - the 3.9 s hole M16 found on this plate, filled with the card's own move.
-# THE CARD CANNOT BE PLACED ON A PICTURE PLATE, so it is not docked on the host window at all.
-# `dock_place` (build_scene_timeline_f.py:4005-4011) returns None unless the world is a LEDGER PAGE -
-# E45's "a dock on a plain plate keeps the solo card" - so `centre`, `centre_w/x/y`, `read`, `read_s` and
-# `park_s` are all dropped for a card on a plate. MEASURED on the first build of this window: the compiled
-# dock entry carried `arrive` and `mass` and no `place`, and the engine's solo card landed at
-# [758, 167, 1068, 515] - across the host's face, in the exact frames the Flow order kept his left third
-# clear for. The parent's ruling is that a card never lands on the host, and there is no door to put it
-# where the order reserved, so the window carries the plate, the chip and the flow instead. THE DOOR THAT
-# IS MISSING: a placement for a dock on a plate (the plate's own declared room, as a page has).
-HOST_CARD_REFUSED = "dock_place returns None on a plain plate (build_scene_timeline_f.py:4005-4011)"
+# THE CARD CAN NOW STAND ON A PICTURE PLATE (P69 T14 (7) - the note this replaces said it could not, and is
+# stale). `dock_place` (build_scene_timeline_f.py:5670) still answers None when the world is not a LEDGER PAGE,
+# but the compiler no longer stops there: R26-221 `plate_dock_place` (build_scene_timeline_f.py:6053, called at
+# :7609 when `place is None`) places the card from the row's own `centre` / `centre_x` / `centre_y` /
+# `centre_w` (+ `card_aspect`), or inside the plate's declared `;room=<x>,<y>,<w>,<h>`, and REFUSES by name a
+# declared room that cannot hold a legible card. So BRAVOS_ON_DESK's fields are honoured on the host window.
+# The history, kept because the ruling stands: the first build of this window (before R26-221) compiled the
+# card with no `place` and the engine's solo card landed at [758, 167, 1068, 515], across the host's face, in
+# the frames the Flow order kept his left third clear for. The parent's ruling stands: a card never lands on
+# the host - with the door built, row 7 (T15) names the desk's clear third and measures the box.
+HOST_CARD_DOOR = ("plate_dock_place places a card on a picture plate from the row's centre fields or the "
+                  "plate's ;room= (R26-221, build_scene_timeline_f.py:6053, used at :7609)")
 
 CARD_READ_S = 5.5   # E25 / M12: a chart card proves its sentence and leaves - under the 6 s homework ceiling
 CARD_CLEAR_S = 1.2  # ... and it is GONE before the page recasts, so the hand-over happens on a clear page
@@ -601,7 +614,10 @@ def sound_cues(rows: list) -> list:
         for d, opts in A.row_arrivals(r):
             arrive = opts["arrive"]
             contact = A.landing_contact(d[2], arrive, stop)
-            cues.append({"slot": "landing %d (%s, %s)" % (i + 1, arrive, opts.get("mass", "paper")),
+            # the slot names the MASS the engine lands at (P69 T14 (5)): the row's own `mass`, else `ink` for a
+            # stamp (the engine's `stampXf(d.mass || "ink")`) and `paper` for a throw or a land - never a stamp
+            # read as paper because the row named nothing
+            cues.append({"slot": "landing %d (%s, %s)" % (i + 1, arrive, A.arrival_mass(opts)),
                          "at": round(contact - 1 / 24, 2), "gain": ACCENT, "fade_in": 0.0,
                          "variants": {"A": STROKE, "B": ROLL},
                          "note": "contact at %.2fs, the cue one frame early (the weight report Q5)" % contact})
@@ -613,6 +629,160 @@ def sound_cues(rows: list) -> list:
                  "env": env, "variants": {"A": BED_HOOK_A, "B": BED_HOOK_B},
                  "note": "%+.0f LU under the VO (%.1f LUFS measured); the long form's calibration" % (BED_LU, VO_LUFS)})
     return cues
+
+
+# ---------------------------------------------------------------- THE BODY'S PREFLIGHT (P69 T14, rows 7-24)
+
+# Read before a body row is authored; nothing here is compiled into the bed (the bed's timeline and table are
+# byte-identical with and without this block). Paths are repo-relative; `find_asset` resolves every plate id.
+_PROJ = "content/video_engine/projects/systems-and-blowups/steel-and-paper/"
+_OBJ = _PROJ + "evidence/objects/"
+_PLATES = "content/video_engine/projects/systems-and-blowups/review/claims/steel-and-paper-plates-wave-"
+_PROPS = "content/video_engine/assets/props/cutouts/"
+_ICONS = "content/video_engine/assets/icons/"
+_SND = _PROJ + "sound/"
+_OUTRO = "content/video_engine/channel-assets/money-physics/outro/"   # gitignored media: present here since 2026-09-22 21:01 (copied from main)
+
+# ROW 16's RANGE IS A RANGE (E53 / E77): 2026E is two estimate series that both leave the 2025 actual, and the
+# wedge between them is a `spread`; the figure writes the range, never a midpoint. The series are read off the
+# object by their own labels, never typed as indices. The old PNG (`vals=[28, 121, 140]`,
+# evidence/build_railway_documents.py:153) draws a 140 midpoint and is NOT a fallback.
+DEBT_PAGE = "ev-debt-issuance-line-v1"
+_DEBT = _series(DEBT_PAGE)
+_DEBT_LABELS = [s["label"] for s in _DEBT["series"]]
+DEBT_SPREAD = {"kind": "spread", "from": _DEBT_LABELS.index("$150B"), "to": _DEBT_LABELS.index("$130B")}
+DEBT_RANGE_TEXT, DEBT_RANGE_SUB = "$130–150B", "2026E"
+TWO_CLOCKS_PAGE = "ev-two-clocks-bars-v1"   # row 19: about 20 years vs about 5 years (RAILWAY-LAG-20Y-FINDINGS.md)
+
+# (kind, item, what it resolves to). Builders: `ledger_page.pick_builder` on the series at the row's variant.
+# PLAUSIBLE pages (H1-H5, row 16, row 19) compile and draw only on the operator's yes (P69-DATA-DEPARTURES.md).
+BODY_ASSETS = {
+    7: (("host", HOST_PLATE_ID, _PROJ + "host/H-1-studio.png - quarantined until approved (E10); supersedes "
+                                "the treatment's world-broadcast-set-v2 (the host amendment)"),
+        ("card", BRAVOS_CARD, "build-h/objects/%s.series.json -> docks.chart_card (re-derived by _hook_object)"
+                              % HOOK_OBJECT_ID),
+        ("card", "flow capital -> value", _ICONS + "coins.svg, factory.svg (CAPITAL_FLOW)"),
+        ("card", "NVIDIA chip", _ICONS + "cpu.svg (NVIDIA_CHIP)"),
+        ("cue", "landing / dip", _SND + STROKE + ", " + ROLL + ", " + WHOOSH)),
+    8: (("page", RAIL_PAGE, _OBJ + RAIL_PAGE + ".series.json - dense-line"),
+        ("cue", "dip 1", _SND + WHOOSH)),
+    9: (("page", RAIL_PAGE, "dense-line; the drop is RAIL_DROP (-64%)"),
+        ("page", GDP_PAGE, _OBJ + GDP_PAGE + ".series.json - dense-line (hline 'Q2 2000 peak - 11.54%')"),
+        ("card", "RAIL_NOTE", "typed text; source EVIDENCE-DOSSIER.md")),
+    10: (("plate", "world-sell-ticket-v1", _PLATES + "3/objects/world-sell-ticket-v1.png"),
+         ("page", LAYER_PAGE, _OBJ + LAYER_PAGE + ".series.json - dense-line (the recast)")),
+    11: (("card", "ev-doc-karp", _OBJ + "ev-doc-karp.png - record dock (payload in build-f/evidence-dock.json)"),
+         ("card", "ev-uber-adoption-v1", _OBJ + "ev-uber-adoption-v1.png - PNG card (departure)"),
+         ("card", "ev-doc-macdonald", _OBJ + "ev-doc-macdonald.png - PNG card; the caption strip carries the words")),
+    12: (("card", "ev-three-manias", _OBJ + "ev-three-manias.png - PNG card, a 4x3 table (CARD DEPARTURE)"),),
+    13: (("plate", "world-viaduct-train-rain-v1", _PLATES + "1/objects/world-viaduct-train-rain-v1.png"),
+         ("cue", "dip 2", _SND + WHOOSH)),
+    14: (("page", "ev-capital-formation-v1", _OBJ + "ev-capital-formation-v1.series.json - dense-line"),
+         ("page", "ev-rail-vs-yardstick-bars-v1", _OBJ + "ev-rail-vs-yardstick-bars-v1.series.json - story (H1)")),
+    15: (("page", "ev-tnx-two-eras-v3", _OBJ + "ev-tnx-two-eras-v3.series.json - dense-line, two panels"),
+         ("prop", "prop-federal-reserve-building-v1", _PROPS + "prop-federal-reserve-building-v1.png"),
+         ("cue", "prop stamp", _SND + STROKE + " / " + ROLL + " - slot `landing N (stamp, ink)` (A.arrival_mass)")),
+    16: (("page", DEBT_PAGE, _OBJ + DEBT_PAGE + ".series.json - dense-line + DEBT_SPREAD + figure "
+                             "DEBT_RANGE_TEXT / DEBT_RANGE_SUB (no PNG fallback)"),
+         ("page", "ev-ig-credit-weighting-v1", _OBJ + "ev-ig-credit-weighting-v1.series.json - story (bars, "
+                                               "not the treatment's :line)"),
+         ("page", "ev-capex-consensus-v1", _OBJ + "ev-capex-consensus-v1.series.json - story"),
+         ("card", "ev-doc-leases", _OBJ + "ev-doc-leases.png - record dock; its payload is NOT authored "
+                                   "(CAPABILITIES:19), so the PNG until it is"),
+         ("prop", "prop-hyperscale-datacenter-v1", _PROPS + "prop-hyperscale-datacenter-v1.png")),
+    17: (("page", "ev-capex-ocf-94-bars-v1", _OBJ + "ev-capex-ocf-94-bars-v1.series.json - story (H2)"),
+         ("card", "badge 'PIMCO, Figure 3'", "text (the PIMCO record departs)")),
+    18: (("plate", "world-paper-and-steel-press-v1", _PLATES + "6/objects/world-paper-and-steel-press-v1.png"),
+         ("card", CERT_CARD, "CERT_PLATE + CERT_CROP; its figure is a badge at RAIL_DROP"),
+         ("page", "ev-index-concentration-bars-v1", _OBJ + "ev-index-concentration-bars-v1.series.json - story (H3; "
+                                                    "2-4% as two hlines)"),
+         ("card", "world-target-date-envelope-v1", _PLATES + "3/objects/world-target-date-envelope-v1.png"),
+         ("prop", "prop-tech-sp500-concentration-v1", _PROPS + "prop-tech-sp500-concentration-v1.png")),
+    19: (("page", TWO_CLOCKS_PAGE, _OBJ + TWO_CLOCKS_PAGE + ".series.json - story (no PNG fallback)"),
+         ("card", "pill 'sold out'", "engine species; source EVIDENCE-DOSSIER.md E1")),
+    20: (("host", "H-2 (no id constant yet)", _PROJ + "host/H-2-desk.png - quarantined; supersedes the "
+                                              "treatment's world-spike-desk-v1"),
+         ("card", "ev-test-scorecard-v1", _OBJ + "ev-test-scorecard-v1.series.json - checklist dock"),
+         ("page", LAYER_PAGE, "dense-line (returns)"),
+         ("cue", "dip 6", _SND + WHOOSH)),
+    21: (("page", "ev-hynix-steel-v1", _OBJ + "ev-hynix-steel-v1.series.json - dense-line"),
+         ("page", "ev-hbm-wafer-ratio-bars-v1", _OBJ + "ev-hbm-wafer-ratio-bars-v1.series.json - story (H4)"),
+         ("page", "ev-dram-contract-v1", _OBJ + "ev-dram-contract-v1.series.json - story (bars, not :line)"),
+         ("card", "ev-test-scorecard-v1", "checklist dock (the ticks)"),
+         ("prop", "prop-hbm-stacked-die-v1", _PROPS + "prop-hbm-stacked-die-v1.png"),
+         ("prop", "prop-silicon-wafer-semiconductor-v1", _PROPS + "prop-silicon-wafer-semiconductor-v1.png")),
+    22: (("card", "ev-tripwire-board-v1", _OBJ + "ev-tripwire-board-v1.png - PNG card / checklist dock"),
+         ("page", "ev-memory-monitor-v1", _OBJ + "ev-memory-monitor-v1.series.json - dense-line (its June mark)"),
+         ("page", "ev-june-print-v1", _OBJ + "ev-june-print-v1.series.json - dense-line, marks []"),
+         ("card", "ev-trim-proof-v1", _OBJ + "ev-trim-proof-v1.series.json -> docks.chart_card (story)"),
+         ("card", CERT_CARD, "returns; badge at RAIL_DROP"),
+         ("prop", "prop-dram-memory-module-v1", _PROPS + "prop-dram-memory-module-v1.png")),
+    23: (("plate", "world-spike-certificate-ring-v2", _PLATES + "1b/objects/world-spike-certificate-ring-v2.png"),
+         ("card", CERT_CARD, "the card + a badge at RAIL_DROP, the ring on the badge"),
+         ("card", "ev-memory-arithmetic-v1", _OBJ + "ev-memory-arithmetic-v1.png - PNG card / checklist dock"),
+         ("page", "ev-weight-check-bars-v1", _OBJ + "ev-weight-check-bars-v1.series.json - story (H5); also the "
+                                             "newsroom desk card via docks.chart_card"),
+         ("host", "H-3 (no id constant yet)", _PROJ + "host/H-3-newsroom.png - RE-ROLL before HG4 (H7)")),
+    24: (("page", LAYER_PAGE, "dense-line (one last time)"),
+         ("card", "agenda", "AGENDA_ROWS_H (species agenda)"),
+         ("outro", "outro clip", _OUTRO + "landscape/outro-yt-1920x1080-24fps.mov - gitignored, on disk"),
+         ("outro", "brand line", _OUTRO + "vo/audio/brand-line-paced.mp3 - gitignored, on disk; text "
+                                 + _OUTRO + "BRAND-LINE.txt"),
+         ("outro", "recipe", "content/video_engine/effects/recipes/outro-clip-life.json (exit: dip)"),
+         ("cue", "the close bed", _SND + "suno-close-A.mp3 / suno-close-B.mp3 / mix-close-A.mp3 / mix-close-B.mp3")),
+}
+
+# What the treatment names that is NOT on disk, and what the row does instead (P69-DATA-DEPARTURES.md).
+# Rows 16 (debt issuance) and 19 (the two clocks) are RESOLVED as pages and are not here.
+BODY_DEPARTURES = (
+    (9, "7% tick / 8% datum on ev-equip-ipp-gdp-v1", "cut - the page rings its own 11.54% (not shown under the 7/8 words)"),
+    (11, "ev-uber-adoption-v1 burndown (PNG only)", "PNG card ev-uber-adoption-v1.png"),
+    (11, "the COO line as a record (ev-doc-macdonald has no payload)", "PNG card ev-doc-macdonald.png; the caption strip"),
+    (12, "ev-three-manias peak and trough markers (a 4x3 table, PNG only)",
+     "CARD: the PNG ev-three-manias.png; the peak-to-trough move is a callout on its own cell"),
+    (15, "BoE 6% / Fed 6.5% rings, Bravos 5.5% tripwire on ev-tnx-two-eras-v3 (a 10-year page)",
+     "badge - the attributed figures as text, no ring (E53: one unit)"),
+    (17, "the Epoch '94 cents' mark on ev-capex-funding-v1 (a different claim)", "cut from row 17's bar beat"),
+    (17, "the PIMCO record (the treatment's 'ev-doc-macdonald' is the Uber COO)", "badge 'PIMCO, Figure 3'"),
+    (18, "the certificate card's '-66%' figure (the crop carries none)", "badge reading RAIL_DROP (-64%)"),
+    (20, "the phone card (no phone icon, cutout or prop)", "cut until an asset is generated (H6)"),
+    (22, "chart_to ev-tripwire-board-v1 (a checklist, refused as a page)", "PNG card / its checklist dock"),
+    (22, "'+17%' / '+14%' end figures on ev-memory-monitor-v1 (UNSOURCED)", "cut - the end labels carry the level"),
+    (22, "the June datum ringed on ev-june-print-v1 (marks [])", "re-target: ring ev-memory-monitor-v1's own June mark"),
+    (22, "the certificate's '-66%' (returns)", "badge reading RAIL_DROP (-64%)"),
+    (23, "ev-memory-arithmetic-v1:bars (two units; 'doubles' vs 80 -> 192 GB)", "PNG card or its checklist dock"),
+    (23, "the certificate's '-66%' ringed", "badge reading RAIL_DROP (-64%), the ring on the badge"),
+)
+
+# THE RULINGS THAT OVERRULE THE TREATMENT'S WORDING (REBUILD-TREATMENT-H.md predates them; a row obeys these).
+# (ruling, where, the operator's words, the treatment's wording it supersedes, what a row does)
+TREATMENT_SUPERSEDED = (
+    ("E99 s84", "docs/portable/OPERATOR-RULINGS.md:3296",
+     "the drift is too random, i think we should use ken burns instead of drift.",
+     "REBUILD-TREATMENT-H.md:54 'every plate the ken tuple plus `;idle=drift;drift=20`' (rows 7, 13, 18, 20, 23)",
+     "a long-form plate row carries the ken push ALONE; no `;idle=drift;drift=20`; `plate_idle_paints` off (R26-236)"),
+    ("E99 s83", "docs/portable/OPERATOR-RULINGS.md:3294",
+     "keep the exterior drift, remove the interior drift, keep the electric/glow etc let that carry the life",
+     "REBUILD-TREATMENT-H.md:54 'Every page `;idle=live`' - read as the interior word walk too",
+     "`;idle=live` is the page's exterior breath + the electric; titles, ticks, tags hold still (R26-234); "
+     "a line's pointer is ONE thing, the lead point"),
+    ("E99 s91", "docs/portable/OPERATOR-RULINGS.md:3313",
+     "The view is a light as an annotation/highlight, not as motion.",
+     "REBUILD-TREATMENT-H.md:169 the events/min targets (35.0 vs a 46.5 median)",
+     "a spotlight credits 0 motion events; a row's density comes from arrivals, builds and transforms, "
+     "never a light (and s71: a named thing arrives, never a spotlight)"),
+    ("E47", "docs/portable/OPERATOR-RULINGS.md:1419, amended :1444",
+     "Our dip is supposed to be used as an actual transition when the scene ACTUALLY changes.",
+     "REBUILD-TREATMENT-H.md:156 'Dips: 10, each at a world change (E47)' - E47 as first written (`docks -> dip`)",
+     "a dip only where the world ACTUALLY changes (page <-> plate), never for a dock and never into a mount "
+     "(a mount replaces the cold transition); each dip names the transform it refused (E99 s74)"),
+    ("E50", "docs/portable/OPERATOR-RULINGS.md:1520, amended :1533",
+     "A chart's deployed life: 6-8 s from its LAST data point on average, 12 s at most; then it un-draws or "
+     "becomes the next thing",
+     "REBUILD-TREATMENT-H.md:24 'the 6 s ceiling on a held dock' (E25) and :75 'the page holds the concession'",
+     "the clock starts at the last data mark: 6-8 s, 12 s max, then undraw / recast / chart_to; the 6 s is a "
+     "FLOOR only for a page that arrives built"),
+)
 
 
 # ---------------------------------------------------------------- THE BUILD
