@@ -1,6 +1,6 @@
 {
   "schema": "finance_props_catalog.v1",
-  "total_assets": 24,
+  "total_assets": 25,
   "props": [
     {
       "id": "prop-ai-hype-bubble-v1",
@@ -607,6 +607,32 @@
       "height": 237,
       "sha256": "bad723eb4c373d7bb71f1dcdf03ae0914e86d515c7b527a6668a5ce7d821c830",
       "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-smartphone-v1",
+      "name": "Smartphone Mobile Terminal",
+      "anchor": [
+        206,
+        383
+      ],
+      "tier": "prop",
+      "category": "technology",
+      "tags": [
+        "smartphone",
+        "mobile",
+        "terminal",
+        "retail-investor",
+        "trading-app",
+        "communication",
+        "fintech"
+      ],
+      "context": "Retail investor mobile execution, fintech trading apps, push notification catalysts, and market access.",
+      "filename": "prop-smartphone-v1.png",
+      "path": "assets/props/cutouts/prop-smartphone-v1.png",
+      "width": 412,
+      "height": 767,
+      "sha256": "d186fdca6c0cb4bd8eb7fd511e96ce98adc0712b431bcc4a50dc32d0ad11f0fc",
+      "source_sheet": "prop-smartphone-v1-source"
     }
   ]
 }

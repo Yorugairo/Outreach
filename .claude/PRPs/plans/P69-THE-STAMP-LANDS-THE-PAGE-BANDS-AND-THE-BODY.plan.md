@@ -337,6 +337,32 @@ holder and P69's engine slices wait.
 
 **Numbers assigned at the lane-A merge (2026-09-22):** rulings E99 s92 (a prop is bare of paper, not of weight - T6b), s93 (a PLAUSIBLE page draws), s94 (read the monitor on the script's own basis), s95 (five years on the operator's word); backlog R26-249 (every page's build vs its span), R26-250 (a rule label over the bars), R26-251 (the measurer's font-rebuild race), R26-252 (the lab's stamp clock), R26-253 (the empty room covers the basis label), R26-254 (the ingester), R26-255 (a bars figure re-placed by the line rule under chart states), R26-256 (an emphasized bar's pill). Where this plan still reads `s??` / `R26-??`, this table is the key.
 
+## Ruling coverage (added 2026-09-23 after the membership stack was found unslotted)
+
+Every operator ruling that asks for something to be BUILT names its carrier here in the SAME commit that writes the ruling; a ruling with no row below is a principle only. The parent re-runs the coverage audit (every E99 ruling since the plan opened, against this table, the slices and the backlog) before each lane merge.
+
+| ruling | ask | carrier |
+|---|---|---|
+| s87 / s88 | the stamp, its size, its ring | T2-T5 (done) |
+| s90 / s97 | the longform profile, the phone type scale, badges as the key, the default flip | T8, T9, T10, T11 |
+| s92 / s96 | the prop's shadow; the 196 px bar | T6b, T6c (done) |
+| s93 | plausible pages; new recipes | T14 (done), T35 |
+| s94 | row 22 on the script's basis; a drawn figure names its basis | T30 |
+| s95 | the fives cite s95 | T27, T31 |
+| s98 | blur under a dock | T40 (+ T8b's receded panels) |
+| s99 | a light that travels / blinks is motion; the freeze beat | T36, T42, T49 |
+| s100 / s109 (5) | area forms; E53 as defaults | T50, T44 (the iceberg) |
+| s101 | the membership stack | T45 |
+| s102 | a second / inverted axis | T43b |
+| s103 | H-3 keeps its certificate (no re-roll) | `host/HOST-NOTES-H.md` |
+| s104 (+ amendments) | panels, four panels, composable focus; row 21 on them | T8b, T29 |
+| s105 (+ amendment) | a recast / a story-moving transform resets M03 | T26c, T26c2 (done in lane B) |
+| s106 | props placed and moved freely; the fit advises | T26d |
+| s107 | prop <-> page / chart morphs | T26e |
+| s108 | chrome as objects; the camera free | T26f |
+| s109 (1)-(4) | schematics; rings on every vertex; pies incl. 3D exploded + the push | T46, T47, T48 |
+| s109 | the broken cross-era axis | AWAITS THE OPERATOR'S WORD |
+
 ## Task Slices
 
 The TDD fields: `tdd-v1` has no definition on disk, so this plan defines its own. **Regression** is the
@@ -532,7 +558,7 @@ verbatim tails and are left pending.
 - Owner: implementation_luna
 - Depends on: lane B's current sequence (T10b, T10c, the key-rail fixes); lane B
 - Write set: `content/video_engine/scripts/ledger_page.py` (a `panels` builder: validation, layout, `page_boxes` per panel), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the page painter: N plots in one page, each with its own axes, title line, end tags / key, and species addressed by panel), `content/video_engine/scripts/build_scene_timeline_f.py` (a species' `panel` index in its target; validation), `content/video_engine/scripts/measure_page_boxes.py` (a panels representative), `content/video_engine/tests/test_ledger_panels.py` (new), `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
-- Acceptance: the operator: "no reason it shouldn't be able to, we already handle 2 evidence docks on world plates, it rhymes to have 2 data panels/charts on ledger plates when needed" (E99 s104). (1) A `panels` object (the format `ev-tnx-two-eras-v3` already carries, and the card's `chart_dock:panels` draws) compiles as a ledger PAGE: two (up to four) plots laid side by side (landscape) or stacked (portrait), each with its panel sub, its axes and its end tags. (2) E79: panels of one measure share ONE scale by default; `independent: true` gives each its own, and the compiler's scale WARN (`ledger_page.scale_warnings`) applies. (3) Species (`build_to`, `figure`, `ring`, `spread`, callouts, the key rail) take a `panel` index and land in that panel's plot; a panel builds on its own clock (one after the other by default). (4) The page composes with `;readability=longform` (each panel in the framed-panel style; one key rail for the page) and with docks/stamps (every panel's boxes in `page_boxes`, so a stamp takes the biggest room across the page). (5) Recast/undraw work per panel. (6) Every existing page and golden byte-identical; one new golden: `ev-tnx-two-eras-v3` as a two-panel page, read by the parent beside the card render. (7) T23 (row 15) may take the panels page or keep v4's overlay - the parent decides on the frame (8) ADDED 2026-09-23, the operator: "we can already resize easily, and morph in various ways, so making that fit with charts should be pretty easy" - a panel ARRIVES by the engine's existing transforms, never by a cut: a standing single-chart page RESIZES into its panel slot (the resize/rescale machinery - `chart_to` rescale/extend, the card-becomes-the-chart resize) while the second panel builds in beside it, and the reverse (a panel leaves, the survivor grows back to the full plot); a morph between the panels (the existing morph/recast verbs) works panel to panel. Find those transforms with `docs_find` first and REUSE them - T8b adds the panel layout and the panel address, not a new motion system
+- Acceptance: the operator: "no reason it shouldn't be able to, we already handle 2 evidence docks on world plates, it rhymes to have 2 data panels/charts on ledger plates when needed" (E99 s104). (1) A `panels` object (the format `ev-tnx-two-eras-v3` already carries, and the card's `chart_dock:panels` draws) compiles as a ledger PAGE: two (up to four) plots laid side by side (landscape) or stacked (portrait), each with its panel sub, its axes and its end tags. (2) E79: panels of one measure share ONE scale by default; `independent: true` gives each its own, and the compiler's scale WARN (`ledger_page.scale_warnings`) applies. (3) Species (`build_to`, `figure`, `ring`, `spread`, callouts, the key rail) take a `panel` index and land in that panel's plot; a panel builds on its own clock (one after the other by default). (4) The page composes with `;readability=longform` (each panel in the framed-panel style; one key rail for the page) and with docks/stamps (every panel's boxes in `page_boxes`, so a stamp takes the biggest room across the page). (5) Recast/undraw work per panel. (6) Every existing page and golden byte-identical; one new golden: `ev-tnx-two-eras-v3` as a two-panel page, read by the parent beside the card render. (7) T23 (row 15) may take the panels page or keep v4's overlay - the parent decides on the frame (8) ADDED 2026-09-23, the operator: "we can already resize easily, and morph in various ways, so making that fit with charts should be pretty easy" - a panel ARRIVES by the engine's existing transforms, never by a cut: a standing single-chart page RESIZES into its panel slot (the resize/rescale machinery - `chart_to` rescale/extend, the card-becomes-the-chart resize) while the second panel builds in beside it, and the reverse (a panel leaves, the survivor grows back to the full plot); a morph between the panels (the existing morph/recast verbs) works panel to panel. Find those transforms with `docs_find` first and REUSE them - T8b adds the panel layout and the panel address, not a new motion system (9) ADDED 2026-09-23 (s104 amended, for row 21's four charts): up to FOUR panels on a page; and FOCUS - a panel or a `then=` state can RECEDE (scale back, dim, soften behind the focused one; reuse the composite stack's `recede to the mosaic` and T40's `blur` under a dock - docs_find "recede" / "blur") and be BROUGHT BACK on its word, animated by the existing resize/morph transforms; a receded chart is still on the page (no cut, no dip); the four-chart row never needs a fifth state, so STATE_MAX stays 3 for `then=` while panels carry the rest (10) ADDED 2026-09-23: FOCUS may also be a RACK - the receded panel softens by the existing blur (CAPABILITIES :47/:71) as depth-of-field, the focused one stays sharp (the GITS blueprint's rack focus, research only), in place of or with the scale-back (11) ADDED 2026-09-23 (s104 amended again): FOCUS IS A COMPOSABLE STATE, not a mode list. The page carries a list of FOCUS STATES keyed to words, each naming (a) a LAYOUT - `row` | `stack` | `quad` | `free` (a box per panel, stage fractions) - and (b) per panel a ROLE - `active` (sharp, full ink, its species live), `receded` (scale-back factor, dim, blur radius - each a dial with a default), or `hidden`; one, two or more panels may be active. A change of focus state on a word is ONE transition: every panel's box, dim and blur interpolate on the transition's clock (reuse the resize/morph transforms and the existing blur), so `quad` -> panel 2 grows to cover the page while 1/3/4 blur and recede behind it -> back to `quad` -> panel 4 grows ... composes from the same parts, as does two active side by side with two receded above. Seek-safe; the key rail, species and camera (T26f's chrome) address a panel by index in any state; a receded panel's species hold. Byte-identical for a page with no focus states. Frames: the four-chart row 21 page run through quad -> grow -> quad -> grow, and a two-active state
 - Regression: `python -m pytest content/video_engine/tests/test_ledger_panels.py -q`
 - Expected RED: a `panels` object compiles to a dense-line page with 0 series (`ev-tnx-two-eras-v3`, P69 T23)
 - Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_ledger_panels.py content/video_engine/tests/test_longform_profile.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
@@ -765,6 +791,63 @@ verbatim tails and are left pending.
 - Validate: as T26a, plus `test_the_stamp_arrival.py`
 - Evidence: lane B af869b7, 2026-09-23 - `camera_reach`: a full-stage page's camera key is refused by name when its framing (the page's breath included) cuts the title, y ticks, source or a measured tag; `"reach": "clamp"` writes `landing_zoom` (the Fed: 1.03; title and sub >= 12 px from the edge, y ticks >= 69 px - the parent read before vs clamped). Row 1's zoom 1.06 is REPORTED (WARN, reachable 1.02) for T33. Parent in place: 933 passed
 
+### T26c: The pacing gate counts a recast as an arrival (E99 s105; closes R26-280)
+- Status: pending
+- Owner: implementation_luna (LANE B)
+- Depends on: T26b (on main 88574ca); lane B
+- Write set: `content/video_engine/scripts/gate_motion_density.py` (M03's arrival list), `content/video_engine/tests/test_gate_motion_density.py`
+- Acceptance: the operator, 2026-09-23: "yes, recast counts." (1) M03's longest-wait clock resets on a `chart_to` recast that changes the chart on screen (its landing instant, from the timeline's own `chart_to` time + its clock), as it does on a page or dock arrival; (2) a retitle alone, a relight or an idle does not reset it; (3) every build whose timeline carries no recast gets a byte-identical gate report; (4) H's row 16 (242.38-303.54, two recasts) no longer reads a 62 s wait NOTE 2026-09-23 (coverage audit): s105 names "M03 (and its player mirror)" - M03 is computed only in the gate; the player draws no M03, so no second write is owed
+- Regression: `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`
+- Expected RED: a timeline with a page, then two recasts 20 s apart, then nothing for 40 s reports M03's wait from the page's landing
+- Validate: the regression, then `python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/steel-and-paper/build-h` unpiped (read-only on the build)
+- Evidence: pending
+
+### T26c2: M03 counts a rescale, extend or morph that moves the story (E99 s105 amended)
+- Status: pending
+- Owner: junior_developer (LANE B)
+- Depends on: T26c (lane B afd8b3d)
+- Write set: `content/video_engine/scripts/gate_motion_density.py`, `content/video_engine/tests/test_gate_motion_density.py`
+- Acceptance: the operator: "true motion doesnt just move the visual it moves the story/narrative/thought process along". (1) A `chart_to` rescale / extend / morph counts as an M03 arrival when BOTH (a) it is anchored to a spoken word (the timeline's own word/cue anchor for the event - find how the compiler records it) and (b) it brings a new thing on screen within its landing window: an extend's new data past the old domain, or a label/badge/callout/figure/ring species landing on the same word or within the transform's duration; (2) a silent re-fit (no word anchor, or nothing new named) does not count; (3) recast behaviour (T26c) unchanged; a timeline with none of these byte-identical; (4) report H's M03 before/after and which transforms counted, each with its word
+- Regression: `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`
+- Expected RED: a rescale on a word landing with a badge does not reset M03
+- Evidence: pending
+
+### T26d: A prop goes where the author puts it, and moves after it lands; the fit is a default and advises (E99 s106; closes R26-279)
+- Status: pending
+- Owner: implementation_luna (LANE B)
+- Depends on: T26c; lane B
+- Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (`stamp_dock_place`, the dock placement, the prop's timeline keys), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the dock painter's prop transform over time), `content/video_engine/scripts/authoring/docks.py`, `content/video_engine/tests/test_prop_free_placement.py` (new), `content/video_engine/tests/test_the_stamp_arrival.py`, goldens only if a new one is added
+- Acceptance: the operator, 2026-09-23 (s106): "we should be able to manipulate props freely". (1) A prop dock (`prop: True`, any arrival incl. `arrive: stamp`) takes an AUTHORED place - `{"place": {"x", "y", "w"}}` in stage fractions (centre and width; height from the cutout's alpha aspect) and `"rot"` degrees - and the compiler honours it exactly; the stamp's ring and 2.1x approach are drawn around THAT place; (2) a prop takes MOVES after it lands - a list of `{"at": <word or s>, "x", "y", "w", "rot", "dur", "ease"}` keys, painted by the engine on the prop's own clock (a seek lands the same frame as forward play; the T6b hatch rides the prop's transform - closes R26-271's case); (3) with no authored place the compiler's fit is the default, and it reads the boxes of the chart state ON SCREEN at the landing instant (a `then=`/`chart_to` page's state), never the row's first state (R26-279); (4) the fit's and the authored place's findings - over a series or its data mask, over a label, a mark under the floor, cut by the frame, over a caption - are WARNs printed in the door's report with the numbers, never refusals; a place that is off the stage entirely stays a refusal (it cannot be seen); (5) every existing stamp and dock with no authored place compiles byte-identical (the H door, the goldens)
+- Regression: `python -m pytest content/video_engine/tests/test_prop_free_placement.py -q`
+- Expected RED: an authored `place` on a stamped prop is refused ("read/park refused") or ignored; a stamp landing after a recast is fitted to the first state's boxes; an overlap with data refuses
+- Validate: `node --check` the engine, `node --test` kinetics, `sync_kinetics.py --check`, `measure_page_boxes.py --check`, the regression, `test_the_stamp_arrival.py`, `test_prop_shadow.py`, `test_prop_alpha.py`, `test_golden_frames.py`, `test_camera_keeps_the_page.py`
+- Frame acceptance: the data centre stamped on row 16's capex state at an authored place in the right margin, then moved on a word; the parent reads the strip
+- Evidence: pending
+
+### T26e: Props, pages and charts morph into each other, both ways, mid-page (E99 s107)
+- Status: pending
+- Owner: implementation_luna (LANE B, after T26d)
+- Depends on: T26d (a prop that stands after a morph is placed and moved by s106's grammar); lane B
+- Write set: `content/video_engine/scripts/kinetics/arap.mjs` (+ sync), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the morph enter, a morph exit, a mid-page morph verb, the textured mesh), `content/video_engine/scripts/build_scene_timeline_f.py` (the grammar and its checks), `content/video_engine/tests/test_prop_morph.py` (new), `content/video_engine/tests/golden/**` (one golden each way)
+- Acceptance: the operator, 2026-09-23 (s107): "we should also be able to morph/transform to/from props to pages and charts." Find and REUSE first (`docs_find "morph"`: CAPABILITIES :109 Method A, :122 morph_to, :123 remake, :125 the object becomes the chart, `MORPH_SHAPES`, `morphInvariants`, the strip mesh). (1) PROP -> PAGE/CHART: `;morph=prop:<id>` on a page enter, and a mid-page `chart_to {to: "morph", from: "prop:<id>"}` on a word - the prop's alpha silhouette (traced from the cutout, simplified, x-monotone strip when the target is an area; the page panel when the target is the page) morphs by ARAP into the target, the prop's pixels texture-mapped on the mesh and handing to the chart's own ink by the landing; (2) PAGE/CHART -> PROP: an `exit: morph:prop:<id>` and a mid-page `chart_to {to: "prop", prop: <id>, place?}` - the page panel or a named mark (a bar, the area under a series) morphs into the prop's silhouette, which then STANDS as a prop dock (T26d's `place` / moves; its T6b hatch); (3) seek-safe (cold seek = forward play), the mesh never inverts (det J > 0 at every t, the existing test pattern), the match-cut invariants printed as a WARN with numbers when they fail, never a refusal (s106); (4) everything that names none of this compiles byte-identical; (5) two goldens (prop->bar, page->prop) read by the parent before pinning (6) ADDED 2026-09-23 from the main-branch survey: `arap.mjs:67` `fanMesh` assumes a star-shaped outline; a traced prop silhouette may not be - triangulate the silhouette (constrained, e.g. ear-clipping or Delaunay on the simplified contour) or refuse the fan by name and fall back to the strip; design reference only: `docs/research/runs/2d-3d-rigging-webgl-optimizations-2026-09/findings_advanced_mathematical_foundations.md` section 1.3 (ARAP local/global) and 2.4 (bounded biharmonic weights) - research, not evidence
+- Regression: `python -m pytest content/video_engine/tests/test_prop_morph.py -q`
+- Expected RED: `;morph=prop:prop-hyperscale-datacenter-v1` is refused as an unknown morph shape; `chart_to {to: "prop"}` is an unknown verb
+- Validate: `node --check` the engine, `node --test` kinetics (incl. the arap tests), `sync_kinetics.py --check`, `measure_page_boxes.py --check`, the regression, `test_golden_frames.py`, `test_prop_free_placement.py`, `test_the_stamp_arrival.py`
+- Frame acceptance: the data centre becoming the $690 capex bar, and the capex page collapsing back into the data centre, before / mid / after; the parent reads both
+- Evidence: pending
+
+### T26f: The page's chrome is objects - the title rescales and moves, and rides the camera (E99 s108)
+- Status: pending
+- Owner: implementation_luna (LANE B)
+- Depends on: T26b (the reach check), T26d (the object move grammar - reuse it); lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the page's chrome layer, the camera transform), `content/video_engine/scripts/build_scene_timeline_f.py` (the chrome keys and T26b's reach), `content/video_engine/scripts/gate_motion_density.py` (the camera mirror, only if the chrome's frame changes what it reads), `content/video_engine/scripts/ledger_page.py` (the chrome boxes the reach reads), `content/video_engine/tests/test_page_chrome_moves.py` (new), `content/video_engine/tests/test_camera_keeps_the_page.py`
+- Acceptance: the operator, 2026-09-23 (s108): "Why can't the title re-scale? ... we should have free dynamic movement between camera and objects." Find and REUSE first (docs_find "retitle", "camera", "rescale", the page's title/sub/source painters, T26d's move keys). (1) Each chrome element (title, sub, source, y ticks, axis names, the key rail) is its own object with a transform: a row may move/rescale it on a word with T26d's key grammar (`{"chrome": {"title": [{"at", "x", "y", "scale", "dur", "ease"}]}}` or the nearest existing grammar) - e.g. the title shrinks to a top-left tag; (2) a camera key may name `chrome: "screen"` (the chrome rides the camera - drawn in screen space at its own size) or `chrome: "fit"` (the chrome counter-scales/re-lays into the pushed frame) - either way nothing the viewer must read leaves the frame; (3) with either, T26b's reach limits the push only by the claim's data (the datum/series/mark the sentence points at stays in frame), chrome findings WARN; a real 1.2x push on the two-eras page and on row 18's index page is reachable; (4) seek-safe; the gate's camera mirror agrees; (5) every existing page and camera key byte-identical until a row names it
+- Regression: `python -m pytest content/video_engine/tests/test_page_chrome_moves.py -q`
+- Expected RED: a 1.2x push on the two-eras page is refused by T26b ("the y tick column's left edge leaves the stage"); `chrome` keys are unknown
+- Validate: `node --check`, `node --test` kinetics, `sync_kinetics.py --check`, `measure_page_boxes.py --check`, the regression, `test_camera_keeps_the_page.py`, `test_camera*.py`, `test_golden_frames.py`, `test_gate_motion_density.py`
+- Frame acceptance: the two-eras page pushed 1.2x onto the dot-com peak with the title riding the camera, and with the title shrunk to a corner tag; before / mid / after; the parent reads both
+- Evidence: pending
+
 ### T26: Row 18 (6:04-7:13) - the turn: reset 2, PROP 3, camera 3, the halving compare
 - Status: pending
 - Owner: implementation_luna
@@ -779,7 +862,7 @@ verbatim tails and are left pending.
 - Owner: implementation_luna
 - Depends on: T26
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
-- Acceptance: the shared body rules; the `sold out` pill; two callouts, one per bar
+- Acceptance: the shared body rules; the `sold out` pill; two callouts, one per bar ADDED 2026-09-23 (coverage audit, s95): a page drawing the fives (a fab's five-year build; a compute generation's ~five-year life) cites E99 s95 as its source
 - Validate: the shared Validate
 - Evidence: pending
 
@@ -797,7 +880,7 @@ verbatim tails and are left pending.
 - Owner: implementation_luna
 - Depends on: T28, P69-HG2
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
-- Acceptance: the shared body rules; camera 4 on the hynix tip; props 4 (`prop-hbm-stacked-die-v1`) and 5 (`prop-silicon-wafer-semiconductor-v1`) stamped on their words; the 1 vs 3 `chart_to compare` on R26-190 (T6); the checklist ticks
+- Acceptance: the shared body rules; camera 4 on the hynix tip; props 4 (`prop-hbm-stacked-die-v1`) and 5 (`prop-silicon-wafer-semiconductor-v1`) stamped on their words; the 1 vs 3 `chart_to compare` on R26-190 (T6); the checklist ticks ADDED 2026-09-23 (coverage audit, s104 amended x2): the row carries FOUR charts (the hynix line, the wafer compare, the DRAM line, the hynix line returning) - build it on T8b's panels + composable focus (quad / grow / recede / bring back on their words), never a cut or a fifth state; a panel grows to the page on the sentence it serves
 - Validate: the shared Validate
 - Evidence: pending
 
@@ -806,7 +889,7 @@ verbatim tails and are left pending.
 - Owner: implementation_luna
 - Depends on: T29, P69-HG2
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
-- Acceptance: the shared body rules; prop 6 `prop-dram-memory-module-v1` on "the RAM inside every one of these data centers"; the monitor cites its release in the strip (E52); the June datum ringed
+- Acceptance: the shared body rules; prop 6 `prop-dram-memory-module-v1` on "the RAM inside every one of these data centers"; the monitor cites its release in the strip (E52); the June datum ringed ADDED 2026-09-23 (coverage audit, s94): read the monitor on the SCRIPT'S basis - DRAM +16.4% on the July print (the bounce off June's -3.7%), HBM-class +13.9% over the last two prints; every drawn figure NAMES its basis on the page ("July print", "last two prints")
 - Validate: the shared Validate
 - Evidence: pending
 
@@ -815,7 +898,7 @@ verbatim tails and are left pending.
 - Owner: implementation_luna
 - Depends on: T30
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
-- Acceptance: the shared body rules; the certificate thrown onto the reset and ringed; the memory-arithmetic bars and the weight check; the newsroom with the weight-check card thrown onto its desk
+- Acceptance: the shared body rules; the certificate thrown onto the reset and ringed; the memory-arithmetic bars and the weight check; the newsroom with the weight-check card thrown onto its desk ADDED 2026-09-23 (coverage audit, s95): as T27 - any drawn five cites E99 s95
 - Validate: the shared Validate
 - Evidence: pending
 
@@ -867,7 +950,7 @@ verbatim tails and are left pending.
 - Owner: implementation_luna (lane B for engine verbs; lane A for recipes and the beats)
 - Depends on: T8-T10 (the `longform` profile the verbs are drawn in); the eight new watches (docs/research/runs/bravos-watch/, Gemini x4 + GPT x4) merged into the harvest first
 - Write set: `content/video_engine/scripts/species/*.mjs` (new verbs only, synced), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (their paint), `content/video_engine/scripts/build_scene_timeline_f.py` (their tokens' validation), `content/video_engine/effects/cards/*.json` + `content/video_engine/effects/recipes/*.json` (new only), their tests and goldens, `content/video_engine/assets/page-boxes.v1.json`
-- Acceptance: the harvest `docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST.md` (106 items; HAVE 55 / PARTIAL 25 / MISSING 26) names ten candidates; build the ones that need no ruling, each as a card + a recipe that composes existing cards (s70) + a golden + a body row that carries it: `level_join` (a dashed rule between two points, a ring at each end - rows 14/15/21), `axis_tag` (the named year as an accent pill on the x-axis - rows 9/15/22), `project` (the line continues dashed past its last real point - rows 16/17/23, labelled as a projection, E77), chip `lit` / `tick` states (rows 10/22), `chapter_tag` (a section pill held over an act's charts - rows 13/18/23), `the-hidden-base` (bars hanging below a waterline - row 16's leases; E53-safe), `loop` (a flow laid as a ring with money moving on its arrows - rows 16-18), `term-over-the-parked-chart` (rows 16/18). CLEARED 2026-09-23: `lit_stretch` as a TRAVELLING or blinking light, and the freeze-on-light beat (E99 s99); `blur-under-the-dock` for a busy chart plate, as a row option (E99 s98). APPROVED as E99 s101: a MEMBERSHIP-STACK exception to E53 s2 (the bar is ONE value; its tiles are equal, unvalued identities - who is in it - and the total is written; never a stack of values), ). CLEARED by E99 s100 (area is valid when it serves the story, truthful when drawn in true proportion with its figures written): the PYRAMID / ICEBERG form - Bravos's surface-vs-hidden debt pyramid, every cell's value written, cell areas proportional - joins the build list beside `the-hidden-base`. STILL HELD: an INVERTED axis (E28 - a rise would draw as a fall; a second axis alone is allowed as E53 s4's overlay), rings on every point (E56), shape-only waves with no data (E52; never fabricated) ADDED 2026-09-23 (the operator: "Have you already noted in what context these actions/effects are most likely useful?" - only as one quoted instance each): before building, a SYNTHESIS pass over the harvest + the eight watches (whose template now asks for USE CONTEXT) writes, for every harvested item, its USE-WHEN - the sentence's act (SPECIES-BY-SENTENCE: names a thing / states a size / compares / shows change / reveals the hidden / turns / warns / concludes), the story moment (hook, setup, proof, turn, reveal, close), the data shape it needs, and when NOT to use it - into `docs/research/bravos-style/BRAVOS-USE-WHEN.md`; every new card and recipe carries that use-when in its own field, so an author finds the move by what the sentence is doing
+- Acceptance: the harvest `docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST.md` (106 items; HAVE 55 / PARTIAL 25 / MISSING 26) names ten candidates; build the ones that need no ruling, each as a card + a recipe that composes existing cards (s70) + a golden + a body row that carries it: `level_join` (a dashed rule between two points, a ring at each end - rows 14/15/21), `axis_tag` (the named year as an accent pill on the x-axis - rows 9/15/22), `project` (the line continues dashed past its last real point - rows 16/17/23, labelled as a projection, E77), chip `lit` / `tick` states (rows 10/22), `chapter_tag` (a section pill held over an act's charts - rows 13/18/23), `the-hidden-base` (bars hanging below a waterline - row 16's leases; E53-safe), `loop` (a flow laid as a ring with money moving on its arrows - rows 16-18), `term-over-the-parked-chart` (rows 16/18). CLEARED 2026-09-23: `lit_stretch` as a TRAVELLING or blinking light, and the freeze-on-light beat (E99 s99); `blur-under-the-dock` for a busy chart plate, as a row option (E99 s98). APPROVED as E99 s101: a MEMBERSHIP-STACK exception to E53 s2 (the bar is ONE value; its tiles are equal, unvalued identities - who is in it - and the total is written; never a stack of values), ). CLEARED by E99 s100 (area is valid when it serves the story, truthful when drawn in true proportion with its figures written): the PYRAMID / ICEBERG form - Bravos's surface-vs-hidden debt pyramid, every cell's value written, cell areas proportional - joins the build list beside `the-hidden-base`. SUPERSEDED 2026-09-23 by E99 s102 (second/inverted axis) and s109 (schematics with no data; rings on every vertex when the sentence is about them; donuts/pies incl. 3D exploded) - the text that follows was the state before those rulings: STILL HELD: an INVERTED axis (E28 - a rise would draw as a fall; a second axis alone is allowed as E53 s4's overlay), rings on every point (E56), shape-only waves with no data (E52; never fabricated) ADDED 2026-09-23 (the operator: "Have you already noted in what context these actions/effects are most likely useful?" - only as one quoted instance each): before building, a SYNTHESIS pass over the harvest + the eight watches (whose template now asks for USE CONTEXT) writes, for every harvested item, its USE-WHEN - the sentence's act (SPECIES-BY-SENTENCE: names a thing / states a size / compares / shows change / reveals the hidden / turns / warns / concludes), the story moment (hook, setup, proof, turn, reveal, close), the data shape it needs, and when NOT to use it - into `docs/research/bravos-style/BRAVOS-USE-WHEN.md`; every new card and recipe carries that use-when in its own field, so an author finds the move by what the sentence is doing
 - Regression: `python content/video_engine/scripts/effects_catalog_check.py` (each new id absent before)
 - Expected RED: none of the candidate ids exists in `effects/cards` / `effects/recipes` / the species list
 - Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, and each verb's own test
@@ -949,7 +1032,7 @@ verbatim tails and are left pending.
 - Owner: implementation_luna
 - Depends on: T39; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
-- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 6 (6 of 9). A dock option: the plate under a landing dock blurs (the backdrop blur `exit:blurzoom` already carries, held) while the dock reads, and clears on its leave; only over a busy CHART plate (s98), never a ledger page's plot (E63 unchanged - the harvest's open question stays with the operator). Rows 10, 11, 16, 18. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 6 (6 of 9). A dock option: the plate under a landing dock blurs (the backdrop blur `exit:blurzoom` already carries, held) while the dock reads, and clears on its leave; only over a busy CHART plate (s98), never a ledger page's plot (E63 unchanged - the harvest's open question stays with the operator). Rows 10, 11, 16, 18. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it AMENDED 2026-09-23 (coverage audit): s104 amended (composable focus: "the others blur and recede") puts blur on a ledger page's RECEDED panels - T8b owns that use; this slice's dock-over-a-plot use follows s98, and E63's "never over a ledger page's plot" gives way where the story needs the plot behind the dock (s109: forms are defaults), the read judged on the frame
 - Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
 - Expected RED: the token is refused as unknown by `build_scene_timeline_f`
 - Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
@@ -1021,6 +1104,77 @@ verbatim tails and are left pending.
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
+- Evidence: pending
+
+### T46: The schematic - a shape drawn with no data, carrying the narrative (E99 s109 (1); harvest #12 `page_builder:cycle`)
+- Status: pending
+- Owner: implementation_luna (LANE B, with the Bravos verbs)
+- Depends on: T10b, T36 (a light that travels along it); lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/scripts/ledger_page.py` (a `schematic` builder: a closed-form curve - the hype cycle, the debt cycle, a mania arc, phase waves - with named phases, no axis values), `content/video_engine/scripts/build_scene_timeline_f.py`, `content/video_engine/tests/test_schematic_page.py` (new), one golden
+- Acceptance: s109 (1): "we can draw with no data - that is the art and narrative coming to life in the world". (1) A `schematic` page draws a named closed-form shape (hype cycle, debt cycle, mania arc, phase waves; a `phases` list names the stretches) with NO axis values and NO figures it cannot source, and says on the page it is a shape, not a series (a small "schematic" tag); (2) its phases light in turn on their words (T36's travelling light / `span`), a `bracket` names a lag; (3) a real series may later be laid over it on a word (the shape meets the data); (4) seek-safe; byte-identical elsewhere; one golden (the hype cycle, three phases lit)
+- Use when: the sentence explains a MECHANISM's shape over time (the cycle, the phases) rather than a measured value - row 12's three manias, the debt cycle
+- Regression: `python -m pytest content/video_engine/tests/test_schematic_page.py -q`
+- Expected RED: `schematic` is an unknown builder
+- Validate: `node --check`, `node --test` kinetics, `sync_kinetics.py --check`, `measure_page_boxes.py --check`, the regression, `test_golden_frames.py`
+- Evidence: pending
+
+### T47: Rings in turn on every vertex, and the valley lit - when the sentence is about those vertices (E99 s109 (3))
+- Status: pending
+- Owner: junior_developer (LANE B)
+- Depends on: T26a (a ring reads the morphed top), T36; lane B
+- Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (the ring species' multi-target form and its check), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (only if the painter needs it), `content/video_engine/tests/test_rings_on_vertices.py` (new)
+- Acceptance: s109 (3): "rings at repeating near similar peaks, and a highlight on the valley". (1) First find whether N `ring` species on N datums in turn already compile and read (`build_scene_timeline_f.py:1165` targets a datum/point/region) - if they do, this is a recipe + a use-when, not engine work; (2) a `ring` may take a list of datums ringed IN TURN on their words (each lands, the previous holds or fades by the row's word), and a `valley` light (the stretch between two peaks lit - T36's travelling light over a region); (3) E56's check accepts N rings when each is keyed to its own word; (4) byte-identical elsewhere
+- Use when: the sentence is ABOUT the vertices - repeated near-equal peaks ("it topped out here, and here, and here"), the trough between them
+- Regression: `python -m pytest content/video_engine/tests/test_rings_on_vertices.py -q`
+- Expected RED: a ring list of three datums is refused, or the rings all land at once
+- Validate: the regression, `test_the_stamp_arrival.py`, `test_golden_frames.py`
+- Evidence: pending
+
+### T48: The pie and the donut, flat or 3D exploded, and the push onto the largest slice (E99 s109 (4))
+- Status: pending
+- Owner: implementation_luna (LANE B)
+- Depends on: T26f (the camera free of the chrome); lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the `share` builder's extrusion + explode + peel), `content/video_engine/scripts/ledger_page.py` (the `share` page options), `content/video_engine/scripts/build_scene_timeline_f.py`, `content/video_engine/tests/test_share_pie_3d.py` (new), goldens
+- Acceptance: s109 (4) and its amendment: "maybe a 3d pie chart exploded and then zoomed onto the largest portion when discussing NVDA's market share of AI". Find and REUSE the existing `share` builder and `peel` first. (1) A share page may be a pie or a donut, flat or EXTRUDED with a tilt (a 2.5D projection of true-angle slices), a slice EXPLODED out on its word; (2) accuracy: the slice ANGLES are the true shares and every figure is written - the perspective is the camera's, not the data's; the check refuses shares that do not sum to their whole (or names the "other" slice); (3) a camera key may push onto a named slice (T26f's free camera) while the others recede; (4) the hatch (T6b) may shade the extrusion's side from the one stage light; (5) byte-identical for existing share pages; goldens for the flat donut, the 3D exploded pie, and the push
+- Use when: the sentence DIVIDES a whole and the story is one piece's weight (NVDA's share of AI compute) - the push makes the emphasis the claim
+- Regression: `python -m pytest content/video_engine/tests/test_share_pie_3d.py -q`
+- Expected RED: `extrude` / `explode` are unknown share options
+- Validate: `node --check`, `node --test` kinetics, `sync_kinetics.py --check`, `measure_page_boxes.py --check`, the regression, `test_golden_frames.py`, `test_camera_keeps_the_page.py`
+- Evidence: pending
+
+### T49: The freeze beat - everything stops and one light comes on (E99 s99)
+- Status: pending
+- Owner: implementation_luna (LANE B)
+- Depends on: T36 (the light); lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the species; `effects/cards/species.json:206` names `beat_freeze` unbuilt), `content/video_engine/scripts/build_scene_timeline_f.py`, `content/video_engine/scripts/gate_motion_density.py` (the beat is punctuation, not stillness), `content/video_engine/tests/test_freeze_beat.py` (new), one golden
+- Acceptance: s99: "a light that comes on as everything else STOPS is a punctuation beat". (1) A `freeze` species on a word: every idle, drift and ambient life on the stage holds for its duration (a 0.4-1.2 s dial) while ONE light (a named datum, mark or prop) comes on; then life resumes; (2) the gate reads it as a punctuation beat, not a still run (the frozen-frame check and E49 know it by name); (3) seek-safe; byte-identical elsewhere; one golden
+- Use when: the TURN of the argument lands on one number or thing - the line the whole row builds to (row 18's turn, row 23's ring)
+- Regression: `python -m pytest content/video_engine/tests/test_freeze_beat.py -q`
+- Expected RED: `freeze` is an unknown species
+- Validate: `node --check`, `node --test` kinetics, `sync_kinetics.py --check`, the regression, `test_gate_motion_density.py`, `test_golden_frames.py`
+- Evidence: pending
+
+### T50: Forms judged by honesty, not type (E99 s100, s109 (5); R26-263) + a bracket on a bars page (R26-272)
+- Status: pending
+- Owner: junior_developer (LANE B)
+- Depends on: none; lane B
+- Write set: `content/video_engine/scripts/ledger_page.py`, `content/video_engine/scripts/build_scene_timeline_f.py` (every by-type refusal of a form), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (paintBracket on bars), `content/video_engine/tests/test_forms_by_honesty.py` (new)
+- Acceptance: s100 + s109 (5): E53's form rules are DEFAULTS that give way to the story when the honesty tests hold. (1) List every place the compiler or the page refuses a FORM by type (stacked bar, area, dual axis, donut, uneven epochs) and turn each into an honesty check - true proportion, figures written, the reading unambiguous - that WARNs with numbers when it fails (s106), keeping hard refusals only for untruth (a value drawn wrong, shares that do not sum); (2) R26-272: a `bracket` on a bars page anchors to the bar tops (it paints nothing today); (3) byte-identical for rows that use none of it
+- Regression: `python -m pytest content/video_engine/tests/test_forms_by_honesty.py -q`
+- Expected RED: an area page / a bracket on bars is refused or paints nothing
+- Validate: the regression, `test_golden_frames.py`, `test_page_boxes.py`
+- Evidence: pending
+
+### T45: The membership stack - equal tiles (logos, names) inside one bar (E99 s101, approved in this lane 2026-09-23; built nowhere yet)
+- Status: pending
+- Owner: implementation_luna (LANE B, with the Bravos verbs)
+- Depends on: T10b (soft bars), T26d (the tiles are placed objects); lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the bars painter's tile layer), `content/video_engine/scripts/ledger_page.py` (the `members` field on a bar and its check), `content/video_engine/scripts/build_scene_timeline_f.py` (the tiles' landing on a word), `content/video_engine/tests/test_membership_stack.py` (new), one golden
+- Acceptance: s101: "A bar may be filled with EQUAL tiles naming who is in it (logos, names) when the bar is ONE value, the tiles carry no value of their own (equal height, never sized), and the bar's total is written on the page" - Bravos's AI-hidden-debt bar with Google / Microsoft / Amazon / Meta / Oracle tiles. (1) A bar datum may carry `members: [{name, logo?}]`; the bar is drawn at its one value and divided into equal tiles bottom-up, each a name or a logo cutout (alpha kept, T6d), the bar's total written above it; (2) the tiles land one by one on their words (or together), each with the badge-ladder spring; a tile may be lit/solo'd (T37) when its name is spoken; (3) the check refuses a `members` entry that carries a value (a stack of values is s109's to judge, not this form's) and WARNs when a name cannot fit its tile at the phone floor; (4) soft bars and the hatch follow the whole bar; (5) byte-identical for a bar with no `members`; one golden (five tiles, the total written) read by the parent before pinning
+- Use when: the sentence names WHO is in a single total ("Google, Microsoft, Amazon, Meta and Oracle - all of it one bill") - never to compare the members' sizes
+- Regression: `python -m pytest content/video_engine/tests/test_membership_stack.py -q`
+- Expected RED: `members` is an unknown bar field
+- Validate: `node --check` the engine, `node --test` kinetics, `sync_kinetics.py --check`, `measure_page_boxes.py --check`, the regression, `test_bar_style.py`, `test_golden_frames.py`
 - Evidence: pending
 
 ### T44: the Bravos RECIPES composed from T36-T43, each proved as a body beat
