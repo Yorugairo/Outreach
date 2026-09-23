@@ -43,7 +43,7 @@ const PROFILES = {
       'evidence-motion-engine', 'exa-search', 'fal-ai-media', 'frontend-slides', 'grill-me',
       'manim-video', 'marketing-campaign', 'motion-system', 'remotion-video-creation',
       'research', 'social-distribution', 'taste', 'tavily-web', 'ui-demo', 'video-editing',
-      'video-engine', 'video-script-architect', 'videodb', 'brand-voice'
+      'video-engine', 'script-writer', 'videodb', 'brand-voice'
     ]
   },
   api: {

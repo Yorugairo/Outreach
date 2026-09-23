@@ -54,7 +54,6 @@ ACTIVE_NAMES = {
     "tavily-web",
     "video-editing",
     "video-engine",
-    "video-script-architect",
     "watch",
     "web-perf",
     "web-research-agent",
