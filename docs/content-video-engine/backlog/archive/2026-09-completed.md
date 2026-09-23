@@ -38,6 +38,8 @@ split to active IDs before the completed portion is archived.
 | R26-114 | Retention-zone opening question resolved by correction. | E99 s10 records that opening on a full chart was never refused. |
 | R26-125 | P57 HG1 review event recorded. | E99 s19 accepted R26-67/71; its unresolved hand-off observation is split into active R26-66. |
 | R26-262 | GDP-share page now carries year ticks and a `% of GDP` label; the recast page was parent-read. | P69 T17; `ev-equip-ipp-gdp-v2` preserves v1 data and adds the labels; `ledger_page --check --variant line` and door exit passed. No operator gate is recorded on this child. |
+| DOCS-BL-01 | The over-length `dock_kind:prop` description was shortened without changing its mechanism; all eight missing source-token cards were recorded. | 2026-09-23: `build_effects_catalog.py --check`, `effects_catalog_check.py` (0 failures), and `build_docs_layers.py --write` (12 layers in sync). Source cards: `dock_kind.json`, `page_enter.json`, `plate_option.json`, `kinetics.json`. |
+| R26-239 | Compiler/kinetics token coverage debt closed without inventing unproved beat recipes. | Eight source cards now cover `room`, `domain`, `build`, `labelfit`, `readability`, `bar_style`, `surface`, and `page_surface`; `effects_catalog_check.py` reports 0 failures and the two strict xfails were removed (2026-09-23). |
 
 ## Remaining close-marked legacy rows
 
@@ -48,9 +50,10 @@ completion-like token (`CLOSED`, `DONE`, `BUILT`, `FIXED`, `RETIRED`,
 `APPROVED`, `ACCEPTED`, `SHIPPED`, `PROMOTED`, `RESOLVED`, `LANDED`,
 `COMPLETE`, or `WITHDRAWN`). It found 102 rows. R26-63/64/67/68/69/70/71/74/
 75/77/78/79/90/92/93/94/95-101/110/112-114/125/262 account for 29 of the 30
-archive IDs; R26-107 was also archived on direct evidence although its trailing
-cell does not match this token list. R26-123 remains active because its
-compiler-default follow-up is unresolved. These 72 other close-marked rows
+archive IDs at the first pass; R26-107 was also archived on direct evidence although its trailing
+cell does not match this token list. R26-239 was subsequently closed on direct
+catalogue evidence above. R26-123 remains active because its
+compiler-default follow-up is unresolved. These 71 other close-marked rows
 remain unreconciled; a token alone does not prove closure:
 
 R26-13, R26-32, R26-37, R26-38, R26-41, R26-42, R26-46, R26-47, R26-48,
@@ -61,7 +64,7 @@ R26-134, R26-135, R26-158, R26-159, R26-161, R26-168, R26-172, R26-175,
 R26-176, R26-177, R26-179, R26-180, R26-181, R26-191, R26-201, R26-218,
 R26-219, R26-220, R26-221, R26-222, R26-223, R26-224, R26-225, R26-226,
 R26-228, R26-230, R26-231, R26-232, R26-233, R26-234, R26-235, R26-236,
-R26-239, R26-241, R26-245, R26-246, R26-247.
+R26-241, R26-245, R26-246, R26-247.
 
 The source also mentions R26-248 without a matching detail-row header. It stays
 an unresolved source anomaly; this pass does not synthesize a task from it.
