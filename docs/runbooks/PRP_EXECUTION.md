@@ -47,7 +47,7 @@ for a small bounded fix that still requires implementation reasoning, and
 
 **Since 2026-09-05 the eight roles ARE dispatchable types on both sides.**
 Codex: `.codex/config.toml` + `.codex/agents/<role>.toml` (OpenAI models).
-Codex model policy was updated by the operator on 2026-09-22: Luna 6/max for execution and professional/computer-use work, Sol 6/xhigh for planning and all three-failure escalations. See `docs/agent-context/SKILL_ROUTER.md`; the Claude model/effort tables below do not override Codex routing.
+Codex model policy was updated by the operator on 2026-09-22 and 2026-09-23: Luna 6/max for execution and professional/computer-use work, Sol 6/xhigh for planning and three-failure diagnosis. A setup/spec failure may receive one Sol-directed Luna retry under the same ledger; Sol need not automatically produce the artifact. See `docs/agent-context/SKILL_ROUTER.md`; the Claude model/effort tables below do not override Codex routing.
 Claude Code: `.claude/agents/<role>.md` (project scope, committed) — pass the
 bare role name as `subagent_type`. Each definition carries its own model, tools
 and the role's stop conditions, so a slice no longer has to be squeezed into
@@ -124,8 +124,17 @@ Fable context; the same hunt delegated would have cost the parent 300.
 under ~40 lines answers it; or the fact is already in context. Below ~5 tool calls the dispatch
 overhead is the larger cost.
 
-**The brief** names: plan path / task id, allowed files, acceptance, the exact validation command,
-the answer cap (≤ 200 words as `path:line` + values), and where the full evidence goes.
+**The brief** is written by the parent or planning architect before Luna execution.
+It recalls the exact source files, prior receipts, asset hashes, working tool/skill
+paths and a runnable smoke command; separates known facts from open decisions;
+and names one bounded artifact and write set, plan path / task id, acceptance,
+negative checks and exact validation. The parent inspects code, tests and
+rendered/artifact evidence before integration. If expectations are missed, the
+parent records the failure and writes a targeted correction rather than silently
+broadening the worker's task.
+
+For read-only retrieval briefs, also name the answer cap (≤ 200 words as
+`path:line` + values) and where the full evidence goes.
 
 **The return contract:** the agent returns the ≤ 200-word answer inline. Anything longer (a
 research pack, a diff review, a transcript of runs) is written to `docs/research/runs/<slug>/`

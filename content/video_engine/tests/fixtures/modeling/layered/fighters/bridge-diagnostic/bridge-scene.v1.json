@@ -1,0 +1,241 @@
+{
+  "schema_version": "authored_layer_scene.v1",
+  "scene_id": "native-fighter-bridge-diagnostic",
+  "review_state": "review_only",
+  "render_eligible": false,
+  "diagnostic_only": true,
+  "art_note": "Generic saved Blender starter. Deformation probes only; no fighter identity, combat or contact claim.",
+  "canvas_px": [
+    512,
+    768
+  ],
+  "clear_color": "#161c26",
+  "view_envelope_deg": {
+    "yaw_deg": [
+      0,
+      0
+    ],
+    "pitch_deg": [
+      0,
+      0
+    ]
+  },
+  "occlusion_policy": "declared_depth_back_to_front",
+  "camera": {
+    "zoom_limits": [
+      1.0,
+      1.04
+    ],
+    "keyframes": [
+      {
+        "frame": 0,
+        "zoom": 1.0,
+        "look_px": [
+          256.0,
+          384.0
+        ],
+        "at_px": [
+          256.0,
+          384.0
+        ],
+        "yaw_deg": 0,
+        "pitch_deg": 0
+      },
+      {
+        "frame": 27,
+        "zoom": 1.025,
+        "look_px": [
+          256.0,
+          384.0
+        ],
+        "at_px": [
+          259.0,
+          382.0
+        ],
+        "yaw_deg": 0,
+        "pitch_deg": 0
+      },
+      {
+        "frame": 52,
+        "zoom": 1.0,
+        "look_px": [
+          256.0,
+          384.0
+        ],
+        "at_px": [
+          256.0,
+          384.0
+        ],
+        "yaw_deg": 0,
+        "pitch_deg": 0
+      }
+    ]
+  },
+  "scene": {
+    "scene_id": "native-fighter-bridge-diagnostic",
+    "duration_frames": 72,
+    "fps": {
+      "numerator": 24,
+      "denominator": 1
+    },
+    "time_origin": {
+      "scene_time_seconds": {
+        "numerator": 0,
+        "denominator": 1
+      }
+    },
+    "events": [],
+    "contacts": [],
+    "motion_channels": [
+      {
+        "channel_id": "probe-pose",
+        "binding_id": "generic_fighter",
+        "target_kind": "articulation",
+        "semantic_target": "saved_source_frame",
+        "value_unit": "normalized",
+        "interpolation": "step",
+        "keyframes": [
+          {
+            "frame": 0,
+            "value": 0
+          },
+          {
+            "frame": 27,
+            "value": 1
+          },
+          {
+            "frame": 52,
+            "value": 2
+          }
+        ]
+      },
+      {
+        "channel_id": "probe-expression",
+        "binding_id": "generic_fighter",
+        "target_kind": "face_control",
+        "semantic_target": "fixed_expression",
+        "value_unit": "normalized",
+        "interpolation": "step",
+        "keyframes": [
+          {
+            "frame": 0,
+            "value": 0
+          }
+        ]
+      }
+    ]
+  },
+  "layers": [
+    {
+      "layer_id": "diagnostic-background",
+      "kind": "environment",
+      "role": "background",
+      "depth": 0.75,
+      "source_bounds_px": [
+        -64,
+        -64,
+        576,
+        832
+      ],
+      "painted_bounds_px": [
+        -64,
+        -64,
+        576,
+        832
+      ],
+      "shapes": [
+        {
+          "kind": "rect",
+          "bounds_px": [
+            -64,
+            -64,
+            576,
+            832
+          ],
+          "fill": "#202937"
+        }
+      ]
+    },
+    {
+      "layer_id": "generic-fighter",
+      "kind": "character",
+      "binding_id": "generic_fighter",
+      "role": "subject",
+      "depth": 1.0,
+      "anchor_px": [
+        256.0,
+        384.0
+      ],
+      "source_bounds_px": [
+        0,
+        0,
+        512,
+        768
+      ],
+      "silhouette_bounds_local_px": [
+        -256.0,
+        -384.0,
+        256.0,
+        384.0
+      ],
+      "disocclusion_budget_px": 0,
+      "pose_channel": "probe-pose",
+      "expression_channel": "probe-expression",
+      "shapes": [],
+      "pose_states": [
+        {
+          "state_id": "neutral",
+          "index": 0,
+          "shapes": [],
+          "raster_asset": {
+            "path": "neutral-beauty.png",
+            "sha256": "8b135c2588cc43fd8843e765c1eabb31837e636697337bc61cc0d94b749be720",
+            "bounds_local_px": [
+              -256.0,
+              -384.0,
+              256.0,
+              384.0
+            ]
+          }
+        },
+        {
+          "state_id": "arm_stress",
+          "index": 1,
+          "shapes": [],
+          "raster_asset": {
+            "path": "arm_stress-beauty.png",
+            "sha256": "35042b11b8065e94ffb7b43673e23461ffce7ef6f352cf3e7911c7df489ec01c",
+            "bounds_local_px": [
+              -256.0,
+              -384.0,
+              256.0,
+              384.0
+            ]
+          }
+        },
+        {
+          "state_id": "leg_stress",
+          "index": 2,
+          "shapes": [],
+          "raster_asset": {
+            "path": "leg_stress-beauty.png",
+            "sha256": "0753882a4615037bd61468a084ee1927e94fc9b67c469d24e55d3c019685f77e",
+            "bounds_local_px": [
+              -256.0,
+              -384.0,
+              256.0,
+              384.0
+            ]
+          }
+        }
+      ],
+      "expression_states": [
+        {
+          "state_id": "source_expression",
+          "index": 0,
+          "shapes": []
+        }
+      ]
+    }
+  ]
+}

@@ -24,6 +24,7 @@ from PIL import Image, ImageColor, ImageDraw, ImageFont
 
 from content.video_engine.scripts.build_plate_library import LAYER_PLANES
 from .motion import MotionContractError, MotionSample, MotionTimeline
+from .planar_rig import PlanarPose, PlanarRig, PlanarRigError
 
 
 MAX_CANVAS_PIXELS = 2_304_000
@@ -67,6 +68,7 @@ class LayeredFrameState:
     anchors_px: Mapping[str, tuple[float, float]]
     layer_order: tuple[str, ...]
     diagnostic_status: str
+    planar_pose: PlanarPose | None = None
 
 
 @dataclass(frozen=True)
@@ -192,7 +194,10 @@ def _ease(name: str, amount: float) -> float:
 class LayeredScene:
     """Validated authored-layer input with a pure, random-seekable frame evaluator."""
 
-    def __init__(self, document: Mapping[str, Any], *, asset_root: str | Path | None = None):
+    def __init__(
+        self, document: Mapping[str, Any], *, asset_root: str | Path | None = None,
+        planar_rig: Mapping[str, Any] | None = None,
+    ):
         raw = dict(document)
         if raw.get('schema_version') != 'authored_layer_scene.v1':
             raise LayeredSceneError('schema_version must be authored_layer_scene.v1')
@@ -241,16 +246,36 @@ class LayeredScene:
         self.occlusion_policy = raw.get('occlusion_policy')
         if self.occlusion_policy != 'declared_depth_back_to_front':
             raise LayeredSceneError('occlusion_policy must be declared_depth_back_to_front')
+        self.planar_rig: PlanarRig | None = None
+        if planar_rig is not None:
+            try:
+                self.planar_rig = PlanarRig.from_document(
+                    planar_rig, scene_id=self.scene_id, layers=self.layers,
+                    contacts=self.timeline.contacts, canvas_px=(self.width, self.height),
+                )
+            except PlanarRigError as exc:
+                raise LayeredSceneError(f'planar rig sidecar: {exc}') from exc
 
     @classmethod
-    def load(cls, path: str | Path, *, asset_root: str | Path | None = None) -> LayeredScene:
+    def load(
+        cls, path: str | Path, *, asset_root: str | Path | None = None,
+        planar_rig_path: str | Path | None = None,
+    ) -> LayeredScene:
         try:
             value = json.loads(Path(path).read_text(encoding='utf-8'))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
             raise LayeredSceneError(f'cannot read authored layer JSON: {exc}') from exc
         if not isinstance(value, Mapping):
             raise LayeredSceneError('authored layer JSON root must be an object')
-        return cls(value, asset_root=asset_root)
+        rig = None
+        if planar_rig_path is not None:
+            try:
+                rig = json.loads(Path(planar_rig_path).read_text(encoding='utf-8'))
+            except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+                raise LayeredSceneError(f'cannot read planar rig sidecar JSON: {exc}') from exc
+            if not isinstance(rig, Mapping):
+                raise LayeredSceneError('planar rig sidecar JSON root must be an object')
+        return cls(value, asset_root=asset_root, planar_rig=rig)
 
     def _parse_layers(self, value: Any) -> tuple[dict[str, Any], ...]:
         if not isinstance(value, list) or not value:
@@ -659,6 +684,19 @@ class LayeredScene:
                 self._validate_disocclusion(layer, camera, anchors[layer['layer_id']], sample)
             if layer['role'] == 'background':
                 self._validate_background_coverage(layer, camera)
+        planar_pose = None
+        if self.planar_rig is not None:
+            rig_layer = next(layer for layer in self.layers if layer['layer_id'] == self.planar_rig.layer_id)
+            scale_channel = rig_layer.get('scale_channel')
+            scale = (_channel_value(sample, scale_channel, 'planar rig scale')
+                     if scale_channel else 1.0)
+            try:
+                planar_pose = self.planar_rig.evaluate(
+                    frame=sample.frame, anchor=anchors[rig_layer['layer_id']], scale=scale,
+                    flip=-1 if rig_layer.get('flip_x') is True else 1,
+                )
+            except PlanarRigError as exc:
+                raise LayeredSceneError(f'planar rig evaluation: {exc}') from exc
         return LayeredFrameState(
             scene_id=self.scene_id,
             frame=sample.frame,
@@ -670,6 +708,7 @@ class LayeredScene:
             anchors_px=anchors,
             layer_order=tuple(layer['layer_id'] for layer in self.layers),
             diagnostic_status='review_only_diagnostic',
+            planar_pose=planar_pose,
         )
 
     def _validate_disocclusion(
@@ -730,7 +769,9 @@ class LayeredScene:
         for layer in self.layers:
             components = self._layer_components(layer, selected_by_id.get(layer['layer_id']))
             world_image = self._raster_layer(layer, components, anchor_by_id.get(layer['layer_id'], layer['_anchor_px']),
-                                             sample, supersample)
+                                             sample, supersample,
+                                             state.planar_pose if self.planar_rig is not None
+                                             and layer['layer_id'] == self.planar_rig.layer_id else None)
             plane = self._plane_camera(state.camera, layer['depth'])
             projected = _project_layer(world_image, layer['_source_bounds'], plane, self.width, self.height, supersample)
             output.alpha_composite(projected)
@@ -778,6 +819,7 @@ class LayeredScene:
         anchor: tuple[float, float],
         sample: MotionSample,
         ss: int,
+        planar_pose: PlanarPose | None = None,
     ) -> Image.Image:
         left, top, right, bottom = layer['_source_bounds']
         width = max(1, math.ceil((right - left) * ss))
@@ -865,6 +907,22 @@ class LayeredScene:
         composite_raster(pose_raster)
         paint(expression_shapes)
         composite_raster(expression_raster)
+        if planar_pose is not None:
+            chain = [point(planar_pose.root_local_px), point(planar_pose.hinge_local_px),
+                     point(planar_pose.end_local_px)]
+            draw.line(chain, fill=(12, 22, 30, 255), width=max(1, round(13 * ss)), joint='curve')
+            draw.line(chain, fill=(58, 224, 226, 255), width=max(1, round(6 * ss)), joint='curve')
+            for joint in chain:
+                radius = 5 * ss
+                draw.ellipse((joint[0] - radius, joint[1] - radius,
+                              joint[0] + radius, joint[1] + radius),
+                             fill=(255, 225, 92, 255), outline=(12, 22, 30, 255), width=max(1, ss))
+            target = planar_pose.requested_endpoint_canvas_px
+            target_on_layer = ((target[0] - left) * ss, (target[1] - top) * ss)
+            marker_radius = 9 * ss
+            draw.ellipse((target_on_layer[0] - marker_radius, target_on_layer[1] - marker_radius,
+                          target_on_layer[0] + marker_radius, target_on_layer[1] + marker_radius),
+                         outline=(238, 91, 226, 255), width=max(1, 2 * ss))
         return image
 
 
