@@ -3583,7 +3583,11 @@ LONGFORM_FONT_FILE = REPO / "content/video_engine/src/assets/fonts/Inter-Variabl
 
 def longform_assets(timeline: dict) -> dict:
     """``{LONGFORM_FONT_ASSET: data uri}`` when any scene's page (or chart state) is drawn under the
-    `longform` profile, else ``{}``. Pure apart from reading the tracked font file."""
+    `longform` profile, else ``{}``. Pure apart from reading the tracked font file. A 9:16 timeline carries
+    none (REVIEW-P69-LANE-B-MERGE-2 N4): the player never draws the profile in portrait, so the 1.17 MB face
+    would ride a build that never sets a word in it."""
+    if (timeline.get("aspect") or "16:9") == "9:16":
+        return {}
     for sc in timeline.get("scenes") or []:
         world = sc.get("world") or {}
         pages = [world.get("page")] + list(world.get("page_states") or [])
@@ -5238,12 +5242,15 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         if err:
             raise ValueError(f"{plate_id!r}: {err}")
         profile, preset = LPG.parse_readability(rd)
+        if profile == LPG.LONGFORM and ASPECT == "9:16":   # REVIEW-P69-LANE-B-MERGE-2 N4: never accepted and ignored
+            raise ValueError(f"{plate_id!r}: readability={rd!r} is the long form's 16:9 page profile - the player never "
+                             "draws it in portrait (a 9:16 page keeps its own layout, P41), so a 9:16 row may not name it")
         if profile == LPG.LONGFORM:   # the preset and, on a line page, the end-tag form that keeps every tag on the stage
             LPG.apply_longform(page, preset)
         else:
             axes = page.setdefault("axes", {})
             axes["readability"] = profile
-            for key in ("type_scale", "tag_form"):   # a series file's long form, overruled by the row
+            for key in ("type_scale", "tag_form", "tag_room"):   # a series file's long form, overruled by the row
                 axes.pop(key, None)
     elif isinstance(world.get("page"), dict) and (world["page"].get("axes") or {}).get("readability") == LPG.LONGFORM:
         LPG.apply_longform(world["page"])   # the series file's own long form, re-fitted to the badges the row's dock gave it
@@ -5283,6 +5290,12 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
             raise ValueError(f"{plate_id!r}: {len(thens) + 1} chart states is past STATE_MAX ({STATE_MAX}): "
                              "a fourth chart is a new page or a card")
         world["page_states"] = [_page_state(t, ep_dir, repr(plate_id)) for t in thens]
+        if (world["page"].get("axes") or {}).get("readability") == LPG.LONGFORM:
+            # REVIEW-P69-LANE-B-MERGE-2 N2: every state is drawn in the page's box, viewBox and preset - so each takes
+            # the profile and its OWN fitted end-tag form, and a line page's viewBox makes room for the widest of them
+            err = LPG.apply_longform_states(world["page"], world["page_states"])
+            if err:
+                raise ValueError(f"{plate_id!r}: {err}")
     return world
 
 

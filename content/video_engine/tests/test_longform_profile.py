@@ -82,13 +82,21 @@ LONG = {"title": "Four long names at the ends of four lines, a title long enough
 CROSS = {"title": "Shape across zero", "sub": "Synthetic bars that cross zero",
          "src": "Synthetic - the longform fixture", "unit": "%",
          "bars": [{"label": "A", "value": -12}, {"label": "B", "value": 8}, {"label": "C", "value": 15}]}
+# REVIEW-P69-LANE-B-MERGE-2 N1: the long page with one badge that keys no line - it goes to the KEY RAIL, as a pill
+# under the source (the review's `long2`: at `phone` that pill stood on the source's second line)
+RAIL = dict(copy.deepcopy(LONG), badges=LONG["badges"] + [{"label": "KEY", "value": "1", "tag": "", "accent": "sunflower"}])
 PAGES = {  # name -> (object id, object, variant)
     "94": ("fx-lf-94", OBJ_94, "bars"),
     "halving": ("fx-lf-halving", OBJ_20, "bars"),
     "line": ("fx-lf-line", LINE, "line"),
     "long": ("fx-lf-long", LONG, "line"),
     "cross": ("fx-lf-cross", CROSS, "bars"),
+    "rail": ("fx-lf-rail", RAIL, "line"),
 }
+# N1: the anchored caption's strip - `full_stage_bands`' bottom band begins at its top, and the one-line caption's own
+# box ends at its foot (CAPTION_ANCHOR, 878-960 on the 1920 x 1080 stage). The source and the key rail never meet it.
+STRIP = (LPG._full_stage_bands(1920, 1080)["bottom"]["y"], LPG.CAPTION_ANCHOR[ASPECT][1] + LPG.CAPTION_ANCHOR[ASPECT][3])
+EST_TOL = 2.0   # N3: the estimate's page is the engine's to the full-stage fixture's own 2 px (test_full_stage_page_is_measured.TOL)
 # THE PINS - measured at lane B's HEAD 9ffbf60 before this slice, with no option on the row: sha256 of the
 # world each row compiles (json, sorted keys) and of the 94 page's frame at T_FRAME (RGB bytes, the golden
 # harness's own fresh-browser render). A page that names no profile must compile and paint exactly these.
@@ -249,6 +257,107 @@ def test_the_inter_face_rides_the_asset_map_only_when_a_page_asks(tmp_path):
     assert base64.b64decode(data) == (ROOT / "content/video_engine/src/assets/fonts/Inter-Variable.ttf").read_bytes()
 
 
+# ---- REVIEW-P69-LANE-B-MERGE-2 (no browser) ----------------------------------------------------------------------
+# N2: a `then=` state is drawn in the page's own chart box, viewBox and preset type, so ITS end tags are fitted too -
+# against the viewBox the page opened (a line page's is already narrowed to the page's own tags).
+
+THEN_ROWS = {   # the first page -> the state it becomes: bars -> the long line (the review's row), a short line -> it
+    "bars-to-line": "ledger:fx-lf-94:bars;then=fx-lf-long:line",
+    "line-to-line": "ledger:fx-lf-line:line;then=fx-lf-long:line",
+}
+
+
+def _then_world(row: str, tmp: Path, preset: str | None, aspect: str = ASPECT) -> dict:
+    ep = _episode(tmp)
+    saved = B.ASPECT
+    B.ASPECT = aspect
+    try:
+        world = B.world_for_plate(row + (f"{OPT}:{preset}" if preset else ""), (0, 0, 0), ep)
+        if aspect == ASPECT:
+            B.stamp_full_stage(world["page"])
+    finally:
+        B.ASPECT = saved
+    return world
+
+
+@pytest.mark.parametrize("preset", PRESETS)
+@pytest.mark.parametrize("row", sorted(THEN_ROWS))
+def test_every_then_state_carries_the_profile_and_its_own_fitted_tag_form(row, preset, tmp_path):
+    """The state takes the page's profile and preset and the fullest end-tag form that fits the stage on its OWN
+    tags; and the viewBox the page opens (the one the state is drawn in) leaves that form its room - on a line page
+    by `axes.tag_room`, the widest tag a state writes, when it is wider than the page's own."""
+    world = _then_world(THEN_ROWS[row], tmp_path, preset)
+    page, state = world["page"], world["page_states"][0]
+    axes = state["axes"]
+    assert axes["readability"] == "longform" and axes["type_scale"] == preset, axes
+    assert axes["tag_form"] == LPG.longform_tag_form(state, preset), axes
+    t, scale = LPG.LONGFORM_TYPE_SCALE[preset], LPG.longform_scale0()
+    room = LPG.longform_page_vw(page)   # the viewBox the state is drawn in
+    assert LPG._longform_max_vw(LPG.longform_tag_units(state, t, axes["tag_form"], scale), scale) >= room - 1e-6, (
+        f"{row} {preset}: the state's {axes['tag_form']!r} tags do not fit the page's {room:.1f}-unit viewBox")
+    if page["builder"] == "dense-line":
+        assert page["axes"].get("tag_room") == pytest.approx(LPG.longform_tag_px(state, t, axes["tag_form"]), abs=0.1), page["axes"]
+
+
+def test_without_the_option_a_then_state_is_untouched(tmp_path):
+    for row in THEN_ROWS.values():
+        state = _then_world(row, tmp_path / row.split(":")[1], None)["page_states"][0]
+        assert not {"readability", "type_scale", "tag_form"} & set(state.get("axes") or {}), state.get("axes")
+
+
+# N3: the estimate wraps the page ink at the face's own advances - the table is the tracked font's, re-read here
+
+def test_the_advance_table_is_the_tracked_inters_own():
+    instancer = pytest.importorskip("fontTools.varLib.instancer")
+    from fontTools.ttLib import TTFont
+    font = ROOT / "content/video_engine/src/assets/fonts/Inter-Variable.ttf"
+    for (weight, opsz), want in LPG.LONGFORM_ADVANCES.items():
+        inst = instancer.instantiateVariableFont(TTFont(font), {"wght": weight, "opsz": opsz})
+        cmap, hmtx = inst.getBestCmap(), inst["hmtx"]
+        assert tuple(hmtx[cmap[ord(c)]][0] for c in LPG.LONGFORM_ADV_CHARS) == want, (weight, opsz)
+    mid = instancer.instantiateVariableFont(TTFont(font), {"wght": 400, "opsz": 22.41})   # middle's sub: 26 / 1.16
+    cmap, hmtx = mid.getBestCmap(), mid["hmtx"]
+    for c in "aMW 0%":
+        got = LPG.longform_text_px(c, "sub", 26.0) * LPG.LONGFORM_ADV_UPM / 26.0
+        assert abs(got - hmtx[cmap[ord(c)]][0]) <= 0.5, (c, got, hmtx[cmap[ord(c)]][0])
+
+
+# N4: the long form is a 16:9 page profile - the engine never draws it in portrait, so a 9:16 row naming it is refused
+# by name, and a 9:16 build never carries the face.
+
+def test_a_portrait_row_naming_the_long_form_is_refused_by_name(tmp_path):
+    ep = _episode(tmp_path)
+    saved = B.ASPECT
+    B.ASPECT = "9:16"
+    try:
+        with pytest.raises(ValueError, match=r"longform.*16:9"):
+            B.world_for_plate(f"ledger:fx-lf-94:bars{OPT}:middle", (0, 0, 0), ep)
+        with pytest.raises(ValueError, match=r"longform.*16:9"):
+            B.world_for_plate(f"ledger:fx-lf-line:line{OPT}", (0, 0, 0), ep)
+    finally:
+        B.ASPECT = saved
+
+
+def test_a_portrait_build_never_carries_the_face(tmp_path):
+    world = _world("94", tmp_path, OPT)   # a series file's own long form reaches a 9:16 timeline the same way
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, G.RUNTIME], "docks": [], "species": []}]
+    assert B.longform_assets(G._timeline("portrait", scenes, {}, "9:16")) == {}
+    assert list(B.longform_assets(G._timeline("landscape", scenes, {}, ASPECT))) == [B.LONGFORM_FONT_ASSET]
+
+
+# N6: a longform page with no face renders in Arial - so a 16:9 timeline that draws one is never instantiated without it
+
+def test_a_longform_page_is_never_instantiated_without_its_face(tmp_path):
+    tl, uris = _timeline(_world("94", tmp_path, OPT))
+    bare = {k: v for k, v in uris.items() if k != B.LONGFORM_FONT_ASSET}
+    with pytest.raises(ValueError, match="font:inter-longform"):
+        RB.instantiate(tl, bare)
+    assert RB.instantiate(tl, uris), "with the face, the page"
+    off, off_uris = _timeline(_world("94", tmp_path / "off"))
+    assert RB.instantiate(off, off_uris), "a page with no profile needs no face"
+
+
 # ---- the browser: the page as the player paints it ------------------------------------------------------------
 
 def _chromium_available() -> bool:
@@ -313,7 +422,8 @@ PROBE = """(face) => {
               ylabelTop: ylab ? R(ylab.el).y : null, plotTop: panel ? R(panel).y : null,
               tagsOut: [...tags, ...chips].map(R).filter(r => !inStage(r)),
               textOut: svgText.filter(t => !inStage(t.rect)).map(t => t.text),
-              source: src ? R(src) : null, sourceIn: src ? inStage(R(src)) : true },
+              source: src ? R(src) : null, sourceIn: src ? inStage(R(src)) : true,
+              pills: [...page.querySelectorAll('.lp-rail .lp-pill')].map(R) },
   };
 }"""
 
@@ -327,6 +437,7 @@ def painted(tmp_path_factory):
         pytest.skip("playwright chromium not installed")
     from playwright.sync_api import sync_playwright
     from PIL import Image
+    import measure_page_boxes as MPB
 
     tmp = tmp_path_factory.mktemp("longform")
     out = {}
@@ -336,7 +447,8 @@ def painted(tmp_path_factory):
         try:
             for name, preset in CASES + [("94", None)]:
                 key = f"{name}-{preset or 'off'}"
-                tl, uris = _timeline(_world(name, tmp / key, f"{OPT}:{preset}" if preset else ""))
+                world = _world(name, tmp / key, f"{OPT}:{preset}" if preset else "")
+                tl, uris = _timeline(world)
                 html = tmp / f"{key}.html"
                 html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
                 srv, port = RB.serve(html.parent)
@@ -351,7 +463,8 @@ def painted(tmp_path_factory):
                     page.wait_for_timeout(120)
                     png = RB.frame_png(page, T_FRAME, (w, h))    # ... and the second reads it settled
                     out[key] = {"probe": page.evaluate(PROBE, FACE), "img": Image.open(io.BytesIO(png)).convert("RGB"),
-                                "errors": errors}
+                                "errors": errors, "page": world["page"],
+                                "boxes": page.evaluate(MPB.READ_BOXES)}   # N3: the fixture tool's own read
                 finally:
                     page.context.close()
                     srv.shutdown()
@@ -428,7 +541,9 @@ def test_the_type_is_the_presets_as_rendered(painted, name, preset):
 def test_nothing_collides_at_any_preset(painted, name, preset):
     """The three reads (the parent, 2026-09-23): the sub's last line stands half a tick figure (M28's air) clear of
     the y label and of the plot; every end tag, and every word the chart writes, is inside the stage; so is the
-    source line, wrapped if it must be."""
+    source line, wrapped if it must be.
+    ... and REVIEW-P69-LANE-B-MERGE-2 N1's two: the source never meets the anchored caption's strip (STRIP), and a key
+    rail's pill never meets the source or the strip (at `phone` the source ran 28 px into it and a pill stood on it)."""
     c = painted[f"{name}-{preset}"]["probe"]["checks"]
     assert c["plotTop"] is not None and c["plotTop"] - c["subBottom"] >= c["air"] - 0.5, c
     if c["ylabelTop"] is not None:
@@ -436,6 +551,49 @@ def test_nothing_collides_at_any_preset(painted, name, preset):
     assert c["tagsOut"] == [], f"end tags off the stage: {c['tagsOut']}"
     assert c["textOut"] == [], f"chart words off the stage: {c['textOut']}"
     assert c["sourceIn"], f"the source leaves the stage: {c['source']}"
+    s = c["source"]
+    assert s is None or not _meets_strip(s), f"the source runs into the caption strip {STRIP}: {s}"
+    for pill in c["pills"]:
+        assert not _meets_strip(pill), f"a key pill stands in the caption strip {STRIP}: {pill}"
+        assert s is None or not _overlaps(pill, s), f"a key pill stands on the source: {pill} / {s}"
+        assert pill["x"] >= -0.5 and pill["y"] + pill["h"] <= 1080.5, f"a key pill leaves the stage: {pill}"
+    if name == "rail":
+        assert c["pills"], "the rail fixture's badge is drawn as a pill"
+
+
+def _meets_strip(r: dict) -> bool:
+    return r["h"] > 0 and r["y"] < STRIP[1] - 0.5 and r["y"] + r["h"] > STRIP[0] + 0.5
+
+
+def _overlaps(a: dict, b: dict) -> bool:
+    return (a["x"] < b["x"] + b["w"] - 0.5 and b["x"] < a["x"] + a["w"] - 0.5
+            and a["y"] < b["y"] + b["h"] - 0.5 and b["y"] < a["y"] + a["h"] - 0.5)
+
+
+@needs_browser
+@pytest.mark.parametrize("name,preset", CASES)
+def test_the_estimate_is_the_engines_page_at_every_preset(painted, name, preset):
+    """REVIEW-P69-LANE-B-MERGE-2 N3: `_longform_full_boxes` - the boxes M28 and the stamp fits read for a page the
+    fixture never measured - is the page the engine lays out, to EST_TOL, at every preset (the long page at `phone`
+    was 73 px off). The title, sub, chart and source to the pixel budget; the rail's top (its width is the column it
+    may fill, never less than the pills it holds); the plot to the budget on a line page, and on a bars page a box
+    that holds every bar the engine drew (its bars are the data's own height, the estimate is the panel)."""
+    got = painted[f"{name}-{preset}"]
+    est = LPG._longform_full_boxes(got["page"], 1920, 1080)
+    meas = got["boxes"]
+    for key in ("title", "sub", "chart", "source"):
+        for d in ("x", "y", "w", "h"):
+            assert abs(est[key][d] - meas[key][d]) <= EST_TOL, (key, d, est[key], meas[key])
+    assert abs(est["rail"]["y"] - meas["rail"]["y"]) <= EST_TOL, (est["rail"], meas["rail"])
+    assert est["rail"]["w"] >= meas["rail"]["w"] - EST_TOL, (est["rail"], meas["rail"])
+    if meas["rail"]["h"] > 0:
+        assert abs(est["rail"]["h"] - meas["rail"]["h"]) <= EST_TOL, (est["rail"], meas["rail"])
+    p, m = est["plot"], meas["plot"]
+    if got["page"]["builder"] == "dense-line":
+        assert all(abs(p[d] - m[d]) <= EST_TOL for d in ("x", "y", "w", "h")), (p, m)
+    else:
+        assert (p["x"] <= m["x"] + EST_TOL and p["y"] <= m["y"] + EST_TOL and p["x"] + p["w"] >= m["x"] + m["w"] - EST_TOL
+                and p["y"] + p["h"] >= m["y"] + m["h"] - EST_TOL), (p, m)
 
 
 @needs_browser
@@ -459,3 +617,59 @@ def _off_html() -> Path:
     html = td / "off.html"
     html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
     return html
+
+
+# N2 in the player: the state a recast reaches writes every end tag on the stage, at every preset
+STATE_TAGS = """() => {
+  const stage = document.getElementById('stage').getBoundingClientRect();
+  const w = [...document.querySelectorAll('.world')].find(e => e.__lp && e.classList.contains('ledger'));
+  if (!w) return null;
+  const S = (w.__lp.states || [])[1]; if (!S) return null;
+  const shown = +getComputedStyle(S.chart).opacity;
+  const out = [];
+  for (const e of S.chart.querySelectorAll('text.sname, tspan.tagchip')) {
+    if (!e.textContent.trim() || (e.closest('text') || e).getAttribute('opacity') === '0') continue;
+    const r = e.getBoundingClientRect();
+    out.push({ text: e.textContent, left: r.left - stage.left, right: r.right - stage.left });
+  }
+  const words = (ink) => ink && ink.div ? ink.div.querySelectorAll('.w').length : 0;
+  return { shown, stageW: stage.width, tags: out, subWords: words(S.subInk), srcWords: words(S.srcInk) };
+}"""
+
+
+@needs_browser
+@pytest.mark.parametrize("preset", PRESETS)
+@pytest.mark.parametrize("row", sorted(THEN_ROWS))
+def test_a_then_state_writes_its_end_tags_on_the_stage(row, preset, tmp_path):
+    """The review's row (`bars;then=...:line`) put the state's tags at x 2194 on a 1920 stage at `phone`: each state
+    now carries its own fitted form, so after the recast every tag it writes ends inside the stage."""
+    from playwright.sync_api import sync_playwright
+
+    world = _then_world(THEN_ROWS[row], tmp_path, preset)
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}), "exit": "cut",
+               "span": [0.0, G.RUNTIME], "docks": [], "species": [{"kind": "chart_to", "to": "recast", "state": 1, "at": 9.0, "dur": 1.5}]}]
+    tl = G._timeline("P69 N2 then", scenes, {}, ASPECT)
+    uris = dict(G._base_uris(), **B.longform_assets(tl))
+    html = tmp_path / "then.html"
+    html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+    w, h = RB.STAGE[ASPECT]
+    srv, port = RB.serve(html.parent)
+    try:
+        with sync_playwright() as pw:
+            br = pw.chromium.launch(headless=True)
+            page = br.new_context(viewport={"width": w, "height": h}, device_scale_factor=1).new_page()
+            page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+            RB.prepare_page(page, w, h)
+            page.wait_for_function("document.fonts.status === 'loaded'")
+            RB.frame_png(page, 18.0, (w, h))
+            page.wait_for_timeout(120)
+            RB.frame_png(page, 18.0, (w, h))
+            got = page.evaluate(STATE_TAGS)
+            br.close()
+    finally:
+        srv.shutdown()
+    assert got and got["shown"] > 0.99, f"the recast reached the state: {got}"
+    assert got["tags"], "the line state writes its end tags"
+    out = [t for t in got["tags"] if t["right"] > got["stageW"] + 0.5 or t["left"] < -0.5]
+    assert not out, f"{row} {preset}: the state's end tags leave the stage: {out}"
+    assert got["subWords"] > 1 and got["srcWords"] > 1, f"the state's sub and source wrap by WORD, as the page's do: {got}"

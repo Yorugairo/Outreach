@@ -57,6 +57,13 @@ carry a geometry the compiler actually writes). The two are filed under `16:9` a
 so a page can only ever be served the geometry it is drawn in. A page that is never stamped (a host
 plate: its board was measured around a hand) has one 16:9 entry exactly as before.
 
+THE LONG FORM'S PAGES (REVIEW-P69-LANE-B-MERGE-2 N3, 2026-09-23). A `;readability=longform[:<preset>]` page lays
+its ink out by its own measure (`ledger_page._longform_full_boxes` estimates it), and a preset moves every box - so
+the `profiles` section measures the builders the profile is legal on (`ledger_page.READABILITY_BUILDERS`) each at
+every preset, full-stage as the compiler stamps it, keyed `<builder>|longform:<preset>`. `--check` diffs them like
+every other entry, a page with that ink is placed by them, and the tests hold the estimate to them. They are
+measured with the WHOLE fixture (a one-builder `--builder` run leaves them out, as it leaves the other builders).
+
 THE TREEMAP'S ONE LOOP. `ledger_page.treemap_cells` squarifies into `page_boxes`' plot, so writing a
 treemap entry changes the layout of the NEXT treemap page built - which changes the plot the player
 fits it into. `--passes` re-measures until the numbers stop moving (2 is enough in practice); a
@@ -277,6 +284,22 @@ def representative(builder: str) -> dict:
 
 
 BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share"}))
+PROFILED = tuple(b for b in BUILDERS if b in LPG.READABILITY_BUILDERS[LPG.LONGFORM])   # N3: dense-line and story
+
+
+def profile_name(builder: str, preset: str) -> str:
+    """The `profiles` section's key for this builder's representative under `longform:<preset>`."""
+    return f"{builder}|{LPG.LONGFORM}:{preset}"
+
+
+def profile_representative(builder: str, preset: str) -> dict:
+    """This builder's representative page as a 16:9 row naming `;readability=longform:<preset>` compiles it: stamped
+    full-stage (the compiler's own stamp) and then the profile (`ledger_page.apply_longform`, as `world_for_plate`
+    does). Pure; the same page the tests rebuild."""
+    page = full_stage_variant(representative(builder))
+    if page is None:
+        raise SystemExit(f"{builder}: its representative is a host plate - the long form is never drawn on one")
+    return LPG.apply_longform(page, preset)
 
 
 def _timeline(page: dict, aspect: str, full_stage: bool | None = None) -> dict:
@@ -341,7 +364,9 @@ def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: 
     from playwright.sync_api import sync_playwright
     with tempfile.TemporaryDirectory() as td:
         html = Path(td) / "page-boxes.html"
-        html.write_text(RB.instantiate(_timeline(page, aspect), {"__audio__": _silence()}), encoding="utf-8")
+        tl = _timeline(page, aspect)
+        uris = {"__audio__": _silence(), **BST.longform_assets(tl)}   # N3: a longform page is measured in its own face
+        html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
         srv, port = RB.serve(html.parent)
         try:
             with sync_playwright() as pw:
@@ -453,7 +478,22 @@ def build(builders: list[str], timelines: list[str] | None = None) -> dict:
     return {"schema": LPG.PAGE_BOXES_SCHEMA, "measured": str(date.today()),
             "player_sha256": template_sha(), "stage": {a: list(RB.STAGE[a]) for a in ASPECTS},
             "note": "measured by scripts/measure_page_boxes.py - do not hand-edit",
-            "projects": sorted(read), "pages": pages, "builders": out}
+            "projects": sorted(read), "pages": pages, "builders": out,
+            "profiles": build_profiles(list(PROFILED)) if set(builders) >= set(BUILDERS) else {}}   # N3: with the whole fixture
+
+
+def build_profiles(builders: list[str]) -> dict:
+    """N3: the `profiles` section - each profiled builder's representative at every longform preset, full-stage."""
+    out: dict[str, dict] = {}
+    for builder in builders:
+        for preset in LPG.LONGFORM_PRESETS:
+            page = profile_representative(builder, preset)
+            key = LPG.box_key(page, "16:9")
+            got = entry(builder, "16:9", page)
+            out[profile_name(builder, preset)] = {key: dict(got, builder=builder)}
+            print(f"  {profile_name(builder, preset):26} {key:16}  chart={got['boxes']['chart']}"
+                  f"  source={got['boxes']['source']}")
+    return out
 
 
 def dumps(doc: dict) -> str:
@@ -464,7 +504,7 @@ def dumps(doc: dict) -> str:
 # and neither is compared: an engine byte that moves no box (a stamp's easing, a comment) is not drift,
 # and a byte-for-byte compare against the sha and the date turned `--check` red on every engine slice.
 PROVENANCE = ("measured", "player_sha256")
-SECTIONS = ("builders", "pages")   # compared entry by entry, so a drift line can say WHICH box moved
+SECTIONS = ("builders", "pages", "profiles")   # compared entry by entry, so a drift line can say WHICH box moved
 NAMED_PARTS = {"boxes": "", "bands": "band ", "axis": "axis "}   # an entry's parts whose members are boxes
 
 
@@ -516,7 +556,7 @@ def drift(was: dict, now: dict) -> list[str]:
                 continue
             for aspect in sorted(set(fa) | set(fb)):
                 ea, eb = fa.get(aspect), fb.get(aspect)
-                label = name if section == "builders" else f"{_builder_of(eb, ea)} {name}"
+                label = name if section != "pages" else f"{_builder_of(eb, ea)} {name}"
                 out += _entry_drift(f"{label} {aspect}", ea, eb)
     return out
 

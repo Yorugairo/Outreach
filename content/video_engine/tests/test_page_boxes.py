@@ -341,10 +341,14 @@ PROBE = (ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-bre
 
 
 def entries():
-    """Every measured entry on file: the per-builder representatives and the projects' own pages."""
+    """Every measured entry on file: the per-builder representatives, the long form's profiled ones (P69) and the
+    projects' own pages."""
     for builder, by_aspect in FIXTURE["builders"].items():
         for aspect, entry in by_aspect.items():
             yield f"{builder} {aspect}", aspect, entry
+    for name, by_aspect in (FIXTURE.get("profiles") or {}).items():
+        for aspect, entry in by_aspect.items():
+            yield f"{name} {aspect}", aspect, entry
     for ink, by_aspect in PAGES.items():
         for aspect, entry in by_aspect.items():
             yield f"{entry.get('builder')} {ink} {aspect}", aspect, entry
@@ -496,3 +500,57 @@ def test_the_boxes_on_file_are_the_boxes_the_player_draws_now():
     moved = M.drift({"builders": FIXTURE["builders"]}, {"builders": now["builders"]})
     assert not moved, "the player draws other boxes than the fixture - run measure_page_boxes.py --write:\n" + (
         "\n".join(moved))
+
+
+# ---- REVIEW-P69-LANE-B-MERGE-2 N3: the long form's pages are MEASURED, per builder and per preset ---------------------
+# `_longform_full_boxes` estimates a `;readability=longform` page, and nothing checked it: on the long page at `phone`
+# its chart stood 73 px below the engine's. The fixture now measures one representative per builder the profile is
+# legal on, at every preset (the `profiles` section, diffed by `--check` like every other entry), a page with that
+# ink is placed by those boxes, and the estimate is held to them.
+EST_TOL = 2   # the full-stage estimate's own bar (test_full_stage_page_is_measured.TOL)
+
+
+def test_the_long_form_is_measured_for_every_builder_it_is_legal_on_at_every_preset():
+    profiles = FIXTURE.get("profiles") or {}
+    want = {M.profile_name(b, p) for b in LPG.READABILITY_BUILDERS[LPG.LONGFORM] for p in LPG.LONGFORM_PRESETS}
+    assert set(profiles) == want, sorted(profiles)
+    for builder in LPG.READABILITY_BUILDERS[LPG.LONGFORM]:
+        for preset in LPG.LONGFORM_PRESETS:
+            page = M.profile_representative(builder, preset)
+            geometry = LPG.box_key(page, "16:9")
+            entry = profiles[M.profile_name(builder, preset)][geometry]
+            assert geometry == "16:9|full_stage" and entry["full_stage"] is True
+            assert entry["ink"] == LPG.page_ink_key(page) and entry["builder"] == builder
+            assert (page["axes"]["readability"], page["axes"]["type_scale"]) == ("longform", preset)
+            boxes = LPG.page_boxes(page, "16:9")
+            assert boxes["measured"] is True, f"{builder} {preset}: the profiled page is placed by the estimate"
+            for key in LPG.BOX_KEYS:
+                assert boxes[key] == entry["boxes"][key], (builder, preset, key)
+
+
+@pytest.mark.parametrize("preset", LPG.LONGFORM_PRESETS)
+@pytest.mark.parametrize("builder", LPG.READABILITY_BUILDERS[LPG.LONGFORM])
+def test_the_long_form_estimate_is_the_measured_page(builder, preset, tmp_path):
+    """The estimate against the engine's own boxes: the title, sub, chart and source to EST_TOL; the rail's top (its
+    width the column it may fill); the plot to EST_TOL on a line page and, on a bars page, a box holding every bar."""
+    page = M.profile_representative(builder, preset)
+    meas = FIXTURE["profiles"][M.profile_name(builder, preset)]["16:9|full_stage"]["boxes"]
+    est = estimate(page, "16:9", tmp_path)
+    assert est["measured"] is False
+    for key in ("title", "sub", "chart", "source"):
+        assert all(abs(est[key][d] - meas[key][d]) <= EST_TOL for d in ("x", "y", "w", "h")), (key, est[key], meas[key])
+    assert abs(est["rail"]["y"] - meas["rail"]["y"]) <= EST_TOL and est["rail"]["w"] >= meas["rail"]["w"], (est["rail"], meas["rail"])
+    p, m = est["plot"], meas["plot"]
+    if builder == "dense-line":
+        assert all(abs(p[d] - m[d]) <= EST_TOL for d in ("x", "y", "w", "h")), (p, m)
+    else:
+        assert (p["x"] <= m["x"] + EST_TOL and p["y"] <= m["y"] + EST_TOL and p["x"] + p["w"] >= m["x"] + m["w"] - EST_TOL
+                and p["y"] + p["h"] >= m["y"] + m["h"] - EST_TOL), (p, m)
+
+
+def test_check_fails_a_moved_long_form_box_naming_its_builder_preset_and_box(tmp_path, monkeypatch, capsys):
+    name = M.profile_name("dense-line", "phone")
+    now = _todays_measurement()
+    now["profiles"][name]["16:9|full_stage"]["boxes"]["chart"]["y"] += 73
+    assert _check(tmp_path, monkeypatch, _yesterdays_copy(), now) == 1
+    assert f"{name} 16:9|full_stage chart" in capsys.readouterr().err

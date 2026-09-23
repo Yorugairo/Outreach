@@ -1588,12 +1588,64 @@ LONGFORM_TYPE_SCALE = {
 # Advances are Inter's in ems per character (Bold title and end tag, Regular sub and source, the 600 chip).
 LONGFORM_LINE_H = 1.1
 LONGFORM_SUB_GAP = 8
-LONGFORM_ADV = {"title": 0.56, "sub": 0.5, "source": 0.5}
 LONGFORM_TAG_EM = {"name": 0.68, "chip": 0.64}
 LONGFORM_CHIP_DX_PX = 12
 LONGFORM_YLAB_GAP_PX = 14
 LONGFORM_EDGE_PX = 16
 LONGFORM_PLOT_T = {"dense-line": 40.0, "story": 90.0}   # each builder's own plot top, in chart units
+# REVIEW-P69-LANE-B-MERGE-2 N3 - THE PAGE INK'S ADVANCES, READ OFF THE FACE ITSELF. The first estimate wrapped the
+# title, sub and source at a flat 0.56 / 0.5 em a character, and a one-line miscount moved every box under it (the
+# long page at `phone`: the chart 73 px below the engine's). The page writes each glyph as its own inline-block
+# (`lpGlyphsWrap`: no kerning, no shaping across glyphs) and each word as an unbreakable run, so a line's width IS the
+# sum of the glyphs' advances - exactly computable from Inter's `hmtx`. The face is VARIABLE on two axes (wght 100-900,
+# opsz 14-32) and the browser sets opsz to the CSS font size (font-optical-sizing: auto), so the advances are stored
+# at the weight each role is set in (the title 700; the sub and the source 400) at opsz 14 and 32, in font units of
+# 2048 per em, and interpolated linearly in opsz between them [MEASURED 2026-09-23 on the tracked
+# `src/assets/fonts/Inter-Variable.ttf` with fontTools' instancer; the linear interpolation is within 0.5 units of
+# the instanced advance at opsz 20.69 for every character - `test_longform_profile` regenerates the table].
+# A character outside the table takes its weight's mean advance.
+LONGFORM_ADV_CHARS = (" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+                      "‘’“”–—·•…é€£¥×→°½")
+LONGFORM_ADV_UPM = 2048
+LONGFORM_OPSZ = (14.0, 32.0)
+LONGFORM_WEIGHT = {"title": 700, "sub": 400, "source": 400}
+LONGFORM_ADVANCES = {   # (weight, opsz) -> the advance of each LONGFORM_ADV_CHARS character, in font units
+    (400, 14): tuple(int(v) for v in (
+        "576 589 954 1297 1314 2011 1319 614 747 747 1026 1355 590 942 590 738 1292 833 1249 1265 1323 1215 1270 1159 1267 1270 590 618 1355 1355 1355 1047 "
+        "1978 1413 1340 1496 1478 1231 1209 1528 1522 550 1169 1376 1158 1850 1543 1566 1308 1566 1318 1314 1322 1524 1413 2018 1397 1390 1288 747 738 747 965 934 "
+        "661 1150 1254 1170 1254 1194 758 1256 1211 496 496 1124 496 1794 1210 1228 1254 1254 771 1081 670 1211 1151 1676 1118 1151 1131 873 681 873 1355 534 "
+        "534 902 902 1024 2048 590 1152 1770 1194 1365 1251 1126 1355 1954 933 1735").split()),
+    (400, 32): tuple(int(v) for v in (
+        "512 450 826 1228 1258 1728 1246 520 612 612 960 1286 450 878 450 666 1256 742 1149 1226 1265 1181 1196 1056 1192 1196 450 456 1286 1286 1286 1073 "
+        "1994 1338 1307 1479 1412 1187 1135 1496 1450 476 1095 1299 1096 1756 1454 1534 1253 1534 1295 1258 1250 1440 1338 1944 1322 1316 1256 612 666 612 896 930 "
+        "494 1060 1158 1071 1158 1098 627 1158 1120 422 422 1039 422 1718 1120 1124 1158 1158 660 972 637 1120 1048 1540 1038 1048 980 788 606 788 1286 390 "
+        "390 694 696 1024 2048 450 1024 1350 1098 1298 1192 1058 1286 1890 866 1548").split()),
+    (700, 14): tuple(int(v) for v in (
+        "485 692 1129 1329 1341 2080 1376 694 772 772 1145 1390 684 958 684 795 1381 883 1289 1322 1385 1274 1330 1191 1333 1330 684 702 1390 1390 1390 1146 "
+        "2081 1529 1355 1515 1479 1244 1202 1537 1530 575 1197 1473 1158 1908 1561 1578 1327 1591 1345 1341 1367 1499 1529 2125 1512 1497 1360 772 795 772 997 975 "
+        "748 1189 1291 1205 1291 1220 815 1294 1275 555 555 1188 555 1869 1275 1256 1291 1291 834 1147 750 1275 1228 1741 1188 1233 1173 960 761 960 1390 636 "
+        "636 1106 1089 1024 2048 684 971 2052 1220 1402 1308 1168 1390 1954 941 1805").split()),
+    (700, 32): tuple(int(v) for v in (
+        "439 505 967 1280 1336 1920 1325 556 679 679 1097 1341 501 911 501 745 1332 798 1226 1269 1345 1229 1264 1126 1258 1264 501 505 1341 1341 1341 1162 "
+        "2062 1461 1320 1487 1436 1245 1191 1507 1471 530 1151 1404 1140 1831 1485 1531 1293 1531 1332 1336 1301 1442 1445 2041 1428 1413 1299 679 745 679 948 973 "
+        "604 1132 1224 1137 1224 1150 759 1224 1199 503 504 1127 503 1810 1199 1189 1224 1224 764 1065 755 1199 1134 1676 1100 1134 1071 900 710 900 1341 464 "
+        "464 887 871 1024 2048 501 877 1502 1150 1354 1250 1120 1341 1907 893 1680").split()),
+}
+# N1 - WHAT STANDS UNDER THE CHART, and where. The anchored caption's STRIP runs from `full_stage_bands`' bottom band's
+# top to the one-line caption's own foot (CAPTION_ANCHOR: 878-960 at 1920 x 1080). The source line and the key rail
+# NEVER stand in it: each writes under the chart (the source LAND_SRC_GAP under it, the rail LAND_RAIL_GAP under it or
+# LONGFORM_STACK_GAP_PX under the source's last line), and one that would meet the strip moves under its foot; when
+# that leaves the stage (LONGFORM_EDGE_PX), the chart's foot rises until the source - then the rail - stands above
+# the strip instead. The rail's pills are the template's own (a 41 CSS px row at 16:9 - 47.56 px rendered - 6 CSS px
+# apart) [MEASURED: the `rail` fixture's one pill, 2026-09-23].
+LONGFORM_STRIP = (CAPTION_ANCHOR["16:9"][1], CAPTION_ANCHOR["16:9"][1] + CAPTION_ANCHOR["16:9"][3])
+LONGFORM_STACK_GAP_PX = 8
+LONGFORM_PILL_PX = 41 * PUNCH_SCALE
+LONGFORM_PILL_GAP_PX = 6 * PUNCH_SCALE
+LONGFORM_PILLS_PER_ROW = 4
+# the face's own line box: a chart label's box reaches its ascent above its baseline and its descent below it
+# [MEASURED: Inter-Variable.ttf hhea 1984 / -494 of 2048 units per em]
+LONGFORM_ASCENT, LONGFORM_DESCENT = 1984 / 2048, 494 / 2048
 # An END TAG that will not fit the stage at its preset gives up its long name for its badge (the value and the short
 # chip), then for its value alone - never a refusal (the parent, 2026-09-23). The long names belong in a key: that is
 # P69 T10's badge key, not built here; the spec keeps every name for it.
@@ -1618,12 +1670,13 @@ def longform_type(spec: dict) -> dict:
     return LONGFORM_TYPE_SCALE[preset if preset in LONGFORM_TYPE_SCALE else LONGFORM_DEFAULT_PRESET]
 
 
-def longform_geom(t: dict, top: float, bot: float) -> dict:
+def longform_geom(t: dict, top: float, bot: float, floor: float | None = None) -> dict:
     """The chart-unit geometry a longform chart is drawn in, for a chart box from `top` to `bot` (rendered px): the
     engine's `lpLongformGeom`, line for line. The x ticks and the bar names hang half a figure under the plot, and the
-    plot's floor rises until they clear the anchored caption's strip."""
+    plot's floor rises until they clear `floor` - the anchored caption's strip, or (N1) the source line when the
+    stack under the chart stands above the strip (`longform_stack`)."""
     s = (bot - top) / LAND_VIEWBOX[1]
-    tick, cap_u = t["tick"] / s, (CAPTION_ANCHOR["16:9"][1] - top) / s
+    tick, cap_u = t["tick"] / s, ((LONGFORM_STRIP[0] if floor is None else floor) - top) / s
     return {"scale": s, "tick": tick, "plot_l": max(70.0, 12 + 2.3 * tick),
             "line_b": min(458.0, cap_u - 5 - 1.5 * tick), "xtick_dy": 1.25 * tick,
             "gutter": max(60.0, 40 + 2.6 * tick), "xlab_dy": 1.25 * tick,
@@ -1631,8 +1684,14 @@ def longform_geom(t: dict, top: float, bot: float) -> dict:
             "ylab_gap": LONGFORM_YLAB_GAP_PX / s, "rule_dy": (8 + 0.25 * t["tag"]) / s}
 
 
-def longform_tag_units(spec: dict, t: dict, form: str, scale: float) -> float:
-    """The widest end tag of a longform dense-line page in `form`, in chart units at `scale` (estimated)."""
+def longform_scale0(h_s: int = 1080) -> float:
+    """One chart unit in rendered px on the UNSHIFTED longform chart box (LAND_FULL's height over the viewBox's): the
+    scale every end-tag form is fitted at, because a chart the layout moves down only shrinks it."""
+    return LAND_FULL["H"] * h_s / LAND_VIEWBOX[1]
+
+
+def longform_tag_px(spec: dict, t: dict, form: str) -> float:
+    """The widest end tag of a longform dense-line page in `form`, in rendered px (estimated at LONGFORM_TAG_EM)."""
     rides = {BADGE_ACCENT_COL.get(str(b.get("accent"))): str(b.get("tag") or "")
              for b in spec.get("badges") or [] if isinstance(b, dict) and b.get("inline")}
     out = 0.0
@@ -1646,7 +1705,12 @@ def longform_tag_units(spec: dict, t: dict, form: str, scale: float) -> float:
         if chip and form != "value":
             px += LONGFORM_CHIP_DX_PX + len(chip) * LONGFORM_TAG_EM["chip"] * t["chip"]
         out = max(out, px)
-    return out / scale
+    return out
+
+
+def longform_tag_units(spec: dict, t: dict, form: str, scale: float) -> float:
+    """The widest end tag of a longform dense-line page in `form`, in chart units at `scale` (estimated)."""
+    return longform_tag_px(spec, t, form) / scale
 
 
 def _longform_max_vw(tags_u: float, scale: float, w_s: int = 1920) -> float:
@@ -1657,11 +1721,23 @@ def _longform_max_vw(tags_u: float, scale: float, w_s: int = 1920) -> float:
 def longform_tag_form(spec: dict, preset: str) -> str | None:
     """The fullest end-tag form that keeps every tag on the stage at the unshifted chart scale (a chart the layout
     moves down only shrinks its scale, which gives the tags more room), or None when not even the values fit."""
-    t, scale = LONGFORM_TYPE_SCALE[preset], LAND_FULL["H"] * STAGE_PX["16:9"][1] / LAND_VIEWBOX[1]
+    t, scale = LONGFORM_TYPE_SCALE[preset], longform_scale0()
     for form in LONGFORM_TAG_FORMS:
         if _longform_max_vw(longform_tag_units(spec, t, form, scale), scale) >= LAND_PHONE_MIN_VIEWBOX_W:
             return form
     return None
+
+
+def longform_page_vw(spec: dict, scale: float | None = None, w_s: int = 1920) -> float:
+    """The viewBox width a longform chart is drawn in (the engine's `lpLongformVW`): a dense-line page's is narrowed
+    until its widest end tag - its own, in its own form, or (N2) the widest its `then=` states write, carried as
+    `axes.tag_room` - ends inside the stage's safe right edge; a bars page keeps the legacy 1000."""
+    if spec.get("builder") != "dense-line":
+        return float(LAND_VIEWBOX[0])
+    scale = longform_scale0() if scale is None else scale
+    axes = spec.get("axes") or {}
+    px = max(longform_tag_px(spec, longform_type(spec), axes.get("tag_form") or "full"), float(axes.get("tag_room") or 0))
+    return max(float(LAND_PHONE_MIN_VIEWBOX_W), _longform_max_vw(px / scale, scale, w_s))
 
 
 def apply_longform(page: dict, preset: str | None = None) -> dict:
@@ -1678,57 +1754,156 @@ def apply_longform(page: dict, preset: str | None = None) -> dict:
     return page
 
 
-def longform_chart_box(spec: dict, t: dict, sub_bottom: float, src_h: float, h_s: int = 1080) -> tuple[float, float]:
-    """(top, bottom) of a longform chart box in rendered px: the engine's `lpLongformBox`, line for line."""
+def apply_longform_states(page: dict, states: list) -> str | None:
+    """REVIEW-P69-LANE-B-MERGE-2 N2: a longform page's `then=` states are drawn in ITS chart box, viewBox and preset,
+    so each is stamped with the page's profile and preset and fitted its OWN end-tag form; and a dense-line page's
+    viewBox makes room for the widest tag any line state writes (`axes.tag_room`, rendered px - written only when a
+    state's tags are wider than the page's own, so a page whose states fit carries nothing new). In place. The
+    refusal (a message) when a state cannot keep even its values on the stage, else None."""
+    axes = page.get("axes") or {}
+    preset = axes.get("type_scale") if axes.get("type_scale") in LONGFORM_PRESETS else LONGFORM_DEFAULT_PRESET
+    t, room = LONGFORM_TYPE_SCALE[preset], 0.0
+    for i, state in enumerate(states):
+        if not isinstance(state, dict):
+            continue
+        if state.get("builder") == "dense-line" and longform_tag_form(state, preset) is None:
+            return (f"then= state {i + 1} cannot keep even its end values inside the 16:9 stage at "
+                    f"readability={LONGFORM}:{preset} (a value alone is the shortest end tag there is)")
+        apply_longform(state, preset)
+        if state.get("builder") == "dense-line":
+            room = max(room, longform_tag_px(state, t, state["axes"]["tag_form"]))
+    if page.get("builder") == "dense-line" and room > longform_tag_px(page, t, axes.get("tag_form") or "full"):
+        page["axes"]["tag_room"] = math.ceil(room * 10) / 10   # up to the tenth: the page's viewBox never grows past a state's fit
+    return None
+
+
+def _longform_place(y: float, h: float) -> float:
+    """Where an item `h` tall that would stand at `y` does stand: at `y`, or under the caption strip's foot if it
+    would meet the strip (N1)."""
+    return LONGFORM_STRIP[1] if h > 0 and y + h > LONGFORM_STRIP[0] and y < LONGFORM_STRIP[1] else y
+
+
+def longform_stack(bot: float, src_h: float, rail_h: float, h_s: int = 1080) -> dict:
+    """The source's and the key rail's tops under a chart whose foot is `bot` (rendered px), and whether both stay on
+    the stage: the engine's `lpLongformStack`, line for line (N1)."""
+    g_src, g_rail = LAND_SRC_GAP * PUNCH_SCALE * h_s, LAND_RAIL_GAP * PUNCH_SCALE * h_s
+    src_y = _longform_place(bot + g_src, src_h)
+    rail_y = _longform_place(max(bot + g_rail, src_y + src_h + LONGFORM_STACK_GAP_PX if src_h > 0 else bot + g_rail), rail_h)
+    end = max(src_y + src_h if src_h > 0 else 0.0, rail_y + rail_h if rail_h > 0 else 0.0)
+    first = src_y if src_h > 0 else rail_y if rail_h > 0 else float(h_s)
+    return {"bot": bot, "src_y": src_y, "rail_y": rail_y, "floor": min(float(LONGFORM_STRIP[0]), first),
+            "fits": end <= h_s - LONGFORM_EDGE_PX}
+
+
+def longform_chart_box(spec: dict, t: dict, sub_bottom: float, src_h: float, rail_h: float = 0.0,
+                       h_s: int = 1080) -> dict:
+    """The longform chart box in rendered px - `top`, `bot` - and what stands under it (`src_y`, `rail_y`, the `floor`
+    its ticks clear): the engine's `lpLongformBox`, line for line. The foot is the full-stage box's, raised (N1) to the
+    first of: the source standing above the caption strip, then the source and the rail both above it."""
     top0, bot0 = LAND_FULL["Y"] * h_s, (LAND_FULL["Y"] + LAND_FULL["H"]) * h_s
-    bot = min(bot0, h_s - LONGFORM_EDGE_PX - LAND_SRC_GAP * PUNCH_SCALE * h_s - src_h)
+    g_src, g_rail = LAND_SRC_GAP * PUNCH_SCALE * h_s, LAND_RAIL_GAP * PUNCH_SCALE * h_s
+    cands = (bot0, LONGFORM_STRIP[0] - g_src - src_h,
+             LONGFORM_STRIP[0] - rail_h - max(g_rail, g_src + src_h + LONGFORM_STACK_GAP_PX))
+    stack: dict = {}
+    for cand in cands:
+        stack = longform_stack(min(bot0, cand), src_h, rail_h, h_s)
+        if stack["fits"]:
+            break
+    bot = stack["bot"]
     tu, vh = LONGFORM_PLOT_T.get(str(spec.get("builder")), LONGFORM_PLOT_T["story"]), LAND_VIEWBOX[1]
     axes = spec.get("axes") or {}
     rules = [h for h in (axes.get("hlines") or ([axes["hline"]] if axes.get("hline") else [])) if isinstance(h, dict) and h.get("label")]
     above = max(0.5 * t["tick"], LONGFORM_YLAB_GAP_PX + t["tick"] if axes.get("ylabel") else 0.0,   # a label's box
                 8 + 1.25 * t["tag"] if rules else 0.0)                                               # reaches ~1 em up
     need = sub_bottom + 0.5 * t["tick"] + above
-    if top0 + tu * (bot - top0) / vh >= need:
-        return top0, bot
-    return (need - tu * bot / vh) / (1 - tu / vh), bot
+    top = top0 if top0 + tu * (bot - top0) / vh >= need else (need - tu * bot / vh) / (1 - tu / vh)
+    return dict(stack, top=top)
+
+
+def longform_text_px(text: str, role: str, px: float) -> float:
+    """The rendered width of `text` in a longform page role (`title` | `sub` | `source`) set at `px` rendered: its
+    glyphs' Inter advances at the role's weight and at the opsz the browser picks (the CSS size, px / the punch)."""
+    weight = LONGFORM_WEIGHT[role]
+    lo, hi = LONGFORM_ADVANCES[(weight, 14)], LONGFORM_ADVANCES[(weight, 32)]
+    k = (min(LONGFORM_OPSZ[1], max(LONGFORM_OPSZ[0], px / PUNCH_SCALE)) - LONGFORM_OPSZ[0]) / (LONGFORM_OPSZ[1] - LONGFORM_OPSZ[0])
+    mean = (sum(lo) + (sum(hi) - sum(lo)) * k) / len(lo)
+    units = 0.0
+    for ch in str(text):
+        i = LONGFORM_ADV_CHARS.find(ch)
+        units += mean if i < 0 else lo[i] + (hi[i] - lo[i]) * k
+    return units * px / LONGFORM_ADV_UPM
+
+
+def longform_lines(text: str, role: str, px: float, box_w: float) -> int:
+    """The lines a longform page role writes `text` in, `box_w` px wide: the browser's greedy break at the spaces
+    between words (a word is one unbreakable run - `lpGlyphsWrap`), measured at the face's own advances."""
+    words = str(text or "").split()
+    if not words:
+        return 0
+    space = longform_text_px(" ", role, px)
+    lines, run = 1, 0.0
+    for word in words:
+        want = longform_text_px(word, role, px)
+        if run and run + space + want > box_w + 0.5:
+            lines, run = lines + 1, want
+        else:
+            run = run + space + want if run else want
+    return lines
+
+
+def _longform_rail_h(spec: dict) -> float:
+    n = len([b for b in spec.get("badges") or [] if isinstance(b, dict) and not b.get("inline")])
+    rows = -(-n // LONGFORM_PILLS_PER_ROW)
+    return rows * LONGFORM_PILL_PX + max(0, rows - 1) * LONGFORM_PILL_GAP_PX
 
 
 def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
-    """A longform page's boxes, ESTIMATED the way the engine lays it out (the fixture measures and outranks it)."""
+    """A longform page's boxes, ESTIMATED the way the engine lays it out (the fixture measures and outranks it; N3:
+    held to the engine's own boxes at every preset by `test_longform_profile` and `test_page_boxes`)."""
     t, dense = longform_type(spec), spec.get("builder") == "dense-line"
     bx, by, bw, bh = LAND_BOARD
     half = 0.5 / PUNCH_SCALE
     vx, vy = bx + bw / 2 - half, by + bh / 2 - half
     ink_x = _punch_pt(max(bx + 0.027, vx + 0.03)) * w_s
-    title_y = _punch_pt(max(by + 0.024, vy + 0.035)) * h_s
+    title_frac = round(max(by + 0.024, vy + 0.035) * 100, 2) / 100   # the engine writes the title's top toFixed(2) %
+    title_y = _punch_pt(title_frac) * h_s
     ink_w = LAND_PHONE_SAFE_RIGHT * w_s - ink_x
-    tall = lambda text, key, px: (max(1, _ink_lines(text, px, ink_w, LONGFORM_ADV[key])) if text else 0) * px * LONGFORM_LINE_H  # noqa: E731
-    title_h = tall(spec.get("title"), "title", t["title"])
-    sub_y = title_y + title_h + LONGFORM_SUB_GAP * PUNCH_SCALE
-    sub_h = tall(spec.get("sub"), "sub", t["sub"])
-    src_h = tall(spec.get("source"), "source", t["src"])
-    top, bot = longform_chart_box(spec, t, sub_y + sub_h, src_h, h_s)
-    g = longform_geom(t, top, bot)
+    # the engine lays the ink out in the page's own CSS px and READS it back whole (offsetTop / offsetHeight), so the
+    # layout's heights are snapped to whole CSS px here too; the boxes report the ink's own (unsnapped) extent
+    lines = {role: (max(1, longform_lines(spec.get(key), role, t[size], ink_w)) if str(spec.get(key) or "").strip() else 0)
+             for role, key, size in (("title", "title", "title"), ("sub", "sub", "sub"), ("source", "source", "src"))}
+    css_h = {role: lines[role] * round(t[size] / PUNCH_SCALE, 3) * LONGFORM_LINE_H
+             for role, size in (("title", "title"), ("sub", "sub"), ("source", "src"))}
+    whole = lambda v: math.floor(v + 0.5)  # noqa: E731
+    rend = lambda css_y: h_s / 2 + (css_y - h_s / 2) * PUNCH_SCALE  # noqa: E731
+    title_top = whole(title_frac * h_s)
+    sub_top = title_top + whole(css_h["title"]) + LONGFORM_SUB_GAP
+    title_h, sub_h, src_h = (css_h[r] * PUNCH_SCALE for r in ("title", "sub", "source"))
+    sub_y = rend(sub_top)
+    sub_bottom = rend(sub_top + whole(css_h["sub"])) if lines["sub"] else rend(title_top + whole(css_h["title"]))
+    rail_h = _longform_rail_h(spec)
+    box = longform_chart_box(spec, t, sub_bottom, whole(css_h["source"]) * PUNCH_SCALE,
+                             whole(rail_h / PUNCH_SCALE) * PUNCH_SCALE, h_s)
+    top, bot = box["top"], box["bot"]
+    g = longform_geom(t, top, bot, box["floor"])
     s, cx, tu = g["scale"], LAND_FULL["X"] * w_s, LONGFORM_PLOT_T["dense-line" if dense else "story"]
     if dense:
-        tags_u = longform_tag_units(spec, t, (spec.get("axes") or {}).get("tag_form") or "value", s)
-        vw, left, right = max(LAND_PHONE_MIN_VIEWBOX_W, _longform_max_vw(tags_u, s, w_s)), g["plot_l"], LAND_PLOT["R"] * LAND_VIEWBOX[0]
-        floor, foot = g["line_b"], g["line_b"] + g["xtick_dy"] + 0.25 * g["tick"]
-    else:
-        tags_u, vw, right = 0.0, float(LAND_VIEWBOX[0]), 20.0
-        left = max(g["gutter"], float((spec.get("axes") or {}).get("left_gutter") or 0))
+        tags_u = longform_tag_units(spec, t, (spec.get("axes") or {}).get("tag_form") or "full", s)
+        vw, left, right = longform_page_vw(spec, s, w_s), g["plot_l"], LAND_PLOT["R"] * LAND_VIEWBOX[0]
+        floor, foot = g["line_b"], g["line_b"] + g["xtick_dy"] + LONGFORM_DESCENT * g["tick"]
+    else:   # the bars page's plot is its PANEL (the tick rules' own extent, x0 - 20 to x1 + 20) over its names
+        tags_u, vw, right = 0.0, float(LAND_VIEWBOX[0]), 0.0
+        left = max(g["gutter"], float((spec.get("axes") or {}).get("left_gutter") or 0)) - 20
         floor, foot = g["bars_b"], g["bars_b"] + g["xlab_dy"] + 1.4 * g["tick"]
-    ylab = LONGFORM_YLAB_GAP_PX + t["tick"] if (spec.get("axes") or {}).get("ylabel") else 0.0
-    rail = [b for b in spec.get("badges") or [] if not b.get("inline")]
+    ylab = LONGFORM_YLAB_GAP_PX + LONGFORM_ASCENT * t["tick"] if (spec.get("axes") or {}).get("ylabel") else 0.0
     return {
         "title": _box(ink_x, title_y, ink_w, title_h),
         "sub": _box(ink_x, sub_y, ink_w, sub_h),
         "chart": _box(cx, top, vw * s, bot - top),
         "plot": _box(cx + left * s, top + tu * s - ylab, (vw - left - right) * s, (foot - tu) * s + ylab),
-        "source": _box(ink_x, bot + LAND_SRC_GAP * PUNCH_SCALE * h_s, ink_w, src_h),
-        "rail": _box(ink_x, bot + LAND_RAIL_GAP * PUNCH_SCALE * h_s, ink_w,
-                     LAND_FULL_INK["pill"] * -(-len(rail) // PORTRAIT_PILLS_PER_ROW) if rail else 0),
-        "tags": _box(cx + (vw - right + LAND_TAG_GAP) * s, top + tu * s, tags_u * s, (floor - tu) * s),
+        "source": _box(ink_x, box["src_y"], ink_w, src_h),
+        "rail": _box(ink_x, box["rail_y"], ink_w, rail_h),
+        "tags": _box(cx + (vw - LAND_PLOT["R"] * LAND_VIEWBOX[0] + LAND_TAG_GAP) * s, top + tu * s, tags_u * s, (floor - tu) * s),
     }
 
 def _readability_profile(spec: dict) -> str | None:
@@ -1884,7 +2059,7 @@ def page_ink_key(spec: dict) -> str:
     readability = (spec.get("axes") or {}).get("readability")
     if readability is not None:
         ink["readability"] = readability
-    for key in ("type_scale", "tag_form"):   # P69 T8: the long form's preset and end-tag form move its boxes
+    for key in ("type_scale", "tag_form", "tag_room"):   # P69 T8: the long form's preset, end-tag form and (N2) its states' tag room move its boxes
         if (spec.get("axes") or {}).get(key) is not None:
             ink[key] = spec["axes"][key]
     if "left_gutter" in (spec.get("axes") or {}):
@@ -1993,6 +2168,21 @@ def measured_pages(path: Path | None = None) -> dict:
     return _section("pages", path)
 
 
+def measured_profiles(path: Path | None = None) -> dict:
+    """`<builder>|longform:<preset>` -> geometry -> entry: each profiled builder's representative measured under the
+    long form at every preset (REVIEW-P69-LANE-B-MERGE-2 N3, `measure_page_boxes.build_profiles`)."""
+    return _section("profiles", path)
+
+
+def _profile_entry(ink: str, geometry: str) -> dict | None:
+    """The `profiles` entry whose ink is this page's own in this geometry, or None."""
+    for by_geometry in measured_profiles().values():
+        got = by_geometry.get(geometry) if isinstance(by_geometry, dict) else None
+        if isinstance(got, dict) and got.get("ink") == ink:
+            return got
+    return None
+
+
 def measured_entry(spec: dict, aspect: str) -> dict | None:
     """The fixture entry that measured THIS page's ink at this aspect, or None.
 
@@ -2009,6 +2199,8 @@ def measured_entry(spec: dict, aspect: str) -> dict | None:
     entry = page_entries.get(geometry) if isinstance(page_entries, dict) else None
     builder_entries = fixture().get(str(spec.get("builder")))
     builder_entry = builder_entries.get(geometry) if isinstance(builder_entries, dict) else None
+    if not (isinstance(builder_entry, dict) and builder_entry.get("ink") == key):
+        builder_entry = _profile_entry(key, geometry) or builder_entry   # N3: a longform representative, by its ink
     if not isinstance(entry, dict):
         entry = builder_entry
     if full and not _valid_full_stage_entry(entry, key):

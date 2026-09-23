@@ -7977,6 +7977,8 @@ async function mount(doc) {
                                       TAG_EM: Object.freeze({ NAME: 0.68, CHIP: 0.64 }),
                                       PLOT_T: Object.freeze({ "dense-line": 40, story: 90 }),
                                       CAPTION_TOP: 878,   /* ledger_page.CAPTION_ANCHOR["16:9"]: the anchored caption's strip */
+                                      CAPTION_FOOT: 960,  /* ... and its one-line caption's foot (ledger_page.LONGFORM_STRIP) */
+                                      STACK_GAP_PX: 8,    /* the key rail under the source's last line (ledger_page.LONGFORM_STACK_GAP_PX) */
                                       DEFAULT: "middle",
                                       TYPE_SCALE: Object.freeze({
                                         bravos: Object.freeze({ title: 38.5, sub: 24, tick: 22.7, tag: 19.3, chip: 15.4, value: 43.3, src: 14.4 }),
@@ -7985,23 +7987,43 @@ async function mount(doc) {
   const lpLongformType = (pg) => LP_LONGFORM.TYPE_SCALE[(((pg || {}).axes) || {}).type_scale] || LP_LONGFORM.TYPE_SCALE[LP_LONGFORM.DEFAULT];
   /* the chart-unit geometry for a chart box from `top` to `bot` (rendered px) - ledger_page.longform_geom, line for line:
      the ticks' column and the names hang half a figure clear of the plot, whose floor rises until they clear the caption */
-  const lpLongformGeom = (T, top, bot) => {
-    const s = (bot - top) / 560, tick = T.tick / s, capU = (LP_LONGFORM.CAPTION_TOP - top) / s;
+  const lpLongformGeom = (T, top, bot, floor) => {
+    const s = (bot - top) / 560, tick = T.tick / s, capU = ((floor == null ? LP_LONGFORM.CAPTION_TOP : floor) - top) / s;
     return { scale: s, tick, tag: T.tag / s, chip: T.chip / s, value: T.value / s,
              plot_l: Math.max(70, 12 + 2.3 * tick), line_b: Math.min(458, capU - 5 - 1.5 * tick), xtick_dy: 1.25 * tick,
              gutter: Math.max(60, 40 + 2.6 * tick), xlab_dy: 1.25 * tick, bars_b: Math.min(440, capU - 5 - 2.65 * tick),
              ylab_gap: LP_LONGFORM.YLAB_GAP_PX / s, rule_dy: (8 + 0.25 * T.tag) / s };
   };
-  /* ... the chart box: ledger_page.longform_chart_box, line for line */
-  const lpLongformBox = (pg, T, subBottom, srcH) => {
+  /* REVIEW-P69-LANE-B-MERGE-2 N1 - WHAT STANDS UNDER THE CHART (ledger_page.longform_stack, line for line): the source
+     LAND_SRC_GAP under its foot, the key rail LAND_RAIL_GAP under it or STACK_GAP_PX under the source's last line; an
+     item that would meet the anchored caption's strip (CAPTION_TOP-CAPTION_FOOT) moves under its foot. `fits` is
+     whether both then stay on the stage; `floor` is the first ink under the chart, which its ticks clear. */
+  const lpLongformPlace = (y, h) => (h > 0 && y + h > LP_LONGFORM.CAPTION_TOP && y < LP_LONGFORM.CAPTION_FOOT ? LP_LONGFORM.CAPTION_FOOT : y);
+  const lpLongformStack = (bot, srcH, railH) => {
+    const gSrc = 0.012 * LP.PUNCH_SCALE * STAGE_H, gRail = 0.044 * LP.PUNCH_SCALE * STAGE_H;
+    const srcY = lpLongformPlace(bot + gSrc, srcH);
+    const railY = lpLongformPlace(Math.max(bot + gRail, srcH > 0 ? srcY + srcH + LP_LONGFORM.STACK_GAP_PX : bot + gRail), railH);
+    const end = Math.max(srcH > 0 ? srcY + srcH : 0, railH > 0 ? railY + railH : 0);
+    const first = srcH > 0 ? srcY : railH > 0 ? railY : STAGE_H;
+    return { bot, srcY, railY, floor: Math.min(LP_LONGFORM.CAPTION_TOP, first), fits: end <= STAGE_H - LP_LONGFORM.EDGE_PX };
+  };
+  /* ... the chart box: ledger_page.longform_chart_box, line for line. Its foot is the full-stage box's, raised (N1) to
+     the first that fits of: the source standing above the caption strip, then the source and the rail both above it */
+  const lpLongformBox = (pg, T, subBottom, srcH, railH) => {
     const top0 = LP.FULL.Y * STAGE_H, bot0 = (LP.FULL.Y + LP.FULL.H) * STAGE_H, ax = pg.axes || {};
-    const bot = Math.min(bot0, STAGE_H - LP_LONGFORM.EDGE_PX - 0.012 * LP.PUNCH_SCALE * STAGE_H - srcH);
+    const gSrc = 0.012 * LP.PUNCH_SCALE * STAGE_H, gRail = 0.044 * LP.PUNCH_SCALE * STAGE_H, S0 = LP_LONGFORM.CAPTION_TOP;
+    let stack = null;
+    for (const cand of [bot0, S0 - gSrc - srcH, S0 - railH - Math.max(gRail, gSrc + srcH + LP_LONGFORM.STACK_GAP_PX)]) {
+      stack = lpLongformStack(Math.min(bot0, cand), srcH, railH);
+      if (stack.fits) break;
+    }
+    const bot = stack.bot;
     const tu = LP_LONGFORM.PLOT_T[pg.builder] || LP_LONGFORM.PLOT_T.story;
     const rules = (ax.hlines || (ax.hline ? [ax.hline] : [])).some((h) => h && h.label);
     const above = Math.max(0.5 * T.tick, ax.ylabel ? LP_LONGFORM.YLAB_GAP_PX + T.tick : 0, rules ? 8 + 1.25 * T.tag : 0);   /* a label's box reaches its font's ascent (~1 em) above its baseline */
     const need = subBottom + 0.5 * T.tick + above;
-    if (top0 + tu * (bot - top0) / 560 >= need) return { top: top0, bot };
-    return { top: (need - tu * bot / 560) / (1 - tu / 560), bot };
+    const top = top0 + tu * (bot - top0) / 560 >= need ? top0 : (need - tu * bot / 560) / (1 - tu / 560);
+    return Object.assign({}, stack, { top });
   };
   /* ... and a dense-line page's end tags at its preset and form (ledger_page.longform_tag_units), widening the viewBox the
      way T17 does so every tag ends inside the stage's safe right edge */
@@ -8018,9 +8040,9 @@ async function mount(doc) {
     }
     return out / scale;
   };
-  const lpLongformVW = (pg, T, scale) => {
+  const lpLongformVW = (pg, T, scale) => {   /* N2: `axes.tag_room` - the widest end tag a `then=` state writes (the compiler's) */
     const maxW = (LP_PHONE.SAFE_RIGHT - LP.FULL.X) * STAGE_W / scale + 220 - LP_PHONE.TAG_GAP
-      - lpLongformTagUnits(pg, T, ((pg.axes || {}).tag_form) || "full", scale);
+      - Math.max(lpLongformTagUnits(pg, T, ((pg.axes || {}).tag_form) || "full", scale), (+((pg.axes || {}).tag_room) || 0) / scale);
     return Math.max(LP_PHONE.MIN_W, Math.round(maxW * 1000) / 1000);
   };
   /* one role's size on a built chart, in its units: T17's 46, or the long form's preset */
@@ -8349,7 +8371,7 @@ async function mount(doc) {
         '<span class="pill-tag" style="color:' + (ACCENT[bd.accent] || "var(--sunflower)") + '">' + bd.tag + '</span></span>';
       return { el, at: LP_BADGE0 + LP_BADGE_STEP * bi };
     });
-    let geom = { W: 1000, H: 560 }, lfGeom = null;   /* lfGeom: P69 T8, the long form's chart-unit geometry at its preset */
+    let geom = { W: 1000, H: 560 }, lfGeom = null, lfBox = null;   /* lfGeom: P69 T8, the long form's chart-unit geometry at its preset; lfBox: its chart box and what stands under it (N1) */
     if (PORTRAIT) {
       geom = lpPortraitLayout({ title, subEl, src, chart, rail });
     } else {
@@ -8398,8 +8420,11 @@ async function mount(doc) {
         }
         subEl.style.top = ((title.offsetTop + title.offsetHeight + LP_LONGFORM.SUB_GAP) / PH * 100).toFixed(3) + "%";
         const subBottom = subText.trim() ? rend(subEl.offsetTop + subEl.offsetHeight) : rend(title.offsetTop + title.offsetHeight);
-        const box = lpLongformBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0);
-        lfGeom = lpLongformGeom(T, box.top, box.bot);
+        rail.style.maxWidth = col;   /* N1: the rail's rows are measured in the column it will stand in */
+        const box = lfBox = lpLongformBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0, badges.length ? rail.offsetHeight * ps : 0);
+        lfGeom = lpLongformGeom(T, box.top, box.bot, box.floor);
+        if (!A[LP_LONGFORM.FONT_ASSET]) console.warn("P69 T8: a longform page (" + (scene.scene_id || "?") + ") mounted with no "
+          + LP_LONGFORM.FONT_ASSET + " in the asset map - its words are set in the fallback face, not Inter (build_scene_timeline_f.longform_assets)");   /* N6 */
         const vw = pg.builder === "dense-line" ? lpLongformVW(pg, T, lfGeom.scale) : 1000;   /* bars: the legacy viewBox, left-aligned, never letterboxed */
         cb.y = un(box.top / STAGE_H); cb.h = (box.bot - box.top) / STAGE_H / ps; cb.w = vw * lfGeom.scale / STAGE_W / ps;
         chart.setAttribute("viewBox", "0 0 " + vw + " 560");
@@ -8423,6 +8448,10 @@ async function mount(doc) {
       subEl.style.width = inkW; subEl.style.left = inkL;
       src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = inkL;
       rail.style.left = inkL; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = inkW;
+      if (lfBox) {   /* N1: a longform page's source and rail stand where its stack put them - never in the caption strip */
+        src.style.top = (un(lfBox.srcY / STAGE_H) * 100).toFixed(3) + "%";
+        rail.style.top = (un(lfBox.railY / STAGE_H) * 100).toFixed(3) + "%";
+      }
     }
     const inlineBadges = {}; (pg.badges || []).forEach((bd) => { if (bd.inline) inlineBadges[LP_BADGE_COL[bd.accent]] = bd; });
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, soakFx, soakFk: fk, seed, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src],
@@ -8458,7 +8487,7 @@ async function mount(doc) {
       const ch2 = lpEl("svg", "lp-chart", page, { viewBox: chart.getAttribute("viewBox") });
       ch2.style.cssText = chart.style.cssText; ch2.style.opacity = 0;
       const s2 = { root, page, chart: ch2, geom, portrait: PORTRAIT, seed, edge, field, rail, stagePx: st.stagePx,   /* P69 T6c: the same box, the same scale */
-                   lfType: st.lfType,   /* P69 T8: ... and the long form's same type */
+                   lfType: st.lfType ? Object.assign({}, st.lfType, { form: ((pg2.axes || {}).tag_form) || st.lfType.form }) : st.lfType,   /* P69 T8: ... and the long form's same type; N2: the state's OWN fitted end-tag form */
                    readability: st.readability,
                    bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: {}, linePts: [],
                    marks: [], markBy: {}, badges: [], inkEls: [],
@@ -8478,7 +8507,7 @@ async function mount(doc) {
       const mkInk = (cls, from, text) => {
         const d = lpEl("div", cls, page);
         if (from.getAttribute("style")) d.setAttribute("style", from.getAttribute("style"));
-        const gs = PORTRAIT ? lpGlyphsWrap(d, text, seed + 60 + st.states.length) : lpGlyphs(d, text, seed + 60 + st.states.length);
+        const gs = PORTRAIT || LF ? lpGlyphsWrap(d, text, seed + 60 + st.states.length) : lpGlyphs(d, text, seed + 60 + st.states.length);   /* N2: a long form's state wraps its sub and source by WORD, as its page does (glyph-by-glyph, "wra / p") */
         for (const g of gs) g.style.setProperty("--w", "0");
         return { div: d, glyphs: gs };
       };

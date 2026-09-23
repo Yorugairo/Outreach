@@ -676,3 +676,34 @@ def test_the_cap_holds_196_px_in_every_layout(layout):
         assert not P.errs, P.errs
     finally:
         P.close()
+
+
+# F5 (LOW, REVIEW-P69-LANE-B-MERGE-2): `lpStagePx`'s rest scale is the punch for a page HANDED the melt's ball, whatever
+# its aspect - the painter rests such a page punched (`pk = handed ? 1`) where a portrait page otherwise rests at 1. A
+# handed 9:16 bars page whose rest scale read 1 would draw its lone bar 196 x 1.16 = 227 px wide on the stage.
+STAGE_PX_AT_REST = """() => {
+  const w = [wB, wA].find(e => e.__lp && e.classList.contains('ledger')); if (!w) return null;
+  const m = w.__lp.chart.getScreenCTM();
+  return { stagePx: w.__lp.stagePx, ctm: Math.hypot(m.a, m.b) };
+}"""
+
+
+@needs_browser
+def test_a_handed_portrait_page_rests_punched_and_its_bar_holds_the_cap():
+    cap = _lpbar()
+    world, aspect = _layout_world("9:16")
+    world["page"]["enter"] = "morph"
+    world["morph"] = {"poly": [[0.40, 0.40], [0.60, 0.40], [0.60, 0.60], [0.40, 0.60]], "hand": True}
+    tl, uris = _one_scene(world, [], aspect)
+    tl["kinetics"] = dict(tl.get("kinetics") or {}, arap_morph=True)
+    P = _Served(tl, uris, aspect=aspect)
+    try:
+        s = P.at(20.0)
+        rest = P.page.evaluate(STAGE_PX_AT_REST)
+        assert rest and abs(rest["stagePx"] - rest["ctm"]) < 0.002, f"the rest scale is the chart's own at rest: {rest}"
+        assert s["barPx"], s
+        for px in s["barPx"]:
+            assert abs(px - cap["W_PX"]) < 0.5, f"a handed 9:16 bar {px:.1f} px wide on the stage, the cap is {cap['W_PX']} px"
+        assert not P.errs, P.errs
+    finally:
+        P.close()

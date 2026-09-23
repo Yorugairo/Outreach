@@ -365,6 +365,25 @@ def single_file_shell(template: Path = TEMPLATE, engine: Path = ENGINE) -> str:
                 .replace("{{ENGINE}}", engine_script(engine)))
 
 
+LONGFORM_FONT_ASSET = "font:inter-longform"   # build_scene_timeline_f.LONGFORM_FONT_ASSET / the engine's LP_LONGFORM.FONT_ASSET
+
+
+def longform_face_missing(timeline: dict, uris: dict) -> str | None:
+    """REVIEW-P69-LANE-B-MERGE-2 N6: a 16:9 page drawn under `;readability=longform` is set in the Inter the asset
+    map carries (`build_scene_timeline_f.longform_assets`); without it the player falls back to Arial and nothing
+    says so. The refusal's message when this timeline draws such a page and the map has no face, else None."""
+    if (timeline.get("aspect") or "16:9") == "9:16" or LONGFORM_FONT_ASSET in (uris or {}):
+        return None
+    for sc in timeline.get("scenes") or []:
+        world = sc.get("world") or {}
+        for page in [world.get("page")] + list(world.get("page_states") or []):
+            if isinstance(page, dict) and (page.get("axes") or {}).get("readability") == "longform":
+                return (f"scene {sc.get('scene_id')!r} draws a `longform` page but the asset map carries no "
+                        f"{LONGFORM_FONT_ASSET!r} - add build_scene_timeline_f.longform_assets(timeline) to the uris "
+                        "(without it the page renders in Arial)")
+    return None
+
+
 def instantiate(timeline: dict, uris: dict, template: Path = TEMPLATE, split: bool = False,
                 engine: Path = ENGINE, timeline_src: str = "", assets_src: str = ASSETS_NAME) -> str:
     """The build step's exact substitution on the reviewed shell.
@@ -376,6 +395,9 @@ def instantiate(timeline: dict, uris: dict, template: Path = TEMPLATE, split: bo
     for slot in ("{{TIMELINE}}", "{{URIS}}", "{{ENGINE}}"):
         if slot not in html:
             raise RuntimeError(f"{template} is not the shell - it has no {slot} slot")
+    missing = longform_face_missing(timeline, uris)
+    if missing:
+        raise ValueError(missing)
     if split and not timeline_src:
         raise ValueError("the split form needs the compiled timeline's file name (timeline_src)")
     return (html.replace("{{TIMELINE}}", "" if split else json.dumps(timeline, separators=(",", ":")))
