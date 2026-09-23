@@ -1842,3 +1842,109 @@ def test_m03_a_retitle_a_relight_or_an_idle_alone_is_not_an_arrival():
     quiet = [{"kind": "retitle", "at": 30.0, "dur": 0.8}, {"kind": "relight", "at": 45.0}]
     g = _by_id(G.run(_recast_window(quiet, idle_live=True), [], {"cues": []})[0])
     assert g["M03"].level == "FAIL" and "71s from 0:10" in g["M03"].message, g["M03"]
+
+
+# ---- P69 T26c2 (E99 s105 AMENDED, 2026-09-23): a rescale, extend or morph resets M03 when it MOVES THE STORY ----
+# The operator: "true motion doesnt just move the visual it moves the story/narrative/thought process along". The
+# transform lands on its spoken word AND brings a new thing on screen with it; a silent re-fit does not reset the wait.
+
+def _story_window(species, words=(), docks=()):
+    """`_recast_window`, with the caption pages carrying a spoken word at each onset in `words` (the compiled
+    timeline's own word clock, build_caption_pages.py's `s`) and the page carrying the given docks."""
+    tl = _recast_window(species)
+    for pg in tl["caption_pages"]:
+        pg["t"] = pg["t"] + [{"w": "now", "s": w, "e": w + 0.3} for w in words if pg["s"] <= w < pg["e"]]
+    tl["scenes"][1]["docks"] = list(docks)
+    return tl
+
+
+def _m03(tl):
+    return G.analyse(tl, [], {"cues": []})["ev_gaps"][0], _by_id(G.run(tl, [], {"cues": []})[0])["M03"]
+
+
+@pytest.mark.parametrize("to, extra", [
+    ("rescale", {"ymin": 0.0, "ymax": 9.0}),
+    ("morph", {}),
+])
+@pytest.mark.parametrize("named", [
+    {"kind": "figure", "at": 40.3, "dur": 1.4, "target": {"kind": "datum", "index": 3}, "text": "+613%"},
+    {"kind": "callout", "at": 40.0, "dur": 3.0, "target": {"kind": "datum", "index": 3}},
+    {"kind": "ring", "at": 40.9, "dur": 1.0, "target": {"kind": "datum", "index": 3}},
+    {"kind": "note", "at": 40.5, "dur": 2.0, "text": "the layer it never drew"},
+    {"kind": "retitle", "at": 40.1, "dur": 0.8, "text": "The layer it never drew"},
+])
+def test_m03_a_rescale_or_morph_on_its_word_landing_with_a_named_thing_is_an_arrival(to, extra, named):
+    """The page at 0:10; a rescale (or morph) on the word at 0:40 with a figure / callout / ring / label / retitle
+    landing on the same word or inside the transform: the wait restarts at its landing (0:41) - 40 s to the end."""
+    gap, m03 = _m03(_story_window([_xf(to, 40.0, dur=1.0, **extra), named], words=(40.0,)))
+    assert gap == (41.0, 40.0), gap
+    assert m03.level == "PASS" and "40s from 0:41" in m03.message, m03
+
+
+def test_m03_a_rescale_on_its_word_with_a_dock_badge_in_its_window_is_an_arrival():
+    """A badge the page's dock reveals while the rescale lands names what the new scale shows."""
+    dock = {"slide": "d1", "at": 20.0, "end": 60.0, "badge_at": [40.6]}
+    gap, m03 = _m03(_story_window([_xf("rescale", 40.0, dur=1.0, ymax=9.0)], words=(40.0,), docks=[dock]))
+    assert gap == (41.0, 40.0), gap
+
+
+@pytest.mark.parametrize("species, words", [
+    ([_xf("rescale", 40.0, dur=1.0, ymax=9.0),
+      {"kind": "figure", "at": 40.3, "dur": 1.4, "target": {"kind": "datum", "index": 3}, "text": "+613%"}], ()),        # no word
+    ([_xf("rescale", 40.0, dur=1.0, ymax=9.0),
+      {"kind": "figure", "at": 40.3, "dur": 1.4, "target": {"kind": "datum", "index": 3}, "text": "+613%"}], (39.7,)),   # off its word
+    ([_xf("rescale", 40.0, dur=1.0, ymax=9.0)], (40.0,)),                                                                  # nothing named
+    ([_xf("rescale", 40.0, dur=1.0, ymax=9.0), {"kind": "relight", "at": 40.2},
+      {"kind": "build_to", "at": 40.0, "dur": 1.0, "series": 0, "target": {"kind": "datum", "index": 9}}], (40.0,)),    # a relight names nothing; a first build has no standing index to pass
+    ([_xf("rescale", 40.0, dur=1.0, ymax=9.0),
+      {"kind": "figure", "at": 43.0, "dur": 1.4, "target": {"kind": "datum", "index": 3}, "text": "+613%"}], (40.0,)),  # named too late
+    ([_xf("morph", 40.0, dur=1.0)], (40.0,)),                                                                              # a silent morph
+    ([_xf("extend", 40.0, dur=1.0, to_index=9, from_index=9)], (40.0,)),                                                   # an extend adding no datum
+])
+def test_m03_a_silent_refit_does_not_reset_the_wait(species, words):
+    """No word anchor, or nothing new named on screen: motion of the visual only - the wait runs from the page (0:10)."""
+    gap, m03 = _m03(_story_window(species, words=words))
+    assert gap == (10.0, 71.0), gap
+    assert m03.level == "FAIL" and "71s from 0:10" in m03.message, m03
+
+
+@pytest.mark.parametrize("xf", [
+    _xf("extend", 40.0, dur=1.0, to_index=9, from_index=5),   # the window grows past its old end (compiler :3463-3468)
+    _xf("extend", 40.0, dur=1.0, series=1, from_series=1),     # a later series draws on
+])
+def test_m03_an_extend_revealing_new_data_on_its_word_is_an_arrival(xf):
+    """An extend on its word brings data past the old domain - the new thing is the data itself."""
+    gap, m03 = _m03(_story_window([xf], words=(40.0,)))
+    assert gap == (41.0, 40.0), gap
+    assert m03.level == "PASS" and "40s from 0:41" in m03.message, m03
+
+
+def test_m03_an_extend_revealing_new_data_off_its_word_is_not_an_arrival():
+    gap, _ = _m03(_story_window([_xf("extend", 40.0, dur=1.0, to_index=9, from_index=5)]))
+    assert gap == (10.0, 71.0), gap
+
+
+def _followed(build_at, stood_index, drawn_index, words=(40.0,)):
+    """A followed rescale on the word at 0:40 whose `build_to` draws series 0 from `stood_index` to `drawn_index`."""
+    stood = {"kind": "build_to", "at": 10.0, "dur": 0.4, "series": 0, "target": {"kind": "datum", "index": stood_index}}
+    drawn = {"kind": "build_to", "at": build_at, "dur": 1.0, "series": 0, "target": {"kind": "datum", "index": drawn_index}}
+    return _story_window([stood, _xf("rescale", 40.0, dur=1.0, ymax=9.0, follow=0), drawn], words=words)
+
+
+def test_m03_a_followed_rescale_whose_build_draws_the_line_past_its_old_data_is_an_arrival():
+    """The parent's ruling on H's s01 (28.23, "Here's the layer it never drew"): the line drawn from datum 3 to 9 on
+    the rescale's word IS new data revealed - the wait restarts at the rescale's landing."""
+    gap, m03 = _m03(_followed(40.0, 3, 9))
+    assert gap == (41.0, 40.0), gap
+    assert m03.level == "PASS" and "40s from 0:41" in m03.message, m03
+
+
+@pytest.mark.parametrize("build_at, stood, drawn, words", [
+    (40.0, 9, 9, (40.0,)),    # the build holds where the line stood
+    (40.0, 9, 4, (40.0,)),    # ... or draws it back
+    (43.0, 3, 9, (40.0,)),    # the advance lands after the rescale's window
+    (40.0, 3, 9, ()),         # the advance, with no word under the rescale
+])
+def test_m03_a_followed_rescale_whose_build_does_not_advance_on_its_word_is_not_an_arrival(build_at, stood, drawn, words):
+    gap, _ = _m03(_followed(build_at, stood, drawn, words=words))
+    assert gap == (10.0, 71.0), gap
