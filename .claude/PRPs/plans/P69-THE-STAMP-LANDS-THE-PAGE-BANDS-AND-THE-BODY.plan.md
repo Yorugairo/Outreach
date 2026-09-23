@@ -368,7 +368,7 @@ verbatim tails and are left pending.
 - Evidence: 2026-09-22 parent - register row, P68 T6 dependency, R26-241 reopened, status running; test_worktree_register + prp_validate green
 
 ### T1: The page-box pin measures boxes, not bytes (R26-241, at the root)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T0
 - Write set: `content/video_engine/scripts/measure_page_boxes.py`, `content/video_engine/tests/test_page_boxes.py`, `content/video_engine/assets/page-boxes.v1.json`, `docs/content-video-engine/BACKLOG.md` (the R26-241 row, closed by the parent on this slice's evidence)
@@ -376,10 +376,10 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_page_boxes.py -q -k "pin or check"`
 - Expected RED: (a) the new case monkeypatches `M.template_sha` to another digest and fails with "the fixture was measured from a different player"; (b) the new case runs `--check` against a copy whose `measured` is yesterday, and gets `DRIFT` and exit 1
 - Validate: `python -m pytest content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_fed_full_stage_fixture.py -q` then `python content/video_engine/scripts/measure_page_boxes.py --check`
-- Red evidence: pending
-- Green evidence: pending
-- Refactor evidence: pending
-- Evidence: pending
+- Red evidence: `4 failed, 1 passed, 44 deselected` - "the fixture was measured from a different player" and "DRIFT ... assert 1 == 0" (the two expected reds)
+- Green evidence: in place, fable-p68: `test_page_boxes.py` + `test_fed_full_stage_fixture.py` -> `64 passed in 34.18s`; `measure_page_boxes.py --check` -> `PASS 5 builders x 15 geometr(ies) measured identical` (exit 0)
+- Refactor evidence: a first combined run under load failed the freshness test on a font-rebuild race in the shared `render_baseline.prepare_page` (fixed 250 ms settle) - re-run idle green; filed as backlog R26-?? (the measurer can read a page before its font rebuild lands), outside T1's write set
+- Evidence: built by implementation_luna as a patch (the harness fences this session's agents out of fable-p68 Edit), applied by the parent with `git apply`; the fixture needed no `--write`; R26-241 closed in BACKLOG
 
 ### T2: The motion gate counts a stamp's contact (R26-247, the gate; STAMP ONLY)
 - Status: pending
