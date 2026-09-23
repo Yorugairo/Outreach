@@ -22,8 +22,10 @@ Earlier local `luna-run.log` attempts for these four IDs ended with `exit=127` a
 
 ## Current state and next step
 
-All four reports received parent content review, and `SYNTHESIS.md` records the transferable grammar, source limitations, existing engine fit, and bounded chart tests. Bundle verification and local-main commit precede a read-only Claude bridge notification containing absolute artifact paths. No Bravos media is in this bundle.
+All four reports received parent content review, and `SYNTHESIS.md` records the transferable grammar, source limitations, existing engine fit, and bounded chart tests. The bundle landed on local `main` at `6c0d344` (no push). Claude acknowledged the read-only bridge packet `6b0916a55d68cacb0ca314a86841a22a9bbbd158a5c78dda1291cc1cff24b769` and confirmed all five research paths and commit. No Bravos media is in this bundle.
+
+Claude's non-blocking integration notes: `DRAW_KEYS` remains unwired, mixed-unit overlays should use aligned small multiples by default, and a targeted chart zoom needs an explicit editorial ruling before implementation. The four watch reports do not approve financial claims or copied visuals.
 
 ## Follow-on authorized by operator
 
-After all four reports are working and Claude is notified, resume `.claude/PRPs/plans/SHARED-MODEL-ENGINES.plan.md` in the `codex/Astra` worktree. Current main plan marks T4a and T7a pending, while prior agents have left uncommitted T4a/T7a candidate work there; reconcile and verify those slices before starting T4b or any new backend work. Keep the existing scene-evidence player as the editorial timeline. No push or publication is authorized.
+The parent resumed `.claude/PRPs/plans/SHARED-MODEL-ENGINES.plan.md` in the `codex/Astra` worktree, reconciled with `main`, committed diagnostic T4a/T7a slices separately, and fast-forwarded local `main` to `e35686c`. The authored-layer/plate four-file suite passes 86/86 on main. The model-focused suite passes 107 with 3 skips after the hash-pinned MPFB package and isolated profile were copied from Astra's ignored T1 cache to the matching ignored main cache; the first main run failed because that cache was absent, not because of a source regression. The next art slice is actual garment geometry and recognizable head-and-shoulders identity, with operator art review still required. Keep the existing scene-evidence player as the editorial timeline. No push or publication is authorized.
