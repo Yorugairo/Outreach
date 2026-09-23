@@ -107,6 +107,12 @@ def test_canonical_native_asset_matches_its_diagnostic_manifest() -> None:
     assert manifest["authoring"]["provider_calls"] == 0
     assert manifest["editable_source"] == "fighter-family-v1.blend"
     assert _sha256(asset_dir / manifest["editable_source"]) == manifest["editable_source_sha256"]
+    garment_manifest = json.loads((asset_dir / "fighter-family-v1.1.manifest.json").read_text(encoding="utf-8"))
+    assert garment_manifest["status"] == "diagnostic_only"
+    assert garment_manifest["art_approval"] == "not_approved"
+    assert garment_manifest["editable_source"] == "fighter-family-v1.1.blend"
+    assert garment_manifest["source_v1_sha256"] == manifest["editable_source_sha256"]
+    assert _sha256(asset_dir / garment_manifest["editable_source"]) == garment_manifest["editable_source_sha256"]
 
 
 def test_blender_builds_and_reopens_editable_diagnostic_preset(tmp_path: Path) -> None:
@@ -114,7 +120,7 @@ def test_blender_builds_and_reopens_editable_diagnostic_preset(tmp_path: Path) -
     controls_doc = json.loads(controls_path.read_text(encoding="utf-8"))
     controls = resolve_controls(controls_doc["controls"])
     profile = (BASELINE_DIR / "profile").resolve()
-    artifact = tmp_path / "fighter-family-v1.blend"
+    artifact = tmp_path / "fighter-family-v1.1.blend"
     renders = tmp_path / "renders"
     build_result_path = tmp_path / "build-result.json"
 
@@ -133,9 +139,11 @@ def test_blender_builds_and_reopens_editable_diagnostic_preset(tmp_path: Path) -
     assert build_result["runtime"]["provider_calls"] == 0
     assert build_result["asset_sha256"] == _sha256(artifact)
 
-    for view in ("front", "three-quarter", "side", "back", "face", "hand", "stress-arm"):
+    for view in ("front", "three-quarter", "side", "back", "face", "hand", "stress-arm",
+                 "garment-front", "garment-three-quarter", "stress-frame-28", "stress-hip-leg-frame-52"):
         image = renders / f"fighter-family-{view}.png"
         assert image.is_file() and image.stat().st_size > 4_000, f"missing/empty {view} diagnostic render"
+    assert _sha256(renders / "fighter-family-front.png") != _sha256(renders / "fighter-family-stress-hip-leg-frame-52.png")
 
     reopened_path = tmp_path / "reopened-inspection.json"
     # Blender loads the actual persisted project before running the read-only inspector.
@@ -155,8 +163,21 @@ def test_blender_builds_and_reopens_editable_diagnostic_preset(tmp_path: Path) -
     assert state["verdict"]["saved_scene_integrity"] == "pass"
     assert state["verdict"]["rig_deformation_probe"] == "pass"
     assert state["character"]["body_materials"]
-    assert state["character"]["clothing_representation"] == "skinned_material_region_only"
-    assert state["character"]["body_material_polygon_counts"]["MM_Costume_cobalt"] >= 100
+    assert state["character"]["clothing_representation"] == "separate_editable_skinned_garment_shell"
+    assert "MM_Costume_cobalt" not in state["character"]["body_materials"]
+    garment = state["garment"]
+    assert garment["present"] is True
+    assert garment["object_name"] == "Garment_FightShorts"
+    assert garment["representation"] == "separate_editable_skinned_shell"
+    assert garment["stored_vertex_count"] >= 500
+    assert garment["stored_polygon_count"] >= 250
+    assert garment["weighted_vertex_count"] == garment["stored_vertex_count"]
+    assert garment["source_vertex_attribute"] == "body_source_vertex_index"
+    assert "MM_Costume_cobalt" in garment["material_names"]
+    assert garment["armature_modifier_targets"] == ["Human.rigify", "Human.rigify"]
+    assert garment["solidify_modifier"]["thickness_m"] == 0.003
+    garment_object = next(obj for obj in state["objects"] if obj["name"] == "Garment_FightShorts")
+    assert garment_object["modifier_stack"][1]["vertex_group"] == "mhmask-preserve-volume"
     assert state["character"]["vertex_group_count"] >= 100
     assert state["character"]["armature_modifier_targets"] == ["Human.rigify", "Human.rigify"]
     assert state["character"]["armature_modifier_stack"] == [
@@ -188,7 +209,7 @@ def test_blender_builds_and_reopens_editable_diagnostic_preset(tmp_path: Path) -
     layers = {obj["diagnostic_layer"] for obj in state["objects"]}
     assert {"face", "hair"}.issubset(layers)
     assert any(obj["name"] == "Hair_SweptQuiff" and obj["vertices_stored"] > 10 for obj in state["objects"])
-    assert not any(obj["diagnostic_layer"] == "clothing" for obj in state["objects"])
+    assert any(obj["diagnostic_layer"] == "clothing" for obj in state["objects"])
     assert any(obj["name"] == "Face_Iris_L" for obj in state["objects"])
     assert any(obj["name"] == "Face_Pupil_L" for obj in state["objects"])
     assert any(obj["attachment_bone"] == "DEF-spine.006" for obj in state["objects"] if obj["diagnostic_layer"] == "face")
@@ -202,12 +223,23 @@ def test_blender_builds_and_reopens_editable_diagnostic_preset(tmp_path: Path) -
     contact = next(frame for frame in state["stress_samples"] if frame["frame"] == 27)
     assert contact["vertices_changed_gt_1e-5_from_frame_1"] >= 100
     assert contact["max_vertex_displacement_from_frame_1_m"] > 0.05
+    leg_stress = next(frame for frame in state["stress_samples"] if frame["frame"] == 52)
+    assert leg_stress["max_vertex_displacement_from_frame_1_m"] > 0.3
+    for sample in (state["stress_samples"][0], leg_stress):
+        clearance = sample["garment_clearance"]
+        assert clearance["status"] == "measured"
+        assert clearance["matched_signed_offset_min_m"] > 0.004
+        assert clearance["nearest_body_surface_min_m"] > 0.001
+        assert clearance["matched_vertices_at_or_below_1mm"] == 0
+        assert clearance["matched_faces"] == garment["stored_polygon_count"]
+        assert clearance["face_centroid_offset_min_m"] > 0.003
+        assert clearance["face_centroids_at_or_below_1mm"] == 0
     assert state["verdict"]["art_status"].startswith("diagnostic only")
 
     # A second build proves the controls change the saved mesh, morphs, hair,
-    # palette and clothing region rather than merely changing manifest text.
+    # palette and separate clothing geometry rather than merely changing manifest text.
     alternate_controls = FIXTURE_DIR / "alternate-controls.v1.json"
-    alternate_artifact = tmp_path / "alternate-fighter-family-v1.blend"
+    alternate_artifact = tmp_path / "alternate-fighter-family-v1.1.blend"
     alternate_build = _run_blender(BUILD_DRIVER, profile, [
         "--controls", str(alternate_controls),
         "--output", str(alternate_artifact),
@@ -227,7 +259,9 @@ def test_blender_builds_and_reopens_editable_diagnostic_preset(tmp_path: Path) -
         "skin_palette": "deep", "clothing_palette": "brick",
     }
     assert "MM_Skin_deep" in alternate["character"]["body_materials"]
-    assert alternate["character"]["body_material_polygon_counts"]["MM_Costume_brick"] >= 100
+    assert "MM_Costume_brick" in alternate["garment"]["material_names"]
+    assert alternate["garment"]["object_name"] == "Garment_WarmupPants"
+    assert alternate["garment"]["stored_vertex_count"] >= garment["stored_vertex_count"]
     assert alternate["character"]["body_bounds_frame_1_world_m"] != state["character"]["body_bounds_frame_1_world_m"]
     alternate_keys = {key["name"]: key["value"] for key in alternate["character"]["shape_keys"]}
     default_keys = {key["name"]: key["value"] for key in state["character"]["shape_keys"]}
@@ -236,3 +270,28 @@ def test_blender_builds_and_reopens_editable_diagnostic_preset(tmp_path: Path) -
     assert alternate_keys["l-hand-scale-incr"] == 0.19
     assert default_keys["l-hand-scale-incr"] == 0.12
     assert not any(obj["name"] == "Hair_SweptQuiff" for obj in alternate["objects"])
+
+
+@pytest.mark.parametrize("palette", ("chalk", "graphite"))
+def test_editable_shorts_palette_variants_survive_reopen(tmp_path: Path, palette: str) -> None:
+    controls_path = FIXTURE_DIR / f"{palette}-shorts-controls.v1.json"
+    assert resolve_controls(json.loads(controls_path.read_text(encoding="utf-8"))["controls"])["clothing_palette"] == palette
+    profile = (BASELINE_DIR / "profile").resolve()
+    artifact = tmp_path / f"fighter-family-{palette}-v1.1.blend"
+    renders = tmp_path / f"{palette}-renders"
+    result_path = tmp_path / f"{palette}-build.json"
+    build = _run_blender(BUILD_DRIVER, profile, [
+        "--controls", str(controls_path), "--output", str(artifact),
+        "--renders", str(renders), "--result", str(result_path),
+    ])
+    assert build.returncode == 0, build.stdout + build.stderr
+    assert artifact.is_file()
+    assert (renders / "fighter-family-garment-front.png").stat().st_size > 4_000
+    report_path = tmp_path / f"{palette}-reopened.json"
+    reopened = _run_blender(REOPEN_DRIVER, profile, ["--output", str(report_path)], blend_file=artifact)
+    assert reopened.returncode == 0, reopened.stdout + reopened.stderr
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    assert report["garment"]["object_name"] == "Garment_FightShorts"
+    assert f"MM_Costume_{palette}" in report["garment"]["material_names"]
+    assert report["garment"]["stored_vertex_count"] >= 500
+    assert report["verdict"]["garment_geometry"] == "pass"

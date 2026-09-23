@@ -19,6 +19,7 @@ from typing import Any
 
 import bpy
 from mathutils import Matrix, Vector
+from mathutils.bvhtree import BVHTree
 
 from .presets import (
     BODY_BOUNDS,
@@ -45,6 +46,17 @@ def _sha256(path: Path) -> str:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _save_mainfile_without_backup(path: Path) -> None:
+    """Avoid a stale .blend1 without changing the operator's Blender preference."""
+    filepaths = bpy.context.preferences.filepaths
+    previous_version_count = filepaths.save_version
+    try:
+        filepaths.save_version = 0
+        bpy.ops.wm.save_as_mainfile(filepath=str(path))
+    finally:
+        filepaths.save_version = previous_version_count
 
 
 def _path_is_inside(path: Path, root: Path) -> bool:
@@ -312,23 +324,196 @@ def _hair_geometry(basis: dict[str, Vector], style: str, material: bpy.types.Mat
     return names
 
 
-def _color_diagnostic_costume(body: bpy.types.Object, style: str,
-                              material: bpy.types.Material) -> int:
-    """Color an existing skinned region; real garment geometry belongs to T4b."""
-    material_index = len(body.data.materials)
-    body.data.materials.append(material)
-    lower = 0.65 if style == "fight_kit" else 0.08
-    upper = 0.91 if style == "fight_kit" else 1.35
-    count = 0
-    for polygon in body.data.polygons:
-        points = [body.data.vertices[index].co for index in polygon.vertices]
-        center = sum(points, Vector()) / len(points)
-        if lower <= center.z <= upper and abs(center.x) <= 0.245:
-            polygon.material_index = material_index
-            count += 1
-    if count < 100:
-        raise RuntimeError(f"diagnostic {style} color region has too few body polygons: {count}")
-    return count
+def _create_skinned_garment(body: bpy.types.Object, rig: bpy.types.Object, style: str,
+                            material: bpy.types.Material) -> dict[str, Any]:
+    """Duplicate a shaped body surface patch into a separate weighted cloth shell."""
+    regions = {"fight_kit": (0.64, 1.03), "warmup": (0.08, 1.03)}
+    if style not in regions:
+        raise ValueError(f"unsupported diagnostic garment style: {style}")
+    lower, upper = regions[style]
+    group_name_by_index = {group.index: group.name for group in body.vertex_groups}
+    visible_group = body.vertex_groups.get("body")
+    if visible_group is None:
+        raise RuntimeError("MPFB body lacks the visible-skin body vertex group")
+    visible_skin = {vertex.index for vertex in body.data.vertices
+                    if any(assignment.group == visible_group.index and assignment.weight > 0.5
+                           for assignment in vertex.groups)}
+    lower_body_groups = {group.index for group in body.vertex_groups
+                         if group.name.startswith(("DEF-pelvis", "DEF-spine", "DEF-thigh", "DEF-shin", "DEF-foot", "DEF-toe"))}
+    if not lower_body_groups:
+        raise RuntimeError("MPFB body lacks lower-body deformation groups")
+
+    armature_modifiers = [modifier for modifier in body.modifiers if modifier.type == "ARMATURE"]
+    # MPFB also masks helper topology. Disable that mask while sampling the
+    # shaped source so its vertex indices still match the stored skin weights.
+    modifier_visibility = [(modifier, modifier.show_viewport, modifier.show_render)
+                           for modifier in body.modifiers]
+    shape_mesh = None
+    try:
+        for modifier, _viewport, _render in modifier_visibility:
+            modifier.show_viewport = False
+            modifier.show_render = False
+        bpy.context.view_layer.update()
+        depsgraph = bpy.context.evaluated_depsgraph_get()
+        shaped_body = body.evaluated_get(depsgraph)
+        shape_mesh = shaped_body.to_mesh(preserve_all_data_layers=True, depsgraph=depsgraph)
+        shape_mesh.update()
+        if len(shape_mesh.vertices) != len(body.data.vertices):
+            raise RuntimeError(
+                f"shaped body topology differs from the source skin-weight mesh: "
+                f"evaluated={len(shape_mesh.vertices)}, stored={len(body.data.vertices)}, "
+                f"modifiers={[(item.name, item.type, item.show_viewport) for item in body.modifiers]}"
+            )
+
+        selected_faces: list[tuple[tuple[int, ...], int]] = []
+        selected_vertex_ids: set[int] = set()
+        for polygon in shape_mesh.polygons:
+            face_vertices = tuple(polygon.vertices)
+            center = sum((shape_mesh.vertices[index].co for index in face_vertices), Vector()) / len(face_vertices)
+            if not lower <= center.z <= upper:
+                continue
+            if not all(vertex_index in visible_skin for vertex_index in face_vertices):
+                continue
+            region_weight = sum(
+                assignment.weight
+                for vertex_index in face_vertices
+                for assignment in body.data.vertices[vertex_index].groups
+                if assignment.group in lower_body_groups
+            ) / len(face_vertices)
+            if region_weight < 0.24:
+                continue
+            selected_faces.append((face_vertices, polygon.index))
+            selected_vertex_ids.update(face_vertices)
+    finally:
+        if shape_mesh is not None:
+            shaped_body.to_mesh_clear()
+        for modifier, viewport, render in modifier_visibility:
+            modifier.show_viewport = viewport
+            modifier.show_render = render
+        bpy.context.view_layer.update()
+
+    if len(selected_faces) < 250 or len(selected_vertex_ids) < 500:
+        raise RuntimeError(
+            f"diagnostic {style} garment patch is undersized: "
+            f"{len(selected_faces)} faces / {len(selected_vertex_ids)} vertices"
+        )
+
+    # Re-evaluate the shaped body without its armature to copy the actual control
+    # result and its surface normals into editable cloth vertices.
+    modifier_visibility = [(modifier, modifier.show_viewport, modifier.show_render)
+                           for modifier in body.modifiers]
+    shape_mesh = None
+    try:
+        for modifier, _viewport, _render in modifier_visibility:
+            modifier.show_viewport = False
+            modifier.show_render = False
+        bpy.context.view_layer.update()
+        depsgraph = bpy.context.evaluated_depsgraph_get()
+        shaped_body = body.evaluated_get(depsgraph)
+        shape_mesh = shaped_body.to_mesh(preserve_all_data_layers=True, depsgraph=depsgraph)
+        shape_mesh.update()
+        source_ids = sorted(selected_vertex_ids)
+        destination_index = {source: destination for destination, source in enumerate(source_ids)}
+        vertices = []
+        for source_index in source_ids:
+            normal = shape_mesh.vertices[source_index].normal.copy()
+            if normal.length < 1e-8:
+                raise RuntimeError(f"garment source vertex {source_index} has no stable surface normal")
+            point = shape_mesh.vertices[source_index].co + normal.normalized() * 0.009
+            vertices.append(tuple(float(value) for value in point))
+        faces = [tuple(destination_index[source] for source in face) for face, _poly in selected_faces]
+        source_polygon_indices = [poly for _face, poly in selected_faces]
+    finally:
+        if shape_mesh is not None:
+            shaped_body.to_mesh_clear()
+        for modifier, viewport, render in modifier_visibility:
+            modifier.show_viewport = viewport
+            modifier.show_render = render
+        bpy.context.view_layer.update()
+
+    garment_name = "Garment_FightShorts" if style == "fight_kit" else "Garment_WarmupPants"
+    garment_mesh = bpy.data.meshes.new(f"{garment_name}_Mesh")
+    garment_mesh.from_pydata(vertices, [], faces)
+    garment_mesh.update(calc_edges=True)
+    garment_mesh.materials.append(material)
+    color = tuple(float(value) for value in material.diffuse_color)
+    trim_color = tuple(min(1.0, component * 0.64 + 0.11) for component in color[:3]) + (1.0,)
+    trim_material = _material("MM_Garment_Seam", trim_color, roughness=0.78)
+    garment_mesh.materials.append(trim_material)
+    for polygon, source_polygon_index in zip(garment_mesh.polygons, source_polygon_indices):
+        polygon.use_smooth = True
+        source_polygon = body.data.polygons[source_polygon_index]
+        center_z = sum(body.data.vertices[index].co.z for index in source_polygon.vertices) / len(source_polygon.vertices)
+        polygon.material_index = 1 if center_z >= upper - 0.045 else 0
+
+    source_index_attribute = garment_mesh.attributes.new(
+        name="body_source_vertex_index", type="INT", domain="POINT",
+    )
+    for destination, source in enumerate(source_ids):
+        source_index_attribute.data[destination].value = source
+
+    garment = bpy.data.objects.new(garment_name, garment_mesh)
+    bpy.context.scene.collection.objects.link(garment)
+    garment.matrix_world = body.matrix_world.copy()
+    garment["diagnostic_layer"] = "clothing"
+    garment["asset_family_id"] = FAMILY_ID
+    garment["garment_style"] = style
+    garment["garment_representation"] = "separate_editable_skinned_shell"
+    garment["surface_ease_m"] = 0.009
+    garment["weight_transfer"] = "copied_from_shaped_body_by_source_vertex_index"
+    garment["art_status"] = "diagnostic_only"
+
+    used_group_indices = {assignment.group for source in source_ids
+                          for assignment in body.data.vertices[source].groups}
+    # Retain empty armature mask groups too. Blender clears a modifier's named
+    # vertex_group if that group does not exist on the new garment; its second
+    # Armature modifier would then deform the entire garment a second time.
+    used_group_indices.update(
+        body.vertex_groups[modifier.vertex_group].index
+        for modifier in armature_modifiers if modifier.vertex_group
+    )
+    garment_groups = {
+        group_index: garment.vertex_groups.new(name=group_name_by_index[group_index])
+        for group_index in sorted(used_group_indices)
+    }
+    for destination, source in enumerate(source_ids):
+        for assignment in body.data.vertices[source].groups:
+            target_group = garment_groups.get(assignment.group)
+            if target_group is not None and assignment.weight > 0.0:
+                target_group.add([destination], float(assignment.weight), "REPLACE")
+
+    for body_modifier in armature_modifiers:
+        modifier = garment.modifiers.new(body_modifier.name, "ARMATURE")
+        modifier.object = body_modifier.object
+        modifier.vertex_group = body_modifier.vertex_group
+        modifier.use_vertex_groups = body_modifier.use_vertex_groups
+        modifier.use_bone_envelopes = body_modifier.use_bone_envelopes
+        modifier.use_deform_preserve_volume = body_modifier.use_deform_preserve_volume
+        modifier.show_viewport = body_modifier.show_viewport
+        modifier.show_render = body_modifier.show_render
+
+    solidify = garment.modifiers.new("Garment_Seam_Thickness", "SOLIDIFY")
+    solidify.thickness = 0.003
+    solidify.offset = -1.0
+    solidify.use_even_offset = True
+    solidify.use_rim = True
+    solidify.material_offset = 0
+    solidify.material_offset_rim = 1
+
+    return {
+        "object_name": garment.name,
+        "style": style,
+        "body_polygons_copied": len(selected_faces),
+        "garment_vertices": len(vertices),
+        "garment_polygons": len(faces),
+        "weighted_vertices": len(source_ids),
+        "weight_group_count": len(garment_groups),
+        "source_vertex_attribute": "body_source_vertex_index",
+        "surface_ease_m": 0.009,
+        "shell_thickness_m": 0.003,
+        "lower_z_m": lower,
+        "upper_z_m": upper,
+    }
 
 
 def _add_face_details(body: bpy.types.Object, basis: dict[str, Vector], materials: dict[str, bpy.types.Material],
@@ -384,12 +569,34 @@ def _configure_rig_pose(rig: bpy.types.Object) -> dict[str, Any]:
     right.keyframe_insert(data_path="rotation_euler", frame=28, group="Diagnostic pose controls")
     right.rotation_euler.z = 0.0
     right.keyframe_insert(data_path="rotation_euler", frame=48, group="Diagnostic pose controls")
+    left_thigh = rig.pose.bones.get("thigh_fk.L")
+    if left_thigh is None:
+        raise RuntimeError("Rigify did not produce the T4b left thigh FK stress control")
+    left_thigh_parent = rig.pose.bones.get("thigh_parent.L")
+    if left_thigh_parent is None or "IK_FK" not in left_thigh_parent:
+        raise RuntimeError("Rigify thigh_parent.L has no IK_FK switch")
+    left_thigh_parent["IK_FK"] = 1.0
+    left_thigh_parent.keyframe_insert(data_path='["IK_FK"]', frame=1, group="Diagnostic pose controls")
+    left_thigh_parent.keyframe_insert(data_path='["IK_FK"]', frame=52, group="Diagnostic pose controls")
+    left_thigh.rotation_mode = "XYZ"
+    left_thigh.rotation_euler = (0.0, 0.0, 0.0)
+    left_thigh.keyframe_insert(data_path="rotation_euler", frame=1, group="Diagnostic pose controls")
+    left_thigh.keyframe_insert(data_path="rotation_euler", frame=50, group="Diagnostic pose controls")
+    left_thigh.rotation_euler.x = 0.72
+    left_thigh.keyframe_insert(data_path="rotation_euler", frame=51, group="Diagnostic pose controls")
+    left_thigh.keyframe_insert(data_path="rotation_euler", frame=52, group="Diagnostic pose controls")
+    left_thigh.rotation_euler.x = 0.0
+    left_thigh.keyframe_insert(data_path="rotation_euler", frame=53, group="Diagnostic pose controls")
     return {
         "fk_controls": found,
         "ik_fk_switches": parent_switches,
-        "pose_keyframes": [1, 27, 28, 48],
+        "pose_keyframes": [1, 27, 28, 48, 50, 51, 52, 53],
         "probe_rotation_radians": 0.60,
-        "scope": "isolated arm deformation probe; not combat choreography",
+        "leg_stress_control": "thigh_fk.L",
+        "leg_ik_fk_switch": "thigh_parent.L",
+        "leg_stress_rotation_radians": 0.72,
+        "leg_stress_frame": 52,
+        "scope": "isolated arm and hip/leg deformation probes; not combat choreography",
     }
 
 
@@ -419,7 +626,7 @@ def _add_floor_and_lighting() -> None:
     scene.render.image_settings.compression = 20
     scene.render.fps = 24
     scene.frame_start = 1
-    scene.frame_end = 48
+    scene.frame_end = 53
     scene.unit_settings.system = "METRIC"
     scene.unit_settings.scale_length = 1.0
     scene.world = scene.world or bpy.data.worlds.new("MM_Diagnostic_World")
@@ -489,6 +696,18 @@ def _render_review_views(rig: bpy.types.Object, output_dir: Path) -> dict[str, s
         bpy.ops.render.render(write_still=True)
         paths[name] = str(path)
 
+    garment_center = Vector((0.0, -0.12, 0.76))
+    for name, direction in (
+        ("garment-front", front),
+        ("garment-three-quarter", (front + side * 0.72).normalized()),
+    ):
+        path = output_dir / f"fighter-family-{name}.png"
+        _make_camera(f"ReviewCamera_{name}", garment_center, direction, 0.70, (512, 512), path)
+        scene.frame_set(1)
+        bpy.context.view_layer.update()
+        bpy.ops.render.render(write_still=True)
+        paths[name] = str(path)
+
     face_target = basis["origin"] + basis["up"] * 0.055 + front * 0.020
     face_path = output_dir / "fighter-family-face.png"
     _make_camera("ReviewCamera_face", face_target, front, 0.42, (512, 512), face_path)
@@ -515,6 +734,20 @@ def _render_review_views(rig: bpy.types.Object, output_dir: Path) -> dict[str, s
     bpy.context.view_layer.update()
     bpy.ops.render.render(write_still=True)
     paths["stress_arm_frame_27"] = str(stress_path)
+    for frame, suffix in ((28, "frame-28"), (52, "hip-leg-frame-52")):
+        path = output_dir / f"fighter-family-stress-{suffix}.png"
+        scene.camera = bpy.data.objects.get("ReviewCamera_front")
+        scene.render.filepath = str(path)
+        scene.frame_set(frame)
+        bpy.context.view_layer.update()
+        bpy.ops.render.render(write_still=True)
+        paths[f"stress_{suffix.replace('-', '_')}"] = str(path)
+    garment_stress_path = output_dir / "fighter-family-garment-stress-hip-leg-frame-52.png"
+    _make_camera("ReviewCamera_garment_stress", garment_center, front, 0.70, (512, 512), garment_stress_path)
+    scene.frame_set(52)
+    bpy.context.view_layer.update()
+    bpy.ops.render.render(write_still=True)
+    paths["garment_stress_hip_leg_frame_52"] = str(garment_stress_path)
     scene.frame_set(1)
     bpy.context.view_layer.update()
     scene.camera = bpy.data.objects.get("ReviewCamera_front")
@@ -528,6 +761,116 @@ def _mesh_world_points(obj: bpy.types.Object) -> list[Vector]:
     points = [evaluated.matrix_world @ vertex.co for vertex in mesh.vertices]
     evaluated.to_mesh_clear()
     return points
+
+
+def _garment_clearance_metrics(body: bpy.types.Object, garment: bpy.types.Object) -> dict[str, Any]:
+    """Measure matched skin-to-shell offsets and nearest surface separation in the live pose."""
+    solidify = next((modifier for modifier in garment.modifiers if modifier.type == "SOLIDIFY"), None)
+    if solidify is None:
+        return {"status": "missing_shell_thickness_modifier"}
+    was_visible = solidify.show_viewport
+    solidify.show_viewport = False
+    topology_modifiers = [(modifier, modifier.show_viewport) for modifier in body.modifiers
+                          if modifier.type == "MASK"]
+    for modifier, _visible in topology_modifiers:
+        modifier.show_viewport = False
+    body_mesh = garment_mesh = None
+    try:
+        bpy.context.view_layer.update()
+        depsgraph = bpy.context.evaluated_depsgraph_get()
+        evaluated_body = body.evaluated_get(depsgraph)
+        evaluated_garment = garment.evaluated_get(depsgraph)
+        body_mesh = evaluated_body.to_mesh(preserve_all_data_layers=True, depsgraph=depsgraph)
+        garment_mesh = evaluated_garment.to_mesh(preserve_all_data_layers=True, depsgraph=depsgraph)
+        attribute = garment_mesh.attributes.get("body_source_vertex_index")
+        if attribute is None or attribute.domain != "POINT" or attribute.data_type != "INT":
+            return {"status": "source_vertex_map_missing"}
+        if len(attribute.data) != len(garment_mesh.vertices):
+            return {"status": "source_vertex_map_size_mismatch"}
+
+        body_points = [evaluated_body.matrix_world @ vertex.co for vertex in body_mesh.vertices]
+        garment_points = [evaluated_garment.matrix_world @ vertex.co for vertex in garment_mesh.vertices]
+        normals_xform = evaluated_body.matrix_world.to_3x3().inverted().transposed()
+        garment_normals_xform = evaluated_garment.matrix_world.to_3x3().inverted().transposed()
+        signed_offsets: list[float] = []
+        matched_samples: list[tuple[float, int, int, Vector, Vector]] = []
+        nearest_distances: list[float] = []
+        for garment_index, point in enumerate(garment_points):
+            source_index = int(attribute.data[garment_index].value)
+            if not 0 <= source_index < len(body_mesh.vertices):
+                return {"status": "source_vertex_index_out_of_range"}
+            normal = normals_xform @ body_mesh.vertices[source_index].normal
+            if normal.length < 1e-8:
+                continue
+            normal.normalize()
+            offset = float((point - body_points[source_index]).dot(normal))
+            signed_offsets.append(offset)
+            matched_samples.append((offset, garment_index, source_index, point, body_points[source_index]))
+
+        visible_group = body.vertex_groups.get("body")
+        visible_skin = {vertex.index for vertex in body.data.vertices
+                        if any(assignment.group == visible_group.index and assignment.weight > 0.5
+                               for assignment in vertex.groups)} if visible_group is not None else set()
+        body_tree = BVHTree.FromPolygons(
+            body_points,
+            [tuple(polygon.vertices) for polygon in body_mesh.polygons
+             if all(index in visible_skin for index in polygon.vertices)],
+            all_triangles=False,
+        )
+        for point in garment_points:
+            nearest = body_tree.find_nearest(point)
+            if nearest is not None and nearest[3] is not None:
+                nearest_distances.append(float(nearest[3]))
+        if not signed_offsets or not nearest_distances:
+            return {"status": "no_clearance_samples"}
+        source_faces = {tuple(sorted(polygon.vertices)): polygon
+                        for polygon in body_mesh.polygons}
+        face_normal_dots: list[float] = []
+        face_centroid_offsets: list[float] = []
+        for polygon in garment_mesh.polygons:
+            source_ids = tuple(sorted(int(attribute.data[index].value) for index in polygon.vertices))
+            source_polygon = source_faces.get(source_ids)
+            if source_polygon is None:
+                continue
+            body_normal = (normals_xform @ source_polygon.normal).normalized()
+            garment_normal = (garment_normals_xform @ polygon.normal).normalized()
+            body_center = sum((body_points[index] for index in source_polygon.vertices), Vector()) / len(source_polygon.vertices)
+            garment_center = sum((garment_points[index] for index in polygon.vertices), Vector()) / len(polygon.vertices)
+            face_normal_dots.append(float(body_normal.dot(garment_normal)))
+            face_centroid_offsets.append(float((garment_center - body_center).dot(body_normal)))
+        return {
+            "status": "measured",
+            "sampled_vertices": len(signed_offsets),
+            "matched_signed_offset_min_m": round(min(signed_offsets), 7),
+            "matched_signed_offset_median_m": round(sorted(signed_offsets)[len(signed_offsets) // 2], 7),
+            "matched_signed_offset_max_m": round(max(signed_offsets), 7),
+            "matched_vertices_at_or_below_1mm": sum(value <= 0.001 for value in signed_offsets),
+            "worst_matched_samples": [
+                {"offset_m": round(offset, 7), "garment_vertex": garment_index,
+                 "body_vertex": source_index,
+                 "garment_world_m": [round(float(v), 5) for v in point],
+                 "body_world_m": [round(float(v), 5) for v in body_point]}
+                for offset, garment_index, source_index, point, body_point
+                in sorted(matched_samples, key=lambda sample: sample[0])[:5]
+            ],
+            "nearest_body_surface_min_m": round(min(nearest_distances), 7),
+            "nearest_vertices_at_or_below_1mm": sum(value <= 0.001 for value in nearest_distances),
+            "matched_faces": len(face_centroid_offsets),
+            "face_normal_dot_min": round(min(face_normal_dots), 7) if face_normal_dots else None,
+            "face_normal_opposed_count": sum(value < 0.0 for value in face_normal_dots),
+            "face_centroid_offset_min_m": round(min(face_centroid_offsets), 7) if face_centroid_offsets else None,
+            "face_centroids_at_or_below_1mm": sum(value <= 0.001 for value in face_centroid_offsets),
+            "interpretation": "Sampled corresponding-vertex offsets and unsigned nearest-surface distances; not cloth simulation or a whole-mesh collision proof.",
+        }
+    finally:
+        if body_mesh is not None:
+            evaluated_body.to_mesh_clear()
+        if garment_mesh is not None:
+            evaluated_garment.to_mesh_clear()
+        solidify.show_viewport = was_visible
+        for modifier, visible in topology_modifiers:
+            modifier.show_viewport = visible
+        bpy.context.view_layer.update()
 
 
 def _bounds(points: list[Vector]) -> dict[str, list[float]] | None:
@@ -558,6 +901,8 @@ def collect_scene_state() -> dict[str, Any]:
     rig = bpy.data.objects.get("Human.rigify")
     if body is None or body.type != "MESH" or rig is None or rig.type != "ARMATURE":
         raise RuntimeError("reopened preset is missing its Human body mesh or Rigify armature")
+    garment = next((obj for obj in bpy.data.objects
+                    if obj.type == "MESH" and obj.get("diagnostic_layer") == "clothing"), None)
 
     scene = bpy.context.scene
     body_points = _mesh_world_points(body)
@@ -594,7 +939,7 @@ def collect_scene_state() -> dict[str, Any]:
     baseline_points = _mesh_world_points(body)
     baseline_bounds = _bounds(baseline_points)
     sampled = []
-    for frame in (1, 27, 28, 48):
+    for frame in (1, 27, 28, 52):
         scene.frame_set(frame)
         bpy.context.view_layer.update()
         points = _mesh_world_points(body)
@@ -608,6 +953,8 @@ def collect_scene_state() -> dict[str, Any]:
             "vertices_changed_gt_1e-5_from_frame_1": sum(value > 1e-5 for value in displacements),
             "max_vertex_displacement_from_frame_1_m": round(max(displacements, default=0.0), 7),
             "rig_control_rotation": [round(float(value), 7) for value in rig.pose.bones["upper_arm_fk.R"].rotation_euler],
+            "leg_control_rotation": [round(float(value), 7) for value in rig.pose.bones["thigh_fk.L"].rotation_euler],
+            "garment_clearance": _garment_clearance_metrics(body, garment) if garment is not None else None,
         })
 
     modifier_probe: dict[str, Any] = {"frame": 27, "status": "not_measured"}
@@ -684,8 +1031,19 @@ def collect_scene_state() -> dict[str, Any]:
             "materials": [material.name for material in obj.data.materials if material],
             "vertex_groups": [group.name for group in obj.vertex_groups],
             "armature_targets": [modifier.object.name if modifier.object else None for modifier in obj.modifiers if modifier.type == "ARMATURE"],
+            "modifier_stack": [{
+                "name": modifier.name,
+                "type": modifier.type,
+                "target": modifier.object.name if modifier.type == "ARMATURE" and modifier.object else None,
+                "vertex_group": modifier.vertex_group if modifier.type == "ARMATURE" else None,
+                "thickness_m": round(float(modifier.thickness), 7) if modifier.type == "SOLIDIFY" else None,
+                "show_viewport": bool(modifier.show_viewport),
+                "show_render": bool(modifier.show_render),
+            } for modifier in obj.modifiers],
             "diagnostic_layer": obj.get("diagnostic_layer"),
             "attachment_bone": obj.get("attachment_bone"),
+            "garment_style": obj.get("garment_style"),
+            "garment_representation": obj.get("garment_representation"),
         })
 
     return {
@@ -730,7 +1088,30 @@ def collect_scene_state() -> dict[str, Any]:
             "pose_action_present": bool(rig.animation_data and rig.animation_data.action),
             "pose_action_name": rig.animation_data.action.name if rig.animation_data and rig.animation_data.action else None,
             "style_controls": {key: rig.get(key) for key in ("hair_style", "clothing_style", "skin_palette", "clothing_palette")},
+            "leg_stress_control": "thigh_fk.L",
             "key_bones": relevant_bones,
+        },
+        "garment": {
+            "present": garment is not None,
+            "object_name": garment.name if garment is not None else None,
+            "style": garment.get("garment_style") if garment is not None else None,
+            "representation": garment.get("garment_representation") if garment is not None else None,
+            "surface_ease_m": garment.get("surface_ease_m") if garment is not None else None,
+            "source_vertex_attribute": "body_source_vertex_index" if garment is not None and garment.data.attributes.get("body_source_vertex_index") else None,
+            "material_names": [material.name for material in garment.data.materials if material] if garment is not None else [],
+            "stored_vertex_count": len(garment.data.vertices) if garment is not None else 0,
+            "stored_polygon_count": len(garment.data.polygons) if garment is not None else 0,
+            "weighted_vertex_count": sum(bool(vertex.groups) for vertex in garment.data.vertices) if garment is not None else 0,
+            "vertex_group_count": len(garment.vertex_groups) if garment is not None else 0,
+            "armature_modifier_targets": [modifier.object.name if modifier.object else None
+                                           for modifier in garment.modifiers if modifier.type == "ARMATURE"] if garment is not None else [],
+            "solidify_modifier": next(({
+                "name": modifier.name,
+                "thickness_m": round(float(modifier.thickness), 7),
+                "offset": round(float(modifier.offset), 4),
+                "use_even_offset": bool(modifier.use_even_offset),
+                "use_rim": bool(modifier.use_rim),
+            } for modifier in garment.modifiers if modifier.type == "SOLIDIFY"), None) if garment is not None else None,
         },
         "objects": objects,
         "stress_samples": sampled,
@@ -744,6 +1125,7 @@ def collect_scene_state() -> dict[str, Any]:
         "verdict": {
             "saved_scene_integrity": "pass" if body_bounds and body_materials and armature_stack == expected_stack else "fail",
             "rig_deformation_probe": "pass" if len(sampled) >= 3 and sampled[1]["vertices_changed_gt_1e-5_from_frame_1"] > 0 else "fail",
+            "garment_geometry": "pass" if garment is not None and len(garment.data.vertices) >= 500 and len(garment.data.polygons) >= 250 else "missing_or_undersized",
             "face_hand_hair_clothing_presence": "pending visual review",
             "art_status": "diagnostic only; not reviewed or approved; no fighter likeness claim",
         },
@@ -827,7 +1209,7 @@ def build_native_preset(output_path: str | Path, *, controls: dict[str, Any] | N
     human.hide_viewport = False
 
     skin = _material("MM_Skin_" + resolved["skin_palette"], SKIN_PALETTES[resolved["skin_palette"]], roughness=0.61)
-    costume = _material("MM_Costume_" + resolved["clothing_palette"], CLOTHING_PALETTES[resolved["clothing_palette"]], roughness=0.66)
+    costume = _material("MM_Costume_" + resolved["clothing_palette"], CLOTHING_PALETTES[resolved["clothing_palette"]], roughness=0.76)
     hair_material = _material("MM_Hair_Ink", (0.017, 0.020, 0.028, 1.0), roughness=0.42)
     iris = _material("MM_Eye_Iris", (0.18, 0.065, 0.025, 1.0), roughness=0.31)
     pupil = _material("MM_Eye_Pupil", (0.008, 0.006, 0.009, 1.0), roughness=0.24)
@@ -842,14 +1224,14 @@ def build_native_preset(output_path: str | Path, *, controls: dict[str, Any] | N
                                       {"iris": iris, "pupil": pupil, "brow": brow},
                                       rig, head_deform)
     hair_objects = _hair_geometry(face_basis, resolved["hair_style"], hair_material, rig, head_deform)
-    clothing_polygons = _color_diagnostic_costume(human, resolved["clothing_style"], costume)
+    clothing_geometry = _create_skinned_garment(human, rig, resolved["clothing_style"], costume)
     _add_floor_and_lighting()
     pose_metadata = _configure_rig_pose(rig)
 
     controls_json = json.dumps(resolved, sort_keys=True, separators=(",", ":"))
     human["asset_family_id"] = FAMILY_ID
     human["art_status"] = "diagnostic_only"
-    human["clothing_representation"] = "skinned_material_region_only"
+    human["clothing_representation"] = "separate_editable_skinned_garment_shell"
     human["preset_controls_json"] = controls_json
     human["applied_mpfb_targets_json"] = json.dumps(applied_face_targets, sort_keys=True, separators=(",", ":"))
     rig["asset_family_id"] = FAMILY_ID
@@ -874,20 +1256,21 @@ def build_native_preset(output_path: str | Path, *, controls: dict[str, Any] | N
     scene.camera = None
     manifest = family_manifest()
     manifest.update({
-        "asset_id": "native-fighter-family-diagnostic-v1",
-        "revision": "r1",
+        "asset_id": "native-fighter-family-diagnostic-v1.1",
+        "revision": "r2",
         "created_with": runtime,
         "enabled_addons": addon_states,
         "controls_applied": resolved,
         "base_phenotype_gender": 0.86,
         "mpfb_targets_applied": applied_face_targets,
-        "attached_diagnostic_objects": {"face": facial_objects, "hair": hair_objects, "clothing": []},
-        "diagnostic_clothing": {"representation": "skinned_material_region_only", "body_polygons": clothing_polygons},
+        "attached_diagnostic_objects": {"face": facial_objects, "hair": hair_objects,
+                                        "clothing": [clothing_geometry["object_name"]]},
+        "diagnostic_clothing": clothing_geometry,
         "rig_pose_probe": pose_metadata,
         "artifact": {"path": str(output.relative_to(REPO_ROOT).as_posix()) if _path_is_inside(output, REPO_ROOT) else output.name},
     })
     bpy.context.scene["model_preset_manifest_json"] = json.dumps(manifest, sort_keys=True, separators=(",", ":"))
-    bpy.ops.wm.save_as_mainfile(filepath=str(output))
+    _save_mainfile_without_backup(output)
 
     render_paths: dict[str, str] = {}
     if render_dir is not None:
@@ -895,7 +1278,7 @@ def build_native_preset(output_path: str | Path, *, controls: dict[str, Any] | N
         # Restore the neutral pose and camera before saving the deliverable scene.
         scene.frame_set(1)
         bpy.context.view_layer.update()
-        bpy.ops.wm.save_as_mainfile(filepath=str(output))
+        _save_mainfile_without_backup(output)
     return {
         "manifest": manifest,
         "runtime": runtime,
