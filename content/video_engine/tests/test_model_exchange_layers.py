@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -58,6 +59,44 @@ def test_exact_nearest_source_mapping_preserves_contact_samples() -> None:
     assert exchange._event_ids(24) == ["left_hook_contact"]
     assert exchange._event_ids(25) == ["receiving_head_response"]
     assert exchange._event_ids(26) == ["left_hand_follow_through"]
+
+
+@pytest.mark.parametrize(
+    ("recorded_bytes", "checkout_bytes"),
+    [
+        (b"VALUE = 42\nNEXT = True\n", b"VALUE = 42\r\nNEXT = True\r\n"),
+        (b"VALUE = 42\r\nNEXT = True\r\n", b"VALUE = 42\nNEXT = True\n"),
+        (b"VALUE = 42\nNEXT = True\n", b"VALUE = 42\nNEXT = True\n"),
+    ],
+)
+def test_tracked_python_hash_accepts_exact_or_lf_crlf_equivalent_bytes(
+    tmp_path: Path,
+    recorded_bytes: bytes,
+    checkout_bytes: bytes,
+) -> None:
+    implementation = tmp_path / "implementation.py"
+    implementation.write_bytes(checkout_bytes)
+    expected = hashlib.sha256(recorded_bytes).hexdigest()
+
+    assert exchange._verify_tracked_python_sha256(implementation, expected, "test implementation") in {
+        "exact", "lf_crlf_equivalent",
+    }
+
+
+def test_tracked_python_hash_rejects_code_changes_and_lone_cr_endings(tmp_path: Path) -> None:
+    recorded = b"VALUE = 42\nNEXT = True\n"
+    implementation = tmp_path / "implementation.py"
+    implementation.write_bytes(b"VALUE = 43\r\nNEXT = True\r\n")
+    with pytest.raises(exchange.ExchangeLayersError, match="only exact bytes or LF/CRLF-only"):
+        exchange._verify_tracked_python_sha256(
+            implementation, hashlib.sha256(recorded).hexdigest(), "test implementation",
+        )
+
+    implementation.write_bytes(recorded.replace(b"\n", b"\r"))
+    with pytest.raises(exchange.ExchangeLayersError, match="only exact bytes or LF/CRLF-only"):
+        exchange._verify_tracked_python_sha256(
+            implementation, hashlib.sha256(recorded).hexdigest(), "test implementation",
+        )
 
 
 def test_build_reopens_saved_scene_and_verifies_all_phone_frames(bundle) -> None:

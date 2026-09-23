@@ -117,6 +117,41 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _verify_tracked_python_sha256(path: Path, expected_sha256: Any, label: str) -> str:
+    """Accept exact Python bytes or the same source with LF/CRLF-only changes.
+
+    Receipts keep the raw digest written by their producing checkout. The
+    validator permits only the two common newline encodings of identical text;
+    it does not normalize code, whitespace, or any binary evidence.
+    """
+    if (not isinstance(expected_sha256, str) or len(expected_sha256) != 64
+            or any(char not in "0123456789abcdefABCDEF" for char in expected_sha256)):
+        raise ExchangeLayersError(f"{label} SHA-256 pin is malformed")
+    try:
+        payload = Path(path).read_bytes()
+    except OSError as exc:
+        raise ExchangeLayersError(f"cannot read tracked Python implementation for {label}: {path}") from exc
+
+    raw_digest = hashlib.sha256(payload).hexdigest()
+    lf = bytes((10,))
+    cr = bytes((13,))
+    crlf = cr + lf
+    # Refuse to synthesize candidates for lone-CR files; only LF and CRLF are
+    # checkout line endings covered by this compatibility check.
+    without_crlf = payload.replace(crlf, b"")
+    digests = {raw_digest}
+    if cr not in without_crlf:
+        lf_payload = payload.replace(crlf, lf)
+        digests.add(hashlib.sha256(lf_payload).hexdigest())
+        digests.add(hashlib.sha256(lf_payload.replace(lf, crlf)).hexdigest())
+    normalized_expected = expected_sha256.lower()
+    if normalized_expected not in digests:
+        raise ExchangeLayersError(
+            f"{label} SHA-256 differs; only exact bytes or LF/CRLF-only line-ending changes are accepted"
+        )
+    return "exact" if normalized_expected == raw_digest else "lf_crlf_equivalent"
+
+
 def _canonical_sha256(value: Any) -> str:
     payload = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
@@ -234,9 +269,11 @@ def validate_source_bundle(
     expected_source = {name: fixture[name] for name in ("source_video", "source_clock", "source_blend")}
     if (receipt.get("source") != expected_source
             or receipt.get("source_blend_sha256_after") != fixture["source_blend"]["sha256"]
-            or receipt.get("fixture_sha256") != fight_motion.FIXTURE_SHA256
-            or receipt.get("implementation_sha256") != sha256(Path(fight_motion.__file__))):
-        raise ExchangeLayersError("parent source, fixture, or fight-motion implementation pin differs")
+            or receipt.get("fixture_sha256") != fight_motion.FIXTURE_SHA256):
+        raise ExchangeLayersError("parent source or fixture pin differs")
+    _verify_tracked_python_sha256(
+        Path(fight_motion.__file__), receipt.get("implementation_sha256"), "fight_motion.py implementation",
+    )
     frames = receipt.get("frames")
     metrics = receipt.get("metrics")
     if (not isinstance(frames, list) or len(frames) != 36
@@ -1013,14 +1050,19 @@ def validate_bundle(
     }
     if receipt.get("inputs") != expected_input_pins:
         raise ExchangeLayersError("receipt source, fixture, saved-scene, or source-receipt pins differ")
-    expected_implementation = {
-        "module_path": Path(__file__).resolve().relative_to(root).as_posix(),
-        "module_sha256": sha256(Path(__file__)),
-        "script_path": (root / "content/video_engine/scripts/model_exchange_layers.py").relative_to(root).as_posix(),
-        "script_sha256": sha256(root / "content/video_engine/scripts/model_exchange_layers.py"),
-    }
-    if receipt.get("implementation") != expected_implementation:
-        raise ExchangeLayersError("exchange layer implementation SHA-256 differs")
+    implementation = receipt.get("implementation")
+    module_path = Path(__file__).resolve()
+    script_path = root / "content/video_engine/scripts/model_exchange_layers.py"
+    if (not isinstance(implementation, Mapping)
+            or implementation.get("module_path") != module_path.relative_to(root).as_posix()
+            or implementation.get("script_path") != script_path.relative_to(root).as_posix()):
+        raise ExchangeLayersError("exchange layer implementation path differs")
+    _verify_tracked_python_sha256(
+        module_path, implementation.get("module_sha256"), "exchange_layers.py implementation",
+    )
+    _verify_tracked_python_sha256(
+        script_path, implementation.get("script_sha256"), "model_exchange_layers.py CLI",
+    )
     if receipt.get("source_mapping") != {
         "rule": "floor((5*n+1)/4)",
         "interpretation": "nearest 30 fps source frame to each 24 fps sample; exact ties round down",
