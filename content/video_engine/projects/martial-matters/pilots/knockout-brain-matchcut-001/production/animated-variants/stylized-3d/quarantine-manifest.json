@@ -1,0 +1,77 @@
+{
+  "schema": "stylized-3d-review-manifest.v1",
+  "review_state": "review_only_quarantine",
+  "approval_state": "operator_pending",
+  "render_eligible": false,
+  "artifacts": [
+    {
+      "path": "build_stylized_fight.py",
+      "bytes": 53354,
+      "sha256": "f08856e7c9f07565f81e9c1eaac1f6043aa8257b92ac1d38366f5b31c80395ad"
+    },
+    {
+      "path": "PROOF.md",
+      "bytes": 1866,
+      "sha256": "860ad8fae780a88b40a403ef4c8ddc733444acbacb3ca3c22f754c534760137a"
+    },
+    {
+      "path": "stylized-fight-preview.blend",
+      "bytes": 493683,
+      "sha256": "7a04785f86a03b4469a74644e255d0e06ac1195f8d270cf6dc3497c26d972b55"
+    },
+    {
+      "path": "scene-contact-inspection.json",
+      "bytes": 47320,
+      "sha256": "e782c50452704dfb644c3a490a5304452551e003ab80ade2dc5d67b3731cc0ec"
+    },
+    {
+      "path": "character-still-guard.png",
+      "bytes": 566044,
+      "sha256": "00aed010effc08e959b8fe3756c02b4ed0394ebbc3741e1c923a54beec7225a0"
+    },
+    {
+      "path": "character-still-contact.png",
+      "bytes": 577166,
+      "sha256": "fb53e28f3a8ed23784392f358c2b6f20417874872e56b46dfeca314d8c69f5c6"
+    },
+    {
+      "path": "character-still-fall.png",
+      "bytes": 570165,
+      "sha256": "f79cd6a6bc2a985943b2cd20419d1d140eeda5e753b06cfae4351a390800aae2"
+    },
+    {
+      "path": "stylized-fight-preview.mp4",
+      "bytes": 225901,
+      "sha256": "d30c23f9ef34b1dfa534d30a0be16d08bf4d0c9ba00bb28eb106f97dcef6b303"
+    },
+    {
+      "path": "encode.json",
+      "bytes": 4893,
+      "sha256": "867ac93c7fffe0f09f702d7239ee15936339a7f0eab9f15b3a2aff0ae5c7d386"
+    },
+    {
+      "path": "ffprobe.json",
+      "bytes": 838,
+      "sha256": "8a8c252f79a385209fda7e7a402b7ffccd80dd5df00d6b48d7809bf945dee339"
+    },
+    {
+      "path": "full-decode.json",
+      "bytes": 507,
+      "sha256": "0280be729e8e4aeb747fe1f99012735bfe9cf816a7504046883ebc44d496c7af"
+    }
+  ],
+  "still_frames": [
+    1,
+    48,
+    96
+  ],
+  "animation": {
+    "duration_seconds": 4.0,
+    "fps": 24,
+    "frames": 96
+  },
+  "validation": {
+    "ffprobe_returncode": 0,
+    "full_decode_returncode": 0
+  }
+}

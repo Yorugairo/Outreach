@@ -1,0 +1,46 @@
+{
+  "status": "private_review",
+  "method": "built-in imagegen except source-reference extracted from existing footage",
+  "files": [
+    {
+      "file": "detailed-2d-end-v1.png",
+      "sha256": "1a3d756f0b4a57c43cacc3ea1d6de00edb3a9964aeeb4cf364292319e958bbee"
+    },
+    {
+      "file": "detailed-2d-start-v2.png",
+      "sha256": "37929e4e2fa4d7c2bd724fbf183841465c5adedebcf1ae01221d8c91d3e38c1f"
+    },
+    {
+      "file": "henderson-source-reference.png",
+      "sha256": "df48f67907cfa0a3f70e62a5e4c0b0f4a47fb527ae7af3255b653baf4d1225db"
+    },
+    {
+      "file": "henderson-start-v1.png",
+      "sha256": "c0e999f1e3a3ec0d74f8e97c28c1644729e3a699b476386aa750d1638e24d80d"
+    },
+    {
+      "file": "interview-neutral-v1.png",
+      "sha256": "78a3f9e3a491e79828ad843e0acdef353670d158827129687706581d1c744f41"
+    },
+    {
+      "file": "interview-reaction-v1.png",
+      "sha256": "0934f71a27266e6a4107c0c7865fe77868a9b690842bcb07eab42b8e87eb1416"
+    },
+    {
+      "file": "roshi-end-v1.png",
+      "sha256": "1a73e1003ecf30a1f871fb14620c1488be8bf8c5f080fcee744995c073130b74"
+    },
+    {
+      "file": "roshi-start-v1.png",
+      "sha256": "cb24f337cb62399e022b99cbfd9a1a46ad1e13a330de52950033d109af5964c2"
+    },
+    {
+      "file": "saitama-end-v1.png",
+      "sha256": "1ae741d738b6ceb74185013c3273dcd93fdcfc964792e3902613b15ed93ad952"
+    },
+    {
+      "file": "saitama-start-v1.png",
+      "sha256": "c3eec5049121e0811a597f011f3ac7a5cf0451c5802b0255823f47bbad449502"
+    }
+  ]
+}

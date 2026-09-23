@@ -1,0 +1,55 @@
+{
+  "schema": "flow_preflight.v1",
+  "checked_at": "2026-09-20T17:41:15-07:00",
+  "scope": "read_only_preflight",
+  "project": "knockout-brain-matchcut-001",
+  "authenticated_flow_browser": {
+    "status": "unavailable",
+    "dedicated_cdp": {
+      "endpoint": "http://127.0.0.1:9223",
+      "result": "ECONNREFUSED",
+      "driver_check": "node tools/google-flow-driver/scripts/check-flow-state.mjs -> connect ECONNREFUSED"
+    },
+    "fallback_cdp": {
+      "endpoint": "http://127.0.0.1:9222",
+      "result": "not a DevTools endpoint (HTTP 404 on /json/version and /json/list; Playwright connect rejected 404)"
+    },
+    "available_browser_check": "Codex in-app browser reached Google account chooser, signed out; no authenticated Flow canvas was present",
+    "action": "STOP; operator must launch the signed-in dedicated Flow Chrome profile; no credentials entered"
+  },
+  "exact_resume_route": {
+    "url": "https://flow.google.com",
+    "driver": "tools/google-flow-driver/mcp/server.mjs:create_flow_video",
+    "mode": "video",
+    "submode": "frames",
+    "model_label": "Omni 1.1 Flash",
+    "ratio": "9:16",
+    "inputs": "approved start frame + approved end frame + character chip; prompt text contains no @ token",
+    "count": 1,
+    "pre_submit_gate": "read the live 'Generating will use N credits' meter; refuse if model/mode/cost do not match"
+  },
+  "model_and_cost": {
+    "current_live_value": "unknown: no authenticated Flow UI was available",
+    "last_repo_observed_video": "Omni 1.1 Flash, 10 credits per 6s clip at x1/720p",
+    "historical_batch_observation": "24 credits at x2/8s/720p; measured x1/6s was 10 credits",
+    "five_variant_budget_if_meter_is_unchanged": "50 credits for five x1/6s clips; verify live meter before any submit",
+    "evidence": [
+      "review/claims/mp-host-transitions-v1/WORK-ORDER.md",
+      "review/claims/mp-host-transitions-v1/batch.json",
+      "docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:19,72,81",
+      "tools/google-flow-driver/src/cdp-driver.mjs:348-470"
+    ]
+  },
+  "conditioning_capability": {
+    "image_to_video": "supported by the implemented driver as frame-conditioned interpolation: startFrame + endFrame, optional character chip, and up to three image references",
+    "source_video_transform": "not exposed by the current driver or MCP contract; no source-video/video-to-video input or transform parameter exists",
+    "quality_caveat": "detailed anime 2D remains unverified for this project; operator ruling is stills-first and frames over ingredients for shot clips"
+  },
+  "inputs_seen": {
+    "style_board": "production/animated-variants/style-board-v1.png",
+    "style_board_sha256": "65c0a4cf061ffd557fe1519874b72108634203eb838f5aee436728e40f7ca027",
+    "motion_inputs": "parent-prepared individual inputs; none uploaded or submitted by this preflight"
+  },
+  "generation_submitted": false,
+  "credits_spent_by_this_preflight": 0
+}

@@ -1,0 +1,28 @@
+{
+ "engine": "kokoro-82M",
+ "voice": "am_michael",
+ "rate": 1.2,
+ "duration_s": 2.08,
+ "words": [
+  {
+   "w": "Now",
+   "start_s": 0.325,
+   "end_s": 0.55
+  },
+  {
+   "w": "watch",
+   "start_s": 0.55,
+   "end_s": 0.85
+  },
+  {
+   "w": "that",
+   "start_s": 0.85,
+   "end_s": 1.012
+  },
+  {
+   "w": "again.",
+   "start_s": 1.012,
+   "end_s": 1.725
+  }
+ ]
+}

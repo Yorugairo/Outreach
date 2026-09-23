@@ -1,0 +1,65 @@
+{
+  "schema_version": "source-recovery-receipt.v1",
+  "project": "martial-matters/pilots/knockout-brain-matchcut-001",
+  "lane": "recover_source_fight",
+  "observed_at": "2026-09-20",
+  "status": "conditional",
+  "review_only": true,
+  "render_eligible": false,
+  "operator_approval": "required",
+  "public_unauthenticated_retrieval": true,
+  "supplied_short": {
+    "source_url": "https://youtube.com/shorts/ID0sgoVzFNQ?si=MU3r0VLMpfC8VGyC",
+    "canonical_watch_url": "https://www.youtube.com/watch?v=ID0sgoVzFNQ",
+    "channel_observed": "One Stop MMA",
+    "title_observed": "Gable Steveson Gets Slept in 5 Seconds 😳 #ufc #mma",
+    "selected_format": "616+251",
+    "media_path": "supplied-short-high.mkv",
+    "video_track_path": "supplied-short-high.f616.mp4",
+    "audio_track_path": "supplied-short-high.f251.webm",
+    "ffprobe_path": "ffprobe-supplied-short-high.mkv.json",
+    "dimensions": "1080x1920",
+    "video_codec": "vp9",
+    "audio_codec": "opus",
+    "fps": 30,
+    "duration_seconds": 24.361,
+    "visual_knockout_window_seconds": "approximately 15.3-16.7 (Short timeline; contact sheets)",
+    "captions": [
+      "supplied-short-high.en-orig.vtt",
+      "supplied-short-high.en.vtt"
+    ],
+    "caption_limit": "Publisher captions say Sean Sherriff and 10 seconds; retain verbatim, but do not treat those names/times or the embedded allegation as verified fact."
+  },
+  "underlying_fight": {
+    "source_url": "https://www.ufc.com/video/160276",
+    "source_page_path": "ufc-video-160276.html",
+    "provider_response_path": "ufc-sharaf-steveson-provider.json",
+    "media_path": "ufc-sharaf-steveson-high.mkv",
+    "metadata_path": "ufc-sharaf-steveson-high.info.json",
+    "ffprobe_path": "ffprobe-ufc-sharaf-steveson-high.mkv.json",
+    "title_observed": "Sean Sharaf Knocks Steveson Out In 12 Seconds | Crypto.com UFC 331 | UFC",
+    "dimensions": "1920x1080",
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "fps": 30,
+    "duration_seconds": 25.066,
+    "visual_knockout_window_seconds": "approximately 1.1-2.8 (official clip timeline; contact sheets)",
+    "identity_reconciliation": "UFC's public page names Sean Sharaf; the Short's Sean Sherriff caption is not source-accurate."
+  },
+  "contact_sheets": [
+    "contact_sheets/supplied-short-full-2fps.jpg",
+    "contact_sheets/supplied-short-ko-window-13-18p5s.jpg",
+    "contact_sheets/supplied-short-ko-fine-14p8-17s.jpg",
+    "contact_sheets/ufc-sharaf-steveson-full-2fps.jpg",
+    "contact_sheets/ufc-sharaf-steveson-ko-window-0-5s.jpg",
+    "contact_sheets/ufc-sharaf-steveson-ko-fine-0p4-3p2s.jpg"
+  ],
+  "evidence_record": "MANIFEST.md",
+  "commands_record": "COMMANDS.md",
+  "hash_record": "SHA256SUMS.txt",
+  "limitations": [
+    "The official UFC endpoint is a signed public playback URL; its expiry is provider-controlled.",
+    "The watch report did not print because Windows cp1252 could not encode the Short title emoji; raw download, captions, and frames were retained.",
+    "No publication or render eligibility is asserted."
+  ]
+}

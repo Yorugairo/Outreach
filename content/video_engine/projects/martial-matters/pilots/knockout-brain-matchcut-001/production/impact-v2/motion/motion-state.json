@@ -1,0 +1,36 @@
+{
+  "schema": "martial_matters_impact_v2_xray.v1",
+  "fps": 30,
+  "frames": 111,
+  "effect_frames": [
+    17,
+    111
+  ],
+  "head_source_px": [
+    777.0,
+    230.0
+  ],
+  "brain_source_px": [
+    764.0,
+    204.0
+  ],
+  "stage_anchor_screen_px": [
+    268.5,
+    465.0
+  ],
+  "timing": {
+    "xray_start_effect_s": 0.1,
+    "fracture_start_effect_s": 0.8,
+    "launch_effect_s": 1.45,
+    "brain_offscreen_effect_s": 2.6,
+    "effect_end_s": 3.1666666666666665
+  },
+  "assets": {
+    "contact": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\impact-v2\\contact.png",
+    "xray": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\impact-v2\\xray-clean-empty.png",
+    "empty": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\impact-v2\\xray-empty.png",
+    "brain": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\impact-v3\\assets\\brain.obj"
+  },
+  "mp4": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\impact-v2\\motion\\xray-impact.mp4",
+  "sha256": "bcdd6237125e446deae1827d78064f53250b023407c7c3439ca9113fd3c33e3d"
+}

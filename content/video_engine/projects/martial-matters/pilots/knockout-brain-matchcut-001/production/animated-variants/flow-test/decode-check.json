@@ -1,0 +1,4 @@
+{
+  "command": "ffmpeg -v error -i detailed-2d-motion-test-v1.mp4 -f null -",
+  "status": "PASS"
+}

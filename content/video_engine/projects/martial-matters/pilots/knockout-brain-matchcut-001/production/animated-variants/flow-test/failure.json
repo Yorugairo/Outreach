@@ -1,0 +1,267 @@
+{
+  "schema": "flow_motion_test_failure.v1",
+  "attempt_id": "f9f3a4a9-5a19-465f-a1f7-248cd234d053",
+  "failed_at": "2026-09-21T01:18:45.651Z",
+  "error": "page.waitForEvent: Timeout 10000ms exceeded while waiting for event \"filechooser\"\n=========================== logs ===========================\nwaiting for event \"filechooser\"\n============================================================\n    at FlowCdpDriver.uploadReferences (C:\\Users\\Snipe\\Downloads\\Outreach Program\\tools\\google-flow-driver\\src\\cdp-driver.mjs:528:49)\n    at async file:///C:/Users/Snipe/Downloads/Outreach%20Program/content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/production/animated-variants/flow-test/run_flow_test.mjs:104:3",
+  "network_records": [
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "GET",
+      "origin": "https://accounts.google.com",
+      "pathname": "/RotateCookiesPage",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://accounts.google.com",
+      "pathname": "/RotateCookiesPage",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "GET",
+      "origin": "https://www.gstatic.com",
+      "pathname": "/aitestkitchen/website/flow/icons/flow-music-icon.webp",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://www.gstatic.com",
+      "pathname": "/aitestkitchen/website/flow/icons/flow-music-icon.webp",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://www.google-analytics.com",
+      "pathname": "/g/collect",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 204,
+      "origin": "https://www.google-analytics.com",
+      "pathname": "/g/collect",
+      "ids": []
+    },
+    {
+      "kind": "request",
+      "method": "POST",
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    },
+    {
+      "kind": "response",
+      "status": 200,
+      "origin": "https://flow.google.com",
+      "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+      "ids": []
+    }
+  ]
+}

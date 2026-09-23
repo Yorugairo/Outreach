@@ -1,0 +1,15 @@
+{
+  "engine": "kokoro-82M",
+  "voice": "am_michael",
+  "rate": 1.2,
+  "duration_s": 1.4,
+  "source_text": "Now watch that again.",
+  "review_only": true,
+  "source_crop_s": [0.325, 1.725],
+  "words": [
+    {"w": "Now", "start_s": 0.0, "end_s": 0.225},
+    {"w": "watch", "start_s": 0.225, "end_s": 0.525},
+    {"w": "that", "start_s": 0.525, "end_s": 0.687},
+    {"w": "again.", "start_s": 0.687, "end_s": 1.4}
+  ]
+}

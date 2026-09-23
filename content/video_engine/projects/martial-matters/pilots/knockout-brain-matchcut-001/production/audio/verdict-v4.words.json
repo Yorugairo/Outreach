@@ -1,0 +1,21 @@
+{
+  "engine": "kokoro-82M",
+  "voice": "am_michael",
+  "rate": 1.2,
+  "duration_s": 3.5,
+  "source_text": "No charges filed. Then Sharaf delivered a one-punch verdict.",
+  "review_only": true,
+  "source_crop_s": [0.3, 4.1],
+  "tempo_filter": "atempo=1.085714",
+  "words": [
+    {"w": "No", "start_s": 0.0, "end_s": 0.161},
+    {"w": "charges", "start_s": 0.161, "end_s": 0.53},
+    {"w": "filed.", "start_s": 0.53, "end_s": 1.197},
+    {"w": "Then", "start_s": 1.197, "end_s": 1.416},
+    {"w": "Sharaf", "start_s": 1.416, "end_s": 1.773},
+    {"w": "delivered", "start_s": 1.773, "end_s": 2.095},
+    {"w": "a", "start_s": 2.095, "end_s": 2.199},
+    {"w": "one-punch", "start_s": 2.199, "end_s": 2.694},
+    {"w": "verdict.", "start_s": 2.694, "end_s": 3.454}
+  ]
+}

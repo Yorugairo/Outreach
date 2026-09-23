@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "video": "minimal-2d-fight-proof.mp4",
+  "probe": {
+    "codec_name": "h264",
+    "width": 540,
+    "height": 960,
+    "pix_fmt": "yuv420p",
+    "r_frame_rate": "24/1",
+    "duration": "4.000000",
+    "nb_frames": "96"
+  },
+  "decode": "PASS",
+  "checks": {
+    "dimensions": true,
+    "frame_rate": true,
+    "frame_count": true,
+    "duration_s": true
+  }
+}

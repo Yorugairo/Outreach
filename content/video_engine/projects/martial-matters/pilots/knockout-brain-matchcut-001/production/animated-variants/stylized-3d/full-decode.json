@@ -1,0 +1,14 @@
+{
+  "command": [
+    "C:\\Users\\Snipe\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-8.1.2-full_build\\bin\\ffmpeg.EXE",
+    "-v",
+    "error",
+    "-i",
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\stylized-3d\\stylized-fight-preview.mp4",
+    "-f",
+    "null",
+    "-"
+  ],
+  "returncode": 0,
+  "stderr": ""
+}

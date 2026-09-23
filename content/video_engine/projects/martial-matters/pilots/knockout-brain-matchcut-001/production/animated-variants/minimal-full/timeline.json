@@ -1,0 +1,184 @@
+{
+  "schema_version": "minimal_full_private_review.v1",
+  "project": "knockout-brain-matchcut-001",
+  "variant": "minimal-full",
+  "status": "private-review-rough-cut",
+  "renderer": "render_minimal_full.py",
+  "deviation": "standalone native SVG frame sequence with full audio; not migrated into shared scene-evidence engine",
+  "canvas": {
+    "width": 540,
+    "height": 960,
+    "fps": 24,
+    "nominal_duration_s": 20.933333,
+    "frame_count": 503
+  },
+  "source_edit": "production/edit-v11.json",
+  "audio": {
+    "original_master": "production/audio/master-v11.wav",
+    "reaction_insert": "production/animated-variants/audio/reaction-duo.wav",
+    "continuous_bed": "production/edit-v9/continuous-bed.wav",
+    "insert_at_s": 8.766667,
+    "reaction_end_s": 11.066666999999999,
+    "new_duration_s": 20.933333
+  },
+  "segments": [
+    {
+      "id": "hook",
+      "start_s": 0.0,
+      "end_s": 7.333333,
+      "source_duration_s": 7.333333,
+      "visual": "proof art opening; filed freeze, transformation flash, right-hand contact, brain recoil, full fall"
+    },
+    {
+      "id": "news",
+      "start_s": 7.333333,
+      "end_s": 8.766667,
+      "source_duration_s": 1.433333,
+      "visual": "native cutout-comedy attributed interview; speaker mouth animates"
+    },
+    {
+      "id": "reaction",
+      "start_s": 8.766667,
+      "end_s": 11.066666999999999,
+      "source_duration_s": 2.3,
+      "visual": "two interviewer mouths scream/arms-up while center remains dry"
+    },
+    {
+      "id": "follow-up",
+      "start_s": 11.066666999999999,
+      "end_s": 14.133334,
+      "source_duration_s": 3.066667,
+      "source_start_s": 8.766667,
+      "visual": "proof-art follow-up replay with actual contact, recoil, continuing fall"
+    },
+    {
+      "id": "hendo",
+      "start_s": 14.133334,
+      "end_s": 18.333334,
+      "source_duration_s": 4.2,
+      "source_start_s": 11.833333,
+      "visual": "separate Henderson/Bisping flat silhouettes; left red right-hand contact, right blue fighter falls"
+    },
+    {
+      "id": "hendo-replay",
+      "start_s": 18.333334,
+      "end_s": 20.933333,
+      "source_duration_s": 2.6,
+      "source_start_s": 16.033333,
+      "visual": "Henderson/Bisping replay; right blue fighter remains down"
+    }
+  ],
+  "captions": [
+    {
+      "start_s": 0.0,
+      "end_s": 1.197,
+      "text": "NO CHARGES FILED."
+    },
+    {
+      "start_s": 1.197,
+      "end_s": 2.199,
+      "text": "THEN SHARAF DELIVERED A"
+    },
+    {
+      "start_s": 2.199,
+      "end_s": 3.5,
+      "text": "ONE-PUNCH VERDICT."
+    }
+  ],
+  "required_disclosures": [
+    "ANIMATED PARODY",
+    "SEAN SHARAF",
+    "2019 ALLEGATION",
+    "NO CHARGES FILED"
+  ],
+  "characters": {
+    "opening_left": "dark skin, short black hair, beard, black shorts, red wraps; falls",
+    "opening_right": "light skin, bald, beard, white shorts, blue wraps; lands right hand then left hook",
+    "hendo_left": "Henderson parody silhouette, light tan skin, short dark hair, white shorts, red wraps; lands right hand",
+    "bisping_right": "Bisping parody silhouette, pale skin, buzzcut, black/white shorts, blue wraps; falls"
+  },
+  "geometry": {
+    "opening": {
+      "animation_map": {
+        "guard_motion_s": [
+          0.0,
+          1.197
+        ],
+        "filed_freeze_s": [
+          1.197,
+          2.35
+        ],
+        "proof_local_at_0_s": 0.0,
+        "proof_local_at_1.197_s": 0.4,
+        "proof_local_at_2.35_s": 0.4,
+        "proof_local_at_4.1_s": 1.125
+      },
+      "contact": {
+        "time_s": 4.1,
+        "attacker": "right_fighter_right_glove",
+        "receiver": "left_head",
+        "glove_center_px": [
+          191.74,
+          323.74
+        ],
+        "receiver_head_center_px": [
+          185.0,
+          315.0
+        ],
+        "center_distance_px": 11.03,
+        "passes": true
+      },
+      "brain_launch": {
+        "planned_time_s": 4.2,
+        "visible_from_s": 4.2,
+        "rule": "proof brain appears only after proof contact/recoil; no skull or gore"
+      },
+      "fall": {
+        "start_s": 5.455,
+        "floor_s": 6.625,
+        "attacker_stays_standing": true
+      }
+    },
+    "hendo_bisping": {
+      "contact": {
+        "time_s": 15.433334,
+        "attacker": "left_henderson_right_glove",
+        "receiver": "right_bisping_head",
+        "glove_center_px": [
+          382.0,
+          315.0
+        ],
+        "receiver_head_center_px": [
+          382.0,
+          315.0
+        ],
+        "center_distance_px": 0.0,
+        "passes": true
+      },
+      "fall": {
+        "sample_s": 17.653334,
+        "fighter": "right_bisping",
+        "head_center_px": [
+          468.85,
+          794.65
+        ],
+        "torso_root_px": [
+          260.0,
+          824.0
+        ],
+        "mat_y_px": 838.0,
+        "head_radius_px": 37.0,
+        "body_angle_deg": 82.0,
+        "near_horizontal": true,
+        "floor_contact_passes": true,
+        "torso_floor_contact_passes": true
+      }
+    }
+  },
+  "review_artifacts": {
+    "video": "minimal-full-review-roughcut.mp4",
+    "contact_sheet": "contact-sheet.png",
+    "style_preview": "style-preview.png",
+    "audio": "audio\\minimal-full-review-audio.wav"
+  }
+}

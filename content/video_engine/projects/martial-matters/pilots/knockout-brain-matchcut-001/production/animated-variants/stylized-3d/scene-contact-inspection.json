@@ -1,0 +1,2033 @@
+{
+  "schema": "stylized-3d-fight-inspection.v1",
+  "status": "review_only",
+  "render_eligible": false,
+  "scene": {
+    "frame_start": 1,
+    "frame_end": 96,
+    "fps": 24,
+    "resolution": [
+      540,
+      960
+    ],
+    "world_up": "Z",
+    "camera_forward": "negative-Y toward fighters",
+    "floor_z": 0.0,
+    "blood": false,
+    "skull_injury": false
+  },
+  "inventory": {
+    "mesh_count": 94,
+    "meshes": [
+      {
+        "name": "BACKDROP_panel",
+        "vertices": 96,
+        "polygons": 98,
+        "character": null,
+        "semantic_role": "background",
+        "materials": [
+          "MAT_backdrop"
+        ]
+      },
+      {
+        "name": "FLOOR_contact_plane",
+        "vertices": 96,
+        "polygons": 98,
+        "character": null,
+        "semantic_role": "ground_plane",
+        "materials": [
+          "MAT_floor"
+        ]
+      },
+      {
+        "name": "IMPACT_ring_symbol",
+        "vertices": 320,
+        "polygons": 320,
+        "character": null,
+        "semantic_role": "symbolic_impact_glyph",
+        "materials": [
+          "MAT_gold"
+        ]
+      },
+      {
+        "name": "L_beard_patch",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "beard",
+        "materials": [
+          "L_left_hair_mat"
+        ]
+      },
+      {
+        "name": "L_brow_L",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "brow",
+        "materials": [
+          "L_left_hair_mat"
+        ]
+      },
+      {
+        "name": "L_brow_R",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "brow",
+        "materials": [
+          "L_left_hair_mat"
+        ]
+      },
+      {
+        "name": "L_ear_L",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "ear",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_ear_R",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "ear",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_elbow_L_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "elbow",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_elbow_R_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "elbow",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_eye_white_L",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "eye_white",
+        "materials": [
+          "L_eye_white_mat"
+        ]
+      },
+      {
+        "name": "L_eye_white_R",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "eye_white",
+        "materials": [
+          "L_eye_white_mat"
+        ]
+      },
+      {
+        "name": "L_fist_L_mesh",
+        "vertices": 362,
+        "polygons": 384,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "wrapped_fist",
+        "materials": [
+          "L_glove_mat"
+        ]
+      },
+      {
+        "name": "L_fist_R_mesh",
+        "vertices": 362,
+        "polygons": 384,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "wrapped_fist",
+        "materials": [
+          "L_glove_mat"
+        ]
+      },
+      {
+        "name": "L_forearm_L_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "forearm",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_forearm_R_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "forearm",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_hair_cap",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "short_hair",
+        "materials": [
+          "L_left_hair_mat"
+        ]
+      },
+      {
+        "name": "L_head_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "head",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_knuckle_L_0",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "L_glove_mat"
+        ]
+      },
+      {
+        "name": "L_knuckle_L_1",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "L_glove_mat"
+        ]
+      },
+      {
+        "name": "L_knuckle_L_2",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "L_glove_mat"
+        ]
+      },
+      {
+        "name": "L_knuckle_R_0",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "L_glove_mat"
+        ]
+      },
+      {
+        "name": "L_knuckle_R_1",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "L_glove_mat"
+        ]
+      },
+      {
+        "name": "L_knuckle_R_2",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "L_glove_mat"
+        ]
+      },
+      {
+        "name": "L_mouth_open",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "mouth_expression",
+        "materials": [
+          "L_mouth_mat"
+        ]
+      },
+      {
+        "name": "L_neck_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "neck",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_nose",
+        "vertices": 362,
+        "polygons": 384,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "nose",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_pectoral_L",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "pectoral_volume",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_pectoral_R",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "pectoral_volume",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_pupil_L",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "pupil",
+        "materials": [
+          "L_eye_mat"
+        ]
+      },
+      {
+        "name": "L_pupil_R",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "pupil",
+        "materials": [
+          "L_eye_mat"
+        ]
+      },
+      {
+        "name": "L_shin_L_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "shin",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_shin_R_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "shin",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_shoe_L_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "shoe",
+        "materials": [
+          "L_left_shoe_mat"
+        ]
+      },
+      {
+        "name": "L_shoe_R_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "shoe",
+        "materials": [
+          "L_left_shoe_mat"
+        ]
+      },
+      {
+        "name": "L_shorts_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "shorts",
+        "materials": [
+          "L_left_shorts_mat"
+        ]
+      },
+      {
+        "name": "L_shorts_waistband",
+        "vertices": 320,
+        "polygons": 320,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "shorts_waistband",
+        "materials": [
+          "L_left_shorts_mat"
+        ]
+      },
+      {
+        "name": "L_shoulder_cap_L",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "shoulder_volume",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_shoulder_cap_R",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "shoulder_volume",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_sideburn_L",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "sideburn",
+        "materials": [
+          "L_left_hair_mat"
+        ]
+      },
+      {
+        "name": "L_sideburn_R",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "sideburn",
+        "materials": [
+          "L_left_hair_mat"
+        ]
+      },
+      {
+        "name": "L_sole_L",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "shoe_sole",
+        "materials": [
+          "L_left_sole_mat"
+        ]
+      },
+      {
+        "name": "L_sole_R",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "shoe_sole",
+        "materials": [
+          "L_left_sole_mat"
+        ]
+      },
+      {
+        "name": "L_thigh_L_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "thigh",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_thigh_R_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "thigh",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_torso_mesh",
+        "vertices": 322,
+        "polygons": 324,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "torso",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_upper_arm_L_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "upper_arm",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_upper_arm_R_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "upper_arm",
+        "materials": [
+          "L_left_skin_mat"
+        ]
+      },
+      {
+        "name": "L_wrap_band_L",
+        "vertices": 320,
+        "polygons": 320,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "wrist_wrap",
+        "materials": [
+          "L_left_wrap_mat"
+        ]
+      },
+      {
+        "name": "L_wrap_band_R",
+        "vertices": 320,
+        "polygons": 320,
+        "character": "left_dark_skin_bearded_black_shorts_red_wraps",
+        "semantic_role": "wrist_wrap",
+        "materials": [
+          "L_left_wrap_mat"
+        ]
+      },
+      {
+        "name": "R_beard_patch",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "beard",
+        "materials": [
+          "R_right_hair_mat"
+        ]
+      },
+      {
+        "name": "R_brow_L",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "brow",
+        "materials": [
+          "R_right_hair_mat"
+        ]
+      },
+      {
+        "name": "R_brow_R",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "brow",
+        "materials": [
+          "R_right_hair_mat"
+        ]
+      },
+      {
+        "name": "R_ear_L",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "ear",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_ear_R",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "ear",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_elbow_L_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "elbow",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_elbow_R_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "elbow",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_eye_white_L",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "eye_white",
+        "materials": [
+          "R_eye_white_mat"
+        ]
+      },
+      {
+        "name": "R_eye_white_R",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "eye_white",
+        "materials": [
+          "R_eye_white_mat"
+        ]
+      },
+      {
+        "name": "R_fist_L_mesh",
+        "vertices": 362,
+        "polygons": 384,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "wrapped_fist",
+        "materials": [
+          "R_glove_mat"
+        ]
+      },
+      {
+        "name": "R_fist_R_mesh",
+        "vertices": 362,
+        "polygons": 384,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "wrapped_fist",
+        "materials": [
+          "R_glove_mat"
+        ]
+      },
+      {
+        "name": "R_forearm_L_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "forearm",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_forearm_R_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "forearm",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_head_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "head",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_knuckle_L_0",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "R_glove_mat"
+        ]
+      },
+      {
+        "name": "R_knuckle_L_1",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "R_glove_mat"
+        ]
+      },
+      {
+        "name": "R_knuckle_L_2",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "R_glove_mat"
+        ]
+      },
+      {
+        "name": "R_knuckle_R_0",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "R_glove_mat"
+        ]
+      },
+      {
+        "name": "R_knuckle_R_1",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "R_glove_mat"
+        ]
+      },
+      {
+        "name": "R_knuckle_R_2",
+        "vertices": 222,
+        "polygons": 240,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "fist_knuckle",
+        "materials": [
+          "R_glove_mat"
+        ]
+      },
+      {
+        "name": "R_mouth_open",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "mouth_expression",
+        "materials": [
+          "R_mouth_mat"
+        ]
+      },
+      {
+        "name": "R_neck_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "neck",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_nose",
+        "vertices": 362,
+        "polygons": 384,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "nose",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_pectoral_L",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "pectoral_volume",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_pectoral_R",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "pectoral_volume",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_pupil_L",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "pupil",
+        "materials": [
+          "R_eye_mat"
+        ]
+      },
+      {
+        "name": "R_pupil_R",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "pupil",
+        "materials": [
+          "R_eye_mat"
+        ]
+      },
+      {
+        "name": "R_shin_L_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "shin",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_shin_R_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "shin",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_shoe_L_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "shoe",
+        "materials": [
+          "R_right_shoe_mat"
+        ]
+      },
+      {
+        "name": "R_shoe_R_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "shoe",
+        "materials": [
+          "R_right_shoe_mat"
+        ]
+      },
+      {
+        "name": "R_shorts_mesh",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "shorts",
+        "materials": [
+          "R_right_shorts_mat"
+        ]
+      },
+      {
+        "name": "R_shorts_waistband",
+        "vertices": 320,
+        "polygons": 320,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "shorts_waistband",
+        "materials": [
+          "R_right_shorts_mat"
+        ]
+      },
+      {
+        "name": "R_shoulder_cap_L",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "shoulder_volume",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_shoulder_cap_R",
+        "vertices": 610,
+        "polygons": 640,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "shoulder_volume",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_sole_L",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "shoe_sole",
+        "materials": [
+          "R_right_sole_mat"
+        ]
+      },
+      {
+        "name": "R_sole_R",
+        "vertices": 96,
+        "polygons": 98,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "shoe_sole",
+        "materials": [
+          "R_right_sole_mat"
+        ]
+      },
+      {
+        "name": "R_thigh_L_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "thigh",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_thigh_R_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "thigh",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_torso_mesh",
+        "vertices": 322,
+        "polygons": 324,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "torso",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_upper_arm_L_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "upper_arm",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_upper_arm_R_mesh",
+        "vertices": 48,
+        "polygons": 26,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "upper_arm",
+        "materials": [
+          "R_right_skin_mat"
+        ]
+      },
+      {
+        "name": "R_wrap_band_L",
+        "vertices": 320,
+        "polygons": 320,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "wrist_wrap",
+        "materials": [
+          "R_right_wrap_mat"
+        ]
+      },
+      {
+        "name": "R_wrap_band_R",
+        "vertices": 320,
+        "polygons": 320,
+        "character": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+        "semantic_role": "wrist_wrap",
+        "materials": [
+          "R_right_wrap_mat"
+        ]
+      }
+    ],
+    "armatures": [
+      {
+        "name": "RIG_L_Armature",
+        "bones": [
+          "root",
+          "pelvis",
+          "spine",
+          "neck",
+          "head",
+          "upper_arm.L",
+          "forearm.L",
+          "hand.L",
+          "upper_arm.R",
+          "forearm.R",
+          "hand.R",
+          "thigh.L",
+          "shin.L",
+          "foot.L",
+          "thigh.R",
+          "shin.R",
+          "foot.R"
+        ],
+        "hidden_from_render": true
+      },
+      {
+        "name": "RIG_R_Armature",
+        "bones": [
+          "root",
+          "pelvis",
+          "spine",
+          "neck",
+          "head",
+          "upper_arm.L",
+          "forearm.L",
+          "hand.L",
+          "upper_arm.R",
+          "forearm.R",
+          "hand.R",
+          "thigh.L",
+          "shin.L",
+          "foot.L",
+          "thigh.R",
+          "shin.R",
+          "foot.R"
+        ],
+        "hidden_from_render": true
+      }
+    ],
+    "controls": [
+      {
+        "name": "CTRL_L_elbow_L",
+        "parent": "CTRL_L_shoulder_L",
+        "role": "arm_joint"
+      },
+      {
+        "name": "CTRL_L_elbow_R",
+        "parent": "CTRL_L_shoulder_R",
+        "role": "arm_joint"
+      },
+      {
+        "name": "CTRL_L_foot_L",
+        "parent": "CTRL_L_knee_L",
+        "role": "foot_contact"
+      },
+      {
+        "name": "CTRL_L_foot_R",
+        "parent": "CTRL_L_knee_R",
+        "role": "foot_contact"
+      },
+      {
+        "name": "CTRL_L_head",
+        "parent": "CTRL_L_neck",
+        "role": "head"
+      },
+      {
+        "name": "CTRL_L_knee_L",
+        "parent": "CTRL_L_thigh_L",
+        "role": "leg_joint"
+      },
+      {
+        "name": "CTRL_L_knee_R",
+        "parent": "CTRL_L_thigh_R",
+        "role": "leg_joint"
+      },
+      {
+        "name": "CTRL_L_neck",
+        "parent": "CTRL_L_spine",
+        "role": "neck"
+      },
+      {
+        "name": "CTRL_L_pelvis",
+        "parent": "CTRL_L_root",
+        "role": "pelvis"
+      },
+      {
+        "name": "CTRL_L_root",
+        "parent": null,
+        "role": "root_motion"
+      },
+      {
+        "name": "CTRL_L_shoulder_L",
+        "parent": "CTRL_L_spine",
+        "role": "arm_joint"
+      },
+      {
+        "name": "CTRL_L_shoulder_R",
+        "parent": "CTRL_L_spine",
+        "role": "arm_joint"
+      },
+      {
+        "name": "CTRL_L_spine",
+        "parent": "CTRL_L_pelvis",
+        "role": "spine"
+      },
+      {
+        "name": "CTRL_L_thigh_L",
+        "parent": "CTRL_L_root",
+        "role": "leg_joint"
+      },
+      {
+        "name": "CTRL_L_thigh_R",
+        "parent": "CTRL_L_root",
+        "role": "leg_joint"
+      },
+      {
+        "name": "CTRL_L_wrist_L",
+        "parent": "CTRL_L_elbow_L",
+        "role": "hand_contact"
+      },
+      {
+        "name": "CTRL_L_wrist_R",
+        "parent": "CTRL_L_elbow_R",
+        "role": "hand_contact"
+      },
+      {
+        "name": "CTRL_R_elbow_L",
+        "parent": "CTRL_R_shoulder_L",
+        "role": "arm_joint"
+      },
+      {
+        "name": "CTRL_R_elbow_R",
+        "parent": "CTRL_R_shoulder_R",
+        "role": "arm_joint"
+      },
+      {
+        "name": "CTRL_R_foot_L",
+        "parent": "CTRL_R_knee_L",
+        "role": "foot_contact"
+      },
+      {
+        "name": "CTRL_R_foot_R",
+        "parent": "CTRL_R_knee_R",
+        "role": "foot_contact"
+      },
+      {
+        "name": "CTRL_R_head",
+        "parent": "CTRL_R_neck",
+        "role": "head"
+      },
+      {
+        "name": "CTRL_R_knee_L",
+        "parent": "CTRL_R_thigh_L",
+        "role": "leg_joint"
+      },
+      {
+        "name": "CTRL_R_knee_R",
+        "parent": "CTRL_R_thigh_R",
+        "role": "leg_joint"
+      },
+      {
+        "name": "CTRL_R_neck",
+        "parent": "CTRL_R_spine",
+        "role": "neck"
+      },
+      {
+        "name": "CTRL_R_pelvis",
+        "parent": "CTRL_R_root",
+        "role": "pelvis"
+      },
+      {
+        "name": "CTRL_R_root",
+        "parent": null,
+        "role": "root_motion"
+      },
+      {
+        "name": "CTRL_R_shoulder_L",
+        "parent": "CTRL_R_spine",
+        "role": "arm_joint"
+      },
+      {
+        "name": "CTRL_R_shoulder_R",
+        "parent": "CTRL_R_spine",
+        "role": "arm_joint"
+      },
+      {
+        "name": "CTRL_R_spine",
+        "parent": "CTRL_R_pelvis",
+        "role": "spine"
+      },
+      {
+        "name": "CTRL_R_thigh_L",
+        "parent": "CTRL_R_root",
+        "role": "leg_joint"
+      },
+      {
+        "name": "CTRL_R_thigh_R",
+        "parent": "CTRL_R_root",
+        "role": "leg_joint"
+      },
+      {
+        "name": "CTRL_R_wrist_L",
+        "parent": "CTRL_R_elbow_L",
+        "role": "hand_contact"
+      },
+      {
+        "name": "CTRL_R_wrist_R",
+        "parent": "CTRL_R_elbow_R",
+        "role": "hand_contact"
+      }
+    ],
+    "cameras": [
+      "CAM_Portrait_Fight"
+    ],
+    "lights": [
+      "LIGHT_key",
+      "LIGHT_fill",
+      "LIGHT_rim"
+    ]
+  },
+  "characters": [
+    {
+      "name": "left_dark_skin_bearded_black_shorts_red_wraps",
+      "prefix": "L",
+      "rig": "RIG_L_Armature",
+      "control_root": "CTRL_L_root",
+      "mesh_roles": [
+        "beard",
+        "brow",
+        "ear",
+        "elbow",
+        "eye_white",
+        "fist_knuckle",
+        "forearm",
+        "head",
+        "mouth_expression",
+        "neck",
+        "nose",
+        "pectoral_volume",
+        "pupil",
+        "shin",
+        "shoe",
+        "shoe_sole",
+        "short_hair",
+        "shorts",
+        "shorts_waistband",
+        "shoulder_volume",
+        "sideburn",
+        "thigh",
+        "torso",
+        "upper_arm",
+        "wrapped_fist",
+        "wrist_wrap"
+      ]
+    },
+    {
+      "name": "right_light_skin_bald_bearded_white_shorts_blue_wraps",
+      "prefix": "R",
+      "rig": "RIG_R_Armature",
+      "control_root": "CTRL_R_root",
+      "mesh_roles": [
+        "beard",
+        "brow",
+        "ear",
+        "elbow",
+        "eye_white",
+        "fist_knuckle",
+        "forearm",
+        "head",
+        "mouth_expression",
+        "neck",
+        "nose",
+        "pectoral_volume",
+        "pupil",
+        "shin",
+        "shoe",
+        "shoe_sole",
+        "shorts",
+        "shorts_waistband",
+        "shoulder_volume",
+        "thigh",
+        "torso",
+        "upper_arm",
+        "wrapped_fist",
+        "wrist_wrap"
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "frame": 1,
+      "seconds": 0.0,
+      "left_root": [
+        -1.55,
+        0.0,
+        0.0
+      ],
+      "right_root": [
+        1.55,
+        0.0,
+        0.0
+      ],
+      "left_head": [
+        -1.54219,
+        -0.01841,
+        6.55
+      ],
+      "right_head": [
+        1.54219,
+        -0.01841,
+        6.55
+      ],
+      "right_punch_fist": [
+        0.35,
+        -0.22,
+        4.2
+      ],
+      "punch_to_head_distance": 3.02382,
+      "contact_candidate": false,
+      "left_feet": [
+        [
+          -2.13,
+          -0.34,
+          0.2
+        ],
+        [
+          -0.97,
+          -0.34,
+          0.2
+        ]
+      ],
+      "right_feet": [
+        [
+          0.97,
+          -0.34,
+          0.2
+        ],
+        [
+          2.13,
+          -0.34,
+          0.2
+        ]
+      ],
+      "support_hand": [
+        -0.93,
+        -0.2,
+        4.18
+      ],
+      "support_hand_ground_contact": false,
+      "left_head_bounds_xyz": [
+        [
+          -2.54289,
+          -0.54148
+        ],
+        [
+          -0.97144,
+          0.93462
+        ],
+        [
+          5.65,
+          7.45
+        ]
+      ],
+      "left_torso_bounds_xyz": [
+        [
+          -2.48247,
+          -0.61753
+        ],
+        [
+          -0.6164,
+          0.6164
+        ],
+        [
+          3.29,
+          5.37
+        ]
+      ],
+      "left_head_ground_contact": false,
+      "left_torso_ground_contact": false,
+      "left_body_ground_contact": false,
+      "global_bounds_xyz": [
+        [
+          -2.90362,
+          2.90045
+        ],
+        [
+          -1.06,
+          0.93462
+        ],
+        [
+          -0.0,
+          7.45
+        ]
+      ],
+      "ground_clearance_min": -0.0,
+      "head_snap_z_degrees": 15.0,
+      "left_spine_y_degrees": 0.0
+    },
+    {
+      "frame": 24,
+      "seconds": 0.95833,
+      "left_root": [
+        -1.55,
+        0.0,
+        0.0
+      ],
+      "right_root": [
+        1.55,
+        0.0,
+        0.0
+      ],
+      "left_head": [
+        -1.54219,
+        -0.01841,
+        6.55
+      ],
+      "right_head": [
+        1.54219,
+        -0.01841,
+        6.55
+      ],
+      "right_punch_fist": [
+        0.35,
+        -0.22,
+        4.2
+      ],
+      "punch_to_head_distance": 3.02382,
+      "contact_candidate": false,
+      "left_feet": [
+        [
+          -2.13,
+          -0.34,
+          0.2
+        ],
+        [
+          -0.97,
+          -0.34,
+          0.2
+        ]
+      ],
+      "right_feet": [
+        [
+          0.97,
+          -0.34,
+          0.2
+        ],
+        [
+          2.13,
+          -0.34,
+          0.2
+        ]
+      ],
+      "support_hand": [
+        -0.93,
+        -0.2,
+        4.18
+      ],
+      "support_hand_ground_contact": false,
+      "left_head_bounds_xyz": [
+        [
+          -2.54289,
+          -0.54148
+        ],
+        [
+          -0.97144,
+          0.93462
+        ],
+        [
+          5.65,
+          7.45
+        ]
+      ],
+      "left_torso_bounds_xyz": [
+        [
+          -2.48247,
+          -0.61753
+        ],
+        [
+          -0.6164,
+          0.6164
+        ],
+        [
+          3.29,
+          5.37
+        ]
+      ],
+      "left_head_ground_contact": false,
+      "left_torso_ground_contact": false,
+      "left_body_ground_contact": false,
+      "global_bounds_xyz": [
+        [
+          -2.90362,
+          2.90045
+        ],
+        [
+          -1.06,
+          0.93462
+        ],
+        [
+          -0.0,
+          7.45
+        ]
+      ],
+      "ground_clearance_min": -0.0,
+      "head_snap_z_degrees": 15.0,
+      "left_spine_y_degrees": 0.0
+    },
+    {
+      "frame": 48,
+      "seconds": 1.95833,
+      "left_root": [
+        -1.55,
+        0.0,
+        0.0
+      ],
+      "right_root": [
+        1.61064,
+        0.02426,
+        0.0
+      ],
+      "left_head": [
+        -1.73732,
+        -0.07453,
+        6.52883
+      ],
+      "right_head": [
+        2.16208,
+        -0.0397,
+        6.49826
+      ],
+      "right_punch_fist": [
+        -0.74036,
+        -0.31603,
+        6.12752
+      ],
+      "punch_to_head_distance": 1.1015,
+      "contact_candidate": true,
+      "left_feet": [
+        [
+          -2.13,
+          -0.34,
+          0.2
+        ],
+        [
+          -0.97,
+          -0.34,
+          0.2
+        ]
+      ],
+      "right_feet": [
+        [
+          1.01677,
+          -0.29089,
+          0.2
+        ],
+        [
+          2.17573,
+          -0.33999,
+          0.2
+        ]
+      ],
+      "support_hand": [
+        -0.93,
+        -0.22,
+        4.15
+      ],
+      "support_hand_ground_contact": false,
+      "left_head_bounds_xyz": [
+        [
+          -2.80527,
+          -0.66936
+        ],
+        [
+          -0.9275,
+          0.77843
+        ],
+        [
+          5.47778,
+          7.57988
+        ]
+      ],
+      "left_torso_bounds_xyz": [
+        [
+          -2.62838,
+          -0.57806
+        ],
+        [
+          -0.71619,
+          0.65357
+        ],
+        [
+          3.22985,
+          5.42635
+        ]
+      ],
+      "left_head_ground_contact": false,
+      "left_torso_ground_contact": false,
+      "left_body_ground_contact": false,
+      "global_bounds_xyz": [
+        [
+          -2.96783,
+          3.25346
+        ],
+        [
+          -1.07542,
+          0.87823
+        ],
+        [
+          -0.0,
+          7.57988
+        ]
+      ],
+      "ground_clearance_min": -0.0,
+      "head_snap_z_degrees": -2.424,
+      "left_spine_y_degrees": -4.0
+    },
+    {
+      "frame": 60,
+      "seconds": 2.45833,
+      "left_root": [
+        -1.55,
+        0.0,
+        0.0
+      ],
+      "right_root": [
+        1.64446,
+        0.03778,
+        0.0
+      ],
+      "left_head": [
+        -1.74561,
+        -0.07422,
+        6.29834
+      ],
+      "right_head": [
+        2.43137,
+        -0.01845,
+        6.44374
+      ],
+      "right_punch_fist": [
+        -0.06204,
+        -0.27497,
+        6.06689
+      ],
+      "punch_to_head_distance": 1.71122,
+      "contact_candidate": false,
+      "left_feet": [
+        [
+          -2.13,
+          -0.34,
+          0.2
+        ],
+        [
+          -0.97,
+          -0.34,
+          0.2
+        ]
+      ],
+      "right_feet": [
+        [
+          1.04332,
+          -0.26326,
+          0.2
+        ],
+        [
+          2.20079,
+          -0.3397,
+          0.2
+        ]
+      ],
+      "support_hand": [
+        -0.7,
+        -0.34,
+        2.88
+      ],
+      "support_hand_ground_contact": false,
+      "left_head_bounds_xyz": [
+        [
+          -2.91095,
+          -0.58028
+        ],
+        [
+          -1.12568,
+          0.97724
+        ],
+        [
+          5.2083,
+          7.38837
+        ]
+      ],
+      "left_torso_bounds_xyz": [
+        [
+          -3.05201,
+          -0.52525
+        ],
+        [
+          -1.03429,
+          0.70058
+        ],
+        [
+          2.82048,
+          5.35453
+        ]
+      ],
+      "left_head_ground_contact": false,
+      "left_torso_ground_contact": false,
+      "left_body_ground_contact": false,
+      "global_bounds_xyz": [
+        [
+          -3.2347,
+          3.48642
+        ],
+        [
+          -1.12568,
+          0.97724
+        ],
+        [
+          -0.0,
+          7.51557
+        ]
+      ],
+      "ground_clearance_min": -0.0,
+      "head_snap_z_degrees": 44.709,
+      "left_spine_y_degrees": -19.0
+    },
+    {
+      "frame": 72,
+      "seconds": 2.95833,
+      "left_root": [
+        -1.55,
+        0.0,
+        0.0
+      ],
+      "right_root": [
+        1.63071,
+        0.03316,
+        0.0
+      ],
+      "left_head": [
+        -1.88583,
+        -0.41101,
+        5.6889
+      ],
+      "right_head": [
+        2.38881,
+        -0.00439,
+        6.45119
+      ],
+      "right_punch_fist": [
+        0.73825,
+        -0.0115,
+        4.50719
+      ],
+      "punch_to_head_distance": 2.90548,
+      "contact_candidate": false,
+      "left_feet": [
+        [
+          -2.13,
+          -0.34,
+          0.2
+        ],
+        [
+          -0.97,
+          -0.34,
+          0.2
+        ]
+      ],
+      "right_feet": [
+        [
+          1.03864,
+          -0.28535,
+          0.2
+        ],
+        [
+          2.19786,
+          -0.32788,
+          0.2
+        ]
+      ],
+      "support_hand": [
+        -0.68,
+        -0.44,
+        1.1
+      ],
+      "support_hand_ground_contact": false,
+      "left_head_bounds_xyz": [
+        [
+          -3.20543,
+          -0.56624
+        ],
+        [
+          -1.60502,
+          0.78301
+        ],
+        [
+          4.36753,
+          7.01027
+        ]
+      ],
+      "left_torso_bounds_xyz": [
+        [
+          -3.25072,
+          -0.4581
+        ],
+        [
+          -1.27545,
+          0.62867
+        ],
+        [
+          2.34719,
+          5.04611
+        ]
+      ],
+      "left_head_ground_contact": false,
+      "left_torso_ground_contact": false,
+      "left_body_ground_contact": false,
+      "global_bounds_xyz": [
+        [
+          -3.39468,
+          3.41688
+        ],
+        [
+          -1.60502,
+          0.88268
+        ],
+        [
+          -0.0,
+          7.511
+        ]
+      ],
+      "ground_clearance_min": -0.0,
+      "head_snap_z_degrees": 34.78,
+      "left_spine_y_degrees": -34.0
+    },
+    {
+      "frame": 84,
+      "seconds": 3.45833,
+      "left_root": [
+        -1.55,
+        0.0,
+        0.0
+      ],
+      "right_root": [
+        1.56259,
+        0.00668,
+        0.0
+      ],
+      "left_head": [
+        -2.13318,
+        -0.7425,
+        2.54326
+      ],
+      "right_head": [
+        1.81355,
+        -0.02633,
+        6.53918
+      ],
+      "right_punch_fist": [
+        0.64142,
+        0.02971,
+        4.32469
+      ],
+      "punch_to_head_distance": 3.38647,
+      "contact_candidate": false,
+      "left_feet": [
+        [
+          -2.13,
+          -0.34,
+          0.2
+        ],
+        [
+          -0.97,
+          -0.34,
+          0.2
+        ]
+      ],
+      "right_feet": [
+        [
+          0.99412,
+          -0.35226,
+          0.2
+        ],
+        [
+          2.15349,
+          -0.31402,
+          0.2
+        ]
+      ],
+      "support_hand": [
+        -0.74,
+        -0.56,
+        0.72
+      ],
+      "support_hand_ground_contact": false,
+      "left_head_bounds_xyz": [
+        [
+          -3.50012,
+          -0.76624
+        ],
+        [
+          -1.8699,
+          0.3849
+        ],
+        [
+          1.20692,
+          3.8796
+        ]
+      ],
+      "left_torso_bounds_xyz": [
+        [
+          -2.13154,
+          0.7291
+        ],
+        [
+          -1.13879,
+          0.40321
+        ],
+        [
+          1.10329,
+          3.75715
+        ]
+      ],
+      "left_head_ground_contact": false,
+      "left_torso_ground_contact": false,
+      "left_body_ground_contact": false,
+      "global_bounds_xyz": [
+        [
+          -3.50012,
+          3.01192
+        ],
+        [
+          -1.8699,
+          0.92429
+        ],
+        [
+          -0.0,
+          7.50175
+        ]
+      ],
+      "ground_clearance_min": -0.0,
+      "head_snap_z_degrees": 21.497,
+      "left_spine_y_degrees": -52.0
+    },
+    {
+      "frame": 96,
+      "seconds": 3.95833,
+      "left_root": [
+        -1.55,
+        0.0,
+        0.0
+      ],
+      "right_root": [
+        1.55,
+        0.0,
+        0.0
+      ],
+      "left_head": [
+        -2.73032,
+        -0.85199,
+        1.25195
+      ],
+      "right_head": [
+        1.54219,
+        -0.01841,
+        6.55
+      ],
+      "right_punch_fist": [
+        0.24917,
+        -0.10246,
+        4.00633
+      ],
+      "punch_to_head_distance": 4.12623,
+      "contact_candidate": false,
+      "left_feet": [
+        [
+          -2.13,
+          -0.34,
+          0.2
+        ],
+        [
+          -0.97,
+          -0.34,
+          0.2
+        ]
+      ],
+      "right_feet": [
+        [
+          0.97,
+          -0.34,
+          0.2
+        ],
+        [
+          2.13,
+          -0.34,
+          0.2
+        ]
+      ],
+      "support_hand": [
+        -0.82,
+        -0.7,
+        0.57
+      ],
+      "support_hand_ground_contact": true,
+      "left_head_bounds_xyz": [
+        [
+          -3.99061,
+          -1.47002
+        ],
+        [
+          -1.93218,
+          0.2282
+        ],
+        [
+          0.0393,
+          2.46459
+        ]
+      ],
+      "left_torso_bounds_xyz": [
+        [
+          -1.92384,
+          0.80904
+        ],
+        [
+          -1.24779,
+          0.26706
+        ],
+        [
+          0.19469,
+          2.5897
+        ]
+      ],
+      "left_head_ground_contact": true,
+      "left_torso_ground_contact": true,
+      "left_body_ground_contact": true,
+      "global_bounds_xyz": [
+        [
+          -3.99061,
+          2.90045
+        ],
+        [
+          -1.93218,
+          0.93462
+        ],
+        [
+          -0.0,
+          7.45
+        ]
+      ],
+      "ground_clearance_min": -0.0,
+      "head_snap_z_degrees": 15.0,
+      "left_spine_y_degrees": -68.0
+    }
+  ],
+  "checks": {
+    "actual_armatures": true,
+    "actual_modeled_meshes": true,
+    "both_characters_have_faces": true,
+    "contact_sample_present": true,
+    "ground_contact_sample_present": true,
+    "head_or_torso_ground_contact_sample_present": true
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "raw-asset-receipt.v1",
+  "asset_id": "martial-matters/knockout-brain-matchcut-001/henderson-bisping",
+  "status": "recovered_review_only",
+  "review_only": true,
+  "render_eligible": false,
+  "source": {
+    "publisher": "UFC",
+    "page_url": "https://www.ufc.com/video/49967",
+    "resolved_media_url": "https://ufc.com/images/2016/04/11/KOTW-hendo.dsk.mp4?VersionId=FxFmrDFxJm6tQoi994OlDrSjgnzuLmXd",
+    "access": "public_unauthenticated",
+    "account_or_cookies_used": false,
+    "retrieval_commands": "retrieval-command.txt"
+  },
+  "original": {
+    "path": "ufc-49967-henderson-bisping-official.mp4",
+    "sha256": "E8BB6A5933A8592ABB951B775271BBA4A55EBAECE579B91B4AB28D0F3ABA5B97",
+    "bytes": 8264856,
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "video": {
+      "codec": "h264",
+      "profile": "Main",
+      "width": 854,
+      "height": 480,
+      "pixel_format": "yuv420p",
+      "frame_rate": "2997/100",
+      "frames": 2255,
+      "duration_seconds": 75.241909,
+      "bit_rate": 764165
+    },
+    "audio": {
+      "codec": "aac",
+      "profile": "LC",
+      "sample_rate": 44100,
+      "channels": 2,
+      "layout": "stereo",
+      "duration_seconds": 75.279093,
+      "bit_rate": 63930
+    }
+  },
+  "quality_ceiling": {
+    "official_page_formats_exposed": 1,
+    "format_inventory": "format-inventory.txt",
+    "verified_public_ceiling": "854x480 H.264/AAC",
+    "higher_quality_official_variant_found": false,
+    "note": "The page's public HTML5 source exposed one direct MP4; no upscale was made."
+  },
+  "windows": [
+    {
+      "id": "primary_clean_ko",
+      "start_seconds": 31.8,
+      "end_seconds": 35.9,
+      "impact_estimate_seconds": "32.7-32.9",
+      "contact_sheet": "contact_sheets/primary-29.5-36.5.jpg"
+    },
+    {
+      "id": "replay_1",
+      "start_seconds": 46.0,
+      "end_seconds": 50.8,
+      "impact_estimate_seconds": "47.7-48.3",
+      "contact_sheet": "contact_sheets/replay-1-45.5-50.8.jpg"
+    },
+    {
+      "id": "replay_2",
+      "start_seconds": 51.0,
+      "end_seconds": 58.8,
+      "impact_estimate_seconds": "approximately 52.6-57.8 action span; frame-precise landing left for operator review",
+      "contact_sheet": "contact_sheets/replay-2-51.0-58.5.jpg"
+    }
+  ],
+  "evidence": {
+    "ffprobe_json": "ffprobe.json",
+    "format_inventory": "format-inventory.txt",
+    "manifest": "MANIFEST.md",
+    "sha256_records": "SHA256SUMS.txt",
+    "watch_reports": [
+      "watch-full-report.md",
+      "watch-impact-report.md",
+      "watch-replay-report.md"
+    ],
+    "contact_sheets": [
+      "contact_sheets/primary-29.5-36.5.jpg",
+      "contact_sheets/replay-1-45.5-50.8.jpg",
+      "contact_sheets/replay-2-51.0-58.5.jpg"
+    ]
+  },
+  "limitations": [
+    "854x480 is the verified official UFC page ceiling; the page does not expose HD in the public source.",
+    "The original carries UFC/MetroPCS lower-thirds and broadcast transitions.",
+    "No transcript/captions were available; watch evidence is frames-only.",
+    "Rights/licensing permission is not established by this recovery."
+  ]
+}

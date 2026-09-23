@@ -1,0 +1,27 @@
+{
+  "programs": [],
+  "stream_groups": [],
+  "streams": [
+    {
+      "codec_name": "h264",
+      "width": 540,
+      "height": 960,
+      "r_frame_rate": "24/1",
+      "duration": "4.000000",
+      "nb_frames": "96"
+    }
+  ],
+  "command": [
+    "C:\\Users\\Snipe\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-8.1.2-full_build\\bin\\ffprobe.EXE",
+    "-v",
+    "error",
+    "-select_streams",
+    "v:0",
+    "-show_entries",
+    "stream=codec_name,width,height,r_frame_rate,nb_frames,duration",
+    "-of",
+    "json",
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\stylized-3d\\stylized-fight-preview.mp4"
+  ],
+  "returncode": 0
+}

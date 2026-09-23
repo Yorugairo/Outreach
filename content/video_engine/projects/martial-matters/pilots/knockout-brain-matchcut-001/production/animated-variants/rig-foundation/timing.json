@@ -1,0 +1,42 @@
+{
+  "schema": "rig-foundation.timing.v1",
+  "fps": 24,
+  "duration_s": 4.0,
+  "events": [
+    {
+      "name": "right_straight_contact",
+      "frame": 27,
+      "time_s": 1.125,
+      "surface_gap_px": 0.0
+    },
+    {
+      "name": "head_recoil_and_brain_release",
+      "frame": 28,
+      "time_s": 1.1666666666666667,
+      "surface_gap_px": -8.598782
+    },
+    {
+      "name": "attacker_step_release",
+      "frame": 41,
+      "time_s": 1.72
+    },
+    {
+      "name": "left_hook_contact",
+      "frame": 50,
+      "time_s": 2.0833333333333335,
+      "surface_gap_px": 0.0
+    },
+    {
+      "name": "victim_fall_release",
+      "frame": 54,
+      "time_s": 2.25
+    },
+    {
+      "name": "victim_grounded",
+      "frame": 85,
+      "time_s": 3.55,
+      "floor_clearance_px": 1.63
+    }
+  ],
+  "note": "World-space timing receipt; parent renderer applies a constant camera fit for the 540x960 proof."
+}

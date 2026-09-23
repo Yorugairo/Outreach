@@ -1,0 +1,20 @@
+# Public, unauthenticated retrieval record. No cookies, account, paywall bypass, or DRM circumvention used.
+# Source page:
+https://www.ufc.com/video/49967
+
+# Metadata/format discovery (yt-dlp 2026.08.19)
+yt-dlp --no-cookies --no-cache-dir --no-playlist --skip-download --dump-single-json --no-warnings -- https://www.ufc.com/video/49967
+yt-dlp --no-cookies --no-cache-dir --no-playlist --list-formats --no-warnings -- https://www.ufc.com/video/49967
+
+# Original download (yt-dlp 2026.08.19; format 0 is the sole UFC page format)
+yt-dlp --no-cookies --no-cache-dir --no-playlist --format 0 --write-info-json --no-part --no-overwrites --output "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/henderson-bisping/ufc-49967-henderson-bisping-official.%(ext)s" -- https://www.ufc.com/video/49967
+
+# Custody probe (ffprobe 8.1.2)
+ffprobe -v error -show_format -show_streams -show_programs -of json -- content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/henderson-bisping/ufc-49967-henderson-bisping-official.mp4 > content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/henderson-bisping/ffprobe.json
+
+# Review evidence (watch skill, local file; no Whisper/API call)
+python .agents/skills/watch/scripts/watch.py content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/henderson-bisping/ufc-49967-henderson-bisping-official.mp4 --detail balanced --no-whisper --fps 2 --resolution 960 --max-frames 100 --out-dir content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/henderson-bisping/watch-full
+python .agents/skills/watch/scripts/watch.py content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/henderson-bisping/ufc-49967-henderson-bisping-official.mp4 --detail balanced --no-whisper --fps 2 --resolution 960 --max-frames 100 --no-dedup --start 28 --end 42 --out-dir content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/henderson-bisping/watch-impact
+python .agents/skills/watch/scripts/watch.py content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/henderson-bisping/ufc-49967-henderson-bisping-official.mp4 --detail balanced --no-whisper --fps 2 --resolution 960 --max-frames 100 --no-dedup --start 43 --end 61 --out-dir content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/henderson-bisping/watch-replay
+
+# The original MP4 and the source-side .info.json are preserved unchanged after download.

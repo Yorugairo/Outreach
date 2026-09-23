@@ -1,0 +1,218 @@
+{
+  "attempt_id": "f7fc0bcf-dfa3-4e75-bf57-bc2e179ba312",
+  "project_url": "https://flow.google.com/project/440edc03-c44a-4ff8-bd71-d22a29866386",
+  "settings": {
+    "pillText": "Video · 720p · 6s crop_9_16 x1",
+    "creditsText": "Generating will use 10 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 10
+  },
+  "prompt": "Continuing from the starting frame, animate a fluid hand-drawn anime MMA exchange in the same wide locked camera. The bald fighter in white shorts on the RIGHT advances and lands a clean RIGHT straight punch against the dark-haired fighter on the LEFT, then the SAME bald fighter lands his LEFT hook. Each glove reaches the opponent's face before the opponent's head recoils. His hips and shoulders drive the punches and his arms complete their follow-through. The dark-haired fighter in black shorts loses balance and falls fully onto the mat while the bald fighter remains standing and stops. At second five the fallen fighter settles onto his side and the standing fighter lowers his guard, with the dark-haired fighter fully grounded and the bald fighter still standing. Preserve the entire fall and floor contact. The exchange is fast and forceful, the characters retain crisp drawn contours and consistent athletic anatomy, and the arena camera keeps both complete bodies visible. Completely silent video, no text or blood.",
+  "source": {
+    "start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\plates\\detailed-2d-start-v2.png",
+      "sha256": "37929e4e2fa4d7c2bd724fbf183841465c5adedebcf1ae01221d8c91d3e38c1f",
+      "bound": true
+    },
+    "end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\plates\\detailed-2d-end-v1.png",
+      "sha256": "1a3d756f0b4a57c43cacc3ea1d6de00edb3a9964aeeb4cf364292319e958bbee",
+      "uploaded": true,
+      "bound": false
+    }
+  },
+  "conditioning": {
+    "start_frame": "detailed-2d-start-v2.png",
+    "end_frame": null,
+    "end_frame_policy": "deliberately_unbound_per_flow_motion_work_order_v2"
+  },
+  "composer": {
+    "text": "Continuing from the starting frame, animate a fluid hand-drawn anime MMA exchange in the same wide locked camera. The bald fighter in white shorts on the RIGHT advances and lands a clean RIGHT straight punch against the dark-haired fighter on the LEFT, then the SAME bald fighter lands his LEFT hook. Each glove reaches the opponent's face before the opponent's head recoils. His hips and shoulders drive the punches and his arms complete their follow-through. The dark-haired fighter in black shorts loses balance and falls fully onto the mat while the bald fighter remains standing and stops. At second five the fallen fighter settles onto his side and the standing fighter lowers his guard, with the dark-haired fighter fully grounded and the bald fighter still standing. Preserve the entire fall and floor contact. The exchange is fast and forceful, the characters retain crisp drawn contours and consistent athletic anatomy, and the arena camera keeps both complete bodies visible. Completely silent video, no text or blood. detailed-2d-start-v2.png",
+    "chips": [
+      "detailed-2d-start-v2.png"
+    ],
+    "frameTriggers": [
+      {
+        "text": "cancel",
+        "hasImg": true
+      },
+      {
+        "text": "cancel",
+        "hasImg": true
+      },
+      {
+        "text": "cancel",
+        "hasImg": true
+      },
+      {
+        "text": "cancel",
+        "hasImg": true
+      }
+    ]
+  },
+  "pre_submit_canvas": {
+    "url": "https://flow.google.com/project/440edc03-c44a-4ff8-bd71-d22a29866386",
+    "title": "Google Flow - Sep 15 - 23:04",
+    "videoSrcs": [],
+    "pending": []
+  },
+  "prepared_at": "2026-09-21T01:30:27.568Z",
+  "submission": {
+    "attempt_id": "f7fc0bcf-dfa3-4e75-bf57-bc2e179ba312",
+    "submitted_at": "2026-09-21T01:30:31.103Z",
+    "acknowledged_before_polling": true,
+    "service_ids_seen_before_polling": [
+      "440edc03-c44a-4ff8-bd71-d22a29866386"
+    ],
+    "network_records_before_polling": [
+      {
+        "kind": "request",
+        "method": "GET",
+        "origin": "https://www.gstatic.com",
+        "pathname": "/aitestkitchen/website/flow/images/perlin.png",
+        "ids": []
+      },
+      {
+        "kind": "response",
+        "status": 200,
+        "origin": "https://www.gstatic.com",
+        "pathname": "/aitestkitchen/website/flow/images/perlin.png",
+        "ids": []
+      },
+      {
+        "kind": "request",
+        "method": "POST",
+        "origin": "https://www.google-analytics.com",
+        "pathname": "/g/collect",
+        "ids": []
+      },
+      {
+        "kind": "request",
+        "method": "POST",
+        "origin": "https://www.google-analytics.com",
+        "pathname": "/g/collect",
+        "ids": []
+      },
+      {
+        "kind": "request",
+        "method": "POST",
+        "origin": "https://www.google-analytics.com",
+        "pathname": "/g/collect",
+        "ids": []
+      },
+      {
+        "kind": "request",
+        "method": "POST",
+        "origin": "https://www.google-analytics.com",
+        "pathname": "/g/collect",
+        "ids": []
+      },
+      {
+        "kind": "request",
+        "method": "POST",
+        "origin": "https://flow.google.com",
+        "pathname": "/_/AiSandboxAngularFrontend/data/batchexecute",
+        "ids": []
+      },
+      {
+        "kind": "response",
+        "status": 204,
+        "origin": "https://www.google-analytics.com",
+        "pathname": "/g/collect",
+        "ids": []
+      },
+      {
+        "kind": "response",
+        "status": 204,
+        "origin": "https://www.google-analytics.com",
+        "pathname": "/g/collect",
+        "ids": []
+      },
+      {
+        "kind": "response",
+        "status": 204,
+        "origin": "https://www.google-analytics.com",
+        "pathname": "/g/collect",
+        "ids": []
+      },
+      {
+        "kind": "response",
+        "status": 204,
+        "origin": "https://www.google-analytics.com",
+        "pathname": "/g/collect",
+        "ids": []
+      }
+    ],
+    "post_submit_canvas": {
+      "url": "https://flow.google.com/project/440edc03-c44a-4ff8-bd71-d22a29866386",
+      "title": "Google Flow - Sep 15 - 23:04",
+      "pending": [
+        {
+          "tag": "SCRIPT",
+          "text": "window.WIZ_global_data = {\"AfY8Hf\":true,\"DpimGf\":false,\"EP1ykd\":[\"/_/*\",\"/accounts/*\"],\"FdrFJe\":\"-9157198283354035150\",\"HiPsbb\":1,\"Im6cmf\":\"/_/AiSandboxAngularFrontend\",\"K21R3e\":\"AIzaSyDSjGxWlo68HcGt6mbaIq9YbkKhFQnt3sk\",\"LoQv7e\":false,\"MT7f9b\":[],\"MUE6Ne\":\"labs-ai-sandbox-frontend\",\"QrtxK\":\"0\",\"S06G",
+          "attrs": [
+            [
+              "data-id",
+              "_gd"
+            ],
+            [
+              "nonce",
+              ""
+            ]
+          ]
+        },
+        {
+          "tag": "FLOW-PENDING-TILE",
+          "text": "play_circle\nContinuing from the starting frame, animate a fluid hand-drawn anime MMA exchange in the same wide locked camera. The bald fighter in white shorts on the RIGHT advances and lands a clean RIGHT straight punch against the dark-haired fighter on the LEFT, then the SAME bald fighter lands hi",
+          "attrs": [
+            [
+              "_ngcontent-ng-c1417075648",
+              ""
+            ],
+            [
+              "_nghost-ng-c3578903291",
+              ""
+            ]
+          ]
+        }
+      ],
+      "bodyText": "Skip to main content\nhome\nmore_vert\nsearch\nfilter_list\nadd\nhelp\nsettings_2\nmore_vert\nULTRA\ndashboard\nAll media\nimage\nImages\nvideocam\nVideos\naccessibility_new\nCharacters\nmovie\nScenes\ndrive_folder_upload\nUploads\napps_spark_2\nTools\ndelete\nTrash\nleft_panel_close\nCollapse\nplay_circle\nContinuing from the starting frame, animate a fluid hand-drawn anime MMA exchange in the same wide locked camera. The bald fighter in white shorts on the RIGHT advances and lands a clean RIGHT straight punch against the dark-haired fighter on the LEFT, then the SAME bald fighter lands his LEFT hook. Each glove reaches the opponent's face before the opponent's head recoils. His hips and shoulders drive the punches and his arms complete their follow-through. The dark-haired fighter in black shorts loses balance and falls fully onto the mat while the bald fighter remains standing and stops. At second five the fallen fighter settles onto his side and the standing fighter lowers his guard, with the dark-haired fighter fully grounded and the bald fighter still standing. Preserve the entire fall and floor contact. The exchange is fast and forceful, the characters retain crisp drawn contours and consistent athletic"
+    }
+  },
+  "result_identity": {
+    "service_ids_seen_before_polling": [
+      "440edc03-c44a-4ff8-bd71-d22a29866386"
+    ],
+    "flow_asset_id": "784cfd9f-fa95-40d9-80e3-a6da22e93378",
+    "editor_id": "402ac862-8916-4b6f-9081-9a3e781a16fa",
+    "download_filename": "Fighter_lands_knockout_punch_20260920183837.mp4",
+    "browser_download_artifacts": [
+      {
+        "path": "C:/Users/Snipe/AppData/Local/Temp/playwright-artifacts-b0hsWd/118f9b15-ec84-4003-9d0b-ce6db1355717",
+        "sha256": "aad2713f2dc39db242fe593cf5fa86f3cff70b99fcf963659fd88dfca058471e",
+        "size_bytes": 2097189
+      },
+      {
+        "path": "C:/Users/Snipe/AppData/Local/Temp/playwright-artifacts-HNcF7e/d97fc582-1b8e-4bc2-b968-28a03fc20a6e",
+        "sha256": "aad2713f2dc39db242fe593cf5fa86f3cff70b99fcf963659fd88dfca058471e",
+        "size_bytes": 2097189
+      }
+    ],
+    "downloaded_at": "2026-09-21T01:40:48.328Z"
+  },
+  "artifact": {
+    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\flow-test\\detailed-2d-motion-test-v1.mp4",
+    "original_download_filename": "Fighter_lands_knockout_punch_20260920183837.mp4",
+    "sha256": "aad2713f2dc39db242fe593cf5fa86f3cff70b99fcf963659fd88dfca058471e",
+    "size_bytes": 2097189,
+    "duration_s": 6.016,
+    "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+    "codec_name": "h264",
+    "width": 720,
+    "height": 1280,
+    "pix_fmt": "yuv420p",
+    "frame_rate": "24/1",
+    "audio_streams": 1,
+    "audio_note": "Flow 720p export includes an AAC stereo stream; no audio edit or remix was performed."
+  }
+}

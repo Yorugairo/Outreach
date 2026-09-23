@@ -1,0 +1,125 @@
+{
+  "schema": "case-source-receipt.v1",
+  "project": "martial-matters/pilots/knockout-brain-matchcut-001",
+  "lane": "recover_case_sources",
+  "status": "complete",
+  "retrieved_at": "2026-09-20T20:57:09Z",
+  "review_state": "review_only",
+  "render_eligible": false,
+  "scope": "Verify the public legal/news record behind the Gable Steveson case reference in the supplied UFC 331 Short. Public unauthenticated sources only.",
+  "sources": [
+    {
+      "id": "HENNEPIN-2019-06-18",
+      "authority": "primary",
+      "title": "No charges against UM wrestlers, investigation continues",
+      "published": "2019-06-18",
+      "url": "https://www.hennepinattorney.org/news/news/2019/June/cao-wrestlers-charges-6-18-2019",
+      "local_copy": "sources/hennepin-2019-06-18-no-charges-at-time.html",
+      "retrieved_at": "2026-09-20T20:57:08Z",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 17078,
+      "sha256": "9D957EB55E64D53348481FC89D5A7DA3C557049AA4441C00E82FCB1CE69D7EAE",
+      "confidence": "high",
+      "supports": [
+        "Hennepin named criminal-sexual-conduct allegations against Gable Steveson and Dylan Martinez.",
+        "No charges could be brought at that time.",
+        "The investigation remained active and prosecutors would review additional evidence."
+      ],
+      "limits": [
+        "This was an interim June release, not the final public charging decision.",
+        "It does not establish whether the allegation occurred."
+      ]
+    },
+    {
+      "id": "HENNEPIN-2019-12-20",
+      "authority": "primary",
+      "title": "No charges filed against University of Minnesota wrestlers following criminal sexual assault investigation",
+      "published": "2019-12-20",
+      "url": "https://www.hennepinattorney.org/news/news/2019/December/university-wrestlers-12-20-2019",
+      "local_copy": "sources/hennepin-2019-12-20-no-charges-filed.html",
+      "retrieved_at": "2026-09-20T20:57:09Z",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 18432,
+      "sha256": "2A25BCB5A471EBAA15311E35631B209CF410CBAEA633442E2A5119969C15D34D",
+      "confidence": "high",
+      "supports": [
+        "The Minneapolis Police Department investigation was reviewed by veteran prosecutors and senior leadership.",
+        "The Hennepin County Attorney's Office did not file charges.",
+        "The prosecutor cited conflicting versions and inadequate evidence to fairly charge and prosecute.",
+        "The office said Minnesota intoxication/consent law constrained how it could charge the case."
+      ],
+      "limits": [
+        "The statement is a prosecutorial decision, not a trial verdict.",
+        "It does not make a factual finding that the allegation was true or false."
+      ]
+    },
+    {
+      "id": "MN-STAT-2019-609344",
+      "authority": "primary",
+      "title": "2019 Minnesota Statutes, section 609.344",
+      "published": "2019 historical version",
+      "url": "https://www.revisor.mn.gov/statutes/2019/cite/609.344/subd/609.344.1",
+      "local_copy": "sources/minnesota-statutes-2019-609-344.html",
+      "retrieved_at": "2026-09-20T20:57:09Z",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 75346,
+      "sha256": "8BC4D31D23A6BF4F4525EA8A636ADE57C40A5EA14E5A4BA89C688561D3834071",
+      "confidence": "high",
+      "supports": [
+        "Preserves the official historical statute text referenced for legal context."
+      ],
+      "limits": [
+        "It is not evidence about the incident or charging decision.",
+        "Do not infer the facts of the allegation from statutory text."
+      ]
+    },
+    {
+      "id": "UFC-331-PRESSER",
+      "authority": "official event source",
+      "title": "Pre-Fight Press Conference | Crypto.com UFC 331: Van vs Pantoja 2",
+      "published": "2026 event page",
+      "url": "https://www.ufc.com/video/160203",
+      "local_copy": "sources/ufc-331-pre-fight-press-conference.html",
+      "retrieved_at": "2026-09-20T20:57:09Z",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 67921,
+      "sha256": "3A67312315CD26B71067C2E7725104C161A7236C0D706FB5FAAEE181D5C06E7F",
+      "confidence": "medium",
+      "supports": [
+        "The public UFC 331 pre-fight press-conference event exists and is identified by UFC."
+      ],
+      "limits": [
+        "The page has no transcript of the accusation.",
+        "The speaker's words require direct recovered-video verification and attribution."
+      ]
+    }
+  ],
+  "findings": {
+    "allegation": "A criminal-sexual-conduct allegation/investigation was publicly identified by Hennepin County in June 2019.",
+    "charge_status": "No criminal charges were filed against the wrestlers in the investigation, per the December 20, 2019 Hennepin release.",
+    "prosecutorial_decision": "After review, prosecutors declined to file charges, citing conflicting accounts and inadequate evidence to fairly charge and prosecute.",
+    "legal_outcome": "No criminal trial, conviction, acquittal, dismissal, or judicial finding is established by this bundle; no charges were filed.",
+    "news_peg": "The UFC 331 press-conference page verifies the event context, but a fighter's accusation remains an attributed public statement rather than an adjudicated fact."
+  },
+  "controls": {
+    "do_not_call_him_convicted": true,
+    "do_not_call_him_acquitted_or_exonerated": true,
+    "do_not_say_charges_were_dropped_or_dismissed": true,
+    "do_not_present_the_allegation_as_fact": true,
+    "do_not_use_the_press_conference_label_as_narrator_voice": true,
+    "keep_sources_review_only": true,
+    "keep_render_eligible_false": true
+  },
+  "verification": {
+    "local_copies_present": true,
+    "sha256_recorded": true,
+    "official_case_sources_recovered": true,
+    "direct_press_conference_transcript_recovered": false,
+    "private_or_authenticated_source_used": false,
+    "operator_approval": false
+  }
+}

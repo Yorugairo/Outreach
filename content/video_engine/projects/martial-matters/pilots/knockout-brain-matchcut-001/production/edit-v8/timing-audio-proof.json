@@ -1,0 +1,19 @@
+{
+  "action_start": 2.8666666666666667,
+  "action_source": [
+    0.2,
+    3.5
+  ],
+  "action_speed": 1.0,
+  "audio_atempo": false,
+  "interview_at": 6.166666666666667,
+  "duration": 23.666667,
+  "music_source": "C:\\Users\\Snipe\\Downloads\\Inspired by nang.wav",
+  "music_sha256": "9f1a40f5f9dec8e18f03a3b36d30646c58ce7d6a0cf08208976455bd7e5b9dda",
+  "music_window": [
+    0,
+    23.666667
+  ],
+  "music_target_lufs": -27,
+  "ducking": "foreground sidechain 4:1, 10ms attack, 250ms release"
+}

@@ -1,0 +1,18 @@
+{
+  "artifact": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\assembly-v12\\build\\render\\knockout-brain-matchcut-001-v12.mp4",
+  "sha256": "e22a43540deaf1d6bcc0beb81d9bd0f068cc0802978d5ba6c74c4665e81f9a35",
+  "audio_unchanged": true,
+  "repair_interval": [
+    5.833333333333333,
+    7.333333333333333
+  ],
+  "source_interval": [
+    2,
+    3.5
+  ],
+  "frames_replaced": 36,
+  "observed_v11_freeze": [
+    5.875,
+    6.583333
+  ]
+}

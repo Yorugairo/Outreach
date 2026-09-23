@@ -1,0 +1,65 @@
+{
+  "schema": "martial_matters_knockout_brain_determinism.v1",
+  "sample_frames": [
+    1,
+    12,
+    24,
+    36,
+    48,
+    60,
+    75,
+    90
+  ],
+  "forward_hashes": {
+    "1": "f65dc04ddfb4cfeb598314f8bb4567bd95cd059c0769340f526f42e831dc2fc0",
+    "12": "7b94e80597385d74b3800b2267fcd942f034480d81c3d1dc2334af1e1f94c6c1",
+    "24": "919bc2774ec46acf5274186d189b7ebc1fa13f3a05d5e08c76d6ac4757bd187a",
+    "36": "b704723355500d2e34badeb9e402f17e946c49e5a04b81698d5ffc32efca6c3b",
+    "48": "6de5383b1ac651d92be6c7d5199f29dfa429b51c784373729f8b1818b42053ac",
+    "60": "ff7078a54b5963f0fac41458c9ac144b2c773475e29fa00fa58362758695c25d",
+    "75": "18f8a30b269c274c561ddccea4dc57e649dc8efb2bbe1e8399334a0b6fd44948",
+    "90": "b267dfefc89440b17bf9ed6235ce695ecf15dcfffff5e227eb66a054c6d7908b"
+  },
+  "reverse_hashes": {
+    "90": "3124c4b1d90df7d3789424292b115257af3998d9316700f39dac4c5ec68b7eb1",
+    "75": "484bff7e7f6b2e06dd96300f2770d6e994021d11ca7c415bd1bf0a95c6007d03",
+    "60": "8c00b99a39fb1ade17bf8106e12c48ffdf871de4ebbccba7918c1d194345f00f",
+    "48": "676df3e5d073530351bb211fb4d2ef4e06312b7dc502754495c2845cf1894d07",
+    "36": "e35ab1d9d256f0c9a7467502ab960b89e2f54c45b814c5dd5c66e81ce7d56edf",
+    "24": "a76c2acf8c946f6782740554f3eb0c5b31807f9ee803ac64b0a41b6c91a56ab4",
+    "12": "7a02d98a45339df3261084f2eed680a74d34142f06af42beefacb85f325b65d6",
+    "1": "d120db996849d50a34967473c480bba0a2176b9e9c7377e778513f43d0d6d46e"
+  },
+  "forward_pixel_hashes": {
+    "1": "559c1a69f023bbc335afdaa55045460a7f011484fb031f0bb1d40fa6ebfe4f39",
+    "12": "e8e21250dc8cb131f5a5d04165db679a4fcc069982b36cd175636566dbc69429",
+    "24": "53f8f682018e04e52de8899c22d559e5574017d0cf3976d004b31f8f7ab7ca3b",
+    "36": "294acd8130c28fed284680fbb0281f2c56af61893c2d3350d02f2cb4438fe8dd",
+    "48": "8da2b4cd9dcabc4e02363aeac41a8e7ad99d6e0aa4f59fab8af0c59a11066df4",
+    "60": "b05231d73a7bb786314dab350e483e8f7a1adcef64f9b36f96e96cb2be9d2552",
+    "75": "d25853675b272dbdb56acf9a66d1dbac8b24cd8acd2a21d74afb7890fed3f215",
+    "90": "1e0fd1ab85f333d218d2f4bf4f077c41ec67bc95bc0a9bee386b14a32be60210"
+  },
+  "reverse_pixel_hashes": {
+    "90": "1e0fd1ab85f333d218d2f4bf4f077c41ec67bc95bc0a9bee386b14a32be60210",
+    "75": "d25853675b272dbdb56acf9a66d1dbac8b24cd8acd2a21d74afb7890fed3f215",
+    "60": "b05231d73a7bb786314dab350e483e8f7a1adcef64f9b36f96e96cb2be9d2552",
+    "48": "8da2b4cd9dcabc4e02363aeac41a8e7ad99d6e0aa4f59fab8af0c59a11066df4",
+    "36": "294acd8130c28fed284680fbb0281f2c56af61893c2d3350d02f2cb4438fe8dd",
+    "24": "53f8f682018e04e52de8899c22d559e5574017d0cf3976d004b31f8f7ab7ca3b",
+    "12": "e8e21250dc8cb131f5a5d04165db679a4fcc069982b36cd175636566dbc69429",
+    "1": "559c1a69f023bbc335afdaa55045460a7f011484fb031f0bb1d40fa6ebfe4f39"
+  },
+  "reverse_seek_equal": true,
+  "comparisons": {
+    "1": true,
+    "12": true,
+    "24": true,
+    "36": true,
+    "48": true,
+    "60": true,
+    "75": true,
+    "90": true
+  },
+  "comparison_note": "PNG byte hashes can differ in metadata; verdict compares decoded Blender pixel buffers."
+}

@@ -1,0 +1,48 @@
+{
+ "engine": "kokoro-82M",
+ "voice": "am_michael",
+ "rate": 1.2,
+ "duration_s": 3.58,
+ "words": [
+  {
+   "w": "Ten",
+   "start_s": 0.275,
+   "end_s": 0.512
+  },
+  {
+   "w": "seconds.",
+   "start_s": 0.512,
+   "end_s": 1.288
+  },
+  {
+   "w": "Sean",
+   "start_s": 1.288,
+   "end_s": 1.587
+  },
+  {
+   "w": "Sharaf",
+   "start_s": 1.587,
+   "end_s": 1.975
+  },
+  {
+   "w": "shuts",
+   "start_s": 1.975,
+   "end_s": 2.237
+  },
+  {
+   "w": "the",
+   "start_s": 2.237,
+   "end_s": 2.325
+  },
+  {
+   "w": "lights",
+   "start_s": 2.325,
+   "end_s": 2.6
+  },
+  {
+   "w": "out.",
+   "start_s": 2.6,
+   "end_s": 3.225
+  }
+ ]
+}

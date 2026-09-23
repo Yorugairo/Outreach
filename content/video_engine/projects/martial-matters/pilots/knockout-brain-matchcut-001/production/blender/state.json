@@ -1,0 +1,236 @@
+{
+  "schema": "martial_matters_knockout_brain_matchcut.v1",
+  "review_state": "review_only",
+  "render_eligible": false,
+  "source_data": false,
+  "scene": {
+    "resolution": [
+      720,
+      1280
+    ],
+    "fps": 30,
+    "frames": [
+      1,
+      90
+    ],
+    "duration_s": 3.0,
+    "engine": "BLENDER_EEVEE"
+  },
+  "motion_contract": {
+    "head": "leftward rotation begins at frame 9 and peaks at frame 27",
+    "brain": "delayed lag starts after frame 15; overshoot/recoil peaks at frames 38 and 50",
+    "recoil_beats": [
+      "first recoil / catch-up",
+      "second smaller recoil / settle"
+    ],
+    "gore": false,
+    "brain_ejection": false
+  },
+  "sampled_motion_state": [
+    {
+      "frame": 1,
+      "time_s": 0.0,
+      "head_location": [
+        0.0,
+        0.0,
+        3.35
+      ],
+      "head_rotation_deg_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "brain_location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "brain_rotation_deg_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "brain_vs_head_y_rotation_deg": 0.0
+    },
+    {
+      "frame": 12,
+      "time_s": 0.366667,
+      "head_location": [
+        -0.01593,
+        0.0,
+        3.35
+      ],
+      "head_rotation_deg_xyz": [
+        0.0,
+        -0.963,
+        -0.426
+      ],
+      "brain_location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "brain_rotation_deg_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "brain_vs_head_y_rotation_deg": 0.963
+    },
+    {
+      "frame": 24,
+      "time_s": 0.766667,
+      "head_location": [
+        -0.40778,
+        0.0,
+        3.35
+      ],
+      "head_rotation_deg_xyz": [
+        0.0,
+        -18.0,
+        -9.796
+      ],
+      "brain_location": [
+        0.17719,
+        0.0,
+        0.0
+      ],
+      "brain_rotation_deg_xyz": [
+        0.0,
+        -2.733,
+        -1.013
+      ],
+      "brain_vs_head_y_rotation_deg": 15.267
+    },
+    {
+      "frame": 36,
+      "time_s": 1.166667,
+      "head_location": [
+        -0.2683,
+        0.0,
+        3.35
+      ],
+      "head_rotation_deg_xyz": [
+        0.0,
+        -12.697,
+        -6.436
+      ],
+      "brain_location": [
+        -0.10037,
+        0.0,
+        0.0
+      ],
+      "brain_rotation_deg_xyz": [
+        0.0,
+        -14.82,
+        -6.844
+      ],
+      "brain_vs_head_y_rotation_deg": -2.123
+    },
+    {
+      "frame": 48,
+      "time_s": 1.566667,
+      "head_location": [
+        -0.34621,
+        0.0,
+        3.35
+      ],
+      "head_rotation_deg_xyz": [
+        0.0,
+        -15.207,
+        -7.603
+      ],
+      "brain_location": [
+        0.13852,
+        0.0,
+        0.0
+      ],
+      "brain_rotation_deg_xyz": [
+        0.0,
+        -23.771,
+        -11.86
+      ],
+      "brain_vs_head_y_rotation_deg": -8.564
+    },
+    {
+      "frame": 60,
+      "time_s": 1.966667,
+      "head_location": [
+        -0.30045,
+        0.0,
+        3.35
+      ],
+      "head_rotation_deg_xyz": [
+        0.0,
+        -13.273,
+        -6.773
+      ],
+      "brain_location": [
+        -0.03026,
+        0.0,
+        0.0
+      ],
+      "brain_rotation_deg_xyz": [
+        0.0,
+        -15.628,
+        -7.382
+      ],
+      "brain_vs_head_y_rotation_deg": -2.355
+    },
+    {
+      "frame": 75,
+      "time_s": 2.466667,
+      "head_location": [
+        -0.20634,
+        0.0,
+        3.35
+      ],
+      "head_rotation_deg_xyz": [
+        0.0,
+        -9.317,
+        -4.317
+      ],
+      "brain_location": [
+        0.02501,
+        0.0,
+        0.0
+      ],
+      "brain_rotation_deg_xyz": [
+        0.0,
+        -10.097,
+        -4.548
+      ],
+      "brain_vs_head_y_rotation_deg": -0.78
+    },
+    {
+      "frame": 90,
+      "time_s": 2.966667,
+      "head_location": [
+        -0.2,
+        0.0,
+        3.35
+      ],
+      "head_rotation_deg_xyz": [
+        0.0,
+        -9.0,
+        -4.0
+      ],
+      "brain_location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "brain_rotation_deg_xyz": [
+        0.0,
+        -9.0,
+        -4.0
+      ],
+      "brain_vs_head_y_rotation_deg": 0.0
+    }
+  ],
+  "objects": {
+    "head_root": "HEAD_ROOT__punch_rotation",
+    "brain_root": "BRAIN_ROOT__delayed_lag_recoil",
+    "camera": "camera_knockout_brain_matchcut"
+  }
+}

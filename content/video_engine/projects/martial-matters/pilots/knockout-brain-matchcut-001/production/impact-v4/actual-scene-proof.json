@@ -1,0 +1,182 @@
+[
+  {
+    "frame": 17,
+    "source_frame": 22,
+    "fractured_skull_alpha": 0.0,
+    "head_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "brain_position": [
+      -6.5,
+      18.0,
+      30.0
+    ]
+  },
+  {
+    "frame": 31,
+    "source_frame": 22,
+    "fractured_skull_alpha": 0.0,
+    "head_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "brain_position": [
+      -6.5,
+      18.0,
+      30.0
+    ]
+  },
+  {
+    "frame": 32,
+    "source_frame": 22,
+    "fractured_skull_alpha": 0.0,
+    "head_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "brain_position": [
+      -6.5,
+      18.0,
+      30.0
+    ]
+  },
+  {
+    "frame": 35,
+    "source_frame": 23,
+    "fractured_skull_alpha": 0.0,
+    "head_position": [
+      12.5,
+      4.5,
+      0.0
+    ],
+    "brain_position": [
+      5.463005542755127,
+      22.29693031311035,
+      30.0
+    ]
+  },
+  {
+    "frame": 38,
+    "source_frame": 24,
+    "fractured_skull_alpha": 0.0,
+    "head_position": [
+      24.0,
+      13.5,
+      0.0
+    ],
+    "brain_position": [
+      16.256946563720703,
+      31.00128936767578,
+      30.0
+    ]
+  },
+  {
+    "frame": 40,
+    "source_frame": 24,
+    "fractured_skull_alpha": 0.5,
+    "head_position": [
+      24.0,
+      13.5,
+      0.0
+    ],
+    "brain_position": [
+      16.256946563720703,
+      31.00128936767578,
+      30.0
+    ]
+  },
+  {
+    "frame": 41,
+    "source_frame": 25,
+    "fractured_skull_alpha": 0.75,
+    "head_position": [
+      34.0,
+      13.0,
+      0.0
+    ],
+    "brain_position": [
+      25.05181884765625,
+      29.91685676574707,
+      30.0
+    ]
+  },
+  {
+    "frame": 42,
+    "source_frame": 25,
+    "fractured_skull_alpha": 1.0,
+    "head_position": [
+      34.0,
+      13.0,
+      0.0
+    ],
+    "brain_position": [
+      21.85555648803711,
+      32.263999938964844,
+      30.83333396911621
+    ]
+  },
+  {
+    "frame": 48,
+    "source_frame": 27,
+    "fractured_skull_alpha": 1.0,
+    "head_position": [
+      46.5,
+      11.0,
+      0.0
+    ],
+    "brain_position": [
+      -10.077777862548828,
+      55.25600051879883,
+      35.83333206176758
+    ]
+  },
+  {
+    "frame": 55,
+    "source_frame": 29,
+    "fractured_skull_alpha": 0.699999988079071,
+    "head_position": [
+      72.5,
+      3.5,
+      0.0
+    ],
+    "brain_position": [
+      -75.64444732666016,
+      102.46399688720703,
+      41.66666793823242
+    ]
+  },
+  {
+    "frame": 62,
+    "source_frame": 32,
+    "fractured_skull_alpha": 0.0,
+    "head_position": [
+      106.5,
+      -17.0,
+      0.0
+    ],
+    "brain_position": [
+      -171.6999969482422,
+      171.62399291992188,
+      47.5
+    ]
+  },
+  {
+    "frame": 90,
+    "source_frame": 60,
+    "fractured_skull_alpha": 0.0,
+    "head_position": [
+      111.5,
+      -22.0,
+      0.0
+    ],
+    "brain_position": [
+      -860.8110961914062,
+      667.7839965820312,
+      70.83333587646484
+    ]
+  }
+]

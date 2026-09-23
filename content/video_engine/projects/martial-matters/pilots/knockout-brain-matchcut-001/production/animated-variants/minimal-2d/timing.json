@@ -1,0 +1,115 @@
+{
+  "schema_version": "minimal_2d_fight_timing.v1",
+  "project": "knockout-brain-matchcut-001",
+  "variant": "minimal-2d",
+  "renderer": "render_minimal_2d.py",
+  "style": "code-native-flat-graphic",
+  "canvas": {
+    "width": 540,
+    "height": 960,
+    "fps": 24,
+    "duration_s": 4.0,
+    "frame_count": 96
+  },
+  "characters": {
+    "left": "dark skin, short black hair, beard, black shorts, red wraps",
+    "right": "light skin, bald, beard, white shorts, blue wraps"
+  },
+  "beats": [
+    {
+      "id": "guard_anticipation",
+      "start_s": 0.0,
+      "end_s": 0.74,
+      "keyframe": 0,
+      "description": "Both fighters hold broad readable guards; right shoulder coils."
+    },
+    {
+      "id": "contact",
+      "start_s": 0.98,
+      "end_s": 1.2,
+      "keyframe": 27,
+      "description": "The right bald/blue fighter's right-hand straight reaches the left face; impact ring marks the clean contact."
+    },
+    {
+      "id": "recoil",
+      "start_s": 1.2,
+      "end_s": 1.82,
+      "keyframe": 36,
+      "description": "The left dark/red fighter's head and torso recoil while feet stay planted; one symbolic golden cartoon brain exits on the visible recoil only."
+    },
+    {
+      "id": "followup_right_left_hook",
+      "start_s": 1.78,
+      "end_s": 2.48,
+      "keyframe": 51,
+      "description": "The same right fighter's left hook crosses into the left jaw with a warm impact accent."
+    },
+    {
+      "id": "fall",
+      "start_s": 2.48,
+      "end_s": 4.0,
+      "keyframe": 78,
+      "description": "The left dark/red fighter continues rotating and descending until the body reaches the floor plane; the right fighter stays standing."
+    }
+  ],
+  "brain_visibility": {
+    "start_s": 1.24,
+    "end_s": 1.82,
+    "rule": "visible only after glove-face contact and during head recoil; no skull or gore"
+  },
+  "contact_geometry": {
+    "sample_s": 1.125,
+    "frame": 27,
+    "attacker": "right_fighter_right_glove",
+    "receiver": "left_head",
+    "glove_center_px": [
+      191.74,
+      323.74
+    ],
+    "receiver_head_center_px": [
+      185.0,
+      315.0
+    ],
+    "center_distance_px": 11.03,
+    "receiver_head_radius_px": 50,
+    "passes": true
+  },
+  "followup_geometry": {
+    "sample_s": 2.125,
+    "frame": 51,
+    "attacker": "right_fighter_left_glove",
+    "receiver": "left_head",
+    "glove_center_px": [
+      176.2,
+      319.6
+    ],
+    "receiver_head_center_px": [
+      168.94,
+      326.91
+    ],
+    "center_distance_px": 10.31,
+    "receiver_head_radius_px": 50,
+    "passes": true
+  },
+  "fall_geometry": {
+    "sample_s": 3.65,
+    "frame": 88,
+    "fighter": "left_dark_red",
+    "head_center_px": [
+      121.59,
+      809.15
+    ],
+    "mat_y_px": 838.0,
+    "head_radius_px": 35.0,
+    "head_to_mat_px": 28.85,
+    "body_angle_deg": -84.0,
+    "scale": 0.7,
+    "near_horizontal": true,
+    "floor_contact_passes": true
+  },
+  "review_artifacts": {
+    "style_preview": "style-preview.png",
+    "contact_sheet": "contact-sheet.png",
+    "video": "minimal-2d-fight-proof.mp4"
+  }
+}

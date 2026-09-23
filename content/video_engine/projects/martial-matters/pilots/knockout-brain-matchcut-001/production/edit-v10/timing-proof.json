@@ -1,0 +1,14 @@
+{
+  "quote_end": 7.6,
+  "lead_source_frames": [
+    13,
+    21
+  ],
+  "xray_at": 7.9,
+  "contact_at": 8.6,
+  "brain_launch_at": 8.7,
+  "hendo_at": 11.066667,
+  "duration": 17.866667,
+  "removed": "extra plain follow-up, replay hold, repeated anime buildup",
+  "bed": "v9 continuous -30 LUFS target, no sidechain; new end fade"
+}

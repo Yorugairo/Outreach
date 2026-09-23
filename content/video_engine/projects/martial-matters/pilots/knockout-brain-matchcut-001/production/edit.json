@@ -1,0 +1,63 @@
+{
+  "duration": 24.6,
+  "clips": [
+    {
+      "id": "hook",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\hook.mp4",
+      "start": 0,
+      "duration": 3.5
+    },
+    {
+      "id": "news",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\news.mp4",
+      "start": 3.5,
+      "duration": 4.6
+    },
+    {
+      "id": "knockout",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\knockout.mp4",
+      "start": 8.1,
+      "duration": 3.5
+    },
+    {
+      "id": "replay-hold",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\replay-hold.mp4",
+      "start": 11.6,
+      "duration": 1.3
+    },
+    {
+      "id": "anime",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\anime.mp4",
+      "start": 12.9,
+      "duration": 1.2
+    },
+    {
+      "id": "impact",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\impact.mp4",
+      "start": 14.1,
+      "duration": 0.7
+    },
+    {
+      "id": "brain",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\blender\\brain-recoil.mp4",
+      "start": 14.8,
+      "duration": 3.0
+    },
+    {
+      "id": "hendo",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\hendo.mp4",
+      "start": 17.8,
+      "duration": 4.2
+    },
+    {
+      "id": "hendo-replay",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\hendo-replay.mp4",
+      "start": 22.0,
+      "duration": 2.6
+    }
+  ],
+  "captions": [
+    {"at": 1.288, "until": 1.975, "text": "SEAN SHARAF"},
+    {"at": 1.975, "until": 3.3, "text": "SHUTS THE LIGHTS OUT."}
+  ]
+}

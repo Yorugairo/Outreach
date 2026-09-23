@@ -1,0 +1,104 @@
+{
+  "schema": "flow_motion_test_receipt.v2",
+  "status": "ready_for_review",
+  "work_order": "../flow-motion-work-order-v2.md",
+  "project": "knockout-brain-matchcut-001",
+  "generation": {
+    "attempt_id": "f7fc0bcf-dfa3-4e75-bf57-bc2e179ba312",
+    "service_ids_seen_before_polling": [
+      "440edc03-c44a-4ff8-bd71-d22a29866386"
+    ],
+    "flow_asset_id": "784cfd9f-fa95-40d9-80e3-a6da22e93378",
+    "editor_id": "402ac862-8916-4b6f-9081-9a3e781a16fa",
+    "model": "Omni 1.1 Flash",
+    "settings": {
+      "pillText": "Video · 720p · 6s crop_9_16 x1",
+      "creditsText": "Generating will use 10 credits",
+      "modelText": "Omni 1.1 Flash",
+      "credits": 10
+    },
+    "credits_spent": 10,
+    "submitted_once": true,
+    "conditioning": {
+      "start_frame": "detailed-2d-start-v2.png",
+      "end_frame": null,
+      "end_frame_policy": "deliberately_unbound_per_flow_motion_work_order_v2"
+    }
+  },
+  "video": {
+    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\flow-test\\detailed-2d-motion-test-v1.mp4",
+    "original_download_filename": "Fighter_lands_knockout_punch_20260920183837.mp4",
+    "sha256": "aad2713f2dc39db242fe593cf5fa86f3cff70b99fcf963659fd88dfca058471e",
+    "size_bytes": 2097189,
+    "duration_s": 6.016,
+    "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+    "codec_name": "h264",
+    "width": 720,
+    "height": 1280,
+    "pix_fmt": "yuv420p",
+    "frame_rate": "24/1",
+    "audio_streams": 1,
+    "audio_note": "Flow 720p export includes an AAC stereo stream; no audio edit or remix was performed."
+  },
+  "browser_download_artifacts": [
+    {
+      "path": "C:/Users/Snipe/AppData/Local/Temp/playwright-artifacts-b0hsWd/118f9b15-ec84-4003-9d0b-ce6db1355717",
+      "sha256": "aad2713f2dc39db242fe593cf5fa86f3cff70b99fcf963659fd88dfca058471e",
+      "size_bytes": 2097189
+    },
+    {
+      "path": "C:/Users/Snipe/AppData/Local/Temp/playwright-artifacts-HNcF7e/d97fc582-1b8e-4bc2-b968-28a03fc20a6e",
+      "sha256": "aad2713f2dc39db242fe593cf5fa86f3cff70b99fcf963659fd88dfca058471e",
+      "size_bytes": 2097189
+    }
+  ],
+  "ffprobe": "ffprobe.json",
+  "decode_check": "decode-check.json",
+  "verification_frames": [
+    {
+      "at_s": 0,
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\flow-test\\contact-frames\\frame-0s.png",
+      "sha256": "0427a2e1411d9537bba85fa7a8530383c0f199f58adb810c30e6a60f8a418fff"
+    },
+    {
+      "at_s": 1,
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\flow-test\\contact-frames\\frame-1s.png",
+      "sha256": "bc95ca8daa812368f487e4a0c1b8450e9d0a4082bb36aa649d055dc57e2ebfc7"
+    },
+    {
+      "at_s": 2,
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\flow-test\\contact-frames\\frame-2s.png",
+      "sha256": "486fa305d0c76cd07dbdb90e3013df227c5480c8f2c852cc5975e89998b4c85f"
+    },
+    {
+      "at_s": 3,
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\flow-test\\contact-frames\\frame-3s.png",
+      "sha256": "e6aa892f0fb056e08e55fcdb817c5f081a9a4f469945bed3a5654b63688fcf46"
+    },
+    {
+      "at_s": 4,
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\flow-test\\contact-frames\\frame-4s.png",
+      "sha256": "80ac86cfe91301d485d38cf7dd614de92557ef0e87bfe75be255fb9d61d3a8e9"
+    },
+    {
+      "at_s": 5,
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\flow-test\\contact-frames\\frame-5s.png",
+      "sha256": "757da90110c2e9de6287e65798b3d5bb210379aed33fcd52b09e252ee4958876"
+    }
+  ],
+  "prompt": "Continuing from the starting frame, animate a fluid hand-drawn anime MMA exchange in the same wide locked camera. The bald fighter in white shorts on the RIGHT advances and lands a clean RIGHT straight punch against the dark-haired fighter on the LEFT, then the SAME bald fighter lands his LEFT hook. Each glove reaches the opponent's face before the opponent's head recoils. His hips and shoulders drive the punches and his arms complete their follow-through. The dark-haired fighter in black shorts loses balance and falls fully onto the mat while the bald fighter remains standing and stops. At second five the fallen fighter settles onto his side and the standing fighter lowers his guard, with the dark-haired fighter fully grounded and the bald fighter still standing. Preserve the entire fall and floor contact. The exchange is fast and forceful, the characters retain crisp drawn contours and consistent athletic anatomy, and the arena camera keeps both complete bodies visible. Completely silent video, no text or blood.",
+  "source_inputs": {
+    "start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\plates\\detailed-2d-start-v2.png",
+      "sha256": "37929e4e2fa4d7c2bd724fbf183841465c5adedebcf1ae01221d8c91d3e38c1f",
+      "bound": true
+    },
+    "end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\plates\\detailed-2d-end-v1.png",
+      "sha256": "1a3d756f0b4a57c43cacc3ea1d6de00edb3a9964aeeb4cf364292319e958bbee",
+      "uploaded": true,
+      "bound": false
+    }
+  },
+  "review_state": "review_only_quarantine"
+}

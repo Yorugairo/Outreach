@@ -1,0 +1,13 @@
+{
+  "engine": "kokoro-82M",
+  "voice": "am_michael",
+  "rate": 1.2,
+  "duration_s": 1.1,
+  "source_text": "Look familiar?",
+  "review_only": true,
+  "source_crop_s": [0.325, 1.425],
+  "words": [
+    {"w": "Look", "start_s": 0.0, "end_s": 0.2},
+    {"w": "familiar?", "start_s": 0.2, "end_s": 1.1}
+  ]
+}

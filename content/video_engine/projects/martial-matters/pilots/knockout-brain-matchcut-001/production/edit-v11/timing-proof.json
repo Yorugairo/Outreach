@@ -1,0 +1,17 @@
+{
+  "power_flash": 2.2,
+  "effect_lead_at": 2.8666666666666667,
+  "xray_at": 3.4,
+  "contact_at": 4.1,
+  "brain_launch_at": 4.2,
+  "ground_tail_source": [
+    2.7333333333333334,
+    3.5
+  ],
+  "quote_at": 7.333333333333333,
+  "plain_follow_up_at": 8.766666666666667,
+  "hendo_at": 11.833333333333334,
+  "duration": 18.633333333333333,
+  "no_time_stretched_fight_audio": true,
+  "bed": "continuous v9 bed without sidechain"
+}

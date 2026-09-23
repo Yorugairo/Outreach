@@ -1,0 +1,25 @@
+{
+  "engine": "local Kokoro-82M",
+  "status": "private listening proof",
+  "actors": "two pitched treatments of one original synthetic voice; no cloning",
+  "limitation": "comic pitched speech, not a verified acted scream",
+  "stems": [
+    {
+      "file": "interviewer-a.wav",
+      "voice": "am_michael",
+      "text": "Oh my God!",
+      "pitch_factor": 1.38,
+      "source_duration": 2.025,
+      "duration": 2.2
+    },
+    {
+      "file": "interviewer-b.wav",
+      "voice": "am_michael",
+      "text": "Oh my God!",
+      "pitch_factor": 1.7,
+      "source_duration": 2.025,
+      "duration": 2.2
+    }
+  ],
+  "mix_duration": 2.3
+}

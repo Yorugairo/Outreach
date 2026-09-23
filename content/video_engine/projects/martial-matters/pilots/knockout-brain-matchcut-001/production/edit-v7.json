@@ -1,0 +1,70 @@
+{
+  "duration": 24.1,
+  "clips": [
+    {
+      "id": "hook",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v7\\hook-complete.mp4",
+      "start": 0,
+      "duration": 6.6
+    },
+    {
+      "id": "news",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v7\\quote.mp4",
+      "start": 6.6,
+      "duration": 1.433333
+    },
+    {
+      "id": "follow-up",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v6\\follow-up.mp4",
+      "start": 8.033333,
+      "duration": 3.066667
+    },
+    {
+      "id": "replay-hold",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\replay-hold.mp4",
+      "start": 11.1,
+      "duration": 1.3
+    },
+    {
+      "id": "anime",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\anime.mp4",
+      "start": 12.4,
+      "duration": 1.2
+    },
+    {
+      "id": "impact-head-snap-v4",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v5\\impact-out.mp4",
+      "start": 13.6,
+      "duration": 3.7
+    },
+    {
+      "id": "hendo",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v5\\hendo-in.mp4",
+      "start": 17.3,
+      "duration": 4.2
+    },
+    {
+      "id": "hendo-replay",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\hendo-replay.mp4",
+      "start": 21.5,
+      "duration": 2.6
+    }
+  ],
+  "captions": [
+    {
+      "at": 0,
+      "until": 1.197,
+      "text": "NO CHARGES FILED."
+    },
+    {
+      "at": 1.197,
+      "until": 2.199,
+      "text": "THEN SHARAF DELIVERED A"
+    },
+    {
+      "at": 2.199,
+      "until": 3.5,
+      "text": "ONE-PUNCH VERDICT."
+    }
+  ]
+}

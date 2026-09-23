@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "source_master": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\audio\\master-v11.wav",
+  "source_reaction": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\audio\\reaction-duo.wav",
+  "source_continuous_bed": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v9\\continuous-bed.wav",
+  "original_duration_s": 18.633333,
+  "insert_at_s": 8.766667,
+  "reaction_duration_s": 2.3,
+  "new_duration_s": 20.933333,
+  "mix_rule": "master before + reaction-duo mixed over continuous v9 bed at unity + master tail; 40ms equal-power fades at boundaries; no ducking"
+}

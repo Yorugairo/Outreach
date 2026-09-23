@@ -1,0 +1,52 @@
+{
+  "duration": 18.633333,
+  "clips": [
+    {
+      "id": "hook",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v11\\powered-impact-opening.mp4",
+      "start": 0,
+      "duration": 7.333333
+    },
+    {
+      "id": "news",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v7\\quote.mp4",
+      "start": 7.333333,
+      "duration": 1.433333
+    },
+    {
+      "id": "follow-up",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v11\\plain-follow-up.mp4",
+      "start": 8.766667,
+      "duration": 3.066667
+    },
+    {
+      "id": "hendo",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v5\\hendo-in.mp4",
+      "start": 11.833333,
+      "duration": 4.2
+    },
+    {
+      "id": "hendo-replay",
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\hendo-replay.mp4",
+      "start": 16.033333,
+      "duration": 2.6
+    }
+  ],
+  "captions": [
+    {
+      "at": 0,
+      "until": 1.197,
+      "text": "NO CHARGES FILED."
+    },
+    {
+      "at": 1.197,
+      "until": 2.199,
+      "text": "THEN SHARAF DELIVERED A"
+    },
+    {
+      "at": 2.199,
+      "until": 3.5,
+      "text": "ONE-PUNCH VERDICT."
+    }
+  ]
+}

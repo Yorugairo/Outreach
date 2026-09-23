@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "video": "minimal-full-review-roughcut.mp4",
+  "probe": {
+    "video": {
+      "codec_name": "h264",
+      "codec_type": "video",
+      "width": 540,
+      "height": 960,
+      "pix_fmt": "yuv420p",
+      "r_frame_rate": "24/1",
+      "duration": "20.958333",
+      "nb_frames": "503"
+    },
+    "audio": {
+      "codec_name": "aac",
+      "codec_type": "audio",
+      "r_frame_rate": "0/0",
+      "duration": "20.933000",
+      "nb_frames": "983"
+    }
+  },
+  "decode": "PASS",
+  "checks": {
+    "dimensions": true,
+    "frame_rate": true,
+    "frame_count": true,
+    "duration_s_within_one_frame": true,
+    "audio_present": true
+  }
+}

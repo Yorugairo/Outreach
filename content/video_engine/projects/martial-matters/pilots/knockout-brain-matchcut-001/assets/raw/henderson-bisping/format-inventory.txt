@@ -1,0 +1,7 @@
+[generic] Extracting URL: https://www.ufc.com/video/49967
+[generic] 49967: Downloading webpage
+[generic] 49967: Extracting information
+[info] Available formats for 49967-1:
+ID EXT RESOLUTION | PROTO | VCODEC  ACODEC
+-------------------------------------------
+0  mp4 unknown    | https | unknown unknown
