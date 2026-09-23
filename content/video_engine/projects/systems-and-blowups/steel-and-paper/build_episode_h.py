@@ -61,8 +61,13 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
         T5), bare of paper with its hatch (E99 s92); the BoE and the concession written on the same page.
   DEBT_PAGE / DESK_PLATE   row 16 (P69 T24): the yields melt and the builders' bond issuance draws on its words (the 2026E
         range a spread, T14), recast to the IG index's tech share and to the capex consensus (E58 x2, `keyed: false`,
-        each state's unit in its title); on "Go into the filings" the page melts onto the records' desk, the $822B
+        each state retitled to its own title - the v2 objects print their unit, P69 T25 / R26-282); on "Go into the filings" the page melts onto the records' desk, the $822B
         record lands at its reading size and PROP 2 the data centre is STAMPED in the desk's declared room (P69 T5).
+  ARITH_PAGE / DESK_PLATE (again)   row 17 (P69 T25): the desk holds the rehook, dip 4 to PIMCO's 94 page on its axes
+        (`ev-capex-ocf-94-bars-v1`, the [0, 100] scale its own, the 100 rule "every dollar from operations"), the bar
+        landing with its own "94%" as the page lands, the title RELIT on the repeat "Ninety-four."; E50 - the page spins
+        into a point (the suck) before "So when you hear" and the records' desk is standing there, the filings' record
+        thrown back AS the page goes, up to the row's end - the anaphora on the bottom caption under it.
 
 THE BODY'S PREFLIGHT (P69 T14, rows 7-24) is three constant tables, read before any body row is authored:
   BODY_ASSETS          every page object (with its builder), card, plate, prop, host still, cue file and outro part
@@ -175,8 +180,9 @@ def _assert_read_only(before: dict) -> None:
 # (the trough, on the same desk) and T21 row 13 (reset 1, the dip to 1849), and they move it to row 14's first words.
 # P69 T22 authors row 14 (the yardstick) and moved it to row 15's first words (the trigger, T23's); P69 T23 authors row 15
 # (the trigger, the concession and PROP 1) and moves it to row 16's first words (who is paying, T24's).
-# P69 T24 authors row 16 (who is paying, PROP 2) and moves it to row 17's first words (the arithmetic, T25's).
-UNIT_CUT_PHRASE = "So put it together"      # row 17's first words; the build stops at the cut BEFORE them
+# P69 T24 authors row 16 (who is paying, PROP 2) and moved it to row 17's first words (the arithmetic, T25's); P69 T25
+# authors row 17 (the arithmetic, the 94 bar) and moves it to row 18's first words (the signpost, T26's).
+UNIT_CUT_PHRASE = "And that's the part everyone"   # row 18's first words; the build stops at the cut BEFORE them
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -699,20 +705,22 @@ DEBT_TITLE_S = 2.0
 DEBT_Q_TITLE = "Who is paying for the steel this time?"
 DEBT_MELT_S = 1.0        # the yields melt over the breath before "But here's the question" (row 15's TNX_MELT_LEAD_S)
 DEBT_MELT_LEAD_S = 0.5
-IG_PAGE = "ev-ig-credit-weighting-v1"      # bars 9 / 10 / >12 (Morgan Stanley IM; LPL) - dossier C3, VERIFIED
+IG_PAGE = "ev-ig-credit-weighting-v2"      # bars 9% / 10% / 12% (>12%) (Morgan Stanley IM; LPL) - dossier C3
 IG = _series(IG_PAGE)
 IG_RECAST = 1
 IG_PROJ = next(k for k, b in enumerate(IG["bars"]) if b["label"] == "Projected")   # the ">12%" bar: "past twelve"
-CAPEX_PAGE = "ev-capex-consensus-v1"       # bars $480B / $690B / $870B (PIMCO Figs 2-3) - dossier B1, VERIFIED
+CAPEX_PAGE = "ev-capex-consensus-v2"       # bars $480 / $690, US$ billions (PIMCO Figs 2-3) - dossier B1
 CAPEX = _series(CAPEX_PAGE)
 CAPEX_RECAST = 2                          # the page's THIRD state (STATE_MAX 3)
-CAPEX_2026 = next(k for k, b in enumerate(CAPEX["bars"]) if b["label"] == "2026 consensus")   # "six hundred and ninety"
-# THE UNIT IS IN THE TITLE (MEASURED on draft 3, tiles 276.5-320.0): the two bars objects carry no `yunit` / `yfmt`, so
-# the bars print "9.0 / 10.0 / 12.0" and "480 / 690 / 870" with no % or $B and the y axes carry no unit (the debt
-# object's `yfmt: usd, yunit: B` is what they lack). The objects are not this slice's to edit (named for the parent: a
-# v2 of each with its unit), so each state's retitle - the page's own title - carries its unit. No new figure.
-IG_TITLE = "Technology's share of the investment-grade bond index, %"
-CAPEX_TITLE = "Hyperscaler capital spending, US$ billions: consensus estimates"
+CAPEX_2026 = next(k for k, b in enumerate(CAPEX["bars"]) if b["label"] == "Consensus now")   # "six hundred and ninety"
+# THE UNIT IS ON THE BARS (P69 T25, R26-282): the v1 objects carried no unit, so the bars printed "9.0 / 10.0 / 12.0"
+# and "480 / 690 / 870" and T24 put the unit in each state's title as a stopgap. The v2 objects carry the source's own
+# unit (`unit: "%"` - % of the index; `unit: "$"` - the page's currency prefix, "US$ billions" in the sub), a sub that
+# states what the bars show (no longer row 17's 94), and the capex page drops the 2027 $870B bar the script never says
+# (each object's `provenance_note`). A recast rewrites the state's sub and source itself; the TITLE is rewritten only
+# by a verb (scene-evidence-engine.mjs:8494 `titleText`), so each recast still retitles - to the state's OWN title.
+IG_TITLE = IG["title"]
+CAPEX_TITLE = CAPEX["title"]
 DEBT_RECAST_S = 1.2
 DEBT_MARK_S = 1.6        # a figure's / spread's write
 # NO RING ON A BAR (MEASURED on draft 6, the probe's M34): a callout on a bars datum circles the WHOLE bar and its stroke
@@ -952,6 +960,86 @@ def page_debt() -> str:
     return ("ledger:%s:line:%d:right:%s%s%s%s;then=%s:bars:%d;then=%s:bars:%d"
             % (DEBT_PAGE, DEBT_2025, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM, IG_PAGE, IG_PROJ, CAPEX_PAGE,
                CAPEX_2026))
+
+
+# ROW 17 (P69 T25): THE ARITHMETIC - PIMCO's projection drawn on its own page (T14a's `ev-capex-ocf-94-bars-v1`: ONE bar,
+# the [0, 100] scale stated, the whole of operating cash flow the 100 rule), its own value "94%" on the bar.
+# The treatment's `chart_to ev-capex-funding-v1` is not this page: its 94 is Epoch's single realised quarter, a different
+# claim (BODY_DEPARTURES row 17; the object's provenance_note), and row 16 ends on the records' desk, not on a page.
+ARITH_PAGE = "ev-capex-ocf-94-bars-v1"
+ARITH = _series(ARITH_PAGE)
+ARITH_BAR = 0                                  # the one bar, "Capex, next two years"
+assert ARITH["bars"][ARITH_BAR]["value"] == 94 and ARITH["domain"] == [0, 100]
+# NO FIGURE ON THE BAR, AND NO RING (the coordinator's read, 2026-09-23; MEASURED, drafts 4-7): the bar's own value already
+# prints "94%", so T6's figure was the same number twice - the value fades while the figure writes a few px off it, a ~0.6 s
+# double print (the probe's M28 FAIL `val:94% on bracket:94%`, `p69t25/m28/crops.png`), and a sub on it ("of operating cash
+# flow") outran the 196 px bar and vanished on the dark plot (draft 5). The RING the coordinator named (E56 - a number on a
+# CHART) was tried (draft 6, `p69t25/draft6/`): a `ring` on the bar's datum resolves the WHOLE `.bar` (resolveTarget's bar
+# branch, scene-evidence-engine.mjs:13722) and its dashed ellipse crosses "Capex, next two years" under the bar; no target
+# reaches the value label alone - a `point` / `region` ring must carry a label with a digit (`_validate_ring`, E56) and
+# `paintRing` WRITES that label beside the ellipse (species/ring.mjs:261), a second "94%". So the repeat "Ninety-four." RELIGHTS
+# the title "Ninety-four cents of every dollar" (SPECIES_WHEN: "the sentence RETURNS to a number already on the page (the
+# ring's echo) - the bracket or the title re-fires"; CAPABILITIES:77) - one number on the page, the landing visible (draft 7).
+ARITH_RELIGHT_S = 1.2
+# THE DESK HOLDS THE REHOOK ("So put it together, because this is where the arithmetic gets tight."), and the page comes
+# up on the next sentence: the dip is centred on "Over" (cut_before's onset rule for a dip), the page lands on its axes
+# (OPEN_ENTER - E73) and its one bar grows as the page lands. MEASURED on the tiles (`p69t25/draft4`): the bar is at ~65
+# at 324.9 and stands at 94 with its value by ~325.4 - on "two years, PIMCO", ~2.6 s BEFORE "ninety-four percent" (328.00);
+# the motion gate books the landing at the build's full LP.BUILD 3.0 s (327.62). A bars page has no hold for a bar (the
+# build_to cap is a series' - CAPABILITIES:77), and a dip mid-sentence to land it on the word was refused: named in the
+# notes. The title says 94 from the page's landing, inside the sentence that says it. The bar's value sits INSIDE the bar
+# under the 100 rule (E28 - never on the far side of a rule its value does not pass, `lpBarLabelPlace`). The bar is NOT
+# emphasized: an emphasized bar's pill (R26-256) would print "94%" twice.
+ARITH_FROM_PHRASE = "Over the next two years, PIMCO"
+# THE DESK'S DOCKS LEAVE BEFORE THE DIP: a dock fades over EXIT AFTER its end time, and the dip's black is a few frames,
+# so docks ending ON the boundary stood over the 94 page - MEASURED, draft 2 (`p69t25/propexit`): the record faded out by
+# ~324.8 and PROP 2 stood over the page's top right to ~325.1 (a prop over a chart). Ending them 0.6 s early changed
+# nothing (draft 3): the engine SNAPS a dock exit within 1.4 s of a scene boundary ONTO the boundary
+# (scene-evidence-engine.mjs:6592 - "an exit more than ~1.4s out is a deliberate early clear and still fades"), and only
+# a WIPE sweeps a card off with the front (`swept`, :17425) - a dip does not. So the docks end 1.5 s before the dip, on
+# "arithmetic": the rehook is said to the record and the stamp, and the desk is bare for "gets tight." (named for the
+# engine: a dip should take the outgoing docks with its black, as the wipe does).
+DOCKS_OFF_LEAD_S = 1.5
+# E50 ON THE PAGE (M21, OPERATOR-RULINGS E50 - 6-8 s from the last data mark, 12 s at most). The gate's clock starts at
+# the BAR's landing (~5:27.6 - a figure "neither restarts nor ends the clock", gate_motion_density.py `_deployed_lives`),
+# and the sentences that read the bar run to "borrowing the difference." - so the page LEAVES in the breath before "So
+# when you hear the buildout" (~10.8 s after the bar lands; MEASURED, draft 1: a leave on "It stopped being true" read
+# 14.4 s, M21 WARN), spinning into a point (the suck, P53 T2 / R26-60) where the records' desk is standing. The treatment
+# held the page through the post-key ("the page holds, idle live") - ~30 s past its landing; the departure is named
+# (BODY_DEPARTURES row 17). The desk is the build's own records' world (rows 11 and 16b): "funded out of profits - that
+# was true. It stopped being true" and the anaphora are said under the filings' record, thrown back as the page goes
+# (the next note) - "the paper" has its referent on screen.
+ARITH_LEAVE_PHRASE = "So when you hear the buildout"
+SUCK_S = 0.3   # the engine's SUCK_S (scene-evidence-engine.mjs:5561) - the page is gone as the phrase starts
+ARITH_SUCK_AT = (0.345, 0.58)   # the suck's point: the stage centre of the record's slot (LEASES_SLOT), where it lands
+# THE RECORD IS UP FROM THE SUCK'S LANDING (the coordinator's read of draft 5, 2026-09-23): the desk stood BARE 338.44-348.01
+# with only the centred stage caption - REBUILD-TREATMENT-H.md:173 "no bare plate between 2:45 and 6:04" - and that caption's
+# unspoken words were pale grey on the pale cream wall (tile 344.00; R26-268, no engine fix). The 348.01 entry was this door's
+# own choice ("signed"), not the engine's dock-exit snap (`:6592` moves EXITS only). The record is thrown as the suck starts,
+# so it lands as the page vanishes into its point, and it is live BEFORE "So when you hear" (338.74): a caption page is
+# stamped stage/anchor by the dock live at its START (`_dock_live_at`), so every page of the row is the bottom caption.
+ARITH_DIP_WHY = ("the records' desk -> PIMCO's 94 page, plate to page (a WORLD change, E47 - the filings to the "
+                 "arithmetic, on the rehook): TAKEN the dip, the last resort (E99 s74); refused: the snap / "
+                 "throw-then-zoom / throw-then-push (no card of this page is thrown on the desk - the one card there, "
+                 "the $822B leases record, is another figure, and pushing it to the stage would say the record IS the "
+                 "94 page), object-becomes-chart (PROP 2 the data centre is not the page's data), the spiral return (a "
+                 "first page, not a returning one), the mount (the page does not belong to the desk's picture), the "
+                 "axes open as the boundary's carrier (it would CUT from the photograph to the board mid-rehook; the "
+                 "page still ENTERS on its axes - this build's own plate -> page precedent is row 14's dip 3), the melt "
+                 "(E88 melts a chart's ink; the desk carries none), recast / rescale / morph (a plate is not a chart)")
+DESK_SUCK_WHY = ("PIMCO's 94 page -> the records' desk, page to plate (a WORLD change, E47 - the arithmetic to the "
+                 "paper: 'So when you hear the buildout is funded out of profits'): TAKEN the suck (P53 T2 / R26-60) - the page spins into the point "
+                 "where the filings' record will land and the desk is standing there; refused: the melt-then-splash "
+                 "(the transform row 16b spent on this same desk 40 s earlier - the variety rule defers a repeat while "
+                 "another transform holds, E99 s74 Apply 1), the door (no page at a depth or on a plane asks for it; "
+                 "the desk is not mounted beneath the page), the dip (the last resort - the suck carries the world "
+                 "change), holding the page (E50: ~30 s past the bar's landing)")
+
+
+def page_arith() -> str:
+    """Row 17's world (P69 T25): PIMCO's projection, one bar on its stated [0, 100] scale (T14a), on its axes (E73), live
+    (E49), in the long form's profile (E99 s97, the middle preset). No emphasis (R26-256: the pill would print 94% twice)."""
+    return "ledger:%s:bars::right:%s%s%s%s" % (ARITH_PAGE, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM)
 
 
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
@@ -1217,6 +1305,8 @@ BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the tr
                 page_tnx(): TNX_MELT_WHY,
                 page_debt(): DEBT_MELT_WHY,
                 DESK_PLATE: DESK_MELT_WHY,
+                page_arith(): ARITH_DIP_WHY,
+                (DESK_PLATE, "suck:%g,%g" % ARITH_SUCK_AT): DESK_SUCK_WHY,   # the desk RETURNS (row 17b): keyed by its exit too
                 SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
                               "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
@@ -1360,6 +1450,15 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_desk = round(at("Go into the filings") - DESK_MELT_LEAD_S, 2)   # the world changes to the paper ...
     t_filings = round(t_desk + MEMO_MELT_S + DESK_CARD_AFTER_S, 2)   # ... and the record is thrown as the splash lands
     t_dc = at("Data centers they've")                   # PROP 2 is stamped on the word that names it (E99 s87)
+    # -- row 17 (P69 T25): THE ARITHMETIC - the desk holds the rehook, dip 4 onto the 94 page on the next sentence's
+    # onset; the bar stands at 94 with its value, the title is relit on the repeat, and the page spins into the desk
+    # before "So when you hear" (E50), the filings' record thrown back as it goes
+    t_docks_off = round(at(ARITH_FROM_PHRASE) - DOCKS_OFF_LEAD_S, 2)   # the desk's docks leave BEFORE the dip
+    t_arith = at(ARITH_FROM_PHRASE)                     # the dip's black centred ON the onset (cut_before's dip rule;
+    # the scratch take runs "tight." to "Over" with no measured gap, so cut_before refuses it - M13 - and the onset is used)
+    t_94 = at("Ninety-four. That is")                   # the repeat: "Ninety-four." - the title relights
+    t_stop = round(at(ARITH_LEAVE_PHRASE) - SUCK_S, 2)   # the page spins away in the breath; the desk stands on "It"
+    t_record = t_stop                                   # the record is thrown AS the page spins into its point (DESK_RECORD_WHY)
     t_row9_end = unit_end
 
     return [
@@ -1558,7 +1657,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # "twenty-eight", the 2025 actual climbs to 121 with its figure, and the two 2026E estimates draw on "tracking
         # toward", the wedge between them a spread with the range figure as "fifty" is said (T14: a range, never a
         # midpoint). The page RECASTS (a plain hand-over, `keyed: false`) to the IG index on "Technology used to be"
-        # (IG_RECAST_WHY), each state retitled with its unit (IG_TITLE), its >12% bar emphasized; and RECASTS
+        # (IG_RECAST_WHY), each state retitled to its own title (IG_TITLE), its >12% bar emphasized; and RECASTS
         # again to the capex consensus on "a bet on data centers" (CAPEX_RECAST_WHY), its 690 emphasized. On "Go
         # into the filings" the page melts onto the records' desk - the row below.
         (t_q, t_desk, page_debt(), (0, 0, 0), [], RAIL_EXIT % DEBT_MELT_S, [
@@ -1592,15 +1691,32 @@ def shot_table(ws: list, unit_end: float) -> list:
         # record is thrown as the splash lands, at its reading size, and PROP 2 is STAMPED on "Data centers"
         # (DATACENTER_STAMPED) into the desk's declared room - fitted first, the record clear of it (P69 T5). The desk's
         # life is its ken push and the mug's steam (row 11's). Both leave with the desk.
-        (t_desk, t_row9_end, DESK_PLATE, MEMO_KEN, ([
-            (DATACENTER_PROP, 1, t_dc, t_row9_end, dict(DATACENTER_OPTS)),   # slot 1: the record holds slot 0 (T5's pair)
+        # P69 T25: the desk now also holds row 17's rehook ("So put it together ... gets tight."), to the dip.
+        (t_desk, t_arith, DESK_PLATE, MEMO_KEN, ([
+            (DATACENTER_PROP, 1, t_dc, t_docks_off, dict(DATACENTER_OPTS)),   # slot 1: the record holds slot 0 (T5's pair)
         ] if DATACENTER_STAMPED else []) + [
-            (LEASES_CARD, 0, t_filings, t_row9_end,
+            (LEASES_CARD, 0, t_filings, t_docks_off,
              dict(LEASES_SLOT, centre_w=LEASES_W, card_aspect=LEASES_ASPECT, arrive="throw", mass="paper")),
         ], MELT_EXIT % MEMO_MELT_S, [
-            {"kind": "steam", "at": t_filings, "dur": round(t_row9_end - t_filings, 2), "target": MUG_STEAM},
+            {"kind": "steam", "at": t_filings, "dur": round(t_arith - t_filings, 2), "target": MUG_STEAM},
         ], {"keys": [], "attention": "landings"}),
-        # (-- ROWS 17-24 are T25-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
+        # -- ROW 17 (P69 T25): THE ARITHMETIC - dip 4 (ARITH_DIP_WHY) onto PIMCO's 94 page on its axes, in the long
+        # form's profile, live; its one bar grows with the page and stands at 94 with its own value; on the repeat
+        # "Ninety-four." the title is RELIT (no figure, no ring - see ARITH_RELIGHT_S's note). In the breath
+        # before "So when you hear" the page spins into the desk (the suck, DESK_SUCK_WHY) - E50, the row below.
+        (t_arith, t_stop, page_arith(), (0, 0, 0), [], "dip", [
+            {"kind": "relight", "at": t_94, "dur": ARITH_RELIGHT_S, "ref": "title"},
+        ], {"keys": []}),
+        # -- ROW 17b (P69 T25): THE PROMISE, ON THE RECORDS' DESK - the page is sucked into the point where the filings'
+        # record lands; the record is thrown back as the page goes (t_record), at its reading size, up to the row's end (the paper the anaphora names); the
+        # desk's life is its ken push and the mug's steam. Both leave with the desk (T26's).
+        (t_stop, t_row9_end, DESK_PLATE, MEMO_KEN, [
+            (LEASES_CARD, 0, t_record, t_row9_end,
+             dict(LEASES_SLOT, centre_w=LEASES_W, card_aspect=LEASES_ASPECT, arrive="throw", mass="paper")),
+        ], "suck:%g,%g" % ARITH_SUCK_AT, [
+            {"kind": "steam", "at": t_stop, "dur": round(t_row9_end - t_stop, 2), "target": MUG_STEAM},
+        ], {"keys": [], "attention": "landings"}),
+        # (-- ROWS 18-24 are T26-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
     ]
 
 
@@ -1714,9 +1830,9 @@ BODY_ASSETS = {
          ("cue", "prop stamp", _SND + STROKE + " / " + ROLL + " - slot `landing N (stamp, ink)` (A.arrival_mass)")),
     16: (("page", DEBT_PAGE, _OBJ + DEBT_PAGE + ".series.json - dense-line + DEBT_SPREAD + figure "
                              "DEBT_RANGE_TEXT / DEBT_RANGE_SUB (no PNG fallback)"),
-         ("page", "ev-ig-credit-weighting-v1", _OBJ + "ev-ig-credit-weighting-v1.series.json - story (bars, "
-                                               "not the treatment's :line)"),
-         ("page", "ev-capex-consensus-v1", _OBJ + "ev-capex-consensus-v1.series.json - story"),
+         ("page", IG_PAGE, _OBJ + IG_PAGE + ".series.json - story (bars, not the treatment's :line; v2 carries "
+                           "its unit, P69 T25)"),
+         ("page", CAPEX_PAGE, _OBJ + CAPEX_PAGE + ".series.json - story (v2: its unit, no 2027 bar, P69 T25)"),
          ("card", "ev-doc-leases", _OBJ + "ev-doc-leases.png - record dock; its payload is NOT authored "
                                    "(CAPABILITIES:19), so the PNG until it is"),
          ("prop", "prop-hyperscale-datacenter-v1", _PROPS + "prop-hyperscale-datacenter-v1.png")),
@@ -1811,11 +1927,26 @@ BODY_DEPARTURES = (
     (16, "'six hundred and ninety' ringed (the thumbnail's 690)", "the 690 bar emphasized - no ring on a bar (as above)"),
     (16, "'right there in the filing' a callout on the filing's line",
      "cut - E56 refuses a ring on a still card; the record's own highlight on '$822 billion' carries it"),
-    (16, "the bars pages' units (the IG '9.0 / 10.0 / 12.0', the capex '480 / 690 / 870' print bare)",
-     "each state's retitle carries the unit (IG_TITLE, CAPEX_TITLE); the objects lack yunit/yfmt - a v2 each is the "
-     "parent's door"),
+    (16, "the bars pages' units (the v1 IG '9.0 / 10.0 / 12.0', the capex '480 / 690 / 870' printed bare)",
+     "RESOLVED by P69 T25 (R26-282): ev-ig-credit-weighting-v2 / ev-capex-consensus-v2 carry the source's unit (9% ... "
+     "12%, $480 / $690 with 'US$ billions' in the sub - the page's '$' is a prefix, no '$...B' form), a sub stating "
+     "what the bars show, and no unspoken 2027 bar; the title stopgap is gone"),
     (17, "the Epoch '94 cents' mark on ev-capex-funding-v1 (a different claim)", "cut from row 17's bar beat"),
-    (17, "the PIMCO record (the treatment's 'ev-doc-macdonald' is the Uber COO)", "badge 'PIMCO, Figure 3'"),
+    (17, "the PIMCO record (the treatment's 'ev-doc-macdonald' is the Uber COO)",
+     "no badge: the 94 page's own source line reads 'PIMCO, AI Credit Expansion ... Figure 3 - a projection, not an "
+     "actual' (P69 T25) - a badge would say it twice"),
+    (17, "the 94 bar 'shooting on Ninety-four' with the figure",
+     "the bar grows as the page lands (~325.4, on 'two years, PIMCO' - ~2.6 s before 'ninety-four percent'; a bars page "
+     "has no hold for a bar and a mid-sentence dip was refused); no figure (the bar's value IS the 94 - a figure "
+     "double-printed it, M28) and no ring (E56's ring on a bar circles the whole bar; on a region it writes a second "
+     "number): the title 'Ninety-four cents of every dollar' is RELIT on the repeat 'Ninety-four.'"),
+    (17, "`chart_to ev-capex-funding-v1` from row 16's page", "dip 4 from the records' desk onto ev-capex-ocf-94-bars-v1 "
+     "(row 16 ends on the desk, P69 T24; ARITH_DIP_WHY)"),
+    (17, "'the page holds, idle live' through the post-key, the anaphora in STAGE mode over its quiet zone",
+     "E50: the page leaves before 'So when you hear' (~10.8 s after the bar lands; held, ~30 s) by the suck onto "
+     "the records' desk; the filings' record is thrown back AS the page goes and stands to the row's end (no bare "
+     "plate, REBUILD-TREATMENT-H.md:173), so the anaphora rides the bottom caption under it (a dock live at a caption "
+     "page's start stamps it anchor), 'the paper' on screen as it is said"),
     (18, "the certificate card's '-66%' figure (the crop carries none)", "badge reading RAIL_DROP (-64%)"),
     (20, "the phone card (no phone icon, cutout or prop)", "cut until an asset is generated (H6)"),
     (22, "chart_to ev-tripwire-board-v1 (a checklist, refused as a page)", "PNG card / its checklist dock"),
@@ -1902,7 +2033,7 @@ def _shot_table_md(rows: list) -> str:
             "", "**Flow count (E99 s74):** %d cut(s), %d dip(s) (each at a world change, E47), %d arrival(s) carrying "
             "a boundary, %d transform(s) - each boundary names the transform it took or refused:" % _flow_count(rows)]
     out += ["- row %d `%s` (`%s` INTO it at %.2f): %s" % (i + 1, str(r[2]).partition(";")[0], r[5], r[0],
-                                                               BOUNDARY_WHY.get(r[2], "UNNAMED - E99 s74 owes a why"))
+                                                               BOUNDARY_WHY.get((r[2], r[5]), BOUNDARY_WHY.get(r[2], "UNNAMED - E99 s74 owes a why")))
             for i, r in enumerate(rows) if r[5]]
     out += ["", "**Transforms inside a row (E99 s74):**"] + ["- %s: %s" % (what, why) for what, why in IN_ROW_WHY]
     out += ["", "**Table rows -> treatment rows (`REBUILD-TREATMENT-H.md`):** "
@@ -1922,7 +2053,10 @@ TABLE_TREATMENT = {1: "treatment rows 1-5 (the page, 0:00-0:42)", 2: "treatment 
                    9: "treatment row 15, the trigger and the concession: PROP 1 the Fed stamped (P69 T23)",
                    10: "treatment row 16, who is paying: the issuance, the IG and capex recasts (P69 T24)",
                    11: "treatment row 16, who is paying: the filings' record on the records' desk and PROP 2 the data "
-                       "centre stamped (P69 T24)"}
+                       "centre stamped (P69 T24), and row 17's rehook (P69 T25)",
+                   12: "treatment row 17, the arithmetic: dip 4, the 94 bar and its figure on PIMCO's page (P69 T25)",
+                   13: "treatment row 17, the promise: the page sucked into the records' desk, the filings' record "
+                       "thrown back for the anaphora (P69 T25)"}
 
 
 def _flow_count(rows: list) -> tuple[int, int, int, int]:

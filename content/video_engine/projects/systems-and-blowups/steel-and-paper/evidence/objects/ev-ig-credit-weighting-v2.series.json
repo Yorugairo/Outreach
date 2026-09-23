@@ -1,0 +1,56 @@
+{
+ "title": "Technology's share of the investment-grade bond index",
+ "sub": "Tech's weight in the Bloomberg Corporate Bond Index, as a % of the index: 2024, now, and the projection (above 12%)",
+ "src": "Morgan Stanley IM; Investing.com / LPL - the third bar is a projection",
+ "unit": "%",
+ "bars": [
+  {
+   "label": "2024",
+   "value": 9,
+   "note": "9%",
+   "color": "deemph"
+  },
+  {
+   "label": "Now",
+   "value": 10,
+   "note": "10%",
+   "color": "crimson"
+  },
+  {
+   "label": "Projected",
+   "value": 12,
+   "note": ">12%",
+   "color": "crimson"
+  }
+ ],
+ "status": "REAL",
+ "research_tier": "PLAUSIBLE",
+ "src_full": "Morgan Stanley Investment Management; Investing.com (LPL): technology's weight in investment-grade credit rose from ~9% (2024) to ~10% of the Bloomberg Corporate Bond Index, with projections above 12%. The primary reports are not on disk; the figures are the dossier's record of them (C3, marked VERIFIED there).",
+ "proof": [
+  {
+   "kind": "dossier",
+   "tier": "PLAUSIBLE",
+   "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md",
+   "locator": "lines 143-146 (C3)",
+   "quote": "rose from ~9% (2024) to ~10% of the Bloomberg Corporate Bond Index, with projections above 12%.",
+   "values": {
+    "tech_share_2024_pct": 9,
+    "tech_share_now_pct": 10,
+    "tech_share_projected_floor_pct": 12
+   }
+  },
+  {
+   "kind": "object",
+   "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-ig-credit-weighting-v1.series.json",
+   "locator": "bars",
+   "quote": "9.0 / 10.0 / 12.0, notes 9% / 10% / >12%"
+  },
+  {
+   "kind": "script",
+   "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt",
+   "locator": "line 35",
+   "quote": "Technology used to be about nine percent of the investment-grade index - the pool that feeds your bond fund. It's ten now, and the projections run past twelve."
+  }
+ ],
+ "provenance_note": "P69 T25 (R26-282, 2026-09-23). v2 of ev-ig-credit-weighting-v1 with the SAME three values and colours: it adds the UNIT the source states (% of the index - `unit: \"%\"`, so the bars print 9% / 10% / 12% the way every other bars object in this project prints its scale, e.g. ev-capex-ocf-94-bars-v1) and a sub that states what the bars show (the index named, the unit, the three readings). The values are written as the integers they are (9.0 -> 9): a bars page prints the value token as written, and '9.0%' is not the source's figure. The third bar is a FLOOR: the source says 'above 12%' (the script 'past twelve'); the bar stands at 12 and the sub says 'above 12%' - no number above 12 is drawn because none is on disk. The v1 sub ('The pool a bond fund buys from - reweighting toward data centres') is dropped: the bars do not show data centres."
+}

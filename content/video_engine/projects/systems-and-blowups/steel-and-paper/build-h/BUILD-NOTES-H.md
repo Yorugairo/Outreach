@@ -1153,3 +1153,119 @@ The desk is the build's own records' world (row 11, the parent's FIX 2: records 
 **Life:** 270.5 vs 272.5 (the debt page, x 0-1500, y 150-850) mean |dL| 2.46, 3.1% changed; 298.3 vs 301.0 (the capex state) 2.66, 3.6%; 313.0 vs 315.0 (the desk) 11.26, 19.8%. Rows 11 of 11 carry life (row 10 `idle=live`, row 11 `ken 0.04/8/-6` + the mug's steam).
 
 **Tiles:** `scratchpad/p69t24/final/tiles-sheet.1-3.png` (29 instants, 242.6-320.8) beside `ref-sheet.1-3.png` (build-f's mp4, sha256 `9a27de1c...0dd3` verified, `ref-sha.txt`; `ref-map.txt`, Script G 280.6-348.8). build-f carries the same beats as PNG cards over plates (the bank vault, the ledger desk, the exchange board, the pylons); H draws them on one page and lands the record on the desk.
+
+## 16. P69 T25 - R26-282 (the IG and capex objects' v2) and row 17: the arithmetic, the 94 bar - 2026-09-23
+
+The build runs 0.00-358.03 s (1006 of 2335 words). `UNIT_CUT_PHRASE` = "And that's the part everyone" (row 18, T26's). RED: before
+the slice the table ended at row 11 (303.54-321.12, `logs/t24-door-final.log`).
+
+**R26-282 - the two v2 objects (evidence/objects/, values and colours unchanged, each with `proof` and `provenance_note`):**
+- `ev-ig-credit-weighting-v2`: `unit: "%"` (the source's own - % of the Bloomberg Corporate Bond Index, dossier C3 `:143-146`);
+  values written as the integers they are (9.0 -> 9: a bars page prints the token as written, so v1 printed "9.0"); the sub states
+  what the bars show ("Tech's weight in the Bloomberg Corporate Bond Index, as a % of the index: 2024, now, and the projection
+  (above 12%)"). The third bar is a FLOOR: the source says "above 12%" (the script "past twelve"); it stands at 12 and the sub says
+  "above 12%" - no number above 12 is on disk. v1's sub (data centres) dropped: the bars do not show data centres.
+- `ev-capex-consensus-v2`: `unit: "$"` - the page's currency PREFIX (`lpWithUnit`, scene-evidence-engine.mjs:8179: "$" is a prefix,
+  every other unit a suffix; there is no "$...B" form), so the bars print $480 / $690 and the axis $0-$600, and the sub carries
+  "US$ billions". The sub no longer carries row 17's "94% of operating cash flow" (PIMCO Figure 3, a different measure). **The 2027
+  $870B bar is DROPPED**: the source shows it (dossier B1 `:115-117`, `:226`), but the script never says it - row 16 reads the
+  REVISION of the 2026 estimate ("When the year opened ... four hundred and eighty ... Consensus now says six hundred and ninety. The
+  estimate went up faster than the year went by."), not the forward consensus. '2026 consensus' relabelled 'Consensus now' (both
+  bars are 2026 estimates taken at two dates; the sub names the year).
+- Row 16 points its recasts at the v2 objects; the title stopgap is gone: each recast retitles to the state's OWN title (a recast
+  rewrites sub and source itself, the title only by a verb - `titleText`, :8494). Door re-run `logs/t25-door-step1.log` (rc 0).
+  Tiles `scratchpad/p69t25/step1/` and `final/` (275.2-301.0): "9% / 10% / 12%", "$480 / $690", bars 196 px (probe plot box).
+  Named: at the recast middle (288.0) the IG pill tweens a transient "11.6%" behind the panel edge (`step1/crop-288-pill.png`) -
+  R26-261's garbled middle.
+
+| table row | window | what |
+|---|---|---|
+| 11 `world-internal-memo-v1;use=landing;room=...` | 303.54-324.62 | row 16b now also holds row 17's rehook ("So put it together, because this is where the arithmetic gets tight."); the record and PROP 2 END at 323.12 (1.5 s before the dip - see below), the desk bare with the stage caption for "gets tight." |
+| 12 `ledger:ev-capex-ocf-94-bars-v1:bars::right:axes:cut;idle=live;readability=longform` | 324.62-338.44 | **dip 4** centred on "Over the next two years, PIMCO" (the take has no measured gap after "tight.", so `at()` - cut_before's own dip rule is the onset); the page on its axes, the 100 rule "every dollar from operations"; the one bar grows as the page lands and stands at 94 with its value by ~325.4; the **figure "94%"** (the object's own note) written on the repeat "Ninety-four." (332.21), INSIDE the bar under the 100 rule (T6's `lpBarLabelPlace`), the value yielding to it; not emphasized (R26-256: the pill would print 94% twice) |
+| 13 `world-internal-memo-v1;use=landing;room=...` | 338.44-358.03 | the page SPINS INTO A POINT (the suck, `suck:0.345,0.58` - the record's slot centre) in the breath before "So when you hear the buildout" and the records' desk is standing there; "funded out of profits - that was true. It stopped being true ... Nobody here committed fraud." in caption STAGE mode over the bare desk; the filings' record (`dock-h-leases-record`) thrown back on "signed" (348.01) at its reading size, for "They signed a promise ... The steel kept building. The paper just got heavier. And promises are the part of this that nobody is charting." (anchor caption); ken push + mug steam |
+
+**Measured and fixed:**
+- The page first left on "It stopped being true" (draft 1): M21 read s12 14.4 s - the gate's clock starts at the BAR's landing, and a
+  figure "neither restarts nor ends the clock" (`_deployed_lives`). Moved to the breath before "So when you hear": s12 now under 12 s
+  (M21 lists only s09 / s10).
+- The desk's docks stood over the 94 page after the dip (draft 2, `scratchpad/p69t25/propexit/`): the record faded by ~324.8 and PROP 2
+  stood at the page's top right to ~325.1 - a prop over a chart. Ending them 0.6 s early changed nothing (draft 3): the engine SNAPS a
+  dock exit within 1.4 s of a boundary onto the boundary (scene-evidence-engine.mjs:6592) and only a WIPE sweeps a card off (`swept`,
+  :17425). They now end 1.5 s early, on "arithmetic" (`draft4/`, clean).
+- A sub on the figure ("of operating cash flow", the object's words) was wider than the 196 px bar and written in the bar's ink - its
+  ends vanished on the dark plot (`draft5/tile-334.50.png`). Cut.
+
+**Named, not fixed:**
+- **M28 FAIL (new) `val:94% on bracket:94%` at 5:32** - T6's hand-over: the bar's value fades on the figure's write clock (the T6 test
+  asserts 0 < opacity < 1 mid-write) and the figure's number sits a few px off the value, so for ~0.6 s "94%" double-prints
+  (`scratchpad/p69t25/m28/crops.png`, tile 332.70); after it the page reads exactly as before, so the figure's landing is nearly
+  invisible. Owner: the engine (write the figure ON the value it replaces, or cut the value at the figure's first glyph) and the probe
+  (M28 pairs a value with the figure it yields to).
+- **The bar lands ~2.6 s before "ninety-four"** (~325.4 vs 328.00): the page's visible bar build is ~0.8 s (the gate books 3.0 s,
+  327.62); a bars page has no hold for a bar (`build_to` caps a series), and a mid-sentence dip was refused. The title states 94 from
+  the landing, inside the sentence that says it. The treatment's "shooting on Ninety-four" is a departure (BODY_DEPARTURES row 17).
+- **A dip does not take the outgoing docks** (above) - engine: a dip should clear the docks in its black as a wipe does.
+- **The suck is silent**: "[silent] no cue mapped for suck" (the kit's cue map has no suck slot). Owner: sound / `authoring.audio`.
+- **The stage caption on the bare desk is low-contrast** (white on the cream wall and the lamp's cone, 340.5 / 344.0) - R26-268.
+- CADENCE WARN "5:42 16.0 s on a single piece" (the desk row 13 and its one record, 348-358).
+- M03 (62 s from 4:02, R26-280), M11 (row 1), M31 (row 15's 0.2 s probe blind spot) - pre-existing.
+
+**Transitions** (in `SHOT-TABLE-H.md`): INTO row 12 **dip 4** (`ARITH_DIP_WHY`) - refused: snap / throw-then-zoom / throw-then-push (the
+only card on the desk is another figure), object-becomes-chart (PROP 2 is not the page's data), the spiral return, the mount, the axes
+open as the boundary's carrier (it would CUT photograph -> board mid-rehook; the page still enters on its axes; row 14's dip 3 is the
+build's plate -> page precedent), the melt, recast / rescale / morph. INTO row 13 **the suck** (`DESK_SUCK_WHY`) - refused: the melt
+(the transform row 16b spent on this desk 40 s earlier - the variety rule), the door, the dip, holding the page (E50). The shot table's
+boundary lookup now reads `(plate, exit)` first so a RETURNING world names its own transition. Flow count: 0 cuts, 4 dips, 1 arrival,
+7 transforms. The treatment's dips 4 and 5 (row 18) become dips 5 and 6.
+
+**Departures and cuts (BODY_DEPARTURES row 17):** the Epoch "94 cents" mark (a different claim) cut; the PIMCO "record" (the treatment's
+`ev-doc-macdonald` is the Uber COO) - no badge, the page's own source line names PIMCO Figure 3; `chart_to ev-capex-funding-v1` from
+row 16's page -> dip 4 from the desk; the page holding through the post-key -> E50's leave by the suck, the anaphora on the ANCHOR
+caption under the record (a dock stamps the caption anchor); the bar "shooting on Ninety-four" -> landing with the page.
+
+**Life:** 334.5 vs 336.5 (the 94 page, x 0-1500, y 150-850) mean |dL| 2.19, 3.0% changed; 328.2 vs 330.0 2.67, 3.6%; 350.5 vs 352.5
+(the desk) 12.39, 19.0%. Rows 13 of 13 carry life (row 12 `idle=live`, row 13 `ken 0.04/8/-6` + the mug's steam).
+
+**The order of proof (`logs/`):** `t25-door-final.log` (rc 0, cues 22 of 22), `t25-probe.log` (132 instants), `t25-gate.log` then
+`t25-gate-final.log` re-stamped on the fresh frame hashes **4 FAIL / 3 WARN / 21 PASS / 1 JUDGE / 4 INFO** (M03, M11, M28, M31),
+`t25-frozen.log` (no run over 0.50 s, 0-358.03), `t25-seams.log` (12 boundaries, 0 faults; 324.62 dip darkest 1.1 clean; 338.44
+suck darkest 35.3 clean), `t25-spoken.log` (3 pointing phrases, 0 uncovered), `t25-stagegaps.log` (324.62 empty 0.2 s licensed;
+338.44 empty 0.0 s). Drafts: `t25-door1..5.log`.
+
+**Tiles:** `scratchpad/p69t25/final/tiles-sheet.1-4.png` (37 instants: row 16's recasts 275.2-301.0, row 17 321.5-357.8) beside
+`final/ref/ref-sheet.1-2.png` (build-f's mp4, sha256 `9a27de1c...0dd3` verified, `ref/ref-sha.txt`; `ref/ref-map.txt`, a word
+alignment of the two takes). build-f carries the 94 as a badge on the Uber COO card over the pipeline plate, then Epoch's quarterly
+capex-vs-cash card with its "94 cents" mark (the realised-quarter claim T14 cut) over the signature; H draws PIMCO's forward 94 at
+page size and returns to the filings for the promise.
+
+### 16a. Revision on the coordinator's read of row 17 (2026-09-23) - supersedes the section above where they differ
+
+1. **The bare desk (338.44-348.01) was a defect** - REBUILD-TREATMENT-H.md:173 "no bare plate between 2:45 and 6:04", and the centred
+   stage caption's unspoken words were pale grey on the pale cream wall (tile 344.00; R26-268). The record's 348.01 entry was this
+   door's own choice (`t_signed`, "signed"), NOT the engine's dock-exit snap (`scene-evidence-engine.mjs:6592` moves exits only).
+   Now `dock-h-leases-record` is THROWN AS THE SUCK STARTS (`t_record = t_stop`, 338.44), lands as the page vanishes into its point,
+   and stands to 358.03; it is live before "So when you hear" (338.74), so every caption page of row 13 is stamped ANCHOR (a caption
+   page takes the dock live at its START, `_dock_live_at`) - the whole row, anaphora included, is the bottom caption under the record.
+   Table row 13: `dock-h-leases-record` 338.44-358.03. CADENCE WARN now "5:38 19.6 s on a single piece".
+2. **The 94 double print (M28)** - the figure is DROPPED (the bar's own value is the 94). The coordinator's `ring` was tried first
+   (Recall: `CAPABILITIES.md:87` "E56: a ring has one use - a number or a point on a CHART"; `CAPABILITIES.md:45` the `ring` kind,
+   `form: "dashed"`): on the bar's datum it resolves the WHOLE `.bar` (resolveTarget's bar branch, `:13722`) and the dashed ellipse
+   crossed "Capex, next two years" (`scratchpad/p69t25/draft6/`, tiles 332.70 / 333.40); a `point` / `region` ring must carry a label
+   with a digit (`_validate_ring`) and `paintRing` WRITES it beside the ellipse (`species/ring.mjs:261`) - a second "94%". No target
+   reaches the value label alone. Taken instead: **`relight {ref: title}` on "Ninety-four." (332.21, 1.2 s)** - Recall:
+   `build_scene_timeline_f.py:576` SPECIES_WHEN "relight: the sentence RETURNS to a number already on the page (the ring's echo) - the
+   bracket or the title re-fires"; `CAPABILITIES.md:77` "RETURNS to a number (relight)". The title "Ninety-four cents of every dollar"
+   lights gold on the word; one "94%" on the page (`draft7/`, `final2/`). Table row 12: `relight @332.21`. M28 CLEARS.
+
+**The order of proof (second run, `logs/`):** `t25-door-final2.log` (rc 0, cues 22 of 22; "[silent] no cue mapped for suck"),
+`t25-probe2.log` (130 instants), `t25-frozen2.log` (no run of identical frames over 0.50 s), `t25-gate-final2.log` (stamped AFTER the
+frame hashes) **3 FAIL / 3 WARN / 22 PASS / 1 JUDGE / 4 INFO** - M03 (62 s from 4:02, R26-280), M11 (row 1), M31 (row 15's 0.2 s probe
+blind spot), all pre-existing; M21 lists only s09 / s10; M18 PASS 0:00-5:58. `t25-seams2.log` 12 boundaries, 0 faults (324.62 dip
+darkest 1.1 clean; 338.44 suck darkest 35.3 clean); `t25-spoken2.log` 3 pointing phrases, 0 uncovered; `t25-stagegaps2.log` 324.62
+empty 0.2 s licensed, 338.44 empty 0.0 s picture 0.0 s. Drafts: `t25-door6.log` (ring), `t25-door7.log` (relight).
+
+**Life (final2):** the desk under the record 340.5 vs 342.5 mean |dL| 9.75, 15.1% changed; 350.5 vs 352.5 11.79, 19.3%. The 94 page's
+life as above (334.5 vs 336.5, 2.19, 3.0%). 13 of 13 rows carry a life token.
+
+**Tiles:** `scratchpad/p69t25/final2/tiles-sheet.png` (324.9, 332.3, 332.7, 333.4, 338.55, 338.8, 340.5, 342.5, 344.0, 347.5, 350.5,
+352.5).

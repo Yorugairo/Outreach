@@ -182,6 +182,35 @@
    "note": "contact at 305.05s, the cue one frame early (the weight report Q5)"
   },
   {
+   "slot": "page enter 12 (axes)",
+   "at": 324.62,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   }
+  },
+  {
+   "slot": "dip 12",
+   "at": 324.27,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-whoosh-3-648729.mp3"
+   }
+  },
+  {
+   "slot": "landing 13 (throw, paper)",
+   "at": 338.86,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 338.90s, the cue one frame early (the weight report Q5)"
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0073,
@@ -265,6 +294,22 @@
     ],
     [
      306.59,
+     0.0
+    ],
+    [
+     338.14,
+     0.0
+    ],
+    [
+     338.44,
+     4.0
+    ],
+    [
+     339.64,
+     4.0
+    ],
+    [
+     340.44,
      0.0
     ]
    ],

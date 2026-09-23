@@ -1,0 +1,55 @@
+{
+ "title": "Hyperscaler capital spending, consensus estimates",
+ "sub": "The five largest hyperscalers' 2026 capital spending, US$ billions: the consensus when the year opened, and now",
+ "src": "PIMCO, AI Credit Expansion: Assessing the Micro and Macro Risks, Figures 2-3 - consensus estimates, not actuals",
+ "unit": "$",
+ "bars": [
+  {
+   "label": "Start of year",
+   "value": 480,
+   "note": "$480B",
+   "color": "deemph"
+  },
+  {
+   "label": "Consensus now",
+   "value": 690,
+   "note": "$690B",
+   "color": "crimson"
+  }
+ ],
+ "status": "REAL",
+ "research_tier": "PLAUSIBLE",
+ "src_full": "PIMCO, 'AI Credit Expansion: Assessing the Micro and Macro Risks', Figures 2-3: consensus capex for the five largest hyperscalers is now about $690B for 2026 and $870B for 2027, up from roughly $480B at the start of the year. The PIMCO paper is not on disk; the figures are the dossier's record of it (B1, marked VERIFIED there).",
+ "proof": [
+  {
+   "kind": "dossier",
+   "tier": "PLAUSIBLE",
+   "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md",
+   "locator": "lines 115-117 (B1)",
+   "quote": "consensus capex for the five largest hyperscalers is now about **$690B for 2026** and **$870B for 2027**, up from roughly $480B at the start of the year",
+   "values": {
+    "capex_2026_consensus_start_of_year_usd_bn": 480,
+    "capex_2026_consensus_now_usd_bn": 690
+   }
+  },
+  {
+   "kind": "dossier",
+   "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md",
+   "locator": "line 226",
+   "quote": "| 5 | Hyperscaler capex 2026E $690B / 2027E $870B; 94% of OCF | our chart | PIMCO Fig. 2-3 |"
+  },
+  {
+   "kind": "object",
+   "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-capex-consensus-v1.series.json",
+   "locator": "bars",
+   "quote": "480 / 690 / 870, notes $480B / $690B / $870B"
+  },
+  {
+   "kind": "script",
+   "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt",
+   "locator": "line 35",
+   "quote": "When the year opened, the street had them spending about four hundred and eighty billion. Consensus now says six hundred and ninety. The estimate went up faster than the year went by."
+  }
+ ],
+ "provenance_note": "P69 T25 (R26-282, 2026-09-23). v2 of ev-capex-consensus-v1. (1) The UNIT the source states, US dollars in billions: `unit: \"$\"` is the page's own currency form (a PREFIX - the bars print $480 / $690, the axis $0 ... $800; the engine's lpWithUnit has no '$...B' form), and the sub carries 'US$ billions'. (2) The sub states what the bars show; v1's sub ('Five largest hyperscalers - 94% of operating cash flow') carried row 17's figure, a different measure (PIMCO Figure 3, capex as a share of operating cash flow), and read as the bars' own value - it is dropped here and drawn on its own page (ev-capex-ocf-94-bars-v1). (3) The 2027 $870B bar is DROPPED: the source shows it (dossier B1, line 226), but the script never says it - row 16's sentences read the REVISION of the 2026 estimate ('When the year opened ... four hundred and eighty ... Consensus now says six hundred and ninety. The estimate went up faster than the year went by.'), not the forward 2027 consensus, so a third bar would stand on screen unspoken. (4) Labels: 'Consensus now' replaces '2026 consensus' (the sub names the year; both bars are 2026 estimates, taken at two dates). Values and colours are v1's; no figure is changed or added."
+}
