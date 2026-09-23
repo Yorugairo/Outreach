@@ -1,0 +1,26 @@
+{
+  "title": "One bet, a fifth of the index",
+  "sub": "AI builders as a share of the S&P 500 - today, against their historical two-to-four percent",
+  "src": "Figures via Bravos Research - S&P 500 weighting (attributed)",
+  "unit": "%",
+  "hlines": [
+    {"y": 4, "label": "historically 2-4%", "color": "deemph"},
+    {"y": 2, "color": "deemph"}
+  ],
+  "bars": [
+    {"label": "AI builders, share of the S&P 500 today", "value": 20, "note": "20%", "color": "crimson"}
+  ],
+  "status": "REAL",
+  "research_tier": "PLAUSIBLE",
+  "src_full": "Bravos Research, 'History is About to Be Made... (Emergency Update)' (youtube.com/watch?v=Jw8ykhoOVBQ), about 2:50-3:00: AI builders ~20% of the S&P 500 against a historical 2-4%. Recorded in the answer brief's sources block; the video's transcript is not on disk.",
+  "proof": [
+    {"kind": "brief_sources_block", "tier": "PLAUSIBLE", "path": "docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md", "locator": "line 525",
+     "quote": "| AI builders = 20% of S&P 500 (vs 2–4% historic) | Bravos video 2:50–3:00 | attributed; verify against S&P sector weights |",
+     "values": {"today_pct": 20, "historic_low_pct": 2, "historic_high_pct": 4}},
+    {"kind": "operator_ruling", "path": "docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md", "locator": "lines 534-536",
+     "quote": "**Sourcing ruling (operator, 2026-08-24):** Bravos Research is accepted as a primary source of truth for this format — their figures need no independent spot-check."},
+    {"kind": "script", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt", "locator": "line 39",
+     "quote": "And Bravos Research's own number tells you where that paper lives today. AI builders are now twenty percent of the S&P five hundred. Historically, two to four."}
+  ],
+  "provenance_note": "P69 T14a (2026-09-22). Tier PLAUSIBLE: the only on-disk record is our brief's attribution to the Bravos video (no transcript on disk); the operator's 2026-08-24 ruling accepts Bravos as a primary source for this format, which the parent may read as raising it. The 2-4% is a RANGE (E53/E77) and a bar cannot draw one, so it is drawn as two comparator rules (axes.hlines, E53 s6) bounding the band, never a midpoint bar. Not a conflict but worth knowing: our own check (ev-weight-check-v1, iShares IWV 2026-08-27) puts seven tickers at 24.3% of the WHOLE US market - a different denominator and cohort. Supersedes nothing: ev-index-concentration-v1 (shares) stays as it is."
+}

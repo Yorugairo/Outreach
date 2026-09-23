@@ -1,0 +1,29 @@
+{
+  "title": "We checked. It's bigger.",
+  "sub": "The AI builders' combined index weight - Bravos' number for the S&P 500, then our check on the whole US market",
+  "src": "Bravos Research (attributed) - iShares Russell 3000 ETF holdings, 27 Aug 2026 (SCML ledger)",
+  "unit": "%",
+  "bars": [
+    {"label": "Their number: the S&P 500", "value": 20, "note": "20%", "color": "cobalt"},
+    {"label": "Our check: the whole US market", "value": 24.3, "note": "24.3%", "color": "crimson"}
+  ],
+  "status": "REAL",
+  "research_tier": "PLAUSIBLE",
+  "src_full": "20%: Bravos Research video, attributed (answer brief sources block). 24.3%: the sum of seven holdings' weights in the iShares Russell 3000 ETF (IWV) holdings file 'as of Aug 27, 2026' - NVDA 7.13 + MSFT 5.03 + AMZN 3.33 + GOOGL 2.66 + AVGO 2.32 + GOOG 2.15 + META 1.68 = 24.30.",
+  "proof": [
+    {"kind": "brief_sources_block", "tier": "PLAUSIBLE", "path": "docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md", "locator": "line 525",
+     "quote": "| AI builders = 20% of S&P 500 (vs 2–4% historic) | Bravos video 2:50–3:00 | attributed; verify against S&P sector weights |",
+     "values": {"bravos_pct": 20}},
+    {"kind": "primary_holdings_file", "tier": "CONFIRMED", "publisher": "iShares (BlackRock)",
+     "path": "C:/Users/Snipe/.claude/Claude Work/Claude Files/scml-ledger/scml-ledger/data/raw/etf_holdings/2026/08/etf_IWV__c5d21e7ca854e17d.csv",
+     "sha256": "c5d21e7ca854e17d970417a71d4d97983aafb077121f7831663eaddabb0c60e8",
+     "url": "https://www.ishares.com/us/products/239714/ishares-russell-3000-etf/latest-holdings.csv",
+     "locator": "line 2 (as-of) and lines 11, 13-18 (the seven holdings, Weight (%) column)",
+     "quote": "Fund Holdings as of,\"Aug 27, 2026\" / \"NVDA\",...,\"7.13\" / \"MSFT\",...,\"5.03\" / \"AMZN\",...,\"3.33\" / \"GOOGL\",...,\"2.66\" / \"AVGO\",...,\"2.32\" / \"GOOG\",...,\"2.15\" / \"META\",...,\"1.68\"",
+     "values": {"cohort_weight_pct": 24.3}},
+    {"kind": "script", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt", "locator": "line 49",
+     "quote": "Everything we checked holds. ... A fifth of your index rides on one bet you never placed."}
+  ],
+  "derivation": {"formula": "7.13 + 5.03 + 3.33 + 2.66 + 2.32 + 2.15 + 1.68", "operation": "sum of the IWV Weight (%) column for NVDA MSFT AMZN GOOGL AVGO GOOG META", "rounding": "none; 24.30 as summed", "cross_check": "scml.db etf_holdings (etf_ticker IWV, as_of 2026-08-27, raw_id af0fad34...) sums to 24.3"},
+  "provenance_note": "P69 T14a (2026-09-22). Tier PLAUSIBLE, taking the weaker of its two figures: 24.3 is CONFIRMED (a primary holdings file on disk, hashed, read-only; the SCML ledger lives outside the repo), 20 is Bravos' attributed number with no transcript on disk. The two bars have DIFFERENT wholes (S&P 500 vs Russell 3000) and the labels say so - the page's claim is 'their number, then our check', which is why they share one unit. Same figures as ev-weight-check-v1 (shares), which stays as it is."
+}

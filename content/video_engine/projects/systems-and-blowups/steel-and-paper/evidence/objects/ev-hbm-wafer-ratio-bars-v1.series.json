@@ -1,0 +1,23 @@
+{
+  "title": "Wafer capacity per gigabyte",
+  "sub": "HBM against standard DRAM - stacking the dies takes about three times the silicon for the same gigabyte",
+  "src": "Micron / SK hynix technical disclosures, via industry reporting - approximate ratio",
+  "unit": "x",
+  "bars": [
+    {"label": "Standard DRAM", "value": 1, "note": "1x", "color": "deemph"},
+    {"label": "HBM (stacked dies)", "value": 3, "note": "about 3x", "color": "crimson"}
+  ],
+  "status": "REAL",
+  "research_tier": "PLAUSIBLE",
+  "src_full": "HBM consumes roughly 3x the wafer capacity of standard DRAM per gigabyte (Micron / SK hynix technical disclosures, Counterpoint - as recorded in two dossiers; no primary on disk). Standard DRAM is the unit (1x) by definition.",
+  "proof": [
+    {"kind": "dossier", "tier": "PLAUSIBLE", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md", "locator": "lines 208-209 (E1)",
+     "quote": "Structural cause: HBM consumes roughly **3× the wafer capacity** of standard DRAM per gigabyte.",
+     "values": {"hbm_to_dram_wafer_ratio": 3}},
+    {"kind": "dossier", "tier": "PLAUSIBLE", "path": "content/video_engine/projects/systems-and-blowups/korea-memory-toll/EVIDENCE-DOSSIER.md", "locator": "line 19",
+     "quote": "| \"consumes three times the wafer space\" | ~3:1 capacity penalty (1 HBM bit vs 1 DDR5 bit) | Micron / SK Hynix technical disclosures, Counterpoint | **PASS** |"},
+    {"kind": "script", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt", "locator": "line 45",
+     "quote": "So a gigabyte of it eats about three times the wafer capacity of the ordinary kind."}
+  ],
+  "provenance_note": "P69 T14a (2026-09-22). Tier PLAUSIBLE: two secondary dossiers agree on ~3:1 and name Micron / SK hynix disclosures, but neither disclosure is on disk. A precision note, not a source conflict: ev-memory-arithmetic-v1's src line says 'HBM 2-3x silicon/GB' with no source behind it; the 3 drawn here is the point every sourced record names and the script speaks. Supersedes nothing: ev-hbm-wafer-ratio-v1 (shares) stays as it is."
+}
