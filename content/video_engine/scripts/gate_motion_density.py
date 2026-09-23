@@ -1025,14 +1025,18 @@ def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
 
 
 def _attention_moves(s: dict) -> list[tuple[float, float, str]]:
-    """P49 T4: (contact, contact + ATTN_IN, dock slide) for every arriving dock a landings-attention scene pulls toward."""
+    """P49 T4: (contact, contact + ATTN_IN, dock slide) for every arriving dock a landings-attention scene pulls toward
+    (P69 T4, R26-247: a stamp too, from its contact STAMP_CONTACT_S after its enter - as the player's contactOf)."""
     if (s.get("camera") or {}).get("attention") != "landings":
         return []
     out: list[tuple[float, float, str]] = []
     for d in s.get("docks", []):
-        if not d.get("place") or d.get("arrive") not in ("throw", "land"):
+        if not d.get("place") or d.get("arrive") not in ("throw", "land", "stamp"):
             continue
-        tc = float(d.get("enter", 0.0)) + (STOP_FLIGHT_S if d.get("arrive") == "throw" else STOP_ANTIC_S + STOP_DROP_S)
+        if d.get("arrive") == "stamp":
+            tc = float(d.get("enter", 0.0)) + STAMP_CONTACT_S
+        else:
+            tc = float(d.get("enter", 0.0)) + (STOP_FLIGHT_S if d.get("arrive") == "throw" else STOP_ANTIC_S + STOP_DROP_S)
         out.append((tc, tc + ATTN_IN, str(d.get("slide", d.get("asset", "?")))))
     return out
 
@@ -1148,9 +1152,12 @@ def camera_state_at(s: dict, t: float, sw: float, sh: float, plot: dict | None) 
         st = ident
         if (s.get("camera") or {}).get("attention") == "landings":   # P49 T4: the pull toward a landing, as the player draws it
             for d in s.get("docks", []):
-                if not d.get("place") or d.get("arrive") not in ("throw", "land"):
+                if not d.get("place") or d.get("arrive") not in ("throw", "land", "stamp"):
                     continue
-                tc = float(d.get("enter", 0.0)) + (STOP_FLIGHT_S if d.get("arrive") == "throw" else STOP_ANTIC_S + STOP_DROP_S)
+                if d.get("arrive") == "stamp":   # P69 T4 (R26-247): a stamp pulls from its contact, as the player's contactOf
+                    tc = float(d.get("enter", 0.0)) + STAMP_CONTACT_S
+                else:
+                    tc = float(d.get("enter", 0.0)) + (STOP_FLIGHT_S if d.get("arrive") == "throw" else STOP_ANTIC_S + STOP_DROP_S)
                 exit_t = float(d.get("exit", tc)); out_t = exit_t - ATTN_OUT
                 if not (tc <= t <= exit_t):
                     continue

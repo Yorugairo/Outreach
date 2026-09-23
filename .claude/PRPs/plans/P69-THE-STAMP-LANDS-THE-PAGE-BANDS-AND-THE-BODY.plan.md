@@ -410,7 +410,7 @@ verbatim tails and are left pending.
 - Evidence: grep - no stamp rows in `lab_build.py`, `tokyo-tea-break/build_short.py` or `steel-and-paper/build_episode_h.py` (a third `row_arrivals` caller, `:601`), so none of their outputs move. Filed backlog R26-?? (`lab_build` has no stamp in `ARRIVAL_MASS` `:210` / `ARRIVAL_LANDS_S` `:168`)
 
 ### T4: The camera may push on a landed stamp - the player and the gate's mirror together (R26-247, the camera; E51)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T3
 - Write set: `content/video_engine/scripts/kinetics/camera.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (only the synced `camera` region and the `contactOf` at `:13383`), `content/video_engine/scripts/gate_motion_density.py` (`_attention_moves` `:1026-1036` and `camera_state_at` `:1143-1156`: a stamp branch only), `content/video_engine/tests/kinetics/camera.test.mjs`, `content/video_engine/tests/test_camera.py`, `content/video_engine/tests/test_stamp_is_a_landing.py`, `content/video_engine/assets/page-boxes.v1.json`
@@ -418,10 +418,10 @@ verbatim tails and are left pending.
 - Regression: `node --test content/video_engine/tests/kinetics/camera.test.mjs`
 - Expected RED: `camAttentionState` returns `null` for a stamp dock (the review probed this); the browser case reads zoom `1` at contact + 0.5 s; the gate's `_attention_moves` returns `[]`
 - Validate: `node --test content/video_engine/tests/kinetics/camera.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then `python content/video_engine/scripts/measure_page_boxes.py --write` then `python -m pytest content/video_engine/tests/test_camera.py content/video_engine/tests/test_stamp_is_a_landing.py content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`
-- Red evidence: pending
-- Green evidence: pending
-- Refactor evidence: pending
-- Evidence: pending
+- Red evidence: node `pass 11, fail 1` (`camAttentionState` null for a stamp); pytest `4 failed, 12 passed` - `assert [] == [(9.37, 9.87, 'fed')]`, mid-ramp zoom 1.0 not 1.03, the browser case `('half-way in from the contact', 1)`
+- Green evidence: parent in place - node camera tests 12/12; `sync_kinetics --check` in sync (43 modules); `test_stamp_is_a_landing` + `test_kinetics_sync` + `test_gate_motion_density` 162 passed, 4 skipped; `test_camera` + `test_page_boxes` + `test_golden_frames` 235 passed in 441.83s (goldens byte-identical)
+- Refactor evidence: HEAD vs new gate, `_attention_moves` + `camera_state_at` at 0.1 s over 39 on-disk timelines with a throw/land/stamp dock: 39 identical; a node-vs-gate cross-check at 9 instants agrees within 1e-4; `--check` before `--write`: no box moved (only `player_sha256` rewritten)
+- Evidence: the player and the gate mirror land in ONE commit. The replaced engine comment cited E99 s87 ("its contact IS its enter, which is why the ring is thrown from that frame"): the camera now pulls from 0.1542 while the ring still fires from the enter - P69-HG1 rules the instant (operator decision 1); reverting is one constant per consumer
 
 ### T5: The stamp takes the room first; the row's other docks are placed around it (R26-247 L2; E99 s88)
 - Status: pending

@@ -8,8 +8,11 @@ here as `STAMP_CONTACT_S` and pinned against the module's own `STAMP_ARRIVAL.LAN
 
 Four readers take it, STAMPS ONLY: M01-M03/M07 (an event), M20 (a row), E51 / M22 (an anchor a push ties to) and
 M29 (a dock landing that licenses a transient cue). Throw and land keep every reader's own value, byte for byte
-(0.46 in `_landings`, STOP_FLIGHT_S / STOP_LAND_S in `_arrivals`). The camera mirror (`_attention_moves`,
-`camera_state_at`) is T4's and moves with the player; it is not read here.
+(0.46 in `_landings`, STOP_FLIGHT_S / STOP_LAND_S in `_arrivals`).
+
+P69 T4 (the camera; E51): the camera mirror (`_attention_moves`, `camera_state_at`) moved WITH the player - a
+landings-attention scene pulls toward a stamp from its contact, and the gate's state agrees with the player's
+`camAttentionState` at the same instants (section 4).
 """
 from __future__ import annotations
 
@@ -29,6 +32,7 @@ import gate_motion_density as G  # noqa: E402
 from test_gate_motion_density import _by_id, _drop_window_build, _with_dock  # noqa: E402
 
 STOP_MJS = ROOT / "content/video_engine/scripts/kinetics/stopaction.mjs"
+CAM_MJS = ROOT / "content/video_engine/scripts/kinetics/camera.mjs"
 NODE = shutil.which("node") or shutil.which("node.exe")
 needs_node = pytest.mark.skipif(NODE is None, reason="node is not on PATH")
 TC_TOL = 1e-4          # the acceptance: the mirror agrees with the module's closed form to within this
@@ -36,8 +40,9 @@ ENTER = 9.2158         # a stamp's enter: its contact falls at 9.37 s, clear of 
 
 
 def _node(expr: str):
-    """Evaluate one expression against stopaction.mjs and return its JSON."""
+    """Evaluate one expression against stopaction.mjs (and camera.mjs's attention law) and return its JSON."""
     src = (f"import {{ STAMP_ARRIVAL, STAMP_LAND }} from {json.dumps(STOP_MJS.as_uri())};\n"
+           f"import {{ ATTN, camAttentionState }} from {json.dumps(CAM_MJS.as_uri())};\n"
            f"console.log(JSON.stringify(({expr})));\n")
     out = subprocess.run([NODE, "--input-type=module", "-e", src], capture_output=True, text=True, cwd=str(ROOT))
     assert out.returncode == 0, out.stderr
@@ -144,3 +149,55 @@ def test_any_other_arrival_is_still_no_arrival_and_lands_on_its_enter():
         assert G._arrivals([_stamp_scene(arrive=arr)]) == []
         assert G._cadence_gate([_stamp_scene(arrive=arr)]) is None
         assert G._landings(_stamp_scene(arrive=arr)) == [(ENTER, f"dock fed {arr or 'spring'}")]
+
+
+# ---- 4. THE CAMERA MIRROR PULLS TOWARD A STAMP FROM ITS CONTACT, AS THE PLAYER DOES (T4) --------------------------
+
+PLACE = {"x": 140, "y": 600, "w": 800, "h": 450}
+SW, SH = 1080, 1920
+
+
+def _attn_scene(arrive="stamp", attention="landings") -> dict:
+    sc = _stamp_scene(arrive=arrive)
+    sc["camera"] = {"keys": [], "attention": attention}
+    sc["docks"][0]["place"] = dict(PLACE)
+    return sc
+
+
+def test_the_camera_mirror_ties_a_stamps_pull_to_its_contact():
+    contact = ENTER + G.STAMP_CONTACT_S
+    assert G._attention_moves(_attn_scene()) == [(contact, contact + G.ATTN_IN, "fed")]
+    assert G._attention_moves(_attn_scene(attention="locked")) == [], "locked: the reference's default, nothing moves"
+
+
+def test_camera_state_at_is_identity_before_a_stamps_contact_and_the_full_pull_after():
+    sc, contact = _attn_scene(), ENTER + G.STAMP_CONTACT_S
+    assert G.camera_state_at(sc, contact - 0.05, SW, SH, None)["s"] == 1.0, "still between the enter and the contact"
+    assert abs(G.camera_state_at(sc, contact + G.ATTN_IN / 2, SW, SH, None)["s"] - (1 + (G.ATTN_SCALE - 1) / 2)) < 1e-9
+    on = G.camera_state_at(sc, contact + G.ATTN_IN, SW, SH, None)
+    assert abs(on["s"] - G.ATTN_SCALE) < 1e-12 and on["look"] == (540.0, 825.0) and on["at"] == on["look"], on
+
+
+@needs_node
+def test_the_gate_and_the_player_read_one_camera_at_the_same_instants():
+    """The player's contact (STAMP_LAND.tc) against the gate's (STAMP_CONTACT_S, 4 dp): one zoom at every instant
+    across the pull, the hold and the release - to within what 4 dp of tc can move a 0.5 s inout ramp."""
+    sc = _attn_scene()
+    ts = [ENTER + dt for dt in (0.1, 0.16, 0.25, 0.4, 0.7, 3.0, 5.5, 5.8, 6.1)]
+    d = {"arrive": "stamp", "enter": ENTER, "exit": ENTER + 6.0, "place": PLACE}
+    player = _node(f"{json.dumps(ts)}.map((t) => (camAttentionState([{json.dumps(d)}], t, "
+                   "(x) => +x.enter + STAMP_LAND.tc, ATTN) || { s: 1 }).s)")
+    gate = [G.camera_state_at(sc, t, SW, SH, None)["s"] for t in ts]
+    assert all(abs(a - b) < 1e-4 for a, b in zip(player, gate)), list(zip(ts, player, gate))
+    assert player[0] == 1 and gate[0] == 1.0 and max(gate) > 1.05, "identity before the contact; the pull after it"
+
+
+def test_the_camera_mirror_keeps_throw_and_land_on_their_own_contacts():
+    for arr, lag in (("throw", G.STOP_FLIGHT_S), ("land", G.STOP_ANTIC_S + G.STOP_DROP_S)):
+        tc = ENTER + lag
+        assert G._attention_moves(_attn_scene(arrive=arr)) == [(tc, tc + G.ATTN_IN, "fed")], arr
+        assert G.camera_state_at(_attn_scene(arrive=arr), tc - 0.01, SW, SH, None)["s"] == 1.0, arr
+        assert G.camera_state_at(_attn_scene(arrive=arr), tc + G.ATTN_IN, SW, SH, None)["s"] == 1 + (G.ATTN_SCALE - 1) * 1.0, arr
+    for arr in (None, "pop", "spring"):
+        assert G._attention_moves(_attn_scene(arrive=arr)) == [], arr
+        assert G.camera_state_at(_attn_scene(arrive=arr), ENTER + 3.0, SW, SH, None)["s"] == 1.0, arr

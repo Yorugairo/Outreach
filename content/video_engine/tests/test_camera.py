@@ -233,6 +233,29 @@ def test_a_landing_pulls_the_eye_only_when_attention_says_so():
         p.close()
 
 
+STAMP_CONTACT = 0.154206   # kinetics/stopaction.mjs STAMP_LAND.tc: the clamped scale spring's crossing (P69 T2 pins it)
+
+
+@needs_browser
+def test_a_landed_stamp_pulls_the_eye_from_its_contact_not_its_enter():
+    """P69 T4 (R26-247, E51): a stamp is a landing - identity between its enter and its contact (the mark is still
+    coming down to its own size), then the same 1.06 zoom in place about its box, on the same inout ramp."""
+    tl, uris = _timeline([[]], [{"keys": [], "attention": "landings"}], True)
+    tl["scenes"][0]["docks"] = [dict(DOCK, arrive="stamp", mass="ink")]
+    p = _Player(tl, uris)
+    try:
+        tc = 4.0 + STAMP_CONTACT
+        p.seek(tc - 0.05); assert p.camera(tc - 0.05)["zoom"] == 1, "still until the contact, not from the enter"
+        p.seek(tc + 0.25); z = p.camera(tc + 0.25)["zoom"]; assert abs(z - 1.03) < 1e-4, ("half-way in from the contact", z)
+        p.seek(tc + 0.5); c = p.camera(tc + 0.5)
+        assert abs(c["zoom"] - 1.06) < 1e-9 and c["look"] == [540, 825] and c["at"] == c["look"], c
+        p.seek(9.0); assert abs(p.camera(9.0)["zoom"] - 1.06) < 1e-9, "held while the mark is up"
+        p.seek(12.5); assert p.camera(12.5)["zoom"] == 1
+        assert not p.errs, p.errs
+    finally:
+        p.close()
+
+
 # ---- P49 T5: the camera arrival - the eye goes to the landed card, the world switches at the match -----------------
 
 CARD = {"asset": "dock-card", "slot": 0, "enter": 2.0, "exit": 8.5, "arrive": "throw", "mass": "paper", "centre": True,   # the exit past the match, as the compiler writes it (extend_camera_cards)
