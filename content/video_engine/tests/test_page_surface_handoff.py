@@ -145,9 +145,23 @@ def test_compiled_world_and_binder_wire_one_real_series_into_synthetic_fixture(m
     assert "_surface_source_ref" not in scenes[1]["world"]["page"]
 
 
+def test_quarantined_synthetic_hall_remains_blocked(monkeypatch, tmp_path):
+    scenes, episode, _page = _scenes(tmp_path, monkeypatch)
+    plate = B.R.find_asset("hall")
+    sidecar = plate.with_suffix(".layers.json")
+    quarantined = json.loads(sidecar.read_text(encoding="utf-8"))
+    quarantined["status"] = "quarantined_geometry_only"
+    quarantined["render_eligible"] = False
+    sidecar.write_text(json.dumps(quarantined), encoding="utf-8")
+    with pytest.raises(ValueError, match="quarantined|render-eligible"):
+        B.bind_surface_page_arrivals(scenes, episode)
+
+
 def test_quarantined_copy_of_real_hall_sidecar_remains_blocked(monkeypatch, tmp_path):
     source_plate = FED_EP / "review/imagegen-complete-worlds-v1/finance-evidence-hall-hosted-v3-cream.png"
     source_sidecar = source_plate.with_suffix(".layers.json")
+    if not source_plate.is_file() or not source_sidecar.is_file():
+        pytest.skip("quarantined review plate and sidecar are not part of a clean checkout")
     plate = tmp_path / "quarantined-finance-hall.png"
     shutil.copyfile(source_plate, plate)
     quarantined = json.loads(source_sidecar.read_text(encoding="utf-8"))
