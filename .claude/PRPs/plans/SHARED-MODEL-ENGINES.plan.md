@@ -214,13 +214,13 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Evidence: pending; full frames and scene inspection with hidden/disabled-object and render-engine state captured.
 
 ### T7a: Independent editable 2.5D model/layer backend
-- Status: running (authored-layer diagnostic input; independent of T4a/T5b)
-- Owner: implementation_luna
+- Status: running (Sol xhigh escalation after three bounded Luna failures)
+- Owner: execution_sol escalation; parent retains integration and art boundary
 - Depends on: T3, T5a
 - Write set: `M/layered.py`; `F/layered/authored/`; `content/video_engine/tests/test_model_layered.py`; `B/2_5d/authored/`; shared player source remains read-only
 - Acceptance: independent backend development uses one editable authored-layer character fixture with pose/expression swaps, plus props/environment planes. This proves independent input support, not completion of the detailed 2D episode variant. Shared contact clock, explicit view limits and disocclusion failures; no dependency on T5b or Blender. Fighter-derived resources belong to T7b.
 - Validate: `python -m pytest content/video_engine/tests/test_model_layered.py content/video_engine/tests/test_plate_library_layers.py content/video_engine/tests/test_page_depth.py content/video_engine/tests/test_dock_depth.py -q`; the new suite includes contact/camera/occlusion and random-seek frame checks.
-- Evidence: pending; editable layers and metadata, bounded camera proof and invalid-view refusal fixture.
+- Evidence: pending. Luna preserved `M/layered.py`, `F/layered/authored/`, and `test_model_layered.py`; `py_compile` and the first contact-clock test passed, but the owned module had 10 cascading fixture failures because two fighter layer rows lacked `binding_id`. Failure ledger: one rejected patch hunk, one syntax/collection failure, one fixture-backed module run (three cumulative); Sol xhigh owns correction and exact four-file suite. Art remains diagnostic and unapproved.
 
 ### T7b: Fighter-derived layer bake and view proof
 - Status: pending
