@@ -841,3 +841,22 @@ Demoted from *doctrine* — not dropped. Each lands as a build item, an explorat
 - **Tokyo `plate-01-*`** — all three rolls predate the character-binding fix.
 - **The Steel and Paper re-script** (`REWRITE-ORDER-G`) — now with G-g available to it,
   which is the single finding that most changes a script.
+
+## Model-engine research routing — 2026-09-23
+
+These are additions to the live backlog, not retroactive changes to the dated P45 triage counts above. The [intake disposition](../research/model-engines/NEW-RESEARCH-INTAKE-2026-09-23.md) separates usable methods from incorrect or unmeasured claims. Active source-timed contact/deformation work remains in [SHARED-MODEL-ENGINES](../../.claude/PRPs/plans/SHARED-MODEL-ENGINES.plan.md) T5a.3/T5b, not a duplicate backlog item.
+
+### Backlog — pull only when the trigger is measured
+
+| id | item | trigger / first acceptance |
+| --- | --- | --- |
+| **ME-BL-01** | Character delivery optimization: QEM/LOD, tangent parity, texture/mesh compression, and a baked deform-only Rigify export rig. Preserve the full editable Blender source rig. | A detailed, approved character exceeds a measured size/load/render budget. Compare same-pose silhouette, material seams, joint deformation, animation parity, bytes and time; no claimed 86.2% bone reduction as a target. |
+| **ME-BL-02** | Optional Three.js/live skinned-character runtime and batching, behind the existing seek-safe player. | A concrete shot needs interactive/live 3D that offline Blender render plus raster passes cannot serve. Measure on representative hardware before adding a separate runtime; no assumed 10,000 actors, 71.4% fragment saving or guaranteed 60 fps. |
+| **ME-BL-03** | Continuous strike collision and XPBD/GJK-style contact methods. | An observed fighter shot misses its declared contact/penetration budget after authored/IK correction. Compare residuals, stability, visual impact and render time; do not infer anatomical injury physics. |
+
+### Explore — bounded comparison, not production adoption
+
+| id | experiment | deciding evidence |
+| --- | --- | --- |
+| **ME-EXP-01** | Compare image-to-3D candidates (including the existing Tripo/Meshy path) and procedural Blender detail against the same fighter reference. | Matched camera/light/pose renders; topology and editability, rig stress, identity read, license/provenance, local time and human cleanup. Promote only an approved detailed source character, not a fast blockout. |
+| **ME-EXP-02** | Test local depth + segmentation + inpainting as an optional 2.5D photograph/painted-plate preparation route (extends P45 T9; not a second implementation lane). | Same-plate A/B against authored layers: edge/disocclusion quality, cleanup time and seek-safe composite. Keep vector chart/UI depth authored; reject advertised sub-second and extreme-speedup numbers until locally measured. |

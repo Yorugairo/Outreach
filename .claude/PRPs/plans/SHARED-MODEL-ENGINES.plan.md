@@ -369,7 +369,7 @@ python content/video_engine/scripts/model_engine.py inspect --manifest content/v
 python -m pytest content/video_engine/tests -k model_ -q
 ```
 
-Source selection is slice-specific: all workers read the inference map and provenance limits; T4/T5 consult the rigging and avatar blueprints, T6/T7 consult only the linked art/pass/layer sections. Raw research bundles are evidence lookup targets, not blanket mandatory full reads. Provider facts are rechecked during T10 rather than assumed current from research notes.
+Source selection is slice-specific: all workers read the inference map and provenance limits; T4/T5 consult the rigging and avatar blueprints, T6/T7 consult only the linked art/pass/layer sections. The 2026-09-23 [new research intake](../../../docs/research/model-engines/NEW-RESEARCH-INTAKE-2026-09-23.md) maps the two newly landed 3D/AI blueprints to bounded experiments and quarantines unverified or incorrect numerical claims; it does not add runtime defaults or waive proof gates. Raw research bundles are evidence lookup targets, not blanket mandatory full reads. Provider facts are rechecked during T10 rather than assumed current from research notes.
 
 Planning: validate this PRP, review the source-grounding inventories, register all human gates, and record assumptions/caveats. Implementation commands above are future acceptance obligations. No new engine tests or renders have run merely because this document names them.
 
