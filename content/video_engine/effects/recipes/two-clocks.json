@@ -1,0 +1,41 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:two-clocks",
+ "title": "Two clocks on one unit",
+ "aliases": [],
+ "acts": [
+  "COMPARES"
+ ],
+ "members": [
+  {
+   "card": "page_builder:bars",
+   "offset_s": 0.0,
+   "role": "two durations on ONE unit (years): the long bar deemphasized, the short bar crimson - the page's own colours - built on its axes while the long one is spoken"
+  },
+  {
+   "card": "page_species:figure",
+   "offset_s": 9.32,
+   "role": "the short bar's figure - the claim ('5 years') - written by the hand on its top on its word ('about five years'); the long bar keeps its printed value"
+  }
+ ],
+ "window_s": 10.9,
+ "does": "Two durations on one unit: the long bar deemphasized while it is spoken, the short one crimson; on the short one's word the hand writes its figure on its top - the claim the page was drawn to make.",
+ "use_when": {
+  "act": "COMPARES - two durations",
+  "moment": "turn",
+  "shape": "two numbers, one unit: a long and a short duration",
+  "use": "a contrast of two clocks where the SHORT one is the claim ('twenty years ... about five years'): the long one deemphasized as it is spoken, the short one's figure on its word",
+  "dont": "two units (E53), when the long one is the claim (emphasize it instead), or more than two durations (rank them)"
+ },
+ "doctrine": [
+  "E53",
+  "E50",
+  "E28",
+  "BACKLOG R26-190",
+  "E99 s60",
+  "E99 s70"
+ ],
+ "status": "candidate",
+ "source": "P69 T35 (the operator 2026-09-22); proved as a beat by projects/_proofs/p69-recipes/proof_p69_recipes.py on Steel and Paper H row 19 ('Railway steel sat waiting ... about five years', take 430.41 s) on ev-two-clocks-bars-v1 - no approved cut carries it",
+ "count": 0
+}

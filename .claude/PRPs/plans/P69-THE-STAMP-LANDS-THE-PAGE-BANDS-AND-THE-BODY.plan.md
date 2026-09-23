@@ -798,7 +798,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T35: New candidate effects and recipes from P69's mechanisms, each proved as a beat (the operator, 2026-09-22)
-- Status: pending
+- Status: in_progress
 - Owner: implementation_luna (authoring + proofs); parent (the frame read)
 - Depends on: T6 and T6b merged into lane A (the recipes use the bar figure, the compare on bars and the prop's resting shadow)
 - Write set: `content/video_engine/effects/recipes/*.json` (NEW candidates only; no existing recipe edited), `content/video_engine/effects/cards/*.json` (only a new card a new recipe needs), the catalogue's generated files via `build_effects_catalog.py --write`, a private proof dir `content/video_engine/projects/_proofs/p69-recipes/**` (gitignored build output; the proof door `proof_p69_recipes.py` commits), `docs/content-video-engine/review-queue.v1.json`, `docs/content-video-engine/REVIEW-QUEUE.md`
@@ -810,7 +810,7 @@ verbatim tails and are left pending.
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
-- Evidence: pending
+- Evidence: 2026-09-23 lane A - THREE candidates kept after the parent's strip read: `recipe:estimate-opens-as-a-wedge` (the debt line lands, the $130B/$150B edges open from 2025, the spread wedge bleeds between them, "$130-150B / 2026E" written - never a midpoint), `recipe:the-stamp-takes-the-room-then-the-card` (the data-centre prop stamped into the biggest room with its ring, the leases record then placed clear of mark and ring - an authored box, the E65 placer found no room for the wide record), `recipe:two-clocks` (one unit, 20 years deemphasized, 5 years crimson, its figure the claim). TWO WITHDRAWN: `the-bar-halves-its-number` (the bar never halves - R26-273) and `the-ratio-read-in-the-gap` (a bracket draws nothing on bars - R26-272). Each recipe carries a `use_when` (act, moment, data shape, use / don't) - the schema and the catalogue builder gained the field. Proof door `_proofs/p69-recipes/proof_p69_recipes.py` (builds to gitignored `build-lab-*`). Catalogue: 49 recipes, in sync; drift tests 50 passed / 3 xfailed; the check's 6 FAILs are R26-239, unchanged. Defects seen: the issuance tag crosses the wedge's start, the page narrow (T8), "20years" and clipped ticks (R26-274), the prop art's black corners. PENDING: `the-prop-lands-with-weight` after lane B merges T6b
 
 ### T35b: The Bravos candidates - SUPERSEDED by T36-T44 (2026-09-23, the harvest v2)
 - Status: done
