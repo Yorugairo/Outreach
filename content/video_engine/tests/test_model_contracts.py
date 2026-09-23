@@ -74,6 +74,9 @@ def _materialize_project(tmp_path: Path) -> tuple[Path, dict[str, dict[str, Any]
     approval = {
         "schema_version": "model_approval_record.v1",
         "approval_id": "contract-fixture-approval",
+        "decision": "approved",
+        "approved_by": "fixture-operator",
+        "approved_on": "fixture",
         "assets": [
             {"asset_id": row["asset_id"], "path": row["path"], "sha256": row["sha256"]}
             for row in catalog_rows
@@ -410,6 +413,41 @@ def test_render_ready_validation_requires_independent_trusted_record_paths(tmp_p
         validate_model_asset(model_path, project_root=root, for_render=True, **_trusted_paths(root))
 
 
+def test_review_only_intake_record_cannot_be_reused_as_approval(tmp_path: Path) -> None:
+    root, models = _materialize_project(tmp_path)
+    approval_path = root / "records" / "approval.json"
+    primary = models["fighter-a"]["resources"][0]
+    review_record = {
+        "schema_version": "model_asset_intake_record.v1",
+        "record_id": "candidate-review",
+        "asset_id": "fighter-a",
+        "path": primary["path"],
+        "sha256": primary["sha256"],
+        "review_state": "review_only",
+        "render_eligible": False,
+    }
+    _write_json(approval_path, review_record)
+    model = models["fighter-a"]
+    model["approval_reference"].update(record_id="candidate-review", sha256=_sha(approval_path))
+
+    validate_model_asset(model, project_root=root)
+    with pytest.raises(ModelContractError, match="approved model_approval_record.v1"):
+        validate_model_asset(model, project_root=root, for_render=True, **_trusted_paths(root))
+
+
+@pytest.mark.parametrize("missing", ["decision", "approved_by", "approved_on"])
+def test_render_approval_record_needs_explicit_decision_and_attribution(missing: str, tmp_path: Path) -> None:
+    root, models = _materialize_project(tmp_path)
+    approval_path = root / "records" / "approval.json"
+    approval = json.loads(approval_path.read_text(encoding="utf-8"))
+    del approval[missing]
+    _write_json(approval_path, approval)
+    model = models["fighter-a"]
+    model["approval_reference"]["sha256"] = _sha(approval_path)
+    with pytest.raises(ModelContractError, match="approval_reference"):
+        validate_model_asset(model, project_root=root, for_render=True, **_trusted_paths(root))
+
+
 def test_scene_binds_exact_revisions_authored_contacts_and_source_time(tmp_path: Path) -> None:
     root, _ = _materialize_project(tmp_path)
     scene = _scene(root)
@@ -487,6 +525,28 @@ def test_scene_rejects_stale_descriptor_hash_and_unsupported_version(tmp_path: P
     scene = _scene(root)
     scene["schema_version"] = "model_scene.v2"
     with pytest.raises(ModelContractError, match="model_scene.v1"):
+        validate_model_scene(scene, project_root=root)
+
+
+@pytest.mark.parametrize(
+    ("collection", "identifier"),
+    [("contacts", "contact_id"), ("events", "event_id")],
+)
+def test_scene_rejects_duplicate_contact_and_event_ids(collection: str, identifier: str, tmp_path: Path) -> None:
+    root, _ = _materialize_project(tmp_path)
+    scene = _scene(root)
+    scene[collection].append(dict(scene[collection][0]))
+    with pytest.raises(ModelContractError, match=f"duplicate {identifier}"):
+        validate_model_scene(scene, project_root=root)
+
+
+def test_scene_rejects_zero_quaternion(tmp_path: Path) -> None:
+    root, _ = _materialize_project(tmp_path)
+    scene = _scene(root)
+    scene["motion_channels"][0]["value_unit"] = "quaternion"
+    scene["motion_channels"][0]["keyframes"][0]["value"] = [0, 0, 0, 0]
+    scene["motion_channels"][0]["keyframes"][1]["value"] = [0, 0, 0, 1]
+    with pytest.raises(ModelContractError, match="quaternion must have nonzero length"):
         validate_model_scene(scene, project_root=root)
 
 

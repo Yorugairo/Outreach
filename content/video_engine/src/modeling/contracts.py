@@ -317,8 +317,15 @@ def _validate_asset_payload(
         linked = resources.get(approval_ref.get("resource_id"))
         if linked is not None and not _approval_covers(approval, asset_id=asset_id, resource=linked):
             errors.append("approval_reference: existing record is not linked to the exact asset id/path/hash")
-        if for_render and trusted_approval is not None and approval_path != trusted_approval:
-            errors.append("approval_reference: path does not match caller-supplied trusted approval record")
+        if for_render:
+            if approval.get("schema_version") != "model_approval_record.v1" or approval.get("decision") != "approved":
+                errors.append("approval_reference: render use requires an approved model_approval_record.v1")
+            if not isinstance(approval.get("approved_by"), str) or not approval["approved_by"].strip():
+                errors.append("approval_reference: approved record requires approved_by")
+            if not isinstance(approval.get("approved_on"), str) or not approval["approved_on"].strip():
+                errors.append("approval_reference: approved record requires approved_on")
+            if trusted_approval is not None and approval_path != trusted_approval:
+                errors.append("approval_reference: path does not match caller-supplied trusted approval record")
 
     return errors
 
@@ -526,8 +533,15 @@ def _validate_scene_payload(
                 errors.append(f"motion_channels[{index}].keyframes[{keyframe_index}]: scalar value_unit requires a number")
             elif expected_shape is not None and (not isinstance(value, list) or len(value) != expected_shape):
                 errors.append(f"motion_channels[{index}].keyframes[{keyframe_index}]: value shape does not match value_unit")
+            elif channel["value_unit"] == "quaternion" and not any(component != 0 for component in value):
+                errors.append(f"motion_channels[{index}].keyframes[{keyframe_index}]: quaternion must have nonzero length")
 
+    contact_ids: set[str] = set()
     for index, contact in enumerate(payload["contacts"]):
+        contact_id = contact["contact_id"]
+        if contact_id in contact_ids:
+            errors.append(f"contacts[{index}]: duplicate contact_id {contact_id!r}")
+        contact_ids.add(contact_id)
         start, end = contact["start_frame"], contact["end_frame"]
         if start >= end or end > duration:
             errors.append(f"contacts[{index}]: interval must satisfy 0 <= start < end <= duration_frames")
@@ -556,7 +570,12 @@ def _validate_scene_payload(
             if contact["target_semantic_joint"] not in set(target_capabilities.get("semantic_joints", [])):
                 errors.append(f"contacts[{index}]: target semantic joint is not declared")
 
+    event_ids: set[str] = set()
     for index, event in enumerate(payload["events"]):
+        event_id = event["event_id"]
+        if event_id in event_ids:
+            errors.append(f"events[{index}]: duplicate event_id {event_id!r}")
+        event_ids.add(event_id)
         if event["frame"] >= duration:
             errors.append(f"events[{index}]: frame must be less than duration_frames")
         binding_id = event.get("binding_id")

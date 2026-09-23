@@ -49,7 +49,7 @@
       }
     },
     "approval_reference": {
-      "description": "Pointer to an existing approval record; this descriptor makes no approval decision.",
+      "description": "Pointer to an existing review or approval record. A review-only intake record is not approval; this descriptor makes no approval decision.",
       "type": "object",
       "additionalProperties": false,
       "required": ["record_id", "path", "sha256", "resource_id"],
