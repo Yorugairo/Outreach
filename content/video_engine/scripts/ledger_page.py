@@ -2488,6 +2488,85 @@ def infer_variant(series: dict) -> str | None:
     return None
 
 
+# P69 T10c (the operator, 2026-09-22, on row 7's thrown Bravos card: "Those charts still seem tough to read to me" and
+# "Evidence cards that are using charts need to use the whole card and use bigger fonts and thicker lines"): the CARD
+# profile. `chart_card.render_card` rendered the FULL ledger page and shrank it to the dock's width, so every word
+# shrank with the card (a 26 px tick read at 9 px on row 7's 653-px card). Under `readability: card` the page is laid
+# out FOR THE CARD'S OWN DISPLAYED BOX (`axes.card_w` x `axes.card_h`, stage px) - drawn on the stage at the card's
+# scale (CARD K = stage width / card width) so that, shown at the card's size, every size below is what it says:
+#   CARD_TYPE_PX   every word (title, ticks, end badges, values, the source) at this many DISPLAYED px, the E99 s90
+#                  phone floor at the card's size: 12 phone px on a 16:9 frame played 390 px wide is 12 x 1920 / 390 =
+#                  59.08 stage px (test_longform_profile.PHONE_FLOOR / PHONE_W) - the floor itself (at 60 the title of
+#                  row 7's card wraps by 4 px, and a second title line costs the plot a fifth of the card);
+#   CARD_STROKE_X  every line and its tip at this many times the full page's own stroke, as displayed;
+#   CARD_PAD_PX    the card's only margin (displayed px): the plot runs edge to edge inside it - no page margins, no
+#                  caption bands, no sub, no y label, no badge rail, no key;
+# end tags reduced to their short badge (the value, in its line's ink), the x ticks to the two ends (the minor ones
+# dropped), the source to its first clause on one line - or none, when it will not fit, or when the plot would keep less
+# than its room (the engine's LP_CARD.PLOT_MIN, or a line card's end badges stacked a line apart). The card keeps its
+# TITLE and its NUMBER.
+# It is the long form's look (the flat ground, the panel, Inter) - a card of a long-form page. NOT a row option: only
+# `chart_card` sets it, and a row that names `readability=card` is refused as an unknown profile.
+CARD = "card"
+CARD_BUILDERS = ("dense-line", "story")
+CARD_PHONE_FLOOR, CARD_PHONE_W = 12.0, 390   # E99 s90's floor, measured the T17 way (phone px = stage px x 390 / 1920)
+CARD_TYPE_PX = CARD_PHONE_FLOOR * 1920 / CARD_PHONE_W   # 59.08: the floor itself (the engine's LP_CARD.TYPE_PX)
+CARD_STROKE_X = 2.0
+CARD_PAD_PX = 8.0   # the engine's LP_CARD.PAD_PX
+CARD_SOURCE_CUTS = (" - ", "; ", ", ", " (")   # the source's first clause ends at the first of these
+
+
+def card_floor_px(stage_w: int = 1920) -> float:
+    """E99 s90's phone floor in DISPLAYED stage px: the size that reads 12 px on a 390-px-wide phone."""
+    return CARD_PHONE_FLOOR * stage_w / CARD_PHONE_W
+
+
+def card_error(page: dict, card_w: float, card_h: float, aspect: str | None = "16:9") -> str | None:
+    """Can THIS page be drawn as a card of this displayed box? The message, or None. Pure."""
+    builder = str(page.get("builder") or "?")
+    if builder not in CARD_BUILDERS:
+        return (f"readability={CARD!r} is drawn by the {' and '.join(CARD_BUILDERS)} builders (a line card and a bars "
+                f"card); this page uses {builder!r}")
+    if aspect not in (None, "16:9"):
+        return f"readability={CARD!r} is a 16:9 page's card (the long form's); a {aspect} card keeps its own page"
+    if not (float(card_w) > 0 and float(card_h) > 0):
+        return f"readability={CARD!r} needs the card's displayed box in stage px (card_w, card_h); got {card_w!r} x {card_h!r}"
+    return None
+
+
+def card_source(source: str, card_w: float, stage_w: int = 1920) -> str:
+    """The card's one short source line: the source's first clause, when it fits one line inside the card's margins at
+    CARD_TYPE_PX - else nothing (the page the card becomes carries the whole citation)."""
+    text = str(source or "").strip()
+    for cut in CARD_SOURCE_CUTS:
+        if cut in text:
+            text = text.split(cut, 1)[0].strip()
+    k = stage_w / float(card_w)
+    room = stage_w - 2 * CARD_PAD_PX * k
+    return text if text and longform_text_px(text, "source", CARD_TYPE_PX * k) <= room else ""
+
+
+def apply_card(page: dict, card_w: float, card_h: float, stage_w: int = 1920) -> dict:
+    """Stamp the CARD profile on a page spec, in place (returned for chaining): the displayed box, the value-only end
+    tags, the two end x ticks, no sub / y label / badges / key, the short source. ValueError when it cannot be one."""
+    err = card_error(page, card_w, card_h)
+    if err:
+        raise ValueError(err)
+    axes = page.setdefault("axes", {})
+    for key in ("type_scale", "tag_form", "tag_room", "key", "key_px", "ylabel"):
+        axes.pop(key, None)
+    axes.update({"readability": CARD, "card_w": round(float(card_w), 2), "card_h": round(float(card_h), 2)})
+    if page.get("builder") == "dense-line":
+        axes["tag_form"] = "value"
+    xt = axes.get("xticks")
+    if isinstance(xt, list) and len(xt) > 2:
+        axes["xticks"] = [xt[0], xt[-1]]
+    page["sub"] = ""
+    page["badges"] = []
+    page["source"] = card_source(page.get("source") or "", card_w, stage_w)
+    return page
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="series.json -> ledger page spec (doc 29 s9.26)")
     parser.add_argument("series", help="the ev-*.series.json beside the asset")

@@ -7020,6 +7020,18 @@ def stack_entry(items, clear_at: float, form: str | None = None,
     return payload, enter, exitt
 
 
+def dock_card_profile(asset: Path) -> dict:
+    """P69 T10c: ``{"card": <the sidecar>}`` for a dock still that chart_card drew FOR ITS OWN SIZE (its
+    ``<asset>.card.json``, `chart_card.card_sidecar`), else ``{}`` - so every other dock's evidence entry is byte-identical."""
+    side = Path(asset).with_suffix(".card.json")
+    if not side.exists():
+        return {}
+    meta = json.loads(side.read_text(encoding="utf-8"))
+    if meta.get("profile") != "card":
+        raise ValueError(f"{side}: a dock sidecar that is not a card profile's ({meta.get('profile')!r})")
+    return {"card": {k: meta[k] for k in sorted(meta)}}
+
+
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
                centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,
@@ -7794,6 +7806,9 @@ def main() -> int:
                             ap.with_suffix(".series.json").read_text(
                                 encoding="utf-8")), enter, tl)}
                            if ap.with_suffix(".series.json").exists() else {}),
+                        # P69 T10c: a CHART CARD drawn for its own size (chart_card's `card` profile) says so, so the
+                        # player hands a push or a snap over to the FULL page instead of growing the card
+                        **dock_card_profile(ap),
                     }
                     # BADGE-CHART SYNC: chart data refetches on rebuild, so
                     # an authored badge value can silently drift from the end

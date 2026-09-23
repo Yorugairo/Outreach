@@ -7948,7 +7948,7 @@ async function mount(doc) {
      because the anchored caption fixes the chart's rendered height; the horizontal viewBox and
      CSS box grow together, so the browser's default xMidYMid meet remains uniform rather than
      letterboxing a wider outer box. The line builder keeps its numeric domains and fixed margins. */
-  const LP_READABILITY = Object.freeze({ LANDSCAPE_PHONE: "landscape-phone", LONGFORM: "longform" });
+  const LP_READABILITY = Object.freeze({ LANDSCAPE_PHONE: "landscape-phone", LONGFORM: "longform", CARD: "card" });   /* CARD: P69 T10c, chart_card's own */
   const LP_PHONE = Object.freeze({ VIEW_H: 560, MIN_W: 1000, SAFE_RIGHT: 0.979, PLOT_L: 120,
                                   NAME_U: 19 * 46 / 24, BADGE_U: 5 * 46 / 18, FONT_PX: 46, TEXT_PX: 52, TAG_GAP: 12 });
   const lpReadability = (pg) => String(((pg || {}).axes || {}).readability || "");
@@ -7995,7 +7995,66 @@ async function mount(doc) {
                                         bravos: Object.freeze({ title: 38.5, sub: 24, tick: 22.7, tag: 19.3, chip: 15.4, value: 43.3, src: 14.4 }),
                                         middle: Object.freeze({ title: 44, sub: 26, tick: 26, tag: 30, chip: 24, value: 34, src: 20 }),
                                         phone: Object.freeze({ title: 60.3, sub: 60.3, tick: 61.4, tag: 61.4, chip: 61.4, value: 61.4, src: 60.3 }) }) });
-  const lpLongformType = (pg) => LP_LONGFORM.TYPE_SCALE[(((pg || {}).axes) || {}).type_scale] || LP_LONGFORM.TYPE_SCALE[LP_LONGFORM.DEFAULT];
+  const lpLongformType = (pg) => lpReadability(pg) === LP_READABILITY.CARD ? lpCardType(pg)
+    : LP_LONGFORM.TYPE_SCALE[(((pg || {}).axes) || {}).type_scale] || LP_LONGFORM.TYPE_SCALE[LP_LONGFORM.DEFAULT];
+  /* P69 T10c (the operator on row 7's thrown Bravos card: "Evidence cards that are using charts need to use the whole card
+     and use bigger fonts and thicker lines") - THE CARD, drawn for its own DISPLAYED box (`axes.card_w` x `card_h`, stage
+     px; ledger_page.apply_card, set by chart_card only). The page is the long form's (the ground, the panel, Inter) laid
+     out on the stage at the card's scale K = STAGE_W / card_w, so that shown at the card's size every dial below is what
+     it says in DISPLAYED px (ledger_page.CARD_*):
+       TYPE_PX   every word at E99 s90's phone floor at the card's size - 12 phone px on a 16:9 frame 390 px wide is
+                 12 x 1920 / 390 = 59.08 px (test_longform_profile.PHONE_FLOOR) - the floor itself;
+       PAD_PX    the card's only margin: the title, the plot and the one source line run edge to edge inside it;
+       STROKE_X  every line, its bloom and its tip at this many times the full page's own, as displayed - the page's
+                 line is the template's 4-unit `.ser` at PAGE_UNIT stage px a unit (the full-stage page at rest,
+                 MEASURED 1.3340 by P69 T6c);
+       PLOT_MIN  the share of the card's height the plot keeps: a source line that would leave it less is dropped
+                 (the page the card becomes carries the citation in full);
+       HANDOVER_U the share of a push (enter=camera, SNAP_S) over which the card gives way to the FULL page (a SNAP
+                 already grows the full page out of the card's rectangle and hides the card on its first frame). */
+  const LP_CARD = Object.freeze({ TYPE_PX: 12 * 1920 / 390, PAD_PX: 8, GAP_PX: 4, STROKE_X: 2, PAGE_UNIT: 1.334,
+                                  PLOT_MIN: 0.4, HANDOVER_U: 0.6 });
+  const lpCardK = (pg) => { const w = +((((pg || {}).axes) || {}).card_w); return w > 0 ? STAGE_W / w : 1; };
+  const lpCardType = (pg) => {
+    const px = LP_CARD.TYPE_PX * lpCardK(pg);
+    return Object.freeze({ title: px, sub: px, tick: px, tag: px, chip: px, value: px, src: px });
+  };
+  /* ... its box (rendered stage px): the title's last line, a gap, the plot's top ink (half a tick figure over it), the
+     chart to the source line - or to the margin, when the source is dropped - and the x labels inside it */
+  const lpCardBox = (pg, T, inkBottom, srcH, pad, gap) => {
+    const ax = pg.axes || {}, rules = (ax.hlines || (ax.hline ? [ax.hline] : [])).some((h) => h && h.label);
+    const tu = LP_LONGFORM.PLOT_T[pg.builder] || LP_LONGFORM.PLOT_T.story;
+    const srcY = srcH > 0 ? STAGE_H - pad - srcH : STAGE_H, bot = srcH > 0 ? srcY - gap : STAGE_H - pad;
+    const above = Math.max(0.5 * T.tick, rules ? gap + 1.25 * T.tag : 0);
+    const need = inkBottom + gap + above;
+    const top = (need - tu * bot / 560) / (1 - tu / 560);
+    return { top, bot, floor: bot, srcY, railY: STAGE_H, keyY: top, fits: true };
+  };
+  /* ... the plot's own height in that box (rendered px: the box less its top units and the x labels' band), and the
+     height it must keep - PLOT_MIN of the stage, and on a line card its end badges stacked a line of their own apart */
+  const lpCardPlotH = (pg, T, box) => {
+    const tu = LP_LONGFORM.PLOT_T[pg.builder] || LP_LONGFORM.PLOT_T.story;
+    return (box.bot - box.top) * (1 - tu / 560) - (LP_LONGFORM.ASCENT + LP_LONGFORM.DESCENT) * T.tick - LP_LONGFORM.XLAB_CLEAR_PX;
+  };
+  const lpCardPlotNeed = (pg, T) => {
+    const n = pg.builder === "dense-line" ? (pg.series || []).filter((sr) => sr && !sr.muted).length : 0;
+    return Math.max(LP_CARD.PLOT_MIN * STAGE_H, (n - 1) * LP_LONGFORM.TAG_SPACE * T.tag);
+  };
+  /* ... and the chart's viewBox width: the plot runs from the margin to the end badges' own right edge at the margin */
+  const lpCardVW = (pg, T, scale, pad) => {
+    const maxW = (STAGE_W - 2 * pad) / scale + 220 - LP_PHONE.TAG_GAP - lpLongformTagUnits(pg, T, ((pg.axes || {}).tag_form) || "value", scale);
+    return Math.max(LP_PHONE.MIN_W, Math.round(maxW * 1000) / 1000);
+  };
+  /* ... every line, its bloom and its tip, thicker by the card's own factor (after the builder has drawn them) */
+  const lpCardStrokes = (S) => {
+    const f = LP_CARD.STROKE_X * LP_CARD.PAGE_UNIT * (S.cardK || 1) / (S.stagePx > 0 ? S.stagePx : 1);
+    for (const pp of S.paths || []) {
+      pp.p.style.strokeWidth = ((pp.muted ? 3 : 4) * f).toFixed(3);
+      if (!pp.muted) lpBloom(S, pp.p, pp.p.getAttribute("stroke"), LP_BLOOM_PX * f);
+      if (pp.tip) pp.tip.setAttribute("r", (6 * f).toFixed(3));
+      if (pp.name && !pp.muted) pp.name.style.fill = pp.p.getAttribute("stroke");   /* the short badge in its line's own ink: the card has no key */
+    }
+  };
   /* the chart-unit geometry for a chart box from `top` to `bot` (rendered px) - ledger_page.longform_geom, line for line:
      the ticks' column and the names hang half a figure clear of the plot, whose floor rises until they clear the caption */
   const lpLongformGeom = (T, top, bot, floor) => {
@@ -8099,11 +8158,11 @@ async function mount(doc) {
   /* one role's size on a built chart, in its units: T17's 46, or the long form's preset */
   const lpTypeU = (st, role) => (st.lfType ? st.lfType[role] : LP_PHONE.FONT_PX);
   /* the profiles that set E99 s90's phone type (T17's own, and the long form that carries it) */
-  const lpPhoneType = (r) => r === LP_READABILITY.LANDSCAPE_PHONE || r === LP_READABILITY.LONGFORM;
+  const lpPhoneType = (r) => r === LP_READABILITY.LANDSCAPE_PHONE || r === LP_READABILITY.LONGFORM || r === LP_READABILITY.CARD;
   /* ... read off a built chart: T17's reads stay exactly as they were (they never asked the aspect); the long form
      is a 16:9 page profile and never sets a portrait chart's type */
   const lpPhoneTypeOf = (st) => st.readability === LP_READABILITY.LANDSCAPE_PHONE
-    || (!st.portrait && st.readability === LP_READABILITY.LONGFORM);
+    || (!st.portrait && (st.readability === LP_READABILITY.LONGFORM || st.readability === LP_READABILITY.CARD));
   const lpPhoneTagUnits = (pg) => {
     if (String((pg || {}).builder || "") !== "dense-line") return 0;
     const rides = {};
@@ -8198,7 +8257,7 @@ async function mount(doc) {
   if (A[LP_LONGFORM.FONT_ASSET] && typeof FontFace !== "undefined" && document.fonts) {
     const face = new FontFace(LP_LONGFORM.FACE, 'url("' + A[LP_LONGFORM.FONT_ASSET] + '")', { weight: "100 900", style: "normal" });
     document.fonts.add(face);
-    face.load().then(() => { for (const [key, S] of [...ledgerState]) if (S && S.readability === LP_READABILITY.LONGFORM) ledgerState.delete(key); }).catch(() => {});
+    face.load().then(() => { for (const [key, S] of [...ledgerState]) if (S && (S.readability === LP_READABILITY.LONGFORM || S.readability === LP_READABILITY.CARD)) ledgerState.delete(key); }).catch(() => {});
   }
   /* PORTRAIT LAYOUT (P41): one column in stage px, measured top-down inside doc 49's zones - the title from y=140
      (zone 1), the chart in zone 2, the caption strip from 1340 (two 64px caption lines reach up to ~1290, so the page
@@ -8404,6 +8463,7 @@ async function mount(doc) {
     const title = lpEl("div", "lp-ink lp-title", page);
     const subEl = lpEl("div", "lp-ink lp-sub", page);
     const LF = lpLongformPage(pg);   /* P69 T8: the long form's page - the ground, the panel, Inter at the phone floor */
+    const cardP = !!LF && lpReadability(pg) === LP_READABILITY.CARD, cardK = cardP ? lpCardK(pg) : 1, cPad = cardP ? LP_CARD.PAD_PX * cardK : 0;   /* P69 T10c: a card, its scale and its margin (rendered px) */
     const src = lpEl("div", "lp-ink lp-src" + (pg.src_style === "compact" ? " compact" : ""), page);   /* the design pass: a citation takes minimal space */
     const subText = PORTRAIT ? lpFirstClause(pg.sub || "", true) : (pg.sub || ""), srcText = PORTRAIT ? lpFirstClause(pg.source || "", false) : (pg.source || "");
     const glyphs = PORTRAIT
@@ -8463,8 +8523,13 @@ async function mount(doc) {
       if (LF) {   /* P69 T8: the long form lays its page out by MEASURING its own ink at its preset (lpLongformBox) */
         const T = lpLongformType(pg), PH = page.offsetHeight || STAGE_H;
         const rend = (y) => STAGE_H / 2 + (y - PH / 2) * ps;   /* a page CSS px -> a rendered stage px (the punch, about the centre) */
-        const col = ((un(LP_PHONE.SAFE_RIGHT) - tL) * 100).toFixed(2) + "%";
+        if (cardP) {   /* P69 T10c: a card's ink starts at its margin */
+          title.style.left = (un(cPad / STAGE_W) * 100).toFixed(3) + "%"; title.style.top = (un(cPad / STAGE_H) * 100).toFixed(3) + "%";
+          subEl.style.display = "none"; rail.style.display = "none";
+        }
+        const col = ((un(cardP ? 1 - cPad / STAGE_W : LP_PHONE.SAFE_RIGHT) - (cardP ? un(cPad / STAGE_W) : tL)) * 100).toFixed(2) + "%";
         page.classList.add("lp-readability-longform");
+        if (cardP) page.classList.add("lp-readability-card");
         for (const [el, px] of [[title, T.title], [subEl, T.sub], [src, T.src]]) {
           el.style.fontSize = (px / ps).toFixed(3) + "px"; el.style.lineHeight = String(LP_LONGFORM.LINE_H);
           el.style.width = col; el.style.whiteSpace = "normal"; el.style.left = title.style.left;
@@ -8474,14 +8539,20 @@ async function mount(doc) {
         rail.style.maxWidth = col;   /* N1: the rail's rows are measured in the column it will stand in */
         lfKey = lpLongformKey(page, pg, ps);   /* P69 T10: the key rail's rows, measured in the ink column it stands in */
         if (lfKey) { lfKey.el.style.left = title.style.left; lfKey.el.style.maxWidth = col; }
-        const box = lfBox = lpLongformBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0, badges.length ? rail.offsetHeight * ps : 0,
-                                          lfKey ? lfKey.el.offsetHeight * ps : 0);
+        let box = lfBox = cardP ? lpCardBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0, cPad, LP_CARD.GAP_PX * cardK)
+          : lpLongformBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0, badges.length ? rail.offsetHeight * ps : 0,
+                          lfKey ? lfKey.el.offsetHeight * ps : 0);
+        if (cardP && srcText.trim() && lpCardPlotH(pg, T, box) < lpCardPlotNeed(pg, T)) {   /* the plot keeps its room: the source goes */
+          src.style.display = "none";
+          box = lfBox = lpCardBox(pg, T, subBottom, 0, cPad, LP_CARD.GAP_PX * cardK);
+        }
         if (lfKey) lfKey.el.style.top = (un(box.keyY / STAGE_H) * 100).toFixed(3) + "%";
         lfGeom = lpLongformGeom(T, box.top, box.bot, box.floor);
         if (!A[LP_LONGFORM.FONT_ASSET]) console.warn("P69 T8: a longform page (" + (scene.scene_id || "?") + ") mounted with no "
           + LP_LONGFORM.FONT_ASSET + " in the asset map - its words are set in the fallback face, not Inter (build_scene_timeline_f.longform_assets)");   /* N6 */
-        const vw = pg.builder === "dense-line" ? lpLongformVW(pg, T, lfGeom.scale) : 1000;   /* bars: the legacy viewBox, left-aligned, never letterboxed */
+        const vw = pg.builder === "dense-line" ? (cardP ? lpCardVW(pg, T, lfGeom.scale, cPad) : lpLongformVW(pg, T, lfGeom.scale)) : 1000;   /* bars: the legacy viewBox, left-aligned, never letterboxed */
         cb.y = un(box.top / STAGE_H); cb.h = (box.bot - box.top) / STAGE_H / ps; cb.w = vw * lfGeom.scale / STAGE_W / ps;
+        if (cardP) { cb.x = un(cPad / STAGE_W); if (pg.builder !== "dense-line") cb.w = (STAGE_W - 2 * cPad) / STAGE_W / ps; }   /* P69 T10c: from the card's margin, and a bars card's box to the other */
         chart.setAttribute("viewBox", "0 0 " + vw + " 560");
         geom = { W: vw, H: 560 };
       }
@@ -8498,8 +8569,8 @@ async function mount(doc) {
          letterbox moves with the data's shape and the heading would drift with it. */
       /* P69 T8: a longform page's ink column ends at the stage's safe right edge - T17's widened chart box runs past it
          (its right margin is the end tags' air), and the long form's floor-sized words WRAP in this column */
-      const inkR = LF ? un(LP_PHONE.SAFE_RIGHT) : cb.x + cb.w;
-      const inkL = FULL ? title.style.left : chart.style.left, inkW = FULL ? ((inkR - tL) * 100).toFixed(2) + "%" : chart.style.width;
+      const inkR = LF ? un(cardP ? 1 - cPad / STAGE_W : LP_PHONE.SAFE_RIGHT) : cb.x + cb.w;
+      const inkL = FULL ? title.style.left : chart.style.left, inkW = FULL ? ((inkR - (cardP ? un(cPad / STAGE_W) : tL)) * 100).toFixed(2) + "%" : chart.style.width;
       subEl.style.width = inkW; subEl.style.left = inkL;
       src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = inkL;
       rail.style.left = inkL; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = inkW;
@@ -8513,6 +8584,7 @@ async function mount(doc) {
                  keyPills: lfKey ? lfKey.pills : null,   /* P69 T10: the long form's key pills (null on every other page) */
                  readability: lpReadability(pg), kind: pg.builder || "story",
                  barStyle: pg.bar_style === "soft" ? "soft" : null,   /* P69 T10b: `;bar_style=soft` (null on every other page) */
+                 cardK: cardP ? cardK : 1,   /* P69 T10c: a card's scale (1 on every other page) */
                  scene: scene.scene_id || null,   /* R26-37: the page's own name, so a probe says WHICH page it answered for */
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
@@ -8529,6 +8601,7 @@ async function mount(doc) {
                        tiers: buildLedgerTiers, treemap: buildLedgerTreemap };   /* P50 T9 / T6 */
     (builders[st.kind] || buildLedgerBars)(st, pg);
     if (LF) lpLongformPlot(st);
+    if (cardP) lpCardStrokes(st);   /* P69 T10c: a card's lines, thicker by its own factor */
     for (const kp of st.keyPills || []) {   /* P69 T10: each key pill's dot takes its line's OWN colour, as drawn */
       const m = st.markBy && st.markBy["s" + kp.series];
       if (m && m.geom && m.geom.col) kp.dot.style.background = m.geom.col;
@@ -8549,7 +8622,7 @@ async function mount(doc) {
       ch2.style.cssText = chart.style.cssText; ch2.style.opacity = 0;
       const s2 = { root, page, chart: ch2, geom, portrait: PORTRAIT, seed, edge, field, rail, stagePx: st.stagePx,   /* P69 T6c: the same box, the same scale */
                    lfType: st.lfType ? Object.assign({}, st.lfType, { form: ((pg2.axes || {}).tag_form) || st.lfType.form }) : st.lfType,   /* P69 T8: ... and the long form's same type; N2: the state's OWN fitted end-tag form */
-                   readability: st.readability, barStyle: st.barStyle,   /* P69 T10b: the page's bars, drawn the page's way */
+                   readability: st.readability, barStyle: st.barStyle, cardK: st.cardK,   /* P69 T10b: the page's bars, drawn the page's way; T10c: a card's scale */
                    bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: {}, linePts: [],
                    marks: [], markBy: {}, badges: [], inkEls: [],
                    vals: pg2.values || [], vstr: pg2.value_strings || [],
@@ -8562,6 +8635,7 @@ async function mount(doc) {
       const pg2Render = pg.surface_from ? { ...pg2, surface_from: pg.surface_from } : pg2;
       (builders[s2.kind] || buildLedgerBars)(s2, pg2Render);
       if (LF) lpLongformPlot(s2);
+      if (cardP) lpCardStrokes(s2);
       /* ... and its own SUB and SOURCE. A caption that goes on describing the chart that left is a lie on the page, so a
          recast rewrites them with the same hand that rewrites the title: the old run erases glyph by glyph, the new one
          writes. They sit exactly where the page's own sit, and carry nothing until the recast reaches them. */
@@ -9180,14 +9254,14 @@ async function mount(doc) {
      2026-09-23 on the 94 page: 1.3340 against the chart's own screen CTM at rest, 1.3340. */
   /* P69 T8: is this page drawn under the long form's profile? A 16:9 full-stage page (never a host plate), on the
      builders the compiler admits it on (ledger_page.READABILITY_BUILDERS) - anything else is the page it was. */
-  const lpLongformPage = (pg) => !PORTRAIT && lpReadability(pg) === LP_READABILITY.LONGFORM && !!(pg && pg.full_stage)
+  const lpLongformPage = (pg) => !PORTRAIT && (lpReadability(pg) === LP_READABILITY.LONGFORM || lpReadability(pg) === LP_READABILITY.CARD) && !!(pg && pg.full_stage)
     && !pg.chart_box && !pg.board && pg.punch !== false && ["dense-line", "story"].indexOf(String(pg.builder || "story")) >= 0;
   /* ... and its PLOT: the lighter panel inside the thin border (the spec's t530), laid UNDER every mark as the chart's
      own ground, and the axis lines sorted - a rule on the panel's edge is the border's job and is hidden (CSS), a
      rule strictly inside it is the ZERO line the data crosses (t1078) and is drawn at its measured weight. Widths
      are stage px, carried into chart units by the page's own rest scale. */
   const lpLongformPlot = (S) => {
-    const k = S.stagePx > 0 ? S.stagePx : 1, P0 = S.plot;
+    const k = (S.stagePx > 0 ? S.stagePx : 1) / (S.cardK || 1), P0 = S.plot;   /* P69 T10c: a card's rules at their displayed weight */
     const box = S.lfPanel || (P0 ? { x: P0.L, y: P0.T, w: P0.W - P0.R - P0.L, h: P0.B - P0.T } : null);
     if (!box || !(box.w > 0) || !(box.h > 0)) return;
     const r = lpEl("rect", "lp-panel", S.chart, { x: box.x.toFixed(1), y: box.y.toFixed(1), width: box.w.toFixed(1), height: box.h.toFixed(1),
@@ -9390,7 +9464,7 @@ async function mount(doc) {
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
     /* THE CAP (P69 T6c, E99 s96): W_PX on the stage, in this chart's units; a row whose natural bar is wider narrows to
        it, at the measured bar/pitch ratio unless that row would leave the plot, and stands centred */
-    const nat = (x1 - x0) / n, capU = LPBAR.W_PX / (st.stagePx > 0 ? st.stagePx : 1);
+    const nat = (x1 - x0) / n, capU = LPBAR.W_PX * (st.cardK || 1) / (st.stagePx > 0 ? st.stagePx : 1);   /* T10c: a card's bar is the cap at the card's own size */
     const capped = nat * (1 - gap) > capU;
     const pitch = capped ? Math.min(nat, capU / LPBAR.PITCH_RATIO) : nat;
     const lead = capped ? x0 + ((x1 - x0) - n * pitch) / 2 : x0;   /* ... and the group stands centred in the plot */
@@ -13979,6 +14053,7 @@ async function mount(doc) {
     const b = resolveTarget(v); if (!b) return null; const { cx, cy } = centre(b); return [cx, cy];
   };
   let camArr = null;   /* P49 T5: this frame's camera arrival, when one is on - set by render, read by camNow for the outgoing scene */
+  let cardHandK = 0;   /* P69 T10c: how far this frame's card-profile card has handed over to its page (0 on every other frame) */
   const camNow = (sc, t) => {
     if (camArr && camArr.scene === sc) return camArr.state;   /* the eye is going to the card: the outgoing world rides the arrival */
     if (!kin("camera")) return camXf(sc, t);
@@ -17147,6 +17222,22 @@ async function mount(doc) {
       seekVideo(v, dur ? Math.min(tLocal % dur, Math.max(0, dur - 0.05)) : tLocal);
     });
   };
+  /* P69 T10c - THE HAND-OVER'S PAGE: the full page (wB) laid on the card's PICTURE exactly as the card was painted this
+     frame - its box on the stage, every transform on the way included (the eye's prefix, the throw's rest, the read pose),
+     and drawn on to the stage on the eye's clock (u^3: with the card while the card is up, the whole stage at u = 1), so
+     the frame after the arrival is the frame the arrival ended on. It takes the card's whoosh with it. No hand-over (null):
+     the page's filter is cleared if a hand-over left one, and nothing else is touched. */
+  const lpCardHandover = (arr) => {
+    const el = arr && arr.el, im = el && el.querySelector("img,video"), stg = document.getElementById("stage");
+    if (!im || !stg) { if (wB.style.filter) wB.style.filter = ""; return; }
+    const sr = stg.getBoundingClientRect(), f = sr.width / STAGE_W || 1, r = im.getBoundingClientRect();
+    const x0 = (r.left - sr.left) / f, y0 = (r.top - sr.top) / f, k0 = r.width / f / STAGE_W, e3 = arr.u * arr.u * arr.u;
+    wB.style.transformOrigin = (-wB.offsetLeft) + "px " + (-wB.offsetTop) + "px";   /* the STAGE's corner inside the world (which overhangs it: .world's inset) */
+    wB.style.transform = "translate(" + (x0 * (1 - e3)).toFixed(2) + "px, " + (y0 * (1 - e3)).toFixed(2) + "px) scale("
+      + (k0 + (1 - k0) * e3).toFixed(5) + ") " + wB.style.transform;
+    wB.style.clipPath = "inset(" + (-wB.offsetTop) + "px " + (-wB.offsetLeft) + "px)";   /* ... and only the stage's own region of it: the card's picture, never the world's overhang */
+    wB.style.filter = el.style.filter || "";
+  };
   const render = (t) => {
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
@@ -17348,6 +17439,7 @@ async function mount(doc) {
       if (box && box.w > 0 && box.h > 0) {
         const u = minJerk(clamp01((t - sc.span[0]) / SNAP_S)), st = camArrivalState(box, u, STAGE_W, STAGE_H);
         camArr = { scene: prev, slide: sc.world.page.snap_from, u, box, state: { s: st.s, ox: st.look[0], oy: st.look[1], ax: st.at[0], ay: st.at[1] } };
+        if (hasBody && ((TL.evidence || {})[camArr.slide] || {}).card) camArr.el = del;   /* P69 T10c: the card the page is handed to, read after the docks paint */
       }
     }
     const throwIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "throw" || sc.world.page.enter === "drop");   /* the plate is thrown onto the world: the world stays beneath until it has landed */
@@ -17381,7 +17473,13 @@ async function mount(doc) {
        inset hides wB completely, so the old plate holds and there is no
        destination-plate flash at the boundary. */
     wB.style.maskImage = "none"; wB.style.webkitMaskImage = "none";
-    wB.style.opacity = camArr ? 0 : dissolve ? dk.toFixed(4) : 1;   /* P49 T5: the page waits for the eye to arrive */
+    /* P69 T10c: a CARD drawn for its own size (TL.evidence[..].card, chart_card's `readability: card`) is not the page
+       it becomes, so the push hands over: the FULL page stands in the card's own box on the stage from the push's first
+       frame, carried by the same eye to the stage, and the card over it gives way on HANDOVER_U of the push - at the
+       match only the page is left, exactly as a full-page card's push always ended. Every other card is untouched. */
+    const hoOn = !!camArr && !!camArr.el;   /* set only for a card-profile card with a picture to lay the page on */
+    cardHandK = hoOn ? minJerk(clamp01(camArr.u / LP_CARD.HANDOVER_U)) : 0;
+    wB.style.opacity = camArr ? (hoOn ? 1 : 0) : dissolve ? dk.toFixed(4) : 1;   /* P49 T5: the page waits for the eye to arrive */
     wB.style.clipPath = sc.exit === "wipe_right"
       ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
     paint(wA, prev || sc);
@@ -17756,6 +17854,7 @@ async function mount(doc) {
         const Cx = el.offsetLeft + (Number.isFinite(org[0]) ? org[0] : (el.offsetWidth || 0) / 2), Cy = el.offsetTop + (Number.isFinite(org[1]) ? org[1] : (el.offsetHeight || 0) / 2);
         el.style.transform = "translate(" + (st.ax + st.s * (Cx - st.ox) - Cx).toFixed(2) + "px, " + (st.ay + st.s * (Cy - st.oy) - Cy).toFixed(2) + "px) scale(" + st.s.toFixed(5) + ") " + el.style.transform;
         const blur = SNAP_BLUR * 4 * camArr.u * (1 - camArr.u); el.style.filter = blur > 0.2 ? "blur(" + blur.toFixed(2) + "px)" : "";
+        if (cardHandK > 0) el.style.opacity = ((el.style.opacity === "" ? 1 : +el.style.opacity) * (1 - cardHandK)).toFixed(4);   /* P69 T10c: the card gives way to its page */
       } else if (el.style.filter) el.style.filter = "";
       /* P58 T6 (a): THE CARD'S OWN PLANE, prepended last so the whole choreography above rides it (a card on a
          declared surface is refused a depth by the compiler - the surface is already its plane). */
@@ -17795,6 +17894,7 @@ async function mount(doc) {
     }
     paintPress(live, t);   /* P50 T3: the press stack, outside the two slots - a pile can be three cards deep */
     embedSheen(sc, t);   /* P50 T7 second watch: a SCREEN's own light back over the card it is displaying */
+    lpCardHandover(hoOn ? camArr : null);   /* P69 T10c: after the docks - the page follows the card as it was painted this frame */
     if (worldAnswer.x || worldAnswer.y) {   /* the ground takes the weight: the dip (and a violent hit's shake) on the world, on top of its own transform */
       for (const wl of [wA, wB]) if (wl.style.display !== "none") {
         /* the OUTGOING world (wA) is a plate that must keep the frame covered while it rides down: a downward answer of y px also
