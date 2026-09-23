@@ -100,15 +100,25 @@ export const PROP_SHADOW = Object.freeze({
                         the melt ball's specular highlight and the card's hard 12 px 12 px lift already agree): the shadow is
                         thrown along LIGHT_DEG + 180, down and to the right. Written twice because this region sits before
                         drop's; stopaction-stamp.test.mjs holds the pair equal */
-  OFFSET_PX: 14,     /* the silhouette's throw on the stage, in stage px, whatever the mark's own turn. The hatch has no blur,
-                        so its REACH past the painted edge is the throw + half the widest line + 1 px of antialiasing = 15.65
-                        px, inside the 16.8 px (STAMP_RING_GAP_PX + STAMP_RING_W_PX) the stamp fit already keeps clear */
+  OFFSET_PX: 14,     /* the silhouette's throw on the stage, in stage px, whatever the mark's own turn. The hatch has no blur
+                        past its silhouette (the taper below only lightens INSIDE it), so its REACH past the painted edge is
+                        the throw + half the widest line + 1 px of antialiasing = 15.35 px, inside the 16.8 px
+                        (STAMP_RING_GAP_PX + STAMP_RING_W_PX) the stamp fit already keeps clear */
+  /* THE ENGRAVING'S GRAIN (the operator on the T6b frames, 2026-09-23: "the cross hatching needs to be much
+     tighter/finer"): 4.5 / 7 px read as a fence mesh; an engraving's lines sit close enough that the eye takes them as a
+     TONE with a grain. The mean ink is kept (~40 % of the silhouette covered, as at 4.5 / 7 px), so the weight holds
+     while the grain closes. [DERIVED: the parent's brief - primary 2-2.5 px at 0.6-0.8 px, crossing 3.5-4 px at 0.5 px;
+     the parent's frame read and P69-HG2 tune them by eye] */
   HATCH: {
-    PITCH_PX: 4.5,       /* the primary family, ALONG the light: one line every PITCH_PX, measured across the lines */
-    WIDTH_PX: 1.3,       /* ... each this wide - an engraver's fine line */
+    PITCH_PX: 2.25,      /* the primary family, ALONG the light: one line every PITCH_PX, measured across the lines */
+    WIDTH_PX: 0.7,       /* ... each this wide - an engraver's fine line */
     CROSS_DEG: 75,       /* the second family crosses the first at this angle ... */
-    CROSS_PITCH_PX: 7,   /* ... sparser ... */
-    CROSS_WIDTH_PX: 1.0, /* ... and finer */
+    CROSS_PITCH_PX: 3.75, /* ... sparser ... */
+    CROSS_WIDTH_PX: 0.5, /* ... and finer */
+    TAPER_PX: 3,         /* THE TAPER: the hatch lightens toward the silhouette's OUTER edge, as an engraver's shading thins
+                            where the shadow ends - the lines are multiplied by the thrown silhouette blurred by this many px,
+                            so they run full a few px inside and fall to about half at the rim. Inside the silhouette only:
+                            it never widens the reach. 0 = no taper */
   },
   INK: { page: [8, 11, 14], ground: [37, 49, 60] },   /* PER GROUND, as the impact ring's ink is: on the charcoal ledger
                         page near-black, deeper than the page; on a light ground the template's own --charcoal */

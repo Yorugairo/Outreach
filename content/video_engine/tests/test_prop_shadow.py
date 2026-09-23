@@ -15,9 +15,12 @@ What this file reads, through the served player on the committed `prop-stamp` go
                           transform, independently of the painter.
   (3) FIXED TO THE PAGE   the hatch lines stand on the same stage pixels (on/off) while the mark is still turning 2.4 deg
                           off its rest and at rest: the silhouette follows the mark, the engraving does not spin.
-  (4) IT READS            on the rendered frame, in the part of the shadow the mark does not cover, the gaps between
-                          the lines are brighter than the lines by at least CONTRAST_MIN levels of luminance (0-255) -
-                          20 on the charcoal page, 60 on a light ground - so the texture is visible on both grounds.
+  (4) IT READS            on the rendered frame, the part of the shadow the mark does not cover is darker than the bare
+                          ground beside it by at least DARKEN_MIN levels of mean luminance (0-255) - 8 on the charcoal
+                          page, 35 on a light ground - so the shadow is visible on both grounds. (The finer grain of
+                          2026-09-23 antialiases: at a 0.7 px line almost no pixel is a whole line or a whole gap, so
+                          the T6b line-against-gap read has nothing left to split; the region's mean against the bare
+                          ground is the measure that survives the pitch.)
   (5) THE HANDOVER        the contact shadow falls to 0 exactly as the hatch reaches full, both continuous across the
                           stamp's contact -> settle window: no frame-to-frame pop, and the weight never drops out.
   (6) A CARD              creates no hatch and keeps its own shadow exactly (the goldens hold the bytes).
@@ -58,7 +61,9 @@ STOPACTION = ROOT / "content/video_engine/scripts/kinetics/stopaction.mjs"
 DROP_MJS = ROOT / "content/video_engine/scripts/kinetics/drop.mjs"
 CREAM = (244, 230, 199)           # the template's --cream: a LIGHT ground
 CHARCOAL = (37, 49, 60)           # the template's --charcoal
-CONTRAST_MIN = {"page": 20.0, "ground": 60.0}   # gap minus line luminance, 0-255, in the uncovered shadow (4)
+DARKEN_MIN = {"page": 8.0, "ground": 35.0}   # bare ground minus uncovered shadow, mean luminance 0-255 (4) - stated
+                                             # 2026-09-23 BEFORE the finer grain was measured
+BARE_CLEAR_PX = 3                            # the bare ground is read this far clear of either silhouette's edge
 
 
 def _node(src: str):
@@ -91,7 +96,7 @@ def _throw(ps: dict) -> tuple[float, float]:
 
 def _reach(ps: dict) -> float:
     """How far the hatch reaches past the painted edge: the throw, half its widest line, and 1 px of antialiasing
-    (the hatch has no blur)."""
+    (the hatch has no blur past its silhouette: the taper only lightens inside it)."""
     h = ps["HATCH"]
     return ps["OFFSET_PX"] + max(h["WIDTH_PX"], h["CROSS_WIDTH_PX"]) / 2 + 1.0
 
@@ -106,8 +111,10 @@ def test_the_resting_shadow_is_a_CROSS_HATCH_thrown_from_the_STAGE_LIGHT(dials):
     assert dx > 0 and dy > 0, "the light is up and to the left, so the shadow falls down and right"
     assert "BLUR_PX" not in ps, "engraved lines, never a soft blur"
     h = ps["HATCH"]
-    assert 4 <= h["PITCH_PX"] <= 6 and 1 <= h["WIDTH_PX"] <= 1.5, "fine lines at an engraver's pitch"
+    assert 2 <= h["PITCH_PX"] <= 2.5 and 0.6 <= h["WIDTH_PX"] <= 0.8, "fine lines at an engraver's pitch (2026-09-23)"
     assert h["CROSS_PITCH_PX"] > h["PITCH_PX"] and h["CROSS_DEG"] % 180 != 0, "a second family crossing it, sparser"
+    assert 3.5 <= h["CROSS_PITCH_PX"] <= 4 and 0.4 <= h["CROSS_WIDTH_PX"] <= h["WIDTH_PX"], "... and finer"
+    assert h.get("TAPER_PX", 0) >= 0, "the taper toward the outer edge is a blur INSIDE the silhouette, never negative"
 
 
 def test_the_hatch_ink_is_picked_per_ground(dials):
@@ -259,17 +266,22 @@ def _q(t: float) -> float:
 
 
 def _contrast(player: _Player, t: float, throw) -> dict:
-    """(4) On the rendered frame at t: the uncovered shadow (inside the thrown silhouette, outside the mark's own),
-    split into LINE pixels (hatch alpha >= 200) and GAP pixels (hatch alpha 0); their mean luminances and counts."""
+    """(4) On the rendered frame at t, on the hatch canvas's own grid: the UNCOVERED SHADOW (inside the thrown
+    silhouette, outside the mark's own) and the BARE GROUND beside it (outside both silhouettes, BARE_CLEAR_PX clear of
+    either edge so no antialiased rim is counted); their mean luminances and counts."""
+    import numpy as np
+    from PIL import Image, ImageFilter
     player.at(t)
     pl = _planes(player.page, throw)
     lum = player.shot(t)
     ys, xs = pl["by"], pl["bx"]
     frame = lum[int(ys):int(ys) + pl["H"], int(xs):int(xs) + pl["W"]]
     free = (pl["thrown"] == 255) & (pl["own"] == 0)
-    line, gap = free & (pl["hatch"] >= 200), free & (pl["hatch"] == 0)
-    return {"line": float(frame[line].mean()) if line.any() else None, "gap": float(frame[gap].mean()) if gap.any() else None,
-            "n_line": int(line.sum()), "n_gap": int(gap.sum())}
+    either = Image.fromarray(np.maximum(pl["thrown"], pl["own"]))
+    bare = ~(np.asarray(either.filter(ImageFilter.MaxFilter(2 * BARE_CLEAR_PX + 1))) > 0)
+    return {"shadow": float(frame[free].mean()) if free.any() else None,
+            "bare": float(frame[bare].mean()) if bare.any() else None,
+            "n_shadow": int(free.sum()), "n_bare": int(bare.sum())}
 
 
 @pytest.fixture(scope="module")
@@ -361,15 +373,15 @@ def test_the_hatch_is_FIXED_TO_THE_PAGE_while_the_silhouette_follows_the_mark(fr
 
 @needs_browser
 @pytest.mark.parametrize("which,ground", [("page_contrast", "page"), ("ink_contrast", "page"), ("light_contrast", "ground")])
-def test_the_hatch_READS_as_texture_on_both_grounds(frames, which, ground):
-    """(4) The texture is visible: in the shadow the mark does not cover, the gaps between the lines are brighter than
-    the lines by CONTRAST_MIN[ground] luminance levels - 20 on the charcoal page, 60 on a light ground."""
+def test_the_hatch_READS_on_both_grounds(frames, which, ground):
+    """(4) The shadow is visible: the part the mark does not cover is darker than the bare ground beside it by
+    DARKEN_MIN[ground] levels of mean luminance - 8 on the charcoal page, 35 on a light ground."""
     c = frames[which]
-    assert c["n_line"] > 300 and c["n_gap"] > 300, f"the uncovered shadow is too small to read: {c}"
-    got = c["gap"] - c["line"]
-    print(f"\n{which}: gap {c['gap']:.1f} - line {c['line']:.1f} = {got:.1f} levels (min {CONTRAST_MIN[ground]}), "
-          f"{c['n_line']} line px, {c['n_gap']} gap px")
-    assert got >= CONTRAST_MIN[ground], f"{which}: the lines differ from the gaps by only {got:.1f} levels"
+    assert c["n_shadow"] > 300 and c["n_bare"] > 300, f"the uncovered shadow or its bare ground is too small to read: {c}"
+    got = c["bare"] - c["shadow"]
+    print(f"\n{which}: bare {c['bare']:.1f} - shadow {c['shadow']:.1f} = {got:.1f} levels (min {DARKEN_MIN[ground]}), "
+          f"{c['n_shadow']} shadow px, {c['n_bare']} bare px")
+    assert got >= DARKEN_MIN[ground], f"{which}: the shadow darkens the ground by only {got:.1f} levels"
 
 
 @needs_browser

@@ -179,11 +179,17 @@ test("E99 s92: the prop's RESTING shadow is thrown from the STAGE LIGHT - the dr
   assert.ok(PROP_SHADOW.OFFSET_PX > 0 && PROP_SHADOW.OFFSET_PX <= 15, `a short throw: ${PROP_SHADOW.OFFSET_PX} px`);
   assert.equal(PROP_SHADOW.BLUR_PX, undefined, "an engraved hatch, never a soft blur (the operator on the first cut)");
   const H = PROP_SHADOW.HATCH;
-  assert.ok(H.PITCH_PX >= 4 && H.PITCH_PX <= 6, `the primary pitch, 4-6 px: ${H.PITCH_PX}`);
-  assert.ok(H.WIDTH_PX >= 1 && H.WIDTH_PX <= 1.5, `a fine line, 1-1.5 px: ${H.WIDTH_PX}`);
+  /* the finer grain (the operator on the T6b frames, 2026-09-23: "the cross hatching needs to be much tighter/finer") */
+  assert.ok(H.PITCH_PX >= 2 && H.PITCH_PX <= 2.5, `the primary pitch, 2-2.5 px: ${H.PITCH_PX}`);
+  assert.ok(H.WIDTH_PX >= 0.6 && H.WIDTH_PX <= 0.8, `a fine line, 0.6-0.8 px: ${H.WIDTH_PX}`);
   assert.ok(H.CROSS_PITCH_PX > H.PITCH_PX, "the crossing family is SPARSER");
-  assert.ok(H.CROSS_WIDTH_PX >= 1 && H.CROSS_WIDTH_PX <= H.WIDTH_PX, "... and no heavier");
+  assert.ok(H.CROSS_PITCH_PX >= 3.5 && H.CROSS_PITCH_PX <= 4, `the crossing pitch, 3.5-4 px: ${H.CROSS_PITCH_PX}`);
+  assert.ok(H.CROSS_WIDTH_PX >= 0.4 && H.CROSS_WIDTH_PX <= H.WIDTH_PX, "... and no heavier");
   assert.ok(H.CROSS_DEG % 180 !== 0, "... and it CROSSES the primary");
+  assert.ok(H.TAPER_PX >= 0, "the taper toward the outer edge lightens inside the silhouette, never negative");
+  /* the reach past the painted edge (throw + half the widest line + 1 px of antialiasing) stays inside the 16.8 px the
+     stamp fit keeps clear (STAMP_RING_GAP_PX + STAMP_RING_W_PX; test_prop_shadow.py reads the pair off the compiler) */
+  assert.ok(PROP_SHADOW.OFFSET_PX + Math.max(H.WIDTH_PX, H.CROSS_WIDTH_PX) / 2 + 1 <= 16.8, "the hatch's reach");
 });
 
 test("E99 s92: the hatch's ink is picked PER GROUND, as the impact ring's is", () => {
