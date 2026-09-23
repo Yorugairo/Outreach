@@ -85,6 +85,10 @@ CROSS = {"title": "Shape across zero", "sub": "Synthetic bars that cross zero",
 # REVIEW-P69-LANE-B-MERGE-2 N1: the long page with one badge that keys no line - it goes to the KEY RAIL, as a pill
 # under the source (the review's `long2`: at `phone` that pill stood on the source's second line)
 RAIL = dict(copy.deepcopy(LONG), badges=LONG["badges"] + [{"label": "KEY", "value": "1", "tag": "", "accent": "sunflower"}])
+# P69 T10 (E99 s84): the long page plus a FOURTH line that names itself by its label alone - its end tag loses nothing
+# when the others are shortened, so it is the one the key may add to land on an even pill count (4, not 3)
+EVEN = dict(copy.deepcopy(LONG), series=LONG["series"] + [
+    {"label": "BASELINE", "color": "deemph", "pts": [[2025 + i / 40, 100.0] for i in range(40)]}])
 PAGES = {  # name -> (object id, object, variant)
     "94": ("fx-lf-94", OBJ_94, "bars"),
     "halving": ("fx-lf-halving", OBJ_20, "bars"),
@@ -92,6 +96,7 @@ PAGES = {  # name -> (object id, object, variant)
     "long": ("fx-lf-long", LONG, "line"),
     "cross": ("fx-lf-cross", CROSS, "bars"),
     "rail": ("fx-lf-rail", RAIL, "line"),
+    "even": ("fx-lf-even", EVEN, "line"),
 }
 # N1: the anchored caption's strip - `full_stage_bands`' bottom band begins at its top, and the one-line caption's own
 # box ends at its foot (CAPTION_ANCHOR, 878-960 on the 1920 x 1080 stage). The source and the key rail never meet it.
@@ -424,6 +429,19 @@ PROBE = """(face) => {
               textOut: svgText.filter(t => !inStage(t.rect)).map(t => t.text),
               source: src ? R(src) : null, sourceIn: src ? inStage(R(src)) : true,
               pills: [...page.querySelectorAll('.lp-rail .lp-pill')].map(R) },
+    /* P69 T10: the KEY RAIL - its box, and each pill's name, dot colour, box and opacity; the line each series drew
+       (its computed stroke) so a dot can be held to its line's own colour; the title's box */
+    key: (() => { const k = page.querySelector('.lp-key'); return k ? R(k) : null; })(),
+    keyPills: [...page.querySelectorAll('.lp-key .lp-kpill')].map(e => ({ name: (e.querySelector('.lp-kname') || e).textContent,
+      dot: e.querySelector('.lp-kdot') ? getComputedStyle(e.querySelector('.lp-kdot')).backgroundColor : null,
+      rect: R(e), opacity: +getComputedStyle(e).opacity, px: fs(e.querySelector('.lp-kname') || e) * ps })),
+    lineCols: Object.fromEntries((st.marks || []).filter(mk => mk.role === 'line' && mk.el && !/:h/.test(mk.key))
+      .map(mk => [mk.key.replace(/^s/, '').replace(/#.*$/, ''), getComputedStyle(mk.el).stroke])),
+    titleRect: title ? R(title) : null,
+    /* P69 T9 (3): every x label (a line page's ticks, a bars page's names) against the panel's foot */
+    panelFoot: panel ? R(panel).y + R(panel).h : null,
+    xlabs: (st.marks || []).filter(mk => (mk.role === 'xtick' || mk.role === 'xlabel') && mk.el && painted(mk.el)).map(mk => ({ text: mk.el.textContent, rect: R(mk.el) })),
+    ylabelRect: ylab ? R(ylab.el) : null,
   };
 }"""
 
@@ -673,3 +691,206 @@ def test_a_then_state_writes_its_end_tags_on_the_stage(row, preset, tmp_path):
     out = [t for t in got["tags"] if t["right"] > got["stageW"] + 0.5 or t["left"] < -0.5]
     assert not out, f"{row} {preset}: the state's end tags leave the stage: {out}"
     assert got["subWords"] > 1 and got["srcWords"] > 1, f"the state's sub and source wrap by WORD, as the page's do: {got}"
+
+
+# ---- P69 T10 (E99 s90 + s84): BADGES AS THE KEY --------------------------------------------------------------------
+# A line whose end tag the stage cannot hold gives up its long name for its badge (T8's `axes.tag_form`); that name
+# gets a home on the KEY RAIL - one Bravos pill per series (a white capsule, the series' colour dot, the full name),
+# in the page's TOP BAND between the sub and the plot (Bravos's own legend band, t170 / t1078), springing on the
+# `badge-ladder` recipe's clock after the build and landing on an even pill count where the series allow.
+
+KEY_CLOCK = (2.05, 1.30)   # recipe:badge-ladder - FIRST_BADGE_S, BADGE_GAP_S (the first key 2.05 s in, then 1.30 apart)
+KEYED = ("long", "rail", "even")   # the fixtures whose end tags give up their names at the larger presets
+
+
+def _dropped(page: dict) -> list[str]:
+    """The full names this page's end tags gave up (a tag in `badge` or `value` form keeps only its label)."""
+    if (page.get("axes") or {}).get("tag_form") in (None, "full"):
+        return []
+    return [s["name"] for s in page.get("series") or [] if s.get("label") and s.get("name") and not s.get("muted")]
+
+
+@pytest.mark.parametrize("preset", PRESETS)
+@pytest.mark.parametrize("name", sorted(PAGES))
+def test_a_shortened_page_keys_every_name_its_tags_gave_up(name, preset, tmp_path):
+    """The compiler writes the key onto the page (`axes.key`, one entry per pill: the series' index and its full name):
+    every name an end tag gave up is on it, in the series' own order; a page whose tags keep their names has none."""
+    page = _world(name, tmp_path, f"{OPT}:{preset}")["page"]
+    key, dropped = page["axes"].get("key") or [], _dropped(page)
+    names = [k["name"] for k in key]
+    assert all(n in names for n in dropped), (name, preset, dropped, key)
+    if not dropped:
+        assert "key" not in page["axes"], (name, preset, key)
+    idx = [k["series"] for k in key]
+    assert idx == sorted(idx) and all(page["series"][k["series"]].get("name") == k["name"] or
+                                      page["series"][k["series"]].get("label") == k["name"] for k in key), key
+
+
+def test_a_long_page_at_middle_is_keyed(tmp_path):
+    """The working default shortens the long fixture's tags (T8), so the key is not vacuous there."""
+    page = _world("long", tmp_path, f"{OPT}:middle")["page"]
+    assert page["axes"]["tag_form"] != "full"
+    assert [k["name"] for k in page["axes"]["key"]] == [s["name"] for s in LONG["series"]]
+
+
+@pytest.mark.parametrize("preset", PRESETS)
+def test_the_key_lands_on_an_even_pill_count_where_the_series_allow(preset, tmp_path):
+    """E99 s84: "prefer to land on even pills (2 or 4)". Three shortened lines and a fourth that keeps its own tag: the
+    fourth joins the key (4 pills). Three shortened lines and nothing else to key: three - never an invented pill."""
+    even = _world("even", tmp_path / "even", f"{OPT}:{preset}")["page"]
+    if _dropped(even):
+        key = [k["name"] for k in even["axes"]["key"]]
+        assert len(key) == 4 and key[-1] == "BASELINE", key
+    long = _world("long", tmp_path / "long", f"{OPT}:{preset}")["page"]
+    if _dropped(long):
+        assert len(long["axes"]["key"]) == 3, long["axes"]["key"]
+
+
+def test_without_the_option_a_page_carries_no_key(tmp_path):
+    for name in KEYED:
+        assert "key" not in (_world(name, tmp_path / name)["page"].get("axes") or {})
+    field = _world("long", tmp_path / "field", "", series=dict(copy.deepcopy(LONG), readability="longform:middle"))
+    assert field["page"]["axes"]["key"], "a series file's own long form is keyed the same way as the row's"
+
+
+@needs_browser
+@pytest.mark.parametrize("name,preset", [(n, p) for n in KEYED for p in PRESETS])
+def test_every_shortened_name_is_written_on_the_stage_in_a_key_pill(painted, name, preset):
+    """The RED of T10: a shortened page wrote its full names nowhere. Now each is a pill on the key rail, carrying the
+    dot of its OWN line's colour, set at the preset's key size, in the Bravos pill (white capsule, dark type)."""
+    got = painted[f"{name}-{preset}"]
+    p, page = got["probe"], got["page"]
+    written = [kp["name"] for kp in p["keyPills"]]
+    for n in _dropped(page):
+        assert n in written, f"{n!r} is written nowhere on the stage"
+    assert written == [k["name"] for k in (page["axes"].get("key") or [])], (p["keyPills"], page["axes"].get("key"))
+    px = page["axes"].get("key_px")
+    if written:   # the preset's own size, or the largest at which the row fits one line - never under the spec's pill
+        assert LPG.LONGFORM_KEY_MIN_PX <= px <= LPG.LONGFORM_KEY_PX[preset], px
+        if px > LPG.LONGFORM_KEY_MIN_PX:
+            assert len({round(kp["rect"]["y"]) for kp in p["keyPills"]}) == 1, ("the key is one row", p["keyPills"])
+    for k, kp in zip(page["axes"].get("key") or [], p["keyPills"]):
+        assert kp["dot"] == p["lineCols"][str(k["series"])], (kp, p["lineCols"])
+        assert kp["px"] == pytest.approx(px, abs=SIZE_TOL), kp
+        assert kp["rect"]["h"] == pytest.approx(LPG.LONGFORM_KEY_EM["h"] * px, abs=1.5), kp
+        assert kp["opacity"] == 1, f"every pill has landed by T_FRAME: {kp}"
+
+
+@needs_browser
+@pytest.mark.parametrize("name,preset", CASES)
+def test_the_key_rail_stands_in_the_top_band_clear_of_everything(painted, name, preset):
+    """The key rail is inside the stage, under the title and M28's air under the sub, M28's air over the chart's
+    top ink (the y label, the plot), and never on the source, the legacy rail, the caption strip or a chart word."""
+    p = painted[f"{name}-{preset}"]["probe"]
+    k, c = p["key"], p["checks"]
+    if not p["keyPills"]:
+        assert k is None or k["h"] == 0, "a page with nothing to key draws no key"
+        return
+    air = c["air"]
+    assert k["x"] >= -0.5 and k["y"] >= -0.5 and k["x"] + k["w"] <= 1920.5 and k["y"] + k["h"] <= 1080.5, k
+    assert k["y"] - c["subBottom"] >= air - 0.5, ("the key stands on the sub", k, c["subBottom"])
+    tops = [c["plotTop"]] + ([p["ylabelRect"]["y"]] if p["ylabelRect"] else [])
+    assert min(tops) - (k["y"] + k["h"]) >= air - 0.5, ("the key stands on the chart", k, tops)
+    for other in [c["source"], *c["pills"], p["titleRect"]]:
+        assert other is None or not _overlaps(k, other), ("the key meets", other, k)
+    assert not _meets_strip(k), f"the key stands in the caption strip {STRIP}: {k}"
+    for kp in p["keyPills"]:
+        for t in p["svgText"]:
+            assert not _overlaps(kp["rect"], t["rect"]), ("a key pill on a chart word", kp, t)
+
+
+SWEEP = """() => {
+  const s = document.getElementById('scrub'), out = [];
+  const lp = () => [...document.querySelectorAll('.world')].find(e => e.__lp && e.classList.contains('ledger'));
+  const op = (sel) => [...lp().__lp.page.querySelectorAll(sel)].map(e => +getComputedStyle(e).opacity);
+  for (let i = 0; i <= 280; i++) {
+    const t = 7 + i * 0.025;
+    s.value = t; s.dispatchEvent(new Event('input', {bubbles: true}));
+    out.push([t, op('.lp-key .lp-kpill'), op('.lp-rail .lp-pill')]);
+  }
+  return out;
+}"""
+
+
+def _key_onsets(name: str, preset: str, tmp_path: Path) -> tuple[list, list]:
+    """Seek the page from 7 s to 14 s in 0.025 s steps: the first instant each key pill and each legacy rail pill
+    shows (opacity > 0)."""
+    from playwright.sync_api import sync_playwright
+
+    tl, uris = _timeline(_world(name, tmp_path, f"{OPT}:{preset}"))
+    html = tmp_path / "clock.html"
+    html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+    w, h = RB.STAGE[ASPECT]
+    srv, port = RB.serve(html.parent)
+    try:
+        with sync_playwright() as pw:
+            br = pw.chromium.launch(headless=True)
+            page = br.new_context(viewport={"width": w, "height": h}, device_scale_factor=1).new_page()
+            page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+            RB.prepare_page(page, w, h)
+            page.wait_for_function("document.fonts.status === 'loaded'")
+            RB.frame_png(page, T_FRAME, (w, h))
+            got = page.evaluate(SWEEP)
+            br.close()
+    finally:
+        srv.shutdown()
+
+    def first(j: int, n: int) -> list:
+        return [next((row[0] for row in got if row[1 + j][i] > 0), None) for i in range(n)]
+    return first(0, len(got[0][1])), first(1, len(got[0][2]))
+
+
+@needs_browser
+def test_the_key_springs_on_the_badge_ladder_clock(tmp_path):
+    """recipe:badge-ladder: the first key pill 2.05 s after the chart has built, every later one 1.30 s behind the last.
+    The build's end is read off the page's OWN rail pill, which springs LP_BADGE0 (0.4 s) after it."""
+    keys, rail = _key_onsets("rail", "middle", tmp_path)
+    assert len(keys) == 3 and len(rail) == 1 and None not in keys + rail, (keys, rail)
+    built = rail[0] - 0.4
+    step = 0.025 + 1e-6
+    assert abs(keys[0] - built - KEY_CLOCK[0]) <= step, (keys, built)
+    for a, b in zip(keys, keys[1:]):
+        assert abs(b - a - KEY_CLOCK[1]) <= step, keys
+
+
+@needs_browser
+@pytest.mark.parametrize("name,preset", [(n, p) for n in KEYED for p in PRESETS])
+def test_the_key_box_is_in_page_boxes_and_docks_and_stamps_avoid_it(painted, name, preset):
+    """`page_boxes` reports the key rail (`key`) - the engine's own box to EST_TOL, and the fixture tool reads it too -
+    and no free band a dock is placed in reaches into it, and a stamp's ring is fitted around it."""
+    got = painted[f"{name}-{preset}"]
+    if not got["probe"]["keyPills"]:
+        pytest.skip("nothing keyed at this preset")
+    est = LPG.page_boxes(got["page"], ASPECT)
+    assert LPG.KEY_BOX in est, sorted(est)
+    meas = got["boxes"].get("key")
+    assert meas is not None, "measure_page_boxes reads the key rail"
+    for d in ("x", "y", "w", "h"):
+        assert abs(est[LPG.KEY_BOX][d] - meas[d]) <= EST_TOL, (d, est[LPG.KEY_BOX], meas)
+    key = est[LPG.KEY_BOX]
+    for band in B.free_bands(est):
+        assert not _overlaps(band, key), ("a dock's free band reaches into the key", band, key)
+    obstacles, _ = B.ring_obstacles(got["page"], ASPECT)
+    assert key in obstacles, "a stamp's ring is fitted around the key"
+
+
+@needs_browser
+@pytest.mark.parametrize("name,preset", CASES)
+def test_the_x_labels_clear_the_panel_by_18_px(painted, name, preset):
+    """T9 (3) / E99 s90: the x tick labels (a line page's) and the category names (a bars page's) stand at least 18 px
+    clear of the plot's foot line - the panel's border (main measured 18; T17 measured 0; T8's page 7)."""
+    p = painted[f"{name}-{preset}"]["probe"]
+    assert p["xlabs"], "the page writes its x labels"
+    top = min(x["rect"]["y"] for x in p["xlabs"])
+    assert top - p["panelFoot"] >= 18.0, (name, preset, top, p["panelFoot"], top - p["panelFoot"])
+
+
+@needs_browser
+@pytest.mark.parametrize("name,preset", CASES)
+def test_the_sub_never_meets_the_y_label(painted, name, preset):
+    """T9 (2), re-verified with the key in the band between them: the sub's box and the y label's box never meet."""
+    p = painted[f"{name}-{preset}"]["probe"]
+    sub = next((i["rect"] for i in p["ink"] if "lp-sub" in i["cls"]), None)
+    if sub is None or p["ylabelRect"] is None:
+        return
+    assert not _overlaps(sub, p["ylabelRect"]), (sub, p["ylabelRect"])

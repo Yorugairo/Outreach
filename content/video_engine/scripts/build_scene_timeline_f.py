@@ -804,7 +804,7 @@ def validate_camera_row(cam, row_species, plate_id: str, aspect: str | None = No
 # holds, and the engine's own 1.32 is refused by name. Tokyo v3b measured the same law off the DOM by
 # hand (`build_short_v3.py:194-197`: "the left edge binds at S_MAX 1.110 / 1.106"); this is that
 # measurement as a compile-time refusal, so no build has to find it on a frame again.
-CAMERA_GLYPH_KEYS = ("title", "sub", "source", "rail", "tags")   # the page's own type; `plot` is the field a punch moves INTO
+CAMERA_GLYPH_KEYS = ("title", "sub", "source", "rail", "tags", LPG.KEY_BOX)   # the page's own type; `plot` is the field a punch moves INTO (P69 T10: a longform page's key rail is type)
 FOCUS_ZOOM_DEFAULT = 1.32   # the engine's own CAM.FOCUS_SCALE (`kinetics/camera.mjs`), mirrored so a refusal can name it and
                             # so `zoom` absent means EXACTLY what every build on disk already renders (test_camera pins the pair)
 CAMERA_MOVE_FLOOR = 1.06   # E99 s80 (3): "a zoom under ~1.06 is not a move and stays out" - said in the refusal, never enforced as taste
@@ -5250,7 +5250,7 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         else:
             axes = page.setdefault("axes", {})
             axes["readability"] = profile
-            for key in ("type_scale", "tag_form", "tag_room"):   # a series file's long form, overruled by the row
+            for key in ("type_scale", "tag_form", "tag_room", "key", "key_px"):   # a series file's long form, overruled by the row
                 axes.pop(key, None)
     elif isinstance(world.get("page"), dict) and (world["page"].get("axes") or {}).get("readability") == LPG.LONGFORM:
         LPG.apply_longform(world["page"])   # the series file's own long form, re-fitted to the badges the row's dock gave it
@@ -5459,12 +5459,20 @@ def free_bands(boxes: dict, reserve: list[dict] | None = None) -> list[dict]:
     # that reports no `tags` box (every page compiled before this row, and every 9:16 page) is unchanged.
     tags = boxes.get(LPG.TAGS_KEY)
     plot_r = max(plot["x"] + plot["w"], tags["x"] + tags["w"] if tags else 0)
+    # P69 T10: a longform page's KEY RAIL stands in the top band between the sub and the plot - the names its end tags
+    # gave up. A card may park over a heading once it is read (E45), never over the key that names the lines under it,
+    # so the `above` band ends at the key's top. A page with no key (every page but a keyed longform one) is unchanged.
+    key = boxes.get(LPG.KEY_BOX)
+    above_foot = min(plot["y"], key["y"]) if key else plot["y"]
+    # ... and the side bands, which run from the safe head, start under the key wherever its row reaches across them
+    left_head = key["y"] + key["h"] if key and key["x"] < plot["x"] else head
+    right_head = key["y"] + key["h"] if key and key["x"] + key["w"] > plot_r else head
     bands = {
-        "above": (left, head, right - left, plot["y"] - head),
+        "above": (left, head, right - left, above_foot - head),
         "below": (left, plot["y"] + plot["h"], right - left, src["y"] - plot["y"] - plot["h"]),
         "foot": (left, ink_foot, right - left, foot - ink_foot),
-        "left": (left, head, plot["x"] - left, foot - head),
-        "right": (plot_r, head, right - plot_r, foot - head),
+        "left": (left, left_head, plot["x"] - left, foot - left_head),
+        "right": (plot_r, right_head, right - plot_r, foot - right_head),
     }
     return [{"band": name, "x": x, "y": y, "w": w, "h": h}
             for name, (x, y, w, h) in bands.items() if w > 0 and h > 0]
@@ -5799,7 +5807,7 @@ def ring_obstacles(page: dict | None, aspect: str | None, extra: list[dict] | No
         raise ValueError(f"this page writes inline end names (tag_units {LPG.tag_units(page):g}) but reports no "
                          f"measured `{LPG.TAGS_KEY}` box (R26-205 measures one on a full-stage 16:9 page) - a stamp's "
                          "ring cannot be fitted blind against names it cannot see")
-    out = [boxes[k] for k in ("title", "sub", "source", "rail", "caption_anchor")
+    out = [boxes[k] for k in ("title", "sub", "source", "rail", LPG.KEY_BOX, "caption_anchor")   # P69 T10: the key rail
            if isinstance(boxes.get(k), dict) and boxes[k].get("w", 0) > 0 and boxes[k].get("h", 0) > 0]
     axis = boxes.get("axis") or {}
     out += [axis[k] for k in ("x", "y") if isinstance(axis.get(k), dict)]
@@ -6424,7 +6432,7 @@ CAPTION_BAND_ORDER = ("below", "above", "quiet")
 # R26-201: the page boxes a CAMERA moves - the page's own ink, and nothing the frame owns (`stage`, `safe`,
 # `caption_anchor` are the stage's; `quiet_zone` / `measured` are words). `free_bands` reads both kinds, which is
 # why the list is named rather than inferred: a transformed safe box would move the band's own walls with the page.
-CAPTION_PAGE_INK_KEYS = ("title", "sub", "chart", "plot", "source", "rail", LPG.TAGS_KEY)
+CAPTION_PAGE_INK_KEYS = ("title", "sub", "chart", "plot", "source", "rail", LPG.TAGS_KEY, LPG.KEY_BOX)
 CAPTION_HOME_BOTTOM = 480      # 9:16: the strip sits on `bottom: 480px` (G-l, y 1297-1440)
 CAPTION_HOME_TOP = 0.40        # 16:9: the stage caption's own 40% band
 CAPTION_SIDE_PAD = 120         # the stage caption's near margin beside a declared quiet zone
@@ -6523,7 +6531,7 @@ def caption_band(page: dict, aspect: str, cards: list[dict] | None, xf=None) -> 
     # the strip clears the page's DATA and the page's own INK. `free_bands` hands E45's card the
     # title and the sub ("over the title", the card being opaque and the heading read); a caption is
     # white type with a shadow, so a strip on the title is two texts in one place - it is not free.
-    ink = [boxes[k] for k in ("plot", "title", "sub", "source", "rail") if boxes.get(k) and boxes[k]["h"] > 0]
+    ink = [boxes[k] for k in ("plot", "title", "sub", "source", "rail", LPG.KEY_BOX) if boxes.get(k) and boxes[k]["h"] > 0]
     bands = {bd["band"]: bd for bd in free_bands(boxes)}
     for name in CAPTION_BAND_ORDER:
         if name == "quiet":

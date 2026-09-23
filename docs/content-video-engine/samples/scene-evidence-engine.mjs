@@ -4696,10 +4696,12 @@ async function mount(doc) {
     + ".meltboard .lp-page>" + MELT_BOARD_CLASSES.map((c) => ":not(." + c + ")").join("") + "{visibility:hidden!important}"
     /* the WORDS are not marks: the marks clone never draws them, and the text clone draws nothing else */
     + ".meltink .lp-ink,.meltink .lp-rail,.meltink .lp-chart line,.meltink .lp-chart text{visibility:hidden!important}"
+    + ".meltink .lp-key{visibility:hidden!important}"   /* P69 T10: the long form's key rail is words too */
     + ".world.melttext{background:transparent!important;pointer-events:none}"
     + ".melttext .lp-page{background:transparent!important}"
     + ".melttext .lp-page *{visibility:hidden!important}"
-    + ".melttext .lp-ink,.melttext .lp-ink *,.melttext .lp-rail,.melttext .lp-rail *,.melttext .lp-chart line,.melttext .lp-chart text,.melttext .lp-chart text *{visibility:visible!important}";
+    + ".melttext .lp-ink,.melttext .lp-ink *,.melttext .lp-rail,.melttext .lp-rail *,.melttext .lp-chart line,.melttext .lp-chart text,.melttext .lp-chart text *{visibility:visible!important}"
+    + ".melttext .lp-key,.melttext .lp-key *{visibility:visible!important}";
 
   /* the stage's box in the world's own px: `.world` overhangs the stage by 5% on every side */
   const meltStageBox = (wA) => ({ x: wA.offsetWidth / 22, y: wA.offsetHeight / 22,
@@ -7979,6 +7981,15 @@ async function mount(doc) {
                                       CAPTION_TOP: 878,   /* ledger_page.CAPTION_ANCHOR["16:9"]: the anchored caption's strip */
                                       CAPTION_FOOT: 960,  /* ... and its one-line caption's foot (ledger_page.LONGFORM_STRIP) */
                                       STACK_GAP_PX: 8,    /* the key rail under the source's last line (ledger_page.LONGFORM_STACK_GAP_PX) */
+                                      /* P69 T9 (3): an x label's box top stands XLAB_CLEAR_PX under the panel's foot line (E99 s90: main
+                                         measured 18, T17 0) - ledger_page.LONGFORM_XLAB_CLEAR_PX; ASCENT / DESCENT are Inter's line box */
+                                      XLAB_CLEAR_PX: 20, ASCENT: 1984 / 2048, DESCENT: 494 / 2048,
+                                      TICK_SPACE: 1.25, TAG_SPACE: 1.1,   /* ... and two end tags this many of their own figures apart */   /* P69 T10: two y tick labels stand at least this many figures apart (Inter's line box is 1.21) */
+                                      /* P69 T10: THE KEY RAIL - ledger_page.LONGFORM_KEY_PX / LONGFORM_KEY_EM / LONGFORM_KEY_CLOCK: the Bravos
+                                         category pill (t1088) at each preset's size, in ems of it, springing on recipe:badge-ladder's clock */
+                                      KEY_PX: Object.freeze({ bravos: 20.6, middle: 24, phone: 61.4 }),
+                                      KEY_EM: Object.freeze({ h: 40 / 20.6, dot: 10 / 20.6, pad_l: 0.55, dot_gap: 0.4, pad_r: 0.7, gap: 0.5, row_gap: 0.35 }),
+                                      KEY_FILL: "#FFFFFF", KEY_INK: "#1E1F22", KEY_FIRST: 2.05, KEY_STEP: 1.30,
                                       DEFAULT: "middle",
                                       TYPE_SCALE: Object.freeze({
                                         bravos: Object.freeze({ title: 38.5, sub: 24, tick: 22.7, tag: 19.3, chip: 15.4, value: 43.3, src: 14.4 }),
@@ -7989,9 +8000,10 @@ async function mount(doc) {
      the ticks' column and the names hang half a figure clear of the plot, whose floor rises until they clear the caption */
   const lpLongformGeom = (T, top, bot, floor) => {
     const s = (bot - top) / 560, tick = T.tick / s, capU = ((floor == null ? LP_LONGFORM.CAPTION_TOP : floor) - top) / s;
+    const xlab = LP_LONGFORM.ASCENT * tick + (LP_LONGFORM.XLAB_CLEAR_PX + LP_LONGFORM.BORDER_PX / 2) / s;   /* P69 T9 (3): the box top clears the panel's foot */
     return { scale: s, tick, tag: T.tag / s, chip: T.chip / s, value: T.value / s,
-             plot_l: Math.max(70, 12 + 2.3 * tick), line_b: Math.min(458, capU - 5 - 1.5 * tick), xtick_dy: 1.25 * tick,
-             gutter: Math.max(60, 40 + 2.6 * tick), xlab_dy: 1.25 * tick, bars_b: Math.min(440, capU - 5 - 2.65 * tick),
+             plot_l: Math.max(70, 12 + 2.3 * tick), line_b: Math.min(458, capU - 5 - xlab - LP_LONGFORM.DESCENT * tick), xtick_dy: xlab,
+             gutter: Math.max(60, 40 + 2.6 * tick), xlab_dy: xlab, bars_b: Math.min(440, capU - 5 - xlab - 1.4 * tick),
              ylab_gap: LP_LONGFORM.YLAB_GAP_PX / s, rule_dy: (8 + 0.25 * T.tag) / s };
   };
   /* REVIEW-P69-LANE-B-MERGE-2 N1 - WHAT STANDS UNDER THE CHART (ledger_page.longform_stack, line for line): the source
@@ -8009,7 +8021,7 @@ async function mount(doc) {
   };
   /* ... the chart box: ledger_page.longform_chart_box, line for line. Its foot is the full-stage box's, raised (N1) to
      the first that fits of: the source standing above the caption strip, then the source and the rail both above it */
-  const lpLongformBox = (pg, T, subBottom, srcH, railH) => {
+  const lpLongformBox = (pg, T, subBottom, srcH, railH, keyH = 0) => {
     const top0 = LP.FULL.Y * STAGE_H, bot0 = (LP.FULL.Y + LP.FULL.H) * STAGE_H, ax = pg.axes || {};
     const gSrc = 0.012 * LP.PUNCH_SCALE * STAGE_H, gRail = 0.044 * LP.PUNCH_SCALE * STAGE_H, S0 = LP_LONGFORM.CAPTION_TOP;
     let stack = null;
@@ -8021,9 +8033,48 @@ async function mount(doc) {
     const tu = LP_LONGFORM.PLOT_T[pg.builder] || LP_LONGFORM.PLOT_T.story;
     const rules = (ax.hlines || (ax.hline ? [ax.hline] : [])).some((h) => h && h.label);
     const above = Math.max(0.5 * T.tick, ax.ylabel ? LP_LONGFORM.YLAB_GAP_PX + T.tick : 0, rules ? 8 + 1.25 * T.tag : 0);   /* a label's box reaches its font's ascent (~1 em) above its baseline */
-    const need = subBottom + 0.5 * T.tick + above;
+    const band = keyH > 0 ? keyH + 0.5 * T.tick : 0;   /* P69 T10: the key rail and M28's air under it */
+    const need = subBottom + 0.5 * T.tick + band + above;
     const top = top0 + tu * (bot - top0) / 560 >= need ? top0 : (need - tu * bot / 560) / (1 - tu / 560);
-    return Object.assign({}, stack, { top });
+    const keyY = top + tu * (bot - top) / 560 - above - 0.5 * T.tick - keyH;   /* ... hugging the chart's top ink */
+    return Object.assign({}, stack, { top, keyY });
+  };
+  /* P69 T10 (E99 s90 "apply badges as the key"; E99 s84 "prefer to land on even pills") - THE KEY RAIL, drawn:
+     ledger_page.longform_key picks the pills (`axes.key`: every line whose end tag gave up its full name, and one more
+     line that names itself when that makes the count even) and longform_key_box estimates the row they wrap into. Each
+     is the Bravos category pill (BRAVOS-LONGFORM-CHART-SPEC.md (b), t1088): a white capsule, a dot in the SERIES' own
+     line colour (set once the builder has drawn the lines), the full name in Inter Medium at the size the compiler fitted
+     the ONE ROW to (`axes.key_px`: the preset's KEY_PX, or less, never under the spec's own pill) - set
+     with no kerning and no ligatures, so its width is the sum of the advances the compiler's estimate adds up. The row
+     wraps in the page's ink column only under that floor, and stands in the TOP BAND (lpLongformBox's keyY); each pill springs on the
+     badge-ladder clock (KEY_FIRST after the build, KEY_STEP apart), exactly as the page's own pills spring. */
+  const lpLongformKey = (page, pg, ps) => {
+    const key = ((pg || {}).axes || {}).key;
+    if (!Array.isArray(key) || !key.length) return null;
+    const E = LP_LONGFORM.KEY_EM, preset = LP_LONGFORM.KEY_PX[(pg.axes || {}).type_scale] ? pg.axes.type_scale : LP_LONGFORM.DEFAULT;
+    const px = (+(pg.axes || {}).key_px > 0 ? +pg.axes.key_px : LP_LONGFORM.KEY_PX[preset]) / ps, f = (v) => (v * px).toFixed(3) + "px";   /* CSS px inside the punched page: the size the compiler fitted the one row to (`axes.key_px`) */
+    const el = lpEl("div", "lp-key", page);
+    el.style.cssText = "position:absolute;display:flex;flex-wrap:wrap;align-items:flex-start;pointer-events:none;column-gap:" + f(E.gap) + ";row-gap:" + f(E.row_gap);
+    const pills = key.map((k, i) => {
+      const pe = lpEl("div", "lp-kpill", el);
+      pe.style.cssText = "display:flex;align-items:center;flex:0 0 auto;box-sizing:border-box;white-space:nowrap;opacity:0;transform-origin:0 100%;"
+        + "height:" + f(E.h) + ";border-radius:" + f(E.h / 2) + ";padding:0 " + f(E.pad_r) + " 0 " + f(E.pad_l) + ";background:" + LP_LONGFORM.KEY_FILL + ";"
+        + "color:" + LP_LONGFORM.KEY_INK + ";font-family:\"" + LP_LONGFORM.FACE + "\", Inter, Arial, sans-serif;font-weight:500;font-size:" + px.toFixed(3) + "px;"
+        + "line-height:1;letter-spacing:0;font-kerning:none;font-variant-ligatures:none;font-feature-settings:\"kern\" 0, \"liga\" 0, \"calt\" 0";
+      const dot = lpEl("span", "lp-kdot", pe);
+      dot.style.cssText = "flex:0 0 auto;width:" + f(E.dot) + ";height:" + f(E.dot) + ";border-radius:50%;margin-right:" + f(E.dot_gap) + ";background:" + LP_LONGFORM.TICK;
+      const nm = lpEl("span", "lp-kname", pe);
+      nm.textContent = String(k.name || "");
+      return { el: pe, dot, series: k.series | 0, at: LP_LONGFORM.KEY_FIRST + LP_LONGFORM.KEY_STEP * i };
+    });
+    return { el, pills };
+  };
+  /* ... and when a built / thrown / snapped page arrives with its beats all past, its key has landed too */
+  const lpKeyBuilt = (st) => (st.keyPills && st.keyPills.length ? LP_FOCUS_AT + st.keyPills[st.keyPills.length - 1].at + LP_BADGE_IN : -Infinity);
+  /* ... the band a longform page keeps over its plot (lpLongformBox's `above`), in the chart's own units `G` (lfType) */
+  const lpLongformAboveU = (pg, G) => {
+    const ax = (pg || {}).axes || {}, rules = (ax.hlines || (ax.hline ? [ax.hline] : [])).some((h) => h && h.label);
+    return Math.max(0.5 * G.tick, ax.ylabel ? G.ylab_gap + G.tick : 0, rules ? 8 / G.scale + 1.25 * G.tag : 0);
   };
   /* ... and a dense-line page's end tags at its preset and form (ledger_page.longform_tag_units), widening the viewBox the
      way T17 does so every tag ends inside the stage's safe right edge */
@@ -8371,7 +8422,7 @@ async function mount(doc) {
         '<span class="pill-tag" style="color:' + (ACCENT[bd.accent] || "var(--sunflower)") + '">' + bd.tag + '</span></span>';
       return { el, at: LP_BADGE0 + LP_BADGE_STEP * bi };
     });
-    let geom = { W: 1000, H: 560 }, lfGeom = null, lfBox = null;   /* lfGeom: P69 T8, the long form's chart-unit geometry at its preset; lfBox: its chart box and what stands under it (N1) */
+    let geom = { W: 1000, H: 560 }, lfGeom = null, lfBox = null, lfKey = null;   /* lfKey: P69 T10, the long form's key rail */   /* lfGeom: P69 T8, the long form's chart-unit geometry at its preset; lfBox: its chart box and what stands under it (N1) */
     if (PORTRAIT) {
       geom = lpPortraitLayout({ title, subEl, src, chart, rail });
     } else {
@@ -8421,7 +8472,11 @@ async function mount(doc) {
         subEl.style.top = ((title.offsetTop + title.offsetHeight + LP_LONGFORM.SUB_GAP) / PH * 100).toFixed(3) + "%";
         const subBottom = subText.trim() ? rend(subEl.offsetTop + subEl.offsetHeight) : rend(title.offsetTop + title.offsetHeight);
         rail.style.maxWidth = col;   /* N1: the rail's rows are measured in the column it will stand in */
-        const box = lfBox = lpLongformBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0, badges.length ? rail.offsetHeight * ps : 0);
+        lfKey = lpLongformKey(page, pg, ps);   /* P69 T10: the key rail's rows, measured in the ink column it stands in */
+        if (lfKey) { lfKey.el.style.left = title.style.left; lfKey.el.style.maxWidth = col; }
+        const box = lfBox = lpLongformBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0, badges.length ? rail.offsetHeight * ps : 0,
+                                          lfKey ? lfKey.el.offsetHeight * ps : 0);
+        if (lfKey) lfKey.el.style.top = (un(box.keyY / STAGE_H) * 100).toFixed(3) + "%";
         lfGeom = lpLongformGeom(T, box.top, box.bot, box.floor);
         if (!A[LP_LONGFORM.FONT_ASSET]) console.warn("P69 T8: a longform page (" + (scene.scene_id || "?") + ") mounted with no "
           + LP_LONGFORM.FONT_ASSET + " in the asset map - its words are set in the fallback face, not Inter (build_scene_timeline_f.longform_assets)");   /* N6 */
@@ -8455,6 +8510,7 @@ async function mount(doc) {
     }
     const inlineBadges = {}; (pg.badges || []).forEach((bd) => { if (bd.inline) inlineBadges[LP_BADGE_COL[bd.accent]] = bd; });
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, soakFx, soakFk: fk, seed, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src],
+                 keyPills: lfKey ? lfKey.pills : null,   /* P69 T10: the long form's key pills (null on every other page) */
                  readability: lpReadability(pg), kind: pg.builder || "story",
                  scene: scene.scene_id || null,   /* R26-37: the page's own name, so a probe says WHICH page it answered for */
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
@@ -8472,6 +8528,10 @@ async function mount(doc) {
                        tiers: buildLedgerTiers, treemap: buildLedgerTreemap };   /* P50 T9 / T6 */
     (builders[st.kind] || buildLedgerBars)(st, pg);
     if (LF) lpLongformPlot(st);
+    for (const kp of st.keyPills || []) {   /* P69 T10: each key pill's dot takes its line's OWN colour, as drawn */
+      const m = st.markBy && st.markBy["s" + kp.series];
+      if (m && m.geom && m.geom.col) kp.dot.style.background = m.geom.col;
+    }
     /* A page may declare its own BUILD length (operator, 2026-09-08: "the fix is to draw out the charts in a
        slower/more animated fashion"). Measured on the tariff short, M21 puts the deployed lives at 0.0-6.1 s
        against a 10-13 s span - the chart is not being HELD too long, it finishes drawing early and then waits.
@@ -9576,14 +9636,18 @@ async function mount(doc) {
     /* both axes, always (operator, 2026-09-03): y ticks - on a log axis at doublings of a power of ten, else the nice-step helper */
     if (ax.log) {
       const lo = Math.pow(10, y0), hi = Math.pow(10, y1); let tv = Math.pow(10, Math.floor(y0));
-      let n = 0;
-      while (tv <= hi) { if (tv >= lo) { const y = my(tv);
+      let n = 0, keptY = null;
+      /* P69 T10: on a long form's page a doubling whose label would stand on the last one's (the key's band can shorten
+         the plot at the larger presets) is skipped - the ticks keep a label's own height (TICK_SPACE figures) apart */
+      const roomy = (y) => !LFT || keptY === null || Math.abs(y - keptY) >= LP_LONGFORM.TICK_SPACE * LFT.tick;
+      while (tv <= hi) { if (tv >= lo && roomy(my(tv))) { const y = keptY = my(tv);
         const gl = lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1) });
         const pe = PJ ? tiltRule(gl, pj, L, y, W - R, y) : null;   /* P58 T5: the decade rules lie on the plane; their numbers stay upright at the left end */
         lpMark(st, "tick:" + n, "tick", gl, { v: tv, y, x1: L, x2: W - R });
         lpMark(st, "ylab:" + n, "ylabel", lpText(st.chart, "lab", pe ? L - 10 + (pe[0][0] - L) : L - 10, pe ? pe[0][1] + 8 : y + 8, "end", lpTick(tv) + (ax.unit || ""),
           lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : undefined), { v: tv, x: pe ? L - 10 + (pe[0][0] - L) : L - 10, y: pe ? pe[0][1] + 8 : y + 8 }); n++; } tv *= 2; }
-    } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10, undefined, PJ ? pj : null);
+    } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10,
+                    LFT ? Math.max(1, Math.min(5, Math.floor((B - T) / (2 * LP_LONGFORM.TICK_SPACE * LFT.tick)))) : undefined, PJ ? pj : null);   /* P69 T10: ... and a linear axis steps as coarse as a short plot needs (5 divisions whenever it has the room) */
     lpYLabel(st, pg, L, T - (LFT ? LFT.ylab_gap : 12));
     (ax.xticks || []).forEach(([x, lab], i) => { const pe = PJ ? pj(mx(x), B) : null;   /* P58 T5: the x label stands at its own place ON the baseline, and upright */
       const tx = lpEl("text", "lab", st.chart, { x: (pe ? pe[0] : mx(x)).toFixed(1), y: pe ? pe[1] + (P ? 52 : LFT ? LFT.xtick_dy : 32) : B + (P ? 52 : LFT ? LFT.xtick_dy : 32), "text-anchor": "middle",
@@ -9681,7 +9745,11 @@ async function mount(doc) {
       lpMark(st, "s" + rec.si + (rec.muted ? ":h" : ""), "line", p, { pts: rec.pts, vals: s.pts.map(([, v]) => +v), len, k0: rec.k0, muted: rec.muted, col }, rec);
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
-    const order = [...st.paths].sort((a, b) => a.ny - b.ny), gap = P ? 50 : PHONE ? 50 : 28;   /* one line = the face's own size (44 px portrait), not the landscape 24 */
+    const order = [...st.paths].sort((a, b) => a.ny - b.ny), gap = P ? 50 : PHONE ? Math.max(50, LFT ? Math.min(LP_LONGFORM.TAG_SPACE * LFT.tag,
+      st.paths.length > 1 ? (B - 12 - T + lpLongformAboveU(pg, LFT) - LP_LONGFORM.ASCENT * LFT.tag) / (st.paths.length - 1) : Infinity) : 0) : 28;   /* one line = the face's own size (44 px portrait), not the landscape 24 */
+    /* P69 T10: a long form's names stand a line of their OWN size apart (at `phone` 50 units is under one, and the key's band
+       shortens the plot) - as far as the chart's own room holds them: the top name's box may climb into the band the page
+       keeps over the plot (lpLongformBox's `above`, the y label's row - empty on the right) and never past it into the key */
     for (let i = 1; i < order.length; i++)
       if (order[i].ny - order[i - 1].ny < gap) order[i].ny = order[i - 1].ny + gap;
     const over = order.length ? order[order.length - 1].ny - (B - 12) : 0;   /* a name never sits on the axis line: lift the group */
@@ -10654,7 +10722,7 @@ async function mount(doc) {
   const lpParticles = (st, page, S) => {
     S = S || st;
     const glyphs = [...st.glyphs, ...(st.rtGlyphs || [])].map((g) => ({ el: g, ...lpHome(page, g) }));   /* P47 T2: a retitle's glyphs ride the vortex too */
-    const pills = (st.badges || []).map((b) => ({ el: b.el, ...lpHome(page, b.el) }));
+    const pills = [...(st.badges || []), ...(st.keyPills || [])].map((b) => ({ el: b.el, ...lpHome(page, b.el) }));   /* P69 T10: and the key rail's */
     const skip = new Set([...S.paths.map((p) => p.p), ...S.paths.map((p) => p.tip)]);
     const svg = [...S.chart.children].filter((e) => !skip.has(e) && e.tagName !== "defs").map((e) => {
       let b; try { b = e.getBBox(); } catch (x) { b = { x: 0, y: 0, width: 0, height: 0 }; }
@@ -13482,7 +13550,7 @@ async function mount(doc) {
        the whole page flies in on the pills' own kinetics (throwXf: a ballistic chord, the tumble, the material's squash and settle) and arrives built */
     const mount = pg.enter === "mount" || (pg.enter === "morph" && !morphOn);   /* a morph with its flag off is a mount of the same length */
     const mountS = mount ? (pg.mount_s || pg.morph_s || LP.FIELD) : 0;   /* R26-50: mount_s is the SOAK's own seconds - the page's clock, never the page that left */
-    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || camIn || built || thrown || dropped) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : axesIn ? LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH : mount ? LP.ROLL + LP.SAVOR + (LP.FIELD - mountS) : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2) on the PAGE's own clock (R26-50): the cream is the ground on its first frame and the SOAK starts there, over mount_s - the roll and the savor are already behind it, and the ink, the punch and the build follow at their own LP offsets; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
+    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || camIn || built || thrown || dropped) ? Math.max(LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1), lpKeyBuilt(st)) : axesIn ? LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH : mount ? LP.ROLL + LP.SAVOR + (LP.FIELD - mountS) : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2) on the PAGE's own clock (R26-50): the cream is the ground on its first frame and the SOAK starts there, over mount_s - the roll and the savor are already behind it, and the ink, the punch and the build follow at their own LP offsets; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
     /* beat 1: roll-out */
     const rk = (mount || morphOn || snap) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) on MOUNT_STEPS over its soak */
     /* HF-16: the wire recedes from the instant the CHART layer comes up - the build drives that layer's opacity, so a
@@ -13650,23 +13718,28 @@ async function mount(doc) {
     /* badges: floored at the build's end, each springs in over LP_BADGE_IN with the dock's back-out overshoot */
     const tb = t3 - LP.PUNCH - (st.buildDur || LP.BUILD);
     const arrP = arriveOf(scene.world), massP = scene.world.mass || "paper";   /* P47 T1: the page's pills may ARRIVE by a throw or a landing (`;arrive=land;mass=metal` on the plate id - the compiler writes it on the world) */
-    for (const bd of st.badges || []) {
+    /* one pill `u0` s past its own onset (P69 T10: the page's badges and its key rail's pills spring by the one law) */
+    const pillAt = (el, u0, bi, phase) => {
       if (arrP !== "spring") {
-        const tp = tb - bd.at, bi = (st.badges || []).indexOf(bd);
-        const sx = arrP === "throw" ? throwXf({ x: -(STOP_THROW_DX + 80 * bi), y: -STOP_THROW_DY }, massP, tp) : landXf(massP, tp);
-        bd.el.style.opacity = tp >= 0 ? "1" : "0";
-        bd.el.style.transform = stopCss(sx) + idleCssFor("pill", pgPillKind(scene, pg), t, st.seed, 20 + bi);   /* R26-228: the ROW's kind, so a `none` page's badges are still (R26-234: and a `live` page's BREATHE - they never drift) */
-        continue;
+        const sx = arrP === "throw" ? throwXf({ x: -(STOP_THROW_DX + 80 * bi), y: -STOP_THROW_DY }, massP, u0) : landXf(massP, u0);
+        el.style.opacity = u0 >= 0 ? "1" : "0";
+        el.style.transform = stopCss(sx) + idleCssFor("pill", pgPillKind(scene, pg), t, st.seed, phase);   /* R26-228: the ROW's kind, so a `none` page's badges are still (R26-234: and a `live` page's BREATHE - they never drift) */
+        return;
       }
-      const ub = clamp01((tb - bd.at) / LP_BADGE_IN), e = (kin("analytic_spring") ? springPop : stagePop)(ub);
-      bd.el.style.opacity = Math.min(1, e * 1.4).toFixed(3);
+      const ub = clamp01(u0 / LP_BADGE_IN), e = (kin("analytic_spring") ? springPop : stagePop)(ub);
+      el.style.opacity = Math.min(1, e * 1.4).toFixed(3);
       /* SQUASH (42 s42.3, P43 T4, kinetics.area_squash + analytic_spring): the badge travels 18 px up; its spring's velocity and
          deceleration set alpha, the tensor stretches along the travel and compresses across it, area kept */
       const sq = kin("area_squash") && kin("analytic_spring") && ub > 0 && ub < 1
         ? " matrix(" + squashMatrix(Math.PI / 2, springSquash(ub, POP, 18, LP_BADGE_IN)).map((v) => v.toFixed(4)).join(",") + ",0,0)" : "";
-      bd.el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")" + sq
-        + idleCssFor("pill", pgPillKind(scene, pg), t, st.seed, 20 + (st.badges || []).indexOf(bd));   /* E49: each pill at its own phase (R26-228: at the kind the ROW named; R26-234: a live page's pills breathe, they do not drift) */
+      el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")" + sq
+        + idleCssFor("pill", pgPillKind(scene, pg), t, st.seed, phase);   /* E49: each pill at its own phase (R26-228: at the kind the ROW named; R26-234: a live page's pills breathe, they do not drift) */
+    };
+    for (const bd of st.badges || []) {
+      const bi = (st.badges || []).indexOf(bd);
+      pillAt(bd.el, tb - bd.at, bi, 20 + bi);
     }
+    (st.keyPills || []).forEach((kp, ki) => pillAt(kp.el, tb - kp.at, ki, 40 + ki));   /* P69 T10: the key, on recipe:badge-ladder's clock */
     paintPerform(st, scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word */
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */

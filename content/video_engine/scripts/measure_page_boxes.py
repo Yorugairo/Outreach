@@ -134,6 +134,9 @@ READ_BOXES = r"""
   out.source = one('.lp-src'); out.chart = one('.lp-chart');
   const rail = one('.lp-rail');
   out.rail = rail || (out.source ? {x: out.source.x, y: out.source.y + out.source.h, w: out.source.w, h: 0} : null);
+  /* P69 T10: a longform page's KEY RAIL (the names its end tags gave up), in the top band - only when it holds a pill */
+  const key = wB.querySelector('.lp-key');
+  if (key && key.querySelector('.lp-kpill')) out.key = R(key);
   /* THE PLOT. The chart's own declared pin box through its screen CTM (viewBox + park + camera) when the
      builder declares one; the marks it drew when it does not (bars). Then WIDENED over the ink that lives
      inside the plot - the basis label above it and the x tick labels below the axis - which is exactly what
@@ -385,6 +388,8 @@ def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: 
     if [round(v) for v in dom["stage"]] != [w, h]:
         raise SystemExit(f"{builder} {aspect}: stage measured {dom['stage']}, expected {[w, h]}")
     boxes = {k: _box(dom[k]) for k in LPG.BOX_KEYS}
+    if dom.get(LPG.KEY_BOX):   # P69 T10: the key rail, on a longform page that has one
+        boxes[LPG.KEY_BOX] = _box(dom[LPG.KEY_BOX])
     axis = {k: (_box(dom["axis"][k]) if (dom.get("axis") or {}).get(k) else None) for k in ("x", "y")}
     return {"page": page, "boxes": boxes, "axis": axis,
             "data_mask": data_mask(boxes["plot"], dom.get("data") or [])}
