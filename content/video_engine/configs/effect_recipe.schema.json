@@ -295,8 +295,8 @@
             },
             "moment": {
               "type": "string",
-              "minLength": 3,
-              "description": "hook / setup / proof / turn / reveal / close"
+              "pattern": "^(hook|setup|proof|turn|reveal|close)( / (hook|setup|proof|turn|reveal|close))*$",
+              "description": "hook / setup / proof / turn / reveal / close - one of the six, or several joined by ' / ' (BRAVOS-USE-WHEN.md's own rows carry 'hook / turn'; the stamp recipe carries 'proof / reveal'); any other word is refused"
             },
             "shape": {
               "type": "string",

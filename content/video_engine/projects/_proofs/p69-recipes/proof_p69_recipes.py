@@ -16,15 +16,15 @@ WRITES ONLY INSIDE `build-lab-<recipe>/` beside this file (gitignored by `.gitig
 Steel and Paper project is READ: the take, the evidence objects, the props, the leases record - and asserted unmoved.
 The compile goes in under a NAMED no-receipt reason (the P67 door's escape), because this is a test bed, never a cut.
 
-THE FIVE BEATS (the sixth, `the-prop-lands-with-weight`, waits for lane B's resting prop shadow - T6b - to merge):
+THE THREE BEATS (the sixth candidate, `the-prop-lands-with-weight`, waits for lane B's resting prop shadow - T6b - to
+merge). Two more were WITHDRAWN 2026-09-23 on the parent's read of their frames, and their code removed:
+`the-bar-halves-its-number` (R26-273: a bar can't change its value - `chart_to compare` melts "20%" into "10%" but the
+bar stays at 20%, so the new number sits at the old gridline; a bar value morph is owed) and `the-ratio-read-in-the-gap` (R26-272: a bracket draws
+nothing on bars - `paintBracket` reads `st.linePts`, which a bars page never has, and the compiler accepts the row
+silently).
   estimate-opens-as-a-wedge              row 16's sentence on `ev-debt-issuance-line-v1`: the actual line lands, the two
                                          estimate edges draw on "This year", the wedge between them bleeds (`spread`) and
                                          the RANGE is written as the figure ($130-150B, 2026E) - never a midpoint (E53/E77)
-  the-bar-halves-its-number              row 18's arithmetic on `ev-index-concentration-bars-v1`: "20%" lands on the bar's
-                                         top, then `chart_to compare` (melt, then splash) turns it into the 10% it erases
-  the-ratio-read-in-the-gap              row 21's 1 vs 3 on `ev-hbm-wafer-ratio-bars-v1`: the two bars, then the ratio
-                                         "3x" written as the figure on the taller bar (a bracket IN the gap paints nothing
-                                         on a bars page yet - see `_ratio_row`)
   the-stamp-takes-the-room-then-the-card row 16's leases sentence on the debt page: the datacenter prop stamped into the
                                          page's biggest room on "Data centers", then the leases record placed clear of the
                                          mark and its ring on "right there in the filing" (P69 T5; see LEASES_BOX)
@@ -124,66 +124,6 @@ def _wedge_strip(ws: list) -> list:
             (round(at("This year") + 1.3, 2), "the two estimate edges open from 2025"),
             (round(at("tracking toward") + 1.0, 2), "the wedge between them bleeds (spread)"),
             (round(at("a hundred and fifty") + 1.8, 2), "the RANGE written as the figure")]
-
-
-CONC_PAGE = "ev-index-concentration-bars-v1"
-CMP_S = 2.4           # the compare's own clock (test_compare_on_bars.py CMP_S, the compare-morph golden's)
-
-
-def _halves_times(ws: list) -> tuple[float, float]:
-    """(the figure's word, the compare's start): the compare ENDS as "ten percent" is spoken, so the comparator is
-    written on its word; it never starts before "fall by half"."""
-    t_fig = T.at(ws, "At a fifth")
-    t_ten = W.word_in(ws, "that erases ten percent", "ten")
-    return t_fig, round(max(T.at(ws, "fall by half"), t_ten + 0.3 - CMP_S), 2)
-
-
-def _halves_row(ws: list, runtime: float) -> tuple:
-    t_fig, t_cmp = _halves_times(ws)
-    obj = _series(CONC_PAGE)
-    share = obj["bars"][0]["value"]
-    species = [
-        {"kind": "figure", "at": t_fig, "dur": 1.5, "text": obj["bars"][0]["note"], "target": _datum(0)},
-        {"kind": "chart_to", "at": t_cmp, "dur": CMP_S, "to": "compare", "form": "melt", "then": "splash",
-         "hold": "metric", "metric": {"value": share, "text": obj["bars"][0]["note"], "label": "of the S&P 500"},
-         "comparator": {"value": share / 2, "text": "10%", "label": "of the market, if they halve"},
-         "inputs": {"share": share}, "derive": "share / 2",
-         "source": f"[DERIVED: from {CONC_PAGE}, a fifth of the index falling by half, share / 2]"},
-    ]
-    return (0.0, runtime, f"ledger:{CONC_PAGE}:bars::right:axes:cut;idle=live", (0, 0, 0), [], None, species)
-
-
-def _halves_strip(ws: list) -> list:
-    t_fig, t_cmp = _halves_times(ws)
-    return [(round(t_fig + 1.6, 2), "the figure lands on its bar's top"),
-            (round(t_cmp + 0.9, 2), "the figure's ink sags and balls up (melt)"),
-            (round(t_cmp + 1.8, 2), "the ball splashes; the hand writes the comparator"),
-            (round(t_cmp + CMP_S + 0.5, 2), "the comparator: 10% of the market")]
-
-
-RATIO_PAGE = "ev-hbm-wafer-ratio-bars-v1"
-
-
-def _ratio_row(ws: list, runtime: float) -> tuple:
-    """The ratio is WRITTEN AS THE FIGURE on the taller bar's top (P69 T6's bar figure). The first cut drew it as a
-    `bracket` from bar 0 to bar 1 - the gap itself - and the frame showed nothing: the engine's `paintBracket` reads
-    `st.linePts`, which a bars page never has (the R26-190 class), and the compiler accepts the row silently. Until a
-    bracket stands on a bars page, "in the gap" is not composable from the cards we have; the figure is."""
-    obj = _series(RATIO_PAGE)
-    lo, hi = (b["value"] for b in obj["bars"])
-    tall = max(range(len(obj["bars"])), key=lambda i: obj["bars"][i]["value"])
-    species = [{"kind": "figure", "at": W.word_in(ws, "about three times the wafer", "three"), "dur": 1.5,
-                "text": f"{hi / lo:g}x",          # the page's own arithmetic: 3 / 1, never typed
-                "sub": "the wafer per gigabyte", "target": _datum(tall)}]
-    return (0.0, runtime, f"ledger:{RATIO_PAGE}:bars::right:axes:cut;idle=live", (0, 0, 0), [], None, species)
-
-
-def _ratio_strip(ws: list) -> list:
-    t3 = W.word_in(ws, "about three times the wafer", "three")
-    return [(round(t3 - 0.6, 2), "the two bars, 1x and 3x, one unit"),
-            (round(t3 + 0.5, 2), "the hand writes the ratio on its word"),
-            (round(t3 + 1.7, 2), "the ratio as the figure: 3x the wafer"),
-            (round(t3 + 3.4, 2), "held, the page alive")]
 
 
 LEASES_CARD = "ev-doc-leases"
