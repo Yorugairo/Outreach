@@ -148,16 +148,16 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Write set: `M/__init__.py`, `M/contracts.py`; `content/video_engine/configs/model_asset.v1.schema.json`, `model_scene.v1.schema.json`, `model_inspection.v1.schema.json`; `F/contracts/`; `content/video_engine/tests/test_model_contracts.py`
 - Acceptance: versioned references, units/axes, semantic rig/socket capability profiles, timebase, authored contacts, source lineage and approval references validate; reject nonfinite values, out-of-root paths, unsupported versions, stale hashes and incompatible capabilities. No copied approval authority or implicit unknown-source promotion.
 - Validate: `python -m pytest content/video_engine/tests/test_model_contracts.py -q`
-- Evidence: `M/contracts.py`, the three v1 schemas, `F/contracts/`, and `test_model_contracts.py`; parent verified 36 passed, one symlink-permission skip on 2026-09-22. Negative tests cover wrong units, invalid time/geometry, stale hashes, path escape, capability mismatch, fabricated catalog/approval records, missing trusted authority anchors, ineligible render scenes, and self-asserted operator approval. Render-ready validation requires caller-supplied trusted catalog and approval paths; metadata validation alone conveys no approval. Independent reviewer identified five trust/schema gaps; Luna fixed the bounded slice after three failed attempts and escalated final test/scene-clock cleanup to Sol xhigh (attempt 4). No native fighter art or motion-quality verdict follows from this contract pass.
+- Evidence: `M/contracts.py`, the three v1 schemas, `F/contracts/`, and `test_model_contracts.py`; parent verified 36 passed, one symlink-permission skip on 2026-09-22. Negative tests cover wrong units, invalid time/geometry, stale hashes, path escape, capability mismatch, fabricated catalog/approval records, missing trusted authority anchors, ineligible render scenes, and self-asserted operator approval. Render-ready validation requires caller-supplied trusted catalog and approval paths; metadata validation alone conveys no approval. Independent reviewer identified five trust/schema gaps; Luna fixed the bounded slice after three failed attempts and escalated final test/scene-clock cleanup to Sol xhigh (attempt 4). T3/T5a integration hardening subsequently added explicit approved-record decision/attribution checks, duplicate event/contact ID checks, and zero-quaternion rejection (43 passed, one symlink skip). No native fighter art or motion-quality verdict follows from this contract pass.
 
 ### T3: Asset intake and reusable library integration
-- Status: pending
-- Owner: implementation_luna
+- Status: complete (review-only intake; render/art approval remains external)
+- Owner: execution_sol escalation; parent retains integration and approval boundary
 - Depends on: T2
 - Write set: `M/assets.py`, `M/importers.py`; `F/assets/`; `content/video_engine/tests/test_model_assets.py`; existing asset service modifications only by parent after narrow interface review
 - Acceptance: native/external model, layered artwork, prop and environment inputs resolve through the existing asset store; immutable originals plus derived versions; relative resource paths, lineage, sockets and provenance captured. No untrusted embedded Blender scripts execute; imported assets cannot write outside the run directory.
 - Validate: `python -m pytest content/video_engine/tests/test_model_assets.py -q`
-- Evidence: pending; import/hash/round-trip and malicious-path fixtures; no provider calls required for tests.
+- Evidence: `M/assets.py`, `M/importers.py`, `F/assets/`, `test_model_assets.py` and `.gitattributes` landed in `708b64d` after Sol escalation preserved the core from three bounded Luna failures. The independent reviewer found missing `.blend` dependency declarations, overly strict in-root glTF `../` handling, and unbounded bundle intake; fixes and follow-up URI-count hardening passed 26 focused tests (two Windows symlink skips), with the combined relevant suite at 143 passed, three skips. Parent hardened T2 render approval so review-only intake records cannot serve as approvals (`aa6b634`). No provider calls or Blender execution; `.blend` packed/dependency claims require later Blender inspection and the 80-byte fixture is diagnostic, not art.
 
 ### T4a: Native preset authoring tooling
 - Status: pending
@@ -187,13 +187,13 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Evidence: pending; consumed by T9, not a prerequisite for fighter art approval.
 
 ### T5a: Backend-neutral motion semantics
-- Status: pending
+- Status: complete (implementation and targeted independent re-review; no backend/art approval)
 - Owner: implementation_luna; parent owns shared contract
 - Depends on: T2
 - Write set: `M/motion.py`, `M/inspection.py`; `F/motion/`; `content/video_engine/tests/test_model_motion.py`
 - Acceptance: rational clock, event/contact intervals, semantic targets, coordinate-tagged residuals and deterministic seek evaluation; no Blender control names or mesh assumptions in portable intent.
 - Validate: `python -m pytest content/video_engine/tests/test_model_motion.py -q`
-- Evidence: pending; both backends consume the same timing fixture.
+- Evidence: `M/motion.py`, `M/inspection.py`, `F/motion/`, and `test_model_motion.py` landed in `411c957`; 15 focused tests passed on 2026-09-22, and a distinct opaque 3D/2.5D target map consumes the same authored clock/contact fixture. Independent reviewer found and verified fixes for T2 semantic-token compatibility, quaternion endpoint normalization/antipodal SLERP, and exact direct RationalClock construction. Parent aligned T2 on duplicate event/contact IDs and zero quaternions in `aa6b634`; contract tests passed 43 with one Windows symlink skip. Portable intent names remain semantic keys resolved through backend maps; T5b must bind stable semantic aliases to actual controls, not serialize Blender control paths into shared intent. This fixture is diagnostic timing evidence, not motion-quality approval.
 
 ### T5b: 3D rig mapping, deformation and contact
 - Status: pending
