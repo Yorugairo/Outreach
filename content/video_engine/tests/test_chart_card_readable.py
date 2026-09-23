@@ -133,7 +133,7 @@ def test_apply_card_draws_the_page_as_a_card():
     LPG.apply_card(page, CARD_W, CARD_W * 9 / 16)
     ax = page["axes"]
     assert ax["readability"] == "card" and ax["card_w"] == 652.8 and ax["card_h"] == 367.2
-    assert ax["tag_form"] == "value", "the end tags are the short badge: the value"
+    assert ax["tag_form"] == "badge", "two lines end on +21%: the shortening stops at the badge (the value and a short name)"
     assert [x[1] for x in ax["xticks"]] == ["Oct '25", "Jul '26"], "the minor ticks are dropped: the two ends stay"
     assert "ylabel" not in ax and "key" not in ax and page["sub"] == "" and page["badges"] == []
     assert page["source"] == "Yahoo Finance", "the source's first clause, on one line"
@@ -222,7 +222,10 @@ CARD_PROBE = """() => {
   const panel = st.chart.querySelector('rect.lp-panel');
   return { card: st.page.classList.contains('lp-readability-card'), words, lines, chart: R(st.chart), panel: panel ? R(panel) : null,
            xticks: (st.marks || []).filter(m => m.role === 'xtick' && m.el).map(m => m.el.textContent),
-           tags: [...st.chart.querySelectorAll('text.sname')].filter(vis).map(e => ({ text: e.textContent, fill: getComputedStyle(e).fill })),
+           xboxes: [...st.chart.querySelectorAll('text.lab')].filter(e => e.isConnected && vis(e) && +(e.getAttribute('opacity') || 1) > 0.05).map(R),
+           tags: [...st.chart.querySelectorAll('text.sname')].filter(vis).map(e => ({ text: e.textContent, fill: getComputedStyle(e).fill,
+             value: (e.firstChild && e.firstChild.nodeType === 3 ? e.firstChild.textContent : e.textContent).trim(),
+             chips: [...e.querySelectorAll('tspan.tagchip')].map(c => ({ text: c.textContent, px: parseFloat(getComputedStyle(c).fontSize) * chartK })) })),
            series: (st.paths || []).filter(p => !p.muted).map(p => getComputedStyle(p.p).stroke),
            hidden: ['.lp-sub', '.lp-rail', '.lp-key'].map(q => { const e = st.page.querySelector(q); return !e || !vis(e); }),
            src: (() => { const e = st.page.querySelector('.lp-src'); return e && vis(e) ? e.textContent.trim() : ''; })(),
@@ -357,9 +360,13 @@ def test_every_line_is_at_least_twice_the_pages_as_displayed(cards):
 @needs_browser
 def test_the_end_tags_are_short_badges_in_their_lines_ink_and_the_card_keeps_its_title_and_number(cards):
     got = cards["card"]
-    assert [t["text"] for t in got["tags"]] == [s["label"] for s in hook_object()["series"]]
+    assert [t["value"] for t in got["tags"]] == [s["label"] for s in hook_object()["series"]]
     assert [t["fill"] for t in got["tags"]] == got["series"], "each value in its own line's ink"
-    assert got["xticks"] == ["Oct '25", "Jul '26"]
+    assert got["xticks"] in (["Oct '25", "Jul '26"], ["Oct '25 – Jul '26"]),         "the axis states its span (E28): both ends, or one range label when the ends would meet - never the start alone"
+    boxes = got["xboxes"]
+    for i, a in enumerate(boxes):
+        for b in boxes[i + 1:]:
+            assert not (a[0] < b[0] + b[2] and b[0] < a[0] + a[2] and a[1] < b[1] + b[3] and b[1] < a[1] + a[3]), ("no label over another", a, b)
     assert any(w["text"] == "Two lines, one warning" for w in got["words"])
 
 
@@ -421,3 +428,29 @@ def test_without_the_profile_chart_card_writes_what_it_wrote(cards):
     assert Image.open(after).size == (round(CC.CARD_RES * CARD_W), round(round(CC.CARD_RES * CARD_W) * 9 / 16))
     assert json.loads(CC.card_sidecar(after).read_text(encoding="utf-8")) == {"card_h": 367.2, "card_w": 652.8, "profile": "card"}
     assert cards["page"]["card"] is False
+
+
+# ---- the names a value cannot carry (the parent's frame read of the first card) -------------------------------------
+
+def test_card_names_stop_the_shortening_at_the_badge_for_values_two_lines_share():
+    page = LPG.build_spec(hook_object(), "line")
+    names = LPG.card_names(page)
+    labels = {i: s["label"] for i, s in enumerate(page["series"])}
+    assert set(names) == {i for i, v in labels.items() if list(labels.values()).count(v) > 1}, (names, labels)
+    assert sorted(names.values()) == ["MEGA-CAP", "S&P"], "the lines' own badge labels, cut to a first word that still tells them apart"
+    LPG.apply_card(page, CARD_W, CARD_W * 9 / 16)
+    assert page["axes"]["tag_form"] == "badge"
+    assert LPG.CARD_NAME_MIN * LPG.CARD_TYPE_PX <= page["axes"]["card_chip_px"] <= LPG.CARD_TYPE_PX
+    one = LPG.build_spec(dict(hook_object(), series=hook_object()["series"][:1]), "line")
+    assert LPG.card_names(one) == {}, "a value no other tag shows keeps the value alone"
+
+
+@needs_browser
+def test_no_two_visible_end_tags_on_a_card_read_the_same(cards):
+    """The parent's frame read: two "+21%" tags told apart by colour alone. Every visible end tag's whole text differs."""
+    texts = [t["text"].strip() for t in cards["card"]["tags"]]
+    assert len(texts) == len(set(texts)), texts
+    chips = [c for t in cards["card"]["tags"] for c in t["chips"]]
+    assert chips, "the two lines that share a value carry their names"
+    for c in chips:
+        assert _displayed(c["px"]) >= LPG.CARD_NAME_MIN * FLOOR - TOL, (round(_displayed(c["px"]), 2), c)

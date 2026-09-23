@@ -8013,11 +8013,12 @@ async function mount(doc) {
        HANDOVER_U the share of a push (enter=camera, SNAP_S) over which the card gives way to the FULL page (a SNAP
                  already grows the full page out of the card's rectangle and hides the card on its first frame). */
   const LP_CARD = Object.freeze({ TYPE_PX: 12 * 1920 / 390, PAD_PX: 8, GAP_PX: 4, STROKE_X: 2, PAGE_UNIT: 1.334,
-                                  PLOT_MIN: 0.4, HANDOVER_U: 0.6 });
+                                  PLOT_MIN: 0.4, HANDOVER_U: 0.6,
+                                  MIN_VW: 520 });   /* a card's narrowest viewBox (a page's LP_PHONE.MIN_W is 1000): room for a plot left of named end tags */
   const lpCardK = (pg) => { const w = +((((pg || {}).axes) || {}).card_w); return w > 0 ? STAGE_W / w : 1; };
   const lpCardType = (pg) => {
-    const px = LP_CARD.TYPE_PX * lpCardK(pg);
-    return Object.freeze({ title: px, sub: px, tick: px, tag: px, chip: px, value: px, src: px });
+    const px = LP_CARD.TYPE_PX * lpCardK(pg), cp = +((((pg || {}).axes) || {}).card_chip_px);   /* a short name's fitted size (ledger_page.card_chip_px) */
+    return Object.freeze({ title: px, sub: px, tick: px, tag: px, chip: cp > 0 ? cp * lpCardK(pg) : px, value: px, src: px });
   };
   /* ... its box (rendered stage px): the title's last line, a gap, the plot's top ink (half a tick figure over it), the
      chart to the source line - or to the margin, when the source is dropped - and the x labels inside it */
@@ -8043,7 +8044,7 @@ async function mount(doc) {
   /* ... and the chart's viewBox width: the plot runs from the margin to the end badges' own right edge at the margin */
   const lpCardVW = (pg, T, scale, pad) => {
     const maxW = (STAGE_W - 2 * pad) / scale + 220 - LP_PHONE.TAG_GAP - lpLongformTagUnits(pg, T, ((pg.axes || {}).tag_form) || "value", scale);
-    return Math.max(LP_PHONE.MIN_W, Math.round(maxW * 1000) / 1000);
+    return Math.max(LP_CARD.MIN_VW, Math.round(maxW * 1000) / 1000);   /* a card's named tags may narrow the plot past a page's 1000 */
   };
   /* ... every line, its bloom and its tip, thicker by the card's own factor (after the builder has drawn them) */
   const lpCardStrokes = (S) => {
@@ -8053,6 +8054,34 @@ async function mount(doc) {
       if (!pp.muted) lpBloom(S, pp.p, pp.p.getAttribute("stroke"), LP_BLOOM_PX * f);
       if (pp.tip) pp.tip.setAttribute("r", (6 * f).toFixed(3));
       if (pp.name && !pp.muted) pp.name.style.fill = pp.p.getAttribute("stroke");   /* the short badge in its line's own ink: the card has no key */
+    }
+    /* ... and the x labels of a plot narrowed for named tags: a label is never written over another (s9.23b), and the
+       axis always states its SPAN (E28 - a time axis says where it starts and where it ends). The two ends are kept
+       and a middle label that would meet either is dropped; when the two ends themselves meet, they become ONE range
+       label from the plot's first date ("Oct '25 - Jul '26"), set from the first label's left edge */
+    const xt = [];
+    for (const m of (S.marks || []).filter((q) => q.role === "xtick" && q.el)) {
+      let b = null; try { b = m.el.getBBox(); } catch (e) { b = null; }
+      if (b && b.width > 0) xt.push({ m, b });
+    }
+    const xDrop = (m) => { m.el.remove(); S.marks = S.marks.filter((q) => q !== m); delete S.markBy[m.key]; };
+    const xGap = (e) => 0.3 * (parseFloat(getComputedStyle(e).fontSize) || 0);
+    const xMeet = (a, b) => b.b.x < a.b.x + a.b.width + xGap(b.m.el);
+    if (xt.length > 1) {
+      const first = xt[0], last = xt[xt.length - 1];
+      if (xMeet(first, last)) {
+        for (const q of xt.slice(1)) xDrop(q.m);
+        first.m.el.textContent = first.m.el.textContent + " – " + last.m.el.textContent;
+        first.m.el.setAttribute("text-anchor", "start");
+        first.m.el.setAttribute("x", first.b.x.toFixed(1));
+        if (first.m.el.__wrapLines) for (const ts of first.m.el.__wrapLines) ts.setAttribute("x", first.b.x.toFixed(1));
+      } else {
+        let kept = first;
+        for (const q of xt.slice(1, -1)) {
+          if (xMeet(kept, q) || xMeet(q, last)) { xDrop(q.m); continue; }
+          kept = q;
+        }
+      }
     }
   };
   /* the chart-unit geometry for a chart box from `top` to `bot` (rendered px) - ledger_page.longform_geom, line for line:
@@ -8179,7 +8208,7 @@ async function mount(doc) {
     let out = 0;
     for (const s of (pg.series || [])) {
       if (!s || s.muted) continue;
-      const label = String(s.label || ""), name = String(s.name || ""), chip = rides[String(s.color || "")] || "";
+      const label = String(s.label || ""), name = String(s.name || ""), chip = rides[String(s.color || "")] || String(s.card_name || "");   /* card_name: a card's short name (ledger_page.card_names) */
       const text = form === "full" ? (label + " " + name).trim() : (label || name);
       out = Math.max(out, text.length * LP_LONGFORM.TAG_EM.NAME * T.tag
         + (chip && form !== "value" ? LP_LONGFORM.CHIP_DX_PX + chip.length * LP_LONGFORM.TAG_EM.CHIP * T.chip : 0));
@@ -9972,9 +10001,9 @@ async function mount(doc) {
       name.textContent = s.muted ? "" : LFT && LFT.form !== "full" ? (s.label || s.name || "") : (s.label ? s.label + " " : "") + (s.name || "");   /* P69 T8: a tag the stage cannot hold keeps its value (T10's key takes the name) */   /* the muted history carries no name */
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
          reveal, one real estate (operator, 2026-09-03) */
-      const ib = (st.inlineBadges || {})[s.color];
-      if (ib && ib.tag && !(LFT && LFT.form === "value")) { const tg = lpEl("tspan", "tagchip", name, { dx: LFT ? (LP_LONGFORM.CHIP_DX_PX / LFT.scale).toFixed(2) : 12, fill: col,
-        ...(PHONE ? { style: "font-size:" + lpTypeU(st, "chip") + "px" } : {}) }); tg.textContent = ib.tag; }
+      const ib = (st.inlineBadges || {})[s.color], chipT = (ib && ib.tag) || s.card_name || "";   /* a card's short name rides where a badge's tag would */
+      if (chipT && !(LFT && LFT.form === "value")) { const tg = lpEl("tspan", "tagchip", name, { dx: LFT ? (LP_LONGFORM.CHIP_DX_PX / LFT.scale).toFixed(2) : 12, fill: col,
+        ...(PHONE ? { style: "font-size:" + lpTypeU(st, "chip") + "px" } : {}) }); tg.textContent = chipT; }
       const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : my(last[1])) + 8,
                      pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */

@@ -2564,6 +2564,47 @@ CARD_TYPE_PX = CARD_PHONE_FLOOR * 1920 / CARD_PHONE_W   # 59.08: the floor itsel
 CARD_STROKE_X = 2.0
 CARD_PAD_PX = 8.0   # the engine's LP_CARD.PAD_PX
 CARD_SOURCE_CUTS = (" - ", "; ", ", ", " (")   # the source's first clause ends at the first of these
+# THE NAMES A VALUE CANNOT CARRY (the parent's frame read of the first card, 2026-09-23: "+21%" grey and "+21%" blue
+# "are indistinguishable except by colour - a viewer cannot tell the S&P from mega-cap"). On a card the end-tag
+# shortening stops at the BADGE for every tag whose value another tag also shows: the value keeps the floor and a SHORT
+# NAME rides it as the badge's chip - the series' own inline badge label (the page's key word for that line: E99 s90),
+# cut to its first word when the first words still tell the lines apart. Never an invented word. The name's size is
+# FITTED so the widest named tag takes at most CARD_TAG_ROOM of the card (the plot keeps the rest), never under
+# CARD_NAME_MIN of the floor; a value no other tag shows names its line already (with its ink) and stays a value.
+CARD_TAG_ROOM = 0.5
+CARD_NAME_MIN = 0.5
+CARD_TAG_EM = (0.68, 0.64)   # the engine's LP_LONGFORM.TAG_EM (NAME, CHIP): ems per character of a value / a chip
+CARD_CHIP_DX_PX = 4.0        # the chip's gap after its value, displayed px (the engine's CHIP_DX_PX 12 at the card's ~3x)
+
+
+def card_names(page: dict) -> dict[int, str]:
+    """{series index: short name} for every live line whose end value another line's also shows. Pure."""
+    live = [(i, s) for i, s in enumerate(page.get("series") or []) if isinstance(s, dict) and not s.get("muted")]
+    vals = [str(s.get("label") or "").strip() for _i, s in live]
+    dup = {v for v in vals if v and vals.count(v) > 1}
+    if not dup:
+        return {}
+    by_col = {BADGE_ACCENT_COL.get(b.get("accent")): str(b.get("label") or "").strip()
+              for b in page.get("badges") or [] if isinstance(b, dict) and b.get("inline")}
+    full = {i: (by_col.get(s.get("color")) or str(s.get("name") or "").strip()) for i, s in live
+            if str(s.get("label") or "").strip() in dup}
+    out = {}
+    for v in dup:
+        group = {i: n for i, n in full.items() if str(page["series"][i].get("label") or "").strip() == v}
+        first = {i: (n.split() or [""])[0] for i, n in group.items()}
+        use = first if len(set(first.values())) == len(first) and all(first.values()) else group
+        out.update(use)
+    return {i: n for i, n in out.items() if n}
+
+
+def card_chip_px(page: dict, names: dict[int, str], card_w: float) -> float:
+    """The short names' size in DISPLAYED px: the floor, or less so the widest named tag fits CARD_TAG_ROOM of the
+    card - never under CARD_NAME_MIN of the floor."""
+    ev, ec = CARD_TAG_EM
+    room = CARD_TAG_ROOM * float(card_w)
+    fit = min((room - len(str(page["series"][i].get("label") or "")) * ev * CARD_TYPE_PX - CARD_CHIP_DX_PX) / (len(n) * ec)
+              for i, n in names.items())
+    return round(max(CARD_NAME_MIN * CARD_TYPE_PX, min(CARD_TYPE_PX, fit)), 2)
 
 
 def card_floor_px(stage_w: int = 1920) -> float:
@@ -2603,11 +2644,17 @@ def apply_card(page: dict, card_w: float, card_h: float, stage_w: int = 1920) ->
     if err:
         raise ValueError(err)
     axes = page.setdefault("axes", {})
-    for key in ("type_scale", "tag_form", "tag_room", "key", "key_px", "ylabel"):
+    for key in ("type_scale", "tag_form", "tag_room", "key", "key_px", "ylabel", "card_chip_px"):
         axes.pop(key, None)
     axes.update({"readability": CARD, "card_w": round(float(card_w), 2), "card_h": round(float(card_h), 2)})
+    names = card_names(page) if page.get("builder") == "dense-line" else {}   # read before the badges are cleared
     if page.get("builder") == "dense-line":
         axes["tag_form"] = "value"
+    if names:   # the shortening stops at the badge: the value and its short name
+        axes["tag_form"] = "badge"
+        axes["card_chip_px"] = card_chip_px(page, names, card_w)
+        for i, n in names.items():
+            page["series"][i]["card_name"] = n
     xt = axes.get("xticks")
     if isinstance(xt, list) and len(xt) > 2:
         axes["xticks"] = [xt[0], xt[-1]]
