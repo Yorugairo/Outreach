@@ -5409,12 +5409,45 @@ def _world_for_bare_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | 
 STAGE_W, CARD_W, Q = 1920, 1400, 90
 
 
+# REVIEW-P69-LANE-B-MERGE-4 MN2: the alpha path's byte budget. A picture that keeps its transparency embeds as a PNG up
+# to this many bytes; over it, as a WebP with alpha at the card width, stepping its quality down (and then its width)
+# until it fits - the JPEG it replaces could not grow a player without bound, and neither may the alpha path.
+ALPHA_BYTES_CAP = 256 * 1024   # [DERIVED: the old JPEG path's p90 over the doors' 164 alpha PNGs (history-of-bjj/assets 70, systems-and-blowups/assets 26, props 24, icons 44, at CARD_W) = 232 kB, rounded up to 256 KiB; median 49 kB, max 415 kB - every prop and icon (max 255 kB as PNG) stays a PNG]
+ALPHA_WEBP_Q = (Q, 80, 70, 60, 50)   # the WebP's quality ladder, from the JPEG's own Q down
+ALPHA_WEBP_SHRINK = 0.85             # ... then the width, a step at a time, at the ladder's last quality
+
+
 def has_alpha(im) -> bool:
-    """P69 T6d: does this picture USE transparency - an alpha channel (or a palette transparency) with at least one
-    pixel under fully opaque? An RGBA file whose alpha is all 255 is a photo in a transparent container: no."""
-    if im.mode in ("RGBA", "LA", "PA") or (im.mode == "P" and "transparency" in im.info):
+    """P69 T6d: does this picture USE transparency - an alpha channel, a palette transparency or (MN1) a colour key
+    (tRNS on an RGB, L or I PNG) - with at least one pixel under fully opaque? An RGBA file whose alpha is all 255 is
+    a photo in a transparent container, and a key no pixel carries is no transparency: no."""
+    if "transparency" in im.info or im.mode in ("RGBA", "LA", "PA", "RGBa", "La"):
         return im.convert("RGBA").getchannel("A").getextrema()[0] < 255
     return False
+
+
+def _alpha_uri(p: Path, im0, cap: int) -> str:
+    """A picture that uses transparency, embedded with it: its own bytes when it is a PNG under the width cap and the
+    byte cap; else a PNG at the width cap when that fits ALPHA_BYTES_CAP; else a WebP with alpha under it (MN2)."""
+    from PIL import Image
+    if im0.width <= cap and p.suffix.lower() == ".png" and p.stat().st_size <= ALPHA_BYTES_CAP:
+        return f"data:image/png;base64,{base64.b64encode(p.read_bytes()).decode()}"
+    im = im0.convert("RGBA")
+    if im.width > cap:   # Pillow resamples RGBA premultiplied: no dark fringe from the transparent pixels' colour
+        im = im.resize((cap, round(im.height * cap / im.width)), Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, "PNG", optimize=True)
+    if buf.tell() <= ALPHA_BYTES_CAP:
+        return f"data:image/png;base64,{base64.b64encode(buf.getvalue()).decode()}"
+    while True:
+        for q in ALPHA_WEBP_Q:
+            buf = io.BytesIO()
+            im.save(buf, "WEBP", quality=q)
+            if buf.tell() <= ALPHA_BYTES_CAP:
+                return f"data:image/webp;base64,{base64.b64encode(buf.getvalue()).decode()}"
+        if im.width <= 1:
+            raise ValueError(f"{p}: no WebP of it fits {ALPHA_BYTES_CAP} bytes")
+        im = im.resize((max(1, round(im.width * ALPHA_WEBP_SHRINK)), max(1, round(im.height * ALPHA_WEBP_SHRINK))), Image.LANCZOS)
 
 
 def data_uri(p: Path, cap: int | None = None) -> str:
@@ -5422,22 +5455,15 @@ def data_uri(p: Path, cap: int | None = None) -> str:
 
     P69 T6d (found on T23's frames: the Fed stamped as a BLACK SQUARE): a picture that uses transparency - a prop
     cutout, any PNG with alpha - keeps it: a PNG at the cap (its own bytes when it is already a PNG under the cap), so
-    the page shows through its sky and T6b's hatch follows the silhouette, not the square. Every picture without
-    alpha is the JPEG it always was, to the byte."""
+    the page shows through its sky and T6b's hatch follows the silhouette, not the square - under ALPHA_BYTES_CAP, a
+    WebP with alpha past it (_alpha_uri). Every picture without alpha is the JPEG it always was, to the byte."""
     if cap is None:
         mime = mimetypes.guess_type(p.name)[0] or "application/octet-stream"
         return f"data:{mime};base64,{base64.b64encode(p.read_bytes()).decode()}"
     from PIL import Image
     im0 = Image.open(p)
     if has_alpha(im0):
-        if im0.width <= cap and p.suffix.lower() == ".png":
-            return f"data:image/png;base64,{base64.b64encode(p.read_bytes()).decode()}"
-        im = im0.convert("RGBA")
-        if im.width > cap:   # Pillow resamples RGBA premultiplied: no dark fringe from the transparent pixels' colour
-            im = im.resize((cap, round(im.height * cap / im.width)), Image.LANCZOS)
-        buf = io.BytesIO()
-        im.save(buf, "PNG", optimize=True)
-        return f"data:image/png;base64,{base64.b64encode(buf.getvalue()).decode()}"
+        return _alpha_uri(p, im0, cap)
     im = im0.convert("RGB")
     if im.width > cap:
         im = im.resize((cap, round(im.height * cap / im.width)), Image.LANCZOS)

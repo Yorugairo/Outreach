@@ -2235,6 +2235,7 @@ PAGE_BOXES_SCHEMA = "page_boxes.v1"
 BOX_KEYS = ("title", "sub", "chart", "plot", "source", "rail")
 TAGS_KEY = "tags"   # R26-205: the end tag column, on a full-stage page only (the fixture measures the six above)
 TAG_BOXES_KEY = "tag_boxes"   # P69 T6d: on a MEASURED full-stage page, each end tag at its drawn rect (the fixture's own)
+TAG_INK_KEY = "tag_ink"       # REVIEW-P69-LANE-B-MERGE-4 MN3: ... and, on the entry, the tags those rects were measured for (`tag_ink`)
 INK_KEYS = ("builder", "title", "sub", "source", "quiet_zone")
 # Kept as a descriptive alias for callers that name the variant.  The fixture's
 # actual key is the main lane's geometry key, ``16:9|full_stage``.
@@ -2287,6 +2288,28 @@ def page_ink_key(spec: dict) -> str:
         ink["left_gutter"] = spec["axes"]["left_gutter"]
     blob = json.dumps(ink, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
+
+
+def tag_ink(spec: dict) -> list[list]:
+    """REVIEW-P69-LANE-B-MERGE-4 MN3: the fingerprint of a page's END TAGS - `[label, name, last value]` for every live
+    series that writes one, in the spec's order. The one measured thing the DATA moves: an end tag stands at its line's
+    last value and reads its label, so `tag_boxes` (P69 T6d) are served only to a page whose tags match the ones they
+    were measured for; `page_ink_key` stays the key for every other box. Pure."""
+    out = []
+    for s in spec.get("series") or []:
+        if not isinstance(s, dict) or s.get("muted"):
+            continue
+        label, name = str(s.get("label") or "").strip(), str(s.get("name") or "").strip()
+        if not (label or name):
+            continue
+        pts = s.get("pts") or []
+        last = pts[-1][1] if pts and isinstance(pts[-1], (list, tuple)) and len(pts[-1]) > 1 else None
+        try:
+            last = round(float(last), 6)
+        except (TypeError, ValueError):
+            last = None if last is None else str(last)
+        out.append([label, name, last])
+    return out
 
 
 @functools.lru_cache(maxsize=4)
@@ -2445,7 +2468,8 @@ def measured_boxes(spec: dict, aspect: str) -> dict | None:
     out = {k: dict(boxes[k]) for k in BOX_KEYS}
     if isinstance(boxes.get(KEY_BOX), dict):   # P69 T10: a longform page's key rail, when it was measured with one
         out[KEY_BOX] = dict(boxes[KEY_BOX])
-    if isinstance(boxes.get(TAG_BOXES_KEY), list) and boxes[TAG_BOXES_KEY]:   # P69 T6d: its end tags, each as drawn
+    if (isinstance(boxes.get(TAG_BOXES_KEY), list) and boxes[TAG_BOXES_KEY]   # P69 T6d: its end tags, each as drawn -
+            and entry.get(TAG_INK_KEY) == tag_ink(spec)):                      # MN3: only for the tags they were drawn for
         out[TAG_BOXES_KEY] = [dict(b) for b in boxes[TAG_BOXES_KEY] if isinstance(b, dict)]
     return out
 

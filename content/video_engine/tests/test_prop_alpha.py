@@ -9,6 +9,7 @@ was, to the byte; and the compiler's embed of the Fed paints the same pixels as 
 from __future__ import annotations
 
 import base64
+import re
 import io
 import sys
 from pathlib import Path
@@ -141,3 +142,106 @@ def test_the_compilers_fed_paints_what_the_goldens_direct_embed_paints(tmp_path)
             mg = [sum(c) / (len(c) or 1) for c in zip(*gi.crop(box).getdata())]
             mc = [sum(c) / (len(c) or 1) for c in zip(*ci.crop(box).getdata())]
             assert sum(abs(a - b) for a, b in zip(mg, mc)) < 12, ("the same picture at the same place", box, mg, mc)
+
+
+# ---- REVIEW-P69-LANE-B-MERGE-4 MN1: a colour-key transparency (tRNS) is transparency, in any mode -------------------
+
+def _keyed(tmp_path: Path, mode: str):
+    """A PNG whose transparency is a tRNS COLOUR KEY (no alpha channel): the keyed colour fills the frame, a block
+    of another colour sits in the middle."""
+    from PIL import Image
+    key, ink = ((0, 0, 0), (200, 60, 40)) if mode == "RGB" else (0, 180)
+    im = Image.new(mode, (300, 200), key)
+    im.paste(ink, (100, 50, 200, 150))
+    p = tmp_path / f"keyed-{mode}.png"
+    im.save(p, transparency=key)
+    return p
+
+
+@pytest.mark.parametrize("mode", ["RGB", "L"])
+def test_a_colour_keyed_png_is_transparency_and_keeps_it(tmp_path, mode):
+    from PIL import Image
+    p = _keyed(tmp_path, mode)
+    im = Image.open(p)
+    assert im.mode == mode and "transparency" in im.info, (im.mode, im.info)
+    assert B.has_alpha(im), "the keyed colour is transparent: the picture uses transparency"
+    head, got = _decode(B.data_uri(p, 800))
+    assert head == "data:image/png;base64", head
+    rgba = got.convert("RGBA")
+    assert rgba.getpixel((5, 5))[3] == 0, "the keyed colour stays transparent - never painted opaque (the T6d square)"
+    assert rgba.getpixel((150, 100))[3] == 255
+
+
+def test_a_keyed_png_whose_key_is_never_used_is_opaque(tmp_path):
+    from PIL import Image
+    im = Image.new("RGB", (300, 200), (90, 120, 150))
+    p = tmp_path / "unused-key.png"
+    im.save(p, transparency=(1, 2, 3))
+    assert "transparency" in Image.open(p).info
+    assert not B.has_alpha(Image.open(p)), "a key no pixel carries: every pixel is opaque"
+    assert B.data_uri(p, 800) == _old_jpeg(p, 800), "... so the JPEG it always was, to the byte"
+
+
+# ---- REVIEW-P69-LANE-B-MERGE-4 MN2: the alpha path keeps a byte budget --------------------------------------------------
+
+def _noisy_cutout(w: int, h: int, grain: int = 256):
+    """A cutout no PNG can compress: noise inside a transparent margin - `grain` 256 is pure noise, a smaller grain a
+    painted gradient with that much texture (an illustration a PNG holds at megabytes)."""
+    import os
+    from PIL import Image, ImageChops
+    noise = Image.frombytes("RGB", (w, h), bytes(b % grain for b in os.urandom(w * h * 3)))
+    if grain < 256:
+        base = Image.linear_gradient("L").resize((w, h)).convert("RGB")
+        noise = ImageChops.add(base, noise, scale=1.0)
+    im = noise.convert("RGBA")
+    mask = Image.new("L", (w, h), 0)
+    mask.paste(255, (w // 8, h // 8, w - w // 8, h - h // 8))
+    im.putalpha(mask)
+    return im
+
+
+def test_the_alpha_byte_cap_is_stated_from_the_old_jpeg_path():
+    assert B.ALPHA_BYTES_CAP == 256 * 1024
+    src = Path(B.__file__).read_text(encoding="utf-8")
+    assert re.search(r"ALPHA_BYTES_CAP = 256 \* 1024 +# \[DERIVED:", src), "the cap cites its derivation"
+
+
+def test_a_large_transparent_png_becomes_a_webp_with_alpha_under_the_cap(tmp_path):
+    p = tmp_path / "painted-cutout.png"
+    _noisy_cutout(1800, 1400, grain=24).save(p)
+    assert p.stat().st_size > B.ALPHA_BYTES_CAP
+    uri = B.data_uri(p, B.CARD_W)
+    head, im = _decode(uri)
+    assert head == "data:image/webp;base64", head
+    assert len(base64.b64decode(uri.split(",", 1)[1])) <= B.ALPHA_BYTES_CAP
+    assert im.width == B.CARD_W, "at the card width"
+    rgba = im.convert("RGBA")
+    assert rgba.getpixel((5, 5))[3] == 0 and rgba.getpixel((im.width // 2, im.height // 2))[3] == 255, "alpha kept"
+
+
+def test_a_transparent_png_under_the_width_cap_but_over_the_byte_cap_is_a_webp(tmp_path):
+    p = tmp_path / "noisy-small.png"
+    _noisy_cutout(700, 600).save(p)
+    assert p.stat().st_size > B.ALPHA_BYTES_CAP
+    uri = B.data_uri(p, B.CARD_W)
+    head, im = _decode(uri)
+    assert head == "data:image/webp;base64" and im.size == (700, 600), (head, im.size)
+    assert len(base64.b64decode(uri.split(",", 1)[1])) <= B.ALPHA_BYTES_CAP
+
+
+def test_a_cutout_no_webp_holds_at_the_card_width_steps_its_width_down_under_the_cap(tmp_path):
+    p = tmp_path / "noise-cutout.png"
+    _noisy_cutout(1800, 1400).save(p)
+    uri = B.data_uri(p, B.CARD_W)
+    head, im = _decode(uri)
+    assert head == "data:image/webp;base64" and im.width < B.CARD_W, (head, im.size)
+    assert len(base64.b64decode(uri.split(",", 1)[1])) <= B.ALPHA_BYTES_CAP
+    assert im.convert("RGBA").getpixel((2, 2))[3] == 0
+
+
+def test_a_large_opaque_picture_keeps_its_exact_jpeg(tmp_path):
+    import os
+    from PIL import Image
+    p = tmp_path / "noisy-photo.png"
+    Image.frombytes("RGB", (1800, 1400), os.urandom(1800 * 1400 * 3)).save(p)
+    assert B.data_uri(p, B.CARD_W) == _old_jpeg(p, B.CARD_W)

@@ -8074,7 +8074,7 @@ async function mount(doc) {
         first.m.el.textContent = first.m.el.textContent + " – " + last.m.el.textContent;
         first.m.el.setAttribute("text-anchor", "start");
         first.m.el.setAttribute("x", first.b.x.toFixed(1));
-        if (first.m.el.__wrapLines) for (const ts of first.m.el.__wrapLines) ts.setAttribute("x", first.b.x.toFixed(1));
+        first.m.geom = Object.assign({}, first.m.geom, { x: +first.b.x.toFixed(1), anchor: "start" });   /* REVIEW-P69-LANE-B-MERGE-4 N1: a state restore keeps the range label where it stands (an x tick is never wrapped: only a bar's x label is) */
       } else {
         let kept = first;
         for (const q of xt.slice(1, -1)) {
@@ -10012,14 +10012,18 @@ async function mount(doc) {
       lpMark(st, "s" + rec.si + (rec.muted ? ":h" : ""), "line", p, { pts: rec.pts, vals: s.pts.map(([, v]) => +v), len, k0: rec.k0, muted: rec.muted, col }, rec);
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
+    /* REVIEW-P69-LANE-B-MERGE-4 N2: on a CARD the x labels run under the end tags' column (a range label is set from the
+       first label's left edge), so the lowest tag's line box stops where the labels' begins - not only 12 units over the axis */
+    const tagFoot = LFT && st.readability === LP_READABILITY.CARD
+      ? Math.min(B - 12, B + LFT.xtick_dy - LP_LONGFORM.ASCENT * LFT.tick - LP_LONGFORM.DESCENT * LFT.tag) : B - 12;
     const order = [...st.paths].sort((a, b) => a.ny - b.ny), gap = P ? 50 : PHONE ? Math.max(50, LFT ? Math.min(LP_LONGFORM.TAG_SPACE * LFT.tag,
-      st.paths.length > 1 ? (B - 12 - T + lpLongformAboveU(pg, LFT) - LP_LONGFORM.ASCENT * LFT.tag) / (st.paths.length - 1) : Infinity) : 0) : 28;   /* one line = the face's own size (44 px portrait), not the landscape 24 */
+      st.paths.length > 1 ? (tagFoot - T + lpLongformAboveU(pg, LFT) - LP_LONGFORM.ASCENT * LFT.tag) / (st.paths.length - 1) : Infinity) : 0) : 28;   /* one line = the face's own size (44 px portrait), not the landscape 24 */
     /* P69 T10: a long form's names stand a line of their OWN size apart (at `phone` 50 units is under one, and the key's band
        shortens the plot) - as far as the chart's own room holds them: the top name's box may climb into the band the page
        keeps over the plot (lpLongformBox's `above`, the y label's row - empty on the right) and never past it into the key */
     for (let i = 1; i < order.length; i++)
       if (order[i].ny - order[i - 1].ny < gap) order[i].ny = order[i - 1].ny + gap;
-    const over = order.length ? order[order.length - 1].ny - (B - 12) : 0;   /* a name never sits on the axis line: lift the group */
+    const over = order.length ? order[order.length - 1].ny - tagFoot : 0;   /* a name never sits on the axis line: lift the group */
     if (over > 0) for (const pp of order) pp.ny -= over;
     for (const pp of order) { pp.name.setAttribute("y", pp.ny.toFixed(1));
       lpMark(st, "name:s" + pp.si + (pp.muted ? ":h" : ""), "name", pp.name, { x: +pp.name.getAttribute("x"), y: pp.ny }, pp); }   /* the name's geom is its SETTLED y, after the push-apart */

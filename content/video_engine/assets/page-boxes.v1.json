@@ -220,6 +220,28 @@
     ],
     "full_stage": true,
     "ink": "8da72baa88183171",
+    "tag_ink": [
+     [
+      "+613%",
+      "MEMORY MAKERS (hynix+Micron)",
+      712.52
+     ],
+     [
+      "+105%",
+      "SEMICONDUCTOR STOCKS",
+      204.62
+     ],
+     [
+      "+21%",
+      "MEGA-CAP TECH STOCKS",
+      120.75
+     ],
+     [
+      "+21%",
+      "S&P 500 (the market)",
+      121.49
+     ]
+    ],
     "title": "The sharpest chart on YouTube - plus the layer it needed"
    },
    "9:16": {
@@ -1062,20 +1084,6 @@
       "x": 67,
       "y": 114
      },
-     "tag_boxes": [
-      {
-       "h": 37,
-       "w": 111,
-       "x": 186,
-       "y": 246
-      },
-      {
-       "h": 37,
-       "w": 260,
-       "x": 186,
-       "y": 539
-      }
-     ],
      "title": {
       "h": 63,
       "w": 433,
@@ -2017,7 +2025,7 @@
    }
   }
  },
- "player_sha256": "54efabbb4e181f7f047f5ea917aea026825771162956649fc3a25af5e3890963",
+ "player_sha256": "a09171089440187361c84e638ee2755caddd85f065810450c06cc0391f12a5aa",
  "profiles": {
   "dense-line|longform:bravos": {
    "16:9|full_stage": {
@@ -2140,6 +2148,28 @@
     ],
     "full_stage": true,
     "ink": "955f5e9d6b012c77",
+    "tag_ink": [
+     [
+      "+613%",
+      "MEMORY MAKERS (hynix+Micron)",
+      712.52
+     ],
+     [
+      "+105%",
+      "SEMICONDUCTOR STOCKS",
+      204.62
+     ],
+     [
+      "+21%",
+      "MEGA-CAP TECH STOCKS",
+      120.75
+     ],
+     [
+      "+21%",
+      "S&P 500 (the market)",
+      121.49
+     ]
+    ],
     "title": "The sharpest chart on YouTube - plus the layer it needed"
    }
   },
@@ -2270,6 +2300,28 @@
     ],
     "full_stage": true,
     "ink": "1eca65af9bc73d42",
+    "tag_ink": [
+     [
+      "+613%",
+      "MEMORY MAKERS (hynix+Micron)",
+      712.52
+     ],
+     [
+      "+105%",
+      "SEMICONDUCTOR STOCKS",
+      204.62
+     ],
+     [
+      "+21%",
+      "MEGA-CAP TECH STOCKS",
+      120.75
+     ],
+     [
+      "+21%",
+      "S&P 500 (the market)",
+      121.49
+     ]
+    ],
     "title": "The sharpest chart on YouTube - plus the layer it needed"
    }
   },
@@ -2400,6 +2452,28 @@
     ],
     "full_stage": true,
     "ink": "798e3238845637f0",
+    "tag_ink": [
+     [
+      "+613%",
+      "MEMORY MAKERS (hynix+Micron)",
+      712.52
+     ],
+     [
+      "+105%",
+      "SEMICONDUCTOR STOCKS",
+      204.62
+     ],
+     [
+      "+21%",
+      "MEGA-CAP TECH STOCKS",
+      120.75
+     ],
+     [
+      "+21%",
+      "S&P 500 (the market)",
+      121.49
+     ]
+    ],
     "title": "The sharpest chart on YouTube - plus the layer it needed"
    }
   },

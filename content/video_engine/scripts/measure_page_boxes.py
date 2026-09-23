@@ -198,8 +198,11 @@ READ_BOXES = r"""
   };
   out.data = [];
   if (chart) for (const el of chart.querySelectorAll(DATA)) for (const bx of dataBoxes(el)) out.data.push(bx);
-  /* P69 T6d: each END TAG at its drawn rect (a line's terminal name, its chip with it), in the chart's order */
-  out.tag_boxes = chart ? [...chart.querySelectorAll('text.sname')].filter((el) => (el.textContent || '').trim()
+  /* P69 T6d: each END TAG at its drawn rect (a line's terminal name, its chip with it), in the chart's order.
+     REVIEW-P69-LANE-B-MERGE-4 MN3: a LINE's end tag only - the builder's `name` marks (dense-line, combo); a tier's name
+     inside the plot and a rule's label are `text.sname` too, and are not end tags */
+  const tagEls = new Set((st.marks || []).filter((m) => m.role === 'name' && m.el).map((m) => m.el));
+  out.tag_boxes = chart ? [...chart.querySelectorAll('text')].filter((el) => tagEls.has(el) && (el.textContent || '').trim()
     && +(el.getAttribute('opacity') || 1) > 0.05).map(R).filter((r) => r.w >= 1 && r.h >= 1) : [];
   out.stage = [stg.width, stg.height];
   return out;
@@ -425,6 +428,8 @@ def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bo
            "boxes": boxes, "bands": bands, "axis": got["axis"], "data_mask": got["data_mask"]}
     if LPG.full_stage(got["page"], aspect):   # R26-235: the GEOMETRY this entry was measured in, on the entry itself
         out["full_stage"] = True
+    if boxes.get(LPG.TAG_BOXES_KEY):   # MN3: the tags these rects were measured for (the data moves them; the ink does not)
+        out[LPG.TAG_INK_KEY] = LPG.tag_ink(got["page"])
     return out
 
 

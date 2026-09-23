@@ -217,12 +217,18 @@ CARD_PROBE = """() => {
     words.push({ role: e.className, text: e.textContent.trim(), px: parseFloat(getComputedStyle(e).fontSize) * pageK, box: R(e) });
   for (const e of st.chart.querySelectorAll('text')) if (vis(e) && (e.textContent || '').trim() && +(e.getAttribute('opacity') || 1) > 0.05)
     words.push({ role: 'svg:' + e.getAttribute('class'), text: e.textContent.trim(), px: parseFloat(getComputedStyle(e).fontSize) * chartK, box: R(e) });
+  /* REVIEW-P69-LANE-B-MERGE-4 MJ1: a <tspan> carries its OWN size (an end tag's short name rides one) - every one is a word */
+  for (const e of st.chart.querySelectorAll('text tspan')) { const t = e.closest('text');
+    if (t && vis(t) && +(t.getAttribute('opacity') || 1) > 0.05 && (e.textContent || '').trim())
+      words.push({ role: 'svg:tspan.' + (e.getAttribute('class') || ''), text: e.textContent.trim(), px: parseFloat(getComputedStyle(e).fontSize) * chartK, box: R(e) }); }
   const lines = [...st.chart.querySelectorAll('path.ser')].filter(p => !p.classList.contains('muted'))
     .map(p => parseFloat(getComputedStyle(p).strokeWidth) * chartK);
   const panel = st.chart.querySelector('rect.lp-panel');
   return { card: st.page.classList.contains('lp-readability-card'), words, lines, chart: R(st.chart), panel: panel ? R(panel) : null,
            xticks: (st.marks || []).filter(m => m.role === 'xtick' && m.el).map(m => m.el.textContent),
            xboxes: [...st.chart.querySelectorAll('text.lab')].filter(e => e.isConnected && vis(e) && +(e.getAttribute('opacity') || 1) > 0.05).map(R),
+           xlabs: (st.marks || []).filter(m => m.role === 'xtick' && m.el && m.el.isConnected)
+             .map(m => ({ text: m.el.textContent, box: R(m.el), x: +m.el.getAttribute('x'), gx: +((m.geom || {}).x) })),
            tags: [...st.chart.querySelectorAll('text.sname')].filter(vis).map(e => ({ text: e.textContent, fill: getComputedStyle(e).fill,
              value: (e.firstChild && e.firstChild.nodeType === 3 ? e.firstChild.textContent : e.textContent).trim(),
              chips: [...e.querySelectorAll('tspan.tagchip')].map(c => ({ text: c.textContent, px: parseFloat(getComputedStyle(c).fontSize) * chartK })) })),
@@ -311,13 +317,30 @@ def _displayed(px: float) -> float:
 
 
 @needs_browser
+def _is_line_name(w) -> bool:
+    return str(w.get("role", "")).endswith("tagchip")
+
+
 def test_every_word_on_the_card_is_at_the_phone_floor_as_displayed(cards):
+    """Every word but the line names is at the floor. The names are the ONE named departure (the fixes4 finding, MJ1):
+    on row 7's 652.8 x 367.2 card neither shape reaches the floor - stacked under their values the five tag lines
+    need ~304 px of ink in 213.5, inline they crush the plot to 22 px - so a name sits at CARD_NAME_MIN of the floor
+    and P69-HG3 reads it on a real phone. The next test pins exactly that, so the departure cannot grow unseen."""
     got = cards["card"]
     assert not got["errors"], got["errors"]
     assert got["card"], "the page is drawn under the card profile"
-    assert got["words"], "the card writes words"
-    small = min(got["words"], key=lambda w: w["px"])
+    words = [w for w in got["words"] if not _is_line_name(w)]
+    assert words, "the card writes words"
+    small = min(words, key=lambda w: w["px"])
     assert _displayed(small["px"]) >= FLOOR - TOL, (round(_displayed(small["px"]), 2), small)
+
+
+def test_a_line_name_is_the_one_word_under_the_floor_and_never_under_its_named_share(cards):
+    got = cards["card"]
+    names = [w for w in got["words"] if _is_line_name(w)]
+    assert names, "the two +21% lines carry their short names (the probe reads the tspans)"
+    for w in names:
+        assert _displayed(w["px"]) >= LPG.CARD_NAME_MIN * FLOOR - TOL, (round(_displayed(w["px"]), 2), w)
 
 
 @needs_browser
@@ -368,6 +391,23 @@ def test_the_end_tags_are_short_badges_in_their_lines_ink_and_the_card_keeps_its
         for b in boxes[i + 1:]:
             assert not (a[0] < b[0] + b[2] and b[0] < a[0] + a[2] and a[1] < b[1] + b[3] and b[1] < a[1] + a[3]), ("no label over another", a, b)
     assert any(w["text"] == "Two lines, one warning" for w in got["words"])
+
+
+@needs_browser
+def test_the_range_label_clears_the_end_tags_and_the_card_edge_and_a_restore_keeps_it(cards):
+    """REVIEW-P69-LANE-B-MERGE-4 N1 + N2: the range label is set from the first label's left edge, so it reaches far past
+    the first tick - under the end tags' column and toward the card's edge. It meets neither, and its settled x is the
+    mark's own geometry (lpRestoreState writes a mark back from `geom`: a restore must not snap it to the old centre)."""
+    got = cards["card"]
+    pad = LPG.CARD_PAD_PX * 1920 / CARD_W
+    tags = [w["box"] for w in got["words"] if w["role"] == "svg:sname"]
+    assert tags and got["xlabs"]
+    for lab in got["xlabs"]:
+        x, y, w, h = lab["box"]
+        assert x >= pad - 1 and x + w <= 1920 - pad + 1 and y + h <= 1080 - pad + 1, ("inside the card's margin", lab)
+        for b in tags:
+            assert not (x < b[0] + b[2] and b[0] < x + w and y < b[1] + b[3] and b[1] < y + h), ("never under an end tag", lab, b)
+        assert lab["gx"] == pytest.approx(lab["x"], abs=0.05), ("the mark's geometry is where the label stands", lab)
 
 
 @needs_browser
