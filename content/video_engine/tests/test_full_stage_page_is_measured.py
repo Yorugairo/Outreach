@@ -136,7 +136,13 @@ def test_the_fixture_measures_both_16x9_geometries_for_every_builder():
         assert full["ink"] == plain["ink"] == LPG.page_ink_key(MPB.representative(builder)), builder
         assert full["boxes"]["plot"]["w"] > plain["boxes"]["plot"]["w"], (
             f"{builder}: the full-stage plot is not wider than the column's - one of the two was not measured")
-        assert set(full["boxes"]) == set(LPG.BOX_KEYS), builder
+        # P69 T6d + fixes4: a full-stage entry may also carry `tag_boxes` - the LINE end tags' drawn rects, read only
+        # by the stamp's fit and only when the entry's `tag_ink` fingerprint matches; never a box of its own
+        extra = set(full["boxes"]) - set(LPG.BOX_KEYS)
+        assert extra <= {"tag_boxes"}, (builder, extra)
+        assert set(full["boxes"]) - extra == set(LPG.BOX_KEYS), builder
+        if extra:
+            assert full.get("tag_ink"), f"{builder}: tag_boxes without the tag_ink fingerprint that guards them"
         assert len(full["data_mask"]) == 16 and "1" in "".join(full["data_mask"]), builder
         assert sorted(full["axis"]) == ["x", "y"], builder
         assert {k: bool(v) for k, v in full["axis"].items()} == {k: bool(v) for k, v in plain["axis"].items()}, (

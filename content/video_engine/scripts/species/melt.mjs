@@ -1476,10 +1476,12 @@ export const MELT_CSS = ".world.meltink{background:transparent!important;pointer
   + ".meltboard .lp-page>" + MELT_BOARD_CLASSES.map((c) => ":not(." + c + ")").join("") + "{visibility:hidden!important}"
   /* the WORDS are not marks: the marks clone never draws them, and the text clone draws nothing else */
   + ".meltink .lp-ink,.meltink .lp-rail,.meltink .lp-chart line,.meltink .lp-chart text{visibility:hidden!important}"
+  + ".meltink .lp-key{visibility:hidden!important}"   /* P69 T10: the long form's key rail is words too */
   + ".world.melttext{background:transparent!important;pointer-events:none}"
   + ".melttext .lp-page{background:transparent!important}"
   + ".melttext .lp-page *{visibility:hidden!important}"
-  + ".melttext .lp-ink,.melttext .lp-ink *,.melttext .lp-rail,.melttext .lp-rail *,.melttext .lp-chart line,.melttext .lp-chart text,.melttext .lp-chart text *{visibility:visible!important}";
+  + ".melttext .lp-ink,.melttext .lp-ink *,.melttext .lp-rail,.melttext .lp-rail *,.melttext .lp-chart line,.melttext .lp-chart text,.melttext .lp-chart text *{visibility:visible!important}"
+  + ".melttext .lp-key,.melttext .lp-key *{visibility:visible!important}";
 
 /* the stage's box in the world's own px: `.world` overhangs the stage by 5% on every side */
 export const meltStageBox = (wA) => ({ x: wA.offsetWidth / 22, y: wA.offsetHeight / 22,

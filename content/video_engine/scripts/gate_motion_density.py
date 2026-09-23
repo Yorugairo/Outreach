@@ -228,7 +228,7 @@ VALUE_OVERSHOOT = 0.05     # (b) THE BURST'S OVERSHOOT (LPX.BT_OVER, mirrored he
                            # dials): during the shoot a breaking bar is drawn this much PAST its own number on purpose (E60)
                            # and settles back. It is a share of the bar's own height, so the band is the sum: 4 % of the top
                            # tick plus 5 % of the number printed. Anything outside that is the page lying about its data.
-LAYOUT_INK = ("page.source", "page.note", "page.title", "page.sub", "pill")   # a LINE of ink; `page.plot` / `page.chart` are
+LAYOUT_INK = ("page.source", "page.note", "page.title", "page.sub", "pill", "page.key")   # page.key: REVIEW-P69-LANE-B-MERGE-3 M2, a longform page's key rail   # a LINE of ink; `page.plot` / `page.chart` are
                            # rectangles the probe reports for context - a card beside a parked chart sits inside the plot box
                            # by design, and only the DATA in it is protected
 SAFE_WARN_SHARE = 0.10     # a settled card with more than a tenth of itself inside a Shorts chrome band (top 12 %, bottom 20 %,
@@ -1143,6 +1143,13 @@ def _target_box(tg: dict, sw: float, sh: float, plot: dict | None) -> dict | Non
     return None
 
 
+def _attn_scale(s: dict) -> float:
+    """P69 T26b: the landing pull's depth - the player's ATTN.SCALE, or the scene's `landing_zoom` where the compiler
+    clamped it to the page's reach on the row's word (`reach: "clamp"`); the player's landings branch reads the same."""
+    lz = (s.get("camera") or {}).get("landing_zoom")
+    return max(1.0, float(lz)) if isinstance(lz, (int, float)) and not isinstance(lz, bool) else ATTN_SCALE
+
+
 def camera_state_at(s: dict, t: float, sw: float, sh: float, plot: dict | None) -> dict:
     """{s, look, at} at t from the scene's authored keys - identity before the first, lerp by the arriving key's ease,
     hold after the last; species windows are the player's and are not evaluated here (their target is their centre)."""
@@ -1163,7 +1170,7 @@ def camera_state_at(s: dict, t: float, sw: float, sh: float, plot: dict | None) 
                     continue
                 a = _cam_ease("inout", (t - tc) / ATTN_IN) * (1 - _cam_ease("inout", (t - out_t) / ATTN_OUT))
                 c = (float(d["place"]["x"]) + float(d["place"]["w"]) / 2, float(d["place"]["y"]) + float(d["place"]["h"]) / 2)
-                st = {"s": 1 + (ATTN_SCALE - 1) * a, "look": c, "at": c}
+                st = {"s": 1 + (_attn_scale(s) - 1) * a, "look": c, "at": c}
         return st
     K = []
     for k in keys:
@@ -2287,6 +2294,7 @@ def _layout_faults(doc: dict) -> tuple[list[str], list[str]]:
 
 def _ink_name(key: str) -> str:
     return {"page.source": "the page's source line", "page.note": "a note", "page.title": "the title", "page.sub": "the sub",
+            "page.key": "the key rail",
             "pill": "a pill", "chart.lab": "an axis label", "chart.val": "a value", "chart.callout": "a callout",
             "chart.sname": "a series name", "chart.bklab": "a bracket label", "chart.bksub": "a bracket's sub line",
             "chart.spanlab": "a span's label", "chart.wlab": "a wedge label"}.get(key, key)

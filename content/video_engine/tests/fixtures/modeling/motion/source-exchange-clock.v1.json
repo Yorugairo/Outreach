@@ -1,0 +1,30 @@
+{
+  "provenance": {
+    "path": "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/source-short/ufc-sharaf-steveson-high.mkv",
+    "sha256": "c162dcb7e7a11336c5b0bd3b29d51ecbf2f8cd5a49f90a3b851775165da64758",
+    "source_fps": {"numerator": 30, "denominator": 1},
+    "observation": "Visual source review: first right-hand contact is near frames 10-11; left hook touches at frame 24; receiving head snap is visible at frame 25. Ground contact is occluded and not authored as an exact event. This is timing reference, not injury or force evidence."
+  },
+  "scene": {
+    "scene_id": "sharaf-steveson-source-clock-review",
+    "duration_frames": 105,
+    "fps": {"numerator": 30, "denominator": 1},
+    "time_origin": {"scene_time_seconds": {"numerator": 0, "denominator": 1}},
+    "events": [
+      {"event_id": "left-hook-contact", "event_type": "observed_contact", "frame": 24, "binding_id": "sharaf"},
+      {"event_id": "head-snap", "event_type": "observed_recoil", "frame": 25, "binding_id": "steveson"}
+    ],
+    "contacts": [
+      {
+        "contact_id": "left-hand-to-head",
+        "actor_binding_id": "sharaf",
+        "semantic_effector": "left_hand",
+        "target_binding_id": "steveson",
+        "start_frame": 24,
+        "end_frame": 25,
+        "target_semantic_joint": "head"
+      }
+    ],
+    "motion_channels": []
+  }
+}

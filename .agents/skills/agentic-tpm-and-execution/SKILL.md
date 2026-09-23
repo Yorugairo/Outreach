@@ -1,30 +1,20 @@
 ---
 name: agentic-tpm-and-execution
-description: Use before beginning any coding task to act as a Technical Product Manager. Enforces requirements gathering, context optimization, sprint translation, and verification-first execution based on 2026 agentic best practices.
+description: Frame an unplanned, multi-slice coding request when acceptance, ownership, or verification is still unclear. Skip for bounded work orders and approved PRPs; use their existing execution route.
 ---
 
-# Agentic TPM & Execution Protocols (2026)
+# Task Framing for Unplanned Work
 
-When tasked with a new feature, bug fix, or architectural change, you must operate as a Technical Product Manager (TPM) before writing any code. Follow this Markdown-driven protocol to ensure clean execution and protect your context window.
+Use this skill only when a coding request still needs a decision about scope, acceptance, ownership, or verification before implementation. It is not a mandatory preflight for every code change.
 
-## 1. Requirements & Architecture Alignment
-Before writing code, verify the request against the project's source of truth:
-- Check `docs/features/FEATURE_MAP.md` to ensure the feature doesn't violate existing product boundaries.
-- Check `docs/runbooks/PRE_STAGING_BLOCKER_REGISTER.md` for performance and acceptance criteria.
-- **Define AC:** Explicitly define the Acceptance Criteria (AC) and Anti-Goals (what is out of scope) in your temporary `task.md` or the active sprint tracker.
+## Route first
 
-## 2. Markdown-Driven State Tracking
-Do not rely on chat history to remember complex states.
-- Translate user requests into atomic tasks within the repository's active tracker (e.g., updating the P0/P1/P2 tables in `Consultant input/SPRINT_BACKLOG.md` or a dedicated Sprint file).
-- Mark tasks as `[ ]`, `[/]`, or `[x]` (or update emojis like `❓` to `✅`) as you execute.
+- If an approved PRP or bounded agent work order already states the outcome, write set, acceptance, and tests, follow it directly. Do not reopen requirements, create a second task tracker, or block on this skill's planning checks. Use the project's PRP execution route where applicable.
+- For an unplanned request, consult the project's actual entrypoint and router, then identify only the unresolved decisions that would change implementation. Ask the user only for consequential choices that cannot be resolved from the repository or existing rulings.
+- Treat named document paths in examples or older plans as conditional references. Check that a document exists and is relevant before opening it. A missing optional planning document is a setup note, not an implementation failure or a reason to create a replacement.
 
-## 3. Atomic Execution (Context Optimization)
-Protect your context window from bloat:
-- **One PR, One Story:** Execute one isolated feature or file change at a time. Never attempt a full-stack rewrite in a single turn.
-- **Targeted Edits:** Use precise `grep_search` and `multi_replace_file_content` instead of dumping massive files into your context window.
-- **Subagent Delegation:** If a task requires crawling the entire codebase or extensive documentation reading, spawn a background `research` subagent to gather the information and summarize it for you.
+## Produce the smallest executable order
 
-## 4. Verification & Reflection Patterns
-Treat AI-generated code as untrusted until verified.
-- **Verification First:** Before making a change, determine how you will prove it works.
-- **Reflect:** After writing code, run the relevant checks (e.g., `npm run test:security`, `npm run lint:src`, or typechecks) to verify your work *before* handing the turn back to the user. Do not assume your code works on the first try.
+Record the intended outcome, acceptance evidence, anti-goals, owner/write set, relevant source paths, verification commands, and any real human gate in the project's existing plan or tracker. Reuse an active record rather than mirroring it into a generic `task.md` or backlog. A one-file fix may need only a short work order; a multi-slice change may need a PRP.
+
+Then implement or dispatch against that order. Verify the artifact and behavior before claiming completion. Count a failed attempt when the bounded task actually fails, not when a nonessential discovery lookup finds no file. Preserve the original permissions and approval gates across retries.

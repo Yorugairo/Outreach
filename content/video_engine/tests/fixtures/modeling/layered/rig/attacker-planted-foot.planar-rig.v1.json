@@ -1,0 +1,22 @@
+{
+  "schema_version": "planar_rig.v1",
+  "review_state": "review_only",
+  "render_eligible": false,
+  "diagnostic_only": true,
+  "scene_id": "knockout-authored-layers",
+  "layer_id": "fighter-a",
+  "binding_id": "fighter_a",
+  "contact_id": "attacker-planted-foot",
+  "semantic_effector": "left_foot",
+  "target_binding_id": "environment",
+  "target_surface_id": "mat-floor",
+  "joint_unit": "layer_local_px",
+  "target_unit": "canvas_px",
+  "rest_joints_local_px": {
+    "root": [-21, -69],
+    "hinge": [-46, -38],
+    "end": [-34, -3]
+  },
+  "bend_sign": 1,
+  "target_canvas_px": [81.2, 515.4]
+}

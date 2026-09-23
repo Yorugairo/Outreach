@@ -296,6 +296,29 @@ def readability_error(page: dict, value: Any, builder: str) -> str | None:
     return None
 
 
+# P69 T10b (the operator, 2026-09-22, on the T6 frames: "I think it should also have some sort of rounded edges, maybe
+# shadows"; AMENDED the same day: the shadow is the prop's own cross-hatch, T6b v2): `;bar_style=soft` - every bar of a
+# bars page gets ROUNDED SHOULDERS (its two corners away from zero; the two on zero stay square, so a bar still stands
+# on its baseline) and a HATCHED SHADOW cast from the one stage light (the player's `LPBAR_SOFT` and `PROP_SHADOW`).
+# A row option, legal on the bars (`story`) builder only, and never beside `;form=extruded_bar` - the prism is the 3D
+# bar; soft is weight on the flat one. Absent, a page is byte-identical.
+BAR_STYLES = ("soft",)
+BAR_STYLE_BUILDERS = ("story",)
+
+
+def bar_style_error(page: dict, value: Any, builder: str) -> str | None:
+    """Is ``value`` a bar style THIS page can take? The message, or None. Pure."""
+    if value not in BAR_STYLES:
+        return f"bar_style {value!r} is not one of {'|'.join(BAR_STYLES)}"
+    if builder not in BAR_STYLE_BUILDERS:
+        return (f"bar_style={value} is how a BARS page draws its bars (the {'|'.join(BAR_STYLE_BUILDERS)} builder); "
+                f"this page uses {builder!r}")
+    if ((page.get("form") or {}).get("kind")) == "extruded_bar":
+        return (f"bar_style={value} and form=extruded_bar are two bars on one page - the prism is the 3D bar, soft is "
+                "weight on the flat one. Keep one")
+    return None
+
+
 def validate(series: dict, variant: str) -> list[str]:
     """Error strings; empty means the series is a page for this variant. Pure."""
     errors: list[str] = []
@@ -1608,7 +1631,7 @@ LONGFORM_ADV_CHARS = (" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVW
                       "‘’“”–—·•…é€£¥×→°½")
 LONGFORM_ADV_UPM = 2048
 LONGFORM_OPSZ = (14.0, 32.0)
-LONGFORM_WEIGHT = {"title": 700, "sub": 400, "source": 400}
+LONGFORM_WEIGHT = {"title": 700, "sub": 400, "source": 400, "key": 500}   # P69 T10: the key pill's name is Inter Medium (the spec's pill)
 LONGFORM_ADVANCES = {   # (weight, opsz) -> the advance of each LONGFORM_ADV_CHARS character, in font units
     (400, 14): tuple(int(v) for v in (
         "576 589 954 1297 1314 2011 1319 614 747 747 1026 1355 590 942 590 738 1292 833 1249 1265 1323 1215 1270 1159 1267 1270 590 618 1355 1355 1355 1047 "
@@ -1625,6 +1648,16 @@ LONGFORM_ADVANCES = {   # (weight, opsz) -> the advance of each LONGFORM_ADV_CHA
         "2081 1529 1355 1515 1479 1244 1202 1537 1530 575 1197 1473 1158 1908 1561 1578 1327 1591 1345 1341 1367 1499 1529 2125 1512 1497 1360 772 795 772 997 975 "
         "748 1189 1291 1205 1291 1220 815 1294 1275 555 555 1188 555 1869 1275 1256 1291 1291 834 1147 750 1275 1228 1741 1188 1233 1173 960 761 960 1390 636 "
         "636 1106 1089 1024 2048 684 971 2052 1220 1402 1308 1168 1390 1954 941 1805").split()),
+    (500, 14): tuple(int(v) for v in (   # P69 T10: the key pill's Medium, read the same way
+        "546 623 1012 1308 1323 2034 1338 641 755 755 1066 1367 621 947 621 757 1322 850 1262 1284 1344 1235 1290 1170 1289 1290 621 646 1367 1367 1367 1080 "
+        "2012 1452 1345 1502 1478 1235 1207 1531 1525 558 1178 1408 1158 1869 1549 1570 1314 1574 1327 1323 1337 1516 1452 2054 1435 1426 1312 755 757 755 976 948 "
+        "690 1163 1266 1182 1266 1203 777 1269 1232 516 516 1145 516 1819 1232 1237 1266 1266 792 1103 697 1232 1177 1698 1141 1178 1145 902 708 902 1367 568 "
+        "568 970 964 1024 2048 621 1092 1864 1203 1377 1270 1140 1367 1954 936 1758").split()),
+    (500, 32): tuple(int(v) for v in (
+        "488 468 873 1245 1284 1792 1272 532 634 634 1006 1304 467 889 467 692 1281 761 1175 1240 1292 1197 1219 1079 1214 1219 467 472 1304 1304 1304 1103 "
+        "2017 1379 1311 1482 1420 1206 1154 1500 1457 494 1114 1334 1111 1781 1464 1533 1266 1533 1307 1284 1267 1441 1374 1976 1357 1348 1270 634 692 634 913 944 "
+        "531 1084 1180 1093 1180 1115 671 1180 1146 449 449 1068 449 1749 1146 1146 1180 1180 695 1003 676 1146 1077 1585 1059 1077 1010 825 641 825 1304 415 "
+        "415 758 754 1024 2048 467 975 1401 1115 1317 1211 1079 1304 1896 875 1592").split()),
     (700, 32): tuple(int(v) for v in (
         "439 505 967 1280 1336 1920 1325 556 679 679 1097 1341 501 911 501 745 1332 798 1226 1269 1345 1229 1264 1126 1258 1264 501 505 1341 1341 1341 1162 "
         "2062 1461 1320 1487 1436 1245 1191 1507 1471 530 1151 1404 1140 1831 1485 1531 1293 1531 1332 1336 1301 1442 1445 2041 1428 1413 1299 679 745 679 948 973 "
@@ -1648,8 +1681,120 @@ LONGFORM_PILLS_PER_ROW = 4
 LONGFORM_ASCENT, LONGFORM_DESCENT = 1984 / 2048, 494 / 2048
 # An END TAG that will not fit the stage at its preset gives up its long name for its badge (the value and the short
 # chip), then for its value alone - never a refusal (the parent, 2026-09-23). The long names belong in a key: that is
-# P69 T10's badge key, not built here; the spec keeps every name for it.
+# P69 T10's badge key (below); the spec keeps every name for it.
 LONGFORM_TAG_FORMS = ("full", "badge", "value")
+# P69 T9 (3) (E99 s90: "x-tick labels must clear the axis line (main measured 18 px, T17 measured 0 px)"): a longform
+# page's x labels - a line page's ticks, a bars page's names - stand with their box's top this far under the panel's
+# foot line (its border, LONGFORM_BORDER_PX, the engine's LP_LONGFORM.BORDER_PX) [DERIVED: main's measured 18 px and
+# two for the rendered box's rounding; T8's page measured 7].
+LONGFORM_XLAB_CLEAR_PX = 20.0
+LONGFORM_BORDER_PX = 1.5
+# P69 T10 (E99 s90 "apply badges as the key"; E99 s84 "prefer to land on even pills (2 or 4)") - THE KEY RAIL. A line
+# page whose end tags gave up their long names (`tag_form` badge or value) writes those names on a KEY: one pill per
+# series, the Bravos category pill (BRAVOS-LONGFORM-CHART-SPEC.md (b) `category_pill`, t1088: a white capsule 40 px
+# tall, r = h/2, a 15 px cap in #1E1F22 Inter 500, a 10 px dot on its left end) with the dot in the SERIES' own line
+# colour, scaled to the preset. It stands in the page's TOP BAND - Bravos's own legend band (t170 / t1078), between the
+# sub and the plot - hugging the chart's top ink with M28's half-figure of air, and when that band is too short the
+# chart moves down to make it (the right margin is the end tags', and the stack under the chart is N1's source and
+# rail over the caption strip). The key is ONE ROW, as Bravos's legend band is: set at the preset's size when its pills
+# fit one row of the ink column, else at the largest size that does (the compiler fits it, as it fits the end tags:
+# `axes.key_px`) - never under the spec's own pill (LONGFORM_KEY_MIN_PX), where a longer key wraps, greedily, as the
+# browser's flex row does. At `phone` a key of long names therefore sets under s90's floor (the stage has no room for
+# four of them at 61 px and a readable plot: the P69-HG3 card says so).
+#   LONGFORM_KEY_PX  the pill's type, a FONT SIZE in rendered px [DERIVED: bravos, the spec's 15 px cap / Inter's 0.727
+#                    cap ratio; middle, the preset's own chip (24); phone, E99 s90's floor at the preset's own 61.4].
+#   LONGFORM_KEY_EM  the pill's box in ems of that size: h and the dot from the spec (40 / 20.6, 10 / 20.6), the pads
+#                    and gaps [DERIVED: t1088's pill read at x5 - the dot a half-dot in from the left end, the name a
+#                    dot's width after it].
+# Every pill springs on recipe:badge-ladder's own clock (FIRST_BADGE_S 2.05 s after the chart has built, then
+# BADGE_GAP_S 1.30 apart - the engine's LP_LONGFORM.KEY_FIRST / KEY_STEP). The key lands on an EVEN pill count where
+# the series allow: an odd key takes one more of the page's lines, one whose end tag kept its own name - never an
+# invented pill, so three shortened lines and nothing else to key stay three.
+LONGFORM_KEY_PX = {"bravos": 20.6, "middle": 24.0, "phone": 61.4}
+LONGFORM_KEY_EM = {"h": 40 / 20.6, "dot": 10 / 20.6, "pad_l": 0.55, "dot_gap": 0.4, "pad_r": 0.7, "gap": 0.5,
+                   "row_gap": 0.35}
+LONGFORM_KEY_MIN_PX = LONGFORM_KEY_PX["bravos"]   # the spec's measured pill: the key never sets smaller
+LONGFORM_KEY_FIT_PX = 2.0   # the one-row fit's margin inside the column [DERIVED: the browser's sub-pixel layout]
+LONGFORM_KEY_CLOCK = (2.05, 1.30)   # recipe:badge-ladder: FIRST_BADGE_S, BADGE_GAP_S
+KEY_BOX = "key"   # page_boxes' key for the key rail's box (a longform page with a key only)
+
+
+def longform_key(spec: dict) -> list[dict]:
+    """The key rail's pills for a longform dense-line page: ``[{"series": i, "name": full name}]`` in the series' own
+    order - every live series whose end tag gave up its name (`tag_form` badge or value, a label AND a name), then, if
+    that is an odd count, the first other live series that names itself (the even pill count, E99 s84). ``[]`` when the
+    tags keep their names."""
+    axes = spec.get("axes") or {}
+    if spec.get("builder") != "dense-line" or axes.get("tag_form") in (None, "full"):
+        return []
+    live = [(i, s) for i, s in enumerate(spec.get("series") or []) if isinstance(s, dict) and not s.get("muted")]
+
+    def text(s: dict) -> str:
+        return str(s.get("name") or s.get("label") or "").strip()
+
+    keyed = {i for i, s in live if str(s.get("label") or "").strip() and str(s.get("name") or "").strip()}
+    if len(keyed) % 2:
+        extra = next((i for i, s in live if i not in keyed and text(s)), None)
+        if extra is not None:
+            keyed.add(extra)
+    return [{"series": i, "name": text(s)} for i, s in live if i in keyed]
+
+
+def longform_key_pill_w(name: str, px: float) -> float:
+    """One key pill's width in rendered px at the key's size `px`: its pads, its dot and its name's Medium advances (the
+    engine sets the pill with no kerning or ligatures, so the name's width IS the sum of its advances)."""
+    em = LONGFORM_KEY_EM
+    return longform_text_px(name, "key", px) + (em["pad_l"] + em["dot"] + em["dot_gap"] + em["pad_r"]) * px
+
+
+def _longform_key_row(key: list, px: float) -> float:
+    """The key's pills in one row at `px`, rendered px wide."""
+    return sum(longform_key_pill_w(k["name"], px) for k in key) + LONGFORM_KEY_EM["gap"] * px * (len(key) - 1)
+
+
+def longform_key_px(spec: dict, w_s: int = 1920) -> float:
+    """The size the key is set in: the preset's own when its pills fit one row of the ink column, else the largest
+    size (to the tenth of a px) at which they do, never under LONGFORM_KEY_MIN_PX."""
+    key = (spec.get("axes") or {}).get("key") or []
+    px0, room = LONGFORM_KEY_PX[longform_preset(spec)], _longform_ink_col(w_s)[1] - LONGFORM_KEY_FIT_PX
+    if not key or _longform_key_row(key, px0) <= room:
+        return px0
+    lo, hi = min(LONGFORM_KEY_MIN_PX, px0), px0
+    if _longform_key_row(key, lo) > room:
+        return lo
+    for _ in range(40):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if _longform_key_row(key, mid) <= room else (lo, mid)
+    return math.floor(lo * 10) / 10
+
+
+def longform_key_box(spec: dict, col_w: float) -> tuple[float, float]:
+    """The key rail's (w, h) in rendered px in an ink column `col_w` wide: the pills wrapped greedily into rows (the
+    browser's flex-wrap), the box as wide as its one row or the column. (0, 0) when the page has no key.
+    REVIEW-P69-LANE-B-MERGE-3 M1: a page whose `then=` states key more than it does carries the band they need
+    (`axes.key_w` / `key_h`, apply_longform_states) - its key box is the larger of the two."""
+    axes = spec.get("axes") or {}
+    w, h = _longform_key_own(spec, col_w)
+    return max(w, float(axes.get("key_w") or 0.0)), max(h, float(axes.get("key_h") or 0.0))
+
+
+def _longform_key_own(spec: dict, col_w: float) -> tuple[float, float]:
+    """The (w, h) of this spec's OWN key, wrapped in the column; (0, 0) when it has none."""
+    axes = spec.get("axes") or {}
+    key = axes.get("key") or []
+    if not key:
+        return 0.0, 0.0
+    px, em = float(axes.get("key_px") or LONGFORM_KEY_PX[longform_preset(spec)]), LONGFORM_KEY_EM
+    gap = em["gap"] * px
+    rows, run = 1, 0.0
+    for k in key:
+        w = longform_key_pill_w(k["name"], px)
+        if run and run + gap + w > col_w + 0.5:
+            rows, run = rows + 1, w
+        else:
+            run = run + gap + w if run else w
+    one_row = sum(longform_key_pill_w(k["name"], px) for k in key) + gap * (len(key) - 1)
+    return min(one_row, col_w), rows * em["h"] * px + (rows - 1) * em["row_gap"] * px
 
 
 def parse_readability(value: Any) -> tuple[str, str | None] | None:
@@ -1664,23 +1809,30 @@ def parse_readability(value: Any) -> tuple[str, str | None] | None:
     return None
 
 
+def longform_preset(spec: dict) -> str:
+    """The preset a longform page is set in."""
+    preset = (spec.get("axes") or {}).get("type_scale")
+    return preset if preset in LONGFORM_TYPE_SCALE else LONGFORM_DEFAULT_PRESET
+
+
 def longform_type(spec: dict) -> dict:
     """The preset's sizes (rendered px) a longform page is set in."""
-    preset = (spec.get("axes") or {}).get("type_scale")
-    return LONGFORM_TYPE_SCALE[preset if preset in LONGFORM_TYPE_SCALE else LONGFORM_DEFAULT_PRESET]
+    return LONGFORM_TYPE_SCALE[longform_preset(spec)]
 
 
 def longform_geom(t: dict, top: float, bot: float, floor: float | None = None) -> dict:
     """The chart-unit geometry a longform chart is drawn in, for a chart box from `top` to `bot` (rendered px): the
-    engine's `lpLongformGeom`, line for line. The x ticks and the bar names hang half a figure under the plot, and the
-    plot's floor rises until they clear `floor` - the anchored caption's strip, or (N1) the source line when the
-    stack under the chart stands above the strip (`longform_stack`)."""
+    engine's `lpLongformGeom`, line for line. The x ticks and the bar names hang under the plot with their box's top
+    LONGFORM_XLAB_CLEAR_PX clear of the panel's foot line (P69 T9 (3), E99 s90: "x-tick labels must clear the axis
+    line" - main measured 18 px, T17 0, T8's page 7), and the plot's floor rises until they clear `floor` - the anchored
+    caption's strip, or (N1) the source line when the stack under the chart stands above the strip (`longform_stack`)."""
     s = (bot - top) / LAND_VIEWBOX[1]
     tick, cap_u = t["tick"] / s, ((LONGFORM_STRIP[0] if floor is None else floor) - top) / s
-    return {"scale": s, "tick": tick, "plot_l": max(70.0, 12 + 2.3 * tick),
-            "line_b": min(458.0, cap_u - 5 - 1.5 * tick), "xtick_dy": 1.25 * tick,
-            "gutter": max(60.0, 40 + 2.6 * tick), "xlab_dy": 1.25 * tick,
-            "bars_b": min(440.0, cap_u - 5 - 2.65 * tick),
+    xlab = LONGFORM_ASCENT * tick + (LONGFORM_XLAB_CLEAR_PX + LONGFORM_BORDER_PX / 2) / s   # T9 (3): the label's box top
+    return {"scale": s, "tick": tick, "plot_l": max(70.0, 12 + 2.3 * tick),                  # clears the panel's foot
+            "line_b": min(458.0, cap_u - 5 - xlab - LONGFORM_DESCENT * tick), "xtick_dy": xlab,
+            "gutter": max(60.0, 40 + 2.6 * tick), "xlab_dy": xlab,
+            "bars_b": min(440.0, cap_u - 5 - xlab - 1.4 * tick),
             "ylab_gap": LONGFORM_YLAB_GAP_PX / s, "rule_dy": (8 + 0.25 * t["tag"]) / s}
 
 
@@ -1751,6 +1903,13 @@ def apply_longform(page: dict, preset: str | None = None) -> dict:
         axes["tag_form"] = longform_tag_form(page, axes["type_scale"]) or "value"
     else:
         axes.pop("tag_form", None)
+    key = longform_key(page)   # P69 T10: the names the end tags gave up, and the size their one row is set in
+    axes.pop("key_px", None)
+    if key:
+        axes["key"] = key
+        axes["key_px"] = longform_key_px(page)
+    else:
+        axes.pop("key", None)
     return page
 
 
@@ -1769,11 +1928,32 @@ def apply_longform_states(page: dict, states: list) -> str | None:
         if state.get("builder") == "dense-line" and longform_tag_form(state, preset) is None:
             return (f"then= state {i + 1} cannot keep even its end values inside the 16:9 stage at "
                     f"readability={LONGFORM}:{preset} (a value alone is the shortest end tag there is)")
-        apply_longform(state, preset)
+        apply_longform(state, preset)   # REVIEW-P69-LANE-B-MERGE-3 M1: a state keeps ITS key - the names ITS tags gave up
         if state.get("builder") == "dense-line":
             room = max(room, longform_tag_px(state, t, state["axes"]["tag_form"]))
     if page.get("builder") == "dense-line" and room > longform_tag_px(page, t, axes.get("tag_form") or "full"):
         page["axes"]["tag_room"] = math.ceil(room * 10) / 10   # up to the tenth: the page's viewBox never grows past a state's fit
+    # ... and every key stands in ONE band over the chart (the recast swaps the key, never the chart's box): the page
+    # reserves the tallest - written only when a state's key needs more than the page's own, so every other page is
+    # the page it was
+    page["axes"].pop("key_w", None)
+    page["axes"].pop("key_h", None)
+    page["axes"].pop("state_ink", None)
+    col = _longform_ink_col()[1]
+    own_w, own_h = _longform_key_own(page, col)
+    band = [(own_w, own_h)] + [_longform_key_own(s, col) for s in states if isinstance(s, dict)]
+    band_w, band_h = max(b[0] for b in band), max(b[1] for b in band)
+    if band_h > own_h + 1e-9:
+        page["axes"]["key_w"] = math.ceil(band_w * 10) / 10
+        page["axes"]["key_h"] = math.ceil(band_h * 10) / 10
+    # ... and the key stands over EVERY chart's top ink, not only the page's own: a state that writes higher (a line's
+    # plot over a bars page's, a y label) carries what it writes, so the band clears it (a keyed page only)
+    if band_h > 0:
+        own_ink = longform_state_ink(page)
+        extra = [longform_state_ink(s) for s in states if isinstance(s, dict)]
+        extra = [i for i in extra if i != own_ink]
+        if extra:
+            page["axes"]["state_ink"] = extra
     return None
 
 
@@ -1796,10 +1976,12 @@ def longform_stack(bot: float, src_h: float, rail_h: float, h_s: int = 1080) -> 
 
 
 def longform_chart_box(spec: dict, t: dict, sub_bottom: float, src_h: float, rail_h: float = 0.0,
-                       h_s: int = 1080) -> dict:
+                       h_s: int = 1080, key_h: float = 0.0) -> dict:
     """The longform chart box in rendered px - `top`, `bot` - and what stands under it (`src_y`, `rail_y`, the `floor`
     its ticks clear): the engine's `lpLongformBox`, line for line. The foot is the full-stage box's, raised (N1) to the
-    first of: the source standing above the caption strip, then the source and the rail both above it."""
+    first of: the source standing above the caption strip, then the source and the rail both above it. P69 T10: a key
+    `key_h` tall stands in the top band (`key_y`), M28's air under the sub and over the chart's top ink - the chart
+    moves down to make that room, never the key onto the sub."""
     top0, bot0 = LAND_FULL["Y"] * h_s, (LAND_FULL["Y"] + LAND_FULL["H"]) * h_s
     g_src, g_rail = LAND_SRC_GAP * PUNCH_SCALE * h_s, LAND_RAIL_GAP * PUNCH_SCALE * h_s
     cands = (bot0, LONGFORM_STRIP[0] - g_src - src_h,
@@ -1812,12 +1994,36 @@ def longform_chart_box(spec: dict, t: dict, sub_bottom: float, src_h: float, rai
     bot = stack["bot"]
     tu, vh = LONGFORM_PLOT_T.get(str(spec.get("builder")), LONGFORM_PLOT_T["story"]), LAND_VIEWBOX[1]
     axes = spec.get("axes") or {}
-    rules = [h for h in (axes.get("hlines") or ([axes["hline"]] if axes.get("hline") else [])) if isinstance(h, dict) and h.get("label")]
-    above = max(0.5 * t["tick"], LONGFORM_YLAB_GAP_PX + t["tick"] if axes.get("ylabel") else 0.0,   # a label's box
-                8 + 1.25 * t["tag"] if rules else 0.0)                                               # reaches ~1 em up
-    need = sub_bottom + 0.5 * t["tick"] + above
-    top = top0 if top0 + tu * (bot - top0) / vh >= need else (need - tu * bot / vh) / (1 - tu / vh)
-    return dict(stack, top=top)
+    band = key_h + 0.5 * t["tick"] if key_h > 0 else 0.0   # P69 T10: the key and M28's air under it
+    base = sub_bottom + 0.5 * t["tick"] + band
+    # REVIEW-P69-LANE-B-MERGE-3 M1: every chart the page can become stands in this box, each with its OWN plot top and
+    # the ink above it (`axes.state_ink`) - the box clears the highest of them, and the key stands over that one
+    reach = _longform_reaches(spec, t)
+    top = max([top0] + [(base + above - tu_i * bot / vh) / (1 - tu_i / vh) for tu_i, above in reach])
+    key_y = top + min(tu_i * (bot - top) / vh - above for tu_i, above in reach) - 0.5 * t["tick"] - key_h
+    return dict(stack, top=top, key_y=key_y)
+
+
+def _longform_above(t: dict, ylabel: bool, rules: bool) -> float:
+    """The ink a chart carries above its plot top, rendered px: half a tick, the y label's row, a rule's name."""
+    return max(0.5 * t["tick"], LONGFORM_YLAB_GAP_PX + t["tick"] if ylabel else 0.0,   # a label's box
+               8 + 1.25 * t["tag"] if rules else 0.0)                                    # reaches ~1 em up
+
+
+def longform_state_ink(spec: dict) -> dict:
+    """What moves a chart's top ink: its builder's plot top (viewBox units) and whether it writes a y label or a named
+    rule above the plot. The shape `axes.state_ink` carries per `then=` state (M1)."""
+    axes = spec.get("axes") or {}
+    rules = any(isinstance(h, dict) and h.get("label") for h in (axes.get("hlines") or ([axes["hline"]] if axes.get("hline") else [])))
+    return {"tu": float(LONGFORM_PLOT_T.get(str(spec.get("builder")), LONGFORM_PLOT_T["story"])),
+            "ylabel": bool(axes.get("ylabel")), "rules": rules}
+
+
+def _longform_reaches(spec: dict, t: dict) -> list[tuple[float, float]]:
+    """(plot top in viewBox units, ink above it in rendered px) for the page and each state it names."""
+    own = longform_state_ink(spec)
+    inks = [own] + [s for s in ((spec.get("axes") or {}).get("state_ink") or []) if isinstance(s, dict)]
+    return [(float(i["tu"]), _longform_above(t, bool(i.get("ylabel")), bool(i.get("rules")))) for i in inks]
 
 
 def longform_text_px(text: str, role: str, px: float) -> float:
@@ -1857,6 +2063,15 @@ def _longform_rail_h(spec: dict) -> float:
     return rows * LONGFORM_PILL_PX + max(0, rows - 1) * LONGFORM_PILL_GAP_PX
 
 
+def _longform_ink_col(w_s: int = 1920) -> tuple[float, float]:
+    """The longform page's ink column in rendered px: its left edge (the title's) and its width (to the stage's safe
+    right edge) - the column the title, sub and source wrap in and the key rail's row fills."""
+    bx, by, bw, _bh = LAND_BOARD
+    vx = bx + bw / 2 - 0.5 / PUNCH_SCALE
+    ink_x = _punch_pt(max(bx + 0.027, vx + 0.03)) * w_s
+    return ink_x, LAND_PHONE_SAFE_RIGHT * w_s - ink_x
+
+
 def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     """A longform page's boxes, ESTIMATED the way the engine lays it out (the fixture measures and outranks it; N3:
     held to the engine's own boxes at every preset by `test_longform_profile` and `test_page_boxes`)."""
@@ -1864,7 +2079,7 @@ def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     bx, by, bw, bh = LAND_BOARD
     half = 0.5 / PUNCH_SCALE
     vx, vy = bx + bw / 2 - half, by + bh / 2 - half
-    ink_x = _punch_pt(max(bx + 0.027, vx + 0.03)) * w_s
+    ink_x = _longform_ink_col(w_s)[0]
     title_frac = round(max(by + 0.024, vy + 0.035) * 100, 2) / 100   # the engine writes the title's top toFixed(2) %
     title_y = _punch_pt(title_frac) * h_s
     ink_w = LAND_PHONE_SAFE_RIGHT * w_s - ink_x
@@ -1882,8 +2097,10 @@ def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     sub_y = rend(sub_top)
     sub_bottom = rend(sub_top + whole(css_h["sub"])) if lines["sub"] else rend(title_top + whole(css_h["title"]))
     rail_h = _longform_rail_h(spec)
+    key_w, key_h = longform_key_box(spec, ink_w)   # P69 T10: the key rail, measured by the engine off its whole CSS px
+    key_h = whole(key_h / PUNCH_SCALE) * PUNCH_SCALE
     box = longform_chart_box(spec, t, sub_bottom, whole(css_h["source"]) * PUNCH_SCALE,
-                             whole(rail_h / PUNCH_SCALE) * PUNCH_SCALE, h_s)
+                             whole(rail_h / PUNCH_SCALE) * PUNCH_SCALE, h_s, key_h)
     top, bot = box["top"], box["bot"]
     g = longform_geom(t, top, bot, box["floor"])
     s, cx, tu = g["scale"], LAND_FULL["X"] * w_s, LONGFORM_PLOT_T["dense-line" if dense else "story"]
@@ -1896,7 +2113,7 @@ def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
         left = max(g["gutter"], float((spec.get("axes") or {}).get("left_gutter") or 0)) - 20
         floor, foot = g["bars_b"], g["bars_b"] + g["xlab_dy"] + 1.4 * g["tick"]
     ylab = LONGFORM_YLAB_GAP_PX + LONGFORM_ASCENT * t["tick"] if (spec.get("axes") or {}).get("ylabel") else 0.0
-    return {
+    out = {
         "title": _box(ink_x, title_y, ink_w, title_h),
         "sub": _box(ink_x, sub_y, ink_w, sub_h),
         "chart": _box(cx, top, vw * s, bot - top),
@@ -1905,6 +2122,9 @@ def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
         "rail": _box(ink_x, box["rail_y"], ink_w, rail_h),
         "tags": _box(cx + (vw - LAND_PLOT["R"] * LAND_VIEWBOX[0] + LAND_TAG_GAP) * s, top + tu * s, tags_u * s, (floor - tu) * s),
     }
+    if key_h > 0:
+        out[KEY_BOX] = _box(ink_x, box["key_y"], key_w, key_h)
+    return out
 
 def _readability_profile(spec: dict) -> str | None:
     """The page-scoped profile carried by the dense page's axes, if any."""
@@ -2014,6 +2234,8 @@ PAGE_BOXES_FIXTURE = _REPO / "content/video_engine/assets/page-boxes.v1.json"
 PAGE_BOXES_SCHEMA = "page_boxes.v1"
 BOX_KEYS = ("title", "sub", "chart", "plot", "source", "rail")
 TAGS_KEY = "tags"   # R26-205: the end tag column, on a full-stage page only (the fixture measures the six above)
+TAG_BOXES_KEY = "tag_boxes"   # P69 T6d: on a MEASURED full-stage page, each end tag at its drawn rect (the fixture's own)
+TAG_INK_KEY = "tag_ink"       # REVIEW-P69-LANE-B-MERGE-4 MN3: ... and, on the entry, the tags those rects were measured for (`tag_ink`)
 INK_KEYS = ("builder", "title", "sub", "source", "quiet_zone")
 # Kept as a descriptive alias for callers that name the variant.  The fixture's
 # actual key is the main lane's geometry key, ``16:9|full_stage``.
@@ -2059,13 +2281,35 @@ def page_ink_key(spec: dict) -> str:
     readability = (spec.get("axes") or {}).get("readability")
     if readability is not None:
         ink["readability"] = readability
-    for key in ("type_scale", "tag_form", "tag_room"):   # P69 T8: the long form's preset, end-tag form and (N2) its states' tag room move its boxes
+    for key in ("type_scale", "tag_form", "tag_room", "key", "key_px", "key_w", "key_h", "state_ink"):   # P69 T8: the long form's preset, end-tag form and (N2) its states' tag room move its boxes; T10: its key's names; M1: its states' key band
         if (spec.get("axes") or {}).get(key) is not None:
             ink[key] = spec["axes"][key]
     if "left_gutter" in (spec.get("axes") or {}):
         ink["left_gutter"] = spec["axes"]["left_gutter"]
     blob = json.dumps(ink, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
+
+
+def tag_ink(spec: dict) -> list[list]:
+    """REVIEW-P69-LANE-B-MERGE-4 MN3: the fingerprint of a page's END TAGS - `[label, name, last value]` for every live
+    series that writes one, in the spec's order. The one measured thing the DATA moves: an end tag stands at its line's
+    last value and reads its label, so `tag_boxes` (P69 T6d) are served only to a page whose tags match the ones they
+    were measured for; `page_ink_key` stays the key for every other box. Pure."""
+    out = []
+    for s in spec.get("series") or []:
+        if not isinstance(s, dict) or s.get("muted"):
+            continue
+        label, name = str(s.get("label") or "").strip(), str(s.get("name") or "").strip()
+        if not (label or name):
+            continue
+        pts = s.get("pts") or []
+        last = pts[-1][1] if pts and isinstance(pts[-1], (list, tuple)) and len(pts[-1]) > 1 else None
+        try:
+            last = round(float(last), 6)
+        except (TypeError, ValueError):
+            last = None if last is None else str(last)
+        out.append([label, name, last])
+    return out
 
 
 @functools.lru_cache(maxsize=4)
@@ -2221,7 +2465,13 @@ def measured_boxes(spec: dict, aspect: str) -> dict | None:
     boxes = (entry or {}).get("boxes")
     if not isinstance(boxes, dict) or not all(k in boxes for k in BOX_KEYS):
         return None
-    return {k: dict(boxes[k]) for k in BOX_KEYS}
+    out = {k: dict(boxes[k]) for k in BOX_KEYS}
+    if isinstance(boxes.get(KEY_BOX), dict):   # P69 T10: a longform page's key rail, when it was measured with one
+        out[KEY_BOX] = dict(boxes[KEY_BOX])
+    if (isinstance(boxes.get(TAG_BOXES_KEY), list) and boxes[TAG_BOXES_KEY]   # P69 T6d: its end tags, each as drawn -
+            and entry.get(TAG_INK_KEY) == tag_ink(spec)):                      # MN3: only for the tags they were drawn for
+        out[TAG_BOXES_KEY] = [dict(b) for b in boxes[TAG_BOXES_KEY] if isinstance(b, dict)]
+    return out
 
 
 def measured_room(spec: dict, aspect: str) -> dict:
@@ -2274,10 +2524,13 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
         boxes["plot"] = treemap_plot(boxes["chart"], aspect)
     measured = measured_boxes(spec, aspect)
     if measured:                      # the player's own numbers for this ink win over every estimate above
-        tags = boxes.get(TAGS_KEY)    # ... except the end tag column, which the fixture does not measure
+        tags = boxes.get(TAGS_KEY)    # ... except the end tag column, which the fixture does not measure as a column
         boxes.update(measured)
+        drawn = boxes.pop(TAG_BOXES_KEY, None)
         if tags is not None:
             boxes[TAGS_KEY] = tags
+            if drawn:   # P69 T6d: ... and beside it the tags AS DRAWN, each at its rect (the stamp's ring fits around these)
+                boxes[TAG_BOXES_KEY] = drawn
         boxes.update(measured_room(spec, aspect))   # E65: the plot's empty room and the axis bands travel with them
         if spec.get("builder") == "tiers":   # the tier bands are a law over the PLOT: re-cut them on the measured one
             boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
@@ -2313,6 +2566,132 @@ def infer_variant(series: dict) -> str | None:
     if isinstance(series.get("shares"), list):
         return "share" if series.get("peel") is not None else "treemap"
     return None
+
+
+# P69 T10c (the operator, 2026-09-22, on row 7's thrown Bravos card: "Those charts still seem tough to read to me" and
+# "Evidence cards that are using charts need to use the whole card and use bigger fonts and thicker lines"): the CARD
+# profile. `chart_card.render_card` rendered the FULL ledger page and shrank it to the dock's width, so every word
+# shrank with the card (a 26 px tick read at 9 px on row 7's 653-px card). Under `readability: card` the page is laid
+# out FOR THE CARD'S OWN DISPLAYED BOX (`axes.card_w` x `axes.card_h`, stage px) - drawn on the stage at the card's
+# scale (CARD K = stage width / card width) so that, shown at the card's size, every size below is what it says:
+#   CARD_TYPE_PX   every word (title, ticks, end badges, values, the source) at this many DISPLAYED px, the E99 s90
+#                  phone floor at the card's size: 12 phone px on a 16:9 frame played 390 px wide is 12 x 1920 / 390 =
+#                  59.08 stage px (test_longform_profile.PHONE_FLOOR / PHONE_W) - the floor itself (at 60 the title of
+#                  row 7's card wraps by 4 px, and a second title line costs the plot a fifth of the card);
+#   CARD_STROKE_X  every line and its tip at this many times the full page's own stroke, as displayed;
+#   CARD_PAD_PX    the card's only margin (displayed px): the plot runs edge to edge inside it - no page margins, no
+#                  caption bands, no sub, no y label, no badge rail, no key;
+# end tags reduced to their short badge (the value, in its line's ink), the x ticks to the two ends (the minor ones
+# dropped), the source to its first clause on one line - or none, when it will not fit, or when the plot would keep less
+# than its room (the engine's LP_CARD.PLOT_MIN, or a line card's end badges stacked a line apart). The card keeps its
+# TITLE and its NUMBER.
+# It is the long form's look (the flat ground, the panel, Inter) - a card of a long-form page. NOT a row option: only
+# `chart_card` sets it, and a row that names `readability=card` is refused as an unknown profile.
+CARD = "card"
+CARD_BUILDERS = ("dense-line", "story")
+CARD_PHONE_FLOOR, CARD_PHONE_W = 12.0, 390   # E99 s90's floor, measured the T17 way (phone px = stage px x 390 / 1920)
+CARD_TYPE_PX = CARD_PHONE_FLOOR * 1920 / CARD_PHONE_W   # 59.08: the floor itself (the engine's LP_CARD.TYPE_PX)
+CARD_STROKE_X = 2.0
+CARD_PAD_PX = 8.0   # the engine's LP_CARD.PAD_PX
+CARD_SOURCE_CUTS = (" - ", "; ", ", ", " (")   # the source's first clause ends at the first of these
+# THE NAMES A VALUE CANNOT CARRY (the parent's frame read of the first card, 2026-09-23: "+21%" grey and "+21%" blue
+# "are indistinguishable except by colour - a viewer cannot tell the S&P from mega-cap"). On a card the end-tag
+# shortening stops at the BADGE for every tag whose value another tag also shows: the value keeps the floor and a SHORT
+# NAME rides it as the badge's chip - the series' own inline badge label (the page's key word for that line: E99 s90),
+# cut to its first word when the first words still tell the lines apart. Never an invented word. The name's size is
+# FITTED so the widest named tag takes at most CARD_TAG_ROOM of the card (the plot keeps the rest), never under
+# CARD_NAME_MIN of the floor; a value no other tag shows names its line already (with its ink) and stays a value.
+CARD_TAG_ROOM = 0.5
+CARD_NAME_MIN = 0.5
+CARD_TAG_EM = (0.68, 0.64)   # the engine's LP_LONGFORM.TAG_EM (NAME, CHIP): ems per character of a value / a chip
+CARD_CHIP_DX_PX = 4.0        # the chip's gap after its value, displayed px (the engine's CHIP_DX_PX 12 at the card's ~3x)
+
+
+def card_names(page: dict) -> dict[int, str]:
+    """{series index: short name} for every live line whose end value another line's also shows. Pure."""
+    live = [(i, s) for i, s in enumerate(page.get("series") or []) if isinstance(s, dict) and not s.get("muted")]
+    vals = [str(s.get("label") or "").strip() for _i, s in live]
+    dup = {v for v in vals if v and vals.count(v) > 1}
+    if not dup:
+        return {}
+    by_col = {BADGE_ACCENT_COL.get(b.get("accent")): str(b.get("label") or "").strip()
+              for b in page.get("badges") or [] if isinstance(b, dict) and b.get("inline")}
+    full = {i: (by_col.get(s.get("color")) or str(s.get("name") or "").strip()) for i, s in live
+            if str(s.get("label") or "").strip() in dup}
+    out = {}
+    for v in dup:
+        group = {i: n for i, n in full.items() if str(page["series"][i].get("label") or "").strip() == v}
+        first = {i: (n.split() or [""])[0] for i, n in group.items()}
+        use = first if len(set(first.values())) == len(first) and all(first.values()) else group
+        out.update(use)
+    return {i: n for i, n in out.items() if n}
+
+
+def card_chip_px(page: dict, names: dict[int, str], card_w: float) -> float:
+    """The short names' size in DISPLAYED px: the floor, or less so the widest named tag fits CARD_TAG_ROOM of the
+    card - never under CARD_NAME_MIN of the floor."""
+    ev, ec = CARD_TAG_EM
+    room = CARD_TAG_ROOM * float(card_w)
+    fit = min((room - len(str(page["series"][i].get("label") or "")) * ev * CARD_TYPE_PX - CARD_CHIP_DX_PX) / (len(n) * ec)
+              for i, n in names.items())
+    return round(max(CARD_NAME_MIN * CARD_TYPE_PX, min(CARD_TYPE_PX, fit)), 2)
+
+
+def card_floor_px(stage_w: int = 1920) -> float:
+    """E99 s90's phone floor in DISPLAYED stage px: the size that reads 12 px on a 390-px-wide phone."""
+    return CARD_PHONE_FLOOR * stage_w / CARD_PHONE_W
+
+
+def card_error(page: dict, card_w: float, card_h: float, aspect: str | None = "16:9") -> str | None:
+    """Can THIS page be drawn as a card of this displayed box? The message, or None. Pure."""
+    builder = str(page.get("builder") or "?")
+    if builder not in CARD_BUILDERS:
+        return (f"readability={CARD!r} is drawn by the {' and '.join(CARD_BUILDERS)} builders (a line card and a bars "
+                f"card); this page uses {builder!r}")
+    if aspect not in (None, "16:9"):
+        return f"readability={CARD!r} is a 16:9 page's card (the long form's); a {aspect} card keeps its own page"
+    if not (float(card_w) > 0 and float(card_h) > 0):
+        return f"readability={CARD!r} needs the card's displayed box in stage px (card_w, card_h); got {card_w!r} x {card_h!r}"
+    return None
+
+
+def card_source(source: str, card_w: float, stage_w: int = 1920) -> str:
+    """The card's one short source line: the source's first clause, when it fits one line inside the card's margins at
+    CARD_TYPE_PX - else nothing (the page the card becomes carries the whole citation)."""
+    text = str(source or "").strip()
+    for cut in CARD_SOURCE_CUTS:
+        if cut in text:
+            text = text.split(cut, 1)[0].strip()
+    k = stage_w / float(card_w)
+    room = stage_w - 2 * CARD_PAD_PX * k
+    return text if text and longform_text_px(text, "source", CARD_TYPE_PX * k) <= room else ""
+
+
+def apply_card(page: dict, card_w: float, card_h: float, stage_w: int = 1920) -> dict:
+    """Stamp the CARD profile on a page spec, in place (returned for chaining): the displayed box, the value-only end
+    tags, the two end x ticks, no sub / y label / badges / key, the short source. ValueError when it cannot be one."""
+    err = card_error(page, card_w, card_h)
+    if err:
+        raise ValueError(err)
+    axes = page.setdefault("axes", {})
+    for key in ("type_scale", "tag_form", "tag_room", "key", "key_px", "ylabel", "card_chip_px"):
+        axes.pop(key, None)
+    axes.update({"readability": CARD, "card_w": round(float(card_w), 2), "card_h": round(float(card_h), 2)})
+    names = card_names(page) if page.get("builder") == "dense-line" else {}   # read before the badges are cleared
+    if page.get("builder") == "dense-line":
+        axes["tag_form"] = "value"
+    if names:   # the shortening stops at the badge: the value and its short name
+        axes["tag_form"] = "badge"
+        axes["card_chip_px"] = card_chip_px(page, names, card_w)
+        for i, n in names.items():
+            page["series"][i]["card_name"] = n
+    xt = axes.get("xticks")
+    if isinstance(xt, list) and len(xt) > 2:
+        axes["xticks"] = [xt[0], xt[-1]]
+    page["sub"] = ""
+    page["badges"] = []
+    page["source"] = card_source(page.get("source") or "", card_w, stage_w)
+    return page
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -104,16 +104,28 @@ def dock_png(aid: str, src: Path, crop: tuple[float, float], build: Path) -> str
     return register(aid, still_card(aid, src, crop, build))
 
 
-def chart_card(aid: str, series_file: Path, build: Path, variant: str = "line", aspect: str | None = None) -> str:
+def chart_card(aid: str, series_file: Path, build: Path, variant: str = "line", aspect: str | None = None,
+               card_w: float | None = None) -> str:
     """A CHART CARD (R26-19 / E50): the series object's ledger page rendered once, at its landing,
     by `chart_card.render_card` and registered as a dock still - so a 2-3 s beat can carry a chart
     a fresh page could never land in time, and a page can then grow out of the landed card.
-    Rebuilt when the object or the renderer is newer than the card."""
+    Rebuilt when the object or the renderer is newer than the card.
+
+    P69 T10c: `card_w` - the card's DISPLAYED width on the stage (px; e.g. a row's `centre_w` x 1920) - draws the card
+    FOR THAT SIZE (chart_card's `card` profile) and writes its `.card.json` sidecar; the card is rebuilt whenever the
+    size it was drawn for is not the one asked (and a card asked without one loses a stale sidecar). Without it, as before."""
+    import json as _json
     import chart_card as CC
     series_file = Path(series_file)
     out = build / "docks" / f"{aid}.png"
-    if not out.exists() or out.stat().st_mtime < max(series_file.stat().st_mtime, Path(CC.__file__).stat().st_mtime):
-        CC.render_card(series_file, out, variant, aspect=aspect)
+    side = CC.card_sidecar(out)
+    drawn_w = _json.loads(side.read_text(encoding="utf-8")).get("card_w") if side.exists() else None
+    want_w = round(float(card_w), 2) if card_w is not None else None
+    if (not out.exists() or out.stat().st_mtime < max(series_file.stat().st_mtime, Path(CC.__file__).stat().st_mtime)
+            or drawn_w != want_w):
+        if side.exists():
+            side.unlink()
+        CC.render_card(series_file, out, variant, aspect=aspect, **({"card_w": card_w} if card_w is not None else {}))
     return register(aid, out)
 
 

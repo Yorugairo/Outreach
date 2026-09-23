@@ -107,7 +107,8 @@ export const lpHome = (page, el) => {   /* an element's untransformed centre in 
 export const lpParticles = (st, page, S) => {
   S = S || st;
   const glyphs = [...st.glyphs, ...(st.rtGlyphs || [])].map((g) => ({ el: g, ...lpHome(page, g) }));   /* P47 T2: a retitle's glyphs ride the vortex too */
-  const pills = (st.badges || []).map((b) => ({ el: b.el, ...lpHome(page, b.el) }));
+  const pills = [...(st.badges || []), ...(st.keyPills || []), ...(S !== st ? S.keyPills || [] : [])]   /* P69 T10: and the key rail's (M1: the active state's too) */
+    .map((b) => ({ el: b.el, ...lpHome(page, b.el) }));
   const skip = new Set([...S.paths.map((p) => p.p), ...S.paths.map((p) => p.tip)]);
   const svg = [...S.chart.children].filter((e) => !skip.has(e) && e.tagName !== "defs").map((e) => {
     let b; try { b = e.getBBox(); } catch (x) { b = { x: 0, y: 0, width: 0, height: 0 }; }

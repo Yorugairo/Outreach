@@ -3282,6 +3282,57 @@ FRAME_T.update({
 })
 
 
+# ---- P69 T26a / R26-273: A BAR CHANGES ITS OWN VALUE (E28) ---------------------------------------------------------
+# The halving beat test_compare_on_bars compiles (row 18 of Steel and Paper H): one bar at 20 on a full-stage bars
+# page, its figure written at its top (8.0), and a `chart_to compare` (melt, then splash) at 11.0 over 2.4 s that turns
+# "20%" into "10%" - which now moves the BAR to 10 on the page's own scale, the figure riding its top. The object's
+# values are COPIED from the evidence object (`ev-index-concentration-bars-v1`) exactly as the test copies them, so the
+# golden never reads an untracked series; the comparator's arithmetic is authored and checked by the compiler here.
+HALVING_OBJ = {"title": "One bet, a fifth of the index",
+               "sub": "AI builders as a share of the S&P 500 - today, against their historical two-to-four percent",
+               "src": "Figures via Bravos Research - S&P 500 weighting (attributed)",
+               "unit": "%",
+               "hlines": [{"y": 4, "label": "historically 2-4%", "color": "deemph"}, {"y": 2, "color": "deemph"}],
+               "bars": [{"label": "AI builders, share of the S&P 500 today", "value": 20, "note": "20%", "color": "crimson"}]}
+HALVING_SPECIES = [
+    {"kind": "figure", "at": 8.0, "dur": 1.5, "text": "20%", "target": {"kind": "datum", "index": 0}},
+    {"kind": "chart_to", "at": 11.0, "dur": 2.4, "to": "compare", "form": "melt", "then": "splash", "hold": "metric",
+     "metric": {"value": 20, "text": "20%", "label": "of the S&P 500"},
+     "comparator": {"value": 10, "text": "10%", "label": "of the market, if they halve"},
+     "inputs": {"share": 20}, "derive": "share / 2",
+     "source": "[DERIVED: from ev-index-concentration-bars-v1, a fifth of the index falling by half, share / 2]"},
+]
+
+
+def bar_value_morph() -> tuple[dict, dict]:
+    """P69 T26a (E28: the geometry says what the number says): the halving AT REST after the morph - the bar standing at
+    10 on the 0-20 scale it was built on, "10%" written over its new top with "20%" held beside it and the comparator's
+    label beneath. Before T26a this frame printed "10%" over a bar still drawn to 20%."""
+    import tempfile
+    import build_scene_timeline_f as BST
+    plate = "ledger:fx-index-concentration-bars:bars"
+    species = [dict(e) for e in HALVING_SPECIES]
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/fx-index-concentration-bars.series.json").write_text(json.dumps(HALVING_OBJ), encoding="utf-8")
+        saved = BST.ASPECT
+        BST.ASPECT = "16:9"
+        try:
+            world = BST.world_for_plate(plate, (0, 0, 0), ep)
+            BST.stamp_full_stage(world["page"])
+        finally:
+            BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: a bar changes its own value (the halving)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"bar-value-morph": bar_value_morph})
+FRAME_T.update({"bar-value-morph": 14.4})   # at rest: the window closed at 13.4 (the bar landed at 11.0 + 0.72 x 2.4), the comparator's label written whole
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

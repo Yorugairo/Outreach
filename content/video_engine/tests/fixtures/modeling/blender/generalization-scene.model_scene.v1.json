@@ -1,0 +1,65 @@
+{
+  "schema_version": "model_scene.v1",
+  "scene_id": "generalization-compiler-v1",
+  "duration_frames": 26,
+  "fps": {"numerator": 24, "denominator": 1},
+  "time_origin": {"scene_frame": 0, "scene_time_seconds": {"numerator": 0, "denominator": 1}},
+  "bindings": [
+    {
+      "binding_id": "prop",
+      "asset_id": "hinged-prop",
+      "revision_id": "hinged-prop-r1",
+      "descriptor_path": "content/video_engine/assets/modeling/native/generalization/contract/prop/e7e4323080c6-native/model-assets/candidates/hinged-prop/hinged-prop-r1/model_asset.v1.json",
+      "descriptor_sha256": "8c93fa16b10eaf3213758a141f8d74fcddf1f99c8aa576225ec615020dee7b98"
+    },
+    {
+      "binding_id": "environment",
+      "asset_id": "layered-environment",
+      "revision_id": "layered-environment-r1",
+      "descriptor_path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/model_asset.v1.json",
+      "descriptor_sha256": "8b40b1028e6cebdcb84ca2f1bd51869a7807539965027fda726ffa91cda6d8a3"
+    }
+  ],
+  "participants": [],
+  "source_time_mappings": [],
+  "contacts": [],
+  "events": [
+    {"event_id": "lid-open", "event_type": "articulation", "frame": 25, "binding_id": "prop"}
+  ],
+  "attachments": [],
+  "environment_collision_surfaces": [
+    {"binding_id": "environment", "surface_id": "floor", "collision_mode": "solid"}
+  ],
+  "camera": {
+    "projection": "orthographic",
+    "position_m": [1.0, -4.3, 2.1],
+    "target_m": [0.0, 0.1, 0.9],
+    "clip_planes_m": [0.01, 100.0],
+    "orthographic_scale_m": 6.25
+  },
+  "lights": [
+    {"light_id": "key", "light_type": "area", "energy_w": 900.0, "color_rgb": [1.0, 0.88, 0.74], "position_m": [-2.5, -3.0, 4.5], "size_m": 4.0},
+    {"light_id": "fill", "light_type": "area", "energy_w": 450.0, "color_rgb": [0.72, 0.84, 1.0], "position_m": [3.0, -0.5, 3.0], "size_m": 3.0}
+  ],
+  "motion_channels": [
+    {
+      "channel_id": "lid-hinge",
+      "binding_id": "prop",
+      "target_kind": "articulation",
+      "semantic_target": "lid_hinge",
+      "value_unit": "degrees",
+      "interpolation": "linear",
+      "keyframes": [
+        {"frame": 1, "value": 0.0},
+        {"frame": 25, "value": -74.484511}
+      ]
+    }
+  ],
+  "render_profile": {
+    "engine_id": "blender_cycles",
+    "resolution_px": [320, 240],
+    "samples": 8,
+    "passes": ["beauty", "depth", "object_mask"],
+    "color_space": "AgX"
+  }
+}

@@ -554,3 +554,104 @@ def test_check_fails_a_moved_long_form_box_naming_its_builder_preset_and_box(tmp
     now["profiles"][name]["16:9|full_stage"]["boxes"]["chart"]["y"] += 73
     assert _check(tmp_path, monkeypatch, _yesterdays_copy(), now) == 1
     assert f"{name} 16:9|full_stage chart" in capsys.readouterr().err
+
+
+# ---- P69 T6d (2): on a MEASURED page the end tags are boxed as drawn --------------------------------------------------
+# The estimate reserves a line page's end tags as ONE solid column (`_landscape_full_boxes`: on v4 x 1329-1880 over
+# y 250-808), and `page_boxes` kept that estimate even on a page the fixture had measured - so a stamp could not take
+# the empty right margin between the tags, level with the rules. On a measured full-stage page each tag is now its own
+# drawn rect (`tag_boxes`, the fixture's), read by the stamp's ring fit only; `tags` stays the estimate's column for
+# every other reader (the camera, the caption, the bands); an estimated page keeps the column alone.
+
+def _measured_line_page() -> dict:
+    return M.full_stage_variant(M.representative("dense-line"))
+
+
+def test_a_measured_full_stage_page_boxes_each_end_tag_as_drawn():
+    page = _measured_line_page()
+    boxes = LPG.page_boxes(page, "16:9")
+    assert boxes["measured"] is True
+    drawn = boxes.get(LPG.TAG_BOXES_KEY)
+    named = [sr for sr in page["series"] if not sr.get("muted")]
+    assert drawn and len(drawn) == len(named), (drawn, len(named))
+    entry = FIXTURE["builders"]["dense-line"]["16:9|full_stage"]["boxes"]
+    assert drawn == entry[LPG.TAG_BOXES_KEY], "the fixture's own rects"
+    est = LPG._landscape_full_boxes(page, 1920, 1080)[LPG.TAGS_KEY]
+    assert boxes[LPG.TAGS_KEY] == est, "`tags` stays the estimate's column for every other reader (camera, caption, bands)"
+    area = sum(b["w"] * b["h"] for b in drawn)
+    assert area < 0.5 * est["w"] * est["h"], ("the tags as drawn leave most of the estimate's column free", area, est)
+
+
+def test_an_estimated_page_keeps_the_solid_column():
+    page = dict(_measured_line_page(), title="A title nobody measured")
+    boxes = LPG.page_boxes(page, "16:9")
+    assert boxes["measured"] is False and LPG.TAG_BOXES_KEY not in boxes
+    assert boxes[LPG.TAGS_KEY] == LPG._landscape_full_boxes(page, 1920, 1080)[LPG.TAGS_KEY]
+
+
+def test_a_stamps_ring_is_fitted_around_each_tag_not_the_column():
+    page = _measured_line_page()
+    obstacles, _bounds = B.ring_obstacles(page, "16:9")
+    boxes = LPG.page_boxes(page, "16:9")
+    for tag in boxes[LPG.TAG_BOXES_KEY]:
+        assert tag in obstacles, tag
+    assert boxes[LPG.TAGS_KEY] not in obstacles, "the column is not an obstacle once each tag is"
+
+
+# ---- REVIEW-P69-LANE-B-MERGE-4 MN3: `tag_boxes` are LINE end tags, and they are served only to the data they measured --
+# (a) the measurement took every `text.sname`: on `tiers` those are the tier NAMES inside the plot, and a rule's label is
+# one too. Only a line's end tag (the `name` marks of a dense-line or combo page) is a tag box now.
+# (b) an end tag stands at its line's last value and reads its label, so the rects move with the DATA while the entry is
+# served by INK: each entry carries the fingerprint of the tags it measured (`tag_ink`: every live series' label, name
+# and last value) and a page whose own fingerprint differs is served no `tag_boxes` - the stamp falls back to the
+# estimated `tags` column, which is computed from the live spec and cannot go stale.
+
+def _entries_with_tag_boxes():
+    for name, geos in (FIXTURE.get("builders") or {}).items():
+        for geo, ent in geos.items():
+            yield "builders", name, geo, ent
+    for name, geos in (FIXTURE.get("profiles") or {}).items():
+        for geo, ent in geos.items():
+            yield "profiles", name, geo, ent
+    for name, geos in PAGES.items():
+        for geo, ent in geos.items():
+            yield "pages", name, geo, ent
+
+
+def test_tag_boxes_are_measured_on_line_end_tags_only():
+    assert "role === 'name'" in M.READ_BOXES and "text.sname" not in M.READ_BOXES.split("out.tag_boxes", 1)[1].split(";", 1)[0]
+    tiers = FIXTURE["builders"]["tiers"]["16:9|full_stage"]
+    assert LPG.TAG_BOXES_KEY not in tiers["boxes"], "a tiers page's names are inside its plot: not end tags"
+    page = M.full_stage_variant(M.representative("tiers"))
+    assert LPG.TAG_BOXES_KEY not in LPG.page_boxes(page, "16:9")
+    for section, name, geo, ent in _entries_with_tag_boxes():
+        if LPG.TAG_BOXES_KEY in (ent.get("boxes") or {}):
+            assert (ent.get("builder") or name) in LPG.LAND_TAG_BUILDERS or name.split("|")[0] in LPG.LAND_TAG_BUILDERS, (section, name, geo)
+
+
+def test_every_entry_with_tag_boxes_carries_the_fingerprint_it_measured():
+    seen = 0
+    for section, name, geo, ent in _entries_with_tag_boxes():
+        if LPG.TAG_BOXES_KEY in (ent.get("boxes") or {}):
+            seen += 1
+            ink = ent.get(LPG.TAG_INK_KEY)
+            assert isinstance(ink, list) and ink and len(ink) == len(ent["boxes"][LPG.TAG_BOXES_KEY]), (section, name, geo, ink)
+    assert seen >= 4
+    page = _measured_line_page()
+    assert FIXTURE["builders"]["dense-line"]["16:9|full_stage"][LPG.TAG_INK_KEY] == LPG.tag_ink(page)
+
+
+def test_a_page_whose_tags_moved_is_served_no_tag_boxes_and_the_ring_fits_the_column():
+    page = copy.deepcopy(_measured_line_page())
+    live = next(sr for sr in page["series"] if not sr.get("muted"))
+    live["pts"][-1] = [live["pts"][-1][0], float(live["pts"][-1][1]) * 1.5 + 1]   # refetched: a new last value, same ink
+    assert LPG.page_ink_key(page) == LPG.page_ink_key(_measured_line_page()), "the INK is the same - only the data moved"
+    assert LPG.tag_ink(page) != LPG.tag_ink(_measured_line_page())
+    boxes = LPG.page_boxes(page, "16:9")
+    assert boxes["measured"] is True, "every other box is still the player's own (the data never moves a box)"
+    assert LPG.TAG_BOXES_KEY not in boxes, "the rects were measured for other data: not served"
+    obstacles, _bounds = B.ring_obstacles(page, "16:9")
+    assert boxes[LPG.TAGS_KEY] in obstacles, "the stamp falls back to the estimated column"
+    relabelled = copy.deepcopy(_measured_line_page())
+    next(sr for sr in relabelled["series"] if not sr.get("muted"))["label"] = "+999%"
+    assert LPG.TAG_BOXES_KEY not in LPG.page_boxes(relabelled, "16:9"), "a new label is a new tag"

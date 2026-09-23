@@ -134,6 +134,11 @@ READ_BOXES = r"""
   out.source = one('.lp-src'); out.chart = one('.lp-chart');
   const rail = one('.lp-rail');
   out.rail = rail || (out.source ? {x: out.source.x, y: out.source.y + out.source.h, w: out.source.w, h: 0} : null);
+  /* P69 T10: a longform page's KEY RAIL (the names its end tags gave up), in the top band - only when it holds a pill */
+  /* ... and (REVIEW-P69-LANE-B-MERGE-3 M1) every key a `then=` state holds, in the same band: the band is their union */
+  for (const key of wB.querySelectorAll('.lp-key')) if (key.querySelector('.lp-kpill')) { const b = R(key);
+    out.key = !out.key ? b : { x: Math.min(out.key.x, b.x), y: Math.min(out.key.y, b.y),
+      w: Math.max(out.key.x + out.key.w, b.x + b.w) - Math.min(out.key.x, b.x), h: Math.max(out.key.y + out.key.h, b.y + b.h) - Math.min(out.key.y, b.y) }; }
   /* THE PLOT. The chart's own declared pin box through its screen CTM (viewBox + park + camera) when the
      builder declares one; the marks it drew when it does not (bars). Then WIDENED over the ink that lives
      inside the plot - the basis label above it and the x tick labels below the axis - which is exactly what
@@ -193,6 +198,12 @@ READ_BOXES = r"""
   };
   out.data = [];
   if (chart) for (const el of chart.querySelectorAll(DATA)) for (const bx of dataBoxes(el)) out.data.push(bx);
+  /* P69 T6d: each END TAG at its drawn rect (a line's terminal name, its chip with it), in the chart's order.
+     REVIEW-P69-LANE-B-MERGE-4 MN3: a LINE's end tag only - the builder's `name` marks (dense-line, combo); a tier's name
+     inside the plot and a rule's label are `text.sname` too, and are not end tags */
+  const tagEls = new Set((st.marks || []).filter((m) => m.role === 'name' && m.el).map((m) => m.el));
+  out.tag_boxes = chart ? [...chart.querySelectorAll('text')].filter((el) => tagEls.has(el) && (el.textContent || '').trim()
+    && +(el.getAttribute('opacity') || 1) > 0.05).map(R).filter((r) => r.w >= 1 && r.h >= 1) : [];
   out.stage = [stg.width, stg.height];
   return out;
 }
@@ -385,6 +396,10 @@ def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: 
     if [round(v) for v in dom["stage"]] != [w, h]:
         raise SystemExit(f"{builder} {aspect}: stage measured {dom['stage']}, expected {[w, h]}")
     boxes = {k: _box(dom[k]) for k in LPG.BOX_KEYS}
+    if dom.get(LPG.KEY_BOX):   # P69 T10: the key rail, on a longform page that has one
+        boxes[LPG.KEY_BOX] = _box(dom[LPG.KEY_BOX])
+    if LPG.full_stage(page, aspect) and dom.get(LPG.TAG_BOXES_KEY):   # P69 T6d: a full-stage page's end tags, as drawn
+        boxes[LPG.TAG_BOXES_KEY] = [_box(b) for b in dom[LPG.TAG_BOXES_KEY]]
     axis = {k: (_box(dom["axis"][k]) if (dom.get("axis") or {}).get(k) else None) for k in ("x", "y")}
     return {"page": page, "boxes": boxes, "axis": axis,
             "data_mask": data_mask(boxes["plot"], dom.get("data") or [])}
@@ -413,6 +428,8 @@ def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bo
            "boxes": boxes, "bands": bands, "axis": got["axis"], "data_mask": got["data_mask"]}
     if LPG.full_stage(got["page"], aspect):   # R26-235: the GEOMETRY this entry was measured in, on the entry itself
         out["full_stage"] = True
+    if boxes.get(LPG.TAG_BOXES_KEY):   # MN3: the tags these rects were measured for (the data moves them; the ink does not)
+        out[LPG.TAG_INK_KEY] = LPG.tag_ink(got["page"])
     return out
 
 

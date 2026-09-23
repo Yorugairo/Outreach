@@ -11,7 +11,7 @@ The repository uses an allowlist-first skill policy. Load the smallest set that 
 
 | Domain | Trigger / Task Intent | Recommended Skills & Tools |
 |---|---|---|
-| **Planning, TPM & Backlog** | Architecture planning, sprints, stress-testing plans, decision tradeoffs | `agentic-tpm-and-execution`, `prp-router`, `prp-plan`, `prp-implement`, `prp-status`, `scrum-master`, `grill-me`, `council` |
+| **Planning, PRPs & Backlog** | Use `agentic-tpm-and-execution` only to frame unplanned multi-slice work; use `prp-implement` directly for an approved PRP. Architecture, backlog, and decision work use their matching skills. | `agentic-tpm-and-execution`, `prp-router`, `prp-plan`, `prp-implement`, `prp-status`, `scrum-master`, `grill-me`, `council` |
 | **Deep Research & Intelligence** | Multi-source web research, academic papers, statutory citations, competitor teardowns | `research`, `deep-research`, `exa-search`, `tavily-web`, `web-research-agent` |
 | **Visual Design & High-Taste Frontend** | Landing pages, brand design systems, Tailwind v4, Swiss/Minimalist UI, anti-slop audits | `design-engine`, `design-taste-frontend`, `high-end-visual-design`, `modern-design-frameworks`, `generative_ui` |
 | **Content, Brand Voice & CRO** | High-conversion copy, voice profiles, Washington statutes, BJJ registry copy, CRO funnels | `brand-voice`, `content-engine`, `seo-content-writer`, `elite-cro-and-marketing` |
@@ -43,15 +43,15 @@ Release management, workspace cleanup, broad infrastructure, unrelated industry 
 
 ## Named Agent Routing
 
-### Codex model policy — operator update 2026-09-22
+### Codex model policy — operator updates 2026-09-22 and 2026-09-23
 
 | Work | Default | After three failed attempts on the same task |
 | --- | --- | --- |
-| Implementation/execution: speedster, junior_developer, implementation_luna, release_steward | gpt-6-luna / max | execution_sol: gpt-6-sol / xhigh |
+| Implementation/execution: speedster, junior_developer, implementation_luna, release_steward | gpt-6-luna / max | Sol xhigh diagnoses and writes a targeted order; Luna may retry setup/spec failures, or execution_sol implements when novel reasoning or a further miss requires it |
 | Planning/architecture: architect_sol and parent planning | gpt-6-sol / xhigh | Return evidence to parent; no further automatic tier |
-| Professional work, research/exploration/review, computer use | gpt-6-luna / max | professional_sol: gpt-6-sol / xhigh |
+| Professional work, research/exploration/review, computer use | gpt-6-luna / max | Sol xhigh diagnoses and directs a targeted Luna retry for setup/spec failures, or professional_sol executes when needed |
 
-Use `professional_worker` for bounded artifact work and `computer_use_worker` for browser/computer execution. Existing read-only roles remain read-only. The parent counts failed attempts in the task ledger against a stable task and acceptance criteria, including failed tool attempts; respawning does not reset the count. At three failures, stop Luna retries and hand off evidence, outputs, live handles, exact permissions, and the next runnable action. Reconcile uncertain external writes before retrying. Escalation never adds approval or write authority. This is an orchestrator instruction, not a native TOML retry setting.
+Use `professional_worker` for bounded artifact work and `computer_use_worker` for browser/computer execution. Existing read-only roles remain read-only. The parent counts failed attempts in the task ledger against a stable task and acceptance criteria, including failed tool attempts; respawning does not reset the count. At three failures, stop the current Luna attempt and hand evidence, outputs, live handles, exact permissions, and the next runnable action to Sol xhigh. Sol first diagnoses whether the failure was setup/specification or an implementation-reasoning limit. For setup/specification failures, the parent or Sol may write one materially corrected, source-linked work order for a targeted Luna retry under the **same** ledger and permissions; preserve the original failure count. Sol implements only when that retry still misses, novel reasoning is needed, or the risk makes another retry inappropriate. Reconcile uncertain external writes before any retry. Escalation never adds approval or write authority. This is an orchestrator instruction, not a native TOML retry setting.
 
 Loaded roles can retain stale pins for this session: reload configuration or use an available generic role with explicit model/effort and the complete original role contract. Do not claim active agents switched models. This policy supersedes older OpenAI model assignments only; Claude/Gemini definitions and their provider routing remain unchanged.
 

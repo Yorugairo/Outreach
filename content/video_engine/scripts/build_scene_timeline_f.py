@@ -109,7 +109,7 @@ DOCK_INKS = ("own", "page")   # E99 s87, OPEN ON THE OPERATOR'S EYE: how a stamp
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain", "build", "readability")   # P69 T8 (E99 s97): readability=longform[:bravos|middle|phone]|landscape-phone - the PAGE PROFILE a ledger page is drawn in, and a long form's type preset, the row's word (it wins over the series file's own field); legal on the builders ledger_page.READABILITY_BUILDERS names, refused by name elsewhere   # R26-226 (E99 s82): build=lines[:<s>] - a MULTI-LINE page's series draw one at a time, each whole, its end tag and inline badge landing as it lands (the operator: "draw the first line completely, label it, badge it, draw the 2nd line completely, badge it"); `lines:<s>` names ONE series' seconds, so the page's whole build is N x s   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain", "build", "readability", "bar_style")   # P69 T10b: bar_style=soft - a BARS page's bars take rounded shoulders (the two corners away from zero) and the prop's own cross-hatched shadow from the one stage light (the operator, 2026-09-22); refused by name off the bars builder and beside form=extruded_bar   # P69 T8 (E99 s97): readability=longform[:bravos|middle|phone]|landscape-phone - the PAGE PROFILE a ledger page is drawn in, and a long form's type preset, the row's word (it wins over the series file's own field); legal on the builders ledger_page.READABILITY_BUILDERS names, refused by name elsewhere   # R26-226 (E99 s82): build=lines[:<s>] - a MULTI-LINE page's series draw one at a time, each whole, its end tag and inline badge landing as it lands (the operator: "draw the first line completely, label it, badge it, draw the 2nd line completely, badge it"); `lines:<s>` names ONE series' seconds, so the page's whole build is N x s   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -736,6 +736,10 @@ def validate_camera(cam, plate_id: str, aspect: str | None = None) -> list[str]:
     errs: list[str] = []
     if cam.get("attention", "locked") not in CAMERA_ATTENTION:
         errs.append(f"{plate_id}: camera attention must be one of {'|'.join(CAMERA_ATTENTION)}")
+    if cam.get("reach", CAMERA_REACH[0]) not in CAMERA_REACH:   # P69 T26b: the row's choice on a full-stage page
+        errs.append(f"{plate_id}: camera reach must be one of {'|'.join(CAMERA_REACH)} (default \"refuse\": a move that "
+                    "would cut the page's title, y ticks, source line or a drawn end tag fails the row by name; "
+                    "\"clamp\": it moves only as far as the page allows)")
     keys = cam.get("keys", [])
     if not isinstance(keys, list):
         return errs + [f"{plate_id}: camera keys must be a list of {{t, zoom, look, at?, ease?}}"]
@@ -804,10 +808,23 @@ def validate_camera_row(cam, row_species, plate_id: str, aspect: str | None = No
 # holds, and the engine's own 1.32 is refused by name. Tokyo v3b measured the same law off the DOM by
 # hand (`build_short_v3.py:194-197`: "the left edge binds at S_MAX 1.110 / 1.106"); this is that
 # measurement as a compile-time refusal, so no build has to find it on a frame again.
-CAMERA_GLYPH_KEYS = ("title", "sub", "source", "rail", "tags")   # the page's own type; `plot` is the field a punch moves INTO
+CAMERA_GLYPH_KEYS = ("title", "sub", "source", "rail", "tags", LPG.KEY_BOX)   # the page's own type; `plot` is the field a punch moves INTO (P69 T10: a longform page's key rail is type)
 FOCUS_ZOOM_DEFAULT = 1.32   # the engine's own CAM.FOCUS_SCALE (`kinetics/camera.mjs`), mirrored so a refusal can name it and
                             # so `zoom` absent means EXACTLY what every build on disk already renders (test_camera pins the pair)
 CAMERA_MOVE_FLOOR = 1.06   # E99 s80 (3): "a zoom under ~1.06 is not a move and stays out" - said in the refusal, never enforced as taste
+# P69 T26b: what a row does when its camera would cut a FULL-STAGE page (found on T23 / T6d's Fed frame: the landing
+# pull took the title's left edge, the y ticks and the source line off the frame). `refuse` (the default) fails the
+# row by name; `clamp` - written on the row's camera as `reach: "clamp"` - moves only as far as the page allows.
+CAMERA_REACH = ("refuse", "clamp")
+CAMERA_ATTN_ARRIVALS = ("throw", "land", "stamp")   # the arrivals a `landings` camera pulls toward (kinetics/camera.mjs camAttentionState)
+# ... and the page's own IDLE under the move (E49): a held page breathes about its centre up to BREATH_AMP and a `live` or
+# `drift` page walks DRIFT_PX, so a crop line measured on the page AT REST lands inside a glyph at the breath's peak -
+# measured on the clamped Fed frame (T26b): at 1.04 the title's T and the sub's O sat flush on x 0 at 219.06 and 11 px in
+# at 221.46, half a breath later. Mirrored from kinetics/idle.mjs IDLE; the engine's IDLE_CLASS.page is `breath`.
+PAGE_IDLE_BREATH_AMP = 0.012   # kinetics/idle.mjs IDLE.BREATH_AMP
+PAGE_IDLE_DRIFT_PX = 2.0       # kinetics/idle.mjs IDLE.DRIFT_PX (the page's drift takes no dial; `;drift=` is a plate's)
+PAGE_IDLE_BREATHES = ("breath", "live", "figure")
+PAGE_IDLE_DRIFTS = ("drift", "live")
 
 
 def page_glyph_boxes(page: dict, aspect: str) -> dict[str, dict]:
@@ -942,7 +959,7 @@ def camera_zoom_errors(world, row_species, cam, plate_id: str, aspect: str | Non
         if c is None:
             continue
         _check(float(z), c, c, f"focus_zoom zoom {float(z):.4g}")
-    if isinstance(cam, dict):
+    if isinstance(cam, dict) and cam.get("reach") != "clamp":   # P69 T26b: a row that chose the clamp is clamped by camera_reach
         for i, k in enumerate(cam.get("keys") or []):
             if not isinstance(k, dict):
                 continue
@@ -955,6 +972,164 @@ def camera_zoom_errors(world, row_species, cam, plate_id: str, aspect: str | Non
             at = MG._cam_point(k.get("at"), sw, sh, plot) if k.get("at") is not None else look
             _check(float(z), look, at or look, f"camera key {i} (t={float(k.get('t', 0.0)):.2f}s) zoom {float(z):.4g}")
     return errs
+
+
+def page_reach_boxes(page: dict, aspect: str) -> dict[str, dict]:
+    """P69 T26b: every box a camera move on this page must keep whole - the glyphs E99 s80 (2) names
+    (`page_glyph_boxes`: the title, sub, source, rail, key, the estimated tag column and the plot's two tick
+    banks) AND each end tag as the player DREW it (`tag_boxes`, served by `page_boxes` only for a measured page
+    whose tags match the ones measured - REVIEW-P69-LANE-B-MERGE-4 MN3). A drawn tag is named by its own words
+    when the tag fingerprint lines up with the boxes one for one."""
+    out = page_glyph_boxes(page, aspect)
+    drawn = LPG.page_boxes(page, aspect).get(LPG.TAG_BOXES_KEY) or []
+    ink = LPG.tag_ink(page)
+    for n, box in enumerate(drawn):
+        words = " ".join(str(w) for w in ink[n][:2]) if len(ink) == len(drawn) else ""
+        out[f'end tag "{words}"' if words else f"end tag {n + 1}"] = dict(box)
+    return out
+
+
+def _page_reach(page: dict, aspect: str, boxes: dict[str, dict], look, at) -> tuple[float, str]:
+    """(the reachable zoom, what binds it) over `boxes` and the page's crop line - `page_zoom_ceiling`'s law:
+    a box already off the stage at rest does not bind."""
+    sw, sh = LPG.STAGE_PX[aspect]
+    best = (math.inf, "-")
+    for name, box in boxes.items():
+        z, edge = zoom_ceiling(box, look, at, sw, sh)
+        if 1.0 <= z < best[0]:
+            best = (z, f"the {name}'s {edge} edge")
+    z_crop, crop_name = page_crop_line_ceiling(page, aspect, look, at)
+    return (z_crop, crop_name) if z_crop < best[0] else best
+
+
+def page_idle_boxes(boxes: dict[str, dict], world: dict, aspect: str) -> dict[str, dict]:
+    """Each box at the page's IDLE excursion: grown about the stage centre by the breath and padded by the drift, so a
+    move measured against these keeps every glyph on the stage at every phase of the held page's life (E49). The idle
+    is the page's word, then the row's (`world.idle`), then the engine's class default, `breath`; `none` holds still."""
+    page = world.get("page") or {}
+    kind = page.get("idle") or world.get("idle") or "breath"
+    k = 1 + PAGE_IDLE_BREATH_AMP if kind in PAGE_IDLE_BREATHES else 1.0
+    dx = PAGE_IDLE_DRIFT_PX if kind in PAGE_IDLE_DRIFTS else 0.0
+    dy = dx * 0.6   # idle.mjs drift: +-DRIFT_PX across, +-0.6 DRIFT_PX down
+    sw, sh = LPG.STAGE_PX[aspect]
+    cx, cy = sw / 2, sh / 2
+    return {name: {"x": cx + k * (b["x"] - cx) - dx, "y": cy + k * (b["y"] - cy) - dy,
+                   "w": k * b["w"] + 2 * dx, "h": k * b["h"] + 2 * dy} for name, b in boxes.items()}
+
+
+def _under_the_floor(reach: float) -> str:
+    return (f"; {reach:.2f} is under the ~{CAMERA_MOVE_FLOOR:.2f} floor, so this is no longer a move (E99 s80 (3))"
+            if reach < CAMERA_MOVE_FLOOR else "")
+
+
+def _landing_reach(page, asp, every, docks, clamp, plate_id) -> tuple[list[str], list[str], float | None]:
+    """camera_reach's first half: the pull of every arriving dock a `landings` camera pulls toward."""
+    errs: list[str] = []
+    notes: list[str] = []
+    lz = None
+    for d in docks or []:
+        if not isinstance(d, dict) or not isinstance(d.get("place"), dict) or d.get("arrive") not in CAMERA_ATTN_ARRIVALS:
+            continue
+        p = d["place"]
+        c = (float(p["x"]) + float(p["w"]) / 2, float(p["y"]) + float(p["h"]) / 2)
+        z, name = _page_reach(page, asp, every, c, c)
+        if MG.ATTN_SCALE <= z + 1e-9:
+            continue
+        reach = max(1.0, math.floor(z * 100) / 100)
+        what = (f"the landing pull on {d.get('slide')} (zoom {MG.ATTN_SCALE:.2f} about its card's centre "
+                f"({c[0]:.0f}, {c[1]:.0f}), from its contact)")
+        if clamp:
+            lz = reach if lz is None else min(lz, reach)
+            notes.append(f"{plate_id}: {what} CLAMPED to {reach:.2f} - {name} leaves the stage at {z:.3f} "
+                         f"(reach: \"clamp\", the row's choice){_under_the_floor(reach)}")
+        else:
+            errs.append(f"{plate_id}: {what} is past the reachable zoom {reach:.2f} on this full-stage page at {asp} - "
+                        f"{name} leaves the stage at {z:.3f}. E99 s80 (2): a move may crop the page - its crop line "
+                        "falls between elements, never through a glyph. Re-place the card, write `reach: \"clamp\"` "
+                        f"on the row's camera to pull only to {reach:.2f}, or lock the camera (P69 T26b)")
+    return errs, notes, lz
+
+
+def _key_reach(page, asp, glyphs, every, plot, keys, clamp, plate_id) -> tuple[list[str], list | None]:
+    """camera_reach's second half: each authored key over zoom 1. `glyphs` are R26-220's boxes AT REST (its refusal
+    law, unchanged); `every` adds the drawn end tags and the page's idle excursion (the reach this door measures)."""
+    sw, sh = LPG.STAGE_PX[asp]
+    notes: list[str] = []
+    new_keys = None
+    for i, k in enumerate(keys):
+        if not isinstance(k, dict):
+            continue
+        z0 = k.get("zoom", 1)
+        if isinstance(z0, bool) or not isinstance(z0, (int, float)) or not z0 > 1.0:
+            continue
+        look = MG._cam_point(k.get("look"), sw, sh, plot)
+        if look is None:
+            continue
+        at = (MG._cam_point(k.get("at"), sw, sh, plot) or look) if k.get("at") is not None else look
+        z, name = _page_reach(page, asp, every, look, at)
+        if z0 <= z + 1e-9:
+            continue
+        reach = max(1.0, math.floor(z * 100) / 100)
+        door = f"camera key {i} (t={float(k.get('t', 0.0)):.2f}s) zoom {float(z0):.4g}"
+        if clamp:
+            new_keys = new_keys or [dict(q) if isinstance(q, dict) else q for q in keys]
+            new_keys[i] = dict(new_keys[i], zoom=reach)
+            notes.append(f"{plate_id}: {door} CLAMPED to {reach:.2f} - {name} leaves the stage at {z:.3f} "
+                         f"(reach: \"clamp\", the row's choice){_under_the_floor(reach)}")
+            continue
+        z_glyph, _g = _page_reach(page, asp, glyphs, look, at)
+        if z0 <= z_glyph + 1e-9:   # R26-220 passes it: a DRAWN END TAG or the page's breath binds - reported, never refused
+            notes.append(f"WARN {plate_id}: {door} is past the reachable zoom {reach:.2f} once the drawn end tags and the "
+                         f"page's breath are measured - {name} leaves the stage at {z:.3f}, looking at ({look[0]:.0f}, "
+                         f"{look[1]:.0f}). REPORTED, not refused (P69 T26b): re-aim the key, lower it, or write "
+                         "`reach: \"clamp\"` on the row's camera")
+        # else a GLYPH binds it at rest: `camera_zoom_errors` has refused it by name already (R26-220)
+    return notes, new_keys
+
+
+def camera_reach(world, docks, cam, plate_id: str, aspect: str | None = None) -> tuple[list[str], list[str], dict | None]:
+    """P69 T26b - a camera push on a FULL-STAGE page keeps the title and the axes in frame.
+
+    Found on T23 / T6d's Fed frame: with the Fed stamped on the two-eras page, the `landings` camera's pull (P69 T4:
+    the player's ATTN.SCALE 1.06 about the card's centre, from its contact) took the title's left edge, the y tick
+    column and the source line off the frame. R26-220 bounds the row's KEYS and `focus_zoom` (`camera_zoom_errors`);
+    the landing pull was never measured, and neither was an end tag the page draws past its estimated column, nor the
+    held page's own breath under the move (`page_idle_boxes`: the boxes at the idle's excursion).
+
+    Returns (errors, notes, the camera to compile). On a full-stage ledger page only, against `page_reach_boxes`:
+      the LANDING PULL of every arriving dock (the player pulls only on a camera with no keys) - past the reach it is
+        refused by name, or, when the row wrote `reach: "clamp"`, clamped: `landing_zoom` (the smallest reach over
+        the scene's landings, floored to the hundredth) is written on the camera, and the player's landings branch and
+        the gate's `camera_state_at` both read it;
+      each KEY - past a reach set by a MEASURED END TAG alone it is REPORTED (a `WARN` note, never a refusal: lane A's
+        committed row 1, 1.06 at the divergence page's datum proxy, reaches only 1.034 once the drawn "+613%" binds
+        it - T33 re-aims it); past a glyph's reach `camera_zoom_errors` has already refused it; with `reach: "clamp"`
+        the key's zoom is clamped to the reach instead.
+    A camera that clears is returned AS GIVEN - no key rewritten, no `landing_zoom` - so its frames do not move."""
+    if not isinstance(cam, dict) or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return [], [], cam
+    page, asp = world.get("page"), aspect or "16:9"
+    if not isinstance(page, dict) or asp not in LPG.STAGE_PX or not LPG.full_stage(page, asp):
+        return [], [], cam
+    try:
+        glyphs = page_glyph_boxes(page, asp)
+        every = page_idle_boxes(page_reach_boxes(page, asp), world, asp)   # the drawn tags, at the page's idle excursion
+        plot = LPG.page_boxes(page, asp).get("plot")
+    except Exception:       # a page the box model cannot place: there is nothing to measure a move against
+        return [], [], cam
+    clamp = cam.get("reach") == "clamp"
+    out = cam
+    keys = cam.get("keys") or []
+    errs: list[str] = []
+    notes: list[str] = []
+    if not keys and cam.get("attention") == "landings":
+        errs, notes, lz = _landing_reach(page, asp, every, docks, clamp, plate_id)
+        if lz is not None:
+            out = dict(out, landing_zoom=lz)
+    key_notes, new_keys = _key_reach(page, asp, glyphs, every, plot, keys, clamp, plate_id)
+    if new_keys is not None:
+        out = dict(out, keys=new_keys)
+    return errs, notes + key_notes, out
 
 
 TARGET_KINDS = ("datum", "point", "region", "span")
@@ -3563,6 +3738,10 @@ def _check_opt(key: str, value, where: str) -> None:
             raise ValueError(f"{where}: readability {value!r} is not one of {LPG.LANDSCAPE_PHONE}|{LPG.LONGFORM}"
                              f"[:{'|'.join(LPG.LONGFORM_PRESETS)}]")
         return
+    if key == "bar_style":   # P69 T10b: the NAME is the row's own grammar; the fit to the page's builder needs the page,
+        if value not in LPG.BAR_STYLES:   # and is checked where the page is read (world_for_plate), as form='s is
+            raise ValueError(f"{where}: bar_style {value!r} is not one of {'|'.join(LPG.BAR_STYLES)}")
+        return
     if key == "build":   # R26-226: the mode and its seconds are the row's own grammar; the fit to the page's BUILDER
         page_build_spec(value, None, None, where)   # and to its SERIES COUNT needs the page, and is checked where the
         return                                      # page is read (world_for_plate), as domain='s is
@@ -4670,10 +4849,70 @@ def page_build_span_error(scene: dict) -> str | None:
             f"(entry/build/leave), but its row span is {row_s:g}s")
 
 
+# REVIEW-P69-LANE-B-MERGE-3 L2: A KEY RAIL LANDS INSIDE ITS ROW. The key is where a shortened line's full name is
+# written (P69 T10), and it springs on recipe:badge-ladder's clock - its first pill FIRST_S after the build, each next
+# STEP_S behind (ledger_page.LONGFORM_KEY_CLOCK), each IN_S to spring (the engine's LP_BADGE_IN) - so four pills land
+# ~6.3 s after the chart. A row that ends (or starts its leave) before the last one lands shows a partial key and
+# writes the other names nowhere: it is REFUSED by name, the key's clock is never shortened (the clock is the recipe's).
+# A state's key (M1) lands on the same clock from its own build's end; a page that arrives built carries its key landed.
+KEY_PILL_IN_S = 0.36          # the engine's LP_BADGE_IN: a pill's spring
+KEYED_RECAST_MIN_S = 1.6      # the engine's KEYED_DATA.MIN_S: a keyed-data recast's floor (E64)
+
+
+def page_key_landings(scene: dict) -> list[tuple[str, float]]:
+    """(whose key, seconds from the row's start its LAST pill lands) for every key rail this row shows. Pure."""
+    world = scene.get("world") if isinstance(scene, dict) else None
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not isinstance(world.get("page"), dict):
+        return []
+    first, step = LPG.LONGFORM_KEY_CLOCK
+    page, states = world["page"], [world["page"]] + [s for s in world.get("page_states") or [] if isinstance(s, dict)]
+    sig = [tuple(k.get("name") for k in ((s.get("axes") or {}).get("key") or [])) for s in states]
+    ladder = lambda n: first + step * (n - 1) + KEY_PILL_IN_S   # noqa: E731
+    out = []
+    if sig[0] and page.get("enter") not in MG.ARRIVES_BUILT:   # a page that arrives built carries its key landed
+        out.append(("the page", MG._page_land_offset(scene) + ladder(len(sig[0]))))
+    a = float((scene.get("span") or [0.0])[0])
+    shown = 0
+    for sp in sorted((e for e in scene.get("species") or [] if isinstance(e, dict) and e.get("kind") == "chart_to"),
+                     key=lambda e: float(e.get("at") or 0.0)):
+        if sp.get("to") in ("compare", "park"):
+            continue
+        k = max(0, min(len(states) - 1, int(sp.get("state") or 0)))
+        if sig[k] == sig[shown]:
+            continue
+        shown = k
+        if not sig[k]:
+            continue
+        d = max(0.001, float(sp.get("dur") or 1.0))
+        dk = max(d, KEYED_RECAST_MIN_S) if sp.get("keyed") == "data" else d
+        builds = not (sp.get("to") in ("rescale", "extend", "remake") or sp.get("keyed"))
+        out.append((f"state {k + 1}", float(sp.get("at") or 0.0) - a + dk + (MG.LP_BUILD_S if builds else 0.0) + ladder(len(sig[k]))))
+    return out
+
+
+def page_key_span_error(scene: dict) -> str | None:
+    """L2: the first key rail this row cannot land before it ends (or starts its leave), named; else None."""
+    span = scene.get("span") if isinstance(scene, dict) else None
+    if not (isinstance(span, (list, tuple)) and len(span) == 2):
+        return None
+    page = ((scene.get("world") or {}).get("page")) or {}
+    no_leave = str(page.get("exit") or "").split(":", 1)[0] == "cut"
+    room = float(span[1]) - float(span[0]) - (0.0 if no_leave else sum(float(v) for v in MG.LP_RETRACT_S))
+    first, step = LPG.LONGFORM_KEY_CLOCK
+    for whose, land in page_key_landings(scene):
+        if land > room + 1e-9:
+            return (f"{scene.get('scene_id', '?')}: {whose}'s key rail on page {page.get('title') or 'ledger page'!r} lands "
+                    f"{land:.2f}s into the row (recipe:badge-ladder: {first:g}s after its build, then {step:g}s apart), "
+                    f"but the row holds it {room:.2f}s - give the row the seconds, or keep the names on the end tags "
+                    "(a smaller preset); the key's clock is the recipe's and is never shortened")
+    return None
+
+
 def validate_page_build_spans(scenes: list[dict]) -> None:
-    """Reject the first authored page build that overruns its finalized row."""
+    """Reject the first authored page build that overruns its finalized row - and (L2) the first key rail that
+    cannot land inside its row."""
     for index, scene in enumerate(scenes):
-        error = page_build_span_error(scene)
+        error = page_build_span_error(scene) or page_key_span_error(scene)
         if error:
             sid = scene.get("scene_id", f"row-{index + 1}")
             raise ValueError(f"shot row {index + 1} ({sid}): {error}")
@@ -5191,6 +5430,19 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
                              "plane per page. A form draws the chart on its own plane; plane= turns the whole "
                              "page as a card (P58 T4). Keep one: drop plane=, or drop form=")
         page["form"] = spec
+    bst = opts.pop("bar_style", None)
+    if bst is not None:
+        # P69 T10b: HOW a bars page draws its bars - rounded shoulders and the prop's hatched shadow. A LEDGER PAGE
+        # option (a plate is a picture), the ROW's word as `;form=` is, written on the page only when the row names
+        # it, so a page that names none is byte-identical. After `form=`, which it may not stand beside.
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError(f"{plate_id!r}: bar_style= is a LEDGER PAGE option - it is how a page's BARS are drawn; "
+                             "a plate is a picture")
+        page = world["page"]
+        err = LPG.bar_style_error(page, bst, str(page.get("builder") or "?"))
+        if err:
+            raise ValueError(f"{plate_id!r}: {err}")
+        page["bar_style"] = bst
     fld = opts.pop("field", None)
     if fld is not None:
         # E99 s35: the page's GROUND, authored by the sentence's job. A LEDGER PAGE option - a plate is a picture and
@@ -5250,7 +5502,7 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         else:
             axes = page.setdefault("axes", {})
             axes["readability"] = profile
-            for key in ("type_scale", "tag_form", "tag_room"):   # a series file's long form, overruled by the row
+            for key in ("type_scale", "tag_form", "tag_room", "key", "key_px", "key_w", "key_h", "state_ink"):   # a series file's long form, overruled by the row
                 axes.pop(key, None)
     elif isinstance(world.get("page"), dict) and (world["page"].get("axes") or {}).get("readability") == LPG.LONGFORM:
         LPG.apply_longform(world["page"])   # the series file's own long form, re-fitted to the badges the row's dock gave it
@@ -5332,13 +5584,62 @@ def _world_for_bare_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | 
 STAGE_W, CARD_W, Q = 1920, 1400, 90
 
 
+# REVIEW-P69-LANE-B-MERGE-4 MN2: the alpha path's byte budget. A picture that keeps its transparency embeds as a PNG up
+# to this many bytes; over it, as a WebP with alpha at the card width, stepping its quality down (and then its width)
+# until it fits - the JPEG it replaces could not grow a player without bound, and neither may the alpha path.
+ALPHA_BYTES_CAP = 256 * 1024   # [DERIVED: the old JPEG path's p90 over the doors' 164 alpha PNGs (history-of-bjj/assets 70, systems-and-blowups/assets 26, props 24, icons 44, at CARD_W) = 232 kB, rounded up to 256 KiB; median 49 kB, max 415 kB - every prop and icon (max 255 kB as PNG) stays a PNG]
+ALPHA_WEBP_Q = (Q, 80, 70, 60, 50)   # the WebP's quality ladder, from the JPEG's own Q down
+ALPHA_WEBP_SHRINK = 0.85             # ... then the width, a step at a time, at the ladder's last quality
+
+
+def has_alpha(im) -> bool:
+    """P69 T6d: does this picture USE transparency - an alpha channel, a palette transparency or (MN1) a colour key
+    (tRNS on an RGB, L or I PNG) - with at least one pixel under fully opaque? An RGBA file whose alpha is all 255 is
+    a photo in a transparent container, and a key no pixel carries is no transparency: no."""
+    if "transparency" in im.info or im.mode in ("RGBA", "LA", "PA", "RGBa", "La"):
+        return im.convert("RGBA").getchannel("A").getextrema()[0] < 255
+    return False
+
+
+def _alpha_uri(p: Path, im0, cap: int) -> str:
+    """A picture that uses transparency, embedded with it: its own bytes when it is a PNG under the width cap and the
+    byte cap; else a PNG at the width cap when that fits ALPHA_BYTES_CAP; else a WebP with alpha under it (MN2)."""
+    from PIL import Image
+    if im0.width <= cap and p.suffix.lower() == ".png" and p.stat().st_size <= ALPHA_BYTES_CAP:
+        return f"data:image/png;base64,{base64.b64encode(p.read_bytes()).decode()}"
+    im = im0.convert("RGBA")
+    if im.width > cap:   # Pillow resamples RGBA premultiplied: no dark fringe from the transparent pixels' colour
+        im = im.resize((cap, round(im.height * cap / im.width)), Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, "PNG", optimize=True)
+    if buf.tell() <= ALPHA_BYTES_CAP:
+        return f"data:image/png;base64,{base64.b64encode(buf.getvalue()).decode()}"
+    while True:
+        for q in ALPHA_WEBP_Q:
+            buf = io.BytesIO()
+            im.save(buf, "WEBP", quality=q)
+            if buf.tell() <= ALPHA_BYTES_CAP:
+                return f"data:image/webp;base64,{base64.b64encode(buf.getvalue()).decode()}"
+        if im.width <= 1:
+            raise ValueError(f"{p}: no WebP of it fits {ALPHA_BYTES_CAP} bytes")
+        im = im.resize((max(1, round(im.width * ALPHA_WEBP_SHRINK)), max(1, round(im.height * ALPHA_WEBP_SHRINK))), Image.LANCZOS)
+
+
 def data_uri(p: Path, cap: int | None = None) -> str:
-    """Embed an asset, downscaled to what the stage can actually show."""
+    """Embed an asset, downscaled to what the stage can actually show.
+
+    P69 T6d (found on T23's frames: the Fed stamped as a BLACK SQUARE): a picture that uses transparency - a prop
+    cutout, any PNG with alpha - keeps it: a PNG at the cap (its own bytes when it is already a PNG under the cap), so
+    the page shows through its sky and T6b's hatch follows the silhouette, not the square - under ALPHA_BYTES_CAP, a
+    WebP with alpha past it (_alpha_uri). Every picture without alpha is the JPEG it always was, to the byte."""
     if cap is None:
         mime = mimetypes.guess_type(p.name)[0] or "application/octet-stream"
         return f"data:{mime};base64,{base64.b64encode(p.read_bytes()).decode()}"
     from PIL import Image
-    im = Image.open(p).convert("RGB")
+    im0 = Image.open(p)
+    if has_alpha(im0):
+        return _alpha_uri(p, im0, cap)
+    im = im0.convert("RGB")
     if im.width > cap:
         im = im.resize((cap, round(im.height * cap / im.width)), Image.LANCZOS)
     buf = io.BytesIO()
@@ -5459,12 +5760,20 @@ def free_bands(boxes: dict, reserve: list[dict] | None = None) -> list[dict]:
     # that reports no `tags` box (every page compiled before this row, and every 9:16 page) is unchanged.
     tags = boxes.get(LPG.TAGS_KEY)
     plot_r = max(plot["x"] + plot["w"], tags["x"] + tags["w"] if tags else 0)
+    # P69 T10: a longform page's KEY RAIL stands in the top band between the sub and the plot - the names its end tags
+    # gave up. A card may park over a heading once it is read (E45), never over the key that names the lines under it,
+    # so the `above` band ends at the key's top. A page with no key (every page but a keyed longform one) is unchanged.
+    key = boxes.get(LPG.KEY_BOX)
+    above_foot = min(plot["y"], key["y"]) if key else plot["y"]
+    # ... and the side bands, which run from the safe head, start under the key wherever its row reaches across them
+    left_head = key["y"] + key["h"] if key and key["x"] < plot["x"] else head
+    right_head = key["y"] + key["h"] if key and key["x"] + key["w"] > plot_r else head
     bands = {
-        "above": (left, head, right - left, plot["y"] - head),
+        "above": (left, head, right - left, above_foot - head),
         "below": (left, plot["y"] + plot["h"], right - left, src["y"] - plot["y"] - plot["h"]),
         "foot": (left, ink_foot, right - left, foot - ink_foot),
-        "left": (left, head, plot["x"] - left, foot - head),
-        "right": (plot_r, head, right - plot_r, foot - head),
+        "left": (left, left_head, plot["x"] - left, foot - left_head),
+        "right": (plot_r, right_head, right - plot_r, foot - right_head),
     }
     return [{"band": name, "x": x, "y": y, "w": w, "h": h}
             for name, (x, y, w, h) in bands.items() if w > 0 and h > 0]
@@ -5799,11 +6108,13 @@ def ring_obstacles(page: dict | None, aspect: str | None, extra: list[dict] | No
         raise ValueError(f"this page writes inline end names (tag_units {LPG.tag_units(page):g}) but reports no "
                          f"measured `{LPG.TAGS_KEY}` box (R26-205 measures one on a full-stage 16:9 page) - a stamp's "
                          "ring cannot be fitted blind against names it cannot see")
-    out = [boxes[k] for k in ("title", "sub", "source", "rail", "caption_anchor")
+    out = [boxes[k] for k in ("title", "sub", "source", "rail", LPG.KEY_BOX, "caption_anchor")   # P69 T10: the key rail
            if isinstance(boxes.get(k), dict) and boxes[k].get("w", 0) > 0 and boxes[k].get("h", 0) > 0]
     axis = boxes.get("axis") or {}
     out += [axis[k] for k in ("x", "y") if isinstance(axis.get(k), dict)]
-    if boxes.get(LPG.TAGS_KEY):
+    if boxes.get(LPG.TAG_BOXES_KEY):   # P69 T6d: a MEASURED page's end tags, each at its drawn rect - the margin between
+        out += [dict(b) for b in boxes[LPG.TAG_BOXES_KEY]]   # them (level with the rules) is room, not a solid column
+    elif boxes.get(LPG.TAGS_KEY):
         out.append(boxes[LPG.TAGS_KEY])
     plot, mask = boxes["plot"], boxes.get("data_mask")
     # THE BASIS LABEL (`axes.ylabel`, "index - 100 = Aug 2025, log scale"): `page_boxes` folds it into `plot`'s own top
@@ -6424,7 +6735,7 @@ CAPTION_BAND_ORDER = ("below", "above", "quiet")
 # R26-201: the page boxes a CAMERA moves - the page's own ink, and nothing the frame owns (`stage`, `safe`,
 # `caption_anchor` are the stage's; `quiet_zone` / `measured` are words). `free_bands` reads both kinds, which is
 # why the list is named rather than inferred: a transformed safe box would move the band's own walls with the page.
-CAPTION_PAGE_INK_KEYS = ("title", "sub", "chart", "plot", "source", "rail", LPG.TAGS_KEY)
+CAPTION_PAGE_INK_KEYS = ("title", "sub", "chart", "plot", "source", "rail", LPG.TAGS_KEY, LPG.KEY_BOX)
 CAPTION_HOME_BOTTOM = 480      # 9:16: the strip sits on `bottom: 480px` (G-l, y 1297-1440)
 CAPTION_HOME_TOP = 0.40        # 16:9: the stage caption's own 40% band
 CAPTION_SIDE_PAD = 120         # the stage caption's near margin beside a declared quiet zone
@@ -6523,7 +6834,7 @@ def caption_band(page: dict, aspect: str, cards: list[dict] | None, xf=None) -> 
     # the strip clears the page's DATA and the page's own INK. `free_bands` hands E45's card the
     # title and the sub ("over the title", the card being opaque and the heading read); a caption is
     # white type with a shadow, so a strip on the title is two texts in one place - it is not free.
-    ink = [boxes[k] for k in ("plot", "title", "sub", "source", "rail") if boxes.get(k) and boxes[k]["h"] > 0]
+    ink = [boxes[k] for k in ("plot", "title", "sub", "source", "rail", LPG.KEY_BOX) if boxes.get(k) and boxes[k]["h"] > 0]
     bands = {bd["band"]: bd for bd in free_bands(boxes)}
     for name in CAPTION_BAND_ORDER:
         if name == "quiet":
@@ -6993,6 +7304,18 @@ def stack_entry(items, clear_at: float, form: str | None = None,
     if form is not None:
         payload["form"] = form
     return payload, enter, exitt
+
+
+def dock_card_profile(asset: Path) -> dict:
+    """P69 T10c: ``{"card": <the sidecar>}`` for a dock still that chart_card drew FOR ITS OWN SIZE (its
+    ``<asset>.card.json``, `chart_card.card_sidecar`), else ``{}`` - so every other dock's evidence entry is byte-identical."""
+    side = Path(asset).with_suffix(".card.json")
+    if not side.exists():
+        return {}
+    meta = json.loads(side.read_text(encoding="utf-8"))
+    if meta.get("profile") != "card":
+        raise ValueError(f"{side}: a dock sidecar that is not a card profile's ({meta.get('profile')!r})")
+    return {"card": {k: meta[k] for k in sorted(meta)}}
 
 
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
@@ -7769,6 +8092,9 @@ def main() -> int:
                             ap.with_suffix(".series.json").read_text(
                                 encoding="utf-8")), enter, tl)}
                            if ap.with_suffix(".series.json").exists() else {}),
+                        # P69 T10c: a CHART CARD drawn for its own size (chart_card's `card` profile) says so, so the
+                        # player hands a push or a snap over to the FULL page instead of growing the card
+                        **dock_card_profile(ap),
                     }
                     # BADGE-CHART SYNC: chart data refetches on rebuild, so
                     # an authored badge value can silently drift from the end
@@ -7801,6 +8127,14 @@ def main() -> int:
                                         from_to=ring_fit["from_to"] if ring_fit else None,   # ... and the approach
                                         paint=ring_fit["paint"] if ring_fit else None))   # ... and its painted extent
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
+        # P69 T26b: the row's camera against the full-stage page it moves over, now that the docks it pulls toward are
+        # placed - a landing pull or a key that would cut the title, the y ticks, the source line or a drawn end tag is
+        # refused by name, reported, or clamped on the row's own word (`reach: "clamp"`)
+        reach_errs, reach_notes, row_camera = camera_reach(world, docks, row_camera, plate, ASPECT)
+        if reach_errs:
+            raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(reach_errs))
+        for _note in reach_notes:
+            print(f"  camera reach: row {i + 1}: {_note}")
         try:
             _pg = (world or {}).get("page") if isinstance((world or {}).get("page"), dict) else None
             _changed = world_key(world) != world_key(prev_world) if i > 0 else False   # the first row has no boundary
