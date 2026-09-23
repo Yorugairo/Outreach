@@ -94,7 +94,7 @@ curvature stroke (P38 T2) plus the hands (A5) plus ink (44), composed. See
 ## The scope shift, named
 
 The engine was scoped to **assemble plates and dock evidence over narration**. It is
-becoming **a narration-timed 2D animation system**. What did it:
+becoming **a narration-timed animation system**. What did it:
 
 1. **The chart engine was never chart-specific.** `drawOn` draws any path;
    `resolveTarget` resolves against data.
