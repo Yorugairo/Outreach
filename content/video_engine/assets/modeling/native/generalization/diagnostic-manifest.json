@@ -1,0 +1,51 @@
+{
+  "art_approval": "not_approved",
+  "assets": {
+    "environment": {
+      "asset_id": "layered-environment",
+      "asset_kind": "environment",
+      "descriptor_path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/model_asset.v1.json",
+      "descriptor_sha256": "8b40b1028e6cebdcb84ca2f1bd51869a7807539965027fda726ffa91cda6d8a3",
+      "editable_source": "content/video_engine/assets/modeling/native/generalization/environment.blend",
+      "editable_source_sha256": "8afd9f3f307574496753b985eece3129c0da4783184eb8fbde5af2afe88e69e4",
+      "render_eligible": false,
+      "renders": {
+        "environment-front.png": {
+          "path": "content/video_engine/review/model-engines/benchmark-v1/art/generalization/renders/environment-front.png",
+          "sha256": "af4cbe40d61404767752996af8c78c40a89fbaed1a144d0bcfb9659059e05089"
+        },
+        "environment-three-quarter.png": {
+          "path": "content/video_engine/review/model-engines/benchmark-v1/art/generalization/renders/environment-three-quarter.png",
+          "sha256": "50282c25c04a63d177d74ae449cbbfb11f2256549e71fd2a479ba721515c8a8b"
+        }
+      },
+      "review_state": "review_only"
+    },
+    "prop": {
+      "asset_id": "hinged-prop",
+      "asset_kind": "prop",
+      "descriptor_path": "content/video_engine/assets/modeling/native/generalization/contract/prop/e7e4323080c6-native/model-assets/candidates/hinged-prop/hinged-prop-r1/model_asset.v1.json",
+      "descriptor_sha256": "8c93fa16b10eaf3213758a141f8d74fcddf1f99c8aa576225ec615020dee7b98",
+      "editable_source": "content/video_engine/assets/modeling/native/generalization/hinged-prop.blend",
+      "editable_source_sha256": "e7e4323080c6e63cf29650d7e6532d414f9bed86fad7b9de5529d2edb8b774cd",
+      "render_eligible": false,
+      "renders": {
+        "hinged-prop-closed.png": {
+          "path": "content/video_engine/review/model-engines/benchmark-v1/art/generalization/renders/hinged-prop-closed.png",
+          "sha256": "bbbcbd491c087e223992e58c80c625e0a8be4db4cf57ab5456ea2bbfb71bdb67"
+        },
+        "hinged-prop-open.png": {
+          "path": "content/video_engine/review/model-engines/benchmark-v1/art/generalization/renders/hinged-prop-open.png",
+          "sha256": "104496743d0d6d3dcee5b47fdbc5b404cc1f0169639dfa6b38d4019d81e22a2e"
+        }
+      },
+      "review_state": "review_only"
+    }
+  },
+  "blender_version": "5.2.2 LTS",
+  "provider_calls": 0,
+  "scene_binding_path": "content/video_engine/assets/modeling/native/generalization/diagnostic-scene.model_scene.v1.json",
+  "scene_binding_sha256": "d443425286bbfa1a7091ab66ad1615f2fe9261a1db5da24f02126b44493dd5ab",
+  "schema_version": "diagnostic-generalization-manifest.v1",
+  "status": "diagnostic_only"
+}

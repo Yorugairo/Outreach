@@ -1,0 +1,25 @@
+{
+  "assets": [
+    {
+      "asset_id": "layered-environment",
+      "kind": "world",
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/resources/environment.blend",
+      "render_eligible": false,
+      "resolution_tier": 1,
+      "review_state": "review_only",
+      "revision_id": "layered-environment-r1",
+      "rights_state": "review_only",
+      "semantic_tags": [
+        "environment",
+        "candidate"
+      ],
+      "sha256": "8afd9f3f307574496753b985eece3129c0da4783184eb8fbde5af2afe88e69e4",
+      "style_version": "model-asset-intake-v1"
+    }
+  ],
+  "project_root": ".",
+  "resolution_order": [
+    "exact_semantic_match"
+  ],
+  "schema_version": "asset_catalog.v1"
+}
