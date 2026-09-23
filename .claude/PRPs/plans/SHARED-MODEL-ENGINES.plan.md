@@ -214,7 +214,7 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Evidence: pending; full frames and scene inspection with hidden/disabled-object and render-engine state captured.
 
 ### T7a: Independent editable 2.5D model/layer backend
-- Status: pending
+- Status: running (authored-layer diagnostic input; independent of T4a/T5b)
 - Owner: implementation_luna
 - Depends on: T3, T5a
 - Write set: `M/layered.py`; `F/layered/authored/`; `content/video_engine/tests/test_model_layered.py`; `B/2_5d/authored/`; shared player source remains read-only
