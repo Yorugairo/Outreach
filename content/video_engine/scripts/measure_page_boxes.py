@@ -198,6 +198,9 @@ READ_BOXES = r"""
   };
   out.data = [];
   if (chart) for (const el of chart.querySelectorAll(DATA)) for (const bx of dataBoxes(el)) out.data.push(bx);
+  /* P69 T6d: each END TAG at its drawn rect (a line's terminal name, its chip with it), in the chart's order */
+  out.tag_boxes = chart ? [...chart.querySelectorAll('text.sname')].filter((el) => (el.textContent || '').trim()
+    && +(el.getAttribute('opacity') || 1) > 0.05).map(R).filter((r) => r.w >= 1 && r.h >= 1) : [];
   out.stage = [stg.width, stg.height];
   return out;
 }
@@ -392,6 +395,8 @@ def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: 
     boxes = {k: _box(dom[k]) for k in LPG.BOX_KEYS}
     if dom.get(LPG.KEY_BOX):   # P69 T10: the key rail, on a longform page that has one
         boxes[LPG.KEY_BOX] = _box(dom[LPG.KEY_BOX])
+    if LPG.full_stage(page, aspect) and dom.get(LPG.TAG_BOXES_KEY):   # P69 T6d: a full-stage page's end tags, as drawn
+        boxes[LPG.TAG_BOXES_KEY] = [_box(b) for b in dom[LPG.TAG_BOXES_KEY]]
     axis = {k: (_box(dom["axis"][k]) if (dom.get("axis") or {}).get(k) else None) for k in ("x", "y")}
     return {"page": page, "boxes": boxes, "axis": axis,
             "data_mask": data_mask(boxes["plot"], dom.get("data") or [])}

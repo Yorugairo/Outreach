@@ -554,3 +554,44 @@ def test_check_fails_a_moved_long_form_box_naming_its_builder_preset_and_box(tmp
     now["profiles"][name]["16:9|full_stage"]["boxes"]["chart"]["y"] += 73
     assert _check(tmp_path, monkeypatch, _yesterdays_copy(), now) == 1
     assert f"{name} 16:9|full_stage chart" in capsys.readouterr().err
+
+
+# ---- P69 T6d (2): on a MEASURED page the end tags are boxed as drawn --------------------------------------------------
+# The estimate reserves a line page's end tags as ONE solid column (`_landscape_full_boxes`: on v4 x 1329-1880 over
+# y 250-808), and `page_boxes` kept that estimate even on a page the fixture had measured - so a stamp could not take
+# the empty right margin between the tags, level with the rules. On a measured full-stage page each tag is now its own
+# drawn rect (`tag_boxes`, the fixture's), `tags` their tight union; an estimated page keeps the column.
+
+def _measured_line_page() -> dict:
+    return M.full_stage_variant(M.representative("dense-line"))
+
+
+def test_a_measured_full_stage_page_boxes_each_end_tag_as_drawn():
+    page = _measured_line_page()
+    boxes = LPG.page_boxes(page, "16:9")
+    assert boxes["measured"] is True
+    drawn = boxes.get(LPG.TAG_BOXES_KEY)
+    named = [sr for sr in page["series"] if not sr.get("muted")]
+    assert drawn and len(drawn) == len(named), (drawn, len(named))
+    entry = FIXTURE["builders"]["dense-line"]["16:9|full_stage"]["boxes"]
+    assert drawn == entry[LPG.TAG_BOXES_KEY], "the fixture's own rects"
+    est = LPG._landscape_full_boxes(page, 1920, 1080)[LPG.TAGS_KEY]
+    assert boxes[LPG.TAGS_KEY] == est, "`tags` stays the estimate's column for every other reader (camera, caption, bands)"
+    area = sum(b["w"] * b["h"] for b in drawn)
+    assert area < 0.5 * est["w"] * est["h"], ("the tags as drawn leave most of the estimate's column free", area, est)
+
+
+def test_an_estimated_page_keeps_the_solid_column():
+    page = dict(_measured_line_page(), title="A title nobody measured")
+    boxes = LPG.page_boxes(page, "16:9")
+    assert boxes["measured"] is False and LPG.TAG_BOXES_KEY not in boxes
+    assert boxes[LPG.TAGS_KEY] == LPG._landscape_full_boxes(page, 1920, 1080)[LPG.TAGS_KEY]
+
+
+def test_a_stamps_ring_is_fitted_around_each_tag_not_the_column():
+    page = _measured_line_page()
+    obstacles, _bounds = B.ring_obstacles(page, "16:9")
+    boxes = LPG.page_boxes(page, "16:9")
+    for tag in boxes[LPG.TAG_BOXES_KEY]:
+        assert tag in obstacles, tag
+    assert boxes[LPG.TAGS_KEY] not in obstacles, "the column is not an obstacle once each tag is"

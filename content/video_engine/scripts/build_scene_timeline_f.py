@@ -5409,13 +5409,36 @@ def _world_for_bare_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | 
 STAGE_W, CARD_W, Q = 1920, 1400, 90
 
 
+def has_alpha(im) -> bool:
+    """P69 T6d: does this picture USE transparency - an alpha channel (or a palette transparency) with at least one
+    pixel under fully opaque? An RGBA file whose alpha is all 255 is a photo in a transparent container: no."""
+    if im.mode in ("RGBA", "LA", "PA") or (im.mode == "P" and "transparency" in im.info):
+        return im.convert("RGBA").getchannel("A").getextrema()[0] < 255
+    return False
+
+
 def data_uri(p: Path, cap: int | None = None) -> str:
-    """Embed an asset, downscaled to what the stage can actually show."""
+    """Embed an asset, downscaled to what the stage can actually show.
+
+    P69 T6d (found on T23's frames: the Fed stamped as a BLACK SQUARE): a picture that uses transparency - a prop
+    cutout, any PNG with alpha - keeps it: a PNG at the cap (its own bytes when it is already a PNG under the cap), so
+    the page shows through its sky and T6b's hatch follows the silhouette, not the square. Every picture without
+    alpha is the JPEG it always was, to the byte."""
     if cap is None:
         mime = mimetypes.guess_type(p.name)[0] or "application/octet-stream"
         return f"data:{mime};base64,{base64.b64encode(p.read_bytes()).decode()}"
     from PIL import Image
-    im = Image.open(p).convert("RGB")
+    im0 = Image.open(p)
+    if has_alpha(im0):
+        if im0.width <= cap and p.suffix.lower() == ".png":
+            return f"data:image/png;base64,{base64.b64encode(p.read_bytes()).decode()}"
+        im = im0.convert("RGBA")
+        if im.width > cap:   # Pillow resamples RGBA premultiplied: no dark fringe from the transparent pixels' colour
+            im = im.resize((cap, round(im.height * cap / im.width)), Image.LANCZOS)
+        buf = io.BytesIO()
+        im.save(buf, "PNG", optimize=True)
+        return f"data:image/png;base64,{base64.b64encode(buf.getvalue()).decode()}"
+    im = im0.convert("RGB")
     if im.width > cap:
         im = im.resize((cap, round(im.height * cap / im.width)), Image.LANCZOS)
     buf = io.BytesIO()
@@ -5888,7 +5911,9 @@ def ring_obstacles(page: dict | None, aspect: str | None, extra: list[dict] | No
            if isinstance(boxes.get(k), dict) and boxes[k].get("w", 0) > 0 and boxes[k].get("h", 0) > 0]
     axis = boxes.get("axis") or {}
     out += [axis[k] for k in ("x", "y") if isinstance(axis.get(k), dict)]
-    if boxes.get(LPG.TAGS_KEY):
+    if boxes.get(LPG.TAG_BOXES_KEY):   # P69 T6d: a MEASURED page's end tags, each at its drawn rect - the margin between
+        out += [dict(b) for b in boxes[LPG.TAG_BOXES_KEY]]   # them (level with the rules) is room, not a solid column
+    elif boxes.get(LPG.TAGS_KEY):
         out.append(boxes[LPG.TAGS_KEY])
     plot, mask = boxes["plot"], boxes.get("data_mask")
     # THE BASIS LABEL (`axes.ylabel`, "index - 100 = Aug 2025, log scale"): `page_boxes` folds it into `plot`'s own top

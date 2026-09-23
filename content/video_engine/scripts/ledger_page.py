@@ -2234,6 +2234,7 @@ PAGE_BOXES_FIXTURE = _REPO / "content/video_engine/assets/page-boxes.v1.json"
 PAGE_BOXES_SCHEMA = "page_boxes.v1"
 BOX_KEYS = ("title", "sub", "chart", "plot", "source", "rail")
 TAGS_KEY = "tags"   # R26-205: the end tag column, on a full-stage page only (the fixture measures the six above)
+TAG_BOXES_KEY = "tag_boxes"   # P69 T6d: on a MEASURED full-stage page, each end tag at its drawn rect (the fixture's own)
 INK_KEYS = ("builder", "title", "sub", "source", "quiet_zone")
 # Kept as a descriptive alias for callers that name the variant.  The fixture's
 # actual key is the main lane's geometry key, ``16:9|full_stage``.
@@ -2444,6 +2445,8 @@ def measured_boxes(spec: dict, aspect: str) -> dict | None:
     out = {k: dict(boxes[k]) for k in BOX_KEYS}
     if isinstance(boxes.get(KEY_BOX), dict):   # P69 T10: a longform page's key rail, when it was measured with one
         out[KEY_BOX] = dict(boxes[KEY_BOX])
+    if isinstance(boxes.get(TAG_BOXES_KEY), list) and boxes[TAG_BOXES_KEY]:   # P69 T6d: its end tags, each as drawn
+        out[TAG_BOXES_KEY] = [dict(b) for b in boxes[TAG_BOXES_KEY] if isinstance(b, dict)]
     return out
 
 
@@ -2497,10 +2500,13 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
         boxes["plot"] = treemap_plot(boxes["chart"], aspect)
     measured = measured_boxes(spec, aspect)
     if measured:                      # the player's own numbers for this ink win over every estimate above
-        tags = boxes.get(TAGS_KEY)    # ... except the end tag column, which the fixture does not measure
+        tags = boxes.get(TAGS_KEY)    # ... except the end tag column, which the fixture does not measure as a column
         boxes.update(measured)
+        drawn = boxes.pop(TAG_BOXES_KEY, None)
         if tags is not None:
             boxes[TAGS_KEY] = tags
+            if drawn:   # P69 T6d: ... and beside it the tags AS DRAWN, each at its rect (the stamp's ring fits around these)
+                boxes[TAG_BOXES_KEY] = drawn
         boxes.update(measured_room(spec, aspect))   # E65: the plot's empty room and the axis bands travel with them
         if spec.get("builder") == "tiers":   # the tier bands are a law over the PLOT: re-cut them on the measured one
             boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
