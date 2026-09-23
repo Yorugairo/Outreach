@@ -1,7 +1,7 @@
 ---
 id: SHARED-MODEL-ENGINES
 title: Shared 2.5D and 3D model engines with reusable stylized assets
-status: draft
+status: running
 operation: feature
 risk: high
 owner: parent
@@ -18,7 +18,7 @@ Build shared local authoring and rendering services for **characters, props and 
 
 The result must make good-looking editable assets and convincing motion, not merely schemas, proxy bodies, or passing math tests. Separate reusable proportion/body presets, recognizable identity additions, rig/deformation, materials/art treatment, motion, and shot presentation. Treat native and externally generated models as alternative inputs to the same inspection and production workflow.
 
-**This is a draft for approval, not implementation authorization.** The operator explicitly selected shared engines with fighter scene first in planning Round 1. The older `MM-KNOCKOUT-ANIMATED-5` plan remains the episode/variant owner; it excluded shared-engine migration, which this separate plan now proposes. Neither plan is silently marked complete or superseded.
+The operator approved HG1 on 2026-09-22: shared engines, fighter scene first. The older `MM-KNOCKOUT-ANIMATED-5` plan remains the episode/variant owner; it excluded shared-engine migration, which this separate plan now implements. Neither plan is silently marked complete or superseded.
 
 ## Intent And Acceptance
 
@@ -44,6 +44,7 @@ The result must make good-looking editable assets and convincing motion, not mer
 | AC7 | Fresh and resumed local builds record source hashes, parameters, tool versions, stage timings, cache decisions and output checksums; missing/stale artifacts and failed render stages cannot report success. |
 | AC8 | Tripo benchmark records retries, credit use, cleanup/rigging minutes, geometry/surface/deformation quality and time to an accepted shot. Vendor failure does not block the native engine; purchase choice remains human. |
 | AC9 | Existing player/layer and project baselines remain unchanged unless a separately reviewed adapter change is necessary. No new player, unauthorized publication, source audio warp, or V12 overwrite. |
+| AC10 | At least one available local-AI enhancement is compared against its Blender-authored source under the same shot and inspection criteria, with quality, editability, runtime, provenance and failure modes recorded. If the local stack is unavailable, record the exact dependency rather than claiming an enhanced result or blocking native delivery. |
 
 ## Scope
 
@@ -53,9 +54,10 @@ The result must make good-looking editable assets and convincing motion, not mer
 
 1. **Asset and preset service:** versioned supplemental `model_asset.v1` descriptors reference the existing asset identity/store and approval record. Fields cover asset kind, original/derived lineage and SHA-256, coordinate convention/scale, bounded proportion parameters, mesh/layer resources, rig capabilities and sockets, expression controls, materials/UV set, view envelope, editable source and provenance. Software/tool license and mesh/texture/motion licenses remain distinct. Never create an independent approval boolean that overrides the established manifest.
 2. **Shared scene/motion contract:** proposed `model_scene.v1` records exact asset revisions, rational FPS, time origin and source-time mapping, duration, camera/lights, named environment collision surfaces, prop attachments, semantic motion channels, contacts/events, render profile and approved art treatment. Authored decisions remain authored; the engine evaluates them, it does not allocate shots by count.
-3. **3D backend:** Blender Python scene construction plus editable `.blend` sources; version-pinned body/face presets, rig mapping, weight/corrective handling, materials and render passes. Evaluate MPFB/MakeHuman + Rigify as the first candidate, not as already installed or validated. Prefer existing Blender deformation tools to reimplementing them; custom math serves contact, retargeting, secondary response and diagnostics.
-4. **2.5D backend:** preserve the existing layer/plate camera contract. Add model-derived and authored-art layers with explicit pivots, masks, pose/expression resources and depth roles. Use local 2D deformation or baked pose resources where appropriate, but state which is used. For views outside an asset's declared envelope, fail with a diagnostic or select an explicitly authored 3D shot; never silently invent unseen geometry. Keep ComfyUI depth/masking as an optional preparation path, not an unconditional runtime dependency.
-5. **Render and inspection adapters:** reuse existing local job/artifact services where their operations fit; add narrow adapters, not a parallel queue. Render requests emit a hash-bound model inspection receipt and existing player-compatible media/layer assets. The existing assembly lane owns captions, music and final mux.
+3. **3D backend:** Blender Python scene construction plus editable `.blend` sources; version-pinned body/face presets, rig mapping, weight/corrective handling, materials and render passes. Blender MCP is permitted for interactive authoring, inspection and fast iteration, provided every accepted change is saved to versioned editable assets and can be reproduced or inspected by the headless Blender build. It is an authoring interface, not a mandatory final-render service. Evaluate MPFB/MakeHuman + Rigify as the first candidate, not as already installed or validated. Prefer existing Blender deformation tools to reimplementing them; custom math serves contact, retargeting, secondary response and diagnostics.
+4. **2.5D backend:** preserve the existing layer/plate camera contract. Add model-derived and authored-art layers with explicit pivots, masks, pose/expression resources and depth roles. Use local 2D deformation or baked pose resources where appropriate, but state which is used. For views outside an asset's declared envelope, fail with a diagnostic or select an explicitly authored 3D shot; never silently invent unseen geometry.
+5. **Optional local-AI enhancement:** Blender-authored meshes, rigs, motion and editable scenes are the primary source. Evaluate the local LoRA/Hugging Face/ComfyUI stack for bounded downstream enhancements such as texture/look variants, masks, depth and 2.5D layer preparation. Compare each enhanced result with the Blender-authored baseline under the same shot and inspection criteria; retain the unenhanced source, provenance, model/version/license and reproducible parameters. No AI output may silently replace rig geometry, contact timing or approved identity. The stack is not required for every build, and an unavailable service does not prevent an otherwise valid Blender build.
+6. **Render and inspection adapters:** reuse existing local job/artifact services where their operations fit; add narrow adapters, not a parallel queue. Render requests emit a hash-bound model inspection receipt and existing player-compatible media/layer assets. The existing assembly lane owns captions, music and final mux.
 
 ### Asset authoring and quality path
 
@@ -64,6 +66,8 @@ Start with a clean base mesh and useful head/face/hands, then proportion and ide
 Use explicit character/prop/environment capability profiles: a static environment need not pretend to have a facial rig; a hinged prop exposes its hinge and attach socket; a humanoid exposes semantic limbs and face controls. One coordinate contract (documented axes, handedness, units and rest pose) is converted at import/export boundaries. Authored pose transfer resolves targets against each body's actual limb lengths and records clamping/residuals; do not scale a skeleton and assume planted contacts survive.
 
 Keep 3D world metres, projected screen coordinates, and P58's layer-depth factors as separate typed fields. The projection adapter produces pixel pivots/masks and dimensionless layer depth from the shared scene; it must not feed world-space Z directly into an existing parallax multiplier. Profile-specific silhouette or pose overrides are explicit authored deltas, never silently different contact clocks.
+
+Geometry detail is shot-dependent, not one universal vertex target. Record stored and evaluated vertices, faces and triangles separately for each fighter and each render-detail variant; compare the riggable control mesh, subdivided/sculpted render mesh and baked material detail in identical full-body, face/hand close-up and impact stress shots. Increase density where silhouette or deformation visibly needs it, preserving editable topology and measured render cost. Vendor polygon or triangle settings are comparison inputs, not a directly comparable count of Blender control vertices.
 
 Motion phases are approach → contact → follow-through → recovery/fall → floor contact. Preserve attack velocity through contact; a rest-to-rest easing curve is not a generic collision model. Visual hit-stop and audio timing are separate clocks. Any simulation is baked or explicitly seek-safe and deterministic within the declared tool/hardware profile; cross-GPU pixel identity is not promised.
 
@@ -80,14 +84,14 @@ After AC2 in-house art exists, use the same operator-selected reference design a
 - A competing 3D foundation model, training pipeline, general-purpose physics solver, Blender replacement, or new scene-evidence player.
 - SaaS, REST endpoints, accounts, multi-tenant storage, browser modeling UI, distributed farm or new database.
 - Photoreal humans as the default, physically exact injury simulation, universal fixed anime timing constants, or unverified research numbers copied into runtime defaults.
-- Mandatory LoRA/Hugging Face/ComfyUI dependencies, mandatory real-time glTF delivery, or blanket retopology of every imported asset regardless of deformation needs.
+- Mandatory LoRA/Hugging Face/ComfyUI dependencies for every build, mandatory real-time glTF delivery, or blanket retopology of every imported asset regardless of deformation needs. This does not exclude evaluating or using the local AI stack for measured asset enhancement.
 - Automatic visual approval, automatic purchase, provider calls during planning, publication, unrelated effects-catalog repairs or destructive cleanup of the dirty checkout.
 
 ## Human Gates
 
 | Gate | Decision and artifact | Blocks |
 |---|---|---|
-| HG1 | Approve this shared-engine PRP and its boundary with the older five-variant plan. | All implementation in this plan. |
+| HG1 | Approved by operator 2026-09-22: shared engines, fighter scene first; local AI stack is an optional evaluated enhancement after Blender authoring; Blender MCP may be used for interactive authoring and inspection. | Closed; implementation may proceed. |
 | HG2 | Judge finished native fighter design sheets, turntables, deformation/face tests and 2.5D view-envelope demonstration. | Expansion to the roster and final action production; diagnostic work may continue. |
 | HG3 | Judge both rendered exchange lanes and the general prop/environment demonstration with inspection receipts. | Calling either engine production-ready or replacing approved episode assets. |
 | HG4 | Review Tripo/native/hybrid comparison and explicitly choose any paid plan/budget. | Paid provider activity and use beyond recorded asset rights; not independent native development. |
@@ -127,13 +131,15 @@ The Tripo comparison follows native art HG2 and can run alongside non-overlappin
 All paths below are proposed new write sets unless identified as existing. Tests/CLI commands in later slices are **contracts to implement**, not assertions those tools currently exist. `M` below means `content/video_engine/src/modeling`; `F` means `content/video_engine/tests/fixtures/modeling`; `B` means `content/video_engine/review/model-engines/benchmark-v1`.
 
 ### T1: Freeze baseline, benchmark inputs and runtime feasibility
-- Status: pending
+- Status: complete (technical starter gate only; art unapproved)
 - Owner: implementation_luna; parent reviews
 - Depends on: HG1
 - Write set: `F/baseline/`; `B/baseline/`; this plan's evidence fields (parent only)
-- Acceptance: current V12/media hashes, measured FPS/audio/events, exact tool versions, existing tests and dirty-file baseline captured; no original cut modified. Test at most two documented starter candidates against the same import/pose fixture, beginning with MPFB/MakeHuman + Rigify. After HG1, necessary free local assets/add-ons may be acquired into an isolated project tool/profile directory with hashes and license records; no global upgrade, paid acquisition or account change is included. Choose the passing candidate from measured compatibility/deformation evidence; if neither passes, return the concrete failures for a scoped decision rather than opening endless research.
+- Acceptance: current V12/media hashes, measured FPS/audio/events, exact tool versions, existing tests and dirty-file baseline captured; no original cut modified. Test at most two documented starter candidates against the same import/pose fixture, beginning with MPFB/MakeHuman + Rigify. Inventory the local LoRA/Hugging Face/ComfyUI capability and Blender MCP availability without requiring either for this native baseline; later enhancement comparisons use the same source/shot and record model and asset provenance. After HG1, necessary free local assets/add-ons may be acquired into an isolated project tool/profile directory with hashes and license records; no global upgrade, paid acquisition or account change is included. Choose the passing candidate from measured compatibility/deformation evidence; if neither passes, return the concrete failures for a scoped decision rather than opening endless research.
 - Validate: run all four Exact existing baseline commands below; `ffprobe -v error -show_format -show_streams -of json content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/production/assembly-v12/build/render/knockout-brain-matchcut-001-v12.mp4`; `& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --version`; retain before/after source hashes in benchmark-inputs.json.
-- Evidence: pending; baseline receipt must distinguish technical prototype from accepted art.
+- Evidence: `F/baseline/benchmark-inputs.json`, `F/baseline/baseline-receipt.md`, `F/baseline/impact-pose-fixture.v1.json`, `F/baseline/run_mpfb_rigify_probe.py`; local ignored `B/baseline/candidates/mpfb-2.0.17/` contains editable `.blend`, inspection JSON and two PNGs with hashes in the tracked manifest. MPFB 2.0.17 + Rigify is selected only as the T4a starter, not accepted art.
+- Execution checkpoint (2026-09-22): worktree/main both began at `712ece1`; register/golden regression `163 passed`. V12 and source timing were read from main without copying or modifying the ignored media. MPFB attempt 1 failed because extension source was imported as a legacy add-on; Blender wrote four new MPFB user-resource files outside the fixture. Their hashes/timestamps were recorded, then exactly those four files and empty directories were removed after hash verification. `BLENDER_USER_RESOURCES` now redirects the top-level USER path inside the fixture. Packaged-extension attempts 2 and 3 created an MPFB human and Rigify rig, but the probe aborted at obsolete Blender API fields (`Bone.roll`, then `BLENDER_EEVEE_NEXT`) before scene save and rendered deformation review. Global MPFB paths remained absent on recheck. The three failures and partial results are recorded in `F/baseline/` and `B/baseline/`; the bounded inspector fix is escalated to `execution_sol` (GPT-6 Sol xhigh). T1 remains running; no model/art acceptance is claimed.
+- Escalation checkpoint: Sol attempt 4 saved an editable `.blend`, two renders and structured inspection. MPFB produced a 13,380-vertex Human, `Human.rigify` (930 bones), and body armature modifiers, but the test's FK arm control caused zero evaluated-vertex movement. Read-only saved-scene inspection showed the rig's `IK_FK` switch at 0, so IK overrode the animated FK control; the default Cube also occluded the renders. Sol attempt 5 explicitly activated FK and hid Cube: `DEF-upper_arm.R` moved 0.0715166 m and 4,736/13,380 evaluated Human vertices moved, with Human floor minimum approximately 0 m. The isolated offline test saved a `.blend` and two unobscured PNGs; V12 hash stayed unchanged. This establishes technical starter feasibility, not likeness, polished deformation, fight choreography or art approval. T2 may begin; T4a must still test face/hands, stress poses, proportion controls and visual quality.
 
 ### T2: Shared asset, preset and scene contracts
 - Status: pending
@@ -221,9 +227,9 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Owner: implementation_luna
 - Depends on: T7a, T6
 - Write set: `M/bake_layers.py`; `F/layered/fighters/`; `B/2_5d/fighters/`; `content/video_engine/tests/test_model_layer_bake.py`
-- Acceptance: first paired fighter proof uses 3D-baked articulated pose resources, preserving the shared contact clock; deliver editable layer metadata, expression/pose resources and bounded view-envelope proof for HG2.
+- Acceptance: first paired fighter proof uses 3D-baked articulated pose resources, preserving the shared contact clock; deliver editable layer metadata, expression/pose resources and bounded view-envelope proof for HG2. When the local LoRA/Hugging Face/ComfyUI stack is available, compare one bounded texture/look, mask, or depth enhancement against the unenhanced Blender-derived resource; the Blender source and pose timing remain authoritative. Record measured benefit, artifacts, model/license/provenance and reproducible settings, or the exact availability blocker.
 - Validate: `python -m pytest content/video_engine/tests/test_model_layer_bake.py -q`; real Blender bake and layer-output checks required.
-- Evidence: pending; no claim this completes the hand-authored detailed 2D variant.
+- Evidence: pending; include the native/enhanced comparison or a concrete unavailable result. No claim this completes the hand-authored detailed 2D variant.
 
 ### T8: Local execution, inspection CLI and existing assembly adapter
 - Status: pending

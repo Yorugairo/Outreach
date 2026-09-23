@@ -1,0 +1,114 @@
+{
+  "schema": "model-engine-benchmark-inputs.v1",
+  "captured_at": "2026-09-22",
+  "worktree": {
+    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\astra\\Outreach Program",
+    "branch": "codex/Astra",
+    "head": "712ece1398e4804f50ec1f7f3ee2b85cbc972a3f",
+    "dirty_baseline": [
+      "M .claude/PRPs/plans/SHARED-MODEL-ENGINES.plan.md (parent-owned)",
+      "M docs/WORKTREE-REGISTER.md (parent-owned)",
+      "?? content/video_engine/tests/fixtures/modeling/ (T1-owned)"
+    ]
+  },
+  "reference_video": {
+    "checkout_role": "main-checkout reference only; read-only; not copied into Astra worktree",
+    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\assembly-v12\\build\\render\\knockout-brain-matchcut-001-v12.mp4",
+    "sha256_before": "e22a43540deaf1d6bcc0beb81d9bd0f068cc0802978d5ba6c74c4665e81f9a35",
+    "sha256_after": "e22a43540deaf1d6bcc0beb81d9bd0f068cc0802978d5ba6c74c4665e81f9a35",
+    "modified_by_t1": false,
+    "probe": {
+      "container_duration_s": 18.648,
+      "video": {"codec": "h264", "profile": "High", "width": 1080, "height": 1920, "r_frame_rate": "24/1", "avg_frame_rate": "24/1", "duration_s": 18.625, "frames": 447},
+      "audio": {"codec": "aac", "profile": "LC", "sample_rate_hz": 48000, "channels": 2, "layout": "stereo", "duration_s": 18.648, "frames": 872}
+    },
+    "edit_receipt": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-v12\\receipt.json",
+      "repair_output_interval_s": [5.833333333333333, 7.333333333333333],
+      "repair_source_interval_s": [2.0, 3.5],
+      "replaced_frames": 36,
+      "audio_unchanged": true
+    },
+    "v12_events": {
+      "intended_opening_freeze_s": [1.208333, 1.75],
+      "only_freeze_reported_after_repair": [1.208333, 1.75],
+      "source_right_hand_contact": {"source_frame": 11, "approx_time_s": 0.367, "basis": "PRODUCTION-LEDGER source timing note; not a newly measured V12 output event"},
+      "source_lead_left_hook": {"source_frame": 24, "approx_time_s": 0.8, "basis": "PRODUCTION-LEDGER source timing note; not a newly measured V12 output event"}
+    }
+  },
+  "shared_pose_fixture": {
+    "path": "content/video_engine/tests/fixtures/modeling/baseline/impact-pose-fixture.v1.json",
+    "fps": 24,
+    "duration_s": 4.0,
+    "events": [
+      {"name": "right_straight_contact", "frame": 27, "time_s": 1.125},
+      {"name": "head_recoil_and_brain_release", "frame": 28, "time_s": 1.1666666666666667},
+      {"name": "attacker_step_release", "frame": 41, "time_s": 1.72},
+      {"name": "left_hook_contact", "frame": 50, "time_s": 2.0833333333333335},
+      {"name": "victim_fall_release", "frame": 54, "time_s": 2.25},
+      {"name": "victim_grounded", "frame": 85, "time_s": 3.55}
+    ],
+    "source_timing_path": "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/production/animated-variants/rig-foundation/timing.json",
+    "source_timing_sha256": "a76353b56654cdb55acef794fd56a572d7d5e99b04891807173145cc1acc7ef4",
+    "distinction": "Existing 2D rig-foundation timing, used as a shared event clock; not V12 output timing or 3D animation acceptance."
+  },
+  "tools": {
+    "blender": {"path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe", "version": "5.2.2 LTS", "build_hash": "d13f752e3b9c", "build_date": "2026-09-15"},
+    "python": "3.11.15",
+    "pytest": "9.1.1",
+    "node": "v24.16.0",
+    "ffmpeg": "8.1.2-full_build-www.gyan.dev",
+    "ffprobe": "8.1.2-full_build-www.gyan.dev"
+  },
+  "candidate": {
+    "name": "MPFB 2.0.17 + Blender Rigify",
+    "source_url": "https://github.com/makehumancommunity/mpfb2",
+    "source_commit": "80919fa4682335c41847f761a4d79dcad4124732",
+    "code_license": "GPL-3.0-or-later (upstream LICENSE.CODE.md and blender_manifest.toml)",
+    "bundled_asset_license": "CC0 1.0 (upstream LICENSE.ASSETS.md)",
+    "package_path": "content/video_engine/tests/fixtures/modeling/baseline/tools/packages/mpfb-2.0.17.zip",
+    "package_sha256": "923b0a0950b2b1d75440200b5457e9af9951e477b37a8e1537956f5f28b15c31",
+    "package_validated": true,
+    "installed_in_isolated_profile": "content/video_engine/tests/fixtures/modeling/baseline/profile",
+    "technical_result": "pass for starter feasibility: MPFB human and Rigify rig generated offline; active FK control propagated to DEF bone and evaluated Human vertices; editable .blend and two renders saved. No art or motion-quality approval.",
+    "selected_for_t4a": true,
+    "selection_limit": "editable rig/deformation starter only; recognizable fighter identity, face/hands, topology stress poses, materials, contact choreography and art acceptance remain T4a/T4b/T5b gates",
+    "attempts": [
+      {"attempt": 1, "result": "legacy source import failed on extension packaging/namespace mismatch; four MPFB user-resource files were created outside the fixture, then hash-verified and removed by parent; see parent execution checkpoint"},
+      {"attempt": 2, "result": "offline packaged extension imported; human and Human.rigify generated; inspection stopped because Blender 5.2 Bone has no roll property; no blend/render persisted"},
+      {"attempt": 3, "result": "offline packaged extension imported; human and Human.rigify generated; script passed mesh/rig/pose measurement block in memory; stopped in render setup because BLENDER_EEVEE_NEXT is not an available engine (this executable exposes BLENDER_EEVEE, BLENDER_WORKBENCH, CYCLES); no blend/render or measurement JSON persisted"},
+      {"attempt": 4, "owner": "execution_sol xhigh escalation", "result": "saved scene/report/renders but selected FK control was overridden by IK_FK=0; zero measured mesh motion was a harness-control failure; default Cube also occluded render and polluted all-mesh ground metric"},
+      {"attempt": 5, "owner": "execution_sol xhigh escalation", "result": "pass after IK_FK=1 and Cube hidden: DEF-upper_arm.R tail moved 0.0715166 m, 4736/13380 Human vertices moved >1e-5 m, max 0.3319437 m, mean 0.0623227 m; Human floor min_z approximately 0 m"}
+    ],
+    "last_inspection_output": "content/video_engine/review/model-engines/benchmark-v1/baseline/candidates/mpfb-2.0.17/inspection.json (ignored local B output; successful attempt-5 technical state)",
+    "output_sha256": {
+      "probe_script": "0a7c63fdab97aef1647183506dae5d462c166925d41a43ee593140199bc34b65",
+      "pose_fixture": "7b7e1ed2df64a6822fed0a70e5d941cf2e8d7c53a419ec1184bab2a86ec20552",
+      "inspection_json": "87597850a25520df91ceb05c66a1158a298de7a56b20ee4fe046cbbeb6925a6b",
+      "blend": "78fa9eeae63df127e49ce3b96e7c8631de2836ed30c38483a67dc2bf1568941a",
+      "forward_estimate_png": "e27a39aa3a1ddb99c64e436a8f04fb868362fbc2c73dc557466bda478fae0b26",
+      "opposite_estimate_png": "8902065bf81f9a9fc5adcaeb0187d0d3e144065d5850ec45e28e20794cf8bddf"
+    },
+    "probe_script": "content/video_engine/tests/fixtures/modeling/baseline/run_mpfb_rigify_probe.py",
+    "global_write_recheck": {
+      "checked_at": "2026-09-22",
+      "targets": ["C:\\Users\\Snipe\\AppData\\Roaming\\Blender Foundation\\Blender\\5.2\\mpfb", "C:\\Users\\Snipe\\AppData\\Roaming\\Blender Foundation\\Blender\\5.2\\scripts\\addons\\mpfb"],
+      "result": "both absent after packaged-extension attempts; no files there to hash; MPFB logs show directories only under isolated F/profile"
+    },
+    "art_status": "not reviewed; no art approval"
+  },
+  "local_ai_inventory": {
+    "scope": "read-only local inventory; no service/provider calls",
+    "huggingface_cli": "C:\\Users\\Snipe\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hf.exe",
+    "cache_models_observed": ["HTDemucs", "Kokoro-82M", "DepthAnythingV2-safetensors", "sam2-safetensors", "faster-whisper-base.en", "faster-whisper-small", "faster-whisper-small.en", "faster-whisper-tiny.en"],
+    "lora": "not confirmed by this inventory",
+    "comfyui": "no command or common local install path found",
+    "blender_mcp": "per parent local availability check, no exposed tool/config/command/listener found; user permits it if connected, but T1 used headless Blender for reproducibility"
+  },
+  "baseline_tests": [
+    {"command": "node --test content/video_engine/tests/kinetics/camera.test.mjs", "result": "10 passed, 0 failed"},
+    {"command": "python -m pytest content/video_engine/tests/test_plate_library_layers.py content/video_engine/tests/test_comfy_depth_split.py content/video_engine/tests/test_page_depth.py content/video_engine/tests/test_dock_depth.py -q", "result": "117 passed, 2 failed; two Tokyo dock PNGs are absent from this isolated worktree and one generated index path resolves into main; assets were not copied or changed"},
+    {"command": "python -m pytest content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/production/animated-variants/rig-foundation/test_rig_foundation.py content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/production/animated-variants/rig-skinning/test_dqs.py content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/production/animated-variants/rig-skinning/test_pose_contract.py -q", "result": "20 passed"},
+    {"command": "python -m pytest content/video_engine/tests/test_local_render_queue.py content/video_engine/tests/test_asset_catalog.py content/video_engine/tests/test_asset_store.py content/video_engine/tests/test_asset_resolver.py content/video_engine/tests/test_martial_editorial_adapter.py content/video_engine/tests/test_editorial_motion_qc.py -q", "result": "83 passed"}
+  ]
+}
