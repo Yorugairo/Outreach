@@ -7,6 +7,10 @@ Status: current. Last reviewed 2026-09-23.
 - `BACKLOG.md` is the canonical active queue. Its opening tables organize work
   by execution context: running PRP, human review, triggered backlog, and
   bounded experiments.
+- The historical source ledger lives in the same-directory
+  `BACKLOG-HISTORY-2026-09.md`; keep the working board compact and do not treat
+  old status tokens or line citations as current evidence. Its provenance
+  banner maps original `BACKLOG.md` line references into the history file.
 - Stable IDs remain attached to their work. R26 rows keep the original
   diagnosis and citations in the historical ledger; the active index names
   only current next actions.
@@ -54,7 +58,7 @@ the P69 umbrella with its 22 open child IDs, 13 legacy follow-ups, three ME-BL
 items, two ME-EXP experiments, and one legacy-revalidation handoff. Thirty
 evidence-backed records are indexed in the September archive and excluded from
 the canonical active tables. Their original rationale and evidence remain in
-the historical section; all 274 R26 source-row headers are preserved. Nothing
+the historical source ledger; all 274 R26 source-row headers are preserved. Nothing
 was deleted. The extra R26-248 mention remains an unresolved reference, not a
 reconstructed task.
 
@@ -97,3 +101,45 @@ triage signal, not proof that the work is complete.
 `backlog/archive/2026-09-completed.md`, and this worktree's existing
 `docs/WORKTREE-REGISTER.md` row. No engine, PRP, ruling, media, or generated
 docs-layer files were edited.
+
+## History split audit — 2026-09
+
+This phase mechanically moved the old historical tail out of the working board;
+it did not re-triage or rewrite that payload. The source snapshot is
+`c6a589961ff8843b9e4290d82776a43ac018a3de`. Before the split, `BACKLOG.md` was
+921 lines / 451,982 bytes. Original lines 55–921 (867 lines / 443,398 bytes)
+now follow the seven-line provenance banner in `BACKLOG-HISTORY-2026-09.md`.
+The exact moved bytes still hash to
+`e45dbe006ba253cb5627efb55277309c36049bbfefa1b9b2e9535c6c7611b9f2`.
+
+After the split, the active board is 64 lines / 9,696 bytes and the history
+file is 874 lines / 443,917 bytes. Mechanical line assertions passed for original line 55
+→ history line 8, line 218 → 171, and line 921 → 874; each compared equal to
+the source snapshot. The source-slice hash and R26 census are unchanged: 275
+unique R26 references remain in the historical tail. The canonical board has
+21 data rows across its three tables, 43 unique IDs in the first column (35
+R26 IDs), and no repeated first-column ID. All five ME-BL / ME-EXP IDs remain
+in the active queue and source history. The completed archive still has 30
+unique archived IDs. The old
+`#model-engine-research-routing--2026-09-23` deep link resolves to the retained
+compatibility heading on the short board.
+
+There are 266 external `BACKLOG.md:<line>` citations in 19 documents, plus 25
+historical self-citations in the moved payload. The external references all
+point into original lines 55–921, so the `n - 47` mapping keeps them resolvable;
+they were deliberately not rewritten. The moved file's relative-link audit
+found 33 Markdown link occurrences (29 unique targets) and no broken local
+targets. This separates the known historical references from genuinely broken
+links; none were identified in the moved slice.
+
+**Verification:** `git diff --check` passed with exit 0; Git emitted only CRLF
+conversion warnings. Nine short-board relative links were checked with
+`Test-Path` relative to `docs/content-video-engine`; all resolved. A `docs_find`
+retrieval attempt was made, but the existing docs-layer builder still fails at
+`effects/cards/dock_kind.json` card 4 `does`; that unrelated builder issue is
+tracked separately as `DOCS-BL-01` and was not changed here.
+
+**Files changed in the split phase:** `BACKLOG.md`, new
+`BACKLOG-HISTORY-2026-09.md`, this report, and this worktree's existing register
+row. The 19 external citation files, generated docs layers, code, PRPs, rulings,
+media, and other boards were not edited.
