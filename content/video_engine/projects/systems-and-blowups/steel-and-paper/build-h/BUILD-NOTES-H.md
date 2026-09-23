@@ -1104,3 +1104,52 @@ rescale / extend, morph, melt:splash:chart and melt:morph. Seam `195.82 s08->s09
 verified, `ref-sha.txt`; `ref-map.txt`, Script G 173.2-199.5). build-f holds the old two-panel card small over the broadcast desk,
 then a bare desk for the concession; H holds the page full-stage through both.
 
+## 15. P69 T24 (row 16) - who is paying: the issuance, two recasts, the filings on the desk; PROP 2 STAMPED - 2026-09-23
+
+The build runs 0.00-321.12 s (897 of 2335 words). `UNIT_CUT_PHRASE` = "So put it together" (row 17, T25's). RED: `t24-red.log`
+(the table ended at row 9, 195.82-242.85). Row 15 now ends at 242.38 (the melt's lead into row 16).
+
+| table row | window | what |
+|---|---|---|
+| 10 `ev-debt-issuance-line-v1 ...;idle=live;readability=longform;then=ev-ig-credit-weighting-v1:bars:2;then=ev-capex-consensus-v1:bars:1` | 242.38-303.54 | the yields MELT and are thrown (E88) in the breath before "But here's the question"; the issuance page on its axes, the 2020 average a stub, the 2026E estimates at nothing; the title becomes the rehook's question on "who is paying" (244.72); the 2020-24 average draws across its years on "For years the giants ... out of pocket" (246.80-251.96); the object's own title "The builders started borrowing" is written back on "Then the bills got" (255.01); "$28B a year / 2020-24 average" lands on "twenty-eight" (260.74); the 2025 actual climbs on "Last year" to 121, "$121B" under its end tag (264.55); the two 2026E estimates draw on "tracking toward" (266.61), the wedge a SPREAD and "$130-150B / 2026E" above the $150B tag as "fifty" is said (T14: a range, never a midpoint); **recast 1** (plain, `keyed: false`) to the IG index on "Technology used to be" (274.56), its unit in its title, the >12% bar EMPHASIZED; **recast 2** (plain) to the capex consensus on "a bet on data centers" (287.59), its unit in its title, the 690 EMPHASIZED |
+| 11 `world-internal-memo-v1;use=landing;room=0.62,0.03,0.35,0.33` | 303.54-321.12 | the page MELTS and splashes onto the records' desk (row 11's world) on "Go into the filings"; the `ev-doc-leases` record is thrown as the splash lands (304.59, contact 305.05) at the reading size (0.64 of the stage, box [48, 405, 1229, 442]); **PROP 2** `prop-hyperscale-datacenter-v1` STAMPED on "Data centers" (308.85, contact 309.00, cue `landing 11 (stamp, ink)`) into the desk's declared room - fitted FIRST (P69 T5): `plate: mark 244x150 painted px (12.7% of the stage width); ring capped at 1.08x by the room`, box [1399, 148, 245, 152], 0 px against the record; the ken push and the mug's steam are the desk's life; both leave with the desk |
+
+**PROP 2 IS STAMPED (`DATACENTER_STAMPED = True`)** - on the desk, not on a page. It renders as the T6d BLACK SQUARE (the compiler's
+JPEG flatten; the hatch is cast by the square): `scratchpad/p69t24/final/stamp-contact-crop.png`, `stamp-parked-crop.png`. The
+placement, the timing and the cue are the row's; the square is lane B's.
+
+**Why the record and the stamp moved to the desk (measured, drafts 2-4, `logs/t24-door2..4.log`, `scratchpad/p69t24/draft3/`):**
+1. On the three-state page the stamp was REFUSED: "the largest mark this place holds at (1756, 192) paints 70 px on its long side,
+   under the 120 px mark floor" (`t24-door2.log`, estimated boxes). And a row's stamp and docks are fitted to the row's FIRST page
+   (`row_stamp_fits` / `dock_place` read `world["page"]`, state 0): a stamp landing in the capex state is fitted to the ISSUANCE
+   page's room. Owner: the engine (fit a dock to the state it lands in). Measuring the page into the fixture would not fix this.
+2. With the capex as its own page (draft 3), E65 placed the record `outside [608, 64, 703, 253]` - over the title and the 870
+   label, at 703 px (card-size type).
+3. E50: the capex bars would stand 27 s past their landing under the record (M21 4:53 -> 5:21).
+The desk is the build's own records' world (row 11, the parent's FIX 2: records need a clean ground).
+
+**Measured and fixed:**
+- `t_28` collided with row 14's camera-landing variable (the camera keys went out of order, `t24-door1.log`) - renamed `t_avg28`.
+- A prop and a card both on slot 0 painted only the card (draft 4: no data centre on any tile) - the prop is on slot 1 (T5's golden pair).
+- The range figure pinned to the $150B tip read "$130-150B $150B" (draft 3); under the $130B tip it sat on "issuance" (draft 4) - lifted above the wedge.
+- The IG recast stretched to land the bars on their words (8 s) garbled the axis hand-over for 8 s (draft 4) - back to 1.2 s.
+- A `bracket` on the capex bars state drew no span and wrote its label behind the 690 bar (draft 5, tile 302.5) - cut.
+- The probe's M28 ("issuance" tag on "$121B", 21 %) and M34 ($121B on both 2026E lines; the callouts on bars crossing "Projected" and "2026 consensus") - `$121B` moved under its tag (`DEBT_2025_DY`), the rings replaced by the state's emphasized bar.
+- The compiler would DERIVE `keyed: true` for the issuance -> IG recast (three lines, three bars) and carry the issuance datum into the 9% bar - authored `keyed: false`.
+
+**Named, not fixed:**
+- **M03 FAIL 62 s from 4:02** (242.38 -> 303.54): the gate counts dock entries and page starts, never a recast (`gate_motion_density.py:1323`), and this row's two E58 recasts are the treatment's. Splitting the IG off as its own page would pass M03 and lose a recast. Owner: the gate (a recast's arriving chart is evidence entering), or the parent's call.
+- **M21 WARN s10 14.8 s** (4:48 -> 5:03): the capex bars carry three sentences ("four hundred and eighty", "six hundred and ninety", "The estimate went up faster than the year went by") to 5:01. The IG bars pass (11.8 s).
+- **The bars objects carry no unit** (`yunit`/`yfmt` absent): the bars print "9.0 / 10.0 / 12.0" and "480 / 690 / 870" and the y axes have no unit. Each state's retitle carries the unit (`IG_TITLE`, `CAPEX_TITLE`). Door for the parent: a v2 of each object with `yunit`/`yfmt` (evidence/objects is not this slice's).
+- **The capex object states two figures the row never says**: the 2027 $870B bar and the sub "94% of operating cash flow" (row 17's figure). Both are sourced (PIMCO Figs 2-3); neither is spoken here. Door: the v2 above, or the parent's ruling.
+- **The capex bars land on "a bet on data centers"**, ~5 s before "four hundred and eighty" is said (E50 on the IG bars puts the recast there).
+- **The recast's middle** (275.2, 288.0): the issuance page's figures ghost over the arriving bars; the 12.0 pill floats above the plot at 288.0 - R26-261 (known).
+- The ring at the stamp's contact grazes the mug's rim (the ken push lifts the mug into the room; ~5 px for the ring's 0.47 s).
+- The stamp's mark is 244x150 in a 672x356 room: the ring's circle (the mark's diagonal x 1.08) binds on the room's height. Engine behaviour, reported.
+- "right there in the filing" - the treatment's callout on the filing's line is cut: E56 refuses a ring on a still card; the record's own highlight on "$822 billion" carries it.
+
+**Transitions** (printed in `SHOT-TABLE-H.md`): INTO row 16 the melt's throw (`DEBT_MELT_WHY`: the dip, a recast, rescale / extend, morph, melt:splash:chart / melt:morph refused); the two recasts (`IG_RECAST_WHY`, `CAPEX_RECAST_WHY`: dip, cut, rescale / extend, morph, remake, the melt refused); INTO the desk the melt's splash onto the plate (`DESK_MELT_WHY`: the record and the stamp on the page, an undraw under the record, a park, the dip, the thread, recast / remake refused). No dip, no cut.
+
+**Life:** 270.5 vs 272.5 (the debt page, x 0-1500, y 150-850) mean |dL| 2.46, 3.1% changed; 298.3 vs 301.0 (the capex state) 2.66, 3.6%; 313.0 vs 315.0 (the desk) 11.26, 19.8%. Rows 11 of 11 carry life (row 10 `idle=live`, row 11 `ken 0.04/8/-6` + the mug's steam).
+
+**Tiles:** `scratchpad/p69t24/final/tiles-sheet.1-3.png` (29 instants, 242.6-320.8) beside `ref-sheet.1-3.png` (build-f's mp4, sha256 `9a27de1c...0dd3` verified, `ref-sha.txt`; `ref-map.txt`, Script G 280.6-348.8). build-f carries the same beats as PNG cards over plates (the bank vault, the ledger desk, the exchange board, the pylons); H draws them on one page and lands the record on the desk.

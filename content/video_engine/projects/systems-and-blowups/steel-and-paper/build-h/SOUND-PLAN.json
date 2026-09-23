@@ -151,6 +151,37 @@
    }
   },
   {
+   "slot": "page enter 10 (axes)",
+   "at": 242.38,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   }
+  },
+  {
+   "slot": "landing 11 (stamp, ink)",
+   "at": 308.96,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 309.00s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 11 (throw, paper)",
+   "at": 305.01,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 305.05s, the cue one frame early (the weight report Q5)"
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0073,
@@ -218,6 +249,22 @@
     ],
     [
      109.09,
+     0.0
+    ],
+    [
+     304.29,
+     0.0
+    ],
+    [
+     304.59,
+     4.0
+    ],
+    [
+     305.79,
+     4.0
+    ],
+    [
+     306.59,
      0.0
     ]
    ],

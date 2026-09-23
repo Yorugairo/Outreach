@@ -59,6 +59,10 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
         eras on one page (`ev-tnx-two-eras-v4`, ordinary series - v3's panels never draw on a ledger page), the Fed's
         6.5% and their 5.5% its RULES (E53 s5); PROP 1 the Fed STAMPED on its word into the page's biggest room (P69
         T5), bare of paper with its hatch (E99 s92); the BoE and the concession written on the same page.
+  DEBT_PAGE / DESK_PLATE   row 16 (P69 T24): the yields melt and the builders' bond issuance draws on its words (the 2026E
+        range a spread, T14), recast to the IG index's tech share and to the capex consensus (E58 x2, `keyed: false`,
+        each state's unit in its title); on "Go into the filings" the page melts onto the records' desk, the $822B
+        record lands at its reading size and PROP 2 the data centre is STAMPED in the desk's declared room (P69 T5).
 
 THE BODY'S PREFLIGHT (P69 T14, rows 7-24) is three constant tables, read before any body row is authored:
   BODY_ASSETS          every page object (with its builder), card, plate, prop, host still, cue file and outro part
@@ -171,7 +175,8 @@ def _assert_read_only(before: dict) -> None:
 # (the trough, on the same desk) and T21 row 13 (reset 1, the dip to 1849), and they move it to row 14's first words.
 # P69 T22 authors row 14 (the yardstick) and moved it to row 15's first words (the trigger, T23's); P69 T23 authors row 15
 # (the trigger, the concession and PROP 1) and moves it to row 16's first words (who is paying, T24's).
-UNIT_CUT_PHRASE = "But here's the question"   # row 16's first words; the build stops at the cut BEFORE them
+# P69 T24 authors row 16 (who is paying, PROP 2) and moves it to row 17's first words (the arithmetic, T25's).
+UNIT_CUT_PHRASE = "So put it together"      # row 17's first words; the build stops at the cut BEFORE them
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -650,6 +655,106 @@ TNX_MELT_WHY = ("the breakthrough bars -> the 10-year yield in two eras, page to
                 "(another frame, not a strip of this one), melt:splash:chart and melt:morph (the yields would arrive "
                 "built - every page builds on screen, E99 s67)")
 
+# ROW 16 (P69 T24): WHO IS PAYING - ONE page and its two recasts (E58 x2, the treatment's #26-#32 on one board): the
+# builders' bond issuance (T14's settled page: DEBT_PAGE, the 2026E range a SPREAD between its two estimate series plus
+# the range figure, never a midpoint - E53 / E77), RECAST on "Technology used to be" to tech's share of the
+# investment-grade index, RECAST on "four hundred and eighty" to the capex consensus. Then the WORLD changes to the paper
+# (E47): on "Go into the filings" the page melts onto the records' desk (row 11's world, DESK_PLATE), the filings'
+# $822B record lands there at its reading size, and PROP 2, the data centre, is STAMPED on "Data centers" (E99 s87 a
+# direct match for the word) into the desk's declared room - fitted FIRST, the record placed round it (P69 T5).
+# WHY THE RECORD AND THE STAMP ARE NOT ON THE PAGE (measured, draft 3 - `scratchpad/p69t24/draft3/`):
+#   (1) the compiler fits a row's stamp and places its docks against the row's FIRST page (`row_stamp_fits` /
+#       `dock_place` read `world["page"]`, state 0) - on a three-state page the data centre would be fitted to the
+#       ISSUANCE page's room and land on the capex bars (row 15's reason, TNX_MELT_WHY);
+#   (2) on the capex page as its own page, E65 put the record "outside [608, 64, 703, 253]" - OVER the title and the
+#       870 label, at 703 px (its type ~9-16 px: a record read at card size, the fault the operator named on T15);
+#   (3) E50: the capex bars would stand 27 s past their landing under the record (M21, 4:53 -> 5:21) - the page must
+#       leave or undraw by ~5:05, and an undrawn page leaves its axes (the "broken chart" behind a record, T19b).
+# The desk is where this build's records already live (row 11, the parent's FIX 2): a clean ground, no world beyond it.
+DEBT_PAGE = "ev-debt-issuance-line-v1"   # T14's settled page (the preflight below names it again, with DEBT_SPREAD)
+DEBT = _series(DEBT_PAGE)
+DEBT_ISSUANCE = [s["label"] for s in DEBT["series"]].index("issuance")   # crimson: 2020-24 average, then 2025 actual
+DEBT_HI = [s["label"] for s in DEBT["series"]].index("$150B")            # the two 2026E estimates, each from the 2025
+DEBT_LO = [s["label"] for s in DEBT["series"]].index("$130B")            # ... actual - read by their own labels
+DEBT_2024 = next(k for k, p in enumerate(DEBT["series"][DEBT_ISSUANCE]["pts"]) if p[0] == 2024)   # the average's end
+DEBT_2025 = _last_index(DEBT, DEBT_ISSUANCE)                                                   # 121, the 2025 actual
+DEBT_MID_AVG = next(k for k, p in enumerate(DEBT["series"][DEBT_ISSUANCE]["pts"]) if p[0] == 2022)   # the figure's pin
+# THE FIGURES ARE THE OBJECT'S OWN, WITH THEIR BASIS (E99 s94): the 28 is an AVERAGE over 2020-24 (the object's sub and
+# src_full say so - one average drawn flat, not five prints); the 121 the 2025 actual; the range the two 2026E ends.
+DEBT_AVG_TEXT, DEBT_AVG_SUB = "$28B a year", "2020–24 average"
+DEBT_2025_TEXT = "$121B"
+# ... and it stands UNDER the series' end tag: MEASURED on draft 6 (`logs/t24-gate.log`), at its datum it sat on the
+# "issuance" tag (M28, 21 % of the tag) and the two 2026E lines drew through it as they left the same point (M34).
+DEBT_2025_DY = 1.6
+assert DEBT["series"][DEBT_ISSUANCE]["pts"][DEBT_MID_AVG][1] == 28 and DEBT["series"][DEBT_ISSUANCE]["pts"][DEBT_2025][1] == 121
+# THE RANGE FIGURE STANDS ABOVE THE $150B TAG, not beside it: MEASURED on draft 3 (tiles 268.8 / 272.0), pinned to the
+# $150B tip it wrote "$130-150B $150B" on one line - the range read twice; dropped under the $130B tip (draft 4) it wrote
+# over the "$121B / issuance" pair. It is lifted DEBT_RANGE_DY of its own lines above the wedge's top edge.
+DEBT_RANGE_DY = -1.4
+DEBT_OPEN_S = 0.4
+DEBT_TITLE_S = 2.0
+# THE REHOOK'S QUESTION IS THE PAGE'S FIRST TITLE (no figure; the page draws its answer - who borrows): written on
+# "who is paying", and the object's own title "The builders started borrowing" is written back on "Then the bills got
+# bigger than the cash" - the sentence that turns to borrowing - before the first figure lands.
+DEBT_Q_TITLE = "Who is paying for the steel this time?"
+DEBT_MELT_S = 1.0        # the yields melt over the breath before "But here's the question" (row 15's TNX_MELT_LEAD_S)
+DEBT_MELT_LEAD_S = 0.5
+IG_PAGE = "ev-ig-credit-weighting-v1"      # bars 9 / 10 / >12 (Morgan Stanley IM; LPL) - dossier C3, VERIFIED
+IG = _series(IG_PAGE)
+IG_RECAST = 1
+IG_PROJ = next(k for k, b in enumerate(IG["bars"]) if b["label"] == "Projected")   # the ">12%" bar: "past twelve"
+CAPEX_PAGE = "ev-capex-consensus-v1"       # bars $480B / $690B / $870B (PIMCO Figs 2-3) - dossier B1, VERIFIED
+CAPEX = _series(CAPEX_PAGE)
+CAPEX_RECAST = 2                          # the page's THIRD state (STATE_MAX 3)
+CAPEX_2026 = next(k for k, b in enumerate(CAPEX["bars"]) if b["label"] == "2026 consensus")   # "six hundred and ninety"
+# THE UNIT IS IN THE TITLE (MEASURED on draft 3, tiles 276.5-320.0): the two bars objects carry no `yunit` / `yfmt`, so
+# the bars print "9.0 / 10.0 / 12.0" and "480 / 690 / 870" with no % or $B and the y axes carry no unit (the debt
+# object's `yfmt: usd, yunit: B` is what they lack). The objects are not this slice's to edit (named for the parent: a
+# v2 of each with its unit), so each state's retitle - the page's own title - carries its unit. No new figure.
+IG_TITLE = "Technology's share of the investment-grade bond index, %"
+CAPEX_TITLE = "Hyperscaler capital spending, US$ billions: consensus estimates"
+DEBT_RECAST_S = 1.2
+DEBT_MARK_S = 1.6        # a figure's / spread's write
+# NO RING ON A BAR (MEASURED on draft 6, the probe's M34): a callout on a bars datum circles the WHOLE bar and its stroke
+# crosses the category tick under it ("Projected" at 4:43, "2026 consensus" at 4:58). The bar the sentence turns to is
+# the state's EMPHASIZED bar instead (`;then=<series>:bars:<index>`, P48 T4): the >12% projection and the 690.
+# E50's CLOCK ON THE TWO BARS STATES (M21 counts builds, brackets and transitions, never a ring or a retitle): the IG bars
+# land at ~4:36, so the capex recast comes on "a bet on data centers" (11.8 s later) - the sentence's own turn to what
+# the money buys. The capex bars then stand ~14.7 s (4:49 -> 5:04) until the page melts into the filings: NAMED, not
+# fixed (M21 WARN) - the three sentences that read them ("four hundred and eighty", "six hundred and ninety", "The
+# estimate went up faster than the year went by") run to 5:01. MEASURED, draft 3: a recast on "four hundred and
+# eighty" left the IG bars 18 s past their landing; draft 4: an 8 s recast (bars growing on their words) garbled the
+# axis hand-over for its whole clock and left the twelve still growing under its ring; draft 5: a `bracket` on the bars
+# state (a data mark) drew no span and wrote its label BEHIND the 690 bar ("nce the year", tile 302.5) - cut.
+LEASES_CARD = "dock-h-leases-record"
+LEASES_PNG = OBJECTS / "ev-doc-leases.png"
+LEASES_ASPECT = round(760 / 2112, 4)   # the object's own page, 2112 x 760
+DATACENTER_PROP = "prop-hyperscale-datacenter-v1"
+DATACENTER_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (DATACENTER_PROP + ".png")
+DATACENTER_OPTS = {"prop": True, "arrive": "stamp"}   # mass unset: a stamp lands at `ink` (the engine's stampXf default)
+DATACENTER_STAMPED = True
+DEBT_MELT_WHY = ("the 10-year yield in two eras -> the builders' bond issuance, page to page: TAKEN the melt's throw "
+                 "(E88; row 15's own entry) - the yields ball up and are thrown off in the breath before the rehook, and "
+                 "the issuance draws on the same board as the question turns to who pays; refused: the dip (two pages "
+                 "are one kind of world, E47 - no world change), a recast (the yields page has no state left that is "
+                 "this argument, and this page spends its own two recasts - STATE_MAX 3 - on the IG index and the "
+                 "capex consensus; a different argument is a different page, E58), rescale / extend (not the same "
+                 "series), morph (another frame, not a strip of this one), melt:splash:chart and melt:morph (the issuance "
+                 "would arrive built - every page builds on screen, E99 s67)")
+IG_RECAST_WHY = ("the builders' bond issuance -> tech's share of the investment-grade index, on one board: TAKEN the "
+                 "plain recast, authored `keyed: false` (E58 - 'bend the bond market': the same borrowing read from the "
+                 "bond fund's side; the compiler would DERIVE `keyed: true` - three lines, three bars - and carry the "
+                 "issuance's datum into the 9% bar, two measures that share nothing); refused: the dip and the cut (no "
+                 "world changes, E47), rescale / extend (another measure, not more of this one), morph (another frame, "
+                 "not a strip of this one), remake (a whole-chart morph needs the same data), the melt (the recast IS "
+                 "the E58 hand-over the treatment names)")
+CAPEX_RECAST_WHY = ("tech's share of the IG index -> the hyperscalers' capex consensus, on one board: TAKEN the plain "
+                    "recast, authored `keyed: false` (E58 - 'none of this is slowing down': what the borrowing pays for, "
+                    "bars to bars on the page's third and last state, STATE_MAX 3); refused: the dip and the cut (no world "
+                    "changes, E47), rescale / extend (another measure), morph, remake (no shared data), the melt (the "
+                    "recast is the treatment's own chart_to; the melt is spent where the world DOES change, into the "
+                    "filings)")
+
 DOCK_META = [
     {"asset": CERT_CARD, "title": "An 1845 railway certificate",
      "source": "Money Physics - plate world-certificate-wall-v1", "species": "deck", "badges": []},
@@ -674,6 +779,11 @@ DOCK_META = [
                 {"label": "2024\u201326 AI BUILD", "value": "still open", "tag": "AI build"}]},
     {"asset": FED_PROP, "title": "The Federal Reserve", "source": "Money Physics - prop cutout " + FED_PROP,
      "species": "prop", "badges": []},     # E99 s87 / s92: art added to the world, bare of paper - no rail, no badge
+    {"asset": LEASES_CARD, "title": "Hyperscaler 10-Q filings: lease commitments",
+     "source": "PIMCO, AI Credit Expansion, from company 10-Q filings", "species": "deck",
+     "badges": []},   # the record's payload is NOT authored (CAPABILITIES:19) - the object's PNG (BODY_ASSETS row 16)
+    {"asset": DATACENTER_PROP, "title": "A hyperscale data centre",
+     "source": "Money Physics - prop cutout " + DATACENTER_PROP, "species": "prop", "badges": []},   # E99 s87 / s92
 ]
 
 
@@ -834,6 +944,15 @@ def page_tnx() -> str:
     profile (E99 s97, the middle preset) - the page PROP 1 is stamped onto. One state: no recast."""
     return ("ledger:%s:line:%d:right:%s%s%s%s"
             % (TNX_PAGE, TNX_DOT_LAST, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM))
+
+
+def page_debt() -> str:
+    """Row 16's world (P69 T24): the builders' bond issuance on its axes (E73), live (E49), in the long form's profile
+    (E99 s97, the middle preset), and its two recasts (E58): the IG index's tech share, then the capex consensus."""
+    return ("ledger:%s:line:%d:right:%s%s%s%s;then=%s:bars:%d;then=%s:bars:%d"
+            % (DEBT_PAGE, DEBT_2025, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM, IG_PAGE, IG_PROJ, CAPEX_PAGE,
+               CAPEX_2026))
+
 
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
 AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}, {"n": 3, "text": "Used tomorrow?"}]
@@ -1054,6 +1173,26 @@ MEMO_MELT_WHY = ("the divergence -> the memo desk, page to plate (a WORLD change
                  "IS a transform for this pair and E88 melts a chart's ink), the thread (no mark of the page belongs on a "
                  "desk), recast / remake (the next thing is a quote, not a chart - and STATE_MAX is spent), a park (a chart "
                  "held small behind a record is the 'broken chart' the parent read)")
+# ROW 16b (P69 T24): THE FILINGS ON THE RECORDS' DESK - row 11's world, re-entered on "Go into the filings". The desk
+# DECLARES the room PROP 2 is stamped in (R26-221 `;room=`; P69 T5 fits the stamp there FIRST): the cream wall right of the
+# lamp's cone and above the mug, x 0.62-0.97, y 0.03-0.36 (read on the bare plate, `scratchpad/p69t24/memo-plate.png`:
+# the mug's rim at y ~0.38, the cone's right edge x ~0.58 at the wall). The RECORD is authored low-left at its reading
+# size (RECORD_W, the Karp record's), over the plate's own memo - the paper the filings replace - clear of the room.
+DESK_ROOM = (0.62, 0.03, 0.35, 0.33)
+DESK_PLATE = MEMO_PLATE + ";room=%g,%g,%g,%g" % DESK_ROOM
+LEASES_SLOT = {"centre": True, "centre_x": 0.345, "centre_y": 0.58}   # its foot above the caption strip (y 878)
+LEASES_W = RECORD_W
+DESK_MELT_LEAD_S = 0.4   # the capex page melts in the breath after "the borrowing you can see." - the desk on "Go"
+DESK_CARD_AFTER_S = 0.05  # the record is thrown as the splash lands, on "filings"
+DESK_MELT_WHY = ("the capex consensus -> the records' desk, page to plate (a WORLD change, E47: the charts to the paper - "
+                 "'Go into the filings'): TAKEN the melt's splash onto the plate (E88; row 11's own entry into this desk) - "
+                 "the page the borrowing ends on balls up and splashes onto the desk the filings' record lands on; "
+                 "refused: the record and the stamp ON the page (the fit reads the row's first page, not the capex state; "
+                 "E65 parked the record over the title at 703 px; E50 - the bars would stand 27 s past their landing), an "
+                 "undraw under the record (undraw takes bars and lines, never axes - the 'broken chart' behind a record, "
+                 "T19b), a park (the same broken chart, held small), the dip (the last resort, s74 - the melt IS a "
+                 "transform for this pair), the thread (no mark of the page belongs on a desk), recast / remake (the next "
+                 "thing is a document, not a chart - and STATE_MAX is spent)")
 SLOT_WHY = ("the ticket -> Karp -> Uber -> the COO: TAKEN the slot hand-off (E99 s80 - each card takes the outgoing card's "
             "box, the chart never stands aside); Karp THROWN on his name (s71), Uber and the COO LAND into the same box "
             "(SLOT_HANDOFF_ARRIVE); refused: a dip per quote (no world changes between them, E47), three worlds "
@@ -1063,6 +1202,8 @@ IN_ROW_WHY = (
     ("row 5 recast 3 (P69 T18, 'catches up with it')", DIV_RECAST_WHY),
     ("row 6 the one slot (P69 T19, 'Alex Karp' / 'Uber's CTO' / 'And their COO')", SLOT_WHY),
     ("row 8 the recast to the breakthrough bars (P69 T22, 'railways took roughly')", YARD_RECAST_WHY),
+    ("row 10 the recast to the IG index (P69 T24, 'Technology used to be')", IG_RECAST_WHY),
+    ("row 10 the recast to the capex consensus (P69 T24, 'a bet on data centers')", CAPEX_RECAST_WHY),
 )
 # (the P69 T16 first cut, before T15b, is kept for the record: it entered the index from the STUDIO by dip 1 and
 # refused recast / rescale / morph, the melt, the snap / throw-then-zoom / throw-then-push, object-becomes-chart, the
@@ -1074,6 +1215,8 @@ BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the tr
                 VIADUCT_PLATE: VIADUCT_DIP_WHY,
                 page_yard(): YARD_DIP_WHY,
                 page_tnx(): TNX_MELT_WHY,
+                page_debt(): DEBT_MELT_WHY,
+                DESK_PLATE: DESK_MELT_WHY,
                 SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
                               "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
@@ -1200,6 +1343,23 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_trade = at("internet trade rolled")               # the dot-com yield rolls over on its words ...
     t_cycle = at("for this cycle")                      # ... and the AI era draws on "this cycle", under their 5.5%
     t_agree = at("Put my agreement")                    # the concession, written on the same page
+    # -- row 16 (P69 T24): WHO IS PAYING - the yields melt in the breath before the rehook (row 15's own lead), the
+    # issuance draws year by year on "For years", each figure lands on its number, and the page recasts twice (E58)
+    t_q = round(at("But here's the question") - DEBT_MELT_LEAD_S, 2)
+    t_who = at("who is paying")                         # the question is the first title
+    t_years = at("For years the")                       # the 2020-24 average draws across its years ...
+    t_pocket_end = at("Cash on hand")                   # ... landing on its 2024 end as "out of pocket" ends
+    t_bills = at("Then the bills got")                  # the object's own title is written back on the turn to borrowing
+    t_avg28 = at("twenty-eight billion")                  # the average's figure lands on its number
+    t_last_year = at("Last year: a")                    # the 2025 actual climbs on "Last year" ...
+    t_121 = at("twenty-one billion")                    # ... landing, with its figure, on "twenty-one"
+    t_tracking = at("tracking toward")                  # the two 2026E estimates draw ...
+    t_150 = at("hundred and fifty")                     # ... and land as "fifty" is said, the range spread between them
+    t_tech = at("Technology used to be")                # recast 1: the IG index
+    t_bet = at("bet on data centers")                   # recast 2: the capex consensus, on what the money now buys
+    t_desk = round(at("Go into the filings") - DESK_MELT_LEAD_S, 2)   # the world changes to the paper ...
+    t_filings = round(t_desk + MEMO_MELT_S + DESK_CARD_AFTER_S, 2)   # ... and the record is thrown as the splash lands
+    t_dc = at("Data centers they've")                   # PROP 2 is stamped on the word that names it (E99 s87)
     t_row9_end = unit_end
 
     return [
@@ -1377,7 +1537,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # page; the dot-com yield rolls over on its words and the AI era draws on "this cycle", ending under their 5.5%
         # rule; the concession is written on the SAME page (no bare plate 2:45-6:04). The camera pulls on the stamp's
         # contact (P69 T4, `attention: landings`, E51).
-        (t_trigger, t_row9_end, page_tnx(), (0, 0, 0), [
+        (t_trigger, t_q, page_tnx(), (0, 0, 0), [
             (FED_PROP, 0, t_fed, t_row9_end, dict(FED_OPTS)),
         ] if FED_STAMPED else [], RAIL_EXIT % TNX_MELT_S, [
             {"kind": "build_to", "at": t_trigger, "dur": TNX_OPEN_S, "series": TNX_DOT, "target": datum(TNX_OPEN_CAP)},
@@ -1391,7 +1551,56 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"kind": "build_to", "at": t_cycle, "dur": TNX_AI_S, "series": TNX_AI, "target": datum(TNX_AI_LAST)},
             {"kind": "retitle", "at": t_agree, "dur": TNX_TITLE_S, "text": TNX_AGREE_TITLE},
         ], {"keys": [], "attention": "landings"}),
-        # (-- ROWS 16-24 are T24-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
+        # -- ROW 16 (P69 T24): WHO IS PAYING - the yields melt and are thrown (DEBT_MELT_WHY) and the issuance page lands
+        # on its axes, the 2020 average a stub (M31: the page lands with ink), the estimates held at nothing; the question
+        # is the title on "who is paying"; the 2020-24 average draws across its years on "For years the giants ... out of
+        # pocket" and the object's own title is written back on "Then the bills got bigger"; "$28B a year" lands on
+        # "twenty-eight", the 2025 actual climbs to 121 with its figure, and the two 2026E estimates draw on "tracking
+        # toward", the wedge between them a spread with the range figure as "fifty" is said (T14: a range, never a
+        # midpoint). The page RECASTS (a plain hand-over, `keyed: false`) to the IG index on "Technology used to be"
+        # (IG_RECAST_WHY), each state retitled with its unit (IG_TITLE), its >12% bar emphasized; and RECASTS
+        # again to the capex consensus on "a bet on data centers" (CAPEX_RECAST_WHY), its 690 emphasized. On "Go
+        # into the filings" the page melts onto the records' desk - the row below.
+        (t_q, t_desk, page_debt(), (0, 0, 0), [], RAIL_EXIT % DEBT_MELT_S, [
+            {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_ISSUANCE, "target": datum(0)},
+            {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_HI, "target": datum(0)},
+            {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_LO, "target": datum(0)},
+            {"kind": "retitle", "at": t_who, "dur": DEBT_TITLE_S, "text": DEBT_Q_TITLE},
+            {"kind": "build_to", "at": t_years, "dur": round(t_pocket_end - t_years, 2), "series": DEBT_ISSUANCE,
+             "target": datum(DEBT_2024)},
+            {"kind": "retitle", "at": t_bills, "dur": DEBT_TITLE_S, "text": DEBT["title"]},
+            {"kind": "figure", "at": t_avg28, "dur": DEBT_MARK_S, "target": datum(DEBT_MID_AVG, DEBT_ISSUANCE),
+             "text": DEBT_AVG_TEXT, "sub": DEBT_AVG_SUB},
+            {"kind": "build_to", "at": t_last_year, "dur": round(t_121 + 0.4 - t_last_year, 2), "series": DEBT_ISSUANCE,
+             "target": datum(DEBT_2025)},
+            {"kind": "figure", "at": t_121, "dur": DEBT_MARK_S, "target": datum(DEBT_2025, DEBT_ISSUANCE),
+             "text": DEBT_2025_TEXT, "dy": DEBT_2025_DY},
+            {"kind": "build_to", "at": t_tracking, "dur": round(t_150 + 0.4 - t_tracking, 2), "series": DEBT_HI,
+             "target": datum(1)},
+            {"kind": "build_to", "at": t_tracking, "dur": round(t_150 + 0.4 - t_tracking, 2), "series": DEBT_LO,
+             "target": datum(1)},
+            dict(DEBT_SPREAD, at=round(t_150 + 0.4, 2), dur=DEBT_MARK_S),
+            {"kind": "figure", "at": round(t_150 + 0.4, 2), "dur": DEBT_MARK_S, "target": datum(1, DEBT_HI),
+             "text": DEBT_RANGE_TEXT, "sub": DEBT_RANGE_SUB, "dy": DEBT_RANGE_DY},
+            {"kind": "chart_to", "at": t_tech, "dur": DEBT_RECAST_S, "to": "recast", "state": IG_RECAST, "keyed": False},
+            {"kind": "retitle", "at": round(t_tech + RETITLE_AFTER_S, 2), "dur": DEBT_RECAST_S, "text": IG_TITLE},
+            {"kind": "chart_to", "at": t_bet, "dur": DEBT_RECAST_S, "to": "recast", "state": CAPEX_RECAST,
+             "keyed": False},
+            {"kind": "retitle", "at": round(t_bet + RETITLE_AFTER_S, 2), "dur": DEBT_RECAST_S, "text": CAPEX_TITLE},
+        ], {"keys": []}),
+        # -- ROW 16b (P69 T24): THE FILINGS - the page melts and splashes onto the records' desk (DESK_MELT_WHY); the
+        # record is thrown as the splash lands, at its reading size, and PROP 2 is STAMPED on "Data centers"
+        # (DATACENTER_STAMPED) into the desk's declared room - fitted first, the record clear of it (P69 T5). The desk's
+        # life is its ken push and the mug's steam (row 11's). Both leave with the desk.
+        (t_desk, t_row9_end, DESK_PLATE, MEMO_KEN, ([
+            (DATACENTER_PROP, 1, t_dc, t_row9_end, dict(DATACENTER_OPTS)),   # slot 1: the record holds slot 0 (T5's pair)
+        ] if DATACENTER_STAMPED else []) + [
+            (LEASES_CARD, 0, t_filings, t_row9_end,
+             dict(LEASES_SLOT, centre_w=LEASES_W, card_aspect=LEASES_ASPECT, arrive="throw", mass="paper")),
+        ], MELT_EXIT % MEMO_MELT_S, [
+            {"kind": "steam", "at": t_filings, "dur": round(t_row9_end - t_filings, 2), "target": MUG_STEAM},
+        ], {"keys": [], "attention": "landings"}),
+        # (-- ROWS 17-24 are T25-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
     ]
 
 
@@ -1554,7 +1763,8 @@ BODY_ASSETS = {
 }
 
 # What the treatment names that is NOT on disk, and what the row does instead (P69-DATA-DEPARTURES.md).
-# Rows 16 (debt issuance) and 19 (the two clocks) are RESOLVED as pages and are not here.
+# Row 16's debt issuance and row 19's two clocks are RESOLVED as pages (their data is not a departure); row 16's P69 T24
+# staging departures are listed below.
 # Row 22's end figures are NOT a departure (E99 s?? (c), the operator: "I think you're reading hbm/dram pricing wrong"):
 # on ev-memory-monitor-v1's own points DRAM is +16.4% on the July print (86970 vs 74686, the bounce off June's -3.7%)
 # and HBM-class +13.9% over the last two prints (95408 vs 83784) - each figure is drawn WITH its basis.
@@ -1591,6 +1801,19 @@ BODY_DEPARTURES = (
      "caption STAGE mode, stage-centred: a picture plate places cards (`;room=`), never its caption (no door)"),
     (15, "BoE 6% / Fed 6.5% rings, Bravos 5.5% tripwire on ev-tnx-two-eras-v3 (a 10-year page)",
      "badge - the attributed figures as text, no ring (E53: one unit)"),
+    (16, "the record 'lands in the room' of the capex page beside prop stamp 2",
+     "the page melts onto the records' desk on 'Go into the filings' (DESK_MELT_WHY, P69 T24): the fit reads the row's "
+     "first page, E65 parked the record over the title at 703 px, and E50 - the record at 0.64 of the stage, the data "
+     "centre stamped in the desk's declared room"),
+    (16, "'bend the bond market' ev-ig-credit-weighting-v1:line with the tech share ringed",
+     "the object's own BARS (9 / 10 / 12), its >12% bar emphasized (`then=...:bars:2`); no ring on a bar - a callout on a "
+     "bars datum circles the whole bar across its category tick (M34, P69 T24 draft 6)"),
+    (16, "'six hundred and ninety' ringed (the thumbnail's 690)", "the 690 bar emphasized - no ring on a bar (as above)"),
+    (16, "'right there in the filing' a callout on the filing's line",
+     "cut - E56 refuses a ring on a still card; the record's own highlight on '$822 billion' carries it"),
+    (16, "the bars pages' units (the IG '9.0 / 10.0 / 12.0', the capex '480 / 690 / 870' print bare)",
+     "each state's retitle carries the unit (IG_TITLE, CAPEX_TITLE); the objects lack yunit/yfmt - a v2 each is the "
+     "parent's door"),
     (17, "the Epoch '94 cents' mark on ev-capex-funding-v1 (a different claim)", "cut from row 17's bar beat"),
     (17, "the PIMCO record (the treatment's 'ev-doc-macdonald' is the Uber COO)", "badge 'PIMCO, Figure 3'"),
     (18, "the certificate card's '-66%' figure (the crop carries none)", "badge reading RAIL_DROP (-64%)"),
@@ -1696,7 +1919,10 @@ TABLE_TREATMENT = {1: "treatment rows 1-5 (the page, 0:00-0:42)", 2: "treatment 
                       "(P69 T19, T20)",
                    7: "treatment row 13, reset 1 - the viaduct, 1849 (P69 T21)",
                    8: "treatment row 14, the yardstick: dip 3, camera 2, the breakthrough bars (P69 T22)",
-                   9: "treatment row 15, the trigger and the concession: PROP 1 the Fed stamped (P69 T23)"}
+                   9: "treatment row 15, the trigger and the concession: PROP 1 the Fed stamped (P69 T23)",
+                   10: "treatment row 16, who is paying: the issuance, the IG and capex recasts (P69 T24)",
+                   11: "treatment row 16, who is paying: the filings' record on the records' desk and PROP 2 the data "
+                       "centre stamped (P69 T24)"}
 
 
 def _flow_count(rows: list) -> tuple[int, int, int, int]:
@@ -1741,6 +1967,8 @@ def main() -> int:
     D.register(UBER_CARD, UBER_PNG)   # row 11: the two PNG cards, by id (BODY_DEPARTURES row 11)
     D.register(COO_CARD, COO_PNG)
     D.register(FED_PROP, FED_PROP_FILE)          # row 15: PROP 1, the catalogued cutout, by id
+    D.register(LEASES_CARD, LEASES_PNG)          # row 16: the filings' record, the object's PNG (payload not authored)
+    D.register(DATACENTER_PROP, DATACENTER_PROP_FILE)   # row 16: PROP 2, the catalogued cutout, by id
     _manias_card()   # row 12: the table, composed from its own bands
     D.chart_card(BRAVOS_CARD, _hook_object(), BUILD, "line")   # the TWO-LINE page, rendered from the derived object
     D.register(HOST_PLATE_ID, HOST_PLATE_FILE)   # the Flow plate by id (build_render_f.find_asset checks STAMPED first)
