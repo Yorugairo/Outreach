@@ -382,7 +382,7 @@ verbatim tails and are left pending.
 - Evidence: built by implementation_luna as a patch (the harness fences this session's agents out of fable-p68 Edit), applied by the parent with `git apply`; the fixture needed no `--write`; R26-241 closed in BACKLOG
 
 ### T2: The motion gate counts a stamp's contact (R26-247, the gate; STAMP ONLY)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T1
 - Write set: `content/video_engine/scripts/gate_motion_density.py`, `content/video_engine/tests/test_stamp_is_a_landing.py` (new)
@@ -390,10 +390,10 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_stamp_is_a_landing.py -q`
 - Expected RED: for a stamp dock, `_arrival_events` returns `[]`, `_landings` gives `(enter + 0.0, 'dock ... stamp')`, and `_cadence_gate` returns `None`
 - Validate: `python -m pytest content/video_engine/tests/test_stamp_is_a_landing.py content/video_engine/tests/test_gate_motion_density.py content/video_engine/tests/test_gate_motion_density_surface_clock.py -q`
-- Red evidence: pending
-- Green evidence: pending
-- Refactor evidence: pending
-- Evidence: pending
+- Red evidence: `9 failed, 2 passed in 0.78s` (the two passing are the throw/land pins); probed on the old code: `_arrival_events []`, `_landings [(9.2158, 'dock fed stamp')]` (enter + 0.0), `_cadence_gate None`
+- Green evidence: parent re-run in place: `152 passed, 4 skipped in 1.25s` (the skips: the Tokyo short build not on disk)
+- Refactor evidence: a before/after snapshot of `_landings`/`_arrivals`/`_arrival_events`/`_cadence_gate`/`_dock_landings`/`_untied_pushes`/`_attention_moves` and every gate message over all 39 on-disk timelines with a throw/land/stamp dock: 37 identical, 2 changed - exactly the two stamp goldens (`prop-stamp`, `prop-stamp-ink`)
+- Evidence: `STAMP_CONTACT_S = 0.1542` (module 0.154206). OPEN FOR P69-HG1: the engine's own comments (`stopaction.mjs:279-281`, ~`:380`) and `test_the_stamp_arrival.py:42` call a stamp's contact its t = 0 (the ring is thrown from it); the plan builds on the scale crossing, per the operator's decision 1 - HG1 rules. `probe.py:837` reads `G._landings`, so its stamp instants move by 0.1542 s too
 
 ### T3: A stamped landing is sounded at its contact, at the engine's mass (R26-247, the cues)
 - Status: pending
