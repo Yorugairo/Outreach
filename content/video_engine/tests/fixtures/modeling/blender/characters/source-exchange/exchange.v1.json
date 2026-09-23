@@ -1,0 +1,57 @@
+{
+  "schema": "model_source_exchange.v1",
+  "status": "review_only",
+  "source_video": {
+    "path": "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/source-short/ufc-sharaf-steveson-high.mkv",
+    "sha256": "c162dcb7e7a11336c5b0bd3b29d51ecbf2f8cd5a49f90a3b851775165da64758"
+  },
+  "source_clock": {
+    "path": "content/video_engine/tests/fixtures/modeling/motion/source-exchange-clock.v1.json",
+    "sha256": "74305d4eb84efdcc9875d3abaaf0e86f2618913cf32335341f4d5ff027d2d823"
+  },
+  "source_blend": {
+    "path": "content/video_engine/assets/modeling/native/fighter-family-v1.1.blend",
+    "sha256": "5a99ce057520e332673230dd5367189a5e6dc7da56ca45da50c8a38b4f40bade"
+  },
+  "fps": 30,
+  "frame_end": 35,
+  "roles": {
+    "attacker": "screen_right_light_shorts_faces_left",
+    "receiver": "screen_left_dark_shorts_faces_right"
+  },
+  "observed_windows": {
+    "first_right_contact": [10, 11],
+    "first_follow_through": 12,
+    "left_hook_contact": 24,
+    "left_head_response": 25,
+    "left_follow_through": 26
+  },
+  "budgets_m": {
+    "precontact_head_motion": 0.002,
+    "contact_surface_gap": 0.05,
+    "contact_penetration": 0.03,
+    "planted_sole_slip_xy": 0.01,
+    "floor_penetration": 0.01,
+    "post_hook_head_response_min": 0.04,
+    "root_support_margin": 0.03
+  },
+  "render_frames": [0, 8, 10, 12, 23, 24, 25, 26, 32],
+  "keyframes": [
+    {"frame": 0, "attacker_x": 0.58, "receiver_x": -0.45, "right": "guard", "left": "guard", "attacker_torso_y": 0.0, "receiver_head_y": 0.0},
+    {"frame": 6, "attacker_x": 0.56, "receiver_x": -0.45, "right": "guard", "left": "guard", "attacker_torso_y": -0.08, "receiver_head_y": 0.0},
+    {"frame": 9, "attacker_x": 0.47, "receiver_x": -0.45, "right": "right_approach", "left": "guard", "attacker_torso_y": 0.02, "receiver_head_y": 0.0},
+    {"frame": 10, "attacker_x": 0.43, "receiver_x": -0.45, "right": "right_touch", "left": "guard", "attacker_torso_y": 0.08, "receiver_head_y": 0.0},
+    {"frame": 11, "attacker_x": 0.41, "receiver_x": -0.45, "right": "right_touch", "left": "guard", "attacker_torso_y": 0.11, "receiver_head_y": 0.0},
+    {"frame": 12, "attacker_x": 0.40, "receiver_x": -0.45, "right": "right_follow", "left": "guard", "attacker_torso_y": 0.14, "receiver_head_y": -0.10},
+    {"frame": 15, "attacker_x": 0.43, "receiver_x": -0.45, "right": "guard", "left": "guard", "attacker_torso_y": 0.04, "receiver_head_y": -0.06},
+    {"frame": 18, "attacker_x": 0.40, "receiver_x": -0.45, "right": "guard", "left": "left_windup", "attacker_torso_y": -0.11, "receiver_head_y": 0.0},
+    {"frame": 21, "attacker_x": 0.37, "receiver_x": -0.45, "right": "guard", "left": "left_approach", "attacker_torso_y": -0.02, "receiver_head_y": 0.0},
+    {"frame": 23, "attacker_x": 0.32, "receiver_x": -0.45, "right": "guard", "left": "left_near", "attacker_torso_y": 0.07, "receiver_head_y": 0.0},
+    {"frame": 24, "attacker_x": 0.28, "receiver_x": -0.45, "right": "guard", "left": "left_touch", "attacker_torso_y": 0.12, "receiver_head_y": 0.0},
+    {"frame": 25, "attacker_x": 0.27, "receiver_x": -0.46, "right": "guard", "left": "left_follow", "attacker_torso_y": 0.16, "receiver_head_y": 0.28},
+    {"frame": 26, "attacker_x": 0.26, "receiver_x": -0.47, "right": "guard", "left": "left_follow_far", "attacker_torso_y": 0.19, "receiver_head_y": 0.36},
+    {"frame": 28, "attacker_x": 0.27, "receiver_x": -0.50, "right": "guard", "left": "left_follow_far", "attacker_torso_y": 0.16, "receiver_head_y": 0.38},
+    {"frame": 32, "attacker_x": 0.32, "receiver_x": -0.52, "right": "guard", "left": "guard", "attacker_torso_y": 0.04, "receiver_head_y": 0.20},
+    {"frame": 35, "attacker_x": 0.37, "receiver_x": -0.52, "right": "guard", "left": "guard", "attacker_torso_y": 0.0, "receiver_head_y": 0.08}
+  ]
+}
