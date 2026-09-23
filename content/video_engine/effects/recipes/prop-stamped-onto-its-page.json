@@ -1,0 +1,36 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:prop-stamped-onto-its-page",
+ "title": "The prop stamped onto its page",
+ "aliases": [],
+ "acts": [
+  "NAMES"
+ ],
+ "members": [
+  {
+   "card": "page_builder:line",
+   "offset_s": 0.0,
+   "role": "the chart is the world - the page holds, its lines drawn and tagged, before anything is added to it"
+  },
+  {
+   "card": "dock_kind:prop",
+   "offset_s": 10.0,
+   "role": "the named thing is added to the world bare - a catalogued cutout, no card, a DIRECT match for the word only"
+  },
+  {
+   "card": "arrival:stamp",
+   "offset_s": 10.0,
+   "role": "it comes down on the word: the mark takes the page's biggest free room, rests off-square, and the ring hugs it"
+  }
+ ],
+ "window_s": 3.0,
+ "does": "A named thing lands INTO the chart's world on its word: the prop is sized to the page's biggest free room, stamped down off-square with the ring just outside it, and leaves with its own exit.",
+ "doctrine": [
+  "E99 s87",
+  "E99 s88",
+  "R26-20"
+ ],
+ "status": "candidate",
+ "source": "the golden prop-stamp (tests/golden/frames/prop-stamp*.png) - no approved cut carries it yet",
+ "count": 0
+}
