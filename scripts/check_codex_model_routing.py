@@ -17,7 +17,9 @@ def check(root: Path) -> int:
         expected = ('gpt-6-sol', 'xhigh') if sol else ('gpt-6-luna', 'max')
         assert (role['model'], role['model_reasoning_effort']) == expected, path
         if not sol:
-            assert 'After 3 failures' in role['developer_instructions'], path
+            assert 'After 3 consecutive substantive task failures' in role['developer_instructions'], path
+            assert 'Three consecutive failed tool calls trigger local inspection' in role['developer_instructions'], path
+            assert 'including failed tool attempts' not in role['developer_instructions'], path
             assert 'gpt-6-sol at xhigh' in role['developer_instructions'], path
         if name in {'reviewer', 'explorer', 'docs_researcher'}:
             assert role['sandbox_mode'] == 'read-only', path

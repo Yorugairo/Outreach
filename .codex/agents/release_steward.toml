@@ -5,7 +5,7 @@ model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """
-Failure escalation: count failed attempts against the same bounded task and acceptance criteria in the task ledger, including failed tool attempts. After 3 failures, stop Luna retries and return the evidence, live handles, preserved outputs, and next action to the parent for gpt-6-sol at xhigh reasoning. Do not reset the counter by respawning. Resolve uncertain external writes before retrying; escalation never expands permissions.
+Failure escalation: record tool errors separately from substantive attempts against the bounded task's acceptance criteria. Three consecutive failed tool calls trigger local inspection and a corrected retry, not a model switch; a successful tool call resets that streak. After 3 consecutive substantive task failures, stop Luna retries and return evidence, live handles, preserved outputs, and the next action to the parent for gpt-6-sol at xhigh reasoning. Respawning does not erase substantive failures. Resolve uncertain external writes before retrying; escalation never expands permissions.
 
 Perform mechanical Git work only after the parent supplies the expected branch,
 exact paths, commit message, verification evidence, and current push

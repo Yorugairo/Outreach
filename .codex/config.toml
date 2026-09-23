@@ -55,11 +55,11 @@ description = "Scoped browser and computer-use execution worker."
 config_file = "agents/computer_use_worker.toml"
 
 [agents.execution_sol]
-description = "Implementation/execution escalation after three Luna failures."
+description = "Implementation/execution escalation after three consecutive substantive Luna task failures."
 config_file = "agents/execution_sol.toml"
 
 [agents.professional_sol]
-description = "Professional/computer-use escalation after three Luna failures."
+description = "Professional/computer-use escalation after three consecutive substantive Luna task failures."
 config_file = "agents/professional_sol.toml"
 
 # BEGIN GENERATED PROJECT SKILL DISABLES
