@@ -129,16 +129,58 @@ def stop_dials(src: Path | None = None) -> dict:
     return out
 
 
+STAMP = "stamp"
+STAMP_SPRING = ("m", "k", "c")
+STAMP_CONTACT_DP = 4           # gate_motion_density.STAMP_CONTACT_S's own precision (0.1542): the cue and the gate read ONE instant
+STAMP_MASS = "ink"             # scene-evidence-engine.mjs:16969 `stampXf(d.mass || "ink", ...)` - the engine's own default, stamps only
+LANDING_MASS = "paper"         # a throw or a land that names no mass (the shipped cue plans' `opts.get("mass", "paper")`)
+WEIGHTED_ARRIVALS = ("throw", "land", STAMP)
+
+
+def stamp_spring(src: Path | None = None) -> dict:
+    """The stamp's CLAMPED scale spring (`STAMP_ARRIVAL.LAND`: m, k, c), read from the module like
+    `stop_dials` - a regex over the STAMP_ARRIVAL block, so the cue cannot drift from the mark."""
+    text = Path(src or STOP_MODULE).read_text(encoding="utf-8")
+    block = text.split("export const STAMP_ARRIVAL", 1)[1].split("});", 1)[0]
+    land = re.search(r"^\s*LAND:\s*\{([^}]*)\}", block, flags=re.M)
+    assert land, "stopaction.mjs STAMP_ARRIVAL no longer names LAND"
+    out = {k: float(v) for k, v in re.findall(r"([a-z]+):\s*([0-9.]+)", land.group(1))}
+    for k in STAMP_SPRING:
+        assert k in out, f"stopaction.mjs STAMP_ARRIVAL.LAND no longer names {k}"
+    return out
+
+
+def stamp_contact_s(src: Path | None = None) -> float:
+    """A stamp's CONTACT after its enter: `STAMP_LAND.tc`, the first instant the clamped scale spring's
+    0 -> 1 step response reaches 1 (stopaction.mjs:305-312, wd t = pi - atan(wd / (z w))) - the mark at
+    its own size. Rounded to the motion gate's mirror (`STAMP_CONTACT_S`), so the two agree to the byte."""
+    g = stamp_spring(src)
+    z = g["c"] / (2 * math.sqrt(g["k"] * g["m"]))
+    w = math.sqrt(g["k"] / g["m"])
+    assert z < 1, f"STAMP_ARRIVAL.LAND is not underdamped (zeta {z:.4f}) - it never crosses 1"
+    wd = w * math.sqrt(1 - z * z)
+    return round((math.pi - math.atan2(wd, z * w)) / wd, STAMP_CONTACT_DP)
+
+
 def landing_contact(t_enter: float, arrive: str, dials: dict, fps: int = FPS) -> float:
     """The frame the card touches down on. A THROW flies on the stepped clock (round(t * fps)), so
     its contact is the first frame at or past FLIGHT_S; a LAND is continuous - anticipation plus
-    drop. The cue goes ON that frame or one early, never two ahead (the weight report Q5)."""
+    drop; a STAMP is continuous too - its clamped scale spring's crossing (`stamp_contact_s`, P69 T3).
+    The cue goes ON that frame or one early, never two ahead (the weight report Q5)."""
     if arrive == "throw":
         return t_enter + math.ceil(dials["FLIGHT_S"] * fps - 1e-9) / fps
+    if arrive == STAMP:
+        return t_enter + stamp_contact_s()
     return t_enter + dials["ANTIC_S"] + dials["DROP_S"]
 
 
-def row_arrivals(row, kinds: tuple[str, ...] = ("throw", "land")):
+def arrival_mass(opts: dict) -> str:
+    """The mass a weighted arrival lands at: its own `mass`, else the default for its kind - `ink` for a
+    stamp (the engine's own), `paper` for a throw or a land."""
+    return (opts or {}).get("mass") or (STAMP_MASS if (opts or {}).get("arrive") == STAMP else LANDING_MASS)
+
+
+def row_arrivals(row, kinds: tuple[str, ...] = WEIGHTED_ARRIVALS):
     """The docks of ONE row that arrive with weight: (dock tuple, its options). Per row, so a cue
     list keeps the order the shot table reads in."""
     for d in (row[4] or []):
@@ -296,7 +338,7 @@ def fired(timeline, dials: dict | None = None) -> list[dict]:
             arrive = str(e.card).split(":", 1)[1]
             contact = round(landing_contact(e.t, arrive, dials), 2)
             out.append({"kind": "landing", "what": arrive, "at": contact, "until": contact,
-                        "scene": e.scene, "ref": e.ref, "mass": e.option or "paper"})
+                        "scene": e.scene, "ref": e.ref, "mass": arrival_mass({"arrive": arrive, "mass": e.option})})
         elif e.cls == "exit" and str(e.ref or "").split(":", 1)[0] == SUCK:
             out.append({"kind": SUCK, "what": SUCK, "at": round(t1, 2), "until": round(t1, 2),
                         "scene": e.scene, "ref": e.ref})

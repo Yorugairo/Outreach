@@ -396,7 +396,7 @@ verbatim tails and are left pending.
 - Evidence: `STAMP_CONTACT_S = 0.1542` (module 0.154206). OPEN FOR P69-HG1: the engine's own comments (`stopaction.mjs:279-281`, ~`:380`) and `test_the_stamp_arrival.py:42` call a stamp's contact its t = 0 (the ring is thrown from it); the plan builds on the scale crossing, per the operator's decision 1 - HG1 rules. `probe.py:837` reads `G._landings`, so its stamp instants move by 0.1542 s too
 
 ### T3: A stamped landing is sounded at its contact, at the engine's mass (R26-247, the cues)
-- Status: pending
+- Status: done
 - Owner: junior_developer
 - Depends on: T2 (same checkout; the same contact)
 - Write set: `content/video_engine/scripts/authoring/audio.py`, `content/video_engine/tests/test_authoring_kit.py`
@@ -404,10 +404,10 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_authoring_kit.py -q -k "stamp or landing or row_arrivals"`
 - Expected RED: `A.landing_contact(2.0, "stamp", dials)` = `2.32`; `list(A.row_arrivals(<stamped row>)) == []`; `fired()` labels an unmassed stamp `paper`
 - Validate: `python -m pytest content/video_engine/tests/test_authoring_kit.py -q`
-- Red evidence: pending
-- Green evidence: pending
-- Refactor evidence: pending
-- Evidence: pending
+- Red evidence: `6 failed, 7 passed, 77 deselected` - `assert 2.3200000000000003 == (2.0 + 0.1542)`, `assert [] == ['prop-x']`, no `stamp_spring` / `arrival_mass`; probed: an unmassed stamp labelled `paper`
+- Green evidence: parent re-run in place: `test_authoring_kit.py` -> `90 passed in 0.53s`
+- Refactor evidence: `stamp_contact_s()` rounds to the gate's 4 dp, so the cue and `G.STAMP_CONTACT_S` read one instant (0.1542)
+- Evidence: grep - no stamp rows in `lab_build.py`, `tokyo-tea-break/build_short.py` or `steel-and-paper/build_episode_h.py` (a third `row_arrivals` caller, `:601`), so none of their outputs move. Filed backlog R26-?? (`lab_build` has no stamp in `ARRIVAL_MASS` `:210` / `ARRIVAL_LANDS_S` `:168`)
 
 ### T4: The camera may push on a landed stamp - the player and the gate's mirror together (R26-247, the camera; E51)
 - Status: pending
