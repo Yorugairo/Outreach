@@ -8861,6 +8861,63 @@ async function mount(doc) {
     el.setAttribute("x2", b[0].toFixed(1)); el.setAttribute("y2", b[1].toFixed(1));
     return [a, b];
   };
+  /* P69 T6 (the parent's frame reads, 2026-09-22) - A NUMBER STAYS ON ITS OWN SIDE OF A RULE. The 94 page's "94%"
+     sat ON its dashed 100 % rule, struck through; lifted above it, it read as MORE than 100 - position on a chart is
+     meaning (E28: sign is geometry). So a label that belongs to a bar (its value, or the figure that takes the value's
+     place) is placed against the NEAREST comparator rule its bar does not reach - the one past the bar's end, on the
+     side the label goes - and never crosses it:
+       - clear of that rule already (by M28's half-figure of air, LPVAL.GUT_FIG): it stays where it was asked to stand;
+       - else it hugs the bar's end, the same air off the end, if the gap to the rule holds it with the air both sides;
+       - else it goes INSIDE the bar, the air in from the end, in an ink that reads on the bar (lfOnInk, R26-191's own
+         read of the board's inks against the bar's fill).
+     A rule the bar passes (it crosses the bar) is not the label's business: the value passes it too. `up`/`down` are
+     the label's reach above and below its baseline; `yWant` the baseline it was asked for. Pure in its numbers. */
+  const lpBarLabelPlace = (q, rules, air, up, down, yWant) => {
+    const beyond = (rules || []).filter((ry) => Number.isFinite(ry) && (q.neg ? ry > q.end : ry < q.end));
+    if (!beyond.length) return { y: yWant, inside: false };
+    const near = q.neg ? Math.min(...beyond) : Math.max(...beyond);
+    const clear = (y) => (q.neg ? y + down <= near - air : y - up >= near + air);
+    if (clear(yWant)) return { y: yWant, inside: false };
+    const hug = q.neg ? q.end + air + up : q.end - air - down;
+    if (clear(hug)) return { y: hug, inside: false };
+    return { y: q.neg ? q.end - air - down : q.end + air + up, inside: true };
+  };
+  /* ... and the builder's half of it: every bar's VALUE, against the page's rules. Inside its bar only if the bar holds
+     it (its height past the air both ends, its width past the number) in an ink that reads there; a value that fits
+     nowhere honest is not printed (R26-191's thin: a number is never moved off its own side of the line). A value
+     R26-191 already put inside its bar is not moved. The move is recorded where R26-191 records its own (`vdy`, the
+     value mark's y), so every later reader agrees. A page with no rule returns at once and builds to the byte what it
+     built before. */
+  const lpValsClearRules = (st) => {
+    const rules = (st.hlines || []).map((r) => r.y).filter(Number.isFinite);
+    if (!rules.length) return;
+    const inks = [lpVarOn(st.chart, "--lp-char"), lpVarOn(st.chart, "--lp-cream")];
+    for (const b of st.bars) {
+      if (!b.val || b.thin || !(b.val.textContent || "").length) continue;
+      const box0 = lpLabelBox(b.val);
+      if (!box0 || (b.neg ? box0[1] + box0[3] <= b.end : box0[1] >= b.end)) continue;   /* inside its own bar */
+      const size = box0[3] / (LPVAL.ASC + LPVAL.LAB_DESC), up = LPVAL.ASC * size, down = LPVAL.LAB_DESC * size;
+      const y0 = +b.val.getAttribute("y"), air = LPVAL.GUT_FIG * size;
+      const q = { end: b.end, neg: b.neg }, pl = lpBarLabelPlace(q, rules, air, up, down, y0);
+      if (pl.y === y0) continue;
+      const ink = pl.inside ? lfOnInk(lpFillOf(b.bar), inks) : null;
+      if (pl.inside && (!ink || b.h < box0[3] + 2 * air || b.bw < box0[2])) {
+        b.val.setAttribute("opacity", 0); b.val.style.display = "none"; b.thin = true; continue;
+      }
+      if (ink) b.val.style.fill = ink.ink;   /* a number on the bar's own ink, or it is a smudge */
+      b.val.setAttribute("y", pl.y.toFixed(1));
+      b.vdy = (b.vdy || 0) + (pl.y - y0);
+      const m = (st.markBy || {})["val:b:" + b.i];
+      if (m) m.geom.y = +b.val.getAttribute("y");
+    }
+  };
+  /* P69 T6 - THE BAR WIDTH CAP (the operator, 2026-09-22, on the lone 94 bar at 66 % of the plot: "that bar can't be that
+     wide, that doesn't read like a bar chart it reads like a giant block"). A bar is never wider than the bar a page of
+     CAP_N bars draws; a page of fewer keeps that width and that pitch, and the group stands CENTRED in the plot with the
+     same even gaps - it never stretches. [DERIVED: CAP_N is the fewest bars any committed golden draws on this builder -
+     `tags-to-bars`'s arriving page, two bars, 303.6 of a 920-unit plot at 16:9 - so no golden's bar is wider than the
+     cap and every golden builds to the byte; a 3- or 4-bar cap (202.4 / 151.8 units) would re-pin that golden.] */
+  const LPBAR = Object.freeze({ CAP_N: 2 });
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
@@ -8898,7 +8955,9 @@ async function mount(doc) {
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
-    const bw = (x1 - x0) / n * (1 - gap);
+    const capped = n < LPBAR.CAP_N, pitch = capped ? (x1 - x0) / LPBAR.CAP_N : (x1 - x0) / n;   /* the cap: a lone bar keeps a pair's pitch */
+    const lead = capped ? x0 + ((x1 - x0) - n * pitch) / 2 : x0;   /* ... and the group stands centred in the plot */
+    const bw = pitch * (1 - gap);
     /* both axes, always (operator, 2026-09-03): y ticks with the unit from the shared helper, the zero line as the axis */
     /* six divisions, not the default five: lpNiceStep's 1-2-5 ladder rounds 21.8 up to 50, which left the tariff
        short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
@@ -8907,7 +8966,7 @@ async function mount(doc) {
     /* the comparator: the tallest bar the stated scale holds - the breaking bar first stands at ITS level, a bar like the others */
     const honest = st.vals.filter((v) => !(brk && v > hi)), comp = honest.length ? Math.max(...honest) : hi;
     st.vals.forEach((v, i) => {
-      const over = brk && v > hi, x = x0 + (x1 - x0) / n * (i + gap / 2), yv = my(over ? comp : v), neg = v < 0;
+      const over = brk && v > hi, x = lead + pitch * (i + gap / 2), yv = my(over ? comp : v), neg = v < 0;
       const h = Math.max(3, Math.abs(yv - base)), y = neg ? base : base - h;
       /* P50 T10: the placeholder's TRACK is laid in BEFORE the bar, so the bar grows in front of it. It is exactly
          the height the bar builds to - the comparator's level - because it is furniture, not data (E28: no frame of
@@ -8947,7 +9006,7 @@ async function mount(doc) {
       lpMark(st, "val:b:" + i, "value", val, { x: x + bw / 2, y: vy, v });
     });
     /* R26-53 law 1: the whole row fits its slots, at ONE size, before anything reads a value's box */
-    const slot = (x1 - x0) / n;
+    const slot = pitch;
     st.valFit = lpFitValues(st, slot, P, { base });   /* R26-191: and the zero line, which is where a label that goes INSIDE its bar is measured from */
     if (brk && st.bars.some((b) => b.over)) {
       const vmax = Math.max(...st.vals), niceCeil = (v) => { const s = lpNiceStep(v / 4); return Math.ceil(v / s - 1e-9) * s; };
@@ -8990,6 +9049,7 @@ async function mount(doc) {
       lpMark(st, "rule:" + hi, "rule", line, { y: hy, v: +h.y, x1: x0, x2: x1 });
       return { h, y: hy, line, lab, col };
     });
+    lpValsClearRules(st);   /* P69 T6: a value is never struck through by a comparator rule - BEFORE the pill reads the values' boxes */
     const e = st.bars[Math.min(st.emph, st.bars.length - 1)];
     if (e) {
       const cg = lpEl("g", "", st.chart, { opacity: 0 });
@@ -10858,13 +10918,18 @@ async function mount(doc) {
   /* THE MORPH'S OWN ELEMENTS, built once and grown, never rebuilt: the extra glyph cells the count needs beyond the
      figure's own, the held metric beside it, and the comparator's label beneath. Idempotent on purpose - a cold seek
      builds exactly what a play built, and a page whose figure was re-drawn gets them back on the next frame. */
+  /* the figure's text-anchor as the page wrote it: `middle` where the builder CENTRED it (P69 T6 / R26-190: a figure on
+     a bars page stands over its bar's top), else the side the room test chose - `end` where there was no room to the
+     right. A figure record that names no anchor is read exactly as before, so every line page is unchanged. */
+  const compareAnchor = (fg) => (fg && fg.anchor === "middle") ? "middle" : (fg && fg.fits === false ? "end" : "start");
+
   const compareEnsure = (fg, sp, ctx, want) => {
     const el = (ctx || {}).el;
     let P = fg.__compare;
     if (!P) {
-      const fs = +fg.fs || 28, fss = +fg.fss || fs * 0.6, anchor = fg.fits === false ? "end" : "start";
+      const fs = +fg.fs || 28, fss = +fg.fss || fs * 0.6, anchor = compareAnchor(fg);
       const col = compareFill(fg);
-      const ghost = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor, opacity: 0,
+      const ghost = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor === "middle" ? "start" : anchor, opacity: 0,
         style: "font-size:" + (fs * COMPARE.GHOST_F).toFixed(1) + "px;fill:" + col + ";opacity:0" }) : null;
       if (ghost) ghost.textContent = String(((sp.metric || {}).text) == null ? "" : (sp.metric || {}).text);
       const sub = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor,
@@ -10899,11 +10964,12 @@ async function mount(doc) {
 
   /* WHAT STANDS BESIDE AND BENEATH the morphing number, for every form: the held metric on the figure's own baseline
      (the side the figure itself took), and the comparator's label written beneath it glyph by glyph. `subInk` is the
-     form's own hand - the counter's own write for `count`, the figure's SUB write for the two morph forms. */
+     form's own hand - the counter's own write for `count`, the figure's SUB write for the two morph forms. A figure
+     CENTRED on its datum (P69 T6: a bar's top) holds the metric to its right and centres the label under it. */
   const compareBeside = (fg, P, sp, text, before, ghost, subInk) => {
-    const fits = fg.fits !== false, x = +fg.x || 0, y = +fg.y || 0;
+    const fits = fg.fits !== false, mid = compareAnchor(fg) === "middle", x = +fg.x || 0, y = +fg.y || 0;
     if (P.ghost) {
-      const w = compareWidth(fg.label, text, P.fs), gx = x + (fits ? 1 : -1) * (w + COMPARE.GAP);
+      const w = compareWidth(fg.label, text, P.fs), gx = x + (fits ? 1 : -1) * ((mid ? w / 2 : w) + COMPARE.GAP);
       P.ghost.setAttribute("x", gx.toFixed(1)); P.ghost.setAttribute("y", y.toFixed(1));
       P.ghost.setAttribute("text-anchor", fits ? "start" : "end");
       compareInk(P.ghost, before || sp.hold === "gone" ? 0 : ghost);
@@ -10911,7 +10977,7 @@ async function mount(doc) {
     if (P.sub) {
       const step = P.fss * COMPARE.SUB_DY;
       P.sub.setAttribute("x", x.toFixed(1)); P.sub.setAttribute("y", (y + step * (fg.sub ? 2 : 1)).toFixed(1));
-      P.sub.setAttribute("text-anchor", fits ? "start" : "end");
+      P.sub.setAttribute("text-anchor", mid ? "middle" : fits ? "start" : "end");
       compareInk(P.sub, 1);   /* the class's own .85 would dim the label the hand is writing; its glyphs carry the write */
       P.sg.forEach((ts, j) => ts.setAttribute("opacity", (before ? 0 : subInk(j, P.sg.length)).toFixed(3)));
     }
@@ -11063,9 +11129,11 @@ async function mount(doc) {
   };
 
   /* the rings at the figure's own datum: the pen is the figure's x (its advance back from it where the page had no room
-     to the right and the text is anchored `end`), and its y is the baseline the hand wrote on */
+     to the right and the text is anchored `end`, half of it where the figure is centred), and its y is the baseline the
+     hand wrote on */
   const compareAtPen = (shape, fg) => {
-    const px = (fg.fits === false ? (+fg.x || 0) - shape.adv : (+fg.x || 0)), py = +fg.y || 0;
+    const a = compareAnchor(fg), x0 = +fg.x || 0;
+    const px = a === "end" ? x0 - shape.adv : a === "middle" ? x0 - shape.adv / 2 : x0, py = +fg.y || 0;
     return { rings: shape.rings.map((r) => ({ hole: r.hole, parent: r.parent, pts: r.pts.map((p) => [px + p[0], py + p[1]]) })),
              box: { x: px + shape.box.x, y: py + shape.box.y, w: shape.box.w, h: shape.box.h }, area: shape.area, adv: shape.adv };
   };
@@ -11363,6 +11431,68 @@ async function mount(doc) {
       wrap.setAttribute("transform", `translate(${x.toFixed(4)} 0) scale(${inv.toFixed(4)} 1) translate(${-x.toFixed(4)} 0)`);
     }
   };
+  /* P69 T6 / R26-190 (E99 s74) - A FIGURE ON A BARS PAGE. A bars page has no `linePts`, and the perform layer used to
+     drop every figure on one (`nFig: 0`), so a `chart_to compare` on it found nothing to morph. The figure's datum is
+     now ITS BAR'S TOP - the bar the target names, read off that bar's own mark (`b:<index>`, the rect the builder
+     drew): `[cx, end]`, the one datum rule lpMarkDatumOn already reads for a bar. Series 0 only, as lpMarkDatumOn
+     reads bars; null when the page drew no bar, so a page that had no figure before still has none.
+       WHERE IT STANDS (the parent's frame read, 2026-09-22): in the bar's own VALUE's place - centred over the bar's
+     top (under a drop's foot), half a figure of air off it (M28's air, LPVAL.GUT_FIG) - and the value YIELDS while
+     it stands (paintPerform), so the page says the number once. Never beside the bar: beside a lone bar is the tick
+     column. The stack it reserves is everything the figure will write: its own text and every comparator a compare
+     on it turns it into, its sub and the comparator's label beneath (compare.mjs writes it one sub step down), and the
+     held metric to its right. Centred on the bar, then pulled inside the PLOT's own edges so no line of it leaves the
+     page's text-safe box; then lifted (a drop's lowered) past every comparator rule, every other bar and every label
+     of the page it would touch, by the same air. */
+  const lpTextW = (surf, text, px, cls) => {   /* one string's advance in the page's own face, measured and thrown away */
+    const s = String(text == null ? "" : text);
+    if (!s) return 0;
+    const e = surf ? lpEl("text", cls, surf, { x: 0, y: 0, opacity: 0, style: "font-size:" + px + "px" }) : null;
+    if (e) e.textContent = s;
+    const w = e && e.getComputedTextLength ? e.getComputedTextLength() : 0;
+    if (e) e.remove();
+    return w > 0 ? w : s.length * px * FIGURE.FIGURE_CHAR_W;
+  };
+  const lpBarFigureAnchor = (st, scene, sp, fsi, fs, fss, G, surf) => {
+    const B = st.markBy || {}, n = (st.bars || []).length;
+    if (fsi !== 0 || !n) return null;
+    const i = Math.max(0, Math.min(n - 1, ((sp.target || {}).index | 0))), m = B["b:" + i];
+    if (!m || !m.geom) return null;
+    const q = m.geom, rec = m.rec || st.bars[i] || null, S = st.scale || {};
+    const said = (v) => String(v == null ? "" : v).trim();
+    const cmps = pageSpecies(scene, "chart_to").filter((c) => c.to === "compare" && said((c.metric || {}).text) === said(sp.text));
+    const num = Math.max(lpTextW(surf, sp.text, fs, "bklab"), ...cmps.map((c) => lpTextW(surf, (c.comparator || {}).text, fs, "bklab")));
+    const under = Math.max(sp.sub ? lpTextW(surf, sp.sub, fss, "bksub") : 0,
+                           ...cmps.map((c) => lpTextW(surf, (c.comparator || {}).label, fss, "bksub")));
+    const held = cmps.filter((c) => c.hold !== "gone").map((c) => lpTextW(surf, (c.metric || {}).text, fs * COMPARE.GHOST_F, "bksub"));
+    const half = Math.max(num, under) / 2, right = held.length ? Math.max(half, num / 2 + COMPARE.GAP + Math.max(...held)) : half;
+    const lo = Number.isFinite(S.x0) ? S.x0 : 0, hi = Number.isFinite(S.x1) ? S.x1 : G.W;
+    const x = Math.max(lo + half, Math.min(hi - right, q.cx));
+    const nSub = (sp.sub ? 1 : 0) + (cmps.some((c) => said((c.comparator || {}).label)) ? 1 : 0);
+    const up = FIGURE.FIGURE_UP * fs, down = nSub ? nSub * fss * FIGURE.SUB_DY + FIGURE.FIGURE_DOWN * fss : FIGURE.FIGURE_DOWN * fs;
+    const air = LPVAL.GUT_FIG * fs, lift = (Number(sp.dy) || 0) * fs * FIGURE.LINE;
+    let y = (q.neg ? q.end + air + up : q.end - air - down) + lift;
+    const own = rec && rec.val ? lpLabelBox(rec.val) : null;
+    const same = (a, b) => !!(a && b) && a.every((v, k) => Math.abs(v - b[k]) < 0.01);
+    const obs = [...(st.labBoxes || []).filter((bx) => !same(bx, own)),
+                 ...[...Array(n).keys()].filter((k) => k !== i).map((k) => (B["b:" + k] || {}).geom).filter(Boolean).map((g) => [g.x, g.y, g.w, g.h])];
+    for (let pass = 0; pass <= obs.length; pass++) {
+      const box = [x - half, y - up, half + right, up + down];
+      const hit = obs.find((o) => boxMeetsBox(box, o, air));
+      if (!hit) break;
+      y = q.neg ? hit[1] + hit[3] + air + up : hit[1] - air - down;
+    }
+    /* ... and never past a rule its bar does not reach (lpBarLabelPlace): inside the bar, in an ink that reads there */
+    const pl = lpBarLabelPlace(q, (st.hlines || []).map((r) => r.y), air, up, down, y);
+    let ink = null;
+    if (pl.inside) {
+      const fill = lpFillOf(m.el), named = sp.color ? (PS_PAL[sp.color] || sp.color) : null;
+      const reads = named && /^#/.test(named) ? lfOnInk(fill, [named]) : null;
+      const best = reads || lfOnInk(fill, [lpVarOn(st.chart, "--lp-chalk"), lpVarOn(st.chart, "--lp-char"), lpVarOn(st.chart, "--lp-cream")]);
+      ink = best ? best.ink : null;
+    }
+    return { D: [q.cx, q.end], i, rec, ink, inside: pl.inside, place: { fits: true, x, anchor: "middle", yA: pl.y } };
+  };
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -11447,15 +11577,18 @@ async function mount(doc) {
          written on the first; and `| 0` turned an authored `null` or `""` into 0 instead of leaving it undeclared.
          A figure that names no series in any of the three IS series 0, as it always was. */
       const fsi = (sp.series ?? sp.tier ?? (sp.target || {}).series) | 0;
-      const pts = (st.linePts || [])[fsi] || [];
-      if (!pts.length) return null;
-      const i = Math.max(0, Math.min(pts.length - 1, ((sp.target || {}).index | 0))), D = pts[i];
-      /* a figure is ink on the page: the chalk unless a colour is named (an emphasised page's unmuted stroke is its coral tail) */
-      const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)";
+      const line = (st.linePts || [])[fsi] || [];
+      const bar = line.length ? null : lpBarFigureAnchor(st, scene, sp, fsi, fs, fss, G, surf);   /* P69 T6 / R26-190: no line, a bar's top */
+      if (!line.length && !bar) return null;
+      const pts = line;
+      const i = bar ? bar.i : Math.max(0, Math.min(line.length - 1, ((sp.target || {}).index | 0))), D = bar ? bar.D : line[i];
+      /* a figure is ink on the page: the chalk unless a colour is named (an emphasised page's unmuted stroke is its coral tail);
+         P69 T6: a bar's figure written INSIDE its bar takes the ink that reads on the bar */
+      const col = (bar && bar.ink) || (sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)");
       /* the AUTHORED place, the module's own law (species/figure.mjs): beside the datum on the side with the
          room, the baseline dropped BASE_DY and moved by `dy` lines of the figure's own size. The PAINTER reads
          it through the same function, which is why a re-read frame lands on the built one to the digit. */
-      const { fits, x, anchor, yA } = figurePlace(D, fs, sp.dy, G.W, PS.BRACKET_GAP, PS.BRACKET_ROOM);
+      const { fits, x, anchor, yA } = bar ? bar.place : figurePlace(D, fs, sp.dy, G.W, PS.BRACKET_GAP, PS.BRACKET_ROOM);
       const g = lpEl("g", "lp-figure", surf, { opacity: 0 });   /* no pin dot: the figure stands where the line was (the third watch: lingering dots read as strange) */
       const label = lpEl("text", "bklab", g, { x: x.toFixed(1), y: yA.toFixed(1), "text-anchor": anchor, style: "font-size:" + fs + "px;fill:" + col });
       const lg = [...String(sp.text || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
@@ -11465,9 +11598,10 @@ async function mount(doc) {
       /* R26-71: the step-off, HERE - the glyphs exist, so the advance is the written one, and the points are the
          series' own. A figure with nothing in its way does not move by a thousandth. */
       const subH = sp.sub ? fss * FIGURE.SUB_DY : 0, tw = figWidth(label, sp.text, fs);
-      const y = figClearY(x, yA, tw, fs, anchor, sp.dy, pts, subH, G.H, st.labBoxes);
+      const y = bar ? yA : figClearY(x, yA, tw, fs, anchor, sp.dy, pts, subH, G.H, st.labBoxes);   /* a bar's figure was placed clear of everything above */
       if (y !== yA) { label.setAttribute("y", y.toFixed(1)); if (sub) sub.setAttribute("y", (y + fss * FIGURE.SUB_DY).toFixed(1)); }
-      return { sp, D, x, y, fits, g, label, lg, sub, sg, fi, fs, fss, W: G.W, H: G.H, tw, subH, si: fsi, idx: i };
+      return { sp, D, x, y, fits, g, label, lg, sub, sg, fi, fs, fss, W: G.W, H: G.H, tw, subH, si: fsi, idx: i,
+               ...(bar ? { anchor, bar: bar.rec } : {}) };   /* P69 T6: a bar's figure is CENTRED (compare.mjs reads `anchor`), and its bar's value yields to it */
     }).filter(Boolean);
     /* NOTES (the third watch: "the page has plenty of space on the side to write things"): a line of handwriting in the page's
        QUIET ZONE beside the chart - the column the chart leaves free (the dock's band) - stacked in order, each written on its
@@ -11658,7 +11792,11 @@ async function mount(doc) {
     for (const sd of PF.spans || []) { const p = PAGE_PAINTERS[sd.sp.kind || "span"]; if (p) p(sd, t, st, PAGE_CTX); }
     for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) { PAGE_PAINTERS.figure(fg, t, st, PAGE_CTX);
       const lv = pageLeave(fg.sp, t);   /* R26-219: the hand wrote it at a datum of the page that has just been replaced */
-      if (lv > 0) fg.g.setAttribute("opacity", ((+fg.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3)); }   /* E50: the chart's next thing - species/figure.mjs, named as the compare's dispatch names its own: ONE hook reads the registry by key (the span's), and it is the span's */
+      if (lv > 0) fg.g.setAttribute("opacity", ((+fg.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3));
+      /* P69 T6: a figure written over its BAR takes the bar's own number's place - the value fades out on the figure's
+         own write and comes back as the figure leaves, so the page never says the number twice */
+      const yv = fg.bar && fg.bar.val && t >= fg.sp.at ? clamp01((t - fg.sp.at) / Math.max(0.001, (fg.sp.dur || 1) * FIGURE.WRITE)) * (1 - lv) : 0;
+      if (yv > 0) fg.bar.val.setAttribute("opacity", ((+fg.bar.val.getAttribute("opacity") || 0) * (1 - yv)).toFixed(3)); }   /* E50: the chart's next thing - species/figure.mjs, named as the compare's dispatch names its own: ONE hook reads the registry by key (the span's), and it is the span's */
     /* P57 T12 / R26-70b / E76 - THE CHART_TO COMPARE, DISPATCHED: the quoted figure the page has already written becomes the
        number the viewer feels. The law, the dials and the DOM are species/compare.mjs; this is the call, and it runs AFTER the
        figures so the morph owns the glyphs its own clock is writing. */

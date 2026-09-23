@@ -260,13 +260,18 @@ export const compareFill = (fg) => {
 /* THE MORPH'S OWN ELEMENTS, built once and grown, never rebuilt: the extra glyph cells the count needs beyond the
    figure's own, the held metric beside it, and the comparator's label beneath. Idempotent on purpose - a cold seek
    builds exactly what a play built, and a page whose figure was re-drawn gets them back on the next frame. */
+/* the figure's text-anchor as the page wrote it: `middle` where the builder CENTRED it (P69 T6 / R26-190: a figure on
+   a bars page stands over its bar's top), else the side the room test chose - `end` where there was no room to the
+   right. A figure record that names no anchor is read exactly as before, so every line page is unchanged. */
+export const compareAnchor = (fg) => (fg && fg.anchor === "middle") ? "middle" : (fg && fg.fits === false ? "end" : "start");
+
 export const compareEnsure = (fg, sp, ctx, want) => {
   const el = (ctx || {}).el;
   let P = fg.__compare;
   if (!P) {
-    const fs = +fg.fs || 28, fss = +fg.fss || fs * 0.6, anchor = fg.fits === false ? "end" : "start";
+    const fs = +fg.fs || 28, fss = +fg.fss || fs * 0.6, anchor = compareAnchor(fg);
     const col = compareFill(fg);
-    const ghost = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor, opacity: 0,
+    const ghost = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor === "middle" ? "start" : anchor, opacity: 0,
       style: "font-size:" + (fs * COMPARE.GHOST_F).toFixed(1) + "px;fill:" + col + ";opacity:0" }) : null;
     if (ghost) ghost.textContent = String(((sp.metric || {}).text) == null ? "" : (sp.metric || {}).text);
     const sub = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor,
@@ -301,11 +306,12 @@ export const compareMeltEnsure = (fg, P, ctx) => {
 
 /* WHAT STANDS BESIDE AND BENEATH the morphing number, for every form: the held metric on the figure's own baseline
    (the side the figure itself took), and the comparator's label written beneath it glyph by glyph. `subInk` is the
-   form's own hand - the counter's own write for `count`, the figure's SUB write for the two morph forms. */
+   form's own hand - the counter's own write for `count`, the figure's SUB write for the two morph forms. A figure
+   CENTRED on its datum (P69 T6: a bar's top) holds the metric to its right and centres the label under it. */
 const compareBeside = (fg, P, sp, text, before, ghost, subInk) => {
-  const fits = fg.fits !== false, x = +fg.x || 0, y = +fg.y || 0;
+  const fits = fg.fits !== false, mid = compareAnchor(fg) === "middle", x = +fg.x || 0, y = +fg.y || 0;
   if (P.ghost) {
-    const w = compareWidth(fg.label, text, P.fs), gx = x + (fits ? 1 : -1) * (w + COMPARE.GAP);
+    const w = compareWidth(fg.label, text, P.fs), gx = x + (fits ? 1 : -1) * ((mid ? w / 2 : w) + COMPARE.GAP);
     P.ghost.setAttribute("x", gx.toFixed(1)); P.ghost.setAttribute("y", y.toFixed(1));
     P.ghost.setAttribute("text-anchor", fits ? "start" : "end");
     compareInk(P.ghost, before || sp.hold === "gone" ? 0 : ghost);
@@ -313,7 +319,7 @@ const compareBeside = (fg, P, sp, text, before, ghost, subInk) => {
   if (P.sub) {
     const step = P.fss * COMPARE.SUB_DY;
     P.sub.setAttribute("x", x.toFixed(1)); P.sub.setAttribute("y", (y + step * (fg.sub ? 2 : 1)).toFixed(1));
-    P.sub.setAttribute("text-anchor", fits ? "start" : "end");
+    P.sub.setAttribute("text-anchor", mid ? "middle" : fits ? "start" : "end");
     compareInk(P.sub, 1);   /* the class's own .85 would dim the label the hand is writing; its glyphs carry the write */
     P.sg.forEach((ts, j) => ts.setAttribute("opacity", (before ? 0 : subInk(j, P.sg.length)).toFixed(3)));
   }
@@ -465,9 +471,11 @@ export const compareShape = (text, face, o = {}) => {
 };
 
 /* the rings at the figure's own datum: the pen is the figure's x (its advance back from it where the page had no room
-   to the right and the text is anchored `end`), and its y is the baseline the hand wrote on */
+   to the right and the text is anchored `end`, half of it where the figure is centred), and its y is the baseline the
+   hand wrote on */
 export const compareAtPen = (shape, fg) => {
-  const px = (fg.fits === false ? (+fg.x || 0) - shape.adv : (+fg.x || 0)), py = +fg.y || 0;
+  const a = compareAnchor(fg), x0 = +fg.x || 0;
+  const px = a === "end" ? x0 - shape.adv : a === "middle" ? x0 - shape.adv / 2 : x0, py = +fg.y || 0;
   return { rings: shape.rings.map((r) => ({ hole: r.hole, parent: r.parent, pts: r.pts.map((p) => [px + p[0], py + p[1]]) })),
            box: { x: px + shape.box.x, y: py + shape.box.y, w: shape.box.w, h: shape.box.h }, area: shape.area, adv: shape.adv };
 };

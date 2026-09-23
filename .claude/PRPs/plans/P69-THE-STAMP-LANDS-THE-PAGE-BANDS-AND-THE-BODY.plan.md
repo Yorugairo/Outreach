@@ -438,7 +438,7 @@ verbatim tails and are left pending.
 - Evidence: FRAME READ by the parent (`scratchpad/p69t5-stamp-plus-card.png` beside the red): the Fed mark clear at full size, the card in open ground, neither over the other. Seen and filed, pre-existing: the E65 `empty` room covers the y basis label (backlog R26-??). R26-247 residual: R4 only
 
 ### T6: A figure lands on a bars page and the compare morphs it (R26-190)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T5
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (`buildPerform` `:11364-11450` and the figure anchor it feeds; `paintCompare` `:11319` only if its read of the figure must change), `content/video_engine/scripts/species/compare.mjs` (only if the compare's source must change; synced), `content/video_engine/tests/test_compare_on_bars.py` (new), `content/video_engine/assets/page-boxes.v1.json`, `content/video_engine/tests/golden/**` (only if a golden carries a figure on a bars page that never painted - it re-pins in this commit, with the parent's frame read)
@@ -447,10 +447,10 @@ verbatim tails and are left pending.
 - Expected RED: the served player reports `nFig: 0` on a bars page with a `figure` species, and the compare paints nothing at its instant (the `if (!pts.length) return null` at `:11449`)
 - Validate: `python content/video_engine/scripts/sync_kinetics.py --check` then `python content/video_engine/scripts/measure_page_boxes.py --write` then `python -m pytest content/video_engine/tests/test_compare_on_bars.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_kinetics_sync.py -q`
 - Frame acceptance: the parent reads the halving at its start, middle and landing
-- Red evidence: pending
-- Green evidence: pending
-- Refactor evidence: pending
-- Evidence: pending
+- Red evidence: `5 failed, 3 passed` - `nFig: 0 - the bars page dropped its figure (R26-190)` x3; `u=0.15: the compare paints nothing at its instant` x2
+- Green evidence: parent re-run: `sync_kinetics` in sync (43); `measure_page_boxes --check` PASS (no box moved); `test_compare_on_bars` + `test_page_boxes` + `test_golden_frames` + `test_kinetics_sync` -> `249 passed in 418.54s`; `node --test content/video_engine/tests/kinetics/*.test.mjs` -> 651 pass, 0 fail
+- Refactor evidence: three rounds on the parent's frame reads - (1) the bar's own value label YIELDS to its figure, which sits centred at the bar top (no "94% 94%" / "20% 20% 10%"); every written line inside SAFE_BOX; value labels clear comparator rules (`lpValsClearRules`); (2) a number never sits on the far side of a rule its value does not pass - `lpBarLabelPlace` puts the 94 INSIDE its bar under the 100 rule (E28); (3) the operator: "that bar can't be that wide ... it reads like a giant block" - `LPBAR.CAP_N = 2` caps a bar at a two-bar page's width, fewer bars centred (a 3-4 bar cap re-pins the `tags-to-bars` golden: the operator's pick at the end-of-run card, beside T10b)
+- Evidence: frames read by the parent (`scratchpad/p69t6-{halving-*,94-land,1v3-land}.png`); goldens byte-identical, line pages byte-identical. Filed: the hline label over a bar (R26-??). Open outside the write set: `species/figure.mjs` re-places a bars figure with the line rule on a page with a SECOND chart; an emphasized bar's pill is not yielded
 
 ### T6b: A bare prop carries a resting shadow - depth and weight (the operator, 2026-09-22)
 - Status: pending
@@ -518,6 +518,21 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_fed_chart_readability.py -q -k "badge_key"`
 - Expected RED: the profiled page writes the full series name inline and has no key box in `page_boxes`
 - Validate: `python content/video_engine/scripts/measure_page_boxes.py --write` then `python -m pytest content/video_engine/tests/test_fed_chart_readability.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+### T10b: A bar with rounded shoulders and a soft shadow - an option, read off/on (the operator, 2026-09-22)
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T6b (the SAME one stage light and shadow dials as the prop's resting shadow); lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the bars builder's bar rect only), `content/video_engine/scripts/ledger_page.py` (the option's validation), `content/video_engine/scripts/build_scene_timeline_f.py` (the row option in `PLATE_OPTS`), `content/video_engine/tests/test_bar_style.py` (new), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: the operator, 2026-09-22, on the T6 frames: "that bar can't be that wide ... it reads like a giant block" (the width cap, T6) and "I think it should also have some sort of rounded edges, maybe shadows". (1) A row option (`;bar_style=soft`) gives every bar ROUNDED SHOULDERS (the top corners - the baseline stays square, so a bar still stands on zero; a negative bar rounds its bottom) and a SOFT SHADOW cast from the one stage light (T6b's dials; short, low-alpha - weight, not a 3D prism, which stays `;form=extruded_bar`). (2) The value label, the figure and every rule keep their clearances against the new rect. (3) Absent the option every page is byte-identical (goldens untouched). (4) The body's bars rows take the option (T33 adopts it with the s90 page). (5) The default flips only on the operator's read at the end (a card beside P69-HG3: bars off/on on the 94, the halving and the 1 vs 3)
+- Regression: `python -m pytest content/video_engine/tests/test_bar_style.py -q`
+- Expected RED: `;bar_style=` is an unknown plate option; a bar rect has the builder's default corner radius and no shadow filter
+- Validate: `python content/video_engine/scripts/measure_page_boxes.py --write` then `python -m pytest content/video_engine/tests/test_bar_style.py content/video_engine/tests/test_compare_on_bars.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`
+- Frame acceptance: the parent reads the three H bars pages off/on before the card is queued
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
