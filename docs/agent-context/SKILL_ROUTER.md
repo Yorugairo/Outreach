@@ -20,7 +20,7 @@ The repository uses an allowlist-first skill policy. Load the smallest set that 
 | **Scene-Evidence Assembly & Motion** | Proprietary scene-evidence player (`scene-evidence-engine.mjs`), timeline compiler, Remotion, HyperFrames | `video-engine`, `evidence-motion-engine`, `motion-system`, `remotion-video-creation`, `remotion-to-hyperframes`, `hyperframes-core`, `hyperframes-creative`, `hyperframes-keyframes` |
 | **Video Scripting & Telemetry** | Script pattern kit, 6-phase architecture (P1-P6), strength loops, video watching/measurement | `script-writer`, `watch`, subagent `video-watcher` |
 | **Backend, Database & Cloud** | Express/Next.js API routes, Postgres schemas, RLS, migrations, Supabase best practices | `backend-patterns`, `supabase`, `supabase-postgres-best-practices` |
-| **Quality, Diagnostics & Perf** | Clean code review, SOLID/DRY guards, hard bug diagnosis, Core Web Vitals, E2E testing | `clean-code-guard`, `diagnosing-bugs`, `web-perf`, `e2e-testing` |
+| **Quality, Diagnostics & Perf** | Code review and hard bug diagnosis, Core Web Vitals, E2E testing | `diagnosing-bugs`, `web-perf`, `e2e-testing` |
 | **Structural Code Navigation** | Declared symbols, blast radius analysis, AST structural search and linting | `sigmap`, `ast-grep`, `ast-grep-outline` |
 | **Context Control & Quarantine** | Minimizing token burn, subagent isolation, safe output compression | `strategic-compact`, isolated subagent delegation (`invoke_subagent`), `sqz` |
 | **Operator Memory & Rulings** | Correction ledger, what was corrected and why, standing rulings | No skill — run `docs_find`, then `docs/operator-ledger/TRIAGE-DIGEST.md` and `docs/agent-memory/operator/` |

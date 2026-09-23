@@ -27,7 +27,7 @@ const PROFILES = {
     name: 'Web & SaaS Stack',
     description: 'TypeScript, Next.js, Supabase, Design Engine, Content Engine, Deep Grilling, AST-grep.',
     skills: [
-      'clean-code-guard', 'content-engine', 'council', 'design-engine', 'diagnosing-bugs',
+      'content-engine', 'council', 'design-engine', 'diagnosing-bugs',
       'e2e-testing', 'exa-search', 'grill-me', 'market-research', 'marketing-campaign',
       'motion-system', 'registry-core', 'research', 'seo-engine', 'social-distribution',
       'supabase', 'supabase-postgres-best-practices', 'taste', 'tavily-web', 'article-writing',
@@ -38,7 +38,7 @@ const PROFILES = {
     name: 'Video Engine & Motion Graphics Stack',
     description: 'Remotion, Google Flow driver, VideoDB, Motion System, Evidence Motion, Taste, Deep Grilling.',
     skills: [
-      'asset-claim-and-quarantine', 'blender-motion-state-inspection', 'clean-code-guard',
+      'asset-claim-and-quarantine', 'blender-motion-state-inspection',
       'content-engine', 'council', 'design-engine', 'diagnosing-bugs', 'e2e-testing',
       'evidence-motion-engine', 'exa-search', 'fal-ai-media', 'frontend-slides', 'grill-me',
       'manim-video', 'marketing-campaign', 'motion-system', 'remotion-video-creation',
@@ -50,7 +50,7 @@ const PROFILES = {
     name: 'Backend & API Stack',
     description: 'Clean Code, Supabase, Database optimization, E2E Testing, Deep Grilling, Subagent Research.',
     skills: [
-      'clean-code-guard', 'council', 'diagnosing-bugs', 'e2e-testing', 'exa-search',
+      'council', 'diagnosing-bugs', 'e2e-testing', 'exa-search',
       'grill-me', 'market-research', 'research', 'supabase',
       'supabase-postgres-best-practices', 'tavily-web'
     ]
