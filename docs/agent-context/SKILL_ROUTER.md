@@ -11,7 +11,7 @@ The repository uses an allowlist-first skill policy. Load the smallest set that 
 
 | Domain | Trigger / Task Intent | Recommended Skills & Tools |
 |---|---|---|
-| **Planning, TPM & Backlog** | Architecture planning, sprints, stress-testing plans, decision tradeoffs | `agentic-tpm-and-execution`, `prp-router`, `prp-plan`, `prp-implement`, `prp-status`, `scrum-master`, `grill-me`, `council` |
+| **Planning, PRPs & Backlog** | Use `agentic-tpm-and-execution` only to frame unplanned multi-slice work; use `prp-implement` directly for an approved PRP. Architecture, backlog, and decision work use their matching skills. | `agentic-tpm-and-execution`, `prp-router`, `prp-plan`, `prp-implement`, `prp-status`, `scrum-master`, `grill-me`, `council` |
 | **Deep Research & Intelligence** | Multi-source web research, academic papers, statutory citations, competitor teardowns | `research`, `deep-research`, `exa-search`, `tavily-web`, `web-research-agent` |
 | **Visual Design & High-Taste Frontend** | Landing pages, brand design systems, Tailwind v4, Swiss/Minimalist UI, anti-slop audits | `design-engine`, `design-taste-frontend`, `high-end-visual-design`, `modern-design-frameworks`, `generative_ui` |
 | **Content, Brand Voice & CRO** | High-conversion copy, voice profiles, Washington statutes, BJJ registry copy, CRO funnels | `brand-voice`, `content-engine`, `seo-content-writer`, `elite-cro-and-marketing` |
