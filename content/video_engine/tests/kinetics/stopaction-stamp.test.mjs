@@ -14,7 +14,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   STAMP_ARRIVAL, STAMP_LAND, STAMP_TURN, STOP, stampSprings, stampRing, stampExit, stampXf, stopCss, landXf, throwXf,
+  PROP_SHADOW,
 } from "../../scripts/kinetics/stopaction.mjs";
+import { DROP } from "../../scripts/kinetics/drop.mjs";
 
 const near = (a, b, eps, what) => assert.ok(Math.abs(a - b) <= eps, `${what}: ${a} vs ${b} (eps ${eps})`);
 
@@ -164,4 +166,38 @@ test("stopCss writes the stamp's scale, and writes NOTHING new for every other a
   }
   /* ... and a state whose scale IS 1 writes none either */
   assert.ok(!stopCss({ x: 0, y: 0, scale: 1 }).includes("scale("));
+});
+
+/* P69 T6b / E99 s92 - "the props should have shadow added to them to give them some depth/weight": a prop is bare of
+   PAPER, not of weight. The resting shadow's dials live beside the contact shadow's; the painter (the dock painter's
+   prop branch) reads them. What is pinned here is what a dial block can promise on its own. */
+test("E99 s92: the prop's RESTING shadow is thrown from the STAGE LIGHT - the drop's own - and is a CROSS-HATCH", () => {
+  assert.ok(Object.isFrozen(PROP_SHADOW), "a dial block, frozen like every other");
+  assert.equal(PROP_SHADOW.LIGHT_DEG, DROP.LIGHT_DEG, "one light: the specular highlight's own bearing, never a second");
+  const th = (PROP_SHADOW.LIGHT_DEG + 180) * Math.PI / 180;
+  assert.ok(Math.cos(th) > 0 && Math.sin(th) > 0, "the light is up and to the left, so the shadow falls down and right");
+  assert.ok(PROP_SHADOW.OFFSET_PX > 0 && PROP_SHADOW.OFFSET_PX <= 15, `a short throw: ${PROP_SHADOW.OFFSET_PX} px`);
+  assert.equal(PROP_SHADOW.BLUR_PX, undefined, "an engraved hatch, never a soft blur (the operator on the first cut)");
+  const H = PROP_SHADOW.HATCH;
+  assert.ok(H.PITCH_PX >= 4 && H.PITCH_PX <= 6, `the primary pitch, 4-6 px: ${H.PITCH_PX}`);
+  assert.ok(H.WIDTH_PX >= 1 && H.WIDTH_PX <= 1.5, `a fine line, 1-1.5 px: ${H.WIDTH_PX}`);
+  assert.ok(H.CROSS_PITCH_PX > H.PITCH_PX, "the crossing family is SPARSER");
+  assert.ok(H.CROSS_WIDTH_PX >= 1 && H.CROSS_WIDTH_PX <= H.WIDTH_PX, "... and no heavier");
+  assert.ok(H.CROSS_DEG % 180 !== 0, "... and it CROSSES the primary");
+});
+
+test("E99 s92: the hatch's ink is picked PER GROUND, as the impact ring's is", () => {
+  assert.ok(PROP_SHADOW.INK.page.every((v) => v <= 20), `on the charcoal page: near-black, deeper than the page: ${PROP_SHADOW.INK.page}`);
+  assert.deepEqual(PROP_SHADOW.INK.ground, [37, 49, 60], "on a light ground: the template's own charcoal");
+  assert.ok(PROP_SHADOW.ALPHA.page >= PROP_SHADOW.ALPHA.ground && PROP_SHADOW.ALPHA.ground > 0.5,
+            "strong enough to read as texture on either ground");
+});
+
+test("E99 s92: the stamp's pose is unchanged by the resting shadow - it is the painter's, not the arrival's", () => {
+  /* the handover runs on the stamp's own two instants, contact (tc) and settle (ts); both are the springs' own */
+  const st = stampSprings(STAMP_TURN.ts + 0.01);
+  assert.equal(st.settled, true);
+  near(st.land_at, STAMP_LAND.tc, 1e-12, "the contact");
+  near(st.rest_at, STAMP_TURN.ts, 1e-12, "the settle");
+  assert.ok(STAMP_TURN.ts > STAMP_LAND.tc, "the settle comes after the contact: the handover window is not empty");
 });

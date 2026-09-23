@@ -85,6 +85,36 @@ export const STOP = Object.freeze({
   G_PX_S2: 2400,        /* the rebound's gravity in px/s^2 [DERIVED: a 48 px drop over 0.14 s] */
   LAG_FRAMES: 1,     /* [DERIVED: HyperFrames /prompting/motion, verified 2026-09-06; measure on ours] */
 });
+/* P69 T6b / E99 s92 - A PROP IS BARE OF PAPER, NOT OF WEIGHT (the operator: "the props should have shadow added to them
+   to give them some depth/weight"; on the first frames, a soft blur: "The shadow doesn't look great, I think we need like
+   cross hatch markings as shadow for texture"). A prop at rest carries a CROSS-HATCHED shadow - engraved ink lines, the
+   woodcut plates' own texture - in the prop's own SILHOUETTE (its painted alpha), thrown along the stage light's fall.
+   Two families of fine parallel lines: the primary runs ALONG the light, the second crosses it, sparser. The lines are
+   laid in STAGE space, so the hatch never turns with the mark (an engraving's hatch does not spin); only the silhouette
+   follows it. The contact shadow above HANDS OVER to it: over the arrival's own contact -> settle window the contact's
+   darkness falls as the hatch rises, on one min-jerk share, so the weight is continuous and neither pops. Dials only -
+   the dock painter's prop branch reads them. [DERIVED, a starting reference; the parent's frame read and P69-HG2 tune
+   them by eye] */
+export const PROP_SHADOW = Object.freeze({
+  LIGHT_DEG: -125,   /* THE STAGE LIGHT (R26-257), drop.mjs's DROP.LIGHT_DEG (degrees from +x, y DOWN: up and to the left -
+                        the melt ball's specular highlight and the card's hard 12 px 12 px lift already agree): the shadow is
+                        thrown along LIGHT_DEG + 180, down and to the right. Written twice because this region sits before
+                        drop's; stopaction-stamp.test.mjs holds the pair equal */
+  OFFSET_PX: 14,     /* the silhouette's throw on the stage, in stage px, whatever the mark's own turn. The hatch has no blur,
+                        so its REACH past the painted edge is the throw + half the widest line + 1 px of antialiasing = 15.65
+                        px, inside the 16.8 px (STAMP_RING_GAP_PX + STAMP_RING_W_PX) the stamp fit already keeps clear */
+  HATCH: {
+    PITCH_PX: 4.5,       /* the primary family, ALONG the light: one line every PITCH_PX, measured across the lines */
+    WIDTH_PX: 1.3,       /* ... each this wide - an engraver's fine line */
+    CROSS_DEG: 75,       /* the second family crosses the first at this angle ... */
+    CROSS_PITCH_PX: 7,   /* ... sparser ... */
+    CROSS_WIDTH_PX: 1.0, /* ... and finer */
+  },
+  INK: { page: [8, 11, 14], ground: [37, 49, 60] },   /* PER GROUND, as the impact ring's ink is: on the charcoal ledger
+                        page near-black, deeper than the page; on a light ground the template's own --charcoal */
+  ALPHA: { page: 1, ground: 0.85 },   /* the lines must READ as texture on the charcoal page, where the ink is only a
+                        little darker than the page: full strength there */
+});
 
 const sa01 = (v) => Math.min(1, Math.max(0, v));
 const saMinJerk = (u) => { u = sa01(u); return u * u * u * (10 - 15 * u + 6 * u * u); };

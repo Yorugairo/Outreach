@@ -273,7 +273,7 @@
           "source": "docs/content-video-engine/BACKLOG.md"
         }
       ],
-      "does": "A catalogued prop cutout added to the world bare - no paper, border, shadow or rail - stamped on or thrown on, never framed.",
+      "does": "A catalogued prop cutout added to the world bare of paper - no card, border, card lift or rail - stamped on or thrown on, never framed; at rest it carries a cross-hatched shadow (engraved lines fixed to the page) in its own silhouette, thrown along the stage light's fall, and the contact shadow hands over to it at settle.",
       "when": "a DIRECT match only - the prop is the thing the sentence names (the operator's standing instruction)",
       "when_source": "docs/portable/OPERATOR-RULINGS.md E99 s87",
       "author": {
@@ -291,6 +291,7 @@
       },
       "doctrine": [
         "E99 s87",
+        "E99 s92",
         "E99 s71",
         "R26-246"
       ],

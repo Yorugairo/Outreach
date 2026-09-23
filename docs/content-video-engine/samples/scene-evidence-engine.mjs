@@ -1653,6 +1653,36 @@ async function mount(doc) {
     G_PX_S2: 2400,        /* the rebound's gravity in px/s^2 [DERIVED: a 48 px drop over 0.14 s] */
     LAG_FRAMES: 1,     /* [DERIVED: HyperFrames /prompting/motion, verified 2026-09-06; measure on ours] */
   });
+  /* P69 T6b / E99 s92 - A PROP IS BARE OF PAPER, NOT OF WEIGHT (the operator: "the props should have shadow added to them
+     to give them some depth/weight"; on the first frames, a soft blur: "The shadow doesn't look great, I think we need like
+     cross hatch markings as shadow for texture"). A prop at rest carries a CROSS-HATCHED shadow - engraved ink lines, the
+     woodcut plates' own texture - in the prop's own SILHOUETTE (its painted alpha), thrown along the stage light's fall.
+     Two families of fine parallel lines: the primary runs ALONG the light, the second crosses it, sparser. The lines are
+     laid in STAGE space, so the hatch never turns with the mark (an engraving's hatch does not spin); only the silhouette
+     follows it. The contact shadow above HANDS OVER to it: over the arrival's own contact -> settle window the contact's
+     darkness falls as the hatch rises, on one min-jerk share, so the weight is continuous and neither pops. Dials only -
+     the dock painter's prop branch reads them. [DERIVED, a starting reference; the parent's frame read and P69-HG2 tune
+     them by eye] */
+  const PROP_SHADOW = Object.freeze({
+    LIGHT_DEG: -125,   /* THE STAGE LIGHT (R26-257), drop.mjs's DROP.LIGHT_DEG (degrees from +x, y DOWN: up and to the left -
+                          the melt ball's specular highlight and the card's hard 12 px 12 px lift already agree): the shadow is
+                          thrown along LIGHT_DEG + 180, down and to the right. Written twice because this region sits before
+                          drop's; stopaction-stamp.test.mjs holds the pair equal */
+    OFFSET_PX: 14,     /* the silhouette's throw on the stage, in stage px, whatever the mark's own turn. The hatch has no blur,
+                          so its REACH past the painted edge is the throw + half the widest line + 1 px of antialiasing = 15.65
+                          px, inside the 16.8 px (STAMP_RING_GAP_PX + STAMP_RING_W_PX) the stamp fit already keeps clear */
+    HATCH: {
+      PITCH_PX: 4.5,       /* the primary family, ALONG the light: one line every PITCH_PX, measured across the lines */
+      WIDTH_PX: 1.3,       /* ... each this wide - an engraver's fine line */
+      CROSS_DEG: 75,       /* the second family crosses the first at this angle ... */
+      CROSS_PITCH_PX: 7,   /* ... sparser ... */
+      CROSS_WIDTH_PX: 1.0, /* ... and finer */
+    },
+    INK: { page: [8, 11, 14], ground: [37, 49, 60] },   /* PER GROUND, as the impact ring's ink is: on the charcoal ledger
+                          page near-black, deeper than the page; on a light ground the template's own --charcoal */
+    ALPHA: { page: 1, ground: 0.85 },   /* the lines must READ as texture on the charcoal page, where the ink is only a
+                          little darker than the page: full strength there */
+  });
 
   const sa01 = (v) => Math.min(1, Math.max(0, v));
   const saMinJerk = (u) => { u = sa01(u); return u * u * u * (10 - 15 * u + 6 * u * u); };
@@ -16475,6 +16505,97 @@ async function mount(doc) {
   const propInkCss = (d, onLedger) => (d && d.ink === "page")
     ? (onLedger ? "grayscale(1) invert(1) contrast(1.15) brightness(1.08)" : "grayscale(1) contrast(1.25) brightness(0.72)")
     : "";
+  /* P69 T6b / E99 s92 - A PROP IS BARE OF PAPER, NOT OF WEIGHT (the operator: "the props should have shadow added to them
+     to give them some depth/weight"). THE HANDOVER: the resting shadow's share of the prop's weight, 0 -> 1 on one
+     min-jerk over the arrival's OWN contact -> settle window (a stamp: the scale spring's crossing to the rotation
+     spring's rest; a throw or a landing: the impact to STOP.SETTLE_S after it), and the contact shadow takes 1 - it -
+     so the two meet at settle with zero slope and neither pops. A spring arrival has no contact shadow: its weight is
+     the picture's own from its first frame. */
+  const propRestShare = (arr, d, t, sfit) => {
+    const tl = t - d.enter;
+    let c0, c1;
+    if (arr === "stamp") { const sp = stampSprings(tl, sfit); c0 = sp.land_at; c1 = sp.rest_at; }
+    else if (arr === "throw") { c0 = Math.max(0.05, STOP.FLIGHT_S); c1 = c0 + STOP.SETTLE_S; }
+    else if (arr === "land") { c0 = STOP.ANTIC_S + STOP.DROP_S; c1 = c0 + STOP.SETTLE_S; }
+    else return 1;
+    return minJerk((tl - c0) / Math.max(1e-6, c1 - c0));
+  };
+  /* ... and the shadow itself: a CROSS-HATCH (the operator on the soft first cut: "we need like cross hatch markings as
+     shadow for texture") on a canvas in the dock layer UNDER the mark, so only the part the mark does not cover shows.
+     The lines are laid in STAGE px - line i of a family is the set of stage points whose distance across the family is
+     i x its pitch - so the hatch is fixed to the page and never turns with the mark; the lines are then cut to the
+     mark's own SILHOUETTE (its <img>, drawn with the mark's full resolved transform and the throw along the stage
+     light's fall, composited `destination-in` - the painted alpha, never a box), and the canvas is sized to that
+     silhouette's own bounds, so no canvas edge ever cuts it. Its ink is the GROUND's, as the impact ring's is. It is
+     drawn from the same decoded <img> the mark paints, synchronously, so a cold seek shows both or neither. */
+  const PROP_HATCH_RUN = 4096;   /* half a hatch line's length in stage px: past the corner of any stage we draw (1920 x 1920's half-diagonal is 1358) */
+  const propHatchLines = (c, x0, y0, W, H, deg, pitch, width) => {
+    const th = deg * Math.PI / 180, ux = Math.cos(th), uy = Math.sin(th);
+    const cs = [[x0, y0], [x0 + W, y0], [x0 + W, y0 + H], [x0, y0 + H]];
+    const across = cs.map(([x, y]) => -x * uy + y * ux);
+    c.setTransform(ux, uy, -uy, ux, -x0, -y0);   /* (along, across) -> stage px -> this canvas */
+    /* each line runs the whole stage (+-PROP_HATCH_RUN along it), so its geometry is the PAGE's, never this canvas's:
+       ends fitted to the canvas would move with the mark's bounds and re-round the line's edges from frame to frame */
+    for (let i = Math.floor(Math.min(...across) / pitch) - 1, n = Math.ceil(Math.max(...across) / pitch) + 1; i <= n; i++)
+      c.fillRect(-PROP_HATCH_RUN, i * pitch - width / 2, 2 * PROP_HATCH_RUN, width);
+  };
+  const propHatchPaint = (el, s, isProp, onLedger, k, wipe, deferred) => {
+    let cv = el.parentNode ? el.parentNode.querySelector("#dock-hatch-" + s) : null;
+    if (!isProp) { if (cv) cv.style.opacity = "0"; return; }   /* a card that follows a prop in its slot carries nothing of it */
+    const img = el.querySelector(".slide-frame img");
+    const op = (parseFloat(el.style.opacity) || 0) * Math.min(1, Math.max(0, k));
+    if (!cv) {
+      cv = document.createElement("canvas"); cv.className = "dock-hatch"; cv.id = "dock-hatch-" + s;
+      cv.style.cssText = "position:absolute;left:0;top:0;pointer-events:none;opacity:0;";
+      el.parentNode.insertBefore(cv, el);
+    }
+    const seq = (+cv.dataset.seq || 0) + 1; cv.dataset.seq = String(seq);   /* a later paint outranks a deferred one */
+    if (!(op > 0) || !img || el.style.visibility === "hidden") { cv.style.opacity = "0"; return; }
+    if (!img.complete || !(img.naturalWidth > 0)) {
+      /* A COLD SEEK: the picture was mounted by this very paint and has not decoded, so there is no silhouette to cut
+         the lines to yet. Paint it once it has, and make the renderer wait for that exactly as it waits for a clip's
+         seek (`clipSeeks`, render_baseline's `__clipsSeeked`) - so a frame at t never ships the mark without its
+         weight. Once only: a picture that never decodes leaves the hatch off rather than looping. */
+      cv.style.opacity = "0";
+      if (!deferred && img.getAttribute("src")) {
+        const p = img.decode().catch(() => {}).then(() => {
+          clipSeeks.delete(p);
+          if (+cv.dataset.seq === seq) propHatchPaint(el, s, isProp, onLedger, k, wipe, true);
+        });
+        clipSeeks.add(p);
+      }
+      return;
+    }
+    const P = PROP_SHADOW, H8 = P.HATCH, g = onLedger ? "page" : "ground";
+    /* the picture's box in STAGE px: the mark's own layout box through its whole resolved transform (the stamp's pose,
+       its idle and the camera's prefix alike), about its own origin */
+    const cs = getComputedStyle(el), org = cs.transformOrigin.split(" ").map(parseFloat);
+    const ox = Number.isFinite(org[0]) ? org[0] : 0, oy = Number.isFinite(org[1]) ? org[1] : 0;
+    const F = new DOMMatrix().translate(el.offsetLeft + ox, el.offsetTop + oy)
+      .multiply(new DOMMatrix(cs.transform && cs.transform !== "none" ? cs.transform : undefined))
+      .translate(img.offsetLeft - ox, img.offsetTop - oy);
+    const th = (P.LIGHT_DEG + 180) * Math.PI / 180, dx = P.OFFSET_PX * Math.cos(th), dy = P.OFFSET_PX * Math.sin(th);
+    const w = img.offsetWidth, h = img.offsetHeight;
+    const pts = [[0, 0], [w, 0], [w, h], [0, h]].map(([x, y]) => [F.a * x + F.c * y + F.e + dx, F.b * x + F.d * y + F.f + dy]);
+    const x0 = Math.floor(Math.min(...pts.map((p) => p[0])) - 2), y0 = Math.floor(Math.min(...pts.map((p) => p[1])) - 2);
+    const W = Math.max(1, Math.ceil(Math.max(...pts.map((p) => p[0])) + 2) - x0), H = Math.max(1, Math.ceil(Math.max(...pts.map((p) => p[1])) + 2) - y0);
+    if (cv.width !== W) cv.width = W;
+    if (cv.height !== H) cv.height = H;
+    cv.style.left = x0 + "px"; cv.style.top = y0 + "px"; cv.style.width = W + "px"; cv.style.height = H + "px";
+    const c = cv.getContext("2d");
+    c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = "source-over"; c.clearRect(0, 0, W, H);
+    c.fillStyle = "rgb(" + P.INK[g].join(",") + ")";
+    propHatchLines(c, x0, y0, W, H, P.LIGHT_DEG, H8.PITCH_PX, H8.WIDTH_PX);   /* the primary family, along the light */
+    propHatchLines(c, x0, y0, W, H, P.LIGHT_DEG + H8.CROSS_DEG, H8.CROSS_PITCH_PX, H8.CROSS_WIDTH_PX);   /* ... crossed, sparser */
+    c.globalCompositeOperation = "destination-in";   /* ... cut to the mark's own silhouette, thrown along the light's fall */
+    c.setTransform(F.a, F.b, F.c, F.d, F.e + dx - x0, F.f + dy - y0);
+    c.drawImage(img, 0, 0, w, h);
+    c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = "source-over";
+    cv.style.opacity = (P.ALPHA[g] * op).toFixed(3);
+    /* the PAGE WIPE takes it with the mark: the same front, at the same stage x */
+    cv.style.clipPath = !wipe ? "none" : wipe.right ? "inset(0 " + Math.max(0, x0 + W - wipe.fx).toFixed(1) + "px 0 0)"
+      : "inset(0 0 0 " + Math.max(0, wipe.fx - x0).toFixed(1) + "px)";
+  };
   (TL.scenes || []).forEach((sc) => (sc.docks || []).forEach((d) => {
     if (dockIsVideo(d.slide) && A[d.slide]) clipFor(d.slide).loop = true;
   }));
@@ -16998,6 +17119,7 @@ async function mount(doc) {
       const el = docks[s];
       if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; parkDockClips(el);
         const c0 = el.parentNode && el.parentNode.querySelector("#dock-contact-" + s); if (c0) c0.style.opacity = 0;   /* P47 T9: a card off its span takes its contact shadow with it (it lingered after the ring's snap) */
+        const h0 = el.parentNode && el.parentNode.querySelector("#dock-hatch-" + s); if (h0) h0.style.opacity = 0;   /* P69 T6b: ... and a prop its hatched shadow */
         continue; }
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       drawRecord(s, t);
@@ -17088,6 +17210,8 @@ async function mount(doc) {
       }
       el.classList.toggle("arriving", arr !== "spring");
       let contact = el.parentNode ? el.parentNode.querySelector("#dock-contact-" + s) : null;
+      const isProp = dockIsProp(d.slide);
+      let propRest = 1;   /* P69 T6b: the resting shadow's share (a spring arrival: full from its first frame) */
       if (arr !== "spring") {   /* P47 T1: the card ARRIVES by a throw or a landing, then the park choreography (dockGeom) is untouched */
         /* R26-20 / E99 s87 - THE STAMP. Three differences from the throw and the landing, and no fourth:
              (a) the TWO-SPRING OFFSET is the pose - `stampXf` carries a `scale` (the clamped spring) beside the `rot`
@@ -17110,6 +17234,7 @@ async function mount(doc) {
           : arr === "throw" ? throwXf(from, d.mass || "paper", t - d.enter, opts) : landXf(d.mass || "paper", t - d.enter, opts);
         /* the mark turns about its PAINTED centre (the compiler's `paint`, fractions of the canvas - R26-20, the operator's
            round: the ring's centre, its radius and every overlap test are the painted extent, not the file's canvas) */
+        if (isProp) propRest = propRestShare(arr, d, t, sfit);
         const pbx = stamped && Array.isArray(d.paint) && d.paint.length === 4 ? d.paint : [0, 0, 1, 1];
         if (stamped) el.style.transformOrigin = (50 * (pbx[0] + pbx[2])).toFixed(3) + "% " + (50 * (pbx[1] + pbx[3])).toFixed(3) + "%";
         el.style.transform = stopCss(sx) + (stamped ? "" : " scale(" + (1 - (1 - DOCK_POP_FROM) * rk).toFixed(4) + ")")
@@ -17132,7 +17257,9 @@ async function mount(doc) {
         /* badge-stamp.tsx:96 "Ink strength: heavy on impact, easing back as the pressure comes off": on a PICTURE the
            ink is never a wash over the art (a prop is art), so it is the PRESSURE under it - the contact shadow's own
            darkness, 1 -> 0.86 as the seal settles. Every other arrival multiplies by exactly 1. */
-        contact.style.opacity = (t >= d.enter && sx.phase !== "settled" ? cs.alpha * (stamped ? sx.ink : 1) * clamp01(1 - rk) * (1 - ex) : 0).toFixed(3);
+        /* P69 T6b / E99 s92: a PROP's contact HANDS OVER to its resting shadow (1 - the share, 0 at settle) instead of
+           vanishing at settle; a card's multiplies by exactly 1, as it always did */
+        contact.style.opacity = (t >= d.enter && sx.phase !== "settled" ? cs.alpha * (stamped ? sx.ink : 1) * clamp01(1 - rk) * (1 - ex) * (isProp ? 1 - propRest : 1) : 0).toFixed(3);
         contact.style.visibility = el.style.visibility;   /* a card hidden for a snap takes its shadow with it */
         /* THE IMPACT RING (E99 s87; badge-stamp.tsx:98-117, :152-162) on its two curves - a LINEAR life that fades and
            thins it and an EASED expansion to twice the mark's own radius, "because a shockwave leaves the impact fast
@@ -17195,6 +17322,10 @@ async function mount(doc) {
       /* E99 s87's open dial, read every frame from the row: the prop's own colour, or the page's own ink. The
          filter is on the PICTURE, never on the dock element (that one carries the camera's blur). */
       { const pimg = el.querySelector(".slide-frame img"); if (pimg) pimg.style.filter = propInkCss(d, onLedgerWorld); }
+      /* P69 T6b / E99 s92: the prop's RESTING shadow, cross-hatched under it, painted once the mark's whole transform
+         (the camera's prefix included) is written; a card never creates one */
+      propHatchPaint(el, s, isProp, onLedgerWorld, propRest,
+                     swept ? { fx: (sc.exit === "wipe_right" ? (1 - wk) : wk) * STAGE_W, right: sc.exit === "wipe_right" } : null);
       if (embedOf(d)) {   /* P50 T7: a STILL card on a declared surface. The reading pop and the park above are
            REPLACED by the projection (the surface is the park), and the landing spot's contact shadow belongs to a
            card that lands on the floor - this one is on a wall, carrying its own shadow on the plane. */
