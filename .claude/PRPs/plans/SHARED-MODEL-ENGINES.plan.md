@@ -79,6 +79,12 @@ Bind to the existing V12 cut and measured source timing rather than new estimate
 
 After AC2 in-house art exists, use the same operator-selected reference design and framing for all candidates. Separate unmodified output quality from cleanup improvements. Inspect turntable, back/hands/face, UV/material seams, stress poses and the same exchange—not just the provider preview. Test whether generated geometry, rebaked appearance, retexturing, or a whole asset is useful; a texture map is not portable across different UVs without work. Capture the actual plan/export/model version at generation time. No subscription or paid generation is authorized by this draft.
 
+The operator separately authorized a preliminary, review-only upload of the Sharaf portrait concept to Tripo and Meshy on 2026-09-23, one free image-to-model generation per service. This early look tests provider feasibility and visual direction; it is not AC2, T10, HG2, or a commercial-use approval. Stop before paid credits, a purchase, or new terms acceptance, and retain the Blender source as the native baseline.
+
+### Deferred reusable sets
+
+The reusable MMA octagon/cage (canvas, fence, posts and pads), broadcast booth, and booth characters are later environment/character assets. They must use the shared prop/environment and character interfaces when scheduled, but they do not block the first fighter exchange. The early one-punch treatment may composite its authored character/cut-in onto the existing fight footage canvas, with footage provenance and publishing rights checked separately before release.
+
 ## Not Building
 
 - A competing 3D foundation model, training pipeline, general-purpose physics solver, Blender replacement, or new scene-evidence player.
