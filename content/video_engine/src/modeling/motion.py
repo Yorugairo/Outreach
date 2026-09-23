@@ -161,6 +161,24 @@ class MotionSample:
 
 
 @dataclass(frozen=True)
+class MotionExposureSample:
+    """One output-frame exposure of a source-clock timeline.
+
+    ``sample`` evaluates pose at the exposure midpoint. Point events and
+    contacts are reported separately when their source intervals intersect the
+    half-open output exposure; midpoint sampling alone can miss either one.
+    """
+
+    output_frame: int
+    output_fps: Fraction
+    source_start_frame: Fraction
+    source_end_frame: Fraction
+    sample: MotionSample
+    exposed_events: tuple[MotionEvent, ...]
+    exposed_contacts: tuple[MotionContact, ...]
+
+
+@dataclass(frozen=True)
 class BoundMotionChannel:
     """A semantic channel paired with an opaque backend-owned target handle."""
 
@@ -396,6 +414,38 @@ class MotionTimeline:
             events=events,
             contacts=contacts,
             channels=channels,
+        )
+
+    def evaluate_output_exposure(
+        self, output_frame: int, output_fps: int | Fraction
+    ) -> MotionExposureSample:
+        """Sample a complete output frame against this timeline's source clock.
+
+        Output frame zero begins at the scene origin. Exposures are half-open,
+        so a point event on an output boundary appears in the following frame
+        exactly once. Partial exposures beyond the authored duration are refused.
+        This opt-in read does not change ``evaluate``'s exact-frame semantics.
+        """
+
+        frame = _integer(output_frame, "output_frame")
+        fps = _rational(output_fps, "output_fps", allow_zero=False)
+        start = Fraction(frame) * self.clock.fps / fps
+        end = Fraction(frame + 1) * self.clock.fps / fps
+        if end > self.clock.duration_frames:
+            raise MotionContractError("output exposure is outside the scene frame range")
+        midpoint = (start + end) / 2
+        return MotionExposureSample(
+            output_frame=frame,
+            output_fps=fps,
+            source_start_frame=start,
+            source_end_frame=end,
+            sample=self.evaluate(midpoint),
+            exposed_events=tuple(event for event in self.events if start <= event.frame < end),
+            exposed_contacts=tuple(
+                contact
+                for contact in self.contacts
+                if contact.start_frame < end and contact.end_frame > start
+            ),
         )
 
     @staticmethod

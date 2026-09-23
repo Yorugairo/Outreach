@@ -25,6 +25,7 @@ from content.video_engine.src.modeling.motion import (
 
 
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "modeling" / "motion" / "knockout-motion.v1.json"
+SOURCE_CLOCK_PATH = Path(__file__).parent / "fixtures" / "modeling" / "motion" / "source-exchange-clock.v1.json"
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
@@ -85,6 +86,54 @@ def test_events_are_points_and_contacts_are_end_exclusive_intervals() -> None:
 
     grounded = timeline.evaluate(Fraction(85))
     assert [contact.contact_id for contact in grounded.contacts] == ["victim-on-mat"]
+
+
+def test_source_clock_exposure_preserves_contact_and_following_head_snap() -> None:
+    fixture = json.loads(SOURCE_CLOCK_PATH.read_text(encoding="utf-8"))
+    source = PROJECT_ROOT / fixture["provenance"]["path"]
+    assert hashlib.sha256(source.read_bytes()).hexdigest() == fixture["provenance"]["sha256"]
+    timeline = MotionTimeline.from_scene(fixture["scene"])
+    assert timeline.clock.fps == Fraction(30)
+
+    # Exact source events are absent from the 24 fps midpoint samples, but
+    # retained in their half-open output exposures and never shifted earlier.
+    before = timeline.evaluate_output_exposure(18, 24)
+    contact = timeline.evaluate_output_exposure(19, 24)
+    recoil = timeline.evaluate_output_exposure(20, 24)
+    assert before.exposed_events == before.exposed_contacts == ()
+    assert (contact.source_start_frame, contact.source_end_frame) == (
+        Fraction(95, 4), Fraction(25)
+    )
+    assert contact.sample.frame == Fraction(195, 8)
+    assert contact.sample.events == ()
+    assert [event.event_id for event in contact.exposed_events] == ["left-hook-contact"]
+    assert [item.contact_id for item in contact.exposed_contacts] == ["left-hand-to-head"]
+    assert [event.event_id for event in recoil.exposed_events] == ["head-snap"]
+    assert recoil.exposed_contacts == ()
+    assert timeline.evaluate(Fraction(24)).events[0].event_id == "left-hook-contact"
+
+    # Arbitrary seek order and fractional output rates must not consume events.
+    assert timeline.evaluate_output_exposure(19, 24) == contact
+    event_ids = [
+        event.event_id
+        for frame in range(84)
+        for event in timeline.evaluate_output_exposure(frame, 24).exposed_events
+    ]
+    assert event_ids == ["left-hook-contact", "head-snap"]
+    assert timeline.evaluate_output_exposure(19, Fraction(24_000, 1_001)).output_fps == Fraction(24_000, 1_001)
+
+
+def test_output_exposure_rejects_invalid_clock_and_partial_tail() -> None:
+    timeline = _timeline()
+    for frame, fps in ((-1, 24), (True, 24), (0, 0), (0, 24.0), (96, 24)):
+        with pytest.raises(MotionContractError):
+            timeline.evaluate_output_exposure(frame, fps)  # type: ignore[arg-type]
+
+    source_scene = json.loads(SOURCE_CLOCK_PATH.read_text(encoding="utf-8"))["scene"]
+    source_timeline = MotionTimeline.from_scene(source_scene)
+    assert source_timeline.evaluate_output_exposure(83, 24).source_end_frame == 105
+    with pytest.raises(MotionContractError, match="output exposure is outside"):
+        source_timeline.evaluate_output_exposure(84, 24)
 
 
 def test_seek_evaluation_is_order_independent_and_cubic_is_defined_smoothstep() -> None:
