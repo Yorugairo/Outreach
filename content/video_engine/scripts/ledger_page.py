@@ -296,6 +296,29 @@ def readability_error(page: dict, value: Any, builder: str) -> str | None:
     return None
 
 
+# P69 T10b (the operator, 2026-09-22, on the T6 frames: "I think it should also have some sort of rounded edges, maybe
+# shadows"; AMENDED the same day: the shadow is the prop's own cross-hatch, T6b v2): `;bar_style=soft` - every bar of a
+# bars page gets ROUNDED SHOULDERS (its two corners away from zero; the two on zero stay square, so a bar still stands
+# on its baseline) and a HATCHED SHADOW cast from the one stage light (the player's `LPBAR_SOFT` and `PROP_SHADOW`).
+# A row option, legal on the bars (`story`) builder only, and never beside `;form=extruded_bar` - the prism is the 3D
+# bar; soft is weight on the flat one. Absent, a page is byte-identical.
+BAR_STYLES = ("soft",)
+BAR_STYLE_BUILDERS = ("story",)
+
+
+def bar_style_error(page: dict, value: Any, builder: str) -> str | None:
+    """Is ``value`` a bar style THIS page can take? The message, or None. Pure."""
+    if value not in BAR_STYLES:
+        return f"bar_style {value!r} is not one of {'|'.join(BAR_STYLES)}"
+    if builder not in BAR_STYLE_BUILDERS:
+        return (f"bar_style={value} is how a BARS page draws its bars (the {'|'.join(BAR_STYLE_BUILDERS)} builder); "
+                f"this page uses {builder!r}")
+    if ((page.get("form") or {}).get("kind")) == "extruded_bar":
+        return (f"bar_style={value} and form=extruded_bar are two bars on one page - the prism is the 3D bar, soft is "
+                "weight on the flat one. Keep one")
+    return None
+
+
 def validate(series: dict, variant: str) -> list[str]:
     """Error strings; empty means the series is a page for this variant. Pure."""
     errors: list[str] = []

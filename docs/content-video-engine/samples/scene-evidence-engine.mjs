@@ -8512,6 +8512,7 @@ async function mount(doc) {
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, soakFx, soakFk: fk, seed, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src],
                  keyPills: lfKey ? lfKey.pills : null,   /* P69 T10: the long form's key pills (null on every other page) */
                  readability: lpReadability(pg), kind: pg.builder || "story",
+                 barStyle: pg.bar_style === "soft" ? "soft" : null,   /* P69 T10b: `;bar_style=soft` (null on every other page) */
                  scene: scene.scene_id || null,   /* R26-37: the page's own name, so a probe says WHICH page it answered for */
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
@@ -8548,7 +8549,7 @@ async function mount(doc) {
       ch2.style.cssText = chart.style.cssText; ch2.style.opacity = 0;
       const s2 = { root, page, chart: ch2, geom, portrait: PORTRAIT, seed, edge, field, rail, stagePx: st.stagePx,   /* P69 T6c: the same box, the same scale */
                    lfType: st.lfType ? Object.assign({}, st.lfType, { form: ((pg2.axes || {}).tag_form) || st.lfType.form }) : st.lfType,   /* P69 T8: ... and the long form's same type; N2: the state's OWN fitted end-tag form */
-                   readability: st.readability,
+                   readability: st.readability, barStyle: st.barStyle,   /* P69 T10b: the page's bars, drawn the page's way */
                    bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: {}, linePts: [],
                    marks: [], markBy: {}, badges: [], inkEls: [],
                    vals: pg2.values || [], vstr: pg2.value_strings || [],
@@ -9236,11 +9237,123 @@ async function mount(doc) {
     e.setAttribute("x", x); e.setAttribute("y", y);
     if (e.__wrapLines) for (const ts of e.__wrapLines) ts.setAttribute("x", x);
   };
+  /* P69 T10b - A BAR WITH ROUNDED SHOULDERS AND A HATCHED SHADOW (`;bar_style=soft`; the operator, 2026-09-22, on the
+     T6 frames: "I think it should also have some sort of rounded edges, maybe shadows"; AMENDED the same day: the bar's
+     shadow is the SAME cross-hatch as the prop's, so props, cards and bars share one light and one texture).
+     THE SHOULDERS: a bar's two corners AWAY from zero are rounded at SHOULDER_PX on the stage; the two ON zero stay
+     square, so a bar still stands on its baseline (a negative bar rounds its bottom; E28: the sign is geometry). The
+     rect keeps every attribute its painters write (y, height, the grow's scaleY, the glow's filter, a remake's
+     opacity) and takes rx = the shoulder; a FOOT - a square rect of the bar's own ink, right under it - fills the two
+     rounded corners on zero, mirrored off the bar every frame (lpBarSoftPaint), so no painter learns a second shape.
+     THE SHADOW: T6b's cross-hatch, by the prop's own painter (`propHatchLines`) at the prop's own dials
+     (`PROP_SHADOW`: the light, the throw, the grain, the taper, the ink and alpha per ground) - laid once, in stage px
+     of the chart at rest, so the engraving is fixed to the page, and cut every frame to each bar's silhouette thrown
+     along the light's fall, never past zero. [DERIVED: SHOULDER_PX is ~7 % of the 196 px capped bar (LPBAR.W_PX) -
+     read as a shoulder, never as a pill end; the parent's frame read and P69-HG3 tune it by eye] */
+  const LPBAR_SOFT = Object.freeze({ SHOULDER_PX: 14 });
+  let lpSoftN = 0;   /* the soft layers' own ids, in build order (deterministic, as plotclip's) */
+  /* propHatchLines draws on a 2D context; this is that context as an SVG path - `setTransform` names the family's
+     frame, each `fillRect` is one line - so a bar's hatch is the prop's to the line, never a copy of its math */
+  const lpHatchSvg = (parent, fam, x0, y0, W, H, deg, pitch, width) => {
+    let m = null; const d = [];
+    propHatchLines({ setTransform: (...a) => { m = a; },
+                     fillRect: (x, y, w, h) => d.push("M" + x + " " + +y.toFixed(4) + "h" + w + "v" + +h.toFixed(4) + "h" + -w + "z") },
+                   x0, y0, W, H, deg, pitch, width);
+    const e = lpEl("path", "lp-hatch-lines", parent, { d: d.join(""), transform: "matrix(" + m.map((v) => +v.toFixed(6)).join(",") + ")" });
+    e.dataset.family = fam;
+    return e;
+  };
+  /* The layer, built once with the bars: the lines over the plot's reach (a little past it, for the throw), a clip
+     (the sharp silhouettes) and a mask (the same silhouettes blurred by the TAPER, as the prop's canvas multiplies
+     its lines by the blurred cut). Under every bar and foot; over the panel, the grid and the axes. */
+  const lpBarSoftLayer = (st, base, box) => {
+    const k = st.stagePx > 0 ? st.stagePx : 1, P = PROP_SHADOW, H8 = P.HATCH, th = (P.LIGHT_DEG + 180) * Math.PI / 180;
+    const id = "lpsoft-" + (st.seed | 0) + "-" + (++lpSoftN), pad = (P.OFFSET_PX + 4 * H8.TAPER_PX) / k;
+    const R = { x: box.x - pad, y: box.y - pad, w: box.w + 2 * pad, h: box.h + 2 * pad };
+    const defs = lpEl("defs", "", st.chart);
+    const cp = lpEl("clipPath", "", defs, { id: id + "-clip", clipPathUnits: "userSpaceOnUse" });
+    const mask = lpEl("mask", "", defs, { id: id + "-mask", maskUnits: "userSpaceOnUse", maskContentUnits: "userSpaceOnUse",
+                                          x: R.x.toFixed(1), y: R.y.toFixed(1), width: R.w.toFixed(1), height: R.h.toFixed(1) });
+    let mg = mask;
+    if (H8.TAPER_PX > 0) {
+      const f = lpEl("filter", "", defs, { id: id + "-taper", filterUnits: "userSpaceOnUse",
+                                           x: R.x.toFixed(1), y: R.y.toFixed(1), width: R.w.toFixed(1), height: R.h.toFixed(1) });
+      lpEl("feGaussianBlur", "", f, { stdDeviation: (H8.TAPER_PX / k).toFixed(4) });
+      mg = lpEl("g", "", mask, { filter: "url(#" + id + "-taper)" });
+    }
+    const g = lpEl("g", "lp-bar-hatch", st.chart, { fill: "rgb(" + P.INK.page.join(",") + ")", opacity: P.ALPHA.page,
+                                                     "clip-path": "url(#" + id + "-clip)", mask: "url(#" + id + "-mask)" });
+    const first = st.bars.length ? (st.bars[0].track || st.bars[0].foot || st.bars[0].bar) : null;
+    if (first) st.chart.insertBefore(g, first);
+    const lx = Math.floor(R.x * k), ly = Math.floor(R.y * k), LW = Math.ceil(R.w * k), LH = Math.ceil(R.h * k);
+    const sg = lpEl("g", "", g, { transform: "scale(" + +(1 / k).toFixed(6) + ") translate(" + lx + " " + ly + ")" });
+    lpHatchSvg(sg, "primary", lx, ly, LW, LH, P.LIGHT_DEG, H8.PITCH_PX, H8.WIDTH_PX);   /* the primary family, along the light */
+    lpHatchSvg(sg, "cross", lx, ly, LW, LH, P.LIGHT_DEG + H8.CROSS_DEG, H8.CROSS_PITCH_PX, H8.CROSS_WIDTH_PX);   /* ... crossed, sparser */
+    st.soft = { r: LPBAR_SOFT.SHOULDER_PX / k, dx: P.OFFSET_PX * Math.cos(th) / k, dy: P.OFFSET_PX * Math.sin(th) / k, base, g,
+                sil: st.bars.map(() => lpEl("path", "lp-bar-sil", cp, { d: "" })),
+                tap: st.bars.map(() => lpEl("path", "", mg, { d: "", fill: "#fff" })) };
+  };
+  /* a bar's own user space -> the chart's, off what its painters WROTE (the style's transform about its origin wins
+     over the attribute, as CSS does) - read from attributes, never from layout */
+  const lpBarXf = (el) => {
+    const css = el.style.transform;
+    if (css && css !== "none") {
+      const o = (el.style.transformOrigin || "0 0").split(/\s+/).map(parseFloat), ox = o[0] || 0, oy = o[1] || 0;
+      return new DOMMatrix().translate(ox, oy).multiply(new DOMMatrix(css)).translate(-ox, -oy);
+    }
+    let m = new DOMMatrix();
+    const tl = el.transform && el.transform.baseVal;
+    for (let i = 0; tl && i < tl.numberOfItems; i++) { const q = tl.getItem(i).matrix; m = m.multiply(new DOMMatrix([q.a, q.b, q.c, q.d, q.e, q.f])); }
+    return m;
+  };
+  /* a rect with two rounded corners: at the TOP (a standing bar), or at the BOTTOM (a hanging one) */
+  const lpShoulderPath = (x0, y0, x1, y1, rx, ry, bottom) => {
+    const f = (v) => +v.toFixed(2);
+    return bottom
+      ? "M" + f(x0) + " " + f(y0) + "H" + f(x1) + "V" + f(y1 - ry) + "A" + f(rx) + " " + f(ry) + " 0 0 1 " + f(x1 - rx) + " " + f(y1)
+        + "H" + f(x0 + rx) + "A" + f(rx) + " " + f(ry) + " 0 0 1 " + f(x0) + " " + f(y1 - ry) + "Z"
+      : "M" + f(x0) + " " + f(y1) + "V" + f(y0 + ry) + "A" + f(rx) + " " + f(ry) + " 0 0 1 " + f(x0 + rx) + " " + f(y0)
+        + "H" + f(x1 - rx) + "A" + f(rx) + " " + f(ry) + " 0 0 1 " + f(x1) + " " + f(y0 + ry) + "V" + f(y1) + "Z";
+  };
+  /* EVERY FRAME, after every painter: each foot mirrors its bar, and each silhouette is its bar as drawn now - grown,
+     burst, faded - thrown along the light and cut at zero. A pure function of what the painters wrote at t. While the
+     drain takes the page (the spiral's vortex turns each mark about its own centre) the weight leaves first. */
+  const lpBarSoftPaint = (S) => {
+    const L = S && S.soft; if (!L) return;
+    let any = false;
+    S.bars.forEach((b, i) => {
+      const bar = b.bar, x = +bar.getAttribute("x"), y = +bar.getAttribute("y"), w = +bar.getAttribute("width"), h = +bar.getAttribute("height");
+      const opA = bar.getAttribute("opacity"), op = (bar.style.opacity === "" ? 1 : +bar.style.opacity) * (opA == null ? 1 : +opA);
+      if (b.foot) {
+        const f = b.foot, fh = Math.max(0, Math.min(L.r, h / 2)), cs = getComputedStyle(bar);
+        f.setAttribute("x", x); f.setAttribute("width", w);
+        f.setAttribute("y", (b.neg ? y : y + h - fh).toFixed(2)); f.setAttribute("height", fh.toFixed(2));
+        f.style.transformOrigin = bar.style.transformOrigin; f.style.transform = bar.style.transform;
+        const ta = bar.getAttribute("transform"); if (ta) f.setAttribute("transform", ta); else f.removeAttribute("transform");
+        f.style.opacity = bar.style.opacity; if (opA == null) f.removeAttribute("opacity"); else f.setAttribute("opacity", opA);
+        f.style.fill = cs.fill; f.style.fillOpacity = cs.fillOpacity; f.style.display = bar.style.display; f.style.visibility = bar.style.visibility;
+      }
+      const m = lpBarXf(bar);
+      let d = "";
+      if (!S.spiralOn && op > 0.001 && h > 0 && w > 0 && Math.abs(m.b) < 1e-9 && Math.abs(m.c) < 1e-9) {
+        const X0 = Math.min(m.a * x, m.a * (x + w)) + m.e, X1 = Math.max(m.a * x, m.a * (x + w)) + m.e;
+        const Y0 = Math.min(m.d * y, m.d * (y + h)) + m.f, Y1 = Math.max(m.d * y, m.d * (y + h)) + m.f;
+        const rx = Math.min(L.r, w / 2) * Math.abs(m.a), ry = Math.min(L.r, h / 2) * Math.abs(m.d);
+        const x0 = X0 + L.dx, x1 = X1 + L.dx, y0 = Y0 + L.dy, y1 = b.neg ? Y1 + L.dy : Math.min(Y1 + L.dy, L.base);   /* E28: never past zero */
+        if (y1 - y0 > 0.01) d = lpShoulderPath(x0, y0, x1, y1, rx, Math.min(ry, y1 - y0), b.neg);
+      }
+      L.sil[i].setAttribute("d", d);
+      L.tap[i].setAttribute("d", d); L.tap[i].setAttribute("fill-opacity", Math.min(1, op).toFixed(3));
+      any = any || !!d;
+    });
+    L.g.style.display = any ? "" : "none";
+  };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
        below it for negatives, value labels ride the bar's far end, category labels stay along the bottom. */
     const XF = formOf(pg, "extruded_bar");   /* P58 T5: opt-in (`;form=extruded_bar`); null is today's page, to the byte */
+    const SOFT = st.barStyle === "soft" ? LPBAR_SOFT.SHOULDER_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0;   /* P69 T10b: the shoulder, in this chart's units (0: the page as it was) */
     const n = Math.max(1, st.vals.length);
     const lo0 = Math.min(0, ...st.vals), hi0 = Math.max(0, ...st.vals);
     /* THE BREAKTHROUGH (2026-09-10): a bars page may STATE its scale (`axes.domain`) that one value cannot fit. That bar builds
@@ -9306,8 +9419,9 @@ async function mount(doc) {
       /* P58 T5 (`;form=extruded_bar`): the prism is built HERE, before the face, so all three of its polygons
          paint behind the bar's own rect. Not one label, capsule, tick or axis moves for it. */
       const ex = XF ? extrudeFaces(st, { x, bw, base, h, neg, P, cls: (neg ? " neg" : " pos") + (i === st.emph ? " emph" : "") }) : null;
+      const foot = SOFT ? lpEl("rect", "lp-bar-foot", st.chart, { x: x.toFixed(1), y: 0, width: bw.toFixed(1), height: 0 }) : null;   /* P69 T10b: squares the zero end (lpBarSoftPaint) */
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
-        { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });   /* grows from the zero baseline, up or down */
+        { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: SOFT ? SOFT.toFixed(3) : 6 });   /* grows from the zero baseline, up or down */
       /* E53 s7: a DECLARED colour outranks the sign default. Without this the builder read only the value's sign,
          so a page of COSTS came out green - three duty bills and a tariff receipt on the tariff short, all reading
          as good news because the numbers were positive. A rise is not always a gain. The stylesheet beats a
@@ -9322,6 +9436,7 @@ async function mount(doc) {
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
       val.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
       const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h, over, v, bx: x, bw, track, stamp, ex };
+      if (foot) rec.foot = foot;
       if (over && btMode === "stack") {   /* the top gridline SNAPS as the bar passes: its two broken ends kick up beside the bar */
         const mk = (ax, bx2) => lpEl("line", "grid snap", st.chart, { x1: ax.toFixed(1), y1: top.toFixed(1), x2: bx2.toFixed(1), y2: (top - 16).toFixed(1), stroke: "var(--lp-chalk)", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 });
         rec.snap = [mk(x - 4, x - 24), mk(x + bw + 4, x + bw + 24)];
@@ -9331,6 +9446,7 @@ async function mount(doc) {
       lpMark(st, "xlab:" + i, "xlabel", lab, { x: x + bw / 2, y: bottom + XLAB });
       lpMark(st, "val:b:" + i, "value", val, { x: x + bw / 2, y: vy, v });
     });
+    if (SOFT) lpBarSoftLayer(st, base, { x: x0 - 20, y: top, w: x1 - x0 + 40, h: bottom - top });   /* P69 T10b: the hatch, under the bars */
     /* R26-53 law 1: the whole row fits its slots, at ONE size, before anything reads a value's box */
     const slot = pitch;
     st.valFit = lpFitValues(st, slot, P, { base });   /* R26-191: and the zero line, which is where a label that goes INSIDE its bar is measured from */
@@ -13521,6 +13637,7 @@ async function mount(doc) {
        reverse seeks too so later figures disappear; never overwrite their glyph
        opacity with the base-axis reveal above. */
     paintPerform(st, scene, t, pg);
+    for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b */
     paintSurfaceFrame(st, frame);
     page.dataset.surfaceProgress = String(frame.progress);
   };
@@ -13744,6 +13861,7 @@ async function mount(doc) {
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
     lpShedPrisms(st, scene, t, pg);   /* P61 T4a: ... and the prisms come apart in that same drain - AFTER it, so the drain's particle cache is always taken from faces at home */
+    for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b: the soft bars' feet and shadows, off what every painter wrote at t */
   };
 
   /* ================= MOTION MENU species (doc 29 s9.27; P35 T6 / T7) =================
