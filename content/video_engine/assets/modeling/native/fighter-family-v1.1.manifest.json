@@ -1,0 +1,49 @@
+{
+  "schema_version": "native_character_preset_asset.v1",
+  "family_id": "martial-matters-fighter-family-v1",
+  "asset_id": "native-fighter-family-diagnostic-v1.1",
+  "revision": "r2",
+  "status": "diagnostic_only",
+  "art_approval": "not_approved",
+  "likeness": "none",
+  "editable_source": "fighter-family-v1.1.blend",
+  "editable_source_sha256": "5a99ce057520e332673230dd5367189a5e6dc7da56ca45da50c8a38b4f40bade",
+  "source_v1_sha256": "713ed1b0cb18fcd41e05863484bd1e0bae28bb7150b3c758a6876fb56882e61f",
+  "controls_fixture": "content/video_engine/tests/fixtures/modeling/presets/default-controls.v1.json",
+  "palette_control_fixtures": [
+    "content/video_engine/tests/fixtures/modeling/presets/chalk-shorts-controls.v1.json",
+    "content/video_engine/tests/fixtures/modeling/presets/graphite-shorts-controls.v1.json"
+  ],
+  "review_packet": "content/video_engine/review/model-engines/benchmark-v1/art/garment-v1.1/",
+  "authoring": {
+    "blender_version": "5.2.2 LTS",
+    "blender_build_hash": "d13f752e3b9c",
+    "mpfb_version": "2.0.17",
+    "mpfb_source_commit": "80919fa4682335c41847f761a4d79dcad4124732",
+    "offline_mode": true,
+    "provider_calls": 0
+  },
+  "garment": {
+    "object_name": "Garment_FightShorts",
+    "representation": "separate_editable_skinned_shell",
+    "stored_vertices": 741,
+    "stored_polygons": 698,
+    "source_vertex_attribute": "body_source_vertex_index",
+    "skin_weight_transfer": "source-index copy from MPFB body",
+    "rig": "Human.rigify",
+    "surface_ease_m": 0.009,
+    "solidify_thickness_m": 0.003
+  },
+  "license_basis": {
+    "mpfb_code": "GPL-3.0-or-later",
+    "mpfb_mesh_and_target_assets": "CC0-1.0",
+    "generated_output": "MPFB upstream LICENSE.md section D identifies generated output as user data; the shell and materials here are Blender-authored."
+  },
+  "limits": [
+    "Generic rigged starter only; no recognizable fighter identity or combat choreography.",
+    "Shorts are an offset shell copied from body topology, not independently tailored cloth or simulated fabric.",
+    "Neutral hem/crotch scalloping and a small number of locally opposed face normals remain visible diagnostic art defects.",
+    "The thigh-stress render has a dark lighting/shadow crease; emission-only render removes it, but the shape is not approved character art.",
+    "Vertex and face clearance samples do not establish collision safety for all poses or continuous motion."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "asset_id": "layered-environment",
+  "dependency_claim": {
+    "declared_dependency_count": 0,
+    "inspection_state": "unverified_blender_inspection",
+    "manifest_resource_id": "blend-dependency-manifest",
+    "packed_claim": true
+  },
+  "layers": [],
+  "parent_revision_id": null,
+  "path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/resources/environment.blend",
+  "record_id": "intake-layered-environment-layered-environment-r1",
+  "render_eligible": false,
+  "resource_id": "primary-source",
+  "resources": [
+    {
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/resources/environment.blend",
+      "resource_id": "primary-source",
+      "resource_kind": "editable_source",
+      "size_bytes": 104733,
+      "source_path": "C:\\Users\\Snipe\\.codex\\wt\\mg\\content\\video_engine\\assets\\modeling\\native\\generalization\\environment.blend",
+      "source_sha256": "8afd9f3f307574496753b985eece3129c0da4783184eb8fbde5af2afe88e69e4"
+    },
+    {
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/resources/environment.blend.dependencies.json",
+      "resource_id": "blend-dependency-manifest",
+      "resource_kind": "other",
+      "size_bytes": 91,
+      "source_path": "C:\\Users\\Snipe\\.codex\\wt\\mg\\content\\video_engine\\assets\\modeling\\native\\generalization\\environment.blend.dependencies.json",
+      "source_sha256": "cbb035d473b6c1651cb6773e3a7b7b0af7a14f5b22bb086f49846caf33cd0fb7"
+    }
+  ],
+  "review_state": "review_only",
+  "revision_id": "layered-environment-r1",
+  "schema_version": "model_asset_intake_record.v1",
+  "sha256": "8afd9f3f307574496753b985eece3129c0da4783184eb8fbde5af2afe88e69e4",
+  "source_format": "blend",
+  "source_path": "C:\\Users\\Snipe\\.codex\\wt\\mg\\content\\video_engine\\assets\\modeling\\native\\generalization\\environment.blend",
+  "source_sha256": "8afd9f3f307574496753b985eece3129c0da4783184eb8fbde5af2afe88e69e4",
+  "status": "candidate",
+  "total_source_bytes": 104824
+}

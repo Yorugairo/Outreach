@@ -1,0 +1,25 @@
+{
+  "art_approval": "not_approved",
+  "asset_id": "layered-environment",
+  "asset_kind": "environment",
+  "blender_version": "5.2.2 LTS",
+  "descriptor_path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/model_asset.v1.json",
+  "descriptor_sha256": "8b40b1028e6cebdcb84ca2f1bd51869a7807539965027fda726ffa91cda6d8a3",
+  "editable_source": "content/video_engine/assets/modeling/native/generalization/environment.blend",
+  "editable_source_sha256": "8afd9f3f307574496753b985eece3129c0da4783184eb8fbde5af2afe88e69e4",
+  "provider_calls": 0,
+  "render_eligible": false,
+  "renders": {
+    "environment-front.png": {
+      "path": "content/video_engine/review/model-engines/benchmark-v1/art/generalization/renders/environment-front.png",
+      "sha256": "af4cbe40d61404767752996af8c78c40a89fbaed1a144d0bcfb9659059e05089"
+    },
+    "environment-three-quarter.png": {
+      "path": "content/video_engine/review/model-engines/benchmark-v1/art/generalization/renders/environment-three-quarter.png",
+      "sha256": "50282c25c04a63d177d74ae449cbbfb11f2256549e71fd2a479ba721515c8a8b"
+    }
+  },
+  "review_state": "review_only",
+  "schema_version": "diagnostic-model-source.v1",
+  "status": "diagnostic_only"
+}

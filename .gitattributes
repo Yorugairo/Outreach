@@ -13,3 +13,7 @@ content/video_engine/projects/**/*.svg -text
 
 # Blender scene files are binary, including hash-bound diagnostic fixtures.
 *.blend -text
+
+# T4c native model descriptors, receipts and scene bindings pin exact JSON bytes.
+# Preserve their LF content across Windows checkouts (core.autocrlf=true).
+content/video_engine/assets/modeling/native/generalization/** -text whitespace=trailing-space,space-before-tab,cr-at-eol

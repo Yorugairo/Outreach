@@ -1,0 +1,54 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-stamp-takes-the-room-then-the-card",
+ "title": "The stamp takes the room, then the card",
+ "aliases": [],
+ "acts": [
+  "NAMES",
+  "QUOTES"
+ ],
+ "members": [
+  {
+   "card": "page_builder:line",
+   "offset_s": 0.0,
+   "role": "the chart is the world - the page lands on its axes and its lines draw before anything is added to it"
+  },
+  {
+   "card": "dock_kind:prop",
+   "offset_s": 5.51,
+   "role": "the named thing ('Data centers') is added to the world bare - a catalogued cutout, no card chrome"
+  },
+  {
+   "card": "arrival:stamp",
+   "option": "prop",
+   "offset_s": 5.51,
+   "role": "it comes down on its word into the page's biggest free room, off-square, the ring hugging it - fitted FIRST in the row (row_stamp_fits, P69 T5)"
+  },
+  {
+   "card": "dock_kind:image",
+   "offset_s": 13.7,
+   "role": "the record that proves it (the leases filing) lands in the room left, clear of the mark and of its ring's widest disc - stamp_clash_error refuses any box that touches them"
+  }
+ ],
+ "window_s": 15.0,
+ "does": "A named thing is stamped into the page's biggest free room on its word; later the record that proves it lands in the room left, clear of the mark and its ring - the stamp chooses first and the card goes round it.",
+ "use_when": {
+  "act": "NAMES, then QUOTES",
+  "moment": "proof / reveal",
+  "shape": "a named thing + the record that proves it, over a held chart",
+  "use": "a sentence that names a physical thing ('Data centers') and then points at its source ('right there in the filing'): the prop into the biggest room on the name, the record in the room left on the source word",
+  "dont": "a prop inside a card (props are bare), a record the page has no room for (place it by hand clear of the ring, or park the chart), or a light instead of the arrival (E99 s71)"
+ },
+ "doctrine": [
+  "E99 s87",
+  "E99 s88",
+  "R26-20",
+  "R26-247",
+  "E65",
+  "E99 s60",
+  "E99 s70"
+ ],
+ "status": "candidate",
+ "source": "P69 T35 (the operator 2026-09-22) over P69 T5's stamp-plus-card row (tests/test_the_stamp_arrival.py); proved as a beat by projects/_proofs/p69-recipes/proof_p69_recipes.py on Steel and Paper H row 16 ('Go into the filings ... right there in the filing', take 303.34 s) on ev-debt-issuance-line-v1 with prop-hyperscale-datacenter-v1 and ev-doc-leases - no approved cut carries it",
+ "count": 0
+}

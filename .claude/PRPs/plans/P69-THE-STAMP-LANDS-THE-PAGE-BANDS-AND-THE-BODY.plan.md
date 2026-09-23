@@ -456,11 +456,11 @@ verbatim tails and are left pending.
 - Evidence: frames read by the parent (`scratchpad/p69t6-{halving-*,94-land,1v3-land}.png`); goldens byte-identical, line pages byte-identical. Filed: the hline label over a bar (R26-??). Open outside the write set: `species/figure.mjs` re-places a bars figure with the line rule on a page with a SECOND chart; an emphasized bar's pill is not yielded
 
 ### T6b: A bare prop carries a resting shadow - depth and weight (the operator, 2026-09-22)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T6 merged; runs in LANE B (`claude/p69-s90`, the engine lane) FIRST, before T8 - so lane A's body rows never render on an engine mid-edit
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the dock painter's prop branch and the `.dock-contact` settle), `content/video_engine/scripts/kinetics/stopaction.mjs` (a `PROP_SHADOW` dial block only, synced), `content/video_engine/tests/kinetics/stopaction-stamp.test.mjs`, `content/video_engine/tests/test_prop_shadow.py` (new), `content/video_engine/tests/golden/**` (the `prop-stamp*` goldens re-pinned with the parent's frame read), `content/video_engine/effects/cards/dock_kind.json` (the `dock_kind:prop` card's `does` loses "no ... shadow"), `content/video_engine/assets/page-boxes.v1.json`
-- Acceptance: the operator: "the props should have shadow added to them to give them some depth/weight" (a ruling, `E99 s??` at merge; it amends the bare-prop card's "no paper, border, shadow or rail" - a prop stays bare of PAPER, never of weight). (1) A `dock_kind:prop` cutout carries a RESTING drop shadow that follows its painted alpha (a CSS `drop-shadow` on the cutout, not a box under the element), cast from the engine's ONE stage light - the same direction as the extruded bar's cast shadow and the melt's highlight (find it; never a second light) - soft, short and dark enough to seat the prop on the page, on the charcoal page and on a light ground alike. (2) The stamp's CONTACT shadow hands over to the resting shadow at settle instead of vanishing (`sx.phase !== "settled"` today zeroes it), so the weight is continuous. (3) A card (paper) keeps its own shadow exactly as today - byte-identical card goldens. (4) The prop's box for placement and the stamp fit include the shadow's extent, so nothing lands on it. (5) The `prop-stamp` / `prop-stamp-ink` goldens re-pin in THIS commit, with the parent's frame read; every other golden byte-identical
+- Acceptance: the operator: "the props should have shadow added to them to give them some depth/weight" (a ruling, `E99 s??` at merge; it amends the bare-prop card's "no paper, border, shadow or rail" - a prop stays bare of PAPER, never of weight). (1) A `dock_kind:prop` cutout carries a RESTING drop shadow that follows its painted alpha (a CSS `drop-shadow` on the cutout, not a box under the element), cast from the engine's ONE stage light - the same direction as the extruded bar's cast shadow and the melt's highlight (find it; never a second light) - soft, short and dark enough to seat the prop on the page, on the charcoal page and on a light ground alike. (2) The stamp's CONTACT shadow hands over to the resting shadow at settle instead of vanishing (`sx.phase !== "settled"` today zeroes it), so the weight is continuous. (3) A card (paper) keeps its own shadow exactly as today - byte-identical card goldens. (4) The prop's box for placement and the stamp fit include the shadow's extent, so nothing lands on it. (5) The `prop-stamp` / `prop-stamp-ink` goldens re-pin in THIS commit, with the parent's frame read; every other golden byte-identical AMENDED 2026-09-22 on the operator's read of v1 (a soft drop-shadow): "The shadow doesn't look great, I think we need like cross hatch markings as shadow for texture" - the resting shadow is a CROSS-HATCHED silhouette (two families of fine engraved lines, the primary along the stage light, masked by the prop's own alpha, offset toward the light's fall, the pattern fixed to the page), visible on the charcoal page and on a light ground; the stage light is DROP's `-125` (R26-257)
 - Regression: `python -m pytest content/video_engine/tests/test_prop_shadow.py -q`
 - Expected RED: the served player shows no `drop-shadow` on a settled prop cutout, and the contact shadow's opacity reads 0 after settle
 - Validate: `node --test content/video_engine/tests/kinetics/stopaction-stamp.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then `python content/video_engine/scripts/measure_page_boxes.py --write` then `python -m pytest content/video_engine/tests/test_prop_shadow.py content/video_engine/tests/test_the_stamp_arrival.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`
@@ -468,7 +468,22 @@ verbatim tails and are left pending.
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
-- Evidence: pending
+- Evidence: lane B, 2026-09-22/23 - v1 soft drop-shadow REJECTED by the operator; v2 cross-hatch `1d7fbf5` (primary 4.5 px / crossing 7 px, 29.3 / 112.4 levels line-vs-gap); the operator: "the cross hatching needs to be much tighter/finer" -> `041e2ff` (primary 2.25 / 0.7 px, crossing 3.75 / 0.5 px, TAPER_PX 3; +11.6 levels on charcoal, +40.4 on light, against the bare ground; reach 15.35 px inside the stamp fit's 16.8). Goldens re-pinned: prop-stamp 03c396dd.. -> f974a8c0.., prop-stamp-ink beb325d9.. -> 3698dbca.., prop-stamp@proof-exit d3646b8c.. -> 3e4d26c5..; every other golden byte-identical. Parent in place: node 654/654, pytest 259 passed. Open: thrown props' placement (R26-258), the hatch fixed while the prop's own camera moves it (R26-271)
+
+### T6c: A bar is narrow - the cap at a five-bar page's width (E99 s96)
+- Status: done
+- Owner: implementation_luna
+- Depends on: T6b (the same engine file; lane B's sequence)
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (`LPBAR.CAP_N` and the bars builder's capped layout only), `content/video_engine/tests/test_compare_on_bars.py`, `content/video_engine/tests/golden/**` (every golden whose page has fewer than five bars re-pins - `tags-to-bars` first - with the parent's frame read), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: the operator: "The two bar width is also still way too much" (E99 s96). (1) The cap is Bravos's MEASURED hero-bar width (`docs/research/bravos-style/BRAVOS-LONGFORM-CHART-SPEC.md`): 196 px on a 1920 stage (10% of the frame), its gap at the measured 0.44 bar/spacing ratio - replacing `LPBAR.CAP_N` with a width dial in stage px, [DERIVED] from the spec; fewer bars keep that width, centred, even gaps. The operator's rounded shoulders (T10b) win over Bravos's square corners. (2) The value label, the figure, the category label and `lpBarLabelPlace` follow the narrower bar; a category label wider than its bar wraps to two lines rather than colliding with its neighbour. (3) Pages with five or more bars byte-identical. (4) Every re-pinned golden is listed with before/after sha and its frame read by the parent; line pages byte-identical
+- Regression: `python -m pytest content/video_engine/tests/test_compare_on_bars.py -q -k cap`
+- Expected RED: with `CAP_N = 2` a one-bar page's bar measures ~405 px on the 1920 stage, over the 196 px cap
+- Validate: `python content/video_engine/scripts/measure_page_boxes.py --check` then `--write`, then `python -m pytest content/video_engine/tests/test_compare_on_bars.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`
+- Frame acceptance: the parent reads the 94, the halving, the 1 vs 3 and every re-pinned golden before commit
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: lane B `9ffbf60`, 2026-09-23 - `LPBAR = { W_PX: 196, PITCH_RATIO: 0.44 }` [DERIVED from the measured spec] replaces CAP_N; `lpStagePx` measures one chart unit in stage px (browser-checked 1.3340 vs 1.3340); a bar renders at 196.00 px, fewer bars centred, rounded shoulders kept, a wider name wraps. Only `tags-to-bars` re-pinned (1f5b4d9a.. -> 8e827822..); the 16 other golden bars pages already narrower. Parent read the 94 / halving / 1 vs 3 frames. Parent in place: node 654/654, pytest 234 passed. Pre-merge review: MERGE AFTER FIXES (F1 a wrapped name through a rescale, F2/F4 tests) - fixes staged after T8
 
 ### T7: R26-230, R26-222 and R26-231 closed on their tests; the one owed test added
 - Status: done
@@ -484,19 +499,21 @@ verbatim tails and are left pending.
 - Refactor evidence: n/a
 - Evidence: rows R26-230/222/231 CLOSED in BACKLOG on the reviewer's read (`REVIEW-P69-T7-ASTRA-ROWS.md`) and this run, `75fc99f` named as origin; R26-231's scope follow-up filed. Found and fixed by the parent: the door's `## Recall` block cited `audio.py:429` and `CAPABILITIES.md:93`, stale after T3 - the P67 receipt refused the compile; now `:471` / `:94`. The door rewrites the tracked `SHOT-TABLE-H.md` on every run (restored after the private build). Planning run 2026-09-22 (fable-p68, `4130942`): the three Astra files -> `46 passed in 20.78s`; the review re-ran them at `ff08213` -> `46 passed in 20.52s`
 
+**RE-SCOPED 2026-09-22 by E99 s97** (the operator: "go much more tighter in [Bravos's] direction ... the chart style in long format is sharper, more electric, and more professional"): T8-T10 build a `longform` page profile to the MEASURED spec `BRAVOS-LONGFORM-CHART-SPEC.md` (a measurement pass over Bravos's frames on disk, landing before T8 starts) - s90's phone type, badges as the key and the three layout fixes are folded into it; T6c's cap takes the spec's measured bar width; T10b's rounded shoulders and hatch are reconciled with the spec (the operator's words win over the reference where they differ). Every override of our own signature is listed for P69-HG3.
+
 ### T8: s90 (a) - the phone type scale on every builder the body uses, as a row option (lane B)
-- Status: pending
+- Status: in_progress
 - Owner: implementation_luna
 - Depends on: T6 merged; lane B created with its register row
 - Write set: `content/video_engine/scripts/ledger_page.py` (`READABILITY_PROFILES`, `_validate_readability` `:244-270`, the profile's geometry), `content/video_engine/scripts/build_scene_timeline_f.py` (a `readability` entry in `PLATE_OPTS` `:112` and its stamp onto the page), `content/video_engine/scripts/measure_page_boxes.py` (representatives with the profile), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the profile's reads at `:7907-7910`, `:9192`, `:9254-9259`, `:9549`, extended to the other builders), `content/video_engine/tests/test_fed_chart_readability.py`, `content/video_engine/assets/page-boxes.v1.json`
-- Acceptance: (1) `;readability=landscape-phone` on a ledger row opts that page in without editing the evidence object. The series-file field stays, and the row option wins. (2) The profile is legal on dense-line and on the builders the body's pages use (bars / `shares`, `story`, the checklist/record pages if they are ledger pages - T14's inventory names them). On any other builder it is refused by name. (3) B's roughly 12.5 px phone type is measured on each (s90: "over main's roughly 6.5 px"). (4) Absent the option, every page is byte-identical. (5) The fixture is re-measured; the goldens are byte-identical
+- Acceptance: (1) `;readability=landscape-phone` on a ledger row opts that page in without editing the evidence object. The series-file field stays, and the row option wins. (2) The profile is legal on dense-line and on the builders the body's pages use (bars / `shares`, `story`, the checklist/record pages if they are ledger pages - T14's inventory names them). On any other builder it is refused by name. (3) B's roughly 12.5 px phone type is measured on each (s90: "over main's roughly 6.5 px"). (4) Absent the option, every page is byte-identical. (5) The fixture is re-measured; the goldens are byte-identical ADDED 2026-09-23 on the parent's frame read of the first `longform` render (the phone floor applied everywhere: ~61 px ticks, a 60 px source, a sub colliding with the y-label, end tags off the stage): s90 (bigger phone type) and s97 (Bravos's measured 15-18 px ticks) CONFLICT - the operator picks at P69-HG3. The profile carries a TYPE_SCALE dial with three presets (`;readability=longform:bravos|middle|phone`, plain = `middle`); the body builds on `middle` (title ~44, ticks ~26, end tags ~30, source ~20 px at 1920) until the ruling; no collision at any preset; the divergence and railway pages compile under it
 - Regression: `python -m pytest content/video_engine/tests/test_fed_chart_readability.py -q -k "row_option or bars"`
 - Expected RED: `;readability=` is an unknown plate option (refused by the `PLATE_OPTS` check); a bars page with the profile is refused with "only supported by the dense-line builder" (`ledger_page.py:257-258`)
 - Validate: `python content/video_engine/scripts/measure_page_boxes.py --write` then `python -m pytest content/video_engine/tests/test_fed_chart_readability.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
-- Evidence: pending
+- Evidence: lane B `58c5f86` (2026-09-23) - `;readability=longform[:bravos|middle|phone]` on dense-line and bars: #14181E ground, #222830 panel in a 1.5 px border, no gridlines (a zero line only across zero), Inter loaded as its own family (R26-259 within the profile), a pink sans title, sub and source in one safe column, the chart placed below with M28's air, end tags shortened full -> badge -> value (long names kept for T10's key). TYPE_SCALE presets bravos (the spec) / middle (title 44 / ticks 26 / tags 30 / source 20 px at 1920, the working default) / phone (the s90 floor). The first render (the floor everywhere: ~61 px ticks, collisions) was sent back on the parent's frame read. Parent in place: node 654, pytest 323 passed; without the option every golden byte-identical. The review fixes `2e51c16` (F1 wrapped name through a rescale, F2 the hatch's cold seek / failed decode, F4 the cap at every aspect, F5 handed-page punch): pytest 361 passed. Second review (REVIEW-P69-LANE-B-MERGE-2): MERGE AFTER FIXES - N1 the phone source into the caption strip, N2 a `;then=` state's tags unfitted, N3 the Python box estimate 73 px off - fixing before the merge. Overrides of our own signature (option only) listed for P69-HG3: E22 ground/deckle/Kalam/no-outline, the one accent, E53.4 gridlines, "both axes always"; s90's floor met only at `phone`
 
 ### T9: s90 (b) - the three layout fixes the side-by-side found (lane B)
 - Status: pending
@@ -531,11 +548,26 @@ verbatim tails and are left pending.
 - Owner: implementation_luna
 - Depends on: T6b (the SAME one stage light and shadow dials as the prop's resting shadow); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the bars builder's bar rect only), `content/video_engine/scripts/ledger_page.py` (the option's validation), `content/video_engine/scripts/build_scene_timeline_f.py` (the row option in `PLATE_OPTS`), `content/video_engine/tests/test_bar_style.py` (new), `content/video_engine/assets/page-boxes.v1.json`
-- Acceptance: the operator, 2026-09-22, on the T6 frames: "that bar can't be that wide ... it reads like a giant block" (the width cap, T6) and "I think it should also have some sort of rounded edges, maybe shadows". (1) A row option (`;bar_style=soft`) gives every bar ROUNDED SHOULDERS (the top corners - the baseline stays square, so a bar still stands on zero; a negative bar rounds its bottom) and a SOFT SHADOW cast from the one stage light (T6b's dials; short, low-alpha - weight, not a 3D prism, which stays `;form=extruded_bar`). (2) The value label, the figure and every rule keep their clearances against the new rect. (3) Absent the option every page is byte-identical (goldens untouched). (4) The body's bars rows take the option (T33 adopts it with the s90 page). (5) The default flips only on the operator's read at the end (a card beside P69-HG3: bars off/on on the 94, the halving and the 1 vs 3)
+- Acceptance: the operator, 2026-09-22, on the T6 frames: "that bar can't be that wide ... it reads like a giant block" (the width cap, T6) and "I think it should also have some sort of rounded edges, maybe shadows". (1) A row option (`;bar_style=soft`) gives every bar ROUNDED SHOULDERS (the top corners - the baseline stays square, so a bar still stands on zero; a negative bar rounds its bottom) and a SOFT SHADOW cast from the one stage light (T6b's dials; short, low-alpha - weight, not a 3D prism, which stays `;form=extruded_bar`). (2) The value label, the figure and every rule keep their clearances against the new rect. (3) Absent the option every page is byte-identical (goldens untouched). (4) The body's bars rows take the option (T33 adopts it with the s90 page). (5) The default flips only on the operator's read at the end (a card beside P69-HG3: bars off/on on the 94, the halving and the 1 vs 3) AMENDED 2026-09-22: the bar's shadow is the SAME cross-hatch as the prop's (T6b v2), cast from the stage light (DROP `-125`), so props, cards and bars share one light and one texture
 - Regression: `python -m pytest content/video_engine/tests/test_bar_style.py -q`
 - Expected RED: `;bar_style=` is an unknown plate option; a bar rect has the builder's default corner radius and no shadow filter
 - Validate: `python content/video_engine/scripts/measure_page_boxes.py --write` then `python -m pytest content/video_engine/tests/test_bar_style.py content/video_engine/tests/test_compare_on_bars.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`
 - Frame acceptance: the parent reads the three H bars pages off/on before the card is queued
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+### T10c: A chart card is drawn for its own size - the whole card, bigger type, thicker lines (the operator, 2026-09-22)
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T8 (the readability profiles it extends); lane B
+- Write set: `content/video_engine/scripts/chart_card.py` (and its caller `dock_card` wherever it lives), `content/video_engine/scripts/ledger_page.py` (a `card` readability profile), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the profile's reads), `content/video_engine/tests/test_chart_card_readable.py` (new), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: the operator, on row 7's thrown Bravos card: "Those charts still seem tough to read to me" and "Evidence cards that are using charts need to use the whole card and use bigger fonts and thicker lines". Today `chart_card.py` renders the FULL ledger page at the dock width (CAPABILITIES.md:74), so every label shrinks with the card. (1) A chart card is rendered FOR ITS DISPLAYED SIZE: the page is laid out at the card's own on-stage pixel box (not a full stage scaled down), under a `card` readability profile - the plot fills the card edge to edge (no page margins, no caption bands, no source-foot beyond one short line), the type measured at >= the s90 phone floor at the card's displayed size (state the px), lines and marks at least 2x the page's stroke, end tags reduced to short badges (s90's badge key) and minor ticks dropped. (2) The card still carries its title and its one number. (3) A card that is THROWN to become the page (s71 throw-then-zoom) hands over to the full page, not the card render. (4) Absent the profile, every page and card is byte-identical; the body's chart cards take it (T33). (5) Frame: the Bravos pairing card at row 7's size before/after, read by the parent
+- Regression: `python -m pytest content/video_engine/tests/test_chart_card_readable.py -q`
+- Expected RED: the rendered card's smallest label measures under the phone floor at its displayed size and its line stroke equals the page's
+- Validate: `python content/video_engine/scripts/measure_page_boxes.py --write` then `python -m pytest content/video_engine/tests/test_chart_card_readable.py content/video_engine/tests/test_fed_chart_readability.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`
+- Frame acceptance: the parent reads the card before/after at its on-stage size; the operator reads it with P69-HG3
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
@@ -584,68 +616,68 @@ verbatim tails and are left pending.
 - Evidence: 2026-09-22 - the door carries `BODY_ASSETS` (rows 7-24, 0 missing paths), `BODY_DEPARTURES` (15, each with its fallback), `TREATMENT_SUPERSEDED` (E99 s84 `:3296`, s83 `:3294`, s91 `:3313`, E47 `:1419`/`:1444`, E50 `:1520`/`:1533`), `DEBT_PAGE` + `DEBT_SPREAD` + the "$130–150B"/"2026E" figure, `TWO_CLOCKS_PAGE`; the cue slot reads `A.arrival_mass` (`(stamp, ink)`); `READ_ONLY` covers `REFERENCE-F.md` and `build-f`; the stale `HOST_CARD_REFUSED` note fixed (R26-221 `plate_dock_place`). Bed unchanged: timeline sha `25203c15...` and table sha `a4e8d798...` identical before and after (private dir). PLAUSIBLE pages draw, each with its named fallback, pending the operator's end-of-run answer. The departures file is folded into `BUILD-NOTES-H.md` section 9
 
 ### T15: Row 7 (0:54-1:09) - host window 1: the studio, the Bravos card thrown, the NVIDIA chip crossed, the flow
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T14
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; `UNIT_CUT_PHRASE` moves past row 7; the host plate on Ken Burns alone; `NVIDIA_CHIP` stays the SVG chip (no form stamp - P69-HG1 decides future chips)
 - Validate: the shared Validate
 - Expected RED: the shared Expected RED (the table ends at row 2, `42.04-52.85`)
-- Evidence: pending
+- Evidence: T15b (2026-09-23, the operator: "Those charts still seem tough to read to me" - E99 s71): row 7 REBUILT - the Bravos card is thrown on its name and the camera PUSHES it to the stage where the page takes its place (throw-then-push; the snap was refused for a forward-play offset, R26-260); the chart is read at full page size, the NVIDIA chip lands and is crossed on the page, the flow draws beside it; the studio opens earlier (the slate row is now 42.04-49.45, a bed change named for HG4) so M44 holds. SUPERSEDED earlier T15 read, 2026-09-22 - table row 3 `52.92-63.77` on `world-h1-studio-v1` (Ken Burns alone, s84): the Bravos card thrown on its name (55.62), put down on "and it isn't Nvidia" (58.26), 5.95 s (E50); the NVIDIA SVG chip lands on its word (58.60) and is crossed (59.80); the capital -> value flow draws on the left monitor (59.86, its dashed frame drawn on by the nib - flow.mjs `box`, s42.1). 1 dip at a world change (slate -> studio) naming the transforms it refused; life 3 of 3 rows; door exit 0, cues 5 of 5 bound; no frozen run > 0.5 s; gate `2 FAIL / 2 WARN / 21 PASS` - M11 (row 1, the bed, pre-existing) and M03 (the BED's 0:09-0:54 gap: nothing new ENTERS between the certificate and row 7 - named for P69-HG4; row 7 cannot clear it without a card before its own name). The dip cue moved to the row's entry (`r[0] - 0.35`). The parent read the tiles beside build-f's at the same sentences: row 7 carries a host, a thrown card, a crossed chip and a drawn flow where build-f holds a bare pen plate. Noted for HG4: the small caption strip over the desk (55.6-61.6) and the full caption crossing the host's collar at 63.4 (no caption-placement option on a picture plate)
 
 ### T16: Row 8 (1:04-1:09) - the dip back to the page (dip 1)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T15
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; the dip names its refused transform ("a recast cannot take a photograph plate to a chart")
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: 2026-09-23 - rows 8-9 are one page (table row 5, 63.80-89.27): NO dip - row 7 now ends on a page, so the boundary is page to page and E47 refuses a dip; their chart melts to a ball and is thrown off on "But capital that fast" (`melt:throw:1`, E88) and the railway index draws on the same board; transforms refused by name (dip, recast, rescale, morph, melt:splash:chart, melt:morph). Life 66.40/68.40 s luma diff 2.99 (4.0%)
 
 ### T17: Row 9 (1:09-1:30) - the railway index and the GDP recast
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T16
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; `RAIL_DROP` "-64%" (the object's arithmetic); the page rings its own GDP data (no invented 7 %/8 % ticks)
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: 2026-09-23 - the railway climbs to the 1845 peak on "pounds", crashes on "crashed", `-64%` written red above the trough under the 1,000 line (E28); recast to the GDP share on "the internet", the title rewritten 0.1 s after (a same-word retitle is dropped by the compiler), the ring on the page's own Q2-2000 peak (unlabelled - the reference line writes 11.54%), the last twenty years drawn on "AI spending just crossed". The unsourced "GBP 250m raised / $1T+ today" note CUT (no source on disk; the door had mis-cited the dossier). Gate at the end of row 9: `2 FAIL / 2 WARN / 22 PASS` - M03 (the bed) and M11 (row 1), both named for HG4; frozen frames none over 0.5 s; seams 0 faults; cues 7 of 7; life 5 of 5. The parent's frame read: the plots use ~60% of the page width (the rest reserved for end tags) - restaged by the longform profile (T33); the recast's middle is unreadable (R26-261); the GDP page has no years (R26-262). FLAGGED for HG4: the page's end label 11.51% lands on the voice's "eight" (two different measures - a next-letter script note), the railway title says "fell 64%" ~14 s before the voice
 
 ### T18: Row 10 (1:30-1:44) - the sell ticket thrown over the recast
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T17
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; the ticket is `arrive: throw, mass: paper`; the page recasts under it (E64)
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: 2026-09-23 - the sell ticket thrown on "obvious move" over the GDP page, the page recasting under it to the divergence ("Chipmakers doubling. Customers flat."), lines drawn one at a time. REWORKED on the parent's frame read (the ticket read as a blank pad with a tiny badge): SELL is stamped across the ticket's centre in coral (~140 px read, ~95 px parked) - the largest thing on the card; the badge's probe FAILs gone. Named: the divergence fills only the bottom ~40% of its plot (R26-266); SELL cannot land as its own stamp on its word (R26-267); the recast's half-title flash (R26-261)
 
 ### T19: Row 11 (1:44-2:10) - one slot, three records (Karp, Uber, the COO line)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T18
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; each record takes the outgoing card's slot (s80); no world change
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: 2026-09-23 - on "like a claims adjuster" the divergence MELTS and splashes onto `world-internal-memo-v1` (lamp, desk, memo; refused by name: recede - no door, R26-265; the dip; the thread; recast/remake; park), so Karp, Uber and the COO share one slot on a clean ground (the parent's frame read: empty axes behind the records read as a broken chart). The desk's mug steam is the plate's life (the gate does not credit typing, R26-269). Uber's chart card read at 0.90 of the stage with three badges from its own card
 
 ### T20: Row 12 (2:10-2:30) - the trough already doing its job
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T19
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; `ev-three-manias` as T14 named it (a card record, not a page); the peak-to-trough move carried by the card's own marker or a callout, named in the build notes
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: 2026-09-23 - the COO card holds through "Remember that line", then the three-manias TABLE lands in the slot at ~0.76 of the stage, composed from its own pixel bands so cells read ~22 px (never a table read small, E99 s71), its four badges springing in turn (priced / fell 64% / twenty years / still open); leaves on "Which flips the question". The "capital committed" row cut (row 9 keeps its ~7-8% off screen). Named for HG4: the badge strip under the table is small; the caption on the bright desk is low-contrast (R26-268)
 
 ### T21: Row 13 (2:30-2:45) - reset 1, the dip to 1849 (dip 2)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T20
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; `use=reset` with Ken Burns alone; the anaphora in caption STAGE mode
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: 2026-09-23 - dip 2 (a real world change, desk -> viaduct, E47; refused: thread, edge arrival, occluder, melt, recast) before "And in 1849"; Ken Burns alone plus the locomotive's steam; the anaphora in caption stage mode. Rows 10-13 gate: `2 FAIL / 2 WARN / 22 PASS` - both FAILs the bed's (M03, M11); frozen frames none over 0.5 s; seams 6 boundaries 0 faults; stage gaps 1.0 s (the two licensed dips); cues 13 of 13; life 7 of 7 rows. LANE A PAUSES HERE for the longform profile (rows 14-24 are chart-heavy and build on it)
 
 ### T22: Row 14 (2:45-3:20) - the yardstick: dip 3, camera 2, the breakthrough bars
 - Status: pending
@@ -766,7 +798,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T35: New candidate effects and recipes from P69's mechanisms, each proved as a beat (the operator, 2026-09-22)
-- Status: pending
+- Status: in_progress
 - Owner: implementation_luna (authoring + proofs); parent (the frame read)
 - Depends on: T6 and T6b merged into lane A (the recipes use the bar figure, the compare on bars and the prop's resting shadow)
 - Write set: `content/video_engine/effects/recipes/*.json` (NEW candidates only; no existing recipe edited), `content/video_engine/effects/cards/*.json` (only a new card a new recipe needs), the catalogue's generated files via `build_effects_catalog.py --write`, a private proof dir `content/video_engine/projects/_proofs/p69-recipes/**` (gitignored build output; the proof door `proof_p69_recipes.py` commits), `docs/content-video-engine/review-queue.v1.json`, `docs/content-video-engine/REVIEW-QUEUE.md`
@@ -775,6 +807,167 @@ verbatim tails and are left pending.
 - Expected RED: none of the six recipe ids exists in `content/video_engine/effects/recipes/`
 - Validate: `python content/video_engine/scripts/build_effects_catalog.py --check` then `python -m pytest content/video_engine/tests/test_effects_catalog_drift.py -q` then the proof door, then `python content/video_engine/scripts/build_review_queue.py`
 - Frame acceptance: the parent reads each proof's strip beside the mechanism it composes; a recipe whose proof reads wrong is withdrawn, never queued
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: 2026-09-23 lane A - THREE candidates kept after the parent's strip read: `recipe:estimate-opens-as-a-wedge` (the debt line lands, the $130B/$150B edges open from 2025, the spread wedge bleeds between them, "$130-150B / 2026E" written - never a midpoint), `recipe:the-stamp-takes-the-room-then-the-card` (the data-centre prop stamped into the biggest room with its ring, the leases record then placed clear of mark and ring - an authored box, the E65 placer found no room for the wide record), `recipe:two-clocks` (one unit, 20 years deemphasized, 5 years crimson, its figure the claim). TWO WITHDRAWN: `the-bar-halves-its-number` (the bar never halves - R26-273) and `the-ratio-read-in-the-gap` (a bracket draws nothing on bars - R26-272). Each recipe carries a `use_when` (act, moment, data shape, use / don't) - the schema and the catalogue builder gained the field. Proof door `_proofs/p69-recipes/proof_p69_recipes.py` (builds to gitignored `build-lab-*`). Catalogue: 49 recipes, in sync; drift tests 50 passed / 3 xfailed; the check's 6 FAILs are R26-239, unchanged. Defects seen: the issuance tag crosses the wedge's start, the page narrow (T8), "20years" and clipped ticks (R26-274), the prop art's black corners. PENDING: `the-prop-lands-with-weight` after lane B merges T6b
+
+### T35b: The Bravos candidates - SUPERSEDED by T36-T44 (2026-09-23, the harvest v2)
+- Status: done
+- Owner: implementation_luna (lane B for engine verbs; lane A for recipes and the beats)
+- Depends on: T8-T10 (the `longform` profile the verbs are drawn in); the eight new watches (docs/research/runs/bravos-watch/, Gemini x4 + GPT x4) merged into the harvest first
+- Write set: `content/video_engine/scripts/species/*.mjs` (new verbs only, synced), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (their paint), `content/video_engine/scripts/build_scene_timeline_f.py` (their tokens' validation), `content/video_engine/effects/cards/*.json` + `content/video_engine/effects/recipes/*.json` (new only), their tests and goldens, `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: the harvest `docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST.md` (106 items; HAVE 55 / PARTIAL 25 / MISSING 26) names ten candidates; build the ones that need no ruling, each as a card + a recipe that composes existing cards (s70) + a golden + a body row that carries it: `level_join` (a dashed rule between two points, a ring at each end - rows 14/15/21), `axis_tag` (the named year as an accent pill on the x-axis - rows 9/15/22), `project` (the line continues dashed past its last real point - rows 16/17/23, labelled as a projection, E77), chip `lit` / `tick` states (rows 10/22), `chapter_tag` (a section pill held over an act's charts - rows 13/18/23), `the-hidden-base` (bars hanging below a waterline - row 16's leases; E53-safe), `loop` (a flow laid as a ring with money moving on its arrows - rows 16-18), `term-over-the-parked-chart` (rows 16/18). CLEARED 2026-09-23: `lit_stretch` as a TRAVELLING or blinking light, and the freeze-on-light beat (E99 s99); `blur-under-the-dock` for a busy chart plate, as a row option (E99 s98). PROPOSED to the operator (P69-HG3): a MEMBERSHIP-STACK exception to E53 s2 (the bar is ONE value; its tiles are equal, unvalued identities - who is in it - and the total is written; never a stack of values), ). CLEARED by E99 s100 (area is valid when it serves the story, truthful when drawn in true proportion with its figures written): the PYRAMID / ICEBERG form - Bravos's surface-vs-hidden debt pyramid, every cell's value written, cell areas proportional - joins the build list beside `the-hidden-base`. STILL HELD: an INVERTED axis (E28 - a rise would draw as a fall; a second axis alone is allowed as E53 s4's overlay), rings on every point (E56), shape-only waves with no data (E52; never fabricated) ADDED 2026-09-23 (the operator: "Have you already noted in what context these actions/effects are most likely useful?" - only as one quoted instance each): before building, a SYNTHESIS pass over the harvest + the eight watches (whose template now asks for USE CONTEXT) writes, for every harvested item, its USE-WHEN - the sentence's act (SPECIES-BY-SENTENCE: names a thing / states a size / compares / shows change / reveals the hidden / turns / warns / concludes), the story moment (hook, setup, proof, turn, reveal, close), the data shape it needs, and when NOT to use it - into `docs/research/bravos-style/BRAVOS-USE-WHEN.md`; every new card and recipe carries that use-when in its own field, so an author finds the move by what the sentence is doing
+- Regression: `python content/video_engine/scripts/effects_catalog_check.py` (each new id absent before)
+- Expected RED: none of the candidate ids exists in `effects/cards` / `effects/recipes` / the species list
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, and each verb's own test
+- Frame acceptance: the parent reads each verb in its body beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: superseded 2026-09-23 - its candidate list became slices T36-T44 on the harvest v2 (nine videos); the use-when synthesis it asked for is `docs/research/bravos-style/BRAVOS-USE-WHEN.md` (171 entries grouped by act)
+
+**ADDED 2026-09-23 (the operator's goal: "after Lane a finishes, add relevant work to p69 and /prp-implement"):** T36-T45 replace T35b's candidate list with the harvest v2's top-ranked moves (nine Bravos videos, ranked by videos x usefulness). Verbs build in LANE B after the `longform` profile (T8-T10, T10b, T10c) so they are drawn in the new style; the recipes compose them in LANE A; the chart-heavy body rows (14-24) build after both and use them where the harvest names their row.
+
+
+### T36: `lit_stretch` - a light that TRAVELS along a stretch of a line on its word (E99 s99)
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T10c; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 1 (8 of 9 videos). A relit stretch runs from `from` to `to` along the series on its word (a comet head optional), the rest of the line keeps its ink; it counts as motion because it travels (s99). Rows 9 (the crash), 14, 15, 21. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T37: `solo` - the on-word isolate for a line or a bar (dim the rest)
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T36; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 2 (8 of 9). On its word every other series or bar mutes to the E67 dim (0.45, or the spec's measured 0.3-0.38 under the longform profile) and the named one keeps its ink; `unsolo` restores. Rows 10, 16, 18, 22. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T38: `axis_tag` + drop guides - the named year becomes a pill on the x-axis
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T37; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 3 (7 of 9). On its word the year's tick springs into an accent pill and a dashed guide drops from the datum to it (E28: the axis states its rule). Rows 9, 14, 15, 22. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T39: `level_join` - a dashed rule drawn from one point to another, a ring at each end
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T38; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 4 (6 of 9). The rule draws A -> B on its word with a small ring at each end and the gap written as a figure; the label never sits on the rule (C14). Rows 14, 15, 21. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T40: `blur` under a dock over a busy chart plate (E99 s98) + the term-over-the-parked-chart recipe
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T39; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 6 (6 of 9). A dock option: the plate under a landing dock blurs (the backdrop blur `exit:blurzoom` already carries, held) while the dock reads, and clears on its leave; only over a busy CHART plate (s98), never a ledger page's plot (E63 unchanged - the harvest's open question stays with the operator). Rows 10, 11, 16, 18. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T41: `project` - a labelled dashed continuation past the last real point
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T40; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 7 (7 of 9). The line continues dashed past its last datum on its word, labelled as a projection ("consensus", "2026E"), never mistaken for data (E77); pairs with the debt page's spread wedge. Rows 16, 17, 22, 23. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T42: chip states `lit` / `tick` / `sell`
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T41; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 9 (7 of 9). The chip species gains a held halo (`lit` - an annotation, s91), a tick (the cross's sibling) and a SELL stamp-state; a blinking halo counts as motion (s99). Rows 10, 20-21, 22. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T43: `loop` - a flow laid as a ring, money moving on its arrows
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T42; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 11 (6 of 9). The flow species gains a ring layout and arc-length tokens moving on its edges. Rows 7, 16, 17. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T44: the Bravos RECIPES composed from T36-T43, each proved as a body beat
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T43; T35; lane A
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Ranks 5, 8, 10, 13, 14, 15: `the-ratio-read-in-the-gap` + the group bracket, `the-epoch-walk`, `peak-fall-magnitude`, `isolate-then-quantify-the-tail`, `the-formula-by-its-words`, `the-hidden-base` / the proportional iceberg (s100). Each a recipe JSON (status candidate) with its use-when, proved on the H row the harvest names. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending

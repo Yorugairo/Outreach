@@ -323,6 +323,7 @@ def recipe_record_of(recipe: dict, titles: dict[str, str], index: list[dict], re
         "source": recipe["source"],
         "count": recipe["count"],
         "backlog": recipe.get("backlog") or [],
+        **({"use_when": recipe["use_when"]} if recipe.get("use_when") else {}),
     }
 
 
@@ -455,6 +456,9 @@ def recipe_block(record: dict) -> list[str]:
                  f" - **source** {record['source']}")
     if record.get("doctrine"):
         lines.append("- **doctrine** " + "; ".join(_cite_text(c) for c in record["doctrine"]))
+    if record.get("use_when"):
+        uw = record["use_when"]
+        lines.append(f"- **use when** {uw['act']} - {uw['moment']} - {uw['shape']}: {uw['use']}. **not** {uw['dont']}")
     if record["aliases"]:
         lines.append("- **aliases** " + "; ".join(f"\"{a['name']}\" ({a['source']})" for a in record["aliases"]))
     return lines + [""]

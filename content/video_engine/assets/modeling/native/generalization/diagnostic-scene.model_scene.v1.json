@@ -1,0 +1,71 @@
+{
+  "attachments": [],
+  "bindings": [
+    {
+      "asset_id": "hinged-prop",
+      "binding_id": "prop",
+      "descriptor_path": "content/video_engine/assets/modeling/native/generalization/contract/prop/e7e4323080c6-native/model-assets/candidates/hinged-prop/hinged-prop-r1/model_asset.v1.json",
+      "descriptor_sha256": "8c93fa16b10eaf3213758a141f8d74fcddf1f99c8aa576225ec615020dee7b98",
+      "revision_id": "hinged-prop-r1"
+    },
+    {
+      "asset_id": "layered-environment",
+      "binding_id": "environment",
+      "descriptor_path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/model_asset.v1.json",
+      "descriptor_sha256": "8b40b1028e6cebdcb84ca2f1bd51869a7807539965027fda726ffa91cda6d8a3",
+      "revision_id": "layered-environment-r1"
+    }
+  ],
+  "contacts": [],
+  "duration_frames": 26,
+  "environment_collision_surfaces": [
+    {
+      "binding_id": "environment",
+      "collision_mode": "solid",
+      "surface_id": "floor"
+    }
+  ],
+  "events": [
+    {
+      "binding_id": "prop",
+      "event_id": "lid-open",
+      "event_type": "articulation",
+      "frame": 25
+    }
+  ],
+  "fps": {
+    "denominator": 1,
+    "numerator": 24
+  },
+  "motion_channels": [
+    {
+      "binding_id": "prop",
+      "channel_id": "lid-hinge",
+      "interpolation": "linear",
+      "keyframes": [
+        {
+          "frame": 1,
+          "value": 0.0
+        },
+        {
+          "frame": 25,
+          "value": -74.484511
+        }
+      ],
+      "semantic_target": "lid_hinge",
+      "target_kind": "articulation",
+      "value_unit": "degrees"
+    }
+  ],
+  "participants": [],
+  "scene_id": "diagnostic-generalization",
+  "schema_version": "model_scene.v1",
+  "source_time_mappings": [],
+  "time_origin": {
+    "scene_frame": 0,
+    "scene_time_seconds": {
+      "denominator": 1,
+      "numerator": 0
+    }
+  }
+}

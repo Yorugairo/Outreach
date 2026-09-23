@@ -22,6 +22,108 @@
    "note": "contact at 9.66s, the cue one frame early (the weight report Q5)"
   },
   {
+   "slot": "landing 3 (throw, paper)",
+   "at": 56.04,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 56.08s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "dip 3",
+   "at": 49.1,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-whoosh-3-648729.mp3"
+   }
+  },
+  {
+   "slot": "page enter 4 (camera)",
+   "at": 56.62,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   }
+  },
+  {
+   "slot": "page enter 5 (axes)",
+   "at": 63.8,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   }
+  },
+  {
+   "slot": "landing 5 (throw, paper)",
+   "at": 90.03,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 90.07s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 6 (throw, paper)",
+   "at": 107.51,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 107.55s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 6 (land, paper)",
+   "at": 114.49,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 114.53s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 6 (land, paper)",
+   "at": 120.93,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 120.97s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 6 (land, paper)",
+   "at": 133.28,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 133.32s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "dip 7",
+   "at": 147.47,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-whoosh-3-648729.mp3"
+   }
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0073,
@@ -41,6 +143,54 @@
     ],
     [
      11.2,
+     0.0
+    ],
+    [
+     55.32,
+     0.0
+    ],
+    [
+     55.62,
+     4.0
+    ],
+    [
+     57.07,
+     4.0
+    ],
+    [
+     57.87,
+     0.0
+    ],
+    [
+     89.31,
+     0.0
+    ],
+    [
+     89.61,
+     4.0
+    ],
+    [
+     90.81,
+     4.0
+    ],
+    [
+     91.61,
+     0.0
+    ],
+    [
+     106.79,
+     0.0
+    ],
+    [
+     107.09,
+     4.0
+    ],
+    [
+     108.29,
+     4.0
+    ],
+    [
+     109.09,
      0.0
     ]
    ],

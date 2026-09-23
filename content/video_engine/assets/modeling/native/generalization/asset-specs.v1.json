@@ -1,0 +1,46 @@
+{
+  "schema_version": "diagnostic-generalization-specs.v1",
+  "status": "diagnostic_only",
+  "art_approval": "not_approved",
+  "provider_calls": 0,
+  "coordinate_system": {
+    "space": "world_3d",
+    "unit": "m",
+    "up_axis": "Z",
+    "forward_axis": "Y",
+    "handedness": "right",
+    "origin": "local scene origin",
+    "rest_pose": "closed for prop; static for environment"
+  },
+  "assets": {
+    "prop": {
+      "asset_id": "hinged-prop",
+      "revision_id": "hinged-prop-r1",
+      "asset_kind": "prop",
+      "source": "hinged-prop.blend",
+      "capabilities": {
+        "articulations": ["lid_hinge"],
+        "sockets": ["grip_socket"]
+      }
+    },
+    "environment": {
+      "asset_id": "layered-environment",
+      "revision_id": "layered-environment-r1",
+      "asset_kind": "environment",
+      "source": "environment.blend",
+      "capabilities": {
+        "surfaces": [
+          {
+            "surface_id": "floor",
+            "surface_type": "floor",
+            "collision_role": "solid",
+            "origin_m": [0.0, 0.0, 0.0],
+            "normal_xyz": [0.0, 0.0, 1.0],
+            "reference": "Floor_Collision top face"
+          }
+        ],
+        "sockets": []
+      }
+    }
+  }
+}

@@ -276,6 +276,45 @@
             "type": "string",
             "pattern": "^R[0-9]{2}-[0-9]+$"
           }
+        },
+        "use_when": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "act",
+            "moment",
+            "shape",
+            "use",
+            "dont"
+          ],
+          "properties": {
+            "act": {
+              "type": "string",
+              "minLength": 3,
+              "description": "the sentence's act (SPECIES-BY-SENTENCE)"
+            },
+            "moment": {
+              "type": "string",
+              "pattern": "^(hook|setup|proof|turn|reveal|close)( / (hook|setup|proof|turn|reveal|close))*$",
+              "description": "hook / setup / proof / turn / reveal / close - one of the six, or several joined by ' / ' (BRAVOS-USE-WHEN.md's own rows carry 'hook / turn'; the stamp recipe carries 'proof / reveal'); any other word is refused"
+            },
+            "shape": {
+              "type": "string",
+              "minLength": 3,
+              "description": "the data shape the recipe needs"
+            },
+            "use": {
+              "type": "string",
+              "minLength": 10,
+              "description": "when to reach for it, one line"
+            },
+            "dont": {
+              "type": "string",
+              "minLength": 10,
+              "description": "when NOT to, one line"
+            }
+          },
+          "description": "P69 T35b / BRAVOS-USE-WHEN.md's fields: an author finds the move by what the sentence is doing"
         }
       },
       "dependentRequired": {

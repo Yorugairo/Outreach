@@ -1,0 +1,77 @@
+{
+  "approval_reference": {
+    "path": "content/video_engine/assets/modeling/native/generalization/contract/prop/e7e4323080c6-native/model-assets/candidates/hinged-prop/hinged-prop-r1/intake-record.json",
+    "record_id": "intake-hinged-prop-hinged-prop-r1",
+    "resource_id": "primary-source",
+    "sha256": "9376c5346e150ed5db6b83de0ce34ba60b811a41e192ec157e919c9232bf8011"
+  },
+  "asset_id": "hinged-prop",
+  "asset_kind": "prop",
+  "capabilities": {
+    "articulations": [
+      "lid_hinge"
+    ],
+    "sockets": [
+      "grip_socket"
+    ]
+  },
+  "catalog_reference": {
+    "asset_id": "hinged-prop",
+    "path": "content/video_engine/assets/modeling/native/generalization/contract/prop/e7e4323080c6-native/model-assets/candidates/hinged-prop/hinged-prop-r1/candidate-catalog.json",
+    "resource_id": "primary-source",
+    "sha256": "fbd04c9a221922b2be78ee8447768a453358380fbaa385249f371dac192d1e80"
+  },
+  "coordinate_system": {
+    "forward_axis": "Y",
+    "handedness": "right",
+    "origin": "local scene origin",
+    "rest_pose": "closed for prop; static for environment",
+    "space": "world_3d",
+    "unit": "m",
+    "up_axis": "Z"
+  },
+  "provenance": {
+    "authoring_method": "native",
+    "licenses": {
+      "mesh": "unknown_pending_review",
+      "motion": "unknown_pending_review",
+      "texture": "unknown_pending_review",
+      "tool": "unknown_pending_review"
+    },
+    "tool_name": "model-asset-intake",
+    "tool_version": "1"
+  },
+  "resources": [
+    {
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/prop/e7e4323080c6-native/model-assets/candidates/hinged-prop/hinged-prop-r1/resources/hinged-prop.blend",
+      "resource_id": "primary-source",
+      "resource_kind": "editable_source",
+      "sha256": "e7e4323080c6e63cf29650d7e6532d414f9bed86fad7b9de5529d2edb8b774cd"
+    },
+    {
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/prop/e7e4323080c6-native/model-assets/candidates/hinged-prop/hinged-prop-r1/resources/hinged-prop.blend.dependencies.json",
+      "resource_id": "blend-dependency-manifest",
+      "resource_kind": "other",
+      "sha256": "cbb035d473b6c1651cb6773e3a7b7b0af7a14f5b22bb086f49846caf33cd0fb7"
+    }
+  ],
+  "revision": {
+    "revision_id": "hinged-prop-r1",
+    "revision_number": 1
+  },
+  "schema_version": "model_asset.v1",
+  "source_lineage": [
+    {
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/prop/e7e4323080c6-native/model-assets/candidates/hinged-prop/hinged-prop-r1/resources/hinged-prop.blend",
+      "relation": "created_from",
+      "sha256": "e7e4323080c6e63cf29650d7e6532d414f9bed86fad7b9de5529d2edb8b774cd",
+      "source_id": "source-original"
+    },
+    {
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/prop/e7e4323080c6-native/model-assets/candidates/hinged-prop/hinged-prop-r1/resources/hinged-prop.blend.dependencies.json",
+      "relation": "created_from",
+      "sha256": "cbb035d473b6c1651cb6773e3a7b7b0af7a14f5b22bb086f49846caf33cd0fb7",
+      "source_id": "blend-dependency-manifest"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "schema_version": "native_character_preset_controls.v1",
+  "family_id": "martial-matters-fighter-family-v1",
+  "controls": {
+    "clothing_style": "fight_kit",
+    "clothing_palette": "graphite"
+  },
+  "art_status": "diagnostic_only_not_likeness_or_final_character_art"
+}

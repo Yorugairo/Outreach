@@ -1,0 +1,35 @@
+{
+  "schema": "offline-mpfb-face-target-proof.v1",
+  "status": "diagnostic_only",
+  "source_asset": "content/video_engine/assets/modeling/native/fighter-family-v1.1.blend",
+  "source_sha256": "5a99ce057520e332673230dd5367189a5e6dc7da56ca45da50c8a38b4f40bade",
+  "human_object": "Human",
+  "rig_object": "Human.rigify",
+  "expected_body_vertices": 19158,
+  "targets": [
+    {
+      "relative_path": "head/head-square.target.gz",
+      "sha256": "94b484ae145970e5368706d4f42711f50e18fcbf7d9f1ee800572c3fa69f855a",
+      "shape_key": "Proof_HeadSquare",
+      "weight": 0.9
+    },
+    {
+      "relative_path": "chin/chin-width-incr.target.gz",
+      "sha256": "68764b6ec7c923597beaaf643f71c41f00c93639d9bb522c169c279db2ad299e",
+      "shape_key": "Proof_ChinWidth",
+      "weight": 0.6
+    },
+    {
+      "relative_path": "cheek/l-cheek-bones-incr.target.gz",
+      "sha256": "ea5aa60abcc2926e61cdabf5d40701c2b23b3f8027f949cea0b80bcbc55df301",
+      "shape_key": "Proof_LeftCheekBone",
+      "weight": 0.75
+    },
+    {
+      "relative_path": "cheek/r-cheek-bones-incr.target.gz",
+      "sha256": "c608528b9e5e1c670179cfb502dab3d9478a77bb942f7c8186cd072a7369e9b9",
+      "shape_key": "Proof_RightCheekBone",
+      "weight": 0.75
+    }
+  ]
+}

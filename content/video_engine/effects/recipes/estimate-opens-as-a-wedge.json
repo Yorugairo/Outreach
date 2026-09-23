@@ -1,0 +1,51 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:estimate-opens-as-a-wedge",
+ "title": "The estimate opens as a wedge",
+ "aliases": [],
+ "acts": [
+  "COMPARES",
+  "SPANS"
+ ],
+ "members": [
+  {
+   "card": "page_builder:line",
+   "offset_s": 0.0,
+   "role": "the page lands on its axes and the ACTUAL line draws (the 2025 datum on its own word at +7.44); the two estimate edges are held at 2025 by a build_to at index 0"
+  },
+  {
+   "card": "page_species:build_to",
+   "offset_s": 9.51,
+   "role": "on the projection's word ('This year') both estimate edges draw out of the last actual datum over 1.2 s - the projection opens from the real line, never from nowhere"
+  },
+  {
+   "card": "page_species:spread",
+   "offset_s": 10.14,
+   "role": "the wedge between the high edge and the low edge bleeds full of ink - the range is an AREA between two lines, never a midpoint line (E53, E77)"
+  },
+  {
+   "card": "page_species:figure",
+   "offset_s": 10.84,
+   "role": "the hand writes the RANGE as the figure - '$130–150B' over '2026E' - at the high edge's end, never one number"
+  }
+ ],
+ "window_s": 12.4,
+ "does": "A line lands on its actuals; on the projection's word two estimate edges draw out of the last real datum, the wedge between them fills with ink, and the hand writes the range as the figure - an estimate is a range, never a midpoint.",
+ "use_when": {
+  "act": "COMPARES over time - a PROJECTION (SPECIES-BY-SENTENCE has no projecting act; BRAVOS-USE-WHEN 3b)",
+  "moment": "proof",
+  "shape": "a series of actuals + a RANGE for the next point (two estimate edges out of the last actual)",
+  "use": "a sentence that projects a figure its sources give as a range ('tracking toward', 'on track to', '2026E'): the actuals land first, the wedge opens on the projection's word, the range is written",
+  "dont": "a single-point forecast (continue the line dashed), a range with no actual to open from, or the midpoint written as the number (E53, E77)"
+ },
+ "doctrine": [
+  "E53",
+  "E77",
+  "E50",
+  "E99 s60",
+  "E99 s70"
+ ],
+ "status": "candidate",
+ "source": "P69 T35 (the operator 2026-09-22); proved as a beat by projects/_proofs/p69-recipes/proof_p69_recipes.py on Steel and Paper H row 16 ('Between 2020 and 2024 ... toward a hundred and fifty', take 256.48 s) on ev-debt-issuance-line-v1 - no approved cut carries it",
+ "count": 0
+}
