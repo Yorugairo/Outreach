@@ -515,8 +515,9 @@ def test_THE_MARK_TAKES_THE_ROOM_the_largest_mark_that_fits_and_a_larger_one_col
 
 def test_the_RING_HUGS_THE_MARK_and_no_floor_can_refuse_it():
     """The 1.6x floor and the mark-shrink step are DELETED: the ring's floor is just outside the painted edge and is
-    reserved when the mark is sized, so across rooms of every size the ring is never refused - only a room too small
-    for the MARK is."""
+    reserved when the mark is sized, so across rooms of every size the ring is never refused. P69 T26d / E99 s106: a
+    room too small for the MARK is no longer refused either - the mark is drawn at the floor and the finding is
+    REPORTED on the fit's `warns` with its numbers (the row loop prints it as a WARN)."""
     assert not hasattr(B, "STAMP_RING_FLOOR") and not hasattr(B, "stamp_ring_fit"), "the ring-first API is gone"
     src = (ROOT / "content/video_engine/scripts/build_scene_timeline_f.py").read_text(encoding="utf-8")
     assert "so the floor fits" not in src, "no mark-shrink step remains"
@@ -525,15 +526,20 @@ def test_the_RING_HUGS_THE_MARK_and_no_floor_can_refuse_it():
                                  {"x": 100, "y": 70, "w": w, "h": h}, None, "t")
         assert fit["ring_to"] >= fit["ring_floor"] > 1.0, (w, h, fit["why"])
         assert fit["ring_floor"] * 0.5 * math.hypot(*fit["painted"]) >= 0.5 * math.hypot(*fit["painted"]) + B.STAMP_RING_GAP_PX - 0.1   # floored to 4 places (L3)
-    with pytest.raises(ValueError, match="under the 120 px mark floor"):
-        B.stamp_dock_place({"asset_id": "plate-plain"}, "16:9", {"prop": True, "arrive": "stamp"}, _fed(),
-                           {"x": 800, "y": 400, "w": 40, "h": 40}, [{"x": 700, "y": 520, "w": 400, "h": 20}], "t")
+    small = B.stamp_dock_place({"asset_id": "plate-plain"}, "16:9", {"prop": True, "arrive": "stamp"}, _fed(),
+                               {"x": 800, "y": 400, "w": 40, "h": 40}, [{"x": 700, "y": 520, "w": 400, "h": 20}], "t")
+    floor = [w for w in small["warns"] if "under the mark floor" in w]
+    assert floor and "under the 120 px floor" in floor[0] and "paints" in floor[0], small["warns"]   # REPORTED, with the number
+    assert max(small["painted"]) >= B.STAMP_MARK_FLOOR_PX - 1, "drawn at the floor, never below it"
 
 
 def test_a_mark_whose_centre_is_ON_the_ink_is_refused():
-    with pytest.raises(ValueError, match="mark floor"):
-        B.stamp_dock_place({"asset_id": "plate-plain"}, "16:9", {"prop": True, "arrive": "stamp", "centre_x": 0.5, "centre_y": 0.5},
-                           _fed(), None, [{"x": 900, "y": 500, "w": 120, "h": 80}], "t")
+    """P69 T26d / E99 s106: no longer refused - REPORTED. The mark is drawn at the floor over the ink and the fit's
+    `warns` say so: under the floor, and over the reserved box it lands on, each with its number."""
+    fit = B.stamp_dock_place({"asset_id": "plate-plain"}, "16:9", {"prop": True, "arrive": "stamp", "centre_x": 0.5, "centre_y": 0.5},
+                             _fed(), None, [{"x": 900, "y": 500, "w": 120, "h": 80}], "t")
+    w = " | ".join(fit["warns"])
+    assert "mark floor" in w and "over a reserved box" in w and "px^2" in w, w
 
 
 def test_the_title_and_the_sub_ARE_obstacles_for_a_ring_though_a_card_may_park_over_them():
@@ -556,11 +562,12 @@ def test_the_row_loop_calls_ONE_door_for_every_stamp_before_the_slot_rule():
     i_slot = body.index("eplace = dplace if (slot == 0 or centred")
     assert 0 < i_fit < i_slot, "fitted before the slot rule, so slot 1 is fitted too"
     assert 'if dopt.get("arrive") != "stamp":' in inspect.getsource(B.row_stamp_fits), "every stamp, any slot"
-    assert "stamp_dock_place(world, aspect, dopt, paint, plate_room, reserve," in inspect.getsource(B.row_stamp_fits)
+    assert ("stamp_dock_place((worlds or {}).get(n, world), aspect, dopt, paint, plate_room, reserve,"   # P69 T26d (R26-279): the
+            in inspect.getsource(B.row_stamp_fits))                                                     # world ON SCREEN at its landing
     assert 'dplace, centred = {k: stamp_fit[k] for k in ("x", "y", "w", "h", "room")}, True' in body
     head = src[src.index("        stamp_fits, stamp_boxes = row_stamp_fits(") - 200:][:600]
     assert 'raise SystemExit(f"FAIL: {exc}") from exc' in head, "a refusal fails the row by number"
-    assert "rplace = None if stamp_fit else" in body, "a stamp never gets a reading box"
+    assert "rplace = None if (stamp_fit or prop_fit) else" in body, "a stamp (or an authored prop, P69 T26d) never gets a reading box"
     assert B.dock_entry("a", 0, 1, 5, 0, arrive="stamp", ring_to=1.6)["ring_to"] == 1.6
     assert "ring_to" not in B.dock_entry("a", 0, 1, 5, 0, arrive="throw", ring_to=1.6)
     eng = (ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs").read_text(encoding="utf-8")
@@ -595,9 +602,14 @@ def _golden_page(full_stage: bool) -> dict:
 def test_THE_REVIEWERS_CASE_a_page_that_hides_its_end_names_is_refused_by_name_never_fitted_blind():
     """H1 (a): the golden's own page as the reviewer ran it - not full-stage, so it reports no `tags` box while
     it writes four end names. The first two cuts fitted it silently ({1251, 369, 347, 205}, a 322 px ring through
-    all four names). Now the row fails, and says why."""
+    all four names). Then the row failed, and said why. P69 T26d / E99 s106: never SILENT still - the fit is made and
+    the blindness is REPORTED on its `warns` (the row loop prints it), by name and number; `ring_obstacles` itself,
+    the strict door, still raises for any other caller."""
+    fit = B.stamp_dock_place(_golden_page(False), "16:9", B.dock_opts({"prop": True, "arrive": "stamp", "mass": "ink"}),
+                             B.painted_box(G.PROP_CUTOUT), None, B.newsreel_boxes([], "16:9"), "t")
+    assert any("writes inline end names (tag_units 696) but reports no measured `tags` box" in w for w in fit["warns"]), fit["warns"]
     with pytest.raises(ValueError, match=r"writes inline end names \(tag_units 696\) but reports no measured `tags` box"):
-        _loop_dock(_golden_page(False), {"prop": True, "arrive": "stamp", "mass": "ink"})
+        B.ring_obstacles(_golden_page(False)["page"], "16:9")
 
 
 def test_a_stamp_on_SLOT_ONE_with_no_centre_is_fitted_exactly_as_slot_zero():
@@ -609,11 +621,13 @@ def test_a_stamp_on_SLOT_ONE_with_no_centre_is_fitted_exactly_as_slot_zero():
 
 def test_a_stamp_OFF_a_ledger_page_is_fitted_against_the_caption_band_and_the_safe_box_or_refused():
     """H1 (c): a plate stamp is held to the frame's own bands (the ledger page's `safe` and `caption_anchor`, the same
-    on every page of an aspect - pinned here against page_boxes) or refused when it names no room at all."""
+    on every page of an aspect - pinned here against page_boxes). P69 T26d / E99 s106: one that names no room at all is
+    no longer refused - it is fitted over the frame's whole safe box and the build is TOLD (the fit's `warns`)."""
     boxes = LPG.page_boxes(_golden_page(True)["page"], "16:9")
     assert B.FRAME_BANDS["16:9"] == {"safe": boxes["safe"], "caption": boxes["caption_anchor"]}
-    with pytest.raises(ValueError, match="needs the plate's `room` or the row's own centre_x / centre_y"):
-        _loop_dock({"asset_id": "plate-plain"}, {"prop": True, "arrive": "stamp"})
+    bare = B.stamp_dock_place({"asset_id": "plate-plain"}, "16:9", B.dock_opts({"prop": True, "arrive": "stamp"}),
+                              B.painted_box(G.PROP_CUTOUT), None, B.newsreel_boxes([], "16:9"), "t")
+    assert any("declares no room" in w for w in bare["warns"]), bare["warns"]
     low = _loop_dock({"asset_id": "plate-plain"}, {"prop": True, "arrive": "stamp"},
                      plate_room={"x": 700, "y": 600, "w": 520, "h": 300})
     cap = B.FRAME_BANDS["16:9"]["caption"]
@@ -632,11 +646,15 @@ def test_the_painted_aspect_is_the_pictures_not_a_cards():
 def test_M1_arrive_stamp_is_refused_where_no_painter_stamps():
     with pytest.raises(ValueError, match="arrive=stamp is a DOCK's arrival"):
         B.split_plate_opts("ledger:ev-divergence-v1:line;arrive=stamp;mass=ink")
-    for other, value in (("embed", "poster"), ("read", {"centre_w": 0.3}), ("read_s", 1.0), ("park_s", 0.5),
-                         ("centre_band", B.DOCK_BAND_ORDER[0])):
-        opts = {"arrive": "stamp", other: value, **({"centre": True} if other == "read" else {})}
-        with pytest.raises(ValueError, match=f"arrive=stamp and {other} cannot be combined"):
-            B.dock_opts(opts)
+    with pytest.raises(ValueError, match="arrive=stamp and embed cannot be combined"):
+        B.dock_opts({"arrive": "stamp", "embed": "poster"})
+    # P69 T26d / E99 s106: a card's reading pop, park and band on a stamp are no longer REFUSED - the stamp still lands
+    # at one box, and the door REPORTS what it did not apply (the fit's `warns`), naming `place` and `moves`
+    page = _golden_page(True)
+    for other, value in (("read", {"centre_w": 0.3}), ("read_s", 1.0), ("park_s", 0.5), ("centre_band", B.DOCK_BAND_ORDER[0])):
+        opts = B.dock_opts({"arrive": "stamp", other: value, **({"centre": True} if other == "read" else {})})
+        fit = B.stamp_dock_place(page, "16:9", opts, B.painted_box(None, None), None, [], "t")
+        assert any(other in w and "not applied" in w for w in fit["warns"]), (other, fit["warns"])
 
 
 @needs_browser
@@ -709,14 +727,15 @@ def _loop_row(world: dict, rows: list[tuple[str, int, dict]], plate_room: dict |
     """ONE ROW OF SEVERAL DOCKS, the way the row loop compiles it (build_scene_timeline_f.py main(), the dock pass),
     for the boxes only: every dock's options through `dock_opts`, the row's stamps fitted BEFORE anything else is placed
     (`row_stamp_fits`, in row order, each round the earlier ones), the page's E65 place clear of every stamp's fitted box
-    (`dock_place(..., clear_of=)`), a card's box by the loop's own slot rule, and the loop's refusal
-    (`stamp_clash_error`) raised as the ValueError the loop turns into its FAIL. {"fits", "boxes", "taken"}."""
+    (`dock_place(..., clear_of=)`), a card's box by the loop's own slot rule, and the loop's finding
+    (`stamp_clash_error`) - P69 T26d / E99 s106: REPORTED as the loop's WARN, no longer its FAIL.
+    {"fits", "boxes", "taken", "warns"}."""
     where = "shot row 1 (0-30s)"
     reserve = B.newsreel_boxes([], "16:9")
     opts = [(aid, slot, B.dock_opts(o)) for aid, slot, o in rows]
     fits, taken = B.row_stamp_fits(world, "16:9", [(aid, d, _paint_of(d)) for aid, _s, d in opts], plate_room, reserve, where)
     place = B.dock_place(world, "16:9", reserve, clear_of=taken)
-    boxes = {}
+    boxes, warns = {}, []
     for n, (aid, slot, d) in enumerate(opts):
         if n in fits:
             boxes[n] = {k: fits[n][k] for k in ("x", "y", "w", "h", "room")}
@@ -729,8 +748,8 @@ def _loop_row(world: dict, rows: list[tuple[str, int, dict]], plate_room: dict |
         boxes[n] = dplace if (slot == 0 or centred or (place is None and dplace)) else None
         err = B.stamp_clash_error(f"{where} dock {aid}", boxes[n], taken)
         if err:
-            raise ValueError(err)
-    return {"fits": fits, "boxes": boxes, "taken": taken}
+            warns.append(err)
+    return {"fits": fits, "boxes": boxes, "taken": taken, "warns": warns}
 
 
 def _hull(fit: dict) -> dict:
@@ -804,14 +823,18 @@ def test_two_stamps_fit_in_row_order_the_second_round_the_first():
 
 def test_an_other_dock_over_the_stamp_or_with_no_box_to_measure_is_refused_by_name_with_its_row():
     """(3): a card the row AUTHORED onto the stamp's room, and a card whose box is the template's paired slot (which
-    the compiler cannot measure against the stamp), are refused by name with the row - never shipped over the mark."""
+    the compiler cannot measure against the stamp), are named with the row - P69 T26d / E99 s106: REPORTED (the loop's
+    WARN), no longer refused; never shipped unsaid."""
+    import re as _re
     world = _golden_page(True)
     alone = _loop_row(world, [("ev-prop-fed", 0, STAMP)])["fits"][0]
     over = {"centre": True, "centre_x": alone["centre"][0] / 1920, "centre_y": alone["centre"][1] / 1080, "centre_w": 0.15}
-    with pytest.raises(ValueError, match=r"shot row 1 \(0-30s\) dock ev-card-doc: .*stamp"):
-        _loop_row(world, [("ev-prop-fed", 0, STAMP), (CARD_ID, 1, over)])
-    with pytest.raises(ValueError, match=r"shot row 1 \(0-30s\) dock ev-card-doc: .*stamp"):
-        _loop_row(world, [("ev-prop-fed", 0, STAMP), (CARD_ID, 1, {})])
+    for card in (over, {}):
+        got = _loop_row(world, [("ev-prop-fed", 0, STAMP), (CARD_ID, 1, card)])["warns"]
+        assert len(got) == 1 and _re.search(r"shot row 1 \(0-30s\) dock ev-card-doc: .*stamp", got[0]), got
+    src = (ROOT / "content/video_engine/scripts/build_scene_timeline_f.py").read_text(encoding="utf-8")
+    body = src[src.index("_clash = stamp_clash_error("):][:400]
+    assert 'print(f"  [WARN] P69 T26d: {_clash}")' in body, "the loop prints the finding as a WARN"
 
 
 def test_a_row_with_no_other_dock_beside_a_stamp_places_exactly_as_before():

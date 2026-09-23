@@ -137,6 +137,32 @@ async function mount(doc) {
      minJerk - Flash & Hogan 1985, the jerk-minimising quintic 10t^3 - 15t^4 + 6t^5: zero velocity AND zero
                acceleration at both ends, so a spatial transition neither snaps nor sags. */
   const minJerk = (u) => { u = Math.min(1, Math.max(0, u)); return u * u * u * (10 - 15 * u + 6 * u * u); };
+
+  /* part 2 (P69 T26d, the parent's find): a PATH THROUGH KEYS that does not stop at each one.
+     hermite - the cubic Hermite with EXPLICIT end velocities, ported from the rig foundation's `hermite`
+               (content/video_engine/projects/martial-matters/.../rig-foundation/rig_math.py:104, d154278 on main,
+               test_rig_foundation.py): p(u) = h00 p0 + h10 (v0 T) + h01 p1 + h11 (v1 T), u in [0,1] over T seconds,
+               v0 / v1 in units per second. Scalar - one channel; the caller runs one per axis. "The velocity at p1 is
+               intentionally allowed to be non-zero."
+     hermiteChain - a whole chain of keys: values ps[0..n] at times ts[0..n] (ascending), velocity 0 at the first and
+               the last knot (the thing starts from rest and settles), and at each MIDDLE knot the Catmull-Rom velocity
+               (p[i+1] - p[i-1]) / (t[i+1] - t[i-1]) - so it passes THROUGH a middle key at speed instead of stopping dead
+               (minJerk on every key stops at each waypoint). Clamped to the first / last value outside [t0, tn]. */
+  const hermite = (p0, p1, v0, v1, u, T) => {
+    u = Math.min(1, Math.max(0, u));
+    const u2 = u * u, u3 = u2 * u;
+    return (2 * u3 - 3 * u2 + 1) * p0 + (u3 - 2 * u2 + u) * v0 * T + (-2 * u3 + 3 * u2) * p1 + (u3 - u2) * v1 * T;
+  };
+  const hermiteChain = (ps, ts, t) => {
+    const n = ps.length - 1;
+    if (n < 1 || !(t > ts[0])) return ps[0];
+    if (t >= ts[n]) return ps[n];
+    const vel = (i) => (i <= 0 || i >= n) ? 0 : (ps[i + 1] - ps[i - 1]) / Math.max(1e-9, ts[i + 1] - ts[i - 1]);
+    let i = 0;
+    while (i < n - 1 && t >= ts[i + 1]) i++;
+    const T = Math.max(1e-9, ts[i + 1] - ts[i]);
+    return hermite(ps[i], ps[i + 1], vel(i), vel(i + 1), (t - ts[i]) / T, T);
+  };
   /* KINETICS:END */
   /* KINETICS:BEGIN spring */
   /* kinetics/spring.mjs - the settle (42 s42.2; FINDING-the-animation-math s3; 47 s1 row 4). SOURCE OF TRUTH, inlined into
@@ -5894,11 +5920,49 @@ async function mount(doc) {
     return (d._read = r);
   };
 
+  /* P69 T26d / E99 s106 - A PROP MOVES AFTER IT LANDS. The compiler writes the prop's `moves` as WHOLE boxes in stage px
+     ({at, dur, ease, x, y, w, rot}, each key starting where the one before has ended - `prop_moves`), and its authored
+     resting angle as `rot`. The pose at t is a PURE function of t: every key begun by t has run (the last one begun,
+     eased by its own curve), so a cold seek lands the frame forward play lands. `rot0` is the angle the prop rests at
+     before any key: the row's `rot`, else the stamp's own LAND_DEG, else square.
+     A CHAIN (the parent's find, 2026-09-23): keys that follow one another with no gap (a key starting the instant the one
+     before ends) are ONE path - `hermiteChain` (kinetics/ease.mjs, the rig foundation's Hermite), from rest, THROUGH
+     each middle key at its Catmull-Rom velocity, settling only at the chain's last key; a lone key (or one after a
+     gap) starts from rest on its own ease. */
+  const PROP_MOVE_EASE = Object.freeze({
+    minjerk: minJerk,                                                                                  /* E45's park: zero velocity and acceleration at both ends */
+    cubic: (k) => { k = Math.min(1, Math.max(0, k)); return k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; },
+    linear: (k) => Math.min(1, Math.max(0, k)),
+    out: (k) => expoOut(Math.min(1, Math.max(0, k))),
+  });
+  const PROP_CHAIN_GAP_S = 1e-6;   /* a key within this of the one before's end CHAINS to it (the compiler writes both to the ms) */
+  const propPose = (d, t, rot0) => {
+    const P = d.place, mv = d.moves || [], K = ["x", "y", "w", "rot"];
+    let cur = { x: P.x, y: P.y, w: P.w, rot: rot0 };
+    for (let i = 0; i < mv.length && t > mv[i].at;) {
+      let j = i;
+      while (j + 1 < mv.length && Math.abs(mv[j + 1].at - (mv[j].at + mv[j].dur)) < PROP_CHAIN_GAP_S) j++;
+      const end = mv[j].at + mv[j].dur;
+      if (t < end) {
+        if (j === i) {   /* a lone key: from rest, on its own ease */
+          const u = (PROP_MOVE_EASE[mv[i].ease] || minJerk)((t - mv[i].at) / Math.max(1e-6, mv[i].dur));
+          const o = {}; K.forEach((k) => { o[k] = cur[k] + (mv[i][k] - cur[k]) * u; }); return o;
+        }
+        const ts = [mv[i].at]; for (let q = i; q <= j; q++) ts.push(mv[q].at + mv[q].dur);   /* a chain: one Hermite path */
+        const o = {}; K.forEach((k) => { o[k] = hermiteChain([cur[k], ...mv.slice(i, j + 1).map((m) => m[k])], ts, t); }); return o;
+      }
+      cur = { x: mv[j].x, y: mv[j].y, w: mv[j].w, rot: mv[j].rot };
+      i = j + 1;
+    }
+    return cur;
+  };
+
   /* the placed card's layout box at t: reading size, then the minimum-jerk park. `parks` is
      recomputed from the LIVE span because the coalescer above can extend a dock's exit. */
   const dockGeom = (el, d, t) => {
     if (!d.place) return null;
     const R = dockReadRect(el, d), P = d.place;
+    if (d.centre && !d.read_place && d.moves) { const q = propPose(d, t, 0); return { x: q.x, y: q.y, w: q.w }; }   /* P69 T26d: a prop that MOVES after it lands */
     if (d.centre && !d.read_place) return { x: P.x, y: P.y, w: P.w };   /* a CENTRED card (the design pass): its box from the first frame, whatever its life - unless the row named a reading box it pops at first */
     const readS = d.read_s != null ? d.read_s : DOCK_READ_S;
     const parkS = d.park_s != null ? d.park_s : DOCK_PARK_S;
@@ -17938,7 +18002,8 @@ async function mount(doc) {
         /* R26-20 send-back: the ring's peak and the approach's scale are the ones the compiler FITTED to the room
            (`ring_to` / `from_to`, stamp_ring_fit) - capped there, never clipped here; an entry with neither keeps the
            source's 2x ring and 2.1x approach */
-        const sfit = Object.assign({}, opts, d.ring_to ? { RING_TO: +d.ring_to } : {}, d.from_to ? { FROM: +d.from_to } : {});   /* ... and the approach it comes down from */
+        const sfit = Object.assign({}, opts, d.ring_to ? { RING_TO: +d.ring_to } : {}, d.from_to ? { FROM: +d.from_to } : {},   /* ... and the approach it comes down from */
+          stamped && d.rot != null ? { LAND_DEG: +d.rot } : {});   /* P69 T26d: an AUTHORED rest - the spring lands there (its wind and overshoot turn about it) */
         const sx = stamped ? stampXf(d.mass || "ink", t - d.enter, sfit)
           : arr === "throw" ? throwXf(from, d.mass || "paper", t - d.enter, opts) : landXf(d.mass || "paper", t - d.enter, opts);
         /* the mark turns about its PAINTED centre (the compiler's `paint`, fractions of the canvas - R26-20, the operator's
@@ -18012,6 +18077,23 @@ async function mount(doc) {
         ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
         : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")")
         + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);
+      /* P69 T26d / E99 s106: a PROP's authored pose - the turn it rests at (a non-stamp arrival rests square, so the whole
+         `rot` is turned here; a stamp's spring already rests at it) and every later key's turn - about its PAINTED centre
+         (a stamp's own origin), prepended to the arrival's transform so the landing plays inside it. The camera's prefix and
+         the dock's plane compose outside it, and the hatch reads the whole resolved transform, so it rides the move. */
+      if (isProp && (d.rot != null || d.moves)) {
+        const stampedP = arr === "stamp", base = d.rot != null ? +d.rot : (stampedP ? STAMP_ARRIVAL.LAND_DEG : 0);
+        const turn = propPose(d, t, base).rot - (stampedP ? base : 0);
+        if (Math.abs(turn) > 1e-6) {
+          const org = (getComputedStyle(el).transformOrigin || "").split(" ").map(parseFloat);
+          const pbq = Array.isArray(d.paint) && d.paint.length === 4 ? d.paint : [0, 0, 1, 1];
+          const Wq = el.offsetWidth || 0, Hq = el.offsetHeight || 0;
+          const dx = Wq * (pbq[0] + pbq[2]) / 2 - (Number.isFinite(org[0]) ? org[0] : Wq / 2);
+          const dy = Hq * (pbq[1] + pbq[3]) / 2 - (Number.isFinite(org[1]) ? org[1] : Hq / 2);
+          el.style.transform = "translate(" + dx.toFixed(2) + "px, " + dy.toFixed(2) + "px) rotate(" + turn.toFixed(3) + "deg) translate("
+            + (-dx).toFixed(2) + "px, " + (-dy).toFixed(2) + "px) " + el.style.transform;
+        }
+      }
       if (camArr && camArr.slide === d.slide) {   /* P49 T5: the landed card rides the arrival - screen = at + s (p - look), composed BEFORE the card's own transform about the card's own centre (its origin) */
         /* the prefix composes about the card's OWN transform-origin (a thrown card's is its bottom edge, the squash's contact
            edge - the first cut scaled about the centre and the card climbed 250 px off the top at the match) */

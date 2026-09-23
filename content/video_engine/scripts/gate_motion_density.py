@@ -624,6 +624,108 @@ def _chart_landings(scenes: list[dict]) -> list[float]:
     return [round(float(s["span"][0]) + _page_land_offset(s), 2) for s in scenes if _is_page(s) and s.get("span")]
 
 
+# P69 T26c2 (E99 s105 AMENDED, 2026-09-23): a rescale, extend or morph is an M03 arrival when it MOVES THE STORY - "true
+# motion doesnt just move the visual it moves the story/narrative/thought process along". Two tests, both read off the
+# compiled timeline: (a) ON ITS WORD - the compiler writes a words-anchored `at` as a bare float (`_word_at`,
+# build_scene_timeline_f.py:7565-7575, and the episode's `T.at`, both `authoring.words.at`: the word's start rounded to
+# 2 dp), and the caption pages carry every spoken word's start rounded the same way (build_caption_pages.py:67), so a
+# transform is on a word when its `at` is a caption word's `s`; (b) A NEW THING ON SCREEN - an extend's new data (the
+# compiler stamps `from_index` below `to_index`, or `from_series`, :3463-3473), a rescale's or extend's `build_to`
+# drawing the line past where it stood (the parent's ruling on H's followed rescale), or a species that NAMES a thing (a
+# figure, a callout, a ring, a note - the page's label - or a retitle naming the new view) or a dock's badge landing on
+# the same word or inside the transform's own `dur`.
+STORY_VERBS = ("rescale", "extend", "morph")
+NAMING_KINDS = ("figure", "callout", "ring", "note", "retitle")
+WORD_ANCHOR_TOL_S = 0.05   # the `at` and the caption word agree to the shared 2 dp rounding (HELD_BUILT_TOL_S's reading)
+
+
+def _word_onsets(tl: dict) -> list[float]:
+    """Every spoken word's start on the compiled timeline's own clock - the caption pages' tokens (`s`)."""
+    return sorted(float(tok["s"]) for pg in tl.get("caption_pages", []) for tok in pg.get("t", [])
+                  if isinstance(tok, dict) and tok.get("s") is not None)
+
+
+def _on_a_word(at: float, onsets: list[float]) -> bool:
+    return any(abs(at - w) <= WORD_ANCHOR_TOL_S for w in onsets)
+
+
+def _landing_window(x: dict) -> tuple[float, float]:
+    """The transform's own word (within the rounding) through the end of its `dur`."""
+    at = float(x.get("at", 0.0))
+    return at - WORD_ANCHOR_TOL_S, at + float(x.get("dur", 0.0)) + WORD_ANCHOR_TOL_S
+
+
+def _advances_the_line(scene: dict, x: dict) -> bool:
+    """A `build_to` in the transform's landing window draws a series past the datum it STOOD at - the index an earlier
+    `build_to` of that series drew to (P69 T26c2, the parent's ruling on H's followed rescale: the line drawn past its
+    old data on the rescale's word IS new data revealed). A series with no earlier `build_to` has no standing index,
+    so a first build is not read as an advance."""
+    lo, hi = _landing_window(x)
+    builds = sorted((float(y["at"]), int(y.get("series") or 0), int((y.get("target") or {}).get("index") or 0))
+                    for y in scene.get("species", [])
+                    if y.get("kind") == "build_to" and isinstance(y.get("at"), (int, float))
+                    and (y.get("target") or {}).get("kind") == "datum")
+    stood: dict[int, int] = {}
+    for at, ser, idx in builds:
+        if lo <= at <= hi and ser in stood and idx > stood[ser]:
+            return True
+        stood[ser] = max(stood.get(ser, idx), idx)
+    return False
+
+
+def _brings_new_data(scene: dict, x: dict) -> bool:
+    """Data past the old domain: an extend's later series drawn on or its window grown past its standing end, or - a
+    rescale's or an extend's - a `build_to` in its landing window advancing the drawn line (`_advances_the_line`)."""
+    if x.get("to") not in ("rescale", "extend"):
+        return False
+    if x.get("to") == "extend" and x.get("from_series") is not None:
+        return True
+    to_i, from_i = x.get("to_index"), x.get("from_index")
+    if x.get("to") == "extend" and to_i is not None and from_i is not None and int(to_i) > int(from_i):
+        return True
+    return _advances_the_line(scene, x)
+
+
+def _names_a_thing(scene: dict, x: dict) -> bool:
+    """A naming species, or a dock's badge, landing on the transform's word or inside its `dur`."""
+    lo, hi = _landing_window(x)
+    named = [float(y["at"]) for y in scene.get("species", [])
+             if y.get("kind") in NAMING_KINDS and isinstance(y.get("at"), (int, float))]
+    badges = [float(b) for d in scene.get("docks", []) for b in (d.get("badge_at") or [])]
+    return any(lo <= t <= hi for t in named + badges)
+
+
+def _moves_the_story(scene: dict, x: dict, onsets: list[float]) -> bool:
+    """(a) on its spoken word AND (b) a new thing on screen - else a silent re-fit, motion of the visual only."""
+    return (_on_a_word(float(x.get("at", -1e9)), onsets)
+            and (_brings_new_data(scene, x) or _names_a_thing(scene, x)))
+
+
+def _recast_landings(scenes: list[dict], onsets: list[float] | None = None) -> list[float]:
+    """Every instant a `chart_to recast` has LANDED on its page - an arrival for M03 (P69 T26c; E99 s105, the operator
+    2026-09-23: "yes, recast counts"). The recast changes the chart on screen, so the wait for evidence restarts at
+    its landing, as it does at a page's start or a dock's entry.
+
+    Read as the gate already reads a chart_to's landing and its data mark (`_landings`' chart_to branch, :3025, and
+    `_deployed_lives`' `a <= at <= z` guard, :3003): the instant is `_transition_land`, the event's own `at` + `dur` (plus a
+    breakthrough state's run, E60). A retitle, a relight or an idle is not a chart_to and adds nothing, so a timeline
+    with no recast reads exactly as before.
+
+    P69 T26c2 (E99 s105 AMENDED): a rescale, extend or morph lands here too when it moves the story
+    (`_moves_the_story`, read against the spoken words `onsets`); with no words, or none of those verbs, the list is
+    T26c's."""
+    words = onsets or []
+    out: list[float] = []
+    for s in scenes:
+        if not s.get("span"):
+            continue
+        a, z = float(s["span"][0]), float(s["span"][1])
+        out += [round(_transition_land(s, x), 2) for x in s.get("species", [])
+                if x.get("kind") == "chart_to" and a <= float(x.get("at", -1e9)) <= z
+                and (x.get("to") == "recast" or (x.get("to") in STORY_VERBS and _moves_the_story(s, x, words)))]
+    return out
+
+
 def _held_built(at: float, dur: float, landings: list[float]) -> float | None:
     """The landing a gap STARTS at, when the gap is no longer than `HELD_BUILT_S` - else None (E99 s69).
 
@@ -1330,7 +1432,9 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     pulse_ev, pulse_still = _sentinelled(set(events) | set(life), runtime)
     # evidence entry gaps, whole runtime: a dock entering or a page starting (D2)
     entries = sorted([a for a, _ in spans] + page_starts)
-    pts = [0.0] + entries + [runtime]
+    # P69 T26c (E99 s105): M03's arrivals also carry each recast's landing; the per-minute entry density keeps `entries`
+    # P69 T26c2 (E99 s105 AMENDED): ... and each rescale / extend / morph that lands on its word with a new thing
+    pts = [0.0] + sorted(entries + _recast_landings(scenes, _word_onsets(tl))) + [runtime]
     ev_gaps = sorted(((a, b - a) for a, b in zip(pts, pts[1:])), key=lambda x: -x[1])
     # plates: a page is its own plate and holds like one (C5)
     plate_ids = [_plate_id(s) for s in scenes]
