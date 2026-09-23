@@ -85,6 +85,8 @@ The operator separately authorized a preliminary, review-only upload of the Shar
 
 The reusable MMA octagon/cage (canvas, fence, posts and pads), broadcast booth, and booth characters are later environment/character assets. They must use the shared prop/environment and character interfaces when scheduled, but they do not block the first fighter exchange. The early one-punch treatment may composite its authored character/cut-in onto the existing fight footage canvas, with footage provenance and publishing rights checked separately before release.
 
+Keep a separate **chibi-comedy fight variant** in the style backlog. The first Meshy portrait test exposed a funny squat/full-body exaggeration that the operator sees as a viable humor treatment, even though it is not the primary realistic-motion fighter. Rebuild the direction with reusable native presets if chosen; Meshy's free preview/export limits do not make that provider model a production dependency. This extends, rather than replaces, the five existing variants.
+
 ## Not Building
 
 - A competing 3D foundation model, training pipeline, general-purpose physics solver, Blender replacement, or new scene-evidence player.
