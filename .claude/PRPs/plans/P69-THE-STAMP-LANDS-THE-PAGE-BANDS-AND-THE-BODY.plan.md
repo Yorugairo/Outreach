@@ -334,6 +334,9 @@ holder and P69's engine slices wait.
 - **The H door:** named constants with their cites (R26-197), `_assert_read_only`, cues bound before the
   report is stamped (R26-198).
 
+
+**Numbers assigned at the lane-A merge (2026-09-22):** rulings E99 s92 (a prop is bare of paper, not of weight - T6b), s93 (a PLAUSIBLE page draws), s94 (read the monitor on the script's own basis), s95 (five years on the operator's word); backlog R26-249 (every page's build vs its span), R26-250 (a rule label over the bars), R26-251 (the measurer's font-rebuild race), R26-252 (the lab's stamp clock), R26-253 (the empty room covers the basis label), R26-254 (the ingester), R26-255 (a bars figure re-placed by the line rule under chart states), R26-256 (an emphasized bar's pill). Where this plan still reads `s??` / `R26-??`, this table is the key.
+
 ## Task Slices
 
 The TDD fields: `tdd-v1` has no definition on disk, so this plan defines its own. **Regression** is the

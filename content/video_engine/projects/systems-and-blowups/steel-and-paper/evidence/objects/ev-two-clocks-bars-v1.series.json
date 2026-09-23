@@ -19,7 +19,7 @@
   ],
   "status": "REAL",
   "research_tier": "PLAUSIBLE",
-  "src_full": "Railways: after the 1845-47 Mania, dividends took the subsequent two decades to barely return to pre-Mania levels (Campbell 2012, EEH 49(2), p. 238, doi:10.1016/j.eeh.2011.10.001); the 1846 projection of GBP 560M capital earning ~5% arrived in 1872, 26 years later (Odlyzko 2010, p. 181). Compute: about five years, accepted on the operator's word 2026-09-22.",
+  "src_full": "Railways: after the 1845-47 Mania, dividends took the subsequent two decades to barely return to pre-Mania levels (Campbell 2012, EEH 49(2), p. 238, doi:10.1016/j.eeh.2011.10.001); the 1846 projection of GBP 560M capital earning ~5% arrived in 1872, 26 years later (Odlyzko 2010, p. 181). Compute: about five years, accepted on the operator's word, E99 s95.",
   "proof": [
     {
       "kind": "research",
@@ -40,8 +40,8 @@
     },
     {
       "kind": "operator",
-      "path": "chat 2026-09-22",
-      "locator": "the operator",
+      "path": "docs/portable/OPERATOR-RULINGS.md",
+      "locator": "line 3321 (E99 s95)",
       "quote": "We don't need an exact source, 5 years is the fab build out",
       "values": {
         "compute_years": 5
