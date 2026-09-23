@@ -1,5 +1,64 @@
 # Backlog — content video engine
 
+Status: current active queue and 2026-09 first-pass cleanup. Last reviewed 2026-09-23.
+
+This is the canonical active board for the video engine. There is no
+`Consultant input/SPRINT_BACKLOG.md` in this repository. The detailed material
+below is retained as a historical decision and evidence ledger; it is not an
+active queue unless its stable ID appears in the tables here. A commit alone
+does not close a visual or operator gate.
+
+**Active work** is grouped by execution context. Every row has a stable ID,
+state, owner or trigger, next action, and evidence pointer. `R26` detail stays
+below so its original rationale and citations remain intact.
+
+## Active queue — canonical
+
+| ID | Work / lane | Status | Owner / trigger | Next action / acceptance | Evidence |
+|---|---|---|---|---|---|
+| P69; R26-253, R26-254, R26-255, R26-256, R26-257, R26-258, R26-259, R26-260, R26-261, R26-263, R26-264, R26-265, R26-266, R26-267, R26-268, R26-269, R26-270, R26-271, R26-272, R26-273, R26-274, R26-275 | Current P69 page and body integration queue | 🔄 In progress | Parent / P69 owner | Update each open child row when its slice is reviewed; preserve operator gates until the corresponding frames are read. | [P69 plan](../../.claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md); detailed row evidence below |
+| R26-31 | Bravos exploration review and next selection | ⏸️ Deferred | Parent; trigger: next Bravos reference review | Select the next experiment only when that review is scheduled; retain its analysis in the review artifact. | [Exploration review](EXPLORATION-REVIEW-2026-09-10.md); historical row below |
+| R26-35 | Tokyo bed swell timing | ⏸️ Triggered | Audio lane; trigger: next sound-bed review | Recheck the swell against the actual camera arrival and record a listened comparison. | Historical row below; P51 T0 context |
+| R26-36 | Page-transition sound map | ⏸️ Triggered | Audio lane; trigger: next sound-bed review | Recheck the `:cut`/option parsing on a listened build and record the exact cue result. | Historical row below; P51 T0 context |
+| R26-43 | Long series tag placement | ⏸️ Triggered | Parent; trigger: first cut with a tag wider than its chart | Decide an authored refusal or shorter label behavior from that cut; retain the measurement. | Historical row below |
+| R26-44 | Wire timing through a page build | ⏸️ Triggered | Parent; trigger: first cut that threads a line | Decide whether the wire belongs to the page or between pages, then review the seam. | Historical row below; HF-16 |
+| R26-45 | Measured page boxes for approved shorts | ⏸️ Triggered | Parent; trigger: next new short | Measure the episode fixture and compare the rendered boxes before changing a frozen approved cut. | Historical row below; `page-boxes.v1.json` |
+| R26-52 | Japan build-beat timing | ❓ Revalidate | Parent | Confirm whether the row’s roll-out-clock change has a completed proof; do not treat its old plan note as closure. | Historical row below; P51 context |
+| R26-57 | Stage-space text rendering | ❓ Revalidate | Parent | Compare the unresolved row with R26-48 and current text-rendering evidence; merge only if the defect and acceptance are identical. | Historical row below; R26-48 is a possible, unconfirmed overlap |
+| R26-65 | Hook-page built entry default | 🟡 Partially built | Parent; trigger: default decision / next hook build | Resolve the remaining default/register question, then prove the selected default on a rendered hook page. | P53 T1 evidence cited in the historical row |
+| R26-66 | Transition hand-off during narration | 🟡 Human review follow-up | Parent; operator frame review required | Restore the whole sequence so the hand-off transforms rather than reads as a jump; then show the frames for operator acceptance. | [E99 s19](../portable/OPERATOR-RULINGS.md); P57 plan and historical row below |
+| R26-85 | Strobe cadence and motion sharpness | 🟡 Measurement / visual review pending | Parent; trigger: representative real motion in the 100–300 px/s range | Keep 154 px/s as the cited cinema-parity reference; measure the remaining sharpness/space question on real motion before promoting a 250/300 threshold. | E99 s30; strobe research and R26-64 historical row |
+| R26-123 | Caption-life default | 🟡 Decision recorded; implementation pending | Parent | Make the operator-selected `blend` the compiler default only after a focused rendered check; keep opt-in behavior and approved cuts stable. | E99 s6; `_caption_life()` still returns `None` when no setting is authored |
+| R26-124 | Race path default | ❓ Ruling needs reconciliation | Parent | Verify whether E99 s8 selected `eased` or `clothoid`; record the default explicitly, or leave both selectable if no default was chosen. | E99 s8; R26-78 two-path evidence and historical row below |
+| LEGACY-REVALIDATION-2026-09 | Older backlog rows outside this first-pass archive | 🟡 Parent review queue | Parent; next pass | Reconcile the remaining historical rows against direct plan, commit, artifact, and operator evidence before archiving or deleting any. The cleanup report names the close-marked census. | [First-pass cleanup report](BACKLOG-DISCIPLINE.md#first-pass-cleanup-report) |
+| DOCS-BL-01 | Effects-card length blocks full docs-layer refresh | 🟡 Revalidate | Effects-catalog owner; trigger: next docs refresh | Check `dock_kind.json` card 4 `does` against the catalog schema; make a meaning-preserving concise edit and rerun the full docs-layer builder. Keep this separate from backlog cleanup. | `python content/video_engine/scripts/build_docs_layers.py --write` failed on 2026-09-23 at `cards/4/does`; [source card](../../content/video_engine/effects/cards/dock_kind.json) |
+
+## Modeling research — triggered backlog
+
+| ID | Work | Status | Owner / trigger | Next action / acceptance | Evidence |
+|---|---|---|---|---|---|
+| ME-BL-01 | Character delivery optimization: QEM/LOD, texture and mesh compression, baked deform-only Rigify export while preserving editable Blender source | ⏸️ Triggered | Modeling lane; trigger: approved detailed character exceeds a measured delivery budget | Compare silhouette, seams, joint deformation, animation parity, bytes and time on the same poses. | [3D rigging / WebGL blueprint](../research/motion/RIGGING_3D_MODELING_WEBGL_IMPACT_OPTIMIZATION_RESEARCH_BLUEPRINT.md) |
+| ME-BL-02 | Optional Three.js live skinned-character runtime and batching | ⏸️ Triggered | Modeling lane; trigger: a concrete shot cannot be served by offline Blender renders and raster passes | Measure a representative interactive need and target hardware before a runtime is promoted. | [3D rigging / WebGL blueprint](../research/motion/RIGGING_3D_MODELING_WEBGL_IMPACT_OPTIMIZATION_RESEARCH_BLUEPRINT.md) |
+| ME-BL-03 | Continuous strike contact methods, including XPBD/GJK-style candidates | ⏸️ Triggered | Modeling lane; trigger: authored motion and IK miss a measured contact/penetration budget | Compare residuals, stability, impact readability and render time; do not infer injury physics. | [3D rigging / WebGL blueprint](../research/motion/RIGGING_3D_MODELING_WEBGL_IMPACT_OPTIMIZATION_RESEARCH_BLUEPRINT.md) |
+
+## Explore — bounded comparisons
+
+| ID | Experiment | Status | Owner / trigger | Next action / acceptance | Evidence |
+|---|---|---|---|---|---|
+| ME-EXP-01 | Compare image-to-3D candidates, including Tripo/Meshy, against procedural Blender detail on the same fighter reference | 🧪 Explore | Modeling lane; trigger: reference and candidate assets are available | Matched camera/light/pose; compare topology, editability, rig stress, identity, provenance/license, cleanup and time. Promote only after human review. | [AI 3D automation blueprint](../research/tech/AI_LLM_3D_MODELING_AUTOMATION_RESEARCH_BLUEPRINT.md) |
+| ME-EXP-02 | Compare local depth, segmentation and inpainting as optional 2.5D plate preparation | 🧪 Explore | Modeling lane; trigger: a plate has a concrete parallax/disocclusion need | A/B against authored layers for edges, cleanup time and seek-safe compositing; keep chart/UI depth authored. | [AI 3D automation blueprint](../research/tech/AI_LLM_3D_MODELING_AUTOMATION_RESEARCH_BLUEPRINT.md); P45 T9 |
+
+Completed rows with source-bound proof are indexed in
+[`backlog/archive/2026-09-completed.md`](backlog/archive/2026-09-completed.md).
+Rules and the first-pass census are in [`BACKLOG-DISCIPLINE.md`](BACKLOG-DISCIPLINE.md).
+
+## Historical record — retained, not the active queue
+
+The material below preserves the original narrative, row rationale, evidence,
+and cross-references. Its older status words remain historical until an ID is
+reconciled in the active queue or archive. Do not infer a current status from
+an old `CLOSED`, `DONE`, `BUILT`, or `OPEN` label alone.
+
 Hand-maintained. `docs/WORKTREE-REGISTER.md` is the board of every checkout (P62); this is the
 work itself. Rewritten 2026-09-04 after the full research-bundle read.
 
@@ -36,7 +95,7 @@ curvature stroke (P38 T2) plus the hands (A5) plus ink (44), composed. See
 ## The scope shift, named
 
 The engine was scoped to **assemble plates and dock evidence over narration**. It is
-becoming **a narration-timed 2D animation system**. What did it:
+becoming **a narration-timed animation system**. What did it:
 
 1. **The chart engine was never chart-specific.** `drawOn` draws any path;
    `resolveTarget` resolves against data.
