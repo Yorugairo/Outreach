@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/model_inspection.v1.json",
+  "title": "Model inspection receipt v1",
+  "description": "Stores separate contract, render, art and operator verdicts with both stored and evaluated geometry counts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "inspection_id", "asset_id", "revision_id", "descriptor_path", "descriptor_sha256", "verdicts", "geometry", "render_artifacts"],
+  "properties": {
+    "schema_version": {"const": "model_inspection.v1"},
+    "inspection_id": {"$ref": "#/definitions/safe_id"},
+    "asset_id": {"$ref": "#/definitions/safe_id"},
+    "revision_id": {"$ref": "#/definitions/safe_id"},
+    "descriptor_path": {"$ref": "#/definitions/relative_path"},
+    "descriptor_sha256": {"$ref": "#/definitions/sha256"},
+    "verdicts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract", "render", "art", "operator"],
+      "properties": {
+        "contract": {"enum": ["pass", "fail"]},
+        "render": {"enum": ["not_run", "pass", "fail"]},
+        "art": {"enum": ["not_reviewed", "pass", "fail"]},
+        "operator": {"enum": ["not_reviewed", "approved", "rejected"]}
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stored", "evaluated"],
+      "properties": {
+        "stored": {"$ref": "#/definitions/geometry_counts"},
+        "evaluated": {"$ref": "#/definitions/geometry_counts"}
+      }
+    },
+    "render_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "kind"],
+        "properties": {
+          "path": {"$ref": "#/definitions/relative_path"},
+          "sha256": {"$ref": "#/definitions/sha256"},
+          "kind": {"enum": ["beauty", "depth", "normal", "mask", "preview", "other"]}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "safe_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relative_path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$)).+$"},
+    "geometry_counts": {
+      "type": "object",
+      "description": "Stored control/source topology and evaluated/deformed topology are recorded independently. Faces and triangles are explicit counts.",
+      "additionalProperties": false,
+      "required": ["vertices", "faces", "triangles"],
+      "properties": {
+        "vertices": {"type": "integer", "minimum": 0},
+        "faces": {"type": "integer", "minimum": 0},
+        "triangles": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

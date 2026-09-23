@@ -1,0 +1,60 @@
+{
+  "schema_version": "model_scene.v1",
+  "scene_id": "fixture-knockout-scene",
+  "duration_frames": 10,
+  "fps": {"numerator": 24, "denominator": 1},
+  "time_origin": {"scene_frame": 0, "scene_time_seconds": {"numerator": 0, "denominator": 1}},
+  "bindings": [
+    {"binding_id": "fighter_a", "asset_id": "fighter-a", "revision_id": "fighter-a-r1", "descriptor_path": "models/fighter-a.json", "descriptor_sha256": ""},
+    {"binding_id": "fighter_b", "asset_id": "fighter-b", "revision_id": "fighter-b-r1", "descriptor_path": "models/fighter-b.json", "descriptor_sha256": ""},
+    {"binding_id": "prop", "asset_id": "impact-prop", "revision_id": "impact-prop-r1", "descriptor_path": "models/impact-prop.json", "descriptor_sha256": ""},
+    {"binding_id": "environment", "asset_id": "fight-environment", "revision_id": "fight-environment-r1", "descriptor_path": "models/fight-environment.json", "descriptor_sha256": ""}
+  ],
+  "participants": [
+    {"participant_id": "fighter-a", "binding_id": "fighter_a", "semantic_joint_requirements": ["head", "right_hand", "left_foot"], "face_control_requirements": ["jaw_open"]},
+    {"participant_id": "fighter-b", "binding_id": "fighter_b", "semantic_joint_requirements": ["head"], "face_control_requirements": []}
+  ],
+  "source_time_mappings": [
+    {"source_id": "reference-fight", "path": "assets/source-video.fixture", "sha256": "", "scene_frame_start": 0, "scene_frame_end": 10, "source_time_start_seconds": {"numerator": 5, "denominator": 1}, "source_seconds_per_scene_frame": {"numerator": 1, "denominator": 24}}
+  ],
+  "contacts": [
+    {"contact_id": "hand-to-head", "actor_binding_id": "fighter_a", "semantic_effector": "right_hand", "target_binding_id": "fighter_b", "target_semantic_joint": "head", "start_frame": 4, "end_frame": 5},
+    {"contact_id": "foot-to-mat", "actor_binding_id": "fighter_a", "semantic_effector": "left_foot", "target_binding_id": "environment", "target_surface_id": "mat-floor", "start_frame": 0, "end_frame": 10}
+  ],
+  "events": [
+    {"event_id": "impact", "event_type": "strike_contact", "frame": 4, "binding_id": "fighter_a"},
+    {"event_id": "floor-impact", "event_type": "ground_impact", "frame": 8, "binding_id": "fighter_b"}
+  ],
+  "attachments": [
+    {"attachment_id": "held-prop", "parent_binding_id": "fighter_a", "parent_socket": "right_hand_socket", "child_binding_id": "prop", "child_socket": "handle_socket"}
+  ],
+  "camera": {
+    "projection": "perspective",
+    "position_m": [0, -6, 1.7],
+    "target_m": [0, 0, 1.0],
+    "clip_planes_m": [0.1, 100.0],
+    "focal_length_mm": 42.0
+  },
+  "lights": [
+    {"light_id": "key", "light_type": "area", "energy_w": 850.0, "color_rgb": [1.0, 0.88, 0.74], "position_m": [-3, -4, 5], "size_m": 4.0}
+  ],
+  "environment_collision_surfaces": [
+    {"binding_id": "environment", "surface_id": "mat-floor", "collision_mode": "solid", "friction": 0.75, "restitution": 0.05}
+  ],
+  "motion_channels": [
+    {
+      "channel_id": "right-hand-strike",
+      "binding_id": "fighter_a",
+      "target_kind": "semantic_joint",
+      "semantic_target": "right_hand",
+      "value_unit": "vector3_m",
+      "interpolation": "cubic",
+      "keyframes": [
+        {"frame": 0, "value": [0.4, -0.2, 1.2]},
+        {"frame": 4, "value": [0.0, 0.3, 1.2]}
+      ]
+    }
+  ],
+  "render_profile": {"engine_id": "blender_eevee", "resolution_px": [1080, 1920], "samples": 64, "passes": ["beauty", "depth"], "color_space": "AgX"},
+  "art_treatment": {"style_id": "stylized-fight-v1", "shading_model": "anime", "outline_width_px": 2.0, "outline_color_rgba": [0.03, 0.02, 0.02, 1.0], "palette_id": "fight-warm"}
+}

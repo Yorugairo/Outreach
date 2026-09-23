@@ -1,0 +1,278 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/model_asset.v1.json",
+  "title": "Supplemental model asset v1",
+  "description": "Immutable model revision metadata. Existing asset catalog and approval records remain authoritative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "asset_id",
+    "revision",
+    "asset_kind",
+    "resources",
+    "catalog_reference",
+    "approval_reference",
+    "coordinate_system",
+    "capabilities",
+    "source_lineage",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "model_asset.v1"},
+    "asset_id": {"$ref": "#/definitions/safe_id"},
+    "revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["revision_id", "revision_number"],
+      "properties": {
+        "revision_id": {"$ref": "#/definitions/safe_id"},
+        "revision_number": {"type": "integer", "minimum": 1},
+        "parent_revision_id": {"$ref": "#/definitions/safe_id"}
+      }
+    },
+    "asset_kind": {"enum": ["character", "prop", "environment"]},
+    "resources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/definitions/resource"}
+    },
+    "catalog_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_id", "path", "sha256", "resource_id"],
+      "properties": {
+        "asset_id": {"$ref": "#/definitions/safe_id"},
+        "path": {"$ref": "#/definitions/relative_path"},
+        "sha256": {"$ref": "#/definitions/sha256"},
+        "resource_id": {"$ref": "#/definitions/safe_id"}
+      }
+    },
+    "approval_reference": {
+      "description": "Pointer to an existing review or approval record. A review-only intake record is not approval; this descriptor makes no approval decision.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_id", "path", "sha256", "resource_id"],
+      "properties": {
+        "record_id": {"$ref": "#/definitions/safe_id"},
+        "path": {"$ref": "#/definitions/relative_path"},
+        "sha256": {"$ref": "#/definitions/sha256"},
+        "resource_id": {"$ref": "#/definitions/safe_id"}
+      }
+    },
+    "coordinate_system": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["space", "unit", "up_axis", "forward_axis", "handedness", "origin", "rest_pose"],
+          "properties": {
+            "space": {"const": "world_3d"},
+            "unit": {"const": "m"},
+            "up_axis": {"enum": ["X", "Y", "Z"]},
+            "forward_axis": {"enum": ["X", "Y", "Z"]},
+            "handedness": {"enum": ["left", "right"]},
+            "origin": {"type": "string", "minLength": 1},
+            "rest_pose": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["space", "unit", "horizontal_axis", "vertical_axis", "vertical_direction", "origin"],
+          "properties": {
+            "space": {"const": "screen_2d"},
+            "unit": {"const": "px"},
+            "horizontal_axis": {"const": "x"},
+            "vertical_axis": {"const": "y"},
+            "vertical_direction": {"enum": ["up", "down"]},
+            "origin": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["space", "unit", "meaning"],
+          "properties": {
+            "space": {"const": "layer_depth"},
+            "unit": {"const": "dimensionless"},
+            "meaning": {"enum": ["front_to_back_factor", "camera_distance_factor"]}
+          }
+        }
+      ]
+    },
+    "proportion_parameters": {
+      "description": "Optional normalized controls relative to the selected reusable body preset. Each scale remains in a bounded range.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "head_scale": {"type": "number", "minimum": 0.25, "maximum": 4.0},
+        "shoulder_width_scale": {"type": "number", "minimum": 0.25, "maximum": 3.0},
+        "torso_length_scale": {"type": "number", "minimum": 0.25, "maximum": 3.0},
+        "arm_length_scale": {"type": "number", "minimum": 0.25, "maximum": 3.0},
+        "leg_length_scale": {"type": "number", "minimum": 0.25, "maximum": 3.0},
+        "hand_scale": {"type": "number", "minimum": 0.25, "maximum": 4.0},
+        "foot_scale": {"type": "number", "minimum": 0.25, "maximum": 4.0}
+      }
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["material_id", "shading_model", "base_color_rgba", "roughness", "metallic", "uv_set_id", "texture_resource_ids"],
+        "properties": {
+          "material_id": {"$ref": "#/definitions/safe_id"},
+          "shading_model": {"enum": ["pbr", "stylized_pbr", "toon", "unlit", "line_art"]},
+          "base_color_rgba": {"$ref": "#/definitions/color_rgba"},
+          "roughness": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "metallic": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "uv_set_id": {"$ref": "#/definitions/safe_id"},
+          "texture_resource_ids": {"$ref": "#/definitions/string_set"}
+        }
+      }
+    },
+    "uv_sets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["uv_set_id", "map_role", "resolution_px", "texture_resource_ids"],
+        "properties": {
+          "uv_set_id": {"$ref": "#/definitions/safe_id"},
+          "map_role": {"enum": ["base_color", "normal", "roughness", "metallic", "emission", "other"]},
+          "resolution_px": {"type": "integer", "minimum": 1, "maximum": 32768},
+          "texture_resource_ids": {"$ref": "#/definitions/string_set"}
+        }
+      }
+    },
+    "view_envelope": {
+      "description": "Optional authored yaw and pitch range for valid 2.5D views.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["yaw_degrees", "pitch_degrees"],
+      "properties": {
+        "yaw_degrees": {"$ref": "#/definitions/degrees_range_180"},
+        "pitch_degrees": {"$ref": "#/definitions/degrees_range_90"}
+      }
+    },
+    "capabilities": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["semantic_joints", "face_controls", "sockets"],
+          "properties": {
+            "semantic_joints": {"$ref": "#/definitions/nonempty_string_set"},
+            "face_controls": {"$ref": "#/definitions/string_set"},
+            "sockets": {"$ref": "#/definitions/string_set"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["articulations", "sockets"],
+          "properties": {
+            "articulations": {"$ref": "#/definitions/string_set"},
+            "sockets": {"$ref": "#/definitions/string_set"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["surfaces", "sockets"],
+          "properties": {
+            "surfaces": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["surface_id", "surface_type"],
+                "properties": {
+                  "surface_id": {"$ref": "#/definitions/safe_id"},
+                  "surface_type": {"enum": ["floor", "wall", "platform", "collision", "other"]},
+                  "collision_role": {"enum": ["solid", "trigger", "visual_only"]},
+                  "origin_m": {"$ref": "#/definitions/vector3_m"},
+                  "normal_xyz": {"$ref": "#/definitions/vector3_unit_range"},
+                  "reference": {"type": "string", "minLength": 1}
+                }
+              }
+            },
+            "sockets": {"$ref": "#/definitions/string_set"}
+          }
+        }
+      ]
+    },
+    "source_lineage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "relation", "path", "sha256"],
+        "properties": {
+          "source_id": {"$ref": "#/definitions/safe_id"},
+          "relation": {"enum": ["created_from", "derived_from", "retargeted_from", "enhanced_from"]},
+          "path": {"$ref": "#/definitions/relative_path"},
+          "sha256": {"$ref": "#/definitions/sha256"}
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authoring_method", "tool_name", "tool_version", "licenses"],
+      "properties": {
+        "authoring_method": {"enum": ["native", "imported", "generated", "derived"]},
+        "tool_name": {"type": "string", "minLength": 1},
+        "tool_version": {"type": "string", "minLength": 1},
+        "licenses": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tool", "mesh", "texture", "motion"],
+          "properties": {
+            "tool": {"type": "string", "minLength": 1},
+            "mesh": {"type": "string", "minLength": 1},
+            "texture": {"type": "string", "minLength": 1},
+            "motion": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"asset_kind": {"const": "character"}}, "required": ["asset_kind"]}, "then": {"properties": {"capabilities": {"required": ["semantic_joints", "face_controls", "sockets"]}}}},
+    {"if": {"properties": {"asset_kind": {"const": "prop"}}, "required": ["asset_kind"]}, "then": {"properties": {"capabilities": {"required": ["articulations", "sockets"]}}}},
+    {"if": {"properties": {"asset_kind": {"const": "environment"}}, "required": ["asset_kind"]}, "then": {"properties": {"capabilities": {"required": ["surfaces", "sockets"]}}}},
+    {"if": {"properties": {"provenance": {"properties": {"authoring_method": {"enum": ["imported", "generated", "derived"]}}, "required": ["authoring_method"]}}, "required": ["provenance"]}, "then": {"properties": {"source_lineage": {"minItems": 1}}}}
+  ],
+  "definitions": {
+    "safe_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relative_path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$)).+$"},
+    "string_set": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "color_rgba": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number", "minimum": 0.0, "maximum": 1.0}},
+    "vector3_m": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number", "minimum": -1000.0, "maximum": 1000.0}},
+    "vector3_unit_range": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number", "minimum": -1.0, "maximum": 1.0}},
+    "degrees_range_180": {
+      "type": "object", "additionalProperties": false, "required": ["minimum", "maximum"],
+      "properties": {"minimum": {"type": "number", "minimum": -180, "maximum": 180}, "maximum": {"type": "number", "minimum": -180, "maximum": 180}}
+    },
+    "degrees_range_90": {
+      "type": "object", "additionalProperties": false, "required": ["minimum", "maximum"],
+      "properties": {"minimum": {"type": "number", "minimum": -90, "maximum": 90}, "maximum": {"type": "number", "minimum": -90, "maximum": 90}}
+    },
+    "nonempty_string_set": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resource_id", "resource_kind", "path", "sha256"],
+      "properties": {
+        "resource_id": {"$ref": "#/definitions/safe_id"},
+        "resource_kind": {"enum": ["editable_source", "mesh", "texture", "layer_manifest", "motion_clip", "other"]},
+        "path": {"$ref": "#/definitions/relative_path"},
+        "sha256": {"$ref": "#/definitions/sha256"}
+      }
+    }
+  }
+}

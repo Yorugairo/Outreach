@@ -1,0 +1,24 @@
+{
+  "schema": "impact-pose-fixture.v1",
+  "clock": {"fps": 24, "duration_s": 4.0, "scene_units": "meters", "blender_up_axis": "Z"},
+  "timing_source": "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/production/animated-variants/rig-foundation/timing.json",
+  "timing_source_sha256": "pending capture",
+  "scope_note": "This is a shared diagnostic event clock reused from the existing 2D rig foundation. It is not measured V12 timing, not biomechanics truth, and not an approved 3D fight animation.",
+  "events": [
+    {"name": "right_straight_contact", "frame": 27, "time_s": 1.125},
+    {"name": "head_recoil_and_brain_release", "frame": 28, "time_s": 1.1666666666666667},
+    {"name": "attacker_step_release", "frame": 41, "time_s": 1.72},
+    {"name": "left_hook_contact", "frame": 50, "time_s": 2.0833333333333335},
+    {"name": "victim_fall_release", "frame": 54, "time_s": 2.25},
+    {"name": "victim_grounded", "frame": 85, "time_s": 3.55}
+  ],
+  "pose_probe": {
+    "purpose": "prove imported editable human mesh, generated Rigify controls, and nonzero skin deformation with the same deterministic control pose across candidates",
+    "rest_frame": 1,
+    "contact_frame": 27,
+    "control_candidates": ["upper_arm_fk.R", "upper_arm_fk.L"],
+    "local_rotation_probe_rad": 0.6,
+    "pose_is_choreography": false,
+    "pass_measurement": "at least one weighted body mesh changes world-space vertex positions and bounds when the selected Rigify FK control is posed"
+  }
+}
