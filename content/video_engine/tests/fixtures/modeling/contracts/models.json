@@ -1,0 +1,118 @@
+{
+  "models": [
+    {
+      "asset_id": "fighter-a",
+      "revision_id": "fighter-a-r1",
+      "asset_kind": "character",
+      "resource_id": "source",
+      "resource_kind": "editable_source",
+      "path": "assets/fighter-a-source.fixture",
+      "additional_resources": [
+        {"resource_id": "albedo", "resource_kind": "texture", "path": "assets/fighter-a-albedo.fixture"}
+      ],
+      "coordinate_system": {
+        "space": "world_3d",
+        "unit": "m",
+        "up_axis": "Z",
+        "forward_axis": "Y",
+        "handedness": "right",
+        "origin": "ground-plane center",
+        "rest_pose": "neutral upright"
+      },
+      "capabilities": {
+        "semantic_joints": ["head", "jaw", "left_hand", "right_hand", "left_foot"],
+        "face_controls": ["jaw_open", "brow_raise"],
+        "sockets": ["right_hand_socket"]
+      },
+      "proportion_parameters": {"head_scale": 1.2, "shoulder_width_scale": 1.1, "hand_scale": 1.05},
+      "materials": [
+        {
+          "material_id": "skin",
+          "shading_model": "stylized_pbr",
+          "base_color_rgba": [0.72, 0.48, 0.36, 1.0],
+          "roughness": 0.68,
+          "metallic": 0.0,
+          "uv_set_id": "body_uv0",
+          "texture_resource_ids": ["albedo"]
+        }
+      ],
+      "uv_sets": [
+        {"uv_set_id": "body_uv0", "map_role": "base_color", "resolution_px": 2048, "texture_resource_ids": ["albedo"]}
+      ],
+      "view_envelope": {
+        "yaw_degrees": {"minimum": -90, "maximum": 90},
+        "pitch_degrees": {"minimum": -30, "maximum": 45}
+      }
+    },
+    {
+      "asset_id": "fighter-b",
+      "revision_id": "fighter-b-r1",
+      "asset_kind": "character",
+      "resource_id": "source",
+      "resource_kind": "editable_source",
+      "path": "assets/fighter-b-source.fixture",
+      "coordinate_system": {
+        "space": "world_3d",
+        "unit": "m",
+        "up_axis": "Z",
+        "forward_axis": "Y",
+        "handedness": "right",
+        "origin": "ground-plane center",
+        "rest_pose": "neutral upright"
+      },
+      "capabilities": {
+        "semantic_joints": ["head", "jaw", "left_hand", "right_hand", "left_foot"],
+        "face_controls": ["jaw_open", "brow_raise"],
+        "sockets": []
+      }
+    },
+    {
+      "asset_id": "impact-prop",
+      "revision_id": "impact-prop-r1",
+      "asset_kind": "prop",
+      "resource_id": "source",
+      "resource_kind": "mesh",
+      "path": "assets/prop-source.fixture",
+      "coordinate_system": {
+        "space": "world_3d",
+        "unit": "m",
+        "up_axis": "Z",
+        "forward_axis": "Y",
+        "handedness": "right",
+        "origin": "prop pivot",
+        "rest_pose": "closed"
+      },
+      "capabilities": {"articulations": ["hinge"], "sockets": ["handle_socket"]}
+    },
+    {
+      "asset_id": "fight-environment",
+      "revision_id": "fight-environment-r1",
+      "asset_kind": "environment",
+      "resource_id": "source",
+      "resource_kind": "mesh",
+      "path": "assets/environment-source.fixture",
+      "coordinate_system": {
+        "space": "world_3d",
+        "unit": "m",
+        "up_axis": "Z",
+        "forward_axis": "Y",
+        "handedness": "right",
+        "origin": "stage center",
+        "rest_pose": "static"
+      },
+      "capabilities": {
+        "surfaces": [
+          {
+            "surface_id": "mat-floor",
+            "surface_type": "floor",
+            "collision_role": "solid",
+            "origin_m": [0, 0, 0],
+            "normal_xyz": [0, 0, 1],
+            "reference": "authored fight-mat plane"
+          }
+        ],
+        "sockets": []
+      }
+    }
+  ]
+}

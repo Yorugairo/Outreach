@@ -142,13 +142,13 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Escalation checkpoint: Sol attempt 4 saved an editable `.blend`, two renders and structured inspection. MPFB produced a 13,380-vertex Human, `Human.rigify` (930 bones), and body armature modifiers, but the test's FK arm control caused zero evaluated-vertex movement. Read-only saved-scene inspection showed the rig's `IK_FK` switch at 0, so IK overrode the animated FK control; the default Cube also occluded the renders. Sol attempt 5 explicitly activated FK and hid Cube: `DEF-upper_arm.R` moved 0.0715166 m and 4,736/13,380 evaluated Human vertices moved, with Human floor minimum approximately 0 m. The isolated offline test saved a `.blend` and two unobscured PNGs; V12 hash stayed unchanged. This establishes technical starter feasibility, not likeness, polished deformation, fight choreography or art approval. T2 may begin; T4a must still test face/hands, stress poses, proportion controls and visual quality.
 
 ### T2: Shared asset, preset and scene contracts
-- Status: pending
+- Status: complete (contract validation only; no art or render approval)
 - Owner: implementation_luna; parent owns schema decisions
 - Depends on: T1
 - Write set: `M/__init__.py`, `M/contracts.py`; `content/video_engine/configs/model_asset.v1.schema.json`, `model_scene.v1.schema.json`, `model_inspection.v1.schema.json`; `F/contracts/`; `content/video_engine/tests/test_model_contracts.py`
 - Acceptance: versioned references, units/axes, semantic rig/socket capability profiles, timebase, authored contacts, source lineage and approval references validate; reject nonfinite values, out-of-root paths, unsupported versions, stale hashes and incompatible capabilities. No copied approval authority or implicit unknown-source promotion.
 - Validate: `python -m pytest content/video_engine/tests/test_model_contracts.py -q`
-- Evidence: pending; include negative fixtures for wrong units, invalid times, broken asset references and missing approval linkage.
+- Evidence: `M/contracts.py`, the three v1 schemas, `F/contracts/`, and `test_model_contracts.py`; parent verified 36 passed, one symlink-permission skip on 2026-09-22. Negative tests cover wrong units, invalid time/geometry, stale hashes, path escape, capability mismatch, fabricated catalog/approval records, missing trusted authority anchors, ineligible render scenes, and self-asserted operator approval. Render-ready validation requires caller-supplied trusted catalog and approval paths; metadata validation alone conveys no approval. Independent reviewer identified five trust/schema gaps; Luna fixed the bounded slice after three failed attempts and escalated final test/scene-clock cleanup to Sol xhigh (attempt 4). No native fighter art or motion-quality verdict follows from this contract pass.
 
 ### T3: Asset intake and reusable library integration
 - Status: pending
