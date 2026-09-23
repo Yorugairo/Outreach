@@ -1,0 +1,74 @@
+{
+  "schema_version": "viewer_windows.v1",
+  "script": "SCRIPT-C-VO.txt",
+  "window_s": 15.0,
+  "memory_windows": 2,
+  "timing_source": "estimated",
+  "screens_source": "none (no build given)",
+  "runtime_s": 96.133,
+  "windows": [
+    {
+      "i": 0,
+      "start_s": 0.0,
+      "end_s": 15.347,
+      "span": "0:00-0:15",
+      "text": "AI can give you a second job. Supervising the assistant you hired to save time. Less supervision means more finished work from models we already have. That is the economic opportunity I see in slowing the frontier. Anthropic's Dario Amodei has argued",
+      "memory": "",
+      "screens": []
+    },
+    {
+      "i": 1,
+      "start_s": 15.0,
+      "end_s": 30.018,
+      "span": "0:15-0:30",
+      "text": "for pacing frontier development. Put the next marginal hour into systems that finish. A model can look brilliant and still leave you holding the checklist. Can the handoff finish work, or hand you the checklist? One missed handoff makes a",
+      "memory": "AI can give you a second job. Supervising the assistant you hired to save time. Less supervision means more finished work from models we already have. That is the economic opportunity I see in slowing the frontier. Anthropic's Dario Amodei has argued",
+      "screens": []
+    },
+    {
+      "i": 2,
+      "start_s": 30.0,
+      "end_s": 45.12,
+      "span": "0:30-0:45",
+      "text": "person inspect the output, repair it, and run the chain again. The bottleneck is finished work. Imagine one job with twenty required steps. Assume each step succeeds independently ninety-five percent of the time. We allow no retries or recovery.",
+      "memory": "AI can give you a second job. Supervising the assistant you hired to save time. Less supervision means more finished work from models we already have. That is the economic opportunity I see in slowing the frontier. Anthropic's Dario Amodei has argued for pacing frontier development. Put the next marginal hour into systems that finish. A model can look brilliant and still leave you holding the checklist. Can the handoff finish work, or hand you the checklist? One missed handoff makes a",
+      "screens": []
+    },
+    {
+      "i": 3,
+      "start_s": 45.0,
+      "end_s": 60.651,
+      "span": "0:45-1:00",
+      "text": "The clean completion rate is thirty-six percent. That is our illustration, not a measurement of any product. Now change one assumption: each step succeeds ninety-nine percent of the time. The same twenty steps reach eighty-two percent clean completion.",
+      "memory": "for pacing frontier development. Put the next marginal hour into systems that finish. A model can look brilliant and still leave you holding the checklist. Can the handoff finish work, or hand you the checklist? One missed handoff makes a person inspect the output, repair it, and run the chain again. The bottleneck is finished work. Imagine one job with twenty required steps. Assume each step succeeds independently ninety-five percent of the time. We allow no retries or recovery.",
+      "screens": []
+    },
+    {
+      "i": 4,
+      "start_s": 60.0,
+      "end_s": 75.138,
+      "span": "1:00-1:15",
+      "text": "A small local gain lets far more jobs cross the finish line. Fewer failures could mean fewer human rescues. The gain could return human hours to work that ships. If those hours serve customers, the team can produce more. Memory, tools,",
+      "memory": "person inspect the output, repair it, and run the chain again. The bottleneck is finished work. Imagine one job with twenty required steps. Assume each step succeeds independently ninety-five percent of the time. We allow no retries or recovery. The clean completion rate is thirty-six percent. That is our illustration, not a measurement of any product. Now change one assumption: each step succeeds ninety-nine percent of the time. The same twenty steps reach eighty-two percent clean completion.",
+      "screens": []
+    },
+    {
+      "i": 5,
+      "start_s": 75.0,
+      "end_s": 90.178,
+      "span": "1:15-1:30",
+      "text": "and error checks are development too. Can a stronger model buy back the same human hours? A stronger frontier model could reduce supervision too; that route deserves the same test. If reliability wins, a slower frontier could still speed up the",
+      "memory": "The clean completion rate is thirty-six percent. That is our illustration, not a measurement of any product. Now change one assumption: each step succeeds ninety-nine percent of the time. The same twenty steps reach eighty-two percent clean completion. A small local gain lets far more jobs cross the finish line. Fewer failures could mean fewer human rescues. The gain could return human hours to work that ships. If those hours serve customers, the team can produce more. Memory, tools,",
+      "screens": []
+    },
+    {
+      "i": 6,
+      "start_s": 90.0,
+      "end_s": 96.133,
+      "span": "1:30-1:45",
+      "text": "economy. Don't count how clever the demo looks. Your second job ends when AI finishes the first.",
+      "memory": "A small local gain lets far more jobs cross the finish line. Fewer failures could mean fewer human rescues. The gain could return human hours to work that ships. If those hours serve customers, the team can produce more. Memory, tools, and error checks are development too. Can a stronger model buy back the same human hours? A stronger frontier model could reduce supervision too; that route deserves the same test. If reliability wins, a slower frontier could still speed up the",
+      "screens": []
+    }
+  ]
+}

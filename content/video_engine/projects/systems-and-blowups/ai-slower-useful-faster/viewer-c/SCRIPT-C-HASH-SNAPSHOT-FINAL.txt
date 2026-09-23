@@ -1,0 +1,7 @@
+script: content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/SCRIPT-C-VO.txt
+canonical_spoken_hash_algorithm: SHA-256
+canonical_spoken_sha256: 17b15fb064b34926332f35d7049de35a9ac4213a648d2ef001061ef3ff324a85
+raw_file_sha256: 8b8f9e74de0311623927d9e241c9f6e2f987de060718a17ad7eea212e21f882d
+length_bytes: 1687
+snapshot_utc: 2026-09-16T05:47:01.0419839Z
+freeze_source: SCRIPT-C-GATES.md / parent final-freeze confirmation

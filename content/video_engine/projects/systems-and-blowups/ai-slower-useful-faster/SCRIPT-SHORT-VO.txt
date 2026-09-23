@@ -1,0 +1,27 @@
+[ring] Slower development could make AI useful faster.
+
+[post-key] More reliable steps can turn the same AI into a system that finishes more jobs.
+
+This week, Anthropic's boss called for pacing the frontier, not shutting down training.
+
+[stakes] You could spend less time rescuing its mistakes.
+
+[new] Imagine a job with twenty steps, each working ninety-five percent of the time.
+
+If failures are independent, only thirty-six percent of jobs finish without a mistake.
+
+[rehook] [new] Now raise each step to ninety-nine percent.
+
+[catalyst] Clean completion jumps to eighty-two percent.
+
+You haven't changed the job, only how often someone has to rescue it.
+
+Better memory, tools, and error checking could buy that reliability.
+
+[rehook] But here's the catch: a stronger model could fix those failures too.
+
+[reflect] Slowing development helps only if the effort moves somewhere productive.
+
+[ring] So here's my claim: fewer headline breakthroughs could still mean more work getting finished.
+
+Slower development wins when useful work gets finished faster.

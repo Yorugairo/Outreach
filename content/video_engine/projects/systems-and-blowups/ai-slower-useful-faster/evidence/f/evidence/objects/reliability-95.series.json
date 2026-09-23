@@ -1,0 +1,16 @@
+{
+  "title": "One weak step compounds",
+  "sub": "Illustrative · 20 independent steps · no retries · p = 95%",
+  "src": "DERIVED · illustrative math only · SCRIPT-F/EVIDENCE-DOSSIER.md",
+  "ylabel": "Clean completion (%)",
+  "line_unit": "%",
+  "name_clear": true,
+  "series": [
+    {
+      "label": "p = 95% per step",
+      "name": "35.8% at 20 steps",
+      "color": "crimson",
+      "pts": [[0,100.0],[1,95.0],[2,90.25],[3,85.7375],[4,81.450625],[5,77.378094],[6,73.509189],[7,69.83373],[8,66.342043],[9,63.024941],[10,59.873694],[11,56.880009],[12,54.036009],[13,51.334208],[14,48.767498],[15,46.329123],[16,44.012667],[17,41.812034],[18,39.721432],[19,37.73536],[20,35.848592]]
+    }
+  ]
+}

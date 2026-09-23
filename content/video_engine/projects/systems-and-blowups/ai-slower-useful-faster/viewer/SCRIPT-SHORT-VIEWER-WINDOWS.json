@@ -1,0 +1,47 @@
+{
+  "schema_version": "viewer_windows.v1",
+  "script": "SCRIPT-SHORT-VO.txt",
+  "window_s": 15.0,
+  "memory_windows": 2,
+  "timing_source": "estimated",
+  "screens_source": "none (no build given)",
+  "runtime_s": 58.809,
+  "windows": [
+    {
+      "i": 0,
+      "start_s": 0.0,
+      "end_s": 15.347,
+      "span": "0:00-0:15",
+      "text": "Slower development could make AI useful faster. More reliable steps can turn the same AI into a system that finishes more jobs. This week, Anthropic's boss called for pacing the frontier, not shutting down training. You could spend less time rescuing",
+      "memory": "",
+      "screens": []
+    },
+    {
+      "i": 1,
+      "start_s": 15.0,
+      "end_s": 30.141,
+      "span": "0:15-0:30",
+      "text": "its mistakes. Imagine a job with twenty steps, each working ninety-five percent of the time. If failures are independent, only thirty-six percent of jobs finish without a mistake. Now raise each step to ninety-nine percent. Clean completion",
+      "memory": "Slower development could make AI useful faster. More reliable steps can turn the same AI into a system that finishes more jobs. This week, Anthropic's boss called for pacing the frontier, not shutting down training. You could spend less time rescuing",
+      "screens": []
+    },
+    {
+      "i": 2,
+      "start_s": 30.0,
+      "end_s": 45.181,
+      "span": "0:30-0:45",
+      "text": "jumps to eighty-two percent. You haven't changed the job, only how often someone has to rescue it. Better memory, tools, and error checking could buy that reliability. But here's the catch: a stronger model could fix those failures too. Slowing",
+      "memory": "Slower development could make AI useful faster. More reliable steps can turn the same AI into a system that finishes more jobs. This week, Anthropic's boss called for pacing the frontier, not shutting down training. You could spend less time rescuing its mistakes. Imagine a job with twenty steps, each working ninety-five percent of the time. If failures are independent, only thirty-six percent of jobs finish without a mistake. Now raise each step to ninety-nine percent. Clean completion",
+      "screens": []
+    },
+    {
+      "i": 3,
+      "start_s": 45.0,
+      "end_s": 58.809,
+      "span": "0:45-1:00",
+      "text": "development helps only if the effort moves somewhere productive. So here's my claim: fewer headline breakthroughs could still mean more work getting finished. Slower development wins when useful work gets finished faster.",
+      "memory": "its mistakes. Imagine a job with twenty steps, each working ninety-five percent of the time. If failures are independent, only thirty-six percent of jobs finish without a mistake. Now raise each step to ninety-nine percent. Clean completion jumps to eighty-two percent. You haven't changed the job, only how often someone has to rescue it. Better memory, tools, and error checking could buy that reliability. But here's the catch: a stronger model could fix those failures too. Slowing",
+      "screens": []
+    }
+  ]
+}

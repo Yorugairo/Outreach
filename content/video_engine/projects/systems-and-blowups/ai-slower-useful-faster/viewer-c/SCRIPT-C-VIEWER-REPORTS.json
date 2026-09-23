@@ -1,0 +1,50 @@
+{
+  "schema_version": "viewer_reports.v1",
+  "prompt_version": "v2",
+  "script": "SCRIPT-C-VO.txt",
+  "windows_file": "SCRIPT-C-VIEWER-WINDOWS.json",
+  "model": "(codex default)",
+  "effort": "high",
+  "lane": "codex",
+  "started_at": "2026-09-16T05:45:27+00:00",
+  "finished_at": "2026-09-16T05:46:00+00:00",
+  "windows_run": 2,
+  "package": {
+    "status": "asked",
+    "title": "Slowing AI Could Speed Up the Economy",
+    "thumb_file": "content\\video_engine\\projects\\systems-and-blowups\\ai-slower-useful-faster\\thumbnail-b\\still-needs-you.png",
+    "promised": "An explanation of why deliberately slowing or adding human checks to AI workflows could make the economy more productive rather than less. I expect to learn where unchecked automation fails and why people may still be essential in the loop."
+  },
+  "reports": [
+    {
+      "i": 0,
+      "span": "0:00-0:15",
+      "new_things": [
+        "AI can create a second job of supervising the assistant meant to save time.",
+        "Less supervision could mean more finished work from existing models.",
+        "The speaker sees an economic opportunity in slowing the AI frontier.",
+        "Anthropic’s Dario Amodei has argued something relevant."
+      ],
+      "held_question": "Why would slowing the AI frontier reduce supervision and make the economy more productive?",
+      "asked_of_me": "",
+      "could_not_follow": [],
+      "promise_answered": "not yet",
+      "answered_by": ""
+    },
+    {
+      "i": 1,
+      "span": "0:15-0:30",
+      "new_things": [
+        "Dario Amodei has argued for pacing frontier AI development.",
+        "The speaker thinks effort should go into systems that can actually finish work.",
+        "A model can seem impressive while still leaving the user to manage a checklist.",
+        "The important test is whether a handoff completes the work or just passes along the checklist."
+      ],
+      "held_question": "Will the handoff actually finish the work, or leave me holding the checklist?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The thought beginning 'One missed handoff makes a...' was cut off."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1202 @@
+{
+ "engine": "chirp-aligned",
+ "voice": "aligned/faster-whisper",
+ "duration_s": 68.38,
+ "words": [
+  {
+   "w": "Trump",
+   "start_s": 0.0,
+   "end_s": 0.7
+  },
+  {
+   "w": "wants",
+   "start_s": 0.7,
+   "end_s": 0.96
+  },
+  {
+   "w": "America",
+   "start_s": 0.96,
+   "end_s": 1.24
+  },
+  {
+   "w": "to",
+   "start_s": 1.24,
+   "end_s": 1.5
+  },
+  {
+   "w": "win",
+   "start_s": 1.5,
+   "end_s": 1.64
+  },
+  {
+   "w": "the",
+   "start_s": 1.64,
+   "end_s": 1.8
+  },
+  {
+   "w": "AI",
+   "start_s": 1.8,
+   "end_s": 2.08
+  },
+  {
+   "w": "race.",
+   "start_s": 2.08,
+   "end_s": 2.46
+  },
+  {
+   "w": "Anthropic's",
+   "start_s": 2.9,
+   "end_s": 3.32
+  },
+  {
+   "w": "Dario",
+   "start_s": 3.46,
+   "end_s": 3.62
+  },
+  {
+   "w": "Amodei",
+   "start_s": 3.62,
+   "end_s": 4.12
+  },
+  {
+   "w": "wants",
+   "start_s": 4.12,
+   "end_s": 4.2
+  },
+  {
+   "w": "a",
+   "start_s": 4.2,
+   "end_s": 4.36
+  },
+  {
+   "w": "slowdown.",
+   "start_s": 4.36,
+   "end_s": 4.68
+  },
+  {
+   "w": "But",
+   "start_s": 5.26,
+   "end_s": 5.34
+  },
+  {
+   "w": "what",
+   "start_s": 5.34,
+   "end_s": 5.44
+  },
+  {
+   "w": "if",
+   "start_s": 5.44,
+   "end_s": 5.56
+  },
+  {
+   "w": "the",
+   "start_s": 5.56,
+   "end_s": 5.68
+  },
+  {
+   "w": "fastest",
+   "start_s": 5.68,
+   "end_s": 5.88
+  },
+  {
+   "w": "way",
+   "start_s": 5.88,
+   "end_s": 6.12
+  },
+  {
+   "w": "forward",
+   "start_s": 6.12,
+   "end_s": 6.36
+  },
+  {
+   "w": "is",
+   "start_s": 6.36,
+   "end_s": 6.62
+  },
+  {
+   "w": "fixing",
+   "start_s": 6.62,
+   "end_s": 6.8
+  },
+  {
+   "w": "what",
+   "start_s": 6.8,
+   "end_s": 7.02
+  },
+  {
+   "w": "we've",
+   "start_s": 7.02,
+   "end_s": 7.18
+  },
+  {
+   "w": "already",
+   "start_s": 7.18,
+   "end_s": 7.36
+  },
+  {
+   "w": "built?",
+   "start_s": 7.36,
+   "end_s": 7.6
+  },
+  {
+   "w": "You",
+   "start_s": 8.34,
+   "end_s": 8.54
+  },
+  {
+   "w": "ask",
+   "start_s": 8.54,
+   "end_s": 8.76
+  },
+  {
+   "w": "AI",
+   "start_s": 8.76,
+   "end_s": 9.02
+  },
+  {
+   "w": "to",
+   "start_s": 9.02,
+   "end_s": 9.2
+  },
+  {
+   "w": "finish",
+   "start_s": 9.2,
+   "end_s": 9.36
+  },
+  {
+   "w": "a",
+   "start_s": 9.36,
+   "end_s": 9.5
+  },
+  {
+   "w": "job.",
+   "start_s": 9.5,
+   "end_s": 9.74
+  },
+  {
+   "w": "Seconds",
+   "start_s": 10.32,
+   "end_s": 10.42
+  },
+  {
+   "w": "later,",
+   "start_s": 10.42,
+   "end_s": 10.76
+  },
+  {
+   "w": "the",
+   "start_s": 10.92,
+   "end_s": 11.0
+  },
+  {
+   "w": "screen",
+   "start_s": 11.0,
+   "end_s": 11.2
+  },
+  {
+   "w": "fills",
+   "start_s": 11.2,
+   "end_s": 11.46
+  },
+  {
+   "w": "up.",
+   "start_s": 11.46,
+   "end_s": 11.76
+  },
+  {
+   "w": "Looks",
+   "start_s": 12.08,
+   "end_s": 12.16
+  },
+  {
+   "w": "finished.",
+   "start_s": 12.16,
+   "end_s": 12.52
+  },
+  {
+   "w": "Then",
+   "start_s": 13.2,
+   "end_s": 13.28
+  },
+  {
+   "w": "you",
+   "start_s": 13.28,
+   "end_s": 13.38
+  },
+  {
+   "w": "find",
+   "start_s": 13.38,
+   "end_s": 13.54
+  },
+  {
+   "w": "the",
+   "start_s": 13.54,
+   "end_s": 13.66
+  },
+  {
+   "w": "wrong",
+   "start_s": 13.66,
+   "end_s": 13.82
+  },
+  {
+   "w": "number.",
+   "start_s": 13.82,
+   "end_s": 14.12
+  },
+  {
+   "w": "The",
+   "start_s": 14.8,
+   "end_s": 14.82
+  },
+  {
+   "w": "missing",
+   "start_s": 14.82,
+   "end_s": 15.02
+  },
+  {
+   "w": "source.",
+   "start_s": 15.02,
+   "end_s": 15.34
+  },
+  {
+   "w": "The",
+   "start_s": 15.88,
+   "end_s": 15.88
+  },
+  {
+   "w": "file",
+   "start_s": 15.88,
+   "end_s": 16.16
+  },
+  {
+   "w": "it",
+   "start_s": 16.16,
+   "end_s": 16.32
+  },
+  {
+   "w": "never",
+   "start_s": 16.32,
+   "end_s": 16.5
+  },
+  {
+   "w": "saved.",
+   "start_s": 16.5,
+   "end_s": 16.86
+  },
+  {
+   "w": "Now",
+   "start_s": 17.34,
+   "end_s": 17.4
+  },
+  {
+   "w": "its",
+   "start_s": 17.4,
+   "end_s": 17.56
+  },
+  {
+   "w": "finished",
+   "start_s": 17.56,
+   "end_s": 17.76
+  },
+  {
+   "w": "job",
+   "start_s": 17.76,
+   "end_s": 18.04
+  },
+  {
+   "w": "is",
+   "start_s": 18.04,
+   "end_s": 18.2
+  },
+  {
+   "w": "your",
+   "start_s": 18.2,
+   "end_s": 18.32
+  },
+  {
+   "w": "afternoon.",
+   "start_s": 18.32,
+   "end_s": 18.68
+  },
+  {
+   "w": "Imagine",
+   "start_s": 19.38,
+   "end_s": 19.52
+  },
+  {
+   "w": "each",
+   "start_s": 19.52,
+   "end_s": 19.78
+  },
+  {
+   "w": "step",
+   "start_s": 19.78,
+   "end_s": 20.0
+  },
+  {
+   "w": "works",
+   "start_s": 20.0,
+   "end_s": 20.22
+  },
+  {
+   "w": "nineteen",
+   "start_s": 20.22,
+   "end_s": 20.5
+  },
+  {
+   "w": "times",
+   "start_s": 20.5,
+   "end_s": 20.82
+  },
+  {
+   "w": "out",
+   "start_s": 20.82,
+   "end_s": 20.92
+  },
+  {
+   "w": "of",
+   "start_s": 20.92,
+   "end_s": 21.02
+  },
+  {
+   "w": "twenty.",
+   "start_s": 21.02,
+   "end_s": 21.24
+  },
+  {
+   "w": "Sounds",
+   "start_s": 21.64,
+   "end_s": 21.78
+  },
+  {
+   "w": "dependable.",
+   "start_s": 21.78,
+   "end_s": 22.26
+  },
+  {
+   "w": "Chain",
+   "start_s": 22.66,
+   "end_s": 22.76
+  },
+  {
+   "w": "twenty",
+   "start_s": 22.76,
+   "end_s": 23.06
+  },
+  {
+   "w": "steps",
+   "start_s": 23.06,
+   "end_s": 23.3
+  },
+  {
+   "w": "together,",
+   "start_s": 23.3,
+   "end_s": 23.62
+  },
+  {
+   "w": "and",
+   "start_s": 23.94,
+   "end_s": 24.02
+  },
+  {
+   "w": "only",
+   "start_s": 24.02,
+   "end_s": 24.2
+  },
+  {
+   "w": "about",
+   "start_s": 24.2,
+   "end_s": 24.4
+  },
+  {
+   "w": "four",
+   "start_s": 24.4,
+   "end_s": 24.64
+  },
+  {
+   "w": "jobs",
+   "start_s": 24.64,
+   "end_s": 24.9
+  },
+  {
+   "w": "out",
+   "start_s": 24.9,
+   "end_s": 25.04
+  },
+  {
+   "w": "of",
+   "start_s": 25.04,
+   "end_s": 25.14
+  },
+  {
+   "w": "ten",
+   "start_s": 25.14,
+   "end_s": 25.3
+  },
+  {
+   "w": "finish",
+   "start_s": 25.3,
+   "end_s": 25.54
+  },
+  {
+   "w": "without",
+   "start_s": 25.54,
+   "end_s": 25.78
+  },
+  {
+   "w": "a",
+   "start_s": 25.78,
+   "end_s": 25.9
+  },
+  {
+   "w": "mistake.",
+   "start_s": 25.9,
+   "end_s": 26.1
+  },
+  {
+   "w": "The",
+   "start_s": 26.64,
+   "end_s": 26.74
+  },
+  {
+   "w": "other",
+   "start_s": 26.74,
+   "end_s": 26.86
+  },
+  {
+   "w": "six",
+   "start_s": 26.86,
+   "end_s": 27.06
+  },
+  {
+   "w": "land",
+   "start_s": 27.06,
+   "end_s": 27.28
+  },
+  {
+   "w": "back",
+   "start_s": 27.28,
+   "end_s": 27.5
+  },
+  {
+   "w": "on",
+   "start_s": 27.5,
+   "end_s": 27.64
+  },
+  {
+   "w": "your",
+   "start_s": 27.64,
+   "end_s": 27.72
+  },
+  {
+   "w": "desk.",
+   "start_s": 27.72,
+   "end_s": 27.94
+  },
+  {
+   "w": "Now",
+   "start_s": 27.94,
+   "end_s": 28.6
+  },
+  {
+   "w": "push",
+   "start_s": 28.6,
+   "end_s": 28.8
+  },
+  {
+   "w": "each",
+   "start_s": 28.8,
+   "end_s": 29.02
+  },
+  {
+   "w": "step",
+   "start_s": 29.02,
+   "end_s": 29.26
+  },
+  {
+   "w": "to",
+   "start_s": 29.26,
+   "end_s": 29.42
+  },
+  {
+   "w": "ninety-nine",
+   "start_s": 29.42,
+   "end_s": 30.008
+  },
+  {
+   "w": "percent.",
+   "start_s": 30.008,
+   "end_s": 30.42
+  },
+  {
+   "w": "About",
+   "start_s": 30.42,
+   "end_s": 30.7
+  },
+  {
+   "w": "eight",
+   "start_s": 30.7,
+   "end_s": 30.92
+  },
+  {
+   "w": "out",
+   "start_s": 30.92,
+   "end_s": 31.04
+  },
+  {
+   "w": "of",
+   "start_s": 31.04,
+   "end_s": 31.1
+  },
+  {
+   "w": "ten",
+   "start_s": 31.1,
+   "end_s": 31.3
+  },
+  {
+   "w": "finish",
+   "start_s": 31.3,
+   "end_s": 31.56
+  },
+  {
+   "w": "cleanly.",
+   "start_s": 31.56,
+   "end_s": 32.06
+  },
+  {
+   "w": "Roughly",
+   "start_s": 32.32,
+   "end_s": 32.56
+  },
+  {
+   "w": "twice",
+   "start_s": 32.56,
+   "end_s": 32.72
+  },
+  {
+   "w": "as",
+   "start_s": 32.72,
+   "end_s": 32.88
+  },
+  {
+   "w": "many",
+   "start_s": 32.88,
+   "end_s": 33.08
+  },
+  {
+   "w": "finished",
+   "start_s": 33.08,
+   "end_s": 33.3
+  },
+  {
+   "w": "jobs.",
+   "start_s": 33.3,
+   "end_s": 33.66
+  },
+  {
+   "w": "Same",
+   "start_s": 33.96,
+   "end_s": 34.06
+  },
+  {
+   "w": "ten",
+   "start_s": 34.06,
+   "end_s": 34.34
+  },
+  {
+   "w": "waiting",
+   "start_s": 34.34,
+   "end_s": 34.56
+  },
+  {
+   "w": "customers.",
+   "start_s": 34.56,
+   "end_s": 35.0
+  },
+  {
+   "w": "That's",
+   "start_s": 35.78,
+   "end_s": 35.96
+  },
+  {
+   "w": "where",
+   "start_s": 35.96,
+   "end_s": 36.04
+  },
+  {
+   "w": "I",
+   "start_s": 36.04,
+   "end_s": 36.14
+  },
+  {
+   "w": "see",
+   "start_s": 36.14,
+   "end_s": 36.26
+  },
+  {
+   "w": "the",
+   "start_s": 36.26,
+   "end_s": 36.38
+  },
+  {
+   "w": "economic",
+   "start_s": 36.38,
+   "end_s": 36.68
+  },
+  {
+   "w": "opportunity.",
+   "start_s": 36.68,
+   "end_s": 37.18
+  },
+  {
+   "w": "A",
+   "start_s": 37.68,
+   "end_s": 37.7
+  },
+  {
+   "w": "shop",
+   "start_s": 37.7,
+   "end_s": 37.86
+  },
+  {
+   "w": "owner",
+   "start_s": 37.86,
+   "end_s": 38.04
+  },
+  {
+   "w": "could",
+   "start_s": 38.04,
+   "end_s": 38.2
+  },
+  {
+   "w": "send",
+   "start_s": 38.2,
+   "end_s": 38.34
+  },
+  {
+   "w": "the",
+   "start_s": 38.34,
+   "end_s": 38.44
+  },
+  {
+   "w": "quote",
+   "start_s": 38.44,
+   "end_s": 38.64
+  },
+  {
+   "w": "and",
+   "start_s": 38.64,
+   "end_s": 38.88
+  },
+  {
+   "w": "take",
+   "start_s": 38.88,
+   "end_s": 39.02
+  },
+  {
+   "w": "the",
+   "start_s": 39.02,
+   "end_s": 39.14
+  },
+  {
+   "w": "next",
+   "start_s": 39.14,
+   "end_s": 39.28
+  },
+  {
+   "w": "customer.",
+   "start_s": 39.28,
+   "end_s": 39.62
+  },
+  {
+   "w": "An",
+   "start_s": 40.16,
+   "end_s": 40.24
+  },
+  {
+   "w": "accountant",
+   "start_s": 40.24,
+   "end_s": 40.46
+  },
+  {
+   "w": "could",
+   "start_s": 40.46,
+   "end_s": 40.66
+  },
+  {
+   "w": "finish",
+   "start_s": 40.66,
+   "end_s": 40.88
+  },
+  {
+   "w": "the",
+   "start_s": 40.88,
+   "end_s": 41.0
+  },
+  {
+   "w": "return",
+   "start_s": 41.0,
+   "end_s": 41.28
+  },
+  {
+   "w": "instead",
+   "start_s": 41.28,
+   "end_s": 41.58
+  },
+  {
+   "w": "of",
+   "start_s": 41.58,
+   "end_s": 41.72
+  },
+  {
+   "w": "hunting",
+   "start_s": 41.72,
+   "end_s": 41.88
+  },
+  {
+   "w": "through",
+   "start_s": 41.88,
+   "end_s": 42.1
+  },
+  {
+   "w": "invented",
+   "start_s": 42.1,
+   "end_s": 42.42
+  },
+  {
+   "w": "receipts.",
+   "start_s": 42.42,
+   "end_s": 42.84
+  },
+  {
+   "w": "Multiply",
+   "start_s": 43.24,
+   "end_s": 43.54
+  },
+  {
+   "w": "those",
+   "start_s": 43.54,
+   "end_s": 43.68
+  },
+  {
+   "w": "recovered",
+   "start_s": 43.68,
+   "end_s": 43.96
+  },
+  {
+   "w": "hours",
+   "start_s": 43.96,
+   "end_s": 44.24
+  },
+  {
+   "w": "across",
+   "start_s": 44.24,
+   "end_s": 44.48
+  },
+  {
+   "w": "businesses,",
+   "start_s": 44.48,
+   "end_s": 44.9
+  },
+  {
+   "w": "and",
+   "start_s": 45.34,
+   "end_s": 45.42
+  },
+  {
+   "w": "reliability",
+   "start_s": 45.42,
+   "end_s": 45.82
+  },
+  {
+   "w": "starts",
+   "start_s": 45.82,
+   "end_s": 46.16
+  },
+  {
+   "w": "looking",
+   "start_s": 46.16,
+   "end_s": 46.38
+  },
+  {
+   "w": "like",
+   "start_s": 46.38,
+   "end_s": 46.62
+  },
+  {
+   "w": "an",
+   "start_s": 46.62,
+   "end_s": 46.72
+  },
+  {
+   "w": "economic",
+   "start_s": 46.72,
+   "end_s": 47.06
+  },
+  {
+   "w": "engine.",
+   "start_s": 47.06,
+   "end_s": 47.46
+  },
+  {
+   "w": "Amodei's",
+   "start_s": 47.46,
+   "end_s": 48.16
+  },
+  {
+   "w": "argument",
+   "start_s": 48.16,
+   "end_s": 48.44
+  },
+  {
+   "w": "is",
+   "start_s": 48.44,
+   "end_s": 48.7
+  },
+  {
+   "w": "about",
+   "start_s": 48.7,
+   "end_s": 48.88
+  },
+  {
+   "w": "safety,",
+   "start_s": 48.88,
+   "end_s": 49.24
+  },
+  {
+   "w": "including",
+   "start_s": 49.5,
+   "end_s": 49.74
+  },
+  {
+   "w": "better",
+   "start_s": 49.74,
+   "end_s": 49.98
+  },
+  {
+   "w": "testing",
+   "start_s": 49.98,
+   "end_s": 50.28
+  },
+  {
+   "w": "and",
+   "start_s": 50.28,
+   "end_s": 50.4
+  },
+  {
+   "w": "operations.",
+   "start_s": 50.4,
+   "end_s": 50.78
+  },
+  {
+   "w": "I",
+   "start_s": 51.56,
+   "end_s": 51.64
+  },
+  {
+   "w": "think",
+   "start_s": 51.64,
+   "end_s": 51.78
+  },
+  {
+   "w": "that",
+   "start_s": 51.78,
+   "end_s": 51.94
+  },
+  {
+   "w": "work",
+   "start_s": 51.94,
+   "end_s": 52.1
+  },
+  {
+   "w": "could",
+   "start_s": 52.1,
+   "end_s": 52.22
+  },
+  {
+   "w": "pay",
+   "start_s": 52.22,
+   "end_s": 52.4
+  },
+  {
+   "w": "a",
+   "start_s": 52.4,
+   "end_s": 52.52
+  },
+  {
+   "w": "productivity",
+   "start_s": 52.52,
+   "end_s": 52.86
+  },
+  {
+   "w": "dividend",
+   "start_s": 52.86,
+   "end_s": 53.2
+  },
+  {
+   "w": "too.",
+   "start_s": 53.2,
+   "end_s": 53.5
+  },
+  {
+   "w": "Of",
+   "start_s": 54.2,
+   "end_s": 54.32
+  },
+  {
+   "w": "course,",
+   "start_s": 54.32,
+   "end_s": 54.54
+  },
+  {
+   "w": "a",
+   "start_s": 54.74,
+   "end_s": 54.84
+  },
+  {
+   "w": "stronger",
+   "start_s": 54.84,
+   "end_s": 55.06
+  },
+  {
+   "w": "model",
+   "start_s": 55.06,
+   "end_s": 55.38
+  },
+  {
+   "w": "might",
+   "start_s": 55.38,
+   "end_s": 55.58
+  },
+  {
+   "w": "make",
+   "start_s": 55.58,
+   "end_s": 55.8
+  },
+  {
+   "w": "fewer",
+   "start_s": 55.8,
+   "end_s": 56.0
+  },
+  {
+   "w": "mistakes.",
+   "start_s": 56.0,
+   "end_s": 56.38
+  },
+  {
+   "w": "So",
+   "start_s": 56.38,
+   "end_s": 57.16
+  },
+  {
+   "w": "put",
+   "start_s": 57.16,
+   "end_s": 57.34
+  },
+  {
+   "w": "both",
+   "start_s": 57.34,
+   "end_s": 57.54
+  },
+  {
+   "w": "approaches",
+   "start_s": 57.54,
+   "end_s": 57.9
+  },
+  {
+   "w": "on",
+   "start_s": 57.9,
+   "end_s": 58.08
+  },
+  {
+   "w": "the",
+   "start_s": 58.08,
+   "end_s": 58.18
+  },
+  {
+   "w": "same",
+   "start_s": 58.18,
+   "end_s": 58.36
+  },
+  {
+   "w": "job.",
+   "start_s": 58.36,
+   "end_s": 58.7
+  },
+  {
+   "w": "Count",
+   "start_s": 59.12,
+   "end_s": 59.14
+  },
+  {
+   "w": "how",
+   "start_s": 59.14,
+   "end_s": 59.34
+  },
+  {
+   "w": "often",
+   "start_s": 59.34,
+   "end_s": 59.56
+  },
+  {
+   "w": "you",
+   "start_s": 59.56,
+   "end_s": 59.72
+  },
+  {
+   "w": "have",
+   "start_s": 59.72,
+   "end_s": 59.84
+  },
+  {
+   "w": "to",
+   "start_s": 59.84,
+   "end_s": 59.96
+  },
+  {
+   "w": "step",
+   "start_s": 59.96,
+   "end_s": 60.12
+  },
+  {
+   "w": "in.",
+   "start_s": 60.12,
+   "end_s": 60.42
+  },
+  {
+   "w": "If",
+   "start_s": 61.08,
+   "end_s": 61.1
+  },
+  {
+   "w": "fixing",
+   "start_s": 61.1,
+   "end_s": 61.38
+  },
+  {
+   "w": "today's",
+   "start_s": 61.38,
+   "end_s": 61.78
+  },
+  {
+   "w": "AI",
+   "start_s": 61.78,
+   "end_s": 62.12
+  },
+  {
+   "w": "saves",
+   "start_s": 62.12,
+   "end_s": 62.5
+  },
+  {
+   "w": "more",
+   "start_s": 62.5,
+   "end_s": 62.74
+  },
+  {
+   "w": "human",
+   "start_s": 62.74,
+   "end_s": 63.02
+  },
+  {
+   "w": "time,",
+   "start_s": 63.02,
+   "end_s": 63.42
+  },
+  {
+   "w": "slowing",
+   "start_s": 63.84,
+   "end_s": 63.92
+  },
+  {
+   "w": "the",
+   "start_s": 63.92,
+   "end_s": 64.08
+  },
+  {
+   "w": "frontier",
+   "start_s": 64.08,
+   "end_s": 64.38
+  },
+  {
+   "w": "could",
+   "start_s": 64.38,
+   "end_s": 64.62
+  },
+  {
+   "w": "speed",
+   "start_s": 64.62,
+   "end_s": 64.84
+  },
+  {
+   "w": "up",
+   "start_s": 64.84,
+   "end_s": 64.96
+  },
+  {
+   "w": "the",
+   "start_s": 64.96,
+   "end_s": 65.08
+  },
+  {
+   "w": "economy.",
+   "start_s": 65.08,
+   "end_s": 65.44
+  },
+  {
+   "w": "Winning",
+   "start_s": 66.28,
+   "end_s": 66.38
+  },
+  {
+   "w": "the",
+   "start_s": 66.38,
+   "end_s": 66.56
+  },
+  {
+   "w": "AI",
+   "start_s": 66.56,
+   "end_s": 66.84
+  },
+  {
+   "w": "race",
+   "start_s": 66.84,
+   "end_s": 67.12
+  },
+  {
+   "w": "should",
+   "start_s": 67.12,
+   "end_s": 67.36
+  },
+  {
+   "w": "give",
+   "start_s": 67.36,
+   "end_s": 67.52
+  },
+  {
+   "w": "you",
+   "start_s": 67.52,
+   "end_s": 67.64
+  },
+  {
+   "w": "your",
+   "start_s": 67.64,
+   "end_s": 67.8
+  },
+  {
+   "w": "afternoon",
+   "start_s": 67.8,
+   "end_s": 68.06
+  },
+  {
+   "w": "back.",
+   "start_s": 68.06,
+   "end_s": 68.38
+  }
+ ],
+ "aligned": {
+  "matched": 235,
+  "interpolated": 3,
+  "script_tokens": 238
+ }
+}

@@ -1,0 +1,5 @@
+﻿name	exit_code	stdout_stderr_log	exact_command
+01-probe-gate	0	logs/01-probe-gate.log	logs/01-probe-gate.command.txt
+02-motion-gate	0	logs/02-motion-gate.log	logs/02-motion-gate.command.txt
+03-floor-gate	1	logs/03-floor-gate.log	logs/03-floor-gate.command.txt
+04-self-watch	1	logs/04-self-watch.log	logs/04-self-watch.command.txt

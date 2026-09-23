@@ -1,0 +1,6 @@
+script: content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/SCRIPT-C-VO.txt
+algorithm: SHA-256
+sha256: 8b8f9e74de0311623927d9e241c9f6e2f987de060718a17ad7eea212e21f882d
+length_bytes: 1687
+last_write_utc: 2026-09-16T05:43:47.0218471Z
+snapshot_utc: 2026-09-16T05:44:43.7189792Z

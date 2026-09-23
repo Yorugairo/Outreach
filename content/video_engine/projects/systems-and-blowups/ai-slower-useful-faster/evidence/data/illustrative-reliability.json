@@ -1,0 +1,134 @@
+{
+  "schema": "illustrative_reliability.v1",
+  "status": "derived-illustration-not-product-benchmark",
+  "assumptions": [
+    "Identical independent step success probabilities within each scenario",
+    "All required steps must succeed",
+    "No retries or recovery",
+    "Same task difficulty and same number of required steps in both scenarios"
+  ],
+  "formula": "clean_completion_pct = 100 * per_step_probability ** required_steps",
+  "units": {
+    "steps": "required steps",
+    "completion_at_95_pct": "percent of whole jobs completed without any error",
+    "completion_at_99_pct": "percent of whole jobs completed without any error"
+  },
+  "rows": [
+    {
+      "steps": 0,
+      "completion_at_95_pct": 100,
+      "completion_at_99_pct": 100
+    },
+    {
+      "steps": 1,
+      "completion_at_95_pct": 95,
+      "completion_at_99_pct": 99
+    },
+    {
+      "steps": 2,
+      "completion_at_95_pct": 90.25,
+      "completion_at_99_pct": 98.00999999999999
+    },
+    {
+      "steps": 3,
+      "completion_at_95_pct": 85.73749999999998,
+      "completion_at_99_pct": 97.0299
+    },
+    {
+      "steps": 4,
+      "completion_at_95_pct": 81.45062499999999,
+      "completion_at_99_pct": 96.059601
+    },
+    {
+      "steps": 5,
+      "completion_at_95_pct": 77.37809374999998,
+      "completion_at_99_pct": 95.09900499
+    },
+    {
+      "steps": 6,
+      "completion_at_95_pct": 73.50918906249998,
+      "completion_at_99_pct": 94.1480149401
+    },
+    {
+      "steps": 7,
+      "completion_at_95_pct": 69.83372960937497,
+      "completion_at_99_pct": 93.206534790699
+    },
+    {
+      "steps": 8,
+      "completion_at_95_pct": 66.34204312890623,
+      "completion_at_99_pct": 92.27446944279201
+    },
+    {
+      "steps": 9,
+      "completion_at_95_pct": 63.02494097246091,
+      "completion_at_99_pct": 91.35172474836408
+    },
+    {
+      "steps": 10,
+      "completion_at_95_pct": 59.87369392383787,
+      "completion_at_99_pct": 90.43820750088044
+    },
+    {
+      "steps": 11,
+      "completion_at_95_pct": 56.880009227645964,
+      "completion_at_99_pct": 89.53382542587164
+    },
+    {
+      "steps": 12,
+      "completion_at_95_pct": 54.03600876626366,
+      "completion_at_99_pct": 88.63848717161292
+    },
+    {
+      "steps": 13,
+      "completion_at_95_pct": 51.33420832795048,
+      "completion_at_99_pct": 87.75210229989679
+    },
+    {
+      "steps": 14,
+      "completion_at_95_pct": 48.76749791155295,
+      "completion_at_99_pct": 86.87458127689783
+    },
+    {
+      "steps": 15,
+      "completion_at_95_pct": 46.329123015975306,
+      "completion_at_99_pct": 86.00583546412885
+    },
+    {
+      "steps": 16,
+      "completion_at_95_pct": 44.012666865176534,
+      "completion_at_99_pct": 85.14577710948755
+    },
+    {
+      "steps": 17,
+      "completion_at_95_pct": 41.812033521917705,
+      "completion_at_99_pct": 84.29431933839268
+    },
+    {
+      "steps": 18,
+      "completion_at_95_pct": 39.72143184582182,
+      "completion_at_99_pct": 83.45137614500875
+    },
+    {
+      "steps": 19,
+      "completion_at_95_pct": 37.73536025353073,
+      "completion_at_99_pct": 82.61686238355867
+    },
+    {
+      "steps": 20,
+      "completion_at_95_pct": 35.84859224085419,
+      "completion_at_99_pct": 81.79069375972307
+    }
+  ],
+  "display_at_20_steps": {
+    "low_one_decimal": "35.8%",
+    "high_one_decimal": "81.8%",
+    "low_spoken_integer": "36%",
+    "high_spoken_integer": "82%"
+  },
+  "limits": [
+    "Does not measure an AI product",
+    "Does not estimate human rescue time, GDP, or optimal research allocation",
+    "Correlated errors or retries change the model"
+  ]
+}

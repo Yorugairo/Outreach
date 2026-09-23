@@ -1,0 +1,53 @@
+AI can give you a second job. [ring]
+
+Supervising the assistant you hired to save time.
+
+Less supervision means more finished work from models we already have. [post-key]
+
+That is the economic opportunity I see in slowing the frontier.
+
+Anthropic's Dario Amodei has argued for pacing frontier development.
+
+Put the next marginal hour into systems that finish.
+
+A model can look brilliant and still leave you holding the checklist.
+
+Can the handoff finish work, or hand you the checklist? [rehook]
+
+One missed handoff makes a person inspect the output, repair it, and run the chain again. [stakes]
+
+The bottleneck is finished work.
+
+Imagine one job with twenty required steps. [new]
+
+Assume each step succeeds independently ninety-five percent of the time. [new]
+
+We allow no retries or recovery.
+
+The clean completion rate is thirty-six percent.
+
+That is our illustration, not a measurement of any product.
+
+Now change one assumption: each step succeeds ninety-nine percent of the time. [rehook]
+
+The same twenty steps reach eighty-two percent clean completion. [catalyst]
+
+A small local gain lets far more jobs cross the finish line.
+
+Fewer failures could mean fewer human rescues.
+
+The gain could return human hours to work that ships.
+
+If those hours serve customers, the team can produce more.
+
+Memory, tools, and error checks are development too.
+
+Can a stronger model buy back the same human hours? [rehook]
+
+A stronger frontier model could reduce supervision too; that route deserves the same test. [reflect]
+
+If reliability wins, a slower frontier could still speed up the economy.
+
+Don't count how clever the demo looks.
+
+Your second job ends when AI finishes the first. [ring]
