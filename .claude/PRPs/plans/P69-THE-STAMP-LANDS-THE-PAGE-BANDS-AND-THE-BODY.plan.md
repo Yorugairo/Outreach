@@ -424,7 +424,7 @@ verbatim tails and are left pending.
 - Evidence: the player and the gate mirror land in ONE commit. The replaced engine comment cited E99 s87 ("its contact IS its enter, which is why the ring is thrown from that frame"): the camera now pulls from 0.1542 while the ring still fires from the enter - P69-HG1 rules the instant (operator decision 1); reverting is one constant per consumer
 
 ### T5: The stamp takes the room first; the row's other docks are placed around it (R26-247 L2; E99 s88)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T4
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (the row loop at `:7505-7519` and the `reserve` passed to `stamp_dock_place` / `dock_place`), `content/video_engine/tests/test_the_stamp_arrival.py`
@@ -432,10 +432,10 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_the_stamp_arrival.py -q -k "other_dock or two_stamps or takes_the_room_first"`
 - Expected RED: the new cases measure a positive overlap, or a smaller mark than the stamp fitted alone (today the stamp is fitted blind to the row's other docks - review item re-verified)
 - Validate: `python -m pytest content/video_engine/tests/test_the_stamp_arrival.py content/video_engine/tests/test_golden_frames.py -q`
-- Red evidence: pending
-- Green evidence: pending
-- Refactor evidence: pending
-- Evidence: pending
+- Red evidence: `7 failed, 30 deselected` - card over the turned mark `(41605.2 px^2, ring 159.5 px into the card)`; two stamps fitted to one spot `clash (54604.3, 159.5)`; frame overlap 45291.7 px^2
+- Green evidence: parent re-run in place: `test_the_stamp_arrival.py` + `test_golden_frames.py` -> `198 passed in 385.30s`; the agent's 11 neighbouring placer files `424 passed, 3 skipped`
+- Refactor evidence: stamp alone 206.5 x 189.5 = stamp beside a card (same mark, same centre, ring 1.1037x); the card gives ground (382 x 239 -> 194 x 133, over the 80 px floor); a second stamp 131.1 x 120.1 near the 120 px floor; 0.0 px^2 / 0 px ring overlap every way. Stamp boxes pass as a sibling `clear_of` (not `reserve`, which `free_bands` reads only as a foot cut-off)
+- Evidence: FRAME READ by the parent (`scratchpad/p69t5-stamp-plus-card.png` beside the red): the Fed mark clear at full size, the card in open ground, neither over the other. Seen and filed, pre-existing: the E65 `empty` room covers the y basis label (backlog R26-??). R26-247 residual: R4 only
 
 ### T6: A figure lands on a bars page and the compare morphs it (R26-190)
 - Status: pending
@@ -457,7 +457,7 @@ verbatim tails and are left pending.
 - Owner: junior_developer (the test); parent (the rows)
 - Depends on: T2, T3, T4 merged (the H-bed rebuild imports the gate and the cues)
 - Write set: `content/video_engine/tests/test_restage_through_the_compiler.py` (new), `docs/content-video-engine/BACKLOG.md` (rows R26-230, R26-222, R26-231; R26-247's residual at T5's merge), `docs/content-video-engine/CAPABILITIES.md` (one line each)
-- Acceptance: (1) The new test compiles one ledger row through `build_scene_timeline_f` at 16:9 and at 9:16 (the `ASPECT` pin, `test_the_stamp_arrival.py:572-580`). The portrait plot sits inside `SAFE_BOX["9:16"]`, the landscape plot inside `full_stage_bands.evidence_safe`, and the data payload is identical. (2) The H bed, rebuilt into a private dir, compiles under `validate_page_build_spans`. (3) `probe.py <dir> --gate`, then the gate, shows M28 with no label paired with its identical copy. (4) Each row reads DONE, citing its tests (`test_fed_full_stage_bands.py`, `test_fed_page_build_span.py`, `test_fed_axis_handoff.py`, the new test) and this slice's run, with `75fc99f` named as the origin ("wip preservation"), not the approval. The `reviewer`'s read of those three diffs is the review of record. (5) R26-230's caption-size half stays with P68 HG3 (A)
+- Acceptance: (1) The new test compiles one ledger row through `build_scene_timeline_f` at 16:9 and at 9:16 (the `ASPECT` pin, `test_the_stamp_arrival.py:572-580`). The portrait plot sits inside `SAFE_BOX["9:16"]`, the landscape plot inside `full_stage_bands.evidence_safe`, and the data payload is identical. (2) The H bed, rebuilt into a private dir, compiles under `validate_page_build_spans`. (3) `probe.py <dir> --gate`, then the gate, shows M28 with no label paired with its identical copy. (4) Each row reads DONE, citing its tests (`test_fed_full_stage_bands.py`, `test_fed_page_build_span.py`, `test_fed_axis_handoff.py`, the new test) and this slice's run, with `75fc99f` named as the origin ("wip preservation"), not the approval. The `reviewer`'s read of those three diffs is the review of record. (5) R26-230's caption-size half stays with P68 HG3 (A) (6) ADDED from the review: R26-231 closes stating its scope - only pages with an authored build are checked (`build_scene_timeline_f.py:4501`); a follow-up row asks for every page (replaying 44 timelines, 0 of 160 page rows would be refused); R26-222 closes citing the player fix (`scene-evidence-engine.mjs:12203-12261`) and the probe's invisible-label skip (`probe.py:125-133`), and its stale `:2316-2368` becomes `rescale_state` `:2949`
 - Regression: `python -m pytest content/video_engine/tests/test_restage_through_the_compiler.py -q`
 - Expected RED: none - this characterizes code already on main; a failure is the finding and keeps the row open
 - Validate: `python -m pytest content/video_engine/tests/test_fed_full_stage_bands.py content/video_engine/tests/test_fed_page_build_span.py content/video_engine/tests/test_fed_axis_handoff.py content/video_engine/tests/test_restage_through_the_compiler.py content/video_engine/tests/test_full_stage_page_is_measured.py content/video_engine/tests/test_page_is_the_plate.py -q`
@@ -485,7 +485,7 @@ verbatim tails and are left pending.
 - Owner: implementation_luna
 - Depends on: T8
 - Write set: `content/video_engine/scripts/ledger_page.py` (`_readability_fit_error` `:1563`, `_profile_tag_units` `:1536`), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the profile's end-tag, sub, y-label and x-tick placement), `content/video_engine/scripts/measure_page_boxes.py`, `content/video_engine/tests/test_fed_chart_readability.py`, `content/video_engine/assets/page-boxes.v1.json`
-- Acceptance: under the option, each measured on the served player - (1) a long name gets a home - the badge key's line (T10) or a wrapped end tag inside the stage - never a refusal; (2) the subtitle's box and the y-axis label's box never intersect (0 px); (3) the x-tick labels clear the axis line by at least 18 px (main's measured value; B measured 0). Absent the option, byte-identical
+- Acceptance: under the option, each measured on the served player - (1) a long name gets a home - the badge key's line (T10) or a wrapped end tag inside the stage - never a refusal; (2) the subtitle's box and the y-axis label's box never intersect (0 px); (3) the x-tick labels clear the axis line by at least 18 px (main's measured value; B measured 0). Absent the option, byte-identical (4) ADDED 2026-09-22 from the T7 review (`scratchpad/REVIEW-P69-T7-ASTRA-ROWS.md`, MEDIUM): under the profile the plot top measures y 178 in the player, 19 px INTO the full-stage top band (`ledger_page.py:1363-1379`); the profiled page keeps E99 s82's bands - a test pins the plot inside `full_stage_bands.evidence_safe` with the option on
 - Regression: `python -m pytest content/video_engine/tests/test_fed_chart_readability.py -q -k "long_name or sub_ylabel or xtick_clearance"`
 - Expected RED: a long-name dense-line page with the profile is refused ("cannot fit its enlarged inline end tags", `ledger_page.py:1574`); the measured x-tick clearance under the profile is 0 px; the sub/y-label intersection is non-zero on the representative that the side-by-side read
 - Validate: `python content/video_engine/scripts/measure_page_boxes.py --write` then `python -m pytest content/video_engine/tests/test_fed_chart_readability.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_golden_frames.py -q`
