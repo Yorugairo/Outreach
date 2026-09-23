@@ -10,3 +10,6 @@ content/video_engine/projects/**/evidence/sources/** -text
 content/video_engine/projects/**/pilots/** -text
 content/video_engine/projects/**/animatic/** -text
 content/video_engine/projects/**/*.svg -text
+
+# Blender scene files are binary, including hash-bound diagnostic fixtures.
+*.blend -text
