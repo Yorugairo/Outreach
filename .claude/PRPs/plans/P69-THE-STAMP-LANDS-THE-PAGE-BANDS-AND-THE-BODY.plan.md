@@ -644,40 +644,40 @@ verbatim tails and are left pending.
 - Evidence: 2026-09-23 - the railway climbs to the 1845 peak on "pounds", crashes on "crashed", `-64%` written red above the trough under the 1,000 line (E28); recast to the GDP share on "the internet", the title rewritten 0.1 s after (a same-word retitle is dropped by the compiler), the ring on the page's own Q2-2000 peak (unlabelled - the reference line writes 11.54%), the last twenty years drawn on "AI spending just crossed". The unsourced "GBP 250m raised / $1T+ today" note CUT (no source on disk; the door had mis-cited the dossier). Gate at the end of row 9: `2 FAIL / 2 WARN / 22 PASS` - M03 (the bed) and M11 (row 1), both named for HG4; frozen frames none over 0.5 s; seams 0 faults; cues 7 of 7; life 5 of 5. The parent's frame read: the plots use ~60% of the page width (the rest reserved for end tags) - restaged by the longform profile (T33); the recast's middle is unreadable (R26-261); the GDP page has no years (R26-262). FLAGGED for HG4: the page's end label 11.51% lands on the voice's "eight" (two different measures - a next-letter script note), the railway title says "fell 64%" ~14 s before the voice
 
 ### T18: Row 10 (1:30-1:44) - the sell ticket thrown over the recast
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T17
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; the ticket is `arrive: throw, mass: paper`; the page recasts under it (E64)
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: 2026-09-23 - the sell ticket thrown on "obvious move" over the GDP page, the page recasting under it to the divergence ("Chipmakers doubling. Customers flat."), lines drawn one at a time. REWORKED on the parent's frame read (the ticket read as a blank pad with a tiny badge): SELL is stamped across the ticket's centre in coral (~140 px read, ~95 px parked) - the largest thing on the card; the badge's probe FAILs gone. Named: the divergence fills only the bottom ~40% of its plot (R26-266); SELL cannot land as its own stamp on its word (R26-267); the recast's half-title flash (R26-261)
 
 ### T19: Row 11 (1:44-2:10) - one slot, three records (Karp, Uber, the COO line)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T18
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; each record takes the outgoing card's slot (s80); no world change
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: 2026-09-23 - on "like a claims adjuster" the divergence MELTS and splashes onto `world-internal-memo-v1` (lamp, desk, memo; refused by name: recede - no door, R26-265; the dip; the thread; recast/remake; park), so Karp, Uber and the COO share one slot on a clean ground (the parent's frame read: empty axes behind the records read as a broken chart). The desk's mug steam is the plate's life (the gate does not credit typing, R26-269). Uber's chart card read at 0.90 of the stage with three badges from its own card
 
 ### T20: Row 12 (2:10-2:30) - the trough already doing its job
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T19
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; `ev-three-manias` as T14 named it (a card record, not a page); the peak-to-trough move carried by the card's own marker or a callout, named in the build notes
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: 2026-09-23 - the COO card holds through "Remember that line", then the three-manias TABLE lands in the slot at ~0.76 of the stage, composed from its own pixel bands so cells read ~22 px (never a table read small, E99 s71), its four badges springing in turn (priced / fell 64% / twenty years / still open); leaves on "Which flips the question". The "capital committed" row cut (row 9 keeps its ~7-8% off screen). Named for HG4: the badge strip under the table is small; the caption on the bright desk is low-contrast (R26-268)
 
 ### T21: Row 13 (2:30-2:45) - reset 1, the dip to 1849 (dip 2)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T20
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; `use=reset` with Ken Burns alone; the anaphora in caption STAGE mode
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: 2026-09-23 - dip 2 (a real world change, desk -> viaduct, E47; refused: thread, edge arrival, occluder, melt, recast) before "And in 1849"; Ken Burns alone plus the locomotive's steam; the anaphora in caption stage mode. Rows 10-13 gate: `2 FAIL / 2 WARN / 22 PASS` - both FAILs the bed's (M03, M11); frozen frames none over 0.5 s; seams 6 boundaries 0 faults; stage gaps 1.0 s (the two licensed dips); cues 13 of 13; life 7 of 7 rows. LANE A PAUSES HERE for the longform profile (rows 14-24 are chart-heavy and build on it)
 
 ### T22: Row 14 (2:45-3:20) - the yardstick: dip 3, camera 2, the breakthrough bars
 - Status: pending
@@ -812,16 +812,162 @@ verbatim tails and are left pending.
 - Refactor evidence: pending
 - Evidence: pending
 
-### T35b: The Bravos candidates - new chart verbs from the harvest, each proved as a body beat (E99 s97)
-- Status: pending
+### T35b: The Bravos candidates - SUPERSEDED by T36-T44 (2026-09-23, the harvest v2)
+- Status: done
 - Owner: implementation_luna (lane B for engine verbs; lane A for recipes and the beats)
 - Depends on: T8-T10 (the `longform` profile the verbs are drawn in); the eight new watches (docs/research/runs/bravos-watch/, Gemini x4 + GPT x4) merged into the harvest first
 - Write set: `content/video_engine/scripts/species/*.mjs` (new verbs only, synced), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (their paint), `content/video_engine/scripts/build_scene_timeline_f.py` (their tokens' validation), `content/video_engine/effects/cards/*.json` + `content/video_engine/effects/recipes/*.json` (new only), their tests and goldens, `content/video_engine/assets/page-boxes.v1.json`
-- Acceptance: the harvest `docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST.md` (106 items; HAVE 55 / PARTIAL 25 / MISSING 26) names ten candidates; build the ones that need no ruling, each as a card + a recipe that composes existing cards (s70) + a golden + a body row that carries it: `level_join` (a dashed rule between two points, a ring at each end - rows 14/15/21), `axis_tag` (the named year as an accent pill on the x-axis - rows 9/15/22), `project` (the line continues dashed past its last real point - rows 16/17/23, labelled as a projection, E77), chip `lit` / `tick` states (rows 10/22), `chapter_tag` (a section pill held over an act's charts - rows 13/18/23), `the-hidden-base` (bars hanging below a waterline - row 16's leases; E53-safe), `loop` (a flow laid as a ring with money moving on its arrows - rows 16-18), `term-over-the-parked-chart` (rows 16/18). CLEARED 2026-09-23: `lit_stretch` as a TRAVELLING or blinking light, and the freeze-on-light beat (E99 s99); `blur-under-the-dock` for a busy chart plate, as a row option (E99 s98). PROPOSED to the operator (P69-HG3): a MEMBERSHIP-STACK exception to E53 s2 (the bar is ONE value; its tiles are equal, unvalued identities - who is in it - and the total is written; never a stack of values), and a CENSUS exception for the pyramid under E53 s1's treemap amendment (every cell's value written, the claim surface-vs-hidden, a size claim in the same beat takes its bar). STILL HELD: an INVERTED axis (E28 - a rise would draw as a fall; a second axis alone is allowed as E53 s4's overlay), rings on every point (E56), shape-only waves with no data (E52; never fabricated)
+- Acceptance: the harvest `docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST.md` (106 items; HAVE 55 / PARTIAL 25 / MISSING 26) names ten candidates; build the ones that need no ruling, each as a card + a recipe that composes existing cards (s70) + a golden + a body row that carries it: `level_join` (a dashed rule between two points, a ring at each end - rows 14/15/21), `axis_tag` (the named year as an accent pill on the x-axis - rows 9/15/22), `project` (the line continues dashed past its last real point - rows 16/17/23, labelled as a projection, E77), chip `lit` / `tick` states (rows 10/22), `chapter_tag` (a section pill held over an act's charts - rows 13/18/23), `the-hidden-base` (bars hanging below a waterline - row 16's leases; E53-safe), `loop` (a flow laid as a ring with money moving on its arrows - rows 16-18), `term-over-the-parked-chart` (rows 16/18). CLEARED 2026-09-23: `lit_stretch` as a TRAVELLING or blinking light, and the freeze-on-light beat (E99 s99); `blur-under-the-dock` for a busy chart plate, as a row option (E99 s98). PROPOSED to the operator (P69-HG3): a MEMBERSHIP-STACK exception to E53 s2 (the bar is ONE value; its tiles are equal, unvalued identities - who is in it - and the total is written; never a stack of values), ). CLEARED by E99 s100 (area is valid when it serves the story, truthful when drawn in true proportion with its figures written): the PYRAMID / ICEBERG form - Bravos's surface-vs-hidden debt pyramid, every cell's value written, cell areas proportional - joins the build list beside `the-hidden-base`. STILL HELD: an INVERTED axis (E28 - a rise would draw as a fall; a second axis alone is allowed as E53 s4's overlay), rings on every point (E56), shape-only waves with no data (E52; never fabricated) ADDED 2026-09-23 (the operator: "Have you already noted in what context these actions/effects are most likely useful?" - only as one quoted instance each): before building, a SYNTHESIS pass over the harvest + the eight watches (whose template now asks for USE CONTEXT) writes, for every harvested item, its USE-WHEN - the sentence's act (SPECIES-BY-SENTENCE: names a thing / states a size / compares / shows change / reveals the hidden / turns / warns / concludes), the story moment (hook, setup, proof, turn, reveal, close), the data shape it needs, and when NOT to use it - into `docs/research/bravos-style/BRAVOS-USE-WHEN.md`; every new card and recipe carries that use-when in its own field, so an author finds the move by what the sentence is doing
 - Regression: `python content/video_engine/scripts/effects_catalog_check.py` (each new id absent before)
 - Expected RED: none of the candidate ids exists in `effects/cards` / `effects/recipes` / the species list
 - Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, and each verb's own test
 - Frame acceptance: the parent reads each verb in its body beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: superseded 2026-09-23 - its candidate list became slices T36-T44 on the harvest v2 (nine videos); the use-when synthesis it asked for is `docs/research/bravos-style/BRAVOS-USE-WHEN.md` (171 entries grouped by act)
+
+**ADDED 2026-09-23 (the operator's goal: "after Lane a finishes, add relevant work to p69 and /prp-implement"):** T36-T45 replace T35b's candidate list with the harvest v2's top-ranked moves (nine Bravos videos, ranked by videos x usefulness). Verbs build in LANE B after the `longform` profile (T8-T10, T10b, T10c) so they are drawn in the new style; the recipes compose them in LANE A; the chart-heavy body rows (14-24) build after both and use them where the harvest names their row.
+
+
+### T36: `lit_stretch` - a light that TRAVELS along a stretch of a line on its word (E99 s99)
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T10c; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 1 (8 of 9 videos). A relit stretch runs from `from` to `to` along the series on its word (a comet head optional), the rest of the line keeps its ink; it counts as motion because it travels (s99). Rows 9 (the crash), 14, 15, 21. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T37: `solo` - the on-word isolate for a line or a bar (dim the rest)
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T36; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 2 (8 of 9). On its word every other series or bar mutes to the E67 dim (0.45, or the spec's measured 0.3-0.38 under the longform profile) and the named one keeps its ink; `unsolo` restores. Rows 10, 16, 18, 22. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T38: `axis_tag` + drop guides - the named year becomes a pill on the x-axis
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T37; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 3 (7 of 9). On its word the year's tick springs into an accent pill and a dashed guide drops from the datum to it (E28: the axis states its rule). Rows 9, 14, 15, 22. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T39: `level_join` - a dashed rule drawn from one point to another, a ring at each end
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T38; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 4 (6 of 9). The rule draws A -> B on its word with a small ring at each end and the gap written as a figure; the label never sits on the rule (C14). Rows 14, 15, 21. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T40: `blur` under a dock over a busy chart plate (E99 s98) + the term-over-the-parked-chart recipe
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T39; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 6 (6 of 9). A dock option: the plate under a landing dock blurs (the backdrop blur `exit:blurzoom` already carries, held) while the dock reads, and clears on its leave; only over a busy CHART plate (s98), never a ledger page's plot (E63 unchanged - the harvest's open question stays with the operator). Rows 10, 11, 16, 18. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T41: `project` - a labelled dashed continuation past the last real point
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T40; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 7 (7 of 9). The line continues dashed past its last datum on its word, labelled as a projection ("consensus", "2026E"), never mistaken for data (E77); pairs with the debt page's spread wedge. Rows 16, 17, 22, 23. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T42: chip states `lit` / `tick` / `sell`
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T41; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 9 (7 of 9). The chip species gains a held halo (`lit` - an annotation, s91), a tick (the cross's sibling) and a SELL stamp-state; a blinking halo counts as motion (s99). Rows 10, 20-21, 22. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T43: `loop` - a flow laid as a ring, money moving on its arrows
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T42; lane B
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Rank 11 (6 of 9). The flow species gains a ring layout and arc-length tokens moving on its edges. Rows 7, 16, 17. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
+
+### T44: the Bravos RECIPES composed from T36-T43, each proved as a body beat
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T43; T35; lane A
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: from the Bravos harvest v2 (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`, section 6) and the use-when guide (`docs/research/bravos-style/BRAVOS-USE-WHEN.md`). Ranks 5, 8, 10, 13, 14, 15: `the-ratio-read-in-the-gap` + the group bracket, `the-epoch-walk`, `peak-fall-magnitude`, `isolate-then-quantify-the-tail`, `the-formula-by-its-words`, `the-hidden-base` / the proportional iceberg (s100). Each a recipe JSON (status candidate) with its use-when, proved on the H row the harvest names. Common: the card carries its USE-WHEN (act, story moment, data shape, use when / don't) copied from the guide; a golden of the verb on a real H body beat (never a fixture served as a scene, s60); absent the token every page byte-identical; drawn in the `longform` profile when the row takes it
+- Regression: the verb's own test (`python -m pytest content/video_engine/tests/test_<verb>.py -q`)
+- Expected RED: the token is refused as unknown by `build_scene_timeline_f`
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_<verb>.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`, `node --test content/video_engine/tests/kinetics/*.test.mjs`
+- Frame acceptance: the parent reads the verb's beat beside the Bravos frame it was harvested from
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
