@@ -1,0 +1,16 @@
+# Fed v4: ONE reference-conditioned finance quality study
+
+Root: C:/Users/Snipe/Downloads/Outreach Program.
+Use /google-flow-production via ONE isolated flow-asset-producer. User authorized proceeding after supplying viable rich-color Mike references. V1-v3 remain unchanged and held. Do not resume those jobs.
+
+Before generation BOTH coordinator and actual producer must read `.agents/skills/google-flow-production/SKILL.md` and `docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md`, including reconciliation. Record exact paths read in receipt. Read episode STYLE-DIRECTION.md. Operator direction overrides flat-vector/cream-stick templates and unsupported research claims.
+
+Execute service order `content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/review/claims/mp-fed-liquidity-quality-v4/WORK-ORDER.md`. ONE candidate, x1, ONE generation submission total. This is a flat opaque quality study, NOT final layers; do not segment it into production assets. No automatic full batch. Preserve raw original native dimensions; no upscale or resize as a quality substitute. Target native 2K or higher if zero-credit controls permit. If only smaller output is available, retain and report it honestly; do not claim high-resolution acceptance.
+
+Attach BOTH exact reference files listed in the service claim, after prompt entry; verify actual media chips. Bind existing @mike2 using real entity chip, no appearance or wardrobe re-description. Hero wrong-bubble supplies richness/detail, user desk supplies finance lighting/material fidelity. Do not copy reference charts or lettering; all documents/monitors blank. This is current-bubble-mechanism, NOT korea-memory-toll. The operator's exact style is: A light application of wood block print meets vox newspaper with rich anime colors.
+
+Use already-signed-in magolliet@gmail.com. Immediately before submission save screenshot showing IMAGE, Nano Banana PRO, landscape 16:9, x1, and zero-credit meter. Prior v3 generated with Nano Banana 2; selecting Pro afterward is not proof. If actual selected model, references, character binding, account or meter cannot be verified, STOP without submitting. Use supported existing browser route; do not edit drivers, install, switch accounts or enable services. Maximum paid credits ZERO. Still only, no video or audio.
+
+Write ONLY under this new delivery directory: readiness.json, settings/chip proof, exact submitted prompt, reference SHA256s, raw original, output SHA256/native dimensions, manifest.json, contact_sheet.html, and reply.md. Keep review_only and render_eligible=false. No registry promotion, doctrine edits, script edits, approval claims or changes to other deliveries. Existing source files read-only. No extraction needed. Verify file decodes and actual dimensions, distinguish uploaded-reference tile from generated output. If a job remains running record its handle and collect it; don't resubmit on uncertain status.
+
+Return <=200 words with actual output path/hash/dimensions, selected model proof, reference/character chip proof, attempt count and credit meter, skills/research read and remaining blockers. Coordinator must collect worker result, not finish merely on dispatch. New artwork still requires parent visual review and HG2 operator approval.
