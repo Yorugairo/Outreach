@@ -160,20 +160,20 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Evidence: `M/assets.py`, `M/importers.py`, `F/assets/`, `test_model_assets.py` and `.gitattributes` landed in `708b64d` after Sol escalation preserved the core from three bounded Luna failures. The independent reviewer found missing `.blend` dependency declarations, overly strict in-root glTF `../` handling, and unbounded bundle intake; fixes and follow-up URI-count hardening passed 26 focused tests (two Windows symlink skips), with the combined relevant suite at 143 passed, three skips. Parent hardened T2 render approval so review-only intake records cannot serve as approvals (`aa6b634`). No provider calls or Blender execution; `.blend` packed/dependency claims require later Blender inspection and the 80-byte fixture is diagnostic, not art.
 
 ### T4a: Native preset authoring tooling
-- Status: running (diagnostic editable preset family; no art approval)
-- Owner: implementation_luna for bounded Blender authoring; parent art direction/integration
+- Status: complete (diagnostic editable preset family only; no art approval)
+- Owner: execution_sol escalation completed; parent art direction/integration
 - Depends on: T3
 - Write set: `M/blender/authoring.py`, `M/blender/presets.py`; `content/video_engine/assets/modeling/native/`; `F/presets/`; `content/video_engine/tests/test_model_presets.py`; `B/art/`
 - Acceptance: one editable body/rig family with bounded face/proportion/hair/clothing controls, tested on diagnostic assets; no finished-art claim. T1 selects the primary starter or its single documented fallback based on usable license, offline import, editable topology, rig compatibility and face/hands baseline; failure blocks that choice rather than starting open-ended research.
 - Validate: `python -m pytest content/video_engine/tests/test_model_presets.py -q`; the T4a test fixture launches the pinned Blender executable and checks reopened assets, independent of T8.
-- Evidence: pending; per-candidate `.blend`, manifest, contact sheet, render metadata and art review.
+- Evidence: `M/blender/authoring.py`, `M/blender/presets.py`, `assets/modeling/native/fighter-family-v1.blend` and its manifest, `F/presets/`, `test_model_presets.py`; branch commit `de9a5b9`. Parent reran the Blender-backed fixture on 2026-09-23 (3 passed; 18 combined T4a/T7a tests). The canonical saved scene has 19,158 stored body vertices, 930 bones, frame-27/28 nonzero deformation and a measured two-modifier comparison; the second Armature modifier did not double-deform at the sampled pose. Local ignored `B/art/REVIEW.md`, structured reopen inspections and matched renders show generic face/hands, rough hair and painted shorts. This closes tooling feasibility only; T4b must establish recognizable fighter art and broader deformation quality.
 
 ### T4b: Two fighter identities and bounded art packet
 - Status: pending
 - Owner: implementation_luna; parent directs art and records operator verdict
 - Depends on: T4a
 - Write set: `content/video_engine/assets/modeling/native/fighters/`; `B/art/fighters/`
-- Acceptance: `fighter-a.blend`, `fighter-b.blend` and per-fighter `model-asset.json`; front, three-quarter, side, back, face and hand closeups in neutral and final materials. Both share the preset family but remain recognizable caricatures. One first submission and at most two correction passes per explicit review; unresolved rejection requires a scoped operator decision, not unlimited polishing.
+- Acceptance: `fighter-a.blend`, `fighter-b.blend` and per-fighter `model-asset.json`; front, three-quarter, side, back, face and hand closeups in neutral and final materials. Both share the preset family but remain recognizable caricatures. One first submission and at most two correction passes per explicit review; unresolved rejection requires a scoped operator decision, not unlimited polishing. Before a whole-body scene proof, review one finished head-and-shoulders look in the intended short framing. It must read as the named fighter through sculpted facial proportions, expression, hair/beard and at least one characteristic costume/body detail without relying on a caption. Generic MPFB anatomy, wedge hair, painted-on flat shorts or a smooth shaded body do not satisfy this art gate. Show the look beside its neutral mesh and a face/shoulder stress pose so texture cannot hide deformation defects. Use the operator's Nate Diaz Sketchfab reference (468.8k vertices/677.6k triangles, Mixamo animation) as a visual-detail comparator, not a polygon-count target or an assumed licensed asset; use the Mojahed Fudailat clip for readable oversized-head caricature and the ESPN Jon Jones edit for footage-plus-anatomy compositing, not as proof that both are full 3D fighter scenes.
 - Validate: `python -m pytest content/video_engine/tests/test_model_presets.py -q`; this suite must enumerate both fighter manifests. HG2 also consumes T5b stress poses and T7b view proof.
 - Evidence: pending; detailed editable assets and review packet, not proxies.
 
@@ -214,13 +214,13 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Evidence: pending; full frames and scene inspection with hidden/disabled-object and render-engine state captured.
 
 ### T7a: Independent editable 2.5D model/layer backend
-- Status: running (Sol xhigh escalation after three bounded Luna failures)
-- Owner: execution_sol escalation; parent retains integration and art boundary
+- Status: complete (diagnostic authored-layer backend only; no art approval)
+- Owner: execution_sol escalation completed; parent retains integration and art boundary
 - Depends on: T3, T5a
 - Write set: `M/layered.py`; `F/layered/authored/`; `content/video_engine/tests/test_model_layered.py`; `B/2_5d/authored/`; shared player source remains read-only
 - Acceptance: independent backend development uses one editable authored-layer character fixture with pose/expression swaps, plus props/environment planes. This proves independent input support, not completion of the detailed 2D episode variant. Shared contact clock, explicit view limits and disocclusion failures; no dependency on T5b or Blender. Fighter-derived resources belong to T7b.
 - Validate: `python -m pytest content/video_engine/tests/test_model_layered.py content/video_engine/tests/test_plate_library_layers.py content/video_engine/tests/test_page_depth.py content/video_engine/tests/test_dock_depth.py -q`; the new suite includes contact/camera/occlusion and random-seek frame checks.
-- Evidence: pending. Luna preserved `M/layered.py`, `F/layered/authored/`, and `test_model_layered.py`; `py_compile` and the first contact-clock test passed, but the owned module had 10 cascading fixture failures because two fighter layer rows lacked `binding_id`. Failure ledger: one rejected patch hunk, one syntax/collection failure, one fixture-backed module run (three cumulative); Sol xhigh owns correction and exact four-file suite. Art remains diagnostic and unapproved.
+- Evidence: `M/layered.py`, `F/layered/authored/`, `test_model_layered.py`; branch commit `e5b2f4b`. Parent reran 15 layered tests on 2026-09-23, including contact clock, camera bounds, occlusion, arbitrary seek order and an explicit review-only gate (18 combined T4a/T7a tests passed). The exact four-file suite returned 84 passed, 2 unrelated plate-library failures: its checked-in index points at main's absolute Tokyo-dock PNG path while the tests expect this worktree, and its ignored alive PNG is absent here (both PNGs exist in main). No T7a test failed. Local ignored `B/2_5d/authored/contact-sheet.png` and receipt show synthetic timing with a visible diagnostic banner. Contact labels are not impact-physics proof, and the vectors are not finished character art.
 
 ### T7b: Fighter-derived layer bake and view proof
 - Status: pending
