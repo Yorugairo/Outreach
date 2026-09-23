@@ -9,7 +9,7 @@ edit `build_episode_h.shot_table`. Every anchor is a PHRASE off the take (`autho
 | 2 | 42.04-49.45 | `world-three-notch-slate-v1` | `use=landing` | - | agenda @43.04 |
 | 3 | 49.45-56.62 | `world-h1-studio-v1` | `use=landing` | `dock-h-two-line-copy` 55.62-56.62 | - |
 | 4 | 56.62-63.80 | `ledger:ev-divergence-v1:line:234:right:camera=dock-h-two-line-copy:cut` | `idle=live;domain=80,277;card=no` | - | build_to @56.62; retitle @56.62; chip @58.60; flow @59.86 |
-| 5 | 63.80-104.31 | `ledger:ev-railway-index-v1:line:139:right:axes:cut` | `idle=live;then=ev-equip-ipp-gdp-v1:line;then=ev-divergence-v1:line` | `dock-h-sell-ticket` 89.61-104.31 | build_to @63.80; build_to @65.33; build_to @68.57; build_to @77.46; figure @78.08; chart_to @80.49; retitle @80.59; callout @83.35; build_to @86.49; chart_to @93.34; undraw @92.44; retitle @93.44 |
+| 5 | 63.80-104.31 | `ledger:ev-railway-index-v1:line:139:right:axes:cut` | `idle=live;then=ev-equip-ipp-gdp-v2:line;then=ev-divergence-v1:line` | `dock-h-sell-ticket` 89.61-104.31 | build_to @63.80; build_to @65.33; build_to @68.57; build_to @77.46; figure @78.08; chart_to @80.49; retitle @80.59; callout @83.35; build_to @86.49; chart_to @93.34; undraw @92.44; retitle @93.44 |
 | 6 | 104.31-147.82 | `world-internal-memo-v1` | `use=landing` | `dock-h-karp-record` 107.09-114.21, `dock-h-uber-adoption` 114.21-120.65, `dock-h-coo-line` 120.65-133.00, `dock-h-three-manias` 133.00-141.38 | steam @105.31; steam @120.65; steam @141.38 |
 | 7 | 147.82-162.50 | `world-viaduct-train-rain-v1` | `use=reset` | - | steam @147.82 |
 

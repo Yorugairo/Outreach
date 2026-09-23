@@ -31,7 +31,7 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
   CAPITAL_FLOW             row 7: the flow diagram `capital -> value` on "capital arriving faster" (CAPABILITIES:99),
         in the page's own empty room; the NVIDIA chip lands on the page on "Nvidia" and is crossed.
   RAIL_PAGE / GDP_RECAST   rows 8-9: the dip back to the page, the railway index building on its own figures,
-        then the recast to `ev-equip-ipp-gdp-v1`. THE 7 % AND 8 % TICKS THE TREATMENT NAMES DO NOT EXIST ON DISK
+        then the recast to `ev-equip-ipp-gdp-v2`. THE 7 % AND 8 % TICKS THE TREATMENT NAMES DO NOT EXIST ON DISK
         (the object is share-of-GDP, 11.54 % at the Q2-2000 peak): the page rings ITS OWN data and the departure
         is written in `build-h/BUILD-NOTES-H.md`. No figure is invented (E77).
   RAIL_DROP                "-64%", the railway object's own arithmetic (2,062 -> 741), never the treatment's -66.
@@ -176,7 +176,7 @@ OBJECTS = HERE / "evidence/objects"
 OPEN_PAGE = "ev-divergence-v1"           # row 1 AND row 4: one verified page, staged
 LAYER_PAGE = "ev-divergence-v1"
 RAIL_PAGE = "ev-railway-index-v1"        # row 9: the 442-company railway index, 1843-1850
-GDP_PAGE = "ev-equip-ipp-gdp-v1"         # row 9: equipment + IP investment, share of GDP
+GDP_PAGE = "ev-equip-ipp-gdp-v2"         # row 9: equipment + IP investment, share of GDP (v2 = v1 + year ticks + y label, E28, R26-262)
 
 
 def _series(name: str) -> dict:
@@ -1309,7 +1309,7 @@ BODY_ASSETS = {
 # and HBM-class +13.9% over the last two prints (95408 vs 83784) - each figure is drawn WITH its basis.
 MEMORY_FIGURES = (("DRAM", "+16%", "on the July print"), ("HBM-class", "+14%", "over the last two prints"))
 BODY_DEPARTURES = (
-    (9, "7% tick / 8% datum on ev-equip-ipp-gdp-v1", "cut - the page rings its own 11.54% (not shown under the 7/8 words)"),
+    (9, "7% tick / 8% datum on ev-equip-ipp-gdp-v2", "cut - the page rings its own 11.54% (not shown under the 7/8 words)"),
     (9, "the note / figures '£250m' then '$1T+ today' (RAIL_NOTE; the treatment's row 9)",
      "cut (P69 T17) - no source on disk (UNSOURCED, never drawn); the caption carries the script's words"),
     (10, "the ticket 'reads SELL over the chip line's tip' (the crop carries no word)",
