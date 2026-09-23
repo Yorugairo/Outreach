@@ -97,13 +97,8 @@ def recipes(recipes_dir: Path) -> list[dict]:
 
 # --------------------------------------------------------------------------- the committed catalogue
 
-@pytest.mark.xfail(strict=True, reason="R26-239: four compiler tokens (room, domain, build, labelfit) have no card")
 def test_the_committed_catalogue_passes_every_check():
-    """R26-224 (2026-09-18), classified (c) a real gap, filed as R26-239 and named rather than hidden: the drift
-    gate's coverage check reports four compiler tokens with no card - `room` (R26-221), `domain` (R26-223) and
-    `build` (R26-226), all three built today, and `labelfit` (pre-existing, R26-191). `build_effects_catalog.py
-    --check` exits 1 on the same four, so the catalogue cannot be regenerated until they are carded. Writing the
-    cards is the row's work, not a test lane's; the xfail is strict, so it fails the moment they land."""
+    """Every accepted compiler token and kinetics module has a catalogued card or option."""
     # Act
     report = ECC.run(ROOT)
 
@@ -334,10 +329,8 @@ def test_coverage_names_a_compiler_exit_that_has_no_card(cards_dir, monkeypatch)
     assert any("zzz_fake" in f and "SCENE_EXITS" in f for f in failures), failures
 
 
-@pytest.mark.xfail(strict=True, reason="R26-239: four compiler tokens (room, domain, build, labelfit) have no card")
 def test_coverage_accepts_a_token_listed_as_a_parent_cards_option(cards_dir):
-    """R26-224 (2026-09-18): the first assert (a token hidden by a parent card's option is reported) still holds;
-    the LAST one - the committed cards cover every token - is R26-239's four. Strict xfail: see the test above."""
+    """An option covers its token, while removing that option exposes the gap."""
     # Arrange: `wipe_right` has no card of its own - it is exit:wipe's option
     edit_card(cards_dir, "exit:wipe", lambda c: c.update(options=[]))
 

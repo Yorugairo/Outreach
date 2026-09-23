@@ -830,6 +830,50 @@
         "today": true,
         "why": null
       }
+    },
+    {
+      "id": "kinetics:labelfit",
+      "axis": "kinetics",
+      "token": "labelfit",
+      "title": "The label-fit kinetics module",
+      "aliases": [],
+      "does": "Split bar values stay inside their own bar when they fit; otherwise the row thins to the minimum, maximum and badged value on their correct sign sides.",
+      "when": "a dense value row cannot fit every label at legible type size",
+      "when_source": "content/video_engine/scripts/kinetics/labelfit.mjs:1",
+      "author": {
+        "key": "the ledger page's value-row layout; no separate shot-row token",
+        "example": "LF",
+        "example_source": null,
+        "check": "module"
+      },
+      "phases": [], "blends": [], "options": [],
+      "dials": {"module": "content/video_engine/scripts/kinetics/labelfit.mjs", "object": "LF"},
+      "lives": {"form": "module", "path": "content/video_engine/scripts/kinetics/labelfit.mjs", "symbol": "LF"},
+      "doctrine": [], "status": "wired",
+      "proof": {"golden": null, "test": "content/video_engine/tests/kinetics/labelfit.test.mjs", "first_use": null},
+      "callable": {"today": true, "why": "inlined value-row law, not a standalone shot-row effect"}
+    },
+    {
+      "id": "kinetics:page_surface",
+      "axis": "kinetics",
+      "token": "page_surface",
+      "title": "The page-surface geometry module",
+      "aliases": [],
+      "does": "A pure geometry helper maps a registered paper quad to stage, chart and viewBox coordinates for a later page handoff; it does not render a page itself.",
+      "when": "a registered paper surface must supply geometry to a source-bound ledger handoff",
+      "when_source": "content/video_engine/scripts/kinetics/page_surface.mjs:1",
+      "author": {
+        "key": "ledger `surface=<paper>,<lead_s>` handoff; module is not a shot-row token",
+        "example": "SURFACE_PAGE",
+        "example_source": null,
+        "check": "module"
+      },
+      "phases": [], "blends": [], "options": [],
+      "dials": {"module": "content/video_engine/scripts/kinetics/page_surface.mjs", "object": "SURFACE_PAGE"},
+      "lives": {"form": "module", "path": "content/video_engine/scripts/kinetics/page_surface.mjs", "symbol": "SURFACE_PAGE"},
+      "doctrine": [], "status": "wired",
+      "proof": {"golden": null, "test": "content/video_engine/tests/test_page_surface_geometry.py::test_source_stage_quad_and_native_host_match_measured_surface", "first_use": null},
+      "callable": {"today": true, "why": "pure geometry helper for the registered paper handoff, not a renderer"}
     }
   ]
 }

@@ -20,7 +20,10 @@ ACTIVE_NAMES = {
     "brand-voice",
     "comfyui",
     "competitive-platform-analysis",
+    "content-engine",
+    "council",
     "deep-research",
+    "design-engine",
     "define-goal",
     "e2e-testing",
     "elite-cro-and-marketing",
@@ -54,7 +57,6 @@ ACTIVE_NAMES = {
     "tavily-web",
     "video-editing",
     "video-engine",
-    "video-script-architect",
     "watch",
     "web-perf",
     "web-research-agent",
@@ -80,9 +82,11 @@ def skill_name(skill_file: Path) -> str:
 
 def is_active(name: str, directory: Path) -> bool:
     normalized = str(directory).replace("\\", "/")
+    if "/product-design/" in normalized:
+        return False
     if name.startswith("hyperframes"):
         return True
-    return name in ACTIVE_NAMES or "/product-design/" in normalized
+    return name in ACTIVE_NAMES
 
 
 def skill_fingerprint(directory: Path) -> str:
