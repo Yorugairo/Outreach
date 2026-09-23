@@ -1,20 +1,23 @@
 """Deterministic, editable 2.5D authored-layer scene evaluation and raster preview.
 
-This backend composes diagnostic vector primitives on declared depth planes. Motion
-comes from the backend-neutral RationalClock and MotionTimeline. This inline JSON
-fixture is a T7a proof input; T3 staged-asset integration belongs to later slices.
-It does not infer hidden geometry or certify physical contact or finished art.
+This backend composes diagnostic vectors and caller-rooted, hash-pinned transparent
+pose/expression PNGs on declared depth planes. Motion comes from the backend-neutral
+RationalClock and MotionTimeline. Raster inputs remain local preview resources; T3
+staged-asset integration belongs to later slices. It does not infer hidden geometry
+or certify physical contact or finished art.
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import hmac
+from io import BytesIO
 import json
 import math
 from dataclasses import dataclass
 from fractions import Fraction
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any, Mapping, Sequence
 
 from PIL import Image, ImageColor, ImageDraw, ImageFont
@@ -25,6 +28,7 @@ from .motion import MotionContractError, MotionSample, MotionTimeline
 
 MAX_CANVAS_PIXELS = 2_304_000
 MAX_SOURCE_PIXELS = 2_304_000
+MAX_RASTER_ASSET_BYTES = 16_777_216
 MAX_RASTER_PIXELS = 36_864_000
 MAX_SHEET_PIXELS = 24_000_000
 MAX_LAYERS = 16
@@ -185,7 +189,7 @@ def _ease(name: str, amount: float) -> float:
 class LayeredScene:
     """Validated authored-layer input with a pure, random-seekable frame evaluator."""
 
-    def __init__(self, document: Mapping[str, Any]):
+    def __init__(self, document: Mapping[str, Any], *, asset_root: str | Path | None = None):
         raw = dict(document)
         if raw.get('schema_version') != 'authored_layer_scene.v1':
             raise LayeredSceneError('schema_version must be authored_layer_scene.v1')
@@ -203,6 +207,16 @@ class LayeredScene:
         self.width, self.height = canvas
         if self.width * self.height > MAX_CANVAS_PIXELS:
             raise LayeredSceneError(f'canvas_px exceeds the {MAX_CANVAS_PIXELS}-pixel diagnostic limit')
+        self._asset_root: Path | None = None
+        self._raster_cache: dict[tuple[str, str], dict[str, Any]] = {}
+        if asset_root is not None:
+            try:
+                trusted_root = Path(asset_root).resolve(strict=True)
+            except (OSError, TypeError, ValueError) as exc:
+                raise LayeredSceneError(f'cannot resolve caller-declared raster asset_root: {exc}') from exc
+            if not trusted_root.is_dir():
+                raise LayeredSceneError('caller-declared raster asset_root must be a directory')
+            self._asset_root = trusted_root
         try:
             self.timeline = MotionTimeline.from_scene(raw.get('scene', {}))
         except MotionContractError as exc:
@@ -224,14 +238,14 @@ class LayeredScene:
             raise LayeredSceneError('occlusion_policy must be declared_depth_back_to_front')
 
     @classmethod
-    def load(cls, path: str | Path) -> LayeredScene:
+    def load(cls, path: str | Path, *, asset_root: str | Path | None = None) -> LayeredScene:
         try:
             value = json.loads(Path(path).read_text(encoding='utf-8'))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
             raise LayeredSceneError(f'cannot read authored layer JSON: {exc}') from exc
         if not isinstance(value, Mapping):
             raise LayeredSceneError('authored layer JSON root must be an object')
-        return cls(value)
+        return cls(value, asset_root=asset_root)
 
     def _parse_layers(self, value: Any) -> tuple[dict[str, Any], ...]:
         if not isinstance(value, list) or not value:
@@ -318,15 +332,28 @@ class LayeredScene:
                     layer['expression_channel'], f'{label}.expression_channel', 'normalized',
                     ('face_control',), ('step',), binding_id,
                 )
-                layer['_pose_states'] = self._parse_states(layer.get('pose_states'), f'{label}.pose_states')
-                layer['_expression_states'] = self._parse_states(
-                    layer.get('expression_states'), f'{label}.expression_states'
-                )
                 if layer.get('silhouette_bounds_local_px') is None:
                     raise LayeredSceneError(f'{label} character needs silhouette_bounds_local_px for disocclusion checks')
                 layer['_silhouette_bounds'] = _rect(
                     layer.get('silhouette_bounds_local_px'), f'{label}.silhouette_bounds_local_px'
                 )
+                layer['_pose_states'] = self._parse_states(layer.get('pose_states'), f'{label}.pose_states')
+                layer['_expression_states'] = self._parse_states(
+                    layer.get('expression_states'), f'{label}.expression_states'
+                )
+                for state_group in (layer['_pose_states'], layer['_expression_states']):
+                    for state in state_group:
+                        raster = state.get('_raster_asset')
+                        if raster is None:
+                            continue
+                        raster_bounds = raster['_bounds_local']
+                        silhouette = layer['_silhouette_bounds']
+                        if not (silhouette[0] <= raster_bounds[0] and silhouette[1] <= raster_bounds[1]
+                                and silhouette[2] >= raster_bounds[2] and silhouette[3] >= raster_bounds[3]):
+                            raise LayeredSceneError(
+                                f"{label} {state['state_id']!r} raster bounds must stay inside "
+                                'silhouette_bounds_local_px for disocclusion checks'
+                            )
                 budget = _finite(layer.get('disocclusion_budget_px'), f'{label}.disocclusion_budget_px')
                 if budget < 0:
                     raise LayeredSceneError(f'{label}.disocclusion_budget_px cannot be negative')
@@ -366,8 +393,7 @@ class LayeredScene:
                 f"{label} channel {channel_id!r} interpolation must be one of {', '.join(interpolations)}"
             )
 
-    @staticmethod
-    def _parse_states(value: Any, label: str) -> tuple[dict[str, Any], ...]:
+    def _parse_states(self, value: Any, label: str) -> tuple[dict[str, Any], ...]:
         if not isinstance(value, list) or not value:
             raise LayeredSceneError(f'{label} must be a non-empty array')
         if len(value) > MAX_STATES:
@@ -386,12 +412,92 @@ class LayeredScene:
                 raise LayeredSceneError(f'{label}[{index}].index must be a unique non-negative integer')
             names.add(state_id)
             indices.add(state_index)
-            states.append({
+            state = {
                 'state_id': state_id,
                 'index': state_index,
                 '_shapes': _validate_shapes(raw.get('shapes', []), f'{label}[{index}].shapes'),
-            })
+            }
+            if raw.get('raster_asset') is not None:
+                state['_raster_asset'] = self._load_raster_asset(
+                    raw.get('raster_asset'), f'{label}[{index}].raster_asset'
+                )
+            states.append(state)
         return tuple(states)
+
+    def _load_raster_asset(self, value: Any, label: str) -> dict[str, Any]:
+        if self._asset_root is None:
+            raise LayeredSceneError(f'{label} requires an explicit caller-declared asset_root')
+        if not isinstance(value, Mapping):
+            raise LayeredSceneError(f'{label} must declare path, sha256, and bounds_local_px')
+        asset_path = value.get('path')
+        if not isinstance(asset_path, str) or not asset_path or '\x00' in asset_path:
+            raise LayeredSceneError(f'{label}.path must be a relative file inside asset_root')
+        posix_path = PurePosixPath(asset_path.replace('\\', '/'))
+        windows_path = PureWindowsPath(asset_path)
+        if (posix_path.is_absolute() or windows_path.is_absolute() or windows_path.drive
+                or any(part == '..' for part in posix_path.parts)):
+            raise LayeredSceneError(f'{label}.path must stay inside the caller-declared asset_root')
+        expected_digest = value.get('sha256')
+        if not isinstance(expected_digest, str) or len(expected_digest) != 64 or any(
+            character not in '0123456789abcdefABCDEF' for character in expected_digest
+        ):
+            raise LayeredSceneError(f'{label}.sha256 must be a 64-character hexadecimal SHA-256')
+        bounds = _rect(value.get('bounds_local_px'), f'{label}.bounds_local_px')
+        normalized_path = Path(*posix_path.parts)
+        try:
+            resolved_path = (self._asset_root / normalized_path).resolve(strict=True)
+            resolved_path.relative_to(self._asset_root)
+        except (OSError, ValueError) as exc:
+            raise LayeredSceneError(f'{label}.path cannot resolve inside asset_root: {exc}') from exc
+        if not resolved_path.is_file():
+            raise LayeredSceneError(f'{label}.path must resolve to a regular file')
+        cache_key = (str(resolved_path), expected_digest.lower())
+        cached = self._raster_cache.get(cache_key)
+        if cached is not None:
+            return {**cached, '_bounds_local': bounds}
+        try:
+            if resolved_path.stat().st_size > MAX_RASTER_ASSET_BYTES:
+                raise LayeredSceneError(f'{label} exceeds the {MAX_RASTER_ASSET_BYTES}-byte raster asset limit')
+            with resolved_path.open('rb') as source:
+                payload = source.read(MAX_RASTER_ASSET_BYTES + 1)
+        except OSError as exc:
+            raise LayeredSceneError(f'{label} cannot be read: {exc}') from exc
+        if len(payload) > MAX_RASTER_ASSET_BYTES:
+            raise LayeredSceneError(f'{label} exceeds the {MAX_RASTER_ASSET_BYTES}-byte raster asset limit')
+        actual_digest = hashlib.sha256(payload).hexdigest()
+        if not hmac.compare_digest(actual_digest, expected_digest.lower()):
+            raise LayeredSceneError(f'{label} SHA-256 does not match its pinned digest')
+        try:
+            with Image.open(BytesIO(payload)) as encoded:
+                if encoded.format != 'PNG':
+                    raise LayeredSceneError(f'{label} must be a PNG raster asset')
+                image_width, image_height = encoded.size
+                if (image_width < 1 or image_height < 1 or image_width > 4096 or image_height > 4096
+                        or image_width * image_height > MAX_SOURCE_PIXELS):
+                    raise LayeredSceneError(
+                        f'{label} dimensions exceed the 4096-side or {MAX_SOURCE_PIXELS}-pixel raster asset limit'
+                    )
+                if 'A' not in encoded.getbands() and 'transparency' not in encoded.info:
+                    raise LayeredSceneError(f'{label} must have an alpha channel or PNG transparency')
+                encoded.verify()
+            with Image.open(BytesIO(payload)) as decoded:
+                decoded.load()
+                rgba = decoded.convert('RGBA')
+                alpha_min, alpha_max = rgba.getchannel('A').getextrema()
+                if alpha_min == 255 or alpha_max == 0:
+                    raise LayeredSceneError(f'{label} alpha must contain both transparent and visible pixels')
+                rgba.load()
+        except LayeredSceneError:
+            raise
+        except (Image.DecompressionBombError, OSError, SyntaxError, ValueError) as exc:
+            raise LayeredSceneError(f'{label} is not a valid bounded PNG raster asset: {exc}') from exc
+        cached = {
+            '_image': rgba.copy(),
+            '_sha256': actual_digest,
+            '_resolved_path': resolved_path,
+        }
+        self._raster_cache[cache_key] = cached
+        return {**cached, '_bounds_local': bounds}
 
     def _parse_camera(self, value: Any) -> tuple[dict[str, Any], ...]:
         if not isinstance(value, Mapping):
@@ -605,8 +711,8 @@ class LayeredScene:
         selected_by_id = state.selected_states
         anchor_by_id = state.anchors_px
         for layer in self.layers:
-            shapes = self._layer_shapes(layer, selected_by_id.get(layer['layer_id']))
-            world_image = self._raster_layer(layer, shapes, anchor_by_id.get(layer['layer_id'], layer['_anchor_px']),
+            components = self._layer_components(layer, selected_by_id.get(layer['layer_id']))
+            world_image = self._raster_layer(layer, components, anchor_by_id.get(layer['layer_id'], layer['_anchor_px']),
                                              sample, supersample)
             plane = self._plane_camera(state.camera, layer['depth'])
             projected = _project_layer(world_image, layer['_source_bounds'], plane, self.width, self.height, supersample)
@@ -616,22 +722,42 @@ class LayeredScene:
     def _layer_shapes(
         self, layer: Mapping[str, Any], selected: Mapping[str, str] | None
     ) -> tuple[dict[str, Any], ...]:
-        shapes = list(layer['_shapes'])
+        base, pose_shapes, _, expression_shapes, _ = self._layer_components(layer, selected)
+        return tuple(base + pose_shapes + expression_shapes)
+
+    def _layer_components(
+        self, layer: Mapping[str, Any], selected: Mapping[str, str] | None
+    ) -> tuple[
+        tuple[dict[str, Any], ...],
+        tuple[dict[str, Any], ...],
+        Mapping[str, Any] | None,
+        tuple[dict[str, Any], ...],
+        Mapping[str, Any] | None,
+    ]:
         if layer['kind'] == 'character' and selected:
-            for state in layer['_pose_states']:
-                if state['state_id'] == selected['pose']:
-                    shapes.extend(state['_shapes'])
-                    break
-            for state in layer['_expression_states']:
-                if state['state_id'] == selected['expression']:
-                    shapes.extend(state['_shapes'])
-                    break
-        return tuple(shapes)
+            pose = next(state for state in layer['_pose_states'] if state['state_id'] == selected['pose'])
+            expression = next(
+                state for state in layer['_expression_states'] if state['state_id'] == selected['expression']
+            )
+            return (
+                tuple(layer['_shapes']),
+                tuple(pose['_shapes']),
+                pose.get('_raster_asset'),
+                tuple(expression['_shapes']),
+                expression.get('_raster_asset'),
+            )
+        return tuple(layer['_shapes']), (), None, (), None
 
     def _raster_layer(
         self,
         layer: Mapping[str, Any],
-        shapes: Sequence[Mapping[str, Any]],
+        components: tuple[
+            tuple[Mapping[str, Any], ...],
+            tuple[Mapping[str, Any], ...],
+            Mapping[str, Any] | None,
+            tuple[Mapping[str, Any], ...],
+            Mapping[str, Any] | None,
+        ],
         anchor: tuple[float, float],
         sample: MotionSample,
         ss: int,
@@ -653,32 +779,75 @@ class LayeredScene:
             return ((anchor[0] + flip * local[0] * scale - left) * ss,
                     (anchor[1] + local[1] * scale - top) * ss)
 
-        for shape in shapes:
-            width_px = max(1, round(shape.get('_stroke_width', 1) * scale * ss))
-            fill = shape.get('_fill')
-            stroke = shape.get('_stroke')
-            if shape['kind'] in {'rect', 'ellipse'}:
-                bounds = shape['_bounds']
-                corners = (point((bounds[0], bounds[1])), point((bounds[2], bounds[3])))
-                box = (corners[0][0], corners[0][1], corners[1][0], corners[1][1])
-                if box[0] > box[2]:
-                    box = (box[2], box[1], box[0], box[3])
-                if shape['kind'] == 'rect':
-                    radius = round(shape['_radius'] * scale * ss)
-                    if radius:
-                        draw.rounded_rectangle(box, radius=radius, fill=fill, outline=stroke, width=width_px)
+        base_shapes, pose_shapes, pose_raster, expression_shapes, expression_raster = components
+
+        def paint(shapes: Sequence[Mapping[str, Any]]) -> None:
+            for shape in shapes:
+                width_px = max(1, round(shape.get('_stroke_width', 1) * scale * ss))
+                fill = shape.get('_fill')
+                stroke = shape.get('_stroke')
+                if shape['kind'] in {'rect', 'ellipse'}:
+                    bounds = shape['_bounds']
+                    corners = (point((bounds[0], bounds[1])), point((bounds[2], bounds[3])))
+                    box = (corners[0][0], corners[0][1], corners[1][0], corners[1][1])
+                    if box[0] > box[2]:
+                        box = (box[2], box[1], box[0], box[3])
+                    if shape['kind'] == 'rect':
+                        radius = round(shape['_radius'] * scale * ss)
+                        if radius:
+                            draw.rounded_rectangle(box, radius=radius, fill=fill, outline=stroke, width=width_px)
+                        else:
+                            draw.rectangle(box, fill=fill, outline=stroke, width=width_px)
                     else:
-                        draw.rectangle(box, fill=fill, outline=stroke, width=width_px)
+                        draw.ellipse(box, fill=fill, outline=stroke, width=width_px)
+                elif shape['kind'] == 'polygon':
+                    points = [point(item) for item in shape['_points']]
+                    draw.polygon(points, fill=fill)
+                    if stroke:
+                        draw.line(points + [points[0]], fill=stroke, width=width_px, joint='curve')
                 else:
-                    draw.ellipse(box, fill=fill, outline=stroke, width=width_px)
-            elif shape['kind'] == 'polygon':
-                points = [point(item) for item in shape['_points']]
-                draw.polygon(points, fill=fill)
-                if stroke:
-                    draw.line(points + [points[0]], fill=stroke, width=width_px, joint='curve')
-            else:
-                draw.line([point(item) for item in shape['_points']], fill=stroke or fill,
-                          width=width_px, joint='curve')
+                    draw.line([point(item) for item in shape['_points']], fill=stroke or fill,
+                              width=width_px, joint='curve')
+
+        def composite_raster(asset: Mapping[str, Any] | None) -> None:
+            if asset is None:
+                return
+            raster = asset['_image']
+            bounds = asset['_bounds_local']
+            if flip < 0:
+                raster = raster.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+            raster_width = max(1, round((bounds[2] - bounds[0]) * scale * ss))
+            raster_height = max(1, round((bounds[3] - bounds[1]) * scale * ss))
+            if raster_width * raster_height > MAX_RASTER_PIXELS:
+                raise LayeredSceneError(
+                    f"layer {layer['layer_id']!r} projected raster art exceeds the "
+                    f'{MAX_RASTER_PIXELS}-pixel allocation limit'
+                )
+            if raster.size != (raster_width, raster_height):
+                raster = raster.resize((raster_width, raster_height), Image.Resampling.LANCZOS)
+            world_left = anchor[0] + min(flip * bounds[0], flip * bounds[2]) * scale
+            world_top = anchor[1] + bounds[1] * scale
+            dest_x = round((world_left - left) * ss)
+            dest_y = round((world_top - top) * ss)
+            clip_left = max(0, dest_x)
+            clip_top = max(0, dest_y)
+            clip_right = min(image.width, dest_x + raster.width)
+            clip_bottom = min(image.height, dest_y + raster.height)
+            if clip_left >= clip_right or clip_top >= clip_bottom:
+                return
+            clipped = raster.crop((
+                clip_left - dest_x,
+                clip_top - dest_y,
+                clip_right - dest_x,
+                clip_bottom - dest_y,
+            ))
+            image.alpha_composite(clipped, (clip_left, clip_top))
+
+        paint(base_shapes)
+        paint(pose_shapes)
+        composite_raster(pose_raster)
+        paint(expression_shapes)
+        composite_raster(expression_raster)
         return image
 
 
@@ -723,9 +892,10 @@ def render_contact_sheet(
     frames: Sequence[int | Fraction],
     *,
     columns: int = 3,
+    asset_root: str | Path | None = None,
 ) -> tuple[Path, Path]:
     """Render a labeled contact sheet and hash receipt into a review-only folder."""
-    scene = LayeredScene.load(scene_path)
+    scene = LayeredScene.load(scene_path, asset_root=asset_root)
     if not frames or len(frames) > 12 or not 1 <= columns <= 6:
         raise LayeredSceneError('contact sheet needs 1..12 frames and 1..6 columns')
     renders = [scene.render(frame) for frame in frames]
@@ -801,9 +971,13 @@ def _main() -> None:
     parser.add_argument('output', type=Path)
     parser.add_argument('--frames', default='0,27,35,50,58,85')
     parser.add_argument('--columns', type=int, default=3)
+    parser.add_argument('--asset-root', type=Path,
+                        help='caller-declared trusted directory for relative, SHA-256-pinned PNG pose/expression assets')
     args = parser.parse_args()
     frames = [Fraction(item.strip()) for item in args.frames.split(',') if item.strip()]
-    image, receipt = render_contact_sheet(args.scene, args.output, frames, columns=args.columns)
+    image, receipt = render_contact_sheet(
+        args.scene, args.output, frames, columns=args.columns, asset_root=args.asset_root
+    )
     print(json.dumps({'contact_sheet': str(image), 'receipt': str(receipt)}, indent=2))
 
 

@@ -7,12 +7,13 @@ from fractions import Fraction
 from pathlib import Path
 
 import pytest
-from PIL import Image
+from PIL import Image, ImageDraw
 
 from content.video_engine.src.modeling.layered import (
     DIAGNOSTIC_LABEL,
     LayeredScene,
     LayeredSceneError,
+    MAX_RASTER_ASSET_BYTES,
     render_contact_sheet,
 )
 
@@ -27,6 +28,57 @@ def _fixture() -> dict:
 
 def _scene() -> LayeredScene:
     return LayeredScene.load(FIXTURE)
+
+
+def _write_synthetic_art(
+    asset_root: Path,
+    name: str,
+    color: tuple[int, int, int, int],
+    bounds: tuple[int, int, int, int],
+) -> dict:
+    asset_root.mkdir(parents=True, exist_ok=True)
+    image = Image.new("RGBA", (8, 8), (0, 0, 0, 0))
+    ImageDraw.Draw(image).rectangle(bounds, fill=color)
+    path = asset_root / name
+    image.save(path, format="PNG", optimize=False)
+    return {
+        "path": name,
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "bounds_local_px": [-40.8, -40.4, -32.8, -32.4],
+    }
+
+
+def _raster_scene(tmp_path: Path) -> tuple[dict, Path]:
+    document = _fixture()
+    asset_root = tmp_path / "trusted-art"
+    background = next(layer for layer in document["layers"] if layer["role"] == "background")
+    background["shapes"] = [{
+        "kind": "rect",
+        "bounds_px": background["painted_bounds_px"],
+        "fill": "#ffffff",
+    }]
+    fighter = next(layer for layer in document["layers"] if layer["layer_id"] == "fighter-b")
+    fighter["shapes"] = []
+    pose_colors = ((255, 0, 0, 128), (255, 196, 0, 128), (0, 96, 255, 128))
+    for index, state in enumerate(fighter["pose_states"]):
+        state["shapes"] = []
+        state["raster_asset"] = _write_synthetic_art(
+            asset_root, f"pose-{index}.png", pose_colors[index], (1, 1, 6, 6)
+        )
+    expression_colors = ((0, 255, 0, 128), (0, 64, 255, 128))
+    for index, state in enumerate(fighter["expression_states"]):
+        state["shapes"] = []
+        state["raster_asset"] = _write_synthetic_art(
+            asset_root, f"expression-{index}.png", expression_colors[index], (3, 3, 4, 4)
+        )
+    document["layers"] = [background, fighter]
+    return document, asset_root
+
+
+def _set_channel_value(document: dict, channel_id: str, value: int) -> None:
+    channel = next(item for item in document["scene"]["motion_channels"] if item["channel_id"] == channel_id)
+    for keyframe in channel["keyframes"]:
+        keyframe["value"] = value
 
 
 def test_authored_fixture_uses_the_shared_rational_contact_clock() -> None:
@@ -221,3 +273,151 @@ def test_scene_frame_range_stays_half_open() -> None:
     scene = _scene()
     with pytest.raises(LayeredSceneError, match="outside the scene frame range"):
         scene.evaluate(Fraction(96))
+
+
+def test_transparent_pose_and_expression_rasters_use_rgba_compositing_and_seek_deterministically(
+    tmp_path: Path,
+) -> None:
+    document, asset_root = _raster_scene(tmp_path)
+    scene = LayeredScene(document, asset_root=asset_root)
+
+    guard_focused = scene.render(Fraction(0), supersample=1)
+    recoil_dazed = scene.render(Fraction(28), supersample=1)
+    assert guard_focused.image.mode == "RGB"
+    assert guard_focused.state.selected_states["fighter-b"] == {"pose": "guard", "expression": "focused"}
+    assert recoil_dazed.state.selected_states["fighter-b"] == {"pose": "recoil", "expression": "dazed"}
+    # A half-alpha red pose sample composites over the opaque white stage.
+    assert guard_focused.image.getpixel((279, 479)) == (255, 127, 127)
+    # The independently swappable expression raster overlays the pose raster with its own alpha.
+    focused_pixel = guard_focused.image.getpixel((281, 481))
+    dazed_document = copy.deepcopy(document)
+    _set_channel_value(dazed_document, "fighter-b-pose", 0)
+    _set_channel_value(dazed_document, "fighter-b-expression", 1)
+    dazed_scene = LayeredScene(dazed_document, asset_root=asset_root)
+    dazed_pixel = dazed_scene.render(Fraction(0), supersample=1).image.getpixel((281, 481))
+    assert focused_pixel[1] > focused_pixel[2]
+    assert dazed_pixel[2] > dazed_pixel[1]
+    assert focused_pixel != dazed_pixel
+
+    requested = [Fraction(28), Fraction(0), Fraction(54), Fraction(27), Fraction(28)]
+    first = {frame: scene.render(frame, supersample=1).image.tobytes() for frame in requested}
+    for frame in (Fraction(12), Fraction(70), Fraction(1), Fraction(54), Fraction(12)):
+        scene.render(frame, supersample=1)
+    second = {frame: scene.render(frame, supersample=1).image.tobytes() for frame in requested}
+    assert first == second
+    assert first[Fraction(0)] != first[Fraction(28)]
+
+
+def test_raster_resources_require_an_explicit_trusted_asset_root(tmp_path: Path) -> None:
+    document, _ = _raster_scene(tmp_path)
+    with pytest.raises(LayeredSceneError, match="explicit caller-declared asset_root"):
+        LayeredScene(document)
+
+
+@pytest.mark.parametrize("asset_path", ["../outside.png", "C:/outside.png"])
+def test_raster_resource_paths_cannot_escape_the_declared_root(tmp_path: Path, asset_path: str) -> None:
+    document, asset_root = _raster_scene(tmp_path)
+    fighter = next(layer for layer in document["layers"] if layer["layer_id"] == "fighter-b")
+    fighter["pose_states"][0]["raster_asset"]["path"] = asset_path
+    with pytest.raises(LayeredSceneError, match="stay inside the caller-declared asset_root"):
+        LayeredScene(document, asset_root=asset_root)
+
+
+def test_raster_resources_reject_missing_and_stale_hash_pins(tmp_path: Path) -> None:
+    document, asset_root = _raster_scene(tmp_path)
+    fighter = next(layer for layer in document["layers"] if layer["layer_id"] == "fighter-b")
+    fighter["pose_states"][0]["raster_asset"]["sha256"] = "0" * 64
+    with pytest.raises(LayeredSceneError, match="does not match its pinned digest"):
+        LayeredScene(document, asset_root=asset_root)
+
+    missing, _ = _raster_scene(tmp_path / "missing")
+    missing_fighter = next(layer for layer in missing["layers"] if layer["layer_id"] == "fighter-b")
+    missing_fighter["pose_states"][0]["raster_asset"]["path"] = "does-not-exist.png"
+    with pytest.raises(LayeredSceneError, match="cannot resolve inside asset_root"):
+        LayeredScene(missing, asset_root=tmp_path / "missing" / "trusted-art")
+
+
+def test_raster_resource_symlink_cannot_escape_the_declared_root(tmp_path: Path) -> None:
+    document, asset_root = _raster_scene(tmp_path)
+    outside = _write_synthetic_art(tmp_path, "outside.png", (255, 0, 255, 128), (1, 1, 6, 6))
+    outside_path = tmp_path / outside["path"]
+    link_path = asset_root / "escape.png"
+    try:
+        link_path.symlink_to(outside_path)
+    except (NotImplementedError, OSError) as exc:
+        pytest.skip(f"symlink creation is unavailable in this environment: {exc}")
+    fighter = next(layer for layer in document["layers"] if layer["layer_id"] == "fighter-b")
+    fighter["pose_states"][0]["raster_asset"].update({
+        "path": link_path.name,
+        "sha256": outside["sha256"],
+    })
+    with pytest.raises(LayeredSceneError, match="cannot resolve inside asset_root"):
+        LayeredScene(document, asset_root=asset_root)
+
+
+def test_raster_resources_require_bounded_transparent_pngs(tmp_path: Path) -> None:
+    document, asset_root = _raster_scene(tmp_path)
+    opaque_path = asset_root / "opaque.png"
+    Image.new("RGBA", (8, 8), (255, 0, 0, 255)).save(opaque_path, format="PNG")
+    fighter = next(layer for layer in document["layers"] if layer["layer_id"] == "fighter-b")
+    fighter["pose_states"][0]["raster_asset"].update({
+        "path": opaque_path.name,
+        "sha256": hashlib.sha256(opaque_path.read_bytes()).hexdigest(),
+    })
+    with pytest.raises(LayeredSceneError, match="alpha must contain both transparent and visible pixels"):
+        LayeredScene(document, asset_root=asset_root)
+
+    oversized_path = asset_root / "oversized.png"
+    Image.new("RGBA", (4097, 1), (255, 0, 0, 128)).save(oversized_path, format="PNG")
+    fighter["pose_states"][0]["raster_asset"].update({
+        "path": oversized_path.name,
+        "sha256": hashlib.sha256(oversized_path.read_bytes()).hexdigest(),
+    })
+    with pytest.raises(LayeredSceneError, match="dimensions exceed the 4096-side"):
+        LayeredScene(document, asset_root=asset_root)
+
+    large_pixel_path = asset_root / "too-many-pixels.png"
+    Image.new("RGBA", (2000, 1200), (255, 0, 0, 128)).save(large_pixel_path, format="PNG")
+    fighter["pose_states"][0]["raster_asset"].update({
+        "path": large_pixel_path.name,
+        "sha256": hashlib.sha256(large_pixel_path.read_bytes()).hexdigest(),
+    })
+    with pytest.raises(LayeredSceneError, match="pixel raster asset limit"):
+        LayeredScene(document, asset_root=asset_root)
+
+    oversized_file = asset_root / "too-large.png"
+    with oversized_file.open("wb") as stream:
+        stream.truncate(MAX_RASTER_ASSET_BYTES + 1)
+    fighter["pose_states"][0]["raster_asset"]["path"] = oversized_file.name
+    with pytest.raises(LayeredSceneError, match="byte raster asset limit"):
+        LayeredScene(document, asset_root=asset_root)
+
+
+def test_raster_extent_must_fit_the_declared_silhouette_envelope(tmp_path: Path) -> None:
+    document, asset_root = _raster_scene(tmp_path)
+    fighter = next(layer for layer in document["layers"] if layer["layer_id"] == "fighter-b")
+    fighter["pose_states"][0]["raster_asset"]["bounds_local_px"] = [-100, -40, -92, -32]
+    with pytest.raises(LayeredSceneError, match="must stay inside silhouette_bounds_local_px"):
+        LayeredScene(document, asset_root=asset_root)
+
+
+def test_raster_local_bounds_are_bounded_before_large_resize(tmp_path: Path) -> None:
+    document, asset_root = _raster_scene(tmp_path)
+    fighter = next(layer for layer in document["layers"] if layer["layer_id"] == "fighter-b")
+    fighter["silhouette_bounds_local_px"] = [-16000, -16000, 16000, 16000]
+    fighter["pose_states"][0]["raster_asset"]["bounds_local_px"] = [-15000, -15000, 15000, 15000]
+    scene = LayeredScene(document, asset_root=asset_root)
+    with pytest.raises(LayeredSceneError, match="projected raster art exceeds the .*pixel allocation limit"):
+        scene.render(Fraction(0), supersample=1)
+
+
+def test_contact_sheet_can_render_caller_rooted_raster_assets(tmp_path: Path) -> None:
+    document, asset_root = _raster_scene(tmp_path)
+    scene_path = tmp_path / "scene.json"
+    scene_path.write_text(json.dumps(document), encoding="utf-8")
+    image_path, receipt_path = render_contact_sheet(
+        scene_path, tmp_path / "raster-contact.png", [0], asset_root=asset_root
+    )
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    assert receipt["diagnostic_only"] is True
+    assert receipt["sha256"] == hashlib.sha256(image_path.read_bytes()).hexdigest()
