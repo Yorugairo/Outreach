@@ -1,0 +1,3 @@
+# Evidence HTML is retrieved through docs_find/rg; keep its Python builders indexed.
+content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/*.html
+content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/**/*.html
