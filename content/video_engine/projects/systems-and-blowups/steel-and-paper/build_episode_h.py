@@ -52,6 +52,9 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
   MEMO_PLATE / RECORD_SLOT rows 11-12 (P69 T19b, T20): the divergence MELTS onto the memo desk; Karp's record, the Uber
         chart, the COO's line and the three-manias table take one slot in turn, the mug's steam the desk's life.
   VIADUCT_PLATE            row 13 (P69 T21): RESET 1 - dip 2 to the 1849 viaduct, Ken Burns and the stack's steam.
+  YARD_PAGE / YARD_BARS    row 14 (P69 T22): dip 3 to the yardstick page in the long form's profile (LONGFORM), camera 2
+        on the 28 as it lands (YARD_CAM_*, a point look - the datum look runs away when panned), and the recast to the
+        breakthrough bars, the railways' 50 bursting the stated [0, 30] scale (E60).
 
 THE BODY'S PREFLIGHT (P69 T14, rows 7-24) is three constant tables, read before any body row is authored:
   BODY_ASSETS          every page object (with its builder), card, plate, prop, host still, cue file and outro part
@@ -162,7 +165,8 @@ def _assert_read_only(before: dict) -> None:
 # ticket thrown over the recast) and moves it on to row 11's first words (the adjuster's walk, T19's). P69 T19 authors
 # row 11 (one slot, three records) and moves it on to row 12's first words (the trough, T20's). P69 T20 authors row 12
 # (the trough, on the same desk) and T21 row 13 (reset 1, the dip to 1849), and they move it to row 14's first words.
-UNIT_CUT_PHRASE = "So I built"              # row 14's first words; the build stops at the cut BEFORE them
+# P69 T22 authors row 14 (the yardstick) and moves it to row 15's first words (the trigger, T23's).
+UNIT_CUT_PHRASE = "Bravos' sharpest"        # row 15's first words; the build stops at the cut BEFORE them
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -491,6 +495,77 @@ VIADUCT_DIP_WHY = ("the memo desk -> the 1849 viaduct, plate to plate: the pair 
                    "declared, HF-17), the melt (E88 melts a chart's ink; the desk carries none), the recast (the "
                    "treatment's own: a page cannot recast into a train - and neither world is a page)")
 
+# ROW 14 (P69 T22): THE YARDSTICK. Dip 3 at the world change (the 1849 viaduct -> the 2026 investment page, E47); the
+# tech line climbs through the sentence that defines it to the dot-com peak it names; camera 2 pushes on the 28 as the
+# line LANDS there (E51, E99 s76); on "In the 1840s railways" the page recasts to the BREAKTHROUGH bars (E60), the
+# railways' half bursting the stated [0, 30] scale. EVERY PAGE FROM HERE ON IS DRAWN IN THE LONG FORM'S PROFILE (E99 s97,
+# P69 T8): `;readability=longform`, plain = the `middle` preset - the working default until the operator's pick at
+# P69-HG3. End tags shorten full -> badge -> value where they do not fit; the key rail with the full names is T10's
+# and NOT BUILT (the notes name it).
+LONGFORM = ";readability=longform"
+YARD_PAGE = "ev-capital-formation-v1"        # tech's share of ALL US private investment, BEA via FRED, 1970 - 2026 Q2
+YARD_BARS = "ev-rail-vs-yardstick-bars-v1"   # PLAUSIBLE, drawn by E99 s93: the railways' ~50 beside today's 28, [0, 30] stated
+YARD = _series(YARD_PAGE)
+YARD_BARS_OBJ = _series(YARD_BARS)
+YARD_NAMES = [s.get("name", "") for s in YARD["series"]]
+YARD_TECH = next(i for i, n in enumerate(YARD_NAMES) if n.startswith("COMPUTERS"))     # the yardstick's own line (28%)
+YARD_SCALE = next(i for i, n in enumerate(YARD_NAMES) if n.startswith("ALL EQUIPMENT"))  # "(for scale)", 65%
+YARD_PEAK = _nearest(YARD, YARD_TECH, YARD["marks"][0]["x"])   # the object's own "dot-com high" mark: 2001 Q1, 23.03
+YARD_LAST = _last_index(YARD, YARD_TECH)                        # 2026 Q2, 28.18 - the series' own maximum ("the most")
+YARD_23 = YARD["marks"][0]["label"]                             # "23%", the object's own words at that datum
+# THE SCALE LINE IS HELD AT NOTHING: "ALL EQUIPMENT + IP (for scale)" ends at 65% and no sentence names it - its end tag
+# would be a number on screen the voice never says, and it is not "everything the country invests" (that is 100). The
+# page's own 50% railway rule stands from the landing: it IS the yardstick the page is named for.
+YARD_OPEN_S = 0.4
+YARD_TODAY_S = 0.5      # the last twenty-five years draw on "Today it's", landing on "twenty-eight" (E51's landing)
+YARD_FIG_S = 1.4
+# CAMERA 2 (E99 s76: only where the sentence names the thing; E51: a push is tied to a landing): the line lands on its
+# 2026 Q2 datum and the camera pushes on it through "the most it has ever been", then releases before the recast. The
+# zoom is row 1's measured 1.06 (a key pair, not a focus_zoom species - the fixed 1.32 cut the page at 16:9).
+# A PUSH IN PLACE CANNOT REACH IT HERE: the long form's title and sub start at x 42 (probe, draft 1 at 181.6 s) and the
+# engine resolves the 28 datum at (1168, 609), so a zoom about the datum takes the title's left edge off the stage at
+# 1.037 (the compiler refused 1.06 by name, `logs/t22-door2.log`). The datum is therefore LANDED right and down of
+# where it stands - `at` (0.6344, 0.5833) = (1218, 630) px - inside the only window that keeps both the page's glyphs
+# and its own edges: the title's left edge >= 1194 px / top >= 612 px (else a glyph leaves the stage), and the PAGE's
+# left edge <= 1238 px / top <= 645 px (else the ground beyond the page shows - MEASURED on the T22 build at (1260,
+# 660): a 22 px cream strip left and 14 px on top at 182.6 s). At (1218, 630) the title keeps ~24 px and the page
+# overhangs the stage ~20 / ~15 px.
+# THE LOOK IS A POINT, NOT THE DATUM: MEASURED on drafts 2-3, a `datum` look with `at` != look RUNS AWAY - the engine
+# resolves the datum on the camera-moved frame each instant, so the look walks with the pan it causes (look 1183 ->
+# 1116 px over 1.9 s at a constant 1.06; the title's left edge -7 then -62 px). An engine defect, named for the parent;
+# a datum is stable only zoomed in place. So the look is the 28 datum's own REST position, read off the probe at
+# 181.6 s (camera identity): (1168, 609) px.
+YARD_CAM_ZOOM, YARD_CAM_IN_S, YARD_CAM_OUT_S = 1.06, 1.1, 0.8
+YARD_CAM_LOOK = {"kind": "point", "x": 0.6083, "y": 0.5639}
+YARD_CAM_AT = [0.6344, 0.5833]
+# THE BREAKTHROUGH (E60, CAPABILITIES:90 - `overflow: burst` on the object): the recast lands the two bars at the
+# comparator's level (28, the tallest honest bar on the stated [0, 30]), holds, and the railways' bar SHOOTS to 50 while
+# the scale rewrites - the frame is not broken, its scale changes to hold the number. The recast opens on "In the
+# 1840s" so the burst runs on "railways took roughly half".
+YARD_RECAST = 1
+YARD_RECAST_S = 1.2
+# THE LINE UNWINDS BEFORE THE BARS ARRIVE (row 10's lesson, MEMORY_HOLD): MEASURED on draft 4, the recast's arriving
+# "50¢" value label stood ON the tech line at 3:05 (the gate's M34, `logs/t22-gate.log`) - a plain recast draws the
+# arriving state over the outgoing ink. The line undraws over "1840s" and is gone 0.1 s before the recast opens.
+YARD_UNDRAW_S = 0.8
+YARD_DIP_WHY = ("the 1849 viaduct -> the 2026 yardstick page, plate to page (a WORLD change, E47 - the steel of 1849 to "
+                "the investment of today); TAKEN the dip, the last resort (E99 s74): this page names no arrival that could "
+                "carry it - refused: the snap / throw-then-zoom / throw-then-push (no card is thrown on the viaduct; nothing "
+                "on it names the yardstick), object-becomes-chart (the train is not the page's data), the spiral return (a "
+                "first page, not a returning one), the mount (E47: a mount lays the page on the picture it grows from - the "
+                "yardstick does not belong to 1849's plate), the melt (E88 melts a chart's ink; the plate carries none), "
+                "recast / rescale / morph (a plate is not a chart)")
+YARD_RECAST_WHY = ("the tech line -> the breakthrough bars, on one board: TAKEN the recast (E64's plain hand-over - one "
+                   "measure, one technology's share of a country's investment, in the other form: the line's last datum "
+                   "IS the 28 bar); refused: the dip and the cut (no world changes, E47), rescale / extend (the railways' "
+                   "50 is not on this series), morph (another frame, not a strip of this one), remake (needs the same "
+                   "data whole - the 50 is Britain's), the melt (it would clear the board the 28 stands on)")
+# ROW 15 (P69 T23) IS BLOCKED, NOT AUTHORED: `ev-tnx-two-eras-v3` is a PANELS object (`axes.panels`, no top-level
+# series) and a LEDGER PAGE draws no panel - compiled, the page is `dense-line` with 0 series and paints only its two
+# rules (the engine paints `panels` in the dock's live chart alone, `fillDock`); the stamp fitter then finds no room for
+# the Fed (46 px against the 120 px floor). MEASURED 2026-09-23: `build-h/logs/t23-door1.log`, `t23-door2.log`; the
+# draft is staged for the parent outside the door (the build notes, section 13).
+
 DOCK_META = [
     {"asset": CERT_CARD, "title": "An 1845 railway certificate",
      "source": "Money Physics - plate world-certificate-wall-v1", "species": "deck", "badges": []},
@@ -658,6 +733,14 @@ def page_snap() -> str:
     that object with memory dropped), live (E49)."""
     return ("ledger:%s:line:%d:right:camera=%s:cut%s%s%s"
             % (LAYER_PAGE, DIV_LAST, BRAVOS_CARD, IDLE_LIVE, PAGE_DOMAIN % (HOOK_YMIN, HOOK_YMAX), SNAP_CARD))
+
+
+def page_yard() -> str:
+    """Row 14's world (P69 T22): the yardstick page - tech's share of all US private investment - on its axes (E73),
+    live (E49), in the long form's profile (E99 s97), and its ONE other state, the breakthrough bars it RECASTS to on
+    "railways took roughly half" (`;then=`, YARD_RECAST)."""
+    return ("ledger:%s:line:%d:right:%s%s%s%s;then=%s:bars"
+            % (YARD_PAGE, YARD_LAST, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM, YARD_BARS))
 
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
 AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}, {"n": 3, "text": "Used tomorrow?"}]
@@ -886,6 +969,7 @@ SLOT_WHY = ("the ticket -> Karp -> Uber -> the COO: TAKEN the slot hand-off (E99
 IN_ROW_WHY = (
     ("row 5 recast 3 (P69 T18, 'catches up with it')", DIV_RECAST_WHY),
     ("row 6 the one slot (P69 T19, 'Alex Karp' / 'Uber's CTO' / 'And their COO')", SLOT_WHY),
+    ("row 8 the recast to the breakthrough bars (P69 T22, 'railways took roughly')", YARD_RECAST_WHY),
 )
 # (the P69 T16 first cut, before T15b, is kept for the record: it entered the index from the STUDIO by dip 1 and
 # refused recast / rescale / morph, the melt, the snap / throw-then-zoom / throw-then-push, object-becomes-chart, the
@@ -895,6 +979,7 @@ BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the tr
                 page_rail(): RAIL_MELT_WHY,
                 MEMO_PLATE: MEMO_MELT_WHY,
                 VIADUCT_PLATE: VIADUCT_DIP_WHY,
+                page_yard(): YARD_DIP_WHY,
                 SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
                               "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
@@ -997,6 +1082,17 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_flips = at("Which flips the question")            # ... and leaves as the question flips; the desk and its steam
     # -- row 13 (P69 T21): RESET 1 - the dip to 1849 at the world change (E47), on the cut before the sentence
     t_1849 = cut("And in 1849")
+    # -- row 14 (P69 T22): THE YARDSTICK - dip 3 at the world change, on the cut before the sentence
+    t_yard = cut("So I built")
+    t_counts = at("It counts every")                    # the tech line climbs through the sentence that defines it ...
+    t_dotcom = at("dot-com peak")                       # ... to the peak the next sentence names
+    t_23 = at("twenty-three cents")                     # the 23 written at its datum as it is said
+    t_today = at("Today it's")                          # the last twenty-five years draw on "Today it's" ...
+    t_28 = round(t_today + YARD_TODAY_S, 2)             # ... landing on "twenty-eight" - camera 2's landing (E51)
+    t_1840s = at("railways took roughly")               # the recast to the breakthrough bars: MEASURED on draft 1, a
+    #                                                     recast on "In the 1840s" (183.78) burst before "roughly" was
+    #                                                     said (185.2); on "railways" the 50 lands on "roughly half"
+    yard_peak_end = at("peak it hit")                   # the peak lands as "peak" is said
     t_row9_end = unit_end
 
     return [
@@ -1137,10 +1233,35 @@ def shot_table(ws: list, unit_end: float) -> list:
         ]),
         # -- ROW 13 (P69 T21): RESET 1 - the viaduct, 1849 (dip 2 at the world change; VIADUCT_DIP_WHY). Ken Burns alone
         # (E99 s84) and the locomotive's stack breathing (E49); the anaphora in caption STAGE mode (no dock on the row).
-        (t_1849, t_row9_end, VIADUCT_PLATE, VIADUCT_KEN, [], "dip", [
-            {"kind": "steam", "at": t_1849, "dur": round(t_row9_end - t_1849, 2), "target": STACK_STEAM},
+        (t_1849, t_yard, VIADUCT_PLATE, VIADUCT_KEN, [], "dip", [
+            {"kind": "steam", "at": t_1849, "dur": round(t_yard - t_1849, 2), "target": STACK_STEAM},
         ]),
-        # (-- ROWS 9-24 are T17-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
+        # -- ROW 14 (P69 T22): THE YARDSTICK - dip 3 back to the page (YARD_DIP_WHY), on its axes, in the long form's
+        # profile. The tech line is held at nothing through the sentence that names the measure, then ONE pen climbs it
+        # through the definition to the dot-com peak; the page's own 23% is written there; the last twenty-five years draw
+        # on "Today it's" and land on "twenty-eight" (its end tag writes 28%), where camera 2 pushes (E51). On "In the
+        # 1840s" the page RECASTS to the breakthrough bars (YARD_RECAST_WHY) and the railways' half bursts the scale.
+        (t_yard, t_row9_end, page_yard(), (0, 0, 0), [], "dip", [
+            {"kind": "build_to", "at": t_yard, "dur": YARD_OPEN_S, "series": YARD_TECH, "target": datum(0)},
+            {"kind": "build_to", "at": t_yard, "dur": YARD_OPEN_S, "series": YARD_SCALE, "target": datum(0)},
+            {"kind": "build_to", "at": t_counts, "dur": round(yard_peak_end - t_counts, 2), "series": YARD_TECH,
+             "target": datum(YARD_PEAK)},
+            {"kind": "figure", "at": t_23, "dur": YARD_FIG_S, "target": datum(YARD_PEAK, YARD_TECH), "text": YARD_23},
+            {"kind": "build_to", "at": t_today, "dur": YARD_TODAY_S, "series": YARD_TECH, "target": datum(YARD_LAST)},
+            {"kind": "undraw", "at": round(t_1840s - YARD_UNDRAW_S - MEMORY_HOLD_GAP_S, 2), "dur": YARD_UNDRAW_S,
+             "series": YARD_TECH, "target": datum(0)},
+            {"kind": "chart_to", "at": t_1840s, "dur": YARD_RECAST_S, "to": "recast", "state": YARD_RECAST},
+            {"kind": "retitle", "at": round(t_1840s + RETITLE_AFTER_S, 2), "dur": YARD_RECAST_S,
+             "text": YARD_BARS_OBJ["title"]},
+        ], {"keys": [
+            {"t": t_28, "zoom": 1.0, "look": YARD_CAM_LOOK, "ease": "inout"},
+            {"t": round(t_28 + YARD_CAM_IN_S, 2), "zoom": YARD_CAM_ZOOM, "look": YARD_CAM_LOOK, "at": YARD_CAM_AT,
+             "ease": "inout"},
+            {"t": round(t_1840s - YARD_CAM_OUT_S - 0.1, 2), "zoom": YARD_CAM_ZOOM, "look": YARD_CAM_LOOK,
+             "at": YARD_CAM_AT, "ease": "inout"},
+            {"t": round(t_1840s - 0.1, 2), "zoom": 1.0, "look": YARD_CAM_LOOK, "ease": "inout"},
+        ]}),
+        # (-- ROW 15 is BLOCKED - see the note at YARD_RECAST_WHY; ROWS 9-24 are T17-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
     ]
 
 
@@ -1443,7 +1564,8 @@ TABLE_TREATMENT = {1: "treatment rows 1-5 (the page, 0:00-0:42)", 2: "treatment 
                       "divergence (P69 T16, T17, T18)",
                    6: "treatment rows 11-12, the memo desk: the three records in one slot, then the three-manias table "
                       "(P69 T19, T20)",
-                   7: "treatment row 13, reset 1 - the viaduct, 1849 (P69 T21)"}
+                   7: "treatment row 13, reset 1 - the viaduct, 1849 (P69 T21)",
+                   8: "treatment row 14, the yardstick: dip 3, camera 2, the breakthrough bars (P69 T22)"}
 
 
 def _flow_count(rows: list) -> tuple[int, int, int, int]:
@@ -1490,7 +1612,6 @@ def main() -> int:
     _manias_card()   # row 12: the table, composed from its own bands
     D.chart_card(BRAVOS_CARD, _hook_object(), BUILD, "line")   # the TWO-LINE page, rendered from the derived object
     D.register(HOST_PLATE_ID, HOST_PLATE_FILE)   # the Flow plate by id (build_render_f.find_asset checks STAMPED first)
-
     rows = shot_table(ws, unit_end)
     karp_record(ws, T.at(ws, "Alex Karp"))   # row 11: the record's words are filled BEFORE the META is written
     (BUILD / "evidence-dock.json").write_text(json.dumps(DOCK_META, indent=1), encoding="utf-8")

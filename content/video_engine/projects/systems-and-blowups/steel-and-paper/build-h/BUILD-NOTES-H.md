@@ -954,3 +954,93 @@ The build now runs 0.00-162.50 s (429 of 2335 words). `UNIT_CUT_PHRASE` = "So I 
 **Tiles:**
 - `scratchpad/p69t20/` (10 instants 128.40-146.30) and `scratchpad/p69t21/` (8 instants 147.60-161.00).
 - Each has `ref-sheet.png` from build-f's mp4 (sha256 `9a27de1c...` verified, `ref-sha.txt`, `ref-map.txt` 249.50-279.90). There, the Uber card holds on the exhibition hall through "Remember that line". The whole table (four rows, ~55% of the frame) stands 11 s on a busy collage. The 1849 sentence runs on the dawn factory, then the molten pour.
+
+---
+
+## 13. P69 T22 (row 14) and T23 (row 15, BLOCKED) - 2026-09-23
+
+The build now runs 0.00-196.25 s (520 of 2335 words). `UNIT_CUT_PHRASE` = "Bravos' sharpest" (row 15, T23's). RED:
+`t22-red.log` (the table ended at 162.50). Row 14 is the first body row in the LONG FORM's profile.
+
+### 13.1 Row 14 (T22): the yardstick - dip 3, camera 2, the breakthrough bars
+
+| table row | window | what |
+|---|---|---|
+| 7 `world-viaduct-train-rain-v1` | 147.82-162.60 | ends on the cut before "So I built" (was the unit's end) |
+| 8 `ev-capital-formation-v1 ...;readability=longform;then=ev-rail-vs-yardstick-bars-v1:bars` | 162.60-196.25 | **dip 3** INTO the page at the world change (the 1849 viaduct -> the 2026 investment page, E47); the page on its axes (E73), `idle=live`; the scale line "ALL EQUIPMENT + IP (for scale)" and the tech line held at nothing; the tech line climbs in ONE pen from "It counts every" (168.12) to the dot-com peak landing on "peak" (177.74); the object's own "23%" written at its 2001 Q1 datum on "twenty-three cents" (178.51); the last twenty-five years draw on "Today it's" (180.44) and land on "twenty-eight" (180.94) with the end tag "28% COMPUTERS + SOFTWARE"; **camera 2** pushes to 1.06 on that landing (180.94 -> 182.04), holds through "the most it has ever been", releases by 185.06; the line undraws over "1840s" (184.26-185.06); the **recast** to the breakthrough bars on "railways took roughly" (185.16), retitled 0.1 s after to the object's own "The railways took half. Tech takes 28 cents."; the two bars land at the comparator's 28 on the stated [0, 30], the railways' bar BURSTS to 50 as the scale rewrites to 0-60, landing on "roughly half" (~186.4) |
+
+**Measured and fixed across drafts (`scratchpad/p69t22/draft1`, `draft2`, `logs/t22-door1..4.log`):**
+- "In the 1840s" first matched row 9's "Railways in the 1840s drew" (72.14 s): the camera keys went out of order (`t22-door1.log`). Anchored on "railways took roughly".
+- A recast on "In the 1840s" (183.78) burst before "roughly" was said (draft 1, 185.2). On "railways" (185.16) the 50 lands on "roughly half".
+- **Camera 2's reach.** The compiler refused 1.06 by name (`t22-door2.log`): "the title's right edge leaves the stage at 1.033". The long form's title and sub start at x 42 and the engine resolves the 28 at (1168, 609) (probe at 181.6 s), so a zoom IN PLACE crops the title at 1.037. The push therefore LANDS the datum at `at` (0.6344, 0.5833) = (1218, 630): the only window that keeps the page's glyphs on the stage (title left >= 1194 px, top >= 612 px) and its own edges past the stage's (page left <= 1238, top <= 645 - else the ground beyond the page shows: at (1260, 660) a 22 px cream strip left and 14 px top, 182.6 s). Final probe at 182.3 / 183.5 / 184.2 s: zoom 1.06, look (1168, 609), title [43..38, 26..29], tag `28% COMPUTERS` at x 1236-1733 - steady.
+- **ENGINE DEFECT, named for the parent:** a `datum` look with `at` != look RUNS AWAY. The engine resolves the datum on the camera-moved frame each instant, so the look walks with the pan it causes (drafts 2-3: look 1183 -> 1116 px over 1.9 s at a constant 1.06; the title's left edge -7 then -62 px). A datum is stable only zoomed in place. The row's look is a `point` at the 28's own REST position (`YARD_CAM_LOOK`). Owner: the engine (resolve a camera's datum look in world coordinates).
+- The recast drew the arriving "50¢" value label ON the tech line at 3:05 (the gate's M34 FAIL on draft 4). The line now undraws first (`YARD_UNDRAW_S`, row 10's MEMORY_HOLD pattern); M34 PASS.
+- The object's own mark (`23%`, "dot-com high") is not drawn by the page, so the figure is the one "23%" on screen (no M28 pair).
+
+**Departures and findings (for the parent):**
+- **The scale line is held at nothing.** "ALL EQUIPMENT + IP (for scale)" (65%) is on the object, and no sentence names it. Its tag would be a number the voice never says, and it is not "everything the country invests" (that is 100). build-f drew it.
+- **Units: % on the line page, ¢ on the bars page** (each page one unit, E53). The treatment's "23¢ / 28¢" figures are written as the line object's own "23%" and "28%". The bars object states its own ¢.
+- **The breakthrough pill drops the unit:** the railways' bar reads "50", the 28 bar "28¢" (tiles 186.8-195.0). The burst's count writes the number, not the object's `note` "~50¢". Owner: the engine (`lpPaintBreakthrough`'s pill string).
+- **The plot uses ~55% of the page width** (plot x 128-1168 of 1920) on both states. The right ~40% is the long form's end-tag room, sized for the widest tag of every series, including the held 65% line's. The key rail with the full names is T10's and NOT BUILT, so the tags keep their full names here ("28% COMPUTERS + SOFTWARE" fits at full form). Owner: T10 / T33.
+- **The recast's middle** (185.3-186.1, `tile-185.80`): a half-written title, the bars' "28¢" / "50¢" labels floating, the "23%" figure ghosting under the arriving bars. This is R26-261 (known); the figure outlives its line's undraw (a page-bound figure retracts with its PAGE, R26-219).
+- **E50:** the bars' burst lands ~186.4 and the row ends at 196.25, 9.9 s (INFO band). The gate's M21 did not list s08.
+- **The empty open (162.6-168.1):** the page's axes, title, sub and its 50% railway rule stand for 5.5 s while "So I built a yardstick for America" is said, before the line starts. The rule IS the yardstick. Life on this stretch: 164.0 vs 167.0 (x 0-1500, y 150-850), mean |dL| 1.84, 2.9% changed.
+
+**Transitions** (printed in `SHOT-TABLE-H.md`):
+- Dip 3 INTO row 14 (`YARD_DIP_WHY`). TAKEN the dip, the last resort: this page names no arrival that could carry it. REFUSED: the snap / throw-then-zoom / throw-then-push (nothing thrown on the viaduct names the yardstick); object-becomes-chart (the train is not the page's data); the spiral return (a first page); the mount (the yardstick does not belong to 1849's plate, E47); the melt (the plate carries no chart ink); recast / rescale / morph (a plate is not a chart). Seam 162.60 `s07->s08 exit=dip darkest 3.8 clean`.
+- The recast inside row 14 (`YARD_RECAST_WHY`). TAKEN the plain recast (E64: one measure, one technology's share of a country's investment, in the other form - the line's last datum IS the 28 bar). REFUSED: the dip and the cut (no world change); rescale / extend (the 50 is not on this series); morph; remake (the 50 is Britain's, not the same data); the melt (it would clear the board the 28 stands on).
+
+**Life:** 188.00 vs 190.00 (the bars held, x 0-1500, y 150-850): mean |dL| 1.95, 3.0% changed. Table rows 8 of 8 carry life (row 8 `idle=live`).
+
+**The order of proof (`logs/`):** `t22-door-final.log` (rc 0, cues 15 of 15 bound), `t22-probe.log` (80 instants), `t22-gate.log`
+**2 FAIL / 2 WARN / 23 PASS / 1 JUDGE / 5 INFO** - FAILs M03 and M11 (the bed's, pre-existing, HG4); WARNs M04 (8 plates vs 16) and
+M25 (row 1's certificate at 0:09-0:10, pre-existing); M24 PASS (the pointing species on the moving-camera scenes in frame); M34 PASS.
+`t22-frozen.log`, `t22-seams.log`, `t22-stagegaps.log`, `t22-spoken.log`: see 13.3. Drafts: `t22-door1..4.log`. Table snapshot: `t22-SHOT-TABLE-H.md`.
+
+**Tiles:** `scratchpad/p69t22/` - `tiles-sheet.1.png` / `.2.png` at 162.4, 164.0, 167.0, 170.0, 174.0, 177.9, 179.6, 181.3, 182.6, 184.6,
+185.8, 186.8, 188.0, 190.0, 195.0; `ref-sheet.1.png` / `.2.png` from build-f's mp4 (sha256 `9a27de1c...` verified, `ref-sha.txt`;
+`ref-map.txt`, Script G's clock 122.6-165.2 - Script G carries this paragraph BEFORE 1849). There, the SAME capital-formation chart
+stands as a card ~55% of the frame wide over the ledger desk and then the boiler gauge, in every ref tile from 122.6 to 165.2 s
+(the treatment's #13 held dock), the 65% line drawn, no build, no camera and no bars.
+
+### 13.2 Row 15 (T23): BLOCKED - the two-eras page draws no lines
+
+`ev-tnx-two-eras-v3` is a PANELS object: `axes.panels` (dot-com 1998-2001, AI era 2021-today) and no top-level `series`. A
+LEDGER PAGE draws no panel. Compiled, the page is `dense-line` with **0 series** (`scratchpad/p69t23/draft1/page-spec.txt`:
+`dense-line 0 True 0 7.2`). The engine paints `panels` only in the dock's live chart (`fillDock`,
+`scene-evidence-engine.mjs:6724`), and `buildLedgerLine` never reads them. On the frame (`scratchpad/p69t23/draft1/tiles-sheet.png`,
+196.6-240.0) the page shows its title, its two rules ("Fed funds peak, 2000 - 6.5%", "their tripwire - 5.5%"), a y axis
+5.5-6.5 and a garbled "2000" tick, and no line for 46 s. The two `note`s (BoE, the concession) did not show either.
+
+**The stamp refuses:** with the Fed authored (`prop: True, arrive: stamp` on "Fed at six and", 217.46), the door FAILs by name
+(`t23-door1.log`): "the largest mark this place holds at (112, 180) paints 46 px on its long side, under the 120 px mark floor". So no
+HG2 frame exists: no frozen copy was made and no strip was rendered.
+
+**The door is left at T22** (every row-15 constant, the page, the dock and the prop registration withdrawn; a comment at
+`YARD_RECAST_WHY` names the block). The full T23 draft, as it compiled, is staged at `scratchpad/p69t23/door-t23-draft.py`:
+- the melt's throw into the page (`TNX_MELT_WHY`: the dip, a third recast state, rescale / extend, morph and melt:splash:chart /
+  melt:morph refused by name);
+- the Fed prop, its DOCK_META entry and its `D.register`;
+- a `note` for the BoE's 6% (the page's own rules already write the Fed's 6.5% and their 5.5%, so those are not written twice);
+- a concession note;
+- `{"attention": "landings"}` for the camera's pull on the contact.
+
+**The object's rules are themselves a unit mix:** the Fed-funds 6.5% and Bravos' 5.5% Fed tripwire are drawn as `hlines` on a
+10-YEAR-yield axis. The departure (BODY_DEPARTURES row 15) refuses rings for exactly this reason, and the object draws the rules
+anyway. Operator item.
+
+**Doors for the parent (none is in this write set):**
+- (a) an evidence object the ledger page can draw: the two eras as ordinary `series` on one x axis (a gap between 2001 and 2021),
+  or one era per page. Write set: `evidence/objects/`;
+- (b) the engine: `buildLedgerLine` draws `axes.panels` (the dock chart already does, `:6724`). Lane B;
+- (c) the live chart card of the object, read at ~0.90 of the stage on a plate, with the Fed stamped in the plate's room
+  (`;room=`). This departs from "the page's biggest room" and from the treatment's "no bare plate 2:45-6:04".
+
+### 13.3 The chain tails (T22's final build)
+
+- `t22-frozen.log`: `no run of identical frames over 0.50s (whole frame)`.
+- `t22-seams.log`: `seam frames: 7 boundaries, 0 faults`; `162.60 s07->s08 exit=dip darkest 3.8 clean`.
+- `t22-stagegaps.log`: `162.60 s07 exit=dip -> enter=axes empty 0.2s picture 0.4s licensed (a dip is a world change)`.
+- `t22-spoken.log`: `spoken visuals: 1 pointing phrases, 0 uncovered`.
+- `t22-probe.log`: 80 instants. The gate as in 13.1.
+
