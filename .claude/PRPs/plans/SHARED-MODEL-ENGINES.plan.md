@@ -192,13 +192,13 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Cross-checkout fix `61428d9` pins exact byte handling for the native diagnostic records in `.gitattributes`; Windows `core.autocrlf=true` had changed generated JSON on checkout and broken descriptor/scene hashes. After the fix, the combined suite reran on local `main`: **7 passed**. The intentionally mixed LF/CRLF hash-bound bytes now survive a fresh checkout unchanged; the JSON remains readable, and this does not alter the model contract.
 
 ### T4d: Source-neutral model mesh audit
-- Status: running (diagnostic support for T4b and T10; no art approval)
-- Owner: implementation_luna; parent owns integration and visual verdict
+- Status: complete (diagnostic support for T4b and T10; no art approval)
+- Owner: implementation_luna, execution_sol escalation; parent owns integration and visual verdict
 - Depends on: T3, T4a
 - Write set: `M/blender/mesh_audit.py`; `content/video_engine/scripts/model_mesh_audit.py`; `content/video_engine/tests/test_model_mesh_audit.py`; `F/mesh-audit/`; ignored `B/art/mesh-audit/` receipts
 - Acceptance: inspect hash-pinned editable Blender and imported GLB model candidates with Blender 5.2.2 in offline, scripts-disabled mode; record stored and evaluated mesh counts, UV/material/shape-key/armature links, connected components, non-manifold or loose geometry, bounds and source provenance in a deterministic JSON receipt. Do not modify an input asset, infer visual likeness or promote review-only work. Negative tests cover stale hashes, missing/unsupported assets, path escape and empty geometry. This diagnostic does not waive T4b's finished-art gate or trigger T5b.
 - Validate: `python -m pytest content/video_engine/tests/test_model_mesh_audit.py -q`; manual scripts-disabled reopen/inspection of at least one canonical native asset and one imported GLB fixture.
-- Evidence: pending; source-neutral inspection makes native, local-generator and later Tripo candidates comparable, but rendered inspection remains mandatory.
+- Evidence: local `main` at `cbea189` includes the source-neutral audit CLI, fixtures and tests. The parent reran its focused tests (**10 passed, 1 Windows symlink-privilege skip**) and the pre-merge register/golden/focused suite (**173 passed, 1 skip**). Ignored `B/art/mesh-audit/` retains hash-verified Blender 5.2.2 offline/scripts-disabled receipts for the native `.blend` and synthetic GLB, copied without hash drift to main. The native scene reports 245 all-scene meshes but only 11 render-eligible objects (including `Diagnostic_Floor`), so neither count is fighter-only. The receipt records byte provenance, geometry and rig facts; source origin/licensing remains in the separate asset manifest. It makes candidate geometry comparable but cannot establish likeness, acceptable skinning, render quality or HG2 art approval.
 
 ### T5a: Backend-neutral motion semantics
 - Status: complete (implementation and targeted independent re-review; no backend/art approval)
