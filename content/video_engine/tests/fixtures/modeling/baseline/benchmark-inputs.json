@@ -73,6 +73,12 @@
     "technical_result": "pass for starter feasibility: MPFB human and Rigify rig generated offline; active FK control propagated to DEF bone and evaluated Human vertices; editable .blend and two renders saved. No art or motion-quality approval.",
     "selected_for_t4a": true,
     "selection_limit": "editable rig/deformation starter only; recognizable fighter identity, face/hands, topology stress poses, materials, contact choreography and art acceptance remain T4a/T4b/T5b gates",
+    "geometry_recheck": {
+      "method": "read-only Blender 5.2.2 reopen with factory startup, offline mode, scripts disabled and isolated user resources; triangles counted by summing polygon vertex_count - 2",
+      "stored_human": {"vertices": 19158, "polygons": 18486, "triangles": 36972},
+      "evaluated_human_saved_pose": {"vertices": 13380, "polygons": 13378, "triangles": 26756},
+      "interpretation": "technical starter only; not a final render-density or character-art verdict"
+    },
     "attempts": [
       {"attempt": 1, "result": "legacy source import failed on extension packaging/namespace mismatch; four MPFB user-resource files were created outside the fixture, then hash-verified and removed by parent; see parent execution checkpoint"},
       {"attempt": 2, "result": "offline packaged extension imported; human and Human.rigify generated; inspection stopped because Blender 5.2 Bone has no roll property; no blend/render persisted"},
