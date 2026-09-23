@@ -1027,7 +1027,8 @@ HG2 frame exists: no frozen copy was made and no strip was rendered.
 
 **The object's rules are themselves a unit mix:** the Fed-funds 6.5% and Bravos' 5.5% Fed tripwire are drawn as `hlines` on a
 10-YEAR-yield axis. The departure (BODY_DEPARTURES row 15) refuses rings for exactly this reason, and the object draws the rules
-anyway. Operator item.
+anyway. Operator item. **SUPERSEDED (the parent, 2026-09-23):** E53 s5, "a policy rate is a RULE" - the rules are the right form,
+not a unit mix; the parent authored `ev-tnx-two-eras-v4` (door (a) below). Section 14 builds on it.
 
 **Doors for the parent (none is in this write set):**
 - (a) an evidence object the ledger page can draw: the two eras as ordinary `series` on one x axis (a gap between 2001 and 2021),
@@ -1043,4 +1044,63 @@ anyway. Operator item.
 - `t22-stagegaps.log`: `162.60 s07 exit=dip -> enter=axes empty 0.2s picture 0.4s licensed (a dip is a world change)`.
 - `t22-spoken.log`: `spoken visuals: 1 pointing phrases, 0 uncovered`.
 - `t22-probe.log`: 80 instants. The gate as in 13.1.
+
+## 14. P69 T23 (row 15) - the trigger and the concession on `ev-tnx-two-eras-v4`; PROP 1 WITHHELD - 2026-09-23
+
+The build runs 0.00-242.85 s. `UNIT_CUT_PHRASE` = "But here's the question" (row 16, T24's). RED: `t23-red.log`.
+
+| table row | window | what |
+|---|---|---|
+| 8 (row 14) | 162.60-195.82 | ends 0.5 s before "Bravos' sharpest" (TNX_MELT_LEAD_S) |
+| 9 `ev-tnx-two-eras-v4 ...;idle=live;readability=longform` | 195.82-242.85 | the bars MELT and are thrown (E88) in the breath after "eighty years."; the yields page on its axes, the dot-com line on a 1998 stub (TNX_OPEN_CAP, M31), the AI era held at nothing; the dot-com yield draws on "what actually ends" (198.38) through the 1998 dip to x 1.2 by "They fail by pointing" (206.07), then crosses back above its first print on "It dies when rates cross back above" (209.95), landing on its Jan 2000 high on "began"; on "Fed" (217.46) the title becomes "The Fed at 6.5% in 2000: the internet trade rolled over" (the page's own 6.5% rule); the rollover draws on "internet trade rolled" (219.69); the AI era draws on "for this cycle" (223.30), ending at 4.7% under their 5.5% rule; on "Put my agreement" (228.90) the title becomes "Agreed: the cycle is real, and so is the threshold". No bare plate 2:45-6:04 |
+
+**PROP 1 IS WITHHELD (`FED_STAMPED = False`) - three blockers, none in this write set:**
+1. **The fit has no room (the fixture).** v4 is not in `content/video_engine/assets/page-boxes.v1.json`; on the estimated boxes the plot
+   is solid and the fit refuses the Fed at 61 px (`t23-door3.log`). Measured into a SCRATCH copy of the fixture
+   (`scratchpad/p69t23/fitsim/fitsim.log`), the same fit takes the plot's empty lower-right room: mark 186 x 171 painted px at (1136, 672).
+   Unblock: `measure_page_boxes.py --write --project <build-h>` (reads this build's compiled timeline).
+2. **The right margin is refused (the end-tag column).** `ledger_page._landscape_full_boxes` reserves the end tags as a COLUMN from
+   the plot's top to its bottom (x 1329-1880, y 250-808), and `page_boxes` keeps that estimate even on a measured page
+   (`ledger_page.py:2277-2280`, "the fixture does not measure" tags). Authored centres in the margin level with the rules are refused
+   at every point tried (`fitsim/margin.log`). Owner: the engine (tags boxed at their drawn extents).
+3. **The prop renders as a black square (the compiler flattens alpha).** `build_scene_timeline_f.dock_uri` (`:5373-5377`) embeds every
+   non-video dock through `data_uri(p, CARD_W)` (`:5335-5346`), which does `convert("RGB")` and writes JPEG; the Fed's asset map entry
+   is `data:image/jpeg` (`scratchpad/p69t23/hg2-preview/build-sim/assets.json`), so the transparent sky paints black and the hatch
+   shadow is cast by the square (`hg2-preview/fed-settled-crop2x.png`). The cutout itself has true alpha
+   (`hg2-preview/fed-cutout-on-magenta.png`). The goldens bypass this route (`build_golden_sources.py` `_prop_stamp` embeds PNG).
+   Call site: `:7789 uris[aid] = dock_uri(ap)`.
+No frozen copy (`build-h-frozen-hg2/`) was made: there is no stamp to freeze. The preview (scratch fixture, scratch build) is in
+`scratchpad/p69t23/hg2-preview/`.
+
+**Measured and fixed:**
+- Notes land OFF the stage: both `note`s at y 1142 / 1222 on a 1080 stage (`scratchpad/p69t23/notes/notes.log`) - the engine's
+  "no free column" fallback on a full-stage page. Replaced by retitles; the BoE's 6% is said, not drawn. Owner: the engine.
+- The first BoE retitle contradicted the page (no 6% rule on a US page; the parent's read) - replaced by the Fed title off the page's rule.
+- A melt opened ON "Bravos'" left 0.2 s empty under the word (`t23-stagegaps.log`, draft 5): moved 0.5 s earlier into the breath.
+
+**Named, not fixed:**
+- **M31 FAIL (0.2 s at 195.82, silent)** is the probe's blind spot, not an empty frame: a melting BARS page records no page ink for its
+  first 0.2 s (`scratchpad/p69t23/notes/gap-fresh.log`) while the frame shows the bars melting (`scratchpad/p69t23/gapframes/cold/`).
+  Row 8's melt of a line page keeps its `chart` box. Owner: the probe / stage-gap measure.
+- **Melt seek purity:** seeking 63.95 then 195.85 painted row 7's divergence page melting at 195.85 (`gapframes/tiles-sheet.png`); a
+  fresh seek paints the bars. The melt's snapshot survives a jump between two melts. Owner: the engine.
+- **M03 FAIL** now reads 47 s from 3:15 - row 15 has no arrival while the Fed is withheld (the stamp at 217.46 splits it). The bed's
+  own 45 s gap (0:09-0:54) stands under it.
+- **M21 WARN** s09 17.6 s past the last data mark (3:45 -> 4:02): the concession carries no figure; the narrator's own tripwire has
+  none in the script. CUT, unsourced: a figure for "my own tripwire", and "don't try to call the top" as a written quote.
+- The AI era renders ORANGE though the object names `crimson` (the palette's mapping).
+- Preview only: the camera's landing pull brings the rewritten title's left edge to the stage edge (218.66, `hg2-preview`).
+
+**Life:** 235.0 vs 237.0 (x 0-1500, y 150-850) mean |dL| 7.20, 8.3% changed; 208.0 vs 210.0 mean |dL| 3.02, 4.3%. Rows 9 of 9 carry life.
+
+**Transitions:** INTO row 15, the melt's throw (`TNX_MELT_WHY`); refused by name: the dip (no world change, E47), a third recast state,
+rescale / extend, morph, melt:splash:chart and melt:morph. Seam `195.82 s08->s09 exit=melt:throw:1 darkest 23.2 clean`. No dip.
+
+**The order of proof (`logs/`):** `t23-door-final.log` (rc 0, cues 16 of 16), `t23-probe.log` (93 instants), `t23-stagegaps.log`,
+`t23-gate.log` **3 FAIL / 3 WARN / 22 PASS / 1 JUDGE / 4 INFO** (M03, M11 - row 1's, M31), `t23-seams.log` (8 boundaries, 0 faults),
+`t23-spoken.log` (2 pointing phrases, 0 uncovered), `t23-frozen.log` (no run over 0.50 s). Drafts: `t23-door3..5.log`.
+
+**Tiles:** `scratchpad/p69t23/final2/tiles-sheet.1.png` / `.2.png` beside `ref-sheet.png` (build-f's mp4, sha256 `9a27de1c...0dd3`
+verified, `ref-sha.txt`; `ref-map.txt`, Script G 173.2-199.5). build-f holds the old two-panel card small over the broadcast desk,
+then a bare desk for the concession; H holds the page full-stage through both.
 

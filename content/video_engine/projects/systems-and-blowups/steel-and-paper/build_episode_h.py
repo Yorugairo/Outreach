@@ -55,6 +55,10 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
   YARD_PAGE / YARD_BARS    row 14 (P69 T22): dip 3 to the yardstick page in the long form's profile (LONGFORM), camera 2
         on the 28 as it lands (YARD_CAM_*, a point look - the datum look runs away when panned), and the recast to the
         breakthrough bars, the railways' 50 bursting the stated [0, 30] scale (E60).
+  TNX_PAGE / FED_PROP      row 15 (P69 T23): the bars melt and are thrown (E88) and the 10-year yield draws in its two
+        eras on one page (`ev-tnx-two-eras-v4`, ordinary series - v3's panels never draw on a ledger page), the Fed's
+        6.5% and their 5.5% its RULES (E53 s5); PROP 1 the Fed STAMPED on its word into the page's biggest room (P69
+        T5), bare of paper with its hatch (E99 s92); the BoE and the concession written on the same page.
 
 THE BODY'S PREFLIGHT (P69 T14, rows 7-24) is three constant tables, read before any body row is authored:
   BODY_ASSETS          every page object (with its builder), card, plate, prop, host still, cue file and outro part
@@ -165,8 +169,9 @@ def _assert_read_only(before: dict) -> None:
 # ticket thrown over the recast) and moves it on to row 11's first words (the adjuster's walk, T19's). P69 T19 authors
 # row 11 (one slot, three records) and moves it on to row 12's first words (the trough, T20's). P69 T20 authors row 12
 # (the trough, on the same desk) and T21 row 13 (reset 1, the dip to 1849), and they move it to row 14's first words.
-# P69 T22 authors row 14 (the yardstick) and moves it to row 15's first words (the trigger, T23's).
-UNIT_CUT_PHRASE = "Bravos' sharpest"        # row 15's first words; the build stops at the cut BEFORE them
+# P69 T22 authors row 14 (the yardstick) and moved it to row 15's first words (the trigger, T23's); P69 T23 authors row 15
+# (the trigger, the concession and PROP 1) and moves it to row 16's first words (who is paying, T24's).
+UNIT_CUT_PHRASE = "But here's the question"   # row 16's first words; the build stops at the cut BEFORE them
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -560,11 +565,90 @@ YARD_RECAST_WHY = ("the tech line -> the breakthrough bars, on one board: TAKEN 
                    "IS the 28 bar); refused: the dip and the cut (no world changes, E47), rescale / extend (the railways' "
                    "50 is not on this series), morph (another frame, not a strip of this one), remake (needs the same "
                    "data whole - the 50 is Britain's), the melt (it would clear the board the 28 stands on)")
-# ROW 15 (P69 T23) IS BLOCKED, NOT AUTHORED: `ev-tnx-two-eras-v3` is a PANELS object (`axes.panels`, no top-level
-# series) and a LEDGER PAGE draws no panel - compiled, the page is `dense-line` with 0 series and paints only its two
-# rules (the engine paints `panels` in the dock's live chart alone, `fillDock`); the stamp fitter then finds no room for
-# the Fed (46 px against the 120 px floor). MEASURED 2026-09-23: `build-h/logs/t23-door1.log`, `t23-door2.log`; the
-# draft is staged for the parent outside the door (the build notes, section 13).
+
+# ROW 15 (P69 T23): THE TRIGGER AND THE CONCESSION, on ONE page - the 10-year yield in its two eras - and PROP 1, the
+# Fed, STAMPED on the word that names it (E99 s87: a DIRECT match for the word only; bare of paper, E99 s92, its
+# cross-hatch resting shadow the engine's own, P69 T6b). The stamp takes the page's biggest room (P69 T5, s88) - the
+# engine's fit chooses it, nothing is hard-coded here; its cue is `landing N (stamp, ink)` (A.arrival_mass); it leaves
+# WITH the page (R26-219: the dock's exit is the row's end).
+# THE PAGE IS v4 (the parent's unblock, 2026-09-23): `ev-tnx-two-eras-v3` keeps its data as two PANELS and a ledger page
+# never draws panels (v3 compiled to `dense-line` with 0 series and refused the Fed at 46 px - `logs/t23-door1.log`,
+# `t23-door2.log`). v4 holds the SAME values as two ordinary series on a shared "years from each era's start" x axis -
+# the dot-com era in teal, the AI era in crimson - with a y label and year ticks. The Fed's 6.5% and Bravos' 5.5% Fed
+# tripwire are the page's RULES: E53 s5, "a policy rate is a RULE" - the right form on a yield page, not a unit mix.
+TNX_PAGE = "ev-tnx-two-eras-v4"
+TNX = _series(TNX_PAGE)
+TNX_NAMES = [s.get("name", "") for s in TNX["series"]]
+TNX_DOT = next(i for i, n in enumerate(TNX_NAMES) if n.startswith("DOT-COM"))     # teal, 1998-2001, its tag "5.1%"
+TNX_AI = next(i for i, n in enumerate(TNX_NAMES) if n.startswith("AI ERA"))       # crimson, 2021-today, its tag "4.7%"
+_DOT_PTS = TNX["series"][TNX_DOT]["pts"]
+TNX_DOT_PEAK = max(range(len(_DOT_PTS)), key=lambda k: _DOT_PTS[k][1])   # Jan 2000, the era's high - read off the data
+TNX_DOT_LAST = _last_index(TNX, TNX_DOT)
+TNX_AI_LAST = _last_index(TNX, TNX_AI)
+# THE LINE CROSSES BACK ABOVE WHERE ITS BORROWING BEGAN, ON THOSE WORDS: the dot-com yield opens at its first print,
+# falls through the 1998 dip and climbs back above that first print during 1999, on to the January 2000 high. The first
+# pen draws the dip and most of the recovery (to TNX_DOT_LEG1_X years, still UNDER the first print) while the narrator
+# talks about risk charts; the second leg starts on "It dies when" and crosses above the first print as "cross back
+# above" is said, landing on its high on "began". Both indices read off the data, never typed.
+TNX_DOT_LEG1_X = 1.2
+TNX_DOT_LEG1 = _nearest(TNX, TNX_DOT, TNX_DOT_LEG1_X)
+assert _DOT_PTS[TNX_DOT_LEG1][1] < _DOT_PTS[0][1] < _DOT_PTS[TNX_DOT_PEAK][1], "the crossing must lie in the second leg"
+TNX_OPEN_S = 0.4
+# THE PAGE LANDS WITH INK (M31, chart to chart): MEASURED on draft 6 (`logs/t23-gate.log` then), both eras held at
+# nothing left the stage with no page ink 195.82-196.02 under the melt - the gate's "empty cream" FAIL. The dot-com
+# yield lands on its first prints instead (row 8's RAIL_OPEN_CAP, the first cap as the page lands), a stub of 1998.
+TNX_OPEN_CAP = 3
+TNX_ROLL_S = 1.5      # the rollover draws on "the internet trade rolled over", landing on "over"
+TNX_AI_S = 1.9        # the AI era draws on "for this cycle", landing as "above five" is said - under their 5.5% rule
+# THE FIGURES THE PAGE DOES NOT CARRY TWICE (M28): the page's own rules already write the Fed's 6.5% ("Fed funds peak,
+# 2000 - 6.5%") and their 5.5% ("their tripwire - 5.5%"), so neither is written again and NO RING lands on the yield
+# line at 6.5 - the sentence's 6.5 is the FED FUNDS rate, and the 10-year's own January 2000 high (6.7) is a different
+# measure (E99 s94: read a figure on the basis its sentence states). The BoE's 6% has no rule and no series on a US
+# page: it is SAID, not drawn (below) - Bravos Research, accepted as a primary source for this format
+# (docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:525 "BoE 6% trigger ... attributed", :532).
+# NO NOTE: MEASURED on draft 4 (`scratchpad/p69t23/notes/notes.log`), both `note`s
+# were placed by the engine's "no free column" fallback UNDER the source line - y 1142 and 1222 px on a 1080 px stage,
+# off the frame for their whole life (the right column is under the engine's 22% floor once the long-form end tags
+# take it; `scene-evidence-engine.mjs` the NOTES block). No row option moves a note, so the hand writes each claim as
+# the title instead (row 1's own verdict retitles). THE TITLE STATES WHAT THIS PAGE SHOWS (the parent's frame read,
+# 2026-09-23): a BoE title over a US page with no 6% line sent the eye looking for a rule that is not there, so the
+# title holds the page's own name through the BoE sentence and is rewritten on "The Fed at six and a half" to the
+# sentence's claim, read off the page's own rule (6.5%, 2000) - no new figure. The BoE's 6% is therefore SAID and not
+# drawn (no note: a note lands off the stage, above). The concession is rewritten on "Put my agreement".
+# Engine gap, named for the parent: a note on a full-stage page has nowhere on the stage to go.
+TNX_FED_TITLE = "The Fed at 6.5% in 2000: the internet trade rolled over"
+TNX_AGREE_TITLE = "Agreed: the cycle is real, and so is the threshold"
+TNX_TITLE_S = 2.0
+# CUT (unsourced, named): "My own tripwire is stricter than theirs" - the script gives no figure for it, so no rule, no
+# note and no number is drawn for the narrator's own tripwire; and "don't try to call the top" is not written (a quote
+# with no line in the sourcing table, ANSWER-BRAVOS-HYPE-CYCLE.md:520-530).
+FED_PROP = "prop-federal-reserve-building-v1"
+FED_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (FED_PROP + ".png")
+FED_OPTS = {"prop": True, "arrive": "stamp"}   # mass unset: a stamp lands at `ink` (the engine's stampXf default)
+# THE STAMP WAITS ON ONE MEASUREMENT (P69 T23, 2026-09-23 - NOT in this slice's write set). The v4 page is not in the
+# page-boxes fixture (`content/video_engine/assets/page-boxes.v1.json`), so the compiler fits the Fed against the
+# ESTIMATED boxes: the whole plot solid (no `data_mask`) and the end-tag COLUMN solid from the plot's top to its bottom
+# (x 1329-1880, y 250-808 - `ledger_page._landscape_full_boxes`; the fixture never measures tags). The largest mark left
+# is 61 px, under the 120 px floor, and the door FAILs by name (`build-h/logs/t23-door3.log`). MEASURED IN A SCRATCH
+# COPY of the fixture (`scratchpad/p69t23/fitsim/`), the same fit takes the plot's lower-right EMPTY room - mark 186 x
+# 171 painted px at centre (1136, 672). The unblock, the parent's: `python content/video_engine/scripts/
+# measure_page_boxes.py --write --project content/video_engine/projects/systems-and-blowups/steel-and-paper/build-h`
+# (it reads THIS build's compiled timeline, which is why the row is built first with the stamp withheld), then
+# FED_STAMPED = True and the door re-run. Withheld, the row compiles everything else and the build notes say so.
+# TWO MORE BLOCKERS, both the engine's (BUILD-NOTES-H.md section 14): (a) the right margin level with the rules (the
+# parent's placement) is refused at every authored centre - the end-tag column above is kept even on a measured page
+# (`ledger_page.page_boxes`); (b) a dock prop is embedded as JPEG (`build_scene_timeline_f.dock_uri` -> `data_uri`'s
+# RGB convert), so the Fed paints on a BLACK SQUARE with the hatch cast by the square - a card, which E99 s92 forbids.
+FED_STAMPED = False
+TNX_MELT_S = 1.0     # the yardstick bars melt over "Bravos' sharpest" and the yields' board is there on "line is about"
+TNX_MELT_LEAD_S = 0.5   # ... opened in the breath before the sentence, so the melt's empty instant falls under no word
+TNX_MELT_WHY = ("the breakthrough bars -> the 10-year yield in two eras, page to page: TAKEN the melt's throw (E88) - the "
+                "bars ball up and are thrown off, the yields draw on the same board as the sentence turns to the trigger; "
+                "refused: the dip (two pages are one kind of world, E47 - no world change), a recast (a third state would "
+                "be the yardstick page's, and the stamp is fitted to its page's OWN room, P69 T5, which must be the "
+                "yields'; a different argument is a different page, E58), rescale / extend (not the same series), morph "
+                "(another frame, not a strip of this one), melt:splash:chart and melt:morph (the yields would arrive "
+                "built - every page builds on screen, E99 s67)")
 
 DOCK_META = [
     {"asset": CERT_CARD, "title": "An 1845 railway certificate",
@@ -588,6 +672,8 @@ DOCK_META = [
                 {"label": "THE PAPER", "value": "fell 64%", "tag": "peak to trough", "accent": "neg"},
                 {"label": "THE RETURNS", "value": "took twenty years", "tag": "1840s railways"},
                 {"label": "2024\u201326 AI BUILD", "value": "still open", "tag": "AI build"}]},
+    {"asset": FED_PROP, "title": "The Federal Reserve", "source": "Money Physics - prop cutout " + FED_PROP,
+     "species": "prop", "badges": []},     # E99 s87 / s92: art added to the world, bare of paper - no rail, no badge
 ]
 
 
@@ -741,6 +827,13 @@ def page_yard() -> str:
     "railways took roughly half" (`;then=`, YARD_RECAST)."""
     return ("ledger:%s:line:%d:right:%s%s%s%s;then=%s:bars"
             % (YARD_PAGE, YARD_LAST, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM, YARD_BARS))
+
+
+def page_tnx() -> str:
+    """Row 15's world (P69 T23): the 10-year yield in its two eras, on its axes (E73), live (E49), in the long form's
+    profile (E99 s97, the middle preset) - the page PROP 1 is stamped onto. One state: no recast."""
+    return ("ledger:%s:line:%d:right:%s%s%s%s"
+            % (TNX_PAGE, TNX_DOT_LAST, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM))
 
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
 AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}, {"n": 3, "text": "Used tomorrow?"}]
@@ -980,6 +1073,7 @@ BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the tr
                 MEMO_PLATE: MEMO_MELT_WHY,
                 VIADUCT_PLATE: VIADUCT_DIP_WHY,
                 page_yard(): YARD_DIP_WHY,
+                page_tnx(): TNX_MELT_WHY,
                 SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
                               "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
@@ -1093,6 +1187,19 @@ def shot_table(ws: list, unit_end: float) -> list:
     #                                                     recast on "In the 1840s" (183.78) burst before "roughly" was
     #                                                     said (185.2); on "railways" the 50 lands on "roughly half"
     yard_peak_end = at("peak it hit")                   # the peak lands as "peak" is said
+    # -- row 15 (P69 T23): THE TRIGGER AND THE CONCESSION - the bars melt on the sentence's turn (the boundary IS the
+    # melt's start), the yields draw on their words, and the Fed is STAMPED on its name
+    # the melt opens TNX_MELT_LEAD_S before the sentence, inside the breath after "eighty years.": MEASURED on draft 5
+    # (`logs/t23-stagegaps.log` then), a melt opened ON "Bravos'" left the stage empty 196.32-196.52 under the word
+    t_trigger = round(at("Bravos' sharpest") - TNX_MELT_LEAD_S, 2)
+    t_ends = at("what actually ends")                   # the dot-com yield starts drawing as the trigger is named ...
+    t_pointing = at("They fail by pointing")            # ... its first leg (the dip and most of the way back) lands here
+    t_dies = at("It dies when")                         # ... and it crosses back above its first print on the words
+    t_began = at("borrowing began")                     # ... landing on its January 2000 high as "began" ends
+    t_fed = at("Fed at six and")                        # PROP 1 lands on the word that names it (E99 s87)
+    t_trade = at("internet trade rolled")               # the dot-com yield rolls over on its words ...
+    t_cycle = at("for this cycle")                      # ... and the AI era draws on "this cycle", under their 5.5%
+    t_agree = at("Put my agreement")                    # the concession, written on the same page
     t_row9_end = unit_end
 
     return [
@@ -1241,7 +1348,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # through the definition to the dot-com peak; the page's own 23% is written there; the last twenty-five years draw
         # on "Today it's" and land on "twenty-eight" (its end tag writes 28%), where camera 2 pushes (E51). On "In the
         # 1840s" the page RECASTS to the breakthrough bars (YARD_RECAST_WHY) and the railways' half bursts the scale.
-        (t_yard, t_row9_end, page_yard(), (0, 0, 0), [], "dip", [
+        (t_yard, t_trigger, page_yard(), (0, 0, 0), [], "dip", [
             {"kind": "build_to", "at": t_yard, "dur": YARD_OPEN_S, "series": YARD_TECH, "target": datum(0)},
             {"kind": "build_to", "at": t_yard, "dur": YARD_OPEN_S, "series": YARD_SCALE, "target": datum(0)},
             {"kind": "build_to", "at": t_counts, "dur": round(yard_peak_end - t_counts, 2), "series": YARD_TECH,
@@ -1261,7 +1368,30 @@ def shot_table(ws: list, unit_end: float) -> list:
              "at": YARD_CAM_AT, "ease": "inout"},
             {"t": round(t_1840s - 0.1, 2), "zoom": 1.0, "look": YARD_CAM_LOOK, "ease": "inout"},
         ]}),
-        # (-- ROW 15 is BLOCKED - see the note at YARD_RECAST_WHY; ROWS 9-24 are T17-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
+        # -- ROW 15 (P69 T23): THE TRIGGER - the bars melt and are thrown (TNX_MELT_WHY) and the 10-year yield page lands
+        # on its axes, both eras held at nothing; the dot-com yield draws on "what actually ends a mania" through the 1998
+        # dip, and crosses back above its first print on "It dies when rates cross back above", landing on its January
+        # 2000 high on "began"; the BoE's 6% is said, not drawn (no series or rule of its own here, BODY_DEPARTURES row
+        # 15); on "Fed" the title becomes the sentence's claim off the page's own 6.5% rule and PROP 1 the Fed is STAMPED
+        # (FED_STAMPED) into the page's biggest room (the engine's fit, P69 T5) and leaves with the
+        # page; the dot-com yield rolls over on its words and the AI era draws on "this cycle", ending under their 5.5%
+        # rule; the concession is written on the SAME page (no bare plate 2:45-6:04). The camera pulls on the stamp's
+        # contact (P69 T4, `attention: landings`, E51).
+        (t_trigger, t_row9_end, page_tnx(), (0, 0, 0), [
+            (FED_PROP, 0, t_fed, t_row9_end, dict(FED_OPTS)),
+        ] if FED_STAMPED else [], RAIL_EXIT % TNX_MELT_S, [
+            {"kind": "build_to", "at": t_trigger, "dur": TNX_OPEN_S, "series": TNX_DOT, "target": datum(TNX_OPEN_CAP)},
+            {"kind": "build_to", "at": t_trigger, "dur": TNX_OPEN_S, "series": TNX_AI, "target": datum(0)},
+            {"kind": "build_to", "at": t_ends, "dur": round(t_pointing - t_ends, 2), "series": TNX_DOT,
+             "target": datum(TNX_DOT_LEG1)},
+            {"kind": "build_to", "at": t_dies, "dur": round(t_began + 0.5 - t_dies, 2), "series": TNX_DOT,
+             "target": datum(TNX_DOT_PEAK)},
+            {"kind": "retitle", "at": t_fed, "dur": TNX_TITLE_S, "text": TNX_FED_TITLE},
+            {"kind": "build_to", "at": t_trade, "dur": TNX_ROLL_S, "series": TNX_DOT, "target": datum(TNX_DOT_LAST)},
+            {"kind": "build_to", "at": t_cycle, "dur": TNX_AI_S, "series": TNX_AI, "target": datum(TNX_AI_LAST)},
+            {"kind": "retitle", "at": t_agree, "dur": TNX_TITLE_S, "text": TNX_AGREE_TITLE},
+        ], {"keys": [], "attention": "landings"}),
+        # (-- ROWS 16-24 are T24-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
     ]
 
 
@@ -1565,7 +1695,8 @@ TABLE_TREATMENT = {1: "treatment rows 1-5 (the page, 0:00-0:42)", 2: "treatment 
                    6: "treatment rows 11-12, the memo desk: the three records in one slot, then the three-manias table "
                       "(P69 T19, T20)",
                    7: "treatment row 13, reset 1 - the viaduct, 1849 (P69 T21)",
-                   8: "treatment row 14, the yardstick: dip 3, camera 2, the breakthrough bars (P69 T22)"}
+                   8: "treatment row 14, the yardstick: dip 3, camera 2, the breakthrough bars (P69 T22)",
+                   9: "treatment row 15, the trigger and the concession: PROP 1 the Fed stamped (P69 T23)"}
 
 
 def _flow_count(rows: list) -> tuple[int, int, int, int]:
@@ -1609,6 +1740,7 @@ def main() -> int:
     _sell_ticket_card()   # row 10: the order form's face with SELL stamped across it
     D.register(UBER_CARD, UBER_PNG)   # row 11: the two PNG cards, by id (BODY_DEPARTURES row 11)
     D.register(COO_CARD, COO_PNG)
+    D.register(FED_PROP, FED_PROP_FILE)          # row 15: PROP 1, the catalogued cutout, by id
     _manias_card()   # row 12: the table, composed from its own bands
     D.chart_card(BRAVOS_CARD, _hook_object(), BUILD, "line")   # the TWO-LINE page, rendered from the derived object
     D.register(HOST_PLATE_ID, HOST_PLATE_FILE)   # the Flow plate by id (build_render_f.find_asset checks STAMPED first)

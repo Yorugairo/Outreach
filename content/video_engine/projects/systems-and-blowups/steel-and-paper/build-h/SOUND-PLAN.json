@@ -142,6 +142,15 @@
    }
   },
   {
+   "slot": "page enter 9 (axes)",
+   "at": 195.82,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   }
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0073,
