@@ -747,6 +747,21 @@ verbatim tails and are left pending.
 - Validate: `python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/steel-and-paper/build-h` and `python content/video_engine/scripts/gate_one_shot_floor.py content/video_engine/projects/systems-and-blowups/steel-and-paper/build-h --project content/video_engine/projects/systems-and-blowups/steel-and-paper --reference content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f` - both unpiped
 - Evidence: pending
 
+### T35: New candidate effects and recipes from P69's mechanisms, each proved as a beat (the operator, 2026-09-22)
+- Status: pending
+- Owner: implementation_luna (authoring + proofs); parent (the frame read)
+- Depends on: T6 and T6b merged into lane A (the recipes use the bar figure, the compare on bars and the prop's resting shadow)
+- Write set: `content/video_engine/effects/recipes/*.json` (NEW candidates only; no existing recipe edited), `content/video_engine/effects/cards/*.json` (only a new card a new recipe needs), the catalogue's generated files via `build_effects_catalog.py --write`, a private proof dir `content/video_engine/projects/_proofs/p69-recipes/**` (gitignored build output; the proof door `proof_p69_recipes.py` commits), `docs/content-video-engine/review-queue.v1.json`, `docs/content-video-engine/REVIEW-QUEUE.md`
+- Acceptance: the operator, 2026-09-22: "draw plausible pages and also some new potential effects/recipes" (E99 s?? (b)). Each candidate is a TIMING THAT COMPOSES from existing cards (s70), `status: candidate`, `count: 0`, with doctrine cites, and each is PROVED AS A BEAT a short or the body could carry (E99 s60 - never a golden fixture served as a scene), frames read by the parent before it reaches the queue. The proposed set: (1) `recipe:estimate-opens-as-a-wedge` - a line lands, then its projection opens as a `spread` wedge between the range's two edges with the range written as a figure (the debt page; never a midpoint); (2) `recipe:the-bar-halves-its-number` - a figure lands on its bar's top and a `chart_to compare` melts and splashes it to the comparator (row 18's 20 -> 10); (3) `recipe:the-ratio-read-in-the-gap` - two bars, the figure written in the gap between them as the ratio (row 21's 1 vs 3); (4) `recipe:the-stamp-takes-the-room-then-the-card` - a prop stamped into the page's biggest room, a card then placed clear of mark and ring (T5); (5) `recipe:the-prop-lands-with-weight` - the stamp's contact shadow hands over to the resting shadow, the ink cue on the contact and the camera's pull from it (T2-T4, T6b); (6) `recipe:two-clocks` - a breakthrough pair of bars on one unit, the long one deemphasized and the short one crimson, its figure the claim (row 19). Every recipe passes `effects_catalog_check`; the queue row `p69-candidate-recipes` carries one clip or strip per recipe
+- Regression: `python content/video_engine/scripts/effects_catalog_check.py`
+- Expected RED: none of the six recipe ids exists in `content/video_engine/effects/recipes/`
+- Validate: `python content/video_engine/scripts/build_effects_catalog.py --check` then `python -m pytest content/video_engine/tests/test_effects_catalog_drift.py -q` then the proof door, then `python content/video_engine/scripts/build_review_queue.py`
+- Frame acceptance: the parent reads each proof's strip beside the mechanism it composes; a recipe whose proof reads wrong is withdrawn, never queued
+- Red evidence: pending
+- Green evidence: pending
+- Refactor evidence: pending
+- Evidence: pending
+
 ## Verification
 
 Run from the slice's worktree root, unpiped:

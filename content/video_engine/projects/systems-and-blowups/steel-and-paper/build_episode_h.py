@@ -655,7 +655,8 @@ DEBT_RANGE_TEXT, DEBT_RANGE_SUB = "$130–150B", "2026E"
 TWO_CLOCKS_PAGE = "ev-two-clocks-bars-v1"   # row 19: about 20 years vs about 5 years (RAILWAY-LAG-20Y-FINDINGS.md)
 
 # (kind, item, what it resolves to). Builders: `ledger_page.pick_builder` on the series at the row's variant.
-# PLAUSIBLE pages (H1-H5, row 16, row 19) compile and draw only on the operator's yes (P69-DATA-DEPARTURES.md).
+# PLAUSIBLE pages (H1-H5, row 16, row 19) DRAW - the operator, 2026-09-22: "yes draw plausible pages" (E99 s?? (b));
+# each object carries its tier and proof, and UNSOURCED / REJECTED still never draw.
 BODY_ASSETS = {
     7: (("host", HOST_PLATE_ID, _PROJ + "host/H-1-studio.png - quarantined until approved (E10); supersedes "
                                 "the treatment's world-broadcast-set-v2 (the host amendment)"),
@@ -734,6 +735,10 @@ BODY_ASSETS = {
 
 # What the treatment names that is NOT on disk, and what the row does instead (P69-DATA-DEPARTURES.md).
 # Rows 16 (debt issuance) and 19 (the two clocks) are RESOLVED as pages and are not here.
+# Row 22's end figures are NOT a departure (E99 s?? (c), the operator: "I think you're reading hbm/dram pricing wrong"):
+# on ev-memory-monitor-v1's own points DRAM is +16.4% on the July print (86970 vs 74686, the bounce off June's -3.7%)
+# and HBM-class +13.9% over the last two prints (95408 vs 83784) - each figure is drawn WITH its basis.
+MEMORY_FIGURES = (("DRAM", "+16%", "on the July print"), ("HBM-class", "+14%", "over the last two prints"))
 BODY_DEPARTURES = (
     (9, "7% tick / 8% datum on ev-equip-ipp-gdp-v1", "cut - the page rings its own 11.54% (not shown under the 7/8 words)"),
     (11, "ev-uber-adoption-v1 burndown (PNG only)", "PNG card ev-uber-adoption-v1.png"),
@@ -747,7 +752,6 @@ BODY_DEPARTURES = (
     (18, "the certificate card's '-66%' figure (the crop carries none)", "badge reading RAIL_DROP (-64%)"),
     (20, "the phone card (no phone icon, cutout or prop)", "cut until an asset is generated (H6)"),
     (22, "chart_to ev-tripwire-board-v1 (a checklist, refused as a page)", "PNG card / its checklist dock"),
-    (22, "'+17%' / '+14%' end figures on ev-memory-monitor-v1 (UNSOURCED)", "cut - the end labels carry the level"),
     (22, "the June datum ringed on ev-june-print-v1 (marks [])", "re-target: ring ev-memory-monitor-v1's own June mark"),
     (22, "the certificate's '-66%' (returns)", "badge reading RAIL_DROP (-64%)"),
     (23, "ev-memory-arithmetic-v1:bars (two units; 'doubles' vs 80 -> 192 GB)", "PNG card or its checklist dock"),
