@@ -1,0 +1,94 @@
+{
+  "plate": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/prompted/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference.png",
+  "stem": "world-tokyo-customs-dock-v1-reference",
+  "size": [
+    1536,
+    1024
+  ],
+  "model": "depth_anything_v2_vitl_fp16.safetensors",
+  "depth_bits": 8,
+  "seed": 0,
+  "sigma": 2.0,
+  "grow_px": 16,
+  "bands": 4,
+  "edges": [
+    0.0,
+    0.098039,
+    1.0
+  ],
+  "quantile_roles": [
+    "far",
+    "mid"
+  ],
+  "sam": {
+    "model": "sam2.1_hiera_small.safetensors",
+    "grow": 6,
+    "occluder_points": "520,170;518,40;455,190",
+    "subject_points": "520,650;400,780;615,800;700,760"
+  },
+  "inpainter": "lama",
+  "notes": [],
+  "layers": [
+    {
+      "role": "far",
+      "path": "world-tokyo-customs-dock-v1-reference-far.png",
+      "parallax_factor": 1.0,
+      "source": "quantile",
+      "depth_band": [
+        0.0,
+        0.098039
+      ],
+      "band_share": 0.425601,
+      "alpha_share": 1.0,
+      "hole_share": 0.574399,
+      "opaque": true
+    },
+    {
+      "role": "mid",
+      "path": "world-tokyo-customs-dock-v1-reference-mid.png",
+      "parallax_factor": 1.15,
+      "source": "quantile",
+      "depth_band": [
+        0.098039,
+        1.0
+      ],
+      "band_share": 0.430813,
+      "alpha_share": 0.455831,
+      "hole_share": 0.025017,
+      "opaque": false
+    },
+    {
+      "role": "subject",
+      "path": "world-tokyo-customs-dock-v1-reference-subject.png",
+      "parallax_factor": 1.15,
+      "source": "sam2.1-mask",
+      "depth_band": null,
+      "band_share": 0.126982,
+      "alpha_share": 0.126982,
+      "hole_share": 0.0,
+      "opaque": false
+    },
+    {
+      "role": "near",
+      "path": "world-tokyo-customs-dock-v1-reference-near.png",
+      "parallax_factor": 1.4,
+      "source": "sam2.1-mask",
+      "depth_band": null,
+      "band_share": 0.016603,
+      "alpha_share": 0.016603,
+      "hole_share": 0.0,
+      "opaque": false
+    }
+  ],
+  "timings_s": {
+    "depth": 3.12,
+    "inpaint": 3.58,
+    "wall_clock": 11.33
+  },
+  "vram_free_bytes": {
+    "before": 11550982144,
+    "after": 11550982144,
+    "min_free_during": 10408123604,
+    "peak_used": 1142858540
+  }
+}

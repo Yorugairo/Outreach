@@ -1,0 +1,94 @@
+{
+  "plate": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-banker-apartment-v2.png",
+  "stem": "world-banker-apartment-v2",
+  "size": [
+    1536,
+    1024
+  ],
+  "model": "depth_anything_v2_vitl_fp16.safetensors",
+  "depth_bits": 8,
+  "seed": 0,
+  "sigma": 2.0,
+  "grow_px": 16,
+  "bands": 4,
+  "edges": [
+    0.0,
+    0.290196,
+    1.0
+  ],
+  "quantile_roles": [
+    "far",
+    "mid"
+  ],
+  "sam": {
+    "model": "sam2.1_hiera_small.safetensors",
+    "grow": 6,
+    "occluder_points": "700,845;600,880;450,935;735,805",
+    "subject_points": "250,825;340,755;80,820;400,845;160,760"
+  },
+  "inpainter": "lama",
+  "notes": [],
+  "layers": [
+    {
+      "role": "far",
+      "path": "world-banker-apartment-v2-far.png",
+      "parallax_factor": 1.0,
+      "source": "quantile",
+      "depth_band": [
+        0.0,
+        0.290196
+      ],
+      "band_share": 0.459362,
+      "alpha_share": 1.0,
+      "hole_share": 0.540638,
+      "opaque": true
+    },
+    {
+      "role": "mid",
+      "path": "world-banker-apartment-v2-mid.png",
+      "parallax_factor": 1.15,
+      "source": "quantile",
+      "depth_band": [
+        0.290196,
+        1.0
+      ],
+      "band_share": 0.469404,
+      "alpha_share": 0.496443,
+      "hole_share": 0.027039,
+      "opaque": false
+    },
+    {
+      "role": "subject",
+      "path": "world-banker-apartment-v2-subject.png",
+      "parallax_factor": 1.15,
+      "source": "sam2.1-mask",
+      "depth_band": null,
+      "band_share": 0.046502,
+      "alpha_share": 0.046889,
+      "hole_share": 0.000387,
+      "opaque": false
+    },
+    {
+      "role": "near",
+      "path": "world-banker-apartment-v2-near.png",
+      "parallax_factor": 1.4,
+      "source": "sam2.1-mask",
+      "depth_band": null,
+      "band_share": 0.024731,
+      "alpha_share": 0.024731,
+      "hole_share": 0.0,
+      "opaque": false
+    }
+  ],
+  "timings_s": {
+    "depth": 3.12,
+    "inpaint": 5.46,
+    "wall_clock": 13.41
+  },
+  "vram_free_bytes": {
+    "before": 11550982144,
+    "after": 11550982144,
+    "min_free_during": 10408123604,
+    "peak_used": 1142858540
+  }
+}

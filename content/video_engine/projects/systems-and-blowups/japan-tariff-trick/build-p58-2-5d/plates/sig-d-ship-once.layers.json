@@ -1,0 +1,9 @@
+{
+ "note": "P58 T7 attempt 2: Japan's approved ship plate (sig-d-ship-once, a byte-identical copy of omni-video/stills/sig-d-ship-once.png, sha256 7d3315...612c2e) split by the b-sam route (Depth Anything v2 vitl fp16 -> quantile far/mid, subject and occluder overridden by SAM 2.1 point masks, LaMa behind each nearer band). Subject = the carrier, its ramp and cars; occluder = Mike and the customs booth with the clerk and the stamp. The copy lives in the private build so the approved still never gains a sidecar.",
+ "layers": [
+  {"path": "split2/sig-d-ship-once-far.png", "role": "background", "alpha": false, "generator": "depth-split-sam"},
+  {"path": "split2/sig-d-ship-once-mid.png", "role": "mid", "alpha": true, "generator": "depth-split-sam"},
+  {"path": "split2/sig-d-ship-once-subject.png", "role": "subject", "alpha": true, "generator": "depth-split-sam"},
+  {"path": "split2/sig-d-ship-once-near.png", "role": "occluder", "alpha": true, "generator": "depth-split-sam"}
+ ]
+}

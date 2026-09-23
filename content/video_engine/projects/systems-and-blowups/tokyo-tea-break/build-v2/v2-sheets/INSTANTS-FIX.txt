@@ -1,0 +1,10 @@
+ 1   66.41s  card throw
+ 2   66.87s  card landed
+ 3   67.20s  card land+
+ 4   67.82s  the snap
+ 5   68.40s  after the snap
+ 6   69.30s  the callout, off the tick band
+ 7   75.80s  the Fed card's throw
+ 8   76.50s  the Fed card landed in the parked page's room
+ 9   76.83s  the camera push
+10   77.40s  the push landed

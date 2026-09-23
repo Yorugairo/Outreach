@@ -1,0 +1,88 @@
+{
+  "plate": "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-banker-apartment-v2.png",
+  "stem": "world-banker-apartment-v2",
+  "size": [
+    1536,
+    1024
+  ],
+  "model": "depth_anything_v2_vitl_fp16.safetensors",
+  "depth_bits": 8,
+  "seed": 0,
+  "sigma": 2.0,
+  "grow_px": 16,
+  "bands": 4,
+  "edges": [
+    0.0,
+    0.117647,
+    0.317647,
+    0.513725,
+    1.0
+  ],
+  "inpainter": "lama",
+  "notes": [],
+  "layers": [
+    {
+      "role": "far",
+      "path": "world-banker-apartment-v2-far.png",
+      "parallax_factor": 1.0,
+      "depth_band": [
+        0.0,
+        0.117647
+      ],
+      "band_share": 0.249652,
+      "alpha_share": 1.0,
+      "hole_share": 0.750348,
+      "opaque": true
+    },
+    {
+      "role": "mid",
+      "path": "world-banker-apartment-v2-mid.png",
+      "parallax_factor": 1.15,
+      "depth_band": [
+        0.117647,
+        0.317647
+      ],
+      "band_share": 0.249893,
+      "alpha_share": 0.346247,
+      "hole_share": 0.096354,
+      "opaque": false
+    },
+    {
+      "role": "subject",
+      "path": "world-banker-apartment-v2-subject.png",
+      "parallax_factor": 1.15,
+      "depth_band": [
+        0.317647,
+        0.513725
+      ],
+      "band_share": 0.250308,
+      "alpha_share": 0.287994,
+      "hole_share": 0.037685,
+      "opaque": false
+    },
+    {
+      "role": "near",
+      "path": "world-banker-apartment-v2-near.png",
+      "parallax_factor": 1.4,
+      "depth_band": [
+        0.513725,
+        1.0
+      ],
+      "band_share": 0.250148,
+      "alpha_share": 0.250148,
+      "hole_share": 0.0,
+      "opaque": false
+    }
+  ],
+  "timings_s": {
+    "depth": 3.08,
+    "inpaint": 5.44,
+    "wall_clock": 10.22
+  },
+  "vram_free_bytes": {
+    "before": 11553079296,
+    "after": 11553079296,
+    "min_free_during": 10410220756,
+    "peak_used": 1142858540
+  }
+}

@@ -1,0 +1,1163 @@
+{
+ "scene_id": 1,
+ "duration_s": 71.544,
+ "engine": "faster-whisper small.en (local) aligned to SCRIPT-SHORT-VO.txt | retime_take: gaps doc37 caps (13 cut, 4.08s); atempo 1.0",
+ "take": "scene_1-tight.mp3",
+ "words": [
+  {
+   "w": "Memory",
+   "start_s": 0.0,
+   "end_s": 0.68
+  },
+  {
+   "w": "stocks",
+   "start_s": 0.68,
+   "end_s": 1.02
+  },
+  {
+   "w": "don't",
+   "start_s": 1.02,
+   "end_s": 1.6
+  },
+  {
+   "w": "trade",
+   "start_s": 1.6,
+   "end_s": 1.76
+  },
+  {
+   "w": "the",
+   "start_s": 1.76,
+   "end_s": 1.92
+  },
+  {
+   "w": "news.",
+   "start_s": 1.92,
+   "end_s": 2.24
+  },
+  {
+   "w": "They",
+   "start_s": 2.52,
+   "end_s": 2.64
+  },
+  {
+   "w": "trade",
+   "start_s": 2.64,
+   "end_s": 2.92
+  },
+  {
+   "w": "the",
+   "start_s": 2.92,
+   "end_s": 3.08
+  },
+  {
+   "w": "calendar.",
+   "start_s": 3.08,
+   "end_s": 3.48
+  },
+  {
+   "w": "Around",
+   "start_s": 3.98,
+   "end_s": 4.06
+  },
+  {
+   "w": "the",
+   "start_s": 4.06,
+   "end_s": 4.22
+  },
+  {
+   "w": "fifteenth",
+   "start_s": 4.22,
+   "end_s": 4.76,
+   "interp": true
+  },
+  {
+   "w": "of",
+   "start_s": 4.76,
+   "end_s": 4.8
+  },
+  {
+   "w": "every",
+   "start_s": 4.8,
+   "end_s": 5.06
+  },
+  {
+   "w": "month,",
+   "start_s": 5.06,
+   "end_s": 5.36
+  },
+  {
+   "w": "Korean",
+   "start_s": 5.64,
+   "end_s": 5.9
+  },
+  {
+   "w": "customs",
+   "start_s": 5.9,
+   "end_s": 6.28
+  },
+  {
+   "w": "prints",
+   "start_s": 6.28,
+   "end_s": 6.62
+  },
+  {
+   "w": "the",
+   "start_s": 6.62,
+   "end_s": 6.84
+  },
+  {
+   "w": "price",
+   "start_s": 6.84,
+   "end_s": 7.02
+  },
+  {
+   "w": "of",
+   "start_s": 7.02,
+   "end_s": 7.24
+  },
+  {
+   "w": "memory",
+   "start_s": 7.24,
+   "end_s": 7.46
+  },
+  {
+   "w": "chips",
+   "start_s": 7.46,
+   "end_s": 7.76
+  },
+  {
+   "w": "crossing",
+   "start_s": 7.76,
+   "end_s": 8.08
+  },
+  {
+   "w": "its",
+   "start_s": 8.08,
+   "end_s": 8.36
+  },
+  {
+   "w": "border.",
+   "start_s": 8.36,
+   "end_s": 8.68
+  },
+  {
+   "w": "If",
+   "start_s": 9.04,
+   "end_s": 9.12
+  },
+  {
+   "w": "you",
+   "start_s": 9.12,
+   "end_s": 9.3
+  },
+  {
+   "w": "own",
+   "start_s": 9.3,
+   "end_s": 9.46
+  },
+  {
+   "w": "the",
+   "start_s": 9.46,
+   "end_s": 9.64
+  },
+  {
+   "w": "stocks,",
+   "start_s": 9.64,
+   "end_s": 9.88
+  },
+  {
+   "w": "that",
+   "start_s": 10.18,
+   "end_s": 10.38
+  },
+  {
+   "w": "print",
+   "start_s": 10.38,
+   "end_s": 10.56
+  },
+  {
+   "w": "is",
+   "start_s": 10.56,
+   "end_s": 10.74
+  },
+  {
+   "w": "your",
+   "start_s": 10.74,
+   "end_s": 10.86
+  },
+  {
+   "w": "metronome.",
+   "start_s": 10.86,
+   "end_s": 11.32
+  },
+  {
+   "w": "Hynix",
+   "start_s": 11.82,
+   "end_s": 11.98,
+   "interp": true
+  },
+  {
+   "w": "and",
+   "start_s": 11.98,
+   "end_s": 12.24
+  },
+  {
+   "w": "Micron",
+   "start_s": 12.24,
+   "end_s": 12.62
+  },
+  {
+   "w": "move",
+   "start_s": 12.62,
+   "end_s": 12.84
+  },
+  {
+   "w": "around",
+   "start_s": 12.84,
+   "end_s": 13.18
+  },
+  {
+   "w": "it,",
+   "start_s": 13.18,
+   "end_s": 13.42
+  },
+  {
+   "w": "not",
+   "start_s": 13.52,
+   "end_s": 13.64
+  },
+  {
+   "w": "after",
+   "start_s": 13.64,
+   "end_s": 13.98
+  },
+  {
+   "w": "it.",
+   "start_s": 13.98,
+   "end_s": 14.3
+  },
+  {
+   "w": "But",
+   "start_s": 14.9,
+   "end_s": 15.14
+  },
+  {
+   "w": "here's",
+   "start_s": 15.14,
+   "end_s": 15.32
+  },
+  {
+   "w": "the",
+   "start_s": 15.32,
+   "end_s": 15.46
+  },
+  {
+   "w": "part",
+   "start_s": 15.46,
+   "end_s": 15.64
+  },
+  {
+   "w": "the",
+   "start_s": 15.64,
+   "end_s": 15.86
+  },
+  {
+   "w": "headline",
+   "start_s": 15.86,
+   "end_s": 16.14
+  },
+  {
+   "w": "hides:",
+   "start_s": 16.14,
+   "end_s": 16.54
+  },
+  {
+   "w": "when",
+   "start_s": 17.0,
+   "end_s": 17.06
+  },
+  {
+   "w": "does",
+   "start_s": 17.06,
+   "end_s": 17.2
+  },
+  {
+   "w": "the",
+   "start_s": 17.2,
+   "end_s": 17.36
+  },
+  {
+   "w": "month's",
+   "start_s": 17.36,
+   "end_s": 17.76
+  },
+  {
+   "w": "gain",
+   "start_s": 17.76,
+   "end_s": 17.9
+  },
+  {
+   "w": "actually",
+   "start_s": 17.9,
+   "end_s": 18.44
+  },
+  {
+   "w": "land?",
+   "start_s": 18.44,
+   "end_s": 18.82
+  },
+  {
+   "w": "Twenty-five",
+   "start_s": 19.32,
+   "end_s": 19.36,
+   "interp": true
+  },
+  {
+   "w": "months",
+   "start_s": 19.36,
+   "end_s": 19.56
+  },
+  {
+   "w": "of",
+   "start_s": 19.56,
+   "end_s": 19.76
+  },
+  {
+   "w": "prints,",
+   "start_s": 19.76,
+   "end_s": 19.96
+  },
+  {
+   "w": "August",
+   "start_s": 20.26,
+   "end_s": 20.4
+  },
+  {
+   "w": "twenty-four",
+   "start_s": 20.4,
+   "end_s": 20.96,
+   "interp": true
+  },
+  {
+   "w": "to",
+   "start_s": 20.96,
+   "end_s": 21.2
+  },
+  {
+   "w": "August",
+   "start_s": 21.2,
+   "end_s": 21.44
+  },
+  {
+   "w": "twenty-six.",
+   "start_s": 21.44,
+   "end_s": 22.0,
+   "interp": true
+  },
+  {
+   "w": "In",
+   "start_s": 22.5,
+   "end_s": 22.66
+  },
+  {
+   "w": "the",
+   "start_s": 22.66,
+   "end_s": 22.76
+  },
+  {
+   "w": "half-month",
+   "start_s": 22.76,
+   "end_s": 23.12,
+   "interp": true
+  },
+  {
+   "w": "into",
+   "start_s": 23.12,
+   "end_s": 23.4
+  },
+  {
+   "w": "the",
+   "start_s": 23.4,
+   "end_s": 23.58
+  },
+  {
+   "w": "print,",
+   "start_s": 23.58,
+   "end_s": 23.8
+  },
+  {
+   "w": "the",
+   "start_s": 23.98,
+   "end_s": 24.0
+  },
+  {
+   "w": "stocks",
+   "start_s": 24.0,
+   "end_s": 24.24
+  },
+  {
+   "w": "average",
+   "start_s": 24.24,
+   "end_s": 24.58
+  },
+  {
+   "w": "plus",
+   "start_s": 24.58,
+   "end_s": 24.94
+  },
+  {
+   "w": "six",
+   "start_s": 24.94,
+   "end_s": 25.042,
+   "interp": true
+  },
+  {
+   "w": "point",
+   "start_s": 25.042,
+   "end_s": 25.212,
+   "interp": true
+  },
+  {
+   "w": "eight",
+   "start_s": 25.212,
+   "end_s": 25.382,
+   "interp": true
+  },
+  {
+   "w": "percent.",
+   "start_s": 25.382,
+   "end_s": 25.62,
+   "interp": true
+  },
+  {
+   "w": "In",
+   "start_s": 26.16,
+   "end_s": 26.68
+  },
+  {
+   "w": "the",
+   "start_s": 26.68,
+   "end_s": 26.78
+  },
+  {
+   "w": "half-month",
+   "start_s": 26.78,
+   "end_s": 27.12,
+   "interp": true
+  },
+  {
+   "w": "after:",
+   "start_s": 27.12,
+   "end_s": 27.58
+  },
+  {
+   "w": "plus",
+   "start_s": 27.9,
+   "end_s": 28.04
+  },
+  {
+   "w": "two",
+   "start_s": 28.04,
+   "end_s": 28.335,
+   "interp": true
+  },
+  {
+   "w": "point",
+   "start_s": 28.335,
+   "end_s": 28.825,
+   "interp": true
+  },
+  {
+   "w": "two.",
+   "start_s": 28.825,
+   "end_s": 29.12,
+   "interp": true
+  },
+  {
+   "w": "The",
+   "start_s": 29.12,
+   "end_s": 29.26
+  },
+  {
+   "w": "move",
+   "start_s": 29.26,
+   "end_s": 29.56
+  },
+  {
+   "w": "is",
+   "start_s": 29.56,
+   "end_s": 29.88
+  },
+  {
+   "w": "front-run.",
+   "start_s": 29.88,
+   "end_s": 30.3,
+   "interp": true
+  },
+  {
+   "w": "A",
+   "start_s": 30.8,
+   "end_s": 30.92
+  },
+  {
+   "w": "strong",
+   "start_s": 30.92,
+   "end_s": 31.24
+  },
+  {
+   "w": "print?",
+   "start_s": 31.24,
+   "end_s": 31.54
+  },
+  {
+   "w": "Already",
+   "start_s": 32.14,
+   "end_s": 32.42
+  },
+  {
+   "w": "paid",
+   "start_s": 32.42,
+   "end_s": 32.7
+  },
+  {
+   "w": "for.",
+   "start_s": 32.7,
+   "end_s": 33.0
+  },
+  {
+   "w": "After",
+   "start_s": 33.62,
+   "end_s": 33.88
+  },
+  {
+   "w": "the",
+   "start_s": 33.88,
+   "end_s": 34.08
+  },
+  {
+   "w": "fourteen",
+   "start_s": 34.08,
+   "end_s": 34.5,
+   "interp": true
+  },
+  {
+   "w": "strong",
+   "start_s": 34.5,
+   "end_s": 34.84
+  },
+  {
+   "w": "prints,",
+   "start_s": 34.84,
+   "end_s": 35.16
+  },
+  {
+   "w": "the",
+   "start_s": 35.46,
+   "end_s": 35.54
+  },
+  {
+   "w": "next",
+   "start_s": 35.54,
+   "end_s": 35.74
+  },
+  {
+   "w": "two",
+   "start_s": 35.74,
+   "end_s": 35.94
+  },
+  {
+   "w": "weeks",
+   "start_s": 35.94,
+   "end_s": 36.18
+  },
+  {
+   "w": "averaged",
+   "start_s": 36.18,
+   "end_s": 36.52,
+   "interp": true
+  },
+  {
+   "w": "plus",
+   "start_s": 36.52,
+   "end_s": 36.88
+  },
+  {
+   "w": "three",
+   "start_s": 36.88,
+   "end_s": 37.173,
+   "interp": true
+  },
+  {
+   "w": "point",
+   "start_s": 37.173,
+   "end_s": 37.466,
+   "interp": true
+  },
+  {
+   "w": "four.",
+   "start_s": 37.466,
+   "end_s": 37.7,
+   "interp": true
+  },
+  {
+   "w": "Eight",
+   "start_s": 38.2,
+   "end_s": 38.34
+  },
+  {
+   "w": "of",
+   "start_s": 38.34,
+   "end_s": 38.48
+  },
+  {
+   "w": "fourteen",
+   "start_s": 38.48,
+   "end_s": 38.86,
+   "interp": true
+  },
+  {
+   "w": "up.",
+   "start_s": 38.86,
+   "end_s": 39.12
+  },
+  {
+   "w": "A",
+   "start_s": 39.7,
+   "end_s": 39.8
+  },
+  {
+   "w": "coin",
+   "start_s": 39.8,
+   "end_s": 40.06
+  },
+  {
+   "w": "flip",
+   "start_s": 40.06,
+   "end_s": 40.32
+  },
+  {
+   "w": "with",
+   "start_s": 40.32,
+   "end_s": 40.5
+  },
+  {
+   "w": "drift.",
+   "start_s": 40.5,
+   "end_s": 40.76
+  },
+  {
+   "w": "But",
+   "start_s": 41.26,
+   "end_s": 41.4
+  },
+  {
+   "w": "now",
+   "start_s": 41.4,
+   "end_s": 41.56
+  },
+  {
+   "w": "the",
+   "start_s": 41.56,
+   "end_s": 41.7
+  },
+  {
+   "w": "weak",
+   "start_s": 41.7,
+   "end_s": 41.86
+  },
+  {
+   "w": "prints.",
+   "start_s": 41.86,
+   "end_s": 42.14
+  },
+  {
+   "w": "Eight",
+   "start_s": 42.68,
+   "end_s": 42.8
+  },
+  {
+   "w": "of",
+   "start_s": 42.8,
+   "end_s": 42.9
+  },
+  {
+   "w": "them",
+   "start_s": 42.9,
+   "end_s": 43.0
+  },
+  {
+   "w": "in",
+   "start_s": 43.0,
+   "end_s": 43.12
+  },
+  {
+   "w": "twenty-five",
+   "start_s": 43.12,
+   "end_s": 43.54,
+   "interp": true
+  },
+  {
+   "w": "months.",
+   "start_s": 43.54,
+   "end_s": 43.88
+  },
+  {
+   "w": "After",
+   "start_s": 44.32,
+   "end_s": 44.58
+  },
+  {
+   "w": "seven",
+   "start_s": 44.58,
+   "end_s": 44.9
+  },
+  {
+   "w": "of",
+   "start_s": 44.9,
+   "end_s": 45.02
+  },
+  {
+   "w": "the",
+   "start_s": 45.02,
+   "end_s": 45.14
+  },
+  {
+   "w": "eight,",
+   "start_s": 45.14,
+   "end_s": 45.3
+  },
+  {
+   "w": "the",
+   "start_s": 45.36,
+   "end_s": 45.44
+  },
+  {
+   "w": "stocks",
+   "start_s": 45.44,
+   "end_s": 45.7
+  },
+  {
+   "w": "fell.",
+   "start_s": 45.7,
+   "end_s": 46.0
+  },
+  {
+   "w": "Average:",
+   "start_s": 46.32,
+   "end_s": 46.58
+  },
+  {
+   "w": "minus",
+   "start_s": 46.58,
+   "end_s": 47.18
+  },
+  {
+   "w": "six",
+   "start_s": 47.18,
+   "end_s": 47.39,
+   "interp": true
+  },
+  {
+   "w": "point",
+   "start_s": 47.39,
+   "end_s": 47.74,
+   "interp": true
+  },
+  {
+   "w": "nine.",
+   "start_s": 47.74,
+   "end_s": 48.02,
+   "interp": true
+  },
+  {
+   "w": "The",
+   "start_s": 48.52,
+   "end_s": 48.7
+  },
+  {
+   "w": "latest",
+   "start_s": 48.7,
+   "end_s": 48.9
+  },
+  {
+   "w": "landed",
+   "start_s": 48.9,
+   "end_s": 49.16
+  },
+  {
+   "w": "in",
+   "start_s": 49.16,
+   "end_s": 49.4
+  },
+  {
+   "w": "July.",
+   "start_s": 49.4,
+   "end_s": 49.7
+  },
+  {
+   "w": "One",
+   "start_s": 49.7,
+   "end_s": 50.42
+  },
+  {
+   "w": "soft",
+   "start_s": 50.42,
+   "end_s": 50.72
+  },
+  {
+   "w": "print,",
+   "start_s": 50.72,
+   "end_s": 50.98
+  },
+  {
+   "w": "and",
+   "start_s": 51.38,
+   "end_s": 51.48
+  },
+  {
+   "w": "the",
+   "start_s": 51.48,
+   "end_s": 51.58
+  },
+  {
+   "w": "stocks",
+   "start_s": 51.58,
+   "end_s": 51.8
+  },
+  {
+   "w": "dropped",
+   "start_s": 51.8,
+   "end_s": 52.08
+  },
+  {
+   "w": "fourteen",
+   "start_s": 52.08,
+   "end_s": 52.485,
+   "interp": true
+  },
+  {
+   "w": "percent",
+   "start_s": 52.485,
+   "end_s": 52.84,
+   "interp": true
+  },
+  {
+   "w": "in",
+   "start_s": 52.84,
+   "end_s": 53.04
+  },
+  {
+   "w": "two",
+   "start_s": 53.04,
+   "end_s": 53.2
+  },
+  {
+   "w": "weeks.",
+   "start_s": 53.2,
+   "end_s": 53.48
+  },
+  {
+   "w": "The",
+   "start_s": 54.0,
+   "end_s": 54.1
+  },
+  {
+   "w": "chip",
+   "start_s": 54.1,
+   "end_s": 54.3
+  },
+  {
+   "w": "price",
+   "start_s": 54.3,
+   "end_s": 54.58
+  },
+  {
+   "w": "itself?",
+   "start_s": 54.58,
+   "end_s": 54.96
+  },
+  {
+   "w": "Sixteen",
+   "start_s": 55.56,
+   "end_s": 55.92,
+   "interp": true
+  },
+  {
+   "w": "percent",
+   "start_s": 55.92,
+   "end_s": 56.28,
+   "interp": true
+  },
+  {
+   "w": "higher",
+   "start_s": 56.28,
+   "end_s": 56.56
+  },
+  {
+   "w": "a",
+   "start_s": 56.56,
+   "end_s": 56.76
+  },
+  {
+   "w": "month",
+   "start_s": 56.76,
+   "end_s": 56.88
+  },
+  {
+   "w": "later.",
+   "start_s": 56.88,
+   "end_s": 57.22
+  },
+  {
+   "w": "In",
+   "start_s": 57.72,
+   "end_s": 57.82
+  },
+  {
+   "w": "finance,",
+   "start_s": 57.82,
+   "end_s": 58.22
+  },
+  {
+   "w": "we",
+   "start_s": 58.58,
+   "end_s": 58.66
+  },
+  {
+   "w": "call",
+   "start_s": 58.66,
+   "end_s": 58.82
+  },
+  {
+   "w": "this",
+   "start_s": 58.82,
+   "end_s": 59.02
+  },
+  {
+   "w": "asymmetry.",
+   "start_s": 59.02,
+   "end_s": 59.62
+  },
+  {
+   "w": "Good",
+   "start_s": 60.22,
+   "end_s": 60.34
+  },
+  {
+   "w": "news",
+   "start_s": 60.34,
+   "end_s": 60.64
+  },
+  {
+   "w": "is",
+   "start_s": 60.64,
+   "end_s": 60.88
+  },
+  {
+   "w": "priced",
+   "start_s": 60.88,
+   "end_s": 61.12
+  },
+  {
+   "w": "before",
+   "start_s": 61.12,
+   "end_s": 61.46
+  },
+  {
+   "w": "it",
+   "start_s": 61.46,
+   "end_s": 61.6
+  },
+  {
+   "w": "lands.",
+   "start_s": 61.6,
+   "end_s": 61.84
+  },
+  {
+   "w": "Bad",
+   "start_s": 62.36,
+   "end_s": 62.5
+  },
+  {
+   "w": "news",
+   "start_s": 62.5,
+   "end_s": 62.84
+  },
+  {
+   "w": "is",
+   "start_s": 62.84,
+   "end_s": 63.06
+  },
+  {
+   "w": "the",
+   "start_s": 63.06,
+   "end_s": 63.2
+  },
+  {
+   "w": "only",
+   "start_s": 63.2,
+   "end_s": 63.42
+  },
+  {
+   "w": "surprise",
+   "start_s": 63.42,
+   "end_s": 63.76
+  },
+  {
+   "w": "left.",
+   "start_s": 63.76,
+   "end_s": 64.14
+  },
+  {
+   "w": "So",
+   "start_s": 64.64,
+   "end_s": 64.8
+  },
+  {
+   "w": "you",
+   "start_s": 64.8,
+   "end_s": 64.92
+  },
+  {
+   "w": "don't",
+   "start_s": 64.92,
+   "end_s": 65.06
+  },
+  {
+   "w": "have",
+   "start_s": 65.06,
+   "end_s": 65.24
+  },
+  {
+   "w": "to",
+   "start_s": 65.24,
+   "end_s": 65.36
+  },
+  {
+   "w": "read",
+   "start_s": 65.36,
+   "end_s": 65.52
+  },
+  {
+   "w": "the",
+   "start_s": 65.52,
+   "end_s": 65.7
+  },
+  {
+   "w": "print",
+   "start_s": 65.7,
+   "end_s": 65.92
+  },
+  {
+   "w": "faster",
+   "start_s": 65.92,
+   "end_s": 66.26
+  },
+  {
+   "w": "than",
+   "start_s": 66.26,
+   "end_s": 66.54
+  },
+  {
+   "w": "the",
+   "start_s": 66.54,
+   "end_s": 66.64
+  },
+  {
+   "w": "market.",
+   "start_s": 66.64,
+   "end_s": 66.88
+  },
+  {
+   "w": "You",
+   "start_s": 67.38,
+   "end_s": 67.56
+  },
+  {
+   "w": "have",
+   "start_s": 67.56,
+   "end_s": 67.7
+  },
+  {
+   "w": "to",
+   "start_s": 67.7,
+   "end_s": 67.82
+  },
+  {
+   "w": "know",
+   "start_s": 67.82,
+   "end_s": 67.92
+  },
+  {
+   "w": "the",
+   "start_s": 67.92,
+   "end_s": 68.06
+  },
+  {
+   "w": "calendar:",
+   "start_s": 68.06,
+   "end_s": 68.44
+  },
+  {
+   "w": "the",
+   "start_s": 68.96,
+   "end_s": 69.04
+  },
+  {
+   "w": "day",
+   "start_s": 69.04,
+   "end_s": 69.18
+  },
+  {
+   "w": "the",
+   "start_s": 69.18,
+   "end_s": 69.32
+  },
+  {
+   "w": "print",
+   "start_s": 69.32,
+   "end_s": 69.5
+  },
+  {
+   "w": "lands",
+   "start_s": 69.5,
+   "end_s": 69.8
+  },
+  {
+   "w": "is",
+   "start_s": 69.8,
+   "end_s": 70.04
+  },
+  {
+   "w": "the",
+   "start_s": 70.04,
+   "end_s": 70.18
+  },
+  {
+   "w": "day",
+   "start_s": 70.18,
+   "end_s": 70.34
+  },
+  {
+   "w": "the",
+   "start_s": 70.34,
+   "end_s": 70.46
+  },
+  {
+   "w": "stocks",
+   "start_s": 70.46,
+   "end_s": 70.78
+  },
+  {
+   "w": "trade",
+   "start_s": 70.78,
+   "end_s": 71.06
+  },
+  {
+   "w": "it.",
+   "start_s": 71.06,
+   "end_s": 71.22
+  }
+ ],
+ "retimed_from": "scratch-chirp.mp3"
+}

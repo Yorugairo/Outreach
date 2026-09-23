@@ -1,0 +1,94 @@
+{
+  "plate": "sig-d-ship-once.png",
+  "stem": "sig-d-ship-once",
+  "size": [
+    768,
+    1376
+  ],
+  "model": "depth_anything_v2_vitl_fp16.safetensors",
+  "depth_bits": 8,
+  "seed": 0,
+  "sigma": 2.0,
+  "grow_px": 16,
+  "bands": 4,
+  "edges": [
+    0.0,
+    0.023529,
+    0.988235
+  ],
+  "quantile_roles": [
+    "far",
+    "mid"
+  ],
+  "sam": {
+    "model": "sam2.1_hiera_small.safetensors",
+    "grow": 6,
+    "occluder_points": "210,1150;220,880;640,840;560,1000;740,1000;640,1300;670,960;600,1090",
+    "subject_points": "380,420;160,620;620,560;430,760;470,800;380,700"
+  },
+  "inpainter": "lama",
+  "notes": [],
+  "layers": [
+    {
+      "role": "far",
+      "path": "sig-d-ship-once-far.png",
+      "parallax_factor": 1.0,
+      "source": "quantile",
+      "depth_band": [
+        0.0,
+        0.023529
+      ],
+      "band_share": 0.238858,
+      "alpha_share": 1.0,
+      "hole_share": 0.761142,
+      "opaque": true
+    },
+    {
+      "role": "mid",
+      "path": "sig-d-ship-once-mid.png",
+      "parallax_factor": 1.15,
+      "source": "quantile",
+      "depth_band": [
+        0.023529,
+        0.988235
+      ],
+      "band_share": 0.244455,
+      "alpha_share": 0.351322,
+      "hole_share": 0.106867,
+      "opaque": false
+    },
+    {
+      "role": "subject",
+      "path": "sig-d-ship-once-subject.png",
+      "parallax_factor": 1.15,
+      "source": "sam2.1-mask",
+      "depth_band": null,
+      "band_share": 0.278865,
+      "alpha_share": 0.283838,
+      "hole_share": 0.004973,
+      "opaque": false
+    },
+    {
+      "role": "near",
+      "path": "sig-d-ship-once-near.png",
+      "parallax_factor": 1.4,
+      "source": "sam2.1-mask",
+      "depth_band": null,
+      "band_share": 0.237821,
+      "alpha_share": 0.237821,
+      "hole_share": 0.0,
+      "opaque": false
+    }
+  ],
+  "timings_s": {
+    "depth": 3.09,
+    "inpaint": 5.07,
+    "wall_clock": 12.38
+  },
+  "vram_free_bytes": {
+    "before": 11550982144,
+    "after": 11550982144,
+    "min_free_during": 10398795964,
+    "peak_used": 1152186180
+  }
+}

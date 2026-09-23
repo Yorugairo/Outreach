@@ -1,0 +1,88 @@
+{
+  "plate": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/prompted/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference.png",
+  "stem": "world-tokyo-customs-dock-v1-reference",
+  "size": [
+    1536,
+    1024
+  ],
+  "model": "depth_anything_v2_vitl_fp16.safetensors",
+  "depth_bits": 8,
+  "seed": 0,
+  "sigma": 2.0,
+  "grow_px": 16,
+  "bands": 4,
+  "edges": [
+    0.0,
+    1e-06,
+    0.14902,
+    0.694118,
+    1.0
+  ],
+  "inpainter": "lama",
+  "notes": [],
+  "layers": [
+    {
+      "role": "far",
+      "path": "world-tokyo-customs-dock-v1-reference-far.png",
+      "parallax_factor": 1.0,
+      "depth_band": [
+        0.0,
+        1e-06
+      ],
+      "band_share": 0.375223,
+      "alpha_share": 1.0,
+      "hole_share": 0.624777,
+      "opaque": true
+    },
+    {
+      "role": "mid",
+      "path": "world-tokyo-customs-dock-v1-reference-mid.png",
+      "parallax_factor": 1.15,
+      "depth_band": [
+        1e-06,
+        0.14902
+      ],
+      "band_share": 0.123587,
+      "alpha_share": 0.156693,
+      "hole_share": 0.033106,
+      "opaque": false
+    },
+    {
+      "role": "subject",
+      "path": "world-tokyo-customs-dock-v1-reference-subject.png",
+      "parallax_factor": 1.15,
+      "depth_band": [
+        0.14902,
+        0.694118
+      ],
+      "band_share": 0.247172,
+      "alpha_share": 0.285246,
+      "hole_share": 0.038074,
+      "opaque": false
+    },
+    {
+      "role": "near",
+      "path": "world-tokyo-customs-dock-v1-reference-near.png",
+      "parallax_factor": 1.4,
+      "depth_band": [
+        0.694118,
+        1.0
+      ],
+      "band_share": 0.254018,
+      "alpha_share": 0.254018,
+      "hole_share": 0.0,
+      "opaque": false
+    }
+  ],
+  "timings_s": {
+    "depth": 3.08,
+    "inpaint": 5.28,
+    "wall_clock": 10.0
+  },
+  "vram_free_bytes": {
+    "before": 11553079296,
+    "after": 11553079296,
+    "min_free_during": 10410220756,
+    "peak_used": 1142858540
+  }
+}

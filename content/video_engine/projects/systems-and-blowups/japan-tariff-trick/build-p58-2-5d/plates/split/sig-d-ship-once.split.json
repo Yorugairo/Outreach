@@ -1,0 +1,94 @@
+{
+  "plate": "build-p58-2-5d/plates/sig-d-ship-once.png",
+  "stem": "sig-d-ship-once",
+  "size": [
+    768,
+    1376
+  ],
+  "model": "depth_anything_v2_vitl_fp16.safetensors",
+  "depth_bits": 8,
+  "seed": 0,
+  "sigma": 2.0,
+  "grow_px": 16,
+  "bands": 4,
+  "edges": [
+    0.0,
+    0.086275,
+    0.992157
+  ],
+  "quantile_roles": [
+    "far",
+    "mid"
+  ],
+  "sam": {
+    "model": "sam2.1_hiera_small.safetensors",
+    "grow": 6,
+    "occluder_points": "210,1150;220,880;640,1220;660,960",
+    "subject_points": "380,420;160,620;620,560;430,760"
+  },
+  "inpainter": "lama",
+  "notes": [],
+  "layers": [
+    {
+      "role": "far",
+      "path": "sig-d-ship-once-far.png",
+      "parallax_factor": 1.0,
+      "source": "quantile",
+      "depth_band": [
+        0.0,
+        0.086275
+      ],
+      "band_share": 0.280946,
+      "alpha_share": 1.0,
+      "hole_share": 0.719054,
+      "opaque": true
+    },
+    {
+      "role": "mid",
+      "path": "sig-d-ship-once-mid.png",
+      "parallax_factor": 1.15,
+      "source": "quantile",
+      "depth_band": [
+        0.086275,
+        0.992157
+      ],
+      "band_share": 0.282676,
+      "alpha_share": 0.389961,
+      "hole_share": 0.107285,
+      "opaque": false
+    },
+    {
+      "role": "subject",
+      "path": "sig-d-ship-once-subject.png",
+      "parallax_factor": 1.15,
+      "source": "sam2.1-mask",
+      "depth_band": null,
+      "band_share": 0.272241,
+      "alpha_share": 0.272246,
+      "hole_share": 5e-06,
+      "opaque": false
+    },
+    {
+      "role": "near",
+      "path": "sig-d-ship-once-near.png",
+      "parallax_factor": 1.4,
+      "source": "sam2.1-mask",
+      "depth_band": null,
+      "band_share": 0.164136,
+      "alpha_share": 0.164136,
+      "hole_share": 0.0,
+      "opaque": false
+    }
+  ],
+  "timings_s": {
+    "depth": 3.1,
+    "inpaint": 4.99,
+    "wall_clock": 12.12
+  },
+  "vram_free_bytes": {
+    "before": 11550982144,
+    "after": 11550982144,
+    "min_free_during": 10101084332,
+    "peak_used": 1449897812
+  }
+}
