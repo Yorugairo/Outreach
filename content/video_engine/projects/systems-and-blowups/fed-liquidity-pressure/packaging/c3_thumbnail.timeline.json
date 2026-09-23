@@ -1,0 +1,80 @@
+{
+  "schema_version": "scene_evidence_timeline.v1",
+  "runtime_s": 15.0,
+  "title": "Fed liquidity C3 thumbnail diagnostic",
+  "subtitle": "source-bound packaging diagnostic; not an episode build",
+  "episode_id": "fed-liquidity-pressure",
+  "project_id": "fed-liquidity-pressure-packaging",
+  "narration": {
+    "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "words_path": ""
+  },
+  "captions": [],
+  "caption_pages": [],
+  "caption_modes": [
+    "stage",
+    "anchor"
+  ],
+  "sound": [],
+  "evidence": {
+    "claim_id": "C3",
+    "source_path": "evidence/sources/mpr_2025_06.html"
+  },
+  "scenes": [
+    {
+      "scene_id": "c3-thumb",
+      "exit": "cut",
+      "span": [
+        0.0,
+        15.0
+      ],
+      "docks": [],
+      "species": [],
+      "world": {
+        "kind": "ledger",
+        "ken_burns": {
+          "scale": 0,
+          "x": 0,
+          "y": 0
+        },
+        "page": {
+          "schema_version": "ledger_page.v1",
+          "surface": "page",
+          "builder": "story",
+          "variant": "bars",
+          "title": "WHERE DID IT GO?",
+          "sub": "Fed balance-sheet change · 01 Jun 2022 → 11 Jun 2025",
+          "source": "Fed MPR Jun 2025 · Table A · USD billions",
+          "quiet_zone": "right",
+          "src_style": "compact",
+          "labels": [
+            "Total assets",
+            "Reserve balances"
+          ],
+          "values": [
+            -2238.0,
+            72.0
+          ],
+          "value_strings": [
+            "-2238",
+            "+72"
+          ],
+          "colors": [
+            "crimson",
+            "teal"
+          ],
+          "axes": {
+            "ylabel": "USD billions",
+            "from_zero": true
+          },
+          "unit": "",
+          "judge": [],
+          "badges": [],
+          "emphasize": null,
+          "full_stage": true,
+          "caption": "anchor"
+        }
+      }
+    }
+  ]
+}

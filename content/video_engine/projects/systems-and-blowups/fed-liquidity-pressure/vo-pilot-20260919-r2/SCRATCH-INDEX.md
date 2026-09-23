@@ -1,0 +1,139 @@
+# SCRATCH INDEX - jump points for the ear pass
+
+kokoro 12.4 min for 12,588 chars -> 16.90 chars/s actual (estimators assume 16.05 c/s / 165.6 wpm)
+
+- 00:00.0  P01  The Fed’s balance fell by trillions. Bank reserves barely budged.
+- 00:04.4  P02  Money funds had parked about two and a half trillion dollars at the Fe
+- 00:12.3  P03  Meanwhile, companies face a debt wall. S&P tallied more than three tri
+- 00:22.4  P04  Imagine you own a workshop. Your two-percent loan is coming due, and r
+- 00:32.1  P05  Your machine still works. Your customers still need their orders. But 
+- 00:40.0  P06  You’ll leave with three checks you can run against public data to help
+- 00:46.2  P07  I worked in business risk at JPMorgan, so I look at what keeps banks s
+- 00:52.9  P08  By the end of this video, you’ll understand one way the Federal Reserv
+- 00:58.3  P09  Here’s the problem: stable bank balances can hide a shrinking buffer. 
+- 01:09.1  P10  We’ll follow where that support went, then bring the risk back to your
+- 01:14.0  P11  Money funds can park cash at the Fed overnight and earn a return. Trea
+- 01:20.5  P12  The Fed calls this arrangement overnight reverse repo.
+- 01:24.3  P13  But money funds can earn money elsewhere, too. They can buy Treasury b
+- 01:34.8  P14  Those withdrawals helped banks hold their ground while the Fed cut its
+- 01:40.0  P15  To see why, we need to separate two things.
+- 01:43.0  P16  The Fed owns Treasury securities and mortgage-backed securities. When 
+- 01:51.9  P17  That process is called quantitative tightening.
+- 01:55.0  P18  You’d expect a shrinking Fed balance sheet to leave banks with less ca
+- 01:59.5  P19  But money funds were drawing down their overnight account at the same 
+- 02:03.6  P20  Here’s a simplified example.
+- 02:06.1  P21  The Fed’s assets fall by a hundred billion dollars. Its overnight reve
+- 02:17.0  P22  The Fed owns a hundred billion less. It also owes money funds a hundre
+- 02:22.7  P23  The money in the banks’ Fed accounts can stay right where it is.
+- 02:26.5  P24  Banks avoid that cash drain because another account shrinks instead.
+- 02:30.6  P25  The Fed’s own figures show how large those offsetting movements became
+- 02:34.9  P26  Its June twenty twenty-five report compares balances with the start of
+- 02:41.4  P27  Over that period, the Fed’s assets fell about two point two trillion d
+- 02:46.4  P28  Reverse repos outside the foreign-official accounts fell about one poi
+- 02:51.4  P29  Banks’ balances at the Fed rose by just seventy-two billion dollars.
+- 02:56.1  P30  The government’s cash account also fell, helping offset the drain on b
+- 03:00.7  P31  Banks didn’t finish that period with trillions more in their accounts.
+- 03:04.7  P32  Trillions of dollars of withdrawals barely helped them hold their grou
+- 03:09.2  P33  Your workshop’s machine still needs financing, even when the bank supp
+- 03:15.4  P34  The bank balances show stability. The other accounts show what helped 
+- 03:20.3  P35  And money funds cannot withdraw the same parked dollar twice.
+- 03:24.1  P36  By September eighteenth, twenty twenty-six, their overnight balance wa
+- 03:30.5  P37  That account now holds too little cash to repeat its trillion-dollar o
+- 03:35.0  P38  That’s the risk we’re following: banks can look steady while one sourc
+- 03:40.5  P39  Back at the workshop, your lender sends the renewal offer.
+- 03:44.3  P40  Your old loan charged two percent. The replacement in our example char
+- 03:49.4  P41  On the same outstanding balance, that’s three and a half times the ann
+- 03:54.4  P42  Your business has to find that extra money.
+- 03:57.5  P43  You can accept a thinner margin. You can try raising your prices. Or y
+- 04:05.2  P44  If you postpone the expansion, your equipment supplier loses that sale
+- 04:13.4  P45  That’s how a financing problem reaches people who never look at a Fed 
+- 04:18.2  P46  The renewal date matters because an old fixed-rate contract can shelte
+- 04:25.9  P47  The Fed’s own research found that new borrowing costs rose much faster
+- 04:31.9  P48  The cheap contract delays the bigger bill. It doesn’t guarantee anothe
+- 04:37.2  P49  To understand the bank behind your loan, we need to see where its cash
+- 04:41.9  P50  A tax payment shows what the headline balance can miss.
+- 04:45.6  P51  Your bank reduces your deposit when you pay the tax bill. The bank set
+- 04:53.0  P52  The government’s balance rises by the amount of your payment.
+- 04:56.8  P53  With nothing else changing, your bank now has less money at the Fed.
+- 05:01.0  P54  That government account is called the Treasury General Account.
+- 05:04.9  P55  The tax payment hasn’t changed the assets the Fed owns. A chart of the
+- 05:12.2  P56  Now let the government pay a contractor.
+- 05:15.0  P57  Money leaves the government’s account and reaches the contractor’s ban
+- 05:21.6  P58  The cash moves back toward the banks.
+- 05:24.1  P59  Both payments changed who held money at the Fed, without changing the 
+- 05:29.1  P60  There’s your first check: which account changed?
+- 05:32.0  P61  The Fed publishes those balances in its weekly balance-sheet release. 
+- 05:39.5  P62  A fall in bank reserves means something different from money funds lea
+- 05:45.1  P63  And a tax payment moves cash differently from the Fed letting a securi
+- 05:49.9  P64  You’ve probably seen a chart that tries to compress those movements in
+- 05:55.9  P65  The formula starts with the Fed’s assets. It subtracts the government’
+- 06:03.0  P66  That unofficial shortcut can help organize the accounts. It isn’t an o
+- 06:10.2  P67  In our hundred-billion example, both declines cancel in the subtractio
+- 06:17.6  P68  Your lender cannot price the workshop’s loan from that formula alone.
+- 06:21.9  P69  We still need to know what borrowing costs.
+- 06:24.6  P70  The Fed has already changed how it supplies money to the banks.
+- 06:28.5  P71  It ended balance-sheet runoff in December twenty twenty-five. It began
+- 06:36.4  P72  Those purchases put money into banks’ accounts at the Fed. Taxes, gove
+- 06:44.2  P73  The Fed was now adding money through purchases, rather than continuing
+- 06:49.5  P74  In its July twenty twenty-six report, the Fed put bank reserves at rou
+- 06:58.6  P75  Money funds were already using the overnight account very little on mo
+- 07:06.9  P76  The Fed’s purchases had helped banks handle seasonal cash movements.
+- 07:11.1  P77  The banks were functioning. But the support behind them had changed.
+- 07:15.0  P78  They were operating with support from Fed purchases while the old over
+- 07:21.2  P79  Your workshop still has to negotiate its replacement loan. A working f
+- 07:29.0  P80  My concern is the support remaining when the next demand for cash arri
+- 07:33.7  P81  The overnight account has far less room to provide the old offset.
+- 07:38.0  P82  Here’s the second check: what does borrowing actually cost?
+- 07:41.8  P83  Start with the wider backdrop.
+- 07:44.0  P84  On September eighteenth, the twenty-year Treasury yield stood at five 
+- 07:49.4  P85  Investors could earn more than five percent lending to the U.S. govern
+- 07:55.0  P86  A company seeking financing has to compete for investors’ money. Its c
+- 08:02.9  P87  That’s the environment facing businesses as their old contracts expire
+- 08:07.6  P88  For pressure closer to the banks, the overnight lending market gives u
+- 08:13.3  P89  A dealer borrows cash against Treasury securities to finance its holdi
+- 08:20.1  P90  When more borrowers compete for cash, lenders can charge a higher rate
+- 08:29.2  P91  The borrowing rate shows what institutions pay to obtain cash, beyond 
+- 08:35.0  P92  The New York Fed publishes the Treasury-backed overnight rate we’re fo
+- 08:43.0  P93  Both rates need to come from the same date.
+- 08:45.9  P94  On September seventeenth, that overnight rate was seven basis points b
+- 08:51.6  P95  That day’s overnight borrowers paid less than banks earned on their ba
+- 08:56.8  P96  If the overnight rate moves above that reference, borrowers are paying
+- 09:01.9  P97  The comparison helps us spot pressure. It doesn’t turn every increase 
+- 09:07.1  P98  And a single day of expensive borrowing doesn’t tell us whether the pr
+- 09:12.2  P99  Remember your tax payment.
+- 09:14.4  P100  Cash moved into the government’s account. Government spending then mov
+- 09:20.3  P101  A price spike around a cash movement and a financing problem that keep
+- 09:26.9  P102  That’s the third check: does the pressure last?
+- 09:30.0  P103  Keep following the same rate comparison after the initial move.
+- 09:34.1  P104  Does the premium fade? Or does it return across successive observation
+- 09:38.8  P105  If the borrowing premium fades and financing stays orderly, the case f
+- 09:45.0  P106  If the premium keeps returning, investigate why borrowers repeatedly h
+- 09:50.5  P107  The account movement gave you a possible cause. The borrowing price sh
+- 09:58.2  P108  You now have something stronger than a scary screenshot: an explanatio
+- 10:04.5  P109  Put two loan contracts beside each other.
+- 10:07.5  P110  The first loan expires soon. The second has years left at a fixed rate
+- 10:12.2  P111  Both owners face the same financial headlines. Only the first must neg
+- 10:18.2  P112  The second owner keeps paying the old fixed rate.
+- 10:21.5  P113  The lender weighs the business’s risk, its own costs, and the loan’s t
+- 10:29.5  P114  For our owner, the higher renewal offer already means a bigger interes
+- 10:34.3  P115  A calmer overnight market doesn’t erase that offer.
+- 10:37.8  P116  Our owner still has to choose between a thinner margin, higher prices,
+- 10:43.7  P117  Delaying the expansion also delays the supplier’s sale. The higher loa
+- 10:51.3  P118  That’s why the debt wall belongs in this story.
+- 10:54.3  P119  A maturity date is the point when an old financing deal has to be sett
+- 11:04.2  P120  And those businesses are seeking financing with far less cash left in 
+- 11:12.2  P121  That combination deserves attention—even when the headline bank balanc
+- 11:17.6  P122  Now bring the three checks together.
+- 11:20.0  P123  Which account changed? Use the Fed’s balance-sheet release to follow t
+- 11:24.8  P124  What does borrowing cost? Compare dated funding rates, not an old bala
+- 11:30.7  P125  Does the pressure last? Follow the next observations instead of freezi
+- 11:36.6  P126  Take the next alarming chart and put its account name and date beside 
+- 11:41.5  P127  Then bring it back to the borrower: when does the old loan expire?
+- 11:45.4  P128  The renewal date tells you when a change in financing conditions can r
+- 11:50.8  P129  Your machine still works, but its loan now costs more. The next machin
+- 11:56.9  P130  Follow the account to find the movement.
+- 11:59.4  P131  Follow the price to find the pressure.
+- 12:01.9  P132  Follow the renewal to find who pays.
+- 12:04.5  P133  The Fed’s balance fell while bank balances held steady. The money fund
+- 12:11.4  P134  That overnight account now offers little room to repeat the same offse
+- 12:18.5  P135  Subscribe for the next breakdown. We’ll follow the price of cash into 

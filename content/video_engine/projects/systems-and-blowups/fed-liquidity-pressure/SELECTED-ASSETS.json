@@ -1,0 +1,26 @@
+{
+  "schema": "mp-fed-liquidity.selected-assets.v1",
+  "assets": [
+    {
+      "sha256": "066a00512921957934d685306eb6e5efad3ea2b5b89ebf0f0ffa4d60461e220d",
+      "path": "review/imagegen-complete-worlds-v1/w2-owner-workshop-world-v1.png",
+      "approval_path": "review/asset-approvals-20260919/w2-owner-workshop-world-v1.json",
+      "approval_sha256": "9ff18765574d6e5d9d4425ccfca8e27b45069cae83df0e3ed6a47673c7607d7b",
+      "asset_id": "w2-owner-workshop-world-v1"
+    },
+    {
+      "sha256": "5c5e68ff73da5d5f1f16c1fb6739ecb8ac0bd46fab76b7f6d40b69dd97351d92",
+      "path": "review/imagegen-complete-worlds-v1/finance-evidence-hall-hosted-v3-cream.png",
+      "approval_path": "review/asset-approvals-20260919/w4-finance-evidence-hall-v1.json",
+      "approval_sha256": "2dc83076f43695a051d64d9b78ae9c252c67f557032a2c8f3c89d96d0f8656df",
+      "asset_id": "w4-finance-evidence-hall-v1"
+    },
+    {
+      "sha256": "0a2615451066bf508ce86470714f4c8e43791a5f20961c4ca18c91c92d14cba5",
+      "path": "review/imagegen-pilot-v1/p2-owner-loan-folio-candidate-v1.png",
+      "approval_path": "review/asset-approvals-20260919/p2-owner-loan-folio-v1.json",
+      "approval_sha256": "f0fcc4787d7c9600dae1c753aec5522129462b40f003989286ee9cb840e585f5",
+      "asset_id": "p2-owner-loan-folio-v1"
+    }
+  ]
+}

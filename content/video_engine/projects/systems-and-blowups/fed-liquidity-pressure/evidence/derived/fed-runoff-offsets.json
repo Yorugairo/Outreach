@@ -1,0 +1,65 @@
+{
+  "schema": "mp-fed-liquidity.runoff-offsets-derivation.v1",
+  "series_id": "fed-runoff-offsets",
+  "source": {
+    "publisher": "Federal Reserve Board",
+    "url": "https://www.federalreserve.gov/monetarypolicy/2025-06-mpr-part2.htm",
+    "path": "evidence/sources/mpr_2025_06.html",
+    "sha256": "7a201f7cad0a75ae840e93d5fc386c501e4774c31e8d1631d99dc9dc0c057da0",
+    "table": "xtable_balancesheet",
+    "table_title": "Table A. Balance sheet comparison",
+    "column": "xsheeta5",
+    "column_label": "Change (since Fed's balance sheet reduction began on June 1, 2022)",
+    "window": {
+      "start": "2022-06-01",
+      "end": "2025-06-11"
+    },
+    "units": "USD billions"
+  },
+  "selection": {
+    "rows": [
+      "xsheetr13",
+      "xsheetr15",
+      "xsheetr18",
+      "xsheetr19",
+      "xsheetr17"
+    ],
+    "selected_rows_not_exhaustive_reconciliation": true,
+    "other_reverse_repos_row_is_not_total": true,
+    "scope": "Selected Table A balance-sheet rows; not an exhaustive reconciliation."
+  },
+  "rows": [
+    {
+      "row": "xsheetr13",
+      "source_label": "Total assets",
+      "label": "Fed assets",
+      "change_usd_billions": -2238
+    },
+    {
+      "row": "xsheetr15",
+      "source_label": "Reserves held by depository institutions",
+      "label": "Reserves",
+      "change_usd_billions": 72
+    },
+    {
+      "row": "xsheetr18",
+      "source_label": "Others",
+      "label": "Other RRP",
+      "change_usd_billions": -1760
+    },
+    {
+      "row": "xsheetr19",
+      "source_label": "U.S. Treasury General Account",
+      "label": "TGA",
+      "change_usd_billions": -504
+    },
+    {
+      "row": "xsheetr17",
+      "source_label": "Foreign official and international accounts",
+      "label": "Foreign",
+      "change_usd_billions": 106
+    }
+  ],
+  "derivation": "Direct transcription of the same source-table change column; no current-balance subtraction or residual inference.",
+  "claim_boundary": "The xsheetr18 value is the Others row inside Reverse repurchase agreements, not total reverse repos. These selected rows share one historical window but do not sum to a balance-sheet reconciliation."
+}

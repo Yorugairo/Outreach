@@ -1,0 +1,21 @@
+{
+  "title": "WHERE DID IT GO?",
+  "sub": "Fed balance-sheet change · 01 Jun 2022 → 11 Jun 2025",
+  "src": "Fed MPR Jun 2025 · Table A · USD billions",
+  "src_style": "compact",
+  "unit": "",
+  "from_zero": true,
+  "ylabel": "USD billions",
+  "bars": [
+    {
+      "label": "Total assets",
+      "value": -2238,
+      "color": "crimson"
+    },
+    {
+      "label": "Reserve balances",
+      "value": 72,
+      "color": "teal"
+    }
+  ]
+}

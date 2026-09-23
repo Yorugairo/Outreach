@@ -1,0 +1,23 @@
+{
+  "schema": "opening_review.v1",
+  "script_hash": "3051887ec9c4554ded24751f9a6aaa1c32bfe8912a30d11833c127c77d2ba796",
+  "review_kind": "estimated_draft",
+  "rows": [
+    {
+      "id": "J13",
+      "verdict": "PASS",
+      "quote": "Imagine you own a workshop. Your two-percent loan is coming due, and replacing it at seven percent more than triples your interest bill—without borrowing another dollar.",
+      "rationale": "Parent read: explicitly imagined workshop owner bears a more-than-tripled interest bill on the same principal; this is the first concrete financial consequence. The following wages/materials/hiring line elaborates the cost. 83 whitespace words through this sentence / 170 target WPM = 29.294 seconds, excluding unmeasured performance pauses. Estimated draft only; fresh take must prove actual completion by 30 seconds.",
+      "clock": 29.294,
+      "clock_basis": "estimated"
+    },
+    {
+      "id": "J14",
+      "verdict": "PASS",
+      "quote": "You’ll leave with three checks you can run against public data to help protect your money from market mechanics.",
+      "rationale": "Parent read: promises three usable public-data checks and a specific personal stake without revealing all three answers. Operator explicitly approved moving this before biography. 125 whitespace words through this sentence / 170 target WPM = 44.118 seconds, excluding unmeasured performance pauses. Estimated draft only; fresh take must prove actual completion by 45 seconds.",
+      "clock": 44.118,
+      "clock_basis": "estimated"
+    }
+  ]
+}

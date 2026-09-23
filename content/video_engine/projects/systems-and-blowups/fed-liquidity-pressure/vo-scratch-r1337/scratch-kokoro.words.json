@@ -1,0 +1,8073 @@
+{
+ "engine": "kokoro-82M",
+ "voice": "am_michael",
+ "rate": 1.337,
+ "duration_s": 549.75,
+ "words": [
+  {
+   "w": "The",
+   "start_s": 0.25,
+   "end_s": 0.325
+  },
+  {
+   "w": "Fed",
+   "start_s": 0.325,
+   "end_s": 0.55
+  },
+  {
+   "w": "shrank",
+   "start_s": 0.55,
+   "end_s": 0.787
+  },
+  {
+   "w": "its",
+   "start_s": 0.787,
+   "end_s": 0.9
+  },
+  {
+   "w": "balance",
+   "start_s": 0.9,
+   "end_s": 1.2
+  },
+  {
+   "w": "sheet",
+   "start_s": 1.2,
+   "end_s": 1.387
+  },
+  {
+   "w": "by",
+   "start_s": 1.387,
+   "end_s": 1.5
+  },
+  {
+   "w": "trillions.",
+   "start_s": 1.5,
+   "end_s": 2.263
+  },
+  {
+   "w": "Bank",
+   "start_s": 2.263,
+   "end_s": 2.462
+  },
+  {
+   "w": "reserves",
+   "start_s": 2.462,
+   "end_s": 2.862
+  },
+  {
+   "w": "barely",
+   "start_s": 2.862,
+   "end_s": 3.2
+  },
+  {
+   "w": "budged.",
+   "start_s": 3.2,
+   "end_s": 3.925
+  },
+  {
+   "w": "One",
+   "start_s": 4.575,
+   "end_s": 4.775
+  },
+  {
+   "w": "reason:",
+   "start_s": 4.775,
+   "end_s": 5.4
+  },
+  {
+   "w": "another",
+   "start_s": 5.4,
+   "end_s": 5.65
+  },
+  {
+   "w": "account",
+   "start_s": 5.65,
+   "end_s": 6.0
+  },
+  {
+   "w": "absorbed",
+   "start_s": 6.0,
+   "end_s": 6.45
+  },
+  {
+   "w": "much",
+   "start_s": 6.45,
+   "end_s": 6.663
+  },
+  {
+   "w": "of",
+   "start_s": 6.663,
+   "end_s": 6.738
+  },
+  {
+   "w": "the",
+   "start_s": 6.738,
+   "end_s": 6.825
+  },
+  {
+   "w": "adjustment.",
+   "start_s": 6.825,
+   "end_s": 7.638
+  },
+  {
+   "w": "It",
+   "start_s": 7.638,
+   "end_s": 7.738
+  },
+  {
+   "w": "once",
+   "start_s": 7.738,
+   "end_s": 7.913
+  },
+  {
+   "w": "held",
+   "start_s": 7.913,
+   "end_s": 8.137
+  },
+  {
+   "w": "two",
+   "start_s": 8.137,
+   "end_s": 8.363
+  },
+  {
+   "w": "and",
+   "start_s": 8.363,
+   "end_s": 8.463
+  },
+  {
+   "w": "a",
+   "start_s": 8.463,
+   "end_s": 8.525
+  },
+  {
+   "w": "half",
+   "start_s": 8.525,
+   "end_s": 8.775
+  },
+  {
+   "w": "trillion",
+   "start_s": 8.775,
+   "end_s": 9.125
+  },
+  {
+   "w": "dollars.",
+   "start_s": 9.125,
+   "end_s": 9.863
+  },
+  {
+   "w": "Now",
+   "start_s": 9.863,
+   "end_s": 10.088
+  },
+  {
+   "w": "it",
+   "start_s": 10.088,
+   "end_s": 10.163
+  },
+  {
+   "w": "has",
+   "start_s": 10.163,
+   "end_s": 10.275
+  },
+  {
+   "w": "almost",
+   "start_s": 10.275,
+   "end_s": 10.675
+  },
+  {
+   "w": "emptied.",
+   "start_s": 10.675,
+   "end_s": 11.45
+  },
+  {
+   "w": "That",
+   "start_s": 12.075,
+   "end_s": 12.225
+  },
+  {
+   "w": "cushion",
+   "start_s": 12.225,
+   "end_s": 12.575
+  },
+  {
+   "w": "absorbed",
+   "start_s": 12.575,
+   "end_s": 13.013
+  },
+  {
+   "w": "an",
+   "start_s": 13.013,
+   "end_s": 13.088
+  },
+  {
+   "w": "adjustment.",
+   "start_s": 13.088,
+   "end_s": 13.938
+  },
+  {
+   "w": "Now",
+   "start_s": 13.938,
+   "end_s": 14.2
+  },
+  {
+   "w": "it",
+   "start_s": 14.2,
+   "end_s": 14.288
+  },
+  {
+   "w": "has",
+   "start_s": 14.288,
+   "end_s": 14.413
+  },
+  {
+   "w": "shrunk.",
+   "start_s": 14.413,
+   "end_s": 15.125
+  },
+  {
+   "w": "If",
+   "start_s": 15.125,
+   "end_s": 15.238
+  },
+  {
+   "w": "your",
+   "start_s": 15.238,
+   "end_s": 15.35
+  },
+  {
+   "w": "business",
+   "start_s": 15.35,
+   "end_s": 15.725
+  },
+  {
+   "w": "needs",
+   "start_s": 15.725,
+   "end_s": 15.938
+  },
+  {
+   "w": "a",
+   "start_s": 15.938,
+   "end_s": 16.0
+  },
+  {
+   "w": "new",
+   "start_s": 16.0,
+   "end_s": 16.175
+  },
+  {
+   "w": "loan,",
+   "start_s": 16.175,
+   "end_s": 16.688
+  },
+  {
+   "w": "the",
+   "start_s": 16.688,
+   "end_s": 16.775
+  },
+  {
+   "w": "next",
+   "start_s": 16.775,
+   "end_s": 16.988
+  },
+  {
+   "w": "adjustment",
+   "start_s": 16.988,
+   "end_s": 17.438
+  },
+  {
+   "w": "could",
+   "start_s": 17.438,
+   "end_s": 17.55
+  },
+  {
+   "w": "reach",
+   "start_s": 17.55,
+   "end_s": 17.8
+  },
+  {
+   "w": "you",
+   "start_s": 17.8,
+   "end_s": 17.95
+  },
+  {
+   "w": "through",
+   "start_s": 17.95,
+   "end_s": 18.138
+  },
+  {
+   "w": "its",
+   "start_s": 18.138,
+   "end_s": 18.25
+  },
+  {
+   "w": "price.",
+   "start_s": 18.25,
+   "end_s": 18.975
+  },
+  {
+   "w": "A",
+   "start_s": 19.6,
+   "end_s": 19.675
+  },
+  {
+   "w": "workshop",
+   "start_s": 19.675,
+   "end_s": 20.075
+  },
+  {
+   "w": "owner",
+   "start_s": 20.075,
+   "end_s": 20.3
+  },
+  {
+   "w": "has",
+   "start_s": 20.3,
+   "end_s": 20.513
+  },
+  {
+   "w": "orders",
+   "start_s": 20.513,
+   "end_s": 20.825
+  },
+  {
+   "w": "waiting,",
+   "start_s": 20.825,
+   "end_s": 21.425
+  },
+  {
+   "w": "but",
+   "start_s": 21.425,
+   "end_s": 21.563
+  },
+  {
+   "w": "the",
+   "start_s": 21.563,
+   "end_s": 21.65
+  },
+  {
+   "w": "loan",
+   "start_s": 21.65,
+   "end_s": 21.95
+  },
+  {
+   "w": "financing",
+   "start_s": 21.95,
+   "end_s": 22.463
+  },
+  {
+   "w": "the",
+   "start_s": 22.463,
+   "end_s": 22.538
+  },
+  {
+   "w": "next",
+   "start_s": 22.538,
+   "end_s": 22.713
+  },
+  {
+   "w": "machine",
+   "start_s": 22.713,
+   "end_s": 23.038
+  },
+  {
+   "w": "is",
+   "start_s": 23.038,
+   "end_s": 23.125
+  },
+  {
+   "w": "coming",
+   "start_s": 23.125,
+   "end_s": 23.375
+  },
+  {
+   "w": "due.",
+   "start_s": 23.375,
+   "end_s": 23.95
+  },
+  {
+   "w": "By",
+   "start_s": 24.55,
+   "end_s": 24.663
+  },
+  {
+   "w": "the",
+   "start_s": 24.663,
+   "end_s": 24.8
+  },
+  {
+   "w": "end,",
+   "start_s": 24.8,
+   "end_s": 25.088
+  },
+  {
+   "w": "you'll",
+   "start_s": 25.088,
+   "end_s": 25.2
+  },
+  {
+   "w": "separate",
+   "start_s": 25.2,
+   "end_s": 25.488
+  },
+  {
+   "w": "three",
+   "start_s": 25.488,
+   "end_s": 25.738
+  },
+  {
+   "w": "things:",
+   "start_s": 25.738,
+   "end_s": 26.488
+  },
+  {
+   "w": "money",
+   "start_s": 26.488,
+   "end_s": 26.725
+  },
+  {
+   "w": "moving",
+   "start_s": 26.725,
+   "end_s": 26.988
+  },
+  {
+   "w": "between",
+   "start_s": 26.988,
+   "end_s": 27.238
+  },
+  {
+   "w": "accounts,",
+   "start_s": 27.238,
+   "end_s": 27.863
+  },
+  {
+   "w": "funding",
+   "start_s": 27.863,
+   "end_s": 28.188
+  },
+  {
+   "w": "becoming",
+   "start_s": 28.188,
+   "end_s": 28.475
+  },
+  {
+   "w": "expensive,",
+   "start_s": 28.475,
+   "end_s": 29.225
+  },
+  {
+   "w": "and",
+   "start_s": 29.225,
+   "end_s": 29.338
+  },
+  {
+   "w": "that",
+   "start_s": 29.338,
+   "end_s": 29.488
+  },
+  {
+   "w": "expense",
+   "start_s": 29.488,
+   "end_s": 29.875
+  },
+  {
+   "w": "reaching",
+   "start_s": 29.875,
+   "end_s": 30.113
+  },
+  {
+   "w": "a",
+   "start_s": 30.113,
+   "end_s": 30.175
+  },
+  {
+   "w": "borrower.",
+   "start_s": 30.175,
+   "end_s": 31.0
+  },
+  {
+   "w": "In",
+   "start_s": 31.625,
+   "end_s": 31.713
+  },
+  {
+   "w": "this",
+   "start_s": 31.713,
+   "end_s": 31.825
+  },
+  {
+   "w": "series,",
+   "start_s": 31.825,
+   "end_s": 32.513
+  },
+  {
+   "w": "we're",
+   "start_s": 32.513,
+   "end_s": 32.638
+  },
+  {
+   "w": "following",
+   "start_s": 32.638,
+   "end_s": 32.963
+  },
+  {
+   "w": "the",
+   "start_s": 32.963,
+   "end_s": 33.05
+  },
+  {
+   "w": "pressures",
+   "start_s": 33.05,
+   "end_s": 33.438
+  },
+  {
+   "w": "that",
+   "start_s": 33.438,
+   "end_s": 33.538
+  },
+  {
+   "w": "can",
+   "start_s": 33.538,
+   "end_s": 33.65
+  },
+  {
+   "w": "break",
+   "start_s": 33.65,
+   "end_s": 33.863
+  },
+  {
+   "w": "an",
+   "start_s": 33.863,
+   "end_s": 33.95
+  },
+  {
+   "w": "economy",
+   "start_s": 33.95,
+   "end_s": 34.475
+  },
+  {
+   "w": "from",
+   "start_s": 34.475,
+   "end_s": 34.613
+  },
+  {
+   "w": "the",
+   "start_s": 34.613,
+   "end_s": 34.7
+  },
+  {
+   "w": "inside.",
+   "start_s": 34.7,
+   "end_s": 35.55
+  },
+  {
+   "w": "This",
+   "start_s": 36.175,
+   "end_s": 36.325
+  },
+  {
+   "w": "chapter",
+   "start_s": 36.325,
+   "end_s": 36.688
+  },
+  {
+   "w": "follows",
+   "start_s": 36.688,
+   "end_s": 36.988
+  },
+  {
+   "w": "the",
+   "start_s": 36.988,
+   "end_s": 37.075
+  },
+  {
+   "w": "money",
+   "start_s": 37.075,
+   "end_s": 37.375
+  },
+  {
+   "w": "between",
+   "start_s": 37.375,
+   "end_s": 37.638
+  },
+  {
+   "w": "the",
+   "start_s": 37.638,
+   "end_s": 37.713
+  },
+  {
+   "w": "institutions",
+   "start_s": 37.713,
+   "end_s": 38.35
+  },
+  {
+   "w": "supplying",
+   "start_s": 38.35,
+   "end_s": 38.738
+  },
+  {
+   "w": "that",
+   "start_s": 38.738,
+   "end_s": 38.9
+  },
+  {
+   "w": "financing.",
+   "start_s": 38.9,
+   "end_s": 39.85
+  },
+  {
+   "w": "The",
+   "start_s": 40.45,
+   "end_s": 40.525
+  },
+  {
+   "w": "total",
+   "start_s": 40.525,
+   "end_s": 40.763
+  },
+  {
+   "w": "can",
+   "start_s": 40.763,
+   "end_s": 40.888
+  },
+  {
+   "w": "shrink",
+   "start_s": 40.888,
+   "end_s": 41.163
+  },
+  {
+   "w": "without",
+   "start_s": 41.163,
+   "end_s": 41.375
+  },
+  {
+   "w": "telling",
+   "start_s": 41.375,
+   "end_s": 41.7
+  },
+  {
+   "w": "you",
+   "start_s": 41.7,
+   "end_s": 42.1
+  },
+  {
+   "w": "which",
+   "start_s": 42.1,
+   "end_s": 42.35
+  },
+  {
+   "w": "institution",
+   "start_s": 42.35,
+   "end_s": 43.013
+  },
+  {
+   "w": "actually",
+   "start_s": 43.013,
+   "end_s": 43.4
+  },
+  {
+   "w": "lost",
+   "start_s": 43.4,
+   "end_s": 43.738
+  },
+  {
+   "w": "access",
+   "start_s": 43.738,
+   "end_s": 44.138
+  },
+  {
+   "w": "to",
+   "start_s": 44.138,
+   "end_s": 44.225
+  },
+  {
+   "w": "cash.",
+   "start_s": 44.225,
+   "end_s": 44.95
+  },
+  {
+   "w": "The",
+   "start_s": 45.55,
+   "end_s": 45.625
+  },
+  {
+   "w": "trap",
+   "start_s": 45.625,
+   "end_s": 45.888
+  },
+  {
+   "w": "is",
+   "start_s": 45.888,
+   "end_s": 45.975
+  },
+  {
+   "w": "treating",
+   "start_s": 45.975,
+   "end_s": 46.225
+  },
+  {
+   "w": "one",
+   "start_s": 46.225,
+   "end_s": 46.438
+  },
+  {
+   "w": "falling",
+   "start_s": 46.438,
+   "end_s": 46.75
+  },
+  {
+   "w": "balance",
+   "start_s": 46.75,
+   "end_s": 47.2
+  },
+  {
+   "w": "as",
+   "start_s": 47.2,
+   "end_s": 47.388
+  },
+  {
+   "w": "every",
+   "start_s": 47.388,
+   "end_s": 47.6
+  },
+  {
+   "w": "bank",
+   "start_s": 47.6,
+   "end_s": 47.8
+  },
+  {
+   "w": "losing",
+   "start_s": 47.8,
+   "end_s": 48.075
+  },
+  {
+   "w": "cash.",
+   "start_s": 48.075,
+   "end_s": 48.775
+  },
+  {
+   "w": "Follow",
+   "start_s": 49.4,
+   "end_s": 49.588
+  },
+  {
+   "w": "the",
+   "start_s": 49.588,
+   "end_s": 49.663
+  },
+  {
+   "w": "accounts",
+   "start_s": 49.663,
+   "end_s": 50.0
+  },
+  {
+   "w": "first.",
+   "start_s": 50.0,
+   "end_s": 50.575
+  },
+  {
+   "w": "Then",
+   "start_s": 50.575,
+   "end_s": 50.713
+  },
+  {
+   "w": "we'll",
+   "start_s": 50.713,
+   "end_s": 50.825
+  },
+  {
+   "w": "test",
+   "start_s": 50.825,
+   "end_s": 51.088
+  },
+  {
+   "w": "what",
+   "start_s": 51.088,
+   "end_s": 51.225
+  },
+  {
+   "w": "borrowing",
+   "start_s": 51.225,
+   "end_s": 51.525
+  },
+  {
+   "w": "costs.",
+   "start_s": 51.525,
+   "end_s": 52.275
+  },
+  {
+   "w": "Before",
+   "start_s": 52.875,
+   "end_s": 53.138
+  },
+  {
+   "w": "you",
+   "start_s": 53.138,
+   "end_s": 53.225
+  },
+  {
+   "w": "see",
+   "start_s": 53.225,
+   "end_s": 53.363
+  },
+  {
+   "w": "the",
+   "start_s": 53.363,
+   "end_s": 53.45
+  },
+  {
+   "w": "hiring",
+   "start_s": 53.45,
+   "end_s": 53.788
+  },
+  {
+   "w": "freeze",
+   "start_s": 53.788,
+   "end_s": 54.25
+  },
+  {
+   "w": "or",
+   "start_s": 54.25,
+   "end_s": 54.338
+  },
+  {
+   "w": "the",
+   "start_s": 54.338,
+   "end_s": 54.425
+  },
+  {
+   "w": "cancelled",
+   "start_s": 54.425,
+   "end_s": 54.763
+  },
+  {
+   "w": "expansion,",
+   "start_s": 54.763,
+   "end_s": 55.638
+  },
+  {
+   "w": "someone",
+   "start_s": 55.638,
+   "end_s": 55.925
+  },
+  {
+   "w": "has",
+   "start_s": 55.925,
+   "end_s": 56.088
+  },
+  {
+   "w": "to",
+   "start_s": 56.088,
+   "end_s": 56.163
+  },
+  {
+   "w": "decide",
+   "start_s": 56.163,
+   "end_s": 56.588
+  },
+  {
+   "w": "what",
+   "start_s": 56.588,
+   "end_s": 56.713
+  },
+  {
+   "w": "the",
+   "start_s": 56.713,
+   "end_s": 56.8
+  },
+  {
+   "w": "next",
+   "start_s": 56.8,
+   "end_s": 57.05
+  },
+  {
+   "w": "loan",
+   "start_s": 57.05,
+   "end_s": 57.263
+  },
+  {
+   "w": "will",
+   "start_s": 57.263,
+   "end_s": 57.375
+  },
+  {
+   "w": "cost.",
+   "start_s": 57.375,
+   "end_s": 58.15
+  },
+  {
+   "w": "One",
+   "start_s": 58.775,
+   "end_s": 58.988
+  },
+  {
+   "w": "shortcut",
+   "start_s": 58.988,
+   "end_s": 59.363
+  },
+  {
+   "w": "for",
+   "start_s": 59.363,
+   "end_s": 59.475
+  },
+  {
+   "w": "watching",
+   "start_s": 59.475,
+   "end_s": 59.738
+  },
+  {
+   "w": "this",
+   "start_s": 59.738,
+   "end_s": 59.85
+  },
+  {
+   "w": "system",
+   "start_s": 59.85,
+   "end_s": 60.413
+  },
+  {
+   "w": "is",
+   "start_s": 60.413,
+   "end_s": 60.55
+  },
+  {
+   "w": "called",
+   "start_s": 60.55,
+   "end_s": 60.838
+  },
+  {
+   "w": "net",
+   "start_s": 60.838,
+   "end_s": 61.05
+  },
+  {
+   "w": "liquidity.",
+   "start_s": 61.05,
+   "end_s": 61.85
+  },
+  {
+   "w": "Take",
+   "start_s": 62.45,
+   "end_s": 62.613
+  },
+  {
+   "w": "the",
+   "start_s": 62.613,
+   "end_s": 62.7
+  },
+  {
+   "w": "Fed's",
+   "start_s": 62.7,
+   "end_s": 62.938
+  },
+  {
+   "w": "assets.",
+   "start_s": 62.938,
+   "end_s": 63.7
+  },
+  {
+   "w": "Subtract",
+   "start_s": 63.7,
+   "end_s": 64.038
+  },
+  {
+   "w": "the",
+   "start_s": 64.038,
+   "end_s": 64.125
+  },
+  {
+   "w": "government's",
+   "start_s": 64.125,
+   "end_s": 64.475
+  },
+  {
+   "w": "cash",
+   "start_s": 64.475,
+   "end_s": 64.738
+  },
+  {
+   "w": "account.",
+   "start_s": 64.738,
+   "end_s": 65.363
+  },
+  {
+   "w": "Subtract",
+   "start_s": 65.363,
+   "end_s": 65.713
+  },
+  {
+   "w": "the",
+   "start_s": 65.713,
+   "end_s": 65.8
+  },
+  {
+   "w": "cash",
+   "start_s": 65.8,
+   "end_s": 66.1
+  },
+  {
+   "w": "parked",
+   "start_s": 66.1,
+   "end_s": 66.325
+  },
+  {
+   "w": "overnight",
+   "start_s": 66.325,
+   "end_s": 66.688
+  },
+  {
+   "w": "at",
+   "start_s": 66.688,
+   "end_s": 66.763
+  },
+  {
+   "w": "the",
+   "start_s": 66.763,
+   "end_s": 66.863
+  },
+  {
+   "w": "Fed.",
+   "start_s": 66.863,
+   "end_s": 67.525
+  },
+  {
+   "w": "Three",
+   "start_s": 68.15,
+   "end_s": 68.35
+  },
+  {
+   "w": "numbers,",
+   "start_s": 68.35,
+   "end_s": 68.875
+  },
+  {
+   "w": "one",
+   "start_s": 68.875,
+   "end_s": 69.05
+  },
+  {
+   "w": "line",
+   "start_s": 69.05,
+   "end_s": 69.263
+  },
+  {
+   "w": "on",
+   "start_s": 69.263,
+   "end_s": 69.363
+  },
+  {
+   "w": "a",
+   "start_s": 69.363,
+   "end_s": 69.425
+  },
+  {
+   "w": "chart.",
+   "start_s": 69.425,
+   "end_s": 70.1
+  },
+  {
+   "w": "Analysts",
+   "start_s": 70.725,
+   "end_s": 71.125
+  },
+  {
+   "w": "build",
+   "start_s": 71.125,
+   "end_s": 71.363
+  },
+  {
+   "w": "this",
+   "start_s": 71.363,
+   "end_s": 71.55
+  },
+  {
+   "w": "unofficial",
+   "start_s": 71.55,
+   "end_s": 71.975
+  },
+  {
+   "w": "proxy",
+   "start_s": 71.975,
+   "end_s": 72.4
+  },
+  {
+   "w": "from",
+   "start_s": 72.4,
+   "end_s": 72.55
+  },
+  {
+   "w": "public",
+   "start_s": 72.55,
+   "end_s": 72.8
+  },
+  {
+   "w": "data.",
+   "start_s": 72.8,
+   "end_s": 73.425
+  },
+  {
+   "w": "It",
+   "start_s": 73.425,
+   "end_s": 73.538
+  },
+  {
+   "w": "isn't",
+   "start_s": 73.538,
+   "end_s": 73.713
+  },
+  {
+   "w": "the",
+   "start_s": 73.713,
+   "end_s": 73.8
+  },
+  {
+   "w": "banks'",
+   "start_s": 73.8,
+   "end_s": 74.125
+  },
+  {
+   "w": "reserve",
+   "start_s": 74.125,
+   "end_s": 74.5
+  },
+  {
+   "w": "balance.",
+   "start_s": 74.5,
+   "end_s": 75.3
+  },
+  {
+   "w": "We'll",
+   "start_s": 75.9,
+   "end_s": 76.025
+  },
+  {
+   "w": "test",
+   "start_s": 76.025,
+   "end_s": 76.263
+  },
+  {
+   "w": "the",
+   "start_s": 76.263,
+   "end_s": 76.338
+  },
+  {
+   "w": "distinction",
+   "start_s": 76.338,
+   "end_s": 76.95
+  },
+  {
+   "w": "against",
+   "start_s": 76.95,
+   "end_s": 77.213
+  },
+  {
+   "w": "the",
+   "start_s": 77.213,
+   "end_s": 77.313
+  },
+  {
+   "w": "Fed's",
+   "start_s": 77.313,
+   "end_s": 77.638
+  },
+  {
+   "w": "June",
+   "start_s": 77.638,
+   "end_s": 78.088
+  },
+  {
+   "w": "twenty",
+   "start_s": 78.088,
+   "end_s": 78.35
+  },
+  {
+   "w": "twenty-five",
+   "start_s": 78.35,
+   "end_s": 78.875
+  },
+  {
+   "w": "record.",
+   "start_s": 78.875,
+   "end_s": 79.575
+  },
+  {
+   "w": "Start",
+   "start_s": 80.175,
+   "end_s": 80.388
+  },
+  {
+   "w": "with",
+   "start_s": 80.388,
+   "end_s": 80.488
+  },
+  {
+   "w": "the",
+   "start_s": 80.488,
+   "end_s": 80.575
+  },
+  {
+   "w": "Fed's",
+   "start_s": 80.575,
+   "end_s": 80.825
+  },
+  {
+   "w": "balance",
+   "start_s": 80.825,
+   "end_s": 81.15
+  },
+  {
+   "w": "sheet.",
+   "start_s": 81.15,
+   "end_s": 81.75
+  },
+  {
+   "w": "On",
+   "start_s": 82.35,
+   "end_s": 82.475
+  },
+  {
+   "w": "one",
+   "start_s": 82.475,
+   "end_s": 82.663
+  },
+  {
+   "w": "side",
+   "start_s": 82.663,
+   "end_s": 82.95
+  },
+  {
+   "w": "are",
+   "start_s": 82.95,
+   "end_s": 83.038
+  },
+  {
+   "w": "the",
+   "start_s": 83.038,
+   "end_s": 83.163
+  },
+  {
+   "w": "assets",
+   "start_s": 83.163,
+   "end_s": 83.488
+  },
+  {
+   "w": "it",
+   "start_s": 83.488,
+   "end_s": 83.575
+  },
+  {
+   "w": "owns,",
+   "start_s": 83.575,
+   "end_s": 84.313
+  },
+  {
+   "w": "largely",
+   "start_s": 84.313,
+   "end_s": 84.7
+  },
+  {
+   "w": "Treasury",
+   "start_s": 84.7,
+   "end_s": 85.1
+  },
+  {
+   "w": "securities",
+   "start_s": 85.1,
+   "end_s": 85.563
+  },
+  {
+   "w": "and",
+   "start_s": 85.563,
+   "end_s": 85.675
+  },
+  {
+   "w": "mortgage-backed",
+   "start_s": 85.675,
+   "end_s": 86.163
+  },
+  {
+   "w": "securities.",
+   "start_s": 86.163,
+   "end_s": 87.075
+  },
+  {
+   "w": "On",
+   "start_s": 87.7,
+   "end_s": 87.813
+  },
+  {
+   "w": "the",
+   "start_s": 87.813,
+   "end_s": 87.9
+  },
+  {
+   "w": "other",
+   "start_s": 87.9,
+   "end_s": 88.175
+  },
+  {
+   "w": "are",
+   "start_s": 88.175,
+   "end_s": 88.263
+  },
+  {
+   "w": "its",
+   "start_s": 88.263,
+   "end_s": 88.375
+  },
+  {
+   "w": "liabilities,",
+   "start_s": 88.375,
+   "end_s": 89.3
+  },
+  {
+   "w": "including",
+   "start_s": 89.3,
+   "end_s": 89.65
+  },
+  {
+   "w": "currency,",
+   "start_s": 89.65,
+   "end_s": 90.325
+  },
+  {
+   "w": "bank",
+   "start_s": 90.325,
+   "end_s": 90.513
+  },
+  {
+   "w": "reserves,",
+   "start_s": 90.513,
+   "end_s": 91.013
+  },
+  {
+   "w": "and",
+   "start_s": 91.013,
+   "end_s": 91.113
+  },
+  {
+   "w": "the",
+   "start_s": 91.113,
+   "end_s": 91.2
+  },
+  {
+   "w": "government's",
+   "start_s": 91.2,
+   "end_s": 91.55
+  },
+  {
+   "w": "cash",
+   "start_s": 91.55,
+   "end_s": 91.813
+  },
+  {
+   "w": "account.",
+   "start_s": 91.813,
+   "end_s": 92.5
+  },
+  {
+   "w": "During",
+   "start_s": 93.1,
+   "end_s": 93.275
+  },
+  {
+   "w": "quantitative",
+   "start_s": 93.275,
+   "end_s": 93.75
+  },
+  {
+   "w": "tightening,",
+   "start_s": 93.75,
+   "end_s": 94.35
+  },
+  {
+   "w": "maturing",
+   "start_s": 94.35,
+   "end_s": 94.75
+  },
+  {
+   "w": "securities",
+   "start_s": 94.75,
+   "end_s": 95.213
+  },
+  {
+   "w": "can",
+   "start_s": 95.213,
+   "end_s": 95.325
+  },
+  {
+   "w": "roll",
+   "start_s": 95.325,
+   "end_s": 95.575
+  },
+  {
+   "w": "off",
+   "start_s": 95.575,
+   "end_s": 95.788
+  },
+  {
+   "w": "without",
+   "start_s": 95.788,
+   "end_s": 96.088
+  },
+  {
+   "w": "full",
+   "start_s": 96.088,
+   "end_s": 96.313
+  },
+  {
+   "w": "replacement.",
+   "start_s": 96.313,
+   "end_s": 97.175
+  },
+  {
+   "w": "The",
+   "start_s": 97.175,
+   "end_s": 97.275
+  },
+  {
+   "w": "balance",
+   "start_s": 97.275,
+   "end_s": 97.663
+  },
+  {
+   "w": "sheet",
+   "start_s": 97.663,
+   "end_s": 97.9
+  },
+  {
+   "w": "gets",
+   "start_s": 97.9,
+   "end_s": 98.063
+  },
+  {
+   "w": "smaller.",
+   "start_s": 98.063,
+   "end_s": 98.875
+  },
+  {
+   "w": "By",
+   "start_s": 99.45,
+   "end_s": 99.575
+  },
+  {
+   "w": "September",
+   "start_s": 99.575,
+   "end_s": 99.925
+  },
+  {
+   "w": "eighteenth,",
+   "start_s": 99.925,
+   "end_s": 100.725
+  },
+  {
+   "w": "money",
+   "start_s": 100.725,
+   "end_s": 100.963
+  },
+  {
+   "w": "funds",
+   "start_s": 100.963,
+   "end_s": 101.263
+  },
+  {
+   "w": "had",
+   "start_s": 101.263,
+   "end_s": 101.375
+  },
+  {
+   "w": "nearly",
+   "start_s": 101.375,
+   "end_s": 101.713
+  },
+  {
+   "w": "emptied",
+   "start_s": 101.713,
+   "end_s": 102.038
+  },
+  {
+   "w": "the",
+   "start_s": 102.038,
+   "end_s": 102.138
+  },
+  {
+   "w": "Fed's",
+   "start_s": 102.138,
+   "end_s": 102.425
+  },
+  {
+   "w": "overnight",
+   "start_s": 102.425,
+   "end_s": 102.85
+  },
+  {
+   "w": "reverse-repo",
+   "start_s": 102.85,
+   "end_s": 103.475
+  },
+  {
+   "w": "facility.",
+   "start_s": 103.475,
+   "end_s": 104.35
+  },
+  {
+   "w": "So",
+   "start_s": 104.975,
+   "end_s": 105.075
+  },
+  {
+   "w": "total",
+   "start_s": 105.075,
+   "end_s": 105.325
+  },
+  {
+   "w": "Fed",
+   "start_s": 105.325,
+   "end_s": 105.5
+  },
+  {
+   "w": "assets",
+   "start_s": 105.5,
+   "end_s": 105.838
+  },
+  {
+   "w": "should",
+   "start_s": 105.838,
+   "end_s": 105.975
+  },
+  {
+   "w": "tell",
+   "start_s": 105.975,
+   "end_s": 106.15
+  },
+  {
+   "w": "you",
+   "start_s": 106.15,
+   "end_s": 106.3
+  },
+  {
+   "w": "which",
+   "start_s": 106.3,
+   "end_s": 106.5
+  },
+  {
+   "w": "way",
+   "start_s": 106.5,
+   "end_s": 106.688
+  },
+  {
+   "w": "the",
+   "start_s": 106.688,
+   "end_s": 106.775
+  },
+  {
+   "w": "banks'",
+   "start_s": 106.775,
+   "end_s": 107.0
+  },
+  {
+   "w": "cushion",
+   "start_s": 107.0,
+   "end_s": 107.25
+  },
+  {
+   "w": "moves.",
+   "start_s": 107.25,
+   "end_s": 107.975
+  },
+  {
+   "w": "Take",
+   "start_s": 108.55,
+   "end_s": 108.688
+  },
+  {
+   "w": "a",
+   "start_s": 108.688,
+   "end_s": 108.75
+  },
+  {
+   "w": "tax",
+   "start_s": 108.75,
+   "end_s": 109.05
+  },
+  {
+   "w": "payment.",
+   "start_s": 109.05,
+   "end_s": 109.75
+  },
+  {
+   "w": "Your",
+   "start_s": 110.35,
+   "end_s": 110.463
+  },
+  {
+   "w": "deposit",
+   "start_s": 110.463,
+   "end_s": 110.875
+  },
+  {
+   "w": "falls.",
+   "start_s": 110.875,
+   "end_s": 111.55
+  },
+  {
+   "w": "Your",
+   "start_s": 111.55,
+   "end_s": 111.688
+  },
+  {
+   "w": "bank",
+   "start_s": 111.688,
+   "end_s": 111.888
+  },
+  {
+   "w": "settles",
+   "start_s": 111.888,
+   "end_s": 112.138
+  },
+  {
+   "w": "the",
+   "start_s": 112.138,
+   "end_s": 112.225
+  },
+  {
+   "w": "payment.",
+   "start_s": 112.225,
+   "end_s": 112.85
+  },
+  {
+   "w": "The",
+   "start_s": 112.85,
+   "end_s": 112.95
+  },
+  {
+   "w": "Treasury's",
+   "start_s": 112.95,
+   "end_s": 113.4
+  },
+  {
+   "w": "balance",
+   "start_s": 113.4,
+   "end_s": 113.763
+  },
+  {
+   "w": "at",
+   "start_s": 113.763,
+   "end_s": 113.838
+  },
+  {
+   "w": "the",
+   "start_s": 113.838,
+   "end_s": 113.938
+  },
+  {
+   "w": "Fed",
+   "start_s": 113.938,
+   "end_s": 114.125
+  },
+  {
+   "w": "rises.",
+   "start_s": 114.125,
+   "end_s": 114.95
+  },
+  {
+   "w": "Holding",
+   "start_s": 115.55,
+   "end_s": 115.763
+  },
+  {
+   "w": "the",
+   "start_s": 115.763,
+   "end_s": 115.85
+  },
+  {
+   "w": "other",
+   "start_s": 115.85,
+   "end_s": 116.025
+  },
+  {
+   "w": "moving",
+   "start_s": 116.025,
+   "end_s": 116.275
+  },
+  {
+   "w": "parts",
+   "start_s": 116.275,
+   "end_s": 116.475
+  },
+  {
+   "w": "still,",
+   "start_s": 116.475,
+   "end_s": 117.1
+  },
+  {
+   "w": "bank",
+   "start_s": 117.1,
+   "end_s": 117.325
+  },
+  {
+   "w": "reserves",
+   "start_s": 117.325,
+   "end_s": 117.738
+  },
+  {
+   "w": "fall",
+   "start_s": 117.738,
+   "end_s": 118.1
+  },
+  {
+   "w": "as",
+   "start_s": 118.1,
+   "end_s": 118.188
+  },
+  {
+   "w": "the",
+   "start_s": 118.188,
+   "end_s": 118.275
+  },
+  {
+   "w": "government's",
+   "start_s": 118.275,
+   "end_s": 118.65
+  },
+  {
+   "w": "cash",
+   "start_s": 118.65,
+   "end_s": 118.925
+  },
+  {
+   "w": "balance",
+   "start_s": 118.925,
+   "end_s": 119.275
+  },
+  {
+   "w": "grows.",
+   "start_s": 119.275,
+   "end_s": 120.1
+  },
+  {
+   "w": "That",
+   "start_s": 120.725,
+   "end_s": 120.875
+  },
+  {
+   "w": "government",
+   "start_s": 120.875,
+   "end_s": 121.188
+  },
+  {
+   "w": "account",
+   "start_s": 121.188,
+   "end_s": 121.5
+  },
+  {
+   "w": "is",
+   "start_s": 121.5,
+   "end_s": 121.613
+  },
+  {
+   "w": "the",
+   "start_s": 121.613,
+   "end_s": 121.7
+  },
+  {
+   "w": "Treasury",
+   "start_s": 121.7,
+   "end_s": 122.1
+  },
+  {
+   "w": "General",
+   "start_s": 122.1,
+   "end_s": 122.338
+  },
+  {
+   "w": "Account\u2014",
+   "start_s": 122.338,
+   "end_s": 122.975
+  },
+  {
+   "w": "the",
+   "start_s": 122.975,
+   "end_s": 123.05
+  },
+  {
+   "w": "TGA.",
+   "start_s": 123.05,
+   "end_s": 123.975
+  },
+  {
+   "w": "But",
+   "start_s": 124.55,
+   "end_s": 124.663
+  },
+  {
+   "w": "reserves",
+   "start_s": 124.663,
+   "end_s": 125.0
+  },
+  {
+   "w": "just",
+   "start_s": 125.0,
+   "end_s": 125.175
+  },
+  {
+   "w": "moved",
+   "start_s": 125.175,
+   "end_s": 125.463
+  },
+  {
+   "w": "without",
+   "start_s": 125.463,
+   "end_s": 125.7
+  },
+  {
+   "w": "any",
+   "start_s": 125.7,
+   "end_s": 125.913
+  },
+  {
+   "w": "change",
+   "start_s": 125.913,
+   "end_s": 126.263
+  },
+  {
+   "w": "in",
+   "start_s": 126.263,
+   "end_s": 126.35
+  },
+  {
+   "w": "Fed",
+   "start_s": 126.35,
+   "end_s": 126.525
+  },
+  {
+   "w": "assets.",
+   "start_s": 126.525,
+   "end_s": 127.3
+  },
+  {
+   "w": "Tax",
+   "start_s": 127.3,
+   "end_s": 127.6
+  },
+  {
+   "w": "payments",
+   "start_s": 127.6,
+   "end_s": 127.963
+  },
+  {
+   "w": "changed",
+   "start_s": 127.963,
+   "end_s": 128.288
+  },
+  {
+   "w": "the",
+   "start_s": 128.288,
+   "end_s": 128.375
+  },
+  {
+   "w": "liabilities",
+   "start_s": 128.375,
+   "end_s": 128.888
+  },
+  {
+   "w": "instead.",
+   "start_s": 128.888,
+   "end_s": 129.675
+  },
+  {
+   "w": "Now",
+   "start_s": 130.3,
+   "end_s": 130.488
+  },
+  {
+   "w": "let",
+   "start_s": 130.488,
+   "end_s": 130.613
+  },
+  {
+   "w": "the",
+   "start_s": 130.613,
+   "end_s": 130.7
+  },
+  {
+   "w": "government",
+   "start_s": 130.7,
+   "end_s": 131.025
+  },
+  {
+   "w": "pay",
+   "start_s": 131.025,
+   "end_s": 131.238
+  },
+  {
+   "w": "a",
+   "start_s": 131.238,
+   "end_s": 131.3
+  },
+  {
+   "w": "contractor.",
+   "start_s": 131.3,
+   "end_s": 132.225
+  },
+  {
+   "w": "The",
+   "start_s": 132.825,
+   "end_s": 132.9
+  },
+  {
+   "w": "Treasury",
+   "start_s": 132.9,
+   "end_s": 133.288
+  },
+  {
+   "w": "account",
+   "start_s": 133.288,
+   "end_s": 133.55
+  },
+  {
+   "w": "falls,",
+   "start_s": 133.55,
+   "end_s": 134.238
+  },
+  {
+   "w": "the",
+   "start_s": 134.238,
+   "end_s": 134.325
+  },
+  {
+   "w": "contractor's",
+   "start_s": 134.325,
+   "end_s": 134.875
+  },
+  {
+   "w": "bank",
+   "start_s": 134.875,
+   "end_s": 135.063
+  },
+  {
+   "w": "receives",
+   "start_s": 135.063,
+   "end_s": 135.413
+  },
+  {
+   "w": "reserves,",
+   "start_s": 135.413,
+   "end_s": 136.175
+  },
+  {
+   "w": "and",
+   "start_s": 136.175,
+   "end_s": 136.288
+  },
+  {
+   "w": "the",
+   "start_s": 136.288,
+   "end_s": 136.375
+  },
+  {
+   "w": "contractor",
+   "start_s": 136.375,
+   "end_s": 136.863
+  },
+  {
+   "w": "receives",
+   "start_s": 136.863,
+   "end_s": 137.213
+  },
+  {
+   "w": "a",
+   "start_s": 137.213,
+   "end_s": 137.263
+  },
+  {
+   "w": "deposit.",
+   "start_s": 137.263,
+   "end_s": 138.125
+  },
+  {
+   "w": "The",
+   "start_s": 138.725,
+   "end_s": 138.788
+  },
+  {
+   "w": "direction",
+   "start_s": 138.788,
+   "end_s": 139.225
+  },
+  {
+   "w": "reverses.",
+   "start_s": 139.225,
+   "end_s": 140.1
+  },
+  {
+   "w": "That's",
+   "start_s": 140.7,
+   "end_s": 140.863
+  },
+  {
+   "w": "why",
+   "start_s": 140.863,
+   "end_s": 140.988
+  },
+  {
+   "w": "a",
+   "start_s": 140.988,
+   "end_s": 141.05
+  },
+  {
+   "w": "tax",
+   "start_s": 141.05,
+   "end_s": 141.375
+  },
+  {
+   "w": "date",
+   "start_s": 141.375,
+   "end_s": 141.888
+  },
+  {
+   "w": "and",
+   "start_s": 141.888,
+   "end_s": 142.013
+  },
+  {
+   "w": "a",
+   "start_s": 142.013,
+   "end_s": 142.075
+  },
+  {
+   "w": "spending",
+   "start_s": 142.075,
+   "end_s": 142.35
+  },
+  {
+   "w": "date",
+   "start_s": 142.35,
+   "end_s": 142.575
+  },
+  {
+   "w": "can",
+   "start_s": 142.575,
+   "end_s": 142.7
+  },
+  {
+   "w": "matter",
+   "start_s": 142.7,
+   "end_s": 142.95
+  },
+  {
+   "w": "even",
+   "start_s": 142.95,
+   "end_s": 143.213
+  },
+  {
+   "w": "when",
+   "start_s": 143.213,
+   "end_s": 143.338
+  },
+  {
+   "w": "the",
+   "start_s": 143.338,
+   "end_s": 143.438
+  },
+  {
+   "w": "Fed",
+   "start_s": 143.438,
+   "end_s": 143.7
+  },
+  {
+   "w": "leaves",
+   "start_s": 143.7,
+   "end_s": 143.938
+  },
+  {
+   "w": "its",
+   "start_s": 143.938,
+   "end_s": 144.05
+  },
+  {
+   "w": "headline",
+   "start_s": 144.05,
+   "end_s": 144.45
+  },
+  {
+   "w": "interest",
+   "start_s": 144.45,
+   "end_s": 144.85
+  },
+  {
+   "w": "rate",
+   "start_s": 144.85,
+   "end_s": 145.038
+  },
+  {
+   "w": "alone.",
+   "start_s": 145.038,
+   "end_s": 145.825
+  },
+  {
+   "w": "The",
+   "start_s": 146.425,
+   "end_s": 146.488
+  },
+  {
+   "w": "headline",
+   "start_s": 146.488,
+   "end_s": 146.8
+  },
+  {
+   "w": "balance",
+   "start_s": 146.8,
+   "end_s": 147.088
+  },
+  {
+   "w": "sheet",
+   "start_s": 147.088,
+   "end_s": 147.325
+  },
+  {
+   "w": "misses",
+   "start_s": 147.325,
+   "end_s": 147.588
+  },
+  {
+   "w": "that",
+   "start_s": 147.588,
+   "end_s": 147.738
+  },
+  {
+   "w": "movement.",
+   "start_s": 147.738,
+   "end_s": 148.463
+  },
+  {
+   "w": "Next,",
+   "start_s": 148.463,
+   "end_s": 149.025
+  },
+  {
+   "w": "follow",
+   "start_s": 149.025,
+   "end_s": 149.288
+  },
+  {
+   "w": "the",
+   "start_s": 149.288,
+   "end_s": 149.375
+  },
+  {
+   "w": "cash",
+   "start_s": 149.375,
+   "end_s": 149.663
+  },
+  {
+   "w": "that",
+   "start_s": 149.663,
+   "end_s": 149.788
+  },
+  {
+   "w": "money",
+   "start_s": 149.788,
+   "end_s": 150.038
+  },
+  {
+   "w": "funds",
+   "start_s": 150.038,
+   "end_s": 150.35
+  },
+  {
+   "w": "parked",
+   "start_s": 150.35,
+   "end_s": 150.588
+  },
+  {
+   "w": "at",
+   "start_s": 150.588,
+   "end_s": 150.663
+  },
+  {
+   "w": "the",
+   "start_s": 150.663,
+   "end_s": 150.763
+  },
+  {
+   "w": "Fed.",
+   "start_s": 150.763,
+   "end_s": 151.45
+  },
+  {
+   "w": "Then",
+   "start_s": 152.05,
+   "end_s": 152.163
+  },
+  {
+   "w": "there",
+   "start_s": 152.163,
+   "end_s": 152.275
+  },
+  {
+   "w": "is",
+   "start_s": 152.275,
+   "end_s": 152.463
+  },
+  {
+   "w": "overnight",
+   "start_s": 152.463,
+   "end_s": 152.85
+  },
+  {
+   "w": "reverse",
+   "start_s": 152.85,
+   "end_s": 153.15
+  },
+  {
+   "w": "repo.",
+   "start_s": 153.15,
+   "end_s": 153.9
+  },
+  {
+   "w": "Money",
+   "start_s": 154.525,
+   "end_s": 154.725
+  },
+  {
+   "w": "funds",
+   "start_s": 154.725,
+   "end_s": 155.05
+  },
+  {
+   "w": "lend",
+   "start_s": 155.05,
+   "end_s": 155.275
+  },
+  {
+   "w": "cash",
+   "start_s": 155.275,
+   "end_s": 155.575
+  },
+  {
+   "w": "to",
+   "start_s": 155.575,
+   "end_s": 155.663
+  },
+  {
+   "w": "the",
+   "start_s": 155.663,
+   "end_s": 155.763
+  },
+  {
+   "w": "Fed",
+   "start_s": 155.763,
+   "end_s": 155.938
+  },
+  {
+   "w": "overnight",
+   "start_s": 155.938,
+   "end_s": 156.538
+  },
+  {
+   "w": "against",
+   "start_s": 156.538,
+   "end_s": 156.825
+  },
+  {
+   "w": "Treasury",
+   "start_s": 156.825,
+   "end_s": 157.15
+  },
+  {
+   "w": "collateral.",
+   "start_s": 157.15,
+   "end_s": 157.975
+  },
+  {
+   "w": "They",
+   "start_s": 158.575,
+   "end_s": 158.663
+  },
+  {
+   "w": "compare",
+   "start_s": 158.663,
+   "end_s": 158.963
+  },
+  {
+   "w": "that",
+   "start_s": 158.963,
+   "end_s": 159.088
+  },
+  {
+   "w": "return",
+   "start_s": 159.088,
+   "end_s": 159.438
+  },
+  {
+   "w": "with",
+   "start_s": 159.438,
+   "end_s": 159.55
+  },
+  {
+   "w": "bills",
+   "start_s": 159.55,
+   "end_s": 159.975
+  },
+  {
+   "w": "and",
+   "start_s": 159.975,
+   "end_s": 160.1
+  },
+  {
+   "w": "private",
+   "start_s": 160.1,
+   "end_s": 160.413
+  },
+  {
+   "w": "repo.",
+   "start_s": 160.413,
+   "end_s": 161.175
+  },
+  {
+   "w": "Think",
+   "start_s": 161.775,
+   "end_s": 161.912
+  },
+  {
+   "w": "of",
+   "start_s": 161.912,
+   "end_s": 161.988
+  },
+  {
+   "w": "this",
+   "start_s": 161.988,
+   "end_s": 162.15
+  },
+  {
+   "w": "account",
+   "start_s": 162.15,
+   "end_s": 162.638
+  },
+  {
+   "w": "as",
+   "start_s": 162.638,
+   "end_s": 162.763
+  },
+  {
+   "w": "an",
+   "start_s": 162.763,
+   "end_s": 162.838
+  },
+  {
+   "w": "available",
+   "start_s": 162.838,
+   "end_s": 163.225
+  },
+  {
+   "w": "place",
+   "start_s": 163.225,
+   "end_s": 163.775
+  },
+  {
+   "w": "for",
+   "start_s": 163.775,
+   "end_s": 163.912
+  },
+  {
+   "w": "short-term",
+   "start_s": 163.912,
+   "end_s": 164.275
+  },
+  {
+   "w": "cash",
+   "start_s": 164.275,
+   "end_s": 164.575
+  },
+  {
+   "w": "to",
+   "start_s": 164.575,
+   "end_s": 164.688
+  },
+  {
+   "w": "settle.",
+   "start_s": 164.688,
+   "end_s": 165.375
+  },
+  {
+   "w": "Its",
+   "start_s": 165.975,
+   "end_s": 166.125
+  },
+  {
+   "w": "balance",
+   "start_s": 166.125,
+   "end_s": 166.45
+  },
+  {
+   "w": "tells",
+   "start_s": 166.45,
+   "end_s": 166.688
+  },
+  {
+   "w": "you",
+   "start_s": 166.688,
+   "end_s": 166.787
+  },
+  {
+   "w": "where",
+   "start_s": 166.787,
+   "end_s": 166.912
+  },
+  {
+   "w": "that",
+   "start_s": 166.912,
+   "end_s": 167.075
+  },
+  {
+   "w": "cash",
+   "start_s": 167.075,
+   "end_s": 167.362
+  },
+  {
+   "w": "is",
+   "start_s": 167.362,
+   "end_s": 167.45
+  },
+  {
+   "w": "sitting",
+   "start_s": 167.45,
+   "end_s": 167.675
+  },
+  {
+   "w": "today.",
+   "start_s": 167.675,
+   "end_s": 168.375
+  },
+  {
+   "w": "At",
+   "start_s": 168.975,
+   "end_s": 169.088
+  },
+  {
+   "w": "the",
+   "start_s": 169.088,
+   "end_s": 169.175
+  },
+  {
+   "w": "end",
+   "start_s": 169.175,
+   "end_s": 169.338
+  },
+  {
+   "w": "of",
+   "start_s": 169.338,
+   "end_s": 169.425
+  },
+  {
+   "w": "twenty",
+   "start_s": 169.425,
+   "end_s": 169.675
+  },
+  {
+   "w": "twenty-two,",
+   "start_s": 169.675,
+   "end_s": 170.475
+  },
+  {
+   "w": "that",
+   "start_s": 170.475,
+   "end_s": 170.65
+  },
+  {
+   "w": "balance",
+   "start_s": 170.65,
+   "end_s": 171.05
+  },
+  {
+   "w": "briefly",
+   "start_s": 171.05,
+   "end_s": 171.4
+  },
+  {
+   "w": "reached",
+   "start_s": 171.4,
+   "end_s": 171.662
+  },
+  {
+   "w": "about",
+   "start_s": 171.662,
+   "end_s": 171.862
+  },
+  {
+   "w": "two",
+   "start_s": 171.862,
+   "end_s": 172.088
+  },
+  {
+   "w": "and",
+   "start_s": 172.088,
+   "end_s": 172.188
+  },
+  {
+   "w": "a",
+   "start_s": 172.188,
+   "end_s": 172.25
+  },
+  {
+   "w": "half",
+   "start_s": 172.25,
+   "end_s": 172.5
+  },
+  {
+   "w": "trillion",
+   "start_s": 172.5,
+   "end_s": 172.825
+  },
+  {
+   "w": "dollars.",
+   "start_s": 172.825,
+   "end_s": 173.625
+  },
+  {
+   "w": "Look",
+   "start_s": 174.25,
+   "end_s": 174.362
+  },
+  {
+   "w": "at",
+   "start_s": 174.362,
+   "end_s": 174.438
+  },
+  {
+   "w": "the",
+   "start_s": 174.438,
+   "end_s": 174.537
+  },
+  {
+   "w": "size",
+   "start_s": 174.537,
+   "end_s": 174.838
+  },
+  {
+   "w": "of",
+   "start_s": 174.838,
+   "end_s": 174.912
+  },
+  {
+   "w": "it",
+   "start_s": 174.912,
+   "end_s": 174.987
+  },
+  {
+   "w": "beside",
+   "start_s": 174.987,
+   "end_s": 175.4
+  },
+  {
+   "w": "today's",
+   "start_s": 175.4,
+   "end_s": 175.7
+  },
+  {
+   "w": "balance.",
+   "start_s": 175.7,
+   "end_s": 176.5
+  },
+  {
+   "w": "The",
+   "start_s": 177.1,
+   "end_s": 177.188
+  },
+  {
+   "w": "change",
+   "start_s": 177.188,
+   "end_s": 177.625
+  },
+  {
+   "w": "is",
+   "start_s": 177.625,
+   "end_s": 177.838
+  },
+  {
+   "w": "enormous.",
+   "start_s": 177.838,
+   "end_s": 178.75
+  },
+  {
+   "w": "But",
+   "start_s": 178.75,
+   "end_s": 178.9
+  },
+  {
+   "w": "following",
+   "start_s": 178.9,
+   "end_s": 179.213
+  },
+  {
+   "w": "the",
+   "start_s": 179.213,
+   "end_s": 179.287
+  },
+  {
+   "w": "money",
+   "start_s": 179.287,
+   "end_s": 179.5
+  },
+  {
+   "w": "out",
+   "start_s": 179.5,
+   "end_s": 179.637
+  },
+  {
+   "w": "of",
+   "start_s": 179.637,
+   "end_s": 179.713
+  },
+  {
+   "w": "the",
+   "start_s": 179.713,
+   "end_s": 179.787
+  },
+  {
+   "w": "account",
+   "start_s": 179.787,
+   "end_s": 180.125
+  },
+  {
+   "w": "matters",
+   "start_s": 180.125,
+   "end_s": 180.512
+  },
+  {
+   "w": "more",
+   "start_s": 180.512,
+   "end_s": 180.762
+  },
+  {
+   "w": "than",
+   "start_s": 180.762,
+   "end_s": 180.9
+  },
+  {
+   "w": "watching",
+   "start_s": 180.9,
+   "end_s": 181.188
+  },
+  {
+   "w": "the",
+   "start_s": 181.188,
+   "end_s": 181.262
+  },
+  {
+   "w": "number",
+   "start_s": 181.262,
+   "end_s": 181.487
+  },
+  {
+   "w": "fall.",
+   "start_s": 181.487,
+   "end_s": 182.2
+  },
+  {
+   "w": "It",
+   "start_s": 182.8,
+   "end_s": 182.912
+  },
+  {
+   "w": "was",
+   "start_s": 182.912,
+   "end_s": 183.025
+  },
+  {
+   "w": "being",
+   "start_s": 183.025,
+   "end_s": 183.312
+  },
+  {
+   "w": "moved",
+   "start_s": 183.312,
+   "end_s": 183.662
+  },
+  {
+   "w": "into",
+   "start_s": 183.662,
+   "end_s": 183.912
+  },
+  {
+   "w": "other",
+   "start_s": 183.912,
+   "end_s": 184.112
+  },
+  {
+   "w": "investments,",
+   "start_s": 184.112,
+   "end_s": 184.975
+  },
+  {
+   "w": "with",
+   "start_s": 184.975,
+   "end_s": 185.1
+  },
+  {
+   "w": "consequences",
+   "start_s": 185.1,
+   "end_s": 185.762
+  },
+  {
+   "w": "for",
+   "start_s": 185.762,
+   "end_s": 185.862
+  },
+  {
+   "w": "the",
+   "start_s": 185.862,
+   "end_s": 185.95
+  },
+  {
+   "w": "rest",
+   "start_s": 185.95,
+   "end_s": 186.187
+  },
+  {
+   "w": "of",
+   "start_s": 186.187,
+   "end_s": 186.262
+  },
+  {
+   "w": "the",
+   "start_s": 186.262,
+   "end_s": 186.35
+  },
+  {
+   "w": "system.",
+   "start_s": 186.35,
+   "end_s": 187.075
+  },
+  {
+   "w": "As",
+   "start_s": 187.7,
+   "end_s": 187.825
+  },
+  {
+   "w": "other",
+   "start_s": 187.825,
+   "end_s": 188.025
+  },
+  {
+   "w": "money-market",
+   "start_s": 188.025,
+   "end_s": 188.537
+  },
+  {
+   "w": "investments",
+   "start_s": 188.537,
+   "end_s": 189.037
+  },
+  {
+   "w": "became",
+   "start_s": 189.037,
+   "end_s": 189.325
+  },
+  {
+   "w": "more",
+   "start_s": 189.325,
+   "end_s": 189.487
+  },
+  {
+   "w": "attractive,",
+   "start_s": 189.487,
+   "end_s": 190.362
+  },
+  {
+   "w": "funds",
+   "start_s": 190.362,
+   "end_s": 190.687
+  },
+  {
+   "w": "shifted",
+   "start_s": 190.687,
+   "end_s": 191.0
+  },
+  {
+   "w": "toward",
+   "start_s": 191.0,
+   "end_s": 191.275
+  },
+  {
+   "w": "Treasury",
+   "start_s": 191.275,
+   "end_s": 191.65
+  },
+  {
+   "w": "bills",
+   "start_s": 191.65,
+   "end_s": 192.075
+  },
+  {
+   "w": "and",
+   "start_s": 192.075,
+   "end_s": 192.2
+  },
+  {
+   "w": "private",
+   "start_s": 192.2,
+   "end_s": 192.525
+  },
+  {
+   "w": "repo",
+   "start_s": 192.525,
+   "end_s": 192.875
+  },
+  {
+   "w": "lending.",
+   "start_s": 192.875,
+   "end_s": 193.575
+  },
+  {
+   "w": "That",
+   "start_s": 194.175,
+   "end_s": 194.325
+  },
+  {
+   "w": "reallocation",
+   "start_s": 194.325,
+   "end_s": 195.05
+  },
+  {
+   "w": "helped",
+   "start_s": 195.05,
+   "end_s": 195.237
+  },
+  {
+   "w": "the",
+   "start_s": 195.237,
+   "end_s": 195.325
+  },
+  {
+   "w": "system",
+   "start_s": 195.325,
+   "end_s": 195.725
+  },
+  {
+   "w": "absorb",
+   "start_s": 195.725,
+   "end_s": 196.187
+  },
+  {
+   "w": "changes",
+   "start_s": 196.187,
+   "end_s": 196.6
+  },
+  {
+   "w": "elsewhere",
+   "start_s": 196.6,
+   "end_s": 197.012
+  },
+  {
+   "w": "on",
+   "start_s": 197.012,
+   "end_s": 197.112
+  },
+  {
+   "w": "the",
+   "start_s": 197.112,
+   "end_s": 197.212
+  },
+  {
+   "w": "Fed's",
+   "start_s": 197.212,
+   "end_s": 197.45
+  },
+  {
+   "w": "balance",
+   "start_s": 197.45,
+   "end_s": 197.787
+  },
+  {
+   "w": "sheet.",
+   "start_s": 197.787,
+   "end_s": 198.4
+  },
+  {
+   "w": "It",
+   "start_s": 199.0,
+   "end_s": 199.087
+  },
+  {
+   "w": "also",
+   "start_s": 199.087,
+   "end_s": 199.325
+  },
+  {
+   "w": "explains",
+   "start_s": 199.325,
+   "end_s": 199.85
+  },
+  {
+   "w": "why",
+   "start_s": 199.85,
+   "end_s": 200.025
+  },
+  {
+   "w": "a",
+   "start_s": 200.025,
+   "end_s": 200.112
+  },
+  {
+   "w": "falling",
+   "start_s": 200.112,
+   "end_s": 200.487
+  },
+  {
+   "w": "Fed",
+   "start_s": 200.487,
+   "end_s": 200.675
+  },
+  {
+   "w": "balance",
+   "start_s": 200.675,
+   "end_s": 200.95
+  },
+  {
+   "w": "sheet",
+   "start_s": 200.95,
+   "end_s": 201.462
+  },
+  {
+   "w": "did",
+   "start_s": 201.462,
+   "end_s": 201.612
+  },
+  {
+   "w": "not",
+   "start_s": 201.612,
+   "end_s": 201.8
+  },
+  {
+   "w": "automatically",
+   "start_s": 201.8,
+   "end_s": 202.375
+  },
+  {
+   "w": "mean",
+   "start_s": 202.375,
+   "end_s": 202.65
+  },
+  {
+   "w": "bank",
+   "start_s": 202.65,
+   "end_s": 202.837
+  },
+  {
+   "w": "reserves",
+   "start_s": 202.837,
+   "end_s": 203.237
+  },
+  {
+   "w": "were",
+   "start_s": 203.237,
+   "end_s": 203.362
+  },
+  {
+   "w": "falling",
+   "start_s": 203.362,
+   "end_s": 203.75
+  },
+  {
+   "w": "just",
+   "start_s": 203.75,
+   "end_s": 203.937
+  },
+  {
+   "w": "as",
+   "start_s": 203.937,
+   "end_s": 204.05
+  },
+  {
+   "w": "fast.",
+   "start_s": 204.05,
+   "end_s": 204.825
+  },
+  {
+   "w": "There",
+   "start_s": 205.425,
+   "end_s": 205.537
+  },
+  {
+   "w": "was",
+   "start_s": 205.537,
+   "end_s": 205.637
+  },
+  {
+   "w": "another",
+   "start_s": 205.637,
+   "end_s": 205.9
+  },
+  {
+   "w": "balance",
+   "start_s": 205.9,
+   "end_s": 206.325
+  },
+  {
+   "w": "available",
+   "start_s": 206.325,
+   "end_s": 206.712
+  },
+  {
+   "w": "to",
+   "start_s": 206.712,
+   "end_s": 206.8
+  },
+  {
+   "w": "shrink",
+   "start_s": 206.8,
+   "end_s": 207.025
+  },
+  {
+   "w": "first.",
+   "start_s": 207.025,
+   "end_s": 207.7
+  },
+  {
+   "w": "Here's",
+   "start_s": 208.3,
+   "end_s": 208.562
+  },
+  {
+   "w": "a",
+   "start_s": 208.562,
+   "end_s": 208.637
+  },
+  {
+   "w": "simplified",
+   "start_s": 208.637,
+   "end_s": 209.062
+  },
+  {
+   "w": "example.",
+   "start_s": 209.062,
+   "end_s": 209.85
+  },
+  {
+   "w": "The",
+   "start_s": 210.45,
+   "end_s": 210.525
+  },
+  {
+   "w": "Fed's",
+   "start_s": 210.525,
+   "end_s": 210.725
+  },
+  {
+   "w": "assets",
+   "start_s": 210.725,
+   "end_s": 211.075
+  },
+  {
+   "w": "fall",
+   "start_s": 211.075,
+   "end_s": 211.287
+  },
+  {
+   "w": "by",
+   "start_s": 211.287,
+   "end_s": 211.387
+  },
+  {
+   "w": "a",
+   "start_s": 211.387,
+   "end_s": 211.45
+  },
+  {
+   "w": "hundred",
+   "start_s": 211.45,
+   "end_s": 211.725
+  },
+  {
+   "w": "billion",
+   "start_s": 211.725,
+   "end_s": 212.0
+  },
+  {
+   "w": "dollars.",
+   "start_s": 212.0,
+   "end_s": 212.8
+  },
+  {
+   "w": "Over",
+   "start_s": 213.4,
+   "end_s": 213.587
+  },
+  {
+   "w": "the",
+   "start_s": 213.587,
+   "end_s": 213.675
+  },
+  {
+   "w": "same",
+   "start_s": 213.675,
+   "end_s": 213.925
+  },
+  {
+   "w": "interval,",
+   "start_s": 213.925,
+   "end_s": 214.55
+  },
+  {
+   "w": "overnight",
+   "start_s": 214.55,
+   "end_s": 214.95
+  },
+  {
+   "w": "reverse",
+   "start_s": 214.95,
+   "end_s": 215.275
+  },
+  {
+   "w": "repo",
+   "start_s": 215.275,
+   "end_s": 215.662
+  },
+  {
+   "w": "falls",
+   "start_s": 215.662,
+   "end_s": 215.962
+  },
+  {
+   "w": "by",
+   "start_s": 215.962,
+   "end_s": 216.062
+  },
+  {
+   "w": "a",
+   "start_s": 216.062,
+   "end_s": 216.125
+  },
+  {
+   "w": "hundred",
+   "start_s": 216.125,
+   "end_s": 216.437
+  },
+  {
+   "w": "billion",
+   "start_s": 216.437,
+   "end_s": 216.837
+  },
+  {
+   "w": "too.",
+   "start_s": 216.837,
+   "end_s": 217.5
+  },
+  {
+   "w": "Hold",
+   "start_s": 217.5,
+   "end_s": 217.725
+  },
+  {
+   "w": "every",
+   "start_s": 217.725,
+   "end_s": 217.95
+  },
+  {
+   "w": "other",
+   "start_s": 217.95,
+   "end_s": 218.125
+  },
+  {
+   "w": "balance",
+   "start_s": 218.125,
+   "end_s": 218.525
+  },
+  {
+   "w": "fixed.",
+   "start_s": 218.525,
+   "end_s": 219.2
+  },
+  {
+   "w": "Bank",
+   "start_s": 219.825,
+   "end_s": 220.012
+  },
+  {
+   "w": "reserves",
+   "start_s": 220.012,
+   "end_s": 220.387
+  },
+  {
+   "w": "can",
+   "start_s": 220.387,
+   "end_s": 220.5
+  },
+  {
+   "w": "stay",
+   "start_s": 220.5,
+   "end_s": 220.725
+  },
+  {
+   "w": "where",
+   "start_s": 220.725,
+   "end_s": 220.862
+  },
+  {
+   "w": "they",
+   "start_s": 220.862,
+   "end_s": 221.0
+  },
+  {
+   "w": "were.",
+   "start_s": 221.0,
+   "end_s": 221.6
+  },
+  {
+   "w": "The",
+   "start_s": 222.2,
+   "end_s": 222.275
+  },
+  {
+   "w": "popular",
+   "start_s": 222.275,
+   "end_s": 222.637
+  },
+  {
+   "w": "net-liquidity",
+   "start_s": 222.637,
+   "end_s": 223.137
+  },
+  {
+   "w": "formula",
+   "start_s": 223.137,
+   "end_s": 223.55
+  },
+  {
+   "w": "stays",
+   "start_s": 223.55,
+   "end_s": 223.95
+  },
+  {
+   "w": "unchanged",
+   "start_s": 223.95,
+   "end_s": 224.55
+  },
+  {
+   "w": "as",
+   "start_s": 224.55,
+   "end_s": 224.675
+  },
+  {
+   "w": "well:",
+   "start_s": 224.675,
+   "end_s": 225.337
+  },
+  {
+   "w": "one",
+   "start_s": 225.337,
+   "end_s": 225.575
+  },
+  {
+   "w": "subtraction",
+   "start_s": 225.575,
+   "end_s": 226.075
+  },
+  {
+   "w": "offsets",
+   "start_s": 226.075,
+   "end_s": 226.412
+  },
+  {
+   "w": "the",
+   "start_s": 226.412,
+   "end_s": 226.5
+  },
+  {
+   "w": "other.",
+   "start_s": 226.5,
+   "end_s": 227.125
+  },
+  {
+   "w": "You",
+   "start_s": 227.725,
+   "end_s": 227.812
+  },
+  {
+   "w": "can",
+   "start_s": 227.812,
+   "end_s": 227.925
+  },
+  {
+   "w": "see",
+   "start_s": 227.925,
+   "end_s": 228.075
+  },
+  {
+   "w": "why",
+   "start_s": 228.075,
+   "end_s": 228.25
+  },
+  {
+   "w": "watching",
+   "start_s": 228.25,
+   "end_s": 228.55
+  },
+  {
+   "w": "only",
+   "start_s": 228.55,
+   "end_s": 228.887
+  },
+  {
+   "w": "the",
+   "start_s": 228.887,
+   "end_s": 228.987
+  },
+  {
+   "w": "Fed's",
+   "start_s": 228.987,
+   "end_s": 229.25
+  },
+  {
+   "w": "total",
+   "start_s": 229.25,
+   "end_s": 229.537
+  },
+  {
+   "w": "assets",
+   "start_s": 229.537,
+   "end_s": 229.925
+  },
+  {
+   "w": "misses",
+   "start_s": 229.925,
+   "end_s": 230.188
+  },
+  {
+   "w": "the",
+   "start_s": 230.188,
+   "end_s": 230.275
+  },
+  {
+   "w": "story.",
+   "start_s": 230.275,
+   "end_s": 231.05
+  },
+  {
+   "w": "Can",
+   "start_s": 231.625,
+   "end_s": 231.738
+  },
+  {
+   "w": "that",
+   "start_s": 231.738,
+   "end_s": 231.9
+  },
+  {
+   "w": "offset",
+   "start_s": 231.9,
+   "end_s": 232.3
+  },
+  {
+   "w": "last",
+   "start_s": 232.3,
+   "end_s": 232.575
+  },
+  {
+   "w": "through",
+   "start_s": 232.575,
+   "end_s": 232.725
+  },
+  {
+   "w": "trillions",
+   "start_s": 232.725,
+   "end_s": 233.138
+  },
+  {
+   "w": "in",
+   "start_s": 233.138,
+   "end_s": 233.225
+  },
+  {
+   "w": "runoff?",
+   "start_s": 233.225,
+   "end_s": 233.925
+  },
+  {
+   "w": "The",
+   "start_s": 233.925,
+   "end_s": 234.037
+  },
+  {
+   "w": "Fed's",
+   "start_s": 234.037,
+   "end_s": 234.3
+  },
+  {
+   "w": "record",
+   "start_s": 234.3,
+   "end_s": 234.65
+  },
+  {
+   "w": "gives",
+   "start_s": 234.65,
+   "end_s": 234.812
+  },
+  {
+   "w": "us",
+   "start_s": 234.812,
+   "end_s": 234.938
+  },
+  {
+   "w": "a",
+   "start_s": 234.938,
+   "end_s": 235.0
+  },
+  {
+   "w": "real",
+   "start_s": 235.0,
+   "end_s": 235.2
+  },
+  {
+   "w": "test.",
+   "start_s": 235.2,
+   "end_s": 235.925
+  },
+  {
+   "w": "By",
+   "start_s": 236.525,
+   "end_s": 236.688
+  },
+  {
+   "w": "June",
+   "start_s": 236.688,
+   "end_s": 236.95
+  },
+  {
+   "w": "twenty",
+   "start_s": 236.95,
+   "end_s": 237.2
+  },
+  {
+   "w": "twenty-five,",
+   "start_s": 237.2,
+   "end_s": 238.1
+  },
+  {
+   "w": "the",
+   "start_s": 238.1,
+   "end_s": 238.213
+  },
+  {
+   "w": "Fed",
+   "start_s": 238.213,
+   "end_s": 238.412
+  },
+  {
+   "w": "reported",
+   "start_s": 238.412,
+   "end_s": 238.812
+  },
+  {
+   "w": "that",
+   "start_s": 238.812,
+   "end_s": 238.912
+  },
+  {
+   "w": "its",
+   "start_s": 238.912,
+   "end_s": 239.062
+  },
+  {
+   "w": "assets",
+   "start_s": 239.062,
+   "end_s": 239.412
+  },
+  {
+   "w": "had",
+   "start_s": 239.412,
+   "end_s": 239.525
+  },
+  {
+   "w": "fallen",
+   "start_s": 239.525,
+   "end_s": 239.812
+  },
+  {
+   "w": "about",
+   "start_s": 239.812,
+   "end_s": 240.037
+  },
+  {
+   "w": "two",
+   "start_s": 240.037,
+   "end_s": 240.225
+  },
+  {
+   "w": "point",
+   "start_s": 240.225,
+   "end_s": 240.463
+  },
+  {
+   "w": "two",
+   "start_s": 240.463,
+   "end_s": 240.688
+  },
+  {
+   "w": "trillion",
+   "start_s": 240.688,
+   "end_s": 241.025
+  },
+  {
+   "w": "dollars",
+   "start_s": 241.025,
+   "end_s": 241.5
+  },
+  {
+   "w": "since",
+   "start_s": 241.5,
+   "end_s": 241.725
+  },
+  {
+   "w": "runoff",
+   "start_s": 241.725,
+   "end_s": 242.013
+  },
+  {
+   "w": "began.",
+   "start_s": 242.013,
+   "end_s": 242.75
+  },
+  {
+   "w": "Yet",
+   "start_s": 243.375,
+   "end_s": 243.5
+  },
+  {
+   "w": "bank",
+   "start_s": 243.5,
+   "end_s": 243.688
+  },
+  {
+   "w": "reserves",
+   "start_s": 243.688,
+   "end_s": 244.037
+  },
+  {
+   "w": "were",
+   "start_s": 244.037,
+   "end_s": 244.15
+  },
+  {
+   "w": "slightly",
+   "start_s": 244.15,
+   "end_s": 244.525
+  },
+  {
+   "w": "higher.",
+   "start_s": 244.525,
+   "end_s": 245.2
+  },
+  {
+   "w": "Other",
+   "start_s": 245.825,
+   "end_s": 246.0
+  },
+  {
+   "w": "reverse",
+   "start_s": 246.0,
+   "end_s": 246.325
+  },
+  {
+   "w": "repos",
+   "start_s": 246.325,
+   "end_s": 247.025
+  },
+  {
+   "w": "and",
+   "start_s": 247.025,
+   "end_s": 247.137
+  },
+  {
+   "w": "the",
+   "start_s": 247.137,
+   "end_s": 247.225
+  },
+  {
+   "w": "Treasury",
+   "start_s": 247.225,
+   "end_s": 247.587
+  },
+  {
+   "w": "account",
+   "start_s": 247.587,
+   "end_s": 247.912
+  },
+  {
+   "w": "had",
+   "start_s": 247.912,
+   "end_s": 248.05
+  },
+  {
+   "w": "both",
+   "start_s": 248.05,
+   "end_s": 248.287
+  },
+  {
+   "w": "fallen",
+   "start_s": 248.287,
+   "end_s": 248.6
+  },
+  {
+   "w": "over",
+   "start_s": 248.6,
+   "end_s": 248.787
+  },
+  {
+   "w": "that",
+   "start_s": 248.787,
+   "end_s": 248.95
+  },
+  {
+   "w": "period,",
+   "start_s": 248.95,
+   "end_s": 249.675
+  },
+  {
+   "w": "helping",
+   "start_s": 249.675,
+   "end_s": 249.987
+  },
+  {
+   "w": "offset",
+   "start_s": 249.987,
+   "end_s": 250.337
+  },
+  {
+   "w": "the",
+   "start_s": 250.337,
+   "end_s": 250.425
+  },
+  {
+   "w": "drain",
+   "start_s": 250.425,
+   "end_s": 250.787
+  },
+  {
+   "w": "on",
+   "start_s": 250.787,
+   "end_s": 250.912
+  },
+  {
+   "w": "reserves.",
+   "start_s": 250.912,
+   "end_s": 251.8
+  },
+  {
+   "w": "The",
+   "start_s": 252.4,
+   "end_s": 252.462
+  },
+  {
+   "w": "balance",
+   "start_s": 252.462,
+   "end_s": 252.75
+  },
+  {
+   "w": "sheet",
+   "start_s": 252.75,
+   "end_s": 252.975
+  },
+  {
+   "w": "shrank.",
+   "start_s": 252.975,
+   "end_s": 253.5
+  },
+  {
+   "w": "The",
+   "start_s": 253.5,
+   "end_s": 253.587
+  },
+  {
+   "w": "banks'",
+   "start_s": 253.587,
+   "end_s": 253.8
+  },
+  {
+   "w": "cushion",
+   "start_s": 253.8,
+   "end_s": 254.05
+  },
+  {
+   "w": "held.",
+   "start_s": 254.05,
+   "end_s": 254.725
+  },
+  {
+   "w": "But",
+   "start_s": 255.3,
+   "end_s": 255.412
+  },
+  {
+   "w": "a",
+   "start_s": 255.412,
+   "end_s": 255.475
+  },
+  {
+   "w": "balance",
+   "start_s": 255.475,
+   "end_s": 255.862
+  },
+  {
+   "w": "that",
+   "start_s": 255.862,
+   "end_s": 255.962
+  },
+  {
+   "w": "has",
+   "start_s": 255.962,
+   "end_s": 256.162
+  },
+  {
+   "w": "already",
+   "start_s": 256.162,
+   "end_s": 256.537
+  },
+  {
+   "w": "fallen",
+   "start_s": 256.537,
+   "end_s": 256.825
+  },
+  {
+   "w": "close",
+   "start_s": 256.825,
+   "end_s": 257.1
+  },
+  {
+   "w": "to",
+   "start_s": 257.1,
+   "end_s": 257.2
+  },
+  {
+   "w": "zero",
+   "start_s": 257.2,
+   "end_s": 257.762
+  },
+  {
+   "w": "has",
+   "start_s": 257.762,
+   "end_s": 257.95
+  },
+  {
+   "w": "little",
+   "start_s": 257.95,
+   "end_s": 258.15
+  },
+  {
+   "w": "room",
+   "start_s": 258.15,
+   "end_s": 258.337
+  },
+  {
+   "w": "to",
+   "start_s": 258.337,
+   "end_s": 258.425
+  },
+  {
+   "w": "fall",
+   "start_s": 258.425,
+   "end_s": 258.637
+  },
+  {
+   "w": "again.",
+   "start_s": 258.637,
+   "end_s": 259.35
+  },
+  {
+   "w": "There",
+   "start_s": 259.95,
+   "end_s": 260.062
+  },
+  {
+   "w": "is",
+   "start_s": 260.062,
+   "end_s": 260.15
+  },
+  {
+   "w": "less",
+   "start_s": 260.15,
+   "end_s": 260.35
+  },
+  {
+   "w": "capacity",
+   "start_s": 260.35,
+   "end_s": 260.875
+  },
+  {
+   "w": "to",
+   "start_s": 260.875,
+   "end_s": 261.0
+  },
+  {
+   "w": "absorb",
+   "start_s": 261.0,
+   "end_s": 261.45
+  },
+  {
+   "w": "another",
+   "start_s": 261.45,
+   "end_s": 261.7
+  },
+  {
+   "w": "adjustment",
+   "start_s": 261.7,
+   "end_s": 262.2
+  },
+  {
+   "w": "through",
+   "start_s": 262.2,
+   "end_s": 262.312
+  },
+  {
+   "w": "that",
+   "start_s": 262.312,
+   "end_s": 262.462
+  },
+  {
+   "w": "account.",
+   "start_s": 262.462,
+   "end_s": 263.175
+  },
+  {
+   "w": "A",
+   "start_s": 263.8,
+   "end_s": 263.875
+  },
+  {
+   "w": "subtraction",
+   "start_s": 263.875,
+   "end_s": 264.35
+  },
+  {
+   "w": "formula",
+   "start_s": 264.35,
+   "end_s": 264.825
+  },
+  {
+   "w": "can",
+   "start_s": 264.825,
+   "end_s": 264.95
+  },
+  {
+   "w": "track",
+   "start_s": 264.95,
+   "end_s": 265.25
+  },
+  {
+   "w": "balances.",
+   "start_s": 265.25,
+   "end_s": 266.15
+  },
+  {
+   "w": "It",
+   "start_s": 266.15,
+   "end_s": 266.262
+  },
+  {
+   "w": "cannot",
+   "start_s": 266.262,
+   "end_s": 266.5
+  },
+  {
+   "w": "tell",
+   "start_s": 266.5,
+   "end_s": 266.75
+  },
+  {
+   "w": "you",
+   "start_s": 266.75,
+   "end_s": 266.9
+  },
+  {
+   "w": "whether",
+   "start_s": 266.9,
+   "end_s": 267.087
+  },
+  {
+   "w": "the",
+   "start_s": 267.087,
+   "end_s": 267.175
+  },
+  {
+   "w": "next",
+   "start_s": 267.175,
+   "end_s": 267.45
+  },
+  {
+   "w": "borrower",
+   "start_s": 267.45,
+   "end_s": 267.787
+  },
+  {
+   "w": "can",
+   "start_s": 267.787,
+   "end_s": 267.887
+  },
+  {
+   "w": "obtain",
+   "start_s": 267.887,
+   "end_s": 268.237
+  },
+  {
+   "w": "funding",
+   "start_s": 268.237,
+   "end_s": 268.688
+  },
+  {
+   "w": "at",
+   "start_s": 268.688,
+   "end_s": 268.787
+  },
+  {
+   "w": "a",
+   "start_s": 268.787,
+   "end_s": 268.85
+  },
+  {
+   "w": "workable",
+   "start_s": 268.85,
+   "end_s": 269.175
+  },
+  {
+   "w": "price.",
+   "start_s": 269.175,
+   "end_s": 269.925
+  },
+  {
+   "w": "The",
+   "start_s": 270.525,
+   "end_s": 270.6
+  },
+  {
+   "w": "quantity",
+   "start_s": 270.6,
+   "end_s": 271.025
+  },
+  {
+   "w": "leads",
+   "start_s": 271.025,
+   "end_s": 271.237
+  },
+  {
+   "w": "us",
+   "start_s": 271.237,
+   "end_s": 271.375
+  },
+  {
+   "w": "to",
+   "start_s": 271.375,
+   "end_s": 271.462
+  },
+  {
+   "w": "the",
+   "start_s": 271.462,
+   "end_s": 271.55
+  },
+  {
+   "w": "question.",
+   "start_s": 271.55,
+   "end_s": 272.325
+  },
+  {
+   "w": "The",
+   "start_s": 272.325,
+   "end_s": 272.425
+  },
+  {
+   "w": "price",
+   "start_s": 272.425,
+   "end_s": 272.75
+  },
+  {
+   "w": "gives",
+   "start_s": 272.75,
+   "end_s": 272.912
+  },
+  {
+   "w": "us",
+   "start_s": 272.912,
+   "end_s": 273.125
+  },
+  {
+   "w": "another",
+   "start_s": 273.125,
+   "end_s": 273.425
+  },
+  {
+   "w": "part",
+   "start_s": 273.425,
+   "end_s": 273.612
+  },
+  {
+   "w": "of",
+   "start_s": 273.612,
+   "end_s": 273.688
+  },
+  {
+   "w": "the",
+   "start_s": 273.688,
+   "end_s": 273.775
+  },
+  {
+   "w": "answer.",
+   "start_s": 273.775,
+   "end_s": 274.525
+  },
+  {
+   "w": "Picture",
+   "start_s": 275.1,
+   "end_s": 275.35
+  },
+  {
+   "w": "a",
+   "start_s": 275.35,
+   "end_s": 275.438
+  },
+  {
+   "w": "dealer",
+   "start_s": 275.438,
+   "end_s": 275.9
+  },
+  {
+   "w": "holding",
+   "start_s": 275.9,
+   "end_s": 276.2
+  },
+  {
+   "w": "Treasury",
+   "start_s": 276.2,
+   "end_s": 276.55
+  },
+  {
+   "w": "securities.",
+   "start_s": 276.55,
+   "end_s": 277.475
+  },
+  {
+   "w": "The",
+   "start_s": 278.075,
+   "end_s": 278.15
+  },
+  {
+   "w": "dealer",
+   "start_s": 278.15,
+   "end_s": 278.45
+  },
+  {
+   "w": "needs",
+   "start_s": 278.45,
+   "end_s": 278.7
+  },
+  {
+   "w": "cash",
+   "start_s": 278.7,
+   "end_s": 278.988
+  },
+  {
+   "w": "to",
+   "start_s": 278.988,
+   "end_s": 279.075
+  },
+  {
+   "w": "finance",
+   "start_s": 279.075,
+   "end_s": 279.488
+  },
+  {
+   "w": "them.",
+   "start_s": 279.488,
+   "end_s": 280.075
+  },
+  {
+   "w": "A",
+   "start_s": 280.075,
+   "end_s": 280.15
+  },
+  {
+   "w": "money",
+   "start_s": 280.15,
+   "end_s": 280.375
+  },
+  {
+   "w": "market",
+   "start_s": 280.375,
+   "end_s": 280.675
+  },
+  {
+   "w": "fund",
+   "start_s": 280.675,
+   "end_s": 280.975
+  },
+  {
+   "w": "lends",
+   "start_s": 280.975,
+   "end_s": 281.188
+  },
+  {
+   "w": "that",
+   "start_s": 281.188,
+   "end_s": 281.325
+  },
+  {
+   "w": "cash",
+   "start_s": 281.325,
+   "end_s": 281.613
+  },
+  {
+   "w": "against",
+   "start_s": 281.613,
+   "end_s": 281.863
+  },
+  {
+   "w": "the",
+   "start_s": 281.863,
+   "end_s": 281.95
+  },
+  {
+   "w": "securities,",
+   "start_s": 281.95,
+   "end_s": 282.787
+  },
+  {
+   "w": "with",
+   "start_s": 282.787,
+   "end_s": 282.887
+  },
+  {
+   "w": "an",
+   "start_s": 282.887,
+   "end_s": 282.962
+  },
+  {
+   "w": "agreement",
+   "start_s": 282.962,
+   "end_s": 283.375
+  },
+  {
+   "w": "to",
+   "start_s": 283.375,
+   "end_s": 283.475
+  },
+  {
+   "w": "reverse",
+   "start_s": 283.475,
+   "end_s": 283.812
+  },
+  {
+   "w": "the",
+   "start_s": 283.812,
+   "end_s": 283.9
+  },
+  {
+   "w": "transaction.",
+   "start_s": 283.9,
+   "end_s": 284.925
+  },
+  {
+   "w": "That's",
+   "start_s": 285.55,
+   "end_s": 285.8
+  },
+  {
+   "w": "repo.",
+   "start_s": 285.8,
+   "end_s": 286.55
+  },
+  {
+   "w": "Now",
+   "start_s": 287.2,
+   "end_s": 287.337
+  },
+  {
+   "w": "more",
+   "start_s": 287.337,
+   "end_s": 287.475
+  },
+  {
+   "w": "securities",
+   "start_s": 287.475,
+   "end_s": 288.0
+  },
+  {
+   "w": "need",
+   "start_s": 288.0,
+   "end_s": 288.2
+  },
+  {
+   "w": "financing,",
+   "start_s": 288.2,
+   "end_s": 289.025
+  },
+  {
+   "w": "or",
+   "start_s": 289.025,
+   "end_s": 289.188
+  },
+  {
+   "w": "lenders",
+   "start_s": 289.188,
+   "end_s": 289.575
+  },
+  {
+   "w": "find",
+   "start_s": 289.575,
+   "end_s": 289.85
+  },
+  {
+   "w": "better",
+   "start_s": 289.85,
+   "end_s": 290.05
+  },
+  {
+   "w": "uses",
+   "start_s": 290.05,
+   "end_s": 290.337
+  },
+  {
+   "w": "for",
+   "start_s": 290.337,
+   "end_s": 290.438
+  },
+  {
+   "w": "their",
+   "start_s": 290.438,
+   "end_s": 290.55
+  },
+  {
+   "w": "cash.",
+   "start_s": 290.55,
+   "end_s": 291.312
+  },
+  {
+   "w": "Borrowers",
+   "start_s": 291.312,
+   "end_s": 291.762
+  },
+  {
+   "w": "compete",
+   "start_s": 291.762,
+   "end_s": 292.05
+  },
+  {
+   "w": "harder",
+   "start_s": 292.05,
+   "end_s": 292.287
+  },
+  {
+   "w": "for",
+   "start_s": 292.287,
+   "end_s": 292.4
+  },
+  {
+   "w": "funding.",
+   "start_s": 292.4,
+   "end_s": 293.125
+  },
+  {
+   "w": "The",
+   "start_s": 293.725,
+   "end_s": 293.8
+  },
+  {
+   "w": "rate",
+   "start_s": 293.8,
+   "end_s": 294.0
+  },
+  {
+   "w": "they",
+   "start_s": 294.0,
+   "end_s": 294.15
+  },
+  {
+   "w": "pay",
+   "start_s": 294.15,
+   "end_s": 294.45
+  },
+  {
+   "w": "can",
+   "start_s": 294.45,
+   "end_s": 294.575
+  },
+  {
+   "w": "rise",
+   "start_s": 294.575,
+   "end_s": 294.912
+  },
+  {
+   "w": "when",
+   "start_s": 294.912,
+   "end_s": 295.087
+  },
+  {
+   "w": "cash",
+   "start_s": 295.087,
+   "end_s": 295.412
+  },
+  {
+   "w": "is",
+   "start_s": 295.412,
+   "end_s": 295.487
+  },
+  {
+   "w": "available",
+   "start_s": 295.487,
+   "end_s": 295.9
+  },
+  {
+   "w": "elsewhere",
+   "start_s": 295.9,
+   "end_s": 296.587
+  },
+  {
+   "w": "but",
+   "start_s": 296.587,
+   "end_s": 296.737
+  },
+  {
+   "w": "isn't",
+   "start_s": 296.737,
+   "end_s": 296.95
+  },
+  {
+   "w": "reaching",
+   "start_s": 296.95,
+   "end_s": 297.262
+  },
+  {
+   "w": "this",
+   "start_s": 297.262,
+   "end_s": 297.425
+  },
+  {
+   "w": "market",
+   "start_s": 297.425,
+   "end_s": 297.687
+  },
+  {
+   "w": "on",
+   "start_s": 297.687,
+   "end_s": 297.787
+  },
+  {
+   "w": "the",
+   "start_s": 297.787,
+   "end_s": 297.875
+  },
+  {
+   "w": "same",
+   "start_s": 297.875,
+   "end_s": 298.125
+  },
+  {
+   "w": "terms.",
+   "start_s": 298.125,
+   "end_s": 298.9
+  },
+  {
+   "w": "There's",
+   "start_s": 299.5,
+   "end_s": 299.637
+  },
+  {
+   "w": "a",
+   "start_s": 299.637,
+   "end_s": 299.7
+  },
+  {
+   "w": "crucial",
+   "start_s": 299.7,
+   "end_s": 300.0
+  },
+  {
+   "w": "change",
+   "start_s": 300.0,
+   "end_s": 300.35
+  },
+  {
+   "w": "to",
+   "start_s": 300.35,
+   "end_s": 300.437
+  },
+  {
+   "w": "the",
+   "start_s": 300.437,
+   "end_s": 300.525
+  },
+  {
+   "w": "timeline",
+   "start_s": 300.525,
+   "end_s": 300.95
+  },
+  {
+   "w": "here.",
+   "start_s": 300.95,
+   "end_s": 301.55
+  },
+  {
+   "w": "The",
+   "start_s": 302.15,
+   "end_s": 302.237
+  },
+  {
+   "w": "Fed",
+   "start_s": 302.237,
+   "end_s": 302.5
+  },
+  {
+   "w": "ended",
+   "start_s": 302.5,
+   "end_s": 302.725
+  },
+  {
+   "w": "balance-sheet",
+   "start_s": 302.725,
+   "end_s": 303.225
+  },
+  {
+   "w": "runoff",
+   "start_s": 303.225,
+   "end_s": 303.575
+  },
+  {
+   "w": "in",
+   "start_s": 303.575,
+   "end_s": 303.662
+  },
+  {
+   "w": "December",
+   "start_s": 303.662,
+   "end_s": 304.0
+  },
+  {
+   "w": "twenty",
+   "start_s": 304.0,
+   "end_s": 304.25
+  },
+  {
+   "w": "twenty-five",
+   "start_s": 304.25,
+   "end_s": 305.137
+  },
+  {
+   "w": "and",
+   "start_s": 305.137,
+   "end_s": 305.262
+  },
+  {
+   "w": "began",
+   "start_s": 305.262,
+   "end_s": 305.55
+  },
+  {
+   "w": "buying",
+   "start_s": 305.55,
+   "end_s": 305.837
+  },
+  {
+   "w": "short-term",
+   "start_s": 305.837,
+   "end_s": 306.225
+  },
+  {
+   "w": "Treasuries",
+   "start_s": 306.225,
+   "end_s": 306.8
+  },
+  {
+   "w": "to",
+   "start_s": 306.8,
+   "end_s": 306.887
+  },
+  {
+   "w": "maintain",
+   "start_s": 306.887,
+   "end_s": 307.437
+  },
+  {
+   "w": "ample",
+   "start_s": 307.437,
+   "end_s": 307.712
+  },
+  {
+   "w": "reserves.",
+   "start_s": 307.712,
+   "end_s": 308.525
+  },
+  {
+   "w": "So",
+   "start_s": 309.15,
+   "end_s": 309.25
+  },
+  {
+   "w": "today's",
+   "start_s": 309.25,
+   "end_s": 309.55
+  },
+  {
+   "w": "story",
+   "start_s": 309.55,
+   "end_s": 309.862
+  },
+  {
+   "w": "has",
+   "start_s": 309.862,
+   "end_s": 309.987
+  },
+  {
+   "w": "to",
+   "start_s": 309.987,
+   "end_s": 310.062
+  },
+  {
+   "w": "include",
+   "start_s": 310.062,
+   "end_s": 310.362
+  },
+  {
+   "w": "those",
+   "start_s": 310.362,
+   "end_s": 310.525
+  },
+  {
+   "w": "purchases.",
+   "start_s": 310.525,
+   "end_s": 311.375
+  },
+  {
+   "w": "They",
+   "start_s": 311.975,
+   "end_s": 312.062
+  },
+  {
+   "w": "help",
+   "start_s": 312.062,
+   "end_s": 312.237
+  },
+  {
+   "w": "replenish",
+   "start_s": 312.237,
+   "end_s": 312.612
+  },
+  {
+   "w": "the",
+   "start_s": 312.612,
+   "end_s": 312.7
+  },
+  {
+   "w": "system",
+   "start_s": 312.7,
+   "end_s": 313.25
+  },
+  {
+   "w": "while",
+   "start_s": 313.25,
+   "end_s": 313.4
+  },
+  {
+   "w": "Treasury",
+   "start_s": 313.4,
+   "end_s": 313.75
+  },
+  {
+   "w": "cash",
+   "start_s": 313.75,
+   "end_s": 314.025
+  },
+  {
+   "w": "flows",
+   "start_s": 314.025,
+   "end_s": 314.412
+  },
+  {
+   "w": "and",
+   "start_s": 314.412,
+   "end_s": 314.525
+  },
+  {
+   "w": "financing",
+   "start_s": 314.525,
+   "end_s": 314.95
+  },
+  {
+   "w": "needs",
+   "start_s": 314.95,
+   "end_s": 315.387
+  },
+  {
+   "w": "keep",
+   "start_s": 315.387,
+   "end_s": 315.6
+  },
+  {
+   "w": "changing.",
+   "start_s": 315.6,
+   "end_s": 316.4
+  },
+  {
+   "w": "The",
+   "start_s": 317.0,
+   "end_s": 317.075
+  },
+  {
+   "w": "pressure",
+   "start_s": 317.075,
+   "end_s": 317.337
+  },
+  {
+   "w": "depends",
+   "start_s": 317.337,
+   "end_s": 317.662
+  },
+  {
+   "w": "on",
+   "start_s": 317.662,
+   "end_s": 317.775
+  },
+  {
+   "w": "how",
+   "start_s": 317.775,
+   "end_s": 317.912
+  },
+  {
+   "w": "those",
+   "start_s": 317.912,
+   "end_s": 318.1
+  },
+  {
+   "w": "forces",
+   "start_s": 318.1,
+   "end_s": 318.425
+  },
+  {
+   "w": "meet.",
+   "start_s": 318.425,
+   "end_s": 319.0
+  },
+  {
+   "w": "In",
+   "start_s": 319.625,
+   "end_s": 319.687
+  },
+  {
+   "w": "its",
+   "start_s": 319.687,
+   "end_s": 319.8
+  },
+  {
+   "w": "July",
+   "start_s": 319.8,
+   "end_s": 320.187
+  },
+  {
+   "w": "twenty",
+   "start_s": 320.187,
+   "end_s": 320.5
+  },
+  {
+   "w": "twenty-six",
+   "start_s": 320.5,
+   "end_s": 320.937
+  },
+  {
+   "w": "report,",
+   "start_s": 320.937,
+   "end_s": 321.625
+  },
+  {
+   "w": "the",
+   "start_s": 321.625,
+   "end_s": 321.737
+  },
+  {
+   "w": "Fed",
+   "start_s": 321.737,
+   "end_s": 322.0
+  },
+  {
+   "w": "put",
+   "start_s": 322.0,
+   "end_s": 322.15
+  },
+  {
+   "w": "bank",
+   "start_s": 322.15,
+   "end_s": 322.337
+  },
+  {
+   "w": "reserves",
+   "start_s": 322.337,
+   "end_s": 322.762
+  },
+  {
+   "w": "at",
+   "start_s": 322.762,
+   "end_s": 322.85
+  },
+  {
+   "w": "roughly",
+   "start_s": 322.85,
+   "end_s": 323.225
+  },
+  {
+   "w": "three",
+   "start_s": 323.225,
+   "end_s": 323.475
+  },
+  {
+   "w": "point",
+   "start_s": 323.475,
+   "end_s": 323.725
+  },
+  {
+   "w": "one",
+   "start_s": 323.725,
+   "end_s": 323.95
+  },
+  {
+   "w": "trillion",
+   "start_s": 323.95,
+   "end_s": 324.3
+  },
+  {
+   "w": "dollars",
+   "start_s": 324.3,
+   "end_s": 324.962
+  },
+  {
+   "w": "and",
+   "start_s": 324.962,
+   "end_s": 325.087
+  },
+  {
+   "w": "described",
+   "start_s": 325.087,
+   "end_s": 325.512
+  },
+  {
+   "w": "them",
+   "start_s": 325.512,
+   "end_s": 325.675
+  },
+  {
+   "w": "as",
+   "start_s": 325.675,
+   "end_s": 325.812
+  },
+  {
+   "w": "ample.",
+   "start_s": 325.812,
+   "end_s": 326.575
+  },
+  {
+   "w": "The",
+   "start_s": 327.175,
+   "end_s": 327.262
+  },
+  {
+   "w": "small",
+   "start_s": 327.262,
+   "end_s": 327.625
+  },
+  {
+   "w": "reverse-repo",
+   "start_s": 327.625,
+   "end_s": 328.175
+  },
+  {
+   "w": "balance",
+   "start_s": 328.175,
+   "end_s": 328.862
+  },
+  {
+   "w": "sits",
+   "start_s": 328.862,
+   "end_s": 329.062
+  },
+  {
+   "w": "beside",
+   "start_s": 329.062,
+   "end_s": 329.412
+  },
+  {
+   "w": "a",
+   "start_s": 329.412,
+   "end_s": 329.475
+  },
+  {
+   "w": "much",
+   "start_s": 329.475,
+   "end_s": 329.737
+  },
+  {
+   "w": "larger",
+   "start_s": 329.737,
+   "end_s": 329.987
+  },
+  {
+   "w": "banking",
+   "start_s": 329.987,
+   "end_s": 330.275
+  },
+  {
+   "w": "system.",
+   "start_s": 330.275,
+   "end_s": 330.975
+  },
+  {
+   "w": "A",
+   "start_s": 331.6,
+   "end_s": 331.675
+  },
+  {
+   "w": "near-empty",
+   "start_s": 331.675,
+   "end_s": 332.1
+  },
+  {
+   "w": "account",
+   "start_s": 332.1,
+   "end_s": 332.537
+  },
+  {
+   "w": "changes",
+   "start_s": 332.537,
+   "end_s": 332.912
+  },
+  {
+   "w": "the",
+   "start_s": 332.912,
+   "end_s": 333.0
+  },
+  {
+   "w": "system's",
+   "start_s": 333.0,
+   "end_s": 333.375
+  },
+  {
+   "w": "flexibility.",
+   "start_s": 333.375,
+   "end_s": 334.35
+  },
+  {
+   "w": "The",
+   "start_s": 334.35,
+   "end_s": 334.437
+  },
+  {
+   "w": "next",
+   "start_s": 334.437,
+   "end_s": 334.625
+  },
+  {
+   "w": "question",
+   "start_s": 334.625,
+   "end_s": 335.237
+  },
+  {
+   "w": "is",
+   "start_s": 335.237,
+   "end_s": 335.35
+  },
+  {
+   "w": "how",
+   "start_s": 335.35,
+   "end_s": 335.55
+  },
+  {
+   "w": "those",
+   "start_s": 335.55,
+   "end_s": 335.8
+  },
+  {
+   "w": "reserves",
+   "start_s": 335.8,
+   "end_s": 336.375
+  },
+  {
+   "w": "and",
+   "start_s": 336.375,
+   "end_s": 336.487
+  },
+  {
+   "w": "the",
+   "start_s": 336.487,
+   "end_s": 336.562
+  },
+  {
+   "w": "demand",
+   "start_s": 336.562,
+   "end_s": 336.937
+  },
+  {
+   "w": "for",
+   "start_s": 336.937,
+   "end_s": 337.05
+  },
+  {
+   "w": "financing",
+   "start_s": 337.05,
+   "end_s": 337.612
+  },
+  {
+   "w": "meet",
+   "start_s": 337.612,
+   "end_s": 337.9
+  },
+  {
+   "w": "in",
+   "start_s": 337.9,
+   "end_s": 337.987
+  },
+  {
+   "w": "the",
+   "start_s": 337.987,
+   "end_s": 338.075
+  },
+  {
+   "w": "overnight",
+   "start_s": 338.075,
+   "end_s": 338.437
+  },
+  {
+   "w": "market.",
+   "start_s": 338.437,
+   "end_s": 339.15
+  },
+  {
+   "w": "Treasury",
+   "start_s": 339.75,
+   "end_s": 340.125
+  },
+  {
+   "w": "financing",
+   "start_s": 340.125,
+   "end_s": 340.85
+  },
+  {
+   "w": "can",
+   "start_s": 340.85,
+   "end_s": 340.975
+  },
+  {
+   "w": "push",
+   "start_s": 340.975,
+   "end_s": 341.212
+  },
+  {
+   "w": "on",
+   "start_s": 341.212,
+   "end_s": 341.312
+  },
+  {
+   "w": "that",
+   "start_s": 341.312,
+   "end_s": 341.462
+  },
+  {
+   "w": "market",
+   "start_s": 341.462,
+   "end_s": 341.712
+  },
+  {
+   "w": "from",
+   "start_s": 341.712,
+   "end_s": 341.85
+  },
+  {
+   "w": "two",
+   "start_s": 341.85,
+   "end_s": 341.962
+  },
+  {
+   "w": "directions.",
+   "start_s": 341.962,
+   "end_s": 342.825
+  },
+  {
+   "w": "More",
+   "start_s": 343.45,
+   "end_s": 343.6
+  },
+  {
+   "w": "longer-term",
+   "start_s": 343.6,
+   "end_s": 344.025
+  },
+  {
+   "w": "securities",
+   "start_s": 344.025,
+   "end_s": 344.762
+  },
+  {
+   "w": "can",
+   "start_s": 344.762,
+   "end_s": 344.887
+  },
+  {
+   "w": "increase",
+   "start_s": 344.887,
+   "end_s": 345.25
+  },
+  {
+   "w": "dealers'",
+   "start_s": 345.25,
+   "end_s": 345.6
+  },
+  {
+   "w": "financing",
+   "start_s": 345.6,
+   "end_s": 346.012
+  },
+  {
+   "w": "needs.",
+   "start_s": 346.012,
+   "end_s": 346.725
+  },
+  {
+   "w": "More",
+   "start_s": 347.35,
+   "end_s": 347.5
+  },
+  {
+   "w": "Treasury",
+   "start_s": 347.5,
+   "end_s": 347.9
+  },
+  {
+   "w": "bills",
+   "start_s": 347.9,
+   "end_s": 348.2
+  },
+  {
+   "w": "can",
+   "start_s": 348.2,
+   "end_s": 348.312
+  },
+  {
+   "w": "attract",
+   "start_s": 348.312,
+   "end_s": 348.65
+  },
+  {
+   "w": "money",
+   "start_s": 348.65,
+   "end_s": 348.875
+  },
+  {
+   "w": "market",
+   "start_s": 348.875,
+   "end_s": 349.15
+  },
+  {
+   "w": "funds",
+   "start_s": 349.15,
+   "end_s": 349.737
+  },
+  {
+   "w": "that",
+   "start_s": 349.737,
+   "end_s": 349.887
+  },
+  {
+   "w": "might",
+   "start_s": 349.887,
+   "end_s": 350.05
+  },
+  {
+   "w": "otherwise",
+   "start_s": 350.05,
+   "end_s": 350.45
+  },
+  {
+   "w": "lend",
+   "start_s": 350.45,
+   "end_s": 350.675
+  },
+  {
+   "w": "through",
+   "start_s": 350.675,
+   "end_s": 350.85
+  },
+  {
+   "w": "repo.",
+   "start_s": 350.85,
+   "end_s": 351.65
+  },
+  {
+   "w": "Fed",
+   "start_s": 352.275,
+   "end_s": 352.412
+  },
+  {
+   "w": "researchers",
+   "start_s": 352.412,
+   "end_s": 352.837
+  },
+  {
+   "w": "describe",
+   "start_s": 352.837,
+   "end_s": 353.25
+  },
+  {
+   "w": "both",
+   "start_s": 353.25,
+   "end_s": 353.475
+  },
+  {
+   "w": "channels:",
+   "start_s": 353.475,
+   "end_s": 354.25
+  },
+  {
+   "w": "demand",
+   "start_s": 354.25,
+   "end_s": 354.612
+  },
+  {
+   "w": "for",
+   "start_s": 354.612,
+   "end_s": 354.725
+  },
+  {
+   "w": "financing",
+   "start_s": 354.725,
+   "end_s": 355.212
+  },
+  {
+   "w": "on",
+   "start_s": 355.212,
+   "end_s": 355.325
+  },
+  {
+   "w": "one",
+   "start_s": 355.325,
+   "end_s": 355.537
+  },
+  {
+   "w": "side,",
+   "start_s": 355.537,
+   "end_s": 356.125
+  },
+  {
+   "w": "competing",
+   "start_s": 356.125,
+   "end_s": 356.5
+  },
+  {
+   "w": "uses",
+   "start_s": 356.5,
+   "end_s": 356.787
+  },
+  {
+   "w": "for",
+   "start_s": 356.787,
+   "end_s": 356.9
+  },
+  {
+   "w": "cash",
+   "start_s": 356.9,
+   "end_s": 357.237
+  },
+  {
+   "w": "on",
+   "start_s": 357.237,
+   "end_s": 357.337
+  },
+  {
+   "w": "the",
+   "start_s": 357.337,
+   "end_s": 357.412
+  },
+  {
+   "w": "other.",
+   "start_s": 357.412,
+   "end_s": 358.025
+  },
+  {
+   "w": "The",
+   "start_s": 358.625,
+   "end_s": 358.712
+  },
+  {
+   "w": "same",
+   "start_s": 358.712,
+   "end_s": 359.0
+  },
+  {
+   "w": "total",
+   "start_s": 359.0,
+   "end_s": 359.237
+  },
+  {
+   "w": "balance",
+   "start_s": 359.237,
+   "end_s": 359.65
+  },
+  {
+   "w": "can",
+   "start_s": 359.65,
+   "end_s": 359.762
+  },
+  {
+   "w": "conceal",
+   "start_s": 359.762,
+   "end_s": 360.437
+  },
+  {
+   "w": "a",
+   "start_s": 360.437,
+   "end_s": 360.525
+  },
+  {
+   "w": "different",
+   "start_s": 360.525,
+   "end_s": 360.8
+  },
+  {
+   "w": "funding",
+   "start_s": 360.8,
+   "end_s": 361.075
+  },
+  {
+   "w": "problem.",
+   "start_s": 361.075,
+   "end_s": 361.875
+  },
+  {
+   "w": "Then",
+   "start_s": 362.5,
+   "end_s": 362.612
+  },
+  {
+   "w": "the",
+   "start_s": 362.612,
+   "end_s": 362.7
+  },
+  {
+   "w": "calendar",
+   "start_s": 362.7,
+   "end_s": 363.15
+  },
+  {
+   "w": "intervenes.",
+   "start_s": 363.15,
+   "end_s": 364.125
+  },
+  {
+   "w": "Tax",
+   "start_s": 364.725,
+   "end_s": 364.925
+  },
+  {
+   "w": "payments",
+   "start_s": 364.925,
+   "end_s": 365.212
+  },
+  {
+   "w": "arrive.",
+   "start_s": 365.212,
+   "end_s": 365.85
+  },
+  {
+   "w": "Debt",
+   "start_s": 365.85,
+   "end_s": 366.075
+  },
+  {
+   "w": "settles.",
+   "start_s": 366.075,
+   "end_s": 366.675
+  },
+  {
+   "w": "Government",
+   "start_s": 366.675,
+   "end_s": 367.0
+  },
+  {
+   "w": "spending",
+   "start_s": 367.0,
+   "end_s": 367.4
+  },
+  {
+   "w": "leaves",
+   "start_s": 367.4,
+   "end_s": 367.662
+  },
+  {
+   "w": "the",
+   "start_s": 367.662,
+   "end_s": 367.75
+  },
+  {
+   "w": "Treasury's",
+   "start_s": 367.75,
+   "end_s": 368.162
+  },
+  {
+   "w": "account.",
+   "start_s": 368.162,
+   "end_s": 368.925
+  },
+  {
+   "w": "Each",
+   "start_s": 369.525,
+   "end_s": 369.7
+  },
+  {
+   "w": "flow",
+   "start_s": 369.7,
+   "end_s": 369.9
+  },
+  {
+   "w": "changes",
+   "start_s": 369.9,
+   "end_s": 370.262
+  },
+  {
+   "w": "who",
+   "start_s": 370.262,
+   "end_s": 370.362
+  },
+  {
+   "w": "holds",
+   "start_s": 370.362,
+   "end_s": 370.537
+  },
+  {
+   "w": "the",
+   "start_s": 370.537,
+   "end_s": 370.625
+  },
+  {
+   "w": "cash",
+   "start_s": 370.625,
+   "end_s": 371.162
+  },
+  {
+   "w": "and",
+   "start_s": 371.162,
+   "end_s": 371.287
+  },
+  {
+   "w": "when",
+   "start_s": 371.287,
+   "end_s": 371.412
+  },
+  {
+   "w": "they",
+   "start_s": 371.412,
+   "end_s": 371.55
+  },
+  {
+   "w": "need",
+   "start_s": 371.55,
+   "end_s": 371.737
+  },
+  {
+   "w": "it.",
+   "start_s": 371.737,
+   "end_s": 372.2
+  },
+  {
+   "w": "Mark",
+   "start_s": 372.825,
+   "end_s": 372.962
+  },
+  {
+   "w": "the",
+   "start_s": 372.962,
+   "end_s": 373.05
+  },
+  {
+   "w": "payment",
+   "start_s": 373.05,
+   "end_s": 373.375
+  },
+  {
+   "w": "date,",
+   "start_s": 373.375,
+   "end_s": 373.737
+  },
+  {
+   "w": "the",
+   "start_s": 373.737,
+   "end_s": 373.825
+  },
+  {
+   "w": "settlement",
+   "start_s": 373.825,
+   "end_s": 374.125
+  },
+  {
+   "w": "date,",
+   "start_s": 374.125,
+   "end_s": 374.437
+  },
+  {
+   "w": "and",
+   "start_s": 374.437,
+   "end_s": 374.537
+  },
+  {
+   "w": "the",
+   "start_s": 374.537,
+   "end_s": 374.625
+  },
+  {
+   "w": "days",
+   "start_s": 374.625,
+   "end_s": 374.912
+  },
+  {
+   "w": "that",
+   "start_s": 374.912,
+   "end_s": 375.025
+  },
+  {
+   "w": "follow.",
+   "start_s": 375.025,
+   "end_s": 375.775
+  },
+  {
+   "w": "Put",
+   "start_s": 376.35,
+   "end_s": 376.475
+  },
+  {
+   "w": "those",
+   "start_s": 376.475,
+   "end_s": 376.7
+  },
+  {
+   "w": "dates",
+   "start_s": 376.7,
+   "end_s": 376.962
+  },
+  {
+   "w": "beside",
+   "start_s": 376.962,
+   "end_s": 377.312
+  },
+  {
+   "w": "the",
+   "start_s": 377.312,
+   "end_s": 377.4
+  },
+  {
+   "w": "funding",
+   "start_s": 377.4,
+   "end_s": 377.675
+  },
+  {
+   "w": "rates,",
+   "start_s": 377.675,
+   "end_s": 378.25
+  },
+  {
+   "w": "and",
+   "start_s": 378.25,
+   "end_s": 378.362
+  },
+  {
+   "w": "you",
+   "start_s": 378.362,
+   "end_s": 378.437
+  },
+  {
+   "w": "can",
+   "start_s": 378.437,
+   "end_s": 378.55
+  },
+  {
+   "w": "start",
+   "start_s": 378.55,
+   "end_s": 378.775
+  },
+  {
+   "w": "testing",
+   "start_s": 378.775,
+   "end_s": 379.112
+  },
+  {
+   "w": "the",
+   "start_s": 379.112,
+   "end_s": 379.2
+  },
+  {
+   "w": "story",
+   "start_s": 379.2,
+   "end_s": 379.6
+  },
+  {
+   "w": "instead",
+   "start_s": 379.6,
+   "end_s": 379.862
+  },
+  {
+   "w": "of",
+   "start_s": 379.862,
+   "end_s": 379.975
+  },
+  {
+   "w": "guessing",
+   "start_s": 379.975,
+   "end_s": 380.287
+  },
+  {
+   "w": "from",
+   "start_s": 380.287,
+   "end_s": 380.412
+  },
+  {
+   "w": "a",
+   "start_s": 380.412,
+   "end_s": 380.475
+  },
+  {
+   "w": "market",
+   "start_s": 380.475,
+   "end_s": 380.75
+  },
+  {
+   "w": "sell-off.",
+   "start_s": 380.75,
+   "end_s": 381.525
+  },
+  {
+   "w": "Start",
+   "start_s": 382.125,
+   "end_s": 382.337
+  },
+  {
+   "w": "with",
+   "start_s": 382.337,
+   "end_s": 382.437
+  },
+  {
+   "w": "a",
+   "start_s": 382.437,
+   "end_s": 382.5
+  },
+  {
+   "w": "secured",
+   "start_s": 382.5,
+   "end_s": 382.925
+  },
+  {
+   "w": "funding",
+   "start_s": 382.925,
+   "end_s": 383.187
+  },
+  {
+   "w": "rate",
+   "start_s": 383.187,
+   "end_s": 383.4
+  },
+  {
+   "w": "such",
+   "start_s": 383.4,
+   "end_s": 383.6
+  },
+  {
+   "w": "as",
+   "start_s": 383.6,
+   "end_s": 383.825
+  },
+  {
+   "w": "the",
+   "start_s": 383.825,
+   "end_s": 383.987
+  },
+  {
+   "w": "tri-party",
+   "start_s": 383.987,
+   "end_s": 384.537
+  },
+  {
+   "w": "general",
+   "start_s": 384.537,
+   "end_s": 384.85
+  },
+  {
+   "w": "collateral",
+   "start_s": 384.85,
+   "end_s": 385.25
+  },
+  {
+   "w": "rate:",
+   "start_s": 385.25,
+   "end_s": 385.9
+  },
+  {
+   "w": "the",
+   "start_s": 385.9,
+   "end_s": 386.0
+  },
+  {
+   "w": "price",
+   "start_s": 386.0,
+   "end_s": 386.262
+  },
+  {
+   "w": "of",
+   "start_s": 386.262,
+   "end_s": 386.412
+  },
+  {
+   "w": "overnight",
+   "start_s": 386.412,
+   "end_s": 386.85
+  },
+  {
+   "w": "cash",
+   "start_s": 386.85,
+   "end_s": 387.25
+  },
+  {
+   "w": "against",
+   "start_s": 387.25,
+   "end_s": 387.525
+  },
+  {
+   "w": "Treasury",
+   "start_s": 387.525,
+   "end_s": 387.9
+  },
+  {
+   "w": "collateral.",
+   "start_s": 387.9,
+   "end_s": 388.725
+  },
+  {
+   "w": "Compare",
+   "start_s": 389.325,
+   "end_s": 389.612
+  },
+  {
+   "w": "it",
+   "start_s": 389.612,
+   "end_s": 389.687
+  },
+  {
+   "w": "with",
+   "start_s": 389.687,
+   "end_s": 389.787
+  },
+  {
+   "w": "the",
+   "start_s": 389.787,
+   "end_s": 389.875
+  },
+  {
+   "w": "interest",
+   "start_s": 389.875,
+   "end_s": 390.475
+  },
+  {
+   "w": "rate",
+   "start_s": 390.475,
+   "end_s": 390.687
+  },
+  {
+   "w": "the",
+   "start_s": 390.687,
+   "end_s": 390.787
+  },
+  {
+   "w": "Fed",
+   "start_s": 390.787,
+   "end_s": 391.0
+  },
+  {
+   "w": "pays",
+   "start_s": 391.0,
+   "end_s": 391.325
+  },
+  {
+   "w": "banks",
+   "start_s": 391.325,
+   "end_s": 391.537
+  },
+  {
+   "w": "on",
+   "start_s": 391.537,
+   "end_s": 391.637
+  },
+  {
+   "w": "reserves.",
+   "start_s": 391.637,
+   "end_s": 392.475
+  },
+  {
+   "w": "Watch",
+   "start_s": 393.1,
+   "end_s": 393.262
+  },
+  {
+   "w": "how",
+   "start_s": 393.262,
+   "end_s": 393.362
+  },
+  {
+   "w": "that",
+   "start_s": 393.362,
+   "end_s": 393.525
+  },
+  {
+   "w": "gap",
+   "start_s": 393.525,
+   "end_s": 393.737
+  },
+  {
+   "w": "behaves",
+   "start_s": 393.737,
+   "end_s": 394.1
+  },
+  {
+   "w": "through",
+   "start_s": 394.1,
+   "end_s": 394.212
+  },
+  {
+   "w": "the",
+   "start_s": 394.212,
+   "end_s": 394.3
+  },
+  {
+   "w": "cash",
+   "start_s": 394.3,
+   "end_s": 394.575
+  },
+  {
+   "w": "movements",
+   "start_s": 394.575,
+   "end_s": 395.0
+  },
+  {
+   "w": "we",
+   "start_s": 395.0,
+   "end_s": 395.1
+  },
+  {
+   "w": "just",
+   "start_s": 395.1,
+   "end_s": 395.275
+  },
+  {
+   "w": "traced.",
+   "start_s": 395.275,
+   "end_s": 396.025
+  },
+  {
+   "w": "Then",
+   "start_s": 396.65,
+   "end_s": 396.812
+  },
+  {
+   "w": "follow",
+   "start_s": 396.812,
+   "end_s": 397.087
+  },
+  {
+   "w": "the",
+   "start_s": 397.087,
+   "end_s": 397.175
+  },
+  {
+   "w": "gap",
+   "start_s": 397.175,
+   "end_s": 397.475
+  },
+  {
+   "w": "after",
+   "start_s": 397.475,
+   "end_s": 397.712
+  },
+  {
+   "w": "the",
+   "start_s": 397.712,
+   "end_s": 397.787
+  },
+  {
+   "w": "event.",
+   "start_s": 397.787,
+   "end_s": 398.525
+  },
+  {
+   "w": "Has",
+   "start_s": 398.525,
+   "end_s": 398.687
+  },
+  {
+   "w": "the",
+   "start_s": 398.687,
+   "end_s": 398.775
+  },
+  {
+   "w": "cash",
+   "start_s": 398.775,
+   "end_s": 399.075
+  },
+  {
+   "w": "returned",
+   "start_s": 399.075,
+   "end_s": 399.437
+  },
+  {
+   "w": "to",
+   "start_s": 399.437,
+   "end_s": 399.512
+  },
+  {
+   "w": "this",
+   "start_s": 399.512,
+   "end_s": 399.675
+  },
+  {
+   "w": "market,",
+   "start_s": 399.675,
+   "end_s": 400.225
+  },
+  {
+   "w": "or",
+   "start_s": 400.225,
+   "end_s": 400.375
+  },
+  {
+   "w": "are",
+   "start_s": 400.375,
+   "end_s": 400.475
+  },
+  {
+   "w": "borrowers",
+   "start_s": 400.475,
+   "end_s": 400.9
+  },
+  {
+   "w": "still",
+   "start_s": 400.9,
+   "end_s": 401.1
+  },
+  {
+   "w": "paying",
+   "start_s": 401.1,
+   "end_s": 401.375
+  },
+  {
+   "w": "more",
+   "start_s": 401.375,
+   "end_s": 401.575
+  },
+  {
+   "w": "to",
+   "start_s": 401.575,
+   "end_s": 401.662
+  },
+  {
+   "w": "obtain",
+   "start_s": 401.662,
+   "end_s": 402.0
+  },
+  {
+   "w": "it?",
+   "start_s": 402.0,
+   "end_s": 402.475
+  },
+  {
+   "w": "The",
+   "start_s": 403.075,
+   "end_s": 403.15
+  },
+  {
+   "w": "July",
+   "start_s": 403.15,
+   "end_s": 403.5
+  },
+  {
+   "w": "report",
+   "start_s": 403.5,
+   "end_s": 403.975
+  },
+  {
+   "w": "gives",
+   "start_s": 403.975,
+   "end_s": 404.137
+  },
+  {
+   "w": "us",
+   "start_s": 404.137,
+   "end_s": 404.275
+  },
+  {
+   "w": "a",
+   "start_s": 404.275,
+   "end_s": 404.387
+  },
+  {
+   "w": "useful",
+   "start_s": 404.387,
+   "end_s": 404.737
+  },
+  {
+   "w": "check",
+   "start_s": 404.737,
+   "end_s": 405.225
+  },
+  {
+   "w": "on",
+   "start_s": 405.225,
+   "end_s": 405.337
+  },
+  {
+   "w": "the",
+   "start_s": 405.337,
+   "end_s": 405.437
+  },
+  {
+   "w": "frightening",
+   "start_s": 405.437,
+   "end_s": 405.775
+  },
+  {
+   "w": "version",
+   "start_s": 405.775,
+   "end_s": 406.062
+  },
+  {
+   "w": "of",
+   "start_s": 406.062,
+   "end_s": 406.137
+  },
+  {
+   "w": "this",
+   "start_s": 406.137,
+   "end_s": 406.25
+  },
+  {
+   "w": "story.",
+   "start_s": 406.25,
+   "end_s": 407.025
+  },
+  {
+   "w": "Reverse-repo",
+   "start_s": 407.65,
+   "end_s": 408.2
+  },
+  {
+   "w": "usage",
+   "start_s": 408.2,
+   "end_s": 408.562
+  },
+  {
+   "w": "was",
+   "start_s": 408.562,
+   "end_s": 408.712
+  },
+  {
+   "w": "already",
+   "start_s": 408.712,
+   "end_s": 409.075
+  },
+  {
+   "w": "close",
+   "start_s": 409.075,
+   "end_s": 409.337
+  },
+  {
+   "w": "to",
+   "start_s": 409.337,
+   "end_s": 409.425
+  },
+  {
+   "w": "zero",
+   "start_s": 409.425,
+   "end_s": 409.762
+  },
+  {
+   "w": "on",
+   "start_s": 409.762,
+   "end_s": 409.875
+  },
+  {
+   "w": "most",
+   "start_s": 409.875,
+   "end_s": 410.125
+  },
+  {
+   "w": "days,",
+   "start_s": 410.125,
+   "end_s": 410.825
+  },
+  {
+   "w": "yet",
+   "start_s": 410.825,
+   "end_s": 411.062
+  },
+  {
+   "w": "overnight",
+   "start_s": 411.062,
+   "end_s": 411.5
+  },
+  {
+   "w": "money",
+   "start_s": 411.5,
+   "end_s": 411.725
+  },
+  {
+   "w": "markets",
+   "start_s": 411.725,
+   "end_s": 412.037
+  },
+  {
+   "w": "were",
+   "start_s": 412.037,
+   "end_s": 412.15
+  },
+  {
+   "w": "stable.",
+   "start_s": 412.15,
+   "end_s": 412.925
+  },
+  {
+   "w": "The",
+   "start_s": 413.525,
+   "end_s": 413.6
+  },
+  {
+   "w": "Fed's",
+   "start_s": 413.6,
+   "end_s": 413.85
+  },
+  {
+   "w": "purchases",
+   "start_s": 413.85,
+   "end_s": 414.337
+  },
+  {
+   "w": "had",
+   "start_s": 414.337,
+   "end_s": 414.437
+  },
+  {
+   "w": "accommodated",
+   "start_s": 414.437,
+   "end_s": 414.962
+  },
+  {
+   "w": "seasonal",
+   "start_s": 414.962,
+   "end_s": 415.275
+  },
+  {
+   "w": "cash",
+   "start_s": 415.275,
+   "end_s": 415.537
+  },
+  {
+   "w": "movements.",
+   "start_s": 415.537,
+   "end_s": 416.3
+  },
+  {
+   "w": "That",
+   "start_s": 416.925,
+   "end_s": 417.075
+  },
+  {
+   "w": "is",
+   "start_s": 417.075,
+   "end_s": 417.162
+  },
+  {
+   "w": "a",
+   "start_s": 417.162,
+   "end_s": 417.262
+  },
+  {
+   "w": "real",
+   "start_s": 417.262,
+   "end_s": 417.55
+  },
+  {
+   "w": "counterexample",
+   "start_s": 417.55,
+   "end_s": 418.15
+  },
+  {
+   "w": "to",
+   "start_s": 418.15,
+   "end_s": 418.25
+  },
+  {
+   "w": "treating",
+   "start_s": 418.25,
+   "end_s": 418.537
+  },
+  {
+   "w": "an",
+   "start_s": 418.537,
+   "end_s": 418.687
+  },
+  {
+   "w": "empty",
+   "start_s": 418.687,
+   "end_s": 418.987
+  },
+  {
+   "w": "reverse-repo",
+   "start_s": 418.987,
+   "end_s": 419.862
+  },
+  {
+   "w": "account",
+   "start_s": 419.862,
+   "end_s": 420.387
+  },
+  {
+   "w": "as",
+   "start_s": 420.387,
+   "end_s": 420.512
+  },
+  {
+   "w": "an",
+   "start_s": 420.512,
+   "end_s": 420.637
+  },
+  {
+   "w": "automatic",
+   "start_s": 420.637,
+   "end_s": 421.1
+  },
+  {
+   "w": "crisis.",
+   "start_s": 421.1,
+   "end_s": 421.95
+  },
+  {
+   "w": "The",
+   "start_s": 422.55,
+   "end_s": 422.65
+  },
+  {
+   "w": "adjustment",
+   "start_s": 422.65,
+   "end_s": 423.112
+  },
+  {
+   "w": "can",
+   "start_s": 423.112,
+   "end_s": 423.225
+  },
+  {
+   "w": "work.",
+   "start_s": 423.225,
+   "end_s": 423.85
+  },
+  {
+   "w": "Now",
+   "start_s": 423.85,
+   "end_s": 424.025
+  },
+  {
+   "w": "follow",
+   "start_s": 424.025,
+   "end_s": 424.262
+  },
+  {
+   "w": "the",
+   "start_s": 424.262,
+   "end_s": 424.35
+  },
+  {
+   "w": "funding",
+   "start_s": 424.35,
+   "end_s": 424.575
+  },
+  {
+   "w": "price",
+   "start_s": 424.575,
+   "end_s": 424.825
+  },
+  {
+   "w": "to",
+   "start_s": 424.825,
+   "end_s": 424.912
+  },
+  {
+   "w": "a",
+   "start_s": 424.912,
+   "end_s": 424.975
+  },
+  {
+   "w": "borrower",
+   "start_s": 424.975,
+   "end_s": 425.337
+  },
+  {
+   "w": "who",
+   "start_s": 425.337,
+   "end_s": 425.487
+  },
+  {
+   "w": "actually",
+   "start_s": 425.487,
+   "end_s": 425.875
+  },
+  {
+   "w": "needs",
+   "start_s": 425.875,
+   "end_s": 426.087
+  },
+  {
+   "w": "a",
+   "start_s": 426.087,
+   "end_s": 426.15
+  },
+  {
+   "w": "loan.",
+   "start_s": 426.15,
+   "end_s": 426.875
+  },
+  {
+   "w": "Now",
+   "start_s": 427.5,
+   "end_s": 427.662
+  },
+  {
+   "w": "return",
+   "start_s": 427.662,
+   "end_s": 427.937
+  },
+  {
+   "w": "to",
+   "start_s": 427.937,
+   "end_s": 428.012
+  },
+  {
+   "w": "the",
+   "start_s": 428.012,
+   "end_s": 428.1
+  },
+  {
+   "w": "business",
+   "start_s": 428.1,
+   "end_s": 428.65
+  },
+  {
+   "w": "with",
+   "start_s": 428.65,
+   "end_s": 428.762
+  },
+  {
+   "w": "the",
+   "start_s": 428.762,
+   "end_s": 428.85
+  },
+  {
+   "w": "loan",
+   "start_s": 428.85,
+   "end_s": 429.15
+  },
+  {
+   "w": "coming",
+   "start_s": 429.15,
+   "end_s": 429.4
+  },
+  {
+   "w": "due.",
+   "start_s": 429.4,
+   "end_s": 429.975
+  },
+  {
+   "w": "Persistent",
+   "start_s": 430.55,
+   "end_s": 430.95
+  },
+  {
+   "w": "funding",
+   "start_s": 430.95,
+   "end_s": 431.187
+  },
+  {
+   "w": "pressure",
+   "start_s": 431.187,
+   "end_s": 431.5
+  },
+  {
+   "w": "can",
+   "start_s": 431.5,
+   "end_s": 431.662
+  },
+  {
+   "w": "add",
+   "start_s": 431.662,
+   "end_s": 431.887
+  },
+  {
+   "w": "to",
+   "start_s": 431.887,
+   "end_s": 431.962
+  },
+  {
+   "w": "the",
+   "start_s": 431.962,
+   "end_s": 432.05
+  },
+  {
+   "w": "cost",
+   "start_s": 432.05,
+   "end_s": 432.337
+  },
+  {
+   "w": "of",
+   "start_s": 432.337,
+   "end_s": 432.425
+  },
+  {
+   "w": "financing,",
+   "start_s": 432.425,
+   "end_s": 433.35
+  },
+  {
+   "w": "alongside",
+   "start_s": 433.35,
+   "end_s": 433.85
+  },
+  {
+   "w": "credit",
+   "start_s": 433.85,
+   "end_s": 434.1
+  },
+  {
+   "w": "risk,",
+   "start_s": 434.1,
+   "end_s": 434.7
+  },
+  {
+   "w": "the",
+   "start_s": 434.7,
+   "end_s": 434.8
+  },
+  {
+   "w": "lender's",
+   "start_s": 434.8,
+   "end_s": 435.125
+  },
+  {
+   "w": "costs,",
+   "start_s": 435.125,
+   "end_s": 435.75
+  },
+  {
+   "w": "and",
+   "start_s": 435.75,
+   "end_s": 435.862
+  },
+  {
+   "w": "the",
+   "start_s": 435.862,
+   "end_s": 435.95
+  },
+  {
+   "w": "borrower's",
+   "start_s": 435.95,
+   "end_s": 436.45
+  },
+  {
+   "w": "own",
+   "start_s": 436.45,
+   "end_s": 436.65
+  },
+  {
+   "w": "condition.",
+   "start_s": 436.65,
+   "end_s": 437.525
+  },
+  {
+   "w": "A",
+   "start_s": 438.125,
+   "end_s": 438.2
+  },
+  {
+   "w": "company",
+   "start_s": 438.2,
+   "end_s": 438.512
+  },
+  {
+   "w": "that",
+   "start_s": 438.512,
+   "end_s": 438.612
+  },
+  {
+   "w": "needs",
+   "start_s": 438.612,
+   "end_s": 438.812
+  },
+  {
+   "w": "to",
+   "start_s": 438.812,
+   "end_s": 438.9
+  },
+  {
+   "w": "refinance",
+   "start_s": 438.9,
+   "end_s": 439.387
+  },
+  {
+   "w": "has",
+   "start_s": 439.387,
+   "end_s": 439.537
+  },
+  {
+   "w": "to",
+   "start_s": 439.537,
+   "end_s": 439.625
+  },
+  {
+   "w": "face",
+   "start_s": 439.625,
+   "end_s": 439.837
+  },
+  {
+   "w": "the",
+   "start_s": 439.837,
+   "end_s": 439.925
+  },
+  {
+   "w": "new",
+   "start_s": 439.925,
+   "end_s": 440.1
+  },
+  {
+   "w": "terms.",
+   "start_s": 440.1,
+   "end_s": 440.875
+  },
+  {
+   "w": "It",
+   "start_s": 440.875,
+   "end_s": 440.987
+  },
+  {
+   "w": "may",
+   "start_s": 440.987,
+   "end_s": 441.15
+  },
+  {
+   "w": "postpone",
+   "start_s": 441.15,
+   "end_s": 441.612
+  },
+  {
+   "w": "equipment,",
+   "start_s": 441.612,
+   "end_s": 442.3
+  },
+  {
+   "w": "hiring,",
+   "start_s": 442.3,
+   "end_s": 442.8
+  },
+  {
+   "w": "or",
+   "start_s": 442.8,
+   "end_s": 442.912
+  },
+  {
+   "w": "expansion.",
+   "start_s": 442.912,
+   "end_s": 443.825
+  },
+  {
+   "w": "That",
+   "start_s": 444.45,
+   "end_s": 444.6
+  },
+  {
+   "w": "is",
+   "start_s": 444.6,
+   "end_s": 444.7
+  },
+  {
+   "w": "how",
+   "start_s": 444.7,
+   "end_s": 444.887
+  },
+  {
+   "w": "a",
+   "start_s": 444.887,
+   "end_s": 444.95
+  },
+  {
+   "w": "financial-market",
+   "start_s": 444.95,
+   "end_s": 445.6
+  },
+  {
+   "w": "strain",
+   "start_s": 445.6,
+   "end_s": 446.225
+  },
+  {
+   "w": "can",
+   "start_s": 446.225,
+   "end_s": 446.337
+  },
+  {
+   "w": "become",
+   "start_s": 446.337,
+   "end_s": 446.587
+  },
+  {
+   "w": "an",
+   "start_s": 446.587,
+   "end_s": 446.712
+  },
+  {
+   "w": "operating",
+   "start_s": 446.712,
+   "end_s": 447.162
+  },
+  {
+   "w": "decision.",
+   "start_s": 447.162,
+   "end_s": 447.95
+  },
+  {
+   "w": "The",
+   "start_s": 448.55,
+   "end_s": 448.625
+  },
+  {
+   "w": "route",
+   "start_s": 448.625,
+   "end_s": 448.85
+  },
+  {
+   "w": "matters",
+   "start_s": 448.85,
+   "end_s": 449.387
+  },
+  {
+   "w": "as",
+   "start_s": 449.387,
+   "end_s": 449.55
+  },
+  {
+   "w": "much",
+   "start_s": 449.55,
+   "end_s": 449.737
+  },
+  {
+   "w": "as",
+   "start_s": 449.737,
+   "end_s": 449.812
+  },
+  {
+   "w": "the",
+   "start_s": 449.812,
+   "end_s": 449.9
+  },
+  {
+   "w": "headline.",
+   "start_s": 449.9,
+   "end_s": 450.75
+  },
+  {
+   "w": "The",
+   "start_s": 451.35,
+   "end_s": 451.425
+  },
+  {
+   "w": "variable",
+   "start_s": 451.425,
+   "end_s": 451.875
+  },
+  {
+   "w": "is",
+   "start_s": 451.875,
+   "end_s": 451.962
+  },
+  {
+   "w": "the",
+   "start_s": 451.962,
+   "end_s": 452.05
+  },
+  {
+   "w": "gap",
+   "start_s": 452.05,
+   "end_s": 452.287
+  },
+  {
+   "w": "between",
+   "start_s": 452.287,
+   "end_s": 452.537
+  },
+  {
+   "w": "the",
+   "start_s": 452.537,
+   "end_s": 452.625
+  },
+  {
+   "w": "tri-party",
+   "start_s": 452.625,
+   "end_s": 453.125
+  },
+  {
+   "w": "repo",
+   "start_s": 453.125,
+   "end_s": 453.425
+  },
+  {
+   "w": "rate",
+   "start_s": 453.425,
+   "end_s": 453.937
+  },
+  {
+   "w": "and",
+   "start_s": 453.937,
+   "end_s": 454.062
+  },
+  {
+   "w": "the",
+   "start_s": 454.062,
+   "end_s": 454.15
+  },
+  {
+   "w": "interest",
+   "start_s": 454.15,
+   "end_s": 454.475
+  },
+  {
+   "w": "paid",
+   "start_s": 454.475,
+   "end_s": 454.787
+  },
+  {
+   "w": "on",
+   "start_s": 454.787,
+   "end_s": 454.887
+  },
+  {
+   "w": "reserves.",
+   "start_s": 454.887,
+   "end_s": 455.75
+  },
+  {
+   "w": "Use",
+   "start_s": 456.375,
+   "end_s": 456.55
+  },
+  {
+   "w": "zero",
+   "start_s": 456.55,
+   "end_s": 456.925
+  },
+  {
+   "w": "as",
+   "start_s": 456.925,
+   "end_s": 457.037
+  },
+  {
+   "w": "the",
+   "start_s": 457.037,
+   "end_s": 457.112
+  },
+  {
+   "w": "comparison",
+   "start_s": 457.112,
+   "end_s": 457.587
+  },
+  {
+   "w": "line.",
+   "start_s": 457.587,
+   "end_s": 458.212
+  },
+  {
+   "w": "Above",
+   "start_s": 458.212,
+   "end_s": 458.525
+  },
+  {
+   "w": "it,",
+   "start_s": 458.525,
+   "end_s": 458.9
+  },
+  {
+   "w": "Treasury-backed",
+   "start_s": 458.9,
+   "end_s": 459.525
+  },
+  {
+   "w": "overnight",
+   "start_s": 459.525,
+   "end_s": 459.9
+  },
+  {
+   "w": "borrowing",
+   "start_s": 459.9,
+   "end_s": 460.25
+  },
+  {
+   "w": "costs",
+   "start_s": 460.25,
+   "end_s": 460.6
+  },
+  {
+   "w": "more",
+   "start_s": 460.6,
+   "end_s": 460.787
+  },
+  {
+   "w": "than",
+   "start_s": 460.787,
+   "end_s": 460.9
+  },
+  {
+   "w": "banks",
+   "start_s": 460.9,
+   "end_s": 461.15
+  },
+  {
+   "w": "earn",
+   "start_s": 461.15,
+   "end_s": 461.337
+  },
+  {
+   "w": "on",
+   "start_s": 461.337,
+   "end_s": 461.437
+  },
+  {
+   "w": "reserves.",
+   "start_s": 461.437,
+   "end_s": 462.325
+  },
+  {
+   "w": "On",
+   "start_s": 462.925,
+   "end_s": 463.05
+  },
+  {
+   "w": "September",
+   "start_s": 463.05,
+   "end_s": 463.4
+  },
+  {
+   "w": "seventeenth,",
+   "start_s": 463.4,
+   "end_s": 464.2
+  },
+  {
+   "w": "that",
+   "start_s": 464.2,
+   "end_s": 464.375
+  },
+  {
+   "w": "gap",
+   "start_s": 464.375,
+   "end_s": 464.612
+  },
+  {
+   "w": "was",
+   "start_s": 464.612,
+   "end_s": 464.787
+  },
+  {
+   "w": "seven",
+   "start_s": 464.787,
+   "end_s": 465.05
+  },
+  {
+   "w": "basis",
+   "start_s": 465.05,
+   "end_s": 465.4
+  },
+  {
+   "w": "points",
+   "start_s": 465.4,
+   "end_s": 465.687
+  },
+  {
+   "w": "below",
+   "start_s": 465.687,
+   "end_s": 465.925
+  },
+  {
+   "w": "zero.",
+   "start_s": 465.925,
+   "end_s": 466.7
+  },
+  {
+   "w": "That",
+   "start_s": 466.7,
+   "end_s": 466.875
+  },
+  {
+   "w": "observation",
+   "start_s": 466.875,
+   "end_s": 467.412
+  },
+  {
+   "w": "does",
+   "start_s": 467.412,
+   "end_s": 467.537
+  },
+  {
+   "w": "not",
+   "start_s": 467.537,
+   "end_s": 467.712
+  },
+  {
+   "w": "show",
+   "start_s": 467.712,
+   "end_s": 467.987
+  },
+  {
+   "w": "an",
+   "start_s": 467.987,
+   "end_s": 468.075
+  },
+  {
+   "w": "above-reserve-rate",
+   "start_s": 468.075,
+   "end_s": 468.875
+  },
+  {
+   "w": "premium.",
+   "start_s": 468.875,
+   "end_s": 469.65
+  },
+  {
+   "w": "If",
+   "start_s": 470.25,
+   "end_s": 470.337
+  },
+  {
+   "w": "the",
+   "start_s": 470.337,
+   "end_s": 470.425
+  },
+  {
+   "w": "gap",
+   "start_s": 470.425,
+   "end_s": 470.675
+  },
+  {
+   "w": "crosses",
+   "start_s": 470.675,
+   "end_s": 470.987
+  },
+  {
+   "w": "above",
+   "start_s": 470.987,
+   "end_s": 471.15
+  },
+  {
+   "w": "zero",
+   "start_s": 471.15,
+   "end_s": 471.5
+  },
+  {
+   "w": "after",
+   "start_s": 471.5,
+   "end_s": 471.712
+  },
+  {
+   "w": "a",
+   "start_s": 471.712,
+   "end_s": 471.775
+  },
+  {
+   "w": "cash",
+   "start_s": 471.775,
+   "end_s": 472.05
+  },
+  {
+   "w": "swing,",
+   "start_s": 472.05,
+   "end_s": 472.637
+  },
+  {
+   "w": "follow",
+   "start_s": 472.637,
+   "end_s": 472.912
+  },
+  {
+   "w": "whether",
+   "start_s": 472.912,
+   "end_s": 473.087
+  },
+  {
+   "w": "it",
+   "start_s": 473.087,
+   "end_s": 473.162
+  },
+  {
+   "w": "returns",
+   "start_s": 473.162,
+   "end_s": 473.562
+  },
+  {
+   "w": "below",
+   "start_s": 473.562,
+   "end_s": 474.0
+  },
+  {
+   "w": "or",
+   "start_s": 474.0,
+   "end_s": 474.125
+  },
+  {
+   "w": "stays",
+   "start_s": 474.125,
+   "end_s": 474.387
+  },
+  {
+   "w": "above.",
+   "start_s": 474.387,
+   "end_s": 475.125
+  },
+  {
+   "w": "Then",
+   "start_s": 475.75,
+   "end_s": 475.962
+  },
+  {
+   "w": "check",
+   "start_s": 475.962,
+   "end_s": 476.225
+  },
+  {
+   "w": "whether",
+   "start_s": 476.225,
+   "end_s": 476.412
+  },
+  {
+   "w": "repeated",
+   "start_s": 476.412,
+   "end_s": 476.75
+  },
+  {
+   "w": "pressure",
+   "start_s": 476.75,
+   "end_s": 477.2
+  },
+  {
+   "w": "comes",
+   "start_s": 477.2,
+   "end_s": 477.612
+  },
+  {
+   "w": "with",
+   "start_s": 477.612,
+   "end_s": 477.762
+  },
+  {
+   "w": "greater",
+   "start_s": 477.762,
+   "end_s": 478.125
+  },
+  {
+   "w": "use",
+   "start_s": 478.125,
+   "end_s": 478.337
+  },
+  {
+   "w": "of",
+   "start_s": 478.337,
+   "end_s": 478.412
+  },
+  {
+   "w": "the",
+   "start_s": 478.412,
+   "end_s": 478.512
+  },
+  {
+   "w": "Fed's",
+   "start_s": 478.512,
+   "end_s": 478.9
+  },
+  {
+   "w": "standing",
+   "start_s": 478.9,
+   "end_s": 479.25
+  },
+  {
+   "w": "repo",
+   "start_s": 479.25,
+   "end_s": 479.625
+  },
+  {
+   "w": "facility.",
+   "start_s": 479.625,
+   "end_s": 480.5
+  },
+  {
+   "w": "Use",
+   "start_s": 481.15,
+   "end_s": 481.337
+  },
+  {
+   "w": "of",
+   "start_s": 481.337,
+   "end_s": 481.412
+  },
+  {
+   "w": "that",
+   "start_s": 481.412,
+   "end_s": 481.575
+  },
+  {
+   "w": "backstop",
+   "start_s": 481.575,
+   "end_s": 482.05
+  },
+  {
+   "w": "shows",
+   "start_s": 482.05,
+   "end_s": 482.337
+  },
+  {
+   "w": "where",
+   "start_s": 482.337,
+   "end_s": 482.475
+  },
+  {
+   "w": "cash",
+   "start_s": 482.475,
+   "end_s": 482.762
+  },
+  {
+   "w": "is",
+   "start_s": 482.762,
+   "end_s": 482.85
+  },
+  {
+   "w": "being",
+   "start_s": 482.85,
+   "end_s": 483.05
+  },
+  {
+   "w": "supplied;",
+   "start_s": 483.05,
+   "end_s": 483.825
+  },
+  {
+   "w": "it",
+   "start_s": 483.825,
+   "end_s": 483.912
+  },
+  {
+   "w": "isn't",
+   "start_s": 483.912,
+   "end_s": 484.087
+  },
+  {
+   "w": "a",
+   "start_s": 484.087,
+   "end_s": 484.162
+  },
+  {
+   "w": "failure",
+   "start_s": 484.162,
+   "end_s": 484.5
+  },
+  {
+   "w": "by",
+   "start_s": 484.5,
+   "end_s": 484.662
+  },
+  {
+   "w": "itself.",
+   "start_s": 484.662,
+   "end_s": 485.425
+  },
+  {
+   "w": "If",
+   "start_s": 486.025,
+   "end_s": 486.112
+  },
+  {
+   "w": "the",
+   "start_s": 486.112,
+   "end_s": 486.2
+  },
+  {
+   "w": "gap",
+   "start_s": 486.2,
+   "end_s": 486.438
+  },
+  {
+   "w": "returns",
+   "start_s": 486.438,
+   "end_s": 486.837
+  },
+  {
+   "w": "below",
+   "start_s": 486.837,
+   "end_s": 487.112
+  },
+  {
+   "w": "zero",
+   "start_s": 487.112,
+   "end_s": 487.462
+  },
+  {
+   "w": "and",
+   "start_s": 487.462,
+   "end_s": 487.575
+  },
+  {
+   "w": "financing",
+   "start_s": 487.575,
+   "end_s": 488.1
+  },
+  {
+   "w": "stays",
+   "start_s": 488.1,
+   "end_s": 488.462
+  },
+  {
+   "w": "orderly,",
+   "start_s": 488.462,
+   "end_s": 489.15
+  },
+  {
+   "w": "that",
+   "start_s": 489.15,
+   "end_s": 489.325
+  },
+  {
+   "w": "premium",
+   "start_s": 489.325,
+   "end_s": 489.712
+  },
+  {
+   "w": "has",
+   "start_s": 489.712,
+   "end_s": 489.825
+  },
+  {
+   "w": "disappeared.",
+   "start_s": 489.825,
+   "end_s": 490.8
+  },
+  {
+   "w": "The",
+   "start_s": 490.8,
+   "end_s": 490.9
+  },
+  {
+   "w": "funding-pressure",
+   "start_s": 490.9,
+   "end_s": 491.4
+  },
+  {
+   "w": "case",
+   "start_s": 491.4,
+   "end_s": 491.65
+  },
+  {
+   "w": "weakens.",
+   "start_s": 491.65,
+   "end_s": 492.475
+  },
+  {
+   "w": "Zero",
+   "start_s": 493.15,
+   "end_s": 493.5
+  },
+  {
+   "w": "is",
+   "start_s": 493.5,
+   "end_s": 493.587
+  },
+  {
+   "w": "the",
+   "start_s": 493.587,
+   "end_s": 493.662
+  },
+  {
+   "w": "comparison,",
+   "start_s": 493.662,
+   "end_s": 494.425
+  },
+  {
+   "w": "not",
+   "start_s": 494.425,
+   "end_s": 494.587
+  },
+  {
+   "w": "a",
+   "start_s": 494.587,
+   "end_s": 494.65
+  },
+  {
+   "w": "crisis",
+   "start_s": 494.65,
+   "end_s": 495.05
+  },
+  {
+   "w": "threshold.",
+   "start_s": 495.05,
+   "end_s": 495.975
+  },
+  {
+   "w": "A",
+   "start_s": 495.975,
+   "end_s": 496.05
+  },
+  {
+   "w": "claim",
+   "start_s": 496.05,
+   "end_s": 496.312
+  },
+  {
+   "w": "that",
+   "start_s": 496.312,
+   "end_s": 496.425
+  },
+  {
+   "w": "strain",
+   "start_s": 496.425,
+   "end_s": 496.787
+  },
+  {
+   "w": "is",
+   "start_s": 496.787,
+   "end_s": 496.875
+  },
+  {
+   "w": "spreading",
+   "start_s": 496.875,
+   "end_s": 497.262
+  },
+  {
+   "w": "still",
+   "start_s": 497.262,
+   "end_s": 497.55
+  },
+  {
+   "w": "needs",
+   "start_s": 497.55,
+   "end_s": 497.812
+  },
+  {
+   "w": "evidence",
+   "start_s": 497.812,
+   "end_s": 498.137
+  },
+  {
+   "w": "from",
+   "start_s": 498.137,
+   "end_s": 498.275
+  },
+  {
+   "w": "borrowers.",
+   "start_s": 498.275,
+   "end_s": 499.1
+  },
+  {
+   "w": "You",
+   "start_s": 499.725,
+   "end_s": 499.825
+  },
+  {
+   "w": "now",
+   "start_s": 499.825,
+   "end_s": 500.075
+  },
+  {
+   "w": "have",
+   "start_s": 500.075,
+   "end_s": 500.238
+  },
+  {
+   "w": "a",
+   "start_s": 500.238,
+   "end_s": 500.3
+  },
+  {
+   "w": "way",
+   "start_s": 500.3,
+   "end_s": 500.438
+  },
+  {
+   "w": "to",
+   "start_s": 500.438,
+   "end_s": 500.525
+  },
+  {
+   "w": "read",
+   "start_s": 500.525,
+   "end_s": 500.712
+  },
+  {
+   "w": "the",
+   "start_s": 500.712,
+   "end_s": 500.787
+  },
+  {
+   "w": "next",
+   "start_s": 500.787,
+   "end_s": 501.012
+  },
+  {
+   "w": "move.",
+   "start_s": 501.012,
+   "end_s": 501.65
+  },
+  {
+   "w": "Check",
+   "start_s": 502.275,
+   "end_s": 502.462
+  },
+  {
+   "w": "which",
+   "start_s": 502.462,
+   "end_s": 502.587
+  },
+  {
+   "w": "account",
+   "start_s": 502.587,
+   "end_s": 502.875
+  },
+  {
+   "w": "changed.",
+   "start_s": 502.875,
+   "end_s": 503.562
+  },
+  {
+   "w": "Check",
+   "start_s": 503.562,
+   "end_s": 503.712
+  },
+  {
+   "w": "the",
+   "start_s": 503.712,
+   "end_s": 503.8
+  },
+  {
+   "w": "price",
+   "start_s": 503.8,
+   "end_s": 504.038
+  },
+  {
+   "w": "of",
+   "start_s": 504.038,
+   "end_s": 504.125
+  },
+  {
+   "w": "funding.",
+   "start_s": 504.125,
+   "end_s": 504.788
+  },
+  {
+   "w": "Check",
+   "start_s": 504.788,
+   "end_s": 505.025
+  },
+  {
+   "w": "whether",
+   "start_s": 505.025,
+   "end_s": 505.212
+  },
+  {
+   "w": "that",
+   "start_s": 505.212,
+   "end_s": 505.375
+  },
+  {
+   "w": "pressure",
+   "start_s": 505.375,
+   "end_s": 505.637
+  },
+  {
+   "w": "persists.",
+   "start_s": 505.637,
+   "end_s": 506.475
+  },
+  {
+   "w": "Keep",
+   "start_s": 507.05,
+   "end_s": 507.188
+  },
+  {
+   "w": "the",
+   "start_s": 507.188,
+   "end_s": 507.275
+  },
+  {
+   "w": "observation",
+   "start_s": 507.275,
+   "end_s": 507.8
+  },
+  {
+   "w": "dates",
+   "start_s": 507.8,
+   "end_s": 508.05
+  },
+  {
+   "w": "together;",
+   "start_s": 508.05,
+   "end_s": 508.812
+  },
+  {
+   "w": "last",
+   "start_s": 508.812,
+   "end_s": 509.1
+  },
+  {
+   "w": "month's",
+   "start_s": 509.1,
+   "end_s": 509.4
+  },
+  {
+   "w": "reserve",
+   "start_s": 509.4,
+   "end_s": 509.775
+  },
+  {
+   "w": "balance",
+   "start_s": 509.775,
+   "end_s": 510.175
+  },
+  {
+   "w": "cannot",
+   "start_s": 510.175,
+   "end_s": 510.438
+  },
+  {
+   "w": "explain",
+   "start_s": 510.438,
+   "end_s": 510.85
+  },
+  {
+   "w": "today's",
+   "start_s": 510.85,
+   "end_s": 511.25
+  },
+  {
+   "w": "rate",
+   "start_s": 511.25,
+   "end_s": 511.45
+  },
+  {
+   "w": "by",
+   "start_s": 511.45,
+   "end_s": 511.587
+  },
+  {
+   "w": "itself.",
+   "start_s": 511.587,
+   "end_s": 512.35
+  },
+  {
+   "w": "And",
+   "start_s": 512.95,
+   "end_s": 513.075
+  },
+  {
+   "w": "ask",
+   "start_s": 513.075,
+   "end_s": 513.338
+  },
+  {
+   "w": "whether",
+   "start_s": 513.338,
+   "end_s": 513.513
+  },
+  {
+   "w": "the",
+   "start_s": 513.513,
+   "end_s": 513.6
+  },
+  {
+   "w": "borrower",
+   "start_s": 513.6,
+   "end_s": 513.938
+  },
+  {
+   "w": "you",
+   "start_s": 513.938,
+   "end_s": 514.013
+  },
+  {
+   "w": "are",
+   "start_s": 514.013,
+   "end_s": 514.1
+  },
+  {
+   "w": "studying",
+   "start_s": 514.1,
+   "end_s": 514.463
+  },
+  {
+   "w": "actually",
+   "start_s": 514.463,
+   "end_s": 515.138
+  },
+  {
+   "w": "needs",
+   "start_s": 515.138,
+   "end_s": 515.425
+  },
+  {
+   "w": "new",
+   "start_s": 515.425,
+   "end_s": 515.6
+  },
+  {
+   "w": "financing.",
+   "start_s": 515.6,
+   "end_s": 516.55
+  },
+  {
+   "w": "That",
+   "start_s": 517.15,
+   "end_s": 517.3
+  },
+  {
+   "w": "takes",
+   "start_s": 517.3,
+   "end_s": 517.513
+  },
+  {
+   "w": "you",
+   "start_s": 517.513,
+   "end_s": 517.6
+  },
+  {
+   "w": "from",
+   "start_s": 517.6,
+   "end_s": 517.738
+  },
+  {
+   "w": "a",
+   "start_s": 517.738,
+   "end_s": 517.8
+  },
+  {
+   "w": "dramatic",
+   "start_s": 517.8,
+   "end_s": 518.15
+  },
+  {
+   "w": "line",
+   "start_s": 518.15,
+   "end_s": 518.738
+  },
+  {
+   "w": "on",
+   "start_s": 518.738,
+   "end_s": 518.863
+  },
+  {
+   "w": "a",
+   "start_s": 518.863,
+   "end_s": 518.925
+  },
+  {
+   "w": "chart",
+   "start_s": 518.925,
+   "end_s": 519.35
+  },
+  {
+   "w": "to",
+   "start_s": 519.35,
+   "end_s": 519.438
+  },
+  {
+   "w": "a",
+   "start_s": 519.438,
+   "end_s": 519.5
+  },
+  {
+   "w": "question",
+   "start_s": 519.5,
+   "end_s": 519.925
+  },
+  {
+   "w": "you",
+   "start_s": 519.925,
+   "end_s": 520.013
+  },
+  {
+   "w": "can",
+   "start_s": 520.013,
+   "end_s": 520.113
+  },
+  {
+   "w": "investigate.",
+   "start_s": 520.113,
+   "end_s": 521.075
+  },
+  {
+   "w": "We",
+   "start_s": 521.675,
+   "end_s": 521.763
+  },
+  {
+   "w": "began",
+   "start_s": 521.763,
+   "end_s": 522.088
+  },
+  {
+   "w": "with",
+   "start_s": 522.088,
+   "end_s": 522.188
+  },
+  {
+   "w": "an",
+   "start_s": 522.188,
+   "end_s": 522.263
+  },
+  {
+   "w": "account",
+   "start_s": 522.263,
+   "end_s": 522.588
+  },
+  {
+   "w": "that",
+   "start_s": 522.588,
+   "end_s": 522.688
+  },
+  {
+   "w": "had",
+   "start_s": 522.688,
+   "end_s": 522.8
+  },
+  {
+   "w": "almost",
+   "start_s": 522.8,
+   "end_s": 523.188
+  },
+  {
+   "w": "emptied.",
+   "start_s": 523.188,
+   "end_s": 523.95
+  },
+  {
+   "w": "Following",
+   "start_s": 524.575,
+   "end_s": 524.863
+  },
+  {
+   "w": "the",
+   "start_s": 524.863,
+   "end_s": 524.95
+  },
+  {
+   "w": "money",
+   "start_s": 524.95,
+   "end_s": 525.2
+  },
+  {
+   "w": "took",
+   "start_s": 525.2,
+   "end_s": 525.338
+  },
+  {
+   "w": "us",
+   "start_s": 525.338,
+   "end_s": 525.475
+  },
+  {
+   "w": "through",
+   "start_s": 525.475,
+   "end_s": 525.613
+  },
+  {
+   "w": "the",
+   "start_s": 525.613,
+   "end_s": 525.7
+  },
+  {
+   "w": "Treasury,",
+   "start_s": 525.7,
+   "end_s": 526.363
+  },
+  {
+   "w": "the",
+   "start_s": 526.363,
+   "end_s": 526.45
+  },
+  {
+   "w": "banks,",
+   "start_s": 526.45,
+   "end_s": 527.075
+  },
+  {
+   "w": "and",
+   "start_s": 527.075,
+   "end_s": 527.188
+  },
+  {
+   "w": "the",
+   "start_s": 527.188,
+   "end_s": 527.275
+  },
+  {
+   "w": "overnight",
+   "start_s": 527.275,
+   "end_s": 527.675
+  },
+  {
+   "w": "lenders,",
+   "start_s": 527.675,
+   "end_s": 528.45
+  },
+  {
+   "w": "all",
+   "start_s": 528.45,
+   "end_s": 528.613
+  },
+  {
+   "w": "the",
+   "start_s": 528.613,
+   "end_s": 528.7
+  },
+  {
+   "w": "way",
+   "start_s": 528.7,
+   "end_s": 528.9
+  },
+  {
+   "w": "to",
+   "start_s": 528.9,
+   "end_s": 528.988
+  },
+  {
+   "w": "a",
+   "start_s": 528.988,
+   "end_s": 529.063
+  },
+  {
+   "w": "business",
+   "start_s": 529.063,
+   "end_s": 529.45
+  },
+  {
+   "w": "deciding",
+   "start_s": 529.45,
+   "end_s": 529.95
+  },
+  {
+   "w": "whether",
+   "start_s": 529.95,
+   "end_s": 530.138
+  },
+  {
+   "w": "it",
+   "start_s": 530.138,
+   "end_s": 530.213
+  },
+  {
+   "w": "can",
+   "start_s": 530.213,
+   "end_s": 530.313
+  },
+  {
+   "w": "expand.",
+   "start_s": 530.313,
+   "end_s": 531.2
+  },
+  {
+   "w": "That",
+   "start_s": 531.825,
+   "end_s": 531.975
+  },
+  {
+   "w": "cushion",
+   "start_s": 531.975,
+   "end_s": 532.413
+  },
+  {
+   "w": "absorbed",
+   "start_s": 532.413,
+   "end_s": 532.863
+  },
+  {
+   "w": "an",
+   "start_s": 532.863,
+   "end_s": 532.938
+  },
+  {
+   "w": "adjustment.",
+   "start_s": 532.938,
+   "end_s": 533.825
+  },
+  {
+   "w": "The",
+   "start_s": 533.825,
+   "end_s": 533.938
+  },
+  {
+   "w": "funding",
+   "start_s": 533.938,
+   "end_s": 534.213
+  },
+  {
+   "w": "market",
+   "start_s": 534.213,
+   "end_s": 534.5
+  },
+  {
+   "w": "tells",
+   "start_s": 534.5,
+   "end_s": 534.738
+  },
+  {
+   "w": "us",
+   "start_s": 534.738,
+   "end_s": 535.0
+  },
+  {
+   "w": "whether",
+   "start_s": 535.0,
+   "end_s": 535.188
+  },
+  {
+   "w": "the",
+   "start_s": 535.188,
+   "end_s": 535.275
+  },
+  {
+   "w": "next",
+   "start_s": 535.275,
+   "end_s": 535.538
+  },
+  {
+   "w": "adjustment",
+   "start_s": 535.538,
+   "end_s": 536.025
+  },
+  {
+   "w": "reaches",
+   "start_s": 536.025,
+   "end_s": 536.338
+  },
+  {
+   "w": "a",
+   "start_s": 536.338,
+   "end_s": 536.4
+  },
+  {
+   "w": "borrower.",
+   "start_s": 536.4,
+   "end_s": 537.225
+  },
+  {
+   "w": "The",
+   "start_s": 537.825,
+   "end_s": 537.913
+  },
+  {
+   "w": "Fed's",
+   "start_s": 537.913,
+   "end_s": 538.15
+  },
+  {
+   "w": "balance",
+   "start_s": 538.15,
+   "end_s": 538.488
+  },
+  {
+   "w": "sheet",
+   "start_s": 538.488,
+   "end_s": 538.725
+  },
+  {
+   "w": "shows",
+   "start_s": 538.725,
+   "end_s": 538.938
+  },
+  {
+   "w": "what",
+   "start_s": 538.938,
+   "end_s": 539.113
+  },
+  {
+   "w": "shrank.",
+   "start_s": 539.113,
+   "end_s": 539.812
+  },
+  {
+   "w": "Bank",
+   "start_s": 539.812,
+   "end_s": 540.075
+  },
+  {
+   "w": "reserves",
+   "start_s": 540.075,
+   "end_s": 540.463
+  },
+  {
+   "w": "show",
+   "start_s": 540.463,
+   "end_s": 540.75
+  },
+  {
+   "w": "where",
+   "start_s": 540.75,
+   "end_s": 540.888
+  },
+  {
+   "w": "the",
+   "start_s": 540.888,
+   "end_s": 540.975
+  },
+  {
+   "w": "adjustment",
+   "start_s": 540.975,
+   "end_s": 541.45
+  },
+  {
+   "w": "landed.",
+   "start_s": 541.45,
+   "end_s": 542.175
+  },
+  {
+   "w": "The",
+   "start_s": 542.175,
+   "end_s": 542.263
+  },
+  {
+   "w": "next",
+   "start_s": 542.263,
+   "end_s": 542.45
+  },
+  {
+   "w": "loan",
+   "start_s": 542.45,
+   "end_s": 542.763
+  },
+  {
+   "w": "shows",
+   "start_s": 542.763,
+   "end_s": 543.013
+  },
+  {
+   "w": "who",
+   "start_s": 543.013,
+   "end_s": 543.125
+  },
+  {
+   "w": "pays.",
+   "start_s": 543.125,
+   "end_s": 543.838
+  },
+  {
+   "w": "Subscribe",
+   "start_s": 543.838,
+   "end_s": 544.288
+  },
+  {
+   "w": "for",
+   "start_s": 544.288,
+   "end_s": 544.388
+  },
+  {
+   "w": "the",
+   "start_s": 544.388,
+   "end_s": 544.475
+  },
+  {
+   "w": "next",
+   "start_s": 544.475,
+   "end_s": 544.675
+  },
+  {
+   "w": "breakdown.",
+   "start_s": 544.675,
+   "end_s": 545.425
+  },
+  {
+   "w": "We'll",
+   "start_s": 545.425,
+   "end_s": 545.588
+  },
+  {
+   "w": "follow",
+   "start_s": 545.588,
+   "end_s": 545.863
+  },
+  {
+   "w": "the",
+   "start_s": 545.863,
+   "end_s": 545.95
+  },
+  {
+   "w": "next",
+   "start_s": 545.95,
+   "end_s": 546.188
+  },
+  {
+   "w": "link:",
+   "start_s": 546.188,
+   "end_s": 546.7
+  },
+  {
+   "w": "what",
+   "start_s": 546.7,
+   "end_s": 546.85
+  },
+  {
+   "w": "happens",
+   "start_s": 546.85,
+   "end_s": 547.188
+  },
+  {
+   "w": "when",
+   "start_s": 547.188,
+   "end_s": 547.312
+  },
+  {
+   "w": "an",
+   "start_s": 547.312,
+   "end_s": 547.4
+  },
+  {
+   "w": "old",
+   "start_s": 547.4,
+   "end_s": 547.625
+  },
+  {
+   "w": "loan",
+   "start_s": 547.625,
+   "end_s": 547.925
+  },
+  {
+   "w": "comes",
+   "start_s": 547.925,
+   "end_s": 548.2
+  },
+  {
+   "w": "due",
+   "start_s": 548.2,
+   "end_s": 548.425
+  },
+  {
+   "w": "at",
+   "start_s": 548.425,
+   "end_s": 548.513
+  },
+  {
+   "w": "a",
+   "start_s": 548.513,
+   "end_s": 548.575
+  },
+  {
+   "w": "new",
+   "start_s": 548.575,
+   "end_s": 548.75
+  },
+  {
+   "w": "rate.",
+   "start_s": 548.75,
+   "end_s": 549.4
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+  "title": "WHERE DID IT GO?",
+  "sub": "Fed balance-sheet change · 01 Jun 2022 → 11 Jun 2025",
+  "src": "Federal Reserve Board · Monetary Policy Report June 2025 · Table A · USD billions",
+  "src_style": "compact",
+  "unit": "",
+  "ylabel": "USD billions",
+  "from_zero": true,
+  "domain": [
+    -2238,
+    2238
+  ],
+  "bars": [
+    {
+      "label": "Total assets",
+      "value": -2238,
+      "color": "crimson"
+    },
+    {
+      "label": "Reserve balances",
+      "value": 72,
+      "color": "teal"
+    }
+  ],
+  "status": "REAL",
+  "facts": {
+    "window_start": "2022-06-01",
+    "window_end": "2025-06-11",
+    "same_source": true,
+    "scale": "common zero-centered USD billions"
+  },
+  "proof": [
+    {
+      "kind": "primary_source",
+      "path": "evidence/sources/mpr_2025_06.html",
+      "sha256": "7a201f7cad0a75ae840e93d5fc386c501e4774c31e8d1631d99dc9dc0c057da0",
+      "table": "xtable_balancesheet",
+      "column": "xsheeta5",
+      "window": {
+        "start": "2022-06-01",
+        "end": "2025-06-11"
+      }
+    }
+  ],
+  "notes": [
+    "Both deltas are direct values from the same Table A change column; no time curve is implied."
+  ],
+  "build_s": 4.0
+}

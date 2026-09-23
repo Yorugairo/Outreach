@@ -1,0 +1,68 @@
+{
+  "title": "Where the change ends",
+  "sub": "Terminal observation · 11 Jun 2025 · same cumulative change ($ trillions)",
+  "src": "Fed H.4.1 / FRED · WALCL + WRBWFRBL · Jun 2022–Jun 2025",
+  "src_style": "compact",
+  "unit": "",
+  "ylabel": "Change ($ trillions)",
+  "from_zero": true,
+  "domain": [
+    -2.242165,
+    0.263294
+  ],
+  "bars": [
+    {
+      "label": "Total assets",
+      "value": -2.237895,
+      "color": "crimson"
+    },
+    {
+      "label": "Bank reserves",
+      "value": 0.07228,
+      "color": "teal"
+    }
+  ],
+  "status": "DERIVED",
+  "facts": {
+    "window_start": "2022-06-01",
+    "window_end": "2025-06-11",
+    "derived_from": "fed-assets-reserves-history.series.json",
+    "derivation": "Each bar is the terminal point of its matching cumulative history series; no new observation.",
+    "display_unit": "USD trillions",
+    "axis_x_support": "ledger_page.AXES_KEYS has no xlabel; explicit date ticks and this dated subtitle are used"
+  },
+  "proof": [
+    {
+      "path": "evidence/sources/opening-history/fred_walcl.csv",
+      "sha256": "f7714585f2a9e48b350c0bb445d1c74337f9bcaa903941cd54fb8b38ca3d569a",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WALCL",
+      "fetched_at": "2026-09-18T22:47:16.377021-07:00",
+      "series": "WALCL"
+    },
+    {
+      "path": "evidence/sources/opening-history/fred_walcl_meta.html",
+      "sha256": "c02ec56fc5180ee800859519e6be06386e5460fdadac2b4aa3e4e2c2bca8a4df",
+      "url": "https://fred.stlouisfed.org/series/WALCL",
+      "fetched_at": "2026-09-18T22:47:16.543619-07:00",
+      "series": "WALCL"
+    },
+    {
+      "path": "evidence/sources/opening-history/fred_wrbwfrbl.csv",
+      "sha256": "9f2c719463a3fdbcbcd532d09e90adef3d54c172238246ce9a8a213bab44e6a4",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WRBWFRBL",
+      "fetched_at": "2026-09-18T22:47:16.877367-07:00",
+      "series": "WRBWFRBL"
+    },
+    {
+      "path": "evidence/sources/opening-history/fred_wrbwfrbl_meta.html",
+      "sha256": "afb9fcc5e288fccd480a08455f7600ed8f19eb7bdc5b77646f59aa78fffb67fa",
+      "url": "https://fred.stlouisfed.org/series/WRBWFRBL",
+      "fetched_at": "2026-09-18T22:47:17.335280-07:00",
+      "series": "WRBWFRBL"
+    }
+  ],
+  "notes": [
+    "Endpoint bars are the same two source-bound terminal observations, not a fabricated time curve."
+  ],
+  "build_s": 3.0
+}

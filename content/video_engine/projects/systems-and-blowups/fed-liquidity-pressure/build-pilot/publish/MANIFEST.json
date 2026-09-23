@@ -1,0 +1,43 @@
+{
+ "schema": "publish_package.v1",
+ "episode": "fed-liquidity-pressure-pilot",
+ "project": "fed-liquidity-pressure",
+ "build": "build-pilot",
+ "title": "THE HIDDEN FED METRIC BREAKING THE ECONOMY",
+ "subtitle": "Fed liquidity pressure · source-bound prefix",
+ "channel": "Fed liquidity pressure",
+ "channel_slug": "fed-liquidity-pressure",
+ "channel_line": null,
+ "channel_path": null,
+ "aspect": "16:9",
+ "runtime_s": 177.975,
+ "script": "SCRIPT-VO.txt",
+ "take": "vo-pilot-20260919-r4",
+ "master": "fed-liquidity-pilot-full-1440p.mp4",
+ "master_bytes": 60231154,
+ "first_frame": "frame-0000.0.png",
+ "thumbnail": "c3_thumbnail_1280x720.png",
+ "fetched": null,
+ "keywords": "the hidden fed metric breaking the economy",
+ "tags": [
+  "#FedLiquidityPressure",
+  "#THEHIDDENFEDMETRICBREAKINGTHEECONOMY"
+ ],
+ "inputs": {
+  "build:timeline.json": "d73eb8eec69455d5",
+  "build:fed-liquidity-pilot.timeline.json": "c77aa1a7563f599d",
+  "project:EVIDENCE-DOSSIER.md": "3c801f412d95e2e3"
+ },
+ "missing": [
+  "the channel's own words (channel-assets/fed-liquidity-pressure/CHANNEL-DESCRIPTION.md)",
+  "the fetched sources' links (evidence/sources/*)"
+ ],
+ "counts": {
+  "hook": 3,
+  "figures": 6,
+  "close": 2,
+  "dossier_sources": 0,
+  "links": 0,
+  "onscreen_sources": 4
+ }
+}

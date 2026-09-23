@@ -1,0 +1,661 @@
+{
+  "schema_version": "viewer_reports.v1",
+  "prompt_version": "v2",
+  "script": "SCRIPT-VO.txt",
+  "windows_file": "SCRIPT-VIEWER-WINDOWS.json",
+  "model": "(codex default)",
+  "effort": "high",
+  "lane": "codex",
+  "started_at": "2026-09-19T21:42:36+00:00",
+  "finished_at": "2026-09-19T21:52:08+00:00",
+  "windows_run": 51,
+  "package": {
+    "status": "asked",
+    "title": "The Hidden Fed Metric Breaking the Economy",
+    "thumb_file": "",
+    "promised": "An explanation of a little-known Federal Reserve metric, why it is distorting policy or decision-making, and how that damage is spreading through the economy. I expect to leave knowing what the metric is, why it matters, and what consequences to watch for."
+  },
+  "reports": [
+    {
+      "i": 0,
+      "span": "0:00-0:15",
+      "new_things": [
+        "The Fed’s balance sheet fell by trillions while bank reserves barely changed.",
+        "Money market funds had parked about $2.5 trillion at the Fed.",
+        "By September 18, that pool of parked money was almost empty.",
+        "Companies are facing a debt wall."
+      ],
+      "held_question": "What did S&P tally about the corporate debt wall, and how does the nearly empty Fed parking facility connect to it?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence ending with “S&P tallied” was cut off before the tally was given."
+      ],
+      "promise_answered": "not yet",
+      "answered_by": ""
+    },
+    {
+      "i": 1,
+      "span": "0:15-0:30",
+      "new_things": [
+        "More than $3 trillion in U.S. corporate debt matures from 2025 through 2027.",
+        "Replacing a 2% loan with a 7% loan would more than triple the interest cost."
+      ],
+      "held_question": "What will the higher refinancing costs do to companies?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 2,
+      "span": "0:30-0:45",
+      "new_things": [
+        "Refinancing a 2% loan at 7% more than triples the interest bill even without taking on more debt.",
+        "The higher interest cost leaves less money for wages, materials, and hiring.",
+        "The video will provide three checks using public information."
+      ],
+      "held_question": "What are the three checks, and what public information will they use?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The final sentence cuts off after “public,” so its meaning is incomplete."
+      ]
+    },
+    {
+      "i": 3,
+      "span": "0:45-1:00",
+      "new_things": [
+        "The three checks use public data and are meant to help protect your money from market mechanics.",
+        "The speaker worked in business risk at JPMorgan.",
+        "The speaker evaluates what keeps banks standing, not merely whether they appear stable."
+      ],
+      "held_question": "How does the Federal Reserve support the financial system?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 4,
+      "span": "1:00-1:15",
+      "new_things": [
+        "Stable bank balances can conceal that the banks’ financial buffer is shrinking.",
+        "Companies replacing cheap debt still need financing while a source of support behind banks is declining.",
+        "The video will trace where that support went."
+      ],
+      "held_question": "What is the support behind the banks, where did it go, and what happens as it runs down?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 5,
+      "span": "1:15-1:30",
+      "new_things": [
+        "Money funds can leave cash at the Federal Reserve overnight and earn a return.",
+        "Treasury securities back that transaction.",
+        "The Fed calls the arrangement overnight reverse repo.",
+        "Money funds can also earn money elsewhere."
+      ],
+      "held_question": "Where else can money funds earn money, and what happens when they move cash there?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 6,
+      "span": "1:30-1:45",
+      "new_things": [
+        "Money funds can also buy Treasury bills or lend in private markets.",
+        "When those alternatives pay better, money funds can withdraw cash from the Fed.",
+        "Those withdrawals helped banks hold steady while the Fed reduced its own investments."
+      ],
+      "held_question": "How did money funds withdrawing cash from the Fed help banks hold their ground?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 7,
+      "span": "1:45-2:00",
+      "new_things": [
+        "The Fed owns Treasury securities and mortgage-backed securities.",
+        "Quantitative tightening is when the Fed lets those investments mature without fully replacing them, causing its assets to fall."
+      ],
+      "held_question": "Why did money funds withdrawing cash from the Fed help banks hold their ground during quantitative tightening?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 8,
+      "span": "2:00-2:15",
+      "new_things": [
+        "A shrinking Fed balance sheet would normally mean banks have less cash.",
+        "At the same time, money-market funds were reducing their balances in the Fed's overnight reverse-repo facility.",
+        "The simplified example starts with the Fed's assets falling by $100 billion."
+      ],
+      "held_question": "How does the drop in overnight reverse-repo balances offset the Fed's $100 billion asset reduction and affect bank cash?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 9,
+      "span": "2:15-2:30",
+      "new_things": [
+        "In the example, the Fed’s reverse-repo balance falls by $100 billion.",
+        "The Fed owns $100 billion less and owes money funds $100 billion less.",
+        "Because the asset and reverse-repo balances fall together, banks’ Fed-account balances can stay unchanged."
+      ],
+      "held_question": "What happens to bank reserves when the reverse-repo balance can no longer offset the Fed’s shrinking assets?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 10,
+      "span": "2:30-2:45",
+      "new_things": [
+        "Banks avoid losing cash when the Fed’s overnight reverse-repo account shrinks enough to offset the balance-sheet runoff.",
+        "The Fed’s June 2025 report compares account balances with their levels when runoff began in June 2022."
+      ],
+      "held_question": "How large were the offsetting movements shown in the Fed’s report?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 11,
+      "span": "2:45-3:00",
+      "new_things": [
+        "From June 2022 to June 2025, the Fed’s assets fell by about $2.2 trillion.",
+        "Reverse repos outside the foreign-official accounts fell by about $1.8 trillion over that period.",
+        "Banks’ balances at the Fed rose by only $72 billion over that period."
+      ],
+      "held_question": "What happened to the government’s balance over that period?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 12,
+      "span": "3:00-3:15",
+      "new_things": [
+        "The government’s cash account also fell, which helped offset the drain on banks.",
+        "Banks ended the period roughly holding their ground rather than gaining trillions in their Fed accounts.",
+        "Trillions withdrawn from other accounts mainly prevented banks’ balances from shrinking."
+      ],
+      "held_question": "What does the workshop’s machine still need?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 13,
+      "span": "3:15-3:30",
+      "new_things": [
+        "A workshop still needs financing even if the bank providing it looks stable.",
+        "Stable bank balances can depend on support from other accounts.",
+        "Money funds cannot withdraw the same parked dollar twice."
+      ],
+      "held_question": "What had happened by September 18?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 14,
+      "span": "3:30-3:45",
+      "new_things": [
+        "By September 18, 2026, money funds’ overnight balance was about half a billion dollars.",
+        "That account no longer has enough cash to provide another trillion-dollar offset.",
+        "Banks can appear steady even as a source of protection is being depleted."
+      ],
+      "held_question": "What happens to banks and financing when that source of protection runs out?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The final sentence cut off after “runs.”"
+      ]
+    },
+    {
+      "i": 15,
+      "span": "3:45-4:00",
+      "new_things": [
+        "The lender has sent the workshop a loan-renewal offer.",
+        "The old loan’s interest rate was 2%.",
+        "The replacement loan in the example has a 7% rate.",
+        "On the same outstanding balance, the annual interest would be three and a half times higher."
+      ],
+      "held_question": "What will the higher interest cost do to the business?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 16,
+      "span": "4:00-4:15",
+      "new_things": [
+        "The business must find the extra money for the higher interest cost.",
+        "It could accept a thinner profit margin.",
+        "It could try raising prices.",
+        "It could postpone an expansion that would help it fill more orders.",
+        "Postponing the expansion would cost the equipment supplier a sale."
+      ],
+      "held_question": "How far will the effects of the business postponing its expansion spread?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 17,
+      "span": "4:15-4:30",
+      "new_things": [
+        "Delaying the expansion also delays hiring the person who would operate the new machine.",
+        "A business financing problem can affect people who never follow Federal Reserve charts.",
+        "An old fixed-rate loan protects a business from higher rates only until its renewal date."
+      ],
+      "held_question": "What happens when the old fixed-rate loan reaches its renewal date?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 18,
+      "span": "4:30-4:45",
+      "new_things": [
+        "The Fed found that new borrowing costs rose much faster than the cost of existing debt.",
+        "An existing cheap loan contract only delays the larger bill; it does not ensure the next contract will also be cheap."
+      ],
+      "held_question": "How does the bank behind the loan handle this situation?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 19,
+      "span": "4:45-5:00",
+      "new_things": [
+        "A tax payment can reveal cash movement that a bank’s headline balance misses.",
+        "When you pay a tax bill, your bank reduces your deposit.",
+        "The bank settles the tax payment through the government’s checking account at the Federal Reserve."
+      ],
+      "held_question": "How does that tax payment move through the bank and the government’s Fed account, and what does it reveal about the bank?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 20,
+      "span": "5:00-5:15",
+      "new_things": [
+        "The government’s balance rises by the amount of the tax payment.",
+        "The bank ends up with less money at the Fed.",
+        "The government’s checking account at the Fed is called the Treasury General Account."
+      ],
+      "held_question": "If the Fed’s assets have not changed, what has changed on its balance sheet?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The final sentence was cut off."
+      ]
+    },
+    {
+      "i": 21,
+      "span": "5:15-5:30",
+      "new_things": [
+        "A chart of the Fed’s assets would not show money leaving a bank’s account at the Fed.",
+        "When the government pays a contractor, money leaves the government’s account and goes to the contractor’s bank.",
+        "The contractor’s bank credits the contractor’s deposit."
+      ],
+      "held_question": "Does the contractor’s bank also gain the same amount in its account at the Fed?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 22,
+      "span": "5:30-5:45",
+      "new_things": [
+        "The contractor payment moves cash back toward the banks.",
+        "Tax and government payments can change who holds money at the Fed without changing the Fed’s assets.",
+        "A useful first check is to identify which account changed.",
+        "The Fed publishes these account balances in its weekly balance-sheet release."
+      ],
+      "held_question": "What should I start with in the Fed’s weekly balance-sheet release?",
+      "asked_of_me": "Identify which account changed.",
+      "could_not_follow": []
+    },
+    {
+      "i": 23,
+      "span": "5:45-6:00",
+      "new_things": [
+        "To interpret a balance-sheet move, first identify the account and the dates being compared.",
+        "A decline in bank reserves is not the same kind of event as money-market funds withdrawing from the Fed’s overnight account.",
+        "A tax payment moves cash differently from the Fed allowing a security to mature."
+      ],
+      "held_question": "What should I check after identifying the account and comparison dates?",
+      "asked_of_me": "Start with the account name and the dates being compared.",
+      "could_not_follow": []
+    },
+    {
+      "i": 24,
+      "span": "6:00-6:15",
+      "new_things": [
+        "There is an unofficial shortcut called net liquidity.",
+        "The net-liquidity formula starts with the Fed’s assets, then subtracts the government’s cash account and money funds’ overnight balance.",
+        "The shortcut can be useful."
+      ],
+      "held_question": "What can the net-liquidity shortcut help explain, and what does it miss?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 25,
+      "span": "6:15-6:30",
+      "new_things": [
+        "The net-liquidity shortcut organizes the accounts but is neither an official Fed series nor a measure of bank reserves.",
+        "In the hundred-billion-dollar example, the two declines cancel because of how the subtraction works.",
+        "The net-liquidity number can remain flat even while the Fed’s balance sheet gets smaller."
+      ],
+      "held_question": "What can’t the lender price about the workshop, and why?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The final sentence about the lender and the workshop was cut off."
+      ]
+    },
+    {
+      "i": 26,
+      "span": "6:30-6:45",
+      "new_things": [
+        "A lender cannot price the workshop loan from the net-liquidity formula alone; borrowing costs also matter.",
+        "The Fed has already changed how it supplies money to banks.",
+        "The Fed ended balance-sheet runoff in December 2025.",
+        "The Fed began buying short-term Treasuries."
+      ],
+      "held_question": "Why did the Fed begin buying short-term Treasuries, and how does that affect borrowing costs?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 27,
+      "span": "6:45-7:00",
+      "new_things": [
+        "The Fed's short-term Treasury purchases put money into banks' accounts at the Fed.",
+        "Taxes, government spending, and financing needs keep moving that money around.",
+        "The Fed had shifted from balance-sheet runoff to adding money through purchases."
+      ],
+      "held_question": "What does this shift mean for borrowing costs?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 28,
+      "span": "7:00-7:15",
+      "new_things": [
+        "The Fed’s July 2026 report put bank reserves at about $3.1 trillion.",
+        "The Fed described those reserves as ample.",
+        "Money funds were barely using the overnight account on most days."
+      ],
+      "held_question": "Why is there still a concern if reserves are ample and money funds are hardly using the overnight account?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 29,
+      "span": "7:15-7:30",
+      "new_things": [
+        "The Fed report said overnight money markets were stable.",
+        "Fed purchases helped banks manage seasonal cash movements.",
+        "Banks were functioning, but the support behind their operations had changed.",
+        "Banks were now operating with support from Fed purchases."
+      ],
+      "held_question": "What is being contrasted with the banks’ reliance on support from Fed purchases?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The final sentence cuts off after “while.”"
+      ]
+    },
+    {
+      "i": 30,
+      "span": "7:30-7:45",
+      "new_things": [
+        "The old overnight buffer is still nearly empty.",
+        "The workshop still has to negotiate a replacement loan.",
+        "A functioning funding market does not bring back the cheap rate from the old loan contract."
+      ],
+      "held_question": "What support will remain when the next demand for funding arrives?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The final sentence cuts off after “the next demand for.”"
+      ]
+    },
+    {
+      "i": 31,
+      "span": "7:45-8:00",
+      "new_things": [
+        "The second check is the actual cost of borrowing.",
+        "The wider backdrop includes the twenty-year Treasury yield on September 18."
+      ],
+      "held_question": "What was the twenty-year Treasury yield on September 18, and what does it show about borrowing costs?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The yield figure was cut off after “five point.”"
+      ]
+    },
+    {
+      "i": 32,
+      "span": "8:00-8:15",
+      "new_things": [
+        "On September 18, the 20-year Treasury yield was 5.38%.",
+        "Investors could earn more than 5% by lending to the U.S. government for 20 years.",
+        "Companies seeking financing must compete for investors’ money.",
+        "A company’s credit risk and the loan’s duration help determine its borrowing cost."
+      ],
+      "held_question": "What will the workshop’s replacement loan actually cost?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 33,
+      "span": "8:15-8:30",
+      "new_things": [
+        "The discussion is now focusing on businesses whose older financing contracts are expiring.",
+        "The overnight lending market is another place to watch for pressure closer to banks.",
+        "Dealers finance their Treasury holdings by borrowing cash against those securities."
+      ],
+      "held_question": "What does the overnight lending market show about the pressure banks are facing?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 34,
+      "span": "8:30-8:45",
+      "new_things": [
+        "A money fund can lend cash to a dealer against Treasury securities.",
+        "When more borrowers compete for cash, lenders can charge a higher rate.",
+        "Lenders can demand a higher rate when other investments offer better returns.",
+        "The borrowing rate indicates what institutions pay to obtain something, but the sentence has not finished."
+      ],
+      "held_question": "What exactly does the borrowing rate show institutions are paying to obtain?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 35,
+      "span": "8:45-9:00",
+      "new_things": [
+        "The New York Fed publishes the Treasury-backed overnight borrowing rate being followed.",
+        "That overnight rate is being compared with the interest the Fed pays banks on reserves.",
+        "The two rates must be taken from the same date.",
+        "The date being used is September 17."
+      ],
+      "held_question": "How did the Treasury-backed overnight rate compare with the rate the Fed paid on reserves on September 17?",
+      "asked_of_me": "Compare the Treasury-backed overnight rate with the interest the Fed pays banks on reserves, using rates from the same date.",
+      "could_not_follow": []
+    },
+    {
+      "i": 36,
+      "span": "9:00-9:15",
+      "new_things": [
+        "On September 17, the overnight rate was 7 basis points below the reserve rate.",
+        "That day, overnight borrowers paid less for cash than banks earned on their Fed balances.",
+        "If the overnight rate rises above the reserve rate, borrowers are paying more for cash."
+      ],
+      "held_question": "Will the overnight rate move above the reserve rate?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 37,
+      "span": "9:15-9:30",
+      "new_things": [
+        "The rate comparison can reveal funding pressure, but an increase does not automatically mean a crisis.",
+        "One day of expensive borrowing cannot show whether the pressure will persist.",
+        "The tax payment moved cash into the government’s account."
+      ],
+      "held_question": "Will the borrowing pressure last?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 38,
+      "span": "9:30-9:45",
+      "new_things": [
+        "Government spending moved cash back toward the banks.",
+        "A temporary price spike around a cash movement and a recurring financing problem call for different conclusions.",
+        "The third check is whether the pressure lasts."
+      ],
+      "held_question": "Will the pressure persist after the cash movement reverses?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The phrase “Keep following the same” was cut off."
+      ]
+    },
+    {
+      "i": 39,
+      "span": "9:45-10:00",
+      "new_things": [
+        "After the initial move, keep comparing rates over successive observations to see whether the borrowing premium fades or returns.",
+        "If the premium fades and financing remains orderly, persistent pressure is less likely."
+      ],
+      "held_question": "What does it mean if the borrowing premium keeps returning?",
+      "asked_of_me": "Keep following the rate comparison after the initial move and check whether the premium fades or returns.",
+      "could_not_follow": []
+    },
+    {
+      "i": 40,
+      "span": "10:00-10:15",
+      "new_things": [
+        "The account movement is only a possible cause, while the borrowing price shows the cost.",
+        "Tracking that borrowing price over time tests whether the pressure persists."
+      ],
+      "held_question": "What is the stronger conclusion or evidence this test gives you beyond a scary initial signal?",
+      "asked_of_me": "Investigate why borrowers repeatedly have to pay more.",
+      "could_not_follow": []
+    },
+    {
+      "i": 41,
+      "span": "10:15-10:30",
+      "new_things": [
+        "The next step is to compare two loan contracts.",
+        "One loan expires soon, while the other has years remaining at a fixed rate.",
+        "Both owners face the same financial headlines, but their loan timing puts them in different positions."
+      ],
+      "held_question": "What must the owner of the soon-expiring loan do that the fixed-rate borrower does not?",
+      "asked_of_me": "Put the two loan contracts side by side.",
+      "could_not_follow": [
+        "The final sentence cuts off after saying only the first owner must do something."
+      ]
+    },
+    {
+      "i": 42,
+      "span": "10:30-10:45",
+      "new_things": [
+        "Only the owner whose loan expires soon has to negotiate a new loan now; the owner with years left on a fixed-rate loan keeps the old rate.",
+        "A lender sets a loan offer by weighing the business’s risk, the lender’s own costs, and the loan terms.",
+        "Overnight funding affects the quote but does not determine the whole price."
+      ],
+      "held_question": "How much higher will the owner’s renewal offer be, and why?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 43,
+      "span": "10:45-11:00",
+      "new_things": [
+        "The higher renewal offer already increases the owner’s interest bill.",
+        "A calmer overnight funding market does not cancel the renewal offer.",
+        "The owner must choose among a thinner profit margin, higher prices, or delaying expansion.",
+        "Delaying the expansion also delays a sale for the supplier."
+      ],
+      "held_question": "Which option will the owner choose in response to the higher interest bill?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 44,
+      "span": "11:00-11:15",
+      "new_things": [
+        "A higher loan payment affects spending beyond the business that borrowed.",
+        "That broader spillover is why the debt wall matters to the story.",
+        "A maturity date is when an old financing deal must be settled or replaced."
+      ],
+      "held_question": "What happens at maturity for a business that needs new financing?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 45,
+      "span": "11:15-11:30",
+      "new_things": [
+        "When a business needs a replacement loan, current borrowing conditions turn into an actual cost.",
+        "Businesses seeking financing now have much less cash in the overnight account that had helped offset the earlier drain on banks.",
+        "The combination of refinancing needs and lower overnight-account cash deserves attention."
+      ],
+      "held_question": "Why does that combination matter even when the headline seems reassuring?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 46,
+      "span": "11:30-11:45",
+      "new_things": [
+        "There are three checks that should be used together.",
+        "To identify which account changed, follow the money using the Fed’s balance-sheet release.",
+        "To assess borrowing costs, compare funding rates from matching dates rather than comparing an old balance with a current headline."
+      ],
+      "held_question": "What is the third check?",
+      "asked_of_me": "Bring the three checks together, identify which account changed using the Fed’s balance-sheet release, and compare dated funding rates to assess borrowing costs.",
+      "could_not_follow": []
+    },
+    {
+      "i": 47,
+      "span": "11:45-12:00",
+      "new_things": [
+        "To judge whether pressure persists, watch the next observations instead of treating the worst day as permanent.",
+        "An alarming chart should be checked against its account name and date, then tied back to when the borrower’s old loan expires."
+      ],
+      "held_question": "When does the borrower’s old loan expire?",
+      "asked_of_me": "Follow the next observations, label the alarming chart with its account name and date, apply the checks, and connect it back to the borrower’s loan expiration.",
+      "could_not_follow": []
+    },
+    {
+      "i": 48,
+      "span": "12:00-12:15",
+      "new_things": [
+        "A loan’s renewal date determines when changed financing conditions reach the business.",
+        "An existing machine can keep working even though its renewed loan costs more.",
+        "Higher financing costs make the next machine harder to justify."
+      ],
+      "held_question": "What should I follow next?",
+      "asked_of_me": "Follow the account to find the movement.",
+      "could_not_follow": [
+        "The final sentence cuts off after “Follow.”"
+      ]
+    },
+    {
+      "i": 49,
+      "span": "12:15-12:30",
+      "new_things": [
+        "Price movements reveal where the pressure is.",
+        "Loan renewals reveal who ultimately pays.",
+        "The Fed’s balance fell while bank balances stayed steady.",
+        "A shrinking money-fund buffer helped bank balances remain steady.",
+        "The overnight account now has little capacity to make that happen again."
+      ],
+      "held_question": "What will absorb further balance-sheet reductions now that the overnight account’s buffer is nearly gone?",
+      "asked_of_me": "Follow the price to locate the pressure and the renewal date to identify who pays.",
+      "could_not_follow": []
+    },
+    {
+      "i": 50,
+      "span": "12:30-12:45",
+      "new_things": [
+        "Businesses still have old debt coming due.",
+        "The next breakdown will trace how the price of cash affects an old loan refinanced at a new rate."
+      ],
+      "held_question": "What happens to a business when its old loan comes due and must be financed at a new rate?",
+      "asked_of_me": "Subscribe for the next breakdown.",
+      "could_not_follow": []
+    }
+  ]
+}

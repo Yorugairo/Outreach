@@ -1,0 +1,29 @@
+{
+  "schema": "fed_s13_blender_determinism.v1",
+  "sample_frames": [
+    1,
+    36,
+    60,
+    120
+  ],
+  "forward_hashes": {
+    "1": "8e2c28e7f6f5cd851e2de8a3e751d6ed51adbca4a782f6a7bad7dd44f668f9f1",
+    "36": "971b8d3bd2c47b586b602c588f90e469a66ee078a5c720f9f204feebfa0abd3d",
+    "60": "971b8d3bd2c47b586b602c588f90e469a66ee078a5c720f9f204feebfa0abd3d",
+    "120": "971b8d3bd2c47b586b602c588f90e469a66ee078a5c720f9f204feebfa0abd3d"
+  },
+  "reverse_hashes": {
+    "120": "971b8d3bd2c47b586b602c588f90e469a66ee078a5c720f9f204feebfa0abd3d",
+    "60": "971b8d3bd2c47b586b602c588f90e469a66ee078a5c720f9f204feebfa0abd3d",
+    "36": "971b8d3bd2c47b586b602c588f90e469a66ee078a5c720f9f204feebfa0abd3d",
+    "1": "8e2c28e7f6f5cd851e2de8a3e751d6ed51adbca4a782f6a7bad7dd44f668f9f1"
+  },
+  "reverse_seek_equal": true,
+  "comparisons": {
+    "1": true,
+    "36": true,
+    "60": true,
+    "120": true
+  },
+  "note": "The same rigid/keyframed scene was sampled forward and in reverse order; stable pixel-preserving PNG encoding removes compressor bookkeeping; no simulation is used."
+}

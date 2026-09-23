@@ -1,0 +1,165 @@
+{
+  "schema": "mp-fed-liquidity.claims.v1",
+  "status": "source_bound_pending_visual_review",
+  "reviewed_on": "2026-09-18",
+  "release_approved": false,
+  "claims": [
+    {
+      "id": "C1-C2",
+      "scenes": ["S01", "S09"],
+      "status": "source_verified",
+      "kind": "daily_observations",
+      "source": {
+        "path": "evidence/sources/fred_rrpontsyd.csv",
+        "sha256": "acc835bda91b45e48738b0017e3d8d1063e4c4f7a31e5cd348cceb68c899d700",
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=RRPONTSYD",
+        "metadata_path": "evidence/sources/fred_rrpontsyd_meta.html",
+        "metadata_sha256": "77615e6a883840e93e98c2c23076f59cfbf81980ba67df015fc25dbbe2a33431"
+      },
+      "units": "USD billions",
+      "cutoff": "2026-09-18",
+      "peak": {"date": "2022-12-30", "value": 2553.716},
+      "latest": {"date": "2026-09-18", "value": 0.576},
+      "derivation": "Select numeric RRPONTSYD observations on or before cutoff; maximum by numeric value and latest by observation date. Missing cells are not zero.",
+      "audit": {"numeric_observations_through_cutoff": 3329, "duplicate_dates": 0},
+      "constraints": ["Daily peak, not average", "Latest equals USD 576 million, not zero", "Plot retained observations, not interpolated endpoints", "Do not mix domestic series with foreign official reverse repos"]
+    },
+    {
+      "id": "C3",
+      "scenes": ["S01", "S10", "S12"],
+      "status": "source_verified",
+      "kind": "historical_change",
+      "history": {
+        "status": "source_verified",
+        "basis": "Matched weekly Wednesday levels, 159 observations each; not weekly averages",
+        "source_units": "USD millions",
+        "display_derivation": "Subtract each series' 2022-06-01 observation; divide by 1000000 for USD trillions",
+        "window": {"start": "2022-06-01", "end": "2025-06-11"},
+        "endpoint_changes_usd_billions": {"WALCL": -2237.895, "WRBWFRBL": 72.280},
+        "rounding_reconciliation": "Actual endpoint differences round to the existing Table A -2238 and +72 USD billions; do not substitute rounded endpoints into the histories",
+        "sources": [
+          {"path": "evidence/sources/opening-history/fred_walcl.csv", "sha256": "f7714585f2a9e48b350c0bb445d1c74337f9bcaa903941cd54fb8b38ca3d569a", "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WALCL"},
+          {"path": "evidence/sources/opening-history/fred_walcl_meta.html", "sha256": "c02ec56fc5180ee800859519e6be06386e5460fdadac2b4aa3e4e2c2bca8a4df", "url": "https://fred.stlouisfed.org/series/WALCL"},
+          {"path": "evidence/sources/opening-history/fred_wrbwfrbl.csv", "sha256": "9f2c719463a3fdbcbcd532d09e90adef3d54c172238246ce9a8a213bab44e6a4", "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WRBWFRBL"},
+          {"path": "evidence/sources/opening-history/fred_wrbwfrbl_meta.html", "sha256": "afb9fcc5e288fccd480a08455f7600ed8f19eb7bdc5b77646f59aa78fffb67fa", "url": "https://fred.stlouisfed.org/series/WRBWFRBL"}
+        ]
+      },
+      "source": {
+        "path": "evidence/sources/mpr_2025_06.html",
+        "sha256": "7a201f7cad0a75ae840e93d5fc386c501e4774c31e8d1631d99dc9dc0c057da0",
+        "url": "https://www.federalreserve.gov/monetarypolicy/2025-06-mpr-part2.htm",
+        "table": "xtable_balancesheet",
+        "column": "xsheeta5"
+      },
+      "window": {"start": "2022-06-01", "end": "2025-06-11"},
+      "units": "USD billions",
+      "values": [
+        {"label": "Total assets", "row": "xsheetr13", "change": -2238},
+        {"label": "Reserve balances", "row": "xsheetr15", "change": 72},
+        {"label": "Other reverse repos", "row": "xsheetr18", "change": -1760},
+        {"label": "Treasury General Account", "row": "xsheetr19", "change": -504},
+        {"label": "Foreign official reverse repos", "row": "xsheetr17", "change": 106}
+      ],
+      "derivation": "Direct transcription of the same source-table change column; no current-balance subtraction or residual inference.",
+      "constraints": ["Selected rows are not an exhaustive reconciliation", "Other reverse repos must not be labelled total reverse repos", "Historical window must remain visible"]
+    },
+    {
+      "id": "C5-funding-data",
+      "scenes": ["S17", "S18", "S22"],
+      "status": "source_verified",
+      "kind": "exact_date_derived_spread",
+      "source": {
+        "path": "evidence/derived/extraction_metadata.json",
+        "sha256": "5077b65a551827f156c6d70e169bc2b9c49844e3a0b7985b05b260b6eab2c06e",
+        "raw_archive_repo_relative": "docs/research/runs/fed-liquidity-raw-fetch-2026-09-18",
+        "episode_copies": "evidence/sources/",
+        "provenance": "Metadata binds each raw response URL, hash, bytes, fetch timestamp and requested window; episode copies preserve the source basenames and hashes."
+      },
+      "extractor": {"path": "evidence/extract_sources.py", "sha256": "bce5ba63ab7070fe8b816d7770ead8d61cc94899564d85395c8902dcca2f29bd"},
+      "rates": {
+        "path": "evidence/derived/funding_rates.csv",
+        "sha256": "26ae4221e77abf348fd8b063292cae200db31b3dca69abeeb7318222662ee5ea",
+        "observations": 261,
+        "window": {"start": "2025-09-02", "end": "2026-09-17"},
+        "latest": {"date": "2026-09-17", "tgcr_percent": 3.83, "sofr_percent": 3.85, "iorb_percent": 3.90, "tgcr_minus_iorb_bps": -7, "sofr_minus_iorb_bps": -5},
+        "derivation": "Exact effective-date join; Decimal (percent rate - IORB percent) * 100 gives basis points. No interpolation, no future IORB rows, no manufactured September 18 daily observation."
+      },
+      "repo_take_up": {
+        "path": "evidence/derived/repo_daily.csv",
+        "sha256": "30343c42944f5a6a15f77860be7de8f1178da62125db8e5c22af427ee6786249",
+        "window": {"start": "2026-09-01", "end": "2026-09-18"},
+        "operations": 26,
+        "business_dates": 13,
+        "units": "USD",
+        "sum_of_daily_accepted": 430000000,
+        "meaning": "Accepted Repo take-up summed across operations; NOT outstanding balance and NOT Reverse Repo."
+      },
+      "constraints": ["Zero spread is an arithmetic comparison, not a calibrated crisis threshold", "Missing observations stay absent", "Do not imply business-loan transmission from funding spread alone", "Repo offering rate changed from 3.75 to 4.00 on September 17; do not repeat the fetch summary's constant-rate claim"]
+    },
+    {
+      "id": "C9",
+      "status": "source_verified_pending_visual_review",
+      "kind": "dated_maturity_schedule",
+      "claim": "S&P tallied more than USD 3 trillion of U.S. corporate debt maturing across 2025–2027",
+      "source": {"path": "evidence/sources/sp_global_corporate_maturities_2025_snapshot.html", "sha256": "43c79cc86247923cdc7b5de7986b5ceb1e81471b9fe4fc3a578921fe700b0993", "url": "https://investorfactbook.spglobal.com/sp-global-ratings/global-corporate-debt-maturities-through-2029/", "table": "Global Maturity Schedule", "row": "Total United States", "snapshot_date": "2025-01-01"},
+      "units": "USD billions",
+      "values": [{"year": 2025, "value": 816}, {"year": 2026, "value": 1167}, {"year": 2027, "value": 1201}],
+      "sum": 3184,
+      "derivation": "816 + 1167 + 1201 = 3184 billion; display more than 3 trillion in narration",
+      "constraints": ["Show 2025–2027 and January 2025 snapshot", "S&P-rated financial and nonfinancial corporate bonds, loans and revolving credit facilities", "Not all still outstanding in September 2026", "Do not label this nonfinancial-only or all due in 2026", "Distinct from illustrative 2%-to-7% workshop rate example"]
+    }
+  ],
+  "qualitative_claims": [
+    {
+      "id": "C4",
+      "scenes": ["S15", "S16", "S20"],
+      "status": "source_verified",
+      "source": {"path": "evidence/sources/mpr_2026_07.html", "sha256": "bdbf5ab23e9f628b74ad201fd76ebd7583f984b8546bba0d67fb2575452b1b8f", "url": "https://www.federalreserve.gov/monetarypolicy/2026-07-mpr-part2.htm"},
+      "bindings": [
+        {"claim": "Runoff ended December 1, 2025", "anchor": "xsheeta5 and table note after Table A", "source_line": 1556},
+        {"claim": "December 2025 meeting initiated shorter-term Treasury purchases to maintain ample reserves", "anchor": "xsubsection-153-85aae8f9", "source_line": 1378},
+        {"claim": "About USD 3.1 trillion reserves, described as ample", "anchor": "xfig49", "source_line": 1380, "data_through": "2026-07-01"},
+        {"claim": "ON RRP near zero most days; overnight markets stable and purchases accommodated seasonal fluctuations", "anchor": "xbox3-developmentsinthefederalreserv-85ab2447", "source_lines": [1400, 1586]}
+      ],
+      "constraints": ["July report, not September current", "Reserve-management purchases do not establish a new QE claim", "Calm counterexample is not a prediction of perpetual stability"]
+    },
+    {
+      "id": "C5-mechanism",
+      "scenes": ["S10", "S14", "S17"],
+      "status": "source_verified",
+      "source": {"path": "evidence/sources/feds_note_repo_20260826.html", "sha256": "c25152ab968758ea8141b04a244e35617d45f6c9dd5b562385709662fc8b7fcc", "url": "https://www.federalreserve.gov/econres/notes/feds-notes/repo-markets-and-the-feds-balance-sheet-implications-for-monetary-policy-implementation-20260826.html"},
+      "bindings": [{"claim": "Dealer financing demand and money-fund ON RRP substitution affect repo funding", "anchor": "fig1", "source_lines": [1566, 1584]}],
+      "constraints": ["Staff analysis, not a universal crisis threshold", "No automatic equity-market or business-loan transmission inferred"]
+    },
+    {
+      "id": "C6",
+      "scenes": ["S05", "S06", "S07"],
+      "status": "illustrative_accounting",
+      "source": {"path": "evidence/sources/feds_note_trilemma_20260114.html", "sha256": "26c10d83b5260b624ea610f5bbe308b7e4b57a71ad6d04c16936d2cc76ad97a5", "url": "https://www.federalreserve.gov/econres/notes/feds-notes/the-central-bank-balance-sheet-trilemma-20260114.html"},
+      "bindings": [{"claim": "Holding other balances fixed, TGA growth reduces reserves; reverse direction on spending", "source_lines": [1451, 1455]}],
+      "constraints": ["Explicit ILLUSTRATION label", "Other balances held fixed", "No claim of a specific historical taxpayer or contractor transaction"]
+    },
+    {
+      "id": "C7",
+      "scenes": ["S03", "S11"],
+      "status": "illustrative_derivation",
+      "units": "USD billions",
+      "formula": "proxy = Fed assets - TGA - domestic ON RRP",
+      "example": {"delta_assets": -100, "delta_tga": 0, "delta_domestic_on_rrp": -100, "delta_proxy": 0},
+      "constraints": ["Explicit hypothetical example", "Not official Fed series or bank reserves", "No empirical stock-price relationship inferred", "No historical proxy chart authorized by this example"]
+    },
+    {
+      "id": "C8",
+      "scenes": ["S02", "S21", "S24"],
+      "status": "illustrative_conditional",
+      "claim": "Illustrative workshop owner receiving a higher refinancing offer and considering expansion; compared with a borrower whose fixed-rate renewal is later",
+      "rate_example": {"old_annual_rate_percent": 2, "replacement_annual_rate_percent": 7, "annual_interest_multiplier_same_principal": 3.5, "label": "Illustrative refinancing · Same loan balance", "scope": "Annual interest expense, not a claim that the full amortizing loan payment triples; not a measured corporate average or matched historical borrower cohort"},
+      "constraints": ["No real borrower claimed", "No measured rate increase or hiring effect claimed", "Credit risk and borrower conditions are separate influences", "Higher payment illustration holds principal and repayment period fixed", "Delayed equipment order and supplier sale are possible scenario consequences, not measured economic outcomes", "Low ON RRP alone does not establish a universal future loan-rate increase"]
+    }
+  ],
+  "unbound_claim_ids": [],
+  "excluded": [
+    {"item": "original rrp_history.csv", "reason": "Duplicate dates and absent raw operation aggregation provenance"},
+    {"item": "14-business-day threshold and three-day exclusion", "reason": "No verified primary support"}
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "diagnostic": "fed-liquidity-c3-thumbnail",
+  "status": "prepared_only",
+  "render_status": "WAITING_FOR_T14_RENDERER_RELEASE",
+  "source": {
+    "path": "evidence/sources/mpr_2025_06.html",
+    "sha256": "7a201f7cad0a75ae840e93d5fc386c501e4774c31e8d1631d99dc9dc0c057da0",
+    "url": "https://www.federalreserve.gov/monetarypolicy/2025-06-mpr-part2.htm",
+    "table": "xtable_balancesheet",
+    "column": "xsheeta5"
+  },
+  "claim_id": "C3",
+  "window": {
+    "start": "2022-06-01",
+    "end": "2025-06-11"
+  },
+  "units": "USD billions",
+  "values": {
+    "Total assets": -2238,
+    "Reserve balances": 72
+  },
+  "geometry_contract": {
+    "variant": "bars",
+    "builder": "story",
+    "common_zero": true,
+    "signed_values": true,
+    "value_strings": [
+      "-2238",
+      "+72"
+    ]
+  },
+  "renderer": "content/video_engine/scripts/render_baseline.py + current packaging renderer"
+}

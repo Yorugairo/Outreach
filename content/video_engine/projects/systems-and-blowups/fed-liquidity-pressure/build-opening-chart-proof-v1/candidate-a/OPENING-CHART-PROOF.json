@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "candidate": "A",
+  "runtime_s": 19.425,
+  "history_source": "fed-assets-reserves-history.series.json",
+  "rrp_source": "fed-on-rrp-history.series.json",
+  "full_stage_stamped": true,
+  "full_stage_visual_acceptance": "pending shared quiet-zone geometry review",
+  "axis_x": "ledger_page.AXES_KEYS has no xlabel; explicit date ticks and this dated subtitle are used",
+  "melt_status": "DRAFT_PENDING_MOTION_REVIEW",
+  "audio_mode": "silence_geometry_only",
+  "narration_claim": "not presented as coherent narration",
+  "rendered": false,
+  "notes": "Candidate only; no motion acceptance is claimed for the draft melt."
+}

@@ -1,0 +1,6 @@
+# SHA-256 of canonical forward sample frames
+# reverse samples are compared in determinism.json
+8e2c28e7f6f5cd851e2de8a3e751d6ed51adbca4a782f6a7bad7dd44f668f9f1  frames/frame-0001.png
+971b8d3bd2c47b586b602c588f90e469a66ee078a5c720f9f204feebfa0abd3d  frames/frame-0036.png
+971b8d3bd2c47b586b602c588f90e469a66ee078a5c720f9f204feebfa0abd3d  frames/frame-0060.png
+971b8d3bd2c47b586b602c588f90e469a66ee078a5c720f9f204feebfa0abd3d  frames/frame-0120.png

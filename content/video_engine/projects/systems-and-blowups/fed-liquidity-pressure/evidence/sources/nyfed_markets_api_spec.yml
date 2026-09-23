@@ -1,0 +1,5142 @@
+openapi: 3.0.0
+schemes:
+ - https
+info:
+  title: Markets Data APIs  
+  description: |
+
+    <div id="email-alert">
+      <form action="https://public.govdelivery.com/accounts/USFRBNEWYORK/subscribers/qualify">
+        <input id="topic_id" name="topic_id" type="hidden" value="USFRBNEWYORK_512">
+        <fieldset>
+          <div id="email-alert-title">receive e-mail alerts for this page</div>
+          <div id="email-alert-textbox">
+            <input name="email" id="email" size="20" placeholder="enter your email" type="text">
+          </div>
+          <div id="email-alert-button_panel">
+            <input id="form_button" name="commit" value="Submit" type="submit">
+          </div>
+        </fieldset>
+      </form>
+    </div>
+
+    ## Introduction
+    The Markets Data APIs are provided to external users and applications to request data from the Federal Reserve Bank of New York. The APIs are architected using RESTful interface, with structured semantic URLs. As these APIs are intended to be consumed by a variety of systems, the data they return are in multiple formats. The supported formats are JSON, XML, PDF, CSV, and Microsoft Excel. This interactive documentation outlines how to use these services. 
+ 
+    
+    ## Notice
+    Use of reference rates, the Markets Data APIs, and all data accessible through the Markets Data APIs is subject to the [Terms of Use]( https://www.newyorkfed.org/privacy/termsofuse) for the Federal Reserve Bank of New York website.
+
+    Reference rates, including the Effective Federal Funds Rate (EFFR), Overnight Bank Funding Rate (OBFR),  Tri-Party General Collateral Rate (TGCR), Broad General Collateral Rate (BGCR), Secured Overnight Financing Rate (SOFR), and SOFR Averages and Index (SOFR-avg-ind) are subject to important disclaimers, conditions, limitations, and indemnification obligations described in the [Terms of Use](https://www.newyorkfed.org/privacy/termsofuse).
+
+    ## Version and Beta Support  
+    The Markets Data APIs do not support multiple production versions. 
+
+    The default endpoints are backed by the latest official service implementation. When upgrades or new features are implemented, best effort will be made to make them first available in beta version so that consumers may test their systems against the updates before they go live. To access a service’s beta version, preface the path with the /beta node.    
+    
+    Data provided in beta are for testing purposes only and are not regularly maintained.  
+    ```
+    /beta/api/ambs/all/results/details/last/1.json  
+    ```
+    
+    ## Last Updated: June 12, 2026
+   
+    ## RESTful Services
+    ### Response Codes and Content 
+    Valid requests will return with an HTTP 200 and data in the requested format. An invalid request (e.g. invalid token/element in the path or an unsupported format/extension) results in an HTTP 400. Requests are validated to ensure conformity to defined perimeters. If a request fails validation, an HTTP 400 will be returned, and the response body will contain a JSON string array with descriptive messages of the validation failures.
+    
+    ### How to use 
+    Expand each area to see available methods and features including parameters, formats, responses, and sample data.  Use “Try it out” to build requests.
+    
+    Base URL will be production unless Beta Mode is selected.
+
+    **Please take note of the following when using:**  
+      * Data returned is based on parameters provided.
+      * Date must be entered in required format. Start and End dates are defaulted to current date when not provided. 
+      * Formats that result in file downloads (e.g. Microsoft Excel, PDF) are not returned interactively on this page. To see data, click on “Download file” in the “Server response” area.
+      * Requests that return very large datasets may not be presentable in the browser or may slow down browser's response. 
+
+
+  version: "1.0"
+servers:
+  - url: https://markets.newyorkfed.org
+    description: Public
+  - url: https://markets.newyorkfed.org/beta
+    description: Public Beta
+tags:
+ - name: Agency Mortgage-Backed Securities Operations
+   description: Outrights, Dollar Rolls and Coupon Swaps  
+ - name: Central Bank Liquidity Swaps  Operations  
+   description: U.S. Dollar and Non-U.S. Dollar         
+ - name: Guide Sheets 
+   description: FR 2004SI, FR 2004WI,  FR 2004F-Series  
+ - name: Primary Dealer Statistics 
+   description: Series of Surveys (Please take note that *timeseries* and *keyid* are used interchangeably)  
+ - name: Primary Dealer Statistics Market Share
+   description: Quarterly and Year-To-Date
+ - name: Reference Rates  
+   description: Secured and Unsecured      
+ - name: Repo and Reverse Repo Operations 
+   description: Repo, Reverse Repo and Propositions            
+ - name: Securities Lending Operations  
+   description: Securities Lending and Extensions   
+ - name: System Open Market Account Holdings  
+   description: SOMA Holdings (Please take note that Agency includes Agency Debts, MBS, and CMBS. Treasury includes Bills, Notes/Bonds, FRN, and TIPS.)    
+ - name: Treasury Securities Operations 
+   description: Outrights and Prices Paid (Please take note that Prices Paid are included in operations detail when available)  
+components:
+ schemas:
+  ambs-json:
+   properties:
+    ambs:
+     type: object
+     properties:
+      auctions:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/ambs-record'
+  ambs-xml:
+   xml:
+    name: markets
+   properties:
+    ambs:
+     type: object
+     properties:
+      operations:
+       type: object
+       properties:
+        operation:
+         type: array
+         items:
+          type: object
+          $ref: '#/components/schemas/ambs-record'   
+  ambs-record:
+   properties:
+    auctionStatus:
+     type: string
+     example: Results
+    operationId:
+     type: string
+     example: OR 122120 1
+    operationDate:
+     type: string
+     format: date  
+    operationType:
+     type: string 
+     example: Outright TBA Purchase
+    operationDirection:
+     type: string 
+     example: P 
+     enum: [P, S]
+    method:
+     type: string 
+     enum: [Multiple Price, Single Price]
+     example: Multiple Price       
+    releaseTime:
+     type: string
+     example: '10:10'          
+    closeTime:
+     type: string
+     example: '10:30'          
+    classType:
+     type: string
+     example: B 
+    totalSubmittedOrigFace:
+     type: string 
+     default: ''            
+    totalAcceptedOrigFace:
+     type: string
+     default: ''                           
+    totalSubmittedCurrFace:
+     type: string
+     default: ''                                         
+    totalAcceptedCurrFace:
+     type: string
+     default: ''                                                       
+    totalAmtSubmittedPar:
+     type: string   
+     example: '2597000000'          
+    totalAmtAcceptedPar:
+     type: string   
+     example: '1408000000'          
+    settlementDate:
+     type: string
+     format: date                
+    lastUpdated:
+     type: string
+     format: date-time  
+     example: '2020-12-23 10:21:49'
+    note:
+     type: string  
+     default: ''
+    details:
+     type: array
+     xml:
+      wrapped: true
+      name: details
+     items:
+      xml:
+       name: detail
+      oneOf:
+       - $ref: '#/components/schemas/ambs-inc-exc'                     
+  ambs-inc-exc:
+   properties:
+    inclusionExclusionFlag:
+     type: string
+     enum: [I,E]
+     example: I
+    securityDescription:
+     type: string
+     example: FNCI 1.5 2/21   
+    amtAcceptedPar:
+     type: string
+     example: '915000000.00'
+  tsy-json:
+   properties:
+    treasury:
+     type: object
+     properties:
+      auctions:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/tsy-record'
+  tsy-xml:
+   xml:
+    name: markets
+   properties:
+    tsy:
+     type: object
+     properties:
+      operations:
+       type: object
+       properties:
+        operation:
+         type: array
+         items:
+          type: object
+          $ref: '#/components/schemas/tsy-record'
+  tsy-record:              
+   properties:
+    operationId:
+     type: string
+     example: OR 122120 2   
+    auctionStatus:
+     type: string
+     example: Results
+    operationType:
+     type: string 
+     example: Outright TIPS Purchase     
+    operationDate:
+     type: string
+     format: date  
+    settlementdate:
+     type: string
+     format: date             
+    maturityRangeStart:
+     type: string
+     format: date             
+    maturityRangeEnd:
+     type: string
+     format: date       
+    operationDirection:
+     type: string 
+     example: P        
+     enum: [P, S]
+    auctionMethod:
+     type: string 
+     example: Multiple Price  
+     enum: [Multiple Price, Single Price]
+    releaseTime:
+     type: string
+     example: "10:10"           
+    closeTime:
+     type: string
+     example: "10:30"            
+    totalParAmtSubmitted:
+     type: string
+     example: '11485000000'
+    totalParAmtAccepted:
+     type: string
+     example: '6001000000'
+    note:
+     type: string
+     default: ''     
+    lastupdated:
+     type: string
+     format: date-time  
+     example: '2020-12-23 10:21:49'  
+    details:
+     type: array
+     xml:
+      wrapped: true
+      name: details
+     items:
+      xml:
+       name: detail
+      anyOf:
+       - $ref: '#/components/schemas/tsy-inclusion'        
+       - $ref: '#/components/schemas/tsy-exclusion'              
+  tsy-inclusion:
+   properties:
+    inclusionIndicator:
+     type: string
+     example: 'I'              
+    cusip:
+     type: string
+     example: '912828ZW3'                                               
+    securityDescription:
+     type: string
+     example: 'T 00.250 06/30/25'                            
+    parAmountAccepted:
+     type: string
+     example: '0'        
+    weightedAvgAccptPrice:
+     type: string
+     example: 'NA'                                                                                         
+    leastFavoriteAccptPrice:
+     type: string
+     example: 'NA'                                                        
+    percentAllottedleastFavoriteAccptPrice:
+     type: string
+     example: 'NA'                                                                      
+  tsy-exclusion:
+   properties:
+    inclusionIndicator:
+     type: string
+     example: 'E'              
+    cusip:
+     type: string
+     example: '912810QL5'                   
+    securityDescription:
+     type: string
+     example: 'T 04.250 11/15/40'                            
+  soma-asof-dates-json:
+   properties:
+    soma:
+     type: object
+     properties: 
+      asOfDates:
+       type: array
+       items:
+        type: string
+        format: date  
+  soma-asof-dates-xml:
+   xml:
+    name: markets
+   properties:
+    soma:
+     type: object
+     properties:
+      asOfDate:
+       type: array
+       items:
+        type: string
+        format: date
+  soma-wam-json:
+   properties:
+    soma:
+     type: object
+     properties: 
+      asOfDate:
+       type: string
+       format: date  
+      wam:
+       type: number
+       example: 7.677750258793619 
+      securityTypes:
+       type: array
+       items:
+        type: string
+        enum: ["FRNs","TIPS","NotesBonds","Bills"]  
+        example: ["FRNs","TIPS"]        
+  soma-wam-xml:
+   xml:
+    name: markets
+   properties:
+    soma:
+     type: object
+     properties:
+      asOfDate:
+       type: string
+       format: date  
+      wam:
+       type: number
+       example: 7.677750258793619 
+      securityTypes:
+       type: object
+       properties:
+        securityType:
+         type: array
+         items:
+          type: string
+          enum: ["FRNs","TIPS","NotesBonds","Bills"]  
+          example: ["FRNs","TIPS"]       
+  soma-releasedates-json:
+   properties:
+    soma:
+     type: object
+     properties: 
+      dates:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/soma-releasedates-record'           
+  soma-releasedates-xml:
+   xml:
+    name: markets
+   properties:
+    soma:
+     type: object
+     properties:
+      dates:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/soma-releasedates-record'
+  soma-releasedates-record:
+   properties:
+    releaseDate:
+     type: string
+     format: date  
+    asOfDate:
+     type: string
+     format: date
+  soma-summary-json:
+   properties:
+    soma:
+     type: object
+     properties:
+      summary:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/soma-summary-record'
+  soma-summary-xml:
+   xml:
+    name: markets
+   properties:
+    soma:
+     type: object
+     properties:
+      summary:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/soma-summary-record'        
+  soma-summary-record:
+   properties:
+    asOfDate:
+     type: string
+     format: date
+    mbs:
+     type: string
+     example: '2069326412710.30'
+    cmbs:
+     type: string
+     example: '9766474223.44'   
+    tips:
+     type: string
+     example: '2069326412710.30'
+    frn:
+     type: string
+     example: '9766474223.44' 
+    tipsInflationCompensation:
+     type: string
+     example: '43448065488.43'   
+    notesbonds:
+     type: string
+     example: '3967653181000'            
+    bills:
+     type: string
+     example: '326044000000'            
+    agencies:
+     type: string
+     example: '2347000000'                      
+    total:
+     type: string
+     example: '6700832750233.74'                                
+  soma-agency:
+   properties:
+    asOfDate:
+     type: string
+     format: date
+    cusip:
+     type: string
+     example: '3134A4KX1'
+    maturityDate:
+     type: string
+     format: date
+    issuer:
+     type: string
+     example: 'FHLMC'         
+    spread:
+     type: string
+     example: ''         
+    coupon:
+     type: string
+     example: '6.25'              
+    parValue:
+     type: string
+     example: '213000000'              
+    inflationCompensation:
+     type: string
+     example: ''         
+    percentOutstanding:
+     type: string
+     example: ''         
+    changeFromPriorWeek:
+     type: string
+     example: '0'                   
+    changeFromPriorYear:
+     type: string
+     example: '0'                        
+    securityType:
+     type: string
+     example: 'Agency Debts'     
+  soma-mbs:
+   properties:
+    asOfDate:
+     type: string
+     format: date
+    cusip:
+     type: string
+     example: '3134A4KX1'
+    securityDescription:
+     type: string
+     example: 'UMBS MORTPASS 2.5% 10/27'
+    term:
+     type: string
+     example: '15yr'         
+    currentFaceValue:
+     type: string
+     example: '406188.33'
+    isAggregated:
+     type: string
+     example: 'Y'         
+    securityType:
+     type: string
+     example: 'MBS'     
+  soma-cmbs:
+   properties:
+    asOfDate:
+     type: string
+     format: date
+    cusip:
+     type: string
+     example: '3134A4KX1'
+    securityDescription:
+     type: string
+     example: 'FNMA MORTPASS 3.56% 06/28'
+    term:
+     type: string
+    currentFaceValue:
+     type: string
+     example: '124200000'
+    securityType:
+     type: string
+     example: 'CMBS'
+  soma-bills:
+   properties:
+    asOfDate:
+     type: string
+     format: date
+    cusip:
+     type: string
+     example: '9127963K3'
+    maturityDate:
+     type: string
+     format: date     
+    issuer:
+     type: string
+     example: ''         
+    spread:
+     type: string
+     example: ''         
+    coupon:
+     type: string
+     example: ''         
+    parValue:
+     type: string  
+     example: '10751584400'     
+    inflationCompensation:
+     type: string     
+     example: ''         
+    percentOutstanding:
+     type: string  
+     example: '0.0601477144439534'          
+    changeFromPriorWeek:
+     type: string
+     example: '0'     
+    changeFromPriorYear:
+     type: string 
+     example: '0'
+    securityType:
+     type: string
+     example: 'Bills'  
+  soma-notesbonds:
+   properties:
+    asOfDate:
+     type: string
+     format: date
+    cusip:
+     type: string
+     example: '9127963K3'
+    maturityDate:
+     type: string
+     format: date     
+    issuer:
+     type: string
+     example: ''         
+    spread:
+     type: string
+     example: ''         
+    coupon:
+     type: string
+     example: '1.75'
+    parValue:
+     type: string  
+     example: '8600000000'     
+    inflationCompensation:
+     type: string     
+     example: ''         
+    percentOutstanding:
+     type: string  
+     example: '0.2457426991872878'          
+    changeFromPriorWeek:
+     type: string
+     example: '0'     
+    changeFromPriorYear:
+     type: string 
+     example: '8520000000'
+    securityType:
+     type: string
+     example: 'NotesBonds'     
+  soma-frns:
+   properties:
+    asOfDate:
+     type: string
+     format: date
+    cusip:
+     type: string
+     example: '9128285Y2'
+    maturityDate:
+     type: string
+     format: date     
+    issuer:
+     type: string
+     example: ''         
+    spread:
+     type: string
+     example: '0.115'
+    coupon:
+     type: string
+     example: ''         
+    parValue:
+     type: string  
+     example: '15000000'     
+    inflationCompensation:
+     type: string     
+     example: ''         
+    percentOutstanding:
+     type: string  
+     example: '0.0002678808153891'          
+    changeFromPriorWeek:
+     type: string
+     example: '0'     
+    changeFromPriorYear:
+     type: string 
+     example: '0'
+    securityType:
+     type: string
+     example: 'FRNs'          
+  soma-tips:
+   properties:
+    asOfDate:
+     type: string
+     format: date
+    cusip:
+     type: string
+     example: '912828PP9'
+    maturityDate:
+     type: string
+     format: date     
+    issuer:
+     type: string
+     example: ''         
+    spread:
+     type: string
+     example: ''         
+    coupon:
+     type: string
+     example: '1.125'
+    parValue:
+     type: string  
+     example: '4690201300'     
+    inflationCompensation:
+     type: string   
+     example: '891560365.12'     
+    percentOutstanding:
+     type: string  
+     example: '0.1278750722780097'          
+    changeFromPriorWeek:
+     type: string
+     example: '0'     
+    changeFromPriorYear:
+     type: string 
+     example: '0'
+    securityType:
+     type: string
+     example: 'TIPS'          
+  soma-agency-details-json:
+   properties:
+    soma:
+     type: object
+     properties:
+      holdings:
+       type: array
+       items:
+        anyOf:
+         - $ref: '#/components/schemas/soma-agency'        
+         - $ref: '#/components/schemas/soma-mbs'        
+         - $ref: '#/components/schemas/soma-cmbs'        
+  soma-agency-details-xml:
+   xml:
+    name: markets
+   properties:
+    soma:
+     type: object
+     properties:
+      holding:
+       type: array
+       items:
+        anyOf:
+         - $ref: '#/components/schemas/soma-agency'        
+         - $ref: '#/components/schemas/soma-mbs'        
+         - $ref: '#/components/schemas/soma-cmbs'     
+  soma-tsy-details-json:
+   properties:
+    soma:
+     type: object
+     properties:
+      holdings:
+       type: array
+       items:
+        anyOf:
+         - $ref: '#/components/schemas/soma-bills'        
+         - $ref: '#/components/schemas/soma-notesbonds'        
+         - $ref: '#/components/schemas/soma-frns'        
+         - $ref: '#/components/schemas/soma-tips'                 
+  soma-tsy-details-xml:
+   xml:
+    name: markets
+   properties:
+    soma:
+     type: object
+     properties:
+      holding:
+       type: array
+       items:
+        anyOf:
+         - $ref: '#/components/schemas/soma-bills'        
+         - $ref: '#/components/schemas/soma-notesbonds'        
+         - $ref: '#/components/schemas/soma-frns'        
+         - $ref: '#/components/schemas/soma-tips'     
+  soma-mbs-details-json:
+   properties:
+    soma:
+     type: object
+     properties:
+      holdings:
+       type: array
+       items:
+        $ref: '#/components/schemas/soma-mbs'        
+  soma-mbs-details-xml:
+   xml:
+    name: markets  
+   properties:
+    soma:
+     type: object
+     properties:
+      holding:
+       type: array
+       items:
+        $ref: '#/components/schemas/soma-mbs'  
+  pd-asof-dates-json:
+   properties:
+    pd:
+     type: object
+     properties:
+      asofdates:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/pd-asof-dates-record'           
+  pd-asof-dates-xml:
+   xml:
+    name: markets
+   properties:
+    pd:
+     type: object
+     properties:
+      asOfDates:
+       type: object
+       properties:
+        data:
+         type: array
+         items:
+          type: object
+          $ref: '#/components/schemas/pd-asof-dates-record'  
+  pd-asof-dates-record:                
+   properties:
+    asof:
+     type: string          
+     format: date
+    seriesbreak:
+     type: string
+     example: 'SBN2015'
+  pd-seriesbreak-json:
+   properties:
+    pd:
+     type: object
+     properties:
+      seriesbreaks:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/pd-seriesbreak-record'  
+  pd-seriesbreak-xml:
+   xml:
+    name: markets  
+   properties:
+    pd:
+     type: object
+     properties:
+      seriesBreaks:
+       type: object
+       properties:
+        seriesBreakDetail:
+         type: array
+         items:
+          type: object
+          $ref: '#/components/schemas/pd-seriesbreak-record'  
+  pd-seriesbreak-record:    
+   properties:          
+    label:
+     type: string          
+     example: 'Pre-January 2015'
+    seriesbreak:
+     type: string
+     example: 'SBN2013'           
+    startdate:
+     type: string
+     format: date
+    enddate:
+     type: string
+     format: date              
+  pd-timeseries-json:
+   properties:
+    pd:
+     type: object
+     properties:
+      timeseries:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/pd-timeseries-record'
+  pd-timeseries-xml:
+   xml:
+    name: markets  
+   properties:
+    pd:
+     type: object
+     properties:
+      timeseries:
+       type: object
+       properties:
+        timeseriesDetail:
+         type: array
+         items:
+          type: object
+          $ref: '#/components/schemas/pd-timeseries-record' 
+  pd-timeseries-record:
+   properties:              
+    seriesbreak:
+     type: string
+     example: 'SBN2013'           
+    keyid:
+     type: string
+     example: 'PDSORA-OC'
+    description:
+     type: string
+     example: 'Total - Repurchase Agreements: Other - Triparty (excluding GCF) - Term Agreements (more than 30 days) - Change From Previous Week'
+  pd-timeseries-set-json:
+   properties:
+    pd:
+     type: object
+     properties:
+      timeseries:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/pd-timeseries-set-record'                     
+  pd-timeseries-set-xml:
+   xml:
+    name: markets    
+   properties:
+    pd:
+     type: object
+     properties:
+      timeSeriesData:
+       type: object
+       properties:
+        data:
+         type: array
+         items:
+          type: object
+          $ref: '#/components/schemas/pd-timeseries-set-record-xml' 
+  pd-timeseries-set-record:                   
+   properties:
+    asofdate:
+     type: string          
+     format: date
+    keyid:
+     type: string
+     example: 'PDTRMBS-TOT'           
+    value:
+     type: string
+     example: '351918'              
+  pd-timeseries-set-record-xml:                   
+   properties:
+    timeSeries:
+     type: string
+     example: 'PDTRMBS-TOT'           
+    asofdate:
+     type: string          
+     format: date
+    value:
+     type: string
+     example: '351918'              
+  pd-ms-quarterly-latest-json:
+   properties:
+    pd:
+     type: object
+     properties:
+        marketShare:
+         type: object
+         properties:
+             quarterly:
+                 type: object
+                 $ref: '#/components/schemas/pd-ms-latest-record'  
+  pd-ms-quarterly-latest-xml:
+   xml:
+    name: markets
+   properties:
+    pd:
+     type: object
+     properties:
+        marketShare:
+         type: object
+         properties:
+            quarterly:
+             type: object
+             properties:
+                data:
+                 type: array
+                 items:
+                  type: object
+                  $ref: '#/components/schemas/pd-ms-latest-record'  
+  pd-ms-ytd-latest-json:
+   properties:
+    pd:
+     type: object
+     properties:
+        marketShare:
+         type: object
+         properties:
+             ytd:
+                 type: object
+                 $ref: '#/components/schemas/pd-ms-latest-record'  
+  pd-ms-ytd-latest-xml:
+   xml:
+    name: markets
+   properties:
+    pd:
+     type: object
+     properties:
+        marketShare:
+         type: object
+         properties:
+            ytd:
+             type: object
+             properties:
+                data:
+                 type: array
+                 items:
+                  type: object
+                  $ref: '#/components/schemas/pd-ms-latest-record'  
+  pd-ms-latest-record:                
+   properties:
+    releaseDate:
+     type: string          
+     format: date
+    title:
+     type: string
+     example: 'QUARTER I 2022'
+    numDealers:
+     type: object
+     properties:
+        firstQuint:
+         type: number          
+         example: 5
+        secondQuint:
+         type: number
+         example: 5
+        thirdQuint:
+         type: number          
+         example: 5
+        fourthQuint:
+         type: number
+         example: 5
+        fifthQuint:
+         type: number          
+         example: 4
+    interDealerBrokers:
+     type: array
+     xml:
+      wrapped: true
+      name: interDealerBrokers
+     items:
+      xml:
+       name: interDealerBroker
+      oneOf:
+       - $ref: '#/components/schemas/pd-ms-dealer-record'                     
+    others:
+     type: array
+     xml:
+      wrapped: true
+      name: others
+     items:
+      xml:
+       name: other
+      oneOf:
+       - $ref: '#/components/schemas/pd-ms-dealer-record'                     
+    totals:
+     type: array
+     xml:
+      wrapped: true
+      name: totals
+     items:
+      xml:
+       name: total
+      oneOf:
+       - $ref: '#/components/schemas/pd-ms-dealer-record'                     
+  pd-ms-dealer-record:                
+   properties:
+    securityType:
+     type: string          
+     example: 'U.S. TREASURY SECURITIES (EXCLUDING TIPS)'
+    security:
+     type: string
+     example: 'TREASURY BILLS'
+    percentFirstQuintRange:
+     type: string          
+     example: '>=7.78'
+    percentFirstQuintMktShare:
+     type: string
+     example: '46.11'
+    percentSecondQuintRange:
+     type: string          
+     example: '4.47 - 7.77'
+    percentSecondQuintMktShare:
+     type: string
+     example: '31.11'
+    percentThirdQuintRange:
+     type: string          
+     example: '2.16 - 3.42'
+    percentThirdQuintMktShare:
+     type: string
+     example: '12.72'
+    percentFourthQuintRange:
+     type: string          
+     example: '1.35 - 2.16'
+    percentFourthQuintMktShare:
+     type: string
+     example: '8.85'
+    percentFifthQuintRange:
+     type: string          
+     example: '<=0.65'
+    percentFifthQuintMktShare:
+     type: string
+     example: '1.22'
+    dailyAvgVolInMillions:
+     type: number
+     example: 33331.4
+  effr-record:
+   properties:
+    effectiveDate:
+     type: string
+     format: date
+     example: "2021-01-12"
+    type:
+     type: string
+     example: "EFFR"
+    percent:
+     type: number
+     example: 0.04 
+    percentPercentile1:
+     type: number
+     example: 0.01     
+    percentPercentile25:
+     type: number
+     example: 0.01     
+    percentPercentile75:
+     type: number
+     example: 0.01     
+    percentPercentile99:
+     type: number
+     example: 0.01          
+    targetRateFrom:
+     type: number
+     example: 0
+    targetRateTo:
+     type: number
+     example: 0.25    
+    volumeInBillions:
+     type: number
+     example: 55
+    footnoteId:
+     type: number
+     example: 1     
+    revisionIndicator:
+     type: string
+     example: "Y"
+  effr-pre-2016-record:
+   properties:
+    effectiveDate:
+     type: string
+     format: date
+     example: "2006-01-12"
+    type:
+     type: string
+     example: "EFFR"
+    percent:
+     type: number
+     example: 5.34 
+    targetRange:
+     type: number
+     example: 5.25      
+    intraDayLow:
+     type: number
+     example: 5.00      
+    intraDayHigh:
+     type: number
+     example: 5.00      
+    stdDeviation:
+     type: number
+     example: 0.10   
+  obfr-record:
+   properties:
+    effectiveDate:
+     type: string
+     format: date
+     example: "2021-01-12"
+    type:
+     type: string
+     example: "OBFR"
+    percent:
+     type: number
+     example: 0.04 
+    percentPercentile1:
+     type: number
+     example: 0.01     
+    percentPercentile25:
+     type: number
+     example: 0.01     
+    percentPercentile75:
+     type: number
+     example: 0.01     
+    percentPercentile99:
+     type: number
+     example: 0.01          
+    volumeInBillions:
+     type: number
+     example: 55
+    footnoteId:
+     type: number
+     example: 1          
+    revisionIndicator:
+     type: string
+     example: "Y"    
+  bgcr-record:
+   properties:
+    effectiveDate:
+     type: string
+     format: date
+     example: "2021-01-12"
+    type:
+     type: string
+     example: "BGCR"
+    percent:
+     type: number
+     example: 0.04 
+    percentPercentile1:
+     type: number
+     example: 0.01     
+    percentPercentile25:
+     type: number
+     example: 0.01     
+    percentPercentile75:
+     type: number
+     example: 0.01     
+    percentPercentile99:
+     type: number
+     example: 0.01          
+    volumeInBillions:
+     type: number
+     example: 55
+    footnoteId:
+     type: number
+     example: 1          
+    revisionIndicator:
+     type: string
+     example: "Y"     
+  tgcr-record:
+   properties:
+    effectiveDate:
+     type: string
+     format: date
+     example: "2021-01-12"
+    type:
+     type: string
+     example: "TGCR"
+    percent:
+     type: number
+     example: 0.04 
+    percentPercentile1:
+     type: number
+     example: 0.01     
+    percentPercentile25:
+     type: number
+     example: 0.01     
+    percentPercentile75:
+     type: number
+     example: 0.01     
+    percentPercentile99:
+     type: number
+     example: 0.01          
+    volumeInBillions:
+     type: number
+     example: 55
+    footnoteId:
+     type: number
+     example: 1          
+    revisionIndicator:
+     type: string
+     example: "Y"          
+  sofr-record:
+   properties:
+    effectiveDate:
+     type: string
+     format: date
+     example: "2021-01-12"
+    type:
+     type: string
+     example: "SOFR"
+    percent:
+     type: number
+     example: 0.04 
+    percentPercentile1:
+     type: number
+     example: 0.01     
+    percentPercentile25:
+     type: number
+     example: 0.01     
+    percentPercentile75:
+     type: number
+     example: 0.01     
+    percentPercentile99:
+     type: number
+     example: 0.01          
+    volumeInBillions:
+     type: number
+     example: 55
+    footnoteId:
+     type: number
+     example: 1          
+    revisionIndicator:
+     type: string
+     example: "Y"           
+  sofrai-record:
+   properties:
+    effectiveDate:
+     type: string
+     format: date
+     example: "2021-01-12"
+    type:
+     type: string
+     example: "SOFRAI"
+    average30day:
+     type: number
+     example: 0.08567 
+    average90day:
+     type: number
+     example: 0.08479 
+    average180day:
+     type: number
+     example: 0.08567      
+    index:
+     type: number
+     example: 1.04199957   
+    revisionIndicator:
+     type: string
+     example: "Y"                    
+  refrates-unsec-json:
+   properties:
+    refRates:
+     type: array
+     items:
+      anyOf:
+       - $ref: '#/components/schemas/effr-record'        
+       - $ref: '#/components/schemas/obfr-record'        
+       - $ref: '#/components/schemas/effr-pre-2016-record'    
+  refrates-sec-json:
+   properties:
+    refRates:
+     type: array
+     items:
+      anyOf:
+       - $ref: '#/components/schemas/tgcr-record'        
+       - $ref: '#/components/schemas/bgcr-record'        
+       - $ref: '#/components/schemas/sofr-record'        
+       - $ref: '#/components/schemas/sofrai-record'  
+  refrates-all-json:
+   properties:
+    refRates:
+     type: array
+     items:
+      anyOf:
+       - $ref: '#/components/schemas/tgcr-record'        
+       - $ref: '#/components/schemas/bgcr-record'        
+       - $ref: '#/components/schemas/sofr-record'        
+       - $ref: '#/components/schemas/sofrai-record'        
+       - $ref: '#/components/schemas/effr-record'        
+       - $ref: '#/components/schemas/obfr-record'        
+       - $ref: '#/components/schemas/effr-pre-2016-record'           
+  refrates-unsec-xml:
+   xml:
+    name: markets
+   properties:
+    rates:
+     type: object
+     properties:
+      rate:
+       type: array
+       items:
+        anyOf:
+         - $ref: '#/components/schemas/effr-record'        
+         - $ref: '#/components/schemas/obfr-record'        
+         - $ref: '#/components/schemas/effr-pre-2016-record'           
+  refrates-sec-xml:
+   xml:
+    name: markets  
+   properties:
+    rates:
+     type: object
+     properties:
+      rate:
+       type: array
+       items:
+        anyOf:
+         - $ref: '#/components/schemas/tgcr-record'        
+         - $ref: '#/components/schemas/bgcr-record'        
+         - $ref: '#/components/schemas/sofr-record'        
+         - $ref: '#/components/schemas/sofrai-record'        
+  refrates-all-xml:
+   xml:
+    name: markets  
+   properties:
+    rates:
+     type: object
+     properties:
+      rate:
+       type: array
+       items:
+        anyOf:
+         - $ref: '#/components/schemas/tgcr-record'        
+         - $ref: '#/components/schemas/bgcr-record'        
+         - $ref: '#/components/schemas/sofr-record'        
+         - $ref: '#/components/schemas/sofrai-record'   
+         - $ref: '#/components/schemas/effr-record'        
+         - $ref: '#/components/schemas/obfr-record'        
+         - $ref: '#/components/schemas/effr-pre-2016-record'   
+
+  fxs-dollar-record:
+   properties:
+    operationType:
+     type: string
+     example: "U.S. Dollar Liquidity Swap"   
+    counterparty:
+     type: string
+     example: "European Central Bank"
+    currency:
+     type: string
+     example: "USD"
+    tradeDate:
+     type: string
+     format: date
+     example: "2021-04-14"     
+    settlementDate:
+     type: string
+     format: date
+     example: "2021-04-14"          
+    maturityDate:
+     type: string
+     format: date
+     example: "2021-04-14"          
+    termInDays:
+     type: number
+     example: 84
+    amount:
+     type: number
+     example: 5000000
+    interestRate:
+     type: number
+     example: 0.33     
+    isSmallValue:
+     type: string
+     example: "Y"  
+    lastUpdated:
+     type: string
+     format: date-time  
+     example: '2020-12-23 10:21:49'
+  fxs-fgn-record:
+   properties:
+    operationType:
+     type: string
+     example: "Non-U.S. Dollar Liquidity Swap"      
+    counterparty:
+     type: string
+     example: "Bank of Canada"
+    currency:
+     type: string
+     example: "CAD"
+    tradeDate:
+     type: string
+     format: date
+     example: "2021-04-14"     
+    settlementDate:
+     type: string
+     format: date
+     example: "2021-04-14"          
+    maturityDate:
+     type: string
+     format: date
+     example: "2021-04-14"          
+    termInDays:
+     type: number
+     example: 84
+    amount:
+     type: number
+     example: 5000000
+    interestRate:
+     type: number
+     example: 0.33     
+    isSmallValue:
+     type: string
+     example: "Y"      
+    lastUpdated:
+     type: string
+     format: date-time  
+     example: '2020-12-23 10:21:49'     
+  fxs-dollar-json:
+   properties:
+    fxSwaps:
+     type: object
+     properties:
+      operations:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/fxs-dollar-record'         
+  fxs-dollar-xml:
+   xml:
+    name: markets    
+   properties:
+    fxSwaps:
+     type: object
+     properties:
+      operations:
+       type: object
+       properties:
+        operation:
+         type: array
+         items:
+          type: object
+          $ref: '#/components/schemas/fxs-dollar-record'    
+  fxs-json:
+   properties:
+    fxSwaps:
+     type: object
+     properties:
+      operations:
+       type: array
+       items:
+        oneOf:
+         - $ref: '#/components/schemas/fxs-dollar-record'        
+         - $ref: '#/components/schemas/fxs-fgn-record'       
+  fxs-xml:
+   xml:
+    name: markets    
+   properties:
+    fxSwaps:
+     type: object
+     properties:
+      operations:
+       type: object
+       properties:
+        operation:
+         type: array
+         items:
+          oneOf:
+           - $ref: '#/components/schemas/fxs-dollar-record'        
+           - $ref: '#/components/schemas/fxs-fgn-record'    
+  fxs-counterparty-json:
+   properties:
+    fxSwaps:
+     type: object
+     properties:
+      counterparties:
+       type: array
+       items:
+        type: string
+       example: [ "Banco de Mexico","Bank of Canada","Bank of England","Bank of Japan","Bank of Korea","Danmarks Nationalbank"]
+  fxs-counterparty-xml:
+   xml:
+    name: markets
+   properties:
+    fxSwaps:
+     type: object
+     properties:
+      counterparties:
+       type: object
+       properties:
+        counterparty:
+         type: array
+         items:
+          type: string
+         example: [ "Banco de Mexico","Bank of Canada","Bank of England","Bank of Japan","Bank of Korea","Danmarks Nationalbank"]
+  repo-json:
+   properties:
+    repo:
+     type: object
+     properties:
+      operations:
+       type: array
+       items:
+        anyOf:
+         - $ref: '#/components/schemas/repo-release-record'
+         - $ref: '#/components/schemas/repo-result-record'
+         - $ref: '#/components/schemas/reverserepo-result-record'
+  repo-xml:
+   xml:
+    name: markets    
+   properties:
+    repo:
+     type: object
+     properties:
+      operations:
+       type: object
+       properties:
+        operation:
+         type: array
+         items:
+          anyOf:
+           - $ref: '#/components/schemas/repo-release-record'
+           - $ref: '#/components/schemas/repo-result-record'
+           - $ref: '#/components/schemas/reverserepo-result-record'
+           
+  repo-postoperation-json:
+   properties:
+    repo:
+     type: object
+     properties:
+      operations:
+       type: array
+       items:
+        anyOf:
+         - $ref: '#/components/schemas/repo-postoperation-result-record'
+  repo-postoperation-xml:
+   xml:
+    name: markets    
+   properties:
+    repo:
+     type: object
+     properties:
+      operations:
+       type: object
+       properties:
+        operation:
+         type: array
+         items:
+          anyOf:
+           - $ref: '#/components/schemas/repo-postoperation-result-record'
+  reverserepo-postoperation-json:
+   properties:
+    repo:
+     type: object
+     properties:
+      operations:
+       type: array
+       items:
+        anyOf:
+         - $ref: '#/components/schemas/reverserepo-postoperation-result-record'
+  reverserepo-postoperation-xml:
+   xml:
+    name: markets    
+   properties:
+    repo:
+     type: object
+     properties:
+      operations:
+       type: object
+       properties:
+        operation:
+         type: array
+         items:
+          anyOf:
+           - $ref: '#/components/schemas/reverserepo-postoperation-result-record'                      
+  repo-fixed-rate-tranche:
+   description: Results for a specific security type for a specific auction method. For Reverse Repo only.
+   properties:
+    securityType:
+     type: string 
+     example: Treasury 
+     enum: [Treasury, Agency, Mortgage-Backed, SRF]
+    amtSubmitted:
+     type: number
+     example: 90000000
+    amtAccepted:
+     type: number
+     example: 90000000     
+    percentAwardRate:
+     type: number
+     example: 0.05         
+    minimumBidRate:
+     type: number
+     example: 0.02         
+    maximumBidRate:
+     type: number
+     example: 0.05         
+    percentOfferingRate:
+     type: number
+     example: 0.02              
+  repo-multiple-price-tranche:
+   description: Results for a specific security type for a specific auction method. For Repo and Reverse Repo.
+   properties:
+    securityType:
+     type: string 
+     example: Agency 
+     enum: [Treasury, Agency, Mortgage-Backed, SRF]
+    amtSubmitted:
+     type: number
+     example: 90000000
+    amtAccepted:
+     type: number
+     example: 90000000   
+    minimumBidRate:
+     type: number
+     example: 0.02         
+    maximumBidRate:
+     type: number
+     example: 0.05         
+    percentOfferingRate:
+     type: number
+     example: 0.02                   
+    percentHighRate:
+     type: number
+     nullable: true
+     description: Only available if amtSubmitted and amtAccepted are greater than 0
+     example: 1.79               
+    percentLowRate:
+     type: number
+     nullable: true
+     description: Only available if amtSubmitted and amtAccepted are greater than 0
+     example: 1.01                    
+    percentStopOutRate:
+     type: number
+     nullable: true
+     description: Only available if amtSubmitted and amtAccepted are greater than 0
+     example: 1.46                        
+    percentWeightedAverageRate:
+     type: number
+     nullable: true
+     description: Only available if amtSubmitted and amtAccepted are greater than 0
+     example: 1.123        
+  repo-single-price-tranche:
+   description: Results for a specific security type for a specific auction method. For Repo and Reverse Repo.
+   properties:
+    securityType:
+     type: string 
+     example: Mortgage-Backed 
+     enum: [Treasury, Agency, Mortgage-Backed, SRF]
+    amtSubmitted:
+     type: number
+     example: 90000000
+    amtAccepted:
+     type: number
+     example: 90000000     
+    minimumBidRate:
+     type: number
+     example: 0.02         
+    maximumBidRate:
+     type: number
+     example: 0.05         
+    percentOfferingRate:
+     type: number
+     example: 0.02                   
+    percentAwardRate:
+     type: number
+     nullable: true
+     description: Only available if amtSubmitted and amtAccepted are greater than 0
+     example: 0.25               
+    percentAmtAtStopOut:
+     type: number
+     nullable: true
+     description: Only available if amtSubmitted and amtAccepted are greater than 0
+     example: 100     
+    percentHighRate:
+     type: number
+     nullable: true
+     description: Only available if amtSubmitted and amtAccepted are greater than 0
+     example: 0.25               
+    percentLowRate:
+     type: number
+     nullable: true
+     description: Only available if amtSubmitted and amtAccepted are greater than 0
+     example: 0.25  
+  repo-release-record:
+   description: Represents an operation announcement, extension, or cancellation. Can represent either a Repo or Reverse Repo operation.
+   properties:
+    operationId:   
+     type: string
+     example: "RP 062221 1"                
+    operationDate:   
+     type: string
+     format: date
+     example: "2021-06-22"     
+    auctionStatus:
+     type: string
+     enum: [Released, Extended, Cancelled]
+     example: Released                    
+    settlementDate:   
+     type: string
+     format: date
+     example: "2021-06-22"             
+    maturityDate:   
+     type: string
+     format: date
+     example: "2021-06-22"                  
+    operationType:   
+     type: string
+     enum: [Repo,Reverse Repo]
+     example: "Reverse Repo"                       
+    operationMethod:   
+     type: string
+     enum: ["Multiple Price", "Single Price", "Fixed Rate","Full Allotment"]
+    settlementType:   
+     type: string
+     example: "Same Day"                                 
+    termCalenderDays:   
+     type: number
+     example: 1
+    closeTime:
+     type: string
+     example: '13:15'      
+    lastUpdated:
+     type: string
+     format: date-time  
+     example: '2020-12-23 10:21:49'     
+    note:
+     type: string  
+     default: ''          
+  repo-result-record:
+   description: A Repo operation results. Post operation data (settlementAmts) is included once available  
+   properties:
+    operationId:   
+     type: string
+     example: "RP 062221 1"                
+    operationDate:   
+     type: string
+     format: date
+     example: "2021-06-22"        
+    auctionStatus:
+     type: string
+     example: Results          
+    settlementDate:   
+     type: string
+     format: date
+     example: "2021-06-22"             
+    maturityDate:   
+     type: string
+     format: date
+     example: "2021-06-22"                  
+    operationType:   
+     type: string
+     example: "Repo"                       
+    operationMethod:   
+     type: string
+     enum: ["Multiple Price", "Single Price", "Fixed Rate"]
+    settlementType:   
+     type: string
+     example: "Same Day"                                 
+    termCalenderDays:   
+     type: number
+     example: 1
+    closeTime:
+     type: string
+     example: '13:15'               
+    totalAmtSubmitted:
+     type: number
+     example: 791605000000 
+    totalAmtAccepted:
+     type: number
+     example: 791605000000 
+    participatingCpty:
+     type: number
+     nullable: true
+     example: 74 
+    acceptedCpty:
+     type: number
+     nullable: true
+     example: 74
+    lastUpdated:
+     type: string
+     format: date-time  
+     example: '2020-12-23 10:21:49'
+    note:
+     type: string  
+     default: ''     
+    details:
+     type: array
+     description: Contains results for specific tranches (Mortgage-Backed, Agency, Treasury, or SRF). The properties available depend on the operation method
+     xml:
+      wrapped: true
+      name: details
+     items:
+      xml:
+       name: detail
+      oneOf:
+       - $ref: '#/components/schemas/repo-multiple-price-tranche'
+       - $ref: '#/components/schemas/repo-single-price-tranche'  
+      discriminator:      
+       propertyName: operationMethod
+       mapping:
+        Multiple Price: '#/components/schemas/repo-multiple-price-tranche'
+        Single Price: '#/components/schemas/repo-single-price-tranche'     
+    settlementAmts:
+     type: array
+     nullable: true
+     description: Populated only for Repos and when post operation data is available
+     xml:
+      wrapped: true
+      name: settlementAmts
+     items:
+      xml:
+       name: settlementAmt
+      oneOf:
+       - $ref: '#/components/schemas/settlement-amount-record'                      
+  reverserepo-result-record:
+   description: A Reverse Repo operation results. Post operation data (propositions) is included once available  
+   properties:
+    operationId:   
+     type: string
+     example: "RP 062221 1"                
+    operationDate:   
+     type: string
+     format: date
+     example: "2021-06-22"   
+    auctionStatus:
+     type: string
+     example: Results               
+    settlementDate:   
+     type: string
+     format: date
+     example: "2021-06-22"             
+    maturityDate:   
+     type: string
+     format: date
+     example: "2021-06-22"                  
+    operationType:   
+     type: string
+     example: "Reverse Repo"                       
+    operationMethod:   
+     type: string
+     enum: ["Multiple Price", "Single Price", "Fixed Rate"]
+    settlementType:   
+     type: string
+     example: "Same Day"                                 
+    termCalenderDays:   
+     type: number
+     example: 1
+    closeTime:
+     type: string
+     example: '13:15'               
+    totalAmtSubmitted:
+     type: number
+     example: 791605000000 
+    totalAmtAccepted:
+     type: number
+     example: 791605000000 
+    participatingCpty:
+     type: number
+     nullable: true
+     example: 74 
+    acceptedCpty:
+     type: number
+     nullable: true
+     example: 74
+    lastUpdated:
+     type: string
+     format: date-time  
+     example: '2020-12-23 10:21:49'     
+    note:
+     type: string  
+     default: ''          
+    details:
+     type: array
+     description: Contains results for specific tranches (Mortgage-Backed, Agency, Treasury, or SRF). The properties available depend on the operation method
+     xml:
+      wrapped: true
+      name: details
+     items:
+      xml:
+       name: detail
+      oneOf:
+       - $ref: '#/components/schemas/repo-multiple-price-tranche'
+       - $ref: '#/components/schemas/repo-single-price-tranche'  
+       - $ref: '#/components/schemas/repo-fixed-rate-tranche' 
+      discriminator:      
+       propertyName: operationMethod
+       mapping:
+        Multiple Price: '#/components/schemas/repo-multiple-price-tranche'
+        Single Price: '#/components/schemas/repo-single-price-tranche'     
+        Fixed Rate: '#/components/schemas/repo-fixed-rate-tranche' 
+    propositions:
+     type: array
+     nullable: true
+     description: Populated only for Reverse Repos and when post operation data is available
+     xml:
+      wrapped: true
+      name: propositions
+     items:
+      xml:
+       name: proposition
+      oneOf:
+       - $ref: '#/components/schemas/proposition-record'
+  settlement-amount-record:
+   description: A post operation settlement amount for a Repo operation. 
+   properties:
+    counterpartyType:
+     type: string
+     example: "All Participants"
+     enum: [All Participants, bank, gse, pd, mmf]
+    securityType:
+     type: string 
+     example: Treasury 
+     enum: [Treasury, Agency, Mortgage-Backed, US Dollar]
+    amtAccepted:
+     type: number
+     example: 1232423442                    
+  proposition-record:
+   description: A post operation proposition amount for a Reverse Repo operation
+   properties:
+    counterpartyType:
+     type: string
+     example: "bank"
+     enum: [All Participants, bank, gse, pd, mmf]
+    amtAccepted:
+     type: number
+     example: 765141000000                         
+     
+  repo-postoperation-result-record:
+   description: A Repo post operation results  
+   properties:
+    operationId:   
+     type: string
+     example: "RP 062221 1"                
+    operationDate:   
+     type: string
+     format: date
+     example: "2021-06-22"        
+    operationType:   
+     type: string
+     example: "Repo"       
+    note:
+     type: string  
+     default: ''    
+    totalAmtAccepted:
+     type: number
+     example: 791605000000     
+    settlementAmts:
+     type: array
+     nullable: true
+     description: Populated only for Repos and when post operation data is available
+     xml:
+      wrapped: true
+      name: settlementAmts
+     items:
+      xml:
+       name: settlementAmt
+      oneOf:
+       - $ref: '#/components/schemas/settlement-amount-record'       
+  reverserepo-postoperation-result-record:
+   description: A Reverse Repo post operation results  
+   properties:
+    operationId:   
+     type: string
+     example: "RP 062221 1"                
+    operationDate:   
+     type: string
+     format: date
+     example: "2021-06-22"        
+    operationType:   
+     type: string
+     example: "Reverse Repo"       
+    note:
+     type: string  
+     default: ''    
+    totalAmtAccepted:
+     type: number
+     example: 791605000000     
+    propositions:
+     type: array
+     nullable: true
+     description: Populated only for Reverse Repos and when post operation data is available
+     xml:
+      wrapped: true
+      name: propositions
+     items:
+      xml:
+       name: proposition
+      oneOf:
+       - $ref: '#/components/schemas/proposition-record'              
+
+  seclending-json:
+   properties:
+    seclending:
+     type: object
+     properties:
+      operations:
+       type: array
+       items:
+        type: object
+        $ref: '#/components/schemas/seclending-record'
+  seclending-xml:
+   xml:
+    name: markets
+   properties:
+    seclending:
+     type: object
+     properties:
+      operations:
+       type: object
+       properties:
+        operation:
+         type: array
+         items:
+          type: object
+          $ref: '#/components/schemas/seclending-record'   
+  seclending-record:
+   properties:
+    operationId:
+     type: string
+     example: SL 012022 1
+    auctionStatus:
+     type: string
+     example: Results
+    operationType:
+     type: string 
+     example: Securities Lending
+    operationDate:
+     type: string
+     format: date  
+    settlementDate:
+     type: string
+     format: date  
+    maturityDate:
+     type: string
+     format: date  
+    releaseTime:
+     type: string
+     example: '10:10'          
+    closeTime:
+     type: string
+     example: '10:30'          
+    note:
+     type: string  
+     default: ''
+    lastUpdated:
+     type: string
+     format: date-time  
+     example: '2020-12-23 10:21:49'
+    totalParAmtSubmitted:
+     type: number   
+     example: 259700000          
+    totalParAmtAccepted:
+     type: number   
+     example: 1408000000          
+    totalParAmtExtended:
+     type: number
+     example: 1408000000         
+    details:
+     type: array
+     xml:
+      wrapped: true
+      name: details
+     items:
+      xml:
+       name: detail
+      oneOf:
+       - $ref: '#/components/schemas/seclending-securities'
+       - $ref: '#/components/schemas/seclending-extensions'
+  seclending-securities:
+   properties:
+    cusip:
+     type: string
+     example: '912828ZW3'                                               
+    securityDescription:
+     type: string
+     example: 'T 00.250 06/30/25'                            
+    parAmtSubmitted:
+     type: number
+     example: 139000000        
+    parAmtAccepted:
+     type: number
+     example: 139000000        
+    weightedAverageRate:
+     type: number
+     example: 0.050                                                                                         
+    somaHoldings:
+     type: number
+     example: 15275143300                                                        
+    theoAvailToBorrow:
+     type: number
+     example: 13747000000                                                                      
+    actualAvailToBorrow:
+     type: number
+     example: 13747000000                                                        
+    outstandingLoans:
+     type: number
+     example: 0                                                                      
+  seclending-extensions:
+   properties:
+    cusip:
+     type: string
+     example: '91282CBA8'                                               
+    securityDescription:
+     type: string
+     example: 'T 00.125 12/15/23'                            
+    parAmtExtended:
+     type: number
+     example: 6000000        
+
+  seclendingCusip-json:
+   properties:
+    seclending:
+     type: object
+     properties:
+      operations:
+       type: array
+       items:
+        type: object
+        oneOf:
+         - $ref: '#/components/schemas/seclending-record'           
+         - $ref: '#/components/schemas/seclendingCusip-record'           
+  seclendingCusip-xml:
+   xml:
+    name: markets
+   properties:
+    seclending:
+     type: object
+     properties:
+      operations:
+       type: object
+       properties:
+        operation:
+         type: array
+         items:
+          type: object
+          oneOf:
+           - $ref: '#/components/schemas/seclending-record'           
+           - $ref: '#/components/schemas/seclendingCusip-record'           
+  seclendingCusip-record:
+   properties:
+    operationId:
+     type: string
+     example: SL 012022 1
+    operationType:
+     type: string 
+     example: Securities Lending
+    operationDate:
+     type: string
+     format: date  
+    settlementDate:
+     type: string
+     format: date  
+    maturityDate:
+     type: string
+     format: date  
+    cusip:
+     type: string
+     example: '912828ZW3'                                               
+    securityDescription:
+     type: string
+     example: 'T 00.250 06/30/25'                            
+    parAmtSubmitted:
+     type: number
+     example: 139000000        
+    parAmtAccepted:
+     type: number
+     example: 139000000        
+    parAmtExtended:
+     type: number
+     example: 6000000        
+    weightedAverageRate:
+     type: number
+     example: 0.050                                                                                         
+    somaHoldings:
+     type: number
+     example: 15275143300                                                        
+    theoAvailToBorrow:
+     type: number
+     example: 13747000000                                                                      
+    actualAvailToBorrow:
+     type: number
+     example: 13747000000                                                        
+    outstandingLoans:
+     type: number
+     example: 0                                                                      
+
+  guidesheets-xml:
+   properties:
+    markets:
+      type: object
+      xml:
+       name: markets
+      properties:
+       guidesheet:
+         type: object
+         xml:
+          name: guidesheet
+         oneOf:
+          - $ref: '#/components/schemas/si-record'           
+          - $ref: '#/components/schemas/wi-record'           
+          - $ref: '#/components/schemas/fs-record'           
+
+  guidesheets-json:
+   properties:
+    guidesheet:
+      type: object
+      xml:
+       name: guidesheet
+      oneOf:
+       - $ref: '#/components/schemas/si-record'           
+       - $ref: '#/components/schemas/wi-record'           
+       - $ref: '#/components/schemas/fs-record'           
+
+  si-record:      
+   properties:
+    si:
+     type: object          
+     properties:
+      title:
+       type: string          
+       example: 'FR 2004SI Guide Sheet'
+      guideMsg:
+       type: string
+       example: 'Test Guidance Message'
+      note:
+       type: string
+       example: 'Test Note'
+      reportWeeksFromDate:
+       type: string
+       format: date  
+      reportWeeksToDate:
+       type: string
+       format: date  
+      nextDistributionDate:
+       type: string
+       format: date  
+      details:
+       type: array
+       xml:
+        wrapped: true
+        name: details
+       items:
+        xml:
+         name: detail
+        oneOf:
+         - $ref: '#/components/schemas/si-detail-record'                     
+  si-detail-record:                
+   properties:
+    formLine:
+     type: string          
+     example: '1'
+    secType:
+     type: string
+     example: '2 Yr NOTE'
+    nyFedSecId:
+     type: string          
+     example: '2 YR'
+    cusip:
+     type: string
+     example: '91282CEG2'
+    issueDate:
+     type: string          
+     format: date  
+    maturityDate:
+     type: string          
+     format: date  
+    percentCouponRate:
+     type: number
+     example: 2.500
+
+  wi-record:                
+   properties:
+    wi:
+     type: object          
+     properties:
+      title:
+       type: string          
+       example: 'FR 2004WI Guide Sheet'
+      guideMsg:
+       type: string
+       example: 'Test Guidance Message'
+      note:
+       type: string
+       example: 'Test Note'
+      secDirAsOfDate:
+       type: string
+       format: date  
+      firstDueDate:
+       type: string
+       format: date  
+      firstAsOfDate:
+       type: string
+       format: date  
+      lastDueDate:
+       type: string
+       format: date  
+      lastAsOfDate:
+       type: string
+       format: date  
+      details:
+       type: array
+       xml:
+        wrapped: true
+        name: details
+       items:
+        xml:
+         name: detail
+        oneOf:
+         - $ref: '#/components/schemas/wi-detail-record'                     
+  wi-detail-record:                
+   properties:
+    secType:
+     type: string
+     example: '20 YEAR BOND'
+    nyFedSecId:
+     type: string          
+     example: '20 YR'
+    cusip:
+     type: string
+     example: '912810TH1'
+    announcementDate:
+     type: string          
+     format: date  
+    auctionDate:
+     type: string          
+     format: date  
+    issueDate:
+     type: string          
+     format: date  
+    maturityDate:
+     type: string          
+     format: date  
+    percentCouponRate:
+     type: number
+     example: 2.500
+
+  fs-record:                
+   properties:
+    fs:
+     type: object          
+     properties:
+      title:
+       type: string          
+       example: 'FR 2004F-Series Guide Sheet'
+      guideMsg:
+       type: string
+       example: 'Test Guidance Message'
+      note:
+       type: string
+       example: 'Test Note'
+      reportsFor:
+       type: string
+       format: date  
+      nextDistributionDate:
+       type: string
+       format: date  
+      details:
+       type: array
+       xml:
+        wrapped: true
+        name: details
+       items:
+        xml:
+         name: detail
+        oneOf:
+         - $ref: '#/components/schemas/fs-detail-record'                     
+  fs-detail-record:                
+   properties:
+    reportName:
+     type: string
+     example: 'FR 2004FA'
+    asOfClassSettleDate:
+     type: string          
+     format: date  
+    reportDueDate:
+     type: string          
+     format: date  
+
+ responses:
+  bad-request:
+   description: Bad Request. The request could not be mapped to a supported path 
+  bad-request-params:
+   description: Bad Request. The request could not be mapped to a supported path or the query parameters violated a rule. For the latter, a JSON message will be returned.
+   content:
+    application/json:
+     schema:
+      type: array
+      items:
+       type: string
+       example: Start date is not a valid date
+       description: A message describing the violation  
+  unexpected-error:
+   description: Unexpected error
+  ambs-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/ambs-json'
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/ambs-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary          
+  tsy-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/tsy-json'
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/tsy-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary               
+  refrates-sec-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/refrates-sec-json'
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/refrates-sec-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary         
+  refrates-unsec-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/refrates-unsec-json'
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/refrates-unsec-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary         
+  refrates-all-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/refrates-all-json'
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/refrates-all-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary              
+  fxs-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/fxs-json'
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/fxs-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary                   
+  fxs-counterparty-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/fxs-counterparty-json'
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/fxs-counterparty-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary     
+  repo-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/repo-json'     
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/repo-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary               
+  repo-postoperation-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/repo-postoperation-json'     
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/repo-postoperation-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary                    
+  reverserepo-postoperation-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/reverserepo-postoperation-json'     
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/reverserepo-postoperation-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary                         
+  seclending-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/seclending-json'
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/seclending-xml'     
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary               
+  seclendingCusip-response:
+   description: OK
+   content:
+    application/json:
+     schema:
+      $ref: '#/components/schemas/seclendingCusip-json'
+    text/xml:
+     schema:
+      $ref: '#/components/schemas/seclendingCusip-xml'
+    text/csv:
+     type: string
+     format: csv
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+     type: string
+     format: binary               
+
+ examples:
+  ambs-rss-xml-example:
+   value: |
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:cb="http://www.cbwiki.net/wiki/index.php/Specification_1.1" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns# rdf.xsd">
+      <channel rdf:about="https://markets.newyorkfed.org/rss/feeds/ambs">
+        <title>NY Fed | Agency Mortgage-Backed Securities Operations</title>
+        <link>https://www.newyorkfed.org/rss/index.html</link>
+        <description>Monetary policy can be implemented through outright purchases or sales of securities, which permanently change the size of the Federal Reserve's System Open Market Account (SOMA) portfolio.</description>
+        <items>
+          <rdf:Seq>
+            <rdf:li rdf:resource="https://www.newyorkfed.org/markets/desk-operations/ambs" />
+          </rdf:Seq>
+        </items>
+        <dc:publisher>Federal Reserve Bank of New York</dc:publisher>
+        <dcterms:license>https://www.newyorkfed.org/termsofuse.html</dcterms:license>
+      </channel>
+      <item rdf:about="https://www.newyorkfed.org/markets/desk-operations/ambs">
+        <title>US: $2.601B TBA Purchase 2020-12-28 NY Fed Agency Mortgage-Backed Securities Operations</title>
+        <link>https://www.newyorkfed.org/markets/desk-operations/ambs</link>
+        <description xml:lang="en">Monetary policy can be implemented through outright purchases or sales of securities, which permanently change the size of the Federal Reserve's System Open Market Account (SOMA) portfolio.</description>
+        <dc:date>2020-12-28T00:00:00-05:00</dc:date>
+        <dc:language>en</dc:language>
+        <cb:statistics>
+          <cb:country>US</cb:country>
+          <cb:institutionAbbrev>NYFed</cb:institutionAbbrev>
+          <cb:transaction>
+            <cb:value frequency="daily" unit_mult="9" units="USD" decimal="3">2.601</cb:value>
+            <cb:transactionType>Agency Mortgage-Backed Securities Operations</cb:transactionType>
+            <cb:transactionName>TBA Purchase</cb:transactionName>
+          </cb:transaction>
+        </cb:statistics>
+      </item>
+    </rdf:RDF>
+  tsy-rss-xml-example:
+   value: |  
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:cb="http://www.cbwiki.net/wiki/index.php/Specification_1.1" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns# rdf.xsd">
+      <channel rdf:about="https://markets.newyorkfed.org/rss/feeds/tsy">
+        <title>NY Fed | Treasury Securities Operations</title>
+        <link>https://www.newyorkfed.org/rss/index.html</link>
+        <description>Monetary policy can be implemented through outright purchases or sales of securities, which permanently change the size of the Federal Reserve's System Open Market Account (SOMA) portfolio.</description>
+        <items>
+          <rdf:Seq>
+            <rdf:li rdf:resource="https://www.newyorkfed.org/markets/desk-operations/treasury-securities" />
+          </rdf:Seq>
+        </items>
+        <dc:publisher>Federal Reserve Bank of New York</dc:publisher>
+        <dcterms:license>https://www.newyorkfed.org/termsofuse.html</dcterms:license>
+      </channel>
+      <item rdf:about="https://www.newyorkfed.org/markets/desk-operations/treasury-securities">
+        <title>US: $6.001B Coupon Purchase 2020-12-23 NY Fed Treasury Securities Operations</title>
+        <link>https://www.newyorkfed.org/markets/desk-operations/treasury-securities</link>
+        <description xml:lang="en">Monetary policy can be implemented through outright purchases or sales of securities, which permanently change the size of the Federal Reserve's System Open Market Account (SOMA) portfolio.</description>
+        <dc:date>2020-12-23T00:00:00-05:00</dc:date>
+        <dc:language>en</dc:language>
+        <cb:statistics>
+          <cb:country>US</cb:country>
+          <cb:institutionAbbrev>NYFed</cb:institutionAbbrev>
+          <cb:transaction>
+            <cb:value frequency="daily" unit_mult="9" units="USD" decimal="3">6.001</cb:value>
+            <cb:transactionType>Treasury Securities Operations</cb:transactionType>
+            <cb:transactionName>Coupon Purchase</cb:transactionName>
+          </cb:transaction>
+        </cb:statistics>
+      </item>
+    </rdf:RDF>   
+  soma-rss-xml-example:
+   value: |  
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <channel rdf:about="https://markets.newyorkfed.org/rss/feeds/soma">
+        <title>NY Fed | System Open Market Account</title>
+        <link>https://www.newyorkfed.org/rss/index.html</link>
+        <description>The System Open Market Account (SOMA), managed by the Federal Reserve Bank of New York, contains dollar-denominated assets acquired via open market operations.</description>
+        <dc:publisher>Federal Reserve Bank of New York</dc:publisher>
+      </channel>
+      <item rdf:about="https://www.newyorkfed.org/markets/soma-holdings">
+        <title>US $6,728,181,998,813 Total SOMA Holdings 2020-12-23 NY Fed System Open Market Account</title>
+        <link>https://www.newyorkfed.org/markets/soma-holdings</link>
+        <description>The System Open Market Account (SOMA), managed by the Federal Reserve Bank of New York. Securities Holdings as of 2020-12-23.</description>
+        <dc:date>2020-12-23T00:00:00-05:00</dc:date>
+        <dc:language>en</dc:language>
+      </item>
+    </rdf:RDF>
+  pd-rss-legacy-xml-example:
+   value: |  
+    <rss version="2.0">
+      <channel>
+        <title>Primary Dealer Statistical Releases</title>
+        <link>http://www.newyorkfed.org/markets/statrel.html</link>
+        <description>Primary dealers voluntarily report weekly on their trading activities, as well as on their cash and financing positions in Treasury and other securities. Though the Bank expects primary dealers to report accurately, the Bank itself does not audit the data.</description>
+        <item>
+          <title>2020-12-16</title>
+          <link>https://markets.newyorkfed.org/api/pd/get/asof/2020-12-16.xml</link>
+          <description>Statistical data as of 2020-12-16</description>
+        </item>
+        <item>
+          <title>2020-12-14</title>
+          <link>https://markets.newyorkfed.org/api/pd/get/asof/2020-12-14.xml</link>
+          <description>Statistical data as of 2020-12-14</description>
+        </item>
+      </channel>
+    </rss>   
+  pd-rss-xml-example:
+   value: |  
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <channel rdf:about="https://markets.newyorkfed.org/rss/feeds/pd">
+        <title>NY Fed | Primary Dealer Statistics</title>
+        <link>https://www.newyorkfed.org/rss/index.html</link>
+        <description>The Primary Dealer Statistics, managed by the Federal Reserve Bank of New York, voluntarily report weekly on their trading activities, as well as on their cash and financing positions in Treasury and other securities. Though the Bank expects primary dealers to report accurately, the Bank itself does not audit the data.</description>
+        <dc:publisher>Federal Reserve Bank of New York</dc:publisher>
+      </channel>
+      <item rdf:about="https://www.newyorkfed.org/markets/counterparties/primary-dealers-statistics">
+        <title>2020-12-16 NY Fed Primary Dealer Statistics</title>
+        <link>https://markets.newyorkfed.org/api/pd/get/asof/2020-12-16.xml</link>
+        <description>The Primary Dealer Statistics, managed by the Federal Reserve Bank of New York. Statistical data as of 2020-12-16.</description>
+        <dc:date>2020-12-16T00:00:00-05:00</dc:date>
+        <dc:language>en</dc:language>
+      </item>
+    </rdf:RDF>
+paths:
+# ====================
+# AMBS
+# ====================
+ /api/ambs/{operation}/{status}/{include}/latest.{format}:
+  get:
+   tags:
+    - Agency Mortgage-Backed Securities Operations
+   summary: Current date operations
+   description: Returns the latest AMBS operation Announcements or Results for the current day. 
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,purchases,sales,roll,swap]
+    - in: path
+      name: status
+      required: true
+      description: The operation status
+      schema:
+       type: string
+       enum: [announcements,results]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/ambs-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'
+ /api/ambs/{operation}/results/{include}/lastTwoWeeks.{format}:
+  get:
+   tags:
+    - Agency Mortgage-Backed Securities Operations    
+   summary: Operations within last two weeks
+   description: Returns the last two weeks AMBS operations Results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,purchases,sales,roll,swap]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/ambs-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'   
+ /api/ambs/{operation}/results/{include}/last/{number}.{format}:
+  get:
+   tags:
+    - Agency Mortgage-Backed Securities Operations    
+   summary: Last n number of operations 
+   description: Returns the last N number of AMBS operations Results.     
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,purchases,sales,roll,swap]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]          
+    - in: path
+      name: number
+      required: true
+      description: The last N amount of operations to return
+      schema:
+       type: number         
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/ambs-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+ /api/ambs/{operation}/results/{include}/search.{format}:
+  get:
+   tags:
+    - Agency Mortgage-Backed Securities Operations    
+   summary: Filter operations
+   description: Returns AMBS operations Results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,purchases,sales,roll,swap]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                               
+    - in: query
+      name: startDate
+      required: false
+      description: The start date (inclusive) from which to search. <br/> <i>Format yyyy-MM-dd</i>  
+      schema:
+       type: string
+       format: date
+       example: "2021-01-01"
+    - in: query
+      name: endDate
+      required: false
+      description: The end date (inclusive) up until which to search. <br/> <i>Format yyyy-MM-dd</i>  
+      schema:
+       type: string
+       format: date       
+       example: "2021-01-02"
+    - in: query
+      name: securities
+      required: false
+      description: Filter by securities (Operation Method) 
+      schema:
+       type: string
+       enum: [Basket, Coupon Swap, Dollar Roll, Specified Pool, TBA]       
+    - in: query
+      name: cusip
+      required: false
+      description: Only return operations which include the given CUSIP. Partial identifiers are accepted.
+      schema:
+       type: string
+    - in: query
+      name: desc
+      required: false
+      description: Only return operations which include the given Security Description. Partial identifiers are accepted.
+      schema:
+       type: string       
+   responses:
+    '200':
+     $ref: '#/components/responses/ambs-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'
+# ====================
+# FX SWAPS
+# ====================    
+ /api/fxs/{operationType}/latest.{format}:
+  get:
+   tags:
+    - Central Bank Liquidity Swaps  Operations    
+   summary: Current date posted operations
+   description: Returns the latest Liquidity Swaps operation Results posted on current day.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operationType
+      required: true
+      description: The operation type to search for
+      schema:
+       type: string
+       enum: [all,usdollar,nonusdollar]                            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/fxs-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'                     
+ /api/fxs/{operationType}/last/{number}.{format}:
+  get:
+   tags:
+    - Central Bank Liquidity Swaps  Operations    
+   summary: Last n number of operations 
+   description: Returns the last N number of Liquidity Swaps operations Results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operationType
+      required: true
+      description: The operation type to search for
+      schema:
+       type: string
+       enum: [usdollar,nonusdollar]
+    - in: path
+      name: number
+      required: true
+      description: The last N amount of trades to return
+      schema:
+       type: number
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/fxs-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error' 
+ /api/fxs/{operationType}/search.{format}:
+  get:
+   tags:
+    - Central Bank Liquidity Swaps  Operations
+   summary: Filter operations
+   description: Returns Liquidity Swaps operation Results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operationType
+      required: true
+      description: The operation type to search for
+      schema:
+       type: string
+       enum: [all,usdollar,nonusdollar]                            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response.
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+    - in: query
+      name: startDate
+      required: false
+      description: The start date (inclusive) from which to search, depending on date type. Defaults to current date. <br/> <i>Format yyyy-MM-dd</i> 
+      schema:
+       type: string
+       format: date
+    - in: query
+      name: endDate
+      required: false
+      description: The end date (inclusive) up until which to search, depending on date type. <br/> <i>Format yyyy-MM-dd</i>  
+      schema:
+       type: string
+       format: date           
+    - in: query
+      name: dateType
+      required: false
+      description: The date type to search for within the start and end. Defaults to trade date.
+      schema:
+       type: string
+       enum: [trade,maturity]      
+    - in: query
+      name: counterparties
+      required: false
+      description: A comma-separated list of counterparty names to search for. Partial names are accepted.
+      schema:
+       type: string
+       example: "japan,europe"
+   responses:
+    '200':
+     $ref: '#/components/responses/fxs-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'                          
+ /api/fxs/list/counterparties.{format}:
+  get:
+   tags:
+    - Central Bank Liquidity Swaps  Operations
+   summary: List of Counterparties
+   description: Returns Counterparties of Liquidity Swaps operations.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response.
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/fxs-counterparty-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'                               
+# ==============================
+# Guide Sheets
+# ==============================
+ /api/guidesheets/{guidesheetType}/latest.{format}:
+  get:
+   tags:
+    - Guide Sheets
+   summary: Current Guide Sheets 
+   description: Returns the latest Guide Sheet.
+   produces:
+    - application/json
+    - text/xml
+    - application/pdf
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: guidesheetType
+      required: true
+      description: The guide sheet type
+      schema:
+       type: string
+       enum: [si,wi,fs]                        
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,pdf,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/guidesheets-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/guidesheets-xml'
+      application/pdf:
+       type: string
+       format: binary
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary               
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+ /api/guidesheets/{guidesheetType}/previous.{format}:
+  get:
+   tags:
+    - Guide Sheets
+   summary: Previously Posted Guide Sheets 
+   description: Returns the previous Guide Sheet.
+   produces:
+    - application/json
+    - text/xml
+    - application/pdf
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: guidesheetType
+      required: true
+      description: The guide sheet type
+      schema:
+       type: string
+       enum: [si,wi,fs]                        
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,pdf,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/guidesheets-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/guidesheets-xml'
+      application/pdf:
+       type: string
+       format: binary
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary               
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+# =====================
+# Primary Dealer
+# =====================
+ /api/pd/latest/{seriesbreak}.{format}:
+  get:
+   tags:
+    - Primary Dealer Statistics
+   summary: Latest survey by Series Break
+   description: Returns the latest Survey results for each timeseries. 
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: seriesbreak
+      required: true
+      description: A valid series break value
+      example: SBP2001      
+      schema:
+       type: string
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/pd-timeseries-set-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/pd-timeseries-set-xml'
+      text/csv:
+       type: string
+       format: csv   
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary                 
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'          
+ /api/pd/get/all/timeseries.csv:
+  get:
+   tags:
+    - Primary Dealer Statistics
+   summary: All surveys 
+   description: Returns all Survey results in csv format.
+   produces:
+    - text/csv
+   responses:
+    '200':
+     description: OK
+     content:
+      text/csv:
+       type: string
+       format: csv   
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'          
+ /api/pd/list/timeseries.{format}:
+  get:
+   tags:
+    - Primary Dealer Statistics
+   summary: Definition of Time Series/Key Id
+   description: Returns Description of timeseries/keyids.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/pd-timeseries-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/pd-timeseries-xml'
+      text/csv:
+       type: string
+       format: csv   
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary                 
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error' 
+ /api/pd/list/asof.{format}:
+  get:
+   tags:
+    - Primary Dealer Statistics
+   summary: List of As Of Dates 
+   description: Returns all As Of Dates with respective Series Break.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/pd-asof-dates-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/pd-asof-dates-xml'
+      text/csv:
+       type: string
+       format: csv   
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary                 
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+ /api/pd/list/seriesbreaks.{format}:
+  get:
+   tags:
+    - Primary Dealer Statistics
+   summary: List of Series Breaks 
+   description: Returns Series Breaks including Label, Start and End Date.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/pd-seriesbreak-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/pd-seriesbreak-xml'
+      text/csv:
+       type: string
+       format: csv   
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary                 
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'          
+ /api/pd/get/asof/{date}.{format}:
+  get:
+   tags:
+    - Primary Dealer Statistics
+   summary: Survey by As Of Date 
+   description: Returns single date Survey results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: date
+      required: true
+      description: The time series as of date. <br/> <i>Format yyyy-MM-dd</i> 
+      schema:
+       type: string
+       format: date
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/pd-timeseries-set-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/pd-timeseries-set-xml'
+      text/csv:
+       type: string
+       format: csv   
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary                 
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'          
+ /api/pd/get/{timeseries}.{format}:
+  get:
+   tags:
+    - Primary Dealer Statistics
+   summary: Survey by Times Series 
+   description: Return Survey results for given timeseries across all Series Breaks. To query multiple timeseries, separate each with underscore(_).  
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: timeseries
+      required: true
+      description: A list of time series ids separated by underscores. 
+      schema:
+       type: string
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/pd-timeseries-set-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/pd-timeseries-set-xml'
+      text/csv:
+       type: string
+       format: csv   
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary                 
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'          
+ /api/pd/get/{seriesbreak}/timeseries/{timeseries}.{format}:
+  get:
+   tags:
+    - Primary Dealer Statistics
+   summary: Survey by Series Break and Times Series 
+   description: Return Survey results for given seriesbreak and timeseries. To query multiple timeseries, separate each with underscore(_). 
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: seriesbreak
+      required: true
+      description: A valid series break value
+      example: SBP2001      
+      schema:
+       type: string
+    - in: path
+      name: timeseries
+      required: true
+      description: A list of valid time series separated with underscores 
+      schema:
+       type: string
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/pd-timeseries-set-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/pd-timeseries-set-xml'
+      text/csv:
+       type: string
+       format: csv   
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary                 
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'          
+# ==============================
+# Primary Dealer Market Share
+# ==============================
+ /api/marketshare/qtrly/latest.{format}:
+  get:
+   tags:
+    - Primary Dealer Statistics Market Share
+   summary: Latest quarterly marketshare data 
+   description: Returns the latest quarterly Market Share.
+   produces:
+    - application/json
+    - text/xml
+    - application/pdf
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,pdf,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/pd-ms-quarterly-latest-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/pd-ms-quarterly-latest-xml'
+      application/pdf:
+       type: string
+       format: binary   
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary                 
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+ /api/marketshare/ytd/latest.{format}:
+  get:
+   tags:
+    - Primary Dealer Statistics Market Share
+   summary: Latest year-to-date marketshare data 
+   description: Returns the latest year-to-date Market Share.
+   produces:
+    - application/json
+    - text/xml
+    - application/pdf
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,pdf,xlsx]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/pd-ms-ytd-latest-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/pd-ms-ytd-latest-xml'
+      application/pdf:
+       type: string
+       format: binary   
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+       type: string
+       format: binary                 
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+# ====================
+# REFERENCE RATES
+# ====================    
+ /api/rates/all/latest.{format}:
+  get:
+   tags:
+    - Reference Rates
+   summary: Last As of Date from current date rates
+   description: Returns the latest secured and unsecured rates.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/refrates-all-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'       
+ /api/rates/all/search.{format}:
+  get:
+   tags:
+    - Reference Rates    
+   summary: Filter rates
+   description: Returns secured and/or unsecured rates and/or volume.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+    - in: query
+      name: startDate
+      required: false
+      description: The start date (inclusive) from which to search. Defaults to the current date. <br/> <i>Format yyyy-MM-dd</i> 
+      schema:
+       type: string
+       format: date
+    - in: query
+      name: endDate
+      required: false
+      description: The end date (inclusive) up until which to search. <br/> <i>Format yyyy-MM-dd</i>  
+      schema:
+       type: string
+       format: date              
+    - in: query
+      name: type
+      required: false
+      description: The report type to return
+      schema:
+       type: string
+       enum: [rate,volume]                               
+   responses:
+    '200':
+     $ref: '#/components/responses/refrates-all-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'  
+ /api/rates/secured/all/latest.{format}:
+  get:
+   tags:
+    - Reference Rates    
+   summary: Last As of Date from current date for Secured rates
+   description: Returns the latest secured rates. 
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/refrates-sec-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'                          
+ /api/rates/secured/{ratetype}/last/{number}.{format}:
+  get:
+   tags:
+    - Reference Rates    
+   summary: Last n number of Secured rates 
+   description: Returns the last N number of secured rates.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: ratetype
+      required: true
+      description: The rate type
+      schema:
+       type: string
+       enum: [tgcr,bgcr,sofr,sofrai]
+    - in: path
+      name: number
+      required: true
+      description: The last N amount of rates to return
+      schema:
+       type: number
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/refrates-sec-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'      
+ /api/rates/secured/{ratetype}/search.{format}:
+  get:
+   tags:
+    - Reference Rates    
+   summary: Filter Secured rates
+   description: Returns secured rates and/or volume.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: ratetype
+      required: true
+      description: The rate type
+      schema:
+       type: string
+       enum: [all,tgcr,bgcr,sofr,sofrai]
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+    - in: query
+      name: startDate
+      required: false
+      description: The start date (inclusive) from which to search. Defaults to the current date. <br/> <i>Format yyyy-MM-dd</i> 
+      schema:
+       type: string
+       format: date
+    - in: query
+      name: endDate
+      required: false
+      description: The end date (inclusive) up until which to search. <br/> <i>Format yyyy-MM-dd</i>  
+      schema:
+       type: string
+       format: date              
+    - in: query
+      name: type
+      required: false
+      description: The report type to return
+      schema:
+       type: string
+       enum: [rate,volume]                               
+   responses:
+    '200':
+     $ref: '#/components/responses/refrates-sec-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'  
+ /api/rates/unsecured/all/latest.{format}:
+  get:
+   tags:
+    - Reference Rates    
+   summary: Last As of Date from current date for Unsecured rates
+   description: Returns the latest unsecured rates.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/refrates-unsec-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'                     
+ /api/rates/unsecured/{ratetype}/last/{number}.{format}:
+  get:
+   tags:
+    - Reference Rates    
+   summary: Last n number of Unsecured rates 
+   description: Returns the last N number of unsecured rates.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: ratetype
+      required: true
+      description: The rate type
+      schema:
+       type: string
+       enum: [effr,obfr]
+    - in: path
+      name: number
+      required: true
+      description: The last N amount of rates to return
+      schema:
+       type: number
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/refrates-unsec-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error' 
+ /api/rates/unsecured/{ratetype}/search.{format}:
+  get:
+   tags:
+    - Reference Rates    
+   summary: Filter Unsecured rates
+   description: Returns unsecured rates and/or volume.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: ratetype
+      required: true
+      description: The rate type
+      schema:
+       type: string
+       enum: [all,effr,obfr]
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+    - in: query
+      name: startDate
+      required: false
+      description: The start date (inclusive) from which to search. Defaults to the current date. <br/> <i>Format yyyy-MM-dd</i> 
+      schema:
+       type: string
+       format: date
+    - in: query
+      name: endDate
+      required: false
+      description: The end date (inclusive) up until which to search. <br/> <i>Format yyyy-MM-dd</i>  
+      schema:
+       type: string
+       format: date              
+    - in: query
+      name: type
+      required: false
+      description: The report type to return
+      schema:
+       type: string
+       enum: [rate,volume]                               
+   responses:
+    '200':
+     $ref: '#/components/responses/refrates-unsec-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'                     
+# ====================
+# REPO
+# ====================
+ /api/rp/{operationType}/{method}/{status}/latest.{format}:
+  get:
+   tags:
+    - Repo and Reverse Repo Operations
+   summary: Current date operations
+   description: Returns the latest Repo and/or Reverse Repo operations Announcements or Results for the current day.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operationType
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,repo,reverserepo]
+    - in: path
+      name: method
+      required: true
+      description: The operation method
+      schema:
+       type: string
+       enum: [all,fixed,single,multiple,allotment]
+    - in: path
+      name: status
+      required: true
+      description: The operation status
+      schema:
+       type: string
+       enum: [announcements,results]  
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/repo-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+ /api/rp/{operationType}/{method}/results/lastTwoWeeks.{format}:    
+  get:
+   tags:
+    - Repo and Reverse Repo Operations
+   summary: Operations within last two weeks 
+   description: Returns the last two weeks Repo and/or Reverse Repo operations Results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operationType
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,repo,reverserepo]
+    - in: path
+      name: method
+      required: true
+      description: The operation method
+      schema:
+       type: string
+       enum: [all,fixed,single,multiple,allotment]
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/repo-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'      
+ /api/rp/{operationType}/{method}/results/last/{number}.{format}:
+  get:
+   tags:
+    - Repo and Reverse Repo Operations
+   summary: Last n number of operations 
+   description: Returns the last N number of Repo and/or Reverse Repo operations Results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operationType
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,repo,reverserepo]
+    - in: path
+      name: method
+      required: true
+      description: The operation method
+      schema:
+       type: string
+       enum: [all,fixed,single,multiple,allotment]
+    - in: path
+      name: number
+      required: true
+      description: The last N amount of operations to return
+      schema:
+       type: number       
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/repo-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+ /api/rp/results/search.{format}:
+  get:
+   tags:
+    - Repo and Reverse Repo Operations
+   summary: Filter operations
+   description: Returns Repo and/or Reverse Repo operation Results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response.
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+    - in: query
+      name: startDate
+      required: false
+      description: The start date (inclusive) from which to search. <br/> <i>Format yyyy-MM-dd</i> 
+      schema:
+       type: string
+       format: date
+    - in: query
+      name: endDate
+      required: false
+      description: The end date (inclusive) up until which to search. <br/> <i>Format yyyy-MM-dd</i>  
+      schema:
+       type: string
+       format: date           
+    - in: query
+      name: operationTypes
+      required: false
+      description: The operation types (comma-delimited) by which to filter.
+      schema:
+       type: string
+       enum: [Repo,Reverse Repo]      
+    - in: query
+      name: method
+      required: false
+      description: The operation method by which to filter.
+      schema:
+       type: string
+       enum: [multiple,single,fixed,allotment]
+    - in: query
+      name: securityType
+      required: false
+      description: The security type (tranche) by which to filter. For specific types, only operations which include that type will be returned.
+      schema:
+       type: string
+       enum: [mbs,agency,tsy,srf]       
+    - in: query
+      name: term
+      required: false
+      description: The term of the operation.
+      schema:
+       type: string
+       enum: [overnight,term]                  
+   responses:
+    '200':
+     $ref: '#/components/responses/repo-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+ /api/rp/reverserepo/propositions/search.{format}:
+  get:
+   tags:
+    - Repo and Reverse Repo Operations
+   summary: Filter Reverse Repo propositions
+   description: Returns Propositions for Reverse Repo operations.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response.
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+    - in: query
+      name: startDate
+      required: false
+      description: The start date (inclusive) from which to search. <br/> <i>Format yyyy-MM-dd</i> 
+      schema:
+       type: string
+       format: date
+    - in: query
+      name: endDate
+      required: false
+      description: The end date (inclusive) up until which to search. <br/> <i>Format yyyy-MM-dd</i>  
+      schema:
+       type: string
+       format: date           
+   responses:
+    '200':
+     $ref: '#/components/responses/reverserepo-postoperation-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'                                    
+# ====================
+# SECURITIES LENDING
+# ====================
+ /api/seclending/{operation}/results/{include}/latest.{format}:
+  get:
+   tags:
+    - Securities Lending Operations
+   summary: Current date operations
+   description: Returns the latest Securities Lending operation Results for the current day.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,seclending,extensions]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/seclending-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'
+ /api/seclending/{operation}/results/{include}/lastTwoWeeks.{format}:
+  get:
+   tags:
+    - Securities Lending Operations    
+   summary: Operations within last two weeks
+   description: Returns the last two weeks Securities Lending operation Results and/or Extensions.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,seclending,extensions]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/seclending-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'   
+ /api/seclending/{operation}/results/{include}/last/{number}.{format}:
+  get:
+   tags:
+    - Securities Lending Operations    
+   summary: Last n number of operations 
+   description: Returns the last N number of Securities Lending operation Results and/or Extensions.    
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,seclending,extensions]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]          
+    - in: path
+      name: number
+      required: true
+      description: The last N amount of operations to return
+      schema:
+       type: number         
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/seclending-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+ /api/seclending/{operation}/results/{include}/search.{format}:
+  get:
+   tags:
+    - Securities Lending Operations    
+   summary: Filter operations
+   description: Returns Securities Lending operation Results and/or Extensions.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,seclending,extensions]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                               
+    - in: query
+      name: startDate
+      required: false
+      description: The start date (inclusive) from which to search. <br/> <i>Format yyyy-MM-dd</i>  
+      schema:
+       type: string
+       format: date
+       example: "2021-01-01"
+    - in: query
+      name: endDate
+      required: false
+      description: The end date (inclusive) up until which to search. <br/> <i>Format yyyy-MM-dd</i>  
+      schema:
+       type: string
+       format: date       
+       example: "2021-01-02"
+    - in: query
+      name: cusips
+      required: false
+      description: Comma separated list of cusips. Only return operations where CUSIP contains the parameter value(s) provided. Partial identifiers are accepted.
+      schema:
+       type: string
+    - in: query
+      name: descriptions
+      required: false
+      description: Comma separated list of security descriptions. Only return operations where Security Description contains the parameter value(s) provided. Partial identifiers are accepted.
+      schema:
+       type: string       
+   responses:
+    '200':
+     $ref: '#/components/responses/seclendingCusip-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'
+# =====================
+# SOMA
+# =====================    
+ /api/soma/asofdates/latest.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Last As Of Date
+   description: Returns the latest SOMA holdings As Of Date.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-asof-dates-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-asof-dates-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'        
+ /api/soma/summary.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Total by Security Types
+   description: Returns Summary Of SOMA holdings for each As of Date and holding type.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-summary-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-summary-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'       
+ /api/soma/asofdates/list.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: List of As Of Dates
+   description: Returns all SOMA holdings As of Date.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-asof-dates-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-asof-dates-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'                 
+ /api/soma/agency/get/release_log.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: List of Release Dates for Agency Securities
+   description: Returns the last three months Agency Release and As Of Dates.   
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-releasedates-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-releasedates-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'            
+ /api/soma/agency/get/asof/{date}.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Agency Securities by As Of Date
+   description: Returns a single date SOMA Agency Holdings. 
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: date
+      required: true
+      description: The date for which to retrieve the agency release. <br/> <i>Format yyyy-MM-dd</i>
+      schema:
+       type: string
+       format: date   
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-agency-details-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-agency-details-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'                  
+ /api/soma/agency/get/cusip/{cusip}.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Agency Securities by CUSIP
+   description: Returns all SOMA Agency Holdings for a single CUSIP.  
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: cusip
+      required: true
+      description: The CUSIP for which to retrieve information
+      schema:
+       type: string
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-agency-details-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-agency-details-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'   
+ /api/soma/agency/get/{holdingtype}/asof/{date}.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Agency Securities by Holding Type and As Of Date
+   description: Returns a single date SOMA Agency Holdings for a Agency holding type. 
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: holdingtype
+      required: true
+      description: The holding type for which to retrieve
+      schema:
+       type: string
+       enum: [all, agency debts, mbs, cmbs]
+    - in: path
+      name: date
+      required: true
+      description: The date for which to retrieve the agency release. <br/> <i>Format yyyy-MM-dd</i>
+      schema:
+       type: string
+       format: date          
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-agency-details-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-agency-details-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'  
+ /api/soma/agency/wam/agency debts/asof/{date}.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Agency Debt Weighted Average Maturity by As Of Date
+   description: Returns a single date Weighted Average Maturity for Agency Debt.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters: 
+    - in: path
+      name: date
+      required: true
+      description: The date for which to retrieve the Weighted Average Maturity number. <br/> <i>Format yyyy-MM-dd</i>
+      schema:
+       type: string
+       format: date       
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-wam-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-wam-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'     
+ /api/soma/tsy/get/release_log.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: List of Release Dates for Treasury Securities
+   description: Returns the last three months Treasury Release and As Of Dates. 
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-releasedates-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-releasedates-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'       
+ /api/soma/tsy/get/asof/{date}.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Treasury Securities by As Of Date
+   description: Returns a single date SOMA Treasury Holdings.  
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: date
+      required: true
+      description: The date for which to retrieve the Treasury release. <br/> <i>Format yyyy-MM-dd</i>
+      schema:
+       type: string
+       format: date          
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-tsy-details-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-tsy-details-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'    
+ /api/soma/tsy/get/cusip/{cusip}.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Treasury Securities by CUSIP
+   description: Returns all SOMA Treasury Holdings for a single CUSIP.   
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: cusip
+      required: true
+      description: The CUSIP for which to retrieve information
+      schema:
+       type: string
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-tsy-details-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-tsy-details-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'    
+ /api/soma/tsy/get/{holdingtype}/asof/{date}.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Treasury Securities by Holding Type and As Of Date
+   description: Returns a single date SOMA Treasury Holdings for a Treasury holding type.  
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: holdingtype
+      required: true
+      description: The holding type for which to retrieve
+      schema:
+       type: string
+       enum: [all, bills, notesbonds, frn, tips]
+    - in: path
+      name: date
+      required: true
+      description: The date for which to retrieve the Treasury release. <br/> <i>Format yyyy-MM-dd</i>
+      schema:
+       type: string
+       format: date          
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-tsy-details-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-tsy-details-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'    
+ /api/soma/tsy/wam/{holdingtype}/asof/{date}.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Treasury Debt Weighted Average Maturity by Holding Type and As Of Date
+   description: Returns a single date Weighted Average Maturity for a Treasury holding type.  
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: holdingtype
+      required: true
+      description: The holding type for which to retrieve
+      schema:
+       type: string
+       enum: [all, bills, notesbonds, frn, tips]   
+    - in: path
+      name: date
+      required: true
+      description: The date for which to retrieve the Weighted Average Maturity number. <br/> <i>Format yyyy-MM-dd</i>
+      schema:
+       type: string
+       format: date       
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-wam-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-wam-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'
+ /api/soma/tsy/get/monthly.{format}:
+  get:
+   tags:
+    - System Open Market Account Holdings
+   summary: Monthly summary of Treasury Holdings
+   description: Returns all SOMA Treasury Holdings at monthly intervals.  
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+   parameters:
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv]                        
+   responses:
+    '200':
+     description: OK
+     content:
+      application/json:
+       schema:
+        $ref: '#/components/schemas/soma-tsy-details-json'
+      text/xml:
+       schema:
+        $ref: '#/components/schemas/soma-tsy-details-xml'
+      text/csv:
+       type: string
+       format: csv         
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'
+# =====================
+# TSY
+# =====================
+ /api/tsy/{operation}/{status}/{include}/latest.{format}:
+  get:
+   tags:
+    - Treasury Securities Operations
+   summary: Current date operations
+   description: Returns the latest Treasury operation Announcements or Results for the current day.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,purchases,sales]
+    - in: path
+      name: status
+      required: true
+      description: The operation status
+      schema:
+       type: string
+       enum: [announcements,results,operations]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/tsy-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'                                    
+ /api/tsy/{operation}/results/{include}/lastTwoWeeks.{format}:
+  get:
+   tags:
+    - Treasury Securities Operations    
+   summary: Operations within last two weeks
+   description: Returns the last two weeks Treasury operations Results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,purchases,sales]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/tsy-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'    
+ /api/tsy/{operation}/results/{include}/last/{number}.{format}:
+  get:
+   tags:
+    - Treasury Securities Operations    
+   summary: Last n number of operations
+   description: Returns the last N number of Treasury operations Results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,purchases,sales]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]            
+    - in: path
+      name: number
+      required: true
+      description: The last amount of results to return from current date
+      schema:
+       type: integer
+       format: int32
+       minimum: 1
+       maximum: 100
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                        
+   responses:
+    '200':
+     $ref: '#/components/responses/tsy-response'
+    '400':
+     $ref: '#/components/responses/bad-request'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'         
+ /api/tsy/{operation}/results/{include}/search.{format}:
+  get:
+   tags:
+    - Treasury Securities Operations    
+   summary: Filter operations
+   description: Returns Treasury operation Results.
+   produces:
+    - application/json
+    - text/xml
+    - text/csv
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+   parameters:
+    - in: path
+      name: operation
+      required: true
+      description: The operation type
+      schema:
+       type: string
+       enum: [all,purchases,sales]
+    - in: path
+      name: include
+      required: true
+      description: The level of details to include
+      schema:
+       type: string
+       enum: [summary,details]            
+    - in: path
+      name: format
+      required: true
+      description: The format of the response
+      schema:
+       type: string
+       enum: [json,xml,csv,xlsx]                               
+    - in: query
+      name: startDate
+      required: false
+      description: The start date (inclusive) from which to search. <br/> <i>Format yyyy-MM-dd</i> 
+      schema:
+       type: string
+       format: date
+       example: "2021-01-01"
+    - in: query
+      name: endDate
+      required: false
+      description: The end date (inclusive) up until which to search. <br/> <i>Format yyyy-MM-dd</i>
+      schema:
+       type: string
+       format: date       
+       example: "2021-01-02"
+    - in: query
+      name: securityType
+      required: false
+      description: Filter by security type. "agency" include Agency Debt. "treasury" includes Bill, Coupon, FRN, TIPS, and Other        
+      schema:
+       type: string
+       enum: [agency, treasury]
+    - in: query
+      name: cusip
+      required: false
+      description: Only return operations which include the given CUSIP. Partial identifiers are accepted.
+      schema:
+       type: string
+    - in: query
+      name: desc
+      required: false
+      description: Only return operations which include the given Security Description. Partial identifiers are accepted.
+      schema:
+       type: string       
+   responses:
+    '200':
+     $ref: '#/components/responses/tsy-response'
+    '400':
+     $ref: '#/components/responses/bad-request-params'
+    '5XX':
+     $ref: '#/components/responses/unexpected-error'  

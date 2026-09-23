@@ -1,0 +1,229 @@
+{
+  "schema": "fed_s13_blender_mechanism.v1",
+  "review_state": "review_only",
+  "render_eligible": false,
+  "source_data": false,
+  "illustrative_geometry_units": true,
+  "scene": {
+    "resolution": [
+      2560,
+      1440
+    ],
+    "fps": 24,
+    "frames": [
+      1,
+      120
+    ],
+    "duration_s": 5.0
+  },
+  "camera": {
+    "type": "orthographic",
+    "azimuth_deg": {
+      "frame_1": 27.0,
+      "frame_36": 35.0,
+      "frame_120": 35.0
+    },
+    "elevation_deg": 25.0,
+    "reveal_degrees": 8.0,
+    "reveal_frames": [
+      1,
+      36
+    ],
+    "locked_from_frame": 37,
+    "target": [
+      0.0,
+      0.0,
+      1.899999976158142
+    ],
+    "ortho_scale": 18.5,
+    "sample_transforms": {
+      "1": {
+        "location": [
+          13.727944,
+          6.994737,
+          9.08451
+        ],
+        "rotation_quaternion": [
+          0.440671,
+          0.280738,
+          0.458123,
+          0.719109
+        ]
+      },
+      "36": {
+        "location": [
+          12.620866,
+          8.837226,
+          9.08451
+        ],
+        "rotation_quaternion": [
+          0.389435,
+          0.248097,
+          0.476591,
+          0.748097
+        ]
+      },
+      "60": {
+        "location": [
+          12.620866,
+          8.837226,
+          9.08451
+        ],
+        "rotation_quaternion": [
+          0.389435,
+          0.248097,
+          0.476591,
+          0.748097
+        ]
+      },
+      "120": {
+        "location": [
+          12.620866,
+          8.837226,
+          9.08451
+        ],
+        "rotation_quaternion": [
+          0.389435,
+          0.248097,
+          0.476591,
+          0.748097
+        ]
+      }
+    }
+  },
+  "chamber": {
+    "frame_geometry": {
+      "left_wall_center": [
+        -1.75,
+        0.05,
+        2.55
+      ],
+      "right_wall_center": [
+        1.75,
+        0.05,
+        2.55
+      ],
+      "top_wall_center": [
+        0.0,
+        0.05,
+        4.73
+      ],
+      "inner_back_center": [
+        0.0,
+        -0.32,
+        2.55
+      ],
+      "outer_width": 3.84,
+      "inner_height": 4.22
+    },
+    "slider_dimensions": [
+      2.45,
+      0.72,
+      0.34
+    ],
+    "low_stop_z": 0.55,
+    "slider_z": {
+      "1": 3.65,
+      "36": 0.95,
+      "60": 0.95,
+      "120": 0.95
+    },
+    "available_downward_span": {
+      "1": 3.1,
+      "36": 0.4,
+      "60": 0.4,
+      "120": 0.4
+    },
+    "semantic_note": "Rigid schematic chamber; no financial scale or source observation."
+  },
+  "routes": {
+    "left": {
+      "start": [
+        -1.62,
+        0.35,
+        0.72
+      ],
+      "open_end": [
+        -4.55,
+        1.2,
+        0.72
+      ]
+    },
+    "right": {
+      "start": [
+        1.62,
+        0.35,
+        0.72
+      ],
+      "open_end": [
+        4.55,
+        1.2,
+        0.72
+      ]
+    }
+  },
+  "label_zones": {
+    "left": {
+      "center": [
+        -5.1,
+        1.56,
+        4.45
+      ],
+      "size": [
+        2.5,
+        0.11,
+        0.75
+      ]
+    },
+    "right": {
+      "center": [
+        5.1,
+        1.56,
+        4.45
+      ],
+      "size": [
+        2.5,
+        0.11,
+        0.75
+      ]
+    }
+  },
+  "samples": [
+    {
+      "frame": 1,
+      "time_s": 0.0,
+      "camera_azimuth_deg": 27.0,
+      "camera_elevation_deg": 25.0,
+      "slider_z": 3.65,
+      "low_stop_z": 0.55,
+      "available_downward_span": 3.1
+    },
+    {
+      "frame": 36,
+      "time_s": 1.458333,
+      "camera_azimuth_deg": 35.0,
+      "camera_elevation_deg": 25.0,
+      "slider_z": 0.95,
+      "low_stop_z": 0.55,
+      "available_downward_span": 0.4
+    },
+    {
+      "frame": 60,
+      "time_s": 2.458333,
+      "camera_azimuth_deg": 35.0,
+      "camera_elevation_deg": 25.0,
+      "slider_z": 0.95,
+      "low_stop_z": 0.55,
+      "available_downward_span": 0.4
+    },
+    {
+      "frame": 120,
+      "time_s": 4.958333,
+      "camera_azimuth_deg": 35.0,
+      "camera_elevation_deg": 25.0,
+      "slider_z": 0.95,
+      "low_stop_z": 0.55,
+      "available_downward_span": 0.4
+    }
+  ]
+}

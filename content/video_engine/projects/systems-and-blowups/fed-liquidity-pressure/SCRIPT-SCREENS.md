@@ -1,0 +1,319 @@
+# STRENGTH SCREENS — SCRIPT-VO.txt
+
+131 sentences. Every candidate below requires a
+per-item verdict in the strength log (ok / FIXED / licensed /
+carryover). A convergence claim without this file walked is
+invalid — the enumeration IS the review.
+
+## X1 — antecedent pairs (27)
+
+- [10] `…o. [new] But money funds can earn money elsewhere, too.` → **They can buy Treasury bills or lend in private markets.**
+- [14] `…s mature without fully replacing them, its assets fall.` → **That process is called quantitative tightening. [head-fake] You’d expect a shrin**
+- [15] `…inking Fed balance sheet to leave banks with less cash.` → **But money funds were drawing down their overnight account at the same time. [new**
+- [20] `…The Fed owns a hundred billion less.` → **It also owes money funds a hundred billion less. [loop] The money in the banks’ **
+- [28] `…r overnight balance was roughly half a billion dollars.` → **That account now holds too little cash to repeat its trillion-dollar offset.**
+- [29] `…s too little cash to repeat its trillion-dollar offset.` → **That’s the risk we’re following: banks can look steady while one source of prote**
+- [34] `…You can try raising your prices.` → **Or you can postpone the expansion that would let you fill more orders.**
+- [38] `…The cheap contract delays the bigger bill.` → **It doesn’t guarantee another cheap contract. [rehook] To understand the bank beh**
+- [43] `…else changing, your bank now has less money at the Fed.` → **That government account is called the Treasury General Account.**
+- [46] `…ssets would miss the money leaving your bank’s account.` → **Now let the government pay a contractor.**
+- [53] `…fferent from money funds leaving the overnight account.` → **And a tax payment moves cash differently from the Fed letting a security mature.**
+- [56] `…The formula starts with the Fed’s assets.` → **It subtracts the government’s cash account and the money funds’ overnight balanc**
+- [57] `…’s cash account and the money funds’ overnight balance.` → **That unofficial shortcut can help organize the accounts.**
+- [58] `…hat unofficial shortcut can help organize the accounts.` → **It isn’t an official Fed series or a bank-reserve balance.**
+- [62] `…ed balance-sheet runoff in December twenty twenty-five.` → **It began buying short-term Treasuries to keep banks supplied with cash. [new] Th**
+- [65] `…k reserves at roughly three point one trillion dollars.` → **It described those cash holdings as ample.**
+- [67] `…y using the overnight account very little on most days.` → **Yet the report described stable overnight money markets.**
+- [69] `…l cash movements. [reflect] The banks were functioning.` → **But the support behind them had changed.**
+- [70] `…But the support behind them had changed.` → **They were operating with support from Fed purchases while the old overnight buff**
+- [77] `…sk and the length of the loan help determine the price.` → **That’s the environment facing businesses as their old contracts expire. [new] Fo**
+- [85] `…ght rate was seven basis points below the reserve rate.` → **That day’s overnight borrowers paid less than banks earned on their balances at **
+- [88] `…The comparison helps us spot pressure.` → **It doesn’t turn every increase into a crisis. [rehook] And a single day of expen**
+- [95] `…Does the premium fade?` → **Or does it return across successive observations?**
+- [113] `…a new loan, today’s borrowing conditions become a bill.` → **And those businesses are seeking financing with far less cash left in the overni**
+- [114] `…k steady. [payoff] Now bring the three checks together.` → **Which account changed?**
+- [121] `… and put its account name and date beside those checks.` → **Then bring it back to the borrower: when does the old loan expire?**
+- [128] `…oney funds’ shrinking buffer helped make that possible.` → **That overnight account now offers little room to repeat the same offset—and busi**
+
+## P6 — deixis openers (15)
+
+- [14] That process is called quantitative tightening. [head-fake] You’d expect a shrinking Fed b
+- [20] It also owes money funds a hundred billion less. [loop] The money in the banks’ Fed accoun
+- [28] That account now holds too little cash to repeat its trillion-dollar offset.
+- [29] That’s the risk we’re following: banks can look steady while one source of protection runs
+- [38] It doesn’t guarantee another cheap contract. [rehook] To understand the bank behind your l
+- [43] That government account is called the Treasury General Account.
+- [56] It subtracts the government’s cash account and the money funds’ overnight balance.
+- [57] That unofficial shortcut can help organize the accounts.
+- [58] It isn’t an official Fed series or a bank-reserve balance.
+- [62] It began buying short-term Treasuries to keep banks supplied with cash. [new] Those purcha
+- [65] It described those cash holdings as ample.
+- [77] That’s the environment facing businesses as their old contracts expire. [new] For pressure
+- [85] That day’s overnight borrowers paid less than banks earned on their balances at the Fed.
+- [88] It doesn’t turn every increase into a crisis. [rehook] And a single day of expensive borro
+- [128] That overnight account now offers little room to repeat the same offset—and businesses sti
+
+## P1J — additive junctions, AND-THEN risk (3)
+
+- [53] `…ney funds leaving the overnight account.` → And a tax payment moves cash differently from the Fed letting a security mature.
+- [113] `…ay’s borrowing conditions become a bill.` → And those businesses are seeking financing with far less cash left in the overni
+- [121] `…count name and date beside those checks.` → Then bring it back to the borrower: when does the old loan expire?
+
+## P5A — phonetic-anchor candidates (47) — legal ONLY at promise / payoff / tell
+
+- [1] (b×) Bank reserves barely budged. [post-key] [payoff] Money funds had parked about two and a 
+- [4] (t×) S&P tallied more than three trillion dollars in U.S. corporate debt maturing across twen
+- [5] (t×) Your customers still need their orders. [tricolon] But the bigger bill leaves less for w
+- [6] (w×) I worked in business risk at JPMorgan, so I look at what keeps banks standing—not just w
+- [7] (s×) By the end of this video, you’ll understand one way the Federal Reserve supports banks. 
+- [8] (c×) The companies replacing cheap debt still need financing, even as one source of support b
+- [9] (t×) Treasury securities back the transaction. [new] The Fed calls this arrangement overnight
+- [11] (w×) When those alternatives pay better, money funds can move their cash out of the Fed. [cat
+- [12] (s×) To see why, we need to separate two things. [new] The Fed owns Treasury securities and m
+- [20] (a×) It also owes money funds a hundred billion less. [loop] The money in the banks’ Fed acco
+- [23] (b×) Banks’ balances at the Fed rose by just seventy-two billion dollars.
+- [24] (a×) The government’s cash account also fell, helping offset the drain on banks. [reflect] Ba
+- [25] (t×) Trillions of dollars of withdrawals barely helped them hold their ground.
+- [26] (s×) Your workshop’s machine still needs financing, even when the bank supplying that financi
+- [27] (s×) The other accounts show what helped sustain it. [dip] And money funds cannot withdraw th
+- [29] (r×) That’s the risk we’re following: banks can look steady while one source of protection ru
+- [30] (t×) The replacement in our example charges seven. [new] On the same outstanding balance, tha
+- [36] (d×) You also delay hiring the person who would operate the new machine. [reflect] That’s how
+- [38] (c×) It doesn’t guarantee another cheap contract. [rehook] To understand the bank behind your
+- [48] (b×) The bank credits the contractor’s deposit. [loop] The cash moves back toward the banks.
+- [49] (c×) Both payments changed who held money at the Fed, without changing the Fed’s assets. [pay
+- [52] (f×) A fall in bank reserves means something different from money funds leaving the overnight
+- [54] (t×) You’ve probably seen a chart that tries to compress those movements into one number: net
+- [60] (f×) The formula stays flat while the Fed gets smaller. [reflect] Your lender cannot price th
+- [61] (s×) We still need to know what borrowing costs. [rehook] The Fed has already changed how it 
+- [62] (b×) It began buying short-term Treasuries to keep banks supplied with cash. [new] Those purc
+- [64] (t×) The Fed was now adding money through purchases, rather than continuing the same runoff. 
+- [70] (w×) They were operating with support from Fed purchases while the old overnight buffer remai
+- [74] (s×) Start with the wider backdrop. [new] On September eighteenth, the twenty-year Treasury y
+- [75] (c×) Investors could earn more than five percent lending to the U.S. government for that term
+- [77] (t×) That’s the environment facing businesses as their old contracts expire. [new] For pressu
+- [79] (c×) When more borrowers compete for cash, lenders can charge a higher rate.
+- [81] (b×) The borrowing rate shows what institutions pay to obtain cash, beyond how much an accoun
+- [84] (s×) On September seventeenth, that overnight rate was seven basis points below the reserve r
+- [85] (t×) That day’s overnight borrowers paid less than banks earned on their balances at the Fed.
+- [92] (p×) A price spike around a cash movement and a financing problem that keeps returning deserv
+- [96] (p×) If the borrowing premium fades and financing stays orderly, the case for persistent pres
+- [97] (r×) If the premium keeps returning, investigate why borrowers repeatedly have to pay more. [
+- [100] (s×) You now have something stronger than a scary screenshot: an explanation you can check ag
+- [102] (f×) The second has years left at a fixed rate. [new] Both owners face the same financial hea
+- [111] (s×) The higher loan payment changes spending beyond the business that borrowed. [reflect] Th
+- [112] (b×) For a business that needs a new loan, today’s borrowing conditions become a bill.
+- [113] (t×) And those businesses are seeking financing with far less cash left in the overnight acco
+- [121] (b×) Then bring it back to the borrower: when does the old loan expire?
+- [122] (r×) The renewal date tells you when a change in financing conditions can reach that business
+- [126] (b×) The Fed’s balance fell while bank balances held steady.
+- [128] (o×) That overnight account now offers little room to repeat the same offset—and businesses s
+
+## P4C — cadence runs (words per sentence, per paragraph)
+
+- ¶1: [7, 6]
+- ¶2: [15, 9]
+- ¶3: [6, 22]
+- ¶4: [30]
+- ¶5: [5, 20]
+- ¶6: [23]
+- ¶7: [21]
+- ¶8: [16]
+- ¶9: [14, 19]
+- ¶10: [18]
+- ¶11: [15, 5]
+- ¶12: [9]
+- ¶13: [9, 10, 15]
+- ¶14: [16]
+- ¶15: [9]
+- ¶16: [10, 13]
+- ¶17: [6]
+- ¶18: [16]
+- ¶19: [13]
+- ¶20: [6]
+- ¶21: [10, 11, 8]
+- ¶22: [7, 9]
+- ¶23: [14]
+- ¶24: [11]
+- ¶25: [13]
+- ¶26: [19]
+- ¶27: [14]
+- ¶28: [13]
+- ¶29: [12]
+- ¶30: [13]
+- ¶31: [13]
+- ¶32: [11]
+- ¶33: [16]
+- ¶34: [8, 8]
+- ¶35: [11]
+- ¶36: [16]
+- ¶37: [13]
+- ¶38: [18]
+- ¶39: [11]
+- ¶40: [7, 7]
+- ¶41: [16]
+- ¶42: [8]
+- ¶43: [6, 6, 13]
+- ¶44: [11, 12]
+- ¶45: [16]
+- ¶46: [22]
+- ¶47: [20]
+- ¶48: [7, 7]
+- ¶49: [16]
+- ¶50: [11]
+- ¶51: [11, 14]
+- ¶52: [11]
+- ¶53: [13]
+- ¶54: [9]
+- ¶55: [11, 16]
+- ¶56: [7]
+- ¶57: [12, 7]
+- ¶58: [8]
+- ¶59: [15]
+- ¶60: [9]
+- ¶61: [11, 10]
+- ¶62: [15]
+- ¶63: [14]
+- ¶64: [17]
+- ¶65: [8, 13]
+- ¶66: [8, 12]
+- ¶67: [11, 9]
+- ¶68: [13]
+- ¶69: [8]
+- ¶70: [13]
+- ¶71: [11, 12]
+- ¶72: [11, 10]
+- ¶73: [14]
+- ¶74: [20, 7]
+- ¶75: [13, 8]
+- ¶76: [11]
+- ¶77: [5, 7]
+- ¶78: [16]
+- ¶79: [10, 14]
+- ¶80: [13]
+- ¶81: [12]
+- ¶82: [11]
+- ¶83: [5]
+- ¶84: [16]
+- ¶85: [16]
+- ¶86: [11, 13]
+- ¶87: [11]
+- ¶88: [17]
+- ¶89: [12, 7]
+- ¶90: [12, 12]
+- ¶91: [16]
+- ¶92: [14, 11]
+- ¶93: [9]
+- ¶94: [14]
+- ¶95: [16]
+- ¶96: [14]
+- ¶97: [6, 9]
+- ¶98: [17]
+- ¶99: [4]
+- ¶100: [7, 9]
+- ¶101: [17]
+- ¶102: [10]
+- ¶103: [10]
+- ¶104: [4, 7]
+- ¶105: [15]
+- ¶106: [13]
+- ¶107: [9, 6, 9]
+- ¶108: [18]
+- ¶109: [8]
+- ¶110: [5, 9]
+- ¶111: [8, 9]
+- ¶112: [9]
+- ¶113: [15, 9]
+- ¶114: [13]
+- ¶115: [9]
+- ¶116: [16]
+- ¶117: [9, 11]
+- ¶118: [11]
+- ¶119: [18, 15]
+- ¶120: [23]
+- ¶121: [13]
+- ¶122: [7]
+- ¶123: [3, 11]
+- ¶124: [4, 12]
+- ¶125: [4, 13]
+- ¶126: [15]
+- ¶127: [13]
+- ¶128: [15]
+- ¶129: [11, 9]
+- ¶130: [9]
+- ¶131: [7]
+- ¶132: [7]
+- ¶133: [10, 9]
+- ¶134: [20]
+- ¶135: [5, 17]
+
+## DECLARED — beat tags (63)
+
+One row per tag, script order. `window` is the opening gate's verdict
+for the tag's owning gate (R1: final, never re-derived). `verdict` is
+the agent's, per tag: **true / laundered** (CHECK-RESPONSIBILITIES R2,
+§3a) - a laundered tag is a FAIL at the phase, not a note.
+
+- [payoff]@0:03  window: PASS — G08  "Money funds had parked about two and a half trillion dollars at the Fed."  → verdict: ____
+- [archetype]@0:18  window: PASS — G37  "Imagine you own a workshop."  → verdict: ____
+- [stakes]@0:20  window: PASS — G07  "Your two-percent loan is coming due, and replacing it at seven percent more than triples your interest bill—w…"  → verdict: ____
+- [ring]@0:28  window: PASS — G15  "Your machine still works."  → verdict: ____
+- [tricolon]@0:32  window: PASS — G12  "But the bigger bill leaves less for wages, materials, or the next hire."  → verdict: ____
+- [promise]@0:36  window: PASS — G09  "You’ll leave with three checks you can run against public data to help protect your money from market mechani…"  → verdict: ____
+- [reflect]@0:56  window: PASS — G16  "Here’s the problem: stable bank balances can hide a shrinking buffer."  → verdict: ____
+- [opponent]@0:56  window: PASS — G14  "Here’s the problem: stable bank balances can hide a shrinking buffer."  → verdict: ____
+- [desire]@1:07  window: PASS — G38  "We’ll follow where that support went, then bring the risk back to your renewal offer."  → verdict: ____
+- [map]@1:07  window: PASS — G39  "We’ll follow where that support went, then bring the risk back to your renewal offer."  → verdict: ____
+- [rehook]@1:13  window: PASS — G13  "Money funds can park cash at the Fed overnight and earn a return."  → verdict: ____
+- [new]@1:13  window: PASS — G20, PASS — G22  "Money funds can park cash at the Fed overnight and earn a return."  → verdict: ____
+- [new]@1:19  window: PASS — G20, PASS — G22  "The Fed calls this arrangement overnight reverse repo."  → verdict: ____
+- [new]@1:22  window: PASS — G20, PASS — G22  "But money funds can earn money elsewhere, too."  → verdict: ____
+- [catalyst]@1:33  window: PASS — G40  "Those withdrawals helped banks hold their ground while the Fed cut its own investments."  → verdict: ____
+- [foreshadow]@1:33  window: PASS — G26  "Those withdrawals helped banks hold their ground while the Fed cut its own investments."  → verdict: ____
+- [new]@1:41  window: PASS — G20, PASS — G22  "The Fed owns Treasury securities and mortgage-backed securities."  → verdict: ____
+- [head-fake]@1:52  window: PASS — G24  "You’d expect a shrinking Fed balance sheet to leave banks with less cash."  → verdict: ____
+- [new]@2:02  window: PASS — G20, PASS — G22  "Here’s a simplified example."  → verdict: ____
+- [loop]@2:19  window: PASS — G19, FAIL — G21  "The money in the banks’ Fed accounts can stay right where it is."  → verdict: ____
+- [debate]@2:23  window: PASS — G41  "Banks avoid that cash drain because another account shrinks instead."  → verdict: ____
+- [new]@2:27  window: PASS — G20, PASS — G22  "The Fed’s own figures show how large those offsetting movements became."  → verdict: ____
+- [new]@2:31  window: PASS — G20, PASS — G22  "Its June twenty twenty-five report compares balances with the start of runoff in June twenty twenty-two."  → verdict: ____
+- [reflect]@2:56  window: n/a — outside opening window (P2 ends 2:38)  "Banks didn’t finish that period with trillions more in their accounts."  → verdict: ____
+- [loop-close]@3:11  window: PASS — G28  "The bank balances show stability."  → verdict: ____
+- [signpost]@3:11  window: PASS — G42  "The bank balances show stability."  → verdict: ____
+- [dip]@3:16  window: n/a — outside opening window (P2 ends 2:38)  "And money funds cannot withdraw the same parked dollar twice."  → verdict: ____
+- [payoff]@3:19  window: n/a — outside opening window (P2 ends 2:38)  "By September eighteenth, twenty twenty-six, their overnight balance was roughly half a billion dollars."  → verdict: ____
+- [rehook]@3:36  window: n/a — outside opening window (P2 ends 2:38)  "Back at the workshop, your lender sends the renewal offer."  → verdict: ____
+- [new]@3:39  window: n/a — outside opening window (P2 ends 2:38)  "Your old loan charged two percent."  → verdict: ____
+- [new]@3:44  window: n/a — outside opening window (P2 ends 2:38)  "On the same outstanding balance, that’s three and a half times the annual interest."  → verdict: ____
+- [reflect]@4:09  window: n/a — outside opening window (P2 ends 2:38)  "That’s how a financing problem reaches people who never look at a Fed chart."  → verdict: ____
+- [rehook]@4:14  window: n/a — outside opening window (P2 ends 2:38)  "The renewal date matters because an old fixed-rate contract can shelter a business from higher rates—until th…"  → verdict: ____
+- [new]@4:21  window: n/a — outside opening window (P2 ends 2:38)  "The Fed’s own research found that new borrowing costs rose much faster than the cost of existing debt."  → verdict: ____
+- [rehook]@4:33  window: n/a — outside opening window (P2 ends 2:38)  "To understand the bank behind your loan, we need to see where its cash moves."  → verdict: ____
+- [new]@4:38  window: n/a — outside opening window (P2 ends 2:38)  "A tax payment shows what the headline balance can miss."  → verdict: ____
+- [loop]@5:20  window: n/a — outside opening window (P2 ends 2:38)  "The cash moves back toward the banks."  → verdict: ____
+- [payoff]@5:27  window: n/a — outside opening window (P2 ends 2:38)  "There’s your first check: which account changed?"  → verdict: ____
+- [reflect]@6:16  window: n/a — outside opening window (P2 ends 2:38)  "Your lender cannot price the workshop’s loan from that formula alone."  → verdict: ____
+- [rehook]@6:23  window: n/a — outside opening window (P2 ends 2:38)  "The Fed has already changed how it supplies money to the banks."  → verdict: ____
+- [new]@6:27  window: n/a — outside opening window (P2 ends 2:38)  "It ended balance-sheet runoff in December twenty twenty-five."  → verdict: ____
+- [new]@6:35  window: n/a — outside opening window (P2 ends 2:38)  "Those purchases put money into banks’ accounts at the Fed."  → verdict: ____
+- [new]@6:47  window: n/a — outside opening window (P2 ends 2:38)  "In its July twenty twenty-six report, the Fed put bank reserves at roughly three point one trillion dollars."  → verdict: ____
+- [reflect]@7:08  window: n/a — outside opening window (P2 ends 2:38)  "The banks were functioning."  → verdict: ____
+- [rehook]@7:18  window: n/a — outside opening window (P2 ends 2:38)  "Your workshop still has to negotiate its replacement loan."  → verdict: ____
+- [payoff]@7:35  window: n/a — outside opening window (P2 ends 2:38)  "Here’s the second check: what does borrowing actually cost?"  → verdict: ____
+- [new]@7:40  window: n/a — outside opening window (P2 ends 2:38)  "On September eighteenth, the twenty-year Treasury yield stood at five point three eight percent."  → verdict: ____
+- [new]@7:48  window: n/a — outside opening window (P2 ends 2:38)  "A company seeking financing has to compete for investors’ money."  → verdict: ____
+- [new]@8:00  window: n/a — outside opening window (P2 ends 2:38)  "For pressure closer to the banks, the overnight lending market gives us another place to watch."  → verdict: ____
+- [new]@8:06  window: n/a — outside opening window (P2 ends 2:38)  "A dealer borrows cash against Treasury securities to finance its holdings."  → verdict: ____
+- [new]@8:27  window: n/a — outside opening window (P2 ends 2:38)  "The New York Fed publishes the Treasury-backed overnight rate we’re following."  → verdict: ____
+- [rehook]@8:59  window: n/a — outside opening window (P2 ends 2:38)  "And a single day of expensive borrowing doesn’t tell us whether the pressure will last."  → verdict: ____
+- [payoff]@9:18  window: n/a — outside opening window (P2 ends 2:38)  "That’s the third check: does the pressure last?"  → verdict: ____
+- [reflect]@9:40  window: n/a — outside opening window (P2 ends 2:38)  "The account movement gave you a possible cause."  → verdict: ____
+- [rehook]@9:55  window: n/a — outside opening window (P2 ends 2:38)  "Put two loan contracts beside each other."  → verdict: ____
+- [new]@10:02  window: n/a — outside opening window (P2 ends 2:38)  "Both owners face the same financial headlines."  → verdict: ____
+- [reflect]@10:39  window: n/a — outside opening window (P2 ends 2:38)  "That’s why the debt wall belongs in this story."  → verdict: ____
+- [new]@10:43  window: n/a — outside opening window (P2 ends 2:38)  "A maturity date is the point when an old financing deal has to be settled or replaced."  → verdict: ____
+- [rehook]@11:02  window: n/a — outside opening window (P2 ends 2:38)  "That combination deserves attention—even when the headline bank balances look steady."  → verdict: ____
+- [payoff]@11:06  window: n/a — outside opening window (P2 ends 2:38)  "Now bring the three checks together."  → verdict: ____
+- [ring]@11:40  window: n/a — outside opening window (P2 ends 2:38)  "Your machine still works, but its loan now costs more."  → verdict: ____
+- [anaphora]@11:46  window: n/a — outside opening window (P2 ends 2:38)  "Follow the account to find the movement."  → verdict: ____
+- [tricolon]@11:46  window: n/a — outside opening window (P2 ends 2:38)  "Follow the account to find the movement."  → verdict: ____

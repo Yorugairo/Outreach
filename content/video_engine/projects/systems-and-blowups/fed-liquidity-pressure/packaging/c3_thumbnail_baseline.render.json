@@ -1,0 +1,72 @@
+{
+  "diagnostic": "fed-liquidity-c3-thumbnail",
+  "status": "rendered_diagnostic",
+  "render_status": "CAPTURED_NO_APPROVAL",
+  "source": {
+    "path": "evidence/sources/mpr_2025_06.html",
+    "sha256": "7a201f7cad0a75ae840e93d5fc386c501e4774c31e8d1631d99dc9dc0c057da0",
+    "url": "https://www.federalreserve.gov/monetarypolicy/2025-06-mpr-part2.htm",
+    "table": "xtable_balancesheet",
+    "column": "xsheeta5"
+  },
+  "claim_id": "C3",
+  "window": {
+    "start": "2022-06-01",
+    "end": "2025-06-11"
+  },
+  "units": "USD billions",
+  "values": {
+    "Total assets": -2238,
+    "Reserve balances": 72
+  },
+  "geometry_contract": {
+    "variant": "bars",
+    "builder": "story",
+    "common_zero": true,
+    "signed_values": true,
+    "value_strings": [
+      "-2238",
+      "72"
+    ]
+  },
+  "renderer": "content/video_engine/scripts/render_baseline.py + current packaging renderer",
+  "capture_t_s": 12.0,
+  "stage_size": [
+    1920,
+    1080
+  ],
+  "output": {
+    "path": "c3_thumbnail_1280x720.png",
+    "size": [
+      1280,
+      720
+    ],
+    "sha256": "df86b4a4c08e8d94ea9fc5109ff761685fd17a1a30db308aca51381986299187"
+  },
+  "phone_proof": {
+    "path": "c3_thumbnail_320w.png",
+    "size": [
+      320,
+      180
+    ],
+    "sha256": "3336e79dcd6f4cfb660fa8106d6b8648d057475b6d74cfb9bf92d9bedae74464"
+  },
+  "player_sha256": "d7cc0a1717d0ed92dffc4e4a6a55339b60a429fcfdad20d1df277eff7c23e217",
+  "overflow": {
+    "stage": {
+      "x": 33,
+      "y": 44,
+      "w": 1920,
+      "h": 1080
+    },
+    "ink_nodes": 21,
+    "page": {
+      "x": -120.6168212890625,
+      "y": -42.41558837890625,
+      "w": 2227.2177734375,
+      "h": 1252.7998046875
+    },
+    "max_overflow_px": 0,
+    "offenders": []
+  }
+}

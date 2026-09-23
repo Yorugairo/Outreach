@@ -1,0 +1,60 @@
+{
+  "claim_id": "mp-fed-liquidity-pilot-worlds-v2",
+  "style_family": "mp-fed-woodblock-newsprint-v1",
+  "status": "candidates_in_review",
+  "render_eligible": false,
+  "contract": "complete_world_plates",
+  "style_block": "A light application of wood block print meets vox newspaper with rich anime colors. Match the current-bubble-mechanism hero-fab-constraint-v1 print reference and the textured finance-host-identity-master-v3, not a smooth polished portrait. Rich cobalt and teal, warm cream #F4E6C7, carved ink contours and visible paper/print texture; no photorealism. Complete opaque world compositions include their furniture and characters. Do not require separated component layers. Keep evidence faces blank: all charts, figures, labels and transaction graphics are authored in code. These are fictional illustrative settings, not evidence photographs. Preserve originals, exact executed prompts and all attempts. Quarantine outputs; worker review never grants operator approval.",
+  "execution_constraints": {
+    "media": "stills_only",
+    "provider": "built_in_imagegen",
+    "max_paid_credits": 0,
+    "max_candidates_per_slot": 3,
+    "max_extraction_attempts_per_slot": 0,
+    "account": "built-in tool; Flow production is held",
+    "final_world_canvas": "native landscape output retained; current world candidates 1672x941, not claimed as native 1920x1080",
+    "composition_contract": "complete opaque world plates; no layer registration, matting, component extraction or independently centered layers",
+    "operator_gate": "HG2 contact sheet before render eligibility"
+  },
+  "candidate_review": {
+    "status": "quarantined_review_only_not_selected",
+    "directory": "review/imagegen-complete-worlds-v1",
+    "paths": {
+      "w2-owner-workshop-world-v1": "review/imagegen-complete-worlds-v1/w2-owner-workshop-world-v1.png",
+      "w4-finance-evidence-hall-v1": "review/imagegen-complete-worlds-v1/finance-evidence-hall-hosted-v3-cream.png",
+      "p2-owner-loan-folio-v1": "review/imagegen-pilot-v1/p2-owner-loan-folio-candidate-v1.png"
+    },
+    "note": "Candidate paths are review references only. No production selection, approval, promotion or render eligibility is implied."
+  },
+  "supersedes": {
+    "claim_id": "mp-fed-liquidity-pilot-worlds-v1",
+    "review_copy": "review/asset-contract-layered-v1/ASSET-CLAIM-SPEC.json",
+    "reason": "The former seven-slot registered-layer contract is retained for review history and is not accepted by the current build."
+  },
+  "slots": [
+    {
+      "asset_id": "w2-owner-workshop-world-v1",
+      "kind": "world_plate",
+      "semantic": "Complete fictional workshop world with its owner, workbench, machine and empty expansion bay",
+      "candidate_path": "review/imagegen-complete-worlds-v1/w2-owner-workshop-world-v1.png",
+      "prompt_record": "review/imagegen-complete-worlds-v1/REVIEW.md",
+      "direction": "Complete workshop with independent owner, machine and quiet expansion bay. Preserve the existing positively received candidate; do not regenerate from the superseded layer prompt."
+    },
+    {
+      "asset_id": "w4-finance-evidence-hall-v1",
+      "kind": "world_plate",
+      "semantic": "Complete fictional finance evidence hall with a wide mounted cream center screen, two side screens and textured presenters at foreground desks",
+      "candidate_path": "review/imagegen-complete-worlds-v1/finance-evidence-hall-hosted-v3-cream.png",
+      "prompt_record": "review/imagegen-complete-worlds-v1/HALL-V3-CREAM.md",
+      "direction": "Preserve the widened center screen and all three blank mounted cream paper faces. Keep desks and textured presenters low and outward in the foreground, with unobstructed sightlines for evidence growth. Use the canonical textured host for Mike. Exact revision ancestry is retained in EVIDENCE-STAGE.md and HALL-V2-WIDE.md."
+    },
+    {
+      "asset_id": "p2-owner-loan-folio-v1",
+      "kind": "prop",
+      "semantic": "Blank workshop loan folio for code-authored financing terms",
+      "candidate_path": "review/imagegen-pilot-v1/p2-owner-loan-folio-candidate-v1.png",
+      "prompt_record": "review/imagegen-pilot-v1/FINANCE-PROMPTS.md",
+      "direction": "Retain the generated blank cream folio candidate. Author financing terms in code; do not treat illustrative prop marks as evidence."
+    }
+  ]
+}

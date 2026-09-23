@@ -1,0 +1,307 @@
+{
+  "cutoff": "2026-09-18",
+  "local_only": true,
+  "no_interpolation": true,
+  "outputs": [
+    "extraction_metadata.json",
+    "funding_rates.csv",
+    "repo_daily.csv",
+    "repo_operation_details.csv",
+    "repo_operations.csv",
+    "reverse_repo_daily.csv",
+    "reverse_repo_operations.csv",
+    "rrp_daily.csv"
+  ],
+  "rates": {
+    "cutoff": "2026-09-18",
+    "exact_date_join": true,
+    "excluded_future_rate_rows": 0,
+    "expected_weekdays_in_requested_window": 275,
+    "interpolation": false,
+    "iorb": {
+      "all_nonempty_observations": 1881,
+      "cutoff": "2026-09-18",
+      "excluded_post_cutoff_nonempty": 3,
+      "metadata_source": {
+        "bytes": 79381,
+        "fetched_at": "2026-09-18T18:55:10.990149-07:00",
+        "path": "sources/fred_iorb_meta.html",
+        "sha256": "3b6e7f4cd56b3b462f7b5087b4cf76d6dce1bec7fd5a09409e96dfb17a923af0",
+        "url": "https://fred.stlouisfed.org/series/IORB"
+      },
+      "missing_value_rows": 0,
+      "observations_through_cutoff": 1878,
+      "series": "IORB",
+      "source": {
+        "bytes": 30118,
+        "fetched_at": "2026-09-18T18:55:10.437280-07:00",
+        "path": "sources/fred_iorb_history.csv",
+        "sha256": "fbe1bd0000bad4aec8e1b6ece347d4ee6d2f257a33e84258bb982eb10cfae312",
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB"
+      },
+      "units": "percent",
+      "window_through_cutoff": {
+        "end": "2026-09-18",
+        "start": "2021-07-29"
+      }
+    },
+    "joined_observations": 261,
+    "joined_window": {
+      "end": "2026-09-17",
+      "start": "2025-09-02"
+    },
+    "missing_iorb_join_dates": [],
+    "missing_weekday_count": 14,
+    "missing_weekday_dates": [
+      "2025-09-01",
+      "2025-10-13",
+      "2025-11-11",
+      "2025-11-27",
+      "2025-12-25",
+      "2026-01-01",
+      "2026-01-19",
+      "2026-02-16",
+      "2026-04-03",
+      "2026-05-25",
+      "2026-06-19",
+      "2026-07-03",
+      "2026-09-07",
+      "2026-09-18"
+    ],
+    "sofr": {
+      "requested_window": {
+        "end": "2026-09-18",
+        "start": "2025-09-01"
+      },
+      "source": {
+        "bytes": 62136,
+        "fetched_at": "2026-09-18T18:54:48.775188-07:00",
+        "path": "sources/nyfed_sofr_search_20250901_20260918.json",
+        "sha256": "3220d2424746ee059395a7d62baae438abaefe4a73964bb5d3f791c00ec33b5b",
+        "url": "https://markets.newyorkfed.org/api/rates/secured/sofr/search.json?startDate=2025-09-01&endDate=2026-09-18"
+      },
+      "source_count": 261,
+      "source_window": {
+        "end": "2026-09-17",
+        "start": "2025-09-02"
+      },
+      "type": "SOFR"
+    },
+    "tgcr": {
+      "requested_window": {
+        "end": "2026-09-18",
+        "start": "2025-09-01"
+      },
+      "source": {
+        "bytes": 62136,
+        "fetched_at": "2026-09-18T18:54:48.377032-07:00",
+        "path": "sources/nyfed_tgcr_search_20250901_20260918.json",
+        "sha256": "2379423a9368a45cd3abcd9ee6006ee7c53b69968082895d79372b9a8d00e64f",
+        "url": "https://markets.newyorkfed.org/api/rates/secured/tgcr/search.json?startDate=2025-09-01&endDate=2026-09-18"
+      },
+      "source_count": 261,
+      "source_window": {
+        "end": "2026-09-17",
+        "start": "2025-09-02"
+      },
+      "type": "TGCR"
+    },
+    "units": {
+      "rates": "percent",
+      "spreads": "basis points",
+      "volumes": "USD billions"
+    }
+  },
+  "repo": {
+    "daily_totals_are": "accepted take-up, not outstanding balance",
+    "excluded_post_cutoff_operations": 0,
+    "operation_dates": 13,
+    "operations": 26,
+    "outstanding_balance": false,
+    "rate_by_date": {
+      "2026-09-01": [
+        "3.75"
+      ],
+      "2026-09-02": [
+        "3.75"
+      ],
+      "2026-09-03": [
+        "3.75"
+      ],
+      "2026-09-04": [
+        "3.75"
+      ],
+      "2026-09-08": [
+        "3.75"
+      ],
+      "2026-09-09": [
+        "3.75"
+      ],
+      "2026-09-10": [
+        "3.75"
+      ],
+      "2026-09-11": [
+        "3.75"
+      ],
+      "2026-09-14": [
+        "3.75"
+      ],
+      "2026-09-15": [
+        "3.75"
+      ],
+      "2026-09-16": [
+        "3.75"
+      ],
+      "2026-09-17": [
+        "4.00"
+      ],
+      "2026-09-18": [
+        "4.00"
+      ]
+    },
+    "requested_window": {
+      "end": "2026-09-18",
+      "start": "2026-09-01"
+    },
+    "source": {
+      "bytes": 19970,
+      "fetched_at": "2026-09-18T18:55:22.268221-07:00",
+      "path": "sources/nyfed_srf_repo_results_20260901_20260918.json",
+      "sha256": "b5cddd9fa1e6649351b50ba23e8472cdf564fc7083bfb9bd84ed648db63b5435",
+      "url": "https://markets.newyorkfed.org/api/rp/results/search.json?startDate=2026-09-01&endDate=2026-09-18&operationTypes=Repo"
+    },
+    "take_up_field": "totalAmtAccepted",
+    "total_accepted_usd": "430000000",
+    "total_submitted_usd": "430000000",
+    "units": "USD"
+  },
+  "reverse_repo": {
+    "operation_dates": 13,
+    "operations": 13,
+    "separate_from_repo_take_up": true,
+    "source": {
+      "bytes": 1882,
+      "fetched_at": "2026-09-18T18:55:22.785378-07:00",
+      "path": "sources/nyfed_rrp_propositions_20260901_20260918.json",
+      "sha256": "acfe1fa87d0a56a68c57f1a8f237dee8172f48448e31f62cf3cc54e9ee675e8c",
+      "url": "https://markets.newyorkfed.org/api/rp/reverserepo/propositions/search.json?startDate=2026-09-01&endDate=2026-09-18"
+    },
+    "total_accepted_usd": "22023000000",
+    "units": "USD"
+  },
+  "rrp": {
+    "duplicate_dates": 0,
+    "interpolation": false,
+    "metadata_source": {
+      "bytes": 80142,
+      "fetched_at": "2026-09-18T18:54:37.117316-07:00",
+      "path": "sources/fred_rrpontsyd_meta.html",
+      "sha256": "77615e6a883840e93e98c2c23076f59cfbf81980ba67df015fc25dbbe2a33431",
+      "url": "https://fred.stlouisfed.org/series/RRPONTSYD"
+    },
+    "missing_value_rows_excluded": 54,
+    "observations": 1176,
+    "post_cutoff_nonempty_excluded": 0,
+    "series": "RRPONTSYD",
+    "source": {
+      "bytes": 95185,
+      "fetched_at": "2026-09-18T18:54:36.432202-07:00",
+      "path": "sources/fred_rrpontsyd.csv",
+      "sha256": "acc835bda91b45e48738b0017e3d8d1063e4c4f7a31e5cd348cceb68c899d700",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=RRPONTSYD"
+    },
+    "units": "USD billions",
+    "window": {
+      "end": "2026-09-18",
+      "start": "2022-01-01"
+    }
+  },
+  "rrp_start": "2022-01-01",
+  "schema": "mp-fed-liquidity.extraction.v1",
+  "source_artifacts": [
+    {
+      "bytes": 30118,
+      "fetched_at": "2026-09-18T18:55:10.437280-07:00",
+      "path": "sources/fred_iorb_history.csv",
+      "sha256": "fbe1bd0000bad4aec8e1b6ece347d4ee6d2f257a33e84258bb982eb10cfae312",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB"
+    },
+    {
+      "bytes": 79381,
+      "fetched_at": "2026-09-18T18:55:10.990149-07:00",
+      "path": "sources/fred_iorb_meta.html",
+      "sha256": "3b6e7f4cd56b3b462f7b5087b4cf76d6dce1bec7fd5a09409e96dfb17a923af0",
+      "url": "https://fred.stlouisfed.org/series/IORB"
+    },
+    {
+      "bytes": 95185,
+      "fetched_at": "2026-09-18T18:54:36.432202-07:00",
+      "path": "sources/fred_rrpontsyd.csv",
+      "sha256": "acc835bda91b45e48738b0017e3d8d1063e4c4f7a31e5cd348cceb68c899d700",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=RRPONTSYD"
+    },
+    {
+      "bytes": 80142,
+      "fetched_at": "2026-09-18T18:54:37.117316-07:00",
+      "path": "sources/fred_rrpontsyd_meta.html",
+      "sha256": "77615e6a883840e93e98c2c23076f59cfbf81980ba67df015fc25dbbe2a33431",
+      "url": "https://fred.stlouisfed.org/series/RRPONTSYD"
+    },
+    {
+      "bytes": 28488,
+      "fetched_at": "2026-09-18T18:55:22.558209-07:00",
+      "path": "sources/nyfed_all_rp_results_20260901_20260918.json",
+      "sha256": "f4bfb408ffcb9430cf18028b127d62592ffa5b0ed32c43d5900ce87ddd3e297c",
+      "url": "https://markets.newyorkfed.org/api/rp/results/search.json?startDate=2026-09-01&endDate=2026-09-18"
+    },
+    {
+      "bytes": 143746,
+      "fetched_at": "2026-09-18T18:54:49.384716-07:00",
+      "path": "sources/nyfed_markets_api_spec.yml",
+      "sha256": "5dbb331d86b91bfc115be9b5fe9c46735833a4f7280d33e4327e8acf7ad30d2b",
+      "url": "https://markets.newyorkfed.org/static/docs/markets-api.yml"
+    },
+    {
+      "bytes": 1882,
+      "fetched_at": "2026-09-18T18:55:22.785378-07:00",
+      "path": "sources/nyfed_rrp_propositions_20260901_20260918.json",
+      "sha256": "acfe1fa87d0a56a68c57f1a8f237dee8172f48448e31f62cf3cc54e9ee675e8c",
+      "url": "https://markets.newyorkfed.org/api/rp/reverserepo/propositions/search.json?startDate=2026-09-01&endDate=2026-09-18"
+    },
+    {
+      "bytes": 62136,
+      "fetched_at": "2026-09-18T18:54:48.775188-07:00",
+      "path": "sources/nyfed_sofr_search_20250901_20260918.json",
+      "sha256": "3220d2424746ee059395a7d62baae438abaefe4a73964bb5d3f791c00ec33b5b",
+      "url": "https://markets.newyorkfed.org/api/rates/secured/sofr/search.json?startDate=2025-09-01&endDate=2026-09-18"
+    },
+    {
+      "bytes": 19970,
+      "fetched_at": "2026-09-18T18:55:22.268221-07:00",
+      "path": "sources/nyfed_srf_repo_results_20260901_20260918.json",
+      "sha256": "b5cddd9fa1e6649351b50ba23e8472cdf564fc7083bfb9bd84ed648db63b5435",
+      "url": "https://markets.newyorkfed.org/api/rp/results/search.json?startDate=2026-09-01&endDate=2026-09-18&operationTypes=Repo"
+    },
+    {
+      "bytes": 62136,
+      "fetched_at": "2026-09-18T18:54:48.377032-07:00",
+      "path": "sources/nyfed_tgcr_search_20250901_20260918.json",
+      "sha256": "2379423a9368a45cd3abcd9ee6006ee7c53b69968082895d79372b9a8d00e64f",
+      "url": "https://markets.newyorkfed.org/api/rates/secured/tgcr/search.json?startDate=2025-09-01&endDate=2026-09-18"
+    }
+  ],
+  "verified_manifests": {
+    "original": {
+      "declared_entries": 14,
+      "manifest": "MANIFEST.json",
+      "not_fetched_entries": 0,
+      "verified_entries": 14
+    },
+    "raw_fetch": {
+      "declared_entries": 17,
+      "manifest": "MANIFEST.json",
+      "not_fetched_entries": 2,
+      "verified_entries": 15
+    }
+  }
+}

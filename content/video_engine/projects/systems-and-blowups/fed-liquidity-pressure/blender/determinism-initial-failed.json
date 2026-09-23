@@ -1,0 +1,19 @@
+{
+  "schema": "fed_s13_blender_determinism.v1",
+  "run": "initial-render-before-png-canonicalization",
+  "observed_at": "2026-09-18",
+  "forward_hashes": {
+    "1": "cd97342d337be6a0fa3a0d01ffb67bb910cc5faf8f7d2ef4694a4185f2805aef",
+    "36": "0de51f3910e7846ce4d52fa13a1cbb1ef35d50a6e7438386e9c7cdcc55716c71",
+    "60": "3442018f5c5b1be01757cdad1cc57b68538eedbe35c14e7002b32dca5ab43046",
+    "120": "5c9315c724f64431c6c221b1a9213400b801f2ab95a579556000eb844af097ad"
+  },
+  "reverse_hashes": {
+    "120": "d373b3eac926ab01e2bc29aa05191f30bd3f149516dc04191e7e470f8a2f3dee",
+    "60": "46f3ad2fbdfe9a23b5bab7097561141dd1dbc3c1c77e6953802b26bbdf8ab9a8",
+    "36": "e2ae9175e757305283ded298fc995e75894312fbf067fe5e9aeb57cd3e0329ed",
+    "1": "d8b77e2aec94539a3387a331dea609d2925891438c3d955dfa22ba0cb5df8e42"
+  },
+  "reverse_seek_equal": false,
+  "diagnosis": "Decompressed PNG scanline payloads were byte-identical; Blender's IDAT compression differed by render order. The builder now canonicalizes pixels before hashing."
+}

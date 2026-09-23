@@ -1,0 +1,19 @@
+{
+  "schema": "mp-fed-liquidity.take-verification.v1",
+  "status": "mechanically_verified_pending_ear_review",
+  "final_voice_approved": false,
+  "script_file_sha256": "ed5eed8620d23863b3ae813c05265e288c0a068b251faee381e0d0ee2c38c4c7",
+  "script_spoken_sha256": "c4c58ac0866cc470ae91bd6770c6f6ce95d6ab889b5e4aed24359eccf479e1b2",
+  "audio": {"path": "scratch-kokoro.mp3", "sha256": "f24c7a318419acd6476b547f11d000915dec2406a472dbfc05b6a2e4ad89e193"},
+  "word_clock": {"path": "scratch-kokoro.words.json", "sha256": "542c85da61d07f3719682300c5c8d43a5ef519b2fa36189193bcc4578a9c382f"},
+  "engine": "local_kokoro",
+  "rate_parameter": 1.337,
+  "duration_s": 549.75,
+  "word_records": 1613,
+  "measured_wpm": 176.04,
+  "source_tokens_match": true,
+  "decode_check": {"tool": "ffmpeg volumedetect", "exit_code": 0, "sample_rate_hz": 24000, "channels": 1, "decoded_samples": 13194000, "mean_volume_db": -28.6, "max_volume_db": -4.3, "interpretation": "Decodes successfully; measured peak below full scale. Not a perceptual quality or final loudness verdict."},
+  "pilot_last_word_end_s": 187.075,
+  "pilot_tail": "Not yet cut; derive from actual silence before the following sentence, without padding.",
+  "validation": "Parent reran episode --segment pilot --check-inputs --take-dir vo-scratch-r1337; exit1 solely for HG2 selected-assets manifest absence. Seven focused tests pass. These checks do not prove perceptual voice quality or completed assembly."
+}

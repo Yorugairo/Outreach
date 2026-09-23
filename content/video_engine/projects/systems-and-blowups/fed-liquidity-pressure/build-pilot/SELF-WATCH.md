@@ -1,0 +1,49 @@
+# SELF-WATCH - fed-liquidity-pressure - build-pilot - 2026-09-19 - long (3 min opening)
+player.html sha256 9a73dfc26d2f - timeline fed-liquidity-pilot.timeline.json - runtime 2:58 - aspect 16:9 - script SCRIPT
+
+## 1. The gates (mechanical - a FAIL here ends the report)
+
+| row | verdict | detail |
+|---|---|---|
+| motion gate (M01-M24) | WARN | [WARN] M04 7 distinct plates; target runtime/12s = 14; [WARN] M11 first chart ledger:s02 enters at 9.2s, its build lands at 9.6s, with spotlight at 9.7s; WARN no sound cue within 1.5s of the enter at 9.2s; window 8-20s (E24 long form: the 8s paradox is paid before …; [WARN] M21 4 page(s) deployed past 12s after the last data mark: s06 14.3s (0:55 -> 1:10); s11 19.1s (1:37 -> 1:57); s13 14.1s (2:22 -> 2:36); s14 18.4s (2:39 -> 2:57) - un-draw it (undraw) or let it become the…; [WARN] M44 1 world plate(s) under 6s (9 world plate(s), floor 6s): s08 3.6s - a plate the eye cannot take in; lengthen it or fold it into its neighbour · RESULT: 0 FAIL / 4 WARN / 17 PASS / 1 JUDGE / 6 INFO |
+| M25 layout | PASS | no settled card on the chart's data, on a line of the page's ink or in the caption strip over 27 instants probed; smallest type read 9.2 CSS px on a phone (floor 11) \| INFO, listed not scored (CSS px on a phone): source (the citation) 8.7 |
+| species by sentence | INFO | 48 sentences · 16 carry an act · 19 have a row firing · 8 have an available species and no row · 4.38- 7.80 · "Money funds had parked about two and a half trillion dollars at the Fed." · TURNS · available: figure, spotlight, callout, note · row has: none ·… ‖ 17.05- 20.82 · "corporate debt maturing across twenty twenty-five through twenty twenty-s…" · NAMES · available: trace, light, arc, stamp · row has: none · no … ‖ 94.70- 96.85 · "To see why, we need to separate two things." · SETS · available: chart_to:park, figure, retitle · row has: none · no row ‖ 122.05-125.85 · "Its overnight reverse-repo balance falls by a hundred billion too." · TURNS · available: figure, spotlight, callout, note · row has: none · no… ‖ 129.45-131.49 · "The Fed owns a hundred billion less." · TURNS · available: figure, spotlight, callout, note · row has: none · no row ‖ 131.49-134.07 · "It also owes money funds a hundred billion less." · TURNS · available: figure, spotlight, callout, note · row has: none · no row ‖ 138.28-141.50 · "Banks avoid that cash drain because another account shrinks instead." · EXPLAINS+RETRACTS · available: note, plate use=bridge, chip, flow, ret… ‖ 152.28-156.07 · "Over that period, the Fed’s assets fell about two point two trillion doll…" · COMPARES+TURNS · available: line page, tiers page, build_to, cha… |
+| E61 plates (long) | WARN | 0.00- 9.15 · plate w4-finance-evidence-hall-v1 · no named use (E61: a plate is a landing surface, a bridge or a reset, and says which) ‖ 21.35- 30.45 · plate w2-owner-workshop-world-v1 · no named use (E61: a plate is a landing surface, a bridge or a reset, and says which) ‖ 30.45- 43.98 · plate w2-owner-workshop-world-v1 · no named use (E61: a plate is a landing surface, a bridge or a reset, and says which) ‖ 43.98- 55.35 · plate w4-finance-evidence-hall-v1 · no named use (E61: a plate is a landing surface, a bridge or a reset, and says which) ‖ 70.08- 76.40 · plate w4-finance-evidence-hall-v1 · no named use (E61: a plate is a landing surface, a bridge or a reset, and says which) ‖ 76.40- 80.00 · plate w4-finance-evidence-hall-v1 · no named use (E61: a plate is a landing surface, a bridge or a reset, and says which) ‖ 80.00- 89.90 · plate w4-finance-evidence-hall-v1 · no named use (E61:… |
+| the viewer (P36) | INFO | present, no verdict line |
+| the script gates | FAIL | VERDICT: FAIL (3 failing tools) |
+| the one-shot floor (M35) | FAIL | 2 chart forms (dense-line/line·4, story/bars·1) on 5 chart surfaces - the floor is 3 distinct forms |
+| the one-shot floor (M36) | PASS | 1 chart-to-chart transforms (s02: species chart_to -> recast) - the floor is 1 (a chart changes state; a snap from a dock is not one) |
+| the one-shot floor (M37) | FAIL | docks on 0.04 of 48 beats (2 on screen, 2 entering) - the floor is 0.36 = max(1/3, the reference's own); the reference japan-tariff-trick/build-short measures 0.36 |
+| the one-shot floor (M38) | WARN | proven-recipe coverage 0.00 spanning / 0.00 by the beat a fire starts in, of 48 beats (0 carry a recipe, 0 open one) - the floor is 0.60 on the spanning number; the reference japan-tariff-trick/build-short measures 0.76 - no proven recipe fires - interim (R26-168): the proven set is being re-proved on today's clocks by the recipe lab; this row does not stop a cut until P65 HG2, and M45 (parity by mechanism) is the floor meanwhile |
+| the one-shot floor (M39) | PASS | narrative : chart 1.80 (9 narrative = 9 plates + 0 clips / 5 chart = 5 pages + 0 chart docks) - the floor is 1.00 = max(1.0, the reference's own); the reference japan-tariff-trick/build-short measures 1.00 |
+| the one-shot floor (M40) | JUDGE | parity: this cut \| japan-tariff-trick/build-short measured at run time \| Bravos quoted |
+| the one-shot floor (M41) | WARN | no beat plan on disk (BEAT-PLAN.jsonl absent in build-pilot) - 48 beats unplanned |
+| the one-shot floor (M42) | INFO | 9.8 events/min (29 = 10 compositions + 19 builds over 177.97 s), 3.37 compositions/min, builds:compositions 1.90 - reported, never a floor |
+| the one-shot floor (M45) | INFO | no beat plan on disk (BEAT-PLAN.jsonl absent in build-pilot) - a mechanism is owed by a BEAT, so nothing is read here; M41 carries the missing plan |
+| the one-shot floor (M46) | WARN | signature mix over 14 scenes: cut 0.43, dip 0.29, hold 0.07, card 0.07, door 0.07, axes 0.07 - the approved cuts measure dip 0.32, mount 0.26, throw-then-zoom 0.11, card 0.11, spiral 0.05, throw-then-push 0.05, suck 0.05, hold 0.05 (approved-mix.json, 19 scenes); the ceiling is 0.42 a signature - OVER 0.42: cut 0.43; CONSECUTIVE: scenes 7-8 cut, scenes 8-9 cut, scenes 9-10 cut - the approved cuts repeat only dip |
+| the recipe audit sheets (O11) | INFO | no sheet: no proven recipe fires in this cut |
+| the publish package (R26-8) | WARN | publish/: CHECKLIST.md, DESCRIPTION-FACEBOOK.md, DESCRIPTION-YOUTUBE.md, MANIFEST.json, PINNED-COMMENT.md, SOURCES.md, TAGS.txt, first-frame.png, thumbnail.png · not on disk: the channel's own words (channel-assets/fed-liquidity-pressure/CHANNEL-DESCRIPTION.md); the fetched sources' links (evidence/sources/*) |
+
+## 2. The opening, read (the agent fills these by reading the sheets - never by the gates alone)
+
+sheets: self-watch/ opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png (88 tiles at 2 s steps from 0:00 to 2:54, 360 px, 12 per sheet)
+
+the operator's copy: SELF-WATCH.html - one plain question per row, the frames at the instants named here, each a link to the served player (`--html` after the read)
+
+| # | check | verdict | evidence (t, what the tile shows) |
+|---|---|---|---|
+| O1 | the package is answered on sentence 1 (E24 / E27): the first frame and the first sentence deliver the title's claim | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+| O2 | the promise lands by 0:45 (G09; a short: the mechanism by 0:10) | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+| O3 | the first chart enters 0:08-0:20 lit (M11) and reads at a glance (E28: sign is geometry, the scale printed) | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+| O4 | every sentence-act with an available species has a row, or the bridge is deliberate (each `no row` line answered: bridge / the light holds / cut) | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+| O5 | no dead band: no 2 s tile pair identical to the eye inside the opening; nothing held still past its sentence (E21, E49) | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+| O6 | no overlap the probe could not see: a card over ink, a label under a card, paper in the strip (M25 read against the tiles) | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+| O7 | the citations readable at the phone scale (>= 11 CSS px; the source line clear of every card) | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+| O8 | the captions read as phrases, never chased (shorts: PHRASE captions; the strip never covers a figure; E62: under a card the caption keeps its size and MOVES to the free band - a shrink is a FAIL unless no band fits) | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+| O9 | every card lands on its word and leaves at the turn (E25 / E50): the landing tile and the exit tile named | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+| O10 | the chart is the world (E61): every plate row in the opening names its use; a plate that proves nothing and docks nothing is a bridge, said so | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+| O11 | the recipe fired as its proof does: the members in order, at their offsets - name the beat where it did not | TODO | opening.1.png, opening.2.png, opening.3.png, opening.4.png, opening.5.png, opening.6.png, opening.7.png, opening.8.png |
+
+## 3. Verdict
+
+NOT CLEAN - the script gates: VERDICT: FAIL (3 failing tools)

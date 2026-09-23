@@ -1,0 +1,80 @@
+{
+  "title": "WHERE THE OFFSET SHOWS UP",
+  "sub": "Selected Table A changes · 01 Jun 2022 → 11 Jun 2025 · USD billions",
+  "src": "Federal Reserve Board · Monetary Policy Report June 2025 · Table A · USD billions",
+  "src_style": "compact",
+  "unit": " bn",
+  "ylabel": "USD billions",
+  "left_gutter": 140,
+  "from_zero": true,
+  "domain": [
+    -2400,
+    2400
+  ],
+  "bars": [
+    {
+      "label": "Fed assets",
+      "value": -2238,
+      "color": "crimson"
+    },
+    {
+      "label": "Reserves",
+      "value": 72,
+      "color": "teal"
+    },
+    {
+      "label": "Other RRP",
+      "value": -1760,
+      "color": "cobalt"
+    },
+    {
+      "label": "TGA",
+      "value": -504,
+      "color": "amber"
+    },
+    {
+      "label": "Foreign",
+      "value": 106,
+      "color": "sunflower"
+    }
+  ],
+  "status": "REAL",
+  "facts": {
+    "window_start": "2022-06-01",
+    "window_end": "2025-06-11",
+    "same_source": true,
+    "same_change_column": "xsheeta5",
+    "scale": "common zero-centered USD billions",
+    "selected_rows_not_exhaustive_reconciliation": true,
+    "other_reverse_repos_row_is_not_total": true
+  },
+  "proof": [
+    {
+      "kind": "primary_source",
+      "publisher": "Federal Reserve Board",
+      "url": "https://www.federalreserve.gov/monetarypolicy/2025-06-mpr-part2.htm",
+      "path": "evidence/sources/mpr_2025_06.html",
+      "sha256": "7a201f7cad0a75ae840e93d5fc386c501e4774c31e8d1631d99dc9dc0c057da0",
+      "table": "xtable_balancesheet",
+      "column": "xsheeta5",
+      "window": {
+        "start": "2022-06-01",
+        "end": "2025-06-11"
+      },
+      "units": "USD billions",
+      "rows": [
+        "xsheetr13",
+        "xsheetr15",
+        "xsheetr18",
+        "xsheetr19",
+        "xsheetr17"
+      ]
+    }
+  ],
+  "notes": [
+    "Selected rows are direct values from one Table A change column; they are not an exhaustive reconciliation.",
+    "Other reverse repos is the xsheetr18 Others row, not total reverse repos.",
+    "This page compares signed changes over the stated historical window; it is not a time curve or current-balance chart.",
+    "Native ledger bars are vertical story bars; horizontal signed bars are not a supported native builder. Display labels are shortened for the five-column layout; source row names remain in proof."
+  ]
+}

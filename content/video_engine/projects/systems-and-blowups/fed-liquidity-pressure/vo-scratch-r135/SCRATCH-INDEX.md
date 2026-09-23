@@ -1,0 +1,118 @@
+# SCRATCH INDEX - jump points for the ear pass
+
+kokoro 8.9 min for 10,156 chars -> 19.05 chars/s actual (estimators assume 16.05 c/s / 165.6 wpm)
+
+- 00:00.0  P01  The Fed shrank its balance sheet by trillions. Bank reserves barely bu
+- 00:04.1  P02  One reason: another account absorbed much of the adjustment. It once h
+- 00:11.5  P03  That cushion absorbed an adjustment. Now it has shrunk. If your busine
+- 00:18.8  P04  A workshop owner has orders waiting, but the loan financing the next m
+- 00:23.6  P05  By the end, you'll separate three things: money moving between account
+- 00:30.4  P06  In this series, we're following the pressures that can break an econom
+- 00:34.8  P07  This chapter follows the money between the institutions supplying that
+- 00:39.0  P08  The total can shrink without telling you which institution actually lo
+- 00:43.8  P09  The trap is treating one falling balance as every bank losing cash.
+- 00:47.5  P10  Follow the accounts first. Then we'll test what borrowing costs.
+- 00:50.9  P11  Before you see the hiring freeze or the cancelled expansion, someone h
+- 00:56.6  P12  One shortcut for watching this system is called net liquidity.
+- 01:00.1  P13  Take the Fed's assets. Subtract the government's cash account. Subtrac
+- 01:05.7  P14  Three numbers, one line on a chart.
+- 01:08.2  P15  Analysts build this unofficial proxy from public data. It isn't the ba
+- 01:13.2  P16  We'll test the distinction against the Fed's June twenty twenty-five r
+- 01:17.2  P17  Start with the Fed's balance sheet.
+- 01:19.3  P18  On one side are the assets it owns, largely Treasury securities and mo
+- 01:24.4  P19  On the other are its liabilities, including currency, bank reserves, a
+- 01:29.7  P20  During quantitative tightening, maturing securities can roll off witho
+- 01:35.8  P21  By September eighteenth, money funds had nearly emptied the Fed's over
+- 01:41.1  P22  So total Fed assets should tell you which way the banks' cushion moves
+- 01:44.7  P23  Take a tax payment.
+- 01:46.4  P24  Your deposit falls. Your bank settles the payment. The Treasury's bala
+- 01:51.5  P25  Holding the other moving parts still, bank reserves fall as the govern
+- 01:56.4  P26  That government account is the Treasury General Account—the TGA.
+- 02:00.2  P27  But reserves just moved without any change in Fed assets. Tax payments
+- 02:05.7  P28  Now let the government pay a contractor.
+- 02:08.2  P29  The Treasury account falls, the contractor's bank receives reserves, a
+- 02:14.0  P30  The direction reverses.
+- 02:15.9  P31  That's why a tax date and a spending date can matter even when the Fed
+- 02:21.4  P32  The headline balance sheet misses that movement. Next, follow the cash
+- 02:27.0  P33  Then there is overnight reverse repo.
+- 02:29.4  P34  Money funds lend cash to the Fed overnight against Treasury collateral
+- 02:33.3  P35  They compare that return with bills and private repo.
+- 02:36.4  P36  Think of this account as an available place for short-term cash to set
+- 02:40.5  P37  Its balance tells you where that cash is sitting today.
+- 02:43.4  P38  At the end of twenty twenty-two, that balance briefly reached about tw
+- 02:48.4  P39  Look at the size of it beside today's balance.
+- 02:51.3  P40  The change is enormous. But following the money out of the account mat
+- 02:56.9  P41  It was being moved into other investments, with consequences for the r
+- 03:01.7  P42  As other money-market investments became more attractive, funds shifte
+- 03:07.9  P43  That reallocation helped the system absorb changes elsewhere on the Fe
+- 03:12.6  P44  It also explains why a falling Fed balance sheet did not automatically
+- 03:18.9  P45  There was another balance available to shrink first.
+- 03:21.7  P46  Here's a simplified example.
+- 03:23.8  P47  The Fed's assets fall by a hundred billion dollars.
+- 03:26.7  P48  Over the same interval, overnight reverse repo falls by a hundred bill
+- 03:32.9  P49  Bank reserves can stay where they were.
+- 03:35.2  P50  The popular net-liquidity formula stays unchanged as well: one subtrac
+- 03:40.5  P51  You can see why watching only the Fed's total assets misses the story.
+- 03:44.3  P52  Can that offset last through trillions in runoff? The Fed's record giv
+- 03:49.1  P53  By June twenty twenty-five, the Fed reported that its assets had falle
+- 03:55.8  P54  Yet bank reserves were slightly higher.
+- 03:58.2  P55  Other reverse repos and the Treasury account had both fallen over that
+- 04:04.5  P56  The balance sheet shrank. The banks' cushion held.
+- 04:07.4  P57  But a balance that has already fallen close to zero has little room to
+- 04:12.0  P58  There is less capacity to absorb another adjustment through that accou
+- 04:15.8  P59  A subtraction formula can track balances. It cannot tell you whether t
+- 04:22.1  P60  The quantity leads us to the question. The price gives us another part
+- 04:26.6  P61  Picture a dealer holding Treasury securities.
+- 04:29.4  P62  The dealer needs cash to finance them. A money market fund lends that 
+- 04:36.6  P63  That's repo.
+- 04:38.2  P64  Now more securities need financing, or lenders find better uses for th
+- 04:44.6  P65  The rate they pay can rise when cash is available elsewhere but isn't 
+- 04:50.1  P66  There's a crucial change to the timeline here.
+- 04:52.7  P67  The Fed ended balance-sheet runoff in December twenty twenty-five and 
+- 04:59.6  P68  So today's story has to include those purchases.
+- 05:02.4  P69  They help replenish the system while Treasury cash flows and financing
+- 05:07.2  P70  The pressure depends on how those forces meet.
+- 05:09.8  P71  In its July twenty twenty-six report, the Fed put bank reserves at rou
+- 05:17.1  P72  The small reverse-repo balance sits beside a much larger banking syste
+- 05:21.3  P73  A near-empty account changes the system's flexibility. The next questi
+- 05:29.3  P74  Treasury financing can push on that market from two directions.
+- 05:32.8  P75  More longer-term securities can increase dealers' financing needs.
+- 05:36.6  P76  More Treasury bills can attract money market funds that might otherwis
+- 05:41.4  P77  Fed researchers describe both channels: demand for financing on one si
+- 05:47.7  P78  The same total balance can conceal a different funding problem.
+- 05:51.4  P79  Then the calendar intervenes.
+- 05:53.5  P80  Tax payments arrive. Debt settles. Government spending leaves the Trea
+- 05:58.2  P81  Each flow changes who holds the cash and when they need it.
+- 06:01.5  P82  Mark the payment date, the settlement date, and the days that follow.
+- 06:05.0  P83  Put those dates beside the funding rates, and you can start testing th
+- 06:10.5  P84  Start with a secured funding rate such as the tri-party general collat
+- 06:17.5  P85  Compare it with the interest rate the Fed pays banks on reserves.
+- 06:21.2  P86  Watch how that gap behaves through the cash movements we just traced.
+- 06:24.7  P87  Then follow the gap after the event. Has the cash returned to this mar
+- 06:30.9  P88  The July report gives us a useful check on the frightening version of 
+- 06:35.4  P89  Reverse-repo usage was already close to zero on most days, yet overnig
+- 06:41.1  P90  The Fed's purchases had accommodated seasonal cash movements.
+- 06:44.3  P91  That is a real counterexample to treating an empty reverse-repo accoun
+- 06:49.8  P92  The adjustment can work. Now follow the funding price to a borrower wh
+- 06:54.4  P93  Now return to the business with the loan coming due.
+- 06:57.5  P94  Persistent funding pressure can add to the cost of financing, alongsid
+- 07:04.7  P95  A company that needs to refinance has to face the new terms. It may po
+- 07:10.7  P96  That is how a financial-market strain can become an operating decision
+- 07:14.8  P97  The route matters as much as the headline.
+- 07:17.4  P98  The variable is the gap between the tri-party repo rate and the intere
+- 07:22.4  P99  Use zero as the comparison line. Above it, Treasury-backed overnight b
+- 07:28.8  P100  On September seventeenth, that gap was seven basis points below zero. 
+- 07:36.0  P101  If the gap crosses above zero after a cash swing, follow whether it re
+- 07:41.3  P102  Then check whether repeated pressure comes with greater use of the Fed
+- 07:46.5  P103  Use of that backstop shows where cash is being supplied; it isn't a fa
+- 07:51.3  P104  If the gap returns below zero and financing stays orderly, that premiu
+- 07:58.2  P105  Zero is the comparison, not a crisis threshold. A claim that strain is
+- 08:04.7  P106  You now have a way to read the next move.
+- 08:07.1  P107  Check which account changed. Check the price of funding. Check whether
+- 08:11.8  P108  Keep the observation dates together; last month's reserve balance cann
+- 08:17.4  P109  And ask whether the borrower you are studying actually needs new finan
+- 08:21.4  P110  That takes you from a dramatic line on a chart to a question you can i
+- 08:25.8  P111  We began with an account that had almost emptied.
+- 08:28.6  P112  Following the money took us through the Treasury, the banks, and the o
+- 08:35.7  P113  That cushion absorbed an adjustment. The funding market tells us wheth
+- 08:41.6  P114  The Fed's balance sheet shows what shrank. Bank reserves show where th

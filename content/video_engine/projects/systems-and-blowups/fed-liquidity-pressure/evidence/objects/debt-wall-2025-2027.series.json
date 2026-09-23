@@ -1,0 +1,94 @@
+{
+  "title": "THE CORPORATE DEBT WALL",
+  "sub": "U.S. maturities · 2025–2027 · Jan 2025 snapshot · USD billions",
+  "src": "S&P Global Ratings · S&P-rated corporate debt",
+  "src_style": "compact",
+  "unit": " bn",
+  "ylabel": "USD billions",
+  "left_gutter": 200,
+  "from_zero": true,
+  "domain": [
+    0,
+    1400
+  ],
+  "xticks": [
+    [
+      2025,
+      "2025"
+    ],
+    [
+      2026,
+      "2026"
+    ],
+    [
+      2027,
+      "2027"
+    ]
+  ],
+  "bars": [
+    {
+      "label": "2025",
+      "value": 816,
+      "color": "cobalt"
+    },
+    {
+      "label": "2026",
+      "value": 1167,
+      "color": "cobalt"
+    },
+    {
+      "label": "2027",
+      "value": 1201,
+      "color": "cobalt"
+    }
+  ],
+  "status": "REAL",
+  "facts": {
+    "geography": "United States",
+    "issuer_scope": "financial and nonfinancial corporate issuers",
+    "included_instruments": [
+      "bonds",
+      "loans",
+      "revolving credit facilities"
+    ],
+    "rating_scope": "rated by S&P Global Ratings",
+    "snapshot_date": "2025-01-01",
+    "window_start": "2025",
+    "window_end": "2027",
+    "maturities_usd_billions": 3184,
+    "not_current_as_of": "2026-09-19"
+  },
+  "proof": [
+    {
+      "kind": "primary_source",
+      "publisher": "S&P Global Ratings",
+      "url": "https://investorfactbook.spglobal.com/sp-global-ratings/global-corporate-debt-maturities-through-2029/",
+      "path": "evidence/sources/sp_global_corporate_maturities_2025_snapshot.html",
+      "sha256": "43c79cc86247923cdc7b5de7986b5ceb1e81471b9fe4fc3a578921fe700b0993",
+      "table": "Global Maturity Schedule",
+      "row": "Total United States",
+      "columns": [
+        "2025",
+        "2026",
+        "2027"
+      ],
+      "snapshot_date": "2025-01-01",
+      "units": "USD billions"
+    }
+  ],
+  "derivation": {
+    "formula": "816 + 1167 + 1201",
+    "operation": "sum selected Total United States row values for 2025–2027",
+    "rounding": "none; source values are whole USD billions",
+    "excluded_years": [
+      2028,
+      2029
+    ]
+  },
+  "notes": [
+    "Values are the source table's Total United States row; financial and nonfinancial issuers are combined.",
+    "The source includes S&P-rated bonds, loans, and revolving credit facilities.",
+    "January 1, 2025 snapshot; do not present the full schedule as still due in September 2026.",
+    "Native ledger bars are vertical story bars; value labels use the compact bn suffix while the axis states USD billions."
+  ]
+}

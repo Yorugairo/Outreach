@@ -1,0 +1,59 @@
+{
+  "schema": "mp-fed-liquidity.debt-wall-derivation.v1",
+  "series_id": "debt-wall-2025-2027",
+  "source": {
+    "publisher": "S&P Global Ratings",
+    "url": "https://investorfactbook.spglobal.com/sp-global-ratings/global-corporate-debt-maturities-through-2029/",
+    "path": "evidence/sources/sp_global_corporate_maturities_2025_snapshot.html",
+    "sha256": "43c79cc86247923cdc7b5de7986b5ceb1e81471b9fe4fc3a578921fe700b0993",
+    "table": "Global Maturity Schedule",
+    "row": "Total United States",
+    "units": "USD billions",
+    "snapshot_date": "2025-01-01"
+  },
+  "selection": {
+    "years": [
+      2025,
+      2026,
+      2027
+    ],
+    "columns": [
+      "2025",
+      "2026",
+      "2027"
+    ],
+    "geography": "United States",
+    "issuer_scope": "financial and nonfinancial corporate issuers",
+    "included_instruments": [
+      "bonds",
+      "loans",
+      "revolving credit facilities"
+    ],
+    "rating_scope": "rated by S&P Global Ratings"
+  },
+  "rows": [
+    {
+      "year": 2025,
+      "value_usd_billions": 816
+    },
+    {
+      "year": 2026,
+      "value_usd_billions": 1167
+    },
+    {
+      "year": 2027,
+      "value_usd_billions": 1201
+    }
+  ],
+  "selected_year_total_usd_billions": 3184,
+  "derivation": {
+    "formula": "816 + 1167 + 1201",
+    "operation": "sum selected Total United States row values for 2025–2027",
+    "rounding": "none; source values are whole USD billions",
+    "excluded_years": [
+      2028,
+      2029
+    ]
+  },
+  "claim_boundary": "This is a January 1, 2025 maturity-schedule snapshot for S&P-rated debt; it is not a claim that the full amount remained due in September 2026."
+}
