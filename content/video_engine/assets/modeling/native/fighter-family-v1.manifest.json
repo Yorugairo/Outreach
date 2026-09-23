@@ -1,0 +1,32 @@
+{
+  "schema_version": "native_character_preset_asset.v1",
+  "family_id": "martial-matters-fighter-family-v1",
+  "asset_id": "native-fighter-family-diagnostic-v1",
+  "revision": "r1",
+  "status": "diagnostic_only",
+  "art_approval": "not_approved",
+  "likeness": "none",
+  "editable_source": "fighter-family-v1.blend",
+  "editable_source_sha256": "713ed1b0cb18fcd41e05863484bd1e0bae28bb7150b3c758a6876fb56882e61f",
+  "controls_fixture": "content/video_engine/tests/fixtures/modeling/presets/default-controls.v1.json",
+  "alternate_controls_fixture": "content/video_engine/tests/fixtures/modeling/presets/alternate-controls.v1.json",
+  "review_packet": "content/video_engine/review/model-engines/benchmark-v1/art/",
+  "authoring": {
+    "blender_version": "5.2.2 LTS",
+    "blender_build_hash": "d13f752e3b9c",
+    "mpfb_version": "2.0.17",
+    "mpfb_source_commit": "80919fa4682335c41847f761a4d79dcad4124732",
+    "offline_mode": true,
+    "provider_calls": 0
+  },
+  "license_basis": {
+    "mpfb_code": "GPL-3.0-or-later",
+    "mpfb_mesh_and_target_assets": "CC0-1.0",
+    "generated_output": "MPFB upstream LICENSE.md section D identifies generated output as user data; added diagnostic geometry and materials are Blender-authored."
+  },
+  "limits": [
+    "Generic rigged starter only; no recognizable fighter identity.",
+    "Shorts are a material region on the skinned body, not garment geometry.",
+    "Face, hair, hands, materials and combat poses require T4b/T5b art and motion review."
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "approval_reference": {
+    "path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/intake-record.json",
+    "record_id": "intake-layered-environment-layered-environment-r1",
+    "resource_id": "primary-source",
+    "sha256": "dbabe65c5296eb7f2d01808900b6adb03a2d1b6748271f8da7390d476e1a84d8"
+  },
+  "asset_id": "layered-environment",
+  "asset_kind": "environment",
+  "capabilities": {
+    "sockets": [],
+    "surfaces": [
+      {
+        "collision_role": "solid",
+        "normal_xyz": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "origin_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "reference": "Floor_Collision top face",
+        "surface_id": "floor",
+        "surface_type": "floor"
+      }
+    ]
+  },
+  "catalog_reference": {
+    "asset_id": "layered-environment",
+    "path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/candidate-catalog.json",
+    "resource_id": "primary-source",
+    "sha256": "76c2437722037a9574c9606b6207ab8d7355cf2457b2c1d1fe615f78eb4d5227"
+  },
+  "coordinate_system": {
+    "forward_axis": "Y",
+    "handedness": "right",
+    "origin": "local scene origin",
+    "rest_pose": "closed for prop; static for environment",
+    "space": "world_3d",
+    "unit": "m",
+    "up_axis": "Z"
+  },
+  "provenance": {
+    "authoring_method": "native",
+    "licenses": {
+      "mesh": "unknown_pending_review",
+      "motion": "unknown_pending_review",
+      "texture": "unknown_pending_review",
+      "tool": "unknown_pending_review"
+    },
+    "tool_name": "model-asset-intake",
+    "tool_version": "1"
+  },
+  "resources": [
+    {
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/resources/environment.blend",
+      "resource_id": "primary-source",
+      "resource_kind": "editable_source",
+      "sha256": "8afd9f3f307574496753b985eece3129c0da4783184eb8fbde5af2afe88e69e4"
+    },
+    {
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/resources/environment.blend.dependencies.json",
+      "resource_id": "blend-dependency-manifest",
+      "resource_kind": "other",
+      "sha256": "cbb035d473b6c1651cb6773e3a7b7b0af7a14f5b22bb086f49846caf33cd0fb7"
+    }
+  ],
+  "revision": {
+    "revision_id": "layered-environment-r1",
+    "revision_number": 1
+  },
+  "schema_version": "model_asset.v1",
+  "source_lineage": [
+    {
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/resources/environment.blend",
+      "relation": "created_from",
+      "sha256": "8afd9f3f307574496753b985eece3129c0da4783184eb8fbde5af2afe88e69e4",
+      "source_id": "source-original"
+    },
+    {
+      "path": "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/resources/environment.blend.dependencies.json",
+      "relation": "created_from",
+      "sha256": "cbb035d473b6c1651cb6773e3a7b7b0af7a14f5b22bb086f49846caf33cd0fb7",
+      "source_id": "blend-dependency-manifest"
+    }
+  ]
+}
