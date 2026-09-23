@@ -149,7 +149,7 @@
       "pending": [
         {
           "tag": "SCRIPT",
-          "text": "window.WIZ_global_data = {\"AfY8Hf\":true,\"DpimGf\":false,\"EP1ykd\":[\"/_/*\",\"/accounts/*\"],\"FdrFJe\":\"-9157198283354035150\",\"HiPsbb\":1,\"Im6cmf\":\"/_/AiSandboxAngularFrontend\",\"K21R3e\":\"AIzaSyDSjGxWlo68HcGt6mbaIq9YbkKhFQnt3sk\",\"LoQv7e\":false,\"MT7f9b\":[],\"MUE6Ne\":\"labs-ai-sandbox-frontend\",\"QrtxK\":\"0\",\"S06G",
+          "text": "window.WIZ_global_data = {\"AfY8Hf\":true,\"DpimGf\":false,\"EP1ykd\":[\"/_/*\",\"/accounts/*\"],\"FdrFJe\":\"-9157198283354035150\",\"HiPsbb\":1,\"Im6cmf\":\"/_/AiSandboxAngularFrontend\",\"K21R3e\":\"<google-page-key-redacted>\",\"LoQv7e\":false,\"MT7f9b\":[],\"MUE6Ne\":\"labs-ai-sandbox-frontend\",\"QrtxK\":\"0\",\"S06G",
           "attrs": [
             [
               "data-id",
