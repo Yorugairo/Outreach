@@ -1770,7 +1770,16 @@ def longform_key_px(spec: dict, w_s: int = 1920) -> float:
 
 def longform_key_box(spec: dict, col_w: float) -> tuple[float, float]:
     """The key rail's (w, h) in rendered px in an ink column `col_w` wide: the pills wrapped greedily into rows (the
-    browser's flex-wrap), the box as wide as its one row or the column. (0, 0) when the page has no key."""
+    browser's flex-wrap), the box as wide as its one row or the column. (0, 0) when the page has no key.
+    REVIEW-P69-LANE-B-MERGE-3 M1: a page whose `then=` states key more than it does carries the band they need
+    (`axes.key_w` / `key_h`, apply_longform_states) - its key box is the larger of the two."""
+    axes = spec.get("axes") or {}
+    w, h = _longform_key_own(spec, col_w)
+    return max(w, float(axes.get("key_w") or 0.0)), max(h, float(axes.get("key_h") or 0.0))
+
+
+def _longform_key_own(spec: dict, col_w: float) -> tuple[float, float]:
+    """The (w, h) of this spec's OWN key, wrapped in the column; (0, 0) when it has none."""
     axes = spec.get("axes") or {}
     key = axes.get("key") or []
     if not key:
@@ -1919,13 +1928,32 @@ def apply_longform_states(page: dict, states: list) -> str | None:
         if state.get("builder") == "dense-line" and longform_tag_form(state, preset) is None:
             return (f"then= state {i + 1} cannot keep even its end values inside the 16:9 stage at "
                     f"readability={LONGFORM}:{preset} (a value alone is the shortest end tag there is)")
-        apply_longform(state, preset)
-        state["axes"].pop("key", None)   # P69 T10: the key rail is the PAGE's (a state draws no key of its own)
-        state["axes"].pop("key_px", None)
+        apply_longform(state, preset)   # REVIEW-P69-LANE-B-MERGE-3 M1: a state keeps ITS key - the names ITS tags gave up
         if state.get("builder") == "dense-line":
             room = max(room, longform_tag_px(state, t, state["axes"]["tag_form"]))
     if page.get("builder") == "dense-line" and room > longform_tag_px(page, t, axes.get("tag_form") or "full"):
         page["axes"]["tag_room"] = math.ceil(room * 10) / 10   # up to the tenth: the page's viewBox never grows past a state's fit
+    # ... and every key stands in ONE band over the chart (the recast swaps the key, never the chart's box): the page
+    # reserves the tallest - written only when a state's key needs more than the page's own, so every other page is
+    # the page it was
+    page["axes"].pop("key_w", None)
+    page["axes"].pop("key_h", None)
+    page["axes"].pop("state_ink", None)
+    col = _longform_ink_col()[1]
+    own_w, own_h = _longform_key_own(page, col)
+    band = [(own_w, own_h)] + [_longform_key_own(s, col) for s in states if isinstance(s, dict)]
+    band_w, band_h = max(b[0] for b in band), max(b[1] for b in band)
+    if band_h > own_h + 1e-9:
+        page["axes"]["key_w"] = math.ceil(band_w * 10) / 10
+        page["axes"]["key_h"] = math.ceil(band_h * 10) / 10
+    # ... and the key stands over EVERY chart's top ink, not only the page's own: a state that writes higher (a line's
+    # plot over a bars page's, a y label) carries what it writes, so the band clears it (a keyed page only)
+    if band_h > 0:
+        own_ink = longform_state_ink(page)
+        extra = [longform_state_ink(s) for s in states if isinstance(s, dict)]
+        extra = [i for i in extra if i != own_ink]
+        if extra:
+            page["axes"]["state_ink"] = extra
     return None
 
 
@@ -1966,14 +1994,36 @@ def longform_chart_box(spec: dict, t: dict, sub_bottom: float, src_h: float, rai
     bot = stack["bot"]
     tu, vh = LONGFORM_PLOT_T.get(str(spec.get("builder")), LONGFORM_PLOT_T["story"]), LAND_VIEWBOX[1]
     axes = spec.get("axes") or {}
-    rules = [h for h in (axes.get("hlines") or ([axes["hline"]] if axes.get("hline") else [])) if isinstance(h, dict) and h.get("label")]
-    above = max(0.5 * t["tick"], LONGFORM_YLAB_GAP_PX + t["tick"] if axes.get("ylabel") else 0.0,   # a label's box
-                8 + 1.25 * t["tag"] if rules else 0.0)                                               # reaches ~1 em up
     band = key_h + 0.5 * t["tick"] if key_h > 0 else 0.0   # P69 T10: the key and M28's air under it
-    need = sub_bottom + 0.5 * t["tick"] + band + above
-    top = top0 if top0 + tu * (bot - top0) / vh >= need else (need - tu * bot / vh) / (1 - tu / vh)
-    key_y = top + tu * (bot - top) / vh - above - 0.5 * t["tick"] - key_h
+    base = sub_bottom + 0.5 * t["tick"] + band
+    # REVIEW-P69-LANE-B-MERGE-3 M1: every chart the page can become stands in this box, each with its OWN plot top and
+    # the ink above it (`axes.state_ink`) - the box clears the highest of them, and the key stands over that one
+    reach = _longform_reaches(spec, t)
+    top = max([top0] + [(base + above - tu_i * bot / vh) / (1 - tu_i / vh) for tu_i, above in reach])
+    key_y = top + min(tu_i * (bot - top) / vh - above for tu_i, above in reach) - 0.5 * t["tick"] - key_h
     return dict(stack, top=top, key_y=key_y)
+
+
+def _longform_above(t: dict, ylabel: bool, rules: bool) -> float:
+    """The ink a chart carries above its plot top, rendered px: half a tick, the y label's row, a rule's name."""
+    return max(0.5 * t["tick"], LONGFORM_YLAB_GAP_PX + t["tick"] if ylabel else 0.0,   # a label's box
+               8 + 1.25 * t["tag"] if rules else 0.0)                                    # reaches ~1 em up
+
+
+def longform_state_ink(spec: dict) -> dict:
+    """What moves a chart's top ink: its builder's plot top (viewBox units) and whether it writes a y label or a named
+    rule above the plot. The shape `axes.state_ink` carries per `then=` state (M1)."""
+    axes = spec.get("axes") or {}
+    rules = any(isinstance(h, dict) and h.get("label") for h in (axes.get("hlines") or ([axes["hline"]] if axes.get("hline") else [])))
+    return {"tu": float(LONGFORM_PLOT_T.get(str(spec.get("builder")), LONGFORM_PLOT_T["story"])),
+            "ylabel": bool(axes.get("ylabel")), "rules": rules}
+
+
+def _longform_reaches(spec: dict, t: dict) -> list[tuple[float, float]]:
+    """(plot top in viewBox units, ink above it in rendered px) for the page and each state it names."""
+    own = longform_state_ink(spec)
+    inks = [own] + [s for s in ((spec.get("axes") or {}).get("state_ink") or []) if isinstance(s, dict)]
+    return [(float(i["tu"]), _longform_above(t, bool(i.get("ylabel")), bool(i.get("rules")))) for i in inks]
 
 
 def longform_text_px(text: str, role: str, px: float) -> float:
@@ -2229,7 +2279,7 @@ def page_ink_key(spec: dict) -> str:
     readability = (spec.get("axes") or {}).get("readability")
     if readability is not None:
         ink["readability"] = readability
-    for key in ("type_scale", "tag_form", "tag_room", "key", "key_px"):   # P69 T8: the long form's preset, end-tag form and (N2) its states' tag room move its boxes; T10: its key's names
+    for key in ("type_scale", "tag_form", "tag_room", "key", "key_px", "key_w", "key_h", "state_ink"):   # P69 T8: the long form's preset, end-tag form and (N2) its states' tag room move its boxes; T10: its key's names; M1: its states' key band
         if (spec.get("axes") or {}).get(key) is not None:
             ink[key] = spec["axes"][key]
     if "left_gutter" in (spec.get("axes") or {}):

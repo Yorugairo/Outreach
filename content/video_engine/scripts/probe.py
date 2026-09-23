@@ -250,6 +250,15 @@ READ_DOM = r"""
       }
     const rail = world.querySelector('.lp-rail');
     if (rail && eff(rail) > 0.05 && rail.getBoundingClientRect().height > 0) out.items.push({ k: 'rail', box: R(rail), px: 0, s: 1, txt: '' });
+    /* REVIEW-P69-LANE-B-MERGE-3 M2: a longform page's KEY RAIL is the page's type - each pill a line of ink a card may
+       not cover (`page.key`), a label among its labels (M28, role `key`), and type the floor reads (its name's size) */
+    for (const kp of world.querySelectorAll('.lp-key .lp-kpill')) {
+      if (eff(kp) <= 0.05) continue;
+      const b = R(kp); if (b[2] < 1 || b[3] < 1) continue;
+      const nm = kp.querySelector('.lp-kname') || kp;
+      out.items.push({ k: 'key', box: b, px: fs(nm), s: sc(kp), txt: txt(kp) });
+      out.labels.push({ role: 'key', text: txt(kp), box: b });
+    }
     /* the charts as the DOM holds them: what is UP is a screen fact, and a page holds one chart per
        state (a recast builds its own). The state object is used for one thing only - the plot box it
        declares - and a builder that declares none (bars) falls back to where its data and axes are
@@ -659,7 +668,7 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
     plot = _union([p["box"] for p in dom.get("plots") or []])
     data = _union(dom.get("data") or [])
     page: dict = {}
-    for k in ("title", "sub", "source", "rail", "note"):
+    for k in ("title", "sub", "source", "rail", "note", "key"):   # M2: the key rail's pills, as one box
         b = _union([i["box"] for i in dom["items"] if i["k"] == k])
         if b:
             page[k] = [int(round(v)) for v in b]
@@ -694,7 +703,7 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
     # OVERLAPS, as named pairs. Every paper/pill against every other and against the page's ink.
     overlaps = []
     solids = [(d["name"], d["box"]) for d in dom["docks"]]
-    ink = [(("page." + i["k"]) if i["k"] in ("title", "sub", "source", "note") else i["k"], i["box"])
+    ink = [(("page." + i["k"]) if i["k"] in ("title", "sub", "source", "note", "key") else i["k"], i["box"])
            for i in dom["items"] if i["k"] != "caption"]
     if plot:
         ink.append(("page.plot", plot))

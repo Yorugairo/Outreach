@@ -135,8 +135,10 @@ READ_BOXES = r"""
   const rail = one('.lp-rail');
   out.rail = rail || (out.source ? {x: out.source.x, y: out.source.y + out.source.h, w: out.source.w, h: 0} : null);
   /* P69 T10: a longform page's KEY RAIL (the names its end tags gave up), in the top band - only when it holds a pill */
-  const key = wB.querySelector('.lp-key');
-  if (key && key.querySelector('.lp-kpill')) out.key = R(key);
+  /* ... and (REVIEW-P69-LANE-B-MERGE-3 M1) every key a `then=` state holds, in the same band: the band is their union */
+  for (const key of wB.querySelectorAll('.lp-key')) if (key.querySelector('.lp-kpill')) { const b = R(key);
+    out.key = !out.key ? b : { x: Math.min(out.key.x, b.x), y: Math.min(out.key.y, b.y),
+      w: Math.max(out.key.x + out.key.w, b.x + b.w) - Math.min(out.key.x, b.x), h: Math.max(out.key.y + out.key.h, b.y + b.h) - Math.min(out.key.y, b.y) }; }
   /* THE PLOT. The chart's own declared pin box through its screen CTM (viewBox + park + camera) when the
      builder declares one; the marks it drew when it does not (bars). Then WIDENED over the ink that lives
      inside the plot - the basis label above it and the x tick labels below the axis - which is exactly what

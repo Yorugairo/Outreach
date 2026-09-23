@@ -8089,13 +8089,16 @@ async function mount(doc) {
       if (stack.fits) break;
     }
     const bot = stack.bot;
-    const tu = LP_LONGFORM.PLOT_T[pg.builder] || LP_LONGFORM.PLOT_T.story;
     const rules = (ax.hlines || (ax.hline ? [ax.hline] : [])).some((h) => h && h.label);
-    const above = Math.max(0.5 * T.tick, ax.ylabel ? LP_LONGFORM.YLAB_GAP_PX + T.tick : 0, rules ? 8 + 1.25 * T.tag : 0);   /* a label's box reaches its font's ascent (~1 em) above its baseline */
+    const aboveOf = (yl, rl) => Math.max(0.5 * T.tick, yl ? LP_LONGFORM.YLAB_GAP_PX + T.tick : 0, rl ? 8 + 1.25 * T.tag : 0);   /* a label's box reaches its font's ascent (~1 em) above its baseline */
     const band = keyH > 0 ? keyH + 0.5 * T.tick : 0;   /* P69 T10: the key rail and M28's air under it */
-    const need = subBottom + 0.5 * T.tick + band + above;
-    const top = top0 + tu * (bot - top0) / 560 >= need ? top0 : (need - tu * bot / 560) / (1 - tu / 560);
-    const keyY = top + tu * (bot - top) / 560 - above - 0.5 * T.tick - keyH;   /* ... hugging the chart's top ink */
+    const base = subBottom + 0.5 * T.tick + band;
+    /* REVIEW-P69-LANE-B-MERGE-3 M1: every chart the page can become stands in this box, each with its own plot top and the
+       ink above it (`axes.state_ink`, ledger_page.longform_chart_box line for line) - the box clears the highest */
+    const reach = [[LP_LONGFORM.PLOT_T[pg.builder] || LP_LONGFORM.PLOT_T.story, aboveOf(!!ax.ylabel, rules)],
+                   ...(ax.state_ink || []).map((i) => [+i.tu, aboveOf(!!i.ylabel, !!i.rules)])];
+    const top = Math.max(top0, ...reach.map(([tu, above]) => (base + above - tu * bot / 560) / (1 - tu / 560)));
+    const keyY = top + Math.min(...reach.map(([tu, above]) => tu * (bot - top) / 560 - above)) - 0.5 * T.tick - keyH;   /* ... hugging the highest chart's top ink */
     return Object.assign({}, stack, { top, keyY });
   };
   /* P69 T10 (E99 s90 "apply badges as the key"; E99 s84 "prefer to land on even pills") - THE KEY RAIL, drawn:
@@ -8124,9 +8127,42 @@ async function mount(doc) {
       dot.style.cssText = "flex:0 0 auto;width:" + f(E.dot) + ";height:" + f(E.dot) + ";border-radius:50%;margin-right:" + f(E.dot_gap) + ";background:" + LP_LONGFORM.TICK;
       const nm = lpEl("span", "lp-kname", pe);
       nm.textContent = String(k.name || "");
-      return { el: pe, dot, series: k.series | 0, at: LP_LONGFORM.KEY_FIRST + LP_LONGFORM.KEY_STEP * i };
+      return { el: pe, dot, series: k.series | 0, name: String(k.name || ""), at: LP_LONGFORM.KEY_FIRST + LP_LONGFORM.KEY_STEP * i };
     });
     return { el, pills };
+  };
+  /* REVIEW-P69-LANE-B-MERGE-3 M1 - A RECAST SWAPS THE KEY. Each state keys the names ITS end tags gave up (the key the
+     page opened with names lines that are gone after a `chart_to`). Read off the chart_to species the way lpPaintStates
+     reads them: the key on screen is the state's the page has recast to; a recast to a state with a DIFFERENT key sends
+     the old one away over the recast's own seconds (min-jerk) and the new one springs in on the badge-ladder clock
+     (KEY_FIRST after THAT state's build ends - or after the recast, for a verb whose target stands built - then KEY_STEP
+     apart), the page's own key keeping the page's clock (`tb`) exactly as before. A state with the same names keeps the
+     key that is up. A page whose states key nothing paints nothing here. */
+  const lpPaintStateKeys = (st, scene, t, tb, pillAt) => {
+    const S = st.states, sig = (x) => (x.keyPills || []).map((kp) => kp.name).join("\n");
+    if (!S.some((x) => x.keyPills && x.keyPills.length)) return;
+    let shown = 0, origin = null, leave = null;
+    for (const sp of pageSpecies(scene, "chart_to")) {
+      if (t < sp.at) break;
+      if (sp.to === "compare" || sp.to === "park") continue;
+      const k = Math.max(0, Math.min(S.length - 1, sp.state | 0));
+      if (sig(S[k]) === sig(S[shown])) continue;
+      const d = Math.max(0.001, sp.dur || 1), dk = sp.keyed === "data" ? Math.max(d, KEYED_DATA.MIN_S) : d;
+      const builds = !(sp.to === "rescale" || sp.to === "extend" || sp.to === "remake" || sp.keyed);
+      leave = { idx: shown, origin, at: sp.at, dur: dk };
+      shown = k; origin = sp.at + dk + (builds ? (S[k].buildDur || LP.BUILD) : 0);
+    }
+    const u0 = (o, kp) => (o == null ? tb : t - o) - kp.at;
+    S.forEach((x, j) => (x.keyPills || []).forEach((kp, ki) => {
+      if (j === shown) { pillAt(kp.el, u0(origin, kp), ki, 40 + ki); return; }
+      const u = leave && j === leave.idx ? clamp01((t - leave.at) / leave.dur) : 1;
+      if (u < 1) {
+        pillAt(kp.el, u0(leave.origin, kp), ki, 40 + ki);
+        kp.el.style.opacity = ((+kp.el.style.opacity || 0) * (1 - minJerk(u))).toFixed(3);
+        return;
+      }
+      kp.el.style.opacity = "0";
+    }));
   };
   /* ... and when a built / thrown / snapped page arrives with its beats all past, its key has landed too */
   const lpKeyBuilt = (st) => (st.keyPills && st.keyPills.length ? LP_FOCUS_AT + st.keyPills[st.keyPills.length - 1].at + LP_BADGE_IN : -Infinity);
@@ -8482,7 +8518,7 @@ async function mount(doc) {
         '<span class="pill-tag" style="color:' + (ACCENT[bd.accent] || "var(--sunflower)") + '">' + bd.tag + '</span></span>';
       return { el, at: LP_BADGE0 + LP_BADGE_STEP * bi };
     });
-    let geom = { W: 1000, H: 560 }, lfGeom = null, lfBox = null, lfKey = null;   /* lfKey: P69 T10, the long form's key rail */   /* lfGeom: P69 T8, the long form's chart-unit geometry at its preset; lfBox: its chart box and what stands under it (N1) */
+    let geom = { W: 1000, H: 560 }, lfGeom = null, lfBox = null, lfKey = null, lfStateKeys = [];   /* lfStateKeys: REVIEW-P69-LANE-B-MERGE-3 M1, each `then=` state's own key */   /* lfKey: P69 T10, the long form's key rail */   /* lfGeom: P69 T8, the long form's chart-unit geometry at its preset; lfBox: its chart box and what stands under it (N1) */
     if (PORTRAIT) {
       geom = lpPortraitLayout({ title, subEl, src, chart, rail });
     } else {
@@ -8539,14 +8575,21 @@ async function mount(doc) {
         rail.style.maxWidth = col;   /* N1: the rail's rows are measured in the column it will stand in */
         lfKey = lpLongformKey(page, pg, ps);   /* P69 T10: the key rail's rows, measured in the ink column it stands in */
         if (lfKey) { lfKey.el.style.left = title.style.left; lfKey.el.style.maxWidth = col; }
+        /* M1: each `then=` state keys the names ITS tags gave up, in the same column - the band is the tallest of them */
+        lfStateKeys = (scene.world.page_states || []).slice(0, LP_STATE_MAX - 1).map((pg2) => {
+          const k2 = lpLongformKey(page, pg2 || {}, ps);
+          if (k2) { k2.el.style.left = title.style.left; k2.el.style.maxWidth = col; }
+          return k2;
+        });
+        const keyBand = Math.max(0, ...[lfKey, ...lfStateKeys].filter(Boolean).map((k) => k.el.offsetHeight * ps));
         let box = lfBox = cardP ? lpCardBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0, cPad, LP_CARD.GAP_PX * cardK)
           : lpLongformBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0, badges.length ? rail.offsetHeight * ps : 0,
-                          lfKey ? lfKey.el.offsetHeight * ps : 0);
+                          keyBand);
         if (cardP && srcText.trim() && lpCardPlotH(pg, T, box) < lpCardPlotNeed(pg, T)) {   /* the plot keeps its room: the source goes */
           src.style.display = "none";
           box = lfBox = lpCardBox(pg, T, subBottom, 0, cPad, LP_CARD.GAP_PX * cardK);
         }
-        if (lfKey) lfKey.el.style.top = (un(box.keyY / STAGE_H) * 100).toFixed(3) + "%";
+        for (const k of [lfKey, ...lfStateKeys]) if (k) k.el.style.top = (un(box.keyY / STAGE_H) * 100).toFixed(3) + "%";
         lfGeom = lpLongformGeom(T, box.top, box.bot, box.floor);
         if (!A[LP_LONGFORM.FONT_ASSET]) console.warn("P69 T8: a longform page (" + (scene.scene_id || "?") + ") mounted with no "
           + LP_LONGFORM.FONT_ASSET + " in the asset map - its words are set in the fallback face, not Inter (build_scene_timeline_f.longform_assets)");   /* N6 */
@@ -8622,6 +8665,7 @@ async function mount(doc) {
       ch2.style.cssText = chart.style.cssText; ch2.style.opacity = 0;
       const s2 = { root, page, chart: ch2, geom, portrait: PORTRAIT, seed, edge, field, rail, stagePx: st.stagePx,   /* P69 T6c: the same box, the same scale */
                    lfType: st.lfType ? Object.assign({}, st.lfType, { form: ((pg2.axes || {}).tag_form) || st.lfType.form }) : st.lfType,   /* P69 T8: ... and the long form's same type; N2: the state's OWN fitted end-tag form */
+                   keyPills: (lfStateKeys[st.states.length - 1] || {}).pills || null,   /* M1: this state's own key (null: none) */
                    readability: st.readability, barStyle: st.barStyle, cardK: st.cardK,   /* P69 T10b: the page's bars, drawn the page's way; T10c: a card's scale */
                    bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: {}, linePts: [],
                    marks: [], markBy: {}, badges: [], inkEls: [],
@@ -8636,6 +8680,10 @@ async function mount(doc) {
       (builders[s2.kind] || buildLedgerBars)(s2, pg2Render);
       if (LF) lpLongformPlot(s2);
       if (cardP) lpCardStrokes(s2);
+      for (const kp of s2.keyPills || []) {   /* M1: each key pill's dot takes ITS state's line colour, as drawn */
+        const m = s2.markBy && s2.markBy["s" + kp.series];
+        if (m && m.geom && m.geom.col) kp.dot.style.background = m.geom.col;
+      }
       /* ... and its own SUB and SOURCE. A caption that goes on describing the chart that left is a lie on the page, so a
          recast rewrites them with the same hand that rewrites the title: the old run erases glyph by glyph, the new one
          writes. They sit exactly where the page's own sit, and carry nothing until the recast reaches them. */
@@ -10912,7 +10960,8 @@ async function mount(doc) {
   const lpParticles = (st, page, S) => {
     S = S || st;
     const glyphs = [...st.glyphs, ...(st.rtGlyphs || [])].map((g) => ({ el: g, ...lpHome(page, g) }));   /* P47 T2: a retitle's glyphs ride the vortex too */
-    const pills = [...(st.badges || []), ...(st.keyPills || [])].map((b) => ({ el: b.el, ...lpHome(page, b.el) }));   /* P69 T10: and the key rail's */
+    const pills = [...(st.badges || []), ...(st.keyPills || []), ...(S !== st ? S.keyPills || [] : [])]   /* P69 T10: and the key rail's (M1: the active state's too) */
+      .map((b) => ({ el: b.el, ...lpHome(page, b.el) }));
     const skip = new Set([...S.paths.map((p) => p.p), ...S.paths.map((p) => p.tip)]);
     const svg = [...S.chart.children].filter((e) => !skip.has(e) && e.tagName !== "defs").map((e) => {
       let b; try { b = e.getBBox(); } catch (x) { b = { x: 0, y: 0, width: 0, height: 0 }; }
@@ -13930,7 +13979,8 @@ async function mount(doc) {
       const bi = (st.badges || []).indexOf(bd);
       pillAt(bd.el, tb - bd.at, bi, 20 + bi);
     }
-    (st.keyPills || []).forEach((kp, ki) => pillAt(kp.el, tb - kp.at, ki, 40 + ki));   /* P69 T10: the key, on recipe:badge-ladder's clock */
+    if (!(st.states && st.states.length > 1)) (st.keyPills || []).forEach((kp, ki) => pillAt(kp.el, tb - kp.at, ki, 40 + ki));   /* P69 T10: the key, on recipe:badge-ladder's clock */
+    else lpPaintStateKeys(st, scene, t, tb, pillAt);   /* M1: the key of the chart on screen; a recast's old key leaves */
     paintPerform(st, scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word */
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */

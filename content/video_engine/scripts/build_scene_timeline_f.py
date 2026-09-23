@@ -4674,10 +4674,70 @@ def page_build_span_error(scene: dict) -> str | None:
             f"(entry/build/leave), but its row span is {row_s:g}s")
 
 
+# REVIEW-P69-LANE-B-MERGE-3 L2: A KEY RAIL LANDS INSIDE ITS ROW. The key is where a shortened line's full name is
+# written (P69 T10), and it springs on recipe:badge-ladder's clock - its first pill FIRST_S after the build, each next
+# STEP_S behind (ledger_page.LONGFORM_KEY_CLOCK), each IN_S to spring (the engine's LP_BADGE_IN) - so four pills land
+# ~6.3 s after the chart. A row that ends (or starts its leave) before the last one lands shows a partial key and
+# writes the other names nowhere: it is REFUSED by name, the key's clock is never shortened (the clock is the recipe's).
+# A state's key (M1) lands on the same clock from its own build's end; a page that arrives built carries its key landed.
+KEY_PILL_IN_S = 0.36          # the engine's LP_BADGE_IN: a pill's spring
+KEYED_RECAST_MIN_S = 1.6      # the engine's KEYED_DATA.MIN_S: a keyed-data recast's floor (E64)
+
+
+def page_key_landings(scene: dict) -> list[tuple[str, float]]:
+    """(whose key, seconds from the row's start its LAST pill lands) for every key rail this row shows. Pure."""
+    world = scene.get("world") if isinstance(scene, dict) else None
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not isinstance(world.get("page"), dict):
+        return []
+    first, step = LPG.LONGFORM_KEY_CLOCK
+    page, states = world["page"], [world["page"]] + [s for s in world.get("page_states") or [] if isinstance(s, dict)]
+    sig = [tuple(k.get("name") for k in ((s.get("axes") or {}).get("key") or [])) for s in states]
+    ladder = lambda n: first + step * (n - 1) + KEY_PILL_IN_S   # noqa: E731
+    out = []
+    if sig[0] and page.get("enter") not in MG.ARRIVES_BUILT:   # a page that arrives built carries its key landed
+        out.append(("the page", MG._page_land_offset(scene) + ladder(len(sig[0]))))
+    a = float((scene.get("span") or [0.0])[0])
+    shown = 0
+    for sp in sorted((e for e in scene.get("species") or [] if isinstance(e, dict) and e.get("kind") == "chart_to"),
+                     key=lambda e: float(e.get("at") or 0.0)):
+        if sp.get("to") in ("compare", "park"):
+            continue
+        k = max(0, min(len(states) - 1, int(sp.get("state") or 0)))
+        if sig[k] == sig[shown]:
+            continue
+        shown = k
+        if not sig[k]:
+            continue
+        d = max(0.001, float(sp.get("dur") or 1.0))
+        dk = max(d, KEYED_RECAST_MIN_S) if sp.get("keyed") == "data" else d
+        builds = not (sp.get("to") in ("rescale", "extend", "remake") or sp.get("keyed"))
+        out.append((f"state {k + 1}", float(sp.get("at") or 0.0) - a + dk + (MG.LP_BUILD_S if builds else 0.0) + ladder(len(sig[k]))))
+    return out
+
+
+def page_key_span_error(scene: dict) -> str | None:
+    """L2: the first key rail this row cannot land before it ends (or starts its leave), named; else None."""
+    span = scene.get("span") if isinstance(scene, dict) else None
+    if not (isinstance(span, (list, tuple)) and len(span) == 2):
+        return None
+    page = ((scene.get("world") or {}).get("page")) or {}
+    no_leave = str(page.get("exit") or "").split(":", 1)[0] == "cut"
+    room = float(span[1]) - float(span[0]) - (0.0 if no_leave else sum(float(v) for v in MG.LP_RETRACT_S))
+    first, step = LPG.LONGFORM_KEY_CLOCK
+    for whose, land in page_key_landings(scene):
+        if land > room + 1e-9:
+            return (f"{scene.get('scene_id', '?')}: {whose}'s key rail on page {page.get('title') or 'ledger page'!r} lands "
+                    f"{land:.2f}s into the row (recipe:badge-ladder: {first:g}s after its build, then {step:g}s apart), "
+                    f"but the row holds it {room:.2f}s - give the row the seconds, or keep the names on the end tags "
+                    "(a smaller preset); the key's clock is the recipe's and is never shortened")
+    return None
+
+
 def validate_page_build_spans(scenes: list[dict]) -> None:
-    """Reject the first authored page build that overruns its finalized row."""
+    """Reject the first authored page build that overruns its finalized row - and (L2) the first key rail that
+    cannot land inside its row."""
     for index, scene in enumerate(scenes):
-        error = page_build_span_error(scene)
+        error = page_build_span_error(scene) or page_key_span_error(scene)
         if error:
             sid = scene.get("scene_id", f"row-{index + 1}")
             raise ValueError(f"shot row {index + 1} ({sid}): {error}")
@@ -5267,7 +5327,7 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         else:
             axes = page.setdefault("axes", {})
             axes["readability"] = profile
-            for key in ("type_scale", "tag_form", "tag_room", "key", "key_px"):   # a series file's long form, overruled by the row
+            for key in ("type_scale", "tag_form", "tag_room", "key", "key_px", "key_w", "key_h", "state_ink"):   # a series file's long form, overruled by the row
                 axes.pop(key, None)
     elif isinstance(world.get("page"), dict) and (world["page"].get("axes") or {}).get("readability") == LPG.LONGFORM:
         LPG.apply_longform(world["page"])   # the series file's own long form, re-fitted to the badges the row's dock gave it
