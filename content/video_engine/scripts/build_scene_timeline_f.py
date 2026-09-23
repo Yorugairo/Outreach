@@ -115,7 +115,7 @@ PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use",
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink")   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves")   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -5262,6 +5262,9 @@ def dock_opts(raw) -> dict:
             if not raw.get("prop"):
                 raise ValueError("dock: ink is a PROP's option - a card in a frame is evidence and is never re-inked")
             continue
+        if k in PROP_POSE_OPTS:   # P69 T26d / E99 s106: a PROP's authored place, resting angle and moves
+            _check_prop_pose(k, v, raw)
+            continue
         if k == "card_aspect":
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
                 raise ValueError("dock: card_aspect must be a positive number (the card's height over its width)")
@@ -5305,12 +5308,11 @@ def dock_opts(raw) -> dict:
                            ("fit", "fit is how a picture takes a surface")):
             if other in raw:
                 raise ValueError(f"dock: cutout and {other} cannot be combined - a cutout has no card ({why})")
-    if raw.get("arrive") == "stamp":   # R26-20 send-back #2: a stamp lands at ONE fitted box, and only a dock's own painter stamps
-        for other, why in (("read", "a stamp lands where its ring is fitted - it never pops at a reading size and slides to a park"),
-                           ("read_s", "a stamp has no reading hold: it lands at its fitted box"),
-                           ("park_s", "a stamp has no park: it lands at its fitted box"),
-                           ("centre_band", "a stamp's room is searched for its ring, not chosen by a card's band"),
-                           ("embed", "the surface's projection repaints the dock over the stamp's own transform, and its ring would be drawn round the unprojected box")):
+    if raw.get("arrive") == "stamp":   # R26-20 send-back #2: a stamp lands at ONE box, and only a dock's own painter stamps
+        # P69 T26d / E99 s106: `read` / `read_s` / `park_s` / `centre_band` on a stamp are no longer REFUSED - the door
+        # WARNs that a stamp lands at one box and names `place` + `moves` (`stamp_dock_place`). `embed` stays refused: it is
+        # not a placement - the surface's projection would repaint the mark over the stamp's own transform.
+        for other, why in (("embed", "the surface's projection repaints the dock over the stamp's own transform, and its ring would be drawn round the unprojected box"),):
             if other in raw:
                 raise ValueError(f"dock: arrive=stamp and {other} cannot be combined ({why})")
     if raw.get("prop"):   # E99 s87: a PROP is art in the world - it is not a document, not a person above a crawl, and not on a surface
@@ -5322,6 +5324,11 @@ def dock_opts(raw) -> dict:
                                       "a prop keeps its whole picture, a cutout dissolves its foot into the band")):
             if other in raw:
                 raise ValueError(f"dock: prop and {other} cannot be combined - a prop is art added to the world ({why})")
+    if raw.get("place") is not None:   # P69 T26d: a place is the box - the card grammar's answers to "where" are a second one
+        for other in ("centre", "centre_x", "centre_y", "centre_w", "centre_band", "read"):
+            if other in raw:
+                raise ValueError(f"dock: place and {other} cannot be combined - `place` IS the prop's box (its painted centre "
+                                 "and width); name one or the other")
     out = dict(raw)
     if "press" in out:
         out["press"] = press_meta(out["press"])   # a path resolves here, so every caller downstream sees the dict
@@ -6074,6 +6081,84 @@ STAMP_TURN_RANGE = (-11.6, 7.0)   # degrees the mark turns through over its arri
 STAMP_MARK_FLOOR_PX = 120  # the least a stamped mark's PAINTED long side may be [DERIVED: three quarters of the agenda page's drawn stamp, ~159 px at rest - below it a prop stops reading as an object]. Against painted pixels it still holds: every one of the 24 cutouts is trimmed to its alpha box with a 1 px margin (measured 2026-09-22), so painted and canvas differ by 2 px
 STAMP_SEARCH_PX = (16, 4)  # the centre is searched on a 16 px grid over every free place, then on a 4 px grid round the best
 STAMP_ALPHA_MIN = 8        # a pixel is PAINTED above this alpha (of 255) - the cutouts' anti-aliased fringe starts at 1
+STAMP_LAND_DEG = -9        # kinetics/stopaction.mjs STAMP_ARRIVAL.LAND_DEG: the angle a stamp rests at unless the row authors `rot` (the engine hands an authored rot to the spring AS its LAND_DEG) - one dial written twice; test_prop_free_placement holds the pair
+
+# ---- P69 T26d (E99 s106): A PROP GOES WHERE THE AUTHOR PUTS IT, AND MOVES AFTER IT LANDS; THE FIT IS A DEFAULT AND ADVISES --
+# The operator, shown row 16's data centre refused off the capex page: *"the engine is being too controlling ... we should
+# be able to manipulate props freely"*. So, on any PROP dock (`prop: True`, any arrival, `arrive: stamp` included):
+#   place = {x, y, w}  the prop's PAINTED centre and PAINTED width in stage fractions (the height is the cutout's own alpha
+#                      aspect) - honoured exactly; a stamp's ring and approach are drawn around THAT place (capped by the
+#                      room, never below the ring's floor or the 1.2x approach), and nothing is searched.
+#   rot = <deg>        its RESTING angle. A stamp's spring lands there (its wind and overshoot turn about it); any other
+#                      arrival is turned to it about the box's centre.
+#   moves = [{at, x, y, w, rot, dur, ease}]  where it goes after it lands: each key a whole box (what it does not name is
+#                      the key before's), `at` in seconds or a phrase of the take (its first onset at or after the dock
+#                      enters), painted by the engine as a pure function of t (a seek lands the frame play lands).
+# THE FIT IS THE DEFAULT (a row that names no place), reading the chart state ON SCREEN at the landing (R26-279,
+# `page_on_screen`). EVERY placement finding is a WARN with its numbers, printed by the row loop - over the data, over a
+# label, over the caption, under the mark floor, cut by the frame, over a reserved box, a page's unmeasured end names, a
+# plate with no room - never a refusal: the frame read and the operator judge. THE ONE PLACEMENT REFUSAL LEFT: a prop
+# (or a move's box) WHOLLY OFF THE STAGE - it cannot be seen. A dock that authors none of it compiles byte-identical.
+PROP_POSE_OPTS = ("place", "rot", "moves")
+PROP_PLACE_KEYS = ("x", "y", "w")
+PROP_MOVE_KEYS = ("at", "x", "y", "w", "rot", "dur", "ease")
+PROP_MOVE_EASES = ("minjerk", "cubic", "linear", "out")   # the engine's `propMoveEase`: minJerk (the default - E45's park), ease-in-out cubic, linear, expo-out
+PROP_MOVE_S = 0.6          # a move's default length, s - E45's DOCK_PARK_S-class move of a whole object across the stage [DERIVED, a dial]
+PROP_ROT_MAX = 180.0       # |rot| in degrees: a resting angle past a half turn is the same angle named twice
+
+
+def _finite(v) -> bool:
+    return not isinstance(v, bool) and isinstance(v, (int, float)) and math.isfinite(v)
+
+
+def _check_prop_pose(k: str, v, raw: dict) -> None:
+    """dock_opts' check of one P69 T26d key. ValueError names the key; the caller names the row."""
+    if not raw.get("prop"):
+        raise ValueError(f"dock: {k} is a PROP's option (`prop: True`) - a card is placed by centre_x / centre_y / centre_w")
+    if k == "place":
+        if not isinstance(v, dict) or set(v) != set(PROP_PLACE_KEYS) or not all(_finite(v[q]) for q in PROP_PLACE_KEYS) or v["w"] <= 0:
+            raise ValueError("dock: place must be {x, y, w} - the prop's painted centre and painted width as finite fractions "
+                             "of the stage (w > 0)")
+    elif k == "rot":
+        if not _finite(v) or abs(v) > PROP_ROT_MAX:
+            raise ValueError(f"dock: rot must be the prop's resting angle in degrees, within +-{PROP_ROT_MAX:g}")
+    else:
+        if not isinstance(v, list) or not v:
+            raise ValueError("dock: moves must be a non-empty list of {at, x, y, w, rot, dur, ease} keys")
+        for i, m in enumerate(v):
+            if not isinstance(m, dict) or "at" not in m or set(m) - set(PROP_MOVE_KEYS):
+                raise ValueError(f"dock: moves[{i}] must be a dict of {'|'.join(PROP_MOVE_KEYS)} with an `at`")
+            if not (_finite(m["at"]) and m["at"] >= 0) and not (isinstance(m["at"], str) and m["at"].strip()):
+                raise ValueError(f"dock: moves[{i}].at must be seconds >= 0 or a phrase of the take")
+            if not any(q in m for q in ("x", "y", "w", "rot")):
+                raise ValueError(f"dock: moves[{i}] moves nothing - name x, y, w or rot")
+            for q in ("x", "y", "w", "rot"):
+                if q in m and not _finite(m[q]):
+                    raise ValueError(f"dock: moves[{i}].{q} must be a finite number")
+            if "w" in m and m["w"] <= 0:
+                raise ValueError(f"dock: moves[{i}].w must be > 0")
+            if "rot" in m and abs(m["rot"]) > PROP_ROT_MAX:
+                raise ValueError(f"dock: moves[{i}].rot must be within +-{PROP_ROT_MAX:g} degrees")
+            if "dur" in m and not (_finite(m["dur"]) and m["dur"] > 0):
+                raise ValueError(f"dock: moves[{i}].dur must be seconds > 0")
+            if "ease" in m and m["ease"] not in PROP_MOVE_EASES:
+                raise ValueError(f"dock: moves[{i}].ease must be one of {'|'.join(PROP_MOVE_EASES)}")
+
+
+def stamp_turns(rot: float | None) -> tuple[float, float]:
+    """The angles a stamped mark turns through over its arrival: STAMP_TURN_RANGE about the source's -9 deg rest, or the
+    same swing about an AUTHORED rest (`rot`, which the engine hands the spring as its LAND_DEG)."""
+    if rot is None:
+        return STAMP_TURN_RANGE
+    lo, hi = STAMP_TURN_RANGE
+    return (lo - STAMP_LAND_DEG + rot, hi - STAMP_LAND_DEG + rot)
+
+
+def prop_rest_deg(dopt: dict) -> float:
+    """The angle a prop RESTS at: the row's `rot`, else the stamp's own LAND_DEG, else square."""
+    if dopt.get("rot") is not None:
+        return float(dopt["rot"])
+    return float(STAMP_LAND_DEG) if dopt.get("arrive") == "stamp" else 0.0
 
 
 # THE FRAME'S OWN BANDS where no page reports them (a picture plate): the ledger page's `safe` and `caption_anchor`,
@@ -6082,6 +6167,60 @@ STAMP_ALPHA_MIN = 8        # a pixel is PAINTED above this alpha (of 255) - the 
 FRAME_BANDS = {
     "16:9": {"safe": {"x": 64, "y": 64, "w": 1792, "h": 814}, "caption": {"x": 145, "y": 878, "w": 1630, "h": 82}},
 }
+
+
+def prop_obstacle_groups(page: dict | None, aspect: str | None, extra: list[dict] | None = None) -> tuple[dict, dict, list[str]]:
+    """P69 T26d: what a prop may not cross, NAMED - ({"label": [(name, rect)], "caption": [...], "data": [...],
+    "reserved": [...]}, the bounds, [what the fit cannot see]). The same rectangles `ring_obstacles` has always
+    returned (it is their concatenation), grouped so a finding can say WHAT a prop is over. Where the fit is blind - a
+    page that writes end names it does not measure, an aspect whose frame bands are not recorded - it says so in the
+    third element instead of raising: the build is told, and the frame read judges (E99 s106)."""
+    blind: list[str] = []
+    reserved = [("a reserved box (another stamp or the newsreel strip)", dict(e)) for e in (extra or [])]
+    if not page:
+        bands = FRAME_BANDS.get(aspect or "16:9")
+        if bands is None:
+            sw, sh = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])
+            blind.append(f"the frame's safe box and caption band are not recorded at {aspect} (FRAME_BANDS) - fitted "
+                         "against the whole stage, the caption unchecked: read the frame")
+            return {"label": [], "caption": [], "data": [], "reserved": reserved}, {"x": 0, "y": 0, "w": sw, "h": sh}, blind
+        return ({"label": [], "caption": [("the caption band", bands["caption"])], "data": [], "reserved": reserved},
+                dict(bands["safe"]), blind)
+    boxes = LPG.page_boxes(page, aspect or "16:9")
+    if not boxes.get(LPG.TAGS_KEY) and LPG.tag_units(page) > 0:
+        blind.append(f"this page writes inline end names (tag_units {LPG.tag_units(page):g}) but reports no measured "
+                     f"`{LPG.TAGS_KEY}` box (R26-205 measures one on a full-stage 16:9 page) - the fit is blind to the "
+                     "names: read the frame")
+    ok = lambda b: isinstance(b, dict) and b.get("w", 0) > 0 and b.get("h", 0) > 0   # noqa: E731
+    label = [(k, boxes[k]) for k in ("title", "sub", "source", "rail", LPG.KEY_BOX) if ok(boxes.get(k))]   # P69 T10: the key rail
+    caption = [("the caption band", boxes["caption_anchor"])] if ok(boxes.get("caption_anchor")) else []
+    axis = boxes.get("axis") or {}
+    label += [(f"the {k} axis", axis[k]) for k in ("x", "y") if isinstance(axis.get(k), dict)]
+    if boxes.get(LPG.TAG_BOXES_KEY):   # P69 T6d: a MEASURED page's end tags, each at its drawn rect - the margin between
+        label += [("an end tag", dict(b)) for b in boxes[LPG.TAG_BOXES_KEY]]   # them (level with the rules) is room, not a solid column
+    elif boxes.get(LPG.TAGS_KEY):
+        label.append(("the end names", boxes[LPG.TAGS_KEY]))
+    plot, mask = boxes["plot"], boxes.get("data_mask")
+    # THE BASIS LABEL (`axes.ylabel`, "index - 100 = Aug 2025, log scale"): `page_boxes` folds it into `plot`'s own top
+    # ("plot is the DATA box plus the ink that lives inside it - the basis label above it"), so it has no box of its
+    # own and the data mask does not carry it. It is written in the tick labels' own `lab` face, so it is taken as the
+    # plot's top strip, one tick-label line high (the page's measured `axis.x` height), across the plot's width -
+    # measured on the served full-stage page 2026-09-22: the label at (151, 208, 435 x 33) inside that strip
+    # (151, 208, 947 x 36). Without it the send-back #2 fit put the ring straight through it.
+    if (page.get("axes") or {}).get("ylabel"):
+        label.append(("the basis label", {"x": plot["x"], "y": plot["y"], "w": plot["w"], "h": (axis.get("x") or {}).get("h") or 36}))
+    if mask:
+        rows, cols = len(mask), len(mask[0])
+        cw, ch = plot["w"] / cols, plot["h"] / rows
+        data = [("an ink cell", {"x": plot["x"] + c * cw, "y": plot["y"] + r * ch, "w": cw, "h": ch})
+                for r in range(rows) for c in range(cols) if mask[r][c] == "1"]
+    else:
+        data = [("the plot", plot)]
+    return {"label": label, "caption": caption, "data": data, "reserved": reserved}, boxes["safe"], blind
+
+
+def _flat_obstacles(groups: dict) -> list[dict]:
+    return [r for g in ("label", "caption", "data", "reserved") for _n, r in groups[g]]
 
 
 def ring_obstacles(page: dict | None, aspect: str | None, extra: list[dict] | None = None) -> tuple[list[dict], dict]:
@@ -6097,42 +6236,12 @@ def ring_obstacles(page: dict | None, aspect: str | None, extra: list[dict] | No
     once read, but a ring through it is a mark drawn through its words. The bounds are the safe box.
     Anywhere else (a picture plate): the frame's own caption band and `extra`, inside the frame's safe box.
     `extra` is a band the caller measured and the boxes do not carry (a newsreel strip)."""
-    if not page:
-        bands = FRAME_BANDS.get(aspect or "16:9")
-        if bands is None:
-            raise ValueError(f"a stamp off a ledger page at {aspect}: the frame's safe box and caption band are not "
-                             "recorded for this aspect (FRAME_BANDS) - its ring cannot be fitted")
-        return [bands["caption"], *(extra or [])], dict(bands["safe"])
-    boxes = LPG.page_boxes(page, aspect or "16:9")
-    if not boxes.get(LPG.TAGS_KEY) and LPG.tag_units(page) > 0:
-        raise ValueError(f"this page writes inline end names (tag_units {LPG.tag_units(page):g}) but reports no "
-                         f"measured `{LPG.TAGS_KEY}` box (R26-205 measures one on a full-stage 16:9 page) - a stamp's "
-                         "ring cannot be fitted blind against names it cannot see")
-    out = [boxes[k] for k in ("title", "sub", "source", "rail", LPG.KEY_BOX, "caption_anchor")   # P69 T10: the key rail
-           if isinstance(boxes.get(k), dict) and boxes[k].get("w", 0) > 0 and boxes[k].get("h", 0) > 0]
-    axis = boxes.get("axis") or {}
-    out += [axis[k] for k in ("x", "y") if isinstance(axis.get(k), dict)]
-    if boxes.get(LPG.TAG_BOXES_KEY):   # P69 T6d: a MEASURED page's end tags, each at its drawn rect - the margin between
-        out += [dict(b) for b in boxes[LPG.TAG_BOXES_KEY]]   # them (level with the rules) is room, not a solid column
-    elif boxes.get(LPG.TAGS_KEY):
-        out.append(boxes[LPG.TAGS_KEY])
-    plot, mask = boxes["plot"], boxes.get("data_mask")
-    # THE BASIS LABEL (`axes.ylabel`, "index - 100 = Aug 2025, log scale"): `page_boxes` folds it into `plot`'s own top
-    # ("plot is the DATA box plus the ink that lives inside it - the basis label above it"), so it has no box of its
-    # own and the data mask does not carry it. It is written in the tick labels' own `lab` face, so it is taken as the
-    # plot's top strip, one tick-label line high (the page's measured `axis.x` height), across the plot's width -
-    # measured on the served full-stage page 2026-09-22: the label at (151, 208, 435 x 33) inside that strip
-    # (151, 208, 947 x 36). Without it the send-back #2 fit put the ring straight through it.
-    if (page.get("axes") or {}).get("ylabel"):
-        out.append({"x": plot["x"], "y": plot["y"], "w": plot["w"], "h": (axis.get("x") or {}).get("h") or 36})
-    if mask:
-        rows, cols = len(mask), len(mask[0])
-        cw, ch = plot["w"] / cols, plot["h"] / rows
-        out += [{"x": plot["x"] + c * cw, "y": plot["y"] + r * ch, "w": cw, "h": ch}
-                for r in range(rows) for c in range(cols) if mask[r][c] == "1"]
-    else:
-        out.append(plot)
-    return out + list(extra or []), boxes["safe"]
+    # P69 T26d: the rectangles are `prop_obstacle_groups`' (one reader); this door stays STRICT for its callers - where
+    # the groups say a fit would be blind, it raises as it always did. The stamp door (`stamp_dock_place`) WARNs instead.
+    groups, bounds, blind = prop_obstacle_groups(page, aspect, extra)
+    if blind:
+        raise ValueError(blind[0])
+    return _flat_obstacles(groups), bounds
 
 
 def disc_clearance(cx: float, cy: float, obstacles: list[dict], bounds: dict) -> float:
@@ -6202,17 +6311,19 @@ def _floor4(v: float) -> float:
     return math.floor(v * 1e4) / 1e4
 
 
-def _stamp_scale(cx: float, cy: float, pw: float, ph: float, obstacles: list[dict], bounds: dict) -> float:
+def _stamp_scale(cx: float, cy: float, pw: float, ph: float, obstacles: list[dict], bounds: dict,
+                 turns: tuple[float, float] = STAMP_TURN_RANGE) -> float:
     """The largest PAINTED size (as a multiple of pw x ph) a mark centred on (cx, cy) may take: its turned hull clear
     at its least approach (STAMP_APPROACH_MIN, which contains it at rest), and the ring's floor disc - the painted
     half-diagonal + STAMP_RING_GAP_PX + the stroke - clear, so the ring can always be drawn."""
-    hx, hy = turned_half_extents(pw, ph)
+    hx, hy = turned_half_extents(pw, ph, turns)
     k_mark = rect_scale(cx, cy, hx * STAMP_APPROACH_MIN, hy * STAMP_APPROACH_MIN, obstacles, bounds)
     k_ring = (disc_clearance(cx, cy, obstacles, bounds) - STAMP_RING_GAP_PX - STAMP_RING_W_PX) / (0.5 * math.hypot(pw, ph))
     return min(k_mark, k_ring)
 
 
-def stamp_fit(cx: float, cy: float, k: float, paint: dict, obstacles: list[dict], bounds: dict) -> dict:
+def stamp_fit(cx: float, cy: float, k: float, paint: dict, obstacles: list[dict], bounds: dict,
+              turns: tuple[float, float] = STAMP_TURN_RANGE) -> dict:
     """The stamp at painted scale `k` about the painted centre (cx, cy), written as the engine draws it: the CANVAS box
     (rounded), the painted fractions, and the ring and approach fitted to what the room leaves AT THAT ROUNDED BOX -
     `ring_to` = min(2, disc / painted half-diagonal), `from_to` = min(2.1, what the turned hull allows). Both rounded
@@ -6226,7 +6337,7 @@ def stamp_fit(cx: float, cy: float, k: float, paint: dict, obstacles: list[dict]
     pcy = box["y"] + box["h"] * (paint["y0"] + fh / 2)
     pw, ph = box["w"] * fw, box["h"] * fh
     rp = 0.5 * math.hypot(pw, ph)
-    hx, hy = turned_half_extents(pw, ph)
+    hx, hy = turned_half_extents(pw, ph, turns)
     ring = _floor4(min(STAMP_RING_TO, (disc_clearance(pcx, pcy, obstacles, bounds) - STAMP_RING_W_PX) / rp))
     frm = _floor4(min(STAMP_FROM, rect_scale(pcx, pcy, hx, hy, obstacles, bounds)))
     return {**box, "paint": [round(paint["x0"], 4), round(paint["y0"], 4), round(paint["x1"], 4), round(paint["y1"], 4)],
@@ -6269,16 +6380,22 @@ def stamp_dock_place(world: dict | None, aspect: str | None, dopt: dict, paint: 
     `paint`: the mark's painted box (`painted_box`), or a bare aspect for a framed card. Returns `stamp_fit` + `room`
     + `why`; ValueError names the row.
     `clear_of` (P69 T5): the row's EARLIER stamps' fitted boxes (`stamp_reserved_box`) - obstacles to this mark and its
-    ring like the page's own ink, and cut out of E65's tie-break room too. Absent, the fit is what it always was."""
+    ring like the page's own ink, and cut out of E65's tie-break room too. Absent, the fit is what it always was.
+    P69 T26d / E99 s106: a row that names `place` is honoured exactly (`prop_place_fit`); and nothing about the place is
+    refused any more - a page's unmeasured end names, a plate with no room, a mark under the floor and a stamp's
+    `read` / `park` / `centre_band` are WARNs on the fit's `warns` (the row loop prints them), and the one refusal left
+    is a place wholly off the stage. `rot` (an authored rest) turns the fitted swing about itself."""
     sw, sh = (1080, 1920) if (aspect or "16:9") == "9:16" else (1920, 1080)
     page = (world or {}).get("page") if (world or {}).get("kind") == SPECIES_LEDGER else None
     if not isinstance(paint, dict):
         paint = painted_box(None, paint)
     taken = [t for t in (clear_of or []) if isinstance(t, dict)]
-    try:
-        obs, bounds = ring_obstacles(page, aspect, list(reserve or []) + taken if taken else reserve)
-    except ValueError as exc:
-        raise ValueError(f"{where}: {exc}") from None
+    if dopt.get("place") is not None:   # P69 T26d: the AUTHOR's place - honoured exactly, nothing searched
+        return prop_place_fit(world, aspect, dopt, paint, reserve, where, taken)
+    groups, bounds, blind = prop_obstacle_groups(page, aspect, list(reserve or []) + taken if taken else reserve)
+    warns = list(blind) + _stamp_one_box_warns(dopt)
+    obs = _flat_obstacles(groups)
+    turns = stamp_turns(dopt.get("rot"))
     if not page and plate_room:   # a picture plate's declared room IS where a card may stand: the mark and its ring stay inside it
         x0, y0 = max(bounds["x"], plate_room["x"]), max(bounds["y"], plate_room["y"])
         x1 = min(bounds["x"] + bounds["w"], plate_room["x"] + plate_room["w"])
@@ -6289,12 +6406,14 @@ def stamp_dock_place(world: dict | None, aspect: str | None, dopt: dict, paint: 
     if dopt.get("centre_x") is not None or dopt.get("centre_y") is not None:
         cx = dopt["centre_x"] * sw if dopt.get("centre_x") is not None else sw / 2
         cy = dopt["centre_y"] * sh if dopt.get("centre_y") is not None else sh / 2
-        k = _stamp_scale(cx, cy, *unit, obs, bounds)
+        k = _stamp_scale(cx, cy, *unit, obs, bounds, turns)
     else:
         region = bounds if (page or plate_room) else None
-        if not region:
-            raise ValueError(f"{where}: a stamp on a picture plate needs the plate's `room` or the row's own "
-                             "centre_x / centre_y - there is nowhere to fit it")
+        if not region:   # P69 T26d: was a refusal - now the frame's whole safe box, and the build is told
+            region = bounds
+            warns.append("the plate declares no room (`;room=`) and the row names no place - fitted over the frame's whole "
+                         f"safe box [{bounds['x']}, {bounds['y']}, {bounds['w']}, {bounds['h']}], blind to the plate's own "
+                         "picture: read the frame, or name `place` or the plate's room")
         e65 = dock_place(world, aspect, reserve, taken) if page else region
         ecx, ecy = e65["x"] + e65["w"] / 2, e65["y"] + e65["h"] / 2
         best = None
@@ -6303,32 +6422,223 @@ def stamp_dock_place(world: dict | None, aspect: str | None, dopt: dict, paint: 
                for gy in range(int(region["y"]), int(region["y"] + region["h"]) + 1, coarse)]
         for _pass in (0, 1):
             for gx, gy in pts:
-                key = (min(_stamp_scale(gx, gy, *unit, obs, bounds), cap), -math.hypot(gx - ecx, gy - ecy))
+                key = (min(_stamp_scale(gx, gy, *unit, obs, bounds, turns), cap), -math.hypot(gx - ecx, gy - ecy))
                 if best is None or key > best[0]:
                     best = (key, gx, gy)
             pts = [(best[1] + dx, best[2] + dy) for dx in range(-coarse, coarse + 1, fine) for dy in range(-coarse, coarse + 1, fine)]
         (k, _tie), cx, cy = best
     k = min(k, cap)
     long_side = max(k, k * unit[1])
-    if long_side < STAMP_MARK_FLOOR_PX:
-        raise ValueError(f"{where}: the largest mark this {'place' if page else 'room'} holds at ({cx:.0f}, {cy:.0f}) paints "
-                         f"{long_side:.0f} px on its long side, under the {STAMP_MARK_FLOOR_PX} px mark floor - name "
-                         "another room for it (R26-191: a collision is fixed, never shipped)")
-    fit = None
-    for _ in range(12):   # L3: the ROUNDED box must still hold the mark; step down a pixel until it does
-        fit = stamp_fit(cx, cy, k, paint, obs, bounds)
-        pw, ph = fit["painted"]
-        if (_stamp_scale(fit["centre"][0], fit["centre"][1], pw, ph, obs, bounds) >= 1.0
-                and fit["from_to"] >= STAMP_APPROACH_MIN and fit["ring_to"] >= fit["ring_floor"]):
-            break
-        k -= 1.0
+    if long_side < STAMP_MARK_FLOOR_PX:   # P69 T26d: was a refusal - drawn AT the floor, and the build is told
+        warns.append(f"under the mark floor: the largest mark this {'place' if page else 'room'} holds at ({cx:.0f}, "
+                     f"{cy:.0f}) paints {long_side:.0f} px on its long side, under the {STAMP_MARK_FLOOR_PX} px floor - "
+                     "drawn AT the floor, over what it meets: read the frame, or name another place (R26-191)")
+        fit = stamp_fit(cx, cy, STAMP_MARK_FLOOR_PX / max(1.0, unit[1]), paint, obs, bounds, turns)
+    else:
+        fit = None
+        for _ in range(12):   # L3: the ROUNDED box must still hold the mark; step down a pixel until it does
+            fit = stamp_fit(cx, cy, k, paint, obs, bounds, turns)
+            pw, ph = fit["painted"]
+            if (_stamp_scale(fit["centre"][0], fit["centre"][1], pw, ph, obs, bounds, turns) >= 1.0
+                    and fit["from_to"] >= STAMP_APPROACH_MIN and fit["ring_to"] >= fit["ring_floor"]):
+                break
+            k -= 1.0
+    fit = _stamp_floors(fit, warns)
+    rest = prop_rest_deg(dopt)
+    if not prop_on_stage(fit["centre"], fit["painted"], rest, aspect):
+        raise ValueError(f"{where}: the stamp's box {[fit['x'], fit['y'], fit['w'], fit['h']]} is wholly off the stage - "
+                         "it cannot be seen (the one placement refusal left, E99 s106)")
+    warns += prop_findings(fit["centre"], fit["painted"], rest, groups, aspect)
     fw = fit["painted"][0]
     why = (f"mark {fit['painted'][0]:.0f}x{fit['painted'][1]:.0f} painted px ({100 * fw / sw:.1f}% of the stage width); "
            f"ring {'capped at ' + format(fit['ring_to'], '.2f') + 'x by the room' if fit['ring_capped'] else 'reaches 2.00x'}"
            f" (floor {fit['ring_floor']:.2f}x, just outside the painted edge); "
            f"approach {'capped ' + format(STAMP_FROM, '.2f') + 'x -> ' + format(fit['from_to'], '.2f') + 'x' if fit['from_capped'] else 'from 2.10x'}")
     return {**fit, "room": "authored" if (dopt.get("centre_x") is not None or dopt.get("centre_y") is not None)
-            else _stamp_room_name(cx, cy, page, aspect), "why": why}
+            else _stamp_room_name(cx, cy, page, aspect), "why": why, "warns": warns}
+
+
+STAMP_ONE_BOX_OPTS = ("read", "read_s", "park_s", "centre_band")   # a card's reading pop, park and band: a stamp lands at ONE box
+
+
+def _stamp_one_box_warns(dopt: dict) -> list[str]:
+    """P69 T26d: what used to refuse a stamp's `read` / `read_s` / `park_s` / `centre_band` - now said, not refused."""
+    named = [k for k in STAMP_ONE_BOX_OPTS if k in dopt]
+    if not named:
+        return []
+    return [f"arrive=stamp lands at ONE box, so {', '.join(named)} {'is' if len(named) == 1 else 'are'} not applied - "
+            "author its landing with `place` and move it after it lands with `moves` (E99 s106)"]
+
+
+def _stamp_floors(fit: dict, warns: list[str]) -> dict:
+    """A stamp's ring never below its floor (just outside the painted edge) and its approach never below 1.2x - where the
+    room holds less (an authored place, a mark drawn at its floor), they are drawn at the floor and the build is told."""
+    if fit["ring_to"] < fit["ring_floor"]:
+        warns.append(f"the ring is drawn at its floor ({fit['ring_floor']:.2f}x, just outside the painted edge) though the "
+                     f"room holds {max(0.0, fit['ring_to']):.2f}x - it crosses the page's ink, a label or the safe box's edge: read the frame")
+        fit = {**fit, "ring_to": fit["ring_floor"], "ring_capped": True}
+    if fit["from_to"] < STAMP_APPROACH_MIN:
+        warns.append(f"the approach comes down from {STAMP_APPROACH_MIN:.2f}x though the room holds "
+                     f"{max(0.0, fit['from_to']):.2f}x - it passes over the page's ink, a label or the safe box's edge: read the frame")
+        fit = {**fit, "from_to": STAMP_APPROACH_MIN, "from_capped": True}
+    return fit
+
+
+def _rest_hull(centre, painted, rest_deg: float) -> dict:
+    """The mark's painted box turned to its resting angle, as the axis-aligned rect round it (stage px)."""
+    hx, hy = turned_half_extents(painted[0], painted[1], (rest_deg, rest_deg))
+    return {"x": centre[0] - hx, "y": centre[1] - hy, "w": 2 * hx, "h": 2 * hy}
+
+
+def _overlap_area(a: dict, b: dict) -> float:
+    return (max(0.0, min(a["x"] + a["w"], b["x"] + b["w"]) - max(a["x"], b["x"]))
+            * max(0.0, min(a["y"] + a["h"], b["y"] + b["h"]) - max(a["y"], b["y"])))
+
+
+def prop_on_stage(centre, painted, rest_deg: float, aspect: str | None) -> bool:
+    """Does any of the prop's turned painted box lie on the stage? False is the one placement refusal left."""
+    sw, sh = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])
+    return _overlap_area(_rest_hull(centre, painted, rest_deg), {"x": 0, "y": 0, "w": sw, "h": sh}) > 0
+
+
+def prop_findings(centre, painted, rest_deg: float, groups: dict, aspect: str | None) -> list[str]:
+    """P69 T26d / E99 s106: what a placed prop's turned painted box lands on, as WARN lines with their numbers - over
+    the data, over a label, over the caption, over a reserved box, cut by the frame, under the mark floor. Empty for a
+    prop the fit placed clear (every default fit). Pure."""
+    hull, out = _rest_hull(centre, painted, rest_deg), []
+    cells = [_overlap_area(hull, r) for _n, r in groups["data"]]
+    if sum(cells) > 0:
+        out.append(f"over the data: {sum(cells):.0f} px^2 of its turned box over the page's ink "
+                   f"({sum(1 for c in cells if c > 0)} of {len(cells)} {'cells' if len(cells) > 1 else 'box'})")
+    labels: dict[str, float] = {}
+    for name, r in groups["label"]:
+        ov = _overlap_area(hull, r)
+        if ov > 0:
+            labels[name] = labels.get(name, 0.0) + ov
+    if labels:
+        out.append("over a label: " + ", ".join(f"{n} {a:.0f} px^2" for n, a in labels.items()))
+    for grp, what in (("caption", "over the caption band"), ("reserved", "over a reserved box (another stamp or the newsreel strip)")):
+        ov = sum(_overlap_area(hull, r) for _n, r in groups[grp])
+        if ov > 0:
+            out.append(f"{what}: {ov:.0f} px^2")
+    sw, sh = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])
+    cut = [(edge, px) for edge, px in (("left", -hull["x"]), ("top", -hull["y"]), ("right", hull["x"] + hull["w"] - sw),
+                                       ("bottom", hull["y"] + hull["h"] - sh)) if px > 0.5]
+    if cut:
+        out.append("cut by the frame: " + ", ".join(f"{px:.0f} px past the {edge} edge" for edge, px in cut))
+    if max(painted) < STAMP_MARK_FLOOR_PX:
+        out.append(f"under the mark floor: paints {max(painted):.0f} px on its long side (floor {STAMP_MARK_FLOOR_PX} px)")
+    return out
+
+
+def prop_place_fit(world: dict | None, aspect: str | None, dopt: dict, paint: dict | float | None,
+                   reserve: list[dict] | None = None, where: str = "prop", clear_of: list[dict] | None = None) -> dict:
+    """P69 T26d / E99 s106: A PROP AT ITS AUTHORED PLACE - `place: {x, y, w}` (the painted centre and painted width,
+    stage fractions; the height is the cutout's alpha aspect), turned to its resting `rot`. Nothing is searched and
+    nothing is refused but a place wholly off the stage. A STAMP's ring and approach are drawn around that place: capped
+    by the room (`stamp_fit`), never below the ring's floor or the 1.2x approach (`_stamp_floors`). Returns the
+    `stamp_fit` shape (a non-stamp carries no ring keys) + `room: "authored"` + `why` + `warns`."""
+    sw, sh = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])
+    page = (world or {}).get("page") if (world or {}).get("kind") == SPECIES_LEDGER else None
+    if not isinstance(paint, dict):
+        paint = painted_box(None, paint)
+    stamped = dopt.get("arrive") == "stamp"
+    groups, bounds, blind = prop_obstacle_groups(page, aspect, list(reserve or []) + [t for t in (clear_of or []) if isinstance(t, dict)])
+    warns = list(blind) + (_stamp_one_box_warns(dopt) if stamped else [])
+    rest = prop_rest_deg(dopt)
+    pl = dopt["place"]
+    fit = stamp_fit(pl["x"] * sw, pl["y"] * sh, pl["w"] * sw, paint, _flat_obstacles(groups), bounds,
+                    stamp_turns(dopt.get("rot")) if stamped else (rest, rest))
+    if not prop_on_stage(fit["centre"], fit["painted"], rest, aspect):
+        raise ValueError(f"{where}: the prop's place {pl} (its box {[fit['x'], fit['y'], fit['w'], fit['h']]}) is wholly "
+                         f"off the stage ({sw} x {sh}) - it cannot be seen; the one placement refusal left (E99 s106)")
+    if stamped:
+        fit = _stamp_floors(fit, warns)
+    else:
+        fit = {k: v for k, v in fit.items() if k not in ("ring_to", "ring_capped", "ring_floor", "from_to", "from_capped")}
+    warns += prop_findings(fit["centre"], fit["painted"], rest, groups, aspect)
+    why = (f"authored place: mark {fit['painted'][0]:.0f}x{fit['painted'][1]:.0f} painted px at "
+           f"({fit['centre'][0]:.0f}, {fit['centre'][1]:.0f}), resting {rest:g} deg"
+           + (f"; ring {fit['ring_to']:.2f}x, approach from {fit['from_to']:.2f}x, drawn around it" if stamped else ""))
+    return {**fit, "room": "authored", "why": why, "warns": warns}
+
+
+def page_on_screen(world: dict | None, row_species: list | None, t: float) -> dict | None:
+    """R26-279: the scene's world as it stands ON SCREEN at t - on a ledger page with chart states, the state the last
+    `chart_to` begun by t has moved to (a recast mid-way is already its destination: a mark landing then lands on
+    it). Before any, or on any other world, the world itself - the same object, so a row with no state change fits
+    exactly as it always did."""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page_states"):
+        return world
+    states = [world.get("page")] + list(world.get("page_states") or [])
+    k = 0
+    for sp in sorted((sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == "chart_to"
+                      and sp.get("state") is not None), key=lambda sp: float(sp.get("at", 0))):
+        if float(sp.get("at", 0)) <= t + 1e-9:
+            k = int(sp["state"])
+    return {**world, "page": states[k]} if 0 < k < len(states) and isinstance(states[k], dict) else world
+
+
+def _phrase_onset(words, phrase: str, after: float, where: str) -> float:
+    """The onset of `phrase` in the take (punctuation-insensitive), its first at or after `after`."""
+    norm = lambda x: re.sub(r"[^a-z0-9']", "", str(x).lower())   # noqa: E731
+    toks = [norm(x) for x in phrase.split()]
+    ws = _override_words(words) or []
+    for i in range(len(ws) - len(toks) + 1):
+        st = ws[i].get("start_s")
+        if st is None or float(st) < after - 1e-9:
+            continue
+        if [norm(w["w"]) for w in ws[i:i + len(toks)]] == toks:
+            return round(float(st), 2)
+    raise ValueError(f"{where}: the phrase {phrase!r} is not in the take at or after {after:g}s")
+
+
+def prop_moves(dopt: dict, paint: dict | float | None, fit: dict, aspect: str | None, enter: float, exitt: float,
+               words, where: str, world: dict | None = None, row_species: list | None = None) -> tuple[list[dict], list[str]]:
+    """P69 T26d / E99 s106: the prop's MOVES after it lands, as the engine paints them - each key a WHOLE canvas box
+    `{at, dur, ease, x, y, w, rot}` in stage px (what a key does not name is the key before's; the first starts from
+    the landed box `fit` and the resting angle). ValueError only where a move cannot be played or seen: a key before
+    the prop lands or after it leaves, a key that starts before the one before it has ended, a box wholly off the
+    stage, a phrase not in the take. Everything a key's box lands on is a WARN, read against the chart state on screen
+    when it lands (`page_on_screen`). ([moves], [warns])."""
+    if not dopt.get("moves"):
+        return [], []
+    sw, sh = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])
+    if not isinstance(paint, dict):
+        paint = painted_box(None, paint)
+    fx0, fy0, fx1, fy1 = paint["x0"], paint["y0"], paint["x1"], paint["y1"]
+    fw = fx1 - fx0
+    cx = fit["x"] + fit["w"] * (fx0 + fx1) / 2
+    cy = fit["y"] + fit["h"] * (fy0 + fy1) / 2
+    pw, rot = fit["w"] * fw, prop_rest_deg(dopt)
+    out, warns, end_prev = [], [], float(enter)
+    for i, m in enumerate(dopt["moves"]):
+        at = float(m["at"]) if not isinstance(m["at"], str) else _phrase_onset(words, m["at"], float(enter), where)
+        dur, ease = float(m.get("dur", PROP_MOVE_S)), m.get("ease", PROP_MOVE_EASES[0])
+        if at < float(enter) - 1e-9:
+            raise ValueError(f"{where}: moves[{i}] at {at:g}s is before the prop lands ({enter:g}s)")
+        if at >= float(exitt) - 1e-9:
+            raise ValueError(f"{where}: moves[{i}] at {at:g}s is after the prop leaves ({exitt:g}s)")
+        if i and at < end_prev - 1e-9:
+            raise ValueError(f"{where}: moves[{i}] at {at:g}s overlaps the key before it (which ends at {end_prev:g}s) - "
+                             "a key starts where the one before has ended")
+        cx = m["x"] * sw if "x" in m else cx
+        cy = m["y"] * sh if "y" in m else cy
+        pw = m["w"] * sw if "w" in m else pw
+        rot = float(m["rot"]) if "rot" in m else rot
+        W = pw / fw
+        H = W * paint["aspect"]
+        box = {"x": round(cx - W * (fx0 + fw / 2), 2), "y": round(cy - H * (fy0 + (fy1 - fy0) / 2), 2), "w": round(W, 2)}
+        painted = (pw, H * (fy1 - fy0))
+        if not prop_on_stage((cx, cy), painted, rot, aspect):
+            raise ValueError(f"{where}: moves[{i}] puts the prop wholly off the stage (its box {box}) - it cannot be seen")
+        state = page_on_screen(world, row_species, at + dur)
+        page = (state or {}).get("page") if (state or {}).get("kind") == SPECIES_LEDGER else None
+        groups, _b, _blind = prop_obstacle_groups(page, aspect)
+        warns += [f"moves[{i}] ({at:g}s): {f}" for f in prop_findings((cx, cy), painted, rot, groups, aspect)]
+        out.append({"at": round(at, 2), "dur": round(dur, 3), "ease": ease, **box, "rot": round(rot, 3)})
+        end_prev = at + dur
+    return out, warns
 
 
 # ---- P69 T5 (R26-247 L2; E99 s88 (3)): THE STAMP TAKES THE ROOM FIRST; THE ROW'S OTHER DOCKS GO ROUND IT ----------
@@ -6348,16 +6658,20 @@ def stamp_reserved_box(fit: dict) -> dict:
 
 
 def row_stamp_fits(world: dict | None, aspect: str | None, docks: list[tuple[str, dict, dict]],
-                   plate_room: dict | None, reserve: list[dict] | None, where: str) -> tuple[dict, list[dict]]:
+                   plate_room: dict | None, reserve: list[dict] | None, where: str,
+                   worlds: dict | None = None) -> tuple[dict, list[dict]]:
     """Every STAMP in a row, fitted before any other dock is placed: ({index in the row: its `stamp_dock_place` fit},
     [their `stamp_reserved_box`es, in row order]). `docks` is the row's (aid, dock options, painted box) in row order;
     each stamp is fitted `clear_of` the earlier stamps' boxes, so the first takes the room exactly as it would alone.
-    ValueError (from the door) names the row and the dock."""
+    ValueError (from the door) names the row and the dock.
+    `worlds` (P69 T26d, R26-279): {index: the world ON SCREEN at that stamp's landing} (`page_on_screen`) - a stamp that
+    lands after a recast is fitted to the state it lands on. Absent, every stamp is fitted to `world`, as before."""
     fits, taken = {}, []
     for n, (aid, dopt, paint) in enumerate(docks):
         if dopt.get("arrive") != "stamp":
             continue
-        fits[n] = stamp_dock_place(world, aspect, dopt, paint, plate_room, reserve, f"{where} dock {aid}", taken)
+        fits[n] = stamp_dock_place((worlds or {}).get(n, world), aspect, dopt, paint, plate_room, reserve,
+                                   f"{where} dock {aid}", taken)
         taken = [*taken, stamp_reserved_box(fits[n])]
     return fits, taken
 
@@ -7325,7 +7639,8 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                prop: bool = False, ink: str | None = None, ring_to: float | None = None, from_to: float | None = None,
                paint: list | None = None,
                rid: str | None = None, read_moved: dict | None = None, read_deferred: bool = False,
-               embed: dict | None = None, cutout: bool = False, depth: float | None = None) -> dict:
+               embed: dict | None = None, cutout: bool = False, depth: float | None = None,
+               rot: float | None = None, moves: list | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -7369,6 +7684,9 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         **({"ring_to": ring_to} if (ring_to is not None and arrive == "stamp") else {}),
         **({"from_to": from_to} if (from_to is not None and arrive == "stamp") else {}),   # ... and its approach
         **({"paint": paint} if (paint is not None and arrive == "stamp") else {}),   # ... and the part of its box the mark PAINTS (fractions): the ring's centre, radius and the turn's pivot
+        # P69 T26d / E99 s106: a PROP's authored resting angle and its moves after it lands (whole canvas boxes in stage
+        # px, `prop_moves`). Written only when the row authors them, so every other entry is byte-for-byte what it was.
+        **({"rot": round(float(rot), 3)} if rot is not None else {}), **({"moves": moves} if moves else {}),
         # P50 T3: a PRESS card carries its source line and its quoted phrase onto the stage; `_stack` is the
         # scene's own bookkeeping and is replaced by stack_index / stack_n once every dock on the scene is known.
         # R26-55: and the phrase's WORDS and the card's own aspect when the card was cut with them - the player
@@ -7800,6 +8118,7 @@ def main() -> int:
 
     evidence, uris, scenes, estimated_pages = {}, {}, [], []   # P50 T16: the pages this build placed by ESTIMATE, for the report below
     read_moves: list[str] = []      # E63: the docks whose READ the rule moved off a building chart ...
+    prop_warns: list[str] = []      # P69 T26d / E99 s106: every prop-placement finding the fit ADVISED (printed as it was found)
     read_defers: list[str] = []     # ... and the ones with no band to move it to, deferred to the parked box
     card_rooms: list[tuple] = []    # E65: (dock row id, room, box, page title) for every card the placer placed
     ledger_rows: list[int] = []     # the rows carrying a ledger page, so the report can say how many were MEASURED
@@ -7971,13 +8290,15 @@ def main() -> int:
             try:
                 _dopt = dock_opts(dextra[0] if dextra else None)
                 _paint = ((painted_box(dock_asset_path(aid, EP)) if _dopt.get("prop") else painted_box(None, _dopt.get("card_aspect")))
-                          if _dopt.get("arrive") == "stamp" else None)   # the PAINTED mark: a prop's alpha box, a card's whole box
+                          if (_dopt.get("arrive") == "stamp" or any(k in _dopt for k in PROP_POSE_OPTS)) else None)   # the PAINTED mark: a prop's alpha box, a card's whole box (P69 T26d: and any posed prop's)
             except ValueError as exc:
                 raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             row_opts.append((aid, _dopt, _paint))
-        try:   # R26-20 send-back #2: every stamp is fitted to the box the engine draws, or the row fails
+        stamp_worlds = {n: page_on_screen(world, row_species, float(ds[n][2]))   # P69 T26d (R26-279): the state each stamp LANDS on
+                        for n, (_aid, _o, _p) in enumerate(row_opts) if _o.get("arrive") == "stamp"}
+        try:   # R26-20 send-back #2: every stamp is fitted to the box the engine draws (P69 T26d: only a place off the stage fails the row)
             stamp_fits, stamp_boxes = row_stamp_fits(world, ASPECT, row_opts, plate_room, newsreel_boxes(row_species, ASPECT),
-                                                     f"shot row {i + 1} ({a}-{b}s)")
+                                                     f"shot row {i + 1} ({a}-{b}s)", worlds=stamp_worlds)
         except ValueError as exc:
             raise SystemExit(f"FAIL: {exc}") from exc
         place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT), clear_of=stamp_boxes)   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
@@ -7994,9 +8315,21 @@ def main() -> int:
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: {exc}") from exc
             stamp_fit = stamp_fits.get(n_dock)   # fitted above, before the row's other docks, whatever its slot
+            prop_fit = None   # P69 T26d: a non-stamped prop at its AUTHORED place
+            if not stamp_fit and dopt.get("place") is not None:
+                try:
+                    prop_fit = prop_place_fit(page_on_screen(world, row_species, float(enter)), ASPECT, dopt, row_opts[n_dock][2],
+                                              newsreel_boxes(row_species, ASPECT), f"shot row {i + 1} ({a}-{b}s) dock {aid}", stamp_boxes)
+                except ValueError as exc:
+                    raise SystemExit(f"FAIL: {exc}") from exc
+                dplace, centred = {k: prop_fit[k] for k in ("x", "y", "w", "h", "room")}, True
+                print(f"  prop: {sid}.{aid} - {prop_fit['why']}")
             if stamp_fit:
                 dplace, centred = {k: stamp_fit[k] for k in ("x", "y", "w", "h", "room")}, True
                 print(f"  stamp: {sid}.{aid} - {stamp_fit['room']}: {stamp_fit['why']}")
+            for _w in (stamp_fit or prop_fit or {}).get("warns") or []:   # P69 T26d / E99 s106: the fit ADVISES - every finding, with its numbers
+                print(f"  [WARN] P69 T26d: shot row {i + 1} ({a}-{b}s) dock {aid}: {_w}")
+                prop_warns.append(f"row {i + 1} {aid}")
             if centred and isinstance(dplace, dict) and isinstance(place, dict) and "room" not in dplace:
                 dplace = dict(dplace, room=place.get("room"))   # E65: the room the PAGE offered travels with the centred box
             if dopt.get("press"):   # P50 T3: E45 - the pile has one box, and it is the stage's centre
@@ -8025,7 +8358,7 @@ def main() -> int:
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
             # R26-221: `dplace` rather than `place` is the test - a card on a picture plate is placed by its own box
             # (the page's `place` is None there), and a read the compiler drops is a card that never pops
-            rplace = None if stamp_fit else centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (dplace and rd) else None
+            rplace = None if (stamp_fit or prop_fit) else centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (dplace and rd) else None
             # E63 (widened): a card never READS over the page's plot, drawing or finished. The read box is the row's
             # own when it named one, the card's solo CSS box otherwise; a centred card with no `read` has no pop at all
             # (it takes its parked box from its first frame), so there is nothing to move and the entry is untouched.
@@ -8033,10 +8366,11 @@ def main() -> int:
             # R26-221: ... and on a picture plate the BOX is the slot - a row that authored one (or a plate that
             # declared the room) has already said where this card goes, on either slot, so it is never dropped here
             eplace = dplace if (slot == 0 or centred or (place is None and dplace)) else None
-            if not stamp_fit:   # P69 T5: a row's other dock never parks on a stamp's mark or its ring - refused, by row
+            if not stamp_fit:   # P69 T5: a row's other dock over a stamp's mark or its ring - P69 T26d / E99 s106: REPORTED, not refused
                 _clash = stamp_clash_error(f"shot row {i + 1} ({a}-{b}s) dock {aid}", eplace, stamp_boxes)
                 if _clash:
-                    raise SystemExit(f"FAIL: {_clash}")
+                    print(f"  [WARN] P69 T26d: {_clash}")
+                    prop_warns.append(f"row {i + 1} {aid}")
             _rs = float(dopt["read_s"]) if dopt.get("read_s") else DOCK_READ_S
             _ps = float(dopt["park_s"]) if dopt.get("park_s") else DOCK_PARK_S
             _aspect_of_card = rd.get("card_aspect", dopt.get("card_aspect")) if rd else dopt.get("card_aspect")
@@ -8051,6 +8385,17 @@ def main() -> int:
             elif e63.get("read_deferred"):
                 read_defers.append(f"{sid}.{aid}")
             ring_fit = stamp_fit   # the fit above; a stamp with no place never reaches here (it failed the row)
+            prop_mv = []
+            if dopt.get("moves"):   # P69 T26d / E99 s106: the prop's moves after it lands, as whole boxes
+                try:
+                    prop_mv, _mw = prop_moves(dopt, row_opts[n_dock][2], eplace if isinstance(eplace, dict) else dplace, ASPECT,
+                                              float(enter), float(exitt), tl.get("words"), f"shot row {i + 1} ({a}-{b}s) dock {aid}",
+                                              world, row_species)
+                except (ValueError, TypeError) as exc:
+                    raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: moves need the prop's landed box - {exc}") from exc
+                for _w in _mw:
+                    print(f"  [WARN] P69 T26d: shot row {i + 1} ({a}-{b}s) dock {aid}: {_w}")
+                    prop_warns.append(f"row {i + 1} {aid}")
             if isinstance(eplace, dict) and eplace.get("room"):   # E65: the room every placed card took
                 card_rooms.append((f"{sid}.{aid}", eplace["room"],
                                    [eplace["x"], eplace["y"], eplace["w"], eplace["h"]],
@@ -8125,7 +8470,8 @@ def main() -> int:
                                         prop=bool(dopt.get("prop")), ink=dopt.get("ink"),   # E99 s87: the bare payload and how its art is laid down
                                         ring_to=ring_fit["ring_to"] if ring_fit else None,   # R26-20 send-back: the ring as the room holds it
                                         from_to=ring_fit["from_to"] if ring_fit else None,   # ... and the approach
-                                        paint=ring_fit["paint"] if ring_fit else None))   # ... and its painted extent
+                                        paint=ring_fit["paint"] if ring_fit else None,   # ... and its painted extent
+                                        rot=dopt.get("rot"), moves=prop_mv))   # P69 T26d: the prop's authored rest and its moves
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         # P69 T26b: the row's camera against the full-stage page it moves over, now that the docks it pulls toward are
         # placed - a landing pull or a key that would cut the title, the y ticks, the source line or a drawn end tag is
@@ -8196,6 +8542,9 @@ def main() -> int:
     # P50 T16: the build says whose numbers it placed by. A page the fixture has not measured is placed
     # by `ledger_page`'s ESTIMATE of the player's layout - good enough to park a card against the plot's
     # edge (E45 parks from the title side), never good enough to centre one in a band (R26-27).
+    if prop_warns:   # P69 T26d: the placement findings, counted once more at the foot of the report
+        print(f"  [WARN] P69 T26d: {len(prop_warns)} prop placement finding(s) - WARNs, not refusals (E99 s106): read the "
+              f"frames ({'; '.join(sorted(set(prop_warns))[:6])})")
     if read_moves or read_defers:
         # E63: the reads the rule re-placed, and the ones it deferred to the parked box. Named, never silent.
         print(f"  dock read   : {len(read_moves)} read(s) moved off a building chart"
