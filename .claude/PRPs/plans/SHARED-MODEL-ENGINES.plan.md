@@ -237,6 +237,15 @@ All paths below are proposed new write sets unless identified as existing. Tests
 - Validate: `python -m pytest content/video_engine/tests/test_model_blender.py -q`; the suite must launch background Blender, render the fixture, reopen its scene and inspect frame sequence/state (not mock those checks).
 - Evidence: pending; full frames and scene inspection with hidden/disabled-object and render-engine state captured.
 
+### T6a: Review-only shared-scene compiler and render-pass proof
+- Status: pending (independent diagnostic; does not close T6 or bypass T4b/T5b)
+- Owner: implementation_luna; parent owns interface, integration, rendered review and approval boundary
+- Depends on: T2, T3, T4c, T5a; deliberately independent of T4b/T5b fighter art and deformation
+- Write set: new `M/blender/scene.py`, `M/blender/render.py`, `F/blender/generalization-scene.model_scene.v1.json`, `content/video_engine/tests/test_model_blender.py`; ignored `B/3d/generalization-compiler/` evidence. Existing asset/source scenes, contracts/schema, layered backend, player and T6 modules outside this slice remain read-only.
+- Acceptance: an opt-in offline Blender 5.2.2 compiler validates one review-only `model_scene.v1` against its hash-pinned prop and environment descriptors, appends both editable object trees without their source cameras/lights, preserves the hinge/socket/floor/material hierarchy, maps the authored hinge channel to the saved scene, applies authored camera/lights/render profile, and saves a new `.blend`. Reopen the derived scene and inspect frames 1/13/25. Render requested beauty/alpha, independent metric camera-depth and binding-ID geometry masks with a hash-bound receipt, and reject unsupported passes rather than claim them. Namespaced object controls and output roots must not collide or overwrite prior evidence. Preserve source bytes and never set approval or `render_eligible:true`; this is not a fighter-motion, likeness, production-render or HG2/HG3 proof.
+- Validate: `python -m pytest content/video_engine/tests/test_model_blender.py -q` launches real offline/scripts-disabled Blender, reopens the output, checks hierarchy, hinge/floor/camera/light/pass state, geometry-depth alignment and out-of-order frame parity. Negative tests reject stale descriptor/source hashes, existing/symlink/junction output roots, missing or duplicate semantic controls, hidden/empty geometry, unsupported passes and Blender render failure. Parent inspects matched frames and structured state.
+- Evidence: pending. No player, source asset, approved art, provider or purchased output may change in this slice.
+
 ### T7a: Independent editable 2.5D model/layer backend
 - Status: complete (diagnostic authored-layer backend only; no art approval)
 - Owner: execution_sol escalation completed; parent retains integration and art boundary
