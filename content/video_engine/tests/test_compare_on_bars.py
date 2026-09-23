@@ -467,3 +467,212 @@ def test_the_compare_melts_the_bars_figure_then_splashes_and_lands_on_the_compar
         assert not P.errs, P.errs
     finally:
         P.close()
+
+
+
+# ---- the lane B merge review (REVIEW-P69-LANE-B-MERGE-1.md) -------------------------------------------------------
+# F1 (MEDIUM): a wrapped category name carries its lines' own x (a tspan's x outranks its <text>'s), so every painter
+# that moves a name must move its lines - and the hand that writes and erases a one-line name must reach both lines.
+# F4 (MEDIUM): the 196 px cap is proven above only on the 16:9 full-stage page; here on 9:16, on a 16:9 page that is not
+# full-stage, and on a `punch: false` page.
+
+class _Served:
+    """A hand-built timeline served the way `Player` serves a fixture."""
+
+    def __init__(self, timeline: dict, uris: dict, aspect: str = ASPECT):
+        from playwright.sync_api import sync_playwright
+        self._td = tempfile.TemporaryDirectory()
+        html = Path(self._td.name) / "bars.html"
+        html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+        self.w, self.h = RB.STAGE[aspect]
+        self._srv, port = RB.serve(html.parent)
+        self._pw = sync_playwright().start()
+        self._br = self._pw.chromium.launch(headless=True)
+        self.page = self._br.new_context(viewport={"width": self.w, "height": self.h}).new_page()
+        self.errs: list[str] = []
+        self.page.on("pageerror", lambda e: self.errs.append(str(e)))
+        self.page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
+        RB.prepare_page(self.page, self.w, self.h)
+
+    def seek(self, t: float) -> None:
+        self.page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+
+    def at(self, t: float) -> dict:
+        self.seek(t)
+        return self.page.evaluate(PROBE)
+
+    def names(self, t: float, state: int) -> list[dict]:
+        self.seek(t)
+        return self.page.evaluate(NAMES, state)
+
+    def close(self) -> None:
+        self._br.close(); self._pw.stop(); self._srv.shutdown(); self._td.cleanup()
+
+
+def _world_at(plate: str, ep: Path, aspect: str) -> dict:
+    saved = B.ASPECT
+    B.ASPECT = aspect
+    try:
+        return B.world_for_plate(plate, (0, 0, 0), ep)
+    finally:
+        B.ASPECT = saved
+
+
+def _one_scene(world: dict, species: list[dict], aspect: str = ASPECT) -> tuple[dict, dict]:
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, G.RUNTIME], "docks": [], "species": species}]
+    return G._timeline("P69 lane B review", scenes, {}, aspect), G._base_uris()
+
+
+# every category name of one chart state: its own x, its lines' x, how much of it is written, its bar's centre
+NAMES = """(si) => {
+  const w = [wB, wA].find(e => e.__lp && e.classList.contains('ledger')); if (!w) return null;
+  const S = (w.__lp.states || [w.__lp])[si];
+  return (S.marks || []).filter(m => m.role === 'xlabel' && m.el).map(m => {
+    const bar = (S.markBy || {})['b:' + m.key.split(':')[1]], ts = [...m.el.querySelectorAll('tspan')];
+    const full = m.el.__wrapText ? m.el.__wrapText.join('') : (m.el.__full != null ? m.el.__full : (m.el.textContent || ''));
+    return { key: m.key, x: +m.el.getAttribute('x'), geomX: m.geom.x, wrapped: ts.length > 1,
+             lineX: ts.map(t => +t.getAttribute('x')),
+             written: ts.length ? ts.map(t => t.textContent).join('').length : (m.el.textContent || '').length,
+             full: full.length,
+             barCx: bar ? +bar.el.getAttribute('x') + +bar.el.getAttribute('width') / 2 : null };
+  });
+}"""
+
+OBJ_13_NEXT = dict(OBJ_13, bars=OBJ_13["bars"] + [{"label": "HBM next generation", "value": 4, "note": "4x", "color": "crimson"}])
+
+
+@needs_browser
+def test_a_wrapped_name_follows_its_bar_through_a_rescale_and_back():
+    """F1: the capped two-bar wafer row (both names wrapped) rescales into a three-bar row, where the bars stand at the
+    plot's own pitch instead of centred: mid-clock every line of a wrapped name stands at its <text>'s x, on its moving
+    bar's centre; a seek back puts every line home."""
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/fx-wafer.series.json").write_text(json.dumps(OBJ_13), encoding="utf-8")
+        (ep / "evidence/objects/fx-wafer-next.series.json").write_text(json.dumps(OBJ_13_NEXT), encoding="utf-8")
+        world = _world_at("ledger:fx-wafer:bars;then=fx-wafer-next:bars", ep, ASPECT)
+    species = [{"kind": "chart_to", "to": "rescale", "state": 1, "at": 10.0, "dur": 2.0}]
+    P = _Served(*_one_scene(world, species))
+    try:
+        before = P.names(9.5, 0)
+        assert sum(n["wrapped"] for n in before) == 2, f"both wafer names wrap under their capped bars: {before}"
+        for n in P.names(11.0, 0):
+            assert abs(n["x"] - n["geomX"]) > 5, f"the fixture moves the bar: {n}"
+            assert abs(n["x"] - n["barCx"]) < 0.6, f"the name rides its bar's centre: {n}"
+            assert all(abs(lx - n["x"]) < 0.05 for lx in n["lineX"]), f"a wrapped name's lines stayed behind: {n}"
+        for n in P.names(9.5, 0):
+            assert abs(n["x"] - n["geomX"]) < 0.05 and all(abs(lx - n["geomX"]) < 0.05 for lx in n["lineX"]), n
+        assert not P.errs, P.errs
+    finally:
+        P.close()
+
+
+def _remake_world(order: str, names: list[str]) -> tuple[dict, list[dict]]:
+    """The golden remake's own fixture cut to its last TWO prints (a capped row, so the names wrap), those two bars
+    given long display names - the golden's derivation, run the golden's way."""
+    line, bars = G._remake_pages()
+    bars = dict(bars, bars=bars["bars"][-2:])
+    first, second = ("line", "bars") if order == "line-to-bars" else ("bars", "line")
+    species = [{"kind": "chart_to", "at": G.REMAKE_AT, "dur": G.REMAKE_S, "to": "remake", "state": 1}]
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/golden-level.series.json").write_text(json.dumps(line), encoding="utf-8")
+        (ep / "evidence/objects/golden-prints.series.json").write_text(json.dumps(bars), encoding="utf-8")
+        ids = {"line": "golden-level:line", "bars": "golden-prints:bars"}
+        plate = f"ledger:{ids[first]};then={ids[second]}"
+        world = _world_at(plate, ep, ASPECT)
+        saved = B.ASPECT
+        B.ASPECT = ASPECT
+        try:
+            B.derive_rescale_states(world, species, plate, ep, sid="s01")
+        finally:
+            B.ASPECT = saved
+    assert len(species[0].get("mark_map") or []) == 2, species[0]
+    spec = world["page"] if first == "bars" else world["page_states"][0]
+    spec["labels"] = list(names)   # display names only: the mark map keys on the index, never the string
+    return world, species
+
+
+LONG_NAMES = ["Holdings at the November print", "Holdings at the December print"]
+
+
+@needs_browser
+def test_a_wrapped_name_is_erased_by_the_remake_and_whole_again_on_a_seek_back():
+    """F1: bars -> line un-writes the bar names (lpPaintRemakeToLine); a two-line name is erased with them, never left
+    fully inked while its neighbours go - and a seek back before the clock puts it back whole."""
+    world, species = _remake_world("bars-to-line", LONG_NAMES)
+    P = _Served(*_one_scene(world, species))
+    try:
+        at, dur = G.REMAKE_AT, G.REMAKE_S
+        before = P.names(at - 0.3, 0)
+        assert before and all(n["wrapped"] for n in before), f"both long names wrap: {before}"
+        assert all(n["written"] == n["full"] for n in before), before
+        runs = [P.names(at + dur * u, 0) for u in (0.02, 0.05, 0.1, 0.2, 0.3, 0.45, 0.6)]
+        for i, n0 in enumerate(before):
+            seq = [r[i]["written"] for r in runs]
+            assert seq == sorted(seq, reverse=True), f"an erase only ever takes letters away: {seq}"
+            assert min(seq) < n0["full"], f"the wrapped name was never erased: {seq}"
+        back = P.names(at - 0.3, 0)
+        assert all(n["written"] == n["full"] for n in back), f"a seek back restores the whole name: {back}"
+        assert not P.errs, P.errs
+    finally:
+        P.close()
+
+
+@needs_browser
+def test_a_wrapped_name_is_written_on_by_the_remake():
+    """F1: line -> bars writes the arriving bars' names on (lpPaintRemake); a two-line name is written with them and
+    stands whole when the clock ends."""
+    world, species = _remake_world("line-to-bars", LONG_NAMES)
+    P = _Served(*_one_scene(world, species))
+    try:
+        at, dur = G.REMAKE_AT, G.REMAKE_S
+        runs = [P.names(at + dur * u, 1) for u in (0.2, 0.4, 0.55, 0.7, 0.85, 0.95)]
+        done = P.names(at + dur + 1.0, 1)
+        assert done and all(n["wrapped"] for n in done), f"both long names wrap: {done}"
+        assert all(n["written"] == n["full"] for n in done), done
+        for i, n0 in enumerate(done):
+            seq = [r[i]["written"] for r in runs]
+            assert seq == sorted(seq), f"a write-on only ever adds letters: {seq}"
+            assert any(0 < w < n0["full"] for w in seq), f"the wrapped name was never part-written: {seq}"
+        assert not P.errs, P.errs
+    finally:
+        P.close()
+
+
+# F4: one capped bar in the three layouts the full-stage fixtures above never reach
+def _layout_world(layout: str) -> tuple[dict, str]:
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/fx-94.series.json").write_text(json.dumps(OBJ_94), encoding="utf-8")
+        if layout == "9:16":
+            return _world_at("ledger:fx-94:bars", ep, "9:16"), "9:16"
+        world = _world_at("ledger:fx-94:bars", ep, ASPECT)
+    world["page"].pop("full_stage", None)   # the legacy 16:9 chart box: 0.9 of the board, then punched
+    world["page"].pop("caption", None)
+    if layout == "punch-off":
+        world["page"]["punch"] = False
+    return world, ASPECT
+
+
+@needs_browser
+@pytest.mark.parametrize("layout", ["9:16", "16:9-not-full-stage", "punch-off"])
+def test_the_cap_holds_196_px_in_every_layout(layout):
+    """F4: the cap is a width ON THE STAGE, so a lone bar measures LPBAR.W_PX on a portrait page (whose chart is drawn
+    in stage px), on a 16:9 page that keeps the legacy chart box, and on a page that skips the punch."""
+    cap = _lpbar()
+    world, aspect = _layout_world(layout)
+    assert not world["page"].get("full_stage"), "these are the layouts the full-stage fixtures miss"
+    P = _Served(*_one_scene(world, [], aspect), aspect=aspect)
+    try:
+        s = P.at(FIG_AT + FIG_S + 0.5)
+        assert s["barPx"], s
+        for px in s["barPx"]:
+            assert abs(px - cap["W_PX"]) < 0.5, f"{layout}: a bar {px:.1f} px wide on the stage, the cap is {cap['W_PX']} px"
+        assert not P.errs, P.errs
+    finally:
+        P.close()

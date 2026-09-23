@@ -8431,7 +8431,7 @@ async function mount(doc) {
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
                  marks: [], markBy: {}, geom, portrait: PORTRAIT, linePts: [], titleEl: title, titleGlyphs: [...title.querySelectorAll(".g")], rtGlyphs: [], perform: null };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
-    st.stagePx = lpStagePx(chart, geom, PORTRAIT || pg.punch === false ? 1 : LP.PUNCH_SCALE);   /* P69 T6c: one chart unit in stage px at rest (the bar cap reads it) */
+    st.stagePx = lpStagePx(chart, geom, (PORTRAIT || pg.punch === false) && !(pg.enter === "morph" && kin("arap_morph") && (scene.world.morph || {}).hand) ? 1 : LP.PUNCH_SCALE);   /* P69 T6c: one chart unit in stage px at rest (the bar cap reads it); F5: a page HANDED the melt's ball rests punched whatever its aspect or punch (the painter's `pk = handed ? 1`), so its rest scale is the punch too */
     if (lfGeom) {   /* P69 T8: every size the builders write, in this chart's units; the stylesheet's read through variables */
       st.lfType = Object.assign({}, lfGeom, { form: ((pg.axes || {}).tag_form) || "full" });
       for (const k of ["tick", "tag", "chip", "value"]) chart.style.setProperty("--lf-" + k, lfGeom[k].toFixed(3) + "px");
@@ -9136,7 +9136,16 @@ async function mount(doc) {
     lab.textContent = "";
     lab.__wrapLines = [best.a, best.b].map((s, j) => { const ts = lpEl("tspan", "", lab, { x, dy: j ? dy.toFixed(1) : 0 }); ts.textContent = s; return ts; });
     lab.__wrapDy = dy;
+    lab.__wrapText = [best.a, best.b];   /* the two lines as written - what a write-on reaches and an erase returns to */
     return true;
+  };
+  /* A wrapped name's lines each carry their OWN x (a line that starts a new chunk must), and a tspan's x outranks its
+     <text>'s - so a painter that moves a name moves it through here, or its lines stay behind while its y follows
+     (the lane B review, F1: a rescale moved the bar and left its two-line name). A one-line name is set exactly as
+     `setAttribute` always set it. */
+  const lpSetTextXY = (e, x, y) => {
+    e.setAttribute("x", x); e.setAttribute("y", y);
+    if (e.__wrapLines) for (const ts of e.__wrapLines) ts.setAttribute("x", x);
   };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
@@ -12470,7 +12479,7 @@ async function mount(doc) {
       if (m.role === "tick" || m.role === "rule") { e.setAttribute("y1", g.y.toFixed(1)); e.setAttribute("y2", g.y.toFixed(1)); e.style.opacity = ""; }
       else if (m.role === "ylabel" || m.role === "rulelabel" || m.role === "name") { e.setAttribute("x", (+g.x).toFixed(1)); e.setAttribute("y", (+g.y).toFixed(1)); e.style.opacity = "";
         if (e.hasAttribute("transform")) e.removeAttribute("transform"); }   /* P50 T11: a tag that grew into a bar shrinks back on a seek */
-      else if (m.role === "xtick" || m.role === "xlabel" || m.role === "value") { e.setAttribute("x", (+g.x).toFixed(1)); e.setAttribute("y", (+g.y).toFixed(1)); e.style.opacity = ""; }
+      else if (m.role === "xtick" || m.role === "xlabel" || m.role === "value") { lpSetTextXY(e, (+g.x).toFixed(1), (+g.y).toFixed(1)); e.style.opacity = ""; }
       else if (m.role === "bar") { e.setAttribute("x", g.x.toFixed(1)); e.setAttribute("y", g.y.toFixed(1)); e.setAttribute("width", g.w.toFixed(1)); e.setAttribute("height", g.h.toFixed(1)); e.style.transformOrigin = "0 " + g.base.toFixed(1) + "px"; e.style.opacity = ""; }   /* P61 T2: a bar the remake handed to its ring stands again the moment no transition is on */
     }
     S.xfDirty = false;
@@ -12612,7 +12621,7 @@ async function mount(doc) {
       else if (m.role === "xtick" && sb.mx) { const x = xfLerp(g.x, sb.mx(g.v), u); e.setAttribute("x", x.toFixed(1)); e.style.opacity = unchangedXTicks ? "" : xfFade(xIn(g.v), false, u).toFixed(3); }
       else if (m.role === "name") { const nb = nameB(m.key); if (nb) { e.setAttribute("x", xfLerp(g.x, nb.geom.x, u).toFixed(1)); e.setAttribute("y", xfLerp(g.y, nb.geom.y, u).toFixed(1)); } }
       else if (m.role === "bar" && sa.kind === "bars") { const nb = nameB(m.key); if (nb) { const r = xfRect(g, nb.geom, u); e.setAttribute("x", r.x.toFixed(1)); e.setAttribute("y", r.y.toFixed(1)); e.setAttribute("width", r.w.toFixed(1)); e.setAttribute("height", r.h.toFixed(1)); e.style.transformOrigin = "0 " + xfLerp(g.base, nb.geom.base, u).toFixed(1) + "px"; } }
-      else if ((m.role === "value" || m.role === "xlabel") && sa.kind === "bars") { const nb = nameB(m.key); if (nb) { e.setAttribute("x", xfLerp(g.x, nb.geom.x, u).toFixed(1)); e.setAttribute("y", xfLerp(g.y, nb.geom.y, u).toFixed(1)); } }
+      else if ((m.role === "value" || m.role === "xlabel") && sa.kind === "bars") { const nb = nameB(m.key); if (nb) lpSetTextXY(e, xfLerp(g.x, nb.geom.x, u).toFixed(1), xfLerp(g.y, nb.geom.y, u).toFixed(1)); }
     }
     /* ... and the target's own SERIES stay undrawn until the clock ends: the furniture loop below hides each path
        (role "line"), and R26-233 hides what hangs off one - the nib and the tip-riding pill. A cap sequence runs on
@@ -12672,12 +12681,20 @@ async function mount(doc) {
      by lpRestoreState, so a seek out of a hand-over paints the label exactly as it was built. */
   const TEXT_HAND = ["ylabel", "rulelabel", "xtick", "axislabel", "xlabel", "value"];   /* P61 T2: a bars page's own NUMBER is re-written by the remake, so it is restored by the same hand - the list is what lpUnwriteRestore puts back, and it puts back only what lpWriteText actually cut (__full is set nowhere else) */
   const lpWriteText = (e, w) => {
+    if (e && e.__wrapText) {   /* F1: a TWO-LINE bar name writes and erases like a one-line one - its first line, then its second */
+      const [a, b] = e.__wrapText, k = Math.ceil(clamp01(w) * (a.length + b.length));
+      const la = a.slice(0, Math.min(a.length, k)), lb = b.slice(0, Math.max(0, k - a.length));
+      if (e.__wrapLines[0].textContent !== la) e.__wrapLines[0].textContent = la;
+      if (e.__wrapLines[1].textContent !== lb) e.__wrapLines[1].textContent = lb;
+      return;
+    }
     if (!e || e.firstElementChild) return;   /* a string with a tspan in it (an inline tag chip) is not ours to re-cut */
     if (e.__full == null) e.__full = e.textContent || "";
     const n = e.__full.length, s = e.__full.slice(0, Math.max(0, Math.min(n, Math.ceil(clamp01(w) * n))));
     if (e.textContent !== s) e.textContent = s;
   };
-  const lpUnwriteRestore = (S) => { for (const m of S.marks || []) if (m.el && m.el.__full != null && TEXT_HAND.includes(m.role) && m.el.textContent !== m.el.__full) m.el.textContent = m.el.__full; };
+  const lpUnwriteRestore = (S) => { for (const m of S.marks || []) if (m.el && m.el.__full != null && TEXT_HAND.includes(m.role) && m.el.textContent !== m.el.__full) m.el.textContent = m.el.__full;
+    for (const m of S.marks || []) if (m.el && m.el.__wrapText && TEXT_HAND.includes(m.role)) lpWriteText(m.el, 1); };   /* F1: a two-line name is whole again too */
   /* E64 - THE AXIS HAND-OVER, on every recast (keyed or plain). The axes never swap in one frame: the standing chart's
      tick labels un-write while its gridlines SLIDE to where the target's stand (by rank - the i-th line of n goes to the
      i-th of m, interpolated - so the two scales meet instead of cross-fading), and the target's labels write themselves

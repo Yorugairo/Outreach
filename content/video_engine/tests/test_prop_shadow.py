@@ -213,13 +213,16 @@ def _planes(page, throw) -> dict:
 class _Player:
     """One timeline, served and mounted the way the golden harness mounts it."""
 
-    def __init__(self, browser, tl: dict, uris: dict, aspect: str = "16:9"):
+    def __init__(self, browser, tl: dict, uris: dict, aspect: str = "16:9", init: str | None = None):
         self._td = tempfile.TemporaryDirectory()
         html = Path(self._td.name) / "p.html"
         html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
         self.size = RB.STAGE[aspect]
         self._srv, port = RB.serve(html.parent)
-        self.page = browser.new_context(viewport={"width": self.size[0], "height": self.size[1]}).new_page()
+        ctx = browser.new_context(viewport={"width": self.size[0], "height": self.size[1]})
+        if init:   # a script run before the player's own (F2 counts the pictures decoded on a cold seek)
+            ctx.add_init_script(init)
+        self.page = ctx.new_page()
         self.errors: list[str] = []
         self.page.on("pageerror", lambda e: self.errors.append(str(e)))
         self.page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
@@ -285,7 +288,15 @@ def _contrast(player: _Player, t: float, throw) -> dict:
 
 
 @pytest.fixture(scope="module")
-def frames(dials):
+def browser():
+    """ONE sync Playwright for the module: `frames` holds its players open for every read, and a second
+    `sync_playwright()` cannot start while it does (F2's cold-seek pair runs beside it)."""
+    with _browser() as br:
+        yield br
+
+
+@pytest.fixture(scope="module")
+def frames(dials, browser):
     """Every instant read through ONE browser: the `own` surface on every scrub step from the frame after the contact
     to 0.3 s past the settle, at the turn and at rest (with the planes); the `page`-ink surface and the light ground
     at rest (with their contrast); a card at its own instant."""
@@ -293,30 +304,30 @@ def frames(dials):
     throw = _throw(dials["ps"])
     t0, t1 = _q(ENTER + contact + STEP), _q(ENTER + settle + 0.30)
     sweep = [round(t0 + STEP * i, 2) for i in range(int(round((t1 - t0) / STEP)) + 1)]
-    with _browser() as br:
-        players = []
-        try:
-            tl, uris, _t, _a = RB.load_surface(SURFACE)
-            own = _Player(br, tl, uris); players.append(own)
-            tl, uris, _t, _a = RB.load_surface("prop-stamp-ink")
-            inked = _Player(br, tl, uris); players.append(inked)
-            light = _Player(br, *light_ground()); players.append(light)
-            tl, uris, t_card, _a = RB.load_surface(CARD_SURFACE)
-            card = _Player(br, tl, uris); players.append(card)
-            out = {"contact": ENTER + contact, "settle": ENTER + settle,
-                   "sweep": [(t, own.at(t)) for t in sweep]}
-            out["turn"] = own.at(T_TURN); out["turn_planes"] = _planes(own.page, throw)
-            out["rest"] = own.at(T_REST); out["rest_planes"] = _planes(own.page, throw)
-            out["page_contrast"] = _contrast(own, T_REST, throw)
-            out["ink"] = inked.at(T_REST); out["ink_contrast"] = _contrast(inked, T_REST, throw)
-            out["light"] = light.at(T_REST); out["light_contrast"] = _contrast(light, T_REST, throw)
-            out["card"] = card.at(t_card)
-            for pl in players:
-                assert not pl.errors, pl.errors
-            yield out
-        finally:
-            for pl in players:
-                pl.close()
+    br = browser
+    players = []
+    try:
+        tl, uris, _t, _a = RB.load_surface(SURFACE)
+        own = _Player(br, tl, uris); players.append(own)
+        tl, uris, _t, _a = RB.load_surface("prop-stamp-ink")
+        inked = _Player(br, tl, uris); players.append(inked)
+        light = _Player(br, *light_ground()); players.append(light)
+        tl, uris, t_card, _a = RB.load_surface(CARD_SURFACE)
+        card = _Player(br, tl, uris); players.append(card)
+        out = {"contact": ENTER + contact, "settle": ENTER + settle,
+               "sweep": [(t, own.at(t)) for t in sweep]}
+        out["turn"] = own.at(T_TURN); out["turn_planes"] = _planes(own.page, throw)
+        out["rest"] = own.at(T_REST); out["rest_planes"] = _planes(own.page, throw)
+        out["page_contrast"] = _contrast(own, T_REST, throw)
+        out["ink"] = inked.at(T_REST); out["ink_contrast"] = _contrast(inked, T_REST, throw)
+        out["light"] = light.at(T_REST); out["light_contrast"] = _contrast(light, T_REST, throw)
+        out["card"] = card.at(t_card)
+        for pl in players:
+            assert not pl.errors, pl.errors
+        yield out
+    finally:
+        for pl in players:
+            pl.close()
 
 
 @needs_browser
@@ -410,3 +421,94 @@ def test_a_CARD_creates_no_hatch_and_keeps_its_own_shadow(frames):
     assert card["hatches"] == 0, "a card never creates a hatch layer"
     assert card["filter"] in ("none", None, ""), card["filter"]
     assert card["box"] and card["box"] != "none", "a card keeps its lift"
+
+
+
+# ---- the lane B merge review (REVIEW-P69-LANE-B-MERGE-1.md), F2 --------------------------------------------------
+# The decode-deferred path is the hatch's only asynchronous one: a COLD SEEK mounts the picture and paints the hatch
+# when it decodes, registered in `clipSeeks` so `__clipsSeeked` waits for it. Pinned here: a cold seek lands the same
+# hatch as forward play at the same settled instant, and a picture that never decodes leaves the hatch simply off.
+
+HATCH_READ = """() => {
+  const cv = document.getElementById('dock-hatch-0');
+  if (!cv) return null;
+  const W = cv.width, H = cv.height, d = cv.getContext('2d').getImageData(0, 0, W, H).data;
+  const a = new Uint8Array(W * H); for (let i = 0; i < W * H; i++) a[i] = d[4 * i + 3];
+  let s = ''; for (let i = 0; i < a.length; i += 0x8000) s += String.fromCharCode.apply(null, a.subarray(i, i + 0x8000));
+  return { opacity: +cv.style.opacity, left: cv.style.left, top: cv.style.top, W, H, seq: +(cv.dataset.seq || 0), alpha: btoa(s) };
+}"""
+
+
+def _settle_seeks(page) -> None:
+    page.evaluate("() => window.__clipsSeeked ? window.__clipsSeeked() : null")
+
+
+# counts every picture decode and whether the picture had decoded already when it was asked
+DECODES = ("window.__decodes = []; const _decode = HTMLImageElement.prototype.decode; HTMLImageElement.prototype.decode = "
+           "function () { window.__decodes.push(!!(this.complete && this.naturalWidth > 0)); return _decode.call(this); };")
+
+
+def _hatch_at_rest(br, tl: dict, uris: dict, *, forward: bool) -> tuple[dict, list[str]]:
+    """The hatch at T_REST from a FRESH page: a cold seek straight there, or forward play scrubbed there step by step
+    from before the stamp's own zero. `decodes` says whether the deferred (decode) paint ran."""
+    pl = _Player(br, tl, uris, init=DECODES)
+    try:
+        if forward:
+            t = _q(ENTER - 0.2)
+            while t < T_REST - 1e-9:
+                pl.at(t)
+                t = round(t + 0.05, 2)
+        pl.at(T_REST)
+        _settle_seeks(pl.page)
+        pl.page.wait_for_timeout(50)
+        got = pl.page.evaluate(HATCH_READ)
+        if got is not None:
+            got["decodes"] = pl.page.evaluate("window.__decodes")
+        return got, list(pl.errors)
+    finally:
+        pl.close()
+
+
+@needs_browser
+def test_a_COLD_SEEK_lands_the_same_hatch_as_FORWARD_PLAY_at_the_settled_instant(browser):
+    """F2: the decode-deferred paint and the in-line paint are one hatch. At T_REST the canvas stands on the same stage
+    rectangle at the same opacity, and its lines agree on/off within the tolerance (3) already holds the hatch to
+    (97 %; the same instant, so the measured agreement is expected to be total)."""
+    import numpy as np
+    tl, uris, _t, _a = RB.load_surface(SURFACE)
+    cold, e1 = _hatch_at_rest(browser, tl, uris, forward=False)
+    warm, e2 = _hatch_at_rest(browser, tl, uris, forward=True)
+    assert not e1 and not e2, (e1, e2)
+    assert cold is not None and warm is not None, "the settled prop carries its hatch either way"
+    assert False in cold["decodes"], f"the cold seek found the picture undecoded and deferred its paint: {cold['decodes']}"
+    for k in ("left", "top", "W", "H"):
+        assert cold[k] == warm[k], f"{k}: cold seek {cold[k]} vs forward play {warm[k]}"
+    assert abs(cold["opacity"] - warm["opacity"]) < 0.005 and cold["opacity"] > 0, (cold["opacity"], warm["opacity"])
+    a = np.frombuffer(base64.b64decode(cold["alpha"]), dtype=np.uint8)
+    b = np.frombuffer(base64.b64decode(warm["alpha"]), dtype=np.uint8)
+    agree = float(((a >= 128) == (b >= 128)).mean())
+    print(f"\ncold seek vs forward play, hatch on/off agreement: {agree:.4f}")
+    assert agree >= 0.97, f"a cold seek paints another hatch: {agree:.2%} of pixels agree"
+
+
+@needs_browser
+def test_a_picture_that_never_decodes_leaves_the_hatch_OFF_and_nothing_throws(browser):
+    """F2: the prop's picture is a broken PNG. A cold seek to the settled instant resolves `__clipsSeeked` (the decode's
+    rejection is caught), throws nothing, shows no hatch, and does not re-arm: a second wait paints nothing new."""
+    tl, uris, _t, _a = RB.load_surface(SURFACE)
+    uris = dict(uris, **{"ev-prop-fed": "data:image/png;base64,iVBORw0KGgo="})   # a PNG signature and nothing after it
+    pl = _Player(browser, tl, uris)
+    try:
+        pl.at(T_REST)
+        _settle_seeks(pl.page)
+        first = pl.page.evaluate(HATCH_READ)
+        pl.page.wait_for_timeout(300)
+        _settle_seeks(pl.page)
+        second = pl.page.evaluate(HATCH_READ)
+        errors = list(pl.errors)
+    finally:
+        pl.close()
+    assert not errors, errors
+    assert first is None or first["opacity"] == 0, f"no silhouette, no hatch: {first and first['opacity']}"
+    assert second is None or (second["opacity"] == 0 and second["seq"] == (first or {}).get("seq")), \
+        "a picture that never decodes leaves the hatch off - it does not loop"
