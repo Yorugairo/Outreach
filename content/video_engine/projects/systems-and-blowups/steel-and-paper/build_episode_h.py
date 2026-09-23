@@ -34,7 +34,9 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
   RAIL_DROP                "-64%", the railway object's own arithmetic (2,062 -> 741), never the treatment's -66.
   BED_LU                   -28 LU under the voice: the LONG FORM's calibration, the project's own locked plan
         (`sound/SOUND-PLAN.json` "Bed gains at VO-28 LU"), not the short's -20 (E55).
-  UNIT_CUT_PHRASE          the unit is the take's own clock to the cut before "So the obvious move" (~1:30).
+  UNIT_CUT_PHRASE          the build is the take's own clock to the cut before the NEXT row's first words: P69 T15
+        moved it past row 7 to "But capital that fast" (row 8's dip, T16's), and each body row moves it on.
+  HOST_DIP_WHY             row 7's dip INTO the studio, and the transform it refused by name (E47, E99 s74).
 
 THE BODY'S PREFLIGHT (P69 T14, rows 7-24) is three constant tables, read before any body row is authored:
   BODY_ASSETS          every page object (with its builder), card, plate, prop, host still, cue file and outro part
@@ -137,9 +139,10 @@ def _assert_read_only(before: dict) -> None:
 
 # ---------------------------------------------------------------- THE UNIT (the treatment's rows 1-9, to 1:30)
 
-# THE 30-SECOND BED (E99 s82 (b)): the first world row only - 0:00 to the dip into the studio. The rows
-# after it (the host window, the railway page) are T6's; this build proves the page.
-UNIT_CUT_PHRASE = "The three questions read"   # the dip into the studio; the bed stops at the cut BEFORE it
+# THE BUILD GROWS ONE BODY ROW AT A TIME (P69 T15-T32). The 30-second bed (E99 s82 (b)) stopped at the cut before
+# "The three questions read"; P69 T15 authors row 7 (the studio) and moves the cut past it, to the first words of
+# row 8 - the dip back to the page, which is T16's. Each body slice moves this phrase to its own row's end.
+UNIT_CUT_PHRASE = "But capital that fast"   # row 8's first words; the build stops at the cut BEFORE them
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -429,13 +432,21 @@ CAPITAL_FLOW = {"nodes": [{"id": "capital", "icon": "coins", "label": "CAPITAL"}
                 "edges": [["capital", "value"]]}
 FLOW_BOX = {"kind": "region", "x0": 0.06, "y0": 0.06, "x1": 0.47, "y1": 0.40}     # the studio's dark monitor wall
 # "and it isn't Nvidia" - THE CHIP, landing on its word and CROSSED OUT on the next (species/chip.mjs's own use:
-# a sourced glyph, a label, the claim retracted). It sits on the desk wood left of the host, clear of the flow's
-# box above and of the parked card below; the cross is what the sentence does to it.
-NVIDIA_CHIP = {"kind": "chip", "icon": "cpu", "label": "NVIDIA",
-               "target": {"kind": "point", "x": 0.47, "y": 0.59}}
+# a sourced glyph, a label, the claim retracted). It stays the SVG chip (the cpu glyph on its card): no
+# `form: stamp` - P69-HG1 decides future chips (P69 T15). The cross is what the sentence does to it.
+# WHERE (P69 T15, read on the plate `host/H-1-studio.png`, 1376x768): the point the first build named (0.47, 0.59)
+# is Mike's own left forearm and cuff, not the desk - a chip there lands ON the host. The plate's other empty dark
+# is the RIGHT monitor behind him (x 0.75-0.97, y 0.07-0.30 of the frame): the chip lands there, so the studio
+# reads left to right - the card on the desk, Mike, the chip - and the flow takes the LEFT monitor after it.
+NVIDIA_CHIP = {"kind": "chip", "icon": "cpu", "label": "NVIDIA", "idle": "breath",   # E49: a held chip breathes
+               "target": {"kind": "point", "x": 0.86, "y": 0.17}}
 CHIP_CROSS_S = 1.2
-BRAVOS_ON_DESK = {"centre": True, "centre_w": 0.30, "centre_x": 0.215, "centre_y": 0.70,
+BRAVOS_ON_DESK = {"centre": True, "centre_w": 0.28, "centre_x": 0.215, "centre_y": 0.655,
                   "card_aspect": BRAVOS_ASPECT}   # the clear left third of the desk (the plate's own room)
+# P69 T15, MEASURED (M25 on the first build): at 0.30 wide centred at y 0.70 the parked card ran to y 918, 40 px into
+# the anchored caption strip (`ledger_page.CAPTION_ANCHOR` 16:9 = y 878-960) - and on a picture plate a live dock
+# ALWAYS sends the caption to that strip (`stamp_caption_bands` stamps a plain plate's dock `null`). At 0.28 centred
+# at 0.655 the box is y 556-858, twenty pixels clear, and its right edge (x 682) stays short of Mike's hand (x ~740).
 # THE CARD READS, THEN IT IS PUT DOWN (E63 / the Tokyo pledge row's `read` + `park_s`): thrown big over the dark
 # wall while the sentence says whose chart it is, then parked onto the desk's clear third on "and it isn't
 # Nvidia". Two beats instead of one - the 3.9 s hole M16 found on this plate, filled with the card's own move.
@@ -451,6 +462,26 @@ BRAVOS_ON_DESK = {"centre": True, "centre_w": 0.30, "centre_x": 0.215, "centre_y
 # the host - with the door built, row 7 (T15) names the desk's clear third and measures the box.
 HOST_CARD_DOOR = ("plate_dock_place places a card on a picture plate from the row's centre fields or the "
                   "plate's ;room= (R26-221, build_scene_timeline_f.py:6053, used at :7609)")
+# ROW 7's CARD, its two boxes and its clock (P69 T15). The READ box is the dark LEFT monitor (x 0.23-0.52, y 0.07-0.40
+# of the plate) and the window light beside it - never Mike, whose head runs x 0.60-0.76. `read` is honoured on a
+# picture plate since R26-221 (`build_scene_timeline_f.py:7641`: "`dplace` rather than `place` is the test").
+BRAVOS_READ = {"centre_w": 0.34, "centre_x": 0.26, "centre_y": 0.25}
+BRAVOS_PARK_S = 0.6      # the put-down's own length (the compiler's DOCK_PARK_S otherwise)
+# ... and its LIFE: the card arrives BUILT (a screenshot of their chart), so E50's clock starts on its landing, and it
+# enters inside the opening minute, where E25 / M12 hold a chart dock to 6 s (`OPENING_CHART_HOLD_MAX_S`). E50's
+# 6-8 s and M12's ceiling meet at 6 s; the card leaves 0.05 s under it so a float never reads 6.000001 as a hold.
+CARD_LIFE_S = 5.95
+# THE DIP INTO THE STUDIO (row 7), and what it refused - E99 s74: a cut or a dip is the last resort and its why names
+# the transform refused. The boundary is plate -> plate (the three-notch slate -> the studio), the pair the dip is FOR
+# (E47), and every transform the kit carries for that pair is refused by name (`authoring/shapes.py`'s plate->plate
+# chain): no mark threads across (`;thread=` carries a PAGE's mark, and neither world is a page); the studio does not
+# arrive from the slate's frame edge (two unrelated photographs, one stage each - HF-15 is a pan inside one stage);
+# the slate declares no foreground occluder (HF-17); and the melt is a CHART's ink (E88) - the slate carries an
+# agenda, not a chart, so there is nothing to melt.
+HOST_DIP_WHY = ("slate -> studio is plate to plate, the pair the dip is FOR (E47); refused: the thread (no page mark "
+                "on either side), the edge arrival (two photographs, not one stage), the occluder (none declared), "
+                "the melt (E88 melts a chart's ink; the slate carries an agenda)")
+DIP_WHY = {HOST_PLATE: HOST_DIP_WHY}   # a dip row's world -> its refused transform, printed in SHOT-TABLE-H.md
 
 CARD_READ_S = 5.5   # E25 / M12: a chart card proves its sentence and leaves - under the 6 s homework ceiling
 CARD_CLEAR_S = 1.2  # ... and it is GONE before the page recasts, so the hand-over happens on a clear page
@@ -514,8 +545,13 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_melt = round(t_three_q - MELT_S_H, 2)
     t_sorts = at("and it sorts")                        # ... and the third row lands on the clause that sorts
     t_top_five = at("By the end")                       # ... and the note under it
-    # (the bed stops at the dip into the studio: the host window and the railway page are T6's, and their
-    # anchors live past this build's own words, so they are not read here.)
+    # -- row 7 (P69 T15): HOST WINDOW 1, the studio. The world changes on the cut before the map sentence.
+    t_host = cut("The three questions read")            # the dip INTO the studio (a row's exit is the door into it)
+    t_bravos = at("Bravos Research")                    # the card ARRIVES on the name (E99 s71) ...
+    t_nvidia_turn = at("and it isn't Nvidia")           # ... and is put down on the desk as the sentence turns
+    t_nvidia = at("Nvidia")                             # the chip lands on its word ...
+    t_capital = at("capital arriving faster")           # ... and the flow draws on the mechanism
+    t_row7_end = unit_end                               # row 8 (T16) owns the dip back to the page
 
     return [
         # -- ROWS 1-6: THE PAGE IS THE WORLD (E58 / E61). One world, two chart states, two cards in one slot.
@@ -575,13 +611,28 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"t": round(t_613 + CAMERA_IN_S + CAMERA_HOLD_S, 2), "zoom": 1.0, "look": datum(DIV_LAST, DIV_MEMORY), "ease": "inout"},
         ]}),
         # -- THE BOARD: the slate the melt clears for, and the three questions on it, one row per word.
-        (t_melt, unit_end, SLATE_PLATE, SLATE_KEN, [], MELT_EXIT % MELT_S_H, [
-            {"kind": "agenda", "at": t_three_q, "dur": round(unit_end - t_three_q - 0.4, 2),
+        (t_melt, t_host, SLATE_PLATE, SLATE_KEN, [], MELT_EXIT % MELT_S_H, [
+            {"kind": "agenda", "at": t_three_q, "dur": round(t_host - t_three_q - 0.4, 2),
              "target": AGENDA_SLATE_BOX,
              "rows": [dict(AGENDA_ROWS_H[0], at=t_three_q), dict(AGENDA_ROWS_H[1], at=t_thirty),
                       dict(AGENDA_ROWS_H[2], at=t_sorts)]},
         ]),
-        # (-- ROWS 7-9 are T6's: the host window and the railway page. The bed is the page.)
+        # -- ROW 7 (P69 T15): HOST WINDOW 1 - the studio (E61 landing surface; E99 s81 the host). The plate's life is
+        # its ken push ALONE (E99 s84 / R26-236 - no `;idle=drift`), the caption in STAGE mode. The dip INTO it is
+        # plate -> plate and refuses the transforms HOST_DIP_WHY names.
+        (t_host, t_row7_end, HOST_PLATE, HOST_KEN, [
+            # THEIR CHART ARRIVES ON THEIR NAME (E99 s71: thrown, never spotlit), reads big over the dark monitor
+            # while the sentence says whose it is, and is PUT DOWN on the desk's clear left third as it turns to
+            # Nvidia (E63's read + park). It is a chart card, so it leaves on E50's / M12's clock (CARD_LIFE_S).
+            (BRAVOS_CARD, 0, t_bravos, round(t_bravos + CARD_LIFE_S, 2),
+             dict(BRAVOS_ON_DESK, arrive="throw", mass="paper", read=dict(BRAVOS_READ, card_aspect=BRAVOS_ASPECT),
+                  read_s=round(t_nvidia_turn - t_bravos, 2), park_s=BRAVOS_PARK_S)),
+        ], "dip", [
+            dict(NVIDIA_CHIP, at=t_nvidia, dur=round(t_row7_end - t_nvidia, 2),
+                 cross_at=round(t_nvidia + CHIP_CROSS_S, 2)),
+            dict(CAPITAL_FLOW, kind="flow", at=t_capital, dur=round(t_row7_end - t_capital, 2), target=FLOW_BOX),
+        ]),
+        # (-- ROWS 8-24 are T16-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
     ]
 
 
@@ -621,8 +672,10 @@ def sound_cues(rows: list) -> list:
                          "at": round(contact - 1 / 24, 2), "gain": ACCENT, "fade_in": 0.0,
                          "variants": {"A": STROKE, "B": ROLL},
                          "note": "contact at %.2fs, the cue one frame early (the weight report Q5)" % contact})
-        if r[5] == "dip":   # the world change's own accent (E47)
-            cues.append({"slot": "dip %d" % (i + 1), "at": round(r[1] - 0.35, 2), "gain": ACCENT,
+        if r[5] == "dip":   # the world change's own accent (E47) - AT THE ROW'S START: a row's exit is the door INTO
+            # it (the engine's `dipIn` reads `sc.exit` against the scene before, transitions.mjs:96 /
+            # build_scene_timeline_f.py:2660). P69 T15 fixed `r[1]`, which sounded the whoosh at the row's END.
+            cues.append({"slot": "dip %d" % (i + 1), "at": round(r[0] - 0.35, 2), "gain": ACCENT,
                          "fade_in": 0.0, "variants": {"A": WHOOSH}})
     env = A.bed_envelope(rows, BED_SWELL_DB, SNAP_S_BED, fallback_end=lambda d: float(d[2]) + 1.2)
     cues.append({"slot": "hook bed", "at": 0.0, "gain": A.bed_gain(VO_LUFS, BED_LU, BED_LUFS), "fade_in": 1.5,
@@ -817,7 +870,7 @@ def _hook_object() -> Path:
 
 def _shot_table_md(rows: list) -> str:
     """SHOT-TABLE-H.md - the table a human reads: one row per window, its world, its use and idle, what fires."""
-    out = ["# SHOT TABLE H - the 1:30 unit (P68 T5)", "",
+    out = ["# SHOT TABLE H - the bed (P68 T5) and the body, one row per P69 slice (T15-T32)", "",
            "GENERATED by `build_episode_h.py` from `%s/%s.words.json`. Do not hand-edit -" % (TAKE.name, TAKE_STEM),
            "edit `build_episode_h.shot_table`. Every anchor is a PHRASE off the take (`authoring.words.at`).", "",
            "| # | window | world | options | cards | what fires |", "|---|---|---|---|---|---|"]
@@ -831,10 +884,12 @@ def _shot_table_md(rows: list) -> str:
     out += ["", "**Life: %d of %d rows** - " % (len(life), len(rows))
             + "; ".join("row %d `%s`" % (n, what) for n, what in life)
             + " (E49 nothing goes truly still; E99 s84 KEN BURNS ALONE on a long-form plate).",
-            "", "**Flow count (E99 s74):** 0 cuts, %d dips, each at a world change (E47): a chart cannot recast "
-            "into a photograph plate and a plate cannot recast into a chart."
-            % sum(1 for r in rows if r[5] == "dip"), ""]
-    return "\n".join(out)
+            "", "**Flow count (E99 s74):** 0 cuts, %d dip(s), each at a world change (E47), each naming the "
+            "transform it refused:" % sum(1 for r in rows if r[5] == "dip")]
+    out += ["- row %d `%s` (dip INTO it at %.2f): %s" % (i + 1, str(r[2]).partition(";")[0], r[0],
+                                                          DIP_WHY.get(r[2], "UNNAMED - E99 s74 owes a why"))
+            for i, r in enumerate(rows) if r[5] == "dip"]
+    return "\n".join(out + [""])
 
 
 def main() -> int:

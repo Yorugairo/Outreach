@@ -584,14 +584,14 @@ verbatim tails and are left pending.
 - Evidence: 2026-09-22 - the door carries `BODY_ASSETS` (rows 7-24, 0 missing paths), `BODY_DEPARTURES` (15, each with its fallback), `TREATMENT_SUPERSEDED` (E99 s84 `:3296`, s83 `:3294`, s91 `:3313`, E47 `:1419`/`:1444`, E50 `:1520`/`:1533`), `DEBT_PAGE` + `DEBT_SPREAD` + the "$130–150B"/"2026E" figure, `TWO_CLOCKS_PAGE`; the cue slot reads `A.arrival_mass` (`(stamp, ink)`); `READ_ONLY` covers `REFERENCE-F.md` and `build-f`; the stale `HOST_CARD_REFUSED` note fixed (R26-221 `plate_dock_place`). Bed unchanged: timeline sha `25203c15...` and table sha `a4e8d798...` identical before and after (private dir). PLAUSIBLE pages draw, each with its named fallback, pending the operator's end-of-run answer. The departures file is folded into `BUILD-NOTES-H.md` section 9
 
 ### T15: Row 7 (0:54-1:09) - host window 1: the studio, the Bravos card thrown, the NVIDIA chip crossed, the flow
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T14
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; `UNIT_CUT_PHRASE` moves past row 7; the host plate on Ken Burns alone; `NVIDIA_CHIP` stays the SVG chip (no form stamp - P69-HG1 decides future chips)
 - Validate: the shared Validate
 - Expected RED: the shared Expected RED (the table ends at row 2, `42.04-52.85`)
-- Evidence: pending
+- Evidence: 2026-09-22 - table row 3 `52.92-63.77` on `world-h1-studio-v1` (Ken Burns alone, s84): the Bravos card thrown on its name (55.62), put down on "and it isn't Nvidia" (58.26), 5.95 s (E50); the NVIDIA SVG chip lands on its word (58.60) and is crossed (59.80); the capital -> value flow draws on the left monitor (59.86, its dashed frame drawn on by the nib - flow.mjs `box`, s42.1). 1 dip at a world change (slate -> studio) naming the transforms it refused; life 3 of 3 rows; door exit 0, cues 5 of 5 bound; no frozen run > 0.5 s; gate `2 FAIL / 2 WARN / 21 PASS` - M11 (row 1, the bed, pre-existing) and M03 (the BED's 0:09-0:54 gap: nothing new ENTERS between the certificate and row 7 - named for P69-HG4; row 7 cannot clear it without a card before its own name). The dip cue moved to the row's entry (`r[0] - 0.35`). The parent read the tiles beside build-f's at the same sentences: row 7 carries a host, a thrown card, a crossed chip and a drawn flow where build-f holds a bare pen plate. Noted for HG4: the small caption strip over the desk (55.6-61.6) and the full caption crossing the host's collar at 63.4 (no caption-placement option on a picture plate)
 
 ### T16: Row 8 (1:04-1:09) - the dip back to the page (dip 1)
 - Status: pending

@@ -600,3 +600,59 @@ disagree.
 - Row 16 `ev-ig-credit-weighting-v1`, row 21 `ev-dram-contract-v1`: the treatment says `:line`; both are bars (story) pages.
 - Row 24 outro clip and brand-line audio: present in the main checkout only
   (`content/video_engine/channel-assets/money-physics/outro/`). They are a copy for the parent, not a generation.
+
+---
+
+## 10. P69 T15 - body row 7 (0:54-1:09): host window 1, the studio (2026-09-22)
+
+The build now runs 0.00-63.77 s (168 of 2335 words). `UNIT_CUT_PHRASE` moved past row 7 to "But capital that fast"
+(row 8's first words; T16 owns that dip). Treatment row 7 compiles as TABLE row 3 (`s03`, 52.92-63.77).
+
+| what | anchor (take words) | how |
+|---|---|---|
+| the world: `world-h1-studio-v1;use=landing` + ken `(0.05, -12, 6)` | the cut before "The three questions read" (52.92) | E99 s84: the ken push ALONE, no `;idle=drift` (R26-236) |
+| the dip INTO the studio | 52.92 | plate -> plate: the thread, the edge arrival, the occluder and the melt refused by name (`HOST_DIP_WHY`, printed in `SHOT-TABLE-H.md`) |
+| their chart (`dock-h-two-line-copy`) THROWN | "Bravos Research" 55.62 | `arrive: throw, mass: paper`; reads over the dark LEFT monitor (`BRAVOS_READ`), put down on the desk's left third on "and it isn't Nvidia" (58.26, `park_s` 0.6), leaves at 61.57 (`CARD_LIFE_S` 5.95: E50's 6 s floor and M12's 6 s opening-minute ceiling meet) |
+| the NVIDIA chip (the SVG chip, NO `form: stamp` - HG1's) | "Nvidia" 58.60, crossed at 59.80 | on the RIGHT monitor (0.86, 0.17); `idle: breath` (E49). The first build's point (0.47, 0.59) was Mike's forearm, read on the plate |
+| the flow `CAPITAL -> VALUE` | "capital arriving faster" 59.86 | `FLOW_BOX`, the dark left monitor, to the row's end |
+
+**Measured and fixed in the row:** M25 on the first build found the parked card 40 px into the anchored caption strip
+(y 918 vs the strip's 878). At 0.28 wide centred at y 0.655 it is `plate-box [144, 556, 538, 303]`: y 556-858, 20 px clear.
+
+**Fixed in the door:** the `dip N` cue sat at `r[1] - 0.35`, the row's END. A row's exit is the door INTO it
+(`transitions.mjs` `dipIn`, `build_scene_timeline_f.py:2660`), so it now sits at `r[0] - 0.35`: `dip 3` at 52.57.
+
+**Life:** 3 of 3 rows (row 1 `idle=live`; row 2 `ken 0.04/10/-6`; row 3 `ken 0.05/-12/6`). Between the tiles at 53.40 and
+55.40 s, on the caption-free region x 1300-1920, y 560-1080, the mean absolute luma difference is 6.96, with a -2 px
+shift by phase correlation: the push, visible. M18: no run of identical frames over 0.5 s (766 frames at 12 fps).
+
+**The order of proof (logs in `logs/`):** `t15-door.log` (door rc 0, cues 5 of 5 bound), `t15-frozen-final.log`,
+`t15-probe-final.log` (22 instants), `t15-seams.log` (the dip clean: 0 faults), `t15-stagegaps.log` (0.5 s empty, licensed),
+`t15-spoken.log`, `t15-gate-final2.log`: **RESULT: 2 FAIL / 2 WARN / 21 PASS / 1 JUDGE / 7 INFO.**
+
+**The FAILs, named:**
+- **M03** "longest wait for evidence to enter: 46s from 0:09". The gate counts a dock or a page START as evidence entering
+  (`gate_motion_density.py:1325`). The bed had 43.6 s from the certificate (9.20) to its end. Row 7's first evidence
+  is their chart, and it arrives on its own name at 55.62. To clear 45 s, a card would have to land by 54.20, on "The three
+  questions read for one thing", before anything is named (E99 s71). Row 7 cannot fix this. Two fixes are open: the gate
+  credits a page's staged reveal (row 4's memory line at 28.23 is new evidence on the same page), or rows 1-6 enter evidence
+  between 0:09 and 0:54. Both are outside T15's write set.
+- **M11** pre-exists (row 1's hook annotation; the baseline carried it before T15).
+
+**WARNs:** M04 (3 plates vs a target of 5, a long-form density target). M25 is the certificate card at 0:09-0:10 in the
+bottom safe-zone band. That is row 1's, first surfaced by the fresh probe, not by row 7.
+
+**Found, not fixable in this write set (for the parent's read):**
+1. On a picture plate, a live dock ALWAYS sends the caption to the anchored strip. `stamp_caption_bands` stamps a plain
+   plate's dock `null`, so from 55.62 to 61.57 the words sit small at y 878-960, over the desk's printed chart and Mike's hand
+   (tile 57.60). The engine has no caption band on a picture plate.
+2. The STAGE caption on this plate is stage-centred. On the row's last page ("the value it's chasing.", tile 63.40) it
+   runs x 630-1290 at y 450-500, across Mike's collar and lapel. A picture plate has no caption room (`PLATE_OPTS` `room=` places cards only).
+3. The door's `## Recall` still quotes s65 ("the 20 px drift") at `:55` and `:61`. s84 supersedes both, and
+   `TREATMENT_SUPERSEDED` says so. The quotes are left as cited text for `recall_verify`.
+
+**Tiles for the parent** (the scratchpad `p69t15/`): `tile-<t>.png` at 53.40 / 55.40 (the life pair, the host plate), 56.20
+(the throw landed), 57.60 (the read), 58.90 (the put-down), 59.30 (the chip landed), 60.40 (the chip crossed, the flow drawing),
+61.60 (the flow, the card leaving), 63.40 (the flow whole). `ref-<t>.png` is build-f's mp4 (sha256 `9a27de1c...` verified
+against REFERENCE-F.md) at the SAME SENTENCE on Script G's clock (`ref-map.txt`: 83.40-91.93 s). There, the bare nib plate
+runs through "isn't Bravos ... isn't Nvidia", then the hype machine and the hype-cycle card.
