@@ -1,0 +1,110 @@
+{
+  "schema_version": "viewer_reports.v1",
+  "prompt_version": "v2",
+  "script": "SCRIPT-C-VO.txt",
+  "windows_file": "SCRIPT-C-VIEWER-WINDOWS-FINAL.json",
+  "model": "(codex default)",
+  "effort": "high",
+  "lane": "codex",
+  "started_at": "2026-09-16T05:47:58+00:00",
+  "finished_at": "2026-09-16T05:49:27+00:00",
+  "windows_run": 7,
+  "package": {
+    "status": "asked",
+    "title": "Slowing AI Could Speed Up the Economy",
+    "thumb_file": "content\\video_engine\\projects\\systems-and-blowups\\ai-slower-useful-faster\\thumbnail-b\\still-needs-you.png",
+    "promised": "A case that slowing down AI adoption or requiring human checks can make the economy more productive rather than less. I expect to learn why AI still needs people in the workflow and what economic benefit comes from that restraint."
+  },
+  "reports": [
+    {
+      "i": 0,
+      "span": "0:00-0:15",
+      "new_things": [
+        "AI can create a second job of supervising it.",
+        "Less supervision lets existing AI models finish more work.",
+        "The speaker sees an economic opportunity in slowing the AI frontier.",
+        "Dario Amodei is associated with Anthropic."
+      ],
+      "held_question": "Why would slowing the AI frontier create that economic opportunity?",
+      "asked_of_me": "",
+      "could_not_follow": [],
+      "promise_answered": "not yet",
+      "answered_by": ""
+    },
+    {
+      "i": 1,
+      "span": "0:15-0:30",
+      "new_things": [
+        "Anthropic's Dario Amodei has argued for slowing or pacing frontier AI development.",
+        "The suggested priority is improving systems that actually finish work rather than pushing the frontier.",
+        "A useful handoff should complete work instead of leaving the user with a checklist."
+      ],
+      "held_question": "Will the handoff actually finish the work, or just leave me with a checklist?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The final sentence cut off after 'One missed handoff makes a...'"
+      ]
+    },
+    {
+      "i": 2,
+      "span": "0:30-0:45",
+      "new_things": [
+        "A missed handoff makes someone inspect the output, repair it, and run the chain again.",
+        "The example job has twenty required steps.",
+        "Each step is assumed to succeed independently 95 percent of the time.",
+        "The example allows no retries or recovery."
+      ],
+      "held_question": "How likely is the whole twenty-step job to finish successfully under those assumptions?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 3,
+      "span": "0:45-1:00",
+      "new_things": [
+        "With twenty independent steps that each succeed 95 percent of the time and no recovery, the clean completion rate is 36 percent.",
+        "Those figures are an illustration, not a measurement of a real product.",
+        "If each of the same twenty steps succeeds 99 percent of the time, clean completion rises to 82 percent."
+      ],
+      "held_question": "",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 4,
+      "span": "1:00-1:15",
+      "new_things": [
+        "A small improvement at each step can let many more jobs finish cleanly.",
+        "Fewer failures may mean fewer human rescues.",
+        "The saved human time could go toward work that ships and serving customers, allowing the team to produce more."
+      ],
+      "held_question": "How do memory and tools fit into improving this process?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 5,
+      "span": "1:15-1:30",
+      "new_things": [
+        "Memory, tools, and error checks count as development work.",
+        "A stronger frontier model might reduce the need for human supervision and should be tested the same way.",
+        "If reliability matters most, a slower frontier model could still make the overall process faster."
+      ],
+      "held_question": "Can a stronger frontier model save the same human hours by reducing supervision?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 6,
+      "span": "1:30-1:45",
+      "new_things": [
+        "The economy could speed up even if the frontier model itself is slower.",
+        "Demo cleverness is not the measure to use.",
+        "The human follow-up job ends when the AI completes the original job."
+      ],
+      "held_question": "How should AI be judged if not by how clever its demos look?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    }
+  ]
+}

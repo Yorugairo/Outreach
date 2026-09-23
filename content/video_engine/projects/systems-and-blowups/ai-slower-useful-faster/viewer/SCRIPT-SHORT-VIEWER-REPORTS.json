@@ -1,0 +1,45 @@
+{
+  "schema_version": "viewer_reports.v1",
+  "prompt_version": "v2",
+  "script": "SCRIPT-SHORT-VO.txt",
+  "windows_file": "SCRIPT-SHORT-VIEWER-WINDOWS.json",
+  "model": "(codex default)",
+  "effort": "high",
+  "lane": "codex",
+  "started_at": "2026-09-16T05:16:14+00:00",
+  "finished_at": "2026-09-16T05:16:47+00:00",
+  "windows_run": 2,
+  "package": {
+    "status": "asked",
+    "title": "How slowing AI development could make it more useful.",
+    "thumb_file": "content\\video_engine\\projects\\systems-and-blowups\\ai-slower-useful-faster\\thumbnail\\candidate-a-charcoal.png",
+    "promised": "Slower, more deliberate AI development may produce systems that are much more reliable at completing multi-step tasks. I expect to see an illustrative comparison showing why higher per-step reliability dramatically improves the odds of an entire job being finished correctly."
+  },
+  "reports": [
+    {
+      "i": 0,
+      "span": "0:00-0:15",
+      "new_things": [
+        "Slower development could make AI useful faster.",
+        "More reliable steps could let the same AI finish more jobs.",
+        "Anthropic’s boss called for pacing frontier AI development rather than stopping training."
+      ],
+      "held_question": "How can higher reliability in individual steps make an AI complete more whole jobs?",
+      "asked_of_me": "",
+      "could_not_follow": [],
+      "promise_answered": "not yet",
+      "answered_by": ""
+    },
+    {
+      "i": 1,
+      "span": "0:15-0:30",
+      "new_things": [
+        "A twenty-step job with steps that each work 95% of the time finishes without any mistake only 36% of the time, if failures are independent.",
+        "Raising each step’s reliability from 95% to 99% increases clean completion."
+      ],
+      "held_question": "How much more often does the whole job finish cleanly when each step works 99% of the time?",
+      "asked_of_me": "Imagine a job with twenty steps, each working 95% of the time.",
+      "could_not_follow": []
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Clean jobs leave a queue behind",
+  "sub": "Illustrative · one 20-step job · no retries",
+  "src": "DERIVED · p^20 illustration · not a benchmark · SCRIPT-F/EVIDENCE-DOSSIER.md",
+  "ylabel": "Clean completion (%)",
+  "unit": "%",
+  "bars": [
+    {"label": "At 95%", "value": 35.848592, "value_string": "35.8% clean", "color": "crimson", "note": "64.2% returned"},
+    {"label": "At 99%", "value": 81.790694, "value_string": "81.8% clean", "color": "cobalt", "note": "18.2% returned"}
+  ],
+  "badges": [
+    {"label": "ILLUSTRATIVE", "value": "81.8% CLEAN", "tag": "18.2% RETURNED · NO RETRIES", "accent": "cobalt"}
+  ]
+}

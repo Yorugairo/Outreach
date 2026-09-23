@@ -1,0 +1,46 @@
+{
+ "schema": "publish_package.v1",
+ "episode": "tokyo-tea-break",
+ "project": "tokyo-tea-break",
+ "build": "build-p58-2-5d",
+ "title": "Tokyo Tea Break",
+ "subtitle": "Money Physics · short",
+ "channel": "Money Physics",
+ "channel_slug": "money-physics",
+ "channel_line": "The market isn't magic. It's mechanics.",
+ "channel_path": "channel-assets/money-physics/CHANNEL-DESCRIPTION.md",
+ "aspect": "9:16",
+ "runtime_s": 88.823,
+ "script": "SCRIPT-90S-VO.claude.txt",
+ "take": "vo-short",
+ "master": null,
+ "master_bytes": null,
+ "first_frame": "frame-0000.0.png",
+ "thumbnail": null,
+ "fetched": "2026-09-03",
+ "keywords": "tokyo tea break, how money actually works, how money works, money mechanics, how markets actually work, market mechanics, finance explained, financial history, market crashes, bubbles, AI bubble, semiconductors, risk, investing explained, money physics",
+ "tags": [
+  "#MoneyPhysics",
+  "#TokyoTeaBreak",
+  "#Risk",
+  "#Shorts"
+ ],
+ "inputs": {
+  "build:timeline.json": "b642d868307b2cb2",
+  "build:tokyo-short.timeline.json": "5bec2d8ba4ccb230",
+  "project:EVIDENCE-DOSSIER.md": "6baf97560f589b0a",
+  "repo:channel-assets/money-physics/CHANNEL-DESCRIPTION.md": "faec24550fcaccb1"
+ },
+ "missing": [
+  "the 1440p master (render/)",
+  "the thumbnail (*thumb*.png)"
+ ],
+ "counts": {
+  "hook": 2,
+  "figures": 3,
+  "close": 2,
+  "dossier_sources": 5,
+  "links": 3,
+  "onscreen_sources": 6
+ }
+}

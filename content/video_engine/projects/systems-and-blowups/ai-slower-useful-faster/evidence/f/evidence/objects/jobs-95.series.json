@@ -1,0 +1,22 @@
+{
+  "title": "Ten fixed jobs · 4 clean",
+  "sub": "Illustrative · same ten jobs · 6 return for correction",
+  "src": "DERIVED · rounded p^20 illustration · not observed jobs",
+  "ylabel": "Job state",
+  "unit": "",
+  "bars": [
+    {"label": "1", "value": 1, "value_string": "DONE", "color": "teal", "note": "clean"},
+    {"label": "2", "value": 1, "value_string": "DONE", "color": "teal", "note": "clean"},
+    {"label": "3", "value": 1, "value_string": "DONE", "color": "teal", "note": "clean"},
+    {"label": "4", "value": 1, "value_string": "DONE", "color": "teal", "note": "clean"},
+    {"label": "5", "value": 0, "value_string": "RETURNED", "color": "crimson", "note": "correction"},
+    {"label": "6", "value": 0, "value_string": "RETURNED", "color": "crimson", "note": "correction"},
+    {"label": "7", "value": 0, "value_string": "RETURNED", "color": "crimson", "note": "correction"},
+    {"label": "8", "value": 0, "value_string": "RETURNED", "color": "crimson", "note": "correction"},
+    {"label": "9", "value": 0, "value_string": "RETURNED", "color": "crimson", "note": "correction"},
+    {"label": "10", "value": 0, "value_string": "RETURNED", "color": "crimson", "note": "correction"}
+  ],
+  "badges": [
+    {"label": "ILLUSTRATIVE", "value": "4 CLEAN", "tag": "6 RETURNED · NO RETRIES", "accent": "crimson"}
+  ]
+}

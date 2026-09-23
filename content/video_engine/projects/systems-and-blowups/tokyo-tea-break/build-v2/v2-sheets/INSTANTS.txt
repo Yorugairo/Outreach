@@ -1,0 +1,29 @@
+n   t        what (v2 = tokyo-v2.N.png, approved = tokyo-approved-same-instants.N.png)
+ 1    1.69s  mount s01->s02 -0.3
+ 2    1.99s  mount s01->s02 +0.0
+ 3    2.59s  mount s01->s02 +0.6
+ 4   38.66s  melt s02->s03 -0.3
+ 5   38.96s  melt s02->s03 +0.0
+ 6   39.50s  melt mid
+ 7   39.56s  melt s02->s03 +0.6
+ 8   40.00s  melt end
+ 9   44.58s  spiral s03->s04 -0.3
+10   44.88s  spiral s03->s04 +0.0
+11   45.48s  spiral s03->s04 +0.6
+12   66.41s  card throw
+13   67.20s  card land
+14   67.52s  snap s04->s05 -0.3
+15   67.82s  snap s04->s05 +0.0
+16   68.40s  after the snap
+17   68.42s  snap s04->s05 +0.6
+18   76.53s  camera push s05->s06 -0.3
+19   76.83s  camera push s05->s06 +0.0
+20   77.43s  camera push s05->s06 +0.6
+21   82.32s  dip s06->s07 -0.3
+22   82.62s  dip s06->s07 +0.0
+23   83.22s  dip s06->s07 +0.6
+24   40.60s  the splash: the desk grows through the stains
+25   41.08s  the light on the phone
+26   10.29s  row 2: the panel in the parked page's room
+27   20.99s  row 2: the un-park, card gone
+28   66.87s  row 4: the card landed in the parked page's room

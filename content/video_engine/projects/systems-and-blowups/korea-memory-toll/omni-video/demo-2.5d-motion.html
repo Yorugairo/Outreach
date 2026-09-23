@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d1117;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  #viewport {
+    width: 450px;
+    height: 800px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    background: #F4E6C7;
+  }
+  #world {
+    position: absolute;
+    inset: -6%;
+    background-image: url('stills/still-01-busan-container-toll-raw.png');
+    background-size: cover;
+    background-position: center;
+    transform-origin: 50% 35%;
+    will-change: transform;
+  }
+  #species-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .caption {
+    position: absolute;
+    bottom: 60px;
+    left: 24px;
+    right: 24px;
+    background: rgba(13, 22, 33, 0.88);
+    border: 1px solid rgba(245, 183, 46, 0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #F4E6C7;
+    font-size: 15px;
+    line-height: 1.4;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+  }
+  .caption b {
+    color: #F5B72E;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div id="viewport">
+  <div id="world"></div>
+  <svg id="species-svg" viewBox="0 0 450 800">
+    <g id="steam-group" fill="none" stroke-linecap="round"></g>
+  </svg>
+  <div class="caption">
+    <b>Doc 29 / 2.5D Motion Standard</b>
+    "South Korea just opened a sovereign toll booth on the entire AI boom."
+  </div>
+</div>
+
+<script>
+  const world = document.getElementById('world');
+  const steamGroup = document.getElementById('steam-group');
+
+  // Steam position over the coffee cup
+  // Viewport is 450x800. Coffee cup sits at x: ~110, y: ~580
+  const cup = { x: 95, y: 575, w: 45, h: 30 };
+  const STEAM_PERIOD = 2.6; // Doc 29 standard
+
+  function hash(seed, i, salt) {
+    const x = Math.sin(seed * 12.9898 + i * 78.233 + salt * 43.123) * 43758.5453;
+    return x - Math.floor(x);
+  }
+
+  function render(time) {
+    // 1. Slow 2.5D Camera Push (1.00x -> 1.12x over 10 seconds into the harbor)
+    const t = (time / 1000) % 10;
+    const progress = t / 10;
+    // Smooth ease-in-out
+    const scale = 1.0 + 0.12 * (progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress);
+    world.style.transform = `scale(${scale.toFixed(4)})`;
+
+    // 2. Doc 29 Harmonic Steam Curls
+    steamGroup.innerHTML = '';
+    const seed = 4242;
+    const ph = t / STEAM_PERIOD;
+    const rise = 110;
+    const col = 'rgba(255, 248, 236, 0.45)';
+
+    for (let w = 0; w < 3; w++) {
+      const u = ((ph + w / 3) % 1 + 1) % 1;
+      const x0 = cup.x + cup.w * (0.3 + 0.25 * w) + (hash(seed, w, 41) - 0.5) * cup.w * 0.2;
+      const y0 = cup.y + 4;
+      const amp = 8 + 10 * hash(seed, w, 42);
+      const turns = 1.4 + hash(seed, w, 43);
+
+      let d = `M ${x0.toFixed(1)} ${y0.toFixed(1)}`;
+      for (let k = 1; k <= 8; k++) {
+        const s2 = k / 8;
+        const y = y0 - rise * s2 * (0.6 + 0.4 * u);
+        const x = x0 + Math.sin((s2 * turns + u) * Math.PI * 2) * amp * (0.3 + s2);
+        d += ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
+      }
+
+      const op = (0.2 + 0.7 * Math.sin(u * Math.PI));
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('stroke', col);
+      path.setAttribute('stroke-width', (2.5 + 2 * u).toFixed(1));
+      path.setAttribute('opacity', op.toFixed(3));
+      path.setAttribute('filter', 'url(#blur)');
+      steamGroup.appendChild(path);
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  window.manualStep = function(timeMs) {
+    // 1. Camera push
+    const t = (timeMs / 1000) % 10;
+    const progress = t / 10;
+    const scale = 1.0 + 0.12 * (progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress);
+    world.style.transform = `scale(${scale.toFixed(4)})`;
+
+    // 2. Steam
+    steamGroup.innerHTML = '';
+    const seed = 4242;
+    const ph = t / STEAM_PERIOD;
+    const rise = 110;
+    const col = 'rgba(255, 248, 236, 0.45)';
+
+    for (let w = 0; w < 3; w++) {
+      const u = ((ph + w / 3) % 1 + 1) % 1;
+      const x0 = cup.x + cup.w * (0.3 + 0.25 * w) + (hash(seed, w, 41) - 0.5) * cup.w * 0.2;
+      const y0 = cup.y + 4;
+      const amp = 8 + 10 * hash(seed, w, 42);
+      const turns = 1.4 + hash(seed, w, 43);
+
+      let d = `M ${x0.toFixed(1)} ${y0.toFixed(1)}`;
+      for (let k = 1; k <= 8; k++) {
+        const s2 = k / 8;
+        const y = y0 - rise * s2 * (0.6 + 0.4 * u);
+        const x = x0 + Math.sin((s2 * turns + u) * Math.PI * 2) * amp * (0.3 + s2);
+        d += ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
+      }
+
+      const op = (0.2 + 0.7 * Math.sin(u * Math.PI));
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('stroke', col);
+      path.setAttribute('stroke-width', (2.5 + 2 * u).toFixed(1));
+      path.setAttribute('opacity', op.toFixed(3));
+      path.setAttribute('filter', 'url(#blur)');
+      steamGroup.appendChild(path);
+    }
+  };
+
+  // Defs for blur filter
+  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  defs.innerHTML = '<filter id="blur"><feGaussianBlur stdDeviation="2.5" /></filter>';
+  document.getElementById('species-svg').prepend(defs);
+
+  requestAnimationFrame(render);
+</script>
+</body>
+</html>

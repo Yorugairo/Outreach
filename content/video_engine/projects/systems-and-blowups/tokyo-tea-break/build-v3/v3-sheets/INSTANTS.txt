@@ -1,0 +1,23 @@
+1    0.00s  axes open s01 -0.3
+2    0.60s  axes open s01 +0.6
+3   26.86s  punch: the June print -0.3
+4   27.16s  punch: the June print +0.0
+5   27.76s  punch: the June print +0.6
+6   38.66s  melt s01->s02 -0.3
+7   38.96s  melt s01->s02 +0.0
+8   39.56s  melt s01->s02 +0.6
+9   44.58s  spiral s02->s03 -0.3
+10   44.88s  spiral s02->s03 +0.0
+11   45.48s  spiral s02->s03 +0.6
+12   67.52s  snap s03->s04 -0.3
+13   67.82s  snap s03->s04 +0.0
+14   68.42s  snap s03->s04 +0.6
+15   72.52s  punch: the 21.5x -0.3
+16   72.82s  punch: the 21.5x +0.0
+17   73.42s  punch: the 21.5x +0.6
+18   76.53s  camera push s04->s05 -0.3
+19   76.83s  camera push s04->s05 +0.0
+20   77.43s  camera push s04->s05 +0.6
+21   82.32s  dip s05->s06 -0.3
+22   82.62s  dip s05->s06 +0.0
+23   83.22s  dip s05->s06 +0.6

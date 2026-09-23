@@ -1,0 +1,47 @@
+Trump wants America to win the AI race.
+
+Anthropic's Dario Amodei wants a slowdown.
+
+[ring] But what if the fastest way forward is fixing what we've already built? [post-key]
+
+You ask AI to finish a job.
+
+Seconds later, the screen fills up. Looks finished.
+
+Then you find the wrong number. The missing source. The file it never saved.
+
+[stakes] [rehook] Now its finished job is your afternoon.
+
+[new] Imagine each step works nineteen times out of twenty.
+
+Sounds dependable.
+
+Chain twenty steps together, and only about four jobs out of ten finish without a mistake.
+
+The other six land back on your desk.
+
+Now push each step to ninety-nine percent.
+
+[new] [rehook] About eight out of ten finish cleanly.
+
+Roughly twice as many finished jobs. Same ten waiting customers.
+
+That's where I see the economic opportunity.
+
+[rehook] A shop owner could send the quote and take the next customer.
+
+An accountant could finish the return instead of hunting through invented receipts.
+
+Multiply those recovered hours across businesses, and reliability starts looking like an economic engine.
+
+Amodei's argument is about safety, including better testing and operations.
+
+I think that work could pay a productivity dividend too.
+
+[concede] [rehook] Of course, a stronger model might make fewer mistakes.
+
+So put both approaches on the same job. Count how often you have to step in.
+
+[ring] If fixing today's AI saves more human time, slowing the frontier could speed up the economy.
+
+Winning the AI race should give you your afternoon back.

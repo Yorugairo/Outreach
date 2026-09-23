@@ -215,3 +215,71 @@ docs/DOCS-STANDARD.md
 # P65 the recipe lab: private test-bed builds (the tracked record is effects/lab/batches/<batch>.jsonl)
 content/video_engine/projects/**/build-lab-*/
 content/video_engine/projects/**/build-p66-*/
+
+# 2026-09-22 baseline triage (UNTRACKED-TRIAGE.md, operator-approved)
+# root runtime output (claim-pack scan summaries); the class prefix rule already covers content/video_engine/**/runtime/
+/runtime/
+# ECC installer output for the Antigravity target: regenerable; the project's own agents and rule stay re-included
+/.agents/ecc-install-state.json
+/.agents/skills.json
+/.agents/workflows/
+/.agents/rules/*
+!/.agents/rules/clarification-and-interview.md
+/.agents/agents/*
+!/.agents/agents/flow-asset-producer.md
+!/.agents/agents/animation-video-researcher.md
+!/.agents/agents/finance-narrative-researcher.md
+!/.agents/agents/video-researcher.md
+!/.agents/agents/video-watcher.md
+# bytecode that the `!.agents/skills/**` negation re-includes - must stay BELOW that negation
+.agents/**/__pycache__/
+# served review copies: frozen snapshots of a live build, never committed
+content/video_engine/projects/**/build-*-frozen-*/
+# derived build output inside any build dir (the record is SHOT-TABLE*.py, BEAT-PLAN.jsonl, receipts, gates, CRITIC, publish/)
+content/video_engine/projects/**/build-*/**/assets*.json
+content/video_engine/projects/**/build-*/**/player.json
+content/video_engine/projects/**/build-*/**/scene-evidence-engine.mjs
+content/video_engine/projects/**/build-*/**/engine-as-committed/
+content/video_engine/projects/**/build-*/**/layout-probe.json
+content/video_engine/projects/**/build-*/**/stage-gaps.json
+content/video_engine/projects/**/build-*/**/seam-frames.json
+content/video_engine/projects/**/build-*/**/spoken-visuals.json
+content/video_engine/projects/**/build-*/**/frame-hashes*.json
+content/video_engine/projects/**/build-*/**/timeline.json
+content/video_engine/projects/**/build-*/**/*.timeline.json
+content/video_engine/projects/**/build-*/**/caption-pages.json
+content/video_engine/projects/**/build-*/**/evidence-dock.json
+content/video_engine/projects/**/build-*/**/docks/*.src
+content/video_engine/projects/**/build-*/**/SOUND-PLAN.derived.json
+content/video_engine/projects/**/build-*/**/_prepared-take/
+content/video_engine/projects/**/build-*/**/gate-test.txt
+content/video_engine/projects/**/build-*/**/*.html
+content/video_engine/projects/**/audio/_pauses/
+# Tokyo v2/v3: the builder re-derives the build's private sound plan (build_short_v2.py docstring)
+content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-v*/SOUND-PLAN.json
+# test fixtures that tracked tests read (keep committed despite the derived-timeline rule)
+!content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/build-opening-chart-proof-v1/candidate-a/fed-opening-chart-proof.timeline.json
+!content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/build-bed/fed-liquidity-bed.timeline.json
+# generated pages / players outside build dirs
+content/video_engine/projects/**/player*.html
+content/video_engine/projects/**/*.player.html
+content/video_engine/projects/**/SELF-WATCH.html
+content/video_engine/projects/**/assets/**/contact_sheet*.html
+content/video_engine/projects/**/assets/**/contact_sheets/*.html
+# stray compiled timelines outside build dirs
+content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/evidence/f/f/
+content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/scratch-f/gate-timeline.json
+# viewer_run raw prompts/answers (the VIEWER-REPORTS/WINDOWS files are the record)
+content/video_engine/projects/**/viewer*/run*/
+# generated vector stills (E99 s31: generated images stay out of git)
+content/video_engine/projects/**/thumbnail*/*.svg
+content/video_engine/projects/**/animated-variants/**/*.svg
+# binaries and third-party media
+*.mkv
+*.blend
+*.blend1
+*.pretone
+content/video_engine/projects/**/*.obj
+content/video_engine/projects/**/*.gii.gz
+content/video_engine/projects/**/assets/raw/**/*.info.json
+content/video_engine/sources/reference_analyses/**/download/

@@ -1,0 +1,2263 @@
+{
+  "push": {
+    "s": [
+      1.0,
+      1.12
+    ],
+    "look_drift_px": [
+      40.0,
+      0.0
+    ],
+    "ease": "cubic",
+    "instants": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "law": "screen = at + s_k * (p - look_k); s_k = 1 + (s-1)*k; look_k = at + (look-at)*k"
+  },
+  "role_parallax": {
+    "far": 1.0,
+    "board": 1.05,
+    "mid": 1.15,
+    "subject": 1.15,
+    "near": 1.4
+  },
+  "frames": [
+    {
+      "file": "a-prompted-world-banker-apartment-v2-u000.png",
+      "route": "a-prompted",
+      "plate": "world-banker-apartment-v2",
+      "u": 0.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          768.0,
+          512.0
+        ],
+        "s": 1.0,
+        "e": 0.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-banker-apartment-v2-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.0,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-banker-apartment-v2-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-banker-apartment-v2-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-banker-apartment-v2-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.4,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "a-prompted-world-banker-apartment-v2-u050.png",
+      "route": "a-prompted",
+      "plate": "world-banker-apartment-v2",
+      "u": 0.5,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          788.0,
+          512.0
+        ],
+        "s": 1.06,
+        "e": 0.5
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-banker-apartment-v2-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -67.28,
+            -30.72,
+            1560.88,
+            1054.72
+          ],
+          "k": 1.0,
+          "scale": 1.06,
+          "look_k": [
+            788.0,
+            512.0
+          ],
+          "translate": [
+            -67.28,
+            -30.72
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-banker-apartment-v2-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-banker-apartment-v2-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-banker-apartment-v2-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -94.864,
+            -43.008,
+            1570.16,
+            1067.008
+          ],
+          "k": 1.4,
+          "scale": 1.084,
+          "look_k": [
+            796.0,
+            512.0
+          ],
+          "translate": [
+            -94.864,
+            -43.008
+          ]
+        }
+      ]
+    },
+    {
+      "file": "a-prompted-world-banker-apartment-v2-u100.png",
+      "route": "a-prompted",
+      "plate": "world-banker-apartment-v2",
+      "u": 1.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          808.0,
+          512.0
+        ],
+        "s": 1.12,
+        "e": 1.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-banker-apartment-v2-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -136.96,
+            -61.44,
+            1583.36,
+            1085.44
+          ],
+          "k": 1.0,
+          "scale": 1.12,
+          "look_k": [
+            808.0,
+            512.0
+          ],
+          "translate": [
+            -136.96,
+            -61.44
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-banker-apartment-v2-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-banker-apartment-v2-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-banker-apartment-v2-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -194.432,
+            -86.016,
+            1599.616,
+            1110.016
+          ],
+          "k": 1.4,
+          "scale": 1.168,
+          "look_k": [
+            824.0,
+            512.0
+          ],
+          "translate": [
+            -194.432,
+            -86.016
+          ]
+        }
+      ]
+    },
+    {
+      "file": "a-prompted-world-tokyo-customs-dock-v1-u000.png",
+      "route": "a-prompted",
+      "plate": "world-tokyo-customs-dock-v1",
+      "u": 0.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          768.0,
+          512.0
+        ],
+        "s": 1.0,
+        "e": 0.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-tokyo-customs-dock-v1-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.0,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-tokyo-customs-dock-v1-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-tokyo-customs-dock-v1-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-tokyo-customs-dock-v1-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.4,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "a-prompted-world-tokyo-customs-dock-v1-u050.png",
+      "route": "a-prompted",
+      "plate": "world-tokyo-customs-dock-v1",
+      "u": 0.5,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          788.0,
+          512.0
+        ],
+        "s": 1.06,
+        "e": 0.5
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-tokyo-customs-dock-v1-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -67.28,
+            -30.72,
+            1560.88,
+            1054.72
+          ],
+          "k": 1.0,
+          "scale": 1.06,
+          "look_k": [
+            788.0,
+            512.0
+          ],
+          "translate": [
+            -67.28,
+            -30.72
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-tokyo-customs-dock-v1-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-tokyo-customs-dock-v1-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-tokyo-customs-dock-v1-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -94.864,
+            -43.008,
+            1570.16,
+            1067.008
+          ],
+          "k": 1.4,
+          "scale": 1.084,
+          "look_k": [
+            796.0,
+            512.0
+          ],
+          "translate": [
+            -94.864,
+            -43.008
+          ]
+        }
+      ]
+    },
+    {
+      "file": "a-prompted-world-tokyo-customs-dock-v1-u100.png",
+      "route": "a-prompted",
+      "plate": "world-tokyo-customs-dock-v1",
+      "u": 1.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          808.0,
+          512.0
+        ],
+        "s": 1.12,
+        "e": 1.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-tokyo-customs-dock-v1-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -136.96,
+            -61.44,
+            1583.36,
+            1085.44
+          ],
+          "k": 1.0,
+          "scale": 1.12,
+          "look_k": [
+            808.0,
+            512.0
+          ],
+          "translate": [
+            -136.96,
+            -61.44
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-tokyo-customs-dock-v1-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-tokyo-customs-dock-v1-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-tokyo-customs-dock-v1-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -194.432,
+            -86.016,
+            1599.616,
+            1110.016
+          ],
+          "k": 1.4,
+          "scale": 1.168,
+          "look_k": [
+            824.0,
+            512.0
+          ],
+          "translate": [
+            -194.432,
+            -86.016
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-split-world-banker-apartment-v2-u000.png",
+      "route": "b-split",
+      "plate": "world-banker-apartment-v2",
+      "u": 0.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          768.0,
+          512.0
+        ],
+        "s": 1.0,
+        "e": 0.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-banker-apartment-v2-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.0,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-banker-apartment-v2-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-banker-apartment-v2-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-banker-apartment-v2-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.4,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-split-world-banker-apartment-v2-u050.png",
+      "route": "b-split",
+      "plate": "world-banker-apartment-v2",
+      "u": 0.5,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          788.0,
+          512.0
+        ],
+        "s": 1.06,
+        "e": 0.5
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-banker-apartment-v2-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -67.28,
+            -30.72,
+            1560.88,
+            1054.72
+          ],
+          "k": 1.0,
+          "scale": 1.06,
+          "look_k": [
+            788.0,
+            512.0
+          ],
+          "translate": [
+            -67.28,
+            -30.72
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-banker-apartment-v2-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-banker-apartment-v2-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-banker-apartment-v2-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -94.864,
+            -43.008,
+            1570.16,
+            1067.008
+          ],
+          "k": 1.4,
+          "scale": 1.084,
+          "look_k": [
+            796.0,
+            512.0
+          ],
+          "translate": [
+            -94.864,
+            -43.008
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-split-world-banker-apartment-v2-u100.png",
+      "route": "b-split",
+      "plate": "world-banker-apartment-v2",
+      "u": 1.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          808.0,
+          512.0
+        ],
+        "s": 1.12,
+        "e": 1.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-banker-apartment-v2-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -136.96,
+            -61.44,
+            1583.36,
+            1085.44
+          ],
+          "k": 1.0,
+          "scale": 1.12,
+          "look_k": [
+            808.0,
+            512.0
+          ],
+          "translate": [
+            -136.96,
+            -61.44
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-banker-apartment-v2-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-banker-apartment-v2-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-banker-apartment-v2-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -194.432,
+            -86.016,
+            1599.616,
+            1110.016
+          ],
+          "k": 1.4,
+          "scale": 1.168,
+          "look_k": [
+            824.0,
+            512.0
+          ],
+          "translate": [
+            -194.432,
+            -86.016
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-split-world-tokyo-customs-dock-v1-u000.png",
+      "route": "b-split",
+      "plate": "world-tokyo-customs-dock-v1",
+      "u": 0.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          768.0,
+          512.0
+        ],
+        "s": 1.0,
+        "e": 0.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-tokyo-customs-dock-v1-reference-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.0,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-tokyo-customs-dock-v1-reference-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-tokyo-customs-dock-v1-reference-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-tokyo-customs-dock-v1-reference-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.4,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-split-world-tokyo-customs-dock-v1-u050.png",
+      "route": "b-split",
+      "plate": "world-tokyo-customs-dock-v1",
+      "u": 0.5,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          788.0,
+          512.0
+        ],
+        "s": 1.06,
+        "e": 0.5
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-tokyo-customs-dock-v1-reference-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -67.28,
+            -30.72,
+            1560.88,
+            1054.72
+          ],
+          "k": 1.0,
+          "scale": 1.06,
+          "look_k": [
+            788.0,
+            512.0
+          ],
+          "translate": [
+            -67.28,
+            -30.72
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-tokyo-customs-dock-v1-reference-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-tokyo-customs-dock-v1-reference-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-tokyo-customs-dock-v1-reference-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -94.864,
+            -43.008,
+            1570.16,
+            1067.008
+          ],
+          "k": 1.4,
+          "scale": 1.084,
+          "look_k": [
+            796.0,
+            512.0
+          ],
+          "translate": [
+            -94.864,
+            -43.008
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-split-world-tokyo-customs-dock-v1-u100.png",
+      "route": "b-split",
+      "plate": "world-tokyo-customs-dock-v1",
+      "u": 1.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          808.0,
+          512.0
+        ],
+        "s": 1.12,
+        "e": 1.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-tokyo-customs-dock-v1-reference-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -136.96,
+            -61.44,
+            1583.36,
+            1085.44
+          ],
+          "k": 1.0,
+          "scale": 1.12,
+          "look_k": [
+            808.0,
+            512.0
+          ],
+          "translate": [
+            -136.96,
+            -61.44
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-tokyo-customs-dock-v1-reference-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-tokyo-customs-dock-v1-reference-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-tokyo-customs-dock-v1-reference-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -194.432,
+            -86.016,
+            1599.616,
+            1110.016
+          ],
+          "k": 1.4,
+          "scale": 1.168,
+          "look_k": [
+            824.0,
+            512.0
+          ],
+          "translate": [
+            -194.432,
+            -86.016
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-sam-world-banker-apartment-v2-u000.png",
+      "route": "b-sam",
+      "plate": "world-banker-apartment-v2",
+      "u": 0.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          768.0,
+          512.0
+        ],
+        "s": 1.0,
+        "e": 0.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-banker-apartment-v2-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.0,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-banker-apartment-v2-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-banker-apartment-v2-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-banker-apartment-v2-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.4,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-sam-world-banker-apartment-v2-u050.png",
+      "route": "b-sam",
+      "plate": "world-banker-apartment-v2",
+      "u": 0.5,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          788.0,
+          512.0
+        ],
+        "s": 1.06,
+        "e": 0.5
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-banker-apartment-v2-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -67.28,
+            -30.72,
+            1560.88,
+            1054.72
+          ],
+          "k": 1.0,
+          "scale": 1.06,
+          "look_k": [
+            788.0,
+            512.0
+          ],
+          "translate": [
+            -67.28,
+            -30.72
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-banker-apartment-v2-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-banker-apartment-v2-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-banker-apartment-v2-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -94.864,
+            -43.008,
+            1570.16,
+            1067.008
+          ],
+          "k": 1.4,
+          "scale": 1.084,
+          "look_k": [
+            796.0,
+            512.0
+          ],
+          "translate": [
+            -94.864,
+            -43.008
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-sam-world-banker-apartment-v2-u100.png",
+      "route": "b-sam",
+      "plate": "world-banker-apartment-v2",
+      "u": 1.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          808.0,
+          512.0
+        ],
+        "s": 1.12,
+        "e": 1.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-banker-apartment-v2-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -136.96,
+            -61.44,
+            1583.36,
+            1085.44
+          ],
+          "k": 1.0,
+          "scale": 1.12,
+          "look_k": [
+            808.0,
+            512.0
+          ],
+          "translate": [
+            -136.96,
+            -61.44
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-banker-apartment-v2-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-banker-apartment-v2-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-banker-apartment-v2-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -194.432,
+            -86.016,
+            1599.616,
+            1110.016
+          ],
+          "k": 1.4,
+          "scale": 1.168,
+          "look_k": [
+            824.0,
+            512.0
+          ],
+          "translate": [
+            -194.432,
+            -86.016
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-sam-world-tokyo-customs-dock-v1-u000.png",
+      "route": "b-sam",
+      "plate": "world-tokyo-customs-dock-v1",
+      "u": 0.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          768.0,
+          512.0
+        ],
+        "s": 1.0,
+        "e": 0.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-tokyo-customs-dock-v1-reference-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.0,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-tokyo-customs-dock-v1-reference-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-tokyo-customs-dock-v1-reference-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.15,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-tokyo-customs-dock-v1-reference-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            0.0,
+            0.0,
+            1536.0,
+            1024.0
+          ],
+          "k": 1.4,
+          "scale": 1.0,
+          "look_k": [
+            768.0,
+            512.0
+          ],
+          "translate": [
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-sam-world-tokyo-customs-dock-v1-u050.png",
+      "route": "b-sam",
+      "plate": "world-tokyo-customs-dock-v1",
+      "u": 0.5,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          788.0,
+          512.0
+        ],
+        "s": 1.06,
+        "e": 0.5
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-tokyo-customs-dock-v1-reference-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -67.28,
+            -30.72,
+            1560.88,
+            1054.72
+          ],
+          "k": 1.0,
+          "scale": 1.06,
+          "look_k": [
+            788.0,
+            512.0
+          ],
+          "translate": [
+            -67.28,
+            -30.72
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-tokyo-customs-dock-v1-reference-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-tokyo-customs-dock-v1-reference-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -77.579,
+            -35.328,
+            1564.405,
+            1059.328
+          ],
+          "k": 1.15,
+          "scale": 1.069,
+          "look_k": [
+            791.0,
+            512.0
+          ],
+          "translate": [
+            -77.579,
+            -35.328
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-tokyo-customs-dock-v1-reference-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -94.864,
+            -43.008,
+            1570.16,
+            1067.008
+          ],
+          "k": 1.4,
+          "scale": 1.084,
+          "look_k": [
+            796.0,
+            512.0
+          ],
+          "translate": [
+            -94.864,
+            -43.008
+          ]
+        }
+      ]
+    },
+    {
+      "file": "b-sam-world-tokyo-customs-dock-v1-u100.png",
+      "route": "b-sam",
+      "plate": "world-tokyo-customs-dock-v1",
+      "u": 1.0,
+      "camera": {
+        "at": [
+          768.0,
+          512.0
+        ],
+        "look": [
+          808.0,
+          512.0
+        ],
+        "s": 1.12,
+        "e": 1.0
+      },
+      "layers": [
+        {
+          "layer": "far",
+          "source": "world-tokyo-customs-dock-v1-reference-far.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -136.96,
+            -61.44,
+            1583.36,
+            1085.44
+          ],
+          "k": 1.0,
+          "scale": 1.12,
+          "look_k": [
+            808.0,
+            512.0
+          ],
+          "translate": [
+            -136.96,
+            -61.44
+          ]
+        },
+        {
+          "layer": "mid",
+          "source": "world-tokyo-customs-dock-v1-reference-mid.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "subject",
+          "source": "world-tokyo-customs-dock-v1-reference-subject.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -158.332,
+            -70.656,
+            1589.636,
+            1094.656
+          ],
+          "k": 1.15,
+          "scale": 1.138,
+          "look_k": [
+            814.0,
+            512.0
+          ],
+          "translate": [
+            -158.332,
+            -70.656
+          ]
+        },
+        {
+          "layer": "near",
+          "source": "world-tokyo-customs-dock-v1-reference-near.png",
+          "size": [
+            1536,
+            1024
+          ],
+          "rect": [
+            -194.432,
+            -86.016,
+            1599.616,
+            1110.016
+          ],
+          "k": 1.4,
+          "scale": 1.168,
+          "look_k": [
+            824.0,
+            512.0
+          ],
+          "translate": [
+            -194.432,
+            -86.016
+          ]
+        }
+      ]
+    }
+  ],
+  "cost_table": [
+    {
+      "route": "a-prompted",
+      "plate": "world-banker-apartment-v2",
+      "generator": {
+        "image_tool": "image_gen.imagegen (built-in)",
+        "model_requested": "gpt-image-2.5",
+        "model_actually_used": "gpt-image version 2.0 (embedded C2PA metadata)",
+        "quality": "high requested; built-in tool exposes no quality parameter",
+        "size": "1536x1024",
+        "background_parameter": "transparent requested for mid, subject, and near; no tool parameter exposed",
+        "per_asset": {
+          "world-banker-apartment-v2-far": {
+            "wall_clock_s": 33,
+            "attempts": 1,
+            "transparent_returned": false
+          },
+          "world-banker-apartment-v2-mid": {
+            "wall_clock_s": 30,
+            "attempts": 1,
+            "transparent_returned": false
+          },
+          "world-banker-apartment-v2-subject": {
+            "wall_clock_s": 20,
+            "attempts": 1,
+            "transparent_returned": false
+          },
+          "world-banker-apartment-v2-near": {
+            "wall_clock_s": 45,
+            "attempts": 1,
+            "transparent_returned": true
+          }
+        },
+        "notes": "Built-in image generation was used with the supplied plate as a reference. The tool did not expose a model-id, quality, size, or background API parameter; generated PNGs were preserved byte-for-byte. Mid and subject returned opaque RGB images with baked checkerboards despite transparent-background requests."
+      },
+      "wall_clock_s": null,
+      "peak_vram_mb": null,
+      "inpainter": null,
+      "re_roll": null,
+      "notes": []
+    },
+    {
+      "route": "a-prompted",
+      "plate": "world-tokyo-customs-dock-v1",
+      "generator": {
+        "image_tool": "built-in image_gen.imagegen",
+        "model_requested": "gpt-image-2.5",
+        "model_actually_used": "not reported by built-in image_gen",
+        "quality": "not exposed by built-in image_gen",
+        "size": "1536x1024",
+        "background_parameter": "transparent requested for mid, subject, and near; native alpha not returned",
+        "per_asset": {
+          "world-tokyo-customs-dock-v1-far": {
+            "wall_clock_s": 23,
+            "attempts": 1,
+            "transparent_returned": false
+          },
+          "world-tokyo-customs-dock-v1-mid": {
+            "wall_clock_s": 51,
+            "attempts": 2,
+            "transparent_returned": false
+          },
+          "world-tokyo-customs-dock-v1-subject": {
+            "wall_clock_s": 20,
+            "attempts": 1,
+            "transparent_returned": false
+          },
+          "world-tokyo-customs-dock-v1-near": {
+            "wall_clock_s": 20,
+            "attempts": 1,
+            "transparent_returned": false
+          }
+        },
+        "notes": "The built-in tool could not be directed to a named model or quality setting. It returned RGB PNGs for all transparent requests; those files are delivered unmodified as required by the route override."
+      },
+      "wall_clock_s": null,
+      "peak_vram_mb": null,
+      "inpainter": null,
+      "re_roll": null,
+      "notes": []
+    },
+    {
+      "route": "b-split",
+      "plate": "world-banker-apartment-v2",
+      "generator": "depth_anything_v2_vitl_fp16.safetensors",
+      "wall_clock_s": 10.22,
+      "peak_vram_mb": 1142.9,
+      "inpainter": "lama",
+      "re_roll": "one server call per layer; a re-roll is the whole split (~10.22s)",
+      "notes": [],
+      "edges": [
+        0.0,
+        0.117647,
+        0.317647,
+        0.513725,
+        1.0
+      ]
+    },
+    {
+      "route": "b-split",
+      "plate": "world-tokyo-customs-dock-v1",
+      "generator": "depth_anything_v2_vitl_fp16.safetensors",
+      "wall_clock_s": 10.0,
+      "peak_vram_mb": 1142.9,
+      "inpainter": "lama",
+      "re_roll": "one server call per layer; a re-roll is the whole split (~10.0s)",
+      "notes": [],
+      "edges": [
+        0.0,
+        1e-06,
+        0.14902,
+        0.694118,
+        1.0
+      ]
+    },
+    {
+      "route": "b-sam",
+      "plate": "world-banker-apartment-v2",
+      "generator": "depth_anything_v2_vitl_fp16.safetensors",
+      "wall_clock_s": 13.41,
+      "peak_vram_mb": 1142.9,
+      "inpainter": "lama",
+      "re_roll": "one server call per layer; a re-roll is the whole split (~13.41s)",
+      "notes": [],
+      "edges": [
+        0.0,
+        0.290196,
+        1.0
+      ]
+    },
+    {
+      "route": "b-sam",
+      "plate": "world-tokyo-customs-dock-v1",
+      "generator": "depth_anything_v2_vitl_fp16.safetensors",
+      "wall_clock_s": 11.33,
+      "peak_vram_mb": 1142.9,
+      "inpainter": "lama",
+      "re_roll": "one server call per layer; a re-roll is the whole split (~11.33s)",
+      "notes": [],
+      "edges": [
+        0.0,
+        0.098039,
+        1.0
+      ]
+    }
+  ],
+  "contact_sheet": "contact-sheet.png"
+}

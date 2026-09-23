@@ -1,0 +1,99 @@
+{
+  "schema_version": "viewer_reports.v1",
+  "prompt_version": "v2",
+  "script": "SCRIPT-F-VO.txt",
+  "windows_file": "SCRIPT-F-VIEWER-WINDOWS.json",
+  "model": "(codex default)",
+  "effort": "high",
+  "lane": "codex",
+  "started_at": "2026-09-16T09:00:22+00:00",
+  "finished_at": "2026-09-16T09:01:46+00:00",
+  "windows_run": 6,
+  "package": {
+    "status": "asked",
+    "title": "Slowing AI Could Speed Up the Economy",
+    "thumb_file": "C:\\Users\\Snipe\\Downloads\\TrumpSam.png",
+    "promised": "I expect an argument that deliberately slowing AI adoption or development could produce a healthier, faster-growing economy by keeping people employed and in the loop. The Trump/Uncle Sam image suggests it may frame this as a political or U.S. policy question about AI still needing human workers."
+  },
+  "reports": [
+    {
+      "i": 0,
+      "span": "0:00-0:15",
+      "new_things": [
+        "Trump wants America to win the AI race.",
+        "Anthropic’s Dario Amodei wants AI development to slow down.",
+        "The video suggests progress may come from fixing existing AI systems rather than simply moving faster.",
+        "AI can produce work that looks finished within seconds."
+      ],
+      "held_question": "What do you find after the AI-generated work first appears finished, and how does fixing it relate to moving AI forward?",
+      "asked_of_me": "",
+      "could_not_follow": [],
+      "promise_answered": "not yet",
+      "answered_by": ""
+    },
+    {
+      "i": 1,
+      "span": "0:15-0:30",
+      "new_things": [
+        "AI can produce work with wrong numbers, missing sources, or unsaved files.",
+        "A job that appears finished can still require substantial manual cleanup.",
+        "Even if each step succeeds 19 times out of 20, chaining 20 steps means only about four jobs out of ten succeed."
+      ],
+      "held_question": "Why does chaining seemingly reliable AI steps make so many whole jobs fail?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 2,
+      "span": "0:30-0:45",
+      "new_things": [
+        "A 20-step AI job with each step working 95% of the time finishes without mistakes only about four times out of ten.",
+        "If each step works 99% of the time, about eight out of ten such jobs finish cleanly.",
+        "Improving reliability could roughly double completed jobs for the same ten waiting customers.",
+        "The speaker sees that reliability improvement as an economic opportunity."
+      ],
+      "held_question": "How can AI systems be made reliable enough that more multi-step jobs finish cleanly?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 3,
+      "span": "0:45-1:00",
+      "new_things": [
+        "More reliable automation would let a shop owner send a quote and move on to the next customer.",
+        "It would let an accountant finish a return instead of searching through made-up receipts.",
+        "Recovered hours across many businesses make reliability seem economically valuable."
+      ],
+      "held_question": "What larger economic opportunity does that reliability create?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 4,
+      "span": "1:00-1:15",
+      "new_things": [
+        "Amodei’s argument is about safety, including improved testing and operations.",
+        "The speaker thinks that safety work could also create a productivity benefit.",
+        "A stronger model might make fewer mistakes.",
+        "The speaker is going to compare both approaches on the same job."
+      ],
+      "held_question": "How will the two approaches perform when they are put on the same job?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "Who Amodei is and what specific argument is being referenced."
+      ]
+    },
+    {
+      "i": 5,
+      "span": "1:15-1:30",
+      "new_things": [
+        "The suggested test is to count how often people have to step in and fix AI.",
+        "Making current AI need less human fixing could save enough time that slowing frontier progress speeds up the economy.",
+        "The speaker says winning the AI race should give people their afternoons back."
+      ],
+      "held_question": "Would making today’s AI more reliable actually save more time than pushing quickly toward stronger models?",
+      "asked_of_me": "Count how often I have to step in.",
+      "could_not_follow": []
+    }
+  ]
+}

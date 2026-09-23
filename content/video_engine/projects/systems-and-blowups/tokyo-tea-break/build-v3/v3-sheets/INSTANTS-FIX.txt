@@ -1,0 +1,11 @@
+1    0.20s  the open
+2    2.59s  the open
+3    4.57s  the open
+4    9.09s  the panel flight
+5    9.50s  the panel landing
+6   10.29s  the panel in the left room
+7   19.49s  the panel leaves
+8   20.99s  the un-park
+9   71.22s  the sentence names the multiple
+10   72.35s  the ring writes 21.5x, the punch on it
+11   73.42s  held

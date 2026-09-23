@@ -1,0 +1,13 @@
+{
+  "title": "Twenty steps, two finish rates",
+  "sub": "Illustrative · same independent steps · no retries",
+  "src": "DERIVED · p^20 values · not a benchmark · SCRIPT-F/EVIDENCE-DOSSIER.md",
+  "bars": [
+    {"label": "p = 95%", "value": 35.848592, "value_string": "35.8%", "color": "crimson", "note": "20 steps"},
+    {"label": "p = 99%", "value": 81.790694, "value_string": "81.8%", "color": "cobalt", "note": "20 steps"},
+    {"label": "baseline", "value": 0, "value_string": "", "color": "deemph", "note": "zero reference"}
+  ],
+  "badges": [
+    {"label": "ILLUSTRATIVE", "value": "35.8% → 81.8%", "tag": "20 INDEPENDENT STEPS · NO RETRIES", "accent": "cobalt"}
+  ]
+}

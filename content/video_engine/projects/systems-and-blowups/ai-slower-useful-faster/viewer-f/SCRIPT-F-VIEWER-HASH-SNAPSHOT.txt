@@ -1,0 +1,6 @@
+script: SCRIPT-F-VO.txt
+spoken_sha256: ccd2ca3354d350f930f4ee651933e9cff1f25e92837a72a810070bc8dc84d1cf
+gates_report_hash: ccd2ca3354d350f930f4ee651933e9cff1f25e92837a72a810070bc8dc84d1cf
+viewer_windows: SCRIPT-F-VIEWER-WINDOWS.json
+timing_source: estimated
+screens_source: none (--no-screens)

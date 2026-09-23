@@ -1,0 +1,43 @@
+Trump wants America to win the AI race.
+
+Anthropic's Dario Amodei is asking for a slowdown.
+
+But what if fixing today's AI gets us further than rushing tomorrow's?
+
+Your AI assistant still comes with a second job: supervising it.
+
+It writes the draft. You check the facts, catch the mistakes, and send it back.
+
+The impressive part happened in seconds. The finished work still needs you.
+
+That's where I see an economic opportunity.
+
+Imagine a job with twenty required steps, each right ninety-five percent of the time.
+
+If errors are independent, only thirty-six percent of whole jobs finish cleanly.
+
+These are illustrative odds, not a product score. We're allowing no retries or recovery.
+
+Now make each step ninety-nine percent reliable.
+
+Clean completion jumps to eighty-two percent.
+
+The job didn't get harder. Each step got more dependable.
+
+And if that means less checking and rescuing, those human hours can go somewhere useful.
+
+Serving another customer. Finishing the work you hired the assistant to help with.
+
+Amodei argues that a slower pace could improve operations and testing.
+
+His case is safety. I think there's a productivity prize there too.
+
+Of course, stronger models can make fewer mistakes as well.
+
+So compare them: which use of the next development dollar saves more human time?
+
+If fixing reliability wins, slowing the frontier could speed up the economy.
+
+Don't count how clever the demo looks.
+
+Your second job ends when AI finishes the first.

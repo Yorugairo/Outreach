@@ -1,0 +1,232 @@
+{
+  "plate_id": "world-banker-apartment-v2",
+  "route": "P58 T1 lane A - route (a): one prompted asset per depth layer",
+  "claim_id": "p58-banker-apartment-layers-v1",
+  "delivery_dir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\p58-banker-apartment-layers-v1",
+  "reference_image": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-banker-apartment-v2.png",
+  "generator": {
+    "image_tool": "image_gen.imagegen (built-in)",
+    "model_requested": "gpt-image-2.5",
+    "model_actually_used": "gpt-image version 2.0 (embedded C2PA metadata)",
+    "quality": "high requested; built-in tool exposes no quality parameter",
+    "size": "1536x1024",
+    "background_parameter": "transparent requested for mid, subject, and near; no tool parameter exposed",
+    "per_asset": {
+      "world-banker-apartment-v2-far": {
+        "wall_clock_s": 33,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "world-banker-apartment-v2-mid": {
+        "wall_clock_s": 30,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "world-banker-apartment-v2-subject": {
+        "wall_clock_s": 20,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "world-banker-apartment-v2-near": {
+        "wall_clock_s": 45,
+        "attempts": 1,
+        "transparent_returned": true
+      }
+    },
+    "notes": "Built-in image generation was used with the supplied plate as a reference. The tool did not expose a model-id, quality, size, or background API parameter; generated PNGs were preserved byte-for-byte. Mid and subject returned opaque RGB images with baked checkerboards despite transparent-background requests."
+  },
+  "built_at": "2026-09-14T11:22:43-0700",
+  "layers": {
+    "far": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-banker-apartment-v2\\world-banker-apartment-v2-far.png",
+      "source_claim": "p58-banker-apartment-layers-v1",
+      "attempt": 1,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode_delivered": "RGB",
+      "alpha_clean": {
+        "total_px": 1572864,
+        "opaque": true,
+        "touched_pct": 0.0
+      },
+      "expected": "opaque",
+      "prompt": "WORLD BOARD OVERRIDE for this slot only (it beats Stage A and Stage B of the work order): generate landscape 1536x1024, fully OPAQUE, filling the frame edge to edge - flatten to RGB (no alpha), skip matting, skip the 1024x1024 resize. Save the one delivered file as BOTH source/<asset_id>-source.png and objects/<asset_id>.png. THE PLATE (reference world-banker-apartment-v2, 'overstuffed banker apartment, dense left / empty right'): a cutaway room box occupies the left 52% of the frame - a gabled charcoal roofline over a dark interior, its open front facing camera; to the right of the box a bare cream wall meets a dark plank floor at a baseboard, with the box's angled shadow falling right across the cream wall. Inside the box, top shelf: stacked kraft cartons, blue and teal lidded bins, a hanging clothes rail of shirts, suitcases, a potted plant, a louvred closet with its doors open, a washing machine and laundry baskets of clothes. Below: a wide black flat TV on a low media stand, a second stack of kraft cartons and blue bins to its right, a table lamp with a cream shade on a side table, a blue sofa with a teal throw and cushions at the lower left, a small coffee table with a mug, and a rowing machine with orange and teal clothes draped over it lying across the foreground floor. CAMERA BRIEF (identical, verbatim, for all four layers of this plate): eye-level 35mm lens, horizon at y=42%, one shared vanishing point inside the cutaway room at x=31%/y=42%, even matte light from the upper left, the same carved ink weight throughout; frame 1536x1024 landscape. Match the supplied composition reference exactly: every object keeps the position, scale, perspective angle and colour it has in the reference image, to the pixel. STYLE (register woodblock-vox-newsprint, unchanged across all four layers of this plate): carved woodblock ink contours, flat editorial colour, matte surface, even light from the upper left, no gradients, no glow, no photographic texture, no micro-detail. Palette: cream #F4E6C7, charcoal #25313C, steel/indigo blue, teal, copper-orange, muted ochre - no other hues. The image contains no text, letters, numerals, logos or watermarks anywhere. INTENT (state it, it changes the choices): this asset is ONE depth layer of a 2.5D parallax composition. The four layers of this plate are stacked back-to-front and pushed under a moving camera, so each layer must register pixel-for-pixel with the others and carry clean edge separation, a full uncropped silhouette of everything it owns, no ground plane, no cast shadow onto anything it does not own. GENERATOR (mandatory): generate with GPT Image 2.5 - model id `gpt-image-2.5` (the Sunburst image model), quality high, size 1536x1024, background transparent where the slot asks for transparency. If your image tool cannot be pointed at that model id, use the strongest image model you do have and RECORD the model that actually generated - see generator.json in the DELIVERY EXTRAS block. Create ONLY the BACKGROUND PLANE of this plate as an opaque full-frame image: the empty room shell and nothing else - the cutaway wall box with its gabled charcoal roofline, the dark empty interior back wall and side walls, the bare EMPTY shelf boards and the empty louvred closet frame with its doors open onto empty space, the dark plank floor of the room, and to the right the bare cream wall, the baseboard, the dark plank floor and the box's angled shadow on the cream wall. NO furniture, NO boxes or bins, NO clothes, NO rail, NO suitcases, NO plant, NO washing machine, NO baskets, NO TV or stand, NO sofa, NO lamp, NO tables, NO rowing machine, NO people. The room as if it had just been emptied. Opaque, the full frame, edge to edge; no text. Designed for 2.5D parallax compositing; nothing may be cropped and the wall/floor meeting line must sit exactly where the reference puts it.",
+      "generator_per_asset": {
+        "wall_clock_s": 33,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "measurement_mask": "painted-background estimate",
+      "registration": {
+        "offset_px": {
+          "dx": 0,
+          "dy": 0
+        },
+        "match_gain_vs_zero_offset": 1.0
+      },
+      "stacked": true
+    },
+    "mid": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-banker-apartment-v2\\world-banker-apartment-v2-mid.png",
+      "source_claim": "p58-banker-apartment-layers-v1",
+      "attempt": 1,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode_delivered": "RGB",
+      "alpha_clean": {
+        "total_px": 1572864,
+        "opaque": true,
+        "touched_pct": 0.0
+      },
+      "expected": "transparent",
+      "prompt": "WORLD BOARD OVERRIDE for this slot only (it beats Stage A and Stage B of the work order): generate landscape 1536x1024 with a TRANSPARENT background - the native transparent RGBA PNG IS the deliverable. Do NOT matte, do NOT run rembg, do NOT trim to a bounding box, do NOT pad, do NOT resize to 1024x1024, do NOT flatten to RGB, do NOT place the subject on a pale ground. Every pixel that is not the named objects must be alpha 0. Save the one delivered file as BOTH source/<asset_id>-source.png and objects/<asset_id>.png. THE PLATE (reference world-banker-apartment-v2, 'overstuffed banker apartment, dense left / empty right'): a cutaway room box occupies the left 52% of the frame - a gabled charcoal roofline over a dark interior, its open front facing camera; to the right of the box a bare cream wall meets a dark plank floor at a baseboard, with the box's angled shadow falling right across the cream wall. Inside the box, top shelf: stacked kraft cartons, blue and teal lidded bins, a hanging clothes rail of shirts, suitcases, a potted plant, a louvred closet with its doors open, a washing machine and laundry baskets of clothes. Below: a wide black flat TV on a low media stand, a second stack of kraft cartons and blue bins to its right, a table lamp with a cream shade on a side table, a blue sofa with a teal throw and cushions at the lower left, a small coffee table with a mug, and a rowing machine with orange and teal clothes draped over it lying across the foreground floor. CAMERA BRIEF (identical, verbatim, for all four layers of this plate): eye-level 35mm lens, horizon at y=42%, one shared vanishing point inside the cutaway room at x=31%/y=42%, even matte light from the upper left, the same carved ink weight throughout; frame 1536x1024 landscape. Match the supplied composition reference exactly: every object keeps the position, scale, perspective angle and colour it has in the reference image, to the pixel. STYLE (register woodblock-vox-newsprint, unchanged across all four layers of this plate): carved woodblock ink contours, flat editorial colour, matte surface, even light from the upper left, no gradients, no glow, no photographic texture, no micro-detail. Palette: cream #F4E6C7, charcoal #25313C, steel/indigo blue, teal, copper-orange, muted ochre - no other hues. The image contains no text, letters, numerals, logos or watermarks anywhere. INTENT (state it, it changes the choices): this asset is ONE depth layer of a 2.5D parallax composition. The four layers of this plate are stacked back-to-front and pushed under a moving camera, so each layer must register pixel-for-pixel with the others and carry clean edge separation, a full uncropped silhouette of everything it owns, no ground plane, no cast shadow onto anything it does not own. GENERATOR (mandatory): generate with GPT Image 2.5 - model id `gpt-image-2.5` (the Sunburst image model), quality high, size 1536x1024, background transparent where the slot asks for transparency. If your image tool cannot be pointed at that model id, use the strongest image model you do have and RECORD the model that actually generated - see generator.json in the DELIVERY EXTRAS block. Create ONLY the MID PLANE as an isolated transparent PNG asset: the shelf contents and the TV group and nothing nearer - the stacked kraft cartons and blue/teal lidded bins on the upper shelf, the hanging clothes rail with its shirts, the suitcases, the potted plant, the clothes hanging inside the open closet, the washing machine and the laundry baskets of clothes, the wide black flat TV with its low media stand and the second stack of cartons and bins beside it. NOT the sofa, NOT the throw, NOT the lamp or side tables, NOT the coffee table or mug, NOT the rowing machine, NOT the walls, NOT the shelf boards, NOT the floor, NOT the closet's frame or doors. No background, no ground plane, no cast shadow, no text; every other pixel alpha 0. Designed for 2.5D parallax compositing; clean edge separation and no cropped objects.",
+      "generator_per_asset": {
+        "wall_clock_s": 30,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "FAILURE": "returned OPAQUE where transparency was asked - re-ordered once, still opaque; delivered as returned (never hand-matted)",
+      "measurement_mask": "painted-background estimate",
+      "registration": {
+        "offset_px": {
+          "dx": -14,
+          "dy": 42
+        },
+        "match_gain_vs_zero_offset": 1.0637
+      },
+      "stacked": false,
+      "stack_note": "skipped in the back-to-front composite: opaque, it would hide every layer under it"
+    },
+    "subject": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-banker-apartment-v2\\world-banker-apartment-v2-subject.png",
+      "source_claim": "p58-banker-apartment-layers-v1",
+      "attempt": 1,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode_delivered": "RGB",
+      "alpha_clean": {
+        "total_px": 1572864,
+        "opaque": true,
+        "touched_pct": 0.0
+      },
+      "expected": "transparent",
+      "prompt": "WORLD BOARD OVERRIDE for this slot only (it beats Stage A and Stage B of the work order): generate landscape 1536x1024 with a TRANSPARENT background - the native transparent RGBA PNG IS the deliverable. Do NOT matte, do NOT run rembg, do NOT trim to a bounding box, do NOT pad, do NOT resize to 1024x1024, do NOT flatten to RGB, do NOT place the subject on a pale ground. Every pixel that is not the named objects must be alpha 0. Save the one delivered file as BOTH source/<asset_id>-source.png and objects/<asset_id>.png. THE PLATE (reference world-banker-apartment-v2, 'overstuffed banker apartment, dense left / empty right'): a cutaway room box occupies the left 52% of the frame - a gabled charcoal roofline over a dark interior, its open front facing camera; to the right of the box a bare cream wall meets a dark plank floor at a baseboard, with the box's angled shadow falling right across the cream wall. Inside the box, top shelf: stacked kraft cartons, blue and teal lidded bins, a hanging clothes rail of shirts, suitcases, a potted plant, a louvred closet with its doors open, a washing machine and laundry baskets of clothes. Below: a wide black flat TV on a low media stand, a second stack of kraft cartons and blue bins to its right, a table lamp with a cream shade on a side table, a blue sofa with a teal throw and cushions at the lower left, a small coffee table with a mug, and a rowing machine with orange and teal clothes draped over it lying across the foreground floor. CAMERA BRIEF (identical, verbatim, for all four layers of this plate): eye-level 35mm lens, horizon at y=42%, one shared vanishing point inside the cutaway room at x=31%/y=42%, even matte light from the upper left, the same carved ink weight throughout; frame 1536x1024 landscape. Match the supplied composition reference exactly: every object keeps the position, scale, perspective angle and colour it has in the reference image, to the pixel. STYLE (register woodblock-vox-newsprint, unchanged across all four layers of this plate): carved woodblock ink contours, flat editorial colour, matte surface, even light from the upper left, no gradients, no glow, no photographic texture, no micro-detail. Palette: cream #F4E6C7, charcoal #25313C, steel/indigo blue, teal, copper-orange, muted ochre - no other hues. The image contains no text, letters, numerals, logos or watermarks anywhere. INTENT (state it, it changes the choices): this asset is ONE depth layer of a 2.5D parallax composition. The four layers of this plate are stacked back-to-front and pushed under a moving camera, so each layer must register pixel-for-pixel with the others and carry clean edge separation, a full uncropped silhouette of everything it owns, no ground plane, no cast shadow onto anything it does not own. GENERATOR (mandatory): generate with GPT Image 2.5 - model id `gpt-image-2.5` (the Sunburst image model), quality high, size 1536x1024, background transparent where the slot asks for transparency. If your image tool cannot be pointed at that model id, use the strongest image model you do have and RECORD the model that actually generated - see generator.json in the DELIVERY EXTRAS block. Create ONLY the SUBJECT PLANE as an isolated transparent PNG asset: the blue sofa with its teal throw and its cushions, the table lamp with the cream shade on its blue base, and the side table / small coffee table with the mug on it - those objects alone, at their reference positions in the lower left of the frame. NOTHING else: no shelving, no boxes, no TV, no rowing machine, no walls, no floor, no room. No background, no ground plane, no cast shadow, no text; every other pixel alpha 0. Designed for 2.5D parallax compositing; clean edge separation, the full silhouette of each object visible, and no cropped legs or edges.",
+      "generator_per_asset": {
+        "wall_clock_s": 20,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "FAILURE": "returned OPAQUE where transparency was asked - re-ordered once, still opaque; delivered as returned (never hand-matted)",
+      "measurement_mask": "painted-background estimate",
+      "registration": {
+        "offset_px": {
+          "dx": 42,
+          "dy": -16
+        },
+        "match_gain_vs_zero_offset": 1.061
+      },
+      "stacked": false,
+      "stack_note": "skipped in the back-to-front composite: opaque, it would hide every layer under it"
+    },
+    "near": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-banker-apartment-v2\\world-banker-apartment-v2-near.png",
+      "source_claim": "p58-banker-apartment-layers-v1",
+      "attempt": 1,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode_delivered": "RGBA",
+      "alpha_clean": {
+        "total_px": 1572864,
+        "opaque": false,
+        "veil_px": 11177,
+        "matte_px": 0,
+        "touched_pct": 0.7106,
+        "opaque_px_pct": 0.0,
+        "rim_px_pct": 25.911,
+        "coverage_pct": 25.911
+      },
+      "expected": "transparent",
+      "prompt": "WORLD BOARD OVERRIDE for this slot only (it beats Stage A and Stage B of the work order): generate landscape 1536x1024 with a TRANSPARENT background - the native transparent RGBA PNG IS the deliverable. Do NOT matte, do NOT run rembg, do NOT trim to a bounding box, do NOT pad, do NOT resize to 1024x1024, do NOT flatten to RGB, do NOT place the subject on a pale ground. Every pixel that is not the named objects must be alpha 0. Save the one delivered file as BOTH source/<asset_id>-source.png and objects/<asset_id>.png. THE PLATE (reference world-banker-apartment-v2, 'overstuffed banker apartment, dense left / empty right'): a cutaway room box occupies the left 52% of the frame - a gabled charcoal roofline over a dark interior, its open front facing camera; to the right of the box a bare cream wall meets a dark plank floor at a baseboard, with the box's angled shadow falling right across the cream wall. Inside the box, top shelf: stacked kraft cartons, blue and teal lidded bins, a hanging clothes rail of shirts, suitcases, a potted plant, a louvred closet with its doors open, a washing machine and laundry baskets of clothes. Below: a wide black flat TV on a low media stand, a second stack of kraft cartons and blue bins to its right, a table lamp with a cream shade on a side table, a blue sofa with a teal throw and cushions at the lower left, a small coffee table with a mug, and a rowing machine with orange and teal clothes draped over it lying across the foreground floor. CAMERA BRIEF (identical, verbatim, for all four layers of this plate): eye-level 35mm lens, horizon at y=42%, one shared vanishing point inside the cutaway room at x=31%/y=42%, even matte light from the upper left, the same carved ink weight throughout; frame 1536x1024 landscape. Match the supplied composition reference exactly: every object keeps the position, scale, perspective angle and colour it has in the reference image, to the pixel. STYLE (register woodblock-vox-newsprint, unchanged across all four layers of this plate): carved woodblock ink contours, flat editorial colour, matte surface, even light from the upper left, no gradients, no glow, no photographic texture, no micro-detail. Palette: cream #F4E6C7, charcoal #25313C, steel/indigo blue, teal, copper-orange, muted ochre - no other hues. The image contains no text, letters, numerals, logos or watermarks anywhere. INTENT (state it, it changes the choices): this asset is ONE depth layer of a 2.5D parallax composition. The four layers of this plate are stacked back-to-front and pushed under a moving camera, so each layer must register pixel-for-pixel with the others and carry clean edge separation, a full uncropped silhouette of everything it owns, no ground plane, no cast shadow onto anything it does not own. GENERATOR (mandatory): generate with GPT Image 2.5 - model id `gpt-image-2.5` (the Sunburst image model), quality high, size 1536x1024, background transparent where the slot asks for transparency. If your image tool cannot be pointed at that model id, use the strongest image model you do have and RECORD the model that actually generated - see generator.json in the DELIVERY EXTRAS block. Create ONLY the NEAR OCCLUDER PLANE as an isolated transparent PNG asset: the rowing machine lying across the lower foreground with the orange and teal clothes draped over its seat and flywheel - alone, at its exact reference position, scale and angle. NOTHING else: no sofa, no floor, no boxes, no walls. No background, no ground plane, no cast shadow, no text; every other pixel alpha 0. Designed for 2.5D parallax compositing; clean edge separation, the whole rail and both feet present, and no cropped rails or handle.",
+      "generator_per_asset": {
+        "wall_clock_s": 45,
+        "attempts": 1,
+        "transparent_returned": true
+      },
+      "measurement_mask": "alpha",
+      "registration": {
+        "offset_px": {
+          "dx": -14,
+          "dy": 6
+        },
+        "match_gain_vs_zero_offset": 1.0404
+      },
+      "stacked": true
+    }
+  },
+  "missing": [],
+  "composite": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-banker-apartment-v2\\world-banker-apartment-v2-composite.png",
+  "composite_vs_reference_mean_abs_diff": 40.72,
+  "registration_read": {
+    "verdict": "The FAR plane registers; the three nearer planes do not. Passing the plate as a conditioning image and repeating the camera brief verbatim holds the full-frame background, but every isolated-object layer is re-composed centred and enlarged.",
+    "by_object": [
+      "far (room shell) REGISTERS: measured, the cutaway box's right edge lands at x=935 against the reference's x=957 (-22 px) and the wall/floor line at x=1400 sits at y=647 against y=648 (1 px). It is faithful geometry with simplified interior detail (two empty shelf bays where the reference has a full-width shelf plus the closet bay) and the emptying was obeyed - no furniture survived.",
+      "mid (shelving/TV/closet) DOES NOT REGISTER: delivered opaque with a painted checkerboard, drawn as one centred cluster rather than at the reference's shelf coordinates; the closet contents are duplicated beside the group. No pixel bbox is quotable - the painted background defeats a mask.",
+      "subject (sofa/lamp/table) DOES NOT REGISTER: delivered opaque with a painted checkerboard; the sofa is drawn roughly 2.4x the reference's size, centred, more side-on than the reference's three-quarter view, with the side table on the other hand and an unrequested potted plant added.",
+      "near (rowing machine) DOES NOT REGISTER: the only true-alpha asset of this plate. Alpha bbox x 42-1505, y 163-891 (1463x728 px) against the reference machine read at roughly x 330-760, y 760-990 (about 430x230 px): about 3.4x too large, centre offset about (+228, -348) px, and redrawn from a different angle (handle left in the reference, rotated here)."
+    ],
+    "translation_search": "the +-42 px gradient-correlation search returns (0,0) for far and saturates for mid, subject and near - their mismatch is scale and re-composition, not a translation any shift could fix."
+  },
+  "style_drift_read": "Style holds; geometry does not. Across the four the register is consistent - carved woodblock contours, the same flat editorial palette (cream, charcoal, steel blue, teal, copper), matte, upper-left light, comparable ink weight. The only style faults: the near layer carries a soft glow/gradient on the flywheel that the register bans, and the subject layer adds an unrequested potted plant. Route (a)'s named risk was style drift across four generations; the measured risk is REGISTRATION drift.",
+  "route_finding": "Through the claims pipeline the generating agent's only image capability is codex's built-in image_gen.imagegen. It exposes NO model, quality, size or background parameter: the model that actually generated is gpt-image 2.0 (read from the delivered PNG's C2PA metadata), not GPT Image 2.5, and 'transparent background' can only be asked for in prose. Asked in prose, the model PAINTS a checkerboard instead of returning alpha: 6 of 9 delivered assets came back opaque RGB with a drawn grey/white checkerboard, and only 2 of 6 transparent slots ever returned a real alpha channel (1 on attempt 1, 1 on the single re-roll).",
+  "alpha_clean_rule": "Cleaned only the true-alpha assets: alpha<=12 (a stray veil) and half-transparent pixels that are near-white (min channel >=248) or near-black (max <=6) go to alpha 0; the antialias rim is kept (doc 24). Opaque deliveries were NOT hand-matted (brief rule).",
+  "cost_table": {
+    "claims": [
+      {
+        "claim_id": "p58-banker-apartment-layers-v1",
+        "slots": 4,
+        "end_to_end_s": 260,
+        "generator_wall_clock_s": {
+          "far": 33,
+          "mid": 30,
+          "subject": 20,
+          "near": 45
+        }
+      },
+      {
+        "claim_id": "p58-banker-apartment-reroll-v1",
+        "slots": 2,
+        "end_to_end_s": 243,
+        "generator_wall_clock_s": {
+          "mid": 38,
+          "subject": 25
+        },
+        "why": "mid and subject came back opaque; one re-order each (brief rule)"
+      }
+    ],
+    "image_generations": 6,
+    "delivered_assets": 4,
+    "re_rolls": 2,
+    "failures": [
+      "mid still opaque after the re-roll",
+      "subject still opaque after the re-roll",
+      "mid/subject/near all re-composed instead of placed at the reference's coordinates"
+    ]
+  },
+  "run": {
+    "lane": "P58 T1 lane A",
+    "codex_sessions": 5,
+    "codex_cli": "codex-cli 0.154.0-alpha.6.2 (OpenAI.Codex_26.908.4834.0)",
+    "total_wall_clock_s": 1118,
+    "image_generations_total": 15,
+    "assets_delivered": 9,
+    "logs": "docs/research/runs/p58-2-5d/lane-a/"
+  }
+}

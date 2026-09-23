@@ -1,0 +1,243 @@
+{
+  "plate_id": "world-tokyo-customs-dock-v1",
+  "route": "P58 T1 lane A - route (a): one prompted asset per depth layer",
+  "claim_id": "p58-tokyo-dock-layers-v1",
+  "delivery_dir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\p58-tokyo-dock-layers-v1",
+  "reference_image": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-tokyo-customs-dock-v1\\world-tokyo-customs-dock-v1-reference.png",
+  "generator": {
+    "image_tool": "built-in image_gen.imagegen",
+    "model_requested": "gpt-image-2.5",
+    "model_actually_used": "not reported by built-in image_gen",
+    "quality": "not exposed by built-in image_gen",
+    "size": "1536x1024",
+    "background_parameter": "transparent requested for mid, subject, and near; native alpha not returned",
+    "per_asset": {
+      "world-tokyo-customs-dock-v1-far": {
+        "wall_clock_s": 23,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "world-tokyo-customs-dock-v1-mid": {
+        "wall_clock_s": 51,
+        "attempts": 2,
+        "transparent_returned": false
+      },
+      "world-tokyo-customs-dock-v1-subject": {
+        "wall_clock_s": 20,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "world-tokyo-customs-dock-v1-near": {
+        "wall_clock_s": 20,
+        "attempts": 1,
+        "transparent_returned": false
+      }
+    },
+    "notes": "The built-in tool could not be directed to a named model or quality setting. It returned RGB PNGs for all transparent requests; those files are delivered unmodified as required by the route override."
+  },
+  "built_at": "2026-09-14T11:23:05-0700",
+  "layers": {
+    "far": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-tokyo-customs-dock-v1\\world-tokyo-customs-dock-v1-far.png",
+      "source_claim": "p58-tokyo-dock-layers-v1",
+      "attempt": 1,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode_delivered": "RGB",
+      "alpha_clean": {
+        "total_px": 1572864,
+        "opaque": true,
+        "touched_pct": 0.0
+      },
+      "expected": "opaque",
+      "prompt": "WORLD BOARD OVERRIDE for this slot only (it beats Stage A and Stage B of the work order): generate landscape 1536x1024, fully OPAQUE, filling the frame edge to edge - flatten to RGB (no alpha), skip matting, skip the 1024x1024 resize. Save the one delivered file as BOTH source/<asset_id>-source.png and objects/<asset_id>.png. THE PLATE (world-tokyo-customs-dock-v1, money-physics, a Tokyo container dock at dusk): a flat dusk sky over Tokyo harbour water across the upper frame; a tall gantry crane standing far off at the right of centre on the far quay; a bank of stacked shipping containers in teal, copper-orange and ochre running across the middle distance with two dock lamps on posts among them; in front of them, at the lower left of centre, a customs clerk's wooden ledger desk with a large open ledger book on it and a wooden stool pulled up; and hanging into the top of the frame from above, a single dock lamp on a cable, the nearest thing to camera. No people. CAMERA BRIEF (identical, verbatim, for the reference and all four layers of this plate): eye-level 35mm lens, horizon at y=42%, one shared vanishing point at x=54%/y=42%, even matte light from the upper left (dusk, flat not glowing), the same carved ink weight throughout; frame 1536x1024 landscape. STYLE (register woodblock-vox-newsprint, unchanged across all four layers of this plate): carved woodblock ink contours, flat editorial colour, matte surface, even light from the upper left, no gradients, no glow, no photographic texture, no micro-detail. Palette: cream #F4E6C7, charcoal #25313C, steel/indigo blue, teal, copper-orange, muted ochre - no other hues. The image contains no text, letters, numerals, logos or watermarks anywhere. INTENT (state it, it changes the choices): this asset is ONE depth layer of a 2.5D parallax composition. The four layers of this plate are stacked back-to-front and pushed under a moving camera, so each layer must register pixel-for-pixel with the others and carry clean edge separation, a full uncropped silhouette of everything it owns, no ground plane, no cast shadow onto anything it does not own. GENERATOR (mandatory): generate with GPT Image 2.5 - model id `gpt-image-2.5` (the Sunburst image model), quality high, size 1536x1024, background transparent where the slot asks for transparency. If your image tool cannot be pointed at that model id, use the strongest image model you do have and RECORD the model that actually generated - see generator.json in the DELIVERY EXTRAS block. Create ONLY the BACKGROUND PLANE as an opaque full-frame image: the dusk sky, the harbour water, the far gantry crane on the far quay, and the empty dock ground plane running to the horizon. NO containers, NO dock lamps on posts, NO desk, NO ledger, NO stool, NO hanging lamp, NO cable. The dock as if it were bare. Opaque, the full frame, edge to edge; no text. Match the supplied composition reference exactly - the horizon, the waterline and the crane sit at their reference pixels. Designed for 2.5D parallax compositing.",
+      "generator_per_asset": {
+        "wall_clock_s": 23,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "measurement_mask": "painted-background estimate",
+      "registration": {
+        "offset_px": {
+          "dx": 0,
+          "dy": 0
+        },
+        "match_gain_vs_zero_offset": 1.0
+      },
+      "stacked": true
+    },
+    "mid": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-tokyo-customs-dock-v1\\world-tokyo-customs-dock-v1-mid.png",
+      "source_claim": "p58-tokyo-dock-layers-v1",
+      "attempt": 1,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode_delivered": "RGB",
+      "alpha_clean": {
+        "total_px": 1572864,
+        "opaque": true,
+        "touched_pct": 0.0
+      },
+      "expected": "transparent",
+      "prompt": "WORLD BOARD OVERRIDE for this slot only (it beats Stage A and Stage B of the work order): generate landscape 1536x1024 with a TRANSPARENT background - the native transparent RGBA PNG IS the deliverable. Do NOT matte, do NOT run rembg, do NOT trim to a bounding box, do NOT pad, do NOT resize to 1024x1024, do NOT flatten to RGB, do NOT place the subject on a pale ground. Every pixel that is not the named objects must be alpha 0. Save the one delivered file as BOTH source/<asset_id>-source.png and objects/<asset_id>.png. THE PLATE (world-tokyo-customs-dock-v1, money-physics, a Tokyo container dock at dusk): a flat dusk sky over Tokyo harbour water across the upper frame; a tall gantry crane standing far off at the right of centre on the far quay; a bank of stacked shipping containers in teal, copper-orange and ochre running across the middle distance with two dock lamps on posts among them; in front of them, at the lower left of centre, a customs clerk's wooden ledger desk with a large open ledger book on it and a wooden stool pulled up; and hanging into the top of the frame from above, a single dock lamp on a cable, the nearest thing to camera. No people. CAMERA BRIEF (identical, verbatim, for the reference and all four layers of this plate): eye-level 35mm lens, horizon at y=42%, one shared vanishing point at x=54%/y=42%, even matte light from the upper left (dusk, flat not glowing), the same carved ink weight throughout; frame 1536x1024 landscape. STYLE (register woodblock-vox-newsprint, unchanged across all four layers of this plate): carved woodblock ink contours, flat editorial colour, matte surface, even light from the upper left, no gradients, no glow, no photographic texture, no micro-detail. Palette: cream #F4E6C7, charcoal #25313C, steel/indigo blue, teal, copper-orange, muted ochre - no other hues. The image contains no text, letters, numerals, logos or watermarks anywhere. INTENT (state it, it changes the choices): this asset is ONE depth layer of a 2.5D parallax composition. The four layers of this plate are stacked back-to-front and pushed under a moving camera, so each layer must register pixel-for-pixel with the others and carry clean edge separation, a full uncropped silhouette of everything it owns, no ground plane, no cast shadow onto anything it does not own. GENERATOR (mandatory): generate with GPT Image 2.5 - model id `gpt-image-2.5` (the Sunburst image model), quality high, size 1536x1024, background transparent where the slot asks for transparency. If your image tool cannot be pointed at that model id, use the strongest image model you do have and RECORD the model that actually generated - see generator.json in the DELIVERY EXTRAS block. Create ONLY the MID PLANE as an isolated transparent PNG asset: the bank of stacked shipping containers and the two dock lamps on their posts - alone, at their exact reference positions, scale and perspective. NOT the sky, NOT the water, NOT the crane, NOT the ground, NOT the desk or ledger or stool, NOT the hanging lamp. No background, no ground plane, no cast shadow, no text; every other pixel alpha 0. Designed for 2.5D parallax compositing; clean edge separation and no cropped containers or posts.",
+      "generator_per_asset": {
+        "wall_clock_s": 51,
+        "attempts": 2,
+        "transparent_returned": false
+      },
+      "FAILURE": "returned OPAQUE where transparency was asked - re-ordered once, still opaque; delivered as returned (never hand-matted)",
+      "measurement_mask": "painted-background estimate",
+      "registration": {
+        "offset_px": {
+          "dx": 0,
+          "dy": -26
+        },
+        "match_gain_vs_zero_offset": 1.0285
+      },
+      "stacked": false,
+      "stack_note": "skipped in the back-to-front composite: opaque, it would hide every layer under it"
+    },
+    "subject": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-tokyo-customs-dock-v1\\world-tokyo-customs-dock-v1-subject.png",
+      "source_claim": "p58-tokyo-dock-reroll-v1",
+      "attempt": 2,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode_delivered": "RGBA",
+      "alpha_clean": {
+        "total_px": 1572864,
+        "opaque": false,
+        "veil_px": 13176,
+        "matte_px": 0,
+        "touched_pct": 0.8377,
+        "opaque_px_pct": 0.0,
+        "rim_px_pct": 49.737,
+        "coverage_pct": 49.737
+      },
+      "expected": "transparent",
+      "prompt": "WORLD BOARD OVERRIDE for this slot only (it beats Stage A and Stage B of the work order): generate landscape 1536x1024 with a TRANSPARENT background - the native transparent RGBA PNG IS the deliverable. Do NOT matte, do NOT run rembg, do NOT trim to a bounding box, do NOT pad, do NOT resize to 1024x1024, do NOT flatten to RGB, do NOT place the subject on a pale ground. Every pixel that is not the named objects must be alpha 0. Save the one delivered file as BOTH source/<asset_id>-source.png and objects/<asset_id>.png. THE PLATE (world-tokyo-customs-dock-v1, money-physics, a Tokyo container dock at dusk): a flat dusk sky over Tokyo harbour water across the upper frame; a tall gantry crane standing far off at the right of centre on the far quay; a bank of stacked shipping containers in teal, copper-orange and ochre running across the middle distance with two dock lamps on posts among them; in front of them, at the lower left of centre, a customs clerk's wooden ledger desk with a large open ledger book on it and a wooden stool pulled up; and hanging into the top of the frame from above, a single dock lamp on a cable, the nearest thing to camera. No people. CAMERA BRIEF (identical, verbatim, for the reference and all four layers of this plate): eye-level 35mm lens, horizon at y=42%, one shared vanishing point at x=54%/y=42%, even matte light from the upper left (dusk, flat not glowing), the same carved ink weight throughout; frame 1536x1024 landscape. STYLE (register woodblock-vox-newsprint, unchanged across all four layers of this plate): carved woodblock ink contours, flat editorial colour, matte surface, even light from the upper left, no gradients, no glow, no photographic texture, no micro-detail. Palette: cream #F4E6C7, charcoal #25313C, steel/indigo blue, teal, copper-orange, muted ochre - no other hues. The image contains no text, letters, numerals, logos or watermarks anywhere. INTENT (state it, it changes the choices): this asset is ONE depth layer of a 2.5D parallax composition. The four layers of this plate are stacked back-to-front and pushed under a moving camera, so each layer must register pixel-for-pixel with the others and carry clean edge separation, a full uncropped silhouette of everything it owns, no ground plane, no cast shadow onto anything it does not own. GENERATOR (mandatory): generate with GPT Image 2.5 - model id `gpt-image-2.5` (the Sunburst image model), quality high, size 1536x1024, background transparent where the slot asks for transparency. If your image tool cannot be pointed at that model id, use the strongest image model you do have and RECORD the model that actually generated - see generator.json in the DELIVERY EXTRAS block. Create ONLY the SUBJECT PLANE as an isolated transparent PNG asset: the customs clerk's wooden ledger desk with the large open ledger book lying on it and the wooden stool pulled up beside it - alone, at their exact reference position, scale and angle. The ledger's pages are blank: no text, no numerals, no ruled writing. NOTHING else: no containers, no lamps, no ground, no sky. No background, no ground plane, no cast shadow, no text; every other pixel alpha 0. Designed for 2.5D parallax compositing; clean edge separation, all four desk legs and the stool's feet fully visible, nothing cropped.",
+      "generator_per_asset": {
+        "wall_clock_s": 36,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "measurement_mask": "alpha",
+      "registration": {
+        "offset_px": {
+          "dx": -36,
+          "dy": 42
+        },
+        "match_gain_vs_zero_offset": 1.155
+      },
+      "stacked": true
+    },
+    "near": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-tokyo-customs-dock-v1\\world-tokyo-customs-dock-v1-near.png",
+      "source_claim": "p58-tokyo-dock-layers-v1",
+      "attempt": 1,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode_delivered": "RGB",
+      "alpha_clean": {
+        "total_px": 1572864,
+        "opaque": true,
+        "touched_pct": 0.0
+      },
+      "expected": "transparent",
+      "prompt": "WORLD BOARD OVERRIDE for this slot only (it beats Stage A and Stage B of the work order): generate landscape 1536x1024 with a TRANSPARENT background - the native transparent RGBA PNG IS the deliverable. Do NOT matte, do NOT run rembg, do NOT trim to a bounding box, do NOT pad, do NOT resize to 1024x1024, do NOT flatten to RGB, do NOT place the subject on a pale ground. Every pixel that is not the named objects must be alpha 0. Save the one delivered file as BOTH source/<asset_id>-source.png and objects/<asset_id>.png. THE PLATE (world-tokyo-customs-dock-v1, money-physics, a Tokyo container dock at dusk): a flat dusk sky over Tokyo harbour water across the upper frame; a tall gantry crane standing far off at the right of centre on the far quay; a bank of stacked shipping containers in teal, copper-orange and ochre running across the middle distance with two dock lamps on posts among them; in front of them, at the lower left of centre, a customs clerk's wooden ledger desk with a large open ledger book on it and a wooden stool pulled up; and hanging into the top of the frame from above, a single dock lamp on a cable, the nearest thing to camera. No people. CAMERA BRIEF (identical, verbatim, for the reference and all four layers of this plate): eye-level 35mm lens, horizon at y=42%, one shared vanishing point at x=54%/y=42%, even matte light from the upper left (dusk, flat not glowing), the same carved ink weight throughout; frame 1536x1024 landscape. STYLE (register woodblock-vox-newsprint, unchanged across all four layers of this plate): carved woodblock ink contours, flat editorial colour, matte surface, even light from the upper left, no gradients, no glow, no photographic texture, no micro-detail. Palette: cream #F4E6C7, charcoal #25313C, steel/indigo blue, teal, copper-orange, muted ochre - no other hues. The image contains no text, letters, numerals, logos or watermarks anywhere. INTENT (state it, it changes the choices): this asset is ONE depth layer of a 2.5D parallax composition. The four layers of this plate are stacked back-to-front and pushed under a moving camera, so each layer must register pixel-for-pixel with the others and carry clean edge separation, a full uncropped silhouette of everything it owns, no ground plane, no cast shadow onto anything it does not own. GENERATOR (mandatory): generate with GPT Image 2.5 - model id `gpt-image-2.5` (the Sunburst image model), quality high, size 1536x1024, background transparent where the slot asks for transparency. If your image tool cannot be pointed at that model id, use the strongest image model you do have and RECORD the model that actually generated - see generator.json in the DELIVERY EXTRAS block. Create ONLY the NEAR OCCLUDER PLANE as an isolated transparent PNG asset: the single hanging dock lamp with its shade and its cable, entering from the TOP edge of the frame and hanging down into the upper third - alone, at its exact reference position and scale, large and close as the nearest thing to camera. NOTHING else: no containers, no desk, no sky, no ground. The cable meeting the top frame edge is the ONLY place the asset touches an edge. No background, no ground plane, no cast shadow, no text; every other pixel alpha 0. Designed for 2.5D parallax compositing; clean edge separation and no cropped shade.",
+      "generator_per_asset": {
+        "wall_clock_s": 20,
+        "attempts": 1,
+        "transparent_returned": false
+      },
+      "FAILURE": "returned OPAQUE where transparency was asked - re-ordered once, still opaque; delivered as returned (never hand-matted)",
+      "measurement_mask": "painted-background estimate",
+      "registration": {
+        "offset_px": {
+          "dx": -38,
+          "dy": 38
+        },
+        "match_gain_vs_zero_offset": 1.094
+      },
+      "stacked": false,
+      "stack_note": "skipped in the back-to-front composite: opaque, it would hide every layer under it"
+    }
+  },
+  "missing": [],
+  "composite": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\prompted\\world-tokyo-customs-dock-v1\\world-tokyo-customs-dock-v1-composite.png",
+  "composite_vs_reference_mean_abs_diff": 50.03,
+  "registration_read": {
+    "verdict": "Same split as plate 1, on a plate whose own reference this model generated four minutes earlier: the FAR plane registers, the three isolated-object planes do not.",
+    "by_object": [
+      "far (sky/water/crane/ground) REGISTERS: the gantry crane's dark mass falls at x~960-1150, on the reference's crane, the horizon matches and the +-42 px correlation search finds no better shift than (0,0). It drops the reference's mooring bollards and the left-hand warehouse post, which arguably belong to this plane.",
+      "mid (containers/dock lamps) DOES NOT REGISTER: delivered opaque with a painted checkerboard. Attempt 1 drew one centred bank; the re-roll split it into a left and a right bank, closer to the reference's arrangement but still inboard of the reference's edge-to-edge container walls.",
+      "subject (desk/ledger/stool) DOES NOT REGISTER: the re-roll returned true alpha (the only transparent asset of this plate). Alpha bbox x 69-1417, y 153-960 (1348x807 px) against the reference group read at roughly x 230-860, y 610-1000 (about 630x390 px): about 2.1x too large and lifted some 450 px; the stool moves from beside the desk to in front of it.",
+      "near (hanging lamp) DOES NOT REGISTER: delivered opaque with a painted checkerboard. Measured on the shade's own ink, it spans x 379-816 against the reference lamp's x 414-629 - about 1.9x too wide, centre about +67 px right - and the cable enters the top edge at the wrong column."
+    ],
+    "translation_search": "far best offset (0,0); subject and near saturate the +-42 px search; mid's best fit (0,-26) is the painted checkerboard correlating with the sky, not a match."
+  },
+  "style_drift_read": "Style holds across all four and against the reference plate: the same dusk palette (steel-blue sky, copper horizon band, teal/orange containers, charcoal ink), the same flat woodblock register, the same ink weight, no banned gradients. No palette drift worth naming. The drift that matters is positional.",
+  "route_finding": "Through the claims pipeline the generating agent's only image capability is codex's built-in image_gen.imagegen. It exposes NO model, quality, size or background parameter: the model that actually generated is gpt-image 2.0 (read from the delivered PNG's C2PA metadata), not GPT Image 2.5, and 'transparent background' can only be asked for in prose. Asked in prose, the model PAINTS a checkerboard instead of returning alpha: 6 of 9 delivered assets came back opaque RGB with a drawn grey/white checkerboard, and only 2 of 6 transparent slots ever returned a real alpha channel (1 on attempt 1, 1 on the single re-roll).",
+  "alpha_clean_rule": "Cleaned only the true-alpha assets: alpha<=12 (a stray veil) and half-transparent pixels that are near-white (min channel >=248) or near-black (max <=6) go to alpha 0; the antialias rim is kept (doc 24). Opaque deliveries were NOT hand-matted (brief rule).",
+  "cost_table": {
+    "claims": [
+      {
+        "claim_id": "p58-tokyo-dock-ref-v1",
+        "slots": 1,
+        "end_to_end_s": 110,
+        "generator_wall_clock_s": {
+          "reference": 26
+        },
+        "why": "the flat full scene - lane B's route (b) input, delivered first"
+      },
+      {
+        "claim_id": "p58-tokyo-dock-layers-v1",
+        "slots": 4,
+        "end_to_end_s": 249,
+        "generator_wall_clock_s": {
+          "far": 23,
+          "mid": 51,
+          "subject": 20,
+          "near": 20
+        },
+        "note": "mid took 2 generations inside the claim (attempt 1 cropped containers at the frame edges)"
+      },
+      {
+        "claim_id": "p58-tokyo-dock-reroll-v1",
+        "slots": 3,
+        "end_to_end_s": 256,
+        "generator_wall_clock_s": {
+          "mid": 21,
+          "subject": 36,
+          "near": 20
+        },
+        "why": "mid, subject and near came back opaque; one re-order each"
+      }
+    ],
+    "image_generations": 9,
+    "delivered_assets": 5,
+    "re_rolls": 3,
+    "failures": [
+      "mid still opaque after the re-roll",
+      "near still opaque after the re-roll",
+      "mid/subject/near all re-composed instead of placed at the reference's coordinates"
+    ]
+  },
+  "run": {
+    "lane": "P58 T1 lane A",
+    "codex_sessions": 5,
+    "codex_cli": "codex-cli 0.154.0-alpha.6.2 (OpenAI.Codex_26.908.4834.0)",
+    "total_wall_clock_s": 1118,
+    "image_generations_total": 15,
+    "assets_delivered": 9,
+    "logs": "docs/research/runs/p58-2-5d/lane-a/"
+  }
+}

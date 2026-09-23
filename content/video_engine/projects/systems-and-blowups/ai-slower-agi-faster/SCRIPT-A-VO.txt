@@ -1,0 +1,43 @@
+It writes the fix. Then it gets stuck finding the file. [ring]
+
+The answer is brilliant. The system is stuck.
+
+A bigger brain is only one part; memory, tools, and recovery can carry the job. [post-key]
+
+My AGI test: finish an unfamiliar job with little supervision.
+
+The bottleneck is the model-work handoff.
+
+It must remember the plan, call the tool, inspect the result, and recover when tests fail.
+
+SWE-agent researchers improved software-task performance by giving a model a purpose-built interface. [new]
+
+A separate study found that test-time reasoning should vary with prompt difficulty. [new]
+
+A fixed budget can waste effort on easy prompts.
+
+Can the system carry an answer through the next step? [rehook]
+
+A capable model still fails when it loses state between steps.
+
+What changes when the system can recover? [rehook]
+
+That changes progress from a clever answer to a finished task. [catalyst]
+
+Give it durable memory and recovery, and one failure could become a branch instead of a dead end.
+
+When the model writes the plan, the tool executes it, and feedback redirects the move, the system adapts.
+
+I would put the next marginal effort into memory, tools, feedback, and recovery.
+
+A slower frontier could still reach that capability faster.
+
+But base models still constrain the system. If the model cannot reason, better scaffolding cannot invent the answer. [reflect]
+
+Once a model is capable enough, the next hour may buy more progress in its handoffs.
+
+That may beat another isolated benchmark.
+
+The file it can remember, test, and repair matters more.
+
+A genius that still gets stuck is still stuck. [ring]
