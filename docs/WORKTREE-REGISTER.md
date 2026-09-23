@@ -31,6 +31,36 @@ Rules while a lane is live:
 5. From main: `git merge --ff-only <branch>`; then update the lane's row in `docs/WORKTREE-REGISTER.md` (last merge).
 6. Never `--force`, never amend after a push, never delete a branch or a worktree without the operator's word, never `git add -A`; deletions in an index-only commit. Push only on the operator's fresh word in chat.
 
+### Shared video registries: proof, then non-destructive push check
+
+- When a capability becomes built, changes state, or retires, update its row in
+  `docs/content-video-engine/CAPABILITIES.md` in the same integration commit and
+  cite code plus a test or review receipt. A passing diagnostic is not finished
+  art or operator approval. When a reusable effect is proven, update its source
+  card under `content/video_engine/effects/cards/`; when a combination is proven,
+  update its recipe under `content/video_engine/effects/recipes/` with the played
+  instant. Do not promote a card/recipe solely from a test or agent summary.
+  Regenerate the local indexes with `build_capabilities_index.py --write` and
+  `build_effects_catalog.py --write`, then check both; generated docs layers
+  remain gitignored build output, not cross-lane edits.
+- Before an authorized push containing any of those three shared paths, run
+  `git fetch`, then
+  `python content/video_engine/scripts/check_shared_video_registries.py --base origin/main --head HEAD`.
+  It reads content diffs and divergent shared
+  commits across **every** worktree, without restoring, copying, rebasing, or
+  cleaning another lane's files. A line-ending-only `status` flag is not a
+  content edit. An in-progress shared edit or overlapping unmerged commit holds
+  the push; coordinate with its owner.
+- Send Claude the emitted candidate fingerprint, candidate commit and Claude
+  branch heads through the bridge as exact `REGISTRY-FINGERPRINT:`,
+  `REGISTRY-CANDIDATE:` and one `REGISTRY-CLAUDE-HEAD:` line per Claude branch.
+  Its review reply must include `POSITION: done`, `REGISTRY-ACK: <fingerprint>`
+  and repeat the candidate/head lines. Re-run the check with
+  `--ack-file <bridge-reply.md>` immediately before push. Both generated-registry checks
+  must pass. If the candidate, base, or a Claude branch head moved, the old
+  fingerprint is invalid: obtain a fresh review. Never use this check as push
+  authorization; the operator's current word remains required.
+
 ## The rows
 
 | path | branch | lane / owner | purpose | live slice | write set (beyond the slice's own) | engine lock | rulings claimed | last merge to main |

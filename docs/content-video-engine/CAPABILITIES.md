@@ -134,7 +134,7 @@ file will be rebuilt by someone who doesn't know it exists.
 | **Remotion composition registry** — single source of truth for editor compositions (Editorial, Documentary, motion variants, finance proofs, production evidence/timeline, 3D prototypes) | `content/video_engine/editor/src/compositions.ts` | LIVE — register here, never in Root.tsx | typecheck + vitest |
 | **Editor fixtures** — editorial-motion two-shot with render harness (`render.mjs`), canonical audio fixture | `content/video_engine/editor/fixtures/` (merged from p16) | BUILT | `npm run render:editorial-motion-fixture` |
 | **remotion-ui registry** (external, MIT) — ~200 copy-in `.tsx` components: captions, data/live metrics, SVG draw-on paths, TransitionSeries transitions, motion primitives; MCP server (`npx remotion-ui-mcp`) exposes list/search/detail/install to agents | github.com/riaz37/remotion-ui · remotionui.com/docs/components/browse | MCP INSTALLED (.mcp.json, loads on session start); registry index + 8 key components read; THREE techniques already ported into the review player (feathered wipe edge, under-wipe parallax, active-word caption pop). Their EASING.pop == our badge spring — same motion school. Full sweep when the Remotion port opens | port commit 2026-08-30 |
-| **Hyperframes** — HTML-to-video rendering framework & motion system (DOM `data-*` timeline, clips, tracks, sub-compositions, 7 runtime adapters [GSAP, Lottie, Three.js, Anime.js, CSS, WAAPI, TypeGPU], seek-safe keyframes, registry blocks, Remotion-to-HyperFrames compilation) | `.agents/skills/hyperframes*`, `content/video_engine/review/hyperframes_assets`, `npx hyperframes` (0.8.27) | LIVE & STANDARDIZED — 8 skills synced across master, global Codex and all worktrees; PLANE ONE preserved (operator 2026-08-30) alongside the Remotion plane | CLI `npx hyperframes --version` -> 0.8.27, doc 29 Part 7 |
+| **Hyperframes** — previously evaluated HTML-to-video framework and motion reference (DOM `data-*` timeline, clips, tracks, sub-compositions, runtime adapters and seek-safe keyframes) | `content/video_engine/review/hyperframes_assets`; doc 29 Part 7 | REFERENCE ONLY — not the production runtime; scene-evidence is the shipping player and historical HyperFrames/Remotion assets remain available for reference | `PIPELINE.md` stages 8–9; `AGENTS-VIDEO-ENGINE.md` runtime route; historical CLI proof for 0.8.27 |
 
 ## Generative video, 2.5D parallax & driver automation (2026-09)
 
@@ -168,6 +168,31 @@ local instance at `127.0.0.1:8188`, not standalone tools.
 satisfy M01/M03/M08/M12, or they launder the stillness those gates were built to catch
 (E21, E25). A parallax move counts as plate life only when it is bound to a narration
 anchor, the same rule as narration-keyed chart draw and `narration_key_delays`.
+
+## Shared model engines — diagnostic capabilities (2026-09-23)
+
+These are opt-in, review-only building blocks for the shared 3D and 2.5D
+fighter benchmark, not a second player or a finished character pipeline.
+Paths in this section are relative to `content/video_engine/`; review bundles
+under `review/model-engines/` are local, gitignored evidence. The current
+`SHARED-MODEL-ENGINES` PRP owns their acceptance and open gates.
+
+| Capability | Where | State | Proof |
+|---|---|---|---|
+| **Shared model asset/scene contracts and intake** — versioned character, prop and environment descriptors, source hashes, scene timebase and trusted approval boundaries | `src/modeling/contracts.py`, `assets.py`, `importers.py`; `tests/fixtures/modeling/contracts/` | BUILT — contract/intake validation only; metadata cannot self-approve art or rendering | `tests/test_model_contracts.py`, `test_model_assets.py`; PRP T2–T3 |
+| **Editable native character starter** — MPFB/Rigify family with an independently weighted shorts shell and saved Blender source | `src/modeling/blender/authoring.py`, `presets.py`; `assets/modeling/native/fighter-family-v1.1.blend` | BUILT — generic rig/garment diagnostic, **not** either finished fighter identity | `tests/test_model_presets.py`; PRP T4a–T4b and local `review/model-engines/benchmark-v1/art/garment-v1.1/REVIEW.md` |
+| **Source-timed two-rig exchange** — editable 30 fps first-right and left-hook contact/follow-through on two independent Rigify instances | `src/modeling/blender/character_instance.py`, `fight_motion.py`; `src/modeling/motion.py` | BUILT — generic motion diagnostic; no completed fall, fighter likeness or approved impact animation | `tests/test_model_fight_motion.py`; local `review/model-engines/benchmark-v1/3d/source-fight-rig/exchange/final-review/receipt.json` |
+| **Native deformation inspection** — saved-stack versus single-LBS/preserve-volume stress and 90° elbow/knee close-ups with source-ID geometry metrics | `src/modeling/blender/deformation_stress.py`, `deep_flexion.py`; `scripts/model_deep_flexion.py` | BUILT — **negative diagnostic**: saved-stack deep-pose minimum triangle-area ratio 0.307 elbow / 0.118 knee; selected patches have no saved preserve-volume mask coverage | `tests/test_model_deep_flexion.py`; local `review/model-engines/benchmark-v1/3d/deep-flexion/t5a5-deep-flexion-bone-plane-r5/receipt.json` |
+| **Review-only 3D scene compiler and render passes** — append an editable prop/environment, retain hinge/socket/floor hierarchy, render beauty/alpha/depth/ID from a saved scene | `src/modeling/blender/scene.py`, `render.py` | BUILT — diagnostic blockouts, not finished fighters or production render eligibility | `tests/test_model_blender.py`; local `review/model-engines/benchmark-v1/3d/generalization-compiler/main-fc90f41/receipt.json` |
+| **Editable 2.5D layers and fixed-view Blender bake** — authored depth/occlusion and seek-safe planar contact; transparent Blender beauty with geometry mask and metric-depth sidecars | `src/modeling/layered.py`, `planar_rig.py`, `bake_layers.py` | BUILT — fixed-view technical bridge; vector/Blender figures are not finished fighter art | `tests/test_model_layered.py`, `test_model_planar_rig.py`, `test_model_layer_bake_bridge.py`; PRP T7a–T7a.2 |
+| **30-to-24 fps exchange layer sequence** — source-frame mapping into background plus transparent combined-fighter motion plane with hash checks and arbitrary seeks | `src/modeling/exchange_layers.py`; `scripts/model_exchange_layers.py` | BUILT — 29-frame review-only sequence; generic figures, one combined motion plane and incomplete fall | `tests/test_model_exchange_layers.py`; local `review/model-engines/benchmark-v1/2_5d/source-exchange/exchange-sequence-eol-v2/receipt.json` |
+
+**Not built or approved:** recognizable two-fighter art, satisfactory deep-joint
+deformation, fighter-derived editable 2.5D pose/expression resources, a full
+fall/ground-contact exchange in both lanes, an integrated model-runner/assembly
+command, or HG2/HG3 operator approval. The local ComfyUI depth comparison is
+also not an enhanced-fighter result: its generic mask aligned, but inferred
+depth ordering/correlation failed against Blender geometry (PRP T7b).
 
 ## Evidence & assets
 

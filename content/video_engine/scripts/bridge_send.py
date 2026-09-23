@@ -252,19 +252,18 @@ def _process_env(env: dict[str, Any]) -> dict[str, str]:
 # --------------------------------------------------------------------------- the claude lane
 
 
-def claude_argv(order: dict[str, Any], profile: str | None) -> list[str]:
-    packet = json.dumps({"packetId": order["packetId"], "brief": order["brief"]}, ensure_ascii=False)
+def claude_argv(profile: str | None) -> list[str]:
     claude_bin = shutil.which("claude") or "claude"
     argv = [claude_bin, "-p", "--output-format", "json"]
     if profile:
         argv += ["--agent", profile]
-    argv.append(packet)
     return argv
 
 
 def send_claude(args: argparse.Namespace, order: dict[str, Any], folder: Path, lines: list[str]) -> dict[str, Any]:
-    argv = claude_argv(order, args.profile)
-    lines.append(f"command: {quote(argv[:-1])} <packet {len(argv[-1])} bytes>")
+    argv = claude_argv(args.profile)
+    packet = json.dumps({"packetId": order["packetId"], "brief": order["brief"]}, ensure_ascii=False)
+    lines.append(f"command: {quote(argv)} <packet on stdin, {len(packet)} bytes>")
     result: dict[str, Any] = {
         "packetId": order["packetId"],
         "lane": "claude",
@@ -278,7 +277,9 @@ def send_claude(args: argparse.Namespace, order: dict[str, Any], folder: Path, l
 
     sent_at = dt.datetime.now().astimezone().isoformat(timespec="seconds")
     started = time.time()
-    proc = subprocess.run(argv, capture_output=True, text=True, shell=(os.name == "nt"))
+    # Keep packet text off the Windows command line: a .CMD launcher otherwise
+    # interprets reply-template pipes and other metacharacters as shell syntax.
+    proc = subprocess.run(argv, input=packet, capture_output=True, text=True, shell=False)
     seconds = round(time.time() - started, 1)
     payload = _parse_json(proc.stdout)
     reply_text = payload.get("result") if isinstance(payload, dict) else None
