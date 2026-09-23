@@ -1,0 +1,13 @@
+{
+  "schema_version": "native_character_preset_controls.v1",
+  "family_id": "martial-matters-fighter-family-v1",
+  "controls": {
+    "body": {"height": 0.62, "muscle": 0.52, "weight": 0.58, "proportions": 0.48},
+    "face": {"head_width": 0.21, "nose_depth": 0.18, "jaw_drop": 0.12, "hand_scale": 0.19},
+    "hair_style": "crop",
+    "clothing_style": "warmup",
+    "skin_palette": "deep",
+    "clothing_palette": "brick"
+  },
+  "art_status": "diagnostic_only_not_likeness_or_final_character_art"
+}
