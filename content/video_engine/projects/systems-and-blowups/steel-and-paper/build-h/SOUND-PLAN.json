@@ -34,11 +34,29 @@
   },
   {
    "slot": "dip 3",
-   "at": 52.57,
+   "at": 49.1,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
+   }
+  },
+  {
+   "slot": "page enter 4 (camera)",
+   "at": 56.62,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   }
+  },
+  {
+   "slot": "page enter 5 (axes)",
+   "at": 63.8,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
    }
   },
   {
@@ -72,11 +90,11 @@
      4.0
     ],
     [
-     56.82,
+     57.07,
      4.0
     ],
     [
-     57.62,
+     57.87,
      0.0
     ]
    ],

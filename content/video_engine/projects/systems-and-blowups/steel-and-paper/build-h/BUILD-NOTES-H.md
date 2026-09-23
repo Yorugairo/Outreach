@@ -656,3 +656,70 @@ bottom safe-zone band. That is row 1's, first surfaced by the fresh probe, not b
 61.60 (the flow, the card leaving), 63.40 (the flow whole). `ref-<t>.png` is build-f's mp4 (sha256 `9a27de1c...` verified
 against REFERENCE-F.md) at the SAME SENTENCE on Script G's clock (`ref-map.txt`: 83.40-91.93 s). There, the bare nib plate
 runs through "isn't Bravos ... isn't Nvidia", then the hype machine and the hype-cycle card.
+
+---
+
+## 11. P69 T15b (row 7 corrected), T16 (row 8) and T17 (row 9) - 2026-09-23
+
+The build now runs 0.00-89.27 s (228 of 2335 words); `UNIT_CUT_PHRASE` = "So the obvious move" (row 10, T18's).
+
+### 11.1 Row 7 corrected (T15b): the card BECOMES the chart
+
+The operator on T15's tiles: "Those charts still seem tough to read to me." T15 read their chart at a third of the
+frame and parked it on the desk - E99 s71's fault ("a thrown full-screen card ... throw-then-zoom or throw-then-push to
+make it full screen"). Now:
+
+| table row | window | what |
+|---|---|---|
+| 3 `world-h1-studio-v1` | 49.45-56.62 | the host window opens on the promise ("By the end you'll run it on your own top five", `HOST_FROM_PHRASE`) so the studio holds its six seconds (M44: a plate under 6 s with a dock FAILs; from "The three questions read" to the push is 3.7 s). Their chart card thrown on "Bravos Research" (55.62) onto the dark left monitor, `arrive: throw, mass: paper` |
+| 4 `ev-divergence-v1 ... camera=dock-h-two-line-copy;card=no;domain=80,277` | 56.62-63.80 | THROW-THEN-PUSH: one second after the throw the camera pushes the card to the stage and the page shows at the match; memory held at nothing (the card's three lines), the hand writes the card's title; the NVIDIA chip lands on "Nvidia" in the page's empty upper right and is crossed at 59.80; the flow `capital -> value` draws beside it on "capital arriving faster". The chart is read FULL SIZE throughout - no park |
+
+- **The slate shortens** to 42.04-49.45 (7.4 s; the agenda's three rows land by 45.62). This moves the BED's row 6 end - the parent's call.
+- **Why not the snap** (`snap=`, throw-then-zoom, the proven recipe): measured (`scratchpad/p69t15b/seq-play`), a 16:9 full-stage page grown by the snap lands OFFSET (+137, +100 px, cream showing top-left) and stays there for the row in forward frame-by-frame play (every frame from 57.38 s), while a cold seek paints it at identity. An engine seek-purity defect in the snap (`paintLedger` `snapBoard`, `scene-evidence-engine.mjs:13286`) - owner: the engine lane. `camera=` settles at identity both ways (`seq-cam`).
+- Chip and flow boxes measured on drafts: at (0.80, 0.60) the chip sat on "+21% S&P 500"; at (0.84, 0.25) its label fell on "+105% SEMICONDUCTOR STOCKS"; a 0.64 park made room for the flow but printed the chart's labels at 8.3-9.1 phone px (probe M25 INFO), so there is no park.
+- Life: 50.50 vs 52.50 (studio, x 1300-1920 y 560-1080) mean |dL| 9.36, 24.2 % of px changed; 59.20 vs 61.20 (the page's chart only, x 0-1100 y 150-850) 5.15 / 5.7 %.
+- Open: the page's SUB still reads the object's own "Their pairing, plus the S&P 500 and the memory builders" while memory is held (the card's sub reads "Mega-cap tech against the chip industry"); no row option rewrites a sub.
+
+### 11.2 Row 8 (T16): the rehook - no dip, a melt
+
+Row 7 now ENDS ON A PAGE, so the treatment's "dip 1" (studio -> page) no longer exists: E47 refuses a dip between two
+pages. The boundary at 63.80 ("But capital that fast") is `melt:throw:1` (E88): their pairing's ink balls up and is
+thrown, and the railway index draws on the same board on its axes (`RAIL_MELT_WHY`: the dip, recast, rescale/extend,
+morph, melt:splash:chart and melt:morph refused by name). The index climbs from the page's entry (first cap 1843.7), and
+one pen carries it from "paper trail" to the half-way cap (1844.35) as row 9 begins - no stop-and-go crawl.
+Life: 66.40 vs 68.40 (x 0-1100 y 150-850) mean |dL| 2.99, 4.0 %. The first T16 cut (the dip from the studio, before T15b)
+is kept in `scratchpad/p69t16/door-at-t16.py` history comments only.
+
+### 11.3 Row 9 (T17): the peak, the crash, the recast, the ring
+
+Same table row (5), same page, `;then=ev-equip-ipp-gdp-v1:line`:
+the stroke carries on to the 6 Oct 1845 peak landing on "pounds" (75.20); the crash draws on "crashed" (77.46, 1.2 s);
+`-64%` (`RAIL_DROP`, the object's arithmetic) written red over the trough and UNDER the 1,000 rule on "nearly two-thirds"
+(E28; at dy +1.1 it had landed on the x axis' "1850"); on "the internet" (80.49) the plain recast (no key - E64's
+hand-over) to the share-of-GDP line; the hand writes the object's own title 0.1 s after it (a retitle ON the recast's
+word is dropped by R26-219 (c), and without one the railway title stood over the GDP line); the GDP line lands at the
+railway's cap index (Q4 2004 - the peak and the fall); the ring on its own Q2-2000 peak on "then the tower came down"
+(83.35, no label - the rule already writes "Q2 2000 peak - 11.54%"); its last twenty years draw on "AI spending just
+crossed" (86.49), back to the peak, ending at its own "11.51%" on "eight.".
+Life: 69.50 vs 71.50 mean |dL| 3.59, 4.5 %; 84.20 vs 86.60 3.54, 5.4 %.
+
+**Departures and flags (row 9):**
+- `RAIL_NOTE` ("£250m raised - over $1T in today's money") is NOT drawn: no source on disk (only the treatment and the door carry it; `EVIDENCE-DOSSIER.md` has no railway capital figure). Added to `BODY_DEPARTURES`.
+- The 7 % tick and 8 % datum are cut (the standing departure). FLAG: the GDP line's own end tag "11.51%" lands on "eight." - the page's measure beside the voice's figure; the parent / HG rules.
+- The GDP object carries no `xticks` and no `ylabel`: the recast page shows no years on its x axis and bare 8-11 on y (E28's "a selected axis states its rule"). The object is read-only here - owner: the evidence object.
+- The railway page's title ("fell 64% from their peak") states the drop from 63.8 s, before the voice says it at 77.5 s.
+- build-f at the same sentence carries `ev-railway-gdp-tile-v1` ("Where Britain's money went, 1844-47": railways ~7 % of British GDP) - an object on disk that fits "seven percent" for the RAILWAYS, not the internet; noted for the parent.
+
+### 11.4 The order of proof (logs in `logs/`)
+
+T15b + T16 (unit 0-68.60): `t16-door.log` (rc 0, cues 7 of 7 bound), `t16-frozen.log`, `t16-probe.log` (28 instants),
+`t16-seams.log` (4 boundaries, 0 faults), `t16-stagegaps.log`, `t16-spoken.log`, `t16-gate.log`: **3 FAIL / 1 WARN / 21 PASS**.
+T17 (unit 0-89.27): `t17-door.log` (rc 0, cues 7 of 7), `t17-frozen.log` (no run over 0.5 s, 1072 frames), `t17-probe.log`
+(40 instants), `t17-seams.log` (0 faults), `t17-stagegaps.log` (0.5 s, the licensed dip only), `t17-spoken.log`,
+`t17-gate.log`: **2 FAIL / 2 WARN / 22 PASS / 1 JUDGE / 6 INFO**.
+
+FAILs named: **M03** (46 s from 0:09 - the bed's gap before row 7's card, pre-existing, P69-HG4) and **M11** (row 1, pre-existing).
+**M31** FAILed on the T16 build (0.2 s "empty" at the melt, 63.80) and PASSes on the T17 build with the identical melt
+(0.0 s) - the melt's throw holds the next chart until the board is clear (`meltDrawDelay`), so this sits on the
+measure's own edge; owner if it returns: the gate (a ball in flight is not an empty stage) or the engine.
+WARNs: M04 (5 plates vs 7), M25 (row 1's certificate at 0:09-0:10, pre-existing).

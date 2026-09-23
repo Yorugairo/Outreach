@@ -24,9 +24,12 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
         (a PIXEL crop, x and y - `docks.still_card` crops a full-width BAND only; the departure is in the notes).
   AGENDA_ROWS_H            row 6: the numbered agenda (CAPABILITIES:43) in the room the page's park frees.
   HOST_PLATE               row 7: HOST WINDOW 1 - the Flow plate `host/H-1-studio.png` as the landing surface
-        (`;use=landing` + the ken push ALONE - E99 s84 withdrew the 20 px drift for long form, R26-236), the
-        Bravos card thrown onto the desk's clear left third on "Not Bravos Research", the caption in STAGE mode.
-  CAPITAL_FLOW             row 7: the flow diagram `capital -> value` on "Capital arriving faster" (CAPABILITIES:99).
+        (`;use=landing` + the ken push ALONE - E99 s84 withdrew the 20 px drift for long form, R26-236), opened on
+        the promise (HOST_FROM_PHRASE, M44's six seconds); their chart card thrown on "Bravos Research".
+  CARD_LEAD_S / page_snap  row 7 (P69 T15b): THE CARD BECOMES THE CHART - one second after the throw the camera pushes
+        the card to the stage and the page shows at the match (throw-then-push, `camera=`; E99 s71); read full size.
+  CAPITAL_FLOW             row 7: the flow diagram `capital -> value` on "capital arriving faster" (CAPABILITIES:99),
+        in the page's own empty room; the NVIDIA chip lands on the page on "Nvidia" and is crossed.
   RAIL_PAGE / GDP_RECAST   rows 8-9: the dip back to the page, the railway index building on its own figures,
         then the recast to `ev-equip-ipp-gdp-v1`. THE 7 % AND 8 % TICKS THE TREATMENT NAMES DO NOT EXIST ON DISK
         (the object is share-of-GDP, 11.54 % at the Q2-2000 peak): the page rings ITS OWN data and the departure
@@ -35,8 +38,13 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
   BED_LU                   -28 LU under the voice: the LONG FORM's calibration, the project's own locked plan
         (`sound/SOUND-PLAN.json` "Bed gains at VO-28 LU"), not the short's -20 (E55).
   UNIT_CUT_PHRASE          the build is the take's own clock to the cut before the NEXT row's first words: P69 T15
-        moved it past row 7 to "But capital that fast" (row 8's dip, T16's), and each body row moves it on.
+        moved it past row 7 to "But capital that fast" (row 8, T16's), P69 T16 past row 8 to "Every transformative"
+        (row 9, T17's), P69 T17 past row 9 to "So the obvious move" (row 10, T18's); each body row moves it on.
   HOST_DIP_WHY             row 7's dip INTO the studio, and the transform it refused by name (E47, E99 s74).
+  SNAP_WHY / RAIL_MELT_WHY row 7's throw-then-zoom into THEIR chart (P69 T15b) and row 8's melt into the railway
+        index - each boundary's transform TAKEN and every one it refused, by name (E47, E99 s71, s74).
+  RAIL_CLIMB               row 8: the index starts on its axes (E73) and CLIMBS through the paper trail - one
+        continuous pen from the dip, never the stop-and-go crawl R26-226 retired.
 
 THE BODY'S PREFLIGHT (P69 T14, rows 7-24) is three constant tables, read before any body row is authored:
   BODY_ASSETS          every page object (with its builder), card, plate, prop, host still, cue file and outro part
@@ -142,7 +150,9 @@ def _assert_read_only(before: dict) -> None:
 # THE BUILD GROWS ONE BODY ROW AT A TIME (P69 T15-T32). The 30-second bed (E99 s82 (b)) stopped at the cut before
 # "The three questions read"; P69 T15 authors row 7 (the studio) and moves the cut past it, to the first words of
 # row 8 - the dip back to the page, which is T16's. Each body slice moves this phrase to its own row's end.
-UNIT_CUT_PHRASE = "But capital that fast"   # row 8's first words; the build stops at the cut BEFORE them
+# P69 T16 authors row 8 (the rehook) and moved it to row 9's first words; P69 T17 authors row 9 (the railway index and
+# the GDP recast) and moves it on to row 10's first words (the head-fake, T18's).
+UNIT_CUT_PHRASE = "So the obvious move"     # row 10's first words; the build stops at the cut BEFORE them
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -233,6 +243,47 @@ RAIL_TROUGH = _nearest(RAIL, 0, RAIL["marks"][1]["x"])
 # the drop the page's OWN marks measure: 2,062 -> 741. The treatment says "-66%" and the object says -64.1 %;
 # the object wins (E77: no figure is invented, and the page's own title reads "fell 64% from their peak").
 RAIL_STEPS = [round(RAIL_PEAK * k / 4) for k in (1, 2, 3)]   # the 1843-45 climb, three steps before the peak
+# ROW 8's CLIMB (P69 T16). The index opens on its axes (E73) and the build beat - which a line page spends on its
+# FIRST cap (scene-evidence-engine.mjs BUILD-ON: "the build beat is spent on the first cap") - draws it to the
+# first quarter of the climb as the page lands; then ONE pen carries it on from "paper trail" to the half-way
+# point, arriving as the next sentence begins, where row 9 (T17) picks the same stroke up. Two caps, continuous,
+# never the stop-and-go per-phrase crawl the bed retired (R26-226, E99 s82).
+RAIL_OPEN_CAP, RAIL_TRAIL_CAP = RAIL_STEPS[0], RAIL_STEPS[1]
+RAIL_JOIN_LEAD_S = 0.1   # the trail's cap lands this far before the next sentence's first word (the row's own end)
+# ROW 9 (P69 T17): THE SAME STROKE CARRIES ON to the October 1845 peak, landing as "a quarter-billion" is said (the
+# treatment's anchor), and the crash draws on "crashed"; the drop is written at the trough as the object's own
+# arithmetic (RAIL_DROP, -64%), red and BELOW the point - E28: a drop goes down, and 741 sits under the page's own
+# 1843-level rule (1,000), so the number stays on the rule's under side.
+RAIL_CRASH_S = 1.2       # the crash's own draw, "crashed by nearly" - it lands before "two-thirds" ends
+RAIL_DROP_DY = -0.9      # the figure's baseline, in its own LINEs, over the trough and still UNDER the 1,000 rule:
+                         # draft1 wrote it at +1.1 (below the point) and the trough is the plot's floor, so "-64%"
+                         # landed on the x axis' own "1850" (p69t17/draft1 79.30)
+RAIL_DROP_S = 1.4
+# THE RECAST (E58 / E64, CAPABILITIES:28 - the plain hand-over: the railway line un-draws by its own law, the title,
+# sub and source rewrite in the hand, the share-of-GDP line draws on). It fires on "the internet" - the sentence's
+# subject - so the crash and its -64% stand from their landing to the new era's first noun. Its own numbers only
+# (BODY_DEPARTURES row 9): no 7 % tick, no 8 % datum (neither is on the object, E77).
+GDP_RECAST_S = 2.0
+# ... and the ring (E56: a ring circles a point on a chart) lands on the page's OWN datum: the Q2-2000 peak, 11.54 %,
+# on "then the tower came down" - the top before the fall, named by the sentence, and NOT under the seven / eight
+# words (the departure: the page's numbers are another measure than the voice's, so nothing of it is rung there).
+GDP_RING_S = 3.0
+# NO LABEL on the ring: the page's own rule already writes "Q2 2000 peak - 11.54%" beside that very point, and a
+# "Q2 2000" label wrote across it (p69t17/draft1 84.20) - the ring points, the page says it once (M28).
+# THE RECAST KEEPS THE RAILWAY TITLE (measured, draft1 82.60-88.50: the sub and source rewrote, the title
+# "British railway shares fell 64% from their peak" stood over the US GDP line) - the 2026-09-18 unit's lesson,
+# still true of the plain hand-over - so the hand writes the arriving object's OWN title as the recast runs.
+# THE GDP LINE LANDS AT THE RAILWAY'S LAST CAP: a build_to caps a SERIES INDEX on the page, and every state's
+# series 0 reads the same caps, so the recast draws the share-of-GDP line to index RAIL_TROUGH (Q4 2004) - the
+# dot-com peak and the fall after it, which is what "then the tower came down" names. Its last twenty years draw on
+# "AI spending just crossed": the line climbs back to its 2000 peak (the page's own title: "back at its dot-com
+# peak"), landing on "eight." (FLAGGED: its end tag reads the page's 11.51 %, another measure than the voice's 8.)
+GDP_CLIMB_S = 2.0
+RETITLE_AFTER_S = 0.1   # the retitle belongs to the ARRIVING page: one written ON the recast's own word is the page
+                        # being replaced, and the compiler drops it (R26-219 (c), "nothing to write" - t17-door2.log)
+# RAIL_NOTE (the treatment's "250m pounds, then $1T+ today") IS NOT WRITTEN: neither figure is on disk - a search for
+# "250m" finds only the treatment and this door, and EVIDENCE-DOSSIER.md carries no railway capital figure (a
+# research-gate UNSOURCED figure never draws, E77). The caption carries the script's words; the departure is noted.
 RAIL_DROP = "−%d%%" % abs(round(100 * (RAIL["marks"][1]["y"] / RAIL["marks"][0]["y"] - 1)))
 # the capital raised is NOT on this chart's axis (the axis is an index of share prices): it is the page's own
 # handwriting in the quiet zone, never a figure written at a datum that means something else (E52 / E28)
@@ -349,9 +400,14 @@ def page_open() -> str:
 
 
 def page_rail() -> str:
-    """Rows 8-9's world: the railway index on its axes, and it stays that page to the end of the unit.
+    """Rows 8-9's world: the railway index on its axes, entered by row 8's melt (P69 T16), and its ONE other state -
+    the share-of-GDP page it RECASTS to on "the internet" (P69 T17, `;then=`, GDP_RECAST).
 
-    THE SHARE-OF-GDP PAGE IS NOT SHOWN UNDER THOSE WORDS (the parent's read, 2026-09-18). The dossier
+    THE GDP PAGE RINGS ITS OWN NUMBER (P69 T17 / BODY_DEPARTURES row 9, which supersede the 2026-09-18 read
+    below): it is shown, it states what it measures in its own title and sub, and the one mark on it is its own
+    Q2-2000 peak (11.54 %), rung under "then the tower came down" - never a 7 % tick or an 8 % datum, and nothing
+    rung under the seven / eight words. The 2026-09-18 read, kept for the record: THE SHARE-OF-GDP PAGE IS NOT
+    SHOWN UNDER THOSE WORDS (the parent's read, 2026-09-18). The dossier
     routes "the internet crossed seven percent of GDP ... AI spending just crossed eight" to the PIMCO
     equipment-and-software series (`evidence/EVIDENCE-DOSSIER.md:120`) and that series IS
     `ev-equip-ipp-gdp-v1` - but what it measures is equipment + IP investment as a share of GDP:
@@ -359,9 +415,26 @@ def page_rail() -> str:
     numbers read 11.5 while the sentence says seven and eight is a different measure on screen than in
     the words, so it is not shown: the railway page holds, and the object the sentence actually needs -
     AI / tech spending as a share of GDP on Bravos' math - IS MISSING FROM DISK. HG3's row."""
-    return ("ledger:%s:line:%d:right:%s%s%s"
-            % (RAIL_PAGE, RAIL_TROUGH, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE))
+    return ("ledger:%s:line:%d:right:%s%s%s;then=%s:line"
+            % (RAIL_PAGE, RAIL_TROUGH, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, GDP_PAGE))
 
+
+
+def page_snap() -> str:
+    """Row 7's second world (P69 T15b): THEIR chart, pushed to the stage out of the card thrown on their name.
+
+    `camera=<dock>` (page_enter:camera, THROW-THEN-PUSH - the `card-becomes-the-chart` family, E99 s71): the card lands
+    on the studio, the camera zooms the studio and the card together until the card fills the stage, and the page
+    shows at the match - the arrival IS the transition, so the row's exit is `cut`. NOT the snap (throw-then-zoom,
+    `snap=`): MEASURED on this build (`p69t15b/seq-play`), a 16:9 full-stage page grown by the snap lands OFFSET
+    (+137, +100 px, cream showing top-left) and stays there for the whole row when the player plays forward frame by
+    frame (every seek from 57.38 s on), while a cold seek paints it at identity - a seek-purity defect in the engine's
+    snap (`paintLedger`'s `snapBoard`, scene-evidence-engine.mjs:13286), outside this door; the camera arrival
+    settles at identity both ways (`p69t15b/seq-cam`). The
+    page is the verified divergence object on the hook's own domain, the memory line held at nothing (the card is
+    that object with memory dropped), live (E49)."""
+    return ("ledger:%s:line:%d:right:camera=%s:cut%s%s%s"
+            % (LAYER_PAGE, DIV_LAST, BRAVOS_CARD, IDLE_LIVE, PAGE_DOMAIN % (HOOK_YMIN, HOOK_YMAX), SNAP_CARD))
 
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
 AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}, {"n": 3, "text": "Used tomorrow?"}]
@@ -430,47 +503,55 @@ UNPARK_LEAD_S = 0.9   # the park is released this far before the rescale: a deri
 CAPITAL_FLOW = {"nodes": [{"id": "capital", "icon": "coins", "label": "CAPITAL"},
                           {"id": "value", "icon": "factory", "label": "VALUE"}],
                 "edges": [["capital", "value"]]}
-FLOW_BOX = {"kind": "region", "x0": 0.06, "y0": 0.06, "x1": 0.47, "y1": 0.40}     # the studio's dark monitor wall
 # "and it isn't Nvidia" - THE CHIP, landing on its word and CROSSED OUT on the next (species/chip.mjs's own use:
 # a sourced glyph, a label, the claim retracted). It stays the SVG chip (the cpu glyph on its card): no
 # `form: stamp` - P69-HG1 decides future chips (P69 T15). The cross is what the sentence does to it.
-# WHERE (P69 T15, read on the plate `host/H-1-studio.png`, 1376x768): the point the first build named (0.47, 0.59)
-# is Mike's own left forearm and cuff, not the desk - a chip there lands ON the host. The plate's other empty dark
-# is the RIGHT monitor behind him (x 0.75-0.97, y 0.07-0.30 of the frame): the chip lands there, so the studio
-# reads left to right - the card on the desk, Mike, the chip - and the flow takes the LEFT monitor after it.
-NVIDIA_CHIP = {"kind": "chip", "icon": "cpu", "label": "NVIDIA", "idle": "breath",   # E49: a held chip breathes
-               "target": {"kind": "point", "x": 0.86, "y": 0.17}}
+NVIDIA_CHIP = {"kind": "chip", "icon": "cpu", "label": "NVIDIA", "idle": "breath"}   # E49: a held chip breathes
 CHIP_CROSS_S = 1.2
-BRAVOS_ON_DESK = {"centre": True, "centre_w": 0.28, "centre_x": 0.215, "centre_y": 0.655,
-                  "card_aspect": BRAVOS_ASPECT}   # the clear left third of the desk (the plate's own room)
-# P69 T15, MEASURED (M25 on the first build): at 0.30 wide centred at y 0.70 the parked card ran to y 918, 40 px into
-# the anchored caption strip (`ledger_page.CAPTION_ANCHOR` 16:9 = y 878-960) - and on a picture plate a live dock
-# ALWAYS sends the caption to that strip (`stamp_caption_bands` stamps a plain plate's dock `null`). At 0.28 centred
-# at 0.655 the box is y 556-858, twenty pixels clear, and its right edge (x 682) stays short of Mike's hand (x ~740).
-# THE CARD READS, THEN IT IS PUT DOWN (E63 / the Tokyo pledge row's `read` + `park_s`): thrown big over the dark
-# wall while the sentence says whose chart it is, then parked onto the desk's clear third on "and it isn't
-# Nvidia". Two beats instead of one - the 3.9 s hole M16 found on this plate, filled with the card's own move.
-# THE CARD CAN NOW STAND ON A PICTURE PLATE (P69 T14 (7) - the note this replaces said it could not, and is
-# stale). `dock_place` (build_scene_timeline_f.py:5670) still answers None when the world is not a LEDGER PAGE,
-# but the compiler no longer stops there: R26-221 `plate_dock_place` (build_scene_timeline_f.py:6053, called at
-# :7609 when `place is None`) places the card from the row's own `centre` / `centre_x` / `centre_y` /
-# `centre_w` (+ `card_aspect`), or inside the plate's declared `;room=<x>,<y>,<w>,<h>`, and REFUSES by name a
-# declared room that cannot hold a legible card. So BRAVOS_ON_DESK's fields are honoured on the host window.
-# The history, kept because the ruling stands: the first build of this window (before R26-221) compiled the
-# card with no `place` and the engine's solo card landed at [758, 167, 1068, 515], across the host's face, in
-# the frames the Flow order kept his left third clear for. The parent's ruling stands: a card never lands on
-# the host - with the door built, row 7 (T15) names the desk's clear third and measures the box.
+# THE CARD CAN STAND ON A PICTURE PLATE (P69 T14 (7)): R26-221 `plate_dock_place` (build_scene_timeline_f.py:6053,
+# called at :7609 when `place is None`) places a card from the row's own `centre` / `centre_x` / `centre_y` /
+# `centre_w` (+ `card_aspect`), and a card never lands on the host (the parent's ruling, 2026-09-18).
 HOST_CARD_DOOR = ("plate_dock_place places a card on a picture plate from the row's centre fields or the "
                   "plate's ;room= (R26-221, build_scene_timeline_f.py:6053, used at :7609)")
-# ROW 7's CARD, its two boxes and its clock (P69 T15). The READ box is the dark LEFT monitor (x 0.23-0.52, y 0.07-0.40
-# of the plate) and the window light beside it - never Mike, whose head runs x 0.60-0.76. `read` is honoured on a
-# picture plate since R26-221 (`build_scene_timeline_f.py:7641`: "`dplace` rather than `place` is the test").
-BRAVOS_READ = {"centre_w": 0.34, "centre_x": 0.26, "centre_y": 0.25}
-BRAVOS_PARK_S = 0.6      # the put-down's own length (the compiler's DOCK_PARK_S otherwise)
-# ... and its LIFE: the card arrives BUILT (a screenshot of their chart), so E50's clock starts on its landing, and it
-# enters inside the opening minute, where E25 / M12 hold a chart dock to 6 s (`OPENING_CHART_HOLD_MAX_S`). E50's
-# 6-8 s and M12's ceiling meet at 6 s; the card leaves 0.05 s under it so a float never reads 6.000001 as a hold.
-CARD_LIFE_S = 5.95
+# ROW 7, CORRECTED (P69 T15b, 2026-09-23). The operator on T15's tiles: "Those charts still seem tough to read to me."
+# T15 threw their chart card, read it at a third of the frame (6-8 px labels) and PUT IT DOWN on the desk - the fault
+# E99 s71 names (OPERATOR-RULINGS.md:3260): "if we are throwing a full-screen card then we should throw-then-zoom or
+# throw-then-push to make it full screen ... What you did ... left it floating over the world plate". So the card
+# BECOMES THE PAGE: `recipe:card-becomes-the-chart` (proven, count 2; effects/recipes/card-becomes-the-chart.json) -
+# the card thrown with a paper mass onto the studio, and one second later the ledger page grows out of that card's
+# own rectangle to the stage. The engine carries two arrivals for it (authoring/shapes.py `_arrival_name`): the snap
+# (`snap=`, throw-then-zoom) and the camera (`camera=`, throw-then-push); this row takes the PUSH - see page_snap for the
+# snap's measured defect. No chart is ever read at card size: the card is on the ground for its landing beat only,
+# and the chart is READ at the page's own type.
+BRAVOS_READ = {"centre_w": 0.34, "centre_x": 0.26, "centre_y": 0.25}   # the dark LEFT monitor - never Mike (x 0.60-0.76)
+CARD_LEAD_S = 1.0     # the card lands, then the page snaps up out of it one second after the throw (the recipe's
+                      # own offsets, +0.82 -> +1.82; japan-tariff-trick build_short.py CARD_LEAD_S)
+# THE PAGE IT BECOMES is the VERIFIED divergence page (the card's source, `_hook_object`, is that object with the
+# memory series dropped; the compiler reads a page only from `evidence/objects/`, which is read-only here) - on the
+# hook's own domain, with the MEMORY LINE HELD AT NOTHING, so the page carries exactly the card's three lines. It is
+# a returning page and "a returning page arrives retitled" (SPECIES_WHEN retitle): the hand writes the card's own
+# title over the object's as the snap lands, so the card and the page say one thing.
+SNAP_RETITLE_S = 1.2
+# THE PAGE'S LIFE (E50): it arrives BUILT (the snap), so its clock starts on arrival and 6 s is its floor; it holds to
+# the rehook, where it melts (row 8). The throw-then-zoom is the standard for a thrown full-page card (E99 s71).
+# THE STUDIO FIRST NEEDS ITS SIX SECONDS (M44, `gate_motion_density.PLATE_MIN_S`: a world plate under 6 s carrying a
+# dock FAILS). From "The three questions read" to the snap is 3.7 s, so the host window opens on the sentence before
+# it - the promise, "By the end you'll run it on your own top five", said by the host to camera - and the slate keeps
+# the three questions to the end of the sentence that sorts them (7.4 s; the agenda's three rows all land by 45.62).
+HOST_FROM_PHRASE = "By the end"
+# ... AND ON THE PAGE, THE REST OF THE SENTENCE, AT FULL SIZE: the chip lands on "Nvidia" in the page's own empty room
+# and is crossed as the sentence turns, and the flow `capital -> value` draws on "capital arriving faster" beside it -
+# the chart is never parked small (the operator: "Those charts still seem tough to read to me"). MEASURED on the
+# T15b drafts (`p69t15b/draft1`, `cold/tile-58.90`): at full size the end tags run y 0.40 (semis) and 0.58-0.62
+# (S&P / mega-cap) from x 0.58 to the right edge, the sub ends at x 0.48, and the semis peak stands at (0.47, 0.25) -
+# so the page's empty room is the upper right, x 0.55-0.97, y 0.07-0.36. A chip at (0.80, 0.60) landed ON
+# "+21% S&P 500", and at (0.84, 0.25) its NVIDIA label dropped onto "+105% SEMICONDUCTOR STOCKS"; a 0.64 park that
+# made room for the flow printed the chart's labels at 8.3-9.1 phone px (the probe's M25 INFO) - so there is no park.
+CHIP_ON_PAGE = {"kind": "point", "x": 0.91, "y": 0.13}
+FLOW_ON_PAGE = {"kind": "region", "x0": 0.60, "y0": 0.06, "x1": 0.85, "y1": 0.32}   # draft3: at x0 0.55 / y1 0.35 the
+# dashed frame touched the semis line's last prints and sat on its tag's top edge (63.75)
+SNAP_CARD = ";card=no"   # the arriving page is a PAGE, full stage like every other page in the cut - never a card at
+                         # full size (the snap's default; read on draft1 at 57.3-63.2)
 # THE DIP INTO THE STUDIO (row 7), and what it refused - E99 s74: a cut or a dip is the last resort and its why names
 # the transform refused. The boundary is plate -> plate (the three-notch slate -> the studio), the pair the dip is FOR
 # (E47), and every transform the kit carries for that pair is refused by name (`authoring/shapes.py`'s plate->plate
@@ -481,7 +562,41 @@ CARD_LIFE_S = 5.95
 HOST_DIP_WHY = ("slate -> studio is plate to plate, the pair the dip is FOR (E47); refused: the thread (no page mark "
                 "on either side), the edge arrival (two photographs, not one stage), the occluder (none declared), "
                 "the melt (E88 melts a chart's ink; the slate carries an agenda)")
-DIP_WHY = {HOST_PLATE: HOST_DIP_WHY}   # a dip row's world -> its refused transform, printed in SHOT-TABLE-H.md
+# ROW 7's SECOND BOUNDARY (P69 T15b): studio -> their chart, carried by the ARRIVAL. The card thrown on "Bravos Research"
+# grows to the stage (throw-then-zoom), so no dip and no cut is owed: the snap IS the transition (E99 s74 Apply 1;
+# authoring/shapes.py plate->page: "the page arrives out of the plate on its own clock, so the arrival IS the
+# transition and no dip is owed").
+SNAP_WHY = ("TAKEN throw-then-push (`camera=`, the card-becomes-the-chart family): the card thrown on their name is "
+            "pushed to the stage and the page shows at the match, so the arrival IS the transition - no dip, no cut "
+            "owed (E99 s71, s74); the snap (throw-then-zoom) refused: on this build it lands the 16:9 page offset in "
+            "forward play (an engine seek-purity defect, named in the notes)")
+# ROW 8, THE REHOOK (P69 T16, re-cut by T15b). Row 7 now ENDS ON A PAGE (their chart), so the boundary into the railway
+# index is page -> page, and the treatment's "dip 1" (studio -> page) no longer exists: E47 refuses a dip between two
+# pages ("two pages are one kind of world, and the dip means the WORLD changed" - authoring/shapes.py page->page). The
+# transform TAKEN is the melt's throw (E88, CAPABILITIES:38): their pairing's ink sags, balls up in its own weight and
+# is thrown off, and the railway index draws on the SAME board - capital that fast, leaving a paper trail. Refused by
+# name for this pair (E99 s74 Apply 1, the page->page chain):
+#  - recast (E64): their pairing and the 1840s index share no data - a different argument is a different page (E58);
+#  - rescale / extend: the same series at another scale / more of it - the railway index is neither;
+#  - morph (E58's table): a filled strip of the SAME frame into another series; this is another frame, another century;
+#  - melt:splash:chart would make the index arrive BUILT out of the splatter, and melt:morph would land its whole
+#    area at once out of the ball - both refuse the climb, and every page BUILDS on screen (E99 s67 (2));
+#  - the dip: two pages are one kind of world (E47).
+RAIL_EXIT = "melt:throw:%g"
+RAIL_MELT_S = 1.0     # the melt runs over "But capital that fast" and the index draws on "leaves a paper trail"
+RAIL_MELT_WHY = ("their chart -> the railway index, page to page: TAKEN the melt's throw (E88) - their pairing's ink "
+                 "balls up and is thrown off, the index draws on the same board; refused: the dip (two pages are one "
+                 "kind of world, E47), recast (no shared data - a different argument, E58/E64), rescale / extend (not "
+                 "the same series), morph (another frame, not a strip of this one), melt:splash:chart and melt:morph "
+                 "(the index would arrive built / whole - every page builds on screen, E99 s67)")
+# (the P69 T16 first cut, before T15b, is kept for the record: it entered the index from the STUDIO by dip 1 and
+# refused recast / rescale / morph, the melt, the snap / throw-then-zoom / throw-then-push, object-becomes-chart, the
+# spiral return, the mount and the thread by name. T15b moved their chart onto the page, which removed that boundary.)
+BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the transition INTO it, in SHOT-TABLE-H.md
+                page_snap(): SNAP_WHY,
+                page_rail(): RAIL_MELT_WHY,
+                SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
+                              "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
 CARD_READ_S = 5.5   # E25 / M12: a chart card proves its sentence and leaves - under the 6 s homework ceiling
 CARD_CLEAR_S = 1.2  # ... and it is GONE before the page recasts, so the hand-over happens on a clear page
@@ -545,13 +660,28 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_melt = round(t_three_q - MELT_S_H, 2)
     t_sorts = at("and it sorts")                        # ... and the third row lands on the clause that sorts
     t_top_five = at("By the end")                       # ... and the note under it
-    # -- row 7 (P69 T15): HOST WINDOW 1, the studio. The world changes on the cut before the map sentence.
-    t_host = cut("The three questions read")            # the dip INTO the studio (a row's exit is the door into it)
+    # -- row 7 (P69 T15, corrected T15b): HOST WINDOW 1. The world changes on the cut before the promise, so the studio
+    # holds its six seconds (M44) before their chart becomes the page.
+    t_host = cut(HOST_FROM_PHRASE)                      # the dip INTO the studio (a row's exit is the door into it)
     t_bravos = at("Bravos Research")                    # the card ARRIVES on the name (E99 s71) ...
-    t_nvidia_turn = at("and it isn't Nvidia")           # ... and is put down on the desk as the sentence turns
-    t_nvidia = at("Nvidia")                             # the chip lands on its word ...
-    t_capital = at("capital arriving faster")           # ... and the flow draws on the mechanism
-    t_row7_end = unit_end                               # row 8 (T16) owns the dip back to the page
+    t_snap = round(t_bravos + CARD_LEAD_S, 2)           # ... and the camera pushes it to the page a second later
+    t_nvidia = at("Nvidia")                             # the chip lands on its word, on the page ...
+    t_its = at("It's capital")                          # ... is crossed as the sentence turns ...
+    t_capital = at("capital arriving faster")           # ... and the flow draws on the mechanism, in the page's room
+    # -- row 8 (P69 T16): THE REHOOK. Their chart melts (E88) on "But capital that fast" and the railway index draws on
+    # the same board - page to page, no dip (E47; RAIL_MELT_WHY).
+    t_rail = at("But capital that fast")                # the melt starts on the word: the boundary IS the melt's start
+    t_trail = at("paper trail")                         # the index climbs on the trail it names ...
+    t_over = at("Every transformative")                 # ... to the half-way cap, as row 9's first sentence begins
+    t_join = round(t_over - RAIL_JOIN_LEAD_S, 2)
+    # -- row 9 (P69 T17): the same page - the climb, the crash, the recast, the ring.
+    t_peak = at("pounds, more than")                    # the peak lands as "a quarter-billion" ends, on "pounds"
+    t_crashed = at("crashed by nearly")                 # the crash draws on its verb
+    t_drop = at("nearly two-thirds")                    # the drop is written as its size is said
+    t_internet = at("the internet crossed")             # the recast on the new era's subject
+    t_tower = at("then the tower came down")            # the ring on the peak before the fall
+    t_ai = at("AI spending just crossed")               # the share-of-GDP line climbs back on the AI sentence
+    t_row9_end = unit_end
 
     return [
         # -- ROWS 1-6: THE PAGE IS THE WORLD (E58 / E61). One world, two chart states, two cards in one slot.
@@ -617,22 +747,45 @@ def shot_table(ws: list, unit_end: float) -> list:
              "rows": [dict(AGENDA_ROWS_H[0], at=t_three_q), dict(AGENDA_ROWS_H[1], at=t_thirty),
                       dict(AGENDA_ROWS_H[2], at=t_sorts)]},
         ]),
-        # -- ROW 7 (P69 T15): HOST WINDOW 1 - the studio (E61 landing surface; E99 s81 the host). The plate's life is
-        # its ken push ALONE (E99 s84 / R26-236 - no `;idle=drift`), the caption in STAGE mode. The dip INTO it is
-        # plate -> plate and refuses the transforms HOST_DIP_WHY names.
-        (t_host, t_row7_end, HOST_PLATE, HOST_KEN, [
-            # THEIR CHART ARRIVES ON THEIR NAME (E99 s71: thrown, never spotlit), reads big over the dark monitor
-            # while the sentence says whose it is, and is PUT DOWN on the desk's clear left third as it turns to
-            # Nvidia (E63's read + park). It is a chart card, so it leaves on E50's / M12's clock (CARD_LIFE_S).
-            (BRAVOS_CARD, 0, t_bravos, round(t_bravos + CARD_LIFE_S, 2),
-             dict(BRAVOS_ON_DESK, arrive="throw", mass="paper", read=dict(BRAVOS_READ, card_aspect=BRAVOS_ASPECT),
-                  read_s=round(t_nvidia_turn - t_bravos, 2), park_s=BRAVOS_PARK_S)),
-        ], "dip", [
-            dict(NVIDIA_CHIP, at=t_nvidia, dur=round(t_row7_end - t_nvidia, 2),
+        # -- ROW 7a (P69 T15b): HOST WINDOW 1 - the studio (E61 landing surface; E99 s81 the host), its life the ken push
+        # ALONE (E99 s84). Mike says the promise to camera; THEIR CHART ARRIVES ON THEIR NAME (E99 s71: thrown, never
+        # spotlit) onto the dark left monitor, and lands - it is on the ground for its landing beat only.
+        (t_host, t_snap, HOST_PLATE, HOST_KEN, [
+            (BRAVOS_CARD, 0, t_bravos, t_snap,
+             dict(BRAVOS_READ, centre=True, card_aspect=BRAVOS_ASPECT, arrive="throw", mass="paper")),
+        ], "dip", []),
+        # -- ROW 7b (P69 T15b): THE CARD BECOMES THE CHART (the card-becomes-the-chart family). The camera pushes the card
+        # to the stage and the page shows at the match (the arrival IS the transition: SNAP_WHY); READ at its own type. The hand writes
+        # the card's title over the object's (a returning page arrives retitled); the chip lands on "Nvidia" in the
+        # page's own room and is crossed as the sentence turns; the flow draws beside it - the chart stays full size.
+        (t_snap, t_rail, page_snap(), (0, 0, 0), [], "cut", [
+            {"kind": "build_to", "at": t_snap, "dur": 0.4, "series": DIV_MEMORY, "target": datum(0)},
+            {"kind": "retitle", "at": t_snap, "dur": SNAP_RETITLE_S, "text": HOOK_CARD_TITLE},
+            dict(NVIDIA_CHIP, at=t_nvidia, dur=round(t_rail - t_nvidia, 2), target=CHIP_ON_PAGE,
                  cross_at=round(t_nvidia + CHIP_CROSS_S, 2)),
-            dict(CAPITAL_FLOW, kind="flow", at=t_capital, dur=round(t_row7_end - t_capital, 2), target=FLOW_BOX),
+            dict(CAPITAL_FLOW, kind="flow", at=t_capital, dur=round(t_rail - t_capital, 2), target=FLOW_ON_PAGE),
         ]),
-        # (-- ROWS 8-24 are T16-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
+        # -- ROW 8 (P69 T16): THE REHOOK - their chart MELTS and is thrown off (E88), and the railway index draws on the
+        # same board (RAIL_MELT_WHY: page to page, no dip). It opens ON ITS AXES (E73), `;idle=live` (E49), and CLIMBS:
+        # the build beat draws it to its first cap as it lands, and one pen carries it on from "paper trail"
+        # (RAIL_CLIMB) - "paper you can read" is the line being written.
+        # -- ROW 9 (P69 T17), the SAME page: the stroke carries on to the 1845 peak, the crash draws on its verb and
+        # the drop is written under the trough; on "the internet" the page RECASTS to the share-of-GDP line (E58/E64),
+        # and on "then the tower came down" the ring lands on its own Q2-2000 peak (E56) - no 7, no 8 (E77).
+        (t_rail, t_row9_end, page_rail(), (0, 0, 0), [], RAIL_EXIT % RAIL_MELT_S, [
+            {"kind": "build_to", "at": t_rail, "dur": 0.4, "series": 0, "target": datum(RAIL_OPEN_CAP)},
+            {"kind": "build_to", "at": t_trail, "dur": round(t_join - t_trail, 2),
+             "series": 0, "target": datum(RAIL_TRAIL_CAP)},
+            {"kind": "build_to", "at": t_join, "dur": round(t_peak - t_join, 2), "series": 0, "target": datum(RAIL_PEAK)},
+            {"kind": "build_to", "at": t_crashed, "dur": RAIL_CRASH_S, "series": 0, "target": datum(RAIL_TROUGH)},
+            {"kind": "figure", "at": t_drop, "dur": RAIL_DROP_S, "target": datum(RAIL_TROUGH, 0), "text": RAIL_DROP,
+             "color": "neg", "dy": RAIL_DROP_DY},
+            {"kind": "chart_to", "at": t_internet, "dur": GDP_RECAST_S, "to": "recast", "state": GDP_RECAST},
+            {"kind": "retitle", "at": round(t_internet + RETITLE_AFTER_S, 2), "dur": GDP_RECAST_S, "text": GDP_TITLE},
+            {"kind": "callout", "at": t_tower, "dur": GDP_RING_S, "target": datum(GDP_PEAK, 0)},
+            {"kind": "build_to", "at": t_ai, "dur": GDP_CLIMB_S, "series": 0, "target": datum(GDP_LAST)},
+        ]),
+        # (-- ROWS 9-24 are T17-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
     ]
 
 
@@ -658,9 +811,10 @@ def sound_cues(rows: list) -> list:
         page = A.page_transitions(r[2])
         if page["ledger"] and not page["mount"] and not page["spiral"]:
             # the slot names the ENTRY the compiled timeline actually plays (`authoring.audio.page_entry`):
-            # an `axes` page fires `page enter (axes)`, never the cream roll-out, and a cue that claims the
-            # wrong one is dropped by the binder (R26-198)
-            cues.append({"slot": "page enter %d (%s)" % (i + 1, OPEN_ENTER), "at": round(r[0], 2),
+            # an `axes` page fires `page enter (axes)`, never the cream roll-out, a snapped page `(snap)` (P69 T15b),
+            # and a cue that claims the wrong one is dropped by the binder (R26-198)
+            entry = "snap" if page["snap"] else "camera" if page["camera"] else OPEN_ENTER
+            cues.append({"slot": "page enter %d (%s)" % (i + 1, entry), "at": round(r[0], 2),
                          "gain": ENTER_GAIN, "fade_in": 0.0, "variants": {"A": ROLL}})
         for d, opts in A.row_arrivals(r):
             arrive = opts["arrive"]
@@ -722,7 +876,7 @@ BODY_ASSETS = {
         ("cue", "dip 1", _SND + WHOOSH)),
     9: (("page", RAIL_PAGE, "dense-line; the drop is RAIL_DROP (-64%)"),
         ("page", GDP_PAGE, _OBJ + GDP_PAGE + ".series.json - dense-line (hline 'Q2 2000 peak - 11.54%')"),
-        ("card", "RAIL_NOTE", "typed text; source EVIDENCE-DOSSIER.md")),
+        ("card", "RAIL_NOTE", "NOT DRAWN (P69 T17): the dossier carries no railway capital figure - see BODY_DEPARTURES")),
     10: (("plate", "world-sell-ticket-v1", _PLATES + "3/objects/world-sell-ticket-v1.png"),
          ("page", LAYER_PAGE, _OBJ + LAYER_PAGE + ".series.json - dense-line (the recast)")),
     11: (("card", "ev-doc-karp", _OBJ + "ev-doc-karp.png - record dock (payload in build-f/evidence-dock.json)"),
@@ -794,6 +948,8 @@ BODY_ASSETS = {
 MEMORY_FIGURES = (("DRAM", "+16%", "on the July print"), ("HBM-class", "+14%", "over the last two prints"))
 BODY_DEPARTURES = (
     (9, "7% tick / 8% datum on ev-equip-ipp-gdp-v1", "cut - the page rings its own 11.54% (not shown under the 7/8 words)"),
+    (9, "the note / figures '£250m' then '$1T+ today' (RAIL_NOTE; the treatment's row 9)",
+     "cut (P69 T17) - no source on disk (UNSOURCED, never drawn); the caption carries the script's words"),
     (11, "ev-uber-adoption-v1 burndown (PNG only)", "PNG card ev-uber-adoption-v1.png"),
     (11, "the COO line as a record (ev-doc-macdonald has no payload)", "PNG card ev-doc-macdonald.png; the caption strip"),
     (12, "ev-three-manias peak and trough markers (a 4x3 table, PNG only)",
@@ -870,7 +1026,8 @@ def _hook_object() -> Path:
 
 def _shot_table_md(rows: list) -> str:
     """SHOT-TABLE-H.md - the table a human reads: one row per window, its world, its use and idle, what fires."""
-    out = ["# SHOT TABLE H - the bed (P68 T5) and the body, one row per P69 slice (T15-T32)", "",
+    out = ["# SHOT TABLE H - the bed (P68 T5) and the body, grown one P69 slice at a time (T15-T32); a row is a world",
+           "",
            "GENERATED by `build_episode_h.py` from `%s/%s.words.json`. Do not hand-edit -" % (TAKE.name, TAKE_STEM),
            "edit `build_episode_h.shot_table`. Every anchor is a PHRASE off the take (`authoring.words.at`).", "",
            "| # | window | world | options | cards | what fires |", "|---|---|---|---|---|---|"]
@@ -884,12 +1041,30 @@ def _shot_table_md(rows: list) -> str:
     out += ["", "**Life: %d of %d rows** - " % (len(life), len(rows))
             + "; ".join("row %d `%s`" % (n, what) for n, what in life)
             + " (E49 nothing goes truly still; E99 s84 KEN BURNS ALONE on a long-form plate).",
-            "", "**Flow count (E99 s74):** 0 cuts, %d dip(s), each at a world change (E47), each naming the "
-            "transform it refused:" % sum(1 for r in rows if r[5] == "dip")]
-    out += ["- row %d `%s` (dip INTO it at %.2f): %s" % (i + 1, str(r[2]).partition(";")[0], r[0],
-                                                          DIP_WHY.get(r[2], "UNNAMED - E99 s74 owes a why"))
-            for i, r in enumerate(rows) if r[5] == "dip"]
+            "", "**Flow count (E99 s74):** %d cut(s), %d dip(s) (each at a world change, E47), %d arrival(s) carrying "
+            "a boundary, %d transform(s) - each boundary names the transform it took or refused:" % _flow_count(rows)]
+    out += ["- row %d `%s` (`%s` INTO it at %.2f): %s" % (i + 1, str(r[2]).partition(";")[0], r[5], r[0],
+                                                               BOUNDARY_WHY.get(r[2], "UNNAMED - E99 s74 owes a why"))
+            for i, r in enumerate(rows) if r[5]]
+    out += ["", "**Table rows -> treatment rows (`REBUILD-TREATMENT-H.md`):** "
+            + "; ".join("row %d = %s" % (i + 1, TABLE_TREATMENT.get(i + 1, "?")) for i in range(len(rows))) + "."]
     return "\n".join(out + [""])
+
+
+# a table row is a WORLD; a treatment row is a beat - the map the parent reads the two tables by (P69 T16)
+TABLE_TREATMENT = {1: "treatment rows 1-5 (the page, 0:00-0:42)", 2: "treatment row 6 (the slate)",
+                   3: "treatment row 7, the studio (P69 T15b)", 4: "treatment row 7, their chart (P69 T15b)",
+                   5: "treatment rows 8-9, the rehook, the railway index and the GDP recast (P69 T16, T17)"}
+
+
+def _flow_count(rows: list) -> tuple[int, int, int, int]:
+    """(cuts, dips, arrivals, transforms) over the rows' own exits - the transition INTO each row. A `cut` INTO a
+    page that arrives by snap / camera is the ARRIVAL's boundary (the snap IS the transition), not a cut."""
+    arrivals = sum(1 for r in rows if r[5] == "cut" and (":snap=" in r[2] or ":camera=" in r[2]))
+    cuts = sum(1 for r in rows if r[5] == "cut") - arrivals
+    dips = sum(1 for r in rows if r[5] == "dip")
+    transforms = sum(1 for r in rows if r[5] and r[5] not in ("cut", "dip"))
+    return cuts, dips, arrivals, transforms
 
 
 def main() -> int:
