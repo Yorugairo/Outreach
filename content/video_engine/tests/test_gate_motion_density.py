@@ -1805,3 +1805,40 @@ def test_m44_fires_on_the_approved_japan_cut():
     g = G._plate_length_gate(tl["scenes"])
     assert g.level == "FAIL", g.message
     assert "s01 1.8s with 1 dock(s)" in g.message and "s05 5.1s with 1 dock(s)" in g.message, g.message
+
+
+# ---- P69 T26c (E99 s105, 2026-09-23: "yes, recast counts"): M03's wait resets on a chart_to recast's landing ----
+
+def _recast_window(species, runtime=81.0, idle_live=False):
+    """A clip, then ONE page from 0:10 to the end whose chart is changed on screen by the given species; captions
+    throughout. The page's start is the only arrival M03 had before T26c."""
+    page = _page_with_states("s02", 10.0, runtime, species, n_states=3)
+    if idle_live:
+        page["world"]["page"]["idle"] = "live"
+    scenes = [{"scene_id": "s01", "world": {"kind": "clip"}, "span": [0.0, 10.0]}, page]
+    pages, tt = [], 0.0
+    while tt < runtime:
+        pages.append({"s": tt, "e": tt + 1.5, "t": [{"w": "x"}] * 5, "cap_mode": "stage"}); tt += 1.5
+    tl = {"runtime_s": runtime, "scenes": scenes, "caption_pages": pages, "rows": []}
+    if idle_live:
+        tl["kinetics"] = {"idle": True}
+    return tl
+
+
+def test_m03_wait_is_measured_from_the_last_recast_and_a_retitle_does_not_reset_it():
+    """A page at 0:10, recasts at 0:20 and 0:40 (each lands at its `at + dur`), a retitle at 1:00, then nothing:
+    the wait is the 40 s from the second recast's landing (0:41) to the end - never the 71 s from the page."""
+    recasts = [_xf("recast", 20.0, dur=1.0), _xf("recast", 40.0, dur=1.0, state=2)]
+    retitle = {"kind": "retitle", "at": 60.0, "dur": 0.8}
+    tl = _recast_window(recasts + [retitle])
+    gap = G.analyse(tl, [], {"cues": []})["ev_gaps"][0]
+    assert gap == (41.0, 40.0), gap
+    g = _by_id(G.run(tl, [], {"cues": []})[0])
+    assert g["M03"].level == "PASS" and "40s from 0:41" in g["M03"].message, g["M03"]
+
+
+def test_m03_a_retitle_a_relight_or_an_idle_alone_is_not_an_arrival():
+    """No recast: the retitle, the relight and a live idle change nothing on M03 - the wait runs from the page."""
+    quiet = [{"kind": "retitle", "at": 30.0, "dur": 0.8}, {"kind": "relight", "at": 45.0}]
+    g = _by_id(G.run(_recast_window(quiet, idle_live=True), [], {"cues": []})[0])
+    assert g["M03"].level == "FAIL" and "71s from 0:10" in g["M03"].message, g["M03"]

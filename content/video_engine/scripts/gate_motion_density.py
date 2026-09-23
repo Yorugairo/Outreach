@@ -624,6 +624,25 @@ def _chart_landings(scenes: list[dict]) -> list[float]:
     return [round(float(s["span"][0]) + _page_land_offset(s), 2) for s in scenes if _is_page(s) and s.get("span")]
 
 
+def _recast_landings(scenes: list[dict]) -> list[float]:
+    """Every instant a `chart_to recast` has LANDED on its page - an arrival for M03 (P69 T26c; E99 s105, the operator
+    2026-09-23: "yes, recast counts"). The recast changes the chart on screen, so the wait for evidence restarts at
+    its landing, as it does at a page's start or a dock's entry.
+
+    Read as the gate already reads a chart_to's landing and its data mark (`_landings`' chart_to branch, :3025, and
+    `_deployed_lives`' `a <= at <= z` guard, :3003): the instant is `_transition_land`, the event's own `at` + `dur` (plus a
+    breakthrough state's run, E60). Only `to == "recast"` counts; a retitle, a relight or an idle is not a chart_to and
+    adds nothing, so a timeline with no recast reads exactly as before."""
+    out: list[float] = []
+    for s in scenes:
+        if not s.get("span"):
+            continue
+        a, z = float(s["span"][0]), float(s["span"][1])
+        out += [round(_transition_land(s, x), 2) for x in s.get("species", [])
+                if x.get("kind") == "chart_to" and x.get("to") == "recast" and a <= float(x.get("at", -1e9)) <= z]
+    return out
+
+
 def _held_built(at: float, dur: float, landings: list[float]) -> float | None:
     """The landing a gap STARTS at, when the gap is no longer than `HELD_BUILT_S` - else None (E99 s69).
 
@@ -1330,7 +1349,8 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     pulse_ev, pulse_still = _sentinelled(set(events) | set(life), runtime)
     # evidence entry gaps, whole runtime: a dock entering or a page starting (D2)
     entries = sorted([a for a, _ in spans] + page_starts)
-    pts = [0.0] + entries + [runtime]
+    # P69 T26c (E99 s105): M03's arrivals also carry each recast's landing; the per-minute entry density keeps `entries`
+    pts = [0.0] + sorted(entries + _recast_landings(scenes)) + [runtime]
     ev_gaps = sorted(((a, b - a) for a, b in zip(pts, pts[1:])), key=lambda x: -x[1])
     # plates: a page is its own plate and holds like one (C5)
     plate_ids = [_plate_id(s) for s in scenes]
