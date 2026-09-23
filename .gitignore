@@ -283,3 +283,11 @@ content/video_engine/projects/**/*.obj
 content/video_engine/projects/**/*.gii.gz
 content/video_engine/projects/**/assets/raw/**/*.info.json
 content/video_engine/sources/reference_analyses/**/download/
+
+# 2026-09-22 (operator): six sovereign-compute dockets are Drive search listings, not research - kept on disk, out of git
+docs/research/markets/sovereign-compute/11_Deep_Tech_Space_Economy_ASTS_RCAT_FLY_PL.md
+docs/research/markets/sovereign-compute/17_Apex_Platform_Primes_Catalyst_Map_RKLB_RDW_BKSY.md
+docs/research/markets/sovereign-compute/26_Strategic_Portfolio_Shielding_Defense_Infrastructure_Edge_AI.md
+docs/research/markets/sovereign-compute/28_Institutional_Equity_Research_GILT_CODA_OUST_WULF_SOLS.md
+docs/research/markets/sovereign-compute/29_Quantitative_Signal_and_Timezone_Arbitrage_Framework.md
+docs/research/markets/sovereign-compute/32_SCML_Product_Vision_and_Ingestion_Architecture.md
