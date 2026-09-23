@@ -456,7 +456,7 @@ verbatim tails and are left pending.
 - Evidence: frames read by the parent (`scratchpad/p69t6-{halving-*,94-land,1v3-land}.png`); goldens byte-identical, line pages byte-identical. Filed: the hline label over a bar (R26-??). Open outside the write set: `species/figure.mjs` re-places a bars figure with the line rule on a page with a SECOND chart; an emphasized bar's pill is not yielded
 
 ### T6b: A bare prop carries a resting shadow - depth and weight (the operator, 2026-09-22)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T6 merged; runs in LANE B (`claude/p69-s90`, the engine lane) FIRST, before T8 - so lane A's body rows never render on an engine mid-edit
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the dock painter's prop branch and the `.dock-contact` settle), `content/video_engine/scripts/kinetics/stopaction.mjs` (a `PROP_SHADOW` dial block only, synced), `content/video_engine/tests/kinetics/stopaction-stamp.test.mjs`, `content/video_engine/tests/test_prop_shadow.py` (new), `content/video_engine/tests/golden/**` (the `prop-stamp*` goldens re-pinned with the parent's frame read), `content/video_engine/effects/cards/dock_kind.json` (the `dock_kind:prop` card's `does` loses "no ... shadow"), `content/video_engine/assets/page-boxes.v1.json`
@@ -468,10 +468,10 @@ verbatim tails and are left pending.
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
-- Evidence: pending
+- Evidence: lane B, 2026-09-22/23 - v1 soft drop-shadow REJECTED by the operator; v2 cross-hatch `1d7fbf5` (primary 4.5 px / crossing 7 px, 29.3 / 112.4 levels line-vs-gap); the operator: "the cross hatching needs to be much tighter/finer" -> `041e2ff` (primary 2.25 / 0.7 px, crossing 3.75 / 0.5 px, TAPER_PX 3; +11.6 levels on charcoal, +40.4 on light, against the bare ground; reach 15.35 px inside the stamp fit's 16.8). Goldens re-pinned: prop-stamp 03c396dd.. -> f974a8c0.., prop-stamp-ink beb325d9.. -> 3698dbca.., prop-stamp@proof-exit d3646b8c.. -> 3e4d26c5..; every other golden byte-identical. Parent in place: node 654/654, pytest 259 passed. Open: thrown props' placement (R26-258), the hatch fixed while the prop's own camera moves it (R26-271)
 
 ### T6c: A bar is narrow - the cap at a five-bar page's width (E99 s96)
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T6b (the same engine file; lane B's sequence)
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (`LPBAR.CAP_N` and the bars builder's capped layout only), `content/video_engine/tests/test_compare_on_bars.py`, `content/video_engine/tests/golden/**` (every golden whose page has fewer than five bars re-pins - `tags-to-bars` first - with the parent's frame read), `content/video_engine/assets/page-boxes.v1.json`
@@ -483,7 +483,7 @@ verbatim tails and are left pending.
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
-- Evidence: pending
+- Evidence: lane B `9ffbf60`, 2026-09-23 - `LPBAR = { W_PX: 196, PITCH_RATIO: 0.44 }` [DERIVED from the measured spec] replaces CAP_N; `lpStagePx` measures one chart unit in stage px (browser-checked 1.3340 vs 1.3340); a bar renders at 196.00 px, fewer bars centred, rounded shoulders kept, a wider name wraps. Only `tags-to-bars` re-pinned (1f5b4d9a.. -> 8e827822..); the 16 other golden bars pages already narrower. Parent read the 94 / halving / 1 vs 3 frames. Parent in place: node 654/654, pytest 234 passed. Pre-merge review: MERGE AFTER FIXES (F1 a wrapped name through a rescale, F2/F4 tests) - fixes staged after T8
 
 ### T7: R26-230, R26-222 and R26-231 closed on their tests; the one owed test added
 - Status: done
