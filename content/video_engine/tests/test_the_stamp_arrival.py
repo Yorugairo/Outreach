@@ -21,6 +21,7 @@ and three boundaries: the vector map's `stamp` SPECIES is untouched, a prop is B
 from __future__ import annotations
 
 import contextlib
+import inspect
 import json
 import math
 import sys
@@ -292,25 +293,34 @@ def _row_timeline() -> tuple[dict, dict, dict]:
 
 
 @pytest.fixture(scope="module")
-def frames():
+def frames(tmp_path_factory):
     """Every instant this file measures, read through ONE browser: the `own` surface at six instants, the `page`-ink
-    surface at its rest, and the ROW - the loop's own door compiled fresh - at the same six. (One browser because a
-    second `sync_playwright()` in the same thread meets a loop that is already running.)"""
+    surface at its rest, the ROW - the loop's own door compiled fresh - at the same six, and (P69 T5) the STAMP-PLUS-
+    CARD row at the ring's widest and at rest, whose rest frame is written to the test's tmp dir for the parent to
+    read. (One browser because a second `sync_playwright()` in the same thread meets a loop that is already running.)"""
     tl, uris, dock = _row_timeline()
+    pair_tl, pair_uris, pair_row = _pair_timeline()
     with _browser() as br:
         own, inked = _Player(br, SURFACE), _Player(br, "prop-stamp-ink")
         row = _Player(br, SURFACE, (tl, uris))
+        pair = _Player(br, SURFACE, (pair_tl, pair_uris))
         try:
             ts = (T_EARLY, T_LAND, T_LATE, T_WIDEST, T_REST, T_EXIT)
             out = {t: own.at(t) for t in ts}
             out["ink:" + str(T_REST)] = inked.at(T_REST)
             out["row"] = {t: row.at(t) for t in ts}
             out["row_dock"] = dock
-            for pl in (own, inked, row):
+            out["pair"] = {t: pair.at(t) | {"docks": pair.page.evaluate(PAIR_PROBE)} for t in (T_WIDEST, T_REST)}
+            out["pair_row"] = pair_row
+            png = tmp_path_factory.mktemp("p69t5") / "stamp-plus-card.png"
+            png.write_bytes(RB.frame_png(pair.page, T_REST, RB.STAGE["16:9"]))
+            print(f"\nP69 T5 stamp-plus-card frame: {png}")
+            out["pair_png"] = png
+            for pl in (own, inked, row, pair):
                 assert not pl.errors, pl.errors
             yield out
         finally:
-            own.close(); inked.close(); row.close()
+            own.close(); inked.close(); row.close(); pair.close()
 
 
 @needs_browser
@@ -540,14 +550,16 @@ def test_the_row_loop_calls_ONE_door_for_every_stamp_before_the_slot_rule():
     """The loop's own call site, pinned by position: every `arrive: stamp` dock goes through `stamp_dock_place`
     BEFORE `eplace` is decided, whatever its slot, and the fit is the entry's `centre` / `ring_to` / `from_to`."""
     src = (ROOT / "content/video_engine/scripts/build_scene_timeline_f.py").read_text(encoding="utf-8")
-    body = src[src.index("        place = dock_place(world, ASPECT"):]
+    body = src[src.index("        stamp_fits, stamp_boxes = row_stamp_fits("):]   # P69 T5: the row's stamps are fitted before its docks loop
     body = body[:body.index("assign_press_stack(docks)")]
-    i_fit = body.index('if dopt.get("arrive") == "stamp":')
-    i_call = body.index("stamp_fit = stamp_dock_place(world, ASPECT, dopt, _paint, plate_room, newsreel_boxes(row_species, ASPECT),")
+    i_fit = body.index("stamp_fit = stamp_fits.get(n_dock)")
     i_slot = body.index("eplace = dplace if (slot == 0 or centred")
-    assert i_fit < i_call < i_slot, "fitted before the slot rule, so slot 1 is fitted too"
+    assert 0 < i_fit < i_slot, "fitted before the slot rule, so slot 1 is fitted too"
+    assert 'if dopt.get("arrive") != "stamp":' in inspect.getsource(B.row_stamp_fits), "every stamp, any slot"
+    assert "stamp_dock_place(world, aspect, dopt, paint, plate_room, reserve," in inspect.getsource(B.row_stamp_fits)
     assert 'dplace, centred = {k: stamp_fit[k] for k in ("x", "y", "w", "h", "room")}, True' in body
-    assert 'raise SystemExit(f"FAIL: {exc}") from exc' in body[i_fit:i_slot], "a refusal fails the row by number"
+    head = src[src.index("        stamp_fits, stamp_boxes = row_stamp_fits(") - 200:][:600]
+    assert 'raise SystemExit(f"FAIL: {exc}") from exc' in head, "a refusal fails the row by number"
     assert "rplace = None if stamp_fit else" in body, "a stamp never gets a reading box"
     assert B.dock_entry("a", 0, 1, 5, 0, arrive="stamp", ring_to=1.6)["ring_to"] == 1.6
     assert "ring_to" not in B.dock_entry("a", 0, 1, 5, 0, arrive="throw", ring_to=1.6)
@@ -669,3 +681,201 @@ def test_the_stamp_golden_is_the_same_whatever_aspect_the_process_last_compiled(
     finally:
         B.ASPECT = saved
     assert dirty == clean
+
+
+# ---- P69 T5 (R26-247 L2; E99 s88 (3)): THE STAMP TAKES THE ROOM FIRST; THE ROW'S OTHER DOCKS GO ROUND IT ----------
+# The R26-20 review's L2: a scene's OTHER dock was not a ring obstacle - two stamps, or a stamp and a card, were fitted
+# independently, so both could answer the same room. The row now fits its stamps FIRST, in row order, each against the
+# earlier stamps' fitted boxes (the mark and its ring's peak), and only then places its other docks, clear of every one.
+
+CARD_ID = "ev-card-doc"
+FED_2 = "ev-prop-fed-2"
+STAMP = {"prop": True, "arrive": "stamp", "mass": "ink", "ink": "own"}
+
+PAIR_PROBE = """() => {
+  const sb = document.getElementById('stage').getBoundingClientRect();
+  return [...document.querySelectorAll('.dock[data-slide]')]
+    .filter((d) => getComputedStyle(d).visibility !== 'hidden' && +d.style.opacity > 0)
+    .map((d) => { const r = d.getBoundingClientRect();
+      return { slide: d.dataset.slide, box: { x: r.left - sb.left, y: r.top - sb.top, w: r.width, h: r.height } }; });
+}"""
+
+
+def _paint_of(dopt: dict) -> dict:
+    return B.painted_box(G.PROP_CUTOUT) if dopt.get("prop") else B.painted_box(None, dopt.get("card_aspect"))
+
+
+def _loop_row(world: dict, rows: list[tuple[str, int, dict]], plate_room: dict | None = None) -> dict:
+    """ONE ROW OF SEVERAL DOCKS, the way the row loop compiles it (build_scene_timeline_f.py main(), the dock pass),
+    for the boxes only: every dock's options through `dock_opts`, the row's stamps fitted BEFORE anything else is placed
+    (`row_stamp_fits`, in row order, each round the earlier ones), the page's E65 place clear of every stamp's fitted box
+    (`dock_place(..., clear_of=)`), a card's box by the loop's own slot rule, and the loop's refusal
+    (`stamp_clash_error`) raised as the ValueError the loop turns into its FAIL. {"fits", "boxes", "taken"}."""
+    where = "shot row 1 (0-30s)"
+    reserve = B.newsreel_boxes([], "16:9")
+    opts = [(aid, slot, B.dock_opts(o)) for aid, slot, o in rows]
+    fits, taken = B.row_stamp_fits(world, "16:9", [(aid, d, _paint_of(d)) for aid, _s, d in opts], plate_room, reserve, where)
+    place = B.dock_place(world, "16:9", reserve, clear_of=taken)
+    boxes = {}
+    for n, (aid, slot, d) in enumerate(opts):
+        if n in fits:
+            boxes[n] = {k: fits[n][k] for k in ("x", "y", "w", "h", "room")}
+            continue
+        centred = bool(d.get("centre"))
+        dplace = (B.centred_place(place, "16:9", d.get("card_aspect"), world.get("page"), d.get("centre_w"), None,
+                                  d.get("centre_y"), d.get("centre_x"), reserve) if (place and centred) else place)
+        if place is None:
+            dplace = B.plate_dock_place(plate_room, "16:9", d, f"{where} dock {aid}")
+        boxes[n] = dplace if (slot == 0 or centred or (place is None and dplace)) else None
+        err = B.stamp_clash_error(f"{where} dock {aid}", boxes[n], taken)
+        if err:
+            raise ValueError(err)
+    return {"fits": fits, "boxes": boxes, "taken": taken}
+
+
+def _hull(fit: dict) -> dict:
+    """The mark as it stands at rest, turned: its painted hull over every angle of the arrival, about its centre."""
+    hx, hy = B.turned_half_extents(*fit["painted"])
+    (cx, cy) = fit["centre"]
+    return {"x": cx - hx, "y": cy - hy, "w": 2 * hx, "h": 2 * hy}
+
+
+def _ring_reach(box: dict, fit: dict) -> float:
+    """How far, in px, the stamp's ring at its widest (the fitted peak plus its stroke) reaches INTO `box` - 0 when the
+    whole disc it sweeps stays off it (the compiler's own `disc_clearance` test)."""
+    cx, cy = fit["centre"]
+    r = fit["ring_to"] * 0.5 * math.hypot(*fit["painted"]) + B.STAMP_RING_W_PX
+    dx = max(box["x"] - cx, 0.0, cx - (box["x"] + box["w"]))
+    dy = max(box["y"] - cy, 0.0, cy - (box["y"] + box["h"]))
+    return max(0.0, r - math.hypot(dx, dy))
+
+
+def _clash(box: dict, fit: dict) -> tuple[float, float]:
+    """(px^2 of `box` over the stamp's turned mark, px its ring reaches into `box`) - both 0 is a clean row."""
+    return round(_overlap(box, _hull(fit)), 1), round(_ring_reach(box, fit), 1)
+
+
+def test_the_stamp_takes_the_room_first_and_beside_a_card_its_mark_is_the_mark_alone():
+    """E99 s88 (3): *"the room chosen is the one that gives the biggest mark"* - so a card in the same row may not take
+    that room first. The stamp beside a card is the stamp alone to the pixel, and the card goes round it: 0 px of the
+    card over the turned mark, 0 px of the ring's widest disc into the card."""
+    world = _golden_page(True)
+    alone = _loop_row(world, [("ev-prop-fed", 0, STAMP)])["fits"][0]
+    row = _loop_row(world, [(CARD_ID, 0, {}), ("ev-prop-fed", 1, STAMP)])
+    fit, card = row["fits"][1], row["boxes"][0]
+    print(f"\nmark alone {alone['painted']} at {alone['centre']}; beside a card {fit['painted']} at {fit['centre']}; "
+          f"card {card}; clash {_clash(card, fit)}")
+    assert fit["painted"] == alone["painted"] and fit["centre"] == alone["centre"], "the card never shrinks the mark"
+    assert _clash(card, fit) == (0.0, 0.0), f"the card is placed round the stamp: {card} against {fit['why']}"
+
+
+def test_the_other_dock_is_placed_by_E65_at_a_legible_scale_clear_of_the_mark_and_its_ring():
+    """(2): the card is placed AFTER the stamp, by E65's own placer with the stamp's fitted box reserved - it still finds
+    a place (a room, at or above the legibility floor), and that place touches neither the mark nor its ring."""
+    world = _golden_page(True)
+    row = _loop_row(world, [(CARD_ID, 0, {}), ("ev-prop-fed", 1, STAMP)])
+    card, fit, (box,) = row["boxes"][0], row["fits"][1], row["taken"]
+    assert card["room"] in B.PLACE_ROOMS and card["h"] >= B.PLACE_FLOOR_H["16:9"], card
+    assert _overlap(card, box) == 0, f"the card is clear of the stamp's whole fitted box {box}"
+    hull = _hull(fit)
+    assert box["x"] <= hull["x"] and box["x"] + box["w"] >= hull["x"] + hull["w"], "the box holds the mark"
+    assert box["y"] <= hull["y"] and box["y"] + box["h"] >= hull["y"] + hull["h"], "the box holds the mark"
+    cx, cy = fit["centre"]
+    r = fit["ring_to"] * 0.5 * math.hypot(*fit["painted"]) + B.STAMP_RING_W_PX
+    assert box["x"] <= cx - r and box["y"] <= cy - r and box["x"] + box["w"] >= cx + r and box["y"] + box["h"] >= cy + r, \
+        "... and the ring's widest disc"
+
+
+def test_two_stamps_fit_in_row_order_the_second_round_the_first():
+    """(1)+(3): the first stamp is the stamp alone; the second is fitted against the first's fitted box, so neither
+    mark is under the other and neither ring reaches the other's mark."""
+    world = _golden_page(True)
+    alone = _loop_row(world, [("ev-prop-fed", 0, STAMP)])["fits"][0]
+    row = _loop_row(world, [("ev-prop-fed", 0, STAMP), (FED_2, 1, STAMP)])
+    first, second = row["fits"][0], row["fits"][1]
+    print(f"\ntwo stamps: first {first['painted']} at {first['centre']} (alone {alone['painted']}); "
+          f"second {second['painted']} at {second['centre']} ring {second['ring_to']}; "
+          f"clash {_clash(_hull(second), first)} / {_clash(_hull(first), second)}")
+    assert first["painted"] == alone["painted"] and first["centre"] == alone["centre"], "row order: the first takes the room"
+    assert _clash(_hull(second), first) == (0.0, 0.0), "the second mark is off the first mark and out of its ring"
+    assert _clash(_hull(first), second) == (0.0, 0.0), "and the second ring never reaches the first mark"
+    assert max(second["painted"]) >= B.STAMP_MARK_FLOOR_PX
+
+
+def test_an_other_dock_over_the_stamp_or_with_no_box_to_measure_is_refused_by_name_with_its_row():
+    """(3): a card the row AUTHORED onto the stamp's room, and a card whose box is the template's paired slot (which
+    the compiler cannot measure against the stamp), are refused by name with the row - never shipped over the mark."""
+    world = _golden_page(True)
+    alone = _loop_row(world, [("ev-prop-fed", 0, STAMP)])["fits"][0]
+    over = {"centre": True, "centre_x": alone["centre"][0] / 1920, "centre_y": alone["centre"][1] / 1080, "centre_w": 0.15}
+    with pytest.raises(ValueError, match=r"shot row 1 \(0-30s\) dock ev-card-doc: .*stamp"):
+        _loop_row(world, [("ev-prop-fed", 0, STAMP), (CARD_ID, 1, over)])
+    with pytest.raises(ValueError, match=r"shot row 1 \(0-30s\) dock ev-card-doc: .*stamp"):
+        _loop_row(world, [("ev-prop-fed", 0, STAMP), (CARD_ID, 1, {})])
+
+
+def test_a_row_with_no_other_dock_beside_a_stamp_places_exactly_as_before():
+    """(4): a single-dock row, a card row with no stamp and the `prop-stamp` golden are unchanged - the reserve is
+    empty and the placer takes the path it always took."""
+    world = _golden_page(True)
+    solo = B.dock_place(world, "16:9", [])
+    assert B.dock_place(world, "16:9", [], clear_of=[]) == B.dock_place(world, "16:9", [], clear_of=None) == solo
+    assert _loop_row(world, [(CARD_ID, 0, {})])["boxes"][0] == solo
+    two_cards = _loop_row(world, [(CARD_ID, 0, {}), ("ev-other-card", 1, {})])
+    assert two_cards["boxes"] == {0: solo, 1: None} and two_cards["taken"] == []
+    golden = RB.load_surface(SURFACE)[0]["scenes"][0]["docks"][0]
+    stamp = _loop_row(world, [("ev-prop-fed", 0, STAMP)])
+    assert {k: stamp["boxes"][0][k] for k in ("x", "y", "w", "h")} == golden["place"]
+
+
+def test_the_row_loop_fits_the_stamps_first_then_places_the_other_docks_round_them():
+    """The loop's own order, pinned by position: `row_stamp_fits` before the page's place is taken, that place taken
+    `clear_of` the stamps, and the refusal inside the dock loop - the sequence `_loop_row` mirrors."""
+    src = (ROOT / "content/video_engine/scripts/build_scene_timeline_f.py").read_text(encoding="utf-8")
+    body = src[src.index("        stamp_fits, stamp_boxes = row_stamp_fits("):]
+    body = body[:body.index("assign_press_stack(docks)")]
+    i_place = body.index("place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT), clear_of=stamp_boxes)")
+    i_loop = body.index("for n_dock, (aid, slot, enter, exitt, *dextra) in enumerate(ds):")
+    i_slot = body.index("eplace = dplace if (slot == 0 or centred")
+    i_clash = body.index("_clash = stamp_clash_error(")
+    assert 0 < i_place < i_loop < i_slot < i_clash
+
+
+def _pair_timeline() -> tuple[dict, dict, dict]:
+    """The committed surface's page with its dock REPLACED by a STAMP-PLUS-CARD row the loop's sequence compiles: a
+    document card on slot 0 entering at 2.0 s (read and parked long before the contact), the Fed stamped on slot 1."""
+    tl, uris, _t, _a = RB.load_surface(SURFACE)
+    tl = json.loads(json.dumps(tl))
+    row = _loop_row(tl["scenes"][0]["world"], [(CARD_ID, 0, {}), ("ev-prop-fed", 1, STAMP)])
+    fit = row["fits"][1]
+    card = B.dock_entry(CARD_ID, 0, 2.0, 26.0, 0, B.DOCK_KIND_IMAGE, row["boxes"][0])
+    stamp = B.dock_entry("ev-prop-fed", 1, ENTER, 26.0, 0, B.DOCK_KIND_PROP, row["boxes"][1], "stamp", "ink", True,
+                         prop=True, ink="own", ring_to=fit["ring_to"], from_to=fit["from_to"], paint=fit["paint"])
+    tl["scenes"][0]["docks"] = [card, stamp]
+    tl["evidence"][CARD_ID] = {"title": "THE FILING", "source": "golden", "species": "data",
+                               "document": {"path": "golden", "sha256": "0" * 64}, "badges": []}
+    uris[CARD_ID] = G.uri("image/png", G.png_solid(64, 36, (236, 230, 216)))   # 16:9, the frame `dock_card_h` sizes the box for
+    return tl, uris, row
+
+
+@needs_browser
+def test_the_stamp_plus_card_row_ON_THE_FRAME_the_other_dock_is_clear_of_the_mark_and_its_ring(frames):
+    """(5): the stamp-plus-card row through the served player. At rest the card's drawn box overlaps 0 px of the
+    stamp's drawn box; at the ring's widest the ring's disc reaches 0 px into the card; the card stands where the
+    compiler placed it; and the rest frame is written to the test's tmp dir (the path is printed) for the parent to read."""
+    pair, row = frames["pair"], frames["pair_row"]
+    rest = {d["slide"]: d["box"] for d in pair[T_REST]["docks"]}
+    assert set(rest) == {CARD_ID, "ev-prop-fed"}, rest
+    card, mark = rest[CARD_ID], rest["ev-prop-fed"]
+    placed = row["boxes"][0]
+    ring = pair[T_WIDEST]["ring"]
+    widest = {d["slide"]: d["box"] for d in pair[T_WIDEST]["docks"]}[CARD_ID]
+    print(f"\nframe: card {card} (placed {placed}) mark {mark} ring {ring and ring['box']}; "
+          f"overlap {_overlap(card, mark):.1f} px^2, ring into card {ring and _disc_hits(ring['box'], {'box': widest})}; "
+          f"png {frames['pair_png']}")
+    assert all(abs(card[k] - placed[k]) <= 1.0 for k in ("x", "y", "w")), (card, placed)   # the engine sets x, y, w (`dockGeom`)
+    assert abs(card["h"] - placed["h"]) <= 2.0, (card, placed)   # ... the height is the card's own frame + chrome (`dock_card_h` rounds it)
+    assert ring and ring["opacity"] > 0, "the ring is drawn"
+    assert _overlap(card, mark) == 0, f"the card is over the landed mark: {card} / {mark}"
+    assert _disc_hits(ring["box"], {"box": widest}) == 0, f"the ring at its widest reaches the card: {ring['box']} / {widest}"
+    assert frames["pair_png"].stat().st_size > 10_000

@@ -223,6 +223,50 @@ def test_stop_dials_are_read_from_the_kinetics_module():
     assert set(A.STOP_DIALS) <= set(dials) and all(v > 0 for k, v in dials.items() if k in A.STOP_DIALS)
 
 
+# ---------------------------------------------------------------- a STAMP lands at its contact (P69 T3, R26-247)
+
+STAMPED = (0.0, 5.0, "plate-a", (0, 0, 0), [("prop-x", 0, 2.0, 5.0, {"arrive": "stamp"})], "cut", None)
+
+
+def _closed_form_tc(g: dict) -> float:
+    """stopaction.mjs:308-312, restated independently: wd t = pi - atan(wd / (z w))."""
+    z = g["c"] / (2 * math.sqrt(g["k"] * g["m"]))
+    w = math.sqrt(g["k"] / g["m"])
+    wd = w * math.sqrt(1 - z * z)
+    return (math.pi - math.atan2(wd, z * w)) / wd
+
+
+def test_stamp_contact_is_the_modules_clamped_scale_spring_tc():
+    import gate_motion_density as G
+    spring = A.stamp_spring()
+    assert set(spring) >= {"m", "k", "c"} and all(spring[k] > 0 for k in ("m", "k", "c")), spring
+    tc = _closed_form_tc(spring)
+    assert abs(A.stamp_contact_s() - tc) <= 1e-4, (A.stamp_contact_s(), tc)
+    assert A.stamp_contact_s() == G.STAMP_CONTACT_S, "the cue and the motion gate read ONE instant"
+
+
+def test_landing_contact_puts_a_stamp_on_its_contact_and_leaves_throw_and_land_alone():
+    import gate_motion_density as G
+    dials = A.stop_dials()
+    assert A.landing_contact(2.0, "stamp", dials) == 2.0 + G.STAMP_CONTACT_S
+    assert A.landing_contact(2.0, "land", dials) == 2.0 + dials["ANTIC_S"] + dials["DROP_S"]
+    assert A.landing_contact(2.0, "throw", dials) == 2.0 + math.ceil(dials["FLIGHT_S"] * A.FPS - 1e-9) / A.FPS
+
+
+def test_row_arrivals_yields_a_stamp_dock_by_default():
+    assert [d[0] for d, _ in A.row_arrivals(STAMPED)] == ["prop-x"]
+    assert [d[0] for d, _ in A.row_arrivals(THROWN[0])] == ["card-x"], "the throw is still yielded"
+    assert list(A.row_arrivals(STAMPED, kinds=("throw", "land"))) == [], "a caller may still narrow the kinds"
+
+
+def test_arrival_mass_is_ink_for_a_stamp_and_paper_for_a_throw_or_land():
+    assert A.arrival_mass({"arrive": "stamp"}) == "ink", "the engine's own default (stampXf(d.mass || 'ink'))"
+    assert A.arrival_mass({"arrive": "stamp", "mass": "metal"}) == "metal"
+    assert A.arrival_mass({"arrive": "throw"}) == "paper"
+    assert A.arrival_mass({"arrive": "land"}) == "paper"
+    assert A.arrival_mass({"arrive": "land", "mass": "metal"}) == "metal"
+
+
 def test_bed_gain_is_the_measured_ratio():
     assert A.bed_gain(-17.9, -20.0, -13.0) == round(10 ** ((-17.9 - 20.0 + 13.0) / 20), 4)
 
@@ -921,6 +965,36 @@ def test_the_unsounded_notes_are_the_fires_no_KEPT_cue_took():
     rep = A.bind_report([_cue("landing 1 (throw, paper)", _contacts(TWO_LANDINGS)[1])], TWO_LANDINGS)
     assert [f["at"] for f in rep["silent"] if f["kind"] == "landing"] == [_contacts(TWO_LANDINGS)[0]]
     assert sum(1 for r in rep["cues"] if r["fire"] is not None) == 1
+
+
+# --- A STAMP IS SOUNDED AT ITS CONTACT, AT THE ENGINE'S MASS (P69 T3, R26-247) --------------------
+
+STAMP_AND_THROW = _timeline(
+    _scene("s01", 0.0, 10.0, page={"builder": "dense-line", "variant": "line", "enter": "axes", "exit": "cut"},
+           docks=[{"slide": "prop-a", "enter": 2.0, "exit": 6.0, "arrive": "stamp"},
+                  {"slide": "dock-b", "enter": 7.0, "exit": 9.0, "arrive": "throw"}]))
+
+
+def test_fired_gives_a_stamp_landing_its_contact_and_the_engines_ink_mass():
+    import gate_motion_density as G
+    lands = [f for f in A.fired(STAMP_AND_THROW) if f["kind"] == "landing"]
+    stamp = next(f for f in lands if f["what"] == "stamp")
+    assert stamp["at"] == round(2.0 + G.STAMP_CONTACT_S, 2), stamp
+    assert stamp["mass"] == "ink", "an unmassed stamp lands at the engine's own default"
+    throw = next(f for f in lands if f["what"] == "throw")
+    assert throw["mass"] == "paper", "an unmassed throw keeps its paper"
+    massed = _timeline(_scene("s01", 0.0, 10.0, docks=[{"slide": "prop-a", "enter": 2.0, "exit": 6.0,
+                                                          "arrive": "stamp", "mass": "metal"}]))
+    assert [f["mass"] for f in A.fired(massed) if f["kind"] == "landing"] == ["metal"]
+
+
+def test_the_binder_keeps_a_stamp_ink_landing_cue_and_drops_a_paper_one():
+    import gate_motion_density as G
+    contact = round(2.0 + G.STAMP_CONTACT_S, 2)
+    kept, dropped = A.bind_cues([_cue("landing 1 (stamp, ink)", round(contact - 1 / 24, 2))], STAMP_AND_THROW)
+    assert [c["slot"] for c in kept] == ["landing 1 (stamp, ink)"] and not dropped
+    kept, dropped = A.bind_cues([_cue("landing 1 (stamp, paper)", contact)], STAMP_AND_THROW)
+    assert not kept and "ink" in dropped[0]["why"], dropped
 
 
 # ---------------------------------------------------------------- the row's LIFE (R26-245)

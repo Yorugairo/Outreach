@@ -5568,19 +5568,49 @@ def emptiest_corner(boxes: dict) -> dict:
     return best
 
 
-def page_place(page: dict, aspect: str, reserve: list[dict] | None = None) -> dict:
+def _pieces_clear_of(room: dict, taken: list[dict]) -> list[dict]:
+    """`room` minus every rectangle in `taken`: the maximal pieces left of, right of, above and below each one that cuts
+    it (they overlap - every one is a room a card may be fitted into), each keeping the room's other keys (`band`).
+    A room nothing cuts is returned as itself. Pure."""
+    pieces = [room]
+    for t in taken:
+        tx1, ty1 = t["x"] + t["w"], t["y"] + t["h"]
+        nxt = []
+        for p in pieces:
+            px1, py1 = p["x"] + p["w"], p["y"] + p["h"]
+            if t["x"] >= px1 or tx1 <= p["x"] or t["y"] >= py1 or ty1 <= p["y"]:
+                nxt.append(p)
+                continue
+            for x, y, w, h in ((p["x"], p["y"], t["x"] - p["x"], p["h"]), (tx1, p["y"], px1 - tx1, p["h"]),
+                               (p["x"], p["y"], p["w"], t["y"] - p["y"]), (p["x"], ty1, p["w"], py1 - ty1)):
+                if w > 0 and h > 0:
+                    nxt.append({**p, "x": x, "y": y, "w": w, "h": h})
+        pieces = nxt
+    return pieces
+
+
+def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear_of: list[dict] | None = None) -> dict:
     """The parked rectangle for a dock on this ledger page, in stage pixels (E45 §1, E65).
 
     ``{"x", "y", "w", "h", "room"}`` - ALWAYS: `room` is which of E65's four rooms it came from
-    (`outside` | `empty` | `axis` | `corner`). Pure: the page spec is never mutated."""
+    (`outside` | `empty` | `axis` | `corner`). Pure: the page spec is never mutated.
+    `clear_of` (P69 T5): rectangles the card may not touch anywhere - a stamp's fitted box, the mark and its ring's
+    peak. Every room is cut round them (`_pieces_clear_of`) before it is scored, so the order and the scale-before-
+    place rule are E65's own; only the last resort can still land on one, and the row loop refuses that by name
+    (`stamp_clash_error`). Absent or empty, every room is the room it always was, to the byte."""
     boxes = LPG.page_boxes(page, aspect)
     stage_w = boxes["stage"]["w"]
     want = round(DOCK_ON_PAGE_W * stage_w)
     quiet = boxes.get("quiet_zone")
     floor_h = _floor_h(aspect)
+    taken = [t for t in (clear_of or []) if isinstance(t, dict)]
+
+    def cut(rooms: list[dict]) -> list[dict]:
+        return [p for r in rooms for p in _pieces_clear_of(r, taken)] if taken else rooms
+
     # (1) OUTSIDE: a band the page's ink leaves free - E45 §1, unchanged
     best = None
-    for band in free_bands(boxes, reserve):   # P52 T6: `reserve` keeps the card out of a newsreel band's strip
+    for band in cut(free_bands(boxes, reserve)):   # P52 T6: `reserve` keeps the card out of a newsreel band's strip
         room_w, room_h = band["w"] - 2 * DOCK_PLACE_PAD, band["h"] - 2 * DOCK_PLACE_PAD
         width = max(DOCK_ON_PAGE_MIN_W, min(want, room_w, _card_w_for(room_h)))
         if width > band["w"] - 2 or dock_card_h(width) > band["h"] - 2:
@@ -5604,7 +5634,7 @@ def page_place(page: dict, aspect: str, reserve: list[dict] | None = None) -> di
     centre = (plot["x"] + plot["w"] / 2, plot["y"] + plot["h"] / 2)
     # (2) EMPTY: the largest rectangle the data does not touch, the quiet side first
     cands = []
-    for room in mask_rooms(boxes):
+    for room in cut(mask_rooms(boxes)):
         fit = _fit_in(room, want, floor_h)
         if fit is None:
             continue
@@ -5620,27 +5650,32 @@ def page_place(page: dict, aspect: str, reserve: list[dict] | None = None) -> di
         return {**max(cands, key=lambda c: c[0])[1], "room": "empty"}
     # (3) AXIS: underneath, over the x tick labels - never on the data
     under = axis_room(boxes)
-    if under:
-        fit = _fit_in(under, want, floor_h)
+    for piece in (cut([under]) if under else []):
+        fit = _fit_in(piece, want, floor_h)
         if fit:
             w, h = fit
-            box = _corner_box(under, w, h, quiet, centre)
+            box = _corner_box(piece, w, h, quiet, centre)
             if mask_is_clear(boxes, box):
                 return {**box, "room": "axis"}
     # (4) THE CORNER, at the floor - and the build warns (the caller reads `room`)
     corner = emptiest_corner(boxes)
     w = _card_w_for(floor_h)
     h = dock_card_h(w)
+    held = [p for p in cut([corner]) if p["w"] >= w and p["h"] >= h]   # P69 T5: the corner's clear pieces, the largest first
+    if held:
+        corner = max(held, key=lambda p: p["w"] * p["h"])
     return {**_corner_box(corner, w, h, quiet, centre), "room": "corner"}
 
 
-def dock_place(world: dict, aspect: str | None, reserve: list[dict] | None = None) -> dict | None:
+def dock_place(world: dict, aspect: str | None, reserve: list[dict] | None = None,
+               clear_of: list[dict] | None = None) -> dict | None:
     """The placement every dock on this scene takes, or None on a plain plate (E45: "a dock on a
     plain plate keeps the solo card"). One rectangle per scene, from the page's geometry alone -
-    and on a ledger page there is ALWAYS one (E65); the rectangle carries the `room` it came from."""
+    and on a ledger page there is ALWAYS one (E65); the rectangle carries the `room` it came from.
+    `clear_of`: the row's stamps' fitted boxes, which the card is placed round (P69 T5, `page_place`)."""
     if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
         return None
-    return page_place(world["page"], aspect or "16:9", reserve)
+    return page_place(world["page"], aspect or "16:9", reserve, clear_of)
 
 
 # ---- R26-20 (2026-09-22): A STAMP IS INK ON THE PAGE - THE MARK TAKES THE ROOM, THE RING HUGS THE MARK ----------
@@ -5844,7 +5879,8 @@ def _stamp_room_name(cx: float, cy: float, page: dict | None, aspect: str | None
 
 
 def stamp_dock_place(world: dict | None, aspect: str | None, dopt: dict, paint: dict | float | None,
-                     plate_room: dict | None = None, reserve: list[dict] | None = None, where: str = "stamp") -> dict:
+                     plate_room: dict | None = None, reserve: list[dict] | None = None, where: str = "stamp",
+                     clear_of: list[dict] | None = None) -> dict:
     """WHERE A STAMP LANDS AND HOW BIG: the door every `arrive: stamp` dock goes through (the row loop calls it before
     the slot rule; R26-20). THE MARK TAKES THE ROOM, THE RING HUGS THE MARK (the operator's round):
 
@@ -5859,13 +5895,16 @@ def stamp_dock_place(world: dict | None, aspect: str | None, dopt: dict, paint: 
     SIZE: the largest the place holds (`centre_w` caps it when the row names one). Refused only when that largest is
     under STAMP_MARK_FLOOR_PX on its painted long side.
     `paint`: the mark's painted box (`painted_box`), or a bare aspect for a framed card. Returns `stamp_fit` + `room`
-    + `why`; ValueError names the row."""
+    + `why`; ValueError names the row.
+    `clear_of` (P69 T5): the row's EARLIER stamps' fitted boxes (`stamp_reserved_box`) - obstacles to this mark and its
+    ring like the page's own ink, and cut out of E65's tie-break room too. Absent, the fit is what it always was."""
     sw, sh = (1080, 1920) if (aspect or "16:9") == "9:16" else (1920, 1080)
     page = (world or {}).get("page") if (world or {}).get("kind") == SPECIES_LEDGER else None
     if not isinstance(paint, dict):
         paint = painted_box(None, paint)
+    taken = [t for t in (clear_of or []) if isinstance(t, dict)]
     try:
-        obs, bounds = ring_obstacles(page, aspect, reserve)
+        obs, bounds = ring_obstacles(page, aspect, list(reserve or []) + taken if taken else reserve)
     except ValueError as exc:
         raise ValueError(f"{where}: {exc}") from None
     if not page and plate_room:   # a picture plate's declared room IS where a card may stand: the mark and its ring stay inside it
@@ -5884,7 +5923,7 @@ def stamp_dock_place(world: dict | None, aspect: str | None, dopt: dict, paint: 
         if not region:
             raise ValueError(f"{where}: a stamp on a picture plate needs the plate's `room` or the row's own "
                              "centre_x / centre_y - there is nowhere to fit it")
-        e65 = dock_place(world, aspect, reserve) if page else region
+        e65 = dock_place(world, aspect, reserve, taken) if page else region
         ecx, ecy = e65["x"] + e65["w"] / 2, e65["y"] + e65["h"] / 2
         best = None
         coarse, fine = STAMP_SEARCH_PX
@@ -5918,6 +5957,55 @@ def stamp_dock_place(world: dict | None, aspect: str | None, dopt: dict, paint: 
            f"approach {'capped ' + format(STAMP_FROM, '.2f') + 'x -> ' + format(fit['from_to'], '.2f') + 'x' if fit['from_capped'] else 'from 2.10x'}")
     return {**fit, "room": "authored" if (dopt.get("centre_x") is not None or dopt.get("centre_y") is not None)
             else _stamp_room_name(cx, cy, page, aspect), "why": why}
+
+
+# ---- P69 T5 (R26-247 L2; E99 s88 (3)): THE STAMP TAKES THE ROOM FIRST; THE ROW'S OTHER DOCKS GO ROUND IT ----------
+# The R26-20 review's L2: a scene's OTHER dock was no obstacle to a stamp - two stamps, or a stamp and a card, were
+# fitted independently, so on the golden page the card's E65 room and the stamp's biggest-mark room were the same
+# corner of the plot (measured before this row: 41 605 px^2 of card over the turned mark, the ring 159.5 px into it).
+# s88 (3) says the room chosen is the one that gives the biggest MARK, so the order is: the row's stamps first, in row
+# order, each fitted round the earlier ones' boxes; then the row's other docks, placed by E65 round every stamp.
+def stamp_reserved_box(fit: dict) -> dict:
+    """The rectangle a fitted stamp takes on the page, in whole stage px: its canvas box and the square round the
+    ring's widest disc (the fitted peak plus the stroke), which holds the turned mark at rest as well. Pure."""
+    cx, cy = fit["centre"]
+    r = fit["ring_to"] * 0.5 * math.hypot(*fit["painted"]) + STAMP_RING_W_PX
+    x0, y0 = math.floor(min(fit["x"], cx - r)), math.floor(min(fit["y"], cy - r))
+    x1, y1 = math.ceil(max(fit["x"] + fit["w"], cx + r)), math.ceil(max(fit["y"] + fit["h"], cy + r))
+    return {"x": x0, "y": y0, "w": x1 - x0, "h": y1 - y0}
+
+
+def row_stamp_fits(world: dict | None, aspect: str | None, docks: list[tuple[str, dict, dict]],
+                   plate_room: dict | None, reserve: list[dict] | None, where: str) -> tuple[dict, list[dict]]:
+    """Every STAMP in a row, fitted before any other dock is placed: ({index in the row: its `stamp_dock_place` fit},
+    [their `stamp_reserved_box`es, in row order]). `docks` is the row's (aid, dock options, painted box) in row order;
+    each stamp is fitted `clear_of` the earlier stamps' boxes, so the first takes the room exactly as it would alone.
+    ValueError (from the door) names the row and the dock."""
+    fits, taken = {}, []
+    for n, (aid, dopt, paint) in enumerate(docks):
+        if dopt.get("arrive") != "stamp":
+            continue
+        fits[n] = stamp_dock_place(world, aspect, dopt, paint, plate_room, reserve, f"{where} dock {aid}", taken)
+        taken = [*taken, stamp_reserved_box(fits[n])]
+    return fits, taken
+
+
+def stamp_clash_error(where: str, box: dict | None, stamps: list[dict]) -> str | None:
+    """Why a row's OTHER dock may not ship beside its stamps, or None: its parked box touches a stamp's fitted box (an
+    authored box, or E65's last resort), or it has no box the compiler can measure (a paired slot's template layout,
+    the solo card on a plain plate). A row with no stamp is never refused here."""
+    if not stamps:
+        return None
+    if not isinstance(box, dict):
+        return (f"{where}: shares the row with a stamp but is parked by the template's own slot, which the compiler "
+                "cannot measure against the stamp's mark and ring - put it on slot 0, or name its box "
+                "(centre_x / centre_y), or the plate's room (P69 T5)")
+    for s in stamps:
+        if box["x"] < s["x"] + s["w"] and s["x"] < box["x"] + box["w"] and box["y"] < s["y"] + s["h"] and s["y"] < box["y"] + box["h"]:
+            return (f"{where}: its box [{box['x']}, {box['y']}, {box['w']}, {box['h']}] lands over a stamp's mark or "
+                    f"ring [{s['x']}, {s['y']}, {s['w']}, {s['h']}] - the stamp takes the room first; move the card "
+                    "(R26-191: a collision is fixed, never shipped)")
+    return None
 
 # ---- R26-221: A CARD TAKES AN AUTHORED SLOT ON A PICTURE PLATE (2026-09-18, the Steel and Paper H unit) ----
 # `dock_place` answers None for a plate - E45's "a dock on a plain plate keeps the solo card" - and that one answer
@@ -7490,13 +7578,27 @@ def main() -> int:
         # E45 §1: on a ledger page every dock parks in the same rectangle, computed from the
         # page's own geometry. Only the SOLO card (slot 0) is placed - a paired/stacked dock keeps
         # the layout its slot declares, and a plain plate keeps the solo card entirely.
-        place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT))   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
         plate_room = plate_room_px(world.get("room"), ASPECT)   # R26-221: the rectangle THIS picture plate declares a card may stand in
-        for aid, slot, enter, exitt, *dextra in ds:   # P47 T1: an optional 5th element names how the card arrives
+        # P69 T5 (R26-247 L2; E99 s88 (3)): the row's STAMPS take the room first - fitted in row order, each round the
+        # earlier ones' mark and ring, so the first is the stamp alone - and only then is the page's place taken for the
+        # row's other docks, clear of every stamp's fitted box (a row with no stamp places exactly as it always did)
+        row_opts = []
+        for aid, _slot, _enter, _exitt, *dextra in ds:   # P47 T1: an optional 5th element names how the card arrives
             try:
-                dopt = dock_opts(dextra[0] if dextra else None)
+                _dopt = dock_opts(dextra[0] if dextra else None)
+                _paint = ((painted_box(dock_asset_path(aid, EP)) if _dopt.get("prop") else painted_box(None, _dopt.get("card_aspect")))
+                          if _dopt.get("arrive") == "stamp" else None)   # the PAINTED mark: a prop's alpha box, a card's whole box
             except ValueError as exc:
                 raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
+            row_opts.append((aid, _dopt, _paint))
+        try:   # R26-20 send-back #2: every stamp is fitted to the box the engine draws, or the row fails
+            stamp_fits, stamp_boxes = row_stamp_fits(world, ASPECT, row_opts, plate_room, newsreel_boxes(row_species, ASPECT),
+                                                     f"shot row {i + 1} ({a}-{b}s)")
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: {exc}") from exc
+        place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT), clear_of=stamp_boxes)   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
+        for n_dock, (aid, slot, enter, exitt, *dextra) in enumerate(ds):
+            dopt = row_opts[n_dock][1]
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
             auto_centre = solo_centre_by_clock(world, ASPECT, len(ds), slot, enter, a, dopt)   # R26-22: E50's clock centres a solo card on a MEASURED page
@@ -7507,14 +7609,8 @@ def main() -> int:
                     dplace = plate_dock_place(plate_room, ASPECT, dopt, f"shot row {i + 1} ({a}-{b}s) dock {aid}")
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: {exc}") from exc
-            stamp_fit = None
-            if dopt.get("arrive") == "stamp":   # R26-20 send-back #2: every stamp is fitted to the box the engine draws, or the row fails
-                try:
-                    _paint = painted_box(dock_asset_path(aid, EP)) if dopt.get("prop") else painted_box(None, dopt.get("card_aspect"))   # the PAINTED mark: a prop's alpha box, a card's whole box
-                    stamp_fit = stamp_dock_place(world, ASPECT, dopt, _paint, plate_room, newsreel_boxes(row_species, ASPECT),
-                                                 f"shot row {i + 1} ({a}-{b}s) dock {aid}")
-                except ValueError as exc:
-                    raise SystemExit(f"FAIL: {exc}") from exc
+            stamp_fit = stamp_fits.get(n_dock)   # fitted above, before the row's other docks, whatever its slot
+            if stamp_fit:
                 dplace, centred = {k: stamp_fit[k] for k in ("x", "y", "w", "h", "room")}, True
                 print(f"  stamp: {sid}.{aid} - {stamp_fit['room']}: {stamp_fit['why']}")
             if centred and isinstance(dplace, dict) and isinstance(place, dict) and "room" not in dplace:
@@ -7553,6 +7649,10 @@ def main() -> int:
             # R26-221: ... and on a picture plate the BOX is the slot - a row that authored one (or a plate that
             # declared the room) has already said where this card goes, on either slot, so it is never dropped here
             eplace = dplace if (slot == 0 or centred or (place is None and dplace)) else None
+            if not stamp_fit:   # P69 T5: a row's other dock never parks on a stamp's mark or its ring - refused, by row
+                _clash = stamp_clash_error(f"shot row {i + 1} ({a}-{b}s) dock {aid}", eplace, stamp_boxes)
+                if _clash:
+                    raise SystemExit(f"FAIL: {_clash}")
             _rs = float(dopt["read_s"]) if dopt.get("read_s") else DOCK_READ_S
             _ps = float(dopt["park_s"]) if dopt.get("park_s") else DOCK_PARK_S
             _aspect_of_card = rd.get("card_aspect", dopt.get("card_aspect")) if rd else dopt.get("card_aspect")

@@ -1,0 +1,34 @@
+{
+  "title": "The builders started borrowing",
+  "sub": "Hyperscaler bond issuance, US$ billions a year. 2020-24 is an AVERAGE, about $28B a year; 2025 actual; 2026 is an estimate range, $130-150B",
+  "src": "Morgan Stanley IM; Mellon; Investing.com/LPL; PIMCO (via the evidence dossier)",
+  "yfmt": "usd",
+  "yunit": "B",
+  "ylabel": "US$ billions per year",
+  "ymin": 0,
+  "xticks": [[2020, "2020"], [2021, "2021"], [2022, "2022"], [2023, "2023"], [2024, "2024"], [2025, "2025"], [2026, "2026E"]],
+  "series": [
+    {"label": "issuance", "color": "crimson", "pts": [[2020, 28], [2021, 28], [2022, 28], [2023, 28], [2024, 28], [2025, 121]]},
+    {"label": "$150B", "color": "deemph", "dash": "7 6", "pts": [[2025, 121], [2026, 150]]},
+    {"label": "$130B", "color": "deemph", "dash": "7 6", "pts": [[2025, 121], [2026, 130]]}
+  ],
+  "status": "REAL",
+  "research_tier": "PLAUSIBLE",
+  "src_full": "28: the hyperscalers' 2020-2024 ANNUAL AVERAGE bond issuance, drawn flat across 2020-2024 because it is one average, not five annual prints. 121: 2025 actual issuance (Mellon ~$121B; Morgan Stanley '>$100B'). 130 and 150: the two ends of the 2026 projected net supply range (+30-50%). All four are the dossier's secondary figures (Morgan Stanley IM, Mellon, Investing.com/LPL, PIMCO); none of those documents is on disk.",
+  "proof": [
+    {"kind": "dossier", "tier": "PLAUSIBLE", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md", "locator": "line 129",
+     "quote": "- **$28B** = the hyperscalers' **2020–2024 ANNUAL AVERAGE** bond issuance",
+     "values": {"avg_2020_2024_usd_b": 28}},
+    {"kind": "dossier", "tier": "PLAUSIBLE", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md", "locator": "line 130",
+     "quote": "- **~$121B** = **2025** actual issuance (Mellon ~$121B; MS \">$100B\")",
+     "values": {"actual_2025_usd_b": 121}},
+    {"kind": "dossier", "tier": "PLAUSIBLE", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md", "locator": "line 131",
+     "quote": "- **$130–150B** = **2026 projected** net supply (+30–50%)",
+     "values": {"est_2026_low_usd_b": 130, "est_2026_high_usd_b": 150}},
+    {"kind": "dossier", "tier": "PLAUSIBLE", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md", "locator": "line 137",
+     "quote": "2020–24 average $28B → 2025 $121B → 2026E $130–150B."},
+    {"kind": "script", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt", "locator": "line 35",
+     "quote": "Between 2020 and 2024, the biggest builders borrowed about twenty-eight billion dollars a year. Last year: a hundred and twenty-one billion. This year they're tracking toward a hundred and fifty."}
+  ],
+  "provenance_note": "P69 T14a follow-up (2026-09-22). Replaces the row 16 departure: the 2026E range is a DATUM the bars builder cannot draw, so it is drawn on a dense-line page as two estimate series ($150B, $130B) that both leave the 2025 actual, and the scene fills the wedge between them with a spread ({kind: 'spread', from: 1, to: 2}) plus a figure '$130–150B' / '2026E'. Nothing is drawn at a midpoint (the old PNG's 140 bar, build_railway_documents.py:153, is not a fallback). Tier PLAUSIBLE: every figure is the dossier's secondary citation, none of the underlying documents is on disk. Not the same measure as Bravos' '$150B '24–25, $244B '26 YTD' (ANSWER-BRAVOS-HYPE-CYCLE.md:528); never mix the two on this page."
+}

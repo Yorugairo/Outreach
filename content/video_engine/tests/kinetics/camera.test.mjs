@@ -2,7 +2,8 @@
 // zoom in place, a frustum that inverts the projection, an in-frame test that knows a point from a box.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { CAM, CAM_EASES, PARALLAX, camEase, camIdentity, camSpeciesState, camKeyState, camCssFor, camFrustum, camInFrame, camProject, camLayerState, camProjectAt, camLayerCss } from "../../scripts/kinetics/camera.mjs";
+import { ATTN, CAM, CAM_EASES, PARALLAX, camAttentionState, camEase, camIdentity, camSpeciesState, camKeyState, camCssFor, camFrustum, camInFrame, camProject, camLayerState, camProjectAt, camLayerCss } from "../../scripts/kinetics/camera.mjs";
+import { STOP, STAMP_LAND } from "../../scripts/kinetics/stopaction.mjs";
 
 const W = 1080, H = 1920;
 const oldCss = (s, ox, oy) => s === 1 ? "" : "translate(" + (ox - W / 2).toFixed(1) + "px, " + (oy - H / 2).toFixed(1) + "px) scale(" + s.toFixed(4) + ") translate(" + (W / 2 - ox).toFixed(1) + "px, " + (H / 2 - oy).toFixed(1) + "px)";
@@ -133,4 +134,36 @@ test("the CSS and the projection are ONE statement at one t: the string maps the
     assert.ok(Math.abs(screen[0] - law[0]) < 0.05 && Math.abs(screen[1] - law[1]) < 0.05,
               "k = " + k + ": " + screen + " vs " + law);
   }
+});
+
+// ---- P69 T4 (R26-247, the camera; E51): THE CAMERA MAY PUSH ON A LANDED STAMP ------------------------------------------
+// A stamp is a landing (T2 gave the gate its contact at enter + STAMP_LAND.tc, T3 the cue). The attention law pulls
+// toward it from THAT contact - the clamped scale spring's crossing, the instant the mark is its own size - never from
+// its enter. contactOf is the player's own; the one below is the same arithmetic, read off the modules.
+
+const contactOf = (d) => +d.enter + (d.arrive === "throw" ? STOP.FLIGHT_S : d.arrive === "stamp" ? STAMP_LAND.tc : STOP.ANTIC_S + STOP.DROP_S);
+const dock = (arrive) => ({ arrive, enter: 4, exit: 12, place: { x: 140, y: 600, w: 800, h: 450 } });
+
+test("a stamp is a landing to the attention law: identity before its contact, a 1.06 zoom in place on its box after", () => {
+  const d = dock("stamp"), tc = 4 + STAMP_LAND.tc;
+  assert.ok(STAMP_LAND.tc > 0.15 && STAMP_LAND.tc < 0.16, "the contact is the scale spring's crossing, ~0.1542 s after the enter");
+  assert.equal(camAttentionState([d], tc - 0.05, contactOf), null, "between the enter and the contact the eye is still");
+  assert.equal(camAttentionState([d], tc, contactOf).s, 1, "the contact frame itself is where the pull starts");
+  assert.ok(Math.abs(camAttentionState([d], tc + ATTN.IN / 2, contactOf).s - (1 + (ATTN.SCALE - 1) / 2)) < 1e-9, "half-way in, on the inout curve");
+  const on = camAttentionState([d], tc + ATTN.IN, contactOf);
+  assert.ok(Math.abs(on.s - ATTN.SCALE) < 1e-12, "the full pull once IN has run");
+  assert.deepEqual(on.look, [540, 825]); assert.deepEqual(on.at, on.look, "a zoom in place about the stamp's box");
+  assert.ok(Math.abs(camAttentionState([d], 9, contactOf).s - ATTN.SCALE) < 1e-12, "held while the mark is up");
+  const out = camAttentionState([d], 11.7, contactOf).s; assert.ok(out > 1 && out < ATTN.SCALE, "released over OUT before the exit");
+  assert.equal(camAttentionState([d], 12.5, contactOf), null, "gone after the exit");
+});
+
+test("throw and land keep their own contacts and envelopes; any other arrival still pulls nothing", () => {
+  for (const [arr, tc] of [["throw", 4.45], ["land", 4.32]]) {
+    const d = dock(arr);
+    assert.equal(camAttentionState([d], tc - 0.01, contactOf), null, arr + ": still before its own contact");
+    assert.equal(camAttentionState([d], tc + 0.5, contactOf).s, 1 + (ATTN.SCALE - 1) * 1, arr + ": the full pull, as it always was");
+  }
+  for (const arr of [undefined, "spring", "pop"]) assert.equal(camAttentionState([dock(arr)], 9, contactOf), null, String(arr));
+  assert.equal(camAttentionState([{ arrive: "stamp", enter: 4, exit: 12 }], 9, contactOf), null, "a stamp with no parked box pulls nothing");
 });

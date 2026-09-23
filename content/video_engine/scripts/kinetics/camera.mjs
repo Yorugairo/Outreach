@@ -109,16 +109,18 @@ export const camInFrame = (fr, box, s = 1) => {
   const vis = area > 0 ? Math.max(0, x1 - x0) * Math.max(0, y1 - y0) / area : (x0 <= x1 && y0 <= y1 ? 1 : 0);   /* a point: in or out */
   return { inside: box.x >= fr.x0 && box.y >= fr.y0 && box.x + box.w <= fr.x1 && box.y + box.h <= fr.y1, visible: vis, scale: s };
 };
-/* T4 - THE ATTENTION LAW (P49), locked by default (Bravos). With `attention: "landings"` a dock that ARRIVES (throw | land)
-   pulls the eye: a zoom in place of ATTN.SCALE about the card's parked box, in over ATTN.IN from the CONTACT frame (E51: a
-   push is tied to a landing - never to a thing that just sits there), held while the card is up, released over ATTN.OUT
-   before it leaves. contactOf(dock) is the player's (the stop-action clock: a throw's FLIGHT_S, a landing's ANTIC_S + DROP_S).
-   [DERIVED: Bravos #68's map push ~6 % between countries, then still; D1's 15 deg cone] - HG1 tunes the three by eye. */
+/* T4 - THE ATTENTION LAW (P49), locked by default (Bravos). With `attention: "landings"` a dock that ARRIVES (throw | land
+   | stamp) pulls the eye: a zoom in place of ATTN.SCALE about the card's parked box, in over ATTN.IN from the CONTACT frame
+   (E51: a push is tied to a landing - never to a thing that just sits there), held while the card is up, released over
+   ATTN.OUT before it leaves. contactOf(dock) is the player's (the stop-action clock: a throw's FLIGHT_S, a landing's
+   ANTIC_S + DROP_S, a stamp's STAMP_LAND.tc - P69 T4, R26-247: the clamped scale spring's crossing, the instant the mark
+   is its own size; the gate mirrors it as STAMP_CONTACT_S). [DERIVED: Bravos #68's map push ~6 % between countries, then
+   still; D1's 15 deg cone] - HG1 tunes the three by eye. */
 export const ATTN = Object.freeze({ SCALE: 1.06, IN: 0.5, OUT: 0.6 });
 export const camAttentionState = (docks, t, contactOf, P = ATTN) => {
   let st = null;
   for (const d of docks || []) {
-    if (!d || !d.place || !(d.arrive === "throw" || d.arrive === "land")) continue;
+    if (!d || !d.place || !(d.arrive === "throw" || d.arrive === "land" || d.arrive === "stamp")) continue;
     const tc = contactOf(d), exit = +d.exit, out = exit - P.OUT;
     if (!(t >= tc && t <= exit)) continue;
     const a = camEase.inout(camClamp((t - tc) / P.IN)) * (1 - camEase.inout(camClamp((t - out) / P.OUT)));

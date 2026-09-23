@@ -15,7 +15,7 @@ are a pure function of its ink - see `ledger_page.page_ink_key`), so `free_bands
 
     python measure_page_boxes.py --list
     python measure_page_boxes.py --write                     # re-measure everything, rewrite the fixture
-    python measure_page_boxes.py --check                     # re-measure, diff against the file, exit 1 on drift
+    python measure_page_boxes.py --check                     # re-measure, diff the boxes against the file, exit 1 on drift
     python measure_page_boxes.py --builder tiers --aspect 9:16   # one page, printed, nothing written
     python measure_page_boxes.py --write --project content/video_engine/projects/.../tokyo-tea-break/build-short-t0
 
@@ -392,7 +392,8 @@ def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bo
 
 
 def template_sha() -> str:
-    """P51 T1: bind both player files after normalizing checkout line endings."""
+    """P51 T1: bind both player files after normalizing checkout line endings. R26-241: recorded on
+    `--write` as provenance and never compared by `--check` - a byte is not a box."""
     template = RB.TEMPLATE.read_bytes().replace(b"\r\n", b"\n")
     engine = RB.ENGINE.read_bytes().replace(b"\r\n", b"\n")
     return hashlib.sha256(template + engine).hexdigest()
@@ -459,6 +460,67 @@ def dumps(doc: dict) -> str:
     return json.dumps(doc, ensure_ascii=False, indent=1, sort_keys=True) + "\n"
 
 
+# R26-241: WHEN the fixture was measured and FROM WHICH player bytes. Both stay on file as provenance
+# and neither is compared: an engine byte that moves no box (a stamp's easing, a comment) is not drift,
+# and a byte-for-byte compare against the sha and the date turned `--check` red on every engine slice.
+PROVENANCE = ("measured", "player_sha256")
+SECTIONS = ("builders", "pages")   # compared entry by entry, so a drift line can say WHICH box moved
+NAMED_PARTS = {"boxes": "", "bands": "band ", "axis": "axis "}   # an entry's parts whose members are boxes
+
+
+def _short(value) -> str:
+    text = json.dumps(value, sort_keys=True)
+    return text if len(text) <= 80 else text[:77] + "..."
+
+
+def _entry_drift(where: str, was, now) -> list[str]:
+    """One line per difference between two measurements of one page in one geometry."""
+    if was is None:
+        return [f"{where}: measured now, not on file"]
+    if now is None:
+        return [f"{where}: on file, no longer measured"]
+    if not (isinstance(was, dict) and isinstance(now, dict)):
+        return [f"{where}: {_short(was)} -> {_short(now)}"] if was != now else []
+    out = []
+    for key in sorted(set(was) | set(now)):
+        a, b = was.get(key), now.get(key)
+        if a == b:
+            continue
+        if key in NAMED_PARTS and isinstance(a, dict) and isinstance(b, dict):
+            out += [f"{where} {NAMED_PARTS[key]}{box}: {_short(a.get(box))} -> {_short(b.get(box))}"
+                    for box in sorted(set(a) | set(b)) if a.get(box) != b.get(box)]
+        else:
+            out.append(f"{where} {key}: {_short(a)} -> {_short(b)}")
+    return out
+
+
+def _builder_of(*entries) -> str:
+    return str(next((e["builder"] for e in entries if isinstance(e, dict) and e.get("builder")), None))
+
+
+def drift(was: dict, now: dict) -> list[str]:
+    """Every difference between the fixture on file and a fresh measurement, the provenance excluded.
+
+    A representative is named `<builder> <aspect> <box>` and a project page `<builder> <ink> <aspect>
+    <box>`, the aspect being the fixture key - a full-stage page reads `16:9|full_stage`."""
+    was = was if isinstance(was, dict) else {}
+    out = [f"{key}: {_short(was.get(key))} -> {_short(now.get(key))}"
+           for key in sorted(set(was) | set(now))
+           if key not in PROVENANCE and key not in SECTIONS and was.get(key) != now.get(key)]
+    for section in SECTIONS:
+        sa, sb = was.get(section) or {}, now.get(section) or {}
+        for name in sorted(set(sa) | set(sb)):
+            fa, fb = sa.get(name) or {}, sb.get(name) or {}
+            if not (isinstance(fa, dict) and isinstance(fb, dict)):
+                out.append(f"{section} {name}: {_short(fa)} -> {_short(fb)}")
+                continue
+            for aspect in sorted(set(fa) | set(fb)):
+                ea, eb = fa.get(aspect), fb.get(aspect)
+                label = name if section == "builders" else f"{_builder_of(eb, ea)} {name}"
+                out += _entry_drift(f"{label} {aspect}", ea, eb)
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--list", action="store_true")
@@ -488,10 +550,15 @@ def main(argv: list[str] | None = None) -> int:
         FIXTURE.write_text(dumps(doc), encoding="utf-8")
         doc = build(builders, timelines)
     if args.check:
-        was = FIXTURE.read_text(encoding="utf-8") if FIXTURE.exists() else ""
-        now = dumps(doc)
-        if was != now:
-            print(f"DRIFT: {FIXTURE.relative_to(REPO)} is not what the player draws - run --write", file=sys.stderr)
+        try:
+            was = json.loads(FIXTURE.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            was = {}
+        lines = drift(was, doc)
+        if lines:
+            print(f"DRIFT: {_rel(FIXTURE)} is not what the player draws - run --write", file=sys.stderr)
+            for line in lines:
+                print(f"  {line}", file=sys.stderr)
             return 1
         print(f"PASS {len(builders)} builders x "
               f"{sum(len(v) for v in doc['builders'].values())} geometr(ies) measured identical")

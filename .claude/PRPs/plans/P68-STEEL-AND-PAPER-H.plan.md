@@ -399,7 +399,7 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
 - Owner: implementation_luna
 - Route: `implementation_luna` builds; `reviewer` reads the diff and the built cut against the
   treatment mechanism by mechanism (M45) before the parent integrates
-- Depends on: T5, HG3
+- Depends on: T5, and the operator's decision of 2026-09-22 (2): the body builds on today's page, 33 px captions and the scratch Kokoro take; HG3's answers re-time it later and no longer block it. ROUTED to P69 T14-T34 (`.claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md`)
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`, `.../CRITIC-REPORT-H.md`, `.../BEAT-PLAN-H.jsonl`
 - Acceptance: every treatment row built; the outro stitched as the last word ends (the dissolve
   plus the recorded brand line 0.7 s under the card - `CAPABILITIES.md:63`,

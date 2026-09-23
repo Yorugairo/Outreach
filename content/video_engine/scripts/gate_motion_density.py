@@ -143,6 +143,7 @@ MORPH_INVARIANTS_NAME = "morph-invariants.json"   # written by measure_morph.py 
 SRC_M17 = "P47 T3 / the brief B4 [DERIVED: :390-396]: a morph reads as one thing changing when its centroid moves <= 6 % of W, its dominant axis turns <= 15 deg and its bounding area keeps >= 60 % - measured in the player by measure_morph.py"
 STOP_FLIGHT_S = 0.45       # P47 T1 [DERIVED: stopaction.mjs STOP.FLIGHT_S] - a thrown card lands this long after its enter
 STOP_LAND_S = 0.32         # P47 T1 [DERIVED: STOP.ANTIC_S + STOP.DROP_S] - a landed card hits its spot this long after its enter
+STAMP_CONTACT_S = 0.1542   # P69 T2 (R26-247) [DERIVED: stopaction.mjs STAMP_LAND.tc] - a stamped mark reaches its own size (the clamped scale spring's crossing) this long after its enter; STAMPS ONLY
 STOP_ON1_PX_S = 154        # P47 T1, E99 s30 [mirrors CADENCE.ON1_PX_S: RED 1/7 picture width/s, cinema parity] - faster than this steps on 1s
 STOP_THROW_DX, STOP_THROW_DY, CARD_W_DEFAULT = 240, 160, 864   # the template's throw offsets and the .dock width, mirrored
 SRC_M20 = "P47 T1 + E99 s30 (the cadence rule, cinema parity): a throw steps on 1s above 154 px/s, on 2s below - reported, not scored, until HG2 tunes it"
@@ -1024,14 +1025,18 @@ def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
 
 
 def _attention_moves(s: dict) -> list[tuple[float, float, str]]:
-    """P49 T4: (contact, contact + ATTN_IN, dock slide) for every arriving dock a landings-attention scene pulls toward."""
+    """P49 T4: (contact, contact + ATTN_IN, dock slide) for every arriving dock a landings-attention scene pulls toward
+    (P69 T4, R26-247: a stamp too, from its contact STAMP_CONTACT_S after its enter - as the player's contactOf)."""
     if (s.get("camera") or {}).get("attention") != "landings":
         return []
     out: list[tuple[float, float, str]] = []
     for d in s.get("docks", []):
-        if not d.get("place") or d.get("arrive") not in ("throw", "land"):
+        if not d.get("place") or d.get("arrive") not in ("throw", "land", "stamp"):
             continue
-        tc = float(d.get("enter", 0.0)) + (STOP_FLIGHT_S if d.get("arrive") == "throw" else STOP_ANTIC_S + STOP_DROP_S)
+        if d.get("arrive") == "stamp":
+            tc = float(d.get("enter", 0.0)) + STAMP_CONTACT_S
+        else:
+            tc = float(d.get("enter", 0.0)) + (STOP_FLIGHT_S if d.get("arrive") == "throw" else STOP_ANTIC_S + STOP_DROP_S)
         out.append((tc, tc + ATTN_IN, str(d.get("slide", d.get("asset", "?")))))
     return out
 
@@ -1147,9 +1152,12 @@ def camera_state_at(s: dict, t: float, sw: float, sh: float, plot: dict | None) 
         st = ident
         if (s.get("camera") or {}).get("attention") == "landings":   # P49 T4: the pull toward a landing, as the player draws it
             for d in s.get("docks", []):
-                if not d.get("place") or d.get("arrive") not in ("throw", "land"):
+                if not d.get("place") or d.get("arrive") not in ("throw", "land", "stamp"):
                     continue
-                tc = float(d.get("enter", 0.0)) + (STOP_FLIGHT_S if d.get("arrive") == "throw" else STOP_ANTIC_S + STOP_DROP_S)
+                if d.get("arrive") == "stamp":   # P69 T4 (R26-247): a stamp pulls from its contact, as the player's contactOf
+                    tc = float(d.get("enter", 0.0)) + STAMP_CONTACT_S
+                else:
+                    tc = float(d.get("enter", 0.0)) + (STOP_FLIGHT_S if d.get("arrive") == "throw" else STOP_ANTIC_S + STOP_DROP_S)
                 exit_t = float(d.get("exit", tc)); out_t = exit_t - ATTN_OUT
                 if not (tc <= t <= exit_t):
                     continue
@@ -2974,7 +2982,7 @@ def _deployed_lives(scenes: list[dict]) -> list[tuple[str, float, float, float]]
 
 def _landings(s: dict) -> list[tuple[float, str]]:
     """Every LANDING on a scene: the page's chart landing, each build_to / bracket / figure / note end, each dock's arrival
-    (its enter, plus a throw's flight or a land's anticipation + drop), each badge landing on a page."""
+    (its enter, plus a throw's flight, a land's anticipation + drop or a stamp's contact), each badge landing on a page."""
     a = float(s["span"][0]) if s.get("span") else 0.0
     out: list[tuple[float, str]] = []
     if _is_page(s):
@@ -2990,6 +2998,8 @@ def _landings(s: dict) -> list[tuple[float, str]]:
     for d in s.get("docks", []):
         arr = d.get("arrive")
         contact = float(d.get("enter", 0.0)) + (0.46 if arr == "throw" else 0.32 if arr == "land" else 0.0)
+        if arr == "stamp":   # P69 T2 (R26-247): a stamp lands at its contact; throw / land above keep their own value
+            contact = float(d.get("enter", 0.0)) + STAMP_CONTACT_S
         out.append((contact, f"dock {d.get('slide', '?')} {arr or 'spring'}"))
     return out
 
@@ -3142,23 +3152,27 @@ def _build_to_gate(scenes: list[dict]) -> Gate | None:
 
 
 def _arrivals(scenes: list[dict]) -> list[tuple[float, str, str, float]]:
-    """(enter, slide, arrive, landing time) for every dock that arrives by a throw or a landing (P47 T1)."""
+    """(enter, slide, arrive, landing time) for every dock that arrives by a throw, a landing (P47 T1) or a stamp
+    (P69 T2, R26-247: its contact, STAMP_CONTACT_S after its enter)."""
     out = []
     for sc in scenes:
         for d in sc.get("docks", []):
             arr = d.get("arrive")
             if arr in ("throw", "land"):
                 out.append((float(d["enter"]), str(d.get("slide", "?")), arr, float(d["enter"]) + (STOP_FLIGHT_S if arr == "throw" else STOP_LAND_S)))
+            elif arr == "stamp":
+                out.append((float(d["enter"]), str(d.get("slide", "?")), arr, float(d["enter"]) + STAMP_CONTACT_S))
     return out
 
 
 def _arrival_events(scenes: list[dict]) -> list[float]:
-    """A throw or a landing is motion: its enter and its impact are events (the pop's enter is already the dock's)."""
+    """A throw, a landing or a stamp is motion: its enter and its impact are events (the pop's enter is already the dock's)."""
     return [round(t, 2) for e, _s, _a, t in _arrivals(scenes)]
 
 
 def _cadence_gate(scenes: list[dict]) -> Gate | None:
-    """M20 (INFO): the cadence rule per thrown card - the flight's speed and the hold it steps on."""
+    """M20 (INFO): the cadence rule per thrown card - the flight's speed and the hold it steps on; a landing's and a
+    stamp's contact (P69 T2) ride along."""
     arr = _arrivals(scenes)
     if not arr:
         return None
@@ -3171,6 +3185,9 @@ def _cadence_gate(scenes: list[dict]) -> Gate | None:
                 rows.append(f"{d.get('slide', '?')} throw ~{v:.0f} px/s -> on {1 if v > STOP_ON1_PX_S else 2}s")
             elif d.get("arrive") == "land":
                 rows.append(f"{d.get('slide', '?')} land ({d.get('mass', 'paper')}) - weight sold {STOP_LAND_S:.2f}s before the impact")
+            elif d.get("arrive") == "stamp":   # P69 T2 (R26-247): the mass defaults to the engine's own, `ink`
+                contact = float(d.get("enter", 0.0)) + STAMP_CONTACT_S
+                rows.append(f"{d.get('slide', '?')} stamp ({d.get('mass') or 'ink'}) - contact {STAMP_CONTACT_S:.2f}s after its enter, at {contact:.2f}s")
     return Gate("M20", "INFO", f"{len(arr)} arrival(s): " + "; ".join(rows[:8]), SRC_M20)
 
 

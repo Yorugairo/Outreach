@@ -1,0 +1,24 @@
+{
+  "title": "Ninety-four cents of every dollar",
+  "sub": "Hyperscaler capital spending as a share of their operating cash flow - PIMCO's projection for the next two years",
+  "src": "PIMCO, AI Credit Expansion: Assessing the Micro and Macro Risks, Figure 3 - a projection, not an actual",
+  "unit": "%",
+  "domain": [0, 100],
+  "hlines": [{"y": 100, "label": "every dollar from operations", "color": "deemph"}],
+  "bars": [
+    {"label": "Capex, next two years", "value": 94, "note": "94%", "color": "crimson"}
+  ],
+  "status": "REAL",
+  "research_tier": "PLAUSIBLE",
+  "src_full": "PIMCO, 'AI Credit Expansion: Assessing the Micro and Macro Risks', Figure 3: aggregate hyperscaler capex expected to absorb 94% of operating cash flow over the next two years. The PIMCO paper is not on disk; the figure is the dossier's record of it.",
+  "proof": [
+    {"kind": "dossier", "tier": "PLAUSIBLE", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md", "locator": "lines 117-118 (B1)",
+     "quote": "aggregate hyperscaler capex is expected to absorb **94% of operating cash flow** over the next two years (Figure 3).",
+     "values": {"capex_share_of_ocf_pct": 94}},
+    {"kind": "dossier", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md", "locator": "line 226",
+     "quote": "| 5 | Hyperscaler capex 2026E $690B / 2027E $870B; 94% of OCF | our chart | PIMCO Fig. 2–3 | ✅ |"},
+    {"kind": "script", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt", "locator": "line 37",
+     "quote": "Over the next two years, PIMCO has this buildout consuming ninety-four percent of every dollar these companies generate from operations. Ninety-four."}
+  ],
+  "provenance_note": "P69 T14a (2026-09-22). The script's sentence is PIMCO's FORWARD claim (two years ahead, five hyperscalers, Figure 3), so this object draws only that. The OTHER 94 is a different claim and is not drawn here: ev-capex-funding-v1's mark '94 cents of every dollar - operating cash consumed, Q1 '26' is a realised single quarter from company filings aggregated by Epoch AI (148.4 / 157.9 = 94.0%, MSFT AMZN GOOGL META ORCL). They agree by coincidence of rounding, not by source. domain [0, 100] states the scale: the whole of operating cash flow, drawn as the rule."
+}

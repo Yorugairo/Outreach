@@ -1,0 +1,28 @@
+{
+  "title": "The railways took half. Tech takes 28 cents.",
+  "sub": "One technology's share of every dollar a country invested - Britain's railways at their peak, US computing and software today",
+  "src": "UK: Campbell & Turner literature (via Focus-Economics) - US: BEA data via FRED, Q2 2026",
+  "unit": "¢",
+  "domain": [0, 30],
+  "overflow": "burst",
+  "bars": [
+    {"label": "Britain's railways, 1844-47 (about half)", "value": 50, "note": "~50¢", "color": "amber"},
+    {"label": "US computing + software, today", "value": 28, "note": "28¢", "color": "crimson"}
+  ],
+  "status": "REAL",
+  "research_tier": "PLAUSIBLE",
+  "src_full": "Railway ~50%: 'about 50% of the country's entire gross domestic capital formation' (Campbell & Turner literature; Focus-Economics summary), a secondary record in the dossier. US 28: (Y034RC1Q027SBEA + B985RC1Q027SBEA) / GPDI, the railway-yardstick reading of 2026-08-30 for 2026 Q2 (28.184%), written as the whole cent the script and the yardstick page both state.",
+  "proof": [
+    {"kind": "dossier", "tier": "PLAUSIBLE", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md", "locator": "lines 80-82 (A1)",
+     "quote": "more than 6.5% of national income and about 50% of the country's entire gross domestic capital formation. Source: Campbell & Turner literature; Focus-Economics summary.",
+     "values": {"railway_share_pct": 50}},
+    {"kind": "instrument_reading", "tier": "CONFIRMED", "path": "content/video_engine/instruments/railway-yardstick/readings.jsonl", "locator": "line 1",
+     "quote": "{\"date\": \"2026-08-30\", \"quarter_x\": 2026.25, \"narrow_pct\": 28.184, \"broad_pct\": 65.366}",
+     "values": {"us_narrow_pct": 28.184}},
+    {"kind": "definition", "path": "content/video_engine/instruments/railway-yardstick/README.md", "locator": "lines 15, 18-21",
+     "quote": "information-processing equipment + software / GPDI | (Y034RC1Q027SBEA + B985RC1Q027SBEA) / GPDI ... the railway 50% was ONE technology against Britain's total capital formation. Neither US line is single-technology"},
+    {"kind": "script", "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt", "locator": "line 31",
+     "quote": "Today it's twenty-eight, the most it has ever been. In the 1840s railways took roughly half of everything Britain invested"}
+  ],
+  "provenance_note": "P69 T14a (2026-09-22). Tier PLAUSIBLE: the 28 is CONFIRMED (a primary FRED reading on disk), the railway 50 is secondary only (the dossier's summary of the Campbell & Turner literature; no primary on disk), and a series takes its weakest figure's tier. The two denominators differ (Britain's gross domestic capital formation; US gross private domestic investment) - the yardstick README's caveat, and ev-capital-formation-v1 already draws the same 50 as an hline. domain [0, 30] is the scale 28 reads on; the railway bar is the breakthrough (E60, CAPABILITIES 'The BREAKTHROUGH bars'), per REBUILD-TREATMENT-H.md row 14."
+}

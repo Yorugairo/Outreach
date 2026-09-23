@@ -1,0 +1,58 @@
+{
+  "title": "Two clocks",
+  "sub": "How long the capital waited for its return - 1840s railways against today's compute",
+  "src": "Campbell (2012), Explorations in Economic History; Odlyzko (2010) - via the research lane; compute ~5 years on the operator's word",
+  "unit": "years",
+  "bars": [
+    {
+      "label": "1840s railways",
+      "value": 20,
+      "note": "about 20 years",
+      "color": "deemph"
+    },
+    {
+      "label": "Today's compute",
+      "value": 5,
+      "note": "about 5 years",
+      "color": "crimson"
+    }
+  ],
+  "status": "REAL",
+  "research_tier": "PLAUSIBLE",
+  "src_full": "Railways: after the 1845-47 Mania, dividends took the subsequent two decades to barely return to pre-Mania levels (Campbell 2012, EEH 49(2), p. 238, doi:10.1016/j.eeh.2011.10.001); the 1846 projection of GBP 560M capital earning ~5% arrived in 1872, 26 years later (Odlyzko 2010, p. 181). Compute: about five years, accepted on the operator's word, E99 s95.",
+  "proof": [
+    {
+      "kind": "research",
+      "tier": "PLAUSIBLE",
+      "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/RAILWAY-LAG-20Y-FINDINGS.md",
+      "locator": "findings table, row 1 (Campbell 2012, p. 238)",
+      "quote": "During the subsequent two decades the rises in dividends were modest and rates barely returned to their pre-Mania levels.",
+      "values": {
+        "railway_lag_years": 20
+      }
+    },
+    {
+      "kind": "research",
+      "tier": "PLAUSIBLE",
+      "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/RAILWAY-LAG-20Y-FINDINGS.md",
+      "locator": "findings table, row 2 (Odlyzko 2010, p. 181)",
+      "quote": "total capital investment reached £ 560 million in 1872, 26 years later"
+    },
+    {
+      "kind": "operator",
+      "path": "docs/portable/OPERATOR-RULINGS.md",
+      "locator": "line 3321 (E99 s95)",
+      "quote": "We don't need an exact source, 5 years is the fab build out",
+      "values": {
+        "compute_years": 5
+      }
+    },
+    {
+      "kind": "script",
+      "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-VO.txt",
+      "locator": "line 41",
+      "quote": "Railway steel sat waiting twenty years while the economy caught up. That's why the return took two decades. Today's compute doesn't sit. It depreciates in about five years."
+    }
+  ],
+  "provenance_note": "P69 T14a (2026-09-22, parent). The 20 is SUPPORTED by the Gemini research lane (content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/RAILWAY-LAG-20Y-FINDINGS.md, verdict SUPPORTED): academic sources quoted verbatim with DOI/page, but the papers are not on disk, so the tier is PLAUSIBLE until a PDF is. The 5 is the operator's word. Caution for the script's next letter (never patched here): the 1840s track was WROUGHT IRON, not steel - Bessemer steel rails came in the mid-1860s (FINDINGS row 7, Pollins 1971; Gourvish 1980)."
+}

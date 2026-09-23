@@ -13,8 +13,9 @@ by the estimate, that the fallback is exactly today's behaviour, and R26-22 - a 
 arrives after E50's clock is centred in a MEASURED free band instead of parked over the title, while
 an authored `centre_y` still wins and an unmeasured page keeps its parked rectangle.
 
-No browser: every test reads the committed fixture. The measurement itself is `measure_page_boxes.py
---check`, which needs chromium and is not run here.
+Every test but one reads the committed fixture, no browser. The one (`needs_browser`, R26-241)
+re-measures the builders' pages in the player and diffs the BOXES; `measure_page_boxes.py --check`
+does the same for the whole file.
 """
 from __future__ import annotations
 
@@ -62,8 +63,9 @@ def estimate(page: dict, aspect: str, tmp: Path) -> dict:
 
 def test_the_fixture_names_every_builder_at_both_aspects_and_the_player_it_was_read_from():
     assert FIXTURE["schema"] == LPG.PAGE_BOXES_SCHEMA
-    assert FIXTURE["player_sha256"] == M.template_sha(), (
-        "the fixture was measured from a different player - re-run measure_page_boxes.py --write")
+    sha = FIXTURE["player_sha256"]
+    assert isinstance(sha, str) and len(sha) == 64 and set(sha) <= set("0123456789abcdef"), (
+        "the fixture records the player it was measured from as a sha256 - provenance, not a pin (R26-241)")
     assert sorted(FIXTURE["builders"]) == sorted(M.BUILDERS)
     for builder, aspect in CASES:
         entry = FIXTURE["builders"][builder][aspect]
@@ -219,7 +221,7 @@ def test_a_page_that_arrives_built_has_landed_at_its_first_frame():
 # ---- R26-51: an EPISODE'S OWN pages, keyed by ink --------------------------------------------
 # A builder has one representative here; Tokyo writes five pages and every one of them was an
 # ESTIMATE until `--project` measured it. The `pages` section is keyed by ink key, is read before
-# the per-builder representative, and is covered by the same `player_sha256` assertion above.
+# the per-builder representative, and is diffed by `--check` like every other entry (R26-241).
 
 
 def test_every_page_the_projects_compiled_is_on_file_at_the_aspect_it_was_measured():
@@ -405,3 +407,92 @@ def test_the_mask_and_the_players_own_ink_read_are_the_same_ink():
     for got, want, edge in ((cells[0], min(c for _r, c in ink), "left"), (cells[1], min(r for r, _c in ink), "top"),
                             (cells[2], max(c for _r, c in ink) + 1, "right"), (cells[3], max(r for r, _c in ink) + 1, "bottom")):
         assert abs(got - want) <= 2.0, f"the {edge} of the data: the probe reads {got:.1f}, the mask says {want}"
+
+
+# ---- R26-241: the pin measures BOXES, not bytes ------------------------------------------------
+# The fixture used to be pinned to the sha of the whole player (template + engine), so any engine
+# byte - a stamp's easing, a comment - turned both `test_page_boxes` and `--check` red although no
+# box had moved. The sha and the date stay on file as PROVENANCE (when, and from which bytes); what
+# is compared is what the player draws.
+OTHER_PLAYER = "f" * 64
+
+
+def _check(tmp_path: Path, monkeypatch, on_file: dict, measured_now: dict) -> int:
+    """`measure_page_boxes.py --check` against `on_file`, with the player's re-measurement stood in
+    by `measured_now` - the comparison is under test here, not chromium (that is the browser test)."""
+    path = tmp_path / "page-boxes.v1.json"
+    path.write_text(M.dumps(on_file), encoding="utf-8")
+    monkeypatch.setattr(M, "REPO", tmp_path)
+    monkeypatch.setattr(M, "FIXTURE", path)
+    monkeypatch.setattr(M, "build", lambda builders, timelines=None: copy.deepcopy(measured_now))
+    return M.main(["--check"])
+
+
+def _yesterdays_copy() -> dict:
+    doc = copy.deepcopy(FIXTURE)
+    doc["measured"] = "2000-01-01"
+    return doc
+
+
+def _todays_measurement() -> dict:
+    return dict(copy.deepcopy(FIXTURE), measured="2099-12-31", player_sha256=OTHER_PLAYER)
+
+
+def test_an_engine_byte_that_moves_no_box_leaves_the_pin_green(monkeypatch):
+    monkeypatch.setattr(M, "template_sha", lambda: OTHER_PLAYER)
+    test_the_fixture_names_every_builder_at_both_aspects_and_the_player_it_was_read_from()
+
+
+def test_check_ignores_the_provenance_when_no_box_moved(tmp_path, monkeypatch, capsys):
+    assert _check(tmp_path, monkeypatch, _yesterdays_copy(), _todays_measurement()) == 0, capsys.readouterr().err
+    assert "PASS" in capsys.readouterr().out
+
+
+def test_check_keeps_the_provenance_on_file(tmp_path, monkeypatch):
+    on_file = _yesterdays_copy()
+    _check(tmp_path, monkeypatch, on_file, _todays_measurement())
+    kept = json.loads((tmp_path / "page-boxes.v1.json").read_text(encoding="utf-8"))
+    assert (kept["measured"], kept["player_sha256"]) == (on_file["measured"], on_file["player_sha256"]), (
+        "--check reads the fixture; it never rewrites its provenance")
+
+
+def test_check_fails_a_moved_box_naming_the_builder_the_aspect_and_the_box(tmp_path, monkeypatch, capsys):
+    now = _todays_measurement()
+    now["builders"]["story"]["9:16"]["boxes"]["plot"]["y"] += 3
+    assert _check(tmp_path, monkeypatch, _yesterdays_copy(), now) == 1
+    err = capsys.readouterr().err
+    assert "DRIFT" in err
+    assert "story 9:16 plot" in err, err
+
+
+def test_check_fails_a_moved_project_page_box_naming_its_builder_its_ink_and_the_box(tmp_path, monkeypatch, capsys):
+    ink = "f5d19c2b33b60636"
+    now = _todays_measurement()
+    now["pages"][ink]["9:16"]["boxes"]["title"]["h"] += 76
+    assert _check(tmp_path, monkeypatch, _yesterdays_copy(), now) == 1
+    err = capsys.readouterr().err
+    assert f"{PAGES[ink]['9:16']['builder']} {ink} 9:16 title" in err, err
+
+
+def _chromium_available() -> bool:
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as pw:
+            pw.chromium.launch(headless=True).close()
+        return True
+    except Exception:
+        return False
+
+
+needs_browser = pytest.mark.skipif(not _chromium_available(), reason="playwright chromium not installed")
+
+
+@needs_browser
+def test_the_boxes_on_file_are_the_boxes_the_player_draws_now():
+    """Freshness, measured: every builder's representative re-measured in today's player, in every
+    geometry, diffed against the file with the provenance left out. The project pages are
+    `--check`'s (their timelines are build artifacts a fresh clone does not have)."""
+    now = M.build(list(M.BUILDERS), [])
+    moved = M.drift({"builders": FIXTURE["builders"]}, {"builders": now["builders"]})
+    assert not moved, "the player draws other boxes than the fixture - run measure_page_boxes.py --write:\n" + (
+        "\n".join(moved))
