@@ -723,3 +723,234 @@ FAILs named: **M03** (46 s from 0:09 - the bed's gap before row 7's card, pre-ex
 (0.0 s) - the melt's throw holds the next chart until the board is clear (`meltDrawDelay`), so this sits on the
 measure's own edge; owner if it returns: the gate (a ball in flight is not an empty stage) or the engine.
 WARNs: M04 (5 plates vs 7), M25 (row 1's certificate at 0:09-0:10, pre-existing).
+
+---
+
+## 12. P69 T18 (row 10) and T19 (row 11) - 2026-09-23
+
+### 12.1 Row 10 (T18): the sell ticket thrown over the recast
+
+The build ran 0.00-102.70 s at T18 (263 of 2335 words). `UNIT_CUT_PHRASE` was "But walk Bravos'" (row 11, T19's). Row 10
+has no world change: the board is the same page (table row 5), which now has THREE states: the railway index, the share of GDP
+and the divergence (`;then=ev-divergence-v1:line`, `DIV_RECAST`, STATE_MAX 3).
+
+| what | anchor (take words) | how |
+|---|---|---|
+| the ticket `dock-h-sell-ticket`, THROWN | "obvious move" 89.61 | `arrive: throw, mass: paper`. The card is the order form's FACE cut from `world-sell-ticket-v1` (`SELL_CROP` 250x226 at plate (712, 562), inside the form's four edges). The plate's rubber stamp stands at plate x 985+, so a whole-form crop would carry a prop onto a card (E99 s92) |
+| its badge `ORDER / SELL / the steel` | springs at 91.66 (the compiler's badge clock, enter + 2.05), on "sell" 91.72 | the crop carries no word. SELL is the sentence's verb. No numeral, so no document owes one |
+| the READ, then the PARK | read in the GDP page's right room (`TICKET_READ` 0.30 wide at (0.815, 0.47), box [1277, 247, 576, 521]) to 92.64, then parked over 0.7 s into `TICKET_ROOM` [1382, 107, 384, 347] | a read centred on the stage was DEFERRED by E63 ("a card never reads over the plot", draft 3). SELL reads at ~26 px at the reading size and ~20 px parked (0.15 wide: 9 px, draft 4) |
+| the GDP line unwinds | 92.44-93.24 ("before the paper catches up") | `undraw` series 0 to nothing, so the divergence's MEMORY line arrives held (see below) |
+| the RECAST to the divergence | "catches up with it" 93.34, 1.2 s | the plain hand-over (E64), UNDER the parked ticket. Retitled 0.1 s after to the sentence's own "Chipmakers doubling. Customers flat." |
+| the lines, one at a time (`build=lines`) | the chips on "Chipmakers doubling" (94.5-95.7); mega-cap and the S&P on "their customers sit flat at the index" (95.7-98.1) | each whole, with its end tag (+105% / +21% / +21%). The chart is read at the full page (tile 98.40: labels 32 px) |
+
+**Measured and fixed across five drafts (`scratchpad/p69t18/draft1..5`, `onset/`, `spread/`):**
+- A `build_to` to datum 0 cannot hold a line whose cap is already further on. Series 0's cap is the GDP line's last datum, so draft 1 drew memory whole, with "+613% MEMORY" under the ticket. An `undraw` that starts WITH the recast still let memory draw to the GDP cap for half a second (`onset` 93.40; probe M25 `chart.sname` at 93.34-93.44). The undraw now lands 0.1 s before the recast (`MEMORY_HOLD_GAP_S`).
+- A recast on "Chipmakers" itself (2.0 s) drew nothing until "sit flat" was over (draft 4). The recast moved to "catches up with it" (1.2 s), and the GDP page's deployed life is now 4.9 s. E50's 6-8 s is an average, and a floor only for a page that arrives built.
+- The ticket at 0.15 carried a 9 px pill. It now reads at 0.30, then parks at 0.20. With memory held, the divergence's lines and tags sit at y 0.50-0.75, so the whole upper band is empty.
+
+**Departures (in `BODY_DEPARTURES`, row 10):**
+- The ticket "reads SELL over the chip line's tip": SELL is the card's badge.
+- "any adviser would sign it", a signature stroke ON the ticket: CUT. No species draws on a still card (the callout's `phrase` target is a press card's alone, and a squiggle is a caption word's). The caption carries the words.
+- The page on the hook's scale: NOT DRAWN. A recast carries no domain, and a `chart_to rescale` after it is refused by name ("4 chart states is past STATE_MAX (3)", `logs/t18-door2.log`). The page lands on the object's own log domain (sized for memory's 1,074), and the three lines fill the plot's lower ~40%. The other door (row 10 as its own page on `;domain=80,277`) would trade E64's recast under the card for a page-to-page transform across a live dock. That is the parent's call.
+- The chips-vs-customers gap as a `spread`: CUT. It painted nothing (`spread/` 98.20-100.10). On a page with states, "a bracket or spread is built on the page's own geometry and waits while a derived state stands" (`scene-evidence-engine.mjs:11498-11501`), and state 0 (the railway) has one series. Owner: the engine.
+
+**The transform inside the row** (`DIV_RECAST_WHY`, now printed in `SHOT-TABLE-H.md` under "Transforms inside a row"):
+- TAKEN: the recast under a live card (E64).
+- REFUSED:
+  - the melt (it takes the ticket's board);
+  - the dip and the cut (no world change, E47);
+  - rescale / extend (another series);
+  - morph (a strip of this frame);
+  - remake (no shared data).
+
+**Found, outside this write set:**
+1. **Probe (M25 + M27 FAIL on the ticket): a card over ITS OWN badge pill.** `probe.py:226-233` pushes every `.dock .pill` as a solid and as ink. The pairing at `:700-709` then sets the card against its own pill (10,440 px = 100% of the pill, which sits inside the card). The code's own comment says "a card's pill belongs to the card". Owner: the probe. The only fix in this write set is to drop the badge, which takes away the word SELL.
+2. **Engine transient at the second recast (93.5-93.9, `tile-93.60`).** The erasing sub and source are the RAILWAY page's ("... January 1843 = 1,000", "... index, 1843-1850"), not the GDP state's. The plain recast's outgoing text reads state 0's strings.
+3. The divergence's SUB still reads the object's own "Their pairing, plus the S&P 500 and the memory builders" while memory is held (the open item of 11.1: no row option rewrites a sub).
+
+**Life:** 98.40 vs 100.40 on the chart (x 0-1100, y 150-850), after every line has landed: mean |dL| 3.18, 5.5% of px changed (`idle=live`). Table rows 5 of 5 carry life.
+
+**The order of proof (logs in `logs/`):**
+- RED: `t18-red.log` (the table's row 5 ended at 89.27).
+- `t18-door.log` (rc 0, cues 8 of 8 bound).
+- `t18-probe.log` (48 instants).
+- `t18-frozen.log` (no run over 0.5 s).
+- `t18-seams.log` (4 boundaries, 0 faults).
+- `t18-stagegaps.log` (0.5 s, the licensed dip only).
+- `t18-spoken.log` (0 uncovered).
+- `t18-gate.log`: **4 FAIL / 1 WARN / 21 PASS / 1 JUDGE / 6 INFO**.
+  - FAILs: M03 (the bed's 46 s gap, pre-existing, HG4); M11 (row 1, pre-existing); M25 and M27 (the probe's self-pill defect above).
+  - WARN: M04 (5 plates vs 8).
+  - INFO: M21 s05 8.2 s (the divergence held to the unit's end; row 11's undraw closes it).
+- Drafts: `t18-door1..5.log`. Table snapshot: `t18-SHOT-TABLE-H.md`.
+
+**Tiles** (`scratchpad/p69t18/`):
+- `tile-<t>.png` + `tiles-sheet.png` at 89.80, 90.40, 91.90, 92.90, 93.60, 95.40, 96.60, 98.40, 100.40, 102.40.
+- `ref-<t>.png` + `ref-sheet.png` from build-f's mp4 (sha256 `9a27de1c...` verified, `ref-sha.txt`), mapped by sentence (`ref-map.txt`, 211.30-219.90 on Script G's clock). There the sell-ticket PLATE stands bare for 9 s with nothing arriving, then cuts to the trading desk.
+
+### 12.2 Row 11 (T19): one slot, three records
+
+The build now runs 0.00-127.80 s (334 of 2335 words). `UNIT_CUT_PHRASE` = "Remember that" (row 12, T20's). The take spells the
+word "line—", so "Remember that line" is not a phrase in it. Row 11 is still table row 5 (the same board): no world change.
+
+| what | anchor (take words) | how |
+|---|---|---|
+| the board re-titled | "own evidence" 103.65 | "Bravos' own evidence", the sentence's words |
+| the divergence UNDRAWS | "claims adjuster" 104.56, 1.2 s | `undraw`, every series, to nothing. E50: the sentence has left the chart's argument, and the next thing is not a chart. The true clock from the last line's landing (~98.1) is 6.4 s. The gate's M21 reads 10.0 s from the recast's landing (INFO) |
+| the ticket leaves; KARP is THROWN | "Alex Karp" 107.09 | a RECORD dock (`dock-h-karp-record`, live type, CAPABILITIES:19). It types from 107.49, and the highlighter lands word by word on the narrator's "paying for tokens that create no value" (109.35-111.75, `D.record_words`). Its words, header, kicker, attribution and source are the record's own (build-f's payload, `ev-doc-karp.png`) |
+| UBER takes the slot | "Uber's CTO" 114.21 | `land` (`SLOT_HANDOFF_ARRIVE`). The PNG card `ev-uber-adoption-v1.png` is a CHART (32% -> 84% adoption), so it is read at 0.83 of the stage (1594 x 574; labels 26-40 px, `draft1/zoom.png`). Its badge springs on "April" (116.26): ANNUAL AI BUDGET / spent by April / 2026, words on the card (B3). build-f's "4 months" is the script's arithmetic and is not carried |
+| the COO's line takes the slot | "And their COO" 120.65, to the row's end | `land`. The PNG card `ev-doc-macdonald.png` at 0.60, with its own highlighter on "that trade becomes harder to justify". The anchored caption strip carries the narrator's words under it |
+
+**Measured and fixed (`scratchpad/p69t19/draft1`, probe):**
+- The undraw takes the LINES, not the axes. On draft 1 (slot 0.92 wide, centred at y 0.472) each card sat on the board's axis labels: the unit label "index - 100 = ..." at y 205-238, the ticks at x 79-133 and the dates at y 837-873 (M25, 72-100% of each). The slot is now centred in the free box (x 140-1780, y 245-830).
+- The COO card's frame adds ~31 px under its picture: at 0.655 it drew 603 px tall, and its foot sat on the dates (M25, 36-44%). It is 0.60 now; Karp's paper is its type's own height (~415 px) and keeps 0.655.
+- After both fixes, no card touches any page label (`t19-probe.log`, 62 instants). The ticket's self-pill (12.1) is the only overlap left.
+
+**Departures:**
+- **The records' slot is NOT the ticket's corner** (the treatment says "lands in its slot"). The ticket's box is 384 px wide, and a record there types at ~8 px. The operator's T15 lesson outranks it: nothing of words or of a chart is read at card size. The three records share ONE box and centre (s80, the footprint narrowing where the aspects differ).
+- **Uber is a PNG card** (no series on disk; `BODY_DEPARTURES` row 11), read near full width, not small.
+- **The COO line is a PNG card** (no record payload), with the caption strip carrying the words.
+
+**Transforms inside the row** (printed in `SHOT-TABLE-H.md`):
+- `WALK_UNDRAW_WHY`:
+  - TAKEN: the undraw (E50).
+  - REFUSED: recast / remake (the next thing is a quote, and STATE_MAX is spent); melt / dip (no world change, E47); park (the undrawn plot IS the room, s80).
+- `SLOT_WHY`:
+  - TAKEN: the slot hand-off (E99 s80). Karp is thrown on his name (s71); Uber and the COO land.
+  - REFUSED: a park of the page; a dip per quote (E47); three worlds (build-f's memo / burndown / racks, the G31 listing risk).
+
+**Found, for the parent:**
+1. The board keeps the divergence's axes (ticks, the unit label, the dates) under the records for 20 s. They peek around each card (`tile-115.30`). No species un-draws a page's AXES. The object's `sub` also still reads "Their pairing, plus the S&P 500 and the memory builders" under "Bravos' own evidence" (no row option rewrites a sub, 11.1). Owner: the engine; flagged for HG4.
+2. E99 s98's blur under a dock over a busy chart plate is NOT built (no option in the compiler or the engine: `grep -i blur` finds the blurzoom exit and the caption stagger only). Here the chart is undrawn before the records land, so there is nothing busy under them.
+3. M21 reads a `build=lines` page's last data mark at the recast's landing (94.54), not at the last line's (98.1).
+4. A transient Playwright `NetworkError` failed one door run (`t19-door2.log`). The re-run was clean.
+
+**Life:**
+- COO hold: 122.40 vs 124.40 (x 0-1920, y 150-870), mean |dL| 9.17, 9.6% of px changed.
+- Board strip: 121.60 vs 124.20 (y 0-240), 3.29, 4.6%.
+- Table rows: 5 of 5 carry life (row 5 `idle=live`).
+
+**The order of proof (logs in `logs/`):**
+- `t19-door.log` (rc 0, cues 11 of 11 bound).
+- `t19-probe.log` (62 instants).
+- `t19-frozen.log` (no run over 0.5 s).
+- `t19-seams.log` (4 boundaries, 0 faults).
+- `t19-stagegaps.log` (0.5 s, the licensed dip only).
+- `t19-spoken.log` (0 uncovered).
+- `t19-gate.log`: **4 FAIL / 1 WARN / 21 PASS / 1 JUDGE / 6 INFO**.
+  - FAILs: M03 and M11 (the bed's, pre-existing, HG4); M25 and M27 (the ticket's self-pill, the probe's defect, 12.1).
+  - WARN: M04 (5 plates vs 10).
+  - INFO: M21 s05 10.0 s (item 3 above).
+  - M05, M10, M12 and M16 PASS (the longest gap between visual events is 1.5 s).
+- Drafts: `t19-door1..3.log`. Table snapshot: `t19-SHOT-TABLE-H.md`.
+
+**Tiles** (`scratchpad/p69t19/`):
+- `tile-<t>.png` + `tiles-sheet.png` at 103.90, 105.30, 106.60, 107.90, 110.00, 112.40, 115.30, 117.80, 121.60, 124.20, 126.90.
+- `ref-<t>.png` + `ref-sheet.png` from build-f's mp4 (sha256 verified, `ref-sha.txt`; `ref-map.txt` 222.30-248.20). There, Karp's record stands on two plates (the memo desk, the whiteboard office), and the Uber card is held across the racks and the exhibition hall. The COO's line is never shown as a document.
+
+### 12.3 The parent's fixes to rows 10-11 (T18b, T19b) - 2026-09-23
+
+**SUPERSEDES** in 12.1: the ORDER / SELL badge, and the M25 / M27 self-pill FAILs (the badge is gone). **SUPERSEDES** in 12.2:
+the undraw, the "Bravos' own evidence" retitle, "no world change", and the slot fitted between the undrawn axes.
+
+**FIX 1: SELL reads big (row 10).** The parent: "The whole point of the beat is the word SELL ... SELL at least ~72 px ... The SELL
+must be the largest thing on the card while it's read."
+- The card is now the form's face with SELL STAMPED across its centre: a rubber-stamp impression with a ruled border, a -7 degree tilt and the ink's grain.
+- The ink is the brand's negative, `brand-tokens.json` coral #ED6A4A ("negative / alarm"). The accent sunflower vanishes on cream paper.
+- The door composes it at build (`_sell_ticket_card`, 4x the crop, the repo's Inter at Black, a fixed grain seed).
+- The word spans 0.66 of the card. Its cap height is ~140 px at the 0.30 read and ~95 px parked at 0.20 (`p69t18b/tile-91.90`, `tile-98.40`).
+- The badge is gone, and with it the probe's self-pill M25 / M27 FAILs.
+- Not built: SELL landing ON the ticket as its own stamp on the word "sell". A second dock cannot ride the first dock's read-then-park (no door), so the word is on the card from its throw on "the obvious move". The move IS the sell.
+
+**FIX 2: a clean ground for the records (row 11). Taken: (b), a world change, made by a TRANSFORM (the melt), not a dip.**
+- **Why (a) was not taken:** it has NO DOOR.
+  - `undraw` takes a page's LINES and never its axes (T19 draft 3).
+  - No species dims or retracts a page's furniture (SPECIES_KINDS).
+  - The dock `#wash` is a fixed 0.18-0.34 gradient scrim (`scene-evidence-player.template.html:250-262`) that no row can deepen.
+  - Engine gap for the parent to file: "a page recedes to its ground under a card" (an undraw of the axes, or a row-level wash depth).
+- **What was done:** the divergence MELTS on "like a claims adjuster" (104.31, `melt:splash:plate:1`, E88; row 2's own ending) and splashes onto `world-internal-memo-v1` (a lamp, a desk, one memo: a plain document plate). There Karp, Uber and the COO take one slot in turn (table row 6).
+- **Refused, by name** (`MEMO_MELT_WHY`, printed in `SHOT-TABLE-H.md`):
+  - the page receding (no door);
+  - the dip (the melt IS this pair's transform, s74);
+  - the thread;
+  - recast / remake (STATE_MAX spent, and the next thing is a quote);
+  - a park (the "broken chart").
+- The ticket leaves with its page at the melt.
+- **New FAILs from the move to a plate** (draft 1: M05 and M16, gaps of 6.7 s, 4.4 s and 6.8 s). On a picture plate a record's typing and a PNG card's hold earn no event, and the anchored caption is not credited. Fixed with LIFE, not by removing motion:
+  - the desk's own MUG breathes steam (E49; s38 "plate life = the ambient lane"), its rim measured at x 0.72-0.83, y 0.35-0.40 (`p69t19b/mug-grid.png`);
+  - so the two documents stand in the slot's left 0.64, leaving the mug visible;
+  - the Uber CHART keeps the full 0.90 width (a chart is never small), and its window's life is three badges, each a phrase printed on the card: spent by April / 2026, 32% -> 84% / Uber engineering, $500-$2,000 / per month;
+  - the steam runs ONLY in windows where it is seen.
+- Result: M05 and M16 PASS (longest gap 2.4 s).
+
+**FIX 3: row 10's scale. LEFT, NAMED.** `;domain=` sets the scale of the state a page is BORN on (row 7's `domain=80,277`). The
+divergence is the rail page's THIRD state, and a rescale after its recast is refused by name (4 states > STATE_MAX 3). Two other paths
+exist, and neither is cheap:
+- a page of its own for row 10 would trade the recast under the card (E64) for a page-to-page transform across a live dock;
+- a per-state domain on `;then=` needs an engine door.
+
+The recast's half-title flash at 93.6 s is R26-261 (known, left).
+
+Checkpoint gate after the fixes (`t19b-gate.log`): **2 FAIL / 2 WARN / 22 PASS**. The FAILs are the bed's M03 and M11. Seams: 5 boundaries, 0 faults. The rest of the chain is in `t19b-*.log`.
+
+Life: the mug region at 107.90 vs 110.00 reads mean |dL| 6.63 (10.1%).
+
+Tiles:
+- `scratchpad/p69t18b/` (`tiles-sheet.png` + the build-f `ref-sheet.png`);
+- `scratchpad/p69t19b/` (`tiles-sheet.1.png`, `tiles-sheet.2.png` + `ref-sheet.png`).
+
+### 12.4 Row 12 (T20) and row 13 (T21) - 2026-09-23
+
+The build now runs 0.00-162.50 s (429 of 2335 words). `UNIT_CUT_PHRASE` = "So I built" (row 14, T22's). RED: `t20-red.log`
+(the table ended at 127.80). Rows 12 and 13 were authored together and validated in one build (`t21-*` logs).
+
+| table row | window | what |
+|---|---|---|
+| 6 `world-internal-memo-v1` (rows 11-12) | 104.31-147.82 | row 12: the COO's card (the "that line") holds through "Remember that line - he's reaching for the third question ... without having it" to 133.00; on "And that isn't the peak" the THREE-MANIAS table takes the slot (`land`, s80) at ~0.76 of the stage; its four badges spring 135.05 / 136.35 / 137.65 / 138.95: THE MARKET PRICED / returns inside three years; THE PAPER / fell 64% / peak to trough (on "trough", 136.29); THE RETURNS / took twenty years; 2024-26 AI BUILD / still open. The table leaves on "Which flips the question" (141.38, an 8.4 s read) and the desk, its steam and the caption in STAGE mode carry "not when the disappointment arrives ... but what survives it" |
+| 7 `world-viaduct-train-rain-v1;use=reset` | 147.82-162.50 | RESET 1: **dip 2** on the cut before "And in 1849" (E47, a world change); Ken Burns alone (0.05 push, E99 s84) and the locomotive's STACK breathing steam (the mouth measured at x 0.397-0.424, y 0.150-0.165 across the push, `p69t21/stack-*.png`); the anaphora "The steel kept working. The paper stopped pretending." in caption STAGE mode (no dock on the row) |
+
+**The three-manias card (T20):** the object is a PNG TABLE only (a card, as T14 named it).
+- Whole, it would be capped at 626 px tall, with its cells at ~16 px (7 phone css). That is a table read small (E99 s71).
+- It is COMPOSED from its own pixel bands (`_manias_card`, nothing redrawn): the title, the column heads and their rule, the three rows the sentence reads, and the source line.
+- CUT: the subtitle and the "Capital committed" row. That row's ~7% / ~8% of GDP are the measures row 9 keeps off screen, and a row the sentence does not read is height the cells cannot spare.
+- It reads at 1456 x 626, cells ~22 px and heads ~26 px (`p69t20/manias-zoom.png`).
+- The peak-to-trough move is the card's own red "64%" plus its badge landing on "trough". No callout can mark a still card (the callout's inner target is a PRESS card's phrase alone, and E56's ring is a chart's).
+
+**Transitions:**
+- Row 12 is inside table row 6 (no boundary): the COO -> the table is the slot hand-off (`SLOT_WHY`).
+- Dip 2 into row 13 (`VIADUCT_DIP_WHY`):
+  - TAKEN: the dip (plate to plate, the pair the dip is for).
+  - REFUSED: the thread; the edge arrival (two pictures, not one stage); the occluder (none declared); the melt (the desk carries no chart ink); the recast (neither world is a page).
+- Seams: 147.82 `s06->s07 exit=dip darkest 5.3 clean`.
+
+**Departures (`BODY_DEPARTURES` rows 11-13):**
+- the records' world change (11);
+- the composed card and the cut capital row (12);
+- the peak-to-trough move by the badges and the card's own red (12);
+- the agenda's third question NOT drawn (12). The dock form writes white on a dark ground and the desk wall is cream, and the page form takes the frame. The COO's card holds instead. Option for HG4;
+- the anaphora stage-centred, not "on the plate's quiet zone" (13). A picture plate places cards, never its caption (no door).
+
+**Life:**
+- Desk steam, 144.00 vs 146.30 at the mug: mean |dL| 8.60, 11.9% of px changed.
+- The table's hold with its badges, 136.60 vs 138.00, whole frame: 20.13, 27.2%.
+- The viaduct, 150.00 vs 152.40 (x 0-1000, y 0-420: push + steam): 17.97, 51.4%.
+- Table rows: 7 of 7 carry life (row 6 ken 0.04/8/-6, row 7 ken 0.05/-12/4).
+
+**The order of proof (`logs/`):**
+- `t21-door.log` (rc 0, cues 13 of 13 bound).
+- `t21-probe.log` (67 instants).
+- `t21-frozen.log` (no run over 0.5 s).
+- `t21-seams.log` (6 boundaries, 0 faults).
+- `t21-stagegaps.log` (1.0 s: the two licensed dips only).
+- `t21-spoken.log` (0 uncovered).
+- `t21-gate.log`: **2 FAIL / 2 WARN / 22 PASS / 1 JUDGE / 6 INFO**.
+  - FAILs: M03 and M11 (the bed's, pre-existing, HG4).
+  - WARNs: M04 (7 plates vs 13) and M25 (row 1's certificate in the safe band at 0:09-0:10, pre-existing).
+  - M05, M10 and M16 PASS (longest gap 2.4 s at 2:18).
+  - INFO: M21 s05 9.8 s.
+- `t21-door-final.log`: the record-table edits only; the timeline and the table are byte-identical before and after.
+- Table snapshot: `t21-SHOT-TABLE-H.md`.
+
+**Tiles:**
+- `scratchpad/p69t20/` (10 instants 128.40-146.30) and `scratchpad/p69t21/` (8 instants 147.60-161.00).
+- Each has `ref-sheet.png` from build-f's mp4 (sha256 `9a27de1c...` verified, `ref-sha.txt`, `ref-map.txt` 249.50-279.90). There, the Uber card holds on the exhibition hall through "Remember that line". The whole table (four rows, ~55% of the frame) stands 11 s on a busy collage. The 1849 sentence runs on the dawn factory, then the molten pour.
