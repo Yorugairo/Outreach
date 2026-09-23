@@ -30,6 +30,9 @@ MAX_CANVAS_PIXELS = 2_304_000
 MAX_SOURCE_PIXELS = 2_304_000
 MAX_RASTER_ASSET_BYTES = 16_777_216
 MAX_RASTER_PIXELS = 36_864_000
+# Bound eager retention of pose/expression swaps to 64 MiB of decoded RGBA art.
+MAX_SCENE_RASTER_ASSET_PIXELS = 16_777_216
+MAX_SCENE_RASTER_ASSET_DECODED_BYTES = 67_108_864
 MAX_SHEET_PIXELS = 24_000_000
 MAX_LAYERS = 16
 MAX_SHAPES = 128
@@ -209,6 +212,8 @@ class LayeredScene:
             raise LayeredSceneError(f'canvas_px exceeds the {MAX_CANVAS_PIXELS}-pixel diagnostic limit')
         self._asset_root: Path | None = None
         self._raster_cache: dict[tuple[str, str], dict[str, Any]] = {}
+        self._raster_cache_pixels = 0
+        self._raster_cache_decoded_bytes = 0
         if asset_root is not None:
             try:
                 trusted_root = Path(asset_root).resolve(strict=True)
@@ -477,6 +482,16 @@ class LayeredScene:
                     raise LayeredSceneError(
                         f'{label} dimensions exceed the 4096-side or {MAX_SOURCE_PIXELS}-pixel raster asset limit'
                     )
+                asset_pixels = image_width * image_height
+                asset_decoded_bytes = asset_pixels * 4
+                if (self._raster_cache_pixels + asset_pixels > MAX_SCENE_RASTER_ASSET_PIXELS
+                        or self._raster_cache_decoded_bytes + asset_decoded_bytes
+                        > MAX_SCENE_RASTER_ASSET_DECODED_BYTES):
+                    raise LayeredSceneError(
+                        f'{label} exceeds the scene-wide decoded raster cache budget '
+                        f'({MAX_SCENE_RASTER_ASSET_PIXELS} pixels / '
+                        f'{MAX_SCENE_RASTER_ASSET_DECODED_BYTES} bytes)'
+                    )
                 if 'A' not in encoded.getbands() and 'transparency' not in encoded.info:
                     raise LayeredSceneError(f'{label} must have an alpha channel or PNG transparency')
                 encoded.verify()
@@ -497,6 +512,8 @@ class LayeredScene:
             '_resolved_path': resolved_path,
         }
         self._raster_cache[cache_key] = cached
+        self._raster_cache_pixels += asset_pixels
+        self._raster_cache_decoded_bytes += asset_decoded_bytes
         return {**cached, '_bounds_local': bounds}
 
     def _parse_camera(self, value: Any) -> tuple[dict[str, Any], ...]:

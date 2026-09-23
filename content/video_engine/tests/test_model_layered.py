@@ -14,6 +14,8 @@ from content.video_engine.src.modeling.layered import (
     LayeredScene,
     LayeredSceneError,
     MAX_RASTER_ASSET_BYTES,
+    MAX_SCENE_RASTER_ASSET_DECODED_BYTES,
+    MAX_SCENE_RASTER_ASSET_PIXELS,
     render_contact_sheet,
 )
 
@@ -73,6 +75,47 @@ def _raster_scene(tmp_path: Path) -> tuple[dict, Path]:
         )
     document["layers"] = [background, fighter]
     return document, asset_root
+
+
+def _write_large_raster_assets(asset_root: Path, count: int) -> list[dict]:
+    asset_root.mkdir(parents=True, exist_ok=True)
+    source_path = asset_root / "large-source.png"
+    image = Image.new("RGBA", (2048, 1025), (0, 0, 0, 0))
+    image.putpixel((0, 0), (255, 32, 16, 128))
+    image.save(source_path, format="PNG", optimize=False)
+    payload = source_path.read_bytes()
+    digest = hashlib.sha256(payload).hexdigest()
+    assets = []
+    for index in range(count):
+        name = f"large-{index}.png"
+        (asset_root / name).write_bytes(payload)
+        assets.append({
+            "path": name,
+            "sha256": digest,
+            "bounds_local_px": [-40.8, -40.4, -32.8, -32.4],
+        })
+    return assets
+
+
+def _document_with_raster_states(asset_root: Path, unique_assets: int) -> dict:
+    document = _fixture()
+    fighter = next(layer for layer in document["layers"] if layer["layer_id"] == "fighter-b")
+    assets = _write_large_raster_assets(asset_root, unique_assets)
+    poses = fighter["pose_states"]
+    for index, state in enumerate(poses):
+        state["shapes"] = []
+        state["raster_asset"] = assets[index]
+    for index in range(len(poses), unique_assets):
+        poses.append({
+            "state_id": f"extra-pose-{index}",
+            "index": index,
+            "shapes": [],
+            "raster_asset": assets[index],
+        })
+    for state in fighter["expression_states"]:
+        state["shapes"] = []
+        state["raster_asset"] = assets[0]
+    return document
 
 
 def _set_channel_value(document: dict, channel_id: str, value: int) -> None:
@@ -306,6 +349,28 @@ def test_transparent_pose_and_expression_rasters_use_rgba_compositing_and_seek_d
     second = {frame: scene.render(frame, supersample=1).image.tobytes() for frame in requested}
     assert first == second
     assert first[Fraction(0)] != first[Fraction(28)]
+
+
+def test_scene_raster_cache_accepts_unique_assets_under_aggregate_decoded_budget(tmp_path: Path) -> None:
+    asset_root = tmp_path / "trusted-large-art"
+    document = _document_with_raster_states(asset_root, 7)
+
+    scene = LayeredScene(document, asset_root=asset_root)
+
+    expected_pixels = 7 * 2048 * 1025
+    assert expected_pixels <= MAX_SCENE_RASTER_ASSET_PIXELS
+    assert expected_pixels * 4 <= MAX_SCENE_RASTER_ASSET_DECODED_BYTES
+    assert len(scene._raster_cache) == 7
+    assert scene._raster_cache_pixels == expected_pixels
+    assert scene._raster_cache_decoded_bytes == expected_pixels * 4
+
+
+def test_scene_raster_cache_rejects_asset_that_exceeds_aggregate_decoded_budget(tmp_path: Path) -> None:
+    asset_root = tmp_path / "trusted-large-art"
+    document = _document_with_raster_states(asset_root, 8)
+
+    with pytest.raises(LayeredSceneError, match="scene-wide decoded raster cache budget"):
+        LayeredScene(document, asset_root=asset_root)
 
 
 def test_raster_resources_require_an_explicit_trusted_asset_root(tmp_path: Path) -> None:
