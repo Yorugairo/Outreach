@@ -80,7 +80,7 @@ ACT_SPECIES = {
     "EXPLAINS": ("note", "plate use=bridge", "chip", "flow"),
     "TURNS": ("figure", "spotlight", "callout", "note"),
     "BREAKS": ("burst", "stack", "burst:stop", "placeholder", "axis capsule"),
-    "SPANS": ("bracket", "spread", "relight", "span"),
+    "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)
     "SETS": ("chart_to:park", "figure", "retitle"),
     "RETRACTS": ("retitle", "squiggle"),
 }
@@ -274,6 +274,7 @@ PROPOSE_FILL = {
     "bracket": (("from", _EDGE), ("to", _EDGE), ("label", "what the two data measure")),
     "spread": (("from", "the series index the gap starts at"), ("to", "the second series' index (or `to_rule`)")),
     B.SPECIES_SPAN: (("from", _EDGE), ("to", _EDGE), ("label", "the stretch of time's own name")),
+    B.SPECIES_LIT_STRETCH: (("from", _EDGE + "; the light leaves here"), ("to", _EDGE + "; ... and lands here")),
     B.SPECIES_CHIP: (("icon", "a SOURCED glyph under assets/icons"), ("label", "the thing the chip stands for")),
     B.SPECIES_FLOW: (("nodes", "2-6 {id, icon, label}"), ("edges", "the arrows, by node id")),
     B.SPECIES_CROSS: (("cells", "the treemap cells' own labels"), ("text", "the crossed share, written as a number")),

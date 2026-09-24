@@ -3557,6 +3557,48 @@ SURFACES.update({"panels-resize": panels_resize})
 FRAME_T.update({"panels-resize": PANELS_RESIZE_AT + PANELS_RESIZE_DUR * 0.5})   # u 0.50: panel 1 half way to its slot
 
 
+# ---- P69 T36 / E99 s99: THE LIT STRETCH - a light that TRAVELS down the fall on its word -----------------------------
+# Steel and Paper H row 5's own page (`ledger:ev-railway-index-v1:line:139:right`, `idle=live`, full stage, 16:9) and
+# its own sentence: "Railways in the 1840s drew a quarter-billion pounds ... then crashed by nearly two-thirds." The
+# H take's words, shifted by -67.46 s so the page has built first: "crashed" 77.46 -> 10.00 (row 5's own build_to to
+# the trough, 1.2 s), "nearly" 78.08 -> 10.62 (the light leaves the PEAK, datum 53, and runs the fall to the TROUGH,
+# datum 139, over "nearly two-thirds." to its end at 79.64 -> 12.18) and the figure "−64%" lands at the trough as the
+# light arrives (the harvest's R18: ring the peak, light the fall, land the % at the trough). The object is the
+# COMMITTED evidence sidecar, read in place. Judged mid-travel (u 0.50 of the head's run): the comet head half way
+# down the fall, the stretch behind it lit, the rest of the line in its own ink, the page's live lead point sparking at
+# the trough the light is running to.
+LIT_PROJECT = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
+LIT_PLATE = "ledger:ev-railway-index-v1:line:139:right;idle=live"
+LIT_FALL_AT, LIT_AT, LIT_DUR = 10.0, 10.62, 1.56
+LIT_SPECIES = [
+    {"kind": "build_to", "at": 0.0, "dur": 0.4, "series": 0, "target": {"kind": "datum", "index": 53}},   # the build beat draws to the peak
+    {"kind": "build_to", "at": LIT_FALL_AT, "dur": 1.2, "series": 0, "target": {"kind": "datum", "index": 139}},   # "crashed": the fall draws
+    {"kind": "lit_stretch", "at": LIT_AT, "dur": LIT_DUR, "from": 53, "to": 139, "comet": True},               # "nearly two-thirds": the light runs it
+    {"kind": "figure", "at": round(LIT_AT + LIT_DUR * 0.8, 2), "dur": 1.4, "target": {"kind": "datum", "index": 139, "series": 0},
+     "text": "−64%", "color": "neg", "dy": -0.9},                                                        # ... and the % lands where it arrives
+]
+
+
+def lit_stretch_crash() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    species = [dict(e) for e in LIT_SPECIES]
+    assert not BST.validate_species(species, (0, 0, 0), LIT_PLATE), BST.validate_species(species, (0, 0, 0), LIT_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(LIT_PLATE, (0, 0, 0), LIT_PROJECT)
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the light travels down the fall (lit_stretch)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"lit-stretch-crash": lit_stretch_crash})
+FRAME_T.update({"lit-stretch-crash": round(LIT_AT + 0.5 * LIT_DUR * 0.8, 3)})   # u 0.50 of the head's run (TRAVEL 0.8 of the word): 11.244
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

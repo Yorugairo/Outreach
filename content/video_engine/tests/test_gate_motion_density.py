@@ -1607,6 +1607,19 @@ def test_the_agenda_credits_each_row_s_own_word_and_the_ring_lands_once():
     assert G._species_events(scenes) == [19.0, 19.34], "rows with no `at` of their own fall on the default word pitch"
 
 
+def test_a_lit_stretch_is_credited_as_motion_because_it_travels():
+    """P69 T36 / E99 s99: a light that TRAVELS along a length is motion - both its edges are events (it leaves `from`
+    on its word and lands at `to` inside it), where a light that only sits (s91: the spotlight) earns none."""
+    assert G.SPECIES_EVENTS["lit_stretch"] == ("at", "end")
+    scenes = [{"scene_id": "s1", "span": [0.0, 30.0],
+               "species": [{"kind": "lit_stretch", "at": 10.62, "dur": 1.56, "from": 53, "to": 139}]}]
+    assert G._species_events(scenes) == [10.62, 12.18], G._species_events(scenes)
+    scenes[0]["species"].append({"kind": "spotlight", "at": 20.0, "dur": 3.0, "target": {"kind": "datum", "index": 0}})
+    assert G._species_events(scenes) == [10.62, 12.18], "a light that sits earns nothing; the travelling one earns both"
+    scenes[0]["span"] = [0.0, 11.0]   # a light cut short by its scene stops with the scene
+    assert G._species_events(scenes) == [10.62]
+
+
 def test_all_three_point_at_a_declared_target_so_m24_reads_them():
     for kind in ("count_array", "agenda", "ring"):
         assert kind in G.POINTING_KINDS, kind

@@ -642,6 +642,21 @@ PANEL_SPECIES = ("build_to", "undraw", "figure", "bracket", "spread", SPECIES_SP
 # species a panel carries (the page's own - retitle, note, a relit title, the focus - stay the page's)
 PANEL_CHART_TO = ("park",)   # a panel has one chart state; the verbs that need a second one are refused by name
 PANEL_FOCUS_KEYS = ("layout", "roles", "active", "hidden", "recede", "region", "boxes")
+# P69 T36 (E99 s99: "a highlight that TRAVELS along a length ... counts as motion") - THE LIT STRETCH, the Bravos
+# harvest v2's rank 1 (A11, with A13's comet head). A PAGE species: a light runs along a stretch of ONE drawn series
+# from `from` to `to` (two datum indices, or two 0..1 x-fractions - the span's edge law) on its word, the rest of the
+# line keeping its ink, and it holds once it has landed. Its law and painter are species/lit_stretch.mjs; this file
+# owns its grammar (`_validate_lit_stretch`). The WHEN is the use-when guide's A11 (BRAVOS-USE-WHEN.md:889): act SPANS,
+# moment proof / turn, a series; use when the sentence walks one segment, don't when the whole line is the claim or
+# the light would only sit.
+SPECIES_LIT_STRETCH = "lit_stretch"
+SPECIES_KINDS += (SPECIES_LIT_STRETCH,)
+PAGE_SPECIES += (SPECIES_LIT_STRETCH,)
+SPECIES_WHEN[SPECIES_LIT_STRETCH] = ("the sentence WALKS one stretch of a drawn line ('the fall', 'the run-up') at the proof "
+                                     "or the turn - a light travels it on the word and holds; never when the whole line "
+                                     "is the claim, the stretch is undrawn, or the light would only sit")
+LIT_STRETCH_KEYS = ("kind", "at", "dur", "id", "from", "to", "series", "color", "comet", "panel")
+PANEL_SPECIES += (SPECIES_LIT_STRETCH,)   # P69 T36: a light travels a line on ONE panel of a panels page (`panel: <i>`; row 21)
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -1517,6 +1532,7 @@ SPECIES_TARGETS = {
     "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
 SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANELS by index, never a coordinate
+SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
 SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
                                                   # point would leave the strip's height to the painter, and the strip is the
                                                   # thing the caption has to be reconciled with (the strip law below)
@@ -1816,7 +1832,7 @@ def check_target_series(world: dict, row_species: list) -> None:
         if not isinstance(sp, dict):
             continue
         named = ([(f, sp.get(f)) for f in TARGET_SERIES_FIELDS if f in sp]
-                 if sp.get("kind") in SERIES_NAMING_SPECIES else [])
+                 if sp.get("kind") in SERIES_NAMING_SPECIES + (SPECIES_LIT_STRETCH,) else [])   # P69 T36: a light names its series as a span does
         tgt = sp.get("target")
         if isinstance(tgt, dict) and tgt.get("kind") == "datum" and "series" in tgt:
             named.append(("target series", tgt["series"]))
@@ -2001,7 +2017,8 @@ def check_panels(world: dict, row_species: list) -> None:
         if pi >= n:
             raise ValueError(f"{kind}: panel {pi} is past the page's last panel ({n - 1})")
         k = len(panels[pi].get("series") or [])
-        fields = [(f, sp[f]) for f in TARGET_SERIES_FIELDS if f in sp] if kind in SERIES_NAMING_SPECIES else []
+        fields = ([(f, sp[f]) for f in TARGET_SERIES_FIELDS if f in sp]
+                  if kind in SERIES_NAMING_SPECIES + (SPECIES_LIT_STRETCH,) else [])   # P69 T36: the light names its panel's series
         if datum and "series" in tgt:
             fields.append(("target series", tgt["series"]))
         for field, v in fields:
@@ -2767,6 +2784,42 @@ def _validate_ring(entry: dict) -> list[str]:
     return errs
 
 
+def _validate_lit_stretch(entry: dict) -> list[str]:
+    """P69 T36 (E99 s99): a light that TRAVELS along a stretch of one drawn series. Its two edges are the span's two
+    forms - two datum indices (the page's own) or two 0..1 x-fractions of the drawn series - named the same way, and
+    they must differ: a light on a point does not travel, so it would be the annotation s91 counts as no motion. It
+    WRITES nothing (no label, no text): the stretch the sentence walks is the claim, and a figure or a span names it."""
+    errs: list[str] = []
+    edges = {}
+    for f in ("from", "to"):
+        v = entry.get(f)
+        if isinstance(v, bool) or not isinstance(v, (int, float)):
+            errs.append(f"lit_stretch: {f!r} must be a datum index (an integer) or an x-fraction of the series (0..1)")
+        elif isinstance(v, int) and v < 0:
+            errs.append(f"lit_stretch: {f}={v} is not a non-negative datum index")
+        elif isinstance(v, float) and not 0.0 <= v <= 1.0:
+            errs.append(f"lit_stretch: {f}={v} is not a 0..1 fraction of the drawn series' x extent")
+        else:
+            edges[f] = v
+    if len(edges) == 2:
+        if isinstance(edges["from"], int) != isinstance(edges["to"], int):
+            errs.append("lit_stretch: name BOTH edges the same way - two datum indices, or two 0..1 fractions")
+        elif edges["from"] == edges["to"]:
+            errs.append(f"lit_stretch: from and to are both {edges['from']} - a light that travels needs a stretch "
+                        "(a light that sits on one point is an annotation, E99 s91; ring the datum instead)")
+    if "series" in entry and (isinstance(entry["series"], bool) or not isinstance(entry["series"], int) or entry["series"] < 0):
+        errs.append("lit_stretch: series must be a non-negative integer series index")
+    if "color" in entry and entry["color"] not in BRACKET_COLORS:
+        errs.append(f"lit_stretch: color must be one of {'|'.join(BRACKET_COLORS)} (absent = the relight's sunflower)")
+    if "comet" in entry and not isinstance(entry["comet"], bool):
+        errs.append("lit_stretch: comet must be true or false (true: a bright head rides the light's leading edge, A13)")
+    extra = sorted(k for k in entry if k not in LIT_STRETCH_KEYS)
+    if extra:
+        errs.append(f"lit_stretch: {', '.join(map(repr, extra))} - a lit stretch writes nothing and takes only "
+                    f"{'|'.join(LIT_STRETCH_KEYS[4:])}; the words that name the stretch are a `figure` or a `span`")
+    return errs
+
+
 def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
     """Errors for one species entry: known kind, numeric at/dur, a target where the law requires one."""
     if not isinstance(entry, dict) or entry.get("kind") not in SPECIES_KINDS:
@@ -2789,6 +2842,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_ring(entry)
     if kind == SPECIES_NEWSREEL:
         errs += _validate_newsreel(entry)
+    if kind == SPECIES_LIT_STRETCH:   # P69 T36
+        errs += _validate_lit_stretch(entry)
     if kind in VECMAP_SPECIES:
         errs += _validate_vecmap_species(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing

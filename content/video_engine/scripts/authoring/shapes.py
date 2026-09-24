@@ -628,7 +628,11 @@ def clear_strips(band: dict, ink: list[dict]) -> list[dict]:
 # So a card whose window overlaps a mark of the row's own takes no room inside the plot: the bands
 # outside it, or the park that makes one, are what is left - the same ladder `make_room` already
 # walks, and the same argument `bound_by_state` makes for a `chart_to` redrawing under a card.
-PLOT_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "undraw", "span", "ring")
+PLOT_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "undraw", "span", "ring", "lit_stretch")
+# P69 T36: the lit stretch is a mark ON the line - and it HOLDS lit after its word until the page leaves (E99 s91: the
+# light that has landed is an annotation, and it is still on the data). Its `dur` is the word it travels over, not how
+# long it stands, so it is read as a mark with no readable end: it stands to the card's own exit.
+HELD_MARKS = ("lit_stretch",)
 # ... and the QUIET ZONE is written in too: a `note` is *"a line of handwriting in the page's quiet
 # zone"* (`build_scene_timeline_f.SPECIES_WHEN`), which is the band a card sent out of the plot is
 # otherwise given. The first fifth-pass build measured exactly that: the cup, out of the plot, landed
@@ -665,7 +669,9 @@ def marks_live(species: list, t_in: float, t_out: float) -> list[str]:
         if str(sp.get("kind")) not in PLOT_MARKS:
             continue
         at, until, dur = float(sp.get("at", 0.0)), sp.get("until"), sp.get("dur")
-        if isinstance(until, (int, float)) and not isinstance(until, bool):
+        if str(sp.get("kind")) in HELD_MARKS:   # P69 T36: the light holds after its word - its dur is not its end
+            end = float(t_out)
+        elif isinstance(until, (int, float)) and not isinstance(until, bool):
             end = float(until)
         elif isinstance(dur, (int, float)) and not isinstance(dur, bool):
             end = at + float(dur)
