@@ -1,6 +1,6 @@
 # MM-HAND-IMPACT-FOUNDATION T2 — editable hand and closed-fist proof
 
-Status: frozen on dispatch; retry bound revised by operator 2026-09-24. Owner: `implementation_luna` in its own worktree. Parent owns contract changes, review, integration, gates and Git actions. This is the **hand before glove** slice; no head contact, force solver, episode cut or fighter-art approval is claimed.
+Status: frozen on dispatch; retry bound and anatomy priority revised by operator 2026-09-24. Owner: `implementation_luna` in its own worktree. Parent owns contract changes, review, integration, gates and Git actions. This is the **hand before glove** slice; no head contact, force solver, episode cut or fighter-art approval is claimed.
 
 ## Recall and fixed inputs
 
@@ -11,7 +11,7 @@ Status: frozen on dispatch; retry bound revised by operator 2026-09-24. Owner: `
 
 ## One bounded deliverable
 
-Produce a versioned, editable, hand-local Blender asset and matching manifest that can be attached to the existing Rigify fighter without altering its source `.blend`. Include a believable closed fist with four fingertips folded into the palm, thumb safely outside/tucked, visible knuckle plane, wrist transition, and intact dorsal/palmar volume. A 27-bone **anatomical reference guide** (8 carpals, 5 metacarpals, 14 phalanges) must locate the pivots and contact plane, but do not simulate all 27 as rigid bodies. State which hand/wrist ligament/tendon effects are approximated as joint limits/couplings and which are omitted. Separately record hand mass/COM/inertia as declared metadata; no impact force or injury claim.
+Produce a versioned, editable, hand-local Blender asset and matching manifest that can be attached to the existing Rigify fighter without altering its source `.blend`. Include a believable **bare-hand** closed fist with four fingertips folded into the palm, thumb safely opposed outside/tucked across the folded fingers, visible knuckle plane, wrist transition, and intact dorsal/palmar volume. Prove the actual closure axes and sequence: MCP/proximal segments bend into the palm, PIP/middle segments wrap toward the wrist/palm, and DIP/distal segments tuck the fingertips. A later 4 oz UFC glove may restrict full closure into a partial claw; that is not a pass for this bare-hand foundation. A 27-bone **anatomical reference guide** (8 carpals, 5 metacarpals, 14 phalanges) must locate the pivots and contact plane, but do not simulate all 27 as rigid bodies. State which hand/wrist ligament/tendon effects are approximated as joint limits/couplings and which are omitted. Separately record hand mass/COM/inertia as declared metadata; no impact force or injury claim.
 
 You may refine/retopologize the hand from the existing native fighter family or use a compatible, provenance-documented open starter. The decision is yours within the above constraints. Keep neutral outer mesh, control/guide rig and skinned final mesh inspectable separately; material/texture must not conceal geometry defects. Do not add a glove or remodel the target head to make the hand appear successful. If the available base cannot yield a credible fist in this bounded pass, return a negative art/rig diagnosis and a source recommendation rather than another capsule/proxy.
 
@@ -26,7 +26,7 @@ Allow at most **three consecutive substantive acceptance submissions total**: th
 ## Acceptance evidence
 
 1. Editable `.blend` and versioned asset manifest: source/provenance hashes, topology counts at control/render levels, semantic axes and attachment, 27 reference labels, deform/control map, declared mass/COM/inertia and limitations.
-2. Saved-scene neutral/open/guard/closed-fist stress poses; same-camera palm, dorsal, side, and 540×960 fist/forearm renders. Show clay and material views so shading cannot hide hand shape.
+2. Saved-scene neutral/open/guard/closed-fist stress poses plus staged MCP/PIP/DIP closure evidence; same-camera palm, dorsal, side, and 540×960 fist/forearm renders. Show clay and material views only to expose geometry, never as a substitute for it.
 3. Measurements: four fingertip-to-palm paths, thumb-to-finger skeletal clearance and evaluated-surface interpenetration witness, local volume/edge distortion, knuckle plane and wrist attachment. Report actual values and explicit visual verdict, not only test booleans.
 4. Headless Blender build and scripts-disabled reopen with source/code/render hashes; seek-order check across the stress poses. Focused pytest must run as `python -m pytest content/video_engine/tests/test_model_hand_foundation.py -q`. Run old hand-pose test to confirm isolation. Parent will inspect the source, diff and phone renders before integration.
 

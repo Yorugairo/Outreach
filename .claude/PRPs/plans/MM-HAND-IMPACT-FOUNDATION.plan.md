@@ -24,7 +24,7 @@ The operator selected screen-plausible, reusable mechanics, **not** a quantitati
 
 | ID | Observable acceptance |
 |---|---|
-| H1 | A versioned editable hand/wrist asset has 27-bone anatomical reference landmarks (8 carpals, 5 metacarpals, 14 phalanges), forearm landmarks, joint axes, four-knuckle striking plane, thumb-tucked closed fist and a skinned outer surface. This does not require 27 independently simulated rigid bodies or literal ligament/tendon meshes. Document which ligament/tendon constraints are represented as joint limits/couplings and which are not modeled. |
+| H1 | A versioned editable hand/wrist asset has 27-bone anatomical reference landmarks (8 carpals, 5 metacarpals, 14 phalanges), forearm landmarks, joint axes, four-knuckle striking plane, thumb-tucked closed fist and a skinned outer surface. Bare-hand closure visibly stages MCP flexion into the palm, PIP flexion toward the wrist/palm, then DIP fingertip tuck, with safe thumb opposition; a glove-limited partial claw is not a T2 pass. This does not require 27 independently simulated rigid bodies or literal ligament/tendon meshes. Document which ligament/tendon constraints are represented as joint limits/couplings and which are not modeled. |
 | H2 | Neutral/guard, approach, first right-hand contact, left-hook contact and retraction show forearm-to-metacarpal alignment, no implausible wrist collapse, curled fingers inside the fist silhouette and no thumb/knuckle collision. Report anatomical landmark angles and evaluated-mesh distortion separately. Guard itself must pass; guard-relative quaternion delta alone is not a wrist measurement. |
 | H3 | Contact is measured from the evaluated **knuckle/glove exterior patch to the target surface**, with signed separation/penetration and surface normal, not a palm world-X extremum or unsigned nearest distance. Approach velocity, normal, penetration budget, contact start/end, receiver displacement and retract-to-guard are traceable on the pinned source clock. No pre-contact head snap or hand tracking the moving head after impact. |
 | H4 | A deterministic backend-neutral strike/contact record with explicit units, mass/inertia/compliance inputs, source timing, pose and impulse/reaction outputs yields identical event/contact ordering in Blender 3D and 2.5D/minimal 2D adapters. Render style may alter silhouette, hit-stop, squash, aura and camera response but must label such multipliers and preserve the physical baseline for comparison. |
@@ -82,13 +82,13 @@ Evidence/baseline and declared tolerances → hand landmarks/fist asset → arm/
 - Budget rationale: the 20°/30° centerline gates demand visibly braced contact and a less strict moving guard; they are not clinical wrist ranges. The ±5–8 mm world gap and 6 px screen gap are paired so a mathematical near miss cannot pass at phone size. The 2 mm self-penetration tolerance applies only to unintended mesh overlap, not deliberate finger/palm contact. Foot and pre-contact head budgets are inherited from the pinned source-exchange fixture for parity. Parent may revise a budget only with a new measured fixture and visual comparison, never to turn a failed candidate green silently.
 
 ### T2: Editable anatomical hand, fist and skin stress proof
-- Status: pending
+- Status: running
 - Owner: bounded implementation; parent judges art/structure
 - Depends on: T1
 - Write set: new versioned hand asset/manifest under `content/video_engine/assets/modeling/native/hands/`; new opt-in `content/video_engine/src/modeling/blender/hand_foundation.py`; focused `content/video_engine/tests/test_model_hand_foundation.py`
-- Acceptance: H1; source and rendered mesh, landmark/axis map, hand COM/inertia metadata, thumb and four fingers curled into a compact fist, open/guard/impact stress poses. Record topology, weights, skin-volume mask coverage and evaluated surface distortion. No glove yet.
+- Acceptance: H1; source and rendered mesh, landmark/axis map, hand COM/inertia metadata, staged MCP/PIP/DIP bare-hand closure and thumb opposition into a compact fist, open/guard/impact stress poses. Record topology, weights, skin-volume mask coverage and evaluated surface distortion. No glove yet.
 - Validate: focused pytest + headless Blender saved-scene reopen + same-camera palm/dorsal/side and 9:16 contact-size renders.
-- Evidence: editable `.blend`, manifest, receipt, views and parent visual verdict. Stop here if the fist still reads as claw/capsule.
+- Evidence: editable `.blend`, manifest, receipt, views and parent visual verdict. Attempts 1 and 2 failed on 2026-09-24 in the isolated `mm-hand-foundation` worktree: thumb-to-finger skeletal clearance 0.1065 m, invalid 1.89x volume ratio from an open crop, and overlit views; attempt 2 preserved group mapping and did not improve geometry. Attempt 3 is in progress, prioritizing anatomical closure and safe thumb opposition. The parent may accept only after reviewing measured geometry and phone renders. Stop here if the bare fist still reads as claw/capsule.
 
 ### T3: Wrist/arm/knuckle retarget, head-contact proof
 - Status: pending
