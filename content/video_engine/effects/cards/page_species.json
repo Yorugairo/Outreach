@@ -567,7 +567,7 @@
         },
         {
           "name": "the boxes move",
-          "does": "every panel's box moves to its cell in the new layout by one translate plus uniform scale (the park's move); the grown panel takes the whole plot region",
+          "does": "every panel's box moves to its cell by one translate plus uniform scale; a box of another aspect is the chart re-laid out at that width, words at their size - a lone panel spans the plot region",
           "trigger": "the species' `at`, over `dur`",
           "dials": null
         },
@@ -629,7 +629,8 @@
         "E99 s104",
         "E79",
         "E99 s106",
-        "P69 T8b"
+        "P69 T8b",
+        "P69 T8c"
       ],
       "status": "wired",
       "proof": {

@@ -2558,22 +2558,34 @@ def panel_cells(layout: str, k: int, region: tuple) -> list[tuple]:
     return [(x + (i % cols) * (cw + g), y + (i // cols) * (ch + g), cw, ch) for i in range(k)]
 
 
-def panel_fit(cell: tuple, aspect: float) -> tuple:
-    """The largest box of `aspect` (w / h) inside `cell`, centred - the svg's own `meet`."""
+def panel_fit(cell: tuple, aspect: float, fill: bool = True) -> tuple:
+    """A panel's box inside `cell`, centred. P69 T8c: a landscape panel (`fill`) takes the cell's WHOLE WIDTH - the line
+    builder re-lays its plot out at any viewBox width - and the cell's height, or the aspect's when the cell is taller
+    (its plot is a fixed height). `fill=False` is T8b's: the largest box of `aspect` (w / h), the svg's own `meet`."""
     x, y, w, h = cell
+    if fill:
+        fh = min(h, w / aspect)
+        return (x, y + (h - fh) / 2, w, fh)
     fw, fh = (h * aspect, h) if w / h > aspect else (w, w / aspect)
     return (x + (w - fw) / 2, y + (h - fh) / 2, fw, fh)
 
 
-def panel_layout(layout: str, k: int, region: tuple, aspect: float) -> list[tuple]:
-    """`k` panel boxes of `aspect` laid out as `layout` in `region`: ONE box size for the grid (the largest the tighter
-    axis allows), the grid hung from the region's TOP (the page reads title, sub, charts), a group centred across the
-    region's width and a lone panel on its left edge - where a single-chart page's chart stands. Pure."""
+def panel_layout(layout: str, k: int, region: tuple, aspect: float, fill: bool = True) -> list[tuple]:
+    """`k` panel boxes laid out as `layout` in `region`: ONE box size for the grid, hung from the region's TOP (the page
+    reads title, sub, charts). P69 T8c (`fill`, every landscape page): a box is its CELL's full width - a lone panel
+    spans the whole region, as a single-chart page's chart does - and its cell's height, or `aspect`'s when the cell is
+    taller (the line builder's landscape plot is a fixed height; a quad panel growing to the page keeps T8b's box).
+    `fill=False` (portrait) is T8b's law: boxes of `aspect`, the largest the tighter axis allows, a group centred
+    across the region and a lone panel on its left edge. Pure."""
     if k <= 0:
         return []
     x, y, w, h = region
     cols, rows = panel_grid(layout, k)
     g = PANEL_GAP * w
+    if fill:
+        cw, ch = (w - g * (cols - 1)) / cols, (h - g * (rows - 1)) / rows
+        bh = min(ch, cw / aspect)
+        return [(x + (i % cols) * (cw + g), y + (i // cols) * (bh + g), cw, bh) for i in range(k)]
     bw = min((w - g * (cols - 1)) / cols, aspect * (h - g * (rows - 1)) / rows)
     bh = bw / aspect
     x0 = x if k == 1 else x + (w - (cols * bw + (cols - 1) * g)) / 2
@@ -2584,7 +2596,8 @@ def panel_aspect(n: int, region: tuple, aspect: str = "16:9") -> float:
     """A panel's viewBox aspect: its HOME CELL's (the page's default layout over its region), so the home layout FILLS
     the region - the line builder draws at any viewBox width (its plot runs L..W-R), and the panel's viewBox is
     `panel_view_w` x (560 + its sub band). A quad's cell and the whole region have nearly one aspect, so a quad
-    panel growing to the page fills it too; a row's cell is narrower than the region (see the report)."""
+    panel growing to the page fills it too. A row's cell is narrower than the region: since P69 T8c a landscape box of
+    another aspect is the same chart RE-LAID OUT at that width (`panel_layout`'s `fill`), so a lone panel spans it."""
     cell = panel_cells(default_panel_layout(n, aspect), n, region)[0]
     return cell[2] / cell[3]
 
@@ -2596,7 +2609,8 @@ def panel_view_w(a: float) -> float:
 
 def panel_home_boxes(n: int, region: tuple, aspect: str = "16:9") -> list[tuple]:
     """Every panel's HOME box: the default layout, every panel active."""
-    return panel_layout(default_panel_layout(n, aspect), n, region, panel_aspect(n, region, aspect))
+    # the home cells ARE of the panel aspect, so both laws agree; the engine keeps T8b's arithmetic for them, to the bit
+    return panel_layout(default_panel_layout(n, aspect), n, region, panel_aspect(n, region, aspect), fill=False)
 
 
 def _panels_region(spec: dict, chart: dict, aspect: str, floor: float | None = None) -> tuple:

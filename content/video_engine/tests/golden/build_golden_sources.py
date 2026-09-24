@@ -3492,6 +3492,25 @@ FRAME_T.update({
 })
 
 
+# ---- P69 T8c (E99 s104, amended): A PANEL'S BOX CHANGES SHAPE, AND ITS CHART RE-LAYS OUT ----------------------------------
+#   panels-resize     the two-era page standing as ONE chart over the whole region (panel 2 hidden, the state it arrives
+#                     in), then on a word the row: panel 1 SHRINKS into its slot, its plot re-projected to the box's width
+#                     every frame with its words at their size, while panel 2 builds in beside it - read at u 0.50. The
+#                     timeline carries the leave too (panel 1 goes, the survivor GROWS back to the whole region)
+PANELS_RESIZE_AT, PANELS_RESIZE_DUR, PANELS_LEAVE_AT = 9.0, 1.2, 16.0   # panel 1 alone has built by 4.4 + 3.0 = 7.4
+
+
+def panels_resize() -> tuple[dict, dict]:
+    fs = [{"kind": "panel_focus", "at": 0.0, "dur": 0.05, "layout": "row", "active": [0], "hidden": [1]},
+          {"kind": "panel_focus", "at": PANELS_RESIZE_AT, "dur": PANELS_RESIZE_DUR, "layout": "row", "active": [0, 1]},
+          {"kind": "panel_focus", "at": PANELS_LEAVE_AT, "dur": PANELS_RESIZE_DUR, "layout": "row", "active": [1], "hidden": [0]}]
+    return _panels_page(LPG.load_series(PANELS_V3), fs, "Golden: one chart shrinks into its slot while the second builds in")
+
+
+SURFACES.update({"panels-resize": panels_resize})
+FRAME_T.update({"panels-resize": PANELS_RESIZE_AT + PANELS_RESIZE_DUR * 0.5})   # u 0.50: panel 1 half way to its slot
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

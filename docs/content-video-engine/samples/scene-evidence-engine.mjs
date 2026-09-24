@@ -11031,6 +11031,8 @@ async function mount(doc) {
     SUB_U: 56,                                                     /* ... in a band this many units ABOVE the line builder's 0 (ledger_page.PANEL_SUB_U) */
     SUB_MAX: 0.8,                                                  /* ... and never bigger than this share of that band */
     FLOOR_AIR: 6,                                                  /* ledger_page.PANEL_FLOOR_AIR: rendered px a full-stage region stops over its floor */
+    WIDE_EPS: 1e-4,                                                /* P69 T8c: a pose box this close to its home's aspect IS the home chart at another size (T8b's move) */
+    WIDE_KEEP: 4,                                                  /* ... and at most this many re-laid-out builds are kept per panel (a cache: the frame is a function of the width alone) */
   });
   const LP_PANEL_KINDS = Object.freeze(["build_to", "undraw", "figure", "bracket", "spread", "span", "chart_to", "relight"]);   /* build_scene_timeline_f.PANEL_SPECIES */
   const lpPanelDefault = (n, portrait) => (portrait ? "stack" : n >= 4 ? "quad" : "row");
@@ -11040,14 +11042,20 @@ async function mount(doc) {
     const g = LP_PANELS.GAP * R.w, cw = (R.w - g * (cr[0] - 1)) / cr[0], ch = (R.h - g * (cr[1] - 1)) / cr[1];
     return Array.from({ length: k }, (_, i) => ({ x: R.x + (i % cr[0]) * (cw + g), y: R.y + Math.floor(i / cr[0]) * (ch + g), w: cw, h: ch }));
   };
-  const lpPanelFit = (c, a) => {   /* the largest box of aspect a inside c, centred: the svg's own `meet` (ledger_page.panel_fit) */
+  const lpPanelFit = (c, a, fill) => {   /* the largest box of aspect a inside c, centred: the svg's own `meet` (ledger_page.panel_fit) */
+    if (fill) { const h = Math.min(c.h, c.w / a); return { x: c.x, y: c.y + (c.h - h) / 2, w: c.w, h }; }   /* P69 T8c: a landscape panel takes the cell's whole width; its plot re-lays out */
     const wide = c.w / c.h > a, w = wide ? c.h * a : c.w, h = wide ? c.h : c.w / a;
     return { x: c.x + (c.w - w) / 2, y: c.y + (c.h - h) / 2, w, h };
   };
   const lpPanelGrid = (layout, k) => (layout === "stack" ? [1, k] : layout === "quad" && k >= 3 ? [2, 2] : layout === "quad" && k === 2 ? [2, 1] : [k, 1]);
-  const lpPanelLayout = (layout, k, R, a) => {   /* ledger_page.panel_layout: one box size, hung from R's top; a group centred across, a lone panel at the left */
+  const lpPanelLayout = (layout, k, R, a, fill) => {   /* ledger_page.panel_layout: one box size, hung from R's top; a group centred across, a lone panel at the left */
     if (!(k > 0)) return [];
     const cr = lpPanelGrid(layout, k), g = LP_PANELS.GAP * R.w;
+    if (fill) {   /* P69 T8c (E99 s104 amended): a landscape box is its CELL's full width - a lone panel spans the region - and its
+                     cell's height, or the aspect's when the cell is taller (the line builder's landscape plot is a fixed height) */
+      const cw = (R.w - g * (cr[0] - 1)) / cr[0], ch = (R.h - g * (cr[1] - 1)) / cr[1], bh = Math.min(ch, cw / a);
+      return Array.from({ length: k }, (_, i) => ({ x: R.x + (i % cr[0]) * (cw + g), y: R.y + Math.floor(i / cr[0]) * (bh + g), w: cw, h: bh }));
+    }
     const bw = Math.min((R.w - g * (cr[0] - 1)) / cr[0], a * (R.h - g * (cr[1] - 1)) / cr[1]), bh = bw / a;
     const x0 = k === 1 ? R.x : R.x + (R.w - (cr[0] * bw + (cr[0] - 1) * g)) / 2;
     return Array.from({ length: k }, (_, i) => ({ x: x0 + (i % cr[0]) * (bw + g), y: R.y + Math.floor(i / cr[0]) * (bh + g), w: bw, h: bh }));
@@ -11062,27 +11070,41 @@ async function mount(doc) {
     if (st.panelFloor > 0) R.h = Math.min(R.h, (0.5 + ((st.panelFloor - LP_PANELS.FLOOR_AIR) / STAGE_H - 0.5) / ps) * STAGE_H - R.y);   /* a panel's ticks are inside its box: the region stops over the floor */
     const layout = lpPanelDefault(n, P), cell = n ? lpPanelCells(layout, n, R)[0] : null;
     const a = cell ? cell.w / cell.h : 1;   /* ledger_page.panel_aspect: the HOME CELL's, so the home layout fills the region */
-    const home = lpPanelLayout(layout, n, R, a), T = st.lfType ? lpLongformType(pg) : null;
+    const home = lpPanelLayout(layout, n, R, a), T = st.lfType ? lpLongformType(pg) : null;   /* the home cells ARE of aspect a, so T8b's law and T8c's agree - kept in T8b's arithmetic to the last bit (a box's CSS is its % to 4 places) */
     const per = Number.isFinite(+pg.build_s) && +pg.build_s > 0 ? +pg.build_s : LP.BUILD;
     const pageDom = Array.isArray((pg.axes || {}).domain) ? pg.axes.domain : null;   /* a row's `domain=` is refused on this builder; a page-level one is the shared scale */
     Object.assign(st, { panelRegion: R, panelAspect: a, panelLayout: layout, panelHome: home, panelPs: ps, panelBuild: per, buildDur: per * Math.max(1, n) });
+    st.panelFill = !P;   /* P69 T8c: a landscape panel's box may change SHAPE - its chart re-lays out (portrait keeps T8b's aspect) */
+    st.panelCtx = { pg, list, P, ps, a, T, pageDom };
     st.panels = list.map((p, i) => {
       const hb = home[i], box = lpEl("div", "lp-pbox", st.page);
       box.style.position = "absolute"; box.style.pointerEvents = "none";
       lpPanelBoxCss(box, hb);
-      const geom = P ? { W: hb.w, H: hb.h } : { W: a * (LP_PANELS.VB[1] + LP_PANELS.SUB_U), H: LP_PANELS.VB[1] };   /* ledger_page.panel_view_w */
+      return lpBuildPanel(st, i, box, null);
+    });
+    st.panelVar = st.panels.map((S) => ({ home: S, cur: S, cache: new Map() }));   /* P69 T8c: each panel's home build, the one on its box now, and its re-laid-out builds by width */
+  };
+  /* ONE panel's chart, built by the LINE builder into its own svg in `box`. `f` null: its HOME build (T8b's, to the byte).
+     P69 T8c: `f` > 0 is the same chart re-laid out for a box `f` times its home's aspect - the viewBox `f` times as wide
+     at the same height (the builder's plot runs L..W-R, so the data re-project to the new width and every word keeps its
+     size in units), the svg `f` times its box's width, so the box's pose stays one translate and one uniform scale. */
+  const lpBuildPanel = (st, i, box, f) => {
+    const { pg, list, P, ps, a, T, pageDom } = st.panelCtx, p = list[i], hb = st.panelHome[i];
+    {
+      const W0 = P ? hb.w : a * (LP_PANELS.VB[1] + LP_PANELS.SUB_U);   /* ledger_page.panel_view_w: the home viewBox's width */
+      const geom = P ? { W: hb.w, H: hb.h } : { W: f ? W0 * f : W0, H: LP_PANELS.VB[1] };
       const top = P ? 0 : LP_PANELS.SUB_U;   /* the SUB BAND over a landscape panel's plot (a portrait panel's builder keeps its own 90 px, and a stacked cell has none to spare) */
       const svg = lpEl("svg", "lp-chart lp-panel-chart", box, { viewBox: "0 " + (-top) + " " + geom.W.toFixed(3) + " " + (geom.H + top).toFixed(3) });
-      svg.style.left = "0"; svg.style.top = "0"; svg.style.width = "100%"; svg.style.height = "100%";
+      svg.style.left = "0"; svg.style.top = "0"; svg.style.width = f ? (100 * f).toFixed(4) + "%" : "100%"; svg.style.height = "100%";
       const axes = Object.assign({}, p.axes || {}, { ylabel: String(p.sub || "") }, pageDom && !p.independent ? { domain: pageDom } : {});
       const pgI = { builder: "dense-line", series: p.series || [], axes, sub: p.sub || "", title: pg.title, badges: pg.badges || [] };
-      const S = { root: st.root, page: st.page, chart: svg, box, geom, portrait: P, seed: st.seed + 97 * (i + 1), edge: st.edge, field: st.field, rail: st.rail,
-                  stagePx: ps * Math.min(hb.w / geom.W, hb.h / (geom.H + top)), lfType: null, keyPills: null, readability: st.readability, barStyle: null, cardK: 1,
+      const S = { root: st.root, page: st.page, chart: svg, box, geom, portrait: P, seed: st.seed + 97 * (i + 1), edge: st.edge, field: st.field, rail: st.rail, wide: f || 1,
+                  stagePx: ps * Math.min(hb.w / W0, hb.h / (geom.H + top)), lfType: null, keyPills: null, readability: st.readability, barStyle: null, cardK: 1,
                   bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: st.inlineBadges || {}, linePts: [],
                   marks: [], markBy: {}, badges: [], inkEls: [], glyphs: [], titleGlyphs: [], rtGlyphs: [], vals: [], vstr: [], emph: -1,
                   kind: "dense-line", scene: st.scene, panel: i, pg: pgI, perform: null, boardCentre: st.boardCentre };
       if (T) {   /* the long form's preset, at THIS panel's rendered scale: its words read at the preset's px in its home box */
-        const u = ps * hb.w / geom.W, g = lpLongformGeom(T, 0, 560 * u, 560 * u);   /* one chart unit in rendered px: the panel's width over its viewBox's */
+        const u = ps * hb.w / W0, g = lpLongformGeom(T, 0, 560 * u, 560 * u);   /* one chart unit in rendered px: the panel's width over its viewBox's (the home's: a re-laid-out build keeps its words) */
         S.lfType = Object.assign({}, g, { form: axes.tag_form || "full" });
         for (const k of ["tick", "tag", "chip", "value"]) svg.style.setProperty("--lf-" + k, g[k].toFixed(3) + "px");
       }
@@ -11106,7 +11128,29 @@ async function mount(doc) {
         sub.setAttribute("y", (-top + 0.92 * fs + 4).toFixed(1));   /* at the top of its own band, clear of the rules' names over the plot */
         if (S.markBy.axislabel.geom) S.markBy.axislabel.geom.y = +sub.getAttribute("y"); }
       return S;
-    });
+    }
+  };
+  /* P69 T8c - the build panel i stands in for pose `q`: its home build while the box keeps the home's aspect (T8b's grow,
+     the recede), else the build re-laid out at the box's aspect - built once per width and kept (a function of the
+     width, so a seek paints what play paints) - swapped onto the box, the one it replaces hidden */
+  const lpPanelFor = (st, i, q) => {
+    const V = st.panelVar[i], hb = st.panelHome[i];
+    const f = st.panelFill && q.b.h > 0 && q.b.w > 0 ? (q.b.w / q.b.h) / (hb.w / hb.h) : 1;
+    let S = V.home;
+    if (Math.abs(f - 1) > LP_PANELS.WIDE_EPS) {
+      const key = f.toFixed(5);
+      S = V.cache.get(key);
+      if (!S) {
+        S = lpBuildPanel(st, i, V.home.box, +key);
+        V.cache.set(key, S);
+        for (const [k2, S2] of V.cache) {   /* the oldest builds go first, never the one on the box */
+          if (V.cache.size <= LP_PANELS.WIDE_KEEP) break;
+          if (S2 !== S && S2 !== V.cur) { S2.chart.remove(); V.cache.delete(k2); }
+        }
+      }
+    }
+    if (S !== V.cur) { V.cur.chart.style.display = "none"; S.chart.style.display = ""; V.cur = S; st.panels[i] = S; }
+    return S;
   };
   /* which panel a species lands in, and which species a panel carries (the rest - a retitle, a note, the title's relight,
      the focus itself - are the page's) */
@@ -11130,10 +11174,10 @@ async function mount(doc) {
     roles.forEach((r, i) => { if (r === "active") act.push(i); });
     const R = fs && Array.isArray(fs.region) ? lpPanelUnBox(st, fs.region) : st.panelRegion;
     const lay = fs ? fs.layout : st.panelLayout, rec = (fs && fs.recede) || LP_PANELS.RECEDE;
-    const placed = lay === "free" ? [] : lpPanelLayout(lay, act.length, R, st.panelAspect);
+    const placed = lay === "free" ? [] : lpPanelLayout(lay, act.length, R, st.panelAspect, st.panelFill);
     return st.panels.map((_, i) => {
       const r = roles[i] || "active", home = st.panelHome[i];
-      const fb = fs && fs.boxes && fs.boxes[i] ? lpPanelFit(lpPanelUnBox(st, fs.boxes[i]), st.panelAspect) : null;
+      const fb = fs && fs.boxes && fs.boxes[i] ? lpPanelFit(lpPanelUnBox(st, fs.boxes[i]), st.panelAspect, st.panelFill) : null;
       if (r === "active") return { b: fb || placed[act.indexOf(i)] || home, op: 1, blur: 0, z: LP_PANELS.Z.active };
       const base = fb || home;
       if (r === "hidden") return { b: base, op: 0, blur: 0, z: LP_PANELS.Z.hidden };
@@ -11184,15 +11228,17 @@ async function mount(doc) {
     const uc = spiralClocks(t, scene.span ? scene.span[0] : 0, scene.span ? scene.span[1] : Infinity, pg.exit, pg.enter).uc;
     const c = { x: STAGE_W * st.boardCentre.x / 100, y: STAGE_H * st.boardCentre.y / 100 }, Rp = Math.hypot(STAGE_W, STAGE_H) / 2;
     const t0 = t - (t3 - LP.PUNCH);   /* the scene second the page's build opens */
-    st.panels.forEach((S, i) => {
+    st.panels.forEach((_, i) => {
       /* the pose is ONE similarity on the panel's home box - a translate and a uniform scale (every box keeps the panel's
          aspect), the park's own kind of move: the box's CSS never changes, so the raster is a function of t alone (a box
-         resized per frame rasterised differently under forward play than under a cold seek - measured, 42k px) */
-      const q = poses[i], bs = S.box.style, hb = st.panelHome[i], k = q.b.w / hb.w;
+         resized per frame rasterised differently under forward play than under a cold seek - measured, 42k px).
+         P69 T8c: a box of ANOTHER aspect is the chart re-laid out for it (lpPanelFor) - its svg that much wider in the
+         same box - and the scale is the box's height over its home's, so its words keep their size across a resize */
+      const q = poses[i], S = lpPanelFor(st, i, q), bs = S.box.style, hb = st.panelHome[i], k = S.wide !== 1 ? q.b.h / hb.h : q.b.w / hb.w;
       const tx = (q.b.x - hb.x) / STAGE_W * S.box.offsetParent.offsetWidth, ty = (q.b.y - hb.y) / STAGE_H * S.box.offsetParent.offsetHeight;
       let xf = "translate(" + tx.toFixed(3) + "px," + ty.toFixed(3) + "px) scale(" + k.toFixed(5) + ")";
       if (uc > 0) {   /* the page's drain takes the panel as one particle, about its posed centre */
-        const cx = tx + k * S.box.offsetWidth / 2, cy = ty + k * S.box.offsetHeight / 2, hx = q.b.x + q.b.w / 2, hy = q.b.y + q.b.h / 2;
+        const cx = tx + k * S.box.offsetWidth * S.wide / 2, cy = ty + k * S.box.offsetHeight / 2, hx = q.b.x + q.b.w / 2, hy = q.b.y + q.b.h / 2;
         xf = "translate(" + cx.toFixed(3) + "px," + cy.toFixed(3) + "px) " + lpVortexCss(lpVortex(hx, hy, c, Rp, uc), hx, hy)
           + " translate(" + (-cx).toFixed(3) + "px," + (-cy).toFixed(3) + "px) " + xf;
       }

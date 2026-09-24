@@ -1876,7 +1876,7 @@
    }
   }
  },
- "measured": "2026-09-23",
+ "measured": "2026-09-24",
  "note": "measured by scripts/measure_page_boxes.py - do not hand-edit",
  "pages": {
   "1cd30ecec2e0face": {
@@ -3846,7 +3846,7 @@
    }
   }
  },
- "player_sha256": "450877aa8fe56aef5807f8350347184d3f52c7dd0be98509aa74a79417d5c045",
+ "player_sha256": "8d23fc3d8e2fde118a823af39f6556c9f515ae08e85cf49a7b55a1d02b185664",
  "profiles": {
   "dense-line|longform:bravos": {
    "16:9|full_stage": {
