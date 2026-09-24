@@ -10197,6 +10197,17 @@ async function mount(doc) {
       st.buildDur = st.mbBase + M.LEAD_S + (most - 1) * M.STEP_S + M.LAND_S;
     }
   };
+  /* P69 T85 (row 22, 2026-09-24) - THE BARS LAW'S STAGGER SCALES TO THE BAR COUNT. Bar i starts at i * step of its
+     build, grows over 0.55 of it (value written over its last tenth) and its name fades in 0.3 - 0.5 past its start;
+     the build's fraction is capped at 1. At the base's fixed step (0.1 on a bars page, 0.08 in a tiers band) a page
+     past six bars never FINISHED: on the trim proof's eight bars bar 7's name stood at 0.5, bar 8's at 0 and bar 8 at
+     97.7% of its height; on twelve, bars 11 and 12 never grew at all. Past six bars the whole stagger now fits in
+     SPREAD of the build - the last bar's grow closes at 0.99 and its name at 0.94. SPREAD is 0.44, not the 0.45 that
+     would close the grow exactly at 1: (1 - 0.45) / 0.55 is 0.99999... in floating point, and a bar would stand one
+     rounding short forever (the callout's own lesson, lpPaintChart). Six bars or fewer keep the base's step to the
+     byte - their goldens stand (the sixth bar's grow ends at expoOut(0.909) = 0.9982, sub-pixel, as it always has). */
+  const LPBAR_STAGGER = { HELD_N: 6, SPREAD: 0.44 };
+  const lpBarStep = (n, step) => (n <= LPBAR_STAGGER.HELD_N ? step : Math.min(step, LPBAR_STAGGER.SPREAD / (n - 1)));
   /* each frame, after the bars law: a tile lands once its bar stands (its value written) - on its species' word, or on
      the cascade `ts` seconds after the ordinary build - and a `light` keeps its tiles and dims the bar's others */
   const lpMemberPaint = (cs, cb, ts, scene, t) => {
@@ -10210,9 +10221,9 @@ async function mount(doc) {
     }
     const names = (sp, j) => sp.tile === "all" || (Array.isArray(sp.tile) ? sp.tile : [sp.tile]).some((v) => (v | 0) === j);
     const opOf = (sp, r) => (!sp || !sp.light ? 1 : names(sp, r.j) ? 1 : M.DIM);
-    const up = new Map();
+    const up = new Map(), step = lpBarStep(cs.bars.length, 0.1);   /* P69 T85: the bars law's own step - a tile is ready when its bar is */
     for (const r of T) {
-      const kb = expoOut(clamp01((cb - r.bar * 0.1) / 0.55)), ready = clamp01((kb - 0.9) / 0.1);
+      const kb = expoOut(clamp01((cb - r.bar * step) / 0.55)), ready = clamp01((kb - 0.9) / 0.1);
       const ul = r.land ? clamp01((t - r.land.at) / r.land.dur) : ts == null ? 0 : clamp01((ts - M.LEAD_S - r.dj * M.STEP_S) / M.LAND_S);
       const s = LPMEMBER.POP_FROM + (1 - LPMEMBER.POP_FROM) * springPop(ul), a = clamp01((ul * M.LAND_S) / M.FADE_S) * ready;
       const [prev, cur] = lights.get(r.bar) || [null, null], e = cur ? expoOut(clamp01((t - cur.at) / (+cur.dur || M.LAND_S))) : 1;
@@ -12246,8 +12257,9 @@ async function mount(doc) {
       if (!bd.bars.length) continue;   /* a line band's name rides its line (lpPaintChart) */
       const k = tierBuildK(c, bd.ti, TT.n);
       bd.name.setAttribute("opacity", clamp01((k - 0.1) / 0.25).toFixed(2));
+      const step = lpBarStep(bd.bars.length, 0.08);   /* P69 T85: a band past six bars finishes too */
       bd.bars.forEach((bb, i) => {
-        const kk = expoOut(clamp01((k - i * 0.08) / 0.55));
+        const kk = expoOut(clamp01((k - i * step) / 0.55));
         bb.bar.style.transform = "scaleY(" + kk.toFixed(4) + ")";
         bb.val.setAttribute("opacity", clamp01((kk - 0.9) / 0.1).toFixed(2));
       });
@@ -14866,12 +14878,13 @@ async function mount(doc) {
          the run on the seconds after (bts); a page without one is exactly what it was (cb === c) */
       const cb = cs.bt ? clamp01(c * cs.buildDur / cs.btBase) : cs.mbBase ? clamp01(c * cs.buildDur / cs.mbBase) : c,   /* P69 T45: ... and a membership cascade's, the same way */
         bts = cs.bt ? c * cs.buildDur - cs.btBase : -1;
+      const step = lpBarStep(cs.bars.length, 0.1);   /* P69 T85: past six bars the stagger fits the build, so every bar and name finishes */
       cs.bars.forEach((bb, i) => {
-        const k = expoOut(clamp01((cb - i * 0.1) / 0.55));
+        const k = expoOut(clamp01((cb - i * step) / 0.55));
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
         if (bb.band) bb.band.style.transform = bb.bar.style.transform;   /* P69 T8d: the range's band grows with its bar, about the same zero */
         if (bb.ex) bb.ex.set(k);   /* P58 T5: the prism grows WITH its face - the same u, one clock, no second state */
-        bb.lab.setAttribute("opacity", clamp01((cb - i * 0.1 - 0.3) / 0.2).toFixed(2));
+        bb.lab.setAttribute("opacity", clamp01((cb - i * step - 0.3) / 0.2).toFixed(2));
         bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
       });
       if (cs.memberTiles) lpMemberPaint(cs, cb, cs.mbBase ? c * cs.buildDur - cs.mbBase : null, scene, t);   /* P69 T45 */
