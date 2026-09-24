@@ -304,6 +304,26 @@
    "note": "contact at 410.11s, the cue one frame early (the weight report Q5)"
   },
   {
+   "slot": "page enter 18 (axes)",
+   "at": 431.01,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   }
+  },
+  {
+   "slot": "landing 18 (stamp, ink)",
+   "at": 437.29,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 437.33s, the cue one frame early (the weight report Q5)"
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0073,

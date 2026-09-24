@@ -878,7 +878,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T27: Row 19 (7:13-7:52) - skips a gear: the breakthrough bars 20 years vs 5
-- Status: pending
+- Status: done (row 19 - BUILD-NOTES-H 18: the railway index melts on "Railway steel", the 20 lands on "twenty", a GPU stamped on "compute" becomes the 5 bar (T26e), the SOLD OUT chip, the retitle, one callout per bar; the object cites E99 s95; + R26-290/291 on row 18); gate 2 FAIL (M11, M31 pre-existing) / 5 WARN (M25 new: PROP 3 in the safe bands at the 1.2x push); HG4 open
 - Owner: implementation_luna
 - Depends on: T26
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`

@@ -196,7 +196,9 @@ def _assert_read_only(before: dict) -> None:
 # P69 T24 authors row 16 (who is paying, PROP 2) and moved it to row 17's first words (the arithmetic, T25's); P69 T25
 # authors row 17 (the arithmetic, the 94 bar) and moved it to row 18's first words (the signpost, T26's); P69 T26 authors
 # row 18 (the turn: reset 2, PROP 3, camera 3, the halving compare) and moves it to row 19's first words (T27's).
-UNIT_CUT_PHRASE = "And this is where the railway map"   # row 19's first words; the build stops at the cut BEFORE them
+# P69 T27 authors row 19 (skips a gear: the two clocks, the GPU becoming the compute bar) and moves it on to row 20's first
+# words (the test, T28's).
+UNIT_CUT_PHRASE = "Now the"   # row 20 ("Now the test" - the take glues "test" to its dash)'s first words; the build stops at the cut BEFORE them
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -794,7 +796,27 @@ SP500_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (SP500_PR
 # the plot and covered the "historically 2-4%" rule label (the page's `data_mask` holds only the bar's column, so the fit
 # does not see the rules or their label as ink). A prop never stands over data (E99 s92). Owner for the rest: the fixture
 # / the fit (a comparator rule and its label are data).
-SP500_OPTS = {"prop": True, "arrive": "stamp", "centre_x": 0.845, "centre_y": 0.42, "centre_w": 0.2}
+SP500_OPTS = {"prop": True, "arrive": "stamp"}   # mass unset: a stamp lands at `ink` (the engine's stampXf default)
+# R26-291 (P69 T27): the centre above (T26's `centre_x 0.845, centre_y 0.42, centre_w 0.2`) is now the prop's AUTHORED
+# PLACE (T26d) - the compiler's own reading of it, `authored: mark 348x241 painted px`, box [1447, 332, 349, 244]: painted
+# centre (1621.5, 454), painted width 349 - so the prop can MOVE after it lands (E99 s106). Camera 3's 1.2x push grows the
+# plot's panel under it (M27 WARN, 17,883 px, 15 % on T26b's gate); the prop steps up into the page's EMPTY upper right
+# (right of the sub, above the pushed panel) on the push's own clock and stays there - row 15's Fed method (FED_ASIDE_X).
+SP500_PLACE = {"x": round(1621.5 / 1920, 4), "y": round(454 / 1080, 4), "w": round(349 / 1920, 4)}
+SP500_ASIDE = {"x": 0.905, "y": 0.135, "w": 0.12}
+# ROW 19's prop (P69 T27, named here because DOCK_META reads it): "Today's compute doesn't sit. It depreciates in about five
+# years." The catalogued GPU card (`assets/props/CATALOGUE.md`: tags gpu, compute) is STAMPED on "compute" (E99 s87 - the
+# word names the thing) and BECOMES the compute bar on "about five years" (E99 s107, P69 T26e: the object IS the claim).
+GPU_PROP = "prop-gpu-accelerator-card-v1"
+GPU_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (GPU_PROP + ".png")
+# R26-290 (P69 T27): the desk card named only the two "+21%" tags (T10c's card names only a value two tags share), so the
+# "+105%" line - the one the sentence is about - carried no name. The signpost card is drawn from its OWN derived object
+# (`_signpost_object`): the hook object again, the semiconductor line carrying `card_name` - the short name the card
+# profile rides beside a tag (ledger_page.apply_card writes the same field for the repeated tags; the engine draws it as
+# the tag's chip, scene-evidence-engine.mjs:10196). The word is the object's own: that series' `delay_anchor` reads "The
+# chart's second line is the chip industry" (ev-divergence-v1.series.json; its name "SEMICONDUCTOR STOCKS").
+SIGNPOST_OBJECT_ID = "ev-divergence-signpost-v1"   # derived, in build-h/objects/ and nowhere else
+SIGNPOST_SEMIS_NAME = "chips"
 ENVELOPE_CARD = "dock-h-target-date-statement"
 ENVELOPE_PLATE = REPO / ("content/video_engine/projects/systems-and-blowups/review/claims/"
                          "steel-and-paper-plates-wave-3/objects/world-target-date-envelope-v1.png")
@@ -859,6 +881,8 @@ DOCK_META = [
      "source": "Money Physics - prop cutout " + SP500_PROP, "species": "prop", "badges": []},   # E99 s87 / s92
     {"asset": ENVELOPE_CARD, "title": "A target-date fund statement",
      "source": "Money Physics - plate world-target-date-envelope-v1", "species": "deck", "badges": []},   # a picture, no figure
+    {"asset": GPU_PROP, "title": "A GPU accelerator card",
+     "source": "Money Physics - prop cutout " + GPU_PROP, "species": "prop", "badges": []},   # row 19 (P69 T27): E99 s87 / s92
 ]
 
 
@@ -1287,6 +1311,79 @@ def page_conc() -> str:
     return "ledger:%s:bars::right:%s%s%s%s%s" % (CONC_PAGE, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM, BAR_SOFT)
 
 
+# ROW 19 (P69 T27): SKIPS A GEAR, 7:13-7:52 of the treatment - "And this is where the railway map, good as it is, skips a
+# gear." ONE page, the two clocks (`ev-two-clocks-bars-v1`, T14a: the railways' ~20 years against today's compute's ~5):
+#   the railway index holds through "skips a gear." and MELTS under "Railway steel" (CLOCKS_MELT_WHY; T27b) and the two
+#     clocks draw on the same board as "Railway steel sat waiting twenty years" is said - the 20 bar grows with the page;
+#   the compute bar is NOT drawn with it: its slot waits under its own name until the sentence reaches it. The GPU card
+#     (GPU_PROP) is STAMPED on "compute" (E99 s87) above the waiting slot and, on "about five years", BECOMES the bar
+#     (E99 s107, P69 T26e `chart_to {to: "morph", from: "prop:<id>", mark: "b:1"}`) - the compute IS its short clock;
+#   "sold out into next year" - the `sold out` pill: there is no pill species (section 4's finding 5), and the bed's
+#     `note` read as nothing (MEASURED, draft 1 - SOLD_CHIP's note), so it is a CHIP over the compute bar;
+#   "Different demand, different clock." - the page is RETITLED with the sentence's words;
+#   "Both are true at once." - two callouts, one on each bar (the treatment's own; E56 as amended by s110: the ring marks
+#     what the sentence points at - both clocks), each drawn wide enough to pass round its value and its name
+#     (CLOCKS_RING_PAD);
+#   the page stands to the row's end ("That's the whole point."), where row 20's host window takes it (T28's boundary).
+# THE FIVE IS THE OPERATOR'S WORD (E99 s95): the object's `src_full` and its `proof` (kind "operator", locator "line 3321
+# (E99 s95)") cite the ruling; its drawn source line reads "compute ~5 years on the operator's word". The twenty is the
+# research lane's (RAILWAY-LAG-20Y-FINDINGS.md, PLAUSIBLE). Both assert below, read off the object - never typed.
+CLOCKS_PAGE = "ev-two-clocks-bars-v1"   # TWO_CLOCKS_PAGE (the preflight's name, BODY_ASSETS row 19)
+CLOCKS = _series(CLOCKS_PAGE)
+CLOCKS_RAIL, CLOCKS_COMPUTE = 0, 1
+assert [b["value"] for b in CLOCKS["bars"]] == [20, 5] and CLOCKS["bars"][CLOCKS_COMPUTE]["label"] == "Today's compute"
+assert "E99 s95" in CLOCKS["src_full"] and any("E99 s95" in str(p.get("locator")) for p in CLOCKS["proof"])
+CLOCKS_MELT_S = 0.6     # the index melts over "Railway steel" and the 20 stands as "twenty" is said (T27b)
+# MEASURED (measure_stage_gaps on the private build, `scratchpad/p69-row19/melt-*.json`): the melt's throw out of the
+# RETURNED index left the board empty 0.2 s at 1.0 s (spoken over "a gear." - a second M31 instance), 0.3 s at 1.2 s,
+# 0.1 s at 0.8 s and 0.0 s at 0.6 s - the shortest reads as the gear skipping.
+# THE 20 LANDS ON "twenty" (T27b, the parent's read of tile A): opened on "a gear" the bar grew at 430.7-431.0 under "skips a
+# gear." and stood by ~431.4, before its number was said. The page's bar grows ~1.3 s after the boundary (the melt, then the
+# page's own build), so the boundary is "Railway steel" (431.01): the index holds through "skips a gear." (9.8 s from its
+# return, under E50's 12), melts under "Railway steel", and the 20 stands as "twenty" is said (MEASURED, section 18, T27b).
+GPU_OPTS = {"prop": True, "arrive": "stamp"}   # mass unset: a stamp lands at `ink` (the engine's stampXf default)
+# ITS PLACE (E99 s106, authored): above the compute bar's waiting slot, so the thing the sentence names stands over the
+# slot it becomes. MEASURED on draft 1 (the probe's boxes): the compute bar lands at x ~895-1090 over the baseline y 785,
+# its value at [941, 629, 109, 41]; the 20 bar and its value stand at x 447-643. The GPU's painted 288 x 220 at (991, 562)
+# stands over the waiting slot, clear of both (the compiler's `authored place` line; section 18).
+GPU_PLACE = {"x": 0.516, "y": 0.52, "w": 0.15}
+GPU_MORPH_S = 0.9       # the GPU becomes the bar over "about five", landing as "years" is said
+# THE `sold out` PILL: no pill species exists (section 4, finding 5). MEASURED on draft 1: the bed's answer, a `note`, wrote
+# 25 px handwriting (10.8 css, under the phone floor) in the page's far upper right, one glyph a few seconds (its write
+# runs over its whole dur) - it read as nothing. The CHIP is the pill that exists: a card with a sourced glyph and a label,
+# landing on its word on the two-spring landing (species/chip.mjs; row 7's NVIDIA chip), breathing while it holds (E49).
+# The glyph is the cpu (assets/icons/cpu.svg - what is sold out is compute); it stands over the compute bar it names, in
+# the page's empty upper right, and holds to the row's end (it is the moat the next sentences talk about).
+SOLD_CHIP = {"kind": "chip", "icon": "cpu", "label": "SOLD OUT", "idle": "breath"}
+SOLD_ON_PAGE = {"kind": "point", "x": 0.516, "y": 0.36}
+# THE TWO CALLOUTS ("Both are true at once"): a callout on a bar's datum rings the BAR's box (resolveTarget), so its tip
+# passes 18 px over the bar's top and under its foot - MEASURED on draft 1, straight through each bar's value ("20years",
+# "5years") and its name ("1840s railways"). The callout's own `pad` widens the hand's ellipse round the same box
+# (species/callout.mjs calloutPad): at 60 px its tips clear the value above and the name below on both bars (section 18).
+CLOCKS_RING_PAD = 80
+CLOCKS_CLOCK_TITLE = "Different demand, different clock"
+CLOCKS_TITLE_S = 1.6
+CLOCKS_MELT_WHY = ("the railway index -> the two clocks, page to page: TAKEN the melt's throw (E88) once 'skips a gear' is "
+                   "said - the index balls up and is thrown off (the map has skipped its gear) under 'Railway steel' and "
+                   "the clocks draw on the same board, the 20 standing as 'twenty' is said; refused: the dip (two pages are one kind "
+                   "of world, E47), a recast (the index is the paper's PRICE and the clocks are how long the capital "
+                   "WAITED - a different argument is a different page, E58, rows 15 and 16's own ruling on the "
+                   "treatment's chart_to), rescale / extend (not the same series), morph (another frame, not a strip of "
+                   "this one), melt:splash:chart and melt:morph (the clocks would arrive built - every page builds on "
+                   "screen, E99 s67)")
+GPU_MORPH_WHY = ("the GPU card -> the compute bar, on one page (P69 T26e, E99 s107 - 'the object IS the claim': today's "
+                 "compute becomes its five-year clock): TAKEN `chart_to morph` from the stamped prop into mark b:1, the "
+                 "bar held hidden under its name until the landing (the T26e WARN: its slot waits ~9 s - the waiting "
+                 "slot is the sentence's own question, read on the frame); refused: drawing both bars at the landing (the "
+                 "5 would stand ~8 s before 'five years' is said), a recast to a one-bar state (no such object; STATE_MAX "
+                 "would be spent on a half-page), a figure beside the bar (R26-284: a figure restating a value)")
+
+
+def page_clocks() -> str:
+    """Row 19's page (P69 T27): the two clocks on their axes (E73), live (E49), in the long form's profile (E99 s97)."""
+    return "ledger:%s:bars::right:%s%s%s%s" % (CLOCKS_PAGE, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM)
+
+
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
 AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}, {"n": 3, "text": "Used tomorrow?"}]
 # ... and the agenda's room is measured the same way: the caption's band ends at y 576 and the parked chart holds
@@ -1539,6 +1636,7 @@ IN_ROW_WHY = (
     ("row 10 the recast to the capex consensus (P69 T24, 'a bet on data centers')", CAPEX_RECAST_WHY),
     ("row 13 the slot hand-off on the desk (P69 T26, 'everyone repeating this chart')", SIGNPOST_CARD_WHY),
     ("row 15 the halving compare (P69 T26, 'fall by half')", HALVING_WHY),
+    ("row 18 the GPU becomes the compute bar (P69 T27, 'about five years')", GPU_MORPH_WHY),
 )
 # (the P69 T16 first cut, before T15b, is kept for the record: it entered the index from the STUDIO by dip 1 and
 # refused recast / rescale / morph, the melt, the snap / throw-then-zoom / throw-then-push, object-becomes-chart, the
@@ -1558,6 +1656,7 @@ BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the tr
                 page_conc(): CONC_DIP_WHY,                                   # row 18b, dip 6
                 (PRESS_PLATE, MELT_EXIT % MEMO_MELT_S): PRESS_MELT_WHY,      # the press RETURNS (row 18c): keyed by its exit
                 page_rail_return(): RAIL_RETURN_WHY,                         # row 18d, the railway index RETURNS
+                page_clocks(): CLOCKS_MELT_WHY,                              # row 19, the two clocks (P69 T27)
                 SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
                               "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
@@ -1740,6 +1839,13 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_proof = at("1845 is the")                         # the railway index RETURNS, built (RAIL_RETURN_WHY) ...
     t_cert_off = round(t_proof - DOCKS_OFF_LEAD_S, 2)   # the certificate (and its ring) leave before the world changes
     t_thirds = at("lost two-thirds")                    # ... and its own -64% is written as "two-thirds" is said
+    # -- row 19 (P69 T27): SKIPS A GEAR - the index melts on the words, the two clocks draw, the GPU becomes the 5
+    t_gear = at("Railway steel")                        # the melt's start (T27b): the map has skipped its gear; the 20 lands on "twenty"
+    t_compute = any_at("compute doesn't", "Today's compute")   # the GPU is stamped on the word that names it (E99 s87)
+    t_five = at("about five years")                     # ... and becomes the compute bar as "five years" is said
+    t_sold = at("sold out into")                        # the `sold out` pill (a chip: no pill species)
+    t_clock = at("Different demand")                    # the page is retitled with the sentence
+    t_both = at("Both are true")                        # the two callouts, one on each bar
     t_row9_end = unit_end
 
     return [
@@ -2022,7 +2128,8 @@ def shot_table(ws: list, unit_end: float) -> list:
         # its settle (E51), the chrome fitted into the frame (E99 s108); the statement card thrown on "target-date" in the room left; both leave on "Run the arithmetic"; on "fall
         # by half" the bar HALVES (HALVING_WHY) and "10%" lands on "ten percent", the old top a ghost.
         (t_conc, t_again, page_conc(), (0, 0, 0), [
-            (SP500_PROP, 0, t_sp500, t_run, dict(SP500_OPTS)),
+            (SP500_PROP, 0, t_sp500, t_run, dict(SP500_OPTS, place=dict(SP500_PLACE), moves=[   # R26-291: it steps up
+                dict(SP500_ASIDE, at=t_contact, dur=CONC_CAM_IN_S, ease="cubic")])),   # ... as the push grows the panel
             (ENVELOPE_CARD, 1, t_target, t_run, dict(ENVELOPE_SLOT)),
         ], "dip", [
             {"kind": "figure", "at": t_conc, "dur": CONC_FIG_S, "target": datum(CONC_BAR), "text": CONC_SHARE_TEXT},
@@ -2047,11 +2154,29 @@ def shot_table(ws: list, unit_end: float) -> list:
         # -- ROW 18d (P69 T26): "1845 IS THE PROOF" - the railway index RETURNS behind a blur-zoom (RAIL_RETURN_WHY),
         # BUILT (E25: a chart that comes back is never drawn like new); its own -64% is written at the trough as "the
         # paper still lost two-thirds" is said.
-        (t_proof, t_row9_end, page_rail_return(), (0, 0, 0), [], RAIL_RETURN_EXIT, [
+        (t_proof, t_gear, page_rail_return(), (0, 0, 0), [], RAIL_RETURN_EXIT, [
             {"kind": "figure", "at": t_thirds, "dur": RAIL_DROP_S, "target": datum(RAIL_TROUGH, 0), "text": RAIL_DROP,
              "color": "neg", "dy": RAIL_DROP_DY},
         ], {"keys": []}),
-        # (-- ROWS 19-24 are T27-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
+        # -- ROW 19 (P69 T27): SKIPS A GEAR - the railway index holds through "skips a gear." and melts and is thrown off
+        # under "Railway steel" (CLOCKS_MELT_WHY); the two clocks draw on the same board, on their axes, live, in the long
+        # form's profile; the 20 grows with the page and stands as "twenty" is said (T27b); the compute slot waits under its name; the GPU is STAMPED
+        # on "compute" above it and BECOMES the 5 bar on "about five years" (GPU_MORPH_WHY); the SOLD OUT chip lands over
+        # the compute bar on "sold out" (no pill species); the page is retitled "Different demand, different clock"; on
+        # "Both are true at once" a callout rings each bar. The page stands to the row's end (T28's boundary).
+        (t_gear, t_row9_end, page_clocks(), (0, 0, 0), [
+            (GPU_PROP, 0, t_compute, round(t_five + GPU_MORPH_S, 2), dict(GPU_OPTS, place=dict(GPU_PLACE))),   # handed to the morph at t_five
+        ], RAIL_EXIT % CLOCKS_MELT_S, [
+            {"kind": "chart_to", "to": "morph", "from": "prop:" + GPU_PROP, "mark": "b:%d" % CLOCKS_COMPUTE,
+             "at": t_five, "dur": GPU_MORPH_S},
+            dict(SOLD_CHIP, at=t_sold, dur=round(t_row9_end - t_sold, 2), target=SOLD_ON_PAGE),
+            {"kind": "retitle", "at": t_clock, "dur": CLOCKS_TITLE_S, "text": CLOCKS_CLOCK_TITLE},
+            {"kind": "callout", "at": t_both, "dur": round(t_row9_end - t_both, 2), "target": datum(CLOCKS_RAIL),
+             "pad": CLOCKS_RING_PAD},
+            {"kind": "callout", "at": t_both, "dur": round(t_row9_end - t_both, 2), "target": datum(CLOCKS_COMPUTE),
+             "pad": CLOCKS_RING_PAD},
+        ], {"keys": []}),
+        # (-- ROWS 20-24 are T28-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
     ]
 
 
@@ -2125,7 +2250,7 @@ _DEBT = _series(DEBT_PAGE)
 _DEBT_LABELS = [s["label"] for s in _DEBT["series"]]
 DEBT_SPREAD = {"kind": "spread", "from": _DEBT_LABELS.index("$150B"), "to": _DEBT_LABELS.index("$130B")}
 DEBT_RANGE_TEXT, DEBT_RANGE_SUB = "$130–150B", "2026E"
-TWO_CLOCKS_PAGE = "ev-two-clocks-bars-v1"   # row 19: about 20 years vs about 5 years (RAILWAY-LAG-20Y-FINDINGS.md)
+TWO_CLOCKS_PAGE = CLOCKS_PAGE   # row 19: about 20 years vs about 5 years (RAILWAY-LAG-20Y-FINDINGS.md)
 
 # (kind, item, what it resolves to). Builders: `ledger_page.pick_builder` on the series at the row's variant.
 # PLAUSIBLE pages (H1-H5, row 16, row 19) DRAW - the operator, 2026-09-22: "yes draw plausible pages" (E99 s?? (b));
@@ -2348,6 +2473,22 @@ def _hook_object() -> Path:
     return out
 
 
+def _signpost_object() -> Path:
+    """Row 18's desk card source (R26-290, P69 T27): the hook object's words and numbers unchanged, the semiconductor
+    line carrying its short name as `card_name` (SIGNPOST_SEMIS_NAME - the object's own "the chip industry"), so the
+    +105% tag the sentence is about is NAMED on the card, as the two +21% tags are. Written into the build dir only."""
+    import copy
+    obj = json.loads(_hook_object().read_text(encoding="utf-8"))
+    semis = [i for i, sr in enumerate(obj["series"]) if str(sr.get("name", "")).startswith("SEMICONDUCTOR")]
+    assert len(semis) == 1 and obj["series"][semis[0]]["label"] == DIV_LABEL[DIV_SEMIS], semis
+    assert "chip industry" in DIVERGENCE["series"][DIV_SEMIS].get("delay_anchor", ""), "the name is the object's own"
+    obj = copy.deepcopy(obj)
+    obj["series"][semis[0]]["card_name"] = SIGNPOST_SEMIS_NAME
+    out = BUILD / "objects" / (SIGNPOST_OBJECT_ID + ".series.json")
+    out.write_text(json.dumps(obj, indent=1), encoding="utf-8")
+    return out
+
+
 def _shot_table_md(rows: list) -> str:
     """SHOT-TABLE-H.md - the table a human reads: one row per window, its world, its use and idle, what fires."""
     out = ["# SHOT TABLE H - the bed (P68 T5) and the body, grown one P69 slice at a time (T15-T32); a row is a world",
@@ -2391,7 +2532,12 @@ TABLE_TREATMENT = {1: "treatment rows 1-5 (the page, 0:00-0:42)", 2: "treatment 
                        "centre stamped (P69 T24), and row 17's rehook (P69 T25)",
                    12: "treatment row 17, the arithmetic: dip 4, the 94 bar and its figure on PIMCO's page (P69 T25)",
                    13: "treatment row 17, the promise: the page sucked into the records' desk, the filings' record "
-                       "thrown back for the anaphora (P69 T25)"}
+                       "thrown back for the anaphora (P69 T25)",
+                   14: "treatment row 18, the turn: dip 5, reset 2 - the press, the certificate thrown (P69 T26)",
+                   15: "treatment row 18, dip 6: the concentration page, PROP 3, camera 3, the halving (P69 T26)",
+                   16: "treatment row 18, the certificate again: the melt back onto the press, the ring (P69 T26)",
+                   17: "treatment row 18, '1845 is the proof': the railway index returns (P69 T26)",
+                   18: "treatment row 19, skips a gear: the two clocks, the GPU becoming the compute bar (P69 T27)"}
 
 
 def _flow_count(rows: list) -> tuple[int, int, int, int]:
@@ -2446,7 +2592,9 @@ def main() -> int:
     # profile - chart_card.render_card(card_w=...)): the shrunk full page read ~8 px type on the desk (T26's
     # `final/tile-359.90.png`); drawn as a card of SIGNPOST_CARD_W stage px every word sits at the phone floor as displayed,
     # and two tags that read the same ("+21%") each carry a short name from the data.
-    D.chart_card(SIGNPOST_CARD, _hook_object(), BUILD, "line", card_w=SIGNPOST_CARD_W)
+    # R26-290 (P69 T27): ... drawn from its own derived object, so the +105% line is named too (_signpost_object).
+    D.chart_card(SIGNPOST_CARD, _signpost_object(), BUILD, "line", card_w=SIGNPOST_CARD_W)
+    D.register(GPU_PROP, GPU_PROP_FILE)          # row 19: the GPU, stamped on "compute", becomes the compute bar
     D.register(HOST_PLATE_ID, HOST_PLATE_FILE)   # the Flow plate by id (build_render_f.find_asset checks STAMPED first)
     rows = shot_table(ws, unit_end)
     karp_record(ws, T.at(ws, "Alex Karp"))   # row 11: the record's words are filled BEFORE the META is written

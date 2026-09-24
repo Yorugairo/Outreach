@@ -1550,3 +1550,154 @@ picture on disk - none carries printed words).
   bars grow after it (~1.5 s) - the stamp sits beside, never over, them.
 - `build-h/docks/dock-h-two-line-copy-again.card.json` (the card sidecar) is UNTRACKED and not ignored (its PNG is,
   `.gitignore:127`); no `.card.json` is tracked anywhere yet. Owner: the parent / the steward (commit or ignore).
+
+
+## 18. P69 T27 - row 19 (7:13-7:52): skips a gear - the two clocks, the GPU becomes the 5; R26-290 and R26-291 - 2026-09-23
+
+The build runs 0.00-464.15 s (1317 of 2335 words). `UNIT_CUT_PHRASE` = "Now the" (row 20's "Now the test", T28's; the take
+glues "test" to its dash, so the three-word phrase is not in it). RED: before the slice the table ended at row 17 (421.21-427.43,
+`logs/t27-door0-head.log` - byte-identical to T26b's final build: timeline, player.html, SHOT-TABLE-H.md sha256 unchanged).
+
+Recall: `docs_find "bar by bar"` -> `CAPABILITIES.md:90` the breakthrough bars, `:121` the keyed recast; `docs_find "build=bars"`
+0 hits (a bars page has no hold for one bar - `PAGE_BUILD_MODES = ("lines",)`, `build_scene_timeline_f.py:4942`); `docs_find
+"pill"` -> `CAPABILITIES.md:30` / `:110` (value pills and the tip pill - no species), and section 4 finding 5 here ("No `pill`
+species ... Built as a `note`"); `docs_find "callout on a bar"` -> `CAPABILITIES.md:86` / `:69`; the P69 section `:221` (T26d
+`place` / `moves`), `:222` (T26f chrome), `:223` (T26e prop <-> mark morph).
+
+| table row | window | what |
+|---|---|---|
+| 17 `ledger:ev-railway-index-v1:line:139:right:built:cut` (T26's, shortened) | 421.21-430.06 | "1845 is the proof": the index returns built, its -64% written on "two-thirds"; it holds through "And this is where the railway map, good as it is, skips" (8.9 s from the return) |
+| 18 `ledger:ev-two-clocks-bars-v1:bars::right:axes:cut;idle=live;readability=longform` | 430.06-464.15 | the index MELTS and is thrown off on "a gear." (`melt:throw:0.6`, `CLOCKS_MELT_WHY`) and the two clocks draw on the same board, on their axes; the 20 grows with the page and stands with its value by ~431.4 ("Railway steel sat", 0.9 s before "twenty"); the compute bar's slot WAITS under its name; **the GPU** (`prop-gpu-accelerator-card-v1`) is STAMPED on "compute" (437.18) at an authored place over the waiting slot (`GPU_PLACE` (0.516, 0.52, w 0.15) - `authored place: mark 288x220 painted px at (991, 562)`) and BECOMES the 5 bar on "about five years" (`chart_to {to: "morph", from: "prop:...", mark: "b:1"}`, 439.44 + 0.9 s, landing on "years" at 440.34; `GPU_MORPH_WHY`); the **SOLD OUT** chip (cpu glyph, `SOLD_CHIP`) lands over the compute bar on "sold out into" (442.06) and holds, breathing, to the row's end; the page is **retitled** "Different demand, different clock" on its words (450.24); on "Both are true at once" (460.29) **two callouts**, one on each bar, `pad: 80` (`CLOCKS_RING_PAD`); the page stands to the row's end (464.15, T28's boundary) |
+
+**Acceptance (P69 T27):** the `sold out` pill - a CHIP (see below; no pill species exists); two callouts, one per bar - at
+460.29, each ringing its whole column; the fives' source - `ev-two-clocks-bars-v1` cites E99 s95 in its `src_full` ("Compute:
+about five years, accepted on the operator's word, E99 s95") and its `proof` (kind `operator`, locator "line 3321 (E99 s95)"),
+and the door ASSERTS both before it draws the page (`CLOCKS`, `build_episode_h.py`). The DRAWN source line reads "... compute ~5
+years on the operator's word" - it names the operator, not the ruling id. A page line that prints "E99 s95" is an edit to the
+evidence object (READ_ONLY to this door and outside this slice's write set) - the parent's call.
+
+**Measured and fixed** (drafts `scratchpad/p69-row19/draft1..3/`, the private build `p69-row19/build` via `STEEL_H_BUILD_DIR`):
+- The GPU dock ending ON the morph's word was refused ("no dock of prop-gpu-accelerator-card-v1 stands in this row at
+  439.44s") - the dock runs to the landing and the compiler hands it to the morph at its word.
+- The bed's `note` for the pill (draft 1): 25 px handwriting (10.8 css, under the phone floor) in the far upper right,
+  writing one glyph every few seconds (a note's write runs over its whole dur) - it read as nothing -> the CHIP.
+- The callouts at no pad (draft 1) and `pad: 60` (draft 2): a callout on a bar's datum rings the BAR's box, so the hand's
+  ellipse ran straight through each bar's value ("20years", "5years") and its name ("1840s railways", "Today's compute").
+  From the probe's ledger (each ellipse's centre, rx, ry) and the label boxes, `pad: 80` clears the value above and the name
+  below on both bars with the jitter (`draft3/t461-zoom.png`); M34 PASS ("no mark over a text box", 31 pairs).
+- The SOLD OUT chip at y 0.43 put its label under the compute ring's top at 460.3 -> y 0.36.
+- The melt's empty board: at 1.0 s the throw out of the RETURNED index left 0.2 s of empty board spoken over "a gear." - a
+  second M31 instance. Measured on the private build: 1.2 s -> 0.3 s, 0.8 s -> 0.1 s, **0.6 s -> 0.0 s**
+  (`p69-row19/melt-*.json`). The melt is 0.6 s; the boundary moved from "skips a gear" to "a gear" so the 20 still grows
+  under "Railway steel".
+
+**R26-290 (the desk card names +105%): DONE.** The +105% line is `SEMICONDUCTOR STOCKS` (`ev-divergence-v1.series.json`, teal;
+its `delay_anchor` "The chart's second line is the chip industry"). The signpost card is now drawn from its own derived
+object, `build-h/objects/ev-divergence-signpost-v1.series.json` (`_signpost_object`: the hook object's words and numbers,
+unchanged, the semis series carrying `card_name: "chips"`) - the field `ledger_page.apply_card` writes for the repeated tags,
+which the engine rides as the tag's chip (`scene-evidence-engine.mjs:10196`). Read on `final/D-row18-fixes.png` (359.9, 361.0):
+"+105% chips", "+21% s&p", "+21% mega-cap" - three named tags in one style, the title "Two lines, one warning" kept (row 3's
+callback). No engine or `ledger_page.py` edit; the hook object (row 3's card) is unchanged. A title naming the line was the
+other door; the tag keeps the callback's title and names the line where the eye lands. `test_chart_card_readable` passes.
+
+**R26-291 (camera 3's push grows the panel under PROP 3): the MOVE, not 1.1.** PROP 3's T26 centre is now its authored `place`
+(the compiler's own reading: painted centre (1621.5, 454), width 349 - `SP500_PLACE`) and it moves on the push's own clock
+(from the stamp's settle 387.61, 0.9 s, cubic) to the page's empty upper right, `SP500_ASIDE` (0.905, 0.135, w 0.12) - row
+15's Fed method. Both read on the frame:
+- **the move (taken)** - `final/D-row18-fixes.png`: at 388.6 / 390.5 the prop stands level with the title, right of the sub,
+  above the pushed panel (box [1609, 47, 256, 197]; the panel's top ~224), clear of the bar, the "20%", the 2-4% rules and
+  their label; it passes over the panel's corner only in flight (388.1); at 1.0 and beside the statement card (394.6) it stays
+  in the corner, and leaves with the page's docks on "Run the arithmetic". The gate: **M27's PROP 3 line is gone** (was
+  17,883 px, 15 %).
+- **1.1 (refused)** - `p69-row19/optB/B-push11.png`, built with the prop at rest: the prop still stands INSIDE the panel
+  (36,871 px, 32 % of the smaller box - the panel at 1.1 about the same `at` still reaches under it), and the page's left edge
+  leaves the stage (a ~25 px cream strip at the left - T22's measured failure). Moving `at` left to keep the panel off the prop
+  runs the y ticks onto the panel's border (T26b draft 1's failure).
+- The cost, named: **a new M25 WARN** - the corner is inside the safe-zone bands ("a card is 42 % inside the top safe-zone
+  band at 6:35; 16 % inside the right"). At 1.2 no place is clear of both the pushed panel and the safe bands (the corner room
+  is x 1644-1824, y 130-224: 180 x 94 px). The compiler's T26d finding "moves[0] (387.61s): over a label: title 10874 px^2,
+  sub 7324 px^2" reads the title's and sub's BOXES (they run the stage's width); their ink ends at x ~620 and ~1122.
+
+**Named, not fixed:**
+- **"20years" / "5years"** - the object's `unit` is `"years"` with no leading space and `lpWithUnit` concatenates
+  (`scene-evidence-engine.mjs:8545`), so every tick and both values print "20years", "0years". The fix is one field in the
+  evidence object (`"unit": " years"` - checked on a scratch copy: `ledger_page.py` keeps the space into the spec,
+  `p69-row19/unit-probe.page.json`), which is READ_ONLY here and outside the write set, and it changes the page's ink (a
+  re-measure of `7570387af47450d9`). For the parent / the evidence owner.
+- **M21 WARN s18 31.1 s (7:13 -> 7:44):** the gate's `_deployed_lives` reads `chart_to` species and the compiler moves a prop
+  morph into `scene.prop_morphs`, so the morph's landing (440.34) is not a data mark to M21 (M03 does read it -
+  `_prop_morph_landings`). Even counted, the page stands 23.8 s after the 5 lands: "sold out", "Governments ... same
+  hardware", "Different demand, different clock", the moat and the paper, "Both are true at once" are commentary on the two
+  clocks, carried by the chip, the retitle and the callouts; the treatment keeps the page to the callouts. Owner: the gate (a
+  prop morph landing is a data mark) and the parent's read (a second world for 452-460 would spend a dip).
+- **The compute slot waits 9.4 s** (T26e WARN "mark b:1 is held hidden 9.38s"): "Today's compute" stands under an empty slot
+  from the page's landing to "five years" (`final/A-boundary-in.png` 431.9-436.8). Read as the sentence's own question - no
+  zero bar, no value; the GPU lands over it on "compute". Drawing both bars at the landing would stand the 5 eight seconds
+  before it is said.
+- **The morph's invariants** (WARN: centroid 10.1 % W, axis 26.9 deg, area 0.26 - a GPU card is not a bar's shape): read on
+  `final/B-gpu-stamp-morph.png` (439.7-440.4) - the card squashes down into the slot, textured, and hands to the orange bar;
+  it reads as the card becoming the bar.
+- **The GPU placement WARNs** (ring at its floor, approach from 1.20x, "over the data: 13,608 px^2 of its turned box" on the
+  measured page): the ink under it is the compute bar's own rect and value, HIDDEN until the morph lands (`pmMarkEls`); on the
+  frame the stamp's ring passes over the empty panel only (437.25).
+- **Life on the clocks page** (446.0 vs 448.0, box x 0-1500 y 150-850, `final/life.txt`): mean |dL| 2.25, 3.6 % of pixels
+  changed - the live idle and the chip's breath; low, like the concentration page's 3.85 / 7.4 %. 18 of 18 rows carry a life
+  token (row 18 `idle=live`).
+- **A 7th prop** - the treatment names six stamps (row 19 names none); the GPU is this slice's, on E99 s87 (the word
+  "compute" names it; `CATALOGUE.md` tags it `compute`) and E99 s107 (the object is the claim). For HG4.
+- `build-h/objects/ev-divergence-signpost-v1.series.json` is new and untracked (the hook object beside it is tracked).
+
+**Departures (for BODY_DEPARTURES / the parent - the door's table is not edited here):** the treatment's "the page `chart_to`
+the breakthrough bars" -> a new page by the melt's throw (the index is the paper's price, the clocks how long the capital
+waited - rows 15 and 16's own rule); "20 years beside 5 years on their words" -> the 20 with the page, the 5 by the GPU's morph
+on "five years"; "a pill `sold out`" -> the chip; the retitle and the GPU are additions.
+
+**Transitions** (printed in `SHOT-TABLE-H.md`): the melt's throw index -> clocks (`CLOCKS_MELT_WHY`: the dip, a recast, rescale
+/ extend, morph, melt:splash:chart / melt:morph refused); inside the row the GPU -> the compute bar (`GPU_MORPH_WHY`: both bars
+at the landing, a one-bar recast state, a figure beside the bar refused). Flow count: 0 cuts, 6 dips, 1 arrival carrying a
+boundary, 10 transforms. The table's treatment map now names rows 14-18 (they read "?").
+
+**The fixture (T27):** the door reported `page boxes : 1 page(s) ESTIMATED, not measured - row 18 'Two clocks'`, so
+`measure_page_boxes.py --write` (plain - the build-h timeline is already in `projects`; `logs/t27-measure-write.log`): **1 page
+ADDED** - `7570387af47450d9` "Two clocks" (story, 16:9 full stage, plot 451, 374, 641 x 410); every other page, `builders`,
+`profiles`, `stage` UNCHANGED; `player_sha256` changed (provenance, excluded from `--check`). The door re-ran on the measured
+fixture ("10 page(s) MEASURED"); `--check` PASS (`logs/t27-measure-check.log`, "PASS 5 builders x 15 geometr(ies) measured
+identical"). `test_page_boxes.py` + `test_full_stage_page_is_measured.py` + `test_chart_card_readable.py`: **101 passed**
+(`logs/t27-pytest.log`).
+
+**The order of proof (`logs/`, final build 0.00-464.15):** `t27-door3.log` (rc 0; cues 33 bound of 34 derived - T26's two
+silent kinds, unchanged: `suck`, `page enter (built)`; life 18 of 18), `t27-measure-check.log` PASS, `t27-probe.log` (171
+instants), `t27-frozen.log` ("no run of identical frames over 0.50s (whole frame)"), then the door re-run
+(`t27-door-final.log`) with the timeline, player.html, player.json, SHOT-TABLE-H.md and SHOT-TABLE-H.py sha256 IDENTICAL
+(`t27-door3.sha` = `t27-door-final.sha`), so GATES-MOTION.md is stamped on the fresh probe and hashes; `t27-seams.log` 17
+boundaries, 0 faults (430.06 melt:throw darkest 23.2, clean); `t27-spoken.log` 5 pointing phrases, 0 uncovered;
+`t27-stagegaps.log` 2.3 s of 464.1 s, 430.06 melt 0.0 s; **`t27-gate.log` 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO**
+(before, `t27-gate-before.log` on HEAD's build: 2 FAIL / 4 WARN / 22 PASS / 1 JUDGE / 4 INFO). FAIL M11 (row 1) and M31 (s08's
+0.2 s at 3:15), both pre-existing and unchanged. WARN M02, M04 (15 plates vs 38), M21 (+ s18, above), M27 (2 cards now - the
+Fed 1 %, the statement card; PROP 3 gone), and **M25 NEW** (PROP 3's corner, above). M01 PASS (9.5 s), M03 PASS (33 s), M34
+PASS. Drafts: `t27-door1.log`, `t27-door2.log` (+ `.sha`), `t27-measure-write.log`, `t27-gate-before.log`.
+
+**Tiles** (`scratchpad/p69-row19/final/`): `A-boundary-in.png` (426.9 the index; 430.0 / 430.2 / 430.45 the melt and throw;
+430.7 / 431.0 the page and the 20 growing; 431.4 / 431.9 / 432.4 / 432.7 the 20 standing through "twenty years"; 434.5; 436.8
+the waiting slot); `B-gpu-stamp-morph.png` (437.18 - 437.6 the stamp's approach, ring and rest; 438.7; 439.44 - 440.4 the
+morph; 441.0; 442.1 the chip landing); `C-chip-retitle-callouts.png` (442.3 - 446.0 the chip; 450.3 / 451.2 / 452.3 the
+retitle; 457.0; 460.4 - 461.5 the callouts drawing; 463.5; 464.1 the row's end); `D-row18-fixes.png` (358.9 / 359.9 / 361.0
+the desk card; 386.2 / 386.4 the stamp; 387.6 the settle; 388.1 mid-move; 388.6 / 390.5 pushed; 392.5 released; 394.6 the
+statement card; 398.9 "Run the arithmetic"); `E-life.png` + `life.txt`. Rendered from the private build (the same door and
+fixture; its timeline differs from build-h's only in its paths). No build-f reference frames were cut for this row.
+
+**T27b (2026-09-23, after the parent's frame read accepted row 19 and R26-290 / R26-291 as chosen).** The parent edited
+`ev-two-clocks-bars-v1` (`"unit": " years"`; `src` now ends "(E99 s95)"). (1) THE 20 LANDS ON "twenty": opened on "a gear" the
+bar grew under "skips a gear." (430.7-431.0) and stood before its number was said; the boundary is now "Railway steel"
+(431.01) - the index holds through "skips a gear." (9.8 s from its return), melts under "Railway steel" (0.6 s, stage gap
+0.0 s, seam darkest 23.3 clean) and the 20 stands with "20 years" at 432.4, on "twenty" (432.35) - chosen over "on Railway
+steel" because the bar and its number land as the number is said (`scratchpad/p69-row19/t27b/timing.png`). (2) The fixture
+re-measured whole (`measure_page_boxes.py` has no per-page write): against HEAD's fixture **1 page ADDED**, `e5248aa1f76bee62`
+"Two clocks" (the ink changed, so its key did; the T27 key `7570387af47450d9` is gone), nothing else changed but
+`player_sha256`; `--check` PASS (`logs/t27b-measure-check.log`). (3) Read on build-h (`t27b/bars-read.png`, 432.4 / 440.4 /
+461.5): every tick and both values read "20 years" / "5 years"; the source is ONE line (box [68, 959, 1332, 22]) ending
+"compute ~5 years on the operator's word (E99 s95)". (4) Chain (`logs/t27b-*`): door rc 0 (cues 33 of 34, life 18 of 18,
+"10 page(s) MEASURED"), door re-run sha256 IDENTICAL (`t27b-door2.sha` = `t27b-door-final.sha`), frozen "no run of identical
+frames over 0.50s", seams 17 boundaries 0 faults, spoken 5 phrases 0 uncovered, stage gaps 2.3 s of 464.1 s, pytest 101 passed,
+**gate 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** (unchanged from T27; M21's s18 now 30.1 s, 7:14 -> 7:44). The "20years"
+item under "Named, not fixed" above is CLOSED.
