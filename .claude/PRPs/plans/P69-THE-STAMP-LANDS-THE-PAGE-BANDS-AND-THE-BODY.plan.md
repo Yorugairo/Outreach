@@ -762,7 +762,7 @@ verbatim tails and are left pending.
 - Evidence: 2026-09-23 - table row 8 `162.60-196.25` on `ev-capital-formation-v1` under `;readability=longform` (middle): dip 3 at a real world change (viaduct -> page; refused by name: snap / throw-then-zoom / throw-then-push, object-becomes-chart, spiral, mount, melt, recast / rescale / morph); the tech line climbs to the dot-com peak on "peak", the object's own "23%" written there, lands on "twenty-eight" with its end tag; camera 2 pushes 1.06 on that landing (E51) aimed at the 28's rest; the line undraws and the page recasts to `ev-rail-vs-yardstick-bars-v1` (s93 draws), the railways' bar bursting to 50 on a 0-60 rewrite. Gate `2 FAIL / 2 WARN / 23 PASS` (the bed's M03, row 1's M11); cues 15 of 15; life 8 of 8; no frozen run; seams 7, 0 faults. The parent's frame read: the line page's panel takes ~half the page (the long end tag reserves the right margin) - the T10 key rail (lane B `0df626a`) shortens the tags and frees it once merged; the recast's middle garbled (R26-261); the camera's datum drifts on a moved frame (engine, the agent's report); "50" without its "¢" on the burst (engine)
 
 ### T23: Row 15 (3:20-4:06) - the trigger and the concession; PROP 1 the Fed, and P69-HG2
-- Status: in-progress (the row is built on `ev-tnx-two-eras-v4`; PROP 1 withheld behind T6d)
+- Status: done (row 15 on `ev-tnx-two-eras-v4`; PROP 1 the Fed STAMPED - BUILD-NOTES-H 14b; the 1.2x chrome-fit push - 17b, lane A 020a68f); HG2/HG4 open
 - Owner: implementation_luna (the row); parent (the HG2 card)
 - Depends on: T22
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`, `.../build-h-frozen-prop1/**` (gitignored), `docs/content-video-engine/review-queue.v1.json`, `docs/content-video-engine/REVIEW-QUEUE.md`
@@ -780,7 +780,7 @@ verbatim tails and are left pending.
 - Evidence: lane A ac38175, 2026-09-23 - row 16 (242.38-321.12): the debt line (T14's beat, 2026E a spread), E58's two recasts (IG index, capex consensus) as plain hand-overs, then the melt splashes onto the records' desk: `dock-h-leases-record` and PROP 2 stamped in the desk's room, 0 px overlap, contact 309.00, `landing 11 (stamp, ink)`. The stamp left the page because the three-state page refused it (70 px < 120 px floor) and the fit reads the FIRST state (R26-279). Gates: 19/19 cues; seams 10/0; M03 named (62 s - the gate never counts a recast, R26-280); M21 WARN capex 14.8 s. Owed: R26-282 (units, the capex sub)
 
 ### T25: Row 17 (5:25-6:04) - the arithmetic: the 94 bar with its figure
-- Status: pending
+- Status: done (row 17, the 94 bar - BUILD-NOTES-H 16/16a); HG4 open
 - Owner: implementation_luna
 - Depends on: T24
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
@@ -869,7 +869,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T26: Row 18 (6:04-7:13) - the turn: reset 2, PROP 3, camera 3, the halving compare
-- Status: pending
+- Status: done (row 18 - BUILD-NOTES-H 17; refreshed 17b, lane A 020a68f: the desk card profile, the certificate 0.30 + whole-card ring, camera 3 chrome fit); follow-ups R26-290, R26-291; HG4 open
 - Owner: implementation_luna
 - Depends on: T25, T26a, T26b, the lane-B merge (the prop's alpha), P69-HG2 (read at the end)
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
