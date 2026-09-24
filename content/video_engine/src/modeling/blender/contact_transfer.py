@@ -11,6 +11,7 @@ from typing import Any
 from . import fight_motion as fight
 
 
+CODE_ROOT = Path(__file__).resolve().parents[5]
 SCHEMA = "model_fight_motion_contact_transfer.v1"
 RENDER_FRAMES = (8, 10, 12, 15, 21, 24, 26, 32)
 PALM_PLANE_GAP_TARGET_M = 0.003
@@ -623,11 +624,11 @@ def build_contact_transfer_exchange(bpy, root: Path, fixture_path: Path,
     source_root = Path(root).resolve()
     fixture_path = Path(fixture_path)
     code_review_root = Path(review_root) if review_root is not None else source_root / fight.REVIEW_RELATIVE
-    append = fight._instance_function(fight.CODE_ROOT)
-    canonical_review_root = (fight.CODE_ROOT / fight.REVIEW_RELATIVE).resolve(strict=True)
+    append = fight._instance_function(CODE_ROOT)
+    canonical_review_root = (CODE_ROOT / fight.REVIEW_RELATIVE).resolve(strict=True)
     if code_review_root.resolve(strict=True) != canonical_review_root:
         raise fight.FightMotionError("contact-transfer quarantine differs from this code checkout")
-    output = fight.validate_output_target(fight.CODE_ROOT, output)
+    output = fight.validate_output_target(CODE_ROOT, output)
     output.mkdir(exist_ok=True)
     bpy.ops.wm.read_factory_settings(use_empty=True)
     instances = {}
@@ -689,7 +690,7 @@ def build_contact_transfer_exchange(bpy, root: Path, fixture_path: Path,
         "source_blend_sha256_after": fight.sha256(source),
         "fixture_sha256": fight.sha256(fixture_path),
         "provenance_roots": {
-            "implementation_checkout": str(fight.CODE_ROOT.resolve()),
+            "implementation_checkout": str(CODE_ROOT.resolve()),
             "source_input_checkout": str(source_root),
             "review_quarantine": str(code_review_root.resolve()),
             "review_output": str(output.resolve()),
@@ -735,10 +736,10 @@ def reopen_contact_transfer(
         raise fight.FightMotionError("pinned scripts-disabled Blender is required to reopen")
     scene_path = Path(scene_path)
     receipt_path = Path(receipt_path)
-    source_root = Path(root).resolve() if root is not None else fight.CODE_ROOT.resolve()
+    source_root = Path(root).resolve() if root is not None else CODE_ROOT.resolve()
     fixture_path = Path(fixture_path) if fixture_path is not None else source_root / fight.FIXTURE_RELATIVE
     code_review_root = Path(review_root) if review_root is not None else source_root / fight.REVIEW_RELATIVE
-    canonical_review_root = (fight.CODE_ROOT / fight.REVIEW_RELATIVE).resolve(strict=True)
+    canonical_review_root = (CODE_ROOT / fight.REVIEW_RELATIVE).resolve(strict=True)
     if code_review_root.resolve(strict=True) != canonical_review_root:
         raise fight.FightMotionError("reopen review quarantine differs from this code checkout")
     fight._reject_redirected_output_chain(code_review_root)
@@ -781,7 +782,7 @@ def reopen_contact_transfer(
         raise fight.FightMotionError("contact-transfer fixture/source hashes differ from read-only inputs")
     roots = receipt.get("provenance_roots")
     if (not isinstance(roots, dict)
-            or roots.get("implementation_checkout") != str(fight.CODE_ROOT.resolve())
+            or roots.get("implementation_checkout") != str(CODE_ROOT.resolve())
             or roots.get("source_input_checkout") != str(source_root)
             or roots.get("review_quarantine") != str(canonical_review_root)
             or roots.get("review_output") != str(receipt_path.parent.resolve(strict=True))):

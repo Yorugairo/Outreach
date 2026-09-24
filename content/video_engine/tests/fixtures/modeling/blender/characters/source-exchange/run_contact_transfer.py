@@ -11,6 +11,7 @@ import bpy
 
 CODE_ROOT = Path(__file__).resolve().parents[8]
 MODULE_PATH = CODE_ROOT / "content/video_engine/src/modeling/blender/fight_motion.py"
+CONTACT_TRANSFER_MODULE_PATH = CODE_ROOT / "content/video_engine/src/modeling/blender/contact_transfer.py"
 PACKAGE_NAME = "model_fight_motion_optin"
 package = ModuleType(PACKAGE_NAME)
 package.__path__ = [str(MODULE_PATH.parent)]
@@ -20,6 +21,13 @@ assert spec and spec.loader
 fight_motion = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = fight_motion
 spec.loader.exec_module(fight_motion)
+contact_spec = importlib.util.spec_from_file_location(
+    PACKAGE_NAME + ".contact_transfer", CONTACT_TRANSFER_MODULE_PATH,
+)
+assert contact_spec and contact_spec.loader
+contact_transfer = importlib.util.module_from_spec(contact_spec)
+sys.modules[contact_spec.name] = contact_transfer
+contact_spec.loader.exec_module(contact_transfer)
 
 
 args = sys.argv[sys.argv.index("--") + 1:]
@@ -28,7 +36,7 @@ if args[0] == "build" and len(args) == 4:
     source_root = Path(source_root).resolve()
     fixture = source_root / fight_motion.FIXTURE_RELATIVE
     review_root = CODE_ROOT / fight_motion.REVIEW_RELATIVE
-    result = fight_motion.build_contact_transfer_exchange(
+    result = contact_transfer.build_contact_transfer_exchange(
         bpy, source_root, fixture, Path(output), render=render == "render",
         review_root=review_root,
     )
@@ -42,7 +50,7 @@ elif args[0] == "reopen" and len(args) == 4:
     _, source_root, scene, receipt = args
     source_root = Path(source_root).resolve()
     try:
-        result = fight_motion.reopen_contact_transfer(
+        result = contact_transfer.reopen_contact_transfer(
             bpy, Path(scene), Path(receipt), root=source_root,
             fixture_path=source_root / fight_motion.FIXTURE_RELATIVE,
             review_root=CODE_ROOT / fight_motion.REVIEW_RELATIVE,
