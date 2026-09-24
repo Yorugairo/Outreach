@@ -78,7 +78,7 @@ alter deterministic scores, or approve customer claims.
 ### API, Dashboard, And Product
 
 Use `backend-patterns` for API and persistence changes. Use
-`frontend-patterns`, `modern-design-frameworks`, and product-design skills for
+`frontend-patterns` and `modern-design-frameworks` for
 the operator dashboard. Verify rendered behavior in addition to static source.
 
 ### SEO Research And Marketing

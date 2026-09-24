@@ -760,6 +760,119 @@
     "today": true,
     "why": "implicit: a plate whose sidecar declares a clip background IS this route (world-tokyo-customs-dock-v1-alive)"
    }
+  },
+  {
+   "id": "plate_option:room",
+   "axis": "plate_option",
+   "token": "room",
+   "title": "Picture-plate card room",
+   "aliases": [],
+   "does": "A picture plate reserves a stage-fraction rectangle where an unplaced card can read and park without covering the subject.",
+   "when": "a picture plate has an authored clear region for a card",
+   "when_source": "content/video_engine/tests/test_card_on_a_plate.py:17",
+   "author": {
+    "key": "`;room=<x>,<y>,<w>,<h>` on a picture plate id",
+    "example": "'world-h1-studio-v1;room=0.04,0.10,0.34,0.62'",
+    "example_source": "content/video_engine/tests/test_card_on_a_plate.py:17",
+    "check": "plate"
+   },
+   "phases": [], "blends": [], "options": [], "dials": null,
+   "lives": {"form": "inline", "path": "content/video_engine/scripts/build_scene_timeline_f.py", "symbol": "plate_room_spec"},
+   "doctrine": [], "status": "wired",
+   "proof": {"golden": null, "test": "content/video_engine/tests/test_card_on_a_plate.py::test_room_is_a_plate_option_and_check_opt_routes_it", "first_use": null},
+   "callable": {"today": true, "why": "accepted by PLATE_OPTS and validated for picture plates"}
+  },
+  {
+   "id": "plate_option:domain",
+   "axis": "plate_option",
+   "token": "domain",
+   "title": "Born-on-scale page domain",
+   "aliases": [],
+   "does": "A ledger page opens on the author's finite y-axis scale instead of changing scale after the first chart beat.",
+   "when": "the opening page must begin on the exact scale used by its first claim",
+   "when_source": "content/video_engine/tests/test_page_born_with_a_domain.py:1",
+   "author": {
+    "key": "`;domain=<ymin>,<ymax>` on a ledger page id",
+    "example": "'ledger:ev-lines-v1:line;domain=80,277'",
+    "example_source": "content/video_engine/tests/test_page_born_with_a_domain.py:1",
+    "check": "plate"
+   },
+   "phases": [], "blends": [], "options": [], "dials": null,
+   "lives": {"form": "inline", "path": "content/video_engine/scripts/build_scene_timeline_f.py", "symbol": "page_domain_spec"},
+   "doctrine": [], "status": "wired",
+   "proof": {"golden": null, "test": "content/video_engine/tests/test_page_born_with_a_domain.py::test_domain_is_a_plate_option_and_check_opt_routes_it", "first_use": null},
+   "callable": {"today": true, "why": "accepted by PLATE_OPTS on supported ledger builders"}
+  },
+  {
+   "id": "plate_option:build",
+   "axis": "plate_option",
+   "token": "build",
+   "title": "Line-by-line page build",
+   "aliases": [],
+   "does": "A multi-line chart draws each series to completion before the next begins, landing that series' tag and badge with it.",
+   "when": "a multi-line page needs an ordered series reveal rather than a simultaneous crawl",
+   "when_source": "content/video_engine/tests/test_page_builds_line_by_line.py:1",
+   "author": {
+    "key": "`;build=lines[:<seconds-per-series>]` on a ledger page id",
+    "example": "'ledger:ev-divergence-v1:line;build=lines:1.2'",
+    "example_source": "content/video_engine/tests/test_page_builds_line_by_line.py:1",
+    "check": "plate"
+   },
+   "phases": [], "blends": [], "options": [], "dials": null,
+   "lives": {"form": "inline", "path": "content/video_engine/scripts/build_scene_timeline_f.py", "symbol": "page_build_spec"},
+   "doctrine": [], "status": "wired",
+   "proof": {"golden": null, "test": "content/video_engine/tests/test_page_builds_line_by_line.py::test_build_is_a_plate_option_and_check_opt_routes_it", "first_use": null},
+   "callable": {"today": true, "why": "accepted by PLATE_OPTS on multi-line pages"}
+  },
+  {
+   "id": "plate_option:readability",
+   "axis": "plate_option",
+   "token": "readability",
+   "title": "Ledger-page readability profile",
+   "aliases": [],
+   "does": "A supported ledger page is laid out in the authored long-form or landscape-phone profile without changing its data; under longform a shortened end tag's full name springs onto a key rail of badges.",
+   "when": "a long-form 16:9 page must read at viewing size in Bravos's tighter page (E99 s97): flat ground, framed panel, a type preset; badges are the key when end tags shorten (E99 s90). The default and the preset wait on P69-HG3",
+   "when_source": "docs/portable/OPERATOR-RULINGS.md:3325",
+   "author": {
+    "key": "`;readability=longform[:bravos|middle|phone]|landscape-phone` on a ledger page id",
+    "example": "'ledger:ev-lines-v1:line;readability=longform:middle'",
+    "example_source": "content/video_engine/tests/test_longform_profile.py:1",
+    "check": "plate"
+   },
+   "phases": [], "blends": [],
+   "options": [
+    {"token": "longform", "means": "The long form's page profile (P69 T8): #14181E ground, #222830 panel, no gridlines, Inter, the key rail (T9/T10).", "source_set": null},
+    {"token": "landscape-phone", "means": "The landscape-phone profile: the page's type at the phone floor on a 16:9 stage.", "source_set": null},
+    {"token": "bravos", "means": "longform preset: Bravos's measured spec (15-18 px ticks at 1920).", "source_set": null},
+    {"token": "middle", "means": "longform preset, the working default: title 44 / ticks 26 / tags 30 / source 20 px at 1920.", "source_set": null},
+    {"token": "phone", "means": "longform preset: the s90 phone floor on every word.", "source_set": null}
+   ],
+   "dials": null,
+   "lives": {"form": "inline", "path": "content/video_engine/scripts/build_scene_timeline_f.py", "symbol": "world_for_plate", "also": ["page_key_span_error"], "note": "ledger_page.py readability_error / longform_type / longform_key; the engine paints the key rail on the badge-ladder clock"},
+   "doctrine": ["E99 s90", "E99 s97", "P69 T8", "P69 T9", "P69 T10", "P69-HG3"], "status": "wired",
+   "proof": {"golden": null, "test": "content/video_engine/tests/test_longform_profile.py::test_the_row_option_opts_a_dense_line_page_in", "first_use": null},
+   "callable": {"today": true, "why": "PLATE_OPTS on dense-line and bars, 16:9 only (a 9:16 longform row is refused by name); a key per recast state (test_longform_key_rail.py)"}
+  },
+  {
+   "id": "plate_option:bar_style",
+   "axis": "plate_option",
+   "token": "bar_style",
+   "title": "Soft-shoulder bars",
+   "aliases": [],
+   "does": "A bars page rounds the shoulders away from zero and casts a hatched shadow along the stage light, keeping its zero edge square.",
+   "when": "a bars page shares the stage with props and should read under the same light and texture (the operator, 2026-09-22); off stays the default until P69-HG3 tunes the shoulder by eye",
+   "when_source": "content/video_engine/tests/test_bar_style.py:1",
+   "author": {
+    "key": "`;bar_style=soft` on a bars ledger page id",
+    "example": "'ledger:ev-bars-v1:bars;bar_style=soft'",
+    "example_source": "content/video_engine/tests/test_bar_style.py:1",
+    "check": "plate"
+   },
+   "phases": [], "blends": [], "options": [], "dials": null,
+   "lives": {"form": "inline", "path": "content/video_engine/scripts/ledger_page.py", "symbol": "bar_style_error", "note": "engine LPBAR_SOFT (SHOULDER_PX 14) + T6b's propHatchLines cut to each bar's thrown silhouette (91de567)"},
+   "doctrine": ["E99 s92", "E99 s96", "P69 T10b", "P69-HG3"], "status": "wired",
+   "proof": {"golden": null, "test": "content/video_engine/tests/test_bar_style.py::test_soft_is_a_named_row_option_on_a_bars_page", "first_use": null},
+   "callable": {"today": true, "why": "accepted by PLATE_OPTS on bars pages, excluding extruded_bar"}
   }
  ]
 }

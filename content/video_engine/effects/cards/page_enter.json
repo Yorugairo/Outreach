@@ -320,6 +320,12 @@
           }
         },
         {
+          "name": "a standing prop is the source",
+          "does": "`;morph=prop:<id>` (P69 T26e, E99 s107): the prop dock standing at the boundary is handed to the page and its silhouette becomes the area under the first series; with no dock standing the prop is drawn on the target and a WARN says so",
+          "trigger": "the scene boundary",
+          "dials": null
+        },
+        {
           "name": "the ground arrives",
           "does": "the charcoal arrives by the field entry the row names (field=soak by default): the nearest stain seeded on the prop's centroid, the rest by distance, over MORPH.GROUND of the morph - never painted whole around the prop (E99 s52)",
           "trigger": "the page's first frame",
@@ -412,7 +418,9 @@
         "E48 s4",
         "E87 s2",
         "E99 s35",
-        "E99 s52"
+        "E99 s52",
+        "E99 s107",
+        "P69 T26e"
       ],
       "status": "wired",
       "proof": {
@@ -985,6 +993,43 @@
       "callable": {
         "today": true,
         "why": "implicit: the page's own plate keys; `;field=plates` is the row's way to ask"
+      }
+    },
+    {
+      "id": "page_enter:surface",
+      "axis": "page_enter",
+      "token": "surface",
+      "title": "Registered paper-to-page handoff",
+      "aliases": [],
+      "does": "A dense-line page grows from a registered paper surface, retaining its source-bound geometry as the chart takes over the frame.",
+      "when": "a source-bound paper surface must become the ledger page without a separate page arrival",
+      "when_source": "content/video_engine/scripts/build_scene_timeline_f.py:58",
+      "author": {
+        "key": "ledger enter `surface=<paper-name>,<lead-seconds>`",
+        "example": "'ledger:fed-on-rrp-history:line::right:surface=center-paper,1.2:cut'",
+        "example_source": "content/video_engine/tests/test_page_surface_handoff.py:17",
+        "check": "enter"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/build_scene_timeline_f.py",
+        "symbol": "_parse_surface_entry",
+        "note": "binds the registered paper/source and timing; page_surface.mjs supplies pure geometry to the player"
+      },
+      "doctrine": [],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_page_surface_handoff.py::test_surface_grammar_binds_dense_line_source_ref_and_flat_pages_stay_plain",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "accepted by LEDGER_ENTERS for source-bound dense-line pages"
       }
     }
   ]

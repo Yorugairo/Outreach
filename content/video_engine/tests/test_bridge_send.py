@@ -367,14 +367,14 @@ def test_claude_dry_run_builds_the_packet_command(fake_machine, tmp_path, capsys
              "--repo", str(tmp_path), "--reply-shape", "review", "--dry-run"])
     out = capsys.readouterr().out
 
-    argv = BS.claude_argv({"packetId": "abc", "brief": "body"}, "reviewer")
+    argv = BS.claude_argv("reviewer")
 
     # re-pinned 2026-09-13: claude_argv now resolves the launcher through shutil.which, so argv[0] is an absolute
     # path (the npm launcher, claude.CMD on this machine) rather than the bare name. The contract under test
     # launcher's identity plus the flag order, so argv[0] is asserted by basename and the flags exactly.
     assert Path(argv[0]).stem.lower() == "claude", argv[0]
     assert argv[1:6] == ["-p", "--output-format", "json", "--agent", "reviewer"]
-    assert json.loads(argv[-1]) == {"packetId": "abc", "brief": "body"}
+    assert len(argv) == 6, "the packet must be sent on stdin, not through the shell command line"
     assert "-p --output-format json --agent reviewer" in out
 
 
@@ -437,7 +437,13 @@ def test_a_real_send_records_the_conversation_moves_the_packet_and_ledgers(fake_
 def test_the_claude_lane_writes_the_reply_into_replied(fake_machine, tmp_path, monkeypatch):
     payload = {"result": "POSITION: agreed.\nDISAGREEMENTS: none.", "session_id": "abc-123",
                "usage": {"input_tokens": 1200, "output_tokens": 300}}
-    monkeypatch.setattr(BS.subprocess, "run", lambda argv, **kw: _Proc(stdout=json.dumps(payload)))
+    calls = []
+
+    def fake_run(argv, **kw):
+        calls.append((argv, kw))
+        return _Proc(stdout=json.dumps(payload))
+
+    monkeypatch.setattr(BS.subprocess, "run", fake_run)
 
     brief_file = _brief(tmp_path)
     BS.main(["--lane", "claude", "--brief-file", str(brief_file), "--repo", str(tmp_path), "--reply-shape", "review"])
@@ -450,6 +456,11 @@ def test_the_claude_lane_writes_the_reply_into_replied(fake_machine, tmp_path, m
     assert json.loads((replied / "reply.json").read_text(encoding="utf-8"))["session_id"] == "abc-123"
     assert ledger["event"] == "replied" and ledger["inputTokens"] == 1200 and ledger["outputTokens"] == 300
     assert ledger["secondsToReply"] is not None
+    assert calls[0][1]["shell"] is False
+    sent_packet = json.loads(calls[0][1]["input"])
+    assert sent_packet["packetId"] == pid
+    assert sent_packet["brief"] == json.loads((replied / "order.json").read_text(encoding="utf-8"))["brief"]
+    assert "|" in sent_packet["brief"], "review grammar must remain data, never shell syntax"
 
 
 def test_a_failing_cli_leaves_the_packet_in_queue_and_reports_the_exit(fake_machine, tmp_path, monkeypatch, capsys):

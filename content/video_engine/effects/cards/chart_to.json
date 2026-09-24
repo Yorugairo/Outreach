@@ -118,6 +118,12 @@
             "GHOST_F": "0.74",
             "GAP": "14"
           }
+        },
+        {
+          "name": "the bar moves to the comparator",
+          "does": "on a bars page the compared bar's height morphs to the comparator's value on the compare's own clock, its value and figure riding its top, the soft foot, hatch or prism following (E28)",
+          "trigger": "the chart_to's `at`, over its `dur`, when the comparator changes the bar's value",
+          "dials": null
         }
       ],
       "blends": [],
@@ -195,7 +201,11 @@
         "E88",
         "E77",
         "E60",
-        "E50"
+        "E50",
+        "R26-190",
+        "R26-273",
+        "P69 T6",
+        "P69 T26a"
       ],
       "status": "wired",
       "backlog": [
@@ -313,6 +323,26 @@
           "dials": {
             "BUILD": "3.0"
           }
+        },
+        {
+          "name": "a prop becomes a mark",
+          "does": "`from: \"prop:<id>\"`: the standing prop is handed on the word; its alpha silhouette (arap.silhouetteMesh) shears into `mark` (a bar `b:<i>` or `area`) and hands to its ink; the mark, tag and pill wait for the landing",
+          "trigger": "the chart_to's `at`, over `dur` (2.0 s default, min-jerk)",
+          "dials": {
+            "PROP_MORPH_HOLD_WARN_S": "2.0"
+          }
+        },
+        {
+          "name": "a mark or the page becomes a prop",
+          "does": "`to: \"prop\"`, `prop`, `mark: page | area | b:<i>`: the mark or page is carved to the prop's silhouette and carried to it; the result is a free-placed prop dock (place/rot/moves/until, T26d), `arrive: \"morph\"`",
+          "trigger": "the chart_to's `at`, over `dur`",
+          "dials": null
+        },
+        {
+          "name": "the page collapses into a prop",
+          "does": "`exit: morph:prop:<id>[:<s>]` on the row the prop stands in: the previous page is carved and shrunk into the prop over the cut while the next world shows under it; the prop lands standing",
+          "trigger": "the row boundary, over <s> (1.6 s in the H door)",
+          "dials": null
         }
       ],
       "blends": [
@@ -326,6 +356,12 @@
           "source": "E64 morph, never cut",
           "became": "the whole arc",
           "record": "docs/portable/OPERATOR-RULINGS.md:2079",
+          "tie": "recorded"
+        },
+        {
+          "source": "E99 s107 props <-> pages and charts",
+          "became": "the prop directions",
+          "record": "docs/portable/OPERATOR-RULINGS.md",
           "tie": "recorded"
         }
       ],
@@ -343,7 +379,10 @@
       "doctrine": [
         "E58",
         "E64",
-        "43 s43.5"
+        "43 s43.5",
+        "E99 s107",
+        "E99 s106",
+        "P69 T26e"
       ],
       "status": "wired",
       "proof": {
