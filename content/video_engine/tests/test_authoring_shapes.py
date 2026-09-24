@@ -1076,12 +1076,20 @@ def test_a_move_kind_and_a_cards_options_are_the_compilers_own_vocabulary():
     with pytest.raises(SH.Refused) as e:
         SH.compile(bad, _take(bad), SH.DEFAULTS, "9:16")
     assert "beat 1" in str(e.value) and "glitter" in str(e.value)
-    worse = [_rec(1, 0.0, 12.0, "plate-desk;idle=drift",
-                  moves=[{"kind": "dock", "at_word": "A sentence", "asset": "dock-x",
-                          "options": {"place": {"x": 1}}}])]
+    # The card's option: `place` was the unknown example until P69 T26d (5c6871c) made it a real option (a
+    # PROP's authored box), and the plate-desk plan then failed earlier, on its opening skeleton's {page}.
+    # So: a token the compiler still does not carry, on a plan that compiles without it (the control), so
+    # the refusal is the option's own.
+    unknown = "sparkle"
+    assert unknown not in C.DOCK_OPTS, "pick another example: the compiler carries this option now"
+    card = {"kind": "dock", "at_word": "month", "asset": "dock-x", "options": {"read_s": 1.2}}
+    good = _chained(moves=[card])
+    rows, _ = SH.compile(good, _take(good), SH.DEFAULTS, "9:16")
+    assert [d[0] for d in rows[0][4]] == ["dock-x"], rows[0][4]
+    worse = _chained(moves=[{**card, "options": {**card["options"], unknown: 1}}])
     with pytest.raises(SH.Refused) as e:
         SH.compile(worse, _take(worse), SH.DEFAULTS, "9:16")
-    assert "beat 1" in str(e.value) and "place" in str(e.value)
+    assert "beat 1" in str(e.value) and unknown in str(e.value) and "not the compiler's" in str(e.value)
 
 
 def test_the_tokyo_beds_own_moves_close_the_base(tokyo):
@@ -1106,6 +1114,21 @@ def test_the_deriver_is_byte_stable_on_both_read_back_plans():
         assert was == now, f"{build.name}: the plan has drifted from its cut"
         assert D.main([str(build), "--check"]) == 0
         assert moves, "the approved cut carries species and cards, and the plan now names them"
+
+
+def test_the_deriver_never_copies_a_compiled_place_back():
+    """A compiled dock's `place` is the PIXEL BOX the placer chose ({x, y, w, h}). Since P69 T26d (5c6871c)
+    `place` is also an authored option - a PROP's {x, y, w} in stage fractions - so the deriver's
+    DOCK_OPTS copy began writing the box back into the read-back plans, a plan the compiler refuses
+    ("place is a PROP's option"). The deriver transcribes what the author named, never what was derived."""
+    import build_scene_timeline_f as C
+    import derive_beat_moves as D
+    assert "place" in SH.dock_option_keys() and "place" not in D.dock_option_fields()
+    compiled = {"slide": "dock-x", "slot": 0, "enter": 1.0, "exit": 3.0, "read_s": 1.2, "park_s": 0.7,
+                "place": {"x": 346, "y": 309, "w": 518, "h": 315}}
+    move = D.dock_move(compiled, "A sentence", D.dock_option_fields())
+    assert move["options"] == {"read_s": 1.2, "park_s": 0.7, SH.MOVE_SLOT: 0}, move
+    C.dock_opts({k: v for k, v in move["options"].items() if k != SH.MOVE_SLOT})   # the compiler admits it
 # ---------------------------------------------------------------- the fifth pass (P66 T3e)
 def _tail_plan():
     """A page beat, then a second page beat: a plan whose cut ends on a PAGE, as the Tokyo bed's does."""
@@ -1952,3 +1975,58 @@ def test_the_engines_own_default_species_duration_is_read_and_never_typed():
     assert (a, z) == (4.0, round(4.0 + SH.SPECIES_DUR_S + MD.LP_BUILD_S, 2)), (a, z)
     (a2, z2, _sp2), = SH.transform_guards([{"kind": "chart_to", "at": 4.0, "to": "recast", "dur": 0.5}])
     assert (a2, z2) == (4.0, round(4.5 + MD.LP_BUILD_S, 2)), (a2, z2)
+
+
+# ------------------------------------------------------------- R26-293: the kit admits the prop morphs the
+# compiler admits (P69 T26e) - one registry of chart_to verbs, the compiler's, never a second copy here
+
+PROP_MORPH_PROP = "prop-hyperscale-datacenter-v1"   # a catalogued cutout (test_prop_morph.py's own)
+PROP_MORPH_PLATE = "ledger:ev-a-v1:line:3:right:axes:cut"
+
+
+def test_the_kits_chart_to_verbs_are_the_compilers_own():
+    """The kit's three families (travel to a state / derived / no state) partition EXACTLY the compiler's
+    CHART_TO_KINDS: a verb the compiler adds or drops shows up here before a plan is refused for it."""
+    families = (SH.CHART_TO_TO_STATE, SH.CHART_TO_DERIVED, SH.CHART_TO_NO_STATE)
+    flat = [k for fam in families for k in fam]
+    assert len(flat) == len(set(flat)), "a verb sits in two families"
+    assert set(flat) == set(SH.compiler().CHART_TO_KINDS)
+    assert set(SH.CHART_TO_KINDS) == set(SH.compiler().CHART_TO_KINDS)
+
+
+@pytest.mark.parametrize("sp", [
+    {"kind": "chart_to", "to": "prop", "prop": PROP_MORPH_PROP, "at": 4.0},
+    {"kind": "chart_to", "to": "prop", "prop": PROP_MORPH_PROP, "at": 4.0, "mark": "b:1",
+     "place": {"x": 0.7, "y": 0.4, "w": 0.2}},
+    {"kind": "chart_to", "to": "morph", "from": f"prop:{PROP_MORPH_PROP}", "at": 4.0},
+    {"kind": "chart_to", "to": "morph", "from": f"prop:{PROP_MORPH_PROP}", "at": 4.0, "mark": "b:2"},
+])
+def test_the_kit_admits_a_prop_morph_the_compiler_admits(sp):
+    """`chart_to {to: "prop"}` and `chart_to {to: "morph", from: "prop:<id>"}` are the compiler's own verbs
+    (build_scene_timeline_f `_prop_morph_way`); the kit refused both - the first as an unknown `to`, the
+    second as a morph with no `state`."""
+    assert SH.compiler()._prop_morph_way(sp) is not None, "the compiler reads this as a prop morph"
+    assert SH.chart_to_error(sp, PROP_MORPH_PLATE, 1) is None
+
+
+@pytest.mark.parametrize("sp, says", [
+    ({"kind": "chart_to", "to": "prop", "at": 4.0}, "name the prop"),
+    ({"kind": "chart_to", "to": "prop", "prop": "prop-no-such-thing-v9", "at": 4.0}, "not in the props catalogue"),
+    ({"kind": "chart_to", "to": "prop", "prop": PROP_MORPH_PROP, "at": 4.0, "mark": "bar one"}, "mark"),
+    ({"kind": "chart_to", "to": "morph", "from": f"prop:{PROP_MORPH_PROP}", "at": 4.0, "mark": "page"}, "mark"),
+    ({"kind": "chart_to", "to": "morph", "from": "datacenter", "at": 4.0}, "is not `prop:<id>`"),
+    ({"kind": "chart_to", "to": "morph", "from": f"prop:{PROP_MORPH_PROP}", "at": 4.0, "state": 1}, "names no chart state"),
+])
+def test_a_prop_morph_the_compiler_would_refuse_is_refused_by_the_kit_with_its_words(sp, says):
+    err = SH.chart_to_error(sp, PROP_MORPH_PLATE, 1)
+    assert err is not None and says in err, err
+    assert err.startswith("beat 1: the chart_to "), err
+
+
+def test_a_plan_naming_a_prop_morph_compiles_through_the_kit():
+    """End to end: the move reaches the generated row as written, where it was a Refused before."""
+    plan = _chained(moves=[{"kind": "chart_to", "at_word": "month", "dur": 1.4,
+                            "options": {"to": "prop", "prop": PROP_MORPH_PROP}}])
+    rows, _why = SH.compile(plan, _take(plan), SH.DEFAULTS, "16:9")
+    got = [sp for sp in (rows[0][6] or []) if sp["kind"] == "chart_to"]
+    assert [(sp["to"], sp.get("prop")) for sp in got] == [("prop", PROP_MORPH_PROP)], got

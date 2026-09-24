@@ -38,7 +38,19 @@ JAPAN = PROJECTS / "japan-tariff-trick/build-short"
 TOKYO = PROJECTS / "tokyo-tea-break/build-short.v2"
 STEEL = PROJECTS / "steel-and-paper/build-f"
 THIN = PROJECTS / "normal-for-which-bridge/review-v1"
-REGISTRY = ROOT / "docs/GATES-REGISTRY.jsonl"
+REGISTRY = ROOT / "docs/GATES-REGISTRY.jsonl"          # build output (docs_layers), gitignored
+EFFECTS_CATALOG = ROOT / FLOOR.CATALOG_REL              # build output (P63), gitignored: M38 reads it
+
+
+def require_input(path: Path) -> None:
+    """Skip, NAMING the path, when a gitignored input is absent from this checkout (R26-295).
+
+    A clean export carries neither build output, and a test that reads one would fail on the missing file
+    (or, for M38, measure 0.00 coverage against no catalogue) - a missing input, not a floor regression.
+    Present, the test runs and every assertion binds exactly as before."""
+    if not path.exists():
+        pytest.skip(f"gitignored input absent: {path.relative_to(ROOT).as_posix()} "
+                    "(build output - regenerate with build_docs_layers.py --write)")
 
 # `self_watch.parse_gate`'s own row pattern: a row this gate prints must parse there unchanged (T7 depends on it).
 ROW_RE = re.compile(r"^\s*\[(PASS |FAIL |WARN |INFO |JUDGE)\]\s*(\S+)\s*(.*)$")
@@ -301,6 +313,7 @@ def test_m42_is_always_info_whatever_the_rate(tmp_path: Path, scenes: list, beat
 
 
 def test_the_registry_records_m42_as_info_only_and_m40_as_judge_only() -> None:
+    require_input(REGISTRY)
     records = [json.loads(l) for l in REGISTRY.read_text(encoding="utf-8").splitlines() if l.strip()]
     floor = {r["id"]: r for r in records if r["family"] == "floor"}
     assert sorted(floor) == list(FLOOR.ROW_ORDER)
@@ -409,6 +422,7 @@ def test_japan_the_reference_reproduces_t2s_measures() -> None:
 
 
 def test_japans_m38_row_carries_the_threshold_and_its_own_measured_coverage() -> None:
+    require_input(EFFECTS_CATALOG)   # absent, no recipe is proven: coverage 0.00 and the interim WARN
     r = floor_rows(JAPAN)
     assert r["M38"].level in ("PASS", "FAIL")                 # the number moves while T8 re-members three proofs
     assert "the floor is 0.60" in r["M38"].message

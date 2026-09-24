@@ -53,6 +53,11 @@ SPECIES_OWN = ("kind", "at", "dur", "target")   # what the move schema carries b
 # "derived from the domain, not named" - its own validator refuses a row that names it.
 DERIVED_FIELDS = ("held", "id")
 DERIVED_BY_KIND = {("chart_to", "rescale"): ("state",)}
+# ... and on a compiled DOCK: its `place` is the PIXEL BOX the placer chose ({x, y, w, h} - build_scene_timeline_f
+# writes `{"place": place, "read_s": ..., "park_s": ...}` onto the entry), derived from the options. Since P69 T26d
+# (5c6871c) `place` is ALSO an authored option - a PROP's {x, y, w} in stage fractions - so the name alone no longer
+# tells the two apart, and the box copied back is a plan the compiler refuses ("place is a PROP's option").
+DERIVED_DOCK_FIELDS = ("place",)
 DOCK_SLIDE = "slide"    # the compiled dock's asset id field
 DOCK_ENTER = "enter"
 
@@ -127,6 +132,12 @@ def species_move(sp: dict, phrase: str) -> dict:
     return move
 
 
+def dock_option_fields() -> tuple:
+    """The options a derived `dock` move may carry: the compiler's own (`SH.dock_option_keys`), less the
+    lane (carried as `slot`) and less what the compiler DERIVES onto the compiled dock (`DERIVED_DOCK_FIELDS`)."""
+    return tuple(k for k in SH.dock_option_keys() if k != SH.MOVE_SLOT and k not in DERIVED_DOCK_FIELDS)
+
+
 def dock_move(dock: dict, phrase: str, allowed: tuple) -> dict:
     """One compiled dock as a `dock` move: the same asset, the same lane, and only the options the
     compiler itself admits (the compiled `place` is DERIVED from them and is never copied back)."""
@@ -144,7 +155,7 @@ def derive(build: Path, timeline=None) -> tuple:
     plan = SH.load_plan(build / PLAN_NAME)
     ws = take_words(build)
     tl = json.loads((timeline or compiled_timeline(build)).read_text(encoding="utf-8"))
-    allowed = tuple(k for k in SH.dock_option_keys() if k != SH.MOVE_SLOT)
+    allowed = dock_option_fields()
     out = {}
     skipped = []
     carried = []
