@@ -1297,6 +1297,68 @@ def camera_frustum(st: dict, sw: float, sh: float) -> dict:
     return {"x0": lx + (0 - ax) / s, "y0": ly + (0 - ay) / s, "x1": lx + (sw - ax) / s, "y1": ly + (sh - ay) / s}
 
 
+# P69 T26f (E99 s108) - THE CHROME'S PLANE, mirrored. The page's chrome (title, sub, source, ticks, axis names, key,
+# rail) may stand on another plane of the ONE camera than the plot: P58 T3's law (CAPABILITIES:153; the player's
+# `camLayerState`, main's src/modeling/layered.py `_plane_camera`) - plane zoom 1 + (s - 1) k, landing look +
+# (at - look) k. `chrome: "screen"` is k 0, a number is that k, `"fit"` the largest k in [0, 1] keeping the object
+# whole and CHROME_FIT_PAD_PX off each edge (or as far off as it stood at rest, if nearer). The player reads the same.
+CHROME_FIT_PAD_PX = 24.0   # [mirrors the engine's CHROME.FIT_PAD_PX]
+CHROME_TEXT_ROLES = ("tick", "key")   # the probe's label roles that are chrome: a tick label, a key pill
+CHROME_PAGE_TEXTS = ("title", "sub", "source")
+
+
+def plane_state(st: dict, k: float) -> dict:
+    """The camera as the plane at k sees it (P58 T3). k 1 is the state itself, by identity - as the player's."""
+    if k == 1.0:
+        return st
+    (lx, ly), (ax, ay) = st["look"], st["at"]
+    return {"s": 1 + (st["s"] - 1) * k, "look": (lx, ly), "at": (lx + (ax - lx) * k, ly + (ay - ly) * k)}
+
+
+def chrome_fit_k(box: dict, st: dict, sw: float, sh: float, pad: float = CHROME_FIT_PAD_PX,
+                 band: tuple[float, float] | None = None) -> float:
+    """`chrome: "fit"`: the largest plane k in [0, 1] at which `box` (its rest box, stage px) stays whole on the stage,
+    `pad` off each edge or as far as it stood at rest. On the plane k every edge moves LINEARLY in k:
+        e(k) = e + k * ((at - look) + (s - 1) * (e - look))
+    so each edge bounds k on its own, and the smallest bound is the fit. `band` (top, foot) is the anchored caption's
+    strip: a box that stood wholly above it stays above it, one below its foot stays below (`_chrome_band`). The
+    engine's `chromeFitK` is this, line for line."""
+    (lx, ly), (ax, ay), s = st["look"], st["at"], st["s"]
+    top = band[1] if band and box["y"] >= band[1] else 0.0
+    bot = band[0] if band and box["y"] + box["h"] <= band[0] else sh
+    k = 1.0
+    for e0, lo, hi, l0, a0 in ((box["x"], 0.0, sw, lx, ax), (box["x"] + box["w"], 0.0, sw, lx, ax),
+                               (box["y"], top, sh, ly, ay), (box["y"] + box["h"], 0.0, bot, ly, ay)):
+        v = (a0 - l0) + (s - 1) * (e0 - l0)
+        lo_m, hi_m = lo + min(pad, max(0.0, e0 - lo)), hi - min(pad, max(0.0, hi - e0))
+        if v < -1e-12:
+            k = min(k, max(0.0, (e0 - lo_m) / -v))
+        elif v > 1e-12:
+            k = min(k, max(0.0, (hi_m - e0) / v))
+    return max(0.0, min(1.0, k))
+
+
+def chrome_of(s: dict) -> dict | None:
+    """The scene's compiled chrome ({mode, k, moves}) when its camera takes the chrome off the plot's plane, else None."""
+    ch = (s.get("camera") or {}).get("chrome")
+    return ch if isinstance(ch, dict) and ch.get("mode") in ("screen", "fit", "depth") else None
+
+
+def _chrome_band(s: dict, aspect: str) -> tuple[float, float] | None:
+    """The anchored caption's strip a 16:9 page's `fit` chrome keeps off (the engine reads the same pair)."""
+    page = (s.get("world") or {}).get("page") or {}
+    if aspect == "9:16" or page.get("caption") != "anchor":
+        return None
+    top, h = LPG.CAPTION_ANCHOR["16:9"][1], LPG.CAPTION_ANCHOR["16:9"][3]
+    return (float(top), float(top + h))
+
+
+def _chrome_frustum(ch: dict, st: dict, box: dict, sw: float, sh: float, band=None) -> dict:
+    """The frame a chrome box is judged against: the frustum of ITS plane (k 0 is the stage itself)."""
+    k = chrome_fit_k(box, st, sw, sh, band=band) if ch.get("mode") == "fit" else float(ch.get("k") or 0.0)
+    return camera_frustum(plane_state(st, k), sw, sh)
+
+
 def _visible_share(fr: dict, box: dict) -> float:
     x0, y0 = max(fr["x0"], box["x"]), max(fr["y0"], box["y"]); x1, y1 = min(fr["x1"], box["x"] + box["w"]), min(fr["y1"], box["y"] + box["h"])
     area = max(0.0, box["w"]) * max(0.0, box["h"])
@@ -2961,6 +3023,23 @@ def _crop_px(fr: dict, box: list[float]) -> tuple[float, str] | None:
     return (px, edge) if px > CROP_EDGE_PX else None
 
 
+def _chrome_crop(ch: dict, fr: dict, name: str, box: list[float], aspect: str, band=None) -> tuple[float, str] | None:
+    """P69 T26f: M43 on a scene whose chrome stands off the plot's plane. A tick label or a key pill is whole or hidden
+    by the player (its gridline in the frame, or not), so the frame never cuts one partway; the page's title, sub and
+    source are judged against the frustum of their own plane; everything else (a data label, a note) against the
+    plot's, as before. The camera state is read back off the frustum - P58 T3's plane depends only on the similarity
+    (screen_k = s_k p + k (at - s look)), never on which look/at pair wrote it."""
+    role = name.split(":", 1)[0]
+    if role in CHROME_TEXT_ROLES:
+        return None
+    if not (name.startswith("page.") and name[5:] in CHROME_PAGE_TEXTS):
+        return _crop_px(fr, box)
+    sw, sh = (1080.0, 1920.0) if aspect == "9:16" else (1920.0, 1080.0)
+    st = {"s": sw / (fr["x1"] - fr["x0"]), "look": (fr["x0"], fr["y0"]), "at": (0.0, 0.0)}
+    b = {"x": box[0], "y": box[1], "w": box[2], "h": box[3]}
+    return _crop_px(_chrome_frustum(ch, st, b, sw, sh, band), box)
+
+
 def _crop_faults(doc: dict, scenes: list[dict], aspect: str) -> tuple[list[str], int, int]:
     """(one line per cropped text box, landings measured, boxes measured). The boxes are read at the probe instant
     nearest the landing on the SAME scene with the camera still at identity - the page as it stands when the move
@@ -2977,8 +3056,9 @@ def _crop_faults(doc: dict, scenes: list[dict], aspect: str) -> tuple[list[str],
         measured += 1
         texts = _instant_texts(inst)
         boxes += len(texts)
+        ch = chrome_of(s)   # P69 T26f: a chrome off the plot's plane is judged on ITS plane (None: every box on the plot's)
         for name, box in texts:
-            cut = _crop_px(fr, box)
+            cut = _crop_px(fr, box) if ch is None else _chrome_crop(ch, fr, name, box, aspect, _chrome_band(s, aspect))
             if cut is None:
                 continue
             px, edge = cut

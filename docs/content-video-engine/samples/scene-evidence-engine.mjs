@@ -14166,6 +14166,192 @@ async function mount(doc) {
     for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b: the soft bars' feet and shadows, off what every painter wrote at t */
   };
 
+  /* ================= P69 T26f / E99 s108 - THE PAGE'S CHROME IS OBJECTS =================
+     The operator (2026-09-23): "Why can't the title re-scale? we have full rescaling capabilities, we should have free
+     dynamic movement between camera and objects." The page's chrome - title, sub, source, y ticks, x ticks, axis names,
+     key rail, badge rail - is a set of OBJECTS the row's camera names (`scene.camera.chrome`, compiled {mode, k, moves}
+     by build_scene_timeline_f.compile_chrome). Opt-in to the byte: a scene whose camera names no chrome returns on the
+     first line and touches nothing.
+       THE PLANE (REUSED, not a second mechanism): P58 T3's depth law, `camLayerState` (CAPABILITIES:153) - an object on
+     the plane k sees plane zoom 1 + (s - 1) k landing look + (at - look) k. `screen` is k 0 (the object stands where it
+     stood, at its own size), `depth` is the row's k, `fit` the largest k in [0, 1] keeping it whole CHROME.FIT_PAD_PX off
+     each edge (chromeFitK - the gate's chrome_fit_k line for line), `world` k 1 (it only MOVES). The plot stays at k 1.
+       HOW IT IS PAINTED. After the world has its camera (paint's last act), each object's element is MEASURED on the
+     stage with its own transform cleared - its parent chain then IS the camera the page content sees (Cam_cur) over the
+     page's envelope - and given the one correction that re-seats it: D = Cam_k . M . Cam_cur^-1 in stage px (M the
+     row's move at t, in the rest frame), conjugated into the element's own coordinates (T = P^-1 . D . P). Measured,
+     not re-derived: the punch, the roll, the breath and a snap all stay whatever they are this frame.
+       A TICK stays on its gridline (E28). Its DATA coordinate stays the plot's (k 1); its PINNED one (x for a y tick, y
+     for an x tick) takes the chrome's plane and the column's move; it keeps its own size at that plane; a label whose
+     gridline has left the frame is hidden whole (its wrapper's display) - never cut partway (E99 s80 (2)). The svg
+     labels are re-parented ONCE into their own `<g class="lp-chrome-w">` so the transform is the chrome's alone (the
+     spiral and the melt still write the label's own). A pure function of t: a cold seek paints what play paints. */
+  const CHROME = Object.freeze({ FIT_PAD_PX: 24 });   /* the gate mirrors it as CHROME_FIT_PAD_PX */
+  const CHROME_SVG = Object.freeze({ ylabel: "yticks", xtick: "xticks", axislabel: "axis_names" });   /* mark role -> object */
+  const CHROME_HTML = Object.freeze({ title: ".lp-title", sub: ".lp-sub", source: ".lp-src", key: ".lp-key", rail: ".lp-rail" });
+  const CHROME_EASE = { minjerk: minJerk, inout: (u) => camEase.inout(u), cubic: (u) => camEase.cubic(u), linear: (u) => clamp01(u) };
+  /* 2x3 affine [a, b, c, d, e, f]: (x, y) -> (a x + c y + e, b x + d y + f) - CSS matrix() order */
+  const chrMul = (A, B) => [A[0] * B[0] + A[2] * B[1], A[1] * B[0] + A[3] * B[1], A[0] * B[2] + A[2] * B[3], A[1] * B[2] + A[3] * B[3],
+                            A[0] * B[4] + A[2] * B[5] + A[4], A[1] * B[4] + A[3] * B[5] + A[5]];
+  const chrInv = (A) => { const det = A[0] * A[3] - A[1] * A[2];
+    return [A[3] / det, -A[1] / det, -A[2] / det, A[0] / det, (A[2] * A[5] - A[3] * A[4]) / det, (A[1] * A[4] - A[0] * A[5]) / det]; };
+  const chrAt = (A, p) => [A[0] * p[0] + A[2] * p[1] + A[4], A[1] * p[0] + A[3] * p[1] + A[5]];
+  const chrCam = (st) => [st.s, 0, 0, st.s, st.at[0] - st.s * st.look[0], st.at[1] - st.s * st.look[1]];   /* screen = at + s (p - look) */
+  const chrIdentity = (A) => Math.abs(A[0] - 1) + Math.abs(A[1]) + Math.abs(A[2]) + Math.abs(A[3] - 1) + Math.abs(A[4]) + Math.abs(A[5]) < 1e-9;
+  const chrCss = (A) => "matrix(" + A.map((v) => v.toFixed(6)).join(",") + ")";
+  const chrSvg = (A) => "matrix(" + A.map((v) => v.toFixed(6)).join(" ") + ")";
+  /* chromeFitK - the gate's chrome_fit_k, line for line: every edge of the box on the plane k moves linearly in k,
+     e(k) = e + k ((at - look) + (s - 1)(e - look)), so each edge bounds k alone; `axes` "x" | "y" reads one pair only.
+     `band` [top, foot] is the anchored caption's strip (a 16:9 page whose caption is anchored): an object that stood
+     wholly above it stays above it, one that stood below its foot stays below - the fit never parks ink on a caption. */
+  const chromeFitK = (box, st, W, H, pad = CHROME.FIT_PAD_PX, axes = "xy", band = null) => {
+    let k = 1;
+    const edges = [];
+    const top = band && box.y >= band[1] ? band[1] : 0, bot = band && box.y + box.h <= band[0] ? band[0] : H;
+    if (axes.includes("x")) edges.push([box.x, 0, W, st.look[0], st.at[0]], [box.x + box.w, 0, W, st.look[0], st.at[0]]);
+    if (axes.includes("y")) edges.push([box.y, top, H, st.look[1], st.at[1]], [box.y + box.h, 0, bot, st.look[1], st.at[1]]);
+    for (const [e0, lo, hi, l0, a0] of edges) {
+      const v = (a0 - l0) + (st.s - 1) * (e0 - l0);
+      const loM = lo + Math.min(pad, Math.max(0, e0 - lo)), hiM = hi - Math.min(pad, Math.max(0, hi - e0));
+      if (v < -1e-12) k = Math.min(k, Math.max(0, (e0 - loM) / -v));
+      else if (v > 1e-12) k = Math.min(k, Math.max(0, (hiM - e0) / v));
+    }
+    return Math.max(0, Math.min(1, k));
+  };
+  /* one object's move at t, in the rest frame (stage px, pre-camera): from its rest {x, y (its top-left), scale 1, rot 0}
+     through each key on its own clock (a key's null x / y is the rest's) - the compiler made every key whole */
+  const chromeMoveAt = (keys, t, rest) => {
+    const val = (k) => ({ x: k.x == null ? rest.x : k.x * STAGE_W, y: k.y == null ? rest.y : k.y * STAGE_H,
+                          sc: k.scale != null ? +k.scale : (k.w != null ? k.w * STAGE_W / Math.max(1e-6, rest.w) : 1), rot: +k.rot || 0 });
+    let cur = { x: rest.x, y: rest.y, sc: 1, rot: 0 };
+    for (const k of keys || []) {
+      if (t < k.at) break;
+      const to = val(k), u = (CHROME_EASE[k.ease] || minJerk)(clamp01((t - k.at) / Math.max(1e-6, k.dur)));
+      if (u >= 1) { cur = to; continue; }
+      const L = (p, q) => p + (q - p) * u;
+      return { x: L(cur.x, to.x), y: L(cur.y, to.y), sc: L(cur.sc, to.sc), rot: L(cur.rot, to.rot) };
+    }
+    return cur;
+  };
+  const chrMove = (tl, mv) => {   /* the rest-frame similarity: the object's top-left `tl` to (mv.x, mv.y), scaled and turned about it */
+    const r = mv.rot * Math.PI / 180, c = Math.cos(r) * mv.sc, s = Math.sin(r) * mv.sc;
+    return [c, s, -s, c, mv.x - (c * tl[0] - s * tl[1]), mv.y - (s * tl[0] + c * tl[1])];
+  };
+  const chrStage = () => { const r = document.getElementById("stage").getBoundingClientRect(); return { x: r.x, y: r.y, k: r.width / STAGE_W }; };
+  const chrRect = (el, S0) => { const r = el.getBoundingClientRect(); return { x: (r.x - S0.x) / S0.k, y: (r.y - S0.y) / S0.k, w: r.width / S0.k, h: r.height / S0.k }; };
+  const chrUnion = (bs) => { const v = bs.filter((b) => b && b.w > 0 && b.h > 0); if (!v.length) return null;
+    const x0 = Math.min(...v.map((b) => b.x)), y0 = Math.min(...v.map((b) => b.y));
+    return { x: x0, y: y0, w: Math.max(...v.map((b) => b.x + b.w)) - x0, h: Math.max(...v.map((b) => b.y + b.h)) - y0 }; };
+  /* the chart's user units -> stage px, off its measured viewport and its own viewBox / preserveAspectRatio */
+  const chrSvgFrame = (svg, S0) => {
+    const cs = getComputedStyle(svg), R = chrRect(svg, S0);   /* its fractional layout size - clientWidth rounds */
+    const cw = parseFloat(cs.width) || svg.clientWidth || 1, ch = parseFloat(cs.height) || svg.clientHeight || 1, gx = R.w / cw, gy = R.h / ch;
+    const vb = svg.viewBox && svg.viewBox.baseVal, par = svg.preserveAspectRatio && svg.preserveAspectRatio.baseVal;
+    if (!vb || !(vb.width > 0) || !(vb.height > 0)) return [gx, 0, 0, gy, R.x, R.y];
+    const align = par ? par.align : 6, slice = par && par.meetOrSlice === 2;
+    let sx = cw / vb.width, sy = ch / vb.height, ox = 0, oy = 0;
+    if (align !== 1) {
+      const m = slice ? Math.max(sx, sy) : Math.min(sx, sy); sx = sy = m;
+      const fx = [0, 0, 0, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1][align] ?? 0.5, fy = [0, 0, 0, 0, 0, 0.5, 0.5, 0.5, 1, 1, 1][align] ?? 0.5;
+      ox = (cw - vb.width * m) * fx; oy = (ch - vb.height * m) * fy;
+    }
+    return [gx * sx, 0, 0, gy * sy, R.x + gx * (ox - vb.x * sx), R.y + gy * (oy - vb.y * sy)];
+  };
+  /* the svg chrome labels, each in its own wrapper - once per label, only on a page whose camera names chrome */
+  const chromeWrap = (S) => {
+    const out = [];
+    for (const m of S.marks || []) {
+      const obj = CHROME_SVG[m.role];
+      if (!obj || !m.el || !m.el.parentNode) continue;
+      let w = m.el.parentNode;
+      if (!(w.classList && w.classList.contains("lp-chrome-w"))) {
+        if (w !== S.chart) continue;   /* a label inside another group keeps that group's frame: not re-parented */
+        w = document.createElementNS(NSV, "g"); w.setAttribute("class", "lp-chrome-w"); w.dataset.chrome = obj;
+        S.chart.insertBefore(w, m.el); w.appendChild(m.el);
+      }
+      out.push({ obj, w, label: m.el, anchor: m.el.getAttribute("text-anchor") || "start" });
+    }
+    return out;
+  };
+  /* one RIGID object (the title, sub, source, key, rail; the axis names per chart state): one correction for all its
+     elements - its rest box (the measured union, taken off the camera it stands under now), its move at t, its plane */
+  const lpChromeRigid = (C, o) => {
+    const U = chrUnion(o.parts.map((p) => p.R));
+    if (!U) return;
+    const tl = chrAt(C.CcurI, [U.x, U.y]), rest = { x: tl[0], y: tl[1], w: U.w / C.camCur.s, h: U.h / C.camCur.s };
+    const mv = chromeMoveAt(C.moves[o.obj], C.t, rest), M = chrMove([rest.x, rest.y], mv);
+    const moved = chrUnion([[0, 0], [1, 0], [0, 1], [1, 1]].map(([u, v]) => {
+      const q = chrAt(M, [rest.x + u * rest.w, rest.y + v * rest.h]); return { x: q[0], y: q[1], w: 1e-9, h: 1e-9 }; }));
+    const k = C.kOf(moved, "xy"), D = chrMul(chrCam(C.planeAt(k)), chrMul(M, C.CcurI));
+    for (const p of o.parts) {
+      const T = chrMul(chrInv(p.P), chrMul(D, p.P)), id = chrIdentity(T);
+      if (p.svg) { if (!id) p.e.setAttribute("transform", chrSvg(T)); }
+      else { p.e.style.transformOrigin = "0 0"; p.e.style.transform = id ? "" : chrCss(T); }
+    }
+    const B = chrAt(D, [U.x, U.y]), sc = Math.hypot(D[0], D[1]);
+    if (!o.S || o.S === C.active) C.report.objects[o.obj] = { k, rest: [moved.x, moved.y, moved.w, moved.h], box: [B[0], B[1], U.w * sc, U.h * sc] };
+  };
+  /* one TICK column (per chart state): each label's pinned coordinate on the chrome's plane and the column's move, its
+     data coordinate the plot's (E28), its own size at that plane; hidden whole once its gridline has left the frame */
+  const lpChromeColumn = (C, obj, S, qs) => {
+    const pin = obj === "yticks" ? 0 : 1, rects = qs.map((q) => chrRect(q.label, C.S0)), U = chrUnion(rects);
+    if (!U) return;
+    const tl = chrAt(C.CcurI, [U.x, U.y]), rest = { x: tl[0], y: tl[1], w: U.w / C.camCur.s, h: U.h / C.camCur.s };
+    const mv = chromeMoveAt(C.moves[obj], C.t, rest), colM = chrMove([rest.x, rest.y], Object.assign({}, mv, { rot: 0 }));
+    const col = { x: pin === 0 ? chrAt(colM, [rest.x, 0])[0] : rest.x, y: pin === 1 ? chrAt(colM, [0, rest.y])[1] : rest.y,
+                  w: pin === 0 ? rest.w * mv.sc : rest.w, h: pin === 1 ? rest.h * mv.sc : rest.h };
+    const k = C.kOf(col, pin === 0 ? "x" : "y"), plane = C.planeAt(k), Ck = chrCam(plane), ratio = mv.sc * plane.s / C.camCur.s;
+    const P = C.frameOf(S), Pi = chrInv(P);
+    qs.forEach((q, i) => {
+      const R = rects[i];
+      if (!(R.w > 0 && R.h > 0)) return;
+      const a = q.anchor === "end" ? R.x + R.w : q.anchor === "middle" ? R.x + R.w / 2 : R.x;
+      const A1 = pin === 0 ? [a, R.y + R.h / 2] : [R.x + R.w / 2, R.y];   /* the label's anchor on screen now ... */
+      const r = chrAt(C.CcurI, A1);                                         /* ... and in the rest frame */
+      const Q = pin === 0 ? [chrAt(Ck, [chrAt(colM, r)[0], r[1]])[0], A1[1]] : [A1[0], chrAt(Ck, [r[0], chrAt(colM, r)[1]])[1]];
+      const D = [ratio, 0, 0, ratio, Q[0] - ratio * A1[0], Q[1] - ratio * A1[1]];
+      const out = pin === 0 ? (Q[1] - ratio * R.h / 2 < 0 || Q[1] + ratio * R.h / 2 > STAGE_H)
+                            : (Q[0] - ratio * (A1[0] - R.x) < 0 || Q[0] + ratio * (R.x + R.w - A1[0]) > STAGE_W);
+      const T = chrMul(Pi, chrMul(D, P));
+      if (!chrIdentity(T)) q.w.setAttribute("transform", chrSvg(T));
+      q.w.style.display = out ? "none" : "";
+    });
+    if (S === C.active) C.report.objects[obj] = { k, rest: [col.x, col.y, col.w, col.h] };
+  };
+  /* this frame's chrome context: the camera (and the one the page's content stands under), the plane law, the fit */
+  const lpChromeContext = (st, scene, t, ch) => {
+    const S0 = chrStage(), pg = scene.world.page || {}, xf = camNow(scene, t);
+    const cam = { s: xf.s, look: [xf.ox, xf.oy], at: [xf.ax != null ? xf.ax : xf.ox, xf.ay != null ? xf.ay : xf.oy] };
+    const pk = pageDepthOf(pg), camCur = pk ? camLayerState(cam, pk) : cam;
+    const band = !PORTRAIT && pg.caption === "anchor" ? [LP_LONGFORM.CAPTION_TOP, LP_LONGFORM.CAPTION_FOOT] : null;   /* the gate's _chrome_band */
+    const frames = new Map();
+    return { t, S0, cam, camCur, CcurI: chrInv(chrCam(camCur)), moves: ch.moves || {},
+             planeAt: (k) => (ch.mode === "world" ? camCur : k === PARALLAX.FLAT ? cam : camLayerState(cam, k)),   /* `world`: it only moves - the plot's plane */
+             kOf: (box, axes) => (ch.mode === "fit" ? chromeFitK(box, cam, STAGE_W, STAGE_H, CHROME.FIT_PAD_PX, axes, band) : ch.mode === "world" ? PARALLAX.FLAT : +ch.k),
+             frameOf: (S) => { if (!frames.has(S)) frames.set(S, chrSvgFrame(S.chart, S0)); return frames.get(S); },
+             active: (st.states || [st])[st.active | 0], report: { t, mode: ch.mode, objects: {} } };
+  };
+  const lpPaintChrome = (el, scene, t) => {
+    const ch = (scene.camera || {}).chrome, st = el.__lp;
+    if (!ch || !ch.mode || !st || !st.page) return;
+    const C = lpChromeContext(st, scene, t, ch);
+    /* every object's elements with the chrome's own transform CLEARED, then measured in one layout */
+    const html = Object.keys(CHROME_HTML).map((obj) => ({ obj, els: [...st.page.querySelectorAll(CHROME_HTML[obj])].filter((e) => e.offsetParent !== null) }));
+    const svg = (st.states || [st]).flatMap((S) => chromeWrap(S).map((q) => Object.assign(q, { S })));
+    for (const o of html) for (const e of o.els) e.style.transform = "";
+    for (const q of svg) { q.w.removeAttribute("transform"); q.w.style.display = ""; }
+    const groupBy = (qs) => [...qs.reduce((m, q) => m.set(q.S, [...(m.get(q.S) || []), q]), new Map())];   /* one column per chart state */
+    /* an ink element's local px -> stage px: the PAGE's own scale (its measured box over its fractional layout size -
+       offsetWidth rounds to an integer, which on a 31.1 px sub is a 0.4 % error) from the element's measured corner */
+    const PR = chrRect(st.page, C.S0), pcs = getComputedStyle(st.page);
+    const gx = PR.w / (parseFloat(pcs.width) || PR.w || 1), gy = PR.h / (parseFloat(pcs.height) || PR.h || 1);
+    html.forEach((o) => lpChromeRigid(C, { obj: o.obj, parts: o.els.map((e) => { const R = chrRect(e, C.S0); return { e, R, P: [gx, 0, 0, gy, R.x, R.y] }; }) }));
+    for (const [S, qs] of groupBy(svg.filter((q) => q.obj === "axis_names")))
+      lpChromeRigid(C, { obj: "axis_names", S, parts: qs.map((q) => ({ e: q.w, svg: true, R: chrRect(q.label, C.S0), P: C.frameOf(S) })) });
+    for (const obj of ["yticks", "xticks"]) for (const [S, qs] of groupBy(svg.filter((q) => q.obj === obj))) lpChromeColumn(C, obj, S, qs);
+    st.chromeReport = C.report;
+  };
+
   /* ================= MOTION MENU species (doc 29 s9.27; P35 T6 / T7) =================
      The targeting law as code: every species takes a DECLARED target and resolveTarget maps it to
      stage pixels at render time (a datum on a ledger page, a point/region of the frame, a caption
@@ -17585,6 +17771,7 @@ async function mount(doc) {
         el.dataset.worldRest = restFlat;   /* P58 T6: what sits UNDER the camera on this element, for a mechanism read at another depth (camDepthSwap) */
         el.style.transform = camCss(camXfNow) + restFlat;
       }
+      if (isLedger && !surfaceArrival) lpPaintChrome(el, scene, t);   /* P69 T26f: the page's chrome, re-seated against the camera it now stands under */
     };
     const prev = TL.scenes[si - 1];
     wA.style.display = "";
@@ -18458,6 +18645,12 @@ async function mount(doc) {
     let target = null;
     if (tg) { const b = resolveTarget(tg); if (b) target = Object.assign(camInFrame(fr, b, st.s), { box: b, screen: camProject(st, [b.x, b.y]) }); }
     return { scene: sc.scene_id, on: kin("camera"), zoom: st.s, look: st.look, at: st.at, frustum: fr, target };
+  };
+  /* P69 T26f: the page's chrome as this frame painted it - each object's plane k, its rest box (after its move, pre-
+     camera, stage px) and where it stands on the stage; null on a page whose camera names no chrome */
+  window.__chrome = () => {
+    const world = [wB, wA].find((e) => e.__lp && e.classList.contains("ledger") && e.style.display !== "none");
+    return (world && world.__lp.chromeReport) || null;
   };
   window.__morphInvariants = (key) => {   /* no key: the page-enter morph; "from>to": a morph_to between two states (P48 T5) */
     const world = [wB, wA].find((e) => e.__lp && e.classList.contains("ledger")); if (!world) return null;
