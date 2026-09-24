@@ -1,41 +1,34 @@
 {
  "title": "THE TEST - 30 seconds a holding",
- "sub": "Ask it of any holding",
  "src": "Money Physics - the three-question test",
  "checklist": {
+  "profile": "phone",
   "head": [
    "Ask",
-   "Where to look",
-   "Steel answers",
-   "Paper answers"
+   "Steel",
+   "Paper"
   ],
   "rows": [
    {
     "cells": [
      "1  Scarce?",
-     "the order book",
-     "sold out, prices up",
-     "abundant on belief"
-    ],
-    "delay": 6.0
+     "sold out",
+     "on belief"
+    ]
    },
    {
     "cells": [
-     "2  Cash or paper?",
-     "cash flow + share count",
-     "earns cash, count flat",
-     "issues paper to run"
-    ],
-    "delay": 13.0
+     "2  Cash?",
+     "earns cash",
+     "issues paper"
+    ]
    },
    {
     "cells": [
-     "3  Used tomorrow?",
-     "the product, hype gone",
-     "still gets used",
-     "needs the story"
-    ],
-    "delay": 17.0
+     "3  Lasts?",
+     "still used",
+     "needs a story"
+    ]
    }
   ]
  }

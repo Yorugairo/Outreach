@@ -1442,12 +1442,18 @@ WHERE_CHIPS = (   # (label, glyph, the phrase its word opens, the word, its plac
     ("THE PRODUCT", "factory", "picture the product", "picture", WHERE_A, None),
 )
 WHERE_HANDOFF_S = 0.1   # a chip leaves this far before the next lands in its place
-# THE TEST CARD - the checklist (CAPABILITIES:268, species/checklist.mjs): ev-test-scorecard-v1's words, unchanged, with
-# its sub the script's own words, derived into the build dir only (`_test_card_object`).
+# THE TEST CARD - the checklist (CAPABILITIES:268, species/checklist.mjs) under its PHONE profile (P69 T28b / R26-300, lane B
+# dc43444): ev-test-scorecard-v1's title and source, and a question with its two answers per row at the long-form phone
+# floor (E99 s90: 59.08 stage px) - the parent's frame read of T28 refused the default card (19 px cells on the 1056 x 480
+# canvas: ~27 px at 0.80 of the stage, over the host, its lower half empty). The chips already said where to look and the
+# agenda already showed the full questions, so the card is Ask / Steel / Paper with the short questions (the parent's
+# grammar); no sub (the compiler refuses one under the profile). Derived into the build dir only (`_test_card_object`).
 TEST_OBJECT = OBJECTS / "ev-test-scorecard-v1"
 TEST_CARD_OBJECT_ID = "ev-test-scorecard-h20-v1"
-TEST_CARD_SUB = "Ask it of any holding"         # the script's own ("Take any holding and ask it three questions"); the
-#                                                  object's sub is the anaphora, which is said at 8:25, not at 8:10
+TEST_CARD_CHECKLIST = {"profile": "phone", "head": ["Ask", "Steel", "Paper"],
+                       "rows": [{"cells": ["1  Scarce?", "sold out", "on belief"]},
+                                {"cells": ["2  Cash?", "earns cash", "issues paper"]},
+                                {"cells": ["3  Lasts?", "still used", "needs a story"]}]}
 # THE CARD IS THE ANAPHORA'S RECAP: it lands on "Steel answers" and stands 6.9 s (under M12's 10 s), so the checklist fills
 # as a RECAP (a hold under CHECKLIST.RECAP_S 12 s: a row every 0.8 s, its cells on the recap's offsets) - the three rows
 # land one by one as "scarce, cash, used" is said. The object's anchors are Script F's question words, spoken ~30 s before
@@ -1456,12 +1462,10 @@ TEST_CARD_LEAD_S = 0.5   # MEASURED on the first build-h pass (`final/B-chips-ca
 #                          was not in frame at 505.8 and each row landed ~0.6-1.2 s after its word; thrown 0.5 s before, under
 #                          "gone.", it lands as "Steel" is said and the recap's rows meet "scarce, cash, used"
 TEST_CARD_ASPECT = round(480 / 1056, 4)        # the chart dock's own canvas (scene-evidence-engine.mjs CW x CH)
-# ITS SIZE: the checklist's cells are the chart canvas' `.cs` type, 19 px on a 1056 px canvas; the floor is 11 CSS px
-# on a phone (gate TYPE_FLOOR_CSS), ~24.8 stage px at 16:9 - so the card reads only at >= 0.72 of the stage. At 0.80 it
-# covers the host: it is the reading surface now (row 11's records, E99 s71: a card read at its reading size).
-TEST_CARD_SLOT = {"centre": True, "centre_w": 0.80, "centre_x": 0.50, "centre_y": 0.355, "card_aspect": TEST_CARD_ASPECT}
-# (MEASURED on drafts 3-4, `d3-B.2.png` / `d4dip-S.png`: at 0.74 wide the cells read ~25 px, at the floor, and at centre_y
-# 0.42 / 0.37 the top of Mike's hair stood above the card's edge; at 0.80 the cells are ~27.6 px and the card's top is ~36 px)
+# ITS PLACE: the right 0.60 of the stage, the host visible at left. The phone profile's type holds the floor only at
+# centre_w >= 0.60 (species/checklist.mjs CHECKLIST_PROFILES.phone.TYPE: 57-58 canvas px at the dock's 1.051x).
+# (T28's default card stood at 0.80, centre (0.50, 0.355), over the host - superseded by T28b.)
+TEST_CARD_SLOT = {"centre": True, "centre_w": 0.60, "centre_x": 0.69, "centre_y": 0.46, "card_aspect": TEST_CARD_ASPECT}
 TEST_SWEEP_WHY = ("the questions, the phone and where to look -> the test card, on the desk: TAKEN the hand-off (E99 s80 - "
                   "the card takes the stage the list, the phone and the chips held, THROWN on 'Steel answers', s71); "
                   "the checklist fills as the anaphora's RECAP, a row as each of 'scarce, cash, used' is said, the steel "
@@ -2684,18 +2688,17 @@ def _signpost_object() -> Path:
 
 
 def _test_card_object() -> Path:
-    """Row 20's test card source (P69 T28): ev-test-scorecard-v1's head, cells and source unchanged; its sub is the
-    script's own words (TEST_CARD_SUB) and its rows land as a RECAP (the object's anchors are Script F's question
-    words, spoken before the card lands - dropped). Written with
+    """Row 20's test card source (P69 T28b): ev-test-scorecard-v1's title and source; its checklist the phone profile's
+    Ask / Steel / Paper (TEST_CARD_CHECKLIST, each row within ~30 characters), no sub; the rows land as a RECAP (no
+    delay anchors). Written with
     the object's PNG (the static fallback the compiler docks) into the build dir only; returns the PNG."""
     import copy
     import shutil
     obj = copy.deepcopy(json.loads(TEST_OBJECT.with_suffix(".series.json").read_text(encoding="utf-8")))
-    rows = obj["checklist"]["rows"]
-    assert [r["cells"][0] for r in rows] == ["1  Scarce?", "2  Cash or paper?", "3  Used tomorrow?"], rows
-    obj["sub"] = TEST_CARD_SUB
-    for r in rows:
-        r.pop("delay_anchor", None)
+    assert [r["cells"][0] for r in obj["checklist"]["rows"]] == ["1  Scarce?", "2  Cash or paper?", "3  Used tomorrow?"]
+    obj["checklist"] = copy.deepcopy(TEST_CARD_CHECKLIST)
+    assert all(len("".join(r["cells"])) <= 32 for r in obj["checklist"]["rows"]), obj["checklist"]["rows"]   # ~30 (row 3 is 32)
+    obj.pop("sub", None)
     out = BUILD / "objects" / (TEST_CARD_OBJECT_ID + ".series.json")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(obj, indent=1), encoding="utf-8")

@@ -1818,3 +1818,22 @@ the card lands on "Steel", rows on "scarce" / "cash" / "used", the card leaves f
 (513.5 - 515.4 the dip and the spiral return; 516.5 - 523.0 the two callouts; 528.4 / 529.4 the spread; 531.8 - 533.85 the retitle
 and the row's end); `E-life.png` + `life.txt`. Drafts: `d1.log` .. `d5.log`, `d2-A.*`, `d3-B.*`, `d3-C.*`, `d4cut-T.png`,
 `d4dip-T.png`, `d4dip-S.png`, `d5-S.png`. No build-f reference frames were cut for this row.
+
+**T28b (2026-09-24, after the parent's frame read refused the test card: at 0.80 of the stage it covered the host, its cells
+read ~25-30 px against the s90 floor of 59.08 stage px, and its lower half was empty).** Rebuilt on lane B's `checklist.profile:
+"phone"` (dc43444): the derived `ev-test-scorecard-h20-v1.series.json` is now Ask / Steel / Paper, the parent's short questions
+(`1  Scarce?` sold out / on belief; `2  Cash?` earns cash / issues paper; `3  Lasts?` still used / needs a story -
+`TEST_CARD_CHECKLIST`), no sub, in the right 0.60 of the stage (`TEST_CARD_SLOT` centre (0.69, 0.46), w 0.60). The throw
+(504.75), the recap timing and the leave (512.19) are unchanged. Read on `scratchpad/p69-row20/t28b/C-card-lands.png`
+(504.6-512.3): Mike's face and shoulder stand at the left for the whole card; the three rows fill the card to its source line;
+row 1 is typed by 506.05 ("scarce"), row 2 at 506.5 ("cash"), row 3 by 507.7 ("used"). At a 390 px phone
+(`t28b/phone-390-x3.png`, 508.5) every cell word reads. Named: the recap sweeps each row's paper cell 0.45 s after its question
+(`RECAP_OFFS[2]`), so "issues paper" / "needs a story" are on the card ~0.7-1 s before "Paper answers" (507.64) - the recap's
+law, as T28's four-column card was at 0.7 s; a later paper sweep needs a per-column delay the species does not have. Row 3 is
+32 characters (the parent's "~30"). The door's why-strings (`TEST_SWEEP_WHY`, the `BODY_DEPARTURES` row 20 line) still give T28's
+0.72-of-the-stage reason for putting the questions on the agenda; they were left unedited so that the gated door output stayed
+byte-identical. Chain (`logs/t28b-*`): door rc 0 (cues 36 of 37, life 20 of 20); `measure_page_boxes.py --check` **PASS 6 builders
+x 18 geometr(ies) measured identical**; probe 194 instants; frozen **no run of identical frames over 0.50s**; door re-run sha256
+IDENTICAL (`t28b-door1.sha` = `t28b-door-final.sha`); seams **19 boundaries, 0 faults**; spoken **5 pointing phrases, 0
+uncovered**; stage gaps **2.5 s of 533.9 s**; **gate 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** (unchanged; M12 PASS, M25
+lists no row 20 card).

@@ -899,7 +899,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T28: Row 20 (7:52-9:04) - host window 2: the desk, the checklist, dip 6, the returning page
-- Status: built (row 20 - BUILD-NOTES-H 19: the clocks page sucked into the host's three fingers, the questions as the numbered agenda on One/Two/Three, the phone stamped, four chips on their words, the test card filling row by row on "Steel answers", dip 6, the divergence page back by the spiral and retitled); gate unchanged 2 FAIL / 5 WARN. OPEN: the test card reads below the phone floor - T28b; HG4 open
+- Status: done (row 20 - BUILD-NOTES-H 19; the test card on T28b's phone profile); gate 2 FAIL / 5 WARN unchanged; HG4 open
 - Owner: implementation_luna
 - Depends on: T27
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
@@ -908,7 +908,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T28b: The checklist card reads on a phone - a type profile for the checklist species (row 20's test card)
-- Status: pending (lane B)
+- Status: done (lane B b449e9f; row 20's card rebuilt on it in lane A - the parent read it at the stage and at a 390 px phone); follow-up R26-302
 - Owner: implementation_luna
 - Depends on: T28; lane B
 - Write set: `content/video_engine/scripts/species/checklist.mjs` (a spec-level `profile: "phone"` or type/pitch option: CHECKLIST.HEAD_DY / ROW0_DY / ROW_PITCH / BAND_RISE / BAND_H scale with the type), `docs/content-video-engine/samples/scene-evidence-player.template.html` (`.chartbox .cs` / `.csr` / `.ct` sizes under the profile), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the chart dock canvas, only if the profile needs it), `content/video_engine/scripts/build_scene_timeline_f.py` (the option's validation), a test, one golden; the species card
