@@ -664,6 +664,14 @@ verbatim tails and are left pending.
 - Acceptance: a retitle with `color: neg` writes its new title in `--lp-neg`; no key = byte-identical; a raw hex is refused (tokens only)
 - Evidence: 6b1d26f (lane B): RETITLE_COLORS neg/pos + color_span (leading); RT_PAL / rtSpanGlyphs; H door byte-identical; tests test_retitle_color.py (27); also fixed test_surface_retitle_visibility's slice that T36 broke. Open: the relight's last-frame sunflower (base behaviour), its own slice
 
+### T87: The gate measures an EMPTY PLOT - a chart frame with no ink held past ~1.5 s (row 22's first cut)
+- Status: pending (lane B)
+- Owner: implementation_luna
+- Depends on: none
+- Write set: `content/video_engine/scripts/gate_motion_density.py` (a new M row, or an M12/M25 extension: for every ledger page scene, the stretches where its plot box stands with zero drawn series/bars/marks - from the compiled timeline's build clocks, chart_to leaves and undraws, not pixels - WARN over 1.5 s, FAIL over 4 s; the number of seconds and the scene named), its registry row, tests
+- Acceptance: row 22's first cut (605.9-624, 18 s of axes with nothing drawn) FAILs; the committed H door (77c8921) passes or WARNs only at its ~1 s flip hand-over; every other committed door's gate line unchanged or the new finding listed and justified
+- Evidence: pending
+
 ### T83: The railway-share certificate plate (E99 s113) for row 18 (the H-3 host window)
 - Status: pending
 - Owner: parent (the image claim) + implementation_luna (the row)

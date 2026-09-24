@@ -14,12 +14,15 @@ line literally.
 > with restrained accents of teal #178C83 and coal-fire coral #ED6A4A.
 > Soft directional key light, heavy atmosphere, visible brush texture,
 > shallow depth of field. Composition leaves generous negative space on
-> one side for later data overlay. Absolutely no text, no numbers, no
-> letters, no logos, no watermarks, no real people's faces.
+> one side for later data overlay. No text or letters unless this prompt
+> names the words, spelled exactly as given; absolutely no numbers, no
+> logos, no watermarks, no real people's faces.
 
 **Hard rules for every generation:**
-- No readable text anywhere — engraved paper and documents must be
-  illegible scrollwork and texture, never legible words.
+- No text unless the narrative needs it (E99 s113): any text is named in
+  the prompt, spelled exactly, and verified on the frame read - garbled or
+  invented lettering is refused. Otherwise engraved paper and documents
+  are illegible scrollwork and texture.
 - No real-person likenesses (no Karp, no executives) and no company
   logos (no Uber, Microsoft, Nvidia marks). Archetypes and objects only.
 - Keep the ring-token spike IDENTICAL across P-01, P-04b, and P-06a/c:

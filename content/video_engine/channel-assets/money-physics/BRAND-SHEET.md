@@ -64,9 +64,12 @@ the sunflower callout is the ONLY yellow on a chart, so it lands.
   photographic.
 - Light: soft, even, from the upper left; gentle shadow lower right; low
   contrast. Camera eye-level, straight on, no perspective distortion.
-- **Hard rules:** no readable text, letters, numbers, logos or watermarks
-  in generated art (documents show illegible engraved scrollwork); no
-  real-person likeness; no flags or political symbols.
+- **Hard rules:** no numbers, logos or watermarks in generated art; no
+  text unless the narrative needs it - any text is named in the prompt,
+  spelled exactly and verified on the frame read (E99 s113), garbled or
+  invented lettering is refused (otherwise documents show illegible
+  engraved scrollwork); no real-person likeness; no flags or political
+  symbols.
 - **Quiet zone:** one side of every frame stays mostly bare cream or
   charcoal as the landing zone for evidence.
 - Tone: adult editorial, financially credible, never childish. Brightness
@@ -179,7 +182,7 @@ never blur. Handwriting face: Kalam (Human Gate 2, decided 2026-09-03).
 ## 9. Never (visual)
 
 No photographic or glossy render · no collage, torn edges or washi on
-plates · no readable text or numbers in generated art · no real faces
+plates · no numbers in generated art, and no text it does not name and verify (E99 s113) · no real faces
 (plates or thumbnails; the operator's on-camera face - a drawn likeness is not one, E80) · no info cards · no decorative motion · no held
 still with a hard cut · no AI-purple, no gradients outside the six tokens
 · no kawaii or toy proportions · no burying the plate under evidence.

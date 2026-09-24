@@ -148,7 +148,7 @@ When an initial frame is anchored, **never re-describe what is already visible i
 
 ### 3.3 The Start Frame and the Reference Outweigh the Prompt (P54 K17, recorded 2026-09-02/03)
 *   **Frame-conditioning beats wording.** Whatever the start frame, a reference or an Extend's source clip carries - a hand included - comes back whatever the prompt says: a tweezers clip kept the finger its start frame held (the operator, reading it as the negative prompt: *"it still had the finger. i think the negative prompt is keeping it in there"*, `ecb350abe417`). Models condition well on a first frame and unreliably on a last one. Fix the frame, or script the object leaving in the prompt's first sentence (`b29149579b4e`, `f3c5bab51164`). Frames to Video from a clip's last frame is the same continuity as Extend (`377104a363b7`).
-*   **Lettering in a reference garbles every frame.** Text baked into a reference (a thumbnail's wordart) pushes garbled lettering into each generated frame: crop baked text off a reference, and a generated hook takes the text-free title world as its reference, never the thumbnail (2026-09-03, `44cc6e686520`). Docs 13 and 21 reject lettering in outputs; this names the reference as its source.
+*   **Lettering in a reference garbles every frame.** Text baked into a reference (a thumbnail's wordart) pushes garbled lettering into each generated frame: crop baked text off a reference, and a generated hook takes the text-free title world as its reference, never the thumbnail (2026-09-03, `44cc6e686520`). Docs 13 and 21 reject lettering in outputs (since E99 s113, 2026-09-24: unnamed or garbled lettering - text the prompt names, spelled exactly and verified on the frame read, is allowed); this names the reference as its source.
 
 ---
 
