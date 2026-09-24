@@ -3076,6 +3076,27 @@ def check_members(world: dict, row_species: list) -> None:
             raise ValueError(f"{where}: tile {past[0]} is past bar {bar}'s {n} tiles (0..{n - 1})")
 
 
+def check_segments(world: dict, row_species: list) -> None:
+    """P69 T64: a STACKED page's segments stand in their bars AS DRAWN (mirrored off each bar every frame), so - as a
+    membership's tiles do - they take a park (the whole chart moved as one affine transform) and nothing that moves,
+    re-values or re-draws the bars: no other `chart_to`, no then= state. ValueError names it; a page with no segments is
+    untouched."""
+    page = world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None
+    held = [i for i, s in enumerate((page or {}).get(LPG.SEGMENTS_KEY) or []) if s] if isinstance(page, dict) else []
+    states = [s for s in (world.get("page_states") or []) if isinstance(s, dict)] if isinstance(world, dict) else []
+    if not (held or any(s.get(LPG.SEGMENTS_KEY) for s in states)):
+        return
+    if states:
+        raise ValueError("a stacked bar stands on a page of its own chart: a then= state is drawn in the same box and "
+                         "would re-draw the bars its segments divide (P69 T64) - give the other chart its own page")
+    for sp in (row_species or []):
+        if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") not in MEMBER_CHART_TO:
+            raise ValueError(f"chart_to {sp.get('to')!r} at {sp.get('at')}: this page carries stacked bars, and each "
+                             "segment stands in its bar AS DRAWN - a transform that moves, re-values or re-draws the "
+                             f"bars would leave the stack behind (P69 T64); {'|'.join(MEMBER_CHART_TO)} is the chart_to "
+                             "it takes")
+
+
 def resolve_member_logos(page: dict) -> list[str]:
     """P69 T45: every membership tile's `logo` must be a render-eligible, operator-approved cutout of the icon catalogue
     (E93 / E94 - the recorded permission 11-ARCHIVAL s4 asks of a logo). One that is not is DROPPED from the page, so
@@ -4260,6 +4281,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_panels(world, row_species)          # P69 T8b: a panel's address, and the focus states, on the page they name
     check_broken_axis(world, row_species)     # P69 T66: a broken axis holds its page (no chart state, no form)
     check_members(world, row_species)         # P69 T45: a tile the membership bar has, and nothing that moves the bar
+    check_segments(world, row_species)        # P69 T64: a stacked page takes a park, and nothing that moves its bars
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
             if world.get("kind") != SPECIES_LEDGER:
@@ -4558,6 +4580,10 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     stamp_full_stage(page)
     if page.get(LPG.MEMBERS_KEY):   # P69 T45: a logo the catalogue does not carry becomes its name; a name too wide WARNs
         notes = resolve_member_logos(page) + LPG.member_fit_warnings(page, ASPECT or "16:9")
+        if notes:
+            page["warnings"] = list(page.get("warnings") or []) + notes
+    if page.get(LPG.SEGMENTS_KEY):   # P69 T64 (s106): a segment too thin for its figure WARNs - the figure takes a leader
+        notes = LPG.segment_fit_warnings(page, ASPECT or "16:9")
         if notes:
             page["warnings"] = list(page.get("warnings") or []) + notes
     return {"kind": SPECIES_LEDGER, "page": page,
@@ -6416,6 +6442,10 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         if page.get(LPG.MEMBERS_KEY) and spec["kind"] == "extruded_bar":   # P69 T45
             raise ValueError(f"{plate_id!r}: form=extruded_bar on a membership stack - its equal tiles divide the bar's "
                              "FACE, and a prism is three faces (P69 T45); draw it flat (bar_style=soft gives it weight)")
+        if page.get(LPG.SEGMENTS_KEY) and spec["kind"] == "extruded_bar":   # P69 T64
+            raise ValueError(f"{plate_id!r}: form=extruded_bar on a stacked bar - its segments are drawn true on the "
+                             "bar's FACE, and a prism's depth would add ink to none of them (P69 T64); draw the stack "
+                             "flat (bar_style=soft gives it weight)")
         page["form"] = spec
         try:
             check_broken_axis(world, [])   # P69 T66: a broken axis is drawn flat (E99 s111)

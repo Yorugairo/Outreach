@@ -415,7 +415,12 @@ def test_every_wired_card_is_in_a_recipe():
     # the broken-axis-two-eras golden; no committed beat plays it until a railway-era series is sourced (H rows 9 / 14).
     # P69 T45's membership tile (page_species:member) is tested alone in test_membership_stack.py and pinned by the
     # membership-* goldens; its recipe is P69 T79's `bar-ladder-to-membership` (harvest R2), not invented here.
-    assert uncovered == ["dock_option:moves", "dock_option:place", "page_builder:line+break", "page_enter:surface",
+    # P69 T64's stacked bar of values and its combo (page_builder:bars+segments, page_builder:combo+segments) are
+    # tested alone in test_stacked_combo.py and pinned by the stacked-outlays / stacked-combo-funding goldens; no
+    # committed beat plays them until H row 17 ("the arithmetic") is re-authored on a stacked object, so no recipe is
+    # invented for them here.
+    assert uncovered == ["dock_option:moves", "dock_option:place", "page_builder:bars+segments",
+                         "page_builder:combo+segments", "page_builder:line+break", "page_enter:surface",
                          "page_species:explode", "page_species:member", "page_species:panel_focus",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:domain", "plate_option:readability",

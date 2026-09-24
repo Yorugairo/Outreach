@@ -10117,6 +10117,222 @@ async function mount(doc) {
     }
     for (const key of cs.memberKeys || []) key.el.setAttribute("opacity", (up.get(key.bar) || 0).toFixed(3));
   };
+  /* P69 T64 - THE STACKED BAR OF VALUES (E99 s110 (1): "allowed ... when you're looking at financial metrics against
+     business metrics ... where you could have a stacked bar and a line"; s100; s106; s109). A bar whose datum carries
+     `segments` (ledger_page, which refuses a stack that does not add up to its written total) stands at its TOTAL exactly
+     as it did - its rect, its value over it, its pill - and its SEGMENTS stand over it bottom-up from zero, each drawn
+     TRUE to its value on the bar's own scale, in the page's ONE key's colours and order: each part a rect of its own
+     laid right after its bar (under every label), the top one carrying the bar's own corners (its rx, or the soft
+     shoulder), a charcoal hairline between parts. Each part's FIGURE is written - inside it when it holds the figure
+     at the value type, else BESIDE the bar on a leader in the part's colour (the compiler WARNs which, s106) - and the
+     key is written once, where it touches no other ink. Every frame the parts MIRROR their bar (lpSegPaint, after every
+     painter, beside the soft bars' feet): whatever grows, fades, drains or moves the bar carries its stack. The combo
+     (buildLedgerCombo) stacks the same way under its line. `segments` absent: nothing here runs. */
+  const LPSEG = Object.freeze({ SEP_PX: 2, PAD_PX: 6, LEAD_PX: 18, LEAD_GAP_PX: 6, LEAD_W_PX: 2, KEY_SW_PX: 20,
+    KEY_GAP_PX: 16, KEY_ITEM_PX: 30, KEY_MIN: 0.7, FIG_LINE: 1.25, FIG_MIN: 0.8, KEY_LINE_W_PX: 5,
+    LINE_CLEAR_PX: 8, AX_STEP: 0.05, AX_MAX: 2, NAME_GAP_PX: 10, SCAN_PX: 2 });
+  const LPSEG_INK = Object.freeze({ SEP: "#25313C", KEY: "#c9ced4" });   /* the board's charcoal between parts; the page's label ink */
+  const lpSegU = (st) => (px) => px / (st.stagePx > 0 ? st.stagePx : 1);   /* stage px -> this chart's units */
+  /* one bar's parts, bottom-up; laid TOP part first so each lower part covers the foot the one above hides under it */
+  const lpSegRects = (st, segs, g) => {
+    const u = lpSegU(st), out = new Array(segs.length);
+    let cum = 0;
+    const ys = segs.map((s) => { const a = cum; cum += Math.abs(+s.value || 0); return [g.my(a), g.my(cum)]; });
+    for (let j = segs.length - 1; j >= 0; j--) {
+      const s = segs[j], [yb, yt] = ys[j], top = j === segs.length - 1, foot = top && j > 0 ? g.rx : 0;
+      const r = lpEl("rect", "lp-seg", st.chart, { x: g.x.toFixed(1), y: yt.toFixed(2), width: g.bw.toFixed(1),
+        height: Math.max(0, yb - yt + foot).toFixed(2), rx: (top ? g.rx : 0).toFixed(3) });
+      r.style.fill = LP_PAL[s.color] || s.color; r.style.stroke = LPSEG_INK.SEP;
+      r.style.strokeWidth = u(LPSEG.SEP_PX).toFixed(3); r.setAttribute("vector-effect", "non-scaling-stroke");
+      r.style.transformOrigin = "0 " + g.base.toFixed(1) + "px"; r.style.transform = "scaleY(0)";
+      out[j] = { el: r, j, name: s.name, color: s.color, value: +s.value, vstr: s.value_string, y0: yb, y1: yt };
+    }
+    return out;
+  };
+  /* P69 T64 (the parent's frame read: "a line may never cross a total, a part figure, the key or the axis title"): does a
+     polyline's stroke pass through a box, padded by `pad` (half the stroke and air)? Sampled every `step` along each
+     segment, so a diagonal is read as drawn, never as its bounding box */
+  const lpSegPolyHits = (polys, boxes, pad, step) => {
+    for (const pts of polys) for (let k = 1; k < pts.length; k++) {
+      const [ax, ay] = pts[k - 1], [bx, by] = pts[k], nS = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / step));
+      for (let j = 0; j <= nS; j++) {
+        const x = ax + (bx - ax) * j / nS, y = ay + (by - ay) * j / nS;
+        for (const r of boxes) if (r && x > r.x - pad && x < r.x + r.w + pad && y > r.y - pad && y < r.y + r.h + pad) return true;
+      }
+    }
+    return false;
+  };
+  /* the highest the polylines reach (the smallest y) over [xa, xb] - where a total the line crosses must stand clear of */
+  const lpSegPolyTop = (polys, xa, xb, step) => {
+    let top = Infinity;
+    for (const pts of polys) for (let k = 1; k < pts.length; k++) {
+      const [ax, ay] = pts[k - 1], [bx, by] = pts[k], nS = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / step));
+      for (let j = 0; j <= nS; j++) { const x = ax + (bx - ax) * j / nS; if (x >= xa && x <= xb) top = Math.min(top, ay + (by - ay) * j / nS); }
+    }
+    return top;
+  };
+  const lpSegBox = (e) => { try { const r = e.getBBox(); return r.width > 0 ? { x: r.x, y: r.y, w: r.width, h: r.height } : null; } catch (_) { return null; } };
+  const lpSegMeets = (a, b, pad) => a.x - pad < b.x + b.w && b.x < a.x + a.w + pad && a.y - pad < b.y + b.h && b.y < a.y + a.h + pad;
+  /* each part's figure (inside, or beside on a leader) and the page's key - built once, after every label has found its
+     place (the totals, the pill, the ticks), so each is laid against the ink it must not touch */
+  const lpSegBuild = (st, pg, g) => {
+    const u = lpSegU(st), unit = g.unit, pad = u(LPSEG.PAD_PX), fs = g.fs;
+    const inks = [lpVarOn(st.chart, "--lp-char"), lpVarOn(st.chart, "--lp-cream")].filter(Boolean);
+    const lay = lpEl("g", "lp-seg-figs", st.chart);
+    const polys = g.linePolys || [], lpad = u(LPSEG.LINE_CLEAR_PX), sc = u(LPSEG.SCAN_PX);
+    const crossed = (r) => !!polys.length && !!r && lpSegPolyHits(polys, [r], lpad, sc);
+    for (const b of g.bars) {   /* a total the line still crosses (the axis rose to its cap) stands up clear of it, over its own bar */
+      const r = b.segs && b.val ? lpSegBox(b.val) : null;
+      if (!crossed(r)) continue;
+      const topY = lpSegPolyTop(polys, r.x - lpad, r.x + r.w + lpad, sc), dy = r.y + r.h - (topY - lpad);
+      if (dy > 0) b.val.setAttribute("y", (+b.val.getAttribute("y") - dy).toFixed(1));
+    }
+    const rects = [], ink = [];
+    let xrF = g.xr;   /* a leader figure's right bound (the page's inner edge, below) */   /* what a leader figure and the key must not touch: the bars, and every word on the page */
+    for (const b of g.bars) { rects.push({ x: b.x, y: b.end, w: b.bw, h: Math.abs(g.base - b.end) });
+      for (const e of [b.val, b.lab]) { const r = e && e.style.display !== "none" ? lpSegBox(e) : null; if (r) ink.push(r); } }
+    for (const e of g.more || []) { const r = e ? lpSegBox(e) : null; if (r) ink.push(r); }
+    if (st.callout) { const p = st.callout.querySelector("rect.cpill"); if (p) ink.push({ x: +p.getAttribute("x"), y: +p.getAttribute("y"), w: +p.getAttribute("width"), h: +p.getAttribute("height") }); }
+    /* ... the page's own words too (title, sub, source), read into this chart's units off the one screen matrix */
+    try { const M = st.chart.getScreenCTM(), inv = M && M.inverse();
+      if (inv && st.page) for (const el of st.page.querySelectorAll(".lp-title, .lp-sub, .lp-src")) {
+        const r = el.getBoundingClientRect(); if (!(r.width > 0)) continue;
+        const a = new DOMPoint(r.x, r.y).matrixTransform(inv), b = new DOMPoint(r.x + r.width, r.y + r.height).matrixTransform(inv);
+        ink.push({ x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), w: Math.abs(b.x - a.x), h: Math.abs(b.y - a.y) }); }
+      /* ... and the page's own inner edge: a leader figure may stand past the chart's box (a 9:16 chart is narrower than
+         its page) but never past the page, a figure's width of air inside it - on a BARS page; a combo's right column is its axis's */
+      const pr = inv && st.page && g.toPage ? st.page.getBoundingClientRect() : null;
+      if (pr && pr.width > 0) xrF = Math.max(g.xr, new DOMPoint(pr.right, pr.top).matrixTransform(inv).x - u(LPSEG.PAD_PX * 4)); } catch (_) { /* not laid out: the chart's own ink only */ }
+    const obst = { some: (f) => rects.some(f) || ink.some(f) };
+    st.segFigs = [];
+    for (const b of g.bars) {
+      if (!b.segs) continue;
+      const placed = [];
+      for (const s of b.segs) {
+        const text = lpWithUnit(s.vstr != null ? String(s.vstr) : lpFmt(s.value), unit), mid = (s.y0 + s.y1) / 2;
+        const t = lpEl("text", "lp-seg-fig", lay, { x: (b.x + b.bw / 2).toFixed(1), y: mid.toFixed(1), "text-anchor": "middle", "dominant-baseline": "central", opacity: 0 });
+        t.textContent = text; t.style.fontSize = fs.toFixed(2) + "px"; t.style.fontWeight = "700";
+        const w = lpInkW(t), hAv = s.y0 - s.y1 - 2 * pad, on = lfOnInk(lpFillOf(s.el), inks);
+        const q = w > 0 ? Math.min(1, (b.bw - 2 * pad) / w) : 1;   /* a figure a little too wide for its part shrinks to fit it, never under FIG_MIN */
+        let clearIn = q >= LPSEG.FIG_MIN && fs * q * LPSEG.FIG_LINE <= hAv && !!on;
+        if (clearIn) {
+          if (q < 1) t.style.fontSize = (fs * q).toFixed(2) + "px";
+          if (crossed(lpSegBox(t))) {   /* the line crosses it: the figure slides within its own part to the nearest clear height, else it takes its leader */
+            const half = fs * q * LPSEG.FIG_LINE / 2 + pad, ys = [];
+            for (let y = s.y1 + half; y <= s.y0 - half; y += sc) ys.push(y);
+            ys.sort((a, c) => Math.abs(a - mid) - Math.abs(c - mid));
+            clearIn = false;
+            for (const y of ys) { t.setAttribute("y", y.toFixed(1)); if (!crossed(lpSegBox(t))) { clearIn = true; break; } }
+            if (!clearIn) { t.setAttribute("y", mid.toFixed(1)); t.style.fontSize = fs.toFixed(2) + "px"; }
+          }
+        }
+        if (clearIn) {
+          t.style.fill = on.ink;
+          st.segFigs.push({ bar: b.i, j: s.j, el: t, lead: null, inside: true, text }); continue;
+        }
+        /* BESIDE on a leader: the right side unless it would touch the next bar or leave the plot, else the left;
+           a second figure beside one bar steps clear of the first */
+        const col = LP_PAL[s.color] || s.color, gap = u(LPSEG.LEAD_GAP_PX), len = u(LPSEG.LEAD_PX);
+        t.style.fill = col; t.setAttribute("style", t.getAttribute("style") + ";" + LP_HALO);
+        let y0 = mid;
+        for (const q of placed) if (Math.abs(q - y0) < fs * LPSEG.FIG_LINE) y0 = q + (y0 >= q ? 1 : -1) * fs * LPSEG.FIG_LINE;
+        const sides = [["start", b.x + b.bw + gap + len], ["end", b.x - gap - len]];
+        /* both sides, at its height then a step down (away from the total over the bar) or up, at its size then FIG_MIN of it: the first place clear of every
+           bar, word and the line; else the least-overlapping place the line does not cross (T64: the line never crosses a figure) */
+        const cands = [];
+        for (const f of [fs, fs * LPSEG.FIG_MIN]) for (const dy of [0, 1, -1, 2, -2]) for (const sd of sides) cands.push([sd, y0 + dy * f * LPSEG.FIG_LINE, f]);
+        let pick = null, least = null;
+        for (const [sd, yy, f] of cands) { t.style.fontSize = f.toFixed(2) + "px"; t.setAttribute("text-anchor", sd[0]); t.setAttribute("x", sd[1].toFixed(1)); t.setAttribute("y", yy.toFixed(1));
+          const r = lpSegBox(t) || { x: sd[0] === "start" ? sd[1] : sd[1] - w, y: yy - f / 2, w, h: f };
+          const inside = r.x >= g.x0 - 20 && r.x + r.w <= xrF, hitLine = crossed(r);
+          if (inside && !hitLine && !rects.some((o) => lpSegMeets(r, o, u(2))) && !ink.some((o) => lpSegMeets(r, o, u(LPSEG.PAD_PX)))) { pick = [sd, yy, f]; break; }   /* a word's air from every word (never jammed against a total); a bar's edge may stand close */
+          if (inside && !hitLine) { let a2 = 0; obst.some((o) => { a2 += Math.max(0, Math.min(r.x + r.w, o.x + o.w) - Math.max(r.x, o.x)) * Math.max(0, Math.min(r.y + r.h, o.y + o.h) - Math.max(r.y, o.y)); return false; });
+            if (!least || a2 < least.a) least = { a: a2, c: [sd, yy, f] }; } }
+        const [sdP, y, fP] = pick || (least ? least.c : [sides[0], y0, fs]);
+        t.style.fontSize = fP.toFixed(2) + "px"; t.setAttribute("text-anchor", sdP[0]); t.setAttribute("x", sdP[1].toFixed(1)); t.setAttribute("y", y.toFixed(1));
+        const pick2 = sdP;
+        const ex = pick2[0] === "start" ? b.x + b.bw : b.x, tx = pick2[0] === "start" ? pick2[1] - u(4) : pick2[1] + u(4);
+        const lead = lpEl("path", "lp-seg-lead", lay, { d: "M" + ex.toFixed(1) + " " + mid.toFixed(1) + " L" + (ex + (tx - ex) * 0.4).toFixed(1) + " " + y.toFixed(1) + " L" + tx.toFixed(1) + " " + y.toFixed(1), opacity: 0 });
+        lead.style.fill = "none"; lead.style.stroke = col; lead.style.strokeWidth = u(LPSEG.LEAD_W_PX).toFixed(3); lead.style.strokeLinecap = "round";
+        placed.push(y);
+        const r = lpSegBox(t); if (r) ink.push(r);
+        st.segFigs.push({ bar: b.i, j: s.j, el: t, lead, inside: false, text });
+      }
+    }
+    for (const f of st.segFigs) { const r = f.inside ? lpSegBox(f.el) : null; if (r) ink.push(r); }
+    /* a part too thin for its own figure is not a place for another number either: a label over it reads as its figure */
+    const thin = st.segFigs.filter((f) => !f.inside).map((f) => { const b = g.bars.find((q) => q.i === f.bar), sg = b.segs[f.j];
+      return { x: b.x, y: sg.y1, w: b.bw, h: sg.y0 - sg.y1 }; });
+    const parts = g.bars.filter((b) => b.segs).flatMap((b) => b.segs.map((sg) => ({ x: b.x, y: sg.y1, w: b.bw, h: sg.y0 - sg.y1 })));
+    if (g.clear) ink.push(...g.clear(ink.concat(thin), parts, g.bars));   /* the combo: its line's labels step clear of every figure and word, before the key is laid */
+    st.segKey = lpSegKey(st, (pg.segment_key || []).concat(g.lineKey ? [g.lineKey] : []), g, obst);
+    st.segs = { bars: g.bars.filter((b) => b.segs), figs: st.segFigs, key: st.segKey };
+  };
+  /* THE KEY: one row, in the stack's order (bottom part first), each a swatch in its colour and the part's name in the
+     label ink; laid over the plot's head - left, then right, then one line higher, at its size or down to KEY_MIN of it
+     - wherever it touches no bar, total, pill, figure, axis name or the chart's own edge */
+  const lpSegKey = (st, key, g, obst) => {
+    if (!key.length) return null;
+    const u = lpSegU(st), G = st.geom || { W: 1000, H: 560 };
+    const el = lpEl("g", "lp-seg-key", st.chart, { opacity: 0 });
+    const items = key.map((k) => {
+      const sw = lpEl("rect", "lp-seg-sw" + (k.line ? " lp-seg-sw-line" : ""), el, { rx: u(3).toFixed(2) }); sw.style.fill = LP_PAL[k.color] || k.color;
+      if (k.line) sw.dataset.line = "1";   /* the combo's line: a stroke in its ink, as it is drawn */
+      const tx = lpEl("text", "lp-seg-name", el, { "dominant-baseline": "central" }); tx.textContent = k.name; tx.style.fill = LPSEG_INK.KEY;
+      return { sw, tx };
+    });
+    const layAt = (x, yc, f, anchorEnd) => {
+      const sw = u(LPSEG.KEY_SW_PX) * f / g.fs0, gapI = u(LPSEG.KEY_ITEM_PX) * f / g.fs0;
+      let cx = x;
+      for (const it of items) { it.tx.style.fontSize = f.toFixed(2) + "px"; }
+      const widths = items.map((it) => sw + 0.4 * f + lpInkW(it.tx));
+      const total = widths.reduce((a, b) => a + b, 0) + gapI * (items.length - 1);
+      if (anchorEnd) cx = x - total;
+      items.forEach((it, j) => {
+        const lh = it.sw.dataset.line ? u(LPSEG.KEY_LINE_W_PX) * f / g.fs0 : sw;
+        it.sw.setAttribute("x", cx.toFixed(1)); it.sw.setAttribute("y", (yc - lh / 2).toFixed(1));
+        it.sw.setAttribute("width", sw.toFixed(1)); it.sw.setAttribute("height", lh.toFixed(1));
+        it.tx.setAttribute("x", (cx + sw + 0.4 * f).toFixed(1)); it.tx.setAttribute("y", yc.toFixed(1));
+        cx += widths[j] + gapI;
+      });
+      const r = lpSegBox(el); if (!r) return true;
+      if (r.x < 0 || r.x + r.w > G.W || r.y < 0) return false;
+      return !obst.some((o) => lpSegMeets(r, o, u(4)));
+    };
+    const f0 = g.fs0;
+    const y1 = g.keyY != null ? g.keyY : g.top - u(LPSEG.KEY_GAP_PX) - f0 * 0.6;   /* the combo lays it a row over its two axis names */
+    for (const q of [1, 0.85, LPSEG.KEY_MIN]) {
+      const f = f0 * q;
+      for (const [x, end, y] of [[g.x0 - 20, false, y1], [g.xr, true, y1], [g.x0 - 20, false, y1 - f * 1.4], [g.xr, true, y1 - f * 1.4],
+                                 ...(g.below != null ? [[g.x0 - 20, false, g.below + f * 0.6]] : [])])   /* ... else under the x labels */
+        if (layAt(x, y, f, end)) return el;
+    }
+    layAt(g.x0 - 20, y1, f0, false);   /* nowhere clear: over the plot's head, where a key is read first */
+    return el;
+  };
+  /* EVERY FRAME, after every painter: each part is its bar as drawn now (grown, faded, drained, moved) - and each figure
+     lands with its bar's own value (the bars law's 0.9 - 1.0 of the grow), the key with the first stack's */
+  const lpSegPaint = (S) => {
+    const G = S && S.segs; if (!G) return;
+    let keyOp = 0;
+    const byBar = new Map();
+    for (const b of G.bars) {
+      const bar = b.bar, opA = bar.getAttribute("opacity"), ta = bar.getAttribute("transform");
+      const op = (bar.style.opacity === "" ? 1 : +bar.style.opacity) * (opA == null ? 1 : +opA) * (bar.style.visibility === "hidden" || bar.style.display === "none" ? 0 : 1);
+      for (const s of b.segs) {
+        const r = s.el;
+        r.style.transformOrigin = bar.style.transformOrigin; r.style.transform = bar.style.transform;
+        if (ta) r.setAttribute("transform", ta); else r.removeAttribute("transform");
+        r.style.opacity = bar.style.opacity; if (opA == null) r.removeAttribute("opacity"); else r.setAttribute("opacity", opA);
+        r.style.display = bar.style.display; r.style.visibility = bar.style.visibility;
+      }
+      const m = /scaleY\(([-\d.e]+)\)/.exec(bar.style.transform || ""), k = m ? +m[1] : 1;
+      const a = clamp01((k - 0.9) / 0.1) * op;
+      byBar.set(b.i, a); keyOp = Math.max(keyOp, a);
+    }
+    for (const f of G.figs) { const a = (byBar.get(f.bar) || 0).toFixed(3); f.el.setAttribute("opacity", a); if (f.lead) f.lead.setAttribute("opacity", a); }
+    if (G.key) G.key.setAttribute("opacity", keyOp.toFixed(3));
+  };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
@@ -10206,6 +10422,7 @@ async function mount(doc) {
       if (dcol) bar.style.fill = dcol;
       if (dcol && ex) ex.tint(dcol);   /* P58 T5: the prism's faces are the bar's OWN ink at a ratio - a declared colour rules them too */
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
+      const segs = Array.isArray(pg.segments) && Array.isArray(pg.segments[i]) ? lpSegRects(st, pg.segments[i], { x, bw, base, my, rx: SOFT || 6 }) : null;   /* P69 T64: the stack, under the labels */
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + XLAB, "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
       const vy = neg ? base + hr + (P ? 62 : 26) : base - hr - (P ? 22 : 14);   /* a range's value stands over its band's far end (hr: h without one) */
@@ -10214,6 +10431,7 @@ async function mount(doc) {
       const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + hr : base - hr, over, v, bx: x, bw, track, stamp, ex };
       if (foot) rec.foot = foot;
       if (band) { rec.band = band; rec.range = rg; }
+      if (segs) rec.segs = segs;   /* P69 T64 */
       if (over && btMode === "stack") {   /* the top gridline SNAPS as the bar passes: its two broken ends kick up beside the bar */
         const mk = (ax, bx2) => lpEl("line", "grid snap", st.chart, { x1: ax.toFixed(1), y1: top.toFixed(1), x2: bx2.toFixed(1), y2: (top - 16).toFixed(1), stroke: "var(--lp-chalk)", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 });
         rec.snap = [mk(x - 4, x - 24), mk(x + bw + 4, x + bw + 24)];
@@ -10363,6 +10581,8 @@ async function mount(doc) {
     if (capped) for (const b of st.bars) lpWrapBarLabel(b.lab, b.bw);   /* P69 T6c: a name wider than its capped bar takes two lines */
     st.tickFit = lpFitTicks(st);   /* R26-191b law 3, last: the callout's axis mount may have moved a month */
     if (Array.isArray(pg.members)) lpMemberBuild(st, pg, { base, P, LF, x0, x1 });   /* P69 T45: the membership tiles, in their bars */
+    if (st.bars.some((b) => b.segs)) lpSegBuild(st, pg, { base, top, x0, xr: x1 + 20, toPage: true, unit, below: bottom + XLAB + (P ? 40 : LF ? LF.tick : 26) * 0.6, fs: LF ? LF.value : P ? 44 : 26, fs0: LF ? LF.tick : P ? 40 : 22,
+      bars: st.bars.map((b) => ({ i: b.i, bar: b.bar, x: b.bx, bw: b.bw, end: b.end, val: b.val, lab: b.lab, segs: b.segs || null })) });   /* P69 T64: each part's figure, and the key */
   };
   /* THE FIELD'S INK (E67, operator 2026-09-12): "we need to use bolder primary, high-contrast line colors for our default
      the chart instead of gray. that way our charts can become our thumbnails, i think this is part of why bravos uses
@@ -11204,7 +11424,13 @@ async function mount(doc) {
        lines' time axis; the lines take their OWN scale on a right axis with unit ticks; their points are registered so a
        bracket can measure them (the +80 bp on the ring). */
     const n = Math.max(1, st.vals.length), unit = lpUnit(pg), P = !!st.portrait;
-    const vmax = Math.max(0, ...st.vals.map((v) => +v)), vmin = Math.min(0, ...st.vals.map((v) => +v)), span = Math.max(1e-9, vmax - vmin) * 1.12;
+    /* P69 T64 (E99 s110 (1) + s102): STACKED bars under ONE line - the line on its OWN right axis only when its unit is not
+       the stacks' (both axes named, the right one in the line's colour), else on the stacks' own scale. No segments:
+       the combo it was, to the byte. */
+    const SEG = Array.isArray(pg.segments) && pg.segments.some(Boolean) ? pg.segments : null;
+    const own = !SEG || !!(pg.line_unit && pg.line_unit !== (pg.unit || ""));
+    const shared = own ? [] : (pg.series || []).flatMap((q) => (q.pts || []).map((p) => +p[1]));
+    const vmax = Math.max(0, ...st.vals.map((v) => +v), ...shared), vmin = Math.min(0, ...st.vals.map((v) => +v), ...shared), span = Math.max(1e-9, vmax - vmin) * 1.12;
     const top = 110, bot = 470, x0 = 96;
     let x1 = (pg.series || []).some((q) => q.pts && q.pts.length) ? 806 : 880;   /* the lines' right axis needs its own margin */
     /* TIERS (the macro-chart intake, 2026-09-07 - Cleveland & McGill's common-scale rule and the Economist's shared-x
@@ -11224,17 +11450,20 @@ async function mount(doc) {
     const slotW = (x1 - x0) / n, bw = Math.min(slotW * 0.62, barsIn.length && barsIn[0] && barsIn[0].x != null ? (x1 - x0) / Math.max(1, (xb - xa) * 12) * 0.62 : slotW * 0.62);
     const cx = (i) => (barsIn[i] && barsIn[i].x != null && xb > xa) ? x0 + (+barsIn[i].x - xa) / (xb - xa) * (x1 - x0) : x0 + slotW * (i + 0.5);
     lpYTicks(st, vmin * 1.12, vmax * 1.12, bmy, x0 - 20, x1 + 20, unit, x0 - 30, tiers ? 3 : 5);   /* a short band wants fewer ticks */
-    lpYLabel(st, pg, x0 - 20, (tiers ? barTop : top) - 16);   /* the unit belongs to the band it measures */
+    const yl = lpYLabel(st, pg, x0 - 20, (tiers ? barTop : top) - 16);   /* the unit belongs to the band it measures */
     const bars = st.vals.map((v, i) => {
       const h = Math.max(3, Math.abs(+v) / span * (barBot - barTop)), emph = i === st.emph, neg = +v < 0;
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (emph ? " emph" : ""), st.chart, { x: (cx(i) - bw / 2).toFixed(1), y: (neg ? base : base - h).toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 5 });
       bar.style.transformOrigin = "0 " + base + "px"; bar.style.transform = "scaleY(0)";
+      const segs = SEG && Array.isArray(SEG[i]) ? lpSegRects(st, SEG[i], { x: cx(i) - bw / 2, bw, base, my: bmy, rx: 5 }) : null;   /* P69 T64: the stack, under the labels */
       const lab = lpText(st.chart, "lab", cx(i), barBot + 34, "middle", String((pg.labels || [])[i] ?? ""), { opacity: 0 });
       const valY = neg ? Math.min(base + h + (P ? 30 : 26), barBot - 8) : base - h - 14;   /* a drop's value sits under its bar, never on the month labels */
-      const tells = emph || Math.abs(+v) >= LPX.COMBO_LABEL_SHARE * Math.max(1e-9, ...st.vals.map((q) => Math.abs(+q)));   /* E52: the chart reads without printing every number */
-      const val = tells ? lpText(st.chart, "val", cx(i), valY, "middle", st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v),
-        { opacity: 0, style: LP_HALO + (emph ? "fill:#F5B72E;font-size:30px;font-weight:700" : "") }) : null;
+      const tells = !!segs || emph || Math.abs(+v) >= LPX.COMBO_LABEL_SHARE * Math.max(1e-9, ...st.vals.map((q) => Math.abs(+q)));   /* E52: the chart reads without printing every number (T64: a stack's TOTAL is always written, s100) */
+      const vtx = st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v);
+      const val = tells ? lpText(st.chart, "val", cx(i), valY, "middle", segs ? lpWithUnit(vtx, unit) : vtx,   /* T64: a stack's total carries its unit, as its parts do */
+        { opacity: 0, style: LP_HALO + (emph ? "fill:#F5B72E;font-size:30px;font-weight:700" : "") + (segs && P ? ";font-size:44px" : "") }) : null;   /* T64: at 9:16 a stack's total at its figures' size, so the line's labels find room */
       const rec = { bar, lab, val, valY: tells ? valY : -1e9, cx: cx(i) };
+      if (segs) { rec.segs = segs; rec.end = neg ? base + h : base - h; }   /* P69 T64 */
       lpMark(st, "b:" + i, "bar", bar, { x: cx(i) - bw / 2, y: neg ? base : base - h, w: bw, h, base, cx: cx(i), end: neg ? base + h : base - h, neg, v: +v }, rec);
       lpMark(st, "xlab:" + i, "xlabel", lab, { x: cx(i), y: barBot + 34 });
       if (val) lpMark(st, "val:b:" + i, "value", val, { x: cx(i), y: valY, v: +v });
@@ -11242,17 +11471,46 @@ async function mount(doc) {
     });
     const cxOf = (b) => b.cx;
     const pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
-    const ly = (v) => lineBot - (+v - lo) / (hi - lo) * (lineBot - lineTop);   /* the lines' own band: no zero is faked, no gridline is fought */
+    if (SEG && own && lo + pad >= 0) lo = 0;   /* P69 T64: a stacked combo's own line axis stands on zero, the stacks' zero (a share read from nothing, E28) */
+    /* P69 T64 (the parent's frame read, 2026-09-24: the line ran through the Q1 '26 total): a stacked combo's line never
+       crosses a written total. Its OWN axis's top rises in AX_STEP of its span (to AX_MAX times it) until the line's path,
+       as drawn, clears every total's box - so each total stays where it is read, over its own bar, and the scale that
+       moved is written on the page (its ticks relabel). Past the cap the total itself stands clear (lpSegBuild). */
+    if (SEG && own && !tiers) {
+      const tb = bars.filter((b) => b.segs && b.val).map((b) => lpSegBox(b.val)).filter(Boolean), uu = lpSegU(st);
+      const at = (s2, x, k) => s2.pts.length === n ? cx(k) : x0 + (+x - xa) / (xb - xa || 1) * (x1 - x0);
+      const hits = (h2) => lpSegPolyHits(series.map((s2) => s2.pts.map(([x, v], k) => [at(s2, x, k), lineBot - (+v - lo) / (h2 - lo) * (lineBot - lineTop)])),
+        tb, uu(LPSEG.LINE_CLEAR_PX), uu(LPSEG.SCAN_PX));
+      const h0 = hi;
+      for (let k = 1; hits(hi) && k <= (LPSEG.AX_MAX - 1) / LPSEG.AX_STEP; k++) hi = h0 + (h0 - lo) * LPSEG.AX_STEP * k;
+    }
+    const ly = own ? (v) => lineBot - (+v - lo) / (hi - lo) * (lineBot - lineTop) : bmy;   /* the lines' own band: no zero is faked, no gridline is fought (T64: a line in the stacks' unit IS on their scale) */
     /* the lines' own axis, on the right, with the unit (pg.line_unit, else the first line's unit, else none) */
     const lunit = pg.line_unit != null ? pg.line_unit : "";
-    { const step = lpNiceStep(Math.max(1e-9, (hi - lo) / (tiers ? 2 : 4)));
+    const lcol = SEG ? LP_PAL[(series[0] || {}).color] || LP_PAL[LP_CYCLE[0]] : null;   /* P69 T64 / s102 (c): the right axis in its line's own colour */
+    const y2t = [];   /* T64: the right axis's words, which the line's labels and the key must not touch */
+    if (own) { const step = lpNiceStep(Math.max(1e-9, (hi - lo) / (tiers ? 2 : 4)));
       for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
         const v = Math.abs(tv) < step * 1e-6 ? 0 : tv;
         if (tiers) lpEl("line", "grid", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: ly(v).toFixed(1), y2: ly(v).toFixed(1) });   /* its own band, its own grid: the bands never overlap, so no prison bars */
-        else lpText(st.chart, "lab", x1 + 14, ly(v) + (P ? 14 : 8), "start", lpWithUnit(lpTick(v), lunit), { style: "fill:#aeb6be" });
+        else { const tk = lpText(st.chart, "lab" + (lcol ? " lp-y2" : ""), x1 + 14, ly(v) + (P ? 14 : 8), "start", lpWithUnit(lpTick(v), lunit), { style: "fill:" + (lcol || "#aeb6be") });
+          if (SEG) y2t.push(tk); }
       }
       /* the tier's scale is written ONCE, on its top gridline, instead of a whole second axis - the terminal labels carry the rest */
       if (tiers) lpText(st.chart, "lab", x0 - 30, ly(Math.floor(hi / step) * step) + (P ? 14 : 8), "end", lpWithUnit(lpTick(Math.floor(hi / step) * step), lunit), { style: "fill:#aeb6be" }); }
+    /* P69 T64 / s102 (b): the right axis NAMES its unit, over its ticks in its line's colour (kept inside the chart) */
+    const yl2 = SEG && own && pg.line_label ? lpText(st.chart, "lab lp-y2-name", x1 + 14, (tiers ? barTop : top) - 16, "start", String(pg.line_label),
+      { style: "font-size:" + (P ? 40 : 22) + "px;fill:" + lcol }) : null;
+    if (yl2 && y2t.length) {   /* T64: the name stands on a line of its own, NAME_GAP_PX clear of the axis's top tick */
+      const nb = lpSegBox(yl2), tt = y2t.map(lpSegBox).filter(Boolean), gapN = lpSegU(st)(LPSEG.NAME_GAP_PX);
+      const tickTop = tt.length ? Math.min(...tt.map((r) => r.y)) : Infinity;
+      if (nb && nb.y + nb.h > tickTop - gapN) yl2.setAttribute("y", (+yl2.getAttribute("y") - (nb.y + nb.h - (tickTop - gapN))).toFixed(1));
+    }
+    let nameRow = 0;   /* T64: when the two axis names meet on one row, the right one steps up a row (and the key over it) */
+    if (yl2) { const r = lpSegBox(yl2), W = st.geom ? st.geom.W : 1000; if (r && r.x + r.w > W - 4) { yl2.setAttribute("text-anchor", "end"); yl2.setAttribute("x", (W - 4).toFixed(1)); }
+      const a = yl ? lpSegBox(yl) : null, b2 = lpSegBox(yl2), fz = P ? 40 : 22;
+      if (a && b2 && lpSegMeets(a, b2, lpSegU(st)(12))) { nameRow = 1; yl2.setAttribute("text-anchor", "end"); yl2.setAttribute("x", (W - 4).toFixed(1));
+        yl2.setAttribute("y", (+yl2.getAttribute("y") - fz * 1.3).toFixed(1)); } }
     const lines = series.map((s, si) => {
       const aligned = s.pts.length === n, lx = (x, k) => aligned ? cx(k) : x0 + (+x - xa) / (xb - xa || 1) * (x1 - x0);   /* one point per bar sits on the bar */
       const pts = s.pts.map(([x, v], k) => [lx(x, k), ly(v), v]), col = LP_PAL[s.color] || LP_PAL[LP_CYCLE[si % LP_CYCLE.length]];   /* E67: undeclared takes the cycle by index - teal, then the orange */
@@ -11264,18 +11522,19 @@ async function mount(doc) {
       /* s9.23b: direct labels never overprint - a label that would land on its bar's value stacks above it instead */
       const labels = pts.map(([x, y], k) => {
         const by = aligned ? bars[k].valY : -1e9, ly0 = y - 18, yy = Math.abs(ly0 - by) < 32 ? by - (k === st.emph ? 38 : 30) : ly0;
-        return lpText(st.chart, "val", x, yy, "middle", "", { opacity: 0, style: LP_HALO + "fill:" + col + ";font-size:24px" });
+        return lpText(st.chart, "val", x, yy, "middle", "", { opacity: 0, style: LP_HALO + "fill:" + col + ";font-size:" + (SEG && P ? 36 : 24) + "px" });   /* T64: a stacked combo's labels read at 9:16 */
       });
       const last = pts[pts.length - 1];   /* the inline name: right of the last point when there is room, else above it, ending at it.
          A combo whose SUB names the lines by colour carries no inline name at all - it would repeat the sub and land in the bars
          (the fourth watch: "we need better handling on text/labels"); the sub is the legend and a bracket carries the number. */
       /* the intake (Economist / Axios): a DETACHED legend is the sin, a TERMINAL label is the cure. In tiers the line band has
          no right axis, so the label sits just past the line's end; on one plot it keeps the old rule. */
-      const room = tiers || x1 + 200 <= (st.geom ? st.geom.W : 1000), quiet = !!pg.legend_in_sub;
+      const room = tiers || x1 + 200 <= (st.geom ? st.geom.W : 1000), quiet = !!pg.legend_in_sub || !!SEG;   /* T64: a stacked combo names its line in the page's ONE key */
       const name = lpText(st.chart, "sname", room ? last[0] + (tiers ? 12 : 44) : last[0], room ? last[1] + 8 : last[1] - 26, room ? "start" : "end", quiet ? "" : (s.label ? s.label + " " : "") + (s.name || ""),
         { opacity: 0, style: LP_HALO + "fill:" + col + (tiers ? ";font-size:" + (P ? 30 : 19) + "px" : "") });   /* the gutter's label is a tag, not a headline */
       st.linePts.push(pts.map(([x, y]) => [x, y]));   /* the species' targets (a bracket on a line) */
       const rec = { p, len, dot, labels, name, pts, ny: room ? last[1] + 8 : last[1] - 26 };
+      if (SEG) rec.unit = own ? lunit : unit;   /* T64: its labels carry their axis's unit */
       lpMark(st, "s" + si, "line", p, { pts: pts.map(([x, y]) => [x, y]), vals: pts.map(([, , v]) => +v), len, k0: 0, muted: false, col }, rec);
       return rec;
     });
@@ -11295,6 +11554,43 @@ async function mount(doc) {
     for (const ln of lines) if (ln.pts.length > 2 * n) for (const lb of ln.labels) lb.remove(), ln.labels = [];
     st.combo = { bars, lines }; st.buildDur = LPX.COMBO_BUILD; st.paint = paintLedgerCombo;
     st.plot = { L: x0, R: st.geom ? st.geom.W - x1 : 1000 - x1, T: top, B: bot, W: st.geom ? st.geom.W : 1000, x0: xa, x1: xb, y0: lo, y1: hi, log: false };
+    if (SEG) st.segNames = [yl, yl2].filter(Boolean);   /* T64: the two axis names (a probe reads them against the line) */
+    if (SEG) for (const b of bars) if (b.segs && b.val) st.chart.appendChild(b.val);   /* T64: a stack's total over the line - its halo cuts the line where it passes */
+    if (SEG) lpSegBuild(st, pg, { base, top, x0, xr: x1 + 6, unit, fs: P ? 30 : 24, fs0: P ? 40 : 22, below: barBot + 34 + (P ? 40 : 26) * 0.6,   /* P69 T64: each part's figure, and the key */
+      bars: bars.map((b, i) => ({ i, bar: b.bar, x: b.cx - bw / 2, bw, end: b.end, val: b.val, lab: b.lab, segs: b.segs || null })),
+      more: [yl, yl2, ...y2t], keyY: Math.min((tiers ? barTop : top) - 16 - (P ? 40 : 22) * (1.5 + 1.3 * nameRow),
+        yl2 && lpSegBox(yl2) ? lpSegBox(yl2).y - lpSegU(st)(LPSEG.KEY_GAP_PX) - (P ? 40 : 22) * 0.6 : Infinity),
+      linePolys: lines.map((ln) => ln.pts.map(([x, y]) => [x, y])), lineKey: series.length ? { name: String(series[0].name || series[0].label || ""), color: series[0].color || LP_CYCLE[0], line: true } : null,
+      clear: (ink, parts, bs) => lpSegClearLabels(st, lines, ink, P, parts, bs) });
+  };
+  /* P69 T64: each of the stacked combo's line labels, at its final figure, takes the first place by its point - over it,
+     under it, then further out - that touches no part's figure, total, name or axis word (s9.23b: a label never
+     overprints); its halo keeps it legible where it crosses a part */
+  const lpSegClearLabels = (st, lines, ink, P, parts, bs) => {
+    const u = lpSegU(st), out = [];
+    const inPart = (q, x, y) => x >= q.x && x <= q.x + q.w && y >= q.y && y <= q.y + q.h;
+    for (const ln of lines) ln.labels.forEach((lb, k) => {
+      const [px, py, v] = ln.pts[k], d = P ? 1.4 : 1, side = (P ? 22 : 16);
+      lb.textContent = lpWithUnit(String(v), ln.unit || "");
+      /* over the point, beside it (right, then left, on its own height), under it, then further out */
+      const own = ln.pts.length === (bs || []).length ? bs[k] : null, gap = u(LPSEG.LEAD_GAP_PX) * 2;   /* the point's own bar (one point per bar) */
+      const cands = [[px, py - 18 * d, "middle"], [px + side, py + 8 * d, "start"], [px - side, py + 8 * d, "end"],
+                     ...(own ? [[own.x + own.bw + gap, py + 8 * d, "start"], [own.x - gap, py + 8 * d, "end"],   /* ... in the gap beside its bar, */
+                                [own.x + own.bw + gap, py + 40 * d, "start"], [own.x - gap, py + 40 * d, "end"]] : []),   /* level with it, then a step under */
+                     [px, py + 34 * d, "middle"], [px, py - 50 * d, "middle"], [px, py + 66 * d, "middle"], [px, py - 82 * d, "middle"]];
+      let got = null, least = null;
+      const over = (r) => ink.concat(out).reduce((a, o) => a + Math.max(0, Math.min(r.x + r.w, o.x + o.w) - Math.max(r.x, o.x)) * Math.max(0, Math.min(r.y + r.h, o.y + o.h) - Math.max(r.y, o.y)), 0);
+      for (const [xx, yy, an] of cands) { lb.setAttribute("x", xx.toFixed(1)); lb.setAttribute("y", yy.toFixed(1)); lb.setAttribute("text-anchor", an);
+        const r = lpSegBox(lb); if (!r) continue;   /* ... and a part that does not hold its own point is not its place (it would read as that part's figure) */
+        const foreign = (parts || []).some((q) => lpSegMeets(r, q, 0) && !inPart(q, px, py));
+        if (!ink.concat(out).some((o) => lpSegMeets(r, o, u(3))) && !foreign) { got = r; break; }
+        const a = over(r); if (!foreign && (!least || a < least.a)) least = { a, xx, yy, an }; }
+      if (!got) {   /* nowhere clear: the place it overlaps least (never a foreign part), else over its point */
+        const L = least || { xx: px, yy: py - 18 * d, an: "middle" };
+        lb.setAttribute("x", L.xx.toFixed(1)); lb.setAttribute("y", L.yy.toFixed(1)); lb.setAttribute("text-anchor", L.an); got = lpSegBox(lb); }
+      if (got) out.push(got);
+    });
+    return out;
   };
   const paintLedgerCombo = (st, c) => {
     const C = st.combo, nb = C.bars.length;
@@ -11314,7 +11610,8 @@ async function mount(doc) {
       ln.labels.forEach((lb, k) => {
         const r = clamp01((g - k / m) / 0.12);   /* appears as the dot arrives, counts to the token */
         lb.setAttribute("opacity", clamp01(r / 0.2).toFixed(2));
-        lb.textContent = r >= 1 ? String(ln.pts[k][2]) : lpFmt(+ln.pts[k][2] * pow2out(r));
+        const tx = r >= 1 ? String(ln.pts[k][2]) : lpFmt(+ln.pts[k][2] * pow2out(r));
+        lb.textContent = ln.unit != null ? lpWithUnit(tx, ln.unit) : tx;   /* P69 T64: a stacked combo's labels in their axis's unit */
       });
       ln.name.setAttribute("opacity", clamp01((g - 1) / 0.05).toFixed(2));
     });
@@ -15544,6 +15841,7 @@ async function mount(doc) {
        opacity with the base-axis reveal above. */
     paintPerform(st, scene, t, pg);
     for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b */
+    for (const S of st.states || [st]) if (S.segs) lpSegPaint(S);   /* P69 T64: each stack mirrors its bar */
     paintSurfaceFrame(st, frame);
     page.dataset.surfaceProgress = String(frame.progress);
   };
@@ -15774,6 +16072,7 @@ async function mount(doc) {
     lpShedPrisms(st, scene, t, pg);   /* P61 T4a: ... and the prisms come apart in that same drain - AFTER it, so the drain's particle cache is always taken from faces at home */
     if (scene.prop_morphs) lpPropMorphPaint(el, st, scene, t);   /* P69 T26e: props and marks becoming each other - BEFORE the soft bars read the marks */
     for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b: the soft bars' feet and shadows, off what every painter wrote at t */
+    for (const S of st.states || [st]) if (S.segs) lpSegPaint(S);   /* P69 T64: ... and each stack, off its bar as drawn at t */
   };
 
   /* ================= P69 T26f / E99 s108 - THE PAGE'S CHROME IS OBJECTS =================

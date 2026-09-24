@@ -3942,6 +3942,77 @@ SURFACES.update({"broken-axis-two-eras": broken_axis_two_eras})
 FRAME_T.update({"broken-axis-two-eras": BROKEN_BUILD_T0 + BROKEN_BUILD_S + 1.6})   # both eras drawn and tagged (7.4), held
 
 
+# ---- P69 T64 / E99 s110 (1): THE STACKED BAR OF VALUES, AND THE STACKED-BAR-PLUS-LINE COMBO ---------------------------
+#   stacked-combo-funding  Steel and Paper H's row 17 ("the arithmetic"): the five biggest builders' operating cash in the
+#                          first quarter of each year, each bar STACKED - what cash capital spending took, and what was
+#                          left - with the capex share of that cash as ONE line over the stacks on its OWN labelled right
+#                          axis (%, in the line's colour; the bars' axis in US$ billions): 44 % -> 65 % -> 94 %
+#   stacked-outlays        a bars page of ONE stacked bar: federal outlays, October-August of fiscal 2026 - what revenue
+#                          paid for and what was borrowed (the deficit), the total written over the bar
+# Both are READ off committed objects, never re-typed: ev-capex-funding-v1's two filed series (Epoch AI - "what was left"
+# and "the share" are those two series' arithmetic, said in the source line) and cbo-interest-revenue's CBO facts. No
+# revenue or debt-funded split exists on disk for the builders (the plan's "cash-funded / debt-funded with the revenue
+# line"), so the golden draws the nearest real pair and the source line says what was computed.
+STACKED_FUNDING = MEMBERS_FUNDING
+STACKED_OUTLAYS = MEMBERS_OBJECTS / "american-debt-trap/evidence/objects/cbo-interest-revenue.series.json"
+STACKED_QUARTERS = ((2024.125, "Q1 2024"), (2025.125, "Q1 2025"), (2026.125, "Q1 2026"))   # the first quarter of each year
+
+
+def stacked_funding_series() -> dict:
+    obj = json.loads(STACKED_FUNDING.read_text(encoding="utf-8"))
+    by = {s.get("name"): {round(x, 3): y for x, y in s["pts"]} for s in obj["series"] if s.get("name")}
+    ocf, capex = by["CASH FROM OPERATIONS"], by["CASH CAPEX"]
+    bars, share = [], []
+    for x, label in STACKED_QUARTERS:
+        cash, spent = ocf[x], capex[x]
+        bars.append({"label": label, "value": cash, "color": "deemph",
+                     "segments": [{"name": "Cash capex", "value": spent, "color": "crimson"},
+                                  {"name": "Left over", "value": round(cash - spent, 1), "color": "deemph"}]})
+        share.append([x, round(100 * spent / cash)])
+    return {"title": "Who pays for the steel",
+            "sub": "The five biggest builders' cash from operations, first quarter of each year: what capital spending "
+                   "took, what was left - and the share it took",
+            "src": "Epoch AI (Jun 2026), filings: " + obj["src"].split(" - ")[1].split(";")[0] + "; the rest: our arithmetic",
+            "unit": "$", "ylabel": "US$ billions per quarter", "line_unit": "%", "line_label": "capex, % of cash",
+            "bars": bars, "series": [{"name": "CAPEX SHARE", "label": "", "color": "teal", "pts": share}]}
+
+
+def stacked_outlays_series() -> dict:
+    f = json.loads(STACKED_OUTLAYS.read_text(encoding="utf-8"))["facts"]
+    return {"title": "Where the spending came from",
+            "sub": "Federal outlays, October-August of fiscal 2026, US$ billions: what revenue paid for, and what was borrowed",
+            "src": "CBO Monthly Budget Review, September 9, 2026, Tables 1 and 3 (preliminary)",
+            "unit": "$",
+            "bars": [{"label": "Outlays", "value": f["outlays_usd_billions"], "color": "deemph",
+                      "segments": [{"name": "Paid by revenue", "value": f["revenue_usd_billions"], "color": "teal"},
+                                   {"name": "Borrowed", "value": f["deficit_usd_billions"], "color": "crimson"}]}]}
+
+
+def _stacked_page(series: dict, emphasize: int | None, title: str) -> tuple[dict, dict]:
+    """A stacked page through the compiler's own path: validated, built, stamped full stage."""
+    import build_scene_timeline_f as BST
+    assert LPG.validate(series, "bars") == [], LPG.validate(series, "bars")
+    page = BST.stamp_full_stage(LPG.build_spec(series, "bars", emphasize, "right"))
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    BST.check_segments(world, [])
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline(title, scenes, {}, None), _base_uris()
+
+
+def stacked_combo_funding() -> tuple[dict, dict]:
+    return _stacked_page(stacked_funding_series(), None,
+                         "Golden: stacked bars of operating cash with the capex share on its own labelled axis")
+
+
+def stacked_outlays() -> tuple[dict, dict]:
+    return _stacked_page(stacked_outlays_series(), 0, "Golden: one stacked bar - what revenue paid for, what was borrowed")
+
+
+SURFACES.update({"stacked-combo-funding": stacked_combo_funding, "stacked-outlays": stacked_outlays})
+FRAME_T.update({"stacked-combo-funding": 12.0,   # the stacks stood (7.4), the line drawn and its three shares written, held
+                "stacked-outlays": 12.0})        # the bar stood, both parts' figures, the total's pill and the key written, held
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:
