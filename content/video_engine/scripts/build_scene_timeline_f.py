@@ -6630,6 +6630,11 @@ STAMP_LAND_DEG = -9        # kinetics/stopaction.mjs STAMP_ARRIVAL.LAND_DEG: the
 # plate with no room - never a refusal: the frame read and the operator judge. THE ONE PLACEMENT REFUSAL LEFT: a prop
 # (or a move's box) WHOLLY OFF THE STAGE - it cannot be seen. A dock that authors none of it compiles byte-identical.
 PROP_POSE_OPTS = ("place", "rot", "moves")
+# R26-298: the compiled dock's record of the AUTHORED `place` / `moves` (the `place` and `moves` it carries are the derived
+# pixel boxes); `rot` needs none - the compiled dock carries the authored resting angle itself. derive_beat_moves copies
+# these back as the options `place` / `moves`; the player never reads them.
+AUTHORED_PLACE_KEY = "authored_place"
+AUTHORED_MOVES_KEY = "authored_moves"
 PROP_PLACE_KEYS = ("x", "y", "w")
 PROP_MOVE_KEYS = ("at", "x", "y", "w", "rot", "dur", "ease")
 PROP_MOVE_EASES = ("minjerk", "cubic", "linear", "out")   # the engine's `propMoveEase`: minJerk (the default - E45's park), ease-in-out cubic, linear, expo-out
@@ -8658,7 +8663,8 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                paint: list | None = None,
                rid: str | None = None, read_moved: dict | None = None, read_deferred: bool = False,
                embed: dict | None = None, cutout: bool = False, depth: float | None = None,
-               rot: float | None = None, moves: list | None = None, handed: bool = False) -> dict:
+               rot: float | None = None, moves: list | None = None, handed: bool = False,
+               authored_place: dict | None = None, authored_moves: list | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -8705,6 +8711,12 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         # P69 T26d / E99 s106: a PROP's authored resting angle and its moves after it lands (whole canvas boxes in stage
         # px, `prop_moves`). Written only when the row authors them, so every other entry is byte-for-byte what it was.
         **({"rot": round(float(rot), 3)} if rot is not None else {}), **({"moves": moves} if moves else {}),
+        # R26-298: ... and what the AUTHOR wrote for them - `place` {x, y, w} and `moves` in stage fractions, verbatim -
+        # beside the derived pixel boxes, so a plan read back from the cut (derive_beat_moves) keeps the prop's authored
+        # place and moves. The player never reads these keys. Written only when the row authors them, so every other
+        # entry is byte-for-byte what it was.
+        **({AUTHORED_PLACE_KEY: dict(authored_place)} if authored_place else {}),
+        **({AUTHORED_MOVES_KEY: [dict(m) for m in authored_moves]} if authored_moves else {}),
         # P69 T26e / E99 s107: a prop HANDED to a morph on its exit word - the mesh carries its pixels from that frame, so
         # the dock leaves on the word with no exit of its own. Written only for a handed prop.
         **({"handed": "morph"} if handed else {}),
@@ -9527,6 +9539,7 @@ def main() -> int:
                                         from_to=ring_fit["from_to"] if ring_fit else None,   # ... and the approach
                                         paint=ring_fit["paint"] if ring_fit else None,   # ... and its painted extent
                                         rot=dopt.get("rot"), moves=prop_mv,   # P69 T26d: the prop's authored rest and its moves
+                                        authored_place=dopt.get("place"), authored_moves=dopt.get("moves"),   # R26-298: as the author wrote them, for the read-back
                                         handed=n_dock in _pm["handed"]))   # P69 T26e: a prop handed to a morph on its exit word
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         pm_entries = []

@@ -374,7 +374,7 @@ def test_the_predates_e96_set_is_the_four_cuts_pinned_to_their_timelines_sha256(
         directory = PROJECTS / project / build
         if not directory.is_dir() or not list(directory.glob("*.timeline.json")):
             pytest.skip(f"no compiled timeline in {directory} (the gitignored builds are not in this checkout)")
-        on_disk = hashlib.sha256(FLOOR.timeline_path(directory).read_bytes()).hexdigest()
+        on_disk = FLOOR.timeline_sha256(FLOOR.timeline_path(directory))
         assert on_disk == sha, f"{project}/{build} was re-authored - the exemption needs a ruling, not a rename"
 
 
@@ -389,6 +389,20 @@ def test_a_re_authored_timeline_in_the_same_dir_stops_predating(tmp_path: Path) 
     (copy_dir / "japan-short.timeline.json").write_text('{"scenes": []}', encoding="utf-8")
     assert not FLOOR.predates_e96(copy_dir)                   # re-authored in the same dir: no exemption
     assert not FLOOR.predates_e96(tmp_path / "build-short")   # no timeline to hash at all
+
+
+def test_the_pin_survives_a_checkouts_line_endings(tmp_path: Path) -> None:
+    """R26-296: the pin is of CRLF-normalised bytes, so an LF and a CRLF checkout of the same cut both predate E96."""
+    if not JAPAN.is_dir() or not list(JAPAN.glob("*.timeline.json")):
+        pytest.skip("no compiled timeline in the Japan build")
+    lf = FLOOR.timeline_path(JAPAN).read_bytes().replace(b"\r\n", b"\n")
+    for label, data in (("lf", lf), ("crlf", lf.replace(b"\n", b"\r\n"))):
+        copy_dir = tmp_path / label / "japan-tariff-trick/build-short"
+        copy_dir.mkdir(parents=True)
+        (copy_dir / "japan-short.timeline.json").write_bytes(data)
+        assert FLOOR.predates_e96(copy_dir), label
+    assert FLOOR.timeline_sha256(tmp_path / "lf/japan-tariff-trick/build-short/japan-short.timeline.json") == \
+        hashlib.sha256(lf).hexdigest()
 
 
 def test_only_m35_and_m36_go_info_on_a_predating_build(tmp_path: Path) -> None:
