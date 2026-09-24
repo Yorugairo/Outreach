@@ -20,8 +20,9 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
         on "twenty-one" / "a hundred and five" / "six hundred and thirteen".
   CAMERA_613               camera 1 - the row's ONE focus_zoom, on the +613 datum, on the words that name it
         (E99 s76; CAPABILITIES:85 one camera per timeline, :124 the declared target).
-  CERT_CROP                the 1845 certificate cut out of `world-certificate-wall-v1` as ONE certificate
-        (a PIXEL crop, x and y - `docks.still_card` crops a full-width BAND only; the departure is in the notes).
+  CERT_CROP                the railway share certificate (P69 T83, the operator-approved plate
+        `prop-railway-share-cert-v1b`, E99 s113) cut to its paper, deckle kept (a PIXEL crop, x and y -
+        `docks.still_card` crops a full-width BAND only); one certificate for rows 2, 18 and 22.
   AGENDA_ROWS_H            row 6: the numbered agenda (CAPABILITIES:43) in the room the page's park frees.
   HOST_PLATE               row 7: HOST WINDOW 1 - the Flow plate `host/H-1-studio.png` as the landing surface
         (`;use=landing` + the ken push ALONE - E99 s84 withdrew the 20 px drift for long form, R26-236), opened on
@@ -73,7 +74,7 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
         thrown back AS the page goes, up to the row's end - the anaphora on the bottom caption under it.
   PRESS_PLATE / CONC_PAGE / page_rail_return   row 18 (P69 T26): the desk holds the signpost (their chart again,
         SIGNPOST_CARD, in the record's slot, drawn for its size - T10c's card profile); dip 5 to RESET 2, the press, the
-        1845 certificate (0.3 of the stage) thrown on its name; dip 6
+        railway share certificate (0.36 of the stage, "RAILWAY SHARE" legible) thrown on its name; dip 6
         to the concentration bars (`;bar_style=soft`, HG3's option), "20%" written as the bar stands, PROP 3 stamped on
         "S&P five hundred" at an authored centre, camera 3 a real 1.2x push on the 20 (E99 s108, `chrome` fit, aimed by
         `at` - CONC_CAM_AT), the
@@ -101,7 +102,7 @@ row names one), and HOST_CARD_DOOR records that a card CAN now stand on a pictur
 - Recall(world): docs/portable/OPERATOR-RULINGS.md:3248 "A plate's life is DIRECTIONAL" (E99 s65 - the host plate carries the ken push and the 20 px drift, the long-form setting)
 - Recall(evidence): content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:120 "seven percent of GDP in two thousand" (the dossier routes this sentence to the PIMCO equipment-and-software series - the page rings its own numbers, never a 7 or an 8 that is not in the data)
 - Recall(motion): docs/content-video-engine/CAPABILITIES.md:44 "THE NUMBERED AGENDA (P52 T8)" (row 6 - two to four numbered rows revealed one per word, in the room the park frees)
-- Recall(sound): content/video_engine/scripts/authoring/audio.py:471 "the cues the frame plays, the cues dropped" (R26-198 - the cues are bound to what the compiled timeline fires BEFORE the gate report is stamped)
+- Recall(sound): content/video_engine/scripts/authoring/audio.py:511 "the cues the frame plays, the cues dropped" (R26-198 - the cues are bound to what the compiled timeline fires BEFORE the gate report is stamped)
 - Recall(publish): docs/portable/OPERATOR-RULINGS.md:3280 "1440p confirmed" (E99 s81 - this build renders nothing and serves nothing; the frozen copy, the link and the render are the parent's)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:2342 "The hook opens on its axes" (E73 - row 1 is the page on its axes from the first frame)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:1494 "Nothing ever goes truly still" (E49 - `;idle=live` on every page row, `;idle=drift;drift=20` on the plate)
@@ -313,7 +314,12 @@ RAIL_DROP_S = 1.4
 # sub and source rewrite in the hand, the share-of-GDP line draws on). It fires on "the internet" - the sentence's
 # subject - so the crash and its -64% stand from their landing to the new era's first noun. Its own numbers only
 # (BODY_DEPARTURES row 9): no 7 % tick, no 8 % datum (neither is on the object, E77).
-GDP_RECAST_S = 2.0
+# P69 lane A job 4 (M47's WARN at 1:20 -> 1:22, a 2.0 s plain hand-over): the recast runs the H door's own 1.2 s
+# (DIV_RECAST_S / RECAST_S / DEBT_RECAST_S) - MEASURED (`scratchpad/p69-m47/before/B05-tiles.png` 80.8-81.7): at 2.0 s the
+# railway line un-draws over the GDP line for ~1 s on half-written axes; at 1.2 s the new line stands whole by 81.69, as
+# "crossed seven percent" is said. A KEYED recast is not this beat: the railway index and the share of GDP are two
+# datasets, and `keyed` hands the SAME data from one form to another (RECAST_KEYS).
+GDP_RECAST_S = 1.2
 # ... and the ring (E56: a ring circles a point on a chart) lands on the page's OWN datum: the Q2-2000 peak, 11.54 %,
 # on "then the tower came down" - the top before the fall, named by the sentence, and NOT under the seven / eight
 # words (the departure: the page's numbers are another measure than the voice's, so nothing of it is rung there).
@@ -354,19 +360,19 @@ GDP_AI_FROM = _nearest(GDP, 0, 2020.0)
 # ---------------------------------------------------------------- THE CARDS
 
 CERT_PLATE = REPO / ("content/video_engine/projects/systems-and-blowups/review/claims/"
-                     "steel-and-paper-plates-wave-1/objects/world-certificate-wall-v1.png")
-# ONE certificate, cut by PIXELS off the plate (x and y, not only a height). `docks.still_card` / `docks.dock_png`
-# crop a full-width BAND ((top, height) fractions - authoring/docks.py:85), which on this plate is five certificates
-# and the blue shaft; `docks.dock_still(..., still=True, frame_crop=(w, h, x, y))` (authoring/docks.py:70) is the
-# kit's only x-aware crop and it reads a PNG as happily as a clip. MEASURED on the plate's own 1536x1024 frame.
-# ONE WHOLE CERTIFICATE WITH ITS PRINTED FACE (the critic's read of copy e: the old rectangle took an
-# empty cartouche and a neighbour's corner). Picked by eye off the plate's own 1536x1024 frame and checked
-# for the blue light shaft pixel by pixel: this is the ONLY certificate on the wall whose four borders,
-# crest medallion, ruled signature line and engraved vignette are all visible at once. The plate's blue
-# light shaft clips its lower-left corner - that is the plate's own light, not the crop's edge.
-CERT_CROP = (282, 238, 296, 146)              # w, h, x, y
-CERT_ASPECT = round(CERT_CROP[1] / CERT_CROP[0], 4)
-CERT_CARD = "dock-h-certificate-1845"
+                     "sp-h-railway-share-cert-1/objects/prop-railway-share-cert-v1b.png")
+# P69 T83 (E99 s113): THE RAILWAY SHARE CERTIFICATE - the operator approved v1b on 2026-09-24 ("lets go with v1b ...
+# yes, you would update row 2 also"; the claim's approvals.json records it). It replaces the 1845 crop of
+# `world-certificate-wall-v1` everywhere in H (rows 2, 18, 22: ONE certificate, the same card each time). Its text is
+# intended - "RAILWAY SHARE" (the title under the locomotive vignette) and "ONE SHARE" (the lower-left cartouche) - and
+# it carries no date. The plate is ONE flat sheet on a flat #25313C ground, so the crop is the PAPER: MEASURED by pixels
+# off the ground (|rgb - #25313C| > 30) on the plate's own 1536x1024 frame, the sheet runs x 64-1471, y 54-972; the crop
+# takes it 2 px out on every side so the torn deckle is whole (its outermost teeth are not clipped flush) and a sliver
+# of the ground shows between the teeth. `docks.dock_still(..., still=True, frame_crop=(w, h, x, y))`
+# (authoring/docks.py:70) is the kit's x-aware crop and reads a PNG as happily as a clip.
+CERT_CROP = (1412, 923, 62, 52)               # w, h, x, y
+CERT_ASPECT = round(CERT_CROP[1] / CERT_CROP[0], 4)   # 0.6537 (the 1845 crop's was 0.8440)
+CERT_CARD = "dock-h-railway-share"
 # THE ROOM A FULL-STAGE PAGE LEAVES, measured on this build's own probe at 11.15 s: the chart's box is
 # [45, 193, 1350, 756], its ink [137, 289, 964, 465], its three end tags run x 1110-1883 at y 372 / 612 /
 # 649, and the anchored caption strip starts at y 919. The free rectangle is therefore x 1400-1900,
@@ -374,7 +380,9 @@ CERT_CARD = "dock-h-certificate-1845"
 # took the emptiest corner at the legibility floor, 101 x 102 px), so the row names it: 0.12 of the stage
 # wide at (0.80, 0.745) -> x 1420-1880, y 700-910. A card at full stage is SMALL, and that is the
 # geometric consequence of R26-205, not a choice - the notes carry the number.
-CERT_ROOM = {"centre": True, "centre_w": 0.12, "centre_x": 0.80, "centre_y": 0.733}   # 0.745 clipped the caption strip by 505 px
+# P69 T83: the railway share sheet is FLATTER (0.654 against the 1845 crop's 0.844), so the same room takes it WIDER at
+# the same height: 0.145 of the stage (278 x 182 px) sits in y ~701-883 - inside the measured room, under the lowest tag.
+CERT_ROOM = {"centre": True, "centre_w": 0.145, "centre_x": 0.80, "centre_y": 0.733}   # 0.745 clipped the caption strip by 505 px
 # "his fourth copy of the same chart" is a card of the TWO-LINE chart - the page as it stands at that
 # instant - never the finished four-line png (the critic's spoiler row: `ev-divergence-v1.png` carries the
 # memory line, its legend and +613 %, five seconds before the sentence that reveals them). The kit's door
@@ -734,6 +742,14 @@ assert DEBT["series"][DEBT_ISSUANCE]["pts"][DEBT_MID_AVG][1] == 28 and DEBT["ser
 # over the "$121B / issuance" pair. It is lifted DEBT_RANGE_DY of its own lines above the wedge's top edge.
 DEBT_RANGE_DY = -1.4
 DEBT_OPEN_S = 0.4
+# THE PAGE LANDS WITH INK (P69 lane A job 4; M47, P69 T87 - lane B's row, read off this door): capped at index 0 every
+# series drew NOTHING (one point is no line) and the plot stood bare 242.38-246.8 s under the question, only the title
+# writing (`scratchpad/p69t87/frames/h-0245.50.png`). The issuance now lands drawn to 2021 - the first year of the 2020-24
+# AVERAGE, the low ~$28B line - so "who is paying for the steel this time?" is asked over where the borrowing stood, and
+# "For years the giants ... out of pocket" carries the same stroke on to 2024. Taken over keeping the yields page up to
+# 246.3 (the question turns the story away from the Fed: the page change belongs on "But here's the question") and over
+# drawing the whole average under the question (that is the next sentence's line, drawn before it is said).
+DEBT_OPEN_CAP = 1
 DEBT_TITLE_S = 2.0
 # THE REHOOK'S QUESTION IS THE PAGE'S FIRST TITLE (no figure; the page draws its answer - who borrows): written on
 # "who is paying", and the object's own title "The builders started borrowing" is written back on "Then the bills got
@@ -758,6 +774,7 @@ CAPEX_2026 = next(k for k, b in enumerate(CAPEX["bars"]) if b["label"] == "Conse
 IG_TITLE = IG["title"]
 CAPEX_TITLE = CAPEX["title"]
 DEBT_RECAST_S = 1.2
+CAPEX_BARS_RISEN_S = 2.6   # MEASURED (P69 T82): the capex recast's bars stand risen 2.6 s after it starts (290.2 - 287.59)
 DEBT_MARK_S = 1.6        # a figure's / spread's write
 # NO RING ON A BAR (MEASURED on draft 6, the probe's M34): a callout on a bars datum circles the WHOLE bar and its stroke
 # crosses the category tick under it ("Projected" at 4:43, "2026 consensus" at 4:58). The bar the sentence turns to is
@@ -780,8 +797,8 @@ DATACENTER_STAMPED = True
 # PROP 2 MOVES TO THE CAPEX STATE (the operator, E99 s106: "i prefer the proposed for the data center"; P69 T26d built
 # the door). It stands at an AUTHORED place in the page's right margin beside the $690 bar - the operator's approved mock
 # (`scratchpad/datacenter-now-vs-proposed.png`, right half) and T26d's frame (`scratchpad/p69t26d/frames/dc-*`): centre
-# (0.85, 0.47) of the stage, 0.2 of its width. It is stamped AFTER the capex recast has landed (t_bet + DEBT_RECAST_S,
-# inside "centers." - on "a bet on data centers", never over the recast's hand-over) and it takes ONE move on "six hundred
+# (0.85, 0.47) of the stage, 0.2 of its width. It is stamped just AFTER "a bet on data centers" has ended AND the capex bars
+# have risen (P69 T82, E99 s112 - `t_dc`; T24 put it inside "centers.", on the recast's clock) and it takes ONE move on "six hundred
 # and ninety" (T26d's): up and a little smaller, turned 4 degrees, so it stands beside the 690's top as the figure is said.
 # It leaves with the page (the melt into the filings). The desk keeps the leases record alone.
 DATACENTER_PLACE = {"x": 0.85, "y": 0.47, "w": 0.2}
@@ -858,8 +875,8 @@ CAPEX_RECAST_WHY = ("tech's share of the IG index -> the hyperscalers' capex con
                     "filings)")
 
 DOCK_META = [
-    {"asset": CERT_CARD, "title": "An 1845 railway certificate",
-     "source": "Money Physics - plate world-certificate-wall-v1", "species": "deck", "badges": []},
+    {"asset": CERT_CARD, "title": "A railway share certificate",
+     "source": "Money Physics - plate prop-railway-share-cert-v1b", "species": "deck", "badges": []},
     {"asset": BRAVOS_CARD, "title": HOOK_CARD_TITLE,
      "source": "Yahoo Finance - pairing after Bravos Research", "species": "chart", "badges": []},
     {"asset": SELL_CARD, "title": "A sell ticket",
@@ -1159,7 +1176,7 @@ def page_arith() -> str:
 #     this is the chart it points at; measure_spoken_visuals' "this chart");
 #   DIP 5 to RESET 2, the press (`world-paper-and-steel-press-v1;use=reset`, the ken push alone - E99 s84): "The bubble
 #     isn't in the steel. It's in the paper wrapped around the steel." - the plate IS that sentence (a steel CNC bed under
-#     a lamp, a printing press spilling certificates); the 1845 certificate (row 2's card, CERT_CARD) is THROWN onto the
+#     a lamp, a printing press spilling certificates); the railway share certificate (row 2's card, CERT_CARD) is THROWN onto the
 #     press's pile on "railway certificates" (E99 s71: a named thing arrives);
 #   DIP 6 to the concentration page (`ev-index-concentration-bars-v1`, H3 - Bravos-attributed, the operator's 2026-08-24
 #     ruling): the 20 bar grows as the page lands and its "20%" is WRITTEN as it stands (the figure the compare needs,
@@ -1247,7 +1264,10 @@ SIGNPOST_CARD_WHY = ("the filings' record -> their two-line chart, one slot on t
 # ruled signature line read as a CERTIFICATE on the busy pile. No larger source exists (the plate and its source are both
 # 1536x1024) and no certificate on the wall carries printed words, so size is the lever; the crop stays row 2's (the
 # sentence is "that certificate AGAIN" - the same certificate). Its box: x 134-710, y 297-783, above the caption strip.
-PRESS_CERT_SLOT = {"centre": True, "centre_w": 0.30, "centre_x": 0.22, "centre_y": 0.50, "card_aspect": CERT_ASPECT,
+# P69 T83 (E99 s113, "verified" - the title must READ): the railway share sheet, 0.36 of the stage (691 x 452 px, the
+# flatter sheet at about the old card's height), so "RAILWAY SHARE" stands ~418 px wide with ~35 px capitals on the
+# stage and ~7 px capitals at a 390 px phone; centred a little right (0.24) to keep the ring's left bulge on the stage.
+PRESS_CERT_SLOT = {"centre": True, "centre_w": 0.36, "centre_x": 0.24, "centre_y": 0.50, "card_aspect": CERT_ASPECT,
                    "arrive": "throw", "mass": "paper"}
 # THE STATEMENT CARD: a named box (P69 T5 - a dock sharing a row with a stamp must name its box so the compiler can
 # measure it against the stamp's mark and ring) in the plot's EMPTY upper left - left of the bar, above the 2-4% rules.
@@ -1295,7 +1315,7 @@ PRESS_DIP_WHY = ("the records' desk -> the press, plate to plate (a WORLD change
                  "morph (a plate is not a chart)")
 CONC_DIP_WHY = ("the press -> the concentration page, plate to page (a WORLD change, E47 - 1845's paper to where 'that "
                 "paper lives today'): TAKEN the dip (dip 6), the last resort (E99 s74); refused: the snap / throw-then-"
-                "zoom / throw-then-push (the one card on the press is the 1845 certificate - pushing it to the stage "
+                "zoom / throw-then-push (the one card on the press is the railway share certificate - pushing it to the stage "
                 "would say the certificate IS the index page), object-becomes-chart (the press's paper is not the page's "
                 "data), the spiral return (a first page, not a returning one), the mount (the page does not belong to "
                 "the press's picture), the axes open as the boundary's carrier (it would CUT from the picture to the "
@@ -1872,7 +1892,9 @@ FLIP_TITLE = "The flip: memory breaks while the buildout holds"
 # MEASURED, draft 8 (`d8-gate.log` M25 / M27 at 11:13): at (0.23, 0.34) w 0.16 its box (y 238-497, the deck's rail included)
 # rose over the y label and its flight crossed the title and sub. The 2023 prices never rise above y ~577 px (HBM-class's
 # Dec '23 high, 21.2k, on the page's log scale), so the card sits lower and smaller in that room.
-CERT_BACK_SLOT = {"centre": True, "centre_w": 0.13, "centre_x": 0.19, "centre_y": 0.42, "card_aspect": CERT_ASPECT}
+# P69 T83: the flatter railway share sheet takes the room wider at a lower height - 0.15 (288 x 188 px, y ~360-548),
+# its foot still above the 2023 prices' ~577 px.
+CERT_BACK_SLOT = {"centre": True, "centre_w": 0.15, "centre_x": 0.19, "centre_y": 0.42, "card_aspect": CERT_ASPECT}
 
 
 def page_monitor() -> str:
@@ -2286,8 +2308,11 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_pointing = at("They fail by pointing")            # ... its first leg (the dip and most of the way back) lands here
     t_dies = at("It dies when")                         # ... and it crosses back above its first print on the words
     t_began = at("borrowing began")                     # ... landing on its January 2000 high as "began" ends
-    t_fed = at("Fed at six and")                        # PROP 1 lands on the word that names it (E99 s87)
-    t_fed_settle = round(t_fed + STAMP_BUILD_S, 2)      # ... and the camera pushes as its landing settles (E51; M14)
+    t_fed = at("Fed at six and")                        # the page is retitled on the word that names the Fed ...
+    # E99 s112 (P69 T82): the stamp is PUNCTUATION - it lands just after "Fed" ends (the building IS the Fed; the title is
+    # retitled on the word, the stamp follows it). The door form: the contact from the word's end, the enter from it.
+    t_fed_stamp = D.stamp_enter(W.after(ws, "Fed at six and", "Fed"))
+    t_fed_settle = round(t_fed_stamp + STAMP_BUILD_S, 2)   # ... and the camera pushes as its landing settles (E51; M14)
     t_fed_release = at("back above five")               # ... held through their tripwire (the 5.5% rule reads in the push),
     #                                                     back at 1.0 before the AI era's end tag lands (t_cycle + TNX_AI_S)
     t_trade = at("internet trade rolled")               # the dot-com yield rolls over on its words ...
@@ -2309,8 +2334,13 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_bet = at("bet on data centers")                   # recast 2: the capex consensus, on what the money now buys
     t_desk = round(at("Go into the filings") - DESK_MELT_LEAD_S, 2)   # the world changes to the paper ...
     t_filings = round(t_desk + MEMO_MELT_S + DESK_CARD_AFTER_S, 2)   # ... and the record is thrown as the splash lands
-    t_dc = round(t_bet + DEBT_RECAST_S, 2)              # PROP 2 is stamped on "a bet on data centers" once the capex
-    #                                                     recast has landed (E99 s106 - on the capex state, not the desk)
+    # PROP 2 is stamped on the capex state (E99 s106) just after "a bet on data centers" ENDS AND the capex bars have
+    # risen (E99 s112, P69 T82: "just after whatever pertinent motion, data point, or word"). MEASURED on T82's draft 2
+    # (`scratchpad/p69-t82/dc-bars*`): the gate books the recast's landing at t_bet + DEBT_RECAST_S (288.79), but the frame
+    # plays the capex bars rising 288.9-290.2 (the orange bar's top y 389 -> 378 px, 289.9 -> 290.2) - a contact on the
+    # word's end (289.40) lands beside a bar still growing, one thing on top of another. So the later of the two.
+    t_dc = D.stamp_enter(max(W.after(ws, "bet on data centers", "centers"),
+                             round(t_bet + CAPEX_BARS_RISEN_S + W.STAMP_AFTER_BEAT_S, 3)))
     # -- row 17 (P69 T25): THE ARITHMETIC - the desk holds the rehook, dip 4 onto the 94 page on the next sentence's
     # onset; the bar stands at 94 with its value, the title is relit on the repeat, and the page spins into the desk
     # before "So when you hear" (E50), the filings' record thrown back as it goes
@@ -2333,7 +2363,9 @@ def shot_table(ws: list, unit_end: float) -> list:
     # MEASURED, draft 1 (M05): held to 1.5 s before dip 6 it left the press 8.4 s with no event (374.2-382.6); off on
     # "And Bravos", the press carries "And Bravos Research's own number ... today." in STAGE captions (read: white on the
     # machine's dark body, not a bright wall - `draft1/tile-366.00.png`)
-    t_sp500 = any_at("S&P five", "the S&P")             # PROP 3 is stamped on the index's name (E99 s87)
+    # PROP 3 is stamped on the index's name (E99 s87) just after the WHOLE name ends (E99 s112, P69 T82): "S&P" alone
+    # would land it during "five hundred", mid-name
+    t_sp500 = D.stamp_enter(W.after(ws, "the S&P five", "S&P five hundred"))
     t_contact = round(t_sp500 + STAMP_BUILD_S, 2)       # ... and camera 3 pushes as its landing settles (E51; M14)
     t_every = at("and calls it the")                    # ... and releases as the sentence names the index "the market"
     t_target = any_at("every target-date", "target-date fund")   # the statement is thrown on its name
@@ -2348,7 +2380,9 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_thirds = at("lost two-thirds")                    # ... and its own -64% is written as "two-thirds" is said
     # -- row 19 (P69 T27): SKIPS A GEAR - the index melts on the words, the two clocks draw, the GPU becomes the 5
     t_gear = at("Railway steel")                        # the melt's start (T27b): the map has skipped its gear; the 20 lands on "twenty"
-    t_compute = any_at("compute doesn't", "Today's compute")   # the GPU is stamped on the word that names it (E99 s87)
+    # the GPU is stamped just after the word that names it ends (E99 s87 / s112, P69 T82) - not at the idea's end ("doesn't
+    # sit."): the GPU becomes the bar on "about five years", and the idea's end would leave it < 1 s to be read first
+    t_compute = D.stamp_enter(W.after(ws, "compute doesn't", "compute"))
     t_five = at("about five years")                     # ... and becomes the compute bar as "five years" is said
     t_sold = at("sold out into")                        # the `sold out` pill (a chip: no pill species)
     t_clock = at("Different demand")                    # the page is retitled with the sentence
@@ -2359,7 +2393,8 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_one = any_at("One: is what", "is what it sells")   # the questions return, one row on each question's word
     t_two = any_at("Two: does it", "does it fund")
     t_three = any_at("Three: if the", "if the hype died")
-    t_phone = W.word_in(ws, "check all three", "phone")  # the phone is stamped on the word that names it (E99 s87)
+    t_phone = D.stamp_enter(W.after(ws, "check all three", "phone"))   # just after "phone." ends - the word and the
+    #                                                     sentence end together (E99 s87 / s112, P69 T82)
     t_where = [W.word_in(ws, ph, w) for _, _, ph, w, _, _ in WHERE_CHIPS]   # where to look, each chip on its word
     t_steel = at("Steel answers")                       # the test card: the anaphora's recap, rows as it is said
     t_card = round(t_steel - TEST_CARD_LEAD_S, 2)       # ... thrown in the breath before, so it LANDS on "Steel"
@@ -2373,7 +2408,9 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_hynix = round(at("Run it on the most") - HYNIX_MELT_LEAD_S, 2)
     t_row20_end = t_hynix
     h_sk = at("SK hynix")                               # the page names the company as the sentence does
-    h_stacked = at("stacked memory")                    # PROP 4 is stamped on the word that names it (E99 s87)
+    # PROP 4 is stamped just after the NOUN that names it, "stacked memory" (E99 s87 / s112, P69 T82): "stacked" alone would
+    # land it during "memory"; the idea's end ("need.") runs into "Over the last year", where the price draws
+    h_stacked = D.stamp_enter(W.after(ws, "stacked memory"))
     h_year = at("Over the last year")                   # the price draws the year ...
     h_pct = round(W.word_in(ws, HYNIX_BUILD_END, "percent") + 0.35, 2)   # ... and lands on "percent" with its +548%
     h_five = at("Five hundred. If")                     # camera 4 pushes on the tip as it is named again
@@ -2381,13 +2418,16 @@ def shot_table(ws: list, unit_end: float) -> list:
     h_scarcity = at("And the scarcity")                 # ... and releases as the sentence turns to what is underneath
     h_physics = W.word_in(ws, "it's physics", "physics")
     h_gig = at("So a gigabyte")                         # the wafer bars grow to the page, the 3 landing on "three times"
-    h_wafer = W.word_in(ws, "the wafer capacity", "wafer")   # PROP 5 is stamped on "wafer"
+    # PROP 5 is stamped just after "wafer capacity" (E99 s112, P69 T82): "wafer" alone lands during "capacity"; the idea's
+    # end ("the ordinary kind.") is 0.3 s before the 3x becomes 3 wafers on "Every accelerator"
+    h_wafer = D.stamp_enter(W.after(ws, "the wafer capacity", "wafer capacity"))
     h_accel = at("Every accelerator")                   # the 3x becomes 3 wafers as silicon is taken away
     h_laptop_s = at("That's why the memory")            # the contract bars grow to the page ...
     h_laptop = W.word_in(ws, "in a new laptop", "laptop")   # ... and the consumer bar is called out on "laptop"
     h_run3 = at("So run the three")                     # the line grows back as the questions are put to it
     h_answers = [at(a) for _, a in HYNIX_AGENDA]        # a row as each answer is said
-    h_racks = W.word_in(ws, "going into racks", "racks")   # the rack is stamped on the word that names it
+    h_racks = D.stamp_enter(W.after(ws, "going into racks", "racks"))   # just after "racks" is spoken (the operator's own
+    #                                                     example, E99 s112; P69 T82) - the answers land from "Scarce"
     h_passes = at("It passes")                          # the verdict: the object's own title
     h_vertical = W.word_in(ws, "The most vertical line", "vertical")   # the light travels the spring
     h_steel = W.word_in(ws, "on the board is steel", "steel")          # ... and the tip is ringed "steel"
@@ -2396,7 +2436,9 @@ def shot_table(ws: list, unit_end: float) -> list:
     # monitor slides in on "it reads what memory costs"; the prices on their words, the trim proof, the certificate back
     m_bravos = at("Bravos put their")                   # the board is thrown on the name (E99 s71)
     m_variable = at("The variable is")                     # the board leaves in the breath before the variable is named
-    m_ram = W.word_in(ws, "the RAM inside", "ram")      # PROP 6 is stamped on the word that names it (E99 s87)
+    # PROP 6 is stamped just after "RAM" ends (E99 s87 / s112, P69 T82) - not at the idea's end ("data centers.", 619.9):
+    # the prop must leave 2.5 s before the slide (RAM_OFF_LEAD_S, R26-309), which would leave it ~0.5 s on stage
+    m_ram = D.stamp_enter(W.after(ws, "the RAM inside", "RAM"))
     m_reads = at("it reads what memory")                # the two prices draw their history on the words that read them ...
     t_row22 = round(m_reads - SLIDE_S, 2)               # ... and the monitor slides in to land on them
     t_row21_end = t_row22
@@ -2417,7 +2459,7 @@ def shot_table(ws: list, unit_end: float) -> list:
     return [
         # -- ROWS 1-6: THE PAGE IS THE WORLD (E58 / E61). One world, two chart states, two cards in one slot.
         (0.0, t_melt, page_open(), (0, 0, 0), [
-            # THE 1845 CERTIFICATE ARRIVES - a thrown still card in the page's OWN room (E99 s71, E65).
+            # THE RAILWAY SHARE CERTIFICATE ARRIVES (P69 T83) - a thrown still card in the page's OWN room (E99 s71, E65).
             # THE PLACER CHOOSES IT: the authored slot was the caption workaround's companion, and with the
             # page full stage (R26-205) and the caption in the anchored strip the page's own measured empty
             # room is free. The notes carry the measurement (0 px on the ink, 0 px on the tags).
@@ -2591,7 +2633,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # 2000 peak from the stamp's settle, the chrome fitted into the frame (E99 s108, FED_CAM), and is back at 1.0
         # before the AI era's end tag lands (end tags are data, not chrome).
         (t_trigger, t_q, page_tnx(), (0, 0, 0), [
-            (FED_PROP, 0, t_fed, t_q, dict(FED_OPTS, place=dict(FED_PLACE), moves=[   # T23b: it leaves WITH the page (R26-219)
+            (FED_PROP, 0, t_fed_stamp, t_q, dict(FED_OPTS, names="Fed", place=dict(FED_PLACE), moves=[   # T23b: it leaves WITH the page (R26-219)
                 {"at": t_fed_settle, "x": FED_ASIDE_X, "dur": FED_CAM_IN_S, "ease": "cubic"}])),   # ... and steps aside as the push grows the plot
         ] if FED_STAMPED else [], RAIL_EXIT % TNX_MELT_S, [
             {"kind": "build_to", "at": t_trigger, "dur": TNX_OPEN_S, "series": TNX_DOT, "target": datum(TNX_OPEN_CAP)},
@@ -2624,9 +2666,9 @@ def shot_table(ws: list, unit_end: float) -> list:
         # hundred and ninety", and leaves with the page.
         (t_q, t_desk, page_debt(), (0, 0, 0), [
             (DATACENTER_PROP, 0, t_dc, t_desk,
-             dict(DATACENTER_OPTS, place=dict(DATACENTER_PLACE), moves=[dict(DATACENTER_MOVE, at=DATACENTER_MOVE_AT)])),
+             dict(DATACENTER_OPTS, names="data centers", place=dict(DATACENTER_PLACE), moves=[dict(DATACENTER_MOVE, at=DATACENTER_MOVE_AT)])),
         ] if DATACENTER_STAMPED else [], RAIL_EXIT % DEBT_MELT_S, [
-            {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_ISSUANCE, "target": datum(0)},
+            {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_ISSUANCE, "target": datum(DEBT_OPEN_CAP)},
             {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_HI, "target": datum(0)},
             {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_LO, "target": datum(0)},
             {"kind": "retitle", "at": t_who, "dur": DEBT_TITLE_S, "text": DEBT_Q_TITLE},
@@ -2683,7 +2725,7 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"kind": "steam", "at": t_stop, "dur": round(t_turn - t_stop, 2), "target": MUG_STEAM},
         ], {"keys": [], "attention": "landings"}),
         # -- ROW 18a (P69 T26): RESET 2, THE PRESS - dip 5 (PRESS_DIP_WHY) on "It was never the AI stocks"; the plate is the
-        # sentence ("the paper wrapped around the steel"); the ken push alone is its life (E99 s84); the 1845 certificate
+        # sentence ("the paper wrapped around the steel"); the ken push alone is its life (E99 s84); the railway share certificate
         # (row 2's card) is thrown onto the press's pile on "railway certificates" (E99 s71) and leaves before dip 6.
         (t_turn, t_conc, PRESS_PLATE, PRESS_KEN, [
             (CERT_CARD, 0, t_certs, t_press_off, dict(PRESS_CERT_SLOT)),
@@ -2694,7 +2736,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # its settle (E51), the chrome fitted into the frame (E99 s108); the statement card thrown on "target-date" in the room left; both leave on "Run the arithmetic"; on "fall
         # by half" the bar HALVES (HALVING_WHY) and "10%" lands on "ten percent", the old top a ghost.
         (t_conc, t_again, page_conc(), (0, 0, 0), [
-            (SP500_PROP, 0, t_sp500, t_run, dict(SP500_OPTS, place=dict(SP500_PLACE), moves=[   # R26-291: it steps up
+            (SP500_PROP, 0, t_sp500, t_run, dict(SP500_OPTS, names="S&P five hundred", place=dict(SP500_PLACE), moves=[   # R26-291: it steps up
                 dict(SP500_ASIDE, at=t_contact, dur=CONC_CAM_IN_S, ease="cubic")])),   # ... as the push grows the panel
             (ENVELOPE_CARD, 1, t_target, t_run, dict(ENVELOPE_SLOT)),
         ], "dip", [
@@ -2731,7 +2773,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # the compute bar on "sold out" (no pill species); the page is retitled "Different demand, different clock"; on
         # "Both are true at once" a callout rings each bar. The page stands to the row's end (T28's boundary).
         (t_gear, t_row9_end, page_clocks(), (0, 0, 0), [
-            (GPU_PROP, 0, t_compute, round(t_five + GPU_MORPH_S, 2), dict(GPU_OPTS, place=dict(GPU_PLACE))),   # handed to the morph at t_five
+            (GPU_PROP, 0, t_compute, round(t_five + GPU_MORPH_S, 2), dict(GPU_OPTS, names="compute", place=dict(GPU_PLACE))),   # handed to the morph at t_five
         ], RAIL_EXIT % CLOCKS_MELT_S, [
             {"kind": "chart_to", "to": "morph", "from": "prop:" + GPU_PROP, "mark": "b:%d" % CLOCKS_COMPUTE,
              "at": t_five, "dur": GPU_MORPH_S},
@@ -2748,7 +2790,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # CARD is thrown to land on "Steel answers" and fills as the anaphora's recap (TEST_SWEEP_WHY). Ken Burns alone
         # (E99 s84). The card leaves before the world changes.
         (t_test, t_div, HOST2_PLATE, HOST2_KEN, [
-            (PHONE_PROP, 0, t_phone, t_card, dict(PHONE_OPTS, place=dict(PHONE_PLACE))),
+            (PHONE_PROP, 0, t_phone, t_card, dict(PHONE_OPTS, names="phone", place=dict(PHONE_PLACE))),
             (TEST_CARD, 0, t_card, t_card_off, dict(TEST_CARD_SLOT, arrive="throw", mass="paper")),
         ], "suck:%g,%g" % TEST_SUCK_AT, [
             {"kind": "agenda", "at": t_one, "dur": round(t_card - t_one, 2), "target": TEST_AGENDA_BOX,
@@ -2783,13 +2825,13 @@ def shot_table(ws: list, unit_end: float) -> list:
         # drawn on "They're selling product", the rack stamped on "racks"; the verdict retitled on "It passes.", a light
         # travelling the spring on "vertical", the tip ringed on "steel".
         (t_hynix, t_row21_end, page_hynix(), (0, 0, 0), [
-            (HBM_PROP, 0, h_stacked, round(h_five - HBM_OFF_LEAD_S, 2), dict(HBM_OPTS, place=dict(HBM_PLACE))),
-            (WAFER_PROP, 0, h_wafer, round(h_laptop_s - 0.2, 2), dict(WAFER_OPTS, place=dict(WAFER_PLACE))),
-            (RACK_PROP, 0, h_racks, h_passes, dict(RACK_OPTS, place=dict(RACK_PLACE))),
+            (HBM_PROP, 0, h_stacked, round(h_five - HBM_OFF_LEAD_S, 2), dict(HBM_OPTS, names="stacked memory", place=dict(HBM_PLACE))),
+            (WAFER_PROP, 0, h_wafer, round(h_laptop_s - 0.2, 2), dict(WAFER_OPTS, names="wafer capacity", place=dict(WAFER_PLACE))),
+            (RACK_PROP, 0, h_racks, h_passes, dict(RACK_OPTS, names="racks", place=dict(RACK_PLACE))),
             # P69 T30 (row 22's opening, on this page): the board beside the shrunk line, then the RAM in its room
             (TRIPWIRE_CARD, 1, m_bravos, round(m_variable - TRIPWIRE_OFF_LEAD_S, 2),
              dict(TRIPWIRE_SLOT, arrive="throw", mass="paper")),
-            (RAM_PROP, 0, m_ram, round(t_row22 - RAM_OFF_LEAD_S, 2), dict(RAM_OPTS, place=dict(RAM_PLACE))),
+            (RAM_PROP, 0, m_ram, round(t_row22 - RAM_OFF_LEAD_S, 2), dict(RAM_OPTS, names="RAM", place=dict(RAM_PLACE))),
         ], RAIL_EXIT % HYNIX_MELT_S, [
             dict(HYNIX_ALONE, kind="panel_focus", at=t_hynix, dur=0.05),
             {"kind": "build_to", "at": t_hynix, "dur": 0.4, "panel": P_HYNIX, "series": H_PRICE, "target": datum(0)},
@@ -2877,7 +2919,8 @@ def shot_table(ws: list, unit_end: float) -> list:
              "target": datum(M_JUL)},
             {"kind": "build_to", "at": round(m_flip + CAPS_BACK_AT_S, 2), "dur": CAPS_BACK_S, "series": M_HBM,
              "target": datum(M_JUL)},
-            {"kind": "retitle", "at": round(m_flip + RETITLE_AFTER_S, 2), "dur": 1.6, "text": FLIP_TITLE},
+            {"kind": "retitle", "at": round(m_flip + RETITLE_AFTER_S, 2), "dur": 1.6, "text": FLIP_TITLE,
+             "color": "neg", "color_span": "The flip"},
         ], {"keys": []}),
         # (-- ROWS 23-24 are T31-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
     ]

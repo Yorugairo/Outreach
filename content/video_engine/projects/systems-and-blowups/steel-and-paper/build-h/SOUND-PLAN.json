@@ -152,14 +152,14 @@
   },
   {
    "slot": "landing 9 (stamp, ink)",
-   "at": 217.57,
+   "at": 217.79,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 217.61s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 217.83s, the cue one frame early (the weight report Q5)"
   },
   {
    "slot": "page enter 10 (axes)",
@@ -172,14 +172,14 @@
   },
   {
    "slot": "landing 10 (stamp, ink)",
-   "at": 288.9,
+   "at": 290.27,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 288.94s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 290.31s, the cue one frame early (the weight report Q5)"
   },
   {
    "slot": "landing 11 (throw, paper)",
@@ -263,14 +263,14 @@
   },
   {
    "slot": "landing 15 (stamp, ink)",
-   "at": 386.22,
+   "at": 387.96,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 386.26s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 388.00s, the cue one frame early (the weight report Q5)"
   },
   {
    "slot": "landing 15 (land, paper)",
@@ -314,25 +314,25 @@
   },
   {
    "slot": "landing 18 (stamp, ink)",
-   "at": 437.29,
+   "at": 437.68,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 437.33s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 437.72s, the cue one frame early (the weight report Q5)"
   },
   {
    "slot": "landing 19 (stamp, ink)",
-   "at": 484.15,
+   "at": 484.98,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 484.19s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 485.02s, the cue one frame early (the weight report Q5)"
   },
   {
    "slot": "landing 19 (throw, paper)",
@@ -365,36 +365,36 @@
   },
   {
    "slot": "landing 21 (stamp, ink)",
-   "at": 539.46,
+   "at": 540.17,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 539.50s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 540.21s, the cue one frame early (the weight report Q5)"
   },
   {
    "slot": "landing 21 (stamp, ink)",
-   "at": 558.67,
+   "at": 559.71,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 558.71s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 559.75s, the cue one frame early (the weight report Q5)"
   },
   {
    "slot": "landing 21 (stamp, ink)",
-   "at": 586.32,
+   "at": 586.71,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 586.36s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 586.75s, the cue one frame early (the weight report Q5)"
   },
   {
    "slot": "landing 21 (throw, paper)",
@@ -409,14 +409,14 @@
   },
   {
    "slot": "landing 21 (stamp, ink)",
-   "at": 617.07,
+   "at": 617.41,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 617.11s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 617.45s, the cue one frame early (the weight report Q5)"
   },
   {
    "slot": "page enter 22 (axes)",

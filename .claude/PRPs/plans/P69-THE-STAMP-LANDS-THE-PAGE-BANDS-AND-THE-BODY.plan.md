@@ -637,13 +637,13 @@ verbatim tails and are left pending.
 - Evidence: de6af2a (lane B): words.after / after_idea, docks.stamp_enter, the after/after_beat/names options, stamp_timing_advice; H door byte-identical; 8 H stamps advised (T82's order); tests test_the_stamp_lands_after.py (28)
 
 ### T82: Every Steel and Paper H stamp re-timed to its word's end or its idea's end (E99 s112)
-- Status: pending (lane A, after T81)
+- Status: done
 - Owner: implementation_luna
 - Depends on: T81
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: every stamped prop in H (the Fed, the data centre, PROP 3, the GPU, the die, the wafer, the rack, the phone, the DRAM module, and later rows') lands just after its word ends or at the end of the idea the sentence carries, read on the frame; the gate stays at 2 FAIL (M11, M31) / 5 WARN or better
 - Validate: the H door rc 0 with zero `[WARN] P69 T81` lines, then `python content/video_engine/scripts/gate_motion_density.py` on the H timeline (2 FAIL / 5 WARN or better) and the stamp contact frames read
-- Evidence: pending
+- Evidence: lane A (this commit): all nine H stamps by the door form D.stamp_enter(W.after(...)) with names=; 0 [WARN] P69 T81, 0 T84 retimed; the data centre lands after its bars finish (290.32, a motion's end); contact sheets SP/p69-t82/
 
 ### T84: A landing's sound is timed by the landing itself - the binder retimes a bound cue to its compiled contact (E99 s116)
 - Status: done
@@ -683,13 +683,13 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T83: The railway-share certificate plate (E99 s113) for row 18 (the H-3 host window)
-- Status: pending
+- Status: done
 - Owner: parent (the image claim) + implementation_luna (the row)
 - Depends on: the image claim flow (open_claim -> the generator; GPT Image 2.5 leads)
 - Acceptance: a new plate of the railway share certificate with "RAILWAY SHARE" legible and spelled exactly (s113: intentional, narrative-driven, verified; no garbled text), in the H-3 host window's style; approved out of quarantine by the operator; row 18 rebuilt on it with the -64% ring kept (s110)
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`, `content/video_engine/assets/page-boxes.v1.json` (re-measure), the claim record `review/claims/sp-h-railway-share-cert-1/` (recording the operator's approval only)
 - Validate: the H door rc 0, `python content/video_engine/scripts/measure_page_boxes.py --check`, and the certificate frames (rows 2, 18, 22) read at 16:9 and 390 px
-- Evidence: pending
+- Evidence: lane A (this commit): v1b replaces the 1845 crop in rows 2 / 18 / 22 (CERT_CROP 1412x923, aspect 0.6537, card dock-h-railway-share); -64% ring refit; RAILWAY SHARE ~35 px caps on stage in row 18 (~7 px at 390); rows 2 / 22 read as a word shape on a phone (rooms too small); operator approval recorded in the claim's approvals.json (gitignored review tree)
 
 ### T9: s90 (b) - the three layout fixes the side-by-side found (lane B)
 - Status: done (lane B 0df626a; review fixes 5ddc035)
