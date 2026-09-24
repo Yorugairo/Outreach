@@ -109,7 +109,8 @@ AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from
              "ymin", "ymax", "yfmt", "yunit", "panels",
              "domain", "xdomain",   # P48 T2: a derived rescale state names its exact y domain and x window
              "overflow_placeholder", "overflow_capsule", "break_cadence",   # P50 T10 / T13: the breakthrough's furniture (E60)
-             "independent")   # E79: this page (or this tier) carries unrelated measures, each on its own scale - nothing implies one
+             "independent",   # E79: this page (or this tier) carries unrelated measures, each on its own scale - nothing implies one
+             "break")   # P69 T66 / E99 s111: one x axis across two eras, cut where no datum is and the cut drawn (`_validate_break`)
 UNCHARTABLE = {
     "checklist": "no chartable values: 'checklist' is a table, not a chart (keep it a dock)",
     "shares": ("'shares' is a donut, and E53 s1 ranks angle and area at the bottom of the perception hierarchy: "
@@ -415,6 +416,7 @@ def validate(series: dict, variant: str) -> list[str]:
     """Error strings; empty means the series is a page for this variant. Pure."""
     errors: list[str] = []
     errors += _validate_readability(series, variant)
+    errors += _validate_break(series, variant)   # P69 T66: [] unless the object names a `break`
     if "left_gutter" in series:
         gutter = series["left_gutter"]
         if isinstance(gutter, bool) or not isinstance(gutter, int) or not 60 <= gutter <= 300:
@@ -523,6 +525,159 @@ def _validate_burst_furniture(series: dict, ovf: str) -> list[str]:
         elif ovf not in BURST_MODES:
             errors.append(f"break_cadence is the BURST's cadence (E60's blend); this page's overflow is {ovf!r}, which already steps")
     return errors
+
+
+# ---- P69 T66 (E99 s111): THE BROKEN CROSS-ERA AXIS ----------------------------------------------------------------------
+# The operator, on Bravos's "AI and Railway Spending As a % of GDP" (the 1860s and 1985-on joined by a `//`): "yes". A
+# line may run across two eras on ONE x axis with a visible break when the claim is that the LEVELS are comparable era
+# to era; the y is one unit for both, both eras are labelled, and the break is drawn so the gap is never read as
+# continuous time (E53 s3's "never a continuous axis" is met by the break). When the claim is that the SHAPES match,
+# the rebased overlay stays the form. `break: {after, before, eras}` on a dense-line object: the last x of the first
+# era, the first x of the second, and the two eras' names; `claim: "level"` beside it. Not E60's retired zigzag - that
+# broke a bar's SCALE, which is never abbreviated; an x axis across two eras IS abbreviated, and the mark says so.
+BREAK_KEYS = ("after", "before", "eras")
+BREAK_CLAIMS = ("level", "shape")
+BREAK_RULING = "E99 s111"
+BREAK_OVERLAY = ("the rebased overlay - each era counted from its own start on one x (row 15's \"years from each era's "
+                 "start\", ev-tnx-two-eras-v4)")
+BREAK_YEARS = (1000, 3000)   # an edge in this range is written as its year ("1849 // 1985"); the railway era is a date
+ERA_VOID_SHARE = 0.4    # a stretch with no datum this share of the page's x span is a VOID between two eras ...
+ERA_VOID_RATIO = 4.0    # ... when it is also this many times the next widest step (a sparse series is not two eras)
+
+
+def _era_year(value: Any) -> str:
+    n = to_number(value)
+    return str(math.floor(n)) if n is not None and BREAK_YEARS[0] <= n < BREAK_YEARS[1] else value_string(value)
+
+
+def break_gap_label(brk: dict) -> str:
+    """The gap written at the break in the eras' own years - the engine's `lpBreakYear` writes the same string."""
+    return f"{_era_year(brk.get('after'))} // {_era_year(brk.get('before'))}"
+
+
+def _dense_xs(series: dict) -> list[float]:
+    return sorted({x for s in dense_series(series) for x in (to_number(p[0]) for p in _points(s)) if x is not None})
+
+
+def _break_shape_errors(series: dict, variant: str, where: str) -> list[str]:
+    """The claim and the ONE unit: a level claim on one measure, or it is another form."""
+    errors: list[str] = []
+    claim = series.get("claim")
+    if claim is None:
+        errors.append(f"{where}: a broken axis states its claim - `claim: \"level\"`: the eras' LEVELS are comparable. "
+                      f"A claim that their SHAPES match is {BREAK_OVERLAY}")
+    elif claim == "shape":
+        errors.append(f"{where}: claim 'shape' - when the SHAPES match, the form is {BREAK_OVERLAY}, not a broken axis; "
+                      "a break is for a LEVEL claim")
+    elif claim not in BREAK_CLAIMS:
+        errors.append(f"{where}: claim {claim!r} is not one of {'|'.join(BREAK_CLAIMS)}")
+    unit = series.get("yunit")
+    if not _text(unit):
+        errors.append(f"{where}: a broken axis writes its ONE unit (`yunit`) - both eras are read on that one y")
+    for i, s in enumerate(dense_series(series)):
+        own = s.get("unit", s.get("yunit"))
+        if own is not None and str(own) != str(unit):
+            errors.append(f"{where}: series[{i}] is in {own!r} and the page in {unit!r} - the eras share ONE unit on one y. "
+                          "Two measures are E79's panels (each panel its own axes, `independent`), never one broken axis")
+    if series.get("independent"):
+        errors.append(f"{where}: `independent` declares unrelated measures on their own scales (E79's panels) - a broken "
+                      "axis is ONE measure on one y")
+    if series.get("line_unit") is not None:
+        errors.append(f"{where}: `line_unit` gives the lines a right axis in a second unit - a broken axis has one y")
+    if "xdomain" in series:
+        errors.append(f"{where}: `xdomain` is a window on a continuous x - a broken axis is its two eras whole")
+    return errors
+
+
+def _break_data_errors(series: dict, a: float, b: float, eras: list, where: str) -> list[str]:
+    """Tight to the data: the break is cut where no datum is, at the first era's last datum and the second's first,
+    and both eras print their own dates at their ticks."""
+    errors: list[str] = []
+    xs = _dense_xs(series)
+    inside = [x for x in xs if a < x < b]
+    if inside:
+        errors.append(f"{where}: a datum at {inside[0]:g} stands in the gap ({a:g} to {b:g}) - the break is cut where "
+                      "there is no datum, and no point is ever drawn across it")
+    first, second = [x for x in xs if x <= a], [x for x in xs if x >= b]
+    if not first or max(first) != a:
+        errors.append(f"{where}: break.after {a:g} is not the first era's last datum"
+                      + (f" ({max(first):g})" if first else " (the first era has none)"))
+    if not second or min(second) != b:
+        errors.append(f"{where}: break.before {b:g} is not the second era's first datum"
+                      + (f" ({min(second):g})" if second else " (the second era has none)"))
+    if len(first) < 2 or len(second) < 2:
+        errors.append(f"{where}: each era carries two data at least - a lone point is a mark, not an era")
+    ticks = [(to_number(t[0]), t) for t in series.get("xticks") or [] if isinstance(t, (list, tuple)) and len(t) == 2]
+    if not (first and second):
+        return errors
+    # a tick a hair outside its era's data still belongs to it (the panels' own rule: "2021" on data from 2021.0082)
+    tol = (PANEL_TICK_EDGE * (a - xs[0]), PANEL_TICK_EDGE * (xs[-1] - b))
+    for x, t in ticks:
+        if x is not None and a + tol[0] < x < b - tol[1]:
+            errors.append(f"{where}: the x tick {t[1]!r} ({x:g}) stands in the gap - the years between the eras are not drawn")
+    names = eras if isinstance(eras, list) and len(eras) == 2 else ["the first era", "the second era"]
+    for name, lo, hi in ((names[0], xs[0] - tol[0], a + tol[0]), (names[1], b - tol[1], xs[-1] + tol[1])):
+        if not any(x is not None and lo <= x <= hi for x, _t in ticks):
+            errors.append(f"{where}: {str(name).strip() or 'an era'} prints no tick of its own dates ({lo:g} to {hi:g}) - "
+                          "both eras' dates are printed at their ticks")
+    return errors
+
+
+def _validate_break(series: dict, variant: str) -> list[str]:
+    """E99 s111: a `break` is refused by name unless it is a sound broken axis. An object naming none is untouched."""
+    if "break" not in series:
+        return []
+    brk, where = series["break"], f"break ({BREAK_RULING})"
+    if not isinstance(brk, dict):
+        return [f"{where}: must be {{after, before, eras}} - the first era's last x, the second era's first x, and the "
+                "two eras' names"]
+    errors = [f"{where}: {k!r} is not a break key ({'|'.join(BREAK_KEYS)})" for k in sorted(set(brk) - set(BREAK_KEYS))]
+    a, b = to_number(brk.get("after")), to_number(brk.get("before"))
+    if a is None or b is None:
+        errors.append(f"{where}: break.after and break.before must be numbers - the first era's last x and the second "
+                      "era's first x")
+    elif a >= b:
+        errors.append(f"{where}: break.before ({b:g}) must come after break.after ({a:g})")
+    eras = brk.get("eras")
+    if not (isinstance(eras, list) and len(eras) == 2 and all(_text(e) for e in eras)):
+        errors.append(f"{where}: both eras are LABELLED on the page - break.eras is the two eras' names, [first, second]; "
+                      "an unlabelled era is refused")
+    builder = pick_builder(series, variant)
+    if builder != "dense-line":
+        return errors + [f"{where}: a broken x axis is a dense-line page's - this page draws as {builder!r}"]
+    errors += _break_shape_errors(series, variant, where)
+    if a is None or b is None or a >= b:
+        return errors
+    return errors + _break_data_errors(series, a, b, eras, where)
+
+
+def era_void(series: dict) -> tuple[float, float] | None:
+    """The widest stretch of a line page's x with no datum in it, when it reads as the void between two eras: at least
+    ERA_VOID_SHARE of the span, ERA_VOID_RATIO times the next widest step, two data or more on each side."""
+    xs = _dense_xs(series)
+    if len(xs) < 4:
+        return None
+    steps = sorted(((xs[i + 1] - xs[i], i) for i in range(len(xs) - 1)), reverse=True)
+    (wide, i), nxt = steps[0], steps[1][0]
+    if wide < ERA_VOID_SHARE * (xs[-1] - xs[0]) or wide < ERA_VOID_RATIO * nxt or i < 1 or len(xs) - i - 1 < 2:
+        return None
+    return xs[i], xs[i + 1]
+
+
+def era_void_warning(series: dict, name: str, variant: str = "line") -> str | None:
+    """The compiler's WARN for two eras on one CONTINUOUS x (E53 s3): it names both honest forms - the broken axis for
+    a LEVEL claim (s111), the rebased overlay for a SHAPE claim. A page that declares its break is answered, not warned;
+    a page that is not ONE line plot (panels, tiers, bars) has no one x to warn about."""
+    if "break" in series or pick_builder(series, variant) != "dense-line":
+        return None
+    void = era_void(series)
+    if void is None:
+        return None
+    a, b = void
+    return (f"{name}: E53 s3 - its x has no datum from {a:g} to {b:g}, and on one continuous axis those empty years read "
+            f"as time. If the claim is that the eras' LEVELS are comparable, declare `break: {{\"after\": {a:g}, "
+            f"\"before\": {b:g}, \"eras\": [..]}}` with `claim: \"level\"` (E99 s111: the `//` drawn); if the claim is "
+            f"that their SHAPES match, {BREAK_OVERLAY} stays the form")
 
 
 SIGNED_NOTE_RE = re.compile(r"^\s*[+\u2212-]\s*\d")

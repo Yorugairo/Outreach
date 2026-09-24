@@ -3836,6 +3836,52 @@ FRAME_T.update({"freeze-trough": FREEZE_AT + FREEZE_DUR * 0.5})
 FRAME_T.update({"lit-stretch-crash": round(LIT_AT + 0.5 * LIT_DUR * 0.8, 3)})   # u 0.50 of the head's run (TRAVEL 0.8 of the word): 11.244
 
 
+# ---- P69 T66 (E99 s111): THE BROKEN CROSS-ERA AXIS ------------------------------------------------------------------------
+#   broken-axis-two-eras  ONE x axis across two eras, the years between them cut out and the cut DRAWN: a `//` across the
+#                         axis, the gap written in the eras' own years ("2001 // 2021"), each era named over its own
+#                         stretch, both stretches on the same years-per-pixel, the one y (the 10-year yield, %) from zero
+#                         for both. The claim is the LEVEL (s111): the yield stands where the dot-com era's stood.
+# The data is the committed two-era object's own (`ev-tnx-two-eras-v3`, Yahoo Finance ^TNX): its two panels' points
+# verbatim as two series, its rules, its unit and its source. No railway-era share-of-GDP SERIES is committed (only the
+# 7 % peak tile, `ev-railway-gdp-tile-v1`), so the railway page waits for its sourced series - none is invented here.
+# The end tags are v4's honest values (v4's provenance note: 5.078 -> "5.1%"); the eras' names are v4's, the years
+# left to the ticks. `;build=lines` (R26-226): the dot-com era draws whole, then the AI era.
+BROKEN_BUILD_T0 = 4.4    # ROLL 0.7 + SAVOR 0.8 + FIELD 2.4 + PUNCH 0.5: the page's build begins
+BROKEN_SERIES_S = 1.5    # the page's BUILD 3.0 over its two series (the bare `lines` mode divides the page's own window)
+BROKEN_BUILD_S = 2 * BROKEN_SERIES_S
+BROKEN_ERAS = ("DOT-COM ERA", "AI ERA")
+BROKEN_TAGS = ("5.1%", "4.7%")   # ev-tnx-two-eras-v4's series labels (the last value of each era, rounded honestly)
+
+
+def broken_axis_series() -> dict:
+    """v3's two eras as ONE line page on ONE broken x axis - every value read off the committed object."""
+    v3 = LPG.load_series(PANELS_V3)
+    era = [p["series"][0] for p in v3["panels"]]
+    return {"title": v3["title"],
+            "sub": "One scale, one axis - the nineteen years between the eras cut out, not drawn",
+            "src": v3["src"], "yunit": v3["yunit"], "ylabel": "10-year yield, %", "from_zero": True,
+            "hlines": v3["hlines"], "xticks": v3["xticks"], "claim": "level",
+            "break": {"after": era[0]["pts"][-1][0], "before": era[1]["pts"][0][0], "eras": list(BROKEN_ERAS)},
+            "series": [{"label": tag, "color": col, "pts": s["pts"]}
+                       for s, tag, col in zip(era, BROKEN_TAGS, ("teal", "crimson"))]}
+
+
+def broken_axis_two_eras() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    series = broken_axis_series()
+    assert LPG.validate(series, "line") == [], LPG.validate(series, "line")
+    page = BST.stamp_full_stage(LPG.build_spec(series, "line", None, "right"))
+    page["build"] = "lines"   # the one key `;build=lines` writes (page_build_spec's bare mode)
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    BST.check_broken_axis(world, [])
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: one line across two eras on a broken axis", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({"broken-axis-two-eras": broken_axis_two_eras})
+FRAME_T.update({"broken-axis-two-eras": BROKEN_BUILD_T0 + BROKEN_BUILD_S + 1.6})   # both eras drawn and tagged (7.4), held
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

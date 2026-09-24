@@ -411,7 +411,9 @@ def test_every_wired_card_is_in_a_recipe():
     # P69 T49's freeze beat (species:freeze) is tested alone in test_freeze_beat.py until a committed beat plays it
     # (the plan names row 18's turn); no recipe is invented for it here. P69 T48's explode (page_species:explode) is
     # tested alone in test_share_pie_3d.py and pinned by the share-pie-3d goldens; no committed beat plays it yet.
-    assert uncovered == ["dock_option:moves", "dock_option:place", "page_enter:surface",
+    # P69 T66's broken cross-era axis (page_builder:line+break) is tested alone in test_broken_axis.py and pinned by
+    # the broken-axis-two-eras golden; no committed beat plays it until a railway-era series is sourced (H rows 9 / 14).
+    assert uncovered == ["dock_option:moves", "dock_option:place", "page_builder:line+break", "page_enter:surface",
                          "page_species:explode", "page_species:panel_focus",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:domain", "plate_option:readability",

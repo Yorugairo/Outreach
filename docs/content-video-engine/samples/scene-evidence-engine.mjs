@@ -10307,6 +10307,94 @@ async function mount(doc) {
     const order = draws.length ? draws : LB.slots;   /* every series held at 0 = nothing to sequence; each is 0 anyway */
     return { n: Math.max(1, LB.slots.length), of: (si) => { const k = order.indexOf(si | 0); return k < 0 ? null : k; } };
   };
+  /* P69 T66 (E99 s111) - THE BROKEN CROSS-ERA AXIS. The operator, on Bravos's "AI and Railway Spending As a % of GDP"
+     (the 1860s and 1985-on joined by a `//`): "yes". ONE x axis across two eras when the claim is that their LEVELS are
+     comparable: the years between them are CUT, and the cut is drawn - so the gap is never read as continuous time (E53
+     s3 met by the break, not broken). `axes.break: {after, before, eras}` (ledger_page._validate_break): the first era's
+     last x, the second era's first x, and the two eras' names. Both stretches are scaled on ONE years-per-pixel, the cut
+     is a fixed width with a `//` across the axis in the axis's own ink, the gap is WRITTEN at the break in the eras' own
+     years ("2001 // 2021"), each era is named over its own stretch, and nothing is drawn through the gap - no gridline,
+     no rule, no axis, no trace: a series that spans both eras keeps its one path (the pen law runs ONE clock over it,
+     and an `M` would restart the dash in every subpath - Chromium, measured) and is held out of the gap by a clip, so the
+     line lifts at the first era's last datum and resumes at the second's first, and no point is drawn between. A page
+     that names no break never reaches any of this: its `mx` is the expression it always was. Not E60's retired zigzag:
+     that cut a bar's SCALE, which is never abbreviated; an x axis across two eras IS, and the mark says so. */
+  const LP_BREAK = Object.freeze({
+    GAP: 44,          /* the cut's width in the chart's units: the `//` and its air - never a stretch of time */
+    GAP_P: 1.5,       /* ... on the portrait page, whose type is 40 units against 24 */
+    SLASH_H: 26,      /* one stroke of the `//`, its height across the axis line (x GAP_P in portrait) */
+    SLASH_W: 3,       /* ... and its weight: the axis's own ink, heavier than the axis's 2 - the cut is the claim's honesty */
+    SLASH_DX: 7,      /* its lean: the stroke runs this far right as it rises */
+    SLASH_SEP: 11,    /* the two strokes, apart */
+    CH_EM: 0.62,      /* one character's advance in ems, ESTIMATED (Inter's figures run ~0.6): the build never measures a font */
+    ERA_EM: 0.74,     /* ... and an era's name, bold capitals (measured on the golden: "DOT-COM ERA" 180 units at 24) */
+    ERA_MIN: 0.7,     /* the smallest share of the tick size an era's name shrinks to, to stand inside its own stretch */
+    TICK_AIR: 8,      /* the air an x tick keeps from the written gap, in units - a tick that would touch it is not written */
+    ERA_TOP: 1.25,    /* an era's name: its baseline this many of its own sizes under the plot's top edge ... */
+    ERA_BOT: 0.45,    /* ... or, where the data or a rule stands there, this many over the axis */
+    ERA_PAD: 6,       /* the room an era's name keeps from a datum or a rule, in units */
+  });
+  let lpBreakN = 0;   /* the clip ids, in build order - deterministic, never a random */
+  const lpBreakYear = (v) => { const n = +v; return Number.isFinite(n) && n >= 1000 && n < 3000 ? String(Math.floor(n)) : String(v); };   /* ledger_page._era_year */
+  const lpBreakScale = (ax, x0, x1, L, xr, k) => {
+    const b = ax && ax.break;
+    if (!b || typeof b !== "object") return null;
+    const after = +b.after, before = +b.before;
+    if (!(Number.isFinite(after) && Number.isFinite(before) && x0 <= after && after < before && before <= x1)) return null;
+    const gap = LP_BREAK.GAP * k, s1 = after - x0, s2 = x1 - before, ppy = (xr - L - gap) / ((s1 + s2) || 1);
+    const xa = L + s1 * ppy, xb = xa + gap, mid = (after + before) / 2;
+    /* a tick a hair outside its era (2021 on data from 2021.0082) is placed by its OWN era's scale: the split is the gap's middle */
+    return { after, before, xa, xb, cx: (xa + xb) / 2, k, ppy, eras: Array.isArray(b.eras) ? b.eras.map(String) : [],
+             label: lpBreakYear(b.after) + " // " + lpBreakYear(b.before), clip: null,
+             mx: (x) => (+x <= mid ? L + (+x - x0) * ppy : xb + (+x - before) * ppy) };
+  };
+  const lpBreakTextW = (text, fs) => String(text).length * LP_BREAK.CH_EM * fs;
+  /* an x tick whose label would touch the written gap is not written: the gap's label carries those years */
+  const lpBreakHides = (BK, x, lab, fs) => !!BK && Math.abs(x - BK.cx) < (lpBreakTextW(BK.label, fs) + lpBreakTextW(lab, fs)) / 2 + LP_BREAK.TICK_AIR;
+  const lpBreakClip = (st, BK) => {
+    if (BK.clip) return BK.clip;
+    const defs = lpEl("defs", "", st.chart), id = "brkclip-" + (st.seed | 0) + "-" + (++lpBreakN);
+    const cp = lpEl("clipPath", "", defs, { id, clipPathUnits: "userSpaceOnUse" });
+    lpEl("rect", "", cp, { x: -1e4, y: -1e4, width: (BK.xa + 1e4).toFixed(2), height: 2e4 });   /* the first era's side, to its last datum */
+    lpEl("rect", "", cp, { x: BK.xb.toFixed(2), y: -1e4, width: 2e4, height: 2e4 });            /* the second's, from its first */
+    return (BK.clip = "url(#" + id + ")");
+  };
+  /* a series that runs across the cut is drawn inside a clipped group; one that lies in one era is drawn as it always is */
+  const lpBreakHost = (st, BK, pts) => {
+    if (!BK || !pts.some(([x]) => +x <= BK.after) || !pts.some(([x]) => +x >= BK.before)) return st.chart;
+    return lpEl("g", "lp-break-host", st.chart, { "clip-path": lpBreakClip(st, BK) });
+  };
+  /* an era's name stands over its own stretch - under the plot's top edge, or over the axis where a datum or a rule
+     already stands at the top (the one-shot rule: a name never lands on the data it names) */
+  const lpBreakEraY = (st, x0e, x1e, fs, T, B) => {
+    const pad = LP_BREAK.ERA_PAD, rules = (st.hlines || []).map((h) => h.y);
+    const clear = (y) => { const top = y - fs - pad, bot = y + 0.3 * fs + pad;
+      if (rules.some((ry) => ry >= top && ry <= bot)) return false;
+      return !(st.paths || []).some((pp) => pp.pts.some(([px, py]) => px >= x0e - pad && px <= x1e + pad && py >= top && py <= bot)); };
+    const top = T + LP_BREAK.ERA_TOP * fs, low = B - LP_BREAK.ERA_BOT * fs;
+    return clear(top) ? top : clear(low) ? low : top;
+  };
+  const lpDrawBreak = (st, BK, G) => {
+    const { T, B, W, R, L, P, fs, tickY, style } = G, url = lpBreakClip(st, BK);
+    for (const el of st.chart.querySelectorAll("line.ax, line.grid, line.hrule")) el.setAttribute("clip-path", url);   /* the gap carries no mark */
+    const h = LP_BREAK.SLASH_H * BK.k, dx = LP_BREAK.SLASH_DX * BK.k, sep = LP_BREAK.SLASH_SEP * BK.k;
+    const slashes = [-0.5, 0.5].map((o) => { const cx = BK.cx + o * sep;
+      const e = lpEl("path", "ax lp-break", st.chart, { d: "M" + (cx - dx / 2).toFixed(1) + " " + (B + h / 2).toFixed(1) + " L" + (cx + dx / 2).toFixed(1) + " " + (B - h / 2).toFixed(1), fill: "none", "stroke-linecap": "round", style: "stroke-width:" + (LP_BREAK.SLASH_W * BK.k) });
+      lpMark(st, "break:" + (o < 0 ? 0 : 1), "break", e, { x: cx, y: B, h });
+      return e; });
+    const gapEl = lpText(st.chart, "lab", BK.cx, tickY, "middle", BK.label, style ? { style } : undefined);
+    lpMark(st, "xtick:break", "xtick", gapEl, { v: (BK.after + BK.before) / 2, x: BK.cx, y: tickY });
+    const spans = [[L, BK.xa], [BK.xb, W - R]];
+    const eraEls = BK.eras.slice(0, 2).map((name, i) => { const [a, b] = spans[i], cx = (a + b) / 2;
+      const w0 = String(name).length * LP_BREAK.ERA_EM * fs, room = b - a - 2 * LP_BREAK.ERA_PAD;
+      const efs = w0 > room ? Math.max(LP_BREAK.ERA_MIN * fs, fs * room / w0) : fs, w = w0 * efs / fs;   /* the name stands inside its own stretch */
+      const y = lpBreakEraY(st, cx - w / 2, cx + w / 2, efs, T, B);
+      const sz = efs !== fs ? ";font-size:" + efs.toFixed(1) + "px" : style ? ";" + style : "";
+      const e = lpText(st.chart, "lab", cx, y, "middle", name, { style: "font-weight:700;letter-spacing:.04em" + sz });
+      lpMark(st, "era:" + i, "axislabel", e, { x: cx, y });
+      return e; });
+    st.brk = { after: BK.after, before: BK.before, xa: BK.xa, xb: BK.xb, cx: BK.cx, label: BK.label, slashes, gapEl, eraEls };
+  };
   const buildLedgerLine = (st, pg) => {
     const ax = pg.axes || {}, series = pg.series || [];
     const PAL = pg.surface_from ? { ...LP_INK, cobalt: "#1769C2", teal: "#087D68", crimson: "#B53A28" } : LP_INK;
@@ -10334,7 +10422,8 @@ async function mount(doc) {
       if (ax.domain[1] !== null && ax.domain[1] !== undefined && Number.isFinite(+ax.domain[1])) y1 = Y(+ax.domain[1]);
     }
     if (Array.isArray(ax.xdomain) && ax.xdomain.length === 2 && Number.isFinite(+ax.xdomain[0]) && Number.isFinite(+ax.xdomain[1])) { x0 = +ax.xdomain[0]; x1 = +ax.xdomain[1]; }
-    const mx = (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
+    const BK = lpBreakScale(ax, x0, x1, L, W - R, P ? LP_BREAK.GAP_P : 1);   /* P69 T66: null unless the page names a break (E99 s111) */
+    const mx = BK ? BK.mx : (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
     st.scale = { kind: "line", mx, my, yv: Y, x0, x1, y0, y1 };   /* P48 T2: the scale a rescale interpolates - both states keep theirs */
     /* P48 (operator, 2026-09-10, on the rescale's over-draw: "how do we prevent the over-draw during the transform? some type of
        pin-and-pivot"): the PLOT BOX is the pin. While a transition re-projects the standing line, the points that leave the target
@@ -10381,7 +10470,9 @@ async function mount(doc) {
     } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10,
                     LFT ? Math.max(1, Math.min(5, Math.floor((B - T) / (2 * LP_LONGFORM.TICK_SPACE * LFT.tick)))) : undefined, PJ ? pj : null);   /* P69 T10: ... and a linear axis steps as coarse as a short plot needs (5 divisions whenever it has the room) */
     lpYLabel(st, pg, L, T - (LFT ? LFT.ylab_gap : 12));
-    (ax.xticks || []).forEach(([x, lab], i) => { const pe = PJ ? pj(mx(x), B) : null;   /* P58 T5: the x label stands at its own place ON the baseline, and upright */
+    const brkFs = PHONE ? lpTypeU(st, "tick") : P ? 40 : 24;   /* P69 T66: the x ticks' own size, in units (the template's .lab, or the phone type) */
+    (ax.xticks || []).forEach(([x, lab], i) => { if (BK && lpBreakHides(BK, mx(x), lab, brkFs)) return;   /* P69 T66: the written gap carries the years at the cut */
+      const pe = PJ ? pj(mx(x), B) : null;   /* P58 T5: the x label stands at its own place ON the baseline, and upright */
       const tx = lpEl("text", "lab", st.chart, { x: (pe ? pe[0] : mx(x)).toFixed(1), y: pe ? pe[1] + (P ? 52 : LFT ? LFT.xtick_dy : 32) : B + (P ? 52 : LFT ? LFT.xtick_dy : 32), "text-anchor": "middle",
         ...(lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : {}) }); tx.textContent = lab;
       lpMark(st, "xtick:" + i, "xtick", tx, { v: x, x: pe ? pe[0] : mx(x), y: pe ? pe[1] + (P ? 52 : LFT ? LFT.xtick_dy : 32) : B + (P ? 52 : LFT ? LFT.xtick_dy : 32) }); });
@@ -10416,11 +10507,12 @@ async function mount(doc) {
       /* E67: the HISTORY of a declared series is that same hue at .45, not grey - on the holdings page 26 years of line
          read as nothing. A series drawn in its SIGN colour keeps a neutral history (the 09-05 rule: "nor the history red"). */
       const col = s.muted ? (declared ? lpInkA(declared, 0.45) : LP_MUTED) : live;
-      const p = lpEl("path", "ser" + (s.muted ? " muted" : ""), st.chart, { d, stroke: col });
+      const sHost = BK ? lpBreakHost(st, BK, s.pts) : st.chart;   /* P69 T66: a line across the cut is held out of the gap */
+      const p = lpEl("path", "ser" + (s.muted ? " muted" : ""), sHost, { d, stroke: col });
       if (!s.muted) lpBloom(st, p, col);   /* the live line blooms; the history never does */
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
-      const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
+      const tip = lpEl("circle", "", sHost, { r: 6, fill: col, opacity: 0 });
       const last = s.pts[s.pts.length - 1];
       const prev = s.pts.length > 1 ? s.pts[s.pts.length - 2] : last;   /* portrait: the name ends left of the last segment so a steep drop never runs through it */
       /* a line ending high takes its name in the empty lower right - but only when it is the ONLY line. With two, both would
@@ -10497,6 +10589,8 @@ async function mount(doc) {
        highlighted page splits one series into a muted history and a live tail (two paths, one si, one slot, so the
        pair draws together as the one line it is) - defensive rather than reachable through the compiler, which needs
        exactly ONE series for the highlight split and at least TWO for this mode. */
+    if (BK) lpDrawBreak(st, BK, { T, B, W, R, L, P, fs: brkFs, tickY: B + (P ? 52 : LFT ? LFT.xtick_dy : 32),   /* P69 T66: the cut, its `//`, the gap written, the eras named */
+                                  style: PHONE ? "font-size:" + brkFs + "px" : null });
     if (pgBuildLines(pg)) {
       const slots = [...new Set(st.paths.map((pp) => pp.si | 0))].sort((a, b) => a - b);
       st.lineBuild = { slots };

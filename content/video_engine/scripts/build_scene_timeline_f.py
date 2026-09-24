@@ -2022,6 +2022,40 @@ def panel_focus_state(entry: dict, n: int, where: str) -> dict:
 PANEL_BARS_REFUSED = ("build_to", "undraw", "bracket", "spread", SPECIES_SPAN, SPECIES_LIT_STRETCH)
 
 
+def _page_breaks(world: dict) -> bool:
+    """Does any chart state of this ledger world draw a broken x axis (P69 T66, `ledger_page._validate_break`)?"""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return False
+    states = [world.get("page")] + list(world.get("page_states") or [])
+    return any(isinstance(s, dict) and isinstance(s.get("axes"), dict) and s["axes"].get("break") is not None
+               for s in states)
+
+
+def check_broken_axis(world: dict, row_species: list) -> None:
+    """P69 T66 / E99 s111: a broken axis holds its page. Its x is two stretches on one years-per-pixel with the gap
+    drawn between them, and every chart-state verb (rescale, extend, recast, morph, remake, compare) re-projects a
+    CONTINUOUS x - the break would be interpolated across, which is the one thing s111 forbids. A 2.5D form lays the
+    plot on a plane the break's clip does not follow. Both are refused by name; a page with no break is untouched.
+    ValueError names the verb; the caller names the row."""
+    if not _page_breaks(world):
+        return
+    if ASPECT == "9:16":
+        raise ValueError("a broken axis (E99 s111) is drawn on a 16:9 page: the portrait plot is too narrow for two eras' "
+                         "dates, the gap written between them and each era's name over its stretch, and the portrait end "
+                         "tag stands over a line that ends mid-plot (read in the frame, P69 T66) - carry the eras as a "
+                         "16:9 page, or as the rebased overlay on a short")
+    page = world.get("page") or {}
+    if page.get("form"):
+        kind = (page["form"] or {}).get("kind") if isinstance(page["form"], dict) else page["form"]
+        raise ValueError(f"form={kind}: a broken axis (E99 s111) is drawn flat - the gap and its `//` are cut in the "
+                         "page's own plot, and a form lays the plot on a plane the cut does not follow")
+    for sp in (row_species or []):
+        if isinstance(sp, dict) and sp.get("kind") == "chart_to":
+            raise ValueError(f"chart_to {sp.get('to')!r} at {sp.get('at')}: a broken axis (E99 s111) holds its page - "
+                             "a chart state re-projects a continuous x and would draw across the gap between the eras. "
+                             "Cut to the next page, or build the eras' words with build_to / figure / span on this one")
+
+
 def check_panels(world: dict, row_species: list) -> None:
     """P69 T8b: a row's species on a PANELS page - every `panel` (and datum `target.panel`) inside the page's panels,
     every series a panel species names inside ITS panel, a `chart_to` only by a verb a one-state panel can do, and
@@ -3988,6 +4022,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     player caps the draw there."""
     check_target_series(world, row_species)   # R26-218: a series the page does not have, refused before it draws nothing
     check_panels(world, row_species)          # P69 T8b: a panel's address, and the focus states, on the page they name
+    check_broken_axis(world, row_species)     # P69 T66: a broken axis holds its page (no chart state, no form)
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
             if world.get("kind") != SPECIES_LEDGER:
@@ -4239,6 +4274,9 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     if errors:
         raise ValueError(f"{plate_id!r}: {path.name} is not a page ({variant}): " + "; ".join(errors))
     page = LPG.build_spec(series, variant, emphasize, quiet_zone)
+    void = LPG.era_void_warning(series, series_id, variant)   # P69 T66: two eras on one continuous x (E53 s3 / E99 s111)
+    if void:
+        print(f"  [WARN] {void}")
     if enter:
         if enter == "surface":
             raise ValueError(f"{plate_id!r}: surface= must name a paper surface and positive lead seconds")
@@ -6141,6 +6179,10 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
                              "plane per page. A form draws the chart on its own plane; plane= turns the whole "
                              "page as a card (P58 T4). Keep one: drop plane=, or drop form=")
         page["form"] = spec
+        try:
+            check_broken_axis(world, [])   # P69 T66: a broken axis is drawn flat (E99 s111)
+        except ValueError as exc:
+            raise ValueError(f"{plate_id!r}: {exc}") from exc
     bst = opts.pop("bar_style", None)
     if bst is not None:
         # P69 T10b: HOW a bars page draws its bars - rounded shoulders and the prop's hatched shadow. A LEDGER PAGE
