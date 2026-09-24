@@ -628,7 +628,7 @@ def clear_strips(band: dict, ink: list[dict]) -> list[dict]:
 # So a card whose window overlaps a mark of the row's own takes no room inside the plot: the bands
 # outside it, or the park that makes one, are what is left - the same ladder `make_room` already
 # walks, and the same argument `bound_by_state` makes for a `chart_to` redrawing under a card.
-PLOT_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "undraw", "span", "ring", "lit_stretch", "freeze")
+PLOT_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "undraw", "span", "ring", "lit_stretch", "freeze", "explode")
 # P69 T49: the freeze beat's ONE light comes on at a datum ON the plot, for the beat's own window (at .. at + dur) and
 # no longer: a card that holds over the plot through the beat would stand on the light the stage stopped for.
 # P69 T36: the lit stretch is a mark ON the line - and it HOLDS lit after its word until the page leaves (E99 s91: the

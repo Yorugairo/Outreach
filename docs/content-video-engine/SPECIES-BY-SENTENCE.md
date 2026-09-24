@@ -147,6 +147,7 @@ edit the compiler, then `lint_species_choice.py --write-doc` (`--check-doc` and 
 | `note` | the sentence adds a side fact the chart cannot show - a line of handwriting in the page's quiet zone |
 | `chart_to` | the sentence needs the SAME data at another scale / with more of it / in another form / beside a card - the page changes state (E58; CHART_TO_WHEN names the verb); never a cut to a second chart of it |
 | `peel` | the sentence names a slice of a whole that LEAVES - the share page's slice peels off and goes blood red |
+| `explode` | the sentence DIVIDES a whole and the story is one piece's weight (NVDA's share of AI compute) - that slice leaves the whole in its own colour, every figure written; a camera key on the slice then pushes in while the others recede |
 | `spread` | the sentence's argument IS the gap between two series (or a series and a rule) - the region bleeds full of ink |
 | `chip` | the sentence names a THING as one of a set (a prediction, an actor, a plant) - a chip lands on its word; RETRACTS crosses it out on a later word (Bravos's icon board) |
 | `flow` | the sentence EXPLAINS a mechanism - A causes B via C - as named things and the arrows between them; a later word SWAPS one node and the rest stands (Bravos's rhyme) |

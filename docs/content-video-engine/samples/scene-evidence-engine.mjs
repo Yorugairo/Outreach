@@ -11087,6 +11087,7 @@ async function mount(doc) {
          + " A" + f(r) + " " + f(r) + " 0 " + (a1 - a0 > Math.PI ? 1 : 0) + " 1 " + f(px(a1)) + " " + f(py(a1)) + " Z";
   };
   const buildLedgerShare = (st, pg) => {
+    if (lpPieSolid(pg)) return buildLedgerPie(st, pg);   /* P69 T48: a donut, an extrusion or an explode - below */
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;
     const vals = (st.vals || []).map((v) => Math.abs(+v) || 0), n = vals.length;
     const total = vals.reduce((a, b) => a + b, 0) || 1;
@@ -11168,6 +11169,323 @@ async function mount(doc) {
       w.lab.setAttribute("opacity", o);
       if (w.val) w.val.setAttribute("opacity", o);
     }
+  };
+  /* ---- P69 T48 / E99 s109 (4) + its amendment: THE SOLID SHARE PAGE - the pie or the donut, flat or 3D exploded ----
+     The operator: "maybe a 3d pie chart exploded and then zoomed onto the largest portion when discussing NVDA's market
+     share of AI ... as long as it's created accurately that can be part of the story". The P48 T4 share page above is
+     untouched: a page that names none of `hole`, `extrude`, `explode` takes buildLedgerShare's own branch, byte for byte.
+     THE GEOMETRY. Every slice keeps its TRUE ANGLE - value / sum of the circle, swept clockwise from twelve with the
+     claim's slice first (the share page's own rule: the eye starts where the story is). A donut cuts a `hole` of that
+     share of the radius. An EXTRUDED pie is the same circle on a plane tilted `tilt` degrees back from face-on, drawn by
+     the ORTHOGRAPHIC projection (x, y) -> (x, y cos tilt): an affine map, so every top face keeps its true share of the
+     tops' area and the angles stay the data's in the plane - the perspective is the camera's, not the data's. The
+     solid under it is `depth` of the radius thick; the visible rim (the near half) and, where a slice has left, the cut
+     faces are shaded by the ONE stage light (T6b's PROP_SHADOW.LIGHT_DEG - never a second light: a Lambert term on
+     the face's own normal between EXTRUDE's SIDE_LIGHT and CAP_LIGHT), and on `hatch` the faces away from it carry
+     T6b's engraving (`lpHatchSvg`, the prop's own lines). Hard edges only (doc 29 s1.2).
+     THE FIGURES. Every slice writes its name and its figure (s100 (b): the number, not the area, is the claim): on the
+     slice where the words fit, else outside it on a short leader. Upright, never on the tilted plane.
+     THE MOTION. `explode` names the slice that leaves the whole: the `explode` page species says WHEN (it slides out
+     `out` of the radius along its own bisector, in its own colour - a peel's red is a LOSS, this is emphasis); a page
+     that names explode and fires no species stands exploded. A camera key whose look is a `datum` on this page aims at
+     that slice's centroid as drawn (resolveTarget), and while the camera pushes the other slices recede (RECEDE_A at the
+     push's full depth, on the camera's own zoom - one clock, a pure function of t). */
+  const PIE = Object.freeze({
+    FACET: Math.PI / 30,   /* a rim facet's angle (6 deg): the shading is stepped per facet, fine enough to read as a curve */
+    LABEL_R: 0.62,         /* where a slice's words sit on a PIE, a share of the radius along its bisector (the share page's 0.60 + the tilt's squeeze) */
+    OUT_R: 1.12,           /* ... and outside it, where they do not fit */
+    LEAD_GAP: 6,           /* the leader stops this short of the words (chart units) */
+    FIT_MIN: 0.42,         /* a slice under this many radians never carries its words inside (24 deg) */
+    SIDE_DARK: 0.58,       /* EXTRUDE.SIDE_LIGHT: a face turned from the stage light ... */
+    SIDE_LIT: 0.80,        /* ... and EXTRUDE.CAP_LIGHT, one turned to it - a ratio on the slice's own ink, never a second palette */
+    RECEDE_A: 0.30,        /* what the OTHER slices keep of their opacity at the push's full depth [DERIVED: read on the push golden] */
+    RECEDE_LAB: 0.45,      /* ... and their words - still legible, no longer competing */
+    SEAM: "#25313C",       /* the page's own field ink (LP_HALO): a hairline between two slices' tops */
+    /* the muted slices, OPAQUE: LP_SHARE_GREY laid over the page's field. A solid has sides, and a translucent top shows
+       the faces behind it through itself */
+    GREY: ["#6e7a86", "#616d78", "#56626d", "#4b5762"],
+    NAME_FS: [22, 38], FIG_FS: [26, 44],   /* [landscape, portrait]: the name, and the figure (the claim, larger) */
+    PAD_X: [150, 70], PAD_Y: [52, 120],    /* room kept for the outside words: each side, and above/below the solid */
+  });
+  const lpPieSolid = (pg) => !!(pg && (pg.hole || pg.extrude || pg.explode));
+  /* the pie's plane -> the chart: angle a from twelve clockwise, radius r, the slice's own offset on the page */
+  const pieXY = (S, a, r, off, dz) => [S.cx + (off ? off[0] : 0) + r * Math.sin(a), S.cy + (off ? off[1] : 0) - r * Math.cos(a) * S.c + (dz || 0)];
+  const pieF = (p) => p[0].toFixed(2) + " " + p[1].toFixed(2);
+  const pieArc = (S, r, a1, cw) => " A" + r.toFixed(2) + " " + (r * S.c).toFixed(2) + " 0 0 " + (cw ? 1 : 0) + " ";   /* one arc of a face: never past pi (the callers split) */
+  /* a slice's top face, a0 -> a1 (a sector, or on a donut an annular sector); a span over pi is written as two arcs */
+  const pieTopD = (S, a0, a1) => {
+    const R = S.R, r = S.rho * R, mid = a1 - a0 > Math.PI ? (a0 + a1) / 2 : null;
+    let d = "M" + pieF(pieXY(S, a0, R));
+    if (mid != null) d += pieArc(S, R, mid, true) + pieF(pieXY(S, mid, R));
+    d += pieArc(S, R, a1, true) + pieF(pieXY(S, a1, R));
+    if (r > 0) {
+      d += " L" + pieF(pieXY(S, a1, r));
+      if (mid != null) d += pieArc(S, r, mid, false) + pieF(pieXY(S, mid, r));
+      d += pieArc(S, r, a0, false) + pieF(pieXY(S, a0, r));
+    } else d += " L" + pieF(pieXY(S, 0, 0));
+    return d + " Z";
+  };
+  /* a wall facet b0 -> b1 at radius r, hanging `h` below its top edge */
+  const pieWallD = (S, b0, b1, r) => {
+    const A = pieXY(S, b0, r), Bp = pieXY(S, b1, r), h = S.h;
+    return "M" + pieF(A) + pieArc(S, r, b1, true) + pieF(Bp) + " L" + pieF([Bp[0], Bp[1] + h])
+         + pieArc(S, r, b0, false) + pieF([A[0], A[1] + h]) + " Z";
+  };
+  /* a cut face along angle a, from the inner radius to the rim */
+  const pieCutD = (S, a) => {
+    const i = pieXY(S, a, S.rho * S.R), o = pieXY(S, a, S.R), h = S.h;
+    return "M" + pieF(i) + " L" + pieF(o) + " L" + pieF([o[0], o[1] + h]) + " L" + pieF([i[0], i[1] + h]) + " Z";
+  };
+  /* the stage light on a face whose outward normal points along plane angle `na` (u = sin, w = -cos; w runs toward the
+     viewer, which is DOWN the page): Lambert against PROP_SHADOW.LIGHT_DEG (degrees from +x, y down) */
+  const pieLight = (na) => {
+    const L = PROP_SHADOW.LIGHT_DEG * Math.PI / 180;
+    return Math.sin(na) * Math.cos(L) - Math.cos(na) * Math.sin(L);
+  };
+  const pieShade = (l) => PIE.SIDE_DARK + (PIE.SIDE_LIT - PIE.SIDE_DARK) * Math.max(0, l);
+  /* the angles in [a0, a1] where a wall turns from the far half to the near (cos a = 0), so no facet straddles it */
+  const pieSplits = (a0, a1) => {
+    const out = [a0];
+    for (let k = Math.ceil((a0 - Math.PI / 2) / Math.PI); Math.PI / 2 + k * Math.PI < a1; k++) {
+      const b = Math.PI / 2 + k * Math.PI; if (b > a0) out.push(b);
+    }
+    out.push(a1); return out;
+  };
+  /* the facets of one wall: [b0, b1] pieces no wider than FACET, kept where `keep(mid)` (the half the eye sees) */
+  const pieFacets = (a0, a1, keep) => {
+    const f = [], s = pieSplits(a0, a1);
+    for (let j = 0; j + 1 < s.length; j++) {
+      const n = Math.max(1, Math.ceil((s[j + 1] - s[j]) / PIE.FACET));
+      for (let q = 0; q < n; q++) {
+        const b0 = s[j] + (s[j + 1] - s[j]) * q / n, b1 = s[j] + (s[j + 1] - s[j]) * (q + 1) / n;
+        if (keep((b0 + b1) / 2)) f.push([b0, b1]);
+      }
+    }
+    return f;
+  };
+  /* the planar centroid of a slice's top (an annular sector), at distance from the pie's centre along the bisector */
+  const pieCentroidR = (R, r, half) => (2 / 3) * (R * R * R - r * r * r) / Math.max(1e-9, R * R - r * r) * Math.sin(half) / Math.max(1e-9, half);
+  /* a polygon's area off an SVG path's own samples (shoelace), for the honesty report - never for drawing */
+  const pieArea = (el) => {
+    if (!el || !el.getTotalLength) return 0;
+    const L0 = el.getTotalLength(); if (!(L0 > 0)) return 0;
+    const n = Math.max(24, Math.ceil(L0 / 2)); let a = 0, p = el.getPointAtLength(0);
+    for (let i = 1; i <= n; i++) { const q = el.getPointAtLength(L0 * i / n); a += p.x * q.y - q.x * p.y; p = q; }
+    return Math.abs(a) / 2;
+  };
+  const buildLedgerPie = (st, pg) => {
+    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait, pi = P ? 1 : 0;
+    const vals = (st.vals || []).map((v) => Math.abs(+v) || 0), n = vals.length;
+    const total = vals.reduce((a, b) => a + b, 0) || 1;
+    const labels = pg.labels || [], cols = pg.colors || [], figs = pg.value_strings || [];
+    const ex = pg.extrude || null, xp = pg.explode || null;
+    const tilt = ex ? (+ex.tilt || 0) * Math.PI / 180 : 0, depth = ex ? +ex.depth || 0 : 0;
+    const c = Math.cos(tilt), rho = Math.max(0, Math.min(0.9, +pg.hole || 0));
+    const top = (P ? 96 : 34) + PIE.PAD_Y[pi], bot = G.H - (P ? 30 : 18) - PIE.PAD_Y[pi];
+    /* the solid's height on the page is 2 R c + depth R sin(tilt): the radius the room allows, and the side room the
+       outside words need */
+    const R = Math.max(60, Math.min(G.W / 2 - PIE.PAD_X[pi], (bot - top) / (2 * c + depth * Math.sin(tilt))) * 0.94);
+    const h = depth * R * Math.sin(tilt);
+    const S = { solid: true, cx: G.W / 2, cy: (top + bot) / 2 - h / 2, R, c, h, rho, wedges: [], hatch: [], seg: null };
+    S.layer = lpEl("g", "pie", st.chart);
+    S.labLayer = lpEl("g", "pie-words", st.chart);
+    const order = []; if (st.emph >= 0 && st.emph < n) order.push(st.emph);
+    for (let i = 0; i < n; i++) if (i !== st.emph) order.push(i);
+    const xi = xp && Number.isInteger(xp.index) ? xp.index : -1;
+    let a = 0;
+    for (const i of order) {
+      const full = vals[i] / total * LP_TAU, emph = i === st.emph;
+      const col = emph ? (LP_PAL[cols[i]] || cols[i] || LP_PAL.teal)
+                       : (cols[i] && cols[i] !== "deemph" ? (LP_PAL[cols[i]] || cols[i]) : PIE.GREY[Math.max(0, order.indexOf(i) - 1) % PIE.GREY.length]);
+      const g = lpEl("g", "pie-slice" + (emph ? " emph" : ""), S.layer);
+      const w = { i, a0: a, a1: a + full, full, v: vals[i], col, emph, g, off: [0, 0], faces: [], cuts: [], top: null };
+      /* the faces, in the painter's order inside the slice: the cut faces, the hole's far wall, the near rim, then the top */
+      if (h > 0) {
+        for (const [side, at] of [[0, a], [1, a + full]]) {   /* side 0: the face at a0 (normal -tangent); 1: at a1 (+tangent) */
+          const na = at + (side ? Math.PI / 2 : -Math.PI / 2), l = pieLight(na);
+          const f = lpEl("path", "pie-cut", g, { d: pieCutD(S, at), fill: col, stroke: col, "stroke-width": 0.6, opacity: 0 });
+          f.style.filter = "brightness(" + pieShade(l).toFixed(3) + ")";
+          /* seen only when it faces the viewer (its normal's w > 0) - and then only once the slice beside it has left */
+          w.cuts.push({ el: f, at, side, seen: -Math.cos(na) > 1e-6, shadow: l <= 0 });
+        }
+        const wall = (b0, b1, r, inner) => {
+          const na = (b0 + b1) / 2 + (inner ? Math.PI : 0), l = pieLight(na);
+          const f = lpEl("path", "pie-side", g, { d: "", fill: col, stroke: col, "stroke-width": 0.6 });
+          f.style.filter = "brightness(" + pieShade(l).toFixed(3) + ")";
+          w.faces.push({ el: f, b0, b1, r, shadow: l <= 0 });
+        };
+        if (rho > 0) for (const [b0, b1] of pieFacets(a, a + full, (m) => Math.cos(m) > 0)) wall(b0, b1, rho * R, true);
+        for (const [b0, b1] of pieFacets(a, a + full, (m) => Math.cos(m) < 0)) wall(b0, b1, R, false);
+      }
+      w.top = lpEl("path", "wedge pie-top" + (emph ? " emph" : ""), g, { d: "", fill: col, stroke: PIE.SEAM, "stroke-width": 1.2, "stroke-linejoin": "round" });
+      lpMark(st, "w:" + i, "wedge", w.top, { a0: a, a1: a + full, cx: S.cx, cy: S.cy, r: R, v: vals[i] }, w);
+      w.bis = a + full / 2;
+      S.wedges.push(w); a += full;
+    }
+    /* THE EXPLODE: the one slice that leaves, and how far - in the pie's plane along its bisector, then projected */
+    S.xw = S.wedges.find((w) => w.i === xi) || null;
+    if (S.xw) {
+      const d = (+xp.out || 0) * R;
+      S.xv = [d * Math.sin(S.xw.bis), -d * Math.cos(S.xw.bis) * c];
+      const k = S.wedges.indexOf(S.xw);
+      S.xNeighbours = [S.wedges[(k - 1 + n) % n], S.wedges[(k + 1) % n]];
+    }
+    /* THE HATCH (T6b): per slice, clipped to that slice's faces turned from the light - in the slice's own group, so the
+       painter's order holds and the lines ride the slice when it leaves (translated, never turned) */
+    if (h > 0 && ex.hatch) {
+      const k = st.stagePx > 0 ? st.stagePx : 1, H8 = PROP_SHADOW.HATCH;
+      S.wedges.forEach((w, j) => {
+        const shade = w.faces.filter((f) => f.shadow).concat(w.cuts.filter((f) => f.shadow && f.seen));
+        if (!shade.length) return;
+        const id = "pie-h-" + (st.seed | 0) + "-" + j;
+        const defs = lpEl("defs", "", w.g), cp = lpEl("clipPath", "", defs, { id, clipPathUnits: "userSpaceOnUse" });
+        const clips = shade.map((f) => ({ f, el: lpEl("path", "", cp, { d: "" }) }));
+        const hg = lpEl("g", "pie-hatch", w.g, { fill: "rgb(" + PROP_SHADOW.INK.page.join(",") + ")", opacity: PROP_SHADOW.ALPHA.page, "clip-path": "url(#" + id + ")" });
+        w.g.insertBefore(hg, w.top);
+        const x0 = S.cx - R - (S.xv ? Math.abs(S.xv[0]) : 0), y0 = S.cy - R * c, W0 = 2 * R + 2 * (S.xv ? Math.abs(S.xv[0]) : 0), H0 = 2 * R * c + h + (S.xv ? Math.abs(S.xv[1]) : 0);
+        const lx = Math.floor(x0 * k), ly = Math.floor(y0 * k), LW = Math.ceil(W0 * k), LH = Math.ceil(H0 * k);
+        const sg = lpEl("g", "", hg, { transform: "scale(" + +(1 / k).toFixed(6) + ") translate(" + lx + " " + ly + ")" });
+        lpHatchSvg(sg, "primary", lx, ly, LW, LH, PROP_SHADOW.LIGHT_DEG, H8.PITCH_PX, H8.WIDTH_PX);
+        lpHatchSvg(sg, "cross", lx, ly, LW, LH, PROP_SHADOW.LIGHT_DEG + H8.CROSS_DEG, H8.CROSS_PITCH_PX, H8.CROSS_WIDTH_PX);
+        w.clips = clips; S.hatch.push(hg);
+      });
+    }
+    /* THE WORDS: every slice's name and figure - on the slice where they fit, else outside it on a leader */
+    const nfs = PIE.NAME_FS[pi], ffs = PIE.FIG_FS[pi], ink = "#FDF6E3", ink2 = "#dfe6ec";
+    const outside = [];
+    for (const w of S.wedges) {
+      const k = w.emph ? 1.12 : 1, name = String((pg.short_labels || [])[w.i] ?? labels[w.i] ?? ""), fig = String(figs[w.i] ?? lpFmt(w.v));
+      const wide = Math.max(name.length * nfs * k * 0.56, fig.length * ffs * k * 0.6);
+      const rl = rho > 0 ? (1 + rho) / 2 * R : PIE.LABEL_R * R;
+      const room = 2 * rl * Math.sin(Math.min(w.full, Math.PI) / 2) * 0.92;
+      const ring = (rho > 0 ? (1 - rho) * R : R) * c;
+      const inside = w.full >= PIE.FIT_MIN && room >= wide && ring >= (nfs + ffs) * k * 1.05;
+      const lg = lpEl("g", "pie-label", S.labLayer);
+      let x, y, anch = "middle";
+      if (inside) { [x, y] = pieXY(S, w.bis, rl); y -= (nfs + ffs) * k * 0.1; }
+      else {
+        const near = Math.cos(w.bis) < 0;
+        [x, y] = pieXY(S, w.bis, R * PIE.OUT_R, null, near ? h : 0);
+        const sx = Math.sin(w.bis);
+        anch = sx > 0.3 ? "start" : sx < -0.3 ? "end" : "middle";
+        if (anch === "middle") y += near ? nfs * k * 0.9 : -ffs * k * 1.1;
+        outside.push({ w, x, y, anch, k, near });
+      }
+      w.lab = lpText(lg, "wlab", x, y, anch, name, { style: LP_HALO + "fill:" + (w.emph ? ink : ink2) + ";font-size:" + (nfs * k).toFixed(0) + "px;font-weight:700" });
+      w.val = lpText(lg, "wlab", x, y + ffs * k * 1.02, anch, fig, { style: LP_HALO + "fill:" + ink + ";font-size:" + (ffs * k).toFixed(0) + "px;font-weight:800" });
+      w.lg = lg; w.inside = inside;
+    }
+    /* two outside labels on one side never overprint: walk them down the side in page order, each at least its own
+       two lines below the last, and draw each one's leader from the rim to where its words now stand */
+    for (const side of ["start", "end", "middle"]) {
+      const ls = outside.filter((o) => o.anch === side).sort((p, q) => p.y - q.y);
+      for (let j = 1; j < ls.length; j++) {
+        const need = ls[j - 1].y + (nfs + ffs) * 1.25 * ls[j - 1].k;
+        if (ls[j].y < need) { const dy = need - ls[j].y; ls[j].y = need; for (const e of [ls[j].w.lab, ls[j].w.val]) e.setAttribute("y", (+e.getAttribute("y") + dy).toFixed(1)); }
+      }
+    }
+    for (const o of outside) {
+      const rim = pieXY(S, o.w.bis, S.R * 1.01, null, o.near ? h : 0);
+      const tx = o.anch === "start" ? o.x - PIE.LEAD_GAP : o.anch === "end" ? o.x + PIE.LEAD_GAP : o.x;
+      const ty = o.anch === "middle" ? (o.near ? o.y - nfs * o.k * 0.95 : o.y + ffs * o.k * 0.35) : o.y - nfs * o.k * 0.3;
+      o.w.lead = lpEl("line", "pie-lead", o.w.lg, { x1: rim[0].toFixed(1), y1: rim[1].toFixed(1), x2: tx.toFixed(1), y2: ty.toFixed(1),
+                                                     stroke: "#aeb6be", "stroke-width": P ? 2.4 : 1.4, "stroke-linecap": "round" });
+      o.w.lg.insertBefore(o.w.lead, o.w.lab);
+    }
+    for (const w of S.wedges) {   /* marked where the words finally stand */
+      lpMark(st, "wlab:" + w.i, "wedgelabel", w.lab, { x: +w.lab.getAttribute("x"), y: +w.lab.getAttribute("y") });
+      lpMark(st, "wval:" + w.i, "wedgelabel", w.val, { x: +w.val.getAttribute("x"), y: +w.val.getAttribute("y"), v: w.v });
+    }
+    st.share = S;
+    st.buildDur = LPX.SHARE_BUILD; st.paint = paintLedgerPie;
+    st.plot = { L: S.cx - R, R: G.W - (S.cx + R), T: S.cy - R * c, B: S.cy + R * c + h, W: G.W, x0: 0, x1: 1, y0: 0, y1: total, log: false };
+    /* the honesty report (T48's measure): each slice's APPARENT area on the page - its top and every face the eye sees
+       at the explode's rest - against its true share. Occlusion is not subtracted, so a near slice's figure is an
+       upper bound. Read by the test and the build notes, never by the painter. */
+    pieRest(S);
+    const areas = S.wedges.map((w) => pieArea(w.top) + w.faces.reduce((s, f) => s + pieArea(f.el), 0)
+                                        + w.cuts.reduce((s, f) => s + (+f.el.getAttribute("opacity") > 0 ? pieArea(f.el) : 0), 0));
+    const sum = areas.reduce((p, q) => p + q, 0) || 1;
+    S.apparent = S.wedges.map((w, j) => ({ i: w.i, share: w.v / total, area: areas[j] / sum, ratio: (areas[j] / sum) / Math.max(1e-9, w.v / total) }));
+  };
+  /* the whole solid at rest (swept, exploded): the painter's own geometry at k = 1, for the measure */
+  const pieRest = (S) => { pieSweep(S, Infinity); pieMove(S, 1); };
+  /* THE SWEEP: each slice's top and faces drawn up to the sweep's front; the words write as their slice completes */
+  const pieSweep = (S, front) => {
+    for (const w of S.wedges) {
+      const a1 = Math.min(w.a1, front), on = a1 > w.a0 + 1e-4;
+      w.top.setAttribute("d", on ? pieTopD(S, w.a0, a1) : "");
+      for (const f of w.faces) f.el.setAttribute("d", f.b0 < a1 - 1e-6 ? pieWallD(S, f.b0, Math.min(f.b1, a1), f.r) : "");
+      /* the words write over the last of their OWN slice, never before it starts: the share page's fade is a tenth of a
+         turn, wider than a thin slice, and a name over a wedge not yet drawn is a lie (read on the 3D sweep's frames) */
+      const fade = Math.min(LPX.SHARE_LABEL * LP_TAU, w.full);
+      w.lg.setAttribute("opacity", clamp01((front - w.a1 + fade) / fade).toFixed(2));
+      w.swept = front >= w.a1 - 1e-6;
+    }
+  };
+  /* THE MOVE: the exploded slice's offset at k, the cut faces the opening shows, and the painter's order */
+  const pieMove = (S, k) => {
+    const X = S.xw, [prev, next] = S.xNeighbours || [null, null];
+    for (const w of S.wedges) {
+      w.off = w === X ? [S.xv[0] * k, S.xv[1] * k] : [0, 0];
+      const tf = w.off[0] || w.off[1] ? "translate(" + w.off[0].toFixed(2) + " " + w.off[1].toFixed(2) + ")" : null;
+      if (tf) { w.g.setAttribute("transform", tf); w.lg.setAttribute("transform", tf); }
+      else { w.g.removeAttribute("transform"); w.lg.removeAttribute("transform"); }
+      /* where the whole has opened: the leaving slice's own two faces, and each neighbour's face toward it (with two
+         slices the one neighbour borders it on both sides) - shown only when turned to the viewer */
+      for (const f of w.cuts) {
+        const open = X && k > 1e-3 && w.swept && X.swept && (w === X || (w === prev && f.side === 1) || (w === next && f.side === 0));
+        f.el.setAttribute("opacity", open && f.seen ? 1 : 0);
+      }
+      if (w.clips) for (const q of w.clips) q.el.setAttribute("d", q.f.el.getAttribute("opacity") === "0" ? "" : (q.f.el.getAttribute("d") || ""));
+    }
+    /* back to front: the painter's order by each slice's centroid depth (w runs toward the viewer, down the page) */
+    const depth = (w) => -Math.cos(w.bis) * pieCentroidR(S.R, S.rho * S.R, w.full / 2) * S.c + w.off[1];
+    const ord = S.wedges.slice().sort((p, q) => depth(p) - depth(q) || p.a0 - q.a0);
+    const seq = ord.map((w) => w.i).join(",");
+    if (seq !== S.seq) { for (const w of ord) S.layer.appendChild(w.g); S.seq = seq; }
+  };
+  /* THE RECESSION: while the camera pushes onto one slice, the others fall back on the push's own clock */
+  const pieRecede = (S, focus) => {
+    for (const w of S.wedges) {
+      const r = focus && w.i !== focus.index ? focus.p : 0;
+      w.g.setAttribute("opacity", (1 - (1 - PIE.RECEDE_A) * r).toFixed(3));
+      w.lg.style.opacity = r > 0 ? (1 - (1 - PIE.RECEDE_LAB) * r).toFixed(3) : "";
+    }
+  };
+  const paintLedgerPie = (st, c) => {
+    const S = st.share, sw = clamp01(c / LPX.SHARE_SWEEP);
+    pieSweep(S, (sw >= 1 ? 1 : expoOut(sw)) * LP_TAU);
+  };
+  /* the slice a camera key pushes onto, and how far the push has gone: the key pair around t, the deeper of the two
+     that looks at a datum of this page, and the camera's own zoom this frame against that key's (0 at rest, 1 held) */
+  const pieFocus = (scene, t) => {
+    const keys = ((scene.camera || {}).keys || []).filter((k) => k && typeof k.t === "number");
+    if (!keys.length || !kin("camera")) return null;
+    const j = keys.findIndex((k) => k.t >= t);
+    const pair = j < 0 ? [keys[keys.length - 1]] : j === 0 ? [] : [keys[j - 1], keys[j]];
+    let best = null;
+    for (const k of pair) if (k.look && k.look.kind === "datum" && Number.isInteger(k.look.index) && +k.zoom > 1 && (!best || +k.zoom > +best.zoom)) best = k;
+    if (!best) return null;
+    return { index: best.look.index, p: clamp01((camNow(scene, t).s - 1) / (+best.zoom - 1)) };
+  };
+  /* the frame's motion: the explode on its word (or standing, when the row names no word), then the push's recession */
+  const lpPieMotion = (st, scene, t) => {
+    const S = st.share; if (!S || !S.solid) return;
+    const sps = pageSpecies(scene, "explode");
+    let k = sps.length ? 0 : 1;
+    for (const sp of sps) k = Math.max(k, expoOut(clamp01((t - sp.at) / Math.max(0.001, sp.dur || 1))));
+    pieMove(S, k);
+    pieRecede(S, pieFocus(scene, t));   /* after the move: the camera resolves the slice's centroid where it now stands */
+  };
+  /* a slice's centroid as drawn, in the chart's own units - what a `datum` target on a share page resolves to (the
+     P48 T4 pie's wedges carry the same a0 / a1 / cx / cy / R, flat and whole) */
+  const lpShareCentroid = (S, i) => {
+    const w = (S.wedges || []).find((q) => q.i === i); if (!w) return null;
+    const half = (w.a1 - w.a0) / 2, m = w.a0 + half;
+    if (!S.solid) { const d = pieCentroidR(S.R, 0, half); return { x: S.cx + d * Math.sin(m), y: S.cy - d * Math.cos(m) }; }
+    const p = pieXY(S, m, pieCentroidR(S.R, S.rho * S.R, half), w.off);
+    return { x: p[0], y: p[1] };
   };
   /* ---- TIERS (P50 T9; BACKLOG R26-24; Bravos shots 35-36's two-panel SPR) ------------------------
      N SMALL MULTIPLES on one page: N bands stacked, each with its own y-scale and its own honest zero
@@ -13933,6 +14251,7 @@ async function mount(doc) {
         let pu = 0;
         for (const sp of pageSpecies(scene, "peel")) pu = Math.max(pu, (t - sp.at) / Math.max(0.001, sp.dur || 1));
         lpPeelTo(cs, pu);
+        if (cs.share.solid) lpPieMotion(cs, scene, t);   /* P69 T48: the slice that leaves on its word, and the push's recession */
       }
   };
   /* P48 T2 - RESCALE. The standing chart never leaves: on one min-jerk clock every mark that exists under both scales moves
@@ -15371,6 +15690,10 @@ async function mount(doc) {
       /* viewBox -> stage px under the default xMidYMid meet (the landscape chart is letterboxed in its box) */
       const vbMap = (svg, q) => { const b = stageBox(svg), vb = svg.viewBox.baseVal, k = Math.min(b.w / vb.width, b.h / vb.height);
         return { x: b.x + (b.w - vb.width * k) / 2 + (q.x - (vb.x || 0)) * k, y: b.y + (b.h - vb.height * k) / 2 + (q.y - (vb.y || 0)) * k, w: 0, h: 0 }; };   /* P69 T8b: a panel's viewBox starts above 0 */
+      if (S0 && S0.share) {   /* P69 T48: on a SHARE page a datum is a SLICE - its centroid as drawn (the explode included) */
+        const q = lpShareCentroid(S0.share, tg.index | 0);
+        return q ? vbMap(chart, q) : null;
+      }
       const rng = lpSeriesRange(S0, tg.series | 0);
       if (rng) {   /* the exact datum (P41): the builder's own point, never a length fraction - and its own series' */
         const q = lpDatumNow(lpst, tg.series | 0, Math.max(rng.lo, Math.min(tg.index | 0, rng.hi)));

@@ -420,6 +420,7 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                                                # law backwards (that is what an un-draw is) and the named state then draws on by its
                                                # own law, on the same page, under a title a retitle carries across. Never a cut.
                  "peel",                       # P48 T4: the piece of a share page's named slice leaves the pie on its word, and goes blood red
+                 "explode",                    # P69 T48 / E99 s109 (4): a solid share page's named slice leaves the whole on its word, in its own colour
                  "spread")                     # the fifth watch: the region between two drawn series, bled full of ink on a word (the divergence IS the argument): a chart's deployed life is 6-8 s from its last data mark, 12 s at most - then it
                                                # UN-DRAWS (the line unwinds from where it stands back to a datum, index 0 = to nothing) or BECOMES
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
@@ -488,7 +489,7 @@ CHECKLIST_PHONE_ROWS = 3   # row 1 at PT + 130, pitched 90: a fourth baseline wo
 COUNT_ARRAY_STEP, COUNT_ARRAY_LAND_S = 0.34, 0.45
 AGENDA_STEP, AGENDA_ROW_S = 0.34, 0.54
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
-PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to",
+PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "explode", "chart_to",
                  SPECIES_SPAN, SPECIES_CROSS)   # P50 T4: a span is a page species - it is shaded behind the page's own chart, on the page's own clock and live scale (R26-28)
 # ---- R26-219: A NOTE OR FIGURE THE PAGE WROTE LEAVES WITH THE PAGE (2026-09-18, the Steel and Paper H unit) ----
 # Measured on the H unit: the railway page's two `note`s and its `-64%` `figure` were still standing on the GDP page
@@ -586,6 +587,7 @@ SPECIES_WHEN = {
     "note": "the sentence adds a side fact the chart cannot show - a line of handwriting in the page's quiet zone",
     "spread": "the sentence's argument IS the gap between two series (or a series and a rule) - the region bleeds full of ink",
     "peel": "the sentence names a slice of a whole that LEAVES - the share page's slice peels off and goes blood red",
+    "explode": "the sentence DIVIDES a whole and the story is one piece's weight (NVDA's share of AI compute) - that slice leaves the whole in its own colour, every figure written; a camera key on the slice then pushes in while the others recede",
     SPECIES_CHIP: "the sentence names a THING as one of a set (a prediction, an actor, a plant) - a chip lands on its word; RETRACTS crosses it out on a later word (Bravos's icon board)",
     SPECIES_FLOW: "the sentence EXPLAINS a mechanism - A causes B via C - as named things and the arrows between them; a later word SWAPS one node and the rest stands (Bravos's rhyme)",
     SPECIES_LIGHT: "the sentence NAMES a place - the country lights on the word, the spotlight's cousin (a fill, never a ring)",
@@ -1511,6 +1513,24 @@ def chrome_reach(world, docks, cam, plate_id: str, aspect: str) -> tuple[list[st
 
 
 TARGET_KINDS = ("datum", "point", "region", "span")
+
+
+def share_slice_errors(world, cam, plate_id: str) -> list[str]:
+    """P69 T48 / E99 s109 (4): on a SHARE page a camera key's `datum` look is a SLICE - `index` names the slice the push
+    goes onto (the player aims at its centroid as drawn, explode included). A slice the page does not have is refused
+    here, where the page is in hand; any other page, or a camera naming no datum, has nothing to say. Pure."""
+    page = (world or {}).get("page") if isinstance(world, dict) else None
+    if not isinstance(page, dict) or page.get("builder") != "share" or not isinstance(cam, dict):
+        return []
+    n = len(page.get("values") or [])
+    errs = []
+    for i, k in enumerate(cam.get("keys") or []):
+        for fld in ("look", "at"):
+            tg = k.get(fld) if isinstance(k, dict) else None
+            if isinstance(tg, dict) and tg.get("kind") == "datum" and not (isinstance(tg.get("index"), int) and 0 <= tg["index"] < n):
+                errs.append(f"{plate_id}: camera key {i} {fld}: datum index {tg.get('index')!r} is not a slice of this share "
+                            f"page (0..{n - 1}) - on a share page a datum IS a slice")
+    return errs
 COUNTRY_TARGET, MAPPOINT_TARGET = "country", "mappoint"   # P50 T5: a place on the VECTOR MAP - {"kind": "country", "id": "IRN"} (the
 MAP_TARGETS = (COUNTRY_TARGET, MAPPOINT_TARGET)           # outline's own centroid) or {"kind": "mappoint", "x": 640, "y": 165} in MAP BOX
                                                           # units, never stage fractions: the map is the coordinate system, so a declared
@@ -1544,7 +1564,7 @@ SPECIES_TARGETS = {
                                                   # only when the label carries a digit (a stamp whose label is the number); never a caption word
                                                   # span, and never a phrase inside a press card (that is the callout's underline, P50 T3)
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
-    "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
+    "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "explode": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
 SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANELS by index, never a coordinate
 SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
@@ -2248,9 +2268,10 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
                         "declared on the plate id as ';then=<series>:<variant>'); 0 is the page's own chart")
         elif idx >= STATE_MAX:
             errs.append(f"chart_to: state {idx} is past STATE_MAX ({STATE_MAX}): a fourth chart is a new page or a card")
-    elif kind == "peel":
+    elif kind in ("peel", "explode"):
         pass   # P48 T4: no fields of its own. WHICH piece leaves and what it is worth are the PAGE's (page.peel), validated
                # by ledger_page against E53 s1's bounds; the species only says WHEN. A peel on a page with no peel is inert.
+               # P69 T48: `explode` is the same contract - the slice and how far are the page's (page.explode).
     elif kind == "note":
         if not isinstance(entry.get("text"), str) or not entry["text"].strip():
             errs.append("note: needs a non-empty string text (a line the page writes in its quiet zone)")
@@ -2880,7 +2901,7 @@ def _validate_freeze(entry: dict) -> list[str]:
 # stepped plate life, a ticker, a declared self-animating world, the newsreel's crawl
 FREEZE_UNHELD = ("punch", "focus_zoom", "pull_back", "plate_life", "ticker", "life", "newsreel")
 # ... and the kinds that DRAW for their whole window (their `dur` is motion, not a hold): spanning a beat, they move in it
-FREEZE_DRAWING = ("build_to", "undraw", "chart_to", "retitle", "trace", "peel", "spread", "bracket")
+FREEZE_DRAWING = ("build_to", "undraw", "chart_to", "retitle", "trace", "peel", "explode", "spread", "bracket")
 
 
 def _freeze_row_errors(row_species: list, plate_id: str) -> list[str]:
@@ -9764,6 +9785,7 @@ def main() -> int:
         # placed - a landing pull or a key that would cut the title, the y ticks, the source line or a drawn end tag is
         # refused by name, reported, or clamped on the row's own word (`reach: "clamp"`)
         reach_errs, reach_notes, row_camera = camera_reach(world, docks, row_camera, plate, ASPECT)
+        reach_errs = reach_errs + share_slice_errors(world, row_camera, plate)   # P69 T48: a push onto a slice names a real one
         if reach_errs:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(reach_errs))
         for _note in reach_notes:

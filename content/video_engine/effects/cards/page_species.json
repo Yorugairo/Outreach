@@ -403,6 +403,51 @@
       }
     },
     {
+      "id": "page_species:explode",
+      "axis": "page_species",
+      "token": "explode",
+      "title": "The explode page species",
+      "aliases": [],
+      "does": "A solid share page's named slice leaves the whole along its own bisector, in its own colour, every figure still written.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"explode\", \"at\", \"dur\"} on a ledger row whose share page declares `explode`",
+        "example": "{'kind': 'explode', 'at': 9.0, 'dur': 0.8}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpPieMotion",
+        "also": [
+          "pieMove",
+          "buildLedgerPie"
+        ],
+        "note": "buildLedgerPie builds the solid; lpPieMotion moves the slice on the species' own clock (expoOut, a pure function of t)"
+      },
+      "doctrine": [
+        "P69 T48",
+        "E99 s109 (4)",
+        "E99 s100"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "share-pie-3d",
+        "test": "content/video_engine/tests/test_share_pie_3d.py::test_the_3d_pie_explodes_its_slice_on_its_word_and_keeps_the_true_angles",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "page_species:figure",
       "axis": "page_species",
       "token": "figure",

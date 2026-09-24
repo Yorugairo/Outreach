@@ -45,6 +45,7 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "agenda-two",   # P52 T8: two numbered rows revealed one per word, each holding at its own breath
             "agenda-page",  # P61 T8 / E99 s16: the same species' PAGE form - the plate version of the list: the rows filling the board on their own mounts, a title over them, and each row's CATALOGUED icon (E93/E94) stamped on after its sentence (its three moving instants ride PROOF_FRAMES)
             "ring-dashed-chip",   # P52 T8: the ring's DASHED form round a datum with its flag chip - E56's use, a new form
+            "share-donut-flat", "share-pie-3d", "share-pie-3d-push",   # P69 T48 / E99 s109 (4) + amendment: the registered DRAM shares as a flat donut, as a tilted extruded pie with Samsung EXPLODED on its word (its cut face shaded by the one stage light, T6b's hatch on the faces turned from it), and the camera pushed onto that largest slice with the other four receded - every angle the share of the whole, every figure written
             "rings-on-vertices",  # P69 T47 / E99 s109 (3): the 20-year yield's three near-equal 2025 tops ringed in turn and held, the valley between the first two lit by T36's light, the trough's 4.44% written
             "species-proof",      # P52 T7 + T8: the proof page for human gate 3 - the three species on one clock (its other two instants are FLAG_FRAMES)
             "newsreel-band",        # P52 T6: the newsreel band 16:9 - the wire crawling under a docked surface, mid-run

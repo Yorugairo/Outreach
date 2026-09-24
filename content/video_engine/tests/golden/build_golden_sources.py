@@ -84,6 +84,9 @@ FRAME_T = {
     "agenda-two": 7.2,              # P52 T8: both rows revealed (5.0 and 6.2 + NUM_LEAD + ROW_S = 6.74) and both rules fully drawn - the agenda as it stands
     "agenda-page": 12.0,            # P61 T8: the agenda PAGE at rest - all three rows written, all three catalogued icons stamped and settled (the last at 8.2 + 0.54 + 0.12 + 0.26 + 0.14 = 9.26), the board full and breathing. Its three moving instants ride PROOF_FRAMES (@proof-first-row / @proof-stamp / @proof-full)
     "rings-on-vertices": 13.2,      # P69 T47: the third ring closed (8.4 + DRAW_S), the valley's light landed (10.2 + 0.8 x 1.6 = 11.48) and the trough's figure written (11.5 + 1.4) - all three rings still standing (they hold to 16.0)
+    "share-donut-flat": 8.4,        # P69 T48: the flat donut at rest - the sweep closed (3.9 + 0.5 + SHARE_BUILD 3.2 = 7.6) and every slice's name and figure written
+    "share-pie-3d": 10.4,           # P69 T48: the tilted, extruded pie with its largest slice EXPLODED - the explode fired on its word (9.0 + 0.8) and settled
+    "share-pie-3d-push": 13.2,      # P69 T48: the camera HELD on the largest slice (11.0 -> 12.4 at PIE_PUSH_ZOOM, inout) with the other four receded
     "ring-dashed-chip": 10.6,       # P52 T8: the page has built (3.9 + 0.5 + 3.0), the dashed ellipse has closed round the datum (9.0 + DRAW_S) and the flag chip has landed beside it (+ FLAG_LAG + CHIP.LAND_S = 10.24)
     "species-proof": 12.6,          # P52 T7/T8, HUMAN GATE 3: the proof page's FIRST instant (the ring closed with its flag on the fully built page). Its other two are FLAG_FRAMES entries on the same clock (species-proof@proof-count / @proof-agenda), so the operator reads all three as frames and then plays the one file
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
@@ -1615,6 +1618,80 @@ def rings_on_vertices() -> tuple[dict, dict]:
     return tl, _base_uris()
 
 
+# P69 T48 / E99 s109 (4) + its amendment: THE PIE AND THE DONUT, FLAT OR 3D EXPLODED, AND THE PUSH ONTO THE LARGEST
+# SLICE. The page is the registered DRAM market-share slide (silicon-silent-triopoly s08, `registration.silicon-silent-
+# triopoly.json`): Samsung 39 %, SK hynix 26 %, Micron 25 %, CXMT 7 % - 97 of the whole 100. The share check refuses
+# that page and NAMES the 3 % it owes; the fifth slice is exactly that remainder, "Other", never a figure invented. The
+# same page is drawn three ways: a flat donut, the tilted/extruded pie with Samsung EXPLODED on its word ("Samsung
+# alone makes..."), and the push - a camera key on the largest slice while the others recede.
+PIE_REGISTRATION = REPO / "content/video_engine/projects/systems-and-blowups/registration/registration.silicon-silent-triopoly.json"
+PIE_SLIDE = "silicon-silent-triopoly-s08"
+PIE_MAKERS = ("Samsung", "SK hynix", "Micron", "CXMT")
+PIE_PLATE = "ledger:golden-dram:share"
+PIE_HOLE = 0.55            # the flat donut's hole, a share of the radius
+PIE_EXPLODE_AT, PIE_EXPLODE_S = 9.0, 0.8     # "Samsung alone" - the slice leaves the whole on its word
+PIE_PUSH_T0, PIE_PUSH_T1, PIE_PUSH_ZOOM = 11.0, 12.4, 1.6   # the push onto the largest slice, then held
+
+
+def pie_series() -> dict:
+    """The slide's four makers, read off the registration (never re-typed), and the remainder the check names."""
+    reg = json.loads(PIE_REGISTRATION.read_text(encoding="utf-8"))
+    figs = {f["label"]: f["value"] for f in next(s for s in reg["slides"] if s["slide_id"] == PIE_SLIDE)["figures"]}
+    vals = [int(figs[f"{n} DRAM market share"].rstrip("%")) for n in PIE_MAKERS]
+    shares = [{"label": n, "value": v, "value_string": f"{v}%"} for n, v in zip(PIE_MAKERS, vals)]
+    rest = 100 - sum(vals)
+    shares.append({"label": "Other", "value": rest, "value_string": f"{rest}%"})
+    return {"title": "Who makes the world's DRAM", "sub": "DRAM market share by maker, percent of the whole",
+            "src": "silicon-silent-triopoly deck, slide 8 (registered figures); Other = the remainder to 100",
+            "unit": "%", "total": 100, "emphasize": 0, "shares": shares,
+            "extrude": {"hatch": True}, "explode": {"index": 0}}
+
+
+def pie_push_camera() -> dict:
+    """The push as a row authors it: the look is the largest slice (a `datum` on a share page is a slice), the chrome
+    rides the screen so the title and the source stay whole while the plot is pushed (T26f)."""
+    look = {"kind": "datum", "index": 0}
+    return {"keys": [{"t": PIE_PUSH_T0, "zoom": 1.0, "look": look, "ease": "inout"},
+                     {"t": PIE_PUSH_T1, "zoom": PIE_PUSH_ZOOM, "look": look, "ease": "inout"}],
+            "attention": "locked", "chrome": "screen"}
+
+
+def _pie_timeline(title: str, series: dict, species: list, camera: dict | None) -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    errs = BST.validate_species(species, (0, 0, 0), PIE_PLATE)
+    assert not errs, errs
+    assert LPG.validate(series, "share") == [], LPG.validate(series, "share")
+    page = LPG.build_spec(series, "share")
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    scene = {"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}
+    if camera is not None:
+        assert BST.validate_camera(camera, PIE_PLATE, "16:9") == []
+        assert BST.share_slice_errors(world, camera, PIE_PLATE) == []
+        scene["camera"], _notes = BST.compile_chrome(camera, None, (0.0, RUNTIME), PIE_PLATE, world, "16:9")
+    tl = _timeline(title, [scene], {}, "16:9")
+    tl["captions"], tl["caption_pages"] = [], []
+    if camera is not None:
+        tl["kinetics"] = {"camera": True}   # E59's own module drives the keys (camNow), as on camera-layers
+    return tl, _base_uris()
+
+
+def share_donut_flat() -> tuple[dict, dict]:
+    """P69 T48: the flat donut - the same five slices at their true angles, every figure written on its slice."""
+    s = pie_series()
+    for k in ("extrude", "explode"):
+        s.pop(k)
+    s["hole"] = PIE_HOLE
+    return _pie_timeline("Golden: the flat donut", s, [], None)
+
+
+def share_pie_3d(push: bool = False) -> tuple[dict, dict]:
+    """P69 T48: the tilted, extruded pie; the largest slice explodes out on its word; with `push`, the camera pushes
+    onto it and holds while the other four recede."""
+    species = [{"kind": "explode", "at": PIE_EXPLODE_AT, "dur": PIE_EXPLODE_S}]
+    return _pie_timeline("Golden: the 3D pie" + (", pushed onto its largest slice" if push else ", exploded"),
+                         pie_series(), species, pie_push_camera() if push else None)
+
+
 def species_proof() -> tuple[dict, dict]:
     """P52 T7 + T8, THE PROOF PAGE FOR HUMAN GATE 3: all three of the last Bravos species on ONE clock, one per
     scene, so the operator reads each at its own instant and then plays the single file end to end.
@@ -1825,6 +1902,9 @@ SURFACES = {
     "agenda-page": agenda_page,          # P61 T8: the plate version of the list (E99 s16)
     "ring-dashed-chip": ring_dashed_chip,   # P52 T8
     "rings-on-vertices": rings_on_vertices,   # P69 T47 / E99 s109 (3): three peaks ringed in turn, the valley lit
+    "share-donut-flat": share_donut_flat,            # P69 T48 / E99 s109 (4): the flat donut, true angles, every figure written
+    "share-pie-3d": share_pie_3d,                    # P69 T48: the tilted, extruded pie, its largest slice exploded on its word
+    "share-pie-3d-push": lambda: share_pie_3d(True),  # P69 T48: ... and the camera pushed onto that slice, the others receded
     "species-proof": species_proof,      # P52 T7 + T8: the proof page for human gate 3
     "melt-page": melt_page,                                  # E88: the throw
     "melt-splash": lambda: melt_page("splash:chart"),        # E88: the splatter forms the next chart

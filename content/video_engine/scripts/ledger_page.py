@@ -127,6 +127,30 @@ SHARE_BOUNDS = (
     "the figure the claim turns on WRITTEN on the page, so no angle has to be estimated",
     f"{SHARE_MAX_SLICES} slices or fewer",
 )
+# P69 T48 / E99 s109 (4) + its amendment: THE SOLID SHARE PAGE - a pie or a DONUT (`hole`), flat or EXTRUDED with a tilt
+# (`extrude`: a 2.5D projection of the TRUE-ANGLE slices), one slice EXPLODED out of the whole (`explode`; the `explode`
+# page species says when). Truthful by s100's two tests: every angle is the slice's share of the whole, whatever the
+# tilt, and every slice's figure is WRITTEN on it - the number, not the area, is the claim. A page naming none of these
+# keys is the P48 T4 pie, byte for byte (its `peel` and its one written figure).
+SHARE_SOLID_KEYS = ("hole", "extrude", "explode")
+PIE_HOLE_MAX = 0.75         # a donut's hole as a share of the radius: past three quarters the ring is a hairline, not a slice
+PIE_TILT_DEG = 50           # the default tilt, degrees back from face-on - see PIE_AREA_LIE_MAX for why it is no steeper
+PIE_TILT_RANGE = (10, 60)   # under 10 the tilt reads as a mistake; past 60 the top is a sliver and the near rim dominates
+PIE_DEPTH = 0.12            # the extrusion's thickness, a share of the radius (in the pie's own plane, before the tilt)
+PIE_DEPTH_RANGE = (0.02, 0.30)
+PIE_EXPLODE_OUT = 0.14      # how far the exploded slice leaves, a share of the radius along its own bisector [DERIVED: clear of
+                            # its neighbours' names, still obviously OF the whole - the peel's own 0.17 less a margin for the rim]
+PIE_EXPLODE_RANGE = (0.04, 0.30)
+# THE HONESTY MEASURE. Under the orthographic tilt every TOP face scales by cos(tilt) alike, so the tops keep their true
+# proportions; what a tilt adds is the RIM, and only the near half of it - so a slice at six o'clock owns a strip the far
+# slices do not. The worst factor any slice's apparent area (top + visible rim) reads against its share is a thin slice
+# at six o'clock: (1 + q) / (1 + q / pi), q = 2 depth tan(tilt); the far slice reads 1 / (1 + q / pi) of its share.
+# PIE_AREA_LIE_MAX is what a WRITTEN figure carries: perceived area grows about as area^0.7 (Stevens' exponent for
+# area), so 1.2 in area reads as ~1.14 - a 39 % slice read as ~44 % with "39%" written on it, which the figure corrects
+# at a glance. The default tilt/depth (50 deg, 0.12) is 1.18; a page past the bound is REPORTED with its number (s106).
+PIE_AREA_LIE_MAX = 1.2
+# the shares must sum to their whole within the WRITTEN figures' own rounding: half a unit of the finest decimal place,
+# per slice (three thirds written 33 % each are 99, not a missing 1 %)
 UNCHARTABLE_DEFAULT = "no chartable values: expected bars[], series[].pts, panels[], or periods + series[].values"
 
 
@@ -506,6 +530,100 @@ MONTH_LABEL_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
 
+def share_solid(series: dict) -> bool:
+    """P69 T48: does this share object name a donut, an extrusion or an explode? Pure."""
+    return any(series.get(k) not in (None, False) for k in SHARE_SOLID_KEYS)
+
+
+def pie_area_lie(tilt_deg: float, depth: float) -> float:
+    """P69 T48: the worst factor a slice's APPARENT area (its top + the rim it shows) reads against its true share, on a
+    pie tilted `tilt_deg` back from face-on and extruded `depth` of its radius. 1.0 is honest area. Pure."""
+    q = 2.0 * float(depth) * math.tan(math.radians(float(tilt_deg)))
+    return max((1.0 + q) / (1.0 + q / math.pi), 1.0 + q / math.pi)
+
+
+def _decimals(v: Any) -> int:
+    text = v if isinstance(v, str) else repr(v)
+    return len(text.split(".", 1)[1]) if "." in text else 0
+
+
+def _in_range(v: Any, lo: float, hi: float) -> bool:
+    n = to_number(v)
+    return n is not None and not isinstance(v, bool) and lo <= n <= hi
+
+
+def _pie_options(series: dict) -> tuple[dict | None, dict | None, float | None]:
+    """(extrude, explode, hole) as the spec carries them - every default written out - or None where not named."""
+    ex, xp, hole = series.get("extrude"), series.get("explode"), series.get("hole")
+    ext = None
+    if ex not in (None, False):
+        d = ex if isinstance(ex, dict) else {}
+        ext = {"tilt": to_number(d["tilt"]) if "tilt" in d else PIE_TILT_DEG,
+               "depth": to_number(d["depth"]) if "depth" in d else PIE_DEPTH,
+               "hatch": bool(d.get("hatch", False))}
+    exp = None
+    if xp not in (None, False):
+        d = xp if isinstance(xp, dict) else {}
+        exp = {"index": d["index"] if "index" in d else series.get("emphasize"),
+               "out": to_number(d["out"]) if "out" in d else PIE_EXPLODE_OUT}
+    return ext, exp, (to_number(hole) if hole not in (None, False) else None)
+
+
+def _validate_option(name: str, value: Any, fields: dict) -> list[str]:
+    """`true` or an object of the named fields, each checked by its own (predicate, message)."""
+    if value is True:
+        return []
+    if not isinstance(value, dict):
+        return [f"{name} must be true or {{{', '.join(fields)}}} (P69 T48), not {value!r}"]
+    unknown = sorted(set(value) - set(fields))
+    errs = [f"{name}: unknown key(s) {unknown} - it takes {', '.join(fields)}"] if unknown else []
+    return errs + [f"{name}.{k} {value[k]!r} {msg}" for k, (ok, msg) in fields.items() if k in value and not ok(value[k])]
+
+
+def _validate_share_solid(series: dict, shares: list) -> list[str]:
+    """P69 T48 / E99 s109 (4): the solid share page's contract. The truth rules are hard (the shares sum to their whole,
+    the options name real slices); how steep a tilt reads is advice, reported by `_share_block` with its number."""
+    errors: list[str] = []
+    n = len(shares)
+    if series.get("peel") is not None:
+        errors.append("peel is the flat pie's piece that leaves (P48 T4); a donut or a 3D page EXPLODES its slice instead "
+                      "(`explode` + the `explode` species on its word) - drop `peel`")
+    hole = series.get("hole")
+    if hole not in (None, False) and not (_in_range(hole, 0.0, PIE_HOLE_MAX) and to_number(hole) > 0):
+        errors.append(f"hole {hole!r} must be the donut's hole as a share of the radius, in (0, {PIE_HOLE_MAX}]")
+    tlo, thi = PIE_TILT_RANGE
+    dlo, dhi = PIE_DEPTH_RANGE
+    olo, ohi = PIE_EXPLODE_RANGE
+    if series.get("extrude") not in (None, False):
+        errors += _validate_option("extrude", series["extrude"], {
+            "tilt": (lambda v: _in_range(v, tlo, thi), f"is outside {tlo}..{thi} degrees back from face-on"),
+            "depth": (lambda v: _in_range(v, dlo, dhi), f"is outside {dlo}..{dhi} of the radius"),
+            "hatch": (lambda v: isinstance(v, bool), "must be true or false (T6b's engraving on the side away from the light)")})
+    if series.get("explode") not in (None, False):
+        errors += _validate_option("explode", series["explode"], {
+            "index": (lambda v: isinstance(v, int) and not isinstance(v, bool) and 0 <= v < n,
+                      f"does not name a slice (0..{n - 1})"),
+            "out": (lambda v: _in_range(v, olo, ohi), f"is outside {olo}..{ohi} of the radius")})
+    total = to_number(series.get("total"))
+    if total is None or total <= 0:
+        errors.append(f"a solid share page must declare 'total': the whole its slices are shares of (100 for percent), "
+                      f"not {series.get('total')!r} - the angles are shares of the WHOLE (E99 s109 (4))")
+        return errors
+    vals = [to_number(s.get("value")) for s in shares if isinstance(s, dict)]
+    if any(v is None for v in vals):
+        return errors
+    summed = sum(vals)
+    tol = sum(0.5 * 10 ** -_decimals(s.get("value")) for s in shares) + 1e-9
+    if summed - total > tol:
+        errors.append(f"the shares sum to {summed:g}, more than the whole {total:g}: a part cannot exceed its whole")
+    elif total - summed > tol:
+        rest = total - summed
+        errors.append(f"the shares sum to {summed:g} of the whole {total:g}: {rest:g} is unaccounted for - name it as its "
+                      f"own slice ({{\"label\": \"Other\", \"value\": {rest:g}}}) or correct the figures. A pie of the "
+                      "named slices alone would draw each of them larger than its share (E99 s109 (4))")
+    return errors
+
+
 def _validate_share(series: dict) -> list[str]:
     """A share page's contract - E53 s1's amendment, checked rather than trusted. Every failure names the bound it
     broke, because the whole point of writing the exception down was that it not widen by use."""
@@ -526,6 +644,8 @@ def _validate_share(series: dict) -> list[str]:
     emph = series.get("emphasize")
     if not isinstance(emph, int) or isinstance(emph, bool) or not 0 <= emph < len(shares):
         errors.append(f"a share page must declare 'emphasize': the index of the ONE slice the claim is about ({SHARE_BOUNDS[0]}; {SHARE_BOUNDS[1]})")
+    if share_solid(series):   # P69 T48: every figure is written on its slice, so no `peel` carries the claim's
+        return errors + _validate_share_solid(series, shares)
     peel = series.get("peel")
     if not isinstance(peel, dict):
         errors.append(f"a share page must declare 'peel': the piece of the named slice the claim is about, with its figure ({SHARE_BOUNDS[2]})")
@@ -1521,6 +1641,8 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         spec["judge"] = review_notes(series)
         spec["badges"] = badges_for(series)
         spec["emphasize"] = int(series.get("emphasize") if emphasize is None else emphasize)
+        if "explode" in spec and not (isinstance(series.get("explode"), dict) and "index" in series["explode"]):
+            spec["explode"] = dict(spec["explode"], index=spec["emphasize"])   # P69 T48: `explode: true` is the claim's slice
         return spec
     if builder in ("tiers", "treemap"):
         spec.update(_tiers_block(series) if builder == "tiers" else _treemap_block(series))
@@ -1602,7 +1724,33 @@ def _share_block(series: dict) -> dict:
             "values": [to_number(s.get("value")) for s in shares],
             "value_strings": [value_string(s.get("value_string", s.get("value"))) for s in shares],
             "colors": [str(s.get("color") or ("crimson" if i == emph else "deemph")) for i, s in enumerate(shares)],
-            "peel": peel}
+            "peel": peel, **(_pie_block(series) if share_solid(series) else {})}
+
+
+def _pie_block(series: dict) -> dict:
+    """P69 T48: the solid share page's keys - only on a page that names one (the P48 T4 pie gains nothing). Every
+    slice's figure is written: its own `value_string`, else its value and the page's unit."""
+    ext, exp, hole = _pie_options(series)
+    unit = str(series.get("unit") or "")
+    sep = "" if unit in ("%", "pp", "x") else " "
+    out: dict[str, Any] = {"total": to_number(series.get("total")),
+                           "value_strings": [value_string(s["value_string"]) if s.get("value_string") is not None
+                                             else (value_string(s.get("value")) + (sep + unit if unit else ""))
+                                             for s in series.get("shares") or []]}
+    if hole is not None:
+        out["hole"] = hole
+    if ext is not None:
+        out["extrude"] = ext
+        lie = pie_area_lie(ext["tilt"], ext["depth"])
+        if lie > PIE_AREA_LIE_MAX + 1e-9:
+            out["warnings"] = [f"WARN share: the tilt {ext['tilt']:g} deg at depth {ext['depth']:g} lets a slice's apparent "
+                               f"area read {lie:.2f}x its share (bound {PIE_AREA_LIE_MAX:g}x; the default "
+                               f"{PIE_TILT_DEG} deg / {PIE_DEPTH:g} reads {pie_area_lie(PIE_TILT_DEG, PIE_DEPTH):.2f}x). "
+                               "Every figure is written on its slice, so the number carries the claim - REPORTED, "
+                               "the frame read decides (E99 s106, s109 (4))"]
+    if exp is not None:
+        out["explode"] = exp
+    return out
 
 
 def _decline_block(series: dict, spec: dict) -> dict:
@@ -3265,7 +3413,7 @@ def infer_variant(series: dict) -> str | None:
     if isinstance(series.get("props"), list) and series["props"]:
         return "object"
     if isinstance(series.get("shares"), list):
-        return "share" if series.get("peel") is not None else "treemap"
+        return "share" if series.get("peel") is not None or share_solid(series) else "treemap"   # P69 T48: a donut / 3D pie is a share page
     return None
 
 
