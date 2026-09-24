@@ -40,7 +40,7 @@ Crosses the border, from Ontario, the money went home -> the `vecmap` world (bui
 A causes B via C, "when you ..., then ..." -> the `chip` board (a named thing as one of a set, landing on its word) and the `flow` diagram (built 2026-09-11: the chips in a dashed box, clothoid arrows between them, one node SWAPPED on a later word while the rest stands, a year tag); a narration plate that names its use, or the page's `note`. Row 6.
 
 ### The turning sentence (TURNS on a number)
-The sentence's weight is one figure -> the `figure` at its datum, the light on it (`spotlight`, held), the ring on it (`callout`, the hand's closed circle; `ring` + `form: "dashed"` for the dashed ellipse with a flag chip beside, built 2026-09-12), a `note` when there is no room. Row 7.
+The sentence's weight is one figure -> the `figure` at its datum, the light on it (`spotlight`, held), the ring on it (`callout`, the hand's closed circle; `ring` + `form: "dashed"` for the dashed ellipse with a flag chip beside, built 2026-09-12), a `note` when there is no room; the `freeze` (built 2026-09-24, P69 T49: when the TURN of the argument lands on that one number, the stage STOPS on it for 0.4-1.2 s while one light comes on there, then life resumes - a punctuation beat, E99 s99). Row 7.
 
 ### The breaking sentence (BREAKS the honest scale)
 A number one bar cannot fit -> the burst (E60: `domain` + `overflow: "burst"` on the object; the comparator's level, the hold, the shoot while the scale rewrites); `stack` when named. Row 11.
@@ -161,6 +161,7 @@ edit the compiler, then `lint_species_choice.py --write-doc` (`--check-doc` and 
 | `newsreel` | the sentence reports WHAT WAS SAID OR PRINTED - the wire, the headlines, the tape - the band crawls the sourced headlines under a surface that shows who said it (a head, a clip, the plate); never the whole frame as text |
 | `panel_focus` | the sentence moves between the charts of a PANELS page - the one it is about grows to be read while the others recede (scaled back, dimmed, softened) and come back on their word; a layout change (side by side, stacked, quadrants, free) is one move, never a cut |
 | `lit_stretch` | the sentence WALKS one stretch of a drawn line ('the fall', 'the run-up') at the proof or the turn - a light travels it on the word and holds; never when the whole line is the claim, the stretch is undrawn, or the light would only sit |
+| `freeze` | the TURN of the argument lands on ONE number or thing - the line the whole row builds to - and the stage STOPS on it: every idle, drift and ambient life holds for 0.4-1.2 s while one light comes on there, then life resumes; never while anything else moves, and never in place of a named thing's arrival (E99 s71: it arrives first, then the stage may stop on it) |
 | `chart_to` -> `recast` | the same data in another form: keyed (n lines -> n bars by series, 'where the four stand today'; RECAST_PAIRS) or the hand-over (a line into the monthly bars, into a pie of the holders) |
 | `chart_to` -> `rescale` | the same series at another scale - 'since February', 'at full width': the window the story is about; never a window that drops the sentence's point |
 | `chart_to` -> `extend` | more of the same series ('and then May') or a later series of the same file ('then consumption') - drawn on at the pen |

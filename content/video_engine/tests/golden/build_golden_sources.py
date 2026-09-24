@@ -3596,6 +3596,46 @@ def lit_stretch_crash() -> tuple[dict, dict]:
 
 
 SURFACES.update({"lit-stretch-crash": lit_stretch_crash})
+
+
+# ---- P69 T49 / E99 s99: THE FREEZE BEAT - everything stops and one light comes on -----------------------------------
+# The same railway page (H row 5, `idle=live`, full stage, 16:9) and the same sentence, one beat later: the fall has
+# drawn on "crashed" (10.0-11.2), the hand has written "−64%" at the trough (11.2-11.8), and on the TURN - the number the
+# row builds to - the stage STOPS for 1.0 s while one light comes on at the trough (12.0-13.0); then the page's life
+# resumes. The page LIVES (E49's switch is on: the source says so, as `page-life-live` does), so the stopped frame is a
+# real stop and not a page that was still anyway. Judged in the beat's held middle (12.5): the light on, the spark and
+# the drift held where they stopped. The beat's two ramps and life resuming are read by test_freeze_beat on the served
+# player, not pinned as frames.
+FREEZE_AT, FREEZE_DUR = 12.0, 1.0
+FREEZE_SPECIES = [
+    {"kind": "build_to", "at": 0.0, "dur": 0.4, "series": 0, "target": {"kind": "datum", "index": 53}},        # the build beat draws to the peak
+    {"kind": "build_to", "at": LIT_FALL_AT, "dur": 1.2, "series": 0, "target": {"kind": "datum", "index": 139}},   # "crashed": the fall draws
+    {"kind": "figure", "at": 11.2, "dur": 0.6, "target": {"kind": "datum", "index": 139, "series": 0},
+     "text": "−64%", "color": "neg", "dy": -0.9},                                                                # the number is written ...
+    {"kind": "freeze", "at": FREEZE_AT, "dur": FREEZE_DUR, "target": {"kind": "datum", "index": 139, "series": 0}},   # ... and the stage stops on it
+]
+
+
+def freeze_trough() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    species = [dict(e) for e in FREEZE_SPECIES]
+    assert not BST.validate_species(species, (0, 0, 0), LIT_PLATE), BST.validate_species(species, (0, 0, 0), LIT_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(LIT_PLATE, (0, 0, 0), LIT_PROJECT)
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: the stage stops on the trough and one light comes on (freeze)", scenes, {}, "16:9")
+    tl["kinetics"] = {"idle": True}   # E49 is ON for every compiled timeline; the beat's subject is that life stopping
+    return tl, _base_uris()
+
+
+SURFACES.update({"freeze-trough": freeze_trough})
+FRAME_T.update({"freeze-trough": FREEZE_AT + FREEZE_DUR * 0.5})
 FRAME_T.update({"lit-stretch-crash": round(LIT_AT + 0.5 * LIT_DUR * 0.8, 3)})   # u 0.50 of the head's run (TRAVEL 0.8 of the word): 11.244
 
 

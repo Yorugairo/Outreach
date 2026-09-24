@@ -401,6 +401,10 @@ SPECIES_EVENTS["ring"] = ("at",)
 # are events: it leaves `from` on its word, and it lands at `to` inside the word (credited at the window's end). What it
 # does after that is an annotation (s91) and earns nothing.
 SPECIES_EVENTS["lit_stretch"] = ("at", "end")
+# P69 T49 / E99 s99 ("a light that comes on as everything else STOPS is a punctuation beat - the freeze is the event"):
+# THE FREEZE BEAT is ONE event, at its word. The light coming on is the beat; life resuming is the idle coming back,
+# and no idle is ever an event (E49). What the beat does to M18 is `punctuate` below: its held frames are not a still.
+SPECIES_EVENTS["freeze"] = ("at",)
 COUNT_ARRAY_STEP = AGENDA_STEP = 0.34   # the default word pitch both kinds arrive on when the row names no `step`
                                         # - the same number the compiler holds (build_scene_timeline_f.COUNT_ARRAY_STEP /
                                         # AGENDA_STEP) and the modules' own dial (COUNT.STEP / AGENDA.STEP): 178 WPM.
@@ -489,6 +493,7 @@ POINTING_KINDS = ("callout", "spotlight", "squiggle", "punch", "focus_zoom", "be
                   "count_array", "agenda", "ring",   # P52 T7 / T8: all three point at a DECLARED target (a region or a point for the field and the block, a datum for the ring), so M24 reads them like any other pointing species
 
                   "light", "arc", "stamp")   # P50 T5: the map's three point at a PLACE - a country or a map point, which is not a stage box, so _target_box skips them and M24 credits them without a frustum test   # P50 T4: a flow points at the region it draws itself inside; a span names data and carries no target dict, so M24 skips it   # the species that point at a declared target
+POINTING_KINDS += ("freeze",)   # P69 T49: the beat's light comes on at a DECLARED target (a datum, a point, a region)
 ATTN_SCALE, ATTN_IN, ATTN_OUT = 1.06, 0.5, 0.6            # P49 T4: kinetics/camera.mjs ATTN, mirrored [DERIVED: Bravos #68]
 STOP_FLIGHT_S, STOP_ANTIC_S, STOP_DROP_S = 0.45, 0.18, 0.14   # the stop-action clock (kinetics/stopaction.mjs STOP), mirrored: the contact frame of a throw / a landing
 BT_HOLD_S, BT_RUN_S, BT_SETTLE_S, BT_STEP_S = 0.5, 0.6, 0.3, 0.06   # E60 the breakthrough's clock (the template's LPX.BT_*), mirrored: the run past the build
@@ -1652,7 +1657,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     # E24 / E25: the opening minute and the chart-as-proof rule
     g += [_opening_still_gate(A["pulse_still"], _life_term(A, OPENING_STILL_MAX_S)),   # R26-232 (2): a pulse row
           _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
-    g.append(_frozen_gate(frames, frame_layers, layer_windows(A)))        # M18 (E49: nothing ever goes truly still; R26-13: per layer)
+    g.append(_frozen_gate(frames, frame_layers, layer_windows(A),
+                          freeze_windows(tl.get("scenes", []))))     # M18 (E49: nothing ever goes truly still; R26-13: per layer; P69 T49: a freeze beat is punctuation)
     if (sg := _drop_window_sound_gate(tl, mp)) is not None:
         g.append(sg)                                                      # M29 (E44 s2a / R26-5: a transient inside 0:05-0:12 needs a page landing; E83: or a dock's)
     if (mo := _mount_gate(tl.get("scenes", []), tl.get("evidence") or {})) is not None:
@@ -2327,6 +2333,65 @@ def frozen_runs(frames: list[dict], max_s: float = FROZEN_MAX_S) -> list[tuple[f
     return out
 
 
+FREEZE_KIND = "freeze"   # P69 T49 / E99 s99: THE FREEZE BEAT - build_scene_timeline_f.SPECIES_FREEZE, mirrored
+
+
+def freeze_windows(scenes: list[dict]) -> list[tuple[float, float]]:
+    """P69 T49: every freeze beat's [at, at + dur] clipped to its scene, sorted, overlaps merged - the windows the player's
+    life clock stands still in (species/freeze.mjs freezeWindows, mirrored; and measure_frozen_frames.freeze_windows)."""
+    ws: list[tuple[float, float]] = []
+    for sc in scenes or []:
+        span = sc.get("span") or [None, None]
+        for sp in sc.get("species") or []:
+            at, dur = (sp or {}).get("at"), (sp or {}).get("dur")
+            if (sp or {}).get("kind") != FREEZE_KIND or not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in (at, dur)):
+                continue
+            a = max(float(at), float(span[0])) if isinstance(span[0], (int, float)) else float(at)
+            b = min(float(at) + float(dur), float(span[1])) if isinstance(span[1], (int, float)) else float(at) + float(dur)
+            if b > a:
+                ws.append((a, b))
+    out: list[list[float]] = []
+    for a, b in sorted(ws):
+        if out and a <= out[-1][1]:
+            out[-1][1] = max(out[-1][1], b)
+        else:
+            out.append([a, b])
+    return [(round(a, 4), round(b, 4)) for a, b in out]
+
+
+def punctuate(runs: list[tuple[float, float]], freezes: list[tuple[float, float]] | None,
+              max_s: float = FROZEN_MAX_S) -> tuple[list[tuple[float, float]], list[tuple[float, float]]]:
+    """P69 T49 / E99 s99: split frozen runs (start, seconds) by the timeline's freeze beats -> (still, beats). The part of
+    a run INSIDE a beat is punctuation - the stage was told to stop there, the beat is the event; each part OUTSIDE every
+    beat is a still exactly as E49 reads it, kept when it is still longer than `max_s`. No beat: the runs come back as
+    they were. Mirrors measure_frozen_frames.punctuate."""
+    if not freezes:
+        return list(runs), []
+    still: list[tuple[float, float]] = []
+    beats: list[tuple[float, float]] = []
+    for s, d in runs:
+        e, cur = s + d, s
+        for a, b in sorted(freezes):
+            if b <= cur or a >= e:
+                continue
+            if a > cur and a - cur > max_s:
+                still.append((round(cur, 4), round(a - cur, 4)))
+            lo, hi = max(cur, a), min(e, b)
+            beats.append((round(lo, 4), round(hi - lo, 4)))
+            cur = hi
+        if e - cur > max_s:
+            still.append((round(cur, 4), round(e - cur, 4)))
+    return still, beats
+
+
+def _beats_note(beats: list[tuple[float, float]]) -> str:
+    """The beats M18 read as punctuation, named - never a silent pass (P69 T49)."""
+    if not beats:
+        return ""
+    return (f"; {len(beats)} held run(s) inside a freeze beat read as punctuation, not a still (E99 s99 / P69 T49): "
+            + ", ".join(f"{a:.2f}s+{d:.2f}s" for a, d in beats[:6]) + (" ..." if len(beats) > 6 else ""))
+
+
 LEVEL_RANK = {"PASS": 1, "INFO": 2, "WARN": 3, "FAIL": 4}   # the worst of several reads is the row's level
 
 
@@ -2356,7 +2421,8 @@ def _frames_in(frames: list[dict], windows: list[tuple[float, float]] | None) ->
 
 
 def frozen_layer_verdicts(layers: dict[str, list[dict] | str] | None,
-                          windows: dict[str, list[tuple[float, float]]] | None = None) -> list[tuple[str, str, str]]:
+                          windows: dict[str, list[tuple[float, float]]] | None = None,
+                          freezes: list[tuple[float, float]] | None = None) -> list[tuple[str, str, str]]:
     """(layer, level, fragment) for every MEASURED layer, in the shell's order (R26-13).
 
     The PAGE layer is the read the row exists for: a page held still under a boiling caption is bit-identical here
@@ -2379,7 +2445,8 @@ def frozen_layer_verdicts(layers: dict[str, list[dict] | str] | None,
         if not segs:
             out.append((layer, "INFO", f"{layer} INFO (the timeline paints nothing on it{read})"))
             continue
-        runs = sorted(r for seg in segs for r in frozen_runs(seg))
+        runs, beats = punctuate(sorted(r for seg in segs for r in frozen_runs(seg)), freezes)   # P69 T49: a beat is punctuation
+        read += _beats_note(beats)
         if runs:
             worst = max(runs, key=lambda r: r[1])
             out.append((layer, "WARN", f"{layer} WARN {len(runs)} run(s) over {FROZEN_MAX_S:.2f}s, worst {worst[1]:.2f}s at {_mm(worst[0])}{read}"
@@ -2391,7 +2458,8 @@ def frozen_layer_verdicts(layers: dict[str, list[dict] | str] | None,
 
 
 def _frozen_gate(frames: list[dict] | str | None, layers: dict[str, list[dict] | str] | None = None,
-                 windows: dict[str, list[tuple[float, float]]] | None = None) -> Gate:
+                 windows: dict[str, list[tuple[float, float]]] | None = None,
+                 freezes: list[tuple[float, float]] | None = None) -> Gate:
     """M18 (E49): the idle is not an event - it is the absence of a frozen frame. Measured, never inferred: without
     frame-hashes.json the row is INFO and says what to run (no silent skip).
 
@@ -2402,8 +2470,8 @@ def _frozen_gate(frames: list[dict] | str | None, layers: dict[str, list[dict] |
     `windows` (layer_windows) keeps a layer's read to the instants the timeline paints something on it: an empty layer
     is bit-identical to the stage's bare ground, and that is not a held thing going still (the Tokyo short's first
     1.92 s carries no dock)."""
-    whole = _frozen_whole(frames)
-    per = frozen_layer_verdicts(layers, windows)
+    whole = _frozen_whole(frames, freezes)
+    per = frozen_layer_verdicts(layers, windows, freezes)
     if not per:
         return whole
     level = max([whole.level] + [lvl for _, lvl, _ in per], key=lambda x: LEVEL_RANK.get(x, 0))
@@ -2414,8 +2482,9 @@ def _frozen_gate(frames: list[dict] | str | None, layers: dict[str, list[dict] |
     return Gate("M18", level, msg, SRC_M18)
 
 
-def _frozen_whole(frames: list[dict] | str | None) -> Gate:
-    """M18's whole-frame read, unchanged (P47 T5) - the layers ride on top of it."""
+def _frozen_whole(frames: list[dict] | str | None, freezes: list[tuple[float, float]] | None = None) -> Gate:
+    """M18's whole-frame read (P47 T5) - the layers ride on top of it. P69 T49: `freezes` (freeze_windows) are the
+    timeline's freeze beats - a run inside one is punctuation, named and passed; what lies outside one is judged as before."""
     if frames is None:
         return Gate("M18", "INFO", f"frozen frames not measured - run measure_frozen_frames.py <build> (writes {FRAME_HASHES_NAME})", SRC_M18)
     if frames == "stale":
@@ -2425,8 +2494,8 @@ def _frozen_whole(frames: list[dict] | str | None) -> Gate:
     ts = sorted(float(f["t"]) for f in frames)
     step = min((b - a for a, b in zip(ts, ts[1:]) if b > a), default=0.0)
     fps = (1 / step) if step > 0 else 0.0
-    runs = frozen_runs(frames)
-    span = f"{len(frames)} frames at {fps:.0f} fps, {_mm(ts[0])}-{_mm(ts[-1])}"
+    runs, beats = punctuate(frozen_runs(frames), freezes)
+    span = f"{len(frames)} frames at {fps:.0f} fps, {_mm(ts[0])}-{_mm(ts[-1])}" + _beats_note(beats)
     if runs:
         worst = max(runs, key=lambda r: r[1])
         return Gate("M18", "WARN", f"{len(runs)} run(s) of bit-identical frames over {FROZEN_MAX_S:.2f}s ({span}); worst {worst[1]:.2f}s at {_mm(worst[0])}: "

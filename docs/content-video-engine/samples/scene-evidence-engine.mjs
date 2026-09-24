@@ -8720,7 +8720,7 @@ async function mount(doc) {
      (M01 / M10 / M16 count events); the frozen-frames row M18 is the idle's own check (measure_frozen_frames.py). */
   const IDLE_CLASS = Object.freeze({ page: "breath", plate: "breath", dock: "breath", pill: "breath", caption: "breath" });
   const idleOf = (cls, override) => (kin("idle") ? (override || IDLE_CLASS[cls] || "none") : "none");
-  const idleCssFor = (cls, override, t, seed, salt) => { const k = idleOf(cls, override); return k === "none" ? "" : idleCss(idleXf(k, t, lpHash(seed | 0, salt | 0, 977))); };
+  const idleCssFor = (cls, override, t, seed, salt) => { const k = idleOf(cls, override); return k === "none" ? "" : idleCss(idleXf(k, lifeT(t), lpHash(seed | 0, salt | 0, 977))); };   /* P69 T49: on the LIFE clock - a freeze beat holds every class's idle (lifeT, declared with the freeze region) */
   /* R26-228 (E99 s82's (e), "LIFE IS SEEN, NOT PASSED: a page's `idle=live` must render the tip spark (E67's live ink),
      the line's glow/pulse and the labels' breath"): THE PAGE'S OWN IDLE KIND. The compiler writes a row's `;idle=<kind>`
      as `world["idle"]` (build_scene_timeline_f.py:3824 - "the player reads it for the page or the plate") and the page
@@ -13865,11 +13865,11 @@ async function mount(doc) {
           /* each series sparks at its OWN phase - E49's law, the one the pills have always kept ("two pills never
              breathe in step"); four lead points pulsing together would read as one mechanism blinking. */
           const sph = lpLifePhase(pp.tip, pp.si | 0), ink = lpVarHex(pp.p.getAttribute("stroke"));
-          const rTip = (LP_LIFE.TIP_R / ctmL) * breath(t, sph, { BREATH_AMP: LP_LIFE.TIP_AMP, BREATH_HZ: LP_LIFE.TIP_HZ });
+          const rTip = (LP_LIFE.TIP_R / ctmL) * breath(lifeT(t), sph, { BREATH_AMP: LP_LIFE.TIP_AMP, BREATH_HZ: LP_LIFE.TIP_HZ });
           pp.tip.setAttribute("r", rTip.toFixed(2));
           pp.tip.style.filter = "drop-shadow(0 0 " + (rTip * LP_LIFE.HALO_K).toFixed(2) + "px " + lpInkA(ink, LP_LIFE.HALO_A) + ")";
           /* R26-228 (b): the glow, at the share of the frame the APPROVED 9:16 page draws, pulsing on the tip's own clock */
-          lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * breath(t, sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ }));
+          lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * breath(lifeT(t), sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ }));
         }
         pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
         if (pp.pill) lpPaintPill(pp, f, drawing);   /* P50 T11: the pill rides this same f - one clock, no second state */
@@ -18211,6 +18211,164 @@ async function mount(doc) {
      import this file for the math above without the engine's registry */
   if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.spotlight = paintSpotlight;
   /* KINETICS:END */
+  /* KINETICS:BEGIN freeze */
+  /* SPACE: stage */
+  /* species/freeze.mjs - THE FREEZE BEAT (P69 T49; E99 s99). SOURCE OF TRUTH, inlined into the scene-evidence player by
+     sync_kinetics.py between KINETICS:BEGIN freeze and KINETICS:END, AFTER ease and lit_stretch (it reads minJerk and the
+     lit stretch's look) and after the engine's SPECIES_PAINTERS declaration, which the registration reaches.
+
+     THE RULING. E99 s99 (the operator, 2026-09-23): "Light can become motion when it's highlighting and moving along a
+     length, blinking, or when it actually stops motion when the light comes on I think. Bravos does this well." - "a light
+     that comes on as everything else STOPS is a punctuation beat - the freeze is the event". A light that simply sits on
+     a thing stays an annotation (s91), and a light is never the move when a named thing should ARRIVE (s71): this one is
+     neither, because what it does is STOP the frame round it.
+
+     WHEN (`SPECIES_WHEN["freeze"]`, build_scene_timeline_f.py): the TURN of the argument lands on ONE number or thing -
+     the line the whole row builds to - and the stage stops on it.
+
+     NOT `beat_freeze` (doc 29 s9.27). That is a BOUNDARY move: the chart's final state freezes as a hit, then a
+     directional-stretch cut into the next plate. This beat is inside a scene, and life comes back.
+
+     THE LAW, a pure function of t:
+       the windows - every `freeze` species on every scene, [at, at + dur] clipped to its scene's span, sorted and merged,
+                     read ONCE when the player mounts (freezeWindows). The engine's LIFE CLOCK is t with the frozen time
+                     before t taken out (lifeClock): inside a window it stands still, outside it runs at speed, and it
+                     never jumps - after the beat every idle carries on from exactly where it stopped, one beat behind t.
+                     A thing whose life is counted from an ORIGIN (the Ken Burns push from its scene's start, a clip from
+                     its mount) takes the scene clock (sceneClock), which counts only the beats after that origin, so a
+                     scene after a beat starts its push at its own start. With no window the clock IS t, the same number,
+                     so a build without a freeze paints the string it always painted.
+       what stops  - the engine hands the life clock to every LIFE on the stage, by name: the idle of every class (the
+                     page, the pills, the docks, the caption strip - idleCssFor), a stage species' own idle (ctx.idle:
+                     the ring's breath, a held light's, a chip's, the agenda's rows), the plate's idle and drift, the
+                     Ken Burns push, the vector map's world idle, the live page's spark and glow (R26-228), the caption
+                     boil, the steam, and an ambient clip (a clip world, an alive plane, a video dock). What it does NOT
+                     stop is an authored EVENT: the voice goes on, so the caption's words keep arriving, and the compiler
+                     refuses any other species that fires inside the beat (`one light`).
+       the light   - ONE light at the resolved target, in the page's one light colour (the relight's sunflower). It comes
+                     ON over ON_S (min-jerk, at most RAMP_MAX of the beat), HOLDS perfectly still through the middle - it
+                     is part of the stopped frame, so it does not breathe - and goes over OFF_S as life resumes, gone at
+                     the beat's end. A target that resolves to a POINT (a datum on a line) is a lit point: the lit
+                     stretch's comet head standing still (LIT's halo over its head, lpBloom's form). A target that
+                     resolves to a BOX (a bar, a prop's or a mark's region) is a lit EDGE round it - never a fill over the
+                     thing it names.
+     The dials are ours to tune (42 s42.5), not findings. */
+
+  const FREEZE = Object.freeze({
+    MIN_S: 0.4,        /* the beat's dial: shorter reads as a dropped frame ... */
+    MAX_S: 1.2,        /* ... longer, as the still frame E49 refuses */
+    ON_S: 0.12,        /* the light comes ON - quick, a switch, never a slow fade */
+    OFF_S: 0.18,       /* ... and goes as life resumes */
+    RAMP_MAX: 0.25,    /* each ramp is at most this share of the beat, so the shortest beat still holds a middle */
+    CORE_PX: 18,       /* the lit point's radius, stage px - read on the golden: at 12 it was the lead spark turned yellow, not a light coming on */
+    PAD: 10,           /* the lit edge's air round a box, stage px */
+    EDGE_PX: 4,        /* the lit edge's width, stage px */
+    EDGE_RX: 10,       /* ... and its corner */
+    POINT_PX: 6,       /* a resolved box smaller than this both ways is a POINT */
+    COLOR: "#F5B72E",  /* the relight's sunflower - the engine's PS.RELIGHT_COL, mirrored (a module imports nothing of the engine's) */
+  });
+
+  const fz01 = (v) => Math.min(1, Math.max(0, v));
+  const fzNum = (v) => typeof v === "number" && Number.isFinite(v);
+
+  /* THE WINDOWS: [[a, b], ...] from the timeline's scenes - clipped to the scene, sorted, overlaps merged. Frozen. */
+  const freezeWindows = (scenes) => {
+    const ws = [];
+    for (const sc of scenes || []) {
+      const span = (sc && sc.span) || [];
+      for (const sp of (sc && sc.species) || []) {
+        if (!sp || sp.kind !== "freeze" || !fzNum(sp.at) || !fzNum(sp.dur) || !(sp.dur > 0)) continue;
+        const a = fzNum(span[0]) ? Math.max(sp.at, span[0]) : sp.at, b = fzNum(span[1]) ? Math.min(sp.at + sp.dur, span[1]) : sp.at + sp.dur;
+        if (b > a) ws.push([a, b]);
+      }
+    }
+    ws.sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+    const out = [];
+    for (const w of ws) {
+      const last = out[out.length - 1];
+      if (last && w[0] <= last[1]) last[1] = Math.max(last[1], w[1]);
+      else out.push([w[0], w[1]]);
+    }
+    return Object.freeze(out.map((w) => Object.freeze(w)));
+  };
+
+  /* the frozen seconds before t */
+  const frozenBefore = (ws, t) => {
+    let s = 0;
+    for (const [a, b] of ws || []) { if (t <= a) break; s += Math.min(t, b) - a; }
+    return s;
+  };
+
+  /* THE LIFE CLOCK: t, with the frozen time before it taken out. No window: t itself, the same number. */
+  const lifeClock = (ws, t) => (ws && ws.length ? t - frozenBefore(ws, t) : t);
+
+  /* ... counted from an ORIGIN t0 (a scene's start, a clip's mount): only the beats after t0 hold it back */
+  const sceneClock = (ws, t, t0) => (ws && ws.length ? t0 + (lifeClock(ws, t) - lifeClock(ws, t0)) : t);
+
+  /* is the stage frozen at t - [a, b): at the beat's end life has resumed */
+  const frozenAt = (ws, t) => (ws || []).some(([a, b]) => t >= a && t < b);
+
+  /* THE LIGHT'S POSE at t: its level f (0 off, 1 on). The held middle is exactly 1 - one pose, the stopped frame's. */
+  const freezePose = (sp, t) => {
+    const D = Math.max(0.001, +sp.dur || 0), d = t - +sp.at;
+    if (!(d >= 0) || d >= D) return { f: 0 };
+    const on = Math.min(FREEZE.ON_S, D * FREEZE.RAMP_MAX), off = Math.min(FREEZE.OFF_S, D * FREEZE.RAMP_MAX);
+    if (d < on) return { f: fz01(minJerk(d / on)) };
+    if (d > D - off) return { f: fz01(minJerk((D - d) / off)) };
+    return { f: 1 };
+  };
+
+  /* THE FORM the light takes, from the box the target resolved to (stage px), or null */
+  const freezeForm = (b) => {
+    if (!b || !fzNum(b.x) || !fzNum(b.y)) return null;
+    const w = fzNum(b.w) ? b.w : 0, h = fzNum(b.h) ? b.h : 0;
+    if (w < FREEZE.POINT_PX && h < FREEZE.POINT_PX) {
+      return { kind: "point", cx: b.x + w / 2, cy: b.y + h / 2, r: FREEZE.CORE_PX, glow: FREEZE.CORE_PX * LIT.GLOW_K / LIT.HEAD_K };
+    }
+    return { kind: "box", x: b.x - FREEZE.PAD, y: b.y - FREEZE.PAD, w: w + 2 * FREEZE.PAD, h: h + 2 * FREEZE.PAD,
+             glow: FREEZE.EDGE_PX * LIT.GLOW_K };
+  };
+
+  /* the halo's colour: the light's own, at LIT's alpha */
+  const freezeHalo = (px, a = LIT.GLOW_A, hex = FREEZE.COLOR) => {
+    const n = parseInt(String(hex).slice(1), 16);
+    return "drop-shadow(0 0 " + px.toFixed(2) + "px rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + "))";
+  };
+
+  /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the clock, the
+     layer already chosen for a datum (beneath any card) or anything else (above), and the shared helpers by name. */
+  function paintFreeze(ctx) {
+    const { sp, t, svg, el, resolveTarget } = ctx;
+    const pose = freezePose(sp, t);
+    if (pose.f <= 0) return;
+    const form = freezeForm(resolveTarget(sp.target));
+    if (!form) return;   /* the targeting law: no resolved target, nothing painted */
+    const g = el("g", "frz", svg, { opacity: pose.f.toFixed(3) });
+    if (form.kind === "point") {
+      const r = form.r * (0.7 + 0.3 * pose.f);   /* a light switching on swells a little as it brightens; held, it is its size */
+      const dot = el("circle", "frz-light", g, { cx: form.cx.toFixed(1), cy: form.cy.toFixed(1), r: r.toFixed(2), fill: FREEZE.COLOR });
+      dot.style.filter = freezeHalo(form.glow);
+      return;
+    }
+    const rect = el("rect", "frz-edge", g, { x: form.x.toFixed(1), y: form.y.toFixed(1), width: form.w.toFixed(1), height: form.h.toFixed(1),
+                                             rx: FREEZE.EDGE_RX, fill: "none", stroke: FREEZE.COLOR, "stroke-width": FREEZE.EDGE_PX });
+    rect.style.filter = freezeHalo(form.glow);
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can import this
+     file for the math above without the engine's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.freeze = paintFreeze;
+  /* KINETICS:END */
+  /* P69 T49 (E99 s99) - THE LIFE CLOCK. The timeline's freeze beats, read once, and the clock every LIFE on the stage
+     reads instead of t: it stands still inside a beat and runs on, one beat behind, after it (species/freeze.mjs). With
+     no beat it IS t - the same number - so a build without one paints the string it always painted. `lifeFrom` counts
+     from an origin (a scene's start, a dock's mount) and loses only the beats after it; `idleLive` is the idle the
+     stage species are handed, so a ring's breath or a held light's stops with the page under it. What is NOT here: an
+     authored event (the voice, the caption's words, a build) - the compiler keeps those out of a beat by name. */
+  const FREEZE_WS = freezeWindows(TL.scenes || []);
+  const lifeT = (t) => lifeClock(FREEZE_WS, t);
+  const lifeFrom = (t0, t) => sceneClock(FREEZE_WS, t, t0);
+  const idleLive = (kind, t, phase, o) => idleXf(kind, lifeT(t), phase, o);
   /* a ledger page's declared focus (page.focus = {kind, target?, label?}) is an implicit species at LP_FOCUS_AT;
      the target defaults to the emphasized datum (E22 addendum 6) */
   const pageFocus = (sc) => {
@@ -18238,7 +18396,7 @@ async function mount(doc) {
       const painter = SPECIES_PAINTERS[sp.kind];
       if (painter) {
         painter({ sp, k, dur, t, sc, si, seed, svg: spSvg, el: lpEl, A, resolveTarget, centre, stageBox,
-                  ease: spEase, io: spIO, clamp: clamp01, drawOn, springPop, idle: idleXf, hash: lpHash,
+                  ease: spEase, io: spIO, clamp: clamp01, drawOn, springPop, idle: idleLive, hash: lpHash,
                   squigglePath, SQUIG_DRAW: SP.SQUIG_DRAW,   /* P57 T17: the callout's UNDERLINE form is the squiggle's stroke and clock, not the ring's - the one kind whose painter reaches for another kind's law */
                   camNow, idleOf,   /* P50 T5: a species ON A WORLD (the map's light, arc and stamp) rides the world's own camera and idle - the species layer is not the world div and carries neither by itself */
                   STAGE_W, STAGE_H, PORTRAIT });
@@ -18251,7 +18409,7 @@ async function mount(doc) {
            curls, each a pure function of t (a period of STEAM_PERIOD), fading with height. Never a particle system. */
         const b = resolveTarget(sp.target); if (!b) return;
         const g = lpEl("g", "", spSvg, { fill: "none", "stroke-linecap": "round" });
-        const ph = (t - sp.at) / SP.STEAM_PERIOD, rise = Math.max(160, b.w * 2.2), col = sp.color || "rgba(255,248,236,.42)";
+        const ph = (lifeFrom(sp.at, t) - sp.at) / SP.STEAM_PERIOD, rise = Math.max(160, b.w * 2.2), col = sp.color || "rgba(255,248,236,.42)";
         for (let w = 0; w < 3; w++) {
           const u = ((ph + w / 3) % 1 + 1) % 1;                        /* this wisp's own phase */
           const x0 = b.x + b.w * (0.25 + 0.25 * w) + (lpHash(seed, w, 41) - 0.5) * b.w * 0.2, y0 = b.y + 6;
@@ -18464,6 +18622,8 @@ async function mount(doc) {
      and the renderer still seek exactly (a pure function of t). */
   const seekVideo = (v, want) => {
     if (clipLive) {
+      if (FREEZE_WS.length && v.__lifeWant === want) { if (!v.paused) v.pause(); return; }   /* P69 T49: a freeze beat holds the clip */
+      v.__lifeWant = want;
       if (v.paused && (v.loop || want < (v.duration || Infinity) - 0.1)) v.play().catch(() => {});
       if (Math.abs((v.currentTime || 0) - want) > 0.15) { try { v.currentTime = want; } catch (e) {} }
       return;
@@ -18485,7 +18645,7 @@ async function mount(doc) {
       parkClips(el);
       v = clipFor(scene.world.asset_id); v.pause(); v.loop = false; el.appendChild(v);
     }
-    const local = Math.max(0, t - scene.span[0]);
+    const local = Math.max(0, lifeFrom(scene.span[0], t) - scene.span[0]);   /* P69 T49: a freeze beat holds the clip's frame */
     const want = Number.isFinite(v.duration) && v.duration > 0 ? Math.min(local, Math.max(0, v.duration - 0.05)) : local;
     seekVideo(v, want);
   };
@@ -18505,7 +18665,7 @@ async function mount(doc) {
       parkDockClips(el);
       v = clipFor(d.slide); v.pause(); v.loop = true; frame.appendChild(v);
     }
-    const local = Math.max(0, t - d.enter);
+    const local = Math.max(0, lifeFrom(d.enter, t) - d.enter);   /* P69 T49: ... and a video dock's */
     const dur = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0;
     seekVideo(v, dur ? Math.min(local % dur, Math.max(0, dur - 0.05)) : local);
   };
@@ -18624,7 +18784,7 @@ async function mount(doc) {
         el.querySelectorAll(".lp").forEach((x) => x.remove());
         const vm = el.querySelector("svg.vm") || lpEl("svg", "vm", el, {});
         vm.setAttribute("viewBox", `0 0 ${STAGE_W} ${STAGE_H}`);
-        paintVecmapWorld({ scene, world: scene.world, t, A, root: vm, el: lpEl, idle: idleXf, hash: lpHash, idleOf, STAGE_W, STAGE_H });
+        paintVecmapWorld({ scene, world: scene.world, t, A, root: vm, el: lpEl, idle: idleLive, hash: lpHash, idleOf, STAGE_W, STAGE_H });
       }
       else {
         el.style.backgroundImage = plies.length ? "none" : `url("${A[scene.world.asset_id]}")`;   /* P58 T3: the planes ARE the picture */
@@ -18634,7 +18794,7 @@ async function mount(doc) {
       if (!isClip) parkClips(el);   /* back to the pool, never destroyed */
       const kb0 = scene.world.ken_burns || { scale: 0, x: 0, y: 0 };
       const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
-      const p = clamp01((t - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
+      const p = clamp01((lifeFrom(scene.span[0], t) - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));   /* P69 T49: the push holds through a freeze beat */
       /* THE WORLD LEANS IN WITH THE ARGUMENT (Gemini showcase: worldScale
          steps 1.02 -> 1.08 across a build). Each evidence event in this
          scene - a card landing, a badge stamping - eases the plate in one
@@ -18651,7 +18811,7 @@ async function mount(doc) {
          one the engine has always written. */
       const idleAmp = idleDriftPx(scene.world.idle_drift_px, KIN.plate_idle_drift_px);
       const idlePose = (isLedger || isClip || isVecmap) ? { scale: 1, dx: 0, dy: 0 }
-        : idleXf(idleOf("plate", scene.world.idle), t, lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleAmp });   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
+        : idleXf(idleOf("plate", scene.world.idle), lifeT(t), lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleAmp });   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
       const zi = idlePose.scale;
       /* R26-133: this block read the plate's idle for its `.scale` ALONE, so `drift` ({scale: 1, dx, dy}) delivered
          nothing and a plate authored `;idle=drift` held perfectly still. The dx/dy now PAINT - on the world's rest
@@ -18675,7 +18835,7 @@ async function mount(doc) {
         el.dataset.worldPose = camCss(camXfNow) + restFlat;
         if (el.dataset.worldRest !== undefined) delete el.dataset.worldRest;   /* P58 T6: the camera is on the planes, not under this element */
         el.style.transform = "";
-        paintPlanes(el, plies, camXfNow, worldRest, idleDrift, Math.max(0, t - scene.span[0]));
+        paintPlanes(el, plies, camXfNow, worldRest, idleDrift, Math.max(0, lifeFrom(scene.span[0], t) - scene.span[0]));   /* P69 T49: the alive plane holds */
       } else if (pageK) {
         /* the page took the camera down onto its own plane; the element keeps what the page's GROUND shares with it
            - the authored Ken Burns and the wipe's push - and `data-world-pose` carries the k = 1 pose, so
@@ -19361,7 +19521,7 @@ async function mount(doc) {
              per-word highlight - the caption-energy lessons - and the HELD page's own life is E49's breath on the strip below. */
             const f = lifeAt(t, x.s, lifeKind), e = f.e;
             const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;                 /* the keyword's box sweeps in when spoken, stays */
-            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;
+            const tick = Math.floor(lifeT(t) * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;
             const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
             const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
             const sc = f.s * (on && e >= 1 ? MARK.LIFT : 1);
@@ -19379,7 +19539,7 @@ async function mount(doc) {
              which is the crowding this register exists to remove. The BLUR IS A FILTER ON THE WORD SPAN, never on the strip. */
             const f = fadeUpAt(t, fuStarts[j], FADE_UP), e = f.e;
             const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;                 /* the keyword's box sweeps in when spoken, stays */
-            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;   /* the boil, unchanged: seeded per word, on the landed word only */
+            const tick = Math.floor(lifeT(t) * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;   /* the boil, unchanged: seeded per word, on the landed word only */
             const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
             const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
             const sc = f.s * (on && e >= 1 ? MARK.LIFT : 1);
@@ -19400,7 +19560,7 @@ async function mount(doc) {
             /* ALIVE (operator, 2026-09-05: 'the words shifting slightly to stay alive, like the golden set'): the spoken word lifts 6% as the
                voice passes it, and every landed word BOILS - the engine's two-frame boil (SP.BOIL_PX / BOIL_DEG at LIFE_FPS), seeded per word */
             const sc = (MARK.POP + (1 - MARK.POP) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1) * (on && e >= 1 ? MARK.LIFT : 1);
-            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = e >= 1;
+            const tick = Math.floor(lifeT(t) * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = e >= 1;
             const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
             const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
             ws[j].style.transform = "translate(" + bx.toFixed(2) + "px," + (MARK.RISE_PX * (1 - e) + by).toFixed(2) + "px) scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + " + " + bdeg.toFixed(2) + "deg))";

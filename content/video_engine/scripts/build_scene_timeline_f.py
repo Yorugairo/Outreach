@@ -657,6 +657,20 @@ SPECIES_WHEN[SPECIES_LIT_STRETCH] = ("the sentence WALKS one stretch of a drawn 
                                      "is the claim, the stretch is undrawn, or the light would only sit")
 LIT_STRETCH_KEYS = ("kind", "at", "dur", "id", "from", "to", "series", "color", "comet", "panel")
 PANEL_SPECIES += (SPECIES_LIT_STRETCH,)   # P69 T36: a light travels a line on ONE panel of a panels page (`panel: <i>`; row 21)
+# P69 T49 (E99 s99: "a light that comes on as everything else STOPS is a punctuation beat - the freeze is the event") -
+# THE FREEZE BEAT. A STAGE species on any row: on its word every idle, drift and ambient life on the stage holds for
+# `dur` while ONE light comes on at the target (a datum; the box of a mark, a bar or a prop), then life resumes. Its law
+# and painter are species/freeze.mjs; this file owns its grammar (`_validate_freeze`, and `_freeze_row_errors` - the
+# row's other species keep out of the beat). Not `beat_freeze` (29 s9.27, still declared): that one is a boundary - a
+# final state frozen as a hit, then a directional cut - and life does not come back to the page it left.
+SPECIES_FREEZE = "freeze"
+SPECIES_KINDS += (SPECIES_FREEZE,)
+SPECIES_WHEN[SPECIES_FREEZE] = ("the TURN of the argument lands on ONE number or thing - the line the whole row builds to - and "
+                                "the stage STOPS on it: every idle, drift and ambient life holds for 0.4-1.2 s while one light "
+                                "comes on there, then life resumes; never while anything else moves, and never in place of a "
+                                "named thing's arrival (E99 s71: it arrives first, then the stage may stop on it)")
+FREEZE_MIN_S, FREEZE_MAX_S = 0.4, 1.2   # species/freeze.mjs FREEZE.MIN_S / MAX_S, mirrored: shorter reads as a dropped frame, longer as E49's still
+FREEZE_KEYS = ("kind", "at", "dur", "id", "target")
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -1533,6 +1547,8 @@ SPECIES_TARGETS = {
 }
 SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANELS by index, never a coordinate
 SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
+SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
+                                                                 # line's point, a bar), or a point / the box of a mark or a prop
 SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
                                                   # point would leave the strip's height to the painter, and the strip is the
                                                   # thing the caption has to be reconciled with (the strip law below)
@@ -2820,6 +2836,55 @@ def _validate_lit_stretch(entry: dict) -> list[str]:
     return errs
 
 
+def _validate_freeze(entry: dict) -> list[str]:
+    """P69 T49 (E99 s99): the beat's length is its dial, 0.4-1.2 s, and it WRITES nothing: its light is the page's one
+    light colour, held still as part of the stopped frame - no label (a `figure` names the number, before the beat), no
+    colour, no idle of its own (a light that breathes while everything stops is not stopped)."""
+    errs: list[str] = []
+    dur = entry.get("dur")
+    if isinstance(dur, (int, float)) and not isinstance(dur, bool) and not FREEZE_MIN_S - 1e-9 <= dur <= FREEZE_MAX_S + 1e-9:
+        errs.append(f"freeze: dur {dur:g}s is outside the beat's dial {FREEZE_MIN_S}-{FREEZE_MAX_S}s - shorter reads as a "
+                    "dropped frame, longer as the still frame E49 refuses")
+    extra = sorted(k for k in entry if k not in FREEZE_KEYS)
+    if extra:
+        errs.append(f"freeze: {', '.join(map(repr, extra))} - a freeze writes nothing and takes only "
+                    f"{'|'.join(FREEZE_KEYS[1:])}; its light is held still in the page's one light colour, and the words "
+                    "that name the number are a `figure` written before the beat")
+    return errs
+
+
+# the kinds whose motion runs on through any window they span and that the player has no hold for: a camera move,
+# stepped plate life, a ticker, a declared self-animating world, the newsreel's crawl
+FREEZE_UNHELD = ("punch", "focus_zoom", "pull_back", "plate_life", "ticker", "life", "newsreel")
+# ... and the kinds that DRAW for their whole window (their `dur` is motion, not a hold): spanning a beat, they move in it
+FREEZE_DRAWING = ("build_to", "undraw", "chart_to", "retitle", "trace", "peel", "spread", "bracket")
+
+
+def _freeze_row_errors(row_species: list, plate_id: str) -> list[str]:
+    """P69 T49: ONE light - everything else stops. The row's other species keep out of each beat [at, at + dur):
+    nothing starts in it (the freeze's own word included), nothing lands or leaves inside it, nothing that draws for
+    its whole window spans it, and nothing the player cannot hold runs across it. A mark that simply HOLDS across the
+    beat (a spotlight, a ring, a lit stretch that has landed) holds with it - its idle is on the life clock."""
+    eps = 1e-6
+    timed = [e for e in row_species if isinstance(e, dict) and _num(e.get("at"))]
+    errs: list[str] = []
+    for f in [e for e in timed if e.get("kind") == SPECIES_FREEZE and _num(e.get("dur"))]:
+        a, b = float(f["at"]), float(f["at"]) + float(f["dur"])
+        for e in timed:
+            if e is f:
+                continue
+            k, ea = str(e.get("kind")), float(e["at"])
+            eb = ea + float(e["dur"]) if _num(e.get("dur")) else ea
+            if k in FREEZE_UNHELD and ea < b - eps and eb > a + eps:
+                errs.append(f"{plate_id}: freeze at {a:g}s - a {k} runs across the beat ({ea:g}-{eb:g}s) and the player "
+                            "cannot hold it, so everything would not stop; move the beat out of its window")
+            elif (a - eps <= ea < b - eps or a + eps < eb < b - eps
+                  or (k in FREEZE_DRAWING and ea < a and eb > b)):
+                errs.append(f"{plate_id}: freeze at {a:g}s - {k} at {ea:g}s moves inside the beat ({a:g}-{b:g}s); one "
+                            "light: everything else stops, so nothing else starts, lands, draws or leaves in it")
+    return errs
+
+
 def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
     """Errors for one species entry: known kind, numeric at/dur, a target where the law requires one."""
     if not isinstance(entry, dict) or entry.get("kind") not in SPECIES_KINDS:
@@ -2844,6 +2909,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_newsreel(entry)
     if kind == SPECIES_LIT_STRETCH:   # P69 T36
         errs += _validate_lit_stretch(entry)
+    if kind == SPECIES_FREEZE:        # P69 T49
+        errs += _validate_freeze(entry)
     if kind in VECMAP_SPECIES:
         errs += _validate_vecmap_species(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
@@ -2919,6 +2986,7 @@ def validate_species(row_species, ken, plate_id: str, pivot_span: tuple | None =
                    and f["text"].strip() == quoted.strip() for f in row_species):
             errs.append(f"{plate_id}: chart_to compare quotes {quoted!r} and the page writes no `figure` species with "
                         "that text - the number the sentence turns on is WRITTEN at its datum before it can morph (E50)")
+    errs += _freeze_row_errors(row_species, plate_id)   # P69 T49: one light - everything else stops
     moves = [e["kind"] for e in row_species if isinstance(e, dict) and e.get("kind") in CAMERA_MOVES]
     if len(moves) > 1:
         errs.append(f"{plate_id}: {' + '.join(moves)} on one row - one camera move per window (s9.28 C3)")

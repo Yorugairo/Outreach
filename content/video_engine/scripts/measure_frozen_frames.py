@@ -61,6 +61,56 @@ def frozen_runs(frames: list[dict], max_s: float = FROZEN_MAX_S) -> list[tuple[f
     return out
 
 
+FREEZE_KIND = "freeze"   # P69 T49 / E99 s99: THE FREEZE BEAT - mirrored in gate_motion_density.FREEZE_KIND
+
+
+def freeze_windows(tl: dict) -> list[tuple[float, float]]:
+    """P69 T49: the timeline's freeze beats - every freeze species' [at, at + dur] clipped to its scene, sorted, overlaps
+    merged. Inside one the stage was TOLD to stop (E99 s99: "a light that comes on as everything else STOPS is a
+    punctuation beat"), so its held frames are the beat, not E49's still. Mirrors gate_motion_density.freeze_windows."""
+    ws: list[tuple[float, float]] = []
+    for sc in (tl or {}).get("scenes") or []:
+        span = sc.get("span") or [None, None]
+        for sp in sc.get("species") or []:
+            at, dur = (sp or {}).get("at"), (sp or {}).get("dur")
+            if (sp or {}).get("kind") != FREEZE_KIND or not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in (at, dur)):
+                continue
+            a = max(float(at), float(span[0])) if isinstance(span[0], (int, float)) else float(at)
+            b = min(float(at) + float(dur), float(span[1])) if isinstance(span[1], (int, float)) else float(at) + float(dur)
+            if b > a:
+                ws.append((a, b))
+    out: list[list[float]] = []
+    for a, b in sorted(ws):
+        if out and a <= out[-1][1]:
+            out[-1][1] = max(out[-1][1], b)
+        else:
+            out.append([a, b])
+    return [(round(a, 4), round(b, 4)) for a, b in out]
+
+
+def punctuate(runs: list[tuple[float, float]], freezes: list[tuple[float, float]] | None,
+              max_s: float = FROZEN_MAX_S) -> tuple[list[tuple[float, float]], list[tuple[float, float]]]:
+    """P69 T49: split frozen runs by the freeze beats -> (still, beats). The part inside a beat is punctuation; each part
+    outside every beat is a still, kept when it is longer than `max_s`. Mirrors gate_motion_density.punctuate."""
+    if not freezes:
+        return list(runs), []
+    still: list[tuple[float, float]] = []
+    beats: list[tuple[float, float]] = []
+    for s, d in runs:
+        e, cur = s + d, s
+        for a, b in sorted(freezes):
+            if b <= cur or a >= e:
+                continue
+            if a > cur and a - cur > max_s:
+                still.append((round(cur, 4), round(a - cur, 4)))
+            lo, hi = max(cur, a), min(e, b)
+            beats.append((round(lo, 4), round(hi - lo, 4)))
+            cur = hi
+        if e - cur > max_s:
+            still.append((round(cur, 4), round(e - cur, 4)))
+    return still, beats
+
+
 def hash_frames(html: Path, aspect: str, fps: float, start: float, end: float, progress=None,
                 layer: str | None = None) -> list[dict]:
     """One browser, one seek per frame, one sha256 of the stage's RGB bytes per frame.
@@ -111,10 +161,14 @@ def measure(build: Path, fps: float = 12.0, start: float | None = None, end: flo
     if not html.exists():
         raise SystemExit(f"no {html_name} in {build}")
     frames = hash_frames(html, aspect, fps, s0, s1, progress, layer)
-    runs = frozen_runs(frames)
+    freezes = freeze_windows(tl)
+    runs, beats = punctuate(frozen_runs(frames), freezes)   # P69 T49: a freeze beat's held frames are punctuation
     doc = {"fps": fps, "start": s0, "end": s1, "aspect": aspect, "timeline": tls[0].name,
            "html_sha256": hashlib.sha256(html.read_bytes()).hexdigest(), "frozen_max_s": FROZEN_MAX_S,
            "frames": frames, "frozen_runs": [{"t": a, "s": round(d, 4)} for a, d in runs]}
+    if freezes:   # only a timeline that HAS a beat writes these keys - every other build's file is the file it wrote
+        doc["freeze_windows"] = [list(w) for w in freezes]
+        doc["freeze_beats"] = [{"t": a, "s": d} for a, d in beats]
     if layer:
         doc["layer"] = layer
     if layer and out_name == FRAME_HASHES_NAME:
@@ -160,6 +214,10 @@ def main() -> int:
                             a.out if layer is None else FRAME_HASHES_NAME,
                             progress=lambda t, e: print(f"  {t:7.2f} / {e:.2f}", flush=True), layer=layer)
         print(f"frame-hashes ({layer or 'whole frame'}): {out}")
+        beats = json.loads(out.read_text(encoding="utf-8")).get("freeze_beats") or []
+        if beats:   # P69 T49: named, never a silent pass
+            print(f"FREEZE BEAT ({layer or 'whole frame'}): {len(beats)} held run(s) read as punctuation (E99 s99): "
+                  + ", ".join(f"{b['t']:.2f}s+{b['s']:.2f}s" for b in beats[:12]))
         if runs:
             print(f"FROZEN ({layer or 'whole frame'}): {len(runs)} run(s) over {FROZEN_MAX_S:.2f}s: "
                   + ", ".join(f"{a:.2f}s+{d:.2f}s" for a, d in runs[:12]))
