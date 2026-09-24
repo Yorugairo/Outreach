@@ -27,7 +27,9 @@ import argparse
 import ast
 import datetime as dt
 import difflib
+import hashlib
 import html.parser
+import http.client
 import io
 import json
 import operator
@@ -306,6 +308,8 @@ class Web:
             return {"status": UNVERIFIABLE, "http": None, "final_url": url, "detail": f"network: {exc.reason}"}, b""
         except (TimeoutError, socket.timeout):
             return {"status": UNVERIFIABLE, "http": None, "final_url": url, "error": "timeout", "detail": "timeout"}, b""
+        except (http.client.HTTPException, ConnectionError, OSError) as exc:   # a dropped / reset connection is UNVERIFIABLE (never CONFIRMED), never a crash
+            return {"status": UNVERIFIABLE, "http": None, "final_url": url, "error": "network", "detail": f"network: {type(exc).__name__}: {exc}"}, b""
 
 
 # --------------------------------------------------------------------------- the per-claim checks
@@ -628,6 +632,24 @@ def require_pass(claims_path: Path, out_dir: Path) -> tuple[bool, str]:
 # --------------------------------------------------------------------------- the CLI
 
 
+def tamper_check() -> str | None:
+    """THE CHECKER IS OURS (2026-09-24: a Gemini run edited this file mid-order - its User-Agent and its exception handling). The verifier refuses to
+    run when its own bytes differ from the committed copy (`git show HEAD:<this file>`), so the lane it checks can never loosen it. None = clean."""
+    me = Path(__file__).resolve()
+    try:
+        top = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=me.parent, capture_output=True, text=True, timeout=20).stdout.strip()
+        rel = me.relative_to(Path(top).resolve()).as_posix()
+        head = subprocess.run(["git", "show", f"HEAD:{rel}"], cwd=top, capture_output=True, timeout=20).stdout
+    except (OSError, ValueError, subprocess.SubprocessError) as exc:
+        return f"cannot read the committed copy ({exc})"
+    if not head:
+        return "no committed copy at HEAD"
+    norm = lambda b: b.replace(bytes([13, 10]), bytes([10]))   # CRLF -> LF: a Windows checkout is the same bytes
+    if hashlib.sha256(norm(me.read_bytes())).hexdigest() != hashlib.sha256(norm(head)).hexdigest():
+        return f"{rel} differs from HEAD - the checker was modified; restore it (`git show HEAD:{rel}`) or commit the change after review"
+    return None
+
+
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("run_dir", type=Path, help="the research run folder (claims.jsonl + sources/)")
@@ -640,6 +662,7 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--delay", type=float, default=0.5, help="seconds before each request (politeness)")
     ap.add_argument("--doi-api", default=DOI_API)
     ap.add_argument("--crossref-api", default=CROSSREF_API)
+    ap.add_argument("--allow-modified", action="store_true", help="skip the tamper check (tests / an uncommitted fix under review only)")
     return ap
 
 
@@ -648,6 +671,11 @@ def main(argv: list[str] | None = None) -> int:
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8", errors="replace")
     a = build_parser().parse_args(argv)
+    if not a.allow_modified:
+        tampered = tamper_check()
+        if tampered:
+            print(f"verify_research_claims: REFUSED - {tampered}")
+            return 2
     run_dir = a.run_dir.resolve()
     claims_path = (a.claims or run_dir / "claims.jsonl").resolve()
     out_dir = (a.out_dir or run_dir).resolve()

@@ -23,6 +23,33 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import verify_research_claims as VR  # noqa: E402
 
+
+@pytest.fixture(autouse=True)
+def _the_checker_is_ours(monkeypatch, request):
+    """The tamper check compares this module to HEAD; an uncommitted fix under test would refuse itself. Every test but the tamper
+    test runs with the check stubbed clean; the tamper test exercises the real one."""
+    if request.node.name != "test_the_verifier_refuses_to_run_when_it_differs_from_the_committed_copy":
+        monkeypatch.setattr(VR, "tamper_check", lambda: None)
+
+
+def test_the_verifier_refuses_to_run_when_it_differs_from_the_committed_copy(tmp_path, monkeypatch):
+    """2026-09-24: a Gemini run edited this verifier mid-order. A copy of the module in a fresh repo passes while it equals its commit,
+    and is REFUSED once its bytes change."""
+    import shutil, subprocess, importlib.util
+    repo = tmp_path / "repo"; (repo / "s").mkdir(parents=True)
+    src = Path(VR.__file__); dst = repo / "s" / "verify_research_claims.py"; shutil.copy(src, dst)
+    shutil.copy(src.parent / "audit_research_provenance.py", repo / "s" / "audit_research_provenance.py")
+    for cmd in (["git", "init", "-q"], ["git", "add", "."], ["git", "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "base"]):
+        subprocess.run(cmd, cwd=repo, check=True)
+    def load():
+        spec = importlib.util.spec_from_file_location("vrc_copy", dst); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); return m
+    assert load().tamper_check() is None, "the committed copy must pass"
+    dst.write_text(dst.read_text(encoding="utf-8").replace("research@localhost", "research@example.org"), encoding="utf-8")
+    why = load().tamper_check()
+    assert why and "differs from HEAD" in why, why
+    assert load().main([str(tmp_path)]) == 2
+
+
 PAGE = ("<html><head><title>NVIDIA 10-K</title><script>var x = 'Data Center $ 999';</script></head><body>"
         "<p>Revenue by end market.</p><table><tr><td>Data Center</td><td>$</td><td>115,186</td>"
         "<td>$</td><td>47,525</td></tr></table>"
