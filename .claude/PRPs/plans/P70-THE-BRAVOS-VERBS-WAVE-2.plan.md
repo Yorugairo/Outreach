@@ -392,6 +392,18 @@ listed order.
 - Review: pending
 - Evidence: pending
 
+### T1b: A seal-type stamp is a seal - the solid border, ring text on two half-arcs, the shockwave from the impact frame, the ink easing back (E99 s121)
+- Status: pending
+- Owner: implementation_luna (LANE B), then reviewer (the stamp's law on every door)
+- Depends on: T1 integrated
+- Harvest: remotion-ui badge-stamp (RU-2) - the port's source `content/video_engine/remotion-ui/src/remotion/primitives/badge-stamp.tsx` (ringText / ringTextBottom, the border rings, the shockwave's start, the ink ease) and the component's docs https://remotionui.com/docs/components/badge-stamp; REUSE the port (`kinetics/stopaction.mjs` STAMP_ARRIVAL / stampRing / stampXf), never re-derive
+- Write set: `content/video_engine/scripts/kinetics/stopaction.mjs` (the shockwave's clock from the contact; the ink ease), `content/video_engine/scripts/species/chip.mjs` (the seal border + ring text on the stamp form), the dock's stamp paint in `docs/content-video-engine/samples/scene-evidence-engine.mjs` (a badge/verdict stamp's seal; a bare prop unchanged but for the shockwave clock), `content/video_engine/scripts/build_scene_timeline_f.py` (`ring_text`, `ring_text_bottom` options, refused on a bare prop by name citing s87 / s121), the cards, tests, goldens re-pinned where the shockwave clock moves them
+- Acceptance: s121 (1)-(4): a seal-type stamp (stamp-form chip, badge, verdict) carries a solid outer + thin inner ring that stay; ring text on two half-arcs both reading left to right, each refused past the ring's side (a length WARN with numbers); a bare prop stamp has no border; EVERY stamp's shockwave starts at the contact (0.1542 s) - measured, zero shockwave ink before it; the ink eases back after the hit on the chip; the parent reads ours beside the remotion-ui reference frames on one sheet; P69-HG1's 'the ring fires from the enter' item closed by this
+- Regression: `node --test content/video_engine/tests/kinetics/stopaction-stamp.test.mjs` then `node --test content/video_engine/tests/kinetics/chip.test.mjs`
+- Expected RED: shockwave ink present before the contact; no seal border on a stamp-form chip; `ring_text` refused as unknown
+- Validate: `node --test "content/video_engine/tests/kinetics/*.test.mjs"`, `python -m pytest content/video_engine/tests/test_the_stamp_arrival.py content/video_engine/tests/test_chip_stamp_arrival.py content/video_engine/tests/test_golden_frames.py -q` (each file its own process)
+- Evidence: pending
+
 ### T2: The schematic - a shape drawn with no data, carrying the narrative (was P69 T46)
 - Status: pending
 - Owner: implementation_luna (LANE B)
@@ -1063,6 +1075,20 @@ listed order.
 - Frame acceptance: `chapter-swap.png` beside the fetched BOOM frame at 02:25.
 - Red evidence: pending
 - Green evidence: pending
+- Evidence: pending
+
+### T13: The drift-hold - a held chart card or evidence dock breathes, turns a fraction and catches a light, one whole cycle per hold (the operator, 2026-09-24; HyperFrames drift-hold)
+- Status: pending
+- Owner: implementation_luna (LANE B)
+- Depends on: T37b (the page's inks) integrated; nothing else in P70
+- Harvest: the operator, 2026-09-24: "npx hyperframes add drift-hold i think this becomes an interesting reference to hold charts/evidence docks with". The component is already on disk, harvested 2026-09-07 as a reference only (fc71e49 - "nothing in the engine changes"): `content/video_engine/hyperframes/compositions/components/drift-hold.html` - sub-degree rotation, restrained scale breathing and a soft light sweep, each ONE complete sine cycle across the mounted duration, the endpoint phase wrapped so t=0 equals t=duration (loop-safe); intensities `whisper` / `standard`.
+- Recall: docs_find "drift-hold" -> 0 capability hits (R26-15 names the harvest); CAPABILITIES :72 "The idle, WIRED" (E49): kinds breath / drift / pulse / figure in `kinetics/idle.mjs` - no rotation idle, no light sweep, no whole-cycle-per-hold law; the opt-in sheen/glint (OPERATOR-RULINGS ~:1828) is the light to REUSE for the sweep
+- Verdict: EXTEND - a new idle kind `hold` in `kinetics/idle.mjs` (rotation + breath + sweep, each one whole cycle over the held span, phase-wrapped), opt-in per dock / chart card (`idle: hold[:whisper|standard]`), never a default change; the dials read off drift-hold.html's own amplitudes (a DERIVED tag per dial), not invented
+- Write set: `content/video_engine/scripts/kinetics/idle.mjs` (the `hold` kind), the engine's idle region via `sync_kinetics.py --write`, `content/video_engine/scripts/build_scene_timeline_f.py` (the dock / card option's validation), `content/video_engine/effects/cards/<idle card>.json`, `content/video_engine/tests/kinetics/idle.test.mjs`, a new test, one golden on a real H held dock (s60), the parent's sheet
+- Acceptance: a dock or chart card with `idle: hold` breathes, turns under a degree and carries one light sweep, each exactly one cycle across its held span (t=0 pose == t=end pose, measured); the sweep never crosses the dock's text at a read-hurting alpha (E28); `whisper` for a card carrying a chart, `standard` for a picture; absent the option every door byte-identical; the parent reads ours beside drift-hold.html rendered by `npx hyperframes@0.7.101 render` on one sheet
+- Regression: `node --test content/video_engine/tests/kinetics/idle.test.mjs`
+- Expected RED: `hold` refused as an unknown idle kind
+- Validate: `node --test "content/video_engine/tests/kinetics/*.test.mjs"`, `python content/video_engine/scripts/sync_kinetics.py --check`, `python -m pytest content/video_engine/tests/test_golden_frames.py -q`
 - Evidence: pending
 
 ### T11: Integration and merge - the registries, the regenerations, CAPABILITIES, one commit per slice
