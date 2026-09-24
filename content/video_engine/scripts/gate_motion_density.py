@@ -396,6 +396,11 @@ SPECIES_EVENTS["newsreel"] = NEWSREEL_CRAWL
 SPECIES_EVENTS["count_array"] = ("at", "arrivals")
 SPECIES_EVENTS["agenda"] = ("at", "rows")
 SPECIES_EVENTS["ring"] = ("at",)
+# P69 T36 / E99 s99 ("a highlight that TRAVELS along a length ... counts as motion"): THE LIT STRETCH. Unlike a span or
+# a light that lands and HOLDS (one event), this light TRAVELS - its head runs the stretch over the word - so both edges
+# are events: it leaves `from` on its word, and it lands at `to` inside the word (credited at the window's end). What it
+# does after that is an annotation (s91) and earns nothing.
+SPECIES_EVENTS["lit_stretch"] = ("at", "end")
 COUNT_ARRAY_STEP = AGENDA_STEP = 0.34   # the default word pitch both kinds arrive on when the row names no `step`
                                         # - the same number the compiler holds (build_scene_timeline_f.COUNT_ARRAY_STEP /
                                         # AGENDA_STEP) and the modules' own dial (COUNT.STEP / AGENDA.STEP): 178 WPM.

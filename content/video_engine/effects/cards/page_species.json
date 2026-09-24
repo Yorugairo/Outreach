@@ -484,6 +484,112 @@
       }
     },
     {
+      "id": "page_species:lit_stretch",
+      "axis": "page_species",
+      "token": "lit_stretch",
+      "title": "The lit stretch: a light travels the line",
+      "aliases": [
+        {
+          "name": "A stretch relights",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:103"
+        },
+        {
+          "name": "Comet retrace over its own ghost",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:105"
+        },
+        {
+          "name": "a highlight that TRAVELS along a length",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3329 (E99 s99)"
+        }
+      ],
+      "does": "On its word a light runs along one stretch of a drawn line, from one datum to another, and holds there lit; the rest of the line keeps its ink. It moves because it travels (E99 s99); a comet head may ride its leading edge.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "SPANS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"lit_stretch\", \"at\", \"dur\", \"from\", \"to\", \"series\"?, \"color\"?, \"comet\"?} on a ledger row; from/to are two datum indices or two 0..1 x-fractions",
+        "example": "{\"kind\": \"lit_stretch\", \"at\": 10.62, \"dur\": 1.56, \"from\": 53, \"to\": 139, \"comet\": True}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (lit-stretch-crash)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the light travels",
+          "does": "the lit stretch grows from `from` toward `to` by arc length on the min-jerk clock, the comet head at its leading edge, never ahead of the drawn ink",
+          "trigger": "the species' `at`, over TRAVEL of `dur`",
+          "dials": {
+            "TRAVEL": "0.8",
+            "CORE_K": "1.6",
+            "GLOW_K": "3.2",
+            "GLOW_A": "0.85",
+            "HEAD_K": "2.2"
+          }
+        },
+        {
+          "name": "the light holds",
+          "does": "the whole stretch stands lit, an annotation now (E99 s91); the comet head fades; an undraw or a replacing chart_to takes it on its own clock",
+          "trigger": "TRAVEL of `dur` after `at`; the head over HEAD_OUT_S",
+          "dials": {
+            "HEAD_OUT_S": "0.35"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos harvest v2 A11 (8 of 9 videos): a stretch relights, the glow travels down one segment",
+          "became": "the travel",
+          "record": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:103",
+          "tie": "recorded"
+        },
+        {
+          "source": "the span's edge law (spanEdgeX)",
+          "became": "the stretch's two edges",
+          "record": "content/video_engine/scripts/species/span.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "R26-228 the electric (lpBloom's halo, the relight's sunflower)",
+          "became": "the lit core's look",
+          "record": "docs/content-video-engine/CAPABILITIES.md:76",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "comet",
+          "means": "`comet: true`: a bright head with a halo rides the light's leading edge (A13) and fades once it lands.",
+          "source_set": null
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/species/lit_stretch.mjs",
+        "object": "LIT"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/lit_stretch.mjs",
+        "symbol": "paintLitStretch"
+      },
+      "doctrine": [
+        "E99 s99",
+        "E99 s91",
+        "E99 s71",
+        "P69 T36"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "lit-stretch-crash",
+        "test": "content/video_engine/tests/kinetics/lit_stretch.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "page_species:note",
       "axis": "page_species",
       "token": "note",
