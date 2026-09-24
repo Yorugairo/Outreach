@@ -1658,12 +1658,23 @@ SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STR
                                                   # point would leave the strip's height to the painter, and the strip is the
                                                   # thing the caption has to be reconciled with (the strip law below)
 PHRASE_TARGET = "phrase"                      # P50 T3: a region INSIDE a press card - {"kind": "phrase", "dock": "<the press dock's asset id>"}.
-TARGET_KINDS_ALL = TARGET_KINDS + (PHRASE_TARGET, EMBED_TARGET) + MAP_TARGETS   # ... admitted for a CALLOUT alone, and only as the underline (E56's one exception); the
+DOCK_TARGET = "dock"                          # P69 T65 / E99 s110 (2): the THING the sentence points at - a docked card, a press card or a
+                                              # prop - {"kind": "dock", "dock": "<the dock's asset id>"[, "box": [x0, y0, x1, y1]]}
+                                              # (`box`: fractions of the card - its face; absent = the whole card, a prop's PAINTED box).
+                                              # Admitted for the two rings alone (RING_ON_DOCK_KINDS) and resolved by the player to the
+                                              # dock's box AT t (its placed box - the park, a prop's moves - else as laid out), so a card
+                                              # that parks or a prop that is moved carries its ring
+RING_ON_DOCK_KINDS = ("callout", SPECIES_RING)   # ... the hand's closed circle and the dashed form; no other species takes a dock
+DOCK_TARGET_KEYS = ("kind", "dock", "box")
+RING_POINTS_KEY = "points"                    # ... the phrase of the take that points at THAT thing ("look at that certificate again")
+S110_RING = "E99 s110 (2)"
+TARGET_KINDS_ALL = TARGET_KINDS + (PHRASE_TARGET, EMBED_TARGET, DOCK_TARGET) + MAP_TARGETS   # ... admitted for a CALLOUT alone, and only as the underline (E56's one exception); the
                                                      # compiler resolves it to the dock's declared phrase box, the player to stage px through
                                                      # the card's LIVE geometry (a parked or stacked card moves, and the underline moves with it)
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word"),
                  PHRASE_TARGET: (),   # its one field is `dock`, a name - checked in _validate_callout, where the row's press docks are known
+                 DOCK_TARGET: (),     # ... and a dock target's are `dock` (a name) and `box` - checked in _validate_dock_ring
                  EMBED_TARGET: (),    # ... and its one field is `name`, checked below and resolved to the plate's quad at the row
                  COUNTRY_TARGET: (), MAPPOINT_TARGET: ()}   # ... and a map target's fields are MAP units, not 0..1 fractions: _validate_map_target checks them against the map's own box
 FRACTION_FIELDS = ("x", "y", "x0", "y0", "x1", "y1")   # plate coordinates as fractions of the frame, 0..1
@@ -2733,6 +2744,55 @@ def species_icons(entry) -> list[str]:
 
 
 CALLOUT_FORMS = (UNDERLINE_FORM,)   # P50 T3: the one form a callout takes besides the ring
+# P69 T65: E56's picture refusal names the one way a picture's THING may still be ringed (s110 (2)), after its own words
+E56_DOCK_ROUTE = (f" - or, when the sentence points at the docked card or prop ITSELF, ring THAT dock "
+                  f"({{'kind': 'dock', 'dock': '<asset id>'}}, its number as the label, `points` on the phrase - {S110_RING})")
+
+
+def _unit_box(v) -> bool:
+    """[x0, y0, x1, y1], each a 0..1 fraction (never a bool), x0 < x1 and y0 < y1."""
+    if not isinstance(v, (list, tuple)) or len(v) != 4:
+        return False
+    if any(isinstance(c, bool) or not isinstance(c, (int, float)) or not 0.0 <= c <= 1.0 for c in v):
+        return False
+    return v[0] < v[2] and v[1] < v[3]
+
+
+def _validate_dock_ring(kind: str, entry: dict) -> list[str]:
+    """P69 T65 / E99 s110 (2) as code: a ring on a DOCK - "a ring may circle a picture, a card or a prop when the
+    sentence points at THAT thing ("look at that certificate again") and carries its number beside it". The two
+    conditions are the ruling's own and each is refused by name: the NUMBER (a digit in the ring's `label` - the
+    figure it writes beside the thing) and the POINTING (`points`, the phrase of the take that points at it). Whether
+    the dock is on the row, on the stage at the ring's word, and whether that word IS the phrase, is `dock_ring_targets`,
+    run where the row's docks and the take are in hand. Pure."""
+    tgt, errs = entry["target"], []
+    dock = tgt.get("dock")
+    if not isinstance(dock, str) or not dock.strip():
+        errs.append(f"{kind}: target dock must name its card or prop - {{'kind': 'dock', 'dock': '<the dock's asset id>'}}")
+    if "box" in tgt and not _unit_box(tgt["box"]):
+        errs.append(f"{kind}: target dock 'box' is the card's face as [x0, y0, x1, y1] fractions of the card "
+                    "(0..1, x0 < x1, y0 < y1); absent = the whole card")
+    for extra in sorted(set(tgt) - set(DOCK_TARGET_KEYS)):
+        errs.append(f"{kind}: target dock {extra!r} is not a dock target's (it takes {'|'.join(DOCK_TARGET_KEYS[1:])})")
+    if not re.search(r"\d", str(entry.get("label", ""))):
+        errs.append(f"{kind}: a ring on a card or a prop carries its NUMBER beside it ({S110_RING}: \"carries its number "
+                    "beside it\") - write the figure as the ring's `label`; a picture's focus with no number is a light (E56)")
+    pts = entry.get(RING_POINTS_KEY)
+    if not isinstance(pts, str) or not pts.strip():
+        errs.append(f"{kind}: a ring on a card or a prop marks what the sentence POINTS AT ({S110_RING}: \"when the "
+                    "sentence points at THAT thing\") - `points` names the phrase of the take that points at it "
+                    "(\"that certificate\"), and the ring's `at` falls on it")
+    return errs
+
+
+def _validate_ring_points(kind: str, entry: dict) -> list[str]:
+    """`points` is the dock ring's key alone - on any other target it would do nothing, and a dial that does nothing
+    is worse than no dial."""
+    tgt = entry.get("target")
+    if RING_POINTS_KEY in entry and not (isinstance(tgt, dict) and tgt.get("kind") == DOCK_TARGET):
+        return [f"{kind}: `points` is the ring-on-a-dock's pointing phrase ({S110_RING}) - it takes a dock target, "
+                f"not a {tgt.get('kind') if isinstance(tgt, dict) else tgt!r}"]
+    return []
 
 
 def _validate_callout(entry: dict, press_docks: dict | None) -> list[str]:
@@ -2759,16 +2819,21 @@ def _validate_callout(entry: dict, press_docks: dict | None) -> list[str]:
                         "a phrase is a region of a press card (P50 T3)")
         if form != UNDERLINE_FORM:
             errs.append("callout: a ring circles a NUMBER or a POINT ON A CHART (E56) - on a press card the one exception is "
-                        f'form: "{UNDERLINE_FORM}" on the quoted phrase (the squiggle law, s9.27); a ring on a card is refused')
-        return errs
+                        f'form: "{UNDERLINE_FORM}" on the quoted phrase (the squiggle law, s9.27); a ring on a card is refused'
+                        + E56_DOCK_ROUTE)
+        return errs + _validate_ring_points("callout", entry)
     if form is not None:
         return [f"callout: form {form!r} is the press card's underline (P50 T3) - it takes a phrase target, "
                 f"not a {tgt.get('kind')}"]
+    if tgt.get("kind") == DOCK_TARGET:   # P69 T65 / E99 s110 (2): the thing the sentence points at, with its number
+        return _validate_dock_ring("callout", entry)
+    if points := _validate_ring_points("callout", entry):
+        return points
     if tgt.get("kind") != "datum" and not re.search(r"\d", str(entry.get("label", ""))):
         # a datum target IS a point on a chart; a stamp whose label is a number IS the number; a ring
         # around a picture's point or region is the cheap call-out the ruling refuses - the focus there is a light
         return [f"callout: a ring circles a NUMBER or a POINT ON A CHART (E56) - this one targets a {tgt.get('kind')} "
-                f"with no numeric label; use a spotlight (the light) on a picture"]
+                f"with no numeric label; use a spotlight (the light) on a picture" + E56_DOCK_ROUTE]
     return []
 
 
@@ -2970,9 +3035,13 @@ def _validate_ring(entry: dict) -> list[str]:
         errs.append(f"ring: 'form' must be one of {'|'.join(RING_FORMS)} - the ring's dashed form is what this kind is "
                     "(the hand's closed circle is a `callout`, E56's ring, unchanged)")
     tgt = entry.get("target")
-    if isinstance(tgt, dict) and tgt.get("kind") != "datum" and not re.search(r"\d", str(entry.get("label", ""))):
+    if isinstance(tgt, dict) and tgt.get("kind") == DOCK_TARGET:   # P69 T65 / E99 s110 (2): the named thing, with its number
+        errs += _validate_dock_ring("ring", entry)
+    elif points := _validate_ring_points("ring", entry):
+        errs += points
+    elif isinstance(tgt, dict) and tgt.get("kind") != "datum" and not re.search(r"\d", str(entry.get("label", ""))):
         errs.append(f"ring: a ring circles a NUMBER or a POINT ON A CHART (E56) - this one targets a {tgt.get('kind')} "
-                    f"with no numeric label; use a spotlight (the light) on a picture")
+                    f"with no numeric label; use a spotlight (the light) on a picture" + E56_DOCK_ROUTE)
     flag = entry.get("flag")
     if flag is not None:
         if not isinstance(flag, str) or not flag.strip():
@@ -3343,6 +3412,9 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
     if kind == "callout":   # E56 and P50 T3's one exception - see _validate_callout
         errs += _validate_callout(entry, press_docks)
     allowed = SPECIES_TARGETS[kind]
+    if kind in RING_ON_DOCK_KINDS and isinstance(entry.get("target"), dict) and entry["target"].get("kind") == DOCK_TARGET:
+        allowed = allowed + (DOCK_TARGET,)   # P69 T65: the rings alone take a dock - admitted where one is named, so every
+                                             # other refusal's "(takes ...)" list reads word for word what it did
     if not allowed:
         return errs
     if "target" not in entry:
@@ -7797,6 +7869,59 @@ def _named_span(ws: list[dict], phrase: str, contact: float) -> tuple[str, float
     return best[1:] if best else None
 
 
+def _dock_ring_error(entry: dict, docks: list[dict], ws: list[dict] | None, where: str) -> str | None:
+    """Why one ring on a dock cannot be played on this row, or None: the dock is ON the row, ON the stage at the ring's
+    word (entered, not yet left), and that word is ON the phrase `points` names, as the take says it (E99 s110 (2))."""
+    tgt, at = entry["target"], float(entry["at"])
+    name, kind, pts = tgt["dock"], entry["kind"], entry[RING_POINTS_KEY]
+    tag = f"{where}: {kind} at {at:g}s on dock {name!r}"
+    d = next((x for x in docks if x.get("slide") == name), None)
+    if d is None:
+        return (f"{tag}, which is not on this row - a ring circles a thing ON the stage (the row's docks: "
+                f"{', '.join(repr(x.get('slide')) for x in docks) or 'none'})")
+    if at < float(d["enter"]) - 1e-9:
+        return f"{tag}: the dock has not arrived (it enters at {float(d['enter']):g}s) - a ring circles a thing on the stage"
+    if at >= float(d["exit"]) - 1e-9:
+        return f"{tag}: the dock has LEFT (at {float(d['exit']):g}s) - a ring on a thing that has left is refused"
+    if not ws:
+        return f"{tag}: `points` {pts!r} needs the build's words (timeline.json) to find the phrase ({S110_RING})"
+    span = _named_span(ws, pts, at)
+    if span is None:
+        return f"{tag}: `points` {pts!r} is not in the take - the ring marks what the sentence points at ({S110_RING})"
+    _p, a0, z0 = span
+    if not (a0 - MG.WORD_ANCHOR_TOL_S <= at <= z0 + 1e-9):
+        return (f"{tag}: the ring's word is the phrase that points at THAT thing ({S110_RING}) - {pts!r} is said "
+                f"{a0:.2f}-{z0:.2f}s; put the ring's `at` on it")
+    return None
+
+
+def dock_ring_targets(row_species, docks: list[dict], words, where: str) -> tuple[list, list[str]]:
+    """P69 T65 / E99 s110 (2): every ring on a DOCK checked against the row's COMPILED docks and the take, and ended on
+    its dock's leave. A thing that is not on the row, has not arrived, or has LEFT at the ring's word is refused by
+    name, and so is a word that is not the phrase `points` names (ValueError, every refusal of the row in one
+    message); a ring whose `dur` runs past the dock's exit is given the dock's exit (the ring leaves with the thing it
+    circles) on a COPY of its entry, and the clamp is reported. A row with no ring on a dock is returned AS IT WAS
+    (the same list), so every other row compiles byte-for-byte what it did. (species, notes)."""
+    rings = [n for n, e in enumerate(row_species or []) if isinstance(e, dict) and e.get("kind") in RING_ON_DOCK_KINDS
+             and isinstance(e.get("target"), dict) and e["target"].get("kind") == DOCK_TARGET]
+    if not rings:
+        return row_species, []
+    ws = _override_words(words)
+    errs = [x for x in (_dock_ring_error(row_species[n], docks, ws, where) for n in rings) if x]
+    if errs:
+        raise ValueError("; ".join(errs))
+    out, notes = list(row_species), []
+    for n in rings:
+        e = row_species[n]
+        d = next(x for x in docks if x.get("slide") == e["target"]["dock"])
+        room = round(float(d["exit"]) - float(e["at"]), 2)
+        if float(e["dur"]) > room + 1e-9:
+            out[n] = dict(e, dur=room)
+            notes.append(f"{e['kind']} at {float(e['at']):g}s on {d['slide']}: dur {float(e['dur']):g}s -> {room:g}s - "
+                         f"the ring leaves on the dock's leave ({float(d['exit']):g}s)")
+    return out, notes
+
+
 def _word_at_enter(ws: list[dict], enter: float) -> tuple[str, float, float] | None:
     """The word an unnamed stamp was put ON: the word whose onset is its enter (within the at() rounding - the door's
     `at` / `word_in` form), else the word spoken across its enter; None in a gap. The word before, ending on that same
@@ -10337,6 +10462,14 @@ def main() -> int:
                                         handed=n_dock in _pm["handed"],   # P69 T26e: a prop handed to a morph on its exit word
                                         names=dopt.get("names") or dopt.get("after")))   # P69 T81: the word a stamp punctuates
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
+        # P69 T65 / E99 s110 (2): a ring on a DOCK - on the row, on the stage at its word, the word on the phrase that
+        # points at it - and it leaves on the dock's leave. A row with no such ring is the same list, untouched.
+        try:
+            row_species, _dr_notes = dock_ring_targets(row_species, docks, tl.get("words"), f"shot row {i + 1} ({a}-{b}s)")
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: {exc}") from exc
+        for _note in _dr_notes:
+            print(f"  ring on a dock: row {i + 1}: {_note}")
         pm_entries = []
         if _pm["morphs"] or _pm["enter_morph"]:   # P69 T26e: the state each prop morph is on, its mark, and its invariants (a WARN when they fail)
             try:

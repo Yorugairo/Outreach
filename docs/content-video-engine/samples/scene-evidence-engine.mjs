@@ -6379,6 +6379,11 @@ async function mount(doc) {
      Nothing above or below changes for a build with no press dock: the two-slot loop skips this kind, and every
      existing golden renders byte-identically. */
   const PRESS_EL = Object.create(null);     /* the mounted card, per slide id */
+  /* P69 T65 / E99 s110 (2): the docks on the stage THIS frame, by asset id - their element and paint - written by the dock
+     loop in render and read by resolveTarget for a `dock` target, so a ring round a card or a prop is drawn at the box
+     the card or prop is drawn at (it parks, it is moved, the ring goes with it). Off the stage - not yet entered, or
+     past its exit - a dock is absent here, and a ring on it resolves to nothing. */
+  const DOCK_LIVE = Object.create(null);
   const PRESS_POSE = Object.create(null);   /* its live stage geometry and the phrase box in stage px - what resolveTarget reads for a `phrase` target */
   const PRESS_KIND = "press", PHRASE_KIND = "phrase", EMBED_KIND = "embed";   /* P50 T7: a declared surface, by name */
   const isPressDock = (d) => !!d && d.kind === PRESS_KIND;
@@ -16404,6 +16409,21 @@ async function mount(doc) {
   const spIO = (k) => { k = clamp01(k); return k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; };
   /* an element's box in STAGE px (the stage is scaled to fit the pane) */
   const stageBox = (el) => { const r = el.getBoundingClientRect(), sb = $("stage").getBoundingClientRect(); const k = STAGE_W / Math.max(1, sb.width); return { x: (r.left - sb.left) * k, y: (r.top - sb.top) * k, w: r.width * k, h: r.height * k }; };
+  const DOCK_TARGET_KIND = "dock";
+  /* the dock's box in STAGE px this frame: a press card's live pose (its pile, its park); a placed card or prop, its
+     PLACED box at t (its park, a prop's moves - dockGeom, the same box the element is written to); an unplaced card,
+     the element as laid out. A prop's ring hugs its PAINTED box (the compiler's `paint`, fractions of the cutout). */
+  const dockLiveBox = (aid) => {
+    const p = PRESS_POSE[aid];
+    if (p && p.card) return p.card;
+    const L = DOCK_LIVE[aid];
+    if (!L) return null;
+    const im = L.prop ? L.el.querySelector(".slide-frame img") || L.el.querySelector("img") : null;
+    const b = L.box || stageBox(im || L.el);
+    if (!(b.w > 0 && b.h > 0)) return null;
+    const q = L.prop && Array.isArray(L.paint) && L.paint.length === 4 ? L.paint : null;
+    return q ? { x: b.x + q[0] * b.w, y: b.y + q[1] * b.h, w: (q[2] - q[0]) * b.w, h: (q[3] - q[1]) * b.h } : b;
+  };
   const resolveTarget = (tg) => {
     if (!tg) return null;
     if (tg.kind === "point") return { x: tg.x * STAGE_W, y: tg.y * STAGE_H, w: 0, h: 0 };
@@ -16450,6 +16470,12 @@ async function mount(doc) {
       const b = Array.isArray(tg.quad) && tg.quad.length === 4
         ? quadBounds(tg.quad.map((p) => [p[0] * STAGE_W, p[1] * STAGE_H])) : null;
       return b && b.w > 0 && b.h > 0 ? b : null;
+    }
+    if (tg.kind === DOCK_TARGET_KIND) {   /* P69 T65 / E99 s110 (2): the THING the sentence points at - a card, a press
+         card or a prop - at its box as DRAWN this frame; `box` is its face, as fractions of that box */
+      const b = dockLiveBox(tg.dock);
+      const f = b && Array.isArray(tg.box) && tg.box.length === 4 ? tg.box : null;
+      return f ? { x: b.x + f[0] * b.w, y: b.y + f[1] * b.h, w: (f[2] - f[0]) * b.w, h: (f[3] - f[1]) * b.h } : b;
     }
     if (tg.kind === PHRASE_KIND) {   /* P50 T3: a region INSIDE a press card, resolved through that card's LIVE
          geometry - a parked or stacked card moves, and what points at it moves with it. Off stage: nothing. */
@@ -20273,6 +20299,7 @@ async function mount(doc) {
       pageContact.style.filter = "blur(" + (cs.blur * 3).toFixed(1) + "px)";
       worldAnswer.y += thr.ground + thr.follow; worldAnswer.x += thr.shake.x; worldAnswer.y += thr.shake.y;
     } else if (pageContact) pageContact.style.opacity = "0";
+    for (const k in DOCK_LIVE) delete DOCK_LIVE[k];   /* P69 T65: this frame's docks only */
     for (let s = 0; s < 2; s++) {
       const d = live.find((x) => x.slot === s && !isPressDock(x));   /* P50 T3: a press card is mounted by paintPress, not by a slot */
       const el = docks[s];
@@ -20304,6 +20331,11 @@ async function mount(doc) {
       el.style.width = G ? G.w.toFixed(2) + "px" : "";
       el.style.left = G ? G.x.toFixed(2) + "px" : "";
       el.style.top = G ? G.y.toFixed(2) + "px" : "";
+      /* P69 T65: a ring on this dock reads its box - the PLACED box at this t (the contact shadow's own, R26-58: a cold
+         seek mounts the image in this very frame, before it has decoded, so the layout's height is not yet the card's),
+         else the element as laid out. It leaves on the dock's leave: past its exit the dock is not here. */
+      if (t < d.exit) DOCK_LIVE[d.slide] = { el, prop: dockIsProp(d.slide), paint: d.paint,
+        box: G && d.place && d.place.w > 0 && d.place.h > 0 ? { x: G.x, y: G.y, w: G.w, h: G.w * d.place.h / d.place.w } : null };
 
       /* Card settle — the whole entrance. The document is simply present on
          the card; no mask, no drawing hand. Reference timing: a 0.75s
