@@ -20,6 +20,7 @@ from typing import Any
 SCHEMA = "model_fight_motion.v1"
 SOURCE_SHA256 = "5a99ce057520e332673230dd5367189a5e6dc7da56ca45da50c8a38b4f40bade"
 FIXTURE_SHA256 = "d7d37878a692e3359cbeb4d3409620c840150c9152d5c344c90815aacf1db971"
+CODE_ROOT = Path(__file__).resolve().parents[5]
 REVIEW_RELATIVE = Path("content/video_engine/review/model-engines/benchmark-v1/3d/source-fight-rig/exchange")
 FIXTURE_RELATIVE = Path("content/video_engine/tests/fixtures/modeling/blender/characters/source-exchange/exchange.v1.json")
 FRAMES = tuple(range(36))
@@ -839,3 +840,24 @@ def reopen_exchange(bpy, scene_path: Path, receipt_path: Path):
             "summary_verified": True, "exposure_verified": True,
             "render_verification": render_verification,
             "actions": receipt["actions"]}
+
+
+def build_contact_transfer_exchange(
+    bpy, root: Path, fixture_path: Path, output: Path, *, render: bool,
+    review_root: Path | None = None,
+):
+    """Opt-in successor; the pinned `build_exchange` path above stays unchanged."""
+    from .contact_transfer import build_contact_transfer_exchange as build
+
+    return build(bpy, root, fixture_path, output, render=render, review_root=review_root)
+
+
+def reopen_contact_transfer(
+    bpy, scene_path: Path, receipt_path: Path, *, root: Path | None = None,
+    fixture_path: Path | None = None, review_root: Path | None = None,
+):
+    """Reopen and independently remeasure an opt-in contact-transfer proof."""
+    from .contact_transfer import reopen_contact_transfer as reopen
+
+    return reopen(bpy, scene_path, receipt_path, root=root,
+                  fixture_path=fixture_path, review_root=review_root)
