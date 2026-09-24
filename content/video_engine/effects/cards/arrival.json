@@ -430,7 +430,8 @@
         "E65",
         "R26-20",
         "R26-247",
-        "E99 s112"
+        "E99 s112",
+        "E99 s116"
       ],
       "status": "wired",
       "proof": {
@@ -440,7 +441,7 @@
       },
       "callable": {
         "today": true,
-        "why": "any dock or prop; the gate (M01/M03/M07/M20/M29), the cues and the camera read its contact at 0.1542 s (P69 T2-T4, HG1 open on the instant); a blind page, no room or a mark under the floor is a WARN, not a refusal (T26d); refused only with embed or a place off the stage; s112 (P69 T81): `after` lands the contact just after its word, and a contact inside its word or on a data mark's instant is ADVISED with the suggested after-time"
+        "why": "any dock or prop; the gate (M01/M03/M07/M20/M29), the cues and the camera read its contact at 0.1542 s (P69 T2-T4, HG1 open on the instant); a blind page, no room or a mark under the floor is a WARN, not a refusal (T26d); refused only with embed or a place off the stage; s112 (P69 T81): `after` lands the contact just after its word, and a contact inside its word or on a data mark's instant is ADVISED with the suggested after-time; s116 (P69 T84): its landing cue plays on the COMPILED contact - the binder moves a paired cue onto it (on it or one frame early is kept) and names the move, so the plan names the sound and the stamp its instant"
       }
     }
   ]

@@ -853,8 +853,10 @@ def test_the_binder_names_every_firing_effect_the_map_leaves_silent():
 
 
 def test_the_binder_adds_nothing_and_never_reorders_what_it_keeps():
+    # the landing cue one frame before the contact the binder READS (`fired` on the module's own dials, not STOP's):
+    # a cue off its contact is moved onto it (E99 s116, P69 T84 - tests/test_landing_sound_follows_the_landing.py)
     cues = [_cue("page enter 1 (spiral)", 0.0), {"slot": "hook bed", "at": 0.0},
-            _cue("landing 2 (throw, paper)", round(A.landing_contact(12.0, "throw", STOP) - 1 / 24, 2))]
+            _cue("landing 2 (throw, paper)", round(A.landing_contact(12.0, "throw", A.stop_dials()) - 1 / 24, 2))]
     kept, _dropped = A.bind_cues(cues, SPIRAL_RETRACTS)
     assert kept == [c for c in cues], "the cues keep their order, their files and their gains"
 

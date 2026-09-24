@@ -1079,14 +1079,16 @@ def bind_embedded_cues(build: Path, plan_path: Path, timeline_name: str) -> list
     cannot judge (a bed, a press pack) survives. Runs here, after `embed_cues`, so a rebuild never re-embeds an
     unbound cue - the sixth pass bound them from the outside (`generate_base_table.py --bind-cues`) and every
     `--table` rebuild put the five back. An instant the map has no cue for stays silent (E99 s37); `cue_notes`
-    already names those, so only the DROPPED cues are returned here."""
+    already names those, so only the DROPPED cues are returned here - and every landing cue the binder MOVED onto
+    its compiled contact (E99 s116, P69 T84: the plan names the sound, the landing its instant), one line each."""
     from authoring import audio as A
     tl_path = Path(build) / timeline_name
     if not tl_path.is_file():
         return []
     tl = json.loads(tl_path.read_text(encoding="utf-8"))
+    moved = A.retimed(list(tl.get("sound") or []), tl)
     kept, dropped = A.bind_cues(list(tl.get("sound") or []), tl)
-    if dropped:
+    if dropped or moved:
         tl["sound"] = kept
         tl_path.write_text(json.dumps(tl, indent=1), encoding="utf-8")
     if Path(plan_path).is_file():
@@ -1096,7 +1098,7 @@ def bind_embedded_cues(build: Path, plan_path: Path, timeline_name: str) -> list
         plan["bound"] = (f"bound to {timeline_name} by lab_build.py after the embed (E99 s72): every cue whose "
                          f"effect does not fire at its instant is dropped; {len(plan_dropped)} dropped")
         Path(plan_path).write_text(json.dumps(plan, indent=1), encoding="utf-8")
-    return [f"DROPPED {d['slot']} at {d['at']:.2f}s: {d['why']}" for d in dropped]
+    return [f"DROPPED {d['slot']} at {d['at']:.2f}s: {d['why']}" for d in dropped] + [A.retime_note(m) for m in moved]
 
 
 def resound(bed, build: Path, rows: list[tuple], t0: float, t1: float) -> dict:
