@@ -1,14 +1,14 @@
 ---
 id: P70-THE-BRAVOS-VERBS-WAVE-2
 title: The Bravos verbs, wave 2 - the chip lands as a stamp, the schematic, the fill gauge, companion bars, the brace, the equation row, the balance, the rig, the chapter pill (P69 T12/T46/T51/T52/T58/T56/T59/T69/T61)
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
 branch: claude/fable-p68 (the plan); engine slices land on claude/p69-s90 (lane B)
 contract: tdd-v1
 created: 2026-09-24
-updated: 2026-09-24 (draft by architect_sol; revision 2 folds in REVIEW.md 1-11 and the parent's eleven rulings; not approved)
+updated: 2026-09-24 (APPROVED by the operator - `/prp-implement p70` - and running; revision 2 folded in REVIEW.md 1-11)
 ---
 
 # P70 - The Bravos verbs, wave 2
@@ -281,7 +281,7 @@ listed order.
 ## Task Slices
 
 ### T0: The base, the approval, the register, the review-queue row and the P69 pointers
-- Status: pending
+- Status: in_progress (the parent)
 - Owner: parent
 - Depends on: the operator's approval of this plan, and P69's in-flight lane-B slices committed: T37 (`solo`, staged on
   c0836b8 at the review), T37b (the bloom and series-inked names, E99 s117 / s118), T65 (rings on the named thing), T85
@@ -300,7 +300,7 @@ listed order.
   4. The queue row `p70-hg1-the-nine-verbs` exists, naming what to judge, where to look and what it blocks.
   5. Each of P69's nine stubs reads "moved to P70 T<n>".
 - Validate: `python scripts/prp_validate.py .claude/PRPs/plans/P70-THE-BRAVOS-VERBS-WAVE-2.plan.md` then `python scripts/prp_validate.py .claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md` then `python -m pytest content/video_engine/tests/test_worktree_register.py -q`
-- Evidence: pending
+- Evidence: (2) APPROVAL, the operator 2026-09-24: `/prp-implement p70` (after the plan was presented READY WITH FIXES, fixes applied). (5) P69's nine stubs point here (this commit). (3) the register row names P70 on lane B (this commit). (4) queue row `p70-hg1-the-nine-verbs` added (this commit). (1) the base is re-captured per slice at dispatch. DEVIATION (the parent): T1 (the chip stamp) is dispatched on lane B ffa2877 BEFORE T37b lands - T1 owns `chip.mjs`, `_validate_chip`, the gate's `_landings` / `_arrivals` and the binder's chip branch, none of which T37b touches (T37b owns the series ink: `lpBloom`, the stroke, end tags, series names, the solo dials); T2-T9 wait for T37b as planned.
 
 ### T1: The chip lands as a stamp - `arrive: "stamp"` on the stamp-form chip, rendered both ways (was P69 T12)
 - Status: pending

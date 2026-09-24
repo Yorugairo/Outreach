@@ -4797,6 +4797,30 @@
       "ruling": "",
       "was_kind": "watch",
       "owed": "P68 HG4 - the parent builds it before the row opens"
+    },
+    {
+      "id": "p70-hg1-the-nine-verbs",
+      "status": "open",
+      "kind": "owed",
+      "title": "P70 HG1 - the nine Bravos verbs, each as a beat played with the take",
+      "ids": [
+        "E99 s60",
+        "E99 s106",
+        "E99 s112",
+        "E99 s117"
+      ],
+      "judge": "Each verb's private test-bed beat (the chip stamp, the schematic, the fill gauge, companion bars, the brace, the equation row, the balance, the rig's poof, the chapter pill), played with the take and served frozen beside its Bravos frame; the rig's 'paper' prop out of quarantine; and (a): whether any verb is adopted into the Steel and Paper H body. Owed by P70 T12.",
+      "where": [],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "adopting any of the nine verbs into the H body",
+      "sources": [
+        ".claude/PRPs/plans/P70-THE-BRAVOS-VERBS-WAVE-2.plan.md"
+      ],
+      "ruling": "",
+      "was_kind": "watch",
+      "owed": "P70 T12 - the parent builds the proof door before the row opens"
     }
   ]
 }
