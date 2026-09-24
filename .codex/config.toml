@@ -62,6 +62,14 @@ config_file = "agents/execution_sol.toml"
 description = "Professional/computer-use escalation after three consecutive substantive Luna task failures."
 config_file = "agents/professional_sol.toml"
 
+[agents.execution_astra]
+description = "Optional GPT-6 Astra-high execution/diagnosis step-up after three consecutive substantive Sol-xhigh task failures."
+config_file = "agents/execution_astra.toml"
+
+[agents.professional_astra]
+description = "Optional GPT-6 Astra-high professional/computer-use step-up after three consecutive substantive Sol-xhigh task failures."
+config_file = "agents/professional_astra.toml"
+
 # BEGIN OPERATOR-DISABLED UNUSED SKILLS
 # Product Design and Excel live control are intentionally inactive.
 [[skills.config]]
