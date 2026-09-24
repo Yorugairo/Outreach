@@ -370,6 +370,10 @@ Every operator ruling that asks for something to be BUILT names its carrier here
 | s114 | "up to" is an animation cue, kept in the source note | T29b (row 21's consumer bar meets its ceiling) |
 | s115 | NVDA's share researched, the larger claim editorial on sourced parts; the railway-GDP series | R26-306 (the research order) |
 | s116 | a stamp's (every landing's) sound is timed by the stamp itself | T84 (the binder retimes a bound landing cue to its contact) |
+| s117 | the lines bloom: a primary line is emissive (core + ink + halo), a solo widens the lit/muted gap, both measured off Bravos | T37b (lane B; takes T76's white-hot core forward) |
+| s118 | a chart's names wear their series' ink, not plain white (axis grey, sunflower the one yellow) | T37b |
+| s119 | the page title takes one loud colour in both styles - Claude orange or the rose, picked from a side-by-side sheet | T37b (the sheet first) |
+| s120 | the squint test: shrunk to a thumbnail, a page still names its focus (contrast), keeps its story words legible, carries few words on the plot | T37b (the tool), T88 (the gate + the label diet) |
 
 **Harvest coverage** (added 2026-09-23; the operator: "yes, add all of the bravos slices"): every MISSING/PARTIAL harvest item is carried by T36-T50 / T51-T80 (or by T8-T10, T8b, T26a, T43b, T45 where they already name it) or listed as skipped below. Carriers by harvest id (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`):
 - TYPE: T1 T44; T3 T45; T7 T46; T8 T62; T9 T47; T10 T48 (the honest donut; the decor use is skipped); T14 T43b; T21 T43; T23 T41; T24 T58; T26 T60; T27 T59; T29 T50 + T64; T30 T48; T31 T57; T32 T55; T33 T63; T34 T51; T35 T66 (s111); T38 T56; T39 T52; T40 T54; T46 T62.
@@ -1114,6 +1118,22 @@ verbatim tails and are left pending.
 - Refactor evidence: pending
 - Evidence: pending
 
+
+### T37b: The lines bloom and their names wear their ink - a primary line is emissive, a solo widens the gap, labels take their series' ink, the title takes a loud colour picked side by side (E99 s117, s118, s119)
+- Status: pending (lane B, after T37)
+- Owner: implementation_luna
+- Depends on: T37 (solo); R26-228's bloom (`lpBloom`, CAPABILITIES :76); E67's inks (CAPABILITIES :35)
+- Write set: `content/video_engine/scripts/measure_line_bloom.py` (new: reads a frame + a line's pixels, reports core luminance, ink saturation, halo radius at half-intensity, lit/muted luminance ratio), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the series stroke's bloom layers; the solo's lit and muted dials), `content/video_engine/scripts/species/solo.mjs` (its dials), tests, goldens re-pinned where lines change
+- Acceptance: s117: measure Bravos first (the JPN 05:20 / 05:23.5 frames the T37 sheet used, plus two more Bravos line frames from the harvest) with the new tool, then ours; every primary line blooms by default (hot core + ink + halo) within the measured Bravos band; a solo's lit/muted ratio within Bravos's; context/muted lines never bloom; the phone 390 px read keeps the line legible and not smeared; s118: every end tag, series name and series figure takes its own series' ink (axis ticks/units stay grey, the sunflower stays the one yellow), a muted series' name mutes with it, and a series ink under the phone-floor contrast on its ground WARNs with its ratio; s119: FIRST a candidate sheet - the same pages (a shorts/default page, the solo golden, and two H long-form pages) rendered with the title in E67's Claude orange #FF8A4C and in the rose (as-is ~#DB8497 and one louder rose measured against Bravos's title), 16:9 and phone 390 px - for the operator's pick; only then every ledger page title, both styles, takes the pick (subtitle/axes/source stay quiet; T86's color_span still wins on its span) and title goldens are re-pinned on purpose; E67's palette hexes unchanged; the parent reads ours beside Bravos on one sheet
+- Evidence: pending
+
+### T88: The squint test - a page shrunk to a thumbnail still says what it is about (E99 s120)
+- Status: pending (lane B gate + lane A label diet; after T37b)
+- Owner: implementation_luna
+- Depends on: T37b (the measuring tool `measure_line_bloom.py`, extended to the downscaled read)
+- Write set: the gate (`gate_motion_density.py` or `gate_one_shot_floor.py` - pick and say why), `measure_line_bloom.py` (the downscaled read: render or downsample each held page to ~320 px wide; the lit/other contrast share, the title's and the named label's cap height in px, the count of words on the plot), tests; then lane A: the H pages' end tags shortened (a name, not a name + sub-label) where the gate asks
+- Acceptance: s120: measured on Bravos frames first (the T37 sheet's JPN 05:20 / 05:23.5 + three more Bravos line pages), then ours; thresholds from Bravos (E38); the solo golden and the H pages read at thumbnail width with the focus identifiable, the title and the named label legible, and the plot's word count within Bravos's; WARN first, FAIL on the operator's word; the parent reads the shrunk sheet ours beside Bravos
+- Evidence: pending
 
 ### T38: `axis_tag` + drop guides - the named year becomes a pill on the x-axis
 - Status: pending

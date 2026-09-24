@@ -64,8 +64,11 @@ RESULT_FILE = "result.md"
 TOAST_APP_ID = "Claude Bridge"
 DECISION_RE = re.compile(r"^\s*\**DECISION:?\**\s*:?\s*\**\s*(done|follow-up|followup|escalate)", re.IGNORECASE | re.MULTILINE)
 LANDED_RE = re.compile(r"landedAt:\s*([0-9T:+\-\.]+)")
-ESCALATIONS = ("timeout", "sla", "handler-escalate", "budget")
+ESCALATIONS = ("timeout", "sla", "handler-escalate", "budget", "research-gate")
 REPAIR_MARKER = "repair.json"   # P46 T7: the original packet's marker that ONE repair follow-up was queued for its form failure
+REVISION_MARKER = "revision.json"   # THE RESEARCH CLAIMS GATE: a failed claims verify went back to the lane as a revision
+MAX_REVISIONS = 2
+REVISION_FAIL_LINES = 40
 
 DEFAULTS: dict[str, Any] = {
     "grace_min": 10,
@@ -343,6 +346,8 @@ def move_or_supersede(tick: Tick, packet: str, from_state: str, to_state: str) -
 
 def step_tier0(tick: Tick) -> None:
     for folder in packets(tick.repo, "replied"):
+        if not folder.is_dir():
+            continue   # closed earlier in this same loop (a repair or a revision closes the packet it answers)
         if (folder / "tier0.json").exists():
             prior = read_json(folder / "tier0.json")
             if prior.get("pass") and not tick.dry_run:
@@ -365,12 +370,16 @@ def step_tier0(tick: Tick) -> None:
             tick.say(f"TIER0-FAIL {packet[:12]} shape={outcome['shape']} class={outcome.get('class')}: {outcome['reason']}")
             if outcome.get("class") == handlers.CLASS_FORM and not order.get("repairs") and not (folder / REPAIR_MARKER).exists():
                 queue_repair(tick, folder, order, packet, outcome)   # P46 T7: one repair round, at zero Claude tokens, before tier 1
+            elif research_gate_failed(order, outcome):
+                queue_revision(tick, folder, order, packet, outcome)   # the claims gate: the failure table goes back to the lane
             continue
         move_or_supersede(tick, packet, "replied", "done")
         tick.summary["tier0_done"] += 1
         tick.say(f"TIER0-DONE {packet[:12]} shape={outcome['shape']}")
         if order.get("repairs"):
             close_repaired(tick, str(order["repairs"]), packet)   # the repair passed: the original it repairs is closed with it
+        for original in order.get("revisionChain") or []:
+            close_repaired(tick, str(original), packet)   # the revision passed the claims gate: every round before it closes
         tick.ledger(
             {
                 "lane": order.get("lane"),
@@ -427,6 +436,69 @@ def queue_repair(tick: Tick, folder: Path, order: dict[str, Any], packet: str, o
     tick.say(f"REPAIR {packet[:12]} -> {repair_id[:12]} queued ({outcome.get('reason')})")
     tick.ledger({"lane": order.get("lane"), "packetId": packet, "event": "repair", "repairPacket": repair_id,
                  "class": outcome.get("class"), "reason": outcome.get("reason")})
+
+
+# --------------------------------------------------------------------------- 3c. the claims gate's revision loop (2026-09-24)
+# A research order's `verify` is `verify_research_claims.py <run>`. P46 T7 sends every failed verify to tier 1 (a follow-up
+# asking for evidence invites invention); the claims gate is different in kind: its table names each failing claim and
+# the honest fixes include LOWERING a tier or dropping a row, so a revision never demands a number. Two rounds on the same
+# conversation, then the operator - never tier 1, whose judgement cannot make a fabricated URL resolve.
+
+
+def research_gate_failed(order: dict[str, Any], outcome: dict[str, Any]) -> bool:
+    return bool(order.get("research_run")) and any(
+        str(c.get("name")) == "verify-cmd" and not c.get("ok") for c in outcome.get("checks") or [])
+
+
+def revision_brief(order: dict[str, Any], round_no: int, fails: list[str]) -> str:
+    run = str(order["research_run"])
+    shown = [f"- {f}" for f in fails[:REVISION_FAIL_LINES]]
+    if len(fails) > REVISION_FAIL_LINES:
+        shown.append(f"- ... and {len(fails) - REVISION_FAIL_LINES} more in {run}/VERIFY.md")
+    return (
+        f"Revision {round_no} of {MAX_REVISIONS}: your research reply to \"{order.get('title') or order['packetId'][:12]}\" "
+        f"FAILED our claims gate (`{order.get('verify')}`; the full table is {run}/VERIFY.md).\n\nThe failures:\n"
+        + "\n".join(shown or ["- (no table: read the verifier's output)"]) + "\n\n"
+        f"Fix each row in {run}/claims.jsonl in place, by ONE of: (a) cite a page you fetch NOW, saved to {run}/sources/ "
+        "with its sha256, the quote copied from it; (b) lower tier_declared to the tier the gate earned (UNSOURCED passes "
+        "when declared honestly); (c) mark the row REJECTED, or delete it and its figure from the report. Never invent a "
+        "URL, a DOI, a quote or a number to make a row pass - it fails again and the order goes to the operator. Run the "
+        "verifier yourself, then reply with the block below.\n\n```\n" + handlers.template(order.get("replyShape") or "report-landed")
+        + "```\n")
+
+
+def queue_revision(tick: Tick, folder: Path, order: dict[str, Any], packet: str, outcome: dict[str, Any]) -> None:
+    """The failure table as a follow-up on the same conversation; after MAX_REVISIONS the operator is told, once."""
+    if (folder / REVISION_MARKER).exists():
+        return
+    round_no = int(order.get("revisionRound") or 0) + 1
+    run = str(order["research_run"])
+    if round_no > MAX_REVISIONS:
+        escalate(tick, folder, packet, "research-gate",
+                 f"{packet[:12]} failed the research claims gate after {MAX_REVISIONS} revisions - read {run}/VERIFY.md")
+        return
+    conversation = str(read_json(folder / "conversation.json").get("conversationId") or order.get("conversationId") or "")
+    if not conversation:
+        tick.say(f"REVISION-SKIP {packet[:12]}: no conversation to continue on")
+        return
+    fails = [str(f) for f in read_json(tick.repo / run / "VERIFY.json").get("fails") or [outcome.get("reason") or ""]]
+    brief = revision_brief(order, round_no, fails)
+    rid = env_mod.packet_id(brief)
+    if tick.dry_run:
+        tick.say(f"REVISION {packet[:12]} -> {rid[:12]} round {round_no} (dry-run: nothing queued)")
+        return
+    env_mod.write_json(env_mod.packet_dir(tick.repo, rid, "queue") / "order.json", {
+        "packetId": rid, "lane": order.get("lane") or "gemini", "from": "claude", "conversationId": conversation,
+        "title": f"revision {round_no}: {order.get('title') or packet[:12]}", "replyShape": order.get("replyShape"),
+        "brief": brief, "createdAt": stamp(), "verify": order.get("verify"), "research_run": run,
+        "revises": order.get("revises") or packet, "revisionRound": round_no,
+        "revisionChain": [*(order.get("revisionChain") or []), packet],
+        **({"roots": order["roots"]} if order.get("roots") else {}),
+    })
+    env_mod.write_json(folder / REVISION_MARKER, {"revisionPacket": rid, "round": round_no, "queuedAt": stamp()})
+    tick.say(f"REVISION {packet[:12]} -> {rid[:12]} round {round_no} ({len(fails)} failing claim line(s))")
+    tick.ledger({"lane": order.get("lane"), "packetId": packet, "event": "revision", "revisionPacket": rid,
+                 "round": round_no, "fails": len(fails)})
 
 
 def close_repaired(tick: Tick, original: str, repair_packet: str) -> None:
@@ -545,6 +617,8 @@ def step_tier1(tick: Tick) -> None:
             continue
         if (folder / REPAIR_MARKER).exists():
             continue   # P46 T7: the original waits for its repair reply; the repair packet is what tier 1 sees if that fails too
+        if (folder / REVISION_MARKER).exists() or "research-gate" in _escalations(folder):
+            continue   # the claims gate: a revision is out, or the rounds are spent and the operator has it - never tier 1
         order = read_json(folder / "order.json")
         packet = order.get("packetId") or folder.name
         age = minutes_since(landed_at(folder))

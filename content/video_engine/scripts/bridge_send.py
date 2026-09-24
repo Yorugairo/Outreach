@@ -21,6 +21,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -42,6 +43,9 @@ SHAPE_SKILLS = {"watch": ["watch"]}   # a shape's skill, named on every order of
 DEFAULT_DEADLINE_MIN = 60
 BRIEF_CAP_BYTES = 6 * 1024
 CLOCK_SLACK_S = 5.0
+CLAIMS_GATE = "content/video_engine/scripts/verify_research_claims.py"   # THE RESEARCH CLAIMS GATE (2026-09-24)
+RESEARCH_RUNS = "docs/research/runs"
+CLAIMS_CONTRACT = "docs/runbooks/RESEARCH-REPLY-CONTRACT.md"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -58,6 +62,11 @@ def build_parser() -> argparse.ArgumentParser:
                         help="P46 T7: an absolute root the order sends the addressee to; a relative path in the reply resolves under it too (repeatable)")
     parser.add_argument("--verify", default=None,
                         help="P46 T7: OUR verification command, run from the repo root once the reply passes on form; exit 0 closes the packet, else tier 1")
+    parser.add_argument("--research-run", default=None,
+                        help="THE RESEARCH CLAIMS GATE: the run dir the reply writes claims.jsonl + sources/ into (repo-relative); "
+                             "on by default for --lane gemini --reply-shape report-landed, at docs/research/runs/<title slug>")
+    parser.add_argument("--no-claims-gate", action="store_true",
+                        help="a gemini report-landed order that is not research (say why in the brief); printed as a warning")
     parser.add_argument("--no-template", action="store_true", help="do not append the reply's fill-in grammar block to the brief")
     parser.add_argument("--skill", action="append", default=[], dest="skills", help="a skill the order must cite (`/watch`); repeatable; a watch order always cites /watch")
     parser.add_argument("--marker", default=None, help="paths-written: a string every written file must carry")
@@ -97,6 +106,7 @@ def build_order(args: argparse.Namespace, brief: str, packet_source: str | None 
         "createdAt": created.isoformat(timespec="seconds"),
         **({"roots": [str(Path(r).expanduser()) for r in args.roots]} if getattr(args, "roots", None) else {}),
         **({"verify": args.verify} if getattr(args, "verify", None) else {}),
+        **({"research_run": args.research_run} if getattr(args, "research_run", None) else {}),
         **({"skills": skills} if (skills := sorted(set([*getattr(args, "skills", []), *SHAPE_SKILLS.get(args.reply_shape, [])]))) else {}),
         **({"marker": args.marker} if getattr(args, "marker", None) else {}),
         **({"fetch_dir": str(Path(args.fetch_dir).expanduser())} if getattr(args, "fetch_dir", None) else {}),
@@ -126,6 +136,68 @@ def with_template(brief: str, shape: str) -> str:
             + handlers.template(shape) + "```\n"
             "Before replying, run `python content/video_engine/scripts/bridge_check.py --shape " + shape
             + " --reply <the file holding your reply>` from the repo root and paste its PASS line under the block.\n")
+
+
+def _slug(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:60] or "research"
+
+
+def claims_gate(args: argparse.Namespace) -> str | None:
+    """The research run dir (repo-relative, posix) when the order is research, else None. Research is any order naming
+    `--research-run`, and BY DEFAULT every gemini `report-landed` order - the research lane's shape - unless it opts out
+    with `--no-claims-gate`. Why a flag and not a new shape: report-landed's form checks stay as they are and the gate
+    rides the existing `verify` hook (P46 T7), so the handlers, the daemon and every older order are untouched."""
+    if getattr(args, "no_claims_gate", False):
+        return None
+    run = getattr(args, "research_run", None)
+    if not run and not (args.lane == "gemini" and args.reply_shape == "report-landed"):
+        return None
+    if not run:
+        return f"{RESEARCH_RUNS}/{_slug(args.title or args.brief_file.stem)}"
+    path = Path(run).expanduser()
+    if path.is_absolute():
+        try:
+            path = path.resolve().relative_to(Path(args.repo).resolve())
+        except ValueError:
+            pass
+    return path.as_posix()
+
+
+def gate_command(run: str) -> str:
+    return f"python {CLAIMS_GATE} {quote([run])}"
+
+
+def with_claims_contract(brief: str, run: str) -> str:
+    """THE RESEARCH CLAIMS GATE's rules, at the top of the brief (about 1.3 KB, inside the 6 KB packet cap)."""
+    return (
+        f"## THE RESEARCH CLAIMS GATE (binding: `{CLAIMS_CONTRACT}`)\n\n"
+        f"OUR script verifies your reply before it lands: `{gate_command(run)}`. It fetches every URL, resolves every DOI, "
+        "finds every quote on the page AND in your saved copy, finds every value inside its quote, recomputes every derived "
+        "figure and computes each claim's tier itself. A failing reply comes back to you as a revision order with the "
+        "failure table (two rounds, then the operator); nothing reaches docs/research/markets until it passes.\n"
+        f"- Write ONLY inside `{run}/`: `claims.jsonl` (one JSON object per figure: id, claim, value, unit, period, "
+        "source_title, publisher, url, doi, retrieved_at, quote, sources_file, sha256, tier_declared, derived_from, formula, "
+        "notes), `sources/` (every page you quote, saved, its sha256 in the claim), and the report `.md`.\n"
+        "- Every number in the report has a claim. No URL you did not fetch this session; no DOI you did not resolve. The "
+        "quote is copied verbatim (<= 300 chars), never paraphrased, and the value appears inside it.\n"
+        "- Declare the tier honestly: CONFIRMED = the page fetched or saved and the quote and value on it; a secondary "
+        "source = PLAUSIBLE; nothing retrievable = UNSOURCED (that passes). An overclaim fails the reply.\n"
+        f"- Before replying run `{gate_command(run)}` and paste its last line.\n\n" + brief)
+
+
+def apply_claims_gate(args: argparse.Namespace) -> str | None:
+    """Attach the gate to the args in place: OUR verify command, the run dir, the report shape. Refuses a second verify."""
+    run = claims_gate(args)
+    if run is None:
+        return None
+    command = gate_command(run)
+    if getattr(args, "verify", None) and args.verify != command:
+        raise SystemExit(f"a research order carries the claims gate ({command}); --verify would replace it - "
+                         "fold your check into the run, or pass --no-claims-gate and say why")
+    args.verify, args.research_run = command, run
+    if args.reply_shape == "free":
+        args.reply_shape = "report-landed"
+    return run
 
 
 def quote(argv: Sequence[str]) -> str:
@@ -331,10 +403,16 @@ def main(argv: Sequence[str] | None = None) -> int:
             stream.reconfigure(encoding="utf-8", errors="replace")
     args = build_parser().parse_args(argv)
     raw = read_brief(args.brief_file)
+    run = apply_claims_gate(args)   # THE RESEARCH CLAIMS GATE: research orders carry OUR verifier by default
     brief = raw if getattr(args, "no_template", False) else with_template(raw, args.reply_shape)   # P46 T7: the fill-in block rides every order
+    brief = with_claims_contract(brief, run) if run else brief
     brief = with_skills(brief, sorted(set([*args.skills, *SHAPE_SKILLS.get(args.reply_shape, [])])))   # P46 T8: the skill line
     order = build_order(args, brief, packet_source=raw)
     lines: list[str] = [f"packetId {order['packetId'][:12]} lane {order['lane']} shape {order['replyShape']}"]
+    if run:
+        lines.append(f"claims gate: {order['verify']}")
+    elif getattr(args, "no_claims_gate", False):
+        lines.append("warning: --no-claims-gate - this order's figures are NOT verified by verify_research_claims.py")
 
     size = len(brief.encode("utf-8"))
     if size > BRIEF_CAP_BYTES:
