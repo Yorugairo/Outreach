@@ -234,6 +234,13 @@ def timeline_pages(path: Path) -> tuple[str, dict]:
     The world's page and every `page_states` entry are read in draw order and deduplicated by ink.
     `variant_pages` expands a representative into the flat geometry keys used by the fixture; this
     reader stays a source-timeline view and never invents a nested full-stage family.
+
+    P69 fixture-H: states that share an ink can still draw their END TAGS apart - a declared `axes.domain` moves
+    them (`ledger_page.tag_ink`). Steel and Paper H's first state of the golden's ink is its BORN domain, `80,277`,
+    which the scene holds with the +613% line unbuilt (`build_to` datum 0) until the rescale: measured at rest with
+    the line drawn, its tag stood at y -205, off the stage - a geometry no frame of the episode draws. So the first
+    state whose declared domain HOLDS its end tags' values is the one measured (`_holds_its_tags`); a page with no
+    such state keeps its first, exactly as before.
     """
     tl = json.loads(Path(path).read_text(encoding="utf-8"))
     if not isinstance(tl.get("scenes"), list):
@@ -248,8 +255,24 @@ def timeline_pages(path: Path) -> tuple[str, dict]:
                 [p for p in (world.get("page_states") or []) if isinstance(p, dict)]
         for page in found:
             spec = _strip(page)
-            pages.setdefault(LPG.page_ink_key(spec), spec)
+            key = LPG.page_ink_key(spec)
+            if key not in pages or (not _holds_its_tags(pages[key]) and _holds_its_tags(spec)):
+                pages[key] = spec
     return aspect, pages
+
+
+def _holds_its_tags(page: dict) -> bool:
+    """True unless the page DECLARES a y domain that one of its end tags' values falls outside - a state whose line
+    runs off its own plot, which the player would draw with that tag off the stage. Pure."""
+    domain = (page.get("axes") or {}).get("domain")
+    if not (isinstance(domain, (list, tuple)) and len(domain) == 2):
+        return True
+    try:
+        lo, hi = sorted(float(v) for v in domain)
+        lasts = [float(entry[2]) for entry in LPG.tag_ink(page) if entry[2] is not None]
+    except (TypeError, ValueError):
+        return True
+    return all(lo <= v <= hi for v in lasts)
 
 
 def full_stage_variant(page: dict) -> dict | None:

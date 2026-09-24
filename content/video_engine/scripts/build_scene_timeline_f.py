@@ -740,6 +740,7 @@ def validate_camera(cam, plate_id: str, aspect: str | None = None) -> list[str]:
         errs.append(f"{plate_id}: camera reach must be one of {'|'.join(CAMERA_REACH)} (default \"refuse\": a move that "
                     "would cut the page's title, y ticks, source line or a drawn end tag fails the row by name; "
                     "\"clamp\": it moves only as far as the page allows)")
+    errs += validate_chrome(cam.get("chrome"), plate_id)   # P69 T26f: the page's chrome, as objects (E99 s108)
     keys = cam.get("keys", [])
     if not isinstance(keys, list):
         return errs + [f"{plate_id}: camera keys must be a list of {{t, zoom, look, at?, ease?}}"]
@@ -923,6 +924,8 @@ def camera_zoom_errors(world, row_species, cam, plate_id: str, aspect: str | Non
         return []
     asp = aspect or "16:9"
     if asp not in LPG.STAGE_PX:
+        return []
+    if chrome_relaxed(cam):   # P69 T26f (E99 s108): the chrome MOVES under the push - camera_reach limits it by the claim's data
         return []
     sw, sh = LPG.STAGE_PX[asp]
     try:
@@ -1109,6 +1112,8 @@ def camera_reach(world, docks, cam, plate_id: str, aspect: str | None = None) ->
     if not isinstance(cam, dict) or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
         return [], [], cam
     page, asp = world.get("page"), aspect or "16:9"
+    if isinstance(page, dict) and asp in LPG.STAGE_PX and chrome_relaxed(cam):
+        return chrome_reach(world, docks, cam, plate_id, asp)   # P69 T26f (E99 s108): the claim's data limits it; the chrome WARNs
     if not isinstance(page, dict) or asp not in LPG.STAGE_PX or not LPG.full_stage(page, asp):
         return [], [], cam
     try:
@@ -1130,6 +1135,325 @@ def camera_reach(world, docks, cam, plate_id: str, aspect: str | None = None) ->
     if new_keys is not None:
         out = dict(out, keys=new_keys)
     return errs, notes + key_notes, out
+
+
+# ---- P69 T26f / E99 s108: THE PAGE'S CHROME IS OBJECTS ------------------------------------------------------------
+# The operator (2026-09-23), told a push on a full-stage page reaches ~1.04 because the title spans the stage: "Why
+# can't the title re-scale? we have full rescaling capabilities, we should have free dynamic movement between camera
+# and objects." So the page's chrome - title, sub, source, y ticks, x ticks, axis names, key rail, badge rail - is a set
+# of OBJECTS, named on the row's camera (its 8th element) as `chrome`:
+#   * the camera RELATION - P58 T3's law, reused (CAPABILITIES:153, kinetics/camera.mjs `camLayerState`, main's
+#     src/modeling/layered.py `_plane_camera`): an object on the plane k sees plane zoom 1 + (s - 1) k landing at
+#     look + (at - look) k. `"screen"` is k 0 (it stands where it stood, at its own size), a number is that k, `"fit"`
+#     is the largest k in [0, 1] that keeps each object whole (the counter-scale into the pushed frame). The plot is k 1.
+#     A tick label keeps its DATA coordinate at k 1 - it stays on its gridline (E28) - and its pinned one at the chrome's
+#     k; the player hides a label whose gridline has left the frame, whole.
+#   * the MOVES - T26d's key grammar mirrored at the data level: `{"<object>": [{"at": <word or s>, "x", "y",
+#     "scale" | "w", "rot", "dur", "ease"}]}` - x, y where the object's top-left lands (stage fractions), `scale` its
+#     size against its own rest (or `w` its width as a stage fraction), `rot` degrees about that corner; a key inherits
+#     what it does not name. A tick column moves only along its pinned axis (E28 is a truth rule, s106 (4)).
+#   `"chrome": "screen"` is shorthand for `{"camera": "screen"}`. A camera that names none compiles untouched.
+CHROME_ELEMENTS = ("title", "sub", "source", "yticks", "xticks", "axis_names", "key", "rail")
+CHROME_MODES = ("screen", "fit")
+CHROME_MOVE_FIELDS = ("at", "x", "y", "scale", "w", "rot", "dur", "ease")
+CHROME_MOVE_EASES = ("minjerk", "inout", "cubic", "linear")   # the first is a key's default (T26d's prop moves open on minjerk too)
+CHROME_MOVE_S = 0.8          # a key's default seconds [DERIVED: the retitle's ERASE_S 0.4 x 2 - one gesture, read by the parent]
+CHROME_TICK_LOCKS = {"yticks": ("y", "rot"), "xticks": ("x", "rot")}   # E28: a tick label never leaves its gridline
+CHROME_BOXES = {"title": "title", "sub": "sub", "source": "source", "rail": "rail", "key": LPG.KEY_BOX,
+                "yticks": "y tick column", "xticks": "x tick labels"}   # the chrome's boxes in `page_glyph_boxes`
+CHROME_RELAXED = ("screen", "fit", "depth")   # the modes that take the chrome off the plot's plane
+
+
+def _num(v) -> bool:
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+
+def _chrome_compiled(ch) -> bool:
+    return isinstance(ch, dict) and "mode" in ch and "moves" in ch
+
+
+def chrome_mode(cam) -> tuple[str | None, float | None]:
+    """(mode, k) the row camera's `chrome` names, authored or compiled: ("screen", 0.0), ("fit", None), ("depth", k),
+    ("world", 1.0) for a chrome that only MOVES objects (they keep the plot's plane), (None, None) for none."""
+    ch = cam.get("chrome") if isinstance(cam, dict) else None
+    if ch is None:
+        return None, None
+    if _chrome_compiled(ch):
+        return ch["mode"], ch.get("k")
+    rel = ch.get("camera") if isinstance(ch, dict) else ch
+    if rel is None:
+        return "world", 1.0
+    if rel == "screen":
+        return "screen", 0.0
+    if rel == "fit":
+        return "fit", None
+    return ("depth", float(rel)) if _num(rel) else (None, None)
+
+
+def chrome_relaxed(cam) -> bool:
+    """P69 T26f: the row's chrome leaves the plot's plane, so its reach is the claim's data alone (E99 s108 (3))."""
+    return chrome_mode(cam)[0] in CHROME_RELAXED
+
+
+def _chrome_relation_errors(rel, where: str) -> list[str]:
+    if rel is None or rel in CHROME_MODES or (_num(rel) and 0 <= rel <= 1):
+        return []
+    return [f"{where}: chrome must be one of {'|'.join(CHROME_MODES)} or a plane k in 0..1 (P58 T3's depth: 0 stands "
+            f"in the frame, 1 rides the plot), not {rel!r}"]
+
+
+def _chrome_key_errors(key, obj: str, n: int, where: str) -> list[str]:
+    at = f"{where}: chrome {obj} key {n}"
+    if not isinstance(key, dict):
+        return [f"{at}: a key is a dict of {'|'.join(CHROME_MOVE_FIELDS)}"]
+    errs = [f"{at}: {f!r} is not one of {'|'.join(CHROME_MOVE_FIELDS)}" for f in key if f not in CHROME_MOVE_FIELDS]
+    a = key.get("at")
+    if not (_num(a) or (isinstance(a, str) and a.strip())):
+        errs.append(f"{at}: 'at' is a word of the take or timeline seconds")
+    for f in ("x", "y"):
+        if f in key and not (_num(key[f]) and 0 <= key[f] <= 1):
+            errs.append(f"{at}: {f} must be a stage fraction 0..1 - the object's top-left stands on the stage "
+                        "(a place wholly off the stage cannot be seen, E99 s106 (4))")
+    if "scale" in key and "w" in key:
+        errs.append(f"{at}: scale OR w - the size is named once")
+    if "scale" in key and not (_num(key["scale"]) and key["scale"] > 0):
+        errs.append(f"{at}: scale must be a number > 0 (1 is the object's rest size)")
+    if "w" in key and not (_num(key["w"]) and 0 < key["w"] <= 1):
+        errs.append(f"{at}: w must be the object's width as a stage fraction, 0 < w <= 1")
+    if "rot" in key and not _num(key["rot"]):
+        errs.append(f"{at}: rot must be degrees")
+    if "dur" in key and not (_num(key["dur"]) and key["dur"] > 0):
+        errs.append(f"{at}: dur must be seconds > 0")
+    if key.get("ease", CHROME_MOVE_EASES[0]) not in CHROME_MOVE_EASES:
+        errs.append(f"{at}: ease must be one of {'|'.join(CHROME_MOVE_EASES)}")
+    locked = [f for f in CHROME_TICK_LOCKS.get(obj, ()) if f in key]
+    if locked:
+        errs.append(f"{at}: {'/'.join(locked)} would take a tick label off its gridline - E28, the geometry says what "
+                    f"the number says: a {obj} column moves along its pinned axis and rescales, nothing else")
+    return errs
+
+
+def validate_chrome(ch, plate_id: str) -> list[str]:
+    """P69 T26f: the row camera's `chrome`, by name - a relation (`screen` | `fit` | a plane k in 0..1), or a dict of
+    `camera` (that relation) and per-object move lists. None passes; a compiled chrome passes as compiled."""
+    where = f"{plate_id}: camera"
+    if ch is None:
+        return []
+    if _chrome_compiled(ch):
+        ok = ch.get("mode") in CHROME_RELAXED + ("world",) and isinstance(ch.get("moves"), dict)
+        return [] if ok else [f"{where}: a compiled chrome is {{mode, k, moves}}, not {ch!r}"]
+    if not isinstance(ch, dict):
+        return _chrome_relation_errors(ch, where)
+    errs = [f"{where}: chrome names {name!r}, which is not one of camera|{'|'.join(CHROME_ELEMENTS)}"
+            for name in ch if name != "camera" and name not in CHROME_ELEMENTS]
+    errs += _chrome_relation_errors(ch.get("camera"), where)
+    for obj in CHROME_ELEMENTS:
+        if obj not in ch:
+            continue
+        if not isinstance(ch[obj], list) or not ch[obj]:
+            errs.append(f"{where}: chrome {obj} is a list of keys {{at, x, y, scale|w, rot, dur, ease}}")
+            continue
+        for n, key in enumerate(ch[obj]):
+            errs += _chrome_key_errors(key, obj, n, where)
+    return errs
+
+
+def _chrome_at(a, ws, where: str) -> float:
+    if _num(a):
+        return round(float(a), 2)
+    if not ws:
+        raise ValueError(f"{where}: at {a!r} is a WORD and this build has no words to date it by")
+    from authoring import words as KW
+    try:
+        return KW.at(ws, a)
+    except SystemExit as exc:
+        raise ValueError(f"{where}: at {a!r} - {exc}") from None
+
+
+def _chrome_keys(raw: list, obj: str, ws, span, plate_id: str) -> list[dict]:
+    """One object's keys, compiled: each `at` in seconds, each key WHOLE (it inherits what it does not name from the
+    key before it; the first from the object's rest - x/y None, scale 1, rot 0), and refused only where it cannot be
+    played: before the page is on screen, after it has left, out of order, or overlapping the key before it."""
+    a0, a1 = float(span[0]), float(span[1])
+    cur = {"x": None, "y": None, "scale": 1.0, "w": None, "rot": 0.0}
+    out: list[dict] = []
+    for n, key in enumerate(raw):
+        where = f"{plate_id}: camera chrome {obj} key {n}"
+        at = _chrome_at(key["at"], ws, where)
+        dur = float(key.get("dur", CHROME_MOVE_S))
+        if out and at <= out[-1]["at"]:
+            raise ValueError(f"{where}: at {at:.2f} - keys must be in ascending time")
+        if out and at < out[-1]["at"] + out[-1]["dur"] - 1e-9:
+            raise ValueError(f"{where}: at {at:.2f} overlaps the key before it (which runs to "
+                             f"{out[-1]['at'] + out[-1]['dur']:.2f})")
+        if at < a0 - 1e-9:
+            raise ValueError(f"{where}: at {at:.2f} is before the page is on screen ({a0:.2f})")
+        if at + dur > a1 + 1e-9:
+            raise ValueError(f"{where}: at {at:.2f} + {dur:g} s runs after the page has left ({a1:.2f})")
+        cur = dict(cur)
+        for f in ("x", "y", "rot"):
+            if f in key:
+                cur[f] = float(key[f])
+        if "scale" in key:
+            cur["scale"], cur["w"] = float(key["scale"]), None
+        if "w" in key:
+            cur["scale"], cur["w"] = None, float(key["w"])
+        out.append({"at": at, "dur": round(dur, 3), "ease": key.get("ease", CHROME_MOVE_EASES[0]), **cur})
+    return out
+
+
+def _chrome_move_warns(moves: dict, world: dict | None, asp: str, plate_id: str) -> list[str]:
+    """s106 (4) for the chrome: a moved object whose ESTIMATED box (its rest size, scaled from its new top-left) runs
+    past the stage is a WARN with the numbers - the frame read decides, never the compiler."""
+    page = (world or {}).get("page")
+    if not isinstance(page, dict) or asp not in LPG.STAGE_PX:
+        return []
+    sw, sh = LPG.STAGE_PX[asp]
+    try:
+        boxes = page_glyph_boxes(page, asp)
+    except Exception:       # a page the box model cannot place: nothing to estimate a move against
+        return []
+    out = []
+    for obj, keys in moves.items():
+        box = boxes.get(CHROME_BOXES.get(obj, ""))
+        if not box:
+            continue
+        for k in keys:
+            s = k["scale"] if k["scale"] is not None else k["w"] * sw / max(1.0, box["w"])
+            x = k["x"] * sw if k["x"] is not None else box["x"]
+            y = k["y"] * sh if k["y"] is not None else box["y"]
+            r, b = x + s * box["w"], y + s * box["h"]
+            if r > sw or b > sh:
+                out.append(f"WARN {plate_id}: chrome {obj} at {k['at']:.2f}s - its estimated box ({x:.0f}, {y:.0f}) "
+                           f"{s * box['w']:.0f}x{s * box['h']:.0f} runs past the stage's {'right' if r > sw else 'bottom'} "
+                           "edge (E99 s106: reported, the frame read decides)")
+    return out
+
+
+def compile_chrome(cam, words, span, plate_id: str, world: dict | None = None,
+                   aspect: str | None = None) -> tuple[dict | None, list[str]]:
+    """P69 T26f: the row camera's `chrome`, compiled for the player and the gate - `{"mode", "k", "moves"}` with every
+    move key whole and in seconds (a word resolved on the take). Returns (the camera, WARN notes); raises ValueError
+    for a chrome that cannot be played. A camera that names no chrome is returned AS GIVEN (byte-identity)."""
+    if not isinstance(cam, dict) or cam.get("chrome") is None:
+        return cam, []
+    ch = cam["chrome"]
+    if _chrome_compiled(ch):
+        return cam, []
+    errs = validate_chrome(ch, plate_id)
+    if errs:
+        raise ValueError("; ".join(errs))
+    if world is not None and world.get("kind") != SPECIES_LEDGER:
+        raise ValueError(f"{plate_id}: camera chrome names a ledger PAGE's chrome (E99 s108) - this row's world is not a page")
+    if world is not None and ((world.get("page") or {}).get("plane") or (world.get("page") or {}).get("depth")):
+        raise ValueError(f"{plate_id}: camera chrome on a page standing on a plane or at a depth is not built - the page's "
+                         "own surface is already the camera's there (P58 T4); lock the chrome or the plane")
+    mode, k = chrome_mode(cam)
+    ws = _override_words(words)
+    moves = {obj: _chrome_keys(ch[obj], obj, ws, span, plate_id)
+             for obj in CHROME_ELEMENTS if isinstance(ch, dict) and obj in ch}
+    notes = _chrome_move_warns(moves, world, aspect or "16:9", plate_id)
+    return dict(cam, chrome={"mode": mode, "k": k, "moves": moves}), notes
+
+
+def _chrome_label(cam) -> str:
+    mode, k = chrome_mode(cam)
+    return f"{k:g}" if mode == "depth" else str(mode)
+
+
+def _plane_leave(box: dict, look, at, k: float, sw: float, sh: float) -> float:
+    """The CAMERA zoom at which `box`, standing on the plane k, leaves the stage (P58 T3: plane zoom 1 + (s - 1) k,
+    landing look + (at - look) k); inf at k 0 - a plane that takes none of the move never leaves by it."""
+    if k <= 0:
+        return math.inf
+    at_k = (look[0] + (at[0] - look[0]) * k, look[1] + (at[1] - look[1]) * k)
+    zk, _edge = zoom_ceiling(box, look, at_k, sw, sh)
+    return 1 + (zk - 1) / k if zk < math.inf else math.inf
+
+
+def _chrome_findings(every: dict, cam, zoom: float, look, at, sw: float, sh: float) -> tuple[list[str], list[str]]:
+    """(the chrome's objects this move would have cut on the plot's plane - and what they do instead, the page's own
+    ink that leaves the stage). Both are REPORTED (E99 s106 (4), s108 (3)); neither limits the push."""
+    mode, k = chrome_mode(cam)
+    chrome_names = {v: n for n, v in CHROME_BOXES.items()}
+    held, ink = [], []
+    for name, box in every.items():
+        z1, _edge = zoom_ceiling(box, look, at, sw, sh)
+        if not (1.0 <= z1 < zoom - 1e-9):
+            continue
+        if name in chrome_names:
+            if mode == "depth":
+                zk = _plane_leave(box, look, at, float(k), sw, sh)
+                held.append(f"the {name} (would leave at {z1:.3f}; on its plane it "
+                            + (f"leaves at {zk:.3f})" if zk < zoom - 1e-9 else "stays whole)"))
+            else:
+                held.append(f"the {name} (would leave at {z1:.3f}; it "
+                            + ("stands in the frame)" if mode == "screen" else "fits the frame)"))
+        else:
+            ink.append(f"the {name} at {z1:.3f}")
+    return held, ink
+
+
+def chrome_reach(world, docks, cam, plate_id: str, aspect: str) -> tuple[list[str], list[str], dict]:
+    """P69 T26f - E99 s108 (3): with the chrome off the plot's plane, a push is limited ONLY by the claim's data - the
+    key's own target (a region must stay whole; a point or a datum lands where the key puts it, so it cannot leave).
+    What the chrome would have cut on the plot's plane, and the page's own ink that leaves (a drawn end tag, a rule's
+    name), are WARN lines with their numbers. A landing pull points at a CARD, which stands in screen space - it has no
+    claim on the page to lose. `reach: "clamp"` clamps a key to its claim's reach; nothing else is ever rewritten."""
+    page = world["page"]
+    sw, sh = LPG.STAGE_PX[aspect]
+    try:
+        every = page_idle_boxes(page_reach_boxes(page, aspect), world, aspect)
+        plot = LPG.page_boxes(page, aspect).get("plot")
+    except Exception:       # a page the box model cannot place: nothing to measure a move against
+        return [], [], cam
+    label, clamp = _chrome_label(cam), cam.get("reach") == "clamp"
+    errs: list[str] = []
+    notes: list[str] = []
+    keys = cam.get("keys") or []
+    new_keys = None
+
+    def _report(door: str, zoom: float, look, at) -> None:
+        held, ink = _chrome_findings(every, cam, zoom, look, at, sw, sh)
+        if held or ink:
+            notes.append(f"WARN {plate_id}: {door} - chrome: {label} (E99 s108): "
+                         + "; ".join(held + ([f"the page's own ink leaves the stage: {', '.join(ink)}"] if ink else []))
+                         + ". REPORTED - the frame read decides")
+
+    if not keys and cam.get("attention") == "landings":
+        for d in docks or []:
+            if isinstance(d, dict) and isinstance(d.get("place"), dict) and d.get("arrive") in CAMERA_ATTN_ARRIVALS:
+                p = d["place"]
+                c = (float(p["x"]) + float(p["w"]) / 2, float(p["y"]) + float(p["h"]) / 2)
+                _report(f"the landing pull on {d.get('slide')} (zoom {MG.ATTN_SCALE:.2f})", MG.ATTN_SCALE, c, c)
+    for i, k in enumerate(keys):
+        z0 = k.get("zoom", 1) if isinstance(k, dict) else None
+        if not (_num(z0) and z0 > 1.0):
+            continue
+        look = MG._cam_point(k.get("look"), sw, sh, plot)
+        if look is None:
+            continue
+        at = (MG._cam_point(k.get("at"), sw, sh, plot) or look) if k.get("at") is not None else look
+        door = f"camera key {i} (t={float(k.get('t', 0.0)):.2f}s) zoom {float(z0):.4g}"
+        _report(door, float(z0), look, at)
+        tg = k.get("look")
+        claim = MG._target_box(tg, sw, sh, plot) if isinstance(tg, dict) and tg.get("kind") == "region" else None
+        if claim is None:
+            continue   # a point or a datum lands where the key puts it: it cannot leave the frame by this push
+        z, edge = zoom_ceiling(claim, look, at, sw, sh)
+        if float(z0) <= z + 1e-9:
+            continue
+        reach = max(1.0, math.floor(z * 100) / 100)
+        if clamp:
+            new_keys = new_keys or [dict(q) if isinstance(q, dict) else q for q in keys]
+            new_keys[i] = dict(new_keys[i], zoom=reach)
+            notes.append(f"{plate_id}: {door} CLAMPED to {reach:.2f} - the claim's region target leaves the stage at "
+                         f"{z:.3f} ({edge} edge) (reach: \"clamp\", the row's choice){_under_the_floor(reach)}")
+        else:
+            errs.append(f"{plate_id}: {door} is past the claim's reach {reach:.2f} - the region target the key points at "
+                        f"leaves the stage at {z:.3f} ({edge} edge). With chrome named (E99 s108) only the data the "
+                        "sentence points at limits a push: lower the key, re-aim it, or write `reach: \"clamp\"`")
+    return errs, notes, (dict(cam, keys=new_keys) if new_keys is not None else cam)
 
 
 TARGET_KINDS = ("datum", "point", "region", "span")
@@ -8227,6 +8551,14 @@ def main() -> int:
             derive_rescale_states(world, row_species, plate, EP, sid=sid)   # P48 T2: each `chart_to rescale` gets its own derived page state; E64: and each recast its derived KEY
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        # P69 T26f (E99 s108): the page's chrome as objects - its camera relation and its moves, each `at` read on the
+        # take's own words. A camera that names no chrome is the camera it was (compile_chrome returns it as given).
+        try:
+            row_camera, chrome_notes = compile_chrome(row_camera, tl.get("words"), (a, b), plate, world, ASPECT)
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        for _note in chrome_notes:
+            print(f"  chrome: row {i + 1}: {_note}")
         # R26-220 / E99 s80 (2): the row's ZOOMS against what this page can take. It lands here and not beside
         # `validate_species` because the ceiling is the PAGE's, and the page only exists once `world_for_plate`
         # has read its series and `stamp_full_stage` has said which geometry it takes at this aspect.
