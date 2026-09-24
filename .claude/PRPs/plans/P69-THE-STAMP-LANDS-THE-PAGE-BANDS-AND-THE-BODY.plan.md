@@ -365,6 +365,10 @@ Every operator ruling that asks for something to be BUILT names its carrier here
 | s110 (1) | a stack of values is valid under s109's tests; its home case is the stacked-bar-plus-line COMBO, each scale labelled per s102 | T64 (+ T50's honesty check) |
 | s110 (2) | a ring may circle a picture, a card or a prop the sentence points at, its number beside it (E56 narrowed, not lifted) | T65 |
 | s111 | the broken cross-era axis when the claim is the LEVEL (one y unit, both eras labelled, the break drawn); the rebased overlay stays for a SHAPE claim | T66 |
+| s112 | the stamp is punctuation: it lands just after the word / datum / idea it names | T81 (engine: the word-end anchor + the advice), T82 (every H stamp re-timed) |
+| s113 | text on a plate is allowed when intentional, narrative-driven, verified | T83 (the railway-share certificate plate), R26-305 (the prompt guides) |
+| s114 | "up to" is an animation cue, kept in the source note | T29b (row 21's consumer bar meets its ceiling) |
+| s115 | NVDA's share researched, the larger claim editorial on sourced parts; the railway-GDP series | R26-306 (the research order) |
 
 **Harvest coverage** (added 2026-09-23; the operator: "yes, add all of the bravos slices"): every MISSING/PARTIAL harvest item is carried by T36-T50 / T51-T80 (or by T8-T10, T8b, T26a, T43b, T45 where they already name it) or listed as skipped below. Carriers by harvest id (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`):
 - TYPE: T1 T44; T3 T45; T7 T46; T8 T62; T9 T47; T10 T48 (the honest donut; the decor use is skipped); T14 T43b; T21 T43; T23 T41; T24 T58; T26 T60; T27 T59; T29 T50 + T64; T30 T48; T31 T57; T32 T55; T33 T63; T34 T51; T35 T66 (s111); T38 T56; T39 T52; T40 T54; T46 T62.
@@ -616,6 +620,30 @@ verbatim tails and are left pending.
 - Depends on: T8b, T8c, T8d, T29 (found them); lane B
 - Acceptance: (1) panel_focus (and held lit_stretch / freeze / member) pass the row path's `id` / `held` (ROW_PATH_KEYS); (2) a panels page is measured in its first focus state (timeline_focus); (3) M03 credits a panel first revealed active (_panel_reveal_landings, E99 s105's panels form); (4) the key rail follows focus; (5) a panel's sub and ticks are chrome (`sub@<i>`, `yticks@<i>`, `xticks@<i>`) so `chrome: fit` keeps them whole
 - Evidence: lane B eb58794 (ledger_panels 77, page_boxes 83, gate_motion_density 172, page_chrome_moves 45; the parent read camera 4's labels whole and the key leaving over the bars)
+
+### T81: The stamp lands just after the thing it names - a word-END anchor and the advice (E99 s112)
+- Status: pending (lane B)
+- Owner: implementation_luna
+- Depends on: T2-T5 (the stamp); lane B
+- Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (a stamp's `at` may name a word's END - e.g. `at: {"after": "racks"}` or an `after_word` anchor - resolved from the take's word timings; a WARN with numbers when a stamp's landing falls inside its own word or within ~0.15 s of a data mark it illustrates), the gate if it reads stamp timing, tests
+- Acceptance: s112: the stamp is punctuation - it lands just AFTER the word / datum / motion it names, never on the same instant, never mid-word; the author may anchor it to the word's end or the idea's end; the engine advises, never refuses (s106); byte-identical for rows that name no anchor
+- Regression: `python -m pytest content/video_engine/tests/test_the_stamp_arrival.py -q`
+- Evidence: pending
+
+### T82: Every Steel and Paper H stamp re-timed to its word's end or its idea's end (E99 s112)
+- Status: pending (lane A, after T81)
+- Owner: implementation_luna
+- Depends on: T81
+- Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
+- Acceptance: every stamped prop in H (the Fed, the data centre, PROP 3, the GPU, the die, the wafer, the rack, the phone, the DRAM module, and later rows') lands just after its word ends or at the end of the idea the sentence carries, read on the frame; the gate stays at 2 FAIL (M11, M31) / 5 WARN or better
+- Evidence: pending
+
+### T83: The railway-share certificate plate (E99 s113) for row 18 (the H-3 host window)
+- Status: pending
+- Owner: parent (the image claim) + implementation_luna (the row)
+- Depends on: the image claim flow (open_claim -> the generator; GPT Image 2.5 leads)
+- Acceptance: a new plate of the railway share certificate with "RAILWAY SHARE" legible and spelled exactly (s113: intentional, narrative-driven, verified; no garbled text), in the H-3 host window's style; approved out of quarantine by the operator; row 18 rebuilt on it with the -64% ring kept (s110)
+- Evidence: pending
 
 ### T9: s90 (b) - the three layout fixes the side-by-side found (lane B)
 - Status: done (lane B 0df626a; review fixes 5ddc035)
