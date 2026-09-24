@@ -3754,6 +3754,66 @@ FRAME_T.update({"panels-mixed-grow": MIXED_GROW_AT + MIXED_GROW_DUR * 0.5,   # u
                 "bars-range": 9.0})                                           # the bars built (4.4 + 3.0), the values landed
 
 
+# ---- P69 T45 (E99 s101; s109 (2)): THE MEMBERSHIP STACK - equal tiles naming who is in ONE bar ---------------------------
+#   membership-builders  the five biggest builders' cash capital spending in Q1 2026, ONE bar of $148.4B divided into its
+#                        five members' equal tiles, bottom-up, landed one per member after the bar stood (the default
+#                        cascade), the total written and "each tile = one company" beside it. No tile carries a logo:
+#                        the operator's catalogue carries no mark for any of the five, so each tile is its NAME
+#   membership-basket    the calendar project's hynix + Micron basket, INTO the print and AFTER it - two membership bars
+#                        whose Micron tile is the catalogue's own cutout (prop-icon-micron-memory-orbit-v1, tagged
+#                        `micron-technology`) and whose SK hynix tile is its name: a logo where one exists, a name where not
+# Both are READ off the objects on disk (the five tickers and the Q1 '26 point of ev-capex-funding-v1; the two bars of
+# ev-into-vs-after-v1), never re-typed. Surfaces, not new claims about the world.
+MEMBERS_OBJECTS = REPO / "content/video_engine/projects/systems-and-blowups"
+MEMBERS_FUNDING = MEMBERS_OBJECTS / "steel-and-paper/evidence/objects/ev-capex-funding-v1.series.json"
+MEMBERS_BASKET = MEMBERS_OBJECTS / "memory-trades-the-calendar/evidence/objects/ev-into-vs-after-v1.series.json"
+MEMBERS_TICKERS = {"MSFT": "Microsoft", "AMZN": "Amazon", "GOOGL": "Alphabet", "META": "Meta", "ORCL": "Oracle"}
+MEMBERS_QUARTER = 2026.125   # Q1 '26 on the object's own decimal-year x
+MEMBERS_MICRON = "prop-icon-micron-memory-orbit-v1"
+
+
+def _members_page(series: dict, title: str) -> tuple[dict, dict]:
+    """A bars page through the compiler's own membership path: the spec, the stamp, the logos resolved against the
+    catalogue - and the asset map that carries them."""
+    import build_scene_timeline_f as BST
+    assert LPG.validate(series, "bars") == [], LPG.validate(series, "bars")
+    page = BST.stamp_full_stage(LPG.build_spec(series, "bars", 0, "right"))
+    assert BST.resolve_member_logos(page) == [], "every logo in a golden is the catalogue's"
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    tl = _timeline(title, scenes, {}, None)
+    return tl, dict(_base_uris(), **BST.member_assets(tl))
+
+
+def membership_builders() -> tuple[dict, dict]:
+    obj = json.loads(MEMBERS_FUNDING.read_text(encoding="utf-8"))
+    capex = next(s for s in obj["series"] if s.get("name") == "CASH CAPEX")
+    value = next(y for x, y in capex["pts"] if abs(x - MEMBERS_QUARTER) < 1e-9)
+    tickers = [t.strip() for t in obj["src"].split(" - ")[1].split(";")[0].split(",")]
+    assert tickers == list(MEMBERS_TICKERS), tickers
+    series = {"title": "Five companies, one quarter's bill",
+              "sub": "Cash capital spending, Q1 2026, US$ billions - the five biggest builders together",
+              "src": obj["src"].split(";")[0] + " (copied from ev-capex-funding-v1 for the golden)",
+              "unit": "$", "member_noun": "company",
+              "bars": [{"label": "Q1 2026", "value": value, "color": "crimson",
+                        "members": [{"name": MEMBERS_TICKERS[t]} for t in tickers]}]}
+    return _members_page(series, "Golden: the membership stack - five companies' tiles in one $148.4B bar")
+
+
+def membership_basket() -> tuple[dict, dict]:
+    obj = json.loads(MEMBERS_BASKET.read_text(encoding="utf-8"))
+    members = [{"name": "SK hynix"}, {"name": "Micron", "logo": MEMBERS_MICRON}]
+    series = {"title": obj["title"], "sub": obj["sub"], "src": obj["src"], "unit": "%", "member_noun": "stock",
+              "bars": [dict({k: b[k] for k in ("label", "value", "color")}, members=json.loads(json.dumps(members)))
+                       for b in obj["bars"]]}
+    return _members_page(series, "Golden: the membership stack - a catalogued logo where one exists, a name where not")
+
+
+SURFACES.update({"membership-builders": membership_builders, "membership-basket": membership_basket})
+FRAME_T.update({"membership-builders": 10.5,   # the cascade over: 4.4 + 3.0 + 0.25 + 4 x 0.34 + 0.45 = 9.46, every tile standing
+                "membership-basket": 10.0})    # 4.4 + 3.0 + 0.25 + 0.34 + 0.45 = 8.44 on both bars, the key written
+
+
 # ---- P69 T36 / E99 s99: THE LIT STRETCH - a light that TRAVELS down the fall on its word -----------------------------
 # Steel and Paper H row 5's own page (`ledger:ev-railway-index-v1:line:139:right`, `idle=live`, full stage, 16:9) and
 # its own sentence: "Railways in the 1840s drew a quarter-billion pounds ... then crashed by nearly two-thirds." The

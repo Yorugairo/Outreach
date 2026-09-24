@@ -404,6 +404,9 @@ SPECIES_EVENTS["lit_stretch"] = ("at", "end")
 # P69 T48 / E99 s109 (4): the EXPLODE - the named slice leaves the pie along its bisector over the word: it moves, so
 # both edges are events (it starts on its word and lands out at its end).
 SPECIES_EVENTS["explode"] = ("at", "end")
+# P69 T45 / E99 s101: a MEMBERSHIP tile lands on its member's word (the badge spring) - one event, at its word; a
+# `light` on a landed tile is the same word's event. What a tile does after that is standing ink and earns nothing.
+SPECIES_EVENTS["member"] = ("at",)
 # P69 T49 / E99 s99 ("a light that comes on as everything else STOPS is a punctuation beat - the freeze is the event"):
 # THE FREEZE BEAT is ONE event, at its word. The light coming on is the beat; life resuming is the idle coming back,
 # and no idle is ever an event (E49). What the beat does to M18 is `punctuate` below: its held frames are not a still.

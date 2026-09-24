@@ -75,7 +75,7 @@ ACT_SPECIES = {
     "QUOTES": ("record dock", "read->park"),
     "RANKS": ("bars page", "callout", "burst"),
     "COMPARES": ("line page", "tiers page", "build_to", "chart_to:rescale", "chart_to:extend", "figure"),   # P50 T9: N small multiples on one shared x - the same quantity across two, three or four subjects
-    "DIVIDES": ("share page", "peel", "treemap page", "cross", "explode"),   # P50 T6: the census, and the X's on its named subset
+    "DIVIDES": ("share page", "peel", "treemap page", "cross", "explode", "member"),   # P50 T6: the census, and the X's on its named subset; P69 T45: who is in ONE total, a tile on each name
     "NAMES": ("trace", "light", "arc", "stamp"),   # P50 T5: the vector map ships - a country lights, an arc crosses, a figure stamps
     "EXPLAINS": ("note", "plate use=bridge", "chip", "flow"),
     "TURNS": ("figure", "spotlight", "callout", "note", "freeze"),   # P69 T49: the stage STOPS on the number the turn lands on (E99 s99)

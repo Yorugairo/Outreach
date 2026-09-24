@@ -12,6 +12,8 @@ line|bars|race|decline|progress) and s9.28 (surface x builder are two axes). P35
 Input shapes (every one needs ``title`` and a non-empty ``src``):
   story    {"bars": [{"label", "value", "color", "note"?}]}   <= STORY_MAX_VALUES
            (P69 T8d: a value may be a RANGE [lo, hi] - the bar at its near end, a band to the far one, written "lo–hi")
+           (P69 T45: a bar may carry "members": [{"name", "logo"?, "short"?}] - equal tiles naming who is in its ONE
+           value, the page's "member_noun" writing what a tile is: "each tile = one company")
   dense    {"series": [{"label"|"name", "color", "pts": [[x, y], ...]}], + AXES_KEYS}
            or {"panels": [{"sub", "series": [...]} | {"sub", "builder": "bars", "unit", "bars": [...]}]}
   tiers    {"tiers": [{"name", "unit", "series"|"pts"|"bars", + AXES_KEYS}], + AXES_KEYS}
@@ -255,6 +257,188 @@ def bar_value_errors(where: str, bar: dict, unit: str) -> list[str]:
     return errors
 
 
+# ---- P69 T45 (E99 s101; s109 (2)): THE MEMBERSHIP STACK - equal tiles naming who is in ONE bar ---------------------
+# s101: "A bar may be filled with EQUAL tiles naming who is in it (logos, names) when the bar is ONE value, the tiles carry
+# no value of their own (equal height, never sized), and the bar's total is written on the page" - Bravos's AI hidden-debt
+# bar with its company tiles. It reads as MEMBERSHIP, not as segments to compare. A member is a NAME, and - where the
+# operator's catalogue carries that member's own mark - a `logo`: a catalogue id the compiler resolves (E94; 11-ARCHIVAL
+# s4: "Logos and organization marks require recorded permission; otherwise use text"). The page WRITES what a tile is
+# ("each tile = one company"), so no one reads a tile as a value. A stack of VALUES is the stacked bar (`segments`, P69
+# T64, s110 (1)) - never this form, and a member that carries a value is refused here by name.
+MEMBERS_KEY = "members"
+MEMBER_NOUN_KEY = "member_noun"
+MEMBER_NOUN_DEFAULT = "member"
+MEMBER_KEY_TEXT = "each tile = one {noun}"
+MEMBER_FIELDS = ("name", "logo", "short")
+MEMBER_VALUE_FIELDS = ("value", "values", "share", "shares", "weight", "size", "pct", "percent", "amount", "height",
+                       "count", "total", "segments")
+# [DERIVED] two to eight: one member is a label, not a set; past eight a full-height bar on the 16:9 page (a 556 px plot,
+# the bar at its 88 % after the builder's 14 % air) leaves a tile under 61 px - under one line of a name at the phone
+# floor (59 px) - and a count that large is the count array's to show (species:count_array)
+MEMBERS_MIN, MEMBERS_MAX = 2, 8
+MEMBER_NOUN_RE = re.compile(r"^[a-z][a-z -]{0,22}[a-z]$")   # a short lowercase noun, written as the author wrote it
+MEMBER_LOGO_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")        # a catalogue asset id (build_scene_timeline_f.PROP_ID)
+# the tile's geometry in STAGE px - mirrors of the engine's LPMEMBER (INSET_PX, GAP_PX, PAD_PX) and LPBAR.W_PX, read by
+# the phone-floor check below (an estimate: the engine fits the drawn name; this names the one that cannot fit)
+MEMBER_TILE_PX = {"inset": 8.0, "gap": 6.0, "pad": 8.0}
+MEMBER_BAR_W_PX = 196.0
+MEMBER_LOGO_MIN_PX = 48.0   # the engine's LPMEMBER.LOGO_MIN_PX: a cutout drawn smaller reads as a smudge, and the tile writes the NAME
+MEMBER_LINE_H = 1.15
+
+
+def _nested_bars(series: dict) -> list[tuple[str, list]]:
+    """Bars that live INSIDE a panel or a tier - where a membership stack is not drawn."""
+    out = [(f"panels[{k}]", p.get("bars") or []) for k, p in enumerate(series.get("panels") or []) if isinstance(p, dict)]
+    out += [(f"tiers[{k}]", t.get("bars") or []) for k, t in enumerate(_tier_entries(series)) if isinstance(t, dict)]
+    return [(w, [b for b in bars if isinstance(b, dict)]) for w, bars in out if isinstance(bars, list)]
+
+
+def member_bars(series: dict) -> list[int]:
+    """The indices of the page's bars that carry `members`."""
+    return [i for i, b in enumerate(_bars(series)) if MEMBERS_KEY in b]
+
+
+def member_errors(where: str, bar: dict) -> list[str]:
+    """One bar's membership: ONE value (never a range, never zero), 2..MEMBERS_MAX members, each a name (unique), an
+    optional catalogue `logo` id and an optional `short` name for its tile - and NOTHING that carries a value (s101)."""
+    errors, ms = [], bar.get(MEMBERS_KEY)
+    if _is_range(bar.get("value")):
+        errors.append(f"{where} is a RANGE and carries members: a range states two values, and a membership stack "
+                      "fills ONE value with equal tiles (E99 s101)")
+    elif to_number(bar.get("value")) == 0:
+        errors.append(f"{where} is zero and carries members: a bar at zero has no height to hold its tiles")
+    if not isinstance(ms, list):
+        return errors + [f"{where} members {ms!r}: members is a list of {{name, logo?, short?}} - one per tile"]
+    if not MEMBERS_MIN <= len(ms) <= MEMBERS_MAX:
+        errors.append(f"{where}: {len(ms)} member(s) - a membership stack holds {MEMBERS_MIN} to {MEMBERS_MAX} members "
+                      "(one is a label; past eight no tile holds a name at the phone floor - count them with the "
+                      "count array)")
+    seen: set[str] = set()
+    for j, m in enumerate(ms):
+        w = f"{where} members[{j}]"
+        if not isinstance(m, dict):
+            errors.append(f"{w} {m!r} is an object {{name, logo?, short?}}")
+            continue
+        valued = [k for k in m if k in MEMBER_VALUE_FIELDS
+                  or (k not in MEMBER_FIELDS and isinstance(m[k], Real) and not isinstance(m[k], bool))]
+        if valued:
+            errors.append(f"{w} carries a value ({', '.join(valued)}): E99 s101 - a membership tile carries no value of "
+                          "its own (equal height, never sized). A stack of VALUES is the stacked bar (`segments`, "
+                          "P69 T64, E99 s110 (1)); to compare the members' sizes, draw them as bars")
+        errors += [f"{w}: {k!r} is not a member field ({'|'.join(MEMBER_FIELDS)})" for k in m
+                   if k not in MEMBER_FIELDS and k not in valued]
+        name = m.get("name")
+        if not _text(name):
+            errors.append(f"{w} needs a name - the tile writes it, or names the logo it carries")
+            continue
+        key = str(name).strip().lower()
+        if key in seen:
+            errors.append(f"{where}: the member {key!r} twice - each tile is ONE member")
+        seen.add(key)
+        logo = m.get("logo")
+        if logo is not None and not (isinstance(logo, str) and MEMBER_LOGO_RE.match(logo)):
+            errors.append(f"{w}: logo {logo!r} is not a catalogue id - a logo is one of the operator's catalogued "
+                          "cutouts (assets/icons, E94), never a file or an invented mark")
+        short = m.get("short")
+        if short is not None and not (_text(short) and len(str(short).strip()) < len(str(name).strip())):
+            errors.append(f"{w}: short {short!r} is not shorter than its name {name!r}")
+    return errors
+
+
+def _validate_members(series: dict, variant: str) -> list[str]:
+    """P69 T45: every `members` on the page - a BARS page's bars only (never a panel's or a tier's, a combo's or a
+    progress page's), never on a breakthrough page (its bar runs past the scale its tiles would divide) - and the
+    `member_noun` its key writes. A page with neither is untouched."""
+    errors = [f"{where}: a membership (members) is a BARS PAGE's - one bar of one value, its tiles naming who is in it "
+              "(P69 T45); draw it on a bars page of its own"
+              for where, bars in _nested_bars(series) if any(MEMBERS_KEY in b for b in bars)]
+    held = member_bars(series)
+    if MEMBER_NOUN_KEY in series:
+        noun = series[MEMBER_NOUN_KEY]
+        if not held:
+            errors.append("member_noun names what a membership tile is, and no bar carries members")
+        if not (isinstance(noun, str) and MEMBER_NOUN_RE.match(noun)):
+            errors.append(f"member_noun {noun!r}: a short lowercase noun ('company', 'stock') - the page writes "
+                          f"{MEMBER_KEY_TEXT.format(noun='<noun>')!r}")
+    if not held:
+        return errors
+    builder = pick_builder(series, variant)
+    if variant != "bars" or builder != "story":
+        errors.append(f"bars{held} carry members: a membership stack is a bars page's (variant bars, one value per "
+                      f"bar) - this page draws {variant!r} as {builder!r}")
+    if series.get("overflow") is not None:
+        errors.append(f"bars{held} carry members on a breakthrough page (overflow): the breakthrough shoots a bar past "
+                      "its stated scale, and a membership divides ONE standing value - give it a page of its own scale")
+    for i in held:
+        errors += member_errors(f"bars[{i}]", _bars(series)[i])
+    return errors
+
+
+def _with_member_tiles(block: dict, series: dict) -> dict:
+    """P69 T45: a bars block whose bars carry members - `members` per bar (None for a bar without) and the key the page
+    writes. A block with none is returned untouched - no key, the page it always was."""
+    bars = _bars(series)
+    if not any(MEMBERS_KEY in b for b in bars):
+        return block
+    block[MEMBERS_KEY] = [[{k: m[k] for k in MEMBER_FIELDS if m.get(k) is not None} for m in b[MEMBERS_KEY]]
+                          if MEMBERS_KEY in b else None for b in bars]
+    block["member_key"] = MEMBER_KEY_TEXT.format(noun=series.get(MEMBER_NOUN_KEY) or MEMBER_NOUN_DEFAULT)
+    return block
+
+
+def _two_lines(words: list[str]) -> list[str]:
+    """A name broken at the space nearest its middle (by characters) - the engine's own break."""
+    best = min(range(1, len(words)), key=lambda k: abs(len(" ".join(words[:k])) - len(" ".join(words[k:]))))
+    return [" ".join(words[:best]), " ".join(words[best:])]
+
+
+def member_fit_warnings(spec: dict, aspect: str = "16:9") -> list[str]:
+    """P69 T45 (the acceptance's (3)): a WARN - never a refusal (E99 s106) - for each membership tile whose NAME cannot
+    be written at E99 s90's phone floor (12 px on a 390-px-wide phone) inside it, on one line or two, with the numbers.
+    The tile is estimated the engine's way: the bar at its width (the 196 px cap, or its pitch less the builder's 0.34
+    air), its height on the bars law's scale (zero kept, 14 % air), divided equally, less the tile's inset, gaps and
+    padding. A logo tile writes no name and is not checked - unless its cutout would be drawn under
+    MEMBER_LOGO_MIN_PX, where the engine writes the name instead. Pure."""
+    members = spec.get(MEMBERS_KEY)
+    if not isinstance(members, list) or not any(members):
+        return []
+    vals = [float(v) for v in spec.get("values") or []]
+    if not vals:
+        return []
+    floor = card_floor_px(STAGE_PX[aspect][0])
+    chart = page_boxes(spec, aspect)["chart"]   # the bars builder's OWN plot inside it (buildLedgerBars, not the line's margins):
+    plot = ({"w": chart["w"] - 150 - 30, "h": chart["h"] - 150 - 70} if aspect == "9:16"     # portrait: stage px, top 150, foot 70
+            else {"w": chart["w"] * 920 / 1000, "h": chart["h"] * 350 / 560})              # landscape: x 60-980, y 90-440 of 1000 x 560
+    lo, hi = min(0.0, *vals), max(0.0, *vals)
+    pad = (hi - lo) * BARS_PAD
+    span = (hi + (pad if hi > 0 else 0.0)) - (lo - (pad if lo < 0 else 0.0)) or 1.0
+    T = MEMBER_TILE_PX
+    tile_w = min(MEMBER_BAR_W_PX, plot["w"] / len(vals) * (1 - 0.34)) - 2 * T["inset"] - 2 * T["pad"]
+    out = []
+    for i, ms in enumerate(members):
+        if not ms:
+            continue
+        bar_h = abs(vals[i]) / span * plot["h"]
+        tile_h = (bar_h - (len(ms) + 1) * T["gap"]) / len(ms) - 2 * T["pad"]
+        for m in ms:
+            if m.get("logo") and min(tile_w, tile_h) >= MEMBER_LOGO_MIN_PX:
+                continue   # the catalogued cutout is drawn, big enough to read; a smaller one gives way to the name, checked below
+            text = str(m.get("short") or m.get("name") or "")
+            one = longform_text_px(text, "title", floor)
+            words = text.split()
+            two = max(longform_text_px(ln, "title", floor) for ln in _two_lines(words)) if len(words) > 1 else one
+            line = floor * MEMBER_LINE_H
+            if (one <= tile_w and line <= tile_h) or (two <= tile_w and 2 * line <= tile_h):
+                continue
+            label = (spec.get("labels") or [None] * len(vals))[i]
+            out.append(f"WARN member: {text!r} on bar {i} ({label!r}) cannot be written at the phone floor "
+                       f"({floor:.0f} px, E99 s90) in its tile ({tile_w:.0f} x {tile_h:.0f} px): it needs {one:.0f} px "
+                       + (f"on one line or {two:.0f} px on two" if len(words) > 1 else "on its one line")
+                       + " - give it a `short` name, fewer members, or its catalogued logo. REPORTED, the frame read "
+                       "decides (E99 s106)")
+    return out
+
+
 def dense_series(series: dict) -> list[dict]:
     """Every pts-bearing series in the file, panels flattened in."""
     own = [s for s in series.get("series") or [] if isinstance(s, dict) and "pts" in s]
@@ -417,6 +601,7 @@ def validate(series: dict, variant: str) -> list[str]:
     errors: list[str] = []
     errors += _validate_readability(series, variant)
     errors += _validate_break(series, variant)   # P69 T66: [] unless the object names a `break`
+    errors += _validate_members(series, variant)   # P69 T45: a membership is a bars page's, and a tile carries no value
     if "left_gutter" in series:
         gutter = series["left_gutter"]
         if isinstance(gutter, bool) or not isinstance(gutter, int) or not 60 <= gutter <= 300:
@@ -1930,7 +2115,7 @@ def _story_block(series: dict) -> dict:
     block = {"labels": list(labels), "values": [to_number(v) for v in raw],
              "value_strings": [value_string(v) for v in raw], "colors": list(colors),
              **({"axes": axes} if axes else {})}
-    return _with_ranges(block, _bars(series))
+    return _with_member_tiles(_with_ranges(block, _bars(series)), series)   # P69 T45: absent members, untouched
 
 
 def _with_ranges(block: dict, bars: list[dict]) -> dict:

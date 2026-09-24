@@ -635,6 +635,52 @@
       }
     },
     {
+      "id": "page_species:member",
+      "axis": "page_species",
+      "token": "member",
+      "title": "The membership stack: a member's tile lands on its word",
+      "aliases": [],
+      "does": "A bar of ONE value divided into EQUAL tiles naming who is in it (a catalogued logo, else the name), its total written and 'each tile = one <noun>' beside it; a tile lands on its member's word.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"member\", \"at\", \"dur\" 0.2-1.2, \"tile\": i | [i, ...] | \"all\", \"bar\"?, \"light\"?} on a ledger row whose bars page carries `members` on a bar (ledger_page: `members: [{name, logo?, short?}]`, `member_noun`)",
+        "example": "{'kind': 'member', 'at': 8.0, 'dur': 0.45, 'tile': 0}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpMemberPaint",
+        "also": [
+          "lpMemberBuild",
+          "lpMemberKey",
+          "lpMemberName"
+        ],
+        "note": "lpMemberBuild divides each membership bar into equal tiles; lpMemberPaint lands them (the build's cascade or each word) on the badge spring and lights one - a pure function of t"
+      },
+      "doctrine": [
+        "P69 T45",
+        "E99 s101",
+        "E99 s109 (2)"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "membership-builders",
+        "test": "content/video_engine/tests/test_membership_stack.py::test_a_member_species_lands_its_tile_on_its_word",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "page_species:note",
       "axis": "page_species",
       "token": "note",

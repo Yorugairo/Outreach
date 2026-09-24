@@ -86,7 +86,7 @@ DEFAULT_EXIT = "wipe_left"   # scene_evidence_timeline.schema.json: `scene.exit`
 # A species `kind` the catalogue carries on the page_species axis (derive_seeds.py PAGE_SPECIES_KINDS).
 PAGE_SPECIES_KINDS = frozenset({"build_to", "chart_to", "retitle", "figure", "note", "bracket",
                                 "span", "spread", "peel", "relight", "undraw", "cross",
-                                "lit_stretch", "explode"})   # P69 T47: T36's card is page_species:lit_stretch - the walk named it species:
+                                "lit_stretch", "explode", "member"})   # P69 T47: T36's card is page_species:lit_stretch - the walk named it species:
 
 # Same-instant order: what a viewer meets first (derive_seeds.py KIND_RANK, widened for the classes it folded).
 CLS_RANK = {"cut": 0, "world": 1, "page_enter": 2, "idle": 3, "dock_enter": 5, "arrival": 6,

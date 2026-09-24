@@ -86,7 +86,13 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "members",
+          "means": "a bar's `members: [{name, logo?, short?}]` (2-8, the page's `member_noun`): EQUAL tiles naming who is in its ONE value, the total written; a member with a value is refused (E99 s101)",
+          "source_set": "MEMBERS_KEY"
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",

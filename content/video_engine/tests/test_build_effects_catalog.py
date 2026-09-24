@@ -413,8 +413,10 @@ def test_every_wired_card_is_in_a_recipe():
     # tested alone in test_share_pie_3d.py and pinned by the share-pie-3d goldens; no committed beat plays it yet.
     # P69 T66's broken cross-era axis (page_builder:line+break) is tested alone in test_broken_axis.py and pinned by
     # the broken-axis-two-eras golden; no committed beat plays it until a railway-era series is sourced (H rows 9 / 14).
+    # P69 T45's membership tile (page_species:member) is tested alone in test_membership_stack.py and pinned by the
+    # membership-* goldens; its recipe is P69 T79's `bar-ladder-to-membership` (harvest R2), not invented here.
     assert uncovered == ["dock_option:moves", "dock_option:place", "page_builder:line+break", "page_enter:surface",
-                         "page_species:explode", "page_species:panel_focus",
+                         "page_species:explode", "page_species:member", "page_species:panel_focus",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:domain", "plate_option:readability",
                          "plate_option:room", "species:freeze"], uncovered

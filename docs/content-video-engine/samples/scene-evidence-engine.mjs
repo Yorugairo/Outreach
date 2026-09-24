@@ -9109,6 +9109,7 @@ async function mount(doc) {
                        tiers: buildLedgerTiers, treemap: buildLedgerTreemap, panels: buildLedgerPanels };   /* P50 T9 / T6; P69 T8b */
     if (st.kind === "panels" && !PORTRAIT && pg.full_stage && !pg.chart_box && !pg.board && pg.punch !== false)
       st.panelFloor = lfBox ? lfBox.floor : LP_LONGFORM.CAPTION_TOP;   /* P69 T8b: the caption strip's top, or the long form's first ink under the chart */
+    if (Array.isArray(pg.members)) st.memberSp = pageSpecies(scene, "member");   /* P69 T45: the tiles a row lands on their words */
     (builders[st.kind] || buildLedgerBars)(st, pg);
     if (LF) lpLongformPlot(st);
     if (cardP) lpCardStrokes(st);   /* P69 T10c: a card's lines, thicker by its own factor */
@@ -9956,6 +9957,166 @@ async function mount(doc) {
     });
     L.g.style.display = any ? "" : "none";
   };
+  /* P69 T45 - THE MEMBERSHIP STACK (E99 s101: "A bar may be filled with EQUAL tiles naming who is in it (logos, names)
+     when the bar is ONE value, the tiles carry no value of their own (equal height, never sized), and the bar's total is
+     written on the page"; s109 (2)). A bar whose datum carries `members` (ledger_page) stands at its ONE value exactly as
+     it did - its rect, its total, its pill - and is then DIVIDED: its members' tiles, equal, bottom-up from the zero line
+     (top-down for a bar that hangs), inside it, each a rounded board-ink tile writing the member's name, or holding the
+     operator's catalogued cutout for that member (`prop:<asset_id>` in the asset map - no cutout, the name; never a
+     mark this engine invents). The page writes what a tile is beside the first membership bar ("each tile = one
+     company"), so no one reads a tile as a value. THE LANDING: by default one tile per member once the bar stands, on
+     the count array's step (COUNT.STEP, one per word) and the badge spring (springPop from COUNT.POP_FROM) - the page's
+     own build lengthened by the cascade, as the breakthrough lengthens it; a `member` page species lands its tiles on
+     its WORD instead, and `light` keeps the tiles it names in their ink (a sunflower edge) while the bar's others dim to
+     E67's 0.45, on the species' own ramp. Every frame is a pure function of t. `members` absent: nothing here runs. */
+  const LPMEMBER = Object.freeze({ INSET_PX: 8, GAP_PX: 6, PAD_PX: 8, RX_PX: 8, KEY_GAP_PX: 18, LIT_PX: 3, LOGO_MIN_PX: 48, KEY_MIN: 0.7,
+    LINE_H: 1.15, FILL_A: 0.86, LEAD_S: 0.25, STEP_S: 0.34, LAND_S: 0.45, FADE_S: 0.12, POP_FROM: 0.86, DIM: 0.45 });
+  const LPMEMBER_INK = Object.freeze({ FILL: "#25313C", NAME: "#F4E6C7", LIT: "#F5B72E", KEY: "#c9ced4" });   /* the board's charcoal, the cream, the sunflower, the page's label ink */
+  const lpMemberTilesOf = (tile, n) => (tile === "all" ? [...Array(n).keys()] : (Array.isArray(tile) ? tile : [tile]).map((v) => v | 0));
+  /* the member's name in its tile: the largest size up to `pref` that fits the tile's room on one line - or on two,
+     broken at the space nearest its middle, when two lines write it larger (the compiler WARNs a name that falls under
+     the phone floor either way; ledger_page.member_fit_warnings) */
+  const lpMemberName = (parent, name, cx, cy, wAv, hAv, pref) => {
+    const M = LPMEMBER, mk = (lines, fs) => {
+      const t = lpEl("text", "lp-tile-name", parent, { x: cx.toFixed(1), y: cy.toFixed(1), "text-anchor": "middle" });
+      t.style.fontSize = fs.toFixed(2) + "px"; t.style.fontWeight = "700"; t.style.fill = LPMEMBER_INK.NAME;
+      if (lines.length === 1) { t.textContent = lines[0]; t.setAttribute("dominant-baseline", "central"); return t; }
+      lines.forEach((ln, k) => { const s = lpEl("tspan", "", t, { x: cx.toFixed(1), y: (cy + (k - 0.5) * M.LINE_H * fs).toFixed(1), "dominant-baseline": "central" });
+        s.textContent = ln + (k ? "" : " "); });   /* the break's space ends the first line, so the name reads whole and no line is indented */
+      return t;
+    };
+    const t1 = mk([name], pref), w1 = lpInkW(t1);
+    const fs1 = Math.min(pref, w1 > 0 ? pref * wAv / w1 : pref, hAv / M.LINE_H);
+    const words = name.split(/\s+/).filter(Boolean);
+    if (words.length > 1 && fs1 < pref) {
+      let best = 1; for (let k = 2; k < words.length; k++) if (Math.abs(words.slice(0, k).join(" ").length - words.slice(k).join(" ").length) < Math.abs(words.slice(0, best).join(" ").length - words.slice(best).join(" ").length)) best = k;
+      const lines = [words.slice(0, best).join(" "), words.slice(best).join(" ")];
+      const probe = lines.map((ln) => mk([ln], pref)), w2 = Math.max(...probe.map(lpInkW));
+      probe.forEach((p) => p.remove());
+      const fs2 = Math.min(pref, w2 > 0 ? pref * wAv / w2 : pref, hAv / (2 * M.LINE_H));
+      if (fs2 > fs1) { t1.remove(); return mk(lines, fs2); }
+    }
+    t1.style.fontSize = fs1.toFixed(2) + "px";
+    return t1;
+  };
+  /* the key: a place that holds it whole and touches no other ink - beside the first membership bar (right, then left,
+     at its size or down to KEY_MIN of it), else OVER a bar in the plot's own air (the membership bar first, then the
+     others, lowest ink first), else under the bar's own name. Each candidate is laid and measured (getBBox) against the
+     bars, their totals and names, the pill and the chart's own box - so a page with no room at the side (two bars on a
+     portrait page) still writes it clear of everything (the 9:16 frame read, 2026-09-24: the key under a bar's name ran
+     into the source line) */
+  const lpMemberKey = (st, text, b, base, far, g) => {
+    const M = LPMEMBER, k = st.stagePx > 0 ? st.stagePx : 1, fs = g.LF ? g.LF.tick : g.P ? 40 : 24, gap = M.KEY_GAP_PX / k;
+    const G = st.geom || { W: 1000, H: 560 };
+    const cut = text.lastIndexOf(" one "), lines = cut > 0 ? [text.slice(0, cut), text.slice(cut + 1)] : [text];
+    const el = lpEl("text", "lp-member-key", st.chart, { opacity: 0 });
+    el.style.fill = LPMEMBER_INK.KEY;
+    const spans = lines.map((ln, j) => { const s = lpEl("tspan", "", el, {});
+      s.textContent = ln + (j < lines.length - 1 ? " " : ""); return s; });   /* the break's space ends the line above it: no line is indented */
+    const bb = (e) => { try { const r = e.getBBox(); return r.width > 0 ? { x: r.x, y: r.y, w: r.width, h: r.height } : null; } catch (_) { return null; } };
+    const hid = (e) => !e || e.style.display === "none";
+    const pill = st.callout ? st.callout.querySelector("rect.cpill") : null;
+    const obst = [];
+    for (const o of st.bars) {
+      obst.push({ x: o.bx, y: o.neg ? base : o.end, w: o.bw, h: Math.abs(o.end - base) });
+      for (const e of [o.val, o.lab]) { const r = hid(e) ? null : bb(e); if (r) obst.push(r); }
+    }
+    if (pill) obst.push({ x: +pill.getAttribute("x"), y: +pill.getAttribute("y"), w: +pill.getAttribute("width"), h: +pill.getAttribute("height") });
+    const lay = (x, anchor, yLast, f) => {   /* lines stacked so the LAST one's baseline is yLast */
+      el.style.fontSize = f.toFixed(2) + "px"; el.setAttribute("text-anchor", anchor);
+      spans.forEach((s, j) => { s.setAttribute("x", x.toFixed(1)); s.setAttribute("y", (yLast - (lines.length - 1 - j) * 1.2 * f).toFixed(1)); });
+      const r = bb(el); if (!r) return true;   /* not laid out (no layout box): take the first candidate, as the pill's own fallback does */
+      const pad = gap / 3;
+      if (r.x < g.x0 - 20 || r.x + r.w > G.W || r.y < 0 || r.y + r.h > G.H) return false;
+      return !obst.some((o) => r.x - pad < o.x + o.w && o.x < r.x + r.w + pad && r.y - pad < o.y + o.h && o.y < r.y + r.h + pad);
+    };
+    const mid = (base + far) / 2 + ((lines.length - 1) / 2) * 1.2 * fs + 0.35 * fs;   /* centred on the tile column */
+    const sizes = [1, 0.85, M.KEY_MIN].map((q) => fs * q);
+    const cands = [];
+    for (const f of sizes) cands.push([b.bx + b.bw + gap, "start", mid, f], [b.bx - gap, "end", mid, f]);
+    const tops = st.bars.map((o) => { let t = o.neg ? base : o.end; for (const e of [o.val]) { const r = hid(e) ? null : bb(e); if (r) t = Math.min(t, r.y); }
+      if (pill && o === st.bars[st.emph]) t = Math.min(t, +pill.getAttribute("y")); return { o, t }; })
+      .sort((p, q) => (p.o === b ? -1 : q.o === b ? 1 : q.t - p.t));
+    for (const f of sizes) for (const { o, t } of tops) cands.push([o.x, "middle", t - gap - 0.3 * f, f]);
+    for (const [x, anchor, y, f] of cands) if (lay(x, anchor, y, f)) return el;
+    lay(b.x, "middle", +b.lab.getAttribute("y") + 1.3 * fs + (lines.length - 1) * 1.2 * fs, fs);   /* nowhere clear: under its name, as the last word */
+    return el;
+  };
+  /* built once with the bars, after every label has found its place (R26-53: the total's box is final) */
+  const lpMemberBuild = (st, pg, g) => {
+    const M = LPMEMBER, k = st.stagePx > 0 ? st.stagePx : 1, u = (px) => px / k;
+    const held = (pg.members || []).map((ms, i) => (Array.isArray(ms) && ms.length ? i : -1)).filter((i) => i >= 0);
+    if (!held.length) return;
+    const sps = st.memberSp || [], lay = lpEl("g", "lp-members", st.chart);
+    st.memberTiles = []; st.memberKeys = [];
+    let most = 0;
+    for (const i of held) {
+      const ms = pg.members[i], b = st.bars[i]; if (!b) continue;
+      const n = ms.length, gap = u(M.GAP_PX), pad = u(M.PAD_PX);
+      let far = b.end;   /* the bar as drawn: zero to its end - and a total written INSIDE it (R26-191) keeps its room */
+      const vb = b.val && b.val.style.display !== "none" ? b.val : null;
+      if (vb) { const vy = +vb.getAttribute("y"), fs = parseFloat(getComputedStyle(vb).fontSize) || 26;
+        if (!b.neg && vy > far && vy < g.base) far = vy + 0.3 * fs;
+        if (b.neg && vy < far && vy > g.base) far = vy - 0.9 * fs; }
+      const H = Math.abs(far - g.base), th = Math.max(u(4), (H - (n + 1) * gap) / n);
+      const x = b.bx + u(M.INSET_PX), w = Math.max(u(4), b.bw - 2 * u(M.INSET_PX)), cx = x + w / 2;
+      const pref = g.LF ? g.LF.value : g.P ? 44 : 26;
+      const land = new Array(n).fill(null);   /* the species that lands each tile on its word (null: the default cascade) */
+      for (const sp of sps) if ((Number.isInteger(sp.bar) ? sp.bar : held[0]) === i)
+        for (const j of lpMemberTilesOf(sp.tile, n)) if (j < n && !land[j]) land[j] = { at: +sp.at, dur: +sp.dur || M.LAND_S };
+      let dj = 0;
+      ms.forEach((m, j) => {
+        const y = b.neg ? g.base + gap + j * (th + gap) : g.base - gap - j * (th + gap) - th, cy = y + th / 2;
+        const gg = lpEl("g", "lp-tile", lay, { opacity: 0 });
+        const box = lpEl("rect", "lp-tile-box", gg, { x: x.toFixed(2), y: y.toFixed(2), width: w.toFixed(2), height: th.toFixed(2),
+          rx: Math.min(u(M.RX_PX), th / 2, w / 2).toFixed(2) });
+        box.style.fill = LPMEMBER_INK.FILL; box.style.fillOpacity = String(M.FILL_A);
+        const src = m.logo && A ? A["prop:" + m.logo] : null;   /* the catalogue's own cutout, or nothing - never a stand-in */
+        let img = null, text = null;
+        const ls = Math.min(w, th) - 2 * pad;   /* the cutout's side; under LOGO_MIN_PX it would read as a smudge, so the NAME is written */
+        if (src && ls * k >= M.LOGO_MIN_PX) { const s = ls;
+          img = lpEl("image", "lp-tile-logo", gg, { x: (cx - s / 2).toFixed(2), y: (cy - s / 2).toFixed(2), width: s.toFixed(2), height: s.toFixed(2),
+            href: src, preserveAspectRatio: "xMidYMid meet" }); }
+        else text = lpMemberName(gg, String(m.short || m.name || ""), cx, cy, w - 2 * pad, th - 2 * pad, pref);
+        st.memberTiles.push({ bar: i, j, name: m.name, logo: img ? m.logo : null, g: gg, box, img, text, cx, cy, land: land[j], dj: land[j] ? -1 : dj++ });
+      });
+      most = Math.max(most, dj);
+      if (!st.memberKeys.length && pg.member_key) st.memberKeys.push({ bar: i, el: lpMemberKey(st, String(pg.member_key), b, g.base, far, g) });
+    }
+    if (most > 0) {   /* the cascade is the page's own build, lengthened past the bars' (the breakthrough's pattern: cb runs on the base) */
+      st.mbBase = (Number.isFinite(+pg.build_s) && +pg.build_s > 0) ? +pg.build_s : LP.BUILD;
+      st.buildDur = st.mbBase + M.LEAD_S + (most - 1) * M.STEP_S + M.LAND_S;
+    }
+  };
+  /* each frame, after the bars law: a tile lands once its bar stands (its value written) - on its species' word, or on
+     the cascade `ts` seconds after the ordinary build - and a `light` keeps its tiles and dims the bar's others */
+  const lpMemberPaint = (cs, cb, ts, scene, t) => {
+    const M = LPMEMBER, T = cs.memberTiles; if (!T || !T.length) return;
+    const held = [...new Set(T.map((r) => r.bar))];
+    const lights = new Map();   /* bar -> [the previous light, the standing one] */
+    for (const sp of pageSpecies(scene, "member")) {
+      if (typeof sp.light !== "boolean" || t < sp.at) continue;
+      const bi = Number.isInteger(sp.bar) ? sp.bar : held[0], L = lights.get(bi) || [null, null];
+      lights.set(bi, [L[1], sp]);
+    }
+    const names = (sp, j) => sp.tile === "all" || (Array.isArray(sp.tile) ? sp.tile : [sp.tile]).some((v) => (v | 0) === j);
+    const opOf = (sp, r) => (!sp || !sp.light ? 1 : names(sp, r.j) ? 1 : M.DIM);
+    const up = new Map();
+    for (const r of T) {
+      const kb = expoOut(clamp01((cb - r.bar * 0.1) / 0.55)), ready = clamp01((kb - 0.9) / 0.1);
+      const ul = r.land ? clamp01((t - r.land.at) / r.land.dur) : ts == null ? 0 : clamp01((ts - M.LEAD_S - r.dj * M.STEP_S) / M.LAND_S);
+      const s = LPMEMBER.POP_FROM + (1 - LPMEMBER.POP_FROM) * springPop(ul), a = clamp01((ul * M.LAND_S) / M.FADE_S) * ready;
+      const [prev, cur] = lights.get(r.bar) || [null, null], e = cur ? expoOut(clamp01((t - cur.at) / (+cur.dur || M.LAND_S))) : 1;
+      const dim = opOf(prev, r) + (opOf(cur, r) - opOf(prev, r)) * e, lit = !!(cur && cur.light && opOf(cur, r) === 1);
+      r.g.setAttribute("opacity", (a * dim).toFixed(3));
+      r.g.setAttribute("transform", "translate(" + r.cx.toFixed(2) + " " + r.cy.toFixed(2) + ") scale(" + s.toFixed(4) + ") translate(" + (-r.cx).toFixed(2) + " " + (-r.cy).toFixed(2) + ")");
+      r.box.style.stroke = lit ? LPMEMBER_INK.LIT : "";
+      r.box.style.strokeWidth = lit ? (M.LIT_PX / (cs.stagePx > 0 ? cs.stagePx : 1)).toFixed(3) : "";
+      r.box.style.strokeOpacity = lit ? e.toFixed(3) : "";
+      up.set(r.bar, Math.max(up.get(r.bar) || 0, a));
+    }
+    for (const key of cs.memberKeys || []) key.el.setAttribute("opacity", (up.get(key.bar) || 0).toFixed(3));
+  };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
@@ -10201,6 +10362,7 @@ async function mount(doc) {
     }
     if (capped) for (const b of st.bars) lpWrapBarLabel(b.lab, b.bw);   /* P69 T6c: a name wider than its capped bar takes two lines */
     st.tickFit = lpFitTicks(st);   /* R26-191b law 3, last: the callout's axis mount may have moved a month */
+    if (Array.isArray(pg.members)) lpMemberBuild(st, pg, { base, P, LF, x0, x1 });   /* P69 T45: the membership tiles, in their bars */
   };
   /* THE FIELD'S INK (E67, operator 2026-09-12): "we need to use bolder primary, high-contrast line colors for our default
      the chart instead of gray. that way our charts can become our thumbnails, i think this is part of why bravos uses
@@ -14225,7 +14387,8 @@ async function mount(doc) {
       cs.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
       /* a breakthrough page's build is longer than LP.BUILD: the ordinary bars law runs on the first LP.BUILD seconds of it (cb),
          the run on the seconds after (bts); a page without one is exactly what it was (cb === c) */
-      const cb = cs.bt ? clamp01(c * cs.buildDur / cs.btBase) : c, bts = cs.bt ? c * cs.buildDur - cs.btBase : -1;
+      const cb = cs.bt ? clamp01(c * cs.buildDur / cs.btBase) : cs.mbBase ? clamp01(c * cs.buildDur / cs.mbBase) : c,   /* P69 T45: ... and a membership cascade's, the same way */
+        bts = cs.bt ? c * cs.buildDur - cs.btBase : -1;
       cs.bars.forEach((bb, i) => {
         const k = expoOut(clamp01((cb - i * 0.1) / 0.55));
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
@@ -14234,6 +14397,7 @@ async function mount(doc) {
         bb.lab.setAttribute("opacity", clamp01((cb - i * 0.1 - 0.3) / 0.2).toFixed(2));
         bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
       });
+      if (cs.memberTiles) lpMemberPaint(cs, cb, cs.mbBase ? c * cs.buildDur - cs.mbBase : null, scene, t);   /* P69 T45 */
       if (cs.callout) {
         const ck = cb >= 1 ? 1 : clamp01((cb - 0.55) / 0.45);   /* (1 - 0.55) / 0.45 is 0.999... in floating point: the count must LAND on the exact string (s9.23b), never one unit short forever */
         cs.callout.setAttribute("opacity", clamp01(ck / 0.3).toFixed(2));

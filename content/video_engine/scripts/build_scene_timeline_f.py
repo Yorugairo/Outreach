@@ -674,6 +674,25 @@ SPECIES_WHEN[SPECIES_FREEZE] = ("the TURN of the argument lands on ONE number or
                                 "named thing's arrival (E99 s71: it arrives first, then the stage may stop on it)")
 FREEZE_MIN_S, FREEZE_MAX_S = 0.4, 1.2   # species/freeze.mjs FREEZE.MIN_S / MAX_S, mirrored: shorter reads as a dropped frame, longer as E49's still
 FREEZE_KEYS = ("kind", "at", "dur", "id", "target")
+# P69 T45 (E99 s101; s109 (2)) - THE MEMBERSHIP STACK's word. A bars page's bar may carry `members` (ledger_page: equal
+# tiles naming who is in its ONE value, the total written, "each tile = one <noun>" written beside it). By default the
+# tiles land one per member once the bar stands, on the page's own build; a `member` PAGE species lands a tile - or a
+# list, or "all" - on its WORD instead, and `light` lights the named tiles while the bar's others dim to E67's 0.45 (the
+# acceptance's "a tile may be lit when its name is spoken"; T37's `solo` is the page-wide verb, this is the tile's own).
+# `dur` is the landing's window (the badge spring, springPop) or the light's ramp. Its law and painter are the engine's
+# (`lpMemberBuild`, `lpMemberPaint`); this file owns its grammar (`_validate_member`) and the page it may stand on
+# (`check_members`: a tile the bar has, and no transform that would move the bar out from under its tiles).
+SPECIES_MEMBER = "member"
+SPECIES_KINDS += (SPECIES_MEMBER,)
+PAGE_SPECIES += (SPECIES_MEMBER,)
+SPECIES_WHEN[SPECIES_MEMBER] = ("the sentence names WHO is in a single total ('Google, Microsoft, Amazon, Meta and Oracle - all "
+                                "of it one bill') - a membership bar's tile lands on its member's name, and `light` lights the "
+                                "one the sentence names; never to compare the members' sizes (that is bars) or to give each "
+                                "member a value (that is the stacked bar, T64)")
+MEMBER_SPECIES_KEYS = ("kind", "at", "dur", "id", "tile", "bar", "light")
+MEMBER_DUR_S = (0.2, 1.2)   # [DERIVED] the landing's window: the count array lands in COUNT_ARRAY_LAND_S (0.45); under 0.2 the
+                            # spring's overshoot is a flicker, past 1.2 it is a float, not a landing
+MEMBER_CHART_TO = ("park",)   # the one chart_to a membership page takes - the whole chart moves as one affine transform
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -1567,6 +1586,7 @@ SPECIES_TARGETS = {
     "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "explode": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
 SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANELS by index, never a coordinate
+SPECIES_TARGETS[SPECIES_MEMBER] = ()   # P69 T45: a tile of a membership bar, by index - the page owns where it stands
 SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
                                                                  # line's point, a bar), or a point / the box of a mark or a prop
@@ -2914,6 +2934,118 @@ def _validate_lit_stretch(entry: dict) -> list[str]:
     return errs
 
 
+def _member_tiles(tile, n: int) -> list[int]:
+    """P69 T45: the tile indices a `member` species names on a bar of `n` tiles ("all" is every one)."""
+    if tile == "all":
+        return list(range(n))
+    return [int(v) for v in (tile if isinstance(tile, list) else [tile])]
+
+
+def _validate_member(entry: dict) -> list[str]:
+    """P69 T45: a `member` species' own fields - `tile` (an index, a list of them, or "all"), an optional `bar` index and
+    `light` flag, and a `dur` in MEMBER_DUR_S. Nothing else: a tile carries no value (E99 s101). The page it lands on is
+    `check_members`'."""
+    is_idx = lambda v: isinstance(v, int) and not isinstance(v, bool) and v >= 0
+    errs = [f"member: {k!r} is not a member field ({'|'.join(MEMBER_SPECIES_KEYS)})"
+            + (" - a tile carries no value of its own (E99 s101)" if k in LPG.MEMBER_VALUE_FIELDS else "")
+            for k in entry if k not in MEMBER_SPECIES_KEYS]
+    t = entry.get("tile")
+    if "tile" not in entry:
+        errs.append("member: needs a 'tile' - the index of the tile its word lands (0 stands on the zero line), a list "
+                    "of them, or \"all\"")
+    elif isinstance(t, list) and t and all(is_idx(v) for v in t):
+        if len(set(t)) != len(t):
+            errs.append(f"member: tile {t!r} names a tile twice")
+    elif t != "all" and not is_idx(t):
+        errs.append(f"member: tile {t!r} is not a tile index (0 stands on the zero line), a list of them, or \"all\"")
+    if "bar" in entry and not is_idx(entry["bar"]):
+        errs.append(f"member: bar {entry['bar']!r} is not a bar index")
+    if "light" in entry and not isinstance(entry["light"], bool):
+        errs.append("member: light must be true or false (true lights the named tiles and dims the bar's others to "
+                    "E67's 0.45)")
+    d = entry.get("dur")
+    if _num(d) and not MEMBER_DUR_S[0] <= float(d) <= MEMBER_DUR_S[1]:
+        errs.append(f"member: dur {d} is outside {MEMBER_DUR_S[0]}-{MEMBER_DUR_S[1]} s - the tile's landing (the badge "
+                    "spring) or its light's ramp")
+    return errs
+
+
+def check_members(world: dict, row_species: list) -> None:
+    """P69 T45: a row's `member` species on the page's MEMBERSHIP bars (a tile the bar has; `bar` named when two bars
+    carry members), and what a membership page may not do. Its tiles are placed in the bar AS DRAWN, so a `then=`
+    state (a second chart drawn in the same box) and every `chart_to` but a park (which moves the whole chart as one
+    affine transform) are refused by name - each would move, re-value or re-draw the bar out from under them.
+    ValueError names it; a page with no members and no `member` species is untouched."""
+    page = world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None
+    members = page.get(LPG.MEMBERS_KEY) if isinstance(page, dict) else None
+    held = [i for i, m in enumerate(members or []) if m]
+    states = [s for s in (world.get("page_states") or []) if isinstance(s, dict)] if isinstance(world, dict) else []
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict)]
+    if held or any(s.get(LPG.MEMBERS_KEY) for s in states):
+        if states:
+            raise ValueError("a membership stack stands on a page of its own chart: a then= state is drawn in the same "
+                             "box and would re-draw the bar its tiles divide (P69 T45) - give the other chart its own page")
+        for sp in sps:
+            if sp.get("kind") == "chart_to" and sp.get("to") not in MEMBER_CHART_TO:
+                raise ValueError(f"chart_to {sp.get('to')!r} at {sp.get('at')}: this page carries a membership stack, and "
+                                 "its tiles stand in the bar AS DRAWN - a transform that moves, re-values or re-draws the "
+                                 f"bar would leave them behind (P69 T45); {'|'.join(MEMBER_CHART_TO)} is the chart_to it takes")
+    for sp in sps:
+        if sp.get("kind") != SPECIES_MEMBER:
+            continue
+        where = f"member at {sp.get('at')}"
+        if not held:
+            raise ValueError(f"{where}: this page has no membership bar - a member species lands a tile of a bar whose "
+                             "datum carries `members` (P69 T45)")
+        bar = sp.get("bar")
+        if bar is None:
+            if len(held) > 1:
+                raise ValueError(f"{where}: {len(held)} bars carry members ({held}) - name the tile's 'bar'")
+            bar = held[0]
+        if not (0 <= bar < len(members)) or not members[bar]:
+            raise ValueError(f"{where}: bar {bar} is not a membership bar of this page (bars {held} carry members)")
+        n = len(members[bar])
+        past = [j for j in _member_tiles(sp.get("tile"), n) if j >= n]
+        if past:
+            raise ValueError(f"{where}: tile {past[0]} is past bar {bar}'s {n} tiles (0..{n - 1})")
+
+
+def resolve_member_logos(page: dict) -> list[str]:
+    """P69 T45: every membership tile's `logo` must be a render-eligible, operator-approved cutout of the icon catalogue
+    (E93 / E94 - the recorded permission 11-ARCHIVAL s4 asks of a logo). One that is not is DROPPED from the page, so
+    the tile writes the member's NAME ("otherwise use text") - never an invented mark - and the returned WARN says so.
+    Mutates `page` (the compiled spec, not the object on disk)."""
+    notes = []
+    for i, ms in enumerate((page or {}).get(LPG.MEMBERS_KEY) or []):
+        for m in ms or []:
+            logo = m.get("logo")
+            if logo is None:
+                continue
+            try:
+                catalogue_icon(logo)
+            except ValueError as exc:
+                m.pop("logo")
+                notes.append(f"WARN member: {m.get('name')!r} on bar {i}: its logo {logo!r} is not a render-eligible "
+                             f"catalogued cutout ({exc}) - the tile writes the NAME (11-ARCHIVAL s4: 'otherwise use "
+                             "text'; never an invented mark)")
+    return notes
+
+
+def member_assets(timeline: dict) -> dict:
+    """P69 T45: ``{prop:<asset_id>: data uri}`` for every catalogued logo a membership tile carries - the file on disk,
+    byte for byte (`catalogue_icon_uri`, the agenda's and the stamp's own route) - else ``{}``, so a build with no
+    membership stack is byte-identical."""
+    out: dict = {}
+    for sc in timeline.get("scenes") or []:
+        world = sc.get("world") or {}
+        for pg in [world.get("page")] + list(world.get("page_states") or []):
+            for ms in (pg.get(LPG.MEMBERS_KEY) or []) if isinstance(pg, dict) else []:
+                for m in ms or []:
+                    if m.get("logo") and PROP_PREFIX + m["logo"] not in out:
+                        out[PROP_PREFIX + m["logo"]] = catalogue_icon_uri(m["logo"])
+    return out
+
+
 def _validate_freeze(entry: dict) -> list[str]:
     """P69 T49 (E99 s99): the beat's length is its dial, 0.4-1.2 s, and it WRITES nothing: its light is the page's one
     light colour, held still as part of the stopped frame - no label (a `figure` names the number, before the beat), no
@@ -2989,6 +3121,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_lit_stretch(entry)
     if kind == SPECIES_FREEZE:        # P69 T49
         errs += _validate_freeze(entry)
+    if kind == SPECIES_MEMBER:        # P69 T45
+        errs += _validate_member(entry)
     if kind in VECMAP_SPECIES:
         errs += _validate_vecmap_species(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
@@ -4023,6 +4157,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_target_series(world, row_species)   # R26-218: a series the page does not have, refused before it draws nothing
     check_panels(world, row_species)          # P69 T8b: a panel's address, and the focus states, on the page they name
     check_broken_axis(world, row_species)     # P69 T66: a broken axis holds its page (no chart state, no form)
+    check_members(world, row_species)         # P69 T45: a tile the membership bar has, and nothing that moves the bar
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
             if world.get("kind") != SPECIES_LEDGER:
@@ -4328,6 +4463,10 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
             raise ValueError(f"{plate_id!r}: " + "; ".join(conflicts))
         page["badges"] = LPG.badges_for(series, dock_badges)
     stamp_full_stage(page)
+    if page.get(LPG.MEMBERS_KEY):   # P69 T45: a logo the catalogue does not carry becomes its name; a name too wide WARNs
+        notes = resolve_member_logos(page) + LPG.member_fit_warnings(page, ASPECT or "16:9")
+        if notes:
+            page["warnings"] = list(page.get("warnings") or []) + notes
     return {"kind": SPECIES_LEDGER, "page": page,
             "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
 
@@ -6178,6 +6317,9 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
             raise ValueError(f"{plate_id!r}: form={spec['kind']} and plane= on one page are two surfaces - ONE "
                              "plane per page. A form draws the chart on its own plane; plane= turns the whole "
                              "page as a card (P58 T4). Keep one: drop plane=, or drop form=")
+        if page.get(LPG.MEMBERS_KEY) and spec["kind"] == "extruded_bar":   # P69 T45
+            raise ValueError(f"{plate_id!r}: form=extruded_bar on a membership stack - its equal tiles divide the bar's "
+                             "FACE, and a prism is three faces (P69 T45); draw it flat (bar_style=soft gives it weight)")
         page["form"] = spec
         try:
             check_broken_axis(world, [])   # P69 T66: a broken axis is drawn flat (E99 s111)
@@ -9520,6 +9662,9 @@ def main() -> int:
         # missing series is a hard build error naming the row
         try:
             world = world_for_plate(plate, ken, EP, META)
+            for _w in ((world or {}).get("page") or {}).get("warnings") or []:
+                if str(_w).startswith("WARN member:"):   # P69 T45: a logo dropped for its name, a name past the phone floor
+                    print(f"  [WARN] P69 T45: shot row {i + 1}: {_w}")
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         if morph_prop_id((world or {}).get("morph")) is not None:   # P69 T26e: `;morph=prop:<id>` - the prop standing at the boundary
@@ -10042,6 +10187,7 @@ def main() -> int:
     # and a served build says which engine it is running.
     import render_baseline as _RB
     uris = {**uris, **longform_assets(timeline)}   # P69 T8: the long form's face, only when a page asks for it
+    uris = {**uris, **member_assets(timeline)}     # P69 T45: a membership tile's catalogued logo, only when one carries it
     out = _RB.write_split(BUILD, timeline, uris, TIMELINE_NAME, template=TEMPLATE)
 
     dur = float(subprocess.run(
