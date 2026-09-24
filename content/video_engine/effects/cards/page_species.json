@@ -989,7 +989,18 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "color",
+          "means": "`color: \"neg\"|\"pos\"` (P69 T86): the new title in the page's sign token (--lp-neg / --lp-pos); a hex or an ink name is refused. Absent: the title's own colour.",
+          "source_set": null
+        },
+        {
+          "token": "color_span",
+          "means": "`color_span: \"The flip\"`: only this LEADING substring of the new title takes the colour; refused unless the text starts with it or without a color. No span: all of it.",
+          "source_set": null
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",

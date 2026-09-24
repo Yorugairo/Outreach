@@ -705,6 +705,9 @@ PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
 RELIGHT_REFS = ("bracket", "title")
 BRACKET_COLORS = ("crimson", "teal", "cobalt", "amber", "deemph", "neg", "pos")
+# P69 T86: a retitle's `color` names a page SIGN token (the template's --lp-neg / --lp-pos), never an ink or a hex -
+# a title is not a series, and the sunflower (--lp-acc) is the callout's and the relight's one yellow
+RETITLE_COLORS = ("neg", "pos")
 # s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
 # mutually exclusive per window - one camera move, never over a Ken Burns drift.
 CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
@@ -2181,9 +2184,31 @@ def _check_bars_panel(kind: str, sp: dict, tgt: dict | None, pi: int, panel: dic
         raise ValueError(f"{kind}: target index {tgt['index']} is past panel {pi}'s last bar ({nb - 1})")
 
 
+def _validate_retitle_color(entry: dict) -> list[str]:
+    """P69 T86: a retitle's optional colour key. `color` names a page token (RETITLE_COLORS) - a raw hex or any other
+    name is refused listing the allowed ones; `color_span`, when given, is a LEADING substring of the new `text` and
+    only it takes the colour (the rest keeps the title's own); no span colours the whole title. A span needs a colour."""
+    errs: list[str] = []
+    if "color" in entry and entry["color"] not in RETITLE_COLORS:
+        errs.append(f"retitle: color {entry['color']!r} is not a page token - name one of {'|'.join(RETITLE_COLORS)} "
+                    "(the page's own sign inks; a raw hex or an ink name is refused)")
+    if "color_span" not in entry:
+        return errs
+    span, text = entry["color_span"], entry.get("text")
+    if not isinstance(span, str) or not span.strip():
+        errs.append("retitle: color_span must be a non-empty string (the leading words of the new title that take the colour)")
+    elif "color" not in entry:
+        errs.append("retitle: color_span needs a color (the span names WHICH words; the color names the token)")
+    elif not isinstance(text, str) or not text.startswith(span):
+        errs.append(f"retitle: color_span {span!r} must be a leading substring of the new title {text!r} - the span is "
+                    "the title's first words, written exactly as the text writes them")
+    return errs
+
+
 def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     """P47 T2: the page species' own fields. bracket: integer `from`/`to` (data indices), a `label`, optional `sub`,
-    `series`, `color`; retitle: a non-empty `text`; relight: `ref` bracket|title, optional `index`."""
+    `series`, `color`; retitle: a non-empty `text`, optional `color` (a page token) and `color_span` (its leading
+    words, P69 T86); relight: `ref` bracket|title, optional `index`."""
     errs: list[str] = []
     is_idx = lambda v: isinstance(v, int) and not isinstance(v, bool) and v >= 0
     if "keep" in entry:   # R26-219: the opt-out of the page's leave, and only a page-bound species has one
@@ -2208,6 +2233,7 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     elif kind == "retitle":
         if not isinstance(entry.get("text"), str) or not entry["text"].strip():
             errs.append("retitle: needs a non-empty string text")
+        errs += _validate_retitle_color(entry)
     elif kind == "relight":
         if entry.get("ref") not in RELIGHT_REFS:
             errs.append(f"relight: ref must be one of {'|'.join(RELIGHT_REFS)}")

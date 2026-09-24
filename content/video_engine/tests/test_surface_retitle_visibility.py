@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[3]
 def test_retitle_clones_geometry_but_not_arrival_opacity():
     source = (ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs").read_text(encoding="utf-8")
     start = source.index('const retitles = pageSpecies(scene, "retitle")')
-    end = source.index("/* E50 (P47 T6)", start)
+    end = source.index("/* THE LIT STRETCH (P69 T36", start)   # the retitle constructor ends where the lit stretch's DOM begins
     actual_constructor = source[start:end]
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)

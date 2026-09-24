@@ -12413,8 +12413,10 @@ async function mount(doc) {
        bracket  {at, dur, from, to, label, sub?, series?, color?} - a measured vertical span between two data, beside them in
                                             the plot's own room (the infographic's bracket): the span line draws by min-jerk,
                                             the ticks land by the spring, the label writes in the hand, glyph by glyph.
-       retitle  {at, dur, text}           - the title erases glyph by glyph over PS.ERASE_S, then the new title writes per
-                                            glyph as the build did. A page may retitle more than once.
+       retitle  {at, dur, text, color?, color_span?} - the title erases glyph by glyph over PS.ERASE_S, then the new
+                                            title writes per glyph as the build did. A page may retitle more than once.
+                                            P69 T86: `color` (a page token, RT_PAL) inks the leading `color_span` of the
+                                            new title - or all of it, with no span - and the rest keeps the title's own.
        relight  {at, dur, ref: bracket|title, index?} - re-fires a bracket (or the title) in the sunflower on a word: a
                                             sunflower twin beneath it rises and falls on a sine, the base never moves.
      Dials, ours (42 s42.5): ERASE_S the title's wipe; BRACKET_DRAW / TICK / LABEL the bracket's phases as shares of its dur;
@@ -12426,6 +12428,11 @@ async function mount(doc) {
   /* P57 T20 / R26-98: R26-71's FIGURE_* dials left with their painter - they are the FIGURE object's, frozen,
      in species/figure.mjs (the region below), and every one carries the value it carried here, to the digit. */
   const PS_PAL = { ...LP_INK, neg: "var(--lp-neg)", pos: "var(--lp-pos)" };   /* E67: a species keyed to a series is the SAME ink as the series */
+  const RT_PAL = { neg: "var(--lp-neg)", pos: "var(--lp-pos)" };   /* P69 T86: a retitle's colour is a page SIGN token, never an ink or a hex (the compiler's RETITLE_COLORS) */
+  /* the glyphs a retitle's leading span owns: every character of it, or - where the title wraps (lpGlyphsWrap writes
+     no glyph for a space) - its non-space ones. No span: the whole title. */
+  const rtSpanGlyphs = (sp, glyphs, wrap) => { if (sp.color_span == null) return glyphs.length;
+    const chars = [...String(sp.color_span)]; return Math.min(glyphs.length, wrap ? chars.filter((ch) => ch !== " ").length : chars.length); };
   const pageSpecies = (scene, kind) => (scene.species || []).filter((sp) => sp && sp.kind === kind).sort((a, b) => a.at - b.at);
   const polyLenTo = (pts, i) => { let L = 0; for (let k = 1; k <= i && k < pts.length; k++) L += Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]); return L; };
   /* the length fraction of a drawn path up to a series datum index (a highlighted tail is offset by its k0; an index before
@@ -13618,6 +13625,7 @@ async function mount(doc) {
       if (st.titleEl && st.titleEl.getAttribute("style")) div.setAttribute("style", st.titleEl.getAttribute("style"));   /* the title's inline geometry (portrait sets it): the rewrite sits exactly where the title sat */
       div.style.opacity = "1";   /* clone geometry, not the surface arrival's transient opacity; glyph widths own the retitle clock */
       const glyphs = P ? lpGlyphsWrap(div, String(sp.text || ""), st.seed + 40 + ri) : lpGlyphs(div, String(sp.text || ""), st.seed + 40 + ri);
+      if (sp.color && RT_PAL[sp.color]) for (const g of glyphs.slice(0, rtSpanGlyphs(sp, glyphs, P))) { g.__col = RT_PAL[sp.color]; g.style.color = g.__col; }   /* P69 T86: the span's own ink; a relight of the title gives it back (__col) */
       (st.rtGlyphs || (st.rtGlyphs = [])).push(...glyphs);
       return { sp, div, glyphs };
     });
@@ -13897,7 +13905,7 @@ async function mount(doc) {
       const u = (t - rl.at) / Math.max(0.001, rl.dur || 1); if (u < 0 || u > 1) continue;
       const e = Math.sin(Math.PI * u);
       if (rl.ref === "bracket") { const b = PF.brackets[rl.index | 0]; if (b) b.glow.g.setAttribute("opacity", e.toFixed(3)); }
-      else if (rl.ref === "title") { const tg = PF.retitles.length ? PF.retitles[PF.retitles.length - 1].glyphs : (st.titleGlyphs || []); for (const g of tg) g.style.color = e > 0.02 ? PS.RELIGHT_COL : ""; }
+      else if (rl.ref === "title") { const tg = PF.retitles.length ? PF.retitles[PF.retitles.length - 1].glyphs : (st.titleGlyphs || []); for (const g of tg) g.style.color = e > 0.02 ? PS.RELIGHT_COL : (g.__col || ""); }   /* P69 T86: back to a keyed span's token, else the title's own */
     }
     for (const b of PF.brackets) if (b.hidden) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); }   /* R26-28: a bracket whose data left the window stays hidden through the relight */
     if (PF.retitles.length) {
