@@ -114,6 +114,11 @@ event every PAGE_LIFE_STEP_S inside its own span. The PULSE ROWS ONLY read that 
   M44  a world plate under 6s (the operator 2026-08-29):       WARN   (ledger 69ff558bdf67; FAIL when the short
        the eye cannot take it in - and one that carries a                  plate also carries a DOCK. From the
        DOCK asks it to read evidence inside the flash                      timeline's scenes; no browser, no render)
+  M47  the empty plot (P69 T87): a ledger page's plot box       FAIL   (over 4 s; WARN over 1.5 s. From the timeline's
+       standing with NO INK - no series drawn, no bar grown,           build clocks, build_to caps, undraws and chart_to
+       no comparator line, no mark on the plot - named by scene        hand-overs, never pixels; the ink model is written
+       and seconds, with the cards over it (row 22's first cut          above EMPTY_PLOT_WARN_S. No row without a plot page)
+       held the customs monitor's bare axes 18 s)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -1732,6 +1737,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(cp)                                                      # M43 (punch-crops-text: a camera landing that cuts a text box partway)
     if (pl := _plate_length_gate(tl.get("scenes", []))) is not None:
         g.append(pl)                                                      # M44 (sub-6s-plate: a world plate the eye cannot take in)
+    if (ep := _empty_plot_gate(tl.get("scenes", []), tl.get("kinetics") if isinstance(tl.get("kinetics"), dict) else {})) is not None:
+        g.append(ep)                                                      # M47 (P69 T87: a plot standing with no ink - row 22's first cut)
     if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
@@ -3285,6 +3292,269 @@ def _plate_length_gate(scenes: list[dict]) -> Gate | None:
                     + ", ".join(warns[:8]) + (" ..." if len(warns) > 8 else "")
                     + " - a plate the eye cannot take in; lengthen it or fold it into its neighbour", SRC_M44)
     return Gate("M44", "PASS", f"every world plate holds at least {PLATE_MIN_S:.0f}s ({span})", SRC_M44)
+
+
+# ---- M47 (the empty plot, P69 T87: row 22's first cut) ------------------------------------------------------------
+# WHAT "THE PLOT BOX STANDS" MEANS. A ledger page's axes and grid belong to its BUILD (`lpPaintChart`: `cs.chart.style
+# .opacity = c > 0 ? 1 : 0`), so the plot stands from the build's first frame - the page's enter plus
+# `_page_land_offset` less the build's seconds (a roll-out's 4.4 s in, an `axes` page's frame 0, a page that arrives
+# built at once) - until the page leaves: its cut, or the start of its retract (the colours and the charcoal going down
+# the drain are the PAGE leaving, not a plot left bare). A page with no axes (a pie, a treemap, an object) is no plot,
+# and a world that is not `ledger` (a host plate, a card-only scene) is not a page.
+# WHAT COUNTS AS INK, per the chart state on screen (`lpPaintStates`):
+#   - a LINE state (dense-line or story, series and no bars) has ink while any series has drawn length: the first
+#     `build_to` caps the build beat (a cap at index 0 draws nothing - R26-226's "held at 0"), a later `build_to` past
+#     index 0 draws from its word, an `undraw` to index 0 of all its paths takes the series from its word;
+#   - any other state (bars, a combo, a race...) has ink from its build's first frame - its first bar grows at once -
+#     and so does a line state that carries a COMPARATOR (`axes.hlines` / `hline`: the reference line and its label
+#     draw in the build's first quarter and no undraw takes them; the comparator before the series is the doctrine);
+#   - a PANELS page has ink from its first panel's build: its own turn, or the focus state that first shows it;
+#   - a MARK on the plot (authoring/shapes.PLOT_MARKS less the undraw - a bracket, a figure, a lit stretch, a freeze)
+#     is ink while it is live (its `until`, its `leave_at`, else its `dur`; a lit stretch to the page's end), and it
+#     leaves with the chart it marks at the next recast, morph or remake (P48 T7).
+# WHERE THE INK GOES. A PLAIN `chart_to` recast (and a morph with the arap morph off, which the engine plays as one)
+# runs the standing chart's build BACKWARDS over its dur and only then builds the new state: the dur is the hand-over
+# where the old ink leaves and the new has not arrived, and it counts as empty. Ink that is LEAVING is not ink: an
+# undraw takes it from its own word, as a recast does. A keyed recast, a remake and an arap morph paint both charts on
+# one clock and a rescale, an extend, a park or a compare keep the chart: none of them empties the plot.
+EMPTY_PLOT_WARN_S = 1.5    # P69 T87: past a second and a half of bare axes the eye has read an empty chart
+EMPTY_PLOT_FAIL_S = 4.0    # ... and past four the chart has stopped proving anything (E25) - row 22's first cut held 18.1
+EMPTY_PLOT_EPS_S = 0.01    # two stretches of ink closer than this are one (the compiler's 2 dp clocks)
+# authoring/shapes.PLOT_MARKS less `undraw` (it takes ink, it lays none) - MIRRORED, since shapes imports this module
+PLOT_INK_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "span", "ring", "lit_stretch", "freeze",
+                  "explode", "member")
+PLOT_HELD_MARKS = ("lit_stretch",)       # authoring/shapes.HELD_MARKS: a light that has landed stands to the page's end
+NO_PLOT_BUILDERS = ("share", "treemap", "object")   # no axes: the engine's E64 axis hand-over has nothing to hand them
+LINE_INK_BUILDERS = ("dense-line", "story")         # the builders whose ink can be lines alone - capped, then undrawn
+STATELESS_VERBS = ("park", "compare")              # a transform on the standing chart, never a state change
+ONE_CLOCK_VERBS = ("rescale", "extend", "remake")  # the target stands built on the transition's one clock (with a keyed recast / an arap morph)
+REPLACING_VERBS = ("recast", "morph", "remake")     # the chart on screen is replaced - a mark on it leaves with it
+SRC_M47 = ("P69 T87: row 22's first cut of Steel and Paper H held the customs monitor's axes with ZERO drawn series for "
+           "18 s (605.9-624 s) - the tripwire board sat on an empty plot, then the RAM stamp sat alone on it; the gate "
+           "passed it and only the parent's frame read caught it. E25 (a chart proves a sentence), the chart-to-chart "
+           "ruling (never empty ground), E21 (the screen never still). Read from the compiled timeline's build clocks, "
+           "build_to caps, undraws and chart_to hand-overs - never from pixels")
+
+
+def _species_series(sp: dict) -> int | None:
+    """The series a page species touches - the engine's `sp.series ?? sp.tier ?? sp.target.series`; None = every one."""
+    for v in (sp.get("series"), sp.get("tier"), (sp.get("target") or {}).get("series")):
+        if v is not None:
+            return int(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else None
+    return None
+
+
+def _on_stretches(on: bool, changes: list[tuple[float, bool]], t0: float, t1: float) -> list[tuple[float, float]]:
+    """The stretches of [t0, t1) that are ON, from the state at the start and its ordered changes."""
+    out: list[tuple[float, float]] = []
+    cur = t0
+    for t, o in changes:
+        if t >= t1:
+            break
+        if t <= t0:
+            on = o
+            continue
+        if o and not on:
+            cur = t
+        elif on and not o:
+            out.append((cur, t))
+        on = o
+    if on and t1 > cur:
+        out.append((cur, t1))
+    return out
+
+
+def _series_ink(species: list[dict], si: int, t0: float, t1: float) -> list[tuple[float, float]]:
+    """Where series `si` has drawn length inside [t0, t1) - the engine's cap-and-undraw sequence for one path, read
+    for presence only: the events in time order (a build_to before an undraw on the same instant, as the engine's
+    stable sort keeps them), the FIRST a build_to that caps the build beat, each later build_to past index 0 drawing
+    from its word, each undraw to index 0 of all its paths taking the series from its word."""
+    evs = []
+    for n, sp in enumerate(species):
+        kind, at = sp.get("kind"), sp.get("at")
+        if kind not in ("build_to", "undraw") or not isinstance(at, (int, float)):
+            continue
+        if _species_series(sp) not in (None, si) or (kind == "build_to" and not isinstance(sp.get("target"), dict)):
+            continue
+        evs.append((float(at), 0 if kind == "build_to" else 1, n, sp))
+    evs.sort(key=lambda e: e[:3])
+    on = True
+    if evs and evs[0][1] == 0:   # "the build beat is spent on the first cap" - whatever its `at`
+        on = int((evs[0][3].get("target") or {}).get("index") or 0) > 0
+        evs = evs[1:]
+    changes: list[tuple[float, bool]] = []
+    for at, is_undraw, _n, sp in evs:
+        idx = int((sp.get("target") or {}).get("index") or 0)
+        if not is_undraw and idx > 0:
+            changes.append((at, True))
+        elif is_undraw and idx <= 0 and (sp.get("paths") or "all") == "all":
+            changes.append((at, False))
+    return _on_stretches(on, changes, t0, t1)
+
+
+def _plot_window(s: dict) -> tuple[float, float] | None:
+    """(the axes stand, the plot leaves) for a ledger page with a plot - None for any other scene."""
+    page = ((s.get("world") or {}).get("page") or {})
+    if not _is_page(s) or not s.get("span") or page.get("builder") in NO_PLOT_BUILDERS:
+        return None
+    a, z = float(s["span"][0]), float(s["span"][1])
+    build = float(page.get("build_s") or LP_BUILD_S)
+    start = min(z, max(a, a + _page_land_offset(s) - build))
+    end = z if page.get("exit") == "cut" else z - sum(LP_RETRACT_S)
+    return (start, end) if end > start + EMPTY_PLOT_EPS_S else None
+
+
+def _chart_segments(s: dict, start: float, end: float, arap: bool) -> list[tuple[int, float, float]]:
+    """(state index, from, build start) per chart on screen, in order; each runs to the next one's `from` (or `end`). A
+    plain recast leaves its dur between the two - nothing stands on the plot there."""
+    states = [((s.get("world") or {}).get("page") or {})] + list((s.get("world") or {}).get("page_states") or [])
+    xs = sorted((x for x in s.get("species", []) if x.get("kind") == "chart_to" and isinstance(x.get("at"), (int, float))
+                 and start <= float(x["at"]) < end), key=lambda x: float(x["at"]))
+    segs: list[tuple[int, float, float]] = [(0, start, start)]
+    for x in xs:
+        at, verb = float(x["at"]), x.get("to")
+        k = max(0, min(len(states) - 1, int(x.get("state") or 0)))
+        if verb in STATELESS_VERBS:
+            continue
+        if verb in ONE_CLOCK_VERBS or x.get("keyed") or (verb == "morph" and arap):
+            segs.append((k, at, at))   # one clock, both charts painted: the plot never empties
+            continue
+        land = at + max(0.001, float(x.get("dur") or 1.0))   # the engine's own `sp.dur || 1`
+        segs.append((-1, at, at))      # the hand-over: the old ink leaves, the new has not arrived
+        segs.append((k, land, land))
+    return segs
+
+
+def _state_ink(s: dict, k: int, t0: float, t1: float) -> list[tuple[float, float]]:
+    """Ink of chart state `k` (0 = the page's own) over [t0, t1), its build having begun at t0."""
+    w = s.get("world") or {}
+    states = [w.get("page") or {}] + list(w.get("page_states") or [])
+    if not 0 <= k < len(states) or t1 <= t0:
+        return []   # the hand-over (k = -1) carries no chart
+    state = states[k] or {}
+    series, bars = state.get("series") or [], state.get("values") or []
+    ax = state.get("axes") or {}
+    # the engine's `hlines || [hline]`: drawn with the build (c / 0.25), and no undraw takes it
+    comparator = ax.get("hlines") or ([ax["hline"]] if isinstance(ax.get("hline"), dict) else [])
+    if state.get("builder") in LINE_INK_BUILDERS and series and not bars and not comparator:
+        return [iv for si in range(len(series)) for iv in _series_ink(s.get("species", []), si, t0, t1)]
+    return [(t0, t1)]
+
+
+def _mark_ink(s: dict, start: float, end: float) -> list[tuple[float, float]]:
+    """Each live MARK on the plot, clipped at the recast / morph / remake that takes the chart it marks."""
+    sp = s.get("species", [])
+    takes = sorted(float(x["at"]) for x in sp if x.get("kind") == "chart_to" and x.get("to") in REPLACING_VERBS
+                   and isinstance(x.get("at"), (int, float)))
+    out: list[tuple[float, float]] = []
+    for x in sp:
+        if x.get("kind") not in PLOT_INK_MARKS or not isinstance(x.get("at"), (int, float)):
+            continue
+        at = float(x["at"])
+        until, leave = x.get("until"), x.get("leave_at")
+        if x.get("kind") in PLOT_HELD_MARKS:
+            z = end
+        elif isinstance(until, (int, float)) and not isinstance(until, bool):
+            z = float(until)
+        elif isinstance(leave, (int, float)) and not isinstance(leave, bool):
+            z = float(leave) + float(x.get("leave_s") or 0.0)
+        else:
+            z = at + float(x.get("dur") or 0.0)
+        z = min([z] + [t for t in takes if t > at])
+        if z > at:
+            out.append((max(at, start), min(z, end)))
+    return out
+
+
+def _panels_ink(s: dict, start: float, end: float) -> list[tuple[float, float]]:
+    """A panels page has ink from its first panel's build: panel i on its own turn (`_panel_reveal_landings`' clock),
+    or - hidden on its turn - at the focus state that first shows it."""
+    page = ((s.get("world") or {}).get("page") or {})
+    focus = sorted((x for x in s.get("species", []) if x.get("kind") == PANEL_FOCUS
+                    and isinstance(x.get("at"), (int, float))), key=lambda x: float(x["at"]))
+    build = float(page.get("build_s") or LP_BUILD_S)
+    t0 = float(s["span"][0]) + _page_land_offset(s) - build
+    firsts: list[float] = []
+    for i in range(len(page.get("panels") or [])):
+        turn = t0 + i * build
+        if _panel_role(focus, i, turn) != "hidden":
+            firsts.append(turn)
+            continue
+        shown = next((float(x["at"]) for x in focus if float(x["at"]) > turn and _panel_role([x], i, float(x["at"])) != "hidden"), None)
+        if shown is not None:
+            firsts.append(shown)
+    first = max(start, min(firsts)) if firsts else end
+    return [(first, end)] if end > first else []
+
+
+def _page_ink(s: dict, start: float, end: float, arap: bool) -> list[tuple[float, float]]:
+    """Every stretch of [start, end) with ink on the plot - the chart states in turn, a panels page's panels, the marks."""
+    page = ((s.get("world") or {}).get("page") or {})
+    if page.get("builder") == "panels":
+        ink = _panels_ink(s, start, end)
+    else:
+        segs = _chart_segments(s, start, end, arap)
+        ink = []
+        for n, (k, frm, build_at) in enumerate(segs):
+            to = segs[n + 1][1] if n + 1 < len(segs) else end
+            ink += _state_ink(s, k, max(frm, build_at), min(to, end))
+    return ink + _mark_ink(s, start, end)
+
+
+def _empty_stretches(start: float, end: float, ink: list[tuple[float, float]]) -> list[tuple[float, float]]:
+    """(from, seconds) of [start, end) that no ink covers, each over EMPTY_PLOT_EPS_S."""
+    out: list[tuple[float, float]] = []
+    cur = start
+    for a, b in sorted((max(start, a), min(end, b)) for a, b in ink if b > a):
+        if a > cur + EMPTY_PLOT_EPS_S:
+            out.append((cur, round(a - cur, 2)))
+        cur = max(cur, b)
+    if end > cur + EMPTY_PLOT_EPS_S:
+        out.append((cur, round(end - cur, 2)))
+    return out
+
+
+def _empty_plots(scenes: list[dict], kinetics: dict | None = None) -> tuple[int, list[tuple[str, float, float, int]]]:
+    """(plot pages, [(scene_id, from, seconds, cards over it)]) - every stretch a ledger page's plot stands bare."""
+    arap = (kinetics or {}).get("arap_morph") is True   # the engine's `kin("arap_morph")`: off unless the timeline says so
+    pages, out = 0, []
+    for s in scenes:
+        win = _plot_window(s)
+        if win is None:
+            continue
+        pages += 1
+        spans = [x for x in (_dock_span(d) for d in s.get("docks", [])) if x]
+        for a, dur in _empty_stretches(*win, _page_ink(s, *win, arap)):
+            cards = sum(1 for p, q in spans if p < a + dur and q > a)
+            out.append((str(s.get("scene_id", "?")), round(a, 2), dur, cards))
+    return pages, out
+
+
+def _empty_plot_gate(scenes: list[dict], kinetics: dict | None = None) -> Gate | None:
+    """M47: a ledger page's plot standing with no ink WARNs past 1.5 s and FAILs past 4 s, each stretch named with its
+    scene, its seconds and the cards over it. No row on a build with no plot page (the M19-M24 shape)."""
+    pages, bare = _empty_plots(scenes, kinetics)
+    if not pages:
+        return None
+    say = lambda sid, a, d, n: (f"{sid} {d:.1f}s ({_mm(a)} -> {_mm(a + d)}"
+                                + (f", {n} card(s) over it)" if n else ")"))
+    fails = [b for b in bare if b[2] > EMPTY_PLOT_FAIL_S]
+    warns = [b for b in bare if EMPTY_PLOT_WARN_S < b[2] <= EMPTY_PLOT_FAIL_S]
+    head = f"{pages} plot page(s)"
+    if fails:
+        return Gate("M47", "FAIL", f"{len(fails)} EMPTY PLOT(S) past {EMPTY_PLOT_FAIL_S:.0f}s ({head}): "
+                    + "; ".join(say(*b) for b in fails[:6]) + (" ..." if len(fails) > 6 else "")
+                    + (f"; and {len(warns)} past {EMPTY_PLOT_WARN_S:.1f}s: " + "; ".join(say(*b) for b in warns[:6]) if warns else "")
+                    + " - axes with nothing drawn: draw a series on the page's landing (a first build_to off index 0), "
+                      "hand the chart over inside 1.5s, or cut to the next thing", SRC_M47)
+    if warns:
+        return Gate("M47", "WARN", f"{len(warns)} empty plot(s) past {EMPTY_PLOT_WARN_S:.1f}s ({head}): "
+                    + "; ".join(say(*b) for b in warns[:8]) + (" ..." if len(warns) > 8 else "")
+                    + " - the axes stand bare; draw sooner or shorten the hand-over", SRC_M47)
+    worst = max(bare, key=lambda b: b[2], default=None)
+    return Gate("M47", "PASS", f"every plot inked within {EMPTY_PLOT_WARN_S:.1f}s of its axes standing ({head}); "
+                + (f"longest empty {worst[2]:.1f}s: {worst[0]} at {_mm(worst[1])}" if worst else "longest empty 0.0s"),
+                SRC_M47)
 
 
 def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:
