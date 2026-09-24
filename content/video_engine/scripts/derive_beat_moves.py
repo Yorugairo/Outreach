@@ -16,7 +16,9 @@ writes the `moves` field into such a plan from THE SPECIES AND DOCKS THAT CUT AC
     the first word spoken over it, and named as carried. It was skipped until 2026-09-17, which is why
     the base still read the page's first title where the approved cut reads the retitle;
   * a dock whose `enter` falls inside its scene is a `dock` move naming the same asset id, with the
-    options the compiler admits (`build_scene_timeline_f.DOCK_OPTS`) copied and nothing else;
+    options the compiler admits (`build_scene_timeline_f.DOCK_OPTS`) copied and nothing else - never a
+    DERIVED pixel box (`place`, a prop's `moves`), but a prop's AUTHORED place and moves, from the
+    compiled dock's own record of them (`authored_place` / `authored_moves`, R26-298);
   * a record the cut left empty keeps NO `moves` key - a silent beat is the author's to fill, and
     `shapes.compile` names it in `why`.
 
@@ -53,6 +55,13 @@ SPECIES_OWN = ("kind", "at", "dur", "target")   # what the move schema carries b
 # "derived from the domain, not named" - its own validator refuses a row that names it.
 DERIVED_FIELDS = ("held", "id")
 DERIVED_BY_KIND = {("chart_to", "rescale"): ("state",)}
+# ... and on a compiled DOCK: its `place` is the PIXEL BOX the placer chose ({x, y, w, h} - build_scene_timeline_f
+# writes `{"place": place, "read_s": ..., "park_s": ...}` onto the entry), derived from the options. Since P69 T26d
+# (5c6871c) `place` is ALSO an authored option - a PROP's {x, y, w} in stage fractions - so the name alone no longer
+# tells the two apart, and the box copied back is a plan the compiler refuses ("place is a PROP's option"). A prop's
+# compiled `moves` are the same kind of thing (R26-298): whole canvas boxes in stage px (`prop_moves`), not the author's
+# fractions - copied back, the compiler reads them as fractions and refuses them as off the stage.
+DERIVED_DOCK_FIELDS = ("place", "moves")
 DOCK_SLIDE = "slide"    # the compiled dock's asset id field
 DOCK_ENTER = "enter"
 
@@ -127,10 +136,32 @@ def species_move(sp: dict, phrase: str) -> dict:
     return move
 
 
+def dock_option_fields() -> tuple:
+    """The options a derived `dock` move may carry: the compiler's own (`SH.dock_option_keys`), less the
+    lane (carried as `slot`) and less what the compiler DERIVES onto the compiled dock (`DERIVED_DOCK_FIELDS`)."""
+    return tuple(k for k in SH.dock_option_keys() if k != SH.MOVE_SLOT and k not in DERIVED_DOCK_FIELDS)
+
+
+def authored_dock_fields() -> dict:
+    """R26-298: `{compiled dock key: option}` - where the compiled dock records what the AUTHOR wrote for a derived
+    field (`build_scene_timeline_f.AUTHORED_PLACE_KEY` / `AUTHORED_MOVES_KEY`), read back as the option it was."""
+    C = SH.compiler()
+    return {C.AUTHORED_PLACE_KEY: "place", C.AUTHORED_MOVES_KEY: "moves"}
+
+
 def dock_move(dock: dict, phrase: str, allowed: tuple) -> dict:
     """One compiled dock as a `dock` move: the same asset, the same lane, and only the options the
-    compiler itself admits (the compiled `place` is DERIVED from them and is never copied back)."""
-    options = {k: dock[k] for k in allowed if k in dock}
+    compiler itself admits (the compiled `place` / `moves` are DERIVED and are never copied back; a prop's
+    AUTHORED place and moves are, from the compiled dock's record of them - R26-298)."""
+    C = SH.compiler()
+    # a PROP dock is compiled as `kind: prop` (dock_entry writes no `prop` flag), and every other prop option
+    # (`ink`, `place`, `rot`, `moves`) is refused without the flag - so the kind reads back as the flag it was.
+    options = {"prop": True} if dock.get("kind") == C.DOCK_KIND_PROP else {}
+    options.update({k: dock[k] for k in allowed if k in dock})
+    authored = {option: dock[key] for key, option in authored_dock_fields().items() if key in dock}
+    if "place" in authored:   # the row loop marks a placed prop `centre` (the place IS its box) - the compiler's, never the
+        options.pop("centre", None)   # author's: `dock_opts` refuses `place` beside `centre`
+    options.update(authored)
     if dock.get("slot") is not None:
         options[SH.MOVE_SLOT] = dock["slot"]
     move = {"kind": SH.MOVE_DOCK, "at_word": phrase, "asset": dock[DOCK_SLIDE]}
@@ -144,7 +175,7 @@ def derive(build: Path, timeline=None) -> tuple:
     plan = SH.load_plan(build / PLAN_NAME)
     ws = take_words(build)
     tl = json.loads((timeline or compiled_timeline(build)).read_text(encoding="utf-8"))
-    allowed = tuple(k for k in SH.dock_option_keys() if k != SH.MOVE_SLOT)
+    allowed = dock_option_fields()
     out = {}
     skipped = []
     carried = []

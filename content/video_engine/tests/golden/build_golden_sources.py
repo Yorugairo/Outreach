@@ -3432,6 +3432,85 @@ FRAME_T.update({
 })
 
 
+# ---- P69 T8b (E99 s104, amended twice): THE LEDGER PAGE DRAWS PANELS ---------------------------------------------------
+# Two pages, both put through the compiler's own doors (`validate_species`, then `derive_rescale_states`, which runs
+# `check_panels` and normalises every focus state) and stamped full-stage as a 16:9 row is:
+#   panels-two-eras   `ev-tnx-two-eras-v3` - the panels object the card's `chart_dock:panels` draws and no page could -
+#                     as a PAGE: two plots on ONE scale (E79), each with its sub, its axes, its value tag, the reference
+#                     rules named once on the panel with room; read once both panels have built on their own turns
+#   panels-quad-grow  four panels in a QUAD, then one `panel_focus` on a word: panel 2 grows to the page while 1, 3 and 4
+#                     recede (scaled back, dimmed, blurred) - read at the transition's midpoint (u 0.50), every box in
+#                     flight on the one clock
+PANELS_V3 = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-tnx-two-eras-v3.series.json"
+PANELS_GROW_AT, PANELS_GROW_DUR = 17.0, 1.2   # the four panels have built on their own turns by 4.4 + 4 x 3.0 = 16.4
+
+
+def _panels_four() -> dict:
+    """Four synthetic line charts - a SHAPE for the golden, not figures about the world."""
+    xs = [2016 + i / 4 for i in range(33)]
+
+    def pts(f):
+        return [[round(x, 2), round(f(i), 2)] for i, x in enumerate(xs)]
+    return {
+        "title": "Four gauges of one boom", "sub": "Synthetic panels for the golden surface; not figures about the world",
+        "src": "Synthetic series for the golden surface", "yunit": "%", "independent": True,
+        "xticks": [[2016, "2016"], [2018, "2018"], [2020, "2020"], [2022, "2022"], [2024, "2024"]],
+        "panels": [
+            {"sub": "Capex growth", "series": [{"name": "CAPEX", "label": "+38%", "color": "teal", "pts": pts(lambda i: 4 + 0.03 * i * i)}]},
+            {"sub": "Memory prices", "series": [{"name": "DRAM", "label": "+61%", "color": "crimson", "pts": pts(lambda i: 20 + 12 * ((i % 11) / 10) + i)}]},
+            {"sub": "Credit spreads", "series": [{"name": "IG OAS", "label": "0.9%", "color": "cobalt", "pts": pts(lambda i: 1.6 - 0.02 * i)}]},
+            {"sub": "Power demand", "series": [{"name": "GRID LOAD", "label": "+12%", "color": "amber", "pts": pts(lambda i: 2 + 0.3 * i)}]},
+        ],
+    }
+
+
+def _panels_page(series: dict, species: list, title: str) -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    page = BST.stamp_full_stage(LPG.build_spec(series, "line", None, "right"))
+    plate = "ledger:golden-panels:line"
+    errs = BST.validate_species(species, (0, 0, 0), plate)
+    assert not errs, errs
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    BST.derive_rescale_states(world, species, plate, REPO)
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline(title, scenes, {}, None), _base_uris()
+
+
+def panels_two_eras() -> tuple[dict, dict]:
+    return _panels_page(LPG.load_series(PANELS_V3), [], "Golden: the two-era panels page")
+
+
+def panels_quad_grow() -> tuple[dict, dict]:
+    grow = {"kind": "panel_focus", "at": PANELS_GROW_AT, "dur": PANELS_GROW_DUR, "layout": "row", "active": [1]}
+    return _panels_page(_panels_four(), [grow], "Golden: a quad, panel 2 growing while the rest recede")
+
+
+SURFACES.update({"panels-two-eras": panels_two_eras, "panels-quad-grow": panels_quad_grow})
+FRAME_T.update({
+    "panels-two-eras": 12.0,                                     # both panels built (4.4 + 2 x 3.0 = 10.4), the tags landed
+    "panels-quad-grow": PANELS_GROW_AT + PANELS_GROW_DUR * 0.5,  # u 0.50: panel 2 half grown, 1 / 3 / 4 half receded
+})
+
+
+# ---- P69 T8c (E99 s104, amended): A PANEL'S BOX CHANGES SHAPE, AND ITS CHART RE-LAYS OUT ----------------------------------
+#   panels-resize     the two-era page standing as ONE chart over the whole region (panel 2 hidden, the state it arrives
+#                     in), then on a word the row: panel 1 SHRINKS into its slot, its plot re-projected to the box's width
+#                     every frame with its words at their size, while panel 2 builds in beside it - read at u 0.50. The
+#                     timeline carries the leave too (panel 1 goes, the survivor GROWS back to the whole region)
+PANELS_RESIZE_AT, PANELS_RESIZE_DUR, PANELS_LEAVE_AT = 9.0, 1.2, 16.0   # panel 1 alone has built by 4.4 + 3.0 = 7.4
+
+
+def panels_resize() -> tuple[dict, dict]:
+    fs = [{"kind": "panel_focus", "at": 0.0, "dur": 0.05, "layout": "row", "active": [0], "hidden": [1]},
+          {"kind": "panel_focus", "at": PANELS_RESIZE_AT, "dur": PANELS_RESIZE_DUR, "layout": "row", "active": [0, 1]},
+          {"kind": "panel_focus", "at": PANELS_LEAVE_AT, "dur": PANELS_RESIZE_DUR, "layout": "row", "active": [1], "hidden": [0]}]
+    return _panels_page(LPG.load_series(PANELS_V3), fs, "Golden: one chart shrinks into its slot while the second builds in")
+
+
+SURFACES.update({"panels-resize": panels_resize})
+FRAME_T.update({"panels-resize": PANELS_RESIZE_AT + PANELS_RESIZE_DUR * 0.5})   # u 0.50: panel 1 half way to its slot
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

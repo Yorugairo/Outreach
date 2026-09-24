@@ -235,6 +235,7 @@ class LayeredScene:
             raise LayeredSceneError('scene_id must match the shared motion scene_id')
         self._channel_contracts = {channel.channel_id: channel for channel in self.timeline.channels}
         self.layers = self._parse_layers(raw.get('layers'))
+        self._projection_groups_by_start = self._parse_projection_groups(raw.get('projection_groups', []))
         self.camera = self._parse_camera(raw.get('camera'))
         self.view_envelope = raw.get('view_envelope_deg')
         if not isinstance(self.view_envelope, Mapping):
@@ -394,6 +395,44 @@ class LayeredScene:
                 layer['_static_shapes'] = layer['_shapes']
             parsed.append(layer)
         return tuple(parsed)
+
+    def _parse_projection_groups(self, value: Any) -> dict[int, int]:
+        if not isinstance(value, list) or len(value) > MAX_LAYERS:
+            raise LayeredSceneError('projection_groups must be an array within the layer limit')
+        by_id = {layer['layer_id']: index for index, layer in enumerate(self.layers)}
+        grouped: set[int] = set()
+        groups: dict[int, int] = {}
+        for group_index, raw in enumerate(value):
+            label = f'projection_groups[{group_index}]'
+            if not isinstance(raw, Mapping) or set(raw) != {'layer_ids', 'mode'}:
+                raise LayeredSceneError(f'{label} must declare only layer_ids and mode')
+            if raw.get('mode') != 'source_over_before_projection':
+                raise LayeredSceneError(f'{label}.mode must be source_over_before_projection')
+            layer_ids = raw.get('layer_ids')
+            if (not isinstance(layer_ids, list) or len(layer_ids) != 2
+                    or any(not isinstance(layer_id, str) for layer_id in layer_ids)
+                    or layer_ids[0] == layer_ids[1]):
+                raise LayeredSceneError(f'{label}.layer_ids must name exactly two distinct layers')
+            if any(layer_id not in by_id for layer_id in layer_ids):
+                raise LayeredSceneError(f'{label}.layer_ids must reference existing layers')
+            indices = [by_id[layer_id] for layer_id in layer_ids]
+            if indices[1] != indices[0] + 1:
+                raise LayeredSceneError(f'{label}.layer_ids must be contiguous in authored back-to-front order')
+            if any(index in grouped for index in indices):
+                raise LayeredSceneError(f'{label} cannot overlap another projection group')
+            back, front = (self.layers[index] for index in indices)
+            if back['kind'] != 'character' or front['kind'] != 'character':
+                raise LayeredSceneError(f'{label} may group only character raster layers')
+            if back['depth'] != front['depth']:
+                raise LayeredSceneError(f'{label} layers must have equal camera depth')
+            if back['_source_bounds'] != front['_source_bounds']:
+                raise LayeredSceneError(f'{label} layers must use the same source/world bounds')
+            if any(state.get('_raster_asset') is None
+                   for layer in (back, front) for state in layer['_pose_states']):
+                raise LayeredSceneError(f'{label} requires every character pose state to use a pinned raster asset')
+            grouped.update(indices)
+            groups[indices[0]] = indices[1] + 1
+        return groups
 
     def _require_channel(
         self,
@@ -757,6 +796,10 @@ class LayeredScene:
                 )
 
     def render(self, frame: int | Fraction, *, supersample: int = 2) -> LayeredRender:
+        output, state = self._render_rgba_frame(frame, supersample=supersample)
+        return LayeredRender(output.convert('RGB'), state)
+
+    def _render_rgba_frame(self, frame: int | Fraction, *, supersample: int = 2) -> tuple[Image.Image, LayeredFrameState]:
         if isinstance(supersample, bool) or not isinstance(supersample, int) or not 1 <= supersample <= 4:
             raise LayeredSceneError('supersample must be an integer in 1..4')
         if self.width * self.height * supersample * supersample > MAX_RASTER_PIXELS:
@@ -766,16 +809,57 @@ class LayeredScene:
         output = Image.new('RGBA', (self.width, self.height), _color(self.document.get('clear_color', '#00000000'), 'clear_color'))
         selected_by_id = state.selected_states
         anchor_by_id = state.anchors_px
-        for layer in self.layers:
-            components = self._layer_components(layer, selected_by_id.get(layer['layer_id']))
-            world_image = self._raster_layer(layer, components, anchor_by_id.get(layer['layer_id'], layer['_anchor_px']),
-                                             sample, supersample,
-                                             state.planar_pose if self.planar_rig is not None
-                                             and layer['layer_id'] == self.planar_rig.layer_id else None)
-            plane = self._plane_camera(state.camera, layer['depth'])
-            projected = _project_layer(world_image, layer['_source_bounds'], plane, self.width, self.height, supersample)
-            output.alpha_composite(projected)
-        return LayeredRender(output.convert('RGB'), state)
+        if not self._projection_groups_by_start:
+            for layer in self.layers:
+                components = self._layer_components(layer, selected_by_id.get(layer['layer_id']))
+                world_image = self._raster_layer(layer, components, anchor_by_id.get(layer['layer_id'], layer['_anchor_px']),
+                                                 sample, supersample,
+                                                 state.planar_pose if self.planar_rig is not None
+                                                 and layer['layer_id'] == self.planar_rig.layer_id else None)
+                plane = self._plane_camera(state.camera, layer['depth'])
+                projected = _project_layer(world_image, layer['_source_bounds'], plane, self.width, self.height, supersample)
+                output.alpha_composite(projected)
+        else:
+            index = 0
+            while index < len(self.layers):
+                group_end = self._projection_groups_by_start.get(index)
+                if group_end is None:
+                    layer = self.layers[index]
+                    components = self._layer_components(layer, selected_by_id.get(layer['layer_id']))
+                    world_image = self._raster_layer(
+                        layer, components, anchor_by_id.get(layer['layer_id'], layer['_anchor_px']), sample, supersample,
+                        state.planar_pose if self.planar_rig is not None
+                        and layer['layer_id'] == self.planar_rig.layer_id else None,
+                    )
+                    plane = self._plane_camera(state.camera, layer['depth'])
+                    projected = _project_layer(
+                        world_image, layer['_source_bounds'], plane, self.width, self.height, supersample,
+                    )
+                    output.alpha_composite(projected)
+                    index += 1
+                    continue
+
+                group = self.layers[index:group_end]
+                world_image = None
+                for layer in group:
+                    components = self._layer_components(layer, selected_by_id.get(layer['layer_id']))
+                    layer_image = self._raster_layer(
+                        layer, components, anchor_by_id.get(layer['layer_id'], layer['_anchor_px']), sample, supersample,
+                        state.planar_pose if self.planar_rig is not None
+                        and layer['layer_id'] == self.planar_rig.layer_id else None,
+                    )
+                    if world_image is None:
+                        world_image = layer_image
+                    else:
+                        world_image.alpha_composite(layer_image)
+                assert world_image is not None
+                plane = self._plane_camera(state.camera, group[0]['depth'])
+                projected = _project_layer(
+                    world_image, group[0]['_source_bounds'], plane, self.width, self.height, supersample,
+                )
+                output.alpha_composite(projected)
+                index = group_end
+        return output, state
 
     def _layer_shapes(
         self, layer: Mapping[str, Any], selected: Mapping[str, str] | None

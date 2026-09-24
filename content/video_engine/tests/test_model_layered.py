@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 from PIL import Image, ImageDraw
 
+from content.video_engine.src.modeling import layered as layered_engine
 from content.video_engine.src.modeling.layered import (
     DIAGNOSTIC_LABEL,
     LayeredScene,
@@ -30,6 +31,26 @@ def _fixture() -> dict:
 
 def _scene() -> LayeredScene:
     return LayeredScene.load(FIXTURE)
+
+
+def _projection_group_fixture(tmp_path: Path) -> tuple[dict, Path]:
+    document = _fixture()
+    asset_root = tmp_path / "projection-group-art"
+    for layer in document["layers"]:
+        if layer["layer_id"] not in {"fighter-a", "fighter-b"}:
+            continue
+        for index, pose in enumerate(layer["pose_states"]):
+            pose["raster_asset"] = _write_synthetic_art(
+                asset_root,
+                f"{layer['layer_id']}-pose-{index}.png",
+                (32 + index * 24, 160, 240 - index * 16, 160),
+                (1, 1, 6, 6),
+            )
+    document["projection_groups"] = [{
+        "layer_ids": ["fighter-a", "fighter-b"],
+        "mode": "source_over_before_projection",
+    }]
+    return document, asset_root
 
 
 def _write_synthetic_art(
@@ -137,6 +158,118 @@ def test_authored_fixture_uses_the_shared_rational_contact_clock() -> None:
     assert after_contact.events == ("head-recoil",)
     assert scene.evaluate(Fraction(85)).contacts == ("victim-on-mat",)
     assert contact.diagnostic_status == "review_only_diagnostic"
+
+
+def test_legacy_scene_without_projection_groups_keeps_its_captured_render_bytes() -> None:
+    scene = LayeredScene.load(FIXTURE)
+    expected = {
+        0: "ae258c240fdb196f8a97376102bdc7d82acb84b602a79e1c0f9104f043bc89ac",
+        27: "d139e97b5b063558ab110788001bb64f26a178bf10959840fa097f1c8b8e40ee",
+        54: "bc4c82ae599eb7731dcd4066aa4231d19f3eb117f748a629c1d050cc113fda25",
+    }
+
+    assert "projection_groups" not in scene.document
+    assert {
+        frame: hashlib.sha256(scene.render(Fraction(frame), supersample=1).image.tobytes()).hexdigest()
+        for frame in expected
+    } == expected
+
+
+def test_projection_group_composites_the_world_grid_before_one_camera_projection(tmp_path: Path, monkeypatch) -> None:
+    document, asset_root = _projection_group_fixture(tmp_path)
+    scene = LayeredScene(document, asset_root=asset_root)
+    frame = Fraction(27)
+    state = scene.evaluate(frame)
+    sample = scene.timeline.evaluate(state.frame)
+    first_index = next(index for index, layer in enumerate(scene.layers) if layer["layer_id"] == "fighter-a")
+    members = scene.layers[first_index:first_index + 2]
+    expected_world = None
+    for layer in members:
+        components = scene._layer_components(layer, state.selected_states.get(layer["layer_id"]))
+        raster = scene._raster_layer(
+            layer, components, state.anchors_px.get(layer["layer_id"], layer["_anchor_px"]), sample, 1,
+        )
+        if expected_world is None:
+            expected_world = raster
+        else:
+            expected_world.alpha_composite(raster)
+
+    calls = []
+    project = layered_engine._project_layer
+
+    def capture(source, bounds, camera, width, height, ss):
+        calls.append((source.copy(), bounds, camera))
+        return project(source, bounds, camera, width, height, ss)
+
+    monkeypatch.setattr(layered_engine, "_project_layer", capture)
+    scene.render(frame, supersample=1)
+
+    assert expected_world is not None
+    assert len(calls) == len(scene.layers) - 1
+    grouped_world, grouped_bounds, grouped_camera = calls[first_index]
+    assert grouped_world.tobytes() == expected_world.tobytes()
+    assert grouped_bounds == members[0]["_source_bounds"] == members[1]["_source_bounds"]
+    assert grouped_camera == scene._plane_camera(state.camera, members[0]["depth"])
+
+
+@pytest.mark.parametrize(
+    ("change", "message"),
+    [
+        (lambda doc: doc["projection_groups"][0].update(mode="project_before_composite"), "mode must be"),
+        (lambda doc: doc["projection_groups"][0].update(layer_ids=["fighter-b", "fighter-a"]), "contiguous"),
+        (lambda doc: doc["projection_groups"][0].update(layer_ids=["fighter-a", "near-ring-ropes"]), "contiguous"),
+        (lambda doc: doc["layers"][4].update(depth=1.3), "equal camera depth"),
+        (lambda doc: doc["layers"][4].update(source_bounds_px=[-71, -72, 432, 712]), "same source/world bounds"),
+    ],
+)
+def test_projection_group_rejects_invalid_mode_order_depth_and_source_grid(tmp_path: Path, change, message) -> None:
+    document, asset_root = _projection_group_fixture(tmp_path)
+    change(document)
+
+    with pytest.raises(LayeredSceneError, match=message):
+        LayeredScene(document, asset_root=asset_root)
+
+
+def test_projection_group_rejects_wrong_arity_overlaps_and_non_character_members(tmp_path: Path) -> None:
+    document, asset_root = _projection_group_fixture(tmp_path)
+    document["projection_groups"][0]["layer_ids"] = ["fighter-a"]
+    with pytest.raises(LayeredSceneError, match="exactly two distinct layers"):
+        LayeredScene(document, asset_root=asset_root)
+
+    document, asset_root = _projection_group_fixture(tmp_path)
+    document["projection_groups"] = [{
+        "layer_ids": ["arena-background", "canvas-mat"],
+        "mode": "source_over_before_projection",
+    }]
+    with pytest.raises(LayeredSceneError, match="only character raster layers"):
+        LayeredScene(document, asset_root=asset_root)
+
+
+def test_projection_group_rejects_overlapping_valid_character_pairs(tmp_path: Path) -> None:
+    document, asset_root = _projection_group_fixture(tmp_path)
+    third_fighter = copy.deepcopy(next(layer for layer in document["layers"] if layer["layer_id"] == "fighter-a"))
+    third_fighter["layer_id"] = "fighter-c"
+    document["layers"].insert(5, third_fighter)
+    document["projection_groups"] = [
+        {"layer_ids": ["fighter-a", "fighter-b"], "mode": "source_over_before_projection"},
+        {"layer_ids": ["fighter-b", "fighter-c"], "mode": "source_over_before_projection"},
+    ]
+
+    with pytest.raises(LayeredSceneError, match="cannot overlap another projection group"):
+        LayeredScene(document, asset_root=asset_root)
+
+
+def test_projection_group_render_is_deterministic_after_arbitrary_seeks(tmp_path: Path) -> None:
+    document, asset_root = _projection_group_fixture(tmp_path)
+    scene = LayeredScene(document, asset_root=asset_root)
+    requested = [Fraction(27), Fraction(0), Fraction(54), Fraction(50), Fraction(27)]
+    first = {frame: scene.render(frame, supersample=1).image.tobytes() for frame in requested}
+
+    for frame in (Fraction(12), Fraction(70), Fraction(1), Fraction(54), Fraction(12)):
+        scene.render(frame, supersample=1)
+
+    second = {frame: scene.render(frame, supersample=1).image.tobytes() for frame in requested}
+    assert first == second
 
 
 def test_pose_and_expression_swaps_are_evaluated_on_the_shared_clock() -> None:

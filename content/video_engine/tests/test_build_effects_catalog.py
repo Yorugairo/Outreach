@@ -405,8 +405,10 @@ def test_every_wired_card_is_in_a_recipe():
     # but no source-bound combination has earned a recipe yet. Keep the exception exact:
     # a newly uncomposed wired card still fails this test. P69 T26d's authored prop place and moves
     # (dock_option:place / dock_option:moves, 5c6871c) are tested alone in test_prop_free_placement.py; no committed
-    # beat plays them yet, so they wait here rather than in an invented recipe.
-    assert uncovered == ["dock_option:moves", "dock_option:place", "page_enter:surface", "plate_option:bar_style",
+    # beat plays them yet, so they wait here rather than in an invented recipe. P69 T8b's panel focus
+    # (page_species:panel_focus) is tested alone in test_ledger_panels.py until row 21 plays it.
+    assert uncovered == ["dock_option:moves", "dock_option:place", "page_enter:surface", "page_species:panel_focus",
+                         "plate_option:bar_style",
                          "plate_option:build", "plate_option:domain", "plate_option:readability",
                          "plate_option:room"], uncovered
     assert excluded == ["kinetics:arap", "kinetics:camera", "kinetics:chartxf", "kinetics:clothoid", "kinetics:contour",

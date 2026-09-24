@@ -111,11 +111,14 @@ BEAT_T_TOL = 0.05              # how near a beat's start a beat-plan record's `t
 # {(project, build): the sha256 of that build's compiled timeline, computed 2026-09-13}. The pair alone was a NAME:
 # a re-authored timeline in the same directory inherited the exemption. The sha ties it to the bytes the ruling was
 # about - re-author the cut and it is judged by the floors like anything else.
+# R26-296 (2026-09-23): the sha is of the LINE-ENDING-NORMALISED bytes (`timeline_sha256`, CRLF -> LF), i.e. of the
+# committed blob - the 2026-09-13 pins hashed the Windows CRLF working copies, so every LF checkout lost the
+# exemption. Same four timelines, re-pinned to the normalised hash of each one's committed bytes at 7369f12.
 PREDATES_E96 = {
-    ("japan-tariff-trick", "build-short"): "dbac920575b5f151907f441f47f93681324a0ed603d5f8122f0ad5475aadfd41",
-    ("tokyo-tea-break", "build-short.v2"): "fe3569ee7e99d912a1d136f055ec8581c3bfbad091219d8b02ba698df397ada5",
-    ("steel-and-paper", "build-f"): "0a9ba6d8bcc66365ec02d11c9d25d7abbe263465331f8c4d779f4d6d10b56492",
-    ("normal-for-which-bridge", "review-v1"): "a0d4c505a26ce49a12220af9e4ccdc66614cb9ea669706b3ad2f26567ae802d9",
+    ("japan-tariff-trick", "build-short"): "ad013549e8ca41328f24b0f891f6f816d77abc39c5d47c2652cd5e7c9e4805c8",
+    ("tokyo-tea-break", "build-short.v2"): "ba6e92bd037f717e540511b039e4cf7bb777ada51ae2bd8b0b6089d4fd970dc1",
+    ("steel-and-paper", "build-f"): "a1f01522902b1907def4eb2016a0a42267d93c82b17d0436169a58c76ce4bf86",
+    ("normal-for-which-bridge", "review-v1"): "99f80159f757c43242c8dd214592c639ee472ed96f6796854240c8a5f4529b59",
 }
 
 # The one QUOTED column (never measured here): `docs/agent-memory/operator/bravos-reference.md` carries 6.0
@@ -450,6 +453,12 @@ def measure(build: Path, project: Path | None = None, recipes: Sequence[Mapping[
         compositions=compositions, builds=builds)
 
 
+def timeline_sha256(path: Path) -> str:
+    """The sha256 of a timeline's bytes with CRLF normalised to LF (R26-296): a checkout's line endings are not
+    a re-authoring, so a CRLF working copy and the LF committed blob hash the same."""
+    return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
 def predates_e96(build: Path, timeline: Path | None = None) -> bool:
     """True for the four cuts HG1 (A) enumerates: the (project, build) pair AND the sha256 of the compiled timeline.
 
@@ -460,7 +469,7 @@ def predates_e96(build: Path, timeline: Path | None = None) -> bool:
         return False
     try:
         path = Path(timeline) if timeline is not None else timeline_path(Path(build))
-        return hashlib.sha256(path.read_bytes()).hexdigest() == said
+        return timeline_sha256(path) == said
     except (SystemExit, OSError):
         return False
 

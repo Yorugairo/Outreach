@@ -114,6 +114,9 @@ SHARE_SERIES = {
                {"label": "Mega-cap", "value": 18.0}, {"label": "The rest", "value": 12.0}],
     "total": 100,
 }
+# P69 T8b: `panels` is measured on the two-era object itself (a tracked evidence object, as `share` carries its own
+# series here) - the plain page, so the golden that pins the grown quad stays free to be a focus state
+PANELS_SERIES = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-tnx-two-eras-v3.series.json"
 # keys a page carries about how it ARRIVES, not about where its ink lands: stripped so every page is
 # measured on the same plain roll-out clock
 TRANSIENT = ("enter", "exit", "mount_s", "morph_s", "spiral_from", "snap_from")
@@ -145,7 +148,20 @@ READ_BOXES = r"""
      `ledger_page.page_boxes` promises its `plot` is, and what a card may never cover. */
   const chart = wB.querySelector('.lp-chart');
   let plot = null;
-  if (chart) {
+  /* P69 T8b: a PANELS page's plot is every panel's (each through its own screen CTM, widened over its sub and x ticks);
+     each panel's home box and plot ride the entry as `panels` */
+  const pplot = (S) => { const m = S.chart.getScreenCTM(), P = S.plot; if (!m || !P) return null;
+    const pt = (x, y) => [m.a * x + m.c * y + m.e - stg.x, m.b * x + m.d * y + m.f - stg.y];
+    const a = pt(P.L, P.T), b = pt(P.W - P.R, P.B);
+    let u = {x: Math.min(a[0], b[0]), y: Math.min(a[1], b[1]), w: Math.abs(b[0] - a[0]), h: Math.abs(b[1] - a[1])};
+    for (const mk of (S.marks || [])) { if (mk.role !== 'axislabel' && mk.role !== 'xtick') continue;
+      const r = mk.el ? R(mk.el) : null; if (r && (r.w >= 1 || r.h >= 1)) u = U(u, r); }
+    return u; };
+  if (st.panels) {
+    out.panels = st.panels.map((S) => ({box: R(S.box), plot: pplot(S)}));
+    for (const p of out.panels) plot = U(plot, p.plot);
+  }
+  if (chart && !st.panels) {
     const m = chart.getScreenCTM();
     if (st.plot && m) { const P = st.plot;
       const pt = (x, y) => [m.a * x + m.c * y + m.e - stg.x, m.b * x + m.d * y + m.f - stg.y];
@@ -164,8 +180,9 @@ READ_BOXES = r"""
   out.plot = plot;
   /* THE AXIS BANDS (E65). The x tick labels under the plot and the y tick column beside it: a card
      may partially overlap these - they are furniture, not the data - and may never overlap the data. */
+  const allMarks = st.panels ? st.panels.flatMap((S) => S.marks || []) : (st.marks || []);   /* P69 T8b: every panel's */
   const roleBox = (roles) => { let u = null;
-    for (const mk of (st.marks || [])) { if (!mk.el || roles.indexOf(mk.role) < 0) continue;
+    for (const mk of allMarks) { if (!mk.el || roles.indexOf(mk.role) < 0) continue;
       const r = R(mk.el); if (r.w >= 1 || r.h >= 1) u = U(u, r); } return u; };
   /* `tick` is the GRIDLINE (it spans the plot) - furniture the data is drawn over, never a band. */
   out.axis = {x: roleBox(['xtick', 'xlabel']), y: roleBox(['ylabel'])};
@@ -197,7 +214,7 @@ READ_BOXES = r"""
     return out2;
   };
   out.data = [];
-  if (chart) for (const el of chart.querySelectorAll(DATA)) for (const bx of dataBoxes(el)) out.data.push(bx);
+  for (const ch of (st.panels ? st.panels.map((S) => S.chart) : chart ? [chart] : [])) for (const el of ch.querySelectorAll(DATA)) for (const bx of dataBoxes(el)) out.data.push(bx);
   /* P69 T6d: each END TAG at its drawn rect (a line's terminal name, its chip with it), in the chart's order.
      REVIEW-P69-LANE-B-MERGE-4 MN3: a LINE's end tag only - the builder's `name` marks (dense-line, combo); a tier's name
      inside the plot and a rule's label are `text.sname` too, and are not end tags */
@@ -308,6 +325,8 @@ def representative(builder: str) -> dict:
     """The page spec this builder is measured on - pure, and the same one the tests rebuild."""
     if builder == "share":
         return LPG.build_spec(SHARE_SERIES, "share", 0, "right")
+    if builder == LPG.PANELS:
+        return LPG.build_spec(LPG.load_series(PANELS_SERIES), "line", None, "right")
     surface, state = GOLDEN_PAGES[builder]
     tl = json.loads((RB.SOURCES / f"{surface}.timeline.json").read_text(encoding="utf-8"))
     world = next(s["world"] for s in tl["scenes"] if (s.get("world") or {}).get("page"))
@@ -317,7 +336,7 @@ def representative(builder: str) -> dict:
     return _strip(page)
 
 
-BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share"}))
+BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS}))
 PROFILED = tuple(b for b in BUILDERS if b in LPG.READABILITY_BUILDERS[LPG.LONGFORM])   # N3: dense-line and story
 
 
@@ -424,8 +443,11 @@ def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: 
     if LPG.full_stage(page, aspect) and dom.get(LPG.TAG_BOXES_KEY):   # P69 T6d: a full-stage page's end tags, as drawn
         boxes[LPG.TAG_BOXES_KEY] = [_box(b) for b in dom[LPG.TAG_BOXES_KEY]]
     axis = {k: (_box(dom["axis"][k]) if (dom.get("axis") or {}).get(k) else None) for k in ("x", "y")}
-    return {"page": page, "boxes": boxes, "axis": axis,
-            "data_mask": data_mask(boxes["plot"], dom.get("data") or [])}
+    out = {"page": page, "boxes": boxes, "axis": axis,
+           "data_mask": data_mask(boxes["plot"], dom.get("data") or [])}
+    if dom.get(LPG.PANELS_KEY):   # P69 T8b: each panel's home box and plot, as drawn
+        out[LPG.PANELS_KEY] = [{k: _box(v) for k, v in p.items() if v} for p in dom[LPG.PANELS_KEY]]
+    return out
 
 
 def _silence() -> str:
@@ -453,6 +475,8 @@ def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bo
         out["full_stage"] = True
     if boxes.get(LPG.TAG_BOXES_KEY):   # MN3: the tags these rects were measured for (the data moves them; the ink does not)
         out[LPG.TAG_INK_KEY] = LPG.tag_ink(got["page"])
+    if got.get(LPG.PANELS_KEY):   # P69 T8b: a panels page's panels, beside its six boxes (the boxes stay the six)
+        out[LPG.PANELS_KEY] = got[LPG.PANELS_KEY]
     return out
 
 

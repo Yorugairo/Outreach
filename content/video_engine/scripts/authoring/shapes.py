@@ -182,6 +182,10 @@ CHART_TO_TO_STATE = ("recast", "morph", "remake")
 CHART_TO_DERIVED = ("rescale", "extend")
 CHART_TO_NO_STATE = ("park", "compare")
 CHART_TO_KINDS = CHART_TO_TO_STATE + CHART_TO_DERIVED + CHART_TO_NO_STATE
+# R26-293: the three families are the kit's own reading of the COMPILER's `CHART_TO_KINDS`, pinned equal to it
+# by test_authoring_shapes (`test_the_kits_chart_to_verbs_are_the_compilers_own`); `chart_to_error` asks the
+# compiler itself which verbs exist, and which moves are its PROP MORPHS (P69 T26e - `to: prop`, and a morph
+# `from: prop:<id>`), which leave the species list there and are never a chart state change.
 LINE_VARIANTS = ("line", "dense-line", "lines", "tiers")
 BARS_VARIANTS = ("bars", "signed-bars", "breakthrough")
 UNPARK_SCALE = 1.0               # CAPABILITIES.md:120 - a park to 1.0 is the UN-PARK: the chart re-takes the stage
@@ -358,14 +362,18 @@ def chart_to_error(sp: dict, plate: str, beat_n) -> str | None:
     A transform is a REFUSAL, never a silent no-op: a `to` the compiler does not know; a verb that
     travels to a page state on a plate declaring no `;then=` chain (or fewer states than the move
     asks for); a pair the page's own FORM does not admit (a morph is line to line, a remake is line
-    to bars); a derived verb with nothing to derive from; a `state` on a verb that has none.
+    to bars); a derived verb with nothing to derive from; a `state` on a verb that has none. A PROP
+    MORPH (`to: prop`, or a morph `from: prop:<id>`) is the compiler's too, read by `prop_morph_error`.
     """
     to = str(sp.get("to") or "")
     where = f"beat {beat_n}: the chart_to {to or '<unnamed>'} at {sp.get('at')}"
     if not str(plate).startswith("ledger:"):
         return f"{where} - only a LEDGER PAGE has chart states, and this row's world is {plate!r}"
-    if to not in CHART_TO_KINDS:
-        return f"{where} - `to` is not one of {'|'.join(CHART_TO_KINDS)} (the verbs the compiler knows)"
+    if compiler()._prop_morph_way({**sp, "kind": "chart_to"}) is not None:
+        return prop_morph_error(sp, where)
+    if to not in compiler().CHART_TO_KINDS:
+        return (f"{where} - `to` is not one of {'|'.join(compiler().CHART_TO_KINDS)} (the verbs the compiler knows), "
+                "nor a prop morph (`to: prop` with `prop: <id>`, or `to: morph` with `from: prop:<id>`)")
     states, here = states_of(plate), variant_of(page_of(plate))
     if to in CHART_TO_TO_STATE:
         k = sp.get("state")
@@ -394,6 +402,37 @@ def chart_to_error(sp: dict, plate: str, beat_n) -> str | None:
     if to == "compare" and not (sp.get("metric") or sp.get("comparator") or sp.get("form")):
         return (f"{where} - a compare names the quoted METRIC and the COMPARATOR it becomes (E76); a bare compare "
                 "melts nothing")
+    return None
+
+
+def prop_morph_error(sp: dict, where: str) -> str | None:
+    """Why the compiler would refuse this PROP MORPH (P69 T26e), in its own words - or None (R26-293).
+
+    Read with the compiler's own readers (`_prop_morph_way`, `morph_prop_id`, `prop_morph_id_error`,
+    `_prop_morph_mark`), never a copy of them: no `state`; a `from` that is `prop:<id>` (the morph in) or a
+    `prop` (the chart becoming one); a catalogued cutout; a mark the way admits. What needs the ROW - its
+    span, the prop dock standing at the word, a free dock slot - is the compiler's to check at compile.
+    """
+    c = compiler()
+    way = c._prop_morph_way({**sp, "kind": "chart_to"})
+    if "state" in sp:
+        return (f"{where} - a prop morph names no chart state: the prop becomes (or is made from) a MARK of the "
+                "state on screen; name the mark (`b:<i>`, `area`" + (", `page`" if way == "out" else "") + ")")
+    if way == "in":
+        pid = c.morph_prop_id(sp.get("from"))
+        if pid is None:
+            return f"{where} - from {sp.get('from')!r} is not `prop:<id>` - the prop the chart is made from"
+    else:
+        pid = sp.get("prop")
+        if not pid:
+            return f"{where} - name the prop the chart becomes - `prop: <id>`, one of the catalogued cutouts"
+    err = c.prop_morph_id_error(pid, where)
+    if err:
+        return err
+    try:
+        c._prop_morph_mark(way, sp.get("mark"), where)
+    except ValueError as exc:
+        return str(exc)
     return None
 
 

@@ -38,7 +38,19 @@ JAPAN = PROJECTS / "japan-tariff-trick/build-short"
 TOKYO = PROJECTS / "tokyo-tea-break/build-short.v2"
 STEEL = PROJECTS / "steel-and-paper/build-f"
 THIN = PROJECTS / "normal-for-which-bridge/review-v1"
-REGISTRY = ROOT / "docs/GATES-REGISTRY.jsonl"
+REGISTRY = ROOT / "docs/GATES-REGISTRY.jsonl"          # build output (docs_layers), gitignored
+EFFECTS_CATALOG = ROOT / FLOOR.CATALOG_REL              # build output (P63), gitignored: M38 reads it
+
+
+def require_input(path: Path) -> None:
+    """Skip, NAMING the path, when a gitignored input is absent from this checkout (R26-295).
+
+    A clean export carries neither build output, and a test that reads one would fail on the missing file
+    (or, for M38, measure 0.00 coverage against no catalogue) - a missing input, not a floor regression.
+    Present, the test runs and every assertion binds exactly as before."""
+    if not path.exists():
+        pytest.skip(f"gitignored input absent: {path.relative_to(ROOT).as_posix()} "
+                    "(build output - regenerate with build_docs_layers.py --write)")
 
 # `self_watch.parse_gate`'s own row pattern: a row this gate prints must parse there unchanged (T7 depends on it).
 ROW_RE = re.compile(r"^\s*\[(PASS |FAIL |WARN |INFO |JUDGE)\]\s*(\S+)\s*(.*)$")
@@ -301,6 +313,7 @@ def test_m42_is_always_info_whatever_the_rate(tmp_path: Path, scenes: list, beat
 
 
 def test_the_registry_records_m42_as_info_only_and_m40_as_judge_only() -> None:
+    require_input(REGISTRY)
     records = [json.loads(l) for l in REGISTRY.read_text(encoding="utf-8").splitlines() if l.strip()]
     floor = {r["id"]: r for r in records if r["family"] == "floor"}
     assert sorted(floor) == list(FLOOR.ROW_ORDER)
@@ -361,7 +374,7 @@ def test_the_predates_e96_set_is_the_four_cuts_pinned_to_their_timelines_sha256(
         directory = PROJECTS / project / build
         if not directory.is_dir() or not list(directory.glob("*.timeline.json")):
             pytest.skip(f"no compiled timeline in {directory} (the gitignored builds are not in this checkout)")
-        on_disk = hashlib.sha256(FLOOR.timeline_path(directory).read_bytes()).hexdigest()
+        on_disk = FLOOR.timeline_sha256(FLOOR.timeline_path(directory))
         assert on_disk == sha, f"{project}/{build} was re-authored - the exemption needs a ruling, not a rename"
 
 
@@ -376,6 +389,20 @@ def test_a_re_authored_timeline_in_the_same_dir_stops_predating(tmp_path: Path) 
     (copy_dir / "japan-short.timeline.json").write_text('{"scenes": []}', encoding="utf-8")
     assert not FLOOR.predates_e96(copy_dir)                   # re-authored in the same dir: no exemption
     assert not FLOOR.predates_e96(tmp_path / "build-short")   # no timeline to hash at all
+
+
+def test_the_pin_survives_a_checkouts_line_endings(tmp_path: Path) -> None:
+    """R26-296: the pin is of CRLF-normalised bytes, so an LF and a CRLF checkout of the same cut both predate E96."""
+    if not JAPAN.is_dir() or not list(JAPAN.glob("*.timeline.json")):
+        pytest.skip("no compiled timeline in the Japan build")
+    lf = FLOOR.timeline_path(JAPAN).read_bytes().replace(b"\r\n", b"\n")
+    for label, data in (("lf", lf), ("crlf", lf.replace(b"\n", b"\r\n"))):
+        copy_dir = tmp_path / label / "japan-tariff-trick/build-short"
+        copy_dir.mkdir(parents=True)
+        (copy_dir / "japan-short.timeline.json").write_bytes(data)
+        assert FLOOR.predates_e96(copy_dir), label
+    assert FLOOR.timeline_sha256(tmp_path / "lf/japan-tariff-trick/build-short/japan-short.timeline.json") == \
+        hashlib.sha256(lf).hexdigest()
 
 
 def test_only_m35_and_m36_go_info_on_a_predating_build(tmp_path: Path) -> None:
@@ -409,6 +436,7 @@ def test_japan_the_reference_reproduces_t2s_measures() -> None:
 
 
 def test_japans_m38_row_carries_the_threshold_and_its_own_measured_coverage() -> None:
+    require_input(EFFECTS_CATALOG)   # absent, no recipe is proven: coverage 0.00 and the interim WARN
     r = floor_rows(JAPAN)
     assert r["M38"].level in ("PASS", "FAIL")                 # the number moves while T8 re-members three proofs
     assert "the floor is 0.60" in r["M38"].message
