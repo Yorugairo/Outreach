@@ -7,14 +7,24 @@ risk: standard
 owner: parent
 branch: codex/Astra
 created: 2026-09-20
-updated: 2026-09-20
+updated: 2026-09-24
 ---
 
 ## Summary
 Build five private-review variations from the existing V12 short: Saitama, Roshi, detailed 2D, deliberately stylized actual 3D, and minimalist 2D.
 
+## Operator priority pivot — 2026-09-24, exchange first
+
+The five full remakes remain a longer-term goal, but the next two-day target is the **source-timed fight exchange**, not five full re-edits. The operator explicitly selected "fight exchange first" and accepted footage-backed still overlays, source-image tracking, or photo-derived looks on a rig as a valid near-term path. This supersedes the earlier "full animated styles must replace scenes, not be filters over footage" rule **for this exchange-first proof only**; it does not make a posterization filter or an untracked static jump cut an accepted animated remake.
+
+Use the real Sharaf–Steveson source as the 105-frame/30 fps action, contact, recoil, ground, and audio clock. Preserve V12 and all raw sources. First produce a reusable review-only exchange recipe and at least two genuinely distinct, playable look proofs at the source timing: one 2D/anime-footage composite and one characterized blocky/big-head 3D or 2.5D look. Existing Saitama overlay is the baseline to beat, not a new deliverable. If the blocky look cannot retain recognizable fighters or convincing contact within the two-day window, show a measured failure and ship the successful exchange proof rather than labeling a rough rig final art. Full scenes, interviews, booth, octagon, and five complete shorts are not the two-day gate.
+
+Near-term effect selection from `docs/research/motion/ANIME_AURAS_NARUTO_TRANSITIONS_RESEARCH_BLUEPRINT.md`: pose-matched transformation flash/aura before the strike; directional speed/energy accents during acceleration; a contact-anchored single-frame flash/ink burst; brief visual impact punctuation and recoil accents **without slowing or warping the source audio**. These are candidates until rendered and visually reviewed; numerical anime/impact constants in the research are not production truth. Do not stack all effects merely because they are available. Larger environment shockwaves, volumetric auras, multi-angle view-dependent wraps, and full simulated fights stay experimental.
+
+Mechanics gate: a fast linear jab and a stronger pivot-driven hook must read differently. At contact the fist does not tunnel, stick to the target, or push deeper; the striking hand returns toward guard while the opponent reacts and the next-hand/head/foot transitions overlap naturally. The visually floating foot in a generated still is an art failure even if the underlying rig's sole metric passes. Source-clock contact and ground landmarks, likeness at phone size, audio continuity, full MP4 decode, and parent visual review are required. No provider spending or publication is implied.
+
 ## Intent And Acceptance
-User said proceed after selecting more characterized 3D models and a fifth minimalist 2D version. Preserve clear contact/recoil/full follow-through, original allegation attribution/no-charge wording, continuous balanced music, and original-pitch source sound. Full animated styles must replace scenes, not be filters over footage. First checkpoint is genuine motion proofs, not another static concept board.
+User said proceed after selecting more characterized 3D models and a fifth minimalist 2D version. Preserve clear contact/recoil/full follow-through, original allegation attribution/no-charge wording, continuous balanced music, and original-pitch source sound. For the eventual five full remakes, animated styles must replace scenes, not be filters over footage; the exchange-first pivot above explicitly permits source-footage composites as its near-term proof. First checkpoint is genuine motion proofs, not another static concept board.
 
 ## Scope
 Project-local asset generation, model and animation authoring, audio reactions and assembly. New outputs under production/animated-variants. Preserve V12.

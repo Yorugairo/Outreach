@@ -350,12 +350,12 @@ Every operator ruling that asks for something to be BUILT names its carrier here
 | s94 | row 22 on the script's basis; a drawn figure names its basis | T30 |
 | s95 | the fives cite s95 | T27, T31 |
 | s98 | blur under a dock | T40 (+ T8b's receded panels) |
-| s99 | a light that travels / blinks is motion; the freeze beat | T36, T42, T49, T75 (the ring that travels), T77 (a blinking glow) |
+| s99 | a light that travels / blinks is motion; the freeze beat | T36 (done), T42, T49 (done), T75 (the ring that travels), T77 (a blinking glow) |
 | s100 / s109 (5) | area forms; E53 as defaults | T50, T44 (the iceberg), T51 (the fill gauge), T64 (the stacked bar of values) |
 | s101 | the membership stack | T45 |
 | s102 | a second / inverted axis | T43b, T64 (the combo's line on its own labelled scale) |
 | s103 | H-3 keeps its certificate (no re-roll) | `host/HOST-NOTES-H.md` |
-| s104 (+ amendments) | panels, four panels, composable focus; row 21 on them; a panel arrives by resize | T8b (done), T8c, T29, T52 (companion bars as a panel), T54 (the inset echo), T60 (two verdict panels) |
+| s104 (+ amendments) | panels, four panels, composable focus; row 21 on them; a panel arrives by resize; bars panels | T8b (done), T8c (done), T8d (done), T8e (done), T29 (done), T52 (companion bars as a panel), T54 (the inset echo), T60 (two verdict panels) |
 | s105 (+ amendment) | a recast / a story-moving transform resets M03 | T26c, T26c2 (done in lane B) |
 | s106 | props placed and moved freely; the fit advises | T26d (done), T59 (the balance's loads), T69 (the rig's prop) |
 | s107 | prop <-> page / chart morphs | T26e (done; follow-ups R26-292, R26-293) |
@@ -365,6 +365,10 @@ Every operator ruling that asks for something to be BUILT names its carrier here
 | s110 (1) | a stack of values is valid under s109's tests; its home case is the stacked-bar-plus-line COMBO, each scale labelled per s102 | T64 (+ T50's honesty check) |
 | s110 (2) | a ring may circle a picture, a card or a prop the sentence points at, its number beside it (E56 narrowed, not lifted) | T65 |
 | s111 | the broken cross-era axis when the claim is the LEVEL (one y unit, both eras labelled, the break drawn); the rebased overlay stays for a SHAPE claim | T66 |
+| s112 | the stamp is punctuation: it lands just after the word / datum / idea it names | T81 (engine: the word-end anchor + the advice), T82 (every H stamp re-timed) |
+| s113 | text on a plate is allowed when intentional, narrative-driven, verified | T83 (the railway-share certificate plate), R26-305 (the prompt guides) |
+| s114 | "up to" is an animation cue, kept in the source note | T29b (row 21's consumer bar meets its ceiling) |
+| s115 | NVDA's share researched, the larger claim editorial on sourced parts; the railway-GDP series | R26-306 (the research order) |
 
 **Harvest coverage** (added 2026-09-23; the operator: "yes, add all of the bravos slices"): every MISSING/PARTIAL harvest item is carried by T36-T50 / T51-T80 (or by T8-T10, T8b, T26a, T43b, T45 where they already name it) or listed as skipped below. Carriers by harvest id (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`):
 - TYPE: T1 T44; T3 T45; T7 T46; T8 T62; T9 T47; T10 T48 (the honest donut; the decor use is skipped); T14 T43b; T21 T43; T23 T41; T24 T58; T26 T60; T27 T59; T29 T50 + T64; T30 T48; T31 T57; T32 T55; T33 T63; T34 T51; T35 T66 (s111); T38 T56; T39 T52; T40 T54; T46 T62.
@@ -598,6 +602,47 @@ verbatim tails and are left pending.
 - Expected RED: a single standing panel's plot spans only its slot; mid-resize the plot width does not interpolate
 - Validate: T8b's Validate list + `test_authoring_*`, `test_build_effects_catalog.py`
 - Frame acceptance: the parent reads the resize-in, the leave and the quad-grow sheets
+- Evidence: pending
+
+### T8d: A panels page carries BARS panels, and a bar may carry a RANGE (E99 s104 amended x2; row 21's four charts)
+- Status: done (lane B 91477ae; the parent read the mixed quad, the bars grow and the range bar)
+- Owner: implementation_luna
+- Depends on: T8b, T8c; lane B
+- Write set: `content/video_engine/scripts/ledger_page.py` (a panel `builder`: line | bars; a bar value `[lo, hi]`), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (`buildLedgerPanels` calls `buildLedgerBars` for a bars panel; the range band), `content/video_engine/scripts/build_scene_timeline_f.py` (validation), `content/video_engine/scripts/measure_page_boxes.py`, tests, goldens, the fixture, the panel_focus card
+- Acceptance: row 21 carries four charts, two of them bars (the wafer ratio, `ev-dram-contract-v1`), which T8b's line-only panels refused. (1) A panel may be bars (the bars rules kept: <=196 px, a value on its bar, units with their space); panel_focus and the T8c resize work for it; species take `panel: <i>` (the refused ones named). (2) A bar value may be a RANGE `[lo, hi]` drawn to lo with a lighter band to hi and printed as the source states it ("+55-60%"), never a midpoint (the row-21 agent found `ev-dram-contract-v1` would print 57.5 - a number no source states). (3) Byte-identical for every existing page; goldens: a mixed 2-line + 2-bars quad at a grow midpoint, and a range bar
+- Regression: `python -m pytest content/video_engine/tests/test_ledger_panels.py -q`
+- Expected RED: a bars panel is refused ("has no line series"); a range value is refused
+- Evidence: pending
+
+### T8e: The panels fixes row 21 found - the row path's `id`, a panels page measured in its first focus, M03 credits a panel's first reveal, the key rail follows focus, a panel's labels are chrome
+- Status: done (lane B eb58794; merged into lane A 953189d; row 21 compiles on the plain door)
+- Owner: implementation_luna
+- Depends on: T8b, T8c, T8d, T29 (found them); lane B
+- Acceptance: (1) panel_focus (and held lit_stretch / freeze / member) pass the row path's `id` / `held` (ROW_PATH_KEYS); (2) a panels page is measured in its first focus state (timeline_focus); (3) M03 credits a panel first revealed active (_panel_reveal_landings, E99 s105's panels form); (4) the key rail follows focus; (5) a panel's sub and ticks are chrome (`sub@<i>`, `yticks@<i>`, `xticks@<i>`) so `chrome: fit` keeps them whole
+- Evidence: lane B eb58794 (ledger_panels 77, page_boxes 83, gate_motion_density 172, page_chrome_moves 45; the parent read camera 4's labels whole and the key leaving over the bars)
+
+### T81: The stamp lands just after the thing it names - a word-END anchor and the advice (E99 s112)
+- Status: pending (lane B)
+- Owner: implementation_luna
+- Depends on: T2-T5 (the stamp); lane B
+- Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (a stamp's `at` may name a word's END - e.g. `at: {"after": "racks"}` or an `after_word` anchor - resolved from the take's word timings; a WARN with numbers when a stamp's landing falls inside its own word or within ~0.15 s of a data mark it illustrates), the gate if it reads stamp timing, tests
+- Acceptance: s112: the stamp is punctuation - it lands just AFTER the word / datum / motion it names, never on the same instant, never mid-word; the author may anchor it to the word's end or the idea's end; the engine advises, never refuses (s106); byte-identical for rows that name no anchor
+- Regression: `python -m pytest content/video_engine/tests/test_the_stamp_arrival.py -q`
+- Evidence: pending
+
+### T82: Every Steel and Paper H stamp re-timed to its word's end or its idea's end (E99 s112)
+- Status: pending (lane A, after T81)
+- Owner: implementation_luna
+- Depends on: T81
+- Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
+- Acceptance: every stamped prop in H (the Fed, the data centre, PROP 3, the GPU, the die, the wafer, the rack, the phone, the DRAM module, and later rows') lands just after its word ends or at the end of the idea the sentence carries, read on the frame; the gate stays at 2 FAIL (M11, M31) / 5 WARN or better
+- Evidence: pending
+
+### T83: The railway-share certificate plate (E99 s113) for row 18 (the H-3 host window)
+- Status: pending
+- Owner: parent (the image claim) + implementation_luna (the row)
+- Depends on: the image claim flow (open_claim -> the generator; GPT Image 2.5 leads)
+- Acceptance: a new plate of the railway share certificate with "RAILWAY SHARE" legible and spelled exactly (s113: intentional, narrative-driven, verified; no garbled text), in the H-3 host window's style; approved out of quarantine by the operator; row 18 rebuilt on it with the -64% ring kept (s110)
 - Evidence: pending
 
 ### T9: s90 (b) - the three layout fixes the side-by-side found (lane B)
@@ -917,7 +962,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T29: Row 21 (9:04-10:18) - SK hynix: camera 4, PROPS 4 and 5, the wafer compare
-- Status: pending
+- Status: done (row 21 - BUILD-NOTES-H 20: four charts on one panels page - the hynix line, the wafer bars, the DRAM contract bars with the +55-60% RANGE, the line returning - each arriving beside then growing on its sentence; props 4/5 stamped, camera 4 with chrome fit, the freeze on "that number", T6's compare, the three questions as the agenda departure; plain door after T8e; gate 2 FAIL (M11, M31) / 5 WARN unchanged); HG4 open
 - Owner: implementation_luna
 - Depends on: T28, P69-HG2
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
@@ -1005,7 +1050,7 @@ verbatim tails and are left pending.
 
 
 ### T36: `lit_stretch` - a light that TRAVELS along a stretch of a line on its word (E99 s99)
-- Status: pending
+- Status: done (lane B 104af07; the parent read the fall lit peak to trough, and a light on panel 2)
 - Owner: implementation_luna
 - Depends on: T10c; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1184,7 +1229,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T49: The freeze beat - everything stops and one light comes on (E99 s99)
-- Status: pending
+- Status: done (lane B 187604a; the parent read the held frames and the one light at the trough)
 - Owner: implementation_luna (LANE B)
 - Depends on: T36 (the light); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the species; `effects/cards/species.json:206` names `beat_freeze` unbuilt), `content/video_engine/scripts/build_scene_timeline_f.py`, `content/video_engine/scripts/gate_motion_density.py` (the beat is punctuation, not stillness), `content/video_engine/tests/test_freeze_beat.py` (new), one golden
