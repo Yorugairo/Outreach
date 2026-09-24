@@ -355,6 +355,48 @@
    }
   },
   {
+   "slot": "page enter 21 (axes)",
+   "at": 533.8,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   }
+  },
+  {
+   "slot": "landing 21 (stamp, ink)",
+   "at": 539.46,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 539.50s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 21 (stamp, ink)",
+   "at": 558.67,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 558.71s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 21 (stamp, ink)",
+   "at": 586.32,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 586.36s, the cue one frame early (the weight report Q5)"
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0073,

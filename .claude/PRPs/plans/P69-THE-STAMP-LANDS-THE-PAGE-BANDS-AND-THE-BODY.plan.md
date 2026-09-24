@@ -355,7 +355,7 @@ Every operator ruling that asks for something to be BUILT names its carrier here
 | s101 | the membership stack | T45 |
 | s102 | a second / inverted axis | T43b, T64 (the combo's line on its own labelled scale) |
 | s103 | H-3 keeps its certificate (no re-roll) | `host/HOST-NOTES-H.md` |
-| s104 (+ amendments) | panels, four panels, composable focus; row 21 on them; a panel arrives by resize; bars panels | T8b (done), T8c (done), T8d, T29, T52 (companion bars as a panel), T54 (the inset echo), T60 (two verdict panels) |
+| s104 (+ amendments) | panels, four panels, composable focus; row 21 on them; a panel arrives by resize; bars panels | T8b (done), T8c (done), T8d (done), T8e (done), T29 (done), T52 (companion bars as a panel), T54 (the inset echo), T60 (two verdict panels) |
 | s105 (+ amendment) | a recast / a story-moving transform resets M03 | T26c, T26c2 (done in lane B) |
 | s106 | props placed and moved freely; the fit advises | T26d (done), T59 (the balance's loads), T69 (the rig's prop) |
 | s107 | prop <-> page / chart morphs | T26e (done; follow-ups R26-292, R26-293) |
@@ -609,6 +609,13 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_ledger_panels.py -q`
 - Expected RED: a bars panel is refused ("has no line series"); a range value is refused
 - Evidence: pending
+
+### T8e: The panels fixes row 21 found - the row path's `id`, a panels page measured in its first focus, M03 credits a panel's first reveal, the key rail follows focus, a panel's labels are chrome
+- Status: done (lane B eb58794; merged into lane A 953189d; row 21 compiles on the plain door)
+- Owner: implementation_luna
+- Depends on: T8b, T8c, T8d, T29 (found them); lane B
+- Acceptance: (1) panel_focus (and held lit_stretch / freeze / member) pass the row path's `id` / `held` (ROW_PATH_KEYS); (2) a panels page is measured in its first focus state (timeline_focus); (3) M03 credits a panel first revealed active (_panel_reveal_landings, E99 s105's panels form); (4) the key rail follows focus; (5) a panel's sub and ticks are chrome (`sub@<i>`, `yticks@<i>`, `xticks@<i>`) so `chrome: fit` keeps them whole
+- Evidence: lane B eb58794 (ledger_panels 77, page_boxes 83, gate_motion_density 172, page_chrome_moves 45; the parent read camera 4's labels whole and the key leaving over the bars)
 
 ### T9: s90 (b) - the three layout fixes the side-by-side found (lane B)
 - Status: done (lane B 0df626a; review fixes 5ddc035)
@@ -927,7 +934,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T29: Row 21 (9:04-10:18) - SK hynix: camera 4, PROPS 4 and 5, the wafer compare
-- Status: pending - unblocked by T8d (bars panels + range); the design at SP/p69-row21/row21-design.md
+- Status: done (row 21 - BUILD-NOTES-H 20: four charts on one panels page - the hynix line, the wafer bars, the DRAM contract bars with the +55-60% RANGE, the line returning - each arriving beside then growing on its sentence; props 4/5 stamped, camera 4 with chrome fit, the freeze on "that number", T6's compare, the three questions as the agenda departure; plain door after T8e; gate 2 FAIL (M11, M31) / 5 WARN unchanged); HG4 open
 - Owner: implementation_luna
 - Depends on: T28, P69-HG2
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
