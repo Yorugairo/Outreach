@@ -124,6 +124,9 @@ FRAME_T["verdict-stack-9x16"] = 13.6   # P61 T7 - THE MOSAIC on a short: proofs 
 FRAME_T["test-card"] = 11.4       # tRel = t - enter(2.0) - CARD_IN * 0.6 = 8.95: rows 1-2 (delays 1.0 / 4.0) fully typed and both answers swept;
                                   # row 3 (delay 7.0) typed (17 chars x 0.045 s), its where-cell in (+0.6), its left answer swept (+1.0 + 0.55),
                                   # its right answer fully faded in (+1.6 + 0.35) with the marker 0.64 of the way through its sweep
+FRAME_T["test-card-phone"] = 10.65   # P69 T28b: tRel 8.2 on the same clock - rows 1-2 typed and both answers swept; row 3
+                                  # (delay 7.0) typed (9 chars x 0.045 s), its steel answer swept (+0.6 + 0.55) and its paper
+                                  # answer 0.2 s in (+1.0): 0.57 faded in, the marker 0.74 of the way through its sweep
 
 
 def png_solid(w: int, h: int, rgb: tuple[int, int, int]) -> bytes:
@@ -1684,6 +1687,46 @@ def test_card() -> tuple[dict, dict]:
     return _timeline("Golden: the test card", scenes, evidence, None), uris
 
 
+# P69 T28b / R26-300: THE TEST CARD THAT READS ON A PHONE - row 20's card, at the right 0.60 of the stage so the host
+# stays visible at left, on the checklist's `profile: "phone"` (species/checklist.mjs CHECKLIST_PROFILES.phone).
+PHONE_CARD = {"centre_w": 0.60, "centre_x": 0.68, "centre_y": 0.46}   # the right ~60 % (1152 px), clear of the caption
+PHONE_CARD_ASPECT = 480 / 1056                                       # the chart dock's own canvas, unchanged by the profile
+# THE WIDTH BUDGET at the floor (MEASURED, Segoe UI 600 at the profile's 58 px): the canvas' usable span is 1000 px, the
+# three columns' air 108, so a row's three LONGEST cells (one per column) share 892 px, about 30 characters - these fit
+# unsqueezed (233 + 274 + 351 = 858). Row 20's full questions do not: "3  Used tomorrow?" alone is 484 px, and the
+# answers beside it would squeeze to 0.64 (the question column types, so it never squeezes - FIT_KEEP_Q).
+PHONE_CHECKLIST = {"profile": "phone", "head": ["Ask", "Steel", "Paper"],
+                   "rows": [{"cells": ["1  Scarce?", "sold out", "on belief"], "delay": 1.0},
+                            {"cells": ["2  Cash?", "earns cash", "issues paper"], "delay": 4.0},
+                            {"cells": ["3  Lasts?", "still used", "needs a story"], "delay": 7.0}]}
+
+
+def test_card_phone(plate_uri: str | None = None) -> tuple[dict, dict]:
+    """P69 T28b - the test card on the checklist's PHONE profile: a head of three (the question and its two answers - the
+    chips already said where to look), three rows of short cells, no sub (the title carries it, as the T10c card
+    profile), docked at the right 0.60 of the stage. The profile sets the type (cells and head at the long-form phone
+    floor as displayed), the row pitch and the highlighter band together, and fills the canvas: row 1 at PT + 130,
+    pitch 90, the last row's baseline in the canvas' lower third. Judged MID-FILL (FRAME_T): rows 1-2 swept, row 3 typed,
+    its steel answer swept and its paper answer mid-sweep. `plate_uri` swaps the plain plate for a real one (the
+    test-bed frame read on row 20's desk); the golden is the plain plate."""
+    import build_scene_timeline_f as BST
+    card = "ev-golden-test-card-phone"
+    chart = {"title": "The test - 30 seconds a holding", "src": "golden - the three-question test",
+             "checklist": json.loads(json.dumps(PHONE_CHECKLIST))}   # the compiler's check: test_checklist_phone_profile.py
+    evidence = {card: {"title": "THE TEST", "source": "golden", "species": "chart",
+                       "document": {"path": "golden", "sha256": "0" * 64}, "badges": [], "chart": chart}}
+    place = BST.centred_place(None, None, PHONE_CARD_ASPECT, None, PHONE_CARD["centre_w"], None,
+                              PHONE_CARD["centre_y"], PHONE_CARD["centre_x"])
+    docks = [BST.dock_entry(card, 0, 2.0, RUNTIME, 0, BST.DOCK_KIND_IMAGE, place, None, None, True)]
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": []}]
+    uris = _base_uris()
+    if plate_uri:
+        uris["plate-plain"] = plate_uri
+    uris[card] = uri("image/png", png_solid(64, 29, (22, 24, 28)))
+    return _timeline("Golden: the test card on a phone", scenes, evidence, None), uris
+
+
 SURFACES = {
     "ledger-page-mid-build": ledger_page_mid_build,
     "chart-callout": chart_callout,
@@ -1732,6 +1775,9 @@ SURFACES.update({   # P52 T6: the newsreel band and the two readings of the bott
 SURFACES.update({   # P55 T6: the two inline dock painters, pinned before T7 promotes them
     "verdict-stack": verdict_stack,
     "test-card": test_card,
+})
+SURFACES.update({   # P69 T28b / R26-300: the test card on the checklist's phone profile, at the right 0.60 of the stage
+    "test-card-phone": test_card_phone,
 })
 SURFACES.update({   # P61 T7 / R26-82: the same five phases on a SHORT - the mosaic is the base frame, the rest ride PROOF_FRAMES
     "verdict-stack-9x16": verdict_stack_9x16,
