@@ -101,7 +101,7 @@
       "when": "the sentence walks a PROCEDURE (a question, its answer) - rows land keyed to the narration",
       "when_source": "docs/content-video-engine/CAPABILITIES.md:189",
       "author": {
-        "key": "`checklist: {head: [...], rows: [{cells: [...], colors?}]}` in the dock asset's .series.json",
+        "key": "`checklist: {head: [...], rows: [{cells: [...], colors?}], profile?: \"phone\"}` in the dock asset's .series.json",
         "example": "(\"ev-test-scorecard-v1\",0,492.3,543.0)",
         "example_source": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:114",
         "check": "chart"
@@ -151,7 +151,8 @@
             "skewX_deg": "-7",
             "band_h_px": "30",
             "band_opacity": "0.28 (a K-M ink layer when kinetics km_ink)",
-            "default_cell_colours": "[\"#f4f6f8\", \"#dce3ea\", \"#3bc9b0\", \"#ff8a8c\"]"
+            "default_cell_colours": "[\"#f4f6f8\", \"#dce3ea\", \"#3bc9b0\", \"#ff8a8c\"]",
+            "phone_band_h_px": "70"
           }
         }
       ],
@@ -169,7 +170,13 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "phone",
+          "means": "`profile: \"phone\"` (P69 T28b): cells 58 / head 57 / title 62 canvas px, rows at PT+130 pitched 90, bands cut to the type - reads at the phone floor at 0.60 of the stage; 3 columns, <= 3 rows, no sub",
+          "source_set": null
+        }
+      ],
       "dials": {
         "module": "content/video_engine/scripts/species/checklist.mjs",
         "object": "CHECKLIST"
@@ -180,9 +187,12 @@
         "symbol": "paintChecklist",
         "also": [
           "CHECKLIST",
-          "buildChecklist"
+          "buildChecklist",
+          "CHECKLIST_PROFILES",
+          "checklistDials",
+          "checklistHeader"
         ],
-        "note": "P55 T7: out of fillDock's C.checklist build + drawChart's fit/row paint, goldens byte-identical; refused as a ledger PAGE (test_ledger_page.py)"
+        "note": "P55 T7: out of fillDock's C.checklist build + drawChart's fit/row paint; refused as a ledger PAGE; P69 T28b: CHECKLIST_PROFILES.phone (golden test-card-phone), checked by checklist_problems"
       },
       "doctrine": [
         "CAPABILITIES checklist species",
@@ -190,11 +200,13 @@
         "E93 #3",
         "BACKLOG R26-81",
         "BACKLOG R26-80",
-        "ledger_page UNCHARTABLE"
+        "ledger_page UNCHARTABLE",
+        "BACKLOG R26-300"
       ],
       "status": "live",
       "backlog": [
-        "R26-81"
+        "R26-81",
+        "R26-300"
       ],
       "proof": {
         "golden": "test-card",

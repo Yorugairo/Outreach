@@ -474,6 +474,13 @@ AGENDA_FORMS = ("page",)  # P61 T8 (E99 s16): the agenda's ONE named form - the 
 AGENDA_PAGE_COVER = 0.55  # ... and what "the page fills its own plate" means: a page form's region takes at least this
                           # share of the frame on BOTH axes, so the corner block R26-80 found can never be called a page
 RING_FORMS = ("dashed",)  # the one form the module paints - the closed circle stays the callout's (E56 unchanged)
+# P69 T28b / R26-300: the checklist's named PROFILES (species/checklist.mjs CHECKLIST_PROFILES - the test holds the two
+# lists to each other). `phone` scales the type, the head, the title, the row pitch and the band together on the
+# dock's own canvas so the card reads at the long-form phone floor at the right 0.60 of the stage; absent = the card
+# it always was. A phone card is a question and its two answers, three rows at most, and no sub (checklist_problems).
+CHECKLIST_PROFILES = ("phone",)
+CHECKLIST_PHONE_COLS = 3   # Ask / Steel / Paper: at the floor, a fourth column does not fit the canvas' width
+CHECKLIST_PHONE_ROWS = 3   # row 1 at PT + 130, pitched 90: a fourth baseline would fall below the 480 canvas
 # the three clocks the grammar has to know to refuse a row that cannot FIT its window. Mirrored from the modules'
 # own dials (species/countarray.mjs COUNT.STEP / LAND_S, species/agenda.mjs AGENDA.STEP / NUM_LEAD + ROW_S), which
 # stay the source of truth for the motion; these are the compiler's copy of the numbers, and the only thing they
@@ -8781,6 +8788,44 @@ def title_for(asset: str) -> tuple[str, str]:
     return asset.replace("-", " ").title(), "Research deck"
 
 
+def checklist_problems(chart: dict) -> list[str]:
+    """P69 T28b: what is wrong with a chart dock's `checklist` (its .series.json), one line each - [] when it has none.
+
+    Only a checklist that NAMES a profile is held to anything new: the name must be one the species draws, and a
+    `phone` card must be what the phone canvas holds at the floor - a question and its two answers (every row as
+    wide as the head), three rows at most, and no sub line (the profile does not draw one; the title carries it)."""
+    chk = chart.get("checklist") if isinstance(chart, dict) else None
+    if not isinstance(chk, dict) or "profile" not in chk:
+        return []
+    name = chk["profile"]
+    if isinstance(name, bool) or name not in CHECKLIST_PROFILES:
+        return [f"checklist: profile {name!r} is not one of {CHECKLIST_PROFILES} (species/checklist.mjs CHECKLIST_PROFILES)"]
+    out: list[str] = []
+    head = chk.get("head") or []
+    rows = chk.get("rows") or []
+    if len(head) != CHECKLIST_PHONE_COLS:
+        out.append(f"checklist: a phone card is a question and its two answers: {CHECKLIST_PHONE_COLS} columns, not "
+                   f"{len(head)} (at the phone floor a fourth column does not fit the canvas)")
+    for i, row in enumerate(rows, 1):
+        n = len((row or {}).get("cells") or [])
+        if n != len(head):
+            out.append(f"checklist: row {i} has {n} cells, the head {len(head)}")
+    if not 1 <= len(rows) <= CHECKLIST_PHONE_ROWS:
+        out.append(f"checklist: {len(rows)} rows - the phone canvas holds {CHECKLIST_PHONE_ROWS} at the floor "
+                   f"(row 1 at PT + 130, pitched 90)")
+    if chart.get("sub"):
+        out.append(f"checklist: a phone card draws no sub (the title carries it, as the T10c card profile) - drop "
+                   f"'sub': {chart['sub']!r}")
+    return out
+
+
+def check_checklist(aid: str, chart: dict) -> None:
+    """The dock door's refusal: ValueError naming the asset and every problem, or nothing."""
+    problems = checklist_problems(chart)
+    if problems:
+        raise ValueError(f"{aid}: " + "; ".join(problems))
+
+
 def narration_key_delays(chart: dict, dock_enter: float, tl: dict) -> dict:
     """NARRATION-KEYED DRAW: a delayed series erupts at its claim's word
     time, not at a hard-coded offset (doc 29 - the deferred item; the
@@ -9515,6 +9560,10 @@ def main() -> int:
                     # badge whose accent maps to a series color takes the
                     # series' CURRENT label - B3 by construction.
                     ch = evidence[aid].get("chart")
+                    try:   # P69 T28b: a checklist's profile is checked by name at the door
+                        check_checklist(aid, ch or {})
+                    except ValueError as exc:
+                        raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
                     if ch and ch.get("series"):
                         amap = {"coral": "crimson", "teal": "teal",
                                 "cobalt": "cobalt", "ink": "deemph",
