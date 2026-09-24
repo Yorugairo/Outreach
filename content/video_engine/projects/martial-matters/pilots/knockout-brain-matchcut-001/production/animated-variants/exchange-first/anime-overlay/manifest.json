@@ -1,0 +1,409 @@
+{
+  "schema": "anime_exchange_overlay.v1",
+  "status": "private-review / experimental local recipe",
+  "approval": "not approved; parent owns visual approval and native assembly",
+  "source_clock": {
+    "source_clip_input": "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/production/edit-media/knockout.mp4",
+    "source_clip_sha256": "d16bc20d1f953ad149b6dd30c545a0146b7b04f0df5ada9a8cd7f2f1ebba8daf",
+    "raw_source_input": "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/source-short/ufc-sharaf-steveson-high.mkv",
+    "raw_source_sha256": "c162dcb7e7a11336c5b0bd3b29d51ecbf2f8cd5a49f90a3b851775165da64758",
+    "raw_source_start_seconds": 0,
+    "frame_origin": 0,
+    "frame_mapping": "output frame n == knockout.mp4 frame n == raw FIGHT frame n",
+    "fps": 30,
+    "frame_count": 105,
+    "duration_seconds": "3.5",
+    "dimensions": [
+      720,
+      1280
+    ],
+    "input_audio": "none",
+    "output_audio": "none; silent review proof"
+  },
+  "timing_reference": {
+    "path": "content/video_engine/tests/fixtures/modeling/motion/source-exchange-clock.v1.json",
+    "sha256": "74305d4eb84efdcc9875d3abaaf0e86f2618913cf32335341f4d5ff027d2d823",
+    "scene_id": "sharaf-steveson-source-clock-review",
+    "reference_events": [
+      {
+        "id": "first-right-contact",
+        "observed_frames": [
+          10,
+          11
+        ],
+        "used_contact_frame": 10,
+        "time_seconds": "1/3",
+        "basis": "current work order plus visual inspection of source f8-f12"
+      },
+      {
+        "id": "left-hook-contact",
+        "observed_frame": 24,
+        "used_contact_frame": 24,
+        "time_seconds": "4/5",
+        "basis": "source-exchange-clock.v1.json and visual inspection"
+      },
+      {
+        "id": "receiving-head-snap",
+        "observed_frame": 25,
+        "time_seconds": "5/6",
+        "overlay_policy": "left fully unobscured; no recoil accent"
+      }
+    ]
+  },
+  "recipe": {
+    "generator": "build_anime_overlay.py",
+    "generator_sha256": "232de79076b8617a074dcf07903f88e4dae50d281e2c9975e18dcf909d0daa9a",
+    "selected_contact_treatment": "broken-ring",
+    "parameters": {
+      "supersample": 3,
+      "contact_anchors_px": {
+        "jab": [
+          427,
+          528
+        ],
+        "hook": [
+          332,
+          478
+        ]
+      },
+      "broken_ring": {
+        "radius_px": 42,
+        "outer_stroke_px": 11,
+        "core_stroke_px": 4,
+        "jab_arc_degrees": [
+          [
+            108,
+            148
+          ],
+          [
+            160,
+            205
+          ],
+          [
+            218,
+            260
+          ],
+          [
+            270,
+            285
+          ]
+        ],
+        "hook_arc_degrees": [
+          [
+            285,
+            333
+          ],
+          [
+            342,
+            360
+          ],
+          [
+            0,
+            62
+          ],
+          [
+            72,
+            108
+          ]
+        ],
+        "jab_tick_angles_degrees": [
+          110,
+          193,
+          257
+        ],
+        "hook_tick_angles_degrees": [
+          291,
+          4,
+          76
+        ]
+      },
+      "visual_policy": "keep head-facing sides open; no effect on f25"
+    },
+    "candidate_contact_treatments": [
+      "ink-burst",
+      "broken-ring",
+      "slash-ticks"
+    ],
+    "candidate_preview": {
+      "path": "review/candidate-treatments.png",
+      "sha256": "f6b4fb6d0821747c974eabe68283e068e656e924fcddb1b92cb6694e8707dc3a",
+      "layout": "unmodified, A, B, C across each f10 and f24 row; 360x640 per cell"
+    },
+    "event_layers": [
+      {
+        "frame": 8,
+        "time_seconds": "4/15",
+        "event_id": "jab-linear",
+        "path": "layers/f008-jab-linear.png",
+        "effect_family": "hand-authored low-opacity anime motion-ink accent",
+        "sha256": "0fdff398dd668f5f6c34eb141dfc4e5478fb04148bf5bf95dd1698a4d9ca2763"
+      },
+      {
+        "frame": 9,
+        "time_seconds": "3/10",
+        "event_id": "jab-linear",
+        "path": "layers/f009-jab-linear.png",
+        "effect_family": "hand-authored low-opacity anime motion-ink accent",
+        "sha256": "66641026190fcb4c3b6f8d3015fa0de1a86b20c335472976c5d88f2da4760787"
+      },
+      {
+        "frame": 10,
+        "time_seconds": "1/3",
+        "event_id": "jab-contact",
+        "path": "layers/f010-jab-contact.png",
+        "effect_family": "hand-authored low-opacity anime motion-ink accent",
+        "sha256": "0041c015345c6a107e463ede3f37565eda4d0f740cd1c5162e4dafdb32135b6e"
+      },
+      {
+        "frame": 22,
+        "time_seconds": "11/15",
+        "event_id": "hook-arc",
+        "path": "layers/f022-hook-arc.png",
+        "effect_family": "hand-authored low-opacity anime motion-ink accent",
+        "sha256": "825dfc887ac848bce566eca9e08f236ade3653ba3e7e995f1fff7aa5177a2d46"
+      },
+      {
+        "frame": 23,
+        "time_seconds": "23/30",
+        "event_id": "hook-arc",
+        "path": "layers/f023-hook-arc.png",
+        "effect_family": "hand-authored low-opacity anime motion-ink accent",
+        "sha256": "f5dc9da4f40211265a59d6bf385f9cc7b688266cec909f216c0cdb9b003c1bc1"
+      },
+      {
+        "frame": 24,
+        "time_seconds": "4/5",
+        "event_id": "hook-contact",
+        "path": "layers/f024-hook-contact.png",
+        "effect_family": "hand-authored low-opacity anime motion-ink accent",
+        "sha256": "ffb721a5e3a0020beeab10da6308789d8ec640214ff28e7e72860a2f0cb1f021"
+      }
+    ],
+    "visual_limits": [
+      "No posterization or source-wide color filter",
+      "No source-frame hold, speed change, retime, or audio warp",
+      "No transformation prelude because the existing stills are not pose-matched to this 105-frame origin",
+      "No effect on f25 head snap or on unlisted frames",
+      "No injury depiction or force claim"
+    ],
+    "layer_alpha_receipts": [
+      {
+        "path": "layers/f008-jab-linear.png",
+        "sha256": "0fdff398dd668f5f6c34eb141dfc4e5478fb04148bf5bf95dd1698a4d9ca2763",
+        "size": [
+          720,
+          1280
+        ],
+        "nontransparent_pixels": 2759,
+        "alpha_bounds": [
+          307,
+          484,
+          409,
+          576
+        ]
+      },
+      {
+        "path": "layers/f009-jab-linear.png",
+        "sha256": "66641026190fcb4c3b6f8d3015fa0de1a86b20c335472976c5d88f2da4760787",
+        "size": [
+          720,
+          1280
+        ],
+        "nontransparent_pixels": 3863,
+        "alpha_bounds": [
+          307,
+          483,
+          446,
+          576
+        ]
+      },
+      {
+        "path": "layers/f010-jab-contact.png",
+        "sha256": "0041c015345c6a107e463ede3f37565eda4d0f740cd1c5162e4dafdb32135b6e",
+        "size": [
+          720,
+          1280
+        ],
+        "nontransparent_pixels": 1863,
+        "alpha_bounds": [
+          367,
+          468,
+          441,
+          586
+        ]
+      },
+      {
+        "path": "layers/f022-hook-arc.png",
+        "sha256": "825dfc887ac848bce566eca9e08f236ade3653ba3e7e995f1fff7aa5177a2d46",
+        "size": [
+          720,
+          1280
+        ],
+        "nontransparent_pixels": 2446,
+        "alpha_bounds": [
+          408,
+          478,
+          495,
+          605
+        ]
+      },
+      {
+        "path": "layers/f023-hook-arc.png",
+        "sha256": "f5dc9da4f40211265a59d6bf385f9cc7b688266cec909f216c0cdb9b003c1bc1",
+        "size": [
+          720,
+          1280
+        ],
+        "nontransparent_pixels": 3519,
+        "alpha_bounds": [
+          361,
+          461,
+          495,
+          605
+        ]
+      },
+      {
+        "path": "layers/f024-hook-contact.png",
+        "sha256": "ffb721a5e3a0020beeab10da6308789d8ec640214ff28e7e72860a2f0cb1f021",
+        "size": [
+          720,
+          1280
+        ],
+        "nontransparent_pixels": 2011,
+        "alpha_bounds": [
+          316,
+          421,
+          393,
+          538
+        ]
+      }
+    ]
+  },
+  "render": {
+    "path": "anime-exchange-overlay.mp4",
+    "sha256": "136c0decd58756dc1b64071940edb723f14da11ae273d8f8706afba9b1e21a1f",
+    "video_codec": "libx264",
+    "pixel_format": "yuv420p",
+    "preset": "medium",
+    "crf": 18,
+    "ffmpeg_version": "ffmpeg version 8.1.2-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+    "encode_command": [
+      "ffmpeg",
+      "-hide_banner",
+      "-loglevel",
+      "error",
+      "-y",
+      "-i",
+      "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\edit-media\\knockout.mp4",
+      "-loop",
+      "1",
+      "-framerate",
+      "30",
+      "-i",
+      "C:\\Users\\Snipe\\.codex\\worktrees\\anime-exchange-overlay\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\exchange-first\\anime-overlay\\layers\\f008-jab-linear.png",
+      "-loop",
+      "1",
+      "-framerate",
+      "30",
+      "-i",
+      "C:\\Users\\Snipe\\.codex\\worktrees\\anime-exchange-overlay\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\exchange-first\\anime-overlay\\layers\\f009-jab-linear.png",
+      "-loop",
+      "1",
+      "-framerate",
+      "30",
+      "-i",
+      "C:\\Users\\Snipe\\.codex\\worktrees\\anime-exchange-overlay\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\exchange-first\\anime-overlay\\layers\\f010-jab-contact.png",
+      "-loop",
+      "1",
+      "-framerate",
+      "30",
+      "-i",
+      "C:\\Users\\Snipe\\.codex\\worktrees\\anime-exchange-overlay\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\exchange-first\\anime-overlay\\layers\\f022-hook-arc.png",
+      "-loop",
+      "1",
+      "-framerate",
+      "30",
+      "-i",
+      "C:\\Users\\Snipe\\.codex\\worktrees\\anime-exchange-overlay\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\exchange-first\\anime-overlay\\layers\\f023-hook-arc.png",
+      "-loop",
+      "1",
+      "-framerate",
+      "30",
+      "-i",
+      "C:\\Users\\Snipe\\.codex\\worktrees\\anime-exchange-overlay\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\exchange-first\\anime-overlay\\layers\\f024-hook-contact.png",
+      "-filter_complex",
+      "[0:v]setpts=PTS-STARTPTS,format=rgba[base];[1:v]setpts=PTS-STARTPTS,format=rgba[layer0];[base][layer0]overlay=0:0:format=auto:eof_action=pass:shortest=0:enable='eq(n,8)'[v0];[2:v]setpts=PTS-STARTPTS,format=rgba[layer1];[v0][layer1]overlay=0:0:format=auto:eof_action=pass:shortest=0:enable='eq(n,9)'[v1];[3:v]setpts=PTS-STARTPTS,format=rgba[layer2];[v1][layer2]overlay=0:0:format=auto:eof_action=pass:shortest=0:enable='eq(n,10)'[v2];[4:v]setpts=PTS-STARTPTS,format=rgba[layer3];[v2][layer3]overlay=0:0:format=auto:eof_action=pass:shortest=0:enable='eq(n,22)'[v3];[5:v]setpts=PTS-STARTPTS,format=rgba[layer4];[v3][layer4]overlay=0:0:format=auto:eof_action=pass:shortest=0:enable='eq(n,23)'[v4];[6:v]setpts=PTS-STARTPTS,format=rgba[layer5];[v4][layer5]overlay=0:0:format=auto:eof_action=pass:shortest=0:enable='eq(n,24)'[v5]",
+      "-map",
+      "[v5]",
+      "-an",
+      "-frames:v",
+      "105",
+      "-r",
+      "30",
+      "-fps_mode",
+      "cfr",
+      "-c:v",
+      "libx264",
+      "-preset",
+      "medium",
+      "-crf",
+      "18",
+      "-pix_fmt",
+      "yuv420p",
+      "-movflags",
+      "+faststart",
+      "-metadata",
+      "title=Private review - source-timed anime accent exchange",
+      "C:\\Users\\Snipe\\.codex\\worktrees\\anime-exchange-overlay\\Outreach Program\\content\\video_engine\\projects\\martial-matters\\pilots\\knockout-brain-matchcut-001\\production\\animated-variants\\exchange-first\\anime-overlay\\anime-exchange-overlay.mp4"
+    ]
+  },
+  "review": {
+    "contact_sheet": {
+      "path": "review/contact-sheet-9x16.png",
+      "sha256": "5953afc5df690dba7e0aa513496222a7798e217b0713d2cb70653ae37313131d",
+      "dimensions": [
+        1440,
+        2560
+      ],
+      "aspect_ratio": "9:16",
+      "frames": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "cell_dimensions": [
+        360,
+        640
+      ]
+    },
+    "detail_crops": {
+      "path": "review/detail-crops-f10-f24-f25.png",
+      "sha256": "34d3df175208eeca1c3d5afb679a590753ccbf54bbc21707e58c727134fda6b3",
+      "dimensions": [
+        720,
+        1758
+      ],
+      "frames": [
+        10,
+        24,
+        25
+      ],
+      "crop_box_source_pixels": [
+        0,
+        350,
+        720,
+        894
+      ],
+      "purpose": "native-size fight viewport crops; f25 remains the unaccented snap reference"
+    },
+    "verification_path": "review/verification.json"
+  }
+}
