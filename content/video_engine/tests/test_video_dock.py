@@ -405,7 +405,11 @@ def test_the_park_is_the_engines_own_kinetics_not_a_cut_or_a_dissolve():
     html = RB.player_text()
     assert "const j = minJerk(clamp01((t - d.enter - readS) / parkS));" in html
     assert "R.x + (P.x - R.x) * j" in html and "R.w + (P.w - R.w) * j" in html
-    assert "const pk = springPop(clamp01((t - d.enter) / DOCK_POP_S));" in html
+    # P69 T26e (192946a) guarded the pop for ONE arrival only: a prop BORN of a morph stands from its first frame
+    # (the mesh landed it). Every other dock still arrives on the spring's POP - the pin is that line, and the guard
+    # is pinned to the morph arrival alone so it cannot widen into a cut for ordinary docks.
+    assert 'const born = d.arrive === "morph";' in html
+    assert "const pk = born ? 1 : springPop(clamp01((t - d.enter) / DOCK_POP_S));" in html
     assert "const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;" in html
     assert "const DOCK_READ_S = 1.2, DOCK_PARK_S = 0.7;" in html
     assert "DOCK_POP_S = 0.45, DOCK_POP_FROM = 0.85, DOCK_FADE_S = 0.12, DOCK_RETRACT_S = 0.35" in html

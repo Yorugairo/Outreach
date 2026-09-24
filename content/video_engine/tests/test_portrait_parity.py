@@ -37,6 +37,14 @@ ALLOW = (
     # stays allowed on its own line above, for species/verdict.mjs's landscape normalisers.
     "REF_W: 1080", "REF_H: 1920",
     "_9X16",
+    # P69 (def63cf, T8): the LONG FORM's anchored caption strip is a 16:9 constant BY DEFINITION - the engine mirrors
+    # ledger_page.LONGFORM_STRIP, which is CAPTION_ANCHOR["16:9"] (top 878, foot 960), and its one reader is the
+    # `!PORTRAIT` band (the gate's _chrome_band). Written as STAGE_H - 120 it would claim a portrait meaning it has not.
+    "CAPTION_FOOT: 960",
+    # P69 (b42d6dc, T10c): the chart card's type is E99 s90's PHONE FLOOR - 12 phone px on a 16:9 frame played 390 px
+    # wide, 12 x 1920 / 390 - mirrored from ledger_page.CARD_TYPE_PX (= CARD_PHONE_FLOOR * 1920 / CARD_PHONE_W). The
+    # 1920 is the long-form frame the floor was measured on, not this stage's width; lpCardK scales it to the stage.
+    "TYPE_PX: 12 * 1920 / 390",
 )
 
 

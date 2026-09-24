@@ -20,7 +20,7 @@ from fractions import Fraction
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any, Mapping, Sequence
 
-from PIL import Image, ImageColor, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageColor, ImageDraw, ImageFont
 
 from content.video_engine.scripts.build_plate_library import LAYER_PLANES
 from .motion import MotionContractError, MotionSample, MotionTimeline
@@ -40,6 +40,7 @@ MAX_SHAPES = 128
 MAX_STATES = 8
 MAX_POINTS = 128
 MAX_COORD = 16_384
+MAX_SPRITE_PIVOT_ANGLE_DEG = 15.0
 DIAGNOSTIC_LABEL = 'DIAGNOSTIC — SYNTHETIC CONTACT CLOCK / NOT APPROVED ART OR PHYSICS'
 
 
@@ -115,6 +116,30 @@ def _color(value: Any, label: str) -> tuple[int, int, int, int]:
         return ImageColor.getcolor(value, 'RGBA')
     except ValueError as exc:
         raise LayeredSceneError(f'{label} is not a valid color') from exc
+
+
+def _raster_polygon_mask(
+    value: Any, label: str, image: Image.Image,
+) -> tuple[tuple[tuple[float, float], ...], tuple[int, int, int, int]]:
+    """Validate an authored image-space cutout against the source alpha."""
+    if not isinstance(value, list) or not 3 <= len(value) <= MAX_POINTS:
+        raise LayeredSceneError(f'{label} must contain 3..{MAX_POINTS} image-space points')
+    points = tuple(_pair(point, f'{label}[{index}]') for index, point in enumerate(value))
+    width, height = image.size
+    if any(not 0 <= x <= width or not 0 <= y <= height for x, y in points):
+        raise LayeredSceneError(f'{label} points must stay inside the raster dimensions')
+    signed_area = sum(x * points[(index + 1) % len(points)][1] -
+                      y * points[(index + 1) % len(points)][0]
+                      for index, (x, y) in enumerate(points))
+    if abs(signed_area) < 1:
+        raise LayeredSceneError(f'{label} polygon must have nonzero area')
+    mask = Image.new('L', image.size, 0)
+    ImageDraw.Draw(mask).polygon(points, fill=255)
+    clipped_alpha = ImageChops.multiply(image.getchannel('A'), mask)
+    visible = clipped_alpha.getbbox()
+    if visible is None:
+        raise LayeredSceneError(f'{label} does not select any visible source pixels')
+    return points, visible
 
 
 def _validate_shapes(shapes: Any, label: str) -> tuple[dict[str, Any], ...]:
@@ -307,6 +332,8 @@ class LayeredScene:
             kind = layer.get('kind')
             if kind not in {'environment', 'prop', 'character', 'occluder'}:
                 raise LayeredSceneError(f'{label}.kind must be environment, prop, character, or occluder')
+            if 'sprite_pivot' in layer and kind != 'character':
+                raise LayeredSceneError(f'{label}.sprite_pivot is only valid on character layers')
             binding_id = layer.get('binding_id')
             if kind in {'character', 'prop'} and (not isinstance(binding_id, str) or not binding_id):
                 raise LayeredSceneError(f'{label}.binding_id must identify a character or prop motion owner')
@@ -368,6 +395,40 @@ class LayeredScene:
                 layer['_silhouette_bounds'] = _rect(
                     layer.get('silhouette_bounds_local_px'), f'{label}.silhouette_bounds_local_px'
                 )
+                if 'sprite_pivot' in layer:
+                    raw_pivot = layer['sprite_pivot']
+                    if not isinstance(raw_pivot, Mapping) or set(raw_pivot) != {
+                        'channel_id', 'max_abs_angle_deg', 'pivot_local_px',
+                    }:
+                        raise LayeredSceneError(
+                            f'{label}.sprite_pivot must declare only channel_id, max_abs_angle_deg, '
+                            'and pivot_local_px'
+                        )
+                    pivot_channel = raw_pivot['channel_id']
+                    self._require_channel(
+                        pivot_channel, f'{label}.sprite_pivot.channel_id', 'degrees',
+                        ('articulation',), ('linear', 'cubic'), binding_id,
+                    )
+                    max_angle = _finite(
+                        raw_pivot['max_abs_angle_deg'], f'{label}.sprite_pivot.max_abs_angle_deg'
+                    )
+                    if not 0 <= max_angle <= MAX_SPRITE_PIVOT_ANGLE_DEG:
+                        raise LayeredSceneError(
+                            f'{label}.sprite_pivot.max_abs_angle_deg must be in 0..'
+                            f'{MAX_SPRITE_PIVOT_ANGLE_DEG:g}'
+                        )
+                    pivot_local = _pair(raw_pivot['pivot_local_px'], f'{label}.sprite_pivot.pivot_local_px')
+                    silhouette = layer['_silhouette_bounds']
+                    if not (silhouette[0] <= pivot_local[0] <= silhouette[2]
+                            and silhouette[1] <= pivot_local[1] <= silhouette[3]):
+                        raise LayeredSceneError(
+                            f'{label}.sprite_pivot.pivot_local_px must sit inside silhouette_bounds_local_px'
+                        )
+                    layer['_sprite_pivot'] = {
+                        'channel_id': pivot_channel,
+                        'max_abs_angle_deg': max_angle,
+                        'pivot_local_px': pivot_local,
+                    }
                 layer['_pose_states'] = self._parse_states(layer.get('pose_states'), f'{label}.pose_states')
                 layer['_expression_states'] = self._parse_states(
                     layer.get('expression_states'), f'{label}.expression_states'
@@ -377,7 +438,7 @@ class LayeredScene:
                         raster = state.get('_raster_asset')
                         if raster is None:
                             continue
-                        raster_bounds = raster['_bounds_local']
+                        raster_bounds = raster['_visible_bounds_local']
                         silhouette = layer['_silhouette_bounds']
                         if not (silhouette[0] <= raster_bounds[0] and silhouette[1] <= raster_bounds[1]
                                 and silhouette[2] >= raster_bounds[2] and silhouette[3] >= raster_bounds[3]):
@@ -512,6 +573,24 @@ class LayeredScene:
         ):
             raise LayeredSceneError(f'{label}.sha256 must be a 64-character hexadecimal SHA-256')
         bounds = _rect(value.get('bounds_local_px'), f'{label}.bounds_local_px')
+
+        def reference(cached_image: Mapping[str, Any]) -> dict[str, Any]:
+            result = {**cached_image, '_bounds_local': bounds, '_visible_bounds_local': bounds}
+            raw_mask = value.get('mask_polygon_image_px')
+            if raw_mask is not None:
+                points, visible = _raster_polygon_mask(
+                    raw_mask, f'{label}.mask_polygon_image_px', cached_image['_image'],
+                )
+                image_width, image_height = cached_image['_image'].size
+                sx = (bounds[2] - bounds[0]) / image_width
+                sy = (bounds[3] - bounds[1]) / image_height
+                result['_mask_polygon_image_px'] = points
+                result['_visible_bounds_local'] = (
+                    bounds[0] + visible[0] * sx, bounds[1] + visible[1] * sy,
+                    bounds[0] + visible[2] * sx, bounds[1] + visible[3] * sy,
+                )
+            return result
+
         normalized_path = Path(*posix_path.parts)
         try:
             resolved_path = (self._asset_root / normalized_path).resolve(strict=True)
@@ -523,7 +602,7 @@ class LayeredScene:
         cache_key = (str(resolved_path), expected_digest.lower())
         cached = self._raster_cache.get(cache_key)
         if cached is not None:
-            return {**cached, '_bounds_local': bounds}
+            return reference(cached)
         try:
             if resolved_path.stat().st_size > MAX_RASTER_ASSET_BYTES:
                 raise LayeredSceneError(f'{label} exceeds the {MAX_RASTER_ASSET_BYTES}-byte raster asset limit')
@@ -578,7 +657,7 @@ class LayeredScene:
         self._raster_cache[cache_key] = cached
         self._raster_cache_pixels += asset_pixels
         self._raster_cache_decoded_bytes += asset_decoded_bytes
-        return {**cached, '_bounds_local': bounds}
+        return reference(cached)
 
     def _parse_camera(self, value: Any) -> tuple[dict[str, Any], ...]:
         if not isinstance(value, Mapping):
@@ -688,6 +767,54 @@ class LayeredScene:
             raise LayeredSceneError(f"layer {layer['layer_id']!r} normalized anchor must be within 0..1")
         return x * self.width, y * self.height
 
+    def _sprite_pivot_angle(
+        self, layer: Mapping[str, Any], anchor: tuple[float, float], sample: MotionSample,
+    ) -> float:
+        """Resolve and validate a rigid sprite pivot before a frame is accepted."""
+        config = layer['_sprite_pivot']
+        angle = _channel_value(sample, config['channel_id'], f"layer {layer['layer_id']} sprite_pivot")
+        maximum = config['max_abs_angle_deg']
+        if abs(angle) > maximum:
+            raise LayeredSceneError(
+                f"layer {layer['layer_id']!r} sprite_pivot angle {angle:g} deg exceeds "
+                f"its authored envelope of {maximum:g} deg"
+            )
+        scale_channel = layer.get('scale_channel')
+        scale = _channel_value(sample, scale_channel, f"layer {layer['layer_id']} scale") if scale_channel else 1.0
+        if not 0 < scale <= 16:
+            raise LayeredSceneError(f"layer {layer['layer_id']!r} scale must be in 0..16")
+        flip = -1.0 if layer.get('flip_x') is True else 1.0
+
+        def world_point(local: tuple[float, float]) -> tuple[float, float]:
+            return (anchor[0] + flip * local[0] * scale, anchor[1] + local[1] * scale)
+
+        pivot = world_point(config['pivot_local_px'])
+        left, top, right, bottom = layer['_source_bounds']
+        silhouette = layer['_silhouette_bounds']
+        corners = tuple(world_point((x, y)) for x, y in (
+            (silhouette[0], silhouette[1]),
+            (silhouette[2], silhouette[1]),
+            (silhouette[2], silhouette[3]),
+            (silhouette[0], silhouette[3]),
+        ))
+        radians = math.radians(angle)
+        cosine, sine = math.cos(radians), math.sin(radians)
+        # Pillow's positive rotation is counter-clockwise in the image plane (y-down).
+        rotated_corners = tuple(
+            (pivot[0] + cosine * (x - pivot[0]) + sine * (y - pivot[1]),
+             pivot[1] - sine * (x - pivot[0]) + cosine * (y - pivot[1]))
+            for x, y in corners
+        )
+        tolerance = 1e-7
+        if any(x < left - tolerance or y < top - tolerance
+               or x > right + tolerance or y > bottom + tolerance
+               for x, y in rotated_corners):
+            raise LayeredSceneError(
+                f"layer {layer['layer_id']!r} sprite_pivot rotation clips its declared silhouette "
+                'by source_bounds_px'
+            )
+        return angle
+
     @staticmethod
     def _state_for(layer: Mapping[str, Any], sample: MotionSample, field: str, states_field: str) -> str:
         channel_id = layer[field]
@@ -720,6 +847,8 @@ class LayeredScene:
             if layer['kind'] in {'character', 'prop'}:
                 anchors[layer['layer_id']] = self._anchor(layer, sample)
             if layer['kind'] == 'character':
+                if layer.get('_sprite_pivot') is not None:
+                    self._sprite_pivot_angle(layer, anchors[layer['layer_id']], sample)
                 self._validate_disocclusion(layer, camera, anchors[layer['layer_id']], sample)
             if layer['role'] == 'background':
                 self._validate_background_coverage(layer, camera)
@@ -956,6 +1085,12 @@ class LayeredScene:
             if asset is None:
                 return
             raster = asset['_image']
+            polygon = asset.get('_mask_polygon_image_px')
+            if polygon is not None:
+                mask = Image.new('L', raster.size, 0)
+                ImageDraw.Draw(mask).polygon(polygon, fill=255)
+                raster = raster.copy()
+                raster.putalpha(ImageChops.multiply(raster.getchannel('A'), mask))
             bounds = asset['_bounds_local']
             if flip < 0:
                 raster = raster.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
@@ -1007,6 +1142,20 @@ class LayeredScene:
             draw.ellipse((target_on_layer[0] - marker_radius, target_on_layer[1] - marker_radius,
                           target_on_layer[0] + marker_radius, target_on_layer[1] + marker_radius),
                          outline=(238, 91, 226, 255), width=max(1, 2 * ss))
+        sprite_pivot = layer.get('_sprite_pivot')
+        if sprite_pivot is not None:
+            angle = self._sprite_pivot_angle(layer, anchor, sample)
+            # At rest, bypass Pillow's resampling entirely: authored bytes remain exact.
+            if angle != 0.0:
+                pivot = point(sprite_pivot['pivot_local_px'])
+                premultiplied = image.convert('RGBa')
+                image = premultiplied.rotate(
+                    angle,
+                    resample=Image.Resampling.BICUBIC,
+                    expand=False,
+                    center=pivot,
+                    fillcolor=(0, 0, 0, 0),
+                ).convert('RGBA')
         return image
 
 

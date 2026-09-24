@@ -1550,3 +1550,290 @@ picture on disk - none carries printed words).
   bars grow after it (~1.5 s) - the stamp sits beside, never over, them.
 - `build-h/docks/dock-h-two-line-copy-again.card.json` (the card sidecar) is UNTRACKED and not ignored (its PNG is,
   `.gitignore:127`); no `.card.json` is tracked anywhere yet. Owner: the parent / the steward (commit or ignore).
+
+
+## 18. P69 T27 - row 19 (7:13-7:52): skips a gear - the two clocks, the GPU becomes the 5; R26-290 and R26-291 - 2026-09-23
+
+The build runs 0.00-464.15 s (1317 of 2335 words). `UNIT_CUT_PHRASE` = "Now the" (row 20's "Now the test", T28's; the take
+glues "test" to its dash, so the three-word phrase is not in it). RED: before the slice the table ended at row 17 (421.21-427.43,
+`logs/t27-door0-head.log` - byte-identical to T26b's final build: timeline, player.html, SHOT-TABLE-H.md sha256 unchanged).
+
+Recall: `docs_find "bar by bar"` -> `CAPABILITIES.md:90` the breakthrough bars, `:121` the keyed recast; `docs_find "build=bars"`
+0 hits (a bars page has no hold for one bar - `PAGE_BUILD_MODES = ("lines",)`, `build_scene_timeline_f.py:4942`); `docs_find
+"pill"` -> `CAPABILITIES.md:30` / `:110` (value pills and the tip pill - no species), and section 4 finding 5 here ("No `pill`
+species ... Built as a `note`"); `docs_find "callout on a bar"` -> `CAPABILITIES.md:86` / `:69`; the P69 section `:221` (T26d
+`place` / `moves`), `:222` (T26f chrome), `:223` (T26e prop <-> mark morph).
+
+| table row | window | what |
+|---|---|---|
+| 17 `ledger:ev-railway-index-v1:line:139:right:built:cut` (T26's, shortened) | 421.21-430.06 | "1845 is the proof": the index returns built, its -64% written on "two-thirds"; it holds through "And this is where the railway map, good as it is, skips" (8.9 s from the return) |
+| 18 `ledger:ev-two-clocks-bars-v1:bars::right:axes:cut;idle=live;readability=longform` | 430.06-464.15 | the index MELTS and is thrown off on "a gear." (`melt:throw:0.6`, `CLOCKS_MELT_WHY`) and the two clocks draw on the same board, on their axes; the 20 grows with the page and stands with its value by ~431.4 ("Railway steel sat", 0.9 s before "twenty"); the compute bar's slot WAITS under its name; **the GPU** (`prop-gpu-accelerator-card-v1`) is STAMPED on "compute" (437.18) at an authored place over the waiting slot (`GPU_PLACE` (0.516, 0.52, w 0.15) - `authored place: mark 288x220 painted px at (991, 562)`) and BECOMES the 5 bar on "about five years" (`chart_to {to: "morph", from: "prop:...", mark: "b:1"}`, 439.44 + 0.9 s, landing on "years" at 440.34; `GPU_MORPH_WHY`); the **SOLD OUT** chip (cpu glyph, `SOLD_CHIP`) lands over the compute bar on "sold out into" (442.06) and holds, breathing, to the row's end; the page is **retitled** "Different demand, different clock" on its words (450.24); on "Both are true at once" (460.29) **two callouts**, one on each bar, `pad: 80` (`CLOCKS_RING_PAD`); the page stands to the row's end (464.15, T28's boundary) |
+
+**Acceptance (P69 T27):** the `sold out` pill - a CHIP (see below; no pill species exists); two callouts, one per bar - at
+460.29, each ringing its whole column; the fives' source - `ev-two-clocks-bars-v1` cites E99 s95 in its `src_full` ("Compute:
+about five years, accepted on the operator's word, E99 s95") and its `proof` (kind `operator`, locator "line 3321 (E99 s95)"),
+and the door ASSERTS both before it draws the page (`CLOCKS`, `build_episode_h.py`). The DRAWN source line reads "... compute ~5
+years on the operator's word" - it names the operator, not the ruling id. A page line that prints "E99 s95" is an edit to the
+evidence object (READ_ONLY to this door and outside this slice's write set) - the parent's call.
+
+**Measured and fixed** (drafts `scratchpad/p69-row19/draft1..3/`, the private build `p69-row19/build` via `STEEL_H_BUILD_DIR`):
+- The GPU dock ending ON the morph's word was refused ("no dock of prop-gpu-accelerator-card-v1 stands in this row at
+  439.44s") - the dock runs to the landing and the compiler hands it to the morph at its word.
+- The bed's `note` for the pill (draft 1): 25 px handwriting (10.8 css, under the phone floor) in the far upper right,
+  writing one glyph every few seconds (a note's write runs over its whole dur) - it read as nothing -> the CHIP.
+- The callouts at no pad (draft 1) and `pad: 60` (draft 2): a callout on a bar's datum rings the BAR's box, so the hand's
+  ellipse ran straight through each bar's value ("20years", "5years") and its name ("1840s railways", "Today's compute").
+  From the probe's ledger (each ellipse's centre, rx, ry) and the label boxes, `pad: 80` clears the value above and the name
+  below on both bars with the jitter (`draft3/t461-zoom.png`); M34 PASS ("no mark over a text box", 31 pairs).
+- The SOLD OUT chip at y 0.43 put its label under the compute ring's top at 460.3 -> y 0.36.
+- The melt's empty board: at 1.0 s the throw out of the RETURNED index left 0.2 s of empty board spoken over "a gear." - a
+  second M31 instance. Measured on the private build: 1.2 s -> 0.3 s, 0.8 s -> 0.1 s, **0.6 s -> 0.0 s**
+  (`p69-row19/melt-*.json`). The melt is 0.6 s; the boundary moved from "skips a gear" to "a gear" so the 20 still grows
+  under "Railway steel".
+
+**R26-290 (the desk card names +105%): DONE.** The +105% line is `SEMICONDUCTOR STOCKS` (`ev-divergence-v1.series.json`, teal;
+its `delay_anchor` "The chart's second line is the chip industry"). The signpost card is now drawn from its own derived
+object, `build-h/objects/ev-divergence-signpost-v1.series.json` (`_signpost_object`: the hook object's words and numbers,
+unchanged, the semis series carrying `card_name: "chips"`) - the field `ledger_page.apply_card` writes for the repeated tags,
+which the engine rides as the tag's chip (`scene-evidence-engine.mjs:10196`). Read on `final/D-row18-fixes.png` (359.9, 361.0):
+"+105% chips", "+21% s&p", "+21% mega-cap" - three named tags in one style, the title "Two lines, one warning" kept (row 3's
+callback). No engine or `ledger_page.py` edit; the hook object (row 3's card) is unchanged. A title naming the line was the
+other door; the tag keeps the callback's title and names the line where the eye lands. `test_chart_card_readable` passes.
+
+**R26-291 (camera 3's push grows the panel under PROP 3): the MOVE, not 1.1.** PROP 3's T26 centre is now its authored `place`
+(the compiler's own reading: painted centre (1621.5, 454), width 349 - `SP500_PLACE`) and it moves on the push's own clock
+(from the stamp's settle 387.61, 0.9 s, cubic) to the page's empty upper right, `SP500_ASIDE` (0.905, 0.135, w 0.12) - row
+15's Fed method. Both read on the frame:
+- **the move (taken)** - `final/D-row18-fixes.png`: at 388.6 / 390.5 the prop stands level with the title, right of the sub,
+  above the pushed panel (box [1609, 47, 256, 197]; the panel's top ~224), clear of the bar, the "20%", the 2-4% rules and
+  their label; it passes over the panel's corner only in flight (388.1); at 1.0 and beside the statement card (394.6) it stays
+  in the corner, and leaves with the page's docks on "Run the arithmetic". The gate: **M27's PROP 3 line is gone** (was
+  17,883 px, 15 %).
+- **1.1 (refused)** - `p69-row19/optB/B-push11.png`, built with the prop at rest: the prop still stands INSIDE the panel
+  (36,871 px, 32 % of the smaller box - the panel at 1.1 about the same `at` still reaches under it), and the page's left edge
+  leaves the stage (a ~25 px cream strip at the left - T22's measured failure). Moving `at` left to keep the panel off the prop
+  runs the y ticks onto the panel's border (T26b draft 1's failure).
+- The cost, named: **a new M25 WARN** - the corner is inside the safe-zone bands ("a card is 42 % inside the top safe-zone
+  band at 6:35; 16 % inside the right"). At 1.2 no place is clear of both the pushed panel and the safe bands (the corner room
+  is x 1644-1824, y 130-224: 180 x 94 px). The compiler's T26d finding "moves[0] (387.61s): over a label: title 10874 px^2,
+  sub 7324 px^2" reads the title's and sub's BOXES (they run the stage's width); their ink ends at x ~620 and ~1122.
+
+**Named, not fixed:**
+- **"20years" / "5years"** - the object's `unit` is `"years"` with no leading space and `lpWithUnit` concatenates
+  (`scene-evidence-engine.mjs:8545`), so every tick and both values print "20years", "0years". The fix is one field in the
+  evidence object (`"unit": " years"` - checked on a scratch copy: `ledger_page.py` keeps the space into the spec,
+  `p69-row19/unit-probe.page.json`), which is READ_ONLY here and outside the write set, and it changes the page's ink (a
+  re-measure of `7570387af47450d9`). For the parent / the evidence owner.
+- **M21 WARN s18 31.1 s (7:13 -> 7:44):** the gate's `_deployed_lives` reads `chart_to` species and the compiler moves a prop
+  morph into `scene.prop_morphs`, so the morph's landing (440.34) is not a data mark to M21 (M03 does read it -
+  `_prop_morph_landings`). Even counted, the page stands 23.8 s after the 5 lands: "sold out", "Governments ... same
+  hardware", "Different demand, different clock", the moat and the paper, "Both are true at once" are commentary on the two
+  clocks, carried by the chip, the retitle and the callouts; the treatment keeps the page to the callouts. Owner: the gate (a
+  prop morph landing is a data mark) and the parent's read (a second world for 452-460 would spend a dip).
+- **The compute slot waits 9.4 s** (T26e WARN "mark b:1 is held hidden 9.38s"): "Today's compute" stands under an empty slot
+  from the page's landing to "five years" (`final/A-boundary-in.png` 431.9-436.8). Read as the sentence's own question - no
+  zero bar, no value; the GPU lands over it on "compute". Drawing both bars at the landing would stand the 5 eight seconds
+  before it is said.
+- **The morph's invariants** (WARN: centroid 10.1 % W, axis 26.9 deg, area 0.26 - a GPU card is not a bar's shape): read on
+  `final/B-gpu-stamp-morph.png` (439.7-440.4) - the card squashes down into the slot, textured, and hands to the orange bar;
+  it reads as the card becoming the bar.
+- **The GPU placement WARNs** (ring at its floor, approach from 1.20x, "over the data: 13,608 px^2 of its turned box" on the
+  measured page): the ink under it is the compute bar's own rect and value, HIDDEN until the morph lands (`pmMarkEls`); on the
+  frame the stamp's ring passes over the empty panel only (437.25).
+- **Life on the clocks page** (446.0 vs 448.0, box x 0-1500 y 150-850, `final/life.txt`): mean |dL| 2.25, 3.6 % of pixels
+  changed - the live idle and the chip's breath; low, like the concentration page's 3.85 / 7.4 %. 18 of 18 rows carry a life
+  token (row 18 `idle=live`).
+- **A 7th prop** - the treatment names six stamps (row 19 names none); the GPU is this slice's, on E99 s87 (the word
+  "compute" names it; `CATALOGUE.md` tags it `compute`) and E99 s107 (the object is the claim). For HG4.
+- `build-h/objects/ev-divergence-signpost-v1.series.json` is new and untracked (the hook object beside it is tracked).
+
+**Departures (for BODY_DEPARTURES / the parent - the door's table is not edited here):** the treatment's "the page `chart_to`
+the breakthrough bars" -> a new page by the melt's throw (the index is the paper's price, the clocks how long the capital
+waited - rows 15 and 16's own rule); "20 years beside 5 years on their words" -> the 20 with the page, the 5 by the GPU's morph
+on "five years"; "a pill `sold out`" -> the chip; the retitle and the GPU are additions.
+
+**Transitions** (printed in `SHOT-TABLE-H.md`): the melt's throw index -> clocks (`CLOCKS_MELT_WHY`: the dip, a recast, rescale
+/ extend, morph, melt:splash:chart / melt:morph refused); inside the row the GPU -> the compute bar (`GPU_MORPH_WHY`: both bars
+at the landing, a one-bar recast state, a figure beside the bar refused). Flow count: 0 cuts, 6 dips, 1 arrival carrying a
+boundary, 10 transforms. The table's treatment map now names rows 14-18 (they read "?").
+
+**The fixture (T27):** the door reported `page boxes : 1 page(s) ESTIMATED, not measured - row 18 'Two clocks'`, so
+`measure_page_boxes.py --write` (plain - the build-h timeline is already in `projects`; `logs/t27-measure-write.log`): **1 page
+ADDED** - `7570387af47450d9` "Two clocks" (story, 16:9 full stage, plot 451, 374, 641 x 410); every other page, `builders`,
+`profiles`, `stage` UNCHANGED; `player_sha256` changed (provenance, excluded from `--check`). The door re-ran on the measured
+fixture ("10 page(s) MEASURED"); `--check` PASS (`logs/t27-measure-check.log`, "PASS 5 builders x 15 geometr(ies) measured
+identical"). `test_page_boxes.py` + `test_full_stage_page_is_measured.py` + `test_chart_card_readable.py`: **101 passed**
+(`logs/t27-pytest.log`).
+
+**The order of proof (`logs/`, final build 0.00-464.15):** `t27-door3.log` (rc 0; cues 33 bound of 34 derived - T26's two
+silent kinds, unchanged: `suck`, `page enter (built)`; life 18 of 18), `t27-measure-check.log` PASS, `t27-probe.log` (171
+instants), `t27-frozen.log` ("no run of identical frames over 0.50s (whole frame)"), then the door re-run
+(`t27-door-final.log`) with the timeline, player.html, player.json, SHOT-TABLE-H.md and SHOT-TABLE-H.py sha256 IDENTICAL
+(`t27-door3.sha` = `t27-door-final.sha`), so GATES-MOTION.md is stamped on the fresh probe and hashes; `t27-seams.log` 17
+boundaries, 0 faults (430.06 melt:throw darkest 23.2, clean); `t27-spoken.log` 5 pointing phrases, 0 uncovered;
+`t27-stagegaps.log` 2.3 s of 464.1 s, 430.06 melt 0.0 s; **`t27-gate.log` 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO**
+(before, `t27-gate-before.log` on HEAD's build: 2 FAIL / 4 WARN / 22 PASS / 1 JUDGE / 4 INFO). FAIL M11 (row 1) and M31 (s08's
+0.2 s at 3:15), both pre-existing and unchanged. WARN M02, M04 (15 plates vs 38), M21 (+ s18, above), M27 (2 cards now - the
+Fed 1 %, the statement card; PROP 3 gone), and **M25 NEW** (PROP 3's corner, above). M01 PASS (9.5 s), M03 PASS (33 s), M34
+PASS. Drafts: `t27-door1.log`, `t27-door2.log` (+ `.sha`), `t27-measure-write.log`, `t27-gate-before.log`.
+
+**Tiles** (`scratchpad/p69-row19/final/`): `A-boundary-in.png` (426.9 the index; 430.0 / 430.2 / 430.45 the melt and throw;
+430.7 / 431.0 the page and the 20 growing; 431.4 / 431.9 / 432.4 / 432.7 the 20 standing through "twenty years"; 434.5; 436.8
+the waiting slot); `B-gpu-stamp-morph.png` (437.18 - 437.6 the stamp's approach, ring and rest; 438.7; 439.44 - 440.4 the
+morph; 441.0; 442.1 the chip landing); `C-chip-retitle-callouts.png` (442.3 - 446.0 the chip; 450.3 / 451.2 / 452.3 the
+retitle; 457.0; 460.4 - 461.5 the callouts drawing; 463.5; 464.1 the row's end); `D-row18-fixes.png` (358.9 / 359.9 / 361.0
+the desk card; 386.2 / 386.4 the stamp; 387.6 the settle; 388.1 mid-move; 388.6 / 390.5 pushed; 392.5 released; 394.6 the
+statement card; 398.9 "Run the arithmetic"); `E-life.png` + `life.txt`. Rendered from the private build (the same door and
+fixture; its timeline differs from build-h's only in its paths). No build-f reference frames were cut for this row.
+
+**T27b (2026-09-23, after the parent's frame read accepted row 19 and R26-290 / R26-291 as chosen).** The parent edited
+`ev-two-clocks-bars-v1` (`"unit": " years"`; `src` now ends "(E99 s95)"). (1) THE 20 LANDS ON "twenty": opened on "a gear" the
+bar grew under "skips a gear." (430.7-431.0) and stood before its number was said; the boundary is now "Railway steel"
+(431.01) - the index holds through "skips a gear." (9.8 s from its return), melts under "Railway steel" (0.6 s, stage gap
+0.0 s, seam darkest 23.3 clean) and the 20 stands with "20 years" at 432.4, on "twenty" (432.35) - chosen over "on Railway
+steel" because the bar and its number land as the number is said (`scratchpad/p69-row19/t27b/timing.png`). (2) The fixture
+re-measured whole (`measure_page_boxes.py` has no per-page write): against HEAD's fixture **1 page ADDED**, `e5248aa1f76bee62`
+"Two clocks" (the ink changed, so its key did; the T27 key `7570387af47450d9` is gone), nothing else changed but
+`player_sha256`; `--check` PASS (`logs/t27b-measure-check.log`). (3) Read on build-h (`t27b/bars-read.png`, 432.4 / 440.4 /
+461.5): every tick and both values read "20 years" / "5 years"; the source is ONE line (box [68, 959, 1332, 22]) ending
+"compute ~5 years on the operator's word (E99 s95)". (4) Chain (`logs/t27b-*`): door rc 0 (cues 33 of 34, life 18 of 18,
+"10 page(s) MEASURED"), door re-run sha256 IDENTICAL (`t27b-door2.sha` = `t27b-door-final.sha`), frozen "no run of identical
+frames over 0.50s", seams 17 boundaries 0 faults, spoken 5 phrases 0 uncovered, stage gaps 2.3 s of 464.1 s, pytest 101 passed,
+**gate 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** (unchanged from T27; M21's s18 now 30.1 s, 7:14 -> 7:44). The "20years"
+item under "Named, not fixed" above is CLOSED.
+
+---
+
+## 19. P69 T28 - row 20 (7:52-9:04): host window 2 - the desk, the questions, the phone, the test card, dip 6, the returning page - 2026-09-23
+
+The build runs 0.00-533.88 s. `UNIT_CUT_PHRASE` = "Run it on the most" (row 21's first words, T29's). RED: before the slice the
+table ended at row 18 (431.01-464.15); `logs/t28-gate-before.log` on HEAD's build: **2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO**.
+Treatment row 20 compiles as TABLE rows 19 (the desk) and 20 (the page).
+
+Recall: `docs_find "returning page"` -> the retitle species ("a returning page arrives retitled") and
+`SHOT-TABLE-90S.claude.md:89` ("a returning page unwinds (`:spiral`)"); `docs_find "unwind"` -> `CAPABILITIES.md:77`, `:79`, the
+undraw species, `SHORT-FORM-SHAPE.md:63` ("The page that opened the short comes back, already drawn, and unwinds from its point: no
+roll, no soak, no ink, no re-build"); `docs_find "E40"` -> `OPERATOR-RULINGS.md:1246` (E40 s4: "a returning page unwinds from its
+point (`enter=spiral`), never rolls out and builds again (E25)"); `CAPABILITIES.md:58` the page VORTEX (RETURN: `enter=spiral`, 1.6 s,
+no wipe); `docs_find "checklist"` -> `CAPABILITIES.md:268` the test card (`chart_dock:checklist`), `:249` (the recap fill, 0.8 s/row
+under 12 s), the page builder refusing `checklist`; `docs_find "agenda"` -> `CAPABILITIES.md:44` the numbered agenda (the
+treatment's own recall names it for "the three questions at 0:43 and 7:52"); `docs_find "chip"` -> `CAPABILITIES.md:100`;
+`docs_find "suck"` -> `CAPABILITIES.md:38` / `:40` / `:58`; `docs_find "smartphone"` -> `assets/props/cutouts/prop-smartphone-v1.png`
+(`CATALOGUE.md:39`); `docs_find "un-parked"` 0 hits for a page (only the finance un-parking in doc 00).
+
+| table row | window | what |
+|---|---|---|
+| 19 `world-h2-desk-v1;use=landing` + ken `(0.05, 10, -4)` | 463.95-513.69 | the clocks page is SUCKED into Mike's three raised fingers (`suck:0.49,0.31`, `TEST_DESK_WHY`) in the breath before "Now the test"; the three questions return as row 2 gave them - the numbered agenda on the brick above the bench, a row on "One:" (468.94), "Two:" (474.36), "Three:" (478.20); **the phone** (`prop-smartphone-v1`) STAMPED on "phone" (484.04) at an authored place on the bench's clear right half (`PHONE_PLACE` (0.835, 0.60, w 0.085) - `authored place: mark 163x312 painted px at (1604, 647)`), bare, with its resting shadow (`final/phone-zoom.png`); WHERE TO LOOK, one chip on each thing named, left of the phone (`WHERE_CHIPS`, `readability: landscape-phone`): SOLD OUT on "sold out" (486.86), CASH FLOW on "operating cash flow" (493.00), SHARE COUNT under it on "the share count isn't growing" (497.31), THE PRODUCT on "picture the product" (503.30); **the test card** (`dock-h-test-card`, the checklist, `build-h/objects/ev-test-scorecard-h20-v1.series.json`) THROWN at 504.75 to land on "Steel answers", 0.80 of the stage, filling as the anaphora's RECAP - row 1 by "scarce", row 2 on "cash", row 3 by "used", the steel and paper cells swept - and leaving 1.5 s before the dip (512.19): "Run your top five tonight." is said to the host |
+| 20 `ledger:ev-divergence-v1:line:234:right:spiral:cut;idle=live;domain=80,277` | 513.69-533.88 | **dip 6** (authored) and the divergence RETURNS BY THE SPIRAL (`DIV_RETURN_WHY`) - row 4's page: the hook's domain, their two lines, memory held at nothing, "Two lines, one warning" written back as it unwinds; a callout on the chips' line where it first stands at twice its base (`DIV_DOUBLED`, datum 158, May 2026, 204.67 - read off the object) on "The chip line doubling" (517.62), and on the giants' line the same day (120.41) on "The giants pinned" (521.24); the gap between them BLEEDS (`spread` mega -> semis) on "The divergence isn't a house of cards" (528.15); retitled "The test, administered in public" on "administered in" (531.54) |
+
+**Acceptance (P69 T28):** *the checklist lands row by row* - the test card's rows land one by one on the anaphora (the recap
+fill, `final/C-card-lands.png` 505.6 / 506.5 / 507.7), and the three questions land one per question on the desk as the numbered
+agenda (`final/A-boundary-in-questions-phone.1.png` 469.4 / 474.7 / 478.6) - see the departure below; *the divergence page returns
+unwound from its point (E40 s4), never redrawn* - `enter=spiral`: the page comes back out of the vortex's point with its lines
+already drawn (`final/D-return-page.1.png` 513.9-515.4; no roll, no build, no soak).
+
+**Measured and fixed** (drafts `scratchpad/p69-row20/d1..d5`, private builds via `STEEL_H_BUILD_DIR`):
+- **The test card from "The cash answer"** (draft 1, rows keyed to "operating cash flow" / "picture the product"): a 22 s hold -
+  **M12 FAIL** (a chart dock over 10 s) - and a row landing inside a card is not an event (**M01 / M05 / M08 FAIL**, 21.7 s at
+  8:10). The card became the anaphora's recap (6.9 s standing) and the where-to-look sentences are carried by the chips.
+- **The chips' glyphs:** a catalogued `prop-icon-*` is refused as a plain chip (only `assets/icons` SVGs; the `form: stamp` raster
+  chip takes no cross and is P69-HG1's) - so cpu / coins / landmark / factory.
+- **The chips' places:** stacked at x 0.68 from y 0.40 (draft 2) SOLD OUT sat on the list's third row; side by side (draft 5) the
+  two 45 px labels ran together ("CASH FLOW SHARE COUNT"); A over B at x 0.64 reads (`final/B-chips-card.1.png` 497.6). The
+  default chip label (~18 px yellow) was lost on the wood - `readability: landscape-phone` (charcoal on a cream stroke).
+- **The card's size:** the checklist's cells are the canvas' 19 px `.cs` on 1056 px, so the card reads at the phone floor only
+  at >= 0.72 of the stage; at 0.80 they are ~27.6 px. At centre_y 0.42 / 0.37 the top of Mike's hair stood over the card's edge;
+  at 0.355 it does not.
+- **The card's timing:** thrown ON "Steel" it was not in frame at 505.8 and each row landed 0.6-1.2 s after its word; thrown
+  0.5 s before (`TEST_CARD_LEAD_S`, under "gone.") it lands on "Steel" and the rows meet "scarce, cash, used".
+- **The returning page's marks:** callouts on the lines' LAST datum (draft 3) made the compiler push both lines' names clear of the
+  rings (`tip_mark`) and "their divergence" / "matches the market" ran off the stage's right edge (`d3-C.1.png` 516.0) - the
+  callouts moved to the doubling datum, which is the sentence's own word.
+- **Dip or cut into the spiral** (drafts 4, `d4cut-T.png` / `d4dip-T.png`): the spiral's return opens on the vortex's own last
+  state - bare cream, the stains coming up the drain, the crisp charcoal, the colours unwinding (513.7-515.4). Cut, the desk snaps
+  to cream in one frame; dipped (the treatment's dip 6, authored - the compiler's default in front of a signature enter is the
+  cut), the desk goes down to black and the cream rises out of it. The dip is taken.
+
+**Named, not fixed:**
+- **The spiral out of a plate reads as ~0.8 s of ink and bare board** (513.85-514.6: a charcoal stain spreading over cream, then
+  empty charcoal, then the particles) - the vortex's return has no outgoing page to unwind from (T26's own finding, section 17).
+  The stage-gap measure counts it 0.2 s empty (the dip's ramp, licensed) because the stains are page ink. The operator's read.
+- **The stage caption on the desk** runs across Mike's raised hand (y ~432-504) while no dock is live (464-484) - row 7's
+  finding 2 (no caption room on a picture plate), unchanged.
+- **The test card's lower half is empty** - the checklist canvas is 1056 x 480 and three rows end at y ~300; a shorter
+  `card_aspect` would clip the source line (the citation). An engine layout, for the parent.
+- **The returning page's sub** still reads "Their pairing, plus the S&P 500 and the memory builders" with memory held at nothing -
+  row 4's open item (section 11.1), unchanged.
+- **M21 WARN s20 18.6 s (8:35 -> 8:53):** a returning page arrives drawn, so its only data mark is its landing (515.3); the
+  callouts, the spread and the retitle are annotations. The whole sentence run is about this page; no data is left to draw on it
+  without redrawing (E40 s4). Owner: the parent's read (or row 21's `chart_to` taking the page earlier).
+- **M03 PASS at 44 s of 45** ("from 7:20"): from the GPU's morph landing (440.34) the next EVIDENCE is the phone (484.04) - the
+  desk is a plate, and the agenda rows and chips are species. An edit that moves the phone later FAILs it.
+- **The test card over the phone's ring** (T26d WARN "its box lands over a stamp's mark or ring") - the phone leaves as the card
+  is thrown (504.75); read on `final/C-card-lands.png` 505.25: the phone is fading as the card flies in, no overlap at rest.
+- **The first frame after the suck** (463.9583) painted the desk with no page on 2 of 4 cold seeks by the probe; the seam
+  measure's SEQUENTIAL read has that frame at luma 38.27, the page's (38.7), where the desk is ~68 - a cold-seek artefact, not a
+  frame in play.
+- **Cues:** `[silent]` for the spiral enter (513.69) and the suck (the kit reports it at the row's end, 513.69, as it does row 13's
+  at 363.38) - no cue kind is mapped for either.
+- `build-h/objects/ev-test-scorecard-h20-v1.series.json` is new (the PNG beside it is a copy of the object's, gitignored).
+
+**Departures (in `BODY_DEPARTURES`, row 20):** the phone card -> RESOLVED, the operator's prop stamped; the checklist "typing
+`1 scarce?` ... on its questions" -> the questions as the numbered agenda (the checklist's answer cells sweep 1.6 s after a
+question, and at a readable size it covers the host), the checklist as the anaphora's recap; the checklist "parked beside" the
+returning page -> not parked (a dip takes no docks; at card size it reads under the floor) - T29's ticks re-land it. Additions:
+the four where-to-look chips, the doubling callouts, the spread.
+
+**Transitions** (printed in `SHOT-TABLE-H.md`): the suck clocks -> desk (`TEST_DESK_WHY`: the melt's splash, the dip, the
+thread, the door, holding the page refused); dip 6 + spiral desk -> divergence (`DIV_RETURN_WHY`: axes / built, a recast, the
+snap / throw-then-push, the melt refused); inside the row the questions, phone and chips -> the test card (`TEST_SWEEP_WHY`).
+Flow count: 0 cuts, 7 dips, 1 arrival carrying a boundary, 11 transforms.
+
+**Life:** 20 of 20 rows carry a life token (row 19 `ken 0.05/10/-4`, row 20 `idle=live`). `final/life.txt`: 466.0 vs 468.0 on the
+desk (x 1100-1920, y 520-850) mean |dL| 1.60, 9.6 % of pixels changed (the push, before the agenda); 524.0 vs 526.0 on the page
+(x 0-1100, y 150-850) 4.14 / 5.4 %.
+
+**The fixture:** the door reported "11 page(s) MEASURED" (T27b: 10) - the returning page's box key is already in the fixture (the same object, variant,
+domain and profile), no ink changed, so **no re-measure**; `measure_page_boxes.py --check` PASS (`logs/t28-measure-check.log`).
+
+**The order of proof (`logs/`, final build 0.00-533.88):** `t28-door1.log` (the first build-h pass; its tiles moved the card's
+throw 0.5 s earlier), `t28-door2.log` (rc 0; cues 36 bound of 37 derived - the one dropped is T26's `page enter 17 (axes)`,
+unchanged; `[silent]` the suck, the built enter, the spiral enter; life 20 of 20; "11 page(s) MEASURED"), `t28-measure-check.log`
+**PASS 5 builders x 15 geometr(ies) measured identical**, `t28-probe.log` (194 instants), `t28-frozen.log` **"no run of identical
+frames over 0.50s (whole frame)"**, then the door re-run (`t28-door-final.log`) with the timeline, player.html, player.json,
+SHOT-TABLE-H.md and SHOT-TABLE-H.py sha256 IDENTICAL (`t28-door2.sha` = `t28-door-final.sha`), so GATES-MOTION.md is stamped on the
+fresh probe and hashes; `t28-seams.log` **19 boundaries, 0 faults** (463.95 suck darkest 38.3 clean; 513.69 dip darkest 6.0 clean);
+`t28-spoken.log` **5 pointing phrases, 0 uncovered**; `t28-stagegaps.log` **2.5 s of 533.9 s** (463.95 suck 0.0 s; 513.69 dip ->
+spiral 0.2 s, licensed); **`t28-gate.log` 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** - unchanged from `t28-gate-before.log`.
+FAIL M11 (row 1) and M31 (s08's 0.2 s at 3:15), both pre-existing. WARN M02, M04 (17 plates vs 44), M21 (+ s20, above), M25, M27 -
+**no new WARN**. M01 PASS (9.5 s), M03 PASS (44 s, above), M05 PASS (worst gap 7.0 s of 8.0), M12 PASS, M18 PASS (6407 frames,
+longest 0.08 s at 7:52). No gated command was piped.
+
+**Tiles** (`scratchpad/p69-row20/final/`, rendered from build-h): `A-boundary-in-questions-phone.1-2.png` (461.5 / 463.5 the
+clocks page and its callouts; 463.96 - 464.3 the suck into the fingers; 466.0 / 468.0 the host; 469.4 / 474.7 / 478.6 the three
+questions on their words; 484.1 - 485.2 the phone's stamp and rest); `phone-zoom.png` (486.0, the phone bare with its resting
+shadow); `B-chips-card.1-2.png` (487.2 SOLD OUT; 493.2 / 495.0 CASH FLOW; 497.6 / 500.0 SHARE COUNT under it; 503.6 THE PRODUCT;
+505.0 - 513.0 the first pass's card, superseded by C); `C-card-lands.png` (504.6 - 512.3: the chips and the list leave on "gone.",
+the card lands on "Steel", rows on "scarce" / "cash" / "used", the card leaves for "Run your top five tonight."); `D-return-page.1-2.png`
+(513.5 - 515.4 the dip and the spiral return; 516.5 - 523.0 the two callouts; 528.4 / 529.4 the spread; 531.8 - 533.85 the retitle
+and the row's end); `E-life.png` + `life.txt`. Drafts: `d1.log` .. `d5.log`, `d2-A.*`, `d3-B.*`, `d3-C.*`, `d4cut-T.png`,
+`d4dip-T.png`, `d4dip-S.png`, `d5-S.png`. No build-f reference frames were cut for this row.
+
+**T28b (2026-09-24, after the parent's frame read refused the test card: at 0.80 of the stage it covered the host, its cells
+read ~25-30 px against the s90 floor of 59.08 stage px, and its lower half was empty).** Rebuilt on lane B's `checklist.profile:
+"phone"` (dc43444): the derived `ev-test-scorecard-h20-v1.series.json` is now Ask / Steel / Paper, the parent's short questions
+(`1  Scarce?` sold out / on belief; `2  Cash?` earns cash / issues paper; `3  Lasts?` still used / needs a story -
+`TEST_CARD_CHECKLIST`), no sub, in the right 0.60 of the stage (`TEST_CARD_SLOT` centre (0.69, 0.46), w 0.60). The throw
+(504.75), the recap timing and the leave (512.19) are unchanged. Read on `scratchpad/p69-row20/t28b/C-card-lands.png`
+(504.6-512.3): Mike's face and shoulder stand at the left for the whole card; the three rows fill the card to its source line;
+row 1 is typed by 506.05 ("scarce"), row 2 at 506.5 ("cash"), row 3 by 507.7 ("used"). At a 390 px phone
+(`t28b/phone-390-x3.png`, 508.5) every cell word reads. Named: the recap sweeps each row's paper cell 0.45 s after its question
+(`RECAP_OFFS[2]`), so "issues paper" / "needs a story" are on the card ~0.7-1 s before "Paper answers" (507.64) - the recap's
+law, as T28's four-column card was at 0.7 s; a later paper sweep needs a per-column delay the species does not have. Row 3 is
+32 characters (the parent's "~30"). The door's why-strings (`TEST_SWEEP_WHY`, the `BODY_DEPARTURES` row 20 line) still give T28's
+0.72-of-the-stage reason for putting the questions on the agenda; they were left unedited so that the gated door output stayed
+byte-identical. Chain (`logs/t28b-*`): door rc 0 (cues 36 of 37, life 20 of 20); `measure_page_boxes.py --check` **PASS 6 builders
+x 18 geometr(ies) measured identical**; probe 194 instants; frozen **no run of identical frames over 0.50s**; door re-run sha256
+IDENTICAL (`t28b-door1.sha` = `t28b-door-final.sha`); seams **19 boundaries, 0 faults**; spoken **5 pointing phrases, 0
+uncovered**; stage gaps **2.5 s of 533.9 s**; **gate 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** (unchanged; M12 PASS, M25
+lists no row 20 card).

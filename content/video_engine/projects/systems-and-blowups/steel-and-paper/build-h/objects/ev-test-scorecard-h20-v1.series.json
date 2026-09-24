@@ -1,0 +1,35 @@
+{
+ "title": "THE TEST - 30 seconds a holding",
+ "src": "Money Physics - the three-question test",
+ "checklist": {
+  "profile": "phone",
+  "head": [
+   "Ask",
+   "Steel",
+   "Paper"
+  ],
+  "rows": [
+   {
+    "cells": [
+     "1  Scarce?",
+     "sold out",
+     "on belief"
+    ]
+   },
+   {
+    "cells": [
+     "2  Cash?",
+     "earns cash",
+     "issues paper"
+    ]
+   },
+   {
+    "cells": [
+     "3  Lasts?",
+     "still used",
+     "needs a story"
+    ]
+   }
+  ]
+ }
+}

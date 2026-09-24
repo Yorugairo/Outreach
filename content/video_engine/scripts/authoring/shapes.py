@@ -188,7 +188,7 @@ CHART_TO_KINDS = CHART_TO_TO_STATE + CHART_TO_DERIVED + CHART_TO_NO_STATE
 # `from: prop:<id>`), which leave the species list there and are never a chart state change.
 LINE_VARIANTS = ("line", "dense-line", "lines", "tiers")
 BARS_VARIANTS = ("bars", "signed-bars", "breakthrough")
-UNPARK_SCALE = 1.0               # CAPABILITIES.md:120 - a park to 1.0 is the UN-PARK: the chart re-takes the stage
+UNPARK_SCALE = 1.0               # CAPABILITIES.md:124 - a park to 1.0 is the UN-PARK: the chart re-takes the stage
 TIME_HOLE = re.compile(r"^\{(t[01])\}([+-][0-9.]+)?$")
 HOLE = re.compile(r"\{([a-z0-9_]+)\}")
 DOCK_ID = re.compile(r"(?<!recipe:)\b(dock-[a-z0-9-]+)")   # `recipe:dock-...` is a RECIPE name, never a dock asset
@@ -547,7 +547,7 @@ SPECIES_DUR_S = 1.0      # the seconds a species with no `dur` of its own runs -
 
 def park_scale_at(species: list, t: float) -> float:
     """The scale the page's chart is PARKED to at `t` - 1.0 while it stands full size. The last
-    `chart_to park` at or before `t` decides, and a park to 1.0 is the UN-PARK (CAPABILITIES.md:120)."""
+    `chart_to park` at or before `t` decides, and a park to 1.0 is the UN-PARK (CAPABILITIES.md:124)."""
     scale = UNPARK_SCALE
     for sp in sorted((s for s in (species or []) if s.get("kind") == "chart_to" and s.get("to") == "park"),
                      key=lambda s: float(s["at"])):
@@ -877,7 +877,7 @@ def unpark_inside_the_row(card: list, at: float, out: float, guards: list, t1: f
     """`(the park, the un-park)` with the UN-PARK landing WHOLE inside the row - or None where it cannot
     and the card is dropped by name.
 
-    CAPABILITIES.md:120 / `build_short.py:394`: the un-park is how the chart RE-TAKES the stage. A page
+    CAPABILITIES.md:124 / `build_short.py:394`: the un-park is how the chart RE-TAKES the stage. A page
     whose un-park falls past its row's end is left standing at `park_scale` into the boundary - the row's
     own exit played on a stamp, and the next world handed a parked chart (the T3j review's MEDIUM 5, on
     arithmetic that clamps the card's exit to `t1` and then adds the lag to it). So the card LEAVES early
@@ -893,14 +893,14 @@ def unpark_inside_the_row(card: list, at: float, out: float, guards: list, t1: f
             and park_covers(at, round(leave + UNPARK_LAG_S, 2), guards) is None):
         notes.append(f"`{card[0]}` leaves at {leave:.2f}s and not at {float(card[3]):.2f}s, so the page's UN-PARK "
                      f"lands whole inside the row (it ends at {t1:.2f}s): the card still has its {need:.2f}s to read "
-                     "and park, and a page is never left standing parked into its own exit (CAPABILITIES.md:120)")
+                     "and park, and a page is never left standing parked into its own exit (CAPABILITIES.md:124)")
         card[3] = leave
         return at, round(leave + UNPARK_LAG_S, 2)
     notes.append(f"`{card[0]}` is DROPPED: the page has no room clear of its ink for it, and the park that would make "
                  f"one could not UN-PARK inside the row - the card lands at {float(card[2]):.2f}s and needs "
                  f"{need:.2f}s to read and park, so the page would still be at `park_scale` when the row ends at "
                  f"{t1:.2f}s. A page left parked hands the next world a stamp, so the card goes and the page keeps "
-                 "the stage (CAPABILITIES.md:120; E65)")
+                 "the stage (CAPABILITIES.md:124; E65)")
     return None
 
 
@@ -937,7 +937,7 @@ def make_room(card: list, species: list, t1: float, d: dict, notes: list) -> flo
                     "scale": UNPARK_SCALE, "anchor": anchor})
     notes.append(f"the page UN-PARKS at {out:.2f}s, as the card leaves, and is back at full size by {out + PARK_DUR_S:.2f}s "
                  f"- inside the row's own end ({t1:.2f}s): the chart re-takes the stage rather than standing small "
-                 "under nothing (`build_short.py:394`; CAPABILITIES.md:120)")
+                 "under nothing (`build_short.py:394`; CAPABILITIES.md:124)")
     return scale
 
 
@@ -1475,7 +1475,7 @@ def page_land_offset(entry: str | None, mount_s: float) -> float:
     if entry == "spiral":
         return MD.LP_SPIRAL_IN_S
     if entry in ("axes", "morph"):
-        # E99 s70 / CAPABILITIES.md:121: an `enter=morph` page is on screen from frame 0 as the
+        # E99 s70 / CAPABILITIES.md:125: an `enter=morph` page is on screen from frame 0 as the
         # traced silhouette it grew out of, and it is the DATA that builds - the axes entry's clock
         return MD.LP_BUILD_S
     if entry in ("built", "snap", "camera"):
