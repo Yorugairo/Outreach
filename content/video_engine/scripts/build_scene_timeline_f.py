@@ -618,6 +618,23 @@ NEWSREEL_BAND_H = 0.14         # [DERIVED: species/newsreel.mjs NEWSREEL.BAND_H]
 NEWSREEL_EXIT_S = 0.38         # [DERIVED: species/newsreel.mjs NEWSREEL.BEATS.EXIT_FOR] the retreat, so `hold` + the retreat must fit the window
 NEWSREEL_CAP_ABOVE = "above"   # `cap_band: "above"` on the row - the operator's alternative: the crawl takes the caption's own
                                # strip and the caption moves ABOVE the crawl. Absent = this slice's default (the band goes below).
+# P69 T8b (E99 s104, amended twice) - A PANELS PAGE, AND ITS FOCUS. A `panels` object is a ledger page of 2-4 plots
+# (ledger_page.PANELS). Its species ADDRESS a panel: `panel: <index>` on a chart species (the ones below) lands it in
+# that panel's plot, on that panel's scale and clock; a datum target carries the same index (`target.panel`) so a
+# callout, a ring or a camera move resolves on the panel it names. FOCUS is a composable STATE on a word:
+# `panel_focus {at, dur, layout: row|stack|quad|free, roles | active / hidden, recede?, region?, boxes?}` - every
+# panel's box, ink and blur move on the ONE clock of the transition (the engine's `lpPanelPoses`); the resize and the
+# recede are that one move, never a cut. `ledger_page.PANEL_*` is the law; `panel_focus_state` normalises an entry.
+SPECIES_PANEL_FOCUS = "panel_focus"
+SPECIES_KINDS += (SPECIES_PANEL_FOCUS,)
+PAGE_SPECIES += (SPECIES_PANEL_FOCUS,)
+SPECIES_WHEN[SPECIES_PANEL_FOCUS] = ("the sentence moves between the charts of a PANELS page - the one it is about grows to be "
+                                     "read while the others recede (scaled back, dimmed, softened) and come back on their "
+                                     "word; a layout change (side by side, stacked, quadrants, free) is one move, never a cut")
+PANEL_SPECIES = ("build_to", "undraw", "figure", "bracket", "spread", SPECIES_SPAN, "chart_to", "relight")   # the chart
+# species a panel carries (the page's own - retitle, note, a relit title, the focus - stay the page's)
+PANEL_CHART_TO = ("park",)   # a panel has one chart state; the verbs that need a second one are refused by name
+PANEL_FOCUS_KEYS = ("layout", "roles", "active", "hidden", "recede", "region", "boxes")
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -1492,6 +1509,7 @@ SPECIES_TARGETS = {
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
     "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
+SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANELS by index, never a coordinate
 SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
                                                   # point would leave the strip's height to the painter, and the strip is the
                                                   # thing the caption has to be reconciled with (the strip law below)
@@ -1537,6 +1555,9 @@ def _validate_target(kind: str, target, allowed: tuple) -> list[str]:
         # index through as well. The UPPER bound needs the page's own series count, which this function has not
         # read - that is `check_target_series`, run from `derive_rescale_states` where the page spec is in hand.
         errs.append(f"{kind}: target datum 'series' must be a non-negative integer series index")
+    if tk == "datum" and "panel" in target and (isinstance(target["panel"], bool)
+                                                or not isinstance(target["panel"], int) or target["panel"] < 0):
+        errs.append(f"{kind}: target datum 'panel' must be a non-negative integer panel index (P69 T8b)")
     if tk == "span" and not errs and target["from_word"] > target["to_word"]:
         errs.append(f"{kind}: target span from_word > to_word")
     return errs
@@ -1810,6 +1831,179 @@ def page_species_end(entry: dict) -> float | None:
     return round(float(entry["leave_at"]) + (float(s) if isinstance(s, (int, float)) and not isinstance(s, bool) else PAGE_LEAVE_S), 3)
 
 
+def _is_index(v) -> bool:
+    return isinstance(v, int) and not isinstance(v, bool) and v >= 0
+
+
+def _fraction_box(v) -> bool:
+    """[x, y, w, h] as stage fractions, on the stage and not empty."""
+    return (isinstance(v, (list, tuple)) and len(v) == 4
+            and all(isinstance(c, (int, float)) and not isinstance(c, bool) and math.isfinite(c) for c in v)
+            and v[2] > 0 and v[3] > 0 and min(v[0], v[1]) >= 0 and v[0] + v[2] <= 1 + 1e-9 and v[1] + v[3] <= 1 + 1e-9)
+
+
+def _index_items(raw):
+    """(index, value) pairs of a list, or of a dict keyed by index (a JSON key is a string); None for anything else."""
+    if isinstance(raw, dict):
+        return list(raw.items())
+    return list(enumerate(raw)) if isinstance(raw, list) else None
+
+
+def _index_key(k) -> bool:
+    return _is_index(k) or (isinstance(k, str) and k.isdigit())
+
+
+def _validate_panel_fields(kind: str, entry: dict) -> list[str]:
+    """P69 T8b: `panel` on a chart species (the panel it lands in), and a `panel_focus` entry's own grammar. The panel
+    COUNT is the page's - `check_panels` bounds every index once the page is in hand."""
+    errs: list[str] = []
+    if "panel" in entry:
+        if not _is_index(entry["panel"]):
+            errs.append(f"{kind}: panel must be a non-negative integer panel index (P69 T8b)")
+        elif kind not in PANEL_SPECIES:
+            errs.append(f"{kind}: 'panel' addresses a panels page's chart species ({'|'.join(PANEL_SPECIES)}); a "
+                        "pointing species names its panel on its datum target (`target.panel`)")
+    if kind != SPECIES_PANEL_FOCUS:
+        return errs
+    stray = sorted(k for k in entry if k not in PANEL_FOCUS_KEYS + ("kind", "at", "dur", "word", "keep"))
+    if stray:
+        errs.append(f"panel_focus: unknown key(s) {stray} - a focus state is {'|'.join(PANEL_FOCUS_KEYS)}")
+    layout = entry.get("layout")
+    if layout not in LPG.PANEL_LAYOUTS:
+        errs.append(f"panel_focus: layout must be one of {'|'.join(LPG.PANEL_LAYOUTS)} (the layout the ACTIVE panels take)")
+    roles = entry.get("roles")
+    if roles is not None and "active" in entry:
+        errs.append("panel_focus: name the roles OR the active panels, not both")
+    if roles is not None:
+        items = _index_items(roles)
+        if items is None:
+            errs.append("panel_focus: roles must be a list (one role per panel) or {panel index: role}")
+        else:
+            for k, r in items:
+                if not _index_key(k):
+                    errs.append(f"panel_focus: roles key {k!r} is not a panel index")
+                if r not in LPG.PANEL_ROLES:
+                    errs.append(f"panel_focus: role {r!r} is not one of {'|'.join(LPG.PANEL_ROLES)}")
+    for key in ("active", "hidden"):
+        v = entry.get(key)
+        if v is not None and not (isinstance(v, list) and all(_is_index(i) for i in v)):
+            errs.append(f"panel_focus: {key} must be a list of panel indices")
+    if roles is None and "active" not in entry:
+        errs.append("panel_focus: name the ACTIVE panels (`active: [...]`, the rest recede) or every panel's `roles`")
+    rec = entry.get("recede")
+    if rec is not None:
+        if not isinstance(rec, dict):
+            errs.append("panel_focus: recede must be {scale?, dim?, blur?} - the receded panels' dials")
+        else:
+            for k, v in rec.items():
+                lo_hi = LPG.PANEL_RECEDE_BOUNDS.get(k)
+                if lo_hi is None:
+                    errs.append(f"panel_focus: recede.{k} is not one of {'|'.join(LPG.PANEL_RECEDE)}")
+                elif isinstance(v, bool) or not isinstance(v, (int, float)) or not lo_hi[0] <= v <= lo_hi[1]:
+                    errs.append(f"panel_focus: recede.{k} {v!r} is not a number in [{lo_hi[0]}, {lo_hi[1]}]")
+    if "region" in entry and not _fraction_box(entry["region"]):
+        errs.append("panel_focus: region must be [x, y, w, h] - stage fractions, on the stage - the box the active panels fill")
+    boxes = entry.get("boxes")
+    if boxes is not None:
+        items = _index_items(boxes)
+        if items is None or not all(_index_key(k) and (b is None or _fraction_box(b)) for k, b in items):
+            errs.append("panel_focus: boxes must be {panel index: [x, y, w, h]} (or a list, one per panel) - stage "
+                        "fractions, on the stage")
+    if layout == "free" and boxes is None:
+        errs.append("panel_focus: layout free names a BOX per panel (`boxes`) - the other layouts compute theirs")
+    return errs
+
+
+def panel_focus_state(entry: dict, n: int, where: str) -> dict:
+    """One `panel_focus` entry NORMALISED for a page of `n` panels, in place: `roles` a full list, `recede` every dial,
+    `boxes` a full list (null = the layout's box); `active` / `hidden` folded into the roles. ValueError names what
+    does not fit the page (an index past its last panel, a free layout with an active panel given no box, no panel in
+    focus). Idempotent: a normalised entry normalises to itself."""
+    roles = ["receded"] * n
+    if entry.get("roles") is not None:
+        raw = entry["roles"]
+        if isinstance(raw, dict):
+            roles = ["active"] * n   # a dict names the exceptions; the rest stay in focus
+        elif len(raw) != n:
+            raise ValueError(f"{where}: panel_focus roles names {len(raw)} panels and the page has {n}")
+        for k, r in _index_items(raw):
+            if int(k) >= n:
+                raise ValueError(f"{where}: panel_focus roles names panel {k} and the page's last panel is {n - 1}")
+            roles[int(k)] = r
+    else:
+        for key, role in (("active", "active"), ("hidden", "hidden")):
+            for i in entry.get(key) or []:
+                if i >= n:
+                    raise ValueError(f"{where}: panel_focus {key} names panel {i} and the page's last panel is {n - 1}")
+                roles[i] = role
+    if "active" not in roles:
+        raise ValueError(f"{where}: panel_focus puts no panel in focus - a state is ABOUT one chart or more (E99 s104)")
+    boxes = [None] * n
+    if entry.get("boxes") is not None:
+        for k, b in _index_items(entry["boxes"]):
+            if int(k) >= n:
+                raise ValueError(f"{where}: panel_focus boxes names panel {k} and the page's last panel is {n - 1}")
+            boxes[int(k)] = [float(c) for c in b] if b is not None else None
+    if entry.get("layout") == "free":
+        bare = [i for i, r in enumerate(roles) if r == "active" and boxes[i] is None]
+        if bare:
+            raise ValueError(f"{where}: panel_focus layout free gives active panel(s) {bare} no box")
+    entry["roles"] = roles
+    entry["recede"] = {k: float((entry.get("recede") or {}).get(k, v)) for k, v in LPG.PANEL_RECEDE.items()}
+    entry["boxes"] = boxes
+    entry.pop("active", None)
+    entry.pop("hidden", None)
+    return entry
+
+
+def check_panels(world: dict, row_species: list) -> None:
+    """P69 T8b: a row's species on a PANELS page - every `panel` (and datum `target.panel`) inside the page's panels,
+    every series a panel species names inside ITS panel, a `chart_to` only by a verb a one-state panel can do, and
+    every `panel_focus` normalised to the page. On any other page a `panel` or a `panel_focus` is refused by name - it
+    would draw nothing. ValueError names the species; the caller names the row."""
+    page = (world or {}).get("page") if isinstance(world, dict) else None
+    is_panels = ((world or {}).get("kind") == SPECIES_LEDGER and isinstance(page, dict)
+                 and page.get("builder") == LPG.PANELS and isinstance(page.get(LPG.PANELS_KEY), list))
+    panels = page[LPG.PANELS_KEY] if is_panels else []
+    for sp in (row_species or []):
+        if not isinstance(sp, dict):
+            continue
+        kind, tgt = sp.get("kind"), sp.get("target")
+        datum = isinstance(tgt, dict) and tgt.get("kind") == "datum"
+        tpanel = tgt.get("panel") if datum else None
+        if not is_panels:
+            if kind == SPECIES_PANEL_FOCUS:
+                raise ValueError("panel_focus: a focus state moves the panels of a PANELS page (a `panels` object's "
+                                 "ledger page) - this page has none")
+            if "panel" in sp or tpanel is not None:
+                raise ValueError(f"{kind}: 'panel' addresses a panel of a PANELS page - this page has none, so the "
+                                 "species would land nowhere")
+            continue
+        n = len(panels)
+        if kind == SPECIES_PANEL_FOCUS:
+            panel_focus_state(sp, n, kind)
+            continue
+        if kind == "chart_to" and sp.get("to") not in PANEL_CHART_TO:
+            raise ValueError(f"chart_to {sp.get('to')}: a panel of a panels page has ONE chart state - it can "
+                             f"{'|'.join(PANEL_CHART_TO)}; a recast / rescale / extend / morph / remake needs a second "
+                             "state the panel does not have (P69 T8b: undraw the panel, or build the next chart as a page)")
+        if "panel" in sp and tpanel is not None and tpanel != sp["panel"]:
+            raise ValueError(f"{kind}: panel {sp['panel']} and target.panel {tpanel} disagree - name one of them")
+        pi = sp.get("panel", tpanel)
+        pi = 0 if pi is None else pi
+        if pi >= n:
+            raise ValueError(f"{kind}: panel {pi} is past the page's last panel ({n - 1})")
+        k = len(panels[pi].get("series") or [])
+        fields = [(f, sp[f]) for f in TARGET_SERIES_FIELDS if f in sp] if kind in SERIES_NAMING_SPECIES else []
+        if datum and "series" in tgt:
+            fields.append(("target series", tgt["series"]))
+        for field, v in fields:
+            if _is_index(v) and v >= k:
+                raise ValueError(f"{kind}: {field} {v} is past panel {pi}'s last series ({k - 1})")
+        if datum:
+            tgt["panel"] = pi   # the pointing species (a callout, a ring, the camera) resolves on the panel it names
+
+
 def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     """P47 T2: the page species' own fields. bracket: integer `from`/`to` (data indices), a `label`, optional `sub`,
     `series`, `color`; retitle: a non-empty `text`; relight: `ref` bracket|title, optional `index`."""
@@ -1900,6 +2094,7 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append(f"{kind}: 'tier' belongs to the page species that name a series ({'|'.join(TIER_SPECIES)})")
         elif "series" in entry and is_idx(entry.get("series")) and entry["series"] != entry["tier"]:
             errs.append(f"{kind}: tier {entry['tier']} and series {entry['series']} disagree - a tier IS the series index on a tiers page; name one of them")
+    errs += _validate_panel_fields(kind, entry)   # P69 T8b: a panel's address, and a focus state's grammar
     if kind in ("build_to", "undraw") and "paths" in entry and entry["paths"] not in PATH_SELECTORS:
         errs.append(f"{kind}: paths must be one of {'|'.join(PATH_SELECTORS)} (the highlighted tail, the history, or all)")
     elif kind == "chart_to":
@@ -3618,6 +3813,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     `to_index`, or reveals a `later: true` series; the species carries `from_index` (the last shared datum) so the
     player caps the draw there."""
     check_target_series(world, row_species)   # R26-218: a series the page does not have, refused before it draws nothing
+    check_panels(world, row_species)          # P69 T8b: a panel's address, and the focus states, on the page they name
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
             if world.get("kind") != SPECIES_LEDGER:

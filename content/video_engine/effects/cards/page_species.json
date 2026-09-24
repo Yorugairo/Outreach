@@ -530,6 +530,119 @@
       }
     },
     {
+      "id": "page_species:panel_focus",
+      "axis": "page_species",
+      "token": "panel_focus",
+      "title": "Panels and focus on a word (quad, grow, recede)",
+      "aliases": [
+        {
+          "name": "one grows up to cover the page while the others blur and recede",
+          "source": "docs/portable/OPERATOR-RULINGS.md (E99 s104 amended)"
+        },
+        {
+          "name": "the ledger page draws PANELS",
+          "source": ".claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md (T8b)"
+        }
+      ],
+      "does": "A `panels` page (2-4 charts, one scale, E79) changes focus on a word: a layout (row, stack, quad, free) and a role per panel (active, receded, hidden), in one move; receded panels scale back, dim and blur but stay.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "COMPARES"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"panel_focus\", \"at\", \"dur\", \"layout\": \"row|stack|quad|free\", \"roles\" | \"active\" | \"hidden\", \"recede\"?: {\"scale\", \"dim\", \"blur\"}, \"region\"?, \"boxes\"?} on a page built from a `panels` object; other species take `panel: <i>`",
+        "example": "{\"kind\": \"panel_focus\", \"at\": 14.0, \"dur\": 1.1, \"layout\": \"quad\", \"roles\": [\"receded\", \"active\", \"receded\", \"receded\"]}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (panels_quad_grow)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the receded soften first",
+          "does": "panels leaving focus dim and blur on their own clock, done by half the move, so the growing panel reads cleanly over them",
+          "trigger": "the species' `at`, over INK_LEAD of `dur`",
+          "dials": {
+            "INK_LEAD": "0.5"
+          }
+        },
+        {
+          "name": "the boxes move",
+          "does": "every panel's box moves to its cell in the new layout by one translate plus uniform scale (the park's move); the grown panel takes the whole plot region",
+          "trigger": "the species' `at`, over `dur`",
+          "dials": null
+        },
+        {
+          "name": "the focused sharpen",
+          "does": "a panel coming forward sharpens in the second half of the move; a receded panel holds its species and stays on the page",
+          "trigger": "INK_LEAD of `dur`, to the end",
+          "dials": {
+            "PANEL_RECEDE.scale": "0.86",
+            "PANEL_RECEDE.dim": "0.55",
+            "PANEL_RECEDE.blur": "5"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "the verdict stack's recede to the mosaic",
+          "became": "the receded role",
+          "record": "docs/content-video-engine/CAPABILITIES.md:248",
+          "tie": "recorded"
+        },
+        {
+          "source": "the park's box-to-box move",
+          "became": "the box move",
+          "record": "docs/content-video-engine/CAPABILITIES.md:91",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "row",
+          "means": "Layout: panels side by side.",
+          "source_set": null
+        },
+        {
+          "token": "stack",
+          "means": "Layout: panels stacked (portrait).",
+          "source_set": null
+        },
+        {
+          "token": "quad",
+          "means": "Layout: a 2x2 grid over the plot region.",
+          "source_set": null
+        },
+        {
+          "token": "free",
+          "means": "Layout: a box per panel (stage fractions); the grown state.",
+          "source_set": null
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpPaintPanels",
+        "note": "buildLedgerPanels, lpPanelPoses (pure in t); ledger_page.panel_layout; build_scene_timeline_f.panel_focus_state"
+      },
+      "doctrine": [
+        "E99 s104",
+        "E79",
+        "E99 s106",
+        "P69 T8b"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "panels-quad-grow",
+        "test": "content/video_engine/tests/test_ledger_panels.py",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "page_species:peel",
       "axis": "page_species",
       "token": "peel",

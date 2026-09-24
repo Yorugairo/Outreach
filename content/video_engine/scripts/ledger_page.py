@@ -71,6 +71,12 @@ CHART_VARIANTS = ("line", "bars", "race", "decline", "progress", "share")
 # is the time axis, which is the comparison the sentence is making. `tiers: true` (a bool) stays what
 # it was - the two-band combo's key - and builds byte-identically; `tiers: [...]` is this builder.
 TIERS_MIN, TIERS_MAX = 2, 4
+# P69 T8b (E99 s104, amended twice): a `panels` object - the format the card's `chart_dock:panels` already draws - is
+# a PAGE of 2-4 plots, each its own chart (its sub, its axes, its end tags), one scale across them by default (E79;
+# `independent: true` gives each its own). The builder is `panels`; each panel is drawn by the dense-line builder
+# inside its own box, and the boxes move by FOCUS STATES (`panel_focus`, the compiler's) - see `panel_layout`.
+PANELS = "panels"
+PANELS_MIN, PANELS_MAX = 2, 4
 # `treemap` (P50 T6): the CENSUS page, under E53 s1's second amendment (ruled 2026-09-10).
 # `object` is the page as a WORKING surface rather than an evidence surface: it draws
 # a registered prop in ink on the cream instead of a chart. Same page clock, same
@@ -86,7 +92,7 @@ LANDSCAPE_PHONE = "landscape-phone"
 LONGFORM = "longform"
 READABILITY_PROFILES = (LANDSCAPE_PHONE, LONGFORM)
 # the builders each profile is legal on (T14's inventory: the body's pages are dense-line and bars/`story`)
-READABILITY_BUILDERS = {LANDSCAPE_PHONE: ("dense-line",), LONGFORM: ("dense-line", "story")}
+READABILITY_BUILDERS = {LANDSCAPE_PHONE: ("dense-line",), LONGFORM: ("dense-line", "story", PANELS)}   # P69 T8b: a panels page, each panel framed
 AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
              "name_clear",   # lift the inline series name clear of the data it would otherwise be written across
              "readability",  # R26-? closed, page-scoped chart typography/geometry profile
@@ -210,6 +216,8 @@ def pick_builder(series: dict, variant: str) -> str:
         return "share"
     if variant in ("tiers", "treemap"):   # P50 T9 / T6: the file's shape is the variant's own - there is nothing to infer
         return variant
+    if variant == "line" and isinstance(series.get("panels"), list):   # P69 T8b: a PANELS object is a page of 2-4 plots
+        return PANELS
     """Builder from the data shape and the variant (P35 Builder Architecture)."""
     if variant in ("race", "decline"):
         return variant
@@ -347,6 +355,8 @@ def validate(series: dict, variant: str) -> list[str]:
         return errors + _validate_share(series)
     if variant == "tiers":
         return errors + _validate_tiers(series)
+    if pick_builder(series, variant) == PANELS:   # P69 T8b
+        return errors + _validate_panels(series)
     if variant == "treemap":
         return errors + _validate_treemap(series)
     has_race = any(r["values"] for r in race_rows(series))
@@ -682,6 +692,214 @@ def scale_warnings(series: dict) -> list[str]:
                    f"share one scale (shared: {_dom_text(shared[unit])}); if these are unrelated measures, declare "
                    "`independent: true` on the page or the tier")
     return out
+
+
+# ---- PANELS (P69 T8b; E99 s104, amended twice) ---------------------------------------------------
+# The operator: "no reason it shouldn't be able to, we already handle 2 evidence docks on world plates, it rhymes to
+# have 2 data panels/charts on ledger plates when needed" - and, for row 21's four charts, "whatever is less important
+# to be held on background/off-focus and brought back up at relevant times". The page is 2-4 LINE plots, each its own
+# chart; the SCALE is E79's: panels of one measure share ONE y domain (the card's own rule - min and max over every
+# panel, the reference rules and a declared ymin / ymax, the air on top and on the bottom unless ymin names the floor -
+# `shared_panel_domain`), written onto each panel's axes so the engine's line builder draws it verbatim; `independent:
+# true` on the page gives every panel its own, on a panel takes that one out of the group. A panel that DECLARES its
+# own `domain` keeps it (the author places, the engine advises - E99 s106) and, if it shares a unit with the group, the
+# build says so as E79's WARN (`panel_scale_warnings`), never a refusal.
+PANEL_Y_PAD = 0.06   # the card's own air on the shared scale (scene-evidence-engine's chart_dock: `pad = (gy1 - gy0) * 0.06`)
+PANEL_TICK_EDGE = 0.02   # a page x tick this share of a panel's span outside its data still belongs to it (1998 on a series from 1998.0027)
+
+
+def _panel_entries(series: dict) -> list:
+    """The declared panels, verbatim (a non-object entry is kept so the error can name it)."""
+    return list(series["panels"]) if isinstance(series.get("panels"), list) else []
+
+
+def _panel_lines(panel: dict) -> list[dict]:
+    """A panel's line series (its `series` list; a `later` series waits off the page, as on a line page)."""
+    return [s for s in (panel.get("series") or []) if isinstance(s, dict) and "pts" in s and not s.get("later")]
+
+
+def _validate_panels(series: dict) -> list[str]:
+    """A panels page's contract: 2-4 panels, each a named plot fed by line series. Every failure names its panel."""
+    panels = _panel_entries(series)
+    if len(panels) < PANELS_MIN:
+        return [f"a panels page needs 'panels': a list of at least {PANELS_MIN} plots, each {{sub, series}} - one plot "
+                "is a line page"]
+    errors: list[str] = []
+    if len(panels) > PANELS_MAX:
+        errors.append(f"{len(panels)} panels: the ceiling is {PANELS_MAX} (E99 s104 amended: up to FOUR on a page, the "
+                      "rest held in focus states - a fifth chart is a new page)")
+    for i, panel in enumerate(panels):
+        where = f"panels[{i}]"
+        if not isinstance(panel, dict):
+            errors.append(f"{where} is not an object")
+            continue
+        if not _text(panel.get("sub")):
+            errors.append(f"{where} has no 'sub': a panel's sub IS its title line - two plots side by side must say "
+                          "which is which")
+        if not _panel_lines(panel):
+            errors.append(f"{where} {panel.get('sub')!r} has no line series ('series': [{{name, pts}}])")
+        if "independent" in panel and not isinstance(panel["independent"], bool):
+            errors.append(f"{where}: independent must be true or false (E79)")
+    return errors + _validate_values(series, "line") + badge_key_conflicts(series)
+
+
+def panel_unit(series: dict, panel: dict) -> str:
+    """The unit a panel's y axis measures: its own `yunit` / `unit`, else the page's."""
+    for src in (panel, series):
+        for key in ("yunit", "unit"):
+            if _text(src.get(key)):
+                return str(src[key])
+    return ""
+
+
+def _panel_raw_extent(series: dict, panel: dict) -> tuple[float, float] | None:
+    """A panel's data extent, the page's reference rules and any declared ymin / ymax - the card's own inputs."""
+    vals = [to_number(p[1]) for s in _panel_lines(panel) for p in _points(s)]
+    rules = series.get("hlines") or ([series["hline"]] if isinstance(series.get("hline"), dict) else [])
+    vals += [to_number(h.get("y")) for h in rules if isinstance(h, dict)]
+    vals += [to_number(src.get(k)) for src in (series, panel) for k in ("ymin", "ymax") if src.get(k) is not None]
+    nums = [v for v in vals if v is not None]
+    return (min(nums), max(nums)) if nums else None
+
+
+def _padded(lo: float, hi: float, floor_named: bool) -> list[float]:
+    pad = (hi - lo) * PANEL_Y_PAD or 1.0
+    return [lo if floor_named else lo - pad, hi + pad]
+
+
+def shared_panel_domain(series: dict) -> list[float] | None:
+    """E79: the ONE y domain every non-independent panel of this page draws on - the card's own rule, verbatim (min
+    and max over the group's data, the reference rules and a declared ymin / ymax, padded 6 % unless ymin names the
+    floor). None when every panel is independent. Pure."""
+    group = [p for p in _panel_entries(series) if isinstance(p, dict) and not _panel_own_scale(series, p)]
+    ext = [e for e in (_panel_raw_extent(series, p) for p in group) if e]
+    if not ext:
+        return None
+    lo, hi = min(e[0] for e in ext), max(e[1] for e in ext)
+    return _padded(lo, hi, series.get("ymin") is not None)
+
+
+def _panel_own_scale(series: dict, panel: dict) -> bool:
+    return series.get("independent") is True or panel.get("independent") is True or _declared_domain(panel) is not None
+
+
+def _panel_domain(series: dict, panel: dict, shared: list[float] | None) -> list[float] | None:
+    """The domain one panel is drawn on: its declared one, else (independent) its own padded extent, else the shared."""
+    own = _declared_domain(panel)
+    if own:
+        return [own[0], own[1]]
+    if not _panel_own_scale(series, panel):
+        return shared
+    ext = _panel_raw_extent(series, panel)
+    return _padded(ext[0], ext[1], panel.get("ymin", series.get("ymin")) is not None) if ext else None
+
+
+def panel_scale_warnings(series: dict) -> list[str]:
+    """E79 on a panels page: a panel that DECLARES a domain of its own while it shares a unit with the grouped panels
+    (no `independent`) - the author's domain stands (E99 s106), and the build says so. Pure."""
+    shared = shared_panel_domain(series)
+    if series.get("independent") is True or shared is None:
+        return []
+    page = series.get("id") or series.get("title") or "page"
+    units = {panel_unit(series, p) for p in _panel_entries(series) if isinstance(p, dict) and not _panel_own_scale(series, p)}
+    out = []
+    for i, p in enumerate(_panel_entries(series)):
+        own = _declared_domain(p) if isinstance(p, dict) else None
+        if own is None or p.get("independent") is True or panel_unit(series, p) not in units:
+            continue
+        if (round(own[0], 9), round(own[1], 9)) != (round(shared[0], 9), round(shared[1], 9)):
+            out.append(f"E79 {page!s}: panels[{i}] {str(p.get('sub') or '')!r} declares y-domain {_dom_text(own)} while the "
+                       f"other panels in {panel_unit(series, p)!r} share {_dom_text(tuple(shared))} - panels of the same "
+                       "measure share one scale; if this is an unrelated measure, declare `independent: true` on it")
+    return out
+
+
+def _panel_xticks(series: dict, panel: dict) -> list:
+    """The page's x ticks that fall inside THIS panel's own x span (the card's rule: a tick outside it is not drawn),
+    or the panel's own when it declares them."""
+    if isinstance(panel.get("xticks"), list):
+        return copy.deepcopy(panel["xticks"])
+    xs = [to_number(p[0]) for s in _panel_lines(panel) for p in _points(s)]
+    xs = [x for x in xs if x is not None]
+    if not xs:
+        return []
+    lo, hi = min(xs), max(xs)
+    edge = (hi - lo) * PANEL_TICK_EDGE   # a tick a hair outside the data's first or last x still states the span (E28)
+    return [copy.deepcopy(t) for t in (series.get("xticks") or [])
+            if isinstance(t, (list, tuple)) and len(t) == 2 and to_number(t[0]) is not None
+            and lo - edge <= to_number(t[0]) <= hi + edge]
+
+
+PANEL_PAGE_AXES = ("log", "from_zero", "name_clear", "yfmt")   # the page's axes every panel draws with
+PANEL_RULE_TAIL = 0.4   # the share of a panel's own x span, at its right end, a rule's name is written over
+
+
+def _panel_rule_home(series: dict) -> int:
+    """Which panel NAMES the page's reference rules (a rule is named once - the card's rule): the one whose data stand
+    LOWEST over the right end of its span, where the line builder writes a rule's name (right-aligned over the rule) -
+    so the name reads on the panel's own ground, not across a line. The first panel on a tie."""
+    best, where = None, 0
+    for i, panel in enumerate(_panel_entries(series)):
+        pts = [(to_number(p[0]), to_number(p[1])) for s in _panel_lines(panel) if isinstance(panel, dict) for p in _points(s)]
+        pts = [(x, y) for x, y in pts if x is not None and y is not None]
+        if not pts:
+            continue
+        lo, hi = min(x for x, _ in pts), max(x for x, _ in pts)
+        tail = [y for x, y in pts if x >= hi - (hi - lo) * PANEL_RULE_TAIL]
+        top = max(tail) if tail else max(y for _, y in pts)
+        if best is None or top < best:
+            best, where = top, i
+    return where
+
+
+def plain_panel_tag_form(series: dict, panel: dict) -> str:
+    """A PLAIN (not long-form) panel's end-tag form: the fullest whose widest tag stands inside the panel's own right
+    margin (the line builder's 220 units, less its tag gap) - a tag past it runs into the next panel or off the stage.
+    `badge` keeps the value and the badge's chip, `value` the value alone."""
+    room = LAND_PLOT["R"] * LAND_VIEWBOX[0] - LAND_TAG_GAP
+    lines = _panel_lines(panel)
+    for form in ("full", "badge", "value"):
+        view = [dict(s, name="") if form != "full" and str(s.get("label") or "").strip() else s for s in lines]
+        badges = [b for b in series.get("badges") or [] if isinstance(b, dict)] if form != "value" else []
+        if tag_units({"builder": "dense-line", "series": view, "badges": badges}) <= room:
+            return form
+    return "value"
+
+
+def _panels_block(series: dict) -> dict:
+    """The panels, normalised - each a dense-line chart of its own: its `sub` (its title line), its live series, and
+    its `axes` (the page's shared ones, its x ticks cut to its own span, the reference rules with their NAMES on the
+    first panel only - the card's rule, a rule is named once - its unit on the tick labels, and the domain E79 gives
+    it). The page's `labels` are the panels' subs: a panel is this page's datum, as a band is a tiers page's."""
+    shared = shared_panel_domain(series)
+    rules = series.get("hlines") or ([series["hline"]] if isinstance(series.get("hline"), dict) else [])
+    named = _panel_rule_home(series)
+    out = []
+    for i, panel in enumerate(_panel_entries(series)):
+        if not isinstance(panel, dict):
+            continue
+        axes = {k: copy.deepcopy(series[k]) for k in PANEL_PAGE_AXES if k in series}
+        axes.update({k: copy.deepcopy(panel[k]) for k in AXES_KEYS if k in panel and k not in ("xticks", "domain")})
+        axes["xticks"] = _panel_xticks(series, panel)
+        if rules and "hlines" not in panel:
+            axes["hlines"] = [dict(h) for h in copy.deepcopy(rules) if isinstance(h, dict)]   # every panel can name them; the
+            # engine shows the names on ONE visible panel per focus state - `panel_rule_home` when it is in focus
+        unit = panel_unit(series, panel)
+        if unit:
+            axes["unit"] = unit
+        dom = _panel_domain(series, panel, shared)
+        if dom is not None:
+            axes["domain"] = [round(dom[0], 6), round(dom[1], 6)]
+        axes["tag_form"] = plain_panel_tag_form(series, panel)   # the long form re-fits it at its preset (apply_longform)
+        entry = {"sub": str(panel.get("sub") or ""), "series": copy.deepcopy(_panel_lines(panel)), "axes": axes}
+        if panel.get("independent") is True:
+            entry["independent"] = True
+        out.append(entry)
+    axes = {k: copy.deepcopy(series[k]) for k in AXES_KEYS if k in series and k != "panels"}   # the panels are the spec's own key
+    return {"panels": out, "labels": [p["sub"] for p in out],
+            **({"panel_rule_home": named} if rules else {}),
+            **({"axes": axes} if axes else {}),
+            "values": [], "value_strings": [], "colors": []}
 
 
 # ---- TREEMAP (P50 T6; E53 s1's second amendment, the CENSUS exception, ruled 2026-09-10) ---------
@@ -1136,6 +1354,19 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
             # page does not know which stage it will be read on and a treemap laid out at paint time is a
             # re-layout waiting to happen (E58 / Sondag 2018: a park is one affine transform)
             spec["layout"] = {aspect: treemap_cells(spec, aspect) for aspect in STAGE_PX}
+        return spec
+    if builder == PANELS:   # P69 T8b: 2-4 line plots on one page, one scale by default (E79)
+        spec.update(_panels_block(series))
+        warnings = panel_scale_warnings(series)
+        if warnings:
+            spec["warnings"] = warnings
+        spec["unit"] = str(series["unit"]) if _text(series.get("unit")) else ""
+        spec["judge"] = review_notes(series)
+        spec["badges"] = badges_for(series)
+        spec["emphasize"] = None
+        parsed = parse_readability((spec.get("axes") or {}).get("readability"))
+        if parsed and parsed[0] == LONGFORM:
+            apply_longform(spec, parsed[1])
         return spec
     if builder == "race":
         spec.update(_race_block(series))
@@ -1615,7 +1846,7 @@ LONGFORM_TAG_EM = {"name": 0.68, "chip": 0.64}
 LONGFORM_CHIP_DX_PX = 12
 LONGFORM_YLAB_GAP_PX = 14
 LONGFORM_EDGE_PX = 16
-LONGFORM_PLOT_T = {"dense-line": 40.0, "story": 90.0}   # each builder's own plot top, in chart units
+LONGFORM_PLOT_T = {"dense-line": 40.0, "story": 90.0, PANELS: 0.0}   # each builder's own plot top, in chart units (P69 T8b: a panels page's region IS its top - each panel carries its own plot top inside its box)
 # REVIEW-P69-LANE-B-MERGE-2 N3 - THE PAGE INK'S ADVANCES, READ OFF THE FACE ITSELF. The first estimate wrapped the
 # title, sub and source at a flat 0.56 / 0.5 em a character, and a one-line miscount moved every box under it (the
 # long page at `phone`: the chart 73 px below the engine's). The page writes each glyph as its own inline-block
@@ -1903,6 +2134,8 @@ def apply_longform(page: dict, preset: str | None = None) -> dict:
         axes["tag_form"] = longform_tag_form(page, axes["type_scale"]) or "value"
     else:
         axes.pop("tag_form", None)
+    if page.get("builder") == PANELS:   # P69 T8b: each panel's end tags fitted to ITS box; one key for the page
+        return _apply_longform_panels(page)
     key = longform_key(page)   # P69 T10: the names the end tags gave up, and the size their one row is set in
     axes.pop("key_px", None)
     if key:
@@ -1955,6 +2188,66 @@ def apply_longform_states(page: dict, states: list) -> str | None:
         if extra:
             page["axes"]["state_ink"] = extra
     return None
+
+
+def _longform_panel_scale(page: dict) -> float:
+    """P69 T8b: the SMALLEST rendered scale (px per chart unit) a longform panels page draws a panel at in its home
+    layout - the page's own estimated region (its ink, its key band) cut by the default layout. The end tags are fitted
+    at it, so every panel's tags hold."""
+    n = len(page.get(PANELS_KEY) or [])
+    if not n:
+        return longform_scale0()
+    chart = _longform_full_boxes(page, *STAGE_PX["16:9"])["chart"]
+    region = (chart["x"], chart["y"], LAND_PHONE_SAFE_RIGHT * STAGE_PX["16:9"][0] - chart["x"], chart["h"])
+    return min(b[3] for b in panel_home_boxes(n, region)) / (LAND_VIEWBOX[1] + PANEL_SUB_U)
+
+
+def longform_panel_tag_form(page: dict, panel: dict, preset: str, scale: float) -> str:
+    """The fullest end-tag form whose widest tag fits a panel's OWN right margin (the line builder's 220 units, less
+    its tag gap) at `scale`; `value` when none does - the name then rides the page's key (never a refusal)."""
+    t, room = LONGFORM_TYPE_SCALE[preset], LAND_PLOT["R"] * LAND_VIEWBOX[0] - LAND_TAG_GAP
+    view = {"series": panel.get("series") or [], "badges": page.get("badges") or []}
+    for form in LONGFORM_TAG_FORMS:
+        if longform_tag_units(view, t, form, scale) <= room:
+            return form
+    return "value"
+
+
+def longform_panel_key(page: dict) -> list[dict]:
+    """The page's ONE key rail: every name a panel's end tag gave up, once - `[{"panel", "series", "name"}]` in panel
+    order, a name and colour two panels share keyed by the first (E53 s8: one name, in one place)."""
+    out, seen = [], set()
+    for pi, panel in enumerate(page.get(PANELS_KEY) or []):
+        if ((panel.get("axes") or {}).get("tag_form") or "full") == "full":
+            continue
+        for si, s in enumerate(panel.get("series") or []):
+            if not isinstance(s, dict) or s.get("muted"):
+                continue
+            name = str(s.get("name") or "").strip()
+            if not (name and str(s.get("label") or "").strip()) or (name, s.get("color")) in seen:
+                continue
+            seen.add((name, s.get("color")))
+            out.append({"panel": pi, "series": si, "name": name})
+    return out
+
+
+def _apply_longform_panels(page: dict) -> dict:
+    """The long form on a panels page: each panel's tag form at the page's home scale (fitted with no key, then again
+    under the key those forms give up, which moves the region down), and the page's one key rail. In place."""
+    axes = page["axes"]
+    for key in ("key", "key_px"):
+        axes.pop(key, None)
+    for _ in range(2):
+        scale = _longform_panel_scale(page)
+        for panel in page.get(PANELS_KEY) or []:
+            panel.setdefault("axes", {})["tag_form"] = longform_panel_tag_form(page, panel, axes["type_scale"], scale)
+        key = longform_panel_key(page)
+        axes.pop("key", None)
+        axes.pop("key_px", None)
+        if key:
+            axes["key"] = key
+            axes["key_px"] = longform_key_px(page)
+    return page
 
 
 def _longform_place(y: float, h: float) -> float:
@@ -2014,6 +2307,8 @@ def longform_state_ink(spec: dict) -> dict:
     """What moves a chart's top ink: its builder's plot top (viewBox units) and whether it writes a y label or a named
     rule above the plot. The shape `axes.state_ink` carries per `then=` state (M1)."""
     axes = spec.get("axes") or {}
+    if spec.get("builder") == PANELS:   # P69 T8b: the region's top is the panels' own - their y labels and rules are inside their boxes
+        return {"tu": LONGFORM_PLOT_T[PANELS], "ylabel": False, "rules": False}
     rules = any(isinstance(h, dict) and h.get("label") for h in (axes.get("hlines") or ([axes["hline"]] if axes.get("hline") else [])))
     return {"tu": float(LONGFORM_PLOT_T.get(str(spec.get("builder")), LONGFORM_PLOT_T["story"])),
             "ylabel": bool(axes.get("ylabel")), "rules": rules}
@@ -2124,6 +2419,8 @@ def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     }
     if key_h > 0:
         out[KEY_BOX] = _box(ink_x, box["key_y"], key_w, key_h)
+    if spec.get("builder") == PANELS:   # P69 T8b: the floor its panels stop over (page_boxes pops it)
+        out["_floor"] = box["floor"]
     return out
 
 def _readability_profile(spec: dict) -> str | None:
@@ -2212,6 +2509,136 @@ def treemap_plot(chart: dict, aspect: str) -> dict:
                 (1 - L["L"] - L["R"]) * vw * s, (L["B"] - L["T"]) * vh * s)
 
 
+# ---- P69 T8b: WHERE THE PANELS STAND - the layout law, and the focus states that move it ----------------------------
+# E99 s104 amended again: "focus is a COMPOSABLE state, not a fixed mode". A FOCUS STATE names (a) a LAYOUT - `row`
+# (side by side), `stack`, `quad` (a 2 x 2 grid: two active take a row, one takes the page) or `free` (a box per panel,
+# stage fractions) - laid over the ACTIVE panels, and (b) per panel a ROLE: `active` (sharp, full ink, its species
+# live), `receded` (at its HOME box, scaled back, dimmed and blurred behind the active ones - each a dial with a
+# default, PANEL_RECEDE), or `hidden`. The page's HOME is its default layout with every panel active; a change of
+# state on a word is ONE transition - every panel's box, ink and blur on the transition's own clock (the engine's
+# `lpPanelPoses`). Every panel keeps its own viewBox's aspect in every box (the fit is `meet`, centred - the chart is
+# the same chart at another size, never a stretched one), and a layout is packed to the region's left edge and centred
+# on its height, so ONE active panel stands exactly where a single-chart page's chart stands (the resize from a
+# standing chart into its slot is a move between two boxes of that one aspect). This is the engine's law, mirrored.
+PANEL_LAYOUTS = ("row", "stack", "quad", "free")
+PANEL_ROLES = ("active", "receded", "hidden")
+PANEL_RECEDE = {"scale": 0.86, "dim": 0.55, "blur": 5.0}   # the engine's LP_PANELS.RECEDE: scale-back about the home box's
+# centre, the share of the panel's ink taken away, and the depth-of-field blur in stage px (the blur-zoom's own backdrop
+# blur is 18 px - a rack focus keeps the receded chart READABLE as a chart, only soft) [DERIVED: the rack-focus frames]
+PANEL_RECEDE_BOUNDS = {"scale": (0.3, 1.0), "dim": (0.0, 0.95), "blur": (0.0, 24.0)}
+PANEL_GAP = 0.03   # the gutter between two cells, a share of the region's WIDTH, both ways (the card's 44 of 1056 units)
+PANELS_KEY = "panels"   # page_boxes' per-panel boxes (a panels page only)
+# a landscape panel's SUB BAND: its viewBox reaches this many units ABOVE the line builder's own 0 (the builder keeps 40
+# over its plot - a y label's row, never a title's), so the panel's sub stands inside its own box at any size
+PANEL_SUB_U = 56.0
+PANEL_FLOOR_AIR = 6.0   # rendered px a full-stage panels region stops over its FLOOR (a panel's x ticks are inside its box)
+
+
+def default_panel_layout(n: int, aspect: str = "16:9") -> str:
+    """The page's HOME layout: stacked on a 9:16 stage, a quad for four on 16:9, else side by side."""
+    if aspect == "9:16":
+        return "stack"
+    return "quad" if n >= 4 else "row"
+
+
+def panel_grid(layout: str, k: int) -> tuple[int, int]:
+    """(columns, rows) of `layout` for `k` panels: a quad's two take a row and its one takes the page."""
+    return ((1, k) if layout == "stack" else (2, 2) if layout == "quad" and k >= 3
+            else (2, 1) if layout == "quad" and k == 2 else (k, 1))
+
+
+def panel_cells(layout: str, k: int, region: tuple) -> list[tuple]:
+    """`k` cells of `layout` over `region` (x, y, w, h), in reading order."""
+    x, y, w, h = region
+    if k <= 0:
+        return []
+    cols, rows = panel_grid(layout, k)
+    g = PANEL_GAP * w
+    cw, ch = (w - g * (cols - 1)) / cols, (h - g * (rows - 1)) / rows
+    return [(x + (i % cols) * (cw + g), y + (i // cols) * (ch + g), cw, ch) for i in range(k)]
+
+
+def panel_fit(cell: tuple, aspect: float) -> tuple:
+    """The largest box of `aspect` (w / h) inside `cell`, centred - the svg's own `meet`."""
+    x, y, w, h = cell
+    fw, fh = (h * aspect, h) if w / h > aspect else (w, w / aspect)
+    return (x + (w - fw) / 2, y + (h - fh) / 2, fw, fh)
+
+
+def panel_layout(layout: str, k: int, region: tuple, aspect: float) -> list[tuple]:
+    """`k` panel boxes of `aspect` laid out as `layout` in `region`: ONE box size for the grid (the largest the tighter
+    axis allows), the grid hung from the region's TOP (the page reads title, sub, charts), a group centred across the
+    region's width and a lone panel on its left edge - where a single-chart page's chart stands. Pure."""
+    if k <= 0:
+        return []
+    x, y, w, h = region
+    cols, rows = panel_grid(layout, k)
+    g = PANEL_GAP * w
+    bw = min((w - g * (cols - 1)) / cols, aspect * (h - g * (rows - 1)) / rows)
+    bh = bw / aspect
+    x0 = x if k == 1 else x + (w - (cols * bw + (cols - 1) * g)) / 2
+    return [(x0 + (i % cols) * (bw + g), y + (i // cols) * (bh + g), bw, bh) for i in range(k)]
+
+
+def panel_aspect(n: int, region: tuple, aspect: str = "16:9") -> float:
+    """A panel's viewBox aspect: its HOME CELL's (the page's default layout over its region), so the home layout FILLS
+    the region - the line builder draws at any viewBox width (its plot runs L..W-R), and the panel's viewBox is
+    `panel_view_w` x (560 + its sub band). A quad's cell and the whole region have nearly one aspect, so a quad
+    panel growing to the page fills it too; a row's cell is narrower than the region (see the report)."""
+    cell = panel_cells(default_panel_layout(n, aspect), n, region)[0]
+    return cell[2] / cell[3]
+
+
+def panel_view_w(a: float) -> float:
+    """A landscape panel's viewBox width for aspect `a`: its height is the line builder's 560 plus its sub band."""
+    return a * (LAND_VIEWBOX[1] + PANEL_SUB_U)
+
+
+def panel_home_boxes(n: int, region: tuple, aspect: str = "16:9") -> list[tuple]:
+    """Every panel's HOME box: the default layout, every panel active."""
+    return panel_layout(default_panel_layout(n, aspect), n, region, panel_aspect(n, region, aspect))
+
+
+def _panels_region(spec: dict, chart: dict, aspect: str, floor: float | None = None) -> tuple:
+    """The region a panels page lays its panels in, stage px: its chart box - which a FULL-STAGE 16:9 page widens to
+    the stage's safe right edge (a panels page keeps no end-tag margin of its own: every panel carries its own) and
+    stops PANEL_FLOOR_AIR over its `floor` (the anchored caption's strip, or the long form's first ink under the
+    chart): a line page raises its ticks over that strip, and a panel's ticks are inside its box."""
+    w, h = chart["w"], chart["h"]
+    if aspect == "16:9" and full_stage(spec, aspect):
+        w = LAND_PHONE_SAFE_RIGHT * STAGE_PX["16:9"][0] - chart["x"]
+        f = CAPTION_ANCHOR["16:9"][1] if floor is None else floor
+        h = min(h, f - PANEL_FLOOR_AIR - chart["y"])
+    return (chart["x"], chart["y"], w, h)
+
+
+def _panel_plot(box: tuple, spec_panel: dict) -> dict:
+    """One panel's plot in stage px: the line builder's own margins inside the panel's box (its viewBox fills it)."""
+    x, y, w, h = box
+    s = h / (LAND_VIEWBOX[1] + PANEL_SUB_U)   # px per unit: the viewBox is the box's own aspect
+    vw, l_u, r_u = w / s, LAND_PLOT["L"] * LAND_VIEWBOX[0], LAND_PLOT["R"] * LAND_VIEWBOX[0]
+    return _box(x + l_u * s, y + (PANEL_SUB_U + LAND_PLOT["T"] * LAND_VIEWBOX[1]) * s,
+                (vw - l_u - r_u) * s, (LAND_PLOT["B"] - LAND_PLOT["T"]) * LAND_VIEWBOX[1] * s)
+
+
+def panel_boxes(spec: dict, chart: dict, aspect: str, floor: float | None = None) -> list[dict]:
+    """Each panel's HOME box and its plot, stage px, estimated from the page's chart box."""
+    panels = spec.get(PANELS_KEY) or []
+    region = _panels_region(spec, chart, aspect, floor)
+    out = []
+    for p, b in zip(panels, panel_home_boxes(len(panels), region, aspect)):
+        out.append({"box": _box(*b), "plot": _panel_plot(b, p) if aspect == "16:9" else
+                    _box(b[0] + PORTRAIT_PLOT["L"], b[1] + PORTRAIT_PLOT["T"], b[2] - PORTRAIT_PLOT["L"] - PORTRAIT_PLOT["R"],
+                         b[3] - PORTRAIT_PLOT["T"] - PORTRAIT_PLOT["B"])})
+    return out
+
+
+def _union(boxes: list[dict]) -> dict:
+    x0, y0 = min(b["x"] for b in boxes), min(b["y"] for b in boxes)
+    x1, y1 = max(b["x"] + b["w"] for b in boxes), max(b["y"] + b["h"] for b in boxes)
+    return _box(x0, y0, x1 - x0, y1 - y0)
+
+
 # ---- ONE PLACEMENT TRUTH (P50 T16, R26-27) -------------------------------------------------
 # Everything above this line is an ESTIMATE of where the player will put the page's ink. The layout
 # LAW in `_portrait_boxes` is the template's own, line for line (measured 2026-09-11: given the ink
@@ -2276,6 +2703,8 @@ def page_ink_key(spec: dict) -> str:
         "ylabel": (spec.get("axes") or {}).get("ylabel"),
         "tiers_n": len(spec.get("tiers")) if isinstance(spec.get("tiers"), list) else 0,
     }
+    if spec.get("builder") == PANELS:   # P69 T8b: the panel count lays the boxes out (keyed only here: every other key stands)
+        ink["panels_n"] = len(spec.get(PANELS_KEY) or [])
     # Keep the absent-profile fingerprint byte-compatible; only an opted-in geometry is a new ink
     # variant.  A profile's value must still be keyed because it changes the chart/viewBox and boxes.
     readability = (spec.get("axes") or {}).get("readability")
@@ -2496,6 +2925,8 @@ def measured_boxes(spec: dict, aspect: str) -> dict | None:
     if (isinstance(boxes.get(TAG_BOXES_KEY), list) and boxes[TAG_BOXES_KEY]   # P69 T6d: its end tags, each as drawn -
             and entry.get(TAG_INK_KEY) == tag_ink(spec)):                      # MN3: only for the tags they were drawn for
         out[TAG_BOXES_KEY] = [dict(b) for b in boxes[TAG_BOXES_KEY] if isinstance(b, dict)]
+    if isinstance(entry.get(PANELS_KEY), list) and entry[PANELS_KEY]:   # P69 T8b: each panel's home box and plot, as drawn
+        out[PANELS_KEY] = [{k: dict(v) for k, v in p.items() if isinstance(v, dict)} for p in entry[PANELS_KEY] if isinstance(p, dict)]
     return out
 
 
@@ -2547,6 +2978,13 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
         boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
     if spec.get("builder") == "treemap":
         boxes["plot"] = treemap_plot(boxes["chart"], aspect)
+    floor = boxes.pop("_floor", None)
+    if spec.get("builder") == PANELS:   # P69 T8b: the chart is the panels' box (to the safe edge); the plot every panel's box
+        rx, ry, rw, _rh = _panels_region(spec, boxes["chart"], aspect)
+        boxes["chart"] = _box(rx, ry, rw, boxes["chart"]["h"])
+        boxes[PANELS_KEY] = panel_boxes(spec, boxes["chart"], aspect, floor)
+        boxes["plot"] = _union([p["box"] for p in boxes[PANELS_KEY]])
+        boxes.pop(TAGS_KEY, None)   # no page-wide end-tag column: every panel's tags stand inside its own box
     measured = measured_boxes(spec, aspect)
     if measured:                      # the player's own numbers for this ink win over every estimate above
         tags = boxes.get(TAGS_KEY)    # ... except the end tag column, which the fixture does not measure as a column
@@ -2559,6 +2997,8 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
         boxes.update(measured_room(spec, aspect))   # E65: the plot's empty room and the axis bands travel with them
         if spec.get("builder") == "tiers":   # the tier bands are a law over the PLOT: re-cut them on the measured one
             boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
+        if spec.get("builder") == PANELS and not measured.get(PANELS_KEY):   # the panels re-cut on the measured chart
+            boxes[PANELS_KEY] = panel_boxes(spec, boxes["chart"], aspect, floor)
     sx, sy, sw, sh = SAFE_BOX[aspect]
     cx, cy, cw, ch = CAPTION_ANCHOR[aspect]
     out = {"aspect": aspect, "stage": _box(0, 0, w_s, h_s), "safe": _box(sx, sy, sw, sh),

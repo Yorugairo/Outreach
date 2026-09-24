@@ -8315,7 +8315,7 @@ async function mount(doc) {
     const base = subBottom + 0.5 * T.tick + band;
     /* REVIEW-P69-LANE-B-MERGE-3 M1: every chart the page can become stands in this box, each with its own plot top and the
        ink above it (`axes.state_ink`, ledger_page.longform_chart_box line for line) - the box clears the highest */
-    const reach = [[LP_LONGFORM.PLOT_T[pg.builder] || LP_LONGFORM.PLOT_T.story, aboveOf(!!ax.ylabel, rules)],
+    const reach = pg.builder === "panels" ? [[0, aboveOf(false, false)]] : [[LP_LONGFORM.PLOT_T[pg.builder] || LP_LONGFORM.PLOT_T.story, aboveOf(!!ax.ylabel, rules)],   /* P69 T8b: a panels region's top is its own - each panel carries its plot top, labels and rules */
                    ...(ax.state_ink || []).map((i) => [+i.tu, aboveOf(!!i.ylabel, !!i.rules)])];
     const top = Math.max(top0, ...reach.map(([tu, above]) => (base + above - tu * bot / 560) / (1 - tu / 560)));
     const keyY = top + Math.min(...reach.map(([tu, above]) => tu * (bot - top) / 560 - above)) - 0.5 * T.tick - keyH;   /* ... hugging the highest chart's top ink */
@@ -8347,7 +8347,7 @@ async function mount(doc) {
       dot.style.cssText = "flex:0 0 auto;width:" + f(E.dot) + ";height:" + f(E.dot) + ";border-radius:50%;margin-right:" + f(E.dot_gap) + ";background:" + LP_LONGFORM.TICK;
       const nm = lpEl("span", "lp-kname", pe);
       nm.textContent = String(k.name || "");
-      return { el: pe, dot, series: k.series | 0, name: String(k.name || ""), at: LP_LONGFORM.KEY_FIRST + LP_LONGFORM.KEY_STEP * i };
+      return { el: pe, dot, series: k.series | 0, panel: k.panel == null ? null : k.panel | 0, name: String(k.name || ""), at: LP_LONGFORM.KEY_FIRST + LP_LONGFORM.KEY_STEP * i };   /* P69 T8b: a panels page keys a panel's line */
     });
     return { el, pills };
   };
@@ -8819,6 +8819,7 @@ async function mount(doc) {
         chart.setAttribute("viewBox", "0 0 " + vw + " 560");
         geom = { W: vw, H: 560 };
       }
+      if (pg.builder === "panels" && FULL) cb.w = un(LP_PHONE.SAFE_RIGHT) - cb.x;   /* P69 T8b: the panels' region - every panel carries its own end-tag margin */
       /* a page whose captions are pinned to the anchor (a host plate, C5) keeps its chart and source above the
          caption band: the chart ends at 79% of the frame so the source line under it never meets a caption. A
          FULL-stage page already ends where its own tick labels clear that strip (LP.FULL.H), so the clamp - which
@@ -8861,12 +8862,14 @@ async function mount(doc) {
     lpMark(st, "title", "title", title, {}); lpMark(st, "sub", "sub", subEl, {}); lpMark(st, "src", "src", src, {});   /* P48 T1: the page's own ink is a mark too - a retitle and a recast both move it */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo, share: buildLedgerShare,
-                       tiers: buildLedgerTiers, treemap: buildLedgerTreemap };   /* P50 T9 / T6 */
+                       tiers: buildLedgerTiers, treemap: buildLedgerTreemap, panels: buildLedgerPanels };   /* P50 T9 / T6; P69 T8b */
+    if (st.kind === "panels" && !PORTRAIT && pg.full_stage && !pg.chart_box && !pg.board && pg.punch !== false)
+      st.panelFloor = lfBox ? lfBox.floor : LP_LONGFORM.CAPTION_TOP;   /* P69 T8b: the caption strip's top, or the long form's first ink under the chart */
     (builders[st.kind] || buildLedgerBars)(st, pg);
     if (LF) lpLongformPlot(st);
     if (cardP) lpCardStrokes(st);   /* P69 T10c: a card's lines, thicker by its own factor */
     for (const kp of st.keyPills || []) {   /* P69 T10: each key pill's dot takes its line's OWN colour, as drawn */
-      const m = st.markBy && st.markBy["s" + kp.series];
+      const src = kp.panel != null && st.panels ? st.panels[kp.panel] : st, m = src && src.markBy && src.markBy["s" + kp.series];   /* P69 T8b: a panel's line */
       if (m && m.geom && m.geom.col) kp.dot.style.background = m.geom.col;
     }
     /* A page may declare its own BUILD length (operator, 2026-09-08: "the fix is to draw out the charts in a
@@ -9523,7 +9526,7 @@ async function mount(doc) {
   /* P69 T8: is this page drawn under the long form's profile? A 16:9 full-stage page (never a host plate), on the
      builders the compiler admits it on (ledger_page.READABILITY_BUILDERS) - anything else is the page it was. */
   const lpLongformPage = (pg) => !PORTRAIT && (lpReadability(pg) === LP_READABILITY.LONGFORM || lpReadability(pg) === LP_READABILITY.CARD) && !!(pg && pg.full_stage)
-    && !pg.chart_box && !pg.board && pg.punch !== false && ["dense-line", "story"].indexOf(String(pg.builder || "story")) >= 0;
+    && !pg.chart_box && !pg.board && pg.punch !== false && ["dense-line", "story", "panels"].indexOf(String(pg.builder || "story")) >= 0;
   /* ... and its PLOT: the lighter panel inside the thin border (the spec's t530), laid UNDER every mark as the chart's
      own ground, and the axis lines sorted - a rule on the panel's edge is the border's job and is hidden (CSS), a
      rule strictly inside it is the ZERO line the data crosses (t1078) and is drawn at its measured weight. Widths
@@ -10999,6 +11002,210 @@ async function mount(doc) {
         bb.val.setAttribute("opacity", clamp01((kk - 0.9) / 0.1).toFixed(2));
       });
     }
+  };
+  /* ---- P69 T8b (E99 s104, amended twice) - THE PANELS PAGE: two to four charts on one page, and their FOCUS ----------
+     The operator: "no reason it shouldn't be able to, we already handle 2 evidence docks on world plates, it rhymes to
+     have 2 data panels/charts on ledger plates when needed" - and, for row 21's four charts, "whatever is less important
+     to be held on background/off-focus and brought back up at relevant times ... one grows up to cover the page while
+     the others blur and recede". A `panels` page (ledger_page.PANELS) draws each panel with the LINE builder, whole and
+     unchanged, into its own <svg> inside its own box (`.lp-pbox`): its own axes, its own sub (the y label's corner, the
+     card's rule), its own end tags, its own species (`panel: <i>`), on ITS OWN build clock (one after another, or from
+     the word that shows it). Nothing about a line page's law is re-derived here.
+       FOCUS is a composable STATE (`panel_focus`, compiled by build_scene_timeline_f.panel_focus_state): a LAYOUT laid
+     over the ACTIVE panels (row | stack | quad | free) and a ROLE per panel - active (sharp, full ink), receded (at its
+     HOME box, scaled back, dimmed, blurred: the rack focus - T40's blur as depth of field, CAPABILITIES :47/:71) or
+     hidden. A change of state is ONE transition: every panel's box, ink and blur on the species' own min-jerk clock,
+     from wherever the last transition left them (`lpPanelPoses`, a pure function of t - a seek is the play). The box
+     move IS the engine's resize - the snap's box-to-box and the park's one affine move (E58): each panel keeps its
+     viewBox's aspect in every box, so a panel growing to cover the page is the same chart at another size, and ONE
+     active panel stands exactly where a single-chart page's chart stands. On the page's vortex exit each panel goes
+     down the drain as one particle (the pills' own law, `lpVortexCss`). ledger_page's PANEL_* table is this law, mirrored. */
+  const LP_PANELS = Object.freeze({
+    GAP: 0.03,                                                     /* ledger_page.PANEL_GAP: a share of the region's width, both ways */
+    VB: Object.freeze([1000, 560]),                                /* a landscape panel's viewBox: the line page's own */
+    RECEDE: Object.freeze({ scale: 0.86, dim: 0.55, blur: 5 }),    /* ledger_page.PANEL_RECEDE: scale-back, ink taken, blur (stage px) */
+    Z: Object.freeze({ active: 3, receded: 2, hidden: 1 }),        /* an active panel stands in front of every receded one */
+    INK_LEAD: 0.5,                                                 /* a panel LEAVING focus has dimmed and blurred by this share of the move, one
+                                                                      COMING forward sharpens over the rest - the one in flight reads cleanly */
+    SUB_K: 1.15,                                                   /* a panel's sub, in its own tick sizes ... */
+    SUB_U: 56,                                                     /* ... in a band this many units ABOVE the line builder's 0 (ledger_page.PANEL_SUB_U) */
+    SUB_MAX: 0.8,                                                  /* ... and never bigger than this share of that band */
+    FLOOR_AIR: 6,                                                  /* ledger_page.PANEL_FLOOR_AIR: rendered px a full-stage region stops over its floor */
+  });
+  const LP_PANEL_KINDS = Object.freeze(["build_to", "undraw", "figure", "bracket", "spread", "span", "chart_to", "relight"]);   /* build_scene_timeline_f.PANEL_SPECIES */
+  const lpPanelDefault = (n, portrait) => (portrait ? "stack" : n >= 4 ? "quad" : "row");
+  const lpPanelCells = (layout, k, R) => {   /* `k` cells of a layout over R {x, y, w, h}, reading order (ledger_page.panel_cells) */
+    if (!(k > 0)) return [];
+    const cr = lpPanelGrid(layout, k);
+    const g = LP_PANELS.GAP * R.w, cw = (R.w - g * (cr[0] - 1)) / cr[0], ch = (R.h - g * (cr[1] - 1)) / cr[1];
+    return Array.from({ length: k }, (_, i) => ({ x: R.x + (i % cr[0]) * (cw + g), y: R.y + Math.floor(i / cr[0]) * (ch + g), w: cw, h: ch }));
+  };
+  const lpPanelFit = (c, a) => {   /* the largest box of aspect a inside c, centred: the svg's own `meet` (ledger_page.panel_fit) */
+    const wide = c.w / c.h > a, w = wide ? c.h * a : c.w, h = wide ? c.h : c.w / a;
+    return { x: c.x + (c.w - w) / 2, y: c.y + (c.h - h) / 2, w, h };
+  };
+  const lpPanelGrid = (layout, k) => (layout === "stack" ? [1, k] : layout === "quad" && k >= 3 ? [2, 2] : layout === "quad" && k === 2 ? [2, 1] : [k, 1]);
+  const lpPanelLayout = (layout, k, R, a) => {   /* ledger_page.panel_layout: one box size, hung from R's top; a group centred across, a lone panel at the left */
+    if (!(k > 0)) return [];
+    const cr = lpPanelGrid(layout, k), g = LP_PANELS.GAP * R.w;
+    const bw = Math.min((R.w - g * (cr[0] - 1)) / cr[0], a * (R.h - g * (cr[1] - 1)) / cr[1]), bh = bw / a;
+    const x0 = k === 1 ? R.x : R.x + (R.w - (cr[0] * bw + (cr[0] - 1) * g)) / 2;
+    return Array.from({ length: k }, (_, i) => ({ x: x0 + (i % cr[0]) * (bw + g), y: R.y + Math.floor(i / cr[0]) * (bh + g), w: bw, h: bh }));
+  };
+  const lpPct = (v, full) => (v / full * 100).toFixed(4) + "%";
+  const lpPanelBoxCss = (el, b) => { el.style.left = lpPct(b.x, STAGE_W); el.style.top = lpPct(b.y, STAGE_H); el.style.width = lpPct(b.w, STAGE_W); el.style.height = lpPct(b.h, STAGE_H); };
+  /* the page's panels, each built by the LINE builder in its own svg at its HOME box (the page's default layout) */
+  const buildLedgerPanels = (st, pg) => {
+    const P = !!st.portrait, ps = P ? 1 : LP.PUNCH_SCALE, list = (pg.panels || []).slice(0, 4), n = list.length;
+    const len = (v, full) => { const q = String(v == null ? "" : v).trim(), x = parseFloat(q); return !Number.isFinite(x) ? 0 : q.endsWith("%") ? x / 100 * full : x; };
+    const cs = st.chart.style, R = { x: len(cs.left, STAGE_W), y: len(cs.top, STAGE_H), w: len(cs.width, STAGE_W), h: len(cs.height, STAGE_H) };
+    if (st.panelFloor > 0) R.h = Math.min(R.h, (0.5 + ((st.panelFloor - LP_PANELS.FLOOR_AIR) / STAGE_H - 0.5) / ps) * STAGE_H - R.y);   /* a panel's ticks are inside its box: the region stops over the floor */
+    const layout = lpPanelDefault(n, P), cell = n ? lpPanelCells(layout, n, R)[0] : null;
+    const a = cell ? cell.w / cell.h : 1;   /* ledger_page.panel_aspect: the HOME CELL's, so the home layout fills the region */
+    const home = lpPanelLayout(layout, n, R, a), T = st.lfType ? lpLongformType(pg) : null;
+    const per = Number.isFinite(+pg.build_s) && +pg.build_s > 0 ? +pg.build_s : LP.BUILD;
+    const pageDom = Array.isArray((pg.axes || {}).domain) ? pg.axes.domain : null;   /* a row's `domain=` is refused on this builder; a page-level one is the shared scale */
+    Object.assign(st, { panelRegion: R, panelAspect: a, panelLayout: layout, panelHome: home, panelPs: ps, panelBuild: per, buildDur: per * Math.max(1, n) });
+    st.panels = list.map((p, i) => {
+      const hb = home[i], box = lpEl("div", "lp-pbox", st.page);
+      box.style.position = "absolute"; box.style.pointerEvents = "none";
+      lpPanelBoxCss(box, hb);
+      const geom = P ? { W: hb.w, H: hb.h } : { W: a * (LP_PANELS.VB[1] + LP_PANELS.SUB_U), H: LP_PANELS.VB[1] };   /* ledger_page.panel_view_w */
+      const top = P ? 0 : LP_PANELS.SUB_U;   /* the SUB BAND over a landscape panel's plot (a portrait panel's builder keeps its own 90 px, and a stacked cell has none to spare) */
+      const svg = lpEl("svg", "lp-chart lp-panel-chart", box, { viewBox: "0 " + (-top) + " " + geom.W.toFixed(3) + " " + (geom.H + top).toFixed(3) });
+      svg.style.left = "0"; svg.style.top = "0"; svg.style.width = "100%"; svg.style.height = "100%";
+      const axes = Object.assign({}, p.axes || {}, { ylabel: String(p.sub || "") }, pageDom && !p.independent ? { domain: pageDom } : {});
+      const pgI = { builder: "dense-line", series: p.series || [], axes, sub: p.sub || "", title: pg.title, badges: pg.badges || [] };
+      const S = { root: st.root, page: st.page, chart: svg, box, geom, portrait: P, seed: st.seed + 97 * (i + 1), edge: st.edge, field: st.field, rail: st.rail,
+                  stagePx: ps * Math.min(hb.w / geom.W, hb.h / (geom.H + top)), lfType: null, keyPills: null, readability: st.readability, barStyle: null, cardK: 1,
+                  bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: st.inlineBadges || {}, linePts: [],
+                  marks: [], markBy: {}, badges: [], inkEls: [], glyphs: [], titleGlyphs: [], rtGlyphs: [], vals: [], vstr: [], emph: -1,
+                  kind: "dense-line", scene: st.scene, panel: i, pg: pgI, perform: null, boardCentre: st.boardCentre };
+      if (T) {   /* the long form's preset, at THIS panel's rendered scale: its words read at the preset's px in its home box */
+        const u = ps * hb.w / geom.W, g = lpLongformGeom(T, 0, 560 * u, 560 * u);   /* one chart unit in rendered px: the panel's width over its viewBox's */
+        S.lfType = Object.assign({}, g, { form: axes.tag_form || "full" });
+        for (const k of ["tick", "tag", "chip", "value"]) svg.style.setProperty("--lf-" + k, g[k].toFixed(3) + "px");
+      }
+      buildLedgerLine(S, pgI);
+      if (T) lpLongformPlot(S);
+      /* the panel's GROUND: its whole box in the page's own ground colour, under everything it draws - so a panel in front
+         (a focus's active one) occludes the receded ones behind it, never shows their words through its margins */
+      const ground = lpEl("rect", "lp-pground", svg, { x: 0, y: -top, width: geom.W.toFixed(3), height: (geom.H + top).toFixed(3), fill: T ? LP_LONGFORM.GROUND : "#25313C" });
+      svg.insertBefore(ground, svg.firstChild);
+      if (!T && axes.tag_form && axes.tag_form !== "full") for (const pp of S.paths) {   /* a PLAIN panel's tags, shortened to fit its own margin (ledger_page.plain_panel_tag_form) */
+        const sr = (pgI.series || [])[pp.si | 0] || {};
+        if (pp.muted || !String(sr.label || "").trim()) continue;
+        const chip = pp.name.querySelector("tspan.tagchip");
+        pp.name.textContent = String(sr.label);
+        if (chip && axes.tag_form === "badge") pp.name.appendChild(chip);
+      }
+      const sub = (S.markBy.axislabel || {}).el;   /* the panel's SUB takes the y label's corner (the card's rule: that corner is the panel title's) */
+      if (sub) { sub.classList.add("lp-psub"); sub.style.fill = "var(--lp-chalk)"; sub.style.fontWeight = "700";
+        const fs = Math.min(LP_PANELS.SUB_K * (S.lfType ? S.lfType.tick : P ? 34 : 22), P ? Infinity : LP_PANELS.SUB_MAX * top);
+        sub.style.fontSize = fs.toFixed(2) + "px";
+        sub.setAttribute("y", (-top + 0.92 * fs + 4).toFixed(1));   /* at the top of its own band, clear of the rules' names over the plot */
+        if (S.markBy.axislabel.geom) S.markBy.axislabel.geom.y = +sub.getAttribute("y"); }
+      return S;
+    });
+  };
+  /* which panel a species lands in, and which species a panel carries (the rest - a retitle, a note, the title's relight,
+     the focus itself - are the page's) */
+  const lpPanelOf = (sp) => (sp.panel != null ? sp.panel | 0 : sp.target && sp.target.panel != null ? sp.target.panel | 0 : 0);
+  const lpPanelKind = (sp) => !!sp && LP_PANEL_KINDS.indexOf(sp.kind) >= 0 && !(sp.kind === "relight" && sp.ref !== "bracket");
+  const lpPanelScenes = (st, scene) => {
+    if (st.panelScenesOf !== scene) {
+      const all = scene.species || [];
+      st.panelScenes = st.panels.map((_, i) => Object.assign({}, scene, { species: all.filter((sp) => lpPanelKind(sp) && lpPanelOf(sp) === i) }));
+      st.panelPageScene = Object.assign({}, scene, { species: all.filter((sp) => !lpPanelKind(sp)) });
+      st.panelScenesOf = scene;
+    }
+    return st.panelScenes;
+  };
+  /* a focus state's own boxes are STAGE fractions (the frame the viewer sees): back through the punch into page px */
+  const lpPanelUnBox = (st, f) => ({ x: (0.5 + (f[0] - 0.5) / st.panelPs) * STAGE_W, y: (0.5 + (f[1] - 0.5) / st.panelPs) * STAGE_H,
+                                     w: f[2] * STAGE_W / st.panelPs, h: f[3] * STAGE_H / st.panelPs });
+  /* ONE focus state (null: the page's home) -> every panel's pose {b, op, blur, z} */
+  const lpPanelTarget = (st, fs) => {
+    const roles = fs && Array.isArray(fs.roles) ? fs.roles : st.panels.map(() => "active"), act = [];
+    roles.forEach((r, i) => { if (r === "active") act.push(i); });
+    const R = fs && Array.isArray(fs.region) ? lpPanelUnBox(st, fs.region) : st.panelRegion;
+    const lay = fs ? fs.layout : st.panelLayout, rec = (fs && fs.recede) || LP_PANELS.RECEDE;
+    const placed = lay === "free" ? [] : lpPanelLayout(lay, act.length, R, st.panelAspect);
+    return st.panels.map((_, i) => {
+      const r = roles[i] || "active", home = st.panelHome[i];
+      const fb = fs && fs.boxes && fs.boxes[i] ? lpPanelFit(lpPanelUnBox(st, fs.boxes[i]), st.panelAspect) : null;
+      if (r === "active") return { b: fb || placed[act.indexOf(i)] || home, op: 1, blur: 0, z: LP_PANELS.Z.active };
+      const base = fb || home;
+      if (r === "hidden") return { b: base, op: 0, blur: 0, z: LP_PANELS.Z.hidden };
+      const k = +rec.scale, cx = base.x + base.w / 2, cy = base.y + base.h / 2;
+      return { b: { x: cx - base.w * k / 2, y: cy - base.h * k / 2, w: base.w * k, h: base.h * k }, op: 1 - +rec.dim, blur: +rec.blur, z: LP_PANELS.Z.receded };
+    });
+  };
+  const lpPanelMix = (A, B, u) => A.map((a, i) => { const b = B[i], L = (p, q) => p + (q - p) * u, K = LP_PANELS.INK_LEAD;
+    const ui = b.op < a.op || b.blur > a.blur ? minJerk(clamp01(u / K)) : b.op > a.op || b.blur < a.blur ? minJerk(clamp01((u - K) / (1 - K))) : u;   /* u is the move's own eased clock */
+    const I = (p, q) => p + (q - p) * ui;
+    return { b: { x: L(a.b.x, b.b.x), y: L(a.b.y, b.b.y), w: L(a.b.w, b.b.w), h: L(a.b.h, b.b.h) }, op: I(a.op, b.op), blur: I(a.blur, b.blur), z: u >= 1 ? b.z : u > 0 ? a.z * 4 + b.z : a.z }; });   /* in flight: by the depth it LEFT, then the one it goes to */
+  /* every panel's pose at t: each transition runs from wherever the one before it stood at its word (a pure function of t) */
+  const lpPanelPoses = (st, scene, t) => {
+    let prev = null;
+    for (const sp of pageSpecies(scene, "panel_focus")) {
+      if (t < sp.at) break;
+      const from = prev ? lpPanelMix(prev.from, prev.to, minJerk(clamp01((sp.at - prev.at) / prev.dur))) : lpPanelTarget(st, null);
+      prev = { from, to: lpPanelTarget(st, sp), at: sp.at, dur: Math.max(0.001, +sp.dur || 1) };
+    }
+    return prev ? lpPanelMix(prev.from, prev.to, minJerk(clamp01((t - prev.at) / prev.dur))) : lpPanelTarget(st, null);
+  };
+  /* panel i's build starts on its turn (one after another from the page's build), or - hidden then - on the word that shows it */
+  const lpPanelRole = (scene, i, x) => { let r = "active"; for (const sp of pageSpecies(scene, "panel_focus")) { if (x < sp.at) break; r = (sp.roles || [])[i] || r; } return r; };
+  const lpPanelStart = (st, scene, i, t0) => {
+    const s = t0 + i * st.panelBuild;
+    if (lpPanelRole(scene, i, s) !== "hidden") return s;
+    for (const sp of pageSpecies(scene, "panel_focus")) if (sp.at > s && ((sp.roles || [])[i] || "active") !== "hidden") return sp.at;
+    return Infinity;
+  };
+  /* the page's reference rules are NAMED on one panel at a time: the page's choice (`panel_rule_home`, the one with room)
+     while it is in focus, else the first panel that is - crossfaded on the focus's own clock, so a hidden panel never
+     takes the names with it */
+  const lpPanelNamer = (roles, pref) => ((roles || [])[pref] === "active" ? pref : (roles || []).indexOf("active"));
+  const lpPanelNames = (st, scene, t, pref) => {
+    const home = st.panels.map(() => "active");
+    let prev = null;
+    for (const sp of pageSpecies(scene, "panel_focus")) {
+      if (t < sp.at) break;
+      const from = prev ? (minJerk(clamp01((sp.at - prev.at) / prev.dur)) >= 0.5 ? prev.to : prev.from) : home;
+      prev = { from, to: sp.roles || home, at: sp.at, dur: Math.max(0.001, +sp.dur || 1) };
+    }
+    const u = prev ? minJerk(clamp01((t - prev.at) / prev.dur)) : 1, a = lpPanelNamer(prev ? prev.from : home, pref), b = lpPanelNamer(prev ? prev.to : home, pref);
+    return st.panels.map((_, i) => (a === i ? 1 - u : 0) + (b === i ? u : 0));
+  };
+  const lpPaintPanels = (st, scene, t3, t) => {
+    const scenes = lpPanelScenes(st, scene), poses = lpPanelPoses(st, scene, t), pg = scene.world.page || {};
+    const names = Number.isInteger(pg.panel_rule_home) ? lpPanelNames(st, scene, t, pg.panel_rule_home) : null;
+    const uc = spiralClocks(t, scene.span ? scene.span[0] : 0, scene.span ? scene.span[1] : Infinity, pg.exit, pg.enter).uc;
+    const c = { x: STAGE_W * st.boardCentre.x / 100, y: STAGE_H * st.boardCentre.y / 100 }, Rp = Math.hypot(STAGE_W, STAGE_H) / 2;
+    const t0 = t - (t3 - LP.PUNCH);   /* the scene second the page's build opens */
+    st.panels.forEach((S, i) => {
+      /* the pose is ONE similarity on the panel's home box - a translate and a uniform scale (every box keeps the panel's
+         aspect), the park's own kind of move: the box's CSS never changes, so the raster is a function of t alone (a box
+         resized per frame rasterised differently under forward play than under a cold seek - measured, 42k px) */
+      const q = poses[i], bs = S.box.style, hb = st.panelHome[i], k = q.b.w / hb.w;
+      const tx = (q.b.x - hb.x) / STAGE_W * S.box.offsetParent.offsetWidth, ty = (q.b.y - hb.y) / STAGE_H * S.box.offsetParent.offsetHeight;
+      let xf = "translate(" + tx.toFixed(3) + "px," + ty.toFixed(3) + "px) scale(" + k.toFixed(5) + ")";
+      if (uc > 0) {   /* the page's drain takes the panel as one particle, about its posed centre */
+        const cx = tx + k * S.box.offsetWidth / 2, cy = ty + k * S.box.offsetHeight / 2, hx = q.b.x + q.b.w / 2, hy = q.b.y + q.b.h / 2;
+        xf = "translate(" + cx.toFixed(3) + "px," + cy.toFixed(3) + "px) " + lpVortexCss(lpVortex(hx, hy, c, Rp, uc), hx, hy)
+          + " translate(" + (-cx).toFixed(3) + "px," + (-cy).toFixed(3) + "px) " + xf;
+      }
+      bs.transformOrigin = "0 0";
+      bs.transform = xf;
+      bs.opacity = q.op >= 0.999 ? "" : Math.max(0, q.op).toFixed(3);
+      bs.filter = q.blur > 0.05 ? "blur(" + (q.blur / st.panelPs / k).toFixed(2) + "px)" : "";   /* the filter is inside the scale: its radius in the unscaled box */
+      bs.zIndex = String(q.z);
+      lpPaintStates(S, scenes[i], clamp01((t - lpPanelStart(st, scene, i, t0)) / st.panelBuild), t3, t);
+      if (names) for (const hr of S.hlines || []) if (hr.lab) hr.lab.setAttribute("opacity", ((+hr.lab.getAttribute("opacity") || 0) * names[i]).toFixed(3));
+      paintPerform(S, scenes[i], t, S.pg);
+    });
+    st.active = 0;
   };
   /* ---- TREEMAP (P50 T6; E53 s1's second amendment - the CENSUS exception; Bravos shots 89-91) ----
      The squarified layout is the COMPILER's (ledger_page.squarify, inside page_boxes' own plot, both
@@ -14091,6 +14298,7 @@ async function mount(doc) {
      transition's own clock, then the named state draws on by its own envelope. Before the first chart_to, and on a page
      that declares none, this is exactly the single-chart behaviour it replaced. */
   const lpPaintStates = (st, scene, cBase, t3, t) => {
+    if (st.panels) { lpPaintPanels(st, scene, t3, t); return; }   /* P69 T8b: a panels page paints each panel's own states */
     const states = st.states || [st];
     if (states.length < 2) {   /* a page with one chart is exactly what it was - plus a park, if the row names one (P48 T2b) */
       lpPaintChart(st, cBase, t3, scene, t);
@@ -14550,7 +14758,7 @@ async function mount(doc) {
     }
     if (!(st.states && st.states.length > 1)) (st.keyPills || []).forEach((kp, ki) => pillAt(kp.el, tb - kp.at, ki, 40 + ki));   /* P69 T10: the key, on recipe:badge-ladder's clock */
     else lpPaintStateKeys(st, scene, t, tb, pillAt);   /* M1: the key of the chart on screen; a recast's old key leaves */
-    paintPerform(st, scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word */
+    paintPerform(st, st.panels ? (lpPanelScenes(st, scene), st.panelPageScene) : scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word (P69 T8b: a panels page's own; each panel's ride lpPaintPanels) */
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
     lpShedPrisms(st, scene, t, pg);   /* P61 T4a: ... and the prisms come apart in that same drain - AFTER it, so the drain's particle cache is always taken from faces at home */
@@ -14786,14 +14994,14 @@ async function mount(doc) {
            2. every `querySelectorAll` below spanned the WHOLE world: every state's `svg.lp-chart` plus the perform,
               morph and remake overlays. So the first `.bar` could belong to the state that has not arrived yet, and
               the n-th `.ser` to another state's first line. Scoped to the ACTIVE state's chart, which is the page. */
-      const lpst = world.__lp;
+      const lp0 = world.__lp, lpst = lp0 && lp0.panels ? (lp0.panels[tg.panel | 0] || lp0.panels[0]) : lp0;   /* P69 T8b: on a panels page, the panel the target names */
       const S0 = lpst ? ((lpst.states && lpst.states[lpst.active | 0]) || lpst) : null;
       const chart = S0 ? S0.chart : null;
       const bars = chart ? chart.querySelectorAll(".bar") : world.querySelectorAll(".lp-chart .bar");
       if (bars.length) return stageBox(bars[Math.min(tg.index | 0, bars.length - 1)]);
       /* viewBox -> stage px under the default xMidYMid meet (the landscape chart is letterboxed in its box) */
       const vbMap = (svg, q) => { const b = stageBox(svg), vb = svg.viewBox.baseVal, k = Math.min(b.w / vb.width, b.h / vb.height);
-        return { x: b.x + (b.w - vb.width * k) / 2 + q.x * k, y: b.y + (b.h - vb.height * k) / 2 + q.y * k, w: 0, h: 0 }; };
+        return { x: b.x + (b.w - vb.width * k) / 2 + (q.x - (vb.x || 0)) * k, y: b.y + (b.h - vb.height * k) / 2 + (q.y - (vb.y || 0)) * k, w: 0, h: 0 }; };   /* P69 T8b: a panel's viewBox starts above 0 */
       const rng = lpSeriesRange(S0, tg.series | 0);
       if (rng) {   /* the exact datum (P41): the builder's own point, never a length fraction - and its own series' */
         const q = lpDatumNow(lpst, tg.series | 0, Math.max(rng.lo, Math.min(tg.index | 0, rng.hi)));
