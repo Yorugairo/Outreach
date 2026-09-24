@@ -323,7 +323,7 @@ def form_labels(timeline: Mapping[str, Any]) -> dict:
 
 
 def chart_to_transforms(timeline: Mapping[str, Any]) -> list:
-    """Every chart-to-chart transform: a `chart_to` species, or a morph/stamped page ON another page."""
+    """Every chart-to-chart transform: a `chart_to` species, a prop morph (P69 T26e), or a morph/stamped page ON another page."""
     scenes = list(timeline.get("scenes") or [])
     out: list = []
     for i, scene in enumerate(scenes):
@@ -331,6 +331,9 @@ def chart_to_transforms(timeline: Mapping[str, Any]) -> list:
         for sp in scene.get("species") or []:
             if sp.get("kind") == "chart_to":
                 out.append((sid, f"species chart_to -> {sp.get('to') or '?'}"))
+        for pm in scene.get("prop_morphs") or []:   # P69 T26e (E99 s107): a prop becoming a mark, or a chart becoming a prop
+            if isinstance(pm, dict):
+                out.append((sid, f"prop morph {pm.get('way') or '?'} {pm.get('mark') or '?'} ({pm.get('prop') or '?'})"))
         page = (scene.get("world") or {}).get("page") or {}
         if page.get("enter") in ("morph", "stamped") and i > 0 and ((scenes[i - 1].get("world") or {}).get("page")):
             out.append((sid, f"page enter {page['enter']} after a ledger page"))

@@ -2,6 +2,19 @@
 
 This guide has one entry for every TYPE, ACTION, EFFECT and RECIPE in `BRAVOS-VOCABULARY-HARVEST-v2.md`: 171 entries. The ids, statuses and video counts come from that file.
 
+**Rulings since this guide was written** (`docs/portable/OPERATOR-RULINGS.md`, E99, all 2026-09-23). Where one overturned a "don't", the entry now states the ruling's condition and cites it by id.
+- **s99**: "A highlight that TRAVELS along a length (a relit stretch running down a line) or BLINKS counts as motion; a light that comes on as everything else STOPS is a punctuation beat" (a light that sits stays 0 events, s91).
+- **s100**: an area form is truthful when "(a) every area is drawn in true proportion to its value ... and (b) the figures the claim turns on are WRITTEN on the page"; E53 s1's hierarchy "becomes GUIDANCE on which form reads fastest, not a refusal list".
+- **s101**: "A bar may be filled with EQUAL tiles naming who is in it (logos, names) when the bar is ONE value, the tiles carry no value of their own (equal height, never sized), and the bar's total is written on the page".
+- **s102**: a second axis, and an inverted one, "Allowed when: (a) the claim is co-movement or lead/lag; (b) each axis names its unit, and an inverted axis says "inverted" on the page; (c) each axis's tick labels are coloured with their own series."
+- **s103**: H-3 keeps its share certificate: "The still stands as generated; the re-roll owed by HOST-NOTES-H.md is withdrawn."
+- **s104** (+ amendments): a ledger page holds two, then up to FOUR panels; a panel "can RECEDE - scaled back, dimmed, softened behind the one in focus - and be BROUGHT BACK on its word"; "Focus is a COMPOSABLE state".
+- **s105** (+ amendment): "A RECAST IS AN ARRIVAL"; for a rescale, extend or morph "THE TEST IS NARRATIVE, NOT GEOMETRIC".
+- **s106**: "A prop's placement is AUTHORABLE"; the fit's findings "are WARNs in the build's report, not refusals".
+- **s107**: "PROPS, PAGES AND CHARTS MORPH INTO EACH OTHER, BOTH WAYS", "MID-PAGE on a word".
+- **s108**: a page's chrome "is a set of OBJECTS, not ink fixed in the page's space", "so the camera is free to push to the data".
+- **s109**: "FORMS ARE NOT BANNED; HONESTY IS THE TEST": (1) schematics with no data; (2) the membership stack; (3) a ring on every vertex "when the sentence is about those vertices"; (4) pies and donuts, "including an extruded or exploded one", and the push onto the largest slice; (5) E53's form rules "are DEFAULTS that give way to the story when the honesty tests hold". "The broken cross-era axis (C13) awaits its own word."
+
 Entries are grouped by the sentence's **act**. The act names are the ones in `docs/content-video-engine/SPECIES-BY-SENTENCE.md` (fable-p68): QUOTES, RANKS, COMPARES, DIVIDES, NAMES, EXPLAINS, TURNS, BREAKS, SPANS, SETS, RETRACTS, COUNTS. Four more rows from that file also get groups:
 - the same data again (E58 verbs, its row 12);
 - the camera (row 14);
@@ -194,7 +207,7 @@ Bubbles times are 12 s windows.
 **R2 Bar ladder with a membership bar**: RECIPE · PARTIAL · n=1
 - act: RANKS · moment: proof · shape: two numbers + a named set
 - use: then vs now, and the "now" bar is made of named members.
-- don't: the membership tiles are a stacked bar in disguise (E53 s2, C3).
+- don't: the tiles carry values or differ in size, or the bar's total is unwritten: s101 allows them "when the bar is ONE value, the tiles carry no value of their own (equal height, never sized), and the bar's total is written on the page" (C3 cleared; P69 T45).
 - ev: `RUH3BPQ5fTo` 01:24 "the total amount of AI related debt from just these few companies"
 
 **R30 Ranked dim-the-rest spotlight**: RECIPE · PARTIAL · n=2
@@ -235,10 +248,10 @@ Bubbles times are 12 s windows.
 - don't: a headline total sits in the middle and competes with the bars (P STK: *"competes with the source bars"*).
 - ev: `4AkB4c0tTfU` 00:02 "Retail investors are piling into semis stocks."; `RUH3BPQ5fTo` 13:10 "has gone from virtually zero in 2023"
 
-**T14 Dual-axis line over line**: TYPE · MISSING · n=7 · **CONFLICT C5**
+**T14 Dual-axis line over line**: TYPE · MISSING · n=7 · **C5 cleared by s102** (P69 T43b)
 - act: COMPARES · moment: hook / proof · shape: series x2 (unlike units)
-- use: (not ours today) two unlike measures read AGAINST each other. Our route: E79 panels (`axes.independent`), or E53 s4's overlay with no second axis and a terminal tag.
-- don't: two scales on one reading (E75 s3); a policy rate as a series (E53 s5). Bravos uses the side-by-side form for eras (BOOM 06:10).
+- use: two series on their own axes (LHS / RHS), one inverted when they move inversely, and the sentence is "these move together" or "this one leads that one" (s102 (a)). Unlike measures with no co-movement claim: E79 panels (`axes.independent`).
+- don't: the claim is a level or a change (s102: E28 "still binds every single-axis page and any page whose claim is a level or a change"); an axis without its unit, an inverted axis not saying "inverted", ticks not "coloured with their own series" (s102 (b), (c)); a policy rate as a series (E53 s5). Bravos uses the side-by-side form for eras (BOOM 06:10).
 - ev: `Jw8ykhoOVBQ` 00:00 "different stories" (LHS points / RHS $); `nB1eXWQlW58` 06:24 "crossed above 5% for the first time since July of 2007"; `PWMhM2_dj3s` 01:00 (screen "US and Japan 30-Year Bond Yield")
 
 **T15 Small multiples**: TYPE · HAVE · n=2
@@ -253,9 +266,9 @@ Bubbles times are 12 s windows.
 - don't: promotional equity curves (DOM 18:30 is Bravos's own strategy).
 - ev: `_rwFYNlKtEc` 11:00 (screen: debt / GDP area); `PWMhM2_dj3s` 18:30 (screen "Bravos Quant Strategy")
 
-**T35 Broken-axis cross-era line**: TYPE · MISSING · n=1 · **C13**
+**T35 Broken-axis cross-era line**: TYPE · MISSING · n=1 · **C13, awaits the operator**
 - act: COMPARES · moment: proof · shape: series x2 (two eras)
-- use: (ruling owed) railway 1840s and AI 2020s on one share-of-GDP axis with a visible `//`.
+- use: (ruling owed; s109: "The broken cross-era axis (C13) awaits its own word") railway 1840s and AI 2020s on one share-of-GDP axis with a visible `//`.
 - don't: without a ruling (E53 s3); E79 panels are the existing honest route.
 - ev: `Jw8ykhoOVBQ` 08:01 "share of the total economy"
 
@@ -349,10 +362,10 @@ Bubbles times are 12 s windows.
 - don't: on axes or text. The spec measured Bravos's hero bloom at ~82 px, ours at ~20 px.
 - ev: `1ZS5_txbOsc` 02:50 (t170, spec); `jx3Ll-GJtMY` 00:36 (G)
 
-**F15 Axis ticks coloured to match their series**: EFFECT · MISSING · n=1
+**F15 Axis ticks coloured to match their series**: EFFECT · MISSING · n=1 · **s102 (c)** (P69 T43b)
 - act: COMPARES · moment: proof · shape: series x2
-- use: only if a dual-axis ruling lands (C5).
-- don't: today (E53 s4 / E75 s3).
+- use: every page with a second axis (T14): "each axis's tick labels are coloured with their own series" (s102 (c)).
+- don't: a single-axis page; a second axis whose claim is not co-movement or lead/lag (s102 (a)).
 - ev: `jx3Ll-GJtMY` 04:10 (G, screen: pink RHS ticks)
 
 **F17 Framed plot panel**: EFFECT · MISSING · n=6
@@ -370,7 +383,7 @@ Bubbles times are 12 s windows.
 **R23 Add the comparison without restarting**: RECIPE · HAVE (one scale) · n=3
 - act: COMPARES · moment: proof · shape: series x2
 - use: hold series 1, draw series 2 on its word, pin the shared date, land the pair of pills.
-- don't: the two need two scales (C5): go to panels.
+- don't: the two need two scales and the claim is not co-movement or lead/lag: go to panels (E79). When it is, a second axis on s102's conditions (T14).
 - ev: `nB1eXWQlW58` 01:14-01:19.5 "exactly 6 months later, the US stock market peaked"; `PWMhM2_dj3s` 00:59-01:04 (screen: the US line joins Japan)
 
 **R32 Today's boom against past booms**: RECIPE · PARTIAL · n=1
@@ -382,7 +395,7 @@ Bubbles times are 12 s windows.
 **R33 Lead with the divergence**: RECIPE · HAVE · n=1
 - act: COMPARES · moment: hook · shape: series x2
 - use: two once-together series now apart; the open's whole thesis.
-- don't: the divergence needs two axes to exist (C5).
+- don't: two axes unless the claim is co-movement or lead/lag (s102 (a)), each unit named and an inverted axis saying "inverted" (s102 (b)); a gap whose size is the claim stays on one scale (s102: E28 "still binds ... any page whose claim is a level or a change").
 - ev: `Jw8ykhoOVBQ` 00:00-00:34 "different stories" (H row 1 already opens on this chart)
 
 **R36 Inset echo, then "?"**: RECIPE · PARTIAL · n=1
@@ -431,10 +444,10 @@ Bubbles times are 12 s windows.
 - don't: the areas are decorative, or the figures are unwritten.
 - ev: `RUH3BPQ5fTo` 00:00-00:48 "This entire section represents AI related purchases and leases"
 
-**T3 Composition bar (logos as tiles)**: TYPE · MISSING · n=2 · **C3**
+**T3 Composition bar (logos as tiles)**: TYPE · MISSING · n=2 · **C3 cleared by s101** (P69 T45)
 - act: DIVIDES · moment: proof · shape: parts of a whole
-- use: (not ours) who makes up a total.
-- don't: E53 s2 (never a stacked bar). Use a chip set beside the bar, or an s100 area form.
+- use: who makes up ONE total: equal tiles (logos, names) inside the bar, its total written (s101, s109 (2)).
+- don't: the tiles carry values or are sized: s101 holds only "when the bar is ONE value, the tiles carry no value of their own (equal height, never sized), and the bar's total is written on the page". To compare the members' sizes, use bars.
 - ev: `RUH3BPQ5fTo` 01:24 "the total amount of AI related debt from just these few companies"; `jx3Ll-GJtMY` 07:55 (G)
 
 **T10 Decorative donut**: TYPE · PARTIAL · n=4
@@ -446,7 +459,7 @@ Bubbles times are 12 s windows.
 **T17 Treemap census, departing cells crossed**: TYPE · HAVE · n=1
 - act: DIVIDES · moment: proof · shape: parts of a whole
 - use: "the biggest ones are leaving": breadth, with the crossed share written.
-- don't: one part's size against another (use a bar).
+- don't: the cells are not in true proportion or the figures the claim turns on are unwritten (s100 (a), (b), which supersede the treemap's census exception). Where one part against another is the whole claim, a bar reads fastest (E53 s1, guidance under s100).
 - ev: `1ZS5_txbOsc` 14:52.5 "if we cross out all of the countries"
 
 **T24 Decomposition brace**: TYPE · MISSING · n=1
@@ -455,16 +468,16 @@ Bubbles times are 12 s windows.
 - don't: the parts are not additive.
 - ev: `_rwFYNlKtEc` 05:40 (screen "Long-Term Interest Rates" braced over two components)
 
-**T29 Partitioned (stacked) horizontal bar**: TYPE · MISSING · n=1 · **C3 stands**
+**T29 Partitioned (stacked) horizontal bar**: TYPE · MISSING · n=1 · **C3 cleared by s109 (5)** (P69 T50)
 - act: DIVIDES · moment: proof · shape: parts of a whole + one number
-- use: (not ours) "your bills are 105 % of your income".
-- don't: E53 s2. s100 opens an area form instead: a proportional block of bills against income, figures written.
+- use: "your bills are 105 % of your income": segments drawn true to their values, figures written. E53's "no stacked bar" is one of the "DEFAULTS that give way to the story when the honesty tests hold" (s109 (5)).
+- don't: a segment is not in true proportion to its value, or the figures are unwritten (s100 (a), (b)). s100's proportional block of bills against income stays the other route.
 - ev: `u70oUWgVoYU` 03:30-04:26 (G, screen "$105k" / "$4.38 Trillion")
 
-**T30 3D extruded donut, exploded slice**: TYPE · PARTIAL · n=1 · **C10**
+**T30 3D extruded donut, exploded slice**: TYPE · PARTIAL · n=1 · **C10 cleared by s109 (4)** (P69 T48)
 - act: DIVIDES · moment: proof · shape: parts of a whole
-- use: the flat `share` + `peel` for "two-thirds is long-term".
-- don't: the 3D form (perspective breaks s100 test (a)).
+- use: one piece's weight is the story ("two-thirds is long-term"): flat, or extruded and exploded, the camera free to push onto the largest slice "because the emphasis IS the claim" (s109 (4)).
+- don't: the slice angles are not the true shares or the figures are unwritten: "accuracy means the slice ANGLES are the true shares and the figures are written - the perspective is the camera's, not the data's" (s109 (4)).
 - ev: `u70oUWgVoYU` 05:26-05:48 (G, screen "67.54%")
 
 **T34 Fill gauge / meter**: TYPE · PARTIAL · n=2
@@ -494,7 +507,7 @@ Bubbles times are 12 s windows.
 **R10 Treemap census, then park**: RECIPE · HAVE · n=1
 - act: DIVIDES · moment: proof · shape: parts of a whole
 - use: X on the word; the page parks for the next diagram 3.3 s later.
-- don't: a size claim without its bar (E53 census (d)).
+- don't: a size claim whose figure is unwritten (s100 (b)). The census exception's (d) ("the treemap never stands alone as proof of a size") is superseded by s100's two tests.
 - ev: `1ZS5_txbOsc` 15:28 "So when China stepped in to cushion the oil shock"
 
 ## 5. NAMES places and flows
@@ -514,7 +527,7 @@ Bubbles times are 12 s windows.
 **T33 2.5D tilted map with lit routes**: TYPE · PARTIAL · n=1
 - act: NAMES · moment: setup · shape: a named thing (a network)
 - use: a physical network built out over time (power lines, fibre).
-- don't: an area-encoded value on a tilted surface (s100 (a)).
+- don't: an area-encoded value that is not true in the flat geometry, or its figure unwritten (s100 (a), (b)); the tilt is "the camera's, not the data's" (s109 (4)).
 - ev: `jx3Ll-GJtMY` 04:05, 05:25 (G)
 
 **A32 Year / figure stamp in a country**: ACTION · HAVE · n=1
@@ -549,16 +562,16 @@ Bubbles times are 12 s windows.
 
 ## 6. EXPLAINS a mechanism
 
-**T7 Schematic cycle (waves, a mania arc, the hype cycle)**: TYPE · MISSING · n=5 · **C9**
+**T7 Schematic cycle (waves, a mania arc, the hype cycle)**: TYPE · MISSING · n=5 · **C9 cleared by s109 (1)** (P69 T46)
 - act: EXPLAINS · moment: setup / turn · shape: none (schematic)
-- use: (ruling owed) a phase model before the real data, named as a model.
-- don't: in chart ink, as if measured (P STK: *"do not port it as data"*).
+- use: a phase model carrying the narrative, named as a model: "the world's art carrying the narrative" (s109 (1)).
+- don't: axis values, figures it cannot source, or no mark on the page that it is "a shape, not a series" (s109 (1)). P STK: *"do not port it as data"*.
 - ev: `4AkB4c0tTfU` 01:42 "Every bull market has three distinct phases."; `Jw8ykhoOVBQ` 04:24-04:30 "peak of inflated expectations"; `PWMhM2_dj3s` 07:30 (screen "Long-term Debt Cycle")
 
 **T8 Candlesticks over a ghost wave**: TYPE · MISSING · n=1
 - act: EXPLAINS · moment: setup · shape: series (illustrative)
 - use: rarely; price action as illustration.
-- don't: no H row needs it; it is not a data claim.
+- don't: no H row needs it; drawn as if measured (s109 (1): a schematic "carries no axis values and no figures it cannot source, and says it is a shape, not a series").
 - ev: `RUH3BPQ5fTo` 04:47 "The stock can theoretically go up and up and up"
 
 **T20 Flow diagram**: TYPE · HAVE · n=8
@@ -588,7 +601,7 @@ Bubbles times are 12 s windows.
 **A23 The chart blurs / dims under an overlay**: ACTION · PARTIAL · n=4 · *candidate #6*, **s98**
 - act: EXPLAINS · moment: proof · shape: series + named things
 - use: an explainer dock lands over a busy chart plate (s98 option).
-- don't: the chart must keep being read. Bravos parks the diagram beside instead (JPN 04:08). Open on a ledger-page plot (E63, C1).
+- don't: the chart must keep being read. Bravos parks the diagram beside instead (JPN 04:08). On a ledger-page plot: cleared for a receded panel (s104 amended: "the rest blur and recede"), the read judged on the frame (s109: "judged on its truth and its read"; C1).
 - ev: `RUH3BPQ5fTo` 02:00 "a credit default swap as a form of insurance"; `PWMhM2_dj3s` 09:16 (screen: the plot softens under the card); `Jw8ykhoOVBQ` 06:04 (screen: the chart dims under "Railways")
 
 **A26 A flow edge fails**: ACTION · PARTIAL · n=3
@@ -618,7 +631,7 @@ Bubbles times are 12 s windows.
 **A35 Poof arrival under a load**: ACTION · MISSING · n=1
 - act: EXPLAINS · moment: setup · shape: a named thing
 - use: a metaphor prop (the rig lane).
-- don't: a data page; it belongs to the prop / rig lane.
+- don't: the prop stands in for a figure (s106: "the truth rules (E28 - the geometry says what the number says; figures never fabricated) stay hard"). On a data page it goes where the row puts it (s106 (1): "A prop's placement is AUTHORABLE").
 - ev: `RUH3BPQ5fTo` 11:58.5 "an elephant on a ball on a tightrope"
 
 **A36 The active actor tile glows**: ACTION · PARTIAL · n=3 · *candidate #9*
@@ -635,13 +648,13 @@ Bubbles times are 12 s windows.
 
 **A54 Phase-shift slide**: ACTION · MISSING · n=1
 - act: EXPLAINS · moment: proof · shape: series x2 (schematic)
-- use: (C9) one indicator leads another by a fixed lag.
-- don't: the lag is not measured, or there is no ruling on schematics (C9).
+- use: (s109 (1), C9 cleared) one indicator leads another by a fixed lag.
+- don't: the lag is written as a figure that is not measured (s109 (1): "no figures it cannot source").
 - ev: `jx3Ll-GJtMY` 15:55 (G)
 
 **A55 Traced state along a schematic**: ACTION · MISSING · n=3
 - act: EXPLAINS · moment: proof · shape: none (schematic)
-- use: (C9) "we are here" on a phase model.
+- use: (s109 (1), C9 cleared) "we are here" on a phase model.
 - don't: real data (use A11 on the measured line).
 - ev: `jx3Ll-GJtMY` 09:45-10:10 (G); `PWMhM2_dj3s` 07:30-08:30 (screen: the active segment green); `4AkB4c0tTfU` 01:48 (screen: Mania band)
 
@@ -681,10 +694,10 @@ Bubbles times are 12 s windows.
 - don't: longer than one proof beat (P DOM: split the 33 s passage).
 - ev: `PWMhM2_dj3s` 08:56-09:29 (screen: Bonds → Interest Rate → Investor); `RUH3BPQ5fTo` 01:59-03:00 "a credit default swap as a form of insurance"; `nB1eXWQlW58` 04:08 (the beside variant)
 
-**R6 Cycle model**: RECIPE · MISSING · n=5 · **C9**
+**R6 Cycle model**: RECIPE · MISSING · n=5 · **C9 cleared by s109 (1)** (P69 T46)
 - act: EXPLAINS · moment: setup / turn · shape: none (schematic)
-- use: name the phases, light the current one, then hand off to real data.
-- don't: with no real chart after it.
+- use: name the phases, light the current one; real data may follow on its word (P69 T46 (3)).
+- don't: the schematic reads as measured: axis values, figures it cannot source, or no mark that it "says it is a shape, not a series" (s109 (1)).
 - ev: `4AkB4c0tTfU` 01:42-01:50 "Every bull market has three distinct phases."; `Jw8ykhoOVBQ` 04:24-04:40 "peak of inflated expectations"; `jx3Ll-GJtMY` 09:35 (G)
 
 **R8 Capital loop with money moving**: RECIPE · MISSING · n=3
@@ -725,10 +738,10 @@ Bubbles times are 12 s windows.
 
 ## 7. TURNS on a number
 
-**T9 Zig-zag with a ring at every vertex**: TYPE · PARTIAL · n=1 · **C7**
+**T9 Zig-zag with a ring at every vertex**: TYPE · PARTIAL · n=1 · **C7 cleared on s109 (3)'s condition** (P69 T47)
 - act: TURNS · moment: proof · shape: series
-- use: (not advised) every step of a run carries its own figure.
-- don't: E56's "not rings on everything".
+- use: the sentence is about those vertices: "repeated near-equal peaks ringed in turn, the valley lit" (s109 (3)); every step of a run carries its own figure.
+- don't: the sentence does not point at each vertex ("E56's one-use means the ring marks what the sentence points at", s109 (3)); rings landing all at once instead of in turn on their words.
 - ev: `RUH3BPQ5fTo` 05:23 "A 40% return per year every year"
 
 **A7 Dashed ellipse on a datum or region**: ACTION · HAVE · n=4
@@ -770,7 +783,7 @@ Bubbles times are 12 s windows.
 **A52 The ring travels to the lagging peak**: ACTION · PARTIAL · n=1
 - act: TURNS · moment: turn · shape: series x2
 - use: the second peak answers the first (s99: a travelling light is motion).
-- don't: the two peaks sit on unlike scales (C5).
+- don't: the two peaks sit on unlike scales without s102's conditions: the claim is lead/lag (s102 (a)), each axis names its unit and an inverted one says "inverted" (s102 (b)).
 - ev: `jx3Ll-GJtMY` 14:15 (G)
 
 **A61 "?" prompt at the unknown**: ACTION · PARTIAL · n=5

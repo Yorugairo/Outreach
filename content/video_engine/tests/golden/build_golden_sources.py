@@ -3333,6 +3333,105 @@ SURFACES.update({"bar-value-morph": bar_value_morph})
 FRAME_T.update({"bar-value-morph": 14.4})   # at rest: the window closed at 13.4 (the bar landed at 11.0 + 0.72 x 2.4), the comparator's label written whole
 
 
+# ---- P69 T26e / E99 s107: PROPS, PAGES AND CHARTS MORPH INTO EACH OTHER - one golden each way ---------------------
+# The operator: "we should also be able to morph/transform to/from props to pages and charts." The Steel and Paper H
+# beat is the pair: the data centre BECOMES the $690 capex bar it costs, and the capex page COLLAPSES back into the
+# data centre. Both are compiled here by the functions the row loop calls (`prop_morph_row`, the stamp/place fit,
+# `dock_entry`, `finish_prop_morphs`) on a two-bar page copied from the capex object's own values - so the golden
+# never reads an untracked series - with the data centre as a PROXY of the catalogued cutout (E99 s31: an approved
+# cutout never enters git; `png_proxy`'s integer box filter, as the stamped-prop goldens do).
+#   prop-morph-bar   the data centre stamped at an authored place in the page's right margin (9.0), then on 14.0 the
+#                    verb `chart_to {to: morph, from: prop:<id>, mark: b:1}` over 2.0 s: judged at u 0.50 - the
+#                    prop's own pixels on the ARAP strip, half way between its silhouette and the bar's rectangle,
+#                    the bar itself not yet drawn (it is the prop's to become).
+#   prop-morph-page  the same page; on 12.0 `chart_to {to: prop, prop: <id>, mark: page, place}` over 2.0 s: judged at
+#                    u 0.50 - the page carved to the shape it is becoming, the prop's pixels arriving on it.
+PROP_DC = "prop-hyperscale-datacenter-v1"
+PROP_DC_CUTOUT = REPO / "content/video_engine/assets/props/cutouts" / f"{PROP_DC}.png"
+PROP_MORPH_OBJ = {"title": "Hyperscaler capital spending, consensus estimates",
+                  "sub": "The five largest hyperscalers' 2026 capital spending, US$ billions",
+                  "src": "Values copied from ev-capex-consensus-v2 (PIMCO, consensus estimates, not actuals)",
+                  "unit": "$",
+                  "bars": [{"label": "Start of year", "value": 480, "note": "$480"},
+                           {"label": "Consensus now", "value": 690, "note": "$690", "color": "crimson"}]}
+PROP_MORPH_STAMP = 9.0      # the page is built by ~7.4 s; the data centre is stamped on a page that has been read
+PROP_MORPH_IN_AT = 14.0     # ... and becomes the bar on this word
+PROP_MORPH_OUT_AT = 12.0    # the page becomes the data centre on this word
+PROP_MORPH_DUR = 2.0
+
+
+def _prop_morph_world():
+    import tempfile
+    import build_scene_timeline_f as BST
+    plate = "ledger:fx-capex-bars:bars"
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/fx-capex-bars.series.json").write_text(json.dumps(PROP_MORPH_OBJ), encoding="utf-8")
+        saved = BST.ASPECT
+        BST.ASPECT = "16:9"
+        try:
+            world = BST.world_for_plate(plate, (0, 0, 0), ep)
+            BST.stamp_full_stage(world["page"])
+        finally:
+            BST.ASPECT = saved
+    return dict(world, ken_burns={"scale": 0, "x": 0, "y": 0})
+
+
+def _prop_morph(way: str) -> tuple[dict, dict]:
+    """One row compiled as the row loop compiles it: the verbs read off (`prop_morph_row`), the docks placed (the
+    authored place, the stamp's fit), the entries written (`dock_entry`, `handed` / `arrive: morph`), and the morphs
+    finished against the state on screen (`finish_prop_morphs`)."""
+    import build_scene_timeline_f as BST
+    world, where = _prop_morph_world(), "golden prop-morph"
+    if way == "in":
+        ds = [(PROP_DC, 0, PROP_MORPH_STAMP, RUNTIME, {"prop": True, "arrive": "stamp", "mass": "ink", "ink": "own",
+                                                       "place": {"x": 0.84, "y": 0.47, "w": 0.2}})]
+        species = [{"kind": "chart_to", "to": "morph", "from": f"prop:{PROP_DC}", "at": PROP_MORPH_IN_AT,
+                    "dur": PROP_MORPH_DUR, "mark": "b:1", "id": "s01.species.0"}]
+    else:
+        ds = []
+        species = [{"kind": "chart_to", "to": "prop", "prop": PROP_DC, "at": PROP_MORPH_OUT_AT, "dur": PROP_MORPH_DUR,
+                    "mark": "page", "place": {"x": 0.5, "y": 0.5, "w": 0.3}, "id": "s01.species.0"}]
+    r = BST.prop_morph_row(species, ds, None, 0.0, RUNTIME, where, sid="s01")
+    docks = []
+    for n, (aid, slot, enter, exitt, raw) in enumerate(r["ds"]):
+        opts = BST.dock_opts(raw)
+        if n in r["born"]:
+            opts = {**opts, "arrive": "morph"}
+        paint = BST.painted_box(PROP_DC_CUTOUT)
+        fit = BST.stamp_dock_place(world, "16:9", opts, paint, None, None, where) if opts.get("arrive") == "stamp" \
+            else BST.prop_place_fit(world, "16:9", opts, paint, None, where)
+        place = {k: fit[k] for k in ("x", "y", "w", "h", "room")}
+        stamped = opts.get("arrive") == "stamp"
+        docks.append(BST.dock_entry(aid, slot, enter, exitt, 0, BST.DOCK_KIND_PROP, place, opts.get("arrive"), opts.get("mass"),
+                                    True, prop=True, ink=opts.get("ink"), ring_to=fit.get("ring_to") if stamped else None,
+                                    from_to=fit.get("from_to") if stamped else None, paint=fit.get("paint") if stamped else None,
+                                    rot=opts.get("rot"), handed=n in r["handed"]))
+    morphs, _warns = BST.finish_prop_morphs(r["morphs"], docks, world, r["species"], "16:9", where, lambda aid: PROP_DC_CUTOUT)
+    ev = {PROP_DC: {"title": "A hyperscale data centre", "source": "the operator's own cutout", "species": "prop",
+                    "document": {"path": str(PROP_DC_CUTOUT.relative_to(REPO)), "sha256": "0" * 64}, "badges": [],
+                    "kind": BST.DOCK_KIND_PROP}}
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": docks,
+               "species": r["species"], BST.PROP_MORPH_KEY: morphs}]
+    uris = _base_uris()
+    uris[PROP_DC] = uri("image/png", png_proxy(PROP_DC_CUTOUT, PROP_PROXY_PX))
+    tl = _timeline(f"Golden: the prop morph ({'the data centre becomes the bar' if way == 'in' else 'the page becomes the data centre'})",
+                   scenes, ev, "16:9")
+    tl["kinetics"] = {"stop_action": True}   # the stamp's own switch (P47 T1), as the stamped-prop goldens carry it
+    return tl, uris
+
+
+SURFACES.update({
+    "prop-morph-bar": lambda: _prop_morph("in"),     # E99 s107: the data centre becomes the $690 bar
+    "prop-morph-page": lambda: _prop_morph("out"),   # ... and the capex page collapses into the data centre
+})
+FRAME_T.update({
+    "prop-morph-bar": PROP_MORPH_IN_AT + PROP_MORPH_DUR * 0.5,    # u 0.50: the pixels on the mesh, half way to the bar
+    "prop-morph-page": PROP_MORPH_OUT_AT + PROP_MORPH_DUR * 0.5,  # u 0.50: the page carved to the shape, the pixels arriving
+})
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

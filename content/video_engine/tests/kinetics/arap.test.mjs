@@ -136,3 +136,72 @@ test("the strip: a tab becomes the area under a jagged series with no triangle i
   const flipped = fan.mesh.tris.filter(([i, j, k]) => det2x2(triJacobian(V[i], V[j], V[k], Bv[i], Bv[j], Bv[k])) <= 0).length;
   assert.ok(flipped > 0, "the fan flips at least one triangle on a jagged series (why the strip exists)");
 });
+
+// ---- P69 T26e / E99 s107: a PROP's own pixels ride the mesh; (6) the fan's star-shaped assumption, checked ----------
+import { alphaColumns, bandStrip, rectStrip, affineOf, triGrow, TRI_GROW, starShaped, fanRefusal, earClip, silhouetteMesh } from "../../scripts/kinetics/arap.mjs";
+
+const C_SHAPE = [[0, 0], [300, 0], [300, 80], [90, 80], [90, 220], [300, 220], [300, 300], [0, 300]];   /* a deep bay: NOT star-shaped about its centroid */
+
+test("(6) the fan is refused BY NAME on a non-star silhouette, and the ears tile it exactly", () => {
+  const sq = [[0, 0], [200, 0], [200, 200], [0, 200]];
+  assert.equal(starShaped(C_SHAPE, centroid(C_SHAPE)), false);
+  assert.equal(starShaped(sq, centroid(sq)), true);
+  const r = fanRefusal(C_SHAPE);
+  assert.ok(r && r.startsWith("fan refused") && r.includes("star-shaped"), r);
+  assert.equal(fanRefusal(sq), null);
+  const ears = earClip(C_SHAPE);
+  assert.equal(ears.length, C_SHAPE.length - 2);
+  let area = 0;
+  for (const [i, j, k] of ears) { const a = polyArea([C_SHAPE[i], C_SHAPE[j], C_SHAPE[k]]); assert.ok(a > 0, "every ear keeps the outline's orientation"); area += a; }
+  assert.ok(near(area, polyArea(C_SHAPE), 1e-6), "the ears tile the silhouette exactly");
+  assert.equal(earClip(C_SHAPE.slice().reverse()).length, C_SHAPE.length - 2, "a clockwise outline clips too");
+});
+
+test("(6) the mesh CHOICE names every refusal and falls back to the strip; a star pair keeps the fan", () => {
+  const bar = [[40, -400], [160, -400], [160, 300], [40, 300]];
+  const m = silhouetteMesh(resample(C_SHAPE, 64), resample(bar, 64));
+  assert.equal(m.kind, "strip");
+  assert.ok(m.refused.some((x) => x.startsWith("fan refused")), m.refused);
+  assert.ok(m.refused.some((x) => x.startsWith("ears refused")), "the ears were tried and refused by name when they fold on the target");
+  const f = silhouetteMesh(resample([[0, 0], [200, 0], [200, 200], [0, 200]], 64), resample([[20, 10], [240, 10], [240, 190], [20, 190]], 64));
+  assert.equal(f.kind, "fan"); assert.deepEqual(f.refused, []);
+});
+
+test("the alpha BAND STRIP is conservative (every painted pixel inside it), and a bay-cut silhouette carried to a bar keeps det J > 0 at every t", () => {
+  const W = 120, H = 90, alpha = new Uint8Array(W * H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const bay = x > 40 && y > 25 && y < 65; if (!bay && (x - 60) ** 2 / 3600 + (y - 45) ** 2 / 2025 < 1) alpha[y * W + x] = 255; }
+  const s = bandStrip(alphaColumns(alpha, W, H, 8), 48);
+  assert.equal(s.n, 48); assert.equal(s.top[0][0], 1); assert.equal(s.top[47][0], 114, "edge to edge of the painted columns");
+  let miss = 0;
+  for (let x = 0; x < W; x++) for (let y = 0; y < H; y++) {
+    if (!alpha[y * W + x]) continue;
+    for (const xx of [x + 0.01, x + 0.99]) {
+      const k = Math.max(0, Math.min(46, Math.floor((xx - s.top[0][0]) / (s.top[47][0] - s.top[0][0]) * 47)));
+      const f = (xx - s.top[k][0]) / (s.top[k + 1][0] - s.top[k][0]);
+      const t = s.top[k][1] + (s.top[k + 1][1] - s.top[k][1]) * f, b = s.bot[k][1] + (s.bot[k + 1][1] - s.bot[k][1]) * f;
+      if (!(t <= y + 0.01 && y + 0.99 <= b)) miss++;
+    }
+  }
+  assert.equal(miss, 0, "no painted pixel side falls outside the strip");
+  const bar = rectStrip(900, 200, 120, 500, 48), Bv = [...bar.top, ...bar.bot];
+  assert.deepEqual([bar.top[0], bar.top[47], bar.bot[0]], [[900, 200], [1020, 200], [900, 700]]);
+  const prep = arapPrepareMesh(stripMesh(s.top, s.bot), Bv, 48 + 24);
+  let worst = Infinity;
+  for (let i = 0; i <= 40; i++) { const d = minDet(prep, i / 40); worst = Math.min(worst, d.target, d.solved); }
+  assert.ok(worst > 0, "det J > 0 on the target Jacobians and the solved mesh at every sampled t: " + worst);
+  const end = arapAt(prep, 1).verts;
+  assert.ok(Math.max(...end.map((p, i) => Math.hypot(p[0] - Bv[i][0], p[1] - Bv[i][1]))) < 1e-6, "the landed mesh IS the bar's rectangle");
+  assert.equal(bandStrip(alphaColumns(new Uint8Array(16), 4, 4, 8), 48), null, "a cutout that paints nothing has no strip");
+});
+
+test("the texture's per-triangle AFFINE is exact, and the clip GROWS each edge along its own normal (mitre capped)", () => {
+  assert.deepEqual(affineOf([[0, 0], [10, 0], [0, 10]], [[5, 5], [5, 25], [-15, 5]]), [0, 2, -2, 0, 5, 5]);
+  const tri = [[0, 0], [100, 0], [0, 60]], g = triGrow(tri, 1);
+  assert.ok(near(g[0][1], -1, 1e-9) && near(g[0][0], -1, 1e-9), "the right-angle corner moves 1 px out along both legs");
+  const dist = (p, a, b) => Math.abs((b[0] - a[0]) * (a[1] - p[1]) - (a[0] - p[0]) * (b[1] - a[1])) / Math.hypot(b[0] - a[0], b[1] - a[1]);
+  assert.ok(near(dist(tri[0], g[1], g[2]), dist(tri[0], tri[1], tri[2]) + 1, 1e-6), "the long edge (hypotenuse) itself moves out by 1 px");
+  const needle = [[0, 0], [100, 0], [0, 2]], gn = triGrow(needle, 1);
+  assert.ok(Math.hypot(gn[1][0] - needle[1][0], gn[1][1] - needle[1][1]) <= TRI_GROW.MITRE_MAX + 1e-9, "a needle's tip is capped at MITRE_MAX px");
+  const u = triGrow([[0, 0], [1, 0], [0, 1]], 2, 100, 50);
+  assert.ok(near(u[0][0], -0.02, 1e-9) && near(u[0][1], -0.04, 1e-9), "measured in pixels through (sx, sy), returned in the caller's units");
+});

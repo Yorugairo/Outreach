@@ -58,16 +58,29 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
   TNX_PAGE / FED_PROP      row 15 (P69 T23): the bars melt and are thrown (E88) and the 10-year yield draws in its two
         eras on one page (`ev-tnx-two-eras-v4`, ordinary series - v3's panels never draw on a ledger page), the Fed's
         6.5% and their 5.5% its RULES (E53 s5); PROP 1 the Fed STAMPED on its word into the page's biggest room (P69
-        T5), bare of paper with its hatch (E99 s92); the BoE and the concession written on the same page.
+        T5), bare of paper with its hatch (E99 s92); the BoE and the concession written on the same page. The camera
+        PUSHES 1.2x onto the 2000 peak (E99 s108, `chrome` fit, FED_CAM_*) from the stamp's settle and is back at 1.0
+        before the AI era's end tag lands; the Fed steps aside as the plot grows (FED_PLACE / FED_ASIDE_X, E99 s106).
   DEBT_PAGE / DESK_PLATE   row 16 (P69 T24): the yields melt and the builders' bond issuance draws on its words (the 2026E
         range a spread, T14), recast to the IG index's tech share and to the capex consensus (E58 x2, `keyed: false`,
         each state retitled to its own title - the v2 objects print their unit, P69 T25 / R26-282); on "Go into the filings" the page melts onto the records' desk, the $822B
-        record lands at its reading size and PROP 2 the data centre is STAMPED in the desk's declared room (P69 T5).
+        record lands at its reading size. PROP 2 the data centre is STAMPED on the capex state at an AUTHORED place
+        beside the $690 bar once the recast lands, and moves on "six hundred and ninety" (E99 s106, DATACENTER_PLACE).
   ARITH_PAGE / DESK_PLATE (again)   row 17 (P69 T25): the desk holds the rehook, dip 4 to PIMCO's 94 page on its axes
         (`ev-capex-ocf-94-bars-v1`, the [0, 100] scale its own, the 100 rule "every dollar from operations"), the bar
         landing with its own "94%" as the page lands, the title RELIT on the repeat "Ninety-four."; E50 - the page spins
         into a point (the suck) before "So when you hear" and the records' desk is standing there, the filings' record
         thrown back AS the page goes, up to the row's end - the anaphora on the bottom caption under it.
+  PRESS_PLATE / CONC_PAGE / page_rail_return   row 18 (P69 T26): the desk holds the signpost (their chart again,
+        SIGNPOST_CARD, in the record's slot, drawn for its size - T10c's card profile); dip 5 to RESET 2, the press, the
+        1845 certificate (0.3 of the stage) thrown on its name; dip 6
+        to the concentration bars (`;bar_style=soft`, HG3's option), "20%" written as the bar stands, PROP 3 stamped on
+        "S&P five hundred" at an authored centre, camera 3 a real 1.2x push on the 20 (E99 s108, `chrome` fit, aimed by
+        `at` - CONC_CAM_AT), the
+        statement card landed on "target-date", the HALVING (`chart_to compare`, T26a: the bar moves to 10, the ghost at
+        20); the page melts back onto the press, the certificate RUNG round the whole card with its figure (RAIL_DROP,
+        E99 s110 (2)); on "1845 is the proof"
+        the railway index RETURNS built behind a blur-zoom and writes its -64% on "two-thirds".
 
 THE BODY'S PREFLIGHT (P69 T14, rows 7-24) is three constant tables, read before any body row is authored:
   BODY_ASSETS          every page object (with its builder), card, plate, prop, host still, cue file and outro part
@@ -181,8 +194,9 @@ def _assert_read_only(before: dict) -> None:
 # P69 T22 authors row 14 (the yardstick) and moved it to row 15's first words (the trigger, T23's); P69 T23 authors row 15
 # (the trigger, the concession and PROP 1) and moves it to row 16's first words (who is paying, T24's).
 # P69 T24 authors row 16 (who is paying, PROP 2) and moved it to row 17's first words (the arithmetic, T25's); P69 T25
-# authors row 17 (the arithmetic, the 94 bar) and moves it to row 18's first words (the signpost, T26's).
-UNIT_CUT_PHRASE = "And that's the part everyone"   # row 18's first words; the build stops at the cut BEFORE them
+# authors row 17 (the arithmetic, the 94 bar) and moved it to row 18's first words (the signpost, T26's); P69 T26 authors
+# row 18 (the turn: reset 2, PROP 3, camera 3, the halving compare) and moves it to row 19's first words (T27's).
+UNIT_CUT_PHRASE = "And this is where the railway map"   # row 19's first words; the build stops at the cut BEFORE them
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -636,21 +650,37 @@ TNX_TITLE_S = 2.0
 FED_PROP = "prop-federal-reserve-building-v1"
 FED_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (FED_PROP + ".png")
 FED_OPTS = {"prop": True, "arrive": "stamp"}   # mass unset: a stamp lands at `ink` (the engine's stampXf default)
-# THE STAMP WAITS ON ONE MEASUREMENT (P69 T23, 2026-09-23 - NOT in this slice's write set). The v4 page is not in the
-# page-boxes fixture (`content/video_engine/assets/page-boxes.v1.json`), so the compiler fits the Fed against the
-# ESTIMATED boxes: the whole plot solid (no `data_mask`) and the end-tag COLUMN solid from the plot's top to its bottom
-# (x 1329-1880, y 250-808 - `ledger_page._landscape_full_boxes`; the fixture never measures tags). The largest mark left
-# is 61 px, under the 120 px floor, and the door FAILs by name (`build-h/logs/t23-door3.log`). MEASURED IN A SCRATCH
-# COPY of the fixture (`scratchpad/p69t23/fitsim/`), the same fit takes the plot's lower-right EMPTY room - mark 186 x
-# 171 painted px at centre (1136, 672). The unblock, the parent's: `python content/video_engine/scripts/
-# measure_page_boxes.py --write --project content/video_engine/projects/systems-and-blowups/steel-and-paper/build-h`
-# (it reads THIS build's compiled timeline, which is why the row is built first with the stamp withheld), then
-# FED_STAMPED = True and the door re-run. Withheld, the row compiles everything else and the build notes say so.
-# TWO MORE BLOCKERS, both the engine's (BUILD-NOTES-H.md section 14): (a) the right margin level with the rules (the
-# parent's placement) is refused at every authored centre - the end-tag column above is kept even on a measured page
-# (`ledger_page.page_boxes`); (b) a dock prop is embedded as JPEG (`build_scene_timeline_f.dock_uri` -> `data_uri`'s
-# RGB convert), so the Fed paints on a BLACK SQUARE with the hatch cast by the square - a card, which E99 s92 forbids.
-FED_STAMPED = False
+# THE STAMP LANDS (P69 T23b, 2026-09-23). Withheld on T23 behind three blockers; all three are closed on the merged tree:
+# (1) the page is MEASURED - `measure_page_boxes.py --write --project build-h` put v4 in the page-boxes fixture (ink
+# 316b119c84ed85b6, its `data_mask` and its drawn `tag_boxes`); (2) T6d boxes the end tags at their drawn rects, so the
+# right margin under the two tags is open; (3) T6d keeps a prop's alpha (the Fed compiles to data:image/png). The fit
+# (P69 T5) takes the right margin under the tags - `outside: mark 248x228 painted px` at card centre (1488, 692), right of
+# the plot (x 81-1313), never over a series (`build-h/logs/t23b-door2.log`).
+# THE CAMERA IS CLAMPED (FED_CAM_REACH, T26b): the landing pull (1.06 about the card's centre, from its contact) is past
+# this page's reach - "the y tick column's left edge leaves the stage at 1.031" (`t23b-door1.log`, the refusal) - and the
+# stamp sits at the page's right edge, so every aim near it binds on the same left column. Clamped to 1.03, the title,
+# the y ticks and the source stay in frame; a lock would leave the landing with no push at all (E51).
+FED_CAM_REACH = "clamp"   # T23b's; SUPERSEDED by FED_CAM below (E99 s108) - kept for the record, no row reads it
+FED_STAMPED = True
+# THE CAMERA PUSHES FOR REAL (E99 s108, P69 T26f): the page's chrome is objects, so the push is no longer limited by the
+# full-width title. `chrome: {"camera": "fit"}` counter-scales the title, sub, source and ticks into the pushed frame (the
+# plot at k 1), and T26b's reach then binds only the key's own target - the dot-com yield's January 2000 high. The push
+# starts at the stamp's SETTLE (E51 - tied to the landing; M14 - no keys over the stamp's build, row 18's measurement)
+# and holds through the rollover and their tripwire (the 5.5% rule and its label stay in the pushed frame); it is back at
+# 1.0 on "back above five" (224.60), before the AI era's END TAG lands (t_cycle + TNX_AI_S = 225.33) - END TAGS ARE DATA,
+# NOT CHROME (T26f's open item): at 1.2 on the peak the "4.7% AI ERA" tag is cut at the right edge
+# (`scratchpad/p69t26f/frames/t26f-b-corner-tag-held-late.png`), so the push is released before that tag draws.
+FED_CAM_ZOOM, FED_CAM_IN_S, FED_CAM_OUT_S = 1.2, 1.2, 1.0
+FED_CAM_LOOK = {"kind": "datum", "series": TNX_DOT, "index": TNX_DOT_PEAK}
+FED_CAM_CHROME = {"camera": "fit"}
+# THE FED STEPS ASIDE AS THE PAGE GROWS (E99 s106 - a prop is moved on a word): a dock stands in SCREEN space, so the
+# push grows the plot UNDER it - MEASURED on this slice's final gate (`logs/t26b-gate.log` M27, before this move): the Fed
+# inside the plot's box "while the chart draws, at 3:39, 19,621 px, 26 % of the smaller box" (the pushed plot's right edge
+# ~1462 px, the Fed's left 1363). The fit's own place (T23b: centre (1488, 692), mark 248 px) is now AUTHORED, and the Fed
+# moves right to centre x 1600 on the push's own clock (from the settle, FED_CAM_IN_S): its left edge ~1475 clears the
+# pushed plot, and it stays there - under the AI era's end tag (y 510-545 at x 1485-1915) by ~30 px, as T23b parked it.
+FED_PLACE = {"x": round(1488 / 1920, 4), "y": round(692 / 1080, 4), "w": round(248 / 1920, 4)}
+FED_ASIDE_X = round(1600 / 1920, 4)
 TNX_MELT_S = 1.0     # the yardstick bars melt over "Bravos' sharpest" and the yields' board is there on "line is about"
 TNX_MELT_LEAD_S = 0.5   # ... opened in the breath before the sentence, so the melt's empty instant falls under no word
 TNX_MELT_WHY = ("the breakthrough bars -> the 10-year yield in two eras, page to page: TAKEN the melt's throw (E88) - the "
@@ -741,6 +771,37 @@ DATACENTER_PROP = "prop-hyperscale-datacenter-v1"
 DATACENTER_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (DATACENTER_PROP + ".png")
 DATACENTER_OPTS = {"prop": True, "arrive": "stamp"}   # mass unset: a stamp lands at `ink` (the engine's stampXf default)
 DATACENTER_STAMPED = True
+# PROP 2 MOVES TO THE CAPEX STATE (the operator, E99 s106: "i prefer the proposed for the data center"; P69 T26d built
+# the door). It stands at an AUTHORED place in the page's right margin beside the $690 bar - the operator's approved mock
+# (`scratchpad/datacenter-now-vs-proposed.png`, right half) and T26d's frame (`scratchpad/p69t26d/frames/dc-*`): centre
+# (0.85, 0.47) of the stage, 0.2 of its width. It is stamped AFTER the capex recast has landed (t_bet + DEBT_RECAST_S,
+# inside "centers." - on "a bet on data centers", never over the recast's hand-over) and it takes ONE move on "six hundred
+# and ninety" (T26d's): up and a little smaller, turned 4 degrees, so it stands beside the 690's top as the figure is said.
+# It leaves with the page (the melt into the filings). The desk keeps the leases record alone.
+DATACENTER_PLACE = {"x": 0.85, "y": 0.47, "w": 0.2}
+DATACENTER_MOVE = {"x": 0.85, "y": 0.36, "w": 0.17, "rot": -4, "dur": 0.8}
+DATACENTER_MOVE_AT = "six hundred and"
+# ROW 18's assets (P69 T26; BODY_ASSETS row 18), named here because DOCK_META reads them: PROP 3 and the statement card.
+# THEIR CHART, AGAIN (row 18's signpost): the same card as BRAVOS_CARD under its OWN id. MEASURED, draft 1: the player
+# painted no dock for BRAVOS_CARD on the desk (probe: `docks: []` at 359.2 / 360.5, throw or land) - row 7's snap
+# (`enter=camera=<dock>`, the card BECOMES the chart) retires the card's element for the rest of the episode. Owner: the
+# engine (a snapped card's id should be reusable); the build renders the same derived object twice.
+SIGNPOST_CARD = "dock-h-two-line-copy-again"
+SP500_PROP = "prop-tech-sp500-concentration-v1"
+SP500_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (SP500_PROP + ".png")
+# PROP 3's centre is AUTHORED in the page's right margin (right of the plot, x 1365-1860 on the measured page): MEASURED,
+# draft 5 (`p69t26/draft5/`), the fit's own choice - `right: mark 550x381` at [1207, 291, 552, 385] - reached 160 px into
+# the plot and covered the "historically 2-4%" rule label (the page's `data_mask` holds only the bar's column, so the fit
+# does not see the rules or their label as ink). A prop never stands over data (E99 s92). Owner for the rest: the fixture
+# / the fit (a comparator rule and its label are data).
+SP500_OPTS = {"prop": True, "arrive": "stamp", "centre_x": 0.845, "centre_y": 0.42, "centre_w": 0.2}
+ENVELOPE_CARD = "dock-h-target-date-statement"
+ENVELOPE_PLATE = REPO / ("content/video_engine/projects/systems-and-blowups/review/claims/"
+                         "steel-and-paper-plates-wave-3/objects/world-target-date-envelope-v1.png")
+# the open envelope and its statement, cut by PIXELS off the plate's 1536x1024 frame (the kit's x-aware crop, as CERT_CROP):
+# the statement's printed lines carry no legible figure, so the card shows the thing and states nothing (E77)
+ENVELOPE_CROP = (500, 340, 448, 410)          # w, h, x, y
+ENVELOPE_ASPECT = round(ENVELOPE_CROP[1] / ENVELOPE_CROP[0], 4)
 DEBT_MELT_WHY = ("the 10-year yield in two eras -> the builders' bond issuance, page to page: TAKEN the melt's throw "
                  "(E88; row 15's own entry) - the yields ball up and are thrown off in the breath before the rehook, and "
                  "the issuance draws on the same board as the question turns to who pays; refused: the dip (two pages "
@@ -792,6 +853,12 @@ DOCK_META = [
      "badges": []},   # the record's payload is NOT authored (CAPABILITIES:19) - the object's PNG (BODY_ASSETS row 16)
     {"asset": DATACENTER_PROP, "title": "A hyperscale data centre",
      "source": "Money Physics - prop cutout " + DATACENTER_PROP, "species": "prop", "badges": []},   # E99 s87 / s92
+    {"asset": SIGNPOST_CARD, "title": HOOK_CARD_TITLE,
+     "source": "Yahoo Finance - pairing after Bravos Research", "species": "chart", "badges": []},   # row 18: BRAVOS_CARD again
+    {"asset": SP500_PROP, "title": "Tech inside the S&P 500",
+     "source": "Money Physics - prop cutout " + SP500_PROP, "species": "prop", "badges": []},   # E99 s87 / s92
+    {"asset": ENVELOPE_CARD, "title": "A target-date fund statement",
+     "source": "Money Physics - plate world-target-date-envelope-v1", "species": "deck", "badges": []},   # a picture, no figure
 ]
 
 
@@ -1042,6 +1109,184 @@ def page_arith() -> str:
     return "ledger:%s:bars::right:%s%s%s%s" % (ARITH_PAGE, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM)
 
 
+# ROW 18 (P69 T26): THE TURN, 6:04-7:13 of the treatment - "It was never the AI stocks." Four worlds, two dips, one melt:
+#   the records' desk holds the SIGNPOST (row 17b, extended): their chart - the two-line copy of row 3, "his fourth copy
+#     of the same chart" - takes the record's slot on "everyone repeating this chart" (the phrase points at a chart, and
+#     this is the chart it points at; measure_spoken_visuals' "this chart");
+#   DIP 5 to RESET 2, the press (`world-paper-and-steel-press-v1;use=reset`, the ken push alone - E99 s84): "The bubble
+#     isn't in the steel. It's in the paper wrapped around the steel." - the plate IS that sentence (a steel CNC bed under
+#     a lamp, a printing press spilling certificates); the 1845 certificate (row 2's card, CERT_CARD) is THROWN onto the
+#     press's pile on "railway certificates" (E99 s71: a named thing arrives);
+#   DIP 6 to the concentration page (`ev-index-concentration-bars-v1`, H3 - Bravos-attributed, the operator's 2026-08-24
+#     ruling): the 20 bar grows as the page lands and its "20%" is WRITTEN as it stands (the figure the compare needs,
+#     E50); PROP 3 is STAMPED on "S&P five hundred" (E99 s87, the prop names the index) and CAMERA 3 pushes on the 20 from
+#     the stamp's contact (E51); the statement card is thrown on "target-date"; on "fall by half" the 20 HALVES (T26a:
+#     the bar moves, not only its number - `chart_to compare`, E76) and "10%" lands on "ten percent", the old top a ghost
+#     (named: `ghost: "yes"`) - the gap between the ghost and the new top is the ten points erased;
+#   the page MELTS and splashes back onto the press (E50: ~4 s after the compare lands) and the certificate is thrown
+#     back onto its pile for "So look at that certificate again" - the ring on it writes its figure, RAIL_DROP (-64%).
+PRESS_PLATE = "world-paper-and-steel-press-v1;use=reset"
+PRESS_KEN = (0.05, 12, -4)   # the push toward the press's pile of paper (the plate's left), away from the steel bed
+CONC_PAGE = "ev-index-concentration-bars-v1"   # one bar, 20 (%), and the historical 2-4% as two rules (T14a, 9.1)
+CONC = _series(CONC_PAGE)
+CONC_BAR = 0
+assert CONC["bars"][CONC_BAR]["value"] == 20 and [h["y"] for h in CONC["hlines"]] == [4, 2]
+CONC_SHARE = CONC["bars"][CONC_BAR]["value"]           # read off the object, never typed
+CONC_HALVED = CONC_SHARE / 2                            # "if the AI names fall by half" - the script's own arithmetic
+CONC_SHARE_TEXT = "%d%%" % CONC_SHARE                   # "20%" - the bar's own note, the figure the compare quotes
+CONC_HALVED_TEXT = "%d%%" % CONC_HALVED                 # "10%" - "that erases ten percent of 'the market'"
+assert CONC["bars"][CONC_BAR]["note"] == CONC_SHARE_TEXT
+BAR_SOFT = ";bar_style=soft"   # T10b's rounded shoulders + soft shadow: an OPTION the operator judges at HG3 (P69-HG3);
+#                                used on this row's bars page and nowhere else in the build, so the read is one page wide
+# THE FIGURE IS THE BAR'S VALUE, WRITTEN AS THE BAR LANDS (R26-284): `chart_to compare` morphs a figure the page has already
+# WRITTEN (`build_scene_timeline_f` - "chart_to compare quotes '20%' and the page writes no `figure` species with that
+# text"), and on a bars page that figure IS the bar's own value (T6: the value yields to it). Row 17 dropped its figure
+# because the value printed first and the figure wrote a few px off it (M28's ~0.6 s double print). Here the figure is
+# written ON the page's landing, while the bar is still growing and before the value's own fade-in (the value's opacity is
+# multiplied by the figure's write, scene-evidence-engine.mjs:12487), so "20%" is printed ONCE, as the bar stands.
+CONC_FIG_S = 1.2
+# CAMERA 3 (E51 - a push tied to a landing): keys, not the landing pull, because the push is on the 20 (the datum the
+# sentence names), not on the stamp; it starts at the stamp's CONTACT (the stamp's clamped scale spring reaches 1 at
+# ~0.15 s - STAMP_ARRIVAL.LAND, tc) and releases before the statement card is thrown. Measured against the page by
+# T26b's reach check; `reach: "clamp"` if it refuses (the build notes carry the number).
+STAMP_CONTACT_S = 0.15
+STAMP_BUILD_S = 1.5   # MEASURED, draft 1 (M14 FAIL): keys from the contact (386.3-387.2) landed ON the stamp's build
+#                       (386.1-387.6, the gate's book) - a camera move never lands on an evidence build; the push starts
+#                       as the stamp's build ends, on the same landing (E51), and holds through "Historically, two to four"
+# E99 s108 (P69 T26f): a REAL push. T26's 1.06 was CLAMPED to 1.02 by the full-width title (sub-floor, no move); with the
+# page's chrome as objects (`chrome: {"camera": "fit"}` - the title, sub, source and ticks counter-scale into the pushed
+# frame, the plot at k 1) the reach binds only the key's own target, the 20 bar's datum.
+# AIMED, NOT IN PLACE (MEASURED on this slice's draft 1, `scratchpad/p69-rows15-18/d1/row18-pushed-388.60.png`): zoomed
+# 1.2 about the bar where it stands (x 772), the plot's left edge went to x 21 - the y ticks sat ON the panel's border
+# ("0%" on its corner) - and the bar's two-line name dropped to y ~922, touching the caption. So the 20's REST centre
+# (772, 580) px (the bar at rest x 673-870, top 373; the datum is the bar's middle) is LANDED right and up at `at`
+# (900, 540): the plot's left edge at ~149 (the ticks outside the panel), the name's foot at ~882 (clear of the caption
+# strip), and the PAGE still over every stage edge (left 900 - 1.2 x 772 = -26; top 540 - 1.2 x 580 = -156; bottom
+# 540 + 1.2 x 500 = 1140 >= 1080). The look is a POINT at the datum's rest (row 14's rule, YARD_CAM_LOOK's note: a
+# `datum` look with `at` != look runs away).
+CONC_CAM_ZOOM, CONC_CAM_IN_S, CONC_CAM_OUT_S = 1.2, 0.9, 0.9
+CONC_CAM_LOOK = {"kind": "point", "x": round(772 / 1920, 4), "y": round(580 / 1080, 4)}
+CONC_CAM_AT = [round(900 / 1920, 4), round(540 / 1080, 4)]
+CONC_CAM_REACH = "clamp"   # T26's; SUPERSEDED by CONC_CAM_CHROME (E99 s108) - kept for the record, no row reads it
+CONC_CAM_CHROME = {"camera": "fit"}
+# THE HALVING (T26a / R26-273): the bar's height morphs 20 -> 10 on the compare's own clock, "20%" melting into "10%"; the
+# arithmetic is authored (the script's "a fifth ... fall by half ... ten percent"), never invented (E77).
+CONC_COMPARE_S = 2.0
+CONC_COMPARE = {"kind": "chart_to", "to": "compare", "form": "melt", "then": "splash", "hold": "metric", "ghost": "yes",
+                "metric": {"value": CONC_SHARE, "text": CONC_SHARE_TEXT, "label": "of the S&P 500"},
+                "comparator": {"value": CONC_HALVED, "text": CONC_HALVED_TEXT,
+                               "label": "of the index, erased if they halve"},
+                "inputs": {"share": CONC_SHARE}, "derive": "share / 2",
+                "source": "[DERIVED: from ev-index-concentration-bars-v1 (Bravos Research, attributed), a fifth of the "
+                          "index falling by half - share / 2]"}
+HALVING_WHY = ("the 20 bar -> the 10 it would erase, on one page: TAKEN `chart_to compare` (E76, T26a - the BAR moves "
+               "to the comparator, not only its number: E28, the geometry says what the number says), the old top kept "
+               "as a ghost (`ghost: \"yes\"`, named) so the fall IS the ten points erased; refused: a recast (no second "
+               "object - the same bar at another value), rescale (the axis does not move; the bar does), a figure "
+               "beside the bar (R26-284: a figure restating a value), a second bar (a comparator across nothing)")
+# THE SIGNPOST ON THE DESK: "And that's the part everyone repeating this chart missed - including, just this once, the
+# people who drew it." Their two-line chart (BRAVOS_CARD, row 3's card) takes the record's slot (s80), large enough to be
+# read as the chart it is (0.62 of the stage, the card drawn for its size - T10c), and leaves DOCKS_OFF_LEAD_S before dip 5
+# (a dip does not take the outgoing docks - row 17's measurement).
+SIGNPOST_SLOT = {"centre": True, "centre_x": 0.345, "centre_y": 0.46, "centre_w": 0.62,   # the record's slot (LEASES_SLOT's x)
+                 "card_aspect": BRAVOS_ASPECT, "arrive": SLOT_HANDOFF_ARRIVE, "mass": "paper"}
+SIGNPOST_CARD_W = round(SIGNPOST_SLOT["centre_w"] * 1920, 2)   # the card's displayed width, stage px (T10c's card_w)
+assert abs(SIGNPOST_SLOT["card_aspect"] - 9 / 16) < 1e-6, "the card profile draws a 16:9 card (chart_card.CARD_ASPECT)"
+SIGNPOST_CARD_WHY = ("the filings' record -> their two-line chart, one slot on the desk: TAKEN the slot hand-off (E99 s80 - "
+                     "the chart takes the outgoing card's slot as the sentence names it); refused: a dip back to the page "
+                     "(the divergence returns in row 20, T28 - a world change mid-signpost would spend it), a recast "
+                     "(a plate is not a chart), a second card beside the record (the record's argument is over)")
+# THE CERTIFICATE ON THE PRESS: row 2's card, the same crop, thrown onto the pile the press spills (the plate's left),
+# at a size it reads (0.2 of the stage, ~1.4x its 282 px crop), above the caption strip.
+# LARGER (the parent's frame read, 2026-09-23: at 0.20 - 384 px, ~1.4x its 282 px crop - "the certificate card reads as
+# blank paper at its size"): 0.30 of the stage (576 px, ~2x the crop), so the engraved border, the crest medallion and the
+# ruled signature line read as a CERTIFICATE on the busy pile. No larger source exists (the plate and its source are both
+# 1536x1024) and no certificate on the wall carries printed words, so size is the lever; the crop stays row 2's (the
+# sentence is "that certificate AGAIN" - the same certificate). Its box: x 134-710, y 297-783, above the caption strip.
+PRESS_CERT_SLOT = {"centre": True, "centre_w": 0.30, "centre_x": 0.22, "centre_y": 0.50, "card_aspect": CERT_ASPECT,
+                   "arrive": "throw", "mass": "paper"}
+# THE STATEMENT CARD: a named box (P69 T5 - a dock sharing a row with a stamp must name its box so the compiler can
+# measure it against the stamp's mark and ring) in the plot's EMPTY upper left - left of the bar, above the 2-4% rules.
+# MEASURED, draft 1: under the stamp in the right margin it landed on the stamp's ring [1391, 239, 465, 465] (refused).
+# It LANDS in place (anticipation + drop), never thrown: MEASURED, the final build before this line (`p69t26/final/
+# tile-394.60.png`), the throw's flight carried the card tilted ACROSS the 20 bar's top for ~0.4 s - a card over data.
+# And it keeps clear of the FINISHED chart's ink (M25 / M27, E63): at 0.22 wide its box (x 202-624) sat under the compare's
+# comparator label, which the halving writes later at x ~568-972 - narrowed to 0.18 at x 0.195 (x ~202-548).
+ENVELOPE_SLOT = {"centre": True, "centre_w": 0.18, "centre_x": 0.195, "centre_y": 0.41, "card_aspect": ENVELOPE_ASPECT,
+                 "arrive": "land", "mass": "paper"}
+# THE RING ON THE CERTIFICATE'S FIGURE (E56; BODY_DEPARTURES row 18): the crop carries no printed figure, so the figure
+# is the ring's own LABEL - `callout` on the card's face (a region) with the label RAIL_DROP ("-64%", the railway
+# object's own arithmetic, 2,062 -> 741), never the treatment's -66. A badge AND a ring would print the number twice
+# (a region ring writes its label - species/callout.mjs; R26-288's shape). The face is the card's inner cartouche.
+# THE RING CIRCLES THE CARD, NOT ITS FACE (E99 s110 (2): "a ring may circle a picture, a card or a prop when the sentence
+# points at THAT thing" - "look at that certificate again"): T26 ringed the inner cartouche and the hand's stroke ran ACROSS
+# the crest and the face (`p69t26/final/tile-414.50.png`) - hiding what the viewer must read. The ring's region is now the
+# card's own box, drawn CERT_RING_PAD px out (the callout's `pad`), so the ellipse passes round the card's edges and only
+# grazes its corners, and the label is written above-right of the ring, over the press's dark rollers.
+CERT_FACE = (0.0, 0.0, 1.0, 1.0)   # x0, y0, x1, y1 as fractions of the card - the whole card (T26's was the cartouche)
+CERT_RING_PAD = 40
+
+
+def cert_face() -> dict:
+    """The certificate's face as a stage region: PRESS_CERT_SLOT's authored box (a plate places a centred card at its
+    authored centre) read through CERT_FACE. 16:9 stage, 1920 x 1080."""
+    w = PRESS_CERT_SLOT["centre_w"]
+    h = w * 1920 * PRESS_CERT_SLOT["card_aspect"] / 1080
+    x0, y0 = PRESS_CERT_SLOT["centre_x"] - w / 2, PRESS_CERT_SLOT["centre_y"] - h / 2
+    fx0, fy0, fx1, fy1 = CERT_FACE
+    return {"kind": "region", "x0": round(x0 + fx0 * w, 4), "y0": round(y0 + fy0 * h, 4),
+            "x1": round(x0 + fx1 * w, 4), "y1": round(y0 + fy1 * h, 4)}
+PRESS_MELT_WHY = ("the concentration page -> the press, page to plate (a WORLD change, E47 - the index back to the paper "
+                  "it is printed on: 'So look at that certificate again'): TAKEN the melt's splash onto the plate (E88) - "
+                  "the halved bar's ink sags, balls and splashes onto the press's pile, and the certificate is thrown back "
+                  "onto it; refused: the dip (the last resort; the melt carries the world change), the suck (spent at 5:38 "
+                  "on the page -> desk, 71 s earlier - the variety rule, E99 s74 Apply 1), the vortex (the retract reads as "
+                  "the suck's twin), the slide (a hand-off between worlds of one kind), holding the page (E50: ~4 s after "
+                  "the compare lands, the next sentence is about the certificate)")
+PRESS_DIP_WHY = ("the records' desk -> the press, plate to plate (a WORLD change, E47 - the pair the dip is FOR: the "
+                 "filings to the turn, 'It was never the AI stocks'): TAKEN the dip (dip 5); refused: the melt (E88 "
+                 "melts a chart's ink - the desk carries none once their chart has left), the suck / the slide (a "
+                 "plate's world does not collapse into another's point, and the press is not beside the desk), the "
+                 "thread (no mark on the desk leads to the press), the door (no page at a depth), recast / rescale / "
+                 "morph (a plate is not a chart)")
+CONC_DIP_WHY = ("the press -> the concentration page, plate to page (a WORLD change, E47 - 1845's paper to where 'that "
+                "paper lives today'): TAKEN the dip (dip 6), the last resort (E99 s74); refused: the snap / throw-then-"
+                "zoom / throw-then-push (the one card on the press is the 1845 certificate - pushing it to the stage "
+                "would say the certificate IS the index page), object-becomes-chart (the press's paper is not the page's "
+                "data), the spiral return (a first page, not a returning one), the mount (the page does not belong to "
+                "the press's picture), the axes open as the boundary's carrier (it would CUT from the picture to the "
+                "board; the page still ENTERS on its axes - row 14's dip 3 and row 17's dip 4 are the precedent), the "
+                "melt (the plate carries no chart ink), recast / rescale / morph (a plate is not a chart)")
+
+
+CERT_RING_LABEL_SCALE = 2.0   # MEASURED, draft 1 (`draft1/tile-426.80.png`): at 1x the ring's "-64%" read ~20 px on the card's
+#                               border - the callout's opt-in `label_scale` (species/callout.mjs, "a stamp on a plate reads at
+#                               phone size")
+RAIL_RETURN_EXIT = "blurzoom"   # the reference's second world-change transition (E47; CAPABILITIES:71), 0.27 s
+RAIL_RETURN_WHY = ("the press -> the railway index, plate to page (a WORLD change, E47 - the certificate to its price: '1845 "
+                   "is the proof: the rails worked, and the paper still lost two-thirds'): TAKEN the blur-zoom (E47's "
+                   "second world-change transition, 0.27 s), the index arriving BUILT (`enter=built` - E25: a chart that "
+                   "comes back is never drawn like new); refused: the spiral return (MEASURED, draft 3 "
+                   "`p69t26/spiral/`: out of a PLATE the vortex has no outgoing page to unwind from and the stage is an "
+                   "empty board for ~0.7 s, 421.3-422.0, under '1845 is the'), the dip (the last resort - the blur-zoom "
+                   "carries the change without the black), the axes open (it would draw the index like new), the snap "
+                   "/ throw-then-push (the certificate card is a picture, not this page's chart card), the melt (the "
+                   "plate carries no chart ink), holding the certificate (M01 / M08, MEASURED on draft 1: 17.2 s after "
+                   "the ring with no new event - and the sentence names the proof, which is the index's fall)")
+
+
+def page_rail_return() -> str:
+    """Row 18d's page (P69 T26): the railway index of rows 8-9 RETURNING built (E25) behind a blur-zoom, alone (no `;then=` states -
+    the recasts were row 9's and row 10's), live (E49), in the long form's profile (every body page, E99 s97)."""
+    return "ledger:%s:line:%d:right:built%s%s%s" % (RAIL_PAGE, RAIL_TROUGH, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM)
+
+
+def page_conc() -> str:
+    """Row 18's page (P69 T26): the concentration bars, one bar on its axes (E73), live (E49), in the long form's profile
+    (E99 s97), soft-shouldered (T10b - the option on this lane for HG3). No emphasis (R26-256: the pill prints the value)."""
+    return "ledger:%s:bars::right:%s%s%s%s%s" % (CONC_PAGE, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM, BAR_SOFT)
+
+
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
 AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}, {"n": 3, "text": "Used tomorrow?"}]
 # ... and the agenda's room is measured the same way: the caption's band ends at y 576 and the parked chart holds
@@ -1275,8 +1520,8 @@ DESK_CARD_AFTER_S = 0.05  # the record is thrown as the splash lands, on "filing
 DESK_MELT_WHY = ("the capex consensus -> the records' desk, page to plate (a WORLD change, E47: the charts to the paper - "
                  "'Go into the filings'): TAKEN the melt's splash onto the plate (E88; row 11's own entry into this desk) - "
                  "the page the borrowing ends on balls up and splashes onto the desk the filings' record lands on; "
-                 "refused: the record and the stamp ON the page (the fit reads the row's first page, not the capex state; "
-                 "E65 parked the record over the title at 703 px; E50 - the bars would stand 27 s past their landing), an "
+                 "refused: the record ON the page (E65 parked it over the title at 703 px; E50 - the bars would stand 27 s "
+                 "past their landing; the data centre DOES stand on the capex state now, E99 s106, and leaves with it), an "
                  "undraw under the record (undraw takes bars and lines, never axes - the 'broken chart' behind a record, "
                  "T19b), a park (the same broken chart, held small), the dip (the last resort, s74 - the melt IS a "
                  "transform for this pair), the thread (no mark of the page belongs on a desk), recast / remake (the next "
@@ -1292,6 +1537,8 @@ IN_ROW_WHY = (
     ("row 8 the recast to the breakthrough bars (P69 T22, 'railways took roughly')", YARD_RECAST_WHY),
     ("row 10 the recast to the IG index (P69 T24, 'Technology used to be')", IG_RECAST_WHY),
     ("row 10 the recast to the capex consensus (P69 T24, 'a bet on data centers')", CAPEX_RECAST_WHY),
+    ("row 13 the slot hand-off on the desk (P69 T26, 'everyone repeating this chart')", SIGNPOST_CARD_WHY),
+    ("row 15 the halving compare (P69 T26, 'fall by half')", HALVING_WHY),
 )
 # (the P69 T16 first cut, before T15b, is kept for the record: it entered the index from the STUDIO by dip 1 and
 # refused recast / rescale / morph, the melt, the snap / throw-then-zoom / throw-then-push, object-becomes-chart, the
@@ -1307,6 +1554,10 @@ BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the tr
                 DESK_PLATE: DESK_MELT_WHY,
                 page_arith(): ARITH_DIP_WHY,
                 (DESK_PLATE, "suck:%g,%g" % ARITH_SUCK_AT): DESK_SUCK_WHY,   # the desk RETURNS (row 17b): keyed by its exit too
+                PRESS_PLATE: PRESS_DIP_WHY,                                  # row 18a, dip 5
+                page_conc(): CONC_DIP_WHY,                                   # row 18b, dip 6
+                (PRESS_PLATE, MELT_EXIT % MEMO_MELT_S): PRESS_MELT_WHY,      # the press RETURNS (row 18c): keyed by its exit
+                page_rail_return(): RAIL_RETURN_WHY,                         # row 18d, the railway index RETURNS
                 SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
                               "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
@@ -1430,6 +1681,9 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_dies = at("It dies when")                         # ... and it crosses back above its first print on the words
     t_began = at("borrowing began")                     # ... landing on its January 2000 high as "began" ends
     t_fed = at("Fed at six and")                        # PROP 1 lands on the word that names it (E99 s87)
+    t_fed_settle = round(t_fed + STAMP_BUILD_S, 2)      # ... and the camera pushes as its landing settles (E51; M14)
+    t_fed_release = at("back above five")               # ... held through their tripwire (the 5.5% rule reads in the push),
+    #                                                     back at 1.0 before the AI era's end tag lands (t_cycle + TNX_AI_S)
     t_trade = at("internet trade rolled")               # the dot-com yield rolls over on its words ...
     t_cycle = at("for this cycle")                      # ... and the AI era draws on "this cycle", under their 5.5%
     t_agree = at("Put my agreement")                    # the concession, written on the same page
@@ -1449,7 +1703,8 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_bet = at("bet on data centers")                   # recast 2: the capex consensus, on what the money now buys
     t_desk = round(at("Go into the filings") - DESK_MELT_LEAD_S, 2)   # the world changes to the paper ...
     t_filings = round(t_desk + MEMO_MELT_S + DESK_CARD_AFTER_S, 2)   # ... and the record is thrown as the splash lands
-    t_dc = at("Data centers they've")                   # PROP 2 is stamped on the word that names it (E99 s87)
+    t_dc = round(t_bet + DEBT_RECAST_S, 2)              # PROP 2 is stamped on "a bet on data centers" once the capex
+    #                                                     recast has landed (E99 s106 - on the capex state, not the desk)
     # -- row 17 (P69 T25): THE ARITHMETIC - the desk holds the rehook, dip 4 onto the 94 page on the next sentence's
     # onset; the bar stands at 94 with its value, the title is relit on the repeat, and the page spins into the desk
     # before "So when you hear" (E50), the filings' record thrown back as it goes
@@ -1459,6 +1714,32 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_94 = at("Ninety-four. That is")                   # the repeat: "Ninety-four." - the title relights
     t_stop = round(at(ARITH_LEAVE_PHRASE) - SUCK_S, 2)   # the page spins away in the breath; the desk stands on "It"
     t_record = t_stop                                   # the record is thrown AS the page spins into its point (DESK_RECORD_WHY)
+    # -- row 18 (P69 T26): THE TURN - the desk holds the signpost (their chart in the record's slot), dip 5 to the press,
+    # the certificate thrown on its name, dip 6 to the concentration page, PROP 3 + camera 3, the halving, the melt back
+    t_signpost = at("everyone repeating")               # their chart takes the record's slot as the phrase names it
+    t_turn = at("It was never the AI")                  # dip 5: the desk -> the press (RESET 2), centred ON the pre-key's
+    # onset - the take runs "drew it." into "It" with no measured gap, so cut_before refuses it (M13) and the onset is
+    # cut_before's own dip rule (row 17's dip 4, the same case)
+    t_signpost_off = round(t_turn - DOCKS_OFF_LEAD_S, 2)   # the card leaves before the dip (a dip takes no docks)
+    t_certs = at("was railway")                         # thrown as "railway certificates" begins (the take glues "certificates" to its dash)
+    t_conc = cut("AI builders are now")                 # dip 6: the press -> the page, in the breath before the figure
+    t_press_off = at("And Bravos")                      # the certificate leaves as the sentence turns to today's paper:
+    # MEASURED, draft 1 (M05): held to 1.5 s before dip 6 it left the press 8.4 s with no event (374.2-382.6); off on
+    # "And Bravos", the press carries "And Bravos Research's own number ... today." in STAGE captions (read: white on the
+    # machine's dark body, not a bright wall - `draft1/tile-366.00.png`)
+    t_sp500 = any_at("S&P five", "the S&P")             # PROP 3 is stamped on the index's name (E99 s87)
+    t_contact = round(t_sp500 + STAMP_BUILD_S, 2)       # ... and camera 3 pushes as its landing settles (E51; M14)
+    t_every = at("and calls it the")                    # ... and releases as the sentence names the index "the market"
+    t_target = any_at("every target-date", "target-date fund")   # the statement is thrown on its name
+    t_run = at("Run the arithmetic")                    # the page's docks leave: the bar moves on a clear page
+    t_fall = at("fall by half")                         # the halving: the compare on its words, "10%" on "ten percent"
+    t_look = at("So look at that")                      # the page melts in the breath before, the press standing there
+    t_again = round(t_look - MEMO_MELT_S - DESK_CARD_AFTER_S - 0.1, 2)
+    t_cert_back = round(t_again + MEMO_MELT_S + DESK_CARD_AFTER_S, 2)   # the certificate thrown back as the splash lands
+    t_ring = at("that certificate")                     # the ring on its figure (E56), held to "1845 is the proof"
+    t_proof = at("1845 is the")                         # the railway index RETURNS, built (RAIL_RETURN_WHY) ...
+    t_cert_off = round(t_proof - DOCKS_OFF_LEAD_S, 2)   # the certificate (and its ring) leave before the world changes
+    t_thirds = at("lost two-thirds")                    # ... and its own -64% is written as "two-thirds" is said
     t_row9_end = unit_end
 
     return [
@@ -1634,10 +1915,12 @@ def shot_table(ws: list, unit_end: float) -> list:
         # 15); on "Fed" the title becomes the sentence's claim off the page's own 6.5% rule and PROP 1 the Fed is STAMPED
         # (FED_STAMPED) into the page's biggest room (the engine's fit, P69 T5) and leaves with the
         # page; the dot-com yield rolls over on its words and the AI era draws on "this cycle", ending under their 5.5%
-        # rule; the concession is written on the SAME page (no bare plate 2:45-6:04). The camera pulls on the stamp's
-        # contact (P69 T4, `attention: landings`, E51).
+        # rule; the concession is written on the SAME page (no bare plate 2:45-6:04). The camera PUSHES 1.2x onto the
+        # 2000 peak from the stamp's settle, the chrome fitted into the frame (E99 s108, FED_CAM), and is back at 1.0
+        # before the AI era's end tag lands (end tags are data, not chrome).
         (t_trigger, t_q, page_tnx(), (0, 0, 0), [
-            (FED_PROP, 0, t_fed, t_row9_end, dict(FED_OPTS)),
+            (FED_PROP, 0, t_fed, t_q, dict(FED_OPTS, place=dict(FED_PLACE), moves=[   # T23b: it leaves WITH the page (R26-219)
+                {"at": t_fed_settle, "x": FED_ASIDE_X, "dur": FED_CAM_IN_S, "ease": "cubic"}])),   # ... and steps aside as the push grows the plot
         ] if FED_STAMPED else [], RAIL_EXIT % TNX_MELT_S, [
             {"kind": "build_to", "at": t_trigger, "dur": TNX_OPEN_S, "series": TNX_DOT, "target": datum(TNX_OPEN_CAP)},
             {"kind": "build_to", "at": t_trigger, "dur": TNX_OPEN_S, "series": TNX_AI, "target": datum(0)},
@@ -1649,7 +1932,12 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"kind": "build_to", "at": t_trade, "dur": TNX_ROLL_S, "series": TNX_DOT, "target": datum(TNX_DOT_LAST)},
             {"kind": "build_to", "at": t_cycle, "dur": TNX_AI_S, "series": TNX_AI, "target": datum(TNX_AI_LAST)},
             {"kind": "retitle", "at": t_agree, "dur": TNX_TITLE_S, "text": TNX_AGREE_TITLE},
-        ], {"keys": [], "attention": "landings"}),
+        ], {"keys": [   # E99 s108: a real push onto the 2000 peak from the stamp's settle, released before the AI era draws
+            {"t": t_fed_settle, "zoom": 1.0, "look": FED_CAM_LOOK, "ease": "inout"},
+            {"t": round(t_fed_settle + FED_CAM_IN_S, 2), "zoom": FED_CAM_ZOOM, "look": FED_CAM_LOOK, "ease": "inout"},
+            {"t": round(t_fed_release - FED_CAM_OUT_S, 2), "zoom": FED_CAM_ZOOM, "look": FED_CAM_LOOK, "ease": "inout"},
+            {"t": t_fed_release, "zoom": 1.0, "look": FED_CAM_LOOK, "ease": "inout"},
+        ], "chrome": dict(FED_CAM_CHROME)}),
         # -- ROW 16 (P69 T24): WHO IS PAYING - the yields melt and are thrown (DEBT_MELT_WHY) and the issuance page lands
         # on its axes, the 2020 average a stub (M31: the page lands with ink), the estimates held at nothing; the question
         # is the title on "who is paying"; the 2020-24 average draws across its years on "For years the giants ... out of
@@ -1660,7 +1948,12 @@ def shot_table(ws: list, unit_end: float) -> list:
         # (IG_RECAST_WHY), each state retitled to its own title (IG_TITLE), its >12% bar emphasized; and RECASTS
         # again to the capex consensus on "a bet on data centers" (CAPEX_RECAST_WHY), its 690 emphasized. On "Go
         # into the filings" the page melts onto the records' desk - the row below.
-        (t_q, t_desk, page_debt(), (0, 0, 0), [], RAIL_EXIT % DEBT_MELT_S, [
+        # PROP 2 (E99 s106) is stamped on the capex state at its AUTHORED place after the recast lands, moves on "six
+        # hundred and ninety", and leaves with the page.
+        (t_q, t_desk, page_debt(), (0, 0, 0), [
+            (DATACENTER_PROP, 0, t_dc, t_desk,
+             dict(DATACENTER_OPTS, place=dict(DATACENTER_PLACE), moves=[dict(DATACENTER_MOVE, at=DATACENTER_MOVE_AT)])),
+        ] if DATACENTER_STAMPED else [], RAIL_EXIT % DEBT_MELT_S, [
             {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_ISSUANCE, "target": datum(0)},
             {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_HI, "target": datum(0)},
             {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_LO, "target": datum(0)},
@@ -1688,13 +1981,11 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"kind": "retitle", "at": round(t_bet + RETITLE_AFTER_S, 2), "dur": DEBT_RECAST_S, "text": CAPEX_TITLE},
         ], {"keys": []}),
         # -- ROW 16b (P69 T24): THE FILINGS - the page melts and splashes onto the records' desk (DESK_MELT_WHY); the
-        # record is thrown as the splash lands, at its reading size, and PROP 2 is STAMPED on "Data centers"
-        # (DATACENTER_STAMPED) into the desk's declared room - fitted first, the record clear of it (P69 T5). The desk's
-        # life is its ken push and the mug's steam (row 11's). Both leave with the desk.
+        # record is thrown as the splash lands, at its reading size. (PROP 2 moved to the capex state, E99 s106.) The
+        # desk's life is its ken push and the mug's steam (row 11's). The record leaves with the desk.
         # P69 T25: the desk now also holds row 17's rehook ("So put it together ... gets tight."), to the dip.
-        (t_desk, t_arith, DESK_PLATE, MEMO_KEN, ([
-            (DATACENTER_PROP, 1, t_dc, t_docks_off, dict(DATACENTER_OPTS)),   # slot 1: the record holds slot 0 (T5's pair)
-        ] if DATACENTER_STAMPED else []) + [
+        # E99 s106: PROP 2 now stands on the capex state (the row above); the desk keeps the leases record alone.
+        (t_desk, t_arith, DESK_PLATE, MEMO_KEN, [
             (LEASES_CARD, 0, t_filings, t_docks_off,
              dict(LEASES_SLOT, centre_w=LEASES_W, card_aspect=LEASES_ASPECT, arrive="throw", mass="paper")),
         ], MELT_EXIT % MEMO_MELT_S, [
@@ -1710,13 +2001,57 @@ def shot_table(ws: list, unit_end: float) -> list:
         # -- ROW 17b (P69 T25): THE PROMISE, ON THE RECORDS' DESK - the page is sucked into the point where the filings'
         # record lands; the record is thrown back as the page goes (t_record), at its reading size, up to the row's end (the paper the anaphora names); the
         # desk's life is its ken push and the mug's steam. Both leave with the desk (T26's).
-        (t_stop, t_row9_end, DESK_PLATE, MEMO_KEN, [
-            (LEASES_CARD, 0, t_record, t_row9_end,
+        # P69 T26: the desk also holds row 18's signpost - their chart takes the record's slot on "everyone repeating
+        # this chart" (s80's hand-off; SIGNPOST_CARD_WHY) and leaves DOCKS_OFF_LEAD_S before dip 5.
+        (t_stop, t_turn, DESK_PLATE, MEMO_KEN, [
+            (LEASES_CARD, 0, t_record, t_signpost,
              dict(LEASES_SLOT, centre_w=LEASES_W, card_aspect=LEASES_ASPECT, arrive="throw", mass="paper")),
+            (SIGNPOST_CARD, 0, t_signpost, t_signpost_off, dict(SIGNPOST_SLOT)),
         ], "suck:%g,%g" % ARITH_SUCK_AT, [
-            {"kind": "steam", "at": t_stop, "dur": round(t_row9_end - t_stop, 2), "target": MUG_STEAM},
+            {"kind": "steam", "at": t_stop, "dur": round(t_turn - t_stop, 2), "target": MUG_STEAM},
         ], {"keys": [], "attention": "landings"}),
-        # (-- ROWS 18-24 are T26-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
+        # -- ROW 18a (P69 T26): RESET 2, THE PRESS - dip 5 (PRESS_DIP_WHY) on "It was never the AI stocks"; the plate is the
+        # sentence ("the paper wrapped around the steel"); the ken push alone is its life (E99 s84); the 1845 certificate
+        # (row 2's card) is thrown onto the press's pile on "railway certificates" (E99 s71) and leaves before dip 6.
+        (t_turn, t_conc, PRESS_PLATE, PRESS_KEN, [
+            (CERT_CARD, 0, t_certs, t_press_off, dict(PRESS_CERT_SLOT)),
+        ], "dip", [], {"keys": [], "attention": "landings"}),
+        # -- ROW 18b (P69 T26): THE CONCENTRATION PAGE - dip 6 (CONC_DIP_WHY) onto the bars on their axes, soft (HG3's
+        # option), live; the 20 bar grows with the page and its "20%" is written as it stands (the figure the compare
+        # quotes); PROP 3 stamped on "S&P five hundred" (P69 T5 - fitted first) and camera 3 PUSHES 1.2x on the 20 from
+        # its settle (E51), the chrome fitted into the frame (E99 s108); the statement card thrown on "target-date" in the room left; both leave on "Run the arithmetic"; on "fall
+        # by half" the bar HALVES (HALVING_WHY) and "10%" lands on "ten percent", the old top a ghost.
+        (t_conc, t_again, page_conc(), (0, 0, 0), [
+            (SP500_PROP, 0, t_sp500, t_run, dict(SP500_OPTS)),
+            (ENVELOPE_CARD, 1, t_target, t_run, dict(ENVELOPE_SLOT)),
+        ], "dip", [
+            {"kind": "figure", "at": t_conc, "dur": CONC_FIG_S, "target": datum(CONC_BAR), "text": CONC_SHARE_TEXT},
+            dict(CONC_COMPARE, at=t_fall, dur=CONC_COMPARE_S),
+        ], {"keys": [
+            {"t": t_contact, "zoom": 1.0, "look": CONC_CAM_LOOK, "ease": "inout"},
+            {"t": round(t_contact + CONC_CAM_IN_S, 2), "zoom": CONC_CAM_ZOOM, "look": CONC_CAM_LOOK, "at": CONC_CAM_AT,
+             "ease": "inout"},
+            {"t": round(t_every - CONC_CAM_OUT_S, 2), "zoom": CONC_CAM_ZOOM, "look": CONC_CAM_LOOK, "at": CONC_CAM_AT,
+             "ease": "inout"},
+            {"t": t_every, "zoom": 1.0, "look": CONC_CAM_LOOK, "ease": "inout"},
+        ], "chrome": dict(CONC_CAM_CHROME)}),
+        # -- ROW 18c (P69 T26): THE CERTIFICATE AGAIN - the page melts and splashes back onto the press (PRESS_MELT_WHY);
+        # the certificate is thrown back onto its pile as the splash lands, and on "certificate again" the ring writes its
+        # figure (RAIL_DROP, E56 - see CERT_FACE's note) and holds through "1845 is the proof" to the row's end.
+        (t_again, t_proof, PRESS_PLATE, PRESS_KEN, [
+            (CERT_CARD, 0, t_cert_back, t_cert_off, dict(PRESS_CERT_SLOT)),
+        ], MELT_EXIT % MEMO_MELT_S, [
+            {"kind": "callout", "at": t_ring, "dur": round(t_cert_off - t_ring, 2), "label": RAIL_DROP,
+             "label_scale": CERT_RING_LABEL_SCALE, "pad": CERT_RING_PAD, "target": cert_face()},
+        ], {"keys": [], "attention": "landings"}),
+        # -- ROW 18d (P69 T26): "1845 IS THE PROOF" - the railway index RETURNS behind a blur-zoom (RAIL_RETURN_WHY),
+        # BUILT (E25: a chart that comes back is never drawn like new); its own -64% is written at the trough as "the
+        # paper still lost two-thirds" is said.
+        (t_proof, t_row9_end, page_rail_return(), (0, 0, 0), [], RAIL_RETURN_EXIT, [
+            {"kind": "figure", "at": t_thirds, "dur": RAIL_DROP_S, "target": datum(RAIL_TROUGH, 0), "text": RAIL_DROP,
+             "color": "neg", "dy": RAIL_DROP_DY},
+        ], {"keys": []}),
+        # (-- ROWS 19-24 are T27-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
     ]
 
 
@@ -2103,8 +2438,15 @@ def main() -> int:
     D.register(FED_PROP, FED_PROP_FILE)          # row 15: PROP 1, the catalogued cutout, by id
     D.register(LEASES_CARD, LEASES_PNG)          # row 16: the filings' record, the object's PNG (payload not authored)
     D.register(DATACENTER_PROP, DATACENTER_PROP_FILE)   # row 16: PROP 2, the catalogued cutout, by id
+    D.register(SP500_PROP, SP500_PROP_FILE)      # row 18: PROP 3, the catalogued cutout, by id
+    D.dock_still(ENVELOPE_CARD, ENVELOPE_PLATE, BUILD, still=True, frame_crop=ENVELOPE_CROP)   # row 18: the statement
     _manias_card()   # row 12: the table, composed from its own bands
     D.chart_card(BRAVOS_CARD, _hook_object(), BUILD, "line")   # the TWO-LINE page, rendered from the derived object
+    # row 18: the same page again, under its own id (SIGNPOST_CARD), DRAWN FOR ITS DISPLAYED SIZE (P69 T10c, the `card`
+    # profile - chart_card.render_card(card_w=...)): the shrunk full page read ~8 px type on the desk (T26's
+    # `final/tile-359.90.png`); drawn as a card of SIGNPOST_CARD_W stage px every word sits at the phone floor as displayed,
+    # and two tags that read the same ("+21%") each carry a short name from the data.
+    D.chart_card(SIGNPOST_CARD, _hook_object(), BUILD, "line", card_w=SIGNPOST_CARD_W)
     D.register(HOST_PLATE_ID, HOST_PLATE_FILE)   # the Flow plate by id (build_render_f.find_asset checks STAMPED first)
     rows = shot_table(ws, unit_end)
     karp_record(ws, T.at(ws, "Alex Karp"))   # row 11: the record's words are filled BEFORE the META is written

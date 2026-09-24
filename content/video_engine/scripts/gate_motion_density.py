@@ -624,6 +624,122 @@ def _chart_landings(scenes: list[dict]) -> list[float]:
     return [round(float(s["span"][0]) + _page_land_offset(s), 2) for s in scenes if _is_page(s) and s.get("span")]
 
 
+# P69 T26c2 (E99 s105 AMENDED, 2026-09-23): a rescale, extend or morph is an M03 arrival when it MOVES THE STORY - "true
+# motion doesnt just move the visual it moves the story/narrative/thought process along". Two tests, both read off the
+# compiled timeline: (a) ON ITS WORD - the compiler writes a words-anchored `at` as a bare float (`_word_at`,
+# build_scene_timeline_f.py:7565-7575, and the episode's `T.at`, both `authoring.words.at`: the word's start rounded to
+# 2 dp), and the caption pages carry every spoken word's start rounded the same way (build_caption_pages.py:67), so a
+# transform is on a word when its `at` is a caption word's `s`; (b) A NEW THING ON SCREEN - an extend's new data (the
+# compiler stamps `from_index` below `to_index`, or `from_series`, :3463-3473), a rescale's or extend's `build_to`
+# drawing the line past where it stood (the parent's ruling on H's followed rescale), or a species that NAMES a thing (a
+# figure, a callout, a ring, a note - the page's label - or a retitle naming the new view) or a dock's badge landing on
+# the same word or inside the transform's own `dur`.
+STORY_VERBS = ("rescale", "extend", "morph")
+NAMING_KINDS = ("figure", "callout", "ring", "note", "retitle")
+WORD_ANCHOR_TOL_S = 0.05   # the `at` and the caption word agree to the shared 2 dp rounding (HELD_BUILT_TOL_S's reading)
+
+
+def _word_onsets(tl: dict) -> list[float]:
+    """Every spoken word's start on the compiled timeline's own clock - the caption pages' tokens (`s`)."""
+    return sorted(float(tok["s"]) for pg in tl.get("caption_pages", []) for tok in pg.get("t", [])
+                  if isinstance(tok, dict) and tok.get("s") is not None)
+
+
+def _on_a_word(at: float, onsets: list[float]) -> bool:
+    return any(abs(at - w) <= WORD_ANCHOR_TOL_S for w in onsets)
+
+
+def _landing_window(x: dict) -> tuple[float, float]:
+    """The transform's own word (within the rounding) through the end of its `dur`."""
+    at = float(x.get("at", 0.0))
+    return at - WORD_ANCHOR_TOL_S, at + float(x.get("dur", 0.0)) + WORD_ANCHOR_TOL_S
+
+
+def _advances_the_line(scene: dict, x: dict) -> bool:
+    """A `build_to` in the transform's landing window draws a series past the datum it STOOD at - the index an earlier
+    `build_to` of that series drew to (P69 T26c2, the parent's ruling on H's followed rescale: the line drawn past its
+    old data on the rescale's word IS new data revealed). A series with no earlier `build_to` has no standing index,
+    so a first build is not read as an advance."""
+    lo, hi = _landing_window(x)
+    builds = sorted((float(y["at"]), int(y.get("series") or 0), int((y.get("target") or {}).get("index") or 0))
+                    for y in scene.get("species", [])
+                    if y.get("kind") == "build_to" and isinstance(y.get("at"), (int, float))
+                    and (y.get("target") or {}).get("kind") == "datum")
+    stood: dict[int, int] = {}
+    for at, ser, idx in builds:
+        if lo <= at <= hi and ser in stood and idx > stood[ser]:
+            return True
+        stood[ser] = max(stood.get(ser, idx), idx)
+    return False
+
+
+def _brings_new_data(scene: dict, x: dict) -> bool:
+    """Data past the old domain: an extend's later series drawn on or its window grown past its standing end, or - a
+    rescale's or an extend's - a `build_to` in its landing window advancing the drawn line (`_advances_the_line`)."""
+    if x.get("to") not in ("rescale", "extend"):
+        return False
+    if x.get("to") == "extend" and x.get("from_series") is not None:
+        return True
+    to_i, from_i = x.get("to_index"), x.get("from_index")
+    if x.get("to") == "extend" and to_i is not None and from_i is not None and int(to_i) > int(from_i):
+        return True
+    return _advances_the_line(scene, x)
+
+
+def _names_a_thing(scene: dict, x: dict) -> bool:
+    """A naming species, or a dock's badge, landing on the transform's word or inside its `dur`."""
+    lo, hi = _landing_window(x)
+    named = [float(y["at"]) for y in scene.get("species", [])
+             if y.get("kind") in NAMING_KINDS and isinstance(y.get("at"), (int, float))]
+    badges = [float(b) for d in scene.get("docks", []) for b in (d.get("badge_at") or [])]
+    return any(lo <= t <= hi for t in named + badges)
+
+
+def _moves_the_story(scene: dict, x: dict, onsets: list[float]) -> bool:
+    """(a) on its spoken word AND (b) a new thing on screen - else a silent re-fit, motion of the visual only."""
+    return (_on_a_word(float(x.get("at", -1e9)), onsets)
+            and (_brings_new_data(scene, x) or _names_a_thing(scene, x)))
+
+
+def _recast_landings(scenes: list[dict], onsets: list[float] | None = None) -> list[float]:
+    """Every instant a `chart_to recast` has LANDED on its page - an arrival for M03 (P69 T26c; E99 s105, the operator
+    2026-09-23: "yes, recast counts"). The recast changes the chart on screen, so the wait for evidence restarts at
+    its landing, as it does at a page's start or a dock's entry.
+
+    Read as the gate already reads a chart_to's landing and its data mark (`_landings`' chart_to branch, :3025, and
+    `_deployed_lives`' `a <= at <= z` guard, :3003): the instant is `_transition_land`, the event's own `at` + `dur` (plus a
+    breakthrough state's run, E60). A retitle, a relight or an idle is not a chart_to and adds nothing, so a timeline
+    with no recast reads exactly as before.
+
+    P69 T26c2 (E99 s105 AMENDED): a rescale, extend or morph lands here too when it moves the story
+    (`_moves_the_story`, read against the spoken words `onsets`); with no words, or none of those verbs, the list is
+    T26c's."""
+    words = onsets or []
+    out: list[float] = []
+    for s in scenes:
+        if not s.get("span"):
+            continue
+        a, z = float(s["span"][0]), float(s["span"][1])
+        out += [round(_transition_land(s, x), 2) for x in s.get("species", [])
+                if x.get("kind") == "chart_to" and a <= float(x.get("at", -1e9)) <= z
+                and (x.get("to") == "recast" or (x.get("to") in STORY_VERBS and _moves_the_story(s, x, words)))]
+    return out
+
+
+PROP_BORN = "morph"   # P69 T26e: the compiler's own `arrive` for a prop born of a morph (build_scene_timeline_f.prop_morph_row)
+
+
+def _prop_morph_landings(scenes: list[dict], onsets: list[float] | None = None) -> list[float]:
+    """P69 T26e (E99 s107; s105 AMENDED): every PROP MORPH that begins on its spoken word lands as an arrival for M03 -
+    it moves the story by construction (the prop becomes the mark, or the chart becomes the thing it measures: a new
+    thing on screen either way), so it is counted as `_moves_the_story` counts a rescale, extend or morph. Read off
+    `scene.prop_morphs` (the compiler writes them there, never as chart_to species); the landing is `at` + `dur`, the
+    player's own clock. A morph over the cut (`over`) is carried by its born dock's entry, which M03 already reads."""
+    words = onsets or []
+    return [round(float(pm["at"]) + float(pm.get("dur", 0.0)), 2) for s in scenes for pm in s.get("prop_morphs") or []
+            if isinstance(pm, dict) and not pm.get("over") and _on_a_word(float(pm.get("at", -1e9)), words)]
+
+
 def _held_built(at: float, dur: float, landings: list[float]) -> float | None:
     """The landing a gap STARTS at, when the gap is no longer than `HELD_BUILT_S` - else None (E99 s69).
 
@@ -1081,6 +1197,8 @@ def _build_windows(scenes: list[dict], docks: list[dict]) -> list[tuple[str, flo
         span = _dock_span(d)
         if not span:
             continue
+        if d.get("arrive") == PROP_BORN:   # P69 T26e: a prop BORN of a morph is the LANDING of a transform, not a card's
+            continue                       # entrance - it stands from its first frame (the player's `born`), nothing builds
         a = span[0]
         z = max(a + DOCK_BUILD_S, *[float(b) + BADGE_SETTLE_S for b in d.get("badge_at", [])] or [a])
         out.append((str(d.get("slide", d.get("asset", "?"))), a, min(z, span[1])))
@@ -1193,6 +1311,68 @@ def camera_state_at(s: dict, t: float, sw: float, sh: float, plot: dict | None) 
 def camera_frustum(st: dict, sw: float, sh: float) -> dict:
     (lx, ly), (ax, ay), s = st["look"], st["at"], st["s"]
     return {"x0": lx + (0 - ax) / s, "y0": ly + (0 - ay) / s, "x1": lx + (sw - ax) / s, "y1": ly + (sh - ay) / s}
+
+
+# P69 T26f (E99 s108) - THE CHROME'S PLANE, mirrored. The page's chrome (title, sub, source, ticks, axis names, key,
+# rail) may stand on another plane of the ONE camera than the plot: P58 T3's law (CAPABILITIES:153; the player's
+# `camLayerState`, main's src/modeling/layered.py `_plane_camera`) - plane zoom 1 + (s - 1) k, landing look +
+# (at - look) k. `chrome: "screen"` is k 0, a number is that k, `"fit"` the largest k in [0, 1] keeping the object
+# whole and CHROME_FIT_PAD_PX off each edge (or as far off as it stood at rest, if nearer). The player reads the same.
+CHROME_FIT_PAD_PX = 24.0   # [mirrors the engine's CHROME.FIT_PAD_PX]
+CHROME_TEXT_ROLES = ("tick", "key")   # the probe's label roles that are chrome: a tick label, a key pill
+CHROME_PAGE_TEXTS = ("title", "sub", "source")
+
+
+def plane_state(st: dict, k: float) -> dict:
+    """The camera as the plane at k sees it (P58 T3). k 1 is the state itself, by identity - as the player's."""
+    if k == 1.0:
+        return st
+    (lx, ly), (ax, ay) = st["look"], st["at"]
+    return {"s": 1 + (st["s"] - 1) * k, "look": (lx, ly), "at": (lx + (ax - lx) * k, ly + (ay - ly) * k)}
+
+
+def chrome_fit_k(box: dict, st: dict, sw: float, sh: float, pad: float = CHROME_FIT_PAD_PX,
+                 band: tuple[float, float] | None = None) -> float:
+    """`chrome: "fit"`: the largest plane k in [0, 1] at which `box` (its rest box, stage px) stays whole on the stage,
+    `pad` off each edge or as far as it stood at rest. On the plane k every edge moves LINEARLY in k:
+        e(k) = e + k * ((at - look) + (s - 1) * (e - look))
+    so each edge bounds k on its own, and the smallest bound is the fit. `band` (top, foot) is the anchored caption's
+    strip: a box that stood wholly above it stays above it, one below its foot stays below (`_chrome_band`). The
+    engine's `chromeFitK` is this, line for line."""
+    (lx, ly), (ax, ay), s = st["look"], st["at"], st["s"]
+    top = band[1] if band and box["y"] >= band[1] else 0.0
+    bot = band[0] if band and box["y"] + box["h"] <= band[0] else sh
+    k = 1.0
+    for e0, lo, hi, l0, a0 in ((box["x"], 0.0, sw, lx, ax), (box["x"] + box["w"], 0.0, sw, lx, ax),
+                               (box["y"], top, sh, ly, ay), (box["y"] + box["h"], 0.0, bot, ly, ay)):
+        v = (a0 - l0) + (s - 1) * (e0 - l0)
+        lo_m, hi_m = lo + min(pad, max(0.0, e0 - lo)), hi - min(pad, max(0.0, hi - e0))
+        if v < -1e-12:
+            k = min(k, max(0.0, (e0 - lo_m) / -v))
+        elif v > 1e-12:
+            k = min(k, max(0.0, (hi_m - e0) / v))
+    return max(0.0, min(1.0, k))
+
+
+def chrome_of(s: dict) -> dict | None:
+    """The scene's compiled chrome ({mode, k, moves}) when its camera takes the chrome off the plot's plane, else None."""
+    ch = (s.get("camera") or {}).get("chrome")
+    return ch if isinstance(ch, dict) and ch.get("mode") in ("screen", "fit", "depth") else None
+
+
+def _chrome_band(s: dict, aspect: str) -> tuple[float, float] | None:
+    """The anchored caption's strip a 16:9 page's `fit` chrome keeps off (the engine reads the same pair)."""
+    page = (s.get("world") or {}).get("page") or {}
+    if aspect == "9:16" or page.get("caption") != "anchor":
+        return None
+    top, h = LPG.CAPTION_ANCHOR["16:9"][1], LPG.CAPTION_ANCHOR["16:9"][3]
+    return (float(top), float(top + h))
+
+
+def _chrome_frustum(ch: dict, st: dict, box: dict, sw: float, sh: float, band=None) -> dict:
+    """The frame a chrome box is judged against: the frustum of ITS plane (k 0 is the stage itself)."""
+    k = chrome_fit_k(box, st, sw, sh, band=band) if ch.get("mode") == "fit" else float(ch.get("k") or 0.0)
+    return camera_frustum(plane_state(st, k), sw, sh)
 
 
 def _visible_share(fr: dict, box: dict) -> float:
@@ -1330,7 +1510,10 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     pulse_ev, pulse_still = _sentinelled(set(events) | set(life), runtime)
     # evidence entry gaps, whole runtime: a dock entering or a page starting (D2)
     entries = sorted([a for a, _ in spans] + page_starts)
-    pts = [0.0] + entries + [runtime]
+    # P69 T26c (E99 s105): M03's arrivals also carry each recast's landing; the per-minute entry density keeps `entries`
+    # P69 T26c2 (E99 s105 AMENDED): ... and each rescale / extend / morph that lands on its word with a new thing
+    # P69 T26e (E99 s107): ... and each prop morph that begins on its word
+    pts = [0.0] + sorted(entries + _recast_landings(scenes, _word_onsets(tl)) + _prop_morph_landings(scenes, _word_onsets(tl))) + [runtime]
     ev_gaps = sorted(((a, b - a) for a, b in zip(pts, pts[1:])), key=lambda x: -x[1])
     # plates: a page is its own plate and holds like one (C5)
     plate_ids = [_plate_id(s) for s in scenes]
@@ -2857,6 +3040,23 @@ def _crop_px(fr: dict, box: list[float]) -> tuple[float, str] | None:
     return (px, edge) if px > CROP_EDGE_PX else None
 
 
+def _chrome_crop(ch: dict, fr: dict, name: str, box: list[float], aspect: str, band=None) -> tuple[float, str] | None:
+    """P69 T26f: M43 on a scene whose chrome stands off the plot's plane. A tick label or a key pill is whole or hidden
+    by the player (its gridline in the frame, or not), so the frame never cuts one partway; the page's title, sub and
+    source are judged against the frustum of their own plane; everything else (a data label, a note) against the
+    plot's, as before. The camera state is read back off the frustum - P58 T3's plane depends only on the similarity
+    (screen_k = s_k p + k (at - s look)), never on which look/at pair wrote it."""
+    role = name.split(":", 1)[0]
+    if role in CHROME_TEXT_ROLES:
+        return None
+    if not (name.startswith("page.") and name[5:] in CHROME_PAGE_TEXTS):
+        return _crop_px(fr, box)
+    sw, sh = (1080.0, 1920.0) if aspect == "9:16" else (1920.0, 1080.0)
+    st = {"s": sw / (fr["x1"] - fr["x0"]), "look": (fr["x0"], fr["y0"]), "at": (0.0, 0.0)}
+    b = {"x": box[0], "y": box[1], "w": box[2], "h": box[3]}
+    return _crop_px(_chrome_frustum(ch, st, b, sw, sh, band), box)
+
+
 def _crop_faults(doc: dict, scenes: list[dict], aspect: str) -> tuple[list[str], int, int]:
     """(one line per cropped text box, landings measured, boxes measured). The boxes are read at the probe instant
     nearest the landing on the SAME scene with the camera still at identity - the page as it stands when the move
@@ -2873,8 +3073,9 @@ def _crop_faults(doc: dict, scenes: list[dict], aspect: str) -> tuple[list[str],
         measured += 1
         texts = _instant_texts(inst)
         boxes += len(texts)
+        ch = chrome_of(s)   # P69 T26f: a chrome off the plot's plane is judged on ITS plane (None: every box on the plot's)
         for name, box in texts:
-            cut = _crop_px(fr, box)
+            cut = _crop_px(fr, box) if ch is None else _chrome_crop(ch, fr, name, box, aspect, _chrome_band(s, aspect))
             if cut is None:
                 continue
             px, edge = cut
@@ -3236,6 +3437,9 @@ def _morphs(scenes: list[dict]) -> list[tuple[str, str]]:
             out.append((str(s.get("scene_id", "?")), str(s.get("scene_id", "?"))))
         for ev in _morph_events(s):
             out.append((ev["key"], f"{s.get('scene_id', '?')} morph_to at {_mm(ev['at'])}"))
+        for pm in s.get("prop_morphs") or []:   # P69 T26e: a prop morph, keyed `prop:<id>` (measure_morph.py, the player's `__propMorph`)
+            if isinstance(pm, dict) and pm.get("id"):
+                out.append((f"prop:{pm['id']}", f"{s.get('scene_id', '?')} prop morph ({pm.get('way')}, {pm.get('mark')}) at {_mm(float(pm.get('at', 0)))}"))
     return out
 
 

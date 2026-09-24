@@ -32,7 +32,7 @@ MORPH_TO_SAMPLE = 0.65   # where in a morph_to's clock the strip is measured: pa
 def morph_scenes(tl: dict) -> list[dict]:
     """Every ledger page with a morph on it: an ENTER by morph, or a `chart_to morph` species (P48 T5)."""
     return [s for s in tl.get("scenes", []) if (s.get("world") or {}).get("kind") == "ledger"
-            and (((s["world"].get("page") or {}).get("enter") == "morph") or morph_events(s))]
+            and (((s["world"].get("page") or {}).get("enter") == "morph") or morph_events(s) or s.get("prop_morphs"))]
 
 
 def measure_html(html: Path, aspect: str, scenes: list[dict]) -> dict:
@@ -53,6 +53,10 @@ def measure_html(html: Path, aspect: str, scenes: list[dict]) -> dict:
                     RB.frame_png(page, t, (w, h))   # seek: the page builds its morph on first paint
                     inv = page.evaluate("() => window.__morphInvariants ? window.__morphInvariants() : null")
                     out[sc.get("scene_id", "?")] = inv or {"error": "no morph on the page at its midpoint"}
+                for pm in sc.get("prop_morphs") or []:   # P69 T26e: each prop morph, measured mid-morph, keyed prop:<id>
+                    RB.frame_png(page, float(pm["at"]) + float(pm["dur"]) * 0.5, (w, h))
+                    inv = page.evaluate("k => window.__propMorph ? window.__propMorph(k, true) : null", pm["id"])
+                    out[f"prop:{pm['id']}"] = (inv or {}).get("inv") or {"error": f"no prop morph mesh at {pm['at']}+{float(pm['dur']) * 0.5:.2f} s"}
                 for ev in morph_events(sc):   # P48 T5: each morph_to, measured mid-morph, keyed scene@at
                     RB.frame_png(page, ev["at"] + ev["dur"] * MORPH_TO_SAMPLE, (w, h))
                     inv = page.evaluate("k => window.__morphInvariants ? window.__morphInvariants(k) : null", f"{ev['from']}>{ev['to']}")

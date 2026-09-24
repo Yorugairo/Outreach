@@ -137,6 +137,32 @@ async function mount(doc) {
      minJerk - Flash & Hogan 1985, the jerk-minimising quintic 10t^3 - 15t^4 + 6t^5: zero velocity AND zero
                acceleration at both ends, so a spatial transition neither snaps nor sags. */
   const minJerk = (u) => { u = Math.min(1, Math.max(0, u)); return u * u * u * (10 - 15 * u + 6 * u * u); };
+
+  /* part 2 (P69 T26d, the parent's find): a PATH THROUGH KEYS that does not stop at each one.
+     hermite - the cubic Hermite with EXPLICIT end velocities, ported from the rig foundation's `hermite`
+               (content/video_engine/projects/martial-matters/.../rig-foundation/rig_math.py:104, d154278 on main,
+               test_rig_foundation.py): p(u) = h00 p0 + h10 (v0 T) + h01 p1 + h11 (v1 T), u in [0,1] over T seconds,
+               v0 / v1 in units per second. Scalar - one channel; the caller runs one per axis. "The velocity at p1 is
+               intentionally allowed to be non-zero."
+     hermiteChain - a whole chain of keys: values ps[0..n] at times ts[0..n] (ascending), velocity 0 at the first and
+               the last knot (the thing starts from rest and settles), and at each MIDDLE knot the Catmull-Rom velocity
+               (p[i+1] - p[i-1]) / (t[i+1] - t[i-1]) - so it passes THROUGH a middle key at speed instead of stopping dead
+               (minJerk on every key stops at each waypoint). Clamped to the first / last value outside [t0, tn]. */
+  const hermite = (p0, p1, v0, v1, u, T) => {
+    u = Math.min(1, Math.max(0, u));
+    const u2 = u * u, u3 = u2 * u;
+    return (2 * u3 - 3 * u2 + 1) * p0 + (u3 - 2 * u2 + u) * v0 * T + (-2 * u3 + 3 * u2) * p1 + (u3 - u2) * v1 * T;
+  };
+  const hermiteChain = (ps, ts, t) => {
+    const n = ps.length - 1;
+    if (n < 1 || !(t > ts[0])) return ps[0];
+    if (t >= ts[n]) return ps[n];
+    const vel = (i) => (i <= 0 || i >= n) ? 0 : (ps[i + 1] - ps[i - 1]) / Math.max(1e-9, ts[i + 1] - ts[i - 1]);
+    let i = 0;
+    while (i < n - 1 && t >= ts[i + 1]) i++;
+    const T = Math.max(1e-9, ts[i + 1] - ts[i]);
+    return hermite(ps[i], ps[i + 1], vel(i), vel(i + 1), (t - ts[i]) / T, T);
+  };
   /* KINETICS:END */
   /* KINETICS:BEGIN spring */
   /* kinetics/spring.mjs - the settle (42 s42.2; FINDING-the-animation-math s3; 47 s1 row 4). SOURCE OF TRUTH, inlined into
@@ -2644,6 +2670,133 @@ async function mount(doc) {
   };
   /* the SVG path of an outline */
   const outlinePath = (pts) => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ") + " Z";
+
+  /* ---- P69 T26e / E99 s107: A PROP'S OWN PIXELS RIDE THE MESH ------------------------------------------------------
+     A catalogued prop is a PICTURE with an alpha, not an outline. Its morph source is described from that alpha, as a
+     strip of columns, because the strip is the topology that never inverts onto an x-monotone target (a bar, the page
+     panel, the area under a series - all three are strips) and because a TEXTURE mapped on it needs a mesh that
+     covers every painted pixel: a pixel outside the mesh is a pixel the morph's first frame would drop.
+     `alphaColumns` reads each pixel column's painted extent; `bandStrip` turns it into n columns whose top and bottom
+     are CONSERVATIVE - vertex i takes the extreme over every pixel column its two neighbouring spans touch, so the
+     straight edge between vertex i and i+1 lies outside every painted pixel between them (each end is already past
+     the extreme of [x_i, x_i+1]). A bay inside a column is carried as transparent texture, which is what it is.
+     `rectStrip` is a bar (or the page panel) in the same n columns, value edge over base (chartxf.mjs xfBarRing's own
+     description). `affineOf` is the texture's per-triangle map (rest -> deformed) as an SVG matrix. Pure. */
+  const alphaColumns = (alpha, W, H, thr = 8) => {
+    const top = new Float64Array(W).fill(NaN), bot = new Float64Array(W).fill(NaN);
+    for (let x = 0; x < W; x++) {
+      for (let y = 0; y < H; y++) if (alpha[y * W + x] > thr) { top[x] = y; break; }
+      if (Number.isNaN(top[x])) continue;
+      for (let y = H - 1; y >= 0; y--) if (alpha[y * W + x] > thr) { bot[x] = y + 1; break; }
+    }
+    return { top, bot, W, H };
+  };
+  const bandStrip = (cols, n = 48, o = {}) => {
+    const P = Object.assign({}, STRIP, o), { top, bot, W } = cols;
+    let c0 = -1, c1 = -1;
+    for (let x = 0; x < W; x++) if (!Number.isNaN(top[x])) { if (c0 < 0) c0 = x; c1 = x; }
+    if (c0 < 0 || !(n >= 2)) return null;
+    const x0 = c0, x1 = c1 + 1;   /* the painted columns' outer edges */
+    let yLo = Infinity, yHi = -Infinity;
+    for (let x = c0; x <= c1; x++) if (!Number.isNaN(top[x])) { yLo = Math.min(yLo, top[x]); yHi = Math.max(yHi, bot[x]); }
+    const minH = (yHi - yLo) * P.MIN_H, xs = [...Array(n).keys()].map((i) => x0 + (i / (n - 1)) * (x1 - x0));
+    const T = [], Bt = [];
+    for (let i = 0; i < n; i++) {
+      const a = Math.max(c0, Math.floor(i > 0 ? xs[i - 1] : xs[0])), b = Math.min(c1, Math.ceil(i < n - 1 ? xs[i + 1] : xs[n - 1]) - 1);
+      let lo = Infinity, hi = -Infinity;
+      for (let x = a; x <= b; x++) if (!Number.isNaN(top[x])) { lo = Math.min(lo, top[x]); hi = Math.max(hi, bot[x]); }
+      if (!(hi > -Infinity)) { lo = hi = (yLo + yHi) / 2; }   /* a span with no painted column (a gap between two parts): the silhouette's middle */
+      if (hi - lo < minH) { const c = (lo + hi) / 2; lo = c - minH / 2; hi = c + minH / 2; }   /* polyStrip's own MIN_H guard */
+      T.push([xs[i], lo]); Bt.push([xs[i], hi]);
+    }
+    return { top: T, bot: Bt, n };
+  };
+  const rectStrip = (x, y, w, h, n = 48) => {
+    const xs = [...Array(n).keys()].map((i) => x + (i / (n - 1)) * w);
+    return { top: xs.map((v) => [v, y]), bot: xs.map((v) => [v, y + h]), n };
+  };
+  /* SVG matrix [a b c d e f] taking triangle p onto triangle q (x' = a x + c y + e, y' = b x + d y + f) */
+  const affineOf = (p, q) => {
+    const [p0, p1, p2] = p, [q0, q1, q2] = q;
+    const J = triJacobian(p0, p1, p2, q0, q1, q2);
+    const a = J[0][0], c = J[0][1], b = J[1][0], d = J[1][1];
+    return [a, b, c, d, q0[0] - a * p0[0] - c * p0[1], q0[1] - b * p0[0] - d * p0[1]];
+  };
+  /* a triangle with every EDGE pushed out along its own normal by px (the texture's clip: adjacent triangles overlap by a
+     hair, so no seam of the background shows between them under anti-aliasing). Measured in PIXELS - (sx, sy) carry the
+     caller's units (the unit square) to the picture's px and back - because a strip's triangles are tall and thin, and a
+     push from the centroid would move their long edges by almost nothing. Each corner is the MITRE of its two offset
+     edges, clamped at MITRE_MAX x px so a needle's tip never throws a spike across the picture. */
+  const TRI_GROW = Object.freeze({ MITRE_MAX: 4 });
+  const triGrow = (tri, px, sx = 1, sy = 1) => {
+    const P = tri.map((p) => [p[0] * sx, p[1] * sy]), s = arapOrient(P[0], P[1], P[2]) < 0 ? -1 : 1;
+    const nrm = (a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1; return [s * dy / L, -s * dx / L]; };   /* outward */
+    return P.map((p, i) => {
+      const n1 = nrm(P[(i + 2) % 3], p), n2 = nrm(p, P[(i + 1) % 3]), dot = n1[0] * n2[0] + n1[1] * n2[1];
+      let mx = n1[0] + n2[0], my = n1[1] + n2[1], k = px / Math.max(1e-9, 1 + dot);
+      const L = Math.hypot(mx, my) * k, cap = TRI_GROW.MITRE_MAX * px;
+      if (L > cap) k *= cap / L;
+      return [(p[0] + mx * k) / sx, (p[1] + my * k) / sy];
+    });
+  };
+
+  /* ---- (6) THE FAN'S ASSUMPTION, CHECKED (P69 T26e; the main-branch survey: `fanMesh` assumes a star-shaped outline) ----
+     A fan from one centre is a valid mesh only when the centre sees every edge - the outline is STAR-SHAPED about it: every
+     fan triangle (p_i, p_i+1, c) keeps the outline's orientation. A traced prop's silhouette often is not (a bay, an
+     overhang), and a fan over it folds. So the mesh is CHOSEN, and every refusal is named:
+       fan    both outlines star-shaped about their own area centroids (the fan's triangles are positive at both ends);
+       ears   a constrained triangulation of the SOURCE (ear clipping: an ear is a convex corner whose triangle holds no
+              other vertex - O(n^2), our outlines are a few hundred points) carried to the target by the correspondence,
+              admitted when no carried triangle inverts on the target;
+       strip  the fallback that never inverts between two x-monotone strips (the caller builds it: `polyStrip` /
+              `bandStrip` against `rectStrip` / `lpStrip`).
+     The design reference is the rigging research run's section 1.3 (the ARAP local/global split) - research, not evidence;
+     bounded biharmonic weights (its section 2.4) are not needed while the mesh is triangulated from the outline itself. */
+  const arapOrient = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+  const starShaped = (poly, c) => {
+    const P = polyArea(poly) < 0 ? poly.slice().reverse() : poly;
+    for (let i = 0, n = P.length; i < n; i++) if (arapOrient(P[i], P[(i + 1) % n], c) <= 0) return false;
+    return true;
+  };
+  const fanRefusal = (poly) => {
+    const P = polyArea(poly) < 0 ? poly.slice().reverse() : poly, c = centroid(P), n = P.length;
+    let bad = 0; for (let i = 0; i < n; i++) if (arapOrient(P[i], P[(i + 1) % n], c) <= 0) bad++;
+    return bad ? "fan refused: the silhouette is not star-shaped about its area centroid (" + bad + " of " + n
+      + " fan triangles fold) - a fan from one centre would invert it" : null;
+  };
+  const earClip = (poly) => {
+    const n = poly.length; if (n < 3) return [];
+    const ccw = polyArea(poly) > 0, idx = [...Array(n).keys()];
+    const V = ccw ? idx : idx.slice().reverse();   /* walk it counter-clockwise; the triangles keep the caller's indices */
+    const inTri = (p, a, b, c) => arapOrient(a, b, p) >= 0 && arapOrient(b, c, p) >= 0 && arapOrient(c, a, p) >= 0;
+    const tris = [], ring = V.slice();
+    let guard = 0;
+    while (ring.length > 3 && guard++ < n * n) {
+      let cut = false;
+      for (let k = 0; k < ring.length; k++) {
+        const i = ring[(k + ring.length - 1) % ring.length], j = ring[k], l = ring[(k + 1) % ring.length];
+        const a = poly[i], b = poly[j], c = poly[l];
+        if (arapOrient(a, b, c) <= 1e-12) continue;   /* a reflex (or flat) corner is never an ear */
+        if (ring.some((m) => m !== i && m !== j && m !== l && inTri(poly[m], a, b, c))) continue;
+        tris.push([i, j, l]); ring.splice(k, 1); cut = true; break;
+      }
+      if (!cut) break;   /* a self-crossing ring has no ear left: the caller refuses what is left */
+    }
+    if (ring.length === 3) tris.push([ring[0], ring[1], ring[2]]);
+    return tris;
+  };
+  const silhouetteMesh = (A, B) => {
+    const refused = [], fr = fanRefusal(A), frB = fanRefusal(B);
+    if (!fr && !frB) return { kind: "fan", mesh: fanMesh(A), refused };
+    refused.push(fr || frB.replace("the silhouette", "the target"));
+    const tris = earClip(A);
+    const flips = tris.filter(([i, j, k]) => arapOrient(B[i], B[j], B[k]) <= 0).length;
+    if (tris.length === A.length - 2 && !flips) return { kind: "ears", mesh: { verts: A.slice(), tris }, refused };
+    refused.push(tris.length !== A.length - 2
+      ? "ears refused: the silhouette would not clip to " + (A.length - 2) + " ears (" + tris.length + ") - it crosses itself"
+      : "ears refused: " + flips + " of " + tris.length + " clipped triangles invert on the target");
+    return { kind: "strip", mesh: null, refused };
+  };
   /* KINETICS:END */
   /* KINETICS:BEGIN morph_a */
   /* kinetics/morph_a.mjs - THE MORPH, METHOD A (P50 T12; doc 43 s43.5 "Method A - vertex-based"). SOURCE OF TRUTH,
@@ -5894,11 +6047,49 @@ async function mount(doc) {
     return (d._read = r);
   };
 
+  /* P69 T26d / E99 s106 - A PROP MOVES AFTER IT LANDS. The compiler writes the prop's `moves` as WHOLE boxes in stage px
+     ({at, dur, ease, x, y, w, rot}, each key starting where the one before has ended - `prop_moves`), and its authored
+     resting angle as `rot`. The pose at t is a PURE function of t: every key begun by t has run (the last one begun,
+     eased by its own curve), so a cold seek lands the frame forward play lands. `rot0` is the angle the prop rests at
+     before any key: the row's `rot`, else the stamp's own LAND_DEG, else square.
+     A CHAIN (the parent's find, 2026-09-23): keys that follow one another with no gap (a key starting the instant the one
+     before ends) are ONE path - `hermiteChain` (kinetics/ease.mjs, the rig foundation's Hermite), from rest, THROUGH
+     each middle key at its Catmull-Rom velocity, settling only at the chain's last key; a lone key (or one after a
+     gap) starts from rest on its own ease. */
+  const PROP_MOVE_EASE = Object.freeze({
+    minjerk: minJerk,                                                                                  /* E45's park: zero velocity and acceleration at both ends */
+    cubic: (k) => { k = Math.min(1, Math.max(0, k)); return k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; },
+    linear: (k) => Math.min(1, Math.max(0, k)),
+    out: (k) => expoOut(Math.min(1, Math.max(0, k))),
+  });
+  const PROP_CHAIN_GAP_S = 1e-6;   /* a key within this of the one before's end CHAINS to it (the compiler writes both to the ms) */
+  const propPose = (d, t, rot0) => {
+    const P = d.place, mv = d.moves || [], K = ["x", "y", "w", "rot"];
+    let cur = { x: P.x, y: P.y, w: P.w, rot: rot0 };
+    for (let i = 0; i < mv.length && t > mv[i].at;) {
+      let j = i;
+      while (j + 1 < mv.length && Math.abs(mv[j + 1].at - (mv[j].at + mv[j].dur)) < PROP_CHAIN_GAP_S) j++;
+      const end = mv[j].at + mv[j].dur;
+      if (t < end) {
+        if (j === i) {   /* a lone key: from rest, on its own ease */
+          const u = (PROP_MOVE_EASE[mv[i].ease] || minJerk)((t - mv[i].at) / Math.max(1e-6, mv[i].dur));
+          const o = {}; K.forEach((k) => { o[k] = cur[k] + (mv[i][k] - cur[k]) * u; }); return o;
+        }
+        const ts = [mv[i].at]; for (let q = i; q <= j; q++) ts.push(mv[q].at + mv[q].dur);   /* a chain: one Hermite path */
+        const o = {}; K.forEach((k) => { o[k] = hermiteChain([cur[k], ...mv.slice(i, j + 1).map((m) => m[k])], ts, t); }); return o;
+      }
+      cur = { x: mv[j].x, y: mv[j].y, w: mv[j].w, rot: mv[j].rot };
+      i = j + 1;
+    }
+    return cur;
+  };
+
   /* the placed card's layout box at t: reading size, then the minimum-jerk park. `parks` is
      recomputed from the LIVE span because the coalescer above can extend a dock's exit. */
   const dockGeom = (el, d, t) => {
     if (!d.place) return null;
     const R = dockReadRect(el, d), P = d.place;
+    if (d.centre && !d.read_place && d.moves) { const q = propPose(d, t, 0); return { x: q.x, y: q.y, w: q.w }; }   /* P69 T26d: a prop that MOVES after it lands */
     if (d.centre && !d.read_place) return { x: P.x, y: P.y, w: P.w };   /* a CENTRED card (the design pass): its box from the first frame, whatever its life - unless the row named a reading box it pops at first */
     const readS = d.read_s != null ? d.read_s : DOCK_READ_S;
     const parkS = d.park_s != null ? d.park_s : DOCK_PARK_S;
@@ -6548,7 +6739,7 @@ async function mount(doc) {
       ds.sort((a, b) => a.enter - b.enter);
       let cur = null;
       for (const d of ds) {
-        if (cur && d.enter - cur.exit <= DOCK_JOIN) {
+        if (cur && d.enter - cur.exit <= DOCK_JOIN && !cur.handed && d.arrive !== "morph") {   /* P69 T26e: a prop handed to a morph, or born of one, keeps its own span */
           cur.exit = Math.max(cur.exit, d.exit);
           cur.badge_at = [...new Set([...(cur.badge_at || []), ...(d.badge_at || [])])];
         } else { cur = d; merged.push(d); }
@@ -6576,7 +6767,7 @@ async function mount(doc) {
      docks separated by a sub-1.2s turnover share one wash - the gap used
      to pulse it off and back on (two of the six flashes at s06's open). */
   const WASHES = [];
-  for (const d of [...DOCKS].sort((a, b) => a.enter - b.enter)) {
+  for (const d of [...DOCKS].sort((a, b) => a.enter - b.enter).filter((d) => d.arrive !== "morph")) {   /* P69 T26e: a prop BORN of a morph is the chart's own ink turned object - it lights no evidence scrim (the landing would pop the world's light) */
     const last = WASHES[WASHES.length - 1];
     if (last && d.enter - last[1] < 1.2) last[1] = Math.max(last[1], d.exit);
     else WASHES.push([d.enter, d.exit]);
@@ -6591,7 +6782,7 @@ async function mount(doc) {
   const BOUNDS = TL.scenes.map((x) => x.span[0]);
   for (const d of DOCKS)
     for (const b of BOUNDS)
-      if (d.enter < b && b - d.exit > 0.05 && b - d.exit <= 1.4) { d.exit = b; break; }
+      if (d.enter < b && b - d.exit > 0.05 && b - d.exit <= 1.4 && !d.handed) { d.exit = b; break; }   /* P69 T26e: a HANDED prop leaves on its word, never snapped to the turn */
 
   /* P50 T3: every press card mounts HERE, at load, not on the frame it first paints. A card's image must be
      decoded before the first frame asks how tall it is - the fan's step and the phrase box are both read off the
@@ -9474,7 +9665,8 @@ async function mount(doc) {
     let any = false;
     S.bars.forEach((b, i) => {
       const bar = b.bar, x = +bar.getAttribute("x"), y = +bar.getAttribute("y"), w = +bar.getAttribute("width"), h = +bar.getAttribute("height");
-      const opA = bar.getAttribute("opacity"), op = (bar.style.opacity === "" ? 1 : +bar.style.opacity) * (opA == null ? 1 : +opA);
+      const opA = bar.getAttribute("opacity"), op = (bar.style.opacity === "" ? 1 : +bar.style.opacity) * (opA == null ? 1 : +opA)
+        * (bar.style.visibility === "hidden" ? 0 : 1);   /* P69 T26e: a bar a prop morph holds (it is the prop's to become) casts no shadow */
       if (b.foot) {
         const f = b.foot, fh = Math.max(0, Math.min(L.r, h / 2)), cs = getComputedStyle(bar);
         f.setAttribute("x", x); f.setAttribute("width", w);
@@ -12570,7 +12762,8 @@ async function mount(doc) {
     }
     return { top, bot };
   };
-  const buildMorph = (st, pg, world) => {
+  const buildMorph = (st, pg, world, key) => {
+    if (world && world.morph && typeof world.morph === "object" && world.morph.prop) return buildPropEnter(st, pg, world, key);   /* P69 T26e: a catalogued PROP's own pixels */
     const line = (st.linePts || [])[0]; if (!line || line.length < 2 || !(st.axisB > 0)) return null;
     const G = st.geom || { W: 1000, H: 560 }, n = MORPH.COLS, xL = line[0][0], xR = line[line.length - 1][0];
     const yAt = (x) => { for (let i = 0; i + 1 < line.length; i++) { const a = line[i], q = line[i + 1]; if (x >= a[0] - 1e-9 && x <= q[0] + 1e-9) { const u = (x - a[0]) / Math.max(1e-9, q[0] - a[0]); return a[1] + (q[1] - a[1]) * clamp01(u); } } return line[line.length - 1][1]; };
@@ -12626,9 +12819,10 @@ async function mount(doc) {
     const path = lpEl("path", "morph", svg, { d: outlinePath(A), fill: stroke, "fill-opacity": MORPH.FILL_A, stroke: "var(--lp-chalk)", "stroke-width": 3 });
     return { svg, ground, path, prep, A, B, W: G.W, stroke, hand: !!(sPoly && src.hand) };
   };
-  const paintMorph = (st, pg, world, u, c, g = 1) => {   /* `g` (P61 T3b): how far the page's GROUND has arrived - 1 on every page whose board was already there */
-    if (st.morph === undefined) st.morph = buildMorph(st, pg, world);
+  const paintMorph = (st, pg, world, u, c, g = 1, key = "") => {   /* `g` (P61 T3b): how far the page's GROUND has arrived - 1 on every page whose board was already there */
+    if (st.morph === undefined) st.morph = buildMorph(st, pg, world, key);
     const M = st.morph; if (!M) return;
+    if (M.prop) { paintPropEnter(st, M, u, c, key); return; }   /* P69 T26e: the prop's textured strip (its own clock, its own hand) */
     const k = kin("min_jerk") ? minJerk(u) : expoOut(clamp01(u));
     const pts = u >= 1 ? M.B : arapAt(M.prep, k).outline;
     M.pts = pts;   /* P61 T3: the shape THIS frame, so the melt's ball can wear the very outline the page is carrying */
@@ -12667,6 +12861,264 @@ async function mount(doc) {
     const lw = pr.width || st.geom.W, lh = pr.height || st.geom.H;
     const sb = meltStageBox(wA);
     return M.pts.map((p) => { const q = threadToStage(fit, p); return [sb.x + (q[0] / lw) * sb.w, sb.y + (q[1] / lh) * sb.h]; });
+  };
+  /* ================= P69 T26e / E99 s107 - PROPS, PAGES AND CHARTS MORPH INTO EACH OTHER, BOTH WAYS =================
+     The operator: "we should also be able to morph/transform to/from props to pages and charts." A catalogued PROP is a
+     picture with an alpha, so it is described by that alpha: `alphaColumns` + `bandStrip` (kinetics/arap.mjs) give its
+     CONSERVATIVE strip of MORPH.COLS columns in its own unit square - every painted pixel inside it - and the strip is
+     the mesh (the topology that never inverts onto a bar, the page panel or the area under a series, all three strips).
+     THE PROP'S OWN PIXELS RIDE THE MESH: one <image> of the cutout in the unit square, and per triangle a <use> of it,
+     clipped to that triangle in the unit square (grown by a hair so no seam shows) under the SVG matrix that carries the
+     triangle to where the ARAP solve puts it this frame (`affineOf`). One object changing form, never two pictures
+     cross-faded: the texture carries the shape until the HAND, then hands to the chart's own ink ON THE SAME SHAPE -
+     the bar's own fill, the series' area, or (a page made into the prop) the page itself, carved to the shape.
+     PURE IN t: the geometry is re-read every frame (the page breathes; its punch moves the chart), the ARAP system is
+     re-prepared from it (one factorisation of a 95 x 95 Laplacian), and only DOM nodes are cached. Seek = play.
+       way "in"   the prop dock standing at `at` (HANDED: it leaves on the word) -> the mark `b:<i>` | `area` of the state
+                  on screen; the mark is not drawn until the landing (it is the prop's to become).
+       way "out"  the mark | `page` -> the prop, which STANDS from the landing as its born dock (`arrive: "morph"`); the
+                  mark is gone from the word; a page is carved to the mesh's outline and fades as the pixels arrive.
+     (6): the fan's assumption is CHECKED on the traced silhouette (`silhouetteMesh`): a non-star outline refuses the fan
+     by name (and the ears, when they fold on the target) and the strip carries it; the refusals ride the probe. */
+  const PROP_MORPH = Object.freeze({ HAND: 0.7, OUT0: 0.3, OUT1: 0.6, GROW_PX: 0.9, THR: 8, BORN_HATCH_S: 0.35, AREA_LEAVE_S: 0.6 });
+  const PM_TEX = {}, PM_STATE = {};
+  const pmTex = (pid) => {   /* the cutout, decoded once, and its conservative strip in its own unit square */
+    let T = PM_TEX[pid];
+    if (!T) { const img = new Image(); img.src = A[pid] || ""; T = PM_TEX[pid] = { img, uv: null, ar: 1 }; }
+    if (!T.uv && T.img.complete && T.img.naturalWidth > 0) {
+      const W = T.img.naturalWidth, H = T.img.naturalHeight, cv = document.createElement("canvas");
+      cv.width = W; cv.height = H;
+      const cx = cv.getContext("2d", { willReadFrequently: true }); cx.drawImage(T.img, 0, 0);
+      const px = cx.getImageData(0, 0, W, H).data, al = new Uint8Array(W * H);
+      for (let i = 0; i < W * H; i++) al[i] = px[4 * i + 3];
+      const s = bandStrip(alphaColumns(al, W, H, PROP_MORPH.THR), MORPH.COLS);
+      if (s) T.uv = { top: s.top.map(([x, y]) => [x / W, y / H]), bot: s.bot.map(([x, y]) => [x / W, y / H]), n: s.n };
+      T.ar = H / W; T.tw = W; T.th = H;
+    }
+    return T.uv ? T : null;
+  };
+  TL.scenes.forEach((sc) => {   /* decode every morphing prop up front, so the first frame that needs one has it */
+    for (const pm of sc.prop_morphs || []) pmTex(pm.prop);
+    const m = (sc.world || {}).morph; if (m && typeof m === "object" && m.prop) pmTex(m.prop);
+  });
+  /* a dock's canvas box and turn at T - the dock painter's own reading (`propPose`, the stamp's LAND_DEG, the pivot at
+     the painted centre a stamp turns about, else the canvas centre) */
+  const pmDockPose = (d, T) => {
+    const P = d.place, rot0 = d.rot != null ? +d.rot : (d.arrive === "stamp" ? STAMP_ARRIVAL.LAND_DEG : 0);
+    const q = d.moves ? propPose(d, T, rot0) : { x: P.x, y: P.y, w: P.w, rot: rot0 };
+    const pb = Array.isArray(d.paint) && d.paint.length === 4 ? d.paint : [0, 0, 1, 1];
+    return { x: q.x, y: q.y, w: q.w, h: q.w * P.h / Math.max(1e-9, P.w), rot: q.rot, px: (pb[0] + pb[2]) / 2, py: (pb[1] + pb[3]) / 2 };
+  };
+  const pmPlace = (pose) => {   /* the unit square -> stage px, turned about the pivot as the dock's CSS turns it */
+    const cx = pose.x + pose.px * pose.w, cy = pose.y + pose.py * pose.h, r = pose.rot * Math.PI / 180, c = Math.cos(r), s = Math.sin(r);
+    return (uv) => { const dx = pose.x + uv[0] * pose.w - cx, dy = pose.y + uv[1] * pose.h - cy; return [cx + dx * c - dy * s, cy + dx * s + dy * c]; };
+  };
+  const pmDock = (pm) => DOCKS.find((d) => d.slide === pm.prop && (pm.way === "in"
+    ? (d.handed && Math.abs(d.exit - pm.at) < 0.02) : (d.arrive === "morph" && Math.abs(d.enter - (pm.at + pm.dur)) < 0.02)));
+  /* an element's rendered box in STAGE px (the docks' own space) - read after the world's camera is written this frame */
+  const pmStageBox = (e) => {
+    const s = document.getElementById("stage").getBoundingClientRect(), k = s.width / STAGE_W, b = e.getBoundingClientRect();
+    return { x: (b.left - s.left) / k, y: (b.top - s.top) / k, w: b.width / k, h: b.height / k };
+  };
+  const pmChartToStage = (S) => {   /* a state's chart units -> stage px, through its rendered box (the page's punch, park and camera included) */
+    const G = S.geom || { W: 1000, H: 560 }, fit = threadFit(pmStageBox(S.chart), G.W, G.H);
+    return (p) => threadToStage(fit, p);
+  };
+  const pmMarkOf = (S, key) => (S.marks || []).find((q) => q.key === key && q.role === "bar") || null;
+  /* everything a bar SAYS, held with the bar: its own rect, its value tag, and the callout pill when the bar is the page's
+     emphasised one - a slot whose number stands over no mark is a figure with no mark (the parent's review of T26e, (b)) */
+  const pmMarkEls = (S, key) => {
+    const m = pmMarkOf(S, key); if (!m) return [];
+    const i = +key.slice(2), val = (S.marks || []).find((q) => q.key === "val:" + key && q.role === "value");
+    return [m.el, val && val.el, S.callout && S.emph === i ? S.callout : null].filter(Boolean);
+  };
+  /* the mark's strip THIS frame, in stage px; null when the state on screen does not draw it */
+  const pmMarkStrip = (st, S, mark, n) => {
+    if (mark === "page") { const r = pmStageBox(st.root); return { strip: rectStrip(r.x, r.y, r.w, r.h, n), ink: null, el: null }; }
+    const toS = pmChartToStage(S);
+    if (mark === "area") {
+      const s = lpStrip(S, n); if (!s) return null;
+      const col = ((S.paths || []).filter((pp) => !pp.muted)[0] || {}).p;
+      return { strip: { top: s.top.map(toS), bot: s.bot.map(toS), n }, ink: col ? col.getAttribute("stroke") : "var(--lp-chalk)", el: null, area: true };
+    }
+    const m = pmMarkOf(S, mark); if (!m) return null;
+    const g = m.geom, y0 = Math.min(g.end, g.base), y1 = Math.max(g.end, g.base), r = rectStrip(g.x, y0, g.w, y1 - y0, n);
+    return { strip: { top: r.top.map(toS), bot: r.bot.map(toS), n }, ink: getComputedStyle(m.el).fill, el: m.el };
+  };
+  /* THE LAYER. The mesh CONTINUES a dock (or becomes one), so it paints where the docks paint: in the stage, above the
+     evidence wash and the spotlight (a scrim over the WORLD while a card is up - under it the prop came out a quarter
+     darker than the dock it continues, measured on the golden) and beneath the docks and the species. Made only when a
+     timeline morphs a prop, so every other player's DOM is what it was; every mesh is hidden at the top of each frame
+     and shown only by the morph that paints it (`render` -> pmHideAll), so a seek anywhere leaves nothing behind. */
+  let PM_LAYER = null;
+  const pmLayer = () => {
+    if (PM_LAYER) return PM_LAYER;
+    const div = document.createElement("div"); div.id = "pmorph";
+    div.style.cssText = "position:absolute;inset:0;pointer-events:none;overflow:hidden";
+    const stg = document.getElementById("stage"); stg.insertBefore(div, document.getElementById("species-under"));
+    const svg = lpEl("svg", "", div, { viewBox: "0 0 " + STAGE_W + " " + STAGE_H, width: "100%", height: "100%" });
+    svg.style.position = "absolute"; svg.style.left = "0"; svg.style.top = "0";
+    return (PM_LAYER = { div, svg, defs: lpEl("defs", "", svg), meshes: {} });
+  };
+  const pmHideAll = () => { if (PM_LAYER) for (const k in PM_LAYER.meshes) PM_LAYER.meshes[k].N.g.style.display = "none"; };
+  let pmSeq = 0;
+  /* THE TEXTURE'S SPACE IS THE PICTURE'S OWN PIXELS (tw x th, its natural size); `gpx` is the clip's overlap in those
+     pixels. The ink path lies under the texture: the chart's own ink, on the same shape, for the hand. */
+  const pmNodes = (svg, defs, pid, uv, tris, gpx, tw, th) => {
+    const id = "pm" + (++pmSeq), g = lpEl("g", "pm-mesh", svg);
+    lpEl("image", "", defs, { id: id + "-img", href: A[pid] || "", x: 0, y: 0, width: tw, height: th, preserveAspectRatio: "none" });
+    const ink = lpEl("path", "pm-ink", g, { d: "", fill: "none", "fill-opacity": 0, stroke: "none" });
+    const tex = lpEl("g", "pm-tex", g);
+    const px = uv.map((q) => [q[0] * tw, q[1] * th]);
+    const gs = tris.map(([i, j, l], q) => {
+      const cp = lpEl("clipPath", "", defs, { id: id + "-c" + q, clipPathUnits: "userSpaceOnUse" });
+      lpEl("polygon", "", cp, { points: triGrow([px[i], px[j], px[l]], gpx).map((p) => p[0].toFixed(3) + "," + p[1].toFixed(3)).join(" ") });
+      const gq = lpEl("g", "", tex);
+      lpEl("use", "", gq, { href: "#" + id + "-img", "clip-path": "url(#" + id + "-c" + q + ")" });
+      return gq;
+    });
+    return { g, ink, tex, gs, px };
+  };
+  const pmTexPaint = (N, tris, V) => tris.forEach(([i, j, l], q) => N.gs[q].setAttribute("transform",
+    "matrix(" + affineOf([N.px[i], N.px[j], N.px[l]], [V[i], V[j], V[l]]).map((v) => +v.toFixed(6)).join(",") + ")"));
+  const pmEase = (u) => minJerk(u);   /* a prop STANDS before its word: the morph leaves it from rest (E45's min-jerk), never on an expo-out's first-frame jump */
+  /* the scene's prop morphs at t: the marks' visibility, the page's carve, the textured meshes - every frame, every one */
+  const lpPropMorphPaint = (el, st, scene, t) => {
+    const pms = scene.prop_morphs || [], states = st.states || [st], hide = new Set(), show = new Set(), root = st.root;
+    let pageOut = null;
+    for (const pm of pms) {
+      const S = states[pm.state | 0] || st, raw = (t - pm.at) / Math.max(1e-6, pm.dur);
+      const els = pm.mark !== "page" && pm.mark !== "area" ? pmMarkEls(S, pm.mark) : [];
+      for (const e of els) ((pm.way === "in" ? raw < 1 : raw >= 0) ? hide : show).add(e);
+      if (pm.mark === "page" && pm.way === "out" && raw >= 0 && (!pageOut || pm.at > pageOut.at)) pageOut = pm;
+    }
+    for (const e of show) if (!hide.has(e)) e.style.visibility = "";
+    for (const e of hide) e.style.visibility = "hidden";
+    if (pms.some((pm) => pm.mark === "page" && pm.way === "out")) {   /* the page's own state, before any carve this frame */
+      const gone = pageOut && t >= pageOut.at + pageOut.dur;
+      root.style.clipPath = ""; root.style.opacity = ""; root.style.transform = ""; root.style.transformOrigin = "";
+      root.style.visibility = gone ? "hidden" : "";
+    }
+    const L = pmLayer();
+    for (const pm of pms) {
+      const key = pm.id || (scene.scene_id + "@" + pm.at), raw = (t - pm.at) / Math.max(1e-6, pm.dur), u = clamp01(raw);
+      const S = states[pm.state | 0] || st, T = pmTex(pm.prop), d = pmDock(pm);
+      const mm = pm.mark !== "page" && pm.mark !== "area" ? pmMarkOf(S, pm.mark) : null;
+      const read = { shown: false, u, way: pm.way, mark: pm.mark, texture: 0, ink: 0, mesh: "strip", refused: [], tris: 0,
+                     bar: mm ? (mm.el.style.visibility === "hidden" ? "hidden" : "visible") : null,
+                     held: mm ? pmMarkEls(S, pm.mark).map((e) => (e.style.visibility === "hidden" ? "hidden" : "visible")) : null };
+      const leaveArea = pm.way === "in" && pm.mark === "area" && raw >= 1 && t < pm.at + pm.dur + PROP_MORPH.AREA_LEAVE_S;
+      const mk = ((raw >= 0 && raw < 1) || leaveArea) && T && d && d.place ? pmMarkStrip(st, S, pm.mark, T.uv.n) : null;
+      if (!mk) { PM_STATE[key] = { read, prep: null }; continue; }
+      const n = T.uv.n, pose = pmDockPose(d, pm.way === "in" ? pm.at : d.enter), place = pmPlace(pose);
+      const prop = { top: T.uv.top.map(place), bot: T.uv.bot.map(place) };
+      const rest = pm.way === "in" ? prop : mk.strip, dest = pm.way === "in" ? mk.strip : prop;
+      const mesh = stripMesh(rest.top, rest.bot), Bv = [...dest.top, ...dest.bot], prep = arapPrepareMesh(mesh, Bv, n + (n >> 1));
+      let M = L.meshes[key];
+      if (!M) {
+        const choice = silhouetteMesh(stripOutline([...prop.top, ...prop.bot], n), stripOutline([...mk.strip.top, ...mk.strip.bot], n));
+        M = L.meshes[key] = { N: pmNodes(L.svg, L.defs, pm.prop, [...T.uv.top, ...T.uv.bot], mesh.tris, PROP_MORPH.GROW_PX * T.tw / Math.max(1, pose.w), T.tw, T.th),
+                              refused: choice.refused, admitted: choice.kind };
+      }
+      M.N.tex.style.filter = propInkCss(d, true);   /* the prop's own ink, as its dock lays it down on a page */
+      const k = raw >= 1 ? 1 : pmEase(u), V = raw >= 1 ? Bv : arapAt(prep, k).verts;
+      const texA = pm.way === "in" ? (raw >= 1 ? 0 : 1 - clamp01((u - PROP_MORPH.HAND) / (1 - PROP_MORPH.HAND)))
+                                   : clamp01((u - PROP_MORPH.OUT0) / (PROP_MORPH.OUT1 - PROP_MORPH.OUT0));
+      const inkA = leaveArea ? 1 - clamp01((t - pm.at - pm.dur) / PROP_MORPH.AREA_LEAVE_S) : 1 - texA;
+      M.N.g.style.display = "";
+      pmTexPaint(M.N, mesh.tris, V);
+      M.N.tex.setAttribute("opacity", texA.toFixed(4));
+      const outline = stripOutline(V, n);
+      if (pm.mark === "page") {   /* the page IS the ink: it COLLAPSES into the shape's box and is carved to the shape, fading as the pixels arrive */
+        M.N.ink.setAttribute("d", "");
+        const R = pmStageBox(root), kR = R.w / Math.max(1, root.offsetWidth || R.w), bb = bbox(outline);
+        const sx = bb.w / Math.max(1e-6, R.w), sy = bb.h / Math.max(1e-6, R.h), tx = (bb.x - R.x) / kR, ty = (bb.y - R.y) / kR;
+        root.style.transformOrigin = "0 0";
+        root.style.transform = "matrix(" + [sx, 0, 0, sy, tx, ty].map((v) => +v.toFixed(6)).join(",") + ")";
+        root.style.clipPath = "polygon(" + outline.map((p) => (((p[0] - R.x) / kR - tx) / sx).toFixed(2) + "px " + (((p[1] - R.y) / kR - ty) / sy).toFixed(2) + "px").join(", ") + ")";
+        root.style.opacity = inkA.toFixed(4); root.style.visibility = "";
+      } else {
+        M.N.ink.setAttribute("d", outlinePath(outline));
+        M.N.ink.setAttribute("fill", mk.ink || "var(--lp-chalk)");
+        M.N.ink.setAttribute("fill-opacity", ((mk.area ? MORPH.FILL_A : 1) * inkA).toFixed(4));
+      }
+      Object.assign(read, { shown: true, texture: +texA.toFixed(4), ink: +inkA.toFixed(4), refused: M.refused.slice(), admitted: M.admitted, tris: mesh.tris.length });
+      PM_STATE[key] = { read, prep, k, n };
+    }
+  };
+  window.__propMorph = (key, withInv) => {   /* the last painted frame of one prop morph: its shares, its mesh, its refusals, det J now */
+    const E = PM_STATE[key]; if (!E) return null;
+    const out = Object.assign({}, E.read);
+    if (E.prep && out.shown) { const d = minDet(E.prep, E.k); out.target = d.target; out.solved = d.solved; }
+    if (withInv && E.prep && E.n) {   /* M17 (measure_morph.py): the match-cut invariants over 25 frames of THIS frame's solve, and det J's worst */
+      const frames = [], nn = E.n; let worst = Infinity;
+      for (let i = 0; i <= 24; i++) { const k = pmEase(i / 24); frames.push(stripOutline(arapAt(E.prep, k).verts, nn));
+        const d = minDet(E.prep, k); worst = Math.min(worst, d.target, d.solved); }
+      const end = arapAt(E.prep, 1).verts, endErr = Math.max(...end.map((p, i) => Math.hypot(p[0] - E.prep.Bv[i][0], p[1] - E.prep.Bv[i][1])));
+      out.inv = Object.assign({}, morphInvariants(frames, STAGE_W), { min_det: worst, end_error: endErr, n: frames[0].length, u: out.u, method: "arap" });
+    }
+    return out;
+  };
+  /* the page ENTER from a prop (`;morph=prop:<id>`): the same strip, solved in the arriving page's own chart units, into
+     the area under its first series (a line page) or its whole panel (any other page). The prop's pixels paint in the
+     stage layer (as the mid-page meshes do); the chart's ink for the hand paints in the page (`lp-morph`), under its own
+     light. The source is the prop dock that stood at the boundary (its stage-px box, turned) or, with none, the prop
+     drawn on the target the way a named outline is. Re-read every frame (the page's punch moves the chart under a prop
+     that stands still on the screen). */
+  const buildPropEnter = (st, pg, world, key) => {
+    const src = world.morph, T = pmTex(src.prop); if (!T) return undefined;   /* not decoded yet: the next frame builds it */
+    const svg = lpEl("svg", "lp-chart lp-morph", st.page, { viewBox: st.chart.getAttribute("viewBox") });
+    svg.setAttribute("style", st.chart.getAttribute("style") || ""); svg.style.overflow = "visible";
+    const line = (st.linePts || [])[0], isLine = !!(line && line.length >= 2 && st.axisB > 0);
+    const col = ((st.paths || []).filter((pp) => !pp.muted)[0] || {}).p, stroke = col ? col.getAttribute("stroke") : "var(--lp-chalk)";
+    const path = lpEl("path", "morph", svg, { d: "", fill: isLine ? stroke : "var(--lp-char)", "fill-opacity": 0, stroke: "none" });
+    const tris = stripMesh(T.uv.top, T.uv.bot).tris, L = pmLayer(), bw = Array.isArray(src.box) ? src.box[2] : STAGE_W * 0.3;
+    const N = L.meshes["enter:" + key] = L.meshes["enter:" + key]
+      || { N: pmNodes(L.svg, L.defs, src.prop, [...T.uv.top, ...T.uv.bot], tris, PROP_MORPH.GROW_PX * T.tw / Math.max(1, bw), T.tw, T.th) };
+    const M = { svg, path, tris, isLine, stroke, prop: true, hand: false, ground: null, W: (st.geom || { W: 1000 }).W, T, src, N: N.N };
+    pmEnterGeom(st, M);
+    M.refused = silhouetteMesh(M.A, M.B).refused;
+    return M;
+  };
+  const pmEnterGeom = (st, M) => {   /* this frame's two strips in the chart's units, the prepared solve, and the units' way to the stage */
+    const G = st.geom || { W: 1000, H: 560 }, n = M.T.uv.n, src = M.src;
+    const fit = threadFit(pmStageBox(st.chart), G.W, G.H);
+    M.toStage = (p) => threadToStage(fit, p);
+    let topB, botB;
+    if (M.isLine) { const s = lpStrip(st, n); topB = s.top; botB = s.bot; }
+    else { const r0 = pmStageBox(st.root), a = threadToLocal(fit, [r0.x, r0.y]), b = threadToLocal(fit, [r0.x + r0.w, r0.y + r0.h]);
+      const r = rectStrip(a[0], a[1], b[0] - a[0], b[1] - a[1], n); topB = r.top; botB = r.bot; }
+    const B = stripOutline([...topB, ...botB], n);
+    let place;
+    if (Array.isArray(src.box)) {   /* where the prop stood, on the screen */
+      const P = pmPlace({ x: src.box[0], y: src.box[1], w: src.box[2], h: src.box[3], rot: +src.rot || 0,
+                          px: (src.pivot || [0.5, 0.5])[0], py: (src.pivot || [0.5, 0.5])[1] });
+      place = (q) => threadToLocal(fit, P(q));
+    } else {   /* conjured on the target, as a named outline is: its centroid, its axis, the prop's own aspect */
+      const c = centroid(B), th = dominantAxis(B), ew = extentAlong(B, th) * MORPH.TAB_W, eh = extentAlong(B, th + Math.PI / 2) * MORPH.TAB_H;
+      const w = Math.min(ew, eh / Math.max(1e-6, M.T.ar)), h = w * M.T.ar;
+      place = pmPlace({ x: c[0] - w / 2, y: c[1] - h / 2, w, h, rot: th * 180 / Math.PI, px: 0.5, py: 0.5 });
+    }
+    const topA = M.T.uv.top.map(place), botA = M.T.uv.bot.map(place), mesh = stripMesh(topA, botA);
+    M.prep = arapPrepareMesh(mesh, [...topB, ...botB], n + (n >> 1)); M.Bv = [...topB, ...botB];
+    M.A = stripOutline(mesh.verts, n); M.B = B;
+  };
+  const paintPropEnter = (st, M, u, c, key) => {
+    pmEnterGeom(st, M);
+    const k = pmEase(u), V = u >= 1 ? M.Bv : arapAt(M.prep, k).verts, n = M.T.uv.n;
+    const hk = clamp01((u - PROP_MORPH.HAND) / (1 - PROP_MORPH.HAND)), leave = u < 1 ? 1 : 1 - clamp01(c);
+    M.pts = u >= 1 ? M.B : stripOutline(V, n);
+    if (u < 1) {   /* the pixels, in the stage layer (hidden again at the next frame's top unless painted) */
+      M.N.g.style.display = "";
+      pmTexPaint(M.N, M.tris, V.map(M.toStage));
+      M.N.tex.setAttribute("opacity", (1 - hk).toFixed(4));
+      M.N.tex.style.filter = "";
+    }
+    M.path.setAttribute("d", outlinePath(M.pts));
+    M.path.setAttribute("fill-opacity", ((M.isLine ? MORPH.FILL_A : 1) * hk * leave).toFixed(4));
+    M.svg.style.opacity = (u < 1 || c < 1) ? "1" : "0"; M.u = u; M.k = k;
+    PM_STATE["enter:" + key] = { read: { shown: u < 1, u, way: "in", mark: M.isLine ? "area" : "page", texture: u >= 1 ? 0 : +(1 - hk).toFixed(4),
+                                         ink: +hk.toFixed(4), mesh: "strip", refused: (M.refused || []).slice(), tris: M.tris.length }, prep: M.prep, k, n };
   };
   /* ---- THE BREAKTHROUGH's run (2026-09-10): seconds since the ordinary build ended, a pure function of them ------------
      burst: the bar shoots from the comparator's level to its true height while the scale rewrites (hi0 -> hi1) under every
@@ -13885,6 +14337,9 @@ async function mount(doc) {
        whose chart elements are detached. The paint was never wrong; only the bookkeeping the probes read was. */
     const pg = scene.world.page || {};
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
+    if (scene.prop_morphs) {   /* P69 T26e: the page a prop morph collapsed LAST frame stands whole before any painter measures it (seek = play) */
+      const R = st.root.style; R.clipPath = ""; R.opacity = ""; R.transform = ""; R.transformOrigin = ""; R.visibility = "";
+    }
     if (!st.thread) lpThread(st, scene);   /* HF-16: after the page is in the DOM, so both charts have a layout box */
     const morphOn = pg.enter === "morph" && kin("arap_morph"), morphS = morphOn ? (pg.morph_s || MORPH.S) : 0;   /* P47 T3: the prop becomes the chart */
     const built = pg.enter === "built";   /* arrives with its chart drawn: the span is all deployed life, the idle keeps it alive */
@@ -14068,7 +14523,7 @@ async function mount(doc) {
        fraction c - and because every builder's law is written as "at c the chart is this far drawn", running c back
        to zero IS an un-draw, whatever the builder. That is what a recast leaves on. */
     lpPaintStates(st, scene, c, t3, t);
-    if (morphOn) paintMorph(st, pg, scene.world, clamp01((t - scene.span[0]) / morphS), c, bRect);   /* P47 T3: the prop becomes the area under the line, then the line draws over it. P61 T3b: `bRect` is the GROUND's last beat - the prop stays the ink it was traced from until the board it stands on is charcoal */
+    if (morphOn) paintMorph(st, pg, scene.world, clamp01((t - scene.span[0]) / morphS), c, bRect, scene.scene_id);   /* P47 T3: the prop becomes the area under the line, then the line draws over it. P61 T3b: `bRect` is the GROUND's last beat - the prop stays the ink it was traced from until the board it stands on is charcoal */
     /* badges: floored at the build's end, each springs in over LP_BADGE_IN with the dock's back-out overshoot */
     const tb = t3 - LP.PUNCH - (st.buildDur || LP.BUILD);
     const arrP = arriveOf(scene.world), massP = scene.world.mass || "paper";   /* P47 T1: the page's pills may ARRIVE by a throw or a landing (`;arrive=land;mass=metal` on the plate id - the compiler writes it on the world) */
@@ -14099,7 +14554,194 @@ async function mount(doc) {
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
     lpShedPrisms(st, scene, t, pg);   /* P61 T4a: ... and the prisms come apart in that same drain - AFTER it, so the drain's particle cache is always taken from faces at home */
+    if (scene.prop_morphs) lpPropMorphPaint(el, st, scene, t);   /* P69 T26e: props and marks becoming each other - BEFORE the soft bars read the marks */
     for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b: the soft bars' feet and shadows, off what every painter wrote at t */
+  };
+
+  /* ================= P69 T26f / E99 s108 - THE PAGE'S CHROME IS OBJECTS =================
+     The operator (2026-09-23): "Why can't the title re-scale? we have full rescaling capabilities, we should have free
+     dynamic movement between camera and objects." The page's chrome - title, sub, source, y ticks, x ticks, axis names,
+     key rail, badge rail - is a set of OBJECTS the row's camera names (`scene.camera.chrome`, compiled {mode, k, moves}
+     by build_scene_timeline_f.compile_chrome). Opt-in to the byte: a scene whose camera names no chrome returns on the
+     first line and touches nothing.
+       THE PLANE (REUSED, not a second mechanism): P58 T3's depth law, `camLayerState` (CAPABILITIES:153) - an object on
+     the plane k sees plane zoom 1 + (s - 1) k landing look + (at - look) k. `screen` is k 0 (the object stands where it
+     stood, at its own size), `depth` is the row's k, `fit` the largest k in [0, 1] keeping it whole CHROME.FIT_PAD_PX off
+     each edge (chromeFitK - the gate's chrome_fit_k line for line), `world` k 1 (it only MOVES). The plot stays at k 1.
+       HOW IT IS PAINTED. After the world has its camera (paint's last act), each object's element is MEASURED on the
+     stage with its own transform cleared - its parent chain then IS the camera the page content sees (Cam_cur) over the
+     page's envelope - and given the one correction that re-seats it: D = Cam_k . M . Cam_cur^-1 in stage px (M the
+     row's move at t, in the rest frame), conjugated into the element's own coordinates (T = P^-1 . D . P). Measured,
+     not re-derived: the punch, the roll, the breath and a snap all stay whatever they are this frame.
+       A TICK stays on its gridline (E28). Its DATA coordinate stays the plot's (k 1); its PINNED one (x for a y tick, y
+     for an x tick) takes the chrome's plane and the column's move; it keeps its own size at that plane; a label whose
+     gridline has left the frame is hidden whole (its wrapper's display) - never cut partway (E99 s80 (2)). The svg
+     labels are re-parented ONCE into their own `<g class="lp-chrome-w">` so the transform is the chrome's alone (the
+     spiral and the melt still write the label's own). A pure function of t: a cold seek paints what play paints. */
+  const CHROME = Object.freeze({ FIT_PAD_PX: 24 });   /* the gate mirrors it as CHROME_FIT_PAD_PX */
+  const CHROME_SVG = Object.freeze({ ylabel: "yticks", xtick: "xticks", axislabel: "axis_names" });   /* mark role -> object */
+  const CHROME_HTML = Object.freeze({ title: ".lp-title", sub: ".lp-sub", source: ".lp-src", key: ".lp-key", rail: ".lp-rail" });
+  const CHROME_EASE = { minjerk: minJerk, inout: (u) => camEase.inout(u), cubic: (u) => camEase.cubic(u), linear: (u) => clamp01(u) };
+  /* 2x3 affine [a, b, c, d, e, f]: (x, y) -> (a x + c y + e, b x + d y + f) - CSS matrix() order */
+  const chrMul = (A, B) => [A[0] * B[0] + A[2] * B[1], A[1] * B[0] + A[3] * B[1], A[0] * B[2] + A[2] * B[3], A[1] * B[2] + A[3] * B[3],
+                            A[0] * B[4] + A[2] * B[5] + A[4], A[1] * B[4] + A[3] * B[5] + A[5]];
+  const chrInv = (A) => { const det = A[0] * A[3] - A[1] * A[2];
+    return [A[3] / det, -A[1] / det, -A[2] / det, A[0] / det, (A[2] * A[5] - A[3] * A[4]) / det, (A[1] * A[4] - A[0] * A[5]) / det]; };
+  const chrAt = (A, p) => [A[0] * p[0] + A[2] * p[1] + A[4], A[1] * p[0] + A[3] * p[1] + A[5]];
+  const chrCam = (st) => [st.s, 0, 0, st.s, st.at[0] - st.s * st.look[0], st.at[1] - st.s * st.look[1]];   /* screen = at + s (p - look) */
+  const chrIdentity = (A) => Math.abs(A[0] - 1) + Math.abs(A[1]) + Math.abs(A[2]) + Math.abs(A[3] - 1) + Math.abs(A[4]) + Math.abs(A[5]) < 1e-9;
+  const chrCss = (A) => "matrix(" + A.map((v) => v.toFixed(6)).join(",") + ")";
+  const chrSvg = (A) => "matrix(" + A.map((v) => v.toFixed(6)).join(" ") + ")";
+  /* chromeFitK - the gate's chrome_fit_k, line for line: every edge of the box on the plane k moves linearly in k,
+     e(k) = e + k ((at - look) + (s - 1)(e - look)), so each edge bounds k alone; `axes` "x" | "y" reads one pair only.
+     `band` [top, foot] is the anchored caption's strip (a 16:9 page whose caption is anchored): an object that stood
+     wholly above it stays above it, one that stood below its foot stays below - the fit never parks ink on a caption. */
+  const chromeFitK = (box, st, W, H, pad = CHROME.FIT_PAD_PX, axes = "xy", band = null) => {
+    let k = 1;
+    const edges = [];
+    const top = band && box.y >= band[1] ? band[1] : 0, bot = band && box.y + box.h <= band[0] ? band[0] : H;
+    if (axes.includes("x")) edges.push([box.x, 0, W, st.look[0], st.at[0]], [box.x + box.w, 0, W, st.look[0], st.at[0]]);
+    if (axes.includes("y")) edges.push([box.y, top, H, st.look[1], st.at[1]], [box.y + box.h, 0, bot, st.look[1], st.at[1]]);
+    for (const [e0, lo, hi, l0, a0] of edges) {
+      const v = (a0 - l0) + (st.s - 1) * (e0 - l0);
+      const loM = lo + Math.min(pad, Math.max(0, e0 - lo)), hiM = hi - Math.min(pad, Math.max(0, hi - e0));
+      if (v < -1e-12) k = Math.min(k, Math.max(0, (e0 - loM) / -v));
+      else if (v > 1e-12) k = Math.min(k, Math.max(0, (hiM - e0) / v));
+    }
+    return Math.max(0, Math.min(1, k));
+  };
+  /* one object's move at t, in the rest frame (stage px, pre-camera): from its rest {x, y (its top-left), scale 1, rot 0}
+     through each key on its own clock (a key's null x / y is the rest's) - the compiler made every key whole */
+  const chromeMoveAt = (keys, t, rest) => {
+    const val = (k) => ({ x: k.x == null ? rest.x : k.x * STAGE_W, y: k.y == null ? rest.y : k.y * STAGE_H,
+                          sc: k.scale != null ? +k.scale : (k.w != null ? k.w * STAGE_W / Math.max(1e-6, rest.w) : 1), rot: +k.rot || 0 });
+    let cur = { x: rest.x, y: rest.y, sc: 1, rot: 0 };
+    for (const k of keys || []) {
+      if (t < k.at) break;
+      const to = val(k), u = (CHROME_EASE[k.ease] || minJerk)(clamp01((t - k.at) / Math.max(1e-6, k.dur)));
+      if (u >= 1) { cur = to; continue; }
+      const L = (p, q) => p + (q - p) * u;
+      return { x: L(cur.x, to.x), y: L(cur.y, to.y), sc: L(cur.sc, to.sc), rot: L(cur.rot, to.rot) };
+    }
+    return cur;
+  };
+  const chrMove = (tl, mv) => {   /* the rest-frame similarity: the object's top-left `tl` to (mv.x, mv.y), scaled and turned about it */
+    const r = mv.rot * Math.PI / 180, c = Math.cos(r) * mv.sc, s = Math.sin(r) * mv.sc;
+    return [c, s, -s, c, mv.x - (c * tl[0] - s * tl[1]), mv.y - (s * tl[0] + c * tl[1])];
+  };
+  const chrStage = () => { const r = document.getElementById("stage").getBoundingClientRect(); return { x: r.x, y: r.y, k: r.width / STAGE_W }; };
+  const chrRect = (el, S0) => { const r = el.getBoundingClientRect(); return { x: (r.x - S0.x) / S0.k, y: (r.y - S0.y) / S0.k, w: r.width / S0.k, h: r.height / S0.k }; };
+  const chrUnion = (bs) => { const v = bs.filter((b) => b && b.w > 0 && b.h > 0); if (!v.length) return null;
+    const x0 = Math.min(...v.map((b) => b.x)), y0 = Math.min(...v.map((b) => b.y));
+    return { x: x0, y: y0, w: Math.max(...v.map((b) => b.x + b.w)) - x0, h: Math.max(...v.map((b) => b.y + b.h)) - y0 }; };
+  /* the chart's user units -> stage px, off its measured viewport and its own viewBox / preserveAspectRatio */
+  const chrSvgFrame = (svg, S0) => {
+    const cs = getComputedStyle(svg), R = chrRect(svg, S0);   /* its fractional layout size - clientWidth rounds */
+    const cw = parseFloat(cs.width) || svg.clientWidth || 1, ch = parseFloat(cs.height) || svg.clientHeight || 1, gx = R.w / cw, gy = R.h / ch;
+    const vb = svg.viewBox && svg.viewBox.baseVal, par = svg.preserveAspectRatio && svg.preserveAspectRatio.baseVal;
+    if (!vb || !(vb.width > 0) || !(vb.height > 0)) return [gx, 0, 0, gy, R.x, R.y];
+    const align = par ? par.align : 6, slice = par && par.meetOrSlice === 2;
+    let sx = cw / vb.width, sy = ch / vb.height, ox = 0, oy = 0;
+    if (align !== 1) {
+      const m = slice ? Math.max(sx, sy) : Math.min(sx, sy); sx = sy = m;
+      const fx = [0, 0, 0, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1][align] ?? 0.5, fy = [0, 0, 0, 0, 0, 0.5, 0.5, 0.5, 1, 1, 1][align] ?? 0.5;
+      ox = (cw - vb.width * m) * fx; oy = (ch - vb.height * m) * fy;
+    }
+    return [gx * sx, 0, 0, gy * sy, R.x + gx * (ox - vb.x * sx), R.y + gy * (oy - vb.y * sy)];
+  };
+  /* the svg chrome labels, each in its own wrapper - once per label, only on a page whose camera names chrome */
+  const chromeWrap = (S) => {
+    const out = [];
+    for (const m of S.marks || []) {
+      const obj = CHROME_SVG[m.role];
+      if (!obj || !m.el || !m.el.parentNode) continue;
+      let w = m.el.parentNode;
+      if (!(w.classList && w.classList.contains("lp-chrome-w"))) {
+        if (w !== S.chart) continue;   /* a label inside another group keeps that group's frame: not re-parented */
+        w = document.createElementNS(NSV, "g"); w.setAttribute("class", "lp-chrome-w"); w.dataset.chrome = obj;
+        S.chart.insertBefore(w, m.el); w.appendChild(m.el);
+      }
+      out.push({ obj, w, label: m.el, anchor: m.el.getAttribute("text-anchor") || "start" });
+    }
+    return out;
+  };
+  /* one RIGID object (the title, sub, source, key, rail; the axis names per chart state): one correction for all its
+     elements - its rest box (the measured union, taken off the camera it stands under now), its move at t, its plane */
+  const lpChromeRigid = (C, o) => {
+    const U = chrUnion(o.parts.map((p) => p.R));
+    if (!U) return;
+    const tl = chrAt(C.CcurI, [U.x, U.y]), rest = { x: tl[0], y: tl[1], w: U.w / C.camCur.s, h: U.h / C.camCur.s };
+    const mv = chromeMoveAt(C.moves[o.obj], C.t, rest), M = chrMove([rest.x, rest.y], mv);
+    const moved = chrUnion([[0, 0], [1, 0], [0, 1], [1, 1]].map(([u, v]) => {
+      const q = chrAt(M, [rest.x + u * rest.w, rest.y + v * rest.h]); return { x: q[0], y: q[1], w: 1e-9, h: 1e-9 }; }));
+    const k = C.kOf(moved, "xy"), D = chrMul(chrCam(C.planeAt(k)), chrMul(M, C.CcurI));
+    for (const p of o.parts) {
+      const T = chrMul(chrInv(p.P), chrMul(D, p.P)), id = chrIdentity(T);
+      if (p.svg) { if (!id) p.e.setAttribute("transform", chrSvg(T)); }
+      else { p.e.style.transformOrigin = "0 0"; p.e.style.transform = id ? "" : chrCss(T); }
+    }
+    const B = chrAt(D, [U.x, U.y]), sc = Math.hypot(D[0], D[1]);
+    if (!o.S || o.S === C.active) C.report.objects[o.obj] = { k, rest: [moved.x, moved.y, moved.w, moved.h], box: [B[0], B[1], U.w * sc, U.h * sc] };
+  };
+  /* one TICK column (per chart state): each label's pinned coordinate on the chrome's plane and the column's move, its
+     data coordinate the plot's (E28), its own size at that plane; hidden whole once its gridline has left the frame */
+  const lpChromeColumn = (C, obj, S, qs) => {
+    const pin = obj === "yticks" ? 0 : 1, rects = qs.map((q) => chrRect(q.label, C.S0)), U = chrUnion(rects);
+    if (!U) return;
+    const tl = chrAt(C.CcurI, [U.x, U.y]), rest = { x: tl[0], y: tl[1], w: U.w / C.camCur.s, h: U.h / C.camCur.s };
+    const mv = chromeMoveAt(C.moves[obj], C.t, rest), colM = chrMove([rest.x, rest.y], Object.assign({}, mv, { rot: 0 }));
+    const col = { x: pin === 0 ? chrAt(colM, [rest.x, 0])[0] : rest.x, y: pin === 1 ? chrAt(colM, [0, rest.y])[1] : rest.y,
+                  w: pin === 0 ? rest.w * mv.sc : rest.w, h: pin === 1 ? rest.h * mv.sc : rest.h };
+    const k = C.kOf(col, pin === 0 ? "x" : "y"), plane = C.planeAt(k), Ck = chrCam(plane), ratio = mv.sc * plane.s / C.camCur.s;
+    const P = C.frameOf(S), Pi = chrInv(P);
+    qs.forEach((q, i) => {
+      const R = rects[i];
+      if (!(R.w > 0 && R.h > 0)) return;
+      const a = q.anchor === "end" ? R.x + R.w : q.anchor === "middle" ? R.x + R.w / 2 : R.x;
+      const A1 = pin === 0 ? [a, R.y + R.h / 2] : [R.x + R.w / 2, R.y];   /* the label's anchor on screen now ... */
+      const r = chrAt(C.CcurI, A1);                                         /* ... and in the rest frame */
+      const Q = pin === 0 ? [chrAt(Ck, [chrAt(colM, r)[0], r[1]])[0], A1[1]] : [A1[0], chrAt(Ck, [r[0], chrAt(colM, r)[1]])[1]];
+      const D = [ratio, 0, 0, ratio, Q[0] - ratio * A1[0], Q[1] - ratio * A1[1]];
+      const out = pin === 0 ? (Q[1] - ratio * R.h / 2 < 0 || Q[1] + ratio * R.h / 2 > STAGE_H)
+                            : (Q[0] - ratio * (A1[0] - R.x) < 0 || Q[0] + ratio * (R.x + R.w - A1[0]) > STAGE_W);
+      const T = chrMul(Pi, chrMul(D, P));
+      if (!chrIdentity(T)) q.w.setAttribute("transform", chrSvg(T));
+      q.w.style.display = out ? "none" : "";
+    });
+    if (S === C.active) C.report.objects[obj] = { k, rest: [col.x, col.y, col.w, col.h] };
+  };
+  /* this frame's chrome context: the camera (and the one the page's content stands under), the plane law, the fit */
+  const lpChromeContext = (st, scene, t, ch) => {
+    const S0 = chrStage(), pg = scene.world.page || {}, xf = camNow(scene, t);
+    const cam = { s: xf.s, look: [xf.ox, xf.oy], at: [xf.ax != null ? xf.ax : xf.ox, xf.ay != null ? xf.ay : xf.oy] };
+    const pk = pageDepthOf(pg), camCur = pk ? camLayerState(cam, pk) : cam;
+    const band = !PORTRAIT && pg.caption === "anchor" ? [LP_LONGFORM.CAPTION_TOP, LP_LONGFORM.CAPTION_FOOT] : null;   /* the gate's _chrome_band */
+    const frames = new Map();
+    return { t, S0, cam, camCur, CcurI: chrInv(chrCam(camCur)), moves: ch.moves || {},
+             planeAt: (k) => (ch.mode === "world" ? camCur : k === PARALLAX.FLAT ? cam : camLayerState(cam, k)),   /* `world`: it only moves - the plot's plane */
+             kOf: (box, axes) => (ch.mode === "fit" ? chromeFitK(box, cam, STAGE_W, STAGE_H, CHROME.FIT_PAD_PX, axes, band) : ch.mode === "world" ? PARALLAX.FLAT : +ch.k),
+             frameOf: (S) => { if (!frames.has(S)) frames.set(S, chrSvgFrame(S.chart, S0)); return frames.get(S); },
+             active: (st.states || [st])[st.active | 0], report: { t, mode: ch.mode, objects: {} } };
+  };
+  const lpPaintChrome = (el, scene, t) => {
+    const ch = (scene.camera || {}).chrome, st = el.__lp;
+    if (!ch || !ch.mode || !st || !st.page) return;
+    const C = lpChromeContext(st, scene, t, ch);
+    /* every object's elements with the chrome's own transform CLEARED, then measured in one layout */
+    const html = Object.keys(CHROME_HTML).map((obj) => ({ obj, els: [...st.page.querySelectorAll(CHROME_HTML[obj])].filter((e) => e.offsetParent !== null) }));
+    const svg = (st.states || [st]).flatMap((S) => chromeWrap(S).map((q) => Object.assign(q, { S })));
+    for (const o of html) for (const e of o.els) e.style.transform = "";
+    for (const q of svg) { q.w.removeAttribute("transform"); q.w.style.display = ""; }
+    const groupBy = (qs) => [...qs.reduce((m, q) => m.set(q.S, [...(m.get(q.S) || []), q]), new Map())];   /* one column per chart state */
+    /* an ink element's local px -> stage px: the PAGE's own scale (its measured box over its fractional layout size -
+       offsetWidth rounds to an integer, which on a 31.1 px sub is a 0.4 % error) from the element's measured corner */
+    const PR = chrRect(st.page, C.S0), pcs = getComputedStyle(st.page);
+    const gx = PR.w / (parseFloat(pcs.width) || PR.w || 1), gy = PR.h / (parseFloat(pcs.height) || PR.h || 1);
+    html.forEach((o) => lpChromeRigid(C, { obj: o.obj, parts: o.els.map((e) => { const R = chrRect(e, C.S0); return { e, R, P: [gx, 0, 0, gy, R.x, R.y] }; }) }));
+    for (const [S, qs] of groupBy(svg.filter((q) => q.obj === "axis_names")))
+      lpChromeRigid(C, { obj: "axis_names", S, parts: qs.map((q) => ({ e: q.w, svg: true, R: chrRect(q.label, C.S0), P: C.frameOf(S) })) });
+    for (const obj of ["yticks", "xticks"]) for (const [S, qs] of groupBy(svg.filter((q) => q.obj === obj))) lpChromeColumn(C, obj, S, qs);
+    st.chromeReport = C.report;
   };
 
   /* ================= MOTION MENU species (doc 29 s9.27; P35 T6 / T7) =================
@@ -17404,6 +18046,7 @@ async function mount(doc) {
     wB.style.filter = el.style.filter || "";
   };
   const render = (t) => {
+    pmHideAll();   /* P69 T26e: a prop morph's mesh shows only on a frame that paints it */
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
     const sc = TL.scenes[si];
@@ -17521,6 +18164,7 @@ async function mount(doc) {
         el.dataset.worldRest = restFlat;   /* P58 T6: what sits UNDER the camera on this element, for a mechanism read at another depth (camDepthSwap) */
         el.style.transform = camCss(camXfNow) + restFlat;
       }
+      if (isLedger && !surfaceArrival) lpPaintChrome(el, scene, t);   /* P69 T26f: the page's chrome, re-seated against the camera it now stands under */
     };
     const prev = TL.scenes[si - 1];
     wA.style.display = "";
@@ -17758,6 +18402,14 @@ async function mount(doc) {
                                      origin[0] || 0, origin[1] || 0) + " " + wA.style.transform;
       }
     }
+    /* P69 T26e (the parent's review, (c)): `exit: morph:prop` ARRIVES ON THE CUT - over its seconds the outgoing PAGE
+       stands over this scene's world and collapses into the prop, revealing the world beneath as it goes. The suck's and
+       the door's layering (the outgoing world above), with the world's own ground made clear so only the page's carved
+       panel covers anything, and the mesh's layer above the page so the prop's pixels arrive over it. */
+    const pmOver = prev && (prev.prop_morphs || []).find((pm) => pm.over && t >= pm.at && t < pm.at + pm.dur);
+    if (pmOver) { wA.style.zIndex = 3; wA.style.setProperty("background-color", "transparent", "important"); }   /* the ledger world's cream is `!important` in the template */
+    else if (wA.style.backgroundColor) wA.style.removeProperty("background-color");
+    if (PM_LAYER) PM_LAYER.div.style.zIndex = pmOver ? "4" : "";
     if (meltOn) paintMelt({ wA, wB, t, t0: sc.span[0], el: lpEl, opts: meltOn,
                             /* P58 T6 (b): the plane the ball melts at - the OUTGOING world's own camera, read at k */
                             worldCss: camDepthSwap(wA, prev, t, +meltOn.depth || 0),
@@ -17770,7 +18422,7 @@ async function mount(doc) {
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * STAGE_W}px)`;
 
     /* LAYER 2/3 — docks live on their own schedule */
-    const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + EXIT);
+    const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + (d.handed ? 0 : EXIT));   /* P69 T26e: a HANDED prop leaves on its word - the morph's mesh carries its pixels from that frame */
     const washOn = WASHES.some(([a, b]) => t >= a && t < b + EXIT);
     wash.classList.toggle("on", washOn);
     spot.classList.toggle("on", washOn);
@@ -17938,7 +18590,8 @@ async function mount(doc) {
         /* R26-20 send-back: the ring's peak and the approach's scale are the ones the compiler FITTED to the room
            (`ring_to` / `from_to`, stamp_ring_fit) - capped there, never clipped here; an entry with neither keeps the
            source's 2x ring and 2.1x approach */
-        const sfit = Object.assign({}, opts, d.ring_to ? { RING_TO: +d.ring_to } : {}, d.from_to ? { FROM: +d.from_to } : {});   /* ... and the approach it comes down from */
+        const sfit = Object.assign({}, opts, d.ring_to ? { RING_TO: +d.ring_to } : {}, d.from_to ? { FROM: +d.from_to } : {},   /* ... and the approach it comes down from */
+          stamped && d.rot != null ? { LAND_DEG: +d.rot } : {});   /* P69 T26d: an AUTHORED rest - the spring lands there (its wind and overshoot turn about it) */
         const sx = stamped ? stampXf(d.mass || "ink", t - d.enter, sfit)
           : arr === "throw" ? throwXf(from, d.mass || "paper", t - d.enter, opts) : landXf(d.mass || "paper", t - d.enter, opts);
         /* the mark turns about its PAINTED centre (the compiler's `paint`, fractions of the canvas - R26-20, the operator's
@@ -17998,11 +18651,13 @@ async function mount(doc) {
         if (sx.shake && (sx.shake.x || sx.shake.y)) { worldAnswer.x += sx.shake.x; worldAnswer.y += sx.shake.y; }
       } else if (G) {
         if (contact) contact.style.opacity = "0";
-        const pk = springPop(clamp01((t - d.enter) / DOCK_POP_S));
+        const born = d.arrive === "morph";   /* P69 T26e: a prop BORN of a morph stands from its first frame - the mesh landed it there */
+        const pk = born ? 1 : springPop(clamp01((t - d.enter) / DOCK_POP_S));
+        if (born && isProp) propRest = clamp01((t - d.enter) / PROP_MORPH.BORN_HATCH_S);   /* ... and its resting shadow comes in under it */
         const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;
         el.style.transform = "scale(" + (DOCK_POP_FROM + (1 - DOCK_POP_FROM) * (pk - rk)).toFixed(4) + ")"
           + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);   /* E49: the parked card breathes */
-        if (!swept) el.style.opacity = clamp01(1 - rk) * clamp01((t - d.enter) / DOCK_FADE_S);
+        if (!swept) el.style.opacity = clamp01(1 - rk) * (born ? 1 : clamp01((t - d.enter) / DOCK_FADE_S));
       } else if (camArr && camArr.slide === d.slide) {   /* P49 T5: the landed card rides the arrival - screen = at + s (p - look), written about the card's own top-left */
         const st = camArr.state, L = el.offsetLeft, Tp = el.offsetTop;
         el.style.transformOrigin = "0 0";
@@ -18012,6 +18667,23 @@ async function mount(doc) {
         ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
         : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")")
         + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);
+      /* P69 T26d / E99 s106: a PROP's authored pose - the turn it rests at (a non-stamp arrival rests square, so the whole
+         `rot` is turned here; a stamp's spring already rests at it) and every later key's turn - about its PAINTED centre
+         (a stamp's own origin), prepended to the arrival's transform so the landing plays inside it. The camera's prefix and
+         the dock's plane compose outside it, and the hatch reads the whole resolved transform, so it rides the move. */
+      if (isProp && (d.rot != null || d.moves)) {
+        const stampedP = arr === "stamp", base = d.rot != null ? +d.rot : (stampedP ? STAMP_ARRIVAL.LAND_DEG : 0);
+        const turn = propPose(d, t, base).rot - (stampedP ? base : 0);
+        if (Math.abs(turn) > 1e-6) {
+          const org = (getComputedStyle(el).transformOrigin || "").split(" ").map(parseFloat);
+          const pbq = Array.isArray(d.paint) && d.paint.length === 4 ? d.paint : [0, 0, 1, 1];
+          const Wq = el.offsetWidth || 0, Hq = el.offsetHeight || 0;
+          const dx = Wq * (pbq[0] + pbq[2]) / 2 - (Number.isFinite(org[0]) ? org[0] : Wq / 2);
+          const dy = Hq * (pbq[1] + pbq[3]) / 2 - (Number.isFinite(org[1]) ? org[1] : Hq / 2);
+          el.style.transform = "translate(" + dx.toFixed(2) + "px, " + dy.toFixed(2) + "px) rotate(" + turn.toFixed(3) + "deg) translate("
+            + (-dx).toFixed(2) + "px, " + (-dy).toFixed(2) + "px) " + el.style.transform;
+        }
+      }
       if (camArr && camArr.slide === d.slide) {   /* P49 T5: the landed card rides the arrival - screen = at + s (p - look), composed BEFORE the card's own transform about the card's own centre (its origin) */
         /* the prefix composes about the card's OWN transform-origin (a thrown card's is its bottom edge, the squash's contact
            edge - the first cut scaled about the centre and the card climbed 250 px off the top at the match) */
@@ -18376,6 +19048,12 @@ async function mount(doc) {
     let target = null;
     if (tg) { const b = resolveTarget(tg); if (b) target = Object.assign(camInFrame(fr, b, st.s), { box: b, screen: camProject(st, [b.x, b.y]) }); }
     return { scene: sc.scene_id, on: kin("camera"), zoom: st.s, look: st.look, at: st.at, frustum: fr, target };
+  };
+  /* P69 T26f: the page's chrome as this frame painted it - each object's plane k, its rest box (after its move, pre-
+     camera, stage px) and where it stands on the stage; null on a page whose camera names no chrome */
+  window.__chrome = () => {
+    const world = [wB, wA].find((e) => e.__lp && e.classList.contains("ledger") && e.style.display !== "none");
+    return (world && world.__lp.chromeReport) || null;
   };
   window.__morphInvariants = (key) => {   /* no key: the page-enter morph; "from>to": a morph_to between two states (P48 T5) */
     const world = [wB, wA].find((e) => e.__lp && e.classList.contains("ledger")); if (!world) return null;

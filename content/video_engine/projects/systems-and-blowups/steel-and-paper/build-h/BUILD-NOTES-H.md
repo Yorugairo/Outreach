@@ -1104,6 +1104,52 @@ rescale / extend, morph, melt:splash:chart and melt:morph. Seam `195.82 s08->s09
 verified, `ref-sha.txt`; `ref-map.txt`, Script G 173.2-199.5). build-f holds the old two-panel card small over the broadcast desk,
 then a bare desk for the concession; H holds the page full-stage through both.
 
+### 14b. P69 T23b - PROP 1 the Fed STAMPED (the blockers closed on the merged tree) - 2026-09-23
+
+Running record (lane A on `88574ca`, the merged tree with T6d / fixes4 / T26a / T26b).
+
+1. **The page measured.** Door recompiled first on the merged tree with the stamp still withheld (`logs/t23b-door0.log`, rc 0 -
+   the compiled timeline predated the merge), then `measure_page_boxes.py --write --project .../build-h`
+   (`logs/t23b-measure.log`), the fixture converted CRLF -> LF, `--check` PASS 5 builders x 15 geometries identical
+   (`logs/t23b-measure-check.log`). **Fixture diff:** 10 pages ADDED from `build-h/steel-and-paper-h.timeline.json` (ink
+   `8da72baa88183171` the divergence, `850b6e0c54d66051` the railway index, `641b65e1dd5c1b0b` the GDP share, `1cd30ecec2e0face`
+   the yardstick, `c7f47e6901b8da0f` the breakthrough bars, `316b119c84ed85b6` the two-eras v4, `eef3ea7369ac5953` the issuance,
+   `fc0918b8aaf315dc` the IG index, `f921e49d322a2eed` the capex consensus, `c9615348e042ad9c` the 94 bars), each with `boxes`,
+   `data_mask`, `axis`, `bands` and (line pages) `tag_boxes` / `tag_ink`; the build-h timeline added to `projects`;
+   `player_sha256` a0917108... -> 7d5ed1222faa... (the merged engine); the five Tokyo pages and every `builders` / `profiles` /
+   `stage` entry UNCHANGED. Card places before vs after on rows 1-17: identical boxes (row 5's sell ticket now `empty` where it
+   was `corner`, the same [1382, 107, 384, 347]).
+2. **The stamp lands.** `FED_STAMPED = True`: the fit takes the right margin under the two end tags - `outside: mark 248x228
+   painted px (12.9% of the stage width)`, box [1363, 577, 250, 230], right of the plot (x 81-1313), never over a series.
+3. **The camera is CLAMPED** (`FED_CAM_REACH = "clamp"`): without it T26b refuses the landing pull by name -
+   "zoom 1.06 about its card's centre (1488, 692) ... past the reachable zoom 1.03 ... the y tick column's left edge leaves the
+   stage at 1.031" (`logs/t23b-door1.log`, rc 1). Clamped: "CLAMPED to 1.03 ... 1.03 is under the ~1.06 floor, so this is no
+   longer a move (E99 s80 (3))" (`t23b-door-final.log`). A better aim was looked for and there is none: over a 30 x 13 grid of
+   looks on v4 (the page's idle boxes, the compiler's own `_page_reach`) the best reach anywhere is **1.039** (x 1200, bound by
+   the title's right edge - a full-stage page's title spans the stage). So on this page the landing carries no real push;
+   named for the parent (E51 on a full-stage page is a sub-floor move or none).
+4. **Fixed on the way:** the Fed's dock exit was `t_row9_end` (T23's unit end) and compiled to 358.03 on a scene ending 242.38 - it
+   now ends with its page, `t_q` (R26-219), `exit 242.38`.
+
+**HG2 strip** (`scratchpad/p69t23b/`): `tiles-sheet.png` (217.40 before, 217.50 enter, 217.61 contact, 217.76 +0.15, 218.60
+settled, 219.40 / 220.40 parked, 223.00, 230.00, 241.00) and `fed-crops-sheet.png` (2x: enter, contact, settled, parked). Read as a
+viewer: **no black square** - the cutout's sky is the page (T6d's PNG embed); the shock ring is a clean circle at contact; the
+hatch is a faint shadow under the base that follows the silhouette (weak on the dark plot - it reads as depth, not as a shape);
+the Fed stands right of the plot and never over a series; it parks ~30 px under the "4.7% AI ERA" tag once that tag draws
+(230.0 / 241.0), touching nothing. The retitle writes over 217.46-219.4 as the stamp lands. Title and axes stay in frame through
+the clamp: the title sits ~20 px from the left edge at rest after the pull (218.6 onward), the y ticks and the source whole.
+
+**The order of proof (`logs/`, the T23b build, 0.00-358.03):** `t23b-door-final.log` (rc 0, cues 23 of 23 bound, the clamp line),
+`t23b-probe.log` (133 instants), `t23b-frozen.log` (no run of identical frames over 0.50 s), `t23b-gate.log` stamped after the frame
+hashes **3 FAIL / 3 WARN / 22 PASS / 1 JUDGE / 4 INFO** - M03 now reads **62 s from 4:02** (row 16's recasts, R26-280): **row 15's
+47 s wait from 3:15 is CLOSED** by the stamp's arrival at 217.46; M11 (row 1) and M31 (row 15's 0.2 s probe blind spot at the melt,
+section 14) pre-existing; WARN M04, M21 (s09 17.2 s, s10 14.8 s - section 14/15), M25 (row 1's certificate at 0:09-0:10);
+`t23b-seams.log` 12 boundaries, 0 faults (195.82 melt darkest 23.2, 242.38 melt 23.1 clean); `t23b-spoken.log` 3 pointing phrases,
+0 uncovered; `t23b-stagegaps.log` 195.82 melt 0.2 s (named, section 14), 242.38 melt 0.0 s. Drafts: `t23b-door0.log` (withheld,
+merged tree), `t23b-door1.log` (the refusal), `t23b-door2.log`. Life on row 15 is unchanged from section 14 (`idle=live`).
+build-f at the same sentence: `scratchpad/p69t23/final2/ref-sheet.png` (T23's grab, sha verified then; Script G 184.0 = "The Fed
+at 6.5 in 2000" - build-f shows the old two-panel card small over the broadcast desk, no Fed).
+
 ## 15. P69 T24 (row 16) - who is paying: the issuance, two recasts, the filings on the desk; PROP 2 STAMPED - 2026-09-23
 
 The build runs 0.00-321.12 s (897 of 2335 words). `UNIT_CUT_PHRASE` = "So put it together" (row 17, T25's). RED: `t24-red.log`
@@ -1269,3 +1315,238 @@ life as above (334.5 vs 336.5, 2.19, 3.0%). 13 of 13 rows carry a life token.
 
 **Tiles:** `scratchpad/p69t25/final2/tiles-sheet.png` (324.9, 332.3, 332.7, 333.4, 338.55, 338.8, 340.5, 342.5, 344.0, 347.5, 350.5,
 352.5).
+
+## 17. P69 T26 - row 18 (6:04-7:13): the turn - reset 2, PROP 3, camera 3, the halving - 2026-09-23
+
+The build runs 0.00-427.43 s (1208 of 2335 words). `UNIT_CUT_PHRASE` = "And this is where the railway map" (row 19, T27's).
+RED: before the slice the table ended at row 17b (338.44-358.03, `logs/t23b-door-final.log`).
+
+Recall: `docs_find "ring on a card"` -> `docs/content-video-engine/CAPABILITIES.md:86` "A centred dock in an AUTHORED box, and a
+ring inside it" (a ring on a number ON a card) and `:87` "E56: a ring has one use - a number or a point on a CHART";
+`docs_find "badge ring"` -> `CAPABILITIES.md:79` "The STAMP arrival (arrive: stamp) and the BARE PROP payload"; `docs_find "reset
+plate"` -> `CAPABILITIES.md:71` "Dip and blur-zoom exits, WIRED" (the blur-zoom row 18d takes) and the effects card `plate_option:use`;
+`docs_find "suck"` -> `CAPABILITIES.md:38` the melt exit (E88), `:40` the slide, `:58` "The page VORTEX" (the spiral return);
+`docs_find "ghost=yes"` and `docs_find "bar_style=soft"`: 0 hits (both are T26a / T10b options in the plan and the engine,
+`scene-evidence-engine.mjs` LPMORPH; the docs layers are stale - docs_find's own banner: `build_docs_layers` FAILED on the effects
+catalogue).
+
+| table row | window | what |
+|---|---|---|
+| 13 `world-internal-memo-v1;use=landing;room=...` (row 17b, extended) | 338.44-363.38 | the filings' record to 358.85; THEIR CHART (`dock-h-two-line-copy-again`, the two-line copy of row 3) takes the record's slot on "everyone repeating this chart" (358.85, `SIGNPOST_CARD_WHY`) and leaves 1.5 s before dip 5 (361.88) |
+| 14 `world-paper-and-steel-press-v1;use=reset` | 363.38-384.12 | **dip 5** on the onset of "It was never the AI stocks" (the take has no gap after "drew it."; `PRESS_DIP_WHY`); RESET 2 - the press (a printing press spilling certificates beside a steel CNC bed: "the paper wrapped around the steel"), ken push 0.05/12/-4 alone (E99 s84); the 1845 certificate (row 2's card) thrown onto the press's pile on "was railway certificates" (372.84), box [230, 400, 384, 324], leaving on "And Bravos" (379.50) - the press then carries "And Bravos Research's own number tells you where that paper lives today." in STAGE captions (white on the machine's dark body, `final/tile-382.00.png`) |
+| 15 `ledger:ev-index-concentration-bars-v1:bars::right:axes:cut;idle=live;readability=longform;bar_style=soft` | 384.12-408.60 | **dip 6** in the breath before "AI builders are now" (`CONC_DIP_WHY`); the page on its axes, the 20 bar grows with the page and "20%" is WRITTEN as it stands (the figure the compare quotes; ONE "20%" on the page - the value never prints first); **PROP 3** stamped on "S&P five hundred" (386.11, contact ~386.26) at an AUTHORED centre in the right margin, `authored: mark 348x241 painted px`, box [1447, 332, 349, 244]; **camera 3** keys on the 20 datum from the stamp's settle (387.61) to "and calls it the market" (392.51), CLAMPED to 1.02; the statement card LANDS on "every target-date" (394.23) at [201, 325, 346, 235], left of the bar; both docks leave on "Run the arithmetic" (398.74); **the halving** `chart_to compare` on "fall by half" (402.38, 2.0 s, melt then splash, hold metric, `ghost: "yes"`): the bar morphs 20 -> 10 (T26a), "10%" over "of the index, erased if they halve", "20%" dimmed beside it, the old top a dashed ghost - the gap between is the ten points erased |
+| 16 `world-paper-and-steel-press-v1;use=reset` (returns) | 408.60-421.21 | the page MELTS and splashes back onto the press (`PRESS_MELT_WHY`) in the breath before "So look at that"; the certificate is thrown back as the splash lands (409.65); on "that certificate" (410.18) the `callout` rings its face and writes its figure RAIL_DROP "-64%" (`label_scale` 2), held to 419.71 (1.5 s before the world changes) |
+| 17 `ledger:ev-railway-index-v1:line:139:right:built:cut;idle=live;readability=longform` | 421.21-427.43 | "1845 is the proof": the railway index of rows 8-9 RETURNS behind a **blur-zoom** (`RAIL_RETURN_WHY`), BUILT (E25); its own "-64%" is written at the trough, under the 1843 rule, as "lost two-thirds" is said (425.30) |
+
+**Measured and fixed** (drafts: `scratchpad/p69t26/draft1..6/`; the private build `scratchpad/p69t26/build` via
+`STEEL_H_BUILD_DIR`; then `logs/t26-door1..3.log` in this build):
+- `cut_before("It was never")` refused (gap 0.00 s, M13) - dip 5 is centred on the onset (row 17's dip 4, the same case).
+- "railway certificates" and "certificate again" are not phrases in the take (the dash glues them) - anchored on "was railway"
+  and "that certificate".
+- THEIR CHART never painted on the desk (probe `docks: []` at 359.2 / 360.5, thrown or landed): row 7's snap retires
+  `dock-h-two-line-copy`'s element for the rest of the episode. The desk shows the same derived page under its own id
+  `dock-h-two-line-copy-again`. Engine owner: a snapped card's id should be reusable.
+- The statement card beside the stamp: refused on the template slot, then on the stamp's ring under it ([1391, 239, 465, 465]);
+  placed in the plot's empty upper left. Thrown, its flight crossed the 20 bar's top for ~0.4 s (first final pass, tile 394.60)
+  -> `arrive: "land"`; at 0.22 wide it sat under the comparator label the halving writes later (probe M25 / M27 FAIL "on the
+  finished chart") -> 0.18 wide.
+- PROP 3 on the MEASURED page: the fit's own choice (`right: mark 550x381` at [1207, 291, 552, 385]) reached 160 px into the plot
+  and covered the "historically 2-4%" label (`draft5/`) - the page's `data_mask` holds only the bar, never the rules or their
+  label - so its centre is authored in the right margin (0.845, 0.42, capped at 0.2). Owner: the fixture / the fit.
+- M01 / M08 FAIL (17.2 s at 6:50 after the ring) and M05 FAIL (the press 8.4 s dead at 6:14), draft 1: the certificate now leaves
+  on "And Bravos" (stage captions carry the press), and "1845 is the proof" RETURNS the railway index (the proof is the index's
+  fall; build-f shows the same page at the same sentence, `final/ref/ref-423.00.png`).
+- M14 FAIL (camera keys 386.3-387.2 over the stamp's build 386.1-387.6), draft 1: the push starts at the stamp's settle (387.61).
+- The spiral return out of the press opened on ~0.7 s of EMPTY board (421.3-422.0, `spiral/tiles-sheet.png`) - the vortex has no
+  outgoing page to unwind from a plate; the page arrives `built` behind a blur-zoom instead (`draft4/`).
+- The certificate's ring label at 1x read ~20 px on the card's border (`draft1/tile-426.80.png`) -> `label_scale: 2.0`.
+
+**The fixture (T26):** `measure_page_boxes.py --write --project .../build-h`, then a plain `--write`: the first run recorded the
+build-h timeline TWICE in `projects` (`--project <dir>` and the recorded file path are different strings for one timeline), and
+`--check` failed on that drift (`logs/t26-measure-check-dup.log`; one earlier `--check` died on a Playwright NetworkError). Final:
+2 pages ADDED - `4a3aeb304e40e2da` "One bet, a fifth of the index" (story) and `9cc84086cf1b1e23` the railway index in the
+long-form profile (dense-line); `projects`, `player_sha256`, `builders`, `profiles`, `stage` and every other page UNCHANGED
+against the T23b fixture; LF; `--check` PASS (`logs/t26-measure-check.log`).
+
+**Named, not fixed:**
+- **Camera 3 is CLAMPED to 1.02** ("the title's right edge leaves the stage at 1.024 ... 1.02 is under the ~1.06 floor, so this is
+  no longer a move (E99 s80 (3))", `logs/t26-door-final.log`). Over a 30 x 13 grid of looks on this page the best reach anywhere
+  is 1.039 (the full-width title binds), so no aim reads truer: E51's push on the 20 is sub-floor on a full-stage page. The same
+  holds for row 15's Fed (1.03). The operator's E99 s108 (2026-09-23, landed during this slice - the title as an object that
+  rescales for the camera, lane B T26f) is the door that opens it.
+- **M21 WARN s15 21.5 s (6:27 -> 6:48):** the gate's E50 clock starts at the bar's landing and never counts the halving - a
+  `chart_to compare` is not in `TRANSITION_DATA_KINDS` (`gate_motion_density.py:165`), though T26a's compare now changes the bar's
+  value. On the frame the page lives ~4 s past the halving's landing (404.4 -> 408.6). Owner: the gate (a compare that moves a
+  bar is a data mark).
+- **M27 WARN:** the statement card inside the plot's box, clear of its ink, on the finished chart - E65's own listing.
+- **The melt flips the caption to STAGE mode over the melting page** (408.7: "companies never get a vote." centred over the
+  page's sagging "10%" labels, ~0.7 s): the melt runs in the plate's scene, which has no dock live at the caption page's start.
+  Owner: the engine / caption layer.
+- **The blur-zoom's incoming page shows a cream margin for ~0.1 s** (421.30, the 1/1.10 rise - CAPABILITIES:71 flags it).
+- **Their chart on the desk is a card** (0.58 of the stage, [106, 184, 1113, 626]; the card's own type is small) - it is the
+  callback to row 3's "fourth copy", read as the chart it is, for 3 s. If the parent reads it as "a chart at card size", the door
+  is a snap / push onto the divergence page (row 20's return, T28's).
+- **Cues 31 of 32**: "[silent] no cue mapped for page enter (built) at 421.21s on s17" (the kit's cue map has no `built` enter)
+  and, as on row 17, "no cue mapped for suck". Owner: sound / `authoring.audio`.
+- The ghost's dashed corners are drawn in the bar's crimson/orange, the same ink as the bar (T26a's own choice).
+
+**Departures (for BODY_DEPARTURES / the parent - the door's table is not edited here):** the treatment's "the ring holds" through
+"1845 is the proof" -> the railway index RETURNS for the proof (M01 / M08 on the held ring; build-f's own frame at the sentence is
+that page); the certificate's "-66%" -> the ring's own label RAIL_DROP "-64%" (no badge: a badge and a ring would print the
+number twice); "target-date fund" a THROWN card -> LANDED (a throw across the bar); camera 3 "tied to the stamp's contact" ->
+from the stamp's settle (M14); the halving's "10 figure lands" -> the compare's own comparator on the moved bar (no separate
+figure - R26-284); the signpost ("this chart") -> their chart as a card on the desk (not in the treatment's row).
+
+**Transitions** (printed in `SHOT-TABLE-H.md`): the slot hand-off on the desk (`SIGNPOST_CARD_WHY`); **dip 5** desk -> press
+(`PRESS_DIP_WHY`: the melt, the suck / the slide, the thread, the door, recast / rescale / morph refused); **dip 6** press -> page
+(`CONC_DIP_WHY`: the snap / throw-then-zoom / throw-then-push, object-becomes-chart, the spiral return, the mount, the axes open as
+the carrier, the melt, recast / rescale / morph refused); the halving (`HALVING_WHY`: recast, rescale, a figure beside the bar, a
+second bar refused); the **melt's splash** page -> press (`PRESS_MELT_WHY`: the dip, the suck (spent 71 s earlier), the vortex, the
+slide, holding the page refused); the **blur-zoom** press -> railway index (`RAIL_RETURN_WHY`: the spiral return (measured empty
+board), the dip, the axes open, the snap / throw-then-push, the melt, holding the certificate refused). Flow count: 0 cuts, 6 dips
+(each at a world change), 1 arrival carrying a boundary, 9 transforms.
+
+**Life** (`scratchpad/p69t26/final/life.txt`, box x 0-1500, y 150-850): the press 368.0 vs 370.0 mean |dL| 33.67, 65.2% changed
+(ken push); the concentration page 391.0 vs 393.0 3.85, 7.4% (the breath, the electric, and camera 3's release); the press again
+412.5 vs 414.5 19.64, 51.7%; the returning index 423.0 vs 425.0 4.14, 4.9%. Rows 17 of 17 carry a life token (row 14 / 16 ken
+0.05/12/-4, row 15 / 17 `idle=live`); no run of identical frames over 0.50 s (`t26-frozen.log`, 0-427.43).
+
+**Bar width:** the probe's data box on the concentration page is 202 px wide at 391.0 (the page's breath inflates it ~3%; at rest
+196 px, T6c's cap). **Soft style:** rounded shoulders and the hatch shadow read on `final/bar-soft-crop2x.png` /
+`halved-crop2x.png` - the one bars page on this lane with `;bar_style=soft`, for P69-HG3.
+
+**The order of proof (`logs/`):** `t26-door-final.log` (rc 0; cues 31 bound of 32 derived; life 17 of 17; re-run
+`t26-door-final-recheck.log` after a docstring-only edit: timeline, SHOT-TABLE-H.py and SHOT-TABLE-H.md sha256 IDENTICAL),
+`t26-probe.log` (163 instants), `t26-frozen.log` (no run of identical frames over 0.50 s), `t26-gate.log` stamped after the frame
+hashes **3 FAIL / 4 WARN / 21 PASS / 1 JUDGE / 4 INFO** - M03 (62 s from 4:02, R26-280 - E99 s105 / T26c closes it), M11 (row 1),
+M31 (row 15's 0.2 s probe blind spot), all pre-existing; WARN M02, M04, M21 (above), M27 (above); `t26-seams.log` 16 boundaries, 0
+faults (363.38 dip darkest 0.0, 384.12 dip 1.1, 408.60 melt 24.7, 421.21 blur-zoom 35.8 - all clean); `t26-spoken.log` 5 pointing
+phrases, 0 uncovered ("this chart" 359.75 on `dock-h-two-line-copy-again`, "look at" 409.93 on the certificate); `t26-stagegaps.log`
+363.38 dip 0.5 s licensed, 384.12 dip 0.2 s licensed, 408.60 melt 0.0 s, 421.21 blur-zoom 0.0 s. Drafts: `t26-door1..3.log`,
+`t26-gate-pre.log`, `t26-probe-pre.log`.
+
+**Tiles:** `scratchpad/p69t26/final/tiles-sheet.1-4.png` (41 instants, 358.5-427.0: every landing, the stamp's enter / contact /
+settle, camera 3's push and hold, the halving before / mid / after, both dips at their black, the melt, the ring, the blur-zoom),
+beside `final/ref/ref-sheet.1-2.png` (build-f's mp4, sha256 `9a27de1c...0dd3` verified against REFERENCE-F.md, `ref/ref-sha.txt`;
+`ref/ref-map.txt`, a word alignment of the two takes). build-f carries the signpost on a filing cabinet, the turn on a collage
+plate, the certificates beat as Parliament's mileage card, the 20% as a "We checked. It's bigger." card (20% vs 24.3%) over the
+envelope table, the halving on a semiconductor drawdown card, and "1845 is the proof" on the railway index card ("fell 64%") -
+H draws the concentration on its own page, halves the bar, and returns the index as a page.
+
+**TESTS RED ON THE MEASURED FIXTURE (for the parent - not fixed, tests are outside this write set):** the ten test files that read
+the door or the fixture (`test_camera_keeps_the_page`, `test_camera_zoom_and_caption_yield`, `test_caption_band`,
+`test_chart_card_readable`, `test_full_stage_page_is_measured`, `test_page_boxes`, `test_page_is_the_plate`, `test_prop_alpha`,
+`test_bar_value_morph`, `test_the_stamp_arrival`): **7 failed / 250 passed** on the T23b+T26 fixture (`logs/t26-pytest.log`)
+against **257 passed** on HEAD's fixture, the same files, the same tree (`logs/t26-pytest-baseline-head-fixture.log`; the fixture
+swapped in and restored, cmp identical). The 7 are ALL the fixture's: `test_page_boxes` asserts every project page key is in
+`M.ASPECTS` (`16:9`, `9:16`) and the tool writes `16:9|full_stage` (this is the first 16:9 full-stage project measured), and
+its tag-rect test reads y -205 on the drawn tags; `test_full_stage_page_is_measured`; `test_camera_keeps_the_page` (row 1's WARN
+now names the +21% tag, not +613%); three `test_the_stamp_arrival` rows (a golden page is now served its MEASURED entry by ink -
+the mark lands over "+613% MEMORY MAKERS" / moves from [252, 308] to [1432, 128]). Owner: lane B (the tool vs the tests on a 16:9
+full-stage project page), or the parent's call to hold the fixture back - which would re-withhold the Fed (the fit needs v4 measured).
+
+
+### 17b. P69 T26b-refresh - rows 15-18 on the merged engine (T26d `place` / `moves`, T26f `chrome`) - 2026-09-23
+
+Running record (lane A, `fable-p68` at 24cf2d0; logs `logs/t26b-*`; frames `scratchpad/p69-rows15-18/`). The operator's
+decisions: s106 (the data centre onto the capex state, "i prefer the proposed"), s108 (real pushes with the chrome as
+objects), s110 (2) (the ring may circle the certificate the sentence points at).
+
+Status: DONE (door3 = the final build; `t26b-door-final.log` / `-recheck.log` byte-identical to it). T26d's frame tree read first (`place {x 0.85, y 0.47, w 0.2}`, a move on "six hundred
+and" to `{0.85, 0.36, 0.17, rot -4}`, landing then at "data centers. And" - inside the recast; this build lands it after).
+
+**The five changes (door `logs/t26b-door1.log` draft 1, `t26b-door2.log` final):**
+1. **Row 16, PROP 2 on the capex state (s106).** `DATACENTER_PLACE` / `DATACENTER_MOVE` / `DATACENTER_MOVE_AT` - the
+   stamp is on the page row now (slot 0), `t_dc = t_bet + DEBT_RECAST_S` = 288.79 (inside "centers." 288.36-289.27, the
+   recast landed), the move on "six hundred and" (297.49, 0.8 s), exit `t_desk` with the page. The compiler: `authored
+   place: mark 384x238 painted px at (1632, 508), resting -9 deg; ring 1.05x, approach from 1.20x, drawn around it`, and
+   two T26d WARNs (the ring at its floor 1.05x where the room holds 0.97x; the approach from 1.20x where the room holds
+   1.06x - "read the frame"). Read on `d1/row16-tiles.png`: the ring at contact reaches ~20 px from the right edge for
+   its ~0.3 s; clear of every bar and label; the moved prop stands level with the $690 pill as "ninety" is said - it
+   matches the operator's mock. The desk (row 16b) keeps the leases record alone with its ken push and the steam: not
+   bare (306.5, 310.0).
+2. **Row 15's camera (s108).** `FED_CAM_*`: keys from the stamp's settle (218.96) to 1.2 at 220.16 on the dot-com
+   January 2000 high (a datum look, zoomed in place), held, back to 1.0 on "back above five" (223.60 -> 224.60),
+   `chrome: {"camera": "fit"}`; `FED_CAM_REACH` no longer read. Compiler: WARN only - "chrome: fit (E99 s108): the
+   title (would leave at 1.023; it fits the frame); the sub ...; the source ...". Read on `d1/row15-tiles.png`: the plot
+   1174 -> 1402 px (1.19x) about the peak; title, sub and source hold their size and place; the DOT-COM tag whole through
+   the rollover; the Fed in frame; the AI era's tag (lands 225.33) draws at 1.0, whole (225.6). No corner tag: at `fit`
+   the title keeps its full size in the pushed frame, so shrinking it would only lose type.
+   **The Fed steps aside (draft 3, E99 s106):** a dock stands in screen space, so the push grew the plot UNDER it - the
+   gate's M27 on draft 2: "inside the plot's box ... while the chart draws, at 3:39, 19,621 px, 26 % of the smaller box".
+   The fit's own place (T23b: centre (1488, 692), 248 px) is now AUTHORED (`FED_PLACE`) and the Fed moves to centre x
+   1600 (`FED_ASIDE_X`) on the push's clock (218.96, 1.2 s, `cubic`) and stays: M27 on the final build 558 px, 1 %,
+   during the move. Read on `d3/row15-tiles.png`: clear of the pushed plot at 220.4-224.1; at 1.0 it parks under the
+   "4.7% AI ERA" tag touching nothing (225.6, 230.0). Compiler: `authored place: mark 248x227 painted px at (1488,
+   692), resting -9 deg; ring 1.08x, approach from 1.21x`.
+3. **Row 18's camera 3 (s108).** Draft 1 (1.2 zoomed in place on the 20 datum): the plot's left edge went to x 21 (the y
+   ticks ON the panel border, "0%" on its corner) and the bar's name dropped to y ~922, touching the caption
+   (`d1/row18-pushed-388.60.png`). Final: a POINT look at the datum's rest (772, 580) landed at `at` (900, 540)
+   (`CONC_CAM_LOOK` / `CONC_CAM_AT`; row 14's rule - a datum look with `at` runs away), 1.2 from the stamp's settle
+   (387.61) to "and calls it the market", `chrome` fit. Read on `d2/cam3-tiles.png` / `d2/cam3-held-390.50.png`: ticks
+   outside the panel, the name's foot clear of the caption, the page over every edge; PROP 3 stands over the panel's
+   EMPTY upper-right corner (the panel's border passes behind it), clear of "historically 2-4%" by ~70 px.
+4. **Row 18's desk card (T10c).** `D.chart_card(SIGNPOST_CARD, ..., card_w=SIGNPOST_CARD_W)` (1190.4 px, the slot's
+   0.62 x 1920; the sidecar `docks/dock-h-two-line-copy-again.card.json`). Read on `d1/row18-desk-359.90.png`: "Two
+   lines, one warning", "+105%", "+21% s&p" / "+21% mega-cap" (the repeat NAMED), "Oct '25" / "Jul '26", "Yahoo
+   Finance" - every word at phone size. The card profile drops the sub and names only the repeating tags, so the
+   +105% line carries no name on the card (T10c's rule).
+5. **Row 18's certificate (s110 (2)).** `PRESS_CERT_SLOT` 0.20 -> 0.30 of the stage (576 px, ~2x the 282 px crop; both
+   press rows), centre y 0.52 -> 0.50; the ring's region is the WHOLE card (`CERT_FACE` (0, 0, 1, 1)) with
+   `CERT_RING_PAD` 40 - T26's ring on the cartouche ran across the crest and the face. The compiler's E56 check PASSES
+   (a region ring with a digit in its label - `_validate_callout`); no refusal. Read on `d1/row18-ringheld-414.50.png`:
+   the crest, the engraved border and the signature rule read as a certificate; the ring passes round the card and
+   grazes its top-left corner; "-64%" ~50 px, orange over the dark rollers. Limits, named: no certificate on the wall
+   (nor on any plate on disk) carries printed words, and the plate's blue light shaft stays on the card's lower-left -
+   the crop is row 2's, kept for "that certificate AGAIN"; no larger source exists (plate and source both 1536x1024).
+
+**Shot-table lines changed (`SHOT-TABLE-H.md`, `build-h/SHOT-TABLE-H.py`):** table row 10 (242.38-303.54) gains
+`prop-hyperscale-datacenter-v1` 288.79-303.54 (`place {x 0.85, y 0.47, w 0.2}`, `moves [{at "six hundred and", x 0.85,
+y 0.36, w 0.17, rot -4, dur 0.8}]`); table row 11 (the desk, 303.54-324.62) loses it (`dock-h-leases-record` alone);
+row 9's Fed gains `place {0.775, 0.6407, 0.1292}` + `moves [{at 218.96, x 0.8333, dur 1.2, cubic}]` and its camera
+`{"keys": [], "attention": "landings", "reach": "clamp"}` becomes four keys 218.96 (1.0) / 220.16 (1.2) / 223.60 (1.2) /
+224.60 (1.0) on the dot-com datum 73 with `chrome: {"camera": "fit"}`; row 15's camera keys 387.61 / 388.51 / 391.61 /
+392.51 go 1.06 (clamped 1.02) -> 1.2 on a POINT look (0.4021, 0.537) with `at` (0.4688, 0.5) and `chrome` fit; both
+press rows' certificate `centre_w` 0.2 -> 0.3, `centre_y` 0.52 -> 0.5; the callout gains `pad: 40` and its region is
+the whole card (0.07, 0.2749)-(0.37, 0.7251). The desk card's change is in its asset (the card profile), not the table.
+
+**The order of proof (`logs/`, final build, 0.00-427.43):** `t26b-door-final.log` (rc 0; cues 31 bound of 32 derived -
+T26's two silent kinds, unchanged; life 17 of 17), `t26b-probe.log` (162 instants), `t26b-frozen.log` ("no run of
+identical frames over 0.50s (whole frame)"), the door re-run after them with the timeline, player.html and player.json
+sha256 IDENTICAL (`t26b-door3.sha`), so GATES-MOTION.md is stamped on the fresh probe and frame hashes; `t26b-gate.log`
+**2 FAIL / 4 WARN / 22 PASS / 1 JUDGE / 4 INFO** (T26: 3 FAIL / 4 WARN / 21 PASS) - **M03 now PASSES** ("33s from
+4:02": the data centre's stamp lands inside the old 62 s wait); FAIL M11 (row 1) and M31 (row 15's 0.2 s at the melt,
+3:15) both pre-existing, section 14; WARN M02, M04, M21 (unchanged, section 17), M27 (3 cards: the Fed 558 px 1 % during
+its move; PROP 3 17,883 px 15 % - camera 3's pushed plot grows under it, over the panel's EMPTY corner, and no place
+right of the pushed panel is on the stage; the statement card, T26's). M14 PASS (no camera move over a card entrance -
+both pushes start at the stamp's settle). `t26b-seams.log` 16 boundaries, 0 faults; `t26b-spoken.log` 5 pointing
+phrases, 0 uncovered; `t26b-stagegaps.log` 2.3 s of 427.4 s, the two licensed dips and the melts at 0.0 s (unchanged).
+`t26b-pytest.log`: `test_page_boxes.py` + `test_full_stage_page_is_measured.py` **82 passed**; `t26b-measure-check.log`
+"PASS 5 builders x 15 geometr(ies) measured identical". **Fixture: no diff** - no page's ink changed (cameras and docks
+only; the door's "page boxes: 9 page(s) MEASURED" before and after), `assets/page-boxes.v1.json` untouched, no
+re-measure. Drafts: `t26b-door1.log` (row 18 zoomed in place), `t26b-door2.log` (camera 3 aimed), `t26b-door3.log` (the
+Fed aside); `t26b-door2.sha` / `t26b-door3.sha` / `t26b-final.sha` the identity checks; a docstring-only edit after the
+chain re-ran identical (`t26b-door-final-recheck.log`).
+
+**Tiles** (`scratchpad/p69-rows15-18/final/`, from the final build): `row15-push-tiles.png` (before 218.90, mid 219.56,
+after/pushed 220.40, held 223.40, released 224.80, the AI tag whole 225.60); `row16-datacentre-tiles.png` (contact
+288.95, ring 289.10, settled 290.40, held 297.30, mid-move 297.90, moved 298.70); `row18-desk-card-tiles.png` (359.20 /
+359.90 / 360.80); `row18-certificate-tiles.png` (thrown 373.50, held 376.00, back 410.10, the ring drawing 410.60, rung
+411.20, held 416.00); `row18-camera3-tiles.png` (settle 387.60 -> after 392.70). Drafts: `d1/` (all rows, door1),
+`d2/cam3-*` (camera 3 aimed), `d3/row15-*` (the Fed aside); `cert-candidates.png` / `cert-crops.png` (every certificate
+picture on disk - none carries printed words).
+
+**Named, not fixed:**
+- PROP 3 over camera 3's pushed panel (M27 WARN, 15 %): over the empty upper-right corner, clear of the bar and "historically
+  2-4%"; the panel's border passes behind it. A move right would leave the stage. Owner: the parent's read (or a smaller
+  push, ~1.1, which keeps it outside the panel).
+- The data centre's contact ring (1.05x, its floor) reaches ~20 px from the stage's right edge for ~0.3 s (T26d WARN) -
+  as on T26d's own frame.
+- The certificate: size carries it now, but the picture is a blank engraved certificate (no printed "SHARE" or company)
+  with the plate's blue light shaft across its lower-left. A certificate that SAYS it is a railway share needs a new
+  plate (a generation order) - the operator's call.
+- The desk card (T10c's rule): the repeating "+21%" tags are named; the "+105%" line carries no name and the sub is dropped.
+- The capex bars are still rising when the stamp makes contact (288.95): the recast has LANDED at 288.79 but the state's
+  bars grow after it (~1.5 s) - the stamp sits beside, never over, them.
+- `build-h/docks/dock-h-two-line-copy-again.card.json` (the card sidecar) is UNTRACKED and not ignored (its PNG is,
+  `.gitignore:127`); no `.card.json` is tracked anywhere yet. Owner: the parent / the steward (commit or ignore).

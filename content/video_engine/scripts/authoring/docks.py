@@ -206,3 +206,23 @@ def meta_set(meta: list[dict], aid: str, key: str, value) -> None:
     for m in meta:
         if m["asset"] == aid:
             m[key] = value
+
+
+def prop_place(x: float, y: float, w: float, rot: float | None = None) -> dict:
+    """P69 T26d / E99 s106: a PROP's AUTHORED place, for a dock's options - ``{"place": {x, y, w}}`` (the prop's
+    PAINTED centre and PAINTED width as fractions of the stage; its height is the cutout's own alpha aspect) and, when
+    given, its resting ``rot`` in degrees. Merge it into the dock dict: ``dict(PROP_OPTS, **prop_place(0.86, 0.46, 0.2))``.
+    The compiler honours it exactly (a stamp's ring and approach are drawn around it) and WARNs what it lands on."""
+    return {"place": {"x": x, "y": y, "w": w}, **({"rot": rot} if rot is not None else {})}
+
+
+def prop_move(at: float | str, *, x: float | None = None, y: float | None = None, w: float | None = None,
+              rot: float | None = None, dur: float | None = None, ease: str | None = None) -> dict:
+    """P69 T26d / E99 s106: one key of a prop's ``moves`` after it lands - ``at`` in seconds or a phrase of the take
+    (its first onset at or after the dock enters), and only the fields it changes (the rest are the key before's).
+    A key that starts the instant the one before ends CHAINS to it (the engine's Hermite path passes through it)."""
+    key = {"at": at, **{k: v for k, v in (("x", x), ("y", y), ("w", w), ("rot", rot), ("dur", dur), ("ease", ease))
+                        if v is not None}}
+    if len(key) == 1:
+        raise ValueError(f"prop_move at {at!r}: a key moves nothing - name x, y, w or rot")
+    return key

@@ -233,13 +233,21 @@ def test_every_page_the_projects_compiled_is_on_file_at_the_aspect_it_was_measur
     for ink, by_aspect in PAGES.items():
         assert by_aspect, f"{ink}: an entry with no aspect measures nothing"
         for aspect, entry in by_aspect.items():
-            assert aspect in M.ASPECTS, f"{ink} {aspect}"
+            # R26-235: a 16:9 project compiles its pages STAMPED full-stage, so they are filed under the geometry key
+            # `ledger_page.box_key` writes - `16:9|full_stage` - and the entry carries the flag that key names
+            full = aspect.endswith(LPG.FULL_STAGE_SUFFIX)
+            assert aspect.removesuffix(LPG.FULL_STAGE_SUFFIX) in M.ASPECTS, f"{ink} {aspect}"
+            assert not full or aspect == f"16:9{LPG.FULL_STAGE_SUFFIX}", f"{ink} {aspect}: only a 16:9 page is stamped"
+            assert bool(entry.get("full_stage")) == full, f"{ink} {aspect}: the entry's geometry is not its key's"
             assert entry["ink"] == ink, f"{ink}: the entry describes another page"
             assert entry["timeline"] in FIXTURE["projects"], f"{ink}: measured from an unrecorded timeline"
-            assert set(entry["boxes"]) == set(LPG.BOX_KEYS), f"{ink} {aspect}"
+            # P69 T6d: a full-stage line page's end tags, as drawn; T10: a longform page's key rail, when it holds a pill
+            extra = {LPG.TAG_BOXES_KEY, LPG.KEY_BOX} if full else set()
+            assert set(LPG.BOX_KEYS) <= set(entry["boxes"]) <= set(LPG.BOX_KEYS) | extra, f"{ink} {aspect}"
             for name, box in entry["boxes"].items():
-                assert sorted(box) == ["h", "w", "x", "y"] and all(isinstance(v, int) for v in box.values()), (
-                    f"{ink} {aspect} {name}")
+                for one in (box if name == LPG.TAG_BOXES_KEY else [box]):
+                    assert sorted(one) == ["h", "w", "x", "y"] and all(isinstance(v, int) for v in one.values()), (
+                        f"{ink} {aspect} {name}")
 
 
 def test_tokyos_five_pages_are_measured_at_portrait():
@@ -655,3 +663,70 @@ def test_a_page_whose_tags_moved_is_served_no_tag_boxes_and_the_ring_fits_the_co
     relabelled = copy.deepcopy(_measured_line_page())
     next(sr for sr in relabelled["series"] if not sr.get("muted"))["label"] = "+999%"
     assert LPG.TAG_BOXES_KEY not in LPG.page_boxes(relabelled, "16:9"), "a new label is a new tag"
+
+
+# ---- P69 fixture-H: one INK, three tag geometries - the entry served is the one measured on this page's own tags -------
+# Steel and Paper H compiles the golden's own ink (`8da72baa88183171`) three times: at its BORN domain `80,277` (held
+# with the +613% line unbuilt until the rescale), at `[95, 1138.74]` and at the auto domain. The first `--write` kept the
+# born state and drew its line whole: the +613% tag measured at y -205, off the stage, a geometry no frame draws - and
+# that entry, filed under the golden's ink with the golden's own `tag_ink`, was served to the golden ahead of the
+# builder's representative, so the stamp's ring fitted against an off-stage tag and landed on the drawn one.
+
+def _stamped_rep_with_domain(domain) -> dict:
+    page = copy.deepcopy(_measured_line_page())
+    page.setdefault("axes", {})["domain"] = domain
+    return page
+
+
+def test_a_declared_domain_is_part_of_the_tag_fingerprint_and_no_domain_keeps_it_byte_compatible():
+    page = _measured_line_page()
+    assert all(len(t) == 3 for t in LPG.tag_ink(page)), "a page with no declared domain keeps the three-member fingerprint"
+    born, risen = _stamped_rep_with_domain([80.0, 277.0]), _stamped_rep_with_domain(["95.0", "1138.74"])
+    assert LPG.page_ink_key(born) == LPG.page_ink_key(page), "the domain is DATA: it moves no box but the tags"
+    assert LPG.tag_ink(born) != LPG.tag_ink(page) != LPG.tag_ink(risen) != LPG.tag_ink(born)
+    assert [t[:3] for t in LPG.tag_ink(risen)] == LPG.tag_ink(page) and LPG.tag_ink(risen)[0][3] == [95.0, 1138.74]
+
+
+def test_the_page_whose_tags_the_builder_measured_is_served_the_builders_entry_over_a_project_page_of_its_ink(tmp_path):
+    page = _measured_line_page()
+    ink = LPG.page_ink_key(page)
+    rep = FIXTURE["builders"]["dense-line"]["16:9|full_stage"]
+    rival = copy.deepcopy(rep)
+    rival["boxes"][LPG.TAG_BOXES_KEY] = [dict(b, y=b["y"] + 40) for b in rep["boxes"][LPG.TAG_BOXES_KEY]]
+    rival["data_mask"] = ["1" * 16] * 16
+    rival[LPG.TAG_INK_KEY] = LPG.tag_ink(_stamped_rep_with_domain([95.0, 1138.74]))
+    saved = LPG.PAGE_BOXES_FIXTURE
+    LPG.PAGE_BOXES_FIXTURE = _fixture_file(tmp_path, FIXTURE["builders"], {ink: {"16:9|full_stage": rival}})
+    try:
+        boxes = LPG.page_boxes(page, "16:9")
+        assert boxes[LPG.TAG_BOXES_KEY] == rep["boxes"][LPG.TAG_BOXES_KEY], "the golden's own tags, not the rescaled page's"
+        assert boxes["data_mask"] == rep["data_mask"], "... and the data it drew with them"
+        risen = LPG.page_boxes(_stamped_rep_with_domain([95.0, 1138.74]), "16:9")
+        assert risen[LPG.TAG_BOXES_KEY] == rival["boxes"][LPG.TAG_BOXES_KEY], "the project page is still served its own"
+        born = LPG.page_boxes(_stamped_rep_with_domain([80.0, 277.0]), "16:9")
+        assert born["measured"] is True and LPG.TAG_BOXES_KEY not in born, "tags nobody measured fall back to the column"
+    finally:
+        LPG.PAGE_BOXES_FIXTURE = saved
+
+
+def test_the_tool_measures_the_state_whose_domain_holds_its_tags(tmp_path):
+    page = _measured_line_page()
+    born, risen = _stamped_rep_with_domain([80.0, 277.0]), _stamped_rep_with_domain([95.0, 1138.74])
+    assert not M._holds_its_tags(born) and M._holds_its_tags(risen) and M._holds_its_tags(page)
+    tl = tmp_path / "x.timeline.json"
+    tl.write_text(json.dumps({"aspect": "16:9", "scenes": [
+        {"world": {"page": born, "page_states": [born, risen]}}, {"world": {"page": page}}]}), encoding="utf-8")
+    _aspect, found = M.timeline_pages(tl)
+    assert list(found) == [LPG.page_ink_key(page)]
+    assert found[LPG.page_ink_key(page)]["axes"]["domain"] == [95.0, 1138.74], "the first state that holds its tags"
+    only_born = tmp_path / "y.timeline.json"
+    only_born.write_text(json.dumps({"aspect": "16:9", "scenes": [{"world": {"page": born}}]}), encoding="utf-8")
+    assert M.timeline_pages(only_born)[1][LPG.page_ink_key(page)]["axes"]["domain"] == [80.0, 277.0], "else the first"
+
+
+def test_every_measured_end_tag_is_on_the_stage():
+    """The -205 guard: a tag rect off the stage is a geometry no frame draws - never a fixture entry."""
+    for section, name, geo, ent in _entries_with_tag_boxes():
+        sw, sh = LPG.STAGE_PX[geo.split("|")[0]]
+        for b in (ent.get("boxes") or {}).get(LPG.TAG_BOXES_KEY) or []:
+            assert b["x"] >= 0 and b["y"] >= 0 and b["x"] + b["w"] <= sw and b["y"] + b["h"] <= sh, (section, name, geo, b)

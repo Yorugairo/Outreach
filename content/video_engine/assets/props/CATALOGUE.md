@@ -1,10 +1,10 @@
-# Finance & AI Hero Props Catalogue (24 Master Cutouts)
+# Finance & AI Hero Props Catalogue (25 Master Cutouts)
 
 Extracted, segmented, defringed, and losslessly isolated from `Propsheet1` & `Propsheet2`.
 Registered under doctrine tier 2 as `kind: prop` / tier 3 as `kind: mechanism`, `rights_state: operator_approved`, `render_eligible: true`.
 
 ## Summary
-- **Total Cutouts:** 24
+- **Total Cutouts:** 25
 - **Schema:** `finance_props_catalog.v1` (`manifest.json`)
 - **Asset Directory:** `assets/props/cutouts/`
 
@@ -36,3 +36,4 @@ Registered under doctrine tier 2 as `kind: prop` / tier 3 as `kind: mechanism`, 
 | [`prop-liquidity-drain-pump-v1`](cutouts/prop-liquidity-drain-pump-v1.png)<br>*Quantitative Tightening Liquidity Drain* | `Propsheet2_Macro_Catalysts` | 270×225 | `e5fb648721...` | `mechanism` | `liquidity-drain`, `quantitative-tightening`, `qt`, `balance-sheet-runoff`, `cash-drain` | Quantitative Tightening (QT), commercial bank reserve drains, and central bank balance sheet contraction. |
 | [`prop-ai-pause-roadblock-barrier-v1`](cutouts/prop-ai-pause-roadblock-barrier-v1.png)<br>*AI Moratorium Roadblock Barrier* | `Propsheet2_Macro_Catalysts` | 247×224 | `71c50a3218...` | `prop` | `ai-pause`, `moratorium`, `regulation`, `governance`, `safety` | Calls for regulatory moratoriums, safety halts, frontier model deployment licensing, and governmental friction. |
 | [`prop-upcoming-catalysts-calendar-v1`](cutouts/prop-upcoming-catalysts-calendar-v1.png)<br>*Upcoming Catalysts Macro Calendar* | `Propsheet2_Macro_Catalysts` | 245×237 | `bad723eb4c...` | `prop` | `catalysts`, `fed-decision`, `federal-reserve`, `inflation-data`, `cpi` | High-impact market catalyst roadmap tracking Fed meetings, CPI/inflation releases, quarterly earnings, and geopolitical risks. |
+| [`prop-smartphone-v1`](cutouts/prop-smartphone-v1.png)<br>*Smartphone Mobile Terminal* | `prop-smartphone-v1-source` | 412×767 | `d186fdca6c...` | `prop` | `smartphone`, `mobile`, `terminal`, `retail-investor`, `trading-app` | Retail investor mobile execution, fintech trading apps, push notification catalysts, and market access. |
