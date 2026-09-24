@@ -1,0 +1,75 @@
+{
+ "title": "Who pays NVIDIA for data-center chips",
+ "sub": "NVIDIA Data Center revenue by customer type, quarter to 26 Jul 2026 ($89.0B)",
+ "src": "NVIDIA Form 10-Q, quarter ended 26 Jul 2026 (filed 26 Aug 2026)",
+ "unit": "%",
+ "total": 100.0,
+ "shares": [
+  {
+   "label": "Hyperscale",
+   "frac": 0.5472,
+   "value": "55%",
+   "color": "crimson",
+   "note": "$48.7B"
+  },
+  {
+   "label": "AI clouds, industrial and enterprise",
+   "frac": 0.4528,
+   "value": "45%",
+   "color": "deemph",
+   "note": "$40.3B"
+  }
+ ],
+ "labels": [
+  "Hyperscale",
+  "AI clouds, industrial and enterprise"
+ ],
+ "values": [
+  54.72,
+  45.28
+ ],
+ "value_strings": [
+  "55%",
+  "45%"
+ ],
+ "status": "REAL",
+ "tier": "CONFIRMED",
+ "research_tier": "CONFIRMED",
+ "retrieved": "2026-09-24",
+ "sources": [
+  {
+   "publisher": "NVIDIA Corporation (SEC EDGAR)",
+   "title": "Form 10-Q for the quarter ended July 26, 2026",
+   "date": "2026-08-26",
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+   "on_disk": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10q-q2fy2027-nvda-20260726.htm"
+  },
+  {
+   "publisher": "NVIDIA Corporation (SEC EDGAR, 8-K exhibit)",
+   "title": "CFO Commentary on Second Quarter Fiscal 2027 Results",
+   "date": "2026-08-26",
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000073/q2fy27cfocommentary.htm",
+   "on_disk": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-q2fy27-cfo-commentary.htm"
+  }
+ ],
+ "proof": [
+  {
+   "kind": "filing",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10q-q2fy2027-nvda-20260726.htm",
+   "locator": "segment note, 'Revenue by Market Platform' (three and six months ended Jul 26, 2026)",
+   "quote": "Revenue by Market Platform Data Center $ 89,023 $ 41,096 $ 164,269 $ 80,208 Hyperscale 48,710 24,168 91,761 46,428 AI Clouds, Industrial, & Enterprise 40,313 16,928 72,508 33,780",
+   "values": {
+    "data_center_musd": 89023,
+    "hyperscale_musd": 48710,
+    "acie_musd": 40313
+   }
+  }
+ ],
+ "derived_from": {
+  "hyperscale_pct": "48,710 / 89,023 = 54.72%",
+  "acie_pct": "40,313 / 89,023 = 45.28%",
+  "first_half_hyperscale_pct": "91,761 / 164,269 = 55.86%"
+ },
+ "provenance_note": "R26-306 intake (2026-09-24). Part (c) of E99 s115, customers' spend on NVIDIA, as FILED. 'Hyperscale' is NVIDIA's own platform label (recast in Q1 FY27; one company moved into it in Q2) - not a list of named companies. The 10-Q also says one AI research and deployment company 'contributed a meaningful amount of our revenue by purchasing cloud services from our customers' - money that reaches NVIDIA through the clouds, never put in a number. The Gemini reply's '35-40% of hyperscaler capex' and '>50-75% of compute capex' (Dell'Oro URL 404, Goldman URL 403) are UNSOURCED and are not in this object."
+}

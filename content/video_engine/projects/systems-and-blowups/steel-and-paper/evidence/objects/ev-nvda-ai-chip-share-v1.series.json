@@ -1,0 +1,64 @@
+{
+ "title": "NVIDIA's slice of the AI chip market",
+ "sub": "Share of the AI chip market, 2025 - GPUs and custom ASICs together",
+ "src": "TrendForce estimate, press release 30 Oct 2025",
+ "unit": "%",
+ "total": 100.0,
+ "shares": [
+  {
+   "label": "NVIDIA",
+   "frac": 0.7,
+   "value": "~70%",
+   "color": "crimson",
+   "note": "TrendForce estimate, 2025"
+  },
+  {
+   "label": "Everyone else (custom ASICs, AMD, others)",
+   "frac": 0.3,
+   "value": "~30%",
+   "color": "deemph",
+   "note": "the remainder to 100; the release does not split it"
+  }
+ ],
+ "labels": [
+  "NVIDIA",
+  "Everyone else"
+ ],
+ "values": [
+  70.0,
+  30.0
+ ],
+ "value_strings": [
+  "~70%",
+  "~30%"
+ ],
+ "status": "REAL",
+ "tier": "CONFIRMED",
+ "research_tier": "CONFIRMED",
+ "retrieved": "2026-09-24",
+ "sources": [
+  {
+   "publisher": "TrendForce",
+   "title": "Strong Demand from CSPs and Sovereign Cloud to Drive Over 20% Growth in AI Server Shipments by 2026, Says TrendForce",
+   "date": "2025-10-30",
+   "url": "https://www.trendforce.com/presscenter/news/20251030-12762.html",
+   "on_disk": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/trendforce-2025-10-30-20251030-12762.html"
+  }
+ ],
+ "proof": [
+  {
+   "kind": "analyst_release",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/trendforce-2025-10-30-20251030-12762.html",
+   "locator": "body text, 'NVIDIA will maintain approximately 70%'",
+   "quote": "TrendForce estimates that NVIDIA will maintain approximately 70% of the AI chip market share in 2025.",
+   "values": {
+    "nvda_ai_chip_share_2025_pct": 70
+   }
+  }
+ ],
+ "derived_from": {
+  "other_pct": "100 - 70 = 30 (remainder; not stated in the release)"
+ },
+ "provenance_note": "R26-306 intake (2026-09-24). The pie's slice (E99 s115): the broadest denominator we could retrieve - the AI chip market including CSP custom ASICs (TPU, Trainium). A TrendForce ESTIMATE ('approximately'), stated as ~70% on screen; the remainder is derived and must not be split into named vendors. The same release says ASIC shipments are expected to overtake GPUs by 2026. The Gemini reply's two TrendForce URLs (20241018-12345, 20240612-12180) 404 on a site whose live URL pattern is the same - REJECTED as fabricated; this object does not use them."
+}
