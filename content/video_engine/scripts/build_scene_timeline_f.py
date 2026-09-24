@@ -666,6 +666,26 @@ SPECIES_WHEN[SPECIES_LIT_STRETCH] = ("the sentence WALKS one stretch of a drawn 
                                      "is the claim, the stretch is undrawn, or the light would only sit")
 LIT_STRETCH_KEYS = ("kind", "at", "dur", "id", "from", "to", "series", "color", "comet", "panel")
 PANEL_SPECIES += (SPECIES_LIT_STRETCH,)   # P69 T36: a light travels a line on ONE panel of a panels page (`panel: <i>`; row 21)
+# P69 T37 - SOLO, THE ON-WORD ISOLATE (the Bravos harvest v2's rank 2: A12 "peers ghost, one series stays lit", 8 of 9
+# videos; A49 "one bar ignites, the rest dim"). A PAGE species: on its word every OTHER series of a line page, or every
+# other bar of a bars page, mutes to E67's 0.45 and the ONE it names keeps its ink; `unsolo` restores every mark on its
+# own word (and a verb that replaces the page releases it). Its law and painter are species/solo.mjs; this file owns its
+# grammar (`_validate_solo`) and the page it may stand on (`check_solo`). The WHENs are the use-when guide's A12
+# (BRAVOS-USE-WHEN.md:329, COMPARES, the turn, series x2+) and A49 (:189, RANKS, the turn, a ranking).
+SPECIES_SOLO, SPECIES_UNSOLO = "solo", "unsolo"
+SPECIES_KINDS += (SPECIES_SOLO, SPECIES_UNSOLO)
+PAGE_SPECIES += (SPECIES_SOLO, SPECIES_UNSOLO)
+SPECIES_WHEN[SPECIES_SOLO] = ("COMPARES / RANKS, at the turn: the sentence narrows to ONE series of several ('look at China's', "
+                              "'Chipmakers doubling') or names ONE bar in a field ('the third largest') - on the word the "
+                              "others mute to E67's dim and the named one keeps its ink; never when the comparison between "
+                              "them is the claim, or on a two-bar page (badge both)")
+SPECIES_WHEN[SPECIES_UNSOLO] = ("the sentence widens back out after a solo - the comparison is the claim again ('against the "
+                                "index', 'all of them') - and every muted series or bar restores its ink on the word; never "
+                                "without a solo before it (it restores nothing)")
+SOLO_KEYS = ("kind", "at", "dur", "series", "bar")
+UNSOLO_KEYS = ("kind", "at", "dur")
+SOLO_DUR_S = (0.2, 1.5)   # species/solo.mjs SOLO.MIN_S / MAX_S, mirrored: shorter is a flicker, longer a fade the word has left
+SOLO_BUILDERS = {"dense-line": "series", "story": "bar"}   # the two pages whose marks it re-inks: a line's series, a bars page's bars
 # P69 T49 (E99 s99: "a light that comes on as everything else STOPS is a punctuation beat - the freeze is the event") -
 # THE FREEZE BEAT. A STAGE species on any row: on its word every idle, drift and ambient life on the stage holds for
 # `dur` while ONE light comes on at the target (a datum; the box of a mark, a bar or a prop), then life resumes. Its law
@@ -1631,6 +1651,7 @@ SPECIES_TARGETS = {
 SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANELS by index, never a coordinate
 SPECIES_TARGETS[SPECIES_MEMBER] = ()   # P69 T45: a tile of a membership bar, by index - the page owns where it stands
 SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
+SPECIES_TARGETS[SPECIES_SOLO] = SPECIES_TARGETS[SPECIES_UNSOLO] = ()   # P69 T37: a solo names a series or a bar by index; the chart owns where it is
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
                                                                  # line's point, a bar), or a point / the box of a mark or a prop
 SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
@@ -1932,7 +1953,7 @@ def check_target_series(world: dict, row_species: list) -> None:
         if not isinstance(sp, dict):
             continue
         named = ([(f, sp.get(f)) for f in TARGET_SERIES_FIELDS if f in sp]
-                 if sp.get("kind") in SERIES_NAMING_SPECIES + (SPECIES_LIT_STRETCH,) else [])   # P69 T36: a light names its series as a span does
+                 if sp.get("kind") in SERIES_NAMING_SPECIES + (SPECIES_LIT_STRETCH, SPECIES_SOLO) else [])   # P69 T36: a light names its series as a span does (T37: and a solo)
         tgt = sp.get("target")
         if isinstance(tgt, dict) and tgt.get("kind") == "datum" and "series" in tgt:
             named.append(("target series", tgt["series"]))
@@ -3000,6 +3021,84 @@ def _validate_lit_stretch(entry: dict) -> list[str]:
     return errs
 
 
+def _validate_solo(entry: dict) -> list[str]:
+    """P69 T37: a `solo` names ONE mark - `series` (a line page's) or `bar` (a bars page's), never both, never neither -
+    and an `unsolo` names none (it restores every mark). Both ease over SOLO_DUR_S. Neither WRITES anything: the named
+    series' own end tag says what it is, and a figure writes a number. The page it stands on is `check_solo`'s."""
+    kind, errs = entry.get("kind"), []
+    d = entry.get("dur")
+    if _num(d) and not SOLO_DUR_S[0] <= float(d) <= SOLO_DUR_S[1]:
+        errs.append(f"{kind}: dur {d} is outside {SOLO_DUR_S[0]}-{SOLO_DUR_S[1]} s - the mute eases over "
+                    f"{SOLO_DUR_S[0]}-{SOLO_DUR_S[1]} s on its word (shorter is a flicker, longer a fade the word has left)")
+    if kind == SPECIES_UNSOLO:
+        extra = sorted(k for k in entry if k not in UNSOLO_KEYS + ROW_PATH_KEYS)
+        if extra:
+            errs.append(f"unsolo: {', '.join(map(repr, extra))} - an unsolo names nothing: it restores every muted series "
+                        f"or bar on its word, and takes only {'|'.join(UNSOLO_KEYS[1:])}")
+        return errs
+    has = [f for f in ("series", "bar") if f in entry]
+    if len(has) != 1:
+        errs.append("solo: names ONE mark - a series (a line page) or a bar (a bars page), "
+                    + ("not both" if has else "and this one names neither"))
+    for f in has:
+        if not _is_index(entry[f]):
+            errs.append(f"solo: {f} must be a non-negative integer {'series' if f == 'series' else 'bar'} index")
+    extra = sorted(k for k in entry if k not in SOLO_KEYS + ROW_PATH_KEYS)
+    if extra:
+        errs.append(f"solo: {', '.join(map(repr, extra))} - a solo writes nothing and takes only "
+                    f"{'|'.join(SOLO_KEYS[1:])}: the named mark keeps its own ink and tag, and a number is a `figure`")
+    return errs
+
+
+def check_solo(world: dict, row_species: list) -> None:
+    """P69 T37: a row's `solo` / `unsolo` on the page they re-ink. A solo names a SERIES on a line page or a BAR on a bars
+    page (any chart state of the row's page may be the one: a `then=` bars state takes a bar solo), inside the page's
+    marks (a series is R26-218's bound, `check_target_series`; a bar is bounded here), on a page with at least two of
+    them (one mark has nothing to dim). Refused by name: every other builder (a panels page moves focus between its
+    charts with `panel_focus`), an extruded bar (its prism's faces are not re-inked), a membership bar (its tiles are the
+    member species' `light`), and an unsolo before any solo. ValueError names it; a page with neither is untouched."""
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") in (SPECIES_SOLO, SPECIES_UNSOLO)]
+    if not sps or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return
+    states = [s for s in [world.get("page")] + list(world.get("page_states") or []) if isinstance(s, dict)]
+    builders = [str(s.get("builder")) for s in states]
+    first_solo = min((float(sp["at"]) for sp in sps if sp["kind"] == SPECIES_SOLO and _num(sp.get("at"))), default=None)
+    for sp in sps:
+        where = f"{sp['kind']} at {sp.get('at')}"
+        if sp["kind"] == SPECIES_UNSOLO:
+            if first_solo is None or not (_num(sp.get("at")) and float(sp["at"]) > first_solo):
+                raise ValueError(f"{where}: no solo stands before it - it restores nothing (P69 T37)")
+            continue
+        if LPG.PANELS in builders:
+            raise ValueError(f"{where}: a panels page moves its focus between charts with panel_focus (a panel recedes, "
+                             "dimmed); a solo re-inks the series or bars of ONE chart - build it on that chart's own page")
+        field = "bar" if "bar" in sp else "series"
+        drawn = [b for b in builders if b in SOLO_BUILDERS]
+        if not drawn:
+            raise ValueError(f"{where}: {builders[0] if builders else '?'} is not a page solo draws on - it re-inks a "
+                             f"LINE page's series or a BARS page's bars ({'|'.join(SOLO_BUILDERS)})")
+        if field not in {SOLO_BUILDERS[b] for b in drawn}:
+            raise ValueError(f"{where}: " + ("a LINE page's marks are its series - name `series`, not `bar`" if field == "bar"
+                                             else "a BARS page's marks are its bars - name `bar`, not `series`"))
+        pages = [s for s in states if SOLO_BUILDERS.get(str(s.get("builder"))) == field]
+        n = max(len(s.get("series" if field == "series" else "values") or []) for s in pages)
+        if n < 2:
+            raise ValueError(f"{where}: this page draws one {field} - there is nothing to dim (a solo mutes the OTHERS)")
+        if field == "bar":
+            v = sp["bar"]
+            if _is_index(v) and v >= n:
+                raise ValueError(f"solo: bar {v} is past the page's last bar ({n - 1})")
+            for s in pages:
+                form = s.get("form")
+                kind = (form or {}).get("kind") if isinstance(form, dict) else form
+                if kind == "extruded_bar":
+                    raise ValueError(f"{where}: form=extruded_bar - a solo re-inks a bar's face, band and value, and "
+                                     "the prism's side and cap would stand at full ink behind a muted face")
+                if any(s.get(LPG.MEMBERS_KEY) or []):
+                    raise ValueError(f"{where}: this bar is a membership stack - its tiles are lit by the member species' "
+                                     "`light` (P69 T45), and a solo would mute the bar out from under them")
+
+
 def _member_tiles(tile, n: int) -> list[int]:
     """P69 T45: the tile indices a `member` species names on a bar of `n` tiles ("all" is every one)."""
     if tile == "all":
@@ -3206,6 +3305,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_newsreel(entry)
     if kind == SPECIES_LIT_STRETCH:   # P69 T36
         errs += _validate_lit_stretch(entry)
+    if kind in (SPECIES_SOLO, SPECIES_UNSOLO):   # P69 T37
+        errs += _validate_solo(entry)
     if kind == SPECIES_FREEZE:        # P69 T49
         errs += _validate_freeze(entry)
     if kind == SPECIES_MEMBER:        # P69 T45
@@ -4282,6 +4383,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_broken_axis(world, row_species)     # P69 T66: a broken axis holds its page (no chart state, no form)
     check_members(world, row_species)         # P69 T45: a tile the membership bar has, and nothing that moves the bar
     check_segments(world, row_species)        # P69 T64: a stacked page takes a park, and nothing that moves its bars
+    check_solo(world, row_species)            # P69 T37: a solo names ONE mark the page draws, on a page whose marks it re-inks
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
             if world.get("kind") != SPECIES_LEDGER:

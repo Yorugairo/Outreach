@@ -3896,6 +3896,54 @@ FRAME_T.update({"freeze-trough": FREEZE_AT + FREEZE_DUR * 0.5})
 FRAME_T.update({"lit-stretch-crash": round(LIT_AT + 0.5 * LIT_DUR * 0.8, 3)})   # u 0.50 of the head's run (TRAVEL 0.8 of the word): 11.244
 
 
+# ---- P69 T37: SOLO - on "Chipmakers" the chips keep their ink and every other line mutes to E67's dim ----------------
+# Steel and Paper H row 10's own page and its own sentence: the verified divergence page (`ev-divergence-v1`, the four
+# lines - memory makers, semiconductors, mega-cap tech, the S&P 500 - the page row 10 recasts to under the sell ticket)
+# and "Chipmakers doubling while their customers sit flat at the index is textbook profit-taking." The H take's words
+# (`vo-h-scratch/scratch-kokoro.words.json`), shifted by -82.675 s so the page has built first: "Chipmakers" 94.675 ->
+# 12.00 (the chips' solo, over the word, 0.71 s), "customers" 96.263 -> 13.59 (the mute hands over to the mega-cap line,
+# 0.58 s) and "textbook" 98.338 -> 15.66 (unsolo: the comparison is the claim again, 0.54 s). The object is the
+# COMMITTED evidence sidecar, read in place; the harvested frame is JPN 05:23.5 (`docs/research/runs/bravos-watch/
+# nB1eXWQlW58/luna-recovery/focus-05-treasury-holdings/frames/frame_0008.jpg`). Judged once the chips' mute has
+# landed and holds (13.11): the semiconductor line, its lead point and its tag at full ink, the other three at 0.45.
+SOLO_PLATE = "ledger:ev-divergence-v1:line;idle=live"
+SOLO_SHIFT = -82.675
+SOLO_CHIPS, SOLO_CUSTOMERS = 1, 2        # ev-divergence-v1's SEMICONDUCTOR STOCKS and MEGA-CAP TECH STOCKS
+SOLO_CHIPS_AT, SOLO_CHIPS_DUR = 12.0, 0.71            # "Chipmakers" 94.675-95.388
+SOLO_CUSTOMERS_AT, SOLO_CUSTOMERS_DUR = 13.59, 0.58   # "customers" 96.263-96.838
+SOLO_UNSOLO_AT, SOLO_UNSOLO_DUR = 15.66, 0.54         # "textbook" 98.338-98.875
+SOLO_SPECIES = [
+    {"kind": "solo", "at": SOLO_CHIPS_AT, "dur": SOLO_CHIPS_DUR, "series": SOLO_CHIPS},            # "Chipmakers doubling"
+    {"kind": "solo", "at": SOLO_CUSTOMERS_AT, "dur": SOLO_CUSTOMERS_DUR, "series": SOLO_CUSTOMERS},  # "... while their customers sit flat"
+    {"kind": "unsolo", "at": SOLO_UNSOLO_AT, "dur": SOLO_UNSOLO_DUR},                               # "... is textbook profit-taking"
+]
+
+
+def solo_chipmakers() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    series = LPG.load_series(SERIES)
+    names = [s.get("name", "") for s in series["series"]]
+    assert names[SOLO_CHIPS].startswith("SEMICONDUCTOR") and names[SOLO_CUSTOMERS].startswith("MEGA-CAP"), names
+    species = [dict(e) for e in SOLO_SPECIES]
+    assert not BST.validate_species(species, (0, 0, 0), SOLO_PLATE), BST.validate_species(species, (0, 0, 0), SOLO_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(SOLO_PLATE, (0, 0, 0), LIT_PROJECT)
+        BST.stamp_full_stage(world["page"])
+        BST.check_target_series(world, species)
+        BST.check_solo(world, species)
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: on 'Chipmakers' the chips keep their ink and the rest mute (solo)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"solo-chipmakers": solo_chipmakers})
+FRAME_T.update({"solo-chipmakers": round(SOLO_CHIPS_AT + SOLO_CHIPS_DUR + 0.4, 3)})   # the chips' mute landed and holding: 13.11
+
+
 # ---- P69 T66 (E99 s111): THE BROKEN CROSS-ERA AXIS ------------------------------------------------------------------------
 #   broken-axis-two-eras  ONE x axis across two eras, the years between them cut out and the cut DRAWN: a `//` across the
 #                         axis, the gap written in the eras' own years ("2001 // 2021"), each era named over its own

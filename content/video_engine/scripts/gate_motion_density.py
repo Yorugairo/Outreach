@@ -411,6 +411,11 @@ SPECIES_EVENTS["member"] = ("at",)
 # THE FREEZE BEAT is ONE event, at its word. The light coming on is the beat; life resuming is the idle coming back,
 # and no idle is ever an event (E49). What the beat does to M18 is `punctuate` below: its held frames are not a still.
 SPECIES_EVENTS["freeze"] = ("at",)
+# P69 T37: SOLO - on its word every other series or bar of the page mutes to E67's dim: the page visibly changes on
+# the word, as a relight does, so it is ONE event at its word; the held isolate after it is standing ink and earns
+# nothing. An UNSOLO is the same change the other way - every mark restores on its word - and one event too.
+SPECIES_EVENTS["solo"] = ("at",)
+SPECIES_EVENTS["unsolo"] = ("at",)
 COUNT_ARRAY_STEP = AGENDA_STEP = 0.34   # the default word pitch both kinds arrive on when the row names no `step`
                                         # - the same number the compiler holds (build_scene_timeline_f.COUNT_ARRAY_STEP /
                                         # AGENDA_STEP) and the modules' own dial (COUNT.STEP / AGENDA.STEP): 178 WPM.

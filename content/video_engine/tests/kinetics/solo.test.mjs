@@ -1,0 +1,141 @@
+// P69 T37 - SOLO (the Bravos harvest v2 rank 2: A12 "peers ghost, one series stays lit", A49 "one bar ignites, the
+// rest dim"). On its word every other series or bar of the page mutes to E67's dim and the named one keeps its ink;
+// `unsolo` - or a verb that replaces the page - restores. These tests pin the dial, the events, the alpha law (a pure
+// function of t, continuous across a hand-over), the painter's writes and the module rule.
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { SOLO, soloKeyOf, soloEvents, soloAlpha, soloWrite, paintSolo } from "../../scripts/species/solo.mjs";
+
+const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
+const solo = (o = {}) => Object.assign({ kind: "solo", at: 10, dur: 0.5, series: 1 }, o);
+
+test("the dim is E67's 0.45 - the page's own muted-history alpha, never a new number", () => {
+  assert.equal(SOLO.DIM, 0.45);
+  assert.ok(SOLO.MIN_S > 0 && SOLO.MAX_S > SOLO.MIN_S && SOLO.EPS > 0 && SOLO.EPS < 0.01);
+});
+
+// ---------------------------------------------------------------- the events
+test("a solo keys the ONE mark it names - a series on a line page, a bar on a bars page", () => {
+  assert.equal(soloKeyOf(solo()), "s:1");
+  assert.equal(soloKeyOf({ kind: "solo", bar: 2 }), "b:2");
+  assert.equal(soloKeyOf({ kind: "unsolo" }), null);
+});
+
+test("the events run in time order; a release at the same instant as a solo gives way to it", () => {
+  const ev = soloEvents([solo({ at: 14, series: 2 }), solo()], [{ at: 12, dur: 0.4 }, { at: 14, dur: 1 }]);
+  assert.deepEqual(ev.map((e) => [e.at, e.key]), [[10, "s:1"], [12, null], [14, null], [14, "s:2"]]);
+  assert.ok(ev.every((e) => e.dur > 0));
+});
+
+// ---------------------------------------------------------------- the alpha
+test("before its word nothing is muted; on it the others ease to DIM and the named one keeps its ink", () => {
+  const ev = soloEvents([solo()], []);
+  for (const k of ["s:0", "s:1", "s:2"]) assert.equal(soloAlpha(ev, k, 9.99), 1);
+  assert.equal(soloAlpha(ev, "s:1", 10.25), 1);
+  assert.ok(near(soloAlpha(ev, "s:0", 10.25), 1 - (1 - SOLO.DIM) * 0.5), "min-jerk is symmetric: half the word, half the mute");
+  assert.equal(soloAlpha(ev, "s:0", 10.5), SOLO.DIM);
+  assert.equal(soloAlpha(ev, "s:2", 60), SOLO.DIM, "and it HOLDS until something restores it");
+});
+
+test("a second solo HANDS OVER from where the first left every mark - no jump at its word", () => {
+  const ev = soloEvents([solo(), solo({ at: 10.2, series: 2 })], []);
+  const eps = 1e-6;
+  for (const k of ["s:0", "s:1", "s:2"]) {
+    assert.ok(Math.abs(soloAlpha(ev, k, 10.2 - eps) - soloAlpha(ev, k, 10.2 + eps)) < 1e-4, k);
+  }
+  assert.equal(soloAlpha(ev, "s:2", 11), 1);
+  assert.equal(soloAlpha(ev, "s:1", 11), SOLO.DIM);
+  assert.equal(soloAlpha(ev, "s:0", 11), SOLO.DIM);
+});
+
+test("unsolo restores every mark on its own clock", () => {
+  const ev = soloEvents([solo()], [{ at: 20, dur: 1 }]);
+  assert.equal(soloAlpha(ev, "s:0", 19.9), SOLO.DIM);
+  assert.ok(near(soloAlpha(ev, "s:0", 20.5), SOLO.DIM + (1 - SOLO.DIM) * 0.5));
+  assert.equal(soloAlpha(ev, "s:0", 21), 1);
+  assert.equal(soloAlpha(ev, "s:1", 20.5), 1, "the named one never moved");
+});
+
+test("a solo mutes marks of its OWN kind: a series solo never dims a bar, nor a bar solo a line", () => {
+  const ev = soloEvents([solo()], []);
+  assert.equal(soloAlpha(ev, "b:0", 11), 1);
+  const evb = soloEvents([{ kind: "solo", at: 10, dur: 0.5, bar: 0 }], []);
+  assert.equal(soloAlpha(evb, "s:0", 11), 1);
+  assert.equal(soloAlpha(evb, "b:1", 11), SOLO.DIM);
+});
+
+test("a seek IS the play: the same t gives the same alpha in any order", () => {
+  const ev = soloEvents([solo(), solo({ at: 10.3, series: 0 })], [{ at: 12, dur: 0.6 }]);
+  const ts = [10.1, 12.3, 10.4, 10.1, 13, 12.3, 9];
+  const a = ts.map((t) => ["s:0", "s:1", "s:2"].map((k) => soloAlpha(ev, k, t)).join());
+  const b = [...ts].reverse().map((t) => ["s:0", "s:1", "s:2"].map((k) => soloAlpha(ev, k, t)).join()).reverse();
+  assert.deepEqual(a, b);
+});
+
+// ---------------------------------------------------------------- the painter
+const rec = (init = {}) => { const a = { ...init }; return { a, setAttribute: (k, v) => { a[k] = String(v); },
+  getAttribute: (k) => (k in a ? a[k] : null), removeAttribute: (k) => { delete a[k]; } }; };
+
+test("a write at full ink REMOVES the attribute - the page before the word is the page with no solo", () => {
+  const el = rec({ opacity: "0.450" });
+  soloWrite(el, "opacity", 1);
+  assert.equal(el.getAttribute("opacity"), null);
+  soloWrite(el, "opacity", 0.45);
+  assert.equal(el.getAttribute("opacity"), "0.450");
+  soloWrite(null, "opacity", 0.5);   /* a mark with no such element writes nothing */
+});
+
+const linePage = () => {
+  const pp = (si, muted = false) => ({ si, muted, p: rec(), tip: rec({ opacity: "1" }), name: rec({ opacity: "1" }) });
+  const st = { paths: [pp(0), pp(1), pp(2)], bars: [] };
+  st.states = [st, { paths: [pp(0), pp(1)], bars: [] }];   /* a derived chart state (a rescale) carries the same series */
+  return st;
+};
+
+test("THE PAINTER mutes every other series' stroke, lead point and end tag on EVERY chart state", () => {
+  const st = linePage(), sd = { evs: soloEvents([solo()], []), lits: [] };
+  paintSolo(sd, 9, st, {});
+  for (const S of st.states) for (const pp of S.paths) assert.equal(pp.p.getAttribute("opacity"), null);
+  paintSolo(sd, 11, st, {});
+  for (const S of st.states) for (const pp of S.paths) {
+    const want = pp.si === 1 ? null : "0.450";
+    assert.equal(pp.p.getAttribute("opacity"), want, "stroke " + pp.si);
+    assert.equal(pp.tip.getAttribute("fill-opacity"), want, "tip " + pp.si);
+    assert.equal(pp.name.getAttribute("fill-opacity"), want, "tag " + pp.si);
+    assert.equal(pp.name.getAttribute("opacity"), "1", "the chart's own reveal channel is never touched");
+  }
+});
+
+test("THE PAINTER mutes every other bar and its value, and never the bar's name", () => {
+  const bar = (i) => ({ i, bar: rec(), val: rec({ opacity: "1" }), lab: rec({ opacity: "1" }), band: i === 0 ? rec() : null });
+  const st = { paths: [], bars: [bar(0), bar(1), bar(2)] };
+  st.states = [st];
+  paintSolo({ evs: soloEvents([{ kind: "solo", at: 10, dur: 0.5, bar: 2 }], []), lits: [] }, 11, st, {});
+  assert.equal(st.bars[0].bar.getAttribute("opacity"), "0.450");
+  assert.equal(st.bars[0].band.getAttribute("opacity"), "0.450", "a range's band is the bar's own ink");
+  assert.equal(st.bars[1].val.getAttribute("fill-opacity"), "0.450");
+  assert.equal(st.bars[2].bar.getAttribute("opacity"), null);
+  for (const b of st.bars) assert.equal(b.lab.getAttribute("fill-opacity"), null, "the category name is the key");
+});
+
+test("a lit stretch on a muted series mutes with it (after the light painted this frame); one on the named series keeps its ink", () => {
+  const st = linePage();
+  const lit = (si) => ({ si, g: rec({ opacity: "1.000" }) });
+  const sd = { evs: soloEvents([solo()], []), lits: [lit(0), lit(1)] };
+  paintSolo(sd, 11, st, {});
+  assert.equal(sd.lits[0].g.getAttribute("opacity"), "0.450");
+  assert.equal(sd.lits[1].g.getAttribute("opacity"), "1.000");
+  sd.lits[0].g.setAttribute("opacity", "0");   /* a light the lit painter hid stays hidden */
+  paintSolo(sd, 11, st, {});
+  assert.equal(sd.lits[0].g.getAttribute("opacity"), "0.000");
+});
+
+test("the painter reaches the engine ONLY through its arguments - no clock, no random, no DOM of its own", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const src = await readFile(new URL("../../scripts/species/solo.mjs", import.meta.url), "utf-8");
+  for (const bad of ["Date.now", "performance.now", "Math.random", "document.", "window.", "requestAnimationFrame"]) {
+    assert.ok(!src.includes(bad), bad);
+  }
+  assert.match(src.split(/\r?\n/)[0], /^\/\* SPACE: page \*\/$/);   // a Windows checkout is CRLF
+  assert.match(src.trimEnd().split(/\r?\n/).pop(), /PAGE_PAINTERS\.solo = paintSolo;$/);
+});
