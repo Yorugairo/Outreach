@@ -40,6 +40,7 @@ MAX_SHAPES = 128
 MAX_STATES = 8
 MAX_POINTS = 128
 MAX_COORD = 16_384
+MAX_SPRITE_PIVOT_ANGLE_DEG = 15.0
 DIAGNOSTIC_LABEL = 'DIAGNOSTIC — SYNTHETIC CONTACT CLOCK / NOT APPROVED ART OR PHYSICS'
 
 
@@ -307,6 +308,8 @@ class LayeredScene:
             kind = layer.get('kind')
             if kind not in {'environment', 'prop', 'character', 'occluder'}:
                 raise LayeredSceneError(f'{label}.kind must be environment, prop, character, or occluder')
+            if 'sprite_pivot' in layer and kind != 'character':
+                raise LayeredSceneError(f'{label}.sprite_pivot is only valid on character layers')
             binding_id = layer.get('binding_id')
             if kind in {'character', 'prop'} and (not isinstance(binding_id, str) or not binding_id):
                 raise LayeredSceneError(f'{label}.binding_id must identify a character or prop motion owner')
@@ -368,6 +371,40 @@ class LayeredScene:
                 layer['_silhouette_bounds'] = _rect(
                     layer.get('silhouette_bounds_local_px'), f'{label}.silhouette_bounds_local_px'
                 )
+                if 'sprite_pivot' in layer:
+                    raw_pivot = layer['sprite_pivot']
+                    if not isinstance(raw_pivot, Mapping) or set(raw_pivot) != {
+                        'channel_id', 'max_abs_angle_deg', 'pivot_local_px',
+                    }:
+                        raise LayeredSceneError(
+                            f'{label}.sprite_pivot must declare only channel_id, max_abs_angle_deg, '
+                            'and pivot_local_px'
+                        )
+                    pivot_channel = raw_pivot['channel_id']
+                    self._require_channel(
+                        pivot_channel, f'{label}.sprite_pivot.channel_id', 'degrees',
+                        ('articulation',), ('linear', 'cubic'), binding_id,
+                    )
+                    max_angle = _finite(
+                        raw_pivot['max_abs_angle_deg'], f'{label}.sprite_pivot.max_abs_angle_deg'
+                    )
+                    if not 0 <= max_angle <= MAX_SPRITE_PIVOT_ANGLE_DEG:
+                        raise LayeredSceneError(
+                            f'{label}.sprite_pivot.max_abs_angle_deg must be in 0..'
+                            f'{MAX_SPRITE_PIVOT_ANGLE_DEG:g}'
+                        )
+                    pivot_local = _pair(raw_pivot['pivot_local_px'], f'{label}.sprite_pivot.pivot_local_px')
+                    silhouette = layer['_silhouette_bounds']
+                    if not (silhouette[0] <= pivot_local[0] <= silhouette[2]
+                            and silhouette[1] <= pivot_local[1] <= silhouette[3]):
+                        raise LayeredSceneError(
+                            f'{label}.sprite_pivot.pivot_local_px must sit inside silhouette_bounds_local_px'
+                        )
+                    layer['_sprite_pivot'] = {
+                        'channel_id': pivot_channel,
+                        'max_abs_angle_deg': max_angle,
+                        'pivot_local_px': pivot_local,
+                    }
                 layer['_pose_states'] = self._parse_states(layer.get('pose_states'), f'{label}.pose_states')
                 layer['_expression_states'] = self._parse_states(
                     layer.get('expression_states'), f'{label}.expression_states'
@@ -688,6 +725,54 @@ class LayeredScene:
             raise LayeredSceneError(f"layer {layer['layer_id']!r} normalized anchor must be within 0..1")
         return x * self.width, y * self.height
 
+    def _sprite_pivot_angle(
+        self, layer: Mapping[str, Any], anchor: tuple[float, float], sample: MotionSample,
+    ) -> float:
+        """Resolve and validate a rigid sprite pivot before a frame is accepted."""
+        config = layer['_sprite_pivot']
+        angle = _channel_value(sample, config['channel_id'], f"layer {layer['layer_id']} sprite_pivot")
+        maximum = config['max_abs_angle_deg']
+        if abs(angle) > maximum:
+            raise LayeredSceneError(
+                f"layer {layer['layer_id']!r} sprite_pivot angle {angle:g} deg exceeds "
+                f"its authored envelope of {maximum:g} deg"
+            )
+        scale_channel = layer.get('scale_channel')
+        scale = _channel_value(sample, scale_channel, f"layer {layer['layer_id']} scale") if scale_channel else 1.0
+        if not 0 < scale <= 16:
+            raise LayeredSceneError(f"layer {layer['layer_id']!r} scale must be in 0..16")
+        flip = -1.0 if layer.get('flip_x') is True else 1.0
+
+        def world_point(local: tuple[float, float]) -> tuple[float, float]:
+            return (anchor[0] + flip * local[0] * scale, anchor[1] + local[1] * scale)
+
+        pivot = world_point(config['pivot_local_px'])
+        left, top, right, bottom = layer['_source_bounds']
+        silhouette = layer['_silhouette_bounds']
+        corners = tuple(world_point((x, y)) for x, y in (
+            (silhouette[0], silhouette[1]),
+            (silhouette[2], silhouette[1]),
+            (silhouette[2], silhouette[3]),
+            (silhouette[0], silhouette[3]),
+        ))
+        radians = math.radians(angle)
+        cosine, sine = math.cos(radians), math.sin(radians)
+        # Pillow's positive rotation is counter-clockwise in the image plane (y-down).
+        rotated_corners = tuple(
+            (pivot[0] + cosine * (x - pivot[0]) + sine * (y - pivot[1]),
+             pivot[1] - sine * (x - pivot[0]) + cosine * (y - pivot[1]))
+            for x, y in corners
+        )
+        tolerance = 1e-7
+        if any(x < left - tolerance or y < top - tolerance
+               or x > right + tolerance or y > bottom + tolerance
+               for x, y in rotated_corners):
+            raise LayeredSceneError(
+                f"layer {layer['layer_id']!r} sprite_pivot rotation clips its declared silhouette "
+                'by source_bounds_px'
+            )
+        return angle
+
     @staticmethod
     def _state_for(layer: Mapping[str, Any], sample: MotionSample, field: str, states_field: str) -> str:
         channel_id = layer[field]
@@ -720,6 +805,8 @@ class LayeredScene:
             if layer['kind'] in {'character', 'prop'}:
                 anchors[layer['layer_id']] = self._anchor(layer, sample)
             if layer['kind'] == 'character':
+                if layer.get('_sprite_pivot') is not None:
+                    self._sprite_pivot_angle(layer, anchors[layer['layer_id']], sample)
                 self._validate_disocclusion(layer, camera, anchors[layer['layer_id']], sample)
             if layer['role'] == 'background':
                 self._validate_background_coverage(layer, camera)
@@ -1007,6 +1094,20 @@ class LayeredScene:
             draw.ellipse((target_on_layer[0] - marker_radius, target_on_layer[1] - marker_radius,
                           target_on_layer[0] + marker_radius, target_on_layer[1] + marker_radius),
                          outline=(238, 91, 226, 255), width=max(1, 2 * ss))
+        sprite_pivot = layer.get('_sprite_pivot')
+        if sprite_pivot is not None:
+            angle = self._sprite_pivot_angle(layer, anchor, sample)
+            # At rest, bypass Pillow's resampling entirely: authored bytes remain exact.
+            if angle != 0.0:
+                pivot = point(sprite_pivot['pivot_local_px'])
+                premultiplied = image.convert('RGBa')
+                image = premultiplied.rotate(
+                    angle,
+                    resample=Image.Resampling.BICUBIC,
+                    expand=False,
+                    center=pivot,
+                    fillcolor=(0, 0, 0, 0),
+                ).convert('RGBA')
         return image
 
 
