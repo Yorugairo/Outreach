@@ -48,7 +48,7 @@ Release management, workspace cleanup, broad infrastructure, unrelated industry 
 | Work | Default | After three consecutive substantive task failures |
 | --- | --- | --- |
 | Parent default and implementation/execution: speedster, junior_developer, implementation_luna, release_steward | gpt-6-luna / max | Sol xhigh diagnoses and writes a targeted order; Luna may retry setup/spec failures, or execution_sol implements when novel reasoning or a further miss requires it |
-| Planning/architecture: architect_sol and parent planning | gpt-6-sol / xhigh | Return evidence to parent; Astra high is an optional parent-directed step-up after three substantive Sol failures on one bounded task |
+| Planning/architecture: architect_sol, or a parent already running Sol xhigh | gpt-6-sol / xhigh | Luna parent briefs and reviews the draft, retaining final architecture decisions and human gates; Astra high is an optional parent-directed step-up after three substantive Sol failures on one bounded task |
 | Independent review: reviewer | gpt-6-sol / high | Read-only review at acceptance/integration gates; parent can re-scope or seek Sol-xhigh diagnosis after three substantive review failures |
 | Professional work, research/exploration, computer use | gpt-6-luna / max | Sol xhigh diagnoses and directs a targeted Luna retry for setup/spec failures, or professional_sol executes when needed |
 

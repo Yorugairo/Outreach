@@ -34,9 +34,12 @@ multiple coherent slices.
 | `reviewer` | Read-only correctness, security, regression, and test review | Editing or integrating its own findings |
 | `release_steward` | Reviewed stage/commit/authorized push mechanics | Unexpected diff, conflict, absent approval |
 
-The parent owns architecture, integration, protected actions, and completion
-truth. Keep concurrency at four threads and depth one. Do not overlap write
-sets.
+The parent owns final architecture decisions, integration, protected actions,
+and completion truth. On Codex's Luna default, route PRP architecture research
+and the draft to `architect_sol` (Sol xhigh); the parent reviews the draft and
+handles approval gates. Claude's same-named role keeps the model specified in
+`.claude/agents/architect_sol.md`. Keep concurrency at four threads and depth
+one. Do not overlap write sets.
 
 Use `speedster` only when judgment is unnecessary. Prefer `junior_developer`
 for a small bounded fix that still requires implementation reasoning, and
