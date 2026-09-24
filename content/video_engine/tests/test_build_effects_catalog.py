@@ -407,10 +407,10 @@ def test_every_wired_card_is_in_a_recipe():
     # (dock_option:place / dock_option:moves, 5c6871c) are tested alone in test_prop_free_placement.py; no committed
     # beat plays them yet, so they wait here rather than in an invented recipe. P69 T8b's panel focus
     # (page_species:panel_focus) is tested alone in test_ledger_panels.py until row 21 plays it. P69 T36's lit stretch
-    # (page_species:lit_stretch) is tested alone in test_lit_stretch.py until a recipe composes it (T44's epoch walk).
+    # is composed by P69 T47's recipe:rings-in-turn-on-the-vertices (the valley lit), so it is no longer excepted.
     # P69 T49's freeze beat (species:freeze) is tested alone in test_freeze_beat.py until a committed beat plays it
     # (the plan names row 18's turn); no recipe is invented for it here.
-    assert uncovered == ["dock_option:moves", "dock_option:place", "page_enter:surface", "page_species:lit_stretch",
+    assert uncovered == ["dock_option:moves", "dock_option:place", "page_enter:surface",
                          "page_species:panel_focus",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:domain", "plate_option:readability",

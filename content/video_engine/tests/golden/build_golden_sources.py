@@ -83,6 +83,7 @@ FRAME_T = {
     "count-array": 8.0,             # P52 T7: all six icons landed (5.0 + 5 * 0.34 + LAND_S = 7.15) and the count written as the claim (+ CLAIM_LAG + CLAIM_S = 7.73) - the field as it is read
     "agenda-two": 7.2,              # P52 T8: both rows revealed (5.0 and 6.2 + NUM_LEAD + ROW_S = 6.74) and both rules fully drawn - the agenda as it stands
     "agenda-page": 12.0,            # P61 T8: the agenda PAGE at rest - all three rows written, all three catalogued icons stamped and settled (the last at 8.2 + 0.54 + 0.12 + 0.26 + 0.14 = 9.26), the board full and breathing. Its three moving instants ride PROOF_FRAMES (@proof-first-row / @proof-stamp / @proof-full)
+    "rings-on-vertices": 13.2,      # P69 T47: the third ring closed (8.4 + DRAW_S), the valley's light landed (10.2 + 0.8 x 1.6 = 11.48) and the trough's figure written (11.5 + 1.4) - all three rings still standing (they hold to 16.0)
     "ring-dashed-chip": 10.6,       # P52 T8: the page has built (3.9 + 0.5 + 3.0), the dashed ellipse has closed round the datum (9.0 + DRAW_S) and the flag chip has landed beside it (+ FLAG_LAG + CHIP.LAND_S = 10.24)
     "species-proof": 12.6,          # P52 T7/T8, HUMAN GATE 3: the proof page's FIRST instant (the ring closed with its flag on the fully built page). Its other two are FLAG_FRAMES entries on the same clock (species-proof@proof-count / @proof-agenda), so the operator reads all three as frames and then plays the one file
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
@@ -1544,6 +1545,76 @@ def ring_dashed_chip() -> tuple[dict, dict]:
     return _timeline("Golden: the ring's dashed form and its flag chip", scenes, {}, None), uris
 
 
+# P69 T47 / E99 s109 (3): RINGS IN TURN ON EVERY VERTEX, AND THE VALLEY LIT - when the sentence is ABOUT the vertices.
+# No new grammar: three `ring` species on three datums, each on its own word and held to the row's word, then T36's
+# `lit_stretch` from the first peak through the trough to the second, and the trough's `figure`. The page is the REAL
+# 20-year Treasury yield (FRED DGS20, american-debt-trap's committed object, status REAL): it topped out near five
+# percent three times in 2025 - pts[8] 5.06 (Jan 14), pts[96] 5.08 (May 21), pts[132] 5.02 (Jul 15) - and between the
+# first two it fell to pts[64] 4.44 (Apr 4). Every label is the datum's own value (E53). The words: "It hit five percent
+# in January [5.8], again in May [7.1], and again in July [8.4] ... in between, it fell [10.2] to four forty-four
+# [11.5]" - the ring beat is recipe:trace-callout-ladder's 1.26 s, rounded to 1.3.
+# THE WINDOW. On the object's whole run (428 days, Jan 2025 - Sep 2026) May and July stand 36 data = 80 px apart on the
+# plot, and two rings (RING.MIN_RX 54: an ellipse at least 108 px wide) overlap and their labels collide - read off this
+# golden's first render. So the page shows the object's own first 187 observations (Jan 2 - Sep 30, 2025) and SAYS so:
+# the sub names the window, the ticks fall inside it, the LATEST badge (Sep 17, 2026) is outside it and is not drawn.
+# No value is changed, added or moved; the indices are the object's own (the window starts at its first datum).
+VERTEX_PROJECT = REPO / "content/video_engine/projects/systems-and-blowups/american-debt-trap"
+VERTEX_SERIES = VERTEX_PROJECT / "evidence/objects/treasury-20y-yield.series.json"
+VERTEX_PLATE = "ledger:treasury-20y-yield:line:427:right"   # the plate the validation reads (a ledger page)
+VERTEX_WINDOW = 187        # pts[:187] = 2025-01-02 .. 2025-09-30
+VERTEX_HOLD_UNTIL = 16.0   # the row's word: the three rings leave together here; the lit valley and its figure stay
+
+
+def _vertex_ring(at: float, index: int, label: str) -> dict:
+    return {"kind": "ring", "at": at, "dur": round(VERTEX_HOLD_UNTIL - at, 2), "form": "dashed", "label": label,
+            "target": {"kind": "datum", "index": index, "series": 0}}
+
+
+VERTEX_SPECIES = [
+    _vertex_ring(5.8, 8, "5.06%"),     # "in January"
+    _vertex_ring(7.1, 96, "5.08%"),    # "again in May"
+    _vertex_ring(8.4, 132, "5.02%"),   # "and again in July"
+    {"kind": "lit_stretch", "at": 10.2, "dur": 1.6, "from": 8, "to": 96, "series": 0},   # "in between, it fell": the valley lit
+    {"kind": "figure", "at": 11.5, "dur": 1.4, "target": {"kind": "datum", "index": 64, "series": 0},
+     "text": "4.44%", "color": "neg", "dy": 0.9},                                          # "to four forty-four": the trough named
+]
+
+
+def _vertex_page() -> dict:
+    """The treasury object's page over its 2025 window (see VERTEX_WINDOW): the object's own values, its title, source
+    and axes; the sub, the ticks and the badges say what the window shows."""
+    obj = LPG.load_series(VERTEX_SERIES)
+    ser = dict(obj["series"][0], pts=obj["series"][0]["pts"][:VERTEX_WINDOW])
+    last_x = ser["pts"][-1][0]
+    windowed = dict(obj, series=[ser], badges=[],
+                    sub="20-year U.S. Treasury constant-maturity yield · Jan 2 → Sep 30, 2025 · daily · percent per annum",
+                    xticks=[obj["xticks"][0], ["2025.2465753425", "Apr 2025"], obj["xticks"][1], [last_x, "Sep 30, 2025"]])
+    return LPG.build_spec(windowed, "line", None, "right")
+
+
+def rings_on_vertices() -> tuple[dict, dict]:
+    """P69 T47: three near-equal peaks ringed in turn, the valley between the first two lit. Judged at 13.2 s - the
+    three rings standing, the light landed on the second peak, the trough's figure written - with no captions, so the
+    frame reads the page (the rings' own words are the labels)."""
+    import build_scene_timeline_f as BST
+    species = [dict(e) for e in VERTEX_SPECIES]
+    errs = BST.validate_species(species, (0, 0, 0), VERTEX_PLATE)
+    assert not errs, errs
+    world = {"kind": "ledger", "page": _vertex_page()}
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    BST.check_target_series(world, species)
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: rings in turn on the vertices, the valley lit", scenes, {}, "16:9")
+    tl["captions"], tl["caption_pages"] = [], []
+    return tl, _base_uris()
+
+
 def species_proof() -> tuple[dict, dict]:
     """P52 T7 + T8, THE PROOF PAGE FOR HUMAN GATE 3: all three of the last Bravos species on ONE clock, one per
     scene, so the operator reads each at its own instant and then plays the single file end to end.
@@ -1753,6 +1824,7 @@ SURFACES = {
     "agenda-two": agenda_two,            # P52 T8
     "agenda-page": agenda_page,          # P61 T8: the plate version of the list (E99 s16)
     "ring-dashed-chip": ring_dashed_chip,   # P52 T8
+    "rings-on-vertices": rings_on_vertices,   # P69 T47 / E99 s109 (3): three peaks ringed in turn, the valley lit
     "species-proof": species_proof,      # P52 T7 + T8: the proof page for human gate 3
     "melt-page": melt_page,                                  # E88: the throw
     "melt-splash": lambda: melt_page("splash:chart"),        # E88: the splatter forms the next chart
