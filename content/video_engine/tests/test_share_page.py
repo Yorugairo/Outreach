@@ -87,8 +87,9 @@ def test_the_share_variant_builds_a_share_page_from_the_object():
     assert spec["colors"][1] == "deemph" and spec["colors"][0] != "deemph", "one slice coloured, the rest muted"
 
 
+# P69 T50 / E99 s100: the slice count is no longer a bound - a sixth slice is a page REPORTED with its numbers
+# (test_forms_by_honesty.py); the rows below are the pie's own fields and its truth, still refused by name.
 @pytest.mark.parametrize("over, needle", [
-    ({"shares": _series()["shares"] + [{"label": "France", "value": 300.0}]}, "5 or fewer"),
     ({"emphasize": None}, "the ONE slice the claim is about"),
     ({"peel": None}, "must declare 'peel'"),
     ({"peel": {**_series()["peel"], "value_string": ""}}, "value_string is required"),

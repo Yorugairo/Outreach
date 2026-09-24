@@ -589,19 +589,24 @@ def test_a_treemap_page_lays_out_both_aspects_and_counts_what_it_could_not_name(
         assert all(c["value_font"] >= L.TREEMAP_VALUE_FONT for c in cells if c["tier"] == 2), aspect
 
 
-def test_a_size_claim_on_a_census_page_is_refused_and_points_at_the_bars_page():
+def test_a_size_claim_on_a_census_page_is_reported_and_points_at_the_bars_page():
+    """P69 T50 / E99 s100 (amends E53 s1): a size claim on a treemap is the story's to choose - it is a page, and the
+    build REPORTS it (s106) with the cells whose figures it cannot write, naming the bars page as the fastest read."""
     for text, field in (("America is bigger than the next four", "sub"), ("Who is largest?", "title"),
                         ("three times Japan's", "claim")):
-        errs = L.validate(_census(**{field: text}), "treemap")
-        assert errs and "SIZE CLAIM takes its BAR" in errs[0], (field, errs)
-        assert "--variant bars" in errs[0], "the refusal names the page that CAN carry it (E53 s1)"
-        assert field in errs[0]
+        assert L.validate(_census(**{field: text}), "treemap") == [], (field, text)
+        warns = L.build_spec(_census(**{field: text}), "treemap").get("warnings") or []
+        assert len(warns) == 1 and warns[0].startswith("WARN form: treemap") and f"page's {field}" in warns[0], warns
+        assert "--variant bars" in warns[0], "the report names the page that reads a size fastest (E53 s1)"
     assert L.validate(_census(sub="the census of a whole year"), "treemap") == []
+    assert "warnings" not in L.build_spec(_census(sub="the census of a whole year"), "treemap")
 
 
-def test_a_census_needs_three_parts_and_positive_ones():
-    errs = L.validate({"title": "t", "src": "s", "shares": [{"label": "a", "value": 1}, {"label": "b", "value": 2}]}, "treemap")
-    assert errs and "at least 3 parts" in errs[0] and "--variant share" in errs[0], errs
+def test_a_census_needs_two_parts_and_positive_ones():
+    # P69 T50 / E99 s100: two parts of a whole is a treemap too (three was the census exception's type bound)
+    assert L.validate({"title": "t", "src": "s", "shares": [{"label": "a", "value": 1}, {"label": "b", "value": 2}]}, "treemap") == []
+    errs = L.validate({"title": "t", "src": "s", "shares": [{"label": "a", "value": 1}]}, "treemap")
+    assert errs and "at least 2 parts" in errs[0], errs
     bad = _census()
     bad["shares"][2] = {"label": "Japan", "value": -4.7}
     assert any("not a positive number" in e for e in L.validate(bad, "treemap")), L.validate(bad, "treemap")

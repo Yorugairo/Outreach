@@ -7,6 +7,7 @@ never touches the watched one.
 """
 from __future__ import annotations
 
+import math
 import subprocess
 from pathlib import Path
 
@@ -226,3 +227,13 @@ def prop_move(at: float | str, *, x: float | None = None, y: float | None = None
     if len(key) == 1:
         raise ValueError(f"prop_move at {at!r}: a key moves nothing - name x, y, w or rot")
     return key
+
+
+def stamp_enter(contact: float) -> float:
+    """E99 s112 (P69 T81): the ENTER of a stamped dock whose CONTACT lands at `contact` (``words.after`` /
+    ``words.after_idea``). The mark falls from 2.1x for ``audio.stamp_contact_s()`` (0.1542 s, the gate's
+    ``STAMP_CONTACT_S``) before it meets the page, so the enter is resolved FROM the contact - rounded UP to the shot
+    table's 0.01 s (the compiled dock writes its enter to 2 dp), so the contact never lands before the instant asked:
+    ``(PROP, 0, D.stamp_enter(W.after(ws, "going into racks", "racks")), exit, opts)``."""
+    from . import audio as A
+    return round(math.ceil(round((float(contact) - A.stamp_contact_s()) * 100, 6)) / 100, 2)

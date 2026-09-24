@@ -122,7 +122,7 @@
       "token": "bracket",
       "title": "The bracket page species",
       "aliases": [],
-      "does": "The hand draws a measured span between two data, the number as its label.",
+      "does": "The hand draws a measured span between two data, the number as its label - on a line, or on a bars page between two bar tops, beside the bars' sides (R26-272).",
       "when": null,
       "when_source": null,
       "author": {
@@ -184,7 +184,8 @@
         "symbol": "paintBracket"
       },
       "doctrine": [
-        "CAPABILITIES Build-on"
+        "CAPABILITIES Build-on",
+        "BACKLOG R26-272"
       ],
       "status": "wired",
       "proof": {
@@ -333,7 +334,7 @@
           "source": "docs/content-video-engine/CAPABILITIES.md:94"
         }
       ],
-      "does": "The named cells of a treemap page take an X on the word and their combined share is written on the page.",
+      "does": "The named cells of a treemap page take an X on the word and their combined share is written; a cross writing no share, or on a cell the page cannot name, is REPORTED with its numbers (E99 s100, s106).",
       "when": null,
       "when_source": null,
       "author": {
@@ -389,6 +390,7 @@
       },
       "doctrine": [
         "E53",
+        "E99 s100",
         "CAPABILITIES TREEMAP"
       ],
       "status": "wired",
@@ -987,7 +989,18 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "color",
+          "means": "`color: \"neg\"|\"pos\"` (P69 T86): the new title in the page's sign token (--lp-neg / --lp-pos); a hex or an ink name is refused. Absent: the title's own colour.",
+          "source_set": null
+        },
+        {
+          "token": "color_span",
+          "means": "`color_span: \"The flip\"`: only this LEADING substring of the new title takes the colour; refused unless the text starts with it or without a color. No span: all of it.",
+          "source_set": null
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",

@@ -587,13 +587,13 @@ def test_a_cross_naming_a_cell_the_page_does_not_carry_is_refused_by_name(tmp_pa
     assert "no cell named 'Atlantis'" in str(exc.value) and "its parts are" in str(exc.value), exc.value
 
 
-def test_a_cross_on_a_cell_the_page_could_not_LABEL_is_refused_by_the_census_bound(tmp_path):
-    """E53 s1's census exception (c): no unlabelled cell is ever the argument. 'Saudi Arabia' is 1.2 %
-    of the whole and its name is long - the floors cull its label, so it may not be crossed."""
+def test_a_cross_on_a_cell_the_page_could_not_LABEL_is_reported_with_its_size(tmp_path, capsys):
+    """E53 s1's census exception (c), superseded by E99 s100's honesty tests (P69 T50): 'Saudi Arabia' is 1.2 % of the
+    whole and its name is long - the floors cull its label, so the build REPORTS the crossed cell's size (s106)."""
     world = _census_world()
-    with pytest.raises(ValueError) as exc:
-        B.derive_rescale_states(world, [_cross(cells=["Saudi Arabia"])], "ledger:exports:treemap", tmp_path)
-    assert "could not fit a label" in str(exc.value) and "census exception (c)" in str(exc.value), exc.value
+    B.derive_rescale_states(world, [_cross(cells=["Saudi Arabia"])], "ledger:exports:treemap", tmp_path)
+    out = capsys.readouterr().out
+    assert "[WARN] cross: 'Saudi Arabia'" in out and "under the label floors" in out, out
 
 
 def test_a_cross_off_a_treemap_page_is_refused(tmp_path):
@@ -604,11 +604,13 @@ def test_a_cross_off_a_treemap_page_is_refused(tmp_path):
     assert "land on a TREEMAP page" in str(exc.value), exc.value
 
 
-def test_a_cross_without_its_written_share_is_refused_by_the_other_half_of_the_bound():
-    errs = B.validate_species([{"kind": "cross", "at": 9.0, "dur": 3.0, "cells": ["Japan"]}], STILL, "ledger:exports:treemap")
-    assert len(errs) == 1 and "census exception (b)" in errs[0], errs
-    errs = B.validate_species([_cross(text="the partners that left")], STILL, "ledger:exports:treemap")
-    assert len(errs) == 1 and "carries no number" in errs[0], errs
+def test_a_cross_without_its_written_share_is_reported_not_refused(tmp_path, capsys):
+    """P69 T50 / E99 s100 (b) + s106: the written share is an honesty test - the grammar accepts a cross without one, and
+    the page pass REPORTS the share its cells add up to (test_forms_by_honesty.py pins the numbers)."""
+    assert B.validate_species([{"kind": "cross", "at": 9.0, "dur": 3.0, "cells": ["Japan"]}], STILL, "ledger:exports:treemap") == []
+    assert B.validate_species([_cross(text="the partners that left")], STILL, "ledger:exports:treemap") == []
+    B.derive_rescale_states(_census_world(), [_cross(text="the partners that left")], "ledger:exports:treemap", tmp_path)
+    assert "carries no number" in capsys.readouterr().out
     errs = B.validate_species([_cross(cells=[])], STILL, "ledger:exports:treemap")
     assert len(errs) == 1 and "'cells' must be a non-empty list" in errs[0], errs
 

@@ -115,7 +115,7 @@ PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use",
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves")   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves", "after", "after_beat", "names")   # P69 T81 / E99 s112: after="<phrase>" - a STAMP's contact lands just AFTER the phrase's last word ends (+ after_beat s, default authoring.words.STAMP_AFTER_BEAT_S), the enter resolved from that contact; names="<phrase>" - the word the stamp punctuates, for the advice (`stamp_timing_advice`)   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -446,9 +446,10 @@ STAMP_SIZES = ("figure", "year")
 SPECIES_CROSS = "cross"       # P50 T6: the CENSUS's X marks on a TREEMAP page (E53 s1's second amendment, 2026-09-10;
 SPECIES_KINDS += (SPECIES_CROSS,)   # Bravos shots 89-91). ONE species carries both halves of the exception - the named
                               # cells take an X (a), and the share they add up to is WRITTEN on the page as a number (b) -
-                              # because they are one act, and a subset marked without its share is the area comparison the
-                              # ruling refuses. The painter's math is scripts/species/treemap.mjs; the page's perform layer
-                              # draws it, as it draws every page species.
+                              # because they are one act. P69 T50 / E99 s100: (b) and (c) are honesty tests now - a cross
+                              # with no written share, or on a cell the page cannot name, is REPORTED (`_cross_honesty`).
+                              # The painter's math is scripts/species/treemap.mjs; the page's perform layer draws it, as it
+                              # draws every page species.
 TIER_SPECIES = ("build_to", "undraw", "figure", "bracket")   # P50 T9: the page species that may name a TIER - which on a
                               # tiers page IS a series index. One resolution, not two: `tier` is the word the author writes
                               # (a band, not a line), `series` is what the player reads, and the two may not disagree.
@@ -704,6 +705,9 @@ PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
 RELIGHT_REFS = ("bracket", "title")
 BRACKET_COLORS = ("crimson", "teal", "cobalt", "amber", "deemph", "neg", "pos")
+# P69 T86: a retitle's `color` names a page SIGN token (the template's --lp-neg / --lp-pos), never an ink or a hex -
+# a title is not a series, and the sunflower (--lp-acc) is the callout's and the relight's one yellow
+RETITLE_COLORS = ("neg", "pos")
 # s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
 # mutually exclusive per window - one camera move, never over a Ken Burns drift.
 CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
@@ -2180,9 +2184,31 @@ def _check_bars_panel(kind: str, sp: dict, tgt: dict | None, pi: int, panel: dic
         raise ValueError(f"{kind}: target index {tgt['index']} is past panel {pi}'s last bar ({nb - 1})")
 
 
+def _validate_retitle_color(entry: dict) -> list[str]:
+    """P69 T86: a retitle's optional colour key. `color` names a page token (RETITLE_COLORS) - a raw hex or any other
+    name is refused listing the allowed ones; `color_span`, when given, is a LEADING substring of the new `text` and
+    only it takes the colour (the rest keeps the title's own); no span colours the whole title. A span needs a colour."""
+    errs: list[str] = []
+    if "color" in entry and entry["color"] not in RETITLE_COLORS:
+        errs.append(f"retitle: color {entry['color']!r} is not a page token - name one of {'|'.join(RETITLE_COLORS)} "
+                    "(the page's own sign inks; a raw hex or an ink name is refused)")
+    if "color_span" not in entry:
+        return errs
+    span, text = entry["color_span"], entry.get("text")
+    if not isinstance(span, str) or not span.strip():
+        errs.append("retitle: color_span must be a non-empty string (the leading words of the new title that take the colour)")
+    elif "color" not in entry:
+        errs.append("retitle: color_span needs a color (the span names WHICH words; the color names the token)")
+    elif not isinstance(text, str) or not text.startswith(span):
+        errs.append(f"retitle: color_span {span!r} must be a leading substring of the new title {text!r} - the span is "
+                    "the title's first words, written exactly as the text writes them")
+    return errs
+
+
 def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     """P47 T2: the page species' own fields. bracket: integer `from`/`to` (data indices), a `label`, optional `sub`,
-    `series`, `color`; retitle: a non-empty `text`; relight: `ref` bracket|title, optional `index`."""
+    `series`, `color`; retitle: a non-empty `text`, optional `color` (a page token) and `color_span` (its leading
+    words, P69 T86); relight: `ref` bracket|title, optional `index`."""
     errs: list[str] = []
     is_idx = lambda v: isinstance(v, int) and not isinstance(v, bool) and v >= 0
     if "keep" in entry:   # R26-219: the opt-out of the page's leave, and only a page-bound species has one
@@ -2207,6 +2233,7 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     elif kind == "retitle":
         if not isinstance(entry.get("text"), str) or not entry["text"].strip():
             errs.append("retitle: needs a non-empty string text")
+        errs += _validate_retitle_color(entry)
     elif kind == "relight":
         if entry.get("ref") not in RELIGHT_REFS:
             errs.append(f"relight: ref must be one of {'|'.join(RELIGHT_REFS)}")
@@ -2246,18 +2273,17 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append(f"span: color must be one of {'|'.join(BRACKET_COLORS)}")
         if "series" in entry and not is_idx(entry["series"]):
             errs.append("span: series must be a non-negative integer series index")
-    elif kind == SPECIES_CROSS:   # P50 T6: the census exception's two halves, checked rather than trusted
+    elif kind == SPECIES_CROSS:   # P50 T6: the named subset; P69 T50: its written share is an honesty test, WARNed on the page
         cells = entry.get("cells")
         if not isinstance(cells, list) or not cells or not all(isinstance(c, str) and c.strip() for c in cells):
             errs.append("cross: 'cells' must be a non-empty list of cell LABELS - the named subset the sentence crosses out")
         elif len(set(cells)) != len(cells):
             errs.append(f"cross: a cell is named twice in {cells}")
-        if not isinstance(entry.get("text"), str) or not entry["text"].strip():
-            errs.append("cross: needs 'text' - the crossed SHARE written on the page as a number (E53 s1's census exception (b): "
-                        "'3 partners, 41 % of exports'). The X's alone would ask the viewer to compare areas, which is the one "
-                        "thing a treemap may not do")
-        elif not re.search(r"\d", entry["text"]):
-            errs.append(f"cross: text {entry['text']!r} carries no number - the share the crossing adds up to is WRITTEN, so no area has to be estimated (E52)")
+        # P69 T50 / E99 s100 (b) + s106: the crossed SHARE written as a number ('3 partners, 41 % of exports') is the
+        # honesty test "the figures the claim turns on are written" - a cross that writes none, or writes no number, is
+        # REPORTED with the share its cells add up to (`_cross_honesty`, where the page is known), never refused
+        if "text" in entry and not isinstance(entry["text"], str):
+            errs.append(f"cross: text {entry['text']!r} must be a string - the crossed share, written ('3 partners, 41 % of exports')")
         if "color" in entry and entry["color"] not in BRACKET_COLORS:
             errs.append(f"cross: color must be one of {'|'.join(BRACKET_COLORS)}")
     elif kind == "undraw":
@@ -2363,7 +2389,8 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append(f"chart_to: state {idx} is past STATE_MAX ({STATE_MAX}): a fourth chart is a new page or a card")
     elif kind in ("peel", "explode"):
         pass   # P48 T4: no fields of its own. WHICH piece leaves and what it is worth are the PAGE's (page.peel), validated
-               # by ledger_page against E53 s1's bounds; the species only says WHEN. A peel on a page with no peel is inert.
+               # by ledger_page (its peel's own fields; P69 T50: the slice count is REPORTED, not refused); the species only
+               # says WHEN. A peel on a page with no peel is inert.
                # P69 T48: `explode` is the same contract - the slice and how far are the page's (page.explode).
     elif kind == "note":
         if not isinstance(entry.get("text"), str) or not entry["text"].strip():
@@ -4188,6 +4215,42 @@ def derive_recast_key(A: dict, Bs: dict) -> tuple[object, list | None, str]:
     return (RECAST_DATA_KEY, key_map, "") if key_map else (None, None, why)
 
 
+def _cross_honesty(page: dict, sp: dict) -> list[str]:
+    """P69 T50 / E99 s100 + s106: the census X on a treemap is judged by the two honesty tests, and a failure is a
+    REPORT with its numbers, never a refusal (E53 s1's census exception (b) and (c) are superseded by them):
+      (b) the figures the claim turns on are WRITTEN - a cross that writes no share, or no number, is told the share
+          its cells add up to on this page (their values against the page's whole);
+      (c) the reading is unambiguous - a crossed cell the label floors left unnamed (80 x 36 px, 18 px type) on a stage
+          is told its size there, so the frame read can see whether the sentence or the text names it.
+    Pure: the page's own spec (labels, values, total, layout) and the species."""
+    cells = [str(c) for c in (sp.get("cells") or [])]
+    labels = [str(x) for x in (page.get("labels") or [])]
+    values = list(page.get("values") or [])
+    whole = float(page.get("total") or sum(float(v or 0.0) for v in values) or 1.0)
+    part = sum(float(values[labels.index(c)] or 0.0) for c in cells if c in labels and labels.index(c) < len(values))
+    unit = str(page.get("unit") or "")
+    notes: list[str] = []
+    text = sp.get("text")
+    if not (isinstance(text, str) and text.strip()) or not re.search(r"\d", text):
+        said = "writes no share" if not (isinstance(text, str) and text.strip()) else f"text {text!r} carries no number"
+        notes.append(f"cross on {', '.join(repr(c) for c in cells)} {said}: those cells are {part / whole * 100:.1f}% of the "
+                     f"whole ({part:g} of {whole:g}{(' ' + unit) if unit and unit != '%' else unit}) - write it on the page, "
+                     "or the viewer estimates an area (E99 s100 (b): the figures the claim turns on are written). "
+                     "REPORTED, the frame read decides (E99 s106)")
+    for aspect, lay in sorted((page.get("layout") or {}).items()):
+        by = {str(c.get("label")): c for c in (lay.get("cells") or [])}
+        for c in cells:
+            cell = by.get(c)
+            if cell is None or int(cell.get("tier") or 0) >= 1:
+                continue
+            notes.append(f"cross: {c!r} at {aspect} is a {float(cell.get('w_px') or 0):.0f} x {float(cell.get('h_px') or 0):.0f} px "
+                         f"cell, under the label floors ({LPG.TREEMAP_MIN_CELL[0]} x {LPG.TREEMAP_MIN_CELL[1]} px, "
+                         f"{LPG.TREEMAP_LABEL_FONT[0]} px type) - the page cannot write the name of the cell it crosses; "
+                         "the sentence or the cross's text must name it (E99 s100: the reading unambiguous). REPORTED, the "
+                         "frame read decides (E99 s106)")
+    return notes
+
+
 def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path, sid: str | None = None) -> None:
     """Append one derived page state per `chart_to rescale` / `extend` on the row, in time order, and point each species
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
@@ -4270,17 +4333,8 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
             if unknown:
                 raise ValueError(f"cross: the page has no cell named {', '.join(repr(u) for u in unknown)} - its parts are: "
                                  + ", ".join(labels[:8]) + (", ..." if len(labels) > 8 else ""))
-            # E53 s1's census exception (c): no UNLABELLED cell is ever the argument. A cell whose name the
-            # research floors culled (too small, or too long a name for its width) may not be crossed - on
-            # either stage, because the page is read on both.
-            for aspect, lay in sorted((page.get("layout") or {}).items()):
-                tiers = {str(c.get("label")): int(c.get("tier") or 0) for c in (lay.get("cells") or [])}
-                bare = [c for c in (sp.get("cells") or []) if tiers.get(str(c), 0) < 1]
-                if bare:
-                    raise ValueError(f"cross: {', '.join(repr(b) for b in bare)} - the page could not fit a label in that cell at "
-                                     f"{aspect} (the research's floors: nothing under 80 x 36 px, no type under 18 px), and E53 s1's "
-                                     "census exception (c) says no unlabelled cell is ever the argument. Give the part a shorter "
-                                     "name on the page, or cross one the page can name")
+            for note in _cross_honesty(page, sp):   # P69 T50: the census exception's (b) and (c) are honesty tests, REPORTED
+                print(f"  [WARN] {note}")
     for sp in (row_species or []):   # P48 T4b: a keyed recast is admitted only on a legal pair, and the refusal names the
         # reason. E64/R26-49: and a recast the author left plain is KEYED BY THE COMPILER when the two states share their
         # data - the un-draw-then-draw the operator read as a cut at 0:50 was never a choice anyone made, it was a key
@@ -6185,6 +6239,9 @@ def dock_opts(raw) -> dict:
         if k in PROP_POSE_OPTS:   # P69 T26d / E99 s106: a PROP's authored place, resting angle and moves
             _check_prop_pose(k, v, raw)
             continue
+        if k in STAMP_ANCHOR_OPTS:   # P69 T81 / E99 s112: a STAMP's word-END anchor and the word it punctuates
+            _check_stamp_anchor(k, v, raw)
+            continue
         if k == "card_aspect":
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
                 raise ValueError("dock: card_aspect must be a positive number (the card's height over its width)")
@@ -7077,6 +7134,34 @@ def _check_prop_pose(k: str, v, raw: dict) -> None:
                 raise ValueError(f"dock: moves[{i}].ease must be one of {'|'.join(PROP_MOVE_EASES)}")
 
 
+# P69 T81 / E99 s112 - THE STAMP IS PUNCTUATION: it lands just AFTER the thing it names, never during it (the operator,
+# 2026-09-24: "I think of the stamp as the punctuation on the thing, so it has to follow immediately after not during").
+# A stamped dock may anchor its CONTACT on a word's END (`after`: the phrase's last word - a word, or the end of the idea
+# - plus `after_beat`); the compiler resolves the enter FROM that contact through the kit's own two functions
+# (`authoring.words.after`, `authoring.docks.stamp_enter`), so a door and a sidecar share one reading. `names` tells the
+# advice which word the stamp punctuates. The advice (`stamp_timing_advice`) is a WARN with its numbers (s106), never a
+# refusal: a contact inside its own word, or within STAMP_DATA_CLEAR_S of a data mark on its scene.
+STAMP_ANCHOR_OPTS = ("after", "after_beat", "names")
+STAMP_AFTER_BEAT_MAX_S = 1.0   # a beat past a second is no longer "just after" - it is the next thought's; name the next word instead
+STAMP_DATA_CLEAR_S = 0.15      # E99 s112: a stamp's contact this close to a data mark (a bar landing, a figure) lands as ONE thing with it -
+                               # "we're asking them to process both at once" [DIAL: the operator's ~0.15 s; T81's brief]
+
+
+def _check_stamp_anchor(k: str, v, raw: dict) -> None:
+    """dock_opts' check of one P69 T81 key. ValueError names the key; the caller names the row."""
+    if raw.get("arrive") != "stamp":
+        raise ValueError(f"dock: {k} is a STAMP's word anchor (E99 s112: the stamp is the punctuation after the word it "
+                         "names) - add arrive=stamp, or time the dock by its enter")
+    if k in ("after", "names"):
+        if not isinstance(v, str) or not v.strip():
+            raise ValueError(f"dock: {k} must name a word or phrase of the take, not {v!r}")
+    elif "after" not in raw:
+        raise ValueError("dock: after_beat is the beat after an `after` - name the word the stamp follows")
+    elif not _finite(v) or not 0.0 <= v <= STAMP_AFTER_BEAT_MAX_S:
+        raise ValueError(f"dock: after_beat must be seconds in [0, {STAMP_AFTER_BEAT_MAX_S:g}] - the beat between the "
+                         "word's end and the stamp's contact")
+
+
 def stamp_turns(rot: float | None) -> tuple[float, float]:
     """The angles a stamped mark turns through over its arrival: STAMP_TURN_RANGE about the source's -9 deg rest, or the
     same swing about an AUTHORED rest (`rot`, which the engine hands the spring as its LAND_DEG)."""
@@ -7523,6 +7608,127 @@ def _phrase_onset(words, phrase: str, after: float, where: str) -> float:
         if [norm(w["w"]) for w in ws[i:i + len(toks)]] == toks:
             return round(float(st), 2)
     raise ValueError(f"{where}: the phrase {phrase!r} is not in the take at or after {after:g}s")
+
+
+def resolve_stamp_after(ds: list, words, where: str) -> tuple[list, list[str]]:
+    """P69 T81 / E99 s112: every stamped dock that names `after` gets its ENTER resolved so its CONTACT lands just after
+    the phrase's last word ends (+ `after_beat`) - the phrase's first occurrence at or after the tuple's own enter, read
+    through `authoring.words.after` and `authoring.docks.stamp_enter` (the kit's pair). Runs before anything reads a
+    dock's enter, so the gate, the cues, the camera and the fit read one instant. A row with no `after` is returned AS
+    IT WAS (the same list), and every dock without one is the same object. ValueError names the dock where the anchor
+    cannot be played: no words, a phrase not in the take, a contact past the dock's exit. (docks, notes)."""
+    if not any(isinstance(d, (list, tuple)) and len(d) > 4 and isinstance(d[4], dict) and d[4].get("after") for d in ds or []):
+        return ds, []
+    from authoring import docks as KD, words as KW
+    ws = _override_words(words)
+    out, notes = [], []
+    for d in ds:
+        opts = d[4] if isinstance(d, (list, tuple)) and len(d) > 4 and isinstance(d[4], dict) else None
+        if not (opts and opts.get("after")):
+            out.append(d)
+            continue
+        tag = f"{where} dock {d[0]}"
+        try:
+            dock_opts(opts)
+        except ValueError as exc:
+            raise ValueError(f"{tag}: {exc}") from None
+        if not ws:
+            raise ValueError(f"{tag}: after {opts['after']!r} needs the build's words (timeline.json) to find the word's end")
+        beat = float(opts.get("after_beat", KW.STAMP_AFTER_BEAT_S))
+        try:
+            contact = KW.after(ws, opts["after"], beat=beat, from_s=float(d[2]))
+        except SystemExit as exc:
+            raise ValueError(f"{tag}: after {opts['after']!r} - {exc}") from None
+        enter = KD.stamp_enter(contact)
+        if enter >= float(d[3]) - 1e-9:
+            raise ValueError(f"{tag}: after {opts['after']!r} puts the contact at {contact:.3f}s, past the dock's exit "
+                             f"({float(d[3]):g}s) - the stamp could never be seen")
+        nd = list(d)
+        nd[2] = enter
+        out.append(tuple(nd) if isinstance(d, tuple) else nd)
+        notes.append(f"{d[0]}: after {opts['after']!r} - the word ends {contact - beat:.3f}s, the contact {contact:.3f}s "
+                     f"(+{beat:g}s), the enter {enter:.2f}s (the tuple's {float(d[2]):g}s was the search floor)")
+    return out, notes
+
+
+def _named_span(ws: list[dict], phrase: str, contact: float) -> tuple[str, float, float] | None:
+    """The occurrence of `phrase` a stamp names: the one nearest its contact (its distance to the phrase's span)."""
+    from authoring import words as KW
+    toks = [KW._norm(x) for x in phrase.split()]
+    best = None
+    for i in range(len(ws) - len(toks) + 1):
+        if toks and [KW._norm(w["w"]) for w in ws[i:i + len(toks)]] == toks:
+            a, z = float(ws[i]["start_s"]), float(ws[i + len(toks) - 1]["end_s"])
+            gap = max(a - contact, 0.0, contact - z)
+            if best is None or gap < best[0]:
+                best = (gap, phrase, a, z)
+    return best[1:] if best else None
+
+
+def _word_at_enter(ws: list[dict], enter: float) -> tuple[str, float, float] | None:
+    """The word an unnamed stamp was put ON: the word whose onset is its enter (within the at() rounding - the door's
+    `at` / `word_in` form), else the word spoken across its enter; None in a gap. The word before, ending on that same
+    onset, is never it."""
+    tol = MG.WORD_ANCHOR_TOL_S
+    onset = min((w for w in ws if abs(float(w["start_s"]) - enter) <= tol), default=None,
+                key=lambda w: abs(float(w["start_s"]) - enter))
+    across = onset or next((w for w in ws if float(w["start_s"]) <= enter < float(w["end_s"])), None)
+    return (across["w"], float(across["start_s"]), float(across["end_s"])) if across else None
+
+
+def _anchor_call(text: str) -> str:
+    """The kit call that lands a stamp after `text`: `after('racks')` for a word, `after_idea('stacked memory')` for more."""
+    bare = " ".join(x.strip(".,:;!?\"'") for x in text.split())   # the kit matches case- and punctuation-free (`words._norm`)
+    return f"after_idea({bare!r})" if len(bare.split()) > 1 else f"after({bare!r})"
+
+
+def stamp_timing_advice(scenes: list[dict], words) -> list[dict]:
+    """P69 T81 / E99 s112 (s106: the engine ADVISES): every stamped dock on the compiled scenes whose CONTACT (enter +
+    STAMP_CONTACT_S, the gate's instant) lands (a) INSIDE its own word - the dock's `names` phrase when the row says
+    which, else the word it was put ON (`_word_at_enter`) - or BEFORE the phrase it names, or (b) with a DATA MARK on its
+    scene landing while it still comes down or within STAMP_DATA_CLEAR_S of its contact (the gate's own landings: the
+    chart's landing, a badge, a build_to / bracket / figure / note end, a chart_to data landing, a panel's reveal -
+    never a dock). Each finding carries the word or the mark, the offset and the suggested contact and enter. Pure; it
+    reads, it never refuses."""
+    from authoring import docks as KD, words as KW
+    ws = _override_words(words) or []
+    out: list[dict] = []
+    for n, sc in enumerate(scenes or []):
+        stamps = [d for d in sc.get("docks") or [] if d.get("arrive") == "stamp"]
+        if not stamps:
+            continue
+        marks = sorted([(float(t), lab) for t, lab in MG._landings(sc) if not str(lab).startswith("dock ")]
+                       + [(float(t), "a panel's reveal") for t in MG._panel_reveal_landings([sc])])
+        for d in stamps:
+            contact = round(float(d["enter"]) + MG.STAMP_CONTACT_S, 4)
+            head = f"E99 s112: shot row {n + 1} ({sc.get('scene_id', '?')}) dock {d.get('slide', '?')}: the stamp's contact {contact:.2f}s"
+            base = {"row": n + 1, "scene": sc.get("scene_id"), "slide": d.get("slide"), "enter": float(d["enter"]),
+                    "contact": contact}
+            span = (_named_span(ws, d["names"], contact) if d.get("names") else _word_at_enter(ws, float(d["enter"]))) if ws else None
+            if span and contact < span[2] - 1e-9:
+                text, a, z = span
+                sug = round(z + KW.STAMP_AFTER_BEAT_S, 3)
+                kind = "inside" if contact >= a - 1e-9 else "before"
+                where = (f"lands INSIDE its word {text!r} ({a:.2f}-{z:.2f}s), {z - contact:.2f}s before it ends"
+                         if kind == "inside" else
+                         f"lands BEFORE the phrase it names, {text!r} ({a:.2f}-{z:.2f}s), {z - contact:.2f}s before it ends")
+                out.append({**base, "kind": kind, "word": text, "word_span": [round(a, 3), round(z, 3)],
+                            "named": bool(d.get("names")), "offset": round(contact - z, 3),
+                            "suggest_contact": sug, "suggest_enter": KD.stamp_enter(sug),
+                            "message": f"{head} {where} - the stamp is the punctuation after the thing, never during it: "
+                                       f"{_anchor_call(text)} puts the contact at {sug:.2f}s (enter {KD.stamp_enter(sug):.2f}s)"})
+            for t, lab in marks:   # a mark landing while the stamp still comes down, or within STAMP_DATA_CLEAR_S of its contact
+                if float(d["enter"]) - 1e-6 <= t <= contact or abs(contact - t) < STAMP_DATA_CLEAR_S - 1e-9:
+                    # the least that clears it: the fall begins after the mark has landed and the contact is
+                    # STAMP_DATA_CLEAR_S past it (the enter on the shot table's 0.01 s, the contact read off that enter)
+                    se = KD.stamp_enter(t + max(STAMP_DATA_CLEAR_S, MG.STAMP_CONTACT_S + 0.01))
+                    sug = round(se + MG.STAMP_CONTACT_S, 4)
+                    out.append({**base, "kind": "data", "mark": lab, "mark_at": round(t, 3), "offset": round(contact - t, 3),
+                                "suggest_contact": sug, "suggest_enter": se,
+                                "message": f"{head} lands {contact - t:+.2f}s from the {lab} at {t:.2f}s - one instant for "
+                                           "two things (the viewer is asked to read both at once): land it after the mark, "
+                                           f"the contact at {sug:.2f}s or later (enter {se:.2f}s)"})
+    return out
 
 
 def prop_moves(dopt: dict, paint: dict | float | None, fit: dict, aspect: str | None, enter: float, exitt: float,
@@ -9061,7 +9267,8 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                rid: str | None = None, read_moved: dict | None = None, read_deferred: bool = False,
                embed: dict | None = None, cutout: bool = False, depth: float | None = None,
                rot: float | None = None, moves: list | None = None, handed: bool = False,
-               authored_place: dict | None = None, authored_moves: list | None = None) -> dict:
+               authored_place: dict | None = None, authored_moves: list | None = None,
+               names: str | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -9117,6 +9324,9 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         # P69 T26e / E99 s107: a prop HANDED to a morph on its exit word - the mesh carries its pixels from that frame, so
         # the dock leaves on the word with no exit of its own. Written only for a handed prop.
         **({"handed": "morph"} if handed else {}),
+        # P69 T81 / E99 s112: the word or phrase a STAMP punctuates (its `names`, or the `after` it was anchored on), for
+        # the advice and the read-back. Written only when the row names one, so every other entry is byte-for-byte what it was.
+        **({"names": names} if names else {}),
         # P50 T3: a PRESS card carries its source line and its quoted phrase onto the stage; `_stack` is the
         # scene's own bookkeeping and is replaced by stack_index / stack_n once every dock on the scene is known.
         # R26-55: and the phrase's WORDS and the card's own aspect when the card was cut with them - the player
@@ -9612,6 +9822,14 @@ def main() -> int:
         row_camera = row[7] if len(row) > 7 and row[7] is not None else None   # P49 T1: the optional 8th element
         # each window runs to the next so the world layer never drops out
         b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
+        # P69 T81 / E99 s112: a stamp anchored `after` a word has its enter resolved from its contact HERE, before the held
+        # species, the prop morphs, the fit, the gate, the cues and the camera read any dock's enter (a row with none: as it was)
+        try:
+            ds, _after_notes = resolve_stamp_after(ds, tl.get("words"), f"shot row {i + 1} ({a}-{b}s)")
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: {exc}") from exc
+        for _note in _after_notes:
+            print(f"  stamp after : {sid}.{_note}")
         # dur: "hold" (operator, 2026-09-08, on the spotlight: "right now we flash it on, and really, it should hold until it
         # has a reason not to") - a species held until the NEXT event on its row (the next species' `at`) or the row's end.
         # Resolved here so the player and the gates see plain seconds; an authored number is never touched.
@@ -9704,6 +9922,8 @@ def main() -> int:
             for _w in ((world or {}).get("page") or {}).get("warnings") or []:
                 if str(_w).startswith("WARN member:"):   # P69 T45: a logo dropped for its name, a name past the phone floor
                     print(f"  [WARN] P69 T45: shot row {i + 1}: {_w}")
+                elif str(_w).startswith(LPG.FORM_WARN):   # P69 T50: a form judged by honesty - its finding, with its numbers
+                    print(f"  [WARN] P69 T50: shot row {i + 1}: {_w}")
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         if morph_prop_id((world or {}).get("morph")) is not None:   # P69 T26e: `;morph=prop:<id>` - the prop standing at the boundary
@@ -9982,7 +10202,8 @@ def main() -> int:
                                         paint=ring_fit["paint"] if ring_fit else None,   # ... and its painted extent
                                         rot=dopt.get("rot"), moves=prop_mv,   # P69 T26d: the prop's authored rest and its moves
                                         authored_place=dopt.get("place"), authored_moves=dopt.get("moves"),   # R26-298: as the author wrote them, for the read-back
-                                        handed=n_dock in _pm["handed"]))   # P69 T26e: a prop handed to a morph on its exit word
+                                        handed=n_dock in _pm["handed"],   # P69 T26e: a prop handed to a morph on its exit word
+                                        names=dopt.get("names") or dopt.get("after")))   # P69 T81: the word a stamp punctuates
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         pm_entries = []
         if _pm["morphs"] or _pm["enter_morph"]:   # P69 T26e: the state each prop morph is on, its mark, and its invariants (a WARN when they fail)
@@ -10075,6 +10296,16 @@ def main() -> int:
             print(f"  surface    : {_note}")
     except ValueError as exc:
         raise SystemExit(f"FAIL: {exc}") from exc
+
+    # P69 T81 / E99 s112 (s106): the stamps' timing ADVISED on the final scenes - a contact inside its own word, or on the
+    # instant of a data mark. WARNs with their numbers and the suggested after-time; the author decides.
+    _stamp_advice = 0
+    for _adv in stamp_timing_advice(scenes, tl.get("words")):
+        print(f"  [WARN] P69 T81: {_adv['message']}")
+        _stamp_advice += 1
+    if _stamp_advice:
+        print(f"  [WARN] P69 T81: {_stamp_advice} stamp timing finding(s) - WARNs, not refusals (E99 s106/s112): the stamp "
+              "lands just after the word, the datum or the idea it names - re-anchor with `after` or read the frame")
 
     # P50 T16: the build says whose numbers it placed by. A page the fixture has not measured is placed
     # by `ledger_page`'s ESTIMATE of the player's layout - good enough to park a card against the plot's

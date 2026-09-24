@@ -12413,8 +12413,10 @@ async function mount(doc) {
        bracket  {at, dur, from, to, label, sub?, series?, color?} - a measured vertical span between two data, beside them in
                                             the plot's own room (the infographic's bracket): the span line draws by min-jerk,
                                             the ticks land by the spring, the label writes in the hand, glyph by glyph.
-       retitle  {at, dur, text}           - the title erases glyph by glyph over PS.ERASE_S, then the new title writes per
-                                            glyph as the build did. A page may retitle more than once.
+       retitle  {at, dur, text, color?, color_span?} - the title erases glyph by glyph over PS.ERASE_S, then the new
+                                            title writes per glyph as the build did. A page may retitle more than once.
+                                            P69 T86: `color` (a page token, RT_PAL) inks the leading `color_span` of the
+                                            new title - or all of it, with no span - and the rest keeps the title's own.
        relight  {at, dur, ref: bracket|title, index?} - re-fires a bracket (or the title) in the sunflower on a word: a
                                             sunflower twin beneath it rises and falls on a sine, the base never moves.
      Dials, ours (42 s42.5): ERASE_S the title's wipe; BRACKET_DRAW / TICK / LABEL the bracket's phases as shares of its dur;
@@ -12426,6 +12428,11 @@ async function mount(doc) {
   /* P57 T20 / R26-98: R26-71's FIGURE_* dials left with their painter - they are the FIGURE object's, frozen,
      in species/figure.mjs (the region below), and every one carries the value it carried here, to the digit. */
   const PS_PAL = { ...LP_INK, neg: "var(--lp-neg)", pos: "var(--lp-pos)" };   /* E67: a species keyed to a series is the SAME ink as the series */
+  const RT_PAL = { neg: "var(--lp-neg)", pos: "var(--lp-pos)" };   /* P69 T86: a retitle's colour is a page SIGN token, never an ink or a hex (the compiler's RETITLE_COLORS) */
+  /* the glyphs a retitle's leading span owns: every character of it, or - where the title wraps (lpGlyphsWrap writes
+     no glyph for a space) - its non-space ones. No span: the whole title. */
+  const rtSpanGlyphs = (sp, glyphs, wrap) => { if (sp.color_span == null) return glyphs.length;
+    const chars = [...String(sp.color_span)]; return Math.min(glyphs.length, wrap ? chars.filter((ch) => ch !== " ").length : chars.length); };
   const pageSpecies = (scene, kind) => (scene.species || []).filter((sp) => sp && sp.kind === kind).sort((a, b) => a.at - b.at);
   const polyLenTo = (pts, i) => { let L = 0; for (let k = 1; k <= i && k < pts.length; k++) L += Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]); return L; };
   /* the length fraction of a drawn path up to a series datum index (a highlighted tail is offset by its k0; an index before
@@ -13546,8 +13553,25 @@ async function mount(doc) {
       st.performSvg.style.opacity = ""; st.performSvg.style.transform = ""; st.performSvg.style.transformOrigin = "";   /* the box, not the chart's current state (a cold seek past a rescale copied opacity 0) */
     }
     const surf = st.surfaceMode ? surfaceLayerOf(st.performSvg || st.chart) : (st.performSvg || st.chart);
+    const BRACKET_BAR_DESC = 0.4;   /* R26-272: a sub's descent below its baseline, in its own size - the room a stacked sub keeps over a bar's value */
     const brackets = pageSpecies(scene, "bracket").map((sp, bi) => {
-      const pts = (st.linePts || [])[sp.series | 0] || [];
+      let pts = (st.linePts || [])[sp.series | 0] || [], barSide = 0, barInkTop = Infinity;
+      /* P69 T50 / R26-272: a BARS page has no `linePts`, and a bracket from bar 0 to bar 1 used to build nothing. Its
+         data are the bars' TOPS - the one datum rule lpMarkDatumOn reads for a bar (`b:<i>`: [cx, end]), series 0 only
+         as a bars page has one - and the span stands beside the bars' own SIDES (`barSide` = the wider of its two bars'
+         half-widths), so it never draws on a bar's ink; a label with no room beside it stacks above the bars' own
+         VALUE labels too (`barInkTop`, their measured tops - the frame read: at 9:16 it wrote onto the "3x"). Only where
+         the line points are absent: every page that drew a bracket before draws it exactly as it did (barSide 0). */
+      if (pts.length < 2 && !(sp.series | 0)) {
+        const BM = st.markBy || {}, n = (st.bars || []).length, tops = [];
+        for (let i = 0; i < n && BM["b:" + i] && BM["b:" + i].geom; i++) tops.push(BM["b:" + i].geom);
+        if (tops.length >= 2) {
+          pts = tops.map((q) => [q.cx, q.end]);
+          const f = Math.max(0, Math.min(tops.length - 1, sp.from | 0)), g = Math.max(0, Math.min(tops.length - 1, sp.to | 0));
+          barSide = Math.max(tops[f].w || 0, tops[g].w || 0) / 2;
+          for (const rec of st.bars || []) { const vb = rec && rec.val ? lpLabelBox(rec.val) : null; if (vb) barInkTop = Math.min(barInkTop, vb[1] - fss * BRACKET_BAR_DESC); }   /* the stacked sub's descenders clear it too */
+        }
+      }
       if (pts.length < 2) return null;
       const A = pts[Math.max(0, Math.min(pts.length - 1, sp.from | 0))], B = pts[Math.max(0, Math.min(pts.length - 1, sp.to | 0))];
       /* the span stands to the RIGHT of the two data (the ticks point back at them); when the chart's room there is too
@@ -13557,10 +13581,11 @@ async function mount(doc) {
          narrow for the label, the label writes ABOVE the span. The geometry is a FUNCTION of the two anchors and the
          series' points, so it can be re-read every frame on a page whose chart changes state (R26-28) */
       const geomOf = (Ap, Bp, ptsNow) => {
-        const xr = Math.max(Ap[0], Bp[0]) + PS.BRACKET_GAP, fits = xr + PS.BRACKET_ROOM <= G.W, inMargin = xr <= G.W;
-        const x = inMargin ? xr : Math.min(Ap[0], Bp[0]) - PS.BRACKET_GAP, dir = inMargin ? -1 : 1;
+        const xr = barSide ? Math.max(Ap[0], Bp[0]) + barSide + PS.BRACKET_GAP : Math.max(Ap[0], Bp[0]) + PS.BRACKET_GAP;   /* R26-272: beside a bar's SIDE */
+        const fits = xr + PS.BRACKET_ROOM <= G.W, inMargin = xr <= G.W;
+        const x = inMargin ? xr : (barSide ? Math.min(Ap[0], Bp[0]) - barSide - PS.BRACKET_GAP : Math.min(Ap[0], Bp[0]) - PS.BRACKET_GAP), dir = inMargin ? -1 : 1;
         const y0 = Math.min(Ap[1], Bp[1]), y1 = Math.max(Ap[1], Bp[1]), ym = (y0 + y1) / 2;
-        const yClear = Math.min(y0, ...ptsNow.map((q) => q[1]));   /* a stacked label clears the WHOLE series - a record before the span can stand higher than the span's top */
+        const yClear = barSide ? Math.min(y0, barInkTop, ...ptsNow.map((q) => q[1])) : Math.min(y0, ...ptsNow.map((q) => q[1]));   /* a stacked label clears the WHOLE series - a record before the span can stand higher than the span's top (R26-272: and every bar's value) */
         const half = sp.form === "bar" ? PS.BRACKET_BAR_W / 2 : 0;   /* P50 T9: a bar has width, and its label is written clear of it, not on it */
         const lx = fits ? x + 12 + half : x - 4 - half, ly = fits ? ym + fs * 0.35 : yClear - (sp.sub ? fss * 1.3 : 0) - 10;   /* beside, or stacked above the whole line */
         return { x, dir, fits, anchor: fits ? "start" : "end", y0, y1, lx, ly, sy: fits ? ly + fss * 1.3 : yClear - 10 };
@@ -13600,6 +13625,7 @@ async function mount(doc) {
       if (st.titleEl && st.titleEl.getAttribute("style")) div.setAttribute("style", st.titleEl.getAttribute("style"));   /* the title's inline geometry (portrait sets it): the rewrite sits exactly where the title sat */
       div.style.opacity = "1";   /* clone geometry, not the surface arrival's transient opacity; glyph widths own the retitle clock */
       const glyphs = P ? lpGlyphsWrap(div, String(sp.text || ""), st.seed + 40 + ri) : lpGlyphs(div, String(sp.text || ""), st.seed + 40 + ri);
+      if (sp.color && RT_PAL[sp.color]) for (const g of glyphs.slice(0, rtSpanGlyphs(sp, glyphs, P))) { g.__col = RT_PAL[sp.color]; g.style.color = g.__col; }   /* P69 T86: the span's own ink; a relight of the title gives it back (__col) */
       (st.rtGlyphs || (st.rtGlyphs = [])).push(...glyphs);
       return { sp, div, glyphs };
     });
@@ -13879,7 +13905,7 @@ async function mount(doc) {
       const u = (t - rl.at) / Math.max(0.001, rl.dur || 1); if (u < 0 || u > 1) continue;
       const e = Math.sin(Math.PI * u);
       if (rl.ref === "bracket") { const b = PF.brackets[rl.index | 0]; if (b) b.glow.g.setAttribute("opacity", e.toFixed(3)); }
-      else if (rl.ref === "title") { const tg = PF.retitles.length ? PF.retitles[PF.retitles.length - 1].glyphs : (st.titleGlyphs || []); for (const g of tg) g.style.color = e > 0.02 ? PS.RELIGHT_COL : ""; }
+      else if (rl.ref === "title") { const tg = PF.retitles.length ? PF.retitles[PF.retitles.length - 1].glyphs : (st.titleGlyphs || []); for (const g of tg) g.style.color = e > 0.02 ? PS.RELIGHT_COL : (g.__col || ""); }   /* P69 T86: back to a keyed span's token, else the title's own */
     }
     for (const b of PF.brackets) if (b.hidden) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); }   /* R26-28: a bracket whose data left the window stays hidden through the relight */
     if (PF.retitles.length) {

@@ -574,6 +574,8 @@ def bind_build_cues(build: Path, timeline_name: str, project: Path | None = None
     print(f"\n{rel(tl_path)}: {len(embedded)} cues -> {len(kept_tl)} bound ({len(dropped_tl)} dropped)")
     for d in dropped:
         print(f"  DROPPED {d['slot']} at {d['at']:.2f}s: {d['why']}")
+    for m in A.retimed(embedded, timeline):   # E99 s116 (P69 T84): a kept landing cue plays on its contact
+        print(f"  {A.retime_note(m)}")
     for note in A.unsounded(kept_tl, timeline):
         print(f"  [sound] {note}")
     if plan is not None:

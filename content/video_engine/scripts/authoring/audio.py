@@ -269,6 +269,10 @@ CUE_SLOT = re.compile(r"^(?P<kind>page enter|page retract|landing|suck|press)"
 CUE_ROW_ID = "s{n:02d}"        # `build_scene_timeline_f.scene_row_id`: the nth ROW names its scene `s01`, `s02`, ...
                                # and a slot is numbered by its row (`build_short.sound_cues`) - the one handle a cue
                                # has on WHERE it belongs, and the difference between row 5's landing and row 2's
+LANDING = "landing"
+CUE_DP_S = 0.01                # a cue plan and `fired()` both write instants to 0.01 s: each side errs by up to half of
+                               # it, so "on the contact or one frame early" is read with this much slack either way
+RETIMED_KEY = "retimed"        # P69 T84: the record a MOVED landing cue carries - {from, to, why}
 
 
 def _scripts_on_path() -> None:
@@ -435,15 +439,36 @@ def drop_why(key: dict, at: float, scene: str | None, fires: list[dict], tol: fl
             "fire sounds once, and this cue is the one left over")
 
 
+def on_contact(at: float, contact: float, fps: int = FPS) -> bool:
+    """Whether a landing cue already sits ON its contact or ONE FRAME early (the weight report Q5 lead,
+    `landing_contact`), read with the plans' own 0.01 s rounding (`CUE_DP_S`) - never two frames ahead."""
+    return contact - 1 / fps - CUE_DP_S - 1e-9 <= at <= contact + CUE_DP_S + 1e-9
+
+
+def landing_plays(key: dict | None, at: float, fire: dict | None, fps: int = FPS) -> float:
+    """E99 s116 (P69 T84): the instant a cue PLAYS. A `landing` cue bound to a compiled landing (throw, land,
+    stamp) plays on THAT landing's contact - the plan names which sound, the compiled landing says when - unless
+    it already sits on the contact or one frame early (`on_contact`), which it keeps. Anything else plays where
+    it was authored: a page cue, a suck, a bed, a press, a cue left unbound."""
+    if not key or key.get("kind") != LANDING or not fire or fire.get("kind") != LANDING:
+        return at
+    return at if on_contact(at, float(fire["at"]), fps) else float(fire["at"])
+
+
 def bind_report(cues: list[dict], timeline, tol: float | None = None) -> dict:
     """The ONE pairing of cues to fires every reader here shares: NEAREST-FIRST and CONSUMED.
 
-    `{fires, tol, cues: [{cue, key, at, scene, fire, why}], silent: [the fires no cue took]}`. Each
+    `{fires, tol, cues: [{cue, key, at, plays, scene, fire, why}], silent: [the fires no cue took],
+    retimed: [{slot, what, scene, from, to}]}`. Each
     cue binds to at most one fire and each fire to at most one cue: every admissible pair is scored by
     its distance and the nearest is taken first, so two arrivals of one kind inside the tolerance -
     ordinary in a dense beat - take a cue each, and the one the map leaves out is NAMED rather than
     silenced by its neighbour's cue (E99 s37: an instant the map has no sound for stays silent, and
-    says so). A cue the binder has no truth for carries `key is None` and is never dropped."""
+    says so). A cue the binder has no truth for carries `key is None` and is never dropped.
+
+    The pairing reads each cue's AUTHORED `at`; only then does a bound landing cue take its fire's contact
+    (`landing_plays`, E99 s116) - so what is dropped and which fire a cue binds to never depend on the move,
+    and every move is listed in `retimed`."""
     fires = fired(timeline)
     tol = gates().CUE_TOL_S if tol is None else float(tol)
     keys = [cue_key(c) for c in cues]
@@ -458,13 +483,28 @@ def bind_report(cues: list[dict], timeline, tol: float | None = None) -> dict:
         if ci not in bound and fi not in taken:
             bound[ci] = fi
             taken.add(fi)
-    rows = [{"cue": cue, "key": keys[ci], "at": ats[ci], "scene": scenes[ci],
-             "fire": fires[bound[ci]] if ci in bound else None,
-             "why": None if keys[ci] is None or ci in bound
-                    else drop_why(keys[ci], ats[ci], scenes[ci], fires, tol)}
-            for ci, cue in enumerate(cues)]
+    rows = []
+    for ci, cue in enumerate(cues):
+        fire = fires[bound[ci]] if ci in bound else None
+        rows.append({"cue": cue, "key": keys[ci], "at": ats[ci], "plays": landing_plays(keys[ci], ats[ci], fire),
+                     "scene": scenes[ci], "fire": fire,
+                     "why": None if keys[ci] is None or ci in bound
+                            else drop_why(keys[ci], ats[ci], scenes[ci], fires, tol)})
+    retimed = [{"slot": r["cue"].get("slot"), "what": r["fire"]["what"], "scene": r["fire"].get("scene"),
+                "from": r["at"], "to": r["plays"]}
+               for r in rows if r["plays"] != r["at"]]
     return {"fires": fires, "tol": tol, "cues": rows,
-            "silent": [f for fi, f in enumerate(fires) if fi not in taken]}
+            "silent": [f for fi, f in enumerate(fires) if fi not in taken], "retimed": retimed}
+
+
+def retimed_cue(r: dict) -> dict:
+    """A bound report row's cue AS IT PLAYS: the same object when it keeps its instant, else a COPY on the
+    landing's contact carrying `RETIMED_KEY` (where it was authored, where it plays, why) - never a mutation."""
+    if r["plays"] == r["at"]:
+        return r["cue"]
+    why = (f"E99 s116: the compiled {r['fire']['what']} lands at {r['plays']:.2f}s - the plan names the sound, "
+           "the landing its instant")
+    return {**r["cue"], "at": r["plays"], RETIMED_KEY: {"from": r["at"], "to": r["plays"], "why": why}}
 
 
 def bind_cues(cues: list[dict], timeline, tol: float | None = None) -> tuple[list[dict], list[dict]]:
@@ -472,14 +512,27 @@ def bind_cues(cues: list[dict], timeline, tol: float | None = None) -> tuple[lis
 
     Every dropped record carries the cue and a `why` naming the effect it claimed and what the
     compiled timeline plays on that instant instead. The kept list keeps the cues' own order, their
-    files, their gains and their envelopes: this function chooses no sound."""
+    files, their gains and their envelopes: this function chooses no sound. A kept LANDING cue plays on
+    its landing's contact (E99 s116, `landing_plays`); the moves are `retimed(...)`."""
     kept, dropped = [], []
     for r in bind_report(cues, timeline, tol)["cues"]:
         if r["key"] is None or r["fire"] is not None:
-            kept.append(r["cue"])
+            kept.append(retimed_cue(r))
         else:
             dropped.append({"cue": r["cue"], "at": r["at"], "slot": r["cue"].get("slot"), "why": r["why"]})
     return kept, dropped
+
+
+def retimed(cues: list[dict], timeline, tol: float | None = None) -> list[dict]:
+    """Every landing cue the binder MOVES onto its contact (E99 s116): `[{slot, what, scene, from, to}]`, in the
+    cue list's order - the accessor beside `bind_cues`, whose 2-tuple its callers keep."""
+    return bind_report(cues, timeline, tol)["retimed"]
+
+
+def retime_note(m: dict) -> str:
+    """One move, as a build prints it."""
+    return (f"[INFO] P69 T84 retimed {m['slot']} {m['from']:.2f}s -> {m['to']:.2f}s: the compiled {m['what']} "
+            f"lands there on {m['scene']} (E99 s116 - the plan names the sound, the landing its instant)")
 
 
 def unsounded(cues: list[dict], timeline, tol: float | None = None) -> list[str]:

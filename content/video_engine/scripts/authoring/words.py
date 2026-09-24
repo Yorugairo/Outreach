@@ -21,6 +21,10 @@ DEFAULT_CUT_RULE = "onset"     # for a MEASURED take; an estimated take (a word 
 SENTENCE_ENDS = (".", "!", "?", ":")   # what closes a caption sentence in `timeline.json`
 HARD_STOPS = ".?!"                     # ... and what closes a SPOKEN sentence (a colon runs on)
 QUOTE_TAIL = "\"”"                # a closing quote may sit after the stop
+STAMP_AFTER_BEAT_S = 0.12   # E99 s112 (P69 T81): a stamp's CONTACT lands this long after the word it names has ENDED - the
+                            # punctuation after the thing, never during it ("it has to follow immediately after not during");
+                            # ~3 frames at 24 fps [DIAL: the operator's "just after"; the author may name another beat]
+ANCHOR_TOL_S = 0.05         # an `at()` rounds a word's start to 2 dp - a floor read off one may sit up to this far past the onset
 
 
 def take_words(project) -> list[dict]:
@@ -63,6 +67,53 @@ def word_in(ws: list[dict], phrase: str, word: str, window: int = 10) -> float:
     mid-phrase (a snap on the verb, a dock on the noun)."""
     i0 = phrase_start(ws, phrase)[0]
     return next(round(w["start_s"], 2) for w in ws[i0:][:window] if w["w"].strip(".,;:!?").lower() == word)
+
+
+def _phrase_from(ws: list[dict], phrase: str, from_s: float | None) -> int:
+    """Index of the word that opens `phrase` - its first occurrence whose onset is at or after `from_s` (less the
+    anchor rounding, ANCHOR_TOL_S: an `at()` rounds a start to 2 dp, up as well as down), or the take's first."""
+    toks = [_norm(x) for x in phrase.split()]
+    if not toks:
+        raise SystemExit(f"phrase not in the take: {phrase!r} names no word")
+    floor = None if from_s is None else float(from_s) - ANCHOR_TOL_S
+    for i in range(len(ws) - len(toks) + 1):
+        if floor is not None and float(ws[i]["start_s"]) < floor:
+            continue
+        if [_norm(x["w"]) for x in ws[i:i + len(toks)]] == toks:
+            return i
+    where = "" if from_s is None else f" at or after {float(from_s):g}s"
+    raise SystemExit(f"phrase not in the take{where}: {phrase!r}")
+
+
+def word_end(ws: list[dict], phrase: str, word: str | None = None, window: int = 10,
+             from_s: float | None = None) -> float:
+    """The raw END of what a row names (E99 s112): the end of `phrase`'s last word, or - with `word` - the end of
+    `word` (one word or several) inside the `window` words that open at `phrase` (`word_in`'s reading, at its end)."""
+    i0 = _phrase_from(ws, phrase, from_s)
+    if word is None:
+        return float(ws[i0 + len(phrase.split()) - 1]["end_s"])
+    toks = [_norm(x) for x in word.split()]
+    span = ws[i0:i0 + window]
+    for j in range(len(span) - len(toks) + 1):
+        if [_norm(x["w"]) for x in span[j:j + len(toks)]] == toks:
+            return float(span[j + len(toks) - 1]["end_s"])
+    raise SystemExit(f"{word!r} is not in the {window} words that open at {phrase!r}")
+
+
+def after(ws: list[dict], phrase: str, word: str | None = None, beat: float = STAMP_AFTER_BEAT_S,
+          window: int = 10, from_s: float | None = None) -> float:
+    """E99 s112 (P69 T81): the instant a stamp's CONTACT lands - just AFTER the thing it names, never during it: the
+    END of `word` inside `phrase` (or of `phrase`'s last word) plus `beat`. The stamp is the punctuation on the thing.
+    Resolve the dock's enter from it with `authoring.docks.stamp_enter` (the mark falls before it meets the page)."""
+    if isinstance(beat, bool) or not isinstance(beat, (int, float)) or beat < 0:
+        raise ValueError(f"after {phrase!r}: the beat must be seconds >= 0, not {beat!r}")
+    return round(word_end(ws, phrase, word, window, from_s) + float(beat), 3)
+
+
+def after_idea(ws: list[dict], phrase: str, beat: float = STAMP_AFTER_BEAT_S, from_s: float | None = None) -> float:
+    """E99 s112: the stamp's CONTACT at the END OF THE IDEA - when the sentence carries a larger idea about the thing,
+    the stamp punctuates the idea, not the noun: the end of `phrase`'s LAST word plus `beat` (the author picks which)."""
+    return after(ws, phrase, None, beat, from_s=from_s)
 
 
 def is_estimated(ws: list[dict]) -> bool:
