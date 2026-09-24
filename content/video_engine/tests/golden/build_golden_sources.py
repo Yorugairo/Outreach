@@ -83,6 +83,10 @@ FRAME_T = {
     "count-array": 8.0,             # P52 T7: all six icons landed (5.0 + 5 * 0.34 + LAND_S = 7.15) and the count written as the claim (+ CLAIM_LAG + CLAIM_S = 7.73) - the field as it is read
     "agenda-two": 7.2,              # P52 T8: both rows revealed (5.0 and 6.2 + NUM_LEAD + ROW_S = 6.74) and both rules fully drawn - the agenda as it stands
     "agenda-page": 12.0,            # P61 T8: the agenda PAGE at rest - all three rows written, all three catalogued icons stamped and settled (the last at 8.2 + 0.54 + 0.12 + 0.26 + 0.14 = 9.26), the board full and breathing. Its three moving instants ride PROOF_FRAMES (@proof-first-row / @proof-stamp / @proof-full)
+    "rings-on-vertices": 13.2,      # P69 T47: the third ring closed (8.4 + DRAW_S), the valley's light landed (10.2 + 0.8 x 1.6 = 11.48) and the trough's figure written (11.5 + 1.4) - all three rings still standing (they hold to 16.0)
+    "share-donut-flat": 8.4,        # P69 T48: the flat donut at rest - the sweep closed (3.9 + 0.5 + SHARE_BUILD 3.2 = 7.6) and every slice's name and figure written
+    "share-pie-3d": 10.4,           # P69 T48: the tilted, extruded pie with its largest slice EXPLODED - the explode fired on its word (9.0 + 0.8) and settled
+    "share-pie-3d-push": 13.2,      # P69 T48: the camera HELD on the largest slice (11.0 -> 12.4 at PIE_PUSH_ZOOM, inout) with the other four receded
     "ring-dashed-chip": 10.6,       # P52 T8: the page has built (3.9 + 0.5 + 3.0), the dashed ellipse has closed round the datum (9.0 + DRAW_S) and the flag chip has landed beside it (+ FLAG_LAG + CHIP.LAND_S = 10.24)
     "species-proof": 12.6,          # P52 T7/T8, HUMAN GATE 3: the proof page's FIRST instant (the ring closed with its flag on the fully built page). Its other two are FLAG_FRAMES entries on the same clock (species-proof@proof-count / @proof-agenda), so the operator reads all three as frames and then plays the one file
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
@@ -1544,6 +1548,150 @@ def ring_dashed_chip() -> tuple[dict, dict]:
     return _timeline("Golden: the ring's dashed form and its flag chip", scenes, {}, None), uris
 
 
+# P69 T47 / E99 s109 (3): RINGS IN TURN ON EVERY VERTEX, AND THE VALLEY LIT - when the sentence is ABOUT the vertices.
+# No new grammar: three `ring` species on three datums, each on its own word and held to the row's word, then T36's
+# `lit_stretch` from the first peak through the trough to the second, and the trough's `figure`. The page is the REAL
+# 20-year Treasury yield (FRED DGS20, american-debt-trap's committed object, status REAL): it topped out near five
+# percent three times in 2025 - pts[8] 5.06 (Jan 14), pts[96] 5.08 (May 21), pts[132] 5.02 (Jul 15) - and between the
+# first two it fell to pts[64] 4.44 (Apr 4). Every label is the datum's own value (E53). The words: "It hit five percent
+# in January [5.8], again in May [7.1], and again in July [8.4] ... in between, it fell [10.2] to four forty-four
+# [11.5]" - the ring beat is recipe:trace-callout-ladder's 1.26 s, rounded to 1.3.
+# THE WINDOW. On the object's whole run (428 days, Jan 2025 - Sep 2026) May and July stand 36 data = 80 px apart on the
+# plot, and two rings (RING.MIN_RX 54: an ellipse at least 108 px wide) overlap and their labels collide - read off this
+# golden's first render. So the page shows the object's own first 187 observations (Jan 2 - Sep 30, 2025) and SAYS so:
+# the sub names the window, the ticks fall inside it, the LATEST badge (Sep 17, 2026) is outside it and is not drawn.
+# No value is changed, added or moved; the indices are the object's own (the window starts at its first datum).
+VERTEX_PROJECT = REPO / "content/video_engine/projects/systems-and-blowups/american-debt-trap"
+VERTEX_SERIES = VERTEX_PROJECT / "evidence/objects/treasury-20y-yield.series.json"
+VERTEX_PLATE = "ledger:treasury-20y-yield:line:427:right"   # the plate the validation reads (a ledger page)
+VERTEX_WINDOW = 187        # pts[:187] = 2025-01-02 .. 2025-09-30
+VERTEX_HOLD_UNTIL = 16.0   # the row's word: the three rings leave together here; the lit valley and its figure stay
+
+
+def _vertex_ring(at: float, index: int, label: str) -> dict:
+    return {"kind": "ring", "at": at, "dur": round(VERTEX_HOLD_UNTIL - at, 2), "form": "dashed", "label": label,
+            "target": {"kind": "datum", "index": index, "series": 0}}
+
+
+VERTEX_SPECIES = [
+    _vertex_ring(5.8, 8, "5.06%"),     # "in January"
+    _vertex_ring(7.1, 96, "5.08%"),    # "again in May"
+    _vertex_ring(8.4, 132, "5.02%"),   # "and again in July"
+    {"kind": "lit_stretch", "at": 10.2, "dur": 1.6, "from": 8, "to": 96, "series": 0},   # "in between, it fell": the valley lit
+    {"kind": "figure", "at": 11.5, "dur": 1.4, "target": {"kind": "datum", "index": 64, "series": 0},
+     "text": "4.44%", "color": "neg", "dy": 0.9},                                          # "to four forty-four": the trough named
+]
+
+
+def _vertex_page() -> dict:
+    """The treasury object's page over its 2025 window (see VERTEX_WINDOW): the object's own values, its title, source
+    and axes; the sub, the ticks and the badges say what the window shows."""
+    obj = LPG.load_series(VERTEX_SERIES)
+    ser = dict(obj["series"][0], pts=obj["series"][0]["pts"][:VERTEX_WINDOW])
+    last_x = ser["pts"][-1][0]
+    windowed = dict(obj, series=[ser], badges=[],
+                    sub="20-year U.S. Treasury constant-maturity yield · Jan 2 → Sep 30, 2025 · daily · percent per annum",
+                    xticks=[obj["xticks"][0], ["2025.2465753425", "Apr 2025"], obj["xticks"][1], [last_x, "Sep 30, 2025"]])
+    return LPG.build_spec(windowed, "line", None, "right")
+
+
+def rings_on_vertices() -> tuple[dict, dict]:
+    """P69 T47: three near-equal peaks ringed in turn, the valley between the first two lit. Judged at 13.2 s - the
+    three rings standing, the light landed on the second peak, the trough's figure written - with no captions, so the
+    frame reads the page (the rings' own words are the labels)."""
+    import build_scene_timeline_f as BST
+    species = [dict(e) for e in VERTEX_SPECIES]
+    errs = BST.validate_species(species, (0, 0, 0), VERTEX_PLATE)
+    assert not errs, errs
+    world = {"kind": "ledger", "page": _vertex_page()}
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    BST.check_target_series(world, species)
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: rings in turn on the vertices, the valley lit", scenes, {}, "16:9")
+    tl["captions"], tl["caption_pages"] = [], []
+    return tl, _base_uris()
+
+
+# P69 T48 / E99 s109 (4) + its amendment: THE PIE AND THE DONUT, FLAT OR 3D EXPLODED, AND THE PUSH ONTO THE LARGEST
+# SLICE. The page is the registered DRAM market-share slide (silicon-silent-triopoly s08, `registration.silicon-silent-
+# triopoly.json`): Samsung 39 %, SK hynix 26 %, Micron 25 %, CXMT 7 % - 97 of the whole 100. The share check refuses
+# that page and NAMES the 3 % it owes; the fifth slice is exactly that remainder, "Other", never a figure invented. The
+# same page is drawn three ways: a flat donut, the tilted/extruded pie with Samsung EXPLODED on its word ("Samsung
+# alone makes..."), and the push - a camera key on the largest slice while the others recede.
+PIE_REGISTRATION = REPO / "content/video_engine/projects/systems-and-blowups/registration/registration.silicon-silent-triopoly.json"
+PIE_SLIDE = "silicon-silent-triopoly-s08"
+PIE_MAKERS = ("Samsung", "SK hynix", "Micron", "CXMT")
+PIE_PLATE = "ledger:golden-dram:share"
+PIE_HOLE = 0.55            # the flat donut's hole, a share of the radius
+PIE_EXPLODE_AT, PIE_EXPLODE_S = 9.0, 0.8     # "Samsung alone" - the slice leaves the whole on its word
+PIE_PUSH_T0, PIE_PUSH_T1, PIE_PUSH_ZOOM = 11.0, 12.4, 1.6   # the push onto the largest slice, then held
+
+
+def pie_series() -> dict:
+    """The slide's four makers, read off the registration (never re-typed), and the remainder the check names."""
+    reg = json.loads(PIE_REGISTRATION.read_text(encoding="utf-8"))
+    figs = {f["label"]: f["value"] for f in next(s for s in reg["slides"] if s["slide_id"] == PIE_SLIDE)["figures"]}
+    vals = [int(figs[f"{n} DRAM market share"].rstrip("%")) for n in PIE_MAKERS]
+    shares = [{"label": n, "value": v, "value_string": f"{v}%"} for n, v in zip(PIE_MAKERS, vals)]
+    rest = 100 - sum(vals)
+    shares.append({"label": "Other", "value": rest, "value_string": f"{rest}%"})
+    return {"title": "Who makes the world's DRAM", "sub": "DRAM market share by maker, percent of the whole",
+            "src": "silicon-silent-triopoly deck, slide 8 (registered figures); Other = the remainder to 100",
+            "unit": "%", "total": 100, "emphasize": 0, "shares": shares,
+            "extrude": {"hatch": True}, "explode": {"index": 0}}
+
+
+def pie_push_camera() -> dict:
+    """The push as a row authors it: the look is the largest slice (a `datum` on a share page is a slice), the chrome
+    rides the screen so the title and the source stay whole while the plot is pushed (T26f)."""
+    look = {"kind": "datum", "index": 0}
+    return {"keys": [{"t": PIE_PUSH_T0, "zoom": 1.0, "look": look, "ease": "inout"},
+                     {"t": PIE_PUSH_T1, "zoom": PIE_PUSH_ZOOM, "look": look, "ease": "inout"}],
+            "attention": "locked", "chrome": "screen"}
+
+
+def _pie_timeline(title: str, series: dict, species: list, camera: dict | None) -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    errs = BST.validate_species(species, (0, 0, 0), PIE_PLATE)
+    assert not errs, errs
+    assert LPG.validate(series, "share") == [], LPG.validate(series, "share")
+    page = LPG.build_spec(series, "share")
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    scene = {"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}
+    if camera is not None:
+        assert BST.validate_camera(camera, PIE_PLATE, "16:9") == []
+        assert BST.share_slice_errors(world, camera, PIE_PLATE) == []
+        scene["camera"], _notes = BST.compile_chrome(camera, None, (0.0, RUNTIME), PIE_PLATE, world, "16:9")
+    tl = _timeline(title, [scene], {}, "16:9")
+    tl["captions"], tl["caption_pages"] = [], []
+    if camera is not None:
+        tl["kinetics"] = {"camera": True}   # E59's own module drives the keys (camNow), as on camera-layers
+    return tl, _base_uris()
+
+
+def share_donut_flat() -> tuple[dict, dict]:
+    """P69 T48: the flat donut - the same five slices at their true angles, every figure written on its slice."""
+    s = pie_series()
+    for k in ("extrude", "explode"):
+        s.pop(k)
+    s["hole"] = PIE_HOLE
+    return _pie_timeline("Golden: the flat donut", s, [], None)
+
+
+def share_pie_3d(push: bool = False) -> tuple[dict, dict]:
+    """P69 T48: the tilted, extruded pie; the largest slice explodes out on its word; with `push`, the camera pushes
+    onto it and holds while the other four recede."""
+    species = [{"kind": "explode", "at": PIE_EXPLODE_AT, "dur": PIE_EXPLODE_S}]
+    return _pie_timeline("Golden: the 3D pie" + (", pushed onto its largest slice" if push else ", exploded"),
+                         pie_series(), species, pie_push_camera() if push else None)
+
+
 def species_proof() -> tuple[dict, dict]:
     """P52 T7 + T8, THE PROOF PAGE FOR HUMAN GATE 3: all three of the last Bravos species on ONE clock, one per
     scene, so the operator reads each at its own instant and then plays the single file end to end.
@@ -1753,6 +1901,10 @@ SURFACES = {
     "agenda-two": agenda_two,            # P52 T8
     "agenda-page": agenda_page,          # P61 T8: the plate version of the list (E99 s16)
     "ring-dashed-chip": ring_dashed_chip,   # P52 T8
+    "rings-on-vertices": rings_on_vertices,   # P69 T47 / E99 s109 (3): three peaks ringed in turn, the valley lit
+    "share-donut-flat": share_donut_flat,            # P69 T48 / E99 s109 (4): the flat donut, true angles, every figure written
+    "share-pie-3d": share_pie_3d,                    # P69 T48: the tilted, extruded pie, its largest slice exploded on its word
+    "share-pie-3d-push": lambda: share_pie_3d(True),  # P69 T48: ... and the camera pushed onto that slice, the others receded
     "species-proof": species_proof,      # P52 T7 + T8: the proof page for human gate 3
     "melt-page": melt_page,                                  # E88: the throw
     "melt-splash": lambda: melt_page("splash:chart"),        # E88: the splatter forms the next chart
@@ -3602,6 +3754,66 @@ FRAME_T.update({"panels-mixed-grow": MIXED_GROW_AT + MIXED_GROW_DUR * 0.5,   # u
                 "bars-range": 9.0})                                           # the bars built (4.4 + 3.0), the values landed
 
 
+# ---- P69 T45 (E99 s101; s109 (2)): THE MEMBERSHIP STACK - equal tiles naming who is in ONE bar ---------------------------
+#   membership-builders  the five biggest builders' cash capital spending in Q1 2026, ONE bar of $148.4B divided into its
+#                        five members' equal tiles, bottom-up, landed one per member after the bar stood (the default
+#                        cascade), the total written and "each tile = one company" beside it. No tile carries a logo:
+#                        the operator's catalogue carries no mark for any of the five, so each tile is its NAME
+#   membership-basket    the calendar project's hynix + Micron basket, INTO the print and AFTER it - two membership bars
+#                        whose Micron tile is the catalogue's own cutout (prop-icon-micron-memory-orbit-v1, tagged
+#                        `micron-technology`) and whose SK hynix tile is its name: a logo where one exists, a name where not
+# Both are READ off the objects on disk (the five tickers and the Q1 '26 point of ev-capex-funding-v1; the two bars of
+# ev-into-vs-after-v1), never re-typed. Surfaces, not new claims about the world.
+MEMBERS_OBJECTS = REPO / "content/video_engine/projects/systems-and-blowups"
+MEMBERS_FUNDING = MEMBERS_OBJECTS / "steel-and-paper/evidence/objects/ev-capex-funding-v1.series.json"
+MEMBERS_BASKET = MEMBERS_OBJECTS / "memory-trades-the-calendar/evidence/objects/ev-into-vs-after-v1.series.json"
+MEMBERS_TICKERS = {"MSFT": "Microsoft", "AMZN": "Amazon", "GOOGL": "Alphabet", "META": "Meta", "ORCL": "Oracle"}
+MEMBERS_QUARTER = 2026.125   # Q1 '26 on the object's own decimal-year x
+MEMBERS_MICRON = "prop-icon-micron-memory-orbit-v1"
+
+
+def _members_page(series: dict, title: str) -> tuple[dict, dict]:
+    """A bars page through the compiler's own membership path: the spec, the stamp, the logos resolved against the
+    catalogue - and the asset map that carries them."""
+    import build_scene_timeline_f as BST
+    assert LPG.validate(series, "bars") == [], LPG.validate(series, "bars")
+    page = BST.stamp_full_stage(LPG.build_spec(series, "bars", 0, "right"))
+    assert BST.resolve_member_logos(page) == [], "every logo in a golden is the catalogue's"
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    tl = _timeline(title, scenes, {}, None)
+    return tl, dict(_base_uris(), **BST.member_assets(tl))
+
+
+def membership_builders() -> tuple[dict, dict]:
+    obj = json.loads(MEMBERS_FUNDING.read_text(encoding="utf-8"))
+    capex = next(s for s in obj["series"] if s.get("name") == "CASH CAPEX")
+    value = next(y for x, y in capex["pts"] if abs(x - MEMBERS_QUARTER) < 1e-9)
+    tickers = [t.strip() for t in obj["src"].split(" - ")[1].split(";")[0].split(",")]
+    assert tickers == list(MEMBERS_TICKERS), tickers
+    series = {"title": "Five companies, one quarter's bill",
+              "sub": "Cash capital spending, Q1 2026, US$ billions - the five biggest builders together",
+              "src": obj["src"].split(";")[0] + " (copied from ev-capex-funding-v1 for the golden)",
+              "unit": "$", "member_noun": "company",
+              "bars": [{"label": "Q1 2026", "value": value, "color": "crimson",
+                        "members": [{"name": MEMBERS_TICKERS[t]} for t in tickers]}]}
+    return _members_page(series, "Golden: the membership stack - five companies' tiles in one $148.4B bar")
+
+
+def membership_basket() -> tuple[dict, dict]:
+    obj = json.loads(MEMBERS_BASKET.read_text(encoding="utf-8"))
+    members = [{"name": "SK hynix"}, {"name": "Micron", "logo": MEMBERS_MICRON}]
+    series = {"title": obj["title"], "sub": obj["sub"], "src": obj["src"], "unit": "%", "member_noun": "stock",
+              "bars": [dict({k: b[k] for k in ("label", "value", "color")}, members=json.loads(json.dumps(members)))
+                       for b in obj["bars"]]}
+    return _members_page(series, "Golden: the membership stack - a catalogued logo where one exists, a name where not")
+
+
+SURFACES.update({"membership-builders": membership_builders, "membership-basket": membership_basket})
+FRAME_T.update({"membership-builders": 10.5,   # the cascade over: 4.4 + 3.0 + 0.25 + 4 x 0.34 + 0.45 = 9.46, every tile standing
+                "membership-basket": 10.0})    # 4.4 + 3.0 + 0.25 + 0.34 + 0.45 = 8.44 on both bars, the key written
+
+
 # ---- P69 T36 / E99 s99: THE LIT STRETCH - a light that TRAVELS down the fall on its word -----------------------------
 # Steel and Paper H row 5's own page (`ledger:ev-railway-index-v1:line:139:right`, `idle=live`, full stage, 16:9) and
 # its own sentence: "Railways in the 1840s drew a quarter-billion pounds ... then crashed by nearly two-thirds." The
@@ -3682,6 +3894,52 @@ def freeze_trough() -> tuple[dict, dict]:
 SURFACES.update({"freeze-trough": freeze_trough})
 FRAME_T.update({"freeze-trough": FREEZE_AT + FREEZE_DUR * 0.5})
 FRAME_T.update({"lit-stretch-crash": round(LIT_AT + 0.5 * LIT_DUR * 0.8, 3)})   # u 0.50 of the head's run (TRAVEL 0.8 of the word): 11.244
+
+
+# ---- P69 T66 (E99 s111): THE BROKEN CROSS-ERA AXIS ------------------------------------------------------------------------
+#   broken-axis-two-eras  ONE x axis across two eras, the years between them cut out and the cut DRAWN: a `//` across the
+#                         axis, the gap written in the eras' own years ("2001 // 2021"), each era named over its own
+#                         stretch, both stretches on the same years-per-pixel, the one y (the 10-year yield, %) from zero
+#                         for both. The claim is the LEVEL (s111): the yield stands where the dot-com era's stood.
+# The data is the committed two-era object's own (`ev-tnx-two-eras-v3`, Yahoo Finance ^TNX): its two panels' points
+# verbatim as two series, its rules, its unit and its source. No railway-era share-of-GDP SERIES is committed (only the
+# 7 % peak tile, `ev-railway-gdp-tile-v1`), so the railway page waits for its sourced series - none is invented here.
+# The end tags are v4's honest values (v4's provenance note: 5.078 -> "5.1%"); the eras' names are v4's, the years
+# left to the ticks. `;build=lines` (R26-226): the dot-com era draws whole, then the AI era.
+BROKEN_BUILD_T0 = 4.4    # ROLL 0.7 + SAVOR 0.8 + FIELD 2.4 + PUNCH 0.5: the page's build begins
+BROKEN_SERIES_S = 1.5    # the page's BUILD 3.0 over its two series (the bare `lines` mode divides the page's own window)
+BROKEN_BUILD_S = 2 * BROKEN_SERIES_S
+BROKEN_ERAS = ("DOT-COM ERA", "AI ERA")
+BROKEN_TAGS = ("5.1%", "4.7%")   # ev-tnx-two-eras-v4's series labels (the last value of each era, rounded honestly)
+
+
+def broken_axis_series() -> dict:
+    """v3's two eras as ONE line page on ONE broken x axis - every value read off the committed object."""
+    v3 = LPG.load_series(PANELS_V3)
+    era = [p["series"][0] for p in v3["panels"]]
+    return {"title": v3["title"],
+            "sub": "One scale, one axis - the nineteen years between the eras cut out, not drawn",
+            "src": v3["src"], "yunit": v3["yunit"], "ylabel": "10-year yield, %", "from_zero": True,
+            "hlines": v3["hlines"], "xticks": v3["xticks"], "claim": "level",
+            "break": {"after": era[0]["pts"][-1][0], "before": era[1]["pts"][0][0], "eras": list(BROKEN_ERAS)},
+            "series": [{"label": tag, "color": col, "pts": s["pts"]}
+                       for s, tag, col in zip(era, BROKEN_TAGS, ("teal", "crimson"))]}
+
+
+def broken_axis_two_eras() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    series = broken_axis_series()
+    assert LPG.validate(series, "line") == [], LPG.validate(series, "line")
+    page = BST.stamp_full_stage(LPG.build_spec(series, "line", None, "right"))
+    page["build"] = "lines"   # the one key `;build=lines` writes (page_build_spec's bare mode)
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    BST.check_broken_axis(world, [])
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: one line across two eras on a broken axis", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({"broken-axis-two-eras": broken_axis_two_eras})
+FRAME_T.update({"broken-axis-two-eras": BROKEN_BUILD_T0 + BROKEN_BUILD_S + 1.6})   # both eras drawn and tagged (7.4), held
 
 
 def write_surface(name: str) -> list[Path]:

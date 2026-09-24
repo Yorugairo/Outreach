@@ -428,3 +428,117 @@ def test_the_title_shrinks_to_a_corner_tag_on_its_word_and_a_cold_seek_agrees():
 def test_a_camera_with_no_chrome_writes_nothing_on_the_chrome():
     got = _run(*_timeline(), [HELD])["reads"][HELD]
     assert got["titleXf"] == "" and got["wrappers"] == 0 and got["chrome"] is None
+
+
+# ---- P69 T8e (5): A PANEL'S OWN SUB AND TICKS ARE CHROME, ADDRESSED BY PANEL INDEX ---------------------------------------
+# Row 21 (T29): camera 4's 1.2 push onto the hynix tip (at the line panel's right edge) cut the panel's OWN sub ("hare
+# price vs its own operating profit") and its y ticks for ~5 s under `chrome: fit` - T26f's chrome moved the PAGE's
+# objects, and a panel's sub and ticks live inside the panel's svg. Now each panel's sub, y ticks and x ticks are chrome
+# objects too: `chrome: fit` keeps them whole like the page's own, and a row may MOVE one by its panel index -
+# `sub@<i>`, `yticks@<i>`, `xticks@<i>` (the tick locks of E28 kept).
+
+def test_a_panels_objects_are_named_by_its_index_and_keep_the_tick_locks_T8e():
+    assert B.CHROME_PANEL_ELEMENTS == ("sub", "yticks", "xticks")
+    ok = {"camera": "fit", "sub@0": [{"at": 1.0, "x": 0.02, "y": 0.2, "scale": 0.8}], "yticks@1": [{"at": 2.0, "x": 0.01}],
+          "xticks@3": [{"at": 2.0, "y": 0.9}]}
+    assert B.validate_camera(_push(chrome=ok), "p", ASPECT) == [], ok
+    for bad, why in (({"yticks@0": [{"at": 1.0, "y": 0.4}]}, "E28"), ({"sub@4": [{"at": 1.0}]}, "sub@4"),
+                     ({"title@0": [{"at": 1.0}]}, "title@0"), ({"sub@x": [{"at": 1.0}]}, "sub@x")):
+        errs = B.validate_camera(_push(chrome=bad), "p", ASPECT)
+        assert errs and any(why in e for e in errs), (bad, errs)
+
+
+def _panels_world(n: int = 2) -> dict:
+    series = LPG.load_series(EP / "evidence/objects/ev-tnx-two-eras-v3.series.json")
+    saved = B.ASPECT
+    B.ASPECT = ASPECT
+    try:
+        return {"kind": B.SPECIES_LEDGER, "page": B.stamp_full_stage(LPG.build_spec(series, "line", None, "right"))}
+    finally:
+        B.ASPECT = saved
+
+
+def test_a_panel_move_compiles_by_its_index_and_a_page_without_that_panel_refuses_it_T8e():
+    span = (195.82, 242.38)
+    cam = _push(chrome={"camera": "fit", "sub@1": [{"at": 230.0, "x": 0.55, "y": 0.2}]})
+    ch = B.compile_chrome(cam, None, span, "p", _panels_world(), ASPECT)[0]["chrome"]
+    assert ch["mode"] == "fit" and list(ch["moves"]) == ["sub@1"] and ch["moves"]["sub@1"][0]["x"] == 0.55
+    with pytest.raises(ValueError, match="panel 2"):
+        B.compile_chrome(_push(chrome={"sub@2": [{"at": 230.0, "y": 0.2}]}), None, span, "p", _panels_world(), ASPECT)
+    world = _two_eras_world_plain()
+    with pytest.raises(ValueError, match="PANELS page"):
+        B.compile_chrome(_push(chrome={"sub@0": [{"at": 230.0, "y": 0.2}]}), None, span, "p", world, ASPECT)
+
+
+def _two_eras_world_plain() -> dict:
+    series = LPG.load_series(EP / "evidence/objects/ev-tnx-two-eras-v4.series.json")
+    return {"kind": B.SPECIES_LEDGER, "page": LPG.build_spec(series, "line")}
+
+
+def _row21_page() -> dict:
+    """Row 21's shape, as `test_ledger_panels` draws it: the line panel ALONE from the page's first frame (a longform
+    panels page), the two bars panels hidden - its tip at the plot's right edge."""
+    import test_ledger_panels as TLP
+    page = TLP._longform_panels(TLP._row21_shape())
+    (fs,) = TLP._focus_states(3, [(0.0, 0.05, TLP.LINE_ALONE)])
+    return page, fs
+
+
+TIP = {"kind": "point", "x": 0.86, "y": 0.49}   # row 21's look: the tip's rest (1652, 532) px, a POINT (seek-safe)
+PANEL_READ = """t => {
+  const s = document.getElementById('stage').getBoundingClientRect(), W = document.getElementById('wB').__lp;
+  const R = (e) => { const r = e.getBoundingClientRect(); return [r.x - s.x, r.y - s.y, r.width, r.height]; };
+  const vis = (e) => { for (let q = e; q && q !== document.body; q = q.parentNode) { const cs = q.nodeType === 1 ? getComputedStyle(q) : null;
+    if (cs && (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0)) return false; } return true; };
+  const S = W.panels[0], sub = S.marks.find((m) => m.role === 'axislabel');
+  return { cam: window.__camera(t), chrome: window.__chrome ? window.__chrome(t) : null, sub: R(sub.el), subShown: vis(sub.el),
+           ticks: S.marks.filter((m) => m.role === 'ylabel').map((m) => ({ box: R(m.el), shown: vis(m.el) })) }; }"""
+
+
+def _panel_run(chrome, times, cold=None):
+    import measure_page_boxes as MP
+    page, fs = _row21_page()
+    tl = MP._timeline(page, ASPECT)
+    tl["runtime_s"] = 40.0
+    sc = tl["scenes"][0]
+    sc["span"], sc["species"] = [0.0, 40.0], [fs]
+    cam = {"keys": [{"t": T0, "zoom": 1.0, "look": TIP, "ease": "inout"}, {"t": T1, "zoom": 1.2, "look": TIP, "ease": "inout"}],
+           "attention": "locked"}
+    if chrome is not None:
+        cam["chrome"] = chrome
+    sc["camera"] = cam
+    tl["kinetics"] = dict(tl.get("kinetics") or {}, camera=True)
+    uris = {"__audio__": MP._silence(), **B.longform_assets(tl)}
+    global READ
+    saved, READ = READ, PANEL_READ
+    try:
+        return _run(tl, uris, times, cold=cold)
+    finally:
+        READ = saved
+
+
+@needs_chromium
+def test_fit_chrome_keeps_the_focused_panels_sub_and_ticks_whole_and_a_cold_seek_agrees_T8e():
+    """The row-21 push (1.2 onto the tip at the line panel's right edge): without chrome the panel's sub runs off the
+    frame's left edge; under `fit` it stands whole, every y tick it shows stands inside the frame (one whose gridline has
+    left is hidden whole), the report names each panel object by its index - and a cold seek lands the same frame."""
+    plain = _panel_run(None, [HELD])["reads"][HELD]
+    assert plain["cam"]["zoom"] == pytest.approx(1.2, abs=1e-4)
+    assert plain["sub"][0] < 0, ("the push cuts the panel's sub without chrome (row 21's frame)", plain["sub"])
+    got = _panel_run({"mode": "fit", "k": None, "moves": {}}, [HELD], cold=HELD)
+    fit = got["reads"][HELD]
+    assert fit["subShown"] and _inside(fit["sub"], pad=MG.CHROME_FIT_PAD_PX - 1), fit["sub"]
+    shown = [tk for tk in fit["ticks"] if tk["shown"]]
+    assert shown and all(_inside(tk["box"]) for tk in shown), fit["ticks"]
+    objs = fit["chrome"]["objects"]
+    assert {"sub@0", "yticks@0"} <= set(objs) and all(0.0 <= objs[k]["k"] <= 1.0 for k in ("sub@0", "yticks@0")), objs
+    assert got["png"][("cold", HELD)] == got["png"][HELD], "a cold seek lands the frame forward play lands"
+
+
+@needs_chromium
+def test_a_panels_sub_moves_on_its_own_index_T8e():
+    moves = {"sub@0": [{"at": MOVE_AT, "dur": MOVE_DUR, "ease": "inout", "x": 0.04, "y": 0.2, "scale": 0.8, "w": None, "rot": 0}]}
+    got = _panel_run({"mode": "screen", "k": 0.0, "moves": moves}, [MOVE_AT - 0.5, MOVE_AT + MOVE_DUR + 0.3])["reads"]
+    before, after = got[MOVE_AT - 0.5], got[MOVE_AT + MOVE_DUR + 0.3]
+    assert after["sub"][0] == pytest.approx(0.04 * W, abs=1.5) and after["sub"][1] == pytest.approx(0.2 * H, abs=1.5), after["sub"]
+    assert after["sub"][2] == pytest.approx(0.8 * before["sub"][2], rel=0.03)

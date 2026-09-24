@@ -178,9 +178,16 @@ READ_BOXES = r"""
     for (const mk of (S.marks || [])) { if (mk.role !== 'axislabel' && mk.role !== 'xtick') continue;
       const r = mk.el ? R(mk.el) : null; if (r && (r.w >= 1 || r.h >= 1)) u = U(u, r); }
     return u; };
+  /* P69 T8e: a panels page measured in its FIRST focus state (measure_page_boxes' `focus`): a panel that state hides
+     stands at ink 0 - it is no part of the plot, the data or the axis bands, and its entry says so. With no focus state
+     every panel is shown (the home layout), exactly as before. */
+  const shown = (S) => !st.panels || +getComputedStyle(S.box).opacity > 0.05;
+  const onPage = st.panels ? st.panels.filter(shown) : null;
   if (st.panels) {
-    out.panels = st.panels.map((S) => ({box: R(S.box), plot: pplot(S)}));
-    for (const p of out.panels) plot = U(plot, p.plot);
+    /* a panel re-laid out for a box of another aspect (T8c, `S.wide`) draws its svg that much wider than its home box:
+       its box is the chart it draws */
+    out.panels = st.panels.map((S) => (shown(S) ? {box: R(S.wide && S.wide !== 1 ? S.chart : S.box), plot: pplot(S)} : {hidden: true}));
+    for (const p of out.panels) if (!p.hidden) plot = U(plot, p.plot);
   }
   if (chart && !st.panels) {
     const m = chart.getScreenCTM();
@@ -201,7 +208,7 @@ READ_BOXES = r"""
   out.plot = plot;
   /* THE AXIS BANDS (E65). The x tick labels under the plot and the y tick column beside it: a card
      may partially overlap these - they are furniture, not the data - and may never overlap the data. */
-  const allMarks = st.panels ? st.panels.flatMap((S) => S.marks || []) : (st.marks || []);   /* P69 T8b: every panel's */
+  const allMarks = st.panels ? onPage.flatMap((S) => S.marks || []) : (st.marks || []);   /* P69 T8b: every panel's (T8e: every SHOWN panel's) */
   const roleBox = (roles) => { let u = null;
     for (const mk of allMarks) { if (!mk.el || roles.indexOf(mk.role) < 0) continue;
       const r = R(mk.el); if (r.w >= 1 || r.h >= 1) u = U(u, r); } return u; };
@@ -235,7 +242,7 @@ READ_BOXES = r"""
     return out2;
   };
   out.data = [];
-  for (const ch of (st.panels ? st.panels.map((S) => S.chart) : chart ? [chart] : [])) for (const el of ch.querySelectorAll(DATA)) for (const bx of dataBoxes(el)) out.data.push(bx);
+  for (const ch of (st.panels ? onPage.map((S) => S.chart) : chart ? [chart] : [])) for (const el of ch.querySelectorAll(DATA)) for (const bx of dataBoxes(el)) out.data.push(bx);
   /* P69 T6d: each END TAG at its drawn rect (a line's terminal name, its chip with it), in the chart's order.
      REVIEW-P69-LANE-B-MERGE-4 MN3: a LINE's end tag only - the builder's `name` marks (dense-line, combo); a tier's name
      inside the plot and a rule's label are `text.sname` too, and are not end tags */
@@ -297,6 +304,28 @@ def timeline_pages(path: Path) -> tuple[str, dict]:
             if key not in pages or (not _holds_its_tags(pages[key]) and _holds_its_tags(spec)):
                 pages[key] = spec
     return aspect, pages
+
+
+PANEL_FOCUS = "panel_focus"   # build_scene_timeline_f.SPECIES_PANEL_FOCUS
+
+
+def timeline_focus(path: Path) -> dict[str, dict]:
+    """P69 T8e: `{ink: focus state}` - each PANELS page's FIRST focus state, the earliest `panel_focus` of the first scene
+    that draws its ink with one (the compiler wrote it normalised: a role per panel, every dial). The page stands in that
+    state from its first frame, so it is measured in it (row 21: the line ALONE - never the home layout of every panel
+    side by side, which no frame draws). A panels page with no focus state is measured in its home layout, as before."""
+    tl = json.loads(Path(path).read_text(encoding="utf-8"))
+    out: dict[str, dict] = {}
+    for scene in tl.get("scenes") or []:
+        page = (scene.get("world") or {}).get("page")
+        if not isinstance(page, dict) or page.get("builder") != LPG.PANELS:
+            continue
+        focus = [sp for sp in scene.get("species") or [] if isinstance(sp, dict) and sp.get("kind") == PANEL_FOCUS
+                 and isinstance(sp.get("at"), (int, float))]
+        ink = LPG.page_ink_key(_strip(page))
+        if focus and ink not in out:
+            out[ink] = min(focus, key=lambda sp: float(sp["at"]))
+    return out
 
 
 def _holds_its_tags(page: dict) -> bool:
@@ -378,8 +407,11 @@ def profile_representative(builder: str, preset: str) -> dict:
     return LPG.apply_longform(page, preset)
 
 
-def _timeline(page: dict, aspect: str, full_stage: bool | None = None) -> dict:
+def _timeline(page: dict, aspect: str, full_stage: bool | None = None, focus: dict | None = None) -> dict:
     """One scene, one page, no docks, no species, no Ken Burns: nothing that could move a box.
+
+    P69 T8e: ``focus`` - a panels page's first focus state - is the scene's one species, from its first frame (``at``
+    0.0): the page is measured standing in it. None: no species, the timeline it always was.
 
     ``aspect`` and the optional full-stage stamp are written into the timeline consumed by the
     renderer.  The optional argument is explicit for callers that need to measure both geometries;
@@ -396,7 +428,8 @@ def _timeline(page: dict, aspect: str, full_stage: bool | None = None) -> dict:
         "episode_id": "page-boxes", "project_id": "page-boxes",
         "narration": {"canonical_hash": "0" * 64, "words_path": ""},
         "captions": [], "caption_pages": [], "caption_modes": ["stage", "anchor"], "sound": [], "evidence": {},
-        "scenes": [{"scene_id": "s01", "exit": "cut", "span": [0.0, 30.0], "docks": [], "species": [],
+        "scenes": [{"scene_id": "s01", "exit": "cut", "span": [0.0, 30.0], "docks": [],
+                    "species": [dict(focus, at=0.0)] if focus else [],
                     "world": {"kind": "ledger", "page": rendered_page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}}],
         "aspect": aspect,
     }
@@ -427,8 +460,10 @@ def data_mask(plot: dict, data: list, n: int = MASK_N) -> list[str]:
     return rows
 
 
-def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: bool | None = None) -> dict:
-    """The player's own boxes for this builder's representative page, in stage pixels."""
+def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: bool | None = None,
+            focus: dict | None = None) -> dict:
+    """The player's own boxes for this builder's representative page, in stage pixels (P69 T8e: a panels page standing
+    in its first focus state, `focus`, when it has one)."""
     page = page if page is not None else representative(builder)
     if full_stage is not None:
         page = dict(page)
@@ -440,7 +475,7 @@ def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: 
     from playwright.sync_api import sync_playwright
     with tempfile.TemporaryDirectory() as td:
         html = Path(td) / "page-boxes.html"
-        tl = _timeline(page, aspect)
+        tl = _timeline(page, aspect, focus=focus)
         uris = {"__audio__": _silence(), **BST.longform_assets(tl)}   # N3: a longform page is measured in its own face
         html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
         srv, port = RB.serve(html.parent)
@@ -469,7 +504,8 @@ def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: 
     out = {"page": page, "boxes": boxes, "axis": axis,
            "data_mask": data_mask(boxes["plot"], dom.get("data") or [])}
     if dom.get(LPG.PANELS_KEY):   # P69 T8b: each panel's home box and plot, as drawn
-        out[LPG.PANELS_KEY] = [{k: _box(v) for k, v in p.items() if v} for p in dom[LPG.PANELS_KEY]]
+        out[LPG.PANELS_KEY] = [{"hidden": True} if p.get("hidden") else {k: _box(v) for k, v in p.items() if v}
+                               for p in dom[LPG.PANELS_KEY]]   # P69 T8e: a panel the first focus state hides
     return out
 
 
@@ -479,16 +515,18 @@ def _silence() -> str:
     return BGS.uri("audio/wav", BGS.silent_wav(2.0))
 
 
-def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bool | None = None) -> dict:
+def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bool | None = None,
+          focus: dict | None = None) -> dict:
     """One fixture entry: the ink it is valid for, the measured boxes, and the free bands they leave.
 
     ``full_stage`` is kept out of ``page_ink_key`` by design.  The flat fixture key carries the
     geometry, while the entry's boolean marker makes a mismatched hand-edited record fail closed.
     """
+    kw = {"focus": focus} if focus else {}   # P69 T8e: a panels page's first focus state
     if full_stage is None:
-        got = measure(builder, aspect, page)
+        got = measure(builder, aspect, page, **kw)
     else:
-        got = measure(builder, aspect, page, full_stage=full_stage)
+        got = measure(builder, aspect, page, full_stage=full_stage, **kw)
     boxes = got["boxes"]
     full = dict(LPG.page_boxes(got["page"], aspect), **boxes)   # safe / caption_anchor / stage, over the MEASURED ink
     bands = {b["band"]: {k: round(b[k]) for k in ("x", "y", "w", "h")} for b in BST.free_bands(full)}
@@ -540,10 +578,11 @@ def build_pages(timelines: list[str]) -> tuple[dict, list[str]]:
             continue
         tl = project_timeline(Path(path))
         aspect, found = timeline_pages(tl)
+        focus = timeline_focus(tl)   # P69 T8e: a panels page stands in its first focus state
         read.append(_rel(tl))
         for ink, page in found.items():
             for key, drawn in variant_pages(page, aspect).items():   # R26-235: both 16:9 geometries
-                got = entry(str(page.get("builder")), aspect, drawn)
+                got = entry(str(page.get("builder")), aspect, drawn, focus=focus.get(ink))
                 pages.setdefault(ink, {})[key] = dict(got, builder=page.get("builder"), timeline=_rel(tl))
                 print(f"  {str(page.get('builder')):11} {key:16}  {ink}  plot={got['boxes']['plot']}"
                       f"  {str(page.get('title'))[:40]!r}")

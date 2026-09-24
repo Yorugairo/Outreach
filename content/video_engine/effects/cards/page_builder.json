@@ -86,7 +86,13 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "members",
+          "means": "a bar's `members: [{name, logo?, short?}]` (2-8, the page's `member_noun`): EQUAL tiles naming who is in its ONE value, the total written; a member with a value is refused (E99 s101)",
+          "source_set": "MEMBERS_KEY"
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",
@@ -347,6 +353,105 @@
       }
     },
     {
+      "id": "page_builder:line+break",
+      "axis": "page_builder",
+      "token": "line+break",
+      "title": "The broken cross-era axis",
+      "aliases": [
+        {
+          "name": "broken axis",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3353"
+        },
+        {
+          "name": "the // between two eras",
+          "source": "docs/research/bravos-chart-watch-2026-09-23/Jw8ykhoOVBQ.md:24"
+        }
+      ],
+      "does": "One line page across two eras on ONE x axis: the years between cut out and the cut drawn - a // on the axis, \"2001 // 2021\" written, each era named, one y, nothing drawn through the gap.",
+      "when": "the claim is that the eras' LEVELS are comparable (E99 s111); when the SHAPES match, the rebased overlay (years from each era's start) stays the form",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:3353",
+      "author": {
+        "key": "series object (evidence/objects/*.series.json) \"break\": {\"after\", \"before\", \"eras\"} + \"claim\": \"level\" on a dense-line page (ledger:<series-id>:line)",
+        "example": "{\"break\": {\"after\": 2001.9692, \"before\": 2021.0082, \"eras\": [\"DOT-COM ERA\", \"AI ERA\"]}, \"claim\": \"level\", \"yunit\": \"%\"}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py",
+        "check": "none"
+      },
+      "phases": [
+        {
+          "name": "the cut stands",
+          "does": "axis, gridlines and rules stop at one era's last datum and resume at the next's first; the // on the axis, the gap written, each era named - with the axis, at every instant",
+          "trigger": "the page's chart (with its axes)",
+          "dials": {
+            "GAP": "44",
+            "SLASH_H": "26",
+            "SLASH_W": "3"
+          }
+        },
+        {
+          "name": "era by era",
+          "does": "under ;build=lines each era's series draws whole in turn; one series across both eras draws on one clock and lifts at the cut (a clip)",
+          "trigger": "the page build (build=lines, R26-226)",
+          "dials": {
+            "BUILD": "3.0"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos HIS 7:18-8:01 (AI and Railway Spending As a % of GDP)",
+          "became": "the whole arc",
+          "record": "docs/research/bravos-chart-watch-2026-09-23/Jw8ykhoOVBQ.md:40",
+          "tie": "recorded"
+        },
+        {
+          "source": "E99 s111 the broken cross-era axis",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:3353",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "break",
+          "means": "{after, before, eras}: the first era's last datum, the second's first, the eras' names; one dense line in one unit, no datum or tick between, 16:9",
+          "source_set": "AXES_KEYS"
+        },
+        {
+          "token": "claim",
+          "means": "\"level\" is required beside a break; \"shape\" is refused, pointing to the rebased overlay (years from each era's start)",
+          "source_set": "BREAK_CLAIMS"
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpBreakScale",
+        "also": [
+          "lpDrawBreak",
+          "lpBreakHost",
+          "LP_BREAK"
+        ],
+        "note": "buildLedgerLine: mx is lpBreakScale's when axes.break is set; ledger_page._validate_break / era_void_warning; build_scene_timeline_f.check_broken_axis"
+      },
+      "doctrine": [
+        "E99 s111",
+        "E53 s3",
+        "E60"
+      ],
+      "status": "wired",
+      "implicit": true,
+      "proof": {
+        "golden": "broken-axis-two-eras",
+        "test": "content/video_engine/tests/test_broken_axis.py::test_the_break_is_drawn_and_both_eras_are_labelled",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "implicit: a dense-line object that carries `break` + `claim: \"level\"` is this page (no plate token of its own)"
+      }
+    },
+    {
       "id": "page_builder:object",
       "axis": "page_builder",
       "token": "object",
@@ -526,14 +631,14 @@
       "id": "page_builder:share",
       "axis": "page_builder",
       "token": "share",
-      "title": "The share ledger page (the pie)",
+      "title": "The share ledger page (the pie, the donut, the 3D pie)",
       "aliases": [
         {
           "name": "a pie of the holders",
           "source": "content/video_engine/scripts/build_scene_timeline_f.py:328"
         }
       ],
-      "does": "A part-to-whole pie of five slices or fewer with one named slice highlighted and its figure written.",
+      "does": "A part-to-whole pie of five slices or fewer, one named slice highlighted; the pie P48 T4 drew by default, or on its options a donut, a tilted extruded pie, a slice exploded - every angle true, every figure written.",
       "when": null,
       "when_source": null,
       "author": {
@@ -562,7 +667,23 @@
         }
       ],
       "blends": [],
-      "options": [],
+      "options": [
+        {
+          "token": "hole",
+          "means": "a DONUT: the hole as a share of the radius, (0, 0.75]; every slice's figure is written on it",
+          "source_set": "SHARE_SOLID_KEYS"
+        },
+        {
+          "token": "extrude",
+          "means": "true or {tilt 10-60 deg (50), depth 0.02-0.3 of R (0.12), hatch}: a 2.5D projection of the TRUE-ANGLE slices, sides lit by the one stage light",
+          "source_set": "SHARE_SOLID_KEYS"
+        },
+        {
+          "token": "explode",
+          "means": "true or {index (the claim's slice), out 0.04-0.3 of R (0.14)}: that slice leaves the whole on the `explode` species' word",
+          "source_set": "SHARE_SOLID_KEYS"
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",
@@ -575,7 +696,7 @@
       ],
       "status": "wired",
       "proof": {
-        "golden": null,
+        "golden": "share-pie-3d",
         "test": "content/video_engine/tests/test_share_page.py::test_the_share_variant_builds_a_share_page_from_the_object",
         "first_use": null
       },

@@ -403,6 +403,51 @@
       }
     },
     {
+      "id": "page_species:explode",
+      "axis": "page_species",
+      "token": "explode",
+      "title": "The explode page species",
+      "aliases": [],
+      "does": "A solid share page's named slice leaves the whole along its own bisector, in its own colour, every figure still written.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"explode\", \"at\", \"dur\"} on a ledger row whose share page declares `explode`",
+        "example": "{'kind': 'explode', 'at': 9.0, 'dur': 0.8}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpPieMotion",
+        "also": [
+          "pieMove",
+          "buildLedgerPie"
+        ],
+        "note": "buildLedgerPie builds the solid; lpPieMotion moves the slice on the species' own clock (expoOut, a pure function of t)"
+      },
+      "doctrine": [
+        "P69 T48",
+        "E99 s109 (4)",
+        "E99 s100"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "share-pie-3d",
+        "test": "content/video_engine/tests/test_share_pie_3d.py::test_the_3d_pie_explodes_its_slice_on_its_word_and_keeps_the_true_angles",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "page_species:figure",
       "axis": "page_species",
       "token": "figure",
@@ -582,6 +627,52 @@
       "proof": {
         "golden": "lit-stretch-crash",
         "test": "content/video_engine/tests/kinetics/lit_stretch.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:member",
+      "axis": "page_species",
+      "token": "member",
+      "title": "The membership stack: a member's tile lands on its word",
+      "aliases": [],
+      "does": "A bar of ONE value divided into EQUAL tiles naming who is in it (a catalogued logo, else the name), its total written and 'each tile = one <noun>' beside it; a tile lands on its member's word.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"member\", \"at\", \"dur\" 0.2-1.2, \"tile\": i | [i, ...] | \"all\", \"bar\"?, \"light\"?} on a ledger row whose bars page carries `members` on a bar (ledger_page: `members: [{name, logo?, short?}]`, `member_noun`)",
+        "example": "{'kind': 'member', 'at': 8.0, 'dur': 0.45, 'tile': 0}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpMemberPaint",
+        "also": [
+          "lpMemberBuild",
+          "lpMemberKey",
+          "lpMemberName"
+        ],
+        "note": "lpMemberBuild divides each membership bar into equal tiles; lpMemberPaint lands them (the build's cascade or each word) on the badge spring and lights one - a pure function of t"
+      },
+      "doctrine": [
+        "P69 T45",
+        "E99 s101",
+        "E99 s109 (2)"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "membership-builders",
+        "test": "content/video_engine/tests/test_membership_stack.py::test_a_member_species_lands_its_tile_on_its_word",
         "first_use": null
       },
       "callable": {

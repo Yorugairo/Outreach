@@ -147,6 +147,7 @@ edit the compiler, then `lint_species_choice.py --write-doc` (`--check-doc` and 
 | `note` | the sentence adds a side fact the chart cannot show - a line of handwriting in the page's quiet zone |
 | `chart_to` | the sentence needs the SAME data at another scale / with more of it / in another form / beside a card - the page changes state (E58; CHART_TO_WHEN names the verb); never a cut to a second chart of it |
 | `peel` | the sentence names a slice of a whole that LEAVES - the share page's slice peels off and goes blood red |
+| `explode` | the sentence DIVIDES a whole and the story is one piece's weight (NVDA's share of AI compute) - that slice leaves the whole in its own colour, every figure written; a camera key on the slice then pushes in while the others recede |
 | `spread` | the sentence's argument IS the gap between two series (or a series and a rule) - the region bleeds full of ink |
 | `chip` | the sentence names a THING as one of a set (a prediction, an actor, a plant) - a chip lands on its word; RETRACTS crosses it out on a later word (Bravos's icon board) |
 | `flow` | the sentence EXPLAINS a mechanism - A causes B via C - as named things and the arrows between them; a later word SWAPS one node and the rest stands (Bravos's rhyme) |
@@ -162,6 +163,7 @@ edit the compiler, then `lint_species_choice.py --write-doc` (`--check-doc` and 
 | `panel_focus` | the sentence moves between the charts of a PANELS page - the one it is about grows to be read while the others recede (scaled back, dimmed, softened) and come back on their word; a layout change (side by side, stacked, quadrants, free) is one move, never a cut |
 | `lit_stretch` | the sentence WALKS one stretch of a drawn line ('the fall', 'the run-up') at the proof or the turn - a light travels it on the word and holds; never when the whole line is the claim, the stretch is undrawn, or the light would only sit |
 | `freeze` | the TURN of the argument lands on ONE number or thing - the line the whole row builds to - and the stage STOPS on it: every idle, drift and ambient life holds for 0.4-1.2 s while one light comes on there, then life resumes; never while anything else moves, and never in place of a named thing's arrival (E99 s71: it arrives first, then the stage may stop on it) |
+| `member` | the sentence names WHO is in a single total ('Google, Microsoft, Amazon, Meta and Oracle - all of it one bill') - a membership bar's tile lands on its member's name, and `light` lights the one the sentence names; never to compare the members' sizes (that is bars) or to give each member a value (that is the stacked bar, T64) |
 | `chart_to` -> `recast` | the same data in another form: keyed (n lines -> n bars by series, 'where the four stand today'; RECAST_PAIRS) or the hand-over (a line into the monthly bars, into a pie of the holders) |
 | `chart_to` -> `rescale` | the same series at another scale - 'since February', 'at full width': the window the story is about; never a window that drops the sentence's point |
 | `chart_to` -> `extend` | more of the same series ('and then May') or a later series of the same file ('then consumption') - drawn on at the pen |

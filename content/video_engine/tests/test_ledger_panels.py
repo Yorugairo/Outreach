@@ -697,3 +697,210 @@ def test_a_range_bar_stands_at_its_near_end_and_its_band_runs_to_the_far_one_in_
     m = mid["bars"][0]
     assert m["band"][1] < m["bar"][1] and (base - m["bar"][1]) / (base - m["band"][1]) == pytest.approx(55 / 60, abs=0.02), (
         "mid-build the band grows WITH its bar")
+
+
+# ---- P69 T8e (1): THE ROW PATH - the compiler's own keys reach the validator ------------------------------------------
+# Row 21 (T29) found it: `main()` writes `id` (P51 T5, `species_row_id`) on EVERY species - and `held` on one whose
+# `dur` is "hold" - BEFORE `validate_species`, and `panel_focus`'s closed key list refused its `id`: every compiled
+# `panel_focus` FAILed "unknown key(s) ['id']". The goldens and the tests above call `validate_species` with no ids, so
+# they never saw it. These run the compiler's own `main()` on a one-row bed, as a door does, and stop it where the row's
+# species have been validated and normalised (`derive_rescale_states`, which runs `check_panels`).
+class _PastTheSpecies(Exception):
+    """Raised once the row path has validated and normalised the row's species - the test needs nothing after."""
+
+
+def _row_path(tmp_path, monkeypatch, species: list, series: Path = TWO_ERAS) -> list:
+    import shutil
+    ep, build = tmp_path / "ep", tmp_path / "ep" / "build"
+    (ep / "evidence/objects").mkdir(parents=True)
+    (build / "audio").mkdir(parents=True)
+    shutil.copy2(series, ep / "evidence/objects" / "ev-row-path.series.json")
+    (build / "audio/episode.mp3").write_bytes(b"")
+    (build / "timeline.json").write_text(json.dumps({"runtime_s": 30.0, "words": []}), encoding="utf-8")
+    (build / "caption-pages.json").write_text("[]", encoding="utf-8")
+    row = (0.0, 30.0, "ledger:ev-row-path:line", (0, 0, 0), [], None, species)
+    (ep / "SHOT-ROW-PATH.py").write_text("W = " + repr([row]) + "\n", encoding="utf-8")
+    seen: dict = {}
+    real = B.derive_rescale_states
+
+    def stop(world, row_species, plate, ep_dir, **kw):
+        real(world, row_species, plate, ep_dir, **kw)
+        seen["species"] = row_species
+        raise _PastTheSpecies
+
+    for name, value in (("BUILD", build), ("EP", ep), ("SHOT_TABLE_FILE", "SHOT-ROW-PATH.py"), ("ASPECT", "16:9"),
+                        ("derive_rescale_states", stop)):
+        monkeypatch.setattr(B, name, value)
+    with pytest.raises(_PastTheSpecies):
+        B.main()
+    return seen["species"]
+
+
+def test_a_panel_focus_compiles_through_the_row_path_with_the_compilers_own_id_T8e(tmp_path, monkeypatch) -> None:
+    """The Expected RED (row 21's blocker): SystemExit "panel_focus: unknown key(s) ['id']"."""
+    sp = _row_path(tmp_path, monkeypatch, [
+        {"kind": "panel_focus", "at": 0.0, "dur": 0.05, "layout": "row", "active": [0], "hidden": [1]},
+        {"kind": "panel_focus", "at": 12.0, "dur": 1.2, "layout": "row", "active": [0, 1]}])
+    focus = [e for e in sp if e["kind"] == "panel_focus"]
+    assert [e["id"] for e in focus] == ["s01.species.0", "s01.species.1"], "the P51 T5 key rides every species"
+    assert [e["roles"] for e in focus] == [["active", "hidden"], ["active", "active"]], "... normalised by check_panels"
+
+
+def test_a_held_closed_key_species_compiles_through_the_row_path_T8e(tmp_path, monkeypatch) -> None:
+    """The audit's second key: `dur: "hold"` makes the hold pass write `held` - a lit stretch (a closed key list) held
+    until the next event on its row keeps the record, and the row compiles."""
+    sp = _row_path(tmp_path, monkeypatch, [
+        {"kind": "lit_stretch", "at": 12.0, "dur": "hold", "panel": 1, "from": 10, "to": 60},
+        {"kind": "retitle", "at": 14.0, "dur": 1.0, "text": "the next event"}])
+    light = next(e for e in sp if e["kind"] == "lit_stretch")
+    assert light["held"] is True and light["dur"] == 2.0 and light["id"] == "s01.species.0"
+
+
+@pytest.mark.parametrize("entry", [
+    {"kind": "panel_focus", "at": 9.0, "dur": 1.0, "layout": "row", "active": [0]},
+    {"kind": "lit_stretch", "at": 9.0, "dur": 1.0, "from": 10, "to": 60},
+    {"kind": "freeze", "at": 9.0, "dur": 0.7, "target": {"kind": "datum", "index": 20}},
+    {"kind": "member", "at": 9.0, "dur": 0.5, "tile": 0},
+], ids=lambda e: e["kind"])
+def test_no_closed_key_species_refuses_a_key_the_row_path_writes_T8e(entry) -> None:
+    """Every species with a CLOSED key list, audited: the row path's own keys (`B.ROW_PATH_KEYS`) are never an
+    unknown key. The other species validate their fields and ignore the rest; `leave_*` is written only on the
+    page-bound species, which are open."""
+    assert set(B.ROW_PATH_KEYS) == {"id", "held"}
+    stamped = dict(entry, id="s01.species.0", held=True)
+    errs = B._validate_entry(stamped)
+    assert not [e for e in errs if "'id'" in e or "'held'" in e or "unknown key" in e], errs
+    assert set(B.PAGE_BOUND_SPECIES).isdisjoint({"panel_focus", "lit_stretch", "freeze", "member"})
+
+
+# ---- P69 T8e (4): THE KEY RAIL FOLLOWS THE FOCUSED PANEL ---------------------------------------------------------------
+# Row 21 (T29): the page's one key rail ("SHARE PRICE / OPERATING PROFIT") stood over the wafer bars once they had grown
+# over the line - a key for a chart that is not the one in focus. A key pill names a line of ONE panel (and every panel
+# whose line shares its name and colour, E53 s8): it stands while such a panel is ACTIVE, and leaves with it on the
+# focus's own clock; a bars panel keys nothing, so with only bars in focus the rail is empty.
+def _row21_shape() -> dict:
+    """Row 21's SHAPE (a line panel of two named lines, then two bars panels) - synthetic, not figures about the world."""
+    xs = [2025.6 + i / 52 for i in range(52)]
+    return {"title": "One line, then two bars", "sub": "Synthetic panels for the key rail; not figures about the world",
+            "src": "Synthetic series", "yunit": "%", "independent": True,
+            "xticks": [[2025.75, "Oct"], [2026.04, "Jan"], [2026.29, "Apr"], [2026.54, "Jul"]],
+            "panels": [
+                {"sub": "A line and its partner", "series": [
+                    {"name": "SHARE PRICE", "label": "+548%", "color": "crimson",
+                     "pts": [[round(x, 3), round(100 + 9 * i + (i // 30) * 12 * (i - 30), 1)] for i, x in enumerate(xs)]},
+                    {"name": "OPERATING PROFIT", "label": "+230%", "color": "teal",
+                     "pts": [[round(x, 3), round(100 + 4 * i, 1)] for i, x in enumerate(xs)]}]},
+                {"sub": "Bars, one unit", "builder": LPG.PANEL_BARS, "unit": "x",
+                 "bars": [{"label": "One", "value": 1, "color": "deemph"}, {"label": "Three", "value": 3, "color": "crimson"}]},
+                {"sub": "Bars with a range", "builder": LPG.PANEL_BARS, "unit": "%",
+                 "bars": [{"label": "Low", "value": ["+55", "60"], "color": "deemph"}, {"label": "High", "value": "+89", "color": "crimson"}]}]}
+
+
+def _longform_panels(series: dict) -> dict:
+    B.ASPECT = "16:9"
+    return LPG.apply_longform(B.stamp_full_stage(LPG.build_spec(series, "line", None, "right")), "middle")
+
+
+def _focus_states(n: int, states: list) -> list:
+    out = []
+    for at, dur, fs in states:
+        e = dict(fs, kind="panel_focus", at=at, dur=dur)
+        B.panel_focus_state(e, n, "test")
+        out.append(e)
+    return out
+
+
+def _play_page(tmp_path, page: dict, species: list, times: list, read: str, camera: dict | None = None) -> dict:
+    """One scene of `page` (0-40 s) with `species` (and a row `camera`), played forward through `times`: {t: read(t)}."""
+    import measure_page_boxes as MP
+    import render_baseline as RB
+    from playwright.sync_api import sync_playwright
+    tl = MP._timeline(page, "16:9")
+    tl["runtime_s"] = 40.0
+    sc = tl["scenes"][0]
+    sc["span"], sc["species"] = [0.0, 40.0], species
+    if camera is not None:
+        sc["camera"] = camera
+        tl["kinetics"] = dict(tl.get("kinetics") or {}, camera=True)
+    uris = {"__audio__": MP._silence(), **B.longform_assets(tl)}
+    html = tmp_path / "p.html"
+    html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+    srv, port = RB.serve(tmp_path)
+    w, h = RB.STAGE["16:9"]
+    out = {}
+    try:
+        with sync_playwright() as pw:
+            br = pw.chromium.launch(headless=True)
+            pg = br.new_context(viewport={"width": w, "height": h}, device_scale_factor=1).new_page()
+            pg.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+            RB.prepare_page(pg, w, h)
+            for x in times:
+                RB.frame_png(pg, x, (w, h))
+                out[x] = pg.evaluate(read, x)
+            br.close()
+    finally:
+        srv.shutdown()
+    return out
+
+
+KEY_READ = """() => { const w = document.getElementById('wB');   /* the measured world (measure_page_boxes' READ_BOXES) */
+  return [...w.querySelectorAll('.lp-kpill')].map((e) => [e.textContent, +getComputedStyle(e).opacity]); }"""
+LINE_ALONE = {"layout": "row", "active": [0], "hidden": [1, 2]}
+BARS_BESIDE = {"layout": "row", "active": [0, 1], "hidden": [2]}
+BARS_GROWN = {"layout": "row", "active": [1], "hidden": [2]}
+LINE_BACK = {"layout": "row", "active": [0], "hidden": [2]}
+
+
+def test_the_row21_shape_keys_the_line_panel_only_T8e() -> None:
+    page = _longform_panels(_row21_shape())
+    assert [(k["panel"], k["name"]) for k in page["axes"]["key"]] == [(0, "SHARE PRICE"), (0, "OPERATING PROFIT")]
+
+
+@pytest.mark.skipif(not _chromium(), reason="playwright chromium not installed")
+def test_the_key_rail_follows_the_focused_panel_and_a_bars_panel_hides_it_T8e(tmp_path) -> None:
+    """The line alone (its key landed), the bars BESIDE it (the line still active: its key stays), the bars GROWN over
+    it (the line receded: the key has gone with it), the line back (its key back). Mid-move the key crossfades on the
+    focus's own clock - it has let go by the move's end, never before its word."""
+    fs = _focus_states(3, [(0.0, 0.05, LINE_ALONE), (22.0, 1.2, BARS_BESIDE), (23.2, 1.2, BARS_GROWN),
+                           (30.0, 1.2, LINE_BACK)])
+    got = _play_page(tmp_path, _longform_panels(_row21_shape()), fs, [21.5, 23.0, 23.5, 26.0, 32.0], KEY_READ)
+    ink = {t: [op for _name, op in pills] for t, pills in got.items()}
+    assert [name for name, _ in got[21.5]] == ["SHARE PRICE", "OPERATING PROFIT"]
+    assert ink[21.5] == [1.0, 1.0], "the line alone: its key has landed"
+    assert ink[23.0] == [1.0, 1.0], "the bars beside the line: the line is still in focus, and so is its key"
+    assert all(0.0 < v < 1.0 for v in ink[23.5]) or all(v == 1.0 for v in ink[23.5]), ink[23.5]
+    assert ink[26.0] == [0.0, 0.0], "the bars grown over the receded line: the line's key has gone with it"
+    assert ink[32.0] == [1.0, 1.0], "the line back in focus: its key back"
+
+
+@pytest.mark.skipif(not _chromium(), reason="playwright chromium not installed")
+def test_a_key_shared_by_two_panels_stays_while_either_is_in_focus_and_no_focus_paints_the_key_as_before_T8e(tmp_path) -> None:
+    """The two-era page keys its one name once, on panel 0 (E53 s8) - panel 1's line carries the same name, so the key
+    stays when panel 1 alone is in focus. A page with no focus state paints its key exactly as before."""
+    page = _longform_panels(_two_eras())
+    assert [k["panel"] for k in page["axes"]["key"]] == [0]
+    fs = _focus_states(2, [(20.0, 1.2, {"layout": "row", "active": [1]})])
+    with_focus = _play_page(tmp_path, page, fs, [19.0, 25.0], KEY_READ)
+    assert [op for _n, op in with_focus[25.0]] == [1.0], "panel 1 carries the keyed name: the key stays"
+    plain = _play_page(tmp_path, page, [], [19.0, 25.0], KEY_READ)
+    assert plain[25.0] == with_focus[19.0] == plain[19.0]
+
+
+# ---- P69 T8e (2): the measurer, in the player ---------------------------------------------------------------------------
+@pytest.mark.skipif(not _chromium(), reason="playwright chromium not installed")
+def test_a_panels_page_is_measured_standing_in_its_first_focus_state_T8e() -> None:
+    """Row 21's shape measured as it stands from its first frame - the line ALONE across the region, the two bars panels
+    hidden: the plot is the line panel's (on the stage), the hidden panels are named hidden and give the plot nothing.
+    Measured in its home layout (every panel side by side, a layout no frame draws) the same page's plot is the three."""
+    import measure_page_boxes as MP
+    page = _longform_panels(_row21_shape())
+    (fs,) = _focus_states(3, [(0.0, 0.05, LINE_ALONE)])
+    home, first = MP.measure(LPG.PANELS, "16:9", page), MP.measure(LPG.PANELS, "16:9", page, focus=fs)
+    assert first[LPG.PANELS_KEY][1] == {"hidden": True} == first[LPG.PANELS_KEY][2]
+    line = first[LPG.PANELS_KEY][0]
+    assert first["boxes"]["plot"] == line["plot"], "the one shown panel IS the plot"
+    p = first["boxes"]["plot"]
+    assert p["x"] >= 0 and p["x"] + p["w"] <= 1920 and p["w"] <= line["box"]["w"] + 2, (p, line["box"])
+    assert line["box"]["w"] > 1.5 * home[LPG.PANELS_KEY][0]["box"]["w"], "the line alone spans the region (T8c)"
+    assert len(home[LPG.PANELS_KEY]) == 3 and all("box" in q for q in home[LPG.PANELS_KEY]), "no focus: every panel, as before"
+    assert "1" in "".join(first["data_mask"]), first["data_mask"]

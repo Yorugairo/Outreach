@@ -12,6 +12,8 @@ line|bars|race|decline|progress) and s9.28 (surface x builder are two axes). P35
 Input shapes (every one needs ``title`` and a non-empty ``src``):
   story    {"bars": [{"label", "value", "color", "note"?}]}   <= STORY_MAX_VALUES
            (P69 T8d: a value may be a RANGE [lo, hi] - the bar at its near end, a band to the far one, written "lo–hi")
+           (P69 T45: a bar may carry "members": [{"name", "logo"?, "short"?}] - equal tiles naming who is in its ONE
+           value, the page's "member_noun" writing what a tile is: "each tile = one company")
   dense    {"series": [{"label"|"name", "color", "pts": [[x, y], ...]}], + AXES_KEYS}
            or {"panels": [{"sub", "series": [...]} | {"sub", "builder": "bars", "unit", "bars": [...]}]}
   tiers    {"tiers": [{"name", "unit", "series"|"pts"|"bars", + AXES_KEYS}], + AXES_KEYS}
@@ -109,7 +111,8 @@ AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from
              "ymin", "ymax", "yfmt", "yunit", "panels",
              "domain", "xdomain",   # P48 T2: a derived rescale state names its exact y domain and x window
              "overflow_placeholder", "overflow_capsule", "break_cadence",   # P50 T10 / T13: the breakthrough's furniture (E60)
-             "independent")   # E79: this page (or this tier) carries unrelated measures, each on its own scale - nothing implies one
+             "independent",   # E79: this page (or this tier) carries unrelated measures, each on its own scale - nothing implies one
+             "break")   # P69 T66 / E99 s111: one x axis across two eras, cut where no datum is and the cut drawn (`_validate_break`)
 UNCHARTABLE = {
     "checklist": "no chartable values: 'checklist' is a table, not a chart (keep it a dock)",
     "shares": ("'shares' is a donut, and E53 s1 ranks angle and area at the bottom of the perception hierarchy: "
@@ -127,6 +130,30 @@ SHARE_BOUNDS = (
     "the figure the claim turns on WRITTEN on the page, so no angle has to be estimated",
     f"{SHARE_MAX_SLICES} slices or fewer",
 )
+# P69 T48 / E99 s109 (4) + its amendment: THE SOLID SHARE PAGE - a pie or a DONUT (`hole`), flat or EXTRUDED with a tilt
+# (`extrude`: a 2.5D projection of the TRUE-ANGLE slices), one slice EXPLODED out of the whole (`explode`; the `explode`
+# page species says when). Truthful by s100's two tests: every angle is the slice's share of the whole, whatever the
+# tilt, and every slice's figure is WRITTEN on it - the number, not the area, is the claim. A page naming none of these
+# keys is the P48 T4 pie, byte for byte (its `peel` and its one written figure).
+SHARE_SOLID_KEYS = ("hole", "extrude", "explode")
+PIE_HOLE_MAX = 0.75         # a donut's hole as a share of the radius: past three quarters the ring is a hairline, not a slice
+PIE_TILT_DEG = 50           # the default tilt, degrees back from face-on - see PIE_AREA_LIE_MAX for why it is no steeper
+PIE_TILT_RANGE = (10, 60)   # under 10 the tilt reads as a mistake; past 60 the top is a sliver and the near rim dominates
+PIE_DEPTH = 0.12            # the extrusion's thickness, a share of the radius (in the pie's own plane, before the tilt)
+PIE_DEPTH_RANGE = (0.02, 0.30)
+PIE_EXPLODE_OUT = 0.14      # how far the exploded slice leaves, a share of the radius along its own bisector [DERIVED: clear of
+                            # its neighbours' names, still obviously OF the whole - the peel's own 0.17 less a margin for the rim]
+PIE_EXPLODE_RANGE = (0.04, 0.30)
+# THE HONESTY MEASURE. Under the orthographic tilt every TOP face scales by cos(tilt) alike, so the tops keep their true
+# proportions; what a tilt adds is the RIM, and only the near half of it - so a slice at six o'clock owns a strip the far
+# slices do not. The worst factor any slice's apparent area (top + visible rim) reads against its share is a thin slice
+# at six o'clock: (1 + q) / (1 + q / pi), q = 2 depth tan(tilt); the far slice reads 1 / (1 + q / pi) of its share.
+# PIE_AREA_LIE_MAX is what a WRITTEN figure carries: perceived area grows about as area^0.7 (Stevens' exponent for
+# area), so 1.2 in area reads as ~1.14 - a 39 % slice read as ~44 % with "39%" written on it, which the figure corrects
+# at a glance. The default tilt/depth (50 deg, 0.12) is 1.18; a page past the bound is REPORTED with its number (s106).
+PIE_AREA_LIE_MAX = 1.2
+# the shares must sum to their whole within the WRITTEN figures' own rounding: half a unit of the finest decimal place,
+# per slice (three thirds written 33 % each are 99, not a missing 1 %)
 UNCHARTABLE_DEFAULT = "no chartable values: expected bars[], series[].pts, panels[], or periods + series[].values"
 
 
@@ -228,6 +255,188 @@ def bar_value_errors(where: str, bar: dict, unit: str) -> list[str]:
         errors.append(f"{where} range {list(v)!r} has no unit: the page writes the range as the source states it "
                       "('+55–60%'), and a range without its unit is not a figure (P69 T8d)")
     return errors
+
+
+# ---- P69 T45 (E99 s101; s109 (2)): THE MEMBERSHIP STACK - equal tiles naming who is in ONE bar ---------------------
+# s101: "A bar may be filled with EQUAL tiles naming who is in it (logos, names) when the bar is ONE value, the tiles carry
+# no value of their own (equal height, never sized), and the bar's total is written on the page" - Bravos's AI hidden-debt
+# bar with its company tiles. It reads as MEMBERSHIP, not as segments to compare. A member is a NAME, and - where the
+# operator's catalogue carries that member's own mark - a `logo`: a catalogue id the compiler resolves (E94; 11-ARCHIVAL
+# s4: "Logos and organization marks require recorded permission; otherwise use text"). The page WRITES what a tile is
+# ("each tile = one company"), so no one reads a tile as a value. A stack of VALUES is the stacked bar (`segments`, P69
+# T64, s110 (1)) - never this form, and a member that carries a value is refused here by name.
+MEMBERS_KEY = "members"
+MEMBER_NOUN_KEY = "member_noun"
+MEMBER_NOUN_DEFAULT = "member"
+MEMBER_KEY_TEXT = "each tile = one {noun}"
+MEMBER_FIELDS = ("name", "logo", "short")
+MEMBER_VALUE_FIELDS = ("value", "values", "share", "shares", "weight", "size", "pct", "percent", "amount", "height",
+                       "count", "total", "segments")
+# [DERIVED] two to eight: one member is a label, not a set; past eight a full-height bar on the 16:9 page (a 556 px plot,
+# the bar at its 88 % after the builder's 14 % air) leaves a tile under 61 px - under one line of a name at the phone
+# floor (59 px) - and a count that large is the count array's to show (species:count_array)
+MEMBERS_MIN, MEMBERS_MAX = 2, 8
+MEMBER_NOUN_RE = re.compile(r"^[a-z][a-z -]{0,22}[a-z]$")   # a short lowercase noun, written as the author wrote it
+MEMBER_LOGO_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")        # a catalogue asset id (build_scene_timeline_f.PROP_ID)
+# the tile's geometry in STAGE px - mirrors of the engine's LPMEMBER (INSET_PX, GAP_PX, PAD_PX) and LPBAR.W_PX, read by
+# the phone-floor check below (an estimate: the engine fits the drawn name; this names the one that cannot fit)
+MEMBER_TILE_PX = {"inset": 8.0, "gap": 6.0, "pad": 8.0}
+MEMBER_BAR_W_PX = 196.0
+MEMBER_LOGO_MIN_PX = 48.0   # the engine's LPMEMBER.LOGO_MIN_PX: a cutout drawn smaller reads as a smudge, and the tile writes the NAME
+MEMBER_LINE_H = 1.15
+
+
+def _nested_bars(series: dict) -> list[tuple[str, list]]:
+    """Bars that live INSIDE a panel or a tier - where a membership stack is not drawn."""
+    out = [(f"panels[{k}]", p.get("bars") or []) for k, p in enumerate(series.get("panels") or []) if isinstance(p, dict)]
+    out += [(f"tiers[{k}]", t.get("bars") or []) for k, t in enumerate(_tier_entries(series)) if isinstance(t, dict)]
+    return [(w, [b for b in bars if isinstance(b, dict)]) for w, bars in out if isinstance(bars, list)]
+
+
+def member_bars(series: dict) -> list[int]:
+    """The indices of the page's bars that carry `members`."""
+    return [i for i, b in enumerate(_bars(series)) if MEMBERS_KEY in b]
+
+
+def member_errors(where: str, bar: dict) -> list[str]:
+    """One bar's membership: ONE value (never a range, never zero), 2..MEMBERS_MAX members, each a name (unique), an
+    optional catalogue `logo` id and an optional `short` name for its tile - and NOTHING that carries a value (s101)."""
+    errors, ms = [], bar.get(MEMBERS_KEY)
+    if _is_range(bar.get("value")):
+        errors.append(f"{where} is a RANGE and carries members: a range states two values, and a membership stack "
+                      "fills ONE value with equal tiles (E99 s101)")
+    elif to_number(bar.get("value")) == 0:
+        errors.append(f"{where} is zero and carries members: a bar at zero has no height to hold its tiles")
+    if not isinstance(ms, list):
+        return errors + [f"{where} members {ms!r}: members is a list of {{name, logo?, short?}} - one per tile"]
+    if not MEMBERS_MIN <= len(ms) <= MEMBERS_MAX:
+        errors.append(f"{where}: {len(ms)} member(s) - a membership stack holds {MEMBERS_MIN} to {MEMBERS_MAX} members "
+                      "(one is a label; past eight no tile holds a name at the phone floor - count them with the "
+                      "count array)")
+    seen: set[str] = set()
+    for j, m in enumerate(ms):
+        w = f"{where} members[{j}]"
+        if not isinstance(m, dict):
+            errors.append(f"{w} {m!r} is an object {{name, logo?, short?}}")
+            continue
+        valued = [k for k in m if k in MEMBER_VALUE_FIELDS
+                  or (k not in MEMBER_FIELDS and isinstance(m[k], Real) and not isinstance(m[k], bool))]
+        if valued:
+            errors.append(f"{w} carries a value ({', '.join(valued)}): E99 s101 - a membership tile carries no value of "
+                          "its own (equal height, never sized). A stack of VALUES is the stacked bar (`segments`, "
+                          "P69 T64, E99 s110 (1)); to compare the members' sizes, draw them as bars")
+        errors += [f"{w}: {k!r} is not a member field ({'|'.join(MEMBER_FIELDS)})" for k in m
+                   if k not in MEMBER_FIELDS and k not in valued]
+        name = m.get("name")
+        if not _text(name):
+            errors.append(f"{w} needs a name - the tile writes it, or names the logo it carries")
+            continue
+        key = str(name).strip().lower()
+        if key in seen:
+            errors.append(f"{where}: the member {key!r} twice - each tile is ONE member")
+        seen.add(key)
+        logo = m.get("logo")
+        if logo is not None and not (isinstance(logo, str) and MEMBER_LOGO_RE.match(logo)):
+            errors.append(f"{w}: logo {logo!r} is not a catalogue id - a logo is one of the operator's catalogued "
+                          "cutouts (assets/icons, E94), never a file or an invented mark")
+        short = m.get("short")
+        if short is not None and not (_text(short) and len(str(short).strip()) < len(str(name).strip())):
+            errors.append(f"{w}: short {short!r} is not shorter than its name {name!r}")
+    return errors
+
+
+def _validate_members(series: dict, variant: str) -> list[str]:
+    """P69 T45: every `members` on the page - a BARS page's bars only (never a panel's or a tier's, a combo's or a
+    progress page's), never on a breakthrough page (its bar runs past the scale its tiles would divide) - and the
+    `member_noun` its key writes. A page with neither is untouched."""
+    errors = [f"{where}: a membership (members) is a BARS PAGE's - one bar of one value, its tiles naming who is in it "
+              "(P69 T45); draw it on a bars page of its own"
+              for where, bars in _nested_bars(series) if any(MEMBERS_KEY in b for b in bars)]
+    held = member_bars(series)
+    if MEMBER_NOUN_KEY in series:
+        noun = series[MEMBER_NOUN_KEY]
+        if not held:
+            errors.append("member_noun names what a membership tile is, and no bar carries members")
+        if not (isinstance(noun, str) and MEMBER_NOUN_RE.match(noun)):
+            errors.append(f"member_noun {noun!r}: a short lowercase noun ('company', 'stock') - the page writes "
+                          f"{MEMBER_KEY_TEXT.format(noun='<noun>')!r}")
+    if not held:
+        return errors
+    builder = pick_builder(series, variant)
+    if variant != "bars" or builder != "story":
+        errors.append(f"bars{held} carry members: a membership stack is a bars page's (variant bars, one value per "
+                      f"bar) - this page draws {variant!r} as {builder!r}")
+    if series.get("overflow") is not None:
+        errors.append(f"bars{held} carry members on a breakthrough page (overflow): the breakthrough shoots a bar past "
+                      "its stated scale, and a membership divides ONE standing value - give it a page of its own scale")
+    for i in held:
+        errors += member_errors(f"bars[{i}]", _bars(series)[i])
+    return errors
+
+
+def _with_member_tiles(block: dict, series: dict) -> dict:
+    """P69 T45: a bars block whose bars carry members - `members` per bar (None for a bar without) and the key the page
+    writes. A block with none is returned untouched - no key, the page it always was."""
+    bars = _bars(series)
+    if not any(MEMBERS_KEY in b for b in bars):
+        return block
+    block[MEMBERS_KEY] = [[{k: m[k] for k in MEMBER_FIELDS if m.get(k) is not None} for m in b[MEMBERS_KEY]]
+                          if MEMBERS_KEY in b else None for b in bars]
+    block["member_key"] = MEMBER_KEY_TEXT.format(noun=series.get(MEMBER_NOUN_KEY) or MEMBER_NOUN_DEFAULT)
+    return block
+
+
+def _two_lines(words: list[str]) -> list[str]:
+    """A name broken at the space nearest its middle (by characters) - the engine's own break."""
+    best = min(range(1, len(words)), key=lambda k: abs(len(" ".join(words[:k])) - len(" ".join(words[k:]))))
+    return [" ".join(words[:best]), " ".join(words[best:])]
+
+
+def member_fit_warnings(spec: dict, aspect: str = "16:9") -> list[str]:
+    """P69 T45 (the acceptance's (3)): a WARN - never a refusal (E99 s106) - for each membership tile whose NAME cannot
+    be written at E99 s90's phone floor (12 px on a 390-px-wide phone) inside it, on one line or two, with the numbers.
+    The tile is estimated the engine's way: the bar at its width (the 196 px cap, or its pitch less the builder's 0.34
+    air), its height on the bars law's scale (zero kept, 14 % air), divided equally, less the tile's inset, gaps and
+    padding. A logo tile writes no name and is not checked - unless its cutout would be drawn under
+    MEMBER_LOGO_MIN_PX, where the engine writes the name instead. Pure."""
+    members = spec.get(MEMBERS_KEY)
+    if not isinstance(members, list) or not any(members):
+        return []
+    vals = [float(v) for v in spec.get("values") or []]
+    if not vals:
+        return []
+    floor = card_floor_px(STAGE_PX[aspect][0])
+    chart = page_boxes(spec, aspect)["chart"]   # the bars builder's OWN plot inside it (buildLedgerBars, not the line's margins):
+    plot = ({"w": chart["w"] - 150 - 30, "h": chart["h"] - 150 - 70} if aspect == "9:16"     # portrait: stage px, top 150, foot 70
+            else {"w": chart["w"] * 920 / 1000, "h": chart["h"] * 350 / 560})              # landscape: x 60-980, y 90-440 of 1000 x 560
+    lo, hi = min(0.0, *vals), max(0.0, *vals)
+    pad = (hi - lo) * BARS_PAD
+    span = (hi + (pad if hi > 0 else 0.0)) - (lo - (pad if lo < 0 else 0.0)) or 1.0
+    T = MEMBER_TILE_PX
+    tile_w = min(MEMBER_BAR_W_PX, plot["w"] / len(vals) * (1 - 0.34)) - 2 * T["inset"] - 2 * T["pad"]
+    out = []
+    for i, ms in enumerate(members):
+        if not ms:
+            continue
+        bar_h = abs(vals[i]) / span * plot["h"]
+        tile_h = (bar_h - (len(ms) + 1) * T["gap"]) / len(ms) - 2 * T["pad"]
+        for m in ms:
+            if m.get("logo") and min(tile_w, tile_h) >= MEMBER_LOGO_MIN_PX:
+                continue   # the catalogued cutout is drawn, big enough to read; a smaller one gives way to the name, checked below
+            text = str(m.get("short") or m.get("name") or "")
+            one = longform_text_px(text, "title", floor)
+            words = text.split()
+            two = max(longform_text_px(ln, "title", floor) for ln in _two_lines(words)) if len(words) > 1 else one
+            line = floor * MEMBER_LINE_H
+            if (one <= tile_w and line <= tile_h) or (two <= tile_w and 2 * line <= tile_h):
+                continue
+            label = (spec.get("labels") or [None] * len(vals))[i]
+            out.append(f"WARN member: {text!r} on bar {i} ({label!r}) cannot be written at the phone floor "
+                       f"({floor:.0f} px, E99 s90) in its tile ({tile_w:.0f} x {tile_h:.0f} px): it needs {one:.0f} px "
+                       + (f"on one line or {two:.0f} px on two" if len(words) > 1 else "on its one line")
+                       + " - give it a `short` name, fewer members, or its catalogued logo. REPORTED, the frame read "
+                       "decides (E99 s106)")
+    return out
 
 
 def dense_series(series: dict) -> list[dict]:
@@ -391,6 +600,8 @@ def validate(series: dict, variant: str) -> list[str]:
     """Error strings; empty means the series is a page for this variant. Pure."""
     errors: list[str] = []
     errors += _validate_readability(series, variant)
+    errors += _validate_break(series, variant)   # P69 T66: [] unless the object names a `break`
+    errors += _validate_members(series, variant)   # P69 T45: a membership is a bars page's, and a tile carries no value
     if "left_gutter" in series:
         gutter = series["left_gutter"]
         if isinstance(gutter, bool) or not isinstance(gutter, int) or not 60 <= gutter <= 300:
@@ -501,9 +712,256 @@ def _validate_burst_furniture(series: dict, ovf: str) -> list[str]:
     return errors
 
 
+# ---- P69 T66 (E99 s111): THE BROKEN CROSS-ERA AXIS ----------------------------------------------------------------------
+# The operator, on Bravos's "AI and Railway Spending As a % of GDP" (the 1860s and 1985-on joined by a `//`): "yes". A
+# line may run across two eras on ONE x axis with a visible break when the claim is that the LEVELS are comparable era
+# to era; the y is one unit for both, both eras are labelled, and the break is drawn so the gap is never read as
+# continuous time (E53 s3's "never a continuous axis" is met by the break). When the claim is that the SHAPES match,
+# the rebased overlay stays the form. `break: {after, before, eras}` on a dense-line object: the last x of the first
+# era, the first x of the second, and the two eras' names; `claim: "level"` beside it. Not E60's retired zigzag - that
+# broke a bar's SCALE, which is never abbreviated; an x axis across two eras IS abbreviated, and the mark says so.
+BREAK_KEYS = ("after", "before", "eras")
+BREAK_CLAIMS = ("level", "shape")
+BREAK_RULING = "E99 s111"
+BREAK_OVERLAY = ("the rebased overlay - each era counted from its own start on one x (row 15's \"years from each era's "
+                 "start\", ev-tnx-two-eras-v4)")
+BREAK_YEARS = (1000, 3000)   # an edge in this range is written as its year ("1849 // 1985"); the railway era is a date
+ERA_VOID_SHARE = 0.4    # a stretch with no datum this share of the page's x span is a VOID between two eras ...
+ERA_VOID_RATIO = 4.0    # ... when it is also this many times the next widest step (a sparse series is not two eras)
+
+
+def _era_year(value: Any) -> str:
+    n = to_number(value)
+    return str(math.floor(n)) if n is not None and BREAK_YEARS[0] <= n < BREAK_YEARS[1] else value_string(value)
+
+
+def break_gap_label(brk: dict) -> str:
+    """The gap written at the break in the eras' own years - the engine's `lpBreakYear` writes the same string."""
+    return f"{_era_year(brk.get('after'))} // {_era_year(brk.get('before'))}"
+
+
+def _dense_xs(series: dict) -> list[float]:
+    return sorted({x for s in dense_series(series) for x in (to_number(p[0]) for p in _points(s)) if x is not None})
+
+
+def _break_shape_errors(series: dict, variant: str, where: str) -> list[str]:
+    """The claim and the ONE unit: a level claim on one measure, or it is another form."""
+    errors: list[str] = []
+    claim = series.get("claim")
+    if claim is None:
+        errors.append(f"{where}: a broken axis states its claim - `claim: \"level\"`: the eras' LEVELS are comparable. "
+                      f"A claim that their SHAPES match is {BREAK_OVERLAY}")
+    elif claim == "shape":
+        errors.append(f"{where}: claim 'shape' - when the SHAPES match, the form is {BREAK_OVERLAY}, not a broken axis; "
+                      "a break is for a LEVEL claim")
+    elif claim not in BREAK_CLAIMS:
+        errors.append(f"{where}: claim {claim!r} is not one of {'|'.join(BREAK_CLAIMS)}")
+    unit = series.get("yunit")
+    if not _text(unit):
+        errors.append(f"{where}: a broken axis writes its ONE unit (`yunit`) - both eras are read on that one y")
+    for i, s in enumerate(dense_series(series)):
+        own = s.get("unit", s.get("yunit"))
+        if own is not None and str(own) != str(unit):
+            errors.append(f"{where}: series[{i}] is in {own!r} and the page in {unit!r} - the eras share ONE unit on one y. "
+                          "Two measures are E79's panels (each panel its own axes, `independent`), never one broken axis")
+    if series.get("independent"):
+        errors.append(f"{where}: `independent` declares unrelated measures on their own scales (E79's panels) - a broken "
+                      "axis is ONE measure on one y")
+    if series.get("line_unit") is not None:
+        errors.append(f"{where}: `line_unit` gives the lines a right axis in a second unit - a broken axis has one y")
+    if "xdomain" in series:
+        errors.append(f"{where}: `xdomain` is a window on a continuous x - a broken axis is its two eras whole")
+    return errors
+
+
+def _break_data_errors(series: dict, a: float, b: float, eras: list, where: str) -> list[str]:
+    """Tight to the data: the break is cut where no datum is, at the first era's last datum and the second's first,
+    and both eras print their own dates at their ticks."""
+    errors: list[str] = []
+    xs = _dense_xs(series)
+    inside = [x for x in xs if a < x < b]
+    if inside:
+        errors.append(f"{where}: a datum at {inside[0]:g} stands in the gap ({a:g} to {b:g}) - the break is cut where "
+                      "there is no datum, and no point is ever drawn across it")
+    first, second = [x for x in xs if x <= a], [x for x in xs if x >= b]
+    if not first or max(first) != a:
+        errors.append(f"{where}: break.after {a:g} is not the first era's last datum"
+                      + (f" ({max(first):g})" if first else " (the first era has none)"))
+    if not second or min(second) != b:
+        errors.append(f"{where}: break.before {b:g} is not the second era's first datum"
+                      + (f" ({min(second):g})" if second else " (the second era has none)"))
+    if len(first) < 2 or len(second) < 2:
+        errors.append(f"{where}: each era carries two data at least - a lone point is a mark, not an era")
+    ticks = [(to_number(t[0]), t) for t in series.get("xticks") or [] if isinstance(t, (list, tuple)) and len(t) == 2]
+    if not (first and second):
+        return errors
+    # a tick a hair outside its era's data still belongs to it (the panels' own rule: "2021" on data from 2021.0082)
+    tol = (PANEL_TICK_EDGE * (a - xs[0]), PANEL_TICK_EDGE * (xs[-1] - b))
+    for x, t in ticks:
+        if x is not None and a + tol[0] < x < b - tol[1]:
+            errors.append(f"{where}: the x tick {t[1]!r} ({x:g}) stands in the gap - the years between the eras are not drawn")
+    names = eras if isinstance(eras, list) and len(eras) == 2 else ["the first era", "the second era"]
+    for name, lo, hi in ((names[0], xs[0] - tol[0], a + tol[0]), (names[1], b - tol[1], xs[-1] + tol[1])):
+        if not any(x is not None and lo <= x <= hi for x, _t in ticks):
+            errors.append(f"{where}: {str(name).strip() or 'an era'} prints no tick of its own dates ({lo:g} to {hi:g}) - "
+                          "both eras' dates are printed at their ticks")
+    return errors
+
+
+def _validate_break(series: dict, variant: str) -> list[str]:
+    """E99 s111: a `break` is refused by name unless it is a sound broken axis. An object naming none is untouched."""
+    if "break" not in series:
+        return []
+    brk, where = series["break"], f"break ({BREAK_RULING})"
+    if not isinstance(brk, dict):
+        return [f"{where}: must be {{after, before, eras}} - the first era's last x, the second era's first x, and the "
+                "two eras' names"]
+    errors = [f"{where}: {k!r} is not a break key ({'|'.join(BREAK_KEYS)})" for k in sorted(set(brk) - set(BREAK_KEYS))]
+    a, b = to_number(brk.get("after")), to_number(brk.get("before"))
+    if a is None or b is None:
+        errors.append(f"{where}: break.after and break.before must be numbers - the first era's last x and the second "
+                      "era's first x")
+    elif a >= b:
+        errors.append(f"{where}: break.before ({b:g}) must come after break.after ({a:g})")
+    eras = brk.get("eras")
+    if not (isinstance(eras, list) and len(eras) == 2 and all(_text(e) for e in eras)):
+        errors.append(f"{where}: both eras are LABELLED on the page - break.eras is the two eras' names, [first, second]; "
+                      "an unlabelled era is refused")
+    builder = pick_builder(series, variant)
+    if builder != "dense-line":
+        return errors + [f"{where}: a broken x axis is a dense-line page's - this page draws as {builder!r}"]
+    errors += _break_shape_errors(series, variant, where)
+    if a is None or b is None or a >= b:
+        return errors
+    return errors + _break_data_errors(series, a, b, eras, where)
+
+
+def era_void(series: dict) -> tuple[float, float] | None:
+    """The widest stretch of a line page's x with no datum in it, when it reads as the void between two eras: at least
+    ERA_VOID_SHARE of the span, ERA_VOID_RATIO times the next widest step, two data or more on each side."""
+    xs = _dense_xs(series)
+    if len(xs) < 4:
+        return None
+    steps = sorted(((xs[i + 1] - xs[i], i) for i in range(len(xs) - 1)), reverse=True)
+    (wide, i), nxt = steps[0], steps[1][0]
+    if wide < ERA_VOID_SHARE * (xs[-1] - xs[0]) or wide < ERA_VOID_RATIO * nxt or i < 1 or len(xs) - i - 1 < 2:
+        return None
+    return xs[i], xs[i + 1]
+
+
+def era_void_warning(series: dict, name: str, variant: str = "line") -> str | None:
+    """The compiler's WARN for two eras on one CONTINUOUS x (E53 s3): it names both honest forms - the broken axis for
+    a LEVEL claim (s111), the rebased overlay for a SHAPE claim. A page that declares its break is answered, not warned;
+    a page that is not ONE line plot (panels, tiers, bars) has no one x to warn about."""
+    if "break" in series or pick_builder(series, variant) != "dense-line":
+        return None
+    void = era_void(series)
+    if void is None:
+        return None
+    a, b = void
+    return (f"{name}: E53 s3 - its x has no datum from {a:g} to {b:g}, and on one continuous axis those empty years read "
+            f"as time. If the claim is that the eras' LEVELS are comparable, declare `break: {{\"after\": {a:g}, "
+            f"\"before\": {b:g}, \"eras\": [..]}}` with `claim: \"level\"` (E99 s111: the `//` drawn); if the claim is "
+            f"that their SHAPES match, {BREAK_OVERLAY} stays the form")
+
+
 SIGNED_NOTE_RE = re.compile(r"^\s*[+\u2212-]\s*\d")
 MONTH_LABEL_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*'?(\d{2}|\d{4})$")
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+
+def share_solid(series: dict) -> bool:
+    """P69 T48: does this share object name a donut, an extrusion or an explode? Pure."""
+    return any(series.get(k) not in (None, False) for k in SHARE_SOLID_KEYS)
+
+
+def pie_area_lie(tilt_deg: float, depth: float) -> float:
+    """P69 T48: the worst factor a slice's APPARENT area (its top + the rim it shows) reads against its true share, on a
+    pie tilted `tilt_deg` back from face-on and extruded `depth` of its radius. 1.0 is honest area. Pure."""
+    q = 2.0 * float(depth) * math.tan(math.radians(float(tilt_deg)))
+    return max((1.0 + q) / (1.0 + q / math.pi), 1.0 + q / math.pi)
+
+
+def _decimals(v: Any) -> int:
+    text = v if isinstance(v, str) else repr(v)
+    return len(text.split(".", 1)[1]) if "." in text else 0
+
+
+def _in_range(v: Any, lo: float, hi: float) -> bool:
+    n = to_number(v)
+    return n is not None and not isinstance(v, bool) and lo <= n <= hi
+
+
+def _pie_options(series: dict) -> tuple[dict | None, dict | None, float | None]:
+    """(extrude, explode, hole) as the spec carries them - every default written out - or None where not named."""
+    ex, xp, hole = series.get("extrude"), series.get("explode"), series.get("hole")
+    ext = None
+    if ex not in (None, False):
+        d = ex if isinstance(ex, dict) else {}
+        ext = {"tilt": to_number(d["tilt"]) if "tilt" in d else PIE_TILT_DEG,
+               "depth": to_number(d["depth"]) if "depth" in d else PIE_DEPTH,
+               "hatch": bool(d.get("hatch", False))}
+    exp = None
+    if xp not in (None, False):
+        d = xp if isinstance(xp, dict) else {}
+        exp = {"index": d["index"] if "index" in d else series.get("emphasize"),
+               "out": to_number(d["out"]) if "out" in d else PIE_EXPLODE_OUT}
+    return ext, exp, (to_number(hole) if hole not in (None, False) else None)
+
+
+def _validate_option(name: str, value: Any, fields: dict) -> list[str]:
+    """`true` or an object of the named fields, each checked by its own (predicate, message)."""
+    if value is True:
+        return []
+    if not isinstance(value, dict):
+        return [f"{name} must be true or {{{', '.join(fields)}}} (P69 T48), not {value!r}"]
+    unknown = sorted(set(value) - set(fields))
+    errs = [f"{name}: unknown key(s) {unknown} - it takes {', '.join(fields)}"] if unknown else []
+    return errs + [f"{name}.{k} {value[k]!r} {msg}" for k, (ok, msg) in fields.items() if k in value and not ok(value[k])]
+
+
+def _validate_share_solid(series: dict, shares: list) -> list[str]:
+    """P69 T48 / E99 s109 (4): the solid share page's contract. The truth rules are hard (the shares sum to their whole,
+    the options name real slices); how steep a tilt reads is advice, reported by `_share_block` with its number."""
+    errors: list[str] = []
+    n = len(shares)
+    if series.get("peel") is not None:
+        errors.append("peel is the flat pie's piece that leaves (P48 T4); a donut or a 3D page EXPLODES its slice instead "
+                      "(`explode` + the `explode` species on its word) - drop `peel`")
+    hole = series.get("hole")
+    if hole not in (None, False) and not (_in_range(hole, 0.0, PIE_HOLE_MAX) and to_number(hole) > 0):
+        errors.append(f"hole {hole!r} must be the donut's hole as a share of the radius, in (0, {PIE_HOLE_MAX}]")
+    tlo, thi = PIE_TILT_RANGE
+    dlo, dhi = PIE_DEPTH_RANGE
+    olo, ohi = PIE_EXPLODE_RANGE
+    if series.get("extrude") not in (None, False):
+        errors += _validate_option("extrude", series["extrude"], {
+            "tilt": (lambda v: _in_range(v, tlo, thi), f"is outside {tlo}..{thi} degrees back from face-on"),
+            "depth": (lambda v: _in_range(v, dlo, dhi), f"is outside {dlo}..{dhi} of the radius"),
+            "hatch": (lambda v: isinstance(v, bool), "must be true or false (T6b's engraving on the side away from the light)")})
+    if series.get("explode") not in (None, False):
+        errors += _validate_option("explode", series["explode"], {
+            "index": (lambda v: isinstance(v, int) and not isinstance(v, bool) and 0 <= v < n,
+                      f"does not name a slice (0..{n - 1})"),
+            "out": (lambda v: _in_range(v, olo, ohi), f"is outside {olo}..{ohi} of the radius")})
+    total = to_number(series.get("total"))
+    if total is None or total <= 0:
+        errors.append(f"a solid share page must declare 'total': the whole its slices are shares of (100 for percent), "
+                      f"not {series.get('total')!r} - the angles are shares of the WHOLE (E99 s109 (4))")
+        return errors
+    vals = [to_number(s.get("value")) for s in shares if isinstance(s, dict)]
+    if any(v is None for v in vals):
+        return errors
+    summed = sum(vals)
+    tol = sum(0.5 * 10 ** -_decimals(s.get("value")) for s in shares) + 1e-9
+    if summed - total > tol:
+        errors.append(f"the shares sum to {summed:g}, more than the whole {total:g}: a part cannot exceed its whole")
+    elif total - summed > tol:
+        rest = total - summed
+        errors.append(f"the shares sum to {summed:g} of the whole {total:g}: {rest:g} is unaccounted for - name it as its "
+                      f"own slice ({{\"label\": \"Other\", \"value\": {rest:g}}}) or correct the figures. A pie of the "
+                      "named slices alone would draw each of them larger than its share (E99 s109 (4))")
+    return errors
 
 
 def _validate_share(series: dict) -> list[str]:
@@ -526,6 +984,8 @@ def _validate_share(series: dict) -> list[str]:
     emph = series.get("emphasize")
     if not isinstance(emph, int) or isinstance(emph, bool) or not 0 <= emph < len(shares):
         errors.append(f"a share page must declare 'emphasize': the index of the ONE slice the claim is about ({SHARE_BOUNDS[0]}; {SHARE_BOUNDS[1]})")
+    if share_solid(series):   # P69 T48: every figure is written on its slice, so no `peel` carries the claim's
+        return errors + _validate_share_solid(series, shares)
     peel = series.get("peel")
     if not isinstance(peel, dict):
         errors.append(f"a share page must declare 'peel': the piece of the named slice the claim is about, with its figure ({SHARE_BOUNDS[2]})")
@@ -1521,6 +1981,8 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         spec["judge"] = review_notes(series)
         spec["badges"] = badges_for(series)
         spec["emphasize"] = int(series.get("emphasize") if emphasize is None else emphasize)
+        if "explode" in spec and not (isinstance(series.get("explode"), dict) and "index" in series["explode"]):
+            spec["explode"] = dict(spec["explode"], index=spec["emphasize"])   # P69 T48: `explode: true` is the claim's slice
         return spec
     if builder in ("tiers", "treemap"):
         spec.update(_tiers_block(series) if builder == "tiers" else _treemap_block(series))
@@ -1602,7 +2064,33 @@ def _share_block(series: dict) -> dict:
             "values": [to_number(s.get("value")) for s in shares],
             "value_strings": [value_string(s.get("value_string", s.get("value"))) for s in shares],
             "colors": [str(s.get("color") or ("crimson" if i == emph else "deemph")) for i, s in enumerate(shares)],
-            "peel": peel}
+            "peel": peel, **(_pie_block(series) if share_solid(series) else {})}
+
+
+def _pie_block(series: dict) -> dict:
+    """P69 T48: the solid share page's keys - only on a page that names one (the P48 T4 pie gains nothing). Every
+    slice's figure is written: its own `value_string`, else its value and the page's unit."""
+    ext, exp, hole = _pie_options(series)
+    unit = str(series.get("unit") or "")
+    sep = "" if unit in ("%", "pp", "x") else " "
+    out: dict[str, Any] = {"total": to_number(series.get("total")),
+                           "value_strings": [value_string(s["value_string"]) if s.get("value_string") is not None
+                                             else (value_string(s.get("value")) + (sep + unit if unit else ""))
+                                             for s in series.get("shares") or []]}
+    if hole is not None:
+        out["hole"] = hole
+    if ext is not None:
+        out["extrude"] = ext
+        lie = pie_area_lie(ext["tilt"], ext["depth"])
+        if lie > PIE_AREA_LIE_MAX + 1e-9:
+            out["warnings"] = [f"WARN share: the tilt {ext['tilt']:g} deg at depth {ext['depth']:g} lets a slice's apparent "
+                               f"area read {lie:.2f}x its share (bound {PIE_AREA_LIE_MAX:g}x; the default "
+                               f"{PIE_TILT_DEG} deg / {PIE_DEPTH:g} reads {pie_area_lie(PIE_TILT_DEG, PIE_DEPTH):.2f}x). "
+                               "Every figure is written on its slice, so the number carries the claim - REPORTED, "
+                               "the frame read decides (E99 s106, s109 (4))"]
+    if exp is not None:
+        out["explode"] = exp
+    return out
 
 
 def _decline_block(series: dict, spec: dict) -> dict:
@@ -1627,7 +2115,7 @@ def _story_block(series: dict) -> dict:
     block = {"labels": list(labels), "values": [to_number(v) for v in raw],
              "value_strings": [value_string(v) for v in raw], "colors": list(colors),
              **({"axes": axes} if axes else {})}
-    return _with_ranges(block, _bars(series))
+    return _with_member_tiles(_with_ranges(block, _bars(series)), series)   # P69 T45: absent members, untouched
 
 
 def _with_ranges(block: dict, bars: list[dict]) -> dict:
@@ -3265,7 +3753,7 @@ def infer_variant(series: dict) -> str | None:
     if isinstance(series.get("props"), list) and series["props"]:
         return "object"
     if isinstance(series.get("shares"), list):
-        return "share" if series.get("peel") is not None else "treemap"
+        return "share" if series.get("peel") is not None or share_solid(series) else "treemap"   # P69 T48: a donut / 3D pie is a share page
     return None
 
 
