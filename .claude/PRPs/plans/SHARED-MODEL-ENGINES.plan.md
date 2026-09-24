@@ -178,6 +178,7 @@ All paths below are proposed new write sets unless identified as existing. Tests
 
 ### T4b: Two fighter identities and bounded art packet
 - Status: in progress (garment/rigging diagnostic only; both identities and HG2 art packet pending)
+- Operator priority correction (2026-09-23): **recognizable editable likeness first**. The realistic Sharaf v2 portrait is a retained image-generated 2D look reference, not a Blender mesh; prior editable head proofs failed their visual gate. Next produce and review one head-only source/sculpt proof against that image and the real source frames. Do not spend further turns repairing the generic starter's fight shorts until a likeness candidate has passed an internal visual review. Garment evidence remains quarantined for later use; it is not the current critical path.
 - Owner: implementation_luna; parent directs art and records operator verdict
 - Depends on: T4a
 - Write set: `content/video_engine/assets/modeling/native/fighters/`; `B/art/fighters/`
@@ -267,6 +268,7 @@ All paths below are proposed new write sets unless identified as existing. Tests
 
 ### T5a.6–T5a.12: Corrective and garment-shard diagnostics
 - Status: complete as **negative review-only diagnostics**; no corrective source/model change is promoted, and T5b/HG2 remain open.
+- Sequencing: the operator deferred further shorts repair behind T4b recognizable likeness. Resume this defect only when a chosen fighter asset/costume makes it relevant to the actual character proof; the current generic shorts may be replaced rather than patched.
 - T5a.6 tested a masked deep-flexion corrective on derived geometry at the same measured 90.464805° elbow and 90.440783° knee poses. Its corrected verifier and focused tests passed, but the elbow minimum area/edge ratios became slightly worse (0.307438/0.303521 LBS → 0.304562/0.299201 corrective), the knee remained 0.118320/0.192760, and the shorts shard remained. The experimental implementation stays uncommitted in `codex/model-deep-flexion`.
 - T5a.7 compared the saved shorts stack, single LBS + Solidify, LBS without Solidify, and unmasked preserve-volume + Solidify on matched neutral and 90° views. The saved preserve-volume group has zero positive garment weights. No modifier-only variant removed the visual defect safely; the no-Solidify shell has 88 boundary edges. Source SHA-256 stayed `5a99ce057520e332673230dd5367189a5e6dc7da56ca45da50c8a38b4f40bade`.
 - T5a.8 mapped the long cyan fin's screen apex within 0.02758 px of evaluated triangles 1477/2162 at a Solidify rim/transition near source face 40/383 and vertex 54. The evaluated apex is already ~0.200 m from the group-matched source corner in neutral and ~0.208 m posed; knee motion adds only 7.715 mm. In-memory 3 mm and 10 mm local caps remove the long fin visually but each flips triangles 1452/2138; both are rejected.
