@@ -44,12 +44,12 @@
         {
           "const": "snap",
           "title": "the thrown chart CARD becomes the page",
-          "description": "enter=snap=<dock>: the page grows from the landed card's own rectangle to the stage over SNAP_S 0.45 with a velocity-envelope blur and a whoosh - the card the viewer already read IS the world now. record=docs/content-video-engine/CAPABILITIES.md:79 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:416-420"
+          "description": "enter=snap=<dock>: the page grows from the landed card's own rectangle to the stage over SNAP_S 0.45 with a velocity-envelope blur and a whoosh - the card the viewer already read IS the world now. record=docs/content-video-engine/CAPABILITIES.md:80 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:416-420"
         },
         {
           "const": "throw-then-zoom",
           "title": "a full chart card is THROWN, then ZOOMS up to the whole stage",
-          "description": "The card-becomes-the-chart pair, both halves on one beat: the page's own card is thrown onto the standing world on the stop-action throw a second early, and the page then snaps up out of it. A thrown full-page card never floats over the plate - it zooms, or it pushes. record=docs/content-video-engine/CAPABILITIES.md:79 cut=content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:281-285"
+          "description": "The card-becomes-the-chart pair, both halves on one beat: the page's own card is thrown onto the standing world on the stop-action throw a second early, and the page then snaps up out of it. A thrown full-page card never floats over the plate - it zooms, or it pushes. record=docs/content-video-engine/CAPABILITIES.md:80 cut=content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:281-285"
         },
         {
           "const": "throw-then-push",
@@ -79,7 +79,7 @@
         {
           "const": "card",
           "title": "EVIDENCE arrives over the standing world",
-          "description": "A dock: a still, a document or a cutout thrown or landed over the world, read at its reading box and parked in the page's own room (E45, E65) - an evidence still, never a full chart page (E99 s67 Apply 5). record=docs/content-video-engine/CAPABILITIES.md:90 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:291"
+          "description": "A dock: a still, a document or a cutout thrown or landed over the world, read at its reading box and parked in the page's own room (E45, E65) - an evidence still, never a full chart page (E99 s67 Apply 5). record=docs/content-video-engine/CAPABILITIES.md:91 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:291"
         },
         {
           "const": "hold",
@@ -89,7 +89,7 @@
         {
           "const": "rescale",
           "title": "the chart's AXES retarget to the window the sentence is about",
-          "description": "chart_to {to: rescale, ymin?, ymax?, window?}: the compiler derives the target state from the page's own series and the axes travel to it on one clock - the sell-off the sentence is about standing at full width. record=docs/content-video-engine/CAPABILITIES.md:118 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:312-313"
+          "description": "chart_to {to: rescale, ymin?, ymax?, window?}: the compiler derives the target state from the page's own series and the axes travel to it on one clock - the sell-off the sentence is about standing at full width. record=docs/content-video-engine/CAPABILITIES.md:119 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:312-313"
         },
         {
           "const": "recast",
@@ -99,12 +99,12 @@
         {
           "const": "park",
           "title": "the chart makes ROOM by one affine transform",
-          "description": "chart_to {to: park, scale, anchor}: the active chart shrinks toward a corner of its own box on the min-jerk clock and holds - one transform on the whole svg, every mark in place, so the next thing has room beside it. Never emitted at 9:16 (R26-172). record=docs/content-video-engine/CAPABILITIES.md:123 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:314"
+          "description": "chart_to {to: park, scale, anchor}: the active chart shrinks toward a corner of its own box on the min-jerk clock and holds - one transform on the whole svg, every mark in place, so the next thing has room beside it. Never emitted at 9:16 (R26-172). record=docs/content-video-engine/CAPABILITIES.md:124 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:314"
         },
         {
           "const": "unpark",
           "title": "the chart RE-TAKES centre stage",
-          "description": "The park to scale 1.0: as the cards leave, the chart grows back to full from the standing park and its result holds large under the sentence that turns (the operator: the chart should re-take center stage). record=docs/content-video-engine/CAPABILITIES.md:123 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:394"
+          "description": "The park to scale 1.0: as the cards leave, the chart grows back to full from the standing park and its result holds large under the sentence that turns (the operator: the chart should re-take center stage). record=docs/content-video-engine/CAPABILITIES.md:124 cut=content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py:394"
         },
         {
           "const": "melt",
@@ -114,12 +114,12 @@
         {
           "const": "morph",
           "title": "one LINE's area hands over to another's by ARAP",
-          "description": "chart_to {to: morph, state} between two LINE pages: the standing line un-draws by length while its area fills, the filled strip morphs into the target's area as the axes hand over, and the target builds on its own law. record=docs/content-video-engine/CAPABILITIES.md:121 cut=content/video_engine/scripts/proof_chart_transitions.py:81 NO APPROVED CUT CARRIES IT: the only realisation on disk is the P48 proof surface, so this word has NO SKELETON - the record names the mechanism and a skeleton is never invented (E99 s70)."
+          "description": "chart_to {to: morph, state} between two LINE pages: the standing line un-draws by length while its area fills, the filled strip morphs into the target's area as the axes hand over, and the target builds on its own law. record=docs/content-video-engine/CAPABILITIES.md:122 cut=content/video_engine/scripts/proof_chart_transitions.py:81 NO APPROVED CUT CARRIES IT: the only realisation on disk is the P48 proof surface, so this word has NO SKELETON - the record names the mechanism and a skeleton is never invented (E99 s70)."
         },
         {
           "const": "remake",
           "title": "the WHOLE chart becomes the whole other chart on one clock",
-          "description": "The seventh verb, chart_to {to: remake, state}, admitted on a line to bars pair only: every series, datum, axis, label and the title transform together (E99 s34 - a morph must prove the WHOLE chart). record=docs/content-video-engine/CAPABILITIES.md:122 cut=content/video_engine/scripts/render_baseline.py:260 NO APPROVED CUT CARRIES IT: the only realisation on disk is the remake-line-to-bars proof surface, so this word has NO SKELETON."
+          "description": "The seventh verb, chart_to {to: remake, state}, admitted on a line to bars pair only: every series, datum, axis, label and the title transform together (E99 s34 - a morph must prove the WHOLE chart). record=docs/content-video-engine/CAPABILITIES.md:123 cut=content/video_engine/scripts/render_baseline.py:265 NO APPROVED CUT CARRIES IT: the only realisation on disk is the remake-line-to-bars proof surface, so this word has NO SKELETON."
         },
         {
           "const": "object-becomes-chart",

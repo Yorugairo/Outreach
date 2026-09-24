@@ -159,6 +159,7 @@ edit the compiler, then `lint_species_choice.py --write-doc` (`--check-doc` and 
 | `agenda` | the sentence SETS an agenda ('two numbers', 'three things') - 2 to 4 numbered rows, each revealed on its own word, holding at a named idle until the sentence that takes them one by one |
 | `ring` | the sentence TURNS on a number and wants the ring as a MARKER - the dashed ellipse round the datum, with an optional flag chip naming it (E56's use unchanged: a number or a point on a chart) |
 | `newsreel` | the sentence reports WHAT WAS SAID OR PRINTED - the wire, the headlines, the tape - the band crawls the sourced headlines under a surface that shows who said it (a head, a clip, the plate); never the whole frame as text |
+| `panel_focus` | the sentence moves between the charts of a PANELS page - the one it is about grows to be read while the others recede (scaled back, dimmed, softened) and come back on their word; a layout change (side by side, stacked, quadrants, free) is one move, never a cut |
 | `chart_to` -> `recast` | the same data in another form: keyed (n lines -> n bars by series, 'where the four stand today'; RECAST_PAIRS) or the hand-over (a line into the monthly bars, into a pie of the holders) |
 | `chart_to` -> `rescale` | the same series at another scale - 'since February', 'at full width': the window the story is about; never a window that drops the sentence's point |
 | `chart_to` -> `extend` | more of the same series ('and then May') or a later series of the same file ('then consumption') - drawn on at the pen |
