@@ -1701,3 +1701,120 @@ re-measured whole (`measure_page_boxes.py` has no per-page write): against HEAD'
 frames over 0.50s", seams 17 boundaries 0 faults, spoken 5 phrases 0 uncovered, stage gaps 2.3 s of 464.1 s, pytest 101 passed,
 **gate 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** (unchanged from T27; M21's s18 now 30.1 s, 7:14 -> 7:44). The "20years"
 item under "Named, not fixed" above is CLOSED.
+
+---
+
+## 19. P69 T28 - row 20 (7:52-9:04): host window 2 - the desk, the questions, the phone, the test card, dip 6, the returning page - 2026-09-23
+
+The build runs 0.00-533.88 s. `UNIT_CUT_PHRASE` = "Run it on the most" (row 21's first words, T29's). RED: before the slice the
+table ended at row 18 (431.01-464.15); `logs/t28-gate-before.log` on HEAD's build: **2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO**.
+Treatment row 20 compiles as TABLE rows 19 (the desk) and 20 (the page).
+
+Recall: `docs_find "returning page"` -> the retitle species ("a returning page arrives retitled") and
+`SHOT-TABLE-90S.claude.md:89` ("a returning page unwinds (`:spiral`)"); `docs_find "unwind"` -> `CAPABILITIES.md:77`, `:79`, the
+undraw species, `SHORT-FORM-SHAPE.md:63` ("The page that opened the short comes back, already drawn, and unwinds from its point: no
+roll, no soak, no ink, no re-build"); `docs_find "E40"` -> `OPERATOR-RULINGS.md:1246` (E40 s4: "a returning page unwinds from its
+point (`enter=spiral`), never rolls out and builds again (E25)"); `CAPABILITIES.md:58` the page VORTEX (RETURN: `enter=spiral`, 1.6 s,
+no wipe); `docs_find "checklist"` -> `CAPABILITIES.md:268` the test card (`chart_dock:checklist`), `:249` (the recap fill, 0.8 s/row
+under 12 s), the page builder refusing `checklist`; `docs_find "agenda"` -> `CAPABILITIES.md:44` the numbered agenda (the
+treatment's own recall names it for "the three questions at 0:43 and 7:52"); `docs_find "chip"` -> `CAPABILITIES.md:100`;
+`docs_find "suck"` -> `CAPABILITIES.md:38` / `:40` / `:58`; `docs_find "smartphone"` -> `assets/props/cutouts/prop-smartphone-v1.png`
+(`CATALOGUE.md:39`); `docs_find "un-parked"` 0 hits for a page (only the finance un-parking in doc 00).
+
+| table row | window | what |
+|---|---|---|
+| 19 `world-h2-desk-v1;use=landing` + ken `(0.05, 10, -4)` | 463.95-513.69 | the clocks page is SUCKED into Mike's three raised fingers (`suck:0.49,0.31`, `TEST_DESK_WHY`) in the breath before "Now the test"; the three questions return as row 2 gave them - the numbered agenda on the brick above the bench, a row on "One:" (468.94), "Two:" (474.36), "Three:" (478.20); **the phone** (`prop-smartphone-v1`) STAMPED on "phone" (484.04) at an authored place on the bench's clear right half (`PHONE_PLACE` (0.835, 0.60, w 0.085) - `authored place: mark 163x312 painted px at (1604, 647)`), bare, with its resting shadow (`final/phone-zoom.png`); WHERE TO LOOK, one chip on each thing named, left of the phone (`WHERE_CHIPS`, `readability: landscape-phone`): SOLD OUT on "sold out" (486.86), CASH FLOW on "operating cash flow" (493.00), SHARE COUNT under it on "the share count isn't growing" (497.31), THE PRODUCT on "picture the product" (503.30); **the test card** (`dock-h-test-card`, the checklist, `build-h/objects/ev-test-scorecard-h20-v1.series.json`) THROWN at 504.75 to land on "Steel answers", 0.80 of the stage, filling as the anaphora's RECAP - row 1 by "scarce", row 2 on "cash", row 3 by "used", the steel and paper cells swept - and leaving 1.5 s before the dip (512.19): "Run your top five tonight." is said to the host |
+| 20 `ledger:ev-divergence-v1:line:234:right:spiral:cut;idle=live;domain=80,277` | 513.69-533.88 | **dip 6** (authored) and the divergence RETURNS BY THE SPIRAL (`DIV_RETURN_WHY`) - row 4's page: the hook's domain, their two lines, memory held at nothing, "Two lines, one warning" written back as it unwinds; a callout on the chips' line where it first stands at twice its base (`DIV_DOUBLED`, datum 158, May 2026, 204.67 - read off the object) on "The chip line doubling" (517.62), and on the giants' line the same day (120.41) on "The giants pinned" (521.24); the gap between them BLEEDS (`spread` mega -> semis) on "The divergence isn't a house of cards" (528.15); retitled "The test, administered in public" on "administered in" (531.54) |
+
+**Acceptance (P69 T28):** *the checklist lands row by row* - the test card's rows land one by one on the anaphora (the recap
+fill, `final/C-card-lands.png` 505.6 / 506.5 / 507.7), and the three questions land one per question on the desk as the numbered
+agenda (`final/A-boundary-in-questions-phone.1.png` 469.4 / 474.7 / 478.6) - see the departure below; *the divergence page returns
+unwound from its point (E40 s4), never redrawn* - `enter=spiral`: the page comes back out of the vortex's point with its lines
+already drawn (`final/D-return-page.1.png` 513.9-515.4; no roll, no build, no soak).
+
+**Measured and fixed** (drafts `scratchpad/p69-row20/d1..d5`, private builds via `STEEL_H_BUILD_DIR`):
+- **The test card from "The cash answer"** (draft 1, rows keyed to "operating cash flow" / "picture the product"): a 22 s hold -
+  **M12 FAIL** (a chart dock over 10 s) - and a row landing inside a card is not an event (**M01 / M05 / M08 FAIL**, 21.7 s at
+  8:10). The card became the anaphora's recap (6.9 s standing) and the where-to-look sentences are carried by the chips.
+- **The chips' glyphs:** a catalogued `prop-icon-*` is refused as a plain chip (only `assets/icons` SVGs; the `form: stamp` raster
+  chip takes no cross and is P69-HG1's) - so cpu / coins / landmark / factory.
+- **The chips' places:** stacked at x 0.68 from y 0.40 (draft 2) SOLD OUT sat on the list's third row; side by side (draft 5) the
+  two 45 px labels ran together ("CASH FLOW SHARE COUNT"); A over B at x 0.64 reads (`final/B-chips-card.1.png` 497.6). The
+  default chip label (~18 px yellow) was lost on the wood - `readability: landscape-phone` (charcoal on a cream stroke).
+- **The card's size:** the checklist's cells are the canvas' 19 px `.cs` on 1056 px, so the card reads at the phone floor only
+  at >= 0.72 of the stage; at 0.80 they are ~27.6 px. At centre_y 0.42 / 0.37 the top of Mike's hair stood over the card's edge;
+  at 0.355 it does not.
+- **The card's timing:** thrown ON "Steel" it was not in frame at 505.8 and each row landed 0.6-1.2 s after its word; thrown
+  0.5 s before (`TEST_CARD_LEAD_S`, under "gone.") it lands on "Steel" and the rows meet "scarce, cash, used".
+- **The returning page's marks:** callouts on the lines' LAST datum (draft 3) made the compiler push both lines' names clear of the
+  rings (`tip_mark`) and "their divergence" / "matches the market" ran off the stage's right edge (`d3-C.1.png` 516.0) - the
+  callouts moved to the doubling datum, which is the sentence's own word.
+- **Dip or cut into the spiral** (drafts 4, `d4cut-T.png` / `d4dip-T.png`): the spiral's return opens on the vortex's own last
+  state - bare cream, the stains coming up the drain, the crisp charcoal, the colours unwinding (513.7-515.4). Cut, the desk snaps
+  to cream in one frame; dipped (the treatment's dip 6, authored - the compiler's default in front of a signature enter is the
+  cut), the desk goes down to black and the cream rises out of it. The dip is taken.
+
+**Named, not fixed:**
+- **The spiral out of a plate reads as ~0.8 s of ink and bare board** (513.85-514.6: a charcoal stain spreading over cream, then
+  empty charcoal, then the particles) - the vortex's return has no outgoing page to unwind from (T26's own finding, section 17).
+  The stage-gap measure counts it 0.2 s empty (the dip's ramp, licensed) because the stains are page ink. The operator's read.
+- **The stage caption on the desk** runs across Mike's raised hand (y ~432-504) while no dock is live (464-484) - row 7's
+  finding 2 (no caption room on a picture plate), unchanged.
+- **The test card's lower half is empty** - the checklist canvas is 1056 x 480 and three rows end at y ~300; a shorter
+  `card_aspect` would clip the source line (the citation). An engine layout, for the parent.
+- **The returning page's sub** still reads "Their pairing, plus the S&P 500 and the memory builders" with memory held at nothing -
+  row 4's open item (section 11.1), unchanged.
+- **M21 WARN s20 18.6 s (8:35 -> 8:53):** a returning page arrives drawn, so its only data mark is its landing (515.3); the
+  callouts, the spread and the retitle are annotations. The whole sentence run is about this page; no data is left to draw on it
+  without redrawing (E40 s4). Owner: the parent's read (or row 21's `chart_to` taking the page earlier).
+- **M03 PASS at 44 s of 45** ("from 7:20"): from the GPU's morph landing (440.34) the next EVIDENCE is the phone (484.04) - the
+  desk is a plate, and the agenda rows and chips are species. An edit that moves the phone later FAILs it.
+- **The test card over the phone's ring** (T26d WARN "its box lands over a stamp's mark or ring") - the phone leaves as the card
+  is thrown (504.75); read on `final/C-card-lands.png` 505.25: the phone is fading as the card flies in, no overlap at rest.
+- **The first frame after the suck** (463.9583) painted the desk with no page on 2 of 4 cold seeks by the probe; the seam
+  measure's SEQUENTIAL read has that frame at luma 38.27, the page's (38.7), where the desk is ~68 - a cold-seek artefact, not a
+  frame in play.
+- **Cues:** `[silent]` for the spiral enter (513.69) and the suck (the kit reports it at the row's end, 513.69, as it does row 13's
+  at 363.38) - no cue kind is mapped for either.
+- `build-h/objects/ev-test-scorecard-h20-v1.series.json` is new (the PNG beside it is a copy of the object's, gitignored).
+
+**Departures (in `BODY_DEPARTURES`, row 20):** the phone card -> RESOLVED, the operator's prop stamped; the checklist "typing
+`1 scarce?` ... on its questions" -> the questions as the numbered agenda (the checklist's answer cells sweep 1.6 s after a
+question, and at a readable size it covers the host), the checklist as the anaphora's recap; the checklist "parked beside" the
+returning page -> not parked (a dip takes no docks; at card size it reads under the floor) - T29's ticks re-land it. Additions:
+the four where-to-look chips, the doubling callouts, the spread.
+
+**Transitions** (printed in `SHOT-TABLE-H.md`): the suck clocks -> desk (`TEST_DESK_WHY`: the melt's splash, the dip, the
+thread, the door, holding the page refused); dip 6 + spiral desk -> divergence (`DIV_RETURN_WHY`: axes / built, a recast, the
+snap / throw-then-push, the melt refused); inside the row the questions, phone and chips -> the test card (`TEST_SWEEP_WHY`).
+Flow count: 0 cuts, 7 dips, 1 arrival carrying a boundary, 11 transforms.
+
+**Life:** 20 of 20 rows carry a life token (row 19 `ken 0.05/10/-4`, row 20 `idle=live`). `final/life.txt`: 466.0 vs 468.0 on the
+desk (x 1100-1920, y 520-850) mean |dL| 1.60, 9.6 % of pixels changed (the push, before the agenda); 524.0 vs 526.0 on the page
+(x 0-1100, y 150-850) 4.14 / 5.4 %.
+
+**The fixture:** the door reported "11 page(s) MEASURED" (T27b: 10) - the returning page's box key is already in the fixture (the same object, variant,
+domain and profile), no ink changed, so **no re-measure**; `measure_page_boxes.py --check` PASS (`logs/t28-measure-check.log`).
+
+**The order of proof (`logs/`, final build 0.00-533.88):** `t28-door1.log` (the first build-h pass; its tiles moved the card's
+throw 0.5 s earlier), `t28-door2.log` (rc 0; cues 36 bound of 37 derived - the one dropped is T26's `page enter 17 (axes)`,
+unchanged; `[silent]` the suck, the built enter, the spiral enter; life 20 of 20; "11 page(s) MEASURED"), `t28-measure-check.log`
+**PASS 5 builders x 15 geometr(ies) measured identical**, `t28-probe.log` (194 instants), `t28-frozen.log` **"no run of identical
+frames over 0.50s (whole frame)"**, then the door re-run (`t28-door-final.log`) with the timeline, player.html, player.json,
+SHOT-TABLE-H.md and SHOT-TABLE-H.py sha256 IDENTICAL (`t28-door2.sha` = `t28-door-final.sha`), so GATES-MOTION.md is stamped on the
+fresh probe and hashes; `t28-seams.log` **19 boundaries, 0 faults** (463.95 suck darkest 38.3 clean; 513.69 dip darkest 6.0 clean);
+`t28-spoken.log` **5 pointing phrases, 0 uncovered**; `t28-stagegaps.log` **2.5 s of 533.9 s** (463.95 suck 0.0 s; 513.69 dip ->
+spiral 0.2 s, licensed); **`t28-gate.log` 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** - unchanged from `t28-gate-before.log`.
+FAIL M11 (row 1) and M31 (s08's 0.2 s at 3:15), both pre-existing. WARN M02, M04 (17 plates vs 44), M21 (+ s20, above), M25, M27 -
+**no new WARN**. M01 PASS (9.5 s), M03 PASS (44 s, above), M05 PASS (worst gap 7.0 s of 8.0), M12 PASS, M18 PASS (6407 frames,
+longest 0.08 s at 7:52). No gated command was piped.
+
+**Tiles** (`scratchpad/p69-row20/final/`, rendered from build-h): `A-boundary-in-questions-phone.1-2.png` (461.5 / 463.5 the
+clocks page and its callouts; 463.96 - 464.3 the suck into the fingers; 466.0 / 468.0 the host; 469.4 / 474.7 / 478.6 the three
+questions on their words; 484.1 - 485.2 the phone's stamp and rest); `phone-zoom.png` (486.0, the phone bare with its resting
+shadow); `B-chips-card.1-2.png` (487.2 SOLD OUT; 493.2 / 495.0 CASH FLOW; 497.6 / 500.0 SHARE COUNT under it; 503.6 THE PRODUCT;
+505.0 - 513.0 the first pass's card, superseded by C); `C-card-lands.png` (504.6 - 512.3: the chips and the list leave on "gone.",
+the card lands on "Steel", rows on "scarce" / "cash" / "used", the card leaves for "Run your top five tonight."); `D-return-page.1-2.png`
+(513.5 - 515.4 the dip and the spiral return; 516.5 - 523.0 the two callouts; 528.4 / 529.4 the spread; 531.8 - 533.85 the retitle
+and the row's end); `E-life.png` + `life.txt`. Drafts: `d1.log` .. `d5.log`, `d2-A.*`, `d3-B.*`, `d3-C.*`, `d4cut-T.png`,
+`d4dip-T.png`, `d4dip-S.png`, `d5-S.png`. No build-f reference frames were cut for this row.

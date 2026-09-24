@@ -355,7 +355,7 @@ Every operator ruling that asks for something to be BUILT names its carrier here
 | s101 | the membership stack | T45 |
 | s102 | a second / inverted axis | T43b, T64 (the combo's line on its own labelled scale) |
 | s103 | H-3 keeps its certificate (no re-roll) | `host/HOST-NOTES-H.md` |
-| s104 (+ amendments) | panels, four panels, composable focus; row 21 on them | T8b, T29, T52 (companion bars as a panel), T54 (the inset echo), T60 (two verdict panels) |
+| s104 (+ amendments) | panels, four panels, composable focus; row 21 on them; a panel arrives by resize | T8b (done), T8c, T29, T52 (companion bars as a panel), T54 (the inset echo), T60 (two verdict panels) |
 | s105 (+ amendment) | a recast / a story-moving transform resets M03 | T26c, T26c2 (done in lane B) |
 | s106 | props placed and moved freely; the fit advises | T26d (done), T59 (the balance's loads), T69 (the rig's prop) |
 | s107 | prop <-> page / chart morphs | T26e (done; follow-ups R26-292, R26-293) |
@@ -574,7 +574,7 @@ verbatim tails and are left pending.
 - Evidence: lane B `58c5f86` (2026-09-23) - `;readability=longform[:bravos|middle|phone]` on dense-line and bars: #14181E ground, #222830 panel in a 1.5 px border, no gridlines (a zero line only across zero), Inter loaded as its own family (R26-259 within the profile), a pink sans title, sub and source in one safe column, the chart placed below with M28's air, end tags shortened full -> badge -> value (long names kept for T10's key). TYPE_SCALE presets bravos (the spec) / middle (title 44 / ticks 26 / tags 30 / source 20 px at 1920, the working default) / phone (the s90 floor). The first render (the floor everywhere: ~61 px ticks, collisions) was sent back on the parent's frame read. Parent in place: node 654, pytest 323 passed; without the option every golden byte-identical. The review fixes `2e51c16` (F1 wrapped name through a rescale, F2 the hatch's cold seek / failed decode, F4 the cap at every aspect, F5 handed-page punch): pytest 361 passed. Second review (REVIEW-P69-LANE-B-MERGE-2): MERGE AFTER FIXES - N1 the phone source into the caption strip, N2 a `;then=` state's tags unfitted, N3 the Python box estimate 73 px off - fixing before the merge. Overrides of our own signature (option only) listed for P69-HG3: E22 ground/deckle/Kalam/no-outline, the one accent, E53.4 gridlines, "both axes always"; s90's floor met only at `phone`
 
 ### T8b: The ledger page draws PANELS - two charts side by side on one page (E99 s104)
-- Status: pending
+- Status: done (lane B 7369f12; r8 refused on the parent's frame read - the quad small, the grown panel ~45% of the stage; r9 accepted); the two-panel single <-> row resize moved to T8c
 - Owner: implementation_luna
 - Depends on: lane B's current sequence (T10b, T10c, the key-rail fixes); lane B
 - Write set: `content/video_engine/scripts/ledger_page.py` (a `panels` builder: validation, layout, `page_boxes` per panel), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the page painter: N plots in one page, each with its own axes, title line, end tags / key, and species addressed by panel), `content/video_engine/scripts/build_scene_timeline_f.py` (a species' `panel` index in its target; validation), `content/video_engine/scripts/measure_page_boxes.py` (a panels representative), `content/video_engine/tests/test_ledger_panels.py` (new), `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -586,6 +586,18 @@ verbatim tails and are left pending.
 - Red evidence: pending
 - Green evidence: pending
 - Refactor evidence: pending
+- Evidence: pending
+
+### T8c: A panel's box changes SHAPE and the chart re-lays out - the single <-> row resize (E99 s104 amended, T8b's open item)
+- Status: done (lane B; the parent read the resize-in, leave and quad-grow sheets)
+- Owner: implementation_luna
+- Depends on: T8b; lane B
+- Write set: `content/video_engine/scripts/ledger_page.py`, `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/scripts/build_scene_timeline_f.py` (only if needed), `content/video_engine/scripts/measure_page_boxes.py`, `content/video_engine/tests/test_ledger_panels.py`, `content/video_engine/tests/golden/**`, `content/video_engine/assets/page-boxes.v1.json`, `content/video_engine/effects/cards/page_species.json`
+- Acceptance: T8b fixed each panel's viewBox aspect, so a quad grows properly but a two-panel page's single chart stands at its slot size and the resize-in became a fade. (1) A standing single chart on a panels page fills the whole plot region; (2) when the second panel arrives the first SHRINKS into its row slot while the second builds in beside it, and the reverse (the survivor GROWS back to the full region) - one clock, never a cut; (3) the plot re-projects its data to the box's current size every frame, text unstretched (ticks, labels, end tags keep their size and their gridlines, E28), data-anchored species follow; (4) the quad/free grow stays as good as T8b's r9; (5) seek-safe; byte-identical elsewhere; one golden at the resize midpoint
+- Regression: `python -m pytest content/video_engine/tests/test_ledger_panels.py -q`
+- Expected RED: a single standing panel's plot spans only its slot; mid-resize the plot width does not interpolate
+- Validate: T8b's Validate list + `test_authoring_*`, `test_build_effects_catalog.py`
+- Frame acceptance: the parent reads the resize-in, the leave and the quad-grow sheets
 - Evidence: pending
 
 ### T9: s90 (b) - the three layout fixes the side-by-side found (lane B)
@@ -887,12 +899,21 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T28: Row 20 (7:52-9:04) - host window 2: the desk, the checklist, dip 6, the returning page
-- Status: pending
+- Status: built (row 20 - BUILD-NOTES-H 19: the clocks page sucked into the host's three fingers, the questions as the numbered agenda on One/Two/Three, the phone stamped, four chips on their words, the test card filling row by row on "Steel answers", dip 6, the divergence page back by the spiral and retitled); gate unchanged 2 FAIL / 5 WARN. OPEN: the test card reads below the phone floor - T28b; HG4 open
 - Owner: implementation_luna
 - Depends on: T27
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; the checklist lands row by row; the divergence page returns unwound from its point (E40 s4), never redrawn
 - Validate: the shared Validate
+- Evidence: pending
+
+### T28b: The checklist card reads on a phone - a type profile for the checklist species (row 20's test card)
+- Status: pending (lane B)
+- Owner: implementation_luna
+- Depends on: T28; lane B
+- Write set: `content/video_engine/scripts/species/checklist.mjs` (a spec-level `profile: "phone"` or type/pitch option: CHECKLIST.HEAD_DY / ROW0_DY / ROW_PITCH / BAND_RISE / BAND_H scale with the type), `docs/content-video-engine/samples/scene-evidence-player.template.html` (`.chartbox .cs` / `.csr` / `.ct` sizes under the profile), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the chart dock canvas, only if the profile needs it), `content/video_engine/scripts/build_scene_timeline_f.py` (the option's validation), a test, one golden; the species card
+- Acceptance: row 20's test card at the right ~60% of the stage (the host visible at left) with its row text at or above the long-form phone floor (`ledger_page.CARD_PHONE_FLOOR` 12 px at a 390 px phone = 59.1 stage px); rows fill the card (no empty lower half); the default checklist and the `test-card` golden byte-identical; then lane A rebuilds the card from a derived object with short cells (Ask / Steel / Paper)
+- Regression: a new checklist-profile test
 - Evidence: pending
 
 ### T29: Row 21 (9:04-10:18) - SK hynix: camera 4, PROPS 4 and 5, the wafer compare

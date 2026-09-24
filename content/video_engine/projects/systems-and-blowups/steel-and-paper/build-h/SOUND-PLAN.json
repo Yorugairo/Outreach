@@ -324,6 +324,37 @@
    "note": "contact at 437.33s, the cue one frame early (the weight report Q5)"
   },
   {
+   "slot": "landing 19 (stamp, ink)",
+   "at": 484.15,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 484.19s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 19 (throw, paper)",
+   "at": 505.17,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 505.21s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "dip 20",
+   "at": 513.34,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-whoosh-3-648729.mp3"
+   }
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0073,
@@ -455,6 +486,22 @@
     ],
     [
      411.65,
+     0.0
+    ],
+    [
+     504.45,
+     0.0
+    ],
+    [
+     504.75,
+     4.0
+    ],
+    [
+     505.95,
+     4.0
+    ],
+    [
+     506.75,
      0.0
     ]
    ],
