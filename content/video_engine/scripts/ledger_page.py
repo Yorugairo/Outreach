@@ -25,8 +25,9 @@ Input shapes (every one needs ``title`` and a non-empty ``src``):
   decline  exactly one metric (a single dense series, or bars of >= DECLINE_MIN_VALUES);
            first and last are the endpoints
   progress story values in 0..PROGRESS_MAX, or non-negative with a numeric "denominator"
-Rejected clearly: "checklist" (a table). "shares" (a donut) is rejected for every variant EXCEPT
-  `share`, which E53 s1 as amended (2026-09-07) allows inside four bounds - see SHARE_BOUNDS.
+Rejected clearly: "checklist" (a table). "shares" (a part-to-whole) has no bars or points to draw for the other
+  variants and is ROUTED to `share` (a pie or a donut) or `treemap` - P69 T50 / E99 s100: a form is judged by its
+  honesty (every area true, the figures written), never refused by type; a finding is a `WARN form:` line (s106).
 Builder (``pick_builder``): race/decline follow the variant; bars + a pts series ->
 combo; > STORY_MAX_VALUES points or > 1 pts series -> dense-line; else story.
 Output ``ledger_page.v1`` (ink/paper colours are NOT here - the template owns the
@@ -115,15 +116,20 @@ AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from
              "break")   # P69 T66 / E99 s111: one x axis across two eras, cut where no datum is and the cut drawn (`_validate_break`)
 UNCHARTABLE = {
     "checklist": "no chartable values: 'checklist' is a table, not a chart (keep it a dock)",
-    "shares": ("'shares' is a donut, and E53 s1 ranks angle and area at the bottom of the perception hierarchy: "
-               "it is refused for every variant except --variant share, which the ruling's amendment (2026-09-07) "
-               "allows only inside its four bounds - a part-to-whole claim about ONE named slice, that slice "
-               "highlighted and the rest muted, the figure WRITTEN on the page, and five slices or fewer. "
-               "A whole with MANY parts is a census: --variant treemap (E53 s1's second amendment, 2026-09-10)"),
+    # P69 T50 (E99 s100, s109 (5)): a part-to-whole is no longer refused as a TYPE - this variant simply has nothing to
+    # draw it with (a `shares` object carries no bars and no points), so the message ROUTES it to the two forms that do
+    "shares": ("'shares' is a part-to-whole - a pie, a donut or a treemap - and this variant draws bars or lines, which "
+               "the file does not carry: draw it as --variant share (a pie or a donut, flat or 3D: every angle true to "
+               "its share, the figures written) or --variant treemap (every area true to its value, the figures the "
+               "claim turns on written). E53 s1's perception hierarchy is guidance on which form reads fastest, not a "
+               "refusal (E99 s100)"),
 }
-# E53 s1 as amended (2026-09-07). The hierarchy's objection is to COMPARING many encoded angles; a claim about one
-# highlighted slice is not that. These are the amendment's bounds, enforced here so the exception cannot widen by use.
+# P69 T50 / E99 s100 (amends E53 s1): "the donut's and the treemap's four-point exceptions are superseded by those two
+# tests" - every angle true to its share, and the figures the claim turns on WRITTEN. SHARE_MAX_SLICES is no longer a
+# bound: it is the count a reader names at a glance, and a page past it is REPORTED with its numbers (s106,
+# `share_honesty_warnings`). SHARE_BOUNDS keeps the words the flat pie's own fields cite (its emphasised slice, its peel).
 SHARE_MAX_SLICES = 5
+FORM_WARN = "WARN form:"   # the prefix of every honesty finding a page reports (the compiler prints it as a [WARN] line)
 SHARE_BOUNDS = (
     "a part-to-whole claim about ONE named slice, never a ranking or a comparison across slices",
     "that slice highlighted, every other slice muted context",
@@ -971,8 +977,8 @@ def _validate_share(series: dict) -> list[str]:
     shares = series.get("shares")
     if not isinstance(shares, list) or len(shares) < 2:
         return ["a share page needs 'shares': at least two slices, the whole they add up to being the page's subject"]
-    if len(shares) > SHARE_MAX_SLICES:
-        errors.append(f"{len(shares)} slices: E53 s1 allows {SHARE_MAX_SLICES} or fewer ({SHARE_BOUNDS[3]})")
+    # P69 T50 / E99 s100: the slice count is no longer refused - past SHARE_MAX_SLICES the page is REPORTED with its
+    # numbers (`share_honesty_warnings`); what stays hard here is untruth (a slice that is not a positive part)
     for i, sh in enumerate(shares):
         if not isinstance(sh, dict):
             errors.append(f"shares[{i}] is not an object"); continue
@@ -1005,6 +1011,33 @@ def _validate_share(series: dict) -> list[str]:
             if abs(pv) > whole:
                 errors.append(f"peel {pv} is larger than the slice it comes out of ({whole}): a piece cannot exceed its part")
     return errors
+
+
+def share_honesty_warnings(series: dict) -> list[str]:
+    """P69 T50 / E99 s100 + s106: a share page past SHARE_MAX_SLICES is a page, REPORTED with its numbers - how many
+    slices, how many of their figures the page writes (a solid page writes every one; the flat pie the peel's alone),
+    and the thinnest slice's share and angle, so the frame read knows what to look at. Every angle is its value's
+    share of the whole by construction (the solid page's sum is refused when it is untrue). Pure; [] inside the
+    guidance, so such a page's spec is byte-identical."""
+    shares = [s for s in series.get("shares") or [] if isinstance(s, dict)]
+    vals = [to_number(s.get("value")) for s in shares]
+    n = len(shares)
+    if n <= SHARE_MAX_SLICES or any(v is None or v <= 0 for v in vals):
+        return []
+    whole = to_number(series.get("total")) if share_solid(series) else None
+    whole = whole if whole and whole > 0 else sum(vals)
+    k = min(range(n), key=lambda i: (vals[i], i))
+    share = vals[k] / whole
+    solid = share_solid(series)
+    written = n if solid else (1 if _text((series.get("peel") or {}).get("value_string")) else 0)
+    how = ("every slice writes its figure" if solid else
+           "a flat pie writes the peel's figure alone - a donut or a solid page (hole / extrude) writes every one, "
+           "E99 s100 (b)")
+    return [f"{FORM_WARN} share: {n} slices, past the {SHARE_MAX_SLICES} a reader names at a glance (E53 s1, guidance "
+            f"since E99 s100). Every angle is true to its share; {written} of {n} figures are written on the page "
+            f"({how}); the thinnest, {str(shares[k].get('label'))!r}, is {share * 100:.1f}% of the whole "
+            f"({share * 360:.1f} deg) - read its name and figure in the frame. REPORTED, the frame read decides "
+            "(E99 s106)"]
 
 
 # ---- TIERS (P50 T9, R26-24; Bravos shots 35-36) -------------------------------------------------
@@ -1539,10 +1572,11 @@ def _bars_panel_entry(series: dict, panel: dict, shared: dict[str, list[float]])
 
 
 # ---- TREEMAP (P50 T6; E53 s1's second amendment, the CENSUS exception, ruled 2026-09-10) ---------
-# A whole broken into its parts by AREA. Area is the bottom of Cleveland & McGill's hierarchy, which
-# is exactly why the exception is narrow: the page shows BREADTH (how many parts there are, and that
-# a few of them are most of it) or marks a NAMED SUBSET and WRITES its share - it never asks anyone to
-# compare two areas. A size claim takes its bar, and the builder refuses the file that carries one.
+# A whole broken into its parts by AREA. P69 T50 / E99 s100: the census exception's four bounds are SUPERSEDED by the
+# two honesty tests - every area true to its value (the squarify is exact: a cell's area is its value's share of the
+# plot, `treemap_area_error` measures it) and the figures the claim turns on WRITTEN. A treemap may carry a SIZE claim
+# ("bigger than"): the story chooses the form, and the page REPORTS, with its numbers, every cell whose figure it cannot
+# write - the frame read decides (s106). The perception hierarchy is guidance: bars read a size fastest.
 TREEMAP_ASPECT = 1.5        # the aspect the squarify tunes toward: 3:2, never 1:1 (Heer & Bostock 2010's square penalty - a square cell reads as a block, a 3:2 cell as a labelled thing)
 TREEMAP_MIN_CELL = (80, 36)     # research s1 (ISO 9241-303 at a 30-40 cm handheld distance): under this, NO text - illegible ink blobs overlap and the mosaic reads as noise
 TREEMAP_TWO_LINE = (110, 64)    # ... and the floor for two lines (label + value)
@@ -1551,9 +1585,9 @@ TREEMAP_LABEL_FONT = (18, 32)   # the label's clamp
 TREEMAP_PAD = 6                 # the cell's inner padding at 1080x1920 (research s2: glyph stems never touch a cell edge)
 TREEMAP_CHAR_W = 0.72           # the advance the font clamp assumes. The research's own figure is 0.65 em; our cell labels are BOLD, and at 0.65 "Japan" touched its cell's right edge in the rendered frame (2026-09-11)
 TREEMAP_LINE_H = {1: 1.5, 2: 2.2}   # the cell height one line of type needs, and two. The research's clamp divides by 2.2 whatever the line count, which contradicts the same document's 36 px single-line floor: at 2.2 a 44 px cell could never carry 18 px type. 2.2 is the TWO-line allowance; one line takes a line and a half
-TREEMAP_MIN_SHARES = 3          # two parts of a whole is a share page (one named slice, the rest muted); a census starts at three
-# E53 s1: a SIZE CLAIM takes its bar. The page that says "bigger than" is asking for exactly the
-# comparison area cannot carry - the refusal names the bars page rather than silently drawing it.
+TREEMAP_MIN_SHARES = 2          # P69 T50: a whole broken into parts - one part is the whole, not a division (three was the census exception's TYPE bound; E99 s100)
+# E53 s1 -> E99 s100: a SIZE CLAIM is found in the page's own words, and REPORTED (`treemap_honesty_warnings`) unless
+# every figure it could compare is written on its cell.
 SIZE_CLAIM_RE = re.compile(
     r"\b(bigger|larger|smaller|biggest|largest|smallest|dwarfs?|outweighs?|twice|thrice|triple|tripled|doubles?|doubled"
     r"|more than|less than|(?:\d+(?:\.\d+)?|two|three|four|five|six|seven|eight|nine|ten)\s*(?:x\b|times))\b", re.I)
@@ -1581,14 +1615,8 @@ def _validate_treemap(series: dict) -> list[str]:
     shares = series.get("shares")
     if not isinstance(shares, list) or len(shares) < TREEMAP_MIN_SHARES:
         return [f"a treemap page needs 'shares': at least {TREEMAP_MIN_SHARES} parts of one whole "
-                "({label, value}) - two parts of a whole is a share page (--variant share), not a census"]
-    errors: list[str] = []
-    claim = _size_claim(series)
-    if claim:
-        errors.append(f"the page's {claim[0]} says {claim[1]!r}: a SIZE CLAIM takes its BAR (E53 s1) - area is the bottom of the "
-                      "perception hierarchy and two cells of a treemap cannot be compared by eye. Draw the named values as "
-                      "--variant bars, and keep the treemap for what it is good at: the census (how many parts, and which "
-                      "named ones are struck out with their share written)")
+                "({label, value}) - one part is the whole itself, not a division of it"]
+    errors: list[str] = []   # P69 T50: a size claim is no longer refused here - build_spec REPORTS it (E99 s100, s106)
     seen: set[str] = set()
     for i, sh in enumerate(_treemap_shares(series)):
         if not _text(sh.get("label")):
@@ -1732,6 +1760,43 @@ def treemap_cells(spec: dict, aspect: str) -> dict:
     return {"plot": plot, "cells": cells, "unnamed": unnamed,
             # the parts the page could not name are COUNTED, never dropped: the census says how many there were
             "legend": f"and {unnamed} others" if unnamed else ""}
+
+
+def treemap_area_error(spec: dict) -> float:
+    """P69 T50 / E99 s100 (a), MEASURED: the worst gap, over both stages, between a cell's share of its plot and its
+    value's share of the parts drawn - 0 is every area true to its value. Pure."""
+    worst = 0.0
+    for lay in (spec.get("layout") or {}).values():
+        cells = lay.get("cells") or []
+        drawn = sum(float(c.get("value") or 0.0) for c in cells) or 1.0
+        for c in cells:
+            worst = max(worst, abs(float(c["fw"]) * float(c["fh"]) - float(c.get("value") or 0.0) / drawn))
+    return worst
+
+
+def treemap_honesty_warnings(series: dict, spec: dict) -> list[str]:
+    """P69 T50 / E99 s100 + s106: a treemap whose own words make a SIZE claim ("bigger than", "twice") is a page; it is
+    honest when every area is true (measured) and the figures it compares are WRITTEN. The WARN names, per stage, how
+    many cells write their figure and which cannot (the label floors cull a small cell's value first). [] for a census
+    with no size claim, or one whose every figure is written - such a spec gains no key. Pure."""
+    claim = _size_claim(series)
+    layout = spec.get("layout") or {}
+    if not claim or not layout:
+        return []
+    order = [str(x) for x in spec.get("labels") or []]
+    stages = sorted(layout, key=lambda a: (a != "16:9", a))
+    unwritten = {a: {str(c["label"]) for c in layout[a].get("cells") or [] if int(c.get("tier") or 0) < 2} for a in stages}
+    if not any(unwritten.values()):
+        return []
+    n = len(order)
+    counts = " and ".join(f"{n - len(unwritten[a])} of {n} cells at {a}" for a in stages)
+    names = [x for x in order if any(x in u for u in unwritten.values())]
+    shown = ", ".join(names[:6]) + (f" and {len(names) - 6} more" if len(names) > 6 else "")
+    return [f"{FORM_WARN} treemap: the page's {claim[0]} says {claim[1]!r} - a SIZE claim read off areas. Every cell is "
+            f"drawn true to its value (off by {treemap_area_error(spec):.1e} of the plot at worst); the figures are "
+            f"written on {counts} - unwritten: {shown}. A size claim needs the figures it compares WRITTEN "
+            f"(E99 s100 (b)): name them in the {claim[0]}, cross them with their share, or draw them as --variant bars "
+            "(the fastest read of a size, E53 s1). REPORTED, the frame read decides (E99 s106)"]
 
 
 def _treemap_block(series: dict) -> dict:
@@ -1983,6 +2048,9 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         spec["emphasize"] = int(series.get("emphasize") if emphasize is None else emphasize)
         if "explode" in spec and not (isinstance(series.get("explode"), dict) and "index" in series["explode"]):
             spec["explode"] = dict(spec["explode"], index=spec["emphasize"])   # P69 T48: `explode: true` is the claim's slice
+        honesty = share_honesty_warnings(series)   # P69 T50: only past the guidance - a page inside it gains no key
+        if honesty:
+            spec["warnings"] = list(spec.get("warnings") or []) + honesty
         return spec
     if builder in ("tiers", "treemap"):
         spec.update(_tiers_block(series) if builder == "tiers" else _treemap_block(series))
@@ -1999,6 +2067,9 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
             # page does not know which stage it will be read on and a treemap laid out at paint time is a
             # re-layout waiting to happen (E58 / Sondag 2018: a park is one affine transform)
             spec["layout"] = {aspect: treemap_cells(spec, aspect) for aspect in STAGE_PX}
+            honesty = treemap_honesty_warnings(series, spec)   # P69 T50: only a size claim with a figure unwritten
+            if honesty:
+                spec["warnings"] = honesty
         return spec
     if builder == PANELS:   # P69 T8b: 2-4 line plots on one page, one scale by default (E79)
         spec.update(_panels_block(series))

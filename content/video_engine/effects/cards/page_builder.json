@@ -638,7 +638,7 @@
           "source": "content/video_engine/scripts/build_scene_timeline_f.py:328"
         }
       ],
-      "does": "A part-to-whole pie of five slices or fewer, one named slice highlighted; the pie P48 T4 drew by default, or on its options a donut, a tilted extruded pie, a slice exploded - every angle true, every figure written.",
+      "does": "A part-to-whole pie, one slice highlighted: the P48 T4 pie, or a donut, a tilted extruded pie, a slice exploded - every angle true, every figure written. Past five slices it is a page REPORTED with its numbers (E99 s100, s106).",
       "when": null,
       "when_source": null,
       "author": {
@@ -692,6 +692,7 @@
       },
       "doctrine": [
         "E53",
+        "E99 s100",
         "29 s9.26"
       ],
       "status": "wired",
@@ -709,9 +710,9 @@
       "id": "page_builder:shares",
       "axis": "page_builder",
       "token": "shares",
-      "title": "The donut refused as a ledger page",
+      "title": "A part-to-whole routed to the page that draws it",
       "aliases": [],
-      "does": "Not a page: ledger_page refuses `shares` with a message and routes it elsewhere.",
+      "does": "Not a bars or line page: ledger_page routes a `shares` object to --variant share (a pie or a donut) or --variant treemap, where its honesty is checked - never refused as a type (E99 s100).",
       "when": null,
       "when_source": null,
       "author": {
@@ -731,7 +732,8 @@
         "note": "UNCHARTABLE['shares']"
       },
       "doctrine": [
-        "E53"
+        "E53",
+        "E99 s100"
       ],
       "status": "declared",
       "proof": {
@@ -741,7 +743,7 @@
       },
       "callable": {
         "today": false,
-        "why": "UNCHARTABLE: 'shares' is a donut, and E53 s1 ranks angle and area at the bottom of the perception hierarchy: it is refused for every variant except --variant share, which th"
+        "why": "UNCHARTABLE: 'shares' is a part-to-whole - a pie, a donut or a treemap - and this variant draws bars or lines, which the file does not carry: draw it as --variant share or --variant treemap (E99 s100)"
       }
     },
     {
@@ -807,7 +809,7 @@
       "token": "treemap",
       "title": "The treemap census ledger page",
       "aliases": [],
-      "does": "A squarified treemap of a whole's many parts, labels only where they fit.",
+      "does": "A squarified treemap of a whole's parts, every area true to its value, labels where they fit; a SIZE claim in its own words is a page REPORTED with the cells whose figures it cannot write (E99 s100, s106).",
       "when": null,
       "when_source": null,
       "author": {
@@ -851,6 +853,7 @@
       },
       "doctrine": [
         "E53",
+        "E99 s100",
         "BACKLOG R26-56"
       ],
       "status": "wired",

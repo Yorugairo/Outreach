@@ -446,9 +446,10 @@ STAMP_SIZES = ("figure", "year")
 SPECIES_CROSS = "cross"       # P50 T6: the CENSUS's X marks on a TREEMAP page (E53 s1's second amendment, 2026-09-10;
 SPECIES_KINDS += (SPECIES_CROSS,)   # Bravos shots 89-91). ONE species carries both halves of the exception - the named
                               # cells take an X (a), and the share they add up to is WRITTEN on the page as a number (b) -
-                              # because they are one act, and a subset marked without its share is the area comparison the
-                              # ruling refuses. The painter's math is scripts/species/treemap.mjs; the page's perform layer
-                              # draws it, as it draws every page species.
+                              # because they are one act. P69 T50 / E99 s100: (b) and (c) are honesty tests now - a cross
+                              # with no written share, or on a cell the page cannot name, is REPORTED (`_cross_honesty`).
+                              # The painter's math is scripts/species/treemap.mjs; the page's perform layer draws it, as it
+                              # draws every page species.
 TIER_SPECIES = ("build_to", "undraw", "figure", "bracket")   # P50 T9: the page species that may name a TIER - which on a
                               # tiers page IS a series index. One resolution, not two: `tier` is the word the author writes
                               # (a band, not a line), `series` is what the player reads, and the two may not disagree.
@@ -2246,18 +2247,17 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append(f"span: color must be one of {'|'.join(BRACKET_COLORS)}")
         if "series" in entry and not is_idx(entry["series"]):
             errs.append("span: series must be a non-negative integer series index")
-    elif kind == SPECIES_CROSS:   # P50 T6: the census exception's two halves, checked rather than trusted
+    elif kind == SPECIES_CROSS:   # P50 T6: the named subset; P69 T50: its written share is an honesty test, WARNed on the page
         cells = entry.get("cells")
         if not isinstance(cells, list) or not cells or not all(isinstance(c, str) and c.strip() for c in cells):
             errs.append("cross: 'cells' must be a non-empty list of cell LABELS - the named subset the sentence crosses out")
         elif len(set(cells)) != len(cells):
             errs.append(f"cross: a cell is named twice in {cells}")
-        if not isinstance(entry.get("text"), str) or not entry["text"].strip():
-            errs.append("cross: needs 'text' - the crossed SHARE written on the page as a number (E53 s1's census exception (b): "
-                        "'3 partners, 41 % of exports'). The X's alone would ask the viewer to compare areas, which is the one "
-                        "thing a treemap may not do")
-        elif not re.search(r"\d", entry["text"]):
-            errs.append(f"cross: text {entry['text']!r} carries no number - the share the crossing adds up to is WRITTEN, so no area has to be estimated (E52)")
+        # P69 T50 / E99 s100 (b) + s106: the crossed SHARE written as a number ('3 partners, 41 % of exports') is the
+        # honesty test "the figures the claim turns on are written" - a cross that writes none, or writes no number, is
+        # REPORTED with the share its cells add up to (`_cross_honesty`, where the page is known), never refused
+        if "text" in entry and not isinstance(entry["text"], str):
+            errs.append(f"cross: text {entry['text']!r} must be a string - the crossed share, written ('3 partners, 41 % of exports')")
         if "color" in entry and entry["color"] not in BRACKET_COLORS:
             errs.append(f"cross: color must be one of {'|'.join(BRACKET_COLORS)}")
     elif kind == "undraw":
@@ -2363,7 +2363,8 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append(f"chart_to: state {idx} is past STATE_MAX ({STATE_MAX}): a fourth chart is a new page or a card")
     elif kind in ("peel", "explode"):
         pass   # P48 T4: no fields of its own. WHICH piece leaves and what it is worth are the PAGE's (page.peel), validated
-               # by ledger_page against E53 s1's bounds; the species only says WHEN. A peel on a page with no peel is inert.
+               # by ledger_page (its peel's own fields; P69 T50: the slice count is REPORTED, not refused); the species only
+               # says WHEN. A peel on a page with no peel is inert.
                # P69 T48: `explode` is the same contract - the slice and how far are the page's (page.explode).
     elif kind == "note":
         if not isinstance(entry.get("text"), str) or not entry["text"].strip():
@@ -4188,6 +4189,42 @@ def derive_recast_key(A: dict, Bs: dict) -> tuple[object, list | None, str]:
     return (RECAST_DATA_KEY, key_map, "") if key_map else (None, None, why)
 
 
+def _cross_honesty(page: dict, sp: dict) -> list[str]:
+    """P69 T50 / E99 s100 + s106: the census X on a treemap is judged by the two honesty tests, and a failure is a
+    REPORT with its numbers, never a refusal (E53 s1's census exception (b) and (c) are superseded by them):
+      (b) the figures the claim turns on are WRITTEN - a cross that writes no share, or no number, is told the share
+          its cells add up to on this page (their values against the page's whole);
+      (c) the reading is unambiguous - a crossed cell the label floors left unnamed (80 x 36 px, 18 px type) on a stage
+          is told its size there, so the frame read can see whether the sentence or the text names it.
+    Pure: the page's own spec (labels, values, total, layout) and the species."""
+    cells = [str(c) for c in (sp.get("cells") or [])]
+    labels = [str(x) for x in (page.get("labels") or [])]
+    values = list(page.get("values") or [])
+    whole = float(page.get("total") or sum(float(v or 0.0) for v in values) or 1.0)
+    part = sum(float(values[labels.index(c)] or 0.0) for c in cells if c in labels and labels.index(c) < len(values))
+    unit = str(page.get("unit") or "")
+    notes: list[str] = []
+    text = sp.get("text")
+    if not (isinstance(text, str) and text.strip()) or not re.search(r"\d", text):
+        said = "writes no share" if not (isinstance(text, str) and text.strip()) else f"text {text!r} carries no number"
+        notes.append(f"cross on {', '.join(repr(c) for c in cells)} {said}: those cells are {part / whole * 100:.1f}% of the "
+                     f"whole ({part:g} of {whole:g}{(' ' + unit) if unit and unit != '%' else unit}) - write it on the page, "
+                     "or the viewer estimates an area (E99 s100 (b): the figures the claim turns on are written). "
+                     "REPORTED, the frame read decides (E99 s106)")
+    for aspect, lay in sorted((page.get("layout") or {}).items()):
+        by = {str(c.get("label")): c for c in (lay.get("cells") or [])}
+        for c in cells:
+            cell = by.get(c)
+            if cell is None or int(cell.get("tier") or 0) >= 1:
+                continue
+            notes.append(f"cross: {c!r} at {aspect} is a {float(cell.get('w_px') or 0):.0f} x {float(cell.get('h_px') or 0):.0f} px "
+                         f"cell, under the label floors ({LPG.TREEMAP_MIN_CELL[0]} x {LPG.TREEMAP_MIN_CELL[1]} px, "
+                         f"{LPG.TREEMAP_LABEL_FONT[0]} px type) - the page cannot write the name of the cell it crosses; "
+                         "the sentence or the cross's text must name it (E99 s100: the reading unambiguous). REPORTED, the "
+                         "frame read decides (E99 s106)")
+    return notes
+
+
 def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path, sid: str | None = None) -> None:
     """Append one derived page state per `chart_to rescale` / `extend` on the row, in time order, and point each species
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
@@ -4270,17 +4307,8 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
             if unknown:
                 raise ValueError(f"cross: the page has no cell named {', '.join(repr(u) for u in unknown)} - its parts are: "
                                  + ", ".join(labels[:8]) + (", ..." if len(labels) > 8 else ""))
-            # E53 s1's census exception (c): no UNLABELLED cell is ever the argument. A cell whose name the
-            # research floors culled (too small, or too long a name for its width) may not be crossed - on
-            # either stage, because the page is read on both.
-            for aspect, lay in sorted((page.get("layout") or {}).items()):
-                tiers = {str(c.get("label")): int(c.get("tier") or 0) for c in (lay.get("cells") or [])}
-                bare = [c for c in (sp.get("cells") or []) if tiers.get(str(c), 0) < 1]
-                if bare:
-                    raise ValueError(f"cross: {', '.join(repr(b) for b in bare)} - the page could not fit a label in that cell at "
-                                     f"{aspect} (the research's floors: nothing under 80 x 36 px, no type under 18 px), and E53 s1's "
-                                     "census exception (c) says no unlabelled cell is ever the argument. Give the part a shorter "
-                                     "name on the page, or cross one the page can name")
+            for note in _cross_honesty(page, sp):   # P69 T50: the census exception's (b) and (c) are honesty tests, REPORTED
+                print(f"  [WARN] {note}")
     for sp in (row_species or []):   # P48 T4b: a keyed recast is admitted only on a legal pair, and the refusal names the
         # reason. E64/R26-49: and a recast the author left plain is KEYED BY THE COMPILER when the two states share their
         # data - the un-draw-then-draw the operator read as a cut at 0:50 was never a choice anyone made, it was a key
@@ -9704,6 +9732,8 @@ def main() -> int:
             for _w in ((world or {}).get("page") or {}).get("warnings") or []:
                 if str(_w).startswith("WARN member:"):   # P69 T45: a logo dropped for its name, a name past the phone floor
                     print(f"  [WARN] P69 T45: shot row {i + 1}: {_w}")
+                elif str(_w).startswith(LPG.FORM_WARN):   # P69 T50: a form judged by honesty - its finding, with its numbers
+                    print(f"  [WARN] P69 T50: shot row {i + 1}: {_w}")
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         if morph_prop_id((world or {}).get("morph")) is not None:   # P69 T26e: `;morph=prop:<id>` - the prop standing at the boundary
