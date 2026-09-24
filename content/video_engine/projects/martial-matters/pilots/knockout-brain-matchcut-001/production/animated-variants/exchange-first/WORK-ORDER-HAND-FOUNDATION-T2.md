@@ -1,6 +1,6 @@
 # MM-HAND-IMPACT-FOUNDATION T2 — editable hand and closed-fist proof
 
-Status: frozen on dispatch. Owner: `implementation_luna` in its own worktree. Parent owns contract changes, review, integration, gates and Git actions. This is the **hand before glove** slice; no head contact, force solver, episode cut or fighter-art approval is claimed.
+Status: frozen on dispatch; retry bound revised by operator 2026-09-24. Owner: `implementation_luna` in its own worktree. Parent owns contract changes, review, integration, gates and Git actions. This is the **hand before glove** slice; no head contact, force solver, episode cut or fighter-art approval is claimed.
 
 ## Recall and fixed inputs
 
@@ -19,7 +19,9 @@ You may refine/retopologize the hand from the existing native fighter family or 
 
 Own only new `content/video_engine/assets/modeling/native/hands/` files, new `content/video_engine/src/modeling/blender/hand_foundation.py`, new `content/video_engine/tests/test_model_hand_foundation.py`, and ignored T2 review output under `content/video_engine/review/model-engines/benchmark-v1/3d/hand-foundation/`. You may add a small runner under `content/video_engine/tests/fixtures/modeling/blender/characters/hand-foundation/` if needed. Do not edit `fight_motion.py`, `contact_transfer.py`, `hand_pose.py`, the T1 baseline fixture/probe/test, the plan, player, docs, source footage or source `.blend`. You are not alone in the codebase; preserve others' edits, do not revert them, and adjust around concurrent changes. No provider generation, install, commit, push or production promotion.
 
-Stop and report if: source license is uncertain; fist looks claw-like, mitten-like or capsule-like at 540×960; thumb intersects the knuckle patch; evaluated mesh collapses or tears under flexion; hand attachment requires changing the historic rig; or the work exceeds the named write set. One first submission and at most one bounded correction after parent visual notes—not unlimited polishing.
+Stop immediately if the source license is uncertain, attachment requires changing the historic rig, or work must exceed the named write set. A claw-like, mitten-like or capsule-like fist at 540×960, thumb/knuckle intersection, or evaluated mesh collapse/tearing is an acceptance failure to report, not an acceptable asset. Stop early with a negative source diagnosis if the base cannot plausibly be corrected within this bounded task.
+
+Allow at most **three consecutive substantive acceptance submissions total**: the initial complete asset/evidence submission plus up to two parent-directed targeted corrections. A submission counts only when the editable asset, measurements and multi-view phone renders are ready for review; exploratory renders, tool/setup errors and an incomplete draft do not count. Record each submission's verdict and specific miss in the task ledger. After the third substantive failure, stop Luna retries and hand the preserved evidence to Sol xhigh for diagnosis or a revised order; respawning never resets the count. This is a cap, not a requirement to use every attempt or permission for unlimited polishing.
 
 ## Acceptance evidence
 
@@ -28,4 +30,4 @@ Stop and report if: source license is uncertain; fist looks claw-like, mitten-li
 3. Measurements: four fingertip-to-palm paths, thumb-to-finger skeletal clearance and evaluated-surface interpenetration witness, local volume/edge distortion, knuckle plane and wrist attachment. Report actual values and explicit visual verdict, not only test booleans.
 4. Headless Blender build and scripts-disabled reopen with source/code/render hashes; seek-order check across the stress poses. Focused pytest must run as `python -m pytest content/video_engine/tests/test_model_hand_foundation.py -q`. Run old hand-pose test to confirm isolation. Parent will inspect the source, diff and phone renders before integration.
 
-Return at most 200 words with exact artifact paths, test verdict, source method and whether the first submission passes your own visual inspection. Do not call it approved; the parent/operator decide that gate.
+Return at most 200 words with exact artifact paths, test verdict, source method, attempt count and whether the current submission passes your own visual inspection. Do not call it approved; the parent/operator decide that gate.
