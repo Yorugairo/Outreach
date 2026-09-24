@@ -4,8 +4,8 @@
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
 web_search = "live"
-model = "gpt-6-sol"
-model_reasoning_effort = "xhigh"
+model = "gpt-6-luna"
+model_reasoning_effort = "max"
 
 [features]
 multi_agent = true
@@ -43,7 +43,7 @@ description = "GPT-6 Luna-max read-only documentation researcher for primary-sou
 config_file = "agents/docs_researcher.toml"
 
 [agents.reviewer]
-description = "GPT-6 Luna-max read-only reviewer for correctness, security, and missing tests."
+description = "GPT-6 Sol-high independent read-only reviewer for correctness, security, and missing tests."
 config_file = "agents/reviewer.toml"
 
 [agents.professional_worker]
