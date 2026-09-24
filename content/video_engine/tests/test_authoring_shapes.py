@@ -1234,6 +1234,12 @@ def test_the_plots_holes_are_not_room_while_the_row_marks_them():
     assert SH.marks_live([{"kind": "callout", "at": 1.0, "dur": 2.0}], 2.0, 4.0) == ["callout at 1.00s"]
     assert SH.marks_live([{"kind": "callout", "at": 1.0, "dur": 2.0}], 3.5, 6.0) == []
     assert SH.marks_live([{"kind": "retitle", "at": 1.0, "dur": 9.0}], 2.0, 4.0) == [], "a retitle is not a plot mark"
+    # P69 T36: a lit stretch is a plot mark, and it HOLDS lit past its word - a card arriving long after the light
+    # landed still finds the plot marked, so it never parks over the light
+    lit = [{"kind": "lit_stretch", "at": 1.0, "dur": 1.5, "from": 3, "to": 9}]
+    assert SH.marks_live(lit, 2.0, 4.0) == ["lit_stretch at 1.00s"]
+    assert SH.marks_live(lit, 8.0, 12.0) == ["lit_stretch at 1.00s"], "the landed light is still on the data"
+    assert SH.marks_live(lit, 0.0, 0.5) == [], "a card that leaves before the light's word never meets it"
     # ... and the quiet zone is the note's while a note is up: that side's band is not offered
     note = [{"kind": "note", "at": 1.0, "dur": 2.0}]
     assert SH.quiet_live(note, 2.0, 4.0) == ["note at 1.00s"] and SH.quiet_live(note, 3.5, 6.0) == []

@@ -1,0 +1,93 @@
+{
+ "aspect": "16:9",
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [],
+   "world": {
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "kind": "ledger",
+    "page": {
+     "badges": [],
+     "builder": "share",
+     "colors": [
+      "crimson",
+      "deemph",
+      "deemph",
+      "deemph",
+      "deemph"
+     ],
+     "emphasize": 0,
+     "hole": 0.55,
+     "judge": [],
+     "labels": [
+      "Samsung",
+      "SK hynix",
+      "Micron",
+      "CXMT",
+      "Other"
+     ],
+     "peel": {},
+     "quiet_zone": "right",
+     "schema_version": "ledger_page.v1",
+     "short_labels": [
+      "Samsung",
+      "SK hynix",
+      "Micron",
+      "CXMT",
+      "Other"
+     ],
+     "source": "silicon-silent-triopoly deck, slide 8 (registered figures); Other = the remainder to 100",
+     "sub": "DRAM market share by maker, percent of the whole",
+     "surface": "page",
+     "title": "Who makes the world's DRAM",
+     "total": 100.0,
+     "unit": "%",
+     "value_strings": [
+      "39%",
+      "26%",
+      "25%",
+      "7%",
+      "3%"
+     ],
+     "values": [
+      39.0,
+      26.0,
+      25.0,
+      7.0,
+      3.0
+     ],
+     "variant": "share"
+    }
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the flat donut"
+}

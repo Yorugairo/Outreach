@@ -127,6 +127,7 @@ from authoring import Project                                             # noqa
 from authoring import audio as A, docks as D, table as T, words as W      # noqa: E402
 import gate_motion_density as MG                                          # noqa: E402
 import lab_build as LB                                                    # noqa: E402
+import ledger_page as LPG                                                 # noqa: E402   (P69 T29: the recede's bound)
 
 BUILD_DIR = os.environ.get("STEEL_H_BUILD_DIR", "build-h")
 BUILD = HERE / BUILD_DIR
@@ -197,8 +198,9 @@ def _assert_read_only(before: dict) -> None:
 # authors row 17 (the arithmetic, the 94 bar) and moved it to row 18's first words (the signpost, T26's); P69 T26 authors
 # row 18 (the turn: reset 2, PROP 3, camera 3, the halving compare) and moves it to row 19's first words (T27's).
 # P69 T27 authors row 19 (skips a gear: the two clocks, the GPU becoming the compute bar) and moves it on to row 20's first
-# words (the test, T28's).
-UNIT_CUT_PHRASE = "Run it on the most"   # row 21 (SK hynix, T29)'s first words; the build stops at the cut BEFORE them
+# words (the test, T28's). P69 T28 authors row 20 (host window 2, the test) and moved it to row 21's first words (SK hynix,
+# T29's); P69 T29 authors row 21 (SK hynix, one panels page) and moves it on to row 22's first words (the tripwires, T30's).
+UNIT_CUT_PHRASE = "Bravos put their"   # row 22 (the tripwires, T30)'s first words; the build stops at the cut BEFORE them
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -1520,6 +1522,173 @@ def page_div_return() -> str:
             % (LAYER_PAGE, DIV_LAST, IDLE_LIVE, PAGE_DOMAIN % (HOOK_YMIN, HOOK_YMAX)))
 
 
+# ---------------------------------------------------------------- ROW 21 (P69 T29): SK HYNIX - ONE PANELS PAGE, FOCUS ON THE WORDS
+# "Run it on the most extreme number in this whole trade." The treatment's row 21 carries FOUR charts - the hynix line,
+# the wafer compare, the memory contract prices and the hynix line returning - and a ledger page holds three chart
+# states (STATE_MAX), so the row is ONE PANELS PAGE (E99 s104 amended x2; P69 T8b/T8c/T8d): three panels - the hynix
+# line (both series verbatim), the wafer bars (1x vs 3x) and the contract bars (the conventional DRAM +55-60% a RANGE,
+# never the 57.5 midpoint `ev-dram-contract-v1` carries) - and FOCUS moves among them on the words (`panel_focus`): the
+# line alone, the wafer bars grown to the page with the line receded behind them, the contract bars grown, the whole
+# board side by side, the line grown back. The fourth chart IS the first coming back - never a cut, never a fifth state.
+# No second LINE panel: the script's only other line is hynix's own operating profit, which is the same object's second
+# series on the same index (100 = Aug '25) and is spoken as the cash answer on the line's own panel.
+HYNIX_PAGE = "ev-hynix-row21-panels-v1"   # DERIVED (evidence/objects, P69 T29): every figure copied from its three sources
+HYNIX = _series(HYNIX_PAGE)
+HYNIX_SRC, WAFER_SRC, DRAM_SRC = (_series(n) for n in ("ev-hynix-steel-v1", "ev-hbm-wafer-ratio-bars-v1", "ev-dram-contract-v1"))
+P_HYNIX, P_WAFER, P_DRAM = 0, 1, 2
+H_PRICE, H_PROFIT = 0, 1
+assert HYNIX["panels"][P_HYNIX]["series"] == HYNIX_SRC["series"], "the hynix line is copied verbatim, never typed"
+assert [b["value"] for b in HYNIX["panels"][P_WAFER]["bars"]] == [b["value"] for b in WAFER_SRC["bars"]] == [1, 3]
+assert ([b["note"] for b in DRAM_SRC["bars"]] == ["+55-60%", "+60%", "+89%"]
+        and [b["value"] for b in HYNIX["panels"][P_DRAM]["bars"]] == [["+55", "60"], "+60", "+89"]), \
+    "the contract bars are the source's own notes - the range as stated, never its 57.5 midpoint"
+_H_PTS = HYNIX_SRC["series"][H_PRICE]["pts"]
+HYNIX_LAST = len(_H_PTS) - 1                                            # the tip: +548% (Aug '26), the object's own tag
+HYNIX_PEAK = max(range(len(_H_PTS)), key=lambda k: _H_PTS[k][1])        # the top of the vertical stretch (Jun '26)
+HYNIX_CLIMB = min(range(HYNIX_PEAK - 60, HYNIX_PEAK), key=lambda k: _H_PTS[k][1])   # ... and its foot, read off the data
+HYNIX_PROFIT_LAST = len(HYNIX_SRC["series"][H_PROFIT]["pts"]) - 1
+WAFER_HBM = 1                                                           # the 3x bar, "HBM (stacked dies)"
+DRAM_CONSUMER = 2                                                       # "a new laptop" - consumer DRAM, up to +89%
+# "a new laptop": the consumer bar is the object's own emphasis (crimson); a callout on a bar rings the whole bar across
+# its category name (MEASURED, draft 1 `d1-A.2.png` 569.2 - row 16's M34 finding), so the page is retitled on the word
+DRAM_TITLE = "Why a new laptop costs more"
+HYNIX_MELT_S = 1.0         # the divergence melts and is thrown over "Run it on the most"; the axes open on "extreme number"
+HYNIX_MELT_LEAD_S = 0.2    # ... opened in the breath before "Run" (TNX_MELT_LEAD_S's reason: no empty board under a word)
+HYNIX_MELT_WHY = ("the divergence -> the SK hynix panels page, page to page: TAKEN the melt's throw (E88) - the divergence "
+                  "balls up and is thrown off as 'Run it on the most extreme number' begins, and the hynix line opens on the "
+                  "same board; refused: the dip (two pages are one kind of world, E47), a recast (a panels page is not a "
+                  "`then=` state, and the next chart is another company's price, not more of this one - E58), rescale / "
+                  "extend (not the same series), the spiral (a first page, not a returning one), the suck (spent into "
+                  "the desk at 7:44 - the variety rule, E99 s74 Apply 1; the melt's throw last ran at 7:11)")
+
+
+def page_hynix() -> str:
+    """Row 21's page (P69 T29): the panels object on its axes (E73), live (E49), in the long form's profile (E99 s97)."""
+    return "ledger:%s:line::right:%s%s%s%s" % (HYNIX_PAGE, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM)
+
+
+# FOCUS - one composable state per word (T8b (11)); every change is ONE transition of FOCUS_S (the golden's 1.2 s). A
+# panel that is HIDDEN until its word BUILDS on that word (the engine's `lpPanelStart`), so each chart is drawn as the
+# sentence names it; a RECEDED panel stays on the page behind the one in focus (scaled 0.86, dimmed, blurred).
+FOCUS_S = 1.2
+# (`active` names the panels in focus, `hidden` the ones not shown; every other panel RECEDES)
+# EACH CHANGE IS TWO STATES ON ONE CLOCK: the chart the sentence turns to ARRIVES beside the one in focus (two active,
+# side by side - T8c's resize-in: the standing chart shrinks into its slot while the new one builds in beside it), then
+# GROWS to the page while the other recedes behind it - scaled back, blurred and dimmed to the recede's deep bound
+# (RECEDE_DEEP) - and the next pair of words brings the next one in the same way. MEASURED on build-h's first pass
+# (`logs/t29-gate-first-pass.log`) and drafts 4-5: with the default recede (0.45 ink left) the chart that had receded
+# still stood under the grown one at every later instant - covered by its ground, so the frame was right, but the probe
+# reads a covered panel's labels as ink and M28 FAILED (the line's x ticks crowding in its home third; "+548%" on the
+# covered "+89%") and M27 (the rack "on" the covered wafer panel's compare label and bars). The deep recede alone
+# (draft 5, `p69-row21/d5t/t-tiles.png` 556.8 / 568.1) emptied the board mid-move - the INK_LEAD law fades the chart
+# leaving in the first half and brings a HIDDEN one in only in the second, so both stood at ~5% ink at once. Two states
+# fix both: the grown chart is already at full ink when the other recedes, and a deep-receded panel ends at 0.05 ink,
+# which the probe does not read (probe.py `eff` <= 0.05).
+RECEDE_DEEP = {"dim": LPG.PANEL_RECEDE_BOUNDS["dim"][1]}   # 0.95: the recede's own bound - ends at 0.05 ink
+HYNIX_ALONE = {"layout": "row", "active": [P_HYNIX], "hidden": [P_WAFER, P_DRAM]}       # the line spans the page
+WAFER_BESIDE = {"layout": "row", "active": [P_HYNIX, P_WAFER], "hidden": [P_DRAM]}      # the wafer builds in beside it
+WAFER_GROWN = {"layout": "row", "active": [P_WAFER], "hidden": [P_DRAM], "recede": RECEDE_DEEP}   # the line recedes
+DRAM_BESIDE = {"layout": "row", "active": [P_WAFER, P_DRAM], "hidden": [P_HYNIX]}       # the contract bars beside it
+DRAM_GROWN = {"layout": "row", "active": [P_DRAM], "hidden": [P_HYNIX], "recede": RECEDE_DEEP}    # the wafer recedes
+HYNIX_BESIDE = {"layout": "row", "active": [P_HYNIX, P_DRAM], "hidden": [P_WAFER]}      # the line comes back beside
+HYNIX_BACK = {"layout": "row", "active": [P_HYNIX], "hidden": [P_WAFER], "recede": RECEDE_DEEP}   # ... and takes the page
+FOCUS_WHY = ("the hynix line -> the wafer bars -> the contract bars -> the hynix line, on ONE panels page "
+             "(P69 T8b/T8d, E99 s104 amended x2 - 'whatever is less important held on background/off-focus and brought "
+             "back up at relevant times'): TAKEN `panel_focus` on each sentence's word - the chart it serves grows to the "
+             "page while the others recede and soften behind it, a hidden panel building as it is shown - in two states, "
+             "the next chart arriving BESIDE the one in focus and then growing over it (RECEDE_DEEP's measurement); refused: a "
+             "recast per chart (STATE_MAX 3 cannot hold four charts, and the fourth is the first returning), a dip or a "
+             "cut between them (no world changes, E47), a melt to each next page (the line would be redrawn like new "
+             "when it returns - E25, E40 s4), the spiral return (the line never left the page), THE BOARD - the three "
+             "side by side on 'So run the three questions' (MEASURED, draft 1: the row layout lands 0.55 s before "
+             "'Scarce?' takes the line back, a flash; its three cells crowd the line's x ticks)")
+# PROP 4 - the stacked die, STAMPED on "stacked memory" (E99 s87: the word names the thing), bare with its resting
+# shadow, in the line's own empty room (upper left: the line runs along the floor until the spring). It leaves before
+# camera 4 pushes on the tip.
+HBM_PROP = "prop-hbm-stacked-die-v1"
+HBM_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (HBM_PROP + ".png")
+HBM_OPTS = {"prop": True, "arrive": "stamp"}
+HBM_PLACE = {"x": 0.30, "y": 0.42, "w": 0.13}
+HBM_OFF_LEAD_S = 0.4       # ... gone before the push
+HYNIX_BUILD_END = "percent. Not fifty"   # the price draws "over the last year" and lands on "percent"
+# CAMERA 4 (E51 - a push tied to a landing): the tip landed with its +548% on "percent"; "Five hundred." names it
+# again and the camera pushes onto it, holds through "it should be that number", and releases on "And the scarcity".
+# The chrome is fitted into the frame (E99 s108, T26f), so the push is limited only by the tip itself.
+HYNIX_CAM_ZOOM, HYNIX_CAM_IN_S, HYNIX_CAM_OUT_S = 1.2, 0.9, 0.9
+# THE LOOK IS A POINT at the tip's rest (row 14's rule, YARD_CAM_LOOK's note): MEASURED on draft 1 (the probe at 544.6 and
+# the player's own look at 547.5, [1652, 532] px) - the gate reads a `datum` look and target as the whole PLOT box, so a
+# datum-aimed freeze inside the push read "88% in frame" (M24) while the player held the tip in the middle of its frame.
+HYNIX_TIP = {"kind": "point", "x": round(1652 / 1920, 4), "y": round(532 / 1080, 4)}
+HYNIX_CAM_CHROME = {"camera": "fit"}
+# (P69 T8e: `fit` now keeps the line PANEL's own sub and y ticks whole too - a panel's labels are chrome - MEASURED on the
+# plain door's draft 8, `p69-row21/d8t/t-tiles.png` 547.6 / 549.4.) The key still moves: MEASURED on draft 9 without these
+# keys (`d9t/t-tiles.png` 547.6 / 549.4) the pushed panel's box still cuts the pills in half.
+# MEASURED, draft 1 (`d1f/g-547-547.50.png`): pushed 1.2 the hynix panel's box rises to y ~149 and its ground covers the
+# lower half of the page's key rail (y 132-181) - so the key steps up beside the title for the push (a T26f chrome move)
+# and back as the camera releases. HYNIX_KEY_UP / _HOME are the key's top-left in stage fractions (its rest: the probe's
+# key box [56-67, 138-144] px at 1.0).
+# MEASURED, draft 2 (`d2f/g-tiles.png` a, 546.2): one diagonal key ran the pills through the title - so the key moves in
+# two legs, right along its own row (clear of the title, which ends x ~853) and then up; back the same way once released.
+HYNIX_KEY_UP = {"x": 0.62, "y": 0.035}
+HYNIX_KEY_HOME = {"x": round(62 / 1920, 4), "y": round(141 / 1080, 4)}
+HYNIX_KEY_ASIDE = {"x": HYNIX_KEY_UP["x"], "y": HYNIX_KEY_HOME["y"]}
+HYNIX_KEY_LEG_S = 0.45
+# THE FREEZE (E99 s99): "If anything in this story is a bubble, it should be that number." - the sentence turns on ONE
+# number, so on "that number" the stage stops and one light comes on at the tip, inside the held push.
+HYNIX_FREEZE_S = 0.7
+# PROP 5 - the wafer, STAMPED on "wafer" over the 1x bar (standard DRAM: one wafer's worth of gigabytes) once the wafer
+# bars have grown to the page; it leaves as the contract bars take the page.
+WAFER_PROP = "prop-silicon-wafer-semiconductor-v1"
+WAFER_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (WAFER_PROP + ".png")
+WAFER_OPTS = {"prop": True, "arrive": "stamp"}
+WAFER_PLACE = {"x": 0.41, "y": 0.39, "w": 0.11}   # MEASURED, draft 1 (`d1f/g-564`): the grown 1x bar stands at x 687-885,
+#                                                   its "1x" at y 575-610 - the wafer centred over it, clear of the value
+# THE WAFER COMPARE (T6's `row21-wafer` fixture, R26-190): "3x" is written on the HBM bar as its bar lands (the value
+# yields to the figure - written ON the landing it prints once, R26-284 / CONC_FIG's note), then morphs to the same ratio
+# in wafers. The ratio is the object's; the arithmetic is the object's two bars (hbm / dram), never typed.
+WAFER_FIG_TEXT = "%dx" % HYNIX["panels"][P_WAFER]["bars"][WAFER_HBM]["value"]
+WAFER_FIG_S = 1.2
+WAFER_COMPARE_S = 2.0
+WAFER_COMPARE = {"kind": "chart_to", "to": "compare", "form": "melt", "then": "splash", "hold": "metric", "panel": P_WAFER,
+                 "metric": {"value": 3, "text": WAFER_FIG_TEXT, "label": "HBM against standard DRAM"},
+                 "comparator": {"value": 3, "text": "3 wafers", "label": "for the gigabytes 1 wafer of DRAM makes"},
+                 "inputs": {"hbm": 3, "dram": 1}, "derive": "hbm / dram",
+                 "source": "[DERIVED: from ev-hbm-wafer-ratio-bars-v1 (via ev-hynix-row21-panels-v1), hbm / dram]"}
+assert WAFER_COMPARE["inputs"] == {"hbm": HYNIX["panels"][P_WAFER]["bars"][WAFER_HBM]["value"],
+                                   "dram": HYNIX["panels"][P_WAFER]["bars"][0]["value"]}
+WAFER_WHY = ("the 3x -> 3 wafers, on the wafer panel (T6, R26-190): TAKEN `chart_to compare` - the same ratio restated "
+             "in the unit the sentence names ('three times the wafer capacity'), the bar unmoved (one value, E28); "
+             "refused: T26e's prop -> bar morph (the wafer becoming the 1x bar - a panel has ONE chart state and the "
+             "compiler refuses `chart_to morph` on a panels page by name, `PANEL_CHART_TO`), a figure beside the bar "
+             "(R26-284: a figure restating a value), a second page for the ratio (the line would leave)")
+# THE THREE QUESTIONS, RUN ON HYNIX - the numbered agenda in the line's own empty room (upper left), a row as each ANSWER
+# is said, the answer as the row's figure. The DEPARTURE from the treatment's checklist ticks (BODY_DEPARTURES row 21).
+HYNIX_AGENDA_BOX = {"kind": "region", "x0": 0.10, "y0": 0.30, "x1": 0.48, "y1": 0.60}
+# MEASURED, draft 1 (`d1f/g-590-590.00.png`): at y0 0.22 row 1 stood across the plot's top rule; the line runs under
+# y ~640 px left of Mar '26, so the block keeps over it
+# Each row carries its ANSWER in its own words: MEASURED at a 390 px phone (`final/phone-390-x3.png`, draft 6), the
+# agenda's grey sub line ("sold out for the year") read at ~5 px - so the answer joins the question in the row's type.
+HYNIX_AGENDA = (("Scarce? Sold out", "says capacity is"),
+                ("Cash or paper? Cash", "They're selling product"),
+                ("Used tomorrow? Racks", "The memory is going"))
+PROFIT_DRAW_S = 1.2        # the operating profit draws on "They're selling product" - the cash answer IS the line
+# THE RACKS: "The memory is going into racks that are already under construction" names the object (the treatment's
+# prop rule - a stamp for a DIRECT match only; `REBUILD-TREATMENT-H.md:116` refused the rack on "the slots are gone",
+# where no rack is named). Kept for the WORDS: on draft 1 it also carried M03 (47 s from the wafer's stamp to the row's
+# end, when the gate counted no `panel_focus`); since P69 T8e M03 credits a panel's first reveal (557.41, 568.65), so the
+# rack no longer holds the gate up - the sentence names it. Stamped right of the answers, over the line's empty middle.
+RACK_PROP = "prop-ai-server-rack-cabinet-v1"
+RACK_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (RACK_PROP + ".png")
+RACK_OPTS = {"prop": True, "arrive": "stamp"}
+RACK_PLACE = {"x": 0.50, "y": 0.40, "w": 0.075}   # MEASURED, draft 7 (`d7t/t-b-588.30.png`): at (0.47, 0.44) its left edge met
+#                                                   row 3's "Racks" (x 822) and its foot the "+230%" tag (x 1033, y 570)
+HYNIX_VERDICT_TITLE = HYNIX_SRC["title"]   # "Sold out, and paid for" - the object's own title, on "It passes."
+# "THE MOST VERTICAL LINE ON THE BOARD": the sentence walks one stretch - the spring to the peak - so a light travels it
+# (P69 T36, E99 s99: a light that TRAVELS is motion), and the tip is ringed on "steel" - the treatment's ring on the
+# tip, with no label (MEASURED, draft 1 `d1-A.3.png` 594.5: the label "Steel" wrote over the tip's own "+548%").
+HYNIX_LIT_S = 1.4
+
+
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
 AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}, {"n": 3, "text": "Used tomorrow?"}]
 # ... and the agenda's room is measured the same way: the caption's band ends at y 576 and the parked chart holds
@@ -1774,6 +1943,9 @@ IN_ROW_WHY = (
     ("row 15 the halving compare (P69 T26, 'fall by half')", HALVING_WHY),
     ("row 18 the GPU becomes the compute bar (P69 T27, 'about five years')", GPU_MORPH_WHY),
     ("row 19 the questions, the phone and where to look -> the test card (P69 T28, 'Steel answers')", TEST_SWEEP_WHY),
+    ("row 21 the focus among the four charts (P69 T29, 'So a gigabyte' / 'That's why the memory' / 'So run the three')",
+     FOCUS_WHY),
+    ("row 21 the wafer compare (P69 T29, 'Every accelerator')", WAFER_WHY),
 )
 # (the P69 T16 first cut, before T15b, is kept for the record: it entered the index from the STUDIO by dip 1 and
 # refused recast / rescale / morph, the melt, the snap / throw-then-zoom / throw-then-push, object-becomes-chart, the
@@ -1796,6 +1968,7 @@ BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the tr
                 page_clocks(): CLOCKS_MELT_WHY,                              # row 19, the two clocks (P69 T27)
                 HOST2_PLATE: TEST_DESK_WHY,                                  # row 20a, host window 2 (P69 T28)
                 page_div_return(): DIV_RETURN_WHY,                           # row 20b, the divergence RETURNS
+                page_hynix(): HYNIX_MELT_WHY,                                # row 21, SK hynix (P69 T29)
                 SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
                               "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
@@ -2001,7 +2174,30 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_giants = at("The giants pinned")                  # ... then the giants' tip
     t_house = at("The divergence isn't")                # the gap between them bleeds: "the divergence"
     t_public = at("administered in")                    # the retitle on the verdict
-    t_row20_end = unit_end
+    # -- row 21 (P69 T29): SK HYNIX - the divergence melts in the breath before "Run it on the most", one panels page
+    t_hynix = round(at("Run it on the most") - HYNIX_MELT_LEAD_S, 2)
+    t_row20_end = t_hynix
+    h_sk = at("SK hynix")                               # the page names the company as the sentence does
+    h_stacked = at("stacked memory")                    # PROP 4 is stamped on the word that names it (E99 s87)
+    h_year = at("Over the last year")                   # the price draws the year ...
+    h_pct = round(W.word_in(ws, HYNIX_BUILD_END, "percent") + 0.35, 2)   # ... and lands on "percent" with its +548%
+    h_five = at("Five hundred. If")                     # camera 4 pushes on the tip as it is named again
+    h_that_n = W.word_in(ws, "should be that number", "that")   # ... holds; the freeze on "that number"
+    h_scarcity = at("And the scarcity")                 # ... and releases as the sentence turns to what is underneath
+    h_physics = W.word_in(ws, "it's physics", "physics")
+    h_gig = at("So a gigabyte")                         # the wafer bars grow to the page, the 3 landing on "three times"
+    h_wafer = W.word_in(ws, "the wafer capacity", "wafer")   # PROP 5 is stamped on "wafer"
+    h_accel = at("Every accelerator")                   # the 3x becomes 3 wafers as silicon is taken away
+    h_laptop_s = at("That's why the memory")            # the contract bars grow to the page ...
+    h_laptop = W.word_in(ws, "in a new laptop", "laptop")   # ... and the consumer bar is called out on "laptop"
+    h_run3 = at("So run the three")                     # the line grows back as the questions are put to it
+    h_answers = [at(a) for _, a in HYNIX_AGENDA]        # a row as each answer is said
+    h_racks = W.word_in(ws, "going into racks", "racks")   # the rack is stamped on the word that names it
+    h_passes = at("It passes")                          # the verdict: the object's own title
+    h_vertical = W.word_in(ws, "The most vertical line", "vertical")   # the light travels the spring
+    h_steel = W.word_in(ws, "on the board is steel", "steel")          # ... and the tip is ringed "steel"
+    h_honest = at("Run it honestly")                    # the last retitle
+    t_row21_end = unit_end
 
     return [
         # -- ROWS 1-6: THE PAGE IS THE WORLD (E58 / E61). One world, two chart states, two cards in one slot.
@@ -2363,7 +2559,63 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"kind": "spread", "at": t_house, "dur": DIV_SPREAD_S, "from": DIV_MEGA, "to": DIV_SEMIS},
             {"kind": "retitle", "at": t_public, "dur": DIV_RETURN_S, "text": DIV_TEST_TITLE},
         ], {"keys": []}),
-        # (-- ROWS 21-24 are T29-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
+        # -- ROW 21 (P69 T29): SK HYNIX - the divergence melts and is thrown (HYNIX_MELT_WHY) and ONE PANELS PAGE carries
+        # the row's four charts (FOCUS_WHY): the hynix line alone, its price drawing the year to +548% on "percent", PROP 4
+        # stamped on "stacked memory"; camera 4 on the tip on "Five hundred.", the freeze on "that number"; the wafer bars
+        # grown to the page on "So a gigabyte", "3x" written as the bar lands, PROP 5 stamped on "wafer", the compare to "3
+        # wafers" (WAFER_WHY); the contract bars grown on "That's why the memory", retitled on "laptop"; the line grown
+        # back on "So run the three questions", the three answers written row by row in its room, the operating profit
+        # drawn on "They're selling product", the rack stamped on "racks"; the verdict retitled on "It passes.", a light
+        # travelling the spring on "vertical", the tip ringed on "steel".
+        (t_hynix, t_row21_end, page_hynix(), (0, 0, 0), [
+            (HBM_PROP, 0, h_stacked, round(h_five - HBM_OFF_LEAD_S, 2), dict(HBM_OPTS, place=dict(HBM_PLACE))),
+            (WAFER_PROP, 0, h_wafer, round(h_laptop_s - 0.2, 2), dict(WAFER_OPTS, place=dict(WAFER_PLACE))),
+            (RACK_PROP, 0, h_racks, h_passes, dict(RACK_OPTS, place=dict(RACK_PLACE))),
+        ], RAIL_EXIT % HYNIX_MELT_S, [
+            dict(HYNIX_ALONE, kind="panel_focus", at=t_hynix, dur=0.05),
+            {"kind": "build_to", "at": t_hynix, "dur": 0.4, "panel": P_HYNIX, "series": H_PRICE, "target": datum(0)},
+            {"kind": "build_to", "at": t_hynix, "dur": 0.4, "panel": P_HYNIX, "series": H_PROFIT, "target": datum(0)},
+            {"kind": "retitle", "at": h_sk, "dur": 1.6, "text": "SK hynix: the memory the AI racks need"},
+            {"kind": "build_to", "at": h_year, "dur": round(h_pct - h_year, 2), "panel": P_HYNIX, "series": H_PRICE,
+             "target": datum(HYNIX_LAST)},
+            {"kind": "freeze", "at": h_that_n, "dur": HYNIX_FREEZE_S, "target": dict(HYNIX_TIP)},
+            {"kind": "retitle", "at": h_physics, "dur": 1.6, "text": "The scarcity is physics"},
+            dict(WAFER_BESIDE, kind="panel_focus", at=h_gig, dur=FOCUS_S),
+            dict(WAFER_GROWN, kind="panel_focus", at=round(h_gig + FOCUS_S, 2), dur=FOCUS_S),
+            {"kind": "figure", "at": h_gig, "dur": WAFER_FIG_S, "panel": P_WAFER, "text": WAFER_FIG_TEXT,
+             "target": {"kind": "datum", "index": WAFER_HBM}},
+            dict(WAFER_COMPARE, at=h_accel, dur=WAFER_COMPARE_S),
+            dict(DRAM_BESIDE, kind="panel_focus", at=h_laptop_s, dur=FOCUS_S),
+            dict(DRAM_GROWN, kind="panel_focus", at=round(h_laptop_s + FOCUS_S, 2), dur=FOCUS_S),
+            {"kind": "retitle", "at": h_laptop, "dur": 1.6, "text": DRAM_TITLE},
+            dict(HYNIX_BESIDE, kind="panel_focus", at=h_run3, dur=FOCUS_S),
+            dict(HYNIX_BACK, kind="panel_focus", at=round(h_run3 + FOCUS_S, 2), dur=FOCUS_S),
+            {"kind": "retitle", "at": h_run3, "dur": 1.6, "text": "Three questions for SK hynix"},
+            {"kind": "agenda", "at": h_answers[0], "dur": round(h_passes - h_answers[0], 2), "target": HYNIX_AGENDA_BOX,
+             "rows": [{"n": i + 1, "text": q, "at": ta} for i, ((q, _), ta) in enumerate(zip(HYNIX_AGENDA, h_answers))]},
+            {"kind": "build_to", "at": h_answers[1], "dur": PROFIT_DRAW_S, "panel": P_HYNIX, "series": H_PROFIT,
+             "target": datum(HYNIX_PROFIT_LAST)},
+            {"kind": "retitle", "at": h_passes, "dur": 1.6, "text": HYNIX_VERDICT_TITLE},
+            {"kind": "lit_stretch", "at": h_vertical, "dur": HYNIX_LIT_S, "panel": P_HYNIX, "series": H_PRICE,
+             "from": HYNIX_CLIMB, "to": HYNIX_PEAK},
+            {"kind": "callout", "at": h_steel, "dur": round(h_honest - 0.2 - h_steel, 2),
+             "target": {"kind": "datum", "index": HYNIX_LAST, "series": H_PRICE, "panel": P_HYNIX}},
+            {"kind": "retitle", "at": h_honest, "dur": 1.6, "text": "Run it honestly"},
+        ], {"keys": [
+            {"t": h_five, "zoom": 1.0, "look": HYNIX_TIP,
+             "ease": "inout"},
+            {"t": round(h_five + HYNIX_CAM_IN_S, 2), "zoom": HYNIX_CAM_ZOOM,
+             "look": HYNIX_TIP, "ease": "inout"},
+            {"t": h_scarcity, "zoom": HYNIX_CAM_ZOOM,
+             "look": HYNIX_TIP, "ease": "inout"},
+            {"t": round(h_scarcity + HYNIX_CAM_OUT_S, 2), "zoom": 1.0,
+             "look": HYNIX_TIP, "ease": "inout"},
+        ], "chrome": dict(HYNIX_CAM_CHROME, key=[
+            dict(HYNIX_KEY_ASIDE, at=round(h_five - HYNIX_KEY_LEG_S, 2), dur=HYNIX_KEY_LEG_S),
+            dict(HYNIX_KEY_UP, at=h_five, dur=HYNIX_KEY_LEG_S),
+            dict(HYNIX_KEY_ASIDE, at=round(h_scarcity + HYNIX_CAM_OUT_S, 2), dur=HYNIX_KEY_LEG_S),
+            dict(HYNIX_KEY_HOME, at=round(h_scarcity + HYNIX_CAM_OUT_S + HYNIX_KEY_LEG_S, 2), dur=HYNIX_KEY_LEG_S)])}),
+        # (-- ROWS 22-24 are T30-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
     ]
 
 
@@ -2502,12 +2754,14 @@ BODY_ASSETS = {
                                                                              "factory.svg (WHERE_CHIPS)"),
          ("page", LAYER_PAGE, "dense-line (returns)"),
          ("cue", "dip 6", _SND + WHOOSH)),
-    21: (("page", "ev-hynix-steel-v1", _OBJ + "ev-hynix-steel-v1.series.json - dense-line"),
+    21: (("page", HYNIX_PAGE, _OBJ + HYNIX_PAGE + ".series.json - panels (P69 T29: derived from the three below)"),
+         ("page", "ev-hynix-steel-v1", _OBJ + "ev-hynix-steel-v1.series.json - dense-line"),
          ("page", "ev-hbm-wafer-ratio-bars-v1", _OBJ + "ev-hbm-wafer-ratio-bars-v1.series.json - story (H4)"),
          ("page", "ev-dram-contract-v1", _OBJ + "ev-dram-contract-v1.series.json - story (bars, not :line)"),
          ("card", "ev-test-scorecard-v1", "checklist dock (the ticks)"),
          ("prop", "prop-hbm-stacked-die-v1", _PROPS + "prop-hbm-stacked-die-v1.png"),
-         ("prop", "prop-silicon-wafer-semiconductor-v1", _PROPS + "prop-silicon-wafer-semiconductor-v1.png")),
+         ("prop", "prop-silicon-wafer-semiconductor-v1", _PROPS + "prop-silicon-wafer-semiconductor-v1.png"),
+         ("prop", RACK_PROP, _PROPS + RACK_PROP + ".png - P69 T29's addition, on 'racks'")),
     22: (("card", "ev-tripwire-board-v1", _OBJ + "ev-tripwire-board-v1.png - PNG card / checklist dock"),
          ("page", "ev-memory-monitor-v1", _OBJ + "ev-memory-monitor-v1.series.json - dense-line (its June mark)"),
          ("page", "ev-june-print-v1", _OBJ + "ev-june-print-v1.series.json - dense-line, marks []"),
@@ -2607,6 +2861,17 @@ BODY_DEPARTURES = (
      "anaphora's recap on 'Steel answers' (TEST_SWEEP_WHY)"),
     (20, "the checklist 'parked beside' the returning page",
      "not parked: a dip takes no docks, and at card size the checklist reads under the phone floor; T29's ticks re-land it"),
+    (21, "four charts by `chart_to` (the hynix line, ev-hbm-wafer-ratio-v1, ev-dram-contract-v1:line, the line returning)",
+     "ONE PANELS PAGE (P69 T29, ev-hynix-row21-panels-v1): focus moves on the words (FOCUS_WHY) - STATE_MAX 3 cannot hold "
+     "four, and the fourth is the first returning; the wafer ratio as BARS (ev-hbm-wafer-ratio-bars-v1, not the shares "
+     "donut), the contract prices as BARS (the object's form), the conventional +55-60% a RANGE, never its 57.5"),
+    (21, "the checklist un-parks and its rows TICK on 'Scarce?' / 'Cash or paper?' / 'Used tomorrow morning?'",
+     "the three questions as the NUMBERED AGENDA in the hynix line's own empty room, a row as each ANSWER is said with the "
+     "answer as its figure (HYNIX_AGENDA): the test card reads at the phone floor only at >= 0.60 of the stage (T28b) and "
+     "there it covers the line whose operating profit draws as the cash answer; the agenda is row 20's own list"),
+    (21, "prop stamp 5 on 'wafer' becoming part of the compare (T26e: a prop becomes a mark)",
+     "stamped over the 1x bar and held (WAFER_PLACE); the morph is refused on a panels page (`PANEL_CHART_TO` = park | "
+     "compare - a panel has one chart state), so the compare restates 3x as 3 wafers on the bar (WAFER_WHY)"),
     (22, "chart_to ev-tripwire-board-v1 (a checklist, refused as a page)", "PNG card / its checklist dock"),
     (22, "the June datum ringed on ev-june-print-v1 (marks [])", "re-target: ring ev-memory-monitor-v1's own June mark"),
     (22, "the certificate's '-66%' (returns)", "badge reading RAIL_DROP (-64%)"),
@@ -2759,7 +3024,9 @@ TABLE_TREATMENT = {1: "treatment rows 1-5 (the page, 0:00-0:42)", 2: "treatment 
                    19: "treatment row 20, host window 2 - the desk: the three questions, the phone, the test card "
                        "(P69 T28)",
                    20: "treatment row 20, the divergence returns unwound from its point, 'administered in public' "
-                       "(P69 T28)"}
+                       "(P69 T28)",
+                   21: "treatment row 21, SK hynix: one panels page - the line, camera 4, PROPS 4 and 5, the wafer "
+                       "compare, the contract prices, the line back with the three answers and the rack (P69 T29)"}
 
 
 def _flow_count(rows: list) -> tuple[int, int, int, int]:
@@ -2821,6 +3088,9 @@ def main() -> int:
     D.register(HOST2_PLATE_ID, HOST2_PLATE_FILE)   # row 20: the H-2 desk, by id (as row 7's studio)
     D.register(PHONE_PROP, PHONE_PROP_FILE)      # row 20: the phone, stamped on "phone" (the operator's prop)
     D.register(TEST_CARD, _test_card_object())   # row 20: the test card - the checklist keyed to this take
+    D.register(HBM_PROP, HBM_PROP_FILE)          # row 21: PROP 4, the stacked die, stamped on "stacked memory"
+    D.register(WAFER_PROP, WAFER_PROP_FILE)      # row 21: PROP 5, the wafer, stamped on "wafer"
+    D.register(RACK_PROP, RACK_PROP_FILE)        # row 21: the rack, stamped on "racks" (the answer to "Used tomorrow?")
     rows = shot_table(ws, unit_end)
     karp_record(ws, T.at(ws, "Alex Karp"))   # row 11: the record's words are filled BEFORE the META is written
     (BUILD / "evidence-dock.json").write_text(json.dumps(DOCK_META, indent=1), encoding="utf-8")

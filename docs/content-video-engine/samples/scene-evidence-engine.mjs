@@ -976,6 +976,173 @@ async function mount(doc) {
      so inlining keeps it and node - where no registry exists - still imports the file for the math. */
   if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.span = paintSpan;
   /* KINETICS:END */
+  /* KINETICS:BEGIN lit_stretch */
+  /* SPACE: page */
+  /* species/lit_stretch.mjs - THE LIT STRETCH (P69 T36; the Bravos harvest v2's rank 1, A11 "a stretch relights" with
+     A13's comet head; E99 s99). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between
+     KINETICS:BEGIN lit_stretch and KINETICS:END, AFTER ease and span (it reads minJerk and the span's edge law). Its
+     region sits with the kinetics laws, beside the span's, for the reason span.mjs gives: a PAGE species' math is
+     called by the page's PERFORM layer, and a const has to exist before the function that closes over it is built.
+
+     WHEN (`SPECIES_WHEN["lit_stretch"]`, build_scene_timeline_f.py): the sentence WALKS one stretch of a drawn line -
+     "the fall", "the run-up", "crashed by nearly two-thirds" - and a light runs along exactly that stretch on the word.
+
+     THE RULING. E99 s99 (the operator, 2026-09-23): "Light can become motion when it's highlighting and moving along a
+     length, blinking ... Bravos does this well." A light that TRAVELS counts as motion; a light that simply SITS on a
+     thing stays an annotation with 0 motion events (s91). So the light here has one job and it is the travel: the head
+     runs from `from` to `to` along the series by arc length on the min-jerk clock, the stretch behind it stays lit, and
+     once it has landed it HOLDS - an annotation now, the travel was the event. E99 s71 still stands beside it: a light
+     is never the MOVE when a named thing should ARRIVE. This light arrives on nothing new; it walks data the page has
+     already drawn, which is why it is a page species and why it never runs ahead of the ink (litClipX).
+
+     THE LAW, a pure function of t:
+       the stretch - the named series' own LIVE points from `from` to `to` (a datum index each, or an x-fraction each -
+                     the SPAN's edge law, spanEdgeX, imported rather than restated), in TRAVEL order: `from` > `to` runs
+                     the other way. Re-read every frame (R26-28): a rescale moves the light with the data, and an edge the
+                     window has dropped lights nothing rather than the wrong stretch.
+       the travel  - the head sits at minJerk((t - at) / (dur * TRAVEL)) of the stretch's LENGTH; the lit path is the
+                     stretch from `from` to the head. After TRAVEL of the word the whole stretch stands lit and holds.
+       the ink     - the lit path is clipped to the x the series' own strokes have DRAWN this frame (litDrawnX): a light on
+                     a stretch the pen has not reached, or has un-drawn, lights nothing there.
+       the head    - `comet: true` puts a bright point with a halo at the head while it travels (A13); it fades over
+                     HEAD_OUT_S once the light has landed.
+       the leave   - an undraw of the page's line (or of this series) or a `chart_to` that REPLACES the page (recast,
+                     morph, remake) takes the light on the verb's own clock, and it does not come back - the bracket's
+                     rule (paintBracket's `ud`), resolved once by the builder into `sd.leave`.
+     The look is R26-228's electric, not a new one: the lit core is the series' own stroke widened by CORE_K, with a
+     drop-shadow halo (lpBloom's form) at GLOW_K; its default colour is the relight's sunflower (PS.RELIGHT_COL), so a
+     light on this page reads as the light the page already uses. The dials are ours to tune (42 s42.5), not findings:
+     the harvest's open question 3 (the travelling glow's speed per unit of arc, timed at 10 fps) is still unmeasured. */
+
+  const LIT = Object.freeze({
+    TRAVEL: 0.8,       /* the share of the word the head takes to run the stretch: it lands inside the word, never after it */
+    CORE_K: 1.6,       /* the lit core's width as a multiple of the series' own stroke - wider, or it hides under the line */
+    GLOW_K: 3.2,       /* the halo's radius, the same multiple (lpBloom's drop-shadow, in the chart's own units) */
+    GLOW_A: 0.85,      /* ... and its alpha: a light, not a tint */
+    HEAD_K: 2.2,       /* the comet head's radius, a multiple of the series' stroke */
+    HEAD_OUT_S: 0.35,  /* the head fades over this once the light has landed; the stretch stays lit */
+    MIN_LEN: 0.5,      /* a lit length under this is nothing: a round-capped zero-length path paints a dot (E50, "dots that linger") */
+  });
+
+  const lit01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* the line's y at an x, read between its own two points (the stretch's fraction edges cut the line there) */
+  const litYAt = (entries, x) => {
+    for (let k = 1; k < entries.length; k++) {
+      const [x0, y0] = entries[k - 1].p, [x1, y1] = entries[k].p;
+      if ((x - x0) * (x - x1) <= 0) return x1 === x0 ? y1 : y0 + (y1 - y0) * ((x - x0) / (x1 - x0));
+    }
+    return null;
+  };
+
+  /* THE STRETCH in travel order, or null: the series' own points between the two edges, with a fraction edge cut into
+     the line at its x. `entries` is lpPointsNow's shape, [{i, p: [x, y]}] in index order. */
+  const litStretchPts = (entries, from, to) => {
+    if (!Array.isArray(entries) || entries.length < 2 || from === to) return null;
+    let out;
+    if (spanIsIndex(from) && spanIsIndex(to)) {
+      const lo = Math.min(from, to), hi = Math.max(from, to);
+      if (!entries.some((q) => q.i === lo) || !entries.some((q) => q.i === hi)) return null;   /* R26-28: the window dropped an edge */
+      out = entries.filter((q) => q.i >= lo && q.i <= hi).map((q) => [q.p[0], q.p[1]]);
+    } else {
+      const a = spanEdgeX(entries, from), b = spanEdgeX(entries, to);
+      if (a === null || b === null) return null;
+      const x0 = Math.min(a, b), x1 = Math.max(a, b), y0 = litYAt(entries, x0), y1 = litYAt(entries, x1);
+      if (y0 === null || y1 === null) return null;
+      out = [[x0, y0], ...entries.filter((q) => q.p[0] > x0 && q.p[0] < x1).map((q) => [q.p[0], q.p[1]]), [x1, y1]];
+    }
+    if (out.length < 2) return null;
+    const reverse = spanIsIndex(from) && spanIsIndex(to) ? from > to : spanEdgeX(entries, from) > spanEdgeX(entries, to);
+    return reverse ? out.reverse() : out;
+  };
+
+  const litLength = (pts) => {
+    let L = 0;
+    for (let k = 1; k < (pts || []).length; k++) L += Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]);
+    return L;
+  };
+
+  /* the stretch's first `s` units of length: its last point is the head */
+  const litCut = (pts, s) => {
+    if (!pts || !pts.length) return [];
+    const out = [[pts[0][0], pts[0][1]]];
+    let left = Math.max(0, s);
+    for (let k = 1; k < pts.length; k++) {
+      const [x0, y0] = pts[k - 1], [x1, y1] = pts[k], seg = Math.hypot(x1 - x0, y1 - y0);
+      if (seg <= 0) continue;
+      if (left >= seg) { out.push([x1, y1]); left -= seg; continue; }
+      if (left > 0) out.push([x0 + (x1 - x0) * (left / seg), y0 + (y1 - y0) * (left / seg)]);
+      return out;
+    }
+    return out;
+  };
+
+  /* THE INK: a line is drawn left to right, so what the pen has laid down is everything at x <= xMax. The lit path keeps
+     its part inside that, cut at xMax where it crosses. `xMax` null means nothing measured it - nothing is clipped. */
+  const litClipX = (pts, xMax) => {
+    if (xMax === null || xMax === undefined || !Number.isFinite(+xMax)) return pts;
+    const out = [];
+    for (let k = 0; k < pts.length; k++) {
+      const q = pts[k];
+      if (q[0] <= xMax) { out.push(q); continue; }
+      const p = pts[k - 1];
+      if (p && p[0] < xMax) out.push([xMax, p[1] + (q[1] - p[1]) * ((xMax - p[0]) / (q[0] - p[0]))]);
+      break;
+    }
+    return out;
+  };
+
+  /* how far THIS series' own strokes are drawn this frame, in the chart's x: the widest of them (a highlighted tail and
+     its muted history are two strokes of one series). Read off the stroke's own dash, which the chart painted before the
+     perform layer runs - a read of this frame's own ink, so a seek is still the play. null: no stroke of the series. */
+  const litDrawnX = (paths, si) => {
+    let x = null;
+    for (const pp of paths || []) {
+      if (!pp || (pp.si | 0) !== (si | 0) || !pp.p || typeof pp.p.getPointAtLength !== "function" || !(pp.len > 0)) continue;
+      const hidden = pp.p.style && pp.p.style.opacity === "0";
+      const f = hidden ? 0 : lit01(1 - (+pp.p.getAttribute("stroke-dashoffset") || 0) / pp.len);
+      const q = pp.p.getPointAtLength(pp.len * f);
+      if (q && Number.isFinite(q.x)) x = x === null ? q.x : Math.max(x, q.x);
+    }
+    return x;
+  };
+
+  /* THE POSE at t: is it up, how far has the head run (0..1 of the stretch's length, eased), is the head showing */
+  const litPose = (sp, t) => {
+    const at = +sp.at, dur = Math.max(0.001, +sp.dur || 1), T = dur * LIT.TRAVEL, d = t - at;
+    const u = d >= T ? 1 : lit01(minJerk(lit01(d / T)));   /* it LANDS whole, and min-jerk's float tail (1.0000000000000002 a hair before T) never overshoots the stretch */
+    return { on: d >= 0, u, head: d < 0 ? 0 : lit01(1 - (d - T) / LIT.HEAD_OUT_S) };
+  };
+
+  /* THE LEAVE: `lv` is the builder's {at, dur} of the verb that takes the line, or null (the light stands) */
+  const litLeave = (lv, t) => (lv && Number.isFinite(+lv.at) ? minJerk(lit01((t - +lv.at) / Math.max(0.001, +lv.dur || 1))) : 0);
+
+  const litPathD = (pts) => (pts || []).map(([x, y], k) => (k ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
+
+  /* THE PAINTER (P69 T36). `sd` is the perform layer's built light (`g`, the lit `core` path, the comet `head` or null,
+     the series `si`, the declaration `sp` and its resolved `leave`), `st` the page state and `ctx` the PAGE species
+     context - `pointsNow` is lpPointsNow, handed in by name, so `node --test` calls this with recorders and no DOM. */
+  const paintLitStretch = (sd, t, st, ctx) => {
+    const pose = litPose(sd.sp, t), lv = litLeave(sd.leave, t);
+    const hide = () => { sd.g.setAttribute("opacity", 0); if (sd.head) sd.head.setAttribute("opacity", 0); };
+    if (!pose.on || lv >= 1) { hide(); return; }
+    const full = litStretchPts(ctx.pointsNow(st, sd.si), sd.sp.from, sd.sp.to);
+    if (!full) { hide(); return; }   /* R26-28: an edge the window dropped lights nothing */
+    const S = spanActiveState(st);
+    const lit = litClipX(litCut(full, pose.u * litLength(full)), litDrawnX((S && S.paths) || [], sd.si));
+    if (lit.length < 2 || litLength(lit) < LIT.MIN_LEN) { hide(); return; }
+    sd.core.setAttribute("d", litPathD(lit));
+    sd.g.setAttribute("opacity", (1 - lv).toFixed(3));
+    if (sd.head) {
+      const [hx, hy] = lit[lit.length - 1];
+      sd.head.setAttribute("cx", hx.toFixed(1)); sd.head.setAttribute("cy", hy.toFixed(1));
+      sd.head.setAttribute("opacity", pose.head.toFixed(3));
+    }
+  };
+
+  /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
+  if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.lit_stretch = paintLitStretch;
+  /* KINETICS:END */
   /* KINETICS:BEGIN thread */
   /* species/thread.mjs - THE WIRE (P50 T15, HF-16: "the three threads - the wire, the ruler, the protagonist chip -
      one continuous line as the film's spine"). SOURCE OF TRUTH, inlined into the scene-evidence player by
@@ -8553,7 +8720,7 @@ async function mount(doc) {
      (M01 / M10 / M16 count events); the frozen-frames row M18 is the idle's own check (measure_frozen_frames.py). */
   const IDLE_CLASS = Object.freeze({ page: "breath", plate: "breath", dock: "breath", pill: "breath", caption: "breath" });
   const idleOf = (cls, override) => (kin("idle") ? (override || IDLE_CLASS[cls] || "none") : "none");
-  const idleCssFor = (cls, override, t, seed, salt) => { const k = idleOf(cls, override); return k === "none" ? "" : idleCss(idleXf(k, t, lpHash(seed | 0, salt | 0, 977))); };
+  const idleCssFor = (cls, override, t, seed, salt) => { const k = idleOf(cls, override); return k === "none" ? "" : idleCss(idleXf(k, lifeT(t), lpHash(seed | 0, salt | 0, 977))); };   /* P69 T49: on the LIFE clock - a freeze beat holds every class's idle (lifeT, declared with the freeze region) */
   /* R26-228 (E99 s82's (e), "LIFE IS SEEN, NOT PASSED: a page's `idle=live` must render the tip spark (E67's live ink),
      the line's glow/pulse and the labels' breath"): THE PAGE'S OWN IDLE KIND. The compiler writes a row's `;idle=<kind>`
      as `world["idle"]` (build_scene_timeline_f.py:3824 - "the player reads it for the page or the plate") and the page
@@ -8942,6 +9109,7 @@ async function mount(doc) {
                        tiers: buildLedgerTiers, treemap: buildLedgerTreemap, panels: buildLedgerPanels };   /* P50 T9 / T6; P69 T8b */
     if (st.kind === "panels" && !PORTRAIT && pg.full_stage && !pg.chart_box && !pg.board && pg.punch !== false)
       st.panelFloor = lfBox ? lfBox.floor : LP_LONGFORM.CAPTION_TOP;   /* P69 T8b: the caption strip's top, or the long form's first ink under the chart */
+    if (Array.isArray(pg.members)) st.memberSp = pageSpecies(scene, "member");   /* P69 T45: the tiles a row lands on their words */
     (builders[st.kind] || buildLedgerBars)(st, pg);
     if (LF) lpLongformPlot(st);
     if (cardP) lpCardStrokes(st);   /* P69 T10c: a card's lines, thicker by its own factor */
@@ -9595,6 +9763,24 @@ async function mount(doc) {
      corners). [DERIVED: BRAVOS-LONGFORM-CHART-SPEC.md, "Bars, vertical hero (<=3)": 196 px on the 1920 stage (10.2 % of
      the frame), w/pitch 196 / 442 = 0.44 - bubbles 0008; ours measured 405 px] */
   const LPBAR = Object.freeze({ W_PX: 196, PITCH_RATIO: 0.44 });
+  /* P69 T8d - A RANGE BAR (`ledger_page.bar_range`, E99 s100's honesty: the figures written, the geometry true). A bar
+     whose value is `[lo, hi]` ("+55-60%" in the source) STANDS at its near end - the part every source guarantees - and a
+     lighter BAND of the bar's own ink runs from there to the far end, its edge dashed (a dashed edge is a bound, never a
+     comparator's solid rule, E53 s6); the value is written over the band's far end as the source states the range. The
+     band grows with its bar on the one clock (scaled about the same zero), so no frame shows a height the page does not
+     print. `ranges` absent: the page as it was, to the byte. */
+  const LPBAR_RANGE = Object.freeze({ FILL_A: 0.34, EDGE_A: 0.9, EDGE_PX: 2, DASH: "7 6", TUCK: 6 });   /* TUCK: units the band runs under its bar's rounded top */
+  const LPBAR_PANEL = Object.freeze({ TOP: 40, TICK_U: 24, TICK_ROOM: 1.8, FRAME_AIR: 8 });   /* P69 T8d: a bars panel's plot top (the line
+     builder's own 40), one y tick per TICK_ROOM label heights of plot (6 at most, as a page), and the long form's frame kept FRAME_AIR over its values */
+  const lpBarBand = (st, b) => {   /* laid in BEFORE its bar, so the bar paints over the tuck; grown by the bar's own transform */
+    const tuck = Math.min(LPBAR_RANGE.TUCK, b.h), y0 = b.neg ? b.base + b.h - tuck : b.base - b.hr, hh = b.hr - b.h + tuck;
+    const w = LPBAR_RANGE.EDGE_PX / (st.stagePx > 0 ? st.stagePx : 1);
+    const el = lpEl("rect", "bar-band", st.chart, { x: b.x.toFixed(1), y: y0.toFixed(1), width: b.bw.toFixed(1), height: Math.max(0, hh).toFixed(1), rx: 6,
+      "stroke-width": w.toFixed(3), "stroke-dasharray": LPBAR_RANGE.DASH, "stroke-linejoin": "round" });
+    el.style.fill = b.col; el.style.fillOpacity = String(LPBAR_RANGE.FILL_A); el.style.stroke = b.col; el.style.strokeOpacity = String(LPBAR_RANGE.EDGE_A);
+    el.style.transformOrigin = "0 " + b.base.toFixed(1) + "px"; el.style.transform = "scaleY(0)";
+    return el;
+  };
   /* ONE viewBox unit of a page's chart in STAGE px, at the page's rest pose: the chart's CSS box (a share of the page,
      whose box IS the stage's - `.lp` is 90.91 % of a 110 % world - or stage px outright on a portrait page) fitted into
      its viewBox the browser's way (uniform, `meet`), times the page's resting scale (the punch, `rest`). Pure in the
@@ -9771,6 +9957,166 @@ async function mount(doc) {
     });
     L.g.style.display = any ? "" : "none";
   };
+  /* P69 T45 - THE MEMBERSHIP STACK (E99 s101: "A bar may be filled with EQUAL tiles naming who is in it (logos, names)
+     when the bar is ONE value, the tiles carry no value of their own (equal height, never sized), and the bar's total is
+     written on the page"; s109 (2)). A bar whose datum carries `members` (ledger_page) stands at its ONE value exactly as
+     it did - its rect, its total, its pill - and is then DIVIDED: its members' tiles, equal, bottom-up from the zero line
+     (top-down for a bar that hangs), inside it, each a rounded board-ink tile writing the member's name, or holding the
+     operator's catalogued cutout for that member (`prop:<asset_id>` in the asset map - no cutout, the name; never a
+     mark this engine invents). The page writes what a tile is beside the first membership bar ("each tile = one
+     company"), so no one reads a tile as a value. THE LANDING: by default one tile per member once the bar stands, on
+     the count array's step (COUNT.STEP, one per word) and the badge spring (springPop from COUNT.POP_FROM) - the page's
+     own build lengthened by the cascade, as the breakthrough lengthens it; a `member` page species lands its tiles on
+     its WORD instead, and `light` keeps the tiles it names in their ink (a sunflower edge) while the bar's others dim to
+     E67's 0.45, on the species' own ramp. Every frame is a pure function of t. `members` absent: nothing here runs. */
+  const LPMEMBER = Object.freeze({ INSET_PX: 8, GAP_PX: 6, PAD_PX: 8, RX_PX: 8, KEY_GAP_PX: 18, LIT_PX: 3, LOGO_MIN_PX: 48, KEY_MIN: 0.7,
+    LINE_H: 1.15, FILL_A: 0.86, LEAD_S: 0.25, STEP_S: 0.34, LAND_S: 0.45, FADE_S: 0.12, POP_FROM: 0.86, DIM: 0.45 });
+  const LPMEMBER_INK = Object.freeze({ FILL: "#25313C", NAME: "#F4E6C7", LIT: "#F5B72E", KEY: "#c9ced4" });   /* the board's charcoal, the cream, the sunflower, the page's label ink */
+  const lpMemberTilesOf = (tile, n) => (tile === "all" ? [...Array(n).keys()] : (Array.isArray(tile) ? tile : [tile]).map((v) => v | 0));
+  /* the member's name in its tile: the largest size up to `pref` that fits the tile's room on one line - or on two,
+     broken at the space nearest its middle, when two lines write it larger (the compiler WARNs a name that falls under
+     the phone floor either way; ledger_page.member_fit_warnings) */
+  const lpMemberName = (parent, name, cx, cy, wAv, hAv, pref) => {
+    const M = LPMEMBER, mk = (lines, fs) => {
+      const t = lpEl("text", "lp-tile-name", parent, { x: cx.toFixed(1), y: cy.toFixed(1), "text-anchor": "middle" });
+      t.style.fontSize = fs.toFixed(2) + "px"; t.style.fontWeight = "700"; t.style.fill = LPMEMBER_INK.NAME;
+      if (lines.length === 1) { t.textContent = lines[0]; t.setAttribute("dominant-baseline", "central"); return t; }
+      lines.forEach((ln, k) => { const s = lpEl("tspan", "", t, { x: cx.toFixed(1), y: (cy + (k - 0.5) * M.LINE_H * fs).toFixed(1), "dominant-baseline": "central" });
+        s.textContent = ln + (k ? "" : " "); });   /* the break's space ends the first line, so the name reads whole and no line is indented */
+      return t;
+    };
+    const t1 = mk([name], pref), w1 = lpInkW(t1);
+    const fs1 = Math.min(pref, w1 > 0 ? pref * wAv / w1 : pref, hAv / M.LINE_H);
+    const words = name.split(/\s+/).filter(Boolean);
+    if (words.length > 1 && fs1 < pref) {
+      let best = 1; for (let k = 2; k < words.length; k++) if (Math.abs(words.slice(0, k).join(" ").length - words.slice(k).join(" ").length) < Math.abs(words.slice(0, best).join(" ").length - words.slice(best).join(" ").length)) best = k;
+      const lines = [words.slice(0, best).join(" "), words.slice(best).join(" ")];
+      const probe = lines.map((ln) => mk([ln], pref)), w2 = Math.max(...probe.map(lpInkW));
+      probe.forEach((p) => p.remove());
+      const fs2 = Math.min(pref, w2 > 0 ? pref * wAv / w2 : pref, hAv / (2 * M.LINE_H));
+      if (fs2 > fs1) { t1.remove(); return mk(lines, fs2); }
+    }
+    t1.style.fontSize = fs1.toFixed(2) + "px";
+    return t1;
+  };
+  /* the key: a place that holds it whole and touches no other ink - beside the first membership bar (right, then left,
+     at its size or down to KEY_MIN of it), else OVER a bar in the plot's own air (the membership bar first, then the
+     others, lowest ink first), else under the bar's own name. Each candidate is laid and measured (getBBox) against the
+     bars, their totals and names, the pill and the chart's own box - so a page with no room at the side (two bars on a
+     portrait page) still writes it clear of everything (the 9:16 frame read, 2026-09-24: the key under a bar's name ran
+     into the source line) */
+  const lpMemberKey = (st, text, b, base, far, g) => {
+    const M = LPMEMBER, k = st.stagePx > 0 ? st.stagePx : 1, fs = g.LF ? g.LF.tick : g.P ? 40 : 24, gap = M.KEY_GAP_PX / k;
+    const G = st.geom || { W: 1000, H: 560 };
+    const cut = text.lastIndexOf(" one "), lines = cut > 0 ? [text.slice(0, cut), text.slice(cut + 1)] : [text];
+    const el = lpEl("text", "lp-member-key", st.chart, { opacity: 0 });
+    el.style.fill = LPMEMBER_INK.KEY;
+    const spans = lines.map((ln, j) => { const s = lpEl("tspan", "", el, {});
+      s.textContent = ln + (j < lines.length - 1 ? " " : ""); return s; });   /* the break's space ends the line above it: no line is indented */
+    const bb = (e) => { try { const r = e.getBBox(); return r.width > 0 ? { x: r.x, y: r.y, w: r.width, h: r.height } : null; } catch (_) { return null; } };
+    const hid = (e) => !e || e.style.display === "none";
+    const pill = st.callout ? st.callout.querySelector("rect.cpill") : null;
+    const obst = [];
+    for (const o of st.bars) {
+      obst.push({ x: o.bx, y: o.neg ? base : o.end, w: o.bw, h: Math.abs(o.end - base) });
+      for (const e of [o.val, o.lab]) { const r = hid(e) ? null : bb(e); if (r) obst.push(r); }
+    }
+    if (pill) obst.push({ x: +pill.getAttribute("x"), y: +pill.getAttribute("y"), w: +pill.getAttribute("width"), h: +pill.getAttribute("height") });
+    const lay = (x, anchor, yLast, f) => {   /* lines stacked so the LAST one's baseline is yLast */
+      el.style.fontSize = f.toFixed(2) + "px"; el.setAttribute("text-anchor", anchor);
+      spans.forEach((s, j) => { s.setAttribute("x", x.toFixed(1)); s.setAttribute("y", (yLast - (lines.length - 1 - j) * 1.2 * f).toFixed(1)); });
+      const r = bb(el); if (!r) return true;   /* not laid out (no layout box): take the first candidate, as the pill's own fallback does */
+      const pad = gap / 3;
+      if (r.x < g.x0 - 20 || r.x + r.w > G.W || r.y < 0 || r.y + r.h > G.H) return false;
+      return !obst.some((o) => r.x - pad < o.x + o.w && o.x < r.x + r.w + pad && r.y - pad < o.y + o.h && o.y < r.y + r.h + pad);
+    };
+    const mid = (base + far) / 2 + ((lines.length - 1) / 2) * 1.2 * fs + 0.35 * fs;   /* centred on the tile column */
+    const sizes = [1, 0.85, M.KEY_MIN].map((q) => fs * q);
+    const cands = [];
+    for (const f of sizes) cands.push([b.bx + b.bw + gap, "start", mid, f], [b.bx - gap, "end", mid, f]);
+    const tops = st.bars.map((o) => { let t = o.neg ? base : o.end; for (const e of [o.val]) { const r = hid(e) ? null : bb(e); if (r) t = Math.min(t, r.y); }
+      if (pill && o === st.bars[st.emph]) t = Math.min(t, +pill.getAttribute("y")); return { o, t }; })
+      .sort((p, q) => (p.o === b ? -1 : q.o === b ? 1 : q.t - p.t));
+    for (const f of sizes) for (const { o, t } of tops) cands.push([o.x, "middle", t - gap - 0.3 * f, f]);
+    for (const [x, anchor, y, f] of cands) if (lay(x, anchor, y, f)) return el;
+    lay(b.x, "middle", +b.lab.getAttribute("y") + 1.3 * fs + (lines.length - 1) * 1.2 * fs, fs);   /* nowhere clear: under its name, as the last word */
+    return el;
+  };
+  /* built once with the bars, after every label has found its place (R26-53: the total's box is final) */
+  const lpMemberBuild = (st, pg, g) => {
+    const M = LPMEMBER, k = st.stagePx > 0 ? st.stagePx : 1, u = (px) => px / k;
+    const held = (pg.members || []).map((ms, i) => (Array.isArray(ms) && ms.length ? i : -1)).filter((i) => i >= 0);
+    if (!held.length) return;
+    const sps = st.memberSp || [], lay = lpEl("g", "lp-members", st.chart);
+    st.memberTiles = []; st.memberKeys = [];
+    let most = 0;
+    for (const i of held) {
+      const ms = pg.members[i], b = st.bars[i]; if (!b) continue;
+      const n = ms.length, gap = u(M.GAP_PX), pad = u(M.PAD_PX);
+      let far = b.end;   /* the bar as drawn: zero to its end - and a total written INSIDE it (R26-191) keeps its room */
+      const vb = b.val && b.val.style.display !== "none" ? b.val : null;
+      if (vb) { const vy = +vb.getAttribute("y"), fs = parseFloat(getComputedStyle(vb).fontSize) || 26;
+        if (!b.neg && vy > far && vy < g.base) far = vy + 0.3 * fs;
+        if (b.neg && vy < far && vy > g.base) far = vy - 0.9 * fs; }
+      const H = Math.abs(far - g.base), th = Math.max(u(4), (H - (n + 1) * gap) / n);
+      const x = b.bx + u(M.INSET_PX), w = Math.max(u(4), b.bw - 2 * u(M.INSET_PX)), cx = x + w / 2;
+      const pref = g.LF ? g.LF.value : g.P ? 44 : 26;
+      const land = new Array(n).fill(null);   /* the species that lands each tile on its word (null: the default cascade) */
+      for (const sp of sps) if ((Number.isInteger(sp.bar) ? sp.bar : held[0]) === i)
+        for (const j of lpMemberTilesOf(sp.tile, n)) if (j < n && !land[j]) land[j] = { at: +sp.at, dur: +sp.dur || M.LAND_S };
+      let dj = 0;
+      ms.forEach((m, j) => {
+        const y = b.neg ? g.base + gap + j * (th + gap) : g.base - gap - j * (th + gap) - th, cy = y + th / 2;
+        const gg = lpEl("g", "lp-tile", lay, { opacity: 0 });
+        const box = lpEl("rect", "lp-tile-box", gg, { x: x.toFixed(2), y: y.toFixed(2), width: w.toFixed(2), height: th.toFixed(2),
+          rx: Math.min(u(M.RX_PX), th / 2, w / 2).toFixed(2) });
+        box.style.fill = LPMEMBER_INK.FILL; box.style.fillOpacity = String(M.FILL_A);
+        const src = m.logo && A ? A["prop:" + m.logo] : null;   /* the catalogue's own cutout, or nothing - never a stand-in */
+        let img = null, text = null;
+        const ls = Math.min(w, th) - 2 * pad;   /* the cutout's side; under LOGO_MIN_PX it would read as a smudge, so the NAME is written */
+        if (src && ls * k >= M.LOGO_MIN_PX) { const s = ls;
+          img = lpEl("image", "lp-tile-logo", gg, { x: (cx - s / 2).toFixed(2), y: (cy - s / 2).toFixed(2), width: s.toFixed(2), height: s.toFixed(2),
+            href: src, preserveAspectRatio: "xMidYMid meet" }); }
+        else text = lpMemberName(gg, String(m.short || m.name || ""), cx, cy, w - 2 * pad, th - 2 * pad, pref);
+        st.memberTiles.push({ bar: i, j, name: m.name, logo: img ? m.logo : null, g: gg, box, img, text, cx, cy, land: land[j], dj: land[j] ? -1 : dj++ });
+      });
+      most = Math.max(most, dj);
+      if (!st.memberKeys.length && pg.member_key) st.memberKeys.push({ bar: i, el: lpMemberKey(st, String(pg.member_key), b, g.base, far, g) });
+    }
+    if (most > 0) {   /* the cascade is the page's own build, lengthened past the bars' (the breakthrough's pattern: cb runs on the base) */
+      st.mbBase = (Number.isFinite(+pg.build_s) && +pg.build_s > 0) ? +pg.build_s : LP.BUILD;
+      st.buildDur = st.mbBase + M.LEAD_S + (most - 1) * M.STEP_S + M.LAND_S;
+    }
+  };
+  /* each frame, after the bars law: a tile lands once its bar stands (its value written) - on its species' word, or on
+     the cascade `ts` seconds after the ordinary build - and a `light` keeps its tiles and dims the bar's others */
+  const lpMemberPaint = (cs, cb, ts, scene, t) => {
+    const M = LPMEMBER, T = cs.memberTiles; if (!T || !T.length) return;
+    const held = [...new Set(T.map((r) => r.bar))];
+    const lights = new Map();   /* bar -> [the previous light, the standing one] */
+    for (const sp of pageSpecies(scene, "member")) {
+      if (typeof sp.light !== "boolean" || t < sp.at) continue;
+      const bi = Number.isInteger(sp.bar) ? sp.bar : held[0], L = lights.get(bi) || [null, null];
+      lights.set(bi, [L[1], sp]);
+    }
+    const names = (sp, j) => sp.tile === "all" || (Array.isArray(sp.tile) ? sp.tile : [sp.tile]).some((v) => (v | 0) === j);
+    const opOf = (sp, r) => (!sp || !sp.light ? 1 : names(sp, r.j) ? 1 : M.DIM);
+    const up = new Map();
+    for (const r of T) {
+      const kb = expoOut(clamp01((cb - r.bar * 0.1) / 0.55)), ready = clamp01((kb - 0.9) / 0.1);
+      const ul = r.land ? clamp01((t - r.land.at) / r.land.dur) : ts == null ? 0 : clamp01((ts - M.LEAD_S - r.dj * M.STEP_S) / M.LAND_S);
+      const s = LPMEMBER.POP_FROM + (1 - LPMEMBER.POP_FROM) * springPop(ul), a = clamp01((ul * M.LAND_S) / M.FADE_S) * ready;
+      const [prev, cur] = lights.get(r.bar) || [null, null], e = cur ? expoOut(clamp01((t - cur.at) / (+cur.dur || M.LAND_S))) : 1;
+      const dim = opOf(prev, r) + (opOf(cur, r) - opOf(prev, r)) * e, lit = !!(cur && cur.light && opOf(cur, r) === 1);
+      r.g.setAttribute("opacity", (a * dim).toFixed(3));
+      r.g.setAttribute("transform", "translate(" + r.cx.toFixed(2) + " " + r.cy.toFixed(2) + ") scale(" + s.toFixed(4) + ") translate(" + (-r.cx).toFixed(2) + " " + (-r.cy).toFixed(2) + ")");
+      r.box.style.stroke = lit ? LPMEMBER_INK.LIT : "";
+      r.box.style.strokeWidth = lit ? (M.LIT_PX / (cs.stagePx > 0 ? cs.stagePx : 1)).toFixed(3) : "";
+      r.box.style.strokeOpacity = lit ? e.toFixed(3) : "";
+      up.set(r.bar, Math.max(up.get(r.bar) || 0, a));
+    }
+    for (const key of cs.memberKeys || []) key.el.setAttribute("opacity", (up.get(key.bar) || 0).toFixed(3));
+  };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
@@ -9778,7 +10124,9 @@ async function mount(doc) {
     const XF = formOf(pg, "extruded_bar");   /* P58 T5: opt-in (`;form=extruded_bar`); null is today's page, to the byte */
     const SOFT = st.barStyle === "soft" ? LPBAR_SOFT.SHOULDER_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0;   /* P69 T10b: the shoulder, in this chart's units (0: the page as it was) */
     const n = Math.max(1, st.vals.length);
-    const lo0 = Math.min(0, ...st.vals), hi0 = Math.max(0, ...st.vals);
+    const RNG = Array.isArray(pg.ranges) ? pg.ranges : null;   /* P69 T8d: [lo, hi] per bar (null: a single value) */
+    const ends = RNG ? RNG.flatMap((r) => (Array.isArray(r) ? r.map(Number) : [])) : [];
+    const lo0 = Math.min(0, ...st.vals, ...ends), hi0 = Math.max(0, ...st.vals, ...ends);
     /* THE BREAKTHROUGH (2026-09-10): a bars page may STATE its scale (`axes.domain`) that one value cannot fit. That bar builds
        to the COMPARATOR's level (the tallest honest bar) with the others, holds, then runs by one of two mechanics (LPX.BT_*):
          burst (Bravos 8:02): it shoots to its true height WHILE the scale rewrites to the nice ceiling above it - the honest
@@ -9807,7 +10155,8 @@ async function mount(doc) {
     const XLAB = P ? 52 : LF ? LF.xlab_dy : 34;   /* the category names' baseline under the plot floor */
     const requestedGutter = Number((pg.axes || {}).left_gutter);
     const leftGutter = Number.isFinite(requestedGutter) ? Math.max(defaultGutter, requestedGutter) : defaultGutter;
-    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : 90, x0 = leftGutter, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
+    const PN = st.panel != null && !P;   /* P69 T8d: a landscape bars PANEL - its plot starts where a line panel's does, its ticks thinned by room */
+    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90, x0 = leftGutter, x1 = P ? G.W - 30 : st.panel != null ? G.W - 20 : 980, gap = 0.34, unit = pg.unit || "";   /* P69 T8d: a panel's viewBox is its box's width */
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
@@ -9823,7 +10172,8 @@ async function mount(doc) {
     /* six divisions, not the default five: lpNiceStep's 1-2-5 ladder rounds 21.8 up to 50, which left the tariff
        short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
        positive bar. Asking for six lands step 20 and five labelled ticks. */
-    const ticks0 = lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26, 6);
+    const ticks0 = lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26,
+      PN ? Math.max(2, Math.min(6, Math.floor((bottom - top) / ((LF ? LF.tick : LPBAR_PANEL.TICK_U) * LPBAR_PANEL.TICK_ROOM)))) : 6);
     if (LF) st.lfPanel = { x: x0 - 20, y: top, w: x1 - x0 + 40, h: bottom - top };   /* P69 T8: the panel spans the tick rules' own extent, the scale's top to its floor */
     /* the comparator: the tallest bar the stated scale holds - the breaking bar first stands at ITS level, a bar like the others */
     const honest = st.vals.filter((v) => !(brk && v > hi)), comp = honest.length ? Math.max(...honest) : hi;
@@ -9842,6 +10192,9 @@ async function mount(doc) {
       /* P58 T5 (`;form=extruded_bar`): the prism is built HERE, before the face, so all three of its polygons
          paint behind the bar's own rect. Not one label, capsule, tick or axis moves for it. */
       const ex = XF ? extrudeFaces(st, { x, bw, base, h, neg, P, cls: (neg ? " neg" : " pos") + (i === st.emph ? " emph" : "") }) : null;
+      const rg = RNG && Array.isArray(RNG[i]) ? RNG[i].map(Number) : null;   /* P69 T8d: the band from the bar's end to the range's far end */
+      const far = rg ? (neg ? Math.min(rg[0], rg[1]) : Math.max(rg[0], rg[1])) : null, hr = rg ? Math.max(h, Math.abs(my(far) - base)) : h;
+      const band = rg ? lpBarBand(st, { x, bw, base, h, hr, neg, col: LP_PAL[(pg.colors || [])[i]] || (neg ? "var(--lp-neg)" : "var(--lp-pos)") }) : null;
       const foot = SOFT ? lpEl("rect", "lp-bar-foot", st.chart, { x: x.toFixed(1), y: 0, width: bw.toFixed(1), height: 0 }) : null;   /* P69 T10b: squares the zero end (lpBarSoftPaint) */
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
         { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: SOFT ? SOFT.toFixed(3) : 6 });   /* grows from the zero baseline, up or down */
@@ -9855,11 +10208,12 @@ async function mount(doc) {
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + XLAB, "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
-      const vy = neg ? base + h + (P ? 62 : 26) : base - h - (P ? 22 : 14);
+      const vy = neg ? base + hr + (P ? 62 : 26) : base - hr - (P ? 22 : 14);   /* a range's value stands over its band's far end (hr: h without one) */
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
       val.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
-      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h, over, v, bx: x, bw, track, stamp, ex };
+      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + hr : base - hr, over, v, bx: x, bw, track, stamp, ex };
       if (foot) rec.foot = foot;
+      if (band) { rec.band = band; rec.range = rg; }
       if (over && btMode === "stack") {   /* the top gridline SNAPS as the bar passes: its two broken ends kick up beside the bar */
         const mk = (ax, bx2) => lpEl("line", "grid snap", st.chart, { x1: ax.toFixed(1), y1: top.toFixed(1), x2: bx2.toFixed(1), y2: (top - 16).toFixed(1), stroke: "var(--lp-chalk)", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 });
         rec.snap = [mk(x - 4, x - 24), mk(x + bw + 4, x + bw + 24)];
@@ -10008,6 +10362,7 @@ async function mount(doc) {
     }
     if (capped) for (const b of st.bars) lpWrapBarLabel(b.lab, b.bw);   /* P69 T6c: a name wider than its capped bar takes two lines */
     st.tickFit = lpFitTicks(st);   /* R26-191b law 3, last: the callout's axis mount may have moved a month */
+    if (Array.isArray(pg.members)) lpMemberBuild(st, pg, { base, P, LF, x0, x1 });   /* P69 T45: the membership tiles, in their bars */
   };
   /* THE FIELD'S INK (E67, operator 2026-09-12): "we need to use bolder primary, high-contrast line colors for our default
      the chart instead of gray. that way our charts can become our thumbnails, i think this is part of why bravos uses
@@ -10114,6 +10469,94 @@ async function mount(doc) {
     const order = draws.length ? draws : LB.slots;   /* every series held at 0 = nothing to sequence; each is 0 anyway */
     return { n: Math.max(1, LB.slots.length), of: (si) => { const k = order.indexOf(si | 0); return k < 0 ? null : k; } };
   };
+  /* P69 T66 (E99 s111) - THE BROKEN CROSS-ERA AXIS. The operator, on Bravos's "AI and Railway Spending As a % of GDP"
+     (the 1860s and 1985-on joined by a `//`): "yes". ONE x axis across two eras when the claim is that their LEVELS are
+     comparable: the years between them are CUT, and the cut is drawn - so the gap is never read as continuous time (E53
+     s3 met by the break, not broken). `axes.break: {after, before, eras}` (ledger_page._validate_break): the first era's
+     last x, the second era's first x, and the two eras' names. Both stretches are scaled on ONE years-per-pixel, the cut
+     is a fixed width with a `//` across the axis in the axis's own ink, the gap is WRITTEN at the break in the eras' own
+     years ("2001 // 2021"), each era is named over its own stretch, and nothing is drawn through the gap - no gridline,
+     no rule, no axis, no trace: a series that spans both eras keeps its one path (the pen law runs ONE clock over it,
+     and an `M` would restart the dash in every subpath - Chromium, measured) and is held out of the gap by a clip, so the
+     line lifts at the first era's last datum and resumes at the second's first, and no point is drawn between. A page
+     that names no break never reaches any of this: its `mx` is the expression it always was. Not E60's retired zigzag:
+     that cut a bar's SCALE, which is never abbreviated; an x axis across two eras IS, and the mark says so. */
+  const LP_BREAK = Object.freeze({
+    GAP: 44,          /* the cut's width in the chart's units: the `//` and its air - never a stretch of time */
+    GAP_P: 1.5,       /* ... on the portrait page, whose type is 40 units against 24 */
+    SLASH_H: 26,      /* one stroke of the `//`, its height across the axis line (x GAP_P in portrait) */
+    SLASH_W: 3,       /* ... and its weight: the axis's own ink, heavier than the axis's 2 - the cut is the claim's honesty */
+    SLASH_DX: 7,      /* its lean: the stroke runs this far right as it rises */
+    SLASH_SEP: 11,    /* the two strokes, apart */
+    CH_EM: 0.62,      /* one character's advance in ems, ESTIMATED (Inter's figures run ~0.6): the build never measures a font */
+    ERA_EM: 0.74,     /* ... and an era's name, bold capitals (measured on the golden: "DOT-COM ERA" 180 units at 24) */
+    ERA_MIN: 0.7,     /* the smallest share of the tick size an era's name shrinks to, to stand inside its own stretch */
+    TICK_AIR: 8,      /* the air an x tick keeps from the written gap, in units - a tick that would touch it is not written */
+    ERA_TOP: 1.25,    /* an era's name: its baseline this many of its own sizes under the plot's top edge ... */
+    ERA_BOT: 0.45,    /* ... or, where the data or a rule stands there, this many over the axis */
+    ERA_PAD: 6,       /* the room an era's name keeps from a datum or a rule, in units */
+  });
+  let lpBreakN = 0;   /* the clip ids, in build order - deterministic, never a random */
+  const lpBreakYear = (v) => { const n = +v; return Number.isFinite(n) && n >= 1000 && n < 3000 ? String(Math.floor(n)) : String(v); };   /* ledger_page._era_year */
+  const lpBreakScale = (ax, x0, x1, L, xr, k) => {
+    const b = ax && ax.break;
+    if (!b || typeof b !== "object") return null;
+    const after = +b.after, before = +b.before;
+    if (!(Number.isFinite(after) && Number.isFinite(before) && x0 <= after && after < before && before <= x1)) return null;
+    const gap = LP_BREAK.GAP * k, s1 = after - x0, s2 = x1 - before, ppy = (xr - L - gap) / ((s1 + s2) || 1);
+    const xa = L + s1 * ppy, xb = xa + gap, mid = (after + before) / 2;
+    /* a tick a hair outside its era (2021 on data from 2021.0082) is placed by its OWN era's scale: the split is the gap's middle */
+    return { after, before, xa, xb, cx: (xa + xb) / 2, k, ppy, eras: Array.isArray(b.eras) ? b.eras.map(String) : [],
+             label: lpBreakYear(b.after) + " // " + lpBreakYear(b.before), clip: null,
+             mx: (x) => (+x <= mid ? L + (+x - x0) * ppy : xb + (+x - before) * ppy) };
+  };
+  const lpBreakTextW = (text, fs) => String(text).length * LP_BREAK.CH_EM * fs;
+  /* an x tick whose label would touch the written gap is not written: the gap's label carries those years */
+  const lpBreakHides = (BK, x, lab, fs) => !!BK && Math.abs(x - BK.cx) < (lpBreakTextW(BK.label, fs) + lpBreakTextW(lab, fs)) / 2 + LP_BREAK.TICK_AIR;
+  const lpBreakClip = (st, BK) => {
+    if (BK.clip) return BK.clip;
+    const defs = lpEl("defs", "", st.chart), id = "brkclip-" + (st.seed | 0) + "-" + (++lpBreakN);
+    const cp = lpEl("clipPath", "", defs, { id, clipPathUnits: "userSpaceOnUse" });
+    lpEl("rect", "", cp, { x: -1e4, y: -1e4, width: (BK.xa + 1e4).toFixed(2), height: 2e4 });   /* the first era's side, to its last datum */
+    lpEl("rect", "", cp, { x: BK.xb.toFixed(2), y: -1e4, width: 2e4, height: 2e4 });            /* the second's, from its first */
+    return (BK.clip = "url(#" + id + ")");
+  };
+  /* a series that runs across the cut is drawn inside a clipped group; one that lies in one era is drawn as it always is */
+  const lpBreakHost = (st, BK, pts) => {
+    if (!BK || !pts.some(([x]) => +x <= BK.after) || !pts.some(([x]) => +x >= BK.before)) return st.chart;
+    return lpEl("g", "lp-break-host", st.chart, { "clip-path": lpBreakClip(st, BK) });
+  };
+  /* an era's name stands over its own stretch - under the plot's top edge, or over the axis where a datum or a rule
+     already stands at the top (the one-shot rule: a name never lands on the data it names) */
+  const lpBreakEraY = (st, x0e, x1e, fs, T, B) => {
+    const pad = LP_BREAK.ERA_PAD, rules = (st.hlines || []).map((h) => h.y);
+    const clear = (y) => { const top = y - fs - pad, bot = y + 0.3 * fs + pad;
+      if (rules.some((ry) => ry >= top && ry <= bot)) return false;
+      return !(st.paths || []).some((pp) => pp.pts.some(([px, py]) => px >= x0e - pad && px <= x1e + pad && py >= top && py <= bot)); };
+    const top = T + LP_BREAK.ERA_TOP * fs, low = B - LP_BREAK.ERA_BOT * fs;
+    return clear(top) ? top : clear(low) ? low : top;
+  };
+  const lpDrawBreak = (st, BK, G) => {
+    const { T, B, W, R, L, P, fs, tickY, style } = G, url = lpBreakClip(st, BK);
+    for (const el of st.chart.querySelectorAll("line.ax, line.grid, line.hrule")) el.setAttribute("clip-path", url);   /* the gap carries no mark */
+    const h = LP_BREAK.SLASH_H * BK.k, dx = LP_BREAK.SLASH_DX * BK.k, sep = LP_BREAK.SLASH_SEP * BK.k;
+    const slashes = [-0.5, 0.5].map((o) => { const cx = BK.cx + o * sep;
+      const e = lpEl("path", "ax lp-break", st.chart, { d: "M" + (cx - dx / 2).toFixed(1) + " " + (B + h / 2).toFixed(1) + " L" + (cx + dx / 2).toFixed(1) + " " + (B - h / 2).toFixed(1), fill: "none", "stroke-linecap": "round", style: "stroke-width:" + (LP_BREAK.SLASH_W * BK.k) });
+      lpMark(st, "break:" + (o < 0 ? 0 : 1), "break", e, { x: cx, y: B, h });
+      return e; });
+    const gapEl = lpText(st.chart, "lab", BK.cx, tickY, "middle", BK.label, style ? { style } : undefined);
+    lpMark(st, "xtick:break", "xtick", gapEl, { v: (BK.after + BK.before) / 2, x: BK.cx, y: tickY });
+    const spans = [[L, BK.xa], [BK.xb, W - R]];
+    const eraEls = BK.eras.slice(0, 2).map((name, i) => { const [a, b] = spans[i], cx = (a + b) / 2;
+      const w0 = String(name).length * LP_BREAK.ERA_EM * fs, room = b - a - 2 * LP_BREAK.ERA_PAD;
+      const efs = w0 > room ? Math.max(LP_BREAK.ERA_MIN * fs, fs * room / w0) : fs, w = w0 * efs / fs;   /* the name stands inside its own stretch */
+      const y = lpBreakEraY(st, cx - w / 2, cx + w / 2, efs, T, B);
+      const sz = efs !== fs ? ";font-size:" + efs.toFixed(1) + "px" : style ? ";" + style : "";
+      const e = lpText(st.chart, "lab", cx, y, "middle", name, { style: "font-weight:700;letter-spacing:.04em" + sz });
+      lpMark(st, "era:" + i, "axislabel", e, { x: cx, y });
+      return e; });
+    st.brk = { after: BK.after, before: BK.before, xa: BK.xa, xb: BK.xb, cx: BK.cx, label: BK.label, slashes, gapEl, eraEls };
+  };
   const buildLedgerLine = (st, pg) => {
     const ax = pg.axes || {}, series = pg.series || [];
     const PAL = pg.surface_from ? { ...LP_INK, cobalt: "#1769C2", teal: "#087D68", crimson: "#B53A28" } : LP_INK;
@@ -10141,7 +10584,8 @@ async function mount(doc) {
       if (ax.domain[1] !== null && ax.domain[1] !== undefined && Number.isFinite(+ax.domain[1])) y1 = Y(+ax.domain[1]);
     }
     if (Array.isArray(ax.xdomain) && ax.xdomain.length === 2 && Number.isFinite(+ax.xdomain[0]) && Number.isFinite(+ax.xdomain[1])) { x0 = +ax.xdomain[0]; x1 = +ax.xdomain[1]; }
-    const mx = (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
+    const BK = lpBreakScale(ax, x0, x1, L, W - R, P ? LP_BREAK.GAP_P : 1);   /* P69 T66: null unless the page names a break (E99 s111) */
+    const mx = BK ? BK.mx : (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
     st.scale = { kind: "line", mx, my, yv: Y, x0, x1, y0, y1 };   /* P48 T2: the scale a rescale interpolates - both states keep theirs */
     /* P48 (operator, 2026-09-10, on the rescale's over-draw: "how do we prevent the over-draw during the transform? some type of
        pin-and-pivot"): the PLOT BOX is the pin. While a transition re-projects the standing line, the points that leave the target
@@ -10188,7 +10632,9 @@ async function mount(doc) {
     } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10,
                     LFT ? Math.max(1, Math.min(5, Math.floor((B - T) / (2 * LP_LONGFORM.TICK_SPACE * LFT.tick)))) : undefined, PJ ? pj : null);   /* P69 T10: ... and a linear axis steps as coarse as a short plot needs (5 divisions whenever it has the room) */
     lpYLabel(st, pg, L, T - (LFT ? LFT.ylab_gap : 12));
-    (ax.xticks || []).forEach(([x, lab], i) => { const pe = PJ ? pj(mx(x), B) : null;   /* P58 T5: the x label stands at its own place ON the baseline, and upright */
+    const brkFs = PHONE ? lpTypeU(st, "tick") : P ? 40 : 24;   /* P69 T66: the x ticks' own size, in units (the template's .lab, or the phone type) */
+    (ax.xticks || []).forEach(([x, lab], i) => { if (BK && lpBreakHides(BK, mx(x), lab, brkFs)) return;   /* P69 T66: the written gap carries the years at the cut */
+      const pe = PJ ? pj(mx(x), B) : null;   /* P58 T5: the x label stands at its own place ON the baseline, and upright */
       const tx = lpEl("text", "lab", st.chart, { x: (pe ? pe[0] : mx(x)).toFixed(1), y: pe ? pe[1] + (P ? 52 : LFT ? LFT.xtick_dy : 32) : B + (P ? 52 : LFT ? LFT.xtick_dy : 32), "text-anchor": "middle",
         ...(lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : {}) }); tx.textContent = lab;
       lpMark(st, "xtick:" + i, "xtick", tx, { v: x, x: pe ? pe[0] : mx(x), y: pe ? pe[1] + (P ? 52 : LFT ? LFT.xtick_dy : 32) : B + (P ? 52 : LFT ? LFT.xtick_dy : 32) }); });
@@ -10223,11 +10669,12 @@ async function mount(doc) {
       /* E67: the HISTORY of a declared series is that same hue at .45, not grey - on the holdings page 26 years of line
          read as nothing. A series drawn in its SIGN colour keeps a neutral history (the 09-05 rule: "nor the history red"). */
       const col = s.muted ? (declared ? lpInkA(declared, 0.45) : LP_MUTED) : live;
-      const p = lpEl("path", "ser" + (s.muted ? " muted" : ""), st.chart, { d, stroke: col });
+      const sHost = BK ? lpBreakHost(st, BK, s.pts) : st.chart;   /* P69 T66: a line across the cut is held out of the gap */
+      const p = lpEl("path", "ser" + (s.muted ? " muted" : ""), sHost, { d, stroke: col });
       if (!s.muted) lpBloom(st, p, col);   /* the live line blooms; the history never does */
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
-      const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
+      const tip = lpEl("circle", "", sHost, { r: 6, fill: col, opacity: 0 });
       const last = s.pts[s.pts.length - 1];
       const prev = s.pts.length > 1 ? s.pts[s.pts.length - 2] : last;   /* portrait: the name ends left of the last segment so a steep drop never runs through it */
       /* a line ending high takes its name in the empty lower right - but only when it is the ONLY line. With two, both would
@@ -10304,6 +10751,8 @@ async function mount(doc) {
        highlighted page splits one series into a muted history and a live tail (two paths, one si, one slot, so the
        pair draws together as the one line it is) - defensive rather than reachable through the compiler, which needs
        exactly ONE series for the highlight split and at least TWO for this mode. */
+    if (BK) lpDrawBreak(st, BK, { T, B, W, R, L, P, fs: brkFs, tickY: B + (P ? 52 : LFT ? LFT.xtick_dy : 32),   /* P69 T66: the cut, its `//`, the gap written, the eras named */
+                                  style: PHONE ? "font-size:" + brkFs + "px" : null });
     if (pgBuildLines(pg)) {
       const slots = [...new Set(st.paths.map((pp) => pp.si | 0))].sort((a, b) => a - b);
       st.lineBuild = { slots };
@@ -10894,6 +11343,7 @@ async function mount(doc) {
          + " A" + f(r) + " " + f(r) + " 0 " + (a1 - a0 > Math.PI ? 1 : 0) + " 1 " + f(px(a1)) + " " + f(py(a1)) + " Z";
   };
   const buildLedgerShare = (st, pg) => {
+    if (lpPieSolid(pg)) return buildLedgerPie(st, pg);   /* P69 T48: a donut, an extrusion or an explode - below */
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;
     const vals = (st.vals || []).map((v) => Math.abs(+v) || 0), n = vals.length;
     const total = vals.reduce((a, b) => a + b, 0) || 1;
@@ -10975,6 +11425,323 @@ async function mount(doc) {
       w.lab.setAttribute("opacity", o);
       if (w.val) w.val.setAttribute("opacity", o);
     }
+  };
+  /* ---- P69 T48 / E99 s109 (4) + its amendment: THE SOLID SHARE PAGE - the pie or the donut, flat or 3D exploded ----
+     The operator: "maybe a 3d pie chart exploded and then zoomed onto the largest portion when discussing NVDA's market
+     share of AI ... as long as it's created accurately that can be part of the story". The P48 T4 share page above is
+     untouched: a page that names none of `hole`, `extrude`, `explode` takes buildLedgerShare's own branch, byte for byte.
+     THE GEOMETRY. Every slice keeps its TRUE ANGLE - value / sum of the circle, swept clockwise from twelve with the
+     claim's slice first (the share page's own rule: the eye starts where the story is). A donut cuts a `hole` of that
+     share of the radius. An EXTRUDED pie is the same circle on a plane tilted `tilt` degrees back from face-on, drawn by
+     the ORTHOGRAPHIC projection (x, y) -> (x, y cos tilt): an affine map, so every top face keeps its true share of the
+     tops' area and the angles stay the data's in the plane - the perspective is the camera's, not the data's. The
+     solid under it is `depth` of the radius thick; the visible rim (the near half) and, where a slice has left, the cut
+     faces are shaded by the ONE stage light (T6b's PROP_SHADOW.LIGHT_DEG - never a second light: a Lambert term on
+     the face's own normal between EXTRUDE's SIDE_LIGHT and CAP_LIGHT), and on `hatch` the faces away from it carry
+     T6b's engraving (`lpHatchSvg`, the prop's own lines). Hard edges only (doc 29 s1.2).
+     THE FIGURES. Every slice writes its name and its figure (s100 (b): the number, not the area, is the claim): on the
+     slice where the words fit, else outside it on a short leader. Upright, never on the tilted plane.
+     THE MOTION. `explode` names the slice that leaves the whole: the `explode` page species says WHEN (it slides out
+     `out` of the radius along its own bisector, in its own colour - a peel's red is a LOSS, this is emphasis); a page
+     that names explode and fires no species stands exploded. A camera key whose look is a `datum` on this page aims at
+     that slice's centroid as drawn (resolveTarget), and while the camera pushes the other slices recede (RECEDE_A at the
+     push's full depth, on the camera's own zoom - one clock, a pure function of t). */
+  const PIE = Object.freeze({
+    FACET: Math.PI / 30,   /* a rim facet's angle (6 deg): the shading is stepped per facet, fine enough to read as a curve */
+    LABEL_R: 0.62,         /* where a slice's words sit on a PIE, a share of the radius along its bisector (the share page's 0.60 + the tilt's squeeze) */
+    OUT_R: 1.12,           /* ... and outside it, where they do not fit */
+    LEAD_GAP: 6,           /* the leader stops this short of the words (chart units) */
+    FIT_MIN: 0.42,         /* a slice under this many radians never carries its words inside (24 deg) */
+    SIDE_DARK: 0.58,       /* EXTRUDE.SIDE_LIGHT: a face turned from the stage light ... */
+    SIDE_LIT: 0.80,        /* ... and EXTRUDE.CAP_LIGHT, one turned to it - a ratio on the slice's own ink, never a second palette */
+    RECEDE_A: 0.30,        /* what the OTHER slices keep of their opacity at the push's full depth [DERIVED: read on the push golden] */
+    RECEDE_LAB: 0.45,      /* ... and their words - still legible, no longer competing */
+    SEAM: "#25313C",       /* the page's own field ink (LP_HALO): a hairline between two slices' tops */
+    /* the muted slices, OPAQUE: LP_SHARE_GREY laid over the page's field. A solid has sides, and a translucent top shows
+       the faces behind it through itself */
+    GREY: ["#6e7a86", "#616d78", "#56626d", "#4b5762"],
+    NAME_FS: [22, 38], FIG_FS: [26, 44],   /* [landscape, portrait]: the name, and the figure (the claim, larger) */
+    PAD_X: [150, 70], PAD_Y: [52, 120],    /* room kept for the outside words: each side, and above/below the solid */
+  });
+  const lpPieSolid = (pg) => !!(pg && (pg.hole || pg.extrude || pg.explode));
+  /* the pie's plane -> the chart: angle a from twelve clockwise, radius r, the slice's own offset on the page */
+  const pieXY = (S, a, r, off, dz) => [S.cx + (off ? off[0] : 0) + r * Math.sin(a), S.cy + (off ? off[1] : 0) - r * Math.cos(a) * S.c + (dz || 0)];
+  const pieF = (p) => p[0].toFixed(2) + " " + p[1].toFixed(2);
+  const pieArc = (S, r, a1, cw) => " A" + r.toFixed(2) + " " + (r * S.c).toFixed(2) + " 0 0 " + (cw ? 1 : 0) + " ";   /* one arc of a face: never past pi (the callers split) */
+  /* a slice's top face, a0 -> a1 (a sector, or on a donut an annular sector); a span over pi is written as two arcs */
+  const pieTopD = (S, a0, a1) => {
+    const R = S.R, r = S.rho * R, mid = a1 - a0 > Math.PI ? (a0 + a1) / 2 : null;
+    let d = "M" + pieF(pieXY(S, a0, R));
+    if (mid != null) d += pieArc(S, R, mid, true) + pieF(pieXY(S, mid, R));
+    d += pieArc(S, R, a1, true) + pieF(pieXY(S, a1, R));
+    if (r > 0) {
+      d += " L" + pieF(pieXY(S, a1, r));
+      if (mid != null) d += pieArc(S, r, mid, false) + pieF(pieXY(S, mid, r));
+      d += pieArc(S, r, a0, false) + pieF(pieXY(S, a0, r));
+    } else d += " L" + pieF(pieXY(S, 0, 0));
+    return d + " Z";
+  };
+  /* a wall facet b0 -> b1 at radius r, hanging `h` below its top edge */
+  const pieWallD = (S, b0, b1, r) => {
+    const A = pieXY(S, b0, r), Bp = pieXY(S, b1, r), h = S.h;
+    return "M" + pieF(A) + pieArc(S, r, b1, true) + pieF(Bp) + " L" + pieF([Bp[0], Bp[1] + h])
+         + pieArc(S, r, b0, false) + pieF([A[0], A[1] + h]) + " Z";
+  };
+  /* a cut face along angle a, from the inner radius to the rim */
+  const pieCutD = (S, a) => {
+    const i = pieXY(S, a, S.rho * S.R), o = pieXY(S, a, S.R), h = S.h;
+    return "M" + pieF(i) + " L" + pieF(o) + " L" + pieF([o[0], o[1] + h]) + " L" + pieF([i[0], i[1] + h]) + " Z";
+  };
+  /* the stage light on a face whose outward normal points along plane angle `na` (u = sin, w = -cos; w runs toward the
+     viewer, which is DOWN the page): Lambert against PROP_SHADOW.LIGHT_DEG (degrees from +x, y down) */
+  const pieLight = (na) => {
+    const L = PROP_SHADOW.LIGHT_DEG * Math.PI / 180;
+    return Math.sin(na) * Math.cos(L) - Math.cos(na) * Math.sin(L);
+  };
+  const pieShade = (l) => PIE.SIDE_DARK + (PIE.SIDE_LIT - PIE.SIDE_DARK) * Math.max(0, l);
+  /* the angles in [a0, a1] where a wall turns from the far half to the near (cos a = 0), so no facet straddles it */
+  const pieSplits = (a0, a1) => {
+    const out = [a0];
+    for (let k = Math.ceil((a0 - Math.PI / 2) / Math.PI); Math.PI / 2 + k * Math.PI < a1; k++) {
+      const b = Math.PI / 2 + k * Math.PI; if (b > a0) out.push(b);
+    }
+    out.push(a1); return out;
+  };
+  /* the facets of one wall: [b0, b1] pieces no wider than FACET, kept where `keep(mid)` (the half the eye sees) */
+  const pieFacets = (a0, a1, keep) => {
+    const f = [], s = pieSplits(a0, a1);
+    for (let j = 0; j + 1 < s.length; j++) {
+      const n = Math.max(1, Math.ceil((s[j + 1] - s[j]) / PIE.FACET));
+      for (let q = 0; q < n; q++) {
+        const b0 = s[j] + (s[j + 1] - s[j]) * q / n, b1 = s[j] + (s[j + 1] - s[j]) * (q + 1) / n;
+        if (keep((b0 + b1) / 2)) f.push([b0, b1]);
+      }
+    }
+    return f;
+  };
+  /* the planar centroid of a slice's top (an annular sector), at distance from the pie's centre along the bisector */
+  const pieCentroidR = (R, r, half) => (2 / 3) * (R * R * R - r * r * r) / Math.max(1e-9, R * R - r * r) * Math.sin(half) / Math.max(1e-9, half);
+  /* a polygon's area off an SVG path's own samples (shoelace), for the honesty report - never for drawing */
+  const pieArea = (el) => {
+    if (!el || !el.getTotalLength) return 0;
+    const L0 = el.getTotalLength(); if (!(L0 > 0)) return 0;
+    const n = Math.max(24, Math.ceil(L0 / 2)); let a = 0, p = el.getPointAtLength(0);
+    for (let i = 1; i <= n; i++) { const q = el.getPointAtLength(L0 * i / n); a += p.x * q.y - q.x * p.y; p = q; }
+    return Math.abs(a) / 2;
+  };
+  const buildLedgerPie = (st, pg) => {
+    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait, pi = P ? 1 : 0;
+    const vals = (st.vals || []).map((v) => Math.abs(+v) || 0), n = vals.length;
+    const total = vals.reduce((a, b) => a + b, 0) || 1;
+    const labels = pg.labels || [], cols = pg.colors || [], figs = pg.value_strings || [];
+    const ex = pg.extrude || null, xp = pg.explode || null;
+    const tilt = ex ? (+ex.tilt || 0) * Math.PI / 180 : 0, depth = ex ? +ex.depth || 0 : 0;
+    const c = Math.cos(tilt), rho = Math.max(0, Math.min(0.9, +pg.hole || 0));
+    const top = (P ? 96 : 34) + PIE.PAD_Y[pi], bot = G.H - (P ? 30 : 18) - PIE.PAD_Y[pi];
+    /* the solid's height on the page is 2 R c + depth R sin(tilt): the radius the room allows, and the side room the
+       outside words need */
+    const R = Math.max(60, Math.min(G.W / 2 - PIE.PAD_X[pi], (bot - top) / (2 * c + depth * Math.sin(tilt))) * 0.94);
+    const h = depth * R * Math.sin(tilt);
+    const S = { solid: true, cx: G.W / 2, cy: (top + bot) / 2 - h / 2, R, c, h, rho, wedges: [], hatch: [], seg: null };
+    S.layer = lpEl("g", "pie", st.chart);
+    S.labLayer = lpEl("g", "pie-words", st.chart);
+    const order = []; if (st.emph >= 0 && st.emph < n) order.push(st.emph);
+    for (let i = 0; i < n; i++) if (i !== st.emph) order.push(i);
+    const xi = xp && Number.isInteger(xp.index) ? xp.index : -1;
+    let a = 0;
+    for (const i of order) {
+      const full = vals[i] / total * LP_TAU, emph = i === st.emph;
+      const col = emph ? (LP_PAL[cols[i]] || cols[i] || LP_PAL.teal)
+                       : (cols[i] && cols[i] !== "deemph" ? (LP_PAL[cols[i]] || cols[i]) : PIE.GREY[Math.max(0, order.indexOf(i) - 1) % PIE.GREY.length]);
+      const g = lpEl("g", "pie-slice" + (emph ? " emph" : ""), S.layer);
+      const w = { i, a0: a, a1: a + full, full, v: vals[i], col, emph, g, off: [0, 0], faces: [], cuts: [], top: null };
+      /* the faces, in the painter's order inside the slice: the cut faces, the hole's far wall, the near rim, then the top */
+      if (h > 0) {
+        for (const [side, at] of [[0, a], [1, a + full]]) {   /* side 0: the face at a0 (normal -tangent); 1: at a1 (+tangent) */
+          const na = at + (side ? Math.PI / 2 : -Math.PI / 2), l = pieLight(na);
+          const f = lpEl("path", "pie-cut", g, { d: pieCutD(S, at), fill: col, stroke: col, "stroke-width": 0.6, opacity: 0 });
+          f.style.filter = "brightness(" + pieShade(l).toFixed(3) + ")";
+          /* seen only when it faces the viewer (its normal's w > 0) - and then only once the slice beside it has left */
+          w.cuts.push({ el: f, at, side, seen: -Math.cos(na) > 1e-6, shadow: l <= 0 });
+        }
+        const wall = (b0, b1, r, inner) => {
+          const na = (b0 + b1) / 2 + (inner ? Math.PI : 0), l = pieLight(na);
+          const f = lpEl("path", "pie-side", g, { d: "", fill: col, stroke: col, "stroke-width": 0.6 });
+          f.style.filter = "brightness(" + pieShade(l).toFixed(3) + ")";
+          w.faces.push({ el: f, b0, b1, r, shadow: l <= 0 });
+        };
+        if (rho > 0) for (const [b0, b1] of pieFacets(a, a + full, (m) => Math.cos(m) > 0)) wall(b0, b1, rho * R, true);
+        for (const [b0, b1] of pieFacets(a, a + full, (m) => Math.cos(m) < 0)) wall(b0, b1, R, false);
+      }
+      w.top = lpEl("path", "wedge pie-top" + (emph ? " emph" : ""), g, { d: "", fill: col, stroke: PIE.SEAM, "stroke-width": 1.2, "stroke-linejoin": "round" });
+      lpMark(st, "w:" + i, "wedge", w.top, { a0: a, a1: a + full, cx: S.cx, cy: S.cy, r: R, v: vals[i] }, w);
+      w.bis = a + full / 2;
+      S.wedges.push(w); a += full;
+    }
+    /* THE EXPLODE: the one slice that leaves, and how far - in the pie's plane along its bisector, then projected */
+    S.xw = S.wedges.find((w) => w.i === xi) || null;
+    if (S.xw) {
+      const d = (+xp.out || 0) * R;
+      S.xv = [d * Math.sin(S.xw.bis), -d * Math.cos(S.xw.bis) * c];
+      const k = S.wedges.indexOf(S.xw);
+      S.xNeighbours = [S.wedges[(k - 1 + n) % n], S.wedges[(k + 1) % n]];
+    }
+    /* THE HATCH (T6b): per slice, clipped to that slice's faces turned from the light - in the slice's own group, so the
+       painter's order holds and the lines ride the slice when it leaves (translated, never turned) */
+    if (h > 0 && ex.hatch) {
+      const k = st.stagePx > 0 ? st.stagePx : 1, H8 = PROP_SHADOW.HATCH;
+      S.wedges.forEach((w, j) => {
+        const shade = w.faces.filter((f) => f.shadow).concat(w.cuts.filter((f) => f.shadow && f.seen));
+        if (!shade.length) return;
+        const id = "pie-h-" + (st.seed | 0) + "-" + j;
+        const defs = lpEl("defs", "", w.g), cp = lpEl("clipPath", "", defs, { id, clipPathUnits: "userSpaceOnUse" });
+        const clips = shade.map((f) => ({ f, el: lpEl("path", "", cp, { d: "" }) }));
+        const hg = lpEl("g", "pie-hatch", w.g, { fill: "rgb(" + PROP_SHADOW.INK.page.join(",") + ")", opacity: PROP_SHADOW.ALPHA.page, "clip-path": "url(#" + id + ")" });
+        w.g.insertBefore(hg, w.top);
+        const x0 = S.cx - R - (S.xv ? Math.abs(S.xv[0]) : 0), y0 = S.cy - R * c, W0 = 2 * R + 2 * (S.xv ? Math.abs(S.xv[0]) : 0), H0 = 2 * R * c + h + (S.xv ? Math.abs(S.xv[1]) : 0);
+        const lx = Math.floor(x0 * k), ly = Math.floor(y0 * k), LW = Math.ceil(W0 * k), LH = Math.ceil(H0 * k);
+        const sg = lpEl("g", "", hg, { transform: "scale(" + +(1 / k).toFixed(6) + ") translate(" + lx + " " + ly + ")" });
+        lpHatchSvg(sg, "primary", lx, ly, LW, LH, PROP_SHADOW.LIGHT_DEG, H8.PITCH_PX, H8.WIDTH_PX);
+        lpHatchSvg(sg, "cross", lx, ly, LW, LH, PROP_SHADOW.LIGHT_DEG + H8.CROSS_DEG, H8.CROSS_PITCH_PX, H8.CROSS_WIDTH_PX);
+        w.clips = clips; S.hatch.push(hg);
+      });
+    }
+    /* THE WORDS: every slice's name and figure - on the slice where they fit, else outside it on a leader */
+    const nfs = PIE.NAME_FS[pi], ffs = PIE.FIG_FS[pi], ink = "#FDF6E3", ink2 = "#dfe6ec";
+    const outside = [];
+    for (const w of S.wedges) {
+      const k = w.emph ? 1.12 : 1, name = String((pg.short_labels || [])[w.i] ?? labels[w.i] ?? ""), fig = String(figs[w.i] ?? lpFmt(w.v));
+      const wide = Math.max(name.length * nfs * k * 0.56, fig.length * ffs * k * 0.6);
+      const rl = rho > 0 ? (1 + rho) / 2 * R : PIE.LABEL_R * R;
+      const room = 2 * rl * Math.sin(Math.min(w.full, Math.PI) / 2) * 0.92;
+      const ring = (rho > 0 ? (1 - rho) * R : R) * c;
+      const inside = w.full >= PIE.FIT_MIN && room >= wide && ring >= (nfs + ffs) * k * 1.05;
+      const lg = lpEl("g", "pie-label", S.labLayer);
+      let x, y, anch = "middle";
+      if (inside) { [x, y] = pieXY(S, w.bis, rl); y -= (nfs + ffs) * k * 0.1; }
+      else {
+        const near = Math.cos(w.bis) < 0;
+        [x, y] = pieXY(S, w.bis, R * PIE.OUT_R, null, near ? h : 0);
+        const sx = Math.sin(w.bis);
+        anch = sx > 0.3 ? "start" : sx < -0.3 ? "end" : "middle";
+        if (anch === "middle") y += near ? nfs * k * 0.9 : -ffs * k * 1.1;
+        outside.push({ w, x, y, anch, k, near });
+      }
+      w.lab = lpText(lg, "wlab", x, y, anch, name, { style: LP_HALO + "fill:" + (w.emph ? ink : ink2) + ";font-size:" + (nfs * k).toFixed(0) + "px;font-weight:700" });
+      w.val = lpText(lg, "wlab", x, y + ffs * k * 1.02, anch, fig, { style: LP_HALO + "fill:" + ink + ";font-size:" + (ffs * k).toFixed(0) + "px;font-weight:800" });
+      w.lg = lg; w.inside = inside;
+    }
+    /* two outside labels on one side never overprint: walk them down the side in page order, each at least its own
+       two lines below the last, and draw each one's leader from the rim to where its words now stand */
+    for (const side of ["start", "end", "middle"]) {
+      const ls = outside.filter((o) => o.anch === side).sort((p, q) => p.y - q.y);
+      for (let j = 1; j < ls.length; j++) {
+        const need = ls[j - 1].y + (nfs + ffs) * 1.25 * ls[j - 1].k;
+        if (ls[j].y < need) { const dy = need - ls[j].y; ls[j].y = need; for (const e of [ls[j].w.lab, ls[j].w.val]) e.setAttribute("y", (+e.getAttribute("y") + dy).toFixed(1)); }
+      }
+    }
+    for (const o of outside) {
+      const rim = pieXY(S, o.w.bis, S.R * 1.01, null, o.near ? h : 0);
+      const tx = o.anch === "start" ? o.x - PIE.LEAD_GAP : o.anch === "end" ? o.x + PIE.LEAD_GAP : o.x;
+      const ty = o.anch === "middle" ? (o.near ? o.y - nfs * o.k * 0.95 : o.y + ffs * o.k * 0.35) : o.y - nfs * o.k * 0.3;
+      o.w.lead = lpEl("line", "pie-lead", o.w.lg, { x1: rim[0].toFixed(1), y1: rim[1].toFixed(1), x2: tx.toFixed(1), y2: ty.toFixed(1),
+                                                     stroke: "#aeb6be", "stroke-width": P ? 2.4 : 1.4, "stroke-linecap": "round" });
+      o.w.lg.insertBefore(o.w.lead, o.w.lab);
+    }
+    for (const w of S.wedges) {   /* marked where the words finally stand */
+      lpMark(st, "wlab:" + w.i, "wedgelabel", w.lab, { x: +w.lab.getAttribute("x"), y: +w.lab.getAttribute("y") });
+      lpMark(st, "wval:" + w.i, "wedgelabel", w.val, { x: +w.val.getAttribute("x"), y: +w.val.getAttribute("y"), v: w.v });
+    }
+    st.share = S;
+    st.buildDur = LPX.SHARE_BUILD; st.paint = paintLedgerPie;
+    st.plot = { L: S.cx - R, R: G.W - (S.cx + R), T: S.cy - R * c, B: S.cy + R * c + h, W: G.W, x0: 0, x1: 1, y0: 0, y1: total, log: false };
+    /* the honesty report (T48's measure): each slice's APPARENT area on the page - its top and every face the eye sees
+       at the explode's rest - against its true share. Occlusion is not subtracted, so a near slice's figure is an
+       upper bound. Read by the test and the build notes, never by the painter. */
+    pieRest(S);
+    const areas = S.wedges.map((w) => pieArea(w.top) + w.faces.reduce((s, f) => s + pieArea(f.el), 0)
+                                        + w.cuts.reduce((s, f) => s + (+f.el.getAttribute("opacity") > 0 ? pieArea(f.el) : 0), 0));
+    const sum = areas.reduce((p, q) => p + q, 0) || 1;
+    S.apparent = S.wedges.map((w, j) => ({ i: w.i, share: w.v / total, area: areas[j] / sum, ratio: (areas[j] / sum) / Math.max(1e-9, w.v / total) }));
+  };
+  /* the whole solid at rest (swept, exploded): the painter's own geometry at k = 1, for the measure */
+  const pieRest = (S) => { pieSweep(S, Infinity); pieMove(S, 1); };
+  /* THE SWEEP: each slice's top and faces drawn up to the sweep's front; the words write as their slice completes */
+  const pieSweep = (S, front) => {
+    for (const w of S.wedges) {
+      const a1 = Math.min(w.a1, front), on = a1 > w.a0 + 1e-4;
+      w.top.setAttribute("d", on ? pieTopD(S, w.a0, a1) : "");
+      for (const f of w.faces) f.el.setAttribute("d", f.b0 < a1 - 1e-6 ? pieWallD(S, f.b0, Math.min(f.b1, a1), f.r) : "");
+      /* the words write over the last of their OWN slice, never before it starts: the share page's fade is a tenth of a
+         turn, wider than a thin slice, and a name over a wedge not yet drawn is a lie (read on the 3D sweep's frames) */
+      const fade = Math.min(LPX.SHARE_LABEL * LP_TAU, w.full);
+      w.lg.setAttribute("opacity", clamp01((front - w.a1 + fade) / fade).toFixed(2));
+      w.swept = front >= w.a1 - 1e-6;
+    }
+  };
+  /* THE MOVE: the exploded slice's offset at k, the cut faces the opening shows, and the painter's order */
+  const pieMove = (S, k) => {
+    const X = S.xw, [prev, next] = S.xNeighbours || [null, null];
+    for (const w of S.wedges) {
+      w.off = w === X ? [S.xv[0] * k, S.xv[1] * k] : [0, 0];
+      const tf = w.off[0] || w.off[1] ? "translate(" + w.off[0].toFixed(2) + " " + w.off[1].toFixed(2) + ")" : null;
+      if (tf) { w.g.setAttribute("transform", tf); w.lg.setAttribute("transform", tf); }
+      else { w.g.removeAttribute("transform"); w.lg.removeAttribute("transform"); }
+      /* where the whole has opened: the leaving slice's own two faces, and each neighbour's face toward it (with two
+         slices the one neighbour borders it on both sides) - shown only when turned to the viewer */
+      for (const f of w.cuts) {
+        const open = X && k > 1e-3 && w.swept && X.swept && (w === X || (w === prev && f.side === 1) || (w === next && f.side === 0));
+        f.el.setAttribute("opacity", open && f.seen ? 1 : 0);
+      }
+      if (w.clips) for (const q of w.clips) q.el.setAttribute("d", q.f.el.getAttribute("opacity") === "0" ? "" : (q.f.el.getAttribute("d") || ""));
+    }
+    /* back to front: the painter's order by each slice's centroid depth (w runs toward the viewer, down the page) */
+    const depth = (w) => -Math.cos(w.bis) * pieCentroidR(S.R, S.rho * S.R, w.full / 2) * S.c + w.off[1];
+    const ord = S.wedges.slice().sort((p, q) => depth(p) - depth(q) || p.a0 - q.a0);
+    const seq = ord.map((w) => w.i).join(",");
+    if (seq !== S.seq) { for (const w of ord) S.layer.appendChild(w.g); S.seq = seq; }
+  };
+  /* THE RECESSION: while the camera pushes onto one slice, the others fall back on the push's own clock */
+  const pieRecede = (S, focus) => {
+    for (const w of S.wedges) {
+      const r = focus && w.i !== focus.index ? focus.p : 0;
+      w.g.setAttribute("opacity", (1 - (1 - PIE.RECEDE_A) * r).toFixed(3));
+      w.lg.style.opacity = r > 0 ? (1 - (1 - PIE.RECEDE_LAB) * r).toFixed(3) : "";
+    }
+  };
+  const paintLedgerPie = (st, c) => {
+    const S = st.share, sw = clamp01(c / LPX.SHARE_SWEEP);
+    pieSweep(S, (sw >= 1 ? 1 : expoOut(sw)) * LP_TAU);
+  };
+  /* the slice a camera key pushes onto, and how far the push has gone: the key pair around t, the deeper of the two
+     that looks at a datum of this page, and the camera's own zoom this frame against that key's (0 at rest, 1 held) */
+  const pieFocus = (scene, t) => {
+    const keys = ((scene.camera || {}).keys || []).filter((k) => k && typeof k.t === "number");
+    if (!keys.length || !kin("camera")) return null;
+    const j = keys.findIndex((k) => k.t >= t);
+    const pair = j < 0 ? [keys[keys.length - 1]] : j === 0 ? [] : [keys[j - 1], keys[j]];
+    let best = null;
+    for (const k of pair) if (k.look && k.look.kind === "datum" && Number.isInteger(k.look.index) && +k.zoom > 1 && (!best || +k.zoom > +best.zoom)) best = k;
+    if (!best) return null;
+    return { index: best.look.index, p: clamp01((camNow(scene, t).s - 1) / (+best.zoom - 1)) };
+  };
+  /* the frame's motion: the explode on its word (or standing, when the row names no word), then the push's recession */
+  const lpPieMotion = (st, scene, t) => {
+    const S = st.share; if (!S || !S.solid) return;
+    const sps = pageSpecies(scene, "explode");
+    let k = sps.length ? 0 : 1;
+    for (const sp of sps) k = Math.max(k, expoOut(clamp01((t - sp.at) / Math.max(0.001, sp.dur || 1))));
+    pieMove(S, k);
+    pieRecede(S, pieFocus(scene, t));   /* after the move: the camera resolves the slice's centroid where it now stands */
+  };
+  /* a slice's centroid as drawn, in the chart's own units - what a `datum` target on a share page resolves to (the
+     P48 T4 pie's wedges carry the same a0 / a1 / cx / cy / R, flat and whole) */
+  const lpShareCentroid = (S, i) => {
+    const w = (S.wedges || []).find((q) => q.i === i); if (!w) return null;
+    const half = (w.a1 - w.a0) / 2, m = w.a0 + half;
+    if (!S.solid) { const d = pieCentroidR(S.R, 0, half); return { x: S.cx + d * Math.sin(m), y: S.cy - d * Math.cos(m) }; }
+    const p = pieXY(S, m, pieCentroidR(S.R, S.rho * S.R, half), w.off);
+    return { x: p[0], y: p[1] };
   };
   /* ---- TIERS (P50 T9; BACKLOG R26-24; Bravos shots 35-36's two-panel SPR) ------------------------
      N SMALL MULTIPLES on one page: N bands stacked, each with its own y-scale and its own honest zero
@@ -11111,7 +11878,7 @@ async function mount(doc) {
     WIDE_EPS: 1e-4,                                                /* P69 T8c: a pose box this close to its home's aspect IS the home chart at another size (T8b's move) */
     WIDE_KEEP: 4,                                                  /* ... and at most this many re-laid-out builds are kept per panel (a cache: the frame is a function of the width alone) */
   });
-  const LP_PANEL_KINDS = Object.freeze(["build_to", "undraw", "figure", "bracket", "spread", "span", "chart_to", "relight"]);   /* build_scene_timeline_f.PANEL_SPECIES */
+  const LP_PANEL_KINDS = Object.freeze(["build_to", "undraw", "figure", "bracket", "spread", "span", "chart_to", "relight", "lit_stretch"]);   /* build_scene_timeline_f.PANEL_SPECIES (P69 T36: the light travels a line on its own panel) */
   const lpPanelDefault = (n, portrait) => (portrait ? "stack" : n >= 4 ? "quad" : "row");
   const lpPanelCells = (layout, k, R) => {   /* `k` cells of a layout over R {x, y, w, h}, reading order (ledger_page.panel_cells) */
     if (!(k > 0)) return [];
@@ -11165,27 +11932,31 @@ async function mount(doc) {
      P69 T8c: `f` > 0 is the same chart re-laid out for a box `f` times its home's aspect - the viewBox `f` times as wide
      at the same height (the builder's plot runs L..W-R, so the data re-project to the new width and every word keeps its
      size in units), the svg `f` times its box's width, so the box's pose stays one translate and one uniform scale. */
-  const lpBuildPanel = (st, i, box, f) => {
+  const lpBuildPanel = (st, i, box, f, kz) => {
     const { pg, list, P, ps, a, T, pageDom } = st.panelCtx, p = list[i], hb = st.panelHome[i];
+    const BARS = p.builder === "bars";   /* P69 T8d: a bars panel - the bars builder in the same box (kz: its grown scale, for the 196 px cap) */
     {
       const W0 = P ? hb.w : a * (LP_PANELS.VB[1] + LP_PANELS.SUB_U);   /* ledger_page.panel_view_w: the home viewBox's width */
       const geom = P ? { W: hb.w, H: hb.h } : { W: f ? W0 * f : W0, H: LP_PANELS.VB[1] };
       const top = P ? 0 : LP_PANELS.SUB_U;   /* the SUB BAND over a landscape panel's plot (a portrait panel's builder keeps its own 90 px, and a stacked cell has none to spare) */
       const svg = lpEl("svg", "lp-chart lp-panel-chart", box, { viewBox: "0 " + (-top) + " " + geom.W.toFixed(3) + " " + (geom.H + top).toFixed(3) });
       svg.style.left = "0"; svg.style.top = "0"; svg.style.width = f ? (100 * f).toFixed(4) + "%" : "100%"; svg.style.height = "100%";
-      const axes = Object.assign({}, p.axes || {}, { ylabel: String(p.sub || "") }, pageDom && !p.independent ? { domain: pageDom } : {});
-      const pgI = { builder: "dense-line", series: p.series || [], axes, sub: p.sub || "", title: pg.title, badges: pg.badges || [] };
+      const axes = Object.assign({}, p.axes || {}, { ylabel: String(p.sub || "") }, pageDom && !p.independent && !BARS ? { domain: pageDom } : {});
+      const pgI = BARS ? { builder: "story", labels: p.labels || [], values: p.values || [], value_strings: p.value_strings || [], colors: p.colors || [],
+                           unit: p.unit || "", axes, sub: p.sub || "", title: pg.title, badges: [], ...(Array.isArray(p.ranges) ? { ranges: p.ranges } : {}) }
+        : { builder: "dense-line", series: p.series || [], axes, sub: p.sub || "", title: pg.title, badges: pg.badges || [] };
       const S = { root: st.root, page: st.page, chart: svg, box, geom, portrait: P, seed: st.seed + 97 * (i + 1), edge: st.edge, field: st.field, rail: st.rail, wide: f || 1,
-                  stagePx: ps * Math.min(hb.w / W0, hb.h / (geom.H + top)), lfType: null, keyPills: null, readability: st.readability, barStyle: null, cardK: 1,
+                  stagePx: ps * Math.min(hb.w / W0, hb.h / (geom.H + top)) * (kz || 1), lfType: null, keyPills: null, readability: st.readability, barStyle: null, cardK: 1,
                   bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: st.inlineBadges || {}, linePts: [],
-                  marks: [], markBy: {}, badges: [], inkEls: [], glyphs: [], titleGlyphs: [], rtGlyphs: [], vals: [], vstr: [], emph: -1,
-                  kind: "dense-line", scene: st.scene, panel: i, pg: pgI, perform: null, boardCentre: st.boardCentre };
+                  marks: [], markBy: {}, badges: [], inkEls: [], glyphs: [], titleGlyphs: [], rtGlyphs: [], vals: BARS ? p.values || [] : [], vstr: BARS ? p.value_strings || [] : [],
+                  emph: BARS && Number.isInteger(p.emphasize) ? p.emphasize : -1,
+                  kind: BARS ? "story" : "dense-line", scene: st.scene, panel: i, pg: pgI, perform: null, boardCentre: st.boardCentre };
       if (T) {   /* the long form's preset, at THIS panel's rendered scale: its words read at the preset's px in its home box */
         const u = ps * hb.w / W0, g = lpLongformGeom(T, 0, 560 * u, 560 * u);   /* one chart unit in rendered px: the panel's width over its viewBox's (the home's: a re-laid-out build keeps its words) */
         S.lfType = Object.assign({}, g, { form: axes.tag_form || "full" });
         for (const k of ["tick", "tag", "chip", "value"]) svg.style.setProperty("--lf-" + k, g[k].toFixed(3) + "px");
       }
-      buildLedgerLine(S, pgI);
+      if (BARS) lpBuildBarsPanel(S, pgI); else buildLedgerLine(S, pgI);
       if (T) lpLongformPlot(S);
       /* the panel's GROUND: its whole box in the page's own ground colour, under everything it draws - so a panel in front
          (a focus's active one) occludes the receded ones behind it, never shows their words through its margins */
@@ -11207,18 +11978,40 @@ async function mount(doc) {
       return S;
     }
   };
+  /* P69 T8d - A BARS PANEL: buildLedgerBars, unchanged, in the panel's svg (its x1 runs to the viewBox's width); then the
+     panel's SUB takes the y label's corner as a line panel's does, and its PLOT is the bars' own frame (the tick rules'
+     extent - what the camera, the focus and the box fixture read as `S.plot`) */
+  const lpBuildBarsPanel = (S, pgI) => {
+    buildLedgerBars(S, pgI);
+    const sc = S.scale || {}, G = S.geom;
+    lpYLabel(S, pgI, (sc.x0 || 0) - 20, 0);
+    if (S.lfPanel) {   /* the long form's framed plot holds its values: the tallest bar's number is inside the frame, never on its edge */
+      const fs = S.lfType ? S.lfType.value : 26;
+      const tops = S.bars.filter((b) => !b.neg && b.val).map((b) => +b.val.getAttribute("y") - 0.8 * fs);
+      const pill = S.callout && S.callout.querySelector("rect.cpill");
+      if (pill) tops.push(+pill.getAttribute("y"));
+      const y = Math.max(2, Math.min(S.lfPanel.y, ...tops.map((v) => v - LPBAR_PANEL.FRAME_AIR)));
+      S.lfPanel = Object.assign({}, S.lfPanel, { y, h: S.lfPanel.h + (S.lfPanel.y - y) });
+    }
+    const top = sc.my ? sc.my(sc.y1) : 0, bot = sc.my ? sc.my(sc.y0) : G.H;
+    S.plot = { L: (sc.x0 || 0) - 20, R: G.W - ((sc.x1 || G.W) + 20), T: top, B: bot, W: G.W, x0: 0, x1: 1, y0: sc.y0, y1: sc.y1, log: false };
+  };
   /* P69 T8c - the build panel i stands in for pose `q`: its home build while the box keeps the home's aspect (T8b's grow,
      the recede), else the build re-laid out at the box's aspect - built once per width and kept (a function of the
      width, so a seek paints what play paints) - swapped onto the box, the one it replaces hidden */
   const lpPanelFor = (st, i, q) => {
     const V = st.panelVar[i], hb = st.panelHome[i];
     const f = st.panelFill && q.b.h > 0 && q.b.w > 0 ? (q.b.w / q.b.h) / (hb.w / hb.h) : 1;
+    const wide = Math.abs(f - 1) > LP_PANELS.WIDE_EPS;
+    /* P69 T8d: a BARS panel shown LARGER than its home (a grow) is rebuilt at that scale, so its bars keep the 196 px cap on
+       the stage (E99 s96) - the bars narrow in the chart's units as the box grows; a receded one is smaller, and keeps home */
+    const kz = V.home.kind === "story" ? Math.max(1, wide ? q.b.h / hb.h : q.b.w / hb.w) : 1, grown = kz > 1 + LP_PANELS.WIDE_EPS;
     let S = V.home;
-    if (Math.abs(f - 1) > LP_PANELS.WIDE_EPS) {
-      const key = f.toFixed(5);
+    if (wide || grown) {
+      const key = (wide ? f : 1).toFixed(5) + (grown ? "@" + kz.toFixed(4) : "");
       S = V.cache.get(key);
       if (!S) {
-        S = lpBuildPanel(st, i, V.home.box, +key);
+        S = lpBuildPanel(st, i, V.home.box, wide ? +f.toFixed(5) : 1, grown ? +kz.toFixed(4) : 1);
         V.cache.set(key, S);
         for (const [k2, S2] of V.cache) {   /* the oldest builds go first, never the one on the box */
           if (V.cache.size <= LP_PANELS.WIDE_KEEP) break;
@@ -11298,6 +12091,43 @@ async function mount(doc) {
     }
     const u = prev ? minJerk(clamp01((t - prev.at) / prev.dur)) : 1, a = lpPanelNamer(prev ? prev.from : home, pref), b = lpPanelNamer(prev ? prev.to : home, pref);
     return st.panels.map((_, i) => (a === i ? 1 - u : 0) + (b === i ? u : 0));
+  };
+  /* P69 T8e (row 21, T29) - THE KEY RAIL FOLLOWS THE FOCUS. A key pill names a line of ONE panel (`kp.panel`) - and of
+     every panel whose line shares its name and colour (ledger_page.longform_panel_key keys such a name once, E53 s8). It
+     stands while one of those panels is ACTIVE and goes with it: a receded or hidden panel's names are not the chart in
+     focus (row 21's "SHARE PRICE / OPERATING PROFIT" stood over the grown wafer bars). A bars panel keys nothing, so with
+     only bars in focus the rail is empty. The weight rides the focus's own clock as the panel's ink does (lpPanelMix's
+     INK_LEAD: a panel leaving focus lets go by the move's first half, one coming forward takes it in the second), from
+     wherever the move before it stood - a pure function of t. null: the page has no focus state (nothing is painted). */
+  const lpPanelKeyWeights = (st, scene, t) => {
+    const focus = pageSpecies(scene, "panel_focus");
+    if (!focus.length) return null;
+    const tgt = (fs) => st.panels.map((_, i) => (((fs && Array.isArray(fs.roles) ? fs.roles[i] : null) || "active") === "active" ? 1 : 0));
+    const mix = (A, B, u) => A.map((a, i) => { const b = B[i], K = LP_PANELS.INK_LEAD;
+      const ui = b < a ? minJerk(clamp01(u / K)) : b > a ? minJerk(clamp01((u - K) / (1 - K))) : u; return a + (b - a) * ui; });
+    let prev = null;
+    for (const sp of focus) {
+      if (t < sp.at) break;
+      const from = prev ? mix(prev.from, prev.to, minJerk(clamp01((sp.at - prev.at) / prev.dur))) : tgt(null);
+      prev = { from, to: tgt(sp), at: sp.at, dur: Math.max(0.001, +sp.dur || 1) };
+    }
+    return prev ? mix(prev.from, prev.to, minJerk(clamp01((t - prev.at) / prev.dur))) : tgt(null);
+  };
+  /* the panels a key pill names: its own, and every panel whose drawn line gave up the same name in the same colour */
+  const lpKeyPanels = (st, kp) => {
+    const list = (st.panelCtx || {}).list || [], own = ((list[kp.panel] || {}).series || [])[kp.series] || {};
+    return list.map((p, j) => j).filter((j) => j === kp.panel || (((list[j].axes || {}).tag_form || "full") !== "full"
+      && (list[j].series || []).some((s) => s && !s.muted && String(s.name || "").trim() === kp.name && String(s.label || "").trim() && s.color === own.color)));
+  };
+  const lpPaintPanelKey = (st, scene, t) => {
+    const w = lpPanelKeyWeights(st, scene, t);
+    if (!w) return;
+    for (const kp of st.keyPills) {
+      if (kp.panel == null) continue;
+      if (!kp.panels) kp.panels = lpKeyPanels(st, kp);
+      const k = Math.max(...kp.panels.map((j) => w[j] || 0));
+      if (k < 1) kp.el.style.opacity = ((+kp.el.style.opacity || 0) * k).toFixed(3);
+    }
   };
   const lpPaintPanels = (st, scene, t3, t) => {
     const scenes = lpPanelScenes(st, scene), poses = lpPanelPoses(st, scene, t), pg = scene.world.page || {};
@@ -12654,7 +13484,7 @@ async function mount(doc) {
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (sp.to !== "compare") continue;
       const fg = compareFigure(PF.figures || [], sp), rec = fg && fg.bar;
-      if (!rec || !rec.bar || rec.over || st.bt) continue;   /* a breaking bar's height is the breakthrough's to write */
+      if (!rec || !rec.bar || rec.over || st.bt || rec.range) continue;   /* a breaking bar's height is the breakthrough's to write; a RANGE bar (P69 T8d) states two values, and one comparator is not both */
       const m = (sp.metric || {}).value, c = (sp.comparator || {}).value;
       if (!lpMorphNum(m) || !lpMorphNum(c) || !lpMorphNum(rec.v) || !lpMorphSame(m, rec.v) || lpMorphSame(m, c)) continue;
       if (c !== 0 && (c < 0) !== (rec.v < 0)) continue;   /* a comparator across zero is another bar, not this one moved */
@@ -12773,6 +13603,31 @@ async function mount(doc) {
       (st.rtGlyphs || (st.rtGlyphs = [])).push(...glyphs);
       return { sp, div, glyphs };
     });
+    /* THE LIT STRETCH (P69 T36; E99 s99 - "a highlight that TRAVELS along a length ... counts as motion"; the Bravos harvest
+       v2's A11 with A13's comet head). A light runs along a stretch of ONE drawn series on its word; species/lit_stretch.mjs
+       owns the law and re-reads the stretch from the LIVE points every frame, so this is only its DOM. The core is the
+       series' own stroke widened (LIT.CORE_K) in the light's colour - the relight's sunflower unless a colour is named - with
+       R26-228's halo form (lpBloom's drop-shadow) round it; the comet head is a point with the same halo. Built BEFORE the
+       figures, so a number the hand writes at the stretch's end stands over the light, never under it. The LEAVE is the
+       bracket's rule (paintBracket's `ud`), resolved once here: the first undraw of the page's line (or of this series), or
+       the first chart_to that replaces the page, at or after the light's word, takes it on that verb's own clock. */
+    const lits = pageSpecies(scene, "lit_stretch").map((sp) => {
+      const si = sp.series | 0, col = sp.color ? (PS_PAL[sp.color] || sp.color) : PS.RELIGHT_COL;
+      let sw = 0;
+      for (const pp of st.paths || []) if ((pp.si | 0) === si && pp.p) sw = Math.max(sw, parseFloat(getComputedStyle(pp.p).strokeWidth) || 0);
+      sw = sw || (P ? 6 : 4);   /* the .ser stroke, when the series has no stroke to read yet */
+      const halo = "drop-shadow(0 0 " + (sw * LIT.GLOW_K).toFixed(2) + "px " + lpInkA(lpVarHex(col), LIT.GLOW_A) + ")";
+      const g = lpEl("g", "lp-lit", surf, { opacity: 0 });
+      const core = lpEl("path", "lp-lit-core", g, { d: "", fill: "none", stroke: col });
+      core.style.strokeWidth = (sw * LIT.CORE_K).toFixed(2) + "px"; core.style.strokeLinecap = "round"; core.style.strokeLinejoin = "round";
+      core.style.filter = halo;
+      const head = sp.comet === true ? lpEl("circle", "lp-lit-head", g, { cx: 0, cy: 0, r: (sw * LIT.HEAD_K).toFixed(2), fill: col, opacity: 0 }) : null;
+      if (head) head.style.filter = halo;
+      const takes = [...pageSpecies(scene, "undraw").filter((u) => { const us = u.series ?? (u.target || {}).series; return us == null || (us | 0) === si; }),
+                     ...pageSpecies(scene, "chart_to").filter((c) => c.to === "recast" || c.to === "morph" || c.to === "remake")]
+        .filter((v) => v.at >= sp.at).sort((a, b) => a.at - b.at);
+      return { sp, si, g, core, head, leave: takes.length ? { at: takes[0].at, dur: takes[0].dur || 1 } : null };
+    });
     /* E50 (P47 T6): a FIGURE - the number the sentence turns to, pinned to its datum by a dot and written by the hand beside
        it (to the right when the chart has room there, else to the left - a peak at the right edge writes leftward); `dy` moves
        it by lines of its own size; `sub` writes under it at the small size. The chart's next thing after an undraw. */
@@ -12887,7 +13742,7 @@ async function mount(doc) {
       const lg = [...String(sp.text || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
       return { sp, marks, label, lg };
     }).filter(Boolean);
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses };
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits };
   };
   /* the X's two strokes over the named cells, the cells dimming under them, and the share written by
      the hand: every number is species/treemap.mjs's, this is the call */
@@ -13001,6 +13856,7 @@ async function mount(doc) {
        at its datum) is the second - species/figure.mjs, its BUILDER still below in buildPerform, where its DOM belongs.
        NEXT, in this order: `bracket`, `spread` - paintBracket and paintSpread still sit above as engine code. */
     for (const sd of PF.spans || []) { const p = PAGE_PAINTERS[sd.sp.kind || "span"]; if (p) p(sd, t, st, PAGE_CTX); }
+    for (const ld of PF.lits || []) if (PAGE_PAINTERS.lit_stretch) PAGE_PAINTERS.lit_stretch(ld, t, st, PAGE_CTX);   /* P69 T36: the light that travels a stretch of the line on its word (species/lit_stretch.mjs) */
     for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) { PAGE_PAINTERS.figure(fg, t, st, PAGE_CTX);
       const lv = pageLeave(fg.sp, t);   /* R26-219: the hand wrote it at a datum of the page that has just been replaced */
       if (lv > 0) fg.g.setAttribute("opacity", ((+fg.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3));
@@ -13568,14 +14424,17 @@ async function mount(doc) {
       cs.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
       /* a breakthrough page's build is longer than LP.BUILD: the ordinary bars law runs on the first LP.BUILD seconds of it (cb),
          the run on the seconds after (bts); a page without one is exactly what it was (cb === c) */
-      const cb = cs.bt ? clamp01(c * cs.buildDur / cs.btBase) : c, bts = cs.bt ? c * cs.buildDur - cs.btBase : -1;
+      const cb = cs.bt ? clamp01(c * cs.buildDur / cs.btBase) : cs.mbBase ? clamp01(c * cs.buildDur / cs.mbBase) : c,   /* P69 T45: ... and a membership cascade's, the same way */
+        bts = cs.bt ? c * cs.buildDur - cs.btBase : -1;
       cs.bars.forEach((bb, i) => {
         const k = expoOut(clamp01((cb - i * 0.1) / 0.55));
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
+        if (bb.band) bb.band.style.transform = bb.bar.style.transform;   /* P69 T8d: the range's band grows with its bar, about the same zero */
         if (bb.ex) bb.ex.set(k);   /* P58 T5: the prism grows WITH its face - the same u, one clock, no second state */
         bb.lab.setAttribute("opacity", clamp01((cb - i * 0.1 - 0.3) / 0.2).toFixed(2));
         bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
       });
+      if (cs.memberTiles) lpMemberPaint(cs, cb, cs.mbBase ? c * cs.buildDur - cs.mbBase : null, scene, t);   /* P69 T45 */
       if (cs.callout) {
         const ck = cb >= 1 ? 1 : clamp01((cb - 0.55) / 0.45);   /* (1 - 0.55) / 0.45 is 0.999... in floating point: the count must LAND on the exact string (s9.23b), never one unit short forever */
         cs.callout.setAttribute("opacity", clamp01(ck / 0.3).toFixed(2));
@@ -13672,11 +14531,11 @@ async function mount(doc) {
           /* each series sparks at its OWN phase - E49's law, the one the pills have always kept ("two pills never
              breathe in step"); four lead points pulsing together would read as one mechanism blinking. */
           const sph = lpLifePhase(pp.tip, pp.si | 0), ink = lpVarHex(pp.p.getAttribute("stroke"));
-          const rTip = (LP_LIFE.TIP_R / ctmL) * breath(t, sph, { BREATH_AMP: LP_LIFE.TIP_AMP, BREATH_HZ: LP_LIFE.TIP_HZ });
+          const rTip = (LP_LIFE.TIP_R / ctmL) * breath(lifeT(t), sph, { BREATH_AMP: LP_LIFE.TIP_AMP, BREATH_HZ: LP_LIFE.TIP_HZ });
           pp.tip.setAttribute("r", rTip.toFixed(2));
           pp.tip.style.filter = "drop-shadow(0 0 " + (rTip * LP_LIFE.HALO_K).toFixed(2) + "px " + lpInkA(ink, LP_LIFE.HALO_A) + ")";
           /* R26-228 (b): the glow, at the share of the frame the APPROVED 9:16 page draws, pulsing on the tip's own clock */
-          lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * breath(t, sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ }));
+          lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * breath(lifeT(t), sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ }));
         }
         pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
         if (pp.pill) lpPaintPill(pp, f, drawing);   /* P50 T11: the pill rides this same f - one clock, no second state */
@@ -13687,6 +14546,7 @@ async function mount(doc) {
         let pu = 0;
         for (const sp of pageSpecies(scene, "peel")) pu = Math.max(pu, (t - sp.at) / Math.max(0.001, sp.dur || 1));
         lpPeelTo(cs, pu);
+        if (cs.share.solid) lpPieMotion(cs, scene, t);   /* P69 T48: the slice that leaves on its word, and the push's recession */
       }
   };
   /* P48 T2 - RESCALE. The standing chart never leaves: on one min-jerk clock every mark that exists under both scales moves
@@ -14881,6 +15741,7 @@ async function mount(doc) {
     }
     if (!(st.states && st.states.length > 1)) (st.keyPills || []).forEach((kp, ki) => pillAt(kp.el, tb - kp.at, ki, 40 + ki));   /* P69 T10: the key, on recipe:badge-ladder's clock */
     else lpPaintStateKeys(st, scene, t, tb, pillAt);   /* M1: the key of the chart on screen; a recast's old key leaves */
+    if (st.panels && (st.keyPills || []).length) lpPaintPanelKey(st, scene, t);   /* P69 T8e: ... and on a panels page it follows the focus */
     paintPerform(st, st.panels ? (lpPanelScenes(st, scene), st.panelPageScene) : scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word (P69 T8b: a panels page's own; each panel's ride lpPaintPanels) */
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
@@ -14911,6 +15772,11 @@ async function mount(doc) {
      spiral and the melt still write the label's own). A pure function of t: a cold seek paints what play paints. */
   const CHROME = Object.freeze({ FIT_PAD_PX: 24 });   /* the gate mirrors it as CHROME_FIT_PAD_PX */
   const CHROME_SVG = Object.freeze({ ylabel: "yticks", xtick: "xticks", axislabel: "axis_names" });   /* mark role -> object */
+  /* P69 T8e (row 21, T29): a PANELS page's panels are chrome too - each panel's sub (its y label's corner, T8b) and its
+     tick columns, named by the panel's index (build_scene_timeline_f.CHROME_PANEL_ELEMENTS): `sub@<i>`, `yticks@<i>`,
+     `xticks@<i>`. The same plane law and the same measure-and-correct as the page's own; each reported under its name. */
+  const CHROME_PANEL = Object.freeze({ axis_names: "sub", yticks: "yticks", xticks: "xticks" });
+  const chromeName = (S, obj) => (S.panel != null ? CHROME_PANEL[obj] + "@" + S.panel : obj);
   const CHROME_HTML = Object.freeze({ title: ".lp-title", sub: ".lp-sub", source: ".lp-src", key: ".lp-key", rail: ".lp-rail" });
   const CHROME_EASE = { minjerk: minJerk, inout: (u) => camEase.inout(u), cubic: (u) => camEase.cubic(u), linear: (u) => clamp01(u) };
   /* 2x3 affine [a, b, c, d, e, f]: (x, y) -> (a x + c y + e, b x + d y + f) - CSS matrix() order */
@@ -15012,15 +15878,15 @@ async function mount(doc) {
       else { p.e.style.transformOrigin = "0 0"; p.e.style.transform = id ? "" : chrCss(T); }
     }
     const B = chrAt(D, [U.x, U.y]), sc = Math.hypot(D[0], D[1]);
-    if (!o.S || o.S === C.active) C.report.objects[o.obj] = { k, rest: [moved.x, moved.y, moved.w, moved.h], box: [B[0], B[1], U.w * sc, U.h * sc] };
+    if (!o.S || o.S === C.active || o.S.panel != null) C.report.objects[o.obj] = { k, rest: [moved.x, moved.y, moved.w, moved.h], box: [B[0], B[1], U.w * sc, U.h * sc] };
   };
   /* one TICK column (per chart state): each label's pinned coordinate on the chrome's plane and the column's move, its
      data coordinate the plot's (E28), its own size at that plane; hidden whole once its gridline has left the frame */
-  const lpChromeColumn = (C, obj, S, qs) => {
+  const lpChromeColumn = (C, obj, S, qs, name = obj) => {   /* name: the object's own (a panel's `yticks@<i>`, P69 T8e) */
     const pin = obj === "yticks" ? 0 : 1, rects = qs.map((q) => chrRect(q.label, C.S0)), U = chrUnion(rects);
     if (!U) return;
     const tl = chrAt(C.CcurI, [U.x, U.y]), rest = { x: tl[0], y: tl[1], w: U.w / C.camCur.s, h: U.h / C.camCur.s };
-    const mv = chromeMoveAt(C.moves[obj], C.t, rest), colM = chrMove([rest.x, rest.y], Object.assign({}, mv, { rot: 0 }));
+    const mv = chromeMoveAt(C.moves[name], C.t, rest), colM = chrMove([rest.x, rest.y], Object.assign({}, mv, { rot: 0 }));
     const col = { x: pin === 0 ? chrAt(colM, [rest.x, 0])[0] : rest.x, y: pin === 1 ? chrAt(colM, [0, rest.y])[1] : rest.y,
                   w: pin === 0 ? rest.w * mv.sc : rest.w, h: pin === 1 ? rest.h * mv.sc : rest.h };
     const k = C.kOf(col, pin === 0 ? "x" : "y"), plane = C.planeAt(k), Ck = chrCam(plane), ratio = mv.sc * plane.s / C.camCur.s;
@@ -15039,7 +15905,7 @@ async function mount(doc) {
       if (!chrIdentity(T)) q.w.setAttribute("transform", chrSvg(T));
       q.w.style.display = out ? "none" : "";
     });
-    if (S === C.active) C.report.objects[obj] = { k, rest: [col.x, col.y, col.w, col.h] };
+    if (S === C.active || S.panel != null) C.report.objects[name] = { k, rest: [col.x, col.y, col.w, col.h] };
   };
   /* this frame's chrome context: the camera (and the one the page's content stands under), the plane law, the fit */
   const lpChromeContext = (st, scene, t, ch) => {
@@ -15060,7 +15926,7 @@ async function mount(doc) {
     const C = lpChromeContext(st, scene, t, ch);
     /* every object's elements with the chrome's own transform CLEARED, then measured in one layout */
     const html = Object.keys(CHROME_HTML).map((obj) => ({ obj, els: [...st.page.querySelectorAll(CHROME_HTML[obj])].filter((e) => e.offsetParent !== null) }));
-    const svg = (st.states || [st]).flatMap((S) => chromeWrap(S).map((q) => Object.assign(q, { S })));
+    const svg = [...(st.states || [st]), ...(st.panels || [])].flatMap((S) => chromeWrap(S).map((q) => Object.assign(q, { S })));   /* P69 T8e: and every panel's */
     for (const o of html) for (const e of o.els) e.style.transform = "";
     for (const q of svg) { q.w.removeAttribute("transform"); q.w.style.display = ""; }
     const groupBy = (qs) => [...qs.reduce((m, q) => m.set(q.S, [...(m.get(q.S) || []), q]), new Map())];   /* one column per chart state */
@@ -15070,8 +15936,8 @@ async function mount(doc) {
     const gx = PR.w / (parseFloat(pcs.width) || PR.w || 1), gy = PR.h / (parseFloat(pcs.height) || PR.h || 1);
     html.forEach((o) => lpChromeRigid(C, { obj: o.obj, parts: o.els.map((e) => { const R = chrRect(e, C.S0); return { e, R, P: [gx, 0, 0, gy, R.x, R.y] }; }) }));
     for (const [S, qs] of groupBy(svg.filter((q) => q.obj === "axis_names")))
-      lpChromeRigid(C, { obj: "axis_names", S, parts: qs.map((q) => ({ e: q.w, svg: true, R: chrRect(q.label, C.S0), P: C.frameOf(S) })) });
-    for (const obj of ["yticks", "xticks"]) for (const [S, qs] of groupBy(svg.filter((q) => q.obj === obj))) lpChromeColumn(C, obj, S, qs);
+      lpChromeRigid(C, { obj: chromeName(S, "axis_names"), S, parts: qs.map((q) => ({ e: q.w, svg: true, R: chrRect(q.label, C.S0), P: C.frameOf(S) })) });
+    for (const obj of ["yticks", "xticks"]) for (const [S, qs] of groupBy(svg.filter((q) => q.obj === obj))) lpChromeColumn(C, obj, S, qs, chromeName(S, obj));
     st.chromeReport = C.report;
   };
 
@@ -15125,6 +15991,10 @@ async function mount(doc) {
       /* viewBox -> stage px under the default xMidYMid meet (the landscape chart is letterboxed in its box) */
       const vbMap = (svg, q) => { const b = stageBox(svg), vb = svg.viewBox.baseVal, k = Math.min(b.w / vb.width, b.h / vb.height);
         return { x: b.x + (b.w - vb.width * k) / 2 + (q.x - (vb.x || 0)) * k, y: b.y + (b.h - vb.height * k) / 2 + (q.y - (vb.y || 0)) * k, w: 0, h: 0 }; };   /* P69 T8b: a panel's viewBox starts above 0 */
+      if (S0 && S0.share) {   /* P69 T48: on a SHARE page a datum is a SLICE - its centroid as drawn (the explode included) */
+        const q = lpShareCentroid(S0.share, tg.index | 0);
+        return q ? vbMap(chart, q) : null;
+      }
       const rng = lpSeriesRange(S0, tg.series | 0);
       if (rng) {   /* the exact datum (P41): the builder's own point, never a length fraction - and its own series' */
         const q = lpDatumNow(lpst, tg.series | 0, Math.max(rng.lo, Math.min(tg.index | 0, rng.hi)));
@@ -18018,6 +18888,164 @@ async function mount(doc) {
      import this file for the math above without the engine's registry */
   if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.spotlight = paintSpotlight;
   /* KINETICS:END */
+  /* KINETICS:BEGIN freeze */
+  /* SPACE: stage */
+  /* species/freeze.mjs - THE FREEZE BEAT (P69 T49; E99 s99). SOURCE OF TRUTH, inlined into the scene-evidence player by
+     sync_kinetics.py between KINETICS:BEGIN freeze and KINETICS:END, AFTER ease and lit_stretch (it reads minJerk and the
+     lit stretch's look) and after the engine's SPECIES_PAINTERS declaration, which the registration reaches.
+
+     THE RULING. E99 s99 (the operator, 2026-09-23): "Light can become motion when it's highlighting and moving along a
+     length, blinking, or when it actually stops motion when the light comes on I think. Bravos does this well." - "a light
+     that comes on as everything else STOPS is a punctuation beat - the freeze is the event". A light that simply sits on
+     a thing stays an annotation (s91), and a light is never the move when a named thing should ARRIVE (s71): this one is
+     neither, because what it does is STOP the frame round it.
+
+     WHEN (`SPECIES_WHEN["freeze"]`, build_scene_timeline_f.py): the TURN of the argument lands on ONE number or thing -
+     the line the whole row builds to - and the stage stops on it.
+
+     NOT `beat_freeze` (doc 29 s9.27). That is a BOUNDARY move: the chart's final state freezes as a hit, then a
+     directional-stretch cut into the next plate. This beat is inside a scene, and life comes back.
+
+     THE LAW, a pure function of t:
+       the windows - every `freeze` species on every scene, [at, at + dur] clipped to its scene's span, sorted and merged,
+                     read ONCE when the player mounts (freezeWindows). The engine's LIFE CLOCK is t with the frozen time
+                     before t taken out (lifeClock): inside a window it stands still, outside it runs at speed, and it
+                     never jumps - after the beat every idle carries on from exactly where it stopped, one beat behind t.
+                     A thing whose life is counted from an ORIGIN (the Ken Burns push from its scene's start, a clip from
+                     its mount) takes the scene clock (sceneClock), which counts only the beats after that origin, so a
+                     scene after a beat starts its push at its own start. With no window the clock IS t, the same number,
+                     so a build without a freeze paints the string it always painted.
+       what stops  - the engine hands the life clock to every LIFE on the stage, by name: the idle of every class (the
+                     page, the pills, the docks, the caption strip - idleCssFor), a stage species' own idle (ctx.idle:
+                     the ring's breath, a held light's, a chip's, the agenda's rows), the plate's idle and drift, the
+                     Ken Burns push, the vector map's world idle, the live page's spark and glow (R26-228), the caption
+                     boil, the steam, and an ambient clip (a clip world, an alive plane, a video dock). What it does NOT
+                     stop is an authored EVENT: the voice goes on, so the caption's words keep arriving, and the compiler
+                     refuses any other species that fires inside the beat (`one light`).
+       the light   - ONE light at the resolved target, in the page's one light colour (the relight's sunflower). It comes
+                     ON over ON_S (min-jerk, at most RAMP_MAX of the beat), HOLDS perfectly still through the middle - it
+                     is part of the stopped frame, so it does not breathe - and goes over OFF_S as life resumes, gone at
+                     the beat's end. A target that resolves to a POINT (a datum on a line) is a lit point: the lit
+                     stretch's comet head standing still (LIT's halo over its head, lpBloom's form). A target that
+                     resolves to a BOX (a bar, a prop's or a mark's region) is a lit EDGE round it - never a fill over the
+                     thing it names.
+     The dials are ours to tune (42 s42.5), not findings. */
+
+  const FREEZE = Object.freeze({
+    MIN_S: 0.4,        /* the beat's dial: shorter reads as a dropped frame ... */
+    MAX_S: 1.2,        /* ... longer, as the still frame E49 refuses */
+    ON_S: 0.12,        /* the light comes ON - quick, a switch, never a slow fade */
+    OFF_S: 0.18,       /* ... and goes as life resumes */
+    RAMP_MAX: 0.25,    /* each ramp is at most this share of the beat, so the shortest beat still holds a middle */
+    CORE_PX: 18,       /* the lit point's radius, stage px - read on the golden: at 12 it was the lead spark turned yellow, not a light coming on */
+    PAD: 10,           /* the lit edge's air round a box, stage px */
+    EDGE_PX: 4,        /* the lit edge's width, stage px */
+    EDGE_RX: 10,       /* ... and its corner */
+    POINT_PX: 6,       /* a resolved box smaller than this both ways is a POINT */
+    COLOR: "#F5B72E",  /* the relight's sunflower - the engine's PS.RELIGHT_COL, mirrored (a module imports nothing of the engine's) */
+  });
+
+  const fz01 = (v) => Math.min(1, Math.max(0, v));
+  const fzNum = (v) => typeof v === "number" && Number.isFinite(v);
+
+  /* THE WINDOWS: [[a, b], ...] from the timeline's scenes - clipped to the scene, sorted, overlaps merged. Frozen. */
+  const freezeWindows = (scenes) => {
+    const ws = [];
+    for (const sc of scenes || []) {
+      const span = (sc && sc.span) || [];
+      for (const sp of (sc && sc.species) || []) {
+        if (!sp || sp.kind !== "freeze" || !fzNum(sp.at) || !fzNum(sp.dur) || !(sp.dur > 0)) continue;
+        const a = fzNum(span[0]) ? Math.max(sp.at, span[0]) : sp.at, b = fzNum(span[1]) ? Math.min(sp.at + sp.dur, span[1]) : sp.at + sp.dur;
+        if (b > a) ws.push([a, b]);
+      }
+    }
+    ws.sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+    const out = [];
+    for (const w of ws) {
+      const last = out[out.length - 1];
+      if (last && w[0] <= last[1]) last[1] = Math.max(last[1], w[1]);
+      else out.push([w[0], w[1]]);
+    }
+    return Object.freeze(out.map((w) => Object.freeze(w)));
+  };
+
+  /* the frozen seconds before t */
+  const frozenBefore = (ws, t) => {
+    let s = 0;
+    for (const [a, b] of ws || []) { if (t <= a) break; s += Math.min(t, b) - a; }
+    return s;
+  };
+
+  /* THE LIFE CLOCK: t, with the frozen time before it taken out. No window: t itself, the same number. */
+  const lifeClock = (ws, t) => (ws && ws.length ? t - frozenBefore(ws, t) : t);
+
+  /* ... counted from an ORIGIN t0 (a scene's start, a clip's mount): only the beats after t0 hold it back */
+  const sceneClock = (ws, t, t0) => (ws && ws.length ? t0 + (lifeClock(ws, t) - lifeClock(ws, t0)) : t);
+
+  /* is the stage frozen at t - [a, b): at the beat's end life has resumed */
+  const frozenAt = (ws, t) => (ws || []).some(([a, b]) => t >= a && t < b);
+
+  /* THE LIGHT'S POSE at t: its level f (0 off, 1 on). The held middle is exactly 1 - one pose, the stopped frame's. */
+  const freezePose = (sp, t) => {
+    const D = Math.max(0.001, +sp.dur || 0), d = t - +sp.at;
+    if (!(d >= 0) || d >= D) return { f: 0 };
+    const on = Math.min(FREEZE.ON_S, D * FREEZE.RAMP_MAX), off = Math.min(FREEZE.OFF_S, D * FREEZE.RAMP_MAX);
+    if (d < on) return { f: fz01(minJerk(d / on)) };
+    if (d > D - off) return { f: fz01(minJerk((D - d) / off)) };
+    return { f: 1 };
+  };
+
+  /* THE FORM the light takes, from the box the target resolved to (stage px), or null */
+  const freezeForm = (b) => {
+    if (!b || !fzNum(b.x) || !fzNum(b.y)) return null;
+    const w = fzNum(b.w) ? b.w : 0, h = fzNum(b.h) ? b.h : 0;
+    if (w < FREEZE.POINT_PX && h < FREEZE.POINT_PX) {
+      return { kind: "point", cx: b.x + w / 2, cy: b.y + h / 2, r: FREEZE.CORE_PX, glow: FREEZE.CORE_PX * LIT.GLOW_K / LIT.HEAD_K };
+    }
+    return { kind: "box", x: b.x - FREEZE.PAD, y: b.y - FREEZE.PAD, w: w + 2 * FREEZE.PAD, h: h + 2 * FREEZE.PAD,
+             glow: FREEZE.EDGE_PX * LIT.GLOW_K };
+  };
+
+  /* the halo's colour: the light's own, at LIT's alpha */
+  const freezeHalo = (px, a = LIT.GLOW_A, hex = FREEZE.COLOR) => {
+    const n = parseInt(String(hex).slice(1), 16);
+    return "drop-shadow(0 0 " + px.toFixed(2) + "px rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + "))";
+  };
+
+  /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the clock, the
+     layer already chosen for a datum (beneath any card) or anything else (above), and the shared helpers by name. */
+  function paintFreeze(ctx) {
+    const { sp, t, svg, el, resolveTarget } = ctx;
+    const pose = freezePose(sp, t);
+    if (pose.f <= 0) return;
+    const form = freezeForm(resolveTarget(sp.target));
+    if (!form) return;   /* the targeting law: no resolved target, nothing painted */
+    const g = el("g", "frz", svg, { opacity: pose.f.toFixed(3) });
+    if (form.kind === "point") {
+      const r = form.r * (0.7 + 0.3 * pose.f);   /* a light switching on swells a little as it brightens; held, it is its size */
+      const dot = el("circle", "frz-light", g, { cx: form.cx.toFixed(1), cy: form.cy.toFixed(1), r: r.toFixed(2), fill: FREEZE.COLOR });
+      dot.style.filter = freezeHalo(form.glow);
+      return;
+    }
+    const rect = el("rect", "frz-edge", g, { x: form.x.toFixed(1), y: form.y.toFixed(1), width: form.w.toFixed(1), height: form.h.toFixed(1),
+                                             rx: FREEZE.EDGE_RX, fill: "none", stroke: FREEZE.COLOR, "stroke-width": FREEZE.EDGE_PX });
+    rect.style.filter = freezeHalo(form.glow);
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can import this
+     file for the math above without the engine's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.freeze = paintFreeze;
+  /* KINETICS:END */
+  /* P69 T49 (E99 s99) - THE LIFE CLOCK. The timeline's freeze beats, read once, and the clock every LIFE on the stage
+     reads instead of t: it stands still inside a beat and runs on, one beat behind, after it (species/freeze.mjs). With
+     no beat it IS t - the same number - so a build without one paints the string it always painted. `lifeFrom` counts
+     from an origin (a scene's start, a dock's mount) and loses only the beats after it; `idleLive` is the idle the
+     stage species are handed, so a ring's breath or a held light's stops with the page under it. What is NOT here: an
+     authored event (the voice, the caption's words, a build) - the compiler keeps those out of a beat by name. */
+  const FREEZE_WS = freezeWindows(TL.scenes || []);
+  const lifeT = (t) => lifeClock(FREEZE_WS, t);
+  const lifeFrom = (t0, t) => sceneClock(FREEZE_WS, t, t0);
+  const idleLive = (kind, t, phase, o) => idleXf(kind, lifeT(t), phase, o);
   /* a ledger page's declared focus (page.focus = {kind, target?, label?}) is an implicit species at LP_FOCUS_AT;
      the target defaults to the emphasized datum (E22 addendum 6) */
   const pageFocus = (sc) => {
@@ -18045,7 +19073,7 @@ async function mount(doc) {
       const painter = SPECIES_PAINTERS[sp.kind];
       if (painter) {
         painter({ sp, k, dur, t, sc, si, seed, svg: spSvg, el: lpEl, A, resolveTarget, centre, stageBox,
-                  ease: spEase, io: spIO, clamp: clamp01, drawOn, springPop, idle: idleXf, hash: lpHash,
+                  ease: spEase, io: spIO, clamp: clamp01, drawOn, springPop, idle: idleLive, hash: lpHash,
                   squigglePath, SQUIG_DRAW: SP.SQUIG_DRAW,   /* P57 T17: the callout's UNDERLINE form is the squiggle's stroke and clock, not the ring's - the one kind whose painter reaches for another kind's law */
                   camNow, idleOf,   /* P50 T5: a species ON A WORLD (the map's light, arc and stamp) rides the world's own camera and idle - the species layer is not the world div and carries neither by itself */
                   STAGE_W, STAGE_H, PORTRAIT });
@@ -18058,7 +19086,7 @@ async function mount(doc) {
            curls, each a pure function of t (a period of STEAM_PERIOD), fading with height. Never a particle system. */
         const b = resolveTarget(sp.target); if (!b) return;
         const g = lpEl("g", "", spSvg, { fill: "none", "stroke-linecap": "round" });
-        const ph = (t - sp.at) / SP.STEAM_PERIOD, rise = Math.max(160, b.w * 2.2), col = sp.color || "rgba(255,248,236,.42)";
+        const ph = (lifeFrom(sp.at, t) - sp.at) / SP.STEAM_PERIOD, rise = Math.max(160, b.w * 2.2), col = sp.color || "rgba(255,248,236,.42)";
         for (let w = 0; w < 3; w++) {
           const u = ((ph + w / 3) % 1 + 1) % 1;                        /* this wisp's own phase */
           const x0 = b.x + b.w * (0.25 + 0.25 * w) + (lpHash(seed, w, 41) - 0.5) * b.w * 0.2, y0 = b.y + 6;
@@ -18271,6 +19299,8 @@ async function mount(doc) {
      and the renderer still seek exactly (a pure function of t). */
   const seekVideo = (v, want) => {
     if (clipLive) {
+      if (FREEZE_WS.length && v.__lifeWant === want) { if (!v.paused) v.pause(); return; }   /* P69 T49: a freeze beat holds the clip */
+      v.__lifeWant = want;
       if (v.paused && (v.loop || want < (v.duration || Infinity) - 0.1)) v.play().catch(() => {});
       if (Math.abs((v.currentTime || 0) - want) > 0.15) { try { v.currentTime = want; } catch (e) {} }
       return;
@@ -18292,7 +19322,7 @@ async function mount(doc) {
       parkClips(el);
       v = clipFor(scene.world.asset_id); v.pause(); v.loop = false; el.appendChild(v);
     }
-    const local = Math.max(0, t - scene.span[0]);
+    const local = Math.max(0, lifeFrom(scene.span[0], t) - scene.span[0]);   /* P69 T49: a freeze beat holds the clip's frame */
     const want = Number.isFinite(v.duration) && v.duration > 0 ? Math.min(local, Math.max(0, v.duration - 0.05)) : local;
     seekVideo(v, want);
   };
@@ -18312,7 +19342,7 @@ async function mount(doc) {
       parkDockClips(el);
       v = clipFor(d.slide); v.pause(); v.loop = true; frame.appendChild(v);
     }
-    const local = Math.max(0, t - d.enter);
+    const local = Math.max(0, lifeFrom(d.enter, t) - d.enter);   /* P69 T49: ... and a video dock's */
     const dur = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0;
     seekVideo(v, dur ? Math.min(local % dur, Math.max(0, dur - 0.05)) : local);
   };
@@ -18431,7 +19461,7 @@ async function mount(doc) {
         el.querySelectorAll(".lp").forEach((x) => x.remove());
         const vm = el.querySelector("svg.vm") || lpEl("svg", "vm", el, {});
         vm.setAttribute("viewBox", `0 0 ${STAGE_W} ${STAGE_H}`);
-        paintVecmapWorld({ scene, world: scene.world, t, A, root: vm, el: lpEl, idle: idleXf, hash: lpHash, idleOf, STAGE_W, STAGE_H });
+        paintVecmapWorld({ scene, world: scene.world, t, A, root: vm, el: lpEl, idle: idleLive, hash: lpHash, idleOf, STAGE_W, STAGE_H });
       }
       else {
         el.style.backgroundImage = plies.length ? "none" : `url("${A[scene.world.asset_id]}")`;   /* P58 T3: the planes ARE the picture */
@@ -18441,7 +19471,7 @@ async function mount(doc) {
       if (!isClip) parkClips(el);   /* back to the pool, never destroyed */
       const kb0 = scene.world.ken_burns || { scale: 0, x: 0, y: 0 };
       const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
-      const p = clamp01((t - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
+      const p = clamp01((lifeFrom(scene.span[0], t) - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));   /* P69 T49: the push holds through a freeze beat */
       /* THE WORLD LEANS IN WITH THE ARGUMENT (Gemini showcase: worldScale
          steps 1.02 -> 1.08 across a build). Each evidence event in this
          scene - a card landing, a badge stamping - eases the plate in one
@@ -18458,7 +19488,7 @@ async function mount(doc) {
          one the engine has always written. */
       const idleAmp = idleDriftPx(scene.world.idle_drift_px, KIN.plate_idle_drift_px);
       const idlePose = (isLedger || isClip || isVecmap) ? { scale: 1, dx: 0, dy: 0 }
-        : idleXf(idleOf("plate", scene.world.idle), t, lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleAmp });   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
+        : idleXf(idleOf("plate", scene.world.idle), lifeT(t), lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleAmp });   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
       const zi = idlePose.scale;
       /* R26-133: this block read the plate's idle for its `.scale` ALONE, so `drift` ({scale: 1, dx, dy}) delivered
          nothing and a plate authored `;idle=drift` held perfectly still. The dx/dy now PAINT - on the world's rest
@@ -18482,7 +19512,7 @@ async function mount(doc) {
         el.dataset.worldPose = camCss(camXfNow) + restFlat;
         if (el.dataset.worldRest !== undefined) delete el.dataset.worldRest;   /* P58 T6: the camera is on the planes, not under this element */
         el.style.transform = "";
-        paintPlanes(el, plies, camXfNow, worldRest, idleDrift, Math.max(0, t - scene.span[0]));
+        paintPlanes(el, plies, camXfNow, worldRest, idleDrift, Math.max(0, lifeFrom(scene.span[0], t) - scene.span[0]));   /* P69 T49: the alive plane holds */
       } else if (pageK) {
         /* the page took the camera down onto its own plane; the element keeps what the page's GROUND shares with it
            - the authored Ken Burns and the wipe's push - and `data-world-pose` carries the k = 1 pose, so
@@ -19168,7 +20198,7 @@ async function mount(doc) {
              per-word highlight - the caption-energy lessons - and the HELD page's own life is E49's breath on the strip below. */
             const f = lifeAt(t, x.s, lifeKind), e = f.e;
             const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;                 /* the keyword's box sweeps in when spoken, stays */
-            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;
+            const tick = Math.floor(lifeT(t) * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;
             const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
             const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
             const sc = f.s * (on && e >= 1 ? MARK.LIFT : 1);
@@ -19186,7 +20216,7 @@ async function mount(doc) {
              which is the crowding this register exists to remove. The BLUR IS A FILTER ON THE WORD SPAN, never on the strip. */
             const f = fadeUpAt(t, fuStarts[j], FADE_UP), e = f.e;
             const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;                 /* the keyword's box sweeps in when spoken, stays */
-            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;   /* the boil, unchanged: seeded per word, on the landed word only */
+            const tick = Math.floor(lifeT(t) * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;   /* the boil, unchanged: seeded per word, on the landed word only */
             const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
             const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
             const sc = f.s * (on && e >= 1 ? MARK.LIFT : 1);
@@ -19207,7 +20237,7 @@ async function mount(doc) {
             /* ALIVE (operator, 2026-09-05: 'the words shifting slightly to stay alive, like the golden set'): the spoken word lifts 6% as the
                voice passes it, and every landed word BOILS - the engine's two-frame boil (SP.BOIL_PX / BOIL_DEG at LIFE_FPS), seeded per word */
             const sc = (MARK.POP + (1 - MARK.POP) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1) * (on && e >= 1 ? MARK.LIFT : 1);
-            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = e >= 1;
+            const tick = Math.floor(lifeT(t) * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = e >= 1;
             const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
             const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
             ws[j].style.transform = "translate(" + bx.toFixed(2) + "px," + (MARK.RISE_PX * (1 - e) + by).toFixed(2) + "px) scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + " + " + bdeg.toFixed(2) + "deg))";

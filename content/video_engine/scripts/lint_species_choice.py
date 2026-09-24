@@ -75,12 +75,12 @@ ACT_SPECIES = {
     "QUOTES": ("record dock", "read->park"),
     "RANKS": ("bars page", "callout", "burst"),
     "COMPARES": ("line page", "tiers page", "build_to", "chart_to:rescale", "chart_to:extend", "figure"),   # P50 T9: N small multiples on one shared x - the same quantity across two, three or four subjects
-    "DIVIDES": ("share page", "peel", "treemap page", "cross"),   # P50 T6: the census, and the X's on its named subset
+    "DIVIDES": ("share page", "peel", "treemap page", "cross", "explode", "member"),   # P50 T6: the census, and the X's on its named subset; P69 T45: who is in ONE total, a tile on each name
     "NAMES": ("trace", "light", "arc", "stamp"),   # P50 T5: the vector map ships - a country lights, an arc crosses, a figure stamps
     "EXPLAINS": ("note", "plate use=bridge", "chip", "flow"),
-    "TURNS": ("figure", "spotlight", "callout", "note"),
+    "TURNS": ("figure", "spotlight", "callout", "note", "freeze"),   # P69 T49: the stage STOPS on the number the turn lands on (E99 s99)
     "BREAKS": ("burst", "stack", "burst:stop", "placeholder", "axis capsule"),
-    "SPANS": ("bracket", "spread", "relight", "span"),
+    "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)
     "SETS": ("chart_to:park", "figure", "retitle"),
     "RETRACTS": ("retitle", "squiggle"),
 }
@@ -274,6 +274,7 @@ PROPOSE_FILL = {
     "bracket": (("from", _EDGE), ("to", _EDGE), ("label", "what the two data measure")),
     "spread": (("from", "the series index the gap starts at"), ("to", "the second series' index (or `to_rule`)")),
     B.SPECIES_SPAN: (("from", _EDGE), ("to", _EDGE), ("label", "the stretch of time's own name")),
+    B.SPECIES_LIT_STRETCH: (("from", _EDGE + "; the light leaves here"), ("to", _EDGE + "; ... and lands here")),
     B.SPECIES_CHIP: (("icon", "a SOURCED glyph under assets/icons"), ("label", "the thing the chip stands for")),
     B.SPECIES_FLOW: (("nodes", "2-6 {id, icon, label}"), ("edges", "the arrows, by node id")),
     B.SPECIES_CROSS: (("cells", "the treemap cells' own labels"), ("text", "the crossed share, written as a number")),

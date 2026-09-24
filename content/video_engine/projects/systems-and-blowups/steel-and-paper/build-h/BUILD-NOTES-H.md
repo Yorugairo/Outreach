@@ -1837,3 +1837,123 @@ x 18 geometr(ies) measured identical**; probe 194 instants; frozen **no run of i
 IDENTICAL (`t28b-door1.sha` = `t28b-door-final.sha`); seams **19 boundaries, 0 faults**; spoken **5 pointing phrases, 0
 uncovered**; stage gaps **2.5 s of 533.9 s**; **gate 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** (unchanged; M12 PASS, M25
 lists no row 20 card).
+
+## 20. P69 T29 - row 21 (9:04-10:05): SK hynix - one PANELS page, focus on the words, camera 4, PROPS 4 and 5, the wafer compare - 2026-09-24
+
+The build runs 0.00-605.73 s. `UNIT_CUT_PHRASE` = "Bravos put their" (row 22's first words, T30's). RED: before the slice the table
+ended at row 20 (513.69-533.88); `logs/t29-gate-before.log` on HEAD's build: **2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO**.
+Treatment row 21 compiles as TABLE row 21 (533.80-605.73); row 20 now ends at the melt (533.80).
+
+**BLOCKER, FOR THE PARENT (a compiler fix, not made here - outside the write set).** Every `panel_focus` in a COMPILED episode
+FAILs: `build_scene_timeline_f._validate_panel_fields` (line ~1908) allows the keys `PANEL_FOCUS_KEYS + ("kind", "at", "dur",
+"word", "keep")`, and the compiler itself writes `id` (`<scene>.species.<n>`, P51 T5, `build_scene_timeline_f.py:9366`) onto
+EVERY species before validation - so `panel_focus: unknown key(s) ['id']` (`logs/t29-door0-plain-FAIL.log`). `LIT_STRETCH_KEYS`
+and `FREEZE_KEYS` carry `"id"`; `PANEL_FOCUS_KEYS` does not. The goldens and `test_ledger_panels.py` never see it: they call
+`validate_species` directly, with no ids. The fix: add `"id"` to that tuple (or to `PANEL_FOCUS_KEYS`), plus a test compiling a
+panel_focus through the row path. Until then this row is built through `scratchpad/p69-row21/door_idfix.py` - a harness that runs
+`build_episode_h.main()` in-process with that one allowance IN MEMORY (nothing on disk in the compiler changes); every `t29-door*`
+log below opens with its `[harness]` line. Once the fix lands, the plain door should compile the same timeline.
+
+Recall: `docs_find "panels"` -> `CAPABILITIES.md:226` (T8b/T8c/T8d: panels, `panel_focus`, bars panels, the RANGE); `:227` the lit
+stretch; `:228` the freeze beat; `:223` T26d place/moves; `:224` T26f chrome; `:225` T26e morph; `:220` T26a; the design
+`scratchpad/p69-row21/row21-design.md` (the anchors, the melt, camera 4, the agenda departure).
+
+| table row | window | what |
+|---|---|---|
+| 21 `ledger:ev-hynix-row21-panels-v1:line::right:axes:cut;idle=live;readability=longform` | 533.80-605.73 | the divergence MELTS and is thrown (`melt:throw:1`, HYNIX_MELT_WHY) in the breath before "Run it on the most"; ONE PANELS PAGE (the derived `evidence/objects/ev-hynix-row21-panels-v1.series.json`: the hynix line, the wafer bars, the contract bars) - the line ALONE on its axes, retitled on "SK hynix."; **PROP 4** (`prop-hbm-stacked-die-v1`) STAMPED on "stacked memory" (539.35) in the line's empty upper left, gone before the push (545.36); the price draws "over the last year" and lands +548% on "percent" (544.5); **CAMERA 4** pushes 1.2x onto the tip on "Five hundred." (545.76-546.66, a POINT look at the tip's rest, `chrome: fit`, the key rail stepping aside and up beside the title in two legs); the **FREEZE** on "that number" (549.12, 0.7 s, one light on the tip); release on "And the scarcity" (550.08); retitled "The scarcity is physics"; on "So a gigabyte" the WAFER bars build in BESIDE the line and grow to the page over it (556.21 / 557.41), "3x" written as the bar lands; **PROP 5** (`prop-silicon-wafer-semiconductor-v1`) STAMPED on "wafer" (558.56) over the 1x bar; **the compare** "3x" -> "3 wafers / for the gigabytes 1 wafer of DRAM makes" on "Every accelerator" (561.67, WAFER_WHY); on "That's why the memory" the CONTRACT bars build in beside the wafer and grow (567.45 / 568.65) - "+55–60%" a RANGE (the bar to +55, a dashed band to +60), "+60%", "+89%" - retitled "Why a new laptop costs more" on "laptop"; on "So run the three questions" the LINE comes back beside the bars and grows to the page (570.84 / 572.04), retitled "Three questions for SK hynix"; the three questions land as the numbered agenda in its empty room, each row on its ANSWER's words with the answer in the row: "Scarce? Sold out" (574.51), "Cash or paper? Cash" (580.40), "Used tomorrow? Racks" (585.05); the OPERATING PROFIT draws on "They're selling product" (+230%); the **rack** (`prop-ai-server-rack-cabinet-v1`, an ADDITION) STAMPED on "racks" (586.21); "It passes." retitled with the object's own "Sold out, and paid for"; the **LIT STRETCH** travels the spring (datum 140 -> the 193 peak, read off the data) on "vertical" (592.26); the tip RINGED on "steel" (593.76); "Run it honestly" (599.62) |
+
+**Acceptance (P69 T29):**
+- *Camera 4 on the hynix tip:* `final/B-tiles.png` (545.8-551.2).
+- *Props 4 and 5 stamped on their words:* `final/A-tiles.png` g-h (539.4 / 539.6: the approach and the ring) and `final/C-tiles.png` g (558.7). Cues: `landing 21 (stamp, ink)` at 539.46 / 558.67 / 586.32.
+- *The 1 vs 3 `chart_to compare` on R26-190 (T6):* the `row21-wafer` fixture's own compare, `final/C-tiles.png` j-l.
+- *Four charts on T8b's panels with composable focus, never a cut or a fifth state:* the line, the wafer bars, the contract bars, the line returning (`final/C`, `D`); `panel_focus` changes only; STATE_MAX untouched.
+- *A panel grows to the page on the sentence it serves:* "So a gigabyte" / "That's why the memory" / "So run the three questions".
+- *The checklist ticks, or the agenda departure:* THE AGENDA DEPARTURE (BODY_DEPARTURES row 21). The phone-profile test card reads at the floor only at >= 0.60 of the stage (T28b). There it covers the line whose operating profit draws as the cash answer, and the page carries its own empty room for a list. The agenda is row 20's own list of these questions.
+- *A lit_stretch / a freeze where the words call for it:* the freeze on "it should be THAT NUMBER" (one number); the lit stretch on "the most VERTICAL line" (one stretch).
+
+**Measured and fixed** (private drafts `scratchpad/p69-row21/d1..d7` via the harness):
+- **draft 1, `d1-A.*.png`, THE BOARD:** the three panels side by side on "So run the three questions" landed 0.55 s before "Scarce?" took the line back - a flash - with the line's x ticks crowding its third. Refused (FOCUS_WHY).
+- **draft 1, the laptop callout:** a callout on the consumer bar rang the whole bar across "Consumer DRAM" (row 16's M34 finding). Replaced by a retitle on "laptop".
+- **draft 1, "Steel":** the callout's label wrote over "+548%". The ring carries no label.
+- **draft 1, the agenda:** at y0 0.22 row 1 straddled the plot's top rule. Box moved to y 0.30-0.60.
+- **draft 1, "+230%":** the profit tag sat on the price line. `name_clear: true` on the line panel (a display key in the derived object) lifts it clear.
+- **draft 1, M03 FAIL (47 s from the wafer's stamp):** the gate counts no `panel_focus` as an arrival. The rack stamped on "racks" is the row's last evidence arrival (the treatment's prop rule: a direct match - the sentence names the racks). Now M03 PASS 44 s.
+- **draft 1, M24 FAIL (the freeze "88% in frame"):** the gate reads a `datum` target as the whole plot box. The look and the freeze target are a POINT at the tip's rest (1652, 532) px.
+- **draft 2, `d2f/g-tiles.png` a:** one diagonal key move ran the pills through the title. Now two legs (aside, then up; back the same way).
+- **build-h's first pass, `logs/t29-gate-first-pass.log`, 5 FAIL:** M28 read the receded line's crowded x ticks and "+548%" on the covered "+89%"; M27 read the rack "on" the covered wafer panel's compare label and bars. The receded panels were fully covered by the grown one's ground, so the frame was right, but the probe reads covered ink.
+  - The default recede leaves 0.45 ink. `RECEDE_DEEP` (the recede's own `dim` bound, 0.95) ends a receded panel at 0.05, which the probe skips.
+  - The deep recede alone emptied the board mid-move (draft 5, `d5t/t-tiles.png` 556.8 / 568.1): INK_LEAD fades the leaving chart in the first half and brings a hidden one in only in the second.
+  - So each change is TWO states: the next chart builds in BESIDE (T8c's resize-in), then grows over (`d6t/t-tiles.png`).
+- **draft 6, the answers:** at a 390 px phone the agenda's grey sub line ("sold out for the year") read at ~5 px. The answer joined the question in the row's type ("Scarce? Sold out"), read at 390 px (`final/phone-390-x3.png`).
+- **draft 7, `d7t/t-b-588.30.png`:** the rack at (0.47, 0.44) met row 3's "Racks" and the "+230%" tag. Moved to (0.50, 0.40), `d7t/u-tiles.png`.
+
+**Named, not fixed:**
+- **THE FIXTURE (for the parent - a tool, not this write set).** `measure_page_boxes.py --write` measured the new page (`3ea360f29084176d`) in its HOME layout, every panel active side by side. The entry's plot is `{x 111, w 2003}` (past the 1920 stage), and its panel plots are wider than their 571 px boxes (904 / 599 / 717). The page never stands in that layout.
+  - On that entry the first build-h pass FAILed M24 (the figure and the tip's ring "90% in frame" at zoom 1.00) and M27 (the rack "over the data").
+  - So the fixture is left at HEAD (`git diff` empty) and the page compiles ESTIMATED (`t29-door-final.log`: "1 page(s) ESTIMATED").
+  - `measure_page_boxes.py --check`, run alone after the chain with no browser work beside it: **rc 1, "DRIFT ... panels 3ea360f29084176d 16:9|full_stage: measured now, not on file"** (`logs/t29-measure-check.log`; the chain's own check crashed on a Playwright network error while frames were being grabbed beside it, `logs/t29-measure-check-crashed.log`).
+  - The measurer needs to take a panels page's boxes in the state its FIRST focus puts it in (here the line alone), or the fixture's panels entry needs to carry per-state boxes. The defective entry is kept at `scratchpad/p69-row21/page-boxes.defective-measure.json`.
+- **Camera 4 cuts the line panel's own sub and y ticks:** "hare price vs its own operating profit", no y ticks, for 546-551 s, `final/B-tiles.png`. T26f's chrome fit moves the PAGE's chrome, but a panel's sub and ticks are inside its svg - the capability's open item "T26f chrome does not address a panel's ticks". A 1.2 push onto a tip at the plot's right edge cannot keep both the tip's tag and the panel's left column (1.05 is the most that does). The parent's call: keep 1.2 as asked, or an engine slice that makes a panel's sub/ticks chrome.
+- **T26e's prop -> bar morph (the wafer becoming the 1x bar) is refused on a panels page** (`PANEL_CHART_TO` = park | compare). The wafer is stamped over the bar instead (WAFER_WHY, BODY_DEPARTURES row 21).
+- **M21 WARN adds s21 24.1 s (9:41 -> 10:05):** the last data mark is the operating profit's landing (581.6). The verdict, the lit stretch, the ring and "Run it honestly" follow with no data left to draw. M21 was already WARN.
+- **M03 counts no `panel_focus`:** a hidden panel building on its word is new evidence entering (the panels form of E99 s105's recast). A gate question for its owner; the rack carries M03 here.
+- **The key rail (SHARE PRICE / OPERATING PROFIT) stays on while the bars panels are grown.** The page has one key rail (the long form). It could step away by the same T26f move; left for the frame read.
+- **The page's empty axes stand ~6 s (535.0-541.7) before the price draws "over the last year"** (`final/A-tiles.png` d-i). The HBM stamp lands in them at 539.35.
+- **The T26d fit's WARNs for the three props** ("over a label: the y axis", "over a reserved box") are read off the ESTIMATED page box and the row's other stamps' reserved boxes. The props never share the stage (545.36 / 558.56-567.25 / 586.21-590.77), and no frame shows an overlap.
+- **The HBM die leaves before the push; it does not return on "stacks the dies vertically"** (553.21). That sentence is carried by the retitle and the HBM bar's own name "(stacked dies)".
+- `ev-dram-contract-v1`'s consumer figure is "up to +89%" in the dossier (`EVIDENCE-DOSSIER.md:203`). The bar prints "+89%"; "up to" is in the object's `src_full`.
+- **The stale probe files** `ev-dram-contract-v1.page.json` (printed 57.5) and `ev-hbm-wafer-ratio-bars-v1.page.json` were deleted. Both were untracked `ledger_page.py` CLI outputs of 03:10, referenced nowhere; the second never carried 57.5 but was the same probe pair.
+
+**The derived object** `evidence/objects/ev-hynix-row21-panels-v1.series.json`: `derived_from` the three objects.
+- The hynix panel's `series` and `xticks` are copied from `ev-hynix-steel-v1`; the door asserts equality.
+- The wafer bars' values are asserted equal to the source's.
+- The contract bars are `ev-dram-contract-v1`'s own NOTES (asserted `["+55-60%", "+60%", "+89%"]`), the conventional one as the RANGE `["+55", "60"]` - never 57.5.
+- `proof` cites the three objects and `EVIDENCE-DOSSIER.md:202-204`. Tier PLAUSIBLE (the wafer panel's tier). `name_clear: true` on panel 0 is a display key.
+
+**Transitions** (in `SHOT-TABLE-H.md`): the melt's throw divergence -> hynix (`HYNIX_MELT_WHY`: the dip, a recast, rescale / extend, the spiral, the suck refused). Inside the row: the focus among the four charts (`FOCUS_WHY`) and the wafer compare (`WAFER_WHY`). Flow count: 0 cuts, 7 dips, 1 arrival carrying a boundary, 12 transforms.
+
+**Life:** 21 of 21 rows (row 21 `idle=live`). `final/life.txt`: 596.0 vs 598.0 (nothing lands) mean |dL| 5.33, 6.7 % of px changed; 575.0 vs 577.0 4.37 / 5.1 %.
+
+**The order of proof** (`logs/`, final build 0.00-605.73, every door through the harness):
+- Door passes: `t29-door0-plain-FAIL.log` (the plain door, the `id` blocker); `t29-door1..3.log` (first build-h passes); `t29-measure-write.log` / `-write2.log` (the defective entry, then reverted); `t29-gate-first-pass.log` (5 FAIL, above); `t29-door4.log` (rc 0; cues 40 bound of 41 - the one dropped is T26's `page enter 17 (axes)`, unchanged; life 21 of 21; "1 page(s) ESTIMATED").
+- `t29-probe.log`: 232 instants.
+- `t29-frozen.log`: **"no run of identical frames over 0.50s (whole frame)"**.
+- `t29-door-final.log`: sha256 IDENTICAL to `t29-door4.sha` (the timeline, player.html, player.json, SHOT-TABLE-H.md, SHOT-TABLE-H.py).
+- `t29-seams.log`: **20 boundaries, 0 faults** (533.80 melt:throw, darkest 50.8, clean).
+- `t29-spoken.log`: **6 pointing phrases, 0 uncovered** (565.16 "the line", s21 page covered).
+- `t29-stagegaps.log`: **2.5 s of 605.7 s** (533.80 melt -> axes, 0.0 s).
+- `t29-measure-check.log`: DRIFT, above.
+- `t29-pytest.log`: `test_ledger_panels.py` + `test_page_boxes.py` + `test_chart_card_readable.py` **165 passed**.
+- **`t29-gate.log` 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** - the same line as `t29-gate-before.log`.
+  - FAIL M11 and M31, both pre-existing.
+  - WARN M02, M04 (18 plates vs 50), M21 (+ s21, above), M25, M27 (+ the three row-21 props "inside the plot's box, clear of its ink" - E65's placement tier). **No new WARN row.**
+  - M01 PASS 9.5 s; M03 PASS 44 s; M05 PASS 7.0 of 8.0; M12 PASS; M18 PASS (longest 0.17 s at 9:09, the freeze's punctuation); M24 PASS (13 pointing species in frame); M28 PASS (9,653 pairs); M34 PASS.
+- No gated command was piped.
+
+**Tiles** (`scratchpad/p69-row21/final/`, rendered from draft 7 / draft 6: the same door and estimated boxes as build-h, the timeline differing only in its paths):
+- `A-tiles.png` 531.5-545.3: row 20's end, the melt, the axes, the retitle, PROP 4's stamp, the price drawing to +548%.
+- `B-tiles.png` 545.8-551.2: camera 4, the key stepping aside, the freeze light at 549.3 / 549.7, the release.
+- `C-tiles.png` 552.5-566.0: the wafer beside then grown, "3x", PROP 5, the compare.
+- `D-tiles.png` 567.3-573.4: the contract bars beside then grown, the range, the laptop retitle, the line back beside then grown.
+- `E-tiles.png` 574.9-591.6: the three answers, the profit line, the rack's stamp, "It passes."
+- `F-tiles.png` 592.3-605.6: the lit stretch, the ring, "Run it honestly", the row's end.
+- `phone-390.png` + `phone-390-x3.png`: a 390 px phone; every agenda row, "3 wafers", "+55–60%" and the retitles read.
+- `life.txt`.
+- No build-f reference frames were cut for this row.
+
+**T29b (2026-09-24, on T8e - lane B eb58794, merged at 953189d).** Row 21 rebuilt with the PLAIN door; no harness:
+- **Supersedes above:** the `id` blocker (T8e allows the compiler's own row-path keys); the defective fixture entry; M03's reliance on the rack; and camera 4 cutting the line panel's sub and ticks.
+- **The fixture:** `measure_page_boxes.py --write` reproduces T8e's `3ea360f29084176d` entry exactly - plot w 1513, measured in the first focus state, the line alone, panels 1-2 hidden. The whole fixture is byte-equal to HEAD (empty `git diff`). The door reports "12 page(s) MEASURED", and `--check` PASSes 7 builders x 21 geometries (`logs/t29b-measure-*.log`).
+- **Camera 4:** the row's existing `chrome: {"camera": "fit"}` needs no panel names - `fit` keeps every panel's labels whole. Read on build-h, `scratchpad/p69-row21/final-t29b/B-tiles.png` 546.2-551.2: the line panel's sub and "1000 / 500" ticks stand whole through the 1.2 push and the freeze; "Oct '25" hides whole as its gridline leaves the frame (E28).
+- **The key's two-leg move is KEPT:** MEASURED on draft 9 without it (`d9t/t-tiles.png` 547.6 / 549.4), the pushed panel's box still cuts the pills in half.
+- **The key rail follows focus:** `final-t29b/C-tiles.png` 557.9-558.3 - it fades as the wafer bars take the page; `D-tiles.png` - it is absent over the contract bars and returns with the line at 572.0.
+- **The rack is KEPT for its words** ("going into racks"). M03 now credits the reveals (557.41, 568.65), and M03's longest wait is 44 s from 7:20 - no longer this row's.
+- **Chain** (`logs/t29b-*`, every browser step alone, in order):
+  - door rc 0 (cues 40 of 41, life 21 of 21);
+  - probe 232 instants;
+  - frozen "no run of identical frames over 0.50s";
+  - door re-run sha256 IDENTICAL (`t29b-door2.sha` = `t29b-door-final.sha`);
+  - seams 20 boundaries, 0 faults;
+  - spoken 6 pointing phrases, 0 uncovered;
+  - stage gaps 2.5 s of 605.7 s;
+  - **gate 2 FAIL (M11, M31) / 5 WARN (M02, M04, M21, M25, M27) / 21 PASS / 1 JUDGE / 5 INFO** - unchanged, no new WARN.

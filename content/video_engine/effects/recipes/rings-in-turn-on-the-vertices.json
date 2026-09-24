@@ -1,0 +1,66 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:rings-in-turn-on-the-vertices",
+ "title": "Rings in turn on the vertices, the valley lit",
+ "aliases": [
+  {
+   "name": "rings at repeating near similar peaks, and a highlight on the valley",
+   "source": "docs/portable/OPERATOR-RULINGS.md:3349"
+  }
+ ],
+ "acts": [
+  "COMPARES",
+  "SPANS"
+ ],
+ "members": [
+  {
+   "card": "page_builder:line",
+   "offset_s": 0.0,
+   "role": "the chart is the world - the page lands and draws the whole line before anything points at it"
+  },
+  {
+   "card": "species:ring",
+   "offset_s": 5.8,
+   "role": "the first top is ringed on its word, its own value written beside it (E56: a datum, the number)"
+  },
+  {
+   "card": "species:ring",
+   "offset_s": 7.1,
+   "role": "the second near-equal top on ITS word, 1.3 s on (the ladder's beat); the first ring holds"
+  },
+  {
+   "card": "species:ring",
+   "offset_s": 8.4,
+   "role": "the third top on its word; all three stand together until the row's word takes them at once"
+  },
+  {
+   "card": "page_species:lit_stretch",
+   "offset_s": 10.2,
+   "role": "the valley lit: the light walks from the first ringed top down through the trough to the second (T36)"
+  },
+  {
+   "card": "page_species:figure",
+   "offset_s": 11.5,
+   "optional": true,
+   "role": "the trough's own figure is written where the light has passed - the valley named by its number"
+  }
+ ],
+ "window_s": 12.0,
+ "does": "Near-equal tops are ringed one per word, each with its value, and held together; then a light walks the valley from one ringed top through the trough to the next, and the trough's figure is written.",
+ "use_when": {
+  "act": "COMPARES, then SPANS",
+  "moment": "proof / turn",
+  "shape": "one line with two or more near-equal tops (or bottoms) and a real trough between two of them, the vertices at least ~120 stage px apart",
+  "use": "the sentence is ABOUT the vertices - 'it hit five percent in January, again in May, and again in July' - one ring per named top on its word, then the valley lit on 'in between, it fell'",
+  "dont": "a sentence about one number (ring that one), rings scattered on points the sentence never names (E56), tops closer than two ring widths (window the page), or all rings on one word"
+ },
+ "doctrine": [
+  "E99 s109",
+  "E99 s110",
+  "E56",
+  "E99 s99"
+ ],
+ "status": "candidate",
+ "source": "P69 T47 (the operator 2026-09-23, E99 s109 (3)) - no new grammar: N `ring` species in turn, each held to the row's word, the way the approved Japan short's s03 carries six callouts (recipe:trace-callout-ladder); proved as the golden rings-on-vertices (tests/test_rings_on_vertices.py) on the 20-year Treasury yield's 2025 tops - no approved cut carries it",
+ "count": 0
+}

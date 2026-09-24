@@ -1,0 +1,138 @@
+{
+ "aspect": "16:9",
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "kinetics": {
+  "camera": true
+ },
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "camera": {
+    "attention": "locked",
+    "chrome": {
+     "k": 0.0,
+     "mode": "screen",
+     "moves": {}
+    },
+    "keys": [
+     {
+      "ease": "inout",
+      "look": {
+       "index": 0,
+       "kind": "datum"
+      },
+      "t": 11.0,
+      "zoom": 1.0
+     },
+     {
+      "ease": "inout",
+      "look": {
+       "index": 0,
+       "kind": "datum"
+      },
+      "t": 12.4,
+      "zoom": 1.6
+     }
+    ]
+   },
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 9.0,
+     "dur": 0.8,
+     "kind": "explode"
+    }
+   ],
+   "world": {
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "kind": "ledger",
+    "page": {
+     "badges": [],
+     "builder": "share",
+     "colors": [
+      "crimson",
+      "deemph",
+      "deemph",
+      "deemph",
+      "deemph"
+     ],
+     "emphasize": 0,
+     "explode": {
+      "index": 0,
+      "out": 0.14
+     },
+     "extrude": {
+      "depth": 0.12,
+      "hatch": true,
+      "tilt": 50
+     },
+     "judge": [],
+     "labels": [
+      "Samsung",
+      "SK hynix",
+      "Micron",
+      "CXMT",
+      "Other"
+     ],
+     "peel": {},
+     "quiet_zone": "right",
+     "schema_version": "ledger_page.v1",
+     "short_labels": [
+      "Samsung",
+      "SK hynix",
+      "Micron",
+      "CXMT",
+      "Other"
+     ],
+     "source": "silicon-silent-triopoly deck, slide 8 (registered figures); Other = the remainder to 100",
+     "sub": "DRAM market share by maker, percent of the whole",
+     "surface": "page",
+     "title": "Who makes the world's DRAM",
+     "total": 100.0,
+     "unit": "%",
+     "value_strings": [
+      "39%",
+      "26%",
+      "25%",
+      "7%",
+      "3%"
+     ],
+     "values": [
+      39.0,
+      26.0,
+      25.0,
+      7.0,
+      3.0
+     ],
+     "variant": "share"
+    }
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the 3D pie, pushed onto its largest slice"
+}

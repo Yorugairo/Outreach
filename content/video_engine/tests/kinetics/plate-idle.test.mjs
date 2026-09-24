@@ -145,7 +145,7 @@ test("the ENGINE reads the amplitude at the plate's idle pose, row before build 
   assert.match(src, /plate_idle_drift_px: "the plate idle drift's half-width in stage px/, "the dial is declared in KINETICS_DIALS");
   assert.match(src, /const idleAmp = idleDriftPx\(scene\.world\.idle_drift_px, KIN\.plate_idle_drift_px\);/,
     "the ROW's px is read before the build's dial, and the module's floor is behind both");
-  assert.match(src, /idleXf\(idleOf\("plate", scene\.world\.idle\), t, lpHash\(Math\.round\(scene\.span\[0\] \* 100\), 0, 977\), \{ DRIFT_PX: idleAmp \}\)/,
+  assert.match(src, /idleXf\(idleOf\("plate", scene\.world\.idle\), (?:lifeT\(t\)|t), lpHash\(Math\.round\(scene\.span\[0\] \* 100\), 0, 977\), \{ DRIFT_PX: idleAmp \}\)/,   // P69 T49: the pose reads the LIFE clock (t, held inside a freeze beat)
     "the amplitude is threaded into the pose itself, so every reader of idlePose gets it");
   assert.ok(!/DRIFT_PX:\s*30/.test(src), "a second default in the engine is exactly the drift this pins");
 });

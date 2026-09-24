@@ -121,7 +121,8 @@ IDLE_IS_THE_SUBJECT = {"plate-drift", "plate-alive"}
 #   page-rescale-follow / -yield        R26-233 (E99 s82) - the followed rescale, on a page that breathes
 # The rest of the wall stays flagless, which is what keeps it byte-identical - that is unchanged.
 PAGE_IDLE_IS_THE_SUBJECT = {"page-life-still", "page-life-live", "page-build-lines", "page-build-lines-4th",
-                            "page-rescale-follow", "page-rescale-follow-yield"}
+                            "page-rescale-follow", "page-rescale-follow-yield",
+                            "freeze-trough"}   # P69 T49 / E99 s99: the freeze beat STOPS the page's life - with no life on, there is nothing to stop
 
 
 def test_golden_sources_carry_no_idle_flag_so_they_stay_byte_identical():
