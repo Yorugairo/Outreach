@@ -12092,6 +12092,43 @@ async function mount(doc) {
     const u = prev ? minJerk(clamp01((t - prev.at) / prev.dur)) : 1, a = lpPanelNamer(prev ? prev.from : home, pref), b = lpPanelNamer(prev ? prev.to : home, pref);
     return st.panels.map((_, i) => (a === i ? 1 - u : 0) + (b === i ? u : 0));
   };
+  /* P69 T8e (row 21, T29) - THE KEY RAIL FOLLOWS THE FOCUS. A key pill names a line of ONE panel (`kp.panel`) - and of
+     every panel whose line shares its name and colour (ledger_page.longform_panel_key keys such a name once, E53 s8). It
+     stands while one of those panels is ACTIVE and goes with it: a receded or hidden panel's names are not the chart in
+     focus (row 21's "SHARE PRICE / OPERATING PROFIT" stood over the grown wafer bars). A bars panel keys nothing, so with
+     only bars in focus the rail is empty. The weight rides the focus's own clock as the panel's ink does (lpPanelMix's
+     INK_LEAD: a panel leaving focus lets go by the move's first half, one coming forward takes it in the second), from
+     wherever the move before it stood - a pure function of t. null: the page has no focus state (nothing is painted). */
+  const lpPanelKeyWeights = (st, scene, t) => {
+    const focus = pageSpecies(scene, "panel_focus");
+    if (!focus.length) return null;
+    const tgt = (fs) => st.panels.map((_, i) => (((fs && Array.isArray(fs.roles) ? fs.roles[i] : null) || "active") === "active" ? 1 : 0));
+    const mix = (A, B, u) => A.map((a, i) => { const b = B[i], K = LP_PANELS.INK_LEAD;
+      const ui = b < a ? minJerk(clamp01(u / K)) : b > a ? minJerk(clamp01((u - K) / (1 - K))) : u; return a + (b - a) * ui; });
+    let prev = null;
+    for (const sp of focus) {
+      if (t < sp.at) break;
+      const from = prev ? mix(prev.from, prev.to, minJerk(clamp01((sp.at - prev.at) / prev.dur))) : tgt(null);
+      prev = { from, to: tgt(sp), at: sp.at, dur: Math.max(0.001, +sp.dur || 1) };
+    }
+    return prev ? mix(prev.from, prev.to, minJerk(clamp01((t - prev.at) / prev.dur))) : tgt(null);
+  };
+  /* the panels a key pill names: its own, and every panel whose drawn line gave up the same name in the same colour */
+  const lpKeyPanels = (st, kp) => {
+    const list = (st.panelCtx || {}).list || [], own = ((list[kp.panel] || {}).series || [])[kp.series] || {};
+    return list.map((p, j) => j).filter((j) => j === kp.panel || (((list[j].axes || {}).tag_form || "full") !== "full"
+      && (list[j].series || []).some((s) => s && !s.muted && String(s.name || "").trim() === kp.name && String(s.label || "").trim() && s.color === own.color)));
+  };
+  const lpPaintPanelKey = (st, scene, t) => {
+    const w = lpPanelKeyWeights(st, scene, t);
+    if (!w) return;
+    for (const kp of st.keyPills) {
+      if (kp.panel == null) continue;
+      if (!kp.panels) kp.panels = lpKeyPanels(st, kp);
+      const k = Math.max(...kp.panels.map((j) => w[j] || 0));
+      if (k < 1) kp.el.style.opacity = ((+kp.el.style.opacity || 0) * k).toFixed(3);
+    }
+  };
   const lpPaintPanels = (st, scene, t3, t) => {
     const scenes = lpPanelScenes(st, scene), poses = lpPanelPoses(st, scene, t), pg = scene.world.page || {};
     const names = Number.isInteger(pg.panel_rule_home) ? lpPanelNames(st, scene, t, pg.panel_rule_home) : null;
@@ -15704,6 +15741,7 @@ async function mount(doc) {
     }
     if (!(st.states && st.states.length > 1)) (st.keyPills || []).forEach((kp, ki) => pillAt(kp.el, tb - kp.at, ki, 40 + ki));   /* P69 T10: the key, on recipe:badge-ladder's clock */
     else lpPaintStateKeys(st, scene, t, tb, pillAt);   /* M1: the key of the chart on screen; a recast's old key leaves */
+    if (st.panels && (st.keyPills || []).length) lpPaintPanelKey(st, scene, t);   /* P69 T8e: ... and on a panels page it follows the focus */
     paintPerform(st, st.panels ? (lpPanelScenes(st, scene), st.panelPageScene) : scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word (P69 T8b: a panels page's own; each panel's ride lpPaintPanels) */
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
@@ -15734,6 +15772,11 @@ async function mount(doc) {
      spiral and the melt still write the label's own). A pure function of t: a cold seek paints what play paints. */
   const CHROME = Object.freeze({ FIT_PAD_PX: 24 });   /* the gate mirrors it as CHROME_FIT_PAD_PX */
   const CHROME_SVG = Object.freeze({ ylabel: "yticks", xtick: "xticks", axislabel: "axis_names" });   /* mark role -> object */
+  /* P69 T8e (row 21, T29): a PANELS page's panels are chrome too - each panel's sub (its y label's corner, T8b) and its
+     tick columns, named by the panel's index (build_scene_timeline_f.CHROME_PANEL_ELEMENTS): `sub@<i>`, `yticks@<i>`,
+     `xticks@<i>`. The same plane law and the same measure-and-correct as the page's own; each reported under its name. */
+  const CHROME_PANEL = Object.freeze({ axis_names: "sub", yticks: "yticks", xticks: "xticks" });
+  const chromeName = (S, obj) => (S.panel != null ? CHROME_PANEL[obj] + "@" + S.panel : obj);
   const CHROME_HTML = Object.freeze({ title: ".lp-title", sub: ".lp-sub", source: ".lp-src", key: ".lp-key", rail: ".lp-rail" });
   const CHROME_EASE = { minjerk: minJerk, inout: (u) => camEase.inout(u), cubic: (u) => camEase.cubic(u), linear: (u) => clamp01(u) };
   /* 2x3 affine [a, b, c, d, e, f]: (x, y) -> (a x + c y + e, b x + d y + f) - CSS matrix() order */
@@ -15835,15 +15878,15 @@ async function mount(doc) {
       else { p.e.style.transformOrigin = "0 0"; p.e.style.transform = id ? "" : chrCss(T); }
     }
     const B = chrAt(D, [U.x, U.y]), sc = Math.hypot(D[0], D[1]);
-    if (!o.S || o.S === C.active) C.report.objects[o.obj] = { k, rest: [moved.x, moved.y, moved.w, moved.h], box: [B[0], B[1], U.w * sc, U.h * sc] };
+    if (!o.S || o.S === C.active || o.S.panel != null) C.report.objects[o.obj] = { k, rest: [moved.x, moved.y, moved.w, moved.h], box: [B[0], B[1], U.w * sc, U.h * sc] };
   };
   /* one TICK column (per chart state): each label's pinned coordinate on the chrome's plane and the column's move, its
      data coordinate the plot's (E28), its own size at that plane; hidden whole once its gridline has left the frame */
-  const lpChromeColumn = (C, obj, S, qs) => {
+  const lpChromeColumn = (C, obj, S, qs, name = obj) => {   /* name: the object's own (a panel's `yticks@<i>`, P69 T8e) */
     const pin = obj === "yticks" ? 0 : 1, rects = qs.map((q) => chrRect(q.label, C.S0)), U = chrUnion(rects);
     if (!U) return;
     const tl = chrAt(C.CcurI, [U.x, U.y]), rest = { x: tl[0], y: tl[1], w: U.w / C.camCur.s, h: U.h / C.camCur.s };
-    const mv = chromeMoveAt(C.moves[obj], C.t, rest), colM = chrMove([rest.x, rest.y], Object.assign({}, mv, { rot: 0 }));
+    const mv = chromeMoveAt(C.moves[name], C.t, rest), colM = chrMove([rest.x, rest.y], Object.assign({}, mv, { rot: 0 }));
     const col = { x: pin === 0 ? chrAt(colM, [rest.x, 0])[0] : rest.x, y: pin === 1 ? chrAt(colM, [0, rest.y])[1] : rest.y,
                   w: pin === 0 ? rest.w * mv.sc : rest.w, h: pin === 1 ? rest.h * mv.sc : rest.h };
     const k = C.kOf(col, pin === 0 ? "x" : "y"), plane = C.planeAt(k), Ck = chrCam(plane), ratio = mv.sc * plane.s / C.camCur.s;
@@ -15862,7 +15905,7 @@ async function mount(doc) {
       if (!chrIdentity(T)) q.w.setAttribute("transform", chrSvg(T));
       q.w.style.display = out ? "none" : "";
     });
-    if (S === C.active) C.report.objects[obj] = { k, rest: [col.x, col.y, col.w, col.h] };
+    if (S === C.active || S.panel != null) C.report.objects[name] = { k, rest: [col.x, col.y, col.w, col.h] };
   };
   /* this frame's chrome context: the camera (and the one the page's content stands under), the plane law, the fit */
   const lpChromeContext = (st, scene, t, ch) => {
@@ -15883,7 +15926,7 @@ async function mount(doc) {
     const C = lpChromeContext(st, scene, t, ch);
     /* every object's elements with the chrome's own transform CLEARED, then measured in one layout */
     const html = Object.keys(CHROME_HTML).map((obj) => ({ obj, els: [...st.page.querySelectorAll(CHROME_HTML[obj])].filter((e) => e.offsetParent !== null) }));
-    const svg = (st.states || [st]).flatMap((S) => chromeWrap(S).map((q) => Object.assign(q, { S })));
+    const svg = [...(st.states || [st]), ...(st.panels || [])].flatMap((S) => chromeWrap(S).map((q) => Object.assign(q, { S })));   /* P69 T8e: and every panel's */
     for (const o of html) for (const e of o.els) e.style.transform = "";
     for (const q of svg) { q.w.removeAttribute("transform"); q.w.style.display = ""; }
     const groupBy = (qs) => [...qs.reduce((m, q) => m.set(q.S, [...(m.get(q.S) || []), q]), new Map())];   /* one column per chart state */
@@ -15893,8 +15936,8 @@ async function mount(doc) {
     const gx = PR.w / (parseFloat(pcs.width) || PR.w || 1), gy = PR.h / (parseFloat(pcs.height) || PR.h || 1);
     html.forEach((o) => lpChromeRigid(C, { obj: o.obj, parts: o.els.map((e) => { const R = chrRect(e, C.S0); return { e, R, P: [gx, 0, 0, gy, R.x, R.y] }; }) }));
     for (const [S, qs] of groupBy(svg.filter((q) => q.obj === "axis_names")))
-      lpChromeRigid(C, { obj: "axis_names", S, parts: qs.map((q) => ({ e: q.w, svg: true, R: chrRect(q.label, C.S0), P: C.frameOf(S) })) });
-    for (const obj of ["yticks", "xticks"]) for (const [S, qs] of groupBy(svg.filter((q) => q.obj === obj))) lpChromeColumn(C, obj, S, qs);
+      lpChromeRigid(C, { obj: chromeName(S, "axis_names"), S, parts: qs.map((q) => ({ e: q.w, svg: true, R: chrRect(q.label, C.S0), P: C.frameOf(S) })) });
+    for (const obj of ["yticks", "xticks"]) for (const [S, qs] of groupBy(svg.filter((q) => q.obj === obj))) lpChromeColumn(C, obj, S, qs, chromeName(S, obj));
     st.chromeReport = C.report;
   };
 

@@ -756,6 +756,52 @@ def _prop_morph_landings(scenes: list[dict], onsets: list[float] | None = None) 
             if isinstance(pm, dict) and not pm.get("over") and _on_a_word(float(pm.get("at", -1e9)), words)]
 
 
+PANEL_FOCUS = "panel_focus"   # P69 T8b: the species that moves a panels page's focus (build_scene_timeline_f.SPECIES_PANEL_FOCUS)
+
+
+def _panel_role(focus: list[dict], i: int, x: float) -> str:
+    """Panel `i`'s role at `x` - the engine's `lpPanelRole` line for line: the last focus state at or before `x`, "active"
+    before any (the page's home) and for a panel a state does not name."""
+    r = "active"
+    for sp in focus:
+        if x < float(sp["at"]):
+            break
+        roles = sp.get("roles") or []
+        r = (roles[i] if i < len(roles) else None) or r
+    return r
+
+
+def _panel_reveal_landings(scenes: list[dict]) -> list[float]:
+    """P69 T8e (E99 s105, the panels form): every instant a PANEL's chart is first revealed ACTIVE on a panels page - an
+    arrival for M03, at the revealing focus state's landing (`at + dur`, the clock `_transition_land` reads a recast on).
+
+    Read as the player reveals a panel (`lpPanelStart`): panel i builds on its own TURN - the page's build opening plus
+    i x its build seconds - unless its role there is hidden; a panel hidden on its turn builds on the first later focus
+    state that shows it. That state is the reveal. It is an arrival when it shows the panel ACTIVE (a new chart in focus,
+    on its word); a panel first shown receded, one shown again after it receded or hid, and one that built on its own
+    turn with the page (the page's start is that arrival) add nothing. A page with no focus states adds nothing."""
+    out: list[float] = []
+    for s in scenes:
+        page = (s.get("world") or {}).get("page") or {}
+        if page.get("builder") != "panels" or not s.get("span"):
+            continue
+        focus = sorted((x for x in s.get("species", []) if x.get("kind") == PANEL_FOCUS
+                        and isinstance(x.get("at"), (int, float))), key=lambda x: float(x["at"]))
+        if not focus:
+            continue
+        a, z = float(s["span"][0]), float(s["span"][1])
+        build = float(page.get("build_s") or LP_BUILD_S)
+        t0 = a + _page_land_offset(s) - build   # the page's build opens (lpPaintPanels' t0; a roll-out page's 4.4 s in)
+        for i in range(len(page.get("panels") or [])):
+            turn = t0 + i * build
+            if _panel_role(focus, i, turn) != "hidden":
+                continue   # it builds on its own turn, with the page
+            shown = next((x for x in focus if float(x["at"]) > turn and _panel_role([x], i, float(x["at"])) != "hidden"), None)
+            if shown is not None and _panel_role([shown], i, float(shown["at"])) == "active" and a <= float(shown["at"]) <= z:
+                out.append(round(float(shown["at"]) + float(shown.get("dur", 0.0)), 2))
+    return sorted(out)
+
+
 def _held_built(at: float, dur: float, landings: list[float]) -> float | None:
     """The landing a gap STARTS at, when the gap is no longer than `HELD_BUILT_S` - else None (E99 s69).
 
@@ -1529,7 +1575,9 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     # P69 T26c (E99 s105): M03's arrivals also carry each recast's landing; the per-minute entry density keeps `entries`
     # P69 T26c2 (E99 s105 AMENDED): ... and each rescale / extend / morph that lands on its word with a new thing
     # P69 T26e (E99 s107): ... and each prop morph that begins on its word
-    pts = [0.0] + sorted(entries + _recast_landings(scenes, _word_onsets(tl)) + _prop_morph_landings(scenes, _word_onsets(tl))) + [runtime]
+    # P69 T8e (E99 s105, the panels form): ... and each panel first revealed active by a focus state on a panels page
+    pts = [0.0] + sorted(entries + _recast_landings(scenes, _word_onsets(tl)) + _prop_morph_landings(scenes, _word_onsets(tl))
+                         + _panel_reveal_landings(scenes)) + [runtime]
     ev_gaps = sorted(((a, b - a) for a, b in zip(pts, pts[1:])), key=lambda x: -x[1])
     # plates: a page is its own plate and holds like one (C5)
     plate_ids = [_plate_id(s) for s in scenes]

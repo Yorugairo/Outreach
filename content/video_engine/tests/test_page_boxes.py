@@ -730,3 +730,76 @@ def test_every_measured_end_tag_is_on_the_stage():
         sw, sh = LPG.STAGE_PX[geo.split("|")[0]]
         for b in (ent.get("boxes") or {}).get(LPG.TAG_BOXES_KEY) or []:
             assert b["x"] >= 0 and b["y"] >= 0 and b["x"] + b["w"] <= sw and b["y"] + b["h"] <= sh, (section, name, geo, b)
+
+
+# ---- P69 T8e (2): A PANELS PAGE IS MEASURED IN ITS FIRST FOCUS STATE ---------------------------------------------------
+# Row 21 (T29): `--write` measured the hynix panels page in its HOME layout - the line, the wafer bars and the contract bars
+# side by side - a layout no frame of the episode draws (the page stands with the line ALONE from its first frame). Its
+# plot came out 2003 px wide, past the 1920 stage, and the gate read it: M24 and M27 FAILed on boxes that never stand.
+# The reader now takes each panels page's FIRST focus state (its earliest `panel_focus`) off the timeline, the page is
+# measured standing in it, and only the panels that state SHOWS make the plot, the data mask and the axis bands. Every
+# other page - and a panels page with no focus state - is measured exactly as before.
+def _focus(at: float, roles: list, dur: float = 1.2) -> dict:
+    return {"kind": "panel_focus", "at": at, "dur": dur, "layout": "row", "roles": roles, "recede": dict(LPG.PANEL_RECEDE),
+            "boxes": [None] * len(roles), "id": f"s01.species.{int(at)}"}
+
+
+def test_the_timeline_reader_takes_a_panels_pages_first_focus_state(tmp_path):
+    panels = dict(M.representative(LPG.PANELS))
+    line = dict(M.representative("story"))
+    later, first = _focus(20.0, ["active", "active"]), _focus(3.0, ["active", "hidden"], dur=0.05)
+    tl = tmp_path / "x.timeline.json"
+    tl.write_text(json.dumps({"aspect": "16:9", "scenes": [
+        {"world": {"page": line}, "species": [first]},                                   # not a panels page: no focus
+        {"world": {"page": panels}, "species": [{"kind": "retitle", "at": 1.0}, later, first]},
+        {"world": {"page": panels}, "species": [_focus(1.0, ["hidden", "active"])]}]}), encoding="utf-8")
+    assert M.timeline_focus(tl) == {LPG.page_ink_key(M._strip(panels)): first}, "the first scene's earliest state"
+
+
+def test_a_panels_page_is_measured_standing_in_its_first_focus_state_and_every_other_page_as_before():
+    page = M.representative(LPG.PANELS)
+    fs = _focus(3.0, ["active", "hidden"], dur=0.05)
+    plain = M._timeline(page, "16:9")
+    assert plain["scenes"][0]["species"] == [], "no focus: the page's home layout, the timeline it always was"
+    focused = M._timeline(page, "16:9", focus=fs)
+    assert focused["scenes"][0]["species"] == [dict(fs, at=0.0)], "the state from the page's first frame"
+    assert {k: v for k, v in focused.items() if k != "scenes"} == {k: v for k, v in plain.items() if k != "scenes"}
+
+
+def test_build_pages_hands_each_panels_page_its_first_focus_state(tmp_path, monkeypatch):
+    panels = dict(M.representative(LPG.PANELS))
+    first = _focus(3.0, ["active", "hidden"], dur=0.05)
+    tl = tmp_path / "x.timeline.json"
+    tl.write_text(json.dumps({"aspect": "16:9", "scenes": [{"world": {"page": panels}, "species": [first]},
+                                                           {"world": {"page": M.representative("story")}}]}), encoding="utf-8")
+    seen = []
+
+    def fake(builder, aspect, page=None, *, full_stage=None, focus=None):
+        seen.append((builder, focus))
+        return {"boxes": {"plot": {}}, "ink": LPG.page_ink_key(page)}
+
+    monkeypatch.setattr(M, "entry", fake)
+    M.build_pages([str(tl)])
+    assert sorted(seen, key=str) == sorted([(LPG.PANELS, first), (LPG.PANELS, first), ("story", None), ("story", None)], key=str)
+
+
+def panels_on_stage(doc: dict) -> list[str]:
+    """Every measured panels entry's plot on the stage, and each panel it shows no wider than its own box (a plot past
+    its box is the home layout's squeeze - the row-21 defect)."""
+    bad = []
+    for ink, by_aspect in (doc.get("pages") or {}).items():
+        for key, e in by_aspect.items():
+            if e.get("builder") != LPG.PANELS:
+                continue
+            sw, sh = LPG.STAGE_PX[key.split("|")[0]]
+            p = e["boxes"]["plot"]
+            if p["x"] < 0 or p["y"] < 0 or p["x"] + p["w"] > sw or p["y"] + p["h"] > sh:
+                bad.append(f"{ink} {key}: plot {p} off the {sw}x{sh} stage")
+            for i, q in enumerate(e.get(LPG.PANELS_KEY) or []):
+                if q.get("plot") and q["plot"]["w"] > q["box"]["w"] + 2:
+                    bad.append(f"{ink} {key}: panel {i}'s plot {q['plot']['w']} px is wider than its box {q['box']['w']} px")
+    return bad
+
+
+def test_every_measured_panels_page_stands_on_the_stage():
+    assert panels_on_stage(FIXTURE) == []

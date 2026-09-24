@@ -501,6 +501,11 @@ PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure",
 # the 1.0 s of the vortex's first phase (the engine's LP_RETRACT.COLOURS; CAPABILITIES, the page VORTEX row) - so
 # nothing pops. `keep: true` on the species refuses the leave: the note is about the argument, not the page.
 PAGE_BOUND_SPECIES = ("note", "figure", "retitle", "bracket", "spread")
+# P69 T8e (row 21, T29): the keys the ROW PATH itself writes on a species before `validate_species` reads it - `id`
+# (P51 T5, `species_row_id`, on every species) and `held` (the hold pass, on one whose `dur` is "hold"). A species with
+# a CLOSED key list (panel_focus, lit_stretch, freeze, member) allows them, or every compiled one FAILs on the
+# compiler's own record. (`leave_at` / `leave_s` / `leave_clamped` are written only on PAGE_BOUND_SPECIES, all open.)
+ROW_PATH_KEYS = ("id", "held")
 PAGE_REPLACING_VERBS = ("recast", "morph", "remake")
 PAGE_LEAVE_S = 1.0
 CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph", "compare", "remake")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP); compare (P57 T11 / R26-70: the quoted metric becomes the comparator, E76); remake (P61 T2 / E99 s34: the WHOLE chart becomes the whole chart - the seventh verb, and the only one under which every series, datum, axis, label and the title transform on one clock)
@@ -1229,6 +1234,25 @@ def camera_reach(world, docks, cam, plate_id: str, aspect: str | None = None) ->
 #     what it does not name. A tick column moves only along its pinned axis (E28 is a truth rule, s106 (4)).
 #   `"chrome": "screen"` is shorthand for `{"camera": "screen"}`. A camera that names none compiles untouched.
 CHROME_ELEMENTS = ("title", "sub", "source", "yticks", "xticks", "axis_names", "key", "rail")
+# P69 T8e (row 21, T29): a PANELS page's panels carry their own sub and ticks inside their svgs - chrome objects too,
+# named by the panel's index: `sub@<i>`, `yticks@<i>`, `xticks@<i>` (i in 0..3; the E28 tick locks by the object's kind).
+# `fit` keeps every panel's whole with no name; a name is only needed to MOVE one.
+CHROME_PANEL_ELEMENTS = ("sub", "yticks", "xticks")
+CHROME_PANEL_RE = re.compile(r"^(" + "|".join(CHROME_PANEL_ELEMENTS) + r")@([0-9]+)$")
+
+
+def chrome_panel_object(name) -> tuple[str, int] | None:
+    """(`sub` | `yticks` | `xticks`, panel index) for a panel's chrome object name (`yticks@1`), else None."""
+    m = CHROME_PANEL_RE.match(name) if isinstance(name, str) else None
+    return (m.group(1), int(m.group(2))) if m and int(m.group(2)) < LPG.PANELS_MAX else None
+
+
+def chrome_objects(ch) -> list[str]:
+    """The objects a chrome dict MOVES, in the order the player reads them: the page's (CHROME_ELEMENTS), then the
+    panels' by index."""
+    if not isinstance(ch, dict):
+        return []
+    return [o for o in CHROME_ELEMENTS if o in ch] + sorted(o for o in ch if chrome_panel_object(o))
 CHROME_MODES = ("screen", "fit")
 CHROME_MOVE_FIELDS = ("at", "x", "y", "scale", "w", "rot", "dur", "ease")
 CHROME_MOVE_EASES = ("minjerk", "inout", "cubic", "linear")   # the first is a key's default (T26d's prop moves open on minjerk too)
@@ -1301,7 +1325,7 @@ def _chrome_key_errors(key, obj: str, n: int, where: str) -> list[str]:
         errs.append(f"{at}: dur must be seconds > 0")
     if key.get("ease", CHROME_MOVE_EASES[0]) not in CHROME_MOVE_EASES:
         errs.append(f"{at}: ease must be one of {'|'.join(CHROME_MOVE_EASES)}")
-    locked = [f for f in CHROME_TICK_LOCKS.get(obj, ()) if f in key]
+    locked = [f for f in CHROME_TICK_LOCKS.get((chrome_panel_object(obj) or (obj,))[0], ()) if f in key]
     if locked:
         errs.append(f"{at}: {'/'.join(locked)} would take a tick label off its gridline - E28, the geometry says what "
                     f"the number says: a {obj} column moves along its pinned axis and rescales, nothing else")
@@ -1319,12 +1343,11 @@ def validate_chrome(ch, plate_id: str) -> list[str]:
         return [] if ok else [f"{where}: a compiled chrome is {{mode, k, moves}}, not {ch!r}"]
     if not isinstance(ch, dict):
         return _chrome_relation_errors(ch, where)
-    errs = [f"{where}: chrome names {name!r}, which is not one of camera|{'|'.join(CHROME_ELEMENTS)}"
-            for name in ch if name != "camera" and name not in CHROME_ELEMENTS]
+    errs = [f"{where}: chrome names {name!r}, which is not one of camera|{'|'.join(CHROME_ELEMENTS)} or a panel's "
+            f"{'|'.join(CHROME_PANEL_ELEMENTS)}@<0-{LPG.PANELS_MAX - 1}> (P69 T8e)"
+            for name in ch if name != "camera" and name not in CHROME_ELEMENTS and not chrome_panel_object(name)]
     errs += _chrome_relation_errors(ch.get("camera"), where)
-    for obj in CHROME_ELEMENTS:
-        if obj not in ch:
-            continue
+    for obj in chrome_objects(ch):
         if not isinstance(ch[obj], list) or not ch[obj]:
             errs.append(f"{where}: chrome {obj} is a list of keys {{at, x, y, scale|w, rot, dur, ease}}")
             continue
@@ -1425,10 +1448,26 @@ def compile_chrome(cam, words, span, plate_id: str, world: dict | None = None,
                          "own surface is already the camera's there (P58 T4); lock the chrome or the plane")
     mode, k = chrome_mode(cam)
     ws = _override_words(words)
-    moves = {obj: _chrome_keys(ch[obj], obj, ws, span, plate_id)
-             for obj in CHROME_ELEMENTS if isinstance(ch, dict) and obj in ch}
+    _chrome_panels_on(ch, world, plate_id)
+    moves = {obj: _chrome_keys(ch[obj], obj, ws, span, plate_id) for obj in chrome_objects(ch)}
     notes = _chrome_move_warns(moves, world, aspect or "16:9", plate_id)
     return dict(cam, chrome={"mode": mode, "k": k, "moves": moves}), notes
+
+
+def _chrome_panels_on(ch, world: dict | None, plate_id: str) -> None:
+    """P69 T8e: a panel's chrome object names a panel THIS page has - on a panels page, an index inside its panels; on
+    any other page none at all. ValueError names the object; nothing to check with no world in hand."""
+    named = [(o, chrome_panel_object(o)[1]) for o in chrome_objects(ch) if chrome_panel_object(o)]
+    if not named or world is None:
+        return
+    page = world.get("page") or {}
+    if page.get("builder") != LPG.PANELS:
+        raise ValueError(f"{plate_id}: camera chrome {named[0][0]} moves a panel's own sub or ticks - a PANELS page's "
+                         "(P69 T8e); this page has no panels")
+    n = len(page.get(LPG.PANELS_KEY) or [])
+    for obj, i in named:
+        if i >= n:
+            raise ValueError(f"{plate_id}: camera chrome {obj} names panel {i} and the page's last panel is {n - 1}")
 
 
 def _chrome_label(cam) -> str:
@@ -1945,7 +1984,7 @@ def _validate_panel_fields(kind: str, entry: dict) -> list[str]:
                         "pointing species names its panel on its datum target (`target.panel`)")
     if kind != SPECIES_PANEL_FOCUS:
         return errs
-    stray = sorted(k for k in entry if k not in PANEL_FOCUS_KEYS + ("kind", "at", "dur", "word", "keep"))
+    stray = sorted(k for k in entry if k not in PANEL_FOCUS_KEYS + ("kind", "at", "dur", "word", "keep") + ROW_PATH_KEYS)
     if stray:
         errs.append(f"panel_focus: unknown key(s) {stray} - a focus state is {'|'.join(PANEL_FOCUS_KEYS)}")
     layout = entry.get("layout")
@@ -2927,7 +2966,7 @@ def _validate_lit_stretch(entry: dict) -> list[str]:
         errs.append(f"lit_stretch: color must be one of {'|'.join(BRACKET_COLORS)} (absent = the relight's sunflower)")
     if "comet" in entry and not isinstance(entry["comet"], bool):
         errs.append("lit_stretch: comet must be true or false (true: a bright head rides the light's leading edge, A13)")
-    extra = sorted(k for k in entry if k not in LIT_STRETCH_KEYS)
+    extra = sorted(k for k in entry if k not in LIT_STRETCH_KEYS + ROW_PATH_KEYS)
     if extra:
         errs.append(f"lit_stretch: {', '.join(map(repr, extra))} - a lit stretch writes nothing and takes only "
                     f"{'|'.join(LIT_STRETCH_KEYS[4:])}; the words that name the stretch are a `figure` or a `span`")
@@ -2948,7 +2987,7 @@ def _validate_member(entry: dict) -> list[str]:
     is_idx = lambda v: isinstance(v, int) and not isinstance(v, bool) and v >= 0
     errs = [f"member: {k!r} is not a member field ({'|'.join(MEMBER_SPECIES_KEYS)})"
             + (" - a tile carries no value of its own (E99 s101)" if k in LPG.MEMBER_VALUE_FIELDS else "")
-            for k in entry if k not in MEMBER_SPECIES_KEYS]
+            for k in entry if k not in MEMBER_SPECIES_KEYS + ROW_PATH_KEYS]
     t = entry.get("tile")
     if "tile" not in entry:
         errs.append("member: needs a 'tile' - the index of the tile its word lands (0 stands on the zero line), a list "
@@ -3055,7 +3094,7 @@ def _validate_freeze(entry: dict) -> list[str]:
     if isinstance(dur, (int, float)) and not isinstance(dur, bool) and not FREEZE_MIN_S - 1e-9 <= dur <= FREEZE_MAX_S + 1e-9:
         errs.append(f"freeze: dur {dur:g}s is outside the beat's dial {FREEZE_MIN_S}-{FREEZE_MAX_S}s - shorter reads as a "
                     "dropped frame, longer as the still frame E49 refuses")
-    extra = sorted(k for k in entry if k not in FREEZE_KEYS)
+    extra = sorted(k for k in entry if k not in FREEZE_KEYS + ROW_PATH_KEYS)
     if extra:
         errs.append(f"freeze: {', '.join(map(repr, extra))} - a freeze writes nothing and takes only "
                     f"{'|'.join(FREEZE_KEYS[1:])}; its light is held still in the page's one light colour, and the words "

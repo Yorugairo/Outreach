@@ -2031,3 +2031,93 @@ def test_m36_counts_a_prop_morph_as_a_chart_to_chart_transform():
                       "prop_morphs": [_pm(12.0)]}]}
     assert F.chart_to_transforms(tl) == [("s10", "prop morph in b:1 (prop-hyperscale-datacenter-v1)")]
     assert F.chart_to_transforms({"scenes": [{"scene_id": "s1", "species": [], "world": {}}]}) == []
+
+
+# ---- P69 T8e (3): a PANEL building on its word is new evidence (the panels form of E99 s105) ---------------------------
+# Row 21 (T29): the wafer bars and the contract bars each BUILD on their sentence's word (a hidden panel shown by a
+# `panel_focus`), and M03 counted none of it - the wait ran 47 s from the wafer's stamp. A focus state whose ACTIVE set
+# gains a panel never shown before is an arrival at the focus's landing (`at + dur`, a recast's `_transition_land`
+# clock); a panel shown again (it receded or hid, and comes back) is not, and neither is a panel that builds on its own
+# turn with the page. The reveal is the player's own: `lpPanelRole` / `lpPanelStart`, mirrored line for line.
+
+def _panels_window(focus, words=(), n=3, build_s=None):
+    """`_story_window`'s clip + ONE page from 0:10, a PANELS page of `n` panels, carrying the given focus states."""
+    tl = _story_window(focus, words=words)
+    page = tl["scenes"][1]["world"]["page"]
+    page.update({"builder": "panels", "panels": [{"sub": f"P{i}"} for i in range(n)]})
+    page.pop("page_states", None)
+    tl["scenes"][1]["world"].pop("page_states", None)
+    if build_s is not None:
+        page["build_s"] = build_s
+    return tl
+
+
+def _focus(at, roles, dur=1.2):
+    return {"kind": "panel_focus", "at": at, "dur": dur, "layout": "row", "roles": roles,
+            "recede": {"scale": 0.86, "dim": 0.55, "blur": 5.0}, "boxes": [None] * len(roles)}
+
+
+ALONE = ["active", "hidden", "hidden"]
+
+
+def test_m03_a_hidden_panel_building_on_its_word_is_an_arrival_T8e():
+    """Row 21's shape: the line alone from the page's start, the bars panel shown BESIDE it on the word at 0:40 - the
+    wait restarts at the focus's landing (0:41.2)."""
+    tl = _panels_window([_focus(10.0, ALONE, dur=0.05), _focus(40.0, ["active", "active", "hidden"])], words=(40.0,))
+    assert G._panel_reveal_landings(tl["scenes"]) == [41.2]
+    gap, m03 = _m03(tl)
+    assert gap == (41.2, 39.8), gap
+    assert m03.level == "PASS", m03
+
+
+def test_m03_each_panel_counts_once_and_a_panel_shown_again_is_not_an_arrival_T8e():
+    """Row 21's four charts: the wafer beside, grown; the contract bars beside, grown; the LINE back (it was shown at
+    the start) - two arrivals, the two panels' first showings, never the line's return nor a grow."""
+    fs = [_focus(10.0, ALONE, dur=0.05),
+          _focus(20.0, ["active", "active", "hidden"]), _focus(21.2, ["receded", "active", "hidden"]),
+          _focus(30.0, ["hidden", "active", "active"]), _focus(31.2, ["hidden", "receded", "active"]),
+          _focus(50.0, ["active", "hidden", "active"]), _focus(51.2, ["active", "hidden", "receded"])]
+    assert G._panel_reveal_landings(_panels_window(fs)["scenes"]) == [21.2, 31.2]
+
+
+@pytest.mark.parametrize("focus", [
+    [],                                                                       # no focus: every panel builds on its turn
+    [_focus(40.0, ["receded", "active", "active"])],                          # a grow of panels already built
+    [_focus(10.0, ["active", "receded", "hidden"], dur=0.05),
+     _focus(40.0, ["active", "active", "active"])],                           # panel 1 receded (shown) first; panel 2 hidden
+], ids=["no-focus", "refocus", "receded-first"])
+def test_m03_a_panel_already_shown_or_on_its_own_turn_is_not_a_reveal_T8e(focus):
+    """No focus states, or a focus that only moves panels the page already built: nothing to credit. A panel shown
+    RECEDED first has been shown - its later activation is a grow, not an arrival. (Panel 3 of the third case is hidden
+    on its turn and first shown ACTIVE at 0:40 - that one IS a reveal, and is the only one.)"""
+    got = G._panel_reveal_landings(_panels_window(focus)["scenes"])
+    assert got == ([41.2] if len(focus) == 2 and focus[0]["roles"][2] == "hidden" else []), got
+
+
+def test_m03_the_reveal_reads_the_panels_own_build_turn_T8e():
+    """A panel hidden only AFTER its own turn has built with the page (lpPanelStart: its turn is the page's build opening
+    + i x build_s); a later focus showing it again is a re-show. Page from 0:10, a roll-out page's build opens 4.4 s in:
+    panel 2's turn is 0:14.4 + 2 x 3.0 = 0:20.4 - hidden at 0:25, it has built; hidden at 0:12, it has not."""
+    late = [_focus(25.0, ["active", "active", "hidden"]), _focus(40.0, ["active", "active", "active"])]
+    early = [_focus(12.0, ["active", "active", "hidden"]), _focus(40.0, ["active", "active", "active"])]
+    assert G._panel_reveal_landings(_panels_window(late)["scenes"]) == []
+    assert G._panel_reveal_landings(_panels_window(early)["scenes"]) == [41.2]
+
+
+def test_m03_a_timeline_with_no_panels_page_reads_exactly_as_before_T8e():
+    tl = _story_window([_xf("recast", 40.0, dur=1.0)], words=(40.0,))
+    assert G._panel_reveal_landings(tl["scenes"]) == []
+    assert _m03(tl)[0] == (41.0, 40.0)
+
+
+def test_the_gates_panel_reveal_is_the_players_lpPanelStart_T8e():
+    """The pin to the player: the gate's reveal reads the role and the build turn as the engine's own two lines do."""
+    src = (ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs").read_bytes().decode("utf-8")
+    lines = [ln.strip() for ln in __import__("re").split(r"\r?\n", src)]
+    assert ('const lpPanelRole = (scene, i, x) => { let r = "active"; for (const sp of pageSpecies(scene, "panel_focus")) '
+            '{ if (x < sp.at) break; r = (sp.roles || [])[i] || r; } return r; };') in lines
+    assert "const s = t0 + i * st.panelBuild;" in lines
+    assert ('for (const sp of pageSpecies(scene, "panel_focus")) if (sp.at > s && ((sp.roles || [])[i] || "active") '
+            '!== "hidden") return sp.at;') in lines
+    assert "const t0 = t - (t3 - LP.PUNCH);   /* the scene second the page's build opens */" in lines
+    assert G.PAGE_BEAT_OFFSETS[4] == pytest.approx(4.4), "the build opens after the roll, the savor, the field and the punch"
