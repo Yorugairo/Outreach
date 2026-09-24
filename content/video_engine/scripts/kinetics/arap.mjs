@@ -263,3 +263,130 @@ export const morphInvariants = (frames, W, o = {}) => {
 };
 /* the SVG path of an outline */
 export const outlinePath = (pts) => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ") + " Z";
+
+/* ---- P69 T26e / E99 s107: A PROP'S OWN PIXELS RIDE THE MESH ------------------------------------------------------
+   A catalogued prop is a PICTURE with an alpha, not an outline. Its morph source is described from that alpha, as a
+   strip of columns, because the strip is the topology that never inverts onto an x-monotone target (a bar, the page
+   panel, the area under a series - all three are strips) and because a TEXTURE mapped on it needs a mesh that
+   covers every painted pixel: a pixel outside the mesh is a pixel the morph's first frame would drop.
+   `alphaColumns` reads each pixel column's painted extent; `bandStrip` turns it into n columns whose top and bottom
+   are CONSERVATIVE - vertex i takes the extreme over every pixel column its two neighbouring spans touch, so the
+   straight edge between vertex i and i+1 lies outside every painted pixel between them (each end is already past
+   the extreme of [x_i, x_i+1]). A bay inside a column is carried as transparent texture, which is what it is.
+   `rectStrip` is a bar (or the page panel) in the same n columns, value edge over base (chartxf.mjs xfBarRing's own
+   description). `affineOf` is the texture's per-triangle map (rest -> deformed) as an SVG matrix. Pure. */
+export const alphaColumns = (alpha, W, H, thr = 8) => {
+  const top = new Float64Array(W).fill(NaN), bot = new Float64Array(W).fill(NaN);
+  for (let x = 0; x < W; x++) {
+    for (let y = 0; y < H; y++) if (alpha[y * W + x] > thr) { top[x] = y; break; }
+    if (Number.isNaN(top[x])) continue;
+    for (let y = H - 1; y >= 0; y--) if (alpha[y * W + x] > thr) { bot[x] = y + 1; break; }
+  }
+  return { top, bot, W, H };
+};
+export const bandStrip = (cols, n = 48, o = {}) => {
+  const P = Object.assign({}, STRIP, o), { top, bot, W } = cols;
+  let c0 = -1, c1 = -1;
+  for (let x = 0; x < W; x++) if (!Number.isNaN(top[x])) { if (c0 < 0) c0 = x; c1 = x; }
+  if (c0 < 0 || !(n >= 2)) return null;
+  const x0 = c0, x1 = c1 + 1;   /* the painted columns' outer edges */
+  let yLo = Infinity, yHi = -Infinity;
+  for (let x = c0; x <= c1; x++) if (!Number.isNaN(top[x])) { yLo = Math.min(yLo, top[x]); yHi = Math.max(yHi, bot[x]); }
+  const minH = (yHi - yLo) * P.MIN_H, xs = [...Array(n).keys()].map((i) => x0 + (i / (n - 1)) * (x1 - x0));
+  const T = [], Bt = [];
+  for (let i = 0; i < n; i++) {
+    const a = Math.max(c0, Math.floor(i > 0 ? xs[i - 1] : xs[0])), b = Math.min(c1, Math.ceil(i < n - 1 ? xs[i + 1] : xs[n - 1]) - 1);
+    let lo = Infinity, hi = -Infinity;
+    for (let x = a; x <= b; x++) if (!Number.isNaN(top[x])) { lo = Math.min(lo, top[x]); hi = Math.max(hi, bot[x]); }
+    if (!(hi > -Infinity)) { lo = hi = (yLo + yHi) / 2; }   /* a span with no painted column (a gap between two parts): the silhouette's middle */
+    if (hi - lo < minH) { const c = (lo + hi) / 2; lo = c - minH / 2; hi = c + minH / 2; }   /* polyStrip's own MIN_H guard */
+    T.push([xs[i], lo]); Bt.push([xs[i], hi]);
+  }
+  return { top: T, bot: Bt, n };
+};
+export const rectStrip = (x, y, w, h, n = 48) => {
+  const xs = [...Array(n).keys()].map((i) => x + (i / (n - 1)) * w);
+  return { top: xs.map((v) => [v, y]), bot: xs.map((v) => [v, y + h]), n };
+};
+/* SVG matrix [a b c d e f] taking triangle p onto triangle q (x' = a x + c y + e, y' = b x + d y + f) */
+export const affineOf = (p, q) => {
+  const [p0, p1, p2] = p, [q0, q1, q2] = q;
+  const J = triJacobian(p0, p1, p2, q0, q1, q2);
+  const a = J[0][0], c = J[0][1], b = J[1][0], d = J[1][1];
+  return [a, b, c, d, q0[0] - a * p0[0] - c * p0[1], q0[1] - b * p0[0] - d * p0[1]];
+};
+/* a triangle with every EDGE pushed out along its own normal by px (the texture's clip: adjacent triangles overlap by a
+   hair, so no seam of the background shows between them under anti-aliasing). Measured in PIXELS - (sx, sy) carry the
+   caller's units (the unit square) to the picture's px and back - because a strip's triangles are tall and thin, and a
+   push from the centroid would move their long edges by almost nothing. Each corner is the MITRE of its two offset
+   edges, clamped at MITRE_MAX x px so a needle's tip never throws a spike across the picture. */
+export const TRI_GROW = Object.freeze({ MITRE_MAX: 4 });
+export const triGrow = (tri, px, sx = 1, sy = 1) => {
+  const P = tri.map((p) => [p[0] * sx, p[1] * sy]), s = arapOrient(P[0], P[1], P[2]) < 0 ? -1 : 1;
+  const nrm = (a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1; return [s * dy / L, -s * dx / L]; };   /* outward */
+  return P.map((p, i) => {
+    const n1 = nrm(P[(i + 2) % 3], p), n2 = nrm(p, P[(i + 1) % 3]), dot = n1[0] * n2[0] + n1[1] * n2[1];
+    let mx = n1[0] + n2[0], my = n1[1] + n2[1], k = px / Math.max(1e-9, 1 + dot);
+    const L = Math.hypot(mx, my) * k, cap = TRI_GROW.MITRE_MAX * px;
+    if (L > cap) k *= cap / L;
+    return [(p[0] + mx * k) / sx, (p[1] + my * k) / sy];
+  });
+};
+
+/* ---- (6) THE FAN'S ASSUMPTION, CHECKED (P69 T26e; the main-branch survey: `fanMesh` assumes a star-shaped outline) ----
+   A fan from one centre is a valid mesh only when the centre sees every edge - the outline is STAR-SHAPED about it: every
+   fan triangle (p_i, p_i+1, c) keeps the outline's orientation. A traced prop's silhouette often is not (a bay, an
+   overhang), and a fan over it folds. So the mesh is CHOSEN, and every refusal is named:
+     fan    both outlines star-shaped about their own area centroids (the fan's triangles are positive at both ends);
+     ears   a constrained triangulation of the SOURCE (ear clipping: an ear is a convex corner whose triangle holds no
+            other vertex - O(n^2), our outlines are a few hundred points) carried to the target by the correspondence,
+            admitted when no carried triangle inverts on the target;
+     strip  the fallback that never inverts between two x-monotone strips (the caller builds it: `polyStrip` /
+            `bandStrip` against `rectStrip` / `lpStrip`).
+   The design reference is the rigging research run's section 1.3 (the ARAP local/global split) - research, not evidence;
+   bounded biharmonic weights (its section 2.4) are not needed while the mesh is triangulated from the outline itself. */
+const arapOrient = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+export const starShaped = (poly, c) => {
+  const P = polyArea(poly) < 0 ? poly.slice().reverse() : poly;
+  for (let i = 0, n = P.length; i < n; i++) if (arapOrient(P[i], P[(i + 1) % n], c) <= 0) return false;
+  return true;
+};
+export const fanRefusal = (poly) => {
+  const P = polyArea(poly) < 0 ? poly.slice().reverse() : poly, c = centroid(P), n = P.length;
+  let bad = 0; for (let i = 0; i < n; i++) if (arapOrient(P[i], P[(i + 1) % n], c) <= 0) bad++;
+  return bad ? "fan refused: the silhouette is not star-shaped about its area centroid (" + bad + " of " + n
+    + " fan triangles fold) - a fan from one centre would invert it" : null;
+};
+export const earClip = (poly) => {
+  const n = poly.length; if (n < 3) return [];
+  const ccw = polyArea(poly) > 0, idx = [...Array(n).keys()];
+  const V = ccw ? idx : idx.slice().reverse();   /* walk it counter-clockwise; the triangles keep the caller's indices */
+  const inTri = (p, a, b, c) => arapOrient(a, b, p) >= 0 && arapOrient(b, c, p) >= 0 && arapOrient(c, a, p) >= 0;
+  const tris = [], ring = V.slice();
+  let guard = 0;
+  while (ring.length > 3 && guard++ < n * n) {
+    let cut = false;
+    for (let k = 0; k < ring.length; k++) {
+      const i = ring[(k + ring.length - 1) % ring.length], j = ring[k], l = ring[(k + 1) % ring.length];
+      const a = poly[i], b = poly[j], c = poly[l];
+      if (arapOrient(a, b, c) <= 1e-12) continue;   /* a reflex (or flat) corner is never an ear */
+      if (ring.some((m) => m !== i && m !== j && m !== l && inTri(poly[m], a, b, c))) continue;
+      tris.push([i, j, l]); ring.splice(k, 1); cut = true; break;
+    }
+    if (!cut) break;   /* a self-crossing ring has no ear left: the caller refuses what is left */
+  }
+  if (ring.length === 3) tris.push([ring[0], ring[1], ring[2]]);
+  return tris;
+};
+export const silhouetteMesh = (A, B) => {
+  const refused = [], fr = fanRefusal(A), frB = fanRefusal(B);
+  if (!fr && !frB) return { kind: "fan", mesh: fanMesh(A), refused };
+  refused.push(fr || frB.replace("the silhouette", "the target"));
+  const tris = earClip(A);
+  const flips = tris.filter(([i, j, k]) => arapOrient(B[i], B[j], B[k]) <= 0).length;
+  if (tris.length === A.length - 2 && !flips) return { kind: "ears", mesh: { verts: A.slice(), tris }, refused };
+  refused.push(tris.length !== A.length - 2
+    ? "ears refused: the silhouette would not clip to " + (A.length - 2) + " ears (" + tris.length + ") - it crosses itself"
+    : "ears refused: " + flips + " of " + tris.length + " clipped triangles invert on the target");
+  return { kind: "strip", mesh: null, refused };
+};

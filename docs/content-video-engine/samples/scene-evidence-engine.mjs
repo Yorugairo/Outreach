@@ -2670,6 +2670,133 @@ async function mount(doc) {
   };
   /* the SVG path of an outline */
   const outlinePath = (pts) => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ") + " Z";
+
+  /* ---- P69 T26e / E99 s107: A PROP'S OWN PIXELS RIDE THE MESH ------------------------------------------------------
+     A catalogued prop is a PICTURE with an alpha, not an outline. Its morph source is described from that alpha, as a
+     strip of columns, because the strip is the topology that never inverts onto an x-monotone target (a bar, the page
+     panel, the area under a series - all three are strips) and because a TEXTURE mapped on it needs a mesh that
+     covers every painted pixel: a pixel outside the mesh is a pixel the morph's first frame would drop.
+     `alphaColumns` reads each pixel column's painted extent; `bandStrip` turns it into n columns whose top and bottom
+     are CONSERVATIVE - vertex i takes the extreme over every pixel column its two neighbouring spans touch, so the
+     straight edge between vertex i and i+1 lies outside every painted pixel between them (each end is already past
+     the extreme of [x_i, x_i+1]). A bay inside a column is carried as transparent texture, which is what it is.
+     `rectStrip` is a bar (or the page panel) in the same n columns, value edge over base (chartxf.mjs xfBarRing's own
+     description). `affineOf` is the texture's per-triangle map (rest -> deformed) as an SVG matrix. Pure. */
+  const alphaColumns = (alpha, W, H, thr = 8) => {
+    const top = new Float64Array(W).fill(NaN), bot = new Float64Array(W).fill(NaN);
+    for (let x = 0; x < W; x++) {
+      for (let y = 0; y < H; y++) if (alpha[y * W + x] > thr) { top[x] = y; break; }
+      if (Number.isNaN(top[x])) continue;
+      for (let y = H - 1; y >= 0; y--) if (alpha[y * W + x] > thr) { bot[x] = y + 1; break; }
+    }
+    return { top, bot, W, H };
+  };
+  const bandStrip = (cols, n = 48, o = {}) => {
+    const P = Object.assign({}, STRIP, o), { top, bot, W } = cols;
+    let c0 = -1, c1 = -1;
+    for (let x = 0; x < W; x++) if (!Number.isNaN(top[x])) { if (c0 < 0) c0 = x; c1 = x; }
+    if (c0 < 0 || !(n >= 2)) return null;
+    const x0 = c0, x1 = c1 + 1;   /* the painted columns' outer edges */
+    let yLo = Infinity, yHi = -Infinity;
+    for (let x = c0; x <= c1; x++) if (!Number.isNaN(top[x])) { yLo = Math.min(yLo, top[x]); yHi = Math.max(yHi, bot[x]); }
+    const minH = (yHi - yLo) * P.MIN_H, xs = [...Array(n).keys()].map((i) => x0 + (i / (n - 1)) * (x1 - x0));
+    const T = [], Bt = [];
+    for (let i = 0; i < n; i++) {
+      const a = Math.max(c0, Math.floor(i > 0 ? xs[i - 1] : xs[0])), b = Math.min(c1, Math.ceil(i < n - 1 ? xs[i + 1] : xs[n - 1]) - 1);
+      let lo = Infinity, hi = -Infinity;
+      for (let x = a; x <= b; x++) if (!Number.isNaN(top[x])) { lo = Math.min(lo, top[x]); hi = Math.max(hi, bot[x]); }
+      if (!(hi > -Infinity)) { lo = hi = (yLo + yHi) / 2; }   /* a span with no painted column (a gap between two parts): the silhouette's middle */
+      if (hi - lo < minH) { const c = (lo + hi) / 2; lo = c - minH / 2; hi = c + minH / 2; }   /* polyStrip's own MIN_H guard */
+      T.push([xs[i], lo]); Bt.push([xs[i], hi]);
+    }
+    return { top: T, bot: Bt, n };
+  };
+  const rectStrip = (x, y, w, h, n = 48) => {
+    const xs = [...Array(n).keys()].map((i) => x + (i / (n - 1)) * w);
+    return { top: xs.map((v) => [v, y]), bot: xs.map((v) => [v, y + h]), n };
+  };
+  /* SVG matrix [a b c d e f] taking triangle p onto triangle q (x' = a x + c y + e, y' = b x + d y + f) */
+  const affineOf = (p, q) => {
+    const [p0, p1, p2] = p, [q0, q1, q2] = q;
+    const J = triJacobian(p0, p1, p2, q0, q1, q2);
+    const a = J[0][0], c = J[0][1], b = J[1][0], d = J[1][1];
+    return [a, b, c, d, q0[0] - a * p0[0] - c * p0[1], q0[1] - b * p0[0] - d * p0[1]];
+  };
+  /* a triangle with every EDGE pushed out along its own normal by px (the texture's clip: adjacent triangles overlap by a
+     hair, so no seam of the background shows between them under anti-aliasing). Measured in PIXELS - (sx, sy) carry the
+     caller's units (the unit square) to the picture's px and back - because a strip's triangles are tall and thin, and a
+     push from the centroid would move their long edges by almost nothing. Each corner is the MITRE of its two offset
+     edges, clamped at MITRE_MAX x px so a needle's tip never throws a spike across the picture. */
+  const TRI_GROW = Object.freeze({ MITRE_MAX: 4 });
+  const triGrow = (tri, px, sx = 1, sy = 1) => {
+    const P = tri.map((p) => [p[0] * sx, p[1] * sy]), s = arapOrient(P[0], P[1], P[2]) < 0 ? -1 : 1;
+    const nrm = (a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1; return [s * dy / L, -s * dx / L]; };   /* outward */
+    return P.map((p, i) => {
+      const n1 = nrm(P[(i + 2) % 3], p), n2 = nrm(p, P[(i + 1) % 3]), dot = n1[0] * n2[0] + n1[1] * n2[1];
+      let mx = n1[0] + n2[0], my = n1[1] + n2[1], k = px / Math.max(1e-9, 1 + dot);
+      const L = Math.hypot(mx, my) * k, cap = TRI_GROW.MITRE_MAX * px;
+      if (L > cap) k *= cap / L;
+      return [(p[0] + mx * k) / sx, (p[1] + my * k) / sy];
+    });
+  };
+
+  /* ---- (6) THE FAN'S ASSUMPTION, CHECKED (P69 T26e; the main-branch survey: `fanMesh` assumes a star-shaped outline) ----
+     A fan from one centre is a valid mesh only when the centre sees every edge - the outline is STAR-SHAPED about it: every
+     fan triangle (p_i, p_i+1, c) keeps the outline's orientation. A traced prop's silhouette often is not (a bay, an
+     overhang), and a fan over it folds. So the mesh is CHOSEN, and every refusal is named:
+       fan    both outlines star-shaped about their own area centroids (the fan's triangles are positive at both ends);
+       ears   a constrained triangulation of the SOURCE (ear clipping: an ear is a convex corner whose triangle holds no
+              other vertex - O(n^2), our outlines are a few hundred points) carried to the target by the correspondence,
+              admitted when no carried triangle inverts on the target;
+       strip  the fallback that never inverts between two x-monotone strips (the caller builds it: `polyStrip` /
+              `bandStrip` against `rectStrip` / `lpStrip`).
+     The design reference is the rigging research run's section 1.3 (the ARAP local/global split) - research, not evidence;
+     bounded biharmonic weights (its section 2.4) are not needed while the mesh is triangulated from the outline itself. */
+  const arapOrient = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+  const starShaped = (poly, c) => {
+    const P = polyArea(poly) < 0 ? poly.slice().reverse() : poly;
+    for (let i = 0, n = P.length; i < n; i++) if (arapOrient(P[i], P[(i + 1) % n], c) <= 0) return false;
+    return true;
+  };
+  const fanRefusal = (poly) => {
+    const P = polyArea(poly) < 0 ? poly.slice().reverse() : poly, c = centroid(P), n = P.length;
+    let bad = 0; for (let i = 0; i < n; i++) if (arapOrient(P[i], P[(i + 1) % n], c) <= 0) bad++;
+    return bad ? "fan refused: the silhouette is not star-shaped about its area centroid (" + bad + " of " + n
+      + " fan triangles fold) - a fan from one centre would invert it" : null;
+  };
+  const earClip = (poly) => {
+    const n = poly.length; if (n < 3) return [];
+    const ccw = polyArea(poly) > 0, idx = [...Array(n).keys()];
+    const V = ccw ? idx : idx.slice().reverse();   /* walk it counter-clockwise; the triangles keep the caller's indices */
+    const inTri = (p, a, b, c) => arapOrient(a, b, p) >= 0 && arapOrient(b, c, p) >= 0 && arapOrient(c, a, p) >= 0;
+    const tris = [], ring = V.slice();
+    let guard = 0;
+    while (ring.length > 3 && guard++ < n * n) {
+      let cut = false;
+      for (let k = 0; k < ring.length; k++) {
+        const i = ring[(k + ring.length - 1) % ring.length], j = ring[k], l = ring[(k + 1) % ring.length];
+        const a = poly[i], b = poly[j], c = poly[l];
+        if (arapOrient(a, b, c) <= 1e-12) continue;   /* a reflex (or flat) corner is never an ear */
+        if (ring.some((m) => m !== i && m !== j && m !== l && inTri(poly[m], a, b, c))) continue;
+        tris.push([i, j, l]); ring.splice(k, 1); cut = true; break;
+      }
+      if (!cut) break;   /* a self-crossing ring has no ear left: the caller refuses what is left */
+    }
+    if (ring.length === 3) tris.push([ring[0], ring[1], ring[2]]);
+    return tris;
+  };
+  const silhouetteMesh = (A, B) => {
+    const refused = [], fr = fanRefusal(A), frB = fanRefusal(B);
+    if (!fr && !frB) return { kind: "fan", mesh: fanMesh(A), refused };
+    refused.push(fr || frB.replace("the silhouette", "the target"));
+    const tris = earClip(A);
+    const flips = tris.filter(([i, j, k]) => arapOrient(B[i], B[j], B[k]) <= 0).length;
+    if (tris.length === A.length - 2 && !flips) return { kind: "ears", mesh: { verts: A.slice(), tris }, refused };
+    refused.push(tris.length !== A.length - 2
+      ? "ears refused: the silhouette would not clip to " + (A.length - 2) + " ears (" + tris.length + ") - it crosses itself"
+      : "ears refused: " + flips + " of " + tris.length + " clipped triangles invert on the target");
+    return { kind: "strip", mesh: null, refused };
+  };
   /* KINETICS:END */
   /* KINETICS:BEGIN morph_a */
   /* kinetics/morph_a.mjs - THE MORPH, METHOD A (P50 T12; doc 43 s43.5 "Method A - vertex-based"). SOURCE OF TRUTH,
@@ -6612,7 +6739,7 @@ async function mount(doc) {
       ds.sort((a, b) => a.enter - b.enter);
       let cur = null;
       for (const d of ds) {
-        if (cur && d.enter - cur.exit <= DOCK_JOIN) {
+        if (cur && d.enter - cur.exit <= DOCK_JOIN && !cur.handed && d.arrive !== "morph") {   /* P69 T26e: a prop handed to a morph, or born of one, keeps its own span */
           cur.exit = Math.max(cur.exit, d.exit);
           cur.badge_at = [...new Set([...(cur.badge_at || []), ...(d.badge_at || [])])];
         } else { cur = d; merged.push(d); }
@@ -6640,7 +6767,7 @@ async function mount(doc) {
      docks separated by a sub-1.2s turnover share one wash - the gap used
      to pulse it off and back on (two of the six flashes at s06's open). */
   const WASHES = [];
-  for (const d of [...DOCKS].sort((a, b) => a.enter - b.enter)) {
+  for (const d of [...DOCKS].sort((a, b) => a.enter - b.enter).filter((d) => d.arrive !== "morph")) {   /* P69 T26e: a prop BORN of a morph is the chart's own ink turned object - it lights no evidence scrim (the landing would pop the world's light) */
     const last = WASHES[WASHES.length - 1];
     if (last && d.enter - last[1] < 1.2) last[1] = Math.max(last[1], d.exit);
     else WASHES.push([d.enter, d.exit]);
@@ -6655,7 +6782,7 @@ async function mount(doc) {
   const BOUNDS = TL.scenes.map((x) => x.span[0]);
   for (const d of DOCKS)
     for (const b of BOUNDS)
-      if (d.enter < b && b - d.exit > 0.05 && b - d.exit <= 1.4) { d.exit = b; break; }
+      if (d.enter < b && b - d.exit > 0.05 && b - d.exit <= 1.4 && !d.handed) { d.exit = b; break; }   /* P69 T26e: a HANDED prop leaves on its word, never snapped to the turn */
 
   /* P50 T3: every press card mounts HERE, at load, not on the frame it first paints. A card's image must be
      decoded before the first frame asks how tall it is - the fan's step and the phrase box are both read off the
@@ -9538,7 +9665,8 @@ async function mount(doc) {
     let any = false;
     S.bars.forEach((b, i) => {
       const bar = b.bar, x = +bar.getAttribute("x"), y = +bar.getAttribute("y"), w = +bar.getAttribute("width"), h = +bar.getAttribute("height");
-      const opA = bar.getAttribute("opacity"), op = (bar.style.opacity === "" ? 1 : +bar.style.opacity) * (opA == null ? 1 : +opA);
+      const opA = bar.getAttribute("opacity"), op = (bar.style.opacity === "" ? 1 : +bar.style.opacity) * (opA == null ? 1 : +opA)
+        * (bar.style.visibility === "hidden" ? 0 : 1);   /* P69 T26e: a bar a prop morph holds (it is the prop's to become) casts no shadow */
       if (b.foot) {
         const f = b.foot, fh = Math.max(0, Math.min(L.r, h / 2)), cs = getComputedStyle(bar);
         f.setAttribute("x", x); f.setAttribute("width", w);
@@ -12634,7 +12762,8 @@ async function mount(doc) {
     }
     return { top, bot };
   };
-  const buildMorph = (st, pg, world) => {
+  const buildMorph = (st, pg, world, key) => {
+    if (world && world.morph && typeof world.morph === "object" && world.morph.prop) return buildPropEnter(st, pg, world, key);   /* P69 T26e: a catalogued PROP's own pixels */
     const line = (st.linePts || [])[0]; if (!line || line.length < 2 || !(st.axisB > 0)) return null;
     const G = st.geom || { W: 1000, H: 560 }, n = MORPH.COLS, xL = line[0][0], xR = line[line.length - 1][0];
     const yAt = (x) => { for (let i = 0; i + 1 < line.length; i++) { const a = line[i], q = line[i + 1]; if (x >= a[0] - 1e-9 && x <= q[0] + 1e-9) { const u = (x - a[0]) / Math.max(1e-9, q[0] - a[0]); return a[1] + (q[1] - a[1]) * clamp01(u); } } return line[line.length - 1][1]; };
@@ -12690,9 +12819,10 @@ async function mount(doc) {
     const path = lpEl("path", "morph", svg, { d: outlinePath(A), fill: stroke, "fill-opacity": MORPH.FILL_A, stroke: "var(--lp-chalk)", "stroke-width": 3 });
     return { svg, ground, path, prep, A, B, W: G.W, stroke, hand: !!(sPoly && src.hand) };
   };
-  const paintMorph = (st, pg, world, u, c, g = 1) => {   /* `g` (P61 T3b): how far the page's GROUND has arrived - 1 on every page whose board was already there */
-    if (st.morph === undefined) st.morph = buildMorph(st, pg, world);
+  const paintMorph = (st, pg, world, u, c, g = 1, key = "") => {   /* `g` (P61 T3b): how far the page's GROUND has arrived - 1 on every page whose board was already there */
+    if (st.morph === undefined) st.morph = buildMorph(st, pg, world, key);
     const M = st.morph; if (!M) return;
+    if (M.prop) { paintPropEnter(st, M, u, c, key); return; }   /* P69 T26e: the prop's textured strip (its own clock, its own hand) */
     const k = kin("min_jerk") ? minJerk(u) : expoOut(clamp01(u));
     const pts = u >= 1 ? M.B : arapAt(M.prep, k).outline;
     M.pts = pts;   /* P61 T3: the shape THIS frame, so the melt's ball can wear the very outline the page is carrying */
@@ -12731,6 +12861,264 @@ async function mount(doc) {
     const lw = pr.width || st.geom.W, lh = pr.height || st.geom.H;
     const sb = meltStageBox(wA);
     return M.pts.map((p) => { const q = threadToStage(fit, p); return [sb.x + (q[0] / lw) * sb.w, sb.y + (q[1] / lh) * sb.h]; });
+  };
+  /* ================= P69 T26e / E99 s107 - PROPS, PAGES AND CHARTS MORPH INTO EACH OTHER, BOTH WAYS =================
+     The operator: "we should also be able to morph/transform to/from props to pages and charts." A catalogued PROP is a
+     picture with an alpha, so it is described by that alpha: `alphaColumns` + `bandStrip` (kinetics/arap.mjs) give its
+     CONSERVATIVE strip of MORPH.COLS columns in its own unit square - every painted pixel inside it - and the strip is
+     the mesh (the topology that never inverts onto a bar, the page panel or the area under a series, all three strips).
+     THE PROP'S OWN PIXELS RIDE THE MESH: one <image> of the cutout in the unit square, and per triangle a <use> of it,
+     clipped to that triangle in the unit square (grown by a hair so no seam shows) under the SVG matrix that carries the
+     triangle to where the ARAP solve puts it this frame (`affineOf`). One object changing form, never two pictures
+     cross-faded: the texture carries the shape until the HAND, then hands to the chart's own ink ON THE SAME SHAPE -
+     the bar's own fill, the series' area, or (a page made into the prop) the page itself, carved to the shape.
+     PURE IN t: the geometry is re-read every frame (the page breathes; its punch moves the chart), the ARAP system is
+     re-prepared from it (one factorisation of a 95 x 95 Laplacian), and only DOM nodes are cached. Seek = play.
+       way "in"   the prop dock standing at `at` (HANDED: it leaves on the word) -> the mark `b:<i>` | `area` of the state
+                  on screen; the mark is not drawn until the landing (it is the prop's to become).
+       way "out"  the mark | `page` -> the prop, which STANDS from the landing as its born dock (`arrive: "morph"`); the
+                  mark is gone from the word; a page is carved to the mesh's outline and fades as the pixels arrive.
+     (6): the fan's assumption is CHECKED on the traced silhouette (`silhouetteMesh`): a non-star outline refuses the fan
+     by name (and the ears, when they fold on the target) and the strip carries it; the refusals ride the probe. */
+  const PROP_MORPH = Object.freeze({ HAND: 0.7, OUT0: 0.3, OUT1: 0.6, GROW_PX: 0.9, THR: 8, BORN_HATCH_S: 0.35, AREA_LEAVE_S: 0.6 });
+  const PM_TEX = {}, PM_STATE = {};
+  const pmTex = (pid) => {   /* the cutout, decoded once, and its conservative strip in its own unit square */
+    let T = PM_TEX[pid];
+    if (!T) { const img = new Image(); img.src = A[pid] || ""; T = PM_TEX[pid] = { img, uv: null, ar: 1 }; }
+    if (!T.uv && T.img.complete && T.img.naturalWidth > 0) {
+      const W = T.img.naturalWidth, H = T.img.naturalHeight, cv = document.createElement("canvas");
+      cv.width = W; cv.height = H;
+      const cx = cv.getContext("2d", { willReadFrequently: true }); cx.drawImage(T.img, 0, 0);
+      const px = cx.getImageData(0, 0, W, H).data, al = new Uint8Array(W * H);
+      for (let i = 0; i < W * H; i++) al[i] = px[4 * i + 3];
+      const s = bandStrip(alphaColumns(al, W, H, PROP_MORPH.THR), MORPH.COLS);
+      if (s) T.uv = { top: s.top.map(([x, y]) => [x / W, y / H]), bot: s.bot.map(([x, y]) => [x / W, y / H]), n: s.n };
+      T.ar = H / W; T.tw = W; T.th = H;
+    }
+    return T.uv ? T : null;
+  };
+  TL.scenes.forEach((sc) => {   /* decode every morphing prop up front, so the first frame that needs one has it */
+    for (const pm of sc.prop_morphs || []) pmTex(pm.prop);
+    const m = (sc.world || {}).morph; if (m && typeof m === "object" && m.prop) pmTex(m.prop);
+  });
+  /* a dock's canvas box and turn at T - the dock painter's own reading (`propPose`, the stamp's LAND_DEG, the pivot at
+     the painted centre a stamp turns about, else the canvas centre) */
+  const pmDockPose = (d, T) => {
+    const P = d.place, rot0 = d.rot != null ? +d.rot : (d.arrive === "stamp" ? STAMP_ARRIVAL.LAND_DEG : 0);
+    const q = d.moves ? propPose(d, T, rot0) : { x: P.x, y: P.y, w: P.w, rot: rot0 };
+    const pb = Array.isArray(d.paint) && d.paint.length === 4 ? d.paint : [0, 0, 1, 1];
+    return { x: q.x, y: q.y, w: q.w, h: q.w * P.h / Math.max(1e-9, P.w), rot: q.rot, px: (pb[0] + pb[2]) / 2, py: (pb[1] + pb[3]) / 2 };
+  };
+  const pmPlace = (pose) => {   /* the unit square -> stage px, turned about the pivot as the dock's CSS turns it */
+    const cx = pose.x + pose.px * pose.w, cy = pose.y + pose.py * pose.h, r = pose.rot * Math.PI / 180, c = Math.cos(r), s = Math.sin(r);
+    return (uv) => { const dx = pose.x + uv[0] * pose.w - cx, dy = pose.y + uv[1] * pose.h - cy; return [cx + dx * c - dy * s, cy + dx * s + dy * c]; };
+  };
+  const pmDock = (pm) => DOCKS.find((d) => d.slide === pm.prop && (pm.way === "in"
+    ? (d.handed && Math.abs(d.exit - pm.at) < 0.02) : (d.arrive === "morph" && Math.abs(d.enter - (pm.at + pm.dur)) < 0.02)));
+  /* an element's rendered box in STAGE px (the docks' own space) - read after the world's camera is written this frame */
+  const pmStageBox = (e) => {
+    const s = document.getElementById("stage").getBoundingClientRect(), k = s.width / STAGE_W, b = e.getBoundingClientRect();
+    return { x: (b.left - s.left) / k, y: (b.top - s.top) / k, w: b.width / k, h: b.height / k };
+  };
+  const pmChartToStage = (S) => {   /* a state's chart units -> stage px, through its rendered box (the page's punch, park and camera included) */
+    const G = S.geom || { W: 1000, H: 560 }, fit = threadFit(pmStageBox(S.chart), G.W, G.H);
+    return (p) => threadToStage(fit, p);
+  };
+  const pmMarkOf = (S, key) => (S.marks || []).find((q) => q.key === key && q.role === "bar") || null;
+  /* everything a bar SAYS, held with the bar: its own rect, its value tag, and the callout pill when the bar is the page's
+     emphasised one - a slot whose number stands over no mark is a figure with no mark (the parent's review of T26e, (b)) */
+  const pmMarkEls = (S, key) => {
+    const m = pmMarkOf(S, key); if (!m) return [];
+    const i = +key.slice(2), val = (S.marks || []).find((q) => q.key === "val:" + key && q.role === "value");
+    return [m.el, val && val.el, S.callout && S.emph === i ? S.callout : null].filter(Boolean);
+  };
+  /* the mark's strip THIS frame, in stage px; null when the state on screen does not draw it */
+  const pmMarkStrip = (st, S, mark, n) => {
+    if (mark === "page") { const r = pmStageBox(st.root); return { strip: rectStrip(r.x, r.y, r.w, r.h, n), ink: null, el: null }; }
+    const toS = pmChartToStage(S);
+    if (mark === "area") {
+      const s = lpStrip(S, n); if (!s) return null;
+      const col = ((S.paths || []).filter((pp) => !pp.muted)[0] || {}).p;
+      return { strip: { top: s.top.map(toS), bot: s.bot.map(toS), n }, ink: col ? col.getAttribute("stroke") : "var(--lp-chalk)", el: null, area: true };
+    }
+    const m = pmMarkOf(S, mark); if (!m) return null;
+    const g = m.geom, y0 = Math.min(g.end, g.base), y1 = Math.max(g.end, g.base), r = rectStrip(g.x, y0, g.w, y1 - y0, n);
+    return { strip: { top: r.top.map(toS), bot: r.bot.map(toS), n }, ink: getComputedStyle(m.el).fill, el: m.el };
+  };
+  /* THE LAYER. The mesh CONTINUES a dock (or becomes one), so it paints where the docks paint: in the stage, above the
+     evidence wash and the spotlight (a scrim over the WORLD while a card is up - under it the prop came out a quarter
+     darker than the dock it continues, measured on the golden) and beneath the docks and the species. Made only when a
+     timeline morphs a prop, so every other player's DOM is what it was; every mesh is hidden at the top of each frame
+     and shown only by the morph that paints it (`render` -> pmHideAll), so a seek anywhere leaves nothing behind. */
+  let PM_LAYER = null;
+  const pmLayer = () => {
+    if (PM_LAYER) return PM_LAYER;
+    const div = document.createElement("div"); div.id = "pmorph";
+    div.style.cssText = "position:absolute;inset:0;pointer-events:none;overflow:hidden";
+    const stg = document.getElementById("stage"); stg.insertBefore(div, document.getElementById("species-under"));
+    const svg = lpEl("svg", "", div, { viewBox: "0 0 " + STAGE_W + " " + STAGE_H, width: "100%", height: "100%" });
+    svg.style.position = "absolute"; svg.style.left = "0"; svg.style.top = "0";
+    return (PM_LAYER = { div, svg, defs: lpEl("defs", "", svg), meshes: {} });
+  };
+  const pmHideAll = () => { if (PM_LAYER) for (const k in PM_LAYER.meshes) PM_LAYER.meshes[k].N.g.style.display = "none"; };
+  let pmSeq = 0;
+  /* THE TEXTURE'S SPACE IS THE PICTURE'S OWN PIXELS (tw x th, its natural size); `gpx` is the clip's overlap in those
+     pixels. The ink path lies under the texture: the chart's own ink, on the same shape, for the hand. */
+  const pmNodes = (svg, defs, pid, uv, tris, gpx, tw, th) => {
+    const id = "pm" + (++pmSeq), g = lpEl("g", "pm-mesh", svg);
+    lpEl("image", "", defs, { id: id + "-img", href: A[pid] || "", x: 0, y: 0, width: tw, height: th, preserveAspectRatio: "none" });
+    const ink = lpEl("path", "pm-ink", g, { d: "", fill: "none", "fill-opacity": 0, stroke: "none" });
+    const tex = lpEl("g", "pm-tex", g);
+    const px = uv.map((q) => [q[0] * tw, q[1] * th]);
+    const gs = tris.map(([i, j, l], q) => {
+      const cp = lpEl("clipPath", "", defs, { id: id + "-c" + q, clipPathUnits: "userSpaceOnUse" });
+      lpEl("polygon", "", cp, { points: triGrow([px[i], px[j], px[l]], gpx).map((p) => p[0].toFixed(3) + "," + p[1].toFixed(3)).join(" ") });
+      const gq = lpEl("g", "", tex);
+      lpEl("use", "", gq, { href: "#" + id + "-img", "clip-path": "url(#" + id + "-c" + q + ")" });
+      return gq;
+    });
+    return { g, ink, tex, gs, px };
+  };
+  const pmTexPaint = (N, tris, V) => tris.forEach(([i, j, l], q) => N.gs[q].setAttribute("transform",
+    "matrix(" + affineOf([N.px[i], N.px[j], N.px[l]], [V[i], V[j], V[l]]).map((v) => +v.toFixed(6)).join(",") + ")"));
+  const pmEase = (u) => minJerk(u);   /* a prop STANDS before its word: the morph leaves it from rest (E45's min-jerk), never on an expo-out's first-frame jump */
+  /* the scene's prop morphs at t: the marks' visibility, the page's carve, the textured meshes - every frame, every one */
+  const lpPropMorphPaint = (el, st, scene, t) => {
+    const pms = scene.prop_morphs || [], states = st.states || [st], hide = new Set(), show = new Set(), root = st.root;
+    let pageOut = null;
+    for (const pm of pms) {
+      const S = states[pm.state | 0] || st, raw = (t - pm.at) / Math.max(1e-6, pm.dur);
+      const els = pm.mark !== "page" && pm.mark !== "area" ? pmMarkEls(S, pm.mark) : [];
+      for (const e of els) ((pm.way === "in" ? raw < 1 : raw >= 0) ? hide : show).add(e);
+      if (pm.mark === "page" && pm.way === "out" && raw >= 0 && (!pageOut || pm.at > pageOut.at)) pageOut = pm;
+    }
+    for (const e of show) if (!hide.has(e)) e.style.visibility = "";
+    for (const e of hide) e.style.visibility = "hidden";
+    if (pms.some((pm) => pm.mark === "page" && pm.way === "out")) {   /* the page's own state, before any carve this frame */
+      const gone = pageOut && t >= pageOut.at + pageOut.dur;
+      root.style.clipPath = ""; root.style.opacity = ""; root.style.transform = ""; root.style.transformOrigin = "";
+      root.style.visibility = gone ? "hidden" : "";
+    }
+    const L = pmLayer();
+    for (const pm of pms) {
+      const key = pm.id || (scene.scene_id + "@" + pm.at), raw = (t - pm.at) / Math.max(1e-6, pm.dur), u = clamp01(raw);
+      const S = states[pm.state | 0] || st, T = pmTex(pm.prop), d = pmDock(pm);
+      const mm = pm.mark !== "page" && pm.mark !== "area" ? pmMarkOf(S, pm.mark) : null;
+      const read = { shown: false, u, way: pm.way, mark: pm.mark, texture: 0, ink: 0, mesh: "strip", refused: [], tris: 0,
+                     bar: mm ? (mm.el.style.visibility === "hidden" ? "hidden" : "visible") : null,
+                     held: mm ? pmMarkEls(S, pm.mark).map((e) => (e.style.visibility === "hidden" ? "hidden" : "visible")) : null };
+      const leaveArea = pm.way === "in" && pm.mark === "area" && raw >= 1 && t < pm.at + pm.dur + PROP_MORPH.AREA_LEAVE_S;
+      const mk = ((raw >= 0 && raw < 1) || leaveArea) && T && d && d.place ? pmMarkStrip(st, S, pm.mark, T.uv.n) : null;
+      if (!mk) { PM_STATE[key] = { read, prep: null }; continue; }
+      const n = T.uv.n, pose = pmDockPose(d, pm.way === "in" ? pm.at : d.enter), place = pmPlace(pose);
+      const prop = { top: T.uv.top.map(place), bot: T.uv.bot.map(place) };
+      const rest = pm.way === "in" ? prop : mk.strip, dest = pm.way === "in" ? mk.strip : prop;
+      const mesh = stripMesh(rest.top, rest.bot), Bv = [...dest.top, ...dest.bot], prep = arapPrepareMesh(mesh, Bv, n + (n >> 1));
+      let M = L.meshes[key];
+      if (!M) {
+        const choice = silhouetteMesh(stripOutline([...prop.top, ...prop.bot], n), stripOutline([...mk.strip.top, ...mk.strip.bot], n));
+        M = L.meshes[key] = { N: pmNodes(L.svg, L.defs, pm.prop, [...T.uv.top, ...T.uv.bot], mesh.tris, PROP_MORPH.GROW_PX * T.tw / Math.max(1, pose.w), T.tw, T.th),
+                              refused: choice.refused, admitted: choice.kind };
+      }
+      M.N.tex.style.filter = propInkCss(d, true);   /* the prop's own ink, as its dock lays it down on a page */
+      const k = raw >= 1 ? 1 : pmEase(u), V = raw >= 1 ? Bv : arapAt(prep, k).verts;
+      const texA = pm.way === "in" ? (raw >= 1 ? 0 : 1 - clamp01((u - PROP_MORPH.HAND) / (1 - PROP_MORPH.HAND)))
+                                   : clamp01((u - PROP_MORPH.OUT0) / (PROP_MORPH.OUT1 - PROP_MORPH.OUT0));
+      const inkA = leaveArea ? 1 - clamp01((t - pm.at - pm.dur) / PROP_MORPH.AREA_LEAVE_S) : 1 - texA;
+      M.N.g.style.display = "";
+      pmTexPaint(M.N, mesh.tris, V);
+      M.N.tex.setAttribute("opacity", texA.toFixed(4));
+      const outline = stripOutline(V, n);
+      if (pm.mark === "page") {   /* the page IS the ink: it COLLAPSES into the shape's box and is carved to the shape, fading as the pixels arrive */
+        M.N.ink.setAttribute("d", "");
+        const R = pmStageBox(root), kR = R.w / Math.max(1, root.offsetWidth || R.w), bb = bbox(outline);
+        const sx = bb.w / Math.max(1e-6, R.w), sy = bb.h / Math.max(1e-6, R.h), tx = (bb.x - R.x) / kR, ty = (bb.y - R.y) / kR;
+        root.style.transformOrigin = "0 0";
+        root.style.transform = "matrix(" + [sx, 0, 0, sy, tx, ty].map((v) => +v.toFixed(6)).join(",") + ")";
+        root.style.clipPath = "polygon(" + outline.map((p) => (((p[0] - R.x) / kR - tx) / sx).toFixed(2) + "px " + (((p[1] - R.y) / kR - ty) / sy).toFixed(2) + "px").join(", ") + ")";
+        root.style.opacity = inkA.toFixed(4); root.style.visibility = "";
+      } else {
+        M.N.ink.setAttribute("d", outlinePath(outline));
+        M.N.ink.setAttribute("fill", mk.ink || "var(--lp-chalk)");
+        M.N.ink.setAttribute("fill-opacity", ((mk.area ? MORPH.FILL_A : 1) * inkA).toFixed(4));
+      }
+      Object.assign(read, { shown: true, texture: +texA.toFixed(4), ink: +inkA.toFixed(4), refused: M.refused.slice(), admitted: M.admitted, tris: mesh.tris.length });
+      PM_STATE[key] = { read, prep, k, n };
+    }
+  };
+  window.__propMorph = (key, withInv) => {   /* the last painted frame of one prop morph: its shares, its mesh, its refusals, det J now */
+    const E = PM_STATE[key]; if (!E) return null;
+    const out = Object.assign({}, E.read);
+    if (E.prep && out.shown) { const d = minDet(E.prep, E.k); out.target = d.target; out.solved = d.solved; }
+    if (withInv && E.prep && E.n) {   /* M17 (measure_morph.py): the match-cut invariants over 25 frames of THIS frame's solve, and det J's worst */
+      const frames = [], nn = E.n; let worst = Infinity;
+      for (let i = 0; i <= 24; i++) { const k = pmEase(i / 24); frames.push(stripOutline(arapAt(E.prep, k).verts, nn));
+        const d = minDet(E.prep, k); worst = Math.min(worst, d.target, d.solved); }
+      const end = arapAt(E.prep, 1).verts, endErr = Math.max(...end.map((p, i) => Math.hypot(p[0] - E.prep.Bv[i][0], p[1] - E.prep.Bv[i][1])));
+      out.inv = Object.assign({}, morphInvariants(frames, STAGE_W), { min_det: worst, end_error: endErr, n: frames[0].length, u: out.u, method: "arap" });
+    }
+    return out;
+  };
+  /* the page ENTER from a prop (`;morph=prop:<id>`): the same strip, solved in the arriving page's own chart units, into
+     the area under its first series (a line page) or its whole panel (any other page). The prop's pixels paint in the
+     stage layer (as the mid-page meshes do); the chart's ink for the hand paints in the page (`lp-morph`), under its own
+     light. The source is the prop dock that stood at the boundary (its stage-px box, turned) or, with none, the prop
+     drawn on the target the way a named outline is. Re-read every frame (the page's punch moves the chart under a prop
+     that stands still on the screen). */
+  const buildPropEnter = (st, pg, world, key) => {
+    const src = world.morph, T = pmTex(src.prop); if (!T) return undefined;   /* not decoded yet: the next frame builds it */
+    const svg = lpEl("svg", "lp-chart lp-morph", st.page, { viewBox: st.chart.getAttribute("viewBox") });
+    svg.setAttribute("style", st.chart.getAttribute("style") || ""); svg.style.overflow = "visible";
+    const line = (st.linePts || [])[0], isLine = !!(line && line.length >= 2 && st.axisB > 0);
+    const col = ((st.paths || []).filter((pp) => !pp.muted)[0] || {}).p, stroke = col ? col.getAttribute("stroke") : "var(--lp-chalk)";
+    const path = lpEl("path", "morph", svg, { d: "", fill: isLine ? stroke : "var(--lp-char)", "fill-opacity": 0, stroke: "none" });
+    const tris = stripMesh(T.uv.top, T.uv.bot).tris, L = pmLayer(), bw = Array.isArray(src.box) ? src.box[2] : STAGE_W * 0.3;
+    const N = L.meshes["enter:" + key] = L.meshes["enter:" + key]
+      || { N: pmNodes(L.svg, L.defs, src.prop, [...T.uv.top, ...T.uv.bot], tris, PROP_MORPH.GROW_PX * T.tw / Math.max(1, bw), T.tw, T.th) };
+    const M = { svg, path, tris, isLine, stroke, prop: true, hand: false, ground: null, W: (st.geom || { W: 1000 }).W, T, src, N: N.N };
+    pmEnterGeom(st, M);
+    M.refused = silhouetteMesh(M.A, M.B).refused;
+    return M;
+  };
+  const pmEnterGeom = (st, M) => {   /* this frame's two strips in the chart's units, the prepared solve, and the units' way to the stage */
+    const G = st.geom || { W: 1000, H: 560 }, n = M.T.uv.n, src = M.src;
+    const fit = threadFit(pmStageBox(st.chart), G.W, G.H);
+    M.toStage = (p) => threadToStage(fit, p);
+    let topB, botB;
+    if (M.isLine) { const s = lpStrip(st, n); topB = s.top; botB = s.bot; }
+    else { const r0 = pmStageBox(st.root), a = threadToLocal(fit, [r0.x, r0.y]), b = threadToLocal(fit, [r0.x + r0.w, r0.y + r0.h]);
+      const r = rectStrip(a[0], a[1], b[0] - a[0], b[1] - a[1], n); topB = r.top; botB = r.bot; }
+    const B = stripOutline([...topB, ...botB], n);
+    let place;
+    if (Array.isArray(src.box)) {   /* where the prop stood, on the screen */
+      const P = pmPlace({ x: src.box[0], y: src.box[1], w: src.box[2], h: src.box[3], rot: +src.rot || 0,
+                          px: (src.pivot || [0.5, 0.5])[0], py: (src.pivot || [0.5, 0.5])[1] });
+      place = (q) => threadToLocal(fit, P(q));
+    } else {   /* conjured on the target, as a named outline is: its centroid, its axis, the prop's own aspect */
+      const c = centroid(B), th = dominantAxis(B), ew = extentAlong(B, th) * MORPH.TAB_W, eh = extentAlong(B, th + Math.PI / 2) * MORPH.TAB_H;
+      const w = Math.min(ew, eh / Math.max(1e-6, M.T.ar)), h = w * M.T.ar;
+      place = pmPlace({ x: c[0] - w / 2, y: c[1] - h / 2, w, h, rot: th * 180 / Math.PI, px: 0.5, py: 0.5 });
+    }
+    const topA = M.T.uv.top.map(place), botA = M.T.uv.bot.map(place), mesh = stripMesh(topA, botA);
+    M.prep = arapPrepareMesh(mesh, [...topB, ...botB], n + (n >> 1)); M.Bv = [...topB, ...botB];
+    M.A = stripOutline(mesh.verts, n); M.B = B;
+  };
+  const paintPropEnter = (st, M, u, c, key) => {
+    pmEnterGeom(st, M);
+    const k = pmEase(u), V = u >= 1 ? M.Bv : arapAt(M.prep, k).verts, n = M.T.uv.n;
+    const hk = clamp01((u - PROP_MORPH.HAND) / (1 - PROP_MORPH.HAND)), leave = u < 1 ? 1 : 1 - clamp01(c);
+    M.pts = u >= 1 ? M.B : stripOutline(V, n);
+    if (u < 1) {   /* the pixels, in the stage layer (hidden again at the next frame's top unless painted) */
+      M.N.g.style.display = "";
+      pmTexPaint(M.N, M.tris, V.map(M.toStage));
+      M.N.tex.setAttribute("opacity", (1 - hk).toFixed(4));
+      M.N.tex.style.filter = "";
+    }
+    M.path.setAttribute("d", outlinePath(M.pts));
+    M.path.setAttribute("fill-opacity", ((M.isLine ? MORPH.FILL_A : 1) * hk * leave).toFixed(4));
+    M.svg.style.opacity = (u < 1 || c < 1) ? "1" : "0"; M.u = u; M.k = k;
+    PM_STATE["enter:" + key] = { read: { shown: u < 1, u, way: "in", mark: M.isLine ? "area" : "page", texture: u >= 1 ? 0 : +(1 - hk).toFixed(4),
+                                         ink: +hk.toFixed(4), mesh: "strip", refused: (M.refused || []).slice(), tris: M.tris.length }, prep: M.prep, k, n };
   };
   /* ---- THE BREAKTHROUGH's run (2026-09-10): seconds since the ordinary build ended, a pure function of them ------------
      burst: the bar shoots from the comparator's level to its true height while the scale rewrites (hi0 -> hi1) under every
@@ -13949,6 +14337,9 @@ async function mount(doc) {
        whose chart elements are detached. The paint was never wrong; only the bookkeeping the probes read was. */
     const pg = scene.world.page || {};
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
+    if (scene.prop_morphs) {   /* P69 T26e: the page a prop morph collapsed LAST frame stands whole before any painter measures it (seek = play) */
+      const R = st.root.style; R.clipPath = ""; R.opacity = ""; R.transform = ""; R.transformOrigin = ""; R.visibility = "";
+    }
     if (!st.thread) lpThread(st, scene);   /* HF-16: after the page is in the DOM, so both charts have a layout box */
     const morphOn = pg.enter === "morph" && kin("arap_morph"), morphS = morphOn ? (pg.morph_s || MORPH.S) : 0;   /* P47 T3: the prop becomes the chart */
     const built = pg.enter === "built";   /* arrives with its chart drawn: the span is all deployed life, the idle keeps it alive */
@@ -14132,7 +14523,7 @@ async function mount(doc) {
        fraction c - and because every builder's law is written as "at c the chart is this far drawn", running c back
        to zero IS an un-draw, whatever the builder. That is what a recast leaves on. */
     lpPaintStates(st, scene, c, t3, t);
-    if (morphOn) paintMorph(st, pg, scene.world, clamp01((t - scene.span[0]) / morphS), c, bRect);   /* P47 T3: the prop becomes the area under the line, then the line draws over it. P61 T3b: `bRect` is the GROUND's last beat - the prop stays the ink it was traced from until the board it stands on is charcoal */
+    if (morphOn) paintMorph(st, pg, scene.world, clamp01((t - scene.span[0]) / morphS), c, bRect, scene.scene_id);   /* P47 T3: the prop becomes the area under the line, then the line draws over it. P61 T3b: `bRect` is the GROUND's last beat - the prop stays the ink it was traced from until the board it stands on is charcoal */
     /* badges: floored at the build's end, each springs in over LP_BADGE_IN with the dock's back-out overshoot */
     const tb = t3 - LP.PUNCH - (st.buildDur || LP.BUILD);
     const arrP = arriveOf(scene.world), massP = scene.world.mass || "paper";   /* P47 T1: the page's pills may ARRIVE by a throw or a landing (`;arrive=land;mass=metal` on the plate id - the compiler writes it on the world) */
@@ -14163,6 +14554,7 @@ async function mount(doc) {
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
     lpShedPrisms(st, scene, t, pg);   /* P61 T4a: ... and the prisms come apart in that same drain - AFTER it, so the drain's particle cache is always taken from faces at home */
+    if (scene.prop_morphs) lpPropMorphPaint(el, st, scene, t);   /* P69 T26e: props and marks becoming each other - BEFORE the soft bars read the marks */
     for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b: the soft bars' feet and shadows, off what every painter wrote at t */
   };
 
@@ -17654,6 +18046,7 @@ async function mount(doc) {
     wB.style.filter = el.style.filter || "";
   };
   const render = (t) => {
+    pmHideAll();   /* P69 T26e: a prop morph's mesh shows only on a frame that paints it */
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
     const sc = TL.scenes[si];
@@ -18009,6 +18402,14 @@ async function mount(doc) {
                                      origin[0] || 0, origin[1] || 0) + " " + wA.style.transform;
       }
     }
+    /* P69 T26e (the parent's review, (c)): `exit: morph:prop` ARRIVES ON THE CUT - over its seconds the outgoing PAGE
+       stands over this scene's world and collapses into the prop, revealing the world beneath as it goes. The suck's and
+       the door's layering (the outgoing world above), with the world's own ground made clear so only the page's carved
+       panel covers anything, and the mesh's layer above the page so the prop's pixels arrive over it. */
+    const pmOver = prev && (prev.prop_morphs || []).find((pm) => pm.over && t >= pm.at && t < pm.at + pm.dur);
+    if (pmOver) { wA.style.zIndex = 3; wA.style.setProperty("background-color", "transparent", "important"); }   /* the ledger world's cream is `!important` in the template */
+    else if (wA.style.backgroundColor) wA.style.removeProperty("background-color");
+    if (PM_LAYER) PM_LAYER.div.style.zIndex = pmOver ? "4" : "";
     if (meltOn) paintMelt({ wA, wB, t, t0: sc.span[0], el: lpEl, opts: meltOn,
                             /* P58 T6 (b): the plane the ball melts at - the OUTGOING world's own camera, read at k */
                             worldCss: camDepthSwap(wA, prev, t, +meltOn.depth || 0),
@@ -18021,7 +18422,7 @@ async function mount(doc) {
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * STAGE_W}px)`;
 
     /* LAYER 2/3 — docks live on their own schedule */
-    const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + EXIT);
+    const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + (d.handed ? 0 : EXIT));   /* P69 T26e: a HANDED prop leaves on its word - the morph's mesh carries its pixels from that frame */
     const washOn = WASHES.some(([a, b]) => t >= a && t < b + EXIT);
     wash.classList.toggle("on", washOn);
     spot.classList.toggle("on", washOn);
@@ -18250,11 +18651,13 @@ async function mount(doc) {
         if (sx.shake && (sx.shake.x || sx.shake.y)) { worldAnswer.x += sx.shake.x; worldAnswer.y += sx.shake.y; }
       } else if (G) {
         if (contact) contact.style.opacity = "0";
-        const pk = springPop(clamp01((t - d.enter) / DOCK_POP_S));
+        const born = d.arrive === "morph";   /* P69 T26e: a prop BORN of a morph stands from its first frame - the mesh landed it there */
+        const pk = born ? 1 : springPop(clamp01((t - d.enter) / DOCK_POP_S));
+        if (born && isProp) propRest = clamp01((t - d.enter) / PROP_MORPH.BORN_HATCH_S);   /* ... and its resting shadow comes in under it */
         const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;
         el.style.transform = "scale(" + (DOCK_POP_FROM + (1 - DOCK_POP_FROM) * (pk - rk)).toFixed(4) + ")"
           + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);   /* E49: the parked card breathes */
-        if (!swept) el.style.opacity = clamp01(1 - rk) * clamp01((t - d.enter) / DOCK_FADE_S);
+        if (!swept) el.style.opacity = clamp01(1 - rk) * (born ? 1 : clamp01((t - d.enter) / DOCK_FADE_S));
       } else if (camArr && camArr.slide === d.slide) {   /* P49 T5: the landed card rides the arrival - screen = at + s (p - look), written about the card's own top-left */
         const st = camArr.state, L = el.offsetLeft, Tp = el.offsetTop;
         el.style.transformOrigin = "0 0";
