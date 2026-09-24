@@ -2294,7 +2294,18 @@ def tag_ink(spec: dict) -> list[list]:
     """REVIEW-P69-LANE-B-MERGE-4 MN3: the fingerprint of a page's END TAGS - `[label, name, last value]` for every live
     series that writes one, in the spec's order. The one measured thing the DATA moves: an end tag stands at its line's
     last value and reads its label, so `tag_boxes` (P69 T6d) are served only to a page whose tags match the ones they
-    were measured for; `page_ink_key` stays the key for every other box. Pure."""
+    were measured for; `page_ink_key` stays the key for every other box. Pure.
+
+    P69 fixture-H: a tag stands at its last value IN THE PAGE'S Y DOMAIN, so a DECLARED `axes.domain` is part of
+    where it lands - Steel and Paper H draws the golden's own ink at `domain=80,277` (the born domain, held until its
+    rescale), at `[95, 1138.74]` and at the auto domain, three tag geometries under one ink. A declared domain joins
+    each tag's fingerprint as a fourth member; a page that declares none keeps the three-member fingerprint, so every
+    entry measured before this row still answers for the page it measured."""
+    domain = (spec.get("axes") or {}).get("domain")
+    try:
+        scale = [round(float(v), 6) for v in domain] if isinstance(domain, (list, tuple)) and len(domain) == 2 else None
+    except (TypeError, ValueError):
+        scale = [str(v) for v in domain]   # an unreadable declared domain still keys the tags apart; never dropped
     out = []
     for s in spec.get("series") or []:
         if not isinstance(s, dict) or s.get("muted"):
@@ -2308,7 +2319,7 @@ def tag_ink(spec: dict) -> list[list]:
             last = round(float(last), 6)
         except (TypeError, ValueError):
             last = None if last is None else str(last)
-        out.append([label, name, last])
+        out.append([label, name, last] + ([scale] if scale is not None else []))
     return out
 
 
@@ -2427,6 +2438,15 @@ def _profile_entry(ink: str, geometry: str) -> dict | None:
     return None
 
 
+def _serves_other_tags(entry: dict, other: dict | None, spec: dict) -> bool:
+    """True when `entry` measured end tags that are not this page's (`tag_ink`) while `other` - the same ink in the
+    same geometry - measured exactly this page's. Pure."""
+    if not isinstance(other, dict) or other is entry:
+        return False
+    own = tag_ink(spec)
+    return entry.get(TAG_INK_KEY) is not None and entry.get(TAG_INK_KEY) != own and other.get(TAG_INK_KEY) == own
+
+
 def measured_entry(spec: dict, aspect: str) -> dict | None:
     """The fixture entry that measured THIS page's ink at this aspect, or None.
 
@@ -2446,6 +2466,11 @@ def measured_entry(spec: dict, aspect: str) -> dict | None:
     if not (isinstance(builder_entry, dict) and builder_entry.get("ink") == key):
         builder_entry = _profile_entry(key, geometry) or builder_entry   # N3: a longform representative, by its ink
     if not isinstance(entry, dict):
+        entry = builder_entry
+    elif _serves_other_tags(entry, builder_entry, spec):
+        # P69 fixture-H: a project page and the builder's representative can share an INK and still draw their tags
+        # (and their data) apart - H draws the golden's own ink in a declared domain. The entry measured on THIS
+        # page's own tags is the one that measured this page; the other one's rects are another page's.
         entry = builder_entry
     if full and not _valid_full_stage_entry(entry, key):
         # A project-specific page may be malformed while its builder
