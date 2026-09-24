@@ -52,7 +52,7 @@
   },
   "recipe": {
     "generator": "build_anime_overlay.py",
-    "generator_sha256": "232de79076b8617a074dcf07903f88e4dae50d281e2c9975e18dcf909d0daa9a",
+    "generator_sha256": "1fad1379acf9a687cbcaa2d644b909667d61670afc0c487f920e67b28ec3f246",
     "selected_contact_treatment": "broken-ring",
     "parameters": {
       "supersample": 3,
