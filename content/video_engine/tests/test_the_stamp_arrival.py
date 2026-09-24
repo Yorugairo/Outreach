@@ -902,3 +902,28 @@ def test_the_stamp_plus_card_row_ON_THE_FRAME_the_other_dock_is_clear_of_the_mar
     assert _overlap(card, mark) == 0, f"the card is over the landed mark: {card} / {mark}"
     assert _disc_hits(ring["box"], {"box": widest}) == 0, f"the ring at its widest reaches the card: {ring['box']} / {widest}"
     assert frames["pair_png"].stat().st_size > 10_000
+
+
+# ---- P69 T81 / E99 s112: the stamp is punctuation - it lands just after the word it names ----------------------------
+
+
+def test_E99_s112_a_stamp_anchored_AFTER_its_word_meets_the_page_just_after_the_word_ENDS_on_the_gates_own_clock():
+    """The operator (2026-09-24): *"I think of the stamp as the punctuation on the thing, so it has to follow
+    immediately after not during."* A dock anchored `after: "racks"` has its enter resolved from its contact, and the
+    motion gate's own arrival list (`_arrivals`, the contact it counts, cues and pulls the camera on) lands the mark
+    STAMP_AFTER_BEAT_S after "racks" ends - where the same dock entered on the word's start lands inside the word and is
+    advised (a WARN with the suggested after-time, never a refusal)."""
+    import gate_motion_density as MG
+    from authoring import words as W
+    words = [{"w": "going", "start": 9.62, "end": 9.90}, {"w": "into", "start": 9.90, "end": 10.05},
+             {"w": "racks.", "start": 10.05, "end": 10.62}, {"w": "It", "start": 11.10, "end": 11.22}]
+    ds, _notes = B.resolve_stamp_after([("ev-prop-fed", 0, 10.05, 20.0, {**STAMP, "after": "racks"})], words, "shot row 1")
+    dock = B.dock_entry("ev-prop-fed", 0, ds[0][2], 20.0, 0, B.DOCK_KIND_PROP, None, "stamp", "ink", True, prop=True,
+                        names="racks")
+    scene = {"scene_id": "s01", "span": [0.0, 30.0], "world": {"asset_id": "plate-plain"}, "species": [], "docks": [dock]}
+    (_enter, _slide, arr, contact), = MG._arrivals([scene])
+    assert arr == "stamp" and 10.62 + W.STAMP_AFTER_BEAT_S - 1e-9 <= contact < 10.62 + W.STAMP_AFTER_BEAT_S + 0.01
+    assert B.stamp_timing_advice([scene], words) == []
+    on_the_word = dict(dock, enter=10.05)
+    adv = B.stamp_timing_advice([dict(scene, docks=[on_the_word])], words)
+    assert [a["kind"] for a in adv] == ["inside"] and adv[0]["suggest_enter"] == dock["enter"]

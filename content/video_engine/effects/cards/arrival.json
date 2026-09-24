@@ -323,7 +323,7 @@
         {
           "name": "approach",
           "does": "down from 2.1x in AREA space (Remotion's perceptual-scale), capped by the room",
-          "trigger": "the dock's `enter`",
+          "trigger": "the dock's `enter` - with `after`, resolved FROM the contact (the word's end + the beat, less 0.1542 s)",
           "dials": {
             "SCALE_FROM": "2.1"
           }
@@ -394,6 +394,21 @@
           "token": "ink",
           "means": "own = the art's own colour; page = laid down in the page's ink (the operator picks)",
           "source_set": "DOCK_OPTS"
+        },
+        {
+          "token": "after",
+          "means": "E99 s112: the stamp is punctuation - its CONTACT lands just after the phrase's last word ENDS (a word, or the idea's end) + after_beat; the enter is resolved from it",
+          "source_set": "DOCK_OPTS"
+        },
+        {
+          "token": "after_beat",
+          "means": "the beat between the word's end and the contact, s in [0, 1] (default authoring.words.STAMP_AFTER_BEAT_S, 0.12)",
+          "source_set": "DOCK_OPTS"
+        },
+        {
+          "token": "names",
+          "means": "the word or phrase the stamp punctuates, for the advice (a contact inside it is WARNed with the suggested after-time)",
+          "source_set": "DOCK_OPTS"
         }
       ],
       "dials": {
@@ -414,7 +429,8 @@
         "E51",
         "E65",
         "R26-20",
-        "R26-247"
+        "R26-247",
+        "E99 s112"
       ],
       "status": "wired",
       "proof": {
@@ -424,7 +440,7 @@
       },
       "callable": {
         "today": true,
-        "why": "any dock or prop; the gate (M01/M03/M07/M20/M29), the cues and the camera read its contact at 0.1542 s (P69 T2-T4, HG1 open on the instant); a blind page, no room or a mark under the floor is a WARN, not a refusal (T26d); refused only with embed or a place off the stage"
+        "why": "any dock or prop; the gate (M01/M03/M07/M20/M29), the cues and the camera read its contact at 0.1542 s (P69 T2-T4, HG1 open on the instant); a blind page, no room or a mark under the floor is a WARN, not a refusal (T26d); refused only with embed or a place off the stage; s112 (P69 T81): `after` lands the contact just after its word, and a contact inside its word or on a data mark's instant is ADVISED with the suggested after-time"
       }
     }
   ]
