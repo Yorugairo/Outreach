@@ -369,6 +369,7 @@ Every operator ruling that asks for something to be BUILT names its carrier here
 | s113 | text on a plate is allowed when intentional, narrative-driven, verified | T83 (the railway-share certificate plate), R26-305 (the prompt guides) |
 | s114 | "up to" is an animation cue, kept in the source note | T29b (row 21's consumer bar meets its ceiling) |
 | s115 | NVDA's share researched, the larger claim editorial on sourced parts; the railway-GDP series | R26-306 (the research order) |
+| s116 | a stamp's (every landing's) sound is timed by the stamp itself | T84 (the binder retimes a bound landing cue to its contact) |
 
 **Harvest coverage** (added 2026-09-23; the operator: "yes, add all of the bravos slices"): every MISSING/PARTIAL harvest item is carried by T36-T50 / T51-T80 (or by T8-T10, T8b, T26a, T43b, T45 where they already name it) or listed as skipped below. Carriers by harvest id (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`):
 - TYPE: T1 T44; T3 T45; T7 T46; T8 T62; T9 T47; T10 T48 (the honest donut; the decor use is skipped); T14 T43b; T21 T43; T23 T41; T24 T58; T26 T60; T27 T59; T29 T50 + T64; T30 T48; T31 T57; T32 T55; T33 T63; T34 T51; T35 T66 (s111); T38 T56; T39 T52; T40 T54; T46 T62.
@@ -622,13 +623,13 @@ verbatim tails and are left pending.
 - Evidence: lane B eb58794 (ledger_panels 77, page_boxes 83, gate_motion_density 172, page_chrome_moves 45; the parent read camera 4's labels whole and the key leaving over the bars)
 
 ### T81: The stamp lands just after the thing it names - a word-END anchor and the advice (E99 s112)
-- Status: pending (lane B)
+- Status: done
 - Owner: implementation_luna
 - Depends on: T2-T5 (the stamp); lane B
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (a stamp's `at` may name a word's END - e.g. `at: {"after": "racks"}` or an `after_word` anchor - resolved from the take's word timings; a WARN with numbers when a stamp's landing falls inside its own word or within ~0.15 s of a data mark it illustrates), the gate if it reads stamp timing, tests
 - Acceptance: s112: the stamp is punctuation - it lands just AFTER the word / datum / motion it names, never on the same instant, never mid-word; the author may anchor it to the word's end or the idea's end; the engine advises, never refuses (s106); byte-identical for rows that name no anchor
 - Regression: `python -m pytest content/video_engine/tests/test_the_stamp_arrival.py -q`
-- Evidence: pending
+- Evidence: de6af2a (lane B): words.after / after_idea, docks.stamp_enter, the after/after_beat/names options, stamp_timing_advice; H door byte-identical; 8 H stamps advised (T82's order); tests test_the_stamp_lands_after.py (28)
 
 ### T82: Every Steel and Paper H stamp re-timed to its word's end or its idea's end (E99 s112)
 - Status: pending (lane A, after T81)
@@ -637,6 +638,31 @@ verbatim tails and are left pending.
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: every stamped prop in H (the Fed, the data centre, PROP 3, the GPU, the die, the wafer, the rack, the phone, the DRAM module, and later rows') lands just after its word ends or at the end of the idea the sentence carries, read on the frame; the gate stays at 2 FAIL (M11, M31) / 5 WARN or better
 - Evidence: pending
+
+### T84: A landing's sound is timed by the landing itself - the binder retimes a bound cue to its compiled contact (E99 s116)
+- Status: done
+- Owner: implementation_luna
+- Depends on: T81; T2-T4 (the stamp's contact as a fire)
+- Write set: `content/video_engine/scripts/authoring/audio.py` (`bind_cues` / `bind_report`: a kept `landing` cue bound to a fire takes the fire's `at`; a cue on the contact or one frame early keeps its own; the move is reported), its callers only if they need the report, tests
+- Acceptance: s116: a stamp moved by `after` (T81's compiler form) sounds on its compiled contact; every committed door's SOUND-PLAN is byte-identical (their cues were built on `landing_contact`); the rack's cue in the kit-form test bed moves 586.32 -> its contact
+- Regression: `python -m pytest content/video_engine/tests/test_authoring_kit.py -q` + a new test file
+- Evidence: e416df5 (lane B): bind_report plays/retimed, landing_plays, on_contact (CUE_DP_S 0.01); H door byte-identical, 0 of 42 timelines move; compiler-form rack 586.32 -> 586.75; tests test_landing_sound_follows_the_landing.py (13)
+
+### T85: A bars page with more than six bars finishes its build - the stagger scales to the bar count (row 22's finding)
+- Status: pending (lane B)
+- Owner: implementation_luna
+- Depends on: none
+- Write set: `content/video_engine/samples/scene-evidence-engine.mjs` (`lpPaintChart`, the bar grow `expoOut(clamp01((cb - i*0.1)/0.55))` and its label `clamp01((cb - i*0.1 - 0.3)/0.2)` with `cb` capped at 1: bar 7's label stops at 0.5, bar 8's at 0 and bar 8 is drawn at ~97.7% on a FINISHED build; scale the stagger to n, e.g. `i * min(0.1, 0.45/(n-1))`), goldens re-pinned only where n > 6, tests
+- Acceptance: every bar and label of an n-bar page reaches 1 by the build's end for n up to the page's cap; pages with n <= 6 byte-identical (their goldens unchanged); row 22's trim proof (8 bars) shows 'Jul '25' at full ink and its 8th label
+- Evidence: pending
+
+### T86: The retitle species takes a colour key (row 22: "The flip" in red)
+- Status: done
+- Owner: implementation_luna
+- Depends on: none
+- Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (`_validate_species` retitle branch: an optional `color` from the page's tokens - `neg` / `pos` / `focus` - refused otherwise), the engine's retitle painter, the card, tests
+- Acceptance: a retitle with `color: neg` writes its new title in `--lp-neg`; no key = byte-identical; a raw hex is refused (tokens only)
+- Evidence: 6b1d26f (lane B): RETITLE_COLORS neg/pos + color_span (leading); RT_PAL / rtSpanGlyphs; H door byte-identical; tests test_retitle_color.py (27); also fixed test_surface_retitle_visibility's slice that T36 broke. Open: the relight's last-frame sunflower (base behaviour), its own slice
 
 ### T83: The railway-share certificate plate (E99 s113) for row 18 (the H-3 host window)
 - Status: pending
@@ -971,13 +997,13 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T30: Row 22 (10:18-11:33) - the tripwires: PROP 6, the customs monitor, the trim proof
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: T29, P69-HG2
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; prop 6 `prop-dram-memory-module-v1` on "the RAM inside every one of these data centers"; the monitor cites its release in the strip (E52); the June datum ringed ADDED 2026-09-23 (coverage audit, s94): read the monitor on the SCRIPT'S basis - DRAM +16.4% on the July print (the bounce off June's -3.7%), HBM-class +13.9% over the last two prints; every drawn figure NAMES its basis on the page ("July print", "last two prints")
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: row 22 built in lane A (this commit): the hynix line shrinks aside on "Bravos" (panel_focus region) for the tripwire board, grows back for the RAM stamp, the monitor slides in on "it reads what memory costs" and its prices draw on their words; +16.4% / +13.9% / -3.7% each naming its basis; the trim proof recast (8 bars) and the flip; the certificate on "The certificates wear". Gate 2 FAIL (M11, M31) / 5 WARN unchanged. Parent frame read twice (sent back once: 18 s empty plot, the -3.7% flash, wrong ticks at the flip - all fixed in the door). Open: "The flip" red waits on T86 in lane A; bars >6 on T85; the flip's half-written ticks ~0.3 s (R26-310); the take says "seventeen" for +16.4% (HG)
 
 ### T31: Row 23 (11:33-13:00) - the ring: reset 3, host window 3, dips 7-9
 - Status: pending
@@ -1205,7 +1231,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T47: Rings in turn on every vertex, and the valley lit - when the sentence is about those vertices (E99 s109 (3))
-- Status: pending
+- Status: done
 - Owner: junior_developer (LANE B)
 - Depends on: T26a (a ring reads the morphed top), T36; lane B
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (the ring species' multi-target form and its check), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (only if the painter needs it), `content/video_engine/tests/test_rings_on_vertices.py` (new)
@@ -1214,10 +1240,10 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_rings_on_vertices.py -q`
 - Expected RED: a ring list of three datums is refused, or the rings all land at once
 - Validate: the regression, `test_the_stamp_arrival.py`, `test_golden_frames.py`
-- Evidence: pending
+- Evidence: 5bb0743 (lane B, a CANDIDATE recipe), merged 953189d
 
 ### T48: The pie and the donut, flat or 3D exploded, and the push onto the largest slice (E99 s109 (4))
-- Status: pending
+- Status: done
 - Owner: implementation_luna (LANE B)
 - Depends on: T26f (the camera free of the chrome); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the `share` builder's extrusion + explode + peel), `content/video_engine/scripts/ledger_page.py` (the `share` page options), `content/video_engine/scripts/build_scene_timeline_f.py`, `content/video_engine/tests/test_share_pie_3d.py` (new), goldens
@@ -1226,7 +1252,7 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_share_pie_3d.py -q`
 - Expected RED: `extrude` / `explode` are unknown share options
 - Validate: `node --check`, `node --test` kinetics, `sync_kinetics.py --check`, `measure_page_boxes.py --check`, the regression, `test_golden_frames.py`, `test_camera_keeps_the_page.py`
-- Evidence: pending
+- Evidence: 04c0145 (lane B), merged 953189d
 
 ### T49: The freeze beat - everything stops and one light comes on (E99 s99)
 - Status: done (lane B 187604a; the parent read the held frames and the one light at the trough)
@@ -1241,7 +1267,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T50: Forms judged by honesty, not type (E99 s100, s109 (5); R26-263) + a bracket on a bars page (R26-272)
-- Status: pending
+- Status: done
 - Owner: junior_developer (LANE B)
 - Depends on: none; lane B
 - Write set: `content/video_engine/scripts/ledger_page.py`, `content/video_engine/scripts/build_scene_timeline_f.py` (every by-type refusal of a form), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (paintBracket on bars), `content/video_engine/tests/test_forms_by_honesty.py` (new)
@@ -1249,10 +1275,10 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_forms_by_honesty.py -q`
 - Expected RED: an area page / a bracket on bars is refused or paints nothing
 - Validate: the regression, `test_golden_frames.py`, `test_page_boxes.py`
-- Evidence: pending
+- Evidence: f63b569 (lane B); R26-307 (`y2`) carried by T43b
 
 ### T45: The membership stack - equal tiles (logos, names) inside one bar (E99 s101, approved in this lane 2026-09-23; built nowhere yet)
-- Status: pending
+- Status: done
 - Owner: implementation_luna (LANE B, with the Bravos verbs)
 - Depends on: T10b (soft bars), T26d (the tiles are placed objects); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the bars painter's tile layer), `content/video_engine/scripts/ledger_page.py` (the `members` field on a bar and its check), `content/video_engine/scripts/build_scene_timeline_f.py` (the tiles' landing on a word), `content/video_engine/tests/test_membership_stack.py` (new), one golden
@@ -1261,7 +1287,7 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_membership_stack.py -q`
 - Expected RED: `members` is an unknown bar field
 - Validate: `node --check` the engine, `node --test` kinetics, `sync_kinetics.py --check`, `measure_page_boxes.py --check`, the regression, `test_bar_style.py`, `test_golden_frames.py`
-- Evidence: pending
+- Evidence: 9caa76b (lane B), merged 953189d
 
 ### T44: the Bravos RECIPES composed from T36-T43, each proved as a body beat
 - Status: pending
@@ -1462,7 +1488,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T66: The broken cross-era axis - one line across two eras on one x-axis, the break drawn (E99 s111; harvest T35, C13 closed)
-- Status: pending
+- Status: done
 - Owner: implementation_luna (LANE B)
 - Depends on: T50 (forms judged by honesty, not refused by type); T8b (panels - E79's route for unlike measures stays beside it); lane B
 - Write set: `content/video_engine/scripts/ledger_page.py` (a `break` key on a dense-line x axis and its check), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the drawn break and each era's ticks), `content/video_engine/scripts/build_scene_timeline_f.py` (validation only), `content/video_engine/scripts/measure_page_boxes.py` (a broken-axis representative), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/test_broken_axis.py` (new), `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1471,7 +1497,7 @@ verbatim tails and are left pending.
 - Regression: `python -m pytest content/video_engine/tests/test_broken_axis.py -q`
 - Expected RED: `break` is not one of `ledger_page.py`'s AXES_KEYS (`:90`) and the object is refused
 - Validate: `node --check docs/content-video-engine/samples/scene-evidence-engine.mjs`, `python content/video_engine/scripts/sync_kinetics.py --check`, `python content/video_engine/scripts/measure_page_boxes.py --write`, `python -m pytest content/video_engine/tests/test_broken_axis.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_boxes.py content/video_engine/tests/test_effects_catalog_drift.py -q`
-- Evidence: pending
+- Evidence: 2b5c714 (lane B), merged 953189d; the railway-GDP series waits on R26-306
 
 ### T67: A card joins its date on the line, and the proof walk (harvest A19, R4)
 - Status: pending
