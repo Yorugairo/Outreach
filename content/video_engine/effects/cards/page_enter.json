@@ -320,6 +320,12 @@
           }
         },
         {
+          "name": "a standing prop is the source",
+          "does": "`;morph=prop:<id>` (P69 T26e, E99 s107): the prop dock standing at the boundary is handed to the page and its silhouette becomes the area under the first series; with no dock standing the prop is drawn on the target and a WARN says so",
+          "trigger": "the scene boundary",
+          "dials": null
+        },
+        {
           "name": "the ground arrives",
           "does": "the charcoal arrives by the field entry the row names (field=soak by default): the nearest stain seeded on the prop's centroid, the rest by distance, over MORPH.GROUND of the morph - never painted whole around the prop (E99 s52)",
           "trigger": "the page's first frame",
@@ -412,7 +418,9 @@
         "E48 s4",
         "E87 s2",
         "E99 s35",
-        "E99 s52"
+        "E99 s52",
+        "E99 s107",
+        "P69 T26e"
       ],
       "status": "wired",
       "proof": {

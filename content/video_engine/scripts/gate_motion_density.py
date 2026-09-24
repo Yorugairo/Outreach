@@ -726,6 +726,20 @@ def _recast_landings(scenes: list[dict], onsets: list[float] | None = None) -> l
     return out
 
 
+PROP_BORN = "morph"   # P69 T26e: the compiler's own `arrive` for a prop born of a morph (build_scene_timeline_f.prop_morph_row)
+
+
+def _prop_morph_landings(scenes: list[dict], onsets: list[float] | None = None) -> list[float]:
+    """P69 T26e (E99 s107; s105 AMENDED): every PROP MORPH that begins on its spoken word lands as an arrival for M03 -
+    it moves the story by construction (the prop becomes the mark, or the chart becomes the thing it measures: a new
+    thing on screen either way), so it is counted as `_moves_the_story` counts a rescale, extend or morph. Read off
+    `scene.prop_morphs` (the compiler writes them there, never as chart_to species); the landing is `at` + `dur`, the
+    player's own clock. A morph over the cut (`over`) is carried by its born dock's entry, which M03 already reads."""
+    words = onsets or []
+    return [round(float(pm["at"]) + float(pm.get("dur", 0.0)), 2) for s in scenes for pm in s.get("prop_morphs") or []
+            if isinstance(pm, dict) and not pm.get("over") and _on_a_word(float(pm.get("at", -1e9)), words)]
+
+
 def _held_built(at: float, dur: float, landings: list[float]) -> float | None:
     """The landing a gap STARTS at, when the gap is no longer than `HELD_BUILT_S` - else None (E99 s69).
 
@@ -1183,6 +1197,8 @@ def _build_windows(scenes: list[dict], docks: list[dict]) -> list[tuple[str, flo
         span = _dock_span(d)
         if not span:
             continue
+        if d.get("arrive") == PROP_BORN:   # P69 T26e: a prop BORN of a morph is the LANDING of a transform, not a card's
+            continue                       # entrance - it stands from its first frame (the player's `born`), nothing builds
         a = span[0]
         z = max(a + DOCK_BUILD_S, *[float(b) + BADGE_SETTLE_S for b in d.get("badge_at", [])] or [a])
         out.append((str(d.get("slide", d.get("asset", "?"))), a, min(z, span[1])))
@@ -1496,7 +1512,8 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     entries = sorted([a for a, _ in spans] + page_starts)
     # P69 T26c (E99 s105): M03's arrivals also carry each recast's landing; the per-minute entry density keeps `entries`
     # P69 T26c2 (E99 s105 AMENDED): ... and each rescale / extend / morph that lands on its word with a new thing
-    pts = [0.0] + sorted(entries + _recast_landings(scenes, _word_onsets(tl))) + [runtime]
+    # P69 T26e (E99 s107): ... and each prop morph that begins on its word
+    pts = [0.0] + sorted(entries + _recast_landings(scenes, _word_onsets(tl)) + _prop_morph_landings(scenes, _word_onsets(tl))) + [runtime]
     ev_gaps = sorted(((a, b - a) for a, b in zip(pts, pts[1:])), key=lambda x: -x[1])
     # plates: a page is its own plate and holds like one (C5)
     plate_ids = [_plate_id(s) for s in scenes]
@@ -3420,6 +3437,9 @@ def _morphs(scenes: list[dict]) -> list[tuple[str, str]]:
             out.append((str(s.get("scene_id", "?")), str(s.get("scene_id", "?"))))
         for ev in _morph_events(s):
             out.append((ev["key"], f"{s.get('scene_id', '?')} morph_to at {_mm(ev['at'])}"))
+        for pm in s.get("prop_morphs") or []:   # P69 T26e: a prop morph, keyed `prop:<id>` (measure_morph.py, the player's `__propMorph`)
+            if isinstance(pm, dict) and pm.get("id"):
+                out.append((f"prop:{pm['id']}", f"{s.get('scene_id', '?')} prop morph ({pm.get('way')}, {pm.get('mark')}) at {_mm(float(pm.get('at', 0)))}"))
     return out
 
 

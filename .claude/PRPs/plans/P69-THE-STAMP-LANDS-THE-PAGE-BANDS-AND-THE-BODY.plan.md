@@ -357,9 +357,9 @@ Every operator ruling that asks for something to be BUILT names its carrier here
 | s103 | H-3 keeps its certificate (no re-roll) | `host/HOST-NOTES-H.md` |
 | s104 (+ amendments) | panels, four panels, composable focus; row 21 on them | T8b, T29, T52 (companion bars as a panel), T54 (the inset echo), T60 (two verdict panels) |
 | s105 (+ amendment) | a recast / a story-moving transform resets M03 | T26c, T26c2 (done in lane B) |
-| s106 | props placed and moved freely; the fit advises | T26d, T59 (the balance's loads), T69 (the rig's prop) |
-| s107 | prop <-> page / chart morphs | T26e |
-| s108 | chrome as objects; the camera free | T26f, T61 (the chapter pill as chrome), T80 (the pedestal and the lens) |
+| s106 | props placed and moved freely; the fit advises | T26d (done), T59 (the balance's loads), T69 (the rig's prop) |
+| s107 | prop <-> page / chart morphs | T26e (done; follow-ups R26-292, R26-293) |
+| s108 | chrome as objects; the camera free | T26f (done), T61 (the chapter pill as chrome), T80 (the pedestal and the lens) |
 | s109 (1)-(4) | schematics; rings on every vertex; pies incl. 3D exploded + the push | T46, T47, T48, T62 (candles and the motif as schematics), T63 (the tilt is the camera's), T75 (the phase-shift slide on a schematic) |
 | s109 | the broken cross-era axis | answered by s111 - T66 |
 | s110 (1) | a stack of values is valid under s109's tests; its home case is the stacked-bar-plus-line COMBO, each scale labelled per s102 | T64 (+ T50's honesty check) |
@@ -845,7 +845,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T26e: Props, pages and charts morph into each other, both ways, mid-page (E99 s107)
-- Status: pending
+- Status: done (lane B, P69 T26e; review fixes: the mark held with its tag, the collapse over the next world, M14/M03/M17/M36)
 - Owner: implementation_luna (LANE B, after T26d)
 - Depends on: T26d (a prop that stands after a morph is placed and moved by s106's grammar); lane B
 - Write set: `content/video_engine/scripts/kinetics/arap.mjs` (+ sync), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the morph enter, a morph exit, a mid-page morph verb, the textured mesh), `content/video_engine/scripts/build_scene_timeline_f.py` (the grammar and its checks), `content/video_engine/tests/test_prop_morph.py` (new), `content/video_engine/tests/golden/**` (one golden each way)

@@ -3025,6 +3025,11 @@ def morph_source_error(world: dict | None, where: str) -> str | None:
     if isinstance(src, str):
         return None if src in MORPH_SHAPES else (f"{where}: morph={src!r} is not one of {'|'.join(MORPH_SHAPES)} - "
                                                  "or a planted element's own outline, {\"poly\": [[x, y], ...]}")
+    if isinstance(src, str) and morph_prop_id(src) is not None:   # P69 T26e: resolved in the row loop; never written unresolved
+        return prop_morph_id_error(morph_prop_id(src), where)
+    if isinstance(src, dict) and "prop" in src:   # P69 T26e: a catalogued prop - its box and outline when one stood at the boundary
+        err = prop_morph_id_error(src.get("prop"), where)
+        return err or (morph_poly_error(src.get("poly"), where) if "poly" in src else None)
     if isinstance(src, dict) and "poly" in src:
         return morph_poly_error(src.get("poly"), where)
     return (f"{where}: world.morph is {src!r} - a named prop ({'|'.join(MORPH_SHAPES)}) or a planted element's own "
@@ -4024,6 +4029,11 @@ def plate_room_spec(value, where: str) -> list[float]:
 
 
 def _check_opt(key: str, value, where: str) -> None:
+    if key == "morph" and morph_prop_id(value) is not None:   # P69 T26e / E99 s107: `;morph=prop:<id>` - a catalogued PROP is a morph source
+        err = prop_morph_id_error(morph_prop_id(value), where)
+        if err:
+            raise ValueError(err)
+        return
     if key == "thread":   # HF-16: the shape here, the page before it in `thread_mark_error` (which needs that page)
         if THREAD_KEY_RE.match(str(value)):
             return
@@ -6965,6 +6975,494 @@ def prop_moves(dopt: dict, paint: dict | float | None, fit: dict, aspect: str | 
     return out, warns
 
 
+
+# ---- P69 T26e / E99 s107: PROPS, PAGES AND CHARTS MORPH INTO EACH OTHER, BOTH WAYS, MID-PAGE --------------------------
+# The operator (2026-09-23): "we should also be able to morph/transform to/from props to pages and charts." Until this
+# slice the object -> chart morph (P47 T3: ARAP on a strip mesh, `kinetics/arap.mjs`) ran only as a page ENTER from three
+# named outlines (tab | plate | card) or a planted poly. Now a catalogued PROP is a morph source and a morph target:
+#   `;morph=prop:<id>` on a page enter - the prop standing at the boundary becomes the area under the page's first series;
+#   `chart_to {to: "morph", from: "prop:<id>", at, dur?, mark?}` - on a word, the prop dock standing in the row becomes
+#       a MARK of the state on screen: a bar (`b:<i>`) or the area under the first series (`area`, the default);
+#   `chart_to {to: "prop", prop: <id>, at, dur?, mark?, place?, rot?, moves?, until?}` - on a word, the page panel
+#       (`page`, the default), a bar or the area becomes the prop, which then STANDS as an ordinary T26d prop dock;
+#   `exit: morph:prop:<id>[:<s>]` - a row's `exit` is the transition INTO it (the player reads `sc.exit` against the
+#       scene before, as `melt:morph` does): it arrives ON THE CUT - over this row's first s seconds the PAGE of the row
+#       before stands over this row's world and collapses into the prop, revealing the world beneath as it goes (the
+#       suck's and the door's own layering), and the prop this row carries lands standing on it (born standing, its
+#       enter the landing) - never a beat of bare cream (the parent's review of T26e, (c)).
+# The two chart_to verbs LEAVE the row's species list here: they are not a chart state change (the gates' state walk and
+# `stamp_page_leave` read every chart_to morph as one), so they ride the scene as `prop_morphs`, which the engine paints.
+# The prop's own pixels ride the mesh (the engine maps the cutout onto it triangle by triangle); the invariants advise
+# (s106): a pair that fails them is a WARN with its numbers, never a refusal. What cannot be PLAYED is refused by name.
+PROP_MORPH_S = 2.0          # a prop morph's default seconds - the page-enter morph's own MORPH.S
+PROP_MORPH_W = 0.24         # a born prop's default painted width (stage fraction) when the row names no place
+PROP_MORPH_HAND = 0.7       # the share of the clock after which the prop's pixels hand to the chart's ink (the engine's PROP_MORPH.HAND)
+PROP_MORPH_COLS = 48        # the strip's columns - the engine's MORPH.COLS
+PROP_MORPH_EXIT = "morph:prop:"
+PROP_MORPH_KEY = "prop_morphs"
+PROP_MORPH_BAR = re.compile(r"^b:(\d+)$")
+PROP_MORPH_MARKS = {"in": ("area",), "out": ("page", "area")}   # ... and every bar, `b:<i>`
+PROP_MORPH_LINE_BUILDERS = ("dense-line",)                       # the builders whose first series is an area (`lpStrip`)
+PROP_MORPH_NON_BARS = ("dense-line", "race", "decline", "share", "tiers", "treemap")   # the engine builds every other page's values as `b:<i>` bars (combo too)
+
+
+def morph_prop_id(value) -> str | None:
+    """`prop:<id>` -> the id; anything else -> None."""
+    return value[len(PROP_PREFIX):] if isinstance(value, str) and value.startswith(PROP_PREFIX) else None
+
+
+def prop_morph_id_error(pid, where: str) -> str | None:
+    """A prop a morph names must be one of E99 s31's catalogued cutouts - never an invented image."""
+    if not (isinstance(pid, str) and PROP_ID.match(pid)):
+        return f"{where}: morph prop {pid!r} is not a prop id (lowercase letters, digits and hyphens)"
+    try:
+        known = pid in prop_catalog()
+    except ValueError as exc:
+        return f"{where}: {exc}"
+    return None if known else (f"{where}: prop {pid!r} is not in the props catalogue ({PROP_CATALOG.name}) - a morph "
+                               "starts from or lands on one of E99 s31's approved cutouts, never an invented image")
+
+
+def _prop_morph_way(e) -> str | None:
+    """"in" (the prop becomes a mark), "out" (a mark or the page becomes the prop), or None (not a prop verb)."""
+    if not (isinstance(e, dict) and e.get("kind") == "chart_to"):
+        return None
+    if e.get("to") == "morph" and "from" in e:
+        return "in"
+    return "out" if e.get("to") == "prop" else None
+
+
+def _prop_morph_mark(way: str, mark, where: str) -> str:
+    if mark is None:
+        return PROP_MORPH_MARKS[way][0]
+    if mark in PROP_MORPH_MARKS[way] or (isinstance(mark, str) and PROP_MORPH_BAR.match(mark)):
+        return mark
+    raise ValueError(f"{where}: mark {mark!r} is not one of {'|'.join(PROP_MORPH_MARKS[way])}|b:<i> (a bar of the state "
+                     "on screen) - the mark the prop " + ("becomes" if way == "in" else "is made from"))
+
+
+def _prop_morph_clock(e: dict, a: float, b: float, where: str) -> tuple[float, float]:
+    at, dur = e.get("at"), e.get("dur", PROP_MORPH_S)
+    if not isinstance(at, (int, float)) or isinstance(at, bool):
+        raise ValueError(f"{where}: `at` must be the word's second (a number)")
+    if not isinstance(dur, (int, float)) or isinstance(dur, bool) or dur <= 0:
+        raise ValueError(f"{where}: dur {dur!r} must be a positive number of seconds (default {PROP_MORPH_S:g})")
+    if at < a - 1e-6 or at + dur > b + 1e-6:
+        raise ValueError(f"{where}: the morph runs {at:g}-{at + dur:g}s, outside its row ({a:g}-{b:g}s) - it starts and "
+                         "lands on the page it belongs to")
+    return float(at), float(dur)
+
+
+def _free_slot(ds: list, enter: float, exitt: float, where: str) -> int:
+    busy = {int(d[1]) for d in ds if float(d[2]) < exitt - 1e-6 and enter < float(d[3]) - 1e-6}
+    for slot in (0, 1):
+        if slot not in busy:
+            return slot
+    raise ValueError(f"{where}: both dock slots are taken while the prop stands ({enter:g}-{exitt:g}s) - the stage "
+                     "draws two docks at once; end one first")
+
+
+def prop_morph_row(row_species, ds, authored_exit, a: float, b: float, where: str, sid: str | None = None,
+                   prev_a: float | None = None) -> dict:
+    """ONE ROW's prop morphs, read off its species and its exit: {"species": the row's species WITHOUT the prop verbs,
+    "ds": its docks (a handed prop's exit clamped to its word; a born prop appended), "exit": the scene exit (a
+    `morph:prop` entry is a cut), "morphs": [{id, way, prop, at, dur, mark}], "enter_morph": the collapse the ROW
+    BEFORE plays into this row's prop ({id, way: out, prop, at, dur, mark: page}, or None), "handed": {dock index},
+    "born": {dock index}, "notes": [...]}. `prev_a`: the row before's start (None on the first row). Pure: the inputs are
+    never mutated and a row that names none of it comes back as it went in. ValueError names what cannot be played."""
+    species, out_ds, morphs, notes = [], list(ds or []), [], []
+    handed, born, enter_morph, exit_out = set(), set(), None, authored_exit
+    for e in row_species or []:
+        way = _prop_morph_way(e)
+        if way is None:
+            species.append(e)
+            continue
+        w = f"{where}: chart_to {e.get('to')}" + (f" at {e['at']:g}s" if isinstance(e.get("at"), (int, float)) else "")
+        if "state" in e:
+            raise ValueError(f"{w}: a prop morph names no chart state - the prop becomes (or is made from) a MARK of the "
+                             "state on screen; name the mark (`b:<i>`, `area`" + (", `page`" if way == "out" else "") + ")")
+        pid = morph_prop_id(e.get("from")) if way == "in" else e.get("prop")
+        if pid is None and way == "in":
+            raise ValueError(f"{w}: from {e.get('from')!r} is not `prop:<id>` - the prop the chart is made from")
+        if way == "out" and not pid:
+            raise ValueError(f"{w}: name the prop the chart becomes - `prop: <id>`, one of the catalogued cutouts")
+        err = prop_morph_id_error(pid, w)
+        if err:
+            raise ValueError(err)
+        mark = _prop_morph_mark(way, e.get("mark"), w)
+        at, dur = _prop_morph_clock(e, a, b, w)
+        m = {"id": e.get("id"), "way": way, "prop": pid, "at": round(at, 3), "dur": round(dur, 3), "mark": mark}
+        if way == "in":
+            src = [n for n, d in enumerate(out_ds) if d[0] == pid and float(d[2]) <= at + 1e-6 and at < float(d[3]) - 1e-6]
+            if not src:
+                raise ValueError(f"{w}: no dock of {pid} stands in this row at {at:g}s - the prop a morph starts from is "
+                                 "REAL and on the stage (R26-16): dock it (a stamp, a throw) before its word")
+            n = src[-1]
+            out_ds[n] = (*out_ds[n][:3], at, *out_ds[n][4:])
+            handed.add(n)
+        else:
+            opts = {"prop": True, "place": e.get("place") or {"x": 0.5, "y": 0.5, "w": PROP_MORPH_W}}
+            for k in ("rot", "moves"):
+                if e.get(k) is not None:
+                    opts[k] = e[k]
+            try:
+                dock_opts(opts)
+            except ValueError as exc:
+                raise ValueError(f"{w}: the prop it becomes - {exc}") from exc
+            land, until = at + dur, e.get("until", b)
+            if not isinstance(until, (int, float)) or not (land < until <= b + 1e-6):
+                raise ValueError(f"{w}: until {until!r} must fall after the landing ({land:g}s) and within the row (to {b:g}s)")
+            if e.get("place") is None:
+                notes.append(f"{w}: no place named - {pid} stands at the stage centre, {PROP_MORPH_W:g} of its width "
+                             "(name `place: {x, y, w}` to put it where the story wants it)")
+            out_ds.append((pid, _free_slot(out_ds, land, float(until), w), round(land, 3), round(float(until), 3), opts))
+            born.add(len(out_ds) - 1)
+        morphs.append(m)
+    if isinstance(authored_exit, str) and authored_exit.startswith(PROP_MORPH_EXIT):
+        w = f"{where}: exit {authored_exit!r}"
+        pid, _, secs = authored_exit[len(PROP_MORPH_EXIT):].partition(":")
+        err = prop_morph_id_error(pid, w)
+        if err:
+            raise ValueError(err)
+        try:
+            dur = float(secs) if secs else PROP_MORPH_S
+        except ValueError:
+            raise ValueError(f"{w}: the seconds {secs!r} are not a number") from None
+        if not (0 < dur <= b - a):
+            raise ValueError(f"{w}: {dur:g}s does not fit the row ({a:g}-{b:g}s)")
+        if prev_a is None:
+            raise ValueError(f"{w}: the collapse is the ROW BEFORE's page becoming the prop - the first row has none")
+        hit = [n for n, d in enumerate(out_ds) if d[0] == pid and abs(float(d[2]) - a) <= 0.011]
+        if not hit:
+            raise ValueError(f"{w}: the page before collapses into {pid} - this row must carry a dock of {pid} from its "
+                             f"first frame ({a:g}s), where the prop stands (its place, its moves: a T26d prop dock)")
+        n = hit[0]
+        land = round(a + dur, 3)
+        if float(out_ds[n][3]) <= land + 1e-6:
+            raise ValueError(f"{w}: the dock of {pid} leaves at {float(out_ds[n][3]):g}s, before the collapse lands it ({land:g}s)")
+        out_ds[n] = (out_ds[n][0], out_ds[n][1], land, *out_ds[n][3:])   # it STANDS from the landing: the mesh carries it until then
+        born.add(n)
+        enter_morph = {"id": f"{sid}.enter" if sid else "enter", "way": "out", "prop": pid, "at": round(a, 3),
+                       "dur": round(dur, 3), "mark": "page", "over": True}
+        exit_out = "cut"
+    return {"species": species, "ds": out_ds, "exit": exit_out, "morphs": morphs, "enter_morph": enter_morph,
+            "handed": handed, "born": born, "notes": notes}
+
+
+_PROP_SIL: dict = {}
+
+
+def prop_silhouette(src: Path, n: int = PROP_MORPH_COLS) -> dict:
+    """The cutout's painted silhouette as a CONSERVATIVE strip of n columns, in fractions of its own canvas -
+    {"x": [...], "top": [...], "bot": [...]}: `kinetics/arap.mjs` `alphaColumns` + `bandStrip`, the same rule the engine
+    maps the texture on (every painted pixel lies inside it). Cached per file."""
+    key = (str(src), n)
+    if key not in _PROP_SIL:
+        from PIL import Image
+        with Image.open(src) as im:
+            a = im.convert("RGBA").getchannel("A")
+            W, H = a.size
+            px = a.load()
+        top, bot = [None] * W, [None] * W
+        for x in range(W):
+            ys = [y for y in range(H) if px[x, y] > STAMP_ALPHA_MIN]
+            if ys:
+                top[x], bot[x] = ys[0], ys[-1] + 1
+        cols = [x for x in range(W) if top[x] is not None]
+        if not cols:
+            raise ValueError(f"{src.name}: the cutout paints nothing (no alpha above {STAMP_ALPHA_MIN})")
+        c0, c1 = cols[0], cols[-1]
+        x0, x1 = c0, c1 + 1
+        ylo, yhi = min(top[x] for x in cols), max(bot[x] for x in cols)
+        min_h = (yhi - ylo) * 0.02   # arap.mjs STRIP.MIN_H
+        xs = [x0 + (i / (n - 1)) * (x1 - x0) for i in range(n)]
+        T, Bt = [], []
+        for i in range(n):
+            lo_x = max(c0, math.floor(xs[i - 1] if i > 0 else xs[0]))
+            hi_x = min(c1, math.ceil(xs[i + 1] if i < n - 1 else xs[-1]) - 1)
+            span = [x for x in range(lo_x, hi_x + 1) if top[x] is not None]
+            lo, hi = (min(top[x] for x in span), max(bot[x] for x in span)) if span else ((ylo + yhi) / 2, (ylo + yhi) / 2)
+            if hi - lo < min_h:
+                c = (lo + hi) / 2
+                lo, hi = c - min_h / 2, c + min_h / 2
+            T.append(lo / H)
+            Bt.append(hi / H)
+        _PROP_SIL[key] = {"x": [x / W for x in xs], "top": T, "bot": Bt}
+    return copy.deepcopy(_PROP_SIL[key])
+
+
+def _pm_ease(name: str | None, k: float) -> float:
+    k = min(1.0, max(0.0, k))
+    if name == "linear":
+        return k
+    if name == "cubic":
+        return 4 * k ** 3 if k < 0.5 else 1 - (-2 * k + 2) ** 3 / 2
+    if name == "out":
+        return 1.0 if k >= 1 else 1 - 2 ** (-10 * k)
+    return k ** 3 * (10 - 15 * k + 6 * k * k)   # min-jerk (the engine's default)
+
+
+def prop_pose_at(dock: dict, t: float) -> dict:
+    """A compiled prop dock's pose at t - {"box": [x, y, w, h] (its canvas box, stage px), "rot": deg, "pivot": [fx, fy]}
+    - read as the engine's `propPose` reads it: the place, then every move begun by t (a key in flight eased on its own
+    curve; a CHAIN is read key by key - the engine runs it on one Hermite path, which passes through the same keys).
+    The pivot is the painted centre a stamp turns about, else the canvas centre."""
+    P = dock["place"]
+    rot0 = dock.get("rot") if dock.get("rot") is not None else (float(STAMP_LAND_DEG) if dock.get("arrive") == "stamp" else 0.0)
+    cur = {"x": float(P["x"]), "y": float(P["y"]), "w": float(P["w"]), "rot": float(rot0)}
+    for m in dock.get("moves") or []:
+        if t <= m["at"]:
+            break
+        u = _pm_ease(m.get("ease"), (t - m["at"]) / max(1e-6, m["dur"]))
+        cur = {k: cur[k] + (float(m[k]) - cur[k]) * u for k in cur}
+    pb = dock.get("paint")
+    pivot = [(pb[0] + pb[2]) / 2, (pb[1] + pb[3]) / 2] if isinstance(pb, list) and len(pb) == 4 else [0.5, 0.5]
+    return {"box": [cur["x"], cur["y"], cur["w"], cur["w"] * float(P["h"]) / max(1e-9, float(P["w"]))], "rot": cur["rot"],
+            "pivot": pivot}
+
+
+def prop_outline_px(sil: dict, pose: dict) -> list[tuple[float, float]]:
+    """The silhouette strip's outline (top left to right, bottom back) standing at a pose, in stage px."""
+    x, y, w, h = pose["box"]
+    cx, cy = x + pose["pivot"][0] * w, y + pose["pivot"][1] * h
+    r = math.radians(pose["rot"])
+    c, s = math.cos(r), math.sin(r)
+    ring = list(zip(sil["x"], sil["top"])) + list(zip(reversed(sil["x"]), reversed(sil["bot"])))
+    out = []
+    for u, v in ring:
+        px_, py_ = x + u * w - cx, y + v * h - cy
+        out.append((cx + px_ * c - py_ * s, cy + px_ * s + py_ * c))
+    return out
+
+
+# the match-cut invariants - `kinetics/arap.mjs` morphInvariants over the two end frames, ported (centroid, inertia, the
+# dominant axis, the oriented box in the target's principal frame), so the build reads the numbers the kinetics would
+def _pm_centroid(P):
+    a = cx = cy = 0.0
+    n = len(P)
+    for i in range(n):
+        (x0, y0), (x1, y1) = P[i], P[(i + 1) % n]
+        w = x0 * y1 - x1 * y0
+        a += w
+        cx += (x0 + x1) * w
+        cy += (y0 + y1) * w
+    if abs(a) < 1e-9:
+        return (sum(p[0] for p in P) / n, sum(p[1] for p in P) / n)
+    return (cx / (3 * a), cy / (3 * a))
+
+
+def _pm_axis(P) -> float:
+    c = _pm_centroid(P)
+    n = len(P)
+    ixx = iyy = ixy = a = 0.0
+    for i in range(n):
+        x0, y0 = P[i][0] - c[0], P[i][1] - c[1]
+        x1, y1 = P[(i + 1) % n][0] - c[0], P[(i + 1) % n][1] - c[1]
+        w = x0 * y1 - x1 * y0
+        a += w
+        ixx += w * (x0 * x0 + x0 * x1 + x1 * x1)
+        iyy += w * (y0 * y0 + y0 * y1 + y1 * y1)
+        ixy += w * (x0 * y1 + 2 * x0 * y0 + 2 * x1 * y1 + x1 * y0)
+    sg = -1 if a < 0 else 1
+    ixx, iyy, ixy = sg * ixx / 12, sg * iyy / 12, sg * ixy / 24
+    ang = 0.5 * math.atan2(2 * ixy, ixx - iyy)
+    if ang >= math.pi / 2:
+        ang -= math.pi
+    if ang < -math.pi / 2:
+        ang += math.pi
+    return ang
+
+
+def _pm_extent(P, ang: float) -> float:
+    c, s = math.cos(ang), math.sin(ang)
+    v = [p[0] * c + p[1] * s for p in P]
+    return max(v) - min(v)
+
+
+def prop_morph_invariants(A, Bp, W: float) -> dict:
+    """The three match-cut invariants of a prop morph's two end shapes (stage px) against the kinetics' own dials
+    (arap.mjs ARAP: centroid shift <= 0.06 W, dominant-axis turn <= 15 deg, oriented area min/max >= 0.60)."""
+    c0, c1 = _pm_centroid(A), _pm_centroid(Bp)
+    shift = math.hypot(c1[0] - c0[0], c1[1] - c0[1]) / max(1.0, W)
+    da = abs(_pm_axis(Bp) - _pm_axis(A))
+    if da > math.pi / 2:
+        da = math.pi - da
+    ang = _pm_axis(Bp)
+    areas = [_pm_extent(P, ang) * _pm_extent(P, ang + math.pi / 2) for P in (A, Bp)]
+    ratio = min(areas) / max(1e-9, max(areas))
+    return {"centroid_shift": shift, "centroid_ok": shift <= 0.06, "axis_deg": math.degrees(da),
+            "axis_ok": math.degrees(da) <= 15, "area_ratio": ratio, "area_ok": ratio >= 0.60}
+
+
+def prop_morph_warns(inv: dict, what: str) -> list[str]:
+    """s106 / s107 (4): the invariants ADVISE - one WARN line with every number when any fails, nothing when all hold."""
+    if inv["centroid_ok"] and inv["axis_ok"] and inv["area_ok"]:
+        return []
+    return [f"{what}: the match-cut invariants fail - centroid {inv['centroid_shift'] * 100:.1f}% W (<= 6.0%) "
+            f"{'ok' if inv['centroid_ok'] else 'FAIL'}, axis {inv['axis_deg']:.1f} deg (<= 15) "
+            f"{'ok' if inv['axis_ok'] else 'FAIL'}, area {inv['area_ratio']:.2f} (>= 0.60) {'ok' if inv['area_ok'] else 'FAIL'} "
+            "- the shapes are not kin by the brief's measure; a WARN, not a refusal (E99 s106): read the frame"]
+
+
+def _state_index_on_screen(world: dict | None, row_species: list | None, t: float) -> int:
+    """`page_on_screen`'s walk, as the state's index (0: the page's own chart)."""
+    k = 0
+    for sp in sorted((sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == "chart_to"
+                      and sp.get("state") is not None), key=lambda sp: float(sp.get("at", 0))):
+        if float(sp.get("at", 0)) <= t + 1e-9:
+            k = int(sp["state"])
+    n = 1 + len((world or {}).get("page_states") or [])
+    return k if 0 <= k < n else 0
+
+
+def prop_morph_target_px(mark: str, page: dict | None, aspect: str | None) -> tuple[list, str]:
+    """The mark's outline in stage px and how it is known: the PAGE panel exactly (the ledger root is the stage);
+    a bar or the area ESTIMATED from the page's measured plot box (the engine's own layout is read in the player -
+    `__propMorph` carries its numbers)."""
+    sw, sh = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])
+    if mark == "page" or not isinstance(page, dict):
+        return [(0.0, 0.0), (sw, 0.0), (sw, sh), (0.0, sh)], "the page panel"
+    plot = LPG.page_boxes(page, aspect or "16:9")["plot"]
+    m = PROP_MORPH_BAR.match(mark)
+    if m:
+        vals = [float(v) for v in (page.get("values") or [])]
+        i, n = int(m.group(1)), max(1, len(vals))
+        hi = max([abs(v) for v in vals] + [1e-9]) * 1.14
+        slot = plot["w"] / n
+        bw, bh = slot * 0.66, plot["h"] * (abs(vals[i]) if i < len(vals) else 0.0) / hi
+        x0, base = plot["x"] + slot * i + (slot - bw) / 2, plot["y"] + plot["h"]
+        return [(x0, base - bh), (x0 + bw, base - bh), (x0 + bw, base), (x0, base)], f"bar {i}, estimated from the plot box"
+    x, y, w, h = plot["x"], plot["y"], plot["w"], plot["h"]
+    return [(x, y + h * 0.4), (x + w, y + h * 0.4), (x + w, y + h), (x, y + h)], "the area, estimated from the plot box"
+
+
+def prop_morph_mark_error(mark: str, page: dict | None, where: str) -> str | None:
+    """A mark the state on screen does not draw cannot be morphed into or out of - refused by name."""
+    if mark == "page":
+        return None
+    builder = str((page or {}).get("builder") or "story")
+    if mark == "area":
+        return None if builder in PROP_MORPH_LINE_BUILDERS else (
+            f"{where}: mark `area` is the area under a LINE page's first series, and the state on screen is a "
+            f"{builder!r} page - name a bar (`b:<i>`) or the page")
+    i = int(PROP_MORPH_BAR.match(mark).group(1))
+    n = len((page or {}).get("values") or [])
+    if builder in PROP_MORPH_NON_BARS:
+        return f"{where}: mark {mark} is a bar, and the state on screen is a {builder!r} page with no bars"
+    return None if i < n else f"{where}: mark {mark} - the state on screen draws {n} bar(s) (b:0..b:{n - 1})"
+
+
+PROP_MORPH_HOLD_WARN_S = 2.0   # a mark held hidden longer than this before its prop morph begins stands as an EMPTY SLOT (the parent's review of T26e, (b))
+
+
+def _state_arrival(world: dict | None, row_species: list | None, k: int, a: float, before: float) -> float:
+    """When state k came on screen by `before`: the landing of the last chart_to into it (its `at` + `dur`), or the
+    scene's first frame for the page's own chart."""
+    lands = [float(sp.get("at", 0)) + float(sp.get("dur", 1.0) or 1.0) for sp in (row_species or [])
+             if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("state") == k and float(sp.get("at", 0)) <= before + 1e-9]
+    return max(lands) if lands and k else float(a)
+
+
+def prop_morph_hold_warns(m: dict, world: dict | None, row_species: list | None, k: int, a: float, where: str) -> list[str]:
+    """E99 s106 (the engine advises): a bar a prop BECOMES is held hidden - its rect, its value tag, its callout - from
+    its state's arrival until the morph lands. Longer than PROP_MORPH_HOLD_WARN_S before the morph begins, the slot
+    stands empty on the page: a WARN with the numbers, never a refusal."""
+    if m["way"] != "in" or not PROP_MORPH_BAR.match(m["mark"]):
+        return []
+    on = _state_arrival(world, row_species, k, a, m["at"])
+    held = float(m["at"]) - on
+    if held <= PROP_MORPH_HOLD_WARN_S + 1e-9:
+        return []
+    return [f"{where}: mark {m['mark']} is held hidden {held:.2f}s before its morph begins (its state arrives at {on:g}s, "
+            f"the morph at {m['at']:g}s, it lands at {m['at'] + m['dur']:g}s; > {PROP_MORPH_HOLD_WARN_S:g}s) - the slot "
+            "stands empty on the page: start the morph on the bar's own arrival word, or read the frame (E99 s106)"]
+
+
+def finish_prop_morphs(morphs: list[dict], docks: list[dict], world: dict | None, row_species: list | None,
+                       aspect: str | None, where: str, asset_path, a: float | None = None) -> tuple[list[dict], list[str]]:
+    """After the row's docks are compiled: each morph's STATE on screen, its mark checked against that state, and its
+    invariants read (the prop at its pose against the mark) - (the scene's `prop_morphs` entries, the WARN lines)."""
+    out, warns = [], []
+    sw = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])[0]
+    for m in morphs:
+        k = _state_index_on_screen(world, row_species, m["at"])
+        states = [(world or {}).get("page")] + list((world or {}).get("page_states") or [])
+        page = states[k] if k < len(states) else None
+        w = f"{where}: prop morph at {m['at']:g}s ({m['way']}, {m['mark']})"
+        err = prop_morph_mark_error(m["mark"], page, w)
+        if err:
+            raise ValueError(err)
+        entry = {k2: v for k2, v in m.items() if v is not None}
+        entry["state"] = k
+        out.append(entry)
+        warns += prop_morph_hold_warns(m, world, row_species, k, float(a if a is not None else m["at"]), w)
+        dock = next((d for d in docks if d["slide"] == m["prop"] and (
+            abs(d["exit"] - m["at"]) < 0.011 if m["way"] == "in" else abs(d["enter"] - (m["at"] + m["dur"])) < 0.011)), None)
+        if dock is None or not dock.get("place"):
+            warns.append(f"{w}: the prop's dock has no measured box - the invariants are read in the player only")
+            continue
+        pose = prop_pose_at(dock, m["at"] if m["way"] == "in" else dock["enter"])
+        prop = prop_outline_px(prop_silhouette(asset_path(m["prop"])), pose)
+        mark, how = prop_morph_target_px(m["mark"], page, aspect)
+        A, Bp = (prop, mark) if m["way"] == "in" else (mark, prop)
+        warns += [f"{x} (the mark: {how})" for x in prop_morph_warns(prop_morph_invariants(A, Bp, sw), w)]
+    return out, warns
+
+
+def attach_enter_morph(morph: dict, prev: dict | None, dock: dict | None, aspect: str | None, where: str,
+                       asset_path) -> list[str]:
+    """`exit: morph:prop:<id>` on a row: its collapse is PLAYED by the scene before (its page is what collapses) - the
+    entry is appended to that scene's `prop_morphs` with the state on screen at its word, the page's own leave is the
+    collapse (`exit: cut` on the page, no retract), and the invariants are read against the prop where this row stands
+    it. Returns the WARN lines; ValueError when the scene before is not a ledger page or leaves by its own exit."""
+    world = (prev or {}).get("world") or {}
+    if world.get("kind") != SPECIES_LEDGER or not isinstance(world.get("page"), dict):
+        raise ValueError(f"{where}: exit morph:prop:{morph['prop']} - only a PAGE collapses into a prop, and the scene "
+                         "before is not a ledger page (a picture plate has no panel to carve)")
+    page = world["page"]
+    if page.get("exit") not in (None, "cut"):
+        raise ValueError(f"{where}: the page before leaves by {page.get('exit')!r} - its collapse into "
+                         f"{morph['prop']} IS its leave; drop the page's own exit")
+    entry = {**morph, "state": _state_index_on_screen(world, prev.get("species"), morph["at"])}
+    prev.setdefault(PROP_MORPH_KEY, []).append(entry)
+    page["exit"] = "cut"
+    if not (dock or {}).get("place"):
+        return []
+    states = [page] + list(world.get("page_states") or [])
+    sw = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])[0]
+    prop = prop_outline_px(prop_silhouette(asset_path(morph["prop"])), prop_pose_at(dock, dock["enter"]))
+    mark, how = prop_morph_target_px("page", states[entry["state"]], aspect)
+    return [f"{x} (the mark: {how})" for x in prop_morph_warns(prop_morph_invariants(mark, prop, sw),
+                                                               f"{where}: exit morph:prop - the page before into {morph['prop']}")]
+
+
+def standing_prop_dock(scene: dict | None, pid: str, t: float) -> dict | None:
+    """The compiled dock of prop `pid` standing in `scene` at t (its last, when two do) - a boundary's own frame counts."""
+    return next((d for d in reversed((scene or {}).get("docks") or [])
+                 if d.get("slide") == pid and d.get("place") and d["enter"] <= t + 1e-6 and t <= d["exit"] + 0.011), None)
+
+
+def resolve_morph_prop(world: dict | None, prev_scene: dict | None, a: float, where: str, asset_path) -> tuple:
+    """`;morph=prop:<id>` on a page enter -> (world.morph, notes). The source is the prop dock STANDING at the boundary in
+    the scene before (R26-16: the source is real): its canvas box, its angle, its pivot and its traced outline in stage
+    fractions (the planted `poly` the soak's seed reads). None standing: {"prop": id} - the engine draws the prop on the
+    target's own area, as it draws a named outline, and the build is told. Any other morph source comes back as it was."""
+    src = (world or {}).get("morph") if isinstance(world, dict) else None
+    pid = morph_prop_id(src)
+    if pid is None:
+        return src, []
+    dock = standing_prop_dock(prev_scene, pid, a)
+    if dock is None:
+        return {"prop": pid}, [f"{where}: morph=prop:{pid} - no dock of {pid} stands in the scene before at {a:g}s, so the "
+                               "prop is drawn on the page's own area and becomes it (a conjured source, as tab|plate|card "
+                               "are: read the seam, R26-16)"]
+    pose = prop_pose_at(dock, a)
+    sw, sh = LPG.STAGE_PX.get(ASPECT or "16:9", LPG.STAGE_PX["16:9"])
+    ring = prop_outline_px(prop_silhouette(asset_path(pid), 24), pose)
+    poly = [[round(min(1.0, max(0.0, x / sw)), 5), round(min(1.0, max(0.0, y / sh)), 5)] for x, y in ring]
+    return ({"prop": pid, "box": [round(v, 2) for v in pose["box"]], "rot": round(pose["rot"], 3),
+             "pivot": [round(v, 5) for v in pose["pivot"]], "poly": poly}, [])
+
 # ---- P69 T5 (R26-247 L2; E99 s88 (3)): THE STAMP TAKES THE ROOM FIRST; THE ROW'S OTHER DOCKS GO ROUND IT ----------
 # The R26-20 review's L2: a scene's OTHER dock was no obstacle to a stamp - two stamps, or a stamp and a card, were
 # fitted independently, so on the golden page the card's E65 room and the stamp's biggest-mark room were the same
@@ -7964,7 +8462,7 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                paint: list | None = None,
                rid: str | None = None, read_moved: dict | None = None, read_deferred: bool = False,
                embed: dict | None = None, cutout: bool = False, depth: float | None = None,
-               rot: float | None = None, moves: list | None = None) -> dict:
+               rot: float | None = None, moves: list | None = None, handed: bool = False) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -8011,6 +8509,9 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         # P69 T26d / E99 s106: a PROP's authored resting angle and its moves after it lands (whole canvas boxes in stage
         # px, `prop_moves`). Written only when the row authors them, so every other entry is byte-for-byte what it was.
         **({"rot": round(float(rot), 3)} if rot is not None else {}), **({"moves": moves} if moves else {}),
+        # P69 T26e / E99 s107: a prop HANDED to a morph on its exit word - the mesh carries its pixels from that frame, so
+        # the dock leaves on the word with no exit of its own. Written only for a handed prop.
+        **({"handed": "morph"} if handed else {}),
         # P50 T3: a PRESS card carries its source line and its quoted phrase onto the stage; `_stack` is the
         # scene's own bookkeeping and is replaced by stack_index / stack_n once every dock on the scene is known.
         # R26-55: and the phrase's WORDS and the card's own aspect when the card was cut with them - the player
@@ -8447,6 +8948,7 @@ def main() -> int:
     card_rooms: list[tuple] = []    # E65: (dock row id, room, box, page title) for every card the placer placed
     ledger_rows: list[int] = []     # the rows carrying a ledger page, so the report can say how many were MEASURED
     prev_world = None   # E47 corrected: the outgoing row's world, for `world_changed`
+    pm_warn_rows = []   # P69 T26e: the rows whose prop morphs the invariants advised on
     for i, row in enumerate(plan):
         # exit style is HYBRID (operator, 2026-08-29): mechanical default
         # (E47, 2026-09-06: docks -> DIP, bare -> cut; it was docks -> wipe),
@@ -8492,6 +8994,17 @@ def main() -> int:
             print(f"  hold: dropped {len(dropped)} {'/'.join(e['kind'] for e in dropped)} on row {i + 1} - under {HOLD_MIN_S}s of room before the next event")
         # R26-219: a page-bound species LEAVES with the page it was written on. Stamped here, beside the hold pass
         # that decides the other end of a species' life, so the player and the gates see plain seconds either way.
+        # P69 T26e / E99 s107: the prop morphs - `chart_to {to: morph, from: prop:<id>}`, `chart_to {to: prop}` and the
+        # `morph:prop:<id>` exit - leave the species here, before the page leave reads a chart_to morph as a verb that
+        # replaces the page: they ride the scene as `prop_morphs`. A handed prop's exit is its word; a born one is a dock.
+        try:
+            _pm = prop_morph_row(row_species, ds, authored_exit, a, b, f"shot row {i + 1} ({a}-{b}s)", sid=sid,
+                                 prev_a=scenes[-1]["span"][0] if scenes else None)
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: {exc}") from exc
+        row_species, ds, authored_exit = _pm["species"], _pm["ds"], _pm["exit"]
+        for _note in _pm["notes"]:
+            print(f"  prop morph  : {_note}")
         left, clamped, page_dropped = stamp_page_leave(row_species)
         if left:
             print(f"  page leave: {len(left)} page-bound species retract with their page on row {i + 1} "
@@ -8547,6 +9060,18 @@ def main() -> int:
             world = world_for_plate(plate, ken, EP, META)
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        if morph_prop_id((world or {}).get("morph")) is not None:   # P69 T26e: `;morph=prop:<id>` - the prop standing at the boundary
+            _pid = morph_prop_id(world["morph"])
+            world["morph"], _mnotes = resolve_morph_prop(world, scenes[-1] if scenes else None, a, f"shot row {i + 1} ({a}-{b}s)",
+                                                         lambda _aid: dock_asset_path(_aid, EP))
+            for _n in _mnotes:
+                print(f"  [WARN] P69 T26e: {_n}")
+                pm_warn_rows.append(f"row {i + 1} {_pid}")
+            _src = standing_prop_dock(scenes[-1] if scenes else None, _pid, a) if world["morph"].get("box") else None
+            if _src is not None:   # HANDED on the boundary: the page's mesh carries its pixels from the first frame
+                _src["exit"], _src["handed"] = round(a, 2), "morph"
+            if _pid not in uris:
+                uris[_pid] = dock_uri(dock_asset_path(_pid, EP))
         try:
             derive_rescale_states(world, row_species, plate, EP, sid=sid)   # P48 T2: each `chart_to rescale` gets its own derived page state; E64: and each recast its derived KEY
         except ValueError as exc:
@@ -8625,6 +9150,8 @@ def main() -> int:
                           if (_dopt.get("arrive") == "stamp" or any(k in _dopt for k in PROP_POSE_OPTS)) else None)   # the PAINTED mark: a prop's alpha box, a card's whole box (P69 T26d: and any posed prop's)
             except ValueError as exc:
                 raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
+            if len(row_opts) in _pm["born"]:   # P69 T26e: born of a morph - it stands from its first frame (`arrive: "morph"`, the compiler's own word)
+                _dopt = {**_dopt, "arrive": "morph"}
             row_opts.append((aid, _dopt, _paint))
         stamp_worlds = {n: page_on_screen(world, row_species, float(ds[n][2]))   # P69 T26d (R26-279): the state each stamp LANDS on
                         for n, (_aid, _o, _p) in enumerate(row_opts) if _o.get("arrive") == "stamp"}
@@ -8803,8 +9330,32 @@ def main() -> int:
                                         ring_to=ring_fit["ring_to"] if ring_fit else None,   # R26-20 send-back: the ring as the room holds it
                                         from_to=ring_fit["from_to"] if ring_fit else None,   # ... and the approach
                                         paint=ring_fit["paint"] if ring_fit else None,   # ... and its painted extent
-                                        rot=dopt.get("rot"), moves=prop_mv))   # P69 T26d: the prop's authored rest and its moves
+                                        rot=dopt.get("rot"), moves=prop_mv,   # P69 T26d: the prop's authored rest and its moves
+                                        handed=n_dock in _pm["handed"]))   # P69 T26e: a prop handed to a morph on its exit word
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
+        pm_entries = []
+        if _pm["morphs"] or _pm["enter_morph"]:   # P69 T26e: the state each prop morph is on, its mark, and its invariants (a WARN when they fail)
+            try:
+                pm_entries, _pmw = finish_prop_morphs(_pm["morphs"], docks, world, row_species, ASPECT,
+                                                      f"shot row {i + 1} ({a}-{b}s)", lambda _aid: dock_asset_path(_aid, EP), a)
+            except ValueError as exc:
+                raise SystemExit(f"FAIL: {exc}") from exc
+            if _pm["enter_morph"]:   # the row before's page collapses into the prop this row stands from its first frame
+                _em = _pm["enter_morph"]
+                _d = next((d for d in docks if d["slide"] == _em["prop"] and d.get("arrive") == "morph"), None)
+                try:
+                    _pmw += attach_enter_morph(_em, scenes[-1] if scenes else None, _d, ASPECT, f"shot row {i + 1} ({a}-{b}s)",
+                                               lambda _aid: dock_asset_path(_aid, EP))
+                except ValueError as exc:
+                    raise SystemExit(f"FAIL: {exc}") from exc
+                if _em["prop"] not in uris:
+                    uris[_em["prop"]] = dock_uri(dock_asset_path(_em["prop"], EP))
+            for _w in _pmw:
+                print(f"  [WARN] P69 T26e: {_w}")
+                pm_warn_rows.append(f"row {i + 1}")
+            for _e in pm_entries:
+                if _e["prop"] not in uris:
+                    uris[_e["prop"]] = dock_uri(dock_asset_path(_e["prop"], EP))
         # P69 T26b: the row's camera against the full-stage page it moves over, now that the docks it pulls toward are
         # placed - a landing pull or a key that would cut the title, the y ticks, the source line or a drawn end tag is
         # refused by name, reported, or clamped on the row's own word (`reach: "clamp"`)
@@ -8835,6 +9386,8 @@ def main() -> int:
             "species": row_species,
             "camera": camera,   # P49 T1: identity unless the row authored keys
         }
+        if pm_entries:   # P69 T26e: written only on a row that morphs a prop, so every other scene is byte-for-byte what it was
+            scene[PROP_MORPH_KEY] = pm_entries
         # E47: a timed exit publishes its length so the motion gate credits the right
         # window without re-parsing the name; a bare `dip` leaves the gate on DIP_S.
         if exit_s is not None:
@@ -8874,6 +9427,9 @@ def main() -> int:
     # P50 T16: the build says whose numbers it placed by. A page the fixture has not measured is placed
     # by `ledger_page`'s ESTIMATE of the player's layout - good enough to park a card against the plot's
     # edge (E45 parks from the title side), never good enough to centre one in a band (R26-27).
+    if pm_warn_rows:   # P69 T26e: the prop morphs' findings - the invariants advise (E99 s106/s107)
+        print(f"  [WARN] P69 T26e: {len(pm_warn_rows)} prop morph finding(s) - WARNs, not refusals: read the frames "
+              f"({'; '.join(sorted(set(pm_warn_rows))[:6])})")
     if prop_warns:   # P69 T26d: the placement findings, counted once more at the foot of the report
         print(f"  [WARN] P69 T26d: {len(prop_warns)} prop placement finding(s) - WARNs, not refusals (E99 s106): read the "
               f"frames ({'; '.join(sorted(set(prop_warns))[:6])})")

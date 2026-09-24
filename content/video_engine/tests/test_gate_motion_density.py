@@ -1948,3 +1948,73 @@ def test_m03_a_followed_rescale_whose_build_draws_the_line_past_its_old_data_is_
 def test_m03_a_followed_rescale_whose_build_does_not_advance_on_its_word_is_not_an_arrival(build_at, stood, drawn, words):
     gap, _ = _m03(_followed(build_at, stood, drawn, words=words))
     assert gap == (10.0, 71.0), gap
+
+
+# ---- P69 T26e (E99 s107; the parent's review (a)): the gate's mirror reads the PROP MORPHS the player paints ----------
+# A prop morph rides the scene as `prop_morphs` (never a chart_to species): it lands on its word and names a new thing
+# by construction (the prop becomes the mark, or the chart the thing it measures), so M03 counts it as T26c2 counts a
+# story-moving transform; M36 counts it as a chart-to-chart transform; M17 measures it per morph; and a prop dock BORN
+# of a morph (`arrive: "morph"`) is the landing of that transform - it stands from its first frame and builds nothing,
+# so a camera pull inside its first seconds is not M14's clash.
+
+def _pm(at, dur=2.0, way="in", mark="b:1", pid="prop-hyperscale-datacenter-v1", **kw):
+    return {"id": f"s02.species.{int(at)}", "way": way, "prop": pid, "at": at, "dur": dur, "mark": mark, "state": 0, **kw}
+
+
+def test_m03_a_prop_morph_on_its_word_is_an_arrival():
+    tl = _story_window([], words=(40.0,))
+    tl["scenes"][1]["prop_morphs"] = [_pm(40.0)]
+    gap, m03 = _m03(tl)
+    assert gap == (42.0, 39.0), gap
+    assert m03.level == "PASS" and "39s from 0:42" in m03.message, m03
+
+
+@pytest.mark.parametrize("words, extra", [((), {}), ((39.5,), {}), ((40.0,), {"over": True})])
+def test_m03_a_prop_morph_off_its_word_or_over_the_cut_is_not_counted_here(words, extra):
+    """Off its word it moves the visual only; over the cut it is carried by its born dock's entry (a dock span)."""
+    tl = _story_window([], words=words)
+    tl["scenes"][1]["prop_morphs"] = [_pm(40.0, **extra)]
+    gap, _ = _m03(tl)
+    assert gap == (10.0, 71.0), gap
+
+
+def test_m03_a_timeline_with_no_prop_morph_reads_exactly_as_before():
+    tl = _story_window([_xf("recast", 40.0, dur=1.0)], words=(40.0,))
+    assert G._prop_morph_landings(tl["scenes"], G._word_onsets(tl)) == []
+    assert _m03(tl)[0] == (41.0, 40.0)
+
+
+def test_m14_a_prop_BORN_of_a_morph_is_an_arrival_not_an_evidence_build():
+    """H's desk (s11): the leases record's landing pull at 305.0-305.5 s sat inside the born data centre's 1.5 s "build"
+    (303.5-305.0) and FAILed M14. A born prop builds nothing - the mesh landed it standing."""
+    born = {"slide": "prop-hyperscale-datacenter-v1", "enter": 303.54, "exit": 323.12, "arrive": "morph",
+            "place": {"x": 1333, "y": 96, "w": 386, "h": 240}, "badge_at": []}
+    card = {"slide": "dock-h-leases-record", "enter": 304.59, "exit": 323.12, "arrive": "throw",
+            "place": {"x": 48, "y": 405, "w": 1229, "h": 442}, "badge_at": []}
+    sc = {"scene_id": "s11", "span": [303.54, 324.62], "world": {"asset_id": "p"}, "species": [], "docks": [born, card],
+          "camera": {"attention": "landings"}}
+    assert [w[0] for w in G._build_windows([sc], [])] == ["dock-h-leases-record"]
+    assert G._build_clashes([sc], []) == []
+    stamped = dict(born, arrive="stamp", enter=303.54)
+    assert [w[0] for w in G._build_windows([dict(sc, docks=[stamped, card])], [])] == [
+        "prop-hyperscale-datacenter-v1", "dock-h-leases-record"], "every other arrival builds as it did"
+
+
+def test_m17_lists_every_prop_morph_per_morph_keyed_prop_id():
+    sc = {"scene_id": "s10", "span": [0.0, 30.0], "world": {"kind": "ledger", "page": {}}, "species": [],
+          "prop_morphs": [_pm(12.0), _pm(20.0, way="out", mark="page")]}
+    keys = [k for k, _l in G._morphs([sc])]
+    assert keys == ["prop:s02.species.12", "prop:s02.species.20"], keys
+    g = G._morph_gate([sc], {"scenes": {"prop:s02.species.12": {"centroid_ok": True, "axis_ok": True, "area_ok": True,
+                                                                "centroid_shift": 0.01, "axis_deg": 2, "area_ratio": 0.8, "min_det": 0.2},
+                                        "prop:s02.species.20": {"centroid_ok": False, "axis_ok": True, "area_ok": False,
+                                                                "centroid_shift": 0.34, "axis_deg": 0.5, "area_ratio": 0.04, "min_det": 0.02}}})
+    assert g.level == "WARN" and "prop morph (out, page)" in g.message and "centroid" in g.message, g
+
+
+def test_m36_counts_a_prop_morph_as_a_chart_to_chart_transform():
+    import gate_one_shot_floor as F
+    tl = {"scenes": [{"scene_id": "s10", "species": [], "world": {"kind": "ledger", "page": {}},
+                      "prop_morphs": [_pm(12.0)]}]}
+    assert F.chart_to_transforms(tl) == [("s10", "prop morph in b:1 (prop-hyperscale-datacenter-v1)")]
+    assert F.chart_to_transforms({"scenes": [{"scene_id": "s1", "species": [], "world": {}}]}) == []
