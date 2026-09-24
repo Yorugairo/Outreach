@@ -81,6 +81,11 @@
           "token": "locked",
           "means": "The locked camera: The camera never moves on its own; with no keys it is the identity.",
           "source_set": "CAMERA_ATTENTION"
+        },
+        {
+          "token": "reach",
+          "means": "On a full-stage page: refuse (default) names a key or landing pull that would cut the title, y ticks, source or a measured tag; clamp stops the pull at the reach (landing_zoom).",
+          "source_set": null
         }
       ],
       "dials": {
@@ -102,7 +107,8 @@
       "doctrine": [
         "E51",
         "E59 s4",
-        "29 s9.28 C3"
+        "29 s9.28 C3",
+        "P69 T26b"
       ],
       "status": "live",
       "proof": {

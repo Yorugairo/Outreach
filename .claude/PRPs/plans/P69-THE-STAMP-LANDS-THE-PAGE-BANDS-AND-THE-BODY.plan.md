@@ -560,7 +560,7 @@ verbatim tails and are left pending.
 **RE-SCOPED 2026-09-22 by E99 s97** (the operator: "go much more tighter in [Bravos's] direction ... the chart style in long format is sharper, more electric, and more professional"): T8-T10 build a `longform` page profile to the MEASURED spec `BRAVOS-LONGFORM-CHART-SPEC.md` (a measurement pass over Bravos's frames on disk, landing before T8 starts) - s90's phone type, badges as the key and the three layout fixes are folded into it; T6c's cap takes the spec's measured bar width; T10b's rounded shoulders and hatch are reconciled with the spec (the operator's words win over the reference where they differ). Every override of our own signature is listed for P69-HG3.
 
 ### T8: s90 (a) - the phone type scale on every builder the body uses, as a row option (lane B)
-- Status: in_progress
+- Status: done (lane B 58c5f86 + def63cf; on main 19144bb); HG3 open
 - Owner: implementation_luna
 - Depends on: T6 merged; lane B created with its register row
 - Write set: `content/video_engine/scripts/ledger_page.py` (`READABILITY_PROFILES`, `_validate_readability` `:244-270`, the profile's geometry), `content/video_engine/scripts/build_scene_timeline_f.py` (a `readability` entry in `PLATE_OPTS` `:112` and its stamp onto the page), `content/video_engine/scripts/measure_page_boxes.py` (representatives with the profile), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the profile's reads at `:7907-7910`, `:9192`, `:9254-9259`, `:9549`, extended to the other builders), `content/video_engine/tests/test_fed_chart_readability.py`, `content/video_engine/assets/page-boxes.v1.json`
@@ -589,7 +589,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T9: s90 (b) - the three layout fixes the side-by-side found (lane B)
-- Status: pending
+- Status: done (lane B 0df626a; review fixes 5ddc035)
 - Owner: implementation_luna
 - Depends on: T8
 - Write set: `content/video_engine/scripts/ledger_page.py` (`_readability_fit_error` `:1563`, `_profile_tag_units` `:1536`), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the profile's end-tag, sub, y-label and x-tick placement), `content/video_engine/scripts/measure_page_boxes.py`, `content/video_engine/tests/test_fed_chart_readability.py`, `content/video_engine/assets/page-boxes.v1.json`
@@ -603,7 +603,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T10: s90 (c) - badges as the key, on the even-pill ladder (lane B)
-- Status: pending
+- Status: done (lane B 0df626a; key per state 5ddc035); HG3 open
 - Owner: implementation_luna
 - Depends on: T9
 - Write set: `content/video_engine/scripts/ledger_page.py` (the key's geometry and its box in `page_boxes`), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the line-end badge and the key rail), `content/video_engine/scripts/measure_page_boxes.py`, `content/video_engine/tests/test_fed_chart_readability.py`, `content/video_engine/assets/page-boxes.v1.json`
@@ -812,7 +812,7 @@ verbatim tails and are left pending.
 - Evidence: lane B af869b7, 2026-09-23 - `camera_reach`: a full-stage page's camera key is refused by name when its framing (the page's breath included) cuts the title, y ticks, source or a measured tag; `"reach": "clamp"` writes `landing_zoom` (the Fed: 1.03; title and sub >= 12 px from the edge, y ticks >= 69 px - the parent read before vs clamped). Row 1's zoom 1.06 is REPORTED (WARN, reachable 1.02) for T33. Parent in place: 933 passed
 
 ### T26c: The pacing gate counts a recast as an arrival (E99 s105; closes R26-280)
-- Status: pending
+- Status: done (lane B afd8b3d)
 - Owner: implementation_luna (LANE B)
 - Depends on: T26b (on main 88574ca); lane B
 - Write set: `content/video_engine/scripts/gate_motion_density.py` (M03's arrival list), `content/video_engine/tests/test_gate_motion_density.py`
@@ -823,7 +823,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T26c2: M03 counts a rescale, extend or morph that moves the story (E99 s105 amended)
-- Status: pending
+- Status: done (lane B 5bd16ee)
 - Owner: junior_developer (LANE B)
 - Depends on: T26c (lane B afd8b3d)
 - Write set: `content/video_engine/scripts/gate_motion_density.py`, `content/video_engine/tests/test_gate_motion_density.py`
@@ -833,7 +833,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T26d: A prop goes where the author puts it, and moves after it lands; the fit is a default and advises (E99 s106; closes R26-279)
-- Status: pending
+- Status: done (lane B 5c6871c)
 - Owner: implementation_luna (LANE B)
 - Depends on: T26c; lane B
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (`stamp_dock_place`, the dock placement, the prop's timeline keys), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the dock painter's prop transform over time), `content/video_engine/scripts/authoring/docks.py`, `content/video_engine/tests/test_prop_free_placement.py` (new), `content/video_engine/tests/test_the_stamp_arrival.py`, goldens only if a new one is added
@@ -857,7 +857,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T26f: The page's chrome is objects - the title rescales and moves, and rides the camera (E99 s108)
-- Status: pending
+- Status: done (lane B 1100c0b)
 - Owner: implementation_luna (LANE B)
 - Depends on: T26b (the reach check), T26d (the object move grammar - reuse it); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the page's chrome layer, the camera transform), `content/video_engine/scripts/build_scene_timeline_f.py` (the chrome keys and T26b's reach), `content/video_engine/scripts/gate_motion_density.py` (the camera mirror, only if the chrome's frame changes what it reads), `content/video_engine/scripts/ledger_page.py` (the chrome boxes the reach reads), `content/video_engine/tests/test_page_chrome_moves.py` (new), `content/video_engine/tests/test_camera_keeps_the_page.py`

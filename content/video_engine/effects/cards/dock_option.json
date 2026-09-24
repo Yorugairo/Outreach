@@ -485,6 +485,155 @@
       }
     },
     {
+      "id": "dock_option:moves",
+      "axis": "dock_option",
+      "token": "moves",
+      "title": "The prop's moves after it lands",
+      "aliases": [
+        {
+          "name": "a prop moves after it lands",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3343"
+        }
+      ],
+      "does": "After it lands the prop travels through authored keys - place, width, angle - on its own clock; keys with no gap glide through a Hermite chain, a gap stops it, and its hatched shadow rides the move.",
+      "when": "the sentence moves the object on after it has landed - it slides to the datum it now names, turns, or steps aside for the next thing (E99 s106 (2))",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:3343",
+      "author": {
+        "key": "dock option {'prop': True, 'moves': [{at (s or a phrase of the take), x, y, w, rot, dur, ease}]}",
+        "example": "{'prop': True, 'arrive': 'stamp', 'mass': 'ink', 'place': {'x': 0.865, 'y': 0.46, 'w': 0.2}, 'rot': 0, 'moves': [{'at': 14.0, 'x': 0.3, 'y': 0.5, 'w': 0.12, 'dur': 1.0, 'ease': 'minjerk'}, {'at': 16.0, 'rot': 8}]}",
+        "example_source": "content/video_engine/tests/test_prop_free_placement.py:213",
+        "check": "dock_option"
+      },
+      "phases": [
+        {
+          "name": "move",
+          "does": "each key moves the prop from where it stands to the key's box and angle over its dur, inheriting what the key does not name; a single move eases by min-jerk",
+          "trigger": "the key's `at` (seconds, or the first word of a phrase of the take)",
+          "dials": {
+            "PROP_MOVE_S": "0.6"
+          }
+        },
+        {
+          "name": "glide",
+          "does": "keys that follow with no gap are one path - a cubic Hermite chain passes through the middle key at speed; a gap between keys is a stop",
+          "trigger": "the next key's `at` equal to this key's end",
+          "dials": null
+        }
+      ],
+      "blends": [
+        {
+          "source": "the rig foundation's cubic Hermite",
+          "became": "the glide through a waypoint",
+          "record": "content/video_engine/scripts/kinetics/ease.mjs:24",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "minjerk",
+          "means": "Move ease: minimum jerk (the default, E45's park).",
+          "source_set": null
+        },
+        {
+          "token": "cubic",
+          "means": "Move ease: ease-in-out cubic.",
+          "source_set": null
+        },
+        {
+          "token": "linear",
+          "means": "Move ease: constant speed.",
+          "source_set": null
+        },
+        {
+          "token": "out",
+          "means": "Move ease: expo-out.",
+          "source_set": null
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "propPose",
+        "also": [
+          "hermiteChain"
+        ],
+        "note": "engine propPose (a pure function of t) paints the keys the compiler's prop_moves writes as whole boxes"
+      },
+      "doctrine": [
+        "E99 s106",
+        "R26-271",
+        "P69 T26d"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_prop_free_placement.py::test_the_MOVE_is_painted_on_the_props_own_clock_and_ends_on_its_key",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "any prop dock (5c6871c); a cold seek equals forward play; a move refused only when it cannot be played or seen"
+      }
+    },
+    {
+      "id": "dock_option:place",
+      "axis": "dock_option",
+      "token": "place",
+      "title": "The authored prop place",
+      "aliases": [
+        {
+          "name": "a prop goes where the author puts it",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3343"
+        }
+      ],
+      "does": "A prop lands exactly where the row puts it - its painted centre and painted width as stage fractions, its height from the cutout's alpha - stamped, thrown or sprung; a stamp's ring and approach are drawn around that place.",
+      "when": "the author knows where the object belongs (a margin, beside the datum it names) and the fit's default room is wrong or too small; the fit's findings print as WARNs and the frame read judges (E99 s106)",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:3343",
+      "author": {
+        "key": "dock option {'prop': True, 'place': {x, y, w}, 'rot': <deg>} (PROP_POSE_OPTS)",
+        "example": "{'prop': True, 'arrive': 'stamp', 'mass': 'ink', 'place': {'x': 0.865, 'y': 0.46, 'w': 0.2}, 'rot': -4}",
+        "example_source": "content/video_engine/tests/test_prop_free_placement.py:72",
+        "check": "dock_option"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [
+        {
+          "token": "rot",
+          "means": "The prop's resting angle in degrees; on a stamp it is the rotation spring's landing angle, and the fit turns the mark through it.",
+          "source_set": "DOCK_OPTS"
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/build_scene_timeline_f.py",
+        "symbol": "prop_place_fit",
+        "also": [
+          "PROP_POSE_OPTS",
+          "stamp_dock_place",
+          "page_on_screen"
+        ],
+        "note": "the compiler honours the place (stamp_dock_place / prop_place_fit); with none, the fit reads the chart ON SCREEN at the landing (page_on_screen, R26-279)"
+      },
+      "doctrine": [
+        "E99 s106",
+        "R26-279",
+        "P69 T26d"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_prop_free_placement.py::test_an_authored_place_on_a_stamp_is_HONOURED_EXACTLY_centre_and_width",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "any prop dock (5c6871c); over data, over a label, cut by the frame or under the mark floor is a WARN with its numbers; only a place wholly off the stage is refused"
+      }
+    },
+    {
       "id": "dock_option:read",
       "axis": "dock_option",
       "token": "read",
@@ -566,7 +715,7 @@
       },
       "callable": {
         "today": true,
-        "why": "probe OK"
+        "why": "probe OK; on a stamp read/read_s/park_s are REPORTED as a WARN and not applied - a stamped prop is placed with place/moves (P69 T26d)"
       }
     },
     {

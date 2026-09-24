@@ -118,6 +118,12 @@
             "GHOST_F": "0.74",
             "GAP": "14"
           }
+        },
+        {
+          "name": "the bar moves to the comparator",
+          "does": "on a bars page the compared bar's height morphs to the comparator's value on the compare's own clock, its value and figure riding its top, the soft foot, hatch or prism following (E28)",
+          "trigger": "the chart_to's `at`, over its `dur`, when the comparator changes the bar's value",
+          "dials": null
         }
       ],
       "blends": [],
@@ -195,7 +201,11 @@
         "E88",
         "E77",
         "E60",
-        "E50"
+        "E50",
+        "R26-190",
+        "R26-273",
+        "P69 T6",
+        "P69 T26a"
       ],
       "status": "wired",
       "backlog": [

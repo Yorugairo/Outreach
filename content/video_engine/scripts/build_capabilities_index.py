@@ -39,7 +39,7 @@ MD_REL = "docs/CAPABILITIES-INDEX.md"
 WHAT_MAX = 120          # characters in `what`, the ellipsis included; cut at a word
 STATE_NOTE_MAX = 60     # characters in the state cell's first clause
 SLUG_MAX = 60
-MD_MAX_BYTES = 40_000   # the start-of-session page; raise only with a stated reason
+MD_MAX_BYTES = 44_000   # the start-of-session page; raise only with a stated reason. 2026-09-23: 40_000 -> 44_000 - P69's catch-up adds 16 capability rows (~1.9 KB of one-line entries) to a page already at 39,288 bytes
 ELLIPSIS = "…"
 ROW_PREFIX = "| **"
 
