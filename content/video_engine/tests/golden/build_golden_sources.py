@@ -3480,6 +3480,61 @@ FRAME_T.update({
 })
 
 
+# ---- P70 T1 (was P69 T12): THE CHIP LANDS AS A STAMP - `arrive: "stamp"` on the stamp form, rendered both ways -------
+# Steel and Paper H row 7's chip, recast: "... and it isn't Nvidia" (take `isn't Nvidia` 58.35-59.60; the door's
+# NVIDIA_CHIP lands at 58.60 as the Lucide `cpu` glyph). Here it is the chip's stamp FORM on the icons catalogue's GPU
+# cutout (E94, approved; a PROXY, as every catalogued cutout in a golden is - E99 s31), label NVIDIA in charcoal, at the
+# stamp form's default size, breathing as the door's does (E49).
+# WHY A PLATE AND NOT ROW 7'S PAGE (the send-back): the stamped chip's painted extent is its mark AND its label, and the
+# arrival is fitted by the dock stamp's own law (`chip_stamp_ring_fit`: stamp_fit's ring and approach, `_stamp_floors`).
+# On the divergence page no point clears at any size the form allows (180-260, searched over the page's right half,
+# scratchpad/p70-t1/NOTES.md) - the fit WARNs everywhere, and a golden pins a clean arrival. On a CREAM plate (so the
+# charcoal ring reads, as it does on every light ground) the fit answers with its law at work and no finding: the ring
+# capped at 1.7508x and the approach at 1.9904x by the safe box's top. The page case rides the test bed, WARNs and all.
+# ONE source, two surfaces: they differ only in `arrive` - and in what the compiler's own door writes because of it,
+# `ring_to`, `from_to` and `paint`. Both are judged at the CONTACT + 0.10 s, the stamp's rotation still off its rest.
+from gate_motion_density import STAMP_CONTACT_S as _STAMP_CONTACT_S  # noqa: E402
+
+CHIP_STAMP_ENTRY = {"kind": "chip", "form": "stamp", "at": 10.0, "dur": 6.0, "icon": "prop-icon-gpu-ai-accelerator-v1",
+                    "label": "NVIDIA", "ink": "charcoal", "idle": "breath", "target": {"kind": "point", "x": 0.5, "y": 0.36}}
+CHIP_STAMP_PLATE = "plate-cream"
+CHIP_STAMP_CREAM = (244, 230, 199)   # CHIP_STAMP.INK.cream, the long form's ground
+
+
+def _chip_stamp(arrive: bool) -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    world = {"asset_id": CHIP_STAMP_PLATE, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    entry = dict(CHIP_STAMP_ENTRY, **({"arrive": "stamp"} if arrive else {}))
+    errs = BST.validate_species([entry], (0, 0, 0), CHIP_STAMP_PLATE)
+    assert not errs, errs
+    compiled, asset = BST._with_stamp_catalogue(entry)   # the compiled entry carries its catalogue, as the row loop writes it
+    compiled, notes = BST.chip_stamp_ring_fit(compiled, world, "16:9", BST.painted_box(asset["file"]), [],
+                                              "golden chip-stamp")
+    assert not notes, notes
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": [compiled]}]
+    tl = _timeline("Golden: the chip's stamp form - on its spring, or landing as a stamp (P70 T1)", scenes, {}, None)
+    # no captions: a build moves them to the quiet bottom rail while a labelled stamp chip is up
+    # (`_readable_species_during`); the harness's hand-written stage captions do not, and sat across the chip
+    tl["captions"], tl["caption_pages"] = [], []
+    uris = _base_uris()
+    uris[CHIP_STAMP_PLATE] = uri("image/png", png_solid(64, 36, CHIP_STAMP_CREAM))
+    uris[BST.PROP_PREFIX + entry["icon"]] = uri("image/png", png_proxy(asset["file"]))
+    return tl, uris
+
+
+SURFACES.update({
+    "chip-stamp-pop": lambda: _chip_stamp(False),       # the stamp form on the chip's spring, as it has always landed
+    "chip-stamp-arrival": lambda: _chip_stamp(True),    # ... and with `arrive: "stamp"`: stopaction's stampXf
+})
+FRAME_T.update({
+    # CONTACT + 0.10 s (10.254): the stamp's scale spring clamped at 1 since 10.154 while the free rotation is still
+    # 1.39 deg past its -9 deg rest (-10.39) and the capped ring radiates at 0.54 of its life round the mark and its
+    # name; the pop is 0.46 of its LAND_S into the spring, its label at 48 px, under the floor.
+    "chip-stamp-pop": round(CHIP_STAMP_ENTRY["at"] + _STAMP_CONTACT_S + 0.10, 3),
+    "chip-stamp-arrival": round(CHIP_STAMP_ENTRY["at"] + _STAMP_CONTACT_S + 0.10, 3),
+})
+
+
 # ---- P69 T26a / R26-273: A BAR CHANGES ITS OWN VALUE (E28) ---------------------------------------------------------
 # The halving beat test_compare_on_bars compiles (row 18 of Steel and Paper H): one bar at 20 on a full-stage bars
 # page, its figure written at its top (8.0), and a `chart_to compare` (melt, then splash) at 11.0 over 2.4 s that turns

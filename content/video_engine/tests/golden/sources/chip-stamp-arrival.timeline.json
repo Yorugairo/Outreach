@@ -1,0 +1,67 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "_catalogue": "icons",
+     "arrive": "stamp",
+     "at": 10.0,
+     "dur": 6.0,
+     "form": "stamp",
+     "from_to": 1.9904,
+     "icon": "prop-icon-gpu-ai-accelerator-v1",
+     "idle": "breath",
+     "ink": "charcoal",
+     "kind": "chip",
+     "label": "NVIDIA",
+     "paint": [
+      0.0089,
+      0.0312,
+      0.9911,
+      1.2629
+     ],
+     "ring_to": 1.7508,
+     "target": {
+      "kind": "point",
+      "x": 0.5,
+      "y": 0.36
+     }
+    }
+   ],
+   "world": {
+    "asset_id": "plate-cream",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the chip's stamp form - on its spring, or landing as a stamp (P70 T1)"
+}

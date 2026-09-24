@@ -133,6 +133,7 @@ import sys as _sys
 from pathlib import Path as _P
 _sys.path.insert(0, str(_P(__file__).resolve().parent))
 import ledger_page as LPG  # noqa: E402  (P49 T6: a datum's in-frame box is the page's plot)
+from recipe_walk import is_stamped_chip  # noqa: E402  (P70 T1: the ONE predicate - which chip lands as a stamp)
 import statistics as st
 import sys
 from dataclasses import dataclass
@@ -3594,7 +3595,8 @@ def _deployed_lives(scenes: list[dict]) -> list[tuple[str, float, float, float]]
 
 def _landings(s: dict) -> list[tuple[float, str]]:
     """Every LANDING on a scene: the page's chart landing, each build_to / bracket / figure / note end, each dock's arrival
-    (its enter, plus a throw's flight, a land's anticipation + drop or a stamp's contact), each badge landing on a page."""
+    (its enter, plus a throw's flight, a land's anticipation + drop or a stamp's contact), each badge landing on a page,
+    and each chip that lands AS A STAMP at its contact (P70 T1)."""
     a = float(s["span"][0]) if s.get("span") else 0.0
     out: list[tuple[float, str]] = []
     if _is_page(s):
@@ -3613,7 +3615,15 @@ def _landings(s: dict) -> list[tuple[float, str]]:
         if arr == "stamp":   # P69 T2 (R26-247): a stamp lands at its contact; throw / land above keep their own value
             contact = float(d.get("enter", 0.0)) + STAMP_CONTACT_S
         out.append((contact, f"dock {d.get('slide', '?')} {arr or 'spring'}"))
+    for sp in _stamped_chips(s):   # P70 T1: a chip that lands AS A STAMP lands at its contact, as a stamped dock does
+        out.append((float(sp.get("at", 0.0)) + STAMP_CONTACT_S, f"chip {sp.get('icon', '?')} stamp"))
     return out
+
+
+def _stamped_chips(s: dict) -> list[dict]:
+    """P70 T1: a scene's chips that land AS A STAMP (`form: "stamp"` + `arrive: "stamp"`, the compiler's
+    `chip_is_stamped`). A glyph chip, or the stamp form on its spring, is none of them - its events are unchanged."""
+    return [sp for sp in s.get("species", []) if is_stamped_chip(sp)]
 
 
 def _untied_pushes(scenes: list[dict]) -> list[tuple[str, str, float]]:
@@ -3765,7 +3775,8 @@ def _build_to_gate(scenes: list[dict]) -> Gate | None:
 
 def _arrivals(scenes: list[dict]) -> list[tuple[float, str, str, float]]:
     """(enter, slide, arrive, landing time) for every dock that arrives by a throw, a landing (P47 T1) or a stamp
-    (P69 T2, R26-247: its contact, STAMP_CONTACT_S after its enter)."""
+    (P69 T2, R26-247: its contact, STAMP_CONTACT_S after its enter) - and every chip that lands AS A STAMP (P70 T1: its
+    `at`, and its contact STAMP_CONTACT_S after it)."""
     out = []
     for sc in scenes:
         for d in sc.get("docks", []):
@@ -3774,6 +3785,9 @@ def _arrivals(scenes: list[dict]) -> list[tuple[float, str, str, float]]:
                 out.append((float(d["enter"]), str(d.get("slide", "?")), arr, float(d["enter"]) + (STOP_FLIGHT_S if arr == "throw" else STOP_LAND_S)))
             elif arr == "stamp":
                 out.append((float(d["enter"]), str(d.get("slide", "?")), arr, float(d["enter"]) + STAMP_CONTACT_S))
+        for sp in _stamped_chips(sc):   # P70 T1: a stamped chip arrives at its `at` and lands at its contact
+            at = float(sp.get("at", 0.0))
+            out.append((at, f"chip {sp.get('icon', '?')}", "stamp", at + STAMP_CONTACT_S))
     return out
 
 
@@ -3800,6 +3814,9 @@ def _cadence_gate(scenes: list[dict]) -> Gate | None:
             elif d.get("arrive") == "stamp":   # P69 T2 (R26-247): the mass defaults to the engine's own, `ink`
                 contact = float(d.get("enter", 0.0)) + STAMP_CONTACT_S
                 rows.append(f"{d.get('slide', '?')} stamp ({d.get('mass') or 'ink'}) - contact {STAMP_CONTACT_S:.2f}s after its enter, at {contact:.2f}s")
+        for sp in _stamped_chips(sc):   # P70 T1: a stamped chip rides along, at the engine's stamp mass
+            contact = float(sp.get("at", 0.0)) + STAMP_CONTACT_S
+            rows.append(f"chip {sp.get('icon', '?')} stamp (ink) - contact {STAMP_CONTACT_S:.2f}s after its at, at {contact:.2f}s")
     return Gate("M20", "INFO", f"{len(arr)} arrival(s): " + "; ".join(rows[:8]), SRC_M20)
 
 

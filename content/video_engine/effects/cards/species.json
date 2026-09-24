@@ -423,7 +423,13 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "arrive",
+          "means": "`arrive: \"stamp\"` on the stamp form only (P70 T1): the art lands by stampXf - down from 2.1x, off-square, the ring fitted to the room, the exit owed inside dur, the label at the s90 floor",
+          "source_set": "CHIP_ARRIVALS"
+        }
+      ],
       "dials": {
         "module": "content/video_engine/scripts/species/chip.mjs",
         "object": "CHIP"
@@ -435,7 +441,9 @@
       },
       "doctrine": [
         "CAPABILITIES icon CHIP",
-        "P50 T2"
+        "P50 T2",
+        "P70 T1",
+        "E99 s87"
       ],
       "status": "wired",
       "proof": {

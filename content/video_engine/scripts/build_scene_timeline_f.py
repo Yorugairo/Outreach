@@ -199,6 +199,38 @@ STAMP_INKS = ("cream", "charcoal")
 STAMP_SIZE_MIN, STAMP_SIZE_MAX, STAMP_SIZE_DEFAULT = 180, 420, 260  # stage px
 STAMP_PROP_SIZE_MAX = 700  # approved finance-prop cutouts can occupy a full narrative beat
 STAMP_MAX_LINES = 3
+# P70 T1 (was P69 T12; E99 s87): the stamp FORM may LAND by the stamp arrival - `arrive: "stamp"` poses the art with
+# kinetics/stopaction.mjs `stampXf` (species/chip.mjs `chipStampPose`) instead of the chip's spring. The stamp form's
+# only; absent is the spring landing it always had, byte for byte.
+CHIP_ARRIVALS = ("stamp",)
+CHIP_STAMP_LABEL_SIZE = 48     # species/chip.mjs CHIP_STAMP.LABEL_SIZE - the label a stamp-form chip draws WITHOUT the arrival
+CHIP_STAMP_LABEL_FLOOR = round(LPG.CARD_TYPE_PX, 2)   # 59.08: CHIP_STAMP.LABEL_FLOOR, E99 s90's phone floor, drawn under `arrive: "stamp"`
+CHIP_STAMP_MASS = "ink"        # CHIP_STAMP.MASS: a stamped chip lands at the engine's own stamp mass
+STAMP_EXIT_S = 16 / 30         # kinetics/stopaction.mjs STAMP_ARRIVAL.EXIT_S (badge-stamp.tsx:62): the exit a landed mark owes
+CHIP_STAMP_MIN_DUR_S = MG.STAMP_CONTACT_S + STAMP_EXIT_S   # 0.6875: a stamped chip's landing and its owed exit, inside `dur`
+# THE LABEL'S BOX (the P70 T1 send-back: the ring hugs the mark AND its name, and the approach clears both). The label is
+# Kalam 700 at CHIP_STAMP_LABEL_FLOOR, MEASURED on the rendered face (scratchpad/p70-t1/logs/advance-probe.json: each
+# glyph ten times, `getComputedTextLength` / 10, in em): a word's advance is the sum of its glyphs' to 0.02 px (NVIDIA
+# 181.78 estimated, 181.77 drawn - no kerning), and its drawn box overhangs that by up to 0.10 em (BEAR MARKET +5.78 px).
+# The font box stands 1.07 em above the baseline and 0.54 em below it. A glyph the table does not know takes the widest.
+CHIP_STAMP_LABEL_ADVANCE_EM = {
+    ' ': 0.385, '!': 0.478, '"': 0.484, '#': 0.7799, '$': 0.5919, '%': 0.991, '&': 0.786, "'": 0.22, '(': 0.4779,
+    ')': 0.53, '*': 0.375, '+': 0.5999, ',': 0.262, '-': 0.531, '.': 0.237, '/': 0.282, '0': 0.513, '1': 0.302,
+    '2': 0.5829, '3': 0.547, '4': 0.545, '5': 0.506, '6': 0.542, '7': 0.472, '8': 0.59, '9': 0.5059, ':': 0.246,
+    ';': 0.306, '<': 0.4749, '=': 0.672, '>': 0.6159, '?': 0.608, '@': 1.078, 'A': 0.63, 'B': 0.6239, 'C': 0.617,
+    'D': 0.6659, 'E': 0.551, 'F': 0.5419, 'G': 0.597, 'H': 0.6509, 'I': 0.309, 'J': 0.486, 'K': 0.602, 'L': 0.546,
+    'M': 0.7559, 'N': 0.631, 'O': 0.6189, 'P': 0.5489, 'Q': 0.659, 'R': 0.601, 'S': 0.5519, 'T': 0.544, 'U': 0.5949,
+    'V': 0.532, 'W': 0.7849, 'X': 0.5849, 'Y': 0.561, 'Z': 0.6459, '[': 0.463, '\\': 0.5999, ']': 0.521, '^': 0.422,
+    '_': 0.6189, '`': 0.258, 'a': 0.51, 'b': 0.567, 'c': 0.489, 'd': 0.5389, 'e': 0.4879, 'f': 0.435, 'g': 0.481,
+    'h': 0.563, 'i': 0.26, 'j': 0.26, 'k': 0.4929, 'l': 0.266, 'm': 0.819, 'n': 0.5539, 'o': 0.456, 'p': 0.5379,
+    'q': 0.519, 'r': 0.3619, 's': 0.467, 't': 0.451, 'u': 0.486, 'v': 0.422, 'w': 0.71, 'x': 0.474, 'y': 0.52,
+    'z': 0.48, '{': 0.462, '|': 0.456, '}': 0.6259, '~': 0.586
+}
+CHIP_STAMP_LABEL_ADVANCE_MAX_EM = max(CHIP_STAMP_LABEL_ADVANCE_EM.values())
+CHIP_STAMP_LABEL_OVERHANG_EM = 0.10   # each side: the drawn box past the advance (measured up to 0.098 em)
+CHIP_STAMP_LABEL_ASC_EM, CHIP_STAMP_LABEL_DESC_EM = 1.08, 0.54   # the font box above / below the baseline (measured 1.07 / 0.54)
+CHIP_STAMP_LABEL_KEYLINE_PX = 2      # half the label's 4 px `paint-order: stroke` keyline, which lies outside the glyph
+CHIP_STAMP_LABEL_GAP, CHIP_STAMP_LABEL_LINE_H = 28, 52   # chip.mjs CHIP_STAMP.LABEL_GAP / LABEL_LINE_H, scaled by the floor under the arrival
 
 # P61 T8 (E93 / E94): THE OPERATOR'S OWN ICON CATALOGUE - the 44 woodblock cutouts, `review_state:
 # operator_approved`, `render_eligible: true`. A catalogued cutout is a PICTURE, not geometry, so it rides the
@@ -2506,6 +2538,13 @@ def _validate_chip(entry: dict) -> list[str]:
     form = entry.get("form")
     if form is not None and form not in CHIP_FORMS:
         errs.append(f"chip: form {form!r} is not one of {' | '.join(CHIP_FORMS)} (absent is the sourced SVG chip)")
+    if "arrive" in entry:   # P70 T1: the stamp FORM's arrival, refused by name anywhere else
+        if form != "stamp":
+            errs.append(f"chip: arrive {entry['arrive']!r} - the stamp arrival is the stamp form's (form: \"stamp\"); "
+                        "a glyph chip lands on the badge spring")
+        elif entry["arrive"] not in CHIP_ARRIVALS:
+            errs.append(f"chip stamp: arrive {entry['arrive']!r} is not one of CHIP_ARRIVALS ({' | '.join(CHIP_ARRIVALS)}) "
+                        "- absent is the chip's spring landing")
     if form == "stamp":
         icon = entry.get("icon")
         asset = None
@@ -7946,46 +7985,186 @@ def stamp_timing_advice(scenes: list[dict], words) -> list[dict]:
     scene landing while it still comes down or within STAMP_DATA_CLEAR_S of its contact (the gate's own landings: the
     chart's landing, a badge, a build_to / bracket / figure / note end, a chart_to data landing, a panel's reveal -
     never a dock). Each finding carries the word or the mark, the offset and the suggested contact and enter. Pure; it
-    reads, it never refuses."""
-    from authoring import docks as KD, words as KW
+    reads, it never refuses.
+    P70 T1: a STAMPED CHIP (`form: "stamp"`, `arrive: "stamp"`) is judged the same way from its `at` - the word it was
+    put on, its contact at + STAMP_CONTACT_S - and, like a dock, is never a data mark itself."""
     ws = _override_words(words) or []
     out: list[dict] = []
     for n, sc in enumerate(scenes or []):
         stamps = [d for d in sc.get("docks") or [] if d.get("arrive") == "stamp"]
-        if not stamps:
+        chips = [e for e in sc.get("species") or [] if chip_is_stamped(e)]
+        if not stamps and not chips:
             continue
-        marks = sorted([(float(t), lab) for t, lab in MG._landings(sc) if not str(lab).startswith("dock ")]
+        marks = sorted([(float(t), lab) for t, lab in MG._landings(sc) if not str(lab).startswith(("dock ", "chip "))]
                        + [(float(t), "a panel's reveal") for t in MG._panel_reveal_landings([sc])])
         for d in stamps:
-            contact = round(float(d["enter"]) + MG.STAMP_CONTACT_S, 4)
-            head = f"E99 s112: shot row {n + 1} ({sc.get('scene_id', '?')}) dock {d.get('slide', '?')}: the stamp's contact {contact:.2f}s"
-            base = {"row": n + 1, "scene": sc.get("scene_id"), "slide": d.get("slide"), "enter": float(d["enter"]),
-                    "contact": contact}
-            span = (_named_span(ws, d["names"], contact) if d.get("names") else _word_at_enter(ws, float(d["enter"]))) if ws else None
-            if span and contact < span[2] - 1e-9:
-                text, a, z = span
-                sug = round(z + KW.STAMP_AFTER_BEAT_S, 3)
-                kind = "inside" if contact >= a - 1e-9 else "before"
-                where = (f"lands INSIDE its word {text!r} ({a:.2f}-{z:.2f}s), {z - contact:.2f}s before it ends"
-                         if kind == "inside" else
-                         f"lands BEFORE the phrase it names, {text!r} ({a:.2f}-{z:.2f}s), {z - contact:.2f}s before it ends")
-                out.append({**base, "kind": kind, "word": text, "word_span": [round(a, 3), round(z, 3)],
-                            "named": bool(d.get("names")), "offset": round(contact - z, 3),
-                            "suggest_contact": sug, "suggest_enter": KD.stamp_enter(sug),
-                            "message": f"{head} {where} - the stamp is the punctuation after the thing, never during it: "
-                                       f"{_anchor_call(text)} puts the contact at {sug:.2f}s (enter {KD.stamp_enter(sug):.2f}s)"})
-            for t, lab in marks:   # a mark landing while the stamp still comes down, or within STAMP_DATA_CLEAR_S of its contact
-                if float(d["enter"]) - 1e-6 <= t <= contact or abs(contact - t) < STAMP_DATA_CLEAR_S - 1e-9:
-                    # the least that clears it: the fall begins after the mark has landed and the contact is
-                    # STAMP_DATA_CLEAR_S past it (the enter on the shot table's 0.01 s, the contact read off that enter)
-                    se = KD.stamp_enter(t + max(STAMP_DATA_CLEAR_S, MG.STAMP_CONTACT_S + 0.01))
-                    sug = round(se + MG.STAMP_CONTACT_S, 4)
-                    out.append({**base, "kind": "data", "mark": lab, "mark_at": round(t, 3), "offset": round(contact - t, 3),
-                                "suggest_contact": sug, "suggest_enter": se,
-                                "message": f"{head} lands {contact - t:+.2f}s from the {lab} at {t:.2f}s - one instant for "
-                                           "two things (the viewer is asked to read both at once): land it after the mark, "
-                                           f"the contact at {sug:.2f}s or later (enter {se:.2f}s)"})
+            base = {"row": n + 1, "scene": sc.get("scene_id"), "slide": d.get("slide"), "enter": float(d["enter"])}
+            out += _stamp_findings(ws, marks, float(d["enter"]), d.get("names"), base,
+                                   f"E99 s112: shot row {n + 1} ({sc.get('scene_id', '?')}) dock {d.get('slide', '?')}")
+        for e in chips:
+            base = {"row": n + 1, "scene": sc.get("scene_id"), "chip": e.get("icon"), "enter": float(e["at"])}
+            out += _stamp_findings(ws, marks, float(e["at"]), None, base,
+                                   f"E99 s112: shot row {n + 1} ({sc.get('scene_id', '?')}) chip {e.get('label')!r} ({e.get('icon')})")
     return out
+
+
+def _stamp_findings(ws: list[dict], marks: list[tuple[float, str]], enter: float, names, base: dict, who: str) -> list[dict]:
+    """One stamp's s112 findings - a dock's or a stamped chip's (P70 T1) - from its enter: the contact inside or before
+    its word, and every data mark landing while it comes down or within STAMP_DATA_CLEAR_S of its contact."""
+    from authoring import docks as KD, words as KW
+    out: list[dict] = []
+    contact = round(enter + MG.STAMP_CONTACT_S, 4)
+    head = f"{who}: the stamp's contact {contact:.2f}s"
+    base = {**base, "contact": contact}
+    span = (_named_span(ws, names, contact) if names else _word_at_enter(ws, enter)) if ws else None
+    if span and contact < span[2] - 1e-9:
+        text, a, z = span
+        sug = round(z + KW.STAMP_AFTER_BEAT_S, 3)
+        kind = "inside" if contact >= a - 1e-9 else "before"
+        where = (f"lands INSIDE its word {text!r} ({a:.2f}-{z:.2f}s), {z - contact:.2f}s before it ends"
+                 if kind == "inside" else
+                 f"lands BEFORE the phrase it names, {text!r} ({a:.2f}-{z:.2f}s), {z - contact:.2f}s before it ends")
+        out.append({**base, "kind": kind, "word": text, "word_span": [round(a, 3), round(z, 3)],
+                    "named": bool(names), "offset": round(contact - z, 3),
+                    "suggest_contact": sug, "suggest_enter": KD.stamp_enter(sug),
+                    "message": f"{head} {where} - the stamp is the punctuation after the thing, never during it: "
+                               f"{_anchor_call(text)} puts the contact at {sug:.2f}s (enter {KD.stamp_enter(sug):.2f}s)"})
+    for t, lab in marks:   # a mark landing while the stamp still comes down, or within STAMP_DATA_CLEAR_S of its contact
+        if enter - 1e-6 <= t <= contact or abs(contact - t) < STAMP_DATA_CLEAR_S - 1e-9:
+            # the least that clears it: the fall begins after the mark has landed and the contact is
+            # STAMP_DATA_CLEAR_S past it (the enter on the shot table's 0.01 s, the contact read off that enter)
+            se = KD.stamp_enter(t + max(STAMP_DATA_CLEAR_S, MG.STAMP_CONTACT_S + 0.01))
+            sug = round(se + MG.STAMP_CONTACT_S, 4)
+            out.append({**base, "kind": "data", "mark": lab, "mark_at": round(t, 3), "offset": round(contact - t, 3),
+                        "suggest_contact": sug, "suggest_enter": se,
+                        "message": f"{head} lands {contact - t:+.2f}s from the {lab} at {t:.2f}s - one instant for "
+                                   "two things (the viewer is asked to read both at once): land it after the mark, "
+                                   f"the contact at {sug:.2f}s or later (enter {se:.2f}s)"})
+    return out
+
+
+# ---- P70 T1 (was P69 T12): THE CHIP LANDS AS A STAMP -------------------------------------------------------------------
+# `arrive: "stamp"` on the chip's opt-in raster form (`form: "stamp"`) poses its art by kinetics/stopaction.mjs `stampXf`
+# (species/chip.mjs `chipStampPose`): every motion number STAMP_ARRIVAL's, no dial of the chip's own. The compiler (a)
+# refuses the arrival anywhere but the stamp form (`_validate_chip`), (b) FITS the impact ring's peak to the room at
+# compile time - `stamp_fit` against the page's (or the plate's) obstacles, the same rectangles `ring_obstacles` returns
+# - and writes it on the species as `ring_to` with the art's painted box `paint`, WARNing with its numbers where nothing
+# fits (s106: the chip stands where the author put it; this amends P69 T12's "or refused"); since the send-back the
+# APPROACH is fitted too (`from_to`), by the dock stamp's own `stamp_fit` + `_stamp_floors`, and the painted extent is the
+# mark AND its label, so the ring hugs both and the approach clears both; and (c) ADVISES the label's
+# size: a stamp-form chip without the arrival draws its label at 48 px, under E99 s90's floor. The gate counts its
+# landing at at + STAMP_CONTACT_S (gate_motion_density `_landings` / `_arrivals`), recipe_walk emits `arrival:stamp`
+# for it (so `authoring.audio.fired` pairs a landing cue to that contact, s116), and the s112 advice reads it.
+
+def chip_is_stamped(entry) -> bool:
+    """A chip that lands as a stamp: the stamp form carrying `arrive: "stamp"` (the only arrival it takes) - the walk's
+    ONE predicate (`recipe_walk.is_stamped_chip`, read through the motion gate), so the fit, the gate's landing and the
+    card walk's arrival can never disagree."""
+    return MG.is_stamped_chip(entry)
+
+
+def chip_stamp_dur_advice(entry) -> str | None:
+    """P70 T1 (the review; s106): a stamped chip owes its landing AND its exit inside `dur` (`chipStampPose` starts the
+    exit EXIT_S before the window closes), so a `dur` under STAMP_CONTACT_S + STAMP_EXIT_S leaves before it has landed
+    while the gate and the cue still count a landing - a WARN with its numbers, never a refusal. None otherwise."""
+    if not chip_is_stamped(entry) or not _finite(entry.get("dur")) or float(entry["dur"]) >= CHIP_STAMP_MIN_DUR_S - 1e-9:
+        return None
+    return (f"chip stamp {entry.get('label')!r} ({entry.get('icon')}): dur {float(entry['dur']):g}s is shorter than the "
+            f"landing and the exit it owes ({MG.STAMP_CONTACT_S:g}s + {STAMP_EXIT_S:.4f}s = {CHIP_STAMP_MIN_DUR_S:.4f}s) "
+            f"- the mark begins to leave before it has landed; give it at least {math.ceil(CHIP_STAMP_MIN_DUR_S * 100) / 100:.2f}s")
+
+
+def chip_stamp_label_advice(entry) -> str | None:
+    """P70 T1 (E99 s90, s106): the WARN a stamp-form chip WITHOUT the arrival earns - its label is drawn at
+    CHIP_STAMP_LABEL_SIZE, under the phone floor. None for a stamped chip (drawn at the floor) and for any other entry."""
+    if not (isinstance(entry, dict) and entry.get("kind") == SPECIES_CHIP and entry.get("form") == "stamp"):
+        return None
+    if chip_is_stamped(entry) or not (isinstance(entry.get("label"), str) and entry["label"].strip()):
+        return None
+    return (f"chip stamp {entry['label']!r} ({entry.get('icon')}): its label is drawn at {CHIP_STAMP_LABEL_SIZE} stage px, "
+            f"under the E99 s90 phone floor of {CHIP_STAMP_LABEL_FLOOR:g} px (ledger_page.CARD_TYPE_PX) - add "
+            f"`arrive: \"stamp\"` (the stamp arrival draws it at {CHIP_STAMP_LABEL_FLOOR:g} px)")
+
+
+def chip_stamp_label_box(label, side: float) -> dict | None:
+    """The stamped label's box in the art SQUARE's own centred coordinates (x right, y down, 0 at the square's centre),
+    as species/chip.mjs draws it under the arrival: `text-anchor: middle` at x 0, the first baseline at side / 2 + the
+    scaled gap, each further line one scaled line step down - its width the widest line's MEASURED advance (the table
+    above) plus the overhang, its height the font box, and the keyline round all of it. None for no label."""
+    lines = str(label).split("\n") if isinstance(label, str) and label.strip() else []
+    if not lines:
+        return None
+    size = CHIP_STAMP_LABEL_FLOOR
+    k = size / CHIP_STAMP_LABEL_SIZE
+    gap, step = round(CHIP_STAMP_LABEL_GAP * k, 2), round(CHIP_STAMP_LABEL_LINE_H * k, 2)
+    em = max(sum(CHIP_STAMP_LABEL_ADVANCE_EM.get(ch, CHIP_STAMP_LABEL_ADVANCE_MAX_EM) for ch in ln) for ln in lines)
+    half = (em / 2 + CHIP_STAMP_LABEL_OVERHANG_EM) * size + CHIP_STAMP_LABEL_KEYLINE_PX
+    base = side / 2 + gap
+    return {"x0": -half, "x1": half,
+            "y0": base - CHIP_STAMP_LABEL_ASC_EM * size - CHIP_STAMP_LABEL_KEYLINE_PX,
+            "y1": base + (len(lines) - 1) * step + CHIP_STAMP_LABEL_DESC_EM * size + CHIP_STAMP_LABEL_KEYLINE_PX}
+
+
+def chip_stamp_art(entry: dict, aspect: str | None, paint: dict) -> dict:
+    """Where the painter draws a stamp-form chip's MARK, in stage px, as species/chip.mjs `paintChipStamp` does: the
+    target's centre (a point, or the centre of a region), the side `min(size, region w, region h)`, the cutout drawn
+    `meet` in that square with its PAINTED box inside it (`paint`: painted_box of the file) - and, since the P70 T1
+    send-back, the label under it: the stamped chip's painted extent is the UNION of the art's painted box and the
+    label's box (`chip_stamp_label_box`), so the ring hugs the mark and its name and never crosses the name, and the
+    approach is fitted with the name it carries. Returns the side, `paint` - that union as fractions of the SQUARE
+    (what the engine reads, `chipStampPaint`: the group turns about its centre, the ring's radius its half-diagonal;
+    it may run past [0, 1] where the label is wider than the art or below it) - the union's centre and its size."""
+    sw, sh = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])
+    tg = entry.get("target") or {}
+    if tg.get("kind") == "region":
+        x, y, w, h = tg["x0"] * sw, tg["y0"] * sh, (tg["x1"] - tg["x0"]) * sw, (tg["y1"] - tg["y0"]) * sh
+    else:
+        x, y, w, h = float(tg.get("x", 0.5)) * sw, float(tg.get("y", 0.5)) * sh, 0.0, 0.0
+    size = entry.get("size", STAMP_SIZE_DEFAULT)
+    req = max(STAMP_SIZE_MIN, min(STAMP_PROP_SIZE_MAX, float(size))) if _finite(size) else float(STAMP_SIZE_DEFAULT)
+    side = min(req, w if w > 0 else req, h if h > 0 else req)
+    asp = float(paint.get("aspect") or 1.0)                     # the canvas's h / w, drawn `meet` in the square
+    cw, ch = (side, side * asp) if asp <= 1 else (side / asp, side)
+    ox, oy = (side - cw) / 2 - side / 2, (side - ch) / 2 - side / 2   # the canvas's top-left, centred coordinates
+    box = {"x0": ox + cw * paint["x0"], "y0": oy + ch * paint["y0"], "x1": ox + cw * paint["x1"], "y1": oy + ch * paint["y1"]}
+    lab = chip_stamp_label_box(entry.get("label"), side)
+    if lab:
+        box = {"x0": min(box["x0"], lab["x0"]), "y0": min(box["y0"], lab["y0"]),
+               "x1": max(box["x1"], lab["x1"]), "y1": max(box["y1"], lab["y1"])}
+    sq = [box["x0"] / side + 0.5, box["y0"] / side + 0.5, box["x1"] / side + 0.5, box["y1"] / side + 0.5]
+    cx, cy = x + w / 2, y + h / 2
+    return {"side": side, "paint": [round(v, 4) for v in sq], "label": lab,
+            "centre": (cx + side * ((sq[0] + sq[2]) / 2 - 0.5), cy + side * ((sq[1] + sq[3]) / 2 - 0.5)),
+            "painted": (side * (sq[2] - sq[0]), side * (sq[3] - sq[1]))}
+
+
+def chip_stamp_ring_fit(entry: dict, world: dict | None, aspect: str | None, paint: dict,
+                        reserve: list[dict] | None = None, where: str = "chip stamp") -> tuple[dict, list[str]]:
+    """P70 T1: a stamped chip's arrival FITTED to the room, by the dock stamp's own law - (a COPY of the entry with
+    `ring_to`, `from_to` and `paint`, [WARNs]).
+
+    The chip's painted extent is its mark AND its label (`chip_stamp_art`, the union). `stamp_fit` answers for that box
+    at its centre exactly as it answers for a stamped dock: the impact ring's peak `ring_to` = min(RING_TO, the clear
+    disc / the half-diagonal) and the APPROACH `from_to` = min(FROM, what the box's hull, turned through every angle
+    of the arrival, may grow to clear), both rounded DOWN - capped, never clipped - against the rectangles
+    `ring_obstacles` returns (the page's title, sub, source, rail, axes, measured end names and ink cells; on a plate
+    the frame's caption band; plus `reserve`) inside the safe box. Then the dock's `_stamp_floors`: a ring under its
+    floor (12 px outside the painted edge) or an approach under STAMP_APPROACH_MIN is drawn at that floor and WARNed
+    with its numbers - the chip stands where the author put it (s106), never refused; so is a fit blind to a page's
+    names. A non-stamped entry is returned AS IT WAS (the same object)."""
+    if not chip_is_stamped(entry):
+        return entry, []
+    page = (world or {}).get("page") if (world or {}).get("kind") == SPECIES_LEDGER else None
+    groups, bounds, blind = prop_obstacle_groups(page, aspect, reserve)
+    art = chip_stamp_art(entry, aspect, paint)
+    (pcx, pcy), (pw, ph) = art["centre"], art["painted"]
+    fit = stamp_fit(pcx, pcy, pw, {"aspect": ph / pw if pw > 0 else 1.0, "x0": 0.0, "y0": 0.0, "x1": 1.0, "y1": 1.0},
+                    _flat_obstacles(groups), bounds)
+    floors: list[str] = []
+    fit = _stamp_floors(fit, floors)
+    head = f"{where} (mark and label {pw:.0f}x{ph:.0f} px at ({pcx:.0f}, {pcy:.0f}))"
+    notes = [f"{where}: {b} (the arrival is fitted without it)" for b in blind] + [f"{head}: {w}" for w in floors]
+    return {**entry, "ring_to": fit["ring_to"], "from_to": fit["from_to"], "paint": art["paint"]}, notes
 
 
 def prop_moves(dopt: dict, paint: dict | float | None, fit: dict, aspect: str | None, enter: float, exitt: float,
@@ -10158,6 +10337,12 @@ def main() -> int:
                 except (TypeError, ValueError) as exc:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): chip stamp: {exc}") from exc
                 resolved_chip_stamps[e["icon"]] = stamp_asset
+                _label_warn = chip_stamp_label_advice(e)   # P70 T1 (E99 s90, s106): a stamp-form chip's label under the floor
+                if _label_warn:
+                    print(f"  [WARN] P70 T1: shot row {i + 1}: {_label_warn}")
+                _dur_warn = chip_stamp_dur_advice(e)       # ... and a stamped chip too short for its landing and its exit
+                if _dur_warn:
+                    print(f"  [WARN] P70 T1: shot row {i + 1}: {_dur_warn}")
         # P50 T2: a chip's SOURCED glyph rides the asset map exactly as a plate or a dock still does,
         # keyed `icon:<name>` - the geometry travels in the player, never a path to a file on disk.
         for e in row_species:
@@ -10283,6 +10468,22 @@ def main() -> int:
                                                      f"shot row {i + 1} ({a}-{b}s)", worlds=stamp_worlds)
         except ValueError as exc:
             raise SystemExit(f"FAIL: {exc}") from exc
+        # P70 T1: a STAMPED CHIP's impact ring is fitted to the room it lands in (the page state on screen at its `at`),
+        # clear of the newsreel strip and the row's stamped docks; written on a COPY of the entry as `ring_to` + `paint`.
+        # Nothing fits = a WARN with numbers, never a refusal (s106). A row with no stamped chip is untouched.
+        if any(chip_is_stamped(e) for e in row_species):
+            _chip_rows = []
+            for e in row_species:
+                if chip_is_stamped(e):
+                    e, _chip_notes = chip_stamp_ring_fit(
+                        e, page_on_screen(world, row_species, float(e["at"])), ASPECT,
+                        painted_box(resolved_chip_stamps[e["icon"]]["file"]),
+                        newsreel_boxes(row_species, ASPECT) + list(stamp_boxes),
+                        f"shot row {i + 1} ({a}-{b}s) chip stamp {e.get('label')!r}")
+                    for _n in _chip_notes:
+                        print(f"  [WARN] P70 T1: {_n}")
+                _chip_rows.append(e)
+            row_species = _chip_rows
         place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT), clear_of=stamp_boxes)   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
         for n_dock, (aid, slot, enter, exitt, *dextra) in enumerate(ds):
             dopt = row_opts[n_dock][1]
