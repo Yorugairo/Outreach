@@ -8720,7 +8720,7 @@ async function mount(doc) {
      (M01 / M10 / M16 count events); the frozen-frames row M18 is the idle's own check (measure_frozen_frames.py). */
   const IDLE_CLASS = Object.freeze({ page: "breath", plate: "breath", dock: "breath", pill: "breath", caption: "breath" });
   const idleOf = (cls, override) => (kin("idle") ? (override || IDLE_CLASS[cls] || "none") : "none");
-  const idleCssFor = (cls, override, t, seed, salt) => { const k = idleOf(cls, override); return k === "none" ? "" : idleCss(idleXf(k, t, lpHash(seed | 0, salt | 0, 977))); };
+  const idleCssFor = (cls, override, t, seed, salt) => { const k = idleOf(cls, override); return k === "none" ? "" : idleCss(idleXf(k, lifeT(t), lpHash(seed | 0, salt | 0, 977))); };   /* P69 T49: on the LIFE clock - a freeze beat holds every class's idle (lifeT, declared with the freeze region) */
   /* R26-228 (E99 s82's (e), "LIFE IS SEEN, NOT PASSED: a page's `idle=live` must render the tip spark (E67's live ink),
      the line's glow/pulse and the labels' breath"): THE PAGE'S OWN IDLE KIND. The compiler writes a row's `;idle=<kind>`
      as `world["idle"]` (build_scene_timeline_f.py:3824 - "the player reads it for the page or the plate") and the page
@@ -9762,6 +9762,24 @@ async function mount(doc) {
      corners). [DERIVED: BRAVOS-LONGFORM-CHART-SPEC.md, "Bars, vertical hero (<=3)": 196 px on the 1920 stage (10.2 % of
      the frame), w/pitch 196 / 442 = 0.44 - bubbles 0008; ours measured 405 px] */
   const LPBAR = Object.freeze({ W_PX: 196, PITCH_RATIO: 0.44 });
+  /* P69 T8d - A RANGE BAR (`ledger_page.bar_range`, E99 s100's honesty: the figures written, the geometry true). A bar
+     whose value is `[lo, hi]` ("+55-60%" in the source) STANDS at its near end - the part every source guarantees - and a
+     lighter BAND of the bar's own ink runs from there to the far end, its edge dashed (a dashed edge is a bound, never a
+     comparator's solid rule, E53 s6); the value is written over the band's far end as the source states the range. The
+     band grows with its bar on the one clock (scaled about the same zero), so no frame shows a height the page does not
+     print. `ranges` absent: the page as it was, to the byte. */
+  const LPBAR_RANGE = Object.freeze({ FILL_A: 0.34, EDGE_A: 0.9, EDGE_PX: 2, DASH: "7 6", TUCK: 6 });   /* TUCK: units the band runs under its bar's rounded top */
+  const LPBAR_PANEL = Object.freeze({ TOP: 40, TICK_U: 24, TICK_ROOM: 1.8, FRAME_AIR: 8 });   /* P69 T8d: a bars panel's plot top (the line
+     builder's own 40), one y tick per TICK_ROOM label heights of plot (6 at most, as a page), and the long form's frame kept FRAME_AIR over its values */
+  const lpBarBand = (st, b) => {   /* laid in BEFORE its bar, so the bar paints over the tuck; grown by the bar's own transform */
+    const tuck = Math.min(LPBAR_RANGE.TUCK, b.h), y0 = b.neg ? b.base + b.h - tuck : b.base - b.hr, hh = b.hr - b.h + tuck;
+    const w = LPBAR_RANGE.EDGE_PX / (st.stagePx > 0 ? st.stagePx : 1);
+    const el = lpEl("rect", "bar-band", st.chart, { x: b.x.toFixed(1), y: y0.toFixed(1), width: b.bw.toFixed(1), height: Math.max(0, hh).toFixed(1), rx: 6,
+      "stroke-width": w.toFixed(3), "stroke-dasharray": LPBAR_RANGE.DASH, "stroke-linejoin": "round" });
+    el.style.fill = b.col; el.style.fillOpacity = String(LPBAR_RANGE.FILL_A); el.style.stroke = b.col; el.style.strokeOpacity = String(LPBAR_RANGE.EDGE_A);
+    el.style.transformOrigin = "0 " + b.base.toFixed(1) + "px"; el.style.transform = "scaleY(0)";
+    return el;
+  };
   /* ONE viewBox unit of a page's chart in STAGE px, at the page's rest pose: the chart's CSS box (a share of the page,
      whose box IS the stage's - `.lp` is 90.91 % of a 110 % world - or stage px outright on a portrait page) fitted into
      its viewBox the browser's way (uniform, `meet`), times the page's resting scale (the punch, `rest`). Pure in the
@@ -9945,7 +9963,9 @@ async function mount(doc) {
     const XF = formOf(pg, "extruded_bar");   /* P58 T5: opt-in (`;form=extruded_bar`); null is today's page, to the byte */
     const SOFT = st.barStyle === "soft" ? LPBAR_SOFT.SHOULDER_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0;   /* P69 T10b: the shoulder, in this chart's units (0: the page as it was) */
     const n = Math.max(1, st.vals.length);
-    const lo0 = Math.min(0, ...st.vals), hi0 = Math.max(0, ...st.vals);
+    const RNG = Array.isArray(pg.ranges) ? pg.ranges : null;   /* P69 T8d: [lo, hi] per bar (null: a single value) */
+    const ends = RNG ? RNG.flatMap((r) => (Array.isArray(r) ? r.map(Number) : [])) : [];
+    const lo0 = Math.min(0, ...st.vals, ...ends), hi0 = Math.max(0, ...st.vals, ...ends);
     /* THE BREAKTHROUGH (2026-09-10): a bars page may STATE its scale (`axes.domain`) that one value cannot fit. That bar builds
        to the COMPARATOR's level (the tallest honest bar) with the others, holds, then runs by one of two mechanics (LPX.BT_*):
          burst (Bravos 8:02): it shoots to its true height WHILE the scale rewrites to the nice ceiling above it - the honest
@@ -9974,7 +9994,8 @@ async function mount(doc) {
     const XLAB = P ? 52 : LF ? LF.xlab_dy : 34;   /* the category names' baseline under the plot floor */
     const requestedGutter = Number((pg.axes || {}).left_gutter);
     const leftGutter = Number.isFinite(requestedGutter) ? Math.max(defaultGutter, requestedGutter) : defaultGutter;
-    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : 90, x0 = leftGutter, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
+    const PN = st.panel != null && !P;   /* P69 T8d: a landscape bars PANEL - its plot starts where a line panel's does, its ticks thinned by room */
+    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90, x0 = leftGutter, x1 = P ? G.W - 30 : st.panel != null ? G.W - 20 : 980, gap = 0.34, unit = pg.unit || "";   /* P69 T8d: a panel's viewBox is its box's width */
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
@@ -9990,7 +10011,8 @@ async function mount(doc) {
     /* six divisions, not the default five: lpNiceStep's 1-2-5 ladder rounds 21.8 up to 50, which left the tariff
        short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
        positive bar. Asking for six lands step 20 and five labelled ticks. */
-    const ticks0 = lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26, 6);
+    const ticks0 = lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26,
+      PN ? Math.max(2, Math.min(6, Math.floor((bottom - top) / ((LF ? LF.tick : LPBAR_PANEL.TICK_U) * LPBAR_PANEL.TICK_ROOM)))) : 6);
     if (LF) st.lfPanel = { x: x0 - 20, y: top, w: x1 - x0 + 40, h: bottom - top };   /* P69 T8: the panel spans the tick rules' own extent, the scale's top to its floor */
     /* the comparator: the tallest bar the stated scale holds - the breaking bar first stands at ITS level, a bar like the others */
     const honest = st.vals.filter((v) => !(brk && v > hi)), comp = honest.length ? Math.max(...honest) : hi;
@@ -10009,6 +10031,9 @@ async function mount(doc) {
       /* P58 T5 (`;form=extruded_bar`): the prism is built HERE, before the face, so all three of its polygons
          paint behind the bar's own rect. Not one label, capsule, tick or axis moves for it. */
       const ex = XF ? extrudeFaces(st, { x, bw, base, h, neg, P, cls: (neg ? " neg" : " pos") + (i === st.emph ? " emph" : "") }) : null;
+      const rg = RNG && Array.isArray(RNG[i]) ? RNG[i].map(Number) : null;   /* P69 T8d: the band from the bar's end to the range's far end */
+      const far = rg ? (neg ? Math.min(rg[0], rg[1]) : Math.max(rg[0], rg[1])) : null, hr = rg ? Math.max(h, Math.abs(my(far) - base)) : h;
+      const band = rg ? lpBarBand(st, { x, bw, base, h, hr, neg, col: LP_PAL[(pg.colors || [])[i]] || (neg ? "var(--lp-neg)" : "var(--lp-pos)") }) : null;
       const foot = SOFT ? lpEl("rect", "lp-bar-foot", st.chart, { x: x.toFixed(1), y: 0, width: bw.toFixed(1), height: 0 }) : null;   /* P69 T10b: squares the zero end (lpBarSoftPaint) */
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
         { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: SOFT ? SOFT.toFixed(3) : 6 });   /* grows from the zero baseline, up or down */
@@ -10022,11 +10047,12 @@ async function mount(doc) {
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + XLAB, "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
-      const vy = neg ? base + h + (P ? 62 : 26) : base - h - (P ? 22 : 14);
+      const vy = neg ? base + hr + (P ? 62 : 26) : base - hr - (P ? 22 : 14);   /* a range's value stands over its band's far end (hr: h without one) */
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
       val.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
-      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h, over, v, bx: x, bw, track, stamp, ex };
+      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + hr : base - hr, over, v, bx: x, bw, track, stamp, ex };
       if (foot) rec.foot = foot;
+      if (band) { rec.band = band; rec.range = rg; }
       if (over && btMode === "stack") {   /* the top gridline SNAPS as the bar passes: its two broken ends kick up beside the bar */
         const mk = (ax, bx2) => lpEl("line", "grid snap", st.chart, { x1: ax.toFixed(1), y1: top.toFixed(1), x2: bx2.toFixed(1), y2: (top - 16).toFixed(1), stroke: "var(--lp-chalk)", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 });
         rec.snap = [mk(x - 4, x - 24), mk(x + bw + 4, x + bw + 24)];
@@ -11332,27 +11358,31 @@ async function mount(doc) {
      P69 T8c: `f` > 0 is the same chart re-laid out for a box `f` times its home's aspect - the viewBox `f` times as wide
      at the same height (the builder's plot runs L..W-R, so the data re-project to the new width and every word keeps its
      size in units), the svg `f` times its box's width, so the box's pose stays one translate and one uniform scale. */
-  const lpBuildPanel = (st, i, box, f) => {
+  const lpBuildPanel = (st, i, box, f, kz) => {
     const { pg, list, P, ps, a, T, pageDom } = st.panelCtx, p = list[i], hb = st.panelHome[i];
+    const BARS = p.builder === "bars";   /* P69 T8d: a bars panel - the bars builder in the same box (kz: its grown scale, for the 196 px cap) */
     {
       const W0 = P ? hb.w : a * (LP_PANELS.VB[1] + LP_PANELS.SUB_U);   /* ledger_page.panel_view_w: the home viewBox's width */
       const geom = P ? { W: hb.w, H: hb.h } : { W: f ? W0 * f : W0, H: LP_PANELS.VB[1] };
       const top = P ? 0 : LP_PANELS.SUB_U;   /* the SUB BAND over a landscape panel's plot (a portrait panel's builder keeps its own 90 px, and a stacked cell has none to spare) */
       const svg = lpEl("svg", "lp-chart lp-panel-chart", box, { viewBox: "0 " + (-top) + " " + geom.W.toFixed(3) + " " + (geom.H + top).toFixed(3) });
       svg.style.left = "0"; svg.style.top = "0"; svg.style.width = f ? (100 * f).toFixed(4) + "%" : "100%"; svg.style.height = "100%";
-      const axes = Object.assign({}, p.axes || {}, { ylabel: String(p.sub || "") }, pageDom && !p.independent ? { domain: pageDom } : {});
-      const pgI = { builder: "dense-line", series: p.series || [], axes, sub: p.sub || "", title: pg.title, badges: pg.badges || [] };
+      const axes = Object.assign({}, p.axes || {}, { ylabel: String(p.sub || "") }, pageDom && !p.independent && !BARS ? { domain: pageDom } : {});
+      const pgI = BARS ? { builder: "story", labels: p.labels || [], values: p.values || [], value_strings: p.value_strings || [], colors: p.colors || [],
+                           unit: p.unit || "", axes, sub: p.sub || "", title: pg.title, badges: [], ...(Array.isArray(p.ranges) ? { ranges: p.ranges } : {}) }
+        : { builder: "dense-line", series: p.series || [], axes, sub: p.sub || "", title: pg.title, badges: pg.badges || [] };
       const S = { root: st.root, page: st.page, chart: svg, box, geom, portrait: P, seed: st.seed + 97 * (i + 1), edge: st.edge, field: st.field, rail: st.rail, wide: f || 1,
-                  stagePx: ps * Math.min(hb.w / W0, hb.h / (geom.H + top)), lfType: null, keyPills: null, readability: st.readability, barStyle: null, cardK: 1,
+                  stagePx: ps * Math.min(hb.w / W0, hb.h / (geom.H + top)) * (kz || 1), lfType: null, keyPills: null, readability: st.readability, barStyle: null, cardK: 1,
                   bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: st.inlineBadges || {}, linePts: [],
-                  marks: [], markBy: {}, badges: [], inkEls: [], glyphs: [], titleGlyphs: [], rtGlyphs: [], vals: [], vstr: [], emph: -1,
-                  kind: "dense-line", scene: st.scene, panel: i, pg: pgI, perform: null, boardCentre: st.boardCentre };
+                  marks: [], markBy: {}, badges: [], inkEls: [], glyphs: [], titleGlyphs: [], rtGlyphs: [], vals: BARS ? p.values || [] : [], vstr: BARS ? p.value_strings || [] : [],
+                  emph: BARS && Number.isInteger(p.emphasize) ? p.emphasize : -1,
+                  kind: BARS ? "story" : "dense-line", scene: st.scene, panel: i, pg: pgI, perform: null, boardCentre: st.boardCentre };
       if (T) {   /* the long form's preset, at THIS panel's rendered scale: its words read at the preset's px in its home box */
         const u = ps * hb.w / W0, g = lpLongformGeom(T, 0, 560 * u, 560 * u);   /* one chart unit in rendered px: the panel's width over its viewBox's (the home's: a re-laid-out build keeps its words) */
         S.lfType = Object.assign({}, g, { form: axes.tag_form || "full" });
         for (const k of ["tick", "tag", "chip", "value"]) svg.style.setProperty("--lf-" + k, g[k].toFixed(3) + "px");
       }
-      buildLedgerLine(S, pgI);
+      if (BARS) lpBuildBarsPanel(S, pgI); else buildLedgerLine(S, pgI);
       if (T) lpLongformPlot(S);
       /* the panel's GROUND: its whole box in the page's own ground colour, under everything it draws - so a panel in front
          (a focus's active one) occludes the receded ones behind it, never shows their words through its margins */
@@ -11374,18 +11404,40 @@ async function mount(doc) {
       return S;
     }
   };
+  /* P69 T8d - A BARS PANEL: buildLedgerBars, unchanged, in the panel's svg (its x1 runs to the viewBox's width); then the
+     panel's SUB takes the y label's corner as a line panel's does, and its PLOT is the bars' own frame (the tick rules'
+     extent - what the camera, the focus and the box fixture read as `S.plot`) */
+  const lpBuildBarsPanel = (S, pgI) => {
+    buildLedgerBars(S, pgI);
+    const sc = S.scale || {}, G = S.geom;
+    lpYLabel(S, pgI, (sc.x0 || 0) - 20, 0);
+    if (S.lfPanel) {   /* the long form's framed plot holds its values: the tallest bar's number is inside the frame, never on its edge */
+      const fs = S.lfType ? S.lfType.value : 26;
+      const tops = S.bars.filter((b) => !b.neg && b.val).map((b) => +b.val.getAttribute("y") - 0.8 * fs);
+      const pill = S.callout && S.callout.querySelector("rect.cpill");
+      if (pill) tops.push(+pill.getAttribute("y"));
+      const y = Math.max(2, Math.min(S.lfPanel.y, ...tops.map((v) => v - LPBAR_PANEL.FRAME_AIR)));
+      S.lfPanel = Object.assign({}, S.lfPanel, { y, h: S.lfPanel.h + (S.lfPanel.y - y) });
+    }
+    const top = sc.my ? sc.my(sc.y1) : 0, bot = sc.my ? sc.my(sc.y0) : G.H;
+    S.plot = { L: (sc.x0 || 0) - 20, R: G.W - ((sc.x1 || G.W) + 20), T: top, B: bot, W: G.W, x0: 0, x1: 1, y0: sc.y0, y1: sc.y1, log: false };
+  };
   /* P69 T8c - the build panel i stands in for pose `q`: its home build while the box keeps the home's aspect (T8b's grow,
      the recede), else the build re-laid out at the box's aspect - built once per width and kept (a function of the
      width, so a seek paints what play paints) - swapped onto the box, the one it replaces hidden */
   const lpPanelFor = (st, i, q) => {
     const V = st.panelVar[i], hb = st.panelHome[i];
     const f = st.panelFill && q.b.h > 0 && q.b.w > 0 ? (q.b.w / q.b.h) / (hb.w / hb.h) : 1;
+    const wide = Math.abs(f - 1) > LP_PANELS.WIDE_EPS;
+    /* P69 T8d: a BARS panel shown LARGER than its home (a grow) is rebuilt at that scale, so its bars keep the 196 px cap on
+       the stage (E99 s96) - the bars narrow in the chart's units as the box grows; a receded one is smaller, and keeps home */
+    const kz = V.home.kind === "story" ? Math.max(1, wide ? q.b.h / hb.h : q.b.w / hb.w) : 1, grown = kz > 1 + LP_PANELS.WIDE_EPS;
     let S = V.home;
-    if (Math.abs(f - 1) > LP_PANELS.WIDE_EPS) {
-      const key = f.toFixed(5);
+    if (wide || grown) {
+      const key = (wide ? f : 1).toFixed(5) + (grown ? "@" + kz.toFixed(4) : "");
       S = V.cache.get(key);
       if (!S) {
-        S = lpBuildPanel(st, i, V.home.box, +key);
+        S = lpBuildPanel(st, i, V.home.box, wide ? +f.toFixed(5) : 1, grown ? +kz.toFixed(4) : 1);
         V.cache.set(key, S);
         for (const [k2, S2] of V.cache) {   /* the oldest builds go first, never the one on the box */
           if (V.cache.size <= LP_PANELS.WIDE_KEEP) break;
@@ -12821,7 +12873,7 @@ async function mount(doc) {
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (sp.to !== "compare") continue;
       const fg = compareFigure(PF.figures || [], sp), rec = fg && fg.bar;
-      if (!rec || !rec.bar || rec.over || st.bt) continue;   /* a breaking bar's height is the breakthrough's to write */
+      if (!rec || !rec.bar || rec.over || st.bt || rec.range) continue;   /* a breaking bar's height is the breakthrough's to write; a RANGE bar (P69 T8d) states two values, and one comparator is not both */
       const m = (sp.metric || {}).value, c = (sp.comparator || {}).value;
       if (!lpMorphNum(m) || !lpMorphNum(c) || !lpMorphNum(rec.v) || !lpMorphSame(m, rec.v) || lpMorphSame(m, c)) continue;
       if (c !== 0 && (c < 0) !== (rec.v < 0)) continue;   /* a comparator across zero is another bar, not this one moved */
@@ -13765,6 +13817,7 @@ async function mount(doc) {
       cs.bars.forEach((bb, i) => {
         const k = expoOut(clamp01((cb - i * 0.1) / 0.55));
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
+        if (bb.band) bb.band.style.transform = bb.bar.style.transform;   /* P69 T8d: the range's band grows with its bar, about the same zero */
         if (bb.ex) bb.ex.set(k);   /* P58 T5: the prism grows WITH its face - the same u, one clock, no second state */
         bb.lab.setAttribute("opacity", clamp01((cb - i * 0.1 - 0.3) / 0.2).toFixed(2));
         bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
@@ -13865,11 +13918,11 @@ async function mount(doc) {
           /* each series sparks at its OWN phase - E49's law, the one the pills have always kept ("two pills never
              breathe in step"); four lead points pulsing together would read as one mechanism blinking. */
           const sph = lpLifePhase(pp.tip, pp.si | 0), ink = lpVarHex(pp.p.getAttribute("stroke"));
-          const rTip = (LP_LIFE.TIP_R / ctmL) * breath(t, sph, { BREATH_AMP: LP_LIFE.TIP_AMP, BREATH_HZ: LP_LIFE.TIP_HZ });
+          const rTip = (LP_LIFE.TIP_R / ctmL) * breath(lifeT(t), sph, { BREATH_AMP: LP_LIFE.TIP_AMP, BREATH_HZ: LP_LIFE.TIP_HZ });
           pp.tip.setAttribute("r", rTip.toFixed(2));
           pp.tip.style.filter = "drop-shadow(0 0 " + (rTip * LP_LIFE.HALO_K).toFixed(2) + "px " + lpInkA(ink, LP_LIFE.HALO_A) + ")";
           /* R26-228 (b): the glow, at the share of the frame the APPROVED 9:16 page draws, pulsing on the tip's own clock */
-          lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * breath(t, sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ }));
+          lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * breath(lifeT(t), sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ }));
         }
         pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
         if (pp.pill) lpPaintPill(pp, f, drawing);   /* P50 T11: the pill rides this same f - one clock, no second state */
@@ -18211,6 +18264,164 @@ async function mount(doc) {
      import this file for the math above without the engine's registry */
   if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.spotlight = paintSpotlight;
   /* KINETICS:END */
+  /* KINETICS:BEGIN freeze */
+  /* SPACE: stage */
+  /* species/freeze.mjs - THE FREEZE BEAT (P69 T49; E99 s99). SOURCE OF TRUTH, inlined into the scene-evidence player by
+     sync_kinetics.py between KINETICS:BEGIN freeze and KINETICS:END, AFTER ease and lit_stretch (it reads minJerk and the
+     lit stretch's look) and after the engine's SPECIES_PAINTERS declaration, which the registration reaches.
+
+     THE RULING. E99 s99 (the operator, 2026-09-23): "Light can become motion when it's highlighting and moving along a
+     length, blinking, or when it actually stops motion when the light comes on I think. Bravos does this well." - "a light
+     that comes on as everything else STOPS is a punctuation beat - the freeze is the event". A light that simply sits on
+     a thing stays an annotation (s91), and a light is never the move when a named thing should ARRIVE (s71): this one is
+     neither, because what it does is STOP the frame round it.
+
+     WHEN (`SPECIES_WHEN["freeze"]`, build_scene_timeline_f.py): the TURN of the argument lands on ONE number or thing -
+     the line the whole row builds to - and the stage stops on it.
+
+     NOT `beat_freeze` (doc 29 s9.27). That is a BOUNDARY move: the chart's final state freezes as a hit, then a
+     directional-stretch cut into the next plate. This beat is inside a scene, and life comes back.
+
+     THE LAW, a pure function of t:
+       the windows - every `freeze` species on every scene, [at, at + dur] clipped to its scene's span, sorted and merged,
+                     read ONCE when the player mounts (freezeWindows). The engine's LIFE CLOCK is t with the frozen time
+                     before t taken out (lifeClock): inside a window it stands still, outside it runs at speed, and it
+                     never jumps - after the beat every idle carries on from exactly where it stopped, one beat behind t.
+                     A thing whose life is counted from an ORIGIN (the Ken Burns push from its scene's start, a clip from
+                     its mount) takes the scene clock (sceneClock), which counts only the beats after that origin, so a
+                     scene after a beat starts its push at its own start. With no window the clock IS t, the same number,
+                     so a build without a freeze paints the string it always painted.
+       what stops  - the engine hands the life clock to every LIFE on the stage, by name: the idle of every class (the
+                     page, the pills, the docks, the caption strip - idleCssFor), a stage species' own idle (ctx.idle:
+                     the ring's breath, a held light's, a chip's, the agenda's rows), the plate's idle and drift, the
+                     Ken Burns push, the vector map's world idle, the live page's spark and glow (R26-228), the caption
+                     boil, the steam, and an ambient clip (a clip world, an alive plane, a video dock). What it does NOT
+                     stop is an authored EVENT: the voice goes on, so the caption's words keep arriving, and the compiler
+                     refuses any other species that fires inside the beat (`one light`).
+       the light   - ONE light at the resolved target, in the page's one light colour (the relight's sunflower). It comes
+                     ON over ON_S (min-jerk, at most RAMP_MAX of the beat), HOLDS perfectly still through the middle - it
+                     is part of the stopped frame, so it does not breathe - and goes over OFF_S as life resumes, gone at
+                     the beat's end. A target that resolves to a POINT (a datum on a line) is a lit point: the lit
+                     stretch's comet head standing still (LIT's halo over its head, lpBloom's form). A target that
+                     resolves to a BOX (a bar, a prop's or a mark's region) is a lit EDGE round it - never a fill over the
+                     thing it names.
+     The dials are ours to tune (42 s42.5), not findings. */
+
+  const FREEZE = Object.freeze({
+    MIN_S: 0.4,        /* the beat's dial: shorter reads as a dropped frame ... */
+    MAX_S: 1.2,        /* ... longer, as the still frame E49 refuses */
+    ON_S: 0.12,        /* the light comes ON - quick, a switch, never a slow fade */
+    OFF_S: 0.18,       /* ... and goes as life resumes */
+    RAMP_MAX: 0.25,    /* each ramp is at most this share of the beat, so the shortest beat still holds a middle */
+    CORE_PX: 18,       /* the lit point's radius, stage px - read on the golden: at 12 it was the lead spark turned yellow, not a light coming on */
+    PAD: 10,           /* the lit edge's air round a box, stage px */
+    EDGE_PX: 4,        /* the lit edge's width, stage px */
+    EDGE_RX: 10,       /* ... and its corner */
+    POINT_PX: 6,       /* a resolved box smaller than this both ways is a POINT */
+    COLOR: "#F5B72E",  /* the relight's sunflower - the engine's PS.RELIGHT_COL, mirrored (a module imports nothing of the engine's) */
+  });
+
+  const fz01 = (v) => Math.min(1, Math.max(0, v));
+  const fzNum = (v) => typeof v === "number" && Number.isFinite(v);
+
+  /* THE WINDOWS: [[a, b], ...] from the timeline's scenes - clipped to the scene, sorted, overlaps merged. Frozen. */
+  const freezeWindows = (scenes) => {
+    const ws = [];
+    for (const sc of scenes || []) {
+      const span = (sc && sc.span) || [];
+      for (const sp of (sc && sc.species) || []) {
+        if (!sp || sp.kind !== "freeze" || !fzNum(sp.at) || !fzNum(sp.dur) || !(sp.dur > 0)) continue;
+        const a = fzNum(span[0]) ? Math.max(sp.at, span[0]) : sp.at, b = fzNum(span[1]) ? Math.min(sp.at + sp.dur, span[1]) : sp.at + sp.dur;
+        if (b > a) ws.push([a, b]);
+      }
+    }
+    ws.sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+    const out = [];
+    for (const w of ws) {
+      const last = out[out.length - 1];
+      if (last && w[0] <= last[1]) last[1] = Math.max(last[1], w[1]);
+      else out.push([w[0], w[1]]);
+    }
+    return Object.freeze(out.map((w) => Object.freeze(w)));
+  };
+
+  /* the frozen seconds before t */
+  const frozenBefore = (ws, t) => {
+    let s = 0;
+    for (const [a, b] of ws || []) { if (t <= a) break; s += Math.min(t, b) - a; }
+    return s;
+  };
+
+  /* THE LIFE CLOCK: t, with the frozen time before it taken out. No window: t itself, the same number. */
+  const lifeClock = (ws, t) => (ws && ws.length ? t - frozenBefore(ws, t) : t);
+
+  /* ... counted from an ORIGIN t0 (a scene's start, a clip's mount): only the beats after t0 hold it back */
+  const sceneClock = (ws, t, t0) => (ws && ws.length ? t0 + (lifeClock(ws, t) - lifeClock(ws, t0)) : t);
+
+  /* is the stage frozen at t - [a, b): at the beat's end life has resumed */
+  const frozenAt = (ws, t) => (ws || []).some(([a, b]) => t >= a && t < b);
+
+  /* THE LIGHT'S POSE at t: its level f (0 off, 1 on). The held middle is exactly 1 - one pose, the stopped frame's. */
+  const freezePose = (sp, t) => {
+    const D = Math.max(0.001, +sp.dur || 0), d = t - +sp.at;
+    if (!(d >= 0) || d >= D) return { f: 0 };
+    const on = Math.min(FREEZE.ON_S, D * FREEZE.RAMP_MAX), off = Math.min(FREEZE.OFF_S, D * FREEZE.RAMP_MAX);
+    if (d < on) return { f: fz01(minJerk(d / on)) };
+    if (d > D - off) return { f: fz01(minJerk((D - d) / off)) };
+    return { f: 1 };
+  };
+
+  /* THE FORM the light takes, from the box the target resolved to (stage px), or null */
+  const freezeForm = (b) => {
+    if (!b || !fzNum(b.x) || !fzNum(b.y)) return null;
+    const w = fzNum(b.w) ? b.w : 0, h = fzNum(b.h) ? b.h : 0;
+    if (w < FREEZE.POINT_PX && h < FREEZE.POINT_PX) {
+      return { kind: "point", cx: b.x + w / 2, cy: b.y + h / 2, r: FREEZE.CORE_PX, glow: FREEZE.CORE_PX * LIT.GLOW_K / LIT.HEAD_K };
+    }
+    return { kind: "box", x: b.x - FREEZE.PAD, y: b.y - FREEZE.PAD, w: w + 2 * FREEZE.PAD, h: h + 2 * FREEZE.PAD,
+             glow: FREEZE.EDGE_PX * LIT.GLOW_K };
+  };
+
+  /* the halo's colour: the light's own, at LIT's alpha */
+  const freezeHalo = (px, a = LIT.GLOW_A, hex = FREEZE.COLOR) => {
+    const n = parseInt(String(hex).slice(1), 16);
+    return "drop-shadow(0 0 " + px.toFixed(2) + "px rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + "))";
+  };
+
+  /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the clock, the
+     layer already chosen for a datum (beneath any card) or anything else (above), and the shared helpers by name. */
+  function paintFreeze(ctx) {
+    const { sp, t, svg, el, resolveTarget } = ctx;
+    const pose = freezePose(sp, t);
+    if (pose.f <= 0) return;
+    const form = freezeForm(resolveTarget(sp.target));
+    if (!form) return;   /* the targeting law: no resolved target, nothing painted */
+    const g = el("g", "frz", svg, { opacity: pose.f.toFixed(3) });
+    if (form.kind === "point") {
+      const r = form.r * (0.7 + 0.3 * pose.f);   /* a light switching on swells a little as it brightens; held, it is its size */
+      const dot = el("circle", "frz-light", g, { cx: form.cx.toFixed(1), cy: form.cy.toFixed(1), r: r.toFixed(2), fill: FREEZE.COLOR });
+      dot.style.filter = freezeHalo(form.glow);
+      return;
+    }
+    const rect = el("rect", "frz-edge", g, { x: form.x.toFixed(1), y: form.y.toFixed(1), width: form.w.toFixed(1), height: form.h.toFixed(1),
+                                             rx: FREEZE.EDGE_RX, fill: "none", stroke: FREEZE.COLOR, "stroke-width": FREEZE.EDGE_PX });
+    rect.style.filter = freezeHalo(form.glow);
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can import this
+     file for the math above without the engine's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.freeze = paintFreeze;
+  /* KINETICS:END */
+  /* P69 T49 (E99 s99) - THE LIFE CLOCK. The timeline's freeze beats, read once, and the clock every LIFE on the stage
+     reads instead of t: it stands still inside a beat and runs on, one beat behind, after it (species/freeze.mjs). With
+     no beat it IS t - the same number - so a build without one paints the string it always painted. `lifeFrom` counts
+     from an origin (a scene's start, a dock's mount) and loses only the beats after it; `idleLive` is the idle the
+     stage species are handed, so a ring's breath or a held light's stops with the page under it. What is NOT here: an
+     authored event (the voice, the caption's words, a build) - the compiler keeps those out of a beat by name. */
+  const FREEZE_WS = freezeWindows(TL.scenes || []);
+  const lifeT = (t) => lifeClock(FREEZE_WS, t);
+  const lifeFrom = (t0, t) => sceneClock(FREEZE_WS, t, t0);
+  const idleLive = (kind, t, phase, o) => idleXf(kind, lifeT(t), phase, o);
   /* a ledger page's declared focus (page.focus = {kind, target?, label?}) is an implicit species at LP_FOCUS_AT;
      the target defaults to the emphasized datum (E22 addendum 6) */
   const pageFocus = (sc) => {
@@ -18238,7 +18449,7 @@ async function mount(doc) {
       const painter = SPECIES_PAINTERS[sp.kind];
       if (painter) {
         painter({ sp, k, dur, t, sc, si, seed, svg: spSvg, el: lpEl, A, resolveTarget, centre, stageBox,
-                  ease: spEase, io: spIO, clamp: clamp01, drawOn, springPop, idle: idleXf, hash: lpHash,
+                  ease: spEase, io: spIO, clamp: clamp01, drawOn, springPop, idle: idleLive, hash: lpHash,
                   squigglePath, SQUIG_DRAW: SP.SQUIG_DRAW,   /* P57 T17: the callout's UNDERLINE form is the squiggle's stroke and clock, not the ring's - the one kind whose painter reaches for another kind's law */
                   camNow, idleOf,   /* P50 T5: a species ON A WORLD (the map's light, arc and stamp) rides the world's own camera and idle - the species layer is not the world div and carries neither by itself */
                   STAGE_W, STAGE_H, PORTRAIT });
@@ -18251,7 +18462,7 @@ async function mount(doc) {
            curls, each a pure function of t (a period of STEAM_PERIOD), fading with height. Never a particle system. */
         const b = resolveTarget(sp.target); if (!b) return;
         const g = lpEl("g", "", spSvg, { fill: "none", "stroke-linecap": "round" });
-        const ph = (t - sp.at) / SP.STEAM_PERIOD, rise = Math.max(160, b.w * 2.2), col = sp.color || "rgba(255,248,236,.42)";
+        const ph = (lifeFrom(sp.at, t) - sp.at) / SP.STEAM_PERIOD, rise = Math.max(160, b.w * 2.2), col = sp.color || "rgba(255,248,236,.42)";
         for (let w = 0; w < 3; w++) {
           const u = ((ph + w / 3) % 1 + 1) % 1;                        /* this wisp's own phase */
           const x0 = b.x + b.w * (0.25 + 0.25 * w) + (lpHash(seed, w, 41) - 0.5) * b.w * 0.2, y0 = b.y + 6;
@@ -18464,6 +18675,8 @@ async function mount(doc) {
      and the renderer still seek exactly (a pure function of t). */
   const seekVideo = (v, want) => {
     if (clipLive) {
+      if (FREEZE_WS.length && v.__lifeWant === want) { if (!v.paused) v.pause(); return; }   /* P69 T49: a freeze beat holds the clip */
+      v.__lifeWant = want;
       if (v.paused && (v.loop || want < (v.duration || Infinity) - 0.1)) v.play().catch(() => {});
       if (Math.abs((v.currentTime || 0) - want) > 0.15) { try { v.currentTime = want; } catch (e) {} }
       return;
@@ -18485,7 +18698,7 @@ async function mount(doc) {
       parkClips(el);
       v = clipFor(scene.world.asset_id); v.pause(); v.loop = false; el.appendChild(v);
     }
-    const local = Math.max(0, t - scene.span[0]);
+    const local = Math.max(0, lifeFrom(scene.span[0], t) - scene.span[0]);   /* P69 T49: a freeze beat holds the clip's frame */
     const want = Number.isFinite(v.duration) && v.duration > 0 ? Math.min(local, Math.max(0, v.duration - 0.05)) : local;
     seekVideo(v, want);
   };
@@ -18505,7 +18718,7 @@ async function mount(doc) {
       parkDockClips(el);
       v = clipFor(d.slide); v.pause(); v.loop = true; frame.appendChild(v);
     }
-    const local = Math.max(0, t - d.enter);
+    const local = Math.max(0, lifeFrom(d.enter, t) - d.enter);   /* P69 T49: ... and a video dock's */
     const dur = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0;
     seekVideo(v, dur ? Math.min(local % dur, Math.max(0, dur - 0.05)) : local);
   };
@@ -18624,7 +18837,7 @@ async function mount(doc) {
         el.querySelectorAll(".lp").forEach((x) => x.remove());
         const vm = el.querySelector("svg.vm") || lpEl("svg", "vm", el, {});
         vm.setAttribute("viewBox", `0 0 ${STAGE_W} ${STAGE_H}`);
-        paintVecmapWorld({ scene, world: scene.world, t, A, root: vm, el: lpEl, idle: idleXf, hash: lpHash, idleOf, STAGE_W, STAGE_H });
+        paintVecmapWorld({ scene, world: scene.world, t, A, root: vm, el: lpEl, idle: idleLive, hash: lpHash, idleOf, STAGE_W, STAGE_H });
       }
       else {
         el.style.backgroundImage = plies.length ? "none" : `url("${A[scene.world.asset_id]}")`;   /* P58 T3: the planes ARE the picture */
@@ -18634,7 +18847,7 @@ async function mount(doc) {
       if (!isClip) parkClips(el);   /* back to the pool, never destroyed */
       const kb0 = scene.world.ken_burns || { scale: 0, x: 0, y: 0 };
       const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
-      const p = clamp01((t - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
+      const p = clamp01((lifeFrom(scene.span[0], t) - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));   /* P69 T49: the push holds through a freeze beat */
       /* THE WORLD LEANS IN WITH THE ARGUMENT (Gemini showcase: worldScale
          steps 1.02 -> 1.08 across a build). Each evidence event in this
          scene - a card landing, a badge stamping - eases the plate in one
@@ -18651,7 +18864,7 @@ async function mount(doc) {
          one the engine has always written. */
       const idleAmp = idleDriftPx(scene.world.idle_drift_px, KIN.plate_idle_drift_px);
       const idlePose = (isLedger || isClip || isVecmap) ? { scale: 1, dx: 0, dy: 0 }
-        : idleXf(idleOf("plate", scene.world.idle), t, lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleAmp });   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
+        : idleXf(idleOf("plate", scene.world.idle), lifeT(t), lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleAmp });   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
       const zi = idlePose.scale;
       /* R26-133: this block read the plate's idle for its `.scale` ALONE, so `drift` ({scale: 1, dx, dy}) delivered
          nothing and a plate authored `;idle=drift` held perfectly still. The dx/dy now PAINT - on the world's rest
@@ -18675,7 +18888,7 @@ async function mount(doc) {
         el.dataset.worldPose = camCss(camXfNow) + restFlat;
         if (el.dataset.worldRest !== undefined) delete el.dataset.worldRest;   /* P58 T6: the camera is on the planes, not under this element */
         el.style.transform = "";
-        paintPlanes(el, plies, camXfNow, worldRest, idleDrift, Math.max(0, t - scene.span[0]));
+        paintPlanes(el, plies, camXfNow, worldRest, idleDrift, Math.max(0, lifeFrom(scene.span[0], t) - scene.span[0]));   /* P69 T49: the alive plane holds */
       } else if (pageK) {
         /* the page took the camera down onto its own plane; the element keeps what the page's GROUND shares with it
            - the authored Ken Burns and the wipe's push - and `data-world-pose` carries the k = 1 pose, so
@@ -19361,7 +19574,7 @@ async function mount(doc) {
              per-word highlight - the caption-energy lessons - and the HELD page's own life is E49's breath on the strip below. */
             const f = lifeAt(t, x.s, lifeKind), e = f.e;
             const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;                 /* the keyword's box sweeps in when spoken, stays */
-            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;
+            const tick = Math.floor(lifeT(t) * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;
             const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
             const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
             const sc = f.s * (on && e >= 1 ? MARK.LIFT : 1);
@@ -19379,7 +19592,7 @@ async function mount(doc) {
              which is the crowding this register exists to remove. The BLUR IS A FILTER ON THE WORD SPAN, never on the strip. */
             const f = fadeUpAt(t, fuStarts[j], FADE_UP), e = f.e;
             const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;                 /* the keyword's box sweeps in when spoken, stays */
-            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;   /* the boil, unchanged: seeded per word, on the landed word only */
+            const tick = Math.floor(lifeT(t) * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;   /* the boil, unchanged: seeded per word, on the landed word only */
             const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
             const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
             const sc = f.s * (on && e >= 1 ? MARK.LIFT : 1);
@@ -19400,7 +19613,7 @@ async function mount(doc) {
             /* ALIVE (operator, 2026-09-05: 'the words shifting slightly to stay alive, like the golden set'): the spoken word lifts 6% as the
                voice passes it, and every landed word BOILS - the engine's two-frame boil (SP.BOIL_PX / BOIL_DEG at LIFE_FPS), seeded per word */
             const sc = (MARK.POP + (1 - MARK.POP) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1) * (on && e >= 1 ? MARK.LIFT : 1);
-            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = e >= 1;
+            const tick = Math.floor(lifeT(t) * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = e >= 1;
             const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
             const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
             ws[j].style.transform = "translate(" + bx.toFixed(2) + "px," + (MARK.RISE_PX * (1 - e) + by).toFixed(2) + "px) scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + " + " + bdeg.toFixed(2) + "deg))";

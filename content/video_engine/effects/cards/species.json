@@ -727,6 +727,110 @@
       }
     },
     {
+      "id": "species:freeze",
+      "axis": "species",
+      "token": "freeze",
+      "title": "The freeze beat: the stage stops",
+      "aliases": [
+        {
+          "name": "a light that comes on as everything else STOPS",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3329 (E99 s99)"
+        },
+        {
+          "name": "The freeze beat",
+          "source": ".claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md:1186 (T49)"
+        }
+      ],
+      "does": "On its word every idle, drift and ambient life on the stage holds for 0.4-1.2 s while ONE light comes on at a datum, a mark or a prop; then life resumes where it stopped. The freeze is the event (E99 s99), not a still frame.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "TURNS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"freeze\", \"at\", \"dur\", \"target\"} (shot row 7th element); dur 0.4-1.2 s; target a datum, a point or a region",
+        "example": "{\"kind\": \"freeze\", \"at\": 12.0, \"dur\": 1.0, \"target\": {\"kind\": \"datum\", \"index\": 139, \"series\": 0}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (freeze-trough)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the stage stops, the light comes on",
+          "does": "every life on the stage (idles, drift, Ken Burns, the live page's spark, the caption boil, an ambient clip) holds on the life clock; one light comes on at the target",
+          "trigger": "the species' `at`; the light over ON_S (at most RAMP_MAX of the beat)",
+          "dials": {
+            "ON_S": "0.12",
+            "RAMP_MAX": "0.25",
+            "CORE_PX": "18"
+          }
+        },
+        {
+          "name": "the held frame",
+          "does": "the frame holds bit-identical with the light on - the light does not breathe; M18 reads the run as punctuation",
+          "trigger": "the beat's middle",
+          "dials": {
+            "MIN_S": "0.4",
+            "MAX_S": "1.2"
+          }
+        },
+        {
+          "name": "life resumes",
+          "does": "the light goes and every idle carries on from where it stopped, one beat behind t",
+          "trigger": "OFF_S before the beat's end",
+          "dials": {
+            "OFF_S": "0.18"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "the lit stretch's comet head (LIT.GLOW_K / LIT.HEAD_K, LIT.GLOW_A)",
+          "became": "the lit point",
+          "record": "content/video_engine/scripts/species/lit_stretch.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "the relight's sunflower (PS.RELIGHT_COL)",
+          "became": "the light's colour",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "E49's idle clock (kinetics/idle.mjs idleXf)",
+          "became": "the life clock it stops",
+          "record": "content/video_engine/scripts/kinetics/idle.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/freeze.mjs",
+        "object": "FREEZE"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/freeze.mjs",
+        "symbol": "paintFreeze"
+      },
+      "doctrine": [
+        "E99 s99",
+        "E99 s91",
+        "E99 s71",
+        "E49",
+        "P69 T49"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "freeze-trough",
+        "test": "content/video_engine/tests/kinetics/freeze.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "species:life",
       "axis": "species",
       "token": "life",

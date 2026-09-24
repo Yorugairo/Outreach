@@ -650,14 +650,14 @@
           "source": ".claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md (T8b)"
         }
       ],
-      "does": "A `panels` page (2-4 charts, one scale, E79) changes focus on a word: a layout (row, stack, quad, free) and a role per panel (active, receded, hidden), in one move; receded panels scale back, dim and blur but stay.",
+      "does": "A `panels` page (2-4 charts, line or bars, one scale per unit, E79) changes focus on a word: a layout (row, stack, quad, free) and a role per panel (active, receded, hidden), in one move; receded panels scale back, dim, blur, stay.",
       "when": null,
       "when_source": null,
       "serves": [
         "COMPARES"
       ],
       "author": {
-        "key": "species[] {\"kind\": \"panel_focus\", \"at\", \"dur\", \"layout\": \"row|stack|quad|free\", \"roles\" | \"active\" | \"hidden\", \"recede\"?: {\"scale\", \"dim\", \"blur\"}, \"region\"?, \"boxes\"?} on a page built from a `panels` object; other species take `panel: <i>`",
+        "key": "species[] {\"kind\": \"panel_focus\", \"at\", \"dur\", \"layout\": \"row|stack|quad|free\", \"roles\" | \"active\" | \"hidden\", \"recede\"?: {\"scale\", \"dim\", \"blur\"}, \"region\"?, \"boxes\"?} on a page built from a `panels` object; other species take `panel: <i>`; a panel is {sub, series} (line, the default) or {sub, builder: \"bars\", unit, bars: [{label, value | [lo, hi]}]} (P69 T8d); on a bars panel a figure, chart_to compare|park and a pointing species (callout, ring: target.panel) land, and build_to / undraw / bracket / spread / span / lit_stretch are refused by name; a bars panel is 16:9 only",
         "example": "{\"kind\": \"panel_focus\", \"at\": 14.0, \"dur\": 1.1, \"layout\": \"quad\", \"roles\": [\"receded\", \"active\", \"receded\", \"receded\"]}",
         "example_source": "content/video_engine/tests/golden/build_golden_sources.py (panels_quad_grow)",
         "check": "species"
@@ -676,6 +676,14 @@
           "does": "every panel's box moves to its cell by one translate plus uniform scale; a box of another aspect is the chart re-laid out at that width, words at their size - a lone panel spans the plot region",
           "trigger": "the species' `at`, over `dur`",
           "dials": null
+        },
+        {
+          "name": "a bars panel holds its bars",
+          "does": "a bars panel shown larger than its home is rebuilt at that scale, so its bars stay at most 196 px on the stage while its words grow with the box (E99 s96)",
+          "trigger": "every frame of the move, by the pose's scale",
+          "dials": {
+            "LPBAR.W_PX": "196"
+          }
         },
         {
           "name": "the focused sharpen",
@@ -722,6 +730,16 @@
           "token": "free",
           "means": "Layout: a box per panel (stage fractions); the grown state.",
           "source_set": null
+        },
+        {
+          "token": "bars",
+          "means": "`builder: bars` - a panel drawn by the bars builder: its bars (at most 196 px), each value on its bar with its unit, the zero line.",
+          "source_set": null
+        },
+        {
+          "token": "range",
+          "means": "A bar `value: [lo, hi]` - drawn to its near end, a lighter dashed band to the far end, the range printed as stated (\"+55–60%\"), never a midpoint.",
+          "source_set": null
         }
       ],
       "dials": null,
@@ -736,7 +754,8 @@
         "E79",
         "E99 s106",
         "P69 T8b",
-        "P69 T8c"
+        "P69 T8c",
+        "P69 T8d"
       ],
       "status": "wired",
       "proof": {

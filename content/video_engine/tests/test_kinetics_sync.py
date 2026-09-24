@@ -51,7 +51,10 @@ SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span",
            "trace",     # P57 T18 / R26-95: the route on a still (the still life's redraw and the opt-in bowed hop), promoted the same way - it imports nothing, so its region sits last, after callout's
            "spotlight", # P57 T19 / R26-96: the LIGHT (E56 - a picture's focus is the light, and its own region carries the life check), promoted the same way and for the same reason; it imports nothing either, so its region sits after trace's
            "figure",    # P57 T20 / R26-98: E50's written number - a PAGE species (PAGE_PAINTERS.figure), so its region sits with span's and compare's, BEFORE paintPerform closes over it, and its builder stays in the engine's buildPerform
-           "spiral"]    # P57 T22 / R26-101: THE PAGE VORTEX, both directions in one module (the row's proposal, taken) - neither a kind nor a dock payload but a page TRANSITION, so it registers no painter and the ledger slot calls lpSpiral by name; its region sits where the inline vortex did, before paintLedger, and it imports squash's scaleBy, whose region is far earlier
+           "spiral",    # P57 T22 (its note follows)
+           "lit_stretch",   # P69 T36: the light that travels a stretch of the line - a PAGE species (PAGE_PAINTERS.lit_stretch), its region right after span's, whose edge law it imports
+           "freeze"]    # P69 T49: the freeze beat - a stage species (SPECIES_PAINTERS.freeze) whose life clock the engine's idles read
+                        # P57 T22 / R26-101: THE PAGE VORTEX, both directions in one module (the row's proposal, taken) - neither a kind nor a dock payload but a page TRANSITION, so it registers no painter and the ledger slot calls lpSpiral by name; its region sits where the inline vortex did, before paintLedger, and it imports squash's scaleBy, whose region is far earlier
                               # `verdict` and `checklist` (P55 T7) are the verdict stack (a dock payload) and the test card (a chart-dock form),
                               # promoted from inline engine code; neither registers a painter - the dock slot calls them by name.
                               # `breakthrough` (P50 T10/T13) is a third that registers no painter: the burst is a PAGE

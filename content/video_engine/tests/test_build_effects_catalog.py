@@ -408,11 +408,13 @@ def test_every_wired_card_is_in_a_recipe():
     # beat plays them yet, so they wait here rather than in an invented recipe. P69 T8b's panel focus
     # (page_species:panel_focus) is tested alone in test_ledger_panels.py until row 21 plays it. P69 T36's lit stretch
     # (page_species:lit_stretch) is tested alone in test_lit_stretch.py until a recipe composes it (T44's epoch walk).
+    # P69 T49's freeze beat (species:freeze) is tested alone in test_freeze_beat.py until a committed beat plays it
+    # (the plan names row 18's turn); no recipe is invented for it here.
     assert uncovered == ["dock_option:moves", "dock_option:place", "page_enter:surface", "page_species:lit_stretch",
                          "page_species:panel_focus",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:domain", "plate_option:readability",
-                         "plate_option:room"], uncovered
+                         "plate_option:room", "species:freeze"], uncovered
     assert excluded == ["kinetics:arap", "kinetics:camera", "kinetics:chartxf", "kinetics:clothoid", "kinetics:contour",
                         "kinetics:ease", "kinetics:homography", "kinetics:ink", "kinetics:labelfit",
                         "kinetics:morph_a", "kinetics:page_surface", "kinetics:spring", "kinetics:squash",
