@@ -9762,6 +9762,24 @@ async function mount(doc) {
      corners). [DERIVED: BRAVOS-LONGFORM-CHART-SPEC.md, "Bars, vertical hero (<=3)": 196 px on the 1920 stage (10.2 % of
      the frame), w/pitch 196 / 442 = 0.44 - bubbles 0008; ours measured 405 px] */
   const LPBAR = Object.freeze({ W_PX: 196, PITCH_RATIO: 0.44 });
+  /* P69 T8d - A RANGE BAR (`ledger_page.bar_range`, E99 s100's honesty: the figures written, the geometry true). A bar
+     whose value is `[lo, hi]` ("+55-60%" in the source) STANDS at its near end - the part every source guarantees - and a
+     lighter BAND of the bar's own ink runs from there to the far end, its edge dashed (a dashed edge is a bound, never a
+     comparator's solid rule, E53 s6); the value is written over the band's far end as the source states the range. The
+     band grows with its bar on the one clock (scaled about the same zero), so no frame shows a height the page does not
+     print. `ranges` absent: the page as it was, to the byte. */
+  const LPBAR_RANGE = Object.freeze({ FILL_A: 0.34, EDGE_A: 0.9, EDGE_PX: 2, DASH: "7 6", TUCK: 6 });   /* TUCK: units the band runs under its bar's rounded top */
+  const LPBAR_PANEL = Object.freeze({ TOP: 40, TICK_U: 24, TICK_ROOM: 1.8, FRAME_AIR: 8 });   /* P69 T8d: a bars panel's plot top (the line
+     builder's own 40), one y tick per TICK_ROOM label heights of plot (6 at most, as a page), and the long form's frame kept FRAME_AIR over its values */
+  const lpBarBand = (st, b) => {   /* laid in BEFORE its bar, so the bar paints over the tuck; grown by the bar's own transform */
+    const tuck = Math.min(LPBAR_RANGE.TUCK, b.h), y0 = b.neg ? b.base + b.h - tuck : b.base - b.hr, hh = b.hr - b.h + tuck;
+    const w = LPBAR_RANGE.EDGE_PX / (st.stagePx > 0 ? st.stagePx : 1);
+    const el = lpEl("rect", "bar-band", st.chart, { x: b.x.toFixed(1), y: y0.toFixed(1), width: b.bw.toFixed(1), height: Math.max(0, hh).toFixed(1), rx: 6,
+      "stroke-width": w.toFixed(3), "stroke-dasharray": LPBAR_RANGE.DASH, "stroke-linejoin": "round" });
+    el.style.fill = b.col; el.style.fillOpacity = String(LPBAR_RANGE.FILL_A); el.style.stroke = b.col; el.style.strokeOpacity = String(LPBAR_RANGE.EDGE_A);
+    el.style.transformOrigin = "0 " + b.base.toFixed(1) + "px"; el.style.transform = "scaleY(0)";
+    return el;
+  };
   /* ONE viewBox unit of a page's chart in STAGE px, at the page's rest pose: the chart's CSS box (a share of the page,
      whose box IS the stage's - `.lp` is 90.91 % of a 110 % world - or stage px outright on a portrait page) fitted into
      its viewBox the browser's way (uniform, `meet`), times the page's resting scale (the punch, `rest`). Pure in the
@@ -9945,7 +9963,9 @@ async function mount(doc) {
     const XF = formOf(pg, "extruded_bar");   /* P58 T5: opt-in (`;form=extruded_bar`); null is today's page, to the byte */
     const SOFT = st.barStyle === "soft" ? LPBAR_SOFT.SHOULDER_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0;   /* P69 T10b: the shoulder, in this chart's units (0: the page as it was) */
     const n = Math.max(1, st.vals.length);
-    const lo0 = Math.min(0, ...st.vals), hi0 = Math.max(0, ...st.vals);
+    const RNG = Array.isArray(pg.ranges) ? pg.ranges : null;   /* P69 T8d: [lo, hi] per bar (null: a single value) */
+    const ends = RNG ? RNG.flatMap((r) => (Array.isArray(r) ? r.map(Number) : [])) : [];
+    const lo0 = Math.min(0, ...st.vals, ...ends), hi0 = Math.max(0, ...st.vals, ...ends);
     /* THE BREAKTHROUGH (2026-09-10): a bars page may STATE its scale (`axes.domain`) that one value cannot fit. That bar builds
        to the COMPARATOR's level (the tallest honest bar) with the others, holds, then runs by one of two mechanics (LPX.BT_*):
          burst (Bravos 8:02): it shoots to its true height WHILE the scale rewrites to the nice ceiling above it - the honest
@@ -9974,7 +9994,8 @@ async function mount(doc) {
     const XLAB = P ? 52 : LF ? LF.xlab_dy : 34;   /* the category names' baseline under the plot floor */
     const requestedGutter = Number((pg.axes || {}).left_gutter);
     const leftGutter = Number.isFinite(requestedGutter) ? Math.max(defaultGutter, requestedGutter) : defaultGutter;
-    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : 90, x0 = leftGutter, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
+    const PN = st.panel != null && !P;   /* P69 T8d: a landscape bars PANEL - its plot starts where a line panel's does, its ticks thinned by room */
+    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90, x0 = leftGutter, x1 = P ? G.W - 30 : st.panel != null ? G.W - 20 : 980, gap = 0.34, unit = pg.unit || "";   /* P69 T8d: a panel's viewBox is its box's width */
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
@@ -9990,7 +10011,8 @@ async function mount(doc) {
     /* six divisions, not the default five: lpNiceStep's 1-2-5 ladder rounds 21.8 up to 50, which left the tariff
        short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
        positive bar. Asking for six lands step 20 and five labelled ticks. */
-    const ticks0 = lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26, 6);
+    const ticks0 = lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26,
+      PN ? Math.max(2, Math.min(6, Math.floor((bottom - top) / ((LF ? LF.tick : LPBAR_PANEL.TICK_U) * LPBAR_PANEL.TICK_ROOM)))) : 6);
     if (LF) st.lfPanel = { x: x0 - 20, y: top, w: x1 - x0 + 40, h: bottom - top };   /* P69 T8: the panel spans the tick rules' own extent, the scale's top to its floor */
     /* the comparator: the tallest bar the stated scale holds - the breaking bar first stands at ITS level, a bar like the others */
     const honest = st.vals.filter((v) => !(brk && v > hi)), comp = honest.length ? Math.max(...honest) : hi;
@@ -10009,6 +10031,9 @@ async function mount(doc) {
       /* P58 T5 (`;form=extruded_bar`): the prism is built HERE, before the face, so all three of its polygons
          paint behind the bar's own rect. Not one label, capsule, tick or axis moves for it. */
       const ex = XF ? extrudeFaces(st, { x, bw, base, h, neg, P, cls: (neg ? " neg" : " pos") + (i === st.emph ? " emph" : "") }) : null;
+      const rg = RNG && Array.isArray(RNG[i]) ? RNG[i].map(Number) : null;   /* P69 T8d: the band from the bar's end to the range's far end */
+      const far = rg ? (neg ? Math.min(rg[0], rg[1]) : Math.max(rg[0], rg[1])) : null, hr = rg ? Math.max(h, Math.abs(my(far) - base)) : h;
+      const band = rg ? lpBarBand(st, { x, bw, base, h, hr, neg, col: LP_PAL[(pg.colors || [])[i]] || (neg ? "var(--lp-neg)" : "var(--lp-pos)") }) : null;
       const foot = SOFT ? lpEl("rect", "lp-bar-foot", st.chart, { x: x.toFixed(1), y: 0, width: bw.toFixed(1), height: 0 }) : null;   /* P69 T10b: squares the zero end (lpBarSoftPaint) */
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
         { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: SOFT ? SOFT.toFixed(3) : 6 });   /* grows from the zero baseline, up or down */
@@ -10022,11 +10047,12 @@ async function mount(doc) {
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + XLAB, "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
-      const vy = neg ? base + h + (P ? 62 : 26) : base - h - (P ? 22 : 14);
+      const vy = neg ? base + hr + (P ? 62 : 26) : base - hr - (P ? 22 : 14);   /* a range's value stands over its band's far end (hr: h without one) */
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
       val.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
-      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h, over, v, bx: x, bw, track, stamp, ex };
+      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + hr : base - hr, over, v, bx: x, bw, track, stamp, ex };
       if (foot) rec.foot = foot;
+      if (band) { rec.band = band; rec.range = rg; }
       if (over && btMode === "stack") {   /* the top gridline SNAPS as the bar passes: its two broken ends kick up beside the bar */
         const mk = (ax, bx2) => lpEl("line", "grid snap", st.chart, { x1: ax.toFixed(1), y1: top.toFixed(1), x2: bx2.toFixed(1), y2: (top - 16).toFixed(1), stroke: "var(--lp-chalk)", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 });
         rec.snap = [mk(x - 4, x - 24), mk(x + bw + 4, x + bw + 24)];
@@ -11332,27 +11358,31 @@ async function mount(doc) {
      P69 T8c: `f` > 0 is the same chart re-laid out for a box `f` times its home's aspect - the viewBox `f` times as wide
      at the same height (the builder's plot runs L..W-R, so the data re-project to the new width and every word keeps its
      size in units), the svg `f` times its box's width, so the box's pose stays one translate and one uniform scale. */
-  const lpBuildPanel = (st, i, box, f) => {
+  const lpBuildPanel = (st, i, box, f, kz) => {
     const { pg, list, P, ps, a, T, pageDom } = st.panelCtx, p = list[i], hb = st.panelHome[i];
+    const BARS = p.builder === "bars";   /* P69 T8d: a bars panel - the bars builder in the same box (kz: its grown scale, for the 196 px cap) */
     {
       const W0 = P ? hb.w : a * (LP_PANELS.VB[1] + LP_PANELS.SUB_U);   /* ledger_page.panel_view_w: the home viewBox's width */
       const geom = P ? { W: hb.w, H: hb.h } : { W: f ? W0 * f : W0, H: LP_PANELS.VB[1] };
       const top = P ? 0 : LP_PANELS.SUB_U;   /* the SUB BAND over a landscape panel's plot (a portrait panel's builder keeps its own 90 px, and a stacked cell has none to spare) */
       const svg = lpEl("svg", "lp-chart lp-panel-chart", box, { viewBox: "0 " + (-top) + " " + geom.W.toFixed(3) + " " + (geom.H + top).toFixed(3) });
       svg.style.left = "0"; svg.style.top = "0"; svg.style.width = f ? (100 * f).toFixed(4) + "%" : "100%"; svg.style.height = "100%";
-      const axes = Object.assign({}, p.axes || {}, { ylabel: String(p.sub || "") }, pageDom && !p.independent ? { domain: pageDom } : {});
-      const pgI = { builder: "dense-line", series: p.series || [], axes, sub: p.sub || "", title: pg.title, badges: pg.badges || [] };
+      const axes = Object.assign({}, p.axes || {}, { ylabel: String(p.sub || "") }, pageDom && !p.independent && !BARS ? { domain: pageDom } : {});
+      const pgI = BARS ? { builder: "story", labels: p.labels || [], values: p.values || [], value_strings: p.value_strings || [], colors: p.colors || [],
+                           unit: p.unit || "", axes, sub: p.sub || "", title: pg.title, badges: [], ...(Array.isArray(p.ranges) ? { ranges: p.ranges } : {}) }
+        : { builder: "dense-line", series: p.series || [], axes, sub: p.sub || "", title: pg.title, badges: pg.badges || [] };
       const S = { root: st.root, page: st.page, chart: svg, box, geom, portrait: P, seed: st.seed + 97 * (i + 1), edge: st.edge, field: st.field, rail: st.rail, wide: f || 1,
-                  stagePx: ps * Math.min(hb.w / W0, hb.h / (geom.H + top)), lfType: null, keyPills: null, readability: st.readability, barStyle: null, cardK: 1,
+                  stagePx: ps * Math.min(hb.w / W0, hb.h / (geom.H + top)) * (kz || 1), lfType: null, keyPills: null, readability: st.readability, barStyle: null, cardK: 1,
                   bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: st.inlineBadges || {}, linePts: [],
-                  marks: [], markBy: {}, badges: [], inkEls: [], glyphs: [], titleGlyphs: [], rtGlyphs: [], vals: [], vstr: [], emph: -1,
-                  kind: "dense-line", scene: st.scene, panel: i, pg: pgI, perform: null, boardCentre: st.boardCentre };
+                  marks: [], markBy: {}, badges: [], inkEls: [], glyphs: [], titleGlyphs: [], rtGlyphs: [], vals: BARS ? p.values || [] : [], vstr: BARS ? p.value_strings || [] : [],
+                  emph: BARS && Number.isInteger(p.emphasize) ? p.emphasize : -1,
+                  kind: BARS ? "story" : "dense-line", scene: st.scene, panel: i, pg: pgI, perform: null, boardCentre: st.boardCentre };
       if (T) {   /* the long form's preset, at THIS panel's rendered scale: its words read at the preset's px in its home box */
         const u = ps * hb.w / W0, g = lpLongformGeom(T, 0, 560 * u, 560 * u);   /* one chart unit in rendered px: the panel's width over its viewBox's (the home's: a re-laid-out build keeps its words) */
         S.lfType = Object.assign({}, g, { form: axes.tag_form || "full" });
         for (const k of ["tick", "tag", "chip", "value"]) svg.style.setProperty("--lf-" + k, g[k].toFixed(3) + "px");
       }
-      buildLedgerLine(S, pgI);
+      if (BARS) lpBuildBarsPanel(S, pgI); else buildLedgerLine(S, pgI);
       if (T) lpLongformPlot(S);
       /* the panel's GROUND: its whole box in the page's own ground colour, under everything it draws - so a panel in front
          (a focus's active one) occludes the receded ones behind it, never shows their words through its margins */
@@ -11374,18 +11404,40 @@ async function mount(doc) {
       return S;
     }
   };
+  /* P69 T8d - A BARS PANEL: buildLedgerBars, unchanged, in the panel's svg (its x1 runs to the viewBox's width); then the
+     panel's SUB takes the y label's corner as a line panel's does, and its PLOT is the bars' own frame (the tick rules'
+     extent - what the camera, the focus and the box fixture read as `S.plot`) */
+  const lpBuildBarsPanel = (S, pgI) => {
+    buildLedgerBars(S, pgI);
+    const sc = S.scale || {}, G = S.geom;
+    lpYLabel(S, pgI, (sc.x0 || 0) - 20, 0);
+    if (S.lfPanel) {   /* the long form's framed plot holds its values: the tallest bar's number is inside the frame, never on its edge */
+      const fs = S.lfType ? S.lfType.value : 26;
+      const tops = S.bars.filter((b) => !b.neg && b.val).map((b) => +b.val.getAttribute("y") - 0.8 * fs);
+      const pill = S.callout && S.callout.querySelector("rect.cpill");
+      if (pill) tops.push(+pill.getAttribute("y"));
+      const y = Math.max(2, Math.min(S.lfPanel.y, ...tops.map((v) => v - LPBAR_PANEL.FRAME_AIR)));
+      S.lfPanel = Object.assign({}, S.lfPanel, { y, h: S.lfPanel.h + (S.lfPanel.y - y) });
+    }
+    const top = sc.my ? sc.my(sc.y1) : 0, bot = sc.my ? sc.my(sc.y0) : G.H;
+    S.plot = { L: (sc.x0 || 0) - 20, R: G.W - ((sc.x1 || G.W) + 20), T: top, B: bot, W: G.W, x0: 0, x1: 1, y0: sc.y0, y1: sc.y1, log: false };
+  };
   /* P69 T8c - the build panel i stands in for pose `q`: its home build while the box keeps the home's aspect (T8b's grow,
      the recede), else the build re-laid out at the box's aspect - built once per width and kept (a function of the
      width, so a seek paints what play paints) - swapped onto the box, the one it replaces hidden */
   const lpPanelFor = (st, i, q) => {
     const V = st.panelVar[i], hb = st.panelHome[i];
     const f = st.panelFill && q.b.h > 0 && q.b.w > 0 ? (q.b.w / q.b.h) / (hb.w / hb.h) : 1;
+    const wide = Math.abs(f - 1) > LP_PANELS.WIDE_EPS;
+    /* P69 T8d: a BARS panel shown LARGER than its home (a grow) is rebuilt at that scale, so its bars keep the 196 px cap on
+       the stage (E99 s96) - the bars narrow in the chart's units as the box grows; a receded one is smaller, and keeps home */
+    const kz = V.home.kind === "story" ? Math.max(1, wide ? q.b.h / hb.h : q.b.w / hb.w) : 1, grown = kz > 1 + LP_PANELS.WIDE_EPS;
     let S = V.home;
-    if (Math.abs(f - 1) > LP_PANELS.WIDE_EPS) {
-      const key = f.toFixed(5);
+    if (wide || grown) {
+      const key = (wide ? f : 1).toFixed(5) + (grown ? "@" + kz.toFixed(4) : "");
       S = V.cache.get(key);
       if (!S) {
-        S = lpBuildPanel(st, i, V.home.box, +key);
+        S = lpBuildPanel(st, i, V.home.box, wide ? +f.toFixed(5) : 1, grown ? +kz.toFixed(4) : 1);
         V.cache.set(key, S);
         for (const [k2, S2] of V.cache) {   /* the oldest builds go first, never the one on the box */
           if (V.cache.size <= LP_PANELS.WIDE_KEEP) break;
@@ -12821,7 +12873,7 @@ async function mount(doc) {
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (sp.to !== "compare") continue;
       const fg = compareFigure(PF.figures || [], sp), rec = fg && fg.bar;
-      if (!rec || !rec.bar || rec.over || st.bt) continue;   /* a breaking bar's height is the breakthrough's to write */
+      if (!rec || !rec.bar || rec.over || st.bt || rec.range) continue;   /* a breaking bar's height is the breakthrough's to write; a RANGE bar (P69 T8d) states two values, and one comparator is not both */
       const m = (sp.metric || {}).value, c = (sp.comparator || {}).value;
       if (!lpMorphNum(m) || !lpMorphNum(c) || !lpMorphNum(rec.v) || !lpMorphSame(m, rec.v) || lpMorphSame(m, c)) continue;
       if (c !== 0 && (c < 0) !== (rec.v < 0)) continue;   /* a comparator across zero is another bar, not this one moved */
@@ -13765,6 +13817,7 @@ async function mount(doc) {
       cs.bars.forEach((bb, i) => {
         const k = expoOut(clamp01((cb - i * 0.1) / 0.55));
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
+        if (bb.band) bb.band.style.transform = bb.bar.style.transform;   /* P69 T8d: the range's band grows with its bar, about the same zero */
         if (bb.ex) bb.ex.set(k);   /* P58 T5: the prism grows WITH its face - the same u, one clock, no second state */
         bb.lab.setAttribute("opacity", clamp01((cb - i * 0.1 - 0.3) / 0.2).toFixed(2));
         bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));

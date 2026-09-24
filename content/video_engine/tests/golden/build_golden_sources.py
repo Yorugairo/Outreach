@@ -3557,6 +3557,51 @@ SURFACES.update({"panels-resize": panels_resize})
 FRAME_T.update({"panels-resize": PANELS_RESIZE_AT + PANELS_RESIZE_DUR * 0.5})   # u 0.50: panel 1 half way to its slot
 
 
+# ---- P69 T8d (E99 s104 amended x2): A PANEL MAY BE BARS, AND A BAR MAY CARRY A RANGE ----------------------------------
+#   panels-mixed-grow  row 21's shape as a quad - two line panels and two BARS panels (the wafer ratio, 1x vs 3x; the
+#                      contract prices, one of them the range "+55–60%") - then one `panel_focus` on a word: the wafer
+#                      bars grow to the page while the other three recede, read at u 0.50. The bars hold Bravos's 196 px
+#                      on the stage as their panel grows (rebuilt at the pose's scale), each value on its bar
+#   bars-range         a bars page whose first bar is a RANGE: the bar at +55, a lighter band to +60 with a dashed edge,
+#                      "+55–60%" written over the band - never the 57.5 midpoint `ev-dram-contract-v1` printed
+# The figures are COPIED from `ev-hbm-wafer-ratio-bars-v1` and `ev-dram-contract-v1` (whose note "+55-60%" is the
+# range restated); the two lines are `_panels_four`'s synthetic shapes. Surfaces, not claims about the world.
+T8D_WAFER = [{"label": "Standard DRAM", "value": 1, "color": "deemph"}, {"label": "HBM (stacked dies)", "value": 3, "color": "crimson"}]
+T8D_DRAM = [{"label": "Conventional DRAM", "value": ["+55", "60"], "color": "deemph"},
+            {"label": "Server DRAM", "value": "+60", "color": "deemph"}, {"label": "Consumer DRAM", "value": "+89", "color": "crimson"}]
+T8D_DRAM_SRC = "TrendForce - Counterpoint - quarterly contract price change (copied from ev-dram-contract-v1 for the golden)"
+MIXED_GROW_AT, MIXED_GROW_DUR = 17.0, 1.2   # the four panels have built on their own turns by 4.4 + 4 x 3.0 = 16.4
+
+
+def _panels_mixed() -> dict:
+    four = _panels_four()
+    lines = four["panels"]
+    return dict(four, title="Two lines and two bars, one page",
+                panels=[lines[0], {"sub": "Wafer capacity per gigabyte", "builder": "bars", "unit": "x", "bars": json.loads(json.dumps(T8D_WAFER))},
+                        lines[2], {"sub": "Memory contract prices, quarter over quarter", "builder": "bars", "unit": "%",
+                                   "bars": json.loads(json.dumps(T8D_DRAM))}])
+
+
+def panels_mixed_grow() -> tuple[dict, dict]:
+    grow = {"kind": "panel_focus", "at": MIXED_GROW_AT, "dur": MIXED_GROW_DUR, "layout": "row", "active": [1]}
+    return _panels_page(_panels_mixed(), [grow], "Golden: a mixed quad, the wafer bars growing while the rest recede")
+
+
+def bars_range() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    series = {"title": "Memory contract prices, quarter over quarter", "sub": "2026 - HBM, DRAM and NAND essentially sold out for the year",
+              "src": T8D_DRAM_SRC, "unit": "%", "bars": json.loads(json.dumps(T8D_DRAM))}
+    page = BST.stamp_full_stage(LPG.build_spec(series, "bars", None, "right"))
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: a range bar - the bar at +55, the band to +60, the range written", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({"panels-mixed-grow": panels_mixed_grow, "bars-range": bars_range})
+FRAME_T.update({"panels-mixed-grow": MIXED_GROW_AT + MIXED_GROW_DUR * 0.5,   # u 0.50: the wafer bars half grown, the rest half receded
+                "bars-range": 9.0})                                           # the bars built (4.4 + 3.0), the values landed
+
+
 # ---- P69 T36 / E99 s99: THE LIT STRETCH - a light that TRAVELS down the fall on its word -----------------------------
 # Steel and Paper H row 5's own page (`ledger:ev-railway-index-v1:line:139:right`, `idle=live`, full stage, 16:9) and
 # its own sentence: "Railways in the 1840s drew a quarter-billion pounds ... then crashed by nearly two-thirds." The

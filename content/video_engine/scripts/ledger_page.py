@@ -11,8 +11,9 @@ line|bars|race|decline|progress) and s9.28 (surface x builder are two axes). P35
 2 when the series is not a page (the message names the file and every failing rule).
 Input shapes (every one needs ``title`` and a non-empty ``src``):
   story    {"bars": [{"label", "value", "color", "note"?}]}   <= STORY_MAX_VALUES
+           (P69 T8d: a value may be a RANGE [lo, hi] - the bar at its near end, a band to the far one, written "lo–hi")
   dense    {"series": [{"label"|"name", "color", "pts": [[x, y], ...]}], + AXES_KEYS}
-           or {"panels": [{"sub", "series": [...]}]}
+           or {"panels": [{"sub", "series": [...]} | {"sub", "builder": "bars", "unit", "bars": [...]}]}
   tiers    {"tiers": [{"name", "unit", "series"|"pts"|"bars", + AXES_KEYS}], + AXES_KEYS}
            E79: same-unit tiers share ONE scale by default; ``independent: true`` (on the page, or on
            one tier) declares unrelated measures on their own scales. Undeclared same-unit tiers on
@@ -77,6 +78,14 @@ TIERS_MIN, TIERS_MAX = 2, 4
 # inside its own box, and the boxes move by FOCUS STATES (`panel_focus`, the compiler's) - see `panel_layout`.
 PANELS = "panels"
 PANELS_MIN, PANELS_MAX = 2, 4
+# P69 T8d (E99 s104 amended x2): a panel names its BUILDER - `line` (the default: T8b's panel) or `bars` (row 21's wafer
+# ratio and its contract prices) - and a bar's value may be a RANGE `[lo, hi]` (the source says "+55-60%"): the bar
+# stands at lo, a lighter band runs lo -> hi, and the page writes the range as the source states it, never a midpoint.
+PANEL_LINE, PANEL_BARS = "line", "bars"
+PANEL_BUILDERS = (PANEL_LINE, PANEL_BARS)
+BARS_PAD = 0.14   # the bars builder's own air on the side away from zero (the engine's `pad = (hi0 - lo0) * 0.14`)
+RANGE_DASH = "–"   # a range is written lo<en dash>hi ("+55-60%" in the source, "+55–60%" on the page)
+REPRESENTATIVE_SEP = "+"   # page-boxes.v1.json: a builder's SECOND representative is filed `<builder>+<shape>` (T8d: panels+bars)
 # `treemap` (P50 T6): the CENSUS page, under E53 s1's second amendment (ruled 2026-09-10).
 # `object` is the page as a WORKING surface rather than an evidence surface: it draws
 # a registered prop in ink on the cream instead of a chart. Same page clock, same
@@ -168,6 +177,57 @@ def _points(entry: dict) -> list:
 
 def _bars(series: dict) -> list[dict]:
     return [b for b in series.get("bars") or [] if isinstance(b, dict)]
+
+
+# ---- P69 T8d: a bar's value may be a RANGE [lo, hi] -------------------------------------------------------------------
+def _is_range(value: Any) -> bool:
+    """A bar value written as a list: a RANGE (checked by `bar_value_errors`)."""
+    return isinstance(value, (list, tuple))
+
+
+def bar_range(bar: dict) -> tuple[float, float] | None:
+    """(lo, hi) of a bar whose value is a well-formed RANGE `[lo, hi]`; None for a single value or a malformed one."""
+    v = bar.get("value") if isinstance(bar, dict) else None
+    if _is_range(v) and len(v) == 2:
+        lo, hi = to_number(v[0]), to_number(v[1])
+        if lo is not None and hi is not None:
+            return (lo, hi)
+    return None
+
+
+def range_foot(lo: float, hi: float) -> float:
+    """The value a range's BAR is drawn to - the end NEAREST ZERO, the part every source guarantees (lo for a rise, hi
+    for a fall: a range never straddles zero); the band runs from it to the far end."""
+    return hi if hi <= 0 else lo
+
+
+def range_string(bar: dict) -> str:
+    """The range as the source states it: its two tokens, verbatim, joined by an en dash ("+55" and "60" -> "+55–60")."""
+    lo, hi = bar["value"]
+    return f"{value_string(lo)}{RANGE_DASH}{value_string(hi)}"
+
+
+def bar_value_errors(where: str, bar: dict, unit: str) -> list[str]:
+    """One bar's value: a number, or an honest RANGE - [lo, hi] (two numbers, lo <= hi), on one side of zero (E28: the
+    sign is geometry, and a range across zero has none), and a unit (the range is WRITTEN, and "55-60" is not a
+    figure). The single-value message is the one it always was."""
+    v = bar.get("value")
+    if not _is_range(v):
+        return [] if to_number(v) is not None else [f"{where} value {v!r} is not numeric"]
+    rng = bar_range(bar)
+    if rng is None:
+        return [f"{where} value {list(v)!r}: a RANGE is [lo, hi] - two numbers, as the source states them (P69 T8d)"]
+    lo, hi = rng
+    errors = []
+    if lo > hi:
+        errors.append(f"{where} range {list(v)!r} runs backwards: lo {lo:g} > hi {hi:g} - a range is [lo, hi] (P69 T8d)")
+    if lo < 0 < hi:
+        errors.append(f"{where} range {list(v)!r} straddles zero: a bar's side of the zero line IS its sign (E28), and "
+                      "this range has none - draw the two ends as two bars, or state the range in words")
+    if not _text(unit):
+        errors.append(f"{where} range {list(v)!r} has no unit: the page writes the range as the source states it "
+                      "('+55–60%'), and a range without its unit is not a figure (P69 T8d)")
+    return errors
 
 
 def dense_series(series: dict) -> list[dict]:
@@ -736,11 +796,52 @@ def _validate_panels(series: dict) -> list[str]:
         if not _text(panel.get("sub")):
             errors.append(f"{where} has no 'sub': a panel's sub IS its title line - two plots side by side must say "
                           "which is which")
-        if not _panel_lines(panel):
+        if panel.get("builder", PANEL_LINE) not in PANEL_BUILDERS:   # P69 T8d
+            errors.append(f"{where}: builder {panel.get('builder')!r} is not one of {'|'.join(PANEL_BUILDERS)} (a panel "
+                          "draws a line chart - the default - or a bars chart)")
+        elif panel_is_bars(panel):
+            errors += _validate_bars_panel(series, panel, where)
+        elif panel.get("bars"):
+            errors.append(f"{where} {panel.get('sub')!r} carries 'bars' and is a line panel: a panel of bars says "
+                          "`builder: bars` (P69 T8d) - one panel, one chart")
+        elif not _panel_lines(panel):
             errors.append(f"{where} {panel.get('sub')!r} has no line series ('series': [{{name, pts}}])")
         if "independent" in panel and not isinstance(panel["independent"], bool):
             errors.append(f"{where}: independent must be true or false (E79)")
     return errors + _validate_values(series, "line") + badge_key_conflicts(series)
+
+
+def panel_is_bars(panel: Any) -> bool:
+    """P69 T8d: is this panel drawn by the BARS builder?"""
+    return isinstance(panel, dict) and panel.get("builder") == PANEL_BARS
+
+
+def _panel_bars(panel: dict) -> list[dict]:
+    return [b for b in panel.get("bars") or [] if isinstance(b, dict)] if panel_is_bars(panel) else []
+
+
+PANEL_BARS_REFUSED = ("overflow", "overflow_placeholder", "overflow_capsule", "break_cadence", "series")
+
+
+def _validate_bars_panel(series: dict, panel: dict, where: str) -> list[str]:
+    """P69 T8d: a bars panel is a bars page in a box - 1..STORY_MAX_VALUES bars, each named, each a number or an honest
+    range in the panel's unit. The breakthrough (overflow) rewrites its OWN scale, and a panel's scale is its unit
+    group's (E79), so it is refused here by name; a line series on a bars panel is a second chart."""
+    bars, errors = _panel_bars(panel), []
+    if not bars:
+        return [f"{where} {panel.get('sub')!r} is a bars panel and has no bars ('bars': [{{label, value}}])"]
+    if len(bars) > STORY_MAX_VALUES:
+        errors.append(f"{where}: {len(bars)} bars; a bars chart's ceiling is {STORY_MAX_VALUES}")
+    for key in (k for k in PANEL_BARS_REFUSED if panel.get(k) is not None):
+        errors.append(f"{where}: {key!r} on a bars panel - " + ("a bars panel draws bars, not lines (one panel, one chart)"
+                      if key == "series" else "the breakthrough rewrites its own scale; a panel's scale is its unit "
+                      "group's (E79) - break it on a bars page of its own"))
+    unit = panel_unit(series, panel)
+    for j, bar in enumerate(bars):
+        errors += bar_value_errors(f"{where} bars[{j}]", bar, unit)
+        if not _text(bar.get("label")):
+            errors.append(f"{where} bars[{j}] has no label (one label per datum)")
+    return errors
 
 
 def panel_unit(series: dict, panel: dict) -> str:
@@ -753,11 +854,22 @@ def panel_unit(series: dict, panel: dict) -> str:
 
 
 def _panel_raw_extent(series: dict, panel: dict) -> tuple[float, float] | None:
-    """A panel's data extent, the page's reference rules and any declared ymin / ymax - the card's own inputs."""
-    vals = [to_number(p[1]) for s in _panel_lines(panel) for p in _points(s)]
-    rules = series.get("hlines") or ([series["hline"]] if isinstance(series.get("hline"), dict) else [])
-    vals += [to_number(h.get("y")) for h in rules if isinstance(h, dict)]
-    vals += [to_number(src.get(k)) for src in (series, panel) for k in ("ymin", "ymax") if src.get(k) is not None]
+    """A panel's data extent, the page's reference rules and any declared ymin / ymax - the card's own inputs.
+    P69 T8d: a BARS panel's extent is its bars (both ends of a range), its OWN rules and ymin / ymax, and ZERO - a bar
+    stands on the zero line (E28); the page's rules are its line panels' (a rule in one measure is not drawn across
+    another's bars)."""
+    if panel_is_bars(panel):
+        vals = [0.0]
+        for b in _panel_bars(panel):
+            rng = bar_range(b)
+            vals += list(rng) if rng else [to_number(b.get("value"))]
+        vals += [to_number(h.get("y")) for h in panel.get("hlines") or [] if isinstance(h, dict)]
+        vals += [to_number(panel.get(k)) for k in ("ymin", "ymax") if panel.get(k) is not None]
+    else:
+        vals = [to_number(p[1]) for s in _panel_lines(panel) for p in _points(s)]
+        rules = series.get("hlines") or ([series["hline"]] if isinstance(series.get("hline"), dict) else [])
+        vals += [to_number(h.get("y")) for h in rules if isinstance(h, dict)]
+        vals += [to_number(src.get(k)) for src in (series, panel) for k in ("ymin", "ymax") if src.get(k) is not None]
     nums = [v for v in vals if v is not None]
     return (min(nums), max(nums)) if nums else None
 
@@ -767,49 +879,86 @@ def _padded(lo: float, hi: float, floor_named: bool) -> list[float]:
     return [lo if floor_named else lo - pad, hi + pad]
 
 
-def shared_panel_domain(series: dict) -> list[float] | None:
-    """E79: the ONE y domain every non-independent panel of this page draws on - the card's own rule, verbatim (min
-    and max over the group's data, the reference rules and a declared ymin / ymax, padded 6 % unless ymin names the
-    floor). None when every panel is independent. Pure."""
-    group = [p for p in _panel_entries(series) if isinstance(p, dict) and not _panel_own_scale(series, p)]
+def _bars_padded(lo: float, hi: float) -> list[float]:
+    """P69 T8d: a scale that holds a BAR - the bars builder's own law (buildLedgerBars): zero inside it, BARS_PAD of air
+    on each side that carries data away from zero, none past the zero line itself."""
+    lo, hi = min(0.0, lo), max(0.0, hi)
+    pad = (hi - lo) * BARS_PAD or 1.0
+    return [lo - (pad if lo < 0 else 0.0), hi + (pad if hi > 0 else 0.0)]
+
+
+def _panel_groups(series: dict) -> dict[str, list[dict]]:
+    """E79's groups: the panels that share a scale, by the unit they measure (P69 T8d: panels in different units never
+    share one - a bars panel in `x` beside a line in `%` stands on its own). The declared-own-scale panels are out."""
+    groups: dict[str, list[dict]] = {}
+    for p in _panel_entries(series):
+        if isinstance(p, dict) and not _panel_own_scale(series, p):
+            groups.setdefault(panel_unit(series, p), []).append(p)
+    return groups
+
+
+def _group_domain(series: dict, group: list[dict]) -> list[float] | None:
     ext = [e for e in (_panel_raw_extent(series, p) for p in group) if e]
     if not ext:
         return None
     lo, hi = min(e[0] for e in ext), max(e[1] for e in ext)
+    if any(panel_is_bars(p) for p in group):   # P69 T8d: a group that holds a bar keeps the zero (E28)
+        return _bars_padded(lo, hi)
     return _padded(lo, hi, series.get("ymin") is not None)
+
+
+def shared_panel_domains(series: dict) -> dict[str, list[float]]:
+    """E79: the ONE y domain each unit's non-independent panels draw on - the card's own rule, verbatim (min and max
+    over the group's data, the reference rules and a declared ymin / ymax, padded 6 % unless ymin names the floor), or
+    the bars law when the group holds a bars panel. Empty when every panel is independent. Pure."""
+    out = {}
+    for unit, group in _panel_groups(series).items():
+        dom = _group_domain(series, group)
+        if dom is not None:
+            out[unit] = dom
+    return out
+
+
+def shared_panel_domain(series: dict) -> list[float] | None:
+    """The shared domain of a page whose grouped panels measure ONE unit (T8b's page); None otherwise. Pure."""
+    doms = shared_panel_domains(series)
+    return next(iter(doms.values())) if len(doms) == 1 else None
 
 
 def _panel_own_scale(series: dict, panel: dict) -> bool:
     return series.get("independent") is True or panel.get("independent") is True or _declared_domain(panel) is not None
 
 
-def _panel_domain(series: dict, panel: dict, shared: list[float] | None) -> list[float] | None:
-    """The domain one panel is drawn on: its declared one, else (independent) its own padded extent, else the shared."""
+def _panel_domain(series: dict, panel: dict, shared: dict[str, list[float]]) -> list[float] | None:
+    """The domain one panel is drawn on: its declared one, else (independent) its own padded extent, else its unit's."""
     own = _declared_domain(panel)
     if own:
         return [own[0], own[1]]
     if not _panel_own_scale(series, panel):
-        return shared
+        return shared.get(panel_unit(series, panel))
     ext = _panel_raw_extent(series, panel)
+    if ext and panel_is_bars(panel):
+        return _bars_padded(ext[0], ext[1])
     return _padded(ext[0], ext[1], panel.get("ymin", series.get("ymin")) is not None) if ext else None
 
 
 def panel_scale_warnings(series: dict) -> list[str]:
     """E79 on a panels page: a panel that DECLARES a domain of its own while it shares a unit with the grouped panels
     (no `independent`) - the author's domain stands (E99 s106), and the build says so. Pure."""
-    shared = shared_panel_domain(series)
-    if series.get("independent") is True or shared is None:
+    shared = shared_panel_domains(series)
+    if series.get("independent") is True or not shared:
         return []
     page = series.get("id") or series.get("title") or "page"
-    units = {panel_unit(series, p) for p in _panel_entries(series) if isinstance(p, dict) and not _panel_own_scale(series, p)}
     out = []
     for i, p in enumerate(_panel_entries(series)):
         own = _declared_domain(p) if isinstance(p, dict) else None
-        if own is None or p.get("independent") is True or panel_unit(series, p) not in units:
+        unit = panel_unit(series, p) if isinstance(p, dict) else ""
+        if own is None or p.get("independent") is True or unit not in shared:
             continue
-        if (round(own[0], 9), round(own[1], 9)) != (round(shared[0], 9), round(shared[1], 9)):
+        dom = shared[unit]
+        if (round(own[0], 9), round(own[1], 9)) != (round(dom[0], 9), round(dom[1], 9)):
             out.append(f"E79 {page!s}: panels[{i}] {str(p.get('sub') or '')!r} declares y-domain {_dom_text(own)} while the "
-                       f"other panels in {panel_unit(series, p)!r} share {_dom_text(tuple(shared))} - panels of the same "
+                       f"other panels in {unit!r} share {_dom_text(tuple(dom))} - panels of the same "
                        "measure share one scale; if this is an unrelated measure, declare `independent: true` on it")
     return out
 
@@ -871,12 +1020,15 @@ def _panels_block(series: dict) -> dict:
     its `axes` (the page's shared ones, its x ticks cut to its own span, the reference rules with their NAMES on the
     first panel only - the card's rule, a rule is named once - its unit on the tick labels, and the domain E79 gives
     it). The page's `labels` are the panels' subs: a panel is this page's datum, as a band is a tiers page's."""
-    shared = shared_panel_domain(series)
+    shared = shared_panel_domains(series)
     rules = series.get("hlines") or ([series["hline"]] if isinstance(series.get("hline"), dict) else [])
     named = _panel_rule_home(series)
     out = []
     for i, panel in enumerate(_panel_entries(series)):
         if not isinstance(panel, dict):
+            continue
+        if panel_is_bars(panel):   # P69 T8d: a bars chart in the panel's box
+            out.append(_bars_panel_entry(series, panel, shared))
             continue
         axes = {k: copy.deepcopy(series[k]) for k in PANEL_PAGE_AXES if k in series}
         axes.update({k: copy.deepcopy(panel[k]) for k in AXES_KEYS if k in panel and k not in ("xticks", "domain")})
@@ -900,6 +1052,30 @@ def _panels_block(series: dict) -> dict:
             **({"panel_rule_home": named} if rules else {}),
             **({"axes": axes} if axes else {}),
             "values": [], "value_strings": [], "colors": []}
+
+
+def _bars_panel_entry(series: dict, panel: dict, shared: dict[str, list[float]]) -> dict:
+    """P69 T8d: one BARS panel, normalised as a bars page's own block (`_story_block`'s labels, values, the tokens
+    verbatim, colours, and `ranges` when a bar carries one), its unit (on the entry, which the bars builder reads, and
+    on its axes), its own axes (its comparator rules; never the page's line rules) and the domain E79 gives its unit
+    group. No x ticks and no end tags: a bar's name is under it and its value on it."""
+    bars = _panel_bars(panel)
+    axes = {k: copy.deepcopy(panel[k]) for k in AXES_KEYS if k in panel and k not in ("xticks", "domain")}
+    unit = panel_unit(series, panel)
+    if unit:
+        axes["unit"] = unit
+    dom = _panel_domain(series, panel, shared)
+    if dom is not None:
+        axes["domain"] = [round(dom[0], 6), round(dom[1], 6)]
+    raw = [b.get("value") for b in bars]
+    entry = _with_ranges({"sub": str(panel.get("sub") or ""), "builder": PANEL_BARS, "labels": [b.get("label") for b in bars],
+                          "values": [to_number(v) for v in raw], "value_strings": [value_string(v) for v in raw],
+                          "colors": [b.get("color") for b in bars], "unit": unit, "axes": axes}, bars)
+    if isinstance(panel.get("emphasize"), int) and not isinstance(panel["emphasize"], bool):
+        entry["emphasize"] = max(0, min(panel["emphasize"], len(bars) - 1))
+    if panel.get("independent") is True:
+        entry["independent"] = True
+    return entry
 
 
 # ---- TREEMAP (P50 T6; E53 s1's second amendment, the CENSUS exception, ruled 2026-09-10) ---------
@@ -1254,9 +1430,16 @@ def _validate_shape_for_variant(series: dict, variant: str) -> list[str]:
 def _validate_values(series: dict, variant: str) -> list[str]:
     """Numeric values, one label per datum, named series, [x, y] pairs, story ceiling."""
     errors, bars = [], _bars(series)
+    ranged = [i for i, bar in enumerate(bars) if _is_range(bar.get("value"))]
+    if ranged and pick_builder(series, variant) != "story":   # P69 T8d
+        errors.append(f"bars{ranged} carry a range: a range is a BARS chart's (a bar at its near end, a band to its far "
+                      f"one) - this page draws its values as {pick_builder(series, variant)!r}")
+    if ranged and series.get("overflow") is not None:
+        errors.append(f"bars{ranged} carry a range on a breakthrough page (overflow): the breakthrough shoots ONE value "
+                      "past its stated scale, and a range has two - state the range on a page of its own scale")
+    unit = str(series.get("unit") or "")
     for i, bar in enumerate(bars):
-        if to_number(bar.get("value")) is None:
-            errors.append(f"bars[{i}] value {bar.get('value')!r} is not numeric")
+        errors += bar_value_errors(f"bars[{i}]", bar, unit)   # P69 T8d: a number, or an honest range
         if not _text(bar.get("label")):
             errors.append(f"bars[{i}] has no label (one label per datum)")
     if bars and pick_builder(series, variant) == "story" and len(bars) > STORY_MAX_VALUES:
@@ -1441,9 +1624,23 @@ def _story_block(series: dict) -> dict:
     # a BARS page carries its axes too, so it can declare a comparator rule (`hlines`) - the device that lets the
     # GAP between a reference and a taller bar be drawn instead of subtracted (E53 s6, operator 2026-09-08)
     axes = {k: copy.deepcopy(series[k]) for k in AXES_KEYS if k in series}
-    return {"labels": list(labels), "values": [to_number(v) for v in raw],
-            "value_strings": [value_string(v) for v in raw], "colors": list(colors),
-            **({"axes": axes} if axes else {})}
+    block = {"labels": list(labels), "values": [to_number(v) for v in raw],
+             "value_strings": [value_string(v) for v in raw], "colors": list(colors),
+             **({"axes": axes} if axes else {})}
+    return _with_ranges(block, _bars(series))
+
+
+def _with_ranges(block: dict, bars: list[dict]) -> dict:
+    """P69 T8d: a bars block whose bars carry a RANGE - each range bar's value is the end it is DRAWN to (`range_foot`),
+    its string the range as stated (`range_string`), and `ranges` names both ends per bar (None for a single value).
+    A block with no range is returned untouched - no `ranges` key, the page it always was."""
+    rngs = [bar_range(b) for b in bars]
+    if not any(rngs):
+        return block
+    block["values"] = [range_foot(*r) if r else v for r, v in zip(rngs, block["values"])]
+    block["value_strings"] = [range_string(b) if r else s for r, b, s in zip(rngs, bars, block["value_strings"])]
+    block["ranges"] = [[r[0], r[1]] if r else None for r in rngs]
+    return block
 
 
 def _dense_block(series: dict) -> dict:
@@ -2240,6 +2437,8 @@ def _apply_longform_panels(page: dict) -> dict:
     for _ in range(2):
         scale = _longform_panel_scale(page)
         for panel in page.get(PANELS_KEY) or []:
+            if panel.get("builder") == PANEL_BARS:   # P69 T8d: a bars panel writes no end tags
+                continue
             panel.setdefault("axes", {})["tag_form"] = longform_panel_tag_form(page, panel, axes["type_scale"], scale)
         key = longform_panel_key(page)
         axes.pop("key", None)
@@ -2532,6 +2731,8 @@ PANELS_KEY = "panels"   # page_boxes' per-panel boxes (a panels page only)
 # over its plot - a y label's row, never a title's), so the panel's sub stands inside its own box at any size
 PANEL_SUB_U = 56.0
 PANEL_FLOOR_AIR = 6.0   # rendered px a full-stage panels region stops over its FLOOR (a panel's x ticks are inside its box)
+PANEL_BARS_PLOT = {"L": 40.0, "TB": (90.0, 440.0)}   # P69 T8d: a bars panel's plot in its units - buildLedgerBars' gutter 60
+# less its 20-unit rule overhang, its top and floor; its right edge the viewBox's (a bars panel runs x1 = W - 20, + 20)
 
 
 def default_panel_layout(n: int, aspect: str = "16:9") -> str:
@@ -2630,6 +2831,9 @@ def _panel_plot(box: tuple, spec_panel: dict) -> dict:
     """One panel's plot in stage px: the line builder's own margins inside the panel's box (its viewBox fills it)."""
     x, y, w, h = box
     s = h / (LAND_VIEWBOX[1] + PANEL_SUB_U)   # px per unit: the viewBox is the box's own aspect
+    if (spec_panel or {}).get("builder") == PANEL_BARS:   # P69 T8d: the bars builder's plot - its tick rules' own extent
+        vw, l_u, (t_u, b_u) = w / s, PANEL_BARS_PLOT["L"], PANEL_BARS_PLOT["TB"]   # (gutter less 20, to the viewBox's edge)
+        return _box(x + l_u * s, y + (PANEL_SUB_U + t_u) * s, (vw - l_u) * s, (b_u - t_u) * s)
     vw, l_u, r_u = w / s, LAND_PLOT["L"] * LAND_VIEWBOX[0], LAND_PLOT["R"] * LAND_VIEWBOX[0]
     return _box(x + l_u * s, y + (PANEL_SUB_U + LAND_PLOT["T"] * LAND_VIEWBOX[1]) * s,
                 (vw - l_u - r_u) * s, (LAND_PLOT["B"] - LAND_PLOT["T"]) * LAND_VIEWBOX[1] * s)
@@ -2719,6 +2923,9 @@ def page_ink_key(spec: dict) -> str:
     }
     if spec.get("builder") == PANELS:   # P69 T8b: the panel count lays the boxes out (keyed only here: every other key stands)
         ink["panels_n"] = len(spec.get(PANELS_KEY) or [])
+        kinds = [str(p.get("builder") or PANEL_LINE) for p in spec.get(PANELS_KEY) or [] if isinstance(p, dict)]
+        if PANEL_BARS in kinds:   # P69 T8d: a bars panel's plot is the bars builder's - keyed only when a page has one
+            ink["panel_builders"] = kinds
     # Keep the absent-profile fingerprint byte-compatible; only an opted-in geometry is a new ink
     # variant.  A profile's value must still be keyed because it changes the chart/viewBox and boxes.
     readability = (spec.get("axes") or {}).get("readability")
@@ -2890,6 +3097,22 @@ def _serves_other_tags(entry: dict, other: dict | None, spec: dict) -> bool:
     return entry.get(TAG_INK_KEY) is not None and entry.get(TAG_INK_KEY) != own and other.get(TAG_INK_KEY) == own
 
 
+def _builder_entry(builder: str, geometry: str, ink: str) -> dict | None:
+    """The builder representative's entry in this geometry. P69 T8d: a builder may file a SECOND representative
+    (`<builder>+<shape>` - `panels+bars`, the mixed quad); the one whose ink is this page's answers, else the builder's
+    own (as before, so every ink it never measured falls through exactly as it did)."""
+    fx = fixture()
+    own = fx.get(builder)
+    own = own.get(geometry) if isinstance(own, dict) else None
+    if isinstance(own, dict) and own.get("ink") == ink:
+        return own
+    for name in sorted(n for n in fx if n.startswith(builder + REPRESENTATIVE_SEP)):
+        got = fx[name].get(geometry) if isinstance(fx[name], dict) else None
+        if isinstance(got, dict) and got.get("ink") == ink:
+            return got
+    return own
+
+
 def measured_entry(spec: dict, aspect: str) -> dict | None:
     """The fixture entry that measured THIS page's ink at this aspect, or None.
 
@@ -2904,8 +3127,7 @@ def measured_entry(spec: dict, aspect: str) -> dict | None:
     geometry = box_key(spec, aspect)
     page_entries = measured_pages().get(key)
     entry = page_entries.get(geometry) if isinstance(page_entries, dict) else None
-    builder_entries = fixture().get(str(spec.get("builder")))
-    builder_entry = builder_entries.get(geometry) if isinstance(builder_entries, dict) else None
+    builder_entry = _builder_entry(str(spec.get("builder")), geometry, key)   # P69 T8d: or its second representative
     if not (isinstance(builder_entry, dict) and builder_entry.get("ink") == key):
         builder_entry = _profile_entry(key, geometry) or builder_entry   # N3: a longform representative, by its ink
     if not isinstance(entry, dict):

@@ -117,6 +117,27 @@ SHARE_SERIES = {
 # P69 T8b: `panels` is measured on the two-era object itself (a tracked evidence object, as `share` carries its own
 # series here) - the plain page, so the golden that pins the grown quad stays free to be a focus state
 PANELS_SERIES = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-tnx-two-eras-v3.series.json"
+# P69 T8d: a panels page's SECOND representative - row 21's shape, a quad of two line panels and two BARS panels (one bar a
+# range): a bars panel's plot is the bars builder's, so its boxes are measured apart (`panel_builders` keys the ink). A
+# SHAPE, not figures about the world.
+PANELS_BARS = LPG.PANELS + LPG.REPRESENTATIVE_SEP + LPG.PANEL_BARS
+
+
+def _panels_bars_series() -> dict:
+    xs = [2016 + i / 4 for i in range(33)]
+    return {"title": "Four charts, two of them bars", "sub": "Synthetic panels for the box fixture; not figures about the world",
+            "src": "Synthetic series for the box fixture", "yunit": "%", "independent": True,
+            "xticks": [[2016, "2016"], [2020, "2020"], [2024, "2024"]],
+            "panels": [
+                {"sub": "A line", "series": [{"name": "LINE A", "label": "+38%", "color": "teal",
+                                              "pts": [[round(x, 2), round(4 + 0.03 * i * i, 2)] for i, x in enumerate(xs)]}]},
+                {"sub": "Bars, one unit", "builder": LPG.PANEL_BARS, "unit": "x",
+                 "bars": [{"label": "One", "value": 1, "color": "deemph"}, {"label": "Three", "value": 3, "color": "crimson"}]},
+                {"sub": "Another line", "series": [{"name": "LINE B", "label": "0.9%", "color": "cobalt",
+                                                    "pts": [[round(x, 2), round(1.6 - 0.02 * i, 2)] for i, x in enumerate(xs)]}]},
+                {"sub": "Bars with a range", "builder": LPG.PANEL_BARS, "unit": "%",
+                 "bars": [{"label": "Low", "value": ["+55", "60"], "color": "deemph"}, {"label": "Mid", "value": "+60", "color": "deemph"},
+                          {"label": "High", "value": "+89", "color": "crimson"}]}]}
 # keys a page carries about how it ARRIVES, not about where its ink lands: stripped so every page is
 # measured on the same plain roll-out clock
 TRANSIENT = ("enter", "exit", "mount_s", "morph_s", "spiral_from", "snap_from")
@@ -191,7 +212,7 @@ READ_BOXES = r"""
      chain of its DRAWN segments. The mask over these is what says where the plot is empty. */
   /* `.lp-cell` is the TREEMAP's own cell (a <g> holding the tile and its labels): probe.py's M25
      selector does not name it, and a mask that misses it would call a full census page empty. */
-  const DATA = 'rect.bar, path.ser, path.wedge, text.val, text.callout, rect.cpill, .lp-cell';
+  const DATA = 'rect.bar, rect.bar-band, path.ser, path.wedge, text.val, text.callout, rect.cpill, .lp-cell';   /* P69 T8d: a range's band is data */
   const SEG = 48;
   const dataBoxes = (el) => {
     const r = R(el);
@@ -327,6 +348,8 @@ def representative(builder: str) -> dict:
         return LPG.build_spec(SHARE_SERIES, "share", 0, "right")
     if builder == LPG.PANELS:
         return LPG.build_spec(LPG.load_series(PANELS_SERIES), "line", None, "right")
+    if builder == PANELS_BARS:   # P69 T8d
+        return LPG.build_spec(_panels_bars_series(), "line", None, "right")
     surface, state = GOLDEN_PAGES[builder]
     tl = json.loads((RB.SOURCES / f"{surface}.timeline.json").read_text(encoding="utf-8"))
     world = next(s["world"] for s in tl["scenes"] if (s.get("world") or {}).get("page"))
@@ -336,7 +359,7 @@ def representative(builder: str) -> dict:
     return _strip(page)
 
 
-BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS}))
+BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS}))
 PROFILED = tuple(b for b in BUILDERS if b in LPG.READABILITY_BUILDERS[LPG.LONGFORM])   # N3: dense-line and story
 
 

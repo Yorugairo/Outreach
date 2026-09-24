@@ -640,7 +640,8 @@ SPECIES_WHEN[SPECIES_PANEL_FOCUS] = ("the sentence moves between the charts of a
                                      "word; a layout change (side by side, stacked, quadrants, free) is one move, never a cut")
 PANEL_SPECIES = ("build_to", "undraw", "figure", "bracket", "spread", SPECIES_SPAN, "chart_to", "relight")   # the chart
 # species a panel carries (the page's own - retitle, note, a relit title, the focus - stay the page's)
-PANEL_CHART_TO = ("park",)   # a panel has one chart state; the verbs that need a second one are refused by name
+PANEL_CHART_TO = ("park", "compare")   # a panel has one chart state; the verbs that need a second one are refused by name
+# (P69 T8d: `compare` morphs a FIGURE the panel wrote - no second state - and on a bars panel the bar moves with it, T26a)
 PANEL_FOCUS_KEYS = ("layout", "roles", "active", "hidden", "recede", "region", "boxes")
 # P69 T36 (E99 s99: "a highlight that TRAVELS along a length ... counts as motion") - THE LIT STRETCH, the Bravos
 # harvest v2's rank 1 (A11, with A13's comet head). A PAGE species: a light runs along a stretch of ONE drawn series
@@ -1995,6 +1996,12 @@ def panel_focus_state(entry: dict, n: int, where: str) -> dict:
     return entry
 
 
+# P69 T8d: a BARS panel draws bars - these species draw on a LINE's points (a cap, an unwind, a light along it, a span
+# or a region between two series) and are refused on it by name; a figure, a compare, a park and every pointing species
+# (a callout, a ring, the camera: `target.panel`) land on its bars
+PANEL_BARS_REFUSED = ("build_to", "undraw", "bracket", "spread", SPECIES_SPAN, SPECIES_LIT_STRETCH)
+
+
 def check_panels(world: dict, row_species: list) -> None:
     """P69 T8b: a row's species on a PANELS page - every `panel` (and datum `target.panel`) inside the page's panels,
     every series a panel species names inside ITS panel, a `chart_to` only by a verb a one-state panel can do, and
@@ -2004,6 +2011,10 @@ def check_panels(world: dict, row_species: list) -> None:
     is_panels = ((world or {}).get("kind") == SPECIES_LEDGER and isinstance(page, dict)
                  and page.get("builder") == LPG.PANELS and isinstance(page.get(LPG.PANELS_KEY), list))
     panels = page[LPG.PANELS_KEY] if is_panels else []
+    if ASPECT == "9:16" and any(isinstance(p, dict) and p.get("builder") == LPG.PANEL_BARS for p in panels):   # P69 T8d
+        raise ValueError("a BARS panel is drawn on a 16:9 page: the portrait bars builder lays a whole 1080 x 1920 page out in "
+                         "stage px (its 150 px top, its 59 px values), and a stacked panel is a fraction of that - build the "
+                         "bars as a page of their own at 9:16 (P69 T8d)")
     for sp in (row_species or []):
         if not isinstance(sp, dict):
             continue
@@ -2032,7 +2043,9 @@ def check_panels(world: dict, row_species: list) -> None:
         pi = 0 if pi is None else pi
         if pi >= n:
             raise ValueError(f"{kind}: panel {pi} is past the page's last panel ({n - 1})")
-        k = len(panels[pi].get("series") or [])
+        if panels[pi].get("builder") == LPG.PANEL_BARS:   # P69 T8d
+            _check_bars_panel(kind, sp, tgt if datum else None, pi, panels[pi])
+        k = 1 if panels[pi].get("builder") == LPG.PANEL_BARS else len(panels[pi].get("series") or [])   # a bars panel is series 0
         fields = ([(f, sp[f]) for f in TARGET_SERIES_FIELDS if f in sp]
                   if kind in SERIES_NAMING_SPECIES + (SPECIES_LIT_STRETCH,) else [])   # P69 T36: the light names its panel's series
         if datum and "series" in tgt:
@@ -2042,6 +2055,16 @@ def check_panels(world: dict, row_species: list) -> None:
                 raise ValueError(f"{kind}: {field} {v} is past panel {pi}'s last series ({k - 1})")
         if datum:
             tgt["panel"] = pi   # the pointing species (a callout, a ring, the camera) resolves on the panel it names
+
+
+def _check_bars_panel(kind: str, sp: dict, tgt: dict | None, pi: int, panel: dict) -> None:
+    """P69 T8d: a species on a BARS panel - a line's species refused by name, a datum inside the panel's bars."""
+    if kind in PANEL_BARS_REFUSED or (kind == "relight" and sp.get("ref") == "bracket"):
+        raise ValueError(f"{kind}: panel {pi} is a BARS panel and {kind} draws on a LINE's points - on bars, write the "
+                         "number (figure), morph it (chart_to compare) or point at the bar (callout, ring: target.panel)")
+    nb = len(panel.get("labels") or [])
+    if tgt is not None and isinstance(tgt.get("index"), int) and not 0 <= tgt["index"] < nb:
+        raise ValueError(f"{kind}: target index {tgt['index']} is past panel {pi}'s last bar ({nb - 1})")
 
 
 def _validate_page_fields(kind: str, entry: dict) -> list[str]:
