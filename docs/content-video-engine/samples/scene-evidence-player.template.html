@@ -209,6 +209,11 @@
      label. `geometricPrecision` takes the outline's own metrics unhinted, which are a function of the font and
      the size alone: the preview's frame and the render's frame become the same frame. */
   .lp text, .lp-chart text { text-rendering: geometricPrecision; }
+  /* R26-57 (P72 T27): the same cure on the STAGE-SPACE species' text - an inline series name, a chip's label, a flow's
+     tag, a map's stamp and the dock chart's tier write SVG text too, and at `auto` they carry the page's warm / cold
+     defect. The named classes only: the caption layer is HTML and every other species keeps its type. */
+  #species .lab, #species-under .lab, #species .chiplab, #species-under .chiplab, #species .flowtag, #species-under .flowtag,
+  #species .vmstamp, #species-under .vmstamp, .chartbox .ct, .chartbox .cs, .chartbox .csr, .chartbox .cl { text-rendering: geometricPrecision; }
   .lp-chart text { font-family: Inter, Arial, sans-serif; fill: var(--lp-chalk); }
   .lp-chart .ax { stroke: #8a94a0; stroke-width: 2; }
   .lp-chart .grid { stroke: rgba(242,242,242,.14); stroke-width: 1.5; }
