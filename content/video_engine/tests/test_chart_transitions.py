@@ -1502,7 +1502,8 @@ def test_the_plain_recasts_axes_hand_over_too(tmp_path):
     try:
         mid = at(DK_AT + DK_S * 0.5)
         assert all(len(a) < len(b) for a, b in zip(mid["yA"], mid["yAfull"])), "the standing labels are being un-written"
-        assert any(0 < len(a) < len(b) for a, b in zip(mid["yB"], mid["yBfull"])), "the arriving axes write on E64's default clock"
+        writing = [at(DK_AT + DK_S * f) for f in (0.4, 0.45, 0.5, 0.55)]   # P71 T3: the write ends by 0.75 of the clock now
+        assert any(any(0 < len(a) < len(b) for a, b in zip(w["yB"], w["yBfull"])) for w in writing),             "the arriving axes write on E64's default clock"
         assert any(abs(t[0] - t[1]) > 1 for t in mid["tickA"]), "the gridlines have slid toward the new scale"
         assert all(t[2] > 0.3 for t in mid["tickA"]), "and none of them blinked out to do it"
         assert all(d[2] == 0 for d in mid["dots"]) if mid["dots"] else True, "no datum travels on a plain recast"

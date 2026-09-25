@@ -16036,6 +16036,25 @@ async function mount(doc) {
      left to show. Every number the hand writes is the page's own: nothing here invents a tick. */
   const AXIS_HAND = Object.freeze({ OUT: 0.55, IN: 0.35, CROSS: 0.6 });   /* the shares of the clock the standing labels take to be un-written, the arriving ones to start, and the gridlines to change hands once they coincide [DERIVED: the erase reads before the write begins, as a retitle's does (PS.ERASE_S); a line that faded before it arrived would hide the slide this exists to show] */
   const PLAIN_AXIS_HANDOFF = 0.90;   /* the opt-in landscape-phone profile waits for the outgoing line's final ink before its target axes arrive */
+  /* P71 T3 (R26-310) - THE DEFAULT CLOCK'S PLAIN RECAST writes its arriving labels WHOLE before the plot is empty. On
+     every page that is not the phone profile (the long form included) the arriving ticks wrote on from AXIS_HAND.IN to
+     the clock's end with no look at the plot, so where the standing data had already gone - a line un-drawn to nothing
+     before the recast (H 93.34), a line on the default ease that is gone at 0.76 of the clock - a half-written tick
+     ("16", "320") stood on an empty plot for up to 0.7 s - and on every long-form page the plot READS empty from the
+     clock's first frame, because the arriving chart is raised with its opaque plot panel (`rect.lp-panel`) over the
+     leaving one (H 663.02: the trim bars are still at full height under it). Two laws, both on this clock only: the
+     write ENDS earlier, and a label that would be part-written while nothing of the standing chart's data reads on the
+     plot is placed whole in its turn instead (the hand still goes label by label; it never leaves a fragment). */
+  const PLAIN_AXIS_WRITE_END = 0.75;   /* the share of the clock by which the arriving labels are all written [DERIVED: the leaving line under min_jerk still holds 10 % of its ink at 0.75 (H 80.49, the probe: 0.104) and the bars' last one 68 % (H 663.02: 0.681 at 0.76); the last label is whole at w = (n + 0.6) / (n + 1) of the window, 0.72 of the clock for five] */
+  const AXIS_INK_GONE = 0.995;   /* a line is off the plot when its dash offset is this share of its length, a bar when its scale is under 1 - this: the phone path's own `lineGone` test */
+  const lpPlotEmpty = (S, over) => {   /* nothing of this state's data READS on the plot THIS frame (its law painted it before the hand-over runs): every line un-drawn and every bar flat, or `over` - the arriving chart, shown - lies above it with an opaque plot panel. A state with no line and no bar (a pie, a treemap) is never called gone: its leave is its own */
+    if (over && over.chart && S.chart && over.chart.style.opacity === "1" && over.chart.querySelector("rect.lp-panel")
+      && (S.chart.compareDocumentPosition(over.chart) & Node.DOCUMENT_POSITION_FOLLOWING)) return true;
+    const paths = (S.paths || []).filter((pp) => pp.p && !pp.muted), bars = S.bars || [];
+    if (!paths.length && !bars.length) return false;
+    return paths.every((pp) => { const off = parseFloat(pp.p.getAttribute("stroke-dashoffset")); return !Number.isFinite(off) || off >= (pp.len || 0) * AXIS_INK_GONE; })
+      && bars.every((bb) => { const m = /scaleY\(([-\d.e]+)\)/.exec(bb.bar.style.transform || ""); return !!m && +m[1] <= 1 - AXIS_INK_GONE; });
+  };
   const AXIS_LINES = ["tick", "rule", "axis"];     /* what SLIDES: the gridlines, the zero, a reference rule */
   const AXIS_LABELS = ["ylabel", "rulelabel", "xtick", "axislabel"];   /* what is WRITTEN: every string on the axes */
   const lpTickRanks = (S) => (S.marks || []).filter((m) => m.role === "tick" && m.el).sort((a, b) => (a.geom.y || 0) - (b.geom.y || 0));
@@ -16044,7 +16063,7 @@ async function mount(doc) {
      place - on both sides. A held label is not erased and re-written for nothing: the standing one stays WHOLE and its
      twin stays empty until the clock ends, which is the same-string hand-over `keyed: "tags"` already ships
      (KEYED_TAG_HAND). No caller that passes nothing sees any difference. */
-  const lpAxisHandOver = (A, Bs, u, hold, plain = false) => {
+  const lpAxisHandOver = (A, Bs, u, hold, plain = false, whole = false) => {   /* `whole`: P71 T3, the default clock's plain recast */
     const pu = clamp01(u);
     /* Plain replacement is the one case where target furniture cannot lead the
        data hand-off. The line painter has already set its dash offset this frame;
@@ -16056,7 +16075,7 @@ async function mount(doc) {
     });
     const phase = plain && lineGone ? clamp01((pu - PLAIN_AXIS_HANDOFF) / (1 - PLAIN_AXIS_HANDOFF)) : (plain ? 0 : pu);
     const ta = lpTickRanks(A), tb = lpTickRanks(Bs), k = segEase(phase);
-    const out = clamp01(pu / AXIS_HAND.OUT), inn = plain ? phase : clamp01((pu - AXIS_HAND.IN) / (1 - AXIS_HAND.IN));
+    const out = clamp01(pu / AXIS_HAND.OUT), inn = plain ? phase : clamp01((pu - AXIS_HAND.IN) / ((whole ? PLAIN_AXIS_WRITE_END : 1) - AXIS_HAND.IN));
     const cross = plain ? phase : clamp01((pu - AXIS_HAND.CROSS) / (1 - AXIS_HAND.CROSS));
     const toY = (i) => {   /* the i-th standing gridline's place under the target's scale, by rank */
       if (!tb.length) return ta[i].geom.y;
@@ -16070,10 +16089,10 @@ async function mount(doc) {
     /* ONE HAND, not six: the labels of a role leave (and arrive) in their own order, each with its own slot of the
        share, exactly as writeGlyphs staggers a title's glyphs. Un-written all at once, six year labels became six
        identical stubs - "20 20 20 20 20 20" - which reads as breakage, not as writing (the Tokyo probe at 50.9). */
-    const sweep = (S, w, ahead, held) => { const seen = {};
+    const sweep = (S, w, ahead, held, placed = false) => { const seen = {};
       for (const m of S.marks || []) { if (!m.el || !AXIS_LABELS.includes(m.role)) continue;
-        const i = (seen[m.role] = (seen[m.role] == null ? 0 : seen[m.role] + 1)), n = axisLabelN(S, m.role);
-        lpWriteText(m.el, held && held.has(m.key) ? (ahead ? 0 : 1) : (ahead ? clamp01((w * (n + 1) - i) / 1.6) : 1 - clamp01((w * (n + 1) - i) / 1.6)));
+        const i = (seen[m.role] = (seen[m.role] == null ? 0 : seen[m.role] + 1)), n = axisLabelN(S, m.role), share = clamp01((w * (n + 1) - i) / 1.6);
+        lpWriteText(m.el, held && held.has(m.key) ? (ahead ? 0 : 1) : (ahead ? (placed ? (share > 0 ? 1 : 0) : share) : 1 - share));
         m.el.style.opacity = "";
       } };
     for (const m of A.marks || []) {
@@ -16094,7 +16113,7 @@ async function mount(doc) {
       else if (AXIS_LINES.includes(m.role)) e.style.opacity = cross.toFixed(3);
       else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(true, true, plain ? phase : pu).toFixed(3);
     }
-    sweep(Bs, inn, true, hold && hold.b);
+    sweep(Bs, inn, true, hold && hold.b, whole && lpPlotEmpty(A, Bs));   /* P71 T3: the plot reads empty now - an arriving label is whole or not yet placed */
     A.xfDirty = true; Bs.xfDirty = true;
   };
   /* P50 T11 - the TAG form (`keyed: "tags"`, Bravos 104-105). The same hand-over keyed on the other mark: each
@@ -16568,6 +16587,7 @@ async function mount(doc) {
     }
     const fedPlainRecast = !!(plain && plain.verb === "recast" && states[plain.from]
       && states[plain.from].readability === LP_READABILITY.LANDSCAPE_PHONE);
+    const plainWhole = !!(plain && plain.verb === "recast" && states[plain.from] && !fedPlainRecast);   /* P71 T3 (R26-310): the DEFAULT clock's unkeyed recast - its arriving labels are whole before the plot is empty */
     st.active = xf ? ((xf.extend && xf.u >= XF_EXTEND.RESCALE) || (xf.morph && xf.u >= XF_MORPH.LEAVE) || (xf.remake && xf.u >= (xf.line_at === "to" ? REMAKE_LINE.HOLD : REMAKE.TRAVEL)) ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2; P61 T2: a remake's marks are in flight until they land; T2b: a bars -> line run's target is drawable when the point has handed over to the drawn line) */
     st.xfNow = xf ? { from: xf.from, to: xf.to, u: xf.u, extend: !!xf.extend, keyed: !!xf.keyed, morph: !!xf.morph, remake: !!xf.remake } : null;   /* R26-28: the perform layer lerps its anchors on this clock. P61 T2 (T1's gap 8): the WHOLE-CHART phase is named here, so a species anchored to the chart resolves against the state that is actually drawable and never lerps across a pair the page keyed mark by mark */
     if (!(xf && (xf.morph || xf.remake)) && !(!xf && hold)) lpHideMorphs(st, null);   /* P48 T5: a morph's strip (P61 T2: a remake's rings) shows only while it morphs or holds under the target's build */
@@ -16587,7 +16607,7 @@ async function mount(doc) {
       /* E64: the PLAIN recast (the compiler found no key) still un-draws and re-draws - but its axes hand over rather
          than swapping in one frame, so the page reads as re-writing itself. The state it is leaving to is otherwise
          untouched: nothing of the target's data is drawn before its own build. */
-      if (plain && states[plain.to] && states[plain.from]) lpAxisHandOver(states[plain.from], states[plain.to], plain.u, undefined, fedPlainRecast);
+      if (plain && states[plain.to] && states[plain.from]) lpAxisHandOver(states[plain.from], states[plain.to], plain.u, undefined, fedPlainRecast, plainWhole);
       if (hold) lpPaintMorphHold(st, hold, cCur);
     }
     for (let i = 0; i < states.length; i++) if (!park || i !== (st.active | 0)) lpUnpark(states[i]);
