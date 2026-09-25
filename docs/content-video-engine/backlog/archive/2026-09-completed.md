@@ -257,3 +257,4 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-313 | A stamped chip's seal is reserved; a card stays legible and off the page's words. Closed by P71 T5. | lane B `3d6e8e5`: `chip_stamp_reserved_box`, the legibility-first placer (words > ink > seals), bed b 0 px2 on seals and words. |
 | R26-354 | A report-landed reply with no verdict up front fails tier 0. Closed by P72 T45. | lane A `d07fec2`: `verdict-up-front`, one repair. |
 | R26-355 | Astra packets land from their own reply.md. Closed by P72 T45. | lane A `d07fec2`: `bridge_watch.FILE_LANES`, the provenance checks; the three live packets closed by hand (their work in main). |
+| R26-340 | The bridge holds on a restart: one summary toast, no packet lost, echoed or sent down the wrong lane. Closed by P72 T44. | lane A `78c884f` (`test_bridge_restart.py`, the rebuilt 02:17 restart 10 toasts -> 1); the live daemon runs it from the merge to main. |
