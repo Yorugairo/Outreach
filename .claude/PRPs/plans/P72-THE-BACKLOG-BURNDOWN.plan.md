@@ -481,7 +481,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: batch 1 `c02deb4` (70 DONE-UNCLOSED rows, R26-0 .. R26-158); batch 2 (53 DONE-UNCLOSED, R26-159 .. R26-314, the four P71 fixes as "code landed; the operator's read at P71-HG1"); batch 3 (20 CLOSE-* rows; R26-102 on s13, R26-155 on s56, R26-124 with the engine's default `eased` recorded); part 2 (R26-176 and R26-181 with their leftovers, LEGACY-REVALIDATION-2026-09, the census reconciled: 64 of its 71 archived, seven carried). Every cited sha resolved with `git log -1` against lane A, lane B and main (0 failed). The board rewritten (P72 / P71 / P70 / P69 / P68 rows with their children once, one row per human gate, the other lane's row, seven `⏸️` rows with their triggers verbatim); `BACKLOG-DISCIPLINE.md`'s second-pass report; queue rows `p69-hg1-*` .. `p69-hg4-*` and `p72-hg1-the-backlog-burndown`, the two lab cards withdrawn, the bake-off card on T37's two steps; the plan statuses (P47 retired; P48, P51, P53, P67 complete; P50, P54, P65, P68, P69 slices closed); lane B's register row names P72. Held open by rule: R26-281 / R26-283 (T36's re-aims), R26-219, R26-9, R26-143, R26-36, R26-132, R26-202, R26-229 (each has an open half and its slice).
 
 ### T1: The recall layer builds again - the capabilities index under its cap, its four malformed rows, and the ten search misses
-- Status: pending
+- Status: done - lane A 14c1293 (the index builds, four rows fixed, WHAT_MAX 110) + eaa6d44 (docs_find's all-words fallback for `_` / `-`); lane B's own index is ported in T2 round 2
 - Owner: junior_developer (LANE A)
 - Depends on: T0
 - Items: NEW-1; R26-136 (5)
@@ -509,7 +509,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T3: The recipes carry the rulings - the four denied leave the proven set, the two approved carry their notes, the melt stack and the note's `keep` are carded, the lab lands a stamp on a stamp's clock
-- Status: pending
+- Status: done - lane B 80fa2f5: 11 proven / 4 denied (E99 s84, verbatim), the kit never offers a denied recipe, the catalogue prints the reason; M38 on the approved Japan cut 0.76 -> 0.48 (interim WARN), on P72-HG1 item 8
 - Owner: implementation_luna (LANE B for the lab and the schema; the recipe JSON is the shared registry - the parent commits it with the catalogue)
 - Depends on: T0
 - Items: R26-237 (E99 s84), R26-196 (its two approved-recipe notes), R26-116, R26-219 (the card half only - the row's other open half, the bracket's label room at 16:9, is T43; the row is archived only when both land), R26-252
@@ -674,7 +674,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Status: pending
 - Owner: implementation_luna (LANE B), then reviewer (placement; findings are WARNs, s106)
 - Depends on: T13 (the same pages' labels); T40 (it edits `page_boxes` and the 9:16 band choice first - T15 rebases on it)
-- Items: R26-253 (the basis label, source, title, sub and end tags stay out of the `empty` room), R26-270 (a wrapped bar name's box, measured against the source foot and the caption band), R26-274's fixture half (the four unmeasured pages - `ev-debt-issuance-line-v1`, `ev-index-concentration-bars-v1`, `ev-hbm-wafer-ratio-bars-v1`, `ev-two-clocks-bars-v1` - measured into `page-boxes.v1.json` by the parent)
+- Items: R26-253 (the basis label, source, title, sub and end tags stay out of the `empty` room), R26-270 (a wrapped bar name's box, measured against the source foot and the caption band), R26-274's fixture half (the four unmeasured pages - `ev-debt-issuance-line-v1`, `ev-index-concentration-bars-v1`, `ev-hbm-wafer-ratio-bars-v1`, `ev-two-clocks-bars-v1` - measured into `page-boxes.v1.json` by the parent); R26-349 (M25's ink list misses a schematic's phase names and tag - added 2026-09-25)
 - Write set: `content/video_engine/scripts/ledger_page.py` (`page_boxes`: the text boxes), `content/video_engine/scripts/build_scene_timeline_f.py` (the E65 `empty`-room placer reads them), `content/video_engine/scripts/measure_page_boxes.py` (`GOLDEN_PAGES` / `representative()` gain the four pages - the parent runs `--write`), tests: NEW `content/video_engine/tests/test_empty_room_keeps_text.py`, `content/video_engine/tests/test_page_boxes.py`
 - Acceptance: (1) on the golden full-stage page a card placed in the `empty` room clears the basis label (T5's red frame, card at (167, 224), no longer covers it); (2) a wrapped two-line bar name clears the source foot and the caption band or WARNs with its numbers; (3) the four pages read MEASURED, not ESTIMATED; (4) placements that cleared before are unchanged.
 - Stop conditions: a committed H row's authored place now reads as a WARN (the author's place stands, s106 - list it, never move it).
@@ -1003,7 +1003,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Status: pending
 - Owner: parent (an edit to P69's T33 / T34 pass lists; the rows themselves are P69's)
 - Depends on: the engine slice named per item
-- Items: now (the engine half landed at `af869b7`, P69 T26b's `camera_reach`) - row 1's push re-aimed to the reachable 1.02 (R26-281) and row 15's pull (R26-283), both rows-1-13-class retrofits held for P69-HG3 (P69 T33); after T27 - row 20's `TEST_SWEEP_WHY` / `BODY_DEPARTURES` text (R26-302); after T22 - row 23's `VERDICT_STACK_ON = True`; after T20 - row 23's 0.8 s hand-off lead removed (R26-329); after T19 - row 23's second asset id retired (R26-328); after T28 - the H door's R26-197 shim removed (if not done in T28); after T14 - rows 7 / 12 / 13 / 17 declare their caption room; R26-347 (added 2026-09-25: H's 12 dips -> 10, each dip that is not a world change becomes the continuity transform it refused - build work, never an operator card; the operator's words are in the row); R26-346 (row 24's derived yardstick card: a lone '20' with no unit, '28%' at the card's edge - E28)
+- Items: now (the engine half landed at `af869b7`, P69 T26b's `camera_reach`) - row 1's push re-aimed to the reachable 1.02 (R26-281) and row 15's pull (R26-283), both rows-1-13-class retrofits held for P69-HG3 (P69 T33); after T27 - row 20's `TEST_SWEEP_WHY` / `BODY_DEPARTURES` text (R26-302); after T22 - row 23's `VERDICT_STACK_ON = True`; after T20 - row 23's 0.8 s hand-off lead removed (R26-329); after T19 - row 23's second asset id retired (R26-328); after T28 - the H door's R26-197 shim removed (if not done in T28); after T14 - rows 7 / 12 / 13 / 17 declare their caption room; R26-347 (added 2026-09-25: H's 12 dips -> 10, each dip that is not a world change becomes the continuity transform it refused - build work, never an operator card; the operator's words are in the row); R26-346 (row 24's derived yardstick card: a lone '20' with no unit, '28%' at the card's edge - E28); R26-350 (the H door's words call the denied `card-becomes-the-chart` proven - added 2026-09-25)
 - Write set: `.claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md` (T33 / T34's lists), `docs/content-video-engine/BACKLOG.md` (the P69 umbrella's children)
 - Acceptance: each item is on P69's pass list with the P72 slice and sha that enabled it; none is built here (the body is held for P69-HG3).
 - Stop conditions: none.
@@ -1046,7 +1046,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T40: The dock's 9:16 fail set - a parked card never covers the schematic's plot or the panels+bars page's, the suite's known three reds
-- Status: pending
+- Status: done - lane B d509ed7: the schematic's 9:16 card goes to a band outside the plot (its phase names counted as ink); panels+bars at 9:16 is a refused page with no placement; test_video_dock 64 + 2 skip (the known 3 reds gone)
 - Owner: implementation_luna (LANE B), then reviewer (placement: the placer is a default, s106; the test is E45 §1 against the player's own boxes)
 - Depends on: the operator's approval of this plan only (wave 1); P70 T2 (landed `3600ec5`, the schematic)
 - Items: R26-337 (`hist:944`: at 9:16 the placer puts the card in the schematic plot's 'empty' room and overlaps the plot by 83,814 px^2), plus the two pre-existing `panels+bars-9:16` cases of the same class. No row carries those two (grep of the history, `BACKLOG.md` and P69 / P70 / P71: only R26-337's own text names them), so this slice carries them by pytest node id. Together they are the whole known fail set of `test_video_dock.py`, and this slice is the precondition for plan acceptance 6.
