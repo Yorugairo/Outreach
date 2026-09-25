@@ -8737,7 +8737,7 @@ def free_bands(boxes: dict, reserve: list[dict] | None = None) -> list[dict]:
 # The card's SCALE gives ground before its place does, down to PLACE_FLOOR_H; the room taken is
 # recorded on the entry as `place_room` so the report, the gate and a reader can all see it.
 PLACE_FLOOR_H = {"9:16": 120, "16:9": 80}   # the legibility floor: a card shorter than this has stopped being evidence
-PLACE_ROOMS = ("outside", "empty", "axis", "corner")
+PLACE_ROOMS = ("outside", "empty", "axis", "corner", "overlap")   # P71 T5 r4: `overlap` - the least-overlap spot at the park size
 # P72 T40: the aspects whose placer takes a band OUTSIDE the plot at the legibility floor before the corner (step 3b). 9:16
 # only: a short's page leaves the title band above its plot, where E45 parks a card once the heading is read; at 16:9 the
 # page IS the plate (E99 s82) and its margins hold no card worth reading, so a 16:9 page keeps E65's four rooms to the byte
@@ -8937,8 +8937,130 @@ def page_refused_at(page: dict, aspect: str) -> str | None:
     return None
 
 
-def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear_of: list[dict] | None = None) -> dict | None:
-    """The parked rectangle for a dock on this ledger page, in stage pixels (E45 §1, E65).
+# ---- P71 T5 round 3 (E28, E99 s128): A CARD NEVER COVERS THE PAGE'S OWN WORDS ---------------------------------------
+# Round 2's bed b parked the card clear of both seals and straight onto "index - 100 = Aug 2025, log scale": E28 (2) -
+# a selected axis states its rule on the page - and the label is data too (E28 addendum). The placer's rooms and the
+# read's candidates are now cut round the page's TEXT as they are round the stamps: the boxes `prop_obstacle_groups`
+# already names for a prop (the source line, the badge rail, the key rail, the y tick labels, every end tag / the end
+# names, and the basis label - which `page_boxes` folds into the plot's top and does not box, so it is taken as that
+# group's measured strip, the plot's width by one tick-label line). EXEMPT, by ruling: the title and the sub (E45 s1 -
+# the card parks "over the title block" once the heading is read, `free_bands`' `above` band) and the x tick labels
+# (E65 (3) - "it can also land underneath partially over-lapping the axis", `axis_room`).
+PLACE_TEXT_EXEMPT = ("title", "sub", "the x axis")
+
+
+def page_text_boxes(page: dict | None, aspect: str | None) -> list[tuple[str, dict]]:
+    """The page's words a park or a read may not cover, as (name, stage-px rect) - `prop_obstacle_groups`' `label`
+    group without PLACE_TEXT_EXEMPT. [] for no page. Pure."""
+    if not page:
+        return []
+    groups, _bounds, _blind = prop_obstacle_groups(page, aspect)
+    return [(name, dict(r)) for name, r in groups["label"] if name not in PLACE_TEXT_EXEMPT]
+
+
+def text_cover_notes(where: str, box: dict | None, text: list[tuple[str, dict]]) -> list[str]:
+    """s106: one WARN with its numbers per page word a card's box still covers (the placer's last resort). Pure."""
+    if not isinstance(box, dict):
+        return []
+    return [f"{where}: its box [{box['x']}, {box['y']}, {box['w']}, {box['h']}] covers {name} "
+            f"[{r['x']:.0f}, {r['y']:.0f}, {r['w']:.0f}, {r['h']:.0f}] by {_overlap_area(box, r):.0f} px^2"
+            + (" (the names' whole COLUMN - the page reports no drawn tag boxes, so the names may stand clear of it: "
+               "read the frame)" if name == "the end names" else "")
+            + " - no room on the page holds it clear of the page's words (E28); move the card or its word (P71 T5)"
+            for name, r in text if _overlap_area(box, r) > 0]
+
+
+# ---- P71 T5 round 4 (E99 s106): NEVER TRADE LEGIBILITY FOR CLEARANCE ------------------------------------------------
+# Round 3 kept bed b's card off every seal and word by shrinking it into E65's corner at the floor - a 100 x 80 speck,
+# worse than the base's legible card over MEMORY's ring. The parent's order: (1) MOVE at the full park size; (2) never
+# shrink below the card's own DEFAULT PARK - the box `_page_place_search` gives it with nothing in the way (the size
+# floor is legibility, not E65's corner minimum); (3) where no clear spot holds the park size, keep the size and take
+# the LEAST-OVERLAP spot, costed page words (and the caption band / a newsreel strip) > plot ink > seals, then the
+# distance from the default park - the data ink is the evidence (E45: a dock never covers the chart) and a stamp is
+# drawn over the world, so covering a seal is the lesser fault (s128; r5, the parent's order) - and
+# the row loop WARNs with the numbers and the fix. Nothing that fits clear, and no card nothing is in the way of,
+# moves by a pixel.
+PLACE_OVERLAP_STEP = (16, 4)   # the least-overlap search: a 16 px grid over the safe box, then a 4 px grid round the best
+
+
+def _least_overlap_park(boxes: dict, page: dict, aspect: str, park: dict, reserve: list[dict] | None,
+                        stamps: list[dict], words: list[dict]) -> dict:
+    """The park-size box inside the safe box that covers the least: (page words + the caption band + any reserved
+    strip, then plot ink, then seals, then its distance from `park`), minimised in that order. `room: "overlap"` when it
+    still covers something; a spot that covers NOTHING is a clear move at the full size the rooms' search missed, and
+    takes the room it stands in (`empty` inside the plot, else `outside`). Pure."""
+    safe, w, h = boxes["safe"], park["w"], park["h"]
+    hard = list(words) + [boxes["caption_anchor"]] + [r for r in (reserve or []) if isinstance(r, dict)]
+    ink = [r for _n, r in prop_obstacle_groups(page, aspect)[0]["data"]]
+
+    def cost(x: float, y: float) -> tuple:
+        b = {"x": x, "y": y, "w": w, "h": h}
+        return (round(sum(_overlap_area(b, r) for r in hard)), round(sum(_overlap_area(b, c) for c in ink)),
+                round(sum(_overlap_area(b, s) for s in stamps)), math.hypot(x - park["x"], y - park["y"]))
+
+    x0, y0 = int(safe["x"]), int(safe["y"])
+    x1, y1 = int(safe["x"] + safe["w"] - w), int(safe["y"] + safe["h"] - h)
+    if x1 < x0 or y1 < y0:
+        return {**park, "room": "overlap"}
+    coarse, fine = PLACE_OVERLAP_STEP
+    best = min((cost(x, y), x, y) for x in range(x0, x1 + 1, coarse) for y in range(y0, y1 + 1, coarse))
+    near = [(x, y) for x in range(max(x0, best[1] - coarse), min(x1, best[1] + coarse) + 1, fine)
+            for y in range(max(y0, best[2] - coarse), min(y1, best[2] + coarse) + 1, fine)]
+    c, x, y = min([best] + [(cost(x, y), x, y) for x, y in near])
+    if c[:3] == (0, 0, 0):
+        pl = boxes["plot"]
+        inside = pl["x"] <= x + w / 2 <= pl["x"] + pl["w"] and pl["y"] <= y + h / 2 <= pl["y"] + pl["h"]
+        return {"x": x, "y": y, "w": w, "h": h, "room": "empty" if inside else "outside"}
+    return {"x": x, "y": y, "w": w, "h": h, "room": "overlap"}
+
+
+def park_full_note(where: str, box: dict | None, page: dict | None, aspect: str | None, stamps: list[dict]) -> str | None:
+    """The row loop's WARN for a card at its least-overlap spot (`room: "overlap"`): what it covers, with numbers, and
+    the fix. None for any other park."""
+    if not isinstance(box, dict) or box.get("room") != "overlap":
+        return None
+    over = [f"{n} {_overlap_area(box, r):.0f} px^2" for n, r in page_text_boxes(page, aspect) if _overlap_area(box, r) > 0]
+    over += [f"a seal or stamp [{s['x']}, {s['y']}, {s['w']}, {s['h']}] {_overlap_area(box, s):.0f} px^2"
+             for s in stamps if isinstance(s, dict) and _overlap_area(box, s) > 0]
+    ink = sum(_overlap_area(box, r) for _n, r in prop_obstacle_groups(page, aspect)[0]["data"]) if page else 0
+    if ink:
+        over.append(f"the plot's ink {ink:.0f} px^2")
+    return (f"{where} (its park): no clear spot holds it at its park size {box['w']}x{box['h']}, so it keeps that size "
+            f"at the least-overlap spot [{box['x']}, {box['y']}, {box['w']}, {box['h']}] over {'; '.join(over) or 'nothing'} "
+            "- the room is full: give the card a slot, drop a stamp, or dock it after the seals leave (E99 s106)")
+
+
+def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear_of: list[dict] | None = None,
+               words: bool = True) -> dict | None:
+    """The parked rectangle for a dock on this ledger page, in stage pixels (E45 s1, E65) - `_page_place_search`, with
+    P71 T5's rule round it: `clear_of` (the row's stamps and chip seals) and the page's words (`page_text_boxes`) are
+    obstacles, and a card is never placed below its DEFAULT PARK (the search with nothing in the way). The search's
+    own answer is kept when it is at least that size and clear; else the default park when IT is clear; else the
+    least-overlap spot at the park size (`_least_overlap_park`, words > ink > seals, `room: "overlap"`). With no stamp and no word, exactly
+    the search. `words=False`: the search round `clear_of` alone, as before T5 - a STAMP's E65 tie-break
+    (`stamp_dock_place`). P72 T40: None for a page `page_refused_at` refuses at `aspect`, as the search returns."""
+    if page_refused_at(page, aspect):   # P72 T40: a page no build draws at `aspect` has no placement - None, as the search says
+        return None
+    stamps = [t for t in (clear_of or []) if isinstance(t, dict)]
+    if not words:
+        return _page_place_search(page, aspect, reserve, stamps)
+    text = [r for _n, r in page_text_boxes(page, aspect)]
+    blocked = stamps + text
+    got = _page_place_search(page, aspect, reserve, blocked)
+    if not blocked:
+        return got
+    park = _page_place_search(page, aspect, reserve, [])
+    if got["w"] >= park["w"] and not any(_overlap_area(got, r) > 0 for r in blocked):
+        return got
+    if not any(_overlap_area(park, r) > 0 for r in blocked):
+        return park
+    return _least_overlap_park(LPG.page_boxes(page, aspect), page, aspect, park, reserve, stamps, text)
+
+
+def _page_place_search(page: dict, aspect: str, reserve: list[dict] | None = None,
+                       clear_of: list[dict] | None = None) -> dict | None:
+    """E65's search for the parked rectangle for a dock on this ledger page, in stage pixels (E45 §1, E65) - the
+    search P71 T5's `page_place` wraps (`clear_of` is every rectangle the rooms are cut round).
 
     ``{"x", "y", "w", "h", "room"}`` - ALWAYS: `room` is which of E65's four rooms it came from
     (`outside` | `empty` | `axis` | `corner`). Pure: the page spec is never mutated.
@@ -9009,7 +9131,7 @@ def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear
 
 
 def dock_place(world: dict, aspect: str | None, reserve: list[dict] | None = None,
-               clear_of: list[dict] | None = None) -> dict | None:
+               clear_of: list[dict] | None = None, words: bool = True) -> dict | None:
     """The placement every dock on this scene takes, or None on a plain plate (E45: "a dock on a
     plain plate keeps the solo card"). One rectangle per scene, from the page's geometry alone -
     and on a ledger page there is ALWAYS one (E65; P72 T40: None on a page no build draws at this aspect,
@@ -9017,7 +9139,7 @@ def dock_place(world: dict, aspect: str | None, reserve: list[dict] | None = Non
     `clear_of`: the row's stamps' fitted boxes, which the card is placed round (P69 T5, `page_place`)."""
     if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
         return None
-    return page_place(world["page"], aspect or "16:9", reserve, clear_of)
+    return page_place(world["page"], aspect or "16:9", reserve, clear_of, words)
 
 
 # ---- R26-20 (2026-09-22): A STAMP IS INK ON THE PAGE - THE MARK TAKES THE ROOM, THE RING HUGS THE MARK ----------
@@ -9447,7 +9569,7 @@ def stamp_dock_place(world: dict | None, aspect: str | None, dopt: dict, paint: 
             warns.append("the plate declares no room (`;room=`) and the row names no place - fitted over the frame's whole "
                          f"safe box [{bounds['x']}, {bounds['y']}, {bounds['w']}, {bounds['h']}], blind to the plate's own "
                          "picture: read the frame, or name `place` or the plate's room")
-        e65 = dock_place(world, aspect, reserve, taken) if page else region
+        e65 = dock_place(world, aspect, reserve, taken, words=False) if page else region   # P71 T5 r3: the tie-break as before
         ecx, ecy = e65["x"] + e65["w"] / 2, e65["y"] + e65["h"] / 2
         best = None
         coarse, fine = STAMP_SEARCH_PX
@@ -10687,21 +10809,107 @@ def stamp_reserved_box(fit: dict) -> dict:
 
 def row_stamp_fits(world: dict | None, aspect: str | None, docks: list[tuple[str, dict, dict]],
                    plate_room: dict | None, reserve: list[dict] | None, where: str,
-                   worlds: dict | None = None) -> tuple[dict, list[dict]]:
+                   worlds: dict | None = None, chips: list[tuple[float, dict]] | None = None,
+                   enters: list[float] | None = None) -> tuple[dict, list[dict]]:
     """Every STAMP in a row, fitted before any other dock is placed: ({index in the row: its `stamp_dock_place` fit},
     [their `stamp_reserved_box`es, in row order]). `docks` is the row's (aid, dock options, painted box) in row order;
     each stamp is fitted `clear_of` the earlier stamps' boxes, so the first takes the room exactly as it would alone.
     ValueError (from the door) names the row and the dock.
     `worlds` (P69 T26d, R26-279): {index: the world ON SCREEN at that stamp's landing} (`page_on_screen`) - a stamp that
-    lands after a recast is fitted to the state it lands on. Absent, every stamp is fitted to `world`, as before."""
-    fits, taken = {}, []
-    for n, (aid, dopt, paint) in enumerate(docks):
+    lands after a recast is fitted to the state it lands on. Absent, every stamp is fitted to `world`, as before.
+    `chips` (P71 T5, R26-313; E99 s128): the row's STAMPED CHIPS already fitted, as (at, `chip_stamp_reserved_box`) in
+    stamp order, with `enters` (every dock's enter, in row order): each joins the order at its `at` (`stamp_order`), so a
+    stamped dock landing after it is fitted clear of its seal, and its box stands in the returned list at its place.
+    Absent, the walk is the docks' alone, as before."""
+    stamped = []
+    for n, (_aid, dopt, _paint) in enumerate(docks):
         if dopt.get("arrive") != "stamp":
             continue
+        stamped.append(n)
+    ats = [at for at, _box in chips or []]
+    if ats and enters is None:
+        raise ValueError(f"{where}: a stamped chip joins the row's stamp order at its `at`, which needs the docks' enters")
+    fits, taken = {}, []
+    for kind, n in stamp_order([(n, float(enters[n]) if ats else 0.0) for n in stamped], ats):
+        if kind == "chip":
+            taken = [*taken, chips[n][1]]
+            continue
+        aid, dopt, paint = docks[n]
         fits[n] = stamp_dock_place((worlds or {}).get(n, world), aspect, dopt, paint, plate_room, reserve,
                                    f"{where} dock {aid}", taken)
         taken = [*taken, stamp_reserved_box(fits[n])]
     return fits, taken
+
+
+# ---- P71 T5 (R26-313; E99 s128): A STAMPED CHIP'S SEAL IS RESERVED - THE ROW'S OTHER ELEMENTS GO ROUND IT -------------
+# P70 T1 / T1b fitted a stamped chip's ring round the row's stamped docks but never added its own box, so a second chip,
+# a later stamped dock or a card landed on its seal. s128: "a stamped chip's reserved box keeps OTHER elements from
+# landing under it on the same beat; it does not keep the stamp off the chart" - the chip joins P69 T5's stamp order at
+# its `at`, its seal and ring's peak are reserved for what comes after, and the chip itself is never moved, grown,
+# shrunk or filled for what it is drawn over (its obstacles are what P70 T1 gave it, plus the earlier stamps' boxes).
+def stamp_order(docks: list[tuple[int, float]], chip_ats: list[float]) -> list[tuple[str, int]]:
+    """The row's stamps in the order they take the room: its stamped docks as (index in the row, enter) in row order,
+    and its stamped chips' `at`s in stamp order (the k-th is ("chip", k)). A chip goes before the first dock still to
+    come that enters AFTER it; a dock landing at the chip's own instant goes first (before T5 every chip was fitted round
+    every dock). With no chip, the docks in row order. Pure."""
+    order, k = [], 0
+    for n, enter in docks:
+        while k < len(chip_ats) and chip_ats[k] < enter:
+            order, k = [*order, ("chip", k)], k + 1
+        order = [*order, ("dock", n)]
+    return order + [("chip", j) for j in range(k, len(chip_ats))]
+
+
+def chip_stamp_fit_order(row_species: list) -> list[int]:
+    """The row's stamped chips, as indices into its species, in the order they land (`at`, then row order)."""
+    return sorted((j for j, e in enumerate(row_species) if chip_is_stamped(e)), key=lambda j: (float(row_species[j]["at"]), j))
+
+
+def _chip_seal_disc(chip: dict, aspect: str | None, paint: dict) -> tuple[float, float, float]:
+    """A FITTED stamped chip's seal and its impact ring's peak as the disc (cx, cy, r) the fit cleared: the grown mark's
+    painted centre (`chip_stamp_art`) and `ring_to` x `seal_r` plus the stroke (`chip_stamp_ring_fit`'s own disc)."""
+    cx, cy = chip_stamp_art(chip, aspect, paint)["centre"]
+    return cx, cy, float(chip["ring_to"]) * float(chip["seal_r"]) + STAMP_RING_W_PX
+
+
+def chip_stamp_reserved_box(chip: dict, aspect: str | None, paint: dict) -> dict | None:
+    """The rectangle a FITTED stamped chip takes on the page, in whole stage px: the square round its seal and its impact
+    ring's peak (`_chip_seal_disc`). None for a chip that is not stamped (a glyph chip's law is the badge spring).
+    ValueError for a stamped chip not yet fitted. Pure."""
+    if not chip_is_stamped(chip):
+        return None
+    if not (_finite(chip.get("seal_r")) and _finite(chip.get("ring_to"))):
+        raise ValueError(f"chip stamp {chip.get('label')!r}: reserved before it is fitted (no `seal_r` / `ring_to`)")
+    cx, cy, r = _chip_seal_disc(chip, aspect, paint)
+    x0, y0 = math.floor(cx - r), math.floor(cy - r)
+    return {"x": x0, "y": y0, "w": math.ceil(cx + r) - x0, "h": math.ceil(cy + r) - y0}
+
+
+def stamps_before_chip(world: dict | None, aspect: str | None, docks: list[tuple[str, dict, dict]], enters: list[float],
+                       chips: list[tuple[float, dict]], at: float, plate_room: dict | None, reserve: list[dict] | None,
+                       where: str, worlds: dict | None = None) -> list[dict]:
+    """The reserved boxes of every stamp that takes the room before a stamped chip landing at `at`: the row's stamped
+    docks fitted round the chips already fitted (`chips`, in stamp order - each earlier than this one), cut where this
+    chip joins the order. The first chip of a row with no stamped dock landing before it sees none."""
+    _fits, taken = row_stamp_fits(world, aspect, docks, plate_room, reserve, where, worlds, chips, enters)
+    stamped = [(n, float(enters[n])) for n, (_aid, dopt, _paint) in enumerate(docks) if dopt.get("arrive") == "stamp"]
+    return taken[:stamp_order(stamped, [c for c, _box in chips] + [float(at)]).index(("chip", len(chips)))]
+
+
+def chip_stamp_clash_notes(where: str, chip: dict, aspect: str | None, paint: dict, earlier: list[dict]) -> list[str]:
+    """s106 / s128: a fitted stamped chip whose seal and ring still reach into an EARLIER stamp's reserved box - its ring
+    gives way to the room down to its floor, its seal never does, and a stamp is never moved off its target - is a WARN
+    with its numbers, one per box. [] when it stands clear."""
+    cx, cy, r = _chip_seal_disc(chip, aspect, paint)
+    notes = []
+    for s in earlier:
+        depth = r - math.hypot(max(s["x"] - cx, 0.0, cx - (s["x"] + s["w"])), max(s["y"] - cy, 0.0, cy - (s["y"] + s["h"])))
+        if depth > 0:
+            notes = [*notes, f"{where}: its seal and ring (radius {r:.0f} px at ({cx:.0f}, {cy:.0f})) reach {depth:.0f} px "
+                             f"into an earlier stamp's reserved box [{s['x']}, {s['y']}, {s['w']}, {s['h']}] - the ring gives "
+                             "way to the room, the seal does not, and a stamp is never moved off its target (E99 s128): "
+                             "move its target or its word (R26-313)"]
+    return notes
 
 
 def stamp_clash_error(where: str, box: dict | None, stamps: list[dict]) -> str | None:
@@ -10967,7 +11175,7 @@ def _grown(box: dict, pad: float) -> dict:
 
 def read_over_build(place: dict | None, read_box: dict | None, page: dict | None, aspect: str | None,
                     read_from: float, read_to: float, windows: list[tuple[float, float]] | None,
-                    card_aspect: float | None = None) -> dict | None:
+                    card_aspect: float | None = None, stamps: list[dict] | None = None) -> dict | None:
     """E63's decision for one placed dock: where its READ goes, or None when there is nothing to move.
 
     Returns ``{"read_place": {...}, "read_moved": {"from": [...], "to": [...], "why": "..."}}`` when a
@@ -10975,15 +11183,27 @@ def read_over_build(place: dict | None, read_box: dict | None, page: dict | None
     ledger page, has no reading pop at all (a centred card takes its parked box from its first frame),
     or reads clear of the plot. The chart's state does NOT enter the decision (the widening): a read on
     the plot moves whether the line is drawing or finished. `windows` stays for the RECORD only - it is
-    what lets `why` say the read fell while the chart was drawing. Pure: nothing is mutated."""
+    what lets `why` say the read fell while the chart was drawing. Pure: nothing is mutated.
+    `stamps` (P71 T5, R26-313; E99 s128 - a recorded deviation into P71 T15's function): the row's reserved stamp boxes
+    (`stamp_boxes`: its stamped docks and its stamped chips' seals). The read clears them exactly as the park does - a
+    read over one moves by the same law (a band, then E65's room, each candidate clear of every stamp; the room is cut
+    round a stamp, so the read shrinks toward the floor before it gives up), and where nothing holds it the read is
+    deferred (the card takes its parked box from its first frame). The stamp is never moved or filled. Absent or
+    empty, the decision is what it always was."""
     if not place or not read_box or not page:
         return None
     boxes = LPG.page_boxes(page, aspect or "16:9")
     plot = boxes.get("plot")
-    if not plot or _overlap_share(read_box, plot) <= READ_OVER_PLOT_SHARE:
-        return None                                   # the card already reads clear of the plot
+    stamps = [s for s in (stamps or []) if isinstance(s, dict)]
+    text = [r for _n, r in page_text_boxes(page, aspect)]   # P71 T5 round 3 (E28): the page's own words, as the park
+    blocked = stamps + text
+    over = [s for s in blocked if _overlap_area(read_box, s) > 0]
+    if not plot or (_overlap_share(read_box, plot) <= READ_OVER_PLOT_SHARE and not over):
+        return None                                   # the card already reads clear of the plot (and of every stamp and word)
     hit = [(a, b) for a, b in (windows or []) if read_from < b - 1e-6 and read_to > a + 1e-6]
-    why = "a card never reads over the plot (E63)"
+    why = ("a card never reads over the plot (E63)" if _overlap_share(read_box, plot) > READ_OVER_PLOT_SHARE
+           else "a card never reads over a stamp's reserved box (P71 T5, E99 s128)"
+           if any(_overlap_area(read_box, s) > 0 for s in stamps) else "a card never reads over the page's words (E28)")
     if hit:                                           # the record, never the reason: which it was, for the report and the gate
         why += f" - while the chart draws, until {max(b for _a, b in hit):.2f}s"
     bands = {bd["band"]: bd for bd in free_bands(boxes)}
@@ -10993,7 +11213,7 @@ def read_over_build(place: dict | None, read_box: dict | None, page: dict | None
             continue
         moved = _read_fit(band, read_box, float(place["w"]), aspect, card_aspect, plot,
                           READ_PLOT_PAD_MEASURED if boxes.get("measured") else READ_PLOT_PAD)
-        if moved is None:
+        if moved is None or any(_overlap_area(moved, s) > 0 for s in blocked):
             continue
         return {"read_place": moved,
                 "read_moved": {"from": [read_box["x"], read_box["y"], read_box["w"], read_box["h"]],
@@ -11001,7 +11221,7 @@ def read_over_build(place: dict | None, read_box: dict | None, page: dict | None
     # E65: no band outside the plot holds the read - take the room the PARK took, enlarged toward the
     # axis (the card may overlap the tick labels, never the data), at the reading scale or scaled down
     # to the legibility floor. The park is the corner the card adjusts up into afterwards.
-    moved = read_in_room(boxes, place, read_box, aspect, card_aspect)
+    moved = read_in_room(boxes, place, read_box, aspect, card_aspect, blocked)
     if moved:
         return {"read_place": moved,
                 "read_moved": {"from": [read_box["x"], read_box["y"], read_box["w"], read_box["h"]],
@@ -11011,15 +11231,19 @@ def read_over_build(place: dict | None, read_box: dict | None, page: dict | None
 
 
 def read_in_room(boxes: dict, place: dict, read_box: dict, aspect: str | None,
-                 card_aspect: float | None = None) -> dict | None:
+                 card_aspect: float | None = None, stamps: list[dict] | None = None) -> dict | None:
     """E65's READ: the parked card's own room, grown toward the axis, at the reading scale.
 
     The room is the largest rectangle the data does not touch that CONTAINS the park (so the read and
     the park are one move apart), grown down to the source line where the x tick labels are - they are
     furniture. The card takes the reading width if it fits, else the widest that does, never under the
-    legibility floor, and never over a cell the data's ink is in. None when the page has no mask."""
+    legibility floor, and never over a cell the data's ink is in. None when the page has no mask.
+    `stamps` (P71 T5): rectangles the read may not cover - the reserved stamp boxes and (round 3) the page's words; each
+    grown room is cut round them (`_pieces_clear_of`) and a candidate must stand clear of every one. Absent, the rooms
+    are what they always were."""
     if not boxes.get("data_mask") or not place:
         return None
+    stamps = [s for s in (stamps or []) if isinstance(s, dict)]
     floor_h = _floor_h(aspect)
     under = axis_room(boxes)
     rooms = mask_rooms(boxes)
@@ -11033,7 +11257,7 @@ def read_in_room(boxes: dict, place: dict, read_box: dict, aspect: str | None,
         room = dict(r)
         if under and abs(room["y"] + room["h"] - under["y"]) < 2:   # the room ends where the axis band starts: join them
             room["h"] = under["y"] + under["h"] - room["y"]
-        grown.append(room)
+        grown.extend(_pieces_clear_of(room, stamps) if stamps else [room])
     best = None
     for room in sorted(grown, key=lambda r: -(r["w"] * r["h"])):
         fit = _fit_in(room, float(read_box["w"]), floor_h, card_aspect)
@@ -11044,7 +11268,9 @@ def read_in_room(boxes: dict, place: dict, read_box: dict, aspect: str | None,
         x = min(max(round((sw - w) / 2), room["x"] + DOCK_PLACE_PAD), room["x"] + room["w"] - DOCK_PLACE_PAD - w)
         box = {"x": round(x), "y": round(room["y"] + (room["h"] - h) / 2), "w": w, "h": h}
         box = _clear_of_axis(box, room, boxes)
-        if not mask_is_clear(boxes, box):
+        if not mask_is_clear(boxes, box) or any(_overlap_area(box, s) > 0 for s in stamps):
+            continue
+        if stamps and box["w"] < place["w"]:   # P71 T5 r4: a read never shrinks below the card's park (s106: legibility first)
             continue
         if best is None or w > best["w"]:
             best = box
@@ -12452,18 +12678,30 @@ def main() -> int:
         # P70 T1: a STAMPED CHIP's impact ring is fitted to the room it lands in (the page state on screen at its `at`),
         # clear of the newsreel strip and the row's stamped docks; written on a COPY of the entry as `ring_to` + `paint`.
         # Nothing fits = a WARN with numbers, never a refusal (s106). A row with no stamped chip is untouched.
+        # P71 T5 (R26-313; E99 s128): each stamped chip joins the row's stamp order at its `at` - fitted round the stamps
+        # that land before it, then its seal and ring's peak are RESERVED: the stamped docks landing after it are fitted
+        # again round it, and the row's cards are placed clear of it. The chip itself is never moved, grown or shrunk
+        # for what it is drawn over; a seal that meets an earlier stamp is a WARN with its numbers (s106).
         if any(chip_is_stamped(e) for e in row_species):
-            _chip_rows = []
-            for e in row_species:
-                if chip_is_stamped(e):
+            _chip_rows, _chips, _enters = list(row_species), [], [float(d[2]) for d in ds]
+            _news, _row = newsreel_boxes(row_species, ASPECT), f"shot row {i + 1} ({a}-{b}s)"
+            try:
+                for _j in chip_stamp_fit_order(row_species):
+                    e, _where = row_species[_j], f"{_row} chip stamp {row_species[_j].get('label')!r}"
+                    _paint = painted_box(resolved_chip_stamps[e["icon"]]["file"])
+                    _before = stamps_before_chip(world, ASPECT, row_opts, _enters, _chips, float(e["at"]), plate_room,
+                                                 _news, _row, stamp_worlds)
                     e, _chip_notes = chip_stamp_ring_fit(
-                        e, page_on_screen(world, row_species, float(e["at"])), ASPECT,
-                        painted_box(resolved_chip_stamps[e["icon"]]["file"]),
-                        newsreel_boxes(row_species, ASPECT) + list(stamp_boxes),
-                        f"shot row {i + 1} ({a}-{b}s) chip stamp {e.get('label')!r}")
+                        e, page_on_screen(world, row_species, float(e["at"])), ASPECT, _paint, _news + list(_before), _where)
                     for _n in _chip_notes:
                         print(f"  [WARN] P70 T1: {_n}")
-                _chip_rows.append(e)
+                    for _n in chip_stamp_clash_notes(_where, e, ASPECT, _paint, _before):
+                        print(f"  [WARN] P71 T5: {_n}")
+                    _chips, _chip_rows[_j] = [*_chips, (float(e["at"]), chip_stamp_reserved_box(e, ASPECT, _paint))], e
+                stamp_fits, stamp_boxes = row_stamp_fits(world, ASPECT, row_opts, plate_room, _news, _row,
+                                                         worlds=stamp_worlds, chips=_chips, enters=_enters)
+            except ValueError as exc:
+                raise SystemExit(f"FAIL: {exc}") from exc
             row_species = _chip_rows
         place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT), clear_of=stamp_boxes)   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
         for n_dock, (aid, slot, enter, exitt, *dextra) in enumerate(ds):
@@ -12542,12 +12780,36 @@ def main() -> int:
                          if (rplace or not centred) else None)
             e63 = read_over_build(eplace, _read_box, (world or {}).get("page"), ASPECT, float(enter),
                                   float(enter) + (_rs if exitt - enter >= _rs + _ps else exitt - enter),
-                                  page_build_windows(world, row_species, a), _aspect_of_card) or {}
+                                  page_build_windows(world, row_species, a), _aspect_of_card,
+                                  [] if stamp_fit else stamp_boxes) or {}   # P71 T5: the read clears the stamps too
             if e63.get("read_place"):
                 rplace = e63["read_place"]
                 read_moves.append(f"{sid}.{aid} -> {e63['read_moved']['to']}")
             elif e63.get("read_deferred"):
                 read_defers.append(f"{sid}.{aid}")
+            _drawn_read = None if (stamp_fit or e63.get("read_deferred")) else (e63.get("read_place") or _read_box)
+            if isinstance(_drawn_read, dict):   # P71 T5: the clash WARN covers the READ as well as the park (s106)
+                _clash = stamp_clash_error(f"shot row {i + 1} ({a}-{b}s) dock {aid} (its read)", _drawn_read, stamp_boxes)
+                if _clash:
+                    print(f"  [WARN] P71 T5: {_clash}")
+                    prop_warns.append(f"row {i + 1} {aid}")
+            if not (stamp_fit or prop_fit):   # P71 T5 round 3 (E28): the park and the read never cover the page's words
+                _full = None if centred else park_full_note(f"shot row {i + 1} ({a}-{b}s) dock {aid}", eplace, (world or {}).get("page"),
+                                       ASPECT, stamp_boxes)
+                if _full:   # P71 T5 r4: the room is full at the park size - kept legible, told with the numbers
+                    print(f"  [WARN] P71 T5: {_full}")
+                    prop_warns.append(f"row {i + 1} {aid}")
+                _text = page_text_boxes((world or {}).get("page"), ASPECT)
+                for _what, _box in (("its park", eplace), ("its read", _drawn_read)):
+                    for _n in text_cover_notes(f"shot row {i + 1} ({a}-{b}s) dock {aid} ({_what})", _box, _text):
+                        print(f"  [WARN] P71 T5: {_n}")
+                if isinstance(_drawn_read, dict) and isinstance(eplace, dict) and e63.get("read_place") \
+                        and _drawn_read["w"] * _drawn_read["h"] <= eplace["w"] * eplace["h"]:
+                    print(f"  [WARN] P71 T5: shot row {i + 1} ({a}-{b}s) dock {aid}: its read "
+                          f"[{_drawn_read['x']}, {_drawn_read['y']}, {_drawn_read['w']}, {_drawn_read['h']}] is no larger than "
+                          f"its park [{eplace['x']}, {eplace['y']}, {eplace['w']}, {eplace['h']}] - the pop is not a read "
+                          "(E45: it springs in at READING size); the room left by the stamps and the page's words holds no "
+                          "more - give the card a word with more room, or `centre` it")
             ring_fit = stamp_fit   # the fit above; a stamp with no place never reaches here (it failed the row)
             prop_mv = []
             if dopt.get("moves"):   # P69 T26d / E99 s106: the prop's moves after it lands, as whole boxes
