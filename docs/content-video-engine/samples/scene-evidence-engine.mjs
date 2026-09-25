@@ -6491,6 +6491,25 @@ async function mount(doc) {
   const wA = $("wA"), wB = $("wB"), wash = $("wash"), seam = $("seam"), cap = $("caption");
   const docks = [$("dock-1"), $("dock-2")];
   const bzveil = $("bzveil"), dipveil = $("dipveil");   /* E47: the blur-zoom's softness and the dip's black */
+  /* P72 T27 / R26-9 TR-3 - THE SOURCE OF EVERY TRANSITION NUMBER (E42 D6: a shipped number carries its tag). No value
+     moves here: a value its tag shows is wrong is filed as its own row and measured off the reference first (E38).
+     The review that found them untagged: TRANSITIONS-REVIEW-2026-09-06.md :22-24 and its TR-3 row.
+       WIPE 0.62        [UNSOURCED - retuned by eye from 1.25 s toward the reference showcase's measured 0.35 s
+                         quart-in-out (doc 29 s8.15's table, :659; 166789a, 2026-08-24) and stopped there; kept: a
+                         declared wipe still runs on it, though E47 retired the wipe as the world-change default]
+       DISSOLVE_S 0.8   [UNSOURCED - chosen with the outro's cross-fade (82ecff4, the operator 2026-09-05 on the wipe into
+                         the outro card: "what is this madness?"); the slowest transition we ship, against doc 29's
+                         "every transition well under a second" and the review's 0.35-0.5 s, and the reference itself
+                         dissolves 0 times in 100 cuts (TR-1, doc 46 s46.5); kept: the outro card has dissolved on it
+                         since 82ecff4 and an approved cut is never re-rendered (E45) - a retune is its own row]
+       MOUNT_STEPS 5    [UNSOURCED - a count set by eye on the operator's direction for the mount, "the screen fades a
+                         portion" (ba890d3, 2026-09-05; doc 29 s9.31 :2134 "fades in five steps"); no reference measure;
+                         kept: the operator's own staircase]
+       SUCK_S 0.3       [UNSOURCED - the operator's "near-instant on 'went'" (74f132d, 2026-09-05), set by eye; no
+                         reference measure (the reference's nearest form is the blur-zoom, BLURZOOM_S 0.27 below)]
+       SUCK_TURN 240    [UNSOURCED - two thirds of a turn, set by eye with SUCK_S (74f132d); no reference measure]
+     DIP_S and the BLURZOOM_* dials carry their tags in the world-change block below, SLIDE_S in the slide's; the
+     test (test_small_engine_rows_b) holds every name this region declares to one. */
   const WIPE = 0.62, DISSOLVE_S = 0.8, MOUNT_STEPS = 5;   /* DISSOLVE_S: the cross-fade a row declares with exit dissolve (the outro card); MOUNT_STEPS: the staircase a mounting page RISES on over its soak (R26-50 retired the cross-fade the outgoing world used to ride) */
   const SUCK_S = 0.3, SUCK_TURN = 240;   /* the suck transition: 0.3 s, two thirds of a turn into the point */
   /* THE TWO WORLD-CHANGE TRANSITIONS (ruling E47, operator 2026-09-06), taken off the measured reference
@@ -6520,7 +6539,10 @@ async function mount(doc) {
      Named `slide` because `push` is our camera push-in. The geometry is @remotion/transitions' `slide` presentation's
      (the editor already imports the package, TransitionEvidence60sProof.tsx): the enter and the exit translate are one
      pair, one distance, opposite ends - read, never vendored.
-       SLIDE_S 0.6      the default length when the row declares none; build_scene_timeline_f.SLIDE_S is the same dial
+       SLIDE_S 0.6      [UNSOURCED - a starting length set with the slide (2a82cd4, P57 T13 / R26-75): the geometry is
+                        @remotion/transitions' `slide`, whose timing is the caller's, and the reference pushes 0 times
+                        in 100 cuts (TR-1); kept: the slide's goldens were read on it (slide-mid / slide-landed)]
+                        the default length when the row declares none; build_scene_timeline_f.SLIDE_S is the same dial
                         written twice, and test_transition_stamps pins the pair.
      THE FRAME IS THE STAGE. A .world layer is 110% of the stage (`inset: -5%`) so Ken Burns has somewhere to move;
      the picture is the stage rect inside it, and everything outside that rect is scenery the viewer never sees. So
