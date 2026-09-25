@@ -318,7 +318,7 @@ export const pickUpXf = (mass, t, S, o = {}) => {
    docked card that keeps its RGBA), so the ink strength is a PRESSURE cue under the picture, never a wash over it.
    WHAT THIS MODULE KEEPS OF OURS: the receiver. A stamp's contact is at its own t = 0 (the mark is already on its
    spot; the scale over 1 is the height), so the page DIPS by the material's own spring and takes the hit's squash
-   frame - groundDip / impactSquash, the same two the throw and the landing answer with. Pure in t; it paints
+   frame - groundDip / impactSquash, the same two the throw and the landing answer with - FROM THE CONTACT (P70 T1b). Pure in t; it paints
    nothing. Added with NO change to anything this module already painted. */
 /* NAMED `STAMP_ARRIVAL`, not `STAMP`: the engine inlines every module into ONE name space and the VECTOR
    MAP's own species dials already own that identifier (species/vecmap.mjs:60). E99 s87 (4) keeps `stamp` the
@@ -331,7 +331,8 @@ export const STAMP_ARRIVAL = Object.freeze({
   LAND: { m: 0.9, k: 220, c: 14 },   /* :78 the CLAMPED scale spring: damping 14, stiffness 220, mass 0.9 -> zeta 0.4975, w0 15.635 rad/s */
   TURN: { m: 1.0, k: 120, c: 11 },   /* :85 the FREE trailing rotation spring: damping 11, stiffness 120, mass 1 -> zeta 0.5021, w0 10.954 rad/s - slower, so it is still ringing when the scale is done */
   FADE: 0.35,         /* :93 opacity = interpolate(land, [0, 0.35], [0, 1]) - never a cut and never a dissolve: the fade rides the scale spring's own first third */
-  INK: [1, 0.86],     /* :96 "Ink strength: heavy on impact, easing back as the pressure comes off", over land 0.35 -> 1 */
+  INK: [1, 0.86],     /* :96 "Ink strength: heavy on impact, easing back as the pressure comes off", over land 0.35 -> 1 - the
+                         source's CURVE, thrown from the contact (P70 T1b, E99 s121 (4); see stampInk) */
   SHOCK_S: 14 / 30,   /* :106 [delayInFrames, delayInFrames + 14] at the source's DEFAULT_FPS 30 (lib/timing.ts:3) = 0.4667 s of ring */
   RING_TO: 2.0,       /* :156 r * (1 + shock): the ring reaches TWICE the mark's own radius - the number the source's comment defends */
   RING_W_PX: 4.8,     /* :159 strokeWidth 2.6 of a 120-unit viewBox drawn at size 220 = 4.77 px of real stroke */
@@ -351,6 +352,14 @@ const stampSpring = (g) => {
   return { z, w, wd, tc: wd > 0 ? (Math.PI - Math.atan2(wd, z * w)) / wd : Infinity, ts: STAMP_ARRIVAL.SETTLE_Z / (z * w) };
 };
 export const STAMP_LAND = stampSpring(STAMP_ARRIVAL.LAND);
+/* the instant the scale spring reaches `fade` (the source's ink starts easing there, land 0.35), by bisection on its
+   closed form - the step response rises monotonically up to its first crossing, tc, so the root is unique */
+const stampFadeAt = (L, fade) => {
+  let lo = 0, hi = L.tc;
+  for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2; if (springEval(m, L).x < fade) lo = m; else hi = m; }
+  return (lo + hi) / 2;
+};
+const STAMP_LAND_FADE_AT = stampFadeAt(STAMP_LAND, STAMP_ARRIVAL.FADE);
 export const STAMP_TURN = stampSpring(STAMP_ARRIVAL.TURN);
 
 /* the source's ENTRANCE curve, cubic-bezier(0.16, 1, 0.3, 1) (lib/timing.ts:6 EASING_ENTER, reached as
@@ -391,13 +400,26 @@ export const stampSprings = (t, o = {}) => {
   const scale = Math.sqrt(P.FROM * P.FROM + (1 - P.FROM * P.FROM) * land);
   return { land, turn, scale, deg: P.LAND_DEG + P.WIND_DEG * (1 - turn),
            off_deg: P.WIND_DEG * (1 - turn), opacity: sa01(land / Math.max(1e-6, P.FADE)),
-           ink: P.INK[0] + (P.INK[1] - P.INK[0]) * sa01((land - P.FADE) / Math.max(1e-6, 1 - P.FADE)),
-           settled: ts >= R.ts, land_at: L.tc, rest_at: R.ts };
+           ink: stampInk(t, P, L), settled: ts >= R.ts, land_at: L.tc, rest_at: R.ts };
+};
+
+/* THE INK, EASING BACK AFTER THE HIT (P70 T1b; E99 s121 (4), the source's own description: "ink strength eases back a
+   little after the hit, the way pressure comes off a real stamp"). The source's CURVE is `interpolate(land, [0.35, 1],
+   [1, 0.86])` (:96) - the clamped scale spring's rise from land FADE to land 1, which in the source runs out AT the
+   contact (land is 1 from tc). Here the same curve, sample for sample, is THROWN FROM THE CONTACT as the ring is: full
+   ink until tc, then the source's land(tf + (t - tc)) mapped through [FADE, 1] -> INK, so it eases back over the
+   source's own span (tc - tf, 0.0891 s at the default springs) and rests at INK[1]. Pure in t. */
+const stampInk = (t, P, L) => {
+  const tf = L === STAMP_LAND && P.FADE === STAMP_ARRIVAL.FADE ? STAMP_LAND_FADE_AT : stampFadeAt(L, P.FADE);
+  if (!(t > L.tc)) return P.INK[0];
+  const u = tf + (t - L.tc), land = u >= L.tc ? 1 : Math.min(1, springEval(u, L).x);
+  return P.INK[0] + (P.INK[1] - P.INK[0]) * sa01((land - P.FADE) / Math.max(1e-6, 1 - P.FADE));
 };
 
 /* THE IMPACT RING on its SPLIT curves: life linear (the fade and the thinning), the expansion eased out to RING_TO
    x the mark's own radius. r is a MULTIPLIER of that radius, so the painter supplies the mark's own geometry.
-   null before the contact and once the life is spent - the source draws it only while 0 < life < 1 (:152). */
+   null before the contact and once the life is spent - the source draws it only while 0 < life < 1 (:152). `ts` is the
+   RING's own clock: stampXf starts it at the contact (P70 T1b, E99 s121 (3)). */
 export const stampRing = (ts, o = {}) => {
   const P = Object.assign({}, STAMP_ARRIVAL, o), S = Math.max(1e-6, P.SHOCK_S);
   if (!(ts > 0)) return null;
@@ -415,8 +437,12 @@ export const stampExit = (ts, o = {}) => {
   return saEaseIn(sa01(Math.max(0, ts) / Math.max(1e-6, P.EXIT_S)));
 };
 
-/* STAMP: the whole arrival as one pure function of t (seconds from the CONTACT - a stamp is already on its spot, so
-   its contact is its own zero and the ring is thrown from it). scale, rot, ink and opacity are the mark's;
+/* STAMP: the whole arrival as one pure function of t (seconds from the ENTER - the springs start there; the mark is
+   already on its spot, so its height is its scale over 1). THE IMPACT FRAME is the CONTACT, `land_at` = tc (0.1542 s at
+   the default scale spring), the instant the scale is its own size and the gate, the cue and the camera read (P69
+   T2-T4): the ring is thrown FROM it (P70 T1b; E99 s121 (3): "the shockwave is thrown from the impact frame rather than
+   from the start, so it can never arrive before the thing that caused it") - the port's first cut started it at t = 0,
+   as the source's code does (`shockLife` from `delayInFrames`, which is also where its springs start). scale, rot, ink and opacity are the mark's;
    y / ground / alpha are the RECEIVER's answer in this module's own vocabulary (the surface dips by the material's
    spring, the hit takes its squash frame); h is the height the contact shadow reads, taken off the scale still to
    come [DERIVED: the mark's oversize IS its distance from the page - the source has no shadow at all]. */
@@ -430,10 +456,15 @@ export const stampXf = (mass, t, o = {}) => {
   const h = H * sa01((sp.scale - 1) / Math.max(1e-6, P.FROM - 1));
   if (t < 0) return { x: 0, y: 0, rot: P.LAND_DEG + P.WIND_DEG, scale: P.FROM, off_deg: P.WIND_DEG, ink: P.INK[0],
                       opacity: 0, alpha: 0, theta: Math.PI / 2, phase: "waiting", u: 0, h, ground: 0, shake: still, ring: null };
-  const st = settle(t, 0, mass, P, 1);   /* h0 = 0: a stamp does not fall and does not hop - the source clamps the scale so the seal never dips under its own size */
+  /* THE RECEIVER ANSWERS FROM THE CONTACT TOO (P70 T1b, the parent's fix 3 - the same fault E99 s121 (3) names for the
+     ring, "it can never arrive before the thing that caused it"): the page's dip, the hit's squash frame and a violent
+     hit's shake run on t - land_at, so nothing answers the mark before it touches the page (they ran from the enter,
+     0.1542 s early, until T1b) */
+  const tk = t - sp.land_at;
+  const st = settle(tk, 0, mass, P, 1);   /* h0 = 0: a stamp does not fall and does not hop - the source clamps the scale so the seal never dips under its own size */
   return { x: 0, y: st.y, rot: sp.deg, scale: sp.scale, off_deg: sp.off_deg, ink: sp.ink, opacity: sp.opacity,
            alpha: st.alpha, theta: Math.PI / 2, phase: sp.settled ? "settled" : "stamp", u: sp.land, h,
-           ground: st.ground, shake: P.violent ? groundShake(t, mass) : still, ring: stampRing(t, o) };
+           ground: st.ground, shake: P.violent ? groundShake(tk, mass) : still, ring: stampRing(tk, o) };
 };
 
 /* the CSS a painter appends: translate, the tumble, the area-preserving squash - fixed decimals. A negative alpha is a

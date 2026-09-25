@@ -215,6 +215,7 @@ test("the stamp fails closed when the approved raster URI is absent", () => {
 // E99 s87's arrival on the chip's opt-in raster form: the pose is stopaction's `stampXf`, every motion number STAMP_ARRIVAL's.
 import * as CHIPMOD from "../../scripts/species/chip.mjs";
 import { STAMP_ARRIVAL, STAMP_LAND, STAMP_TURN, stampXf, stampRing, stampExit } from "../../scripts/kinetics/stopaction.mjs";
+const { CHIP_SEAL } = CHIPMOD;   // P70 T1b (E99 s121): the seal's dials, read off the module
 
 const stampForm = (o = {}) => Object.assign({ kind: "chip", form: "stamp", at: 4, dur: 6, size: 260, _catalogue: "icons",
   icon: "prop-icon-gpu-ai-accelerator-v1", label: "NVIDIA", target: { kind: "point", x: 0.5, y: 0.5 } }, o);
@@ -245,7 +246,8 @@ test("P70 T1: arrive stamp on the stamp form - the pose at t - at IS stampXf's (
     assert.ok(near(p.rot, sx.rot, 1e-12), `rot at ${ts}`);
     assert.ok(near(p.ink, sx.ink, 1e-12), `ink at ${ts}`);
     assert.ok(near(p.fade, sx.opacity, 1e-12), `fade at ${ts}`);
-    assert.deepEqual(p.ring, stampRing(ts), `ring at ${ts}`);
+    assert.deepEqual(p.ring, sx.ring, `ring at ${ts}`);   // P70 T1b (s121 (3)): stampXf throws it from the contact
+    assert.deepEqual(p.ring, ts > STAMP_LAND.tc ? stampRing(ts - STAMP_LAND.tc) : null, `... stampRing on the contact's clock at ${ts}`);
   }
   assert.ok(near(chipPose(sp, sp.at).scale, STAMP_ARRIVAL.FROM, 1e-12), "it comes down from 2.1x");
   for (const ts of [STAMP_LAND.tc + 1e-9, 0.2, 0.5, 2]) assert.equal(chipPose(sp, sp.at + ts).scale, 1, `exactly 1 from tc (${ts})`);
@@ -257,14 +259,16 @@ test("P70 T1: arrive stamp on the stamp form - the pose at t - at IS stampXf's (
   assert.equal(chipPose(sp, sp.at).ink, STAMP_ARRIVAL.INK[0]);
   assert.ok(near(chipPose(sp, sp.at + 1).ink, STAMP_ARRIVAL.INK[1], 1e-12), "the ink eases back to 0.86");
   assert.equal(chipPose(sp, sp.at).ring, null, "no ring before the contact");
-  assert.equal(chipPose(sp, sp.at + STAMP_ARRIVAL.SHOCK_S + 0.01).ring, null, "and never held past its life");
+  assert.equal(chipPose(sp, sp.at + STAMP_LAND.tc - 0.01).ring, null, "nor on the way down (P70 T1b, s121 (3))");
+  assert.equal(chipPose(sp, sp.at + STAMP_LAND.tc + STAMP_ARRIVAL.SHOCK_S + 0.01).ring, null, "and never held past its life");
 });
 
 test("P70 T1: the ring's peak is the compiler's fitted ring_to, else the source's RING_TO", () => {
   const ts = (4 + 0.3) - 4, fitted = chipPose(stampForm({ arrive: "stamp", ring_to: 1.4 }), 4 + 0.3).ring;
-  assert.deepEqual(fitted, stampRing(ts, { RING_TO: 1.4 }));
-  assert.ok(fitted.r < stampRing(ts).r);
-  assert.deepEqual(chipPose(stampForm({ arrive: "stamp" }), 4 + 0.3).ring, stampRing(ts));
+  const tr = ts - STAMP_LAND.tc;   // P70 T1b (s121 (3)): the ring's clock starts at the contact
+  assert.deepEqual(fitted, stampRing(tr, { RING_TO: 1.4 }));
+  assert.ok(fitted.r < stampRing(tr).r);
+  assert.deepEqual(chipPose(stampForm({ arrive: "stamp" }), 4 + 0.3).ring, stampRing(tr));
 });
 
 test("P70 T1: the approach comes down from the compiler's fitted from_to, else the source's FROM - capped, never clipped", () => {
@@ -302,18 +306,20 @@ test("P70 T1: the painter lands a stamped chip with its ring UNDER the mark, tur
   assert.equal(CHIP_STAMP.LABEL_FLOOR, 59.08, "the phone floor [DERIVED: ledger_page.CARD_TYPE_PX, 12 * 1920 / 390]");
   const sp = stampForm({ arrive: "stamp", paint: [0, 0.1, 1, 0.9] });
   const mid = paintAt(sp, sp.at + 0.254);   // contact + 0.10 s: the ring radiating, the rotation still off its rest
-  assert.deepEqual(mid.map((e) => e.tag), ["circle", "g", "image", "text"]);
-  const [ring, g, art, lab] = mid;
+  assert.deepEqual(mid.map((e) => e.tag), ["circle", "g", "circle", "circle", "image", "text"]);   // P70 T1b: the seal's two rings in the mark's group
+  const [ring, g, , , art, lab] = mid;
   assert.equal(ring.cls, "chipstampring");
   assert.equal(ring.at.stroke, "#F2F2F2", "chalk on the ledger page");
   assert.equal(ring.at.fill, "none");
-  const rg = stampRing(0.254), r0 = 0.5 * Math.hypot(260, 260 * 0.8);
-  assert.equal(ring.at.r, (r0 * rg.r).toFixed(1), "the art's own PAINTED radius x the ring's multiplier");
+  const rg = stampRing(0.254 - STAMP_LAND.tc), r0 = 0.5 * Math.hypot(260, 260 * 0.8);   // P70 T1b: the ring's clock from the contact
+  const R0 = (r0 + CHIP_SEAL.GAP_PX) * CHIP_SEAL.SRC_R / CHIP_SEAL.INNER_R;   // ... and its base the SEAL's outer ring (s121 (1))
+  assert.equal(ring.at.r, (R0 * rg.r).toFixed(1), "the seal's own outer radius x the ring's multiplier - thrown from the seal's border, as the source's is");
   assert.equal(ring.at["stroke-width"], rg.width.toFixed(2));
   assert.equal(ring.at.opacity, rg.alpha.toFixed(3));
   assert.equal(ring.at.cx, "960.0");
   assert.equal(ring.at.cy, "540.0", "about the painted centre - here the square's own");
-  assert.match(g.at.transform, /^translate\(960\.0 540\.\d\) rotate\(-10\.39\) scale\(1\.0000\)$/);
+  // P70 T1b (fix 3): the receiver's dip runs from the CONTACT, so 0.10 s after it the mark rides stampXf's dip exactly
+  assert.equal(g.at.transform, "translate(960.0 " + (540 + stampXf("ink", 0.254).y).toFixed(1) + ") rotate(-10.39) scale(1.0000)");
   assert.equal(art.cls, "chipstampart");
   assert.match(lab.at.style, /font-size:59\.08px/);
   assert.equal(lab.at.y, (130 + 28 * 59.08 / 48).toFixed(1), "the gap scales with the floor");
@@ -321,7 +327,7 @@ test("P70 T1: the painter lands a stamped chip with its ring UNDER the mark, tur
   assert.equal(plate[0].at.stroke, "#25313C", "charcoal on any other ground");
   const two = paintAt(stampForm({ arrive: "stamp", label: "NVIDIA\nCHIPS" }), 4 + 2);
   assert.equal(two.filter((e) => e.tag === "tspan")[1].at.dy, +(52 * 59.08 / 48).toFixed(2), "and the line step");
-  assert.deepEqual(paintAt(sp, sp.at + 2).map((e) => e.tag), ["g", "image", "text"], "the ring is never held");
+  assert.deepEqual(paintAt(sp, sp.at + 2).map((e) => e.tag), ["g", "circle", "circle", "image", "text"], "the ring is never held (the seal stays)");
 });
 
 test("P70 T1: a stamp-form chip WITHOUT arrive paints exactly what it painted - 48 px label, no ring, no turn", () => {
@@ -331,4 +337,179 @@ test("P70 T1: a stamp-form chip WITHOUT arrive paints exactly what it painted - 
   assert.match(made[2].at.style, /font-size:48px/);
   assert.equal(made[2].at.y, (130 + 28).toFixed(1));
   assert.equal(made[2].at.x, 0);
+});
+
+// ---------------------------------------------------------------- P70 T1b (E99 s121, s123): a seal-type stamp is a SEAL, and gold
+// The operator: "the stamp needs to have a solid border"; "part of the reason that stamp works is the color". badge-stamp.tsx's
+// seal, read off its lines (r = 50): the outer ring at r, stroke 3.4, ink (:172-180); the inner ring at r - 6, stroke 1.2,
+// ink x 0.7 (:181-189); ring text 7.4 / letterSpacing 1.6 on the top arc at r - 12 and the bottom arc at r - 14 with dy 6.4,
+// ink x 0.9 (:137-149, :191-220); the colour #E8B86D (:57). Both rings are in the MARK's group, so they land, rest and leave
+// with it - the impact ring radiates from the outer one and is gone.
+const sealOf = (sp, side = 260) => {
+  const S = CHIP_SEAL, rc = CHIPMOD.chipStampPaint(sp, side).r;
+  const R = Number.isFinite(+sp.seal_r) ? +sp.seal_r : (rc + S.GAP_PX) * S.SRC_R / S.INNER_R;
+  return { rc, R, u: R / S.SRC_R, rIn: R * S.INNER_R / S.SRC_R };
+};
+
+test("P70 T1b: the seal's dials ARE the source's, each read off its own line", () => {
+  assert.equal(CHIP_SEAL.SRC_R, 50);            /* :127 const r = 50 */
+  assert.equal(CHIP_SEAL.INNER_R, 44);          /* :184 r - 6 */
+  assert.equal(CHIP_SEAL.OUTER_W, 3.4);         /* :178 */
+  assert.equal(CHIP_SEAL.INNER_W, 1.2);         /* :187 */
+  assert.equal(CHIP_SEAL.INNER_A, 0.7);         /* :188 ink * 0.7 */
+  assert.equal(CHIP_SEAL.TEXT_A, 0.9);          /* :198 / :214 ink * 0.9 */
+  assert.equal(CHIP_SEAL.TEXT_SIZE, 7.4);       /* :194 */
+  assert.equal(CHIP_SEAL.TEXT_TRACK, 1.6);      /* :196 */
+  assert.equal(CHIP_SEAL.TOP_R, 38);            /* :142 r - 12 */
+  assert.equal(CHIP_SEAL.BOTTOM_R, 36);         /* :147 r - 14 */
+  assert.equal(CHIP_SEAL.BOTTOM_DY, 6.4);       /* :212 */
+  assert.equal(CHIP_SEAL.GOLD, "#E8B86D", "E99 s123: the source's own default colour, ONE dial");
+  assert.equal(CHIP_SEAL.GAP_PX, 12, "the build's STAMP_RING_GAP_PX - the least page between a mark and a ring");
+});
+
+test("P70 T1b (s123): the seal is GOLD on the dark ground, darkened on the cream until it reads - the sunflower is not the seal's", () => {
+  assert.equal(CHIPMOD.sealGold({}), CHIP_SEAL.GOLD, "gold on the dark ground, as the reference");
+  assert.ok(CHIPMOD.sealContrast(CHIP_SEAL.GOLD, CHIP_SEAL.GROUND.dark) > 7, "#E8B86D on the charcoal is 7.27:1");
+  assert.ok(CHIPMOD.sealContrast(CHIP_SEAL.GOLD, CHIP_SEAL.GROUND.light) < CHIP_SEAL.CONTRAST_MIN, "... and 1.48:1 on the cream - it would not read");
+  const dark = CHIPMOD.sealGold({ ink: "charcoal" });
+  assert.equal(dark, "#A07F4B", "the gold's channels scaled down in 1 % steps (x0.69)");
+  assert.ok(CHIPMOD.sealContrast(dark, CHIP_SEAL.GROUND.light) >= CHIP_SEAL.CONTRAST_MIN, "until it holds 3:1 on the cream");
+  assert.notEqual(CHIP_SEAL.GOLD.toUpperCase(), "#F5B72E", "the sunflower stays the callout / focus yellow - a separate token");
+  assert.equal(CHIPMOD.sealGold({ ink: "charcoal" }, "#C79E5E"), "#9F7E4B", "the dial's other candidate darkens the same way");
+});
+
+test("P70 T1b (s121 (1)): a stamped chip lands AS A SEAL - the solid outer ring and the thin inner ring ride the mark, in gold", () => {
+  const sp = stampForm({ arrive: "stamp", paint: [0, 0.1, 1, 0.9], ink: "charcoal" });
+  const mid = paintAt(sp, sp.at + 0.254), g = mid[1], seal = CHIPMOD.chipSeal(sp, 260), want = sealOf(sp);
+  assert.ok(near(seal.R, want.R, 1e-9) && near(seal.rIn, want.rIn, 1e-9), "chipSeal is the geometry the source's ratios give");
+  const [outer, inner] = g.kids.filter((e) => e.tag === "circle");
+  assert.ok(outer && inner, "both rings are children of the MARK's group - they land, rest and leave with it");
+  assert.equal(outer.cls, "chipseal"); assert.equal(inner.cls, "chipsealin");
+  for (const c of [outer, inner]) {
+    assert.equal(c.at.cx, 0); assert.equal(c.at.cy, 0); assert.equal(c.at.fill, "none");
+    assert.equal(c.at.stroke, "#A07F4B", "the seal's gold, darkened on the light ground the row names");
+  }
+  assert.equal(outer.at.r, want.R.toFixed(1));
+  assert.equal(outer.at["stroke-width"], (want.R * 3.4 / 50).toFixed(2), "SOLID and thick: 3.4 of 50");
+  assert.equal(inner.at.r, want.rIn.toFixed(1));
+  assert.equal(inner.at["stroke-width"], (want.R * 1.2 / 50).toFixed(2), "thin: 1.2 of 50");
+  assert.ok(want.rIn - want.rc >= CHIP_SEAL.GAP_PX - 1e-9, "the mark and its name sit inside the inner ring, the gap clear");
+  assert.equal(mid[0].cls, "chipstampring");
+  assert.ok(+mid[0].at.r > want.R, "the impact ring is outside the seal - thrown from its border");
+  const rest = paintAt(sp, sp.at + 2);
+  assert.equal(rest.filter((e) => e.cls === "chipstampring").length, 0, "the impact ring is spent");
+  assert.equal(rest.filter((e) => e.cls === "chipseal" || e.cls === "chipsealin").length, 2, "the seal rests with the mark");
+  const out = sp.at + sp.dur - STAMP_ARRIVAL.EXIT_S + 0.3, leaving = paintAt(sp, out);
+  assert.equal(leaving.filter((e) => e.cls === "chipseal").length, 1, "and leaves on the mark's own exit");
+  assert.ok(near(+leaving[0].at.opacity, 1 - stampExit(0.3), 2e-3), "inside the group that fades");
+  const dark = paintAt(stampForm({ arrive: "stamp" }), 6);
+  assert.equal(dark.find((e) => e.cls === "chipseal").at.stroke, CHIP_SEAL.GOLD, "gold as it is on the dark ground");
+  assert.match(dark.find((e) => e.cls === "chipstamplab").at.style, /fill:#E8B86D;/, "the NAME is the seal's gold");
+  assert.match(dark.find((e) => e.cls === "chipstamplab").at.style, /stroke:#25313C/, "... on its charcoal keyline");
+});
+
+test("P70 T1b (fix 6): the seal's radius is the compiler's `seal_r` - the room the authored mark reserved - whatever the grown art", () => {
+  const sp = stampForm({ arrive: "stamp", size: 335.2, seal_r: 246.4, paint: [0.0089, 0.0093, 0.9911, 1.17] });
+  const seal = CHIPMOD.chipSeal(sp, 335.2);
+  assert.equal(seal.R, 246.4, "the seal stays the size the room gave it");
+  assert.ok(near(seal.rIn, 246.4 * 44 / 50, 1e-9));
+  const m = paintAt(sp, sp.at + 2);
+  assert.equal(m.find((e) => e.cls === "chipstampart").at.width, "335.2", "the art is drawn at the grown side");
+  assert.equal(m.find((e) => e.cls === "chipseal").at.r, "246.4");
+});
+
+// the group's LINEAR part as the SVG composes it (rotate . scale . matrix), and a circle of radius r's half-extents under it
+const groupLinear = (transform) => {
+  const rot = +/rotate\(([-0-9.]+)\)/.exec(transform)[1] * Math.PI / 180, s = +/scale\(([-0-9.]+)\)/.exec(transform)[1];
+  const m = /matrix\(([^)]+)\)/.exec(transform), [a, b, c, d] = m ? m[1].trim().split(/\s+/).map(Number) : [1, 0, 0, 1];
+  const R = [[Math.cos(rot) * s, -Math.sin(rot) * s], [Math.sin(rot) * s, Math.cos(rot) * s]], M = [[a, c], [b, d]];
+  return [[R[0][0] * M[0][0] + R[0][1] * M[1][0], R[0][0] * M[0][1] + R[0][1] * M[1][1]],
+          [R[1][0] * M[0][0] + R[1][1] * M[1][0], R[1][0] * M[0][1] + R[1][1] * M[1][1]]];
+};
+const circleExtents = (L, r) => [r * Math.hypot(L[0][0], L[0][1]), r * Math.hypot(L[1][0], L[1][1])];
+
+test("P70 T1b (the parent's R3): a SEAL does not squash - its width and height stay equal from the contact to contact + 0.1 s", () => {
+  const sp = stampForm({ arrive: "stamp", paint: [0, 0.1, 1, 0.9], ink: "charcoal" });
+  const tc = STAMP_LAND.tc;
+  let dipped = 0, rang = 0;
+  for (let i = 0; i <= 100; i++) {   // every millisecond, so the 24 fps squash frame (contact + 0.021 .. + 0.063 s) is crossed
+    const t = sp.at + tc + i / 1000, p = chipPose(sp, t);
+    assert.equal(p.alpha, 0, `no squash on the seal's pose at contact + ${(i / 1000).toFixed(3)} s`);
+    const g = paintAt(sp, t)[1], outer = g.kids.find((e) => e.cls === "chipseal");
+    assert.doesNotMatch(g.at.transform, /matrix/, `no squash tensor on the mark's group at contact + ${(i / 1000).toFixed(3)} s`);
+    const [w, h] = circleExtents(groupLinear(g.at.transform), +outer.at.r);
+    assert.ok(near(w, h, 1e-9), `the seal is round at contact + ${(i / 1000).toFixed(3)} s: ${w.toFixed(3)} x ${h.toFixed(3)}`);
+    dipped = Math.max(dipped, p.dy); if (p.ring) rang++;
+  }
+  // ... and the rest of the hit stays: the page's dip, the impact ring and the ink easing back, as stampXf("ink") has them
+  const sx = stampXf("ink", tc + 0.05);
+  assert.ok(near(chipPose(sp, sp.at + tc + 0.05).dy, sx.y, 1e-12) && sx.y > 0, "the dip is the ink mass's, from the contact");
+  assert.ok(dipped > 1 && rang > 90, `the dip (${dipped.toFixed(2)} px) and the ring (${rang} of 101 instants) are kept`);
+  assert.ok(chipPose(sp, sp.at + tc + 0.05).ink < STAMP_ARRIVAL.INK[0], "the ink is easing back after the hit");
+  // a BARE PROP (the dock's stampXf at its own mass) keeps its squash frame - only the seal is rigid
+  assert.ok(stampXf("ink", tc + 0.04).alpha > 0.2, "the dock stamp's squash frame is untouched");
+});
+
+test("P70 T1b (s121 (2)): no seal anywhere else - the unstamped stamp form, a glyph chip", () => {
+  assert.equal(CHIPMOD.chipSeal(stampForm(), 260), null, "the stamp FORM on its spring is a sticker being placed, not a stamp");
+  assert.equal(CHIPMOD.chipSeal(chip(), 260), null);
+  assert.equal(paintAt(stampForm(), 6).filter((e) => /chipseal/.test(e.cls || "")).length, 0);
+  assert.equal(paintAt(stampForm({ ring_text: "AI" }), 6).filter((e) => e.cls === "chipsealglyph").length, 0, "ring text is the seal's");
+  assert.doesNotMatch(paintAt(stampForm(), 6).find((e) => e.cls === "chipstamplab").at.style, /E8B86D/, "an unstamped name keeps its ink");
+});
+
+test("P70 T1b (s121 (4)): the ink eases back ON THE MARK - the seal, its text and its name; never a wash over the picture", () => {
+  const sp = stampForm({ arrive: "stamp", ring_text: "AI ACCELERATOR", ring_text_bottom: "GPU" });
+  const at = (t) => {
+    const m = paintAt(sp, t);
+    return { o: m.find((e) => e.cls === "chipseal"), i: m.find((e) => e.cls === "chipsealin"), tx: m.filter((e) => e.cls === "chipsealtext"),
+             lab: m.find((e) => e.cls === "chipstamplab"), art: m.find((e) => e.cls === "chipstampart") };
+  };
+  const hit = at(sp.at + STAMP_LAND.tc), later = at(sp.at + 1);
+  assert.equal(hit.o.at.opacity, "1.000", "heavy at the hit");
+  assert.equal(hit.lab.at.opacity, "1.000");
+  assert.equal(later.o.at.opacity, (0.86).toFixed(3), "0.86 once the pressure is off");
+  assert.equal(later.i.at.opacity, (0.86 * 0.7).toFixed(3));
+  assert.equal(later.tx.length, 2);
+  for (const e of later.tx) assert.equal(e.at.opacity, (0.86 * 0.9).toFixed(3));
+  assert.equal(later.lab.at.opacity, (0.86).toFixed(3), "the name is stamped ink too");
+  assert.equal(later.art.at.opacity, undefined, "the PICTURE is the payload: no ink over it");
+});
+
+test("P70 T1b (fixes 1, 2): ring text at the SOURCE's proportion, glyph by glyph, EVENLY spaced and CENTRED on each arc's axis", () => {
+  const sp = stampForm({ arrive: "stamp", ring_text: "AI ACCELERATOR", ring_text_bottom: "GPU" }), w = sealOf(sp), S = CHIP_SEAL;
+  const seal = CHIPMOD.chipSeal(sp, 260);
+  assert.ok(near(seal.size, S.TEXT_SIZE * w.u, 1e-9), "7.4 of r = 50 - the text never widens the seal");
+  assert.ok(near(seal.R, sealOf(stampForm({ arrive: "stamp" })).R, 1e-9), "the seal is the size it is without text");
+  assert.ok(near(seal.track, S.TEXT_TRACK * w.u, 1e-9));
+  const m = paintAt(sp, sp.at + 2), groups = m.filter((e) => e.cls === "chipsealtext");
+  assert.equal(groups.length, 2);
+  assert.equal(m.filter((e) => e.tag === "textPath" || e.tag === "defs").length, 0, "no textPath: each glyph is placed");
+  for (const [arc, grp, side] of [[seal.top, groups[0], 1], [seal.bottom, groups[1], -1]]) {
+    const adv = [...arc.text].map((ch) => S.ADVANCE_EM[ch] * seal.size);
+    const L = adv.reduce((a, v) => a + v, 0) + (adv.length - 1) * seal.track;
+    assert.ok(near(arc.len, L, 1e-9), "the line's length is the measured advances plus the tracking between glyphs");
+    /* CENTRED: the first glyph's left edge and the last glyph's right edge are symmetric about the axis */
+    const first = arc.glyphs[0].a * arc.r - adv[0] / 2, last = arc.glyphs.at(-1).a * arc.r + adv.at(-1) / 2;
+    assert.ok(near(first, -last, 1e-9), `centred on its axis: ${first.toFixed(2)} / ${last.toFixed(2)}`);
+    /* EVEN: consecutive centres are exactly half of each advance + the tracking apart, along the arc */
+    for (let i = 1; i < adv.length; i++) {
+      const gap = (arc.glyphs[i].a - arc.glyphs[i - 1].a) * arc.r;
+      assert.ok(near(gap, adv[i - 1] / 2 + seal.track + adv[i] / 2, 1e-9), `glyph ${i} spaced by the advances`);
+    }
+    assert.ok(L <= Math.PI * arc.r, "within its half-arc");
+    const drawn = grp.kids.filter((e) => e.cls === "chipsealglyph");
+    assert.equal(drawn.length, [...arc.text].filter((c) => c.trim()).length, "a space is an advance, not a glyph");
+    const rho = side > 0 ? arc.r : arc.r + arc.dy;
+    const g0 = arc.glyphs.find((gl) => gl.ch.trim()), d0 = drawn[0];
+    assert.equal(d0.at.x, (rho * Math.sin(g0.a)).toFixed(2));
+    assert.equal(d0.at.y, (side * -rho * Math.cos(g0.a)).toFixed(2), side > 0 ? "the top's baseline on its arc" : "the bottom's pushed out by dy");
+    const deg = (side > 0 ? g0.a : -g0.a) * 180 / Math.PI;
+    assert.match(d0.at.transform, new RegExp("^rotate\\(" + deg.toFixed(3).replace(".", "\\.")), "each glyph turned to stand on the arc, reading left to right");
+    assert.ok(+d0.at.x < 0, "the line STARTS on the left - left to right on both arcs");
+    assert.equal(d0.at["text-anchor"], "middle");
+    assert.match(grp.at.style, new RegExp("font-size:" + seal.size.toFixed(2).replace(".", "\\.") + "px"));
+  }
+  assert.equal(paintAt(stampForm({ arrive: "stamp", ring_text: "AI" }), 6).filter((e) => e.cls === "chipsealtext").length, 1, "either arc is optional");
+  assert.equal(paintAt(stampForm({ arrive: "stamp" }), 6).filter((e) => e.cls === "chipsealtext").length, 0, "absent = no ring text");
 });

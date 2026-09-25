@@ -164,7 +164,8 @@ def test_the_chips_painted_extent_is_the_UNION_of_its_mark_and_its_label_and_the
 
 
 def test_on_a_clear_plate_the_ring_takes_the_sources_full_2x_and_is_written_on_a_COPY():
-    e = _stamp(arrive="stamp", size=180)
+    # P70 T1b: the room is read round the SEAL (radius R > the mark's half-diagonal), so the clear point is 0.40, not 0.42
+    e = _stamp(arrive="stamp", size=180, target={"kind": "point", "x": 0.5, "y": 0.40})
     out, notes = B.chip_stamp_ring_fit(e, {"asset_id": "plate-plain"}, "16:9", _gpu_paint())
     assert notes == []
     assert out is not e and "ring_to" not in e, "the authored entry is never mutated"
@@ -175,11 +176,12 @@ def test_on_a_clear_plate_the_ring_takes_the_sources_full_2x_and_is_written_on_a
 def test_a_ring_near_the_caption_band_is_CAPPED_by_stamp_fit_rounded_down():
     e = _stamp(arrive="stamp", size=180, target={"kind": "point", "x": 0.5, "y": 0.5})
     out, notes = B.chip_stamp_ring_fit(e, {"asset_id": "plate-plain"}, "16:9", _gpu_paint())
-    art = B.chip_stamp_art(e, "16:9", _gpu_paint())
+    art = B.chip_stamp_art(out, "16:9", _gpu_paint())   # P70 T1b (fix 6): the GROWN mark's painted centre
     (cx, cy), (pw, ph) = art["centre"], art["painted"]
     band = B.FRAME_BANDS["16:9"]["caption"]
     clear = min(band["y"] - cy, B.disc_clearance(cx, cy, [band], B.FRAME_BANDS["16:9"]["safe"]))
-    rp = 0.5 * (pw ** 2 + ph ** 2) ** 0.5
+    rp = out["seal_r"]   # P70 T1b (E99 s121): the ring is thrown from the SEAL's border - the room the authored mark reserved
+    assert rp == B.chip_stamp_seal_r(B.chip_stamp_art(e, "16:9", _gpu_paint())), "the seal the AUTHORED mark reserves"
     assert out["ring_to"] < B.STAMP_RING_TO
     assert out["ring_to"] == pytest.approx((clear - B.STAMP_RING_W_PX) / rp, abs=1e-2)   # stamp_fit reads its own ROUNDED box
     assert notes == [], "a capped ring is the fit doing its job, not a finding"
@@ -190,9 +192,9 @@ def test_the_APPROACH_is_fitted_by_the_docks_law_capped_never_clipped():
     is - stamp_fit's `from_to` (the turned hull clear at that scale), rounded down."""
     e = _stamp(arrive="stamp", target={"kind": "point", "x": 0.5, "y": 0.34})   # the default 260: the safe box's top is near
     out, notes = B.chip_stamp_ring_fit(e, {"asset_id": "plate-plain"}, "16:9", _gpu_paint())
-    art = B.chip_stamp_art(e, "16:9", _gpu_paint())
+    art = B.chip_stamp_art(out, "16:9", _gpu_paint())   # P70 T1b (fix 6): the GROWN mark's painted centre
     (cx, cy), (w, h) = art["centre"], art["painted"]
-    hx, hy = B.turned_half_extents(w, h)
+    hy = out["seal_r"]   # P70 T1b (E99 s121): the whole SEAL comes down - a circle, the same at every turn
     safe = B.FRAME_BANDS["16:9"]["safe"]
     assert B.STAMP_APPROACH_MIN <= out["from_to"] < B.STAMP_FROM and notes == []
     assert out["from_to"] == pytest.approx((cy - safe["y"]) / hy, abs=5e-3), "held by the safe box's top"
@@ -205,9 +207,8 @@ def test_where_NOTHING_fits_it_is_a_WARN_with_numbers_and_the_ring_is_drawn_at_i
     assert len(notes) == 2 and all(n.startswith("row 7 chip (mark and label ") for n in notes), notes
     assert "the ring is drawn at its floor" in notes[0] and "though the room holds" in notes[0]
     assert "the approach comes down from 1.20x though the room holds" in notes[1], "the dock's _stamp_floors, word for word"
-    art = B.chip_stamp_art(e, "16:9", _gpu_paint())
-    rp = 0.5 * (art["painted"][0] ** 2 + art["painted"][1] ** 2) ** 0.5
-    assert out["ring_to"] == pytest.approx((rp + B.STAMP_RING_GAP_PX) / rp, abs=1e-3), "stamp_fit's floor, on its rounded box"
+    rp = out["seal_r"]   # P70 T1b (E99 s121): the floor is 12 px outside the SEAL's outer ring
+    assert out["ring_to"] == pytest.approx((rp + B.STAMP_RING_GAP_PX) / rp, abs=2e-3), "stamp_fit's floor, on its rounded box"
     assert out["from_to"] == B.STAMP_APPROACH_MIN
     assert "raise" not in inspect.getsource(B.chip_stamp_ring_fit)
 
@@ -315,7 +316,7 @@ def test_the_two_goldens_come_from_one_source_that_differs_only_in_arrive():
     arr, arr_uris = BGS.SURFACES["chip-stamp-arrival"]()
     assert pop_uris == arr_uris
     (p,), (a,) = pop["scenes"][0]["species"], arr["scenes"][0]["species"]
-    fitted = {"arrive", "ring_to", "from_to", "paint"}   # the arrival, and what the compiler's fit writes because of it
+    fitted = {"arrive", "ring_to", "from_to", "paint", "seal_r", "size"}   # the arrival, and what the fit writes (T1b: the seal, the grown mark)
     assert {k: v for k, v in a.items() if k not in fitted} == p
     assert a["arrive"] == "stamp" and "arrive" not in p and "ring_to" not in p and "from_to" not in p
     assert a["ring_to"] < B.STAMP_RING_TO and a["from_to"] < B.STAMP_FROM, "both fits at work, and no finding"
@@ -338,7 +339,11 @@ def test_the_compilers_label_step_mirrors_equal_chip_mjs_and_the_exit_mirror_equ
     assert re.search(rf"LABEL_LINE_H:\s*{B.CHIP_STAMP_LABEL_LINE_H},", src), "CHIP_STAMP.LABEL_LINE_H"
     m = re.search(r"EXIT_S:\s*(\d+)\s*/\s*(\d+),", STOPACTION.read_text(encoding="utf-8"))
     assert m and B.STAMP_EXIT_S == int(m.group(1)) / int(m.group(2)), "STAMP_ARRIVAL.EXIT_S, one dial written twice"
-    assert B.CHIP_STAMP_MIN_DUR_S == pytest.approx(CONTACT + B.STAMP_EXIT_S)
+    m = re.search(r"SHOCK_S:\s*(\d+)\s*/\s*(\d+),", STOPACTION.read_text(encoding="utf-8"))
+    assert m and B.STAMP_SHOCK_S == int(m.group(1)) / int(m.group(2)), "STAMP_ARRIVAL.SHOCK_S, one dial written twice"
+    # P70 T1b (fix 4): the landing, the shockwave's whole life and the exit - a stamp never leaves with its shockwave out
+    assert B.CHIP_STAMP_MIN_DUR_S == pytest.approx(CONTACT + B.STAMP_SHOCK_S + B.STAMP_EXIT_S)
+    assert B.CHIP_STAMP_MIN_DUR_S == pytest.approx(1.1542, abs=1e-4)
 
 
 def test_one_predicate_says_which_chip_lands_as_a_stamp_for_the_compiler_the_gate_and_the_walk():
@@ -357,8 +362,10 @@ def test_one_predicate_says_which_chip_lands_as_a_stamp_for_the_compiler_the_gat
 def test_a_stamped_chip_shorter_than_its_landing_and_its_exit_is_WARNED_with_its_numbers():
     need = B.CHIP_STAMP_MIN_DUR_S
     msg = B.chip_stamp_dur_advice(_stamp(arrive="stamp", dur=0.5))
-    for part in ("'NVIDIA'", GPU, "dur 0.5s", f"{CONTACT:g}s", f"{B.STAMP_EXIT_S:.4f}s", f"{need:.4f}s", f"{need:.2f}s"):
+    for part in ("'NVIDIA'", GPU, "dur 0.5s", f"{CONTACT:g}s", f"{B.STAMP_SHOCK_S:.4f}s", f"{B.STAMP_EXIT_S:.4f}s",
+                 f"{need:.4f}s", "1.16s", "shockwave still out"):
         assert part in msg, (part, msg)
+    assert B.chip_stamp_dur_advice(_stamp(arrive="stamp", dur=1.0)) is not None, "T1's 0.69 s is no longer enough"
     assert B.chip_stamp_dur_advice(_stamp(arrive="stamp", dur=round(need + 0.01, 2))) is None
     assert B.chip_stamp_dur_advice(_stamp(dur=0.5)) is None, "the spring landing owes no stamp exit"
     assert B.chip_stamp_dur_advice(_glyph(dur=0.5)) is None

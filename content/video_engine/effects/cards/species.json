@@ -426,8 +426,18 @@
       "options": [
         {
           "token": "arrive",
-          "means": "`arrive: \"stamp\"` on the stamp form only (P70 T1): the art lands by stampXf - down from 2.1x, off-square, the ring fitted to the room, the exit owed inside dur, the label at the s90 floor",
+          "means": "`arrive: \"stamp\"` on the stamp form only (P70 T1): lands by stampXf - down from 2.1x, off-square, ring fitted to the room, exit owed inside dur, label at the s90 floor - AS A SEAL (P70 T1b, E99 s121)",
           "source_set": "CHIP_ARRIVALS"
+        },
+        {
+          "token": "ring_text",
+          "means": "a stamped chip's GOLD seal only (E99 s121, s123): one short line on the TOP half-arc, left to right, at the source's size; past the ring's side it is WARNed and not drawn (s113)",
+          "source_set": "CHIP_SEAL_OPTS"
+        },
+        {
+          "token": "ring_text_bottom",
+          "means": "... and on the BOTTOM half-arc, its own left-to-right arc so it reads upright (badge-stamp.tsx ringTextBottom)",
+          "source_set": "CHIP_SEAL_OPTS"
         }
       ],
       "dials": {
@@ -443,7 +453,10 @@
         "CAPABILITIES icon CHIP",
         "P50 T2",
         "P70 T1",
-        "E99 s87"
+        "P70 T1b",
+        "E99 s87",
+        "E99 s121",
+        "E99 s123"
       ],
       "status": "wired",
       "proof": {

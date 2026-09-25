@@ -29,21 +29,23 @@
      "at": 10.0,
      "dur": 6.0,
      "form": "stamp",
-     "from_to": 1.4792,
+     "from_to": 1.4711,
      "icon": "prop-icon-gpu-ai-accelerator-v1",
      "idle": "breath",
-     "ink": "charcoal",
+     "ink": "cream",
      "kind": "chip",
      "label": "NVIDIA",
      "paint": [
       0.0089,
       0.0312,
       0.9911,
-      1.2039
+      1.2843
      ],
-     "ring_to": 1.4597,
+     "ring_text": "AI ACCELERATOR",
+     "ring_text_bottom": "GPU",
+     "ring_to": 1.4516,
      "seal_r": 246.4,
-     "size": 335.2,
+     "size": 240.5,
      "target": {
       "kind": "point",
       "x": 0.5,
@@ -52,7 +54,7 @@
     }
    ],
    "world": {
-    "asset_id": "plate-cream",
+    "asset_id": "plate-charcoal",
     "ken_burns": {
      "scale": 0,
      "x": 0,

@@ -3501,23 +3501,36 @@ CHIP_STAMP_PLATE = "plate-cream"
 CHIP_STAMP_CREAM = (244, 230, 199)   # CHIP_STAMP.INK.cream, the long form's ground
 
 
-def _chip_stamp(arrive: bool) -> tuple[dict, dict]:
+# P70 T1b (E99 s121, s123): THE SEAL WITH ITS RING TEXT, GOLD ON THE DARK GROUND - the same source with `ring_text` /
+# `ring_text_bottom` on the stamped chip: the top arc "AI ACCELERATOR", the bottom arc "GPU", both read left to right, at
+# the source's proportion of the seal (it never widens it). The words are the icon's own catalogue name
+# (`prop-icon-gpu-ai-accelerator-v1`), plainly generic and true of the drawn thing (s113: intentional, verified). It
+# stands on a CHARCOAL plate with the name's ink `cream` - the reference's look, the seal's gold as it is; the arrival
+# golden above stays on the cream, where the gold is darkened until it reads.
+CHIP_STAMP_RING_TEXT = {"ring_text": "AI ACCELERATOR", "ring_text_bottom": "GPU", "ink": "cream"}
+CHIP_STAMP_DARK_PLATE = "plate-charcoal"
+CHIP_STAMP_CHARCOAL = (37, 49, 60)   # CHIP_SEAL.GROUND.dark, the template's --charcoal
+
+
+def _chip_stamp(arrive: bool, ring: bool = False) -> tuple[dict, dict]:
     import build_scene_timeline_f as BST
-    world = {"asset_id": CHIP_STAMP_PLATE, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
-    entry = dict(CHIP_STAMP_ENTRY, **({"arrive": "stamp"} if arrive else {}))
-    errs = BST.validate_species([entry], (0, 0, 0), CHIP_STAMP_PLATE)
+    plate = CHIP_STAMP_DARK_PLATE if ring else CHIP_STAMP_PLATE
+    world = {"asset_id": plate, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    entry = dict(CHIP_STAMP_ENTRY, **({"arrive": "stamp"} if arrive else {}), **(CHIP_STAMP_RING_TEXT if ring else {}))
+    errs = BST.validate_species([entry], (0, 0, 0), plate)
     assert not errs, errs
     compiled, asset = BST._with_stamp_catalogue(entry)   # the compiled entry carries its catalogue, as the row loop writes it
     compiled, notes = BST.chip_stamp_ring_fit(compiled, world, "16:9", BST.painted_box(asset["file"]), [],
                                               "golden chip-stamp")
-    assert not notes, notes
+    # the one finding a golden may carry is the s90 advice on its ring text (drawn at the seal's proportion, s106)
+    assert all("under the E99 s90 phone floor" in n for n in notes), notes
     scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": [compiled]}]
     tl = _timeline("Golden: the chip's stamp form - on its spring, or landing as a stamp (P70 T1)", scenes, {}, None)
     # no captions: a build moves them to the quiet bottom rail while a labelled stamp chip is up
     # (`_readable_species_during`); the harness's hand-written stage captions do not, and sat across the chip
     tl["captions"], tl["caption_pages"] = [], []
     uris = _base_uris()
-    uris[CHIP_STAMP_PLATE] = uri("image/png", png_solid(64, 36, CHIP_STAMP_CREAM))
+    uris[plate] = uri("image/png", png_solid(64, 36, CHIP_STAMP_CHARCOAL if ring else CHIP_STAMP_CREAM))
     uris[BST.PROP_PREFIX + entry["icon"]] = uri("image/png", png_proxy(asset["file"]))
     return tl, uris
 
@@ -3525,6 +3538,7 @@ def _chip_stamp(arrive: bool) -> tuple[dict, dict]:
 SURFACES.update({
     "chip-stamp-pop": lambda: _chip_stamp(False),       # the stamp form on the chip's spring, as it has always landed
     "chip-stamp-arrival": lambda: _chip_stamp(True),    # ... and with `arrive: "stamp"`: stopaction's stampXf
+    "chip-stamp-seal-text": lambda: _chip_stamp(True, ring=True),   # P70 T1b: ... landed as a SEAL, its ring text on two arcs
 })
 FRAME_T.update({
     # CONTACT + 0.10 s (10.254): the stamp's scale spring clamped at 1 since 10.154 while the free rotation is still
@@ -3532,6 +3546,9 @@ FRAME_T.update({
     # name; the pop is 0.46 of its LAND_S into the spring, its label at 48 px, under the floor.
     "chip-stamp-pop": round(CHIP_STAMP_ENTRY["at"] + _STAMP_CONTACT_S + 0.10, 3),
     "chip-stamp-arrival": round(CHIP_STAMP_ENTRY["at"] + _STAMP_CONTACT_S + 0.10, 3),
+    # P70 T1b: the seal AT REST, 1.30 s after the enter (as prop-stamp's): both springs done, the ring spent, the ink eased
+    # back to 0.86 - the two rings and the two arcs as they stay, the mark off-square at its -9 deg rest
+    "chip-stamp-seal-text": round(CHIP_STAMP_ENTRY["at"] + 1.30, 3),
 })
 
 

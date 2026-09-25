@@ -339,13 +339,27 @@
         },
         {
           "name": "ring",
-          "does": "the impact ring: linear life, eased expansion toward 2x, CAPPED to the room and never below 12 px outside the painted edge, never clipped",
+          "does": "the impact ring: thrown FROM THE CONTACT (zero ring before it, E99 s121 (3)), linear life, eased expansion toward 2x, CAPPED to the room and never below 12 px outside the painted edge, never clipped",
           "trigger": "contact",
           "dials": {
             "RING_LIFE_S": "0.4667",
             "RING_TO": "2.0",
             "STAMP_RING_GAP_PX": "12"
           }
+        },
+        {
+          "name": "ink eases back",
+          "does": "heavy at the hit, then the source curve (land 0.35 -> 1) thrown from the contact: 1 -> 0.86 as the pressure comes off (E99 s121 (4)); a dock darkens its contact shadow, a stamped chip its seal and name - never the art",
+          "trigger": "contact",
+          "dials": {
+            "INK": "1 -> 0.86",
+            "INK_EASE_S": "0.0891"
+          }
+        },
+        {
+          "name": "the page answers",
+          "does": "the receiver's dip, the hit's squash frame and a violent hit's shake run FROM THE CONTACT - the page never answers before the mark touches it (P70 T1b)",
+          "trigger": "contact"
         },
         {
           "name": "rest",

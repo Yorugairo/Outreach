@@ -204,11 +204,20 @@ STAMP_MAX_LINES = 3
 # kinetics/stopaction.mjs `stampXf` (species/chip.mjs `chipStampPose`) instead of the chip's spring. The stamp form's
 # only; absent is the spring landing it always had, byte for byte.
 CHIP_ARRIVALS = ("stamp",)
+# P70 T1b (E99 s121 (1)): a stamped chip lands as a SEAL, and a seal may carry RING TEXT on two half-arcs, both read left to
+# right (remotion-ui badge-stamp.tsx's `ringText` / `ringTextBottom`). A stamped chip's only: refused by name on any other
+# chip, and a dock stamp asking for a seal is refused by name (DOCK_SEAL_REFUSED) - a bare prop stays bare (s87, s121 (2)).
+CHIP_SEAL_OPTS = ("ring_text", "ring_text_bottom")
+DOCK_SEAL_REFUSED = CHIP_SEAL_OPTS + ("seal",)
 CHIP_STAMP_LABEL_SIZE = 48     # species/chip.mjs CHIP_STAMP.LABEL_SIZE - the label a stamp-form chip draws WITHOUT the arrival
 CHIP_STAMP_LABEL_FLOOR = round(LPG.CARD_TYPE_PX, 2)   # 59.08: CHIP_STAMP.LABEL_FLOOR, E99 s90's phone floor, drawn under `arrive: "stamp"`
 CHIP_STAMP_MASS = "ink"        # CHIP_STAMP.MASS: a stamped chip lands at the engine's own stamp mass
 STAMP_EXIT_S = 16 / 30         # kinetics/stopaction.mjs STAMP_ARRIVAL.EXIT_S (badge-stamp.tsx:62): the exit a landed mark owes
-CHIP_STAMP_MIN_DUR_S = MG.STAMP_CONTACT_S + STAMP_EXIT_S   # 0.6875: a stamped chip's landing and its owed exit, inside `dur`
+STAMP_SHOCK_S = 14 / 30        # kinetics/stopaction.mjs STAMP_ARRIVAL.SHOCK_S (badge-stamp.tsx:106): the shockwave's life, from the contact
+# P70 T1b (the parent's fix 4): a stamped chip's landing, its shockwave's whole life and its owed exit, inside `dur` - 1.1542 s:
+# the exit begins EXIT_S before the window closes and the ring is not drawn once it has, so a shorter `dur` leaves with its
+# shockwave still out
+CHIP_STAMP_MIN_DUR_S = MG.STAMP_CONTACT_S + STAMP_SHOCK_S + STAMP_EXIT_S
 # THE LABEL'S BOX (the P70 T1 send-back: the ring hugs the mark AND its name, and the approach clears both). The label is
 # Kalam 700 at CHIP_STAMP_LABEL_FLOOR, MEASURED on the rendered face (scratchpad/p70-t1/logs/advance-probe.json: each
 # glyph ten times, `getComputedTextLength` / 10, in em): a word's advance is the sum of its glyphs' to 0.02 px (NVIDIA
@@ -2539,6 +2548,16 @@ def _validate_chip(entry: dict) -> list[str]:
     form = entry.get("form")
     if form is not None and form not in CHIP_FORMS:
         errs.append(f"chip: form {form!r} is not one of {' | '.join(CHIP_FORMS)} (absent is the sourced SVG chip)")
+    for key in CHIP_SEAL_OPTS:   # P70 T1b (E99 s121): ring text is a SEAL's, and the seal is a stamped chip's
+        if key not in entry:
+            continue
+        if not MG.is_stamped_chip(entry):
+            errs.append(f"chip: {key} - ring text is a seal's, and the seal is a stamped chip's (form: \"stamp\" with "
+                        "arrive: \"stamp\"; E99 s121 (1)); a chip on its spring carries no seal")
+        val = entry[key]
+        if not isinstance(val, str) or not val.strip() or "\n" in val or val != val.strip():
+            errs.append(f"chip stamp: {key} must be one line of text, short, chosen for the narrative and verified "
+                        f"(E99 s113) - not {val!r}")
     if "arrive" in entry:   # P70 T1: the stamp FORM's arrival, refused by name anywhere else
         if form != "stamp":
             errs.append(f"chip: arrive {entry['arrive']!r} - the stamp arrival is the stamp form's (form: \"stamp\"); "
@@ -6443,6 +6462,11 @@ def dock_opts(raw) -> dict:
     if not isinstance(raw, dict):
         raise ValueError(f"dock options must be a dict of {'|'.join(DOCK_OPTS)}, not {raw!r}")
     for k, v in raw.items():
+        if k in DOCK_SEAL_REFUSED:   # P70 T1b: a seal is asked of a stamp that is not a seal - refused BY NAME, not as unknown
+            raise ValueError(f"dock option {k!r}: a dock stamp carries no seal - a bare prop stays bare, the stamp motion, its "
+                             "shockwave and its shadow, no border (E99 s87; E99 s121 (2)); the seal and its ring text are a "
+                             "seal-type stamp's - a stamped chip (form: \"stamp\", arrive: \"stamp\", E99 s121 (1)) - and "
+                             "no dock payload is a badge or a verdict today")
         if k not in DOCK_OPTS:
             raise ValueError(f"dock option {k!r} is not one of {'|'.join(DOCK_OPTS)}")
         if k == "behind":   # HF-17: the plate's foreground layer this card goes behind; the plate is checked at the row
@@ -8059,6 +8083,171 @@ def _stamp_findings(ws: list[dict], marks: list[tuple[float, str]], enter: float
 # landing at at + STAMP_CONTACT_S (gate_motion_density `_landings` / `_arrivals`), recipe_walk emits `arrival:stamp`
 # for it (so `authoring.audio.fired` pairs a landing cue to that contact, s116), and the s112 advice reads it.
 
+# ---- P70 T1b (E99 s121, s123): THE SEAL of a stamped chip - species/chip.mjs `CHIP_SEAL` / `chipSeal`, mirrored ------
+# The source's seal in its own units (badge-stamp.tsx, r = 50), scaled to the seal's outer radius R: the inner ring at
+# r - 6, the ring text 7.4 on the top arc at r - 12 (baseline on it) and the bottom arc at r - 14 (dy 6.4), letterSpacing
+# 1.6. R is the ROOM THE AUTHORED MARK RESERVES - the inner ring 12 px outside the mark and its name - and the art then
+# GROWS to fill it (THE MARK TAKES THE ROOM, the operator 2026-09-22, CAPABILITIES :79): the largest side whose PAINTED
+# pixels (alpha > STAMP_ALPHA_MIN) and name stand inside the inner ring - or inside the ring text's band - by 12 px.
+# Ring text never widens the seal (the parent's fix 2): at the source's proportion it may be under the s90 floor, which
+# is a WARN (s106). THE INK is the seal's GOLD (E99 s123), darkened on a light ground until it holds CONTRAST_MIN.
+# test_stamp_is_a_seal holds every mirror against chip.mjs.
+CHIP_SEAL_SRC_R, CHIP_SEAL_INNER_R = 50, 44   # chip.mjs CHIP_SEAL.SRC_R / INNER_R (badge-stamp.tsx:127, :184)
+CHIP_SEAL_TEXT_SIZE, CHIP_SEAL_TEXT_TRACK = 7.4, 1.6   # chip.mjs CHIP_SEAL.TEXT_SIZE / TEXT_TRACK (:194, :196)
+CHIP_SEAL_TOP_R, CHIP_SEAL_BOTTOM_R, CHIP_SEAL_BOTTOM_DY = 38, 36, 6.4   # chip.mjs CHIP_SEAL.TOP_R / BOTTOM_R / BOTTOM_DY
+CHIP_SEAL_GAP_PX = STAMP_RING_GAP_PX          # chip.mjs CHIP_SEAL.GAP_PX: the least page between the mark and a ring
+CHIP_SEAL_TEXT_ASC_EM, CHIP_SEAL_TEXT_DESC_EM = 0.81, 0.25   # chip.mjs CHIP_SEAL.TEXT_ASC_EM / TEXT_DESC_EM
+CHIP_SEAL_GOLD = "#E8B86D"                    # chip.mjs CHIP_SEAL.GOLD (E99 s123; badge-stamp.tsx:57) - THE dial
+CHIP_SEAL_CONTRAST_MIN = 3.0                  # chip.mjs CHIP_SEAL.CONTRAST_MIN [DERIVED: WCAG 1.4.11 / 1.4.3 large, 3:1]
+CHIP_SEAL_GROUND = {"dark": "#25313C", "light": "#F4E6C7"}   # chip.mjs CHIP_SEAL.GROUND
+CHIP_SEAL_TURNS = (-90.0, 90.0)               # a circle's hull is the same at every angle: turned through a half turn, a
+                                              # square of half-diagonal R has half-extent R on both axes - the seal's own
+
+
+def _seal_lum(hex_: str) -> float:
+    c = [int(hex_[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    c = [v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4 for v in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+
+def seal_contrast(a: str, b: str) -> float:
+    """WCAG contrast of two #RRGGBB colours (chip.mjs `sealContrast`)."""
+    x, y = _seal_lum(a), _seal_lum(b)
+    return (max(x, y) + 0.05) / (min(x, y) + 0.05)
+
+
+def seal_gold(entry: dict, gold: str = CHIP_SEAL_GOLD) -> tuple[str, str]:
+    """(the seal's ink, its ground) as chip.mjs `sealGold` paints it: GOLD on the dark ground; on the light ground (the
+    row says `ink: "charcoal"`) GOLD's channels scaled down in 1 % steps until it holds CONTRAST_MIN on the cream."""
+    if entry.get("ink") != "charcoal":
+        return gold, CHIP_SEAL_GROUND["dark"]
+    rgb = [int(gold[i:i + 2], 16) for i in (1, 3, 5)]
+    for n in range(100, -1, -1):
+        hex_ = "#" + "".join(f"{max(0, min(255, round(v * n / 100))):02X}" for v in rgb)
+        if seal_contrast(hex_, CHIP_SEAL_GROUND["light"]) >= CHIP_SEAL_CONTRAST_MIN:
+            return hex_, CHIP_SEAL_GROUND["light"]
+    return "#000000", CHIP_SEAL_GROUND["light"]
+
+
+def chip_stamp_seal_r(art: dict) -> float:
+    """The seal's outer radius the AUTHORED mark reserves: its inner ring 12 px outside the mark and its name (the painted
+    union's half-diagonal), at the source's r - 6 of r = 50. Rounded to 0.1 px - the number written as `seal_r`."""
+    return round((0.5 * math.hypot(*art["painted"]) + CHIP_SEAL_GAP_PX) * CHIP_SEAL_SRC_R / CHIP_SEAL_INNER_R, 1)
+
+
+def chip_stamp_seal(entry: dict, R: float) -> dict:
+    """The seal of outer radius R, in stage px about the painted centre, as chip.mjs `chipSeal` draws it: the inner ring,
+    the ring text's size and tracking (the source's fractions of R), the two arcs' radii (`top_r` the top's baseline,
+    `bottom_r` the bottom's path, its baseline `bottom_r + bottom_dy`) and `content_r` - how far from the centre the mark
+    and its name may reach: 12 px inside the inner ring, or inside the ring text's band when there is ring text."""
+    u = R / CHIP_SEAL_SRC_R
+    size, track = CHIP_SEAL_TEXT_SIZE * u, CHIP_SEAL_TEXT_TRACK * u
+    top_r, bottom_r, dy = CHIP_SEAL_TOP_R * u, CHIP_SEAL_BOTTOM_R * u, CHIP_SEAL_BOTTOM_DY * u
+    r_in = CHIP_SEAL_INNER_R * u
+    text = any(isinstance(entry.get(k), str) and entry[k].strip() for k in CHIP_SEAL_OPTS)
+    band = min(top_r - CHIP_SEAL_TEXT_DESC_EM * size, bottom_r + dy - CHIP_SEAL_TEXT_ASC_EM * size) if text else r_in
+    return {"R": R, "r_in": r_in, "size": size, "track": track, "top_r": top_r, "bottom_r": bottom_r, "bottom_dy": dy,
+            "content_r": band - CHIP_SEAL_GAP_PX, "text": text}
+
+
+def chip_seal_text_advance(text: str, size: float, track: float) -> float:
+    """Ring text's length along its arc, in px, as chip.mjs `sealGlyphs` lays it: the MEASURED Kalam 700 advances (the
+    label's table; an unknown glyph the widest) plus the source's tracking BETWEEN glyphs."""
+    return (sum(CHIP_STAMP_LABEL_ADVANCE_EM.get(ch, CHIP_STAMP_LABEL_ADVANCE_MAX_EM) for ch in text) * size
+            + max(0, len(text) - 1) * track)
+
+
+def chip_seal_text_fit(entry: dict, R: float, where: str) -> tuple[dict, list[str]]:
+    """E99 s121 / the source's own words: each ring text "should be short enough not to run past the side of the ring".
+    Each arc is a HALF circle centred on its axis, so a line longer than its half-arc would run past the side: it is NOT
+    DRAWN and the build is told with its numbers (s106: a WARN, never a refusal, never a clipped word). The text is drawn
+    at the SOURCE's proportion of the seal (7.4 of r = 50): under the s90 phone floor that is a WARN with the numbers,
+    and it is drawn at the proportion anyway (the parent's fix 2 - legibility is advised, the seal's proportion is the
+    design). Returns (a copy without the lines that do not fit, [WARNs]); the entry as it was when all fit."""
+    seal = chip_stamp_seal(entry, R)
+    drop, warns = [], []
+    for key, rho in (("ring_text", seal["top_r"]), ("ring_text_bottom", seal["bottom_r"])):
+        text = entry.get(key)
+        if not (isinstance(text, str) and text.strip()):
+            continue
+        adv, arc = chip_seal_text_advance(text, seal["size"], seal["track"]), math.pi * rho
+        if adv > arc + 1e-6:
+            drop.append(key)
+            warns.append(f"{where}: {key} {text!r} runs past the side of the ring - {adv:.0f} px of text at "
+                         f"{seal['size']:.1f} px on a {arc:.0f} px half-arc (radius {rho:.0f} px); it is not drawn - shorten "
+                         f"it to fit (E99 s121; s106)")
+    if seal["text"] and len(drop) < sum(isinstance(entry.get(k), str) and bool(entry[k].strip()) for k in CHIP_SEAL_OPTS) \
+            and seal["size"] < CHIP_STAMP_LABEL_FLOOR - 1e-9:
+        need = CHIP_STAMP_LABEL_FLOOR * CHIP_SEAL_SRC_R / CHIP_SEAL_TEXT_SIZE
+        warns.append(f"{where}: its ring text is drawn at {seal['size']:.1f} px - the source's 7.4 of r = 50 on a seal of "
+                     f"radius {R:.0f} px - under the E99 s90 phone floor of {CHIP_STAMP_LABEL_FLOOR:g} px; it is drawn at "
+                     f"the seal's proportion (s106: legibility is advised); a seal of radius {need:.0f} px or more draws it "
+                     f"at the floor")
+    if not drop:
+        return entry, warns
+    return {k: v for k, v in entry.items() if k not in drop}, warns
+
+
+_ALPHA_RIM: dict = {}
+
+
+def _alpha_rim(src) -> list[tuple[float, float]]:
+    """The painted pixels' RIM as fractions of the canvas: each painted row's leftmost pixel's left edge and rightmost
+    pixel's right edge, at the row's top and bottom (alpha > STAMP_ALPHA_MIN, as painted_box measures). The farthest
+    painted point from any centre is on it."""
+    key = str(src)
+    if key not in _ALPHA_RIM:
+        from PIL import Image
+        with Image.open(src) as im:
+            im = im.convert("RGBA")
+            W, H = im.size
+            a = im.getchannel("A").point(lambda v: 255 if v > STAMP_ALPHA_MIN else 0)
+            px = a.load()
+            pts = []
+            for y in range(H):
+                xs = [x for x in range(W) if px[x, y]]
+                if xs:
+                    for fy in (y / H, (y + 1) / H):
+                        pts += [(xs[0] / W, fy), ((xs[-1] + 1) / W, fy)]
+        _ALPHA_RIM[key] = pts
+    return _ALPHA_RIM[key]
+
+
+def chip_seal_reach(entry: dict, aspect: str | None, paint: dict, rim: list, side: float) -> float:
+    """How far the mark (its painted pixels) and its name reach from the painted centre at art side `side` (stage px)."""
+    e = {**entry, "size": side}
+    art = chip_stamp_art(e, aspect, paint)
+    sq = art["paint"]
+    cxs, cys = side * ((sq[0] + sq[2]) / 2 - 0.5), side * ((sq[1] + sq[3]) / 2 - 0.5)   # the group's origin, square coords
+    asp = float(paint.get("aspect") or 1.0)
+    cw, ch = (side, side * asp) if asp <= 1 else (side / asp, side)
+    reach = max(math.hypot(-cw / 2 + cw * fx - cxs, -ch / 2 + ch * fy - cys) for fx, fy in rim)
+    lab = art["label"]
+    if lab:   # the name's PAINTED box: its measured ink (0.81 em up, 0.25 em down - CHIP_SEAL_TEXT_*), not its font box
+        f, k = CHIP_STAMP_LABEL_FLOOR, CHIP_STAMP_LABEL_KEYLINE_PX
+        base0 = lab["y0"] + CHIP_STAMP_LABEL_ASC_EM * f + k                     # the first baseline
+        base1 = lab["y1"] - CHIP_STAMP_LABEL_DESC_EM * f - k                    # the last
+        ys = (base0 - CHIP_SEAL_TEXT_ASC_EM * f - k, base1 + CHIP_SEAL_TEXT_DESC_EM * f + k)
+        reach = max([reach] + [math.hypot(x - cxs, y - cys) for x in (lab["x0"], lab["x1"]) for y in ys])
+    return reach
+
+
+def chip_seal_grow(entry: dict, aspect: str | None, paint: dict, rim: list, content_r: float) -> float:
+    """THE MARK TAKES THE ROOM, inside the seal (the operator, 2026-09-22 and 2026-09-24): the largest art side whose
+    painted pixels and name stand within `content_r` of the painted centre - bisected on the side between the form's
+    floor and its catalogue's ceiling, rounded DOWN to 0.1 px. The floor when even that reaches past it."""
+    lo = float(STAMP_SIZE_MIN)
+    hi = float(STAMP_PROP_SIZE_MAX if entry.get("_catalogue") == "props" else STAMP_SIZE_MAX)
+    if chip_seal_reach(entry, aspect, paint, rim, lo) > content_r:
+        return lo
+    if chip_seal_reach(entry, aspect, paint, rim, hi) <= content_r:
+        return hi
+    for _ in range(40):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if chip_seal_reach(entry, aspect, paint, rim, mid) <= content_r else (lo, mid)
+    return math.floor(lo * 10) / 10
+
+
 def chip_is_stamped(entry) -> bool:
     """A chip that lands as a stamp: the stamp form carrying `arrive: "stamp"` (the only arrival it takes) - the walk's
     ONE predicate (`recipe_walk.is_stamped_chip`, read through the motion gate), so the fit, the gate's landing and the
@@ -8068,13 +8257,15 @@ def chip_is_stamped(entry) -> bool:
 
 def chip_stamp_dur_advice(entry) -> str | None:
     """P70 T1 (the review; s106): a stamped chip owes its landing AND its exit inside `dur` (`chipStampPose` starts the
-    exit EXIT_S before the window closes), so a `dur` under STAMP_CONTACT_S + STAMP_EXIT_S leaves before it has landed
-    while the gate and the cue still count a landing - a WARN with its numbers, never a refusal. None otherwise."""
+    exit EXIT_S before the window closes) - and, since P70 T1b, its shockwave's whole life between them (the ring is
+    thrown at the contact and is not drawn once the exit begins), so a `dur` under STAMP_CONTACT_S + STAMP_SHOCK_S +
+    STAMP_EXIT_S leaves with its shockwave still out - a WARN with its numbers, never a refusal. None otherwise."""
     if not chip_is_stamped(entry) or not _finite(entry.get("dur")) or float(entry["dur"]) >= CHIP_STAMP_MIN_DUR_S - 1e-9:
         return None
     return (f"chip stamp {entry.get('label')!r} ({entry.get('icon')}): dur {float(entry['dur']):g}s is shorter than the "
-            f"landing and the exit it owes ({MG.STAMP_CONTACT_S:g}s + {STAMP_EXIT_S:.4f}s = {CHIP_STAMP_MIN_DUR_S:.4f}s) "
-            f"- the mark begins to leave before it has landed; give it at least {math.ceil(CHIP_STAMP_MIN_DUR_S * 100) / 100:.2f}s")
+            f"landing, the shockwave's life and the exit it owes ({MG.STAMP_CONTACT_S:g}s + {STAMP_SHOCK_S:.4f}s + "
+            f"{STAMP_EXIT_S:.4f}s = {CHIP_STAMP_MIN_DUR_S:.4f}s) - the mark begins to leave with its shockwave still out; "
+            f"give it at least {math.ceil(CHIP_STAMP_MIN_DUR_S * 100) / 100:.2f}s")
 
 
 def chip_stamp_label_advice(entry) -> str | None:
@@ -8144,30 +8335,56 @@ def chip_stamp_art(entry: dict, aspect: str | None, paint: dict) -> dict:
 def chip_stamp_ring_fit(entry: dict, world: dict | None, aspect: str | None, paint: dict,
                         reserve: list[dict] | None = None, where: str = "chip stamp") -> tuple[dict, list[str]]:
     """P70 T1: a stamped chip's arrival FITTED to the room, by the dock stamp's own law - (a COPY of the entry with
-    `ring_to`, `from_to` and `paint`, [WARNs]).
+    `ring_to`, `from_to` and `paint` - and since T1b `seal_r` and the grown `size` - [WARNs]).
 
-    The chip's painted extent is its mark AND its label (`chip_stamp_art`, the union). `stamp_fit` answers for that box
-    at its centre exactly as it answers for a stamped dock: the impact ring's peak `ring_to` = min(RING_TO, the clear
-    disc / the half-diagonal) and the APPROACH `from_to` = min(FROM, what the box's hull, turned through every angle
-    of the arrival, may grow to clear), both rounded DOWN - capped, never clipped - against the rectangles
-    `ring_obstacles` returns (the page's title, sub, source, rail, axes, measured end names and ink cells; on a plate
-    the frame's caption band; plus `reserve`) inside the safe box. Then the dock's `_stamp_floors`: a ring under its
-    floor (12 px outside the painted edge) or an approach under STAMP_APPROACH_MIN is drawn at that floor and WARNed
-    with its numbers - the chip stands where the author put it (s106), never refused; so is a fit blind to a page's
-    names. A non-stamped entry is returned AS IT WAS (the same object)."""
+    P70 T1b (E99 s121, s123): the stamped chip is a SEAL. Its outer radius `seal_r` is the room the AUTHORED mark and its
+    name reserve (`chip_stamp_seal_r`); ring text that runs past its half-arc is dropped with a WARN, and ring text under
+    the s90 floor at the source's proportion is WARNed (`chip_seal_text_fit`); then THE MARK TAKES THE ROOM - the art
+    grows (or, under ring text, shrinks) to the largest side whose painted pixels and name stand inside the seal
+    (`chip_seal_grow`), and is written as `size`. The fit reads the SEAL at the grown mark's painted centre: `stamp_fit`
+    on the square of half-diagonal R turned through a half turn, so the impact ring's peak `ring_to` = min(RING_TO, the
+    clear disc / R) - thrown from the seal's border, as the source's is - and the APPROACH `from_to` is the whole
+    circle's box, both rounded DOWN, against the rectangles `ring_obstacles` returns (plus `reserve`) inside the safe
+    box. Then the dock's `_stamp_floors` - a WARN with numbers, never a refusal (s106); so is a fit blind to a page's
+    names, and a seal ink under CONTRAST_MIN on its ground. A non-stamped entry is returned AS IT WAS (the same object)."""
     if not chip_is_stamped(entry):
         return entry, []
     page = (world or {}).get("page") if (world or {}).get("kind") == SPECIES_LEDGER else None
     groups, bounds, blind = prop_obstacle_groups(page, aspect, reserve)
-    art = chip_stamp_art(entry, aspect, paint)
+    art0 = chip_stamp_art(entry, aspect, paint)
+    R = chip_stamp_seal_r(art0)
+    entry, text_notes = chip_seal_text_fit(entry, R, where)
+    seal = chip_stamp_seal(entry, R)
+    notes: list[str] = []
+    side0 = art0["side"]
+    try:
+        rim = _alpha_rim(catalogue_stamp_asset(entry.get("icon"))["file"])
+    except (TypeError, ValueError, OSError):
+        rim = None
+    if rim:
+        side = chip_seal_grow(entry, aspect, paint, rim, seal["content_r"])
+        if chip_seal_reach(entry, aspect, paint, rim, side) > seal["content_r"] + 1e-6:
+            notes.append(f"{where}: the mark and its name reach past the seal's inner ring even at the form's floor "
+                         f"({STAMP_SIZE_MIN} px) - drawn at the floor")
+    else:
+        side = side0
+    grown = {**entry, "size": side}
+    art = chip_stamp_art(grown, aspect, paint)
     (pcx, pcy), (pw, ph) = art["centre"], art["painted"]
-    fit = stamp_fit(pcx, pcy, pw, {"aspect": ph / pw if pw > 0 else 1.0, "x0": 0.0, "y0": 0.0, "x1": 1.0, "y1": 1.0},
-                    _flat_obstacles(groups), bounds)
+    fit = stamp_fit(pcx, pcy, R * math.sqrt(2.0), {"aspect": 1.0, "x0": 0.0, "y0": 0.0, "x1": 1.0, "y1": 1.0},
+                    _flat_obstacles(groups), bounds, turns=CHIP_SEAL_TURNS)
     floors: list[str] = []
     fit = _stamp_floors(fit, floors)
-    head = f"{where} (mark and label {pw:.0f}x{ph:.0f} px at ({pcx:.0f}, {pcy:.0f}))"
-    notes = [f"{where}: {b} (the arrival is fitted without it)" for b in blind] + [f"{head}: {w}" for w in floors]
-    return {**entry, "ring_to": fit["ring_to"], "from_to": fit["from_to"], "paint": art["paint"]}, notes
+    ink, ground = seal_gold(entry)
+    ratio = seal_contrast(ink, ground)
+    if ratio < CHIP_SEAL_CONTRAST_MIN - 1e-9:
+        notes.append(f"{where}: the seal's gold {ink} on its ground {ground} is {ratio:.2f}:1, under the "
+                     f"{CHIP_SEAL_CONTRAST_MIN:g}:1 floor (E99 s123) - read the frame")
+    head = (f"{where} (mark and label {pw:.0f}x{ph:.0f} px in a seal of radius {R:.0f} px "
+            f"at ({pcx:.0f}, {pcy:.0f}))")
+    notes = ([f"{where}: {b} (the arrival is fitted without it)" for b in blind] + [f"{head}: {w}" for w in floors]
+             + text_notes + notes)
+    return {**grown, "ring_to": fit["ring_to"], "from_to": fit["from_to"], "paint": art["paint"], "seal_r": R}, notes
 
 
 def prop_moves(dopt: dict, paint: dict | float | None, fit: dict, aspect: str | None, enter: float, exitt: float,

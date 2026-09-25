@@ -42,9 +42,10 @@ import build_golden_sources as G  # noqa: E402
 SURFACE = "prop-stamp"
 ENTER = 10.0            # the contact (build_golden_sources.PROP_STAMP_ENTER)
 T_LAND = 10.17          # the instant the golden pair is judged at (the scrub's step is 0.01, so this IS the frame a t of 10.1667 renders)
-T_EARLY = 10.04         # one frame in, the mark still coming down and the ring just thrown
-T_LATE = 10.20          # ... and the ring at the end of its expansion
-T_WIDEST = 10.46        # the last drawn frame of the ring (its life is 0.4667 s, the scrub steps 0.01): the ring at its WIDEST
+T_EARLY = 10.04         # one frame in, the mark still coming down - and NO ring: it is thrown from the contact (P70 T1b, E99 s121 (3))
+T_RING = 10.20          # P70 T1b: the ring 0.0458 s after the contact (10.1542), just thrown
+T_LATE = 10.36          # ... and 0.2058 s after it, at the end of its expansion
+T_WIDEST = 10.62        # the last drawn frame of the ring (its life is 0.4667 s FROM THE CONTACT, the scrub steps 0.01): the ring at its WIDEST
 T_REST = 11.30          # 1.30 s after the contact, past the rotation spring's own rest
 T_EXIT = 26.40          # 0.4 s into the owed exit
 
@@ -305,7 +306,7 @@ def frames(tmp_path_factory):
         row = _Player(br, SURFACE, (tl, uris))
         pair = _Player(br, SURFACE, (pair_tl, pair_uris))
         try:
-            ts = (T_EARLY, T_LAND, T_LATE, T_WIDEST, T_REST, T_EXIT)
+            ts = (T_EARLY, T_LAND, T_RING, T_LATE, T_WIDEST, T_REST, T_EXIT)
             out = {t: own.at(t) for t in ts}
             out["ink:" + str(T_REST)] = inked.at(T_REST)
             out["row"] = {t: row.at(t) for t in ts}
@@ -345,8 +346,11 @@ def test_a_the_scale_spring_is_SETTLED_while_the_rotation_is_still_OFF_AXIS(fram
 def test_b_the_impact_ring_is_DRAWN_and_expands_to_twice_the_marks_radius(frames):
     """(b) THE RING, on the frame - the failure the source names is one nobody sees, so this measures that it is
     painted (a width, an opacity, a colour) and that its radius doubles between two instants."""
-    early, late = frames[T_EARLY]["ring"], frames[T_LATE]["ring"]
-    for r, when in ((early, "0.04 s"), (late, "0.20 s")):
+    # P70 T1b (E99 s121 (3)): "the shockwave is thrown from the impact frame rather than from the start" - none on the way down
+    before = frames[T_EARLY]["ring"]
+    assert before is None or before["opacity"] == 0, f"no ring before the contact (at {T_EARLY}): {before}"
+    early, late = frames[T_RING]["ring"], frames[T_LATE]["ring"]
+    for r, when in ((early, "contact + 0.046 s"), (late, "contact + 0.206 s")):
         assert r is not None, f"no ring at {when}"
         assert r["width"] > 2.0, f"the ring is painted at {when}: {r['width']:.2f} px of stroke"
         assert r["opacity"] > 0.25, f"... and visible at {when}: opacity {r['opacity']:.3f}"
@@ -360,9 +364,9 @@ def test_b_the_impact_ring_is_DRAWN_and_expands_to_twice_the_marks_radius(frames
     r_early, r_late = early["box"]["w"] / 2, late["box"]["w"] / 2
     cap = dock["ring_to"]
     assert (r0 + B.STAMP_RING_GAP_PX) / r0 - 1e-3 <= cap <= B.STAMP_RING_TO, f"the ring's peak {cap}x sits between its floor and 2x"
-    # the source's eased expansion k(life) at 0.04 s and 0.20 s is 0.4402 and 0.9512 (stopaction-stamp.test.mjs)
-    assert abs(r_early / r0 - (1 + (cap - 1) * 0.4402)) < 0.02, f"at 0.04 s the ring stands at {r_early / r0:.4f} of the painted radius ({r_early:.1f} px)"
-    assert abs(r_late / r0 - (1 + (cap - 1) * 0.9512)) < 0.02, f"at 0.20 s it has reached {r_late / r0:.4f} ({r_late:.1f} px)"
+    # the source's eased expansion k at 0.0458 s and 0.2058 s of the RING's clock (from the contact) is 0.4876 and 0.9555
+    assert abs(r_early / r0 - (1 + (cap - 1) * 0.4876)) < 0.02, f"0.046 s after the contact the ring stands at {r_early / r0:.4f} of the painted radius ({r_early:.1f} px)"
+    assert abs(r_late / r0 - (1 + (cap - 1) * 0.9555)) < 0.02, f"0.206 s after it, it has reached {r_late / r0:.4f} ({r_late:.1f} px)"
     assert r_late > r_early, "it expands"
     widest = frames[T_WIDEST]["ring"]["box"]["w"] / 2
     assert widest / r0 <= cap + 1e-3, f"at its widest it reaches {widest / r0:.4f} - the cap, never past it"

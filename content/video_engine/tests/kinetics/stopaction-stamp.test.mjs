@@ -131,11 +131,12 @@ test("the arrival is pure in t, and a seek IS the play", () => {
 
 test("the RECEIVER answers in this module's own vocabulary - and the mark never hops", () => {
   /* the page dips by the material's spring and recovers; a stamp does not fall, so there is no rebound */
-  const ys = [0.02, 0.06, 0.12, 0.4, 1.2].map((t) => stampXf("ink", t).ground);
+  /* P70 T1b (the parent's fix 3): the receiver answers FROM THE CONTACT, tc - the instants are the contact's */
+  const tc = STAMP_LAND.tc, ys = [0.02, 0.06, 0.12, 0.4, 1.2].map((d) => stampXf("ink", tc + d).ground);
   assert.ok(ys[0] > 0 && ys[0] > ys[4], `the surface dips at the contact and recovers: ${ys.map((v) => v.toFixed(3))}`);
   assert.ok(Math.max(...ys) < 5, "a dip, never a stage shake (the report Q3)");
   /* metal hits harder than paper - the same law every landing obeys */
-  assert.ok(stampXf("metal", 0.05).ground > stampXf("paper", 0.05).ground);
+  assert.ok(stampXf("metal", tc + 0.05).ground > stampXf("paper", tc + 0.05).ground);
 });
 
 test("the CONTACT SHADOW's height tracks the approach: far while the mark is still coming down, 0 once it is on the page", () => {
@@ -206,4 +207,60 @@ test("E99 s92: the stamp's pose is unchanged by the resting shadow - it is the p
   near(st.land_at, STAMP_LAND.tc, 1e-12, "the contact");
   near(st.rest_at, STAMP_TURN.ts, 1e-12, "the settle");
   assert.ok(STAMP_TURN.ts > STAMP_LAND.tc, "the settle comes after the contact: the handover window is not empty");
+});
+
+// ---------------------------------------------------------------- P70 T1b (E99 s121 (3), (4)): the impact frame
+/* The operator (2026-09-24), pasting the component's own description: "the shockwave is thrown from the impact frame
+   rather than from the start, so it can never arrive before the thing that caused it" and "ink strength eases back a
+   little after the hit, the way pressure comes off a real stamp". Our impact frame is the CONTACT - STAMP_LAND.tc, the
+   clamped scale spring's crossing (0.1542 s), the instant the gate, the cue and the camera already read. */
+import { springEval } from "../../scripts/kinetics/spring.mjs";
+
+test("s121 (3): the shockwave is thrown from the CONTACT - zero ring before it, on every stamp", () => {
+  const tc = STAMP_LAND.tc;
+  for (let t = -0.2; t < tc; t += 0.0025) assert.equal(stampXf("ink", t).ring, null, `no ring at ${t.toFixed(4)} s, before the contact`);
+  assert.equal(stampXf("ink", tc).ring, null, "... nor AT it: the life is 0 there, and the source draws only 0 < life < 1");
+  assert.ok(stampXf("ink", tc + 1e-4).ring, "the ring is out the instant after the contact");
+  /* the ring's own clock IS stampRing's, started at the contact - every dial of its two curves unchanged */
+  for (let t = tc; t < tc + STAMP_ARRIVAL.SHOCK_S + 0.1; t += 0.01) {
+    assert.deepEqual(stampXf("ink", t).ring, stampRing(t - tc), `the ring at ${t.toFixed(3)} is stampRing(t - tc)`);
+    assert.deepEqual(stampXf("ink", t, { RING_TO: 1.4 }).ring, stampRing(t - tc, { RING_TO: 1.4 }), "a fitted peak rides the same clock");
+  }
+  assert.equal(stampXf("ink", tc + STAMP_ARRIVAL.SHOCK_S + 1e-9).ring, null, "and it is spent SHOCK_S after the contact, never held");
+  /* the contact is the spring in use: an overridden scale spring moves the impact frame with it */
+  const slow = { LAND: { m: 1.2, k: 150, c: 14 } }, sl = stampSprings(0, slow).land_at;
+  assert.ok(sl > tc, "a slower scale spring lands later");
+  assert.equal(stampXf("ink", sl - 0.01, slow).ring, null, "... and throws its ring from its OWN contact");
+  assert.ok(stampXf("ink", sl + 0.01, slow).ring);
+});
+
+test("s121 (4): the ink is HEAVY at the hit and eases back AFTER it, on the source's own curve", () => {
+  const tc = STAMP_LAND.tc, [heavy, light] = STAMP_ARRIVAL.INK;
+  for (let t = -0.1; t <= tc; t += 0.005) assert.equal(stampXf("ink", t).ink, heavy, `full ink until the contact (${t.toFixed(3)})`);
+  /* THE SOURCE'S CURVE (badge-stamp.tsx:96 interpolate(land, [0.35, 1], [1, 0.86])) is the scale spring's rise from
+     land 0.35 to land 1 - in the source it runs out AT the contact. Here the same curve, sample for sample, begins AT it. */
+  const L = STAMP_LAND, land = (t) => (t >= L.tc ? 1 : Math.min(1, springEval(t, L).x));
+  let tf = 0; for (let lo = 0, hi = L.tc, i = 0; i < 60; i++) { tf = (lo + hi) / 2; if (land(tf) < STAMP_ARRIVAL.FADE) lo = tf; else hi = tf; }
+  const src = (t) => heavy + (light - heavy) * Math.min(1, Math.max(0, (land(t) - STAMP_ARRIVAL.FADE) / (1 - STAMP_ARRIVAL.FADE)));
+  const span = L.tc - tf;
+  near(span, 0.0891, 5e-4, "the ease spans the source's own 0.35 -> 1 of the scale spring");
+  for (let d = 0; d <= span + 0.05; d += 0.004) near(stampXf("ink", tc + d).ink, src(tf + d), 1e-9, `the ink ${d.toFixed(3)} s after the hit`);
+  let prev = heavy; for (let d = 0; d <= 1; d += 0.002) { const v = stampXf("ink", tc + d).ink; assert.ok(v <= prev + 1e-12, "it only eases back"); prev = v; }
+  assert.equal(stampXf("ink", tc + span + 1e-6).ink, light, "and rests at 0.86 once the pressure is off");
+  assert.equal(stampSprings(tc + 0.05).ink, stampXf("ink", tc + 0.05).ink, "stampSprings carries the same ink");
+});
+
+test("fix 3 (s121 (3)'s law, on the receiver): no dip, no squash and no shake before the CONTACT - the page never answers early", () => {
+  const tc = STAMP_LAND.tc;
+  for (let t = 0; t <= tc; t += 0.0025) {
+    for (const m of ["ink", "paper", "metal"]) {
+      const s = stampXf(m, t, { violent: true });
+      assert.equal(s.ground, 0, `no dip at ${t.toFixed(4)} (${m})`);
+      assert.equal(s.y, 0, `the mark rides no dip at ${t.toFixed(4)}`);
+      assert.equal(s.alpha, 0, `no squash frame at ${t.toFixed(4)}`);
+      assert.deepEqual(s.shake, { x: 0, y: 0 }, `no shake at ${t.toFixed(4)}`);
+    }
+  }
+  assert.ok(stampXf("ink", tc + 0.02).ground > 0, "the page dips once the mark has touched it");
+  assert.ok(stampXf("paper", tc + 1 / 24 + 1e-3).alpha > 0 || stampXf("paper", tc + 1 / 30 + 1e-3).alpha > 0, "the squash frame is the frame after the contact");
 });

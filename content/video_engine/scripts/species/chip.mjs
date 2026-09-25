@@ -67,7 +67,97 @@ export const CHIP_STAMP = Object.freeze({
      on the charcoal ledger page, charcoal on any other ground - never gold */
   RING_INK: Object.freeze({ ledger: "#F2F2F2", ground: "#25313C" }),
   MASS: "ink",       /* the mass the stamp lands at: the engine's own default for a stamp (`stampXf(d.mass || "ink", ...)`) */
+  /* P70 T1b (the parent's round 3): A SEAL DOES NOT SQUASH. At mass "ink" the hit's ONE squash frame (STOP.IMPACT_SQUASH 0.22,
+     contact + 0.021 .. + 0.063 s at 24 fps) turned the full-size seal into a vertical oval - a coin flipping, not a stamp; the
+     source (badge-stamp.tsx) has no squash at all. The seal lands rigid: this is the IMPACT_SQUASH it hands stampXf, and
+     nothing else moves - MASS stays "ink", so the page's dip, a violent shake, the impact ring and the ink easing back are the
+     ink stamp's. ("metal" has squash_frames 0 too, but its dip is 1.5x deeper on a slower spring - not only the squash.)
+     A bare prop (the dock's stamp) keeps its squash frame. */
+  SQUASH: 0,
 });
+
+/* P70 T1b (E99 s121 (1); E99 s123): A SEAL-TYPE STAMP IS A SEAL, AND A SEAL IS GOLD. The operator, beside remotion-ui's
+   badge stamp: "the stamp needs to have a solid border" - and "part of the reason that stamp works is the color, we need
+   that sort of yellow/gold accent". A stamped chip (the stamp FORM landing by the stamp arrival) carries the source's
+   seal: a solid thick OUTER ring and a thin INNER ring in the MARK's own group, so they land with it, rest with it and
+   leave on its exit (the impact ring radiates from the outer one and is gone), and, optionally, RING TEXT on two
+   half-arcs, both reading left to right. Its geometry is the source's in its own units (badge-stamp.tsx, r = 50) scaled
+   to the seal's outer radius R: the rings, their strokes and alphas, and the ring text's size, tracking and radii. R is
+   the room the mark reserves (`seal_r`, written by the compiler: the inner ring 12 px outside the authored mark and its
+   name); the compiler then GROWS the art to fill it (THE MARK TAKES THE ROOM, CAPABILITIES :79), so ring text never
+   widens the seal. THE INK is ONE dial, GOLD - the source's own default `color` - on the rings, the ring text and the
+   name; on a light ground (the row says `ink: "charcoal"`) it is darkened until it reads, CONTRAST_MIN against the
+   cream. The picture keeps its own colours. The sunflower (#F5B72E) stays the callout / focus yellow: a separate token.
+   The unstamped stamp form (the chip's spring) carries no seal - one spring "reads as a sticker being placed" (the
+   component's docs); a bare prop stays bare (s87, s121 (2)). */
+export const CHIP_SEAL = Object.freeze({
+  SRC_R: 50,          /* badge-stamp.tsx:127 `const r = 50` - the seal's outer radius in the source's own units */
+  INNER_R: 44,        /* :184 the inner ring at r - 6 */
+  OUTER_W: 3.4,       /* :178 the outer ring's stroke - SOLID and thick */
+  INNER_W: 1.2,       /* :187 the inner ring's stroke - thin */
+  INNER_A: 0.7,       /* :188 the inner ring's opacity, ink x 0.7 */
+  TEXT_A: 0.9,        /* :198 / :214 the ring text's opacity, ink x 0.9 */
+  TEXT_SIZE: 7.4,     /* :194 / :209 the ring text's size - 0.148 of R; under the s90 floor the compiler WARNs, never resizes */
+  TEXT_TRACK: 1.6,    /* :196 / :211 letterSpacing */
+  TOP_R: 38,          /* :142 the top arc at r - 12, its baseline ON the arc, glyphs standing out */
+  BOTTOM_R: 36,       /* :147 the bottom arc at r - 14 ... */
+  BOTTOM_DY: 6.4,     /* :212 ... its baseline pushed out by dy, glyphs standing in */
+  GAP_PX: 12,         /* the build's STAMP_RING_GAP_PX: the least page between the mark and the inner ring or the text */
+  TEXT_ASC_EM: 0.81,  /* Kalam 700's ink above its baseline, MEASURED on the player's face (caps 0.767, ascenders 0.808 em;
+                         scratchpad/p70-t1b/logs/probe-cap.json) - where the ring text's band starts inside the seal */
+  TEXT_DESC_EM: 0.25, /* ... and below it (Q 0.167, descenders 0.250 em) */
+  GOLD: "#E8B86D",    /* E99 s123: the seal's antique gold, badge-stamp.tsx:57 `color = "#E8B86D"` - THE dial */
+  CONTRAST_MIN: 3.0,  /* the least contrast the seal's ink keeps on its ground [DERIVED: WCAG 2.x 1.4.11 non-text and 1.4.3
+                         large text, 3:1] - the gold on the cream is 1.48:1, so there it is darkened until it reads */
+  GROUND: Object.freeze({ dark: "#25313C", light: "#F4E6C7" }),   /* the grounds the name's ink names: charcoal, cream */
+  /* Kalam 700's glyph ADVANCES in em, MEASURED on the player's face (P70 T1: scratchpad/p70-t1/logs/advance-probe.json -
+     no kerning, the sum is the drawn length to 0.02 px); the compiler's CHIP_STAMP_LABEL_ADVANCE_EM, held equal by
+     test_stamp_is_a_seal. An unknown glyph takes the widest. */
+  ADVANCE_EM: Object.freeze({
+    " ": 0.385, "!": 0.478, "\"": 0.484, "#": 0.7799, "$": 0.5919, "%": 0.991, "&": 0.786, "'": 0.22, "(": 0.4779,
+    ")": 0.53, "*": 0.375, "+": 0.5999, ",": 0.262, "-": 0.531, ".": 0.237, "/": 0.282, "0": 0.513, "1": 0.302,
+    "2": 0.5829, "3": 0.547, "4": 0.545, "5": 0.506, "6": 0.542, "7": 0.472, "8": 0.59, "9": 0.5059, ":": 0.246,
+    ";": 0.306, "<": 0.4749, "=": 0.672, ">": 0.6159, "?": 0.608, "@": 1.078, "A": 0.63, "B": 0.6239, "C": 0.617,
+    "D": 0.6659, "E": 0.551, "F": 0.5419, "G": 0.597, "H": 0.6509, "I": 0.309, "J": 0.486, "K": 0.602, "L": 0.546,
+    "M": 0.7559, "N": 0.631, "O": 0.6189, "P": 0.5489, "Q": 0.659, "R": 0.601, "S": 0.5519, "T": 0.544, "U": 0.5949,
+    "V": 0.532, "W": 0.7849, "X": 0.5849, "Y": 0.561, "Z": 0.6459, "[": 0.463, "\\": 0.5999, "]": 0.521, "^": 0.422,
+    "_": 0.6189, "`": 0.258, "a": 0.51, "b": 0.567, "c": 0.489, "d": 0.5389, "e": 0.4879, "f": 0.435, "g": 0.481,
+    "h": 0.563, "i": 0.26, "j": 0.26, "k": 0.4929, "l": 0.266, "m": 0.819, "n": 0.5539, "o": 0.456, "p": 0.5379,
+    "q": 0.519, "r": 0.3619, "s": 0.467, "t": 0.451, "u": 0.486, "v": 0.422, "w": 0.71, "x": 0.474, "y": 0.52,
+    "z": 0.48, "{": 0.462, "|": 0.456, "}": 0.6259, "~": 0.586
+  }),
+  ADVANCE_MAX_EM: 1.078,
+});
+
+/* WCAG relative luminance and contrast of two #RRGGBB colours */
+const sealLum = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+  .map((c) => (c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)))
+  .reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
+export const sealContrast = (a, b) => { const x = sealLum(a), y = sealLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+const sealHex = (rgb) => "#" + rgb.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0").toUpperCase()).join("");
+/* THE SEAL'S INK on its ground: GOLD on the dark ground as it is; on the light ground GOLD's channels scaled down in 1 %
+   steps until it holds CONTRAST_MIN against the cream (#A07F4B at the default GOLD, 3.02:1) */
+export const sealGold = (sp, gold = CHIP_SEAL.GOLD) => {
+  if (!(sp && sp.ink === "charcoal")) return gold;
+  const rgb = [1, 3, 5].map((i) => parseInt(gold.slice(i, i + 2), 16));
+  for (let n = 100; n >= 0; n--) {
+    const hex = sealHex(rgb.map((v) => v * n / 100));
+    if (sealContrast(hex, CHIP_SEAL.GROUND.light) >= CHIP_SEAL.CONTRAST_MIN) return hex;
+  }
+  return sealHex([0, 0, 0]);
+};
+
+/* RING TEXT, GLYPH BY GLYPH (the parent's frame read: a textPath bunched and drifted): each glyph's CENTRE sits at its
+   arc length from the arc's middle, laid by the measured advances plus the source's tracking between glyphs, the whole
+   line centred on the arc's axis (the top's at 12 o'clock, the bottom's at 6). `a` is the glyph's angle from that axis
+   in radians, positive to the reader's right; `len` the line's length along the arc. */
+export const sealGlyphs = (text, rho, size, track) => {
+  const adv = [...String(text)].map((ch) => (CHIP_SEAL.ADVANCE_EM[ch] != null ? CHIP_SEAL.ADVANCE_EM[ch] : CHIP_SEAL.ADVANCE_MAX_EM) * size);
+  const len = adv.reduce((a, v) => a + v, 0) + Math.max(0, adv.length - 1) * track;
+  let s = -len / 2;
+  const glyphs = [...String(text)].map((ch, i) => { const c = s + adv[i] / 2; s += adv[i] + track; return { ch, a: c / rho }; });
+  return { len, glyphs };
+};
 
 const chip01 = (v) => Math.min(1, Math.max(0, v));
 
@@ -99,17 +189,35 @@ export const chipStamped = (sp) => !!sp && sp.form === "stamp" && sp.arrive === 
    law (`ring_to` / `from_to`: stamp_fit against ring_obstacles, round the mark AND its label), else the source's
    RING_TO / FROM - capped there, never clipped here. The exit the landed mark owes (E50) is `stampExit`, run INSIDE the
    chip's `dur` - it begins EXIT_S before the window closes, so the species leaves on its own curve and is gone at
-   at + dur; the ring is never drawn once the exit has begun. `ink` is carried for the record: a chip stamp has no
-   contact shadow for the pressure to darken, and a wash over the art is what the dock's own port refuses. */
+   at + dur; the ring is never drawn once the exit has begun. P70 T1b (E99 s121): the ring is thrown from the CONTACT
+   (stampXf) and from the SEAL's border (chipStampGroup); `ink` - heavy at the hit, easing back after it - is painted ON
+   THE MARK, the seal's rings, its ring text and the name (paintChipSeal), never as a wash over the art. */
 export const chipStampPose = (sp, t) => {
   const fit = Object.assign({}, Number.isFinite(+sp.ring_to) && +sp.ring_to > 0 ? { RING_TO: +sp.ring_to } : {},
     Number.isFinite(+sp.from_to) && +sp.from_to >= 1 ? { FROM: +sp.from_to } : {});   /* ... the approach it comes down from */
-  const at = +sp.at, sx = stampXf(CHIP_STAMP.MASS, t - at, fit);
+  const at = +sp.at, sx = stampXf(CHIP_STAMP.MASS, t - at, Object.assign({ IMPACT_SQUASH: CHIP_STAMP.SQUASH }, fit));   /* the seal is rigid */
   const out = at + (Number.isFinite(+sp.dur) ? +sp.dur : 0) - STAMP_ARRIVAL.EXIT_S, leaving = t > out;
   const ex = leaving ? stampExit(t - out) : 0;
   return { u: sx.u, scale: sx.scale, rot: sx.rot, off_deg: sx.off_deg, dx: sx.x, dy: sx.y, alpha: sx.alpha, theta: sx.theta,
            ink: sx.ink, fade: sx.opacity * (1 - ex), exit: ex, ring: leaving ? null : sx.ring, phase: sx.phase,
            cross: 0, strokes: [0, 0], dim: 1 };
+};
+
+/* P70 T1b: the seal's geometry for a stamped chip in its side x side square - null for any other chip. About the PAINTED
+   centre (the group's origin): `R` the outer ring - the compiler's `seal_r` (the room the authored mark reserved), else
+   the inner ring 12 px outside the mark and its name (`rc`, their half-diagonal) at the source's r - 6 of r = 50 - `rIn`
+   the inner ring, and every other length the source's fraction of R: the strokes, the ring text's size and tracking,
+   the top arc (baseline on it) and the bottom arc (baseline pushed out by dy). `ink` is the seal's gold on its ground. */
+export const chipSeal = (sp, side) => {
+  if (!chipStamped(sp)) return null;
+  const S = CHIP_SEAL, rc = chipStampPaint(sp, side).r;
+  const R = Number.isFinite(+sp.seal_r) && +sp.seal_r > 0 ? +sp.seal_r : (rc + S.GAP_PX) * S.SRC_R / S.INNER_R;
+  const u = R / S.SRC_R, size = S.TEXT_SIZE * u, track = S.TEXT_TRACK * u;
+  const txt = (v) => (typeof v === "string" && v.trim() ? v : null);
+  const top = txt(sp.ring_text), bot = txt(sp.ring_text_bottom);
+  return { rc, R, rIn: S.INNER_R * u, outerW: S.OUTER_W * u, innerW: S.INNER_W * u, size, track, ink: sealGold(sp),
+           top: top ? Object.assign({ text: top, r: S.TOP_R * u }, sealGlyphs(top, S.TOP_R * u, size, track)) : null,
+           bottom: bot ? Object.assign({ text: bot, r: S.BOTTOM_R * u, dy: S.BOTTOM_DY * u }, sealGlyphs(bot, S.BOTTOM_R * u, size, track)) : null };
 };
 
 /* ONE ENTRY: everything the painter draws at t, from the declaration alone. */
@@ -167,6 +275,7 @@ function paintChipStamp(ctx, b) {
     : el("g", "chipstamp", svg, { opacity: pose.fade.toFixed(3),
       transform: "translate(" + (cx + ix.dx).toFixed(1) + " " + (cy + pose.dy + ix.dy).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
   const off = stamped ? chipStampPaint(sp, side).off : [0, 0];   /* the art about its PAINTED centre, the group's origin */
+  if (stamped) paintChipSeal(ctx, g, chipSeal(sp, side), pose.ink);   /* P70 T1b: the seal, under the art, in the mark's group */
   el("image", "chipstampart", g, {
     x: (-side / 2 - off[0]).toFixed(1), y: (-side / 2 - off[1]).toFixed(1), width: side.toFixed(1), height: side.toFixed(1),
     href: src, preserveAspectRatio: "xMidYMid meet",
@@ -174,12 +283,17 @@ function paintChipStamp(ctx, b) {
   if (sp.label) {
     const lines = chipStampLabelLines(sp.label);
     const L = chipStampLabelType(stamped);
-    const lab = el("text", "chipstamplab", g, {
+    const labAt = {
       x: stamped ? (-off[0]).toFixed(1) : 0, y: (side / 2 - off[1] + L.gap).toFixed(1), "text-anchor": "middle",
       style: "font-family:Kalam,cursive;font-size:" + L.size + "px;font-weight:700;fill:" + chipStampInk(sp.ink)
         + ";paint-order:stroke;stroke:" + chipStampInk(sp.ink === "charcoal" ? "cream" : "charcoal")
         + ";stroke-width:4px;stroke-linejoin:round",
-    });
+    };
+    if (stamped) {   /* P70 T1b: the name is the SEAL's ink - gold (E99 s123) - and eases back with it (s121 (4)) */
+      labAt.style = labAt.style.replace("fill:" + chipStampInk(sp.ink) + ";", "fill:" + sealGold(sp) + ";");
+      labAt.opacity = pose.ink.toFixed(3);
+    }
+    const lab = el("text", "chipstamplab", g, labAt);
     if (lines.length > 1) {
       lines.forEach((line, index) => {
         const ts = el("tspan", "", lab, { x: stamped ? (-off[0]).toFixed(1) : 0, dy: index ? L.line : 0 });
@@ -214,9 +328,10 @@ export const chipStampPaint = (sp, side) => {
 function chipStampGroup(ctx, pose, ix, cx, cy, side, s) {
   const { sp, svg, el, sc } = ctx;
   const P = chipStampPaint(sp, side), pcx = cx + P.off[0] + ix.dx, pcy = cy + P.off[1] + ix.dy;
+  const seal = chipSeal(sp, side), r0 = seal ? seal.R : P.r;   /* P70 T1b: thrown from the SEAL's border, as the source's is (:156 r * (1 + shock)) */
   if (pose.ring) {
     const ledger = !!(sc && sc.world && sc.world.kind === "ledger");
-    el("circle", "chipstampring", svg, { cx: pcx.toFixed(1), cy: pcy.toFixed(1), r: (P.r * pose.ring.r).toFixed(1), fill: "none",
+    el("circle", "chipstampring", svg, { cx: pcx.toFixed(1), cy: pcy.toFixed(1), r: (r0 * pose.ring.r).toFixed(1), fill: "none",
       stroke: ledger ? CHIP_STAMP.RING_INK.ledger : CHIP_STAMP.RING_INK.ground, "stroke-width": pose.ring.width.toFixed(2),
       opacity: pose.ring.alpha.toFixed(3) });
   }
@@ -225,6 +340,36 @@ function chipStampGroup(ctx, pose, ix, cx, cy, side, s) {
   return el("g", "chipstamp", svg, { opacity: pose.fade.toFixed(3),
     transform: "translate(" + pcx.toFixed(1) + " " + (pcy + (pose.dy || 0)).toFixed(1) + ") rotate(" + pose.rot.toFixed(2)
       + ") scale(" + s.toFixed(4) + ")" + sq });
+}
+
+/* P70 T1b: THE SEAL, drawn into the mark's group about its origin (the painted centre) - so it rides the pose (the dip,
+   the free turn, the clamped scale, the squash) and the group's fade and exit, exactly as the art does. THE INK EASES
+   BACK ON THE MARK (s121 (4)): the rings and the ring text take `ink` (1 at the hit -> 0.86 as the pressure comes off,
+   stopaction's stampInk) at the source's own ratios (:179 ink, :188 ink x 0.7, :198 ink x 0.9); the PICTURE is the
+   payload and is never washed. RING TEXT is laid glyph by glyph (sealGlyphs): the TOP's glyphs stand OUT from their arc,
+   each turned by its angle; the BOTTOM's stand IN, each turned by minus its angle, so both read left to right - "a
+   shared full-circle path would invert everything on the bottom half" (:137-139). A space is an advance, not a glyph. */
+function paintChipSeal(ctx, g, seal, ink) {
+  if (!seal) return;
+  const { el } = ctx, S = CHIP_SEAL, col = seal.ink, k = Number.isFinite(+ink) ? +ink : 1;
+  el("circle", "chipseal", g, { cx: 0, cy: 0, r: seal.R.toFixed(1), fill: "none", stroke: col,
+    "stroke-width": seal.outerW.toFixed(2), opacity: k.toFixed(3) });
+  el("circle", "chipsealin", g, { cx: 0, cy: 0, r: seal.rIn.toFixed(1), fill: "none", stroke: col,
+    "stroke-width": seal.innerW.toFixed(2), opacity: (k * S.INNER_A).toFixed(3) });
+  [[seal.top, 1], [seal.bottom, -1]].forEach(([arc, side]) => {
+    if (!arc) return;
+    const tg = el("g", "chipsealtext", g, { opacity: (k * S.TEXT_A).toFixed(3),
+      style: "font-family:Kalam,cursive;font-size:" + seal.size.toFixed(2) + "px;font-weight:700;fill:" + col });
+    const rho = side > 0 ? arc.r : arc.r + arc.dy;   /* the BASELINE's radius */
+    arc.glyphs.forEach((gl) => {
+      if (!gl.ch.trim()) return;
+      const x = rho * Math.sin(gl.a), y = side > 0 ? -rho * Math.cos(gl.a) : rho * Math.cos(gl.a);
+      const deg = (side > 0 ? gl.a : -gl.a) * 180 / Math.PI;
+      const t = el("text", "chipsealglyph", tg, { x: x.toFixed(2), y: y.toFixed(2), "text-anchor": "middle",
+        transform: "rotate(" + deg.toFixed(3) + " " + x.toFixed(2) + " " + y.toFixed(2) + ")" });
+      t.textContent = gl.ch;
+    });
+  });
 }
 
 /* THE PAINTER. ctx is the template's species context (see SPECIES_PAINTERS in the player): the declaration,
