@@ -40,6 +40,7 @@ docs/research/runs/<run>/
 | `author` | no | the cited author(s). With a DOI, one registered family name must appear |
 | `publisher` | no | who published it |
 | `url` | no | a page **you fetched this session** |
+| `mirror_url` | no | a canonical mirror of the same file (another official host). When `url` cannot be fetched from here, our fetch of the mirror is compared with your saved copy |
 | `doi` | no | a DOI **you resolved this session** (`10.2307/2552228`) |
 | `retrieved_at` | no | ISO date of your fetch |
 | `quote` | yes (may be empty only for a derived claim or a DOI-only claim) | copied **verbatim** from the source, at most 300 characters. The value must appear inside it. `...` or `…` marks an elision |
@@ -57,24 +58,30 @@ docs/research/runs/<run>/
 2. **No URL you did not fetch this session. No DOI you did not resolve.** The verifier fetches every URL and resolves every DOI. A 404 is a fabricated citation.
 3. **The quote is copied, never paraphrased.** The verifier finds it in the live page and in your saved copy. Case, spacing, dash and quote-mark styles are folded; words are not.
 4. **The value is inside the quote.** It must match to its own printed precision: `1.2 billion` may round a source's `1.23 billion`, but `1.23` may not sharpen a source's `1.2`. `1,234.5` = `1234.5`; `1.2` with unit `USD billion` = `$1,200 million` = `1200000000 USD`; `(3,236)` counts as either sign.
-5. **Save the page to `sources/`** with its sha256, so the evidence survives the web.
-6. **Declare the tier honestly.** The verifier computes the tier itself. If the declared tier is higher than the earned one, that is an **overclaim, and it fails the reply**, even though the claim is kept at the lower tier. An honest UNSOURCED passes.
+5. **Save the page to `sources/`** with its sha256, so the evidence survives the web. A saved copy proves only that it agrees with itself: it earns CONFIRMED only when OUR fetch of the same URL (or of the `mirror_url` you name) matches it.
+6. **Declare the tier honestly.** The verifier computes the tier itself. If the declared tier is higher than the earned one, that is an **overclaim, and it fails the reply**, even though the claim is kept at the lower tier. An honest UNSOURCED passes. The one exception is a claim **capped** because we could not fetch its source: a declared CONFIRMED there is not an overclaim, since you could not know our network.
 7. **A derived figure names its inputs and its formula.** The verifier recomputes it; a mismatch beyond the claim's own rounding fails.
 
 ## 4. The tiers, as the verifier earns them
 
+R26-311 (Gemini, 2026-09-24) is the case for the independent check. Every FRED URL timed out from this machine, so 269
+CONFIRMED rested on CSVs the lane itself saved. A file the checked lane wrote proves only that it agrees with itself.
+
 | earned | when |
 |---|---|
-| **CONFIRMED** | a primary source whose live page (HTTP 2xx, quote on it) or saved copy (sha256 equal, quote in it) carries the quote, with the value inside the quote |
-| **PLAUSIBLE** | the same checks pass on a `secondary` source, or a DOI resolves to the cited work but no page or copy was checked (E99 s93) |
+| **CONFIRMED** | a primary source, with the value inside the quote, and one of: (a) OUR live fetch of its URL returns the page (HTTP 2xx) and the quote is on it; (b) its saved copy (sha256 equal, quote in it) is byte-identical to OUR fetch of the same URL, or of the canonical `mirror_url` the claim names; (c) the run is a **trusted run**, produced by our own agent and declared with `--trusted-run` (R26-306, where SEC blocked a live re-fetch) |
+| **PLAUSIBLE** | the same checks pass on a `secondary` source; or a DOI resolves to the cited work but no page or copy was checked (E99 s93); or the claim is **capped**: its saved copy passes, but its URL is UNVERIFIABLE from here (a timeout, a reset, a 403), has no URL, or the run is `--offline`, and the run is not trusted. The reason reads "saved by the lane, not independently fetched" |
 | **UNSOURCED** | nothing checkable backs it: no URL, or one that could not be verified (401/402/403/429/451, a timeout, a page with no readable text), and no saved copy |
-| **REJECTED** | any check FAILs: a 4xx/5xx or DNS failure, an unregistered or misattributed DOI, a quote not found, a value not in its quote, a sha256 mismatch, a missing saved file, a derived value that does not recompute |
+| **REJECTED** | any check FAILs: a 4xx/5xx or DNS failure, an unregistered or misattributed DOI, a quote not found, a value not in its quote, a sha256 mismatch, a missing saved file, a derived value that does not recompute, or **the saved source does not match the live page**. That last one means our fetch's sha256 differs from the saved copy and the quote is not on our copy |
 
-A derived claim earns the weakest tier of its inputs, or REJECTED if it does not recompute.
+A fetched copy whose sha256 **differs** from the saved one is judged on the quote. If the quote is on our copy, the claim is CONFIRMED (the page moved but still says it). If it is not, the claim FAILs.
+A **capped** claim passes as an honest PLAUSIBLE. A self-declared CONFIRMED on it is not an overclaim, because the lane could not know our network. `VERIFY.md` lists every capped claim under "capped: not independently fetched", so the parent sees how many there are.
+A derived claim earns the weakest tier of its inputs, or REJECTED if it does not recompute. It is capped when an input is capped.
 If a claim is **declared** REJECTED, it is a disclosure: its checks are reported, and they never fail the reply.
 
-`--offline` never touches the network (tests, CI). A claim can then earn CONFIRMED only from its saved copy, so a
-web-only CONFIRMED is an overclaim offline. The verifier's User-Agent is `MoneyPhysics-research-verifier (research@localhost)`.
+`--offline` never touches the network (tests, CI). A saved copy is then capped at PLAUSIBLE unless the run is
+`--trusted-run`, and a web-only CONFIRMED is an overclaim offline. `--trusted-run` is for a run our own agent fetched and
+saved, never for a lane's reply. The verifier's User-Agent is `MoneyPhysics-research-verifier (research@localhost)`.
 No personal address ever goes in a request.
 
 ## 5. Refusal and revision

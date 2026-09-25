@@ -8,17 +8,23 @@ self-marked CONFIRMED with nothing on disk. The reply's own checks are never tru
     python content/video_engine/scripts/verify_research_claims.py <run dir>              # online: URLs, DOIs, disk
     python content/video_engine/scripts/verify_research_claims.py <run dir> --offline    # the on-disk sources only (CI)
     python content/video_engine/scripts/verify_research_claims.py <run dir> --require-pass   # promotion check
+    python content/video_engine/scripts/verify_research_claims.py <run dir> --trusted-run    # a run OUR agent fetched
 
 The run dir holds `claims.jsonl` (the contract: `docs/runbooks/RESEARCH-REPLY-CONTRACT.md`) and `sources/`. Per claim:
 URL fetched (generic User-Agent, retries; 4xx/5xx/DNS = FAIL, 401/402/403/429/451 or a timeout = UNVERIFIABLE); DOI
 resolved at the handle API and Crossref (unregistered = FAIL, a registered title that does not match = FAIL
 misattributed); the QUOTE found in the fetched page text; the VALUE found inside the quote; the SOURCE ON DISK present,
-its sha256 equal, the quote in it too; a DERIVED value recomputed from its inputs. The TIER is computed, never read: a
+its sha256 equal, the quote in it too; the saved source INDEPENDENT of the lane (R26-311: every FRED URL timed out from
+here, so 269 CONFIRMED rested on CSVs the lane itself saved - a file the checked lane wrote proves only that it agrees with
+itself): it counts toward CONFIRMED only when OUR fetch of its URL (or of the `mirror_url` the claim names) is
+byte-identical, or differs but still carries the quote (differs without it = FAIL), or the run is `--trusted-run`;
+otherwise the claim is CAPPED at PLAUSIBLE, a declared CONFIRMED on it is not an overclaim, and VERIFY.md lists it under
+"capped: not independently fetched"; a DERIVED value recomputed from its inputs. The TIER is computed, never read: a
 self-declared tier above the earned one is an OVERCLAIM and fails the reply. A claim declared REJECTED is a disclosure:
 its checks are reported and never fail the reply. Writes `VERIFY.json` + `VERIFY.md`; exit 0 only when nothing FAILs.
 
-`--offline` never touches the network, so a claim earns CONFIRMED only from its saved source. `--require-pass` exits 0
-only when `VERIFY.json` says PASS for the claims file as it is now (its sha256) - the check a promotion into
+`--offline` never touches the network, so a saved source is capped at PLAUSIBLE unless the run is `--trusted-run`.
+`--require-pass` exits 0 only when `VERIFY.json` says PASS for the claims file as it is now (its sha256) - the check a promotion into
 `docs/research/markets/` or an evidence object runs first. Standard library, plus pypdf (or pdftotext) for PDFs.
 """
 from __future__ import annotations
@@ -53,7 +59,7 @@ if str(SCRIPTS) not in sys.path:
 
 from audit_research_provenance import compute_sha256  # noqa: E402  (the one sha256 the research layer uses)
 
-VERSION = "verify_research_claims.v1"
+VERSION = "verify_research_claims.v2"   # v2 (R26-311): a lane-saved source confirms only against OUR fetch
 USER_AGENT = "MoneyPhysics-research-verifier (research@localhost)"   # generic by rule: never a personal address
 DOI_API = "https://doi.org/api/handles/"
 CROSSREF_API = "https://api.crossref.org/works/"
@@ -335,6 +341,7 @@ def check_url(c: dict[str, Any], web: Web) -> tuple[dict[str, Any], str | None]:
         return info, None
     text = body_text(body, urllib.parse.urlparse(info["final_url"]).path, info.get("content_type", ""))
     info["detail"] = f"HTTP {info['http']}, {info.get('bytes')} bytes"
+    info["sha256"] = hashlib.sha256(body).hexdigest()   # OUR copy's digest: the independent check compares the saved one to it
     return info, text
 
 
@@ -363,6 +370,46 @@ def check_disk(c: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         return {"status": UNVERIFIABLE, "detail": f"{rel}: no tool here reads it as text"}
     ok = quote_in(c.get("quote") or "", normalise(text))
     return {"status": PASS if ok else FAIL, "detail": f"{rel}: sha256 ok, quote {'found' if ok else 'NOT found'}"}
+
+
+NOT_FETCHED = "saved by the lane, not independently fetched"
+
+
+def check_independent(c: dict[str, Any], checks: dict[str, dict[str, Any]], web: Web | None, trusted: bool) -> dict[str, Any] | None:
+    """R26-311: a file the checked lane SAVED proves only that it agrees with itself. The saved copy counts toward CONFIRMED
+    only when OUR fetch of its URL (or of the canonical `mirror_url` the claim names) is byte-identical to it, or still
+    carries the quote when it differs, or when the run is ours (`--trusted-run`). Anything else is capped at PLAUSIBLE."""
+    if checks.get("disk", {}).get("status") != PASS:
+        return None
+    if trusted:
+        return {"status": PASS, "detail": "trusted run (--trusted-run): our own agent fetched and saved the source"}
+    saved = str(c.get("sha256") or "").strip().lower()
+    url = checks.get("url")
+    if url and url["status"] == PASS:
+        return _compare_copy(saved, url.get("sha256"), checks.get("quote_web"), "the live page", url.get("http"))
+    why = f"url: {url['detail']}" if url else ("offline" if web is None else "no url to fetch")
+    if c.get("mirror_url") and web is not None:
+        mirror, text = check_url({**c, "url": c["mirror_url"]}, web)
+        if mirror["status"] == FAIL:
+            return {"status": FAIL, "http": mirror.get("http"), "detail": f"mirror_url: {mirror['detail']}"}
+        if mirror["status"] == PASS:
+            quote = check_quote_web(c, text) if str(c.get("quote") or "").strip() else None
+            return _compare_copy(saved, mirror.get("sha256"), quote, "the named mirror", mirror.get("http"))
+        why += f"; mirror_url: {mirror['detail']}"
+    return {"status": UNVERIFIABLE, "detail": f"{NOT_FETCHED} ({why})"}
+
+
+def _compare_copy(saved: str, ours: str | None, quote: dict[str, Any] | None, where: str, http: Any) -> dict[str, Any]:
+    """The saved copy against OUR copy: equal bytes confirm; different bytes confirm only if our copy still carries the quote."""
+    digests = f"ours {str(ours)[:12]}, saved {saved[:12]}"
+    if ours and ours == saved:
+        return {"status": PASS, "http": http, "detail": f"our fetch of {where} is byte-identical to the saved source (sha256 {saved[:12]})"}
+    status = (quote or {}).get("status")
+    if status == PASS:
+        return {"status": PASS, "http": http, "detail": f"our fetch of {where} differs from the saved source ({digests}) but still carries the quote"}
+    if status == FAIL:
+        return {"status": FAIL, "http": http, "detail": f"the saved source does not match {where}: our fetch differs ({digests}) and the quote is not on it"}
+    return {"status": UNVERIFIABLE, "http": http, "detail": f"{NOT_FETCHED}: our fetch of {where} differs ({digests}) and could not be read for the quote"}
 
 
 def check_doi(c: dict[str, Any], web: Web, doi_api: str, crossref_api: str) -> dict[str, Any]:
@@ -439,21 +486,27 @@ def schema_errors(c: dict[str, Any]) -> list[str]:
 # --------------------------------------------------------------------------- the tier, earned
 
 
-def earned_tier(c: dict[str, Any], checks: dict[str, dict[str, Any]]) -> str:
-    """REJECTED on any FAIL; CONFIRMED when a live page or the saved source carries the quote and the value (a secondary
-    source caps at PLAUSIBLE); PLAUSIBLE on a DOI that resolves to the cited work; otherwise UNSOURCED."""
+def earned_tier(c: dict[str, Any], checks: dict[str, dict[str, Any]]) -> tuple[str, str]:
+    """(earned, ceiling). REJECTED on any FAIL; CONFIRMED when OUR live page carries the quote and the value, or the saved
+    source does and the independent check passed (a secondary source caps at PLAUSIBLE); PLAUSIBLE on a DOI that resolves
+    to the cited work; otherwise UNSOURCED. A saved source that passes but was never independently fetched earns PLAUSIBLE
+    with a CONFIRMED ceiling: CAPPED, which is honest, so declaring the ceiling is not an overclaim."""
     if any(v["status"] == FAIL for v in checks.values()):
-        return "REJECTED"
-    page = (checks.get("url", {}).get("status") == PASS and checks.get("quote_web", {}).get("status") == PASS) \
-        or checks.get("disk", {}).get("status") == PASS
-    if page and checks["value"]["status"] in (PASS, SKIP):
-        return "PLAUSIBLE" if str(c.get("source_kind") or "primary").lower() == "secondary" else "CONFIRMED"
-    if checks.get("doi", {}).get("status") == PASS and checks["value"]["status"] in (PASS, SKIP):
-        return "PLAUSIBLE"
-    return "UNSOURCED"
+        return "REJECTED", "REJECTED"
+    value_ok = checks["value"]["status"] in (PASS, SKIP)
+    web = checks.get("url", {}).get("status") == PASS and checks.get("quote_web", {}).get("status") == PASS
+    disk = checks.get("disk", {}).get("status") == PASS
+    top = "PLAUSIBLE" if str(c.get("source_kind") or "primary").lower() == "secondary" else "CONFIRMED"
+    if value_ok and (web or (disk and checks.get("independent", {}).get("status") == PASS)):
+        return top, top
+    if value_ok and disk:
+        return "PLAUSIBLE", top   # capped: saved by the lane, not independently fetched
+    if checks.get("doi", {}).get("status") == PASS and value_ok:
+        return "PLAUSIBLE", "PLAUSIBLE"
+    return "UNSOURCED", "UNSOURCED"
 
 
-def verify_claim(c: dict[str, Any], run_dir: Path, web: Web | None, apis: tuple[str, str]) -> dict[str, Any]:
+def verify_claim(c: dict[str, Any], run_dir: Path, web: Web | None, apis: tuple[str, str], trusted: bool = False) -> dict[str, Any]:
     checks: dict[str, dict[str, Any]] = {}
     if c.get("url") and web is not None:
         checks["url"], text = check_url(c, web)
@@ -463,17 +516,21 @@ def verify_claim(c: dict[str, Any], run_dir: Path, web: Web | None, apis: tuple[
         checks["doi"] = check_doi(c, web, *apis)
     if c.get("sources_file"):
         checks["disk"] = check_disk(c, run_dir)
+        independent = check_independent(c, checks, web, trusted)
+        if independent:
+            checks["independent"] = independent
     checks["value"] = check_value(c) if not c.get("derived_from") else {"status": SKIP, "detail": "derived"}
     return {"id": c.get("id"), "checks": checks, "schema": schema_errors(c)}
 
 
 def resolve_derived(rows: dict[str, dict[str, Any]], claims: dict[str, dict[str, Any]], cid: str, seen: tuple = ()) -> str:
-    """The derived claim's value recomputed from its inputs; its tier is the weakest input's, or REJECTED."""
+    """The derived claim's value recomputed from its inputs; its tier is the weakest input's, or REJECTED. Its ceiling is the
+    weakest input ceiling, so a derived figure over capped inputs is capped too."""
     row, c = rows[cid], claims[cid]
     if row.get("tier_earned"):
         return row["tier_earned"]
     if not c.get("derived_from"):
-        row["tier_earned"] = earned_tier(c, row["checks"])
+        row["tier_earned"], row["tier_ceiling"] = earned_tier(c, row["checks"])
         return row["tier_earned"]
     inputs = [str(i) for i in c.get("derived_from") or []]
     bad = [i for i in inputs if i not in claims or i in seen or i == cid]
@@ -483,8 +540,11 @@ def resolve_derived(rows: dict[str, dict[str, Any]], claims: dict[str, dict[str,
         tiers = [resolve_derived(rows, claims, i, (*seen, cid)) for i in inputs]
         row["checks"]["derived"] = _recompute(c, {i: claims[i] for i in inputs})
         row["inputs_tier"] = min(tiers, key=TIERS.index)
+        row["inputs_ceiling"] = min((rows[i]["tier_ceiling"] for i in inputs), key=TIERS.index)
+        row["capped_inputs"] = [i for i in inputs if rows[i]["tier_ceiling"] != rows[i]["tier_earned"]]
     failed = any(v["status"] == FAIL for v in row["checks"].values())
     row["tier_earned"] = "REJECTED" if failed else row["inputs_tier"]
+    row["tier_ceiling"] = "REJECTED" if failed else row["inputs_ceiling"]
     return row["tier_earned"]
 
 
@@ -530,25 +590,36 @@ def load_claims(path: Path) -> tuple[list[dict[str, Any]], list[str]]:
     return claims, errs
 
 
-def verify_run(run_dir: Path, claims_path: Path, *, offline: bool, web: Web, apis: tuple[str, str]) -> dict[str, Any]:
+def verify_run(run_dir: Path, claims_path: Path, *, offline: bool, web: Web, apis: tuple[str, str],
+               trusted: bool = False) -> dict[str, Any]:
     claims, fails = load_claims(claims_path)
     by_id = {str(c.get("id")): c for c in claims}
-    rows = {cid: verify_claim(c, run_dir, None if offline else web, apis) for cid, c in by_id.items()}
+    rows = {cid: verify_claim(c, run_dir, None if offline else web, apis, trusted) for cid, c in by_id.items()}
     out = []
     for cid, c in by_id.items():
         resolve_derived(rows, by_id, cid)
         out.append(_finish(rows[cid], c, fails))
     counts = {t: sum(1 for r in out if r["tier_earned"] == t) for t in TIERS}
+    capped = [{"id": r["id"], "tier_declared": r["tier_declared"], "tier_earned": r["tier_earned"], "why": r["capped_reason"]}
+              for r in out if r["capped"]]
     return {"verifier": VERSION, "run_dir": str(run_dir), "claims_file": str(claims_path),
             "claims_sha256": compute_sha256(claims_path) if claims_path.is_file() else None,
             "checked_at": dt.datetime.now().astimezone().isoformat(timespec="seconds"), "offline": offline,
-            "verdict": FAIL if fails else PASS, "counts": counts, "fails": fails, "claims": out}
+            "trusted_run": trusted, "verdict": FAIL if fails else PASS, "counts": counts, "capped": capped,
+            "fails": fails, "claims": out}
+
+
+def _capped_reason(row: dict[str, Any]) -> str:
+    if row.get("capped_inputs"):
+        return f"derived from input(s) {NOT_FETCHED}: {', '.join(row['capped_inputs'])}"
+    return row["checks"].get("independent", {}).get("detail") or NOT_FETCHED
 
 
 def _finish(row: dict[str, Any], c: dict[str, Any], fails: list[str]) -> dict[str, Any]:
     declared = str(c.get("tier_declared") or "").upper()
-    earned = row["tier_earned"]
-    over = declared in TIERS and TIERS.index(declared) > TIERS.index(earned)
+    earned, ceiling = row["tier_earned"], row["tier_ceiling"]
+    capped = TIERS.index(ceiling) > TIERS.index(earned)   # the lane could not know our network: up to the ceiling is honest
+    over = declared in TIERS and TIERS.index(declared) > TIERS.index(ceiling)
     reasons = [f"{k}: {v['detail']}" for k, v in row["checks"].items() if v["status"] == FAIL] + row["schema"]
     if over:
         reasons.append(f"overclaim: declared {declared}, earned {earned}")
@@ -557,7 +628,8 @@ def _finish(row: dict[str, Any], c: dict[str, Any], fails: list[str]) -> dict[st
     if verdict == FAIL:
         fails.extend(f"{row['id']}: {r}" for r in reasons)
     return {"id": row["id"], "claim": c.get("claim"), "value": c.get("value"), "unit": c.get("unit"),
-            "tier_declared": declared, "tier_earned": earned, "overclaim": over, "verdict": verdict,
+            "tier_declared": declared, "tier_earned": earned, "tier_ceiling": ceiling, "capped": capped,
+            "capped_reason": _capped_reason(row) if capped else None, "overclaim": over, "verdict": verdict,
             "reasons": reasons, "checks": row["checks"]}
 
 
@@ -582,9 +654,11 @@ def render_md(report: dict[str, Any]) -> str:
         "# VERIFY - the research claims gate (`verify_research_claims.py`)",
         "",
         f"**Verdict: {report['verdict']}** - {len(claims)} claim(s), {len(failed)} failing; "
-        f"mode {'offline (disk only)' if report['offline'] else 'online'}; checked {report['checked_at']}.",
+        f"mode {'offline (disk only)' if report['offline'] else 'online'}"
+        f"{', trusted run (--trusted-run)' if report.get('trusted_run') else ''}; checked {report['checked_at']}.",
         f"Claims file sha256 `{report['claims_sha256']}` - a promotion runs `--require-pass` against it.",
-        "Earned tiers: " + ", ".join(f"{t} {n}" for t, n in report["counts"].items()) + ".",
+        "Earned tiers: " + ", ".join(f"{t} {n}" for t, n in report["counts"].items())
+        + f"; {len(report.get('capped', []))} held at PLAUSIBLE because nothing we fetched matched the lane's saved copy.",
         "",
         "## Failures (the revision table)",
         "",
@@ -597,15 +671,23 @@ def render_md(report: dict[str, Any]) -> str:
         lines += [f"| - | - | - | {_esc(f)} |" for f in report["fails"] if f.split(":", 1)[0] not in known]
     else:
         lines.append("- none")
+    lines += ["", "## capped: not independently fetched", "",
+              "A saved source that the checked lane wrote proves only that it agrees with itself. These claims pass as PLAUSIBLE; "
+              "a CONFIRMED declared on them is not an overclaim (the lane could not know our network).", ""]
+    if report.get("capped"):
+        lines += ["| id | declared | earned | why |", "|---|---|---|---|"]
+        lines += [f"| {_esc(c['id'])} | {c['tier_declared']} | {c['tier_earned']} | {_esc(c['why'])} |" for c in report["capped"]]
+    else:
+        lines.append("- none")
     lines += ["", "## Every claim", "",
-              "| id | value | declared | earned | verdict | url | doi | quote on page | value in quote | disk | derived |",
-              "|---|---|---|---|---|---|---|---|---|---|---|"]
+              "| id | value | declared | earned | verdict | url | doi | quote on page | value in quote | disk | independent | derived |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for c in claims:
         ch = c["checks"]
         lines.append(f"| {_esc(c['id'])} | {_esc(c['value'])} {_esc(c['unit'] or '')} | {c['tier_declared']} | "
                      f"{c['tier_earned']} | {c['verdict']} | {_cell(ch.get('url'))} | {_cell(ch.get('doi'))} | "
                      f"{_cell(ch.get('quote_web'))} | {_cell(ch.get('value'))} | {_cell(ch.get('disk'))} | "
-                     f"{_cell(ch.get('derived'))} |")
+                     f"{_cell(ch.get('independent'))} | {_cell(ch.get('derived'))} |")
     return "\n".join(lines) + "\n"
 
 
@@ -662,6 +744,9 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--delay", type=float, default=0.5, help="seconds before each request (politeness)")
     ap.add_argument("--doi-api", default=DOI_API)
     ap.add_argument("--crossref-api", default=CROSSREF_API)
+    ap.add_argument("--trusted-run", action="store_true",
+                    help="the run was produced by OUR own agent (it fetched and saved the sources): a saved copy confirms "
+                         "without our re-fetch. Never for a lane's run")
     ap.add_argument("--allow-modified", action="store_true", help="skip the tamper check (tests / an uncommitted fix under review only)")
     return ap
 
@@ -687,13 +772,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"verify_research_claims: FAIL - run dir not found: {run_dir}")
         return 1
     web = Web(timeout=a.timeout, retries=a.retries, delay=a.delay)
-    report = verify_run(run_dir, claims_path, offline=a.offline, web=web, apis=(a.doi_api, a.crossref_api))
+    report = verify_run(run_dir, claims_path, offline=a.offline, web=web, apis=(a.doi_api, a.crossref_api),
+                        trusted=a.trusted_run)
     write_report(report, out_dir)
     for line in report["fails"][:40]:
         print("FAIL", line)
     tiers = ", ".join(f"{t} {n}" for t, n in report["counts"].items())
     print(f"verify_research_claims: {report['verdict']} - {len(report['claims'])} claim(s); earned {tiers}; "
-          f"{len(report['fails'])} failure(s); {out_dir / 'VERIFY.md'}")
+          f"{len(report['capped'])} capped (not independently fetched); {len(report['fails'])} failure(s); {out_dir / 'VERIFY.md'}")
     return 0 if report["verdict"] == PASS else 1
 
 

@@ -284,15 +284,135 @@ def test_a_registered_doi_with_its_own_title_passes_the_doi_check(tmp_path, web)
 # --------------------------------------------------------------------------- the source on disk
 
 
-def test_a_source_on_disk_confirms_offline(tmp_path):
+def test_a_source_on_disk_offline_is_capped_at_plausible_unless_the_run_is_trusted(tmp_path):
+    """R26-311: a file the checked lane saved proves only that it agrees with itself. Offline nothing is fetched, so a disk-only
+    pass is capped at PLAUSIBLE - honestly, with no overclaim - unless the run is ours (`--trusted-run`)."""
     folder = run(tmp_path, [claim("c1", sources_file="sources/10k.htm", sha256=sha(PAGE))], {"10k.htm": PAGE})
 
     code, report = verify(folder, None, "--offline")
 
     c1 = by_id(report, "c1")
     assert code == 0, report["fails"]
-    assert c1["checks"]["disk"]["status"] == "PASS" and c1["tier_earned"] == "CONFIRMED"
+    assert c1["checks"]["disk"]["status"] == "PASS" and c1["tier_earned"] == "PLAUSIBLE"
+    assert c1["capped"] is True and c1["overclaim"] is False
     assert report["offline"] is True and "url" not in c1["checks"]
+
+    code, report = verify(folder, None, "--offline", "--trusted-run")
+
+    c1 = by_id(report, "c1")
+    assert code == 0 and c1["tier_earned"] == "CONFIRMED" and c1["capped"] is False and report["trusted_run"] is True
+
+
+# --------------------------------------------------------------------------- the independent check (R26-311)
+
+
+def dead_url() -> str:
+    """A localhost port nothing listens on: the fetch is refused, the way FRED timed out from this machine."""
+    import socket
+    s = socket.socket()
+    s.bind(("127.0.0.1", 0))
+    port = s.getsockname()[1]
+    s.close()
+    return f"http://127.0.0.1:{port}/fredgraph.csv"
+
+
+def test_a_lane_saved_source_behind_an_unreachable_url_is_capped_not_an_overclaim(tmp_path):
+    folder = run(tmp_path, [claim("c1", url=dead_url(), sources_file="sources/10k.htm", sha256=sha(PAGE))],
+                 {"10k.htm": PAGE})
+
+    code, report = verify(folder, None)
+
+    c1 = by_id(report, "c1")
+    assert c1["checks"]["url"]["status"] == "UNVERIFIABLE" and c1["checks"]["disk"]["status"] == "PASS"
+    assert c1["tier_earned"] == "PLAUSIBLE" and c1["capped"] is True and c1["overclaim"] is False
+    assert "saved by the lane, not independently fetched" in c1["checks"]["independent"]["detail"]
+    assert code == 0 and report["verdict"] == "PASS", report["fails"]
+    assert [c["id"] for c in report["capped"]] == ["c1"]
+    md = (folder / "VERIFY.md").read_text(encoding="utf-8")
+    section = md.split("## capped: not independently fetched", 1)[1].split("## Every claim", 1)[0]
+    assert "| c1 | CONFIRMED | PLAUSIBLE |" in section
+
+
+def test_the_same_unreachable_url_in_a_trusted_run_is_confirmed(tmp_path):
+    folder = run(tmp_path, [claim("c1", url=dead_url(), sources_file="sources/10k.htm", sha256=sha(PAGE))],
+                 {"10k.htm": PAGE})
+
+    code, report = verify(folder, None, "--trusted-run")
+
+    c1 = by_id(report, "c1")
+    assert code == 0, report["fails"]
+    assert c1["tier_earned"] == "CONFIRMED" and c1["capped"] is False and report["capped"] == []
+
+
+def test_a_saved_source_byte_identical_to_our_fetch_is_confirmed(tmp_path, web):
+    base, routes = web
+    routes["/fredgraph.csv"] = html(PAGE)
+    folder = run(tmp_path, [claim("c1", url=f"{base}/fredgraph.csv", sources_file="sources/10k.htm", sha256=sha(PAGE))],
+                 {"10k.htm": PAGE})
+
+    code, report = verify(folder, base)
+
+    c1 = by_id(report, "c1")
+    assert code == 0, report["fails"]
+    assert c1["checks"]["independent"]["status"] == "PASS" and "byte-identical" in c1["checks"]["independent"]["detail"]
+    assert c1["tier_earned"] == "CONFIRMED" and c1["capped"] is False
+
+
+def test_a_saved_source_that_differs_from_our_fetch_and_lacks_the_quote_there_fails(tmp_path, web):
+    base, routes = web
+    routes["/10k.htm"] = html(PAGE.replace("115,186", "120,001"))
+    folder = run(tmp_path, [claim("c1", url=f"{base}/10k.htm", sources_file="sources/10k.htm", sha256=sha(PAGE))],
+                 {"10k.htm": PAGE})
+
+    code, report = verify(folder, base)
+
+    c1 = by_id(report, "c1")
+    assert code == 1 and c1["tier_earned"] == "REJECTED"
+    assert c1["checks"]["independent"]["status"] == "FAIL"
+    assert any("the saved source does not match the live page" in r for r in c1["reasons"])
+
+
+def test_a_saved_source_that_differs_but_our_fetch_still_carries_the_quote_is_confirmed(tmp_path, web):
+    base, routes = web
+    routes["/10k.htm"] = html(PAGE.replace("</body>", "<p>Updated 2026-09-24.</p></body>"))
+    folder = run(tmp_path, [claim("c1", url=f"{base}/10k.htm", sources_file="sources/10k.htm", sha256=sha(PAGE))],
+                 {"10k.htm": PAGE})
+
+    code, report = verify(folder, base)
+
+    c1 = by_id(report, "c1")
+    assert code == 0, report["fails"]
+    assert c1["checks"]["independent"]["status"] == "PASS" and "still carries the quote" in c1["checks"]["independent"]["detail"]
+    assert c1["tier_earned"] == "CONFIRMED"
+
+
+def test_a_named_mirror_byte_identical_to_the_saved_source_confirms_an_unreachable_url(tmp_path, web):
+    base, routes = web
+    routes["/alfred/GDPA.csv"] = html(PAGE)
+    folder = run(tmp_path, [claim("c1", url=dead_url(), mirror_url=f"{base}/alfred/GDPA.csv",
+                                  sources_file="sources/10k.htm", sha256=sha(PAGE))], {"10k.htm": PAGE})
+
+    code, report = verify(folder, base)
+
+    c1 = by_id(report, "c1")
+    assert code == 0, report["fails"]
+    assert c1["checks"]["independent"]["status"] == "PASS" and "mirror" in c1["checks"]["independent"]["detail"]
+    assert c1["tier_earned"] == "CONFIRMED"
+
+
+def test_a_derived_claim_over_capped_inputs_is_capped_too_not_an_overclaim(tmp_path):
+    body = "<p>Net cash provided by operating activities 64,089</p><p>Purchases of property and equipment (3,236)</p>"
+    ocf = claim("ocf", value="64,089", quote="operating activities 64,089", sources_file="sources/cf.htm", sha256=sha(body))
+    capex = claim("capex", value="3,236", quote="property and equipment (3,236)", sources_file="sources/cf.htm", sha256=sha(body))
+    fcf = claim("fcf", value="60,853", quote="", derived_from=["ocf", "capex"], formula="{ocf} - {capex}")
+    folder = run(tmp_path, [ocf, capex, fcf], {"cf.htm": body})
+
+    code, report = verify(folder, None, "--offline")
+
+    f = by_id(report, "fcf")
+    assert code == 0, report["fails"]
+    assert f["tier_earned"] == "PLAUSIBLE" and f["capped"] is True and f["overclaim"] is False
+    assert {c["id"] for c in report["capped"]} == {"ocf", "capex", "fcf"}
 
 
 def test_a_sha256_mismatch_fails(tmp_path):
@@ -370,7 +490,7 @@ def test_a_derived_value_recomputes_from_its_inputs(tmp_path):
     fcf = claim("fcf", value="60,853", quote="", derived_from=["ocf", "capex"], formula="{ocf} - {capex}")
     folder = run(tmp_path, [ocf, capex, fcf], {"cf.htm": body})
 
-    code, report = verify(folder, None, "--offline")
+    code, report = verify(folder, None, "--offline", "--trusted-run")   # trusted: the inputs' saved copies confirm
 
     f = by_id(report, "fcf")
     assert code == 0, report["fails"]
