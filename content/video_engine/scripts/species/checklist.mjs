@@ -26,6 +26,11 @@
      profile- P69 T28b / R26-300: a spec that names `profile` takes that profile's dial set (CHECKLIST_PROFILES) for
               the build, the painter and the chart's header, on the dock's own canvas; a spec that names none takes
               CHECKLIST itself - the default card, and every pixel of the `test-card` golden, cannot move.
+     at     - P72 T27 / R26-302: a spec may carry `at`, one instant per column on the dock's own clock (seconds from
+              the land, as a row's `delay`; null = the column's own clock). A column's cells WAIT for their instant -
+              they start at the later of it and the row's own offset, so an answer is never on the card before the
+              word that gives it (row 20: "Paper answers") and never before its own question. A spec without `at`
+              runs the very arithmetic it always ran.
    The dials below are ours to tune (42 s42.5), not findings. */
 import { INK, kmHex } from "../kinetics/ink.mjs";
 
@@ -142,10 +147,10 @@ export const checklistRecap = (d, V = CHECKLIST) => (d.exit - d.enter) < V.RECAP
 /* row ri's delay: its declared one (r.d), or the recap's fast step */
 export const checklistRowDelay = (r, ri, recap, V = CHECKLIST) => recap ? ri * V.RECAP_ROW_S : r.d;
 
-/* cell k's clock inside its row */
-export const checklistCellClock = (tRel, rowDelay, k, recap, V = CHECKLIST) => {
-  const offs = recap ? V.RECAP_OFFS : V.OFFS;
-  return tRel - rowDelay - offs[Math.min(k, 3)];
+/* cell k's clock inside its row - or, when its column names a later instant `at` (R26-302), on that instant */
+export const checklistCellClock = (tRel, rowDelay, k, recap, V = CHECKLIST, at = null) => {
+  const offs = recap ? V.RECAP_OFFS : V.OFFS, own = offs[Math.min(k, 3)];
+  return (at != null && at > rowDelay + own) ? tRel - at : tRel - rowDelay - own;
 };
 
 /* the number of characters typed at the cell's clock */
@@ -180,7 +185,7 @@ export function buildChecklist(spec, ctx, V = checklistDials(spec)) {
   const { mk, slot, PL, PT, CW, PR, kin } = ctx;
   const headEls = spec.head.map((h) =>
     mk("text", { class: "csr", x: PL, y: PT + V.HEAD_DY, ...checklistType(V, "HEAD_PX") }, h));
-  const rowEls = [];
+  const rowEls = [], colAt = Array.isArray(spec.at) ? spec.at : null;   /* R26-302: the columns' own instants */
   spec.rows.forEach((r, i) => {
     const y = checklistRowY(PT, i, V);
     const colr = r.colors || V.COLORS;
@@ -202,7 +207,7 @@ export function buildChecklist(spec, ctx, V = checklistDials(spec)) {
       const tx = mk("text", { class: "cs", x: PL, y,
          fill: colr[ci], ...checklistType(V, "CELL_PX") }, ci === 0 ? "" : cell, g2);
       cells.push({ el: g2, tx, txt: cell, ci, sweep, band, y,
-                   bandCls: "hlband" + slot + i + ci });
+                   bandCls: "hlband" + slot + i + ci, at: colAt ? colAt[ci] : null });
     });
     mk("line", { x1: PL, x2: CW - PR, y1: y + V.RULE_DY, y2: y + V.RULE_DY,
        stroke: V.RULE_COLOR, "stroke-width": V.RULE_W });
@@ -254,7 +259,7 @@ export function paintChecklist(st, tRel, d, V = (st.chkFit && st.chkFit.V) || CH
   (st.rowEls || []).forEach((r, ri) => {
     const rowDelay = checklistRowDelay(r, ri, recap, V);
     r.cells.forEach((c, k) => {
-      const ct = checklistCellClock(tRel, rowDelay, k, recap, V);
+      const ct = checklistCellClock(tRel, rowDelay, k, recap, V, c.at);
       const o = checklist01(ct / V.CELL_FADE_S);
       c.el.setAttribute("opacity", o.toFixed(2));
       if (c.ci === 0) {

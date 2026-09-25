@@ -12122,12 +12122,15 @@ def checklist_problems(chart: dict) -> list[str]:
     `phone` card must be what the phone canvas holds at the floor - a question and its two answers (every row as
     wide as the head), three rows at most, and no sub line (the profile does not draw one; the title carries it)."""
     chk = chart.get("checklist") if isinstance(chart, dict) else None
-    if not isinstance(chk, dict) or "profile" not in chk:
+    if not isinstance(chk, dict):
         return []
+    at = checklist_at_problems(chk)
+    if "profile" not in chk:
+        return at
     name = chk["profile"]
     if isinstance(name, bool) or name not in CHECKLIST_PROFILES:
-        return [f"checklist: profile {name!r} is not one of {CHECKLIST_PROFILES} (species/checklist.mjs CHECKLIST_PROFILES)"]
-    out: list[str] = []
+        return at + [f"checklist: profile {name!r} is not one of {CHECKLIST_PROFILES} (species/checklist.mjs CHECKLIST_PROFILES)"]
+    out: list[str] = at
     head = chk.get("head") or []
     rows = chk.get("rows") or []
     if len(head) != CHECKLIST_PHONE_COLS:
@@ -12143,6 +12146,27 @@ def checklist_problems(chart: dict) -> list[str]:
     if chart.get("sub"):
         out.append(f"checklist: a phone card draws no sub (the title carries it, as the T10c card profile) - drop "
                    f"'sub': {chart['sub']!r}")
+    return out
+
+
+def checklist_at_problems(chk: dict) -> list[str]:
+    """P72 T27 / R26-302: a checklist's `at` - one instant per column on the dock's own clock (seconds, as a row's
+    `delay`; null = the column's own clock), so a column's cells wait for the word that gives them. Refused by name
+    when it is not a list, names another number of columns than the head, or carries anything but a finite number
+    of seconds >= 0 or null (s106: a malformed key is never silently dropped). Absent = [] - the card it always was."""
+    if "at" not in chk:
+        return []
+    at, head = chk["at"], chk.get("head") or []
+    if not isinstance(at, list):
+        return [f"checklist: `at` must be a list of one instant per column (seconds on the dock's clock, null for the "
+                f"column's own), not {at!r}"]
+    out = [] if len(at) == len(head) else [f"checklist: `at` names {len(at)} columns, the head {len(head)}"]
+    for i, v in enumerate(at, 1):
+        if v is None:
+            continue
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) or v < 0:
+            out.append(f"checklist: `at` column {i} is {v!r} - an instant is a finite number of seconds >= 0 on the "
+                       f"dock's clock, or null")
     return out
 
 

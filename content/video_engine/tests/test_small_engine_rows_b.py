@@ -88,3 +88,87 @@ def test_every_transition_constant_carries_a_source_tag() -> None:
     untagged = [n for n in _declared(region)
                 if not re.search(rf"\b{n}\b(?:\s+-?[\d.]+)?\s+{TAG}", region)]
     assert untagged == [], f"transition constants with no source tag: {untagged}"
+
+
+# ---- R26-302: a checklist column waits for its own instant --------------------------------------------------------
+
+def _card_chart(at=None) -> tuple[dict, dict, dict]:
+    tl, uris = G.test_card()
+    chart = next(iter(tl["evidence"].values()))["chart"]
+    if at is not None:
+        chart["checklist"]["at"] = at
+    return tl, uris, chart
+
+
+@pytest.mark.parametrize("at, says", [
+    ("6.0", r"checklist: `at` must be a list of one instant per column"),
+    ([None, None, 6.0], r"checklist: `at` names 3 columns, the head 4"),
+    ([None, None, None, -1.0], r"checklist: `at` column 4 is -1.0"),
+    ([None, None, None, True], r"checklist: `at` column 4 is True"),
+    ([None, None, None, "6"], r"checklist: `at` column 4 is '6'"),
+    ([None, None, None, float("nan")], r"checklist: `at` column 4 is nan"),
+])
+def test_a_malformed_column_at_is_refused_by_name(at, says) -> None:
+    _, _, chart = _card_chart(at)
+    problems = BST.checklist_problems(chart)
+    assert problems and re.search(says, " | ".join(problems)), problems
+    with pytest.raises(ValueError, match=r"ev-x: checklist: `at`"):
+        BST.check_checklist("ev-x", chart)
+
+
+def test_a_good_column_at_and_none_both_pass() -> None:
+    assert BST.checklist_problems(_card_chart()[2]) == []
+    assert BST.checklist_problems(_card_chart([None, None, None, 6.0])[2]) == []
+    assert BST.checklist_problems(_card_chart([0, 1.5, None, 6])[2]) == []
+
+
+def _node(js: str) -> object:
+    url = CHECKLIST.resolve().as_uri()
+    code = f"import * as C from {json.dumps(url)};\n{js}"
+    r = subprocess.run(["node", "--input-type=module", "-e", code], capture_output=True, text=True, timeout=60)
+    assert r.returncode == 0, r.stderr
+    return json.loads(r.stdout)
+
+
+def test_the_cell_clock_waits_for_its_column_and_is_the_old_clock_without_one() -> None:
+    got = _node("""
+      const V = C.CHECKLIST, clk = (t, d, k, at) => C.checklistCellClock(t, d, k, false, V, at);
+      console.log(JSON.stringify({
+        plain: [clk(5, 1, 3), clk(5, 1, 3, null), clk(5, 1, 3, undefined)],
+        waits: clk(5, 1, 3, 6), after: clk(7, 1, 3, 6), early: clk(5, 4, 3, 2),
+        recap: C.checklistCellClock(5, 1, 3, true, V, 6)}));""")
+    assert got["plain"] == [5 - 1 - 1.6] * 3, got          # no `at`: tRel - rowDelay - OFFS[k], as it always was
+    assert got["waits"] == pytest.approx(-1.0), got           # the column's instant is later than the row's: it waits
+    assert got["after"] == pytest.approx(1.0), got
+    assert got["early"] == pytest.approx(5 - 4 - 1.6), got    # an instant BEFORE the row's own clock never draws early
+    assert got["recap"] == pytest.approx(-1.0), got           # ... on a recap too
+
+
+def test_the_engine_carries_the_species_column_clock() -> None:
+    src = ENGINE.read_text(encoding="utf-8")
+    assert "const checklistCellClock = (tRel, rowDelay, k, recap, V = CHECKLIST, at = null) => {" in src
+    assert "checklistCellClock(tRel, rowDelay, k, recap, V, c.at)" in src
+
+
+# every cell of the test card's rows: its text, its column and the opacity its group carries
+CELLS = """() => [...document.querySelectorAll('.dock svg.chartbox text.cs')].map((e) => ({
+  text: e.textContent, fill: e.getAttribute('fill'), o: +(e.parentNode.getAttribute('opacity') || 1) }))"""
+
+
+@needs_browser
+def test_the_paper_column_writes_on_its_own_instant() -> None:
+    """Row 20's defect on the golden card: the Believed column waits for its word at tRel 6.0 (t 8.45 on this card's
+    clock - enter 2.0 + CARD_IN x 0.6). Before it, row 1's answer (+1.6 on its row, long due) is not on the card;
+    after it, it is; every other cell reads exactly as the card without `at`."""
+    tl0, uris, _ = _card_chart()
+    tl1, _, _ = _card_chart([None, None, None, 6.0])
+    t_before, t_after = 2.45 + 6.0 - 0.05, 2.45 + 6.0 + 0.40
+    base = [p for _, p in _render(tl0, uris, [t_before, t_after], CELLS)]
+    colat = [p for _, p in _render(tl1, uris, [t_before, t_after], CELLS)]
+    believed = G.test_card()[0]["evidence"]["ev-golden-test-card"]["chart"]["checklist"]["rows"][0]["cells"][3]
+    pick = lambda cells, txt: next(c for c in cells if c["text"] == txt)   # noqa: E731
+    assert pick(base[0], believed)["o"] == 1, base[0]                       # the card without `at`: already written
+    assert pick(colat[0], believed)["o"] == 0, colat[0]                     # with it: waiting for its instant
+    assert pick(colat[1], believed)["o"] == 1, colat[1]                     # ... and written after it
+    others = lambda cells: [c for c in cells if c["fill"] != "#ff8a8c"]    # noqa: E731 - every column but Believed
+    assert others(colat[0]) == others(base[0]) and others(colat[1]) == others(base[1])
