@@ -843,7 +843,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T6: A prop's authored exit near its page's end is honoured, or refused with its numbers (R26-309)
-- Status: pending
+- Status: done - lane B 43363ea: the engine's boundary snap skips `dockOwnsExit` docks (stamped marks, props); `swept` holds; cards unchanged; no refusal needed (s106); the reviewer's read runs post-commit
 - Owner: implementation_luna (LANE B), then reviewer
 - Depends on: P70 T8 and T9 committed (both own `render()` hunks); T15 (the same dock branch in wave 4: its hover lines
   sit beside the exit)
