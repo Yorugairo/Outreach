@@ -1077,7 +1077,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T42: The agenda beat's park-and-pan - R26-229 (a), built so P68-HG3's card shows both forms
-- Status: pending
+- Status: done - lane A c665190: form (a) built in a private bed beside (b); P68-HG3's card carries item (C), the side-by-side clip and the recommendation (b); R26-229 (a) closes when the operator rules at HG3
 - Owner: parent (the beat's authoring and the frame read), implementation_luna (the build) - LANE A, a private build
 - Depends on: none on lane B (the engine as it is); lane A at a slice boundary (P69 T32 is writing `build_episode_h.py` - T42 never edits the committed door)
 - Items: R26-229 (a) (`hist:672`: "the beat authored both ways on the 30 s bed - (a) a ~20 % park with a camera pan; (b) `melt` to the ball ... - and the two on one card"). (b) is built (the 30 s bed, on P68-HG3's queue text); (a) was not, so the row stays open until the card carries both.
