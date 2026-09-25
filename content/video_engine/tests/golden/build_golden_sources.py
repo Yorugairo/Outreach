@@ -4369,6 +4369,31 @@ SURFACES.update({"gauge-94": gauge_94})
 FRAME_T.update({"gauge-94": 9.0})
 
 
+# ---- P72 T6 (R26-319): THE HORIZONTAL FILL GAUGE - the same 94 page, the capsule on its side -----------------------
+#   gauge-94-h  gauge-94's object and page under `;form=gauge:h`: the capsule lies from 0 at its left to the whole at its
+#               right, filled to 94 of it; "0%" and "100%" over the stubs above it, the category naming it from its left,
+#               the whole ("every dollar from operations") past the ceiling, "94%" under the fill's end in the bar's ink.
+#               Flat type, as gauge-94's. Read at the HOLD (9.0), where M26 reads the fill as a WIDTH.
+GAUGE_H_PLATE = GAUGE_PLATE + ":h"
+
+
+def gauge_94_h() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(GAUGE_H_PLATE, (0, 0, 0), LIT_PROJECT)
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: the horizontal fill gauge - 94 of every dollar from operations", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"gauge-94-h": gauge_94_h})
+FRAME_T.update({"gauge-94-h": 9.0})
+
+
 # ---- P70 T2 (was P69 T46) / E99 s109 (1): THE SCHEMATIC - a shape drawn with no data, the light walking peak -> trough --
 # Steel and Paper H row 12's sentence: "And that isn't the peak of inflated expectations. It's the trough already doing
 # its job" (SHOT-TABLE-H #6, 104.31-147.82). A SCHEMATIC needs no data (s109 (1)): the object is words only - the title,

@@ -10931,8 +10931,8 @@ async function mount(doc) {
                                   NAME_GAP_PX: 8, FIG_PX: LP_CARD.TYPE_PX });
   let lpGaugeN = 0;   /* the capsules' clip ids, in build order (deterministic, as the soft layers') */
   /* the capsule: a track path (rounded at the ceiling, square on zero) and, over it, the group its fill is cut to */
-  const lpGaugeCapsule = (st, g) => {
-    const grp = lpEl("g", "lp-gauge", st.chart), d = lpShoulderPath(g.x, g.top, g.x + g.bw, g.base, g.r, g.r, false);
+  const lpGaugeCapsule = (st, g, parent) => {   /* P72 T6: `parent` - the horizontal gauge's turned group (absent: the chart) */
+    const grp = lpEl("g", "lp-gauge", parent || st.chart), d = lpShoulderPath(g.x, g.top, g.x + g.bw, g.base, g.r, g.r, false);
     const track = lpEl("path", "lp-gauge-track", grp, { d, fill: "var(--lp-chalk)", "fill-opacity": LPGAUGE.TRACK_A });
     const id = "lpgauge-" + (st.seed | 0) + "-" + (++lpGaugeN);
     lpEl("path", "", lpEl("clipPath", "", lpEl("defs", "", grp), { id, clipPathUnits: "userSpaceOnUse" }), { d });
@@ -10983,12 +10983,115 @@ async function mount(doc) {
     return w;
   };
   const lpGaugePitch = (st, capU, figW) => capU + figW + 2 * (LPGAUGE.OVER_PX + LPGAUGE.FIG_GAP_PX) * (st.cardK || 1) / (st.stagePx > 0 ? st.stagePx : 1);
+  /* P72 T6 (R26-319) - THE HORIZONTAL FILL GAUGE (`;form=gauge:h`): the vertical capsule laid on its side. The capsule,
+     its clip, its square fill and the fill's grow (lpPaintChart's own bar clock, scaleY about the zero) are built in the
+     VERTICAL gauge's own local frame inside ONE group turned a quarter (`g.lp-gauge-h`: local "up" is the chart's
+     "right", local "right" the chart's "down"), so nothing of the fill's law is written twice. The WORDS are never turned
+     - each stands where the vertical gauge's stands, carried round with the capsule: the category names the capsule from
+     its left (the vertical one's name under its foot), the whole names itself past the ceiling (over the top), the
+     printed scale - 0 and the whole - over the stubs above the first capsule (the tick column on the left), and the
+     figure under the capsule at the fill's end, in the bar's ink (beside the fill line), clear of the ceiling's stub.
+     The page's map along x is `st.scale.mx` (`dir: "h"`); the probe's M26 reads the fill's WIDTH against the printed
+     0 and whole on their stubs, standing up.
+     [DERIVED: the capsule, the overhang, the corner and the figure's floor are LPGAUGE's; LAB_GAP_PX / TICK_GAP_PX by
+     eye for the parent's frame read, as FIG_GAP_PX was; LAB_MAX_SHARE caps the category's column so the capsule keeps
+     the page] */
+  const LPGAUGE_H = Object.freeze({ LAB_GAP_PX: 18, TICK_GAP_PX: 10, LAB_MAX_SHARE: 0.24 });
+  const lpBoxShift = (el, dy) => { if (dy) el.setAttribute("y", (+el.getAttribute("y") + dy).toFixed(1)); };   /* a text moved by its own measured box */
+  const lpSetX = (el, x) => { el.setAttribute("x", x.toFixed(1)); for (const ts of el.__wrapLines || []) ts.setAttribute("x", x.toFixed(1)); };
+  const lpBuildGaugeH = (st, pg, GA) => {
+    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait, LF = !P && st.lfType ? st.lfType : null;
+    const k = st.stagePx > 0 ? st.stagePx : 1, cK = st.cardK || 1, u = (px) => px * cK / k, unit = pg.unit || "";
+    const ceil = +GA.ceiling, n = Math.max(1, st.vals.length), capU = u(LPGAUGE.W_PX), ov = u(LPGAUGE.OVER_PX);
+    const lgap = u(LPGAUGE_H.LAB_GAP_PX), tgap = u(LPGAUGE_H.TICK_GAP_PX), fgap = u(LPGAUGE.FIG_GAP_PX);
+    const x0 = P ? 30 : 20, x1 = P ? G.W - 30 : 980, top = P ? 150 : 90, bottom = P ? G.H - 70 : LF ? LF.bars_b : 440;
+    const tAt = lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : undefined;
+    const vtext = (v, i) => lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
+    /* the words first, measured, so the capsule takes the room they leave */
+    const labs = st.vals.map((_v, i) => { const e = lpEl("text", "lab", st.chart, { x: 0, y: 0, "text-anchor": "end", opacity: 0 });
+      e.textContent = (pg.labels || [])[i] || ""; return e; });
+    const labMax = LPGAUGE_H.LAB_MAX_SHARE * (x1 - x0);
+    labs.forEach((e) => lpWrapBarLabel(e, labMax));
+    const labW = Math.min(labMax, Math.max(0, ...labs.map(lpInkW)));
+    const HL = ((pg.axes || {}).hlines || []).filter((h) => h && Number.isFinite(+h.y));
+    const wholeH = HL.find((h) => Math.abs(+h.y - ceil) < 1e-9 && h.label);
+    const ruleAt = (h) => ({ opacity: 0, style: LP_HALO + "fill:" + (LP_PAL[h.color] || h.color || LP_INK.cobalt) + (P ? ";font-size:34px" : "") });
+    const nameEl = wholeH ? lpText(st.chart, "sname", 0, 0, "start", String(wholeH.label), ruleAt(wholeH)) : null;
+    const figs = st.vals.map((v, i) => { const e = lpEl("text", "val", st.chart, { x: 0, y: 0, opacity: 0 });
+      e.textContent = vtext(v, i); lpGaugeFigure(st, e, { x: 0, y: 0, ink: "none" }); e.setAttribute("text-anchor", "middle"); return e; });
+    const figW = Math.max(0, ...figs.map(lpInkW)), figH = Math.max(0, ...figs.map((e) => e.getBBox().height));
+    const XA = x0 + labW + ov + lgap, XB = x1 - Math.max((nameEl ? lpInkW(nameEl) : 0) + ov + lgap, figW / 2 + ov), L = Math.max(1, XB - XA);
+    const mx = (v) => XA + (v / (ceil || 1)) * L, myL = (v) => L - (v / (ceil || 1)) * L;   /* the chart's x; the turned frame's y */
+    /* the rows: the scale's words over the first capsule, each capsule its figure's height apart */
+    const tick0 = lpText(st.chart, "lab", 0, 0, "middle", lpWithUnit(lpTick(0), unit), tAt), tickH = tick0.getBBox().height;
+    const pitch = capU + 2 * ov + fgap + figH;
+    const block = tickH + tgap + ov + n * capU + (n - 1) * (pitch - capU) + ov + fgap + figH;
+    const cy0 = top + Math.max(0, (bottom - top) - block) / 2 + tickH + tgap + ov;
+    const caps = Array.from({ length: n }, (_, i) => [cy0 + i * pitch, cy0 + i * pitch + capU]);   /* the chart's y = the turned frame's x */
+    const hg = lpEl("g", "lp-gauge-h", st.chart, { transform: "matrix(0 1 -1 0 " + (XA + L).toFixed(3) + " 0)" });
+    st.scale = { kind: "bars", dir: "h", mx, my: myL, yv: (v) => v, y0: 0, y1: ceil, x0: XA, x1: XB };
+    /* the printed scale: the zero rule across every capsule's foot, the whole as stubs at each capsule's edges */
+    [0, ceil].forEach((v, j) => {
+      const gl = v === 0 ? lpEl("line", "ax", hg, { x1: (caps[0][0] - ov).toFixed(1), x2: (caps[n - 1][1] + ov).toFixed(1), y1: myL(0).toFixed(1), y2: myL(0).toFixed(1) })
+                         : lpGaugeStubs(hg, caps, ov, myL(v), "grid")[0];
+      gl.style.display = "inline";
+      const tl = v === 0 ? tick0 : lpText(st.chart, "lab", 0, 0, "middle", lpWithUnit(lpTick(v), unit), tAt);
+      lpSetX(tl, mx(v));
+      const bb = tl.getBBox(); lpBoxShift(tl, (caps[0][0] - ov - tgap) - (bb.y + bb.height));
+      lpMark(st, "tick:" + j, "tick", gl, { v, x: mx(v), y1: caps[0][0] - ov, y2: caps[n - 1][1] + ov });
+      lpMark(st, "ylab:" + j, "ylabel", tl, { v, x: mx(v), y: +tl.getAttribute("y") });
+      if (v !== 0) st.gaugeCeilLab = tl;
+    });
+    st.vals.forEach((v, i) => {
+      const [cy, cb] = caps[i], neg = v < 0, h = Math.max(3, Math.abs(myL(v) - myL(0)));
+      const gz = lpGaugeCapsule(st, { x: cy, bw: capU, base: myL(0), top: myL(ceil), r: LPGAUGE.RX }, hg);
+      const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), gz.fill,
+        { x: cy.toFixed(1), y: (myL(0) - h).toFixed(1), width: capU.toFixed(1), height: h.toFixed(1), rx: 0 });
+      const dcol = LP_PAL[(pg.colors || [])[i]];
+      if (dcol) bar.style.fill = dcol;
+      bar.style.transformOrigin = "0 " + myL(0).toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
+      const lab = labs[i];
+      lpSetX(lab, XA - ov - lgap);
+      let bb = lab.getBBox(); lpBoxShift(lab, (cy + capU / 2) - (bb.y + bb.height / 2));
+      const val = figs[i];
+      val.style.fill = dcol || (neg ? "var(--lp-neg)" : "var(--lp-pos)");
+      lpSetX(val, mx(v));
+      bb = val.getBBox(); lpBoxShift(val, (cb + ov + fgap) - bb.y);
+      const tip = mx(v), rec = { bar, lab, val, h, x: tip, i, neg, end: cy + capU / 2, over: false, v, bx: cy, bw: capU,
+                                 track: gz.grp, gauge: gz, stamp: null, ex: null };
+      st.bars.push(rec);
+      lpMark(st, "b:" + i, "bar", bar, { x: XA, y: cy, w: tip - XA, h: capU, base: XA, cx: tip, end: cy + capU / 2, neg, v }, rec);
+      lpMark(st, "xlab:" + i, "xlabel", lab, { x: +lab.getAttribute("x"), y: +lab.getAttribute("y") });
+      lpMark(st, "val:b:" + i, "value", val, { x: tip, y: +val.getAttribute("y"), v });
+    });
+    st.gauge = { caps: st.bars.map((b) => b.gauge), top: myL(ceil), base: myL(0), ceiling: ceil, dir: "h", group: hg };
+    st.valFit = null; st.tickFit = null;
+    const mid = (caps[0][0] + caps[n - 1][1]) / 2;
+    st.hlines = HL.map((h, hi) => {
+      const col = LP_PAL[h.color] || h.color || LP_INK.cobalt, v = +h.y, whole = Math.abs(v - ceil) < 1e-9;
+      const line = whole ? lpEl("g", "lp-gauge-rule", hg)
+        : lpEl("line", "hrule", hg, { x1: (caps[0][0] - ov).toFixed(1), x2: (caps[n - 1][1] + ov).toFixed(1), y1: myL(v).toFixed(1), y2: myL(v).toFixed(1), stroke: col });
+      if (whole) lpGaugeStubs(line, caps, ov, myL(v), "hrule", { stroke: col });
+      let lab = null;
+      if (h === wholeH) {   /* the whole names itself past the ceiling, on the capsules' middle */
+        lab = nameEl; lpSetX(lab, XB + ov + lgap);
+        const bb = lab.getBBox(); lpBoxShift(lab, mid - (bb.y + bb.height / 2));
+      } else if (h.label) {   /* a rule inside the whole is named over the capsules at its own value, over the scale's words */
+        lab = lpText(st.chart, "sname", mx(v), 0, "middle", String(h.label), ruleAt(h));
+        const bb = lab.getBBox(), tb = st.gaugeCeilLab ? st.gaugeCeilLab.getBBox() : null;
+        lpBoxShift(lab, (tb ? tb.y - tgap : caps[0][0] - ov - tgap) - (bb.y + bb.height));
+      }
+      lpMark(st, "rule:" + hi, "rule", line, { x: mx(v), v, y1: caps[0][0] - ov, y2: caps[n - 1][1] + ov });
+      return { h, y: mx(v), line, lab, col };
+    });
+  };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
        below it for negatives, value labels ride the bar's far end, category labels stay along the bottom. */
     const XF = formOf(pg, "extruded_bar");   /* P58 T5: opt-in (`;form=extruded_bar`); null is today's page, to the byte */
     const GA = formOf(pg, "gauge");   /* P70 T3: opt-in (`;form=gauge`, a progress page); null is today's page, to the byte */
+    if (GA && GA.dir === "h") return lpBuildGaugeH(st, pg, GA);   /* P72 T6 (R26-319): the capsule on its side */
     const SOFT = st.barStyle === "soft" ? LPBAR_SOFT.SHOULDER_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0;   /* P69 T10b: the shoulder, in this chart's units (0: the page as it was) */
     const n = Math.max(1, st.vals.length);
     const RNG = Array.isArray(pg.ranges) ? pg.ranges : null;   /* P69 T8d: [lo, hi] per bar (null: a single value) */

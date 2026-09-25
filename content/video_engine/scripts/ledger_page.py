@@ -866,9 +866,19 @@ TILT_DEG = 14.0        # the tilted plane's default turn about the page's own ve
 TILT_DEG_MAX = 89.0    # build_scene_timeline_f.PAGE_DEPTH["TILT_MAX"] - one limit, and the compiler checks it
 
 
+GAUGE_DIRS = ("h",)    # P72 T6 (R26-319): `gauge:h`, the horizontal capsule - M26 reads its fill as a WIDTH
+
+
 def form_error(form: str, builder: str, where: str, variant: str | None = None) -> str | None:
     """Is ``form`` a form THIS page's builder can draw? The message, or None. Pure. ``variant`` is read only by a form
-    `FORM_VARIANTS` names (the gauge: a progress page); the two 2.5D forms ignore it, so their rule is what it was."""
+    `FORM_VARIANTS` names (the gauge: a progress page); the two 2.5D forms ignore it, so their rule is what it was.
+    P72 T6: an OBJECT may name `gauge:h` (the row's grammar, `page_form_geom`); any other gauge setting is refused."""
+    name, sep, rest = str(form).partition(":")
+    if name == "gauge" and sep:
+        if rest not in GAUGE_DIRS:
+            return (f"{where}: form={form!r} - form=gauge takes no setting but :h (the horizontal capsule; form=gauge "
+                    "alone is the vertical one)")
+        form = name
     if form not in CHART_FORMS:
         return (f"{where}: form {form!r} is not one of {'|'.join(CHART_FORMS)} "
                 "(the two 2.5D chart forms and the progress gauge; the flat page is the reading form and names none)")
@@ -1040,6 +1050,10 @@ def bar_style_error(page: dict, value: Any, builder: str) -> str | None:
     if ((page.get("form") or {}).get("kind")) == "extruded_bar":
         return (f"bar_style={value} and form=extruded_bar are two bars on one page - the prism is the 3D bar, soft is "
                 "weight on the flat one. Keep one")
+    if ((page.get("form") or {}).get("kind")) == "gauge" and (page.get("form") or {}).get("dir") == "h":   # P72 T6
+        return (f"bar_style={value} and form=gauge:h - the soft bar's shoulders and its hatched shadow are laid for an "
+                "upright bar under the one stage light, and the horizontal capsule lies on its side. Draw it flat, or "
+                "draw the gauge vertical (form=gauge)")
     return None
 
 
@@ -1260,7 +1274,7 @@ def validate(series: dict, variant: str) -> list[str]:
             errors.append("left_gutter requires a story/bar chart")
     if series.get("form") is not None:   # P58 T5: an OBJECT naming a form is held to the same one rule the row is
         err = form_error(str(series["form"]), pick_builder(series, variant), "form", variant)
-        if not err and str(series["form"]) == "gauge":   # P70 T3: ... and a gauge's whole is named, as on the row
+        if not err and str(series["form"]).partition(":")[0] == "gauge":   # P70 T3: ... and a gauge's whole is named, as on the row
             err = gauge_error(series, "form")
         if err:
             errors.append(err)
@@ -4192,7 +4206,7 @@ def page_ink_key(spec: dict) -> str:
     if "left_gutter" in (spec.get("axes") or {}):
         ink["left_gutter"] = spec["axes"]["left_gutter"]
     if ((spec.get("form") or {}).get("kind")) == "gauge":   # P70 T3: a gauge's plot is its capsules, not the bars' - keyed only on a gauge
-        ink["form"] = "gauge"
+        ink["form"] = "gauge" + (":h" if (spec.get("form") or {}).get("dir") == "h" else "")   # P72 T6: a lying capsule's plot is its own
     if isinstance(spec.get(SCHEMATIC_KEY), dict):   # P70 T2: no tick column and the tag - keyed only on a schematic page
         ink[SCHEMATIC_KEY] = True
     blob = json.dumps(ink, ensure_ascii=False, sort_keys=True, separators=(",", ":"))

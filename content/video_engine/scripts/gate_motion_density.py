@@ -136,6 +136,7 @@ import argparse
 import hashlib
 import json
 import math
+import re
 import sys as _sys
 from pathlib import Path as _P
 _sys.path.insert(0, str(_P(__file__).resolve().parent))
@@ -2716,40 +2717,197 @@ def _printed_number(text: str) -> float | None:
         return None
 
 
+# P72 T6 (R26-303): A RANGE READS AS ITS TWO ENDS. `ledger_page.range_string` writes a range bar's value as its two
+# tokens joined by an en dash ("+55–60%"); `_printed_number` kept the digits of both and read 5560. Round 2 (LOW 6 / 7):
+# the printed string is TOKENISED - each number with its own sign (U+2212 is a minus), and a range is exactly two numbers
+# with ONE explicit separator between them (– — - or "to"; units and spaces around it are the unit's), written low to
+# high as `bar_value_errors` holds a range ("2024-25" is a label, not a range). A hyphen straight after a digit is the
+# separator, never the second number's sign ("55-60"); a second minus after it is that sign ("-12--8").
+_NUM_RE = re.compile(r"([+-]?)[$\u20ac\u00a3]?(\d[\d,]*(?:\.\d+)?)")
+_RANGE_SEPS = ("\u2013", "\u2014", "-", "to")
+_UNIT_CHARS = "%$\u20ac\u00a3xX\u00d7 "
+
+
+def _printed_values(text: str) -> tuple[float, ...] | None:
+    """(the number,) or (lo end, hi end) as PRINTED, out of the string the page printed them in. None when no number."""
+    norm = str(text).replace("\u2212", "-")
+    toks = list(_NUM_RE.finditer(norm))
+    if len(toks) == 2:
+        (a, b) = toks
+        between = norm[a.end():b.start()]
+        sign_b = b.group(1)
+        if not between.strip(_UNIT_CHARS) and sign_b == "-":   # "55-60": the hyphen is the separator, not a sign
+            between, sign_b = "-", ""
+        if between.strip(_UNIT_CHARS) in _RANGE_SEPS:
+            lo = float((a.group(1) or "") + a.group(2).replace(",", ""))
+            hi = float(sign_b + b.group(2).replace(",", ""))
+            if lo <= hi:
+                return (lo, hi)
+            if between.strip(_UNIT_CHARS) != "-":
+                return (lo, hi)   # an explicit dash or "to" written high to low is still a range; ledger_page refuses it upstream
+            return None           # "2024-25": a hyphenated label, low to high it is not - no number the gate can read
+    single = _printed_number(norm)
+    return None if single is None else (single,)
+
+
+def _range_foot_far(ends: tuple[float, float]) -> tuple[float, float]:
+    """(the end a range's BAR is drawn to, the end its BAND reaches) - `ledger_page.range_foot`, the builder's own law
+    (the end nearest zero is the bar; the band runs to the other)."""
+    lo, hi = min(ends), max(ends)
+    foot = LPG.range_foot(lo, hi)
+    return foot, (lo if foot == hi else hi)
+
+
+def _value_read(b: dict, horizontal: bool, base: float, span: float, tv: float) -> tuple[float, float | None]:
+    """(the value the BAR draws, the value its range BAND's far end draws or None) on the page's own scale. A bar hangs
+    below (or, on a horizontal gauge, left of) the zero line for a negative value (E28): the sign is geometry."""
+    if horizontal:
+        sign = 1 if b["x"] >= base - 1 else -1
+        return sign * b["w"] / span * tv, None
+    sign = 1 if b["y"] + b["h"] <= base + 1 else -1
+    band = b.get("r")
+    if not (band and len(band) == 2):
+        return sign * b["h"] / span * tv, None
+    reach = (base - float(band[0])) if sign > 0 else (float(band[0]) + float(band[1]) - base)
+    return sign * b["h"] / span * tv, sign * abs(reach) / span * tv
+
+
+def _record_name(bars: dict, scene: str | None) -> str:
+    """The page a bars record belongs to, as a FAIL line names it: its title (and its panel), or its scene."""
+    name = repr(str(bars["pg"])) if bars.get("pg") else f"the bars page of {scene or 'this scene'}"
+    return name + (f" (panel {int(bars['pn']) + 1})" if bars.get("pn") is not None else "")
+
+
+def _unreadable_fault(bars: dict, t: float, scene: str | None = None, excused: bool = False) -> str | None:
+    """P72 T6 (R26-318): a bars page the probe could not read (`ns`) that PRINTED a value - the FAIL line, by name. Round 2
+    (HIGH 2): unreadable mid hand-over and read at rest elsewhere in the doc is `excused` - named by the row, not failed."""
+    shown = [b["v"] for b in bars.get("b") or [] if b.get("v")]
+    if not shown or excused:
+        return None   # nothing printed yet: the page claims nothing the gate could miss
+    why = "no scale" if bars["ns"] == "in hand-over" else bars["ns"]
+    clock = f" (in hand-over, u {bars['xf']:g}, and never read at rest)" if bars["ns"] == "in hand-over" else ""
+    return (f"{why} on {_record_name(bars, scene)} at {_mm(t)}{clock} - {len(shown)} printed value(s) "
+            f"({', '.join(shown[:4])}) with no printed tick on a rule to be read against")
+
+
+def _records(inst: dict) -> list[dict]:
+    """Round 2 (HIGH 1): every bars record of one instant - `page.bars` and the other bars charts on screen."""
+    page = inst.get("page") or {}
+    return [r for r in [page.get("bars"), *(page.get("bars_more") or [])] if r]
+
+
+def _state_key(bars: dict, scene: str | None) -> tuple:
+    """Round 3: which chart a record reads - (scene, the state's index on its page, the panel). A record that names no
+    state keys None, so it can never excuse a hand-over (a hand-over exists only on a page with several states, and
+    every record of such a page carries its index); a title is shared by every state of a page, so it never keys."""
+    return (scene, bars.get("si"), bars.get("pn"))   # a record with no state index can never excuse a hand-over (the review)
+
+
+def _read_at_rest(doc: dict) -> set[tuple]:
+    """The state key of every bars record READ on its scale with no hand-over clock, in a NAMED scene."""
+    out = set()
+    for inst in doc.get("instants") or []:
+        scene = (inst.get("camera") or {}).get("scene")
+        if scene is None:
+            continue
+        for r in _records(inst):
+            if not r.get("ns") and r.get("xf") is None and len(r.get("tick") or []) == 2:
+                out.add(_state_key(r, scene))
+    return out
+
+
+def _handover_excused(bars: dict, scene: str | None, rest: set[tuple]) -> bool:
+    """Round 3: excused only when the ARRIVING state (`si`, the page's `xfNow.to`) of the same scene is read at rest - never
+    by a painted read with no state, never by another state of the page, never with no scene."""
+    return (bars.get("ns") == "in hand-over" and scene is not None and bars.get("si") is not None
+            and _state_key(bars, scene) in rest)
+
+
+def _handovers(doc: dict) -> list[str]:
+    """The hand-over instants the row NAMES and does not fail (round 2, HIGH 2)."""
+    rest, out = _read_at_rest(doc), []
+    for inst in doc.get("instants") or []:
+        scene = (inst.get("camera") or {}).get("scene")
+        for r in _records(inst):
+            if _handover_excused(r, scene, rest) and any(b.get("v") for b in r.get("b") or []):
+                out.append(f"in hand-over on {_record_name(r, scene)} at {_mm(float(inst.get('t', 0.0)))} (u {r['xf']:g})")
+    return _dedupe(out)
+
+
+def _unusable_fault(bars: dict, t: float, scene: str | None) -> str | None:
+    """Round 2 (MEDIUM 3): a record whose scale the row cannot use - a one-member or zero tick, the zero line at or past the
+    tick - FAILs by name once a value is printed; it never skips silently."""
+    shown = [b["v"] for b in bars.get("b") or [] if b.get("v")]
+    if not shown:
+        return None
+    return (f"unreadable scale on {_record_name(bars, scene)} at {_mm(t)} - zero line {bars.get('base')}, tick "
+            f"{bars.get('tick')}: {len(shown)} printed value(s) ({', '.join(shown[:4])}) cannot be read against it")
+
+
+def _bar_faults(b: dict, horizontal: bool, base: float, span: float, tv: float, t: float) -> tuple[list[str], list[tuple[float, str]]]:
+    """(FAIL lines, (share of the top tick, where) per end read) for ONE printed bar: its value at the bar, and a range
+    at both ends - the bar at the end nearest zero, the band at the far end (R26-303)."""
+    ends = _printed_values(b["v"])
+    drawn, far = _value_read(b, horizontal, base, span, tv)
+    foot, far_printed = _range_foot_far(ends) if len(ends) == 2 else (ends[0], None)
+    name, px = b["l"] or "a bar", f"{b['w']} px" if horizontal else f"{b['h']} px"
+    band = lambda v: VALUE_TOL * abs(tv) + VALUE_OVERSHOOT * abs(v)  # noqa: E731 - the row's one tolerance, per end
+    fails, gaps = [], [(abs(drawn - foot) / abs(tv), f"{name} at {_mm(t)}")]
+    if abs(drawn - foot) > band(foot):
+        fails.append(f"{name} prints {b['v']} and draws {drawn:.2f} at {_mm(t)} ({px} against {span:.0f} px to the {tv:g} tick)")
+    if far_printed is None:
+        return fails, gaps
+    if far is None:
+        return fails + [f"{name} prints the range {b['v']} and draws no band to its far end {far_printed:g} at {_mm(t)}"], gaps
+    gaps.append((abs(far - far_printed) / abs(tv), f"{name}'s far end at {_mm(t)}"))
+    if abs(far - far_printed) > band(far_printed):
+        fails.append(f"{name} prints {b['v']} and its band's far end draws {far:.2f}, not {far_printed:g}, at {_mm(t)} "
+                     f"(against {span:.0f} px to the {tv:g} tick)")
+    return fails, gaps
+
+
 def _value_faults(doc: dict) -> tuple[list[str], int, tuple[float, str]]:
     """(FAIL lines, how many printed values were read, the worst disagreement as a share of the top tick).
 
     The arithmetic is the chart's own: a bar's value is its height as a share of the distance from the zero
     line to a tick, times that tick's value. Both come from the page as DRAWN, so a parked chart, a rescale
-    mid-flight and a burst rewriting its own scale are all read on whatever the viewer is looking at."""
+    mid-flight and a burst rewriting its own scale are all read on whatever the viewer is looking at.
+    P72 T6: a horizontal gauge (`dir: h`) is read the same way along x - its fill is a WIDTH (R26-319); a range is
+    judged at both ends (R26-303); a page the probe could NOT read (`ns`) FAILs by name once it has printed a value - a
+    truth gate that silently cannot read is a false PASS (R26-318). Round 2: EVERY bars record on screen is judged (a
+    bars panel's too); unreadable mid hand-over is named, not failed, only when the same page is read at rest; a scale
+    the row cannot use FAILs by name."""
     fails: list[str] = []
     read = 0
     worst = (0.0, "")
+    rest = _read_at_rest(doc)
     for inst in doc.get("instants") or []:
         t = float(inst.get("t", 0.0))
-        bars = (inst.get("page") or {}).get("bars") or {}
-        tick = bars.get("tick") or []
-        if not bars.get("b") or len(tick) != 2:
-            continue
-        base, (tv, ty) = float(bars["base"]), (float(tick[0]), float(tick[1]))
-        span = base - ty
-        if not (span > 1) or not tv:
-            continue
-        for b in bars["b"]:
-            printed = _printed_number(b.get("v")) if b.get("v") else None
-            if printed is None:
+        scene = (inst.get("camera") or {}).get("scene")
+        for bars in _records(inst):
+            if not bars.get("b"):
                 continue
-            read += 1
-            # a bar hangs BELOW the zero line for a negative value (E28): the sign is geometry, so read it there
-            sign = 1 if b["y"] + b["h"] <= base + 1 else -1
-            drawn = sign * b["h"] / span * tv
-            gap = abs(drawn - printed)
-            share = gap / abs(tv)
-            if share > worst[0]:
-                worst = (share, f"{b['l'] or 'a bar'} at {_mm(t)}")
-            if gap > VALUE_TOL * abs(tv) + VALUE_OVERSHOOT * abs(printed):
-                fails.append(f"{b['l'] or 'a bar'} prints {b['v']} and draws {drawn:.2f} at {_mm(t)} "
-                             f"({b['h']} px against {span:.0f} px to the {tv:g} tick)")
+            if bars.get("ns"):
+                line = _unreadable_fault(bars, t, scene, _handover_excused(bars, scene, rest))
+                fails += [line] if line else []
+                continue
+            tick = bars.get("tick") or []
+            horizontal = bars.get("dir") == "h"
+            usable = len(tick) == 2 and bool(float(tick[0]))
+            span = ((float(tick[1]) - float(bars["base"])) if horizontal else (float(bars["base"]) - float(tick[1]))) if usable else 0.0
+            if not usable or not (span > 1):
+                line = _unusable_fault(bars, t, scene)
+                fails += [line] if line else []
+                continue
+            base, tv = float(bars["base"]), float(tick[0])
+            where = f"panel {int(bars['pn']) + 1}: " if bars.get("pn") is not None else ""
+            for b in bars["b"]:
+                if not b.get("v") or _printed_values(b["v"]) is None:
+                    continue
+                read += 1
+                lines, gaps = _bar_faults(b, horizontal, base, span, tv, t)
+                fails += [where + line for line in lines]
+                worst = max([worst, *gaps], key=lambda g: g[0])
     return _dedupe(fails), read, worst
 
 
@@ -2766,15 +2924,17 @@ def _values_gate(doc: dict | str | None) -> Gate:
         return Gate("M26", "INFO", f"{LAYOUT_PROBE_NAME} carries no instants - re-run probe.py <build> --gate", SRC_M26)
     fails, read, worst = _value_faults(doc)
     span = f"{len(instants)} instants probed"
+    band = f"{VALUE_TOL:.0%} of the top tick + the burst's {VALUE_OVERSHOOT:.0%} overshoot"
+    named = _handovers(doc)   # round 2 (HIGH 2): hand-over instants the row names and does not fail
+    also = (" | named, not failed (read at rest elsewhere): " + "; ".join(named[:4]) + (" ..." if len(named) > 4 else "")) if named else ""
+    if fails:   # P72 T6 (R26-318): BEFORE the nothing-read INFO - a page the probe could not read is a FAIL, never a pass
+        return Gate("M26", "FAIL", f"{len(fails)} value fault(s) over {span} "
+                    f"(band {band}): " + "; ".join(fails[:6]) + (" ..." if len(fails) > 6 else "") + also, SRC_M26)
     if not read:
         return Gate("M26", "INFO", f"no bars page printed a value at any of the {span} - nothing to check "
-                    "(a line page's numbers are its tags, not a height)", SRC_M26)
-    band = f"{VALUE_TOL:.0%} of the top tick + the burst's {VALUE_OVERSHOOT:.0%} overshoot"
-    if fails:
-        return Gate("M26", "FAIL", f"{len(fails)} bar(s) drawn at a height their own printed value does not carry, over {span} "
-                    f"(band {band}): " + "; ".join(fails[:6]) + (" ..." if len(fails) > 6 else ""), SRC_M26)
+                    "(a line page's numbers are its tags, not a height)" + also, SRC_M26)
     return Gate("M26", "PASS", f"{read} printed value(s) over {span} agree with the height drawn on the scale the page prints "
-                f"(band {band}); worst {worst[0]:.1%} of the top tick" + (f" - {worst[1]}" if worst[1] else ""), SRC_M26)
+                f"(band {band}); worst {worst[0]:.1%} of the top tick" + (f" - {worst[1]}" if worst[1] else "") + also, SRC_M26)
 
 
 def _in_build_window(t: float, scenes: list[dict]) -> bool:

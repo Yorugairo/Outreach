@@ -7,8 +7,8 @@ the share filled in its ink). A CHART FORM - "how a page's chart is DRAWN, never
 
 What is held here:
   1. `;form=gauge` is legal on a PROGRESS page only, refused elsewhere by name through `form_error` (one rule: the row
-     and an object naming the form). `gauge:h` is refused by name: a horizontal fill is a width, and the probe's M26
-     reads HEIGHTS - the plan's stop condition, reported for the reviewer.
+     and an object naming the form). `gauge:h` (the horizontal capsule) was refused by name here until P72 T6 gave M26 a
+     width reader (R26-319); it is held by test_value_gate_longform now, and any OTHER setting is still refused here.
   2. One capsule, vertical: its fill rises from empty to value / ceiling on the page's own bar-grow clock, and the
      figure is written at the fill line as the fill lands - verbatim, at the s90 phone floor, in its bar's ink.
   3. The capsule's full length IS the whole, and the whole is NAMED on the page (the label of an hline at the ceiling).
@@ -135,11 +135,11 @@ def test_a_gauge_on_any_other_page_is_refused_by_name_and_it_is_the_only_refusal
     assert world(ep, "ledger:g-two:progress;form=gauge")["page"]["form"]["kind"] == "gauge"
 
 
-def test_the_horizontal_gauge_is_refused_by_name_because_m26_reads_heights() -> None:
-    with pytest.raises(ValueError) as exc:
-        B.page_form_geom("gauge:h", "r")
-    msg = str(exc.value)
-    assert "form=gauge:h" in msg and "M26" in msg and "vertical" in msg
+def test_the_gauge_takes_no_setting_but_h() -> None:
+    """P72 T6 (R26-319): `gauge:h` compiles - M26 reads its fill as a width (test_value_gate_longform holds it); any other
+    setting is refused by name, and the bare form is the vertical capsule to the byte."""
+    assert B.page_form_geom("gauge:h", "r") == {"kind": "gauge", "dir": "h"}
+    assert B.page_form_geom("gauge", "r") == {"kind": "gauge"}
     with pytest.raises(ValueError) as exc:
         B.page_form_geom("gauge:x", "r")
     assert "takes no setting but :h" in str(exc.value)

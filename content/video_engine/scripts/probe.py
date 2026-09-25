@@ -68,6 +68,7 @@ LABEL_TOUCH_PX = 2.0
 # of a 49 px box and nothing touched on screen.
 LABEL_LEAD_SHARE = 0.18
 LABEL_TEXT_MAX = 14     # what the label says, enough for a gate row to name it - one instant's JSON stays small
+PAGE_NAME_MAX = 48      # P72 T6: an unreadable bars page is named by its title, cut here (READ_DOM cuts it the same)
 # M34 (K9, the collision ledger): a series is written as the polyline of its DRAWN part, simplified to this many px -
 # the gate's hairline (LINE_TOUCH_PX 2) - so a daily series costs its bends, not its samples, and an instant stays small.
 LINE_SIMPLIFY_PX = 2.0
@@ -226,11 +227,13 @@ READ_DOM = r"""
   for (const p of [...wpills, ...document.querySelectorAll('.dock .pill')]) {
     const o = eff(p); if (o <= 0.05) continue;
     const b = R(p); if (b[2] < 1 || b[3] < 1) continue;
-    out.docks.push({ el: p.id || 'pill', name: 'pill', box: b, op: o, arriving: false, paper: false });
+    /* P72 T6 (R26-264): a badge INSIDE a card is the card's own ink, never page ink the card covers - it names its card */
+    const host = wpills.has(p) ? null : p.closest('.dock'), own = host ? { own: host.id || host.dataset.slide } : {};
+    out.docks.push({ el: p.id || 'pill', name: 'pill', box: b, op: o, arriving: false, paper: false, ...own });
     /* a pill's own font-size is the box's, 16 px; its LABEL, its number and its tag carry the type */
     const runs = [...p.querySelectorAll('*')].filter((s) => (s.textContent || '').trim() && !s.children.length
       && s.getBoundingClientRect().height >= 2);   /* a run the portrait sheet lays out at nothing is not type on screen */
-    out.items.push({ k: 'pill', box: b, px: runs.length ? Math.min(...runs.map(fs)) : fs(p), s: sc(p), txt: txt(p) });
+    out.items.push({ k: 'pill', box: b, px: runs.length ? Math.min(...runs.map(fs)) : fs(p), s: sc(p), txt: txt(p), ...own });
     /* M28: the PAGE's own capsule is a label among its labels; a card's pill belongs to the card. Named
        `capsule`, not `pill` - `pill` is the CALLOUT's, and only the callout stands in the value row that
        lpFitValues fits with half a figure of air. A rail of capsules keeps its own gutter. */
@@ -299,7 +302,120 @@ READ_DOM = r"""
       }
       return keys;
     };
-    let up = 0, chartBox = null, parked = false, barsOp = -1;
+    /* M26 (R26-40) + P72 T6: ONE CHART'S BARS RECORD. The old painted pairing first (a page read before reads the same),
+       then the declared rules; `null` when no bar is drawn. `Q` is the chart's state - a page state, or a bars panel's. */
+    const pgName = ((world.querySelector('.lp-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().slice(0, 48);
+    const bnum = (s) => { const v = parseFloat(String(s).replace(/[^0-9.\-]/g, '')); return Number.isFinite(v) ? v : null; };
+    /* round 2 (HIGH 1): a bars PANEL's state lives on the page's `panelVar` (the build on its box now, its home, the builds
+       re-laid out by width) and `panels`, never in `states` - [state, panel index] of the one this chart belongs to */
+    const panelOf = (chart) => {
+      for (const [i, V] of (S.panelVar || []).entries())
+        for (const x of [V.cur, V.home, ...(V.cache ? V.cache.values() : [])]) if (x && x.chart === chart) return [x, i];
+      for (const [i, x] of (S.panels || []).entries()) if (x && x.chart === chart) return [x, i];
+      return [null, null];
+    };
+    /* each bar as drawn, the number printed for it (if FULLY shown, with its own opacity for the veil below), and on a
+       horizontal gauge its width (R26-319), on a range bar its band's box (R26-303) */
+    const barRows = (Q, HZ) => {
+      const rows = [];
+      for (const bb of Q.bars) {
+        if (!bb.bar || eff(bb.bar) <= 0.05) continue;
+        const r = bb.bar.getBoundingClientRect();
+        /* the emphasised bar's number is in the CALLOUT (its own label is hidden); everyone else's is its value label */
+        const vEl = (Q.callout && Q.cval && Q.bars[Q.emph] === bb) ? Q.cval : bb.val;
+        const row = { l: (bb.lab ? txt(bb.lab) : '').slice(0, 14), h: r.height, y: r.y - stg.y,
+                      v: (vEl && eff(vEl) >= 0.99) ? txt(vEl) : null, vo: vEl ? eff(vEl) : 0 };
+        if (HZ) { row.w = r.width; row.x = r.x - stg.x; }
+        if (bb.band && eff(bb.band) > 0.05) { const q = R(bb.band); row.r = [q[1], q[3]]; }
+        rows.push(row);
+      }
+      return rows;
+    };
+    /* THE PAINTED PAIRING (R26-40): a tick's VALUE is on its label and its Y on its PAINTED rule, paired by proximity; the
+       topmost visible one is the scale. Round 2 (MEDIUM 3): it stands on a zero line that is DRAWN - a hidden one has no
+       box, and its empty box read as the zero was a silent wrong scale - or it yields to the declared rules. */
+    const paintedScale = (chart) => {
+      const axEl = chart.querySelector('line.ax');
+      if (!axEl || eff(axEl) <= 0.05 || R(axEl)[2] < 4) return null;
+      const gridY = [];
+      for (const g of chart.querySelectorAll('line.grid, line.ax')) {
+        if (eff(g) <= 0.05) continue;
+        const b = R(g); if (b[2] < 4) continue;   /* a horizontal rule is wide and has no height */
+        gridY.push(b[1] + b[3] / 2);
+      }
+      let tick = null;
+      for (const el of chart.querySelectorAll('text.lab')) {
+        if (el.getAttribute('text-anchor') !== 'end' || eff(el) <= 0.5) continue;   /* a y tick's label; a category label is centred */
+        const v = bnum(el.textContent); if (v === null || v === 0) continue;
+        const b = R(el), cy = b[1] + b[3] / 2;
+        let y = null, d = 1e9;
+        for (const gy of gridY) { const q = Math.abs(gy - cy); if (q < d) { d = q; y = gy; } }
+        if (y === null || d > b[3]) continue;
+        if (!tick || y < tick[1]) tick = [v, y];
+      }
+      return tick ? { base: R(axEl)[1], tv: tick[0], ty: tick[1] } : null;
+    };
+    /* P72 T6 (R26-318): THE RULES THE SHEET DOES NOT PAINT. The long form's sheet hides every gridline and a zero line on
+       its panel's edge (`display: none`), so the pairing above finds no rule on any long-form bars page and M26 read
+       nothing - over the whole H episode. The rules are still THERE: the builder wrote each tick's rule at its value's line
+       (`lpYTicks`, `lpGaugeTicks`) and every painter that moves a scale - a burst's rewrite, a recast's hand-over - moves
+       those same attributes with the bars. So each declared rule is read from its OWN live geometry through its parent's
+       screen CTM (the park, the camera and a lying gauge's quarter turn are in it) and paired with a PRINTED tick label
+       exactly as above: a rule never supplies a number the page did not print, and nothing is fitted to pixels (E38). A
+       horizontal gauge (`dir: h`) reads its rules standing up and its labels along x. `seen` is what the dip's veil leaves
+       of the page (round 2): a label under the veil is not up. {mt, zero} - either may be missing. */
+    const declaredScale = (chart, HZ, seen) => {
+      const own = (el) => { const cs = getComputedStyle(el), a = el.getAttribute('opacity');
+        return parseFloat(cs.opacity) * (a != null && a !== '' ? (parseFloat(a) || 0) : 1) * eff(el.parentNode); };
+      const rules = [];
+      for (const g of chart.querySelectorAll('line.grid, line.ax')) {
+        const pm = g.parentNode && g.parentNode.getScreenCTM ? g.parentNode.getScreenCTM() : null;
+        if (!pm || own(g) <= 0.05) continue;
+        const q = (x, y) => [pm.a * x + pm.c * y + pm.e - stg.x, pm.b * x + pm.d * y + pm.f - stg.y];
+        const p1 = q(+g.getAttribute('x1') || 0, +g.getAttribute('y1') || 0), p2 = q(+g.getAttribute('x2') || 0, +g.getAttribute('y2') || 0);
+        const along = HZ ? Math.abs(p2[1] - p1[1]) : Math.abs(p2[0] - p1[0]), across = HZ ? Math.abs(p2[0] - p1[0]) : Math.abs(p2[1] - p1[1]);
+        if (along < 4 || across > 0.5) continue;   /* a rule across the value axis, at least the 4 px floor above */
+        rules.push({ at: HZ ? (p1[0] + p2[0]) / 2 : (p1[1] + p2[1]) / 2, zero: g.classList.contains('ax') });
+      }
+      let mt = null;
+      for (const el of chart.querySelectorAll('text.lab')) {
+        if ((!HZ && el.getAttribute('text-anchor') !== 'end') || eff(el) * seen <= 0.5) continue;   /* the y ticks, as above */
+        const v = bnum(el.textContent); if (v === null || v === 0) continue;
+        const b = R(el), c = HZ ? b[0] + b[2] / 2 : b[1] + b[3] / 2, room = HZ ? b[2] / 2 : b[3];
+        let at = null, d = 1e9;
+        for (const r of rules) { const e = Math.abs(r.at - c); if (e < d) { d = e; at = r.at; } }
+        if (at === null || d > room) continue;
+        if (!mt || (HZ ? at > mt[1] : at < mt[1])) mt = [v, at];
+      }
+      return { mt, zero: rules.find((r) => r.zero) || null };
+    };
+    /* round 2 / round 3: the DIP'S VEIL (#dipveil, z 60, black) stands over the whole stage - what it COVERS is not
+       printed to the viewer, however opaque the DOM holds it (the H door at 11:56.79: a panel's values at full opacity under
+       the veil at full black). It counts only when it covers the page - at the on-screen cut every other read uses, 0.95
+       of black; partway through a dip the page is still printed, and a page unreadable there is FAILed, never hidden (the
+       reviewer's round-2 HIGH: a veil at 0.02 turned a printed "94%" with no scale into "nothing to check"). One `seen` for
+       the tick labels and the values alike. Read on the declared path only: the painted path reads as it always read. */
+    const veil = document.getElementById('dipveil'), seen = veil && eff(veil) >= 0.95 ? 0 : 1;
+    /* round 3: WHICH STATE a record reads - its index on the page (`si`), written on a page that has more than one (a
+       single-state page's records name none: state 0); a hand-over's unreadable record names the ARRIVING state
+       (`xfNow.to`), so M26 excuses it only against that state read at rest in the same scene */
+    const barsRecord = (chart, Q, pn, o, si) => {
+      const HZ = Q.scale.dir === 'h', rows = barRows(Q, HZ), tag = { ...(pn != null ? { pn } : {}), ...(si != null ? { si } : {}) };
+      if (!rows.length) return null;
+      const painted = HZ ? null : paintedScale(chart);
+      if (painted) return { op: o, ...painted, b: rows, ...tag };
+      const { mt, zero } = declaredScale(chart, HZ, seen);
+      if (mt && zero) return { op: o, base: zero.at, tv: mt[0], ty: mt[1], b: rows, sc: 'declared', pg: pgName, ...(HZ ? { dir: 'h' } : {}), ...tag };
+      /* round 2 (HIGH 2): mid hand-over (a recast, a keyed recast, an extend: the page's own `xfNow`) the old scale is
+         leaving and the new one arriving - a page unreadable THERE is named with its clock, and the gate FAILs it only if
+         the same page is never read at rest */
+      const xf = S.xfNow && Number.isFinite(+S.xfNow.u) ? +(+S.xfNow.u).toFixed(3) : null;
+      if (!seen) for (const r of rows) r.v = null;   /* a value under a covering veil is not printed */
+      return { op: o, ns: xf !== null ? 'in hand-over' : mt ? 'no zero line' : 'no scale', pg: pgName, b: rows, ...tag,
+               ...(xf !== null ? { xf, si: +S.xfNow.to | 0 } : {}) };
+    };
+    const barsAll = [];
+    let up = 0, chartBox = null, parked = false;
     for (const chart of world.querySelectorAll('.lp-chart')) {
       const o = eff(chart); if (o <= 0.05) continue;
       const st = states.find((x) => x.chart === chart);
@@ -380,37 +496,18 @@ READ_DOM = r"""
          the viewer is reading it against) and the number printed for that bar if it is FULLY shown. A tick's
          VALUE is on its label and its Y is on its rule, so the two are paired by proximity; a label with no
          rule under it is not a tick. Bars pages only: `st.scale.kind` says which. */
-      if (st && st.scale && st.scale.kind === 'bars' && (st.bars || []).length && o > barsOp) {
-        const axEl = chart.querySelector('line.ax');
-        const gridY = [];
-        for (const g of chart.querySelectorAll('line.grid, line.ax')) {
-          if (eff(g) <= 0.05) continue;
-          const b = R(g); if (b[2] < 4) continue;   /* a horizontal rule is wide and has no height */
-          gridY.push(b[1] + b[3] / 2);
-        }
-        const bnum = (s) => { const v = parseFloat(String(s).replace(/[^0-9.\-]/g, '')); return Number.isFinite(v) ? v : null; };
-        let tick = null;
-        for (const el of chart.querySelectorAll('text.lab')) {
-          if (el.getAttribute('text-anchor') !== 'end' || eff(el) <= 0.5) continue;   /* a y tick's label; a category label is centred */
-          const v = bnum(el.textContent); if (v === null || v === 0) continue;
-          const b = R(el), cy = b[1] + b[3] / 2;
-          let y = null, d = 1e9;
-          for (const gy of gridY) { const q = Math.abs(gy - cy); if (q < d) { d = q; y = gy; } }
-          if (y === null || d > b[3]) continue;
-          if (!tick || y < tick[1]) tick = [v, y];
-        }
-        const rows = [];
-        for (const bb of st.bars) {
-          if (!bb.bar || eff(bb.bar) <= 0.05) continue;
-          const r = bb.bar.getBoundingClientRect();
-          /* the emphasised bar's number is in the CALLOUT (its own label is hidden); everyone else's is its value label */
-          const vEl = (st.callout && st.cval && st.bars[st.emph] === bb) ? st.cval : bb.val;
-          rows.push({ l: (bb.lab ? txt(bb.lab) : '').slice(0, 14), h: r.height, y: r.y - stg.y,
-                      v: (vEl && eff(vEl) >= 0.99) ? txt(vEl) : null });
-        }
-        if (axEl && tick && rows.length) { out.bars = { base: R(axEl)[1], tv: tick[0], ty: tick[1], b: rows }; barsOp = o; }
+      /* P72 T6 round 2 (HIGH 1): a bars PANEL is a chart of its own (`lp-panel-chart`) whose state lives on the page's
+         `panels` / `panelVar`, never in `states` - so it is found there, for this read only (the plot and data boxes
+         above keep the states' own lookup, to the byte). Every bars chart on screen writes ONE record. */
+      const [bst, pn] = st ? [st, null] : panelOf(chart);
+      if (bst && bst.scale && bst.scale.kind === 'bars' && (bst.bars || []).length) {
+        const si = states.length > 1 ? (st ? states.indexOf(st) : (S.active | 0)) : null;
+        const rec = barsRecord(chart, bst, pn, o, si);
+        if (rec) barsAll.push(rec);
       }
     }
+    barsAll.sort((x, y) => y.op - x.op);   /* stable: among equals the first in DOM order, as `o > barsOp` kept it */
+    if (barsAll.length) { out.bars = barsAll[0]; if (barsAll.length > 1) out.barsMore = barsAll.slice(1); }
     /* M28: the page's own NOTE is one of its labels when it is written ON the plot - off the plot it is
        margin ink and M25's business. Line by line: a note's element box is mostly air. */
     const plotU = out.plots.reduce((a, p) => (a ? [Math.min(a[0], p.box[0]), Math.min(a[1], p.box[1]),
@@ -615,6 +712,25 @@ def _near_text(a, b, boxes: list[list[float]], pad: float) -> bool:
     return any(G._seg_hits_box(a, b, box, pad) for box in boxes)
 
 
+def bars_json(bars: dict) -> dict:
+    """One bars record as the gate reads it (M26): ints, abbreviated keys - one instant's JSON stays under 2 KB. A page
+    read as before is written as before; the round-1 / round-2 keys ride only the records that need them."""
+    rows = [{"l": r["l"], "h": int(round(r["h"])), "y": int(round(r["y"])),
+             **({"w": int(round(r["w"])), "x": int(round(r["x"]))} if r.get("w") is not None else {}),
+             **({"r": [int(round(v)) for v in r["r"]]} if r.get("r") else {}),
+             **({"v": r["v"]} if r.get("v") else {})} for r in bars["b"]]
+    tail = {**({"pg": str(bars["pg"])[:PAGE_NAME_MAX]} if bars.get("pg") is not None and (bars.get("ns") or bars.get("sc")) else {}),
+            **({"pn": int(bars["pn"])} if bars.get("pn") is not None else {}),
+            **({"si": int(bars["si"])} if bars.get("si") is not None else {}),
+            **({"xf": bars["xf"]} if bars.get("xf") is not None else {})}
+    if bars.get("ns"):
+        return {"ns": str(bars["ns"]), "pg": str(bars.get("pg") or "")[:PAGE_NAME_MAX], "b": rows,
+                **{k: v for k, v in tail.items() if k != "pg"}}
+    return {"base": int(round(bars["base"])), "tick": [bars["tv"], int(round(bars["ty"]))], "b": rows,
+            **({"sc": str(bars["sc"])} if bars.get("sc") else {}),
+            **({"dir": "h"} if bars.get("dir") == "h" else {}), **tail}
+
+
 def ledger(dom: dict) -> dict:
     """M34 (K9): the collision ledger's geometry - each drawn series as its simplified polyline with its owner, half
     its stroke and its TIP (the last drawn point), each CLOSED ring or callout as the ellipse its box describes (an
@@ -680,11 +796,17 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
         page["chart"] = [int(round(v)) for v in dom["chart"]["box"]]
     # R26-40: the bars as DRAWN, with the number printed for each and the scale it is read on (M26).
     # Abbreviated keys and ints - one instant's JSON is the contract and it stays under 2 KB.
-    bars = dom.get("bars")
-    if bars and bars.get("b"):
-        page["bars"] = {"base": int(round(bars["base"])), "tick": [bars["tv"], int(round(bars["ty"]))],
-                        "b": [{"l": r["l"], "h": int(round(r["h"])), "y": int(round(r["y"])),
-                               **({"v": r["v"]} if r.get("v") else {})} for r in bars["b"]]}
+    # P72 T6: a horizontal gauge's rows carry their width and left edge (`w`, `x`; the page `dir: h`), a range bar its
+    # band's box (`r`: y and height), a page read on its own map `sc: map` - and a bars page the probe could NOT read is
+    # written `ns` with its title (`pg`), so M26 can refuse it by name. A page read as before is written as before.
+    # Round 2: every bars chart on screen is a record - `page.bars` the most opaque (what M26 always read), the others
+    # (a bars PANEL's, a recast's other state) in `page.bars_more`; a panel's record names its panel (`pn`), and a page
+    # unreadable mid hand-over carries the clock (`xf`).
+    if (dom.get("bars") or {}).get("b"):
+        page["bars"] = bars_json(dom["bars"])
+        more = [bars_json(b) for b in dom.get("barsMore") or [] if b.get("b")]
+        if more:
+            page["bars_more"] = more
 
     # TYPE, grouped by kind: the smallest drawn size in the group is what the floor is read against
     groups: dict[str, list[dict]] = {}
@@ -702,18 +824,22 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
 
     # OVERLAPS, as named pairs. Every paper/pill against every other and against the page's ink.
     overlaps = []
-    solids = [(d["name"], d["box"]) for d in dom["docks"]]
-    ink = [(("page." + i["k"]) if i["k"] in ("title", "sub", "source", "note", "key") else i["k"], i["box"])
+    # P72 T6 (R26-264): a pill INSIDE a card carries `own` - the card's element id - and is that card's own ink: never paired
+    # against the card it belongs to (the sell ticket's SELL badge read as page ink under the ticket)
+    solids = [(d["name"], d["box"], d.get("own"), d.get("el")) for d in dom["docks"]]
+    ink = [(("page." + i["k"]) if i["k"] in ("title", "sub", "source", "note", "key") else i["k"], i["box"], i.get("own"))
            for i in dom["items"] if i["k"] != "caption"]
     if plot:
-        ink.append(("page.plot", plot))
-    for n, (an, ab) in enumerate(solids):
-        for bn, bb in solids[n + 1:]:
+        ink.append(("page.plot", plot, None))
+    for n, (an, ab, aown, ael) in enumerate(solids):
+        for bn, bb, bown, bel in solids[n + 1:]:
+            if (bown is not None and bown == ael) or (aown is not None and aown == bel):
+                continue
             p = _pair(an, ab, bn, bb)
             if p:
                 overlaps.append(p)
-        for bn, bb in ink:
-            if bn == an:
+        for bn, bb, bown in ink:
+            if bn == an or (bown is not None and bown == ael):
                 continue
             p = _pair(an, ab, bn, bb)
             if p:
@@ -726,7 +852,7 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
                              "share_of_smaller": int(round(100 * hit / max(1.0, ab[2] * ab[3])))})
     cap = dom.get("caption")
     if cap:
-        for an, ab in solids:
+        for an, ab, _own, _el in solids:
             p = _pair(an, ab, "caption", cap["box"])
             if p:
                 overlaps.append(p)
@@ -757,7 +883,7 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
         safe[name] = int(round(100 * depth))
     clear = {"safe_pct": safe}
     if cap and solids:
-        clear["caption_px"] = int(round(min(gap_px(ab, cap["box"]) for _an, ab in solids)))
+        clear["caption_px"] = int(round(min(gap_px(ab, cap["box"]) for _an, ab, _own, _el in solids)))
 
     out = {"t": round(t, 2), "why": why, "docks": docks, "page": page, "texts": texts,
            "labels": labels, "overlaps": overlaps, "clearances": clear, "ledger": ledger(dom),

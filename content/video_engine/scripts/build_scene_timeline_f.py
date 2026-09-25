@@ -2396,6 +2396,33 @@ def check_broken_axis(world: dict, row_species: list) -> None:
                              "Cut to the next page, or build the eras' words with build_to / figure / span on this one")
 
 
+# P72 T6 round 2 (INFO 10): THE LYING CAPSULE HOLDS ITS PAGE. `form=gauge:h` builds the vertical gauge in a quarter-
+# turned group: its marks are laid out along the chart's x and its `st.scale.my` is the TURNED frame's y. A species that
+# anchors on the page's data - a datum target, a bracket, a figure, a cap, a join, a span, a chart state (`chart_to`, a
+# `then=` recast) - would draw at the wrong place, and a ring on the wrong number is a lie, so each is refused by name.
+GAUGE_H_DATA_KINDS = ("chart_to", "bracket", "figure", "undraw", "build_to", "spread", SPECIES_SPAN, SPECIES_LIT_STRETCH,
+                      SPECIES_LEVEL_JOIN, SPECIES_AXIS_TAG, SPECIES_MEMBER)
+
+
+def check_gauge_h(world: dict, row_species: list) -> None:
+    """ValueError naming the first species (or the later state) a horizontal gauge page cannot place; untouched else."""
+    page = world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None
+    form = (page or {}).get("form") if isinstance(page, dict) else None
+    if not (isinstance(form, dict) and form.get("kind") == CHART_FORM_GAUGE and form.get("dir") == "h"):
+        return
+    why = ("form=gauge:h lays the capsule on its side, so the page's marks stand along x and its y scale is the turned "
+           "frame's - {what} would be drawn at the wrong place. Draw the gauge vertical (form=gauge) for it, or cut to a "
+           "bars page")
+    if world.get("page_states"):
+        raise ValueError(why.format(what="a later chart state (then=, a recast) re-projects the bars"))
+    for sp in row_species or []:
+        if not isinstance(sp, dict):
+            continue
+        kind, tgt = sp.get("kind"), sp.get("target")
+        if kind in GAUGE_H_DATA_KINDS or (isinstance(tgt, dict) and tgt.get("kind") == "datum"):
+            raise ValueError(f"{kind!r} at {sp.get('at')}: " + why.format(what=f"a {kind} anchored on the page's data"))
+
+
 def check_panels(world: dict, row_species: list) -> None:
     """P69 T8b: a row's species on a PANELS page - every `panel` (and datum `target.panel`) inside the page's panels,
     every series a panel species names inside ITS panel, a `chart_to` only by a verb a one-state panel can do, and
@@ -6142,6 +6169,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_target_series(world, row_species)   # R26-218: a series the page does not have, refused before it draws nothing
     check_panels(world, row_species)          # P69 T8b: a panel's address, and the focus states, on the page they name
     check_broken_axis(world, row_species)     # P69 T66: a broken axis holds its page (no chart state, no form)
+    check_gauge_h(world, row_species)         # P72 T6: the lying capsule holds its page (nothing that reads its y scale)
     check_members(world, row_species)         # P69 T45: a tile the membership bar has, and nothing that moves the bar
     check_segments(world, row_species)        # P69 T64: a stacked page takes a park, and nothing that moves its bars
     check_brace(world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None,
@@ -7339,10 +7367,9 @@ def dock_depth_behind_error(k: float, layer: str, where: str) -> str | None:
 # The tilted line's PLANE is resolved here, exactly as `plane=` is: the compiler owns the tilt's geometry and the
 # player consumes one projective form (the quad) - a second tilt path would be a second geometry to get wrong.
 CHART_FORM_TILT = "tilted_line"
-# P70 T3: the FILL GAUGE (`;form=gauge`, a progress page's one share of one whole as a capsule) is vertical. `gauge:h`,
-# the harvest's horizontal capsule, is refused BY NAME and not drawn: its fill is a WIDTH, and the probe's M26 (R26-40)
-# reads a bar's HEIGHT against a y tick - a horizontal fill would be the one mark on a page the value gate cannot read.
-# The plan's stop condition: the probe's change is the reviewer's call, not this slice's.
+# P70 T3: the FILL GAUGE (`;form=gauge`, a progress page's one share of one whole as a capsule) is vertical. P72 T6
+# (R26-319): `gauge:h`, the harvest's horizontal capsule, is drawn - its fill is a WIDTH, and the probe's M26 now reads a
+# width against its printed scale along x (`dir: h`). Any other setting is refused by name (`ledger_page.GAUGE_DIRS`).
 CHART_FORM_GAUGE = "gauge"
 
 
@@ -7357,12 +7384,10 @@ def page_form_geom(value: str, where: str) -> dict:
                          "(the two 2.5D chart forms and the progress gauge; the flat page is the reading form and "
                          "names none)")
     if name == CHART_FORM_GAUGE and rest:
-        if rest == "h":
-            raise ValueError(f"{where}: form=gauge:h - the horizontal gauge is not drawn: its fill would be a WIDTH, and "
-                             "the value gate (M26, probe.py) reads a bar's HEIGHT against the printed scale, so the "
-                             "one number on the page would go unchecked. Draw the gauge vertical (form=gauge)")
-        raise ValueError(f"{where}: form={value!r} - form=gauge takes no setting but :h (and :h is refused: the "
-                         "gauge is vertical)")
+        if rest in LPG.GAUGE_DIRS:
+            return {"kind": name, "dir": rest}
+        raise ValueError(f"{where}: form={value!r} - form=gauge takes no setting but :h (the horizontal capsule; "
+                         "form=gauge alone is the vertical one)")
     if name != CHART_FORM_TILT:
         if rest:
             raise ValueError(f"{where}: form={value!r} takes no setting - form={name} is the whole option "
