@@ -10779,11 +10779,82 @@ async function mount(doc) {
     for (const f of G.figs) { const a = (byBar.get(f.bar) || 0).toFixed(3); f.el.setAttribute("opacity", a); if (f.lead) f.lead.setAttribute("opacity", a); }
     if (G.key) G.key.setAttribute("opacity", keyOp.toFixed(3));
   };
+  /* P70 T3 (was P69 T51) - THE FILL GAUGE (`;form=gauge`: a PROGRESS page's one share of one whole, harvest v2 T34,
+     Bravos D40 17:24). The capsule IS the whole - its foot on zero, its top at the ceiling the compiler wrote
+     (`pg.form.ceiling`: 100, or the page's denominator) - and the page's OWN bar is its fill: square, cut to the capsule,
+     grown by lpPaintChart on the bar-grow clock like any bar (T85's stagger untouched). The figure is the bar's own
+     value label moved to the fill line beside the capsule, at the s90 floor (LP_CARD.TYPE_PX) and in its bar's ink; it
+     fades in as the fill lands (the label's own k 0.9 -> 1), so the probe's M26 reads, at every instant, only a number
+     the fill carries - which is why the gauge takes no counting callout pill. Two ticks, 0 and the ceiling, are the
+     printed scale; the whole's NAME is its comparator rule's label, centred over the capsule.
+     [DERIVED: Bravos D40 17:30, measured on the 1080p source - a 110 px capsule on a 525 px track, its baseline rule
+     overhanging ~30 px each side, a rounded top and a square foot. TRACK_A: the empty part's tone - Bravos's track
+     against its ground, measured on the same frame, is 1.741:1 (rgb 60,65,76 on 20,24,30); the chalk #F2F2F2 at 0.19
+     over the page's #25313C and the long form's #14181E gives 1.76:1 / 1.75:1 (0.16 gave 1.61 / 1.58, the review's
+     reading). FIG_MID: Inter's line box (ASCENT 0.969, DESCENT 0.241) centred on the line, (0.969 - 0.241) / 2.
+     FIG_GAP_PX by eye, for the parent's frame read] */
+  const LPGAUGE = Object.freeze({ W_PX: 110, OVER_PX: 30, RX: 6, TRACK_A: 0.19, FIG_GAP_PX: 18, FIG_MID: 0.364,
+                                  NAME_GAP_PX: 8, FIG_PX: LP_CARD.TYPE_PX });
+  let lpGaugeN = 0;   /* the capsules' clip ids, in build order (deterministic, as the soft layers') */
+  /* the capsule: a track path (rounded at the ceiling, square on zero) and, over it, the group its fill is cut to */
+  const lpGaugeCapsule = (st, g) => {
+    const grp = lpEl("g", "lp-gauge", st.chart), d = lpShoulderPath(g.x, g.top, g.x + g.bw, g.base, g.r, g.r, false);
+    const track = lpEl("path", "lp-gauge-track", grp, { d, fill: "var(--lp-chalk)", "fill-opacity": LPGAUGE.TRACK_A });
+    const id = "lpgauge-" + (st.seed | 0) + "-" + (++lpGaugeN);
+    lpEl("path", "", lpEl("clipPath", "", lpEl("defs", "", grp), { id, clipPathUnits: "userSpaceOnUse" }), { d });
+    return { grp, track, fill: lpEl("g", "lp-gauge-fill", grp, { "clip-path": "url(#" + id + ")" }) };
+  };
+  /* the printed scale: the zero rule under the capsules (Bravos's baseline, overhanging) and the ceiling, each labelled.
+     They are the GAUGE's furniture, not gridlines: the long form's sheet hides every `.grid` and an `.ax` on its panel's
+     edge (its "no gridline is painted"), and a scale the page does not show is one the probe's M26 cannot read the fill
+     against - so both are shown by their own style, which outranks the sheet */
+  /* The CEILING is drawn as STUBS at each capsule's edges (`lpGaugeStubs`), never across the capsule's rounded top: a
+     line over the top reads as a bar meeting a reference rule (the bars page's idiom), and Bravos draws none. A stub is
+     the overhang, OVER_PX - past probe.py's 4 px floor for a rule, so M26 still pairs the ceiling's label with it. */
+  const lpGaugeStubs = (parent, caps, ov, y, cls, at) => caps.flatMap(([xl, xr]) => [[xl - ov, xl], [xr, xr + ov]].map(([a, b]) => {
+    const e = lpEl("line", cls, parent, { x1: a.toFixed(1), x2: b.toFixed(1), y1: y.toFixed(1), y2: y.toFixed(1), ...(at || {}) });
+    e.style.display = "inline";
+    return e;
+  }));
+  const lpGaugeTicks = (st, my, ceil, caps, ov, unit, labX) => [0, ceil].flatMap((v, n) => {
+    const y = my(v), xa = caps[0][0] - ov, xb = caps[caps.length - 1][1] + ov;
+    const gl = v === 0 ? lpEl("line", "ax", st.chart, { x1: xa.toFixed(1), x2: xb.toFixed(1), y1: y.toFixed(1), y2: y.toFixed(1) })
+                       : lpGaugeStubs(st.chart, caps, ov, y, "grid")[0];
+    gl.style.display = "inline";
+    const ly = y + (st.portrait ? 14 : 8);
+    const tl = lpText(st.chart, "lab", labX, ly, "end", lpWithUnit(lpTick(v), unit),
+                      lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : undefined);
+    lpMark(st, "tick:" + n, "tick", gl, { v, y, x1: xa, x2: xb });
+    lpMark(st, "ylab:" + n, "ylabel", tl, { v, x: labX, y: ly });
+    if (v !== 0) st.gaugeCeilLab = tl;   /* the ceiling's own label: the whole's name stands clear of it */
+    return [gl, tl];
+  });
+  /* the figure at the fill line: beside the capsule, never under the floor, in the bar's ink */
+  const lpGaugeFigure = (st, val, g) => {
+    const k = st.stagePx > 0 ? st.stagePx : 1;
+    const fs = Math.max(parseFloat(getComputedStyle(val).fontSize) || 0, LPGAUGE.FIG_PX * (st.cardK || 1) / k);
+    val.style.fontSize = fs.toFixed(2) + "px"; val.style.fill = g.ink;
+    val.setAttribute("text-anchor", "start"); val.setAttribute("x", g.x.toFixed(1));
+    val.setAttribute("y", (g.y + LPGAUGE.FIG_MID * fs).toFixed(1));
+  };
+  /* review finding 2: the widest figure on the page, set as lpGaugeFigure sets it, in chart units - measured BEFORE the
+     pitch is chosen, so a gauge's pitch holds its capsule, both overhangs, the gap and its figure, and a figure never
+     prints over the next capsule */
+  const lpGaugeFigW = (st, unit) => {
+    const probe = lpEl("text", "val", st.chart, { opacity: 0, x: 0, y: 0 });
+    lpGaugeFigure(st, probe, { x: 0, y: 0, ink: "none" });
+    let w = 0;
+    st.vals.forEach((v, i) => { probe.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit); w = Math.max(w, lpInkW(probe)); });
+    probe.remove();
+    return w;
+  };
+  const lpGaugePitch = (st, capU, figW) => capU + figW + 2 * (LPGAUGE.OVER_PX + LPGAUGE.FIG_GAP_PX) * (st.cardK || 1) / (st.stagePx > 0 ? st.stagePx : 1);
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
        below it for negatives, value labels ride the bar's far end, category labels stay along the bottom. */
     const XF = formOf(pg, "extruded_bar");   /* P58 T5: opt-in (`;form=extruded_bar`); null is today's page, to the byte */
+    const GA = formOf(pg, "gauge");   /* P70 T3: opt-in (`;form=gauge`, a progress page); null is today's page, to the byte */
     const SOFT = st.barStyle === "soft" ? LPBAR_SOFT.SHOULDER_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0;   /* P69 T10b: the shoulder, in this chart's units (0: the page as it was) */
     const n = Math.max(1, st.vals.length);
     const RNG = Array.isArray(pg.ranges) ? pg.ranges : null;   /* P69 T8d: [lo, hi] per bar (null: a single value) */
@@ -10798,7 +10869,7 @@ async function mount(doc) {
        The scale is printed and the value is printed at every instant, so nothing is a lie (E28/E53). */
     const dom = Array.isArray((pg.axes || {}).domain) && (pg.axes.domain.length === 2) ? pg.axes.domain.map(Number) : null;
     const ovf = (pg.axes || {}).overflow, btMode = (ovf === "burst" || ovf === "break") ? "burst" : ovf === "stack" ? "stack" : null;
-    const brk = !!btMode && !!dom;
+    const brk = !GA && !!btMode && !!dom;   /* P70 T3: a gauge's scale is its whole - nothing breaks through it */
     /* P50 T10 / T13 - THE BURST'S FURNITURE (Bravos 8:01.8-8:03.2), every piece OFF unless the object names it, so a
        page that names none builds byte-identically: `overflow_placeholder` (a grey track of the comparator's height behind the
        bar and the mark in the number's place until the number is SPOKEN), `overflow_capsule: "axis"` (the value
@@ -10810,7 +10881,7 @@ async function mount(doc) {
     const capAxis = !!btMode && bfx.overflow_capsule === "axis";
     const stopCad = !!btMode && bfx.break_cadence === "stop";
     const pad = Math.max(1e-9, (hi0 - lo0) * 0.14);
-    const lo = dom ? Math.min(dom[0], lo0) : lo0 - (lo0 < 0 ? pad : 0), hi = dom ? dom[1] : hi0 + (hi0 > 0 ? pad : 0);
+    const lo = GA ? 0 : dom ? Math.min(dom[0], lo0) : lo0 - (lo0 < 0 ? pad : 0), hi = GA ? +GA.ceiling : dom ? dom[1] : hi0 + (hi0 > 0 ? pad : 0);   /* P70 T3: the capsule is 0..the whole */
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px, 40px labels below, 59px values and pill above */
     const LF = !P && st.lfType ? st.lfType : null;   /* P69 T8: the long form's bars - its preset's type, a gutter and a floor that fit it */
     const defaultGutter = P ? 150 : LF ? LF.gutter : 60;
@@ -10824,19 +10895,22 @@ async function mount(doc) {
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
     /* THE CAP (P69 T6c, E99 s96): W_PX on the stage, in this chart's units; a row whose natural bar is wider narrows to
        it, at the measured bar/pitch ratio unless that row would leave the plot, and stands centred */
-    const nat = (x1 - x0) / n, capU = LPBAR.W_PX * (st.cardK || 1) / (st.stagePx > 0 ? st.stagePx : 1);   /* T10c: a card's bar is the cap at the card's own size */
+    const nat = (x1 - x0) / n, capU = (GA ? LPGAUGE.W_PX : LPBAR.W_PX) * (st.cardK || 1) / (st.stagePx > 0 ? st.stagePx : 1);   /* T10c: a card's bar is the cap at the card's own size */
     const capped = nat * (1 - gap) > capU;
-    const pitch = capped ? Math.min(nat, capU / LPBAR.PITCH_RATIO) : nat;
+    const pitch = capped ? Math.min(nat, GA ? Math.max(capU / LPBAR.PITCH_RATIO, lpGaugePitch(st, capU, lpGaugeFigW(st, unit))) : capU / LPBAR.PITCH_RATIO) : nat;   /* P70 T3: a gauge's pitch holds its figure */
     const lead = capped ? x0 + ((x1 - x0) - n * pitch) / 2 : x0;   /* ... and the group stands centred in the plot */
     const bw = capped ? capU : pitch * (1 - gap);
     const air = capped ? 1 - bw / pitch : gap;   /* the pitch's share left as air, half each side of its bar */
+    const GS = GA ? (() => { const k = st.stagePx > 0 ? st.stagePx : 1, ov = LPGAUGE.OVER_PX * (st.cardK || 1) / k;   /* P70 T3: the capsules' span, the rule's overhang either side */
+      const caps = Array.from({ length: n }, (_, i) => { const cx = lead + pitch * (i + air / 2); return [cx, cx + bw]; });
+      return { k, ov, caps, x0: caps[0][0] - ov, x1: caps[n - 1][1] + ov }; })() : null;
     /* both axes, always (operator, 2026-09-03): y ticks with the unit from the shared helper, the zero line as the axis */
     /* six divisions, not the default five: lpNiceStep's 1-2-5 ladder rounds 21.8 up to 50, which left the tariff
        short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
        positive bar. Asking for six lands step 20 and five labelled ticks. */
-    const ticks0 = lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26,
+    const ticks0 = GA ? lpGaugeTicks(st, my, hi, GS.caps, GS.ov, unit, GS.x0 - 6) : lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26,
       PN ? Math.max(2, Math.min(6, Math.floor((bottom - top) / ((LF ? LF.tick : LPBAR_PANEL.TICK_U) * LPBAR_PANEL.TICK_ROOM)))) : 6);
-    if (LF) st.lfPanel = { x: x0 - 20, y: top, w: x1 - x0 + 40, h: bottom - top };   /* P69 T8: the panel spans the tick rules' own extent, the scale's top to its floor */
+    if (LF && !GA) st.lfPanel = { x: x0 - 20, y: top, w: x1 - x0 + 40, h: bottom - top };   /* P70 T3: a gauge stands on the ground, unframed (Bravos D40) */   /* P69 T8: the panel spans the tick rules' own extent, the scale's top to its floor */
     /* the comparator: the tallest bar the stated scale holds - the breaking bar first stands at ITS level, a bar like the others */
     const honest = st.vals.filter((v) => !(brk && v > hi)), comp = honest.length ? Math.max(...honest) : hi;
     st.vals.forEach((v, i) => {
@@ -10857,7 +10931,8 @@ async function mount(doc) {
       const rg = RNG && Array.isArray(RNG[i]) ? RNG[i].map(Number) : null;   /* P69 T8d: the band from the bar's end to the range's far end */
       const far = rg ? (neg ? Math.min(rg[0], rg[1]) : Math.max(rg[0], rg[1])) : null, hr = rg ? Math.max(h, Math.abs(my(far) - base)) : h;
       const band = rg ? lpBarBand(st, { x, bw, base, h, hr, neg, col: LP_PAL[(pg.colors || [])[i]] || (neg ? "var(--lp-neg)" : "var(--lp-pos)") }) : null;
-      const foot = SOFT ? lpEl("rect", "lp-bar-foot", st.chart, { x: x.toFixed(1), y: 0, width: bw.toFixed(1), height: 0 }) : null;   /* P69 T10b: squares the zero end (lpBarSoftPaint) */
+      const gz = GA ? lpGaugeCapsule(st, { x, bw, base, top: my(hi), r: SOFT || LPGAUGE.RX }) : null;   /* P70 T3: the whole, laid before its fill */
+      const foot = SOFT && !gz ? lpEl("rect", "lp-bar-foot", st.chart, { x: x.toFixed(1), y: 0, width: bw.toFixed(1), height: 0 }) : null;   /* P69 T10b: squares the zero end (lpBarSoftPaint) */
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
         { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: SOFT ? SOFT.toFixed(3) : 6 });   /* grows from the zero baseline, up or down */
       /* E53 s7: a DECLARED colour outranks the sign default. Without this the builder read only the value's sign,
@@ -10867,6 +10942,7 @@ async function mount(doc) {
       const dcol = LP_PAL[(pg.colors || [])[i]];
       if (dcol) bar.style.fill = dcol;
       if (dcol && ex) ex.tint(dcol);   /* P58 T5: the prism's faces are the bar's OWN ink at a ratio - a declared colour rules them too */
+      if (gz) { bar.setAttribute("rx", 0); gz.fill.appendChild(bar); }   /* P70 T3: the fill is square, cut to its capsule */
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
       const segs = Array.isArray(pg.segments) && Array.isArray(pg.segments[i]) ? lpSegRects(st, pg.segments[i], { x, bw, base, my, rx: SOFT || 6 }) : null;   /* P69 T64: the stack, under the labels */
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + XLAB, "text-anchor": "middle", opacity: 0 });
@@ -10874,7 +10950,10 @@ async function mount(doc) {
       const vy = neg ? base + hr + (P ? 62 : 26) : base - hr - (P ? 22 : 14);   /* a range's value stands over its band's far end (hr: h without one) */
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
       val.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
+      if (gz) lpGaugeFigure(st, val, { x: x + bw + GS.ov + LPGAUGE.FIG_GAP_PX * (st.cardK || 1) / GS.k, y: yv,
+                                       ink: dcol || (neg ? "var(--lp-neg)" : "var(--lp-pos)") });   /* P70 T3: at the fill line, in the bar's ink */
       const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + hr : base - hr, over, v, bx: x, bw, track, stamp, ex };
+      if (gz) { rec.track = gz.grp; rec.gauge = gz; }   /* P70 T3: the capsule is the fill's track (the soft hatch lays under it) */
       if (foot) rec.foot = foot;
       if (band) { rec.band = band; rec.range = rg; }
       if (segs) rec.segs = segs;   /* P69 T64 */
@@ -10885,12 +10964,13 @@ async function mount(doc) {
       st.bars.push(rec);
       lpMark(st, "b:" + i, "bar", bar, { x, y, w: bw, h, base, cx: x + bw / 2, end: rec.end, neg, v }, rec);
       lpMark(st, "xlab:" + i, "xlabel", lab, { x: x + bw / 2, y: bottom + XLAB });
-      lpMark(st, "val:b:" + i, "value", val, { x: x + bw / 2, y: vy, v });
+      lpMark(st, "val:b:" + i, "value", val, gz ? { x: +val.getAttribute("x"), y: +val.getAttribute("y"), v } : { x: x + bw / 2, y: vy, v });
     });
     if (SOFT) lpBarSoftLayer(st, base, { x: x0 - 20, y: top, w: x1 - x0 + 40, h: bottom - top });   /* P69 T10b: the hatch, under the bars */
     /* R26-53 law 1: the whole row fits its slots, at ONE size, before anything reads a value's box */
     const slot = pitch;
-    st.valFit = lpFitValues(st, slot, P, { base });   /* R26-191: and the zero line, which is where a label that goes INSIDE its bar is measured from */
+    if (GA) st.gauge = { caps: st.bars.map((b) => b.gauge), top: my(hi), base, ceiling: hi };   /* P70 T3: the capsules, for the probe and the tests */
+    st.valFit = GA ? null : lpFitValues(st, slot, P, { base });   /* R26-191: and the zero line, which is where a label that goes INSIDE its bar is measured from */
     if (brk && st.bars.some((b) => b.over)) {
       const vmax = Math.max(...st.vals), niceCeil = (v) => { const s = lpNiceStep(v / 4); return Math.ceil(v / s - 1e-9) * s; };
       const hi1 = btMode === "burst" ? niceCeil(vmax) : hi, my1 = (v) => bottom - (v - lo) / (hi1 - lo || 1) * (bottom - top);
@@ -10924,16 +11004,24 @@ async function mount(doc) {
        is exactly where a viewer is asked to subtract. The rule is drawn across the plot at its value and named at
        its right end, so the gap between it and a taller bar IS the argument (E53 s6). */
     const HLB = ((pg.axes || {}).hlines || []).filter((h) => h && Number.isFinite(+h.y));
+    const hx0 = GA ? GS.x0 : x0, hx1 = GA ? GS.x1 : x1;   /* P70 T3: a gauge's rule spans its capsules, and names the whole over them */
     st.hlines = HLB.map((h, hi) => {
       const col = LP_PAL[h.color] || h.color || LP_INK.cobalt, hy = my(+h.y);
-      const line = lpEl("line", "hrule", st.chart, { x1: x0, x2: x1, y1: hy.toFixed(1), y2: hy.toFixed(1), stroke: col });
-      const lab = h.label ? lpText(st.chart, "sname", x1, hy - (P ? 16 : LF ? LF.rule_dy : 10), "end", String(h.label),
+      const whole = GA && Math.abs(+h.y - GA.ceiling) < 1e-9;   /* P70 T3: the whole's rule is stubs at the capsules' edges, in one group (its paint reads .line's opacity) */
+      const line = whole ? lpEl("g", "lp-gauge-rule", st.chart) : lpEl("line", "hrule", st.chart, { x1: hx0, x2: hx1, y1: hy.toFixed(1), y2: hy.toFixed(1), stroke: col });
+      if (whole) lpGaugeStubs(line, GS.caps, GS.ov, hy, "hrule", { stroke: col });
+      const lab = h.label ? lpText(st.chart, "sname", GA ? (hx0 + hx1) / 2 : x1, hy - (P ? 16 : LF ? LF.rule_dy : 10), GA ? "middle" : "end", String(h.label),
         { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : "") }) : null;
-      lpMark(st, "rule:" + hi, "rule", line, { y: hy, v: +h.y, x1: x0, x2: x1 });
+      lpMark(st, "rule:" + hi, "rule", line, { y: hy, v: +h.y, x1: hx0, x2: hx1 });
+      if (GA && lab && st.gaugeCeilLab) {   /* P70 T3: the whole's name stands clear of the ceiling's own tick label (s9.23b: a label never overprints) */
+        const nb = lab.getBBox(), tb = st.gaugeCeilLab.getBBox();
+        const lift = nb.x < tb.x + tb.width ? nb.y + nb.height + LPGAUGE.NAME_GAP_PX / GS.k - tb.y : 0;
+        if (lift > 0) lab.setAttribute("y", (+lab.getAttribute("y") - lift).toFixed(1));
+      }
       return { h, y: hy, line, lab, col };
     });
-    lpValsClearRules(st);   /* P69 T6: a value is never struck through by a comparator rule - BEFORE the pill reads the values' boxes */
-    const e = st.bars[Math.min(st.emph, st.bars.length - 1)];
+    if (!GA) lpValsClearRules(st);   /* P70 T3: a gauge's figure stands beside its capsule, off every rule. P69 T6: a value is never struck through by a comparator rule - BEFORE the pill reads the values' boxes */
+    const e = GA ? null : st.bars[Math.min(st.emph, st.bars.length - 1)];   /* P70 T3: no counting pill on a gauge - the figure is the fill's */
     if (e) {
       const cg = lpEl("g", "", st.chart, { opacity: 0 });
       let CP = P ? { w: 160, h: 84, ty: 61, up: 128, dn: 40, rx: 14 } : { w: 128, h: 42, ty: 30, up: 66, dn: 24, rx: 8 };   /* portrait pill: 59px type, narrower than a bar pitch so the neighbours' values stay clear */

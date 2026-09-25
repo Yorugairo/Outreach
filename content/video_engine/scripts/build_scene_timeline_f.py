@@ -6307,6 +6307,11 @@ def dock_depth_behind_error(k: float, layer: str, where: str) -> str | None:
 # The tilted line's PLANE is resolved here, exactly as `plane=` is: the compiler owns the tilt's geometry and the
 # player consumes one projective form (the quad) - a second tilt path would be a second geometry to get wrong.
 CHART_FORM_TILT = "tilted_line"
+# P70 T3: the FILL GAUGE (`;form=gauge`, a progress page's one share of one whole as a capsule) is vertical. `gauge:h`,
+# the harvest's horizontal capsule, is refused BY NAME and not drawn: its fill is a WIDTH, and the probe's M26 (R26-40)
+# reads a bar's HEIGHT against a y tick - a horizontal fill would be the one mark on a page the value gate cannot read.
+# The plan's stop condition: the probe's change is the reviewer's call, not this slice's.
+CHART_FORM_GAUGE = "gauge"
 
 
 def page_form_geom(value: str, where: str) -> dict:
@@ -6317,7 +6322,15 @@ def page_form_geom(value: str, where: str) -> dict:
     name, _, rest = value.partition(":")
     if name not in LPG.CHART_FORMS:
         raise ValueError(f"{where}: form {name!r} is not one of {'|'.join(LPG.CHART_FORMS)} "
-                         "(the two 2.5D chart forms; the flat page is the reading form and names none)")
+                         "(the two 2.5D chart forms and the progress gauge; the flat page is the reading form and "
+                         "names none)")
+    if name == CHART_FORM_GAUGE and rest:
+        if rest == "h":
+            raise ValueError(f"{where}: form=gauge:h - the horizontal gauge is not drawn: its fill would be a WIDTH, and "
+                             "the value gate (M26, probe.py) reads a bar's HEIGHT against the printed scale, so the "
+                             "one number on the page would go unchecked. Draw the gauge vertical (form=gauge)")
+        raise ValueError(f"{where}: form={value!r} - form=gauge takes no setting but :h (and :h is refused: the "
+                         "gauge is vertical)")
     if name != CHART_FORM_TILT:
         if rest:
             raise ValueError(f"{where}: form={value!r} takes no setting - form={name} is the whole option "
@@ -6965,13 +6978,22 @@ def rescale_follow_series(world: dict, sp: dict, species: list[dict] | None, whe
     return idx
 
 
-def page_form_spec(value: str, builder: str, where: str) -> dict:
-    """The row's form, refused BY NAME when this page's builder cannot draw it (`ledger_page.form_error`)."""
+def page_form_spec(value: str, builder: str, where: str, page: dict | None = None) -> dict:
+    """The row's form, refused BY NAME when this page's builder cannot draw it (`ledger_page.form_error`). P70 T3: with
+    the PAGE, its variant reaches the fit (the gauge draws a progress page only), and a gauge is held to its whole
+    (`ledger_page.gauge_error`: the whole named, the scale the whole) and carries the ceiling its capsule stands for."""
     name = str(value).partition(":")[0]
-    err = LPG.form_error(name, builder, where)
+    err = LPG.form_error(name, builder, where, (page or {}).get("variant"))
     if err:
         raise ValueError(err)
-    return page_form_geom(str(value), where)
+    spec = page_form_geom(str(value), where)
+    if name == CHART_FORM_GAUGE:
+        err = LPG.gauge_error(page or {}, where)
+        if err:
+            raise ValueError(err)
+        ceiling = LPG.gauge_ceiling(page or {})
+        spec["ceiling"] = int(ceiling) if float(ceiling).is_integer() else ceiling
+    return spec
 
 
 def image_aspect(p: Path) -> float | None:
@@ -7291,7 +7313,9 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
             raise ValueError(f"{plate_id!r}: form= is a LEDGER PAGE option - it is how a page's CHART is drawn "
                              "(a plate is a picture: its own depth is its <plate>.layers.json's, P58 T2)")
         page = world["page"]
-        spec = page_form_spec(str(form), str(page.get("builder") or "?"), repr(plate_id))
+        spec = page_form_spec(str(form), str(page.get("builder") or "?"), repr(plate_id), page)
+        for _w in LPG.gauge_warnings(dict(page, form=spec)):   # P70 T3 (s106): a second bar - PRINTED, never stored
+            print(f"  [WARN] P70 T3: {plate_id!r}: {_w}")
         if page.get("plane"):
             raise ValueError(f"{plate_id!r}: form={spec['kind']} and plane= on one page are two surfaces - ONE "
                              "plane per page. A form draws the chart on its own plane; plane= turns the whole "

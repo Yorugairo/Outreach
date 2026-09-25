@@ -121,6 +121,11 @@ PANELS_SERIES = REPO / "content/video_engine/projects/systems-and-blowups/steel-
 # range): a bars panel's plot is the bars builder's, so its boxes are measured apart (`panel_builders` keys the ink). A
 # SHAPE, not figures about the world.
 PANELS_BARS = LPG.PANELS + LPG.REPRESENTATIVE_SEP + LPG.PANEL_BARS
+# P70 T3: the story builder's SECOND representative - the fill gauge (`;form=gauge`), whose plot is its capsules and not
+# the bars' plot. Its ink carries the form (`ledger_page.page_ink_key`), so it answers for gauge pages only. Measured on
+# the golden `gauge-94` (H row 17's PIMCO 94 page compiled as a progress page under the form).
+STORY_GAUGE = "story" + LPG.REPRESENTATIVE_SEP + "gauge"
+GAUGE_SURFACE = "gauge-94"
 
 
 def _panels_bars_series() -> dict:
@@ -379,6 +384,14 @@ def representative(builder: str) -> dict:
         return LPG.build_spec(LPG.load_series(PANELS_SERIES), "line", None, "right")
     if builder == PANELS_BARS:   # P69 T8d
         return LPG.build_spec(_panels_bars_series(), "line", None, "right")
+    if builder == STORY_GAUGE:   # P70 T3
+        tl = json.loads((RB.SOURCES / f"{GAUGE_SURFACE}.timeline.json").read_text(encoding="utf-8"))
+        page = next(s["world"]["page"] for s in tl["scenes"] if (s.get("world") or {}).get("page"))
+        if page.get("builder") != "story" or (page.get("form") or {}).get("kind") != "gauge":
+            raise SystemExit(f"{GAUGE_SURFACE}: expected a story page drawn as a gauge, found {page.get('builder')!r}")
+        # the golden is COMPILED (world_for_plate stamps it full-stage); a representative is the declared page, and
+        # variant_pages measures both 16:9 geometries off it, as it does for every other builder
+        return {k: v for k, v in _strip(page).items() if k != "full_stage"}
     surface, state = GOLDEN_PAGES[builder]
     tl = json.loads((RB.SOURCES / f"{surface}.timeline.json").read_text(encoding="utf-8"))
     world = next(s["world"] for s in tl["scenes"] if (s.get("world") or {}).get("page"))
@@ -388,7 +401,7 @@ def representative(builder: str) -> dict:
     return _strip(page)
 
 
-BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS}))
+BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE}))
 PROFILED = tuple(b for b in BUILDERS if b in LPG.READABILITY_BUILDERS[LPG.LONGFORM])   # N3: dense-line and story
 
 

@@ -427,8 +427,12 @@ def test_every_wired_card_is_in_a_recipe():
     # P71 T10's level join (page_species:level_join) is tested alone in test_level_join.py and pinned by the
     # level-join-half-a-point golden (H row 14's yardstick); no committed beat plays it until HG1 (P71 T38), and its
     # recipes are P71 T34-T36's, not invented here.
+    # P70 T3's fill gauge (page_builder:progress, now wired: its painter is the `;form=gauge` branch of buildLedgerBars) is
+    # tested alone in test_fill_gauge.py and pinned by the gauge-94 golden; no committed beat plays it until P70-HG1, so
+    # no recipe is invented for it here.
     assert uncovered == ["dock_option:moves", "dock_option:place", "page_builder:bars+segments",
-                         "page_builder:combo+segments", "page_builder:line+break", "page_enter:surface",
+                         "page_builder:combo+segments", "page_builder:line+break", "page_builder:progress",
+                         "page_enter:surface",
                          "page_species:axis_tag", "page_species:explode", "page_species:level_join", "page_species:member", "page_species:solo",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:domain", "plate_option:readability",

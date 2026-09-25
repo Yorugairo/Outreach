@@ -583,18 +583,18 @@
    "id": "plate_option:form",
    "axis": "plate_option",
    "token": "form",
-   "title": "The form plate option (2.5D chart forms)",
+   "title": "The form plate option (2.5D chart forms, the fill gauge)",
    "aliases": [
     {
      "name": "the two chart forms in 2.5D",
      "source": "docs/portable/OPERATOR-RULINGS.md:2832"
     }
    ],
-   "does": "Draws a page's chart in 2.5D (extruded_bar or tilted_line[:<deg>]); the flat page is the default reading form.",
+   "does": "Draws a page's chart in another form: 2.5D (extruded_bar, tilted_line[:<deg>]), or on a progress page the fill gauge (one share of one whole as a capsule); the flat page is the default reading form.",
    "when": null,
    "when_source": null,
    "author": {
-    "key": "`;form=extruded_bar|tilted_line[:<deg>]` on a ledger page",
+    "key": "`;form=extruded_bar|tilted_line[:<deg>]|gauge` on a ledger page (gauge: a progress page only)",
     "example": "'ledger:ev-x:bars;form=extruded_bar'",
     "example_source": null,
     "check": "plate"
@@ -611,6 +611,11 @@
      "token": "tilted_line",
      "means": "The line, the ruled baseline and the gridlines drawn ON a tilted plane the compiler resolves (plane='s own geometry) and converging; every number upright at its projected anchor.",
      "source_set": "CHART_FORMS"
+    },
+    {
+     "token": "gauge",
+     "means": "A progress page's one share of one whole: the capsule IS the whole (its rule named at the ceiling), the bar its fill, the figure at the fill line as it lands. Vertical; :h refused (M26).",
+     "source_set": "CHART_FORMS"
     }
    ],
    "dials": null,
@@ -622,11 +627,12 @@
      "tiltProject",
      "formOf"
     ],
-    "note": "the two painters in the bars / dense-line builders; compiler page_form_spec / world_for_plate, one rule in ledger_page.form_error"
+    "note": "the two painters in the bars / dense-line builders, and the gauge branch of buildLedgerBars (P70 T3); compiler page_form_spec / world_for_plate, one rule in ledger_page.form_error"
    },
    "doctrine": [
     "E98 s3",
-    "P58 T5"
+    "P58 T5",
+    "P70 T3"
    ],
    "status": "wired",
    "proof": {

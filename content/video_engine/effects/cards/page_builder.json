@@ -699,8 +699,13 @@
       "axis": "page_builder",
       "token": "progress",
       "title": "The progress ledger page",
-      "aliases": [],
-      "does": "A progress-to-target reading on the ledger page (builder resolves through pick_builder; no dedicated painter found).",
+      "aliases": [
+        {
+          "name": "the fill gauge",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:483"
+        }
+      ],
+      "does": "One share of one whole on the ledger page, bounded 0..100 or 0..its denominator: drawn as bars (story), or with `;form=gauge` as a capsule that IS the whole, its fill rising to the share and the figure written at the fill line (P70 T3).",
       "when": null,
       "when_source": null,
       "author": {
@@ -714,26 +719,31 @@
       "options": [],
       "dials": null,
       "lives": {
-        "form": "compiler-only",
-        "path": "content/video_engine/scripts/ledger_page.py",
-        "symbol": "pick_builder",
+        "form": "module",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildLedgerBars",
         "also": [
-          "PROGRESS_MAX"
+          "lpGaugeCapsule",
+          "lpGaugeTicks",
+          "lpGaugeFigure",
+          "LPGAUGE"
         ],
-        "note": "pick_builder never returns \"progress\" (falls to story / dense-line); PROGRESS_MAX"
+        "note": "the story builder's `formOf(pg, \"gauge\")` branch; pick_builder resolves progress to story, bounded by ledger_page PROGRESS_MAX / the denominator; the whole's rule: ledger_page.gauge_error"
       },
       "doctrine": [
-        "29 s9.26"
+        "29 s9.26",
+        "E28",
+        "P70 T3"
       ],
-      "status": "declared",
+      "status": "wired",
       "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_ledger_page.py::test_progress_out_of_range_needs_a_denominator",
+        "golden": "gauge-94",
+        "test": "content/video_engine/tests/test_fill_gauge.py::test_m26_through_the_probe_the_printed_value_and_the_fill_agree_at_every_instant",
         "first_use": null
       },
       "callable": {
-        "today": false,
-        "why": "compiles; pick_builder never returns progress, it falls to story / dense-line (decision 8)"
+        "today": true,
+        "why": "probe OK"
       }
     },
     {

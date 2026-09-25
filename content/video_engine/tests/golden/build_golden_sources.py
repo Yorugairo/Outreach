@@ -4342,6 +4342,33 @@ SURFACES.update({"level-join-half-a-point": level_join_half_a_point})
 FRAME_T.update({"level-join-half-a-point": round(LEVEL_AT + LEVEL_DUR, 2)})   # the figure's write end: 13.34
 
 
+# ---- P70 T3 (was P69 T51): THE FILL GAUGE - one share of one whole fills a capsule -----------------------------------
+#   gauge-94   Steel and Paper H row 17's own object, READ where it is committed (`ev-capex-ocf-94-bars-v1`: PIMCO Fig. 3,
+#              94 % of operating cash flow, the 100 rule named "every dollar from operations"), compiled as the PROGRESS
+#              page with `;form=gauge` through the compiler's own world_for_plate: the capsule IS the whole, the fill
+#              stands at 94 of it, the figure written at the fill line in the bar's ink. Flat type (the long form's face
+#              would put the 0.9 MB Inter file in the uris; the long form + bar_style=soft composition is held by
+#              test_fill_gauge on the served player). Read at the HOLD (9.0: the build lands ~5.9 s).
+GAUGE_PLATE = "ledger:ev-capex-ocf-94-bars-v1:progress::right;form=gauge"
+
+
+def gauge_94() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(GAUGE_PLATE, (0, 0, 0), LIT_PROJECT)
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: the fill gauge - 94 of every dollar from operations", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"gauge-94": gauge_94})
+FRAME_T.update({"gauge-94": 9.0})
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

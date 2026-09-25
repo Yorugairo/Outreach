@@ -851,24 +851,124 @@ def pick_builder(series: dict, variant: str) -> str:
 #   The fit is a BUILDER's, not a variant's, because the builder is what owns the painter: `pick_builder` already
 # turns a variant and a data shape into one of nine, and a form its builder cannot draw is refused BY NAME here -
 # ONE rule, read by the compiler (which authors the row) and by `validate` (which reads an object naming one).
-CHART_FORMS = ("extruded_bar", "tilted_line")
-FORM_BUILDERS = {"extruded_bar": ("story",), "tilted_line": ("dense-line",)}
+# P70 T3 (was P69 T51; Bravos D40 17:24, harvest v2 T34): the FILL GAUGE is the third form - one share of one whole drawn
+# as a capsule filling to it. It draws a PROGRESS page only (the variant that bounds a share: 0..PROGRESS_MAX, or
+# 0..its denominator), so it is the one form whose fit reads the VARIANT as well as the builder (`FORM_VARIANTS`).
+CHART_FORMS = ("extruded_bar", "tilted_line", "gauge")
+FORM_BUILDERS = {"extruded_bar": ("story",), "tilted_line": ("dense-line",), "gauge": ("story",)}
+FORM_VARIANTS = {"gauge": ("progress",)}   # a form named here fits these variants only; the two 2.5D forms fit any
 FORM_READS = {"extruded_bar": "a BARS page - every bar is drawn as a prism",
-              "tilted_line": "a LINE page - the line is drawn on a tilted plane"}
+              "tilted_line": "a LINE page - the line is drawn on a tilted plane",
+              "gauge": "a PROGRESS page - one share of one whole, drawn as a capsule"}
 TILT_DEG = 14.0        # the tilted plane's default turn about the page's own vertical axis, in degrees (E98 s3)
 TILT_DEG_MAX = 89.0    # build_scene_timeline_f.PAGE_DEPTH["TILT_MAX"] - one limit, and the compiler checks it
 
 
-def form_error(form: str, builder: str, where: str) -> str | None:
-    """Is ``form`` a form THIS page's builder can draw? The message, or None. Pure."""
+def form_error(form: str, builder: str, where: str, variant: str | None = None) -> str | None:
+    """Is ``form`` a form THIS page's builder can draw? The message, or None. Pure. ``variant`` is read only by a form
+    `FORM_VARIANTS` names (the gauge: a progress page); the two 2.5D forms ignore it, so their rule is what it was."""
     if form not in CHART_FORMS:
         return (f"{where}: form {form!r} is not one of {'|'.join(CHART_FORMS)} "
-                "(the two 2.5D chart forms; the flat page is the reading form and names none)")
+                "(the two 2.5D chart forms and the progress gauge; the flat page is the reading form and names none)")
+    if form in FORM_VARIANTS and variant not in FORM_VARIANTS[form]:
+        return (f"{where}: form={form} is {FORM_READS[form]}, and this page is variant {variant!r} built by "
+                f"{builder!r} (the form draws --variant {'|'.join(FORM_VARIANTS[form])}). The flat page is the "
+                "reading form - drop the option")
     fits = FORM_BUILDERS[form]
     if builder not in fits:
         return (f"{where}: form={form} is {FORM_READS[form]}, and this page is built by {builder!r} "
                 f"(the form is drawn by {'|'.join(fits)}). The flat page is the reading form - drop the option")
     return None
+
+
+# ---- P70 T3: THE GAUGE'S WHOLE -----------------------------------------------------------------------------------
+# The capsule's full length IS the whole - the progress ceiling (`PROGRESS_MAX`, or the page's denominator) - and the
+# whole is NAMED on the page: the label of a comparator rule standing AT the ceiling (the 94 page's "every dollar from
+# operations"). A capsule whose whole has no name is a bar in a box (E28: a chart reads at a glance or it is not on the
+# page), so it is refused; a stated scale other than 0..the whole would draw the capsule as something else, refused too.
+# Read off the compiled PAGE (`axes.hlines`, `axes.domain`) or off an OBJECT (`hlines`, `domain`) - one rule, twice.
+def gauge_ceiling(page: dict) -> float:
+    """The whole a gauge's capsule stands for: the page's denominator, else PROGRESS_MAX (`_validate_variant`'s bound)."""
+    denominator = to_number(page.get("denominator"))
+    return denominator if denominator and denominator > 0 else float(PROGRESS_MAX)
+
+
+def _gauge_axes(page: dict) -> dict:
+    axes = page.get("axes") if isinstance(page.get("axes"), dict) else {}
+    return {"hlines": axes.get("hlines", page.get("hlines")) or [], "domain": axes.get("domain", page.get("domain"))}
+
+
+def gauge_whole(page: dict) -> str | None:
+    """The whole's NAME - the label of the first hline standing at the ceiling - or None."""
+    ceiling = gauge_ceiling(page)
+    for rule in _gauge_axes(page)["hlines"]:
+        y = to_number(rule.get("y")) if isinstance(rule, dict) else None
+        if y is not None and abs(y - ceiling) < 1e-9 and _text(rule.get("label")):
+            return str(rule["label"]).strip()
+    return None
+
+
+def gauge_error(page: dict, where: str) -> str | None:
+    """Can this progress page be drawn as a gauge whose capsule IS its whole? The message, or None. Pure."""
+    ceiling = gauge_ceiling(page)
+    top = f"{ceiling:g}"
+    domain = _gauge_axes(page)["domain"]
+    if isinstance(domain, (list, tuple)) and len(domain) == 2:
+        lo, hi = to_number(domain[0]), to_number(domain[1])
+        if lo is None or hi is None or abs(lo) > 1e-9 or abs(hi - ceiling) > 1e-9:
+            return (f"{where}: form=gauge draws the capsule as the WHOLE, 0..{top}, and the page states the scale "
+                    f"[{value_string(domain[0])}, {value_string(domain[1])}] - a gauge's scale is its whole: state "
+                    f"[0, {top}] or none")
+    if gauge_whole(page) is None:
+        return (f"{where}: form=gauge draws the capsule as the WHOLE ({top}), and the page never names it - give it a "
+                f"comparator rule AT {top} with a label naming the whole (an hline at y {top} with a label, as the 94 "
+                "page's 'every dollar from operations'). E28: a chart reads at a glance or it is not on the page")
+    return None
+
+
+GAUGE_TEXT_FLOOR = 4.5   # series_inks.TEXT_FLOOR (BUILD-PIPELINE.md:307): a figure is text, and owes the text tier
+
+
+def gauge_figure_ink(page: dict, i: int) -> tuple[str, str, str]:
+    """(the hex the engine writes bar i's figure in, its token, the ground under it) - the engine's own rule for a gauge
+    figure (`dcol || sign`: the declared token's ink, else the sign colour), read off the engine's palette and the
+    template's grounds by series_inks, never re-typed. A page on a plate's cream surface stands on the cream."""
+    import series_inks as SINKS
+    pal = SINKS.palette()
+    tok = (page.get("colors") or [None] * (i + 1))[i]
+    value = to_number((page.get("values") or [0])[i]) or 0.0
+    hx, name = (pal["ink"][tok], str(tok)) if tok in pal["ink"] else ((pal["neg"], "--lp-neg") if value < 0 else (pal["pos"], "--lp-pos"))
+    if page.get("surface_from"):
+        m = re.search(r"--lp-cream:\s*(#[0-9A-Fa-f]{6})", SINKS.TEMPLATE.read_text(encoding="utf-8"))
+        return hx, name, m.group(1) if m else "#F4E6C7"
+    return hx, name, SINKS.ground_of(page)
+
+
+def gauge_warnings(page: dict) -> list[str]:
+    """P70 T3 / E99 s106: REPORTED with their numbers, never refused - (a) a gauge page with a SECOND bar is drawn, one
+    capsule per bar, because comparing shares is a bars page's job (USE-WHEN T34: "don't: comparing shares (use bars)");
+    (b) a figure whose bar's ink reads under the text floor on its ground (the review's finding 7: T37b's s118 check
+    reads line and combo pages only). [] on a page that names no gauge. Pure: the compiler prints it, never stores it."""
+    if ((page.get("form") or {}).get("kind")) != "gauge":
+        return []
+    import series_inks as SINKS
+    out = []
+    for i, label in enumerate(page.get("labels") or []):
+        hx, tok, ground = gauge_figure_ink(page, i)
+        ratio = SINKS.contrast(hx, ground)
+        if ratio < GAUGE_TEXT_FLOOR:
+            out.append(f"{FORM_WARN} gauge: the figure of {str(label)!r} is written in its bar's ink {tok} {hx} at "
+                       f"{ratio:.2f}:1 on the ground {ground} - under the text floor {GAUGE_TEXT_FLOOR}:1 "
+                       "(BUILD-PIPELINE.md:307). REPORTED, the frame read decides (E99 s106): declare a brighter token")
+    if len(page.get("values") or []) < 2:
+        return out
+    unit = str(page.get("unit") or "")
+    shares = ", ".join(f"{str(lab)!r} {vs}{unit}"
+                       for lab, vs in zip(page.get("labels") or [], page.get("value_strings") or []))
+    n = len(page["values"])
+    return [f"{FORM_WARN} gauge: {n} bars on one gauge page - {n} capsules, each its own share of "
+            f"{gauge_ceiling(page):g}{unit} ({shares}). A gauge reads ONE share of one whole; comparing "
+            "shares is a bars page's job - use bars (USE-WHEN T34). REPORTED, the frame read decides (E99 s106)"] + out
 
 
 def _validate_readability(series: dict, variant: str) -> list[str]:
@@ -956,7 +1056,9 @@ def validate(series: dict, variant: str) -> list[str]:
         if not series.get("bars") or pick_builder(series, variant) != "story":
             errors.append("left_gutter requires a story/bar chart")
     if series.get("form") is not None:   # P58 T5: an OBJECT naming a form is held to the same one rule the row is
-        err = form_error(str(series["form"]), pick_builder(series, variant), "form")
+        err = form_error(str(series["form"]), pick_builder(series, variant), "form", variant)
+        if not err and str(series["form"]) == "gauge":   # P70 T3: ... and a gauge's whole is named, as on the row
+            err = gauge_error(series, "form")
         if err:
             errors.append(err)
     if variant not in VARIANTS:
@@ -3882,6 +3984,8 @@ def page_ink_key(spec: dict) -> str:
             ink[key] = spec["axes"][key]
     if "left_gutter" in (spec.get("axes") or {}):
         ink["left_gutter"] = spec["axes"]["left_gutter"]
+    if ((spec.get("form") or {}).get("kind")) == "gauge":   # P70 T3: a gauge's plot is its capsules, not the bars' - keyed only on a gauge
+        ink["form"] = "gauge"
     blob = json.dumps(ink, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 
