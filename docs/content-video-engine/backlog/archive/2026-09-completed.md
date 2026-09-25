@@ -254,3 +254,6 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-244 | The lab-log pins read s84. Closed by P72 T2. | lane B `a4bfe6a`: `test_lab_log.py` 17 passed. |
 | R26-252 | The lab lands a stamp on a stamp's clock. Closed by P72 T3. | lane B `80fa2f5`: 0.1542 s with `ink`, read from `authoring.audio`. |
 | R26-337 | A dock never covers the schematic's plot at 9:16. Closed by P72 T40. | lane B `d509ed7`: the phase names counted as ink, a band outside the plot before the corner; test_video_dock 64 + 2 skip. |
+| R26-313 | A stamped chip's seal is reserved; a card stays legible and off the page's words. Closed by P71 T5. | lane B `3d6e8e5`: `chip_stamp_reserved_box`, the legibility-first placer (words > ink > seals), bed b 0 px2 on seals and words. |
+| R26-354 | A report-landed reply with no verdict up front fails tier 0. Closed by P72 T45. | lane A `d07fec2`: `verdict-up-front`, one repair. |
+| R26-355 | Astra packets land from their own reply.md. Closed by P72 T45. | lane A `d07fec2`: `bridge_watch.FILE_LANES`, the provenance checks; the three live packets closed by hand (their work in main). |
