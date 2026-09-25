@@ -15,13 +15,16 @@ One tick, in order:
                   `conversationId`, and continues that conversation through `bridge_reply.py` instead). A lane
                   with no sender (astra) is refused and escalated once, never re-routed (R26-340).
   2. `sent/`    - one watcher read per packet (`bridge_watch.py --once`): done moves it to `replied/`, still
-                  working leaves it, past the deadline is a `timeout` and an escalation. A lane with no watcher
-                  is skipped and ledgered once (`watch-skip.json`); a lost conversation id is recovered from the
-                  agentapi stdout the send stored (`conversationIdRecoveredFrom`).
+                  working leaves it, past the deadline is a `timeout` and an escalation. The astra lane is read
+                  from the packet folder (R26-355): its own `reply.md`, proven the lane's answer to this order,
+                  lands; an unproven one stays and is escalated once (`unproven-reply`, `provenance.json`). A
+                  lane with no watcher at all is skipped and ledgered once (`watch-skip.json`); a lost
+                  conversation id is recovered from the agentapi stdout the send stored.
   3. `replied/` - tier 0 (`bridge_check.classify`: the shape's checks, then the root check): a pass writes
-                  `tier0.json`, moves the packet to `done/` and ledgers `tier: 0`; a form failure queues ONE repair;
-                  a failure no repair can fix (an order defect, a transcript cut outside a whole paths block) is an
-                  `order` failure - one escalation, no repair, no tier 1.
+                  `tier0.json`, moves the packet to `done/` and ledgers `tier: 0`; a form failure queues ONE repair
+                  (never on a lane with no sender - astra's goes to tier 1); a failure no repair can fix (an order
+                  defect, a transcript cut outside a whole paths block) is an `order` failure - one escalation, no
+                  repair, no tier 1.
   4. `replied/` - a tier-0 failure older than `grace_min` with no `tier1.json` is dispatched once to the
                   `bridge_handler` role headlessly; its usage is ledgered with `tier: 1`. An original whose
                   repair reached `done/` by any route is closed with it.
@@ -73,7 +76,8 @@ RESULT_FILE = "result.md"
 TOAST_APP_ID = "Claude Bridge"
 DECISION_RE = re.compile(r"^\s*\**DECISION:?\**\s*:?\s*\**\s*(done|follow-up|followup|escalate)", re.IGNORECASE | re.MULTILINE)
 LANDED_RE = re.compile(r"landedAt:\s*([0-9T:+\-\.]+)")
-ESCALATIONS = ("timeout", "sla", "handler-escalate", "budget", "research-gate", "order", "no-sender")
+ESCALATIONS = ("timeout", "sla", "handler-escalate", "budget", "research-gate", "order", "no-sender", "unproven-reply")
+PROVENANCE_FILE = "provenance.json"   # R26-355: why a file lane's reply.md was not landed, written with its one escalation
 REPAIR_MARKER = "repair.json"   # P46 T7: the original packet's marker that ONE repair follow-up was queued for its form failure
 REVISION_MARKER = "revision.json"   # THE RESEARCH CLAIMS GATE: a failed claims verify went back to the lane as a revision
 WATCH_SKIP_MARKER = "watch-skip.json"   # R26-340 F6: a sent packet on a lane with no watcher, logged once
@@ -325,6 +329,9 @@ def step_sent(tick: Tick) -> None:
         packet = order.get("packetId") or folder.name
         ident = conversation.get("conversationId") or order.get("conversationId")
         lane = conversation.get("lane") or order.get("lane") or "gemini"
+        if lane in watch_mod.FILE_LANES:
+            watch_file_lane(tick, folder, packet, lane, order)   # R26-355: the packet's own reply.md, never a transcript
+            continue
         if lane not in watch_mod.LANES:
             skip_unwatched(tick, folder, packet, lane)   # R26-340 F6 / R26-336: was an argparse SystemExit(2) every tick
             continue
@@ -351,8 +358,36 @@ def step_sent(tick: Tick) -> None:
             escalate(tick, folder, packet, "timeout", f"{packet[:12]} passed its deadline with no reply")
 
 
+def watch_file_lane(tick: Tick, folder: Path, packet: str, lane: str, order: dict[str, Any]) -> None:
+    """R26-355: a lane that writes its reply INTO the packet folder (astra). A proven reply lands through the watcher; an
+    unproven one stays in sent/ and is escalated ONCE with its provenance; no reply yet waits, and past the order's deadline
+    it is a `timeout`, escalated once. The toasts join the tick's end like every other (R26-340 F1)."""
+    proof = watch_mod.file_reply(folder, lane)
+    if proof["status"] == "working":
+        deadline = watch_mod.parse_time(order.get("deadline"))
+        if deadline and now() >= deadline:
+            escalate(tick, folder, packet, "timeout", f"{packet[:12]} ({lane}) passed its deadline with no reply.md")
+        else:
+            tick.say(f"WAIT {packet[:12]} lane={lane}: no reply.md yet")
+        return
+    if proof["status"] == "refused":
+        if escalate(tick, folder, packet, "unproven-reply", f"{packet[:12]}: its {lane} reply.md is not provably its own - "
+                    f"{proof['reason']}"[:240]):
+            tick.say(f"REPLY-REFUSED {packet[:12]} lane={lane}: {proof['reason']}")
+            if not tick.dry_run:
+                env_mod.write_json(folder / PROVENANCE_FILE, {k: v for k, v in proof.items() if k != "text"})
+        return
+    tick.summary["watched"] += 1
+    if tick.dry_run:
+        tick.say(f"LAND {packet[:12]} lane={lane} from its own reply.md (dry-run: proven, nothing moved)")
+        return
+    watch_mod.land_file_reply(tick.repo, packet, lane)
+    tick.say(f"LANDED {packet[:12]} lane={lane} from its own reply.md ({proof['checks'][-1]['detail']})")
+
+
 def skip_unwatched(tick: Tick, folder: Path, packet: str, lane: str) -> None:
-    """A sent packet on a lane the watcher cannot read (astra): said and ledgered ONCE, marked by `watch-skip.json`."""
+    """A sent packet on a lane no watcher reads (any lane but gemini / claude / astra): said and ledgered ONCE, marked by
+    `watch-skip.json`."""
     if (folder / WATCH_SKIP_MARKER).exists():
         return
     if tick.dry_run:
@@ -383,13 +418,15 @@ def recover_conversation_id(tick: Tick, folder: Path, packet: str, conversation:
 
 
 def landed_at(folder: Path) -> dt.datetime | None:
-    """When the reply landed: the header the watcher wrote, else the file's mtime."""
+    """When the reply landed: the header the watcher wrote, else `watch.json`'s `landedAt` (a file lane's reply.md is the
+    lane's own and carries no header - its mtime is when it was WRITTEN, days before a landing, R26-355), else the mtime."""
 
     path = folder / "reply.md"
     if not path.exists():
         return None
     match = LANDED_RE.search(path.read_text(encoding="utf-8", errors="replace")[:400])
     parsed = watch_mod.parse_time(match.group(1)) if match else None
+    parsed = parsed or watch_mod.parse_time(read_json(folder / "watch.json").get("landedAt"))
     return parsed or dt.datetime.fromtimestamp(path.stat().st_mtime).astimezone()
 
 
@@ -439,7 +476,11 @@ def step_tier0(tick: Tick) -> None:
                 # R26-340 F4: no repair can fix it and tier 1 cannot either - the operator is told once
                 escalate(tick, folder, packet, "order", f"{packet[:12]}: {outcome['reason']}"[:240])
             elif outcome.get("class") == handlers.CLASS_FORM and not order.get("repairs") and not (folder / REPAIR_MARKER).exists():
-                queue_repair(tick, folder, order, packet, outcome)   # P46 T7: one repair round, at zero Claude tokens, before tier 1
+                lane = order.get("lane") or "gemini"
+                if lane in send_mod.LANES:
+                    queue_repair(tick, folder, order, packet, outcome)   # P46 T7: one repair round, at zero Claude tokens, before tier 1
+                else:   # R26-355: a repair on a lane with no sender is refused at send and strands the original - tier 1 instead
+                    tick.say(f"REPAIR-SKIP {packet[:12]}: lane {lane} has no sender; tier 1 after the grace window")
             elif research_gate_failed(order, outcome):
                 queue_revision(tick, folder, order, packet, outcome)   # the claims gate: the failure table goes back to the lane
             continue

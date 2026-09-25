@@ -188,7 +188,12 @@ def test_contract_block_fails_when_the_source_itself_lacks_the_block(tmp_path):
 # --------------------------------------------------------------------------- report-landed
 
 
+VERDICT = "## Verdict up front" + chr(10) + "Adoption reached 41% by the vendor's own count." + chr(10) * 2
+WROTE = "Wrote `docs/research/tech/report.md`." + chr(10)
 REPORT = """# A report
+
+## Verdict up front
+Adoption reached 41% by the vendor's own count.
 
 [Adoption | 41% | Acme | URL: https://example.com/x | Verified 2026-09-06]
 
@@ -226,6 +231,31 @@ def test_report_landed_fails_when_the_layers_do_not_rebuild(tmp_path, monkeypatc
     outcome = BH.classify({"replyShape": "report-landed"}, "Wrote `docs/research/tech/report.md`.\n", root)
 
     assert not outcome["pass"] and "exit 1" in outcome["reason"]
+
+
+def test_report_landed_fails_by_name_without_a_verdict_up_front_as_a_form_failure(tmp_path, monkeypatch):
+    """R26-354: the template demands `## Verdict up front`; a report without it is a FORM failure (one repair), not a pass."""
+    root = repo(tmp_path)
+    write(root / "docs/research/tech/report.md", REPORT.replace(VERDICT, ""))
+    monkeypatch.setattr(BH, "run_layers", lambda r: pytest.fail("the layers must not be rebuilt for a report with no verdict"))
+
+    outcome = BH.classify({"replyShape": "report-landed"}, WROTE, root)
+
+    names = {c["name"]: c["ok"] for c in outcome["checks"]}
+    assert not outcome["pass"] and names["verdict-up-front"] is False
+    assert "## Verdict up front" in outcome["reason"] and outcome["class"] == BH.CLASS_FORM
+    assert "verdict-up-front" in BH.FORM_CHECKS
+
+
+def test_report_landed_fails_on_a_verdict_heading_with_nothing_under_it(tmp_path, monkeypatch):
+    root = repo(tmp_path)
+    write(root / "docs/research/tech/report.md", REPORT.replace(VERDICT, "").replace("## NOT FOUND", "## Verdict up front" + chr(10) * 2 + "## NOT FOUND"))
+    monkeypatch.setattr(BH, "run_layers", lambda r: pytest.fail("the layers must not be rebuilt for an empty verdict"))
+
+    outcome = BH.classify({"replyShape": "report-landed"}, WROTE, root)
+
+    assert not outcome["pass"] and outcome["class"] == BH.CLASS_FORM
+    assert {c["name"]: c["ok"] for c in outcome["checks"]}["verdict-up-front"] is False
 
 
 # --------------------------------------------------------------------------- review

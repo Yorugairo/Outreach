@@ -9,7 +9,8 @@ raises a real toast, reads the live IDE or touches the real `evals/BRIDGE-LOG.js
   3. a follow-up's reply must post-date the follow-up (no echo of the original's text)
   4. no repair for a failure a repair cannot fix (a cut outside a whole paths block; an order defect)
   5. an original is closed whenever its repair closes, by any route
-  6. a lane with no watcher or sender (astra) is skipped / refused once, never argparse-failed every tick
+  6. a lane with no watcher (now any lane but gemini / claude / astra) or no sender (astra) is skipped / refused once,
+     never argparse-failed every tick
   7. a reply path outside the order's roots fails tier 0 with its own class; the order names the output root
 """
 from __future__ import annotations
@@ -384,9 +385,10 @@ def test_fix5_a_prior_passing_verdict_on_a_repair_closes_its_original(tmp_path):
 
 def test_fix6_a_sent_packet_on_a_lane_with_no_watcher_is_skipped_and_logged_once(tmp_path, monkeypatch, capsys):
     repo = make_repo(tmp_path)
+    # R26-355 gave astra a file watcher (test_bridge_daemon); a lane with NEITHER a transcript nor a file watcher still skips
     folder = BE.packet_dir(repo, "p-astra", "sent")
-    BE.write_json(folder / "order.json", {"packetId": "p-astra", "lane": "astra", "replyShape": "paths-written"})
-    BE.write_json(folder / "conversation.json", {"packetId": "p-astra", "conversationId": "c-1", "lane": "astra"})
+    BE.write_json(folder / "order.json", {"packetId": "p-astra", "lane": "hermes", "replyShape": "paths-written"})
+    BE.write_json(folder / "conversation.json", {"packetId": "p-astra", "conversationId": "c-1", "lane": "hermes"})
 
     first = BD.tick_once(repo, CONFIG)
     second = BD.tick_once(repo, CONFIG)

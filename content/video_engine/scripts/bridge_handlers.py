@@ -11,8 +11,9 @@ reply* - with zero tokens:
 
   * `paths-written`  every path the reply names exists (and carries the order's `marker` when it named one)
   * `contract-block` the order's `block` is present at the source and at every copy the order named
-  * `report-landed`  the report is under `docs/research/<area>/`, carries a proof line and the NOT FOUND
-                     block, and `build_docs_layers.py --write` then `--check` exit 0
+  * `report-landed`  the report is under `docs/research/<area>/`, carries a proof line, the NOT FOUND block and
+                     a `## Verdict up front` with a line under it (R26-354: its own template demands it; a report
+                     without one is a FORM failure - one repair), and `build_docs_layers.py --write` then `--check` exit 0
   * `review`         the reply parses with a POSITION line and is `done` with no disagreements, no prerequisites
   * `test-run`       the order's `command` exits 0 from the repo root
   * `free`           never closes here; a shapeless reply is judgment by definition
@@ -53,7 +54,7 @@ REPLAY_DIR = "replay"
 # Gemini to write us bad numbers"), so it goes to tier 1. A repair is asked for FORM only, never for evidence.
 FORM_CHECKS = ("paths-named", "reply-whole", "report-named", "not-found-block", "docs-layers", "command-named", "shape", "exists",
                "fetch-dir-named", "manifest", "manifest-parses", "entries", "entry", "outputs-named", "verify-named", "csv-named",
-               "intake-named", "section")   # P46 T8: the file shapes' FORM checks; sha256 / schema / rows / required-cells / claims-* / dedupe-* are substance
+               "intake-named", "section", "verdict-up-front")   # P46 T8: the file shapes' FORM checks; sha256 / schema / rows / required-cells / claims-* / dedupe-* are substance
 CLASS_FORM, CLASS_SUBSTANCE = "form", "substance"
 DETAIL_CHARS = 400
 
@@ -442,10 +443,13 @@ def check_report_landed(order: dict[str, Any], text: str, repo: Path) -> Tier0Re
     checks.append(check("proof-line", proofs > 0, f"{proofs} proof line(s) `[... | URL: https://... | Verified 20..]`"))
     checks.append(check("not-found-block", NOT_FOUND_BLOCK in body, f"`{NOT_FOUND_BLOCK}` {'present' if NOT_FOUND_BLOCK in body else 'absent'}"))
     verdict = _verdict_line(body)
-    abstained = verdict is not None and "[UNVERIFIED]" in verdict
+    checks.append(check("verdict-up-front", bool(verdict), f"verdict: {verdict[:80]}" if verdict else (
+        "no `## Verdict up front` section - the report-landed template demands one (R26-354)" if verdict is None
+        else "`## Verdict up front` has nothing under it - the report-landed template demands the verdict line (R26-354)")))
+    abstained = bool(verdict) and "[UNVERIFIED]" in verdict
     checks.append(check("verdict-verified", not abstained,
                         "the verdict is an abstention - `[UNVERIFIED]` under `## Verdict up front`; a follow-up, not a pass"
-                        if abstained else (f"verdict: {verdict[:80]}" if verdict else "no `## Verdict up front` section (not required)")))
+                        if abstained else "the verdict is not an abstention"))
     if _first_failure(checks) is None:
         layers_ok, detail = run_layers(Path(repo))
         checks.append(check("docs-layers", layers_ok, detail))
@@ -454,13 +458,14 @@ def check_report_landed(order: dict[str, Any], text: str, repo: Path) -> Tier0Re
 
 
 def _verdict_line(body: str) -> str | None:
-    """The first non-empty line under `## Verdict up front`, or None when the report has no such section."""
+    """The first non-empty line under `## Verdict up front`, or None when the report has no such section; "" when the
+    section is empty (the next non-empty line is another heading, or there is none)."""
     lines = body.splitlines()
     for i, line in enumerate(lines):
         if line.strip().lower().startswith("## verdict up front"):
             for nxt in lines[i + 1:]:
                 if nxt.strip():
-                    return nxt.strip()
+                    return "" if nxt.lstrip().startswith("#") else nxt.strip()
             return ""
     return None
 
