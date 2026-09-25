@@ -29,8 +29,20 @@ Every px number is also given at the 1920-wide stage (`*_px1080`), so a 512 px B
 compare. Luma is Rec.709 on the sRGB-coded values, 0-255 (the Bravos spec's "lum",
 `docs/research/bravos-style/mlib.py`); relative luminance is WCAG's.
 
+THE SQUINT GATE'S READ (P71 T7, E99 s126: M48 FAILs, and reads the captions too). `--build <dir>` renders a built
+player through the frozen-frames capture path and writes `<dir>/squint.json` for gate_motion_density's M48: every HELD
+page (the timeline's own clocks: a gap between its builds, hand-overs and undraw, read at its middle) on the PAGE layer
+alone (`?layers=page`) - its lit share at the band's 1024 px, its title's and its lit series' name's cap glyph by glyph
+at 320 px wide, its words off the player's DOM - and every caption page on the whole frame once its last word is
+written - its fill's cap and its WCAG contrast at 320 px (`caption_read`). The thresholds are the reference's:
+`squint_band` in the band file (Bravos's five frames through `squint_gate_read`) and
+`content/video_engine/assets/caption-squint-floor.v1.json` (Wealth Logic's burned-in strip; the shorts' strip has no
+reference on disk yet).
+
     python measure_line_bloom.py FRAME --ink "#34F5C5" --box 150,250,1098,820 [--title-box ..] [--label-box ..] [--words N]
     python measure_line_bloom.py --band content/video_engine/assets/bravos-line-bloom.v1.json --check
+    python measure_line_bloom.py --caption-floor content/video_engine/assets/caption-squint-floor.v1.json --check
+    python measure_line_bloom.py --build <build-dir> [--timeline NAME] [--at T ...] [--frames DIR]
 """
 from __future__ import annotations
 
@@ -264,6 +276,23 @@ def _map_glyphs(glyphs: list[list[float]], text: str) -> tuple[list[tuple[float,
     return (pairs, f"words {kept}/{len(words)}") if kept else ([], "cluster")
 
 
+def _caps_of(glyphs: list[list[float]], text: str) -> tuple[list[float], list[float], str]:
+    """(cap heights, x heights, method): the capitals and the x letters of the glyphs that map onto `text`; with no
+    capital mapped, the TALL CLUSTER - the glyphs standing on the baseline at >= 85 % of their p90 (capitals and
+    ascenders; an all-caps line is all of them)."""
+    pairs, method = _map_glyphs(glyphs, text)
+    caps = [hh for hh, c in pairs if c.isupper() and c not in "QJ"]
+    xs = [hh for hh, c in pairs if c in TITLE_X_LETTERS]
+    if pairs and caps:
+        return caps, xs, method
+    bots = np.array([g[3] for g in glyphs])
+    base = float(np.median(bots)) if glyphs else 0.0
+    on = np.array([g[3] - g[2] for g, b in zip(glyphs, bots) if abs(b - base) <= 1.5]) if glyphs else np.array([])
+    top = float(np.percentile(on, 90)) if on.size else 0.0
+    return ([float(v) for v in on if v >= 0.85 * top], [float(v) for v in on if 0.5 * top <= v < 0.85 * top],
+            "cluster")
+
+
 def title_size(frame: str | Path, box, text: str) -> dict:
     """E99 s122 (P69 T37c): a title's size read GLYPH BY GLYPH at the frame's own resolution - the capitals' height,
     the x-height, the stroke - each also as a share of the frame height (the one size that compares a 512, a 1024
@@ -279,19 +308,7 @@ def title_size(frame: str | Path, box, text: str) -> dict:
     diff = np.abs(lu - ground)
     cov = np.clip(diff / max(float(np.percentile(diff, 99.5)), 1e-6), 0.0, 1.0)
     glyphs = _glyph_boxes(cov)
-    heights = [g[3] - g[2] for g in glyphs]
-    pairs, method = _map_glyphs(glyphs, text)
-    if pairs:
-        caps = [hh for hh, c in pairs if c.isupper() and c not in "QJ"]
-        xs = [hh for hh, c in pairs if c in TITLE_X_LETTERS]
-    if not pairs or not caps:
-        method = "cluster"
-        bots = np.array([g[3] for g in glyphs])
-        base = float(np.median(bots)) if glyphs else 0.0
-        on = np.array([hh for hh, b in zip(heights, bots) if abs(b - base) <= 1.5]) if glyphs else np.array([])
-        top = float(np.percentile(on, 90)) if on.size else 0.0
-        caps = [float(v) for v in on if v >= 0.85 * top]
-        xs = [float(v) for v in on if 0.5 * top <= v < 0.85 * top]
+    caps, xs, method = _caps_of(glyphs, text)
     mask = cov >= TITLE_COVER
     skel = skeletonize(mask)
     stroke = 2.0 * float(np.median(ndimage.distance_transform_edt(mask)[skel])) if skel.any() else None
@@ -355,6 +372,103 @@ def title_halo(frame: str | Path, box, *, ring_1080: int = TITLE_RING_1080) -> d
             "halo_area_1080": round(float(sum(max(v, 0.0) for v in prof)) * k1080, 1),
             "glow_3_12": round(glow, 2),
             "halo_profile": [round(v, 2) for v in prof]}
+
+
+CAPTION_PAD = 0.25     # the contrast box: the caption's glyphs grown by this share of its cap, each side
+CAP_PROXIES = set("bdfhkl0123456789")   # with no capital on the line: the ascenders and the figures stand at the cap
+GLYPH_IN_BOX = (0.3, 0.95)   # a word's glyph stands between these shares of its DOM box's height (the line box, ~1.24 em);
+                             # a fragment the shadow cut off or a fill run into a bright ground is a misread, not a letter
+
+
+def _fill_glyphs(lu: np.ndarray) -> list[list[float]]:
+    """A caption's letters are its FILL: the pixels at least half-way from its dark (p5, the outline / shadow) to its
+    light (p97), less every fill region touching the box's edge (the ground), read glyph by glyph (`_glyph_boxes`)."""
+    lo, hi = float(np.percentile(lu, 5)), float(np.percentile(lu, 97))
+    if hi - lo < MARK_LUMA:
+        return []
+    cov = np.clip((lu - lo) / (hi - lo), 0.0, 1.0)
+    lab, _ = ndimage.label(cov >= TITLE_COVER)
+    edge = np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))
+    return _glyph_boxes(np.where(np.isin(lab, edge[edge > 0]), 0.0, cov))
+
+
+def _crop(lu: np.ndarray, box) -> tuple[np.ndarray, int, int]:
+    h, w = lu.shape
+    x0, y0 = max(0, int(round(box[0]))), max(0, int(round(box[1])))
+    x1, y1 = min(w - 1, int(round(box[2]))), min(h - 1, int(round(box[3])))
+    return lu[y0:y1 + 1, x0:x1 + 1], x0, y0
+
+
+def _word_caps(lu: np.ndarray, words) -> tuple[list[float], list[list[float]], str]:
+    """Our captions carry their words' boxes (the player's DOM): each word is read on its own (a merged pair costs
+    only its word), mapped one glyph to one letter, and a word whose letters stand outside GLYPH_IN_BOX of its box is
+    dropped. The cap is the line's capitals' height - only those standing on the line's BASELINE (the median bottom of
+    its non-descending letters; a capital fused with ink under the strip - a page's source line - is not one) - or, on
+    a line with no capital, its ascenders' and figures' (CAP_PROXIES). A line with neither has no cap to read (None,
+    never its x-height)."""
+    mapped, boxes, n = [], [], 0
+    for box, text in words:
+        crop, x0, y0 = _crop(lu, box)
+        bh = float(box[3] - box[1])
+        gl = _fill_glyphs(crop) if crop.size else []
+        boxes += [[x0 + g[0], x0 + g[1], y0 + g[2], y0 + g[3]] for g in gl]
+        chars = str(text).replace(" ", "")
+        if gl and len(gl) == len(chars) and all(GLYPH_IN_BOX[0] * bh <= g[3] - g[2] <= GLYPH_IN_BOX[1] * bh
+                                                for g, c in zip(gl, chars) if c.isalnum()):
+            n += 1
+            mapped += [(y0 + g[3], g[3] - g[2], c) for g, c in zip(gl, chars) if c.isalnum()]
+    base = float(np.median([bt for bt, _h, c in mapped if c not in "gjpqyQJ"])) if mapped else 0.0
+    tol = max(1.5, 0.06 * float(np.median([h for _b, h, _c in mapped]))) if mapped else 0.0
+    on = [(h, c) for bt, h, c in mapped if abs(bt - base) <= tol]
+    caps = [h for h, c in on if c.isupper() and c not in "QJ"]
+    proxies = [h for h, c in on if c in CAP_PROXIES]
+    method = f"words {n}/{len(words)}" + ("" if caps else " (ascenders / figures)" if proxies else " (no cap letter)")
+    return caps or proxies, boxes, method
+
+
+def caption_read(frame: str | Path, box, text: str = "", *, words=None, width: int = SQUINT_W) -> dict:
+    """E99 s126 (P71 T7): a CAPTION line's legibility at the gate's width. A caption is LIGHT ink held off its ground
+    by an outline or a shadow (Wealth Logic's white caps in a black stroke; ours cream in a dark text-shadow), so its
+    letters are its FILL (`_fill_glyphs`). The cap is read glyph by glyph at the frame's own size and given at `width`:
+    word by word when the words' boxes are known (`_word_caps` - ours, off the DOM), else over the line (`_caps_of`:
+    the capitals of `text`, else the tall cluster - the reference's all-caps strip is all of it). The contrast is
+    WCAG's ratio of the p90 and p10 relative luminance inside the glyphs' box (grown by CAPTION_PAD of the cap) on the
+    frame DOWNSAMPLED to `width` - what the thumbnail keeps."""
+    rgb = load_rgb(frame)
+    h, w = rgb.shape[:2]
+    lu = luma(rgb)
+    if words:
+        caps, glyphs, method = _word_caps(lu, words)
+    else:
+        crop, x0, y0 = _crop(lu, box)
+        gl = _fill_glyphs(crop)
+        caps, _xs, method = _caps_of(gl, text)
+        glyphs = [[x0 + g[0], x0 + g[1], y0 + g[2], y0 + g[3]] for g in gl]
+    cap = float(np.median(caps)) if caps else None
+    k = width / w
+    if glyphs:
+        pad = CAPTION_PAD * (cap or 0.0)
+        gb = [min(g[0] for g in glyphs) - pad, min(g[2] for g in glyphs) - pad,
+              max(g[1] for g in glyphs) + pad, max(g[3] for g in glyphs) + pad]
+    else:
+        gb = [box[0], box[1], box[2] + 1, box[3] + 1]
+    small = load_rgb(frame, width)
+    sy0, sy1 = max(0, int(np.floor(gb[1] * k))), min(small.shape[0], int(np.ceil(gb[3] * k)))
+    sx0, sx1 = max(0, int(np.floor(gb[0] * k))), min(small.shape[1], int(np.ceil(gb[2] * k)))
+    yl = rel_lum(small[sy0:sy1, sx0:sx1]) if sy1 > sy0 and sx1 > sx0 else np.zeros(1)
+    contrast = (float(np.percentile(yl, 90)) + 0.05) / (float(np.percentile(yl, 10)) + 0.05)
+    return {"frame_h": h, "frame_w": w, "width": width, "method": method if glyphs else "none",
+            "glyphs": len(glyphs), "capitals": len(caps),
+            "cap_px": round(cap * k, 3) if cap else None, "cap_frac": round(cap / h, 5) if cap else None,
+            "cap_px1080": round(cap / h * 1080, 2) if cap else None, "contrast": round(contrast, 2),
+            "box_gate": [sx0, sy0, sx1, sy1]}
+
+
+def word_count(texts) -> int:
+    """s120 (3): the WORDS on a plot - every token carrying at least two letters (a name, "(LHS)", "S&P"); a figure,
+    a percentage or a tick ("240%", "$1.2T", "2000") is not a word. Bravos's hand counts (the band's `plot_words`)
+    are the legend rows, read by the same rule."""
+    return sum(1 for t in texts for tok in str(t).split() if sum(c.isalpha() for c in tok) >= 2)
 
 
 def ocr_words(path: str | Path, box) -> int | None:
@@ -487,6 +601,388 @@ def check_band(band_path: Path, root: Path) -> list[str]:
     return bad
 
 
+# ---- M48 (P71 T7; E99 s120 / s126): the squint read of a BUILD, and the reference it is judged against ------------
+
+SQUINT_NAME = "squint.json"          # written beside the timeline; gate_motion_density.load_squint reads it
+SQUINT_SCHEMA = "squint.v1"
+BAND_W = 1024                        # the band's lit share is read at its 1024 px frames' width - ours at the same
+HELD_MIN_S = 1.0                     # [DERIVED: a state held under a second is a pass-through, not a page a thumbnail catches]
+TRANSIENT_S = 2.5                    # [DERIVED: M16's 2.5 s pulse] a species this short is a WRITE (a retitle, a figure, a
+                                     # note, a ring) - the page is not at rest under it; a longer one (a solo, a held
+                                     # spotlight) is a state the page is held in
+AXIS_ROLES = ("xtick", "ylabel", "tick", "axislabel", "axis")   # axis furniture - Bravos's counts leave the axes out
+
+
+def squint_gate_read(entry: dict, root: Path) -> dict:
+    """One band frame's squint numbers, as the gate reads ours: the lit share at BAND_W, the title's and the named
+    label's cap (glyph by glyph, T37c's `title_size`) at the gate's width, and the hand-counted plot words."""
+    path = resolve(entry["frame"], root)
+    got = measure(path, entry["ink"], entry["box"], **_args_of(entry), at_width=BAND_W)
+    nat_w = Image.open(path).width
+    t = title_size(path, entry["title_box"], entry["title"]["text"])
+    lab = None if entry.get("label_unread") else title_size(path, entry["label_box"], entry["label_text"])
+    at = lambda r: round(r["cap_px"] * SQUINT_W / nat_w, 3) if r and r["cap_px"] else None  # noqa: E731
+    return {"width": SQUINT_W, "at_width": BAND_W, "lit_share": got["squint"]["lit_share"],
+            "title_cap_px": at(t), "label_cap_px": at(lab), "label_method": lab["method"] if lab else None,
+            "plot_words": entry["plot_words"]}
+
+
+def squint_band(frames: list[dict]) -> dict:
+    keys = ("lit_share", "title_cap_px", "label_cap_px", "plot_words")
+    out = {"width": SQUINT_W, "at_width": BAND_W, "frames": [f["id"] for f in frames],
+           "unread": {f["id"]: f["label_unread"] for f in frames if f.get("label_unread")}}
+    for k in keys:
+        v = [f["squint_gate"][k] for f in frames if f["squint_gate"][k] is not None]
+        out[k] = {"min": min(v), "max": max(v), "n": len(v)}
+    return out
+
+
+def _drift(fid: str, want: dict, have: dict, keys) -> list[str]:
+    bad = []
+    for key in keys:
+        a, b = want.get(key), have.get(key)
+        if a is None or b is None:
+            if a != b:
+                bad.append(f"{fid}.{key}: recorded {a}, measured {b}")
+        elif abs(a - b) > max(BAND_TOL * abs(a), BAND_ABS.get(key, 0.0), 0.05 if key != "cap_px" else 0.02):
+            bad.append(f"{fid}.{key}: recorded {a}, measured {b}")
+    return bad
+
+
+def check_squint_band(band_path: Path, root: Path) -> list[str]:
+    band = json.loads(band_path.read_text(encoding="utf-8"))
+    bad = []
+    for e in band["frames"]:
+        if "squint_gate" in e and resolve(e["frame"], root).exists():
+            bad += _drift(e["id"], e["squint_gate"], squint_gate_read(e, root),
+                          ("lit_share", "title_cap_px", "label_cap_px", "plot_words"))
+    return bad
+
+
+def check_caption_floor(floor_path: Path, root: Path) -> list[str]:
+    """Re-read every reference caption the floor records; a number that no longer reproduces is a finding."""
+    doc = json.loads(floor_path.read_text(encoding="utf-8"))
+    bad = []
+    for lane in doc["lanes"].values():
+        for fr in lane.get("frames") or []:
+            p = resolve(fr["frame"], root)
+            if not p.exists():
+                bad.append(f"{fr['frame']}: not on disk")
+                continue
+            bad += _drift(fr["frame"], fr["measured"], caption_read(p, fr["box"], fr.get("text", "")),
+                          ("cap_px", "contrast"))
+    return bad
+
+
+def held_instants(tl: dict) -> list[dict]:
+    """Every HELD state of every ledger page, read off the timeline's own clocks (the gate's): the page's changes are
+    its build_to / bracket windows, its data-changing chart_to hand-overs and its undraw; a hold is a gap between
+    them from the page's landing on, at least HELD_MIN_S long, read at its MIDDLE (clear of the landing's settle and
+    of the exit's start). Every other species up to TRANSIENT_S long is a write in progress and splits a hold too."""
+    import gate_motion_density as G  # noqa: PLC0415 - the gate owns the clocks; imported where a build is read
+    out = []
+    for s in tl.get("scenes", []):
+        if not G._is_page(s) or not s.get("span"):
+            continue
+        a, z = float(s["span"][0]), float(s["span"][1])
+        win = []
+        for x in s.get("species", []):
+            at, k = float(x.get("at", -1e9)), x.get("kind")
+            if not a <= at <= z:
+                continue
+            if k in ("build_to", "bracket"):
+                win.append((at, at + float(x.get("dur", 0.0)), f"{k} lands"))
+            elif k == "chart_to" and x.get("to") in G.TRANSITION_DATA_KINDS:
+                win.append((at, G._transition_land(s, x), f"chart_to {x.get('to')} lands"))
+            elif k == "undraw":
+                win.append((at, z, "undraw"))
+            elif 0.0 < float(x.get("dur", 0.0)) <= TRANSIENT_S:
+                win.append((at, at + float(x["dur"]), f"{k} lands"))
+        cur, why = a + G._page_land_offset(s), "the page lands"
+        for w0, w1, wwhy in sorted(win) + [(z, z, "")]:
+            if w0 - cur >= HELD_MIN_S:
+                out.append({"t": round((cur + w0) / 2, 3), "scene": str(s.get("scene_id", "?")),
+                            "why": f"{why} {cur:.2f}s, held to {w0:.2f}s", "hold": [round(cur, 3), round(w0, 3)]})
+            if w1 > cur:
+                cur, why = w1, wwhy
+    return out
+
+
+def caption_instants(tl: dict) -> list[dict]:
+    """Every caption page, read when its LAST word has been written: halfway from that word's start to the page's end."""
+    out = []
+    for p in tl.get("caption_pages") or []:
+        ws = p.get("t") or []
+        if not ws:
+            continue
+        last, e = max(float(w["s"]) for w in ws), float(p["e"])
+        out.append({"t": round(last + 0.5 * max(0.0, e - last), 3), "text": " ".join(str(w["w"]) for w in ws),
+                    "mode": p.get("cap_mode") or "", "span": [float(p["s"]), e]})
+    return out
+
+
+READ_SQUINT = r"""
+() => {
+  const stg = document.getElementById('stage').getBoundingClientRect();
+  const R = (el) => { const r = el.getBoundingClientRect();
+    return [r.x - stg.x, r.y - stg.y, r.x - stg.x + r.width, r.y - stg.y + r.height]; };
+  const U = (a, b) => !a ? b : [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[2], b[2]), Math.max(a[3], b[3])];
+  const eff = (el) => { let o = 1, e = el;   /* probe.py's READ_DOM: the effective opacity up the tree */
+    while (e && e !== document.documentElement) { const cs = getComputedStyle(e);
+      if (cs.display === 'none' || cs.visibility === 'hidden') return 0;
+      o *= parseFloat(cs.opacity); if (!(o > 0)) return 0;
+      const a = e.getAttribute && e.getAttribute('opacity'); if (a != null && a !== '') o *= parseFloat(a) || 0;
+      e = e.parentNode instanceof Element ? e.parentNode : null; }
+    return o; };
+  const written = (el) => { const gs = el.querySelectorAll('.g'); if (!gs.length) return 1; let n = 0;
+    for (const g of gs) if (parseFloat(g.style.getPropertyValue('--w') || '0') > 0.02) n++; return n / gs.length; };
+  const TX = (x) => (x || '').replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+  /* an SVG text's runs (a tag's value, name and chip are tspans) read as words apart, never run together */
+  const RUNS = (el) => { if (el.tagName !== 'text') return TX(el.textContent);
+    const parts = [...el.childNodes].map((n) => n.textContent || '');   /* a glyph-by-glyph write is one tspan a letter */
+    return TX(parts.join(parts.every((x) => x.length <= 1) ? '' : ' ')); };
+  const out = { page: null, caption: null };
+  const cap = document.getElementById('caption');
+  if (cap && eff(cap) > 0.05) {
+    const ws = [...cap.querySelectorAll('.cw')].filter((w) => eff(w) > 0.05 && w.getBoundingClientRect().width > 0);
+    let u = null; for (const w of ws) u = U(u, R(w));
+    if (u) out.caption = { box: u, text: TX(ws.map((w) => w.textContent).join(' ')), mode: cap.className,
+                           words: ws.map((w) => [R(w), TX(w.textContent)]) };
+  }
+  /* the page on screen: wB, the last world (probe.py's and the template's own rule, R26-37) */
+  const worlds = [...document.querySelectorAll('.world')];
+  const wB = document.getElementById('wB') || worlds[worlds.length - 1];
+  const world = wB && wB.__lp && wB.classList.contains('ledger') && eff(wB) > 0.05 ? wB : null;
+  if (!world) return out;
+  const S = world.__lp, pg = { title: null, plot: null, lit: null, label: null, words: [], wboxes: [], panels: !!S.panels,
+                               panel_plots: [] };
+  /* a PANELS page: each SHOWN panel's plot box through its own screen CTM (measure_page_boxes' pplot), in panel order */
+  if (S.panels) for (const P of S.panels) {
+    if (!(+getComputedStyle(P.box).opacity > 0.05)) continue;
+    const m = P.chart && P.chart.getScreenCTM(), Q = P.plot; if (!m || !Q) continue;
+    const pt = (x, y) => [m.a * x + m.c * y + m.e - stg.x, m.b * x + m.d * y + m.f - stg.y];
+    const a = pt(Q.L, Q.T), b = pt(Q.W - Q.R, Q.B);
+    pg.panel_plots.push([Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0], b[0]), Math.max(a[1], b[1])]);
+  }
+  const t = world.querySelector('.lp-title');
+  if (t && eff(t) > 0.05) {   /* the FIRST written line of the title (a retitle's new run; the old run is unwritten) */
+    const gs = [...t.querySelectorAll('.g')].filter((g) => parseFloat(g.style.getPropertyValue('--w') || '0') > 0.5
+      && g.getBoundingClientRect().width > 0);
+    /* a glyph's INK box: its rect less the padding the glow is given room by (P69 T37c pads each glyph .36em) */
+    const G = (g) => { const r = R(g), cs = getComputedStyle(g); return [r[0] + parseFloat(cs.paddingLeft), r[1] + parseFloat(cs.paddingTop),
+      r[2] - parseFloat(cs.paddingRight), r[3] - parseFloat(cs.paddingBottom)]; };
+    if (gs.length) { const y0 = Math.min(...gs.map((g) => G(g)[1])); const row = gs.filter((g) => G(g)[1] < y0 + (G(g)[3] - G(g)[1]) / 2);
+      row.sort((a, b) => G(a)[0] - G(b)[0]);   /* the spaces are not glyphs: a gap over a quarter of the line's height is one */
+      const lh = Math.max(...row.map((g) => G(g)[3] - G(g)[1]));
+      let u = null, txt = ''; row.forEach((g, i) => { u = U(u, G(g));
+        if (i && G(g)[0] - G(row[i - 1])[2] > 0.25 * lh) txt += ' '; txt += g.textContent; });
+      pg.title = { box: u, text: TX(txt) }; }
+    else pg.title = { box: R(t), text: TX(t.textContent) };
+  }
+  /* the STATE on screen: a page with page_states keeps every state's chart in the DOM (st.states), and the one
+     painted need not be wB.__lp - the visible chart that draws the most visible line ink is the page read */
+  const inked = (st) => (st.marks || []).filter((mk) => mk.role === 'line' && mk.el && eff(mk.el) > 0.05).length;
+  const V = [S, ...(S.states || [])].filter((st) => st.chart && eff(st.chart) > 0.05)
+    .sort((a, b) => inked(b) - inked(a))[0] || S;
+  const chart = V.chart || world.querySelector('.lp-chart');
+  if (chart && !S.panels) {
+    const m = chart.getScreenCTM();
+    if (V.plot && m) { const P = V.plot, pt = (x, y) => [m.a * x + m.c * y + m.e - stg.x, m.b * x + m.d * y + m.f - stg.y];
+      const a = pt(P.L, P.T), b = pt(P.W - P.R, P.B);
+      pg.plot = [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0], b[0]), Math.max(a[1], b[1])]; }
+    else for (const el of chart.querySelectorAll('rect.bar, path.ser, path.wedge, line.ax, line.grid')) {
+      const r = R(el); if (r[2] - r[0] >= 1 || r[3] - r[1] >= 1) pg.plot = U(pg.plot, r); }
+  }
+  /* the LIT line: the unmuted series drawn hot (E99 s117's lphot filter; a solo moves it), most visible first */
+  const lines = (V.marks || []).filter((mk) => mk.role === 'line' && mk.el && !(mk.rec && mk.rec.muted) && eff(mk.el) > 0.05);
+  const hot = (mk) => /lphot/.test((mk.el.getAttribute('filter') || '') + (mk.el.style.filter || ''));
+  const rank = lines.map((mk) => [(hot(mk) ? 2 : 1) * eff(mk.el) * (parseFloat(getComputedStyle(mk.el).strokeWidth) || 1), mk])
+    .sort((p, q) => q[0] - p[0]);
+  if (rank.length) { const mk = rank[0][1]; pg.lit = { key: mk.key, stroke: getComputedStyle(mk.el).stroke, hot: hot(mk) };
+    const nm = V.markBy && V.markBy['name:' + mk.key];
+    if (nm && nm.el && eff(nm.el) > 0.05) pg.label = { box: R(nm.el), text: RUNS(nm.el) }; }
+  /* the WORDS on the page: every visible text run of the world and the species layers, less the title, the sub,
+     the source and the axis furniture (a glyph-written run and an SVG text count once, whole) */
+  /* a PANELS page's axis marks live on each panel (P.marks), not on the page's own list */
+  /* E99 s129 (3): axis ticks and axis titles are not words. They are marks on whichever STATE drew them (st.states: a
+     page with page_states keeps each state's own list - the one on screen need not be wB.__lp's) and on each panel */
+  const owners = [S, ...(S.states || []), ...(S.panels || [])];
+  for (const st of S.states || []) owners.push(...(st.panels || []));
+  const allMarks = [].concat(...owners.map((o) => o.marks || []));
+  const skip = new Set(allMarks.filter((mk) => AXIS.includes(mk.role) && mk.el).map((mk) => mk.el));
+  const blocks = new Set();
+  for (const root of [world, document.getElementById('species'), document.getElementById('species-under')]) {
+    if (!root) continue;
+    const tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+      if (!(n.textContent || '').trim()) continue;
+      const p = n.parentElement; if (!p) continue;
+      const blk = p.closest('text') || p.closest('.lp-ink') || p;
+      /* the page's title / sub / source, and a panel's own title (.lp-psub: each panel reads as its own chart, whose
+         title - like Bravos's - is judged for size, not counted as plot words) */
+      if (blocks.has(blk) || blk.closest('.lp-title, .lp-sub:not(.lp-note), .lp-src, .lp-psub')) continue;
+      let sk = false; for (let e = blk; e && e !== root; e = e.parentElement) if (skip.has(e)) { sk = true; break; }
+      if (sk || eff(blk) <= 0.05 || written(blk) <= 0.5) continue;
+      const r = blk.getBoundingClientRect(); if (r.width < 1 || r.height < 1) continue;
+      blocks.add(blk); pg.words.push(RUNS(blk)); pg.wboxes.push(R(blk));
+    }
+  }
+  out.page = pg;
+  return out;
+}
+""".replace("AXIS.includes", json.dumps(list(AXIS_ROLES)) + ".includes")
+
+
+def _hex(css: str) -> str | None:
+    nums = [float(v) for v in css.replace("rgba(", "").replace("rgb(", "").rstrip(")").split(",")[:3]] \
+        if css and css.startswith("rgb") else None
+    return "#" + "".join(f"{int(round(v)):02X}" for v in nums) if nums else None
+
+
+def _grow(box, px: float, w: int, h: int) -> list[float]:
+    return [max(0.0, box[0] - px), max(0.0, box[1] - px), min(w - 1.0, box[2] + px), min(h - 1.0, box[3] + px)]
+
+
+def panel_word_counts(texts: list[str], boxes: list, plots: list) -> list[int]:
+    """The words on each plot panel (the parent's T7 ruling: Bravos's band is single-chart pages, so a PANELS page
+    reads as one chart per panel and each carries its own limit). A run belongs to the panel whose plot box holds
+    its centre; one outside every panel counts toward the nearest (the distance from its centre to the box)."""
+    counts = [0] * len(plots)
+    for text, b in zip(texts, boxes):
+        cx, cy = (b[0] + b[2]) / 2, (b[1] + b[3]) / 2
+        d = [max(p[0] - cx, 0, cx - p[2]) ** 2 + max(p[1] - cy, 0, cy - p[3]) ** 2 for p in plots]
+        counts[d.index(min(d))] += word_count([text])
+    return counts
+
+
+def read_page(png: Path, dom: dict, size: tuple[int, int]) -> dict:
+    """The gate's numbers for one held page: its lit share (at BAND_W), its title's and its lit series' name's cap at
+    the gate's width, and its words. A page with no lit line (bars, panels) has no lit share: the Bravos band is line
+    pages only, and a number with no reference is not judged (E38)."""
+    w, h = size
+    k = SQUINT_W / w
+    rec = {"title": None, "title_cap_px": None, "label": None, "label_cap_px": None, "lit_share": None, "lit_ink": None,
+           "lit_note": None, "plot_words": word_count(dom.get("words") or []), "words": dom.get("words") or []}
+    if dom.get("panel_plots"):   # the parent's T7 ruling: the band is single-chart pages - 7 words PER PLOT PANEL
+        rec["panel_words"] = panel_word_counts(dom["words"], dom.get("wboxes") or [], dom["panel_plots"])
+        rec["plot_words"] = max(rec["panel_words"])
+    if dom.get("title"):
+        rec["title"] = dom["title"]["text"]
+        rec["title_cap_px"] = (lambda r: round(r["cap_px"] * k, 3) if r["cap_px"] else None)(
+            title_size(png, _grow(dom["title"]["box"], 6, w, h), dom["title"]["text"]))
+    if dom.get("label"):
+        rec["label"] = dom["label"]["text"]
+        rec["label_cap_px"] = (lambda r: round(r["cap_px"] * k, 3) if r["cap_px"] else None)(
+            title_size(png, _grow(dom["label"]["box"], 4, w, h), dom["label"]["text"]))
+    lit, plot = dom.get("lit"), dom.get("plot")
+    if dom.get("panels") or not lit or not plot:
+        rec["lit_note"] = "no lit line on this page (a bars / panels page): the Bravos band is line pages only"
+        return rec
+    rec["lit_ink"] = _hex(lit.get("stroke") or "")
+    try:
+        got = measure(png, rec["lit_ink"], plot, at_width=BAND_W)
+        rec["lit_share"] = got["squint"]["lit_share"]
+    except ValueError as exc:
+        rec["lit_note"] = f"the lit line's ink was not found in the plot ({exc})"
+    return rec
+
+
+def _instants(tl: dict, at: list[float] | None) -> tuple[list[dict], list[dict]]:
+    if at is None:
+        return held_instants(tl), caption_instants(tl)
+    return ([{"t": float(t), "scene": _scene_of(tl, float(t)), "why": "given"} for t in at],
+            [{"t": float(t)} for t in at])
+
+
+def _shot(view, t: float, size: tuple[int, int], fdir: Path, tag: str) -> tuple[Path, dict]:
+    """One frame at t through render_baseline's capture path, and the player's DOM read at the same t. The first seek
+    settles (a cold seek reads a card before its body decodes - probe.py's rule); the second is the frame."""
+    import render_baseline as RB  # noqa: PLC0415
+    RB.frame_png(view, t, size)
+    view.wait_for_timeout(120)
+    p = fdir / f"{tag}-{t:08.3f}.png"
+    p.write_bytes(RB.frame_png(view, t, size))
+    return p, view.evaluate(READ_SQUINT)
+
+
+PAGE_ONLY_CSS = ("#caption, .dock, .stackbox { visibility: hidden !important; }")   # the shell's R26-13 rule, for a
+                                                                                      # player built before the switch
+
+
+def _page_layer(view) -> str:
+    """The page read wants the PAGE alone. A shell with R26-13's `?layers=` switch set it on <html>; a player built
+    before it (the Japan short, 2026-09-10) ignores the query, so the same rule is put on the page by hand."""
+    if view.evaluate("() => document.documentElement.getAttribute('data-layers')") == "page":
+        return "shell ?layers=page"
+    view.add_style_tag(content=PAGE_ONLY_CSS)
+    return "injected (a player older than the ?layers= switch): " + PAGE_ONLY_CSS
+
+
+def _caption_rec(p: Path, cap: dict, t: float, tl: dict, size: tuple[int, int], keep: bool) -> dict:
+    r = caption_read(p, _grow(cap["box"], 4, *size), cap["text"],
+                     words=[(_grow(b, 3, *size), t) for b, t in cap.get("words") or []])
+    return {"t": t, "scene": _scene_of(tl, t), "text": cap["text"], "mode": cap.get("mode"), "cap_px": r["cap_px"],
+            "contrast": r["contrast"], "cap_px1080": r["cap_px1080"], "method": r["method"],
+            "frame": p.name if keep else None, "box": [round(v, 1) for v in cap["box"]],
+            "words": [[[round(v, 1) for v in b], t_] for b, t_ in cap.get("words") or []]}
+
+
+def measure_build(build: Path, *, timeline_name: str | None = None, html_name: str = "player.html",
+                  at: list[float] | None = None, frames_dir: Path | None = None) -> Path:
+    """The --build mode: each held page's frame (the PAGE layer only, the shell's `?layers=page` - its docks and
+    caption hidden, their geometry kept) and each caption page's WHOLE frame (the caption over what is behind it),
+    rendered through the frozen-frames capture path (render_baseline's serve / prepare_page / frame_png), read off
+    the player's own DOM and measured at the gate's width. `at` restricts both to those instants (the caption on
+    screen at each). Writes <build>/squint.json."""
+    import hashlib  # noqa: PLC0415
+    import tempfile  # noqa: PLC0415
+    import render_baseline as RB  # noqa: PLC0415
+    from playwright.sync_api import sync_playwright  # noqa: PLC0415
+    build, html = Path(build), Path(build) / html_name
+    tls = [build / timeline_name] if timeline_name else sorted(build.glob("*.timeline.json"))
+    if not tls or not tls[0].exists():
+        raise SystemExit(f"no timeline in {build}")
+    tl = json.loads(tls[0].read_text(encoding="utf-8"))
+    aspect = str(tl.get("aspect") or "16:9")
+    size = RB.STAGE[aspect]
+    pages, caps = _instants(tl, at)
+    doc = {"schema": SQUINT_SCHEMA, "player_sha256": hashlib.sha256(html.read_bytes()).hexdigest(),
+           "timeline": tls[0].name, "aspect": aspect, "gate_width": SQUINT_W, "band_width": BAND_W,
+           "pages": [], "captions": []}
+    keep = frames_dir is not None
+    srv, port = RB.serve(build)
+    with tempfile.TemporaryDirectory() as tmp, sync_playwright() as pw:
+        fdir = Path(frames_dir) if keep else Path(tmp)
+        fdir.mkdir(parents=True, exist_ok=True)
+        try:
+            br = pw.chromium.launch(headless=True)
+            views = {}
+            for tag, q in (("page", "?layers=page"), ("whole", "")):
+                views[tag] = br.new_context(viewport=dict(zip(("width", "height"), size))).new_page()
+                views[tag].goto(f"http://127.0.0.1:{port}/{html.name}{q}", wait_until="networkidle", timeout=300000)
+                RB.prepare_page(views[tag], *size)
+            doc["page_layer"] = _page_layer(views["page"])
+            for pgi in pages:
+                p, dom = _shot(views["page"], pgi["t"], size, fdir, "page")
+                if dom.get("page"):
+                    doc["pages"].append({**pgi, **read_page(p, dom["page"], size), "frame": p.name if keep else None})
+            for ci in caps:
+                p, dom = _shot(views["whole"], ci["t"], size, fdir, "whole")
+                if (dom.get("caption") or {}).get("text"):
+                    doc["captions"].append(_caption_rec(p, dom["caption"], ci["t"], tl, size, keep))
+            br.close()
+        finally:
+            srv.shutdown()
+    out = build / SQUINT_NAME
+    out.write_text(json.dumps(doc, indent=1), encoding="utf-8")
+    return out
+
+
+def _scene_of(tl: dict, t: float) -> str | None:
+    return next((str(s.get("scene_id")) for s in tl.get("scenes", [])
+                 if s.get("span") and float(s["span"][0]) <= t < float(s["span"][1])), None)
+
+
 def _box(s: str | None):
     return [float(v) for v in s.split(",")] if s else None
 
@@ -502,10 +998,21 @@ def main(argv=None) -> int:
     ap.add_argument("--band", type=Path, help="a band file (bravos-line-bloom.v1.json)")
     ap.add_argument("--check", action="store_true", help="re-measure every band frame; exit 1 when one drifts")
     ap.add_argument("--root", type=Path, default=Path.cwd(), help="where a band's relative frame paths resolve")
+    ap.add_argument("--caption-floor", type=Path, help="a caption floor file (caption-squint-floor.v1.json) to --check")
+    ap.add_argument("--build", type=Path, help="M48: read every held page and caption of a built player -> squint.json")
+    ap.add_argument("--timeline", help="--build: the timeline file name inside the build dir")
+    ap.add_argument("--at", type=float, nargs="+", help="--build: only these instants (the page and the caption at each)")
+    ap.add_argument("--frames", type=Path, help="--build: keep the rendered frames in this dir")
     a = ap.parse_args(argv)
-    if a.band and a.check:
-        bad = check_band(a.band, a.root)
-        print("\n".join(bad) if bad else f"{a.band}: every recorded frame reproduces")
+    if a.build:
+        out = measure_build(a.build, timeline_name=a.timeline, at=a.at, frames_dir=a.frames)
+        doc = json.loads(out.read_text(encoding="utf-8"))
+        print(f"{out}: {len(doc['pages'])} held page(s), {len(doc['captions'])} caption(s) at {SQUINT_W} px wide")
+        return 0
+    if a.check and (a.band or a.caption_floor):
+        bad = (check_band(a.band, a.root) + check_squint_band(a.band, a.root) if a.band else []) \
+            + (check_caption_floor(a.caption_floor, a.root) if a.caption_floor else [])
+        print("\n".join(bad) if bad else f"{a.band or a.caption_floor}: every recorded frame reproduces")
         return 1 if bad else 0
     if not (a.frame and a.ink and a.box):
         ap.error("a frame, --ink and --box (or --band --check)")

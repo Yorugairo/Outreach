@@ -119,6 +119,13 @@ event every PAGE_LIFE_STEP_S inside its own span. The PULSE ROWS ONLY read that 
        no comparator line, no mark on the plot - named by scene        hand-overs, never pixels; the ink model is written
        and seconds, with the cards over it (row 22's first cut          above EMPTY_PLOT_WARN_S. No row without a plot page)
        held the customs monitor's bare axes 18 s)
+  M48  the squint (E99 s120 / s126; P71 T7): a held page        FAIL   (at Bravos's own numbers, one-sided - the band
+       rendered to thumbnail width (320 px) that loses its            `squint_band` of bravos-line-bloom.v1.json, n = 5; the
+       focus (the lit series' share of the plot's contrast),          caption floor caption-squint-floor.v1.json off the
+       its title's or its lit series' name's legibility; a            reference's own strip (Wealth Logic, 16:9); the
+       caption under the reference's cap or contrast at that          shorts' strip INFO until a reference is on disk.
+       width. The plot's word count is INFO (E99 s129)                From squint.json (measure_line_bloom.py --build);
+                                                                        INFO until it has run, INFO when stale)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -1626,7 +1633,8 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
 
 
 def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None = None, morph: dict | str | None = None,
-        layout: dict | str | None = None, frame_layers: dict[str, list[dict] | str] | None = None) -> tuple[list[Gate], dict]:
+        layout: dict | str | None = None, frame_layers: dict[str, list[dict] | str] | None = None,
+        squint: dict | str | None = None) -> tuple[list[Gate], dict]:
     form_error = _timeline_form_error(tl)
     A = analyse(tl, docks, mp)
     R = A["runtime"]
@@ -1748,6 +1756,9 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(pl)                                                      # M44 (sub-6s-plate: a world plate the eye cannot take in)
     if (ep := _empty_plot_gate(tl.get("scenes", []), tl.get("kinetics") if isinstance(tl.get("kinetics"), dict) else {})) is not None:
         g.append(ep)                                                      # M47 (P69 T87: a plot standing with no ink - row 22's first cut)
+    if squint is not None or (BUILD_DIR and (any(_is_page(s) for s in tl.get("scenes", [])) or tl.get("caption_pages"))):
+        g.append(_squint_gate(squint if squint is not None else load_squint(BUILD_DIR[0]),
+                              BUILD_DIR[0] if BUILD_DIR else None))   # M48 (P71 T7: the page and the caption at thumbnail width)
     if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
@@ -3566,6 +3577,108 @@ def _empty_plot_gate(scenes: list[dict], kinetics: dict | None = None) -> Gate |
                 SRC_M47)
 
 
+# ---- M48 (the squint gate, P71 T7; E99 s120 / s126) -----------------------------------------------------------------
+
+SQUINT_NAME = "squint.json"   # written by measure_line_bloom.py --build beside the timeline - mirrors its SQUINT_NAME
+_ASSETS = Path(__file__).resolve().parents[1] / "assets"
+SQUINT_BAND_FILE = _ASSETS / "bravos-line-bloom.v1.json"          # `squint_band`: Bravos's five frames, the gate's read
+CAPTION_FLOOR_FILE = _ASSETS / "caption-squint-floor.v1.json"     # the reference's caption strip, per lane (aspect)
+SRC_M48 = ("E99 s120 (the operator on the solo sheet shrunk small: \"bravos chart still reads with its text/font, ours "
+           "really doesn't ... not clear what we're immediately talking about/focusing on\") and s126 (\"m48 should "
+           "probably be a block because we have this issue with our captions too\"): a held page rendered to thumbnail "
+           "width keeps its focus (the lit series' share of the plot's contrast) and its title and the one name the "
+           "sentence is about legible - at Bravos's own numbers (E38); s129: the plot's word count is INFO, never a "
+           "gate; a caption at the "
+           "small size reads at the reference's floor, never one fitted to ours. Measured off the rendered frames "
+           "(measure_line_bloom.py --build writes squint.json)")
+
+
+def load_squint(build: Path) -> dict | str | None:
+    """squint.json beside the timeline (measure_line_bloom.py --build), None before it has run, "stale" when it was read
+    off another player, "unreadable: <why>" when it cannot be parsed (M25's pattern)."""
+    p = Path(build) / SQUINT_NAME
+    if not p.exists():
+        return None
+    try:
+        doc = json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return f"unreadable: {exc}"
+    html = Path(build) / "player.html"
+    if isinstance(doc, dict) and doc.get("player_sha256") and html.exists() \
+            and hashlib.sha256(html.read_bytes()).hexdigest() != doc["player_sha256"]:
+        return "stale"
+    return doc if isinstance(doc, dict) else "unreadable: not an object"
+
+
+def squint_thresholds() -> tuple[dict, dict]:
+    """(the page band, the caption floors by aspect) - read from the reference files, never typed here."""
+    band = json.loads(SQUINT_BAND_FILE.read_text(encoding="utf-8"))["squint_band"]
+    floors = json.loads(CAPTION_FLOOR_FILE.read_text(encoding="utf-8"))["lanes"]
+    return band, floors
+
+
+def _squint_page_faults(p: dict, band: dict) -> list[str]:
+    """One held page against the band, one-sided: a focus, a title and a name at least Bravos's least (E99 s129: the
+    plot's word count is INFO, never a fault)."""
+    out, at = [], f"{p.get('scene') or '?'} {_mm(float(p.get('t', 0.0)))} ({float(p.get('t', 0.0)):.2f}s)"
+    if p.get("lit_share") is not None and p["lit_share"] < band["lit_share"]["min"]:
+        out.append(f"{at} focus lost: lit share {p['lit_share']:.3f} < Bravos's {band['lit_share']['min']}")
+    if p.get("title_cap_px") is not None and p["title_cap_px"] < band["title_cap_px"]["min"]:
+        out.append(f"{at} title \"{str(p.get('title') or '')[:40]}\" cap {p['title_cap_px']:.2f} px < "
+                   f"{band['title_cap_px']['min']} px at {band['width']} wide")
+    if p.get("label_cap_px") is not None and p["label_cap_px"] < band["label_cap_px"]["min"]:
+        out.append(f"{at} name \"{str(p.get('label') or '')[:40]}\" cap {p['label_cap_px']:.2f} px < "
+                   f"{band['label_cap_px']['min']} px")
+    return out   # E99 s129 (1): the words on the plot are NOT a gate - reported (squint.json, the sheet, the INFO line)
+
+
+def _squint_caption_faults(c: dict, floor: dict) -> list[str]:
+    out, at = [], f"{_mm(float(c.get('t', 0.0)))} ({float(c.get('t', 0.0)):.2f}s) \"{str(c.get('text') or '')[:40]}\""
+    if c.get("cap_px") is not None and c["cap_px"] < floor["cap_px"]["min"]:
+        out.append(f"{at} caption cap {c['cap_px']} px < the reference's {floor['cap_px']['min']} px")
+    if c.get("contrast") is not None and c["contrast"] < floor["contrast"]["min"]:
+        out.append(f"{at} caption contrast {c['contrast']} < the reference's {floor['contrast']['min']}")
+    return out
+
+
+def _squint_gate(squint: dict | str | None, measured_in: Path | None = None, band: dict | None = None,
+                 floors: dict | None = None) -> Gate:
+    """M48 FAILs a page or a caption that does not read at thumbnail width (s126: a FAIL from the start, not WARN-first),
+    each named with its numbers; PASS when every one reads; INFO before squint.json exists, on a stale one, and for a
+    caption lane with no reference floor (the shorts' strip - never a floor fitted to ours, E38)."""
+    cmd = "measure_line_bloom.py --build <build>"   # never the path: the report is the same text wherever it is read
+    if squint is None:
+        return Gate("M48", "INFO", f"not measured - run {cmd} (writes {SQUINT_NAME})", SRC_M48)
+    if isinstance(squint, str):
+        return Gate("M48", "INFO", f"{SQUINT_NAME} {squint} - re-run {cmd}", SRC_M48)
+    if band is None or floors is None:
+        band, floors = squint_thresholds()
+    aspect = str(squint.get("aspect") or "16:9")
+    floor = floors.get(aspect) or {}
+    pages, caps = squint.get("pages") or [], squint.get("captions") or []
+    faults = [f for p in pages for f in _squint_page_faults(p, band)]
+    unfloored = bool(caps) and not floor.get("cap_px")
+    if not unfloored:
+        faults += [f for c in caps for f in _squint_caption_faults(c, floor)]
+    nocap = sum(1 for c in caps if c.get("cap_px") is None)
+    wmax = max(((p.get("plot_words") or 0, p) for p in pages), key=lambda x: x[0], default=(0, None))
+    words = (f"; words on the plot (INFO, s129) up to {wmax[0]} ({wmax[1].get('scene')} {float(wmax[1].get('t', 0)):.2f}s)"
+             if wmax[1] else "")
+    head = (f"{len(pages)} page(s), {len(caps)} caption(s) at {squint.get('gate_width', 320)} px wide"
+            + (f"; {nocap} caption(s) with no cap letter, read for contrast only" if nocap else "") + words)
+    note = (f"; captions: no reference floor measured for {aspect} (INFO - {str(floor.get('status', ''))[:60]})"
+            if unfloored else "")
+    if faults:
+        return Gate("M48", "FAIL", f"{len(faults)} squint fault(s) ({head}): " + "; ".join(faults[:10])
+                    + (f" ... and {len(faults) - 10} more" if len(faults) > 10 else "") + note
+                    + " - light the one series, keep the title and its name at Bravos's size; set the caption up to "
+                      "the reference's size and ground", SRC_M48)
+    if not pages and unfloored:
+        return Gate("M48", "INFO", f"{head}{note}", SRC_M48)
+    return Gate("M48", "PASS", f"every held page reads at thumbnail width ({head}; lit share >= {band['lit_share']['min']}, "
+                f"title >= {band['title_cap_px']['min']} px, name >= {band['label_cap_px']['min']} px)" + note, SRC_M48)
+
+
 def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:
     """P47 T2: between one build_to's landing and the next one's word the line HOLDS at a datum - the pen resting on the
     cap is not stillness the author forgot, it is the hold the sentence asked for. Listed for the judge, never scored."""
@@ -3953,7 +4066,7 @@ def write_report(build_dir: Path, timeline_name: str | None = None) -> tuple[Pat
     tl, docks, mp = _load(build_dir, timeline_name)
     tl_path = _timeline_path(build_dir, timeline_name)
     gates, stats = run(tl, docks, mp, load_frames(build_dir), load_morph_invariants(build_dir), load_layout(build_dir),
-                       load_frame_layers(build_dir))
+                       load_frame_layers(build_dir), load_squint(build_dir))
     n_fail = fail_count(gates)
     verdict = "FAIL" if n_fail else "PASS"
     # the timeline hash keys the report to the build it measured; render_episode refuses a
@@ -3976,7 +4089,7 @@ def main() -> int:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     tl, docks, mp = _load(args.build, args.timeline)
     gates, stats = run(tl, docks, mp, load_frames(args.build), load_morph_invariants(args.build), load_layout(args.build),
-                       load_frame_layers(args.build))
+                       load_frame_layers(args.build), load_squint(args.build))
     print(report_text(gates, stats, args.build))
     return 1 if fail_count(gates) else 0
 

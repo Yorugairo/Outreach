@@ -1,0 +1,1354 @@
+{
+ "schema": "caption-squint-floor.v1",
+ "purpose": "E99 s126 (P71 T7): M48's CAPTION floor - a caption that does not read at the small size fails the same gate, at a floor measured off the reference, not fitted to ours (E38). Written by measure_line_bloom.caption_read over the reference's own burned-in caption strip; `python content/video_engine/scripts/measure_line_bloom.py --caption-floor content/video_engine/assets/caption-squint-floor.v1.json --check --root <main checkout>` re-reads every frame.",
+ "width": 320,
+ "method": "caption_read: the caption's FILL (light ink held off its ground by an outline or a shadow) read glyph by glyph at the frame's own size - the capitals, else the tall cluster (an all-caps strip is all of it) - and given at the gate's 320 px; the contrast is WCAG's p90 / p10 relative-luminance ratio inside the glyphs' box on the frame downsampled to 320 px. Each floor is the reference's MIN (one-sided: ours at least it).",
+ "frames_root": "the main checkout (content/video_engine/sources/reference_analyses is research, read-only)",
+ "lanes": {
+  "16:9": {
+   "reference": "Wealth Logic - the long-form reference (thresholds-from-the-reference); its two reference analyses on disk carry a burned-in strip: white caps in a black stroke, the spoken word on a green block, bottom centre. Bravos carries NO caption strip (the band's frames, CHN 122, BUB 89 - checked), so the long form's floor cannot be Bravos's.",
+   "sources": [
+    "6-ways-rich-people-make-money-with-debt/frames (512x286)",
+    "why-us-bond-yields-are-surging-again-do-this-asap/frames (512x286)"
+   ],
+   "found": "measure_line_bloom-free locator (P71 T7 scratch wl_find.py): the bottom 20 % band's densest run of rows with >= 14 luma edges; 98 of 200 frames carry a strip, 83 of them >= 60 px wide; one of those is an illustration's edge (no glyphs read) and is left out",
+   "resolution_note": "512 px frames: a 1-px read error is 0.625 px at 320; the per-video medians differ (6-ways 5.2, why-us 5.9 px at 320) - two caption sizes, both the reference's",
+   "per_video_median_cap_px": {
+    "6-ways-rich-people-make-money-with-debt": 5.212,
+    "why-us-bond-yields-are-surging-again-do-this-asap": 5.931
+   },
+   "cap_px": {
+    "min": 4.285,
+    "max": 6.097,
+    "median": 5.898,
+    "n": 82
+   },
+   "contrast": {
+    "min": 3.97,
+    "max": 15.02,
+    "median": 8.835,
+    "n": 82
+   },
+   "frames": [
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0004.jpg",
+     "box": [
+      213,
+      263,
+      303,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.395,
+      "contrast": 4.69,
+      "cap_px1080": 32.6,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0006.jpg",
+     "box": [
+      182,
+      262,
+      332,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.313,
+      "contrast": 5.55,
+      "cap_px1080": 32.1,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0009.jpg",
+     "box": [
+      187,
+      262,
+      323,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.127,
+      "contrast": 6.78,
+      "cap_px1080": 30.98,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0010.jpg",
+     "box": [
+      191,
+      262,
+      320,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.285,
+      "contrast": 6.6,
+      "cap_px1080": 25.89,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0016.jpg",
+     "box": [
+      158,
+      262,
+      353,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.864,
+      "contrast": 7.89,
+      "cap_px1080": 29.39,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0025.jpg",
+     "box": [
+      191,
+      262,
+      321,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.353,
+      "contrast": 6.54,
+      "cap_px1080": 32.34,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0036.jpg",
+     "box": [
+      189,
+      262,
+      321,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.807,
+      "contrast": 9.91,
+      "cap_px1080": 29.05,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0037.jpg",
+     "box": [
+      172,
+      262,
+      339,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.866,
+      "contrast": 7.6,
+      "cap_px1080": 29.4,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0040.jpg",
+     "box": [
+      207,
+      262,
+      306,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.475,
+      "contrast": 5.88,
+      "cap_px1080": 33.08,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0048.jpg",
+     "box": [
+      168,
+      263,
+      352,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.275,
+      "contrast": 15.02,
+      "cap_px1080": 31.87,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0060.jpg",
+     "box": [
+      227,
+      262,
+      288,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.254,
+      "contrast": 5.56,
+      "cap_px1080": 31.75,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0065.jpg",
+     "box": [
+      225,
+      263,
+      285,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.386,
+      "contrast": 7.63,
+      "cap_px1080": 32.54,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0066.jpg",
+     "box": [
+      170,
+      262,
+      342,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.884,
+      "contrast": 8.93,
+      "cap_px1080": 29.51,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0068.jpg",
+     "box": [
+      185,
+      262,
+      326,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.258,
+      "contrast": 4.37,
+      "cap_px1080": 31.77,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0069.jpg",
+     "box": [
+      184,
+      262,
+      327,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.828,
+      "contrast": 7.6,
+      "cap_px1080": 29.17,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0080.jpg",
+     "box": [
+      197,
+      262,
+      319,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.784,
+      "contrast": 5.04,
+      "cap_px1080": 28.91,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0081.jpg",
+     "box": [
+      172,
+      262,
+      339,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.212,
+      "contrast": 9.09,
+      "cap_px1080": 31.49,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0085.jpg",
+     "box": [
+      202,
+      262,
+      312,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.366,
+      "contrast": 6.95,
+      "cap_px1080": 32.42,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0092.jpg",
+     "box": [
+      184,
+      262,
+      326,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.316,
+      "contrast": 7.0,
+      "cap_px1080": 26.08,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0093.jpg",
+     "box": [
+      203,
+      262,
+      310,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.249,
+      "contrast": 5.85,
+      "cap_px1080": 31.71,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0094.jpg",
+     "box": [
+      175,
+      263,
+      336,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.337,
+      "contrast": 3.97,
+      "cap_px1080": 32.25,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0098.jpg",
+     "box": [
+      176,
+      262,
+      318,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.159,
+      "contrast": 7.35,
+      "cap_px1080": 31.17,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0100.jpg",
+     "box": [
+      198,
+      262,
+      313,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.749,
+      "contrast": 7.09,
+      "cap_px1080": 28.69,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0104.jpg",
+     "box": [
+      168,
+      263,
+      348,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.332,
+      "contrast": 8.23,
+      "cap_px1080": 32.21,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0113.jpg",
+     "box": [
+      196,
+      262,
+      314,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.306,
+      "contrast": 7.23,
+      "cap_px1080": 26.02,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0116.jpg",
+     "box": [
+      199,
+      262,
+      311,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.821,
+      "contrast": 7.43,
+      "cap_px1080": 29.13,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0117.jpg",
+     "box": [
+      206,
+      262,
+      309,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.889,
+      "contrast": 5.74,
+      "cap_px1080": 29.54,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0121.jpg",
+     "box": [
+      201,
+      262,
+      310,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.218,
+      "contrast": 6.92,
+      "cap_px1080": 31.53,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0124.jpg",
+     "box": [
+      196,
+      262,
+      316,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 4.721,
+      "contrast": 5.71,
+      "cap_px1080": 28.52,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0129.jpg",
+     "box": [
+      210,
+      262,
+      299,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.231,
+      "contrast": 11.57,
+      "cap_px1080": 31.61,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/frames/frame_0133.jpg",
+     "box": [
+      191,
+      262,
+      320,
+      275
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.29,
+      "contrast": 7.58,
+      "cap_px1080": 31.96,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0004.jpg",
+     "box": [
+      196,
+      260,
+      314,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.953,
+      "contrast": 8.78,
+      "cap_px1080": 35.97,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0007.jpg",
+     "box": [
+      196,
+      260,
+      316,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.971,
+      "contrast": 10.8,
+      "cap_px1080": 36.08,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0009.jpg",
+     "box": [
+      226,
+      260,
+      290,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.962,
+      "contrast": 5.21,
+      "cap_px1080": 36.02,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0010.jpg",
+     "box": [
+      177,
+      261,
+      339,
+      273
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.865,
+      "contrast": 8.04,
+      "cap_px1080": 35.44,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0020.jpg",
+     "box": [
+      185,
+      260,
+      325,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.946,
+      "contrast": 9.99,
+      "cap_px1080": 35.92,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0023.jpg",
+     "box": [
+      190,
+      260,
+      325,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.905,
+      "contrast": 9.64,
+      "cap_px1080": 35.68,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0024.jpg",
+     "box": [
+      196,
+      260,
+      314,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.999,
+      "contrast": 9.67,
+      "cap_px1080": 36.24,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0027.jpg",
+     "box": [
+      168,
+      260,
+      343,
+      273
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.96,
+      "contrast": 6.07,
+      "cap_px1080": 36.01,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0034.jpg",
+     "box": [
+      162,
+      256,
+      344,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.946,
+      "contrast": 9.99,
+      "cap_px1080": 35.92,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0035.jpg",
+     "box": [
+      162,
+      255,
+      322,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 6.094,
+      "contrast": 8.39,
+      "cap_px1080": 36.82,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0040.jpg",
+     "box": [
+      158,
+      260,
+      353,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.884,
+      "contrast": 10.98,
+      "cap_px1080": 35.55,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0041.jpg",
+     "box": [
+      190,
+      260,
+      322,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 6.062,
+      "contrast": 8.14,
+      "cap_px1080": 36.63,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0045.jpg",
+     "box": [
+      160,
+      260,
+      350,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.864,
+      "contrast": 10.66,
+      "cap_px1080": 35.43,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0046.jpg",
+     "box": [
+      142,
+      260,
+      368,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.91,
+      "contrast": 9.48,
+      "cap_px1080": 35.71,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0048.jpg",
+     "box": [
+      174,
+      260,
+      336,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 6.005,
+      "contrast": 11.6,
+      "cap_px1080": 36.28,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0049.jpg",
+     "box": [
+      128,
+      259,
+      383,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.945,
+      "contrast": 9.02,
+      "cap_px1080": 35.92,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0057.jpg",
+     "box": [
+      181,
+      260,
+      328,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.986,
+      "contrast": 9.39,
+      "cap_px1080": 36.17,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0060.jpg",
+     "box": [
+      210,
+      260,
+      305,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.91,
+      "contrast": 8.18,
+      "cap_px1080": 35.71,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0062.jpg",
+     "box": [
+      175,
+      260,
+      336,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.894,
+      "contrast": 10.3,
+      "cap_px1080": 35.61,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0068.jpg",
+     "box": [
+      151,
+      260,
+      362,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.87,
+      "contrast": 11.95,
+      "cap_px1080": 35.47,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0069.jpg",
+     "box": [
+      152,
+      260,
+      364,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.923,
+      "contrast": 11.28,
+      "cap_px1080": 35.79,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0071.jpg",
+     "box": [
+      186,
+      259,
+      329,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 6.017,
+      "contrast": 9.54,
+      "cap_px1080": 36.35,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0073.jpg",
+     "box": [
+      181,
+      260,
+      330,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.955,
+      "contrast": 10.59,
+      "cap_px1080": 35.98,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0074.jpg",
+     "box": [
+      131,
+      260,
+      379,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.914,
+      "contrast": 9.38,
+      "cap_px1080": 35.73,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0077.jpg",
+     "box": [
+      194,
+      260,
+      322,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.967,
+      "contrast": 7.65,
+      "cap_px1080": 36.05,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0085.jpg",
+     "box": [
+      196,
+      260,
+      319,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.911,
+      "contrast": 9.6,
+      "cap_px1080": 35.71,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0088.jpg",
+     "box": [
+      187,
+      260,
+      323,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 6.097,
+      "contrast": 8.4,
+      "cap_px1080": 36.84,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0090.jpg",
+     "box": [
+      205,
+      260,
+      310,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.996,
+      "contrast": 7.52,
+      "cap_px1080": 36.23,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0091.jpg",
+     "box": [
+      168,
+      260,
+      342,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.92,
+      "contrast": 11.81,
+      "cap_px1080": 35.77,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0097.jpg",
+     "box": [
+      170,
+      260,
+      341,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.902,
+      "contrast": 10.15,
+      "cap_px1080": 35.66,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0099.jpg",
+     "box": [
+      208,
+      260,
+      307,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.96,
+      "contrast": 5.64,
+      "cap_px1080": 36.01,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0101.jpg",
+     "box": [
+      145,
+      260,
+      372,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.981,
+      "contrast": 7.58,
+      "cap_px1080": 36.14,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0102.jpg",
+     "box": [
+      135,
+      259,
+      376,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.931,
+      "contrast": 9.18,
+      "cap_px1080": 35.84,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0104.jpg",
+     "box": [
+      208,
+      260,
+      306,
+      273
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.877,
+      "contrast": 6.36,
+      "cap_px1080": 35.51,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0105.jpg",
+     "box": [
+      197,
+      260,
+      320,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.984,
+      "contrast": 8.89,
+      "cap_px1080": 36.16,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0111.jpg",
+     "box": [
+      129,
+      260,
+      386,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.895,
+      "contrast": 9.03,
+      "cap_px1080": 35.62,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0115.jpg",
+     "box": [
+      157,
+      260,
+      353,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.897,
+      "contrast": 9.09,
+      "cap_px1080": 35.63,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0116.jpg",
+     "box": [
+      203,
+      260,
+      310,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.919,
+      "contrast": 10.29,
+      "cap_px1080": 35.76,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0119.jpg",
+     "box": [
+      186,
+      260,
+      324,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 6.023,
+      "contrast": 9.37,
+      "cap_px1080": 36.39,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0122.jpg",
+     "box": [
+      172,
+      260,
+      338,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.848,
+      "contrast": 9.94,
+      "cap_px1080": 35.34,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0127.jpg",
+     "box": [
+      187,
+      260,
+      322,
+      273
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.989,
+      "contrast": 7.67,
+      "cap_px1080": 36.18,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0132.jpg",
+     "box": [
+      162,
+      260,
+      349,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.9,
+      "contrast": 8.91,
+      "cap_px1080": 35.65,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0136.jpg",
+     "box": [
+      175,
+      260,
+      340,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.933,
+      "contrast": 9.05,
+      "cap_px1080": 35.85,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0138.jpg",
+     "box": [
+      126,
+      259,
+      386,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.901,
+      "contrast": 9.53,
+      "cap_px1080": 35.66,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0141.jpg",
+     "box": [
+      132,
+      260,
+      380,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.917,
+      "contrast": 10.41,
+      "cap_px1080": 35.75,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0146.jpg",
+     "box": [
+      184,
+      260,
+      327,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.899,
+      "contrast": 9.23,
+      "cap_px1080": 35.64,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0147.jpg",
+     "box": [
+      142,
+      259,
+      372,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.949,
+      "contrast": 9.36,
+      "cap_px1080": 35.94,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0149.jpg",
+     "box": [
+      168,
+      260,
+      342,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.944,
+      "contrast": 7.77,
+      "cap_px1080": 35.92,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0150.jpg",
+     "box": [
+      163,
+      260,
+      348,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.873,
+      "contrast": 9.73,
+      "cap_px1080": 35.49,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0152.jpg",
+     "box": [
+      120,
+      259,
+      390,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.918,
+      "contrast": 9.21,
+      "cap_px1080": 35.75,
+      "method": "cluster"
+     }
+    },
+    {
+     "frame": "content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/frames/frame_0155.jpg",
+     "box": [
+      197,
+      260,
+      315,
+      274
+     ],
+     "text": "",
+     "measured": {
+      "cap_px": 5.899,
+      "contrast": 10.05,
+      "cap_px1080": 35.64,
+      "method": "cluster"
+     }
+    }
+   ]
+  },
+  "9:16": {
+   "status": "no reference floor measured - the only 9:16 reference on disk (caricature-ref-wGmb6-BDNWA, an ESPN MMA short, 12 frames at 360x640) carries no caption; M48 reports the shorts' strip INFO until a reference with a burned-in caption is on disk (a research-lane frame order is filed, P71 T7)",
+   "cap_px": null,
+   "contrast": null,
+   "frames": []
+  }
+ }
+}
