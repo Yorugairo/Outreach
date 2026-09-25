@@ -1043,7 +1043,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T32: Row 24 (13:00-13:43) - the close and the outro (dip 10)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-25 on lane A 8f233a1)
 - Owner: implementation_luna
 - Depends on: T31
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
@@ -1052,7 +1052,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T33: The body adopts the s90 page
-- Status: pending
+- Status: HELD for P69-HG3 (the operator, 2026-09-25: "hold it all for a clean hg3 view") - HG3 shows the whole H episode in both looks; the pick is applied to every row in one pass after it
 - Owner: implementation_luna
 - Depends on: T32; T10 merged into main and main merged into lane A at a boundary
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`

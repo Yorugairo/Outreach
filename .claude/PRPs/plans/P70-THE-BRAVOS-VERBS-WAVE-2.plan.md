@@ -415,7 +415,7 @@ listed order.
 - Evidence: pending
 
 ### T2: The schematic - a shape drawn with no data, carrying the narrative (was P69 T46)
-- Status: in integration (rebased on 482a9f7, no end tag on a schematic; merging on lane B)
+- Status: done - lane B `3600ec5` (the schematic; no end tag - the title names the shape; digits refused unless sourced; golden schematic-hype-trough on the title-glow engine; a real series over it is P71 T39 / s125)
 - Owner: implementation_luna (LANE B)
 - Depends on: P70's base (T0), which carries T37b's bloom and T87's empty-plot gate; done P69 T36 `104af07` (the lit
   stretch), T50 `f63b569`. Nothing in P70.
@@ -737,6 +737,7 @@ listed order.
 - Evidence: pending
 
 ### T6: The equation row - the inputs, the relation and the signed result, in spoken order (was P69 T56)
+- Amendment (the parent, from the review 2026-09-25): the truth rule computes from each term's WRITTEN text (not `value`); units are a closed list - `%` / `pts` count x0.01, + and - need one unit across the row, x and / give the derived unit, B/M/K/T scale; `tier: CONFIRMED|PLAUSIBLE` needs a `src` naming an existing evidence object (only `scenario` stands alone); a negative result's red comes from its text's sign; optional per-term and result `label` captions (a row with none WARNs, E28); operators in a sans. The page dim behind the row is P71 T15's.
 - Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
 - Owner: implementation_luna (LANE B), then reviewer (the gate's `SPECIES_EVENTS`, the arithmetic truth rule)
 - Depends on: P70's base (T0); done P69 T50. Integrated after wave 1.
