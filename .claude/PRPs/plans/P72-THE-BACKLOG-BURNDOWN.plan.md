@@ -495,7 +495,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T2: The suite is green and its pins are honest
-- Status: pending
+- Status: done - lane B a4bfe6a: the lab pins on s84, every species / verb `when` under 260 (the strict xfail retired), the effects layer ranked by field, the guarded Playwright opener, the committed-tree test on a HEAD copy, check 13 (schema); T1 ported to lane B (WHAT_MAX 100 on both lanes); the gallery re-pinned
 - Owner: implementation_luna (LANE B)
 - Depends on: T0
 - Items: R26-244 (the lab-log pins re-read against E99 s84: the live set now includes the 09-18 answer; which `plate-dock-wipe` answer supersedes which), R26-238 (`CHART_TO_WHEN["remake"]` trimmed to the 260 ceiling; the strict xfail at `test_lint_species_choice.py:35` removed in the same commit), R26-240 (the effects layer built `rank_by_field=True`; the strict xfail at `test_effects_catalog_drift.py:551` removed; `test_docs_find.py` re-run for pinned orders), R26-145 (the fixture that leaks the event loop named and closed), R26-162 (`test_the_committed_tree_passes_check` ensures into a scratch copy of the tree), R26-141 (`effects_catalog_check.py` loads `configs/effect_card.schema.json` and refuses a card the schema refuses, naming the field and the cap)
@@ -584,7 +584,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Status: pending
 - Owner: implementation_luna (LANE B)
 - Depends on: T0
-- Items: R26-140 (`render_baseline.py --repeat` reports drift by surface), R26-243 + R26-251 (one fix: the template sets `__fontsSettled` after its post-font rebuild and `prepare_page` waits on it, not a fixed 250 ms; the un-awaited `document.fonts.ready` at `:484` removed), R26-151 (the builder's non-deterministic input named and pinned), R26-323 (`write_surface` writes `newline="\n"`)
+- Items: R26-140 (`render_baseline.py --repeat` reports drift by surface), R26-243 + R26-251 (one fix: the template sets `__fontsSettled` after its post-font rebuild and `prepare_page` waits on it, not a fixed 250 ms; the un-awaited `document.fonts.ready` at `:484` removed), R26-151 (the builder's non-deterministic input named and pinned), R26-323 (`write_surface` writes `newline="\n"`); R26-351 (the R26-145 Playwright leak in 38 more test files - a shared guarded opener; added 2026-09-25)
 - Write set: `content/video_engine/scripts/render_baseline.py` (`prepare_page`, a NEW `--repeat`), `docs/content-video-engine/samples/scene-evidence-player.template.html` (the flag set after the font rebuild - a region P71 T15's `#dockveil` does not touch), `content/video_engine/scripts/build_golden_sources.py`, tests: NEW `content/video_engine/tests/test_render_determinism.py`, `content/video_engine/tests/test_golden_frames.py` (a second build of the sources is byte-identical)
 - Acceptance: (1) a CPU-throttled capture of the `tiers` / `treemap` / `race-path-eased` pages matches the golden; (2) `--repeat 3` on the data-to-bars golden reports 0 differing bytes or names the surface and the cause; (3) building the golden sources twice is byte-identical and LF; (4) no golden moves.
 - Stop conditions: the drift is GPU raster timing that no page signal can cure (report the probe's numbers; the goldens keep their fresh-page rule).

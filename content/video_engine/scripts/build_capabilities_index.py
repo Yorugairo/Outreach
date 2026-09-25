@@ -36,7 +36,7 @@ CAP_REL = "docs/content-video-engine/CAPABILITIES.md"
 JSONL_REL = "docs/CAPABILITIES-INDEX.jsonl"
 MD_REL = "docs/CAPABILITIES-INDEX.md"
 
-WHAT_MAX = 110          # characters in `what`, the ellipsis included; cut at a word. 2026-09-25: 120 -> 110 -
+WHAT_MAX = 100          # characters in `what`, the ellipsis included; cut at a word. 2026-09-25: 120 -> 110 (P72 T1) -> 100 (P72 T2, lane B's 245 records: 44,439 bytes at 110, 42,583 at 100 - room for the lanes' merge) -
                         # P72 T1 fits the page under MD_MAX_BYTES by compacting each line, never by raising
                         # the cap: at 120 the 237-record page was 44,695 bytes; at 110 it is 42,774 (every
                         # word stays searchable - `terms` carries the whole row)
