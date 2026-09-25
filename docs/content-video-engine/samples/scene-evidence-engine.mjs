@@ -1161,10 +1161,15 @@ async function mount(doc) {
      else: a line's stroke, its lead point and its end tag; a bar's rect, its range band and its value. The key, the
      axes, a bar's category name, the title stay ("Keep the ghosted legend readable", the use-when guide, P JPN).
 
-     THE DIM is E67's: the muted history of a series is its own hue at 0.45 (the engine's buildLedgerLine; LP_MUTED), and
-     P69 T45's member `light` dims a bar's other tiles to the same 0.45. It is one number here, not a second one. The long
-     form's spec measured Bravos lower - unlit bars at ~0.38x, context lines at ~0.3 (BRAVOS-LONGFORM-CHART-SPEC.md (c)9)
-     - and names moving 0.45 as the operator's call; until that call this dial IS E67's, under every profile.
+     THE DIM was E67's 0.45 until the operator's call the long form's spec named ((c)9): E99 s117 (2), on our solo beside
+     Bravos JPN 05:20 / 05:23.5 - Bravos "fades theirs to a higher contrast", so "a SOLO lifts the named line's bloom
+     further and fades the others harder and thinner than E67's 0.45, so the contrast between the lit and the muted
+     matches Bravos's". Three dials, set from measure_line_bloom.py's read of the Bravos band
+     (content/video_engine/assets/bravos-line-bloom.v1.json; the numbers in tests/test_line_bloom.py): DIM, the muted
+     marks' alpha; THIN, a muted stroke's width at a full mute; LIFT, the named line's halo radius at a full lift (it eases
+     INTO the primary's three layers - the engine's lpSoloBloom - and a muted line's halo eases OUT: "a context or muted
+     line never blooms"). E67's HISTORY stays at 0.45 (E99 s78 (2)) - a different mark, and not this dial. P69 T45's
+     member `light` keeps its own 0.45 (LPMEMBER.DIM).
 
      THE LAW, a pure function of t:
        the events - every `solo` on the page names ONE key (`s:<series>` or `b:<bar>`); every `unsolo`, and every verb
@@ -1183,7 +1188,9 @@ async function mount(doc) {
                     in the frame and the solo multiplies what it wrote. A light on the named series keeps its ink. */
 
   const SOLO = Object.freeze({
-    DIM: 0.45,     /* E67: the page's own muted alpha - the history's, the member light's (see the header on (c)9) */
+    DIM: 0.42,     /* E99 s117 (2): the muted marks' alpha - harder than E67's 0.45: lit/muted 5.24 at 1024 px (Bravos 3.39-5.29; 0.30 read 5.9, over it) */
+    THIN: 0.45,    /* ... a muted stroke's width at a full mute, as a share of its own - thinner, so the lit line carries the plot */
+    LIFT: 1.5,     /* ... the named line's halo radius at a full lift: its share of the plot's contrast at 320 px 0.63 (Bravos 0.57-0.74) */
     MIN_S: 0.2,    /* the mute's shortest ease: under it the dim is a flicker (build_scene_timeline_f.SOLO_DUR_S) */
     MAX_S: 1.5,    /* ... and its longest: past it the isolate is a fade the word has left behind */
     EPS: 5e-4,     /* an alpha this close to 1 is full ink: the attribute is removed, never written as 1.000 */
@@ -1202,19 +1209,27 @@ async function mount(doc) {
     ...(releases || []).map((r) => ({ at: +r.at, dur: Math.max(0.001, +r.dur || SOLO.MIN_S), key: null })),
   ].filter((e) => Number.isFinite(e.at)).sort((a, b) => a.at - b.at || (a.key === null ? 0 : 1) - (b.key === null ? 0 : 1));
 
-  /* THE ALPHA of the mark `key` at t: each event eases it from where the previous one left it at the event's word */
-  const soloAlpha = (evs, key, t, dim = SOLO.DIM) => {
-    let a = 1;
+  /* THE LEVEL of the mark `key` at t: from `start`, each event eases it from where the previous one left it at the event's
+     word toward its target - `named` for the mark it names, `other` for every other mark of the same kind, `release` on a
+     release (and for a mark of the other kind, which a solo never touches) */
+  const soloLevel = (evs, key, t, { start, named, other, release }) => {
+    let a = start;
     for (let k = 0; k < (evs || []).length; k++) {
       const e = evs[k];
       if (t < e.at) break;
       const nx = evs[k + 1], end = nx && nx.at <= t ? nx.at : t;
-      const want = e.key === null || e.key === key || e.key[0] !== String(key)[0] ? 1 : dim;
+      const want = e.key === null || e.key[0] !== String(key)[0] ? release : e.key === key ? named : other;
       const u = solo01((end - e.at) / e.dur);
       a = u >= 1 ? want : a + (want - a) * solo01(minJerk(u));   /* it LANDS exactly (1 + (0.45 - 1) is 0.44999999999999996) */
     }
     return a;
   };
+
+  /* THE ALPHA of the mark `key` at t: 1, SOLO.DIM for the others on a solo, 1 again on a release */
+  const soloAlpha = (evs, key, t, dim = SOLO.DIM) => soloLevel(evs, key, t, { start: 1, named: 1, other: dim, release: 1 });
+
+  /* THE LIFT of the mark `key` at t (E99 s117 (2)): 0, then 1 for the named line while its solo stands, 0 on a release */
+  const soloLift = (evs, key, t) => soloLevel(evs, key, t, { start: 0, named: 1, other: 0, release: 0 });
 
   /* one alpha onto one element's channel: full ink REMOVES the attribute (the page with no solo, to the byte) */
   const soloWrite = (el, attr, a) => {
@@ -1225,13 +1240,18 @@ async function mount(doc) {
 
   /* THE PAINTER (P69 T37). `sd` is the perform layer's built solo (`evs`, the page's `lits`), `st` the page state - every
      chart state of it is written (a rescale's derived state carries the same series), so a seek into any state is the
-     play. It reads nothing from the engine but its arguments; `ctx` is the page species context, unused. */
+     play. It reads nothing from the engine but its arguments; `ctx` is the page species context - its `bloom` and `thin`
+     (P69 T37b) are the two engine writers a solo drives. */
   const paintSolo = (sd, t, st, ctx) => {
     const states = st && Array.isArray(st.states) && st.states.length ? st.states : [st];
     for (const S of states) {
       for (const pp of (S && S.paths) || []) {
-        const a = soloAlpha(sd.evs, "s:" + (pp.si | 0), t);
+        const key = "s:" + (pp.si | 0), a = soloAlpha(sd.evs, key, t), m = solo01((1 - a) / (1 - SOLO.DIM));
         soloWrite(pp.p, "opacity", a); soloWrite(pp.tip, "fill-opacity", a); soloWrite(pp.name, "fill-opacity", a);
+        /* E99 s117 (2): the named line's bloom lifts, a muted one's halo leaves and its stroke thins - the engine's DOM
+           work, handed in through the page context (absent, a bare test, the alpha above is the whole solo) */
+        if (ctx && ctx.bloom) ctx.bloom(S, pp, soloLift(sd.evs, key, t), m, SOLO.LIFT);
+        if (ctx && ctx.thin) ctx.thin(S, pp, m, SOLO.THIN);
       }
       ((S && S.bars) || []).forEach((b, i) => {
         const a = soloAlpha(sd.evs, "b:" + (Number.isInteger(b.i) ? b.i : i), t);
@@ -8595,7 +8615,9 @@ async function mount(doc) {
     const f = LP_CARD.STROKE_X * LP_CARD.PAGE_UNIT * (S.cardK || 1) / (S.stagePx > 0 ? S.stagePx : 1);
     for (const pp of S.paths || []) {
       pp.p.style.strokeWidth = ((pp.muted ? 3 : 4) * f).toFixed(3);
-      if (!pp.muted) lpBloom(S, pp.p, pp.p.getAttribute("stroke"), LP_BLOOM_PX * f);
+      lpHotResize(S, pp.p);   /* E99 s117: the hot core erodes the card's own width */
+      if (pp.hot) { lpBloomHot(S, pp.p, pp.p.getAttribute("stroke"), lpHotUnit(S)); lpHotBase(pp.p, lpHotUnit(S), 1); }
+      else if (!pp.muted && !pp.context) lpBloom(S, pp.p, pp.p.getAttribute("stroke"), LP_BLOOM_PX * f);
       if (pp.tip) pp.tip.setAttribute("r", (6 * f).toFixed(3));
       if (pp.name && !pp.muted) pp.name.style.fill = pp.p.getAttribute("stroke");   /* the short badge in its line's own ink: the card has no key */
     }
@@ -10732,7 +10754,140 @@ async function mount(doc) {
     /* R26-228: `r` is an explicit radius in the chart's own user units - the pulsing halo a LIVE page writes per frame.
        Absent (every page that does not author `;idle=live`), the string is byte-for-byte the one E67 shipped. */
     const rad = r != null ? r.toFixed(2) : (st && st.portrait ? LP_BLOOM_PX * 2 : LP_BLOOM_PX);
-    p.style.filter = "drop-shadow(0 0 " + rad + "px " + lpInkA(lpVarHex(col), LINE_BLOOM) + ")"; };
+    p.style.filter = "drop-shadow(0 0 " + rad + "px " + lpInkA(lpVarHex(col), LINE_BLOOM) + ")"; p.__lpBase = p.style.filter; p.__lpR = +rad; };
+  /* E99 s117 (P69 T37b) - THE LINES BLOOM: A PRIMARY LINE IS EMISSIVE. The operator, on our solo beside Bravos JPN
+     05:20 / 05:23.5: "bravos uses a higher vibrancy/contrast/electricity than we do on their primary lines ... we still
+     need more electricity/glow to our lines". E67 already gave every live line a 6-unit neon; that is the MULTI-LINE
+     glow Bravos draws on every series (BRAVOS-LONGFORM-CHART-SPEC.md (b) "Multi-line, every series ... glow ~16.5 px"),
+     not its HERO line ("core 4.5 px, white-hot ... bloom +13 lum at 15 px, +3 at 45 px, gone at ~82 px"). So the ONE
+     line a page is about - its PRIMARY - blooms in three layers, the harvest's F18 carried to every page:
+       the core  a near-white hot centre along the stroke: the stroke's own ink ERODED to CORE_W of its width and mixed
+                 CORE_MIX of the way to white (an SVG filter on SourceGraphic, so one filter serves any ink and it rides
+                 the dasharray exactly as the stroke does - a drawing line is hot only where drawn);
+       the ink   the stroke itself, E67's hex, never changed;
+       the halo  two drop-shadows of that ink - an inner one (INNER_PX at INNER_A) and a WIDE soft outer one (OUTER_PX
+                 at OUTER_A) - in STAGE px, divided by the chart's own scale, so 16:9 and 9:16 draw the same glow.
+     The dials are set from measure_line_bloom.py's Bravos band (content/video_engine/assets/bravos-line-bloom.v1.json,
+     E38: thresholds from the reference) - the numbers the slice read are in content/video_engine/tests/test_line_bloom.py.
+     PRIMARY is read off the page, never authored twice: a dense-line page's FIRST live series that is not `deemph`
+     (a highlight_from page's live story window - its history never blooms), a decline's one line, a combo's first
+     line, each tier's first line; and on its word the SOLO'd series (species/solo.mjs lifts it through PAGE_CTX.bloom).
+     Every other live series keeps E67's own neon (lpBloom, byte for byte), a `deemph` series is CONTEXT and never
+     blooms, and a muted history never blooms (E67). LINE_BLOOM = 0 still turns every halo off. */
+  /* Measured at 1024 px wide (the Bravos frames' own width) on the solo golden's primary before its solo, against the
+     band's three 1024 px frames: halo r50 12.2 px @1080 (Bravos 11.1-35.8), area 575 (420-2403), edge 0.22
+     (0.07-0.52), core L* 89.8 at saturation 0.23 (61-100, 0.02-0.89). A tight bright ring first (4 px at 0.85 - the
+     first try) put the edge so high that the halo's half fell at 6 px: Bravos's glow is soft from the stroke out. */
+  const LP_HOT = Object.freeze({
+    CORE_W: 0.5,      /* the hot core's width as a share of the stroke's */
+    CORE_MIX: 0.55,   /* ... and how far it is mixed toward white: 0 is the ink, 1 is white */
+    INNER_PX: 10.0,   /* the inner halo round the stroke, STAGE px ... */
+    INNER_A: 0.8,     /* ... at this alpha of the ink */
+    OUTER_PX: 26.0,   /* the WIDE soft outer halo, STAGE px (it shadows the inner one: the tail) ... */
+    OUTER_A: 0.8,     /* ... at this alpha */
+  });
+  let lpHotN = 0;
+  /* ONE SVG FILTER per line path, built with the path (deterministic: the build order names it), carrying all three
+     layers: the core (the ink eroded to CORE_W of the stroke and mixed toward white, merged over the stroke) and the two
+     halos (the inner and the outer - each a gaussian of what is under it, flooded with the ink, the outer shadowing the
+     inner: a CSS drop-shadow list's own law). stdDeviation = the radius: MEASURED, this draws what Chromium's
+     `drop-shadow(0 0 <radius>px ...)` drew on the solo golden to the tool's last digit (r50 12.13, area 575.3), where
+     radius / 2 read half the reach. Written as PRIMITIVES, and the filter region is the chart's own box: a CSS
+     drop-shadow list, or a region past the chart, rastered the panels golden's grow differently on a forward play than
+     on a cold seek (1 level of 255 on 493 px - test_ledger_panels' seek law); this form is seek-exact. A secondary line
+     carries one too, referenced only while a solo lights it. */
+  const lpHotFilter = (st, p) => {
+    if (p.__lpHot) return p.__lpHot;
+    const svg = p.ownerSVGElement || st.chart, g = st.geom || { W: 1000, H: 560 };
+    const w = lpHotStroke(st, p);
+    const id = "lphot-" + (st.seed | 0) + "-" + (++lpHotN);
+    const defs = lpEl("defs", "", svg);
+    const f = lpEl("filter", "", defs, { id, filterUnits: "userSpaceOnUse", x: 0, y: 0, width: g.W, height: g.H,
+                                         "color-interpolation-filters": "sRGB" });
+    const mo = lpEl("feMorphology", "", f, { in: "SourceGraphic", operator: "erode", radius: (w * (1 - LP_HOT.CORE_W) / 2).toFixed(3), result: "thin" });
+    const cm = lpEl("feColorMatrix", "", f, { in: "thin", type: "matrix", result: "hot" });
+    const m0 = lpEl("feMerge", "", f, { result: "lit" }); lpEl("feMergeNode", "", m0, { in: "SourceGraphic" }); lpEl("feMergeNode", "", m0, { in: "hot" });
+    const halo = (src, n) => {
+      const b = lpEl("feGaussianBlur", "", f, { in: src, stdDeviation: 0, result: "b" + n });
+      const fl = lpEl("feFlood", "", f, { "flood-color": "#000", "flood-opacity": 0, result: "f" + n });
+      lpEl("feComposite", "", f, { in: "f" + n, in2: "b" + n, operator: "in", result: "s" + n });
+      return { b, fl };
+    };
+    const h1 = halo("lit", 1);
+    const m1 = lpEl("feMerge", "", f, { result: "g1" }); lpEl("feMergeNode", "", m1, { in: "s1" }); lpEl("feMergeNode", "", m1, { in: "lit" });
+    const h2 = halo("g1", 2);
+    const m2 = lpEl("feMerge", "", f); lpEl("feMergeNode", "", m2, { in: "s2" }); lpEl("feMergeNode", "", m2, { in: "g1" });
+    p.__lpHot = { id, mo, cm, w, h1, h2 };
+    return p.__lpHot;
+  };
+  /* the stroke's width in chart units: an inline width (a card's), else the template's (a page is built DETACHED, so
+     its computed style is empty: `.ser` is 4, 8 in portrait) */
+  const lpHotStroke = (st, p) => parseFloat(p.style.strokeWidth) || (st && st.portrait ? 8 : 4);
+  /* ... re-read when a builder re-sizes the stroke (a card's lpCardStrokes) */
+  const lpHotResize = (st, p) => { if (p.__lpHot) { p.__lpHot.w = lpHotStroke(st, p); p.__lpHot.mo.setAttribute("radius", (p.__lpHot.w * (1 - LP_HOT.CORE_W) / 2).toFixed(3)); } };
+  /* ... the core's strength c (0-1) into its matrix: each channel mixed c * CORE_MIX of the way to white */
+  const lpHotCore = (hf, c) => { const m = Math.max(0, Math.min(1, c)) * LP_HOT.CORE_MIX, k = (1 - m).toFixed(4), o = m.toFixed(4);
+    hf.cm.setAttribute("values", k + " 0 0 0 " + o + " 0 " + k + " 0 0 " + o + " 0 0 " + k + " 0 " + o + " 0 0 0 1 0"); };
+  /* one halo's radius (chart units) and alpha into its primitives, in the ink */
+  const lpHotHalo = (h, hx, r, a) => { h.b.setAttribute("stdDeviation", Math.max(0, r).toFixed(3));
+    h.fl.setAttribute("flood-color", hx); h.fl.setAttribute("flood-opacity", Math.max(0, Math.min(1, a)).toFixed(3)); };
+  /* the whole chain at once: the core's strength c, the inner halo (r1, a1), the outer (r2, a2) - written, then referenced */
+  const lpHotWrite = (st, p, col, c, r1, a1, r2, a2) => {
+    const hf = lpHotFilter(st, p), hx = lpVarHex(col);
+    lpHotCore(hf, c); lpHotHalo(hf.h1, hx, r1, a1); lpHotHalo(hf.h2, hx, r2, a2);
+    p.style.filter = "url(#" + hf.id + ")";
+    return p.style.filter;
+  };
+  /* THE PRIMARY'S FILTER: `u` chart units per stage px, `k` the halo's radius multiple (a live page's pulse, a solo's
+     lift), `a` its alpha multiple (a live page's glow pulse, a solo's fade), `c` the core's strength. */
+  const lpBloomHot = (st, p, col, u, k = 1, a = 1, c = 1) => {
+    if (!(LINE_BLOOM > 0)) return "";
+    const U = u > 0 ? u : (st && st.portrait ? 2 : 1);
+    return lpHotWrite(st, p, col, c, LP_HOT.INNER_PX * U * k, LP_HOT.INNER_A * a, LP_HOT.OUTER_PX * U * k, LP_HOT.OUTER_A * a);
+  };
+  /* the filter a builder (or a live page's pulse) wrote is the line's BASE: what a solo restores, and the units and pulse
+     it lifts from, so the lift is continuous with the frame it lands on */
+  const lpHotBase = (p, u, k, a = 1) => { p.__lpBase = p.style.filter; p.__lpU = u; p.__lpK = k; p.__lpA = a; };
+  /* THE SOLO'S BLOOM (E99 s117 (2); species/solo.mjs calls it through PAGE_CTX): on its word the named series eases INTO
+     the primary's three layers, its halo lifted `liftK` (`lift` 0-1), and a muted series' halo eases OUT (`fade` 0-1) -
+     at a full fade it has none ("a context or muted line never blooms"). At 0 and 0 the line wears its own base, to the
+     byte (the primary's attributes re-written from its base's numbers). A history never blooms, so it is never touched. */
+  const lpSoloBloom = (S, pp, lift, fade, liftK) => {
+    const p = pp && pp.p;
+    if (!p || pp.muted || pp.context || !(LINE_BLOOM > 0)) return;
+    const col = p.getAttribute("stroke") || p.style.stroke, on = 1 - fade, kk = (p.__lpK || 1) * (1 + (liftK - 1) * lift);
+    const U = p.__lpU > 0 ? p.__lpU : (lpHotUnit(S) || (S && S.portrait ? 2 : 1));
+    if (pp.hot) {
+      if (fade >= 1 - 1e-4) { p.style.filter = ""; return; }
+      lpBloomHot(S, p, col, U, kk, on * (p.__lpA || 1), on); return;
+    }
+    if (lift <= 1e-4 && fade <= 1e-4) { p.style.filter = p.__lpBase != null ? p.__lpBase : ""; return; }
+    if (fade >= 1 - 1e-4) { p.style.filter = ""; return; }
+    /* a live peer: E67's neon (radius r at LINE_BLOOM) eases into the primary's inner halo, the outer and the core in */
+    const r = p.__lpR != null ? p.__lpR : LP_BLOOM_PX * (S && S.portrait ? 2 : 1), c = lift * on;
+    lpHotWrite(S, p, col, c, r + (LP_HOT.INNER_PX * U * kk - r) * lift, (LINE_BLOOM + (LP_HOT.INNER_A - LINE_BLOOM) * lift) * on,
+               LP_HOT.OUTER_PX * U * kk, LP_HOT.OUTER_A * c);
+  };
+  /* ... and THINNER (s117 (2)): a muted stroke's width eases to `thin` of its own at a full mute. Its width at rest is
+     read once, before the first write (a card's inline width, else the template's), and a full-ink frame restores the
+     inline value it found - so every frame before the word is the page it was. */
+  const lpSoloW0 = new WeakMap();
+  const lpSoloThin = (S, pp, m, thin) => {
+    const p = pp && pp.p; if (!p) return;
+    let w0 = lpSoloW0.get(p);
+    if (m <= 1e-4) { if (w0) p.style.strokeWidth = w0.inline; return; }
+    if (!w0) { w0 = { inline: p.style.strokeWidth, w: lpHotStroke(S, p) * (pp.muted ? 0.75 : 1) }; lpSoloW0.set(p, w0); }
+    p.style.strokeWidth = (w0.w * (1 - (1 - thin) * Math.min(1, m))).toFixed(3);
+  };
+  /* chart units per stage px at rest (P69 T6c's own number); 0 where the page never measured it */
+  const lpHotUnit = (st) => (st && st.stagePx > 0 ? 1 / st.stagePx : 0);
+  /* a line record's own bloom at rest - the role the builder gave it - written and remembered as its base */
+  const lpBloomRole = (st, rec, col) => {
+    if (rec.muted || rec.context) return;
+    if (rec.hot) { lpBloomHot(st, rec.p, col, lpHotUnit(st)); lpHotBase(rec.p, lpHotUnit(st), 1); }
+    else lpBloom(st, rec.p, col);
+    lpHotFilter(st, rec.p);   /* every live line carries its core, lit only when it is (or is solo'd into) the primary */
+  };
   /* R26-228 (E99 s82's (e); the operator: "You also missed the sparking lead points from the line chart reference, which
      add chart life ... our chart lines have no glow/pulse") - THE PAGE'S INTERIOR AT ITS IDLE. Measured on frozen copy d
      at 16:9 against the approved 9:16 page (tests/R26-228-NOTE.md): the interior at 16:9 already moved MORE than the
@@ -10990,6 +11145,8 @@ async function mount(doc) {
         drawn.push({ ...s, pts: s.pts.slice(k0), muted: false, si, k0 });
       } else drawn.push({ ...s, muted: false, si, k0: 0 });
     });
+    /* E99 s117 (P69 T37b): the PRIMARY - the first live series that is not `deemph` (context never blooms) */
+    const primaryI = drawn.findIndex((q) => !q.muted && q.color !== "deemph");
     drawn.forEach((s, i) => {
       /* P58 T5: every datum through the ONE homography, once. The path, the travelling tip, the tip-riding pill,
          the terminal name and the species' targets then all ride the same projected geometry - a line drawn ON the
@@ -11011,7 +11168,8 @@ async function mount(doc) {
       const col = s.muted ? (declared ? lpInkA(declared, 0.45) : LP_MUTED) : live;
       const sHost = BK ? lpBreakHost(st, BK, s.pts) : st.chart;   /* P69 T66: a line across the cut is held out of the gap */
       const p = lpEl("path", "ser" + (s.muted ? " muted" : ""), sHost, { d, stroke: col });
-      if (!s.muted) lpBloom(st, p, col);   /* the live line blooms; the history never does */
+      const role = { p, muted: !!s.muted, context: !s.muted && s.color === "deemph", hot: i === primaryI };
+      lpBloomRole(st, role, col);   /* E99 s117: the primary is emissive, a live peer keeps E67's neon, context and the history never bloom */
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
       const tip = lpEl("circle", "", sHost, { r: 6, fill: col, opacity: 0 });
@@ -11054,8 +11212,13 @@ async function mount(doc) {
       }
       /* E53: the label at the LINE'S END - so on a tilted plane it stands at the end the line actually has, and
          upright (the text is never turned; only the marks lie on the plane). */
-      const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0, ...(PHONE ? { style: "font-size:" + lpTypeU(st, "tag") + "px" } : {}) }
-                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr).toFixed(1), y: ((PJ ? PE[1] : my(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(PHONE ? { style: "font-size:" + lpTypeU(st, "tag") + "px" } : {}) });
+      /* E99 s118 (P69 T37b): THE NAME WEARS ITS SERIES' INK. The `fill` attribute always carried the line's colour, but the
+         template's `.lp-chart text { fill: var(--lp-chalk) }` outranks a presentation attribute, so every end tag read in
+         plain white ("pretty low visibility"). The ink is written as the element's own STYLE, which outranks the class -
+         a teal line's name is teal. A page on a plate's cream surface keeps the chalk its surface rule inverts. */
+      const nameSt = (pg.surface_from ? "" : "fill:" + col + ";") + (PHONE ? "font-size:" + lpTypeU(st, "tag") + "px" : "");
+      const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0, ...(nameSt ? { style: nameSt } : {}) }
+                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr).toFixed(1), y: ((PJ ? PE[1] : my(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(nameSt ? { style: nameSt } : {}) });
       st.linePts.push(PT.map((q) => [q[0], q[1]]));   /* the exact datum positions, for the species' targets */
       name.textContent = s.muted ? "" : LFT && LFT.form !== "full" ? (s.label || s.name || "") : (s.label ? s.label + " " : "") + (s.name || "");   /* P69 T8: a tag the stage cannot hold keeps its value (T10's key takes the name) */   /* the muted history carries no name */
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
@@ -11064,7 +11227,7 @@ async function mount(doc) {
       if (chipT && !(LFT && LFT.form === "value")) { const tg = lpEl("tspan", "tagchip", name, { dx: LFT ? (LP_LONGFORM.CHIP_DX_PX / LFT.scale).toFixed(2) : 12, fill: col,
         ...(PHONE ? { style: "font-size:" + lpTypeU(st, "chip") + "px" } : {}) }); tg.textContent = chipT; }
       const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : my(last[1])) + 8,
-                     pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted,
+                     pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted, hot: role.hot, context: role.context,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
       if (ax.name_clear && !nameBelow) rec.ny = Math.min(rec.ny, clearY - (P ? 34 : 20));
       st.paths.push(rec);
@@ -11500,7 +11663,7 @@ async function mount(doc) {
     const ylab = lpYLabel(st, pg, L, 64, { opacity: 0 }); if (ylab) labels.push(ylab);   /* top-left, on the callout's row, clear of the ghost */
     const d = vals.map((v, i) => (i ? "L" : "M") + mx(xs[i]).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
     const p = lpEl("path", "ser", st.chart, { d, style: "stroke:" + LP_INK.crimson });   /* a fall is the negative token */
-    lpBloom(st, p, LP_INK.crimson);   /* E67 */
+    lpBloomRole(st, { p, hot: true }, LP_INK.crimson);   /* E67; E99 s117: the decline's one line is its primary */
     const len = p.getTotalLength ? p.getTotalLength() : 2000;
     p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
     const tip = lpEl("circle", "", st.chart, { r: 6, fill: LP_INK.crimson, opacity: 0 });
@@ -11635,7 +11798,7 @@ async function mount(doc) {
       const aligned = s.pts.length === n, lx = (x, k) => aligned ? cx(k) : x0 + (+x - xa) / (xb - xa || 1) * (x1 - x0);   /* one point per bar sits on the bar */
       const pts = s.pts.map(([x, v], k) => [lx(x, k), ly(v), v]), col = LP_PAL[s.color] || LP_PAL[LP_CYCLE[si % LP_CYCLE.length]];   /* E67: undeclared takes the cycle by index - teal, then the orange */
       const p = lpEl("path", "ser", st.chart, { d: pts.map(([x, y], k) => (k ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" "), style: "stroke:" + col });
-      lpBloom(st, p, col);   /* E67 */
+      lpBloomRole(st, { p, hot: si === 0 && s.color !== "deemph", context: s.color === "deemph" }, col);   /* E67; E99 s117: the combo's first line is its primary */
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
       const dot = lpEl("circle", "", st.chart, { r: 7, fill: col, opacity: 0 });
@@ -12221,13 +12384,15 @@ async function mount(doc) {
           const col = LP_PAL[s.color] || LP_PAL[tr.color] || (n > 1 ? LP_PAL.cobalt : LP_PAL.crimson);
           const d = pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
           const p = lpEl("path", "ser", st.chart, { d, stroke: col });
-          lpBloom(st, p, col);   /* E67 */
+          const hot = !k && s.color !== "deemph";   /* E99 s117: each band's first line is that band's primary */
+          lpBloomRole(st, { p, hot, context: s.color === "deemph" }, col);   /* E67 */
+          if (!k && !pg.surface_from) nameEl.style.fill = col;   /* E99 s118: the band's name IS this line's name, in its ink */
           const len = p.getTotalLength ? p.getTotalLength() : 2000;
           p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
           const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
           /* the band's name IS this line's name (the line page's law): it writes as the band finishes drawing */
           const prec = { p, len, tip, name: k ? lpText(st.chart, "sname", L, band.y0 - TIERS.NAME_DY, "start", "", { opacity: 0 }) : nameEl,
-                         stagger: ti / Math.max(1, n), ny: band.y0 - TIERS.NAME_DY, pts, si: ti, k0: 0, muted: false,
+                         stagger: ti / Math.max(1, n), ny: band.y0 - TIERS.NAME_DY, pts, si: ti, k0: 0, muted: false, hot, context: s.color === "deemph",
                          data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };
           st.paths.push(prec);
           lpMark(st, "s" + ti + (k ? ":" + k : ""), "line", p, { pts, vals: s.pts.map((q) => +q[1]), len, k0: 0, muted: false, col }, prec);
@@ -14273,7 +14438,8 @@ async function mount(doc) {
   /* THE PAGE SPECIES CONTEXT (R26-41): the one object a page painter reaches the engine through - built once here,
      where every helper it names already exists, and handed to every page painter by paintPerform. A pure bag: a
      painter that wants something new is given it here by name, and never as an identifier only the engine has. */
-  const PAGE_CTX = { pointsNow: lpPointsNow, datumNow: lpDatumNow, markDatum: lpMarkDatum, clamp: clamp01, el: lpEl, PS };
+  const PAGE_CTX = { pointsNow: lpPointsNow, datumNow: lpDatumNow, markDatum: lpMarkDatum, clamp: clamp01, el: lpEl, PS,
+                     bloom: lpSoloBloom, thin: lpSoloThin };   /* P69 T37b: the solo's lift and fade (E99 s117 (2)) */
   /* R26-219 (2026-09-18, the Steel and Paper H unit: the railway page's two notes and its -64% figure were still
      standing on the GDP page eight seconds after the recast) - THE PAGE'S OWN LEAVE, for what the hand WROTE on it.
      A note, a figure, a retitle, a bracket and a spread belong to the page they were written on, and a `chart_to`
@@ -14988,7 +15154,9 @@ async function mount(doc) {
           pp.tip.setAttribute("r", rTip.toFixed(2));
           pp.tip.style.filter = "drop-shadow(0 0 " + (rTip * LP_LIFE.HALO_K).toFixed(2) + "px " + lpInkA(ink, LP_LIFE.HALO_A) + ")";
           /* R26-228 (b): the glow, at the share of the frame the APPROVED 9:16 page draws, pulsing on the tip's own clock */
-          lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * breath(lifeT(t), sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ }));
+          const pulse = breath(lifeT(t), sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ });
+          if (pp.hot) { lpBloomHot(cs, pp.p, pp.p.getAttribute("stroke"), 1 / ctmL, pulse, pulse); lpHotBase(pp.p, 1 / ctmL, pulse, pulse); }   /* E99 s117: the primary's halo pulses on the one clock - its reach AND its glow (a still page already draws the halo at rest, so a radius pulse alone read 26 % of the tip band against the life test's 35 % floor; the glow pulse reads it) */
+          else if (!pp.context) lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * pulse);
         }
         pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
         if (pp.pill) lpPaintPill(pp, f, drawing);   /* P50 T11: the pill rides this same f - one clock, no second state */

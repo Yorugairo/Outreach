@@ -52,6 +52,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import build_render_f as R  # noqa: E402  (asset resolver + doc-29 durations)
 import gate_motion_density as MG  # noqa: E402  (E21 motion gate -> GATES-MOTION.md)
 import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, doc 29 s9.26)
+import series_inks as SINKS  # noqa: E402  (P69 T37b: a series name in its ink under the text floor WARNs)
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
 LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
@@ -4799,6 +4800,8 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
         notes = LPG.segment_fit_warnings(page, ASPECT or "16:9")
         if notes:
             page["warnings"] = list(page.get("warnings") or []) + notes
+    for _w in SINKS.ink_contrast_warnings(page):   # P69 T37b (E99 s118): a name in its series' ink under the text floor - PRINTED, never stored (the page's bytes stay)
+        print(f"  [WARN] P69 T37b: {plate_id!r}: {_w}")
     return {"kind": SPECIES_LEDGER, "page": page,
             "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
 

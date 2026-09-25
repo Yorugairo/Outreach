@@ -14,6 +14,7 @@ while their customers sit flat at the index is textbook profit-taking").
 from __future__ import annotations
 
 import json
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -28,6 +29,8 @@ import build_scene_timeline_f as B  # noqa: E402
 
 ENGINE = ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
 MODULE = ROOT / "content/video_engine/scripts/species/solo.mjs"
+# P69 T37b (E99 s117 (2)): the dim is the module's own dial, read off it - never re-typed here
+DIM = float(re.search(r"DIM: ([0-9.]+),", MODULE.read_text(encoding="utf-8")).group(1))
 CARDS = ROOT / "content/video_engine/effects/cards/page_species.json"
 PROJECT = ROOT / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
 PLATE = "ledger:ev-divergence-v1:line"
@@ -273,7 +276,7 @@ def test_on_its_word_the_other_series_mute_and_the_named_one_keeps_its_ink():
         close()
     assert not errs, errs
     assert set(_by_series(before).values()) == {1}, before
-    dim = 0.45
+    dim = DIM
     got = _by_series(chips)
     assert got[G.SOLO_CHIPS] == 1 and all(abs(v - dim) < 1e-3 for k, v in got.items() if k != G.SOLO_CHIPS), got
     for p in chips["paths"]:
@@ -314,7 +317,7 @@ def test_on_a_bars_page_the_other_bars_and_their_values_mute_and_the_names_stay(
     assert all(b["op"] == 1 and b["val"] == 1 for b in before["bars"]), before
     lit, other = after["bars"][1], after["bars"][0]
     assert lit["op"] == 1 and lit["val"] == 1, lit
-    assert abs(other["op"] - 0.45) < 1e-3 and abs(other["val"] - 0.45) < 1e-3, other
+    assert abs(other["op"] - DIM) < 1e-3 and abs(other["val"] - DIM) < 1e-3, other
     assert all(b["lab"] == 1 for b in after["bars"]), "the category names are the page's key - never muted"
 
 
@@ -334,4 +337,4 @@ def test_a_light_on_a_muted_series_mutes_with_it_and_a_light_on_the_named_one_ke
     assert not errs, errs
     by = {L["si"]: L["g"] for L in f["lits"]}
     assert by[G.SOLO_CHIPS] == 1, by
-    assert abs(by[0] - 0.45) < 1e-3, by
+    assert abs(by[0] - DIM) < 1e-3, by

@@ -183,6 +183,8 @@ STROKES = """() => [...document.querySelector('.lp-chart').querySelectorAll('pat
   muted: p.classList.contains('muted'),
   stroke: p.getAttribute('stroke') || p.style.stroke || '',
   filter: p.style.filter || '',
+  flood: (() => { const m = /#(lphot-[\w-]+)/.exec(p.style.filter || ''); const f = m && document.getElementById(m[1]);
+                  return f ? [...f.querySelectorAll('feFlood')].map(e => e.getAttribute('flood-color')) : []; })(),
 }))"""
 
 
@@ -280,10 +282,20 @@ def test_the_live_line_blooms_and_the_history_never_does():
         muted = [s for s in got if s["muted"]][0]
         ink = _engine_table("LP_INK")
         r, g, b = (int(ink["teal"].lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
-        assert "drop-shadow" in live["filter"], live["filter"]
-        assert f"{r}, {g}, {b}" in live["filter"], f"the halo is the line's own hue: {live['filter']}"
-        assert "0.35" in live["filter"], f"LINE_BLOOM is the halo's alpha: {live['filter']}"
-        assert "drop-shadow" not in muted["filter"], muted["filter"]
+        # E99 s117 (P69 T37b): a lone line's live window is the page's PRIMARY - its bloom is the hot filter (the core and
+        # the two halos as SVG primitives), and the halos are flooded with the line's own hue
+        assert "#lphot-" in live["filter"], live["filter"]
+        assert live["flood"] and all(f.upper() == ink["teal"].upper() for f in live["flood"]), f"the halo is the line's own hue: {live}"
+        assert "drop-shadow" not in muted["filter"] and "url(" not in muted["filter"], muted["filter"]
+    finally:
+        p.close()
+    # ... and a live PEER keeps E67's own neon: LINE_BLOOM is its halo's alpha, in its own hue
+    p = _Page([{"name": "Japan", "color": "teal", "pts": _pts()}, {"name": "China", "color": "cobalt", "pts": _pts(base=80.0)}])
+    try:
+        peer = [s for s in p.strokes() if not s["muted"]][1]
+        r, g, b = (int(ink["cobalt"].lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
+        assert "drop-shadow" in peer["filter"] and f"{r}, {g}, {b}" in peer["filter"], peer["filter"]
+        assert "0.35" in peer["filter"], f"LINE_BLOOM is the halo's alpha: {peer['filter']}"
     finally:
         p.close()
 

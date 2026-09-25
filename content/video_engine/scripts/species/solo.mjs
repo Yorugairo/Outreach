@@ -15,10 +15,15 @@
    else: a line's stroke, its lead point and its end tag; a bar's rect, its range band and its value. The key, the
    axes, a bar's category name, the title stay ("Keep the ghosted legend readable", the use-when guide, P JPN).
 
-   THE DIM is E67's: the muted history of a series is its own hue at 0.45 (the engine's buildLedgerLine; LP_MUTED), and
-   P69 T45's member `light` dims a bar's other tiles to the same 0.45. It is one number here, not a second one. The long
-   form's spec measured Bravos lower - unlit bars at ~0.38x, context lines at ~0.3 (BRAVOS-LONGFORM-CHART-SPEC.md (c)9)
-   - and names moving 0.45 as the operator's call; until that call this dial IS E67's, under every profile.
+   THE DIM was E67's 0.45 until the operator's call the long form's spec named ((c)9): E99 s117 (2), on our solo beside
+   Bravos JPN 05:20 / 05:23.5 - Bravos "fades theirs to a higher contrast", so "a SOLO lifts the named line's bloom
+   further and fades the others harder and thinner than E67's 0.45, so the contrast between the lit and the muted
+   matches Bravos's". Three dials, set from measure_line_bloom.py's read of the Bravos band
+   (content/video_engine/assets/bravos-line-bloom.v1.json; the numbers in tests/test_line_bloom.py): DIM, the muted
+   marks' alpha; THIN, a muted stroke's width at a full mute; LIFT, the named line's halo radius at a full lift (it eases
+   INTO the primary's three layers - the engine's lpSoloBloom - and a muted line's halo eases OUT: "a context or muted
+   line never blooms"). E67's HISTORY stays at 0.45 (E99 s78 (2)) - a different mark, and not this dial. P69 T45's
+   member `light` keeps its own 0.45 (LPMEMBER.DIM).
 
    THE LAW, a pure function of t:
      the events - every `solo` on the page names ONE key (`s:<series>` or `b:<bar>`); every `unsolo`, and every verb
@@ -38,7 +43,9 @@
 import { minJerk } from "../kinetics/ease.mjs";
 
 export const SOLO = Object.freeze({
-  DIM: 0.45,     /* E67: the page's own muted alpha - the history's, the member light's (see the header on (c)9) */
+  DIM: 0.42,     /* E99 s117 (2): the muted marks' alpha - harder than E67's 0.45: lit/muted 5.24 at 1024 px (Bravos 3.39-5.29; 0.30 read 5.9, over it) */
+  THIN: 0.45,    /* ... a muted stroke's width at a full mute, as a share of its own - thinner, so the lit line carries the plot */
+  LIFT: 1.5,     /* ... the named line's halo radius at a full lift: its share of the plot's contrast at 320 px 0.63 (Bravos 0.57-0.74) */
   MIN_S: 0.2,    /* the mute's shortest ease: under it the dim is a flicker (build_scene_timeline_f.SOLO_DUR_S) */
   MAX_S: 1.5,    /* ... and its longest: past it the isolate is a fade the word has left behind */
   EPS: 5e-4,     /* an alpha this close to 1 is full ink: the attribute is removed, never written as 1.000 */
@@ -57,19 +64,27 @@ export const soloEvents = (solos, releases) => [
   ...(releases || []).map((r) => ({ at: +r.at, dur: Math.max(0.001, +r.dur || SOLO.MIN_S), key: null })),
 ].filter((e) => Number.isFinite(e.at)).sort((a, b) => a.at - b.at || (a.key === null ? 0 : 1) - (b.key === null ? 0 : 1));
 
-/* THE ALPHA of the mark `key` at t: each event eases it from where the previous one left it at the event's word */
-export const soloAlpha = (evs, key, t, dim = SOLO.DIM) => {
-  let a = 1;
+/* THE LEVEL of the mark `key` at t: from `start`, each event eases it from where the previous one left it at the event's
+   word toward its target - `named` for the mark it names, `other` for every other mark of the same kind, `release` on a
+   release (and for a mark of the other kind, which a solo never touches) */
+export const soloLevel = (evs, key, t, { start, named, other, release }) => {
+  let a = start;
   for (let k = 0; k < (evs || []).length; k++) {
     const e = evs[k];
     if (t < e.at) break;
     const nx = evs[k + 1], end = nx && nx.at <= t ? nx.at : t;
-    const want = e.key === null || e.key === key || e.key[0] !== String(key)[0] ? 1 : dim;
+    const want = e.key === null || e.key[0] !== String(key)[0] ? release : e.key === key ? named : other;
     const u = solo01((end - e.at) / e.dur);
     a = u >= 1 ? want : a + (want - a) * solo01(minJerk(u));   /* it LANDS exactly (1 + (0.45 - 1) is 0.44999999999999996) */
   }
   return a;
 };
+
+/* THE ALPHA of the mark `key` at t: 1, SOLO.DIM for the others on a solo, 1 again on a release */
+export const soloAlpha = (evs, key, t, dim = SOLO.DIM) => soloLevel(evs, key, t, { start: 1, named: 1, other: dim, release: 1 });
+
+/* THE LIFT of the mark `key` at t (E99 s117 (2)): 0, then 1 for the named line while its solo stands, 0 on a release */
+export const soloLift = (evs, key, t) => soloLevel(evs, key, t, { start: 0, named: 1, other: 0, release: 0 });
 
 /* one alpha onto one element's channel: full ink REMOVES the attribute (the page with no solo, to the byte) */
 export const soloWrite = (el, attr, a) => {
@@ -80,13 +95,18 @@ export const soloWrite = (el, attr, a) => {
 
 /* THE PAINTER (P69 T37). `sd` is the perform layer's built solo (`evs`, the page's `lits`), `st` the page state - every
    chart state of it is written (a rescale's derived state carries the same series), so a seek into any state is the
-   play. It reads nothing from the engine but its arguments; `ctx` is the page species context, unused. */
+   play. It reads nothing from the engine but its arguments; `ctx` is the page species context - its `bloom` and `thin`
+   (P69 T37b) are the two engine writers a solo drives. */
 export const paintSolo = (sd, t, st, ctx) => {
   const states = st && Array.isArray(st.states) && st.states.length ? st.states : [st];
   for (const S of states) {
     for (const pp of (S && S.paths) || []) {
-      const a = soloAlpha(sd.evs, "s:" + (pp.si | 0), t);
+      const key = "s:" + (pp.si | 0), a = soloAlpha(sd.evs, key, t), m = solo01((1 - a) / (1 - SOLO.DIM));
       soloWrite(pp.p, "opacity", a); soloWrite(pp.tip, "fill-opacity", a); soloWrite(pp.name, "fill-opacity", a);
+      /* E99 s117 (2): the named line's bloom lifts, a muted one's halo leaves and its stroke thins - the engine's DOM
+         work, handed in through the page context (absent, a bare test, the alpha above is the whole solo) */
+      if (ctx && ctx.bloom) ctx.bloom(S, pp, soloLift(sd.evs, key, t), m, SOLO.LIFT);
+      if (ctx && ctx.thin) ctx.thin(S, pp, m, SOLO.THIN);
     }
     ((S && S.bars) || []).forEach((b, i) => {
       const a = soloAlpha(sd.evs, "b:" + (Number.isInteger(b.i) ? b.i : i), t);

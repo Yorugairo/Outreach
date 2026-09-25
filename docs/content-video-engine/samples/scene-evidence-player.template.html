@@ -91,7 +91,13 @@
                -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--w) * 118% - 18%), transparent calc(var(--w) * 118%));
                mask-image: linear-gradient(90deg, #000 calc(var(--w) * 118% - 18%), transparent calc(var(--w) * 118%));
                transform: rotate(var(--tilt)); }
-  .lp-title { left: 8.4%; top: 10.4%; font-size: 34px; font-weight: 700; color: var(--lp-chalk); letter-spacing: -.01em; }
+  /* E99 s119 (P69 T37b) - THE TITLE'S COLOUR IS ONE DIAL: `--lp-title-ink`. Unset (today), each page style keeps its own
+     title ink - the default / shorts page its chalk, the long form its rose (below). The operator picks ONE loud colour
+     for BOTH from the side-by-side sheet (E67's Claude orange #FF8A4C, or the rose as it is or lifted); the pick is the
+     one line `--lp-title-ink: <hex>;` in the `.lp` block, and every page's title - a retitle's too - takes it. A retitle's
+     `color_span` (T86) still paints its own span. (A page drawn on a plate's CREAM surface would take the pick too -
+     read that page on the frame before wiring it; with the dial unset every page draws exactly as before.) */
+  .lp-title { left: 8.4%; top: 10.4%; font-size: 34px; font-weight: 700; color: var(--lp-title-ink, var(--lp-chalk)); letter-spacing: -.01em; }
   .lp-src { left: 6%; font-size: 22px; font-weight: 500; color: var(--lp-chalk); opacity: .85; }   /* the source sits under the chart box, clear of the anchor caption's band: chalk, not charcoal */
   /* E28: the sub carries the selection rule (which dates and why) - written under the title, wrapped by word */
   .lp-sub { font-size: 21px; font-weight: 400; line-height: 1.25; color: var(--lp-chalk); opacity: .8; white-space: normal; }
@@ -223,7 +229,7 @@
   .lp-readability-longform .lp-field, .lp-readability-longform .lp-fieldplate { display: none; }
   .lp-readability-longform .lp-ink { font-family: "Inter Longform", Inter, Arial, sans-serif; letter-spacing: 0; }
   .lp-readability-longform .lp-ink .g { transform: none; }   /* a set face, not a hand: no per-glyph tilt */
-  .lp-readability-longform .lp-title { color: #DB8497; font-weight: 700; }
+  .lp-readability-longform .lp-title { color: var(--lp-title-ink, #DB8497); font-weight: 700; }
   .lp-readability-longform .lp-title .w, .lp-readability-longform .lp-src .w { display: inline-block; white-space: nowrap; }
   .lp-readability-longform .lp-sub { font-weight: 400; }
   .lp-readability-longform .lp-src { color: #868A8F; font-weight: 400; opacity: 1; }
