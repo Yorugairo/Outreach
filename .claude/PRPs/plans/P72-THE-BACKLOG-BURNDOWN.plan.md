@@ -656,7 +656,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T14: The captions read on every plate - a plate's caption room and its contrast backing, a quote on the word it opens, a caption that waits for a collapsing page
-- Status: pending
+- Status: done - lane B 7c2258d: `caption_room`, the measured stage-caption backing (text shadow, never a box), `place_quotes`, the collapse window; 12 goldens re-pinned inside the caption box only; M48 on H 455 -> 454 (the rest is P71 T8b's quiet strip)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0; HIGH - "the contrast backing is owed before HG4" (R26-268, recurred on row 17)
 - Items: R26-268, R26-278, R26-292
