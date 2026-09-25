@@ -168,6 +168,15 @@ def test_every_capability_row_in_the_doc_is_exactly_one_record():
 
 
 @needs_real
+def test_no_real_row_is_flagged_so_the_page_carries_no_fix_list():
+    # Act
+    parsed = B.build(ROOT)
+
+    # Assert: every row reads in the four-cell form - no stray pipe, no three-cell reference row
+    assert parsed.flagged == []
+
+
+@needs_real
 def test_every_real_what_is_capped_at_a_word_and_the_page_fits_its_budget():
     # Arrange
     lines = REAL.read_text(encoding="utf-8").replace("\\|", "|").split("\n")
