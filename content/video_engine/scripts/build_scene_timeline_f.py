@@ -836,6 +836,33 @@ LEVEL_JOIN_PAD_PX, LEVEL_JOIN_CLEAR_PX, LEVEL_JOIN_FRAME_AIR_PX = 14, 10, 8
 LEVEL_JOIN_ASC, LEVEL_JOIN_DESC, LEVEL_JOIN_MID = 0.8, 0.22, 0.3
 LEVEL_JOIN_RING_PX = (54.0 * 0.55, 40.0 * 0.55)   # RING.MIN_RX / MIN_RY at LEVEL.RING_K: an end mark, not a callout
 LEVEL_JOIN_EM_W = 0.52   # [DERIVED: Kalam 700's mean advance, the figure's own estimate] - a WARN's width, never a place
+# P71 T14 (was P69 T55; RESCOPED by the BOOM frame verification, VERIFY.md row T32) - THE DECADE RULER. A STAGE species:
+# a full-width ruler (a tick a year, a taller one each five, the tallest each decade under a large faded numeral) enters
+# at the stage's right edge, SCROLLS left from `from` and lands with its `settle` decades framed, then holds - a GROUND
+# for time passing. It PINS NOTHING: the witness (jx3Ll-GJtMY 05:50.5-06:10) shows the chips in a row ABOVE it, with no
+# year label, no pin and no tick alignment ("cards pinned at their years" was Gemini's, retired). The chips and the
+# tree over it are the author's (recipe:the-decade-ruler). Its law and painter are species/ruler.mjs; this file owns
+# its grammar (`_validate_ruler`: every key refused by name when malformed or misplaced) and the one reading it can
+# spoil - a chip that prints a year while it stands reads as pinned to a tick, a WARN with its numbers
+# (`ruler_row_advice`, s109 (c) / s106).
+SPECIES_RULER = "ruler"
+SPECIES_KINDS += (SPECIES_RULER,)
+SPECIES_WHEN[SPECIES_RULER] = ("the sentence SPANS a LAG of years between a cause and its payoff ('it took more than a "
+                               "decade', 'the fibre came first') at the proof - a ruler scrolls the years past and settles on "
+                               "the decades the lag lands in, a GROUND under the things the sentence names; never for a single "
+                               "date (an axis tag or a stamp), and it pins no chip to a year")
+RULER_KEYS = ("kind", "at", "dur", "from", "to", "settle", "y", "idle", *ROW_PATH_KEYS)
+RULER_PIN_KEYS = ("pins", "pin", "marks", "labels", "label", "cards", "chips", "tick_at", "leader", "leaders")
+RULER_SCROLL_S, RULER_OUT_S = 1.5, 0.4   # species/ruler.mjs RULER.SCROLL_S / OUT_S, mirrored (test_decade_ruler pins them)
+RULER_SETTLE_N = (2, 4)                  # ... and RULER.SETTLE_MIN / SETTLE_MAX: a window of two to four decades
+RULER_YEARS = (1000, 2999)               # a year the ruler prints is a four-digit year
+RULER_Y = (0.1, 0.9)                     # an authored line, as a share of the stage height
+RULER_YEAR_RE = re.compile(r"(?<!\d)(1\d{3}|2\d{3})(?!\d)")   # a year printed in a chip's label
+# species/ruler.mjs RULER.Y / Y_PORTRAIT and rulerBandHalf() (TICK_DECADE_H / 2 + NUM_GAP + NUM_CAP * NUM_SIZE), mirrored
+# (test_decade_ruler pins them): the default line per aspect, and how far the ruler covers above and below it - what
+# `ruler_caption_advice` holds against the stage caption's home strip (caption_home_box).
+RULER_Y_DEFAULT = {"16:9": 0.74, "9:16": 0.56}
+RULER_BAND_HALF_PX = 138 / 2 + 14 + 0.72 * 132
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -1769,6 +1796,7 @@ SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANEL
 SPECIES_TARGETS[SPECIES_MEMBER] = ()   # P69 T45: a tile of a membership bar, by index - the page owns where it stands
 SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
 SPECIES_TARGETS[SPECIES_LEVEL_JOIN] = ()   # P71 T10: a level join names its two ends as DATA; the chart owns where they are
+SPECIES_TARGETS[SPECIES_RULER] = ()   # P71 T14: the ruler is the stage's full width at its line - it points at nothing
 SPECIES_TARGETS[SPECIES_SOLO] = SPECIES_TARGETS[SPECIES_UNSOLO] = ()   # P69 T37: a solo names a series or a bar by index; the chart owns where it is
 SPECIES_TARGETS[SPECIES_AXIS_TAG] = ()   # P71 T9: a tag names its x as the page's own value (a tick, a datum, a bar); the chart owns where it is
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
@@ -3672,6 +3700,136 @@ def _validate_level_join(entry: dict) -> list[str]:
     return errs
 
 
+def _ruler_year(v) -> bool:
+    return isinstance(v, int) and not isinstance(v, bool) and RULER_YEARS[0] <= v <= RULER_YEARS[1]
+
+
+def _ruler_settle_errors(entry: dict, lo, hi, years: bool) -> list[str]:
+    """P71 T14: `settle` - present, a list of decades, then three findings each its own: how many, in order, and
+    inside the strip (a settle year the strip does not hold would land the scroll on nothing)."""
+    errs: list[str] = []
+    settle = entry.get("settle")
+    decades = isinstance(settle, list) and all(isinstance(d, int) and not isinstance(d, bool) for d in settle)
+    if "settle" not in entry:
+        errs.append("ruler: needs 'settle' - the 2-4 consecutive decades it lands framed on, e.g. [2000, 2010, 2020]")
+    elif not isinstance(settle, list):
+        errs.append(f"ruler: 'settle' must be a list of decades, e.g. [2000, 2010, 2020], not {settle!r}")
+    elif not decades or any(d % 10 for d in settle):
+        errs.append(f"ruler: settle {settle!r} must name decades (integers ending in 0) - the ruler lands on its decade "
+                    "numerals, never between them")
+    else:   # three findings, each its own: how many, in order, and inside the strip
+        if not RULER_SETTLE_N[0] <= len(settle) <= RULER_SETTLE_N[1]:
+            errs.append(f"ruler: settle names {len(settle)} decade(s) - a window is {RULER_SETTLE_N[0]}-{RULER_SETTLE_N[1]} "
+                        "(one decade is a date: an axis tag or a stamp; five leaves a year 25 px wide)")
+        if any(b - a != 10 for a, b in zip(settle, settle[1:])):
+            errs.append(f"ruler: settle {settle!r} must be consecutive ascending decades - the window names every decade it "
+                        "shows, and one between two named ones would print unnamed")
+        out = [d for d in settle if years and not lo <= d <= hi]
+        if out:
+            errs.append(f"ruler: settle {out!r} is outside from-to {lo}-{hi} - the scroll would land on a year the strip "
+                        "does not hold")
+    return errs
+
+
+def _validate_ruler(entry: dict) -> list[str]:
+    """P71 T14: a `ruler`'s own fields. `from` / `to` are the strip's first and last TRUE years; `settle` names the 2-4
+    CONSECUTIVE decades it lands framed on, inside from..to (a settle year the strip does not hold would land the scroll
+    on nothing - the plan's constraint); `y` moves its line; `idle` is a named kind (checked by _validate_entry). It
+    pins nothing: a key that would pin, label or lead a card to a year is refused as what it is, and any other key by
+    name (P71's review finding 7: never accepted and ignored)."""
+    errs: list[str] = []
+    lo, hi = entry.get("from"), entry.get("to")
+    for key, v in (("from", lo), ("to", hi)):
+        if key not in entry:
+            errs.append(f"ruler: needs '{key}' - the strip's {'first' if key == 'from' else 'last'} year")
+        elif not _ruler_year(v):
+            errs.append(f"ruler: '{key}' must be a four-digit year (an integer {RULER_YEARS[0]}-{RULER_YEARS[1]}), not {v!r}")
+    years = _ruler_year(lo) and _ruler_year(hi)
+    if years and lo >= hi:
+        errs.append(f"ruler: from {lo} must come before to {hi} - the strip runs forward in time")
+    errs += _ruler_settle_errors(entry, lo, hi, years)
+    if "y" in entry:
+        y = entry["y"]
+        if isinstance(y, bool) or not isinstance(y, (int, float)) or not RULER_Y[0] <= y <= RULER_Y[1]:
+            errs.append(f"ruler: y must be the line's place as a share of the stage height, {RULER_Y[0]}-{RULER_Y[1]} "
+                        f"(absent = the aspect's default, clear of the caption: {RULER_Y_DEFAULT}), not {y!r}")
+    dur = entry.get("dur")
+    if _num(dur) and dur < RULER_SCROLL_S + RULER_OUT_S - 1e-9:
+        errs.append(f"ruler: dur {dur:g}s leaves before it lands - the scroll is {RULER_SCROLL_S:g}s and the leave "
+                    f"{RULER_OUT_S:g}s, so a ruler holds {RULER_SCROLL_S + RULER_OUT_S:g}s at least")
+    pins = [k for k in entry if k in RULER_PIN_KEYS]
+    if pins:
+        errs.append(f"ruler: {', '.join(map(repr, pins))} - the ruler pins nothing: it is a ground for time passing, "
+                    "and no chip is dated by it (no pin, no leader to a tick, no year it did not print - s109 (c)); "
+                    "lay the chips above it as their own species (recipe:the-decade-ruler)")
+    extra = sorted(k for k in entry if k not in RULER_KEYS and k not in RULER_PIN_KEYS)
+    if extra:
+        errs.append(f"ruler: {', '.join(map(repr, extra))} - a ruler takes only "
+                    f"{'|'.join(k for k in RULER_KEYS if k not in ('kind', 'at', 'dur', *ROW_PATH_KEYS))}")
+    return errs
+
+
+def ruler_row_advice(row_species: list) -> list[str]:
+    """P71 T14 (s109 (c), s106): a CHIP that prints a year while a ruler stands reads as pinned to that year's tick - and
+    the ruler pins nothing. REPORTED with its numbers, never refused: the frame read decides."""
+    timed = [e for e in (row_species or []) if isinstance(e, dict) and _num(e.get("at")) and _num(e.get("dur"))]
+    notes: list[str] = []
+    for r in [e for e in timed if e.get("kind") == SPECIES_RULER]:
+        a, b = float(r["at"]), float(r["at"]) + float(r["dur"])
+        for c in [e for e in timed if e.get("kind") == SPECIES_CHIP and isinstance(e.get("label"), str)]:
+            ca, cb = float(c["at"]), float(c["at"]) + float(c["dur"])
+            found = RULER_YEAR_RE.findall(c["label"])
+            if found and ca < b and cb > a:
+                notes.append(f"chip {c['label']!r} at {ca:g}s prints {', '.join(found)} while the ruler ({a:g}-{b:g}s, "
+                             f"{r.get('from')}-{r.get('to')}) stands: a year on a chip over the ruler reads as pinned to "
+                             "its tick, and the ruler pins nothing (s109 (c): an unambiguous reading) - drop the year or "
+                             "say it. REPORTED, the frame read decides (E99 s106)")
+    return notes
+
+
+def ruler_band_box(entry: dict, aspect: str | None) -> dict:
+    """The ruler's band in stage px - the full width, its line (the authored `y`, else the aspect's default) +- the band's
+    half-height (the decade tick, the gap, a numeral's cap)."""
+    asp = aspect or "16:9"
+    sw, sh = LPG.STAGE_PX[asp]
+    y = entry.get("y") if _num(entry.get("y")) else RULER_Y_DEFAULT[asp]
+    return {"x": 0, "y": round(float(y) * sh - RULER_BAND_HALF_PX, 1), "w": sw, "h": round(2 * RULER_BAND_HALF_PX, 1),
+            "line": float(y)}
+
+
+def ruler_clear_y(aspect: str | None, near: float) -> float | None:
+    """The line nearest `near` whose band clears the caption's home strip by NEWSREEL_STRIP_PAD and stays on the stage
+    and inside RULER_Y - above the strip or below it; None when neither fits."""
+    asp = aspect or "16:9"
+    sh = LPG.STAGE_PX[asp][1]
+    home, pad, half = caption_home_box(asp), NEWSREEL_STRIP_PAD, RULER_BAND_HALF_PX
+    above = math.floor((home["y"] - pad - half) / sh * 1000) / 1000      # the band's foot on the strip's top, less the pad
+    below = math.ceil((home["y"] + home["h"] + pad + half) / sh * 1000) / 1000   # its top on the strip's foot, plus the pad
+    fits = [y for y in (above, below)                    # (rounded AWAY from the strip, so the suggestion clears it)
+            if RULER_Y[0] <= y <= RULER_Y[1] and y * sh - half >= 0 and y * sh + half <= sh]
+    return min(fits, key=lambda y: abs(y - near)) if fits else None
+
+
+def ruler_caption_advice(row_species: list, aspect: str | None) -> list[str]:
+    """P71 T14 (E99 s106): a ruler whose band meets the stage caption's home strip for the row's aspect - the caption
+    runs across the ticks or the numerals. REPORTED with the numbers and the nearest clear `y`, never refused (the
+    author may park the caption; the frame read decides)."""
+    asp = aspect or "16:9"
+    home = caption_home_box(asp)
+    notes: list[str] = []
+    for r in [e for e in (row_species or []) if isinstance(e, dict) and e.get("kind") == SPECIES_RULER]:
+        band = ruler_band_box(r, asp)
+        if _rects_meet(band, home, NEWSREEL_STRIP_PAD):
+            fix = ruler_clear_y(asp, band["line"])
+            said = "authored" if _num(r.get("y")) else "default"
+            notes.append(f"ruler at {r.get('at')}s: its band [{band['y']:g}-{band['y'] + band['h']:g}] px (y {band['line']:g}, "
+                         f"{said}) meets the stage caption's home strip [{home['y']}-{home['y'] + home['h']}] px on {asp} - "
+                         "the caption would run across the ticks or the numerals; "
+                         + (f"y {fix:g} clears it" if fix is not None else "no line on this stage clears it")
+                         + ". REPORTED, the frame read decides (E99 s106)")
+    return notes
+
+
 def _validate_member(entry: dict) -> list[str]:
     """P69 T45: a `member` species' own fields - `tile` (an index, a list of them, or "all"), an optional `bar` index and
     `light` flag, and a `dur` in MEMBER_DUR_S. Nothing else: a tile carries no value (E99 s101). The page it lands on is
@@ -3881,6 +4039,11 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_axis_tag(entry)
     if kind == SPECIES_LEVEL_JOIN:    # P71 T10
         errs += _validate_level_join(entry)
+    if kind == SPECIES_RULER:         # P71 T14
+        errs += _validate_ruler(entry)
+    elif "settle" in entry:           # P71 T14: the ruler's own key, refused by name on any other kind
+        errs.append(f"{kind}: 'settle' is the ruler's - the decades a `ruler` lands framed on; a {kind} has no scroll "
+                    "to settle")
     if kind in VECMAP_SPECIES:
         errs += _validate_vecmap_species(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
@@ -11331,6 +11494,8 @@ def main() -> int:
                 _dur_warn = chip_stamp_dur_advice(e)       # ... and a stamped chip too short for its landing and its exit
                 if _dur_warn:
                     print(f"  [WARN] P70 T1: shot row {i + 1}: {_dur_warn}")
+        for _w in ruler_row_advice(row_species) + ruler_caption_advice(row_species, ASPECT):   # P71 T14 (s109 (c), s106):
+            print(f"  [WARN] P71 T14: shot row {i + 1}: {_w}")                                 # a year on a chip; the caption strip
         # P50 T2: a chip's SOURCED glyph rides the asset map exactly as a plate or a dock still does,
         # keyed `icon:<name>` - the geometry travels in the player, never a path to a file on disk.
         for e in row_species:

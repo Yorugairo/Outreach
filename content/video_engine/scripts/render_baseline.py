@@ -86,6 +86,10 @@ PROOF_FRAMES = {
     "melt-depth@proof-ball": ("melt-depth", {"camera": True}, 15.88),
     # P61 T8 / E99 s16 + E93 - THE AGENDA PAGE, at the three instants the held page cannot show. No flag: the page
     # form is AUTHORED on the row (`form: "page"`), never switched on, and the stamps are the rows' own clock.
+    # P71 T14 - THE DECADE RULER mid-scroll, beside BOOM 05:51.0: 0.5 s after its word the strip's first year (1980, below
+    # its ticks) has come in from the right edge and 1990 (above) is passing - the ease-out quad at 0.33 of its clock
+    # has covered 56 % of the travel. No flag: the ruler is authored on the row.
+    "decade-ruler-scroll@proof-scroll": ("decade-ruler-scroll", {}, 5.5),
     "agenda-page@proof-first-row": ("agenda-page", {}, 5.54),   # row 1's SENTENCE just fully written (5.0 + NUM_LEAD + ROW_S) and its icon NOT yet on the page - E93's order, in a frame
     "agenda-page@proof-stamp": ("agenda-page", {}, 7.325),      # row 2's icon MID-FALL: its sentence is read at 7.14, the stamp opens at 7.26 and lands at 7.52, and this is u 0.25 of that fall - the cubic ease is most of the way home by half, so a quarter is where a falling stamp is still visibly falling
     "agenda-page@proof-full": ("agenda-page", {}, 9.30),        # THE PAGE FULL: three rows written, three icons stamped, the last squash settled (9.26)

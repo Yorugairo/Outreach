@@ -1,0 +1,40 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-decade-ruler",
+ "title": "The decade ruler under the things it took",
+ "aliases": [],
+ "acts": [
+  "SPANS"
+ ],
+ "members": [
+  {
+   "card": "species:ruler",
+   "offset_s": 0.0,
+   "role": "the ground: on the lag's word ('it took more than a decade') the strip enters at the right edge, scrolls the earlier decades past and lands framed on the decades the lag lands in, then holds"
+  },
+  {
+   "card": "species:chip",
+   "offset_s": 3.0,
+   "role": "the things it took, one chip per named thing on its own word, in a ROW ABOVE the ruler - no year on a chip, no pin, no leader to a tick (the ruler dates nothing; a year on a chip over it is a WARN)"
+  }
+ ],
+ "window_s": 12.0,
+ "does": "A lag of years as a ground: the ruler scrolls the decades past and settles, then the named things land in a row above it, one per word - the time is felt, and nothing is pinned to a year.",
+ "use_when": {
+  "act": "SPANS - a lag of years",
+  "moment": "proof",
+  "shape": "dates + named things: a span of decades and 2-4 things that arrived across it",
+  "use": "a lag of years between a cause and its payoff ('it took more than a decade for smartphones, streaming, cloud computing'; 'the fibre came first') - the ruler is the time, the chips are the things",
+  "dont": "a single date (an axis tag, A10); a chip pinned to a year or labelled with one (the ruler dates nothing - s109 (c)); more than four decades in the window"
+ },
+ "doctrine": [
+  "P71 T14",
+  "E99 s109",
+  "E99 s106",
+  "E99 s99",
+  "E99 s60"
+ ],
+ "status": "candidate",
+ "source": "P71 T14 (VERIFY.md row T32: Bravos BOOM jx3Ll-GJtMY 05:50.5-06:10 - the ruler scrolls from 1980 and settles on 2000-2020, the chips pop in a row above it; no pins). Proved as a REFERENCE test-bed beat by the golden decade-ruler-scroll (a bare plate). OPEN, and it stays a candidate until both land: the witness's tree/recede step completes when P71 T17 lands (flow `layout: hub` - the hub chip over the row with its dashed tree) and P71 T15 lands (`under: blur` - the chart receded under the chips). No approved cut carries it",
+ "count": 0
+}

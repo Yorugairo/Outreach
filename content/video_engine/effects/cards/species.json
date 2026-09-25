@@ -1640,6 +1640,107 @@
       }
     },
     {
+      "id": "species:ruler",
+      "axis": "species",
+      "token": "ruler",
+      "title": "The decade ruler: time scrolls past",
+      "aliases": [
+        {
+          "name": "Epoch ruler",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:877"
+        }
+      ],
+      "does": "A full-width ruler - a tick a year, the tallest each decade under a large faded numeral - enters at the right edge on its word, scrolls left and lands with its settle decades framed, then holds: a ground for time passing. It pins nothing.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "SPANS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"ruler\", \"at\", \"dur\", \"from\", \"to\", \"settle\": [<decade>, ...], \"y\"?, \"idle\"?} (shot row 7th element); settle 2-4 consecutive decades inside from..to; no target",
+        "example": "{\"kind\": \"ruler\", \"at\": 5.0, \"dur\": 20.0, \"from\": 1980, \"to\": 2030, \"settle\": [2000, 2010, 2020], \"idle\": \"drift\"}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (decade-ruler-scroll)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the entry and the scroll",
+          "does": "the strip's first year stands at the stage's right edge on the word (the ruler wipes on by its own translation, A67) and scrolls left on the ease-out quad, the earlier decades passing",
+          "trigger": "the species' `at`, over SCROLL_S",
+          "dials": {
+            "SCROLL_S": "1.5",
+            "LEAD": "2.0"
+          }
+        },
+        {
+          "name": "the landing",
+          "does": "the first settle decade lands at SETTLE_L of the width and the last at SETTLE_R, exactly - true years at one scale, even decades' numerals below the ticks and odd above",
+          "trigger": "at + SCROLL_S",
+          "dials": {
+            "SETTLE_L": "0.19",
+            "SETTLE_R": "0.85",
+            "Y": "0.646"
+          }
+        },
+        {
+          "name": "the ground",
+          "does": "the ruler holds under the chips the author lays above it (a named idle walks it, on the life clock); it fades out over OUT_S at the end of dur",
+          "trigger": "the hold, then at + dur - OUT_S",
+          "dials": {
+            "NUM_ALPHA": "0.16",
+            "OUT_S": "0.4"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos BOOM 05:50.5-06:10 (VERIFY.md row T32, the frames under verify/T32_epoch_ruler/)",
+          "became": "the entry, the scroll's clock, the framing, the alternating numerals",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md",
+          "tie": "recorded"
+        },
+        {
+          "source": "kinetics/ease.mjs hermite (P69 T26d)",
+          "became": "the scroll's decelerating ease (LEAD 2: the ease-out quad)",
+          "record": "content/video_engine/scripts/kinetics/ease.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "E49's idle (kinetics/idle.mjs idleXf), through the engine's idleLive",
+          "became": "the held ground's walk",
+          "record": "content/video_engine/scripts/kinetics/idle.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/ruler.mjs",
+        "object": "RULER"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/ruler.mjs",
+        "symbol": "paintRuler"
+      },
+      "doctrine": [
+        "P71 T14",
+        "E99 s109",
+        "E99 s106",
+        "E99 s99",
+        "E49"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "decade-ruler-scroll",
+        "test": "content/video_engine/tests/kinetics/ruler.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "species:spotlight",
       "axis": "species",
       "token": "spotlight",

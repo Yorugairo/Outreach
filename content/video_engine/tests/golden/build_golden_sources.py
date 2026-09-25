@@ -4514,6 +4514,44 @@ SURFACES.update({"chip-states-sell": chip_states_sell})
 FRAME_T.update({"chip-states-sell": round(STATES_TAB_AT + 0.55 + 0.3, 3)})   # the tab settled (LAND_S 0.55) and holding: 8.95
 
 
+# ---- P71 T14 (was P69 T55; RESCOPED by the BOOM frame verification): THE DECADE RULER - time scrolls past ---------------
+#   decade-ruler-scroll  A REFERENCE test-bed beat on a bare dark plate (no approved cut carries it; the parent confirms
+#                     an H beat): the witness's own ruler (VERIFY.md row T32, BOOM 05:50.5-05:52.0) - the strip enters at
+#                     the right edge on its word (5.0), scrolls 1980 / 1990 past and lands framed on 2000 / 2010 / 2020
+#                     at 6.5, walking on the named drift idle - then three chips pop in a ROW ABOVE it, one per word
+#                     (the row at 0.22 and the line at the 16:9 default 0.74, the stage caption between them),
+#                     (7.0 / 8.0 / 9.0; the chip board's own sourced icons and labels), with no year, no pin, no leader.
+#                     Judged when the third chip has landed (9.0 + LAND_S = 9.55): the settled ruler under the chip row,
+#                     beside BOOM 05:55.5. Its mid-scroll instant (0.5 s in, beside BOOM 05:51.0) rides PROOF_FRAMES.
+DECADE_RULER = {"kind": "ruler", "at": 5.0, "dur": 20.0, "from": 1980, "to": 2030, "settle": [2000, 2010, 2020],
+                "idle": "drift"}   # the line at the 16:9 DEFAULT (0.74), not the witness's 0.646: our stage caption's home
+                                   # is 432-575 px, so the chips go above it and the ruler's band below it
+DECADE_RULER_CHIPS = [("factory", "PLANTS", 0.335), ("ship", "FREIGHT", 0.5), ("cpu", "CHIPS", 0.665)]   # BOOM's row x
+
+
+def decade_ruler_scroll() -> tuple[dict, dict]:
+    """The ruler first (the ground, painted beneath), then the row of chips above it - composed by the author, as the
+    recipe `the-decade-ruler` composes them; the ruler draws none of them and dates none of them."""
+    import build_scene_timeline_f as BST
+    species = [dict(DECADE_RULER)] + [
+        {"kind": "chip", "at": 7.0 + i, "dur": 18.0 - i, "icon": icon, "label": label, "idle": "breath",
+         "target": {"kind": "point", "x": x, "y": 0.22}}
+        for i, (icon, label, x) in enumerate(DECADE_RULER_CHIPS)]
+    assert not BST.validate_species(species, (0, 0, 0), "plate-plain"), BST.validate_species(species, (0, 0, 0), "plate-plain")
+    assert not BST.ruler_row_advice(species), "no chip over the ruler prints a year"
+    assert not BST.ruler_caption_advice(species, "16:9"), "the default line clears the caption's home strip"
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    for icon, _label, _x in DECADE_RULER_CHIPS:
+        uris[BST.ICON_PREFIX + icon] = BST.icon_geometry(icon)
+    return _timeline("Golden: the decade ruler scrolls, lands, and a row of chips stands above it", scenes, {}, "16:9"), uris
+
+
+SURFACES.update({"decade-ruler-scroll": decade_ruler_scroll})
+FRAME_T.update({"decade-ruler-scroll": 11.0})   # the ruler landed (6.5), the third chip landed (9.55) and at rest
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

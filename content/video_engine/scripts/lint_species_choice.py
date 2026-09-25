@@ -80,7 +80,7 @@ ACT_SPECIES = {
     "EXPLAINS": ("note", "plate use=bridge", "chip", "flow"),
     "TURNS": ("figure", "spotlight", "callout", "note", "freeze"),   # P69 T49: the stage STOPS on the number the turn lands on (E99 s99)
     "BREAKS": ("burst", "stack", "burst:stop", "placeholder", "axis capsule"),
-    "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch", "level_join"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)
+    "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch", "level_join", "ruler"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)
     "SETS": ("chart_to:park", "figure", "retitle"),
     "RETRACTS": ("retitle", "squiggle"),
 }
@@ -279,6 +279,8 @@ PROPOSE_FILL = {
                            ("label", "the gap the page's own numbers make, written off the rule")),   # P71 T10
     B.SPECIES_SOLO: (("series", "the ONE series the sentence names (a line page) - or `bar`, the ONE bar (a bars page)"),),
     B.SPECIES_AXIS_TAG: (("x", "the year the sentence names - a tick or a datum of the page (a bars page: the bar)"),),   # P71 T9
+    B.SPECIES_RULER: (("from", "the strip's first year - the scroll passes it on the way"), ("to", "its last year"),
+                      ("settle", "the 2-4 consecutive decades the lag lands in, e.g. [2000, 2010, 2020]")),   # P71 T14
     B.SPECIES_CHIP: (("icon", "a SOURCED glyph under assets/icons"), ("label", "the thing the chip stands for")),
     B.SPECIES_FLOW: (("nodes", "2-6 {id, icon, label}"), ("edges", "the arrows, by node id")),
     B.SPECIES_CROSS: (("cells", "the treemap cells' own labels"), ("text", "the crossed share, written as a number")),
