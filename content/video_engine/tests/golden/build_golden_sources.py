@@ -4249,6 +4249,42 @@ SURFACES.update({"flow-loop-tokens": flow_loop_tokens})
 FRAME_T.update({"flow-loop-tokens": 9.0})   # the loop drawn (7.105), the tokens 1.8 s into their run - mid-run on every arrow
 
 
+# ---- P71 T9 (was P69 T38): THE AXIS TAG - the named year becomes an accent pill on the x axis ---------------------------
+# Steel and Paper H row 9's own page, the one its door recasts to on "the internet": `ev-equip-ipp-gdp-v2` (v1's data,
+# byte for byte, with the decade x ticks R26-262 added - v1 has no x ticks, so 2000 is only a TICK on v2), full stage,
+# 16:9, live. The H take's words, shifted by -70.49 s so the page has built first: "the internet crossed" 80.49 -> 10.00
+# (the GDP page is on screen from that word; "two thousand" at 79.80 is spoken over the railway page, which has no
+# 2000), to "seven percent"'s start 81.42 -> 10.93. The tag names 2000 - a tick AND the series' Q1-2000 datum (index
+# 120, 11.494 %) - so the "2000" tick springs into the pill and the dotted guide drops to it from that datum. The
+# object is the COMMITTED evidence sidecar, read in place. Judged at 80.49 + 0.4 s (the plan's instant): the pill and
+# its guide have landed (POP_S 0.25; GUIDE_AT 0.1 + GUIDE_S 0.28), the 2000 tick is under the pill, 1990 and 2010 stand.
+AXTAG_PROJECT = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
+AXTAG_PLATE = "ledger:ev-equip-ipp-gdp-v2:line:225:right;idle=live"
+AXTAG_AT, AXTAG_DUR = 10.0, 0.93
+AXTAG_SPECIES = [{"kind": "axis_tag", "at": AXTAG_AT, "dur": AXTAG_DUR, "x": 2000}]
+
+
+def axis_tag_two_thousand() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    species = [dict(e) for e in AXTAG_SPECIES]
+    assert not BST.validate_species(species, (0, 0, 0), AXTAG_PLATE), BST.validate_species(species, (0, 0, 0), AXTAG_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(AXTAG_PLATE, (0, 0, 0), AXTAG_PROJECT)
+        BST.stamp_full_stage(world["page"])
+        assert BST.check_axis_tags(world, species) == [], "2000 is a tick and a datum of the page: no finding"
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the named year becomes a pill on the axis (axis_tag)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"axis-tag-two-thousand": axis_tag_two_thousand})
+FRAME_T.update({"axis-tag-two-thousand": round(AXTAG_AT + 0.4, 3)})   # the plan's 80.49 + 0.4 s: pill and guide landed
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

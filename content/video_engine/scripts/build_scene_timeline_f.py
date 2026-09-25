@@ -770,6 +770,27 @@ MEMBER_SPECIES_KEYS = ("kind", "at", "dur", "id", "tile", "bar", "light")
 MEMBER_DUR_S = (0.2, 1.2)   # [DERIVED] the landing's window: the count array lands in COUNT_ARRAY_LAND_S (0.45); under 0.2 the
                             # spring's overshoot is a flicker, past 1.2 it is a float, not a landing
 MEMBER_CHART_TO = ("park",)   # the one chart_to a membership page takes - the whole chart moves as one affine transform
+# P71 T9 (was P69 T38) - THE AXIS TAG and its DROP GUIDE (the Bravos harvest v2's A10, rank 3; A42 / A43 are the same
+# pill; BRAVOS-USE-WHEN.md:323). A PAGE species: on its word the x-axis label the sentence NAMES - a year on a line
+# page's axis, a category under a bars page's bar - becomes an accent pill in its place (covering any neighbour it
+# reaches), and on a line page a dotted guide drops from the datum to it. It stands until its page leaves (page-bound,
+# R26-219). Its law and painter are species/axis_tag.mjs; this file owns its grammar (`_validate_axis_tag`) and its
+# TRUTH on the page it stands on (`check_axis_tags`: the x is one of that page's ticks or data, inside its domain; a
+# bars label is the bar's own; a year the pill prints is the year it stands on), and a fourth tag standing in one hold
+# is a WARN with its numbers (E99 s106).
+SPECIES_AXIS_TAG = "axis_tag"
+SPECIES_KINDS += (SPECIES_AXIS_TAG,)
+PAGE_SPECIES += (SPECIES_AXIS_TAG,)
+PANEL_SPECIES += (SPECIES_AXIS_TAG,)       # a panel's own x axis (`panel: <i>`)
+PAGE_BOUND_SPECIES += (SPECIES_AXIS_TAG,)  # R26-219: a verb that replaces its page takes it (and `keep: true` holds it)
+SPECIES_WHEN[SPECIES_AXIS_TAG] = ("COMPARES, at the proof: the sentence NAMES a year on the chart ('in November of 1999') - its "
+                                  "tick becomes an accent pill on the word, a dotted guide dropped to it from the datum; never "
+                                  "when the date is not spoken, or past 2-3 tags in one hold")
+AXIS_TAG_KEYS = (("kind", "at", "dur", "x", "label", "series", "guide", "panel", "keep")
+                 + ROW_PATH_KEYS + ("leave_at", "leave_s", "leave_clamped"))   # + what the row path and R26-219 write
+AXIS_TAG_MAX = 3   # the don't (USE-WHEN :323): "more than 2-3 tags in one hold"; species/axis_tag.mjs AXTAG.MAX_STANDING
+AXIS_TAG_LINE = ("dense-line", LPG.PANEL_LINE)   # the pages whose x axis carries values: a line page, a line panel ...
+AXIS_TAG_BARS = ("story", LPG.PANEL_BARS)        # ... and the pages whose x axis is the bars' categories
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -1703,6 +1724,7 @@ SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANEL
 SPECIES_TARGETS[SPECIES_MEMBER] = ()   # P69 T45: a tile of a membership bar, by index - the page owns where it stands
 SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
 SPECIES_TARGETS[SPECIES_SOLO] = SPECIES_TARGETS[SPECIES_UNSOLO] = ()   # P69 T37: a solo names a series or a bar by index; the chart owns where it is
+SPECIES_TARGETS[SPECIES_AXIS_TAG] = ()   # P71 T9: a tag names its x as the page's own value (a tick, a datum, a bar); the chart owns where it is
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
                                                                  # line's point, a bar), or a point / the box of a mark or a prop
 SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
@@ -3319,6 +3341,182 @@ def check_solo(world: dict, row_species: list) -> None:
                                      "`light` (P69 T45), and a solo would mute the bar out from under them")
 
 
+# ---- P71 T9: THE AXIS TAG's grammar and its truth on the page it stands on -------------------------------------------
+def _validate_axis_tag(entry: dict) -> list[str]:
+    """P71 T9: `{"kind": "axis_tag", at, dur, x, label?, series?, guide?, panel?}`. `x` is the page's own x - a number
+    (a line page's value, or a bars page's bar index) or a string (a tick's own label, or a bar's category); `label`
+    what the pill prints when it is not the tick's own string; `series` the line the guide drops from; `guide: false`
+    the pill alone. Anything else is refused by name (P71 common rule (h)): a tag prints the page's own x, nothing more."""
+    errs: list[str] = []
+    x = entry.get("x")
+    if not ((isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x))
+            or (isinstance(x, str) and x.strip())):
+        errs.append("axis_tag: 'x' must be the page's own x - a number (a line page's value, a bar's index) or a string "
+                    "(a tick's own label, a bar's category)")
+    if "label" in entry and not (isinstance(entry["label"], str) and entry["label"].strip()):
+        errs.append("axis_tag: label must be a non-empty string (absent: the tick's own label)")
+    if "series" in entry and not _is_index(entry["series"]):
+        errs.append("axis_tag: series must be a non-negative integer series index (the line the guide drops from)")
+    if "guide" in entry and not isinstance(entry["guide"], bool):
+        errs.append("axis_tag: guide must be true or false (false: the pill alone, no drop guide)")
+    for k in sorted(k for k in entry if k not in AXIS_TAG_KEYS):
+        errs.append(f"axis_tag: {k!r} is not one of its keys ({'|'.join(AXIS_TAG_KEYS[3:9])}) - a tag prints the page's "
+                    "own x; the number the sentence turns on is a `figure`")
+    return errs
+
+
+def _axis_tag_page(world: dict, row_species: list, sp: dict, where: str) -> dict:
+    """The page a tag stands on: the chart state on screen at its word (`_state_index_on_screen`) - or, on a panels
+    page, the panel it names."""
+    states = [world.get("page") or {}] + list(world.get("page_states") or [])
+    spec = states[_state_index_on_screen(world, row_species, float(sp.get("at", 0)))]
+    if spec.get("builder") != LPG.PANELS:
+        return spec
+    panels = spec.get(LPG.PANELS_KEY) or []
+    pi = sp.get("panel")
+    if not _is_index(pi):
+        raise ValueError(f"{where}: a panels page's x axes are its panels' - name the `panel` whose axis it stands on")
+    if pi >= len(panels):
+        raise ValueError(f"{where}: panel {pi} is past the page's last panel ({len(panels) - 1})")
+    return dict(panels[pi], builder=panels[pi].get("builder") or LPG.PANEL_LINE)
+
+
+def _axis_tag_years_ok(label: str, xv: float) -> str | None:
+    """A year the pill PRINTS must be the year it stands on: '2000', 'Q2 2000', 'November 1999' name floor(x); a decade
+    ('the 1990s') holds x inside it. The first year that disagrees, or None (a label naming no year is not checked)."""
+    years = re.findall(r"(?<!\d)(\d{4})(s?)(?!\d)", label)
+    if not years or any((int(y) <= xv < int(y) + 10) if dec else int(y) == math.floor(xv + 1e-9) for y, dec in years):
+        return None
+    return years[0][0] + years[0][1]
+
+
+def _axis_tag_line(spec: dict, sp: dict, where: str) -> tuple[float, list[str]]:
+    """A line page's truth: the x is one of its ticks or one of the named series' data, inside its domain."""
+    series = spec.get("series") or []
+    si = sp.get("series", 0)
+    if si >= len(series):
+        raise ValueError(f"{where}: series {si} is past the page's last series ({len(series) - 1})")
+    xs = [float(p[0]) for p in (series[si].get("pts") or [])]
+    ticks = [(float(v), str(lab)) for v, lab in ((spec.get("axes") or {}).get("xticks") or [])]
+    x = sp["x"]
+    if isinstance(x, str):
+        hit = [v for v, lab in ticks if lab == x]
+        if not hit:
+            raise ValueError(f"{where}: x {x!r} is not one of the page's x tick labels "
+                             f"({', '.join(lab for _v, lab in ticks) or 'none'}) - name a tick, or the value itself")
+        xv = hit[0]
+    else:
+        xv = float(x)
+    dom = [v for v, _lab in ticks] + xs
+    lo, hi = (min(dom), max(dom)) if dom else (0.0, 0.0)
+    if not dom or xv < lo - 1e-9 or xv > hi + 1e-9:
+        raise ValueError(f"{where}: x={xv:g} is outside the page's domain [{lo:g}, {hi:g}] - a tag names a date the chart "
+                         "draws (s109: never a place the page does not have)")
+    on_tick = any(abs(v - xv) < 1e-9 for v, _lab in ticks)
+    on_datum = any(abs(v - xv) < 1e-9 for v in xs)
+    if not (on_tick or on_datum):
+        near = min(dom, key=lambda v: abs(v - xv))
+        raise ValueError(f"{where}: x={xv:g} is neither one of the page's x ticks nor a datum of series {si} (the "
+                         f"nearest is {near:g}) - a tag stands on a date the page carries (s109)")
+    label = sp.get("label")
+    bad = _axis_tag_years_ok(label, xv) if isinstance(label, str) else None
+    if bad:
+        raise ValueError(f"{where}: label {label!r} - the pill would print {bad} at x={xv:g} (E28: a date written over "
+                         "another date is a value drawn wrong)")
+    warns = []
+    if not on_tick and not isinstance(label, str):
+        warns.append(f"{where}: no tick stands at x={xv:g}, so the pill prints '{xv:g}' - name it with `label` (the "
+                     "sentence's own words); REPORTED, the frame read decides (E99 s106)")
+    if not on_datum and sp.get("guide") is True:
+        warns.append(f"{where}: x={xv:g} is a tick with no datum of series {si} - there is no point to drop a guide from, "
+                     "so the pill stands alone; REPORTED (E99 s106)")
+    return xv, warns
+
+
+def _axis_tag_bars(spec: dict, sp: dict, where: str) -> tuple[float, list[str]]:
+    """A bars page's truth: the tag names a BAR - by index or by its category - and prints that bar's own category
+    (review finding 15; s106, s109 (5): a tag on a bars page is not refused by type, a label no bar carries is)."""
+    cats = [str(c) for c in (spec.get("labels") or [])]
+    n = max(len(cats), len(spec.get("values") or []))
+    x = sp["x"]
+    if isinstance(x, str):
+        if x not in cats:
+            raise ValueError(f"{where}: {x!r} is not one of the page's bars ({', '.join(cats)}) - a tag names a bar the "
+                             "page draws (s109 (5))")
+        i = cats.index(x)
+    elif isinstance(x, int):
+        i = x
+        if i < 0 or i >= n:
+            raise ValueError(f"{where}: bar {i} is past the page's last bar ({n - 1})")
+    else:
+        raise ValueError(f"{where}: x={x!r} - a bars page's x is a bar's index or its category, not a value between them")
+    label = sp.get("label")
+    if isinstance(label, str) and i < len(cats) and label != cats[i]:
+        raise ValueError(f"{where}: label {label!r} is not bar {i}'s category {cats[i]!r} - the pill names the bar it "
+                         "stands under (s109 (5): a label no bar carries is refused)")
+    warns = []
+    if sp.get("guide") is True:
+        warns.append(f"{where}: guide - a bars page draws no guide (a dotted rule down a bar is a seam in it; the "
+                     "breakthrough capsule's measured finding): the pill stands under its bar; REPORTED (E99 s106)")
+    return float(i), warns
+
+
+def _axis_tag_arrival(row_species: list, at: float) -> tuple[str, float, float] | None:
+    """The state-changing chart_to a tag's word falls UNDER - (its verb, its at, its end) - or None. The player's pop
+    waits for it (species/axis_tag.mjs `axtagStart`: a state is the active one only once its verb has run)."""
+    last = None
+    for c in sorted((c for c in (row_species or []) if isinstance(c, dict) and c.get("kind") == "chart_to"
+                     and c.get("to") not in ("park", "compare") and _num(c.get("at"))), key=lambda c: float(c["at"])):
+        if float(c["at"]) <= at + 1e-9:
+            last = c
+    if last is None:
+        return None
+    d = max(0.001, float(last.get("dur") or 1.0))
+    if last.get("keyed") == "data":
+        d = max(d, KEYED_RECAST_MIN_S)
+    end = round(float(last["at"]) + d, 3)
+    return (str(last.get("to")), float(last["at"]), end) if at < end - 1e-9 else None
+
+
+def check_axis_tags(world: dict, row_species: list) -> list[str]:
+    """P71 T9: every `axis_tag` of a row, on the page it stands on. Refused (ValueError naming it) where it would be a
+    lie: a page with no x axis a tag can name, an x outside the page's domain, an x that is neither a tick nor a datum,
+    a bars label no bar carries, a year printed over another year. Returned as WARN lines (E99 s106): more than
+    AXIS_TAG_MAX standing at once in one hold, a pill with no tick and no label, a guide the page cannot draw."""
+    tags = [sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == SPECIES_AXIS_TAG]
+    if not tags or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return []
+    warns: list[str] = []
+    placed = []
+    for sp in tags:
+        where = f"axis_tag at {sp.get('at')}"
+        spec = _axis_tag_page(world, row_species, sp, where)
+        builder = spec.get("builder")
+        if builder in AXIS_TAG_LINE:
+            xv, w = _axis_tag_line(spec, sp, where)
+        elif builder in AXIS_TAG_BARS:
+            xv, w = _axis_tag_bars(spec, sp, where)
+        else:
+            raise ValueError(f"{where}: a {builder} page has no x axis a tag can name - it stands on a line page's x axis "
+                             f"({'|'.join(AXIS_TAG_LINE)}) or under a bars page's bar ({'|'.join(AXIS_TAG_BARS)})")
+        warns += w
+        arrive = _axis_tag_arrival(row_species, float(sp["at"]))
+        if arrive is not None:
+            warns.append(f"{where}: its page is still arriving (the chart_to {arrive[0]} at {arrive[1]:g}s runs to "
+                         f"{arrive[2]:g}s) - the pill pops when the page stands, at {arrive[2]:g}s, not on the word; "
+                         "author it there if the word is later (E99 s106)")
+        hold = (_state_index_on_screen(world, row_species, float(sp["at"])), sp.get("panel"))
+        placed.append((float(sp["at"]), page_species_end(sp), hold, xv))
+    for at, _end, hold, _xv in sorted(placed, key=lambda q: q[0]):
+        up = [(a, x) for a, e, h, x in placed if h == hold and a <= at + 1e-9 and (e is None or e > at + 1e-9)]
+        if len(up) > AXIS_TAG_MAX:
+            warns.append(f"axis_tag: {len(up)} tags stand at once at {at:g}s on this page (x = "
+                         f"{', '.join(f'{x:g}' for _a, x in sorted(up))}) - more than {AXIS_TAG_MAX} in one hold crowds the "
+                         "axis (USE-WHEN :323's don't); REPORTED, the frame read decides (E99 s106)")
+            break
+    return warns
+
+
 def _member_tiles(tile, n: int) -> list[int]:
     """P69 T45: the tile indices a `member` species names on a bar of `n` tiles ("all" is every one)."""
     if tile == "all":
@@ -3531,6 +3729,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_freeze(entry)
     if kind == SPECIES_MEMBER:        # P69 T45
         errs += _validate_member(entry)
+    if kind == SPECIES_AXIS_TAG:      # P71 T9
+        errs += _validate_axis_tag(entry)
     if kind in VECMAP_SPECIES:
         errs += _validate_vecmap_species(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
@@ -10708,6 +10908,8 @@ def main() -> int:
                 uris[_pid] = dock_uri(dock_asset_path(_pid, EP))
         try:
             derive_rescale_states(world, row_species, plate, EP, sid=sid)   # P48 T2: each `chart_to rescale` gets its own derived page state; E64: and each recast its derived KEY
+            for _w in check_axis_tags(world, row_species):   # P71 T9: a tag's truth on its page (refused above), its crowding (a WARN)
+                print(f"  [WARN] P71 T9: shot row {i + 1}: {_w}")
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         # P69 T26f (E99 s108): the page's chrome as objects - its camera relation and its moves, each `at` read on the

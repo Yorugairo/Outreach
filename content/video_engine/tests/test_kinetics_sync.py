@@ -54,6 +54,7 @@ SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span",
            "spiral",    # P57 T22 (its note follows)
            "lit_stretch",   # P69 T36: the light that travels a stretch of the line - a PAGE species (PAGE_PAINTERS.lit_stretch), its region right after span's, whose edge law it imports
            "solo",      # P69 T37: the on-word isolate - a PAGE species (PAGE_PAINTERS.solo), its region right after lit_stretch's, before paintPerform closes over it
+           "axis_tag",   # P71 T9: the axis tag and its drop guide - a PAGE species (PAGE_PAINTERS.axis_tag), its region right after compare's, before buildPerform
            "freeze"]    # P69 T49: the freeze beat - a stage species (SPECIES_PAINTERS.freeze) whose life clock the engine's idles read
                         # P57 T22 / R26-101: THE PAGE VORTEX, both directions in one module (the row's proposal, taken) - neither a kind nor a dock payload but a page TRANSITION, so it registers no painter and the ledger slot calls lpSpiral by name; its region sits where the inline vortex did, before paintLedger, and it imports squash's scaleBy, whose region is far earlier
                               # `verdict` and `checklist` (P55 T7) are the verdict stack (a dock payload) and the test card (a chart-dock form),

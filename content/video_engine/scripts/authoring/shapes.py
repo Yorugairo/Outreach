@@ -629,13 +629,13 @@ def clear_strips(band: dict, ink: list[dict]) -> list[dict]:
 # outside it, or the park that makes one, are what is left - the same ladder `make_room` already
 # walks, and the same argument `bound_by_state` makes for a `chart_to` redrawing under a card.
 PLOT_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "undraw", "span", "ring", "lit_stretch", "freeze", "explode",
-              "member")   # P69 T45: a membership tile lands INSIDE its bar, on the plot
+              "member", "axis_tag")   # P69 T45: a membership tile lands INSIDE its bar, on the plot; P71 T9: the pill on the axis and its guide down the plot
 # P69 T49: the freeze beat's ONE light comes on at a datum ON the plot, for the beat's own window (at .. at + dur) and
 # no longer: a card that holds over the plot through the beat would stand on the light the stage stopped for.
 # P69 T36: the lit stretch is a mark ON the line - and it HOLDS lit after its word until the page leaves (E99 s91: the
 # light that has landed is an annotation, and it is still on the data). Its `dur` is the word it travels over, not how
 # long it stands, so it is read as a mark with no readable end: it stands to the card's own exit.
-HELD_MARKS = ("lit_stretch",)
+HELD_MARKS = ("lit_stretch", "axis_tag")   # P71 T9: the tag stands after its word until its page leaves (page-bound, R26-219)
 # ... and the QUIET ZONE is written in too: a `note` is *"a line of handwriting in the page's quiet
 # zone"* (`build_scene_timeline_f.SPECIES_WHEN`), which is the band a card sent out of the plot is
 # otherwise given. The first fifth-pass build measured exactly that: the cup, out of the plot, landed

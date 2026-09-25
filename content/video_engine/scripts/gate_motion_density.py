@@ -423,6 +423,9 @@ SPECIES_EVENTS["freeze"] = ("at",)
 # nothing. An UNSOLO is the same change the other way - every mark restores on its word - and one event too.
 SPECIES_EVENTS["solo"] = ("at",)
 SPECIES_EVENTS["unsolo"] = ("at",)
+# P71 T9: THE AXIS TAG - the tick springs into a pill on its word and the guide drops to it inside the same word: ONE
+# arrival, at its word. The pill that then stands is an annotation (E99 s91) and earns nothing.
+SPECIES_EVENTS["axis_tag"] = ("at",)
 COUNT_ARRAY_STEP = AGENDA_STEP = 0.34   # the default word pitch both kinds arrive on when the row names no `step`
                                         # - the same number the compiler holds (build_scene_timeline_f.COUNT_ARRAY_STEP /
                                         # AGENDA_STEP) and the modules' own dial (COUNT.STEP / AGENDA.STEP): 178 WPM.

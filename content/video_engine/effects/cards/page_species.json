@@ -117,6 +117,129 @@
       }
     },
     {
+      "id": "page_species:axis_tag",
+      "axis": "page_species",
+      "token": "axis_tag",
+      "title": "The axis tag: the named year becomes a pill",
+      "aliases": [
+        {
+          "name": "Axis tag: the named year / era / span replaces its tick as an accent pill",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:323"
+        },
+        {
+          "name": "Drop guides to both axes, a pill at each foot (the x foot)",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:765"
+        },
+        {
+          "name": "Vertical event guide under a date capsule",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:353"
+        }
+      ],
+      "does": "On its word the x-axis label the sentence names springs into an accent pill in its place, covering any neighbour it reaches, and on a line page a dotted guide drops from the datum to it, cut round any label. It stands until the page leaves.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "COMPARES"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"axis_tag\", \"at\", \"dur\", \"x\", \"label\"?, \"series\"?, \"guide\"?, \"panel\"?} on a ledger row; x is a tick or a datum of a line page (a value or a tick's label), or a bars page's bar (its index or its category)",
+        "example": "{\"kind\": \"axis_tag\", \"at\": 10.0, \"dur\": 0.93, \"x\": 2000}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (axis-tag-two-thousand)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the tick becomes the pill",
+          "does": "the pill springs in about the tick's centre on springPop; the named tick hides once the pill has swallowed it, a neighbour the moment the pill's edge reaches it; the pill's text writes in after",
+          "trigger": "the species' `at`, over POP_S",
+          "dials": {
+            "POP_S": "0.25",
+            "POP_MP": "0.05",
+            "TYPE_K": "1.25",
+            "PAD_X": "14",
+            "PAD_Y": "9"
+          }
+        },
+        {
+          "name": "the guide drops",
+          "does": "a dotted rule draws by length from the datum down to the pill's top, never ahead of the drawn ink, cut round the page's own labels (C14); a bars page draws none",
+          "trigger": "GUIDE_AT after `at`, over GUIDE_S",
+          "dials": {
+            "GUIDE_AT": "0.1",
+            "GUIDE_S": "0.28",
+            "LABEL_PAD": "6"
+          }
+        },
+        {
+          "name": "the tag stands",
+          "does": "the pill and its guide hold, an annotation now (E99 s91), following the datum on the live scale; a chart_to that replaces the page takes them and the covered labels come back",
+          "trigger": "POP_S after `at`, until the page's leave (R26-219)",
+          "dials": {
+            "MAX_STANDING": "3"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos harvest v2 A10 (n=7): the named year replaces its tick as an accent pill (HIS 05:50, JPN 01:16, BOOM)",
+          "became": "the pill in the tick's place, covering its neighbours",
+          "record": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:247",
+          "tie": "recorded"
+        },
+        {
+          "source": "tippill's pill (TIPPILL.PAD_X / PAD_Y, pillBox, springPop Mp 0.05)",
+          "became": "the pill's box and its pop",
+          "record": "content/video_engine/scripts/species/tippill.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "the breakthrough capsule's dotted leader (BREAK.CAP_LEAD_*) and the page's callout capsule (.cpill / .callout)",
+          "became": "the guide's dash and the pill's accent",
+          "record": "content/video_engine/scripts/species/breakthrough.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "guide",
+          "means": "`guide: false`: the pill alone, no drop guide (a bars page never draws one).",
+          "source_set": null
+        },
+        {
+          "token": "label",
+          "means": "`label`: what the pill prints when it is not the tick's own string ('Q2 2000'); a year it prints must be the year it stands on.",
+          "source_set": null
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/species/axis_tag.mjs",
+        "object": "AXTAG"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/axis_tag.mjs",
+        "symbol": "paintAxisTags"
+      },
+      "doctrine": [
+        "E99 s106",
+        "E99 s109",
+        "E99 s91",
+        "E28",
+        "R26-219",
+        "P71 T9"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "axis-tag-two-thousand",
+        "test": "content/video_engine/tests/kinetics/axis_tag.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "page_species:bracket",
       "axis": "page_species",
       "token": "bracket",

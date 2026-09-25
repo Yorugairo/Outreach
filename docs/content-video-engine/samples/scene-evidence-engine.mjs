@@ -12540,7 +12540,7 @@ async function mount(doc) {
     WIDE_EPS: 1e-4,                                                /* P69 T8c: a pose box this close to its home's aspect IS the home chart at another size (T8b's move) */
     WIDE_KEEP: 4,                                                  /* ... and at most this many re-laid-out builds are kept per panel (a cache: the frame is a function of the width alone) */
   });
-  const LP_PANEL_KINDS = Object.freeze(["build_to", "undraw", "figure", "bracket", "spread", "span", "chart_to", "relight", "lit_stretch"]);   /* build_scene_timeline_f.PANEL_SPECIES (P69 T36: the light travels a line on its own panel) */
+  const LP_PANEL_KINDS = Object.freeze(["build_to", "undraw", "figure", "bracket", "spread", "span", "chart_to", "relight", "lit_stretch", "axis_tag"]);   /* build_scene_timeline_f.PANEL_SPECIES (P69 T36: the light travels a line on its own panel) */
   const lpPanelDefault = (n, portrait) => (portrait ? "stack" : n >= 4 ? "quad" : "row");
   const lpPanelCells = (layout, k, R) => {   /* `k` cells of a layout over R {x, y, w, h}, reading order (ledger_page.panel_cells) */
     if (!(k > 0)) return [];
@@ -14037,6 +14037,193 @@ async function mount(doc) {
      inlining keeps it and node - where no registry exists - still imports the file for the math. */
   if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.compare = paintCompare;
   /* KINETICS:END */
+  /* KINETICS:BEGIN axis_tag */
+  /* SPACE: page */
+  /* species/axis_tag.mjs - THE AXIS TAG and its DROP GUIDE (P71 T9, was P69 T38; the Bravos harvest v2's A10 "the named
+     year / era / span replaces its tick as an accent pill", n=7, rank 3 - A42 / A43 are the same pill). SOURCE OF TRUTH,
+     inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN axis_tag and KINETICS:END, AFTER
+     ease, spring, span, lit_stretch and breakthrough (it imports all five, and the import order IS the region order).
+     Its region sits BEFORE paintPerform, for span.mjs's reason: a PAGE species' painter is closed over by the perform
+     layer, and a const has to exist before the function that closes over it is built.
+
+     WHEN (`SPECIES_WHEN["axis_tag"]`, build_scene_timeline_f.py; BRAVOS-USE-WHEN.md:323): the sentence NAMES a year or
+     an era ("in November of 1999", "the late 1990s") on a chart that carries it. Don't: the date is not spoken; more
+     than 2-3 tags standing in one hold (the compiler WARNs a fourth with its numbers, E99 s106).
+
+     THE LOOK, off Bravos's frames (HIS 05:50-05:54, JPN 01:16; BOOM "November 1999" 13:37): the tick's own label
+     becomes a filled accent pill IN ITS PLACE - the same string, bolder - and a pill wider than one tick COVERS its
+     neighbours. So the one rule here is: every x-axis label (an `xtick`, or a bars page's `xlabel`) whose box the pill
+     overlaps is hidden while the pill stands - the NAMED one once the growing pill has swallowed it whole (the viewer
+     sees the tick become the pill, as HIS 05:52 does), a neighbour the moment the pill's edge reaches it. The pill is
+     the page's own callout capsule (`rect.cpill` + `text.callout`: the sunflower accent, the charcoal type, the one
+     yellow the page has), so every gate that reads the callout reads this one.
+
+     THE LAW, a pure function of t:
+       the pop    - the pill springs in about its centre on springPop(Mp = POP_MP) over POP_S from the word (tippill's
+                    named overshoot, R26-34); its text writes in only once the pill has covered the tick it names, so
+                    the two strings never stand on each other (M28).
+       the guide  - on a LINE page, a dotted rule drops from the datum the tag names down to the pill's top, drawn by
+                    LENGTH on min-jerk from GUIDE_AT over GUIDE_S (the breakthrough capsule's dotted-leader law:
+                    BREAK.CAP_LEAD_DASH / _W / _GAP - a solid rule across a chart is a comparator, E53 s6). It never
+                    crosses one of the page's own labels (C14): the run is cut round every label box it would meet.
+                    A bars page draws none (a guide down a bar is a seam in it - the capsule's own measured finding).
+       the place  - re-read every frame on the ACTIVE state (R26-28): a line tag stands at its datum's live position
+                    (the perform layer's datumNow, lerped across a rescale), a bars tag at its bar's; a value the active
+                    state does not carry hides the tag rather than drawing it in the wrong place.
+       the leave  - a tag is PAGE-BOUND (R26-219): a chart_to that replaces its page takes it on the page's own leave,
+                    resolved by the compiler (`leave_at`), and the covered labels come back when it has gone.
+     The dials are ours to tune (42 s42.5), not findings. */
+
+  const AXTAG = Object.freeze({
+    POP_S: 0.25,        /* the pill's pop, from the word: a tick becoming a pill ARRIVES on the word, inside it */
+    POP_MP: 0.05,       /* tippill's POP_MP - R26-34's named overshoot for a pill that arrives on a WORD */
+    PAD_X: 14, PAD_Y: 9,/* tippill's TIPPILL.PAD_X / PAD_Y, BY VALUE: tippill's region sits after paintPerform, so a page module cannot import it (the node test pins them equal) */
+    RADIUS: 12,         /* tippill's pillBox corner: min(h / 2, 12) */
+    TYPE_K: 1.25,       /* the pill's type over the tick's own: the template's .callout (30) over .lab (24), the page's one capsule ratio */
+    GUIDE_AT: 0.1,      /* the guide starts this far into the word (the pill is half popped) ... */
+    GUIDE_S: 0.28,      /* ... and drops by length over this: pill and guide have both landed 0.38 s after the word */
+    GUIDE_GAP: BREAK.CAP_LEAD_GAP,     /* the guide stops this short of the datum and of the pill: it points, it does not touch */
+    GUIDE_DASH: BREAK.CAP_LEAD_DASH,   /* ... dotted */
+    GUIDE_W: BREAK.CAP_LEAD_W,         /* ... at the leader's weight */
+    LABEL_PAD: 6,       /* C14: the guide stops this far short of a label box it would cross */
+    MAX_STANDING: 3,    /* the don't (USE-WHEN :323): "more than 2-3 tags in one hold" - build_scene_timeline_f.AXIS_TAG_MAX, the compiler's copy */
+  });
+
+  const ax01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE POSE at t: is it up, the pop's scale (springPop overshoots, then 1), the guide's drawn share (0..1). `t0` is
+     when the clock starts (axtagStart: the word, or the instant its page has arrived); absent, the word. */
+  const axtagPose = (sp, t, t0) => {
+    const d = t - (Number.isFinite(t0) ? t0 : (+sp.at || 0));
+    if (!(d >= 0)) return { on: false, s: 0, u: 0, guide: 0 };
+    const u = ax01(d / AXTAG.POP_S);
+    return { on: true, u, s: springPop(u, AXTAG.POP_MP), guide: minJerk(ax01((d - AXTAG.GUIDE_AT) / AXTAG.GUIDE_S)) };
+  };
+
+  /* WHEN THE POP STARTS: on its word - unless its word falls while the chart state it names is still ARRIVING. A state
+     stands (the one a species resolves against) only when the chart_to that brings it in has run (the engine's
+     lpPaintStates: a recast hands over for its `dur` - a keyed "data" recast for at least `keyedMin` - and only then is
+     the new state the active one). A pill that popped under the hand-over would appear WHOLE at the switch, so the pop
+     waits for it: the last state-changing chart_to at or before the word, and its end. A pure function of the row. */
+  const AXTAG_STILL = Object.freeze(["park", "compare"]);   /* verbs that change no state */
+  const axtagStart = (sp, chartTos, keyedMin = 0) => {
+    const at = +sp.at || 0;
+    let end = -Infinity;
+    for (const c of chartTos || []) {
+      if (!c || AXTAG_STILL.indexOf(c.to) >= 0 || !(+c.at <= at + 1e-9)) continue;
+      const d = Math.max(0.001, +c.dur || 1);
+      end = +c.at + (c.keyed === "data" ? Math.max(d, keyedMin) : d);
+    }
+    return Math.max(at, end);
+  };
+
+  /* the pill's box for a measured text width and height - tippill's pillBox shape, about its centre */
+  const axtagPillBox = (w, h) => {
+    const bw = w + 2 * AXTAG.PAD_X, bh = h + 2 * AXTAG.PAD_Y;
+    return { w: bw, h: bh, x: -bw / 2, y: -bh / 2, r: Math.min(bh / 2, AXTAG.RADIUS) };
+  };
+
+  /* the pill's rect at scale s about (cx, cy), as [x, y, w, h] */
+  const axtagRect = (cx, cy, pill, s) => [cx - (s * pill.w) / 2, cy - (s * pill.h) / 2, s * pill.w, s * pill.h];
+  const axtagOverlaps = (a, b) => !!a && !!b && a[2] > 0 && a[3] > 0 && b[2] > 0 && b[3] > 0
+    && a[0] < b[0] + b[2] && b[0] < a[0] + a[2] && a[1] < b[1] + b[3] && b[1] < a[1] + a[3];
+  const axtagContains = (a, b) => !!a && !!b && a[0] <= b[0] && a[1] <= b[1] && a[0] + a[2] >= b[0] + b[2] && a[1] + a[3] >= b[1] + b[3];
+  /* the covering rule: the NAMED tick hides once the pill contains it (the tick becomes the pill), a neighbour the moment
+     the pill's edge reaches it (the pill covers it) */
+  const axtagHides = (rect, box, named) => (named ? axtagContains(rect, box) : axtagOverlaps(rect, box));
+  /* the scale at which the pill about (cx, cy) contains a box: its text may write from here on */
+  const axtagCoverScale = (cx, cy, pill, box) => {
+    if (!box) return 0;
+    const sx = (2 * Math.max(cx - box[0], box[0] + box[2] - cx)) / Math.max(1e-6, pill.w);
+    const sy = (2 * Math.max(cy - box[1], box[1] + box[3] - cy)) / Math.max(1e-6, pill.h);
+    return Math.max(0, sx, sy);
+  };
+
+  /* C14: the guide's runs down x from y0 to y1, cut round every label box it would cross (padded by `pad`). Sorted,
+     never empty-length; [] when the labels take all of it. */
+  const axtagGuideRuns = (x, y0, y1, boxes, pad = AXTAG.LABEL_PAD) => {
+    if (!(y1 > y0)) return [];
+    const cuts = [];
+    for (const b of boxes || []) {
+      if (!b || !(x >= b[0] - pad && x <= b[0] + b[2] + pad)) continue;
+      const a = b[1] - pad, z = b[1] + b[3] + pad;
+      if (z > y0 && a < y1) cuts.push([Math.max(y0, a), Math.min(y1, z)]);
+    }
+    cuts.sort((p, q) => p[0] - q[0]);
+    const runs = [];
+    let y = y0;
+    for (const [a, z] of cuts) { if (a > y) runs.push([y, a]); y = Math.max(y, z); }
+    if (y < y1) runs.push([y, y1]);
+    return runs.filter(([a, z]) => z - a > 0.5);
+  };
+
+  /* the runs drawn DOWN to `to` (the guide drops from the datum), as one path of sub-paths */
+  const axtagGuideD = (x, runs, to) => runs
+    .filter(([a]) => a < to)
+    .map(([a, z]) => "M" + x.toFixed(1) + " " + a.toFixed(1) + " L" + x.toFixed(1) + " " + Math.min(z, to).toFixed(1))
+    .join(" ");
+
+  /* a label's box THIS FRAME: its build-time size about its LIVE x (a rescale moves the ticks; their size does not) */
+  const axtagLabelBox = (lab) => {
+    const x = parseFloat(lab.el.getAttribute("x"));
+    if (!Number.isFinite(x)) return null;
+    const x0 = lab.anchor === "middle" ? x - lab.w / 2 : lab.anchor === "end" ? x - lab.w : x;
+    return [x0, lab.top, lab.w, lab.h];
+  };
+
+  /* WHERE the tag stands this frame, on the ACTIVE state: {x, y (the datum's, or null), cy (the tick row's centre),
+     named (the label it names, or null), S} - or null when the active state does not carry the value (R26-28) */
+  const axtagPlace = (td, st, ctx) => {
+    const S = spanActiveState(st), k = (st && st.states && st.states.length > 1) ? (st.active | 0) : 0;
+    const on = (td.on || [])[k];
+    if (!on) return null;
+    const p = on.di == null ? null : ctx.datumNow(st, on.si, on.di);
+    if (on.di != null && !p) return null;
+    const named = on.label || null, nb = named ? axtagLabelBox(named) : null;
+    const x = p ? p[0] : nb ? nb[0] + nb[2] / 2 : null;
+    if (x == null || !Number.isFinite(on.cy)) return null;
+    return { x, y: on.bars || !p ? null : p[1], cy: on.cy, named, S, si: on.si, k };
+  };
+
+  /* THE PAINTER (P71 T9). `at` is the perform layer's built set - `tags` (each: `sp`, the pill group `g`, `rect`,
+     `text`, `guide`, the measured `pill` box, its clock's start `t0` (axtagStart), and `on[k]` per chart state: the datum it names, the label it names and
+     the row's centre), `labels` (every x-axis label of every state: `el`, its build-time `w` / `h` / `top` / `anchor`)
+     `boxesOf[k]` (state k's own label boxes, the guide's C14 obstacles) and `leaveOf(sp, t)` (the engine's pageLeave;
+     absent in a test). `ctx` is the page species context. */
+  const paintAxisTags = (at, t, st, ctx) => {
+    const hide = new Set();
+    for (const td of at.tags || []) {
+      const pose = axtagPose(td.sp, t, td.t0), lv = at.leaveOf ? at.leaveOf(td.sp, t) : 0;
+      const P = pose.on && lv < 1 ? axtagPlace(td, st, ctx) : null;
+      if (!P) { td.g.setAttribute("opacity", 0); td.guide.setAttribute("opacity", 0); continue; }
+      const s = Math.max(0, pose.s), rect = axtagRect(P.x, P.cy, td.pill, s);
+      td.g.setAttribute("transform", "translate(" + P.x.toFixed(1) + " " + P.cy.toFixed(1) + ") scale(" + s.toFixed(4) + ")");
+      td.g.setAttribute("opacity", (1 - lv).toFixed(3));
+      const nb = P.named ? axtagLabelBox(P.named) : null, sc = axtagCoverScale(P.x, P.cy, td.pill, nb);
+      td.text.setAttribute("opacity", (pose.u >= 1 ? 1 : ax01((s - sc) / Math.max(1e-6, 1 - sc))).toFixed(3));
+      for (const lab of at.labels || []) {
+        const b = axtagLabelBox(lab);
+        if (b && axtagHides(rect, b, lab === P.named)) hide.add(lab);
+      }
+      /* the guide: a line page's, from the datum down to the pill's top, cut round the page's labels, never ahead of the ink */
+      const drawn = P.y == null ? null : litDrawnX((P.S && P.S.paths) || [], P.si);
+      if (P.y == null || td.sp.guide === false || drawn === null || drawn < P.x - 0.5) { td.guide.setAttribute("opacity", 0); continue; }
+      const y0 = P.y + AXTAG.GUIDE_GAP, y1 = P.cy - td.pill.h / 2 - AXTAG.GUIDE_GAP;
+      const runs = axtagGuideRuns(P.x, y0, y1, (at.boxesOf || [])[P.k] || []);
+      const d = axtagGuideD(P.x, runs, y0 + (y1 - y0) * pose.guide);
+      td.guide.setAttribute("d", d);
+      td.guide.setAttribute("opacity", d ? (1 - lv).toFixed(3) : 0);
+    }
+    /* the covered labels, re-decided every frame from t alone: hidden while a pill covers them, given back after */
+    for (const lab of at.labels || []) {
+      if (hide.has(lab)) { lab.el.style.visibility = "hidden"; lab.hid = true; }
+      else if (lab.hid) { lab.el.style.visibility = ""; lab.hid = false; }
+    }
+  };
+
+  /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
+  if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.axis_tag = paintAxisTags;
+  /* KINETICS:END */
   /* T19: keep the surface projection as one affine layer around every chart-owned node. The
      state painters continue to own their data and transitions; this layer only carries their
      destination user-space into the native-wide surface viewBox (and carries the perform layer
@@ -14444,7 +14631,75 @@ async function mount(doc) {
       const lg = [...String(sp.text || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
       return { sp, marks, label, lg };
     }).filter(Boolean);
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo };
+    /* P71 T9 axis_tag: BEGIN - THE AXIS TAG and its DROP GUIDE (species/axis_tag.mjs; the Bravos harvest v2's A10). The
+       named year's x-axis label becomes an accent pill in its place and, on a line page, a dotted guide drops to it from
+       the datum. This block is its DOM and its resolution, done once. Per chart STATE: the datum the tag names (the
+       state's own series in the page's index space - a derived window's offset added, so lpMarkDatumOn reads it back),
+       the label it names (the xtick of that value, or a bars page's xlabel) and the axis row's centre. Every x-axis
+       label of every state is measured (the covering rule hides them), and each state's own label boxes are the
+       guide's C14 obstacles. Built LAST, so the pill stands over everything the perform layer wrote. null on a page
+       with no tag: nothing is built and nothing paints. */
+    const tagSps = pageSpecies(scene, "axis_tag");
+    let axisTags = null;
+    if (tagSps.length) {
+      const multi = (st.states || []).length > 1, tagStates = multi ? st.states : [st];
+      const specs = multi ? [pg, ...(((scene.world || {}).page_states) || [])] : [pg];
+      /* a label is measured on its WHOLE string: a state the page has not reached yet has its axis text cut to nothing
+         by the hand that will write it (lpWriteText keeps the string in __full), and the build runs whenever the page is
+         first painted - so a measure of what is written NOW would depend on where the play began (a cold seek past the
+         recast measured the ticks, a play through it measured empty strings and placed nothing) */
+      const fullText = (el) => (el.__full != null ? el.__full : (el.textContent || ""));
+      const fullBox = (el) => { const was = el.textContent, cut = was !== fullText(el); if (cut) el.textContent = fullText(el);
+        const b = lpLabelBox(el); if (cut) el.textContent = was; return b; };
+      const labels = [];
+      tagStates.forEach((S, k) => { for (const m of S.marks || []) {
+        if ((m.role !== "xtick" && m.role !== "xlabel") || !m.el) continue;
+        const b = fullBox(m.el);
+        if (b) labels.push({ el: m.el, w: b[2], h: b[3], top: b[1], anchor: m.el.getAttribute("text-anchor") || "start",
+                             k, role: m.role, v: (m.geom || {}).v, key: m.key, hid: false });
+      } });
+      const same = (a, b) => Number.isFinite(+a) && Number.isFinite(+b) && Math.abs(+a - +b) < 1e-9;
+      const tags = tagSps.map((sp) => {
+        const si = Number.isInteger(sp.series) ? sp.series : 0;
+        let text = sp.label != null ? String(sp.label) : null, fsBase = 0;
+        const on = tagStates.map((S, k) => {
+          const spec = specs[k] || {}, mine = labels.filter((l) => l.k === k), pts = ((spec.series || [])[si] || {}).pts;
+          let di = null, named = null, bars = false;
+          if (Array.isArray(pts) && pts.length) {   /* a LINE state: the x is a value on its axis */
+            const xv = typeof sp.x === "string" ? ((((spec.axes || {}).xticks) || []).find((q) => String(q[1]) === sp.x) || [NaN])[0] : sp.x;
+            const j = pts.findIndex((p) => same(p[0], xv));
+            di = j >= 0 ? j + ((((spec.window_offsets || [])[si]) | 0)) : null;
+            named = mine.find((l) => l.role === "xtick" && same(l.v, xv)) || null;
+            if (text == null && !named && Number.isFinite(+xv)) text = String(+xv);
+          } else if (Array.isArray(spec.labels) && spec.labels.length) {   /* a BARS state: the x is a bar (review finding 15) */
+            const i = typeof sp.x === "string" ? spec.labels.map(String).indexOf(sp.x) : (Number.isInteger(sp.x) ? sp.x : -1);
+            if (i >= 0) { di = i; bars = true; named = mine.find((l) => l.key === "xlab:" + i) || null; }
+          }
+          if (di == null && !named) return null;
+          if (named && text == null) text = fullText(named.el);
+          if (named && !fsBase) fsBase = parseFloat(getComputedStyle(named.el).fontSize) || 0;
+          const row = named || mine[0] || null;
+          return { si: bars ? 0 : si, di, label: named, cy: row ? row.top + row.h / 2 : NaN, bars };
+        });
+        const fs = (fsBase || (P ? 40 : 24)) * AXTAG.TYPE_K;   /* the tick's own size, bolder: .callout over .lab */
+        const guide = lpEl("path", "lp-axtag-guide", surf, { d: "", fill: "none", stroke: "var(--lp-acc)", opacity: 0,
+          "stroke-width": AXTAG.GUIDE_W, "stroke-linecap": "round", "stroke-dasharray": AXTAG.GUIDE_DASH });
+        const g = lpEl("g", "lp-axtag", surf, { opacity: 0 });
+        const rect = lpEl("rect", "cpill", g, {});   /* the page's own callout capsule: the sunflower accent */
+        const tx = lpEl("text", "callout", g, { x: 0, y: (fs * 0.35).toFixed(1), "text-anchor": "middle", opacity: 0,
+          style: "font-size:" + fs.toFixed(1) + "px" });
+        tx.textContent = text || "";
+        const pill = axtagPillBox(lpInkW(tx), fs);
+        rect.setAttribute("x", pill.x.toFixed(1)); rect.setAttribute("y", pill.y.toFixed(1));
+        rect.setAttribute("width", pill.w.toFixed(1)); rect.setAttribute("height", pill.h.toFixed(1)); rect.setAttribute("rx", pill.r.toFixed(1));
+        return { sp, g, rect, text: tx, guide, pill, on, t0: axtagStart(sp, pageSpecies(scene, "chart_to"), KEYED_DATA.MIN_S) };   /* the pop waits for its page to have arrived */
+      });
+      const boxesOf = tagStates.map((S) => [...((S.chart && S.chart.querySelectorAll) ? S.chart.querySelectorAll("text.lab, text.sname, text.val") : [])]
+        .map(fullBox).filter(Boolean));   /* lpLabelBoxes' own set, each on its whole string */
+      axisTags = { tags, labels, boxesOf, leaveOf: pageLeave };
+    }
+    /* P71 T9 axis_tag: END */
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags };
   };
   /* the X's two strokes over the named cells, the cells dimming under them, and the share written by
      the hand: every number is species/treemap.mjs's, this is the call */
@@ -14577,6 +14832,7 @@ async function mount(doc) {
     for (const nt of PF.notes || []) { const lv = pageLeave(nt.sp, t);   /* R26-219: a note in the page's quiet zone is the page's */
       nt.div.style.opacity = t < nt.sp.at ? "0" : (lv > 0 ? (1 - lv).toFixed(3) : "");
       writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }
+    if (PF.axisTags && PAGE_PAINTERS.axis_tag) PAGE_PAINTERS.axis_tag(PF.axisTags, t, st, PAGE_CTX);   /* P71 T9: the named year's pill on the axis and its drop guide (species/axis_tag.mjs) */
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
     for (const b of PF.brackets) b.glow.g.setAttribute("opacity", "0");
     for (const rl of PF.relights) {

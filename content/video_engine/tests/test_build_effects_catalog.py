@@ -422,9 +422,11 @@ def test_every_wired_card_is_in_a_recipe():
     # invented for them here.
     # P69 T37's solo (page_species:solo) is tested alone in test_solo.py and pinned by the solo-chipmakers golden (H row
     # 10's divergence page); its recipe is the harvest's R24 `isolate-then-quantify-the-tail` (P69 T44), not invented here.
+    # P71 T9's axis tag (page_species:axis_tag) is tested alone in test_axis_tag.py and pinned by the axis-tag-two-thousand
+    # golden; no body row adopts it before P71-HG1 (common rule (f)), so no recipe is invented for it here.
     assert uncovered == ["dock_option:moves", "dock_option:place", "page_builder:bars+segments",
                          "page_builder:combo+segments", "page_builder:line+break", "page_enter:surface",
-                         "page_species:explode", "page_species:member", "page_species:solo",
+                         "page_species:axis_tag", "page_species:explode", "page_species:member", "page_species:solo",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:domain", "plate_option:readability",
                          "plate_option:room", "species:freeze"], uncovered
