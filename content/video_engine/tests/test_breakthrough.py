@@ -26,6 +26,8 @@ import build_scene_timeline_f as B  # noqa: E402
 import ledger_page as LP  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 EP = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break"
 OBJ = EP / "evidence/objects/ev-bonds-vs-chips-10y-v1.series.json"
 PLATE = "ledger:ev-bonds-vs-chips-10y-v1:bars:1:right"
@@ -127,7 +129,6 @@ PROBE = """() => {
 def _player(mode: str, opts: dict | None = None):
     """The breakthrough page, with whatever OPTIONS the slice is about laid on its axes (P50 T10/T13).
     `opts` None is the page exactly as E60 shipped it."""
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
     world = B.world_for_plate(PLATE, (0, 0, 0), EP)
     world = json.loads(json.dumps(world)); world["page"]["axes"]["overflow"] = mode
@@ -139,17 +140,7 @@ def _player(mode: str, opts: dict | None = None):
     html = Path(td.name) / "breakthrough.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["9:16"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs: list[str] = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
-
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
+    page, errs, close = SP.open_served(html, w, h, cleanup=td.cleanup)   # R26-351: guarded
     return page, errs, close
 
 

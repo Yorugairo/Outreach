@@ -34,6 +34,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 # A two-line object with NO axes of its own, so every scale in this file is either the data's or the row's.
 # Series A runs 100 -> 300 and B runs 100 -> 118: the object's own scale is A's, and B is the flat pair of lines
 # at the bottom that the H unit's hook is actually about.
@@ -256,7 +258,6 @@ SCALE_PROBE = """() => {
 
 
 def _born_player(domain, species=None, runtime: float = 20.0):
-    from playwright.sync_api import sync_playwright
     td, ep = _ep()
     plate = "ledger:ev-lines-v1:line" + (";domain=%s" % domain if domain else "")
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
@@ -269,21 +270,12 @@ def _born_player(domain, species=None, runtime: float = 20.0):
     html = ep / "born.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["9:16"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = SP.open_served(html, w, h, cleanup=td.cleanup)   # R26-351: guarded
 
     def at(t: float) -> dict:
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
         return page.evaluate(SCALE_PROBE)
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return at, errs, close
 
 

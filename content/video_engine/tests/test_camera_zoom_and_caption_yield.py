@@ -46,6 +46,8 @@ import ledger_page as LPG  # noqa: E402
 import measure_page_boxes as MPB  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 SURFACE_16X9 = "ledger-page-mid-build"     # the dense-line golden: the H unit's own page
 W9, H9 = LPG.STAGE_PX["16:9"]
 W16, H16 = LPG.STAGE_PX["9:16"]
@@ -446,30 +448,22 @@ CAP_PROBE = """() => {
 def _frames(timeline: dict, uris: dict, aspect: str, instants: list[float]) -> list[dict]:
     """The served player at each instant: the page's own boxes (the probe the fixture is measured with)
     and the caption's rect, with the camera IN them - a rendered box is where the frame puts it."""
-    from playwright.sync_api import sync_playwright
     w, h = LPG.STAGE_PX[aspect]
     td = tempfile.TemporaryDirectory()
+    close = td.cleanup   # until the player is open; then its own close, which cleans the dir too
     try:
         html = Path(td.name) / "page.html"
         html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
-        srv, port = RB.serve(html.parent)
-        pw = sync_playwright().start()
-        br = pw.chromium.launch(headless=True)
-        page = br.new_context(viewport={"width": w, "height": h}).new_page()
-        errs: list[str] = []
-        page.on("pageerror", lambda e: errs.append(str(e)))
-        page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-        RB.prepare_page(page, w, h)
+        page, errs, close = SP.open_served(html, w, h, cleanup=td.cleanup)   # R26-351: guarded
         out = []
         for t in instants:
             page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; "
                           "s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
             out.append({"t": t, "boxes": page.evaluate(MPB.READ_BOXES), "cap": page.evaluate(CAP_PROBE),
                         "errs": list(errs)})
-        br.close(); pw.stop(); srv.shutdown()
         return out
     finally:
-        td.cleanup()
+        close()
 
 
 FZ_AT, FZ_DUR = 8.0, 3.0

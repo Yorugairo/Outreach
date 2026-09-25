@@ -26,6 +26,8 @@ import build_scene_timeline_f as B  # noqa: E402
 import gate_motion_density as G  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 LEDGER = "ledger:x:line"
 BUILD_START, BUILD_S = 4.4, 3.0        # LP: ROLL .7 + SAVOR .8 + FIELD 2.4 + PUNCH .5 -> the build runs 4.4-7.4 s on a page entered at 0
 T_CAP2, CAP2_S = 12.0, 1.5
@@ -206,24 +208,18 @@ def _authored(tl: dict, pts: list) -> tuple[dict, int, int]:
 
 class _Player:
     def __init__(self, tl: dict, uris: dict, aspect: str):
-        from playwright.sync_api import sync_playwright
         self.td = tempfile.TemporaryDirectory()
         html = Path(self.td.name) / "perform.html"
         html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
         self.w, self.h = RB.STAGE[aspect]
-        self.srv, port = RB.serve(html.parent)
-        self.pw = sync_playwright().start()
-        self.browser = self.pw.chromium.launch(headless=True)
-        self.page = self.browser.new_context(viewport={"width": self.w, "height": self.h}).new_page()
-        self.page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
-        RB.prepare_page(self.page, self.w, self.h)
+        self.page, _errs, self._close = SP.open_served(html, self.w, self.h, cleanup=self.td.cleanup)   # R26-351: guarded
 
     def probe(self, t: float) -> dict:
         self.page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
         return self.page.evaluate("() => window.__lpProbe()")
 
     def close(self):
-        self.browser.close(); self.pw.stop(); self.srv.shutdown(); self.td.cleanup()
+        self._close()
 
 
 def _poly_frac(pts: list, i: int) -> float:

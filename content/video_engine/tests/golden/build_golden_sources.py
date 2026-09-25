@@ -3304,7 +3304,7 @@ def write_page_source(name: str) -> list[Path]:
     """Write ONE page frame's source - the recipe, beside the engine surfaces' timelines."""
     SOURCES.mkdir(parents=True, exist_ok=True)
     p = SOURCES / f"{name}.page.json"
-    p.write_text(json.dumps(page_source(name), indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    p.write_text(json.dumps(page_source(name), indent=1, sort_keys=True) + "\n", encoding="utf-8", newline="\n")   # R26-323: LF on every platform
     return [p]
 
 
@@ -4739,7 +4739,7 @@ def write_surface(name: str) -> list[Path]:
     out = []
     for suffix, payload in (("timeline", tl), ("uris", uris)):
         p = SOURCES / f"{name}.{suffix}.json"
-        p.write_text(json.dumps(payload, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        p.write_text(json.dumps(payload, indent=1, sort_keys=True) + "\n", encoding="utf-8", newline="\n")   # R26-323: LF on every platform
         out.append(p)
     return out
 

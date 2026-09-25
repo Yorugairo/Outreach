@@ -15,6 +15,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 PLATE = "ledger:golden:line"
 POINT = {"kind": "point", "x": 0.62, "y": 0.41}
 
@@ -87,19 +89,11 @@ def _timeline(scenes_species: list[list[dict]], cameras: list[dict | None], flag
 
 class _Player:
     def __init__(self, timeline, uris):
-        from playwright.sync_api import sync_playwright
         self.td = tempfile.TemporaryDirectory()
         html = Path(self.td.name) / "cam.html"
         html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
         self.w, self.h = RB.STAGE["9:16"]
-        self.srv, port = RB.serve(html.parent)
-        self.pw = sync_playwright().start()
-        self.br = self.pw.chromium.launch(headless=True)
-        self.page = self.br.new_context(viewport={"width": self.w, "height": self.h}).new_page()
-        self.errs: list[str] = []
-        self.page.on("pageerror", lambda e: self.errs.append(str(e)))
-        self.page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-        RB.prepare_page(self.page, self.w, self.h)
+        self.page, self.errs, self._close = SP.open_served(html, self.w, self.h, cleanup=self.td.cleanup)   # R26-351: guarded
 
     def seek(self, t: float) -> None:
         self.page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
@@ -118,7 +112,7 @@ class _Player:
         return self.page.evaluate("([t, tg]) => window.__camera(t, tg)", [t, target])
 
     def close(self) -> None:
-        self.br.close(); self.pw.stop(); self.srv.shutdown(); self.td.cleanup()
+        self._close()
 
 
 SPECIES = [[{"kind": "punch", "at": 2.0, "dur": 2.0, "target": POINT}],

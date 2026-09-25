@@ -31,6 +31,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/tests/golden"))
 import render_baseline as RB  # noqa: E402
 import build_golden_sources as G  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 # every crossing in the fixture's five rows, in period units (the engine solves the same roots)
 CROSSINGS = {("ALPHA", "CHI"): G.race_crossing("ALPHA", "CHI"),
              ("BETA", "CHI"): G.race_crossing("BETA", "CHI"),
@@ -75,13 +77,8 @@ PROBE = """() => {
 
 @contextlib.contextmanager
 def _browser():
-    from playwright.sync_api import sync_playwright
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    try:
+    with SP.browser() as br:   # R26-351: guarded
         yield br
-    finally:
-        br.close(); pw.stop()
 
 
 class _Player:

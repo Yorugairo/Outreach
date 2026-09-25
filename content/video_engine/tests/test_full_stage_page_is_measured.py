@@ -45,6 +45,8 @@ import ledger_page as LPG  # noqa: E402
 import measure_page_boxes as MPB  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 STAGE_W, STAGE_H = LPG.STAGE_PX["16:9"]
 SURFACE = "ledger-page-mid-build"     # the dense-line golden: the page the H bed's own s01 draws (same ink)
 PROBE_T = MPB.MEASURE_T               # 20 s - past the page's whole build, the instant the fixture is read at
@@ -284,29 +286,21 @@ def _kenned_frame() -> tuple[dict, list[str]]:
     """The golden surface's own page, STAMPED full stage, on the served player at `PROBE_T` - so it
     carries the page's Ken Burns exactly as a built cut does. Read with the probe the fixture is
     measured with (`measure_page_boxes.READ_BOXES`), so these are the player's own boxes."""
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface(SURFACE)
     tl = json.loads(json.dumps(tl))
     tl["scenes"][0]["world"]["page"].update(full_stage=True, caption="anchor")
     td = tempfile.TemporaryDirectory()
+    close = td.cleanup   # until the player is open; then its own close, which cleans the dir too
     try:
         html = Path(td.name) / "page.html"
         html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
-        srv, port = RB.serve(html.parent)
-        pw = sync_playwright().start()
-        br = pw.chromium.launch(headless=True)
-        page = br.new_context(viewport={"width": STAGE_W, "height": STAGE_H}).new_page()
-        errs: list[str] = []
-        page.on("pageerror", lambda e: errs.append(str(e)))
-        page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-        RB.prepare_page(page, STAGE_W, STAGE_H)
+        page, errs, close = SP.open_served(html, STAGE_W, STAGE_H, cleanup=td.cleanup)   # R26-351: guarded
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; "
                       "s.dispatchEvent(new Event('input', {bubbles:true})); }", PROBE_T)
         boxes = page.evaluate(MPB.READ_BOXES)
-        br.close(); pw.stop(); srv.shutdown()
         return boxes, errs
     finally:
-        td.cleanup()
+        close()
 
 
 @pytest.fixture(scope="module")

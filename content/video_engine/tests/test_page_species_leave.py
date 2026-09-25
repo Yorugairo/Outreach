@@ -35,6 +35,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 DIVERGENCE = ROOT / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-divergence-v1.series.json"
 
 
@@ -231,7 +233,6 @@ LEAVE_PROBE = """() => {
 
 def _leave_player(species, runtime=30.0):
     """A three-series line page with a bars state to recast into, and whatever species the case names."""
-    from playwright.sync_api import sync_playwright
     src = json.loads(DIVERGENCE.read_text(encoding="utf-8"))
     src = dict(src, series=src["series"][:3])
     bars = {"title": "Where the three stand today", "sub": "index, 100 = Aug 2025", "src": "Yahoo Finance", "unit": "",
@@ -252,21 +253,12 @@ def _leave_player(species, runtime=30.0):
     html = ep / "leave.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["9:16"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs: list[str] = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = SP.open_served(html, w, h, cleanup=td.cleanup)   # R26-351: guarded
 
     def at(t: float) -> dict:
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
         return page.evaluate(LEAVE_PROBE)
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return at, errs, close
 
 

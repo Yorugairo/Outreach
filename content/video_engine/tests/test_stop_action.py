@@ -23,6 +23,8 @@ import build_scene_timeline_f as B  # noqa: E402
 import gate_motion_density as G  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 TEMPLATE = RB.TEMPLATE
 SOURCES = RB.SOURCES
 DOCK_IN, DOCK_OUT = 4.0, 20.0
@@ -140,11 +142,13 @@ def _dock_build(tmp_path: Path, arrive: str | None) -> Path:
 class _Browser:
     """One playwright, one server for a directory, a prepared page per html (two sync playwrights in one thread throw)."""
     def __init__(self, directory: Path, aspect: str = "16:9"):
-        from playwright.sync_api import sync_playwright
         self.w, self.h = RB.STAGE[aspect]
         self.srv, self.port = RB.serve(directory)
-        self.pw = sync_playwright().start()
-        self.browser = self.pw.chromium.launch(headless=True)
+        try:
+            self.pw, self.browser = SP.launch()   # R26-351: guarded
+        except BaseException:
+            self.srv.shutdown()
+            raise
 
     def open(self, html: Path):
         page = self.browser.new_context(viewport={"width": self.w, "height": self.h}).new_page()
@@ -160,7 +164,7 @@ class _Browser:
             return { x: r.x - st.x, y: r.y - st.y, w: r.width, h: r.height, tf: e.style.transform, op: e.style.opacity, filter: e.style.filter }; }""", sel)
 
     def close(self):
-        self.browser.close(); self.pw.stop(); self.srv.shutdown()
+        SP.closer(self.pw, self.browser, self.srv.shutdown)()
 
 
 @needs_browser

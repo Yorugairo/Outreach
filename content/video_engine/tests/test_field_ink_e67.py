@@ -32,6 +32,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 FIELD = "#25313C"        # E22: the charcoal the chart is drawn on - every ratio below is against THIS
 LINE_MIN = 4.0           # any ink that paints a line on the field
 PRIMARY_MIN = 6.0        # the ones a page reaches for first: teal, cobalt, and a rise
@@ -192,7 +194,6 @@ class _Page:
     """One golden surface's page, its series REPLACED with the case under test."""
 
     def __init__(self, series: list, axes_extra: dict | None = None, engine: Path | None = None):
-        from playwright.sync_api import sync_playwright
         tl, uris, _t, aspect = RB.load_surface(SURFACE)
         sc = tl["scenes"][0]
         pg = sc["world"]["page"]
@@ -203,12 +204,7 @@ class _Page:
         html = Path(self.td.name) / "ink.html"
         html.write_text(RB.instantiate(timeline, uris, engine=engine or RB.ENGINE), encoding="utf-8")
         w, h = RB.STAGE[aspect]
-        self.srv, port = RB.serve(html.parent)
-        self.pw = sync_playwright().start()
-        self.browser = self.pw.chromium.launch(headless=True)
-        self.page = self.browser.new_context(viewport={"width": w, "height": h}).new_page()
-        self.page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
-        RB.prepare_page(self.page, w, h)
+        self.page, _errs, self._close = SP.open_served(html, w, h, cleanup=self.td.cleanup)   # R26-351: guarded
 
     def strokes(self, t: float = 9.0) -> list:
         self.page.evaluate(
@@ -216,10 +212,7 @@ class _Page:
         return self.page.evaluate(STROKES)
 
     def close(self):
-        self.browser.close()
-        self.pw.stop()
-        self.srv.shutdown()
-        self.td.cleanup()
+        self._close()
 
 
 def _pts(n: int = 10, base: float = 100.0) -> list:

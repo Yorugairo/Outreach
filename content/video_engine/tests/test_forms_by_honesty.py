@@ -44,6 +44,8 @@ import ledger_page as L  # noqa: E402
 import render_baseline as RB  # noqa: E402
 import build_golden_sources as G  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 STILL = (0, 0, 0)
 FORM_WARN = "WARN form:"
 
@@ -352,23 +354,11 @@ def bars_timeline(tmp: Path, obj: dict, species: list[dict], aspect: str = ASPEC
 
 class Served:
     def __init__(self, timeline: dict, uris: dict, aspect: str = ASPECT):
-        from playwright.sync_api import sync_playwright
         self._td = tempfile.TemporaryDirectory()
         html = Path(self._td.name) / "bars.html"
         html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
         self.w, self.h = RB.STAGE[aspect]
-        self._srv, port = RB.serve(html.parent)
-        self._pw = sync_playwright().start()
-        self._br = self._pw.chromium.launch(headless=True)
-        self.page = self._br.new_context(viewport={"width": self.w, "height": self.h}).new_page()
-        self.errs: list[str] = []
-        self.page.on("pageerror", lambda e: self.errs.append(str(e)))
-        try:
-            self.page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-            RB.prepare_page(self.page, self.w, self.h)
-        except Exception:
-            self.close()   # a player that never mounts must not leave its loop running under the next test
-            raise
+        self.page, self.errs, self._close = SP.open_served(html, self.w, self.h, cleanup=self._td.cleanup)   # R26-351: guarded
 
     def at(self, t: float) -> dict:
         self.page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
@@ -378,7 +368,7 @@ class Served:
         return RB.frame_png(self.page, t, (self.w, self.h))
 
     def close(self) -> None:
-        self._br.close(); self._pw.stop(); self._srv.shutdown(); self._td.cleanup()
+        self._close()
 
 
 def _meets(a: list[float], b: list[float]) -> bool:

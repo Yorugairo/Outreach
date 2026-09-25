@@ -38,6 +38,8 @@ import ledger_page as LPG  # noqa: E402
 import render_baseline as RB  # noqa: E402
 import build_golden_sources as G  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 ASPECT = "16:9"                  # the H episode is long-form: its pages are stamped full-stage (R26-205)
 FIG_AT, FIG_S = 8.0, 1.5         # the page has built (LP: its bars grow 4.4-7.4 s on a page entered at 0)
 CMP_AT, CMP_S = 11.0, 2.4        # the compare's word - the same clock the `compare-morph` golden runs
@@ -176,21 +178,13 @@ class Player:
     """One fixture served in the player at the stage's native size: `at(t)` seeks and probes, `png(t)` shoots."""
 
     def __init__(self, name: str, species: list[dict] | None = None):
-        from playwright.sync_api import sync_playwright
         self._td = tempfile.TemporaryDirectory()
         tmp = Path(self._td.name)
         timeline, uris = fixture_timeline(name, tmp / "ep", species)
         html = tmp / "bars.html"
         html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
         self.w, self.h = RB.STAGE[ASPECT]
-        self._srv, port = RB.serve(html.parent)
-        self._pw = sync_playwright().start()
-        self._br = self._pw.chromium.launch(headless=True)
-        self.page = self._br.new_context(viewport={"width": self.w, "height": self.h}).new_page()
-        self.errs: list[str] = []
-        self.page.on("pageerror", lambda e: self.errs.append(str(e)))
-        self.page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-        RB.prepare_page(self.page, self.w, self.h)
+        self.page, self.errs, self._close = SP.open_served(html, self.w, self.h, cleanup=self._td.cleanup)   # R26-351: guarded
 
     def at(self, t: float) -> dict:
         self.page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
@@ -200,7 +194,7 @@ class Player:
         return RB.frame_png(self.page, t, (self.w, self.h))
 
     def close(self) -> None:
-        self._br.close(); self._pw.stop(); self._srv.shutdown(); self._td.cleanup()
+        self._close()
 
 
 # ---- the compiler: the three beats are rows it accepts ---------------------------------------------------------------
@@ -480,19 +474,11 @@ class _Served:
     """A hand-built timeline served the way `Player` serves a fixture."""
 
     def __init__(self, timeline: dict, uris: dict, aspect: str = ASPECT):
-        from playwright.sync_api import sync_playwright
         self._td = tempfile.TemporaryDirectory()
         html = Path(self._td.name) / "bars.html"
         html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
         self.w, self.h = RB.STAGE[aspect]
-        self._srv, port = RB.serve(html.parent)
-        self._pw = sync_playwright().start()
-        self._br = self._pw.chromium.launch(headless=True)
-        self.page = self._br.new_context(viewport={"width": self.w, "height": self.h}).new_page()
-        self.errs: list[str] = []
-        self.page.on("pageerror", lambda e: self.errs.append(str(e)))
-        self.page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-        RB.prepare_page(self.page, self.w, self.h)
+        self.page, self.errs, self._close = SP.open_served(html, self.w, self.h, cleanup=self._td.cleanup)   # R26-351: guarded
 
     def seek(self, t: float) -> None:
         self.page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
@@ -506,7 +492,7 @@ class _Served:
         return self.page.evaluate(NAMES, state)
 
     def close(self) -> None:
-        self._br.close(); self._pw.stop(); self._srv.shutdown(); self._td.cleanup()
+        self._close()
 
 
 def _world_at(plate: str, ep: Path, aspect: str) -> dict:

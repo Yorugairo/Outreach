@@ -39,6 +39,8 @@ import ledger_page as LPG  # noqa: E402
 import render_baseline as RB  # noqa: E402
 import build_golden_sources as G  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 SURFACE = "prop-stamp"
 ENTER = 10.0            # the contact (build_golden_sources.PROP_STAMP_ENTER)
 T_LAND = 10.17          # the instant the golden pair is judged at (the scrub's step is 0.01, so this IS the frame a t of 10.1667 renders)
@@ -194,13 +196,8 @@ PROBE = """() => {
 
 @contextlib.contextmanager
 def _browser():
-    from playwright.sync_api import sync_playwright
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    try:
+    with SP.browser() as br:   # R26-351: guarded
         yield br
-    finally:
-        br.close(); pw.stop()
 
 
 class _Player:

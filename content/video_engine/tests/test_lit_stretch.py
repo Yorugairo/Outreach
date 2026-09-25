@@ -21,6 +21,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import build_scene_timeline_f as B  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 sys.path.insert(0, str(ROOT / "content/video_engine/tests/golden"))
 
 ENGINE = ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
@@ -137,27 +139,17 @@ PROBE = """() => {
 
 def _serve(surface: str):
     import render_baseline as RB
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, aspect = RB.load_surface(surface)
     td = tempfile.TemporaryDirectory()
     html = Path(td.name) / "probe.html"
     html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
     w, h = RB.STAGE[aspect]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs: list[str] = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = SP.open_served(html, w, h, cleanup=td.cleanup)   # R26-351: guarded
 
     def at(t: float) -> dict:
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
         return page.evaluate(PROBE)
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return at, errs, close
 
 

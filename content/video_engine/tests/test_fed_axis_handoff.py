@@ -20,6 +20,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 EP = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break"
 PLATE = "ledger:ev-japan-holdings-v1:line"
 AT, DUR = 11.0, 1.4
@@ -83,8 +85,6 @@ def _assert_finite_tick_geometry(sample: dict) -> None:
 
 
 def _timeline_player(*, window: list[float] | None, aspect: str, relabel: bool = False):
-    from playwright.sync_api import sync_playwright
-
     tl, uris, _text, _audio = RB.load_surface("ledger-soak-page")
     world = B.world_for_plate(PLATE, (0, 0, 0), EP)
     species = [{"kind": "chart_to", "at": AT, "dur": DUR, "to": "rescale"}]
@@ -119,14 +119,7 @@ def _timeline_player(*, window: list[float] | None, aspect: str, relabel: bool =
     html = Path(td.name) / f"{stem}.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE[aspect]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errors: list[str] = []
-    page.on("pageerror", lambda error: errors.append(str(error)))
-    page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errors, close = SP.open_served(html, w, h, cleanup=td.cleanup)   # R26-351: guarded
 
     proof_dir = ROOT / ".context/fed-t14-proof"
     write_proof = os.environ.get("FED_T14_PROOF") == "1"
@@ -144,12 +137,6 @@ def _timeline_player(*, window: list[float] | None, aspect: str, relabel: bool =
             (proof_dir / f"{html.stem}-{label}.json").write_text(json.dumps(result, indent=2, sort_keys=True), encoding="utf-8")
             page.screenshot(path=str(proof_dir / f"{html.stem}-{label}.png"), full_page=True)
         return result
-
-    def close():
-        br.close()
-        pw.stop()
-        srv.shutdown()
-        td.cleanup()
 
     return at, errors, close
 

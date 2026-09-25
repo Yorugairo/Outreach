@@ -41,6 +41,8 @@ import build_scene_timeline_f as B  # noqa: E402
 import ledger_page as L  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 V3 = ROOT / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-tnx-two-eras-v3.series.json"
 V4 = ROOT / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-tnx-two-eras-v4.series.json"
 OBJECTS = sorted(ROOT.glob("content/video_engine/projects/*/*/evidence/objects/*.series.json"))
@@ -313,7 +315,6 @@ PROBE = """t => {
 
 
 def _player(surface: str = SURFACE, aspect: str | None = None, mutate=None):
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, asp = RB.load_surface(surface)
     if mutate:
         tl = mutate(copy.deepcopy(tl))
@@ -324,15 +325,7 @@ def _player(surface: str = SURFACE, aspect: str | None = None, mutate=None):
     html = Path(td.name) / "brk.html"
     html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
     w, h = RB.STAGE[asp]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
-
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
+    page, _errs, close = SP.open_served(html, w, h, cleanup=td.cleanup)   # R26-351: guarded
     return page, close
 
 

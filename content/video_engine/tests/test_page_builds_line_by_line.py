@@ -39,6 +39,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/tests/golden"))
 import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 SRC = (ROOT / "content/video_engine/scripts/build_scene_timeline_f.py").read_text(encoding="utf-8")
 ENGINE = (ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs").read_text(encoding="utf-8")
 
@@ -415,7 +417,6 @@ def _measure(cases: dict) -> dict:
     One session because two `sync_playwright()` loops cannot be open at the same time in one process (the second
     start raises "using Playwright Sync API inside the asyncio loop"), and a module fixture that yields while its
     browser is up holds the first one open. The player is `test_page_born_with_a_domain`'s served harness."""
-    from playwright.sync_api import sync_playwright
     td = tempfile.TemporaryDirectory()
     root = Path(td.name)
     for name, (tl, uris, _ts) in cases.items():
@@ -423,8 +424,11 @@ def _measure(cases: dict) -> dict:
     w, h = RB.STAGE["16:9"]
     srv, port = RB.serve(root)
     out: dict = {"errs": []}
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
+    try:
+        pw, br = SP.launch()   # R26-351: guarded
+    except BaseException:
+        SP.run_all(srv.shutdown, td.cleanup)
+        raise
     try:
         for name, (_tl, _uris, ts) in cases.items():
             page = br.new_context(viewport={"width": w, "height": h}).new_page()
@@ -438,7 +442,7 @@ def _measure(cases: dict) -> dict:
             out[name] = rows
             page.close()
     finally:
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
+        SP.closer(pw, br, srv.shutdown, td.cleanup)()
     return out
 
 

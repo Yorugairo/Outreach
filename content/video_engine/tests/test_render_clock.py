@@ -31,8 +31,9 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
-import render_baseline as RB  # noqa: E402
 import render_episode as RE  # noqa: E402
+
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
 
 ENGINE = ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
 KINETICS = ROOT / "content/video_engine/scripts/kinetics"
@@ -129,20 +130,18 @@ class _Probe:
     """A served page holding one stepped element per hold, driven frame by frame at a named render clock."""
 
     def __init__(self):
-        from playwright.sync_api import sync_playwright
         self.td = tempfile.TemporaryDirectory()
         d = Path(self.td.name)
         for mjs in KINETICS.glob("*.mjs"):      # the modules under test, as they stand on disk
             shutil.copy2(mjs, d / mjs.name)
         (d / "probe.html").write_text(PROBE_HTML, encoding="utf-8")
-        self.srv, port = RB.serve(d)
-        self.pw = sync_playwright().start()
-        self.br = self.pw.chromium.launch(headless=True)
-        self.page = self.br.new_context(viewport={"width": 320, "height": 240}).new_page()
-        self.errs: list[str] = []
-        self.page.on("pageerror", lambda e: self.errs.append(str(e)))
-        self.page.goto("http://127.0.0.1:%d/probe.html" % port, wait_until="networkidle", timeout=120000)
-        self.page.wait_for_function("() => window.__ready === true", timeout=30000)
+        self.page, self.errs, self._close = SP.open_served(d / "probe.html", 320, 240, cleanup=self.td.cleanup,
+                                                          prepare=False)   # R26-351: guarded
+        try:
+            self.page.wait_for_function("() => window.__ready === true", timeout=30000)
+        except BaseException:
+            self._close()
+            raise
 
     def holds(self, ids: list[str], fps: float, life_fps: float, seconds: float = 1.0) -> dict[str, list[int]]:
         """Run lengths of the identical poses each element holds, over `seconds` of the render grid k / fps."""
@@ -164,7 +163,7 @@ class _Probe:
         return out
 
     def close(self) -> None:
-        self.br.close(); self.pw.stop(); self.srv.shutdown(); self.td.cleanup()
+        self._close()
 
 
 @pytest.fixture(scope="module")

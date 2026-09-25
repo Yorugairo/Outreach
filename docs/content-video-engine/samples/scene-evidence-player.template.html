@@ -687,6 +687,43 @@
                  .filter(function (s) { return KNOWN.indexOf(s) >= 0; });
     document.documentElement.setAttribute("data-layers", on.join(" "));
   })();
+
+  /* THE FONTS HAVE SETTLED (P72 T9; R26-243 / R26-251). The hand (Kalam) comes from the Google Fonts sheet in the
+     head and is fetched on first use, so a capture could be taken after its sheet or a face failed to arrive - the
+     title, the sub and the citation then shot in the fallback face and nothing said so (race-path-eased's diff under
+     a full-suite load) - or a measurer could read a page before the rebuild a landed face asks for. This resolves
+     once the hand's two faces have been asked for, every face the page knows has settled, two frames have painted
+     and one task has passed: the engine's rebuild hooks (a portrait or a long-form page drops its measured layout
+     when a face lands) run in the task the face landed in, so they have run, and the next paint is the rebuild.
+     It REPORTS and never throws - { ok, faces, failed, missing } - and render_baseline.prepare_page waits on it
+     instead of a fixed timeout, loading the page again when a face failed. */
+  window.__fontsSettled = function () {
+    var HAND = "Kalam", ASK = ["700 68px Kalam", "400 40px Kalam"], fonts = document.fonts;
+    if (!fonts || !fonts.load) return Promise.resolve({ ok: true, faces: [], failed: [], missing: [] });
+    var asked = ASK.map(function (font) {
+      return fonts.load(font).then(function (got) { return { font: font, n: got.length }; },
+                                   function (e) { return { font: font, error: String((e && e.name) || e) }; });
+    });
+    var painted = function (value) {
+      return new Promise(function (done) {
+        requestAnimationFrame(function () { requestAnimationFrame(function () { setTimeout(function () { done(value); }, 0); }); });
+      });
+    };
+    return Promise.all(asked).then(function (res) { return fonts.ready.then(function () { return painted(res); }); })
+      .then(function (res) {
+        var faces = [];
+        fonts.forEach(function (f) {
+          faces.push({ family: String(f.family).replace(/["']/g, ""), weight: String(f.weight), style: f.style, status: f.status });
+        });
+        var failed = faces.filter(function (f) { return f.status === "error"; })
+                          .map(function (f) { return f.family + " " + f.weight + " " + f.style; });
+        var missing = [];
+        res.forEach(function (r) { if (r.error) failed.push(r.font + " (" + r.error + ")"); });
+        if (!faces.some(function (f) { return f.family === HAND; })) missing.push(HAND + " (the Google Fonts sheet did not load)");
+        else res.forEach(function (r) { if (r.n === 0) missing.push(r.font + " (no face answers it)"); });
+        return { ok: !failed.length && !missing.length, faces: faces, failed: failed, missing: missing };
+      });
+  };
 </script>
 
 <h1><b id="eptitle">Episode</b> &middot; scene-evidence lane &middot; <span id="epsub"></span></h1>

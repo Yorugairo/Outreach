@@ -8,6 +8,7 @@ regression can be caught by pixels without an episode build or the :8731 server.
     python render_baseline.py --surface chart-callout --out frame.png      # one frame at its judged t
     python render_baseline.py --update                                      # rewrite every golden frame
     python render_baseline.py --check                                       # compare, write diffs, exit 1 on any change
+    python render_baseline.py --repeat 3 [--surface data-to-bars]           # R26-140: capture each surface N times, name any drift
 
 Golden frames live in content/video_engine/tests/golden/frames/; their sources in
 .../golden/sources/ (written by build_golden_sources.py). Frames are captured at device
@@ -468,24 +469,19 @@ def frame_png(page, t: float, size: tuple[int, int]) -> bytes:
     return page.screenshot(type="png", clip={"x": round(r[0]), "y": round(r[1]), "width": size[0], "height": size[1]})
 
 
-def prepare_page(page, w: int, h: int) -> None:
-    """Make the loaded player a pure function of t, at the stage's native size.
+FONT_TRIES = 3   # P72 T9: a page whose face failed is loaded again, twice; the third failure refuses the capture
 
-    The four wall-clock / geometry dependencies P39 T2 found, neutralised in one place so
-    the golden harness and the shipped renderer capture identically:
-      - CSS transitions (.dock opacity .75s, pills .34s, captions .12s) run on the WALL CLOCK,
-        so a seek-and-screenshot can land mid-transition (caught: run 2 of 3 differed on 9:16)
-      - fitStage() scales #stage to the #fit container (~0.73x at 1920x1080), so an element
-        screenshot is a downscaled stage that render_episode used to LANCZOS-upscale
-      - document.fonts.ready.then(()=>1) is not awaited by page.evaluate; the bare promise is
-      - an element screenshot inherits the container's fractional offset (1081x1920)
-    """
+
+class FontsUnsettled(RuntimeError):
+    """The player's faces never settled: a capture now would shoot the fallback face (R26-243)."""
+
+
+def _prepare_once(page, w: int, h: int) -> None:
     page.wait_for_selector("#stage", timeout=60000)
     # P51 T1: the split page mounts after two fetches, so the DOM can exist before the engine has
     # run. __mounted is undefined on a single-file page and on every player committed before the
     # split, where the engine has already run by load - those pass this line without waiting.
     page.wait_for_function("window.__mounted !== false", timeout=300000)
-    page.evaluate("document.fonts.ready")
     page.evaluate("document.getElementById('vo').muted = true")
     page.evaluate("for (const id of ['sndbar']) { const e=document.getElementById(id); if (e) e.style.display='none'; }")
     page.add_style_tag(content=(
@@ -494,11 +490,53 @@ def prepare_page(page, w: int, h: int) -> None:
         f" #fit {{ width: {w}px !important; height: {h}px !important; max-width: none !important; overflow: visible !important; }}"
         " #stage { transform: none !important; }"))
     page.set_viewport_size({"width": w + 64, "height": h + 64})
-    # the handwriting face loads on first use: fetch it explicitly so a portrait page never measures its ink
-    # in the fallback face (P41) - the template rebuilds its pages when the load lands
+
+
+def _legacy_font_wait(page) -> None:
+    """A player built before the shell's signal: the hand fetched explicitly (it loads on first use, and a portrait
+    page must never measure its ink in the fallback face - P41), then a fixed wait for the rebuild."""
     page.evaluate("() => document.fonts.load('700 68px Kalam').then(() => document.fonts.load('400 40px Kalam')).then(() => 1)")
     page.wait_for_function("document.fonts.status === 'loaded'")
     page.wait_for_timeout(250)
+
+
+def settle_fonts(page) -> dict | None:
+    """The shell's own report that its faces have settled (`window.__fontsSettled`: ok, faces, failed, missing),
+    or None on a player built before the shell carried it."""
+    if not page.evaluate("() => typeof window.__fontsSettled === 'function'"):
+        return None
+    return page.evaluate("() => window.__fontsSettled()")
+
+
+def prepare_page(page, w: int, h: int) -> None:
+    """Make the loaded player a pure function of t, at the stage's native size.
+
+    The wall-clock / geometry / network dependencies P39 T2 and P72 T9 found, neutralised in one
+    place so the golden harness and the shipped renderer capture identically:
+      - CSS transitions (.dock opacity .75s, pills .34s, captions .12s) run on the WALL CLOCK,
+        so a seek-and-screenshot can land mid-transition (caught: run 2 of 3 differed on 9:16)
+      - fitStage() scales #stage to the #fit container (~0.73x at 1920x1080), so an element
+        screenshot is a downscaled stage that render_episode used to LANCZOS-upscale
+      - an element screenshot inherits the container's fractional offset (1081x1920)
+      - the hand (Kalam) is FETCHED from Google Fonts on first use (R26-243 / R26-251): the shell's
+        `__fontsSettled` resolves once its faces have settled and the rebuild they ask for has run -
+        waited on here instead of a fixed 250 ms. A face that failed is fetched again on a reloaded
+        page; after FONT_TRIES loads the capture is refused (FontsUnsettled) rather than shot in the
+        fallback face. A player built before the signal keeps the old explicit load and fixed wait.
+    """
+    report: dict = {}
+    for attempt in range(1, FONT_TRIES + 1):
+        _prepare_once(page, w, h)
+        report = settle_fonts(page)
+        if report is None:
+            _legacy_font_wait(page)
+            return
+        if report.get("ok"):
+            return
+        if attempt < FONT_TRIES:
+            page.reload(wait_until="networkidle", timeout=120000)
+    raise FontsUnsettled(f"the player's fonts never settled in {FONT_TRIES} loads - a capture now would shoot the "
+                         f"fallback face (R26-243): failed {report.get('failed')}, missing {report.get('missing')}")
 
 
 def render_frame(html_path: Path, t: float, aspect: str = "16:9", device_scale_factor: float = 1.0) -> bytes:
@@ -585,6 +623,110 @@ def check(names: list[str]) -> list[str]:
     return failures
 
 
+REPEAT_CAUSES = ("identical", "raster (same DOM)", "state (the DOM moved)")
+STAGE_DOM = "() => { const s = document.getElementById('stage'); return s ? s.outerHTML : ''; }"
+
+
+def repeat_cause(first_rgb: bytes, rgb: bytes, first_dom: str, dom: str) -> str:
+    """Why a warm capture differs from the first: the same stage DOM painting other pixels is the raster's (GPU /
+    compositor timing - no page signal cures it); a DOM that moved is the page's own state."""
+    if rgb == first_rgb:
+        return "identical"
+    return "raster (same DOM)" if dom == first_dom else "state (the DOM moved)"
+
+
+def _drift(ref_png: bytes, png: bytes) -> tuple[int, tuple[int, int, int, int] | None]:
+    """(differing bytes, their bounding box in stage px) between two captures."""
+    from PIL import Image, ImageChops
+    a, b = Image.open(io.BytesIO(ref_png)).convert("RGB"), Image.open(io.BytesIO(png)).convert("RGB")
+    ab, bb = a.tobytes(), b.tobytes()
+    if ab == bb:
+        return 0, None
+    return sum(1 for x, y in zip(ab, bb) if x != y) + abs(len(ab) - len(bb)), ImageChops.difference(a, b).getbbox()
+
+
+def _surface_page(name: str) -> tuple[dict, dict, float, str]:
+    """(timeline, uris, t, aspect) for a golden name - a FLAG_FRAMES / PROOF_FRAMES key fixes its flags and t,
+    exactly as render_surface resolves it."""
+    if name in FLAG_FRAMES or name in PROOF_FRAMES:
+        surface, flags, t = FLAG_FRAMES[name] if name in FLAG_FRAMES else PROOF_FRAMES[name]
+        tl, uris, _t, aspect = load_surface(surface)
+        return dict(tl, kinetics=dict(flags)), uris, t, aspect
+    return load_surface(name)
+
+
+def _warm_captures(name: str, n: int) -> list[tuple[bytes, str]]:
+    """n captures of one surface at its t from ONE loaded page, each with the stage's DOM beside it."""
+    from playwright.sync_api import sync_playwright
+    tl, uris, t, aspect = _surface_page(name)
+    w, h = STAGE[aspect]
+    out = []
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / f"{name.replace('@', '-')}.html"
+        html.write_text(instantiate(tl, uris), encoding="utf-8")
+        srv, port = serve(html.parent)
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+                try:
+                    page = browser.new_context(viewport={"width": w, "height": h}).new_page()
+                    page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+                    prepare_page(page, w, h)
+                    for _ in range(n):
+                        png = frame_png(page, t, (w, h))
+                        out.append((png, page.evaluate(STAGE_DOM)))
+                finally:
+                    browser.close()
+        finally:
+            srv.shutdown()
+    return out
+
+
+def repeat(names: list[str], n: int) -> list[dict]:
+    """R26-140's probe. Per surface: n FRESH-page captures, each against the golden (the rule every golden stands
+    on) or, with no golden, against the first; and n captures from ONE WARM page, each against that page's first,
+    with the cause (REPEAT_CAUSES) read at the capture its pixels moved on: the stage DOM there against the DOM of
+    the capture before it (a DOM can move without a pixel - data-to-bars writes a label's y as "474" on its first
+    paint and "474.0" after - so the step the pixels moved on is the one that names the cause)."""
+    records = []
+    for name in names:
+        golden = FRAMES / f"{name}.png"
+        fresh_png = [render_surface(name) for _ in range(n)]
+        ref = golden.read_bytes() if golden.exists() else fresh_png[0]
+        fresh = []
+        for i, png in enumerate(fresh_png):
+            nbytes, box = _drift(ref, png)
+            fresh.append({"i": i, "bytes": nbytes, "box": box})
+        warm_caps = _warm_captures(name, n)
+        first_png, warm, prev, cause = warm_caps[0][0], [], None, "identical"
+        first_rgb = rgb_bytes(first_png)[1]
+        for i, (png, dom) in enumerate(warm_caps):
+            rgb = rgb_bytes(png)[1]
+            if prev is not None and rgb != prev[0]:   # the cause is read at the capture the pixels moved on
+                cause = repeat_cause(prev[0], rgb, prev[1], dom)
+            nbytes, box = _drift(first_png, png)
+            warm.append({"i": i, "bytes": nbytes, "box": box, "cause": cause if rgb != first_rgb else "identical"})
+            prev = (rgb, dom)
+        records.append({"surface": name, "t": _surface_page(name)[2], "golden": golden.exists(),
+                        "fresh": fresh, "warm": warm})
+    return records
+
+
+def repeat_lines(rec: dict) -> list[str]:
+    """The probe's report for one surface: the fresh line, then the warm line (every drift named)."""
+    head = f"{rec['surface']} @{rec['t']}"
+    ref = "the golden" if rec["golden"] else "the first capture"
+    n = len(rec["fresh"])
+    bad = [c for c in rec["fresh"] if c["bytes"]]
+    fresh = (f"{head}  fresh {n}/{n} identical to {ref}" if not bad else
+             f"{head}  FRESH DRIFT: " + "; ".join(f"capture {c['i']} differs from {ref} by {c['bytes']} bytes in {c['box']}" for c in bad))
+    wbad = [c for c in rec["warm"] if c["bytes"]]
+    warm = (f"{head}  warm {len(rec['warm'])}/{len(rec['warm'])} identical to the page's first capture" if not wbad else
+            f"{head}  WARM DRIFT (INFO): " + "; ".join(f"capture {c['i']} differs from capture 0 by {c['bytes']} bytes in "
+                                                      f"{c['box']} - {c['cause']}" for c in wbad))
+    return [fresh, warm]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--list", action="store_true")
@@ -594,10 +736,21 @@ def main() -> int:
     ap.add_argument("--out")
     ap.add_argument("--update", action="store_true")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--repeat", type=int, metavar="N",
+                    help="R26-140: capture each surface (or --surface) N times fresh and N times warm, and name any drift")
     args = ap.parse_args()
     names = sorted(p.name[: -len(".timeline.json")] for p in SOURCES.glob("*.timeline.json")) + sorted(FLAG_FRAMES) + sorted(PROOF_FRAMES)
     if args.list:
         print("\n".join(names)); return 0
+    if args.repeat:
+        if args.repeat < 2:
+            ap.error("--repeat needs N >= 2 (one capture has nothing to differ from)")
+        if args.surface and args.surface not in names:
+            ap.error(f"--surface {args.surface!r} is not a golden surface (see --list)")
+        records = repeat([args.surface] if args.surface else names, args.repeat)
+        for rec in records:
+            print("\n".join(repeat_lines(rec)))
+        return 1 if any(c["bytes"] for rec in records for c in rec["fresh"]) else 0
     if args.surface:
         png = render_surface(args.surface, args.t, kinetics={f: True for f in args.flags.split(",")} if args.flags else None)
         Path(args.out or f"{args.surface}.png").write_bytes(png)

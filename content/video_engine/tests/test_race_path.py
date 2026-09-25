@@ -32,6 +32,8 @@ import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
 import build_golden_sources as G  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 STEEL = ROOT / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
 RACE_ID = "ev-race-path-v1"
 KNOTS = [G.race_t(i) for i in range(len(G.RACE_PERIODS))]              # every period boundary, in scene seconds
@@ -115,13 +117,8 @@ PROBE = """() => {
 def _browser():
     """ONE browser for both arms: the sync API is a single fibre per thread, so a second playwright started
     while the first is live is an error, and the pair has to be read side by side."""
-    from playwright.sync_api import sync_playwright
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    try:
+    with SP.browser() as br:   # R26-351: guarded
         yield br
-    finally:
-        br.close(); pw.stop()
 
 
 class _Player:

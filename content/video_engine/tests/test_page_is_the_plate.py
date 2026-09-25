@@ -41,6 +41,8 @@ import ledger_page as LPG  # noqa: E402
 import measure_page_boxes as MPB  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 STAGE_W, STAGE_H = LPG.STAGE_PX["16:9"]
 SURFACE = "ledger-page-mid-build"     # the dense-line golden: four series, the longest end tags in the repo
 PROBE_T = 20.0                        # past the page's whole build (roll 0.7 + savor 0.8 + field + punch + build = 7.4 s)
@@ -337,30 +339,22 @@ TAG_PROBE = """() => {
 def _frame(stamp: bool) -> tuple[dict, dict, list, list]:
     """The dense-line golden's own page on the SERVED player, with and without the stamp, read with
     the probe `measure_page_boxes` measures the fixture with - so these are the player's own boxes."""
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface(SURFACE)
     tl = json.loads(json.dumps(tl))
     if stamp:
         tl["scenes"][0]["world"]["page"].update(full_stage=True, caption="anchor")
     td = tempfile.TemporaryDirectory()
+    close = td.cleanup   # until the player is open; then its own close, which cleans the dir too
     try:
         html = Path(td.name) / "page.html"
         html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
-        srv, port = RB.serve(html.parent)
-        pw = sync_playwright().start()
-        br = pw.chromium.launch(headless=True)
-        page = br.new_context(viewport={"width": STAGE_W, "height": STAGE_H}).new_page()
-        errs: list[str] = []
-        page.on("pageerror", lambda e: errs.append(str(e)))
-        page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-        RB.prepare_page(page, STAGE_W, STAGE_H)
+        page, errs, close = SP.open_served(html, STAGE_W, STAGE_H, cleanup=td.cleanup)   # R26-351: guarded
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; "
                       "s.dispatchEvent(new Event('input', {bubbles:true})); }", PROBE_T)
         boxes, cap, tags = page.evaluate(MPB.READ_BOXES), page.evaluate(CAP_PROBE), page.evaluate(TAG_PROBE)
-        br.close(); pw.stop(); srv.shutdown()
         return boxes, cap, tags, errs
     finally:
-        td.cleanup()
+        close()
 
 
 @pytest.fixture(scope="module")
@@ -429,7 +423,6 @@ def test_ON_THE_FRAME_a_card_on_a_full_stage_page_covers_neither_the_chart_nor_a
     end tags are a short page's rather than the longest in the repo (a page whose names take the whole
     band is told so instead - `test_a_page_whose_names_take_the_whole_band_is_told_so_rather_than_covered`);
     the card is the dock goldens' own asset, placed by `dock_place` exactly as the row loop places it."""
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface(SURFACE)
     dtl, duris, _dt, _da = RB.load_surface("dock-pair-16x9")
     tl, uris = json.loads(json.dumps(tl)), dict(duris, **uris)
@@ -445,23 +438,16 @@ def test_ON_THE_FRAME_a_card_on_a_full_stage_page_covers_neither_the_chart_nor_a
     scene["docks"] = [B.dock_entry(aid, 0, 2.0, 30.0, 2, B.DOCK_KIND_IMAGE, place, None, None, False)]
     tl["scenes"] = [scene]
     td = tempfile.TemporaryDirectory()
+    close = td.cleanup   # until the player is open; then its own close, which cleans the dir too
     try:
         html = Path(td.name) / "card.html"
         html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
-        srv, port = RB.serve(html.parent)
-        pw = sync_playwright().start()
-        br = pw.chromium.launch(headless=True)
-        pg = br.new_context(viewport={"width": STAGE_W, "height": STAGE_H}).new_page()
-        errs: list[str] = []
-        pg.on("pageerror", lambda e: errs.append(str(e)))
-        pg.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-        RB.prepare_page(pg, STAGE_W, STAGE_H)
+        pg, errs, close = SP.open_served(html, STAGE_W, STAGE_H, cleanup=td.cleanup)   # R26-351: guarded
         pg.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; "
                     "s.dispatchEvent(new Event('input', {bubbles:true})); }", PROBE_T)
         card, boxes, tags = pg.evaluate(DOCK_PROBE), pg.evaluate(MPB.READ_BOXES), pg.evaluate(TAG_PROBE)
-        br.close(); pw.stop(); srv.shutdown()
     finally:
-        td.cleanup()
+        close()
     assert not errs, errs
     assert card, "the card is up"
     assert not _meets(card, boxes["plot"]), ("0 px over the chart", card, boxes["plot"])

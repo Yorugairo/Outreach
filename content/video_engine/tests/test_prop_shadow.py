@@ -51,6 +51,8 @@ import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
 import build_golden_sources as G  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 SURFACE = "prop-stamp"
 CARD_SURFACE = "dock-pair-16x9"   # two plain cards on a plate - a card's shadow, untouched
 ENTER = G.PROP_STAMP_ENTER        # the stamp's own t = 0
@@ -255,13 +257,8 @@ def light_ground(surface: str = SURFACE) -> tuple[dict, dict]:
 
 @contextlib.contextmanager
 def _browser():
-    from playwright.sync_api import sync_playwright
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    try:
+    with SP.browser() as br:   # R26-351: guarded
         yield br
-    finally:
-        br.close(); pw.stop()
 
 
 def _q(t: float) -> float:

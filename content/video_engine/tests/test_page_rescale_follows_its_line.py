@@ -39,6 +39,8 @@ import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
 import build_golden_sources as GS  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 ENGINE = ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
 
 OBJ = GS.FOLLOW_OBJECT            # the test bed's own object: three lines that land, one that climbs to 600
@@ -354,7 +356,6 @@ FOLLOW_PROBE = """() => {
 
 def _player(species, runtime: float = GS.RUNTIME):
     """The golden's own page and row on the served player at 16:9 - the aspect the H unit is cut at."""
-    from playwright.sync_api import sync_playwright
     td, ep = _ep()
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
     world = B.world_for_plate(PLATE, (0, 0, 0), ep)
@@ -367,21 +368,12 @@ def _player(species, runtime: float = GS.RUNTIME):
     html = ep / "follow.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["16:9"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = SP.open_served(html, w, h, cleanup=td.cleanup)   # R26-351: guarded
 
     def at(t: float) -> dict:
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
         return page.evaluate(FOLLOW_PROBE)
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return at, errs, close
 
 

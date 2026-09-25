@@ -28,6 +28,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 SURFACE = "ledger-soak-page"
 AT, DUR = 6.0, 1.2          # the figure's word; every read is at AT + DUR (fully written)
 ROUND = 0.1001              # the baseline AND the datum I read it back from are both written to one decimal:
@@ -65,7 +67,6 @@ class _FigurePage:
     """One golden surface's page, its series and its one FIGURE replaced with the case under test."""
 
     def __init__(self, values: list[float], index: int, text: str = "31% of GDP", dy: float = DY):
-        from playwright.sync_api import sync_playwright
         tl, uris, _t, aspect = RB.load_surface(SURFACE)
         sc = tl["scenes"][0]
         pg = sc["world"]["page"]
@@ -81,12 +82,7 @@ class _FigurePage:
         html = Path(self.td.name) / "figure.html"
         html.write_text(RB.instantiate(timeline, uris, engine=RB.ENGINE), encoding="utf-8")
         w, h = RB.STAGE[aspect]
-        self.srv, port = RB.serve(html.parent)
-        self.pw = sync_playwright().start()
-        self.browser = self.pw.chromium.launch(headless=True)
-        self.page = self.browser.new_context(viewport={"width": w, "height": h}).new_page()
-        self.page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
-        RB.prepare_page(self.page, w, h)
+        self.page, _errs, self._close = SP.open_served(html, w, h, cleanup=self.td.cleanup)   # R26-351: guarded
 
     def read(self, t: float = AT + DUR) -> dict:
         for _ in range(2):   # WARM: the probe's rule - the first seek settles the page, the second is the frame
@@ -98,10 +94,7 @@ class _FigurePage:
         return got
 
     def close(self):
-        self.browser.close()
-        self.pw.stop()
-        self.srv.shutdown()
-        self.td.cleanup()
+        self._close()
 
 
 # ---- the measurement (the test owes nobody's arithmetic) ----------------------------------------

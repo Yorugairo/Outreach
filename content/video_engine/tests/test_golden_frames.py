@@ -386,3 +386,73 @@ def test_at_the_reveal_only_the_lead_point_moves_on_a_live_line() -> None:
     for (_ra, _fa, pa), (_rb, _fb, pb) in zip(a["tips"], b["tips"]):
         assert ((pa[0] - pb[0]) ** 2 + (pa[1] - pb[1]) ** 2) ** 0.5 >= REVEAL_TIP_FLOOR, (
             f"the lead point moved {pa} -> {pb}: the pointer is the thing that moves on a drawing line")
+
+
+# ---- P72 T9 / R26-151 + R26-323: the sources are built the same way twice, LF -------------------------------------
+# R26-151 read "regenerating the sources rewrites tiers-two and treemap-cross though nothing about them changed" as a
+# non-deterministic builder input. The probe says otherwise: two builds in two processes under two hash seeds are
+# byte-identical. What moved was the COMMITTED copy - nine sources are older than the builder that writes them (a
+# later compiler or page change, never re-pinned; the goldens render from the committed copy, so no frame said so).
+# They are named below with the change that moved each; re-pinning one is a golden change of its own, so this test
+# asks for the name to leave the list in the same commit.
+STALE_SOURCES = {
+    "data-to-bars.timeline.json": "R26-205's `stamp_full_stage` (`full_stage`, `caption: anchor`), c462e18",
+    "ledger-extend.timeline.json": "R26-205's `stamp_full_stage` (`full_stage`, `caption: anchor`), c462e18",
+    "ledger-keyed.timeline.json": "R26-205's `stamp_full_stage` (`full_stage`, `caption: anchor`), c462e18",
+    "tags-to-bars.timeline.json": "R26-205's `stamp_full_stage` (`full_stage`, `caption: anchor`), c462e18",
+    "remake-bars-to-line.timeline.json": "R26-205's `stamp_full_stage` (`full_stage`, `caption: anchor`), c462e18",
+    "remake-line-to-bars.timeline.json": "R26-205's `stamp_full_stage` (`full_stage`, `caption: anchor`), c462e18",
+    "tiers-two.timeline.json": "the E79 shared-scale warning on the page (5aa0f8f)",
+    "treemap-cross.timeline.json": "the plot's box, so each cell's px size and font (`ledger_page.page_boxes`, after cbd1417)",
+    "page-depth.uris.json": "the dock planes re-matted (17fc475, b4b556f)",
+}
+
+
+def _build_sources(out: Path) -> tuple[list[str], dict[str, str]]:
+    """Every surface's sources written into `out`: (the files, {surface: why it was not built}). A surface whose
+    gitignored input is not on this machine (a quarantine plate, the alive plate) is set aside by name."""
+    sys.path.insert(0, str(ROOT / "content/video_engine/tests/golden"))
+    import build_golden_sources as G
+    keep, G.SOURCES = G.SOURCES, out
+    skipped: dict[str, str] = {}
+    try:
+        for name in [*G.SURFACES, *G.PAGE_SURFACES]:
+            try:
+                G.write_surface(name)
+            except (SystemExit, FileNotFoundError) as e:
+                skipped[name] = str(e)[:120]
+            except ValueError as e:  # the plate library's own "not on disk" (the alive plate's generated water)
+                if "not on disk" not in str(e):
+                    raise
+                skipped[name] = str(e)[:120]
+    finally:
+        G.SOURCES = keep
+    return sorted(p.name for p in out.iterdir()), skipped
+
+
+@pytest.fixture(scope="module")
+def two_builds(tmp_path_factory):
+    a, b = tmp_path_factory.mktemp("sources-a"), tmp_path_factory.mktemp("sources-b")
+    return (a, *_build_sources(a)), (b, *_build_sources(b))
+
+
+def test_a_second_build_of_the_sources_is_byte_identical_and_lf(two_builds) -> None:
+    """Acceptance (3): the builder is idempotent - the same files, the same bytes - and writes no CR."""
+    (a, files_a, skip_a), (b, files_b, skip_b) = two_builds
+    assert files_a == files_b and skip_a == skip_b
+    assert len(files_a) >= 200, f"only {len(files_a)} sources built - the builder is not being exercised ({skip_a})"
+    moved = [f for f in files_a if (a / f).read_bytes() != (b / f).read_bytes()]
+    assert moved == [], f"a second build rewrote {moved}"
+    crs = [f for f in files_a if b"\r" in (a / f).read_bytes()]
+    assert crs == [], f"{len(crs)} sources written with CR: {crs[:5]}"
+
+
+def test_the_committed_sources_are_the_builders_own_but_the_named_stale(two_builds) -> None:
+    """R26-151's real cause, kept named: a built source that differs from the committed one is on STALE_SOURCES
+    with the change that moved it, and a name on the list still differs (a re-pin takes its name off)."""
+    (a, files, _skip), _ = two_builds
+    committed = ROOT / "content/video_engine/tests/golden/sources"
+    differ = {f for f in files if (committed / f).read_bytes().replace(b"\r\n", b"\n") != (a / f).read_bytes()}
+    assert differ - set(STALE_SOURCES) == set(), f"sources the builder no longer writes as committed: {sorted(differ - set(STALE_SOURCES))}"
+    built_stale = {f for f in STALE_SOURCES if f in files}
+    assert built_stale - differ == set(), f"re-pinned - take them off STALE_SOURCES: {sorted(built_stale - differ)}"

@@ -10,7 +10,6 @@ the five biggest foreign holders draws on with Japan's sold wedge in it.
 """
 from __future__ import annotations
 
-import contextlib
 import json
 import sys
 import tempfile
@@ -23,6 +22,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
+
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
 
 EP = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break"
 PLATE = "ledger:ev-japan-holdings-v1:line;then=ev-top-holders-v1:share"
@@ -139,36 +140,9 @@ PROBE = """() => {
 def _open_player(html: Path, td, w: int, h: int):
     """Serve `html`, open it in a fresh Playwright at w x h, and return (page, errs, close) - the ONE place the
     player helpers start a driver. R26-145: a setup that raises closes what it opened and re-raises, and `close()`
-    stops the driver even when the browser's own close raises, so no failure leaves Playwright's loop running."""
-    from playwright.sync_api import sync_playwright
-    srv, port = RB.serve(html.parent)
-    pw = br = None
-
-    def close():
-        try:
-            if br is not None:
-                br.close()
-        finally:
-            try:
-                if pw is not None:
-                    pw.stop()
-            finally:
-                srv.shutdown()
-                td.cleanup()
-
-    try:
-        pw = sync_playwright().start()
-        br = pw.chromium.launch(headless=True)
-        page = br.new_context(viewport={"width": w, "height": h}).new_page()
-        errs: list[str] = []
-        page.on("pageerror", lambda e: errs.append(str(e)))
-        page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-        RB.prepare_page(page, w, h)
-    except BaseException:
-        with contextlib.suppress(Exception):
-            close()
-        raise
-    return page, errs, close
+    stops the driver even when the browser's own close raises, so no failure leaves Playwright's loop running.
+    R26-351 (P72 T9): the opener is now the suite's shared one, `served_player.open_served`."""
+    return SP.open_served(html, w, h, cleanup=td.cleanup)
 
 
 def _player(species, plate=PLATE, ep=EP):

@@ -39,6 +39,8 @@ import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
 import build_golden_sources as G  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 DC = "prop-hyperscale-datacenter-v1"
 DC_PATH = ROOT / "content/video_engine/assets/props/cutouts" / f"{DC}.png"
 SW, SH = 1920, 1080
@@ -296,13 +298,8 @@ class _Player:
 
 @contextlib.contextmanager
 def _browser():
-    from playwright.sync_api import sync_playwright
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    try:
+    with SP.browser() as br:   # R26-351: guarded
         yield br
-    finally:
-        br.close(); pw.stop()
 
 
 def _crop_diff(a: bytes, b: bytes, box) -> float:

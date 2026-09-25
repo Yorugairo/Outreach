@@ -36,6 +36,8 @@ import build_scene_timeline_f as B  # noqa: E402
 import ledger_page as LPG  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+import served_player as SP  # noqa: E402 - R26-351: the one guarded Playwright opener
+
 ENGINE = ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
 FRAMES = ROOT / "content/video_engine/tests/golden/frames"
 KEN = (0, 0, 0)
@@ -108,20 +110,12 @@ class _Player:
     """A golden SURFACE in a headless page, seekable - test_camera.py's `_Player`, scoped to what a form needs."""
 
     def __init__(self, surface: str):
-        from playwright.sync_api import sync_playwright
         tl, uris, _t, aspect = RB.load_surface(surface)
         self.td = tempfile.TemporaryDirectory()
         html = Path(self.td.name) / f"{surface}.html"
         html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
         self.w, self.h = RB.STAGE[aspect]
-        self.srv, port = RB.serve(html.parent)
-        self.pw = sync_playwright().start()
-        self.br = self.pw.chromium.launch(headless=True)
-        self.page = self.br.new_context(viewport={"width": self.w, "height": self.h}).new_page()
-        self.errs: list[str] = []
-        self.page.on("pageerror", lambda e: self.errs.append(str(e)))
-        self.page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-        RB.prepare_page(self.page, self.w, self.h)
+        self.page, self.errs, self._close = SP.open_served(html, self.w, self.h, cleanup=self.td.cleanup)   # R26-351: guarded
 
     def seek(self, t: float) -> None:
         self.page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
@@ -136,7 +130,7 @@ class _Player:
         return self.page.evaluate(FACES_JS, FACE_SEL)
 
     def close(self) -> None:
-        self.br.close(); self.pw.stop(); self.srv.shutdown(); self.td.cleanup()
+        self._close()
 
 
 @contextlib.contextmanager
