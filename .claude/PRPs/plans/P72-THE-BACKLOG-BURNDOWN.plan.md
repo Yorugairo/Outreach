@@ -109,7 +109,7 @@ moved to T26 behind P71's `buildLedgerLine` slices. The numbers match the invent
 | T24 | R26-153, 163, 150, 148, 152: the morph | ENGINE + TOOLING | implementation_luna | 6 | T7 (gate file, disjoint function), T9 (`build_golden_sources.py`'s idempotence) |
 | T25 | R26-165, 164: the plate's moves take a window (R26-283 and R26-281's engine half are DONE at `af869b7`) | ENGINE | implementation_luna | 6 | P71 T32 only if step (0) finds the ken window in `kinetics/camera.mjs` |
 | T26 | R26-266, 275, 265, 277, 331, 332, 261 (the title): a page's later states | ENGINE | implementation_luna, reviewer | 6 | P71 T3b, T13, T16, T28, T39; P70 T2 (landed `3600ec5`) |
-| T27 | R26-57, 72, 73, 142, 123, 302, 257, 2, 171, 106, 9 (TR-3): the small engine rows | ENGINE | junior_developer | 4-6 (one commit each) | each row's named neighbour |
+| T27 | R26-57, 72, 73, 142, 123, 302, 257, 2, 171, 106, 9 (TR-3), 360: the small engine rows | ENGINE | junior_developer | 4-6 (one commit each) | each row's named neighbour |
 | T28 | R26-227, 215, 197, 198 (b, c), 178, 130, 183, 136 (3), 188's mirror: scripts that cost runs or say the wrong thing | TOOLING | implementation_luna | 5 | T7 (`gate_motion_density.py main`), T20 (`authoring/audio.py`); the H-door half after P69 T32 |
 | T29 | R26-242, 301: citations resolve by row title | TOOLING | implementation_luna | 2 | T1 |
 | T30 | R26-160, 166, 182, 161, 115, 138: files under the line cap; one fold; the region order | TOOLING (refactor) | implementation_luna | 3 | T2, T3 |
@@ -581,7 +581,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T9: The renders and the golden sources are deterministic - fonts settled before a capture, a repeat probe, idempotent LF sources
-- Status: pending
+- Status: done - lane B ae5f6b8: `__fontsSettled` + `FontsUnsettled`, `--repeat`, LF idempotent sources with `STALE_SOURCES`, `tests/served_player.py` (39 files); no golden moved; R26-360 (the local font) filed to T27
 - Owner: implementation_luna (LANE B)
 - Depends on: T0
 - Items: R26-140 (`render_baseline.py --repeat` reports drift by surface), R26-243 + R26-251 (one fix: the template sets `__fontsSettled` after its post-font rebuild and `prepare_page` waits on it, not a fixed 250 ms; the un-awaited `document.fonts.ready` at `:484` removed), R26-151 (the builder's non-deterministic input named and pinned), R26-323 (`write_surface` writes `newline="\n"`); R26-351 (the R26-145 Playwright leak in 38 more test files - a shared guarded opener; added 2026-09-25)
@@ -850,6 +850,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
   - R26-171 - the compiler scales a badge rail on a 9:16 dock to the stage, never drops it (E99 s71 amendment in the row; the lab already does, `lab_build.py:1162`);
   - R26-106 - a DISCOVERY only: does any painter draw `prof.w`'s outline (`kinetics/stroke.mjs:58`)? If none, the finding is written and the build is filed as its own slice for the parent;
   - R26-9 TR-3 - "tag and test the unsourced numbers" (`hist:529`; TR-4 is done, `e96059d`, E46): the transition constants that carry no source tag at `a469501` - `SUCK_S` / `SUCK_TURN` (engine `:6407`), `DIP_S` / `BLURZOOM_*` (`:6428`), `SLIDE_S` (`:6444`), the dissolve's duration (0.8 vs the reference's 0.35-0.5) and `MOUNT_STEPS` (step (0) finds each by name) - each gets `[DERIVED: <source>]`, `[MEASURED: <frame or run>]` or `[UNSOURCED - <why kept>]`, and one test pins that every constant in the transitions region carries a tag. No value changes here: a value the tag shows is wrong is filed as its own row, measured off the reference first (E38).
+  - R26-360 - the hand (Kalam, OFL) served from a local file by the template instead of Google Fonts, so a capture never waits on the network (T9's `__fontsSettled` stays as the check); the goldens byte-identical, or the parent reads each moved frame;
 - Write set: the engine regions each row names, `docs/content-video-engine/samples/scene-evidence-player.template.html` (R26-57, R26-142 only), `content/video_engine/scripts/build_scene_timeline_f.py` (R26-123's default only), `content/video_engine/scripts/species/checklist.mjs` (R26-302), tests: one NEW test file per row (`test_small_engine_rows.py` with one test per row is acceptable)
 - Acceptance: one line per row, one commit each, the H door identical except the listed instants (R26-57, R26-123, R26-257) -
   - R26-57: every stage-space text class named in the row computes `text-rendering: geometricPrecision` (read off the rendered DOM), and the `.lp text` / `.lp-chart text` classes are unchanged; frames of one chip label, one flow tag and one stamp before / after at 1x;
@@ -863,6 +864,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
   - R26-171: a badge rail on a 9:16 dock scales to the stage and is never dropped (the compiler's timeline carries every badge, with its scale); 16:9 unchanged;
   - R26-106: the discovery is written (which painter, if any, draws `prof.w`'s outline, with the grep and a frame); if none does, the build is filed as its own row for the parent - nothing built here;
   - R26-9 TR-3: the tag test passes, every transition constant named above carries a tag, and the engine's bytes differ only in comments.
+  - R26-360: no capture requests fonts.googleapis.com / fonts.gstatic.com (read off the page's network log); `test_render_determinism` 19 green; every golden byte-identical or re-pinned with the parent's frame read;
 - Stop conditions: a row's fix touches a function a P70 / P71 slice owns (stop; sequence).
 - Regression: `python -m pytest -q content/video_engine/tests/test_small_engine_rows.py`
 - Expected RED: one failing test per row (each predicted from the inventory's evidence line); TR-3's tag test fails on `SUCK_S` (no tag at `:6407`).
