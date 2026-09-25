@@ -12664,6 +12664,8 @@ def main() -> int:
                     print(f"  [WARN] P69 T45: shot row {i + 1}: {_w}")
                 elif str(_w).startswith(LPG.FORM_WARN):   # P69 T50: a form judged by honesty - its finding, with its numbers
                     print(f"  [WARN] P69 T50: shot row {i + 1}: {_w}")
+                elif str(_w).startswith(LPG.FIT_WARN):    # P72 T12 (R26-316): a panels page at longform:phone - its region, its need, its faults
+                    print(f"  [WARN] P72 T12: shot row {i + 1} ({a}-{b}s): {_w}")
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         if morph_prop_id((world or {}).get("morph")) is not None:   # P69 T26e: `;morph=prop:<id>` - the prop standing at the boundary

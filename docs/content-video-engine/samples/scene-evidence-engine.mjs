@@ -9257,6 +9257,19 @@ async function mount(doc) {
     }
     return out / scale;
   };
+  /* P72 T12 (R26-339; D1 keeps the long form's `phone` preset) - A BARS PAGE AT `phone` RUNS ACROSS THE STAGE. Its
+     61.4 px words leave the chart a small scale (0.795 on the one-bar stacked page), and the legacy 1000-unit viewBox a
+     plot on the left 41 % of the stage: the T64 key had no clear place and sat over the total. At `phone` the viewBox
+     runs to the stage's safe right edge, as a dense-line page's does (lpLongformVW, less its tags); the bars stay capped
+     and centred (E99 s96), the room is the key's and the names'. Every other preset keeps 1000 (the page it was).
+     A `then=` LINE state shares the viewBox, so its widest end tag (`axes.tag_room`, the compiler's) keeps its room at
+     the right, as a dense-line page's own does. ledger_page.longform_bars_vw, line for line. */
+  const lpLongformPhoneOf = (pg) => lpReadability(pg) === LP_READABILITY.LONGFORM && ((pg || {}).axes || {}).type_scale === "phone";
+  const lpLongformBarsVW = (pg, scale) => {
+    if (!lpLongformPhoneOf(pg) || !(scale > 0)) return 1000;
+    const room = +((pg.axes || {}).tag_room) || 0, run = (LP_PHONE.SAFE_RIGHT - LP.FULL.X) * STAGE_W / scale;
+    return Math.max(1000, Math.round((room > 0 ? run + 220 - LP_PHONE.TAG_GAP - room / scale : run) * 1000) / 1000);
+  };
   const lpLongformVW = (pg, T, scale) => {   /* N2: `axes.tag_room` - the widest end tag a `then=` state writes (the compiler's) */
     const maxW = (LP_PHONE.SAFE_RIGHT - LP.FULL.X) * STAGE_W / scale + 220 - LP_PHONE.TAG_GAP
       - Math.max(lpLongformTagUnits(pg, T, ((pg.axes || {}).tag_form) || "full", scale), (+((pg.axes || {}).tag_room) || 0) / scale);
@@ -9689,7 +9702,8 @@ async function mount(doc) {
         lfGeom = lpLongformGeom(T, box.top, box.bot, box.floor);
         if (!A[LP_LONGFORM.FONT_ASSET]) console.warn("P69 T8: a longform page (" + (scene.scene_id || "?") + ") mounted with no "
           + LP_LONGFORM.FONT_ASSET + " in the asset map - its words are set in the fallback face, not Inter (build_scene_timeline_f.longform_assets)");   /* N6 */
-        const vw = pg.builder === "dense-line" ? (cardP ? lpCardVW(pg, T, lfGeom.scale, cPad) : lpLongformVW(pg, T, lfGeom.scale)) : 1000;   /* bars: the legacy viewBox, left-aligned, never letterboxed */
+        const vw = pg.builder === "dense-line" ? (cardP ? lpCardVW(pg, T, lfGeom.scale, cPad) : lpLongformVW(pg, T, lfGeom.scale))
+          : cardP ? 1000 : lpLongformBarsVW(pg, lfGeom.scale);   /* bars: the legacy viewBox, left-aligned, never letterboxed - at `phone`, to the safe edge (R26-339) */
         cb.y = un(box.top / STAGE_H); cb.h = (box.bot - box.top) / STAGE_H / ps; cb.w = vw * lfGeom.scale / STAGE_W / ps;
         if (cardP) { cb.x = un(cPad / STAGE_W); if (pg.builder !== "dense-line") cb.w = (STAGE_W - 2 * cPad) / STAGE_W / ps; }   /* P69 T10c: from the card's margin, and a bars card's box to the other */
         chart.setAttribute("viewBox", "0 0 " + vw + " 560");
@@ -10452,6 +10466,7 @@ async function mount(doc) {
      remembered on the element (`__wrapLines`), so every reader that measures a name (lpInkW, lpLabelBox) measures the
      widest line and both lines' height. Only a capped row calls this: every other page's names stay one <text>. */
   const LPBAR_LINE_H = 1.15;   /* a wrapped name's second line sits this many font sizes under its first [DERIVED: the page's own two-line reading leading] */
+  const LPBAR_NAME_GAP = 0.3;  /* P72 T12: at `phone` two names keep this many of their own size apart (lpCardStrokes' x-label gap) */
   const lpWrapBarLabel = (lab, bw) => {
     const text = (lab && lab.textContent) || "";
     if (!lab || lab.firstElementChild || text.indexOf(" ") < 0 || !(lpInkW(lab) > bw)) return false;
@@ -10857,7 +10872,7 @@ async function mount(doc) {
         t.textContent = text; t.style.fontSize = fs.toFixed(2) + "px"; t.style.fontWeight = "700";
         const w = lpInkW(t), hAv = s.y0 - s.y1 - 2 * pad, on = lfOnInk(lpFillOf(s.el), inks);
         const q = w > 0 ? Math.min(1, (b.bw - 2 * pad) / w) : 1;   /* a figure a little too wide for its part shrinks to fit it, never under FIG_MIN */
-        let clearIn = q >= LPSEG.FIG_MIN && fs * q * LPSEG.FIG_LINE <= hAv && !!on;
+        let clearIn = q >= LPSEG.FIG_MIN && fs * q * LPSEG.FIG_LINE <= hAv && !!on && fs * q >= (g.floorU || 0) - 1e-9;   /* P72 T12: at `phone` a figure the floor cannot fit in its part takes its leader */
         if (clearIn) {
           if (q < 1) t.style.fontSize = (fs * q).toFixed(2) + "px";
           if (crossed(lpSegBox(t))) {   /* the line crosses it: the figure slides within its own part to the nearest clear height, else it takes its leader */
@@ -10883,7 +10898,7 @@ async function mount(doc) {
         /* both sides, at its height then a step down (away from the total over the bar) or up, at its size then FIG_MIN of it: the first place clear of every
            bar, word and the line; else the least-overlapping place the line does not cross (T64: the line never crosses a figure) */
         const cands = [];
-        for (const f of [fs, fs * LPSEG.FIG_MIN]) for (const dy of [0, 1, -1, 2, -2]) for (const sd of sides) cands.push([sd, y0 + dy * f * LPSEG.FIG_LINE, f]);
+        for (const f of [fs, fs * LPSEG.FIG_MIN].filter((v) => v >= (g.floorU || 0) - 1e-9)) for (const dy of [0, 1, -1, 2, -2]) for (const sd of sides) cands.push([sd, y0 + dy * f * LPSEG.FIG_LINE, f]);
         let pick = null, least = null;
         for (const [sd, yy, f] of cands) { t.style.fontSize = f.toFixed(2) + "px"; t.setAttribute("text-anchor", sd[0]); t.setAttribute("x", sd[1].toFixed(1)); t.setAttribute("y", yy.toFixed(1));
           const r = lpSegBox(t) || { x: sd[0] === "start" ? sd[1] : sd[1] - w, y: yy - f / 2, w, h: f };
@@ -10944,7 +10959,7 @@ async function mount(doc) {
     };
     const f0 = g.fs0;
     const y1 = g.keyY != null ? g.keyY : g.top - u(LPSEG.KEY_GAP_PX) - f0 * 0.6;   /* the combo lays it a row over its two axis names */
-    for (const q of [1, 0.85, LPSEG.KEY_MIN]) {
+    for (const q of [1, 0.85, LPSEG.KEY_MIN].filter((v) => !(f0 * v < (g.floorU || 0) - 1e-9))) {   /* P72 T12: never under the floor at `phone` */
       const f = f0 * q;
       for (const [x, end, y] of [[g.x0 - 20, false, y1], [g.xr, true, y1], [g.x0 - 20, false, y1 - f * 1.4], [g.xr, true, y1 - f * 1.4],
                                  ...(g.below != null ? [[g.x0 - 20, false, g.below + f * 0.6]] : [])])   /* ... else under the x labels */
@@ -11197,12 +11212,13 @@ async function mount(doc) {
     const lo = GA ? 0 : dom ? Math.min(dom[0], lo0) : lo0 - (lo0 < 0 ? pad : 0), hi = GA ? +GA.ceiling : dom ? dom[1] : hi0 + (hi0 > 0 ? pad : 0);   /* P70 T3: the capsule is 0..the whole */
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px, 40px labels below, 59px values and pill above */
     const LF = !P && st.lfType ? st.lfType : null;   /* P69 T8: the long form's bars - its preset's type, a gutter and a floor that fit it */
+    const PH = !!LF && st.panel == null && lpLongformPhoneOf(pg);   /* P72 T12 (R26-339): the long form's `phone` page - its chart runs to the safe edge, no word under the floor */
     const defaultGutter = P ? 150 : LF ? LF.gutter : 60;
     const XLAB = P ? 52 : LF ? LF.xlab_dy : 34;   /* the category names' baseline under the plot floor */
     const requestedGutter = Number((pg.axes || {}).left_gutter);
     const leftGutter = Number.isFinite(requestedGutter) ? Math.max(defaultGutter, requestedGutter) : defaultGutter;
     const PN = st.panel != null && !P;   /* P69 T8d: a landscape bars PANEL - its plot starts where a line panel's does, its ticks thinned by room */
-    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90, x0 = leftGutter, x1 = P ? G.W - 30 : st.panel != null ? G.W - 20 : 980, gap = 0.34, unit = pg.unit || "";   /* P69 T8d: a panel's viewBox is its box's width */
+    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90, x0 = leftGutter, x1 = P ? G.W - 30 : st.panel != null || PH ? G.W - 20 : 980, gap = 0.34, unit = pg.unit || "";   /* P69 T8d: a panel's viewBox is its box's width */
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
@@ -11425,10 +11441,13 @@ async function mount(doc) {
       if (e.over && st.bt) { st.cfinalTrue = e.val.textContent; st.cnum = st.bt.comp; st.cfinal = lpWithUnit(lpFmt(st.bt.comp), unit); st.cpill = pr; st.cp = CP; }
       lpMark(st, "callout", "callout", cg, { x: e.x, y: py });
     }
-    if (capped) for (const b of st.bars) lpWrapBarLabel(b.lab, b.bw);   /* P69 T6c: a name wider than its capped bar takes two lines */
+    /* P69 T6c: a name wider than its capped bar takes two lines. P72 T12 (R26-339): at `phone` the rule is its SLOT - the
+       pitch, less LPBAR_NAME_GAP of its own size - so a name wraps only where it would run into its neighbour's column
+       (a second 61.4 px line costs the plot 70 px; "Q1 2026" on one bar's page wrapped with the whole row free) */
+    if (capped) for (const b of st.bars) lpWrapBarLabel(b.lab, PH ? pitch - LPBAR_NAME_GAP * LF.tick : b.bw);
     st.tickFit = lpFitTicks(st);   /* R26-191b law 3, last: the callout's axis mount may have moved a month */
     if (Array.isArray(pg.members)) lpMemberBuild(st, pg, { base, P, LF, x0, x1 });   /* P69 T45: the membership tiles, in their bars */
-    if (st.bars.some((b) => b.segs)) lpSegBuild(st, pg, { base, top, x0, xr: x1 + 20, toPage: true, unit, below: bottom + XLAB + (P ? 40 : LF ? LF.tick : 26) * 0.6, fs: LF ? LF.value : P ? 44 : 26, fs0: LF ? LF.tick : P ? 40 : 22,
+    if (st.bars.some((b) => b.segs)) lpSegBuild(st, pg, { base, top, x0, xr: x1 + 20, toPage: true, unit, floorU: PH ? LP_CARD.TYPE_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0, below: bottom + XLAB + (P ? 40 : LF ? LF.tick : 26) * 0.6, fs: LF ? LF.value : P ? 44 : 26, fs0: LF ? LF.tick : P ? 40 : 22,
       bars: st.bars.map((b) => ({ i: b.i, bar: b.bar, x: b.bx, bw: b.bw, end: b.end, val: b.val, lab: b.lab, segs: b.segs || null })) });   /* P69 T64: each part's figure, and the key */
   };
   /* THE FIELD'S INK (E67, operator 2026-09-12): "we need to use bolder primary, high-contrast line colors for our default
@@ -13313,6 +13332,10 @@ async function mount(doc) {
     FLOOR_AIR: 6,                                                  /* ledger_page.PANEL_FLOOR_AIR: rendered px a full-stage region stops over its floor */
     WIDE_EPS: 1e-4,                                                /* P69 T8c: a pose box this close to its home's aspect IS the home chart at another size (T8b's move) */
     WIDE_KEEP: 4,                                                  /* ... and at most this many re-laid-out builds are kept per panel (a cache: the frame is a function of the width alone) */
+    SHOWN_C: 1e-6,                                                 /* P72 T12 (R26-315): a revealed panel's build clock from its word to its reveal's landing - its
+                                                                      chart (frame, axes, ticks) drawn, every datum still at zero (a bar's scaleY rounds to 0) */
+    OCCLUDE_OP: 0.5,                                               /* P72 T12 (R26-299): a panel in front covers the words behind it from this opacity - a word it
+                                                                      covers even in part is not drawn (never '%' without its digits) */
   });
   const LP_PANEL_KINDS = Object.freeze(["build_to", "undraw", "figure", "bracket", "spread", "span", "chart_to", "relight", "lit_stretch", "axis_tag", "level_join"]);   /* build_scene_timeline_f.PANEL_SPECIES (P69 T36: the light travels a line on its own panel; P71 T10: a level join reads both ends on its panel) */
   const lpPanelDefault = (n, portrait) => (portrait ? "stack" : n >= 4 ? "quad" : "row");
@@ -13513,6 +13536,18 @@ async function mount(doc) {
     for (const sp of pageSpecies(scene, "panel_focus")) if (sp.at > s && ((sp.roles || [])[i] || "active") !== "hidden") return sp.at;
     return Infinity;
   };
+  /* P72 T12 (R26-315, Bravos DOM 06:02-06:04: the bars grow IN VIEW over ~1.5 s) - panel i's BUILD, as against the word
+     that shows it (lpPanelStart). A panel on its own turn builds then, as it always did. A panel shown by a focus state
+     is invisible for the first INK_LEAD of that move (a panel coming forward sharpens over the rest), so a build started
+     on the word was ~95 % done when first seen - the bars faded in built. Its build waits for the reveal's LANDING
+     (`at + dur`, the instant the motion gate credits as the arrival: gate_motion_density._panel_reveal_landings); until
+     then it stands its frame and axes (SHOWN_C) and fades in empty, so the build is seen whole. {shown, build}, pure in t. */
+  const lpPanelBuildAt = (st, scene, i, t0) => {
+    const shown = lpPanelStart(st, scene, i, t0);
+    if (!(shown > t0 + i * st.panelBuild) || !Number.isFinite(shown)) return { shown, build: shown };
+    const sp = pageSpecies(scene, "panel_focus").find((x) => x.at === shown);
+    return { shown, build: shown + (sp ? Math.max(0.001, +sp.dur || 1) : 0) };
+  };
   /* the page's reference rules are NAMED on one panel at a time: the page's choice (`panel_rule_home`, the one with room)
      while it is in focus, else the first panel that is - crossfaded on the focus's own clock, so a hidden panel never
      takes the names with it */
@@ -13590,11 +13625,36 @@ async function mount(doc) {
       bs.opacity = q.op >= 0.999 ? "" : Math.max(0, q.op).toFixed(3);
       bs.filter = q.blur > 0.05 ? "blur(" + (q.blur / st.panelPs / k).toFixed(2) + "px)" : "";   /* the filter is inside the scale: its radius in the unscaled box */
       bs.zIndex = String(q.z);
-      lpPaintStates(S, scenes[i], clamp01((t - lpPanelStart(st, scene, i, t0)) / st.panelBuild), t3, t);
+      const pb = lpPanelBuildAt(st, scene, i, t0), cp = clamp01((t - pb.build) / st.panelBuild);   /* (never `c`: the board centre above) */
+      lpPaintStates(S, scenes[i], pb.build > pb.shown && t >= pb.shown ? Math.max(LP_PANELS.SHOWN_C, cp) : cp, t3, t);   /* R26-315: a revealed panel's chart stands from its word */
+      S.panelBuildAt = pb.build > pb.shown ? pb.build : null;   /* ... and a figure written on it lands with its bars (paintPerform's figure clock) */
       if (names) for (const hr of S.hlines || []) if (hr.lab) hr.lab.setAttribute("opacity", ((+hr.lab.getAttribute("opacity") || 0) * names[i]).toFixed(3));
       paintPerform(S, scenes[i], t, S.pg);
     });
+    lpPanelOcclude(st, poses, uc > 0);
     st.active = 0;
+  };
+  /* P72 T12 (R26-299: "a panel's y labels read '%' without digits while it builds") - A PANEL'S WORD IS WHOLE OR NOT
+     DRAWN. The text was always whole: the panel IN FRONT (a higher z - lpPanelMix's in-flight depth - or the later one on
+     a tie), its opaque ground under everything it draws, covered the digits of the panel behind while the '%' stood
+     clear (panels-resize 9.9: the shrinking line's box to x 1039, the arriving panel's ticks from 1024). So every word of
+     a panel that a panel in front - at OCCLUDE_OP of its ink or more - covers even in part is not drawn this frame (the
+     SVG `visibility` attribute: it composes with every painter's own opacity and style, and nothing else writes it on a
+     chart's text); given back the frame it stands clear. A word the front panel covers WHOLE is not seen and is left
+     alone (hiding it would only move a receded panel's blur raster by a level). Re-decided every frame from the poses
+     alone (a pure function of t); a page draining down its vortex keeps every word (the panels leave as particles). */
+  const lpPanelOcclude = (st, poses, draining) => {
+    const front = (i, j) => poses[j].z > poses[i].z || (poses[j].z === poses[i].z && j > i);
+    const rects = st.panels.map((S, j) => !draining && poses[j].op >= LP_PANELS.OCCLUDE_OP ? S.chart.getBoundingClientRect() : null);
+    st.panels.forEach((S, i) => {
+      const covers = poses[i].op > 0 ? rects.filter((r, j) => r && j !== i && front(i, j)) : [];
+      for (const e of S.chart.querySelectorAll("text")) {
+        const b = covers.length ? e.getBoundingClientRect() : null;
+        const cut = !!b && b.width > 0 && covers.some((r) => b.x < r.right && r.x < b.right && b.y < r.bottom && r.y < b.bottom)
+          && !covers.some((r) => b.x >= r.x && b.right <= r.right && b.y >= r.y && b.bottom <= r.bottom);   /* one it covers WHOLE is not seen anyway: left as it is */
+        if (cut) e.setAttribute("visibility", "hidden"); else if (e.hasAttribute("visibility")) e.removeAttribute("visibility");
+      }
+    });
   };
   /* ---- TREEMAP (P50 T6; E53 s1's second amendment - the CENSUS exception; Bravos shots 89-91) ----
      The squarified layout is the COMPILER's (ledger_page.squarify, inside page_boxes' own plot, both
@@ -15797,12 +15857,17 @@ async function mount(doc) {
     for (const ld of PF.lits || []) if (PAGE_PAINTERS.lit_stretch) PAGE_PAINTERS.lit_stretch(ld, t, st, PAGE_CTX);   /* P69 T36: the light that travels a stretch of the line on its word (species/lit_stretch.mjs) */
     for (const lj of PF.levelJoins || []) if (PAGE_PAINTERS.level_join) { PAGE_PAINTERS.level_join(lj, t, st, PAGE_CTX); const lv = pageLeave(lj.sp, t); if (lv > 0) lj.g.setAttribute("opacity", ((+lj.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3)); }   /* P71 T10: the dashed level from one datum to another, its figure off the rule (species/level_join.mjs); R26-219: it leaves with its page */
     if (PF.solo && PAGE_PAINTERS.solo) PAGE_PAINTERS.solo(PF.solo, t, st, PAGE_CTX);   /* P69 T37: the others mute on the word (species/solo.mjs) - after the lights, so a light on a muted series mutes with it */
-    for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) { PAGE_PAINTERS.figure(fg, t, st, PAGE_CTX);
+    for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) {
+      /* P72 T12 (R26-315, H row 21's "3x"): a figure on a REVEALED panel runs its clock from no earlier than the panel's
+         build (lpPanelBuildAt, written by lpPaintPanels as st.panelBuildAt) - written on the reveal's word, it stood over
+         an empty plot while the bars waited. Its own clock only (its `at`, as read here); every other page: t itself */
+      const tf = st.panelBuildAt > fg.sp.at ? t - (st.panelBuildAt - fg.sp.at) : t;
+      PAGE_PAINTERS.figure(fg, tf, st, PAGE_CTX);
       const lv = pageLeave(fg.sp, t);   /* R26-219: the hand wrote it at a datum of the page that has just been replaced */
       if (lv > 0) fg.g.setAttribute("opacity", ((+fg.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3));
       /* P69 T6: a figure written over its BAR takes the bar's own number's place - the value fades out on the figure's
          own write and comes back as the figure leaves, so the page never says the number twice */
-      const yv = fg.bar && fg.bar.val && t >= fg.sp.at ? clamp01((t - fg.sp.at) / Math.max(0.001, (fg.sp.dur || 1) * FIGURE.WRITE)) * (1 - lv) : 0;
+      const yv = fg.bar && fg.bar.val && tf >= fg.sp.at ? clamp01((tf - fg.sp.at) / Math.max(0.001, (fg.sp.dur || 1) * FIGURE.WRITE)) * (1 - lv) : 0;
       if (yv > 0) fg.bar.val.setAttribute("opacity", ((+fg.bar.val.getAttribute("opacity") || 0) * (1 - yv)).toFixed(3)); }   /* E50: the chart's next thing - species/figure.mjs, named as the compare's dispatch names its own: ONE hook reads the registry by key (the span's), and it is the span's */
     /* P57 T12 / R26-70b / E76 - THE CHART_TO COMPARE, DISPATCHED: the quoted figure the page has already written becomes the
        number the viewer feels. The law, the dials and the DOM are species/compare.mjs; this is the call, and it runs AFTER the

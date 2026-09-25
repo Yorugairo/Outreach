@@ -1,9 +1,10 @@
 """P70 T4 (was P69 T52; harvest v2 T39): COMPANION BARS BESIDE A HELD LINE.
 
 The verb is BUILT (P69 T8b-T8e): a panels page stands as its line alone with a bars panel hidden, and a `row` focus
-state on a word makes both active - `lpPanelStart` starts a hidden panel's build on the word that shows it. So the beat
-is a RECIPE (`recipe:companion-bars-beside-the-held-line`) and a golden (`companion-railway-yardstick`: Steel and Paper
-H row 14's yardstick, the railways' ~50 beside US tech's 28).
+state on a word makes both active - `lpPanelStart` shows a hidden panel on that word, and (P72 T12, R26-315) its build
+waits for the reveal's landing (`lpPanelBuildAt`), so the bars grow in view. So the beat is a RECIPE
+(`recipe:companion-bars-beside-the-held-line`) and a golden (`companion-railway-yardstick`: Steel and Paper H row 14's
+yardstick, the railways' ~50 beside US tech's 28).
 
 The honesty rule had a gap, and it is the one new mechanism: E79 groups panels by their unit STRING, so one measure
 written in two units ("%" on the line, "¢" on the bars - both a share of every dollar invested) silently drew two
@@ -287,10 +288,9 @@ def test_on_the_leave_the_bars_go_and_the_line_stands_alone_again(played) -> Non
     assert again[0]["chart"] == pytest.approx(alone[0]["chart"], abs=1.5), (again[0]["chart"], alone[0]["chart"])
 
 
-@pytest.mark.xfail(strict=True, reason="P70 T4 FINDING (engine, outside T4): a hidden panel builds while invisible - "
-                   "lpPanelStart starts its build on the focus word, the move fades it in from ~u 0.6, so the bars are "
-                   "~95 % built when first seen (NOTES.md). Flips to a pass when the engine starts the build as it shows.")
 def test_the_bars_are_seen_BUILDING_on_their_word(played) -> None:
+    """R26-315 (P70 T4's finding, fixed by P72 T12): the bars panel fades in with its bars at zero and builds once its
+    reveal has landed - when first seen its bars are still building (frame by frame: test_panels_page)."""
     first = played["first_seen"][1]
     assert first["op"] > 0.1, first
     tall = max(b["h"] for b in played["both"][1]["bars"])

@@ -3580,13 +3580,28 @@ def longform_tag_form(spec: dict, preset: str) -> str | None:
 def longform_page_vw(spec: dict, scale: float | None = None, w_s: int = 1920) -> float:
     """The viewBox width a longform chart is drawn in (the engine's `lpLongformVW`): a dense-line page's is narrowed
     until its widest end tag - its own, in its own form, or (N2) the widest its `then=` states write, carried as
-    `axes.tag_room` - ends inside the stage's safe right edge; a bars page keeps the legacy 1000."""
+    `axes.tag_room` - ends inside the stage's safe right edge; a bars page keeps the legacy 1000 (at `phone`, its own
+    `longform_bars_vw`)."""
     if spec.get("builder") != "dense-line":
         return float(LAND_VIEWBOX[0])
     scale = longform_scale0() if scale is None else scale
     axes = spec.get("axes") or {}
     px = max(longform_tag_px(spec, longform_type(spec), axes.get("tag_form") or "full"), float(axes.get("tag_room") or 0))
     return max(float(LAND_PHONE_MIN_VIEWBOX_W), _longform_max_vw(px / scale, scale, w_s))
+
+
+def longform_bars_vw(spec: dict, scale: float, w_s: int = 1920) -> float:
+    """P72 T12 (R26-339; D1 keeps the `phone` preset): the viewBox width a longform BARS page is drawn in - the legacy
+    1000 at every preset but `phone`, where the chart runs to the stage's safe right edge (its 61.4 px words leave it a
+    small scale, and 1000 units left the plot on the left 41 % of the stage: the key sat over the total). The engine's
+    `lpLongformBarsVW`, line for line; a dense-line page has its own (`longform_page_vw`). A `then=` LINE state is drawn
+    in the same viewBox, so its widest end tag (`axes.tag_room`, apply_longform_states) keeps its room at the right, as
+    a dense-line page's own does."""
+    if spec.get("builder") == "dense-line" or longform_preset(spec) != "phone" or not scale > 0:
+        return float(LAND_VIEWBOX[0])
+    room = float((spec.get("axes") or {}).get("tag_room") or 0)
+    vw = _longform_max_vw(room / scale, scale, w_s) if room > 0 else (LAND_PHONE_SAFE_RIGHT - LAND_FULL["X"]) * w_s / scale
+    return max(float(LAND_VIEWBOX[0]), round(vw * 1000) / 1000)
 
 
 def apply_longform(page: dict, preset: str | None = None) -> dict:
@@ -3632,6 +3647,8 @@ def apply_longform_states(page: dict, states: list) -> str | None:
             room = max(room, longform_tag_px(state, t, state["axes"]["tag_form"]))
     if page.get("builder") == "dense-line" and room > longform_tag_px(page, t, axes.get("tag_form") or "full"):
         page["axes"]["tag_room"] = math.ceil(room * 10) / 10   # up to the tenth: the page's viewBox never grows past a state's fit
+    elif page.get("builder") != "dense-line" and preset == "phone" and room > 0:
+        page["axes"]["tag_room"] = math.ceil(room * 10) / 10   # P72 T12: a phone bars page's widened viewBox keeps a line state's tags on the stage
     # ... and every key stands in ONE band over the chart (the recast swaps the key, never the chart's box): the page
     # reserves the tallest - written only when a state's key needs more than the page's own, so every other page is
     # the page it was
@@ -3715,7 +3732,91 @@ def _apply_longform_panels(page: dict) -> dict:
         if key:
             axes["key"] = key
             axes["key_px"] = longform_key_px(page)
+    warns = [w for w in page.get("warnings") or [] if not str(w).startswith(FIT_WARN)]   # re-fitted: its own finding, once
+    fit = longform_panels_fit_warning(page)
+    if fit:
+        warns.append(fit)
+    if warns:
+        page["warnings"] = warns
+    else:
+        page.pop("warnings", None)
     return page
+
+
+# P72 T12 (R26-316; D1 keeps `phone`, E99 s106: a fit finding is advice) - A PANELS PAGE AT `longform:phone` IS WARNED,
+# never refused, and renders as it does. Its words at 61.4 px leave the panels a small region under the page's own ink,
+# and the panel is laid out for the middle preset: the WARN says the region it gets against the one it needs, and which
+# of the five measured faults apply (P72 T12's frames), with their numbers. The build that makes it hold is its own slice.
+# The NEED is one panel's own ink at the floor, stacked: its sub (a floor line, LONGFORM_LINE_H, over the y label's gap),
+# two y ticks TICK_SPACE figures apart (E28: an axis states its scale) and its x labels' box under the plot.
+FIT_WARN = "WARN fit:"
+PANEL_SUB_K, PANEL_SUB_MAX = 1.15, 0.8   # the engine's LP_PANELS.SUB_K / SUB_MAX: a panel's sub, in ticks, capped by its band
+LONGFORM_TICK_SPACE = 1.25               # the engine's LP_LONGFORM.TICK_SPACE: two y ticks this many figures apart
+PANEL_LINE_TOP_U = 40.0                  # the line builder's plot top (LONGFORM_PLOT_T["dense-line"])
+PANEL_BARS_TOP_U = 40.0                  # the engine's LPBAR_PANEL.TOP: a bars panel's plot top
+
+
+def longform_panels_need_px(t: dict) -> float:
+    """The height (rendered px) one panel needs at a preset: its sub, two y ticks, its x labels (see FIT_WARN)."""
+    return (CARD_TYPE_PX * LONGFORM_LINE_H + LONGFORM_YLAB_GAP_PX + 2 * LONGFORM_TICK_SPACE * t["tick"]
+            + (LONGFORM_ASCENT + LONGFORM_DESCENT) * t["tick"] + LONGFORM_XLAB_CLEAR_PX)
+
+
+def _panel_faults(page: dict, t: dict, boxes: list) -> list[str]:
+    """The five faults a panels page shows at `phone`, each named with its number, for every panel it applies to."""
+    out, subs, bars, ticks, xlab, rules = [], [], [], [], [], []
+    for i, (panel, b) in enumerate(zip(page.get(PANELS_KEY) or [], boxes)):
+        s = b[3] / (LAND_VIEWBOX[1] + PANEL_SUB_U)   # rendered px per unit in its home box
+        g = longform_geom(t, 0.0, LAND_VIEWBOX[1] * s, LAND_VIEWBOX[1] * s)
+        axes = panel.get("axes") or {}
+        lo, hi = (list(axes.get("domain") or [0.0, 1.0]) + [1.0])[:2]
+        span = (float(hi) - float(lo)) or 1.0
+        if str(panel.get("sub") or "").strip():
+            subs.append(min(PANEL_SUB_K * t["tick"], PANEL_SUB_MAX * PANEL_SUB_U * s))
+        if panel.get("builder") == PANEL_BARS:
+            plot = (g["bars_b"] - PANEL_BARS_TOP_U) * s
+            vals = [abs(float(v)) for v in panel.get("values") or [] if isinstance(v, (int, float))]
+            if vals and max(vals) / span * plot < t["tick"]:
+                bars.append((i, max(vals) / span * plot))
+            continue
+        plot = (g["line_b"] - PANEL_LINE_TOP_U) * s
+        if plot < 2 * LONGFORM_TICK_SPACE * t["tick"]:
+            ticks.append((i, plot))
+        labels = [str(x[1]) for x in axes.get("xticks") or [] if isinstance(x, (list, tuple)) and len(x) == 2]
+        width = (b[2] / s - g["plot_l"] - LAND_PLOT["R"] * LAND_VIEWBOX[0]) * s
+        need = sum(longform_text_px(x, "sub", t["tick"]) for x in labels) + 0.3 * t["tick"] * max(0, len(labels) - 1)
+        if labels and need > width:
+            xlab.append((i, need, width))
+        ys = sorted(float(h["y"]) for h in axes.get("hlines") or [] if isinstance(h, dict) and h.get("label"))
+        if any((y2 - y1) / span * plot < (LONGFORM_ASCENT + LONGFORM_DESCENT) * t["tag"] for y1, y2 in zip(ys, ys[1:])):
+            rules.append(i)
+    if subs and min(subs) < CARD_TYPE_PX:
+        out.append(f"the panel subs at {min(subs):.1f} px (floor {CARD_TYPE_PX:.2f})")
+    for i, plot in ticks:
+        out.append(f"panel {i}'s plot {plot:.0f} px - under two y ticks' {2 * LONGFORM_TICK_SPACE * t['tick']:.0f}")
+    for i, need, width in xlab:
+        out.append(f"panel {i}'s x labels overprint ({need:.0f} px of labels on a {width:.0f} px plot)")
+    if rules:
+        out.append("the rule names overprint on panel" + ("s " if len(rules) > 1 else " ") + ", ".join(map(str, rules)))
+    for i, h in bars:
+        out.append(f"panel {i}'s bars at most {h:.1f} px tall")
+    return out
+
+
+def longform_panels_fit_warning(page: dict) -> str | None:
+    """P72 T12 (R26-316): the FIT_WARN a panels page at `longform:phone` carries - the region its panels get against the
+    height one needs, and the faults that apply - or None (every other preset, and a page that holds)."""
+    if page.get("builder") != PANELS or longform_preset(page) != "phone" or not page.get(PANELS_KEY):
+        return None
+    t, boxes = longform_type(page), _longform_full_boxes(page, *STAGE_PX["16:9"])
+    region = _panels_region(page, boxes["chart"], "16:9", boxes.get("_floor"))
+    homes = panel_home_boxes(len(page[PANELS_KEY]), region)
+    need, faults = longform_panels_need_px(t), _panel_faults(page, t, homes)
+    if region[3] >= need and not faults:
+        return None
+    return (f"{FIT_WARN} a panels page at readability={LONGFORM}:phone gets a {region[3]:.0f} px region and a panel needs "
+            f"~{need:.0f} px (its sub at the floor, two y ticks, its x labels)" + (": " + "; ".join(faults) if faults else "")
+            + " - it renders as drawn (E99 s106: advice; R26-316's build is its own slice)")
 
 
 def _longform_place(y: float, h: float) -> float:
@@ -3872,7 +3973,7 @@ def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
         vw, left, right = longform_page_vw(spec, s, w_s), g["plot_l"], LAND_PLOT["R"] * LAND_VIEWBOX[0]
         floor, foot = g["line_b"], g["line_b"] + g["xtick_dy"] + LONGFORM_DESCENT * g["tick"]
     else:   # the bars page's plot is its PANEL (the tick rules' own extent, x0 - 20 to x1 + 20) over its names
-        tags_u, vw, right = 0.0, float(LAND_VIEWBOX[0]), 0.0
+        tags_u, vw, right = 0.0, longform_bars_vw(spec, s, w_s), 0.0
         left = max(g["gutter"], float((spec.get("axes") or {}).get("left_gutter") or 0)) - 20
         floor, foot = g["bars_b"], g["bars_b"] + g["xlab_dy"] + 1.4 * g["tick"]
     ylab = LONGFORM_YLAB_GAP_PX + LONGFORM_ASCENT * t["tick"] if (spec.get("axes") or {}).get("ylabel") else 0.0
