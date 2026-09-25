@@ -974,3 +974,87 @@ def test_m45_reads_the_departure_on_the_beat_the_mechanism_is_owed_by(tmp_path: 
     assert list(FLOOR.base_departures(b)) == ["3"], FLOOR.base_departures(b)
     assert [s.beat for s in FLOOR.ShapeReader(m, FLOOR.beat_plan(b) or []).owed(7)] == [3]
     assert verdict == "replaced" and "never been on screen" in detail, detail
+
+
+# ---------------------------------------------------------------- P72 T8: the long form (R26-207, R26-208)
+# A build over 3:00 is a long form (the opening gate's SHORT_MAX_S, the motion gate's SHORT_FULL_MINUTES). The default
+# reference is a SHORT (Japan, 89 s, 12 scenes, 9:16) and approved-mix.json holds two shorts (19 scenes): a long form
+# names its reference, the three reference rows say when the reference is a short, and M46 goes INFO until a long form
+# is approved.
+
+def long_build(tmp: Path, runtime: float = 600.0) -> Path:
+    """Two plates with a chart dock each, twenty beats, `runtime` seconds - a long form by the clock."""
+    half = runtime / 2
+    scenes = [plate("s1", [0, half], docks=[dock("ev-a", 0.0, half)]),
+              plate("s2", [half, runtime], docks=[dock("ev-b", half, runtime)])]
+    step = runtime / 20
+    return build(tmp, scenes, [(i * step, (i + 1) * step) for i in range(20)], runtime=runtime,
+                 evidence={"ev-a": {"species": "chart"}, "ev-b": {"species": "chart"}})
+
+
+def test_the_long_form_line_is_the_opening_gates_three_minutes() -> None:
+    import gate_opening_structure as OPEN  # noqa: E402
+    assert FLOOR.LONG_FORM_S == OPEN.SHORT_MAX_S == 180.0
+
+
+def test_a_long_build_without_a_reference_exits_two_naming_the_flag(tmp_path: Path) -> None:
+    built = long_build(tmp_path / "b")
+    done = subprocess.run([sys.executable, str(ROOT / "content/video_engine/scripts/gate_one_shot_floor.py"), str(built)],
+                          capture_output=True, text=True, encoding="utf-8", errors="replace")
+    assert done.returncode == 2, done.stdout + done.stderr
+    assert "--reference" in done.stderr and "10:00" in done.stderr and "SHORT" in done.stderr, done.stderr
+    assert "RESULT:" not in done.stdout                  # refused before it measures - no rows against a short
+
+
+def test_a_short_build_still_defaults_its_reference(tmp_path: Path) -> None:
+    built = long_build(tmp_path / "b", runtime=170.0)
+    done = subprocess.run([sys.executable, str(ROOT / "content/video_engine/scripts/gate_one_shot_floor.py"), str(built)],
+                          capture_output=True, text=True, encoding="utf-8", errors="replace")
+    assert done.returncode in (0, 1) and "RESULT:" in done.stdout, done.stdout + done.stderr
+
+
+def test_a_long_cut_read_against_a_short_says_so_on_m37_m39_and_m40(tmp_path: Path) -> None:
+    cut = FLOOR.measure(long_build(tmp_path / "cut"), recipes=[])
+    ref = FLOOR.measure(long_build(tmp_path / "ref", runtime=89.0), recipes=[])
+    gates = {g.id: g for g in FLOOR.rows(cut, ref, predates=False)}
+    for rid in ("M37", "M39", "M40"):
+        assert "reference is a SHORT" in gates[rid].message, gates[rid].message
+        assert "1:29" in gates[rid].message and "10:00" in gates[rid].message
+    assert "reference is a SHORT" not in gates["M38"].message
+    short_cut = FLOOR.measure(long_build(tmp_path / "short", runtime=120.0), recipes=[])
+    assert not any("reference is a SHORT" in g.message for g in FLOOR.rows(short_cut, ref, predates=False))
+    long_ref = FLOOR.measure(long_build(tmp_path / "longref", runtime=700.0), recipes=[])
+    assert not any("reference is a SHORT" in g.message for g in FLOOR.rows(cut, long_ref, predates=False))
+
+
+def test_the_cli_with_a_reference_runs_a_long_build_and_prints_the_caveat(tmp_path: Path) -> None:
+    built, ref = long_build(tmp_path / "b"), long_build(tmp_path / "ref", runtime=89.0)
+    done = subprocess.run([sys.executable, str(ROOT / "content/video_engine/scripts/gate_one_shot_floor.py"), str(built),
+                           "--reference", str(ref)], capture_output=True, text=True, encoding="utf-8", errors="replace")
+    assert done.returncode in (0, 1) and "RESULT:" in done.stdout, done.stdout + done.stderr
+    assert done.stdout.count("reference is a SHORT") >= 3, done.stdout
+
+
+def test_m46_is_info_over_three_minutes_until_a_long_form_is_approved(tmp_path: Path, monkeypatch) -> None:
+    # Arrange: four scenes all entering on their axes - WARN-worthy on a short (the existing M46 test)
+    scenes = [page(f"s{i}", [i * 100, i * 100 + 100], enter="axes") for i in range(4)]
+    m = measured(tmp_path / "b", scenes, [(0, 400)], runtime=400.0)
+
+    # Act / Assert: over 3:00 with only shorts approved - INFO, the reason in the line, the measurement kept
+    gate = row(FLOOR.rows(m, None, predates=False), "M46")
+    assert gate.level == "INFO", gate
+    assert "6:40" in gate.message and "no long form is approved" in gate.message, gate.message
+    assert f"OVER {FLOOR.M46_MAX_SHARE:.2f}: axes 1.00" in gate.message
+
+    # a long form in approved-mix.json ends the INFO: the row judges as it does on a short
+    long_tl = tmp_path / "approved-long.timeline.json"
+    long_tl.write_text(json.dumps({"runtime_s": 812.0, "scenes": []}), encoding="utf-8")
+    mix = dict(FLOOR.approved_mix() or {}, approved=[{"build": "x/build-h", "timeline": str(long_tl)}])
+    monkeypatch.setattr(FLOOR, "approved_mix", lambda path=None: mix)
+    assert row(FLOOR.rows(m, None, predates=False), "M46").level == "WARN"
+
+
+def test_m46_on_a_short_is_untouched_by_the_long_form_rule(tmp_path: Path) -> None:
+    scenes = [page(f"s{i}", [i * 10, i * 10 + 10], enter="axes") for i in range(4)]
+    m = measured(tmp_path / "b", scenes, [(0, 40)])
+    assert row(FLOOR.rows(m, None, predates=False), "M46").level == "WARN"

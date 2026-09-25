@@ -22,6 +22,11 @@ they live:
   M45  parity by MECHANISM, read against the beat plan       FAIL / WARN / PASS  (INFO with no plan on disk)
   M46  the signature mix beside the approved cuts' own       WARN / PASS  (variety never FAILs - E96)
 
+A LONG FORM (a build over LONG_FORM_S = 3:00, P72 T8): `--reference` is REQUIRED - the default reference is a short and
+the gate exits 2 naming the flag (R26-207 (a)); M37 / M39 / M40 say "reference is a SHORT" while the reference is one
+(R26-207 (b) - until H's approved cut is the long-form reference, (c)); and M46 is INFO, its measurement kept, until a
+long form is in approved-mix.json (R26-208).
+
 The catalogue M38 reads is BUILD OUTPUT (P63): `run` ensures `docs/EFFECTS-CATALOG.jsonl` (by the digest of the
 cards, the recipes and the modules behind them) before it reads it, so a recipe added since the last build is in
 the coverage. A `--catalog` that is not this repository's own artifact is read exactly as given, never rebuilt.
@@ -88,6 +93,10 @@ CATALOG_REL = "docs/EFFECTS-CATALOG.jsonl"
 CATALOG_LAYER = "effects-catalog"      # docs_layers' name for the builder that writes CATALOG_REL
 PROJECTS_REL = "content/video_engine/projects/systems-and-blowups"
 REFERENCE_REL = f"{PROJECTS_REL}/japan-tariff-trick/build-short"   # the best approved short (09-09), the reference
+# P72 T8 (R26-207 / R26-208): a build over three minutes is a LONG FORM - the opening gate's SHORT_MAX_S and the motion
+# gate's SHORT_FULL_MINUTES draw the same line. The default reference above is a SHORT (89 s, 12 scenes, 9:16) and the
+# approved mix holds two shorts (19 scenes), so neither is a long form's comparator until a long form is approved.
+LONG_FORM_S = 180.0
 BEAT_PLAN_NAME = "BEAT-PLAN.jsonl"
 WORDS_NAME = "timeline.json"
 BASE_TABLE_NAME = "BASE-TABLE.md"          # the generated base's own read-out (`generate_base_table.py`)
@@ -570,6 +579,23 @@ def _ref_text(warn: str | None, absent: str) -> str:
     return f"reference {warn} not readable - floor held at the rule's own number" if warn else absent
 
 
+def _mmss(seconds: float) -> str:
+    return f"{int(seconds // 60)}:{int(seconds % 60):02d}"
+
+
+def is_long_form(m: Measures) -> bool:
+    return m.runtime_s > LONG_FORM_S
+
+
+def short_caveat(m: Measures, ref: Measures | None) -> str:
+    """R26-207 (b): the text a reference row carries while a LONG cut is read against a SHORT reference - empty otherwise
+    (a short against a short, or a long form against a long one, needs no caveat)."""
+    if ref is None or not is_long_form(m) or is_long_form(ref):
+        return ""
+    return (f" - reference is a SHORT: {ref.name} runs {_mmss(ref.runtime_s)} against this cut's {_mmss(m.runtime_s)}; "
+            "a long form is read against a short's own numbers until a long form is approved (R26-207)")
+
+
 def row_m37(m: Measures, ref: Measures | None, warn: str | None = None) -> Gate:
     floor = max(MIN_DOCKS_PER_BEAT, ref.docks_per_beat if ref else 0.0)
     ok = m.docks_per_beat + EPS >= floor
@@ -577,8 +603,8 @@ def row_m37(m: Measures, ref: Measures | None, warn: str | None = None) -> Gate:
                 else _ref_text(warn, "the reference is not on disk - only E96's 1/3 binds"))
     return Gate("M37", "FAIL" if not ok else "WARN" if warn else "PASS",
                 f"docks on {m.docks_per_beat:.2f} of {m.n_beats} beats ({m.dock_beats} on screen, "
-                f"{m.enter_beats} entering) - the floor is {floor:.2f} = max(1/3, the reference's own); {ref_text}",
-                SRC_M37)
+                f"{m.enter_beats} entering) - the floor is {floor:.2f} = max(1/3, the reference's own); {ref_text}"
+                f"{short_caveat(m, ref)}", SRC_M37)
 
 
 def _recipe_text(m: Measures) -> str:
@@ -614,7 +640,7 @@ def row_m39(m: Measures, ref: Measures | None, warn: str | None = None) -> Gate:
     return Gate("M39", "FAIL" if not ok else "WARN" if warn else "PASS",
                 f"narrative : chart {m.narr_chart:.2f} ({m.narrative} narrative = {m.plates} plates + {m.clips} "
                 f"clips / {m.chart_surfaces} chart = {m.pages} pages + {m.chart_docks} chart docks) - the floor is "
-                f"{floor:.2f} = max(1.0, the reference's own); {ref_text}", SRC_M39)
+                f"{floor:.2f} = max(1.0, the reference's own); {ref_text}{short_caveat(m, ref)}", SRC_M39)
 
 
 def _parity_rows(m: Measures, ref: Measures | None) -> list:
@@ -633,7 +659,7 @@ def _parity_rows(m: Measures, ref: Measures | None) -> list:
 
 
 def row_m40(m: Measures, ref: Measures | None) -> Gate:
-    head = (f"parity: this cut | {ref.name} measured at run time | Bravos quoted" if ref
+    head = (f"parity: this cut | {ref.name} measured at run time | Bravos quoted{short_caveat(m, ref)}" if ref
             else "parity: this cut | the reference is NOT on disk | Bravos quoted")
     table = _parity_rows(m, ref)
     width = max(len(row[0]) for row in table)
@@ -1102,7 +1128,33 @@ def cut_vocabulary(timeline: Mapping[str, Any]) -> list:
     return sorted(words, key=MIX.SIGNATURES.index)
 
 
+def approved_long_forms(mix: Mapping[str, Any] | None) -> list:
+    """The approved cuts that are LONG FORMS - each one's compiled timeline read for its own `runtime_s` (the mix records
+    no clock of its own). An entry whose timeline is not on disk is not counted: it cannot be shown to be long."""
+    found = []
+    for cut in ((mix or {}).get("approved") or []):
+        try:
+            runtime = float(json.loads((REPO / str(cut.get("timeline") or "")).read_text(encoding="utf-8"))
+                            .get("runtime_s") or 0.0)
+        except (OSError, ValueError, TypeError, AttributeError):
+            continue
+        if runtime > LONG_FORM_S:
+            found.append(cut.get("build"))
+    return found
+
+
 def row_m46(m: Measures) -> Gate:
+    """R26-208 (P72 T8): on a LONG FORM the approved mix is a sample of shorts (19 scenes) - its share ceiling and its
+    repeat clause are a short's - so the row is INFO, its measurement kept, until a long form is approved."""
+    gate = _row_m46_measured(m)
+    if not is_long_form(m) or approved_long_forms(approved_mix()):
+        return gate
+    return Gate("M46", "INFO", f"{_mmss(m.runtime_s)} is a long form and no long form is approved (approved-mix.json "
+                f"holds shorts only) - this reads a long cut against a short's mix, so it is INFO until one is "
+                f"(R26-208); measured {gate.level}: {gate.message}", SRC_M46)
+
+
+def _row_m46_measured(m: Measures) -> Gate:
     """The cut's signature mix and its VOCABULARY beside the approved shorts' - JUDGE-adjacent, so it never FAILs.
 
     The classifier is `derive_approved_mix.scene_signatures` / `.scene_transforms` themselves (one ARRIVAL per
@@ -1243,11 +1295,17 @@ def run(build: Path, project: Path | None = None, reference: Path | None = None,
     return rows(m, ref), m, ref
 
 
+def build_runtime(build: Path, timeline_name: str | None = None) -> float:
+    """The compiled timeline's own `runtime_s` - read before anything is measured, so a long form is refused first."""
+    return float(json.loads(timeline_path(Path(build), timeline_name).read_text(encoding="utf-8")).get("runtime_s") or 0.0)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="the one-shot floor (M35-M42, M45-M46) on a compiled build (P56, P66, E96)")
     ap.add_argument("build", type=Path, help="the build dir holding the compiled *.timeline.json")
     ap.add_argument("--project", type=Path, help="the project dir (only to resolve narration.words_path)")
-    ap.add_argument("--reference", type=Path, help=f"the reference build (default {REFERENCE_REL})")
+    ap.add_argument("--reference", type=Path, help=f"the reference build (default {REFERENCE_REL}; REQUIRED on a "
+                                                   f"build over {LONG_FORM_S:.0f} s - that default is a short)")
     ap.add_argument("--catalog", type=Path, help=f"the effects catalogue (default {CATALOG_REL})")
     ap.add_argument("--timeline", help="the compiled timeline's file name inside the build dir")
     ap.add_argument("--wait", action="store_true",
@@ -1256,6 +1314,12 @@ def main() -> int:
     args = ap.parse_args()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if args.reference is None:
+        runtime = build_runtime(args.build, args.timeline)
+        if runtime > LONG_FORM_S:
+            ap.error(f"--reference is required on a long form: {args.build} runs {_mmss(runtime)} (over "
+                     f"{_mmss(LONG_FORM_S)}) and the default reference {REFERENCE_REL} is a SHORT - name the cut this "
+                     "one is judged against (R26-207)")
     gates, m, ref = run(args.build, args.project, args.reference, args.catalog, args.timeline, args.wait)
     print(report_text(gates, m, ref))
     return 1 if fail_count(gates) else 0

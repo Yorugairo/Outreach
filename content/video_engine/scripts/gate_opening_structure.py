@@ -77,6 +77,7 @@ gate_motion_density.py.
 from __future__ import annotations
 
 import argparse
+import difflib
 import json
 import re
 import sys
@@ -122,6 +123,14 @@ SHORT_RING_FRACTION = 0.20       # 51.2: the ring = the last 20% (long form: 12%
 SHORT_CYCLE_S = 30.0             # the retention clock on a short: a rehook every 30 s (long form: 60)
 SHORT_SENT_WARN_WORDS = 18       # doc 37: 10-15 words for speech; a caption page holds 3-6 words, so a long sentence is many pages
 BRAND_LINE = re.compile(r"not\s+a\s+panic\W+not\s+a\s+plot\W+mechanics", re.I)   # the recorded brand line (channel-assets/money-physics/outro)
+SRC_S07 = ("the brand line ('Not a panic. Not a plot. Mechanics.') is stitched under the outro card - a script "
+           "that speaks it doubles it (E41 (2), 2026-09-05; both formats since the 16:9 outro card, R26-210 / R26-212)")
+# R26-203 (P72 T8): a take is THIS script's before its clock is trusted. The share of the script's words the take speaks IN
+# ORDER (`take_overlap`), measured 2026-09-25 with this function (P72 T8 logs/overlap-measure*.txt): every recorded take
+# under its own script reads 1.000 - Japan's four takes, Tokyo's, the calendar's, the bridge's two, G's and H's - and the
+# nearest take under ANOTHER script reads 0.916 (Script F under G's take; E 0.915, D 0.873, H under G's 0.778). The floor
+# sits between them: an aligner's re-tokenised number may cost a matched take a few words, a revision costs it a sentence.
+TAKE_OVERLAP_MIN = 0.95
 RING_MECHANISM_MIN = 2           # content stems the close must share with the P1 claim sentence (beyond the token)
 RING_MECHANISM_LEVEL = "FAIL"    # operator ruling 2026-09-04: no grandfathering - both scripts are being rewritten to this bar
 BEAT5_START = 60.0              # 38 B5: the map, desire, opponent, A2, ring - 0:60 to P1 end
@@ -295,7 +304,8 @@ def geometry(runtime_s: float) -> dict:
 
 
 # ---- text -> timed sentences + marks -------------------------------------
-def _sentences_timed(text: str, timeline: list[dict] | None):
+def _sentence_bounds(text: str) -> list[tuple[int, str]]:
+    """(offset, clean sentence) for every spoken sentence - marks, headings and tables stripped."""
     bounds = []
     for m in re.finditer(r"[^.!?]*[.!?]+(?:\s+|$)", text, re.S):
         clean = beat_tags.strip_marks(m.group(0))
@@ -303,14 +313,24 @@ def _sentences_timed(text: str, timeline: list[dict] | None):
         clean = re.sub(r"\s+", " ", clean).strip()
         if clean:
             bounds.append((m.start(), clean))
+    return bounds
+
+
+def _take_units(timeline: list[dict]) -> list[dict]:
+    """The take's words in the sentence counter's lexical units (one dict per unit, carrying its word's times)."""
+    # Match the sentence counter's lexical units on both sides. A take can
+    # store "twenty-two" as one timed word while the script counts two;
+    # counting only the script side progressively shifts every later beat.
+    return [dict(w, w=token) for w in timeline
+            for token in re.findall(r"[A-Za-z0-9'%$]+", w["w"])
+            if re.search(r"[A-Za-z0-9]", token)]
+
+
+def _sentences_timed(text: str, timeline: list[dict] | None):
+    bounds = _sentence_bounds(text)
     out = []
     if timeline:
-        # Match the sentence counter's lexical units on both sides. A take can
-        # store "twenty-two" as one timed word while the script counts two;
-        # counting only the script side progressively shifts every later beat.
-        words = [dict(w, w=token) for w in timeline
-                 for token in re.findall(r"[A-Za-z0-9'%$]+", w["w"])
-                 if re.search(r"[A-Za-z0-9]", token)]
+        words = _take_units(timeline)
         wi = 0
         for off, s in bounds:
             n = len(re.findall(r"[A-Za-z0-9'%$]+", s))
@@ -326,6 +346,65 @@ def _sentences_timed(text: str, timeline: list[dict] | None):
         out.append((t, t + d, s, off))
         t += d
     return out
+
+
+# ---- R26-203 (P72 T8): the take is THIS script's, or it is refused -------------------------------------------
+def _unit_key(word: str) -> str:
+    return word.lower().replace("'", "")
+
+
+def take_overlap(text: str, timeline: list[dict]) -> float:
+    """The share of the script's spoken words the take speaks IN ORDER (difflib's matching blocks over the same lexical
+    units `_sentences_timed` maps by position) - 1.000 for a take of this text, less for a take of another one."""
+    script = [_unit_key(w) for _, s in _sentence_bounds(text) for w in re.findall(r"[A-Za-z0-9'%$]+", s)
+              if re.search(r"[A-Za-z0-9]", w)]
+    if not script:
+        return 0.0
+    take = [_unit_key(w["w"]) for w in _take_units(timeline)]
+    matcher = difflib.SequenceMatcher(None, script, take, autojunk=False)
+    return round(sum(b.size for b in matcher.get_matching_blocks()) / len(script), 3)
+
+
+def take_refusal(text: str, timeline: list[dict] | None, source: Path | str | None,
+                 overlap: float | None = None) -> str | None:
+    """None when the take is this script's (its in-order overlap clears TAKE_OVERLAP_MIN), else the refusal - naming
+    the take and the overlap - that `main` prints. The position mapping is only true of a take of THIS text.
+    overlap: `take_overlap(text, timeline)` when the caller has it already."""
+    if not timeline:
+        return None
+    overlap = take_overlap(text, timeline) if overlap is None else overlap
+    if overlap >= TAKE_OVERLAP_MIN:
+        return None
+    return (f"the take {source} is refused: it speaks {overlap:.3f} of this script's words in order, under the "
+            f"{TAKE_OVERLAP_MIN:.2f} floor - another script's take, whose clock mapped onto this text by position is "
+            f"not this script's clock (R26-203)")
+
+
+def project_take(script: Path) -> tuple[list[dict] | None, Path | None]:
+    """The project's recorded take as `audit_script_doctrine.load_timings` finds it (no opening words given: its FIRST
+    `vo*` dir holding scene_*.words.json), with that dir - the path the report names. The words are load_timings' own."""
+    words = A.load_timings(script)
+    if not words:
+        return None, None
+    found = next((vo for vo in sorted(script.parent.glob("vo*"))
+                  if vo.is_dir() and any(vo.rglob("scene_*.words.json"))), None)
+    return words, found
+
+
+def _timing(timeline, take: Path | str | None, refused: str | None, estimate: str, measured: str) -> str:
+    """The report's `timing` line: measured on WHICH take, or the estimate and the take it refused (R26-203 (b)).
+    With no take named (an importer's own timeline) the line is the shape's own word, unchanged."""
+    if timeline:
+        return f"measured (take {take})" if take is not None else measured
+    return f"{estimate} - {refused}" if refused else estimate
+
+
+def _brand_line_gate(text: str) -> Gate:
+    """S07 in both shapes (R26-212): the brand line is stitched under the outro card in both formats, so a script - short
+    or long - that speaks it spends the line twice. E41 (2)'s long-form final triad (P6) is a DIFFERENT triad and stays;
+    only the recorded line itself is matched."""
+    spoken = BRAND_LINE.search(text)
+    return Gate("S07", SRC_S07, "FAIL" if spoken else "PASS", "spoken in the script" if spoken else "clean")
 
 
 def _time_of(off: int, sents) -> float | None:
@@ -552,7 +631,8 @@ def _content_stems(sentence: str) -> set[str]:
 
 
 def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | None, title: str | None,
-              thumb: str | None, thumb_file: str | None, pages: list[float] | None = None) -> tuple[list[Gate], dict]:
+              thumb: str | None, thumb_file: str | None, pages: list[float] | None = None,
+              take: Path | str | None = None, refused: str | None = None) -> tuple[list[Gate], dict]:
     """G2: the shorts shape (doc 51 s51.2) as gates. S01-S08 plus the shared platform gates.
     pages: the seconds at which ledger pages LAND (load_pages on the build's scene timeline) - E44 / R26-4: the first page
     on the hook IS the mechanism surface, so S02 reads a page by 0:10 as the mechanism stated, the [post-key] sentence
@@ -630,12 +710,12 @@ def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | 
     gaps = [(a, b - a) for a, b in zip([0.0] + hits, hits + [runtime]) if b - a > SHORT_CYCLE_S * tol]
     add("S06", f"CLK on a short: a rehook (template line or [rehook]) every {SHORT_CYCLE_S:.0f} s, 0:00 to the end", "FAIL" if gaps else "PASS", f"{len(hits)} rehooks; " + ("longest gap " + ", ".join(f"{mmss(a)}+{d:.0f}s" for a, d in gaps[:3]) if gaps else "no gap over 30 s"))
     # S07 the brand line is the outro's, never the script's (2026-09-05: recorded once, stitched under the card)
-    add("S07", "the brand line ('Not a panic. Not a plot. Mechanics.') is stitched under the outro card - a script that speaks it doubles it", "FAIL" if BRAND_LINE.search(text) else "PASS", "spoken in the script" if BRAND_LINE.search(text) else "clean")
+    g.append(_brand_line_gate(text))
     # S08 sentences short enough to speak and to caption (doc 37; the two-line caption gate holds 3-6 words a page)
     longest = max(((len(re.findall(r"[A-Za-z0-9'%$]+", s_)), s_) for _, _, s_, _ in sents), default=(0, ""))
     add("S08", f"doc 37 speech: sentences 10-15 words; over {SHORT_SENT_WARN_WORDS} is several caption pages of one breath", "WARN" if longest[0] > SHORT_SENT_WARN_WORDS else "PASS", f"longest sentence {longest[0]} words: '{longest[1][:70]}'")
     g += _self_promise_gates(sents, timeline)           # C03-R011 G47 / G47b, C09-R013 G48: the words, not the shape
-    stats = {"mode": "short (G2: doc 51 s51.2)", "runtime": mmss(runtime), "timing": "measured" if timeline else "estimated",
+    stats = {"mode": "short (G2: doc 51 s51.2)", "runtime": mmss(runtime), "timing": _timing(timeline, take, refused, "estimated", "measured"),
              "mechanism": sents[mech_k][2][:60] if mech_k is not None else "-", "instances": len(inst), "ring_close_from": mmss(close_start),
              "first_page": f"{min(pages):.2f}s" if pages else "-",   # E44: the page that carries the mechanism, when a scene timeline was read
              "beats_declared": {k: [mmss(sents[i][0]) for i in v] for k, v in beats.items()}}   # the screens enumerator reads these (R2 / s3a)
@@ -645,8 +725,11 @@ def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | 
 def run(text: str, timeline: list[dict] | None = None, counterparty: str | None = None,
         ring: str | None = None, opening_s: float = 300.0,
         cycle_s: float | None = None, title: str | None = None, thumb: str | None = None,
-        thumb_file: str | None = None, short: bool | None = None, pages: list[float] | None = None) -> tuple[list[Gate], dict]:
+        thumb_file: str | None = None, short: bool | None = None, pages: list[float] | None = None,
+        take: Path | str | None = None, refused: str | None = None) -> tuple[list[Gate], dict]:
     """cycle_s: how far G36's cycle check runs; None = the whole runtime (E23).
+    take: where the timeline's words came from (the report's `timing` names it); refused: the take `main` refused for
+    this text (R26-203), named on the estimate's `timing` line.
     pages: ledger page landing seconds from the build's scene timeline (load_pages) - the short's S02 reads them (E44).
     title / thumb: the packaging's words for G45; thumb_file: the thumbnail path J12 prints (E24).
     short: True forces the shorts shape (G2), False the long form; None = a MEASURED clock under SHORT_MAX_S is a short."""
@@ -654,7 +737,8 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     if short is None:
         short = timeline is not None and bool(sents) and sents[-1][1] < SHORT_MAX_S
     if short:
-        return run_short(text, timeline, sents, beat_tags.find_marks(text), ring, title, thumb, thumb_file, pages)
+        return run_short(text, timeline, sents, beat_tags.find_marks(text), ring, title, thumb, thumb_file, pages,
+                         take=take, refused=refused)
     marks = beat_tags.find_marks(text)
     beats: dict[str, list[tuple[float, int]]] = {}
     for tag, off in marks:
@@ -688,6 +772,7 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         else:
             add("G46", SRC_G46, "PASS", f"runtime {mmss(runtime)} ({'measured' if timeline else 'estimated'}) clears the 8:00 floor")
     g += _self_promise_gates(sents, timeline)           # C03-R011 G47 / G47b, C09-R013 G48
+    g.append(_brand_line_gate(text))                    # R26-212: S07 in the long shape too - the outro carries the line
 
     # ================= P1 - THE OPEN =================
     if sents:
@@ -1006,7 +1091,8 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         else f"all {len(windows)} unit windows rehook out")
     add("J04", "38 B5 context-dump ban: every abstraction cashed into an object or number within one sentence", "JUDGE", "read P1 B5 and the P2 catalyst")
 
-    stats = {"runtime": mmss(runtime), "timing": "measured (take)" if timeline else "estimated (kit rate, 8% band)",
+    stats = {"runtime": mmss(runtime), "timing": _timing(timeline, take, refused, "estimated (kit rate, 8% band)",
+                                                      "measured (take)"),
              "geometry": f"P1 0:00-{mmss(p1_end)} (beat 5 from {mmss(beat5_lo)}), P2 -{mmss(p2_end)} ({geo['source']})",
              "density_bands": f"loops {geo['loops']}, new-info {geo['new']}",
              "a3_anchor": mmss(a3c),
@@ -1074,11 +1160,21 @@ def main() -> int:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     text = args.script.read_text(encoding="utf-8")
     unknown = beat_tags.unknown_marks(text)
-    tl = load_timeline(args.timeline) if args.timeline else A.load_timings(args.script)
+    tl, take = (load_timeline(args.timeline), args.timeline) if args.timeline else project_take(args.script)
+    overlap = take_overlap(text, tl) if tl else None
+    refused = take_refusal(text, tl, take, overlap)
+    if refused and args.timeline:            # the caller NAMED another script's take: the run is refused (R26-203)
+        print(f"gate_opening_structure: {refused}", file=sys.stderr)
+        return 2
+    if refused:                              # the project's take is another script's: estimate, naming the one refused
+        tl = None
+    elif tl:
+        take = f"{take}, overlap {overlap:.3f}"
     scenes = args.scenes or (find_scene_timeline(args.timeline) if args.timeline else None)
     pages = load_pages(scenes) if scenes else None
     gates, stats = run(text, tl, args.counterparty, args.ring, args.opening_s, args.cycle_s,
-                       args.title, args.thumb, args.thumb_file, short=args.short, pages=pages)
+                       args.title, args.thumb, args.thumb_file, short=args.short, pages=pages,
+                       take=take, refused=refused)
     if unknown:
         gates.insert(0, Gate("G00", "doc 37 marks", "FAIL", f"unknown marks would be spoken: {sorted(unknown)}"))
     print(f"=== OPENING STRUCTURE GATE: {args.script.name} ===")

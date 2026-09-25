@@ -657,3 +657,115 @@ def test_g47_g48_run_on_shorts_too():
     """The defects are the script's words, not the long-form geometry: a short that says 'this week' rots the same."""
     g = _by_id(G.run(_conforming_short() + "\nThis week the tab grew.\n", None, ring="tea break", short=True)[0])
     assert g["G48"].level == "WARN" and {"G47", "G47b"} <= set(g)
+
+
+# ---- P72 T8 / R26-203: a take is used only when its words are THIS script's --------------------------------------
+# With no --timeline the gate took the project's first take (`load_timings`' first `vo*` dir) and mapped Script H's
+# sentences onto it by POSITION, printing `timing: measured (take)` and a 7:26 runtime for a ~13:26 script
+# (SCRIPT-H-GATES.md carried it for ten days). Measured 2026-09-25 (P72 T8 logs/overlap-measure*.txt): every recorded
+# take under its own script covers 1.000 of the script's words in order (Japan x4 takes, Tokyo, the calendar, the bridge
+# x2, G, H); the nearest take under ANOTHER script covers 0.916 (Script F under G's take), G's under H 0.778.
+
+import json  # noqa: E402
+import subprocess  # noqa: E402
+
+SCRIPT_H = EP / "SCRIPT-H-VO.txt"
+TAKE_H = EP / "vo-h-scratch/timeline.json"
+needs_h = pytest.mark.skipif(not (SCRIPT_H.exists() and TAKE_H.exists() and TIMELINE.exists()),
+                             reason="Script H, its take or G's take not on disk")
+GATE = SCRIPTS / "gate_opening_structure.py"
+
+
+def _gate_cli(*argv: str) -> subprocess.CompletedProcess:
+    return subprocess.run([sys.executable, str(GATE), *map(str, argv)], capture_output=True, text=True,
+                          encoding="utf-8", errors="replace")
+
+
+def test_take_overlap_floor_sits_between_the_measured_matched_and_mismatched_takes():
+    assert 0.916 < G.TAKE_OVERLAP_MIN < 1.0
+
+
+@needs_h
+def test_take_of_script_g_under_script_h_is_refused_naming_the_take_and_the_overlap():
+    text = SCRIPT_H.read_text(encoding="utf-8")
+    overlap = G.take_overlap(text, G.load_timeline(TIMELINE))
+    assert 0.70 < overlap < G.TAKE_OVERLAP_MIN, overlap        # a rewrite of G: most words shared, the order not
+    refusal = G.take_refusal(text, G.load_timeline(TIMELINE), TIMELINE)
+    assert refusal and "build-f" in refusal and f"{overlap:.3f}" in refusal, refusal
+    done = _gate_cli(SCRIPT_H, "--timeline", TIMELINE)
+    assert done.returncode == 2, done.stdout[-400:] + done.stderr
+    assert "build-f" in done.stderr and "refused" in done.stderr and f"{overlap:.3f}" in done.stderr, done.stderr
+    assert "RESULT:" not in done.stdout
+
+
+@needs_h
+def test_take_of_script_h_under_script_h_passes_and_the_timing_names_it():
+    text = SCRIPT_H.read_text(encoding="utf-8")
+    assert G.take_overlap(text, G.load_timeline(TAKE_H)) == 1.0
+    assert G.take_refusal(text, G.load_timeline(TAKE_H), TAKE_H) is None
+    done = _gate_cli(SCRIPT_H, "--timeline", TAKE_H)
+    assert done.returncode in (0, 1) and "RESULT:" in done.stdout, done.stderr
+    timing = next(line for line in done.stdout.splitlines() if line.strip().startswith("timing:"))
+    assert "measured" in timing and "vo-h-scratch" in timing and "1.000" in timing, timing
+    assert re.search(r"runtime: 13:\d\d", done.stdout), done.stdout[:600]    # H's own clock, not the 7:26 it borrowed
+
+
+def _project(tmp_path: Path, script_text: str, takes: dict[str, str]) -> Path:
+    """A project dir: SCRIPT-X-VO.txt plus one `vo*` dir per take, each one scene_1.words.json of `takes[name]`."""
+    (tmp_path / "SCRIPT-X-VO.txt").write_text(script_text, encoding="utf-8")
+    for name, spoken in takes.items():
+        audio = tmp_path / name / "audio"
+        audio.mkdir(parents=True)
+        words = [{"w": w, "start_s": i * 0.4, "end_s": i * 0.4 + 0.3} for i, w in enumerate(spoken.split())]
+        (audio / "scene_1.words.json").write_text(json.dumps({"words": words, "duration_s": len(words) * 0.4}),
+                                                  encoding="utf-8")
+    return tmp_path / "SCRIPT-X-VO.txt"
+
+
+OLD = "In 1845 the railway was the safest thing you could own. Then the shares fell by half in a year."
+NEW = "The safest thing you own looks like this. An iron spike ruined almost everyone who touched it."
+
+
+def test_project_take_names_the_directory_load_timings_reads(tmp_path):
+    script = _project(tmp_path, NEW, {"vo": OLD, "vo-z": NEW})
+    words, source = G.project_take(script)
+    assert words == A.load_timings(script)
+    assert source == tmp_path / "vo" and [w["w"] for w in words][:3] == ["In", "1845", "the"]
+
+
+def test_project_take_of_another_script_is_refused_and_the_gate_estimates(tmp_path):
+    script = _project(tmp_path, NEW + " " + FILLER * 3, {"vo": OLD})
+    done = _gate_cli(script, "--short")
+    assert "RESULT:" in done.stdout, done.stdout + done.stderr
+    timing = next(line for line in done.stdout.splitlines() if line.strip().startswith("timing:"))
+    assert timing.strip().startswith("timing: estimated"), timing
+    assert "refused" in timing and str(tmp_path / "vo") in timing, timing
+
+
+def test_project_take_of_this_script_is_used_and_named(tmp_path):
+    script = _project(tmp_path, NEW, {"vo": NEW})
+    done = _gate_cli(script, "--short")
+    timing = next(line for line in done.stdout.splitlines() if line.strip().startswith("timing:"))
+    assert timing.strip().startswith("timing: measured") and str(tmp_path / "vo") in timing, timing
+
+
+# ---- P72 T8 / R26-212: the brand line is stitched under the outro in BOTH formats (S07 in the long shape) ----------
+
+BRAND = "Not a panic. Not a plot. Mechanics."
+
+
+def test_s07_fails_a_long_script_that_speaks_the_brand_line():
+    long_text = _pad_to(_conforming_opening() + " " + BRAND, 820.0)
+    g = _by_id(G.run(long_text, None, counterparty="Bravos", ring="spike", short=False)[0])
+    assert g["S07"].level == "FAIL" and "spoken in the script" in g["S07"].message, g["S07"]
+    clean = _by_id(G.run(_conforming_opening(), None, counterparty="Bravos", ring="spike", short=False)[0])
+    assert clean["S07"].level == "PASS", clean["S07"]
+
+
+@needs_h
+def test_s07_runs_in_the_long_shape_on_scripts_g_and_h_and_both_are_clean():
+    """Neither long script speaks the recorded line ("not a rebuttal, not a victory lap, not a panic" is P1's own
+    tricolon, not the brand line - E41 (2)): the row is present and PASSes on both."""
+    for script, take in ((SCRIPT_H, TAKE_H), (SCRIPT, TIMELINE)):
+        g = _by_id(G.run(script.read_text(encoding="utf-8"), G.load_timeline(take), short=False)[0])
+        assert g["S07"].level == "PASS", (script.name, g["S07"])
