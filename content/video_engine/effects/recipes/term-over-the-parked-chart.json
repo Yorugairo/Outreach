@@ -1,0 +1,47 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:term-over-the-parked-chart",
+ "title": "The term over the parked chart",
+ "aliases": [],
+ "acts": [
+  "NAMES",
+  "EXPLAINS"
+ ],
+ "members": [
+  {
+   "card": "chart_to:park",
+   "offset_s": 0.0,
+   "role": "the held chart parks to its corner on the word that turns to the mechanism - it stays on stage, smaller, and is never cut away"
+  },
+  {
+   "card": "dock_option:under",
+   "option": "blur",
+   "offset_s": 0.4,
+   "role": "the TERM lands as a card over the parked chart naming under: blur - the chart is not the point while the term is read (s124 (2)); hover when the chart must stay read"
+  },
+  {
+   "card": "species:flow",
+   "offset_s": 1.6,
+   "role": "a flow explains the term, one node per clause, inside the card's beat"
+  }
+ ],
+ "window_s": 6.0,
+ "does": "The chart parks, a term card lands over it on the blurred page and a short flow explains the mechanism; on the card's leave the blur clears and the chart returns.",
+ "use_when": {
+  "act": "NAMES / EXPLAINS - a term or mechanism the chart's move depends on",
+  "moment": "proof",
+  "shape": "a held chart + one named term and the two or three clauses that explain it",
+  "use": "the chart blurs or parks, a term chip lands, a flow explains it, then the chart returns - the harvest's R3 (BUB 1:59; DOM 08:56-09:29; HIS 06:04; JPN 04:08, 05:28)",
+  "dont": "longer than one proof beat; a term the chart itself already labels; blur when the chart must keep being read (hover, s124 amended)"
+ },
+ "doctrine": [
+  "P71 T15",
+  "E99 s124",
+  "E99 s98",
+  "E99 s70",
+  "E63"
+ ],
+ "status": "candidate",
+ "source": "P71 T15 (harvest v2 R3, n=4; BRAVOS-USE-WHEN R3). Its `under` member is pinned by the goldens dock-blur-over-plate and dock-hover-over-ledger; the whole beat is proved as a private TEST-BED beat on H row 12 ('inflated expectations', 134.07-136.10), labelled as one; no approved cut carries it",
+ "count": 0
+}

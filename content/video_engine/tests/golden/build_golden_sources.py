@@ -4819,6 +4819,63 @@ SURFACES.update({"prop-poof": prop_poof})
 FRAME_T.update({"prop-poof": round(POOF_ENTER + 0.30, 2)})   # 11.11: the prop whole, the cloud opened into its ring
 
 
+# ---- P71 T15 (was P69 T40; E99 s124 AS AMENDED): A DOCK OVER A CHART CHOOSES BY INTENT -----------------------------------
+#   dock-hover-over-ledger  the divergence line page (the committed ev-divergence-v1 object, built by its own clock) with
+#                           the golden chart card centred OVER its plot, naming `under: "hover"`: the card lifts 10 px, grows
+#                           its 3.5 % step, casts drift-hold's drop shadow and holds on the drift-hold (graded whisper - a
+#                           card carrying a chart); the chart under it is untouched - no veil, no wash. Read mid-hold.
+#   dock-blur-over-plate    a PICTURE plate of a larger chart (synthetic bars, a committed input) with the same card over it
+#                           naming `under: "blur"`: the veil between the plate and the docks blurs the chart while the small
+#                           evidence card makes its point (s124 (2)); read at the same instant.
+UNDER_ENTER, UNDER_EXIT = 12.0, 24.0
+UNDER_CARD = "ev-golden-chart"
+UNDER_SLOT = {"centre": True, "centre_w": 0.34, "centre_x": 0.66, "centre_y": 0.50, "card_aspect": 0.62}
+UNDER_SHARP_REGION = (180, 330, 820, 800)   # the chart beside the card (stage px): the left of the plot / the plate's bars
+UNDER_PLATE_BARS = [(0.08 + 0.105 * i, 0.82 - (0.12 + 0.07 * ((i * 5) % 8)), 0.08 + 0.105 * i + 0.07, 0.82) for i in range(8)] \
+    + [(0.06, 0.82, 0.94, 0.83), (0.06, 0.12, 0.062, 0.82)]   # eight bars on a baseline, and the y axis
+
+
+def dock_under_surface(under: str | None, world: str, dock: bool = True, life: bool | None = None) -> tuple[dict, dict]:
+    """The P71 T15 bench: `world` "ledger" (a line page) or "plate" (a picture of a chart); the card naming `under` (or
+    none: the dock as it always was), or no dock at all (`dock=False`: the chart alone, the reference the hover's
+    untouched-outside-the-card read compares against). `life` turns E49's switch on (default: when the dock holds), so a
+    comparison frame can carry the same page life as the hover it is compared with."""
+    import build_scene_timeline_f as BST
+    ev = _chart_evidence()
+    ev[UNDER_CARD] = dict(ev[UNDER_CARD], badges=[])   # no rail: the card is the evidence and nothing lands on it
+    opts = BST.dock_opts(dict(UNDER_SLOT, **({"under": under} if under else {})))   # the row's own options, validated
+    idle = BST.dock_idle(opts, ev[UNDER_CARD])
+    place = BST.centred_place(None, None, opts["card_aspect"], None, opts["centre_w"], None, opts["centre_y"], opts["centre_x"])
+    docks = [BST.dock_entry(UNDER_CARD, 0, UNDER_ENTER, UNDER_EXIT, 0, BST.DOCK_KIND_IMAGE, place, None, None, True,
+                            idle=idle, under=opts.get("under"))] if dock else []
+    uris = _base_uris()
+    uris[UNDER_CARD] = uri("image/png", png_solid(64, 40, (22, 24, 28)))   # the static fallback: the card is DRAWN from its series
+    if world == "ledger":
+        page = LPG.build_spec(LPG.load_series(SERIES), "line", 0, "right")
+        w = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    else:
+        uris["plate-chart"] = uri("image/png", png_bars(480, 270, (238, 229, 208), UNDER_PLATE_BARS, (30, 64, 96)))
+        w = {"asset_id": "plate-chart", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    scenes = [{"scene_id": "s01", "world": w, "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": []}]
+    tl = _timeline(f"Golden: a dock over a chart, under {under or 'unnamed'} ({world})", scenes, ev, None)
+    if (idle if life is None else life):   # a HOVER holds on the drift-hold, a dock's own idle (test_idle_e49's DOCK_IDLE_IS_THE_SUBJECT); blur holds none
+        tl["kinetics"] = {"idle": True}
+    return tl, uris
+
+
+def dock_hover_over_ledger() -> tuple[dict, dict]:
+    return dock_under_surface("hover", "ledger")
+
+
+def dock_blur_over_plate() -> tuple[dict, dict]:
+    return dock_under_surface("blur", "plate")
+
+
+SURFACES.update({"dock-hover-over-ledger": dock_hover_over_ledger, "dock-blur-over-plate": dock_blur_over_plate})
+FRAME_T.update({"dock-hover-over-ledger": round(UNDER_ENTER + 3.0, 2),   # the hover risen (contact 0.45 + 0.30 + 0.50) and holding
+                "dock-blur-over-plate": round(UNDER_ENTER + 3.0, 2)})    # the veil up (0.45 s) and holding
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

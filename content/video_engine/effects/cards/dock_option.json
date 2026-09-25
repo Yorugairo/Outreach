@@ -931,6 +931,78 @@
         "today": true,
         "why": "probe: {'press': ..., 'stack': True} OK; {'stack': True} alone refused by name"
       }
+    },
+    {
+      "id": "dock_option:under",
+      "axis": "dock_option",
+      "token": "under",
+      "title": "The dock over a chart, by intent",
+      "aliases": [
+        {
+          "name": "hover the dock",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3379"
+        },
+        {
+          "name": "blur under a dock",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3379"
+        }
+      ],
+      "does": "A dock over a chart does what the beat's goal asks: HOVER lifts the card a step with a drop shadow while it holds, the chart untouched; BLUR lays a veil under the card that blurs the chart while it reads.",
+      "when": "The author's per-dock choice by the beat's goal, never a default (E99 s124 amended): HOVER when the chart must keep being read; BLUR when it is not the point and a small evidence dock is up briefly. A card over a ledger plot naming neither is asked to choose. Never on a prop, stamp, cutout, press card or embed; blur never with behind.",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:3379",
+      "author": {
+        "key": "dock option {'under': 'hover'|'blur'} (DOCK_UNDER; a hover's unnamed idle resolves to the drift-hold - dock_idle)",
+        "example": "{'centre': True, 'centre_w': 0.34, 'centre_x': 0.66, 'centre_y': 0.5, 'card_aspect': 0.62, 'under': 'hover'}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:UNDER_SLOT",
+        "check": "dock_option"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [
+        {
+          "token": "hover",
+          "means": "Keep the chart read: the card lifts 10 px, grows 3.5 % and casts the drift-hold card's drop shadow, holds on the drift-hold, sets down on the leave; it lights no wash.",
+          "source_set": null
+        },
+        {
+          "token": "blur",
+          "means": "Focus a temporary evidence dock: #dockveil blurs the chart under the card (8 px, the dock's own clock), the page's title, sub and source kept sharp; it clears on the leave.",
+          "source_set": null
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "dockHover",
+        "also": [
+          "DOCK_HOVER",
+          "DOCK_VEIL",
+          "dockVeilK",
+          "paintDockVeil",
+          "dockHoverShadow"
+        ],
+        "note": "the dock loop prepends the hover and its shadow; paintDockVeil drives #dockveil; compiler DOCK_UNDER / under_choice_note / read_over_build(under=); gate _under_of (M25 / M27 WARN)"
+      },
+      "doctrine": [
+        "E99 s124",
+        "E99 s98",
+        "E63",
+        "E61",
+        "E99 s106",
+        "E99 s128",
+        "HyperFrames drift-hold"
+      ],
+      "status": "draft",
+      "proof": {
+        "golden": "dock-hover-over-ledger",
+        "test": "content/video_engine/tests/test_dock_under.py::test_a_hovering_card_lifts_and_steps_and_leaves_the_chart_untouched",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "dock_opts accepts it, the compiler writes it on the entry and keeps the authored read, the engine hovers or blurs (goldens dock-hover-over-ledger and dock-blur-over-plate); no committed dock names it - which of H's docks hover or blur is authored by each beat's goal; it awaits the operator's watch"
+      }
     }
   ]
 }

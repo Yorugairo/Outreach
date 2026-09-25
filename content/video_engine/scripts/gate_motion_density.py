@@ -187,7 +187,9 @@ SRC_M18 = ("E49 / P47 T5: nothing ever goes truly still - a run of identical ren
 LAYOUT_PROBE_NAME = "layout-probe.json"   # written by probe.py --gate beside the timeline; M25 reads it and never opens a browser
 SRC_M25 = ("E45 s1 (the compiler's `place`: a card parks in the page's quiet space, never over the plot, the title, the source line "
            "or the caption's anchor) / E52 (the page CITES: the citation rides the park) / E60 - the three defects of 2026-09-10, "
-           "refused from the page's own DOM (probe.py --gate)")
+           "refused from the page's own DOM (probe.py --gate) / E99 s124 amended (P71 T15): a dock that NAMES `under` "
+           "(hover or blur) chose to sit over the PLOT, so its overlap with the chart's data or labels is a WARN with its numbers "
+           "(s106); the page's own words - title, sub, source, note, key rail, pills - stay a FAIL (E45 s1, E52)")
 # A SETTLED card only. What a card RESTS on is composition and the compiler's contract; what it flies over on its way in is
 # choreography (the Tokyo Fed card crosses the whole page mid-throw, approved 2026-09-09). probe.py marks `rest` and `state`.
 LAYOUT_SETTLED = ("parked", "reading")
@@ -215,7 +217,10 @@ SRC_M27 = ("E63 (operator 2026-09-11, on the Tokyo cut at 0:09.5-0:10.5: \"docki
            "ledger page's INK, drawing or finished - the READ moves (the compiler's `read_moved` / `read_deferred`), never the "
            "word. The page's own INK is what the row scores (the data, the labels, the citation - M25's boxes): since E65 the "
            "placer may put a card in the plot's own empty ROOM on purpose, so the plot box is the WARN tier and the ink is the "
-           "FAIL. A PARKED card is E45's contract and M25's row. Read from the page's own DOM (probe.py --gate)")
+           "FAIL. A PARKED card is E45's contract and M25's row. Read from the page's own DOM (probe.py --gate). E99 s124 "
+           "amended (P71 T15): a dock that NAMES `under` (hover or blur) reads over the PLOT by intent - its data or labels "
+           "are a WARN with the numbers (s106); the page's own words stay a FAIL (E45 s1, E52), and a card with no `under` "
+           "keeps every FAIL")
 BUILD_OVER_SHARE = 0.05    # of the smaller box: the compiler's own line (READ_OVER_PLOT_SHARE), kept so the placer and the
                            # gate name the same number. Since E65 the row no longer SCORES it: a card in the plot's own empty
                            # room is what the placer now chooses, so the plot BOX is the WARN tier and the INK is the FAIL.
@@ -1775,7 +1780,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(sg)                                                      # M29 (E44 s2a / R26-5: a transient inside 0:05-0:12 needs a page landing; E83: or a dock's)
     if (mo := _mount_gate(tl.get("scenes", []), tl.get("evidence") or {})) is not None:
         g.append(mo)                                                      # M30 (E44 s2b / R26-6: a returning character mounts, it never cuts on)
-    g.append(_layout_gate(layout))                                        # M25 (P51 T2: the layout gate, from probe.py's boxes)
+    g.append(_layout_gate(layout, tl.get("scenes", [])))                  # M25 (P51 T2: the layout gate, from probe.py's boxes)
     g.append(_values_gate(layout))                                        # M26 (R26-40: the printed value against the drawn height)
     g.append(_over_build_gate(layout, tl.get("scenes", [])))              # M27 (E63/E65: no card reads over a ledger page's ink)
     g.append(_labels_gate(layout))                                        # M28 (R26-53: text on text among the page's own labels)
@@ -2636,8 +2641,39 @@ def _parked_type(doc: dict) -> list[str]:
     return [f"{k} {v:.1f}" for k, v in sorted(smallest.items(), key=lambda kv: kv[1])]
 
 
-def _layout_faults(doc: dict) -> tuple[list[str], list[str]]:
-    """(FAIL lines, WARN lines) over every probed instant. Each names the two boxes, the instant and the area."""
+UNDER_WARN = "by intent"   # P71 T15: the words every chosen-dock WARN carries (M25 splits its WARN lines on them)
+UNDER_LEAVE_S = 0.72       # ... and the engine's EXIT: a dock is on the stage this long past its exit
+
+
+UNDER_INTENTS = ("hover", "blur")   # the compiler's DOCK_UNDER: anything else claims nothing
+
+
+def _under_of(scenes: list[dict] | None, card: str, t: float) -> str | None:
+    """P71 T15: the `under` the compiled dock `card` names at `t` (E99 s124 amended), or None. The dock's OWN window
+    decides - its enter to its leave (the retract is still the dock) - on any scene, so a chosen dock whose retract runs
+    past the boundary is still chosen there. Only hover or blur count (a hand-edited value claims nothing)."""
+    for s in scenes or []:
+        for d in s.get("docks") or []:
+            if str(d.get("slide")) == card and d.get("under") in UNDER_INTENTS and \
+                    float(d.get("enter", 0.0)) <= t <= float(d.get("exit", 0.0)) + UNDER_LEAVE_S:
+                return str(d["under"])
+    return None
+
+
+def _on_the_plot(hit: str) -> bool:
+    """P71 T15: what a chosen `under` lifts the bar for - the chart itself (its data and its labels), never the page's
+    own words (LAYOUT_INK: E45 s1 - never over the title or the source line; E52 - the page CITES)."""
+    return hit == "page.data" or hit.startswith("chart.")
+
+
+def _under_line(card: str, under: str, what: str, where: str) -> str:
+    return f"{card} over {what} {UNDER_WARN} (under: {under}, E99 s124) {where}"
+
+
+def _layout_faults(doc: dict, scenes: list[dict] | None = None) -> tuple[list[str], list[str]]:
+    """(FAIL lines, WARN lines) over every probed instant. Each names the two boxes, the instant and the area.
+    `scenes` (P71 T15): the compiled scenes - a settled dock that names `under` over the data or the ink is a WARN with
+    the same numbers (E99 s124 amended, s106); absent, every overlap is judged as it always was."""
     fails: list[str] = []
     warns: list[str] = []
     portrait = str(doc.get("aspect") or "16:9") == "9:16"
@@ -2649,7 +2685,11 @@ def _layout_faults(doc: dict) -> tuple[list[str], list[str]]:
                 continue
             share, px = o["share_of_smaller"] / 100.0, o["area_px"]
             where = f"at {_mm(t)}, {px:,} px, {o['share_of_smaller']} %"
-            if o["b"] == "page.data" and share > DATA_OVER_SHARE:
+            under = _under_of(scenes, str(o["a"]), t) if scenes else None
+            if under and _on_the_plot(o["b"]) and share > (DATA_OVER_SHARE if o["b"] == "page.data" else INK_OVER_SHARE):
+                warns.append(_under_line(o["a"], under, "the chart's data" if o["b"] == "page.data" else _ink_name(o["b"]),
+                                         where + " of the smaller"))
+            elif o["b"] == "page.data" and share > DATA_OVER_SHARE:
                 fails.append(f"{o['a']} over the chart's data {where} of the card")
             elif o["b"] == "caption" and share > CAPTION_TOUCH_SHARE:
                 fails.append(f"{o['a']} in the caption strip {where} of the smaller")
@@ -2685,7 +2725,7 @@ def _dedupe(lines: list[str]) -> list[str]:
     return out
 
 
-def _layout_gate(doc: dict | str | None) -> Gate:
+def _layout_gate(doc: dict | str | None, scenes: list[dict] | None = None) -> Gate:
     """M25 (P51 T2): the layout gate. Browser-free, exactly as M18 is - it reads the boxes probe.py measured in the
     page's own DOM at the instants that matter, and refuses the three defects of 2026-09-10 by name."""
     if doc is None:
@@ -2695,12 +2735,18 @@ def _layout_gate(doc: dict | str | None) -> Gate:
     instants = (doc or {}).get("instants") or []
     if not instants:
         return Gate("M25", "INFO", f"{LAYOUT_PROBE_NAME} carries no instants - re-run probe.py <build> --gate", SRC_M25)
-    fails, warns = _layout_faults(doc)
+    fails, warns = _layout_faults(doc, scenes)
     span = f"{len(instants)} instants probed"
     parked = _parked_type(doc)
     listed = (" | INFO, listed not scored (CSS px on a phone): " + ", ".join(parked[:4])) if parked else ""
     if fails:
         return Gate("M25", "FAIL", f"{len(fails)} layout fault(s) over {span}: " + "; ".join(fails[:6]) + (" ..." if len(fails) > 6 else "") + listed, SRC_M25)
+    chosen = [w for w in warns if f" {UNDER_WARN} (under: " in w]   # P71 T15: the docks that chose the chart
+    safe = [w for w in warns if w not in chosen]
+    if chosen:
+        return Gate("M25", "WARN", f"{len(chosen)} settled dock(s) over the chart {UNDER_WARN} over {span}: " + "; ".join(chosen[:4])
+                    + (" ..." if len(chosen) > 4 else "") + " - the author's `under` (E99 s124 amended); listed with the numbers"
+                    + (f" | {len(safe)} safe-zone intrusion(s): " + "; ".join(safe[:2]) if safe else "") + listed, SRC_M25)
     if warns:
         return Gate("M25", "WARN", f"{len(warns)} safe-zone intrusion(s) over {span}: " + "; ".join(warns[:4]) + (" ..." if len(warns) > 4 else "") + listed, SRC_M25)
     small = min((x["css"] for i in instants for x in (i.get("texts") or [])
@@ -2990,7 +3036,12 @@ def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[s
             if state.get(card) in (None, "parked"):
                 continue                              # a PARKED card is E45's contract and M25's row; this one is the READ
             share = o["share_of_smaller"] / 100.0
-            if hit == "page.data" and share > DATA_OVER_SHARE:
+            under = _under_of(scenes, card, t)   # P71 T15: a dock that chose the chart reads over it by intent - a WARN
+            if under and _on_the_plot(hit) and share > (DATA_OVER_SHARE if hit == "page.data" else INK_OVER_SHARE):
+                on_ink.add(card)
+                warns.append(_under_line(card, under, "the chart's data" if hit == "page.data" else _ink_name(hit),
+                                         f"{when}, {line(o)}"))
+            elif hit == "page.data" and share > DATA_OVER_SHARE:
                 on_ink.add(card)
                 fails.append(f"{card} reads on the chart's data {when}, {line(o)}")
             elif (hit in LAYOUT_INK or hit.startswith("chart.")) and share > INK_OVER_SHARE:
@@ -3022,6 +3073,13 @@ def _over_build_gate(doc: dict | str | None, scenes: list[dict]) -> Gate:
         return Gate("M27", "FAIL", f"{len(fails)} card(s) reading over a ledger page's ink over {span}: " + "; ".join(fails[:6])
                     + (" ..." if len(fails) > 6 else "") + f" - move the READ, never the word (E63): a free band at the "
                     f"reading scale, else the plot's own empty room (E65), else the scale that fits", SRC_M27)
+    chosen = [w for w in warns if f" {UNDER_WARN} (under: " in w]   # P71 T15: the docks that chose the chart
+    if chosen:
+        room = [w for w in warns if w not in chosen]
+        return Gate("M27", "WARN", f"{len(chosen)} dock(s) reading over the chart {UNDER_WARN} over {span}: " + "; ".join(chosen[:4])
+                    + (" ..." if len(chosen) > 4 else "") + " - the author's `under` (E99 s124 amended); listed with the numbers"
+                    + (f" | {len(room)} card(s) inside the plot's box, clear of its ink: " + "; ".join(room[:2]) if room else ""),
+                    SRC_M27)
     if warns:
         return Gate("M27", "WARN", f"{len(warns)} card(s) inside the plot's box, clear of its ink, over {span}: "
                     + "; ".join(warns[:4]) + (" ..." if len(warns) > 4 else "")

@@ -126,7 +126,9 @@ PAGE_IDLE_IS_THE_SUBJECT = {"page-life-still", "page-life-live", "page-build-lin
 
 # P70 T13: one DOCK golden carries the switch for the same reason - its subject is the drift-hold, a dock's own idle
 # (`idle: hold`), which `idleOf` answers "none" for when E49's switch is off. Its plate stays at the class breath.
-DOCK_IDLE_IS_THE_SUBJECT = {"drift-hold-tripwire"}
+# P71 T15: ... and the HOVER over a ledger page holds on the same drift-hold (an unnamed idle under `under: "hover"`
+# resolves to it), so its golden carries the switch too; the blur golden holds nothing and carries none.
+DOCK_IDLE_IS_THE_SUBJECT = {"drift-hold-tripwire", "dock-hover-over-ledger"}
 
 
 def test_golden_sources_carry_no_idle_flag_so_they_stay_byte_identical():

@@ -6840,6 +6840,67 @@ async function mount(doc) {
   /* P70 T8: ... and a POOFED prop appears at its place inside a ring of seeded puffs (kinetics/stopaction.mjs poofXf) - a
      prop's arrival only (the compiler refuses it on a card and on a page's pills) */
   const arriveOf = (o) => (kin("stop_action") && o && (o.arrive === "throw" || o.arrive === "land" || o.arrive === "stamp" || o.arrive === "poof")) ? o.arrive : "spring";
+  /* P71 T15 - A DOCK OVER A CHART CHOOSES BY INTENT (E99 s124 AS AMENDED: "it needs to be a choice depending on the goal of
+     what we want to have happen"). The compiler writes `under` on the entry ONLY when the row names it; an entry without it
+     paints exactly as it always did (neither is a default).
+       HOVER - the chart underneath keeps being READ. After the card's contact (its arrival's own: the spring's settle, a
+         throw's flight, a landing's drop) the card LIFTS and grows ONE STEP on a minimum-jerk rise, its drop shadow growing
+         with the lift, and it holds on the drift-hold (the compiler resolves the idle to `hold`); the lift and the step
+         reverse on the leave. Nothing is laid over the chart and a hovering card lights no wash (WASHES below): outside
+         its own box and shadow the chart is the chart.
+       BLUR - focus on a TEMPORARY evidence dock. #dockveil, between the page and the docks, blurs what is under it on the
+         dock's own clock (the blurzoom's law: a numeric radius per frame on a min-jerk u) and clears on the leave.
+     Both are pure in t: the envelopes read only t and the entry.
+       DOCK_HOVER.SHADOW_Y 0.08, SHADOW_BLUR 0.227, SHADOW_A 0.58 [DERIVED: drift-hold.html's .dh-card box-shadow
+         "0 3.5cqh 10cqh" at 58 % of --bg #05070d, on its 44cqh card - offset and blur as shares of the card's height];
+       LIFT_PX 10, STEP 1.035 [DERIVED: the frame read (P71 T15 frames/) - the reference card never lifts (its hold is
+         the idle), so the lift is ours: enough to read as off the page, under the park's slide];
+       AFTER_S 0.30, IN_S 0.50 [DERIVED: the frame read - the lift begins once the contact's squash has relaxed and rises
+         over about the pop's own length]; OUT_S = DOCK_RETRACT_S (the lift sets down on the retract's clock);
+       DOCK_VEIL.BLUR 8 [DERIVED: the frame read between panel_focus's receded 5 px (the chart is still a chart) and the
+         blurzoom's 18 px (the plate's detail gone) - the chart steps back, its shape still legible]; IN_S = DOCK_POP_S,
+         OUT_S = DOCK_RETRACT_S (the dock's own enter and leave). */
+  const DOCK_HOVER = Object.freeze({ AFTER_S: 0.30, IN_S: 0.50, OUT_S: DOCK_RETRACT_S, LIFT_PX: 10, STEP: 1.035,
+    SHADOW_Y: 0.08, SHADOW_BLUR: 0.227, SHADOW_A: 0.58 });
+  const DOCK_VEIL = Object.freeze({ BLUR: 8, IN_S: DOCK_POP_S, OUT_S: DOCK_RETRACT_S, WORD_PAD: 6 });
+  const dockContactAt = (d) => +d.enter + (arriveOf(d) === "throw" ? STOP.FLIGHT_S : arriveOf(d) === "land" ? STOP.ANTIC_S + STOP.DROP_S : DOCK_POP_S);
+  const dockHover = (d, t, contact) => {   /* the hover's share k (0 = the card as it always was), its lift and its step */
+    if (!d || d.under !== "hover") return { k: 0, lift: 0, step: 1 };
+    const up = minJerk((t - contact - DOCK_HOVER.AFTER_S) / DOCK_HOVER.IN_S);
+    const k = up * (t > d.exit ? 1 - minJerk((t - d.exit) / DOCK_HOVER.OUT_S) : 1);
+    return { k, lift: DOCK_HOVER.LIFT_PX * k, step: 1 + (DOCK_HOVER.STEP - 1) * k };
+  };
+  const dockHoverShadow = (hov, h) => hov.k > 0   /* the drop shadow the lift casts, added under the card's own hard edge */
+    ? ", 0 " + (hov.lift + DOCK_HOVER.SHADOW_Y * h * hov.k).toFixed(1) + "px " + (DOCK_HOVER.SHADOW_BLUR * h * hov.k).toFixed(1)
+      + "px rgba(5,7,13," + (DOCK_HOVER.SHADOW_A * hov.k).toFixed(3) + ")" : "";
+  const dockVeilK = (d, t) => (d && d.under === "blur")
+    ? minJerk((t - d.enter) / DOCK_VEIL.IN_S) * (t > d.exit ? 1 - minJerk((t - d.exit) / DOCK_VEIL.OUT_S) : 1) : 0;
+  const dockveil = $("dockveil");
+  /* THE PAGE'S WORDS STAY OUT OF THE BLUR (review round 2; E45 s1, E52: a page CITES). The veil blurs the chart - its plot,
+     its series, its labels - and is cut round every word the page itself prints (the title, the sub, the citation, a note,
+     the key rail), each box grown DOCK_VEIL.WORD_PAD px, as ONE even-odd clip path in stage px read off the page as laid out
+     THIS frame (the world's own transform is a function of t), so it is seek-pure. A picture plate prints no words: the
+     path is the whole stage. DOCK_VEIL.WORD_PAD 6 [DERIVED: the frame read - the blur's own reach past a glyph edge]. */
+  const DOCK_VEIL_WORDS = ".lp-title, .lp-sub, .lp-src, .lp-note, .lp-key";
+  const dockVeilClip = (world) => {
+    const st = document.getElementById("stage"), sb = st && st.getBoundingClientRect();
+    if (!world || !sb || !(sb.width > 0)) return "none";
+    const k = STAGE_W / sb.width, p = DOCK_VEIL.WORD_PAD, cut = [];
+    for (const el of world.querySelectorAll(DOCK_VEIL_WORDS)) {
+      const b = el.getBoundingClientRect();
+      if (!(b.width > 1 && b.height > 1)) continue;
+      const x = (b.left - sb.left) * k - p, y = (b.top - sb.top) * k - p, w = b.width * k + 2 * p, h = b.height * k + 2 * p;
+      cut.push("M" + x.toFixed(1) + " " + y.toFixed(1) + "h" + w.toFixed(1) + "v" + h.toFixed(1) + "h" + (-w).toFixed(1) + "Z");
+    }
+    return cut.length ? 'path(evenodd, "M0 0H' + STAGE_W + "V" + STAGE_H + "H0Z" + cut.join("") + '")' : "none";
+  };
+  const paintDockVeil = (live, t, world) => {   /* the strongest blur any live blurring dock asks for; none paints nothing */
+    if (!dockveil) return;
+    const k = live.reduce((m, d) => Math.max(m, dockVeilK(d, t)), 0);
+    const css = k > 0.001 ? "blur(" + (DOCK_VEIL.BLUR * k).toFixed(2) + "px)" : "none";
+    dockveil.style.backdropFilter = css; dockveil.style.webkitBackdropFilter = css;
+    dockveil.style.clipPath = k > 0.001 ? dockVeilClip(world) : "none";
+  };
 
   /* the READING rectangle: the card's own CSS geometry, measured with no placement forced on it.
      Content-independent (width, left and top are all CSS), so it is measured once per dock. */
@@ -7578,7 +7639,7 @@ async function mount(doc) {
      docks separated by a sub-1.2s turnover share one wash - the gap used
      to pulse it off and back on (two of the six flashes at s06's open). */
   const WASHES = [];
-  for (const d of [...DOCKS].sort((a, b) => a.enter - b.enter).filter((d) => d.arrive !== "morph")) {   /* P69 T26e: a prop BORN of a morph is the chart's own ink turned object - it lights no evidence scrim (the landing would pop the world's light) */
+  for (const d of [...DOCKS].sort((a, b) => a.enter - b.enter).filter((d) => d.arrive !== "morph" && d.under !== "hover")) {   /* P71 T15: a HOVERING card leaves the chart under it untouched - no scrim */   /* P69 T26e: a prop BORN of a morph is the chart's own ink turned object - it lights no evidence scrim (the landing would pop the world's light) */
     const last = WASHES[WASHES.length - 1];
     if (last && d.enter - last[1] < 1.2) last[1] = Math.max(last[1], d.exit);
     else WASHES.push([d.enter, d.exit]);
@@ -23798,6 +23859,7 @@ async function mount(doc) {
       spot.style.setProperty("--sx", "50%");
       spot.style.setProperty("--sy", "44%");
     }
+    paintDockVeil(live, t, sc.world && sc.world.kind === "ledger" ? wB : null);   /* P71 T15: a dock that chose BLUR blurs the chart under it, on its own clock - the page's words kept out */
 
     const worldAnswer = { x: 0, y: 0 };   /* HG2: the sum of this frame's landings (the dip, and a violent hit's shake), applied to the world layer below */
     /* a THROWN PAGE (enter=throw): the camera follows it up and settles with it, the ground takes its dip and shake, and its contact
@@ -24049,6 +24111,10 @@ async function mount(doc) {
             + (-dx).toFixed(2) + "px, " + (-dy).toFixed(2) + "px) " + el.style.transform;
         }
       }
+      /* P71 T15: a dock that chose to HOVER lifts and grows its step - prepended OUTSIDE the arrival (the landing plays
+         inside it) and INSIDE the camera's prefix and the card's plane below, which compose outside it */
+      const hov = dockHover(d, t, dockContactAt(d));
+      if (hov.k > 0) el.style.transform = "translateY(" + (-hov.lift).toFixed(2) + "px) scale(" + hov.step.toFixed(4) + ") " + el.style.transform;
       if (camArr && camArr.slide === d.slide) {   /* P49 T5: the landed card rides the arrival - screen = at + s (p - look), composed BEFORE the card's own transform about the card's own centre (its origin) */
         /* the prefix composes about the card's OWN transform-origin (a thrown card's is its bottom edge, the squash's contact
            edge - the first cut scaled about the centre and the card climbed 250 px off the top at the match) */
@@ -24065,7 +24131,8 @@ async function mount(doc) {
       const sh = 12 * shk * (swept ? (1 - wk) : 1);   // light leaves with the page
       /* P53 T7: a CUTOUT casts no card's lift - the hard offset shadow drew a ghost card edge down the right and along the
          foot of a person (gate 1's second read, 2026-09-12); a cutout sits on its world (or on the band) with no box at all */
-      el.style.boxShadow = dockIsBare(d.slide) ? "none" : sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";   /* E99 s87: a prop is art in the world and casts no card's lift either */
+      el.style.boxShadow = dockIsBare(d.slide) ? "none" : sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)"
+        + dockHoverShadow(hov, G && d.place && d.place.w > 0 ? G.w * d.place.h / d.place.w : (el.offsetHeight || 0));   /* P71 T15: a hover's drop shadow; "" otherwise */   /* E99 s87: a prop is art in the world and casts no card's lift either */
       /* E99 s87's open dial, read every frame from the row: the prop's own colour, or the page's own ink. The
          filter is on the PICTURE, never on the dock element (that one carries the camera's blur). */
       { const pimg = el.querySelector(".slide-frame img"); if (pimg) pimg.style.filter = propInkCss(d, onLedgerWorld); }

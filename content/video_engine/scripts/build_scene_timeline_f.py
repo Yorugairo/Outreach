@@ -117,7 +117,7 @@ PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use",
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves", "after", "after_beat", "names", "idle")   # P69 T81 / E99 s112: after="<phrase>" - a STAMP's contact lands just AFTER the phrase's last word ends (+ after_beat s, default authoring.words.STAMP_AFTER_BEAT_S), the enter resolved from that contact; names="<phrase>" - the word the stamp punctuates, for the advice (`stamp_timing_advice`)   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves", "after", "after_beat", "names", "idle", "under")   # P71 T15 / E99 s124 amended: under=hover|blur - the author's choice, by the beat's goal, of what a dock does to the chart it sits over (DOCK_UNDER)   # P69 T81 / E99 s112: after="<phrase>" - a STAMP's contact lands just AFTER the phrase's last word ends (+ after_beat s, default authoring.words.STAMP_AFTER_BEAT_S), the enter resolved from that contact; names="<phrase>" - the word the stamp punctuates, for the advice (`stamp_timing_advice`)   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 # P70 T13 - THE DRIFT-HOLD (the operator, 2026-09-24; HyperFrames drift-hold; E99 s124 as amended): `idle` on a dock names
 # the HOLD - the held card turns under a degree, breathes and carries one light sweep, each one whole cycle across its
 # held span (kinetics/idle.mjs IDLE_HOLD, its dials read off drift-hold.html). OPT-IN per dock: a dock that names none is
@@ -126,6 +126,17 @@ DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band
 # species' idle (IDLE_KINDS is unchanged), and not a prop's, a stamp's or a cutout's (E99 s128; `_check_dock_idle`).
 DOCK_HOLD_GRADES = ("whisper", "standard")          # kinetics/idle.mjs IDLE_HOLD_GRADES
 DOCK_IDLES = ("hold",) + tuple(f"hold:{g}" for g in DOCK_HOLD_GRADES)   # kinetics/idle.mjs IDLE_CARD_KINDS
+# P71 T15 - A DOCK OVER A CHART CHOOSES BY INTENT (E99 s124 AS AMENDED, the operator 2026-09-24: "the ultimate outcome is
+# it needs to be a choice depending on the goal of what we want to have happen"). `under` on a dock names it, and neither
+# is a default: HOVER keeps the chart underneath READ - the card lifts, its shadow grows with the lift, it grows one step
+# and holds on the drift-hold (an unnamed idle resolves to `hold`, `dock_idle`), and the chart stays sharp, washed by
+# nothing; BLUR focuses a TEMPORARY evidence dock - the engine's #dockveil blurs the chart under it on the dock's own
+# clock and clears on its leave. A dock that names `under` keeps its authored read over a ledger page's plot (s124 (3);
+# `read_over_build`), and M25 / M27 WARN it with its numbers (s106). A card dock over a ledger page naming neither
+# compiles as it always did and is asked for the choice (`under_choice_note`). A held CARD's choice only: a prop lives in
+# the world and a stamp is drawn over it (E99 s128), a cutout has no card, a press card is the pile's, and a card on a
+# surface is part of the plate (`_check_dock_under`).
+DOCK_UNDER = ("hover", "blur")
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -8248,6 +8259,9 @@ def dock_opts(raw) -> dict:
         if k == "idle":   # P70 T13: the drift-hold, a held CARD's idle
             _check_dock_idle(v, raw)
             continue
+        if k == "under":   # P71 T15: hover or blur, the author's choice over a chart
+            _check_dock_under(v, raw)
+            continue
         if k == "card_aspect":
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
                 raise ValueError("dock: card_aspect must be a positive number (the card's height over its width)")
@@ -9350,6 +9364,49 @@ def _check_dock_idle(v, raw: dict) -> None:
             raise ValueError(f"dock: idle={v} and {other} cannot be combined - the hold is a held CARD's idle ({why})")
 
 
+def _check_dock_under(v, raw: dict) -> None:
+    """P71 T15: a dock's `under` is `hover` or `blur` on a held CARD. ValueError names the values, or the dock that is no
+    held card: the hover lifts a card off the chart and the veil blurs the chart beneath one (E99 s124)."""
+    if not isinstance(v, str) or v not in DOCK_UNDER:
+        raise ValueError(f"dock: under {v!r} is not one of {'|'.join(DOCK_UNDER)} - a dock over a chart HOVERS (the chart "
+                         "underneath keeps being read) or BLURS it (focus on a temporary evidence dock), by the beat's goal "
+                         "(E99 s124 amended)")
+    for other, on, why in (("prop", raw.get("prop"), "a prop is an object IN the world (E99 s128): it stands in the "
+                            "world's room with the stage light's resting shadow, it is not a card held over it"),
+                           ("stamp", raw.get("arrive") == "stamp", "a stamp is drawn OVER the world (E99 s128), open, "
+                            "the chart showing through it - punctuation, not a held card"),
+                           ("cutout", raw.get("cutout"), "a cutout is a person with no card to lift or to stand on a veil"),
+                           ("press", raw.get("press"), "a press card is painted in the pile, which has its own recede"),
+                           ("embed", raw.get(EMBED_KEY), "a card on a declared surface is part of the plate, not held over it"),
+                           ("behind", v == "blur" and raw.get("behind"), "the plate's foreground cutout paints above the "
+                            "docks and above the veil, so it would stand sharp over the blurred plate - hover keeps it")):
+        if on:
+            raise ValueError(f"dock: under={v} and {other} cannot be combined - the choice is a held CARD's ({why})")
+
+
+def under_choice_note(world: dict | None, dopt: dict | None, label: str, boxes: list | None = None,
+                      aspect: str | None = None) -> str | None:
+    """P71 T15 / E99 s124 amended: the WARN for a card dock over a ledger page's PLOT (a chart plate IS the ledger page,
+    E61) that names neither `under`. `boxes`: what the dock draws on the page (its park, its read) - a card no box of
+    which meets the plot is not over the chart and is asked nothing (review round 2). None for a dock that chose, for one
+    over a picture plate, and for a dock that is not a held card (a prop, a stamp, a cutout, a press card, a card on a
+    surface). s106: advice, never a refusal or a move."""
+    dopt = dopt or {}
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or dopt.get("under"):
+        return None
+    if dopt.get("prop") or dopt.get("cutout") or dopt.get("press") or dopt.get(EMBED_KEY) or dopt.get("arrive") == "stamp":
+        return None
+    page = world.get("page") if isinstance(world.get("page"), dict) else {}
+    plot = LPG.page_boxes(page, aspect or "16:9").get("plot") if page else None
+    if not plot or not any(isinstance(b, dict) and _overlap_area(b, plot) > 0 for b in (boxes or [])):
+        return None
+    title = str(page.get("title") or "")[:44]
+    named = f" ({title!r})" if title else ""
+    return (f"{label}: a dock over the chart's plot{named} - choose under: \"hover\" (keep the chart read: the card lifts and "
+            "holds, the chart stays sharp) or under: \"blur\" (focus a temporary evidence dock: the chart blurs while it "
+            "reads) - E99 s124 amended; compiled as today (s106)")
+
+
 def dock_carries_chart(ev: dict | None) -> bool:
     """A dock whose evidence IS a chart: a chart card (`species` chart), a live chart payload or a card-profile still."""
     ev = ev or {}
@@ -9359,7 +9416,7 @@ def dock_carries_chart(ev: dict | None) -> bool:
 def dock_idle(dopt: dict | None, ev: dict | None) -> str | None:
     """P70 T13: the dock's RESOLVED idle for its entry - None when the row names none (the entry is untouched); an
     authored grade as written; an unqualified `hold` graded by the payload: whisper on a chart, standard on a picture."""
-    v = (dopt or {}).get("idle")
+    v = (dopt or {}).get("idle") or ("hold" if (dopt or {}).get("under") == "hover" else None)   # P71 T15: a hover holds
     if not v:
         return None
     if v != "hold":
@@ -11257,7 +11314,8 @@ def _grown(box: dict, pad: float) -> dict:
 
 def read_over_build(place: dict | None, read_box: dict | None, page: dict | None, aspect: str | None,
                     read_from: float, read_to: float, windows: list[tuple[float, float]] | None,
-                    card_aspect: float | None = None, stamps: list[dict] | None = None) -> dict | None:
+                    card_aspect: float | None = None, stamps: list[dict] | None = None,
+                    under: str | None = None) -> dict | None:
     """E63's decision for one placed dock: where its READ goes, or None when there is nothing to move.
 
     Returns ``{"read_place": {...}, "read_moved": {"from": [...], "to": [...], "why": "..."}}`` when a
@@ -11271,7 +11329,10 @@ def read_over_build(place: dict | None, read_box: dict | None, page: dict | None
     read over one moves by the same law (a band, then E65's room, each candidate clear of every stamp; the room is cut
     round a stamp, so the read shrinks toward the floor before it gives up), and where nothing holds it the read is
     deferred (the card takes its parked box from its first frame). The stamp is never moved or filled. Absent or
-    empty, the decision is what it always was."""
+    empty, the decision is what it always was.
+    `under` (P71 T15, E99 s124 (3) amended): a dock that NAMES `hover` or `blur` chose to sit over the chart, so its read
+    over the PLOT is its authored place and is not moved (M25 / M27 WARN it with its numbers). The stamps and the page's
+    words are legibility, not E63 (P71 T5): a read over one of them still moves by the same law. None = today's rule."""
     if not place or not read_box or not page:
         return None
     boxes = LPG.page_boxes(page, aspect or "16:9")
@@ -11280,10 +11341,10 @@ def read_over_build(place: dict | None, read_box: dict | None, page: dict | None
     text = [r for _n, r in page_text_boxes(page, aspect)]   # P71 T5 round 3 (E28): the page's own words, as the park
     blocked = stamps + text
     over = [s for s in blocked if _overlap_area(read_box, s) > 0]
-    if not plot or (_overlap_share(read_box, plot) <= READ_OVER_PLOT_SHARE and not over):
-        return None                                   # the card already reads clear of the plot (and of every stamp and word)
+    if not plot or ((under or _overlap_share(read_box, plot) <= READ_OVER_PLOT_SHARE) and not over):
+        return None                                   # the card already reads clear of the plot (and of every stamp and word) - or chose it (P71 T15)
     hit = [(a, b) for a, b in (windows or []) if read_from < b - 1e-6 and read_to > a + 1e-6]
-    why = ("a card never reads over the plot (E63)" if _overlap_share(read_box, plot) > READ_OVER_PLOT_SHARE
+    why = ("a card never reads over the plot (E63)" if not under and _overlap_share(read_box, plot) > READ_OVER_PLOT_SHARE
            else "a card never reads over a stamp's reserved box (P71 T5, E99 s128)"
            if any(_overlap_area(read_box, s) > 0 for s in stamps) else "a card never reads over the page's words (E28)")
     if hit:                                           # the record, never the reason: which it was, for the report and the gate
@@ -11992,7 +12053,7 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                embed: dict | None = None, cutout: bool = False, depth: float | None = None,
                rot: float | None = None, moves: list | None = None, handed: bool = False,
                authored_place: dict | None = None, authored_moves: list | None = None,
-               names: str | None = None, idle: str | None = None) -> dict:
+               names: str | None = None, idle: str | None = None, under: str | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -12076,6 +12137,9 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         # P70 T13: the drift-hold, resolved (`dock_idle`). Written only when the row names it, so every other entry is
         # byte-for-byte what it was.
         **({"idle": idle} if idle else {}),
+        # P71 T15 / E99 s124 amended: what the dock does to the chart it sits over - hover or blur, the author's choice.
+        # Written only when the row names it, so every other entry is byte-for-byte what it was.
+        **({"under": under} if under else {}),
         **({"centre": True} if (centre or (read_deferred and place)) and place else {}),   # the design pass: a centred card sits at its box from its first frame - no reading size, no park
     }
 
@@ -12907,13 +12971,18 @@ def main() -> int:
             e63 = read_over_build(eplace, _read_box, (world or {}).get("page"), ASPECT, float(enter),
                                   float(enter) + (_rs if exitt - enter >= _rs + _ps else exitt - enter),
                                   page_build_windows(world, row_species, a), _aspect_of_card,
-                                  [] if stamp_fit else stamp_boxes) or {}   # P71 T5: the read clears the stamps too
+                                  [] if stamp_fit else stamp_boxes,   # P71 T5: the read clears the stamps too
+                                  under=dopt.get("under")) or {}   # P71 T15: a dock that chose the chart keeps its read over it
             if e63.get("read_place"):
                 rplace = e63["read_place"]
                 read_moves.append(f"{sid}.{aid} -> {e63['read_moved']['to']}")
             elif e63.get("read_deferred"):
                 read_defers.append(f"{sid}.{aid}")
             _drawn_read = None if (stamp_fit or e63.get("read_deferred")) else (e63.get("read_place") or _read_box)
+            _uc = under_choice_note(world, dopt, f"shot row {i + 1} ({a}-{b}s) dock {aid}",
+                                    [eplace, _drawn_read], ASPECT)
+            if _uc:
+                print(f"  [WARN] P71 T15: {_uc}")
             if isinstance(_drawn_read, dict):   # P71 T5: the clash WARN covers the READ as well as the park (s106)
                 _clash = stamp_clash_error(f"shot row {i + 1} ({a}-{b}s) dock {aid} (its read)", _drawn_read, stamp_boxes)
                 if _clash:
@@ -13031,7 +13100,8 @@ def main() -> int:
                                         authored_place=dopt.get("place"), authored_moves=dopt.get("moves"),   # R26-298: as the author wrote them, for the read-back
                                         handed=n_dock in _pm["handed"],   # P69 T26e: a prop handed to a morph on its exit word
                                         names=dopt.get("names") or dopt.get("after"),   # P69 T81: the word a stamp punctuates
-                                        idle=dock_idle(dopt, evidence[aid])))   # P70 T13: the drift-hold, graded by the payload
+                                        idle=dock_idle(dopt, evidence[aid]),   # P70 T13: the drift-hold, graded by the payload
+                                        under=dopt.get("under")))   # P71 T15: hover or blur, the author's choice
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         # P69 T65 / E99 s110 (2): a ring on a DOCK - on the row, on the stage at its word, the word on the phrase that
         # points at it - and it leaves on the dock's leave. A row with no such ring is the same list, untouched.

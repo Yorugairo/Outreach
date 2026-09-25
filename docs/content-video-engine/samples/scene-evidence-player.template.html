@@ -158,6 +158,13 @@
      #bzveil at backdrop-filter none filters nothing, so a build with neither exit renders as before. */
   #bzveil { position: absolute; inset: 0; pointer-events: none; z-index: 60; }
   #dipveil { position: absolute; inset: 0; pointer-events: none; background: #000; opacity: 0; z-index: 60; }   /* R26-50: above #caption's z-index 50, because E47's dip takes the viewer's layer down with the world */
+  /* P71 T15 / E99 s124 amended: the veil a dock that chose `under: blur` lays over the chart - above the page, its wash and
+     the species on its data, below the docks (a veil UNDER a dock needs its own element: #bzveil is above them). Inert at
+     backdrop-filter none, so a build with no blurring dock renders as before. Its layer is EXPLICIT: z-index 0, painted in
+     tree order with the worlds' wash, the datum species and the docks (z auto) - above the page, below the two docks after
+     it; the press pile (6), the plate's foreground cutout (7, which is why `under: blur` + `behind` is refused), the
+     caption (50) and E47's veils (60) stay above it, and a world a transition raises to 3 rides over it for its beat. */
+  #dockveil { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
 #species .co, #species-under .co { fill: none; stroke: #F5B72E; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
 #species .sq, #species-under .sq { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; }
 #species .lab, #species-under .lab { font: 700 30px Inter, Arial, sans-serif; fill: #F5B72E; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 8px; }   /* inline series names may run past the plot (s9.23b) */
@@ -691,6 +698,7 @@
   html[data-layers]:not([data-layers~="page"]) #species-under,
   html[data-layers]:not([data-layers~="page"]) #bzveil,
   html[data-layers]:not([data-layers~="page"]) #dipveil,
+  html[data-layers]:not([data-layers~="page"]) #dockveil,
   html[data-layers]:not([data-layers~="docks"]) .dock,
   html[data-layers]:not([data-layers~="docks"]) .stackbox,
   html[data-layers]:not([data-layers~="captions"]) #caption { visibility: hidden !important; }
@@ -762,6 +770,7 @@
        the layer beneath the card" (operator); a species on a point / region / span annotates what is there and paints in #species, above
        the docks (the golden chart-callout: a ring on the card itself). The choice is per species, in paintSpecies. -->
   <svg id="species-under" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
+  <div id="dockveil"></div>
   <div class="dock" id="dock-1">
     <div class="slide-frame"><img id="i1" alt="evidence" /></div>
     <div class="rail" id="r1"></div>
