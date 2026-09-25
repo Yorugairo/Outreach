@@ -1146,7 +1146,7 @@ verbatim tails and are left pending.
 - Validate: the squint gate's own test and `python content/video_engine/scripts/gate_motion_density.py` on the H timeline; the shrunk sheet read beside Bravos
 - Evidence: pending
 
-### T37c: The title is Claude orange and Bravos-sized (E99 s122)
+### T37c: The title is Claude orange, glows in its ink, and the shorts face goes bolder (E99 s122 amended; the size measured at parity)
 - Status: pending (lane B, after T37b)
 - Owner: implementation_luna
 - Depends on: T37b (`--lp-title-ink`, `measure_line_bloom.py`, the Bravos band)
