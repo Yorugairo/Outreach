@@ -48,8 +48,9 @@ Write hook, or `post-commit`). `--wait` is for the caller who must be current: i
 default, kept because the tests and a few runbooks pass it. stdout stays one hit per line, which is what a
 recall receipt quotes. A PLAIN query (letters, digits and spaces only) reads a
 space as any run of space, hyphen or underscore, so `federal reserve` hits a `federal-reserve` tag; and when a
-multi-word plain query hits nothing as a phrase, it runs once more matching records that carry EVERY word
-(any order, any searched field) and the summary says `(all words)`; in a field-ranked layer the fallback
+multi-word query of words (plain, or words joined by `_` or `-`, as `serve_player no-store`) hits nothing
+as a phrase, it runs once more matching records that carry EVERY word (any order, any searched field) and
+the summary says `(all words)`; in a field-ranked layer the fallback
 ranks a record by the sum of each word's earliest field, so words landing in earlier fields rank first. A phrase that hits never falls back. Standard library only.
 """
 from __future__ import annotations
@@ -264,12 +265,21 @@ class Hit:
 
 
 PLAIN_QUERY = re.compile(r"[A-Za-z0-9 ]+")
+WORDS_QUERY = re.compile(r"[A-Za-z0-9_ -]+")     # plain, plus the `_` and `-` that join a word
 SEPARATOR_RUN = r"[\s_-]+"
 
 
 def plain_words(term: str) -> list[str]:
     """The words of a plain query (letters, digits, spaces); empty when the query carries anything else."""
     return term.split() if PLAIN_QUERY.fullmatch(term or "") else []
+
+
+def fallback_words(term: str) -> list[str]:
+    """The words the all-words fallback matches: a plain query's, or one whose words also carry `_` or
+    `-` (`serve_player no-store`); empty for anything else, which stays a phrase or a regex. A bare `_` or
+    `-` is no word - it would match every record."""
+    words = term.split() if WORDS_QUERY.fullmatch(term or "") else []
+    return words if all(re.search(r"[A-Za-z0-9]", word) for word in words) else []
 
 
 def build_pattern(term: str) -> re.Pattern[str]:
@@ -482,9 +492,9 @@ def share_of(remaining: int, layers_left: int) -> int:
 
 
 def search(term: str, layer_names: Sequence[str], repo: Path, limit: int) -> Result:
-    """The phrase first; a multi-word plain query that hits nothing runs once more on all its words."""
+    """The phrase first; a multi-word query of words that hits nothing runs once more on all its words."""
     result = search_with(build_pattern(term), layer_names, repo, limit)
-    words = plain_words(term)
+    words = fallback_words(term)
     if result.hits or len(words) < 2:
         return result
     fallback = search_with(AllWords(words), layer_names, repo, limit)
