@@ -429,6 +429,11 @@ SPECIES_EVENTS["explode"] = ("at", "end")
 # P69 T45 / E99 s101: a MEMBERSHIP tile lands on its member's word (the badge spring) - one event, at its word; a
 # `light` on a landed tile is the same word's event. What a tile does after that is standing ink and earns nothing.
 SPECIES_EVENTS["member"] = ("at",)
+# P70 T7: THE BALANCE SCALE draws on its word (the fulcrum, the beam, the pans), each side's load LANDS on its own
+# word (a mass, landXf) and the beam TIPS on the tip's - four field edges, each its own event (the flow's dotted
+# swap.at is the precedent). What it does after a landing (the lean, the level settle) is that landing's spring, not
+# another event; an idle is never an event (E49).
+SPECIES_EVENTS["balance"] = ("at", "left.at", "right.at", "tip.at")
 # P69 T49 / E99 s99 ("a light that comes on as everything else STOPS is a punctuation beat - the freeze is the event"):
 # THE FREEZE BEAT is ONE event, at its word. The light coming on is the beat; life resuming is the idle coming back,
 # and no idle is ever an event (E49). What the beat does to M18 is `punctuate` below: its held frames are not a still.
@@ -538,6 +543,7 @@ POINTING_KINDS = ("callout", "spotlight", "squiggle", "punch", "focus_zoom", "be
 
                   "light", "arc", "stamp")   # P50 T5: the map's three point at a PLACE - a country or a map point, which is not a stage box, so _target_box skips them and M24 credits them without a frustum test   # P50 T4: a flow points at the region it draws itself inside; a span names data and carries no target dict, so M24 skips it   # the species that point at a declared target
 POINTING_KINDS += ("freeze",)   # P69 T49: the beat's light comes on at a DECLARED target (a datum, a point, a region)
+POINTING_KINDS += ("balance",)   # P70 T7: the balance stands in a DECLARED room (a region), read by M24 like the flow's box
 ATTN_SCALE, ATTN_IN, ATTN_OUT = 1.06, 0.5, 0.6            # P49 T4: kinetics/camera.mjs ATTN, mirrored [DERIVED: Bravos #68]
 STOP_FLIGHT_S, STOP_ANTIC_S, STOP_DROP_S = 0.45, 0.18, 0.14   # the stop-action clock (kinetics/stopaction.mjs STOP), mirrored: the contact frame of a throw / a landing
 BT_HOLD_S, BT_RUN_S, BT_SETTLE_S, BT_STEP_S = 0.5, 0.6, 0.3, 0.06   # E60 the breakthrough's clock (the template's LPX.BT_*), mirrored: the run past the build

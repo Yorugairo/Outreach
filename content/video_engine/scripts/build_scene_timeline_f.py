@@ -38,6 +38,7 @@ import functools
 import json
 import math
 import re
+import unicodedata
 import mimetypes
 import subprocess
 import sys
@@ -455,6 +456,8 @@ def species_props(entry) -> list[str]:
         return [entry["icon"]] if isinstance(entry.get("icon"), str) else []
     if entry.get("kind") == SPECIES_AGENDA and entry.get("form") in AGENDA_FORMS:
         return [r["icon"] for r in (entry.get("rows") or []) if isinstance(r, dict) and isinstance(r.get("icon"), str)]
+    if entry.get("kind") == "balance":   # P70 T7: a pan's catalogued prop (SPECIES_BALANCE, declared further down the file)
+        return [entry[s]["prop"] for s in ("left", "right") if isinstance(entry.get(s), dict) and isinstance(entry[s].get("prop"), str)]
     return []
 
 
@@ -909,6 +912,52 @@ EQUATION_SRC = re.compile(r"^ev-[a-z0-9][a-z0-9-]*$")      # an evidence object'
 # species/equation.mjs EQUATION, MIRRORED (test_equation_row pins them): the write window, the operator's lead before
 # the next word, the row's leave, and the s90 floor every item is written at or above
 EQUATION_WRITE_S, EQUATION_OP_LEAD, EQUATION_OUT_S, EQUATION_FLOOR_PX = 0.6, 0.12, 0.25, 59.08
+# P70 T7 (was P69 T59; the Bravos harvest v2's T27 "Balance scale" and A40 "The balance tips", CHN 19:10) - THE BALANCE
+# SCALE. A STAGE species in a declared ROOM (a region): the fulcrum and the beam draw on `at`, each side's load lands on its
+# own word, the beam leans to a lone load and settles LEVEL once both are weighed, and an optional `tip` tips it toward the
+# side the sentence says, on a spring with one visible overshoot. Its law and painter are species/balance.mjs; this file
+# owns its grammar and its TRUTH (`_validate_balance`): two NAMED, WEIGHED forces and never figures - a label with a digit
+# is refused, pointing to two bars (BRAVOS-USE-WHEN :646); an unnamed or unweighed side is refused (:643's don't). E99
+# s128: it is an object in the world (a prop's resting hatch, the page's room), so where it stands is the author's (s106).
+SPECIES_BALANCE = "balance"
+SPECIES_KINDS += (SPECIES_BALANCE,)
+SPECIES_WHEN[SPECIES_BALANCE] = ("two forces are WEIGHED and the sentence says which way it tips - or that it does not ('not "
+                                 "just threats ... opportunities', the moat against the paper): each named side lands on its "
+                                 "word, the beam settles level or tips; never when one side is unnamed or unweighed, and never "
+                                 "for a real balance of figures (that is two bars)")
+BALANCE_SIDES = ("left", "right")
+BALANCE_KEYS = ("kind", "at", "dur", "target", "left", "right", "tip", "idle", "ink") + ROW_PATH_KEYS
+BALANCE_SIDE_KEYS = ("label", "at", "icon", "prop", "mass")
+BALANCE_TIP_KEYS = ("at", "to")
+BALANCE_INKS = ("cream", "charcoal")   # species/balance.mjs BALANCE.INK - the stamp's own pair: cream on the charcoal page, charcoal on a light ground
+# species/balance.mjs BALANCE, mirrored (test_balance_scale pins the pairs): the draw a load must wait for, the window a
+# load's landing and a tip's overshoot need, and the tip's rest angle
+BALANCE_DRAW_S, BALANCE_LAND_S, BALANCE_TIP_SEEN_S, BALANCE_TIP_DEG = 0.9, 0.62, 0.7, 12.0
+BALANCE_LABEL_PX, BALANCE_LABEL_EM, BALANCE_POST_CLEAR_PX = 60, 0.55, 22   # ... a name's size, its width estimate, the post's clearance
+BALANCE_LABEL_FLOOR, BALANCE_STAGE_MARGIN = 59.08, 12   # ... the size a too-wide name is fitted down to, the stage margin it keeps
+BALANCE_NAME_PAD = 8   # ... and a name's painted width over its advance (the halo, the face's overhang) - species/balance.mjs NAME_PAD
+# ... and the geometry the FOOTPRINT is read from (species/balance.mjs BALANCE, mirrored; test_balance_scale pins each)
+BALANCE_GEOM = {"ARM_K": 0.33, "PIVOT_F": 0.22, "HANG_K": 0.34, "PAN_K": 0.9, "PAN_DEPTH_K": 0.2, "FOOT_F": 0.96,
+                "FOOT_K": 0.7, "END_R": 7, "BEAM_W": 11, "LABEL_GAP": 22, "RIM_LIFT": 8, "LEAN_DEG": 7, "LEAN_MP": 0.1,
+                "TIP_MP": 0.2, "LOAD_K": 0.62, "LOAD_DROP_PX": 90, "ANTIC_PX": 6}
+BALANCE_FOOT_PAD_PX = 16   # the footprint's air: the resting hatch's throw (PROP_SHADOW.OFFSET_PX 14) and the idle's 1.2 % breath
+# THE NO-FIGURES RULE (USE-WHEN :646; E28; the review's F1 / F3): a balance weighs NAMED forces, so a figure is refused
+# wherever it would reach the scale - a label's digit, numeral, sign or number word, and a load's PICTURE:
+#   - the sourced glyphs whose DRAWING carries a numeral, read path by path (assets/icons/*.svg): coins has a "1" in each
+#     coin (`M15 6h1v4`, `m6.134 14.768.866-.5 2 3.464`); cpu (pins), factory (a roof, three dots), landmark (a pediment,
+#     columns) and ship carry none;
+#   - a catalogued prop whose id (its -vN version aside), name or tags carry a digit, a % or $, or a DATE (a calendar,
+#     a month) - the 5 % gauge, the S&P 500 flow, the dated calendars. A prop whose figures are only painted in its image
+#     and named nowhere in the record is the manifest's to flag (a follow-up: a `figures` field).
+BALANCE_FIGURE_ICONS = ("coins",)
+BALANCE_NUMBER_WORDS = frozenset((
+    "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen "
+    "eighteen nineteen twenty thirty forty fifty sixty seventy eighty ninety hundred thousand million billion trillion "
+    "dozen half halves quarter quarters twice thrice double triple quadruple times percent pct").split())
+BALANCE_FIGURE_SIGNS = "%$£€¥¢‰"
+BALANCE_DATE_WORDS = frozenset((
+    "calendar calendars date dates january february march april may june july august september october november december "
+    "jan feb mar apr jun jul aug sep sept oct nov dec").split())
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -1848,6 +1897,7 @@ SPECIES_TARGETS[SPECIES_AXIS_TAG] = ()   # P71 T9: a tag names its x as the page
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
                                                                  # line's point, a bar), or a point / the box of a mark or a prop
 SPECIES_TARGETS[SPECIES_EQUATION] = ("region",)   # P70 T6: the row's ROOM is declared - it is laid out and sized inside it
+SPECIES_TARGETS[SPECIES_BALANCE] = ("region",)   # P70 T7: a balance needs its ROOM declared - the box it stands in; a point would leave its size to the painter
 SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
                                                   # point would leave the strip's height to the painter, and the strip is the
                                                   # thing the caption has to be reconciled with (the strip law below)
@@ -3108,6 +3158,8 @@ def species_icons(entry) -> list[str]:
         return [entry["icon"]] if isinstance(entry.get("icon"), str) else []
     if entry.get("kind") == SPECIES_RING:          # P52 T8: the flag chip's glyph, when the ring carries a flag
         return [entry["flag_icon"]] if entry.get("flag") and isinstance(entry.get("flag_icon"), str) else []
+    if entry.get("kind") == SPECIES_BALANCE:       # P70 T7: each pan's sourced glyph, when its load names one
+        return [entry[s]["icon"] for s in BALANCE_SIDES if isinstance(entry.get(s), dict) and isinstance(entry[s].get("icon"), str)]
     if entry.get("kind") == SPECIES_FLOW:
         out = [n["icon"] for n in (entry.get("nodes") or []) if isinstance(n, dict) and isinstance(n.get("icon"), str)]
         sw = entry.get("swap")
@@ -4444,6 +4496,290 @@ def _freeze_row_errors(row_species: list, plate_id: str) -> list[str]:
     return errs
 
 
+def _balance_side_errors(entry: dict, side: str) -> list[str]:
+    """P70 T7: one side of a balance - a NAMED, WEIGHED force (USE-WHEN :643's don't), never a figure (:646), with at most
+    one picture (a sourced glyph or a catalogued prop) and a stopaction material."""
+    L = entry.get(side)
+    where = f"balance: {side}"
+    if not isinstance(L, dict):
+        return [f"balance: '{side}' must be a dict {{label, at, icon? | prop?, mass?}} - a balance weighs TWO named forces, "
+                "and one side is unnamed or unweighed (the don't)"]
+    errs: list[str] = []
+    extra = sorted(k for k in L if k not in BALANCE_SIDE_KEYS)
+    if extra:
+        errs.append(f"{where}: {', '.join(map(repr, extra))} - a side takes only {'|'.join(BALANCE_SIDE_KEYS)}")
+    label = L.get("label")
+    if not isinstance(label, str) or not label.strip():
+        errs.append(f"{where} is unnamed - 'label' names the force the sentence weighs (the don't: 'one side is unnamed')")
+    elif (fig := balance_figure(label)) is not None:
+        errs.append(f"{where}: label {label!r} carries a figure ({fig[0]} {fig[1]!r}) - a balance weighs NAMED forces, "
+                    "never figures: a real balance of figures is two bars (BRAVOS-USE-WHEN :646; figures are never "
+                    "fabricated onto a scale)")
+    at = L.get("at")
+    if not _num(at):
+        errs.append(f"{where} is unweighed - 'at' is the word its load lands on (episode seconds; the don't: 'one side "
+                    "is unweighed')")
+    elif _num(entry.get("at")) and _num(entry.get("dur")):
+        if at < entry["at"] + BALANCE_DRAW_S - 1e-9:
+            errs.append(f"{where} lands at {at:g}s, before the pans are drawn ({entry['at'] + BALANCE_DRAW_S:g}s = at + "
+                        f"{BALANCE_DRAW_S:g}s) - a load lands on a drawn pan")
+        elif at + BALANCE_LAND_S > entry["at"] + entry["dur"] + 1e-9:
+            errs.append(f"{where} lands at {at:g}s and the window ends at {entry['at'] + entry['dur']:g}s - a load needs "
+                        f"{BALANCE_LAND_S:g}s of window to land, or it flashes")
+    if L.get("icon") is not None and L.get("prop") is not None:
+        errs.append(f"{where} names an icon AND a prop - one picture per load (a sourced glyph or a catalogued prop)")
+    elif L.get("icon") is not None:
+        errs += _validate_icon(where, L.get("icon"))
+        if L.get("icon") in BALANCE_FIGURE_ICONS:
+            errs.append(f"{where}: icon {L['icon']!r} carries a figure (its drawing has a numeral in it) - a balance weighs "
+                        "NAMED forces, never figures: a real balance of figures is two bars (BRAVOS-USE-WHEN :646)")
+    elif L.get("prop") is not None:
+        try:
+            entry_p = catalogue_prop(L["prop"])
+        except ValueError as exc:
+            errs.append(f"{where}: {exc}")
+        else:
+            if (fig := balance_prop_figure(entry_p)) is not None:
+                errs.append(f"{where}: prop {L['prop']!r} carries a figure ({fig}) - a balance weighs NAMED forces, never "
+                            "figures: a real balance of figures is two bars (BRAVOS-USE-WHEN :646)")
+    if "mass" in L and L["mass"] not in MASSES:
+        errs.append(f"{where}: mass {L['mass']!r} is not one of {'|'.join(MASSES)} (stopaction's materials)")
+    return errs
+
+
+def balance_figure(label: str) -> tuple[str, str] | None:
+    """P70 T7 (the review's F3): the first FIGURE a balance label carries, as (what, token) - a digit (any script's),
+    another numeral (a vulgar fraction, a superscript, a Roman numeral: `unicodedata.numeric`), a money or percent sign,
+    or a number word, whole words only ('stone' is not 'one') - or None."""
+    for c in label:
+        if c.isdigit():
+            return ("the digit", c)
+    for c in label:
+        if unicodedata.numeric(c, None) is not None:
+            return ("the numeral", c)
+    for c in label:
+        if c in BALANCE_FIGURE_SIGNS:
+            return ("the sign", c)
+    for w in re.findall(r"[^\W\d_]+", label.lower()):
+        if w in BALANCE_NUMBER_WORDS:
+            return ("the number word", w)
+    return None
+
+
+def balance_prop_figure(entry: dict) -> str | None:
+    """P70 T7 (the review's F1): why a catalogued prop cannot be a load - its id (the -vN version aside), name or a tag
+    carries a digit, a % or $, or a date word (a calendar, a month) - or None."""
+    texts = [re.sub(r"-v\d+$", "", str(entry.get("id") or "")), str(entry.get("name") or "")]
+    texts += [str(t) for t in (entry.get("tags") or [])]
+    for text in texts:
+        if m := re.search(r"[\d%$]", text):
+            return f"{text!r} has {m.group(0)!r}"
+        for w in re.findall(r"[a-z]+", text.lower()):
+            if w in BALANCE_DATE_WORDS:
+                return f"{text!r} names a date ({w!r})"
+    return None
+
+
+def _balance_room_px(entry: dict, aspect: str | None) -> dict | None:
+    """The balance's room (its region target) in stage px, or None when it is not a numeric region."""
+    tgt = entry.get("target") if isinstance(entry, dict) else None
+    if not (isinstance(tgt, dict) and all(_num(tgt.get(k)) for k in ("x0", "y0", "x1", "y1"))):
+        return None
+    sw, sh = LPG.STAGE_PX[aspect or "16:9"]
+    return {"x": tgt["x0"] * sw, "y": tgt["y0"] * sh, "w": (tgt["x1"] - tgt["x0"]) * sw, "h": (tgt["y1"] - tgt["y0"]) * sh}
+
+
+def balance_name_fit(side: str, w: float, room: dict, stage_w: float) -> dict:
+    """species/balance.mjs `balanceNameFit`, mirrored on the ESTIMATED width `w` at BALANCE_LABEL_PX, the name under its
+    pan (the arm's end, level): {size, w, x0, x1, step} - fit, shrunk (its size fitted to its half, down to the floor),
+    overhang (at the floor, under its own pan, pushed outward off the post's guard toward the stage margin) or pinned
+    (at the margin, which may reach the guard)."""
+    cx, arm = room["x"] + room["w"] / 2, BALANCE_GEOM["ARM_K"] * room["w"]
+    left = side == "left"
+    px = cx - arm if left else cx + arm
+    inner = cx - BALANCE_POST_CLEAR_PX if left else cx + BALANCE_POST_CLEAR_PX
+    outer = room["x"] if left else room["x"] + room["w"]
+    edge = BALANCE_STAGE_MARGIN if left else stage_w - BALANCE_STAGE_MARGIN
+    half = abs(inner - outer)
+
+    def clamp(ww: float, a: float, b: float) -> float:
+        h = ww / 2
+        lo, hi = (a + h, b - h) if a < b else (b + h, a - h)
+        return min(hi, max(lo, px))
+
+    def out(size: float, ww: float, x: float, step: str) -> dict:
+        return {"size": size, "w": ww, "x0": x - ww / 2, "x1": x + ww / 2, "step": step}
+
+    if w <= half:
+        return out(BALANCE_LABEL_PX, w, clamp(w, outer, inner), "fit")
+    size = max(BALANCE_LABEL_FLOOR, BALANCE_LABEL_PX * half / w)
+    ws = w * size / BALANCE_LABEL_PX
+    if ws <= half + 1e-9:
+        return out(size, ws, clamp(ws, outer, inner), "shrunk")
+    if ws <= abs(edge - inner) + 1e-9:
+        return out(size, ws, clamp(ws, edge, inner), "overhang")
+    return out(size, ws, edge + ws / 2 if left else edge - ws / 2, "pinned")
+
+
+def balance_advice(entry: dict, aspect: str | None) -> list[str]:
+    """P70 T7 (E99 s106 - advice, never a refusal): every FALLBACK a name takes from its half of the room (the room's
+    outer edge to BALANCE_POST_CLEAR_PX off the post), with its estimated widths - shrunk, overhang, pinned (and whether
+    the pinned name reaches the post's guard) - and, at 16:9, the balance's footprint reaching the caption's rail (the
+    caption takes that rail while the balance's names stand, `_readable_species_during`)."""
+    room = _balance_room_px(entry, aspect)
+    if room is None:
+        return []
+    asp = aspect or "16:9"
+    sw = LPG.STAGE_PX[asp][0]
+    cx = room["x"] + room["w"] / 2
+    half = room["w"] / 2 - BALANCE_POST_CLEAR_PX
+    out = []
+    for side in BALANCE_SIDES:
+        L = entry.get(side)
+        label = L.get("label") if isinstance(L, dict) else None
+        if not isinstance(label, str) or not label.strip():
+            continue
+        est = BALANCE_LABEL_EM * BALANCE_LABEL_PX * len(label) + BALANCE_NAME_PAD
+        fit = balance_name_fit(side, est, room, sw)
+        if fit["step"] == "fit":
+            continue
+        head = (f"balance: {side} name {label!r} is ~{est:.0f} px wide at {BALANCE_LABEL_PX} px and its half of the room "
+                f"is {half:.0f} px")
+        if fit["step"] == "shrunk":
+            out.append(f"{head} - fitted to {fit['size']:.2f} px (~{fit['w']:.0f} px), inside its half (E99 s106: advice)")
+            continue
+        at_floor = f"~{fit['w']:.0f} px at the {BALANCE_LABEL_FLOOR} px floor"
+        if fit["step"] == "overhang":
+            out.append(f"{head} - {at_floor} still does not fit, so it overhangs OUTWARD under its own pan, "
+                       f"{fit['x0']:.0f}-{fit['x1']:.0f} px, past the room's edge and clear of the post (E99 s106: advice) "
+                       "- a wider room or a shorter name")
+        else:   # "pinned": no placement satisfies both rules - advised with its numbers and the fix (s106), never refused
+            out += balance_post_crossings({side: L, "target": entry.get("target")}, asp)
+    rail = LPG.CAPTION_ANCHOR.get(asp) if asp == "16:9" else None
+    foot = balance_footprint(entry, asp)
+    if rail and foot:
+        rx, ry, rw, rh = rail
+        dy = min(foot["y"] + foot["h"], ry + rh) - max(foot["y"], ry)
+        dx = min(foot["x"] + foot["w"], rx + rw) - max(foot["x"], rx)
+        if dy > 0 and dx > 0:
+            out.append(f"balance: its footprint (y {foot['y']:.0f}-{foot['y'] + foot['h']:.0f} px) reaches {dy:.0f} px into "
+                       f"the caption's rail (y {ry}-{ry + rh} px), where the caption stands while its names do - raise "
+                       f"the room's y1 to {ry / LPG.STAGE_PX[asp][1] - 0.01:.2f} or less (E99 s106: advice)")
+    return out
+
+
+def balance_post_crossings(entry: dict, aspect: str | None) -> list[str]:
+    """P70 T7 (the parent, round 4; E99 s106 - the engine advises, the author decides): a name that neither fits its half
+    at the floor nor can overhang outward off the post's guard before the stage margin (the fit's step 3, `pinned`) has
+    no placement that satisfies both rules. It is a PLACEMENT finding, not a truth rule, so it is ADVISED - with its
+    numbers and the fix - and the engine pins it at the stage margin, the least-bad frame."""
+    room = _balance_room_px(entry, aspect)
+    if room is None:
+        return []
+    sw = LPG.STAGE_PX[aspect or "16:9"][0]
+    cx = room["x"] + room["w"] / 2
+    errs = []
+    for side in BALANCE_SIDES:
+        L = entry.get(side)
+        label = L.get("label") if isinstance(L, dict) else None
+        if not isinstance(label, str) or not label.strip():
+            continue
+        fit = balance_name_fit(side, BALANCE_LABEL_EM * BALANCE_LABEL_PX * len(label) + BALANCE_NAME_PAD, room, sw)
+        if fit["step"] != "pinned":
+            continue
+        guard = cx - BALANCE_POST_CLEAR_PX if side == "left" else cx + BALANCE_POST_CLEAR_PX
+        avail = (guard - BALANCE_STAGE_MARGIN) if side == "left" else (sw - BALANCE_STAGE_MARGIN - guard)
+        cross = (fit["x1"] - guard) if side == "left" else (guard - fit["x0"])
+        errs.append(f"balance: {side} name {label!r} is ~{fit['w']:.0f} px at the {BALANCE_LABEL_FLOOR} px floor and there are "
+                    f"{avail:.0f} px from the post's guard to the stage margin on its side - no placement keeps it off the "
+                    f"post, so it is pinned at the stage margin, {fit['x0']:.0f}-{fit['x1']:.0f} px, {cross:.0f} px across "
+                    "the post's guard (E99 s106: advice) - a wider room, a room away from the stage's edge, or a shorter name")
+    return errs
+
+
+def balance_footprint(entry: dict, aspect: str | None) -> dict | None:
+    """P70 T7 (round 3): THE BOX THE BALANCE OCCUPIES in stage px, published as the newsreel's band is - the beam's
+    sweep at its widest tilt (the tip's first swing, else the lean's), both pans and their loads at the ends' lowest
+    reach, the names where their fit puts them (fallbacks included), the foot, and BALANCE_FOOT_PAD_PX of air for the
+    resting hatch's throw and the idle's breath. Mirrors species/balance.mjs's geometry (balanceGeom)."""
+    room = _balance_room_px(entry, aspect)
+    if room is None:
+        return None
+    G_ = BALANCE_GEOM
+    sw, sh = LPG.STAGE_PX[aspect or "16:9"]
+    cx, arm = room["x"] + room["w"] / 2, G_["ARM_K"] * room["w"]
+    py, hang, pw = room["y"] + G_["PIVOT_F"] * room["h"], G_["HANG_K"] * room["h"], G_["PAN_K"] * arm
+    pd, fy = G_["PAN_DEPTH_K"] * pw, room["y"] + G_["FOOT_F"] * room["h"]
+    tipped = isinstance(entry.get("tip"), dict)
+    deg = BALANCE_TIP_DEG * (1 + G_["TIP_MP"]) if tipped else G_["LEAN_DEG"] * (1 + G_["LEAN_MP"])
+    rise = arm * math.sin(math.radians(deg))
+    x0, x1 = cx - arm - pw / 2, cx + arm + pw / 2
+    top = py - rise - G_["END_R"] - G_["BEAM_W"]
+    bottom = max(fy, py + rise + hang + pd)
+    fall = G_["LOAD_DROP_PX"] + G_["ANTIC_PX"]   # a load (and a bare name with it) drops into its pan from this far above
+    top = min(top, py - rise + hang + 0.5 * pd - G_["LOAD_K"] * pw - fall)
+    for side in BALANCE_SIDES:
+        L = entry.get(side)
+        label = L.get("label") if isinstance(L, dict) else None
+        if not isinstance(label, str) or not label.strip():
+            continue
+        fit = balance_name_fit(side, BALANCE_LABEL_EM * BALANCE_LABEL_PX * len(label) + BALANCE_NAME_PAD, room, sw)
+        x0, x1 = min(x0, fit["x0"]), max(x1, fit["x1"])
+        pictured = bool(L.get("icon") or L.get("prop"))
+        base = (py + rise + hang + pd + G_["LABEL_GAP"] + 0.8 * fit["size"]) if pictured else (py + rise + hang - G_["RIM_LIFT"])
+        bottom = max(bottom, base + 0.25 * fit["size"])
+        top = min(top, (py - rise + hang - G_["RIM_LIFT"] - 0.8 * fit["size"] - fall) if not pictured else top)
+    pad = BALANCE_FOOT_PAD_PX
+    x0, y0 = max(0.0, x0 - pad), max(0.0, top - pad)
+    x1, y1 = min(float(sw), x1 + pad), min(float(sh), bottom + pad)
+    return {"x": round(x0, 1), "y": round(y0, 1), "w": round(x1 - x0, 1), "h": round(y1 - y0, 1)}
+
+
+def balance_boxes(row_species, aspect: str | None) -> list[dict]:
+    """Every balance's footprint on the row - reserved for the whole row, as the newsreel's band is."""
+    return [b for b in (balance_footprint(e, aspect) for e in (row_species or [])
+                        if isinstance(e, dict) and e.get("kind") == SPECIES_BALANCE) if b]
+
+
+def _validate_balance(entry: dict) -> list[str]:
+    """P70 T7: THE BALANCE SCALE. Two named, weighed sides, and an optional tip toward one of them once BOTH are weighed
+    (A40: the sentence weighs both, then says which way it tips), inside the window with room for its overshoot. The
+    truth is hard (a digit is refused, pointing to two bars; an unnamed or unweighed side is refused); where it stands is
+    the author's (E99 s106 / s128)."""
+    errs: list[str] = []
+    extra = sorted(k for k in entry if k not in BALANCE_KEYS)
+    if extra:
+        errs.append(f"balance: {', '.join(map(repr, extra))} - a balance takes only {'|'.join(BALANCE_KEYS[1:])}; it weighs "
+                    "NAMED forces and never numbers (a balance of figures is two bars)")
+    for side in BALANCE_SIDES:
+        errs += _balance_side_errors(entry, side)
+    if "ink" in entry and entry["ink"] not in BALANCE_INKS:
+        errs.append(f"balance: ink {entry['ink']!r} must be one of {'|'.join(BALANCE_INKS)} (cream on the charcoal page, "
+                    "charcoal on a light ground)")
+    tip = entry.get("tip")
+    if tip is None:
+        return errs
+    if not isinstance(tip, dict):
+        return errs + ["balance: tip must be a dict {at, to: left | right}"]
+    extra = sorted(k for k in tip if k not in BALANCE_TIP_KEYS)
+    if extra:
+        errs.append(f"balance: tip {', '.join(map(repr, extra))} - a tip takes only at|to")
+    if tip.get("to") not in BALANCE_SIDES:
+        errs.append(f"balance: tip 'to' {tip.get('to')!r} must be left or right - the side that goes DOWN")
+    tat = tip.get("at")
+    if not _num(tat):
+        return errs + ["balance: tip 'at' must be a number (episode seconds, the word the sentence says which way it tips)"]
+    weighed = [entry[s]["at"] for s in BALANCE_SIDES if isinstance(entry.get(s), dict) and _num(entry[s].get("at"))]
+    if len(weighed) == 2 and tat < max(weighed) + BALANCE_LAND_S - 1e-9:
+        errs.append(f"balance: tip at {tat:g}s comes before both sides are weighed and landed (left at {weighed[0]:g}s, "
+                    f"right at {weighed[1]:g}s; the later load has landed by {max(weighed) + BALANCE_LAND_S:g}s, its word + "
+                    f"{BALANCE_LAND_S:g}s) - the sentence weighs both, then says which way it tips (A40)")
+    if _num(entry.get("at")) and _num(entry.get("dur")) and tat + BALANCE_TIP_SEEN_S > entry["at"] + entry["dur"] + 1e-9:
+        errs.append(f"balance: tip at {tat:g}s and the window ends at {entry['at'] + entry['dur']:g}s - a tip needs "
+                    f"{BALANCE_TIP_SEEN_S:g}s of window (its overshoot and the swing back), or it is a jolt")
+    return errs
+
+
 def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
     """Errors for one species entry: known kind, numeric at/dur, a target where the law requires one."""
     if not isinstance(entry, dict) or entry.get("kind") not in SPECIES_KINDS:
@@ -4478,6 +4814,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_axis_tag(entry)
     if kind == SPECIES_LEVEL_JOIN:    # P71 T10
         errs += _validate_level_join(entry)
+    if kind == SPECIES_BALANCE:       # P70 T7
+        errs += _validate_balance(entry)
     if kind == SPECIES_RULER:         # P71 T14
         errs += _validate_ruler(entry)
     elif "settle" in entry:           # P71 T14: the ruler's own key, refused by name on any other kind
@@ -4610,6 +4948,7 @@ def _readable_species_during(scenes: list, start: float, end: float) -> bool:
             (sp.get("readability") == "landscape-phone" and sp.get("kind") in ("chip", "flow"))
             or (sp.get("kind") == "chip" and sp.get("form") == "stamp"
                 and isinstance(sp.get("label"), str) and bool(sp["label"].strip()))
+            or sp.get("kind") == "balance"   # P70 T7: its names stand at the phone floor, so the caption takes the rail
         )
         and max(start, float(sc["span"][0]), float(sp["at"]))
         < min(end, float(sc["span"][1]), float(sp["at"]) + float(sp["dur"]))
@@ -10859,8 +11198,11 @@ def newsreel_rows(row_species) -> list[dict]:
 
 
 def newsreel_boxes(row_species, aspect: str | None) -> list[dict]:
-    """The bands' rectangles - what a card may not cover (handed to the placer as one more reserved strip)."""
-    return [b for b in (newsreel_region_box(e, aspect) for e in newsreel_rows(row_species)) if b]
+    """The bands' rectangles - what a card may not cover (handed to the placer as one more reserved strip). P70 T7: and
+    every stage species that PUBLISHES its footprint - the balance (`balance_boxes`) - so every placer that reserves the
+    band (dock_place, centred_place, the stamp and prop fits) keeps a card or a stamp off the scale too. A row with no
+    balance returns exactly the bands it always did."""
+    return [b for b in (newsreel_region_box(e, aspect) for e in newsreel_rows(row_species)) if b] + balance_boxes(row_species, aspect)
 
 
 def caption_home_box(aspect: str | None) -> dict:
@@ -11938,6 +12280,10 @@ def main() -> int:
                 _dur_warn = chip_stamp_dur_advice(e)       # ... and a stamped chip too short for its landing and its exit
                 if _dur_warn:
                     print(f"  [WARN] P70 T1: shot row {i + 1}: {_dur_warn}")
+        for e in row_species:   # P70 T7 (E99 s106): a balance name that cannot fit its half of the room is advised, not refused
+            if isinstance(e, dict) and e.get("kind") == SPECIES_BALANCE:
+                for _w in balance_advice(e, ASPECT):
+                    print(f"  [WARN] P70 T7: shot row {i + 1}: {_w}")
         for _w in ruler_row_advice(row_species) + ruler_caption_advice(row_species, ASPECT):   # P71 T14 (s109 (c), s106):
             print(f"  [WARN] P71 T14: shot row {i + 1}: {_w}")                                 # a year on a chip; the caption strip
         # P50 T2: a chip's SOURCED glyph rides the asset map exactly as a plate or a dock still does,

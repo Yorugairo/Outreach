@@ -4660,6 +4660,51 @@ def brace_funding(extra: list | None = None, longform: str | None = None) -> tup
 SURFACES.update({"brace-funding": brace_funding})
 FRAME_T.update({"brace-funding": round(BRACE_PARTS_AT[0] + 1.0, 2)})   # both names written (the last at 15.33), the key handed over
 
+# ---- P70 T7 (was P69 T59; harvest v2 T27 / A40): THE BALANCE SCALE - two named forces weighed, settled LEVEL ----------
+#   balance-level    Steel and Paper H row 18's two-clocks page (`ledger:ev-two-clocks-bars-v1:bars::right:axes:cut`,
+#                    `idle=live`, full stage, 16:9, the PLAIN profile - the row's `;readability=longform` would inline the
+#                    long-form face into the committed uris; test_balance_scale reads the served beat) and its own
+#                    sentences: "Different demand, different clock. The moat under the builders runs deeper than the paper
+#                    holders can see. And the paper stacked on top runs taller than the builders admit. Both are true at
+#                    once." The take's words shifted by -440.0 s: the balance draws in the page's ROOM (the right quarter
+#                    of the stage, clear of the plot - E99 s128: an object in the world stands in its room) on "clock."
+#                    (451.43), "MOAT" - the builders' plant, a sourced glyph - lands in the left pan on "moat" (452.76) and
+#                    the beam leans to it; "PAPER" - the bank's columns, the paper holders - lands in the right on "paper" (456.65) and the beam settles
+#                    LEVEL; judged on "Both are true at once" + 0.5 s (460.79), both sides weighed, the beam level, its
+#                    base on T6b's resting hatch. H has no sentence that tips two UNQUANTIFIED forces (row 16's "the bills
+#                    got bigger than the cash" is a balance of figures: two bars), so the tip is the private test bed's.
+BAL_PROJECT = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
+BAL_PLATE = "ledger:ev-two-clocks-bars-v1:bars::right:axes:cut;idle=live"
+BAL_SHIFT = 440.0
+BAL_SPECIES = [
+    {"kind": "balance", "at": round(451.43 - BAL_SHIFT, 2), "dur": round(463.95 - 451.43, 2), "idle": "breath",
+     "target": {"kind": "region", "x0": 0.735, "y0": 0.22, "x1": 0.985, "y1": 0.80},       # the page's room, clear of the plot and of the caption's rail
+     "left": {"label": "MOAT", "icon": "factory", "at": round(452.76 - BAL_SHIFT, 2)},     # "The moat under the builders"
+     "right": {"label": "PAPER", "icon": "landmark", "at": round(456.65 - BAL_SHIFT, 2)}},   # "And the paper stacked on top"
+]
+
+
+def balance_level() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    species = [json.loads(json.dumps(e)) for e in BAL_SPECIES]
+    assert not BST.validate_species(species, (0, 0, 0), BAL_PLATE), BST.validate_species(species, (0, 0, 0), BAL_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(BAL_PLATE, (0, 0, 0), BAL_PROJECT)
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = dict(_base_uris(), **{BST.ICON_PREFIX + n: BST.icon_geometry(n) for e in species for n in BST.species_icons(e)})
+    return _timeline("Golden: two named forces weighed and settled level (balance)", scenes, {}, "16:9"), uris
+
+
+SURFACES.update({"balance-level": balance_level})
+FRAME_T.update({"balance-level": round(460.29 + 0.5 - BAL_SHIFT, 2)})   # "Both are true at once" + 0.5 s: 20.79
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

@@ -56,6 +56,7 @@ SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span",
            "solo",      # P69 T37: the on-word isolate - a PAGE species (PAGE_PAINTERS.solo), its region right after lit_stretch's, before paintPerform closes over it
            "axis_tag",   # P71 T9: the axis tag and its drop guide - a PAGE species (PAGE_PAINTERS.axis_tag), its region right after compare's, before buildPerform
            "level_join",   # P71 T10: the dashed level between two data - a PAGE species (PAGE_PAINTERS.level_join), its region right after solo's, before paintPerform
+           "balance",   # P70 T7: the balance scale - a stage species (SPECIES_PAINTERS.balance), its region immediately before ring's
            "freeze",    # P69 T49: the freeze beat - a stage species (SPECIES_PAINTERS.freeze) whose life clock the engine's idles read
            "ruler",     # P71 T14: the decade ruler - a stage species (SPECIES_PAINTERS.ruler), its region right after freeze's; it imports ease's hermite
            "equation"]  # P70 T6: the equation row - a stage species (SPECIES_PAINTERS.equation), its region right after ruler's; it imports figure's figureGlyph and spring's springPop, both earlier

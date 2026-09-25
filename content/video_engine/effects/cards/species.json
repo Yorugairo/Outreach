@@ -203,6 +203,140 @@
       }
     },
     {
+      "id": "species:balance",
+      "axis": "species",
+      "token": "balance",
+      "title": "The balance scale, and the balance tips",
+      "aliases": [
+        {
+          "name": "Balance scale (a tip, or a flag / scale / flag trio)",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md (T27, CHN 19:10; JPN 06:41)"
+        },
+        {
+          "name": "The balance tips",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md (A40, CHN 19:10)"
+        },
+        {
+          "name": "The balance scale",
+          "source": ".claude/PRPs/plans/P70-THE-BRAVOS-VERBS-WAVE-2.plan.md (T7)"
+        }
+      ],
+      "does": "Two NAMED forces weighed in the page's room: the fulcrum and beam draw on the word, each side's load lands on its own word, the beam leans to a lone load and settles level; a tip swings it toward one side with one overshoot.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "COMPARES"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"balance\", \"at\", \"dur\", \"target\": region, \"left\": {label, at, icon? | prop?, mass?}, \"right\": {...}, \"tip\"?: {at, to: left | right}, \"idle\"?, \"ink\"?} (shot row 7th element); a label never carries a digit (two bars)",
+        "example": "{\"kind\": \"balance\", \"at\": 11.43, \"dur\": 12.52, \"idle\": \"breath\", \"target\": {\"kind\": \"region\", \"x0\": 0.735, \"y0\": 0.22, \"x1\": 0.985, \"y1\": 0.84}, \"left\": {\"label\": \"MOAT\", \"icon\": \"factory\", \"at\": 12.76}, \"right\": {\"label\": \"PAPER\", \"icon\": \"landmark\", \"at\": 16.65}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (balance-level)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the scale draws",
+          "does": "the domed foot and the tapered post, then the two clothoid arms out of the pivot, then each pan's hangers and bowl, by length; a fill follows its outline, and the base's resting hatch rises",
+          "trigger": "the species' `at`, over DRAW_S",
+          "dials": {
+            "DRAW_S": "0.9",
+            "ARM_BOW_DEG": "7",
+            "FILL_S": "0.18",
+            "HATCH_S": "0.35"
+          }
+        },
+        {
+          "name": "a load lands and the beam leans",
+          "does": "the side's glyph, prop or name drops into its pan by stopaction's landXf; at the contact the beam takes LEAN_DEG toward it on its spring - both sides weighed, the two steps cancel and it settles level",
+          "trigger": "each side's `at`; the beam at its contact (landXf's ANTIC_S + DROP_S)",
+          "dials": {
+            "LEAN_DEG": "7",
+            "LEAN_MP": "0.1",
+            "LEAN_S": "0.9",
+            "LOAD_DROP_PX": "90"
+          }
+        },
+        {
+          "name": "the balance tips",
+          "does": "the beam swings to TIP_DEG toward `tip.to` on an underdamped spring - one visible overshoot, the swing back under a degree - while the pans hang plumb",
+          "trigger": "`tip.at`",
+          "dials": {
+            "TIP_DEG": "12",
+            "TIP_MP": "0.2",
+            "TIP_S": "1.2"
+          }
+        },
+        {
+          "name": "it leaves",
+          "does": "the whole object goes down in opacity over the window's last EXIT_S",
+          "trigger": "EXIT_S before the window's end",
+          "dials": {
+            "EXIT_S": "0.35"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "the closed-form spring (kinetics/spring.mjs springEval)",
+          "became": "the beam's lean, level and tip",
+          "record": "content/video_engine/scripts/kinetics/spring.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "the clothoid fitter (kinetics/clothoid.mjs, doc 42 s42.4)",
+          "became": "the arms, the hangers, the bowls and the foot",
+          "record": "content/video_engine/scripts/kinetics/clothoid.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "stopaction's landing (kinetics/stopaction.mjs landXf, MASS)",
+          "became": "a load dropped into its pan",
+          "record": "content/video_engine/scripts/kinetics/stopaction.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "the chip's landing fade and sourced glyph (species/chip.mjs chipLand, chipGeometry)",
+          "became": "a pan's named load",
+          "record": "content/video_engine/scripts/species/chip.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "T6b's resting hatch (the engine's propHatchLines, PROP_SHADOW)",
+          "became": "the base's resting shadow",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/balance.mjs",
+        "object": "BALANCE"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/balance.mjs",
+        "symbol": "paintBalance"
+      },
+      "doctrine": [
+        "E99 s128",
+        "E99 s106",
+        "E99 s92",
+        "E99 s90",
+        "E28",
+        "P70 T7"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "balance-level",
+        "test": "content/video_engine/tests/kinetics/balance.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "species:beat_freeze",
       "axis": "species",
       "token": "beat_freeze",
