@@ -41,6 +41,7 @@ NEXT_STATE = "sent"
 GEMINI_REQUIRED = ("ANTIGRAVITY_LS_ADDRESS", "ANTIGRAVITY_CSRF_TOKEN")
 FOLLOWUP_DIR = "followups"
 DRY_RUN_NEXT = "next: send for real (drop --dry-run)"
+SENDER_LANES = ("gemini", "claude")   # the lanes a follow-up can be sent on; any other lane is refused, never re-routed
 
 
 class BridgeReplyError(RuntimeError):
@@ -153,8 +154,11 @@ def claude_argv(conversation: str, text: str) -> list[str]:
 
 
 def resolve(lane: str, conversation: str, text: str, repo: Path) -> tuple[list[str], dict[str, Any] | None, str]:
-    """Argv, the environment it needs (gemini only) and the line that may be shown - masked."""
+    """Argv, the environment it needs (gemini only) and the line that may be shown - masked. A lane with no sender
+    (astra) is refused: it used to fall through to the Gemini send (three Astra orders, 2026-09-25 02:17 - R26-340)."""
 
+    if lane not in SENDER_LANES:
+        raise BridgeReplyError(f"lane {lane!r} has no sender (senders: {', '.join(SENDER_LANES)}); nothing sent")
     if lane == "claude":
         argv = claude_argv(conversation, text)
         return argv, None, f"command: {quote(argv[:-1])} <text {len(text)} chars>"

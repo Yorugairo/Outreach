@@ -126,16 +126,42 @@ def with_skills(brief: str, skills: list[str]) -> str:
     return brief if line.strip() in brief else line + brief
 
 
-def with_template(brief: str, shape: str) -> str:
+def main_checkout(repo: Path | str) -> Path:
+    """R26-340 F7: the MAIN checkout a repo path belongs to. A linked worktree's `.git` is a file naming
+    `<main>/.git/worktrees/<name>`; the main checkout's `.git` is a directory. Anything else is its own root."""
+    root = Path(repo)
+    marker = root / ".git"
+    if not marker.is_file():
+        return root
+    try:
+        line = marker.read_text(encoding="utf-8").strip()
+    except OSError:
+        return root
+    gitdir = Path(line.split(":", 1)[1].strip()) if line.lower().startswith("gitdir:") else None
+    if gitdir is None or gitdir.parent.name != "worktrees" or gitdir.parent.parent.name != ".git":
+        return root
+    return gitdir.parent.parent.parent
+
+
+def output_root_line(repo: Path | str) -> str:
+    """The one line every templated order carries: where the files land, as an absolute main-checkout path
+    (2026-09-25: two Gemini reviews were written into the Astra worktree instead)."""
+    root = main_checkout(repo)
+    return (f"Output root: write every file under `{root}` (the main checkout) and name each in the reply by its "
+            "absolute path there - never under another worktree or checkout; tier 0 fails a path outside it.\n")
+
+
+def with_template(brief: str, shape: str, repo: Path | str = REPO) -> str:
     """P46 T7: the reply's fill-in grammar block, appended to the brief - a block to copy beats prose about format. The
-    check CLI both sides can run is named beside it."""
+    check CLI both sides can run is named beside it, and the output root is stated as an absolute path (R26-340 F7)."""
     import bridge_handlers as handlers
     if "## Reply block" in brief or shape == "free":
         return brief
     return (brief.rstrip("\n") + "\n\n## Reply block (fill this in, verbatim, as the first thing in your reply)\n\n```\n"
             + handlers.template(shape) + "```\n"
             "Before replying, run `python content/video_engine/scripts/bridge_check.py --shape " + shape
-            + " --reply <the file holding your reply>` from the repo root and paste its PASS line under the block.\n")
+            + " --reply <the file holding your reply>` from the repo root and paste its PASS line under the block.\n"
+            + output_root_line(repo))
 
 
 def _slug(text: str) -> str:
@@ -265,13 +291,39 @@ def send_gemini(args: argparse.Namespace, order: dict[str, Any], folder: Path, l
         env_mod.write_json(folder / "send-error.json", {"returncode": proc.returncode, "stderr": stderr[:4000]})
         return result
 
-    conversation_id = env_mod.newest_conversation(after_ts=before, title=order["title"],
-                                          needle=next((ln.strip() for ln in order["brief"].splitlines() if ln.strip()), None))
+    # R26-340 F1: agentapi prints the id it created (`response.newConversation.conversationId`); the store scan by file
+    # time is only the fallback for a stdout that does not carry it - six packets sat `conversationId: null` on the guess
+    conversation_id, source = conversation_from_stdout(stdout), "stdout"
     if not conversation_id:
-        lines.append("conversation id not found where I looked (store mtime + title scan); sent anyway")
+        conversation_id, source = env_mod.newest_conversation(
+            after_ts=before, title=order["title"],
+            needle=next((ln.strip() for ln in order["brief"].splitlines() if ln.strip()), None)), "store-scan"
+    if not conversation_id:
+        source = None
+        lines.append("conversation id not found where I looked (agentapi stdout, then store mtime + title scan); sent anyway")
     result.update({"conversationId": conversation_id, "sentAt": sent_at})
-    result["packetDir"] = str(_record_gemini_send(args, order, folder, env, conversation_id, sent_at, stdout))
+    result["packetDir"] = str(_record_gemini_send(args, order, folder, env, conversation_id, sent_at, stdout, source))
     return result
+
+
+_STDOUT_ID = re.compile(r'(?<!\\)"conversationId"\s*:\s*"([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})"')
+STDOUT_HEAD, STDOUT_TAIL = 4000, 600
+
+
+def conversation_from_stdout(stdout: str | None) -> str | None:
+    """The id agentapi's `new-conversation` printed: the parsed `response.newConversation.conversationId`, else the
+    last unescaped `"conversationId": "<uuid>"` in the text (a stored stdout may be cut). A half id is no id."""
+    text = stdout or ""
+    try:
+        payload = json.loads(text)
+    except ValueError:
+        payload = None
+    if isinstance(payload, dict):
+        found = ((payload.get("response") or {}).get("newConversation") or {}).get("conversationId")
+        if isinstance(found, str) and found.strip():
+            return found.strip()
+    matches = _STDOUT_ID.findall(text)
+    return matches[-1] if matches else None
 
 
 def _record_gemini_send(
@@ -282,19 +334,23 @@ def _record_gemini_send(
     conversation_id: str | None,
     sent_at: str,
     stdout: str,
+    source: str | None = None,
 ) -> Path:
-    """The send's paper trail: the conversation record, the rename into `sent/`, one ledger line."""
+    """The send's paper trail: the conversation record, the rename into `sent/`, one ledger line. The stdout is kept
+    head AND tail: agentapi prints the id after the echoed prompt, so a head alone loses it (R26-340 F1)."""
 
     env_mod.write_json(
         folder / "conversation.json",
         {
             "packetId": order["packetId"],
             "conversationId": conversation_id,
+            "conversationIdSource": source,
             "sentAt": sent_at,
             "lsAddress": env.get("ANTIGRAVITY_LS_ADDRESS"),
             "model": args.model,
             "profile": args.profile,
-            "stdout": stdout[:4000],
+            "stdout": stdout[:STDOUT_HEAD],
+            **({"stdoutTail": stdout[-STDOUT_TAIL:]} if len(stdout) > STDOUT_HEAD else {}),
         },
     )
     moved = env_mod.move_packet(order["packetId"], "queue", "sent", repo=args.repo)
@@ -404,7 +460,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     raw = read_brief(args.brief_file)
     run = apply_claims_gate(args)   # THE RESEARCH CLAIMS GATE: research orders carry OUR verifier by default
-    brief = raw if getattr(args, "no_template", False) else with_template(raw, args.reply_shape)   # P46 T7: the fill-in block rides every order
+    brief = raw if getattr(args, "no_template", False) else with_template(raw, args.reply_shape, args.repo)   # P46 T7: the fill-in block rides every order
     brief = with_claims_contract(brief, run) if run else brief
     brief = with_skills(brief, sorted(set([*args.skills, *SHAPE_SKILLS.get(args.reply_shape, [])])))   # P46 T8: the skill line
     order = build_order(args, brief, packet_source=raw)

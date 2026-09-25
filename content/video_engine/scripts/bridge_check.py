@@ -11,11 +11,16 @@ the order came through the bridge or the operator typed it, so it needs only the
 
 Prints `PASS <shape> (<n> checks)` and the checks, exit 0; or `FAIL <class>: <first failing check>` with the block to fill,
 exit 1. `--reply -` reads stdin. `--json` prints the classify() outcome instead.
+
+R26-340 F7: an absolute path under PATHS WRITTEN outside every root the order declared (the repo root by default, plus
+`roots`, `fetch_dir`, the `outputs` / `csv` folders) is `FAIL outside-root`, whatever the shape's own checks said.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
+import re
 import sys
 from pathlib import Path
 
@@ -27,6 +32,68 @@ import bridge_handlers as handlers  # noqa: E402
 
 REPO = env_mod.REPO if hasattr(env_mod, "REPO") else HERE.parents[2]
 STATES = ("sent", "replied", "done", "queue")
+CLASS_OUTSIDE_ROOT = "outside-root"   # R26-340 F7: a reply path outside every root the order declared (the repo root by default)
+_MSYS_DRIVE = re.compile(r"^/([a-zA-Z])/")
+
+
+# --------------------------------------------------------------------------- the roots a reply may write under (R26-340 F7)
+
+
+def declared_roots(order: dict, repo: Path) -> list[str]:
+    """The repo root, then every absolute location the ORDER named: `roots`, `fetch_dir`, each `outputs` file's folder,
+    the `csv`'s folder. A declared root need not exist yet - the reply is what writes it."""
+    raw: list[str] = [str(repo), *[str(r) for r in order.get("roots") or []]]
+    if order.get("fetch_dir"):
+        raw.append(str(order["fetch_dir"]))
+    raw += [str(Path(str(o)).parent) for o in order.get("outputs") or []]
+    if order.get("csv"):
+        raw.append(str(Path(str(order["csv"])).parent))
+    return [_norm(r) for r in raw if r]
+
+
+def _norm(path: str) -> str:
+    text = os.path.expanduser(str(path).strip())
+    if os.name == "nt":
+        text = _MSYS_DRIVE.sub(lambda m: f"{m.group(1)}:/", text)   # a Git Bash `/c/Users/...` is `C:/Users/...`
+    return os.path.normcase(os.path.normpath(os.path.abspath(text)))
+
+
+def _under(path: str, root: str) -> bool:
+    return path == root or path.startswith(root.rstrip("\\/") + os.sep)
+
+
+def outside_roots(order: dict, text: str, repo: Path) -> list[str]:
+    """Every ABSOLUTE path under PATHS WRITTEN that sits under none of the declared roots. A relative path resolves under
+    the repo, so it is inside by construction; a half-path left by a transcript cut is not a path and is skipped."""
+    items = handlers.parse_reply(text).paths_written or []
+    cut = handlers._TRUNCATED.search(text or "")
+    roots = declared_roots(order, Path(repo))
+    stray: list[str] = []
+    for item in items:
+        path = handlers._path_from_item(item)
+        if not path or "<truncated" in path or (cut and not handlers._looks_whole(path)):
+            continue
+        if not (handlers._ABSOLUTE.match(path) or Path(path).is_absolute()):
+            continue
+        if not any(_under(_norm(path), root) for root in roots):
+            stray.append(path)
+    return stray
+
+
+def classify(order: dict, text: str, repo: Path | str = REPO) -> dict:
+    """Tier 0 as the daemon and this CLI run it: the shape's checks (`bridge_handlers.classify`), then the root check. A
+    path outside the declared roots fails the reply with its own class, whatever the shape's checks said - a file
+    written into another checkout is lost to this one even when it exists (2026-09-25: two Gemini reviews in the Astra
+    worktree)."""
+    outcome = handlers.classify(order, text, repo)
+    stray = outside_roots(order, text, Path(repo))
+    if not stray:
+        return outcome
+    reason = (f"{len(stray)} path(s) outside the order's roots ({', '.join(declared_roots(order, Path(repo))[:3])}): "
+              + ", ".join(stray[:3]))
+    entry = handlers.check("inside-root", False, reason)
+    return {**outcome, "pass": False, "reason": entry["detail"], "checks": [entry, *outcome["checks"]],
+            "class": CLASS_OUTSIDE_ROOT}
 
 
 def find_order(repo: Path, packet: str) -> dict:
@@ -82,7 +149,7 @@ def main(argv: list[str] | None = None) -> int:
     if not a.reply or not (a.packet or a.shape):
         ap.error("--reply and one of --packet / --shape are required (or --template)")
     order = find_order(a.repo, a.packet) if a.packet else {"replyShape": a.shape}
-    outcome = handlers.classify(order, read_reply(a.reply), a.repo)
+    outcome = classify(order, read_reply(a.reply), a.repo)
     print(json.dumps(outcome, indent=1) if a.as_json else report(outcome))
     return 0 if outcome["pass"] else 1
 

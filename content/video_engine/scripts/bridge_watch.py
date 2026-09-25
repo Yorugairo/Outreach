@@ -25,6 +25,9 @@ completion report at step 103):
     An abstention that ends a turn is a reply, and the same rule catches it.
   * claude - the last `assistant` record's text blocks, joined. A `thinking` block carries no `text` key and
     is skipped by type, so it cannot reach a file.
+  * a follow-up packet (a repair, a revision, a nudge: `lastFollowupAt`, or a `conversationId` on the order) takes
+    only a reply stamped at or after the follow-up went out - three repairs of 2026-09-25 "replied" in 0-3 s with
+    their originals' text (R26-340 F2).
 
 Exit codes: 0 done, 2 timeout (the deadline passed with no reply), 3 still working (a replay of a live
 conversation - outside the plan's three codes, and not an error), 1 error.
@@ -151,15 +154,25 @@ def _placeholder(record: dict[str, Any]) -> bool:
     return record.get("type") == "PLANNER_RESPONSE" and bool(_WAIT_PLACEHOLDER.match((record.get("content") or "").strip()))
 
 
-def gemini_reply(records: Sequence[dict[str, Any]]) -> dict[str, Any]:
+def _answers(record: dict[str, Any], after: dt.datetime | None, key: str = "created_at") -> bool:
+    """R26-340 F2: a reply to a follow-up must post-date the follow-up. With no `after` every record may answer (a new
+    conversation holds no older turn); with one, a record whose time is absent or earlier is not an answer."""
+    if after is None:
+        return True
+    when = parse_time(record.get(key))
+    return when is not None and when >= after
+
+
+def gemini_reply(records: Sequence[dict[str, Any]], after: dt.datetime | None = None) -> dict[str, Any]:
     """The last completed PLANNER_RESPONSE with text and no tool call, if nothing after it is pending - and a
-    "Waiting for task-N" placeholder is never that reply."""
+    "Waiting for task-N" placeholder is never that reply. With `after` (a follow-up's send time) only a record at or
+    after it counts, so a repair read seconds after its send never lands the original's text (R26-340 F2)."""
 
     index = None
     for position, record in enumerate(records):
         if record.get("type") != "PLANNER_RESPONSE" or _pending(record) or _placeholder(record):
             continue
-        if (record.get("content") or "").strip():
+        if (record.get("content") or "").strip() and _answers(record, after):
             index = position
     if index is None or any(_pending(r) or _placeholder(r) for r in records[index + 1 :]):
         return {"status": "working", "text": "", "record": None}
@@ -220,11 +233,11 @@ def _texts(record: dict[str, Any]) -> list[str]:
     return [b.get("text") or "" for b in _blocks(record) if b.get("type") == "text" and (b.get("text") or "").strip()]
 
 
-def claude_reply(records: Sequence[dict[str, Any]]) -> dict[str, Any]:
-    """The last assistant record that actually said something."""
+def claude_reply(records: Sequence[dict[str, Any]], after: dt.datetime | None = None) -> dict[str, Any]:
+    """The last assistant record that actually said something - at or after `after` when a follow-up is answered."""
 
     for record in reversed(list(records)):
-        if record.get("type") != "assistant":
+        if record.get("type") != "assistant" or not _answers(record, after, "timestamp"):
             continue
         texts = _texts(record)
         if texts:
@@ -260,7 +273,7 @@ def claude_usage(record: dict[str, Any] | None) -> dict[str, Any]:
     return {"inputTokens": usage.get("input_tokens"), "outputTokens": usage.get("output_tokens")}
 
 
-READERS: dict[str, Callable[[Sequence[dict[str, Any]]], dict[str, Any]]] = {
+READERS: dict[str, Callable[..., dict[str, Any]]] = {   # (records, after=None) -> the reply
     "gemini": gemini_reply,
     "claude": claude_reply,
 }
@@ -332,6 +345,20 @@ def packet_sent_at(folder: Path) -> str | None:
     return conversation.get("sentAt") or order.get("sentAt") or order.get("createdAt")
 
 
+def reply_after(folder: Path | None) -> dt.datetime | None:
+    """R26-340 F2: when the packet is a FOLLOW-UP on an existing conversation (a repair, a revision, a nudge), the time
+    it went out - its reply must come after it. A new order returns None: its conversation holds nothing older."""
+    if folder is None:
+        return None
+    conversation = _read_json(folder / "conversation.json")
+    order = _read_json(folder / "order.json")
+    if order.get("lastFollowupAt"):
+        return parse_time(order["lastFollowupAt"])
+    if order.get("conversationId") or conversation.get("followup"):
+        return parse_time(conversation.get("sentAt") or order.get("sentAt"))
+    return None
+
+
 def parse_time(value: str | None) -> dt.datetime | None:
     if not value:
         return None
@@ -367,6 +394,7 @@ def _poll(
     poll_sec: int,
     replay: bool,
     once: bool = False,
+    after: dt.datetime | None = None,
 ) -> tuple[list, dict, str]:
     """Read until the reply lands, the deadline passes, or exactly once when replaying.
 
@@ -377,7 +405,7 @@ def _poll(
     reader = READERS[lane]
     while True:
         records = read_records(path)
-        reply = reader(records)
+        reply = reader(records, after=after)
         if reply["status"] == "done" or (replay and not once):
             return records, reply, reply["status"]
         if deadline and dt.datetime.now().astimezone() >= deadline:
@@ -453,7 +481,7 @@ def run_watch(args: argparse.Namespace) -> dict[str, Any]:
 
     deadline = resolve_deadline(args.timeout_min, order, started)
     once = bool(getattr(args, "once", False))
-    records, reply, status = _poll(args.lane, path, deadline, args.poll_sec, args.replay or once, once)
+    records, reply, status = _poll(args.lane, path, deadline, args.poll_sec, args.replay or once, once, reply_after(folder))
     landed_at = dt.datetime.now().astimezone().isoformat(timespec="seconds")
     steps = STEPPERS[args.lane](records, secrets)
     watch = {
