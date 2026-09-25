@@ -391,9 +391,13 @@ SPECIES_EVENTS["stamp"] = ("at",)
 SPECIES_EVENTS["cross"] = ("at",)   # P50 T6: the census's X marks strike on their word - the named cells are struck, dimmed
                                     # and their share written, all on one clock; like a span or a light it holds after that,
                                     # so it has no end event (what happens next is the park, which is its own row).
-SPECIES_EVENTS["chip"] = ("at", "cross_at")   # P50 T2: a chip LANDS on its word (an event) and is CROSSED on a later one (another).
+SPECIES_EVENTS["chip"] = ("at", "cross_at", "tick_at", "tab_at", "pulse")   # P50 T2: a chip LANDS on its word (an event) and is CROSSED on a later one (another).
                                               # "cross_at" is neither an edge of the window nor its end: it names the row's own field,
                                               # and _species_events credits any such name at the instant that field holds.
+                                              # P71 T12: ... and so are its TICK (tick_at) and its TAB (tab_at), each landing on its word;
+                                              # a held `state: "lit"` halo is an annotation, 0 events (E99 s91), but `pulse: true` BLINKS
+                                              # it - one event per blink onset (E99 s99), on CHIP_PULSE's clock ("pulse", below).
+CHIP_PULSE = {"land_s": 0.55, "n": 3, "s": 0.5}   # [DERIVED: species/chip.mjs CHIP.LAND_S / PULSE_N / PULSE_S] the blinks run from at + LAND_S
 # P52 T6: THE NEWSREEL BAND is a STANDING element with a LIFE. It arrives once (one event, on its word) and then
 # CRAWLS - continuous motion for exactly as long as it stands, which is its `hold` plus the retreat when the author
 # gave it one, else its whole window. It is credited like a `life` (one event per LIFE_CONTINUOUS_S), and never like
@@ -963,6 +967,11 @@ def _species_events(scenes: list[dict]) -> list[float]:
                     n, gap = int(sp.get("count") or 0), float(sp.get("step") or COUNT_ARRAY_STEP)
                     if gap > 0:
                         out += [round(at + i * gap, 2) for i in range(1, n) if keep(at + i * gap)]
+                    continue
+                if edge == "pulse":      # P71 T12: a lit chip's blinks - one event per onset, inside its window only
+                    if sp.get("pulse") is True and sp.get("state") == "lit":
+                        ons = [at + CHIP_PULSE["land_s"] + k * CHIP_PULSE["s"] for k in range(CHIP_PULSE["n"])]
+                        out += [round(w, 2) for w in ons if w < at + dur and keep(w)]
                     continue
                 if edge == "rows":       # P52 T8: ... and the agenda's rows are revealed one per word, each on its own `at`
                     for i, row in enumerate(sp.get("rows") or []):

@@ -27,6 +27,7 @@ import render_baseline as RB  # noqa: E402
 SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pair-9x16", "ledger-soak-page",
             "chip-board",   # P50 T2: the icon chip, three of them, the middle one crossed
             "press-stack",  # P50 T3: three press cards stacked, the newest lit, the underline drawn on its phrase
+            "chip-states-sell",   # P71 T12: H row 10's "sell" - a SELL tab in the negative ink lands on the NVIDIA chip's top edge on the badge spring, its word at the s90 floor, the board breathing
             "flow-loop-tokens",   # P71 T11: THE LOOP - a four-node flow laid as a RING (the first at 12 o'clock, clockwise, each arrow leaving its card along the ring) with two plain dots in the arrow's ink riding every arrow mid-run (A27); a test-bed beat
             "flow-swap",    # P50 T4: the three-node diagram after its swap - the new node in place, both clothoid arrows standing, the year stamped
             "span-decade",  # P50 T4: a ledger line page with a named stretch of time shaded behind it

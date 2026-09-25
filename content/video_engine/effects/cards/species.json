@@ -367,7 +367,7 @@
           "source": "content/video_engine/scripts/build_scene_timeline_f.py:211"
         }
       ],
-      "does": "A card with one sourced glyph and a label lands on its word and is crossed out on a later word.",
+      "does": "A card with one sourced glyph and a label lands on its word; later it is crossed out, or ticked, or a SELL / BUY tab lands on its edge - and a lit chip holds a halo (the one actor of a set).",
       "when": null,
       "when_source": null,
       "author": {
@@ -401,6 +401,40 @@
             "CROSS_S": "0.5",
             "DIM": "0.55"
           }
+        },
+        {
+          "name": "lit",
+          "does": "a halo LIT_PAD outside the card in the focus yellow, glowing in its ink, comes up with the landing and HOLDS (0 events, s91); `pulse: true` blinks it PULSE_N times from the settle (an event per onset, s99)",
+          "trigger": "`state: \"lit\"` (the species' `at`); the blinks from at + LAND_S",
+          "dials": {
+            "LIT_PAD": "12",
+            "LIT_W": "5",
+            "LIT_GLOW": "18",
+            "PULSE_N": "3",
+            "PULSE_S": "0.5",
+            "PULSE_LOW": "0.2"
+          }
+        },
+        {
+          "name": "tick",
+          "does": "a small disc badge in the positive ink centred ON the card's top edge (HIS 06:13) springs in, its charcoal check drawn in two strokes; the card keeps its ink and the icon is never covered",
+          "trigger": "`tick_at`, a later word (never with `cross_at` or a `tab`)",
+          "dials": {
+            "CHECK_D": "0.224",
+            "CROSS_S": "0.5",
+            "LAND_S": "0.55"
+          }
+        },
+        {
+          "name": "tab",
+          "does": "a rounded SELL (negative ink) or BUY (positive ink) pill centred ON the card's top edge, half above it, its word in charcoal at the s90 floor, the pill hugging it, landing on the badge spring",
+          "trigger": "`tab_at`, else the species' `at`",
+          "dials": {
+            "TAB_TYPE": "59.08",
+            "TAB_H": "70",
+            "TAB_PAD": "14",
+            "LAND_S": "0.55"
+          }
         }
       ],
       "blends": [
@@ -421,6 +455,24 @@
           "became": "the whole arc",
           "record": "docs/content-video-engine/42-DRAWING-KINETICS.md:12",
           "tie": "recorded"
+        },
+        {
+          "source": "Bravos A36 / F3 - the active actor tile glows, a halo behind it (BUB #20)",
+          "became": "the lit halo and its pulse",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:637",
+          "tie": "recorded"
+        },
+        {
+          "source": "Bravos A14 - the check badge (BUB #40, HIS 06:07)",
+          "became": "the tick",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:995",
+          "tie": "recorded"
+        },
+        {
+          "source": "Bravos A59 - BUY / SELL state tabs (JPN 04:08, 05:34; DOM 17:30)",
+          "became": "the tab",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:667",
+          "tie": "recorded"
         }
       ],
       "options": [
@@ -438,6 +490,31 @@
           "token": "ring_text_bottom",
           "means": "... and on the BOTTOM half-arc, its own left-to-right arc so it reads upright (badge-stamp.tsx ringTextBottom)",
           "source_set": "CHIP_SEAL_OPTS"
+        },
+        {
+          "token": "state",
+          "means": "`on` | `crossed` | `lit` (P71 T12, A36: the ONE actor of a set the sentence is about; a held halo is 0 events, s91). Refused on the stamp form",
+          "source_set": "CHIP_STATES"
+        },
+        {
+          "token": "pulse",
+          "means": "`pulse: true`, a lit chip only (P71 T12): the halo BLINKS PULSE_N times, an event per onset (s99); refused off a lit chip, when not true, or when the window cannot hold the blinks",
+          "source_set": "CHIP_STATE_KEYS"
+        },
+        {
+          "token": "tick_at",
+          "means": "a later word in the window (P71 T12, A14: a tick for what held, an X for what failed): the two-stroke badge; refused with `cross_at` / `state: crossed` (held or failed) or with a `tab` (one edge)",
+          "source_set": "CHIP_STATE_KEYS"
+        },
+        {
+          "token": "tab",
+          "means": "`sell` | `buy` (P71 T12, A59: who must sell, who buys - H row 10's SELL); a NUMBER is refused by name (never imply a trade record)",
+          "source_set": "CHIP_TABS"
+        },
+        {
+          "token": "tab_at",
+          "means": "the tab's own word, a later one inside the window; absent, the tab lands with the chip; refused without a `tab`",
+          "source_set": "CHIP_STATE_KEYS"
         }
       ],
       "dials": {
@@ -456,7 +533,11 @@
         "P70 T1b",
         "E99 s87",
         "E99 s121",
-        "E99 s123"
+        "E99 s123",
+        "P71 T12",
+        "E99 s91",
+        "E99 s99",
+        "E28"
       ],
       "status": "wired",
       "proof": {

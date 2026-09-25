@@ -550,3 +550,206 @@ test("T1c (E99 s128): the seal is OPEN - nothing in the mark's group is filled b
     }
   }
 });
+
+// ---------------------------------------------------------------- P71 T12: THE STATES - lit (and pulse), tick, sell / buy
+// Bravos A36 / F3 (the active tile glows, BUB #20), A14 (the check), A59 (SELL / BUY tabs, JPN 04:08 / 05:34). Each lands on
+// its word and each is a pure function of t; absent, the chip paints exactly what it painted (chipPose is today's).
+const { chipTickF, chipTickStrokes, chipCheckPose, chipLitF, chipPulseOnsets, chipTabPose, chipStates } = CHIPMOD;
+const glyphCtx = (sp, t) => {
+  const made = [];
+  const el = (tag, cls, parent, at) => { const e = { tag, cls, at: at || {}, kids: [], textContent: "", setAttribute(k, v) { this.at[k] = v; } };
+    made.push(e); if (parent && parent.kids) parent.kids.push(e); return e; };
+  paintChip({ sp, t, svg: { kids: [] }, el, A: { "icon:factory": JSON.stringify({ vb: [0, 0, 24, 24], el: [{ t: "path", a: { d: "M12 16h.01" } }] }) },
+    resolveTarget: () => ({ x: 100, y: 200, w: 0, h: 0 }), drawOn: (p, k) => p.setAttribute("stroke-dashoffset", k.toFixed(3)),
+    hash: () => 0.5, idle: () => ({ scale: 1, dx: 0, dy: 0 }), seed: 1, si: 0 });
+  return made;
+};
+
+test("T12: the states are the module's exports, and chipPose stays today's for a chip that carries them", () => {
+  for (const f of [chipTickF, chipTickStrokes, chipCheckPose, chipLitF, chipPulseOnsets, chipTabPose, chipStates]) assert.equal(typeof f, "function");
+  const cases = [chip({ state: "lit" }), chip({ state: "lit", pulse: true }), chip({ tick_at: 7 }), chip({ tab: "sell", tab_at: 6 }),
+                 chip({ tab: "buy" })];
+  for (const sp of cases) for (let i = 0; i < 120; i++) {
+    const t = sp.at - 0.5 + i * 0.05;
+    assert.deepEqual(chipPose(sp, t), springPose(sp, t), `${JSON.stringify(sp)} at ${t}`);
+  }
+});
+
+test("T12 (acceptance 3): the tick is 0 until tick_at, 1 CROSS_S later, and absent without tick_at", () => {
+  const sp = chip({ tick_at: 7 });
+  assert.equal(chipTickF(sp, 6.99), 0);
+  assert.ok(near(chipTickF(sp, 7 + CHIP.CROSS_S / 2), 0.5, 1e-12));
+  assert.equal(chipTickF(sp, 7 + CHIP.CROSS_S), 1);
+  assert.equal(chipTickF(sp, 30), 1);
+  assert.equal(chipTickF(chip(), 30), 0, "no tick_at, never ticked");
+  assert.equal(chipTickF(chip({ cross_at: 7 }), 30), 0, "a cross is not a tick");
+  assert.equal(chipCrossF(sp, 30), 0, "... and a tick is not a cross");
+});
+
+test("T12 (acceptance 3): the check draws in TWO strokes, split by their lengths - one hand through the knee", () => {
+  const K = CHIP.TICK, l1 = Math.hypot(K[1][0] - K[0][0], K[1][1] - K[0][1]), l2 = Math.hypot(K[2][0] - K[1][0], K[2][1] - K[1][1]);
+  assert.ok(l2 > l1 * 1.5, "the up stroke is the long one");
+  assert.ok(K[1][1] > K[0][1] && K[2][1] < K[1][1], "down to the knee, then up: a check, not a slash");
+  assert.deepEqual(chipTickStrokes(0), [0, 0]);
+  assert.deepEqual(chipTickStrokes(1), [1, 1]);
+  const knee = l1 / (l1 + l2);
+  const at = chipTickStrokes(knee);
+  assert.ok(near(at[0], 1, 1e-12) && near(at[1], 0, 1e-12), `the first stroke ends at the knee: ${at}`);
+  let prev = [0, 0];
+  for (let i = 0; i <= 100; i++) {
+    const s = chipTickStrokes(i / 100);
+    assert.ok(s[0] >= prev[0] && s[1] >= prev[1], "only ever forward");
+    assert.ok(s[1] === 0 || s[0] === 1, "the second stroke starts only once the first is done");
+    prev = s;
+  }
+});
+
+test("T12 (fix 1, HIS 06:13): the check is a DISC BADGE centred ON the card's top edge, CHECK_D of the card - the icon is never covered", () => {
+  assert.equal(CHIP.CHECK_D, 0.224, "Bravos HIS 06:13: 37 px discs on 164 px tiles");
+  const made = glyphCtx(chip({ tick_at: 7 }), 7 + CHIP.CROSS_S * 0.8);
+  const body = made.filter((e) => e.tag === "g")[1];
+  assert.equal(body.at.opacity, "1.000", "the card is not dimmed");
+  const cg = made.find((e) => e.cls === "chipcheck");
+  assert.ok(cg, "the badge group");
+  assert.equal(made[0].kids[made[0].kids.length - 1], cg, "drawn last, over the card's edge");
+  const settled = glyphCtx(chip({ tick_at: 7 }), 7 + 2 * CHIP.LAND_S).find((e) => e.cls === "chipcheck");
+  assert.equal(settled.at.transform, "translate(0 " + (-CHIP.SIZE / 2).toFixed(1) + ") scale(1.0000)", "centred ON the top edge, settled");
+  const disc = cg.kids[0];
+  assert.equal(disc.cls, "chipcheckdisc");
+  assert.equal(+disc.at.r, +(CHIP.CHECK_D * CHIP.SIZE / 2).toFixed(1));
+  assert.ok(disc.at.style.includes("fill:" + CHIP.TICK_INK));
+  const marks = made.filter((e) => e.cls === "chipcheckmark");
+  assert.equal(marks.length, 2, "the check in two strokes");
+  for (const p of marks) assert.ok(p.at.style.includes("stroke:" + CHIP.CHECK_MARK), p.at.style);
+  assert.equal(marks[0].at["stroke-dashoffset"], "1.000", "the short stroke is in");
+  assert.ok(+marks[1].at["stroke-dashoffset"] > 0 && +marks[1].at["stroke-dashoffset"] < 1, "the long one drawing");
+  assert.equal(made.filter((e) => e.cls === "sq").length, 0, "no stroke across the icon");
+  const r = CHIP.CHECK_D * CHIP.SIZE / 2;
+  assert.ok(r < CHIP.SIZE / 2 - CHIP.GLYPH / 2, "the badge's lower half stays above the glyph's box");
+  assert.equal(glyphCtx(chip({ tick_at: 7 }), 6.9).filter((e) => e.cls === "chipcheck").length, 0, "nothing before its word");
+  assert.ok(sealContrastOf(CHIP.CHECK_MARK, CHIP.TICK_INK) >= 4.5, "the check reads on the disc");
+});
+
+test("T12 (fix 1): the badge springs in on tick_at on the BADGE SPRING (chipLand's clock)", () => {
+  const sp = chip({ tick_at: 7 });
+  for (let i = 0; i <= 40; i++) {
+    const t = 6.8 + i * 0.025, ck = chipCheckPose(sp, t), land = chipLand(t, 7);
+    assert.deepEqual([ck.u, ck.scale, ck.dy, ck.fade], [land.u, land.scale, land.dy, land.fade], `t=${t}`);
+    assert.deepEqual(ck.strokes, chipTickStrokes(chipTickF(sp, t)));
+  }
+  assert.equal(chipCheckPose(chip(), 9), null);
+  assert.equal(chipCheckPose(sp, 7, 110).d, CHIP.CHECK_D * 110, "the badge scales with the card (the phone card)");
+});
+
+test("T12 (acceptance 2): lit HOLDS - its level is the landing's fade, then exactly 1 for as long as the chip stands", () => {
+  const sp = chip({ state: "lit" });
+  assert.equal(chipLitF(chip(), 6), 0, "a chip that is not lit has no halo");
+  assert.equal(chipLitF(chip({ state: "crossed" }), 6), 0);
+  assert.equal(chipLitF(sp, sp.at - 0.1), 0, "nothing before its word");
+  for (let i = 0; i <= 20; i++) {
+    const t = sp.at + i * CHIP.FADE_S / 20;
+    assert.ok(near(chipLitF(sp, t), chipLand(t, sp.at).fade, 1e-12), "the halo comes up with the landing's fade");
+  }
+  for (let i = 0; i < 200; i++) assert.equal(chipLitF(sp, sp.at + 2 * CHIP.FADE_S + i * 0.03), 1, "a held halo: no blink, no drift");   // past the fade's float edge
+  assert.deepEqual(chipPulseOnsets(sp), [], "no pulse, no onsets");
+  assert.deepEqual(chipPulseOnsets(chip({ pulse: true })), [], "a pulse on a chip that is not lit blinks nothing");
+});
+
+test("T12 (acceptance 2): pulse BLINKS the lit halo PULSE_N times from the settle, down to PULSE_LOW and back, then holds", () => {
+  const sp = chip({ state: "lit", pulse: true });
+  const ons = chipPulseOnsets(sp);
+  assert.equal(ons.length, CHIP.PULSE_N);
+  ons.forEach((a, k) => assert.ok(near(a, sp.at + CHIP.LAND_S + k * CHIP.PULSE_S, 1e-12)));
+  for (const a of ons) {
+    assert.ok(near(chipLitF(sp, a), 1, 1e-12), "each blink begins from the full halo");
+    assert.ok(near(chipLitF(sp, a + CHIP.PULSE_S / 2), CHIP.PULSE_LOW, 1e-12), "... dips to PULSE_LOW at its middle");
+    assert.ok(chipLitF(sp, a + CHIP.PULSE_S * 0.25) < 1 && chipLitF(sp, a + CHIP.PULSE_S * 0.25) > CHIP.PULSE_LOW);
+  }
+  const end = ons[ons.length - 1] + CHIP.PULSE_S;
+  for (let i = 0; i < 50; i++) assert.equal(chipLitF(sp, end + i * 0.1), 1, "after the last blink it holds");
+  assert.equal(chipLitF(sp, ons[0] - 0.01), 1, "between the settle and the first blink it is lit");
+});
+
+test("T12 (acceptance 4): the tab lands on tab_at on the BADGE SPRING (chipLand's clock), else with the chip", () => {
+  const sp = chip({ tab: "sell", tab_at: 7 });
+  for (let i = 0; i <= 40; i++) {
+    const t = 6.8 + i * 0.025, tab = chipTabPose(sp, t), land = chipLand(t, 7);
+    assert.deepEqual([tab.u, tab.scale, tab.dy, tab.fade], [land.u, land.scale, land.dy, land.fade], `t=${t}`);
+  }
+  assert.equal(chipTabPose(sp, 6.99).fade, 0, "nothing before its word");
+  assert.equal(chipTabPose(chip({ tab: "buy" }), 4.3).at, 4, "no tab_at: it lands with the chip");
+  assert.equal(chipTabPose(chip(), 9), null);
+  assert.equal(chipTabPose(chip({ tab: "hold" }), 9), null, "an unknown tab is the compiler's refusal, and paints nothing");
+  assert.equal(chipTabPose(chip({ tab: 120 }), 9), null);
+});
+
+test("T12 (acceptance 4, fix 1): SELL in the negative ink, BUY in the positive, the word at the s90 floor, the PILL hugging it", () => {
+  const s = chipTabPose(chip({ tab: "sell" }), 9), b = chipTabPose(chip({ tab: "buy" }), 9);
+  assert.equal(s.fill, CHIP.TAB_INK.sell);
+  assert.equal(b.fill, CHIP.TAB_INK.buy);
+  assert.equal(CHIP.TAB_INK.sell, "#FF4D4D");
+  assert.equal(CHIP.TAB_INK.buy, "#3DDC84");
+  assert.deepEqual([s.word, b.word], ["SELL", "BUY"]);
+  assert.deepEqual(Object.keys(CHIP.TAB_EM).sort(), Object.keys(CHIP.TAB_INK).map((k) => k.toUpperCase()).sort(), "every tab word has its measured advance");
+  assert.ok(CHIP.TAB_TYPE >= 59.08, "the s90 floor");
+  for (const tab of [s, b]) assert.ok(near(tab.w, CHIP.TAB_EM[tab.word] * CHIP.TAB_TYPE + 2 * CHIP.TAB_PAD, 1e-9), "the pill hugs its word");
+  assert.ok(b.w <= CHIP.SIZE, "BUY is no wider than the card");
+  assert.ok((s.w - CHIP.SIZE) / 2 <= 6, `SELL overhangs a few px at most: ${(s.w - CHIP.SIZE) / 2}`);
+  const cap = CHIP.TAB_TYPE * 0.727, R = CHIP.TAB_H / 2;
+  assert.ok(CHIP.TAB_H > cap + 20, "the pill holds its word's caps with room");
+  // the capsule's round end clears the caps at the word's first and last column (TAB_PAD in from the end)
+  assert.ok(Math.sqrt(R * R - (R - CHIP.TAB_PAD) ** 2) > cap / 2, "the caps sit inside the capsule's ends");
+  assert.ok(CHIP.SIZE / 2 - R > CHIP.GLYPH / 2 - 3, "the pill's lower half stops at the glyph's box");
+  assert.ok(sealContrastOf(CHIP.TAB_TEXT, CHIP.TAB_INK.sell) >= 3 && sealContrastOf(CHIP.TAB_TEXT, CHIP.TAB_INK.buy) >= 3,
+    "the word reads on both fills (WCAG large text 3:1)");
+  for (const fill of Object.values(CHIP.TAB_INK))
+    assert.ok(sealContrastOf(CHIP.TAB_TEXT, fill) > sealContrastOf("#F2F2F2", fill), "charcoal beats chalk on " + fill);
+});
+const sealContrastOf = (a, b) => CHIPMOD.sealContrast(a, b);
+
+test("T12: the painter - the halo is the body's FIRST child (under the card, dimming with it); the tab is the group's LAST", () => {
+  const lit = glyphCtx(chip({ state: "lit" }), 9);
+  const body = lit.filter((e) => e.tag === "g")[1];
+  assert.equal(body.kids[0].cls, "chiphalo");
+  assert.equal(body.kids[1].cls, "chipcard");
+  const halo = body.kids[0];
+  assert.equal(halo.at.opacity, "1.000");
+  assert.ok(halo.at.style.includes("fill:none") && halo.at.style.includes("stroke:" + CHIP.LIT_INK), halo.at.style);
+  assert.equal(+halo.at.width, CHIP.SIZE + 2 * CHIP.LIT_PAD);
+  const tabbed = glyphCtx(chip({ tab: "sell", tab_at: 7 }), 7 + 2 * CHIP.LAND_S);
+  const g = tabbed[0];
+  const tg = g.kids[g.kids.length - 1];
+  assert.equal(tg.cls, "chiptab");
+  assert.deepEqual(tg.kids.map((e) => e.cls), ["chiptabbody", "chiptablab"]);
+  assert.equal(tg.kids[1].textContent, "SELL");
+  assert.equal(tg.at.transform, "translate(0 " + (-CHIP.SIZE / 2).toFixed(1) + ") scale(1.0000)", "centred ON the top edge, settled");
+  assert.equal(tg.kids[0].tag, "rect");
+  assert.equal(+tg.kids[0].at.rx, CHIP.TAB_H / 2, "a capsule: fully rounded ends");
+  assert.equal(+tg.kids[0].at.y, -CHIP.TAB_H / 2, "half above the edge, half on the card");
+  assert.ok(tg.kids[0].at.style.startsWith("fill:" + CHIP.TAB_INK.sell));
+  assert.ok(tg.kids[1].at.style.includes("font-size:" + CHIP.TAB_TYPE + "px"));
+  assert.equal(glyphCtx(chip({ tab: "sell", tab_at: 7 }), 6.9).filter((e) => e.cls === "chiptab").length, 0, "no tab before its word");
+});
+
+test("T12: absent the new keys the painter's output is today's - no halo, no check, no tab", () => {
+  for (const sp of [chip(), chip({ cross_at: 9 }), chip({ state: "crossed" }), chip({ readability: "landscape-phone" })]) {
+    const made = glyphCtx(sp, 9.4);
+    assert.deepEqual(made.filter((e) => ["chiphalo", "chiptab", "chiptabbody", "chiptablab", "chipcheck", "chipcheckdisc", "chipcheckmark"].includes(e.cls)), []);
+    assert.equal(made.filter((e) => e.cls === "sq" && e.at.style).length, 0, "the X keeps its class-only stroke");
+  }
+});
+
+test("T12: a seek IS the play with every state on", () => {
+  const sp = chip({ state: "lit", pulse: true, tick_at: 8, idle: "breath" });
+  const forward = [], backward = [];
+  for (let i = 0; i <= 300; i++) forward.push(JSON.stringify(chipStates(sp, i / 20)));
+  for (let i = 300; i >= 0; i--) backward.unshift(JSON.stringify(chipStates(sp, i / 20)));
+  assert.deepEqual(backward, forward);
+  const bs = chip({ tab: "buy", tab_at: 6 });
+  const fb = [], bb = [];
+  for (let i = 0; i <= 300; i++) fb.push(JSON.stringify(chipStates(bs, i / 20)));
+  for (let i = 300; i >= 0; i--) bb.unshift(JSON.stringify(chipStates(bs, i / 20)));
+  assert.deepEqual(bb, fb);
+  const src = chipStates.toString() + chipLitF.toString() + chipTickF.toString() + chipCheckPose.toString() + chipTabPose.toString() + chipPulseOnsets.toString();
+  assert.ok(!/Math\.random|Date\.now|new Date|performance\./.test(src), src);
+});

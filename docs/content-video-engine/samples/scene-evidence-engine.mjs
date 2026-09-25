@@ -17872,6 +17872,21 @@ async function mount(doc) {
                 half of CROSS_S, the second over the second, and the card dims to DIM as the X completes.
                 `state: "crossed"` with no `cross_at` means the chip LANDS already crossed (the board is read
                 back after the fact).
+       P71 T12 (was P69 T42; Bravos A36 / F3 / A14 / A59), THE STATES - each lands on its word, each a pure function of t:
+       lit    - `state: "lit"`: a HALO behind the card in the focus yellow (the ONE actor of a set the sentence is about,
+                BUB #20). It comes up with the landing's fade and HOLDS - an annotation, 0 events (E99 s91). `pulse: true`
+                BLINKS it PULSE_N times from the settle - motion, one event per blink onset (E99 s99).
+       tick   - `tick_at` is the cross's sibling, drawn as Bravos draws it (HIS 06:13): a small DISC BADGE in the positive
+                ink centred ON the card's top edge, springing in on tick_at (chipLand's clock), its charcoal check drawn in
+                two strokes over CROSS_S (split by their length, one gesture). The card keeps its ink - a thing that held is
+                not dimmed - and the icon is never covered. A chip is ticked or crossed, never both (the compiler refuses
+                the pair), and a badge and a tab never share the top edge (refused too).
+       tab    - `tab: "sell" | "buy"` is a state PILL centred ON the card's top edge, half above it and half on it (JPN 04:08
+                / 05:34 - Bravos centres it on the tile): it lands on `tab_at` (else with the chip) on the badge spring,
+                SELL in the negative ink and BUY in the positive (E28's sign inks), its word at the s90 floor and the pill
+                hugging it. A tab names a MOVE, never a trade record: no number.
+       None of the three is a stamped chip's: a seal carries its verdict in its ring text (E99 s121), and the compiler
+       refuses a state on the stamp form by name. Absent, the chip paints exactly what it painted.
      Nothing is stored: every visual reads from t, sp.at and sp.cross_at, so a scrubbed frame is the played
      frame. The glyph is a SOURCED icon (assets/icons, A2a provenance) carried in the asset map as `icon:<name>`;
      this module never invents geometry. The dials below are ours to tune (42 s42.5), not findings. */
@@ -17891,6 +17906,30 @@ async function mount(doc) {
     FADE_S: 0.14,     /* the opacity ramp, the dock's DOCK_FADE_S 0.12 - never a pop out of nothing */
     CROSS_S: 0.5,     /* the X's two strokes together */
     DIM: 0.55,        /* what a crossed chip dims to - struck through, still legible (it is still one of the set) */
+    /* P71 T12: THE STATES' DIALS - ours to tune (42 s42.5), not findings, except where a line names its source */
+    LIT_INK: "#F5B72E",   /* the halo's ink: the focus yellow, the template's .sq / .chiplab sunflower (pinned by a test) - never the seal's gold */
+    LIT_PAD: 12,          /* the halo's outset from the card's edge, stage px */
+    LIT_W: 5,             /* its stroke: the .sq hand's width */
+    LIT_GLOW: 18,         /* its glow: a drop-shadow in the same ink (lpBloom's form, as flow's token halo), px */
+    LIT_GLOW_A: 0.85,     /* ... at this alpha */
+    PULSE_N: 3,           /* `pulse: true`: the halo blinks this many times ... */
+    PULSE_S: 0.5,         /* ... each blink this long (a dip and back), the first from the settle (at + LAND_S) */
+    PULSE_LOW: 0.2,       /* ... down to this share of the halo at the blink's middle */
+    CHECK_D: 0.224,       /* the check badge's diameter in card sides [MEASURED: Bravos HIS 06:13, three tiles - disc 37 / 36 / 37 px on
+                             tiles 164 / 163 / 165 px (0.226 / 0.221 / 0.224), each disc's centre ON the tile's top edge (-1 / 0 / 0 px)
+                             and on its centre line (0.5 / 0.5 / 0 px) - scratchpad/p71-t12/logs/measure-his-badge.json] */
+    TICK: Object.freeze([[-0.46, 0.02], [-0.14, 0.34], [0.46, -0.30]]),   /* the check's three points in the BADGE's radii, about its centre: the short down stroke, then the long up one */
+    TICK_W: 0.2,          /* the check's stroke, in the badge's radius (3.8 px on the 168 px card) */
+    TICK_INK: "#3DDC84",  /* the badge's fill: the template's --lp-pos (a thing that HELD reads at a glance; the X keeps the sunflower) */
+    CHECK_MARK: "#25313C", /* the check on the badge: charcoal, 7.43:1 on the positive ink (white is 1.78:1 there) */
+    TAB_TYPE: 59.08,      /* the tab's word: the s90 phone floor [DERIVED: ledger_page.CARD_TYPE_PX, 12 * 1920 / 390] */
+    TAB_H: 70,            /* the pill's height: Bravos's pill over its caps (JPN 04:08: 26 px over 16 px caps, 1.625) x our caps (0.727 em
+                             of 59.08 = 42.95 px), rounded [MEASURED: scratchpad/p71-t12/logs/measure-jpn-pill.json] */
+    TAB_PAD: 14,          /* the room each side of the word, trimmed from Bravos's 0.27 of the height so the pill hugs its word: BUY
+                             153 px on the 168 px card, SELL 179 px (5.5 px over each side); at 12 the L's foot ran into the capsule's end */
+    TAB_INK: Object.freeze({ sell: "#FF4D4D", buy: "#3DDC84" }),   /* E28's sign inks: the template's --lp-neg / --lp-pos (pinned by a test) */
+    TAB_TEXT: "#25313C",  /* the word on the tab: charcoal, the ink with the higher WCAG contrast on BOTH fills (pinned by a test) */
+    TAB_EM: Object.freeze({ SELL: 2.56, BUY: 2.12 }),   /* the word's advance in em at weight 700 [MEASURED: getComputedTextLength in the golden's own page, SELL 151.0 / BUY 124.75 px at 59.08 px - scratchpad/p71-t12/logs/measure-tab-word.json] - sizes the tab */
   });
 
   /* OPT-IN STAMP FORM (P62): an approved woodblock raster prop freely placed on a
@@ -18023,6 +18062,68 @@ async function mount(doc) {
 
   /* the two strokes of the X from the cross's fraction: the first over its first half, the second over the second */
   const chipStrokes = (f) => [chip01(f * 2), chip01(f * 2 - 1)];
+
+  /* P71 T12: THE TICK at t in [0, 1] - the cross's sibling on its own field: 0 until tick_at, 1 CROSS_S later, and 0 on a
+     chip that names no tick_at (there is no "lands ticked" state). */
+  const chipTickF = (sp, t, o = {}) => {
+    const P = Object.assign({}, CHIP, o);
+    if (sp.tick_at == null || !Number.isFinite(+sp.tick_at)) return 0;
+    return chip01((t - +sp.tick_at) / P.CROSS_S);
+  };
+
+  /* the check's two strokes from the tick's fraction, split by their LENGTHS so the hand moves at one speed through the
+     knee (the X's strokes are equal, so halves are the same law there) */
+  const chipTickStrokes = (f, o = {}) => {
+    const K = o.TICK || CHIP.TICK;
+    const l1 = Math.hypot(K[1][0] - K[0][0], K[1][1] - K[0][1]), l2 = Math.hypot(K[2][0] - K[1][0], K[2][1] - K[1][1]);
+    const d = chip01(f) * (l1 + l2);
+    return [chip01(d / l1), chip01((d - l1) / l2)];
+  };
+
+  /* P71 T12: THE LIT HALO. The blink onsets of a `pulse: true` lit chip (none otherwise): PULSE_N of them, from the settle
+     (at + LAND_S), PULSE_S apart - the gate credits one event at each (gate_motion_density, the chip's "pulse" edge). */
+  const chipPulseOnsets = (sp, o = {}) => {
+    const P = Object.assign({}, CHIP, o);
+    if (!(sp && sp.state === "lit" && sp.pulse === true)) return [];
+    return Array.from({ length: P.PULSE_N }, (_, k) => +sp.at + P.LAND_S + k * P.PULSE_S);
+  };
+  /* ... and its level at t in [0, 1]: 0 on a chip that is not `state: "lit"`; else the landing's fade, each blink dipping
+     it to PULSE_LOW and back on a sine square, then holding at 1. */
+  const chipLitF = (sp, t, o = {}) => {
+    const P = Object.assign({}, CHIP, o);
+    if (!(sp && sp.state === "lit")) return 0;
+    const fade = chipLand(t, +sp.at, P).fade;
+    const on = chipPulseOnsets(sp, P).find((a) => t >= a && t < a + P.PULSE_S);
+    if (on === undefined) return fade;
+    const w = Math.sin(Math.PI * (t - on) / P.PULSE_S);
+    return fade * (1 - (1 - P.PULSE_LOW) * w * w);
+  };
+
+  /* P71 T12: THE CHECK BADGE's pose at t, or null without tick_at: the badge spring's landing (chipLand) on `tick_at`, its
+     diameter (CHECK_D of the card) and the check's two strokes (chipTickStrokes of chipTickF). */
+  const chipCheckPose = (sp, t, cardSize = CHIP.SIZE, o = {}) => {
+    const P = Object.assign({}, CHIP, o);
+    if (!sp || sp.tick_at == null || !Number.isFinite(+sp.tick_at)) return null;
+    const land = chipLand(t, +sp.tick_at, P), f = chipTickF(sp, t, P);
+    return { at: +sp.tick_at, u: land.u, scale: land.scale, dy: land.dy, fade: land.fade, d: P.CHECK_D * cardSize,
+             strokes: chipTickStrokes(f, P) };
+  };
+
+  /* P71 T12: THE TAB's pose at t, or null: the badge spring's landing (chipLand) on `tab_at`, else on the chip's own `at`;
+     its word (the move, upper-cased), its fill (the sign ink) and its width - the word's measured advance plus TAB_PAD
+     each side, so the pill hugs its word. */
+  const chipTabPose = (sp, t, cardSize = CHIP.SIZE, o = {}) => {
+    const P = Object.assign({}, CHIP, o);
+    if (!sp || typeof sp.tab !== "string" || !Object.prototype.hasOwnProperty.call(P.TAB_INK, sp.tab)) return null;
+    const at = sp.tab_at != null && Number.isFinite(+sp.tab_at) ? +sp.tab_at : +sp.at;
+    const land = chipLand(t, at, P), word = sp.tab.toUpperCase();   /* TAB_EM holds every word TAB_INK admits */
+    return { at, u: land.u, scale: land.scale, dy: land.dy, fade: land.fade, word, fill: P.TAB_INK[sp.tab],
+             w: P.TAB_EM[word] * P.TAB_TYPE + 2 * P.TAB_PAD, h: P.TAB_H };
+  };
+
+  /* P71 T12: the states at t, beside chipPose (which stays today's, field for field): the halo, the check and the tab. */
+  const chipStates = (sp, t, cardSize = CHIP.SIZE, o = {}) =>
+    ({ lit: chipLitF(sp, t, o), check: chipCheckPose(sp, t, cardSize, o), tab: chipTabPose(sp, t, cardSize, o) });
 
   /* P70 T1: does this chip LAND AS A STAMP? Only the stamp FORM takes the arrival (the compiler refuses it anywhere else,
      by name); a glyph chip, flow's node chips and the count array keep chipLand whatever they carry. */
@@ -18242,6 +18343,8 @@ async function mount(doc) {
     const body = el("g", "", g, { opacity: pose.dim.toFixed(3) });   /* the card dims under its own X; the X does not */
     const cardSize = phone ? 110 : CHIP.SIZE;
     const h = cardSize / 2;
+    const st = chipStates(sp, t, cardSize);   /* P71 T12: the halo, the tick, the tab - zero / null on a chip without them */
+    if (st.lit > 0) paintChipHalo(el, body, h, st.lit);
     const cardAttrs = { x: (-h).toFixed(1), y: (-h).toFixed(1), width: cardSize, height: cardSize, rx: CHIP.RX };
     if (phone) cardAttrs.style = "fill:#F4E6C7;stroke:#25313C;stroke-width:3";
     el("rect", "chipcard", body, cardAttrs);
@@ -18274,6 +18377,44 @@ async function mount(doc) {
        ["M" + a.toFixed(1) + " " + (-a).toFixed(1) + " L" + (-a).toFixed(1) + " " + a.toFixed(1), pose.strokes[1]]]
         .forEach(([d, f]) => { if (f > 0) drawOn(el("path", "sq", g, { d }), f); });
     }
+    if (st.check && st.check.fade > 0) paintChipCheck(el, g, h, st.check, drawOn);   /* P71 T12: the badge; the card keeps its ink */
+    if (st.tab && st.tab.fade > 0) paintChipTab(el, g, h, st.tab);
+  }
+
+  /* P71 T12: THE CHECK BADGE centred ON the card's top edge (HIS 06:13), in the chip's group (it rides the landing and the
+     idle): a disc in the positive ink, springing in about its centre, and its charcoal check drawn in two strokes. */
+  function paintChipCheck(el, g, h, ck, drawOn) {
+    const r = ck.d / 2, f = (v) => v.toFixed(1);
+    const cg = el("g", "chipcheck", g, { opacity: ck.fade.toFixed(3),
+      transform: "translate(0 " + f(-h + ck.dy) + ") scale(" + ck.scale.toFixed(4) + ")" });
+    el("circle", "chipcheckdisc", cg, { cx: 0, cy: 0, r: f(r), style: "fill:" + CHIP.TICK_INK + ";stroke:none" });
+    const K = CHIP.TICK.map(([x, y]) => f(x * r) + " " + f(y * r));
+    [["M" + K[0] + " L" + K[1], ck.strokes[0]], ["M" + K[1] + " L" + K[2], ck.strokes[1]]]
+      .forEach(([d, k]) => { if (k > 0) drawOn(el("path", "chipcheckmark", cg, { d, style: "fill:none;stroke:" + CHIP.CHECK_MARK
+        + ";stroke-width:" + f(CHIP.TICK_W * r) + ";stroke-linecap:round;stroke-linejoin:round" }), k); });
+  }
+
+  /* P71 T12: THE HALO, first in the card's body (so the card covers its inside and it dims with a cross): a rounded ring
+     LIT_PAD outside the card in the focus yellow, glowing in its own ink, at the level chipLitF gives. */
+  function paintChipHalo(el, body, h, level) {
+    const r = h + CHIP.LIT_PAD;
+    el("rect", "chiphalo", body, { x: (-r).toFixed(1), y: (-r).toFixed(1), width: (2 * r).toFixed(1), height: (2 * r).toFixed(1),
+      rx: CHIP.RX + CHIP.LIT_PAD, opacity: level.toFixed(3),
+      style: "fill:none;stroke:" + CHIP.LIT_INK + ";stroke-width:" + CHIP.LIT_W + ";filter:drop-shadow(0 0 " + CHIP.LIT_GLOW
+        + "px rgba(245,183,46," + CHIP.LIT_GLOW_A + "))" });
+  }
+
+  /* P71 T12: THE TAB, a rounded PILL centred ON the card's top edge - half above it, half on it - in the chip's group (it
+     rides the landing and the idle); the spring scales it about its own centre; its word's caps centred in it. */
+  function paintChipTab(el, g, h, tab) {
+    const w = tab.w, H = tab.h, f = (v) => v.toFixed(1);
+    const tg = el("g", "chiptab", g, { opacity: tab.fade.toFixed(3),
+      transform: "translate(0 " + f(-h + tab.dy) + ") scale(" + tab.scale.toFixed(4) + ")" });
+    el("rect", "chiptabbody", tg, { x: f(-w / 2), y: f(-H / 2), width: f(w), height: f(H), rx: f(H / 2),
+      style: "fill:" + tab.fill + ";stroke:none" });
+    const lab = el("text", "chiptablab", tg, { x: 0, y: f(0.3635 * CHIP.TAB_TYPE), "text-anchor": "middle",
+      style: "font-family:Inter,Arial,sans-serif;font-size:" + CHIP.TAB_TYPE + "px;font-weight:700;fill:" + CHIP.TAB_TEXT + ";stroke:none" });
+    lab.textContent = tab.word;
   }
 
   /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can

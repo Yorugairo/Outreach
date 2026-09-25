@@ -202,7 +202,17 @@ ICON_PREFIX = "icon:"
 ICON_NAME = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 ICON_TAGS = ("path", "circle", "rect", "line", "polyline", "polygon", "ellipse")
 ICON_ATTRS = ("d", "cx", "cy", "r", "rx", "ry", "x", "y", "width", "height", "x1", "y1", "x2", "y2", "points")
-CHIP_STATES = ("on", "crossed")   # a chip lands lit, or lands already crossed (a board read back after the fact)
+CHIP_STATES = ("on", "crossed", "lit")   # a chip lands on, or lands already crossed (a board read back after the fact),
+                                         # or (P71 T12, Bravos A36) lands LIT: the one actor of a set, a held halo (0 events, s91)
+# P71 T12 (was P69 T42): THE CHIP'S STATES beside `state` - `pulse` (a lit halo BLINKS, s99), `tick_at` (the cross's sibling,
+# a two-stroke check on a later word), `tab` / `tab_at` (a SELL / BUY tab on the card's top edge, A59). Each is the glyph
+# chip's only: the stamp form refuses them BY NAME (a seal carries its verdict in its ring text, E99 s121).
+CHIP_TABS = ("sell", "buy")
+CHIP_STATE_KEYS = ("pulse", "tick_at", "tab", "tab_at")
+CHIP_LAND_S, CHIP_CROSS_S = 0.55, 0.5          # species/chip.mjs CHIP.LAND_S / CROSS_S (test_chip_states pins them)
+CHIP_PULSE_N, CHIP_PULSE_S = 3, 0.5            # chip.mjs CHIP.PULSE_N / PULSE_S: the blinks run from at + LAND_S
+# a tab that is a NUMBER (a price, a size, a share count) would read as a trade record (A59's don't): refused by name
+CHIP_TAB_NUMBER = re.compile(r"^[\s$\u20ac\u00a3\u00a5+\-\u2212(]*\d[\d\s,.%)]*[kKmMbBxX]?\s*$")
 CHIP_FORMS = ("stamp",)            # opt-in raster prop form; absent keeps the sourced SVG chip contract
 STAMP_INKS = ("cream", "charcoal")
 STAMP_SIZE_MIN, STAMP_SIZE_MAX, STAMP_SIZE_DEFAULT = 180, 420, 260  # stage px
@@ -2660,6 +2670,10 @@ def _validate_chip(entry: dict) -> list[str]:
             errs.append("chip stamp: 'readability' is not supported - use ink: 'cream' or 'charcoal'")
         if "state" in entry or "cross_at" in entry:
             errs.append("chip stamp: state/cross_at are not supported - the prop leaves with its authored dur")
+        for key in CHIP_STATE_KEYS:   # P71 T12: the new states are the glyph chip's; a seal says its verdict in its ring text
+            if key in entry:
+                errs.append(f"chip stamp: {key} is not supported - a stamped chip is a seal, and a seal carries its verdict "
+                            "in its ring text (E99 s121), never a state; the states are the glyph chip's (P71 T12)")
         return errs
     if "readability" in entry and entry["readability"] != "landscape-phone":
         errs.append("chip: readability must be 'landscape-phone'")
@@ -2680,6 +2694,58 @@ def _validate_chip(entry: dict) -> list[str]:
             errs.append("chip: 'cross_at' must be a number (episode seconds, the word the claim is retracted on)")
         elif isinstance(entry.get("at"), (int, float)) and not isinstance(entry.get("at"), bool) and ca <= entry["at"]:
             errs.append(f"chip: cross_at {ca} is not after at {entry['at']} - a chip is crossed out on a LATER word")
+    return errs + _validate_chip_states(entry)
+
+
+def _chip_clock(entry: dict, key: str, what: str) -> list[str]:
+    """A state's own word: a number, after the chip's `at` (a LATER word) and inside its window (never after it left)."""
+    v = entry[key]
+    if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v):
+        return [f"chip: {key!r} must be a number (episode seconds, the word the chip is {what} on) - not {v!r}"]
+    at, dur = entry.get("at"), entry.get("dur")
+    if not isinstance(at, (int, float)) or isinstance(at, bool):
+        return []
+    if v <= at:
+        return [f"chip: {key} {v} is not after at {at} - a chip is {what} on a LATER word"]
+    if isinstance(dur, (int, float)) and not isinstance(dur, bool) and v >= at + dur:
+        return [f"chip: {key} {v} is not inside the chip's window [{at}, {round(at + dur, 3)}) - it would be {what} "
+                "after the chip has left"]
+    return []
+
+
+def _validate_chip_states(entry: dict) -> list[str]:
+    """P71 T12 (was P69 T42): the glyph chip's states beside `state`, each refused BY NAME when malformed or misplaced
+    (rule (h); at the base all four were accepted and ignored). `pulse` blinks a LIT chip's halo and must be true, with
+    room in the window for its blinks; `tick_at` and `cross_at` never share a chip ("a thing held or failed, not both");
+    `tab` names the move (sell | buy) and is never a number (A59: no trade record); `tab_at` times a tab the chip names."""
+    errs: list[str] = []
+    if "pulse" in entry:
+        if entry["pulse"] is not True:
+            errs.append(f"chip: pulse must be true (the lit halo blinks {CHIP_PULSE_N} times, E99 s99) - not {entry['pulse']!r}")
+        if entry.get("state") != "lit":
+            errs.append("chip: pulse blinks a LIT chip's halo (state: \"lit\"); a chip that is not lit has nothing to blink")
+        dur = entry.get("dur")
+        need = round(CHIP_LAND_S + CHIP_PULSE_N * CHIP_PULSE_S, 3)
+        if isinstance(dur, (int, float)) and not isinstance(dur, bool) and dur < need:
+            errs.append(f"chip: pulse needs {need} s of the chip's window (the landing {CHIP_LAND_S} s, then {CHIP_PULSE_N} "
+                        f"blinks of {CHIP_PULSE_S} s); dur {dur} ends before its last blink")
+    if "tick_at" in entry:
+        errs += _chip_clock(entry, "tick_at", "ticked")
+        if "cross_at" in entry or entry.get("state") == "crossed":
+            errs.append("chip: tick_at and cross_at (or state: \"crossed\") on one chip - a thing held or failed, not both")
+        if "tab" in entry:   # both are centred ON the card's top edge (the badge, HIS 06:13; the pill, JPN 04:08)
+            errs.append("chip: tick_at and tab on one chip - the check badge and the tab share the card's top edge; one mark per chip")
+    if "tab" in entry:
+        tab = entry["tab"]
+        if (isinstance(tab, (int, float)) and not isinstance(tab, bool)) or (isinstance(tab, str) and CHIP_TAB_NUMBER.match(tab)):
+            errs.append(f"chip: tab {tab!r} is a number - a tab names the move ({' | '.join(CHIP_TABS)}) and never implies a "
+                        "trade record (A59: a scenario illustration)")
+        elif tab not in CHIP_TABS:
+            errs.append(f"chip: tab must be one of {' | '.join(CHIP_TABS)} - not {tab!r}")
+    if "tab_at" in entry:
+        if "tab" not in entry:
+            errs.append(f"chip: tab_at times a tab, and the chip names none (tab: {' | '.join(CHIP_TABS)})")
+        errs += _chip_clock(entry, "tab_at", "tabbed")
     return errs
 
 

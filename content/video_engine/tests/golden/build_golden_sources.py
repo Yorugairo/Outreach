@@ -4483,6 +4483,37 @@ SURFACES.update({"drift-hold-tripwire": drift_hold_tripwire})
 FRAME_T.update({"drift-hold-tripwire": round(HOLD_ENTER + 0.25 * HOLD_LEN, 4)})   # u 0.25 of the hold (H: 608.20)
 
 
+# P71 T12 (was P69 T42; A59): THE SELL TAB - H row 10's "sell" (the head-fake: "So the obvious move looks obvious: sell
+# the steel", take `sell` 91.72-92.00) on the NVIDIA / hynix chip board (P70 T1's NVIDIA_CHIP, the Lucide `cpu` glyph, as
+# the door lands it). The board is recast on the golden's clock (the word at 8.0 = take - 83.72); the tab lands 0.1 s
+# into the word, on the badge spring, on ONE chip: SELL in the negative ink on NVIDIA's top edge, its word at the s90
+# floor. No H row adopts the move before HG1 (rule f).
+STATES_BOARD = [("cpu", "NVIDIA", 0.36), ("cpu", "SK HYNIX", 0.64)]
+STATES_SELL_WORD = 8.0
+STATES_TAB_AT = round(STATES_SELL_WORD + 0.1, 3)
+
+
+def chip_states_sell() -> tuple[dict, dict]:
+    """P71 T12: two chips land on two words, then on "sell" a SELL tab lands on the first one's top edge. Judged with the
+    tab settled on its spring (FRAME_T = tab_at + LAND_S + 0.3), both chips breathing (E49)."""
+    import build_scene_timeline_f as BST
+    species = [{"kind": "chip", "at": 5.0 + 1.2 * i, "dur": 10.0 - 1.2 * i, "icon": icon, "label": label,
+                "idle": "breath", "target": {"kind": "point", "x": x, "y": 0.62}}   # below the caption band, as chip-board's
+               for i, (icon, label, x) in enumerate(STATES_BOARD)]
+    species[0].update(tab="sell", tab_at=STATES_TAB_AT)
+    for sp in species:
+        assert not BST.validate_species([sp], (0, 0, 0), "plate-plain"), BST.validate_species([sp], (0, 0, 0), "plate-plain")
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    uris[BST.ICON_PREFIX + "cpu"] = BST.icon_geometry("cpu")
+    return _timeline("Golden: on 'sell' a SELL tab lands on the chip's edge (P71 T12)", scenes, {}, None), uris
+
+
+SURFACES.update({"chip-states-sell": chip_states_sell})
+FRAME_T.update({"chip-states-sell": round(STATES_TAB_AT + 0.55 + 0.3, 3)})   # the tab settled (LAND_S 0.55) and holding: 8.95
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:
