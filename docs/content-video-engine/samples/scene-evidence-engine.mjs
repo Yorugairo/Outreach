@@ -14835,11 +14835,22 @@ async function mount(doc) {
     if (PF.axisTags && PAGE_PAINTERS.axis_tag) PAGE_PAINTERS.axis_tag(PF.axisTags, t, st, PAGE_CTX);   /* P71 T9: the named year's pill on the axis and its drop guide (species/axis_tag.mjs) */
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
     for (const b of PF.brackets) b.glow.g.setAttribute("opacity", "0");
+    let titleRelit = false, titleLit = false;
     for (const rl of PF.relights) {
+      if (rl.ref === "title") titleRelit = true;
       const u = (t - rl.at) / Math.max(0.001, rl.dur || 1); if (u < 0 || u > 1) continue;
       const e = Math.sin(Math.PI * u);
       if (rl.ref === "bracket") { const b = PF.brackets[rl.index | 0]; if (b) b.glow.g.setAttribute("opacity", e.toFixed(3)); }
-      else if (rl.ref === "title") { const tg = PF.retitles.length ? PF.retitles[PF.retitles.length - 1].glyphs : (st.titleGlyphs || []); for (const g of tg) g.style.color = e > 0.02 ? PS.RELIGHT_COL : (g.__col || ""); }   /* P69 T86: back to a keyed span's token, else the title's own */
+      else if (rl.ref === "title" && e > 0.02) titleLit = true;
+    }
+    /* P71 T2 / R26-308: the title's colour is a pure function of t. On a page with a title relight EVERY title glyph is
+       written every frame - the sunflower on the title STANDING at t (the retitle chain's own clock below: the last whose
+       `at` <= t) while a relight is up, and otherwise the glyph's own (P69 T86: a keyed span's token, else ""; the
+       title's ink, which T37c's currentColor glow follows). The frame after a relight reads the same by seek or by play. */
+    if (titleRelit) {
+      const titles = [{ glyphs: st.titleGlyphs || [], at: -Infinity }, ...PF.retitles.map((r) => ({ glyphs: r.glyphs, at: r.sp.at }))];
+      const standing = titles.reduce((s, c) => (c.at <= t ? c : s), titles[0]);
+      for (const c of titles) for (const g of c.glyphs) g.style.color = titleLit && c === standing ? PS.RELIGHT_COL : (g.__col || "");
     }
     for (const b of PF.brackets) if (b.hidden) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); }   /* R26-28: a bracket whose data left the window stays hidden through the relight */
     if (PF.retitles.length) {
