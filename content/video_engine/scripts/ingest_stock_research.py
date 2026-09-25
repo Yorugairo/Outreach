@@ -9,10 +9,18 @@ Enforces retrieval standards per GEMINI.md, audit_docs_standard.py, and build_do
 4. Topical Recall:
    - Headings strictly name the concept in words it is searched by (0 generic headings).
    - Explicit bold labels (**Metric:**, **Moat:**, **Playbook:**, **Valuation:**) embedded in sections for term indexing.
-   - Standardized YAML frontmatter with title, category, tickers, source_id, and supersedes mapping.
+   - Standardized YAML frontmatter with title, category, tickers and source location (no Drive ids).
 5. Table Preservation:
    - All OpenXML tables converted to native Markdown tables.
 6. Rebuilds and verifies DOCS-INDEX.jsonl, DOCS-TOPICS.jsonl, and research provenance.
+7. Keeps its own scrub (R26-254 (1), the operator 2026-09-22: "you can scrub drive id's and term-sheet references"):
+   - writes no Google Drive id or Drive URL anywhere (no source_id / supersedes, no id or parent column, no Drive
+     inventory json), and verifies every document before it is written;
+   - REFUSES an offering document (a term sheet, a PPM, a subscription document) by its file name or title, and drops
+     an inventory row that names one;
+   - FAILS a docket whose body is a Drive SEARCH LISTING (third-party records, not research) instead of writing it;
+     the run exits 1 when any docket failed.
+   It reads the operator's named folder (SOURCE_DIR, `*.docx`, not recursive) and nothing else.
 """
 from __future__ import annotations
 
@@ -24,15 +32,13 @@ import zipfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 SOURCE_DIR = Path(r"C:\Users\Snipe\Downloads\Stock research and ideas")
 REPO_ROOT = Path(__file__).resolve().parents[3]  # C:\Users\Snipe\Downloads\Outreach Program
 TARGET_MARKETS_DIR = REPO_ROOT / "docs" / "research" / "markets" / "sovereign-compute"
 RUNS_DIR = REPO_ROOT / "docs" / "research" / "runs" / "sovereign-compute-2026-09"
-
-TARGET_MARKETS_DIR.mkdir(parents=True, exist_ok=True)
-RUNS_DIR.mkdir(parents=True, exist_ok=True)
 
 NS = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
 
@@ -66,6 +72,67 @@ DOCKET_STEMS = {
 }
 
 
+# --- R26-254 (1): the scrub the ingester keeps ---------------------------------------------------------------------
+
+DRIVE_URL = re.compile(r"(?:https?://)?(?:docs|drive)\.google\.com/[^\s)\]>'\"`|]*", re.IGNORECASE)
+DRIVE_TOKEN = re.compile(r"(?<![A-Za-z0-9_-])[A-Za-z0-9_-]{19,}(?![A-Za-z0-9_-])")
+DRIVE_URL_MARK = "[Drive link removed]"
+DRIVE_ID_MARK = "[Drive id removed]"
+ID_SEGMENT_MIN = 6        # a Drive id has a run this long mixing lower, upper and digits; a file stem's words do not
+ID_BARE_MIN = 25          # ... or it is this long with few separators (a stem is many short words)
+ID_BARE_SEGMENT_MEAN = 10
+
+OFFERING_DOCUMENTS = (    # (the kind named in the refusal, the pattern over the file name or title, spaced)
+    ("term sheet", re.compile(r"\bterm\s*sheets?\b", re.IGNORECASE)),
+    ("PPM", re.compile(r"(?<!\d)(?<!\d )\bPPMs?\b")),   # case-sensitive: "5 ppm" / "20 PPM" is a purity, not an offering
+    ("PPM", re.compile(r"\b(?:private\s+placement|offering)\s+memorand", re.IGNORECASE)),
+    ("subscription", re.compile(r"\bsubscription\s+(?:agreement|document|doc|booklet|form|package)s?\b", re.IGNORECASE)),
+)
+
+SEARCH_HIT = re.compile(r"\bID:\s*[A-Za-z0-9_-]{10,}\s*\|\s*Title:")
+SEARCH_SNIPPET = "Snippet:"
+SEARCH_LISTING_MIN = 3    # the six listing dockets carry 103-141 hits each; the research dockets carry 0
+
+
+def _mixed(text: str) -> bool:
+    return bool(re.search(r"[a-z]", text) and re.search(r"[A-Z]", text) and re.search(r"[0-9]", text))
+
+
+def _is_drive_id(token: str) -> bool:
+    segments = [s for s in re.split(r"[_-]", token) if s]
+    if any(len(s) >= ID_SEGMENT_MIN and _mixed(s) for s in segments):
+        return True
+    return len(token) >= ID_BARE_MIN and _mixed(token) and len(token) / max(len(segments), 1) >= ID_BARE_SEGMENT_MEAN
+
+
+def drive_refs(text: str) -> list[str]:
+    """Every Drive URL and Drive-id-shaped token in `text`, in order. Empty means the text is clean."""
+    urls = DRIVE_URL.findall(text)
+    rest = DRIVE_URL.sub(" ", text)
+    return urls + [tok for tok in DRIVE_TOKEN.findall(rest) if _is_drive_id(tok)]
+
+
+def scrub_drive_refs(text: str) -> str:
+    """The text with each Drive URL and Drive id replaced by a mark that names what was removed."""
+    text = DRIVE_URL.sub(DRIVE_URL_MARK, text)
+    return DRIVE_TOKEN.sub(lambda m: DRIVE_ID_MARK if _is_drive_id(m.group(0)) else m.group(0), text)
+
+
+def offering_refusal(name: str, title: str) -> str | None:
+    """The kind of offering document a file name or title names (`term sheet`, `PPM`, `subscription`), else None."""
+    for text in (name, title):
+        spaced = re.sub(r"[_.\-]+", " ", text or "")
+        for kind, pattern in OFFERING_DOCUMENTS:
+            if pattern.search(spaced):
+                return kind
+    return None
+
+
+def search_listing(text: str) -> bool:
+    """True when the body is a Drive search listing (`ID: .. | Title: .. Snippet: ..` records), not a document."""
+    return min(len(SEARCH_HIT.findall(text)), text.count(SEARCH_SNIPPET)) >= SEARCH_LISTING_MIN
+
+
 def clean_heading(h_text: str, doc_title: str) -> str:
     stripped = re.sub(r"^[0-9IVX\.\-§\s]+", "", h_text).strip()
     s_lower = stripped.lower()
@@ -84,12 +151,12 @@ def clean_heading(h_text: str, doc_title: str) -> str:
 
 
 def extract_frontmatter_and_metadata(first_para: str) -> dict:
+    """The docket's own frontmatter. `source_id` is a Drive id and is never read; `supersedes` is kept only when it names
+    no Drive id (`None (Original unique document)`), as the 2026-09-22 scrub kept it (R26-254 (1))."""
     meta = {
         "title": "",
         "category": "General Equity & Sovereign Compute",
-        "source_id": "",
         "source_location": "",
-        "supersedes": "None",
         "ingestion_target": "LLM Ingestion & Sovereign Research Repository",
     }
     title_m = re.search(r'title:\s*"([^"]+)"', first_para)
@@ -102,16 +169,12 @@ def extract_frontmatter_and_metadata(first_para: str) -> dict:
     if cat_m:
         meta["category"] = cat_m.group(1)
 
-    src_m = re.search(r'source_id:\s*"([^"]+)"', first_para)
-    if src_m:
-        meta["source_id"] = src_m.group(1)
-
     loc_m = re.search(r'source_location:\s*"([^"]+)"', first_para)
     if loc_m:
         meta["source_location"] = loc_m.group(1)
 
     sup_m = re.search(r'supersedes:\s*"([^"]+)"', first_para)
-    if sup_m:
+    if sup_m and not drive_refs(sup_m.group(1)):
         meta["supersedes"] = sup_m.group(1)
 
     return meta
@@ -157,11 +220,10 @@ def parse_docket_file(clean_stem: str, meta: dict, raw_text: str) -> str:
         f"The sovereign compute research ledger establishes the institutional lineage, metadata bindings, and upstream source document docket for this research domain.",
         "",
         "## 1. Docket Metadata & Sovereign Classification",
-        f"This docket registers the upstream Google Drive source document (`{meta.get('source_id', 'N/A')}`) under the `{meta.get('category', 'Equity Research')}` domain for sovereign compute intelligence.",
+        f"This docket registers the upstream Google Drive source document under the `{meta.get('category', 'Equity Research')}` domain for sovereign compute intelligence.",
         "",
-        f"- **Primary Source ID:** `{meta.get('source_id', 'N/A')}`",
         f"- **Source Location:** `{meta.get('source_location', 'N/A')}`",
-        f"- **Supersedes:** `{meta.get('supersedes', 'None')}`",
+        *([f"- **Supersedes:** `{meta['supersedes']}`"] if meta.get("supersedes") else []),
         f"- **Ingestion Target:** `{meta.get('ingestion_target', 'Sovereign Research Repository')}`",
         f"- **Auditor:** Outreach Program Sovereign Research Librarian",
         f"- **Audit Date:** 2026-09-20",
@@ -171,11 +233,15 @@ def parse_docket_file(clean_stem: str, meta: dict, raw_text: str) -> str:
         "",
     ]
 
+    in_folder_matches = [(d_title, d_mime, d_mod) for _id, d_title, d_mime, d_mod in in_folder_matches
+                         if offering_refusal(d_title, "") is None]
+    outside_folder_matches = [(d_title, d_mime, d_mod) for _id, d_title, _parent, d_mime, d_mod in outside_folder_matches
+                              if offering_refusal(d_title, "") is None]
     if in_folder_matches:
-        lines.append("| Title | Document Type | Google Drive ID | Modified Timestamp |")
-        lines.append("|---|---|---|---|")
-        for d_id, d_title, d_mime, d_mod in in_folder_matches:
-            lines.append(f"| {d_title.strip()} | `{d_mime.strip()}` | `{d_id.strip()}` | {d_mod.strip()} |")
+        lines.append("| Title | Document Type | Modified Timestamp |")
+        lines.append("|---|---|---|")
+        for d_title, d_mime, d_mod in in_folder_matches:
+            lines.append(f"| {d_title.strip()} | `{d_mime.strip()}` | {d_mod.strip()} |")
     else:
         lines.append("- No internal research folder overrides identified in docket manifest.")
 
@@ -187,10 +253,10 @@ def parse_docket_file(clean_stem: str, meta: dict, raw_text: str) -> str:
     ])
 
     if outside_folder_matches:
-        lines.append("| Title | Parent Folder | Document Type | Google Drive ID | Modified Timestamp |")
-        lines.append("|---|---|---|---|---|")
-        for d_id, d_title, d_parent, d_mime, d_mod in outside_folder_matches:
-            lines.append(f"| {d_title.strip()} | `{d_parent.strip()}` | `{d_mime.strip()}` | `{d_id.strip()}` | {d_mod.strip()} |")
+        lines.append("| Title | Document Type | Modified Timestamp |")
+        lines.append("|---|---|---|")
+        for d_title, d_mime, d_mod in outside_folder_matches:
+            lines.append(f"| {d_title.strip()} | `{d_mime.strip()}` | {d_mod.strip()} |")
     else:
         lines.append("- No external repository dependencies recorded in this docket.")
 
@@ -488,19 +554,42 @@ def convert_docx_to_markdown_structure(docx_path: Path) -> tuple[dict, str, list
         return meta, content_body, all_tables, raw_paras
 
 
-def main():
+def gate_docket(docx_path: Path, meta: dict, raw_combined: str) -> tuple[str, str] | None:
+    """R26-254 (1): ("REFUSED" | "FAIL", why) when this docket must not be written, else None."""
+    kind = offering_refusal(docx_path.stem, meta.get("title", ""))
+    if kind:
+        return "REFUSED", f"offering document ({kind}) - never ingested"
+    if search_listing(raw_combined):
+        hits = len(SEARCH_HIT.findall(raw_combined))
+        return "FAIL", (f"body is a Drive search listing ({hits} records), not research - not written; "
+                        "re-export the document itself")
+    return None
+
+
+def main() -> int:
+    """Ingest the operator's folder. Exit 1 when any docket FAILED (a refusal is the policy working, not a failure)."""
+    TARGET_MARKETS_DIR.mkdir(parents=True, exist_ok=True)
+    RUNS_DIR.mkdir(parents=True, exist_ok=True)
     print(f"=== Sovereign Compute Ingestion Engine (Target: {TARGET_MARKETS_DIR.relative_to(REPO_ROOT)}) ===")
     docx_files = sorted(SOURCE_DIR.glob("*.docx"))
     print(f"Found {len(docx_files)} source docx file(s) in {SOURCE_DIR}\n")
 
     catalog_entries = []
     screener_dataset = []
-    all_gdrive_docs = {}
+    refused: list[str] = []
+    failed: list[str] = []
 
     for idx, docx_path in enumerate(docx_files, 1):
         clean_stem = docx_path.stem.replace(".md", "")
         out_name = f"{clean_stem}.md"
         meta, body, tables, raw_paras = convert_docx_to_markdown_structure(docx_path)
+        raw_combined = " ".join(raw_paras)
+
+        verdict = gate_docket(docx_path, meta, raw_combined)
+        if verdict:
+            (refused if verdict[0] == "REFUSED" else failed).append(docx_path.name)
+            print(f"{verdict[0]} {docx_path.name}: {verdict[1]} (R26-254)")
+            continue
 
         tickers = extract_tickers_from_text(meta.get("title", "") + " " + body[:5000])
 
@@ -513,29 +602,15 @@ def main():
                 if len(clean_row) == len(header):
                     screener_dataset.append(dict(zip(header, clean_row)))
 
-        # Extract GDrive documents for inventory
-        raw_combined = " ".join(raw_paras)
-        doc_matches = re.findall(
-            r"ID:\s*([a-zA-Z0-9_\-]+)\s*\|\s*Title:\s*([^|]+?)\s*\|\s*Parent:\s*([^|]+?)\s*\|\s*Mime:\s*([^|]+?)\s*\|\s*Mod:\s*([0-9T:\.\-Z]+)",
-            raw_combined,
-        )
-        for d_id, d_title, d_parent, d_mime, d_mod in doc_matches:
-            all_gdrive_docs[d_id] = {
-                "id": d_id,
-                "title": d_title.strip(),
-                "parent": d_parent.strip(),
-                "mime": d_mime.strip(),
-                "mod": d_mod.strip(),
-            }
-
+        # R26-254 (1): no Drive inventory json and no source_id (the ids the 2026-09-22 scrub removed); supersedes only
+        # when it names no Drive id
         frontmatter = [
             "---",
             f'title: "{meta.get("title", clean_stem)}"',
             f'category: "{meta.get("category", "General Equity")}"',
             f'tickers: {json.dumps(tickers)}',
-            f'source_id: "{meta.get("source_id", "N/A")}"',
             f'source_location: "{meta.get("source_location", "N/A")}"',
-            f'supersedes: "{meta.get("supersedes", "None")}"',
+            *([f'supersedes: "{meta["supersedes"]}"'] if meta.get("supersedes") else []),
             f'ingestion_target: "{meta.get("ingestion_target", "Sovereign Research Repository")}"',
             f'date: "2026-09-20"',
             f'auditor: "Outreach Program Sovereign Research Librarian"',
@@ -560,7 +635,12 @@ def main():
             else:
                 body_content = body
 
-        full_md_doc = "\n".join(frontmatter) + body_content.strip() + "\n"
+        full_md_doc = scrub_drive_refs("\n".join(frontmatter) + body_content.strip() + "\n")
+        left = drive_refs(full_md_doc)
+        if left:   # the scrub is verified before anything is written; a miss is a FAIL, never a silent write
+            failed.append(docx_path.name)
+            print(f"FAIL {docx_path.name}: {len(left)} Drive reference(s) survived the scrub - not written (R26-254)")
+            continue
 
         # Write Tier 2 raw extract
         tier2_path = RUNS_DIR / f"raw_{clean_stem}.md"
@@ -576,13 +656,11 @@ def main():
             "title": meta.get("title", clean_stem),
             "category": meta.get("category", "General Equity"),
             "tickers": tickers,
-            "source_id": meta.get("source_id", "N/A"),
-            "supersedes": meta.get("supersedes", "None"),
             "tables": len(tables),
             "chars": len(full_md_doc),
         })
 
-        print(f"[{idx:02d}/32] Ingested -> docs/research/markets/sovereign-compute/{out_name} ({len(full_md_doc):,} chars, {len(tickers)} tickers)")
+        print(f"[{idx:02d}/{len(docx_files)}] Ingested -> docs/research/markets/sovereign-compute/{out_name} ({len(full_md_doc):,} chars, {len(tickers)} tickers)")
 
     if screener_dataset:
         csv_path = RUNS_DIR / "screener_metrics.csv"
@@ -595,17 +673,37 @@ def main():
         json_path.write_text(json.dumps(screener_dataset, indent=2), encoding="utf-8")
         print(f"\n[OK] Wrote screener dataset ({len(screener_dataset)} tickers) to {csv_path.name} & {json_path.name}")
 
-    if all_gdrive_docs:
-        gdrive_json_path = RUNS_DIR / "google_drive_docket_301.json"
-        gdrive_json_path.write_text(json.dumps(list(all_gdrive_docs.values()), indent=2), encoding="utf-8")
-        print(f"[OK] Wrote Google Drive inventory ({len(all_gdrive_docs)} docs) to {gdrive_json_path.name}")
+    write_catalog(catalog_entries)
+    print(f"\ningest_stock_research: {len(catalog_entries)} written, {len(refused)} refused, {len(failed)} failed")
+    return 1 if failed else 0
 
-    # Build Master Catalog
+
+def keep_written_links(lines: list[str], written: set[str]) -> list[str]:
+    """The catalog's hand-written lines, pointing only at documents this run wrote: a `Primary Document` line keeps its
+    written links (dropped when none is left); any other line linking an unwritten document is dropped."""
+    link = re.compile(r"\[`?([^`\]]+\.md)`?\]\(\./([^)]+\.md)\)")
+    out = []
+    for line in lines:
+        targets = [m.group(2) for m in link.finditer(line)]
+        if not targets or all(t in written for t in targets):
+            out.append(line)
+            continue
+        if line.startswith("- **Primary Document"):
+            head, _, rest = line.partition(":** ")
+            kept = [item for item in rest.split(", ") if any(t in written for t in (m.group(2) for m in link.finditer(item)))]
+            if kept:
+                out.append(f"{head}:** " + ", ".join(kept))
+    return out
+
+
+def write_catalog(catalog_entries: list[dict]) -> None:
+    count = len(catalog_entries)
+    written = {c["filename"] for c in catalog_entries}
     print("\n--- Generating Master Catalog (00_SOVEREIGN_COMPUTE_MASTER_CATALOG.md) ---")
     catalog_md = [
         "# Sovereign Compute & Accretive Capital Allocation — Master Research Catalog",
         "",
-        "*Ingestion Date: 2026-09-20 · Source: Google Drive Sovereign Compute Ingestion Docket · 32 Master Documents · 120 Screened Tickers*",
+        f"*Ingestion Date: 2026-09-20 · Source: Google Drive Sovereign Compute Ingestion Docket · {count} Master Documents · 120 Screened Tickers*",
         "",
         "## Sovereign Capital Architecture & Master Ingestion Scope",
         "",
@@ -615,10 +713,10 @@ def main():
         "",
         "---",
         "",
-        "## 1. Document Index (32 Master Research Documents)",
+        f"## 1. Document Index ({count} Master Research Documents)",
         "",
-        "| # | Document | Category | Tickers | Tables | GDrive Source ID |",
-        "|---|---|---|---|---|---|",
+        "| # | Document | Category | Tickers | Tables |",
+        "|---|---|---|---|---|",
     ]
 
     for c in catalog_entries:
@@ -626,7 +724,7 @@ def main():
         if not ticker_str:
             ticker_str = "—"
         catalog_md.append(
-            f"| {c['num']:02d} | [{c['filename']}](./{c['filename']}) | {c['category']} | `{ticker_str}` | {c['tables']} | `{c['source_id'][:16]}...` |"
+            f"| {c['num']:02d} | [{c['filename']}](./{c['filename']}) | {c['category']} | `{ticker_str}` | {c['tables']} |"
         )
 
     catalog_md.extend([
@@ -680,7 +778,7 @@ def main():
         "",
         "## 5. Retrieval & Agent Navigation",
         "",
-        "All 32 documents are registered in `docs/DOCS-INDEX.jsonl` and searchable via:",
+        f"All {count} documents are registered in `docs/DOCS-INDEX.jsonl` and searchable via:",
         "```bash",
         'python content/video_engine/scripts/docs_find.py "TeraWulf"',
         'python content/video_engine/scripts/docs_find.py "Centrus Energy"',
@@ -689,9 +787,9 @@ def main():
     ])
 
     catalog_path = TARGET_MARKETS_DIR / "00_SOVEREIGN_COMPUTE_MASTER_CATALOG.md"
-    catalog_path.write_text("\n".join(catalog_md) + "\n", encoding="utf-8")
+    catalog_path.write_text("\n".join(keep_written_links(catalog_md, written)) + "\n", encoding="utf-8")
     print(f"[OK] Generated Master Catalog at {catalog_path.relative_to(REPO_ROOT)}")
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

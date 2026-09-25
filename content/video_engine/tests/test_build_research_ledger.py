@@ -123,6 +123,40 @@ def test_the_generated_layers_never_count_as_a_citation(tree):
     assert record_of(BRL.build(tree), "orphan_run")["status"] == "orphan"
 
 
+# --- the bridge is transport, not research (R26-129) ----------------------------------------------
+
+def test_the_bridge_packet_queue_is_transport_and_never_counts_as_a_run(tmp_path):
+    """One real run and one bridge packet: the ledger counts 1 run. The daemon's queue grew 99 -> 140 files in a day, so
+    counting it re-staled the ledger every tick while the daemon ran."""
+    make_run(tmp_path, "real_run")
+    packet = tmp_path / BRL.RUNS_REL / "bridge" / "sent" / "0123456789ab"
+    packet.mkdir(parents=True)
+    (packet / "order.json").write_text('{"packetId": "0123456789ab"}\n', encoding="utf-8")
+
+    records = BRL.build(tmp_path)
+
+    assert [r["name"] for r in records] == ["real_run"]
+    assert len(records) == 1
+
+
+def test_a_new_packet_on_the_bridge_never_stales_the_ledger(tmp_path):
+    make_run(tmp_path, "real_run")
+    BRL.write(tmp_path)
+    packet = tmp_path / BRL.RUNS_REL / "bridge" / "queue" / "fedcba987654"
+    packet.mkdir(parents=True)
+    (packet / "order.json").write_text("{}\n", encoding="utf-8")
+
+    assert BRL.check(tmp_path) == []
+
+
+def test_the_md_says_the_bridge_is_skipped_as_transport(tmp_path):
+    make_run(tmp_path, "real_run")
+    BRL.write(tmp_path)
+
+    md = (tmp_path / BRL.MD_REL).read_text(encoding="utf-8")
+    assert "`docs/research/runs/bridge/`" in md and "transport" in md
+
+
 # --- the rule, and the artifacts ----------------------------------------------------------------
 
 def test_the_md_states_the_rule_at_the_top(tree):
