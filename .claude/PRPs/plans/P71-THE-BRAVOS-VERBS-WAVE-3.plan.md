@@ -1411,7 +1411,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T15: A dock over a chart chooses by intent - `under: hover` or `under: blur`, the author's choice by the beat's goal, over ledger pages; and R3, the term over the parked chart (was P69 T40; E99 s98, s124)
-- Status: pending
+- Status: done - lane B 8765bf8: `under: hover | blur` per dock (never a default), the veil clipped round the page's words (E52), M25 / M27 WARN only on the chart's data (the page's words stay FAIL), the choose-WARN only when a dock meets the plot (H: 8); two review rounds; goldens dock-hover-over-ledger / dock-blur-over-plate; recipe term-over-the-parked-chart (candidate)
 - Owner: implementation_luna (LANE B), then reviewer (a default change, and M25 / M27's rule for a dock over ink)
 - Depends on: P70 T8 committed (it owns `dock_opts` and `render()`'s dock-arrival branch); P70 T13 committed (the
   drift-hold `idle: hold` the hover holds on, and the compiler's dock-option validation, P70 plan `:1090`-`:1102`)
