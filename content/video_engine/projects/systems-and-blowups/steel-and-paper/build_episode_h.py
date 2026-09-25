@@ -2325,7 +2325,14 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_years = at("For years the")                       # the 2020-24 average draws across its years ...
     t_pocket_end = at("Cash on hand")                   # ... landing on its 2024 end as "out of pocket" ends
     t_bills = at("Then the bills got")                  # the object's own title is written back on the turn to borrowing
-    t_avg28 = at("twenty-eight billion")                  # the average's figure lands on its number
+    # the average's figure is written ON THE WAITING LINE across the question (P69 lane A job 5, E99 s120 - the squint
+    # test: a flat stroke on the floor of a 0-150 axis read EMPTY for ~5 s, 243.4-248.5): its write (DEBT_MARK_S) runs
+    # "decides it: who is paying" and is whole as "paying" is said - the question's own verb, what the builders borrowed
+    # while they paid out of pocket - which is also when the stub reaches the datum it stands on (DEBT_OPEN_CAP, 2021,
+    # MEASURED ~245.0-245.5: the page's entry draws the stub over ~2.3 s). "paying" alone would leave 243.1-245.6 bare.
+    # ONE figure: the voice's "twenty-eight billion" (260.74) then names the number already standing (E28: the sub says
+    # its basis, "2020-24 average"); a second write of the same number would print it twice.
+    t_avg28 = round(W.word_in(ws, "who is paying", "paying") + 0.45 - DEBT_MARK_S, 2)
     t_last_year = at("Last year: a")                    # the 2025 actual climbs on "Last year" ...
     t_121 = at("twenty-one billion")                    # ... landing, with its figure, on "twenty-one"
     t_tracking = at("tracking toward")                  # the two 2026E estimates draw ...
@@ -2675,7 +2682,7 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"kind": "build_to", "at": t_years, "dur": round(t_pocket_end - t_years, 2), "series": DEBT_ISSUANCE,
              "target": datum(DEBT_2024)},
             {"kind": "retitle", "at": t_bills, "dur": DEBT_TITLE_S, "text": DEBT["title"]},
-            {"kind": "figure", "at": t_avg28, "dur": DEBT_MARK_S, "target": datum(DEBT_MID_AVG, DEBT_ISSUANCE),
+            {"kind": "figure", "at": t_avg28, "dur": DEBT_MARK_S, "target": datum(DEBT_OPEN_CAP, DEBT_ISSUANCE),
              "text": DEBT_AVG_TEXT, "sub": DEBT_AVG_SUB},
             {"kind": "build_to", "at": t_last_year, "dur": round(t_121 + 0.4 - t_last_year, 2), "series": DEBT_ISSUANCE,
              "target": datum(DEBT_2025)},

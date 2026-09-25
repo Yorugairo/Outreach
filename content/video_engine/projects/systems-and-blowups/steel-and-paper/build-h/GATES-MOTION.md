@@ -3,14 +3,14 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\.claude\worktrees\fable-p68\content\video_engine\projects\systems-and-blowups\steel-and-paper\build-h ===
                runtime: 11:19
-         visual_events: 1930 (170.5/min)
+         visual_events: 1931 (170.5/min)
    caption_page_events: 2040 from 377 page(s) (324 anchor, 53 stage) + 1663 word arrival(s) - the stage register plus the pages a full-stage row PINNED to the anchor, 67 unpinned anchored page(s) not counted (R26-232)
         live_page_life: 304 event(s) every 1.613s inside s01 0:00-0:42, s04 0:56-1:03, s05 1:03-1:44, s08 2:42-3:15 - the PULSE rows M05/M10/M16 only (R26-232)
                  docks: 25
            dock_source: timeline
           ledger_pages: 13
   still_over_12s_share: 0%
-            per_minute: 0:00:180/4 1:00:146/4 2:00:150/3 3:00:192/2 4:00:196/2 5:00:111/4 6:00:147/5 7:00:188/3 8:00:161/4 9:00:199/3 10:00:194/3
+            per_minute: 0:00:180/4 1:00:146/4 2:00:150/3 3:00:192/2 4:00:197/2 5:00:111/4 6:00:147/5 7:00:188/3 8:00:161/4 9:00:199/3 10:00:194/3
 
   [FAIL ] M11 first chart ledger:s01 enters at 0.0s - outside 8-20s; first chart enters full and unannotated - declare a spotlight/callout/punch on its divergence within 1.5s AFTER the page's build lands at 4.8s (never over the build); window 8-20s (E24 long form: the 8s paradox is paid before the chart enters)
           E24 / doc 29 s9.29 (long form) + E44 (short) + operator 2026-09-20: the first chart enters 0:08-0:20, 0:00-0:10 on a short, or 0:00-0:03 when explicitly authored as an opening ledger action; it is annotated on its divergence, with a sound cue
@@ -54,7 +54,7 @@
           P48 (operator 2026-09-07): chart-to-chart transitions are a first-rate feature - a chart changes STATE and never cuts; E45/E50: never over a build, never inside the last 0.5 s of a page's life. R26-233 (2026-09-18): a `chart_to rescale` that carries `follow` is EXEMPT from the over-a-build check - a followed rescale runs on the followed LINE's own clock (the domain's top is that series' drawn extremum frame by frame, `build_scene_timeline_f.py:3796`), so the line's `build_to` IS its clock and "over the build" is the shape the move is FOR (the breakthrough bars' shape on a line page). The edge check still binds.
   [PASS ] M24 13 pointing species on moving-camera scenes, every target in frame when it fires
           P49 T6 (operator 2026-09-08: 'our engine ... doesn't know what it's seeing until it's rendered back'): a pointing species whose target is out of the camera's frame when it fires points at nothing - checked from the track before render
-  [PASS ] M28 no two of a page's own labels touch, and the value row keeps half a figure of air, over 273 instants probed (12,224 label pair(s) checked)
+  [PASS ] M28 no two of a page's own labels touch, and the value row keeps half a figure of air, over 273 instants probed (12,279 label pair(s) checked)
           R26-53 (the operator, 2026-09-11: "why are we now crashing text?") - the Tokyo Meta page's four values "$665 $633 $604 $577" touched each other and the callout's pill on bar 4 covered bar 3's label, on the approved build and on every side build before f67c5ed, and no row saw it: M25 reads cards over ink, M26 the value's height, and the probe's `overlaps` carried card-vs-ink and pill-vs-rail only. E28 (a chart reads right at a glance): no two of a page's OWN labels may sit on each other, and the row that fits them (lpFitValues / lpPillBand) leaves half a figure of air between them. From the page's own DOM (probe.py --gate)
   [PASS ] M29 1 transient cue(s) inside the drop window, each with a page or dock landing on it: landing 1 (throw, paper) at 9.62s gain 0.12 with s01 dock dock-h-railway-share throw lands at 9.66s (window 0:05-0:12, E44 s2a: the press cue at a cut is not a hook device)
           E44 s2a / R26-5 (operator 2026-09-06: "the camera flash sound maybe shouldn't be as aggressive"): the press / flash cue at a cut is not a hook device - at 0:09 it is the last thing a viewer hears before leaving, so no TRANSIENT cue lands inside 0:05-0:12 unless a PAGE lands with it (the page's own arrival or its chart's landing, within 1.5 s). E83 (operator 2026-09-13: "for sound cue timing on docks: we probably should have sound cues"): a DOCK's own landing licenses the cue the same way - a card that lands is an instant the cue marks, not a cut's flash. The beds are exempt: a bed marks no instant
@@ -84,5 +84,5 @@
 RESULT: 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO
 ```
 
-TIMELINE: steel-and-paper-h.timeline.json sha256:f7a5d6e72e42b92621f52b5358e8b2ca0e272a43323334f197dc85425f38e57a
+TIMELINE: steel-and-paper-h.timeline.json sha256:d6701f52ebf2992e6edf3c15d8a8538329ef16058d661c4b9d61f34aea993d0c
 VERDICT: FAIL (2 FAIL)

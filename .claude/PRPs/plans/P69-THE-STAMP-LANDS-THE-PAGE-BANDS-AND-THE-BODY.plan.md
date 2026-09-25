@@ -374,6 +374,8 @@ Every operator ruling that asks for something to be BUILT names its carrier here
 | s118 | a chart's names wear their series' ink, not plain white (axis grey, sunflower the one yellow) | T37b |
 | s119 | the page title takes one loud colour in both styles - Claude orange or the rose, picked from a side-by-side sheet | T37b (the sheet first) |
 | s120 | the squint test: shrunk to a thumbnail, a page still names its focus (contrast), keeps its story words legible, carries few words on the plot | T37b (the tool), T88 (the gate + the label diet) |
+| s121 | a seal-type stamp is a seal (P70) | P70 T1b |
+| s122 | the title is Claude orange (finalists #FF8A4C / #FEA87D) and Bravos-sized | T37c |
 
 **Harvest coverage** (added 2026-09-23; the operator: "yes, add all of the bravos slices"): every MISSING/PARTIAL harvest item is carried by T36-T50 / T51-T80 (or by T8-T10, T8b, T26a, T43b, T45 where they already name it) or listed as skipped below. Carriers by harvest id (`docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md`):
 - TYPE: T1 T44; T3 T45; T7 T46; T8 T62; T9 T47; T10 T48 (the honest donut; the decor use is skipped); T14 T43b; T21 T43; T23 T41; T24 T58; T26 T60; T27 T59; T29 T50 + T64; T30 T48; T31 T57; T32 T55; T33 T63; T34 T51; T35 T66 (s111); T38 T56; T39 T52; T40 T54; T46 T62.
@@ -1142,6 +1144,15 @@ verbatim tails and are left pending.
 - Write set: the gate (`gate_motion_density.py` or `gate_one_shot_floor.py` - pick and say why), `measure_line_bloom.py` (the downscaled read: render or downsample each held page to ~320 px wide; the lit/other contrast share, the title's and the named label's cap height in px, the count of words on the plot), tests; then lane A: the H pages' end tags shortened (a name, not a name + sub-label) where the gate asks
 - Acceptance: s120: measured on Bravos frames first (the T37 sheet's JPN 05:20 / 05:23.5 + three more Bravos line pages), then ours; thresholds from Bravos (E38); the solo golden and the H pages read at thumbnail width with the focus identifiable, the title and the named label legible, and the plot's word count within Bravos's; WARN first, FAIL on the operator's word; the parent reads the shrunk sheet ours beside Bravos
 - Validate: the squint gate's own test and `python content/video_engine/scripts/gate_motion_density.py` on the H timeline; the shrunk sheet read beside Bravos
+- Evidence: pending
+
+### T37c: The title is Claude orange and Bravos-sized (E99 s122)
+- Status: pending (lane B, after T37b)
+- Owner: implementation_luna
+- Depends on: T37b (`--lp-title-ink`, `measure_line_bloom.py`, the Bravos band)
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` and the player template (the title's size token for both page styles; `--lp-title-ink` default), `content/video_engine/scripts/measure_line_bloom.py` (a full-resolution title cap-height read: cap height / frame height), `content/video_engine/assets/bravos-line-bloom.v1.json` (the Bravos title size), `content/video_engine/scripts/build_scene_timeline_f.py` or `ledger_page.py` (the overrun WARN at the new size), tests, goldens re-pinned on purpose
+- Acceptance: s122: Bravos's title cap height measured as a fraction of frame height on the five band frames (and their title length in characters); ours set to that fraction in both styles (a title that overruns its band at the new size wraps to two lines or WARNs with numbers); a SHEET of the two orange finalists `#FF8A4C` and `#FEA87D` at the new size, both styles, 16:9 and phone 390 px, beside Bravos, for the operator's pick; then `--lp-title-ink` defaults to the pick
+- Validate: `python -m pytest content/video_engine/tests/test_line_bloom.py content/video_engine/tests/test_golden_frames.py -q` (each file its own process)
 - Evidence: pending
 
 ### T38: `axis_tag` + drop guides - the named year becomes a pill on the x-axis
