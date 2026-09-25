@@ -165,8 +165,8 @@ export const compareFrame = (sp, u) => {
             u >= 1 the comparator - the ends are the authored strings, as they are for the counter)
      sub    how far the comparator's LABEL has been written beneath: the re-draw splits into the number and its label
             on figure.mjs's own share (FIGURE.WRITE), and the label is then written on T12's own hand (compareGlyph),
-            which lands its last letter exactly as the window ends - figureSubGlyph's OVERLAP slack overruns the
-            figure's window and leaves its last glyph at 0.625, which on a label beside a 0.62 ghost is not a label
+            which lands its last letter exactly as the window ends - chosen when figureSubGlyph's 1 / n share left a
+            sub's last glyph at 0.625 (R26-314), which beside a 0.62 ghost is not a label; P71 T1 fixed that share
      ghost  the held metric's opacity: it arrives only once the hand has LANDED the comparator's own text (FIGURE.WRITE
             of the re-draw), so the two numbers are never both half-written */
 export const compareMorphFrame = (sp, u, form) => {

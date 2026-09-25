@@ -195,12 +195,48 @@ test("the sub writes over the remaining 0.4, starting where the figure's own wri
   assert.equal(figureSubGlyph(0.6, 0, 2), 0, "not a glyph of it before WRITE");
   assert.ok(figureSubGlyph(0.8, 0, 2) > 0, "... and it is running after");
   assert.ok(near(figureSubGlyph(0.9, 1, 2),
-                 clamp01((0.9 - 0.6 - 1 * (0.4 / 2)) / ((0.4 / 2) * 1.6))), "the inline expression");
-  /* the same overrun, and the SUB has no room after it to finish in: `u` is clamped at 1, so the last glyph of
-     a sub holds at 0.625 from the end of the word on. That is what the inline engine has always painted - it is
-     recorded here, not corrected: a value change is a golden change, and this promotion changes no pixel. */
-  assert.ok(near(figureSubGlyph(1, 1, 2), 0.625), "the sub's last glyph holds at 0.625 - the inline tail");
+                 clamp01((0.9 - 0.6 - 1 * (0.4 / 2.6)) / ((0.4 / 2.6) * 1.6))), "the share is 0.4 / (n + 0.6)");
+  /* R26-314 (P71 T1): the SUB has no room after it to finish in - `u` is clamped at 1 - so at the promotion's
+     share of 0.4 / n its last glyph held at 0.625 from the end of the word on, which is what the inline engine
+     had always painted (H row 10 read "averag" plus a dim "e"). The share is now 0.4 / (n + OVERLAP - 1), the
+     span's and the comparator's law, and the last glyph is whole exactly as the word ends - the assertion that
+     recorded the tail at 0.625 is inverted here, not deleted. */
+  assert.equal(figureSubGlyph(1, 1, 2), 1, "the sub's last glyph is whole at the word's end");
   assert.equal(figureSubGlyph(1, 0, 2), 1, "every glyph before it is fully in");
+});
+
+/* R26-314 (P71 T1): H row 10's "$28B a year" figure read "averag" plus a dim "e" from its word's end on. The law
+   the span (spanGlyph) and the comparator (compareGlyph) already carry: the share is SUB_WRITE / (n + OVERLAP - 1),
+   so the LAST glyph is fully in exactly when the word ends - never before, and never held part-written after. */
+const oldSubGlyph = (u, j, n) => clamp01((u - 0.6 - j * (0.4 / Math.max(1, n))) / ((0.4 / Math.max(1, n)) * 1.6));
+const oldFigGlyph = (u, j, n) => clamp01((u - j * (0.6 / Math.max(1, n))) / ((0.6 / Math.max(1, n)) * 1.6));
+const lcg = (seed) => () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+
+test("R26-314: the sub writes its last letter exactly when its word ends, for every length", () => {
+  for (let n = 1; n <= 40; n++) {
+    assert.equal(figureSubGlyph(1, n - 1, n), 1, `n=${n}: the last glyph is whole at the word's end`);
+    assert.ok(figureSubGlyph(0.99, n - 1, n) < 1, `n=${n}: ... and not before it - the hand still runs to the end`);
+  }
+});
+
+test("R26-314: every sub glyph is monotone in u and never less written than before the fix", () => {
+  for (let n = 1; n <= 40; n++) for (let j = 0; j < n; j++) {
+    let prev = -1;
+    for (let k = 0; k <= 400; k++) {
+      const u = k / 400, v = figureSubGlyph(u, j, n);
+      assert.ok(v >= prev, `n=${n} j=${j} u=${u}: monotone`);
+      assert.ok(v >= oldSubGlyph(u, j, n), `n=${n} j=${j} u=${u}: at or above the 1 / n share`);
+      prev = v;
+    }
+  }
+});
+
+test("R26-314: the figure's own line (figureGlyph) is untouched - byte-identical over 1000 samples", () => {
+  const r = lcg(314);
+  for (let i = 0; i < 1000; i++) {
+    const n = 1 + Math.floor(r() * 40), j = Math.floor(r() * n), u = r() * 1.2 - 0.1;
+    assert.equal(figureGlyph(u, j, n), oldFigGlyph(u, j, n), `u=${u} j=${j} n=${n}`);
+  }
 });
 
 // ---------------------------------------------------------------- the painter, on recorders, with no DOM
@@ -211,7 +247,7 @@ test("the painter writes the glyph opacities to three places, and nothing before
   paintFigure(fg, 12, null, { PS });
   assert.equal(fg.g.a.opacity, 1);
   assert.deepEqual(fg.lg.map((n) => n.a.opacity), ["1.000", "1.000", "1.000", "1.000"]);
-  assert.deepEqual(fg.sg.map((n) => n.a.opacity), ["1.000", "0.625"], "the sub's tail, as the inline code paints it");
+  assert.deepEqual(fg.sg.map((n) => n.a.opacity), ["1.000", "1.000"], "the sub is whole at the word's end (R26-314)");
   const mid = built();
   paintFigure(mid, 10.3, null, { PS });
   assert.equal(mid.lg[0].a.opacity, figureGlyph(0.15, 0, 4).toFixed(3), "the same number, written the same way");

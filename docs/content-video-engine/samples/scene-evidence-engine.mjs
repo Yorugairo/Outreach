@@ -13259,9 +13259,16 @@ async function mount(doc) {
     return fig01((u - j * per) / (per * FIGURE.OVERLAP));
   };
 
-  /* one glyph of the SUB: the same hand, over SUB_WRITE, starting where the figure's own write ended */
+  /* one glyph of the SUB: the same hand, over SUB_WRITE, starting where the figure's own write ended. R26-314 (P71
+     T1): the share is SUB_WRITE / (n + OVERLAP - 1), not SUB_WRITE / n - spanGlyph's and compareGlyph's law - so the
+     LAST glyph is fully in exactly when the word ends. At 1 / n it held at 0.625 from the word's end on, because `u`
+     is clamped at 1 and the sub has no room after it (H row 10's "$28B a year" read "averag" plus a dim "e"). A
+     smaller share only brings each glyph in earlier: no glyph is ever less written than it was. At the word's end
+     every glyph IS in (the last one lands at WRITE + per * (n - 1 + OVERLAP) = 1), so u >= 1 returns 1 exactly: the
+     float division lands a hair short of it for some n (0.9999999999999997 at n = 3), which the law does not mean. */
   const figureSubGlyph = (u, j, n) => {
-    const per = FIGURE.SUB_WRITE / Math.max(1, n);
+    if (u >= 1) return 1;
+    const per = FIGURE.SUB_WRITE / (Math.max(1, n) + FIGURE.OVERLAP - 1);
     return fig01((u - FIGURE.WRITE - j * per) / (per * FIGURE.OVERLAP));
   };
 
@@ -13453,8 +13460,8 @@ async function mount(doc) {
               u >= 1 the comparator - the ends are the authored strings, as they are for the counter)
        sub    how far the comparator's LABEL has been written beneath: the re-draw splits into the number and its label
               on figure.mjs's own share (FIGURE.WRITE), and the label is then written on T12's own hand (compareGlyph),
-              which lands its last letter exactly as the window ends - figureSubGlyph's OVERLAP slack overruns the
-              figure's window and leaves its last glyph at 0.625, which on a label beside a 0.62 ghost is not a label
+              which lands its last letter exactly as the window ends - chosen when figureSubGlyph's 1 / n share left a
+              sub's last glyph at 0.625 (R26-314), which beside a 0.62 ghost is not a label; P71 T1 fixed that share
        ghost  the held metric's opacity: it arrives only once the hand has LANDED the comparator's own text (FIGURE.WRITE
               of the re-draw), so the two numbers are never both half-written */
   const compareMorphFrame = (sp, u, form) => {
