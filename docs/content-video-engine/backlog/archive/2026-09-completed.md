@@ -258,3 +258,10 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-354 | A report-landed reply with no verdict up front fails tier 0. Closed by P72 T45. | lane A `d07fec2`: `verdict-up-front`, one repair. |
 | R26-355 | Astra packets land from their own reply.md. Closed by P72 T45. | lane A `d07fec2`: `bridge_watch.FILE_LANES`, the provenance checks; the three live packets closed by hand (their work in main). |
 | R26-340 | The bridge holds on a restart: one summary toast, no packet lost, echoed or sent down the wrong lane. Closed by P72 T44. | lane A `78c884f` (`test_bridge_restart.py`, the rebuilt 02:17 restart 10 toasts -> 1); the live daemon runs it from the merge to main. |
+| R26-206 | The landscape safe box. Closed by P72 T8. | lane B `02e9b83`: `--aspect 16:9`, the bottom 120 px measured on YouTube's player. |
+| R26-207 | The long-form floor names its reference. Closed by P72 T8. | lane B `02e9b83`: --reference required over 3:00; the SHORT caveat. |
+| R26-208 | M46 honest over 3:00. Closed by P72 T8. | lane B `02e9b83`: INFO until a long form is approved. |
+| R26-203 | The opening gate runs on its own take. Closed by P72 T8. | lane B `02e9b83`: a take under 0.95 in-order overlap is refused (H's borrowed take was `vo/`, not G's as the row said). |
+| R26-212 | The brand line in the long shape. Closed by P72 T8. | lane B `02e9b83`: S07 runs in both shapes. |
+| R26-242 | Cites resolve by row title. Closed by P72 T29. | lane B `47d87a0`: `resolve_cite`, the decoy-row test; 587 of 645 cites. |
+| R26-301 | The skeleton vocabulary's cites follow their rows. Closed by P72 T29. | lane B `47d87a0`. |
