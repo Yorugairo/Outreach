@@ -303,7 +303,7 @@ listed order.
 - Evidence: (2) APPROVAL, the operator 2026-09-24: `/prp-implement p70` (after the plan was presented READY WITH FIXES, fixes applied). (5) P69's nine stubs point here (this commit). (3) the register row names P70 on lane B (this commit). (4) queue row `p70-hg1-the-nine-verbs` added (this commit). (1) the base is re-captured per slice at dispatch. DEVIATION (the parent): T1 (the chip stamp) is dispatched on lane B ffa2877 BEFORE T37b lands - T1 owns `chip.mjs`, `_validate_chip`, the gate's `_landings` / `_arrivals` and the binder's chip branch, none of which T37b touches (T37b owns the series ink: `lpBloom`, the stroke, end tags, series names, the solo dials); T2-T9 wait for T37b as planned.
 
 ### T1: The chip lands as a stamp - `arrive: "stamp"` on the stamp-form chip, rendered both ways (was P69 T12)
-- Status: pending
+- Status: done - lane B `5c25444` (the chip lands as a stamp; frame-read, reviewed MERGE WITH FIXES applied)
 - Owner: implementation_luna (LANE B), then reviewer (the stamp, the gate, the sound)
 - Depends on: P70's base (T0); done P69 slices T2-T5 (the stamp as a landing), T26d `5c6871c` (the fit advises), T81
   `de6af2a`, T84 `e416df5`. Nothing in P70.
@@ -393,7 +393,7 @@ listed order.
 - Evidence: pending
 
 ### T1b: A seal-type stamp is a seal - the solid border, ring text on two half-arcs, the shockwave from the impact frame, the ink easing back (E99 s121)
-- Status: pending
+- Status: done - lane B `50b2f85` (the six fixes + the parent's no-squash default `CHIP_STAMP.SQUASH: 0`; 182/182 goldens, kinetics 727, test_stamp_is_a_seal 30; known gap: the impact ring inks charcoal on a dark non-ledger plate)
 - Owner: implementation_luna (LANE B), then reviewer (the stamp's law on every door)
 - Depends on: T1 integrated
 - Harvest: remotion-ui badge-stamp (RU-2) - the port's source `content/video_engine/remotion-ui/src/remotion/primitives/badge-stamp.tsx` (ringText / ringTextBottom, the border rings, the shockwave's start, the ink ease) and the component's docs https://remotionui.com/docs/components/badge-stamp; REUSE the port (`kinetics/stopaction.mjs` STAMP_ARRIVAL / stampRing / stampXf), never re-derive
@@ -404,8 +404,18 @@ listed order.
 - Validate: `node --test "content/video_engine/tests/kinetics/*.test.mjs"`, `python -m pytest content/video_engine/tests/test_the_stamp_arrival.py content/video_engine/tests/test_chip_stamp_arrival.py content/video_engine/tests/test_golden_frames.py -q` (each file its own process)
 - Evidence: pending
 
+### T1c: The seal's shockwave is gold; a bare prop's ring reads on any ground; the seal stays open (E99 s127 / s128)
+- Status: in_progress (dispatched 2026-09-24 on lane B 50b2f85, scratch patch)
+- Owner: implementation_luna (LANE B), then the parent's frame read
+- Depends on: T1b committed (`50b2f85`)
+- Harvest: the operator, 2026-09-24: "keep #E8B86D", "if reference is gold, make ours gold too" (s127); "i dont mind it being drawn over" (s128). T1b's finding: `RING_INK.ground` inks the ring charcoal on a dark non-ledger plate, where it nearly vanishes (`chip-stamp-seal-text`).
+- Write set: the stamp's impact-ring ink (`stampRing` / `RING_INK` in `kinetics/stopaction.mjs` and/or `species/chip.mjs`, the engine region via `sync_kinetics.py --write`, and the engine's dock-stamp ring paint if separate); the matching compiler constant in `build_scene_timeline_f.py` if one exists; the stamp tests; the re-pinned goldens (on purpose).
+- Acceptance: (1) a SEAL's shockwave is `CHIP_SEAL.GOLD` (#E8B86D), darkened on cream by the seal's own contrast law, timing unchanged; (2) a BARE PROP's stamp ring picks chalk or charcoal by the measured luminance of the ground under it (not by the world kind), so it holds contrast on cream, the charcoal ledger, a charcoal plate and a photo plate; (3) the seal has no fill (s128) - a test asserts the chart shows through; (4) a sheet: seal + bare prop at contact +0.05/+0.15/+0.30 s on cream, charcoal ledger, charcoal plate, a photo plate, with measured ring contrast; (5) byte-identical doors except ring pixels; goldens re-pinned on purpose only where a ring shows.
+- Validate: node `tests/kinetics/*.test.mjs`, `test_stamp_is_a_seal`, `test_chip_stamp_arrival`, `test_the_stamp_arrival`, `test_golden_frames`, `test_kinetics_sync`, each in its own process.
+- Evidence: pending
+
 ### T2: The schematic - a shape drawn with no data, carrying the narrative (was P69 T46)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-24 on lane B 50b2f85, scratch patch)
 - Owner: implementation_luna (LANE B)
 - Depends on: P70's base (T0), which carries T37b's bloom and T87's empty-plot gate; done P69 T36 `104af07` (the lit
   stretch), T50 `f63b569`. Nothing in P70.
@@ -485,7 +495,7 @@ listed order.
 - Evidence: pending
 
 ### T3: The fill gauge - one share of one whole fills a capsule on its word (was P69 T51)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-24 on lane B 50b2f85, scratch patch)
 - Owner: implementation_luna (LANE B), then reviewer (M26, a truth gate, must read the fill)
 - Depends on: P70's base (T0), which carries T85's stagger and T37b's series ink; done P69 T50 `f63b569`, T10b
   `91de567` (`bar_style=soft`), T8 (`longform`). Nothing in P70.
@@ -566,7 +576,7 @@ listed order.
 - Evidence: pending
 
 ### T4: Companion bars beside a held line - a recipe on the panels page, and the E79 WARN for one measure in two units (was P69 T52)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-24 on lane B 50b2f85, scratch patch)
 - Owner: implementation_luna (LANE B)
 - Depends on: P70's base (T0); done P69 T8b `7369f12`, T8c, T8d `91477ae`, T8e `eb58794` (the panels page, bars panels,
   first-reveal credit). Nothing in P70.
@@ -1043,7 +1053,7 @@ listed order.
 - Evidence: pending
 
 ### T10: The in-place badge swap on the chapter pill (was P69 T61, A44)
-- Status: blocked
+- Status: pending (UNBLOCKED 2026-09-24: BOOM read on real frames - A44 CONFIRMED in place at 02:27.0-02:27.5, "Dot-Com Bust" rolls into "Lost Decade" in the same pill; the 02:47-02:49 instance is NOT in place (old pill leaves, new one arrives) and is not a witness. `docs/research/runs/bravos-watch/jx3Ll-GJtMY/verify/VERIFY.md`, frames `A44_A45_T37_swap1/frames/t02m27.0s.jpg`)
 - Owner: implementation_luna (LANE B)
 - Depends on: P70 T9 merged. **Blocker:** harvest v2 `:318` says "Verify the Gemini-only timings for BOOM (`jx3Ll-GJtMY`
   has no frames on disk) before any of R32 / R36 / A44 / A54 / A56 is built from them". `docs/research/runs/bravos-watch/jx3Ll-GJtMY/`
