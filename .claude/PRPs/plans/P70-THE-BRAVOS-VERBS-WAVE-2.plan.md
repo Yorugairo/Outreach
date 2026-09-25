@@ -576,7 +576,7 @@ listed order.
 - Evidence: pending
 
 ### T4: Companion bars beside a held line - a recipe on the panels page, and the E79 WARN for one measure in two units (was P69 T52)
-- Status: in_progress (dispatched 2026-09-24 on lane B 50b2f85, scratch patch)
+- Status: done - lane B `d0dd19b` (recipe candidate + the E79 one-measure-two-units WARN + `recipe_walk` names `panel_focus`; golden `companion-railway-yardstick`; H door identical. Acceptance 2 (the bars build IN VIEW) NOT met: a hidden panel builds while invisible - R26-315, strict xfail; the phone preset collapse R26-316; doors don't print the WARN R26-317)
 - Owner: implementation_luna (LANE B)
 - Depends on: P70's base (T0); done P69 T8b `7369f12`, T8c, T8d `91477ae`, T8e `eb58794` (the panels page, bars panels,
   first-reveal credit). Nothing in P70.
