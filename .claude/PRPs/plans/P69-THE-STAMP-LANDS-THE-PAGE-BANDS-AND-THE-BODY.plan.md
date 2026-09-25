@@ -1114,7 +1114,7 @@ verbatim tails and are left pending.
 
 
 ### T37: `solo` - the on-word isolate for a line or a bar (dim the rest)
-- Status: pending
+- Status: done (f8f6b06)
 - Owner: implementation_luna
 - Depends on: T36; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1130,7 +1130,7 @@ verbatim tails and are left pending.
 
 
 ### T37b: The lines bloom and their names wear their ink - a primary line is emissive, a solo widens the gap, labels take their series' ink, the title takes a loud colour picked side by side (E99 s117, s118, s119)
-- Status: pending (lane B, after T37)
+- Status: done (557e1dc)
 - Owner: implementation_luna
 - Depends on: T37 (solo); R26-228's bloom (`lpBloom`, CAPABILITIES :76); E67's inks (CAPABILITIES :35)
 - Write set: `content/video_engine/scripts/measure_line_bloom.py` (new: reads a frame + a line's pixels, reports core luminance, ink saturation, halo radius at half-intensity, lit/muted luminance ratio), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the series stroke's bloom layers; the solo's lit and muted dials), `content/video_engine/scripts/species/solo.mjs` (its dials), tests, goldens re-pinned where lines change
@@ -1138,7 +1138,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T88: The squint test - a page shrunk to a thumbnail still says what it is about (E99 s120)
-- Status: pending (lane B gate + lane A label diet; after T37b)
+- Status: moved to P71 T7 + T8 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna
 - Depends on: T37b (the measuring tool `measure_line_bloom.py`, extended to the downscaled read)
 - Write set: the gate (`gate_motion_density.py` or `gate_one_shot_floor.py` - pick and say why), `measure_line_bloom.py` (the downscaled read: render or downsample each held page to ~320 px wide; the lit/other contrast share, the title's and the named label's cap height in px, the count of words on the plot), tests; then lane A: the H pages' end tags shortened (a name, not a name + sub-label) where the gate asks
@@ -1156,7 +1156,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T38: `axis_tag` + drop guides - the named year becomes a pill on the x-axis
-- Status: pending
+- Status: moved to P71 T9 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna
 - Depends on: T37; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1172,7 +1172,7 @@ verbatim tails and are left pending.
 
 
 ### T39: `level_join` - a dashed rule drawn from one point to another, a ring at each end
-- Status: pending
+- Status: moved to P71 T10 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna
 - Depends on: T38; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1188,7 +1188,7 @@ verbatim tails and are left pending.
 
 
 ### T40: `blur` under a dock over a busy chart plate (E99 s98) + the term-over-the-parked-chart recipe
-- Status: pending
+- Status: moved to P71 T15 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna
 - Depends on: T39; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1204,7 +1204,7 @@ verbatim tails and are left pending.
 
 
 ### T41: `project` - a labelled dashed continuation past the last real point
-- Status: pending
+- Status: moved to P71 T16 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna
 - Depends on: T40; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1220,7 +1220,7 @@ verbatim tails and are left pending.
 
 
 ### T42: chip states `lit` / `tick` / `sell`
-- Status: pending
+- Status: moved to P71 T12 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna
 - Depends on: T41; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1236,7 +1236,7 @@ verbatim tails and are left pending.
 
 
 ### T43: `loop` - a flow laid as a ring, money moving on its arrows
-- Status: pending
+- Status: moved to P71 T11 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna
 - Depends on: T42; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1252,7 +1252,7 @@ verbatim tails and are left pending.
 
 
 ### T43b: A second axis, and an inverted one, for a co-movement claim (E99 s102)
-- Status: pending
+- Status: moved to P71 T13 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna
 - Depends on: T43; lane B
 - Write set: `content/video_engine/scripts/ledger_page.py` (a `y2` / `invert` key on a dense-line object), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the RHS axis, its coloured ticks, the "inverted" label), `content/video_engine/scripts/build_scene_timeline_f.py` (validation), `content/video_engine/tests/test_dual_axis.py` (new), `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1338,7 +1338,7 @@ verbatim tails and are left pending.
 - Evidence: 9caa76b (lane B), merged 953189d
 
 ### T44: the Bravos RECIPES composed from T36-T43, each proved as a body beat
-- Status: pending
+- Status: moved to P71 T34 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna
 - Depends on: T43; T35; lane A; T56 (the equation row, for the formula recipe R25)
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the verb's paint only), `content/video_engine/scripts/species/<verb>.mjs` (new, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the token's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/<verb>.test.mjs`, `content/video_engine/tests/test_<verb>.py`, `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1380,7 +1380,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T53: The "?" at the unknown, the collage that resolves into it, the predictions board (harvest A61, F12, R13)
-- Status: pending
+- Status: moved to P71 T18 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T42 (the chip's states - the "?" is a chip glyph and a datum mark); T40 (the blur a collage recedes under); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the prompt's paint; the collage's resolve), `content/video_engine/scripts/species/chip.mjs` (the "?" glyph, synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/effects/recipes/<new>.json` (the predictions board), the catalogue's generated files via `build_effects_catalog.py --write`, `content/video_engine/tests/test_unknown_prompt.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1392,7 +1392,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T54: The inset echo - a historical twin mini-chart in the plot's empty room, then the "?" (harvest T40, R36)
-- Status: pending
+- Status: moved to P71 T33 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T8b (a `free` panel box on the page); T10c (a chart card drawn for its displayed size); T53 (the "?"); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the inset's paint and entry), `content/video_engine/scripts/build_scene_timeline_f.py` (the inset's validation and its placement read from the page's boxes), `content/video_engine/scripts/ledger_page.py` (only if the inset is a panel role), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/effects/recipes/<new>.json`, the catalogue's generated files via `build_effects_catalog.py --write`, `content/video_engine/tests/test_inset_echo.py` (new), `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1404,7 +1404,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T55: The epoch ruler - a time axis with cards pinned to its ticks (harvest T32)
-- Status: pending
+- Status: moved to P71 T14 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T38 (the axis_tag pill on a tick); T26d (cards placed and moved where the author puts them); T50 (a bracket between two ticks); lane B
 - Write set: `content/video_engine/scripts/species/ruler.mjs` (new, synced by `sync_kinetics.py --write`), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the ruler's paint only), `content/video_engine/scripts/build_scene_timeline_f.py` (the species' validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/ruler.test.mjs` (new), `content/video_engine/tests/test_epoch_ruler.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1428,7 +1428,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T57: Hub-and-spoke - one institution to many, and a link that fails (harvest T31, A26)
-- Status: pending
+- Status: moved to P71 T17 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T43 (the flow's ring layout and edge tokens); T42 (the chip's `lit`); lane B
 - Write set: `content/video_engine/scripts/species/flow.mjs` (the `hub` layout and the failed edge, synced), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (`flowLayout` and the edge paint only), `content/video_engine/scripts/build_scene_timeline_f.py` (validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/flow.test.mjs`, `content/video_engine/tests/test_hub_and_spoke.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1464,7 +1464,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T60: Verdict tiles with a check state, two verdict panels, and the BUY tab (harvest T26, R14, A59)
-- Status: pending
+- Status: moved to P71 T19 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T42 (the chip's `tick` and `sell` states); T10c (a chart card drawn at its displayed size); T8b (two panels on one page); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the tile's state layer), `content/video_engine/scripts/chart_card.py` (a `tile` size of the `card` profile, only if T10c's profile cannot carry it), `content/video_engine/scripts/build_scene_timeline_f.py` (the state keys' validation), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/effects/recipes/<new>.json`, the catalogue's generated files via `build_effects_catalog.py --write`, `content/video_engine/tests/test_verdict_tiles.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1488,7 +1488,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T62: Illustrations drawn as schematics - candlesticks over a ghost wave, the axis-free motif line with X marks, and a ✓ / ✗ on a datum (harvest T8, T46, A14)
-- Status: pending
+- Status: moved to P71 T20 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T46 (the schematic builder); T42 (the tick and the cross as glyphs); lane B
 - Write set: `content/video_engine/scripts/ledger_page.py` (the schematic's `candles` and `motif` shapes), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (their paint; the datum badge), `content/video_engine/scripts/build_scene_timeline_f.py` (validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/test_schematic_illustrations.py` (new), `content/video_engine/tests/golden/**` (one golden per new form)
@@ -1500,7 +1500,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T63: The 2.5D tilted map with its routes lighting in turn, the origin ping, the chart beside the map (harvest T33, A37, R17)
-- Status: pending
+- Status: moved to P71 T22 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T26f (the camera free of the chrome); T43 (tokens moving on an edge); T8b (a map and a chart on one clock, as panels); lane B
 - Write set: `content/video_engine/scripts/species/vecmap.mjs` (the tilted plane, the route sequence and the ping, synced), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the map world's projection only), `content/video_engine/scripts/build_scene_timeline_f.py` (validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/effects/recipes/<new>.json`, the catalogue's generated files via `build_effects_catalog.py --write`, `content/video_engine/tests/kinetics/vecmap.test.mjs`, `content/video_engine/tests/test_tilted_map.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1512,7 +1512,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T64: The stacked bar of values, and the stacked-bar-plus-line combo (E99 s110 (1); harvest T29)
-- Status: pending
+- Status: done (c0836b8)
 - Owner: implementation_luna (LANE B)
 - Depends on: T50 (the stacked-bar refusal turned into an honesty check); T43b (a second, labelled scale for the line); T10b (soft bars); lane B
 - Write set: `content/video_engine/scripts/ledger_page.py` (the `segments` field on a bar datum and its check; the `combo` builder's stacked bars), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the stacked segments' paint), `content/video_engine/scripts/build_scene_timeline_f.py` (validation only), `content/video_engine/scripts/measure_page_boxes.py` (a stacked-combo representative), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/test_stacked_combo.py` (new), `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1524,7 +1524,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T65: A ring may circle the thing the sentence points at - a picture, a card or a prop (E99 s110 (2))
-- Status: pending
+- Status: done (bc5a82a)
 - Owner: junior_developer (LANE B)
 - Depends on: T47 (it edits the same ring check - sequenced after it); T26d (a prop's authored box, which the ring reads); lane B
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py` (`_validate_callout` `:1993`, the ring species' targets `:1165`, and E56's messages), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (only if a dock or prop target needs the ring to read the dock's live box), `content/video_engine/tests/test_ring_on_the_named_thing.py` (new), `content/video_engine/tests/test_the_stamp_arrival.py`
@@ -1548,7 +1548,7 @@ verbatim tails and are left pending.
 - Evidence: 2b5c714 (lane B), merged 953189d; the railway-GDP series waits on R26-306
 
 ### T67: A card joins its date on the line, and the proof walk (harvest A19, R4)
-- Status: pending
+- Status: moved to P71 T23 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T36 (the stretch lit); T38 (the era tagged); T40 (the blur under a dock); T26d (the parked chip placed at its datum); T62 (the ✓ / ✗ on a datum); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the park-to-a-datum target and its leader), `content/video_engine/scripts/build_scene_timeline_f.py` (the dock's `park_at` datum validation), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/effects/recipes/<new>.json`, the catalogue's generated files via `build_effects_catalog.py --write`, `content/video_engine/tests/test_card_at_its_date.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1560,7 +1560,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T68: The future box, the push to now then the unknown, the evidence then the conditional future (harvest A56, R5, R26)
-- Status: pending
+- Status: moved to P71 T26 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T41 (`project`); T26f (the camera free to push to today's end); T53 (the "?" and "???"); T36 (the now lit); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the future box's paint only), `content/video_engine/scripts/build_scene_timeline_f.py` (the box's validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/effects/recipes/<new>.json` (two recipes), the catalogue's generated files via `build_effects_catalog.py --write`, `content/video_engine/tests/test_future_box.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1584,7 +1584,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T70: Chart-and-diagram recipes - rise, turn, consequence; the doubt then the budget evidence; the total that points back (harvest R19, R34, R35)
-- Status: pending
+- Status: moved to P71 T35 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T36, T37, T40, T42, T50; T44 (R18's peak-fall-magnitude, which R19 extends); lane B
 - Write set: `content/video_engine/effects/recipes/<new>.json` (three new recipes; no existing recipe edited), the catalogue's generated files via `python content/video_engine/scripts/build_effects_catalog.py --write`, `content/video_engine/projects/_proofs/p69-recipes/proof_p69_recipes.py` (three new proof beats; the build output stays gitignored), `docs/content-video-engine/review-queue.v1.json`, `docs/content-video-engine/REVIEW-QUEUE.md`
@@ -1596,7 +1596,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T71: Line recipes - the trace to its level, the divergence spread, today's boom against past booms (harvest R21, R27, R32)
-- Status: pending
+- Status: moved to P71 T36 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T37 (`solo`); T38 (`axis_tag`); T39 (`level_join`); T50 (a bracket on the gap); lane B
 - Write set: `content/video_engine/effects/recipes/<new>.json` (three new recipes; no existing recipe edited), the catalogue's generated files via `python content/video_engine/scripts/build_effects_catalog.py --write`, `content/video_engine/projects/_proofs/p69-recipes/proof_p69_recipes.py` (three new proof beats), `docs/content-video-engine/review-queue.v1.json`, `docs/content-video-engine/REVIEW-QUEUE.md`
@@ -1608,7 +1608,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T72: Bars re-valued - then to now, the ratio span after it, and the ranked dim-the-rest (harvest A48, R28, R30)
-- Status: pending
+- Status: moved to P71 T24 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T26a (a bar changes its own value; `ghost=yes`); T37 (`solo` on bars); T50 (the bracket on bars); T44 (the ratio recipe); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the compare's then -> now two-key path in `lpBarMorphs`), `content/video_engine/scripts/species/compare.mjs` (synced by `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (the `from` value's validation), `content/video_engine/effects/recipes/<new>.json` (two recipes), the catalogue's generated files via `build_effects_catalog.py --write`, `content/video_engine/tests/test_bar_revalue.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1620,7 +1620,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T73: Fills to a level - the underwater fill, the fill below zero, the negative spike's glowing trough (harvest A45, A46, R29)
-- Status: pending
+- Status: moved to P71 T21 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: junior_developer (LANE B)
 - Depends on: T39 (a level drawn from a datum, C14); T36; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the `spread` to a level's paint), `content/video_engine/scripts/build_scene_timeline_f.py` (the `spread` level target's validation), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/effects/recipes/<new>.json`, the catalogue's generated files via `build_effects_catalog.py --write`, `content/video_engine/tests/test_fill_to_a_level.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1632,7 +1632,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T74: The scale-out reveal and the projected overtake (harvest A50, A51, R31)
-- Status: pending
+- Status: moved to P71 T25 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T41 (the projection's label and tier); T50 (the bracket on bars); T37; lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the projected bar's paint and the rank pill), `content/video_engine/scripts/ledger_page.py` (a bar datum's `projected` field and its check), `content/video_engine/scripts/build_scene_timeline_f.py` (validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/effects/recipes/<new>.json`, the catalogue's generated files via `build_effects_catalog.py --write`, `content/video_engine/tests/test_scale_out_overtake.py` (new), `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1644,7 +1644,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T75: Lead and lag - the ring travels to the lagging peak, the lead-lag bracket across two series, the phase-shift slide (harvest A52, A53, A54)
-- Status: pending
+- Status: moved to P71 T27 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T36 (a travelling light); T46 (the schematic wave A54 slides); T47 (rings in turn); T43b (two series on unlike scales need s102's conditions); lane B
 - Write set: `content/video_engine/scripts/species/ring.mjs` (the travelling ring, synced), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the bracket across two series; the schematic's slide), `content/video_engine/scripts/build_scene_timeline_f.py` (validation only), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/ring.test.mjs`, `content/video_engine/tests/test_lead_lag.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1656,7 +1656,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T76: The line painter - the trace before the furniture, the line changing ink at a point, the white-hot core (harvest A41, A21, F18)
-- Status: pending
+- Status: moved to P71 T28 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T8 (the `longform` profile); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (a `trace` page enter, the series' ink key, the two-layer stroke), `content/video_engine/scripts/ledger_page.py` (an `ink_from` series key and its check), `content/video_engine/scripts/build_scene_timeline_f.py` (the enter's validation), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/test_line_painter.py` (new), `content/video_engine/tests/golden/**` (one golden per new form)
@@ -1668,7 +1668,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T77: Glow edges - a glow outline on a region or bar, a glowing perimeter on a headline card, the bevelled stamp slab (harvest F2, F14, F19)
-- Status: pending
+- Status: moved to P71 T29 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T6b (the one stage light and its shadow); T10b (the bar's soft rect); T42 (`lit` - one light grammar); lane B
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the glow outline, the card perimeter, the slab's bevel and shadow), `content/video_engine/scripts/build_scene_timeline_f.py` (the options' validation), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/test_glow_edges.py` (new), `content/video_engine/tests/golden/**` (one new golden)
@@ -1680,7 +1680,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T78: The longform chrome finish - the key chip turns accent on `solo`, the two-line source, the title in an accent capsule (harvest S9, S10, S11)
-- Status: pending
+- Status: moved to P71 T30 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: junior_developer (LANE B)
 - Depends on: T10 (badges as the key); T37 (`solo`); T26f (the chrome as objects); lane B
 - Write set: `content/video_engine/scripts/ledger_page.py` (the longform source and title options), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the key chip's accent on solo, the two-line source, the title capsule), `content/video_engine/scripts/measure_page_boxes.py`, `content/video_engine/tests/test_longform_chrome.py` (new), `content/video_engine/assets/page-boxes.v1.json`
@@ -1692,7 +1692,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T79: Labels - a category pill over axis-less story bars, logos as data labels, the bar ladder that ends on a membership bar (harvest S5, S6, R2)
-- Status: pending
+- Status: moved to P71 T31 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T45 (the membership stack); T10 (the key rail keeps the names); lane B
 - Write set: `content/video_engine/scripts/ledger_page.py` (the story builder's `axes: none` and a datum's `pill` and `logo` fields), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (their paint), `content/video_engine/scripts/build_scene_timeline_f.py` (validation only), `content/video_engine/scripts/measure_page_boxes.py`, `content/video_engine/effects/cards/<new>.json`, `content/video_engine/effects/recipes/<new>.json`, the catalogue's generated files via `build_effects_catalog.py --write`, `content/video_engine/tests/test_story_bar_labels.py` (new), `content/video_engine/tests/golden/**` (one new golden), `content/video_engine/assets/page-boxes.v1.json`
@@ -1704,7 +1704,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T80: The camera - a pedestal down through the waterline, the magnifier lens (harvest A33, A57)
-- Status: pending
+- Status: moved to P71 T32 (`.claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md`, approved 2026-09-24)
 - Owner: implementation_luna (LANE B)
 - Depends on: T26f (the camera free of the chrome); T44 (the hidden base / iceberg the pedestal reveals); lane B
 - Write set: `content/video_engine/scripts/kinetics/camera.mjs` (the pedestal key, synced), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the `lens` species' paint), `content/video_engine/scripts/build_scene_timeline_f.py` (validation only), `content/video_engine/scripts/gate_motion_density.py` (the camera mirror, only if the pedestal changes what M14 reads), `content/video_engine/effects/cards/<new>.json`, `content/video_engine/tests/kinetics/camera.test.mjs`, `content/video_engine/tests/test_pedestal_and_lens.py` (new), `content/video_engine/tests/golden/**` (one new golden)

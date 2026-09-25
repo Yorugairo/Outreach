@@ -4821,6 +4821,33 @@
       "ruling": "",
       "was_kind": "watch",
       "owed": "P70 T12 - the parent builds the proof door before the row opens"
+    },
+    {
+      "id": "p71-hg1-the-bravos-verbs-wave-3",
+      "status": "open",
+      "kind": "owed",
+      "title": "P71 HG1 - the Bravos verbs wave 3 and the engine fixes, each as a beat played with the take",
+      "ids": [
+        "E99 s106",
+        "E99 s117",
+        "E99 s120",
+        "E99 s124",
+        "E99 s125",
+        "E99 s126",
+        "E99 s128"
+      ],
+      "judge": "Each verb's private test-bed beat played with the take and served frozen beside its Bravos frame (BOOM items against VERIFY.md's real frames); each engine fix before/after (R26-307..317); M48 the squint gate's verdicts on pages and captions; and the one adoption question: which verbs enter the Steel and Paper H body. Owed by P71 T38.",
+      "where": [],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "adopting any wave-3 verb into the H body; the one-shot test vs the 09-16 baseline follows P71",
+      "sources": [
+        ".claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md"
+      ],
+      "ruling": "",
+      "was_kind": "watch",
+      "owed": "P71 T38 - the parent builds the proof door before the row opens"
     }
   ]
 }

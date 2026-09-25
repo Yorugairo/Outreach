@@ -1,14 +1,14 @@
 ---
 id: P71-THE-BRAVOS-VERBS-WAVE-3
 title: The Bravos verbs, wave 3, and the engine fixes - the six engine fixes (R26-308/309/310/312/313/314), the squint gate (P69 T88), and every P69 Bravos slice not moved to P70 (T38-T43b, T40, T44, T53-T55, T57, T60, T62, T63, T67, T68, T70-T80)
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
 branch: claude/fable-p68 (the plan); engine slices land on claude/p69-s90 (lane B); T8 (the label diet) on lane A
 contract: tdd-v1
 created: 2026-09-24
-updated: 2026-09-24 (revision 2, architect_sol: the fresh review's findings 1-7 and 9-15 applied, finding 8 resolved from the parent's BOOM VERIFY.md; E99 s124-s128 folded in; code re-cited at lane B 50b2f85; not approved)
+updated: 2026-09-24 (APPROVED by the operator - `/prp-implement P71` - and running; revision 2 + the s124 amendment)
 ---
 
 # P71 - The Bravos verbs, wave 3, and the engine fixes
@@ -512,7 +512,7 @@ the path named in Mandatory Reads, under the main checkout. For BUB and CHN, whe
 frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE time (never Gemini's).
 
 ### T0: The base, the approval, the register, the review-queue row, the P69 pointers and the BOOM verification hand-off
-- Status: pending
+- Status: done (the parent; evidence below)
 - Owner: parent. speedster makes the P69 pointer lines, one exact line per stub.
 - Depends on: the operator's approval of this plan.
 - Write set:
@@ -541,9 +541,10 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
      A44 / A45 / R32 as confirmed; P70 T10's unblocking is the parent's edit to P70.
 - Validate: `python scripts/prp_validate.py .claude/PRPs/plans/P71-THE-BRAVOS-VERBS-WAVE-3.plan.md` then `python scripts/prp_validate.py .claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md` then `python -m pytest content/video_engine/tests/test_worktree_register.py -q` then `python content/video_engine/scripts/build_review_queue.py`
 - Evidence: pending
+- T0 evidence (the parent, 2026-09-24): (2) APPROVAL, the operator: `/prp-implement P71`. (1) base: lane B `cd0b630` (P70 T1b `50b2f85`, T4 `d0dd19b`, T1c `cd0b630` committed; no tracked dirty file); P70 T2 / T3 / T13 and P69 T37c are in flight on lane B as scratch patches - P71 slices that share their functions wait (T2 waits for T37c; T15 for P70 T8 + T13). (3) register row names P71 (this commit). (4) queue row `p71-hg1-the-bravos-verbs-wave-3` (this commit). (5) P69 stubs + a BACKLOG row point here (this commit). (6) BOOM: VERIFY.md folded in revision 2.
 
 ### T1: A figure writes its last letter - the sub's hand finishes when its word does (R26-314)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t1/`)
 - Owner: junior_developer (LANE B)
 - Depends on: T0
 - Bravos reference: none; this is a defect. For parity, HIS `Jw8ykhoOVBQ` 11:01, where the "$28 Billion" figure's
@@ -651,7 +652,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T3: A plain recast on the default clock never stands a half-written tick on an empty plot (R26-310)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t3/`)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0
 - Bravos reference: Bravos builds inside a held frame, and its axes never show a fragment (46 §46.7; CAPABILITIES
@@ -718,7 +719,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T4: The second melt throws the page on screen, not a stale snapshot (R26-312)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t4/`)
 - Owner: implementation_luna (LANE B), then reviewer (a transition carries the world it leaves, s74)
 - Depends on: T0
 - Bravos reference: none (a defect).
@@ -1026,7 +1027,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T9: `axis_tag` and the drop guide - the named year becomes an accent pill on the x axis (was P69 T38)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t9/`)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0. Done: P69 T36 `104af07` (the page-species pattern) and T37b `557e1dc` (the series ink).
 - Harvest: v2 A10 "Axis tag: the named year / era / span replaces its tick as an accent pill", n=7 (BUB #14; CHN 39;
@@ -1090,7 +1091,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T10: `level_join` - a dashed rule from one datum to another, a ring at each end, the gap written off the rule (was P69 T39)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t10/`)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0
 - Harvest: v2 A9 "Dashed LEVEL rule drawn from one datum to another", n=5 (BUB 2:48; RST 7:00; DOM 00:50 "from the
@@ -1141,7 +1142,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T11: `loop` - a flow laid as a ring, money moving on its arrows (was P69 T43)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t11/`)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0
 - Harvest: v2 T21 "Circular loop / flywheel", n=3 (BUB 11:22; RST 9:30; BOOM (G)): "`flowLayout` is a row or a column
