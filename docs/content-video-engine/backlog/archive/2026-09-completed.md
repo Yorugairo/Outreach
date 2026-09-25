@@ -124,6 +124,64 @@ the P72 slice that names it carries the half.
 | R26-156 | The alive plate as a plate-life route. Closed by P72 T0 (DONE-UNCLOSED). | `plate_option:alive` (`81210d8`, E99 s55; CAPABILITIES); `hist:600`. |
 | R26-158 | The docs layers were source. Closed by P72 T0 (DONE-UNCLOSED). | closed (P63); `hist:602`. |
 
+### Batch 2 - DONE-UNCLOSED (53 rows)
+
+| ID | Verified outcome | Evidence / follow-up |
+|---|---|---|
+| R26-159 | Gates registry 15 s. Closed by P72 T0 (DONE-UNCLOSED). | `31ebf09` (P64 T2: `--check` 14.7 s -> 0.8 s, byte-identical); the row itself says CLOSED; `hist:603`. |
+| R26-172 | `chart_to park` shrinks the pills. Closed by P72 T0 (DONE-UNCLOSED). | WITHDRAWN 2026-09-17; `hist:616`. |
+| R26-177 | Recall the motion doctrine before authoring. Closed by P72 T0 (DONE-UNCLOSED). | both halves DONE in the row: M45 (`bf6f737`, P66 T5 + P65 T7) and the verified receipt (`4b0343d`, P67 T6); `hist:621`. |
+| R26-179 | Caption pages never read the punctuation. Closed by P72 T0 (DONE-UNCLOSED). | fixed (one-shot #3); `hist:623`. |
+| R26-184 | A gate guides, never dismisses (s69). Closed by P72 T0 (DONE-UNCLOSED). | the lab diagnoses (`lab_build.py:54` "buildable with a companion"); `HELD_BUILT_S = 4.0` (gate `:245`, E99 s69); reproof-r2 carded and ruled (s84); `hist:627`. |
+| R26-190 | The compare melt never painted on a bars page. Closed by P72 T0 (DONE-UNCLOSED). | engine `:14571` "P69 T6 / R26-190 (E99 s74) - A FIGURE ON A BARS PAGE"; kept by s77 (2); `hist:633`. |
+| R26-191 | A collision is fixed, never named. Closed by P72 T0 (DONE-UNCLOSED). | BUILT (a) `9e30f2a`, (b) the thinning; `hist:634`. |
+| R26-201 | A punch on a 9:16 page. Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18 (with R26-220); `hist:644`. |
+| R26-205 | The 16:9 caption strip. Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18; `hist:648`. |
+| R26-210 | No 16:9 outro card. Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18 (`OutroLandscape`); `hist:653`. |
+| R26-211 | `idle.mjs`'s comment contradicts s64/s65 (G-07). Closed by P72 T0 (DONE-UNCLOSED). | `kinetics/idle.mjs` at e43c3d8 reads "20 px is the named long-form setting (E99 s64 / s65 amended s55's 30) ... PLATE_DRIFT_LONG 20"; the string first appears in `3a9d82e` (`git log -S`); `hist:654`. |
+| R26-213 | Ep1's five SVGs have no port into the kit (G-09). Closed by P72 T0 (DONE-UNCLOSED). | H re-authored the charts as ledger pages from committed objects (`build_episode_h.py` `page_open` :1029, `page_rail`, `page_snap`, `page_yard` .. `page_arith` :1180); "owed: nothing in the engine"; `hist:656`. |
+| R26-218 | A MARK CANNOT NAME ITS SERIES ON A MULTI-LINE PAGE (2026-09-18, Steel and Paper H unit). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18 each (P68 T5b evidence); this row: "BUILT 2026-09-18"; `hist:661`. |
+| R26-220 | `focus_zoom` IS A FIXED 1.32 AND CROPS A 16:9 PAGE'S TITLE (2026-09-18). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18 each (P68 T5b evidence); this row: "BUILT 2026-09-18 (with R26-201 - one door)"; `hist:663`. |
+| R26-221 | A CARD CANNOT TAKE AN AUTHORED SLOT ON A PICTURE PLATE (2026-09-18). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18 each (P68 T5b evidence); this row: "BUILT 2026-09-18"; `hist:664`. |
+| R26-222 | M28 READS A Y-ONLY RESCALE'S TICK HAND-OVER AS A COLLISION WITH ITSELF (2026-09-18, H unit). Closed by P72 T0 (DONE-UNCLOSED). | CLOSED 2026-09-22 each (P69 T7 / `0d15009` / P69 T1); this row: "CLOSED 2026-09-22 (P69 T7)"; `hist:665`. |
+| R26-223 | A PAGE CANNOT BE BORN WITH A DOMAIN (2026-09-18). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18 each (P68 T5b evidence); this row: "BUILT 2026-09-18"; `hist:666`. |
+| R26-224 | FIFTEEN TESTS FAIL ON THE COMMITTED TREE BEFORE ANY CHANGE (2026-09-18, measured by the R26-218/219 lane). Closed by P72 T0 (DONE-UNCLOSED). | CLOSED 2026-09-22 each (P69 T7 / `0d15009` / P69 T1); this row: "CLOSED 2026-09-22"; `hist:667`. |
+| R26-225 | A GATE TEST REWRITES `build-f/GATES-MOTION.md` DURING A FULL SUITE RUN (2026-09-18). Closed by P72 T0 (DONE-UNCLOSED). | CLOSED 2026-09-22 each (P69 T7 / `0d15009` / P69 T1); this row: "CLOSED 2026-09-22"; `hist:668`. |
+| R26-226 | A MULTI-LINE PAGE BUILDS LINE BY LINE (E99 s82, 2026-09-18). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18 each (P68 T5b evidence); this row: "BUILT 2026-09-18"; `hist:669`. |
+| R26-228 | LIFE IS SEEN, NOT PASSED - the 16:9 page renders no tip spark, no glow, no pulse, no label breath, and the plate's drift + Ken Burns read as still (E99 s82, the operator on copy d). Closed by P72 T0 (DONE-UNCLOSED). | CLOSED 2026-09-22 each (P69 T7 / `0d15009` / P69 T1); this row: "CLOSED 2026-09-22"; `hist:671`. |
+| R26-230 | THE FULL-STAGE 16:9 PAGE KEEPS ITS TOP AND BOTTOM BANDS FOR CAPTIONS AND THE 9:16 RE-STAGE (E99 s82). Closed by P72 T0 (DONE-UNCLOSED). | CLOSED 2026-09-22 each (P69 T7 / `0d15009` / P69 T1); this row: "CLOSED 2026-09-22 (P69 T7)"; `hist:673`. |
+| R26-231 | A PAGE'S BUILD IS NEVER CHECKED AGAINST ITS ROW'S SPAN (2026-09-18, found by the R26-226 lane). Closed by P72 T0 (DONE-UNCLOSED). | CLOSED 2026-09-22 each (P69 T7 / `0d15009` / P69 T1); this row: "CLOSED 2026-09-22 (P69 T7) WITH ITS SCOPE STATED"; `hist:674`. |
+| R26-232 | THE PULSE ROWS READ A LIVING FULL-STAGE PAGE AS DEAD (2026-09-18, the H bed on the new doors). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18 each (P68 T5b evidence); this row: "BUILT 2026-09-18"; `hist:677`. |
+| R26-233 | THE REVEAL RESCALE DRAGS LANDED INK; THE AXIS SHOULD YIELD TO THE LINE THAT PUSHES IT (2026-09-18, the H bed, the critic on copy e). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18 each (P68 T5b evidence); this row: "BUILT 2026-09-18"; `hist:678`. |
+| R26-234 | THE INTERIOR WORD WALK GOES; THE ELECTRIC CARRIES THE LIFE (E99 s83, 2026-09-18). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-18 each (P68 T5b evidence); this row: "BUILT 2026-09-18"; `hist:679`. |
+| R26-235 | A FULL-STAGE PAGE IS NEVER SERVED THE MEASURED FIXTURE (2026-09-18, found by the R26-220 lane). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-22 each; this row: "BUILT 2026-09-22 (the Fable worktree)"; `hist:680`. |
+| R26-236 | THE PLATE'S LIFE IS KEN BURNS ALONE - the drift withdrawn for long form (E99 s84). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-22 each; this row: "BUILT 2026-09-22 (the Fable worktree)"; `hist:681`. |
+| R26-241 | THE PAGE-BOX FIXTURE'S PIN IS THE PLAYER'S BYTES, SO EVERY ENGINE COMMIT REDDENS IT (2026-09-18, found by the R26-224 lane). Closed by P72 T0 (DONE-UNCLOSED). | CLOSED 2026-09-22 each (P69 T7 / `0d15009` / P69 T1); this row: "CLOSED 2026-09-22 at the root (P69 T1)"; `hist:686`. |
+| R26-245 | THE IDLE-TOKEN COUNTER DOES NOT COUNT A KEN AS LIFE (E99 s84, 2026-09-22). Closed by P72 T0 (DONE-UNCLOSED). | BUILT 2026-09-22 each; this row: "BUILT 2026-09-22 (the Fable worktree)"; `hist:692`. |
+| R26-246 | "PROP STAMP" IS NOT A `stamp`: the 24 prop cutouts have no route into a cut except a DOCKED CARD (2026-09-22). Closed by P72 T0 (DONE-UNCLOSED). | CLOSED 2026-09-22 each (P69 T7 / `0d15009` / P69 T1); this row: "CLOSED 2026-09-22"; `hist:693`. |
+| R26-247 | A stamp is a landing to the gate, the cues, the camera. Closed by P72 T0 (DONE-UNCLOSED). | `7965c05` (P69 T2) + P69 T3-T5 done; `hist:694`. |
+| R26-263 | `ledger_page` refuses area forms by name. Closed by P72 T0 (DONE-UNCLOSED). | `f63b569` "P69 T50 - forms judged by honesty, not type (E99 s100, s109 (5); R26-263)" - on both lanes; `hist:705`. |
+| R26-272 | A bracket on a bars page draws nothing. Closed by P72 T0 (DONE-UNCLOSED). | `f63b569` "... and a bracket on a bars page (R26-272)"; `hist:714`. |
+| R26-273 | A BAR CANNOT CHANGE ITS OWN VALUE (2026-09-23, found by P69 T35). Closed by P72 T0 (DONE-UNCLOSED). | `af869b7`, `5c6871c`, `afd8b3d`; this row: "closed (P69 T26a, af869b7)"; `hist:715`. |
+| R26-276 | Scrubbing from one melt to another paints the wrong page. Closed by P72 T0 (DONE-UNCLOSED). | `7789afa` (P71 T4, the mount keyed per boundary); `tests/test_melt_snapshot_is_current.py:180` `test_a_seek_from_the_first_melt_straight_into_the_second_throws_page_b`; `hist:882`. |
+| R26-279 | A ROW'S STAMP AND DOCKS ARE FITTED TO THE ROW'S FIRST CHART, NOT THE STATE ON SCREEN WHEN THEY LAND (2026-09-23, found by P69 T24). Closed by P72 T0 (DONE-UNCLOSED). | `af869b7`, `5c6871c`, `afd8b3d`; this row: "closed (P69 T26d, 5c6871c)"; `hist:885`. |
+| R26-280 | THE MOTION GATE'S LONGEST WAIT (M03) NEVER COUNTS A RECAST (2026-09-23, found by P69 T24). Closed by P72 T0 (DONE-UNCLOSED). | `af869b7`, `5c6871c`, `afd8b3d`; this row: "closed (P69 T26c, afd8b3d)"; `hist:886`. |
+| R26-282 | The IG and capex objects carry no unit. Closed by P72 T0 (DONE-UNCLOSED). | `7d43e43` "P69 T25 - ... the IG and capex objects get their units (v2)": `ev-ig-credit-weighting-v2` (`unit: %`, a sub stating what the bars show) and `ev-capex-consensus-v2` (`unit: $`, "US$ billions"); the `$...B` form is R26-287's; `hist:888`. |
+| R26-290 | THE DESK CARD'S +105% LINE HAS NO NAME (2026-09-23, P69 rows 15-18 refresh). Closed by P72 T0 (DONE-UNCLOSED). | closed 2026-09-23 (T27); this row: "closed 2026-09-23 (T27: the desk card draws from its own derived object, the +105% line named 'chips' from its series' anchor text)"; `hist:896`. |
+| R26-291 | PROP 3 SITS IN THE PUSHED PANEL'S CORNER (2026-09-23, P69 rows 15-18 refresh). Closed by P72 T0 (DONE-UNCLOSED). | closed 2026-09-23 (T27); this row: "closed 2026-09-23 (T27: PROP 3 placed and moved up into the top-right corner in step with the 1.2x push; M27 cleared, M25 WARN named)"; `hist:897`. |
+| R26-293 | THE AUTHORING KIT REFUSES A PROP MORPH (2026-09-23, P69 T26e review). Closed by P72 T0 (DONE-UNCLOSED). | `0c606d6`; this row: "closed 2026-09-23 (lane B 0c606d6: the kit validates a prop morph with the compiler's own checks; pinned to its CHART_TO_KINDS)"; `hist:899`. |
+| R26-295 | THE ONE-SHOT FLOOR TESTS NEED GITIGNORED INPUTS (2026-09-23, P69 T26e review). Closed by P72 T0 (DONE-UNCLOSED). | `0c606d6`; this row: "closed 2026-09-23 (lane B 0c606d6: the two floor tests skip with the missing gitignored path named)"; `hist:901`. |
+| R26-296 | THE FLOOR'S TIMELINE HASH PINS ARE LINE-ENDING BOUND (2026-09-23, P69 fixes5 review). Closed by P72 T0 (DONE-UNCLOSED). | `83b89fd`; this row: "closed 2026-09-23 (lane B 83b89fd: timeline_sha256 hashes line-ending-normalised bytes; the four pins replaced, proven against the committed blobs)"; `hist:902`. |
+| R26-297 | A lane that never takes main back. Closed by P72 T0 (DONE-UNCLOSED). | `d4ec5eb`; `hist:903`. |
+| R26-298 | A READ-BACK PLAN LOSES A PROP'S AUTHORED PLACE (2026-09-23, P69 fixes5b). Closed by P72 T0 (DONE-UNCLOSED). | `83b89fd`; this row: "closed 2026-09-23 (lane B 83b89fd: the compiled dock records authored_place / authored_moves; the deriver copies them back; the compiler accepts the ..."; `hist:904`. |
+| R26-300 | Row 20's test card below the phone floor. Closed by P72 T0 (DONE-UNCLOSED). | `b449e9f` (P69 T28b); `hist:906`. |
+| R26-305 | The plate prompt guides still say "no text". Closed by P72 T0 (DONE-UNCLOSED). | `3473082` "docs: R26-305 - the plate-prompt guides take E99 s113" (lane A); `hist:911`. |
+| R26-306 | Research NVDA's share and the railway-GDP series. Closed by P72 T0 (DONE-UNCLOSED). | `b67df03`: five objects verified and tiered (`docs/research/markets/r26-306-nvda-share-railway-gdp-VERIFY-2026-09-24.md`); the rejected remainder is R26-311; `hist:912`. |
+| R26-308 | A title relight reads sunflower on its last frame. Code landed (`11b94d1`); the operator's read at P71-HG1. | `11b94d1` (P71 T2); REV 1: archived as "code landed; the operator's read at P71-HG1" (BACKLOG-DISCIPLINE `:20`); `hist:914`. |
+| R26-310 | A recast hand-writes its ticks over an empty plot. Code landed (`e6aaa30`); the operator's read at P71-HG1. | `e6aaa30` (P71 T3); REV 1: archived as "code landed; the operator's read at P71-HG1"; `hist:916`. |
+| R26-312 | The second melt shows the wrong page. Code landed (`7789afa`); the operator's read at P71-HG1. | `7789afa` (P71 T4); REV 1: archived as "code landed; the operator's read at P71-HG1"; `hist:918`. |
+| R26-314 | A figure's subtitle never writes its last letter. Code landed (`ef96cee`); the operator's read at P71-HG1. | `ef96cee` (P71 T1); REV 1: archived as "code landed; the operator's read at P71-HG1"; `hist:920`. |
+
 ## Remaining close-marked legacy rows
 
 This is a census for parent review, not a second archive and not a completion
