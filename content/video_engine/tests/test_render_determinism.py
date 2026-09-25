@@ -150,21 +150,26 @@ def test_a_page_label_measures_the_same_warm_and_cold(surface: str) -> None:
 #
 # The probes that found each class are in the slice's evidence (P72 T9); these are the tests that keep them found.
 
-FONT_CSS = "https://fonts.googleapis.com/**"
-FONT_FILES = "https://fonts.gstatic.com/**"
+# R26-360: the hand is served from the committed faces - a split page fetches them beside itself (a single-file page
+# carries them inline and cannot drop one), so the fault tests break the face on the split form's own path.
+HAND_FACES = "**/fonts/kalam/*.woff2"
 THROTTLED = ["tiers-two", "treemap-cross", "race-path-eased"]   # R26-251's two titles and R26-243's golden
 CPU_RATE = 6   # Chromium's own CPU throttle: 6x slower than the host (the probe also ran 20x: every frame matched)
 
 
 
-def _golden_page(surface: str, route=None, cpu: float | None = None):
+def _golden_page(surface: str, route=None, cpu: float | None = None, split: bool = False):
     """A golden surface served in a fresh driver and loaded, NOT prepared: (page, t, (w, h), close).
-    `route(page)` installs request routes before the load; `cpu` throttles the page's CPU by that factor."""
+    `route(page)` installs request routes before the load; `cpu` throttles the page's CPU by that factor;
+    `split` serves the build form (the page, its timeline, its engine and its faces as files) instead of one page."""
     tl, uris, t, aspect = RB.load_surface(surface)
     w, h = RB.STAGE[aspect]
     td = tempfile.TemporaryDirectory()
-    html = Path(td.name) / f"{surface}.html"
-    html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+    if split:
+        html = RB.write_split(Path(td.name), tl, uris, f"{surface}.timeline.json")
+    else:
+        html = Path(td.name) / f"{surface}.html"
+        html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
     srv, port = RB.serve(html.parent)
     pw = br = None
 
@@ -224,9 +229,11 @@ def test_prepare_page_waits_on_the_signal_not_a_fixed_clock():
 
 @needs_chromium_and_pillow
 def test_a_hand_that_never_arrives_refuses_the_capture_by_name():
-    """R26-243's diff class, made on purpose: the Google Fonts stylesheet never arrives. The base captured the title,
-    the sub and the citation in the fallback face without a word; the capture is now refused, naming the hand."""
-    page, _t, size, close = _golden_page("race-path-eased", route=lambda p: p.route(FONT_CSS, lambda r: r.abort()))
+    """R26-243's diff class, made on purpose: the hand never arrives (every face request refused - the Google Fonts
+    sheet until R26-360, the committed faces beside a split page since). The base captured the title, the sub and the
+    citation in the fallback face without a word; the capture is now refused, naming the hand."""
+    page, _t, size, close = _golden_page("race-path-eased", route=lambda p: p.route(HAND_FACES, lambda r: r.abort()),
+                                         split=True)
     try:
         with pytest.raises(RB.FontsUnsettled) as err:
             RB.prepare_page(page, *size)
@@ -249,7 +256,7 @@ def test_a_face_fetch_that_fails_once_is_fetched_again_and_the_frame_is_the_gold
         else:
             route.continue_()
 
-    page, t, size, close = _golden_page("race-path-eased", route=lambda p: p.route(FONT_FILES, flaky))
+    page, t, size, close = _golden_page("race-path-eased", route=lambda p: p.route(HAND_FACES, flaky), split=True)
     try:
         RB.prepare_page(page, *size)
         png = RB.frame_png(page, t, size)

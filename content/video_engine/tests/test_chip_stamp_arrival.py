@@ -430,8 +430,8 @@ _LIVE_READ = """() => { const faces = [...document.fonts].filter(f => /kalam/i.t
 
 
 def test_the_label_table_matches_the_LIVE_face_as_the_browser_draws_it(tmp_path):
-    """The review's fix 3: the table is a measurement of Kalam 700 as served (fonts.googleapis.com, the player's own
-    link), so a font update or a fallback face would move the real label off it silently. This renders the four labels
+    """The review's fix 3: the table is a measurement of Kalam 700 as served (the template's local Kalam faces since R26-360 - the Google Fonts v18 build
+    the player loads), so a font update or a fallback face would move the real label off it silently. This renders the four labels
     with the LIVE face and holds the table to the drawn text: the advance to 1 px, the drawn box inside the table's."""
     playwright = pytest.importorskip("playwright.sync_api")
     import render_baseline as RB
@@ -459,7 +459,7 @@ def test_the_label_table_matches_the_LIVE_face_as_the_browser_draws_it(tmp_path)
     finally:
         srv.shutdown()
     if not read["loaded"]:
-        pytest.skip("the live Kalam 700 face did not load (offline: fonts.googleapis.com unreachable) - the table is "
+        pytest.skip("the live Kalam 700 face did not load (the local faces in samples/fonts/kalam/ did not load) - the table is "
                     "held to the served face only")
     size = B.CHIP_STAMP_LABEL_FLOOR
     assert sorted(r["text"] for r in read["labels"]) == sorted(LIVE_LABELS)

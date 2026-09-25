@@ -17,11 +17,13 @@ scale 1 (1920x1080 or 1080x1920) - the check is exact, so resolution only costs 
 from __future__ import annotations
 
 import argparse
+import base64
 import functools
 import hashlib
 import http.server
 import io
 import json
+import re
 import shutil
 import sys
 import tempfile
@@ -38,6 +40,10 @@ SOURCES = GOLDEN / "sources"
 FRAMES = GOLDEN / "frames"
 DIFFS = GOLDEN / "diffs"
 STAGE = {"16:9": (1920, 1080), "9:16": (1080, 1920)}
+# R26-360 (P72 T27): THE HAND'S FACES are committed beside the template (`fonts/kalam/`, the build Google Fonts served) and
+# the template's `hand-faces` style names them by a path relative to itself. A single-file page carries them inline (as it
+# carries the engine); a split build carries a copy beside its page (as it carries the engine's). No capture leaves the machine.
+HAND_FACE_URL = re.compile(r"url\((fonts/kalam/[a-z0-9-]+\.woff2)\)")
 # P43 T6: one golden per capability with its flag ON, at a t where the change is on screen. Each is checked like the
 # base frames; test_kinetics_flags proves each differs from the flag-off render at the same t (a flag golden that
 # matched the base would prove nothing). The squash frame has its spring-only twin so the squash is what differs.
@@ -350,6 +356,34 @@ def module_script(engine_src: str = None) -> str:
             + BOOT + "\n" + WATCH_CLIENT + "</script>")
 
 
+def _hand_face(template: Path, rel: str) -> Path:
+    """A face the template names: beside the template, else beside the reviewed one (a test's edited copy of the shell
+    lives in a temp dir and names the same faces). A face on neither path is refused by name."""
+    for base in (Path(template).parent, TEMPLATE.parent):
+        if (base / rel).is_file():
+            return base / rel
+    raise FileNotFoundError(f"the template names the hand's face {rel!r} and it is not beside {template} (R26-360)")
+
+
+def inline_hand_faces(html: str, template: Path = TEMPLATE) -> str:
+    """The single-file page's faces as data: URLs - the committed files' own bytes, so the page needs no server path."""
+    def data(m: re.Match) -> str:
+        b64 = base64.b64encode(_hand_face(template, m.group(1)).read_bytes()).decode("ascii")
+        return "url(data:font/woff2;base64," + b64 + ")"
+    return HAND_FACE_URL.sub(data, html)
+
+
+def copy_hand_faces(html: str, build_dir: Path, template: Path = TEMPLATE) -> list[Path]:
+    """The split page's faces, copied beside it at the path the page names (a served build never reaches into docs/)."""
+    out = []
+    for rel in sorted(set(HAND_FACE_URL.findall(html))):
+        dst = Path(build_dir) / rel
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(_hand_face(template, rel), dst)
+        out.append(dst)
+    return out
+
+
 def player_text(template: Path = TEMPLATE, engine: Path = ENGINE) -> str:
     """The shell and the engine as ONE text - what a lint or a grep-style check means by "the
     player's source". It is not a page (nothing is substituted): use instantiate() for that."""
@@ -366,6 +400,7 @@ def single_file_shell(template: Path = TEMPLATE, engine: Path = ENGINE) -> str:
     for slot in ("{{TIMELINE}}", "{{URIS}}", "{{ENGINE}}"):
         if slot not in html:
             raise RuntimeError(f"{template} is not the shell - it has no {slot} slot")
+    html = inline_hand_faces(html, template)   # R26-360: the shell's own faces, before the engine goes in
     return (html.replace("{{TIMELINE_SRC}}", "").replace("{{ASSETS_SRC}}", "")
                 .replace("{{ENGINE}}", engine_script(engine)))
 
@@ -405,6 +440,8 @@ def instantiate(timeline: dict, uris: dict, template: Path = TEMPLATE, split: bo
         raise ValueError(missing)
     if split and not timeline_src:
         raise ValueError("the split form needs the compiled timeline's file name (timeline_src)")
+    if not split:
+        html = inline_hand_faces(html, template)   # R26-360: before the data goes in, so only the shell's own faces are read
     return (html.replace("{{TIMELINE}}", "" if split else json.dumps(timeline, separators=(",", ":")))
                 .replace("{{URIS}}", "" if split else json.dumps(uris, separators=(",", ":")))
                 .replace("{{TIMELINE_SRC}}", timeline_src if split else "")
@@ -425,6 +462,7 @@ def write_split(build_dir: Path, timeline: dict, uris: dict, timeline_name: str,
     out = build_dir / "player.html"
     out.write_text(instantiate(timeline, uris, template, split=True, engine=engine,
                                timeline_src=timeline_name), encoding="utf-8")
+    copy_hand_faces(out.read_text(encoding="utf-8"), build_dir, template)   # R26-360: the hand beside the page
     (build_dir / MANIFEST_NAME).write_text(json.dumps({
         "form": "split",
         "engine": engine.name,
@@ -518,7 +556,7 @@ def prepare_page(page, w: int, h: int) -> None:
       - fitStage() scales #stage to the #fit container (~0.73x at 1920x1080), so an element
         screenshot is a downscaled stage that render_episode used to LANCZOS-upscale
       - an element screenshot inherits the container's fractional offset (1081x1920)
-      - the hand (Kalam) is FETCHED from Google Fonts on first use (R26-243 / R26-251): the shell's
+      - the hand (Kalam) is FETCHED on first use (R26-243 / R26-251; from the committed faces since R26-360): the shell's
         `__fontsSettled` resolves once its faces have settled and the rebuild they ask for has run -
         waited on here instead of a fixed 250 ms. A face that failed is fetched again on a reloaded
         page; after FONT_TRIES loads the capture is refused (FontsUnsettled) rather than shot in the

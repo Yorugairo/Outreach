@@ -234,3 +234,82 @@ def test_r26_72_tier_shared_reads_the_unit_and_drops_a_malformed_entry_to_the_ba
                                     check=True).stdout)
     assert got[:7] == [[0, 300], None, None, None, None, None, None], got
     assert got[7] == [0, 300 * 1.08] and got[8] == [0, 20 * 1.08], got
+
+
+# ---- R26-360: the hand served from the committed faces, never from Google Fonts --------------------------------
+# The player fetched Kalam from fonts.googleapis.com / fonts.gstatic.com on every capture, so a dropped request under
+# load was a named red (T9's FontsUnsettled) and the face was whatever build Google served that day. The six faces
+# are committed beside the template - the bytes Google served on 2026-09-25 - and a capture never leaves the machine.
+
+HAND_DIR = TEMPLATE.parent / "fonts" / "kalam"
+HAND_BUILD = {   # the sha256 of each face as fonts.gstatic.com served it (kalam/v18, css2?family=Kalam:wght@400;700)
+    "kalam-400-devanagari.woff2": "b79d6614aac600d3bf950ae2d6924f72725366d9b5cfb8e9ff88dbc5152044c0",
+    "kalam-400-latin-ext.woff2": "1099e56781c48f97dc66c8df2039a640ded07742acd4c6f2c9dc6350c3e3f324",
+    "kalam-400-latin.woff2": "954410601a823f37e219f7930b7446f86afa15621326a7078d56fb9c910135cb",
+    "kalam-700-devanagari.woff2": "7deb08192e5f12f885cab3826284b68fb44c44447aa7e6dbafa27160fe90aa5c",
+    "kalam-700-latin-ext.woff2": "1fc176f6b1fbc091d4321ef2c9b683a6f512f645b9f22c460c2e2f3d298fcf74",
+    "kalam-700-latin.woff2": "252063af6ade8b9a744cde4ddad0fc21ea53b8ba711eed121a0c2e8610ea9c93",
+}
+GOOGLE = ("fonts.googleapis.com", "fonts.gstatic.com")
+HAND_SURFACE = "race-path-eased"   # R26-243's own golden: a title, a sub and a citation in the hand
+
+
+def test_r26_360_the_committed_faces_are_the_build_google_served_with_their_licence():
+    import hashlib
+    got = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(HAND_DIR.glob("*.woff2"))}
+    assert got == HAND_BUILD
+    ofl = (HAND_DIR / "OFL.txt").read_text(encoding="utf-8")
+    assert "Indian Type Foundry" in ofl and "SIL OPEN FONT LICENSE Version 1.1" in ofl
+
+
+def test_r26_360_the_template_names_no_font_host():
+    src = TEMPLATE.read_text(encoding="utf-8")
+    code = re.sub(r"<!--.*?-->|/\*.*?\*/", "", src, flags=re.S)   # a comment may tell the history; the page may not fetch it
+    assert not [h for h in GOOGLE if h in code], "the player still names a Google Fonts host"
+    faces = re.findall(r"url\((fonts/kalam/[a-z0-9-]+\.woff2)\)", code)
+    assert sorted(Path(f).name for f in faces) == sorted(HAND_BUILD), faces
+
+
+def _capture_offline(html: Path, t: float, size: tuple[int, int]) -> tuple[bytes, list[str], dict]:
+    """A capture with every request logged and the two Google hosts refused outright."""
+    srv, port = RB.serve(html.parent)
+    pw = br = None
+    try:
+        pw, br = SP.launch()
+        page = br.new_context(viewport={"width": size[0], "height": size[1]}).new_page()
+        asked: list[str] = []
+        page.on("request", lambda r: asked.append(r.url))
+        for host in GOOGLE:
+            page.route(f"https://{host}/**", lambda r: r.abort())
+        page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+        RB.prepare_page(page, *size)
+        png = RB.frame_png(page, t, size)
+        report = page.evaluate("() => window.__fontsSettled()")
+        return png, asked, report
+    finally:
+        SP.closer(pw, br, srv.shutdown)()
+
+
+def _assert_offline_golden(png: bytes, asked: list[str], report: dict) -> None:
+    google = [u for u in asked if any(h in u for h in GOOGLE)]
+    assert not google, f"the capture asked Google for the hand: {google}"
+    hand = {f["weight"] for f in report["faces"] if f["family"] == "Kalam" and f["status"] == "loaded"}
+    assert report["ok"] is True and hand >= {"400", "700"}, report
+    golden = RB.rgb_bytes((RB.FRAMES / f"{HAND_SURFACE}.png").read_bytes())[1]
+    assert RB.rgb_bytes(png)[1] == golden, "the committed face does not render the golden's bytes"
+
+
+@needs_chromium
+def test_r26_360_a_single_file_capture_never_asks_google_and_is_the_golden():
+    with tempfile.TemporaryDirectory() as td:
+        html, t, size = _golden_html(HAND_SURFACE, td)
+        _assert_offline_golden(*_capture_offline(html, t, size))
+
+
+@needs_chromium
+def test_r26_360_a_split_build_carries_its_faces_and_is_the_golden():
+    tl, uris, t, aspect = RB.load_surface(HAND_SURFACE)
+    with tempfile.TemporaryDirectory() as td:
+        page = RB.write_split(Path(td), tl, uris, f"{HAND_SURFACE}.timeline.json")
+        assert sorted(p.name for p in (Path(td) / "fonts" / "kalam").glob("*.woff2")) == sorted(HAND_BUILD)
+        _assert_offline_golden(*_capture_offline(page, t, RB.STAGE[aspect]))

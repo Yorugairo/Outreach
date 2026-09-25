@@ -1,6 +1,17 @@
 <meta charset="utf-8"> <!-- served by python http.server with no charset header: without this, caption dashes and ledger ink glyphs decode as cp1252 -->
 <title id="doctitle">Episode</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap"> <!-- the ledger page's hand (HG2: Kalam, OFL) -->
+<!-- THE HAND (R26-360, P72 T27): the ledger page's Kalam (HG2, SIL OFL - fonts/kalam/OFL.txt) is served from the files
+     beside this template, never from Google Fonts: the six faces ARE the build fonts.googleapis.com served on 2026-09-25
+     (css2?family=Kalam:wght@400;700, kalam/v18 - the same bytes, the same unicode-range split, the same order), so a capture
+     never waits on the network. render_baseline inlines them in the single-file page and copies them beside a split one. -->
+<style id="hand-faces">
+@font-face { font-family: 'Kalam'; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/kalam/kalam-400-devanagari.woff2) format('woff2'); unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09; }
+@font-face { font-family: 'Kalam'; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/kalam/kalam-400-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Kalam'; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/kalam/kalam-400-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Kalam'; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/kalam/kalam-700-devanagari.woff2) format('woff2'); unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09; }
+@font-face { font-family: 'Kalam'; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/kalam/kalam-700-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Kalam'; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/kalam/kalam-700-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+</style>
 <style>
   :root {
     --charcoal: #25313C; --cobalt: #1769C2; --teal: #178C83;
@@ -83,9 +94,9 @@
      and the conic border are gone; `page.board` stays (the punch centre and the chart box). */
   /* ink writes: per glyph, a left-to-right mask wipe with an ink-soft edge (~18% of the glyph),
      a fixed seeded tilt per character so it reads as a hand and never wriggles after it is written.
-     Font: KALAM (Human Gate 2 DECIDED 2026-09-03 - "Kalam is probably the right call"; SIL OFL), loaded from
-     Google Fonts by the link in the head; Inter is the fallback when the machine is offline (never a generic
-     cursive - it resolves per machine). */
+     Font: KALAM (Human Gate 2 DECIDED 2026-09-03 - "Kalam is probably the right call"; SIL OFL), served from the
+     committed files by the `hand-faces` style in the head (R26-360); Inter is the fallback if a face cannot load
+     (never a generic cursive - it resolves per machine). */
   .lp-ink { position: absolute; font-family: Kalam, Inter, Arial, sans-serif; white-space: nowrap; pointer-events: none; }
   .lp-ink .g { display: inline-block; --w: 0; --tilt: 0deg;
                -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--w) * 118% - 18%), transparent calc(var(--w) * 118%));
@@ -700,8 +711,8 @@
     document.documentElement.setAttribute("data-layers", on.join(" "));
   })();
 
-  /* THE FONTS HAVE SETTLED (P72 T9; R26-243 / R26-251). The hand (Kalam) comes from the Google Fonts sheet in the
-     head and is fetched on first use, so a capture could be taken after its sheet or a face failed to arrive - the
+  /* THE FONTS HAVE SETTLED (P72 T9; R26-243 / R26-251). The hand (Kalam) is fetched on first use - from the Google
+     Fonts sheet until R26-360, from the committed faces since - so a capture could be taken after a face failed to arrive - the
      title, the sub and the citation then shot in the fallback face and nothing said so (race-path-eased's diff under
      a full-suite load) - or a measurer could read a page before the rebuild a landed face asks for. This resolves
      once the hand's two faces have been asked for, every face the page knows has settled, two frames have painted
@@ -731,7 +742,7 @@
                           .map(function (f) { return f.family + " " + f.weight + " " + f.style; });
         var missing = [];
         res.forEach(function (r) { if (r.error) failed.push(r.font + " (" + r.error + ")"); });
-        if (!faces.some(function (f) { return f.family === HAND; })) missing.push(HAND + " (the Google Fonts sheet did not load)");
+        if (!faces.some(function (f) { return f.family === HAND; })) missing.push(HAND + " (the hand-faces style did not load)");
         else res.forEach(function (r) { if (r.n === 0) missing.push(r.font + " (no face answers it)"); });
         return { ok: !failed.length && !missing.length, faces: faces, failed: failed, missing: missing };
       });
