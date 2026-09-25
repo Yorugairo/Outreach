@@ -691,7 +691,9 @@ CHART_TO_WHEN = {
     "park": "room for the next thing beside the chart (a card, a second diagram); scale 1.0 is the UN-PARK when the cards leave; it moves no data and restarts no clock",
     "compare": "the sentence quotes the market's figure and then says what it MEANS - the quoted number morphs into the number the viewer feels (E76); the arithmetic is authored, never invented",
     "morph": "a different LINE series in the same frame ('what the Fed charges against what America pays') - the area under the line becomes the target's by ARAP",
-    "remake": "the sentence turns the SAME data into the other whole chart ('month by month, this is what it did') - every series, datum, axis, label and the title transform on one clock, line <-> bars; when only the scale, the window or the form changes, the verb is rescale, extend or recast",
+    "remake": ("the sentence turns the SAME data into the other whole chart ('month by month, this is what it did') - "
+               "every series, datum, axis, label and the title transform on one clock, line <-> bars; only the scale, "
+               "window or form changing is rescale, extend or recast"),
 }
 # P52 T6: THE NEWSREEL BAND (the operator, 2026-09-12: "run the newsreel and then above it we can have either a
 # talking news head, actual news footage, or a narrative plate, we don't always have to fill the whole thing with
@@ -753,10 +755,10 @@ PANEL_SPECIES += (SPECIES_LIT_STRETCH,)   # P69 T36: a light travels a line on O
 SPECIES_SOLO, SPECIES_UNSOLO = "solo", "unsolo"
 SPECIES_KINDS += (SPECIES_SOLO, SPECIES_UNSOLO)
 PAGE_SPECIES += (SPECIES_SOLO, SPECIES_UNSOLO)
-SPECIES_WHEN[SPECIES_SOLO] = ("COMPARES / RANKS, at the turn: the sentence narrows to ONE series of several ('look at China's', "
-                              "'Chipmakers doubling') or names ONE bar in a field ('the third largest') - on the word the "
-                              "others mute to E67's dim and the named one keeps its ink; never when the comparison between "
-                              "them is the claim, or on a two-bar page (badge both)")
+SPECIES_WHEN[SPECIES_SOLO] = ("COMPARES / RANKS, at the turn: the sentence narrows to ONE series of several ('look "
+                              "at China's') or ONE bar in a field - on the word the others mute to E67's dim, the "
+                              "named one keeps its ink; never when the comparison is the claim, or on two bars "
+                              "(badge both)")
 SPECIES_WHEN[SPECIES_UNSOLO] = ("the sentence widens back out after a solo - the comparison is the claim again ('against the "
                                 "index', 'all of them') - and every muted series or bar restores its ink on the word; never "
                                 "without a solo before it (it restores nothing)")
@@ -772,10 +774,10 @@ SOLO_BUILDERS = {"dense-line": "series", "story": "bar"}   # the two pages whose
 # final state frozen as a hit, then a directional cut - and life does not come back to the page it left.
 SPECIES_FREEZE = "freeze"
 SPECIES_KINDS += (SPECIES_FREEZE,)
-SPECIES_WHEN[SPECIES_FREEZE] = ("the TURN of the argument lands on ONE number or thing - the line the whole row builds to - and "
-                                "the stage STOPS on it: every idle, drift and ambient life holds for 0.4-1.2 s while one light "
-                                "comes on there, then life resumes; never while anything else moves, and never in place of a "
-                                "named thing's arrival (E99 s71: it arrives first, then the stage may stop on it)")
+SPECIES_WHEN[SPECIES_FREEZE] = ("the TURN of the argument lands on ONE number or thing and the stage STOPS on it: "
+                                "every idle, drift and ambient life holds 0.4-1.2 s while one light comes on, then "
+                                "resumes; never while anything else moves, nor instead of its arrival (E99 s71: it "
+                                "arrives first)")
 FREEZE_MIN_S, FREEZE_MAX_S = 0.4, 1.2   # species/freeze.mjs FREEZE.MIN_S / MAX_S, mirrored: shorter reads as a dropped frame, longer as E49's still
 FREEZE_KEYS = ("kind", "at", "dur", "id", "target")
 # P69 T45 (E99 s101; s109 (2)) - THE MEMBERSHIP STACK's word. A bars page's bar may carry `members` (ledger_page: equal
@@ -789,10 +791,10 @@ FREEZE_KEYS = ("kind", "at", "dur", "id", "target")
 SPECIES_MEMBER = "member"
 SPECIES_KINDS += (SPECIES_MEMBER,)
 PAGE_SPECIES += (SPECIES_MEMBER,)
-SPECIES_WHEN[SPECIES_MEMBER] = ("the sentence names WHO is in a single total ('Google, Microsoft, Amazon, Meta and Oracle - all "
-                                "of it one bill') - a membership bar's tile lands on its member's name, and `light` lights the "
-                                "one the sentence names; never to compare the members' sizes (that is bars) or to give each "
-                                "member a value (that is the stacked bar, T64)")
+SPECIES_WHEN[SPECIES_MEMBER] = ("the sentence names WHO is in a single total ('Google, Microsoft, Amazon, Meta and "
+                                "Oracle - all of it one bill') - each tile lands on its name, `light` lights the "
+                                "named one; never to compare the members' sizes (bars) or value each (the stacked "
+                                "bar, T64)")
 MEMBER_SPECIES_KEYS = ("kind", "at", "dur", "id", "tile", "bar", "light")
 MEMBER_DUR_S = (0.2, 1.2)   # [DERIVED] the landing's window: the count array lands in COUNT_ARRAY_LAND_S (0.45); under 0.2 the
                             # spring's overshoot is a flicker, past 1.2 it is a float, not a landing
@@ -856,10 +858,9 @@ LEVEL_JOIN_EM_W = 0.52   # [DERIVED: Kalam 700's mean advance, the figure's own 
 # (`ruler_row_advice`, s109 (c) / s106).
 SPECIES_RULER = "ruler"
 SPECIES_KINDS += (SPECIES_RULER,)
-SPECIES_WHEN[SPECIES_RULER] = ("the sentence SPANS a LAG of years between a cause and its payoff ('it took more than a "
-                               "decade', 'the fibre came first') at the proof - a ruler scrolls the years past and settles on "
-                               "the decades the lag lands in, a GROUND under the things the sentence names; never for a single "
-                               "date (an axis tag or a stamp), and it pins no chip to a year")
+SPECIES_WHEN[SPECIES_RULER] = ("the sentence SPANS a LAG of years between a cause and its payoff at the proof - a "
+                               "ruler scrolls the years and settles on the lag's decades, a GROUND under the named "
+                               "things; never for a single date (an axis tag or a stamp); it pins no chip to a year")
 RULER_KEYS = ("kind", "at", "dur", "from", "to", "settle", "y", "idle", *ROW_PATH_KEYS)
 RULER_PIN_KEYS = ("pins", "pin", "marks", "labels", "label", "cards", "chips", "tick_at", "leader", "leaders")
 RULER_SCROLL_S, RULER_OUT_S = 1.5, 0.4   # species/ruler.mjs RULER.SCROLL_S / OUT_S, mirrored (test_decade_ruler pins them)
@@ -881,10 +882,10 @@ RULER_BAND_HALF_PX = 138 / 2 + 14 + 0.72 * 132
 # refused, and every term names its source - an evidence object (`src`) or a research tier (`tier`).
 SPECIES_EQUATION = "equation"
 SPECIES_KINDS += (SPECIES_EQUATION,)
-SPECIES_WHEN[SPECIES_EQUATION] = ("EXPLAINS: the arithmetic IS the claim ('real yield = coupon minus inflation', 'a fifth "
-                                  "of the index, halved, erases ten percent') - each input written on its own word, the "
-                                  "operators between, the signed result on the word that says it; never when an input is "
-                                  "unsourced or the result is not spoken")
+SPECIES_WHEN[SPECIES_EQUATION] = ("EXPLAINS: the arithmetic IS the claim ('real yield = coupon minus inflation') - "
+                                  "each input written on its own word, the operators between, the signed result on "
+                                  "the word that says it; never when an input is unsourced or the result is not "
+                                  "spoken")
 EQUATION_KEYS = ("kind", "at", "dur", "target", "terms", "ops", "result", "idle", *ROW_PATH_KEYS)
 EQUATION_TERM_KEYS = ("text", "value", "at", "src", "tier", "label")
 EQUATION_RESULT_KEYS = ("text", "value", "at", "label")   # computed, never sourced: the row's own inputs are its source
@@ -921,10 +922,10 @@ EQUATION_WRITE_S, EQUATION_OP_LEAD, EQUATION_OUT_S, EQUATION_FLOOR_PX = 0.6, 0.1
 # s128: it is an object in the world (a prop's resting hatch, the page's room), so where it stands is the author's (s106).
 SPECIES_BALANCE = "balance"
 SPECIES_KINDS += (SPECIES_BALANCE,)
-SPECIES_WHEN[SPECIES_BALANCE] = ("two forces are WEIGHED and the sentence says which way it tips - or that it does not ('not "
-                                 "just threats ... opportunities', the moat against the paper): each named side lands on its "
-                                 "word, the beam settles level or tips; never when one side is unnamed or unweighed, and never "
-                                 "for a real balance of figures (that is two bars)")
+SPECIES_WHEN[SPECIES_BALANCE] = ("two forces are WEIGHED and the sentence says which way it tips - or that it does "
+                                 "not ('threat' vs 'opportunity'): each named side lands on its word, the beam "
+                                 "settles level or tips; never with a side unnamed or unweighed, nor for a balance "
+                                 "of figures (two bars)")
 BALANCE_SIDES = ("left", "right")
 BALANCE_KEYS = ("kind", "at", "dur", "target", "left", "right", "tip", "idle", "ink") + ROW_PATH_KEYS
 BALANCE_SIDE_KEYS = ("label", "at", "icon", "prop", "mass")

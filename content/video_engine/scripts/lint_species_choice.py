@@ -635,7 +635,7 @@ def sync_doc(write: bool) -> bool:
     if text[a:b] == want:
         return True
     if write:
-        MAP_DOC.write_text(text[:a] + want + text[b:], encoding="utf-8")
+        MAP_DOC.write_text(text[:a] + want + text[b:], encoding="utf-8", newline="\n")   # LF on every OS (R26-323 class)
         return True
     return False
 

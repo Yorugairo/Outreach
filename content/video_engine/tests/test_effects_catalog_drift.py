@@ -548,15 +548,12 @@ def card_of(card_id: str) -> dict:
     return next(c for c in cards(CARDS_DIR) if c["id"] == card_id)
 
 
-@pytest.mark.xfail(strict=True, reason="R26-240: docs_find's effects layer does not rank by field, so the `does` match leads")
 def test_the_ken_burns_card_is_implicit_and_docs_find_answers_with_it_first():
-    """R26-224 (2026-09-18), classified (c) a defect in the recall layer, filed as R26-240: the card's own three
-    assertions still pass; the RECALL one does not. `docs_find "Ken Burns" --layer effects` now answers with
-    `plate_option:alive` (81210d8 / E99 s55, whose `does` mentions the Ken Burns plate) before `plate_option:ken`,
-    because the effects Layer is the only recall layer built WITHOUT `rank_by_field=True` (capabilities and assets
-    have it): every effects hit ranks 0, so the order is the catalogue's id order and `alive` sorts first.
-    Measured: ken matches in `title` (field index 1), alive in `does` (index 3) - with the flag, ken leads."""
-    """(a) The push and the drift are ONE card with no token of its own, and the recall layer leads with it."""
+    """(a) The push and the drift are ONE card with no token of its own, and the recall layer leads with it.
+
+    R26-240 (closed by P72 T2): `plate_option:alive` (81210d8 / E99 s55, whose `does` mentions the Ken Burns plate)
+    used to lead `plate_option:ken`, because the effects Layer was the only recall layer built without
+    `rank_by_field=True`; with it, ken's `title` hit (field 1) ranks ahead of alive's `does` hit (field 3)."""
     # Arrange
     card = card_of("plate_option:ken")
 

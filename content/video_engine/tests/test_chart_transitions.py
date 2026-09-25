@@ -10,6 +10,7 @@ the five biggest foreign holders draws on with Japan's sold wedge in it.
 """
 from __future__ import annotations
 
+import contextlib
 import json
 import sys
 import tempfile
@@ -135,8 +136,42 @@ PROBE = """() => {
 }"""
 
 
-def _player(species, plate=PLATE, ep=EP):
+def _open_player(html: Path, td, w: int, h: int):
+    """Serve `html`, open it in a fresh Playwright at w x h, and return (page, errs, close) - the ONE place the
+    player helpers start a driver. R26-145: a setup that raises closes what it opened and re-raises, and `close()`
+    stops the driver even when the browser's own close raises, so no failure leaves Playwright's loop running."""
     from playwright.sync_api import sync_playwright
+    srv, port = RB.serve(html.parent)
+    pw = br = None
+
+    def close():
+        try:
+            if br is not None:
+                br.close()
+        finally:
+            try:
+                if pw is not None:
+                    pw.stop()
+            finally:
+                srv.shutdown()
+                td.cleanup()
+
+    try:
+        pw = sync_playwright().start()
+        br = pw.chromium.launch(headless=True)
+        page = br.new_context(viewport={"width": w, "height": h}).new_page()
+        errs: list[str] = []
+        page.on("pageerror", lambda e: errs.append(str(e)))
+        page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
+        RB.prepare_page(page, w, h)
+    except BaseException:
+        with contextlib.suppress(Exception):
+            close()
+        raise
+    return page, errs, close
+
+
+def _player(species, plate=PLATE, ep=EP):
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
     world = B.world_for_plate(plate, (0, 0, 0), ep)
     sc = tl["scenes"][0]
@@ -147,18 +182,30 @@ def _player(species, plate=PLATE, ep=EP):
     html = Path(td.name) / "recast.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["9:16"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs: list[str] = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = _open_player(html, td, w, h)
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return page, errs, close
+
+
+# ---- R26-145: a player whose setup fails must not leave Playwright's loop running ---------------------------------
+
+@needs_objects
+@needs_browser
+def test_a_player_whose_setup_fails_stops_its_playwright(monkeypatch):
+    """R26-145: in one process with `test_effects_gallery.py`, six of these tests failed with 'Sync API inside the
+    asyncio loop' after a NetworkError. The leak was HERE: every `_*_player` helper started Playwright and only its
+    returned `close()` stopped it, so a setup that raised (a goto under load) left the driver's loop running, and
+    every later `sync_playwright()` in the process refused. A failed setup now closes what it opened and re-raises."""
+    from playwright.sync_api import sync_playwright
+
+    def network_error(*_a, **_k):
+        raise RuntimeError("net::ERR_ABORTED - a NetworkError stand-in")
+
+    monkeypatch.setattr(RB, "prepare_page", network_error)
+    with pytest.raises(RuntimeError, match="NetworkError stand-in"):
+        _player(SPECIES)
+    with sync_playwright() as pw:          # a leaked driver raises 'Sync API inside the asyncio loop' right here
+        pw.chromium.launch(headless=True).close()
 
 
 SPECIES = [
@@ -358,7 +405,6 @@ RS_PROBE = """() => {
 
 
 def _rescale_player():
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
     plate = "ledger:ev-japan-holdings-v1:line"
     world = B.world_for_plate(plate, (0, 0, 0), EP)
@@ -371,21 +417,12 @@ def _rescale_player():
     html = Path(td.name) / "rescale.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["9:16"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs: list[str] = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = _open_player(html, td, w, h)
 
     def at(t: float) -> dict:
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
         return page.evaluate(RS_PROBE)
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return at, errs, close
 
 
@@ -497,7 +534,6 @@ EX_PROBE = """() => {
 
 
 def _extend_player(ep, plate, species, runtime=26.0):
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
     world = B.world_for_plate(plate, (0, 0, 0), ep)
     B.derive_rescale_states(world, species, plate, ep)
@@ -507,21 +543,12 @@ def _extend_player(ep, plate, species, runtime=26.0):
     html = Path(td.name) / "extend.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["9:16"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs: list[str] = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = _open_player(html, td, w, h)
 
     def at(t: float) -> dict:
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
         return page.evaluate(EX_PROBE)
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return at, errs, close
 
 
@@ -627,7 +654,6 @@ PK_PROBE = """() => {
 
 
 def _park_player(species, runtime=24.0):
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
     plate = "ledger:ev-japan-holdings-v1:line"
     world = B.world_for_plate(plate, (0, 0, 0), EP)
@@ -638,22 +664,13 @@ def _park_player(species, runtime=24.0):
     html = Path(td.name) / "park.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["9:16"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs: list[str] = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = _open_player(html, td, w, h)
     probe = PK_PROBE % w
 
     def at(t: float) -> dict:
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
         return page.evaluate(probe)
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return at, errs, close
 
 
@@ -742,7 +759,6 @@ KR_PROBE = """() => {
 
 
 def _keyed_player(ep, plate, species, runtime=24.0, probe=None):
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
     world = B.world_for_plate(plate, (0, 0, 0), ep)
     B.derive_rescale_states(world, species, plate, ep)
@@ -752,21 +768,12 @@ def _keyed_player(ep, plate, species, runtime=24.0, probe=None):
     html = Path(td.name) / "keyed.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["9:16"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs: list[str] = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = _open_player(html, td, w, h)
 
     def at(t: float) -> dict:
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
         return page.evaluate(probe or KR_PROBE)
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return at, errs, close
 
 
@@ -960,20 +967,12 @@ def _morph_timeline(ep, plate, species, runtime=30.0, kinetics=None):
 
 
 def _morph_player(ep, plate, species, runtime=30.0, kinetics=None):
-    from playwright.sync_api import sync_playwright
     timeline, uris = _morph_timeline(ep, plate, species, runtime, kinetics)
     td = tempfile.TemporaryDirectory()
     html = Path(td.name) / "morph.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["9:16"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs: list[str] = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = _open_player(html, td, w, h)
 
     def at(t: float) -> dict:
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
@@ -982,8 +981,6 @@ def _morph_player(ep, plate, species, runtime=30.0, kinetics=None):
     def frame(t: float) -> bytes:
         return RB.frame_png(page, t, (w, h))
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return at, frame, page, errs, close
 
 
@@ -1167,7 +1164,6 @@ BR_RESCALE_AT, BR_RESCALE_S = 10.0, 1.4
 
 def _perform_player(plate, species, runtime=24.0):
     """The Tokyo page with page species and a chart_to, through the compiler's own derivation."""
-    from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
     world = B.world_for_plate(plate, (0, 0, 0), EP)
     B.derive_rescale_states(world, species, plate, EP)
@@ -1177,20 +1173,11 @@ def _perform_player(plate, species, runtime=24.0):
     html = Path(td.name) / "perform.html"
     html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
     w, h = RB.STAGE["9:16"]
-    srv, port = RB.serve(html.parent)
-    pw = sync_playwright().start()
-    br = pw.chromium.launch(headless=True)
-    page = br.new_context(viewport={"width": w, "height": h}).new_page()
-    errs: list[str] = []
-    page.on("pageerror", lambda e: errs.append(str(e)))
-    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
-    RB.prepare_page(page, w, h)
+    page, errs, close = _open_player(html, td, w, h)
 
     def seek(t):
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
 
-    def close():
-        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
     return page, seek, errs, close
 
 

@@ -352,6 +352,22 @@ def test_the_real_tree_answers_a_capability_term_from_the_capabilities_layer_fir
 
 
 @needs_capabilities
+def test_the_real_tree_answers_serve_player_no_store_from_the_server_row_and_its_memory(capsys):
+    # Arrange: R26-136 (5) - the phrase is in no record; the review server's row and memory carry both words
+    server_row = next(r["line"] for r in DF.read_records(REAL_CAPABILITIES)
+                      if "HOT RELOAD" in r["name"] and any("serve_player" in w for w in r["where"]))
+
+    # Act
+    assert DF.main(["serve_player no-store", "--repo", str(ROOT), "--no-ensure"]) == 0
+    lines = capsys.readouterr().out.splitlines()
+
+    # Assert
+    assert f"[capabilities] docs/content-video-engine/CAPABILITIES.md:{server_row} — HOT RELOAD" in "\n".join(lines)
+    assert any("docs/agent-memory/operator/review-server-no-store.md" in line for line in lines)
+    assert lines[-1].endswith("(all words)")
+
+
+@needs_capabilities
 def test_the_real_capabilities_list_is_the_index_page_line_for_line(capsys):
     # Arrange
     page = (ROOT / "docs/CAPABILITIES-INDEX.md").read_text(encoding="utf-8")
@@ -425,6 +441,33 @@ def test_all_words_answers_only_when_the_phrase_hits_nothing(capsys, tree):
     # Assert
     assert lines[0].startswith("[assets] content/video_engine/assets/props/cutouts/prop-gadget-v1.png")
     assert lines[-1] == "1 hit(s) in assets (all words)"
+
+
+SERVER_CAPABILITY = {**CAPABILITY, "id": "hot-reload", "name": "Hot reload", "line": 115,
+                     "what": "the shared review server.", "where": ["scripts/serve_player.py"],
+                     "cards": [], "terms": ["review", "server", "no-store", "cache-control"]}
+
+
+def test_all_words_answers_a_query_with_underscores_and_hyphens_when_its_phrase_misses(capsys, tree):
+    # Arrange: the row carries `serve_player` in its paths and `no-store` in its prose, never side by side
+    (tree / "docs/CAPABILITIES-INDEX.jsonl").write_text(json.dumps(SERVER_CAPABILITY) + "\n", encoding="utf-8")
+
+    # Act
+    lines = run(capsys, tree, "serve_player no-store", "--layer", "capabilities")
+
+    # Assert
+    assert lines[0] == f"[capabilities] {CAP_DOC}:115 — Hot reload — LIVE - the shared review server."
+    assert lines[-1] == f"1 hit(s) in capabilities; next: sed -n 115p {CAP_DOC} (all words)"
+
+
+def test_only_words_of_letters_digits_underscores_and_hyphens_fall_back():
+    # Act / Assert: a regex or punctuated query stays a phrase; a single word has nothing to fall back to
+    assert DF.fallback_words("serve_player no-store") == ["serve_player", "no-store"]
+    assert DF.fallback_words("gadget catalogue") == ["gadget", "catalogue"]
+    assert DF.fallback_words(r"\bG99\b x") == []
+    assert DF.fallback_words("a.b c") == []
+    assert DF.fallback_words("gadget - catalogue") == []
+    assert DF.fallback_words("federal-reserve") == ["federal-reserve"]
 
 
 def test_a_phrase_that_hits_never_falls_back(capsys, tree):

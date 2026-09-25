@@ -26,24 +26,32 @@ def _has_build(project: Path) -> bool:
 
 # ---------------------------------------------------------------- the three places agree
 def test_every_kind_and_verb_names_a_when_and_a_when_names_a_kind():
-    """R26-224 (2026-09-18): the SET half of the test below, kept LIVE while its length half is xfailed - a kind
-    or a verb that ships with no `when` must still fail here and now, never behind an xfail."""
+    """R26-224 (2026-09-18): the SET half - a kind or a verb that ships with no `when` fails here and now."""
     assert set(B.SPECIES_WHEN) == set(B.SPECIES_KINDS)
     assert set(B.CHART_TO_WHEN) == set(B.CHART_TO_KINDS)
 
 
-@pytest.mark.xfail(strict=True, reason="R26-238: chart_to remake's `when` is 278 chars, over this lint's 260 ceiling")
-def test_every_kind_and_verb_carries_a_when():
-    """R26-224 (2026-09-18), classified (c) a defect in the compiler - filed as R26-238 and NAMED here rather
-    than dialled away: `CHART_TO_WHEN["remake"]` (build_scene_timeline_f.py:481, written by d4294e2 / P61 T2 /
-    E99 s1-s34) is 278 characters where the other six verbs run 118-185, so it overruns the 260 this lint has
-    always held the map's s4 table to (one verb, one row, one readable line). No ruling moved the ceiling, and
-    the fix is the compiler's sentence, not this number - so the xfail is STRICT: the day R26-238 lands, this
-    test fails again and the marker comes off."""
-    assert set(B.SPECIES_WHEN) == set(B.SPECIES_KINDS)
-    assert set(B.CHART_TO_WHEN) == set(B.CHART_TO_KINDS)
-    for text in list(B.SPECIES_WHEN.values()) + list(B.CHART_TO_WHEN.values()):
-        assert "\n" not in text and 30 <= len(text) <= 260, text
+WHEN_CEILING = 260          # one verb or kind, one row, one readable line of the map's s4 table
+
+
+def _over_the_ceiling(table: dict[str, str]) -> dict[str, int]:
+    return {k: len(v) for k, v in table.items() if "\n" in v or not 30 <= len(v) <= WHEN_CEILING}
+
+
+def test_every_verb_carries_a_when_under_the_ceiling():
+    """R26-238 (closed by P72 T2): `CHART_TO_WHEN["remake"]` was 278 characters, over the 260 this lint has always
+    held the map's s4 table to; the compiler's sentence was cut (the rule kept: the SAME data into the other whole
+    chart, every series / datum / axis / label / title on one clock, line <-> bars; a scale, window or form change
+    is rescale, extend or recast), the number was not moved. LIVE: a verb that overruns fails here and now."""
+    assert _over_the_ceiling(B.CHART_TO_WHEN) == {}
+
+
+def test_every_kind_carries_a_when_under_the_ceiling():
+    """The kinds' half of R26-224's length check, LIVE (P72 T2 round 2). Six species `when`s had landed over 260 -
+    solo 332 (f8f6b06, P69 T37), freeze 361 (187604a), member 325 (9caa76b), ruler 336 (df678cc, P71 T14), equation
+    295 (8a9fc02, P70 T6), balance 323 (4950a91, P70 T7) - and each sentence was cut to fit with its rule kept (the act,
+    the trigger, the motion, every `never` and its redirect); a second example was what went. The ceiling did not move."""
+    assert _over_the_ceiling(B.SPECIES_WHEN) == {}
 
 
 def test_map_carries_the_compiler_when_and_the_ten_acts():
@@ -55,6 +63,22 @@ def test_map_carries_the_compiler_when_and_the_ten_acts():
         assert f"**{act}" in doc, act
     for kind in B.SPECIES_KINDS:
         assert f"`{kind}`" in doc, kind
+
+
+def test_write_doc_writes_lf_only(tmp_path, monkeypatch):
+    """P72 T2 (the R26-323 class): `--write-doc` wrote CRLF on Windows - `write_text` without `newline` - so a regenerated
+    map diffed on every line. A stale copy of the map is rewritten in a temp dir; the bytes carry no CR."""
+    doc = tmp_path / "SPECIES-BY-SENTENCE.md"
+    text = L.MAP_DOC.read_bytes().decode("utf-8").replace("\r\n", "\n")
+    a, b = L.doc_block(text)
+    doc.write_bytes((text[:a] + "\nstale\n" + text[b:]).encode("utf-8"))
+    monkeypatch.setattr(L, "MAP_DOC", doc)
+
+    assert L.sync_doc(write=True)
+
+    crs = doc.read_bytes().count(b"\r")
+    assert crs == 0, f"{crs} CR bytes in the written map"
+    assert L.sync_doc(write=False)
 
 
 def test_every_act_names_built_species_the_map_lists():

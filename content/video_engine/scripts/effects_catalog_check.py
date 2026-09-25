@@ -30,6 +30,11 @@ P72 T3 (E99 s84) adds the DENIED status: a recipe the operator ruled off is neve
 `count` as the record of what was ruled (10 and 12 accept both on `denied` only - never on a candidate, and the proof
 is not re-walked: a record is not a claim), and a proven recipe that splices a denied one in as a member FAILs (9).
 
+R26-141 (P72 T2) adds the SCHEMA check the generator used to be the only holder of:
+
+ 13. schema     - every axis file validates against `configs/effect_card.schema.json`; a refusal names the file, the
+                  card id, the dotted field and, for a length, the cap (`does` over 240, `lives.note` over 200)
+
     python content/video_engine/scripts/effects_catalog_check.py [--repo <root>]
 
 Exit 1 on any failure. An example the gate cannot validate without a project is listed as SKIPPED_EXAMPLE, never
@@ -145,7 +150,7 @@ def load_recipes(recipes_dir: Path) -> list[dict]:
 
 
 def load_cards(cards_dir: Path) -> list[dict]:
-    """Every card from every axis file, raw (the schema is the generator's job; this gate must see duplicates)."""
+    """Every card from every axis file, raw (this gate must see duplicates; `check_schema` reads the files itself)."""
     cards: list[dict] = []
     for path in sorted(Path(cards_dir).glob("*.json")):
         cards.extend(json.loads(path.read_text(encoding="utf-8"))["cards"])
@@ -182,6 +187,36 @@ def _options_for(cards: list[dict], source: Source) -> set[str]:
 
 
 # --------------------------------------------------------------------------- 1. coverage / 2. phantoms
+
+def _schema_failure(file_name: str, doc: dict, error) -> str:
+    """One refusal: `<file>: <card id>: `<dotted field>` ...`, with the cap when the schema refused a length."""
+    where = list(error.absolute_path)
+    owner = file_name
+    cards = doc.get("cards") if isinstance(doc, dict) else None
+    if len(where) >= 2 and where[0] == "cards" and isinstance(where[1], int) and isinstance(cards, list):
+        card = cards[where[1]] if where[1] < len(cards) and isinstance(cards[where[1]], dict) else {}
+        owner = f"{file_name}: {card.get('id') or f'cards[{where[1]}]'}"
+        where = where[2:]
+    field = ".".join(str(part) for part in where) or "(the card)"
+    if error.validator == "maxLength":
+        return f"{owner}: `{field}` is {len(error.instance)} chars, over the schema's maxLength {error.validator_value}"
+    return f"{owner}: `{field}` refused by the schema ({error.validator}): {error.message[:160]}"
+
+
+def check_schema(cards_dir: Path, repo: Path = REPO) -> list[str]:
+    """13. Every axis file against `effect_card.schema.json` (R26-141): the generator's refusal, here, so a lane's
+    validate line refuses what `build_docs_layers.py --write` would, and names every refusal instead of the first."""
+    import jsonschema
+
+    schema = json.loads((Path(repo) / BEC.SCHEMA_REL).read_text(encoding="utf-8"))
+    validator = jsonschema.Draft202012Validator(schema)
+    failures: list[str] = []
+    for path in sorted(Path(cards_dir).glob("*.json")):
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        for error in sorted(validator.iter_errors(doc), key=lambda e: [str(p) for p in e.absolute_path]):
+            failures.append(_schema_failure(path.name, doc, error))
+    return failures
+
 
 def check_coverage(cards: list[dict], repo: Path = REPO) -> list[str]:
     failures: list[str] = []
@@ -675,10 +710,12 @@ def _walked_count(recipe: dict, registry: dict, walk) -> int | None:
 def run(repo: Path = REPO, cards_dir: Path | None = None, inventory_dir: Path | None = None,
         recipes_dir: Path | None = None) -> Report:
     repo = Path(repo)
-    cards = load_cards(cards_dir or repo / BEC.CARDS_REL)
+    cards_dir = cards_dir or repo / BEC.CARDS_REL
+    cards = load_cards(cards_dir)
     recipes = load_recipes(recipes_dir or repo / BEC.RECIPES_REL)
     report = Report(recipes=len(recipes), proven=sum(1 for r in recipes if r.get("status") == PROVEN),
                     denied=sum(1 for r in recipes if r.get("status") == DENIED))
+    report.failures += check_schema(cards_dir, repo)
     report.failures += check_coverage(cards, repo) + check_phantoms(cards, repo)
     report.failures += check_anchors(cards, repo) + check_proof(cards, repo)
     failures, report.skipped = check_examples(cards)

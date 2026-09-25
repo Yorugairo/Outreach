@@ -212,10 +212,105 @@ def test_ensure_reports_a_failing_builder_with_its_last_line(stubbed, monkeypatc
     assert "FAILED to build first - stub: the source is malformed" in capsys.readouterr().out
 
 
-# --- the real tree --------------------------------------------------------------------------------
+# --- the real tree ---------------------------------------------------------------------------------
+#
+# R26-162: this test used to `ensure` over the LIVE checkout, so another lane's half-done working-tree edit (P61 T14's
+# in-flight `dials.note` on the plate-idle card) failed it, and it rewrote the live generated layers as a side effect.
+# It now rebuilds a SCRATCH COPY of what HEAD holds: the committed tree is what it names, and a dirty card, an untracked
+# file or a stale live layer cannot move its answer. The live layers and digests only SEED the copy (read, never
+# written), so a layer whose committed inputs match the live stamp is not rebuilt; any other layer is, honestly.
 
-def test_the_committed_tree_passes_check():
-    """The stack really runs: every tool that is stale, over this checkout, in order."""
+BINARY_EXT = frozenset(("png", "jpg", "jpeg", "webp", "gif", "mp4", "webm", "mov", "wav", "mp3", "m4a", "flac",
+                        "ttf", "otf", "woff", "woff2", "zip", "pdf"))
+WHOLE_ROOTS = ("docs/", "content/video_engine/scripts/", "content/video_engine/effects/",
+               "content/video_engine/configs/", "content/video_engine/sources/")
+
+
+def layer_input(rel: str) -> bool:
+    """A superset of what `docs_layers.LAYERS` reads (their globs, widened to whole roots), minus media."""
+    name = rel.rsplit("/", 1)[-1]
+    ext = name.rsplit(".", 1)[-1].lower() if "." in name else ""
+    if rel == "AGENTS.md" or rel.startswith((".claude/PRPs/plans/", "content/video_engine/assets/")):
+        return True                                       # the asset index LISTS every file there, media too
+    if ext in BINARY_EXT:
+        return False
+    if rel.startswith(WHOLE_ROOTS):
+        return True
+    if rel.startswith("content/video_engine/tests/"):
+        return ext in ("py", "mjs", "js")
+    return rel.startswith("content/video_engine/projects/") and ext == "md"
+
+
+def committed_tree(root: Path, dest: Path, wanted=layer_input) -> Path:
+    """Every file HEAD holds that `wanted` keeps, written under `dest` from git's own blobs - never the working tree."""
+    import subprocess
+
+    listing = subprocess.run(["git", "ls-tree", "-r", "-z", "HEAD"], cwd=root, capture_output=True, check=True).stdout
+    blobs: list[tuple[str, str]] = []
+    for entry in filter(None, listing.split(b"\0")):
+        meta, rel = entry.split(b"\t", 1)
+        kind, sha = meta.split()[1:3]
+        if kind == b"blob" and wanted(rel.decode("utf-8")):
+            blobs.append((sha.decode(), rel.decode("utf-8")))
+    batch = subprocess.run(["git", "cat-file", "--batch"], cwd=root, check=True, capture_output=True,
+                           input="".join(f"{sha}\n" for sha, _rel in blobs).encode()).stdout
+    at = 0
+    for _sha, rel in blobs:
+        header_end = batch.index(b"\n", at)
+        size = int(batch[at:header_end].split()[2])
+        target = dest / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(batch[header_end + 1:header_end + 1 + size])
+        at = header_end + 1 + size + 1
+    return dest
+
+
+def seed_layers(live: Path, copy: Path) -> None:
+    """The live checkout's generated layers and their stamps, copied in so an unmoved layer is not rebuilt."""
+    import shutil
+
+    for layer in DL.LAYERS:
+        for rel in layer.outputs:
+            if (live / rel).is_file():
+                (copy / rel).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(live / rel, copy / rel)
+    (copy / DL.CACHE_REL).mkdir(parents=True, exist_ok=True)
+    for stamp_file in (live / DL.CACHE_REL).glob("*.digest"):
+        shutil.copy2(stamp_file, copy / DL.CACHE_REL / stamp_file.name)
+
+
+def is_git_checkout(root: Path) -> bool:
+    import subprocess
+
+    try:
+        return subprocess.run(["git", "rev-parse", "--verify", "-q", "HEAD"], cwd=root,
+                              capture_output=True).returncode == 0
+    except OSError:
+        return False
+
+
+def test_the_committed_copy_is_heads_bytes_not_the_working_trees(tmp_path):
+    """R26-162's mechanism on a tiny repository: a dirty edit and an untracked file never reach the copy."""
+    import subprocess
+
+    repo = tmp_path / "repo"
+    (repo / "docs").mkdir(parents=True)
+    (repo / "docs/a.md").write_bytes(b"committed\n")
+    (repo / "docs/pic.png").write_bytes(b"\x89PNG media")
+    git = ["git", "-c", "user.name=t", "-c", "user.email=t@example.invalid", "-c", "core.autocrlf=false"]
+    for args in (["init", "-q"], ["add", "-A"], ["commit", "-q", "-m", "base"]):
+        subprocess.run([*git, *args], cwd=repo, check=True, capture_output=True)
+    (repo / "docs/a.md").write_bytes(b"another lane's half-done edit\n")
+    (repo / "docs/b.md").write_bytes(b"untracked\n")
+
+    copy = committed_tree(repo, tmp_path / "copy")
+
+    assert (copy / "docs/a.md").read_bytes() == b"committed\n"
+    assert not (copy / "docs/b.md").exists() and not (copy / "docs/pic.png").exists()
+
+
+def test_the_committed_tree_passes_check(tmp_path, monkeypatch):
+    """The stack really runs: every tool that is stale, over a scratch copy of HEAD, in order (R26-162)."""
     assert [layer.script for layer in BDL.LAYERS] == [
         "build_docs_index.py", "build_capabilities_index.py", "build_asset_index.py",
         "build_research_ledger.py", "build_effects_catalog.py",
@@ -224,8 +319,13 @@ def test_the_committed_tree_passes_check():
         "build_animation_registry.py",
         "build_craft_map.py",
         "report_doc_overlap.py", "audit_docs_standard.py"]
-    DL.ensure(None, ROOT)                    # a no-op when nothing moved; the honest cost when it did
-    assert BDL.main(["--check", "--repo", str(ROOT)]) == 0
+    if not is_git_checkout(ROOT):
+        pytest.skip("not a git checkout: there is no committed tree to copy")
+    copy = committed_tree(ROOT, tmp_path / "committed")
+    seed_layers(ROOT, copy)
+    DL.ensure(None, copy)                    # the copy's own builders; the live checkout is only read
+    monkeypatch.setattr(BDL, "SCRIPTS", copy / DL.SCRIPTS_REL)
+    assert BDL.main(["--check", "--repo", str(copy)]) == 0
 
 
 # --- --refresh, --status and the child's --then-recheck (P64 T1) ----------------------------------

@@ -33,6 +33,13 @@ THE_SIX = {
     "recipe:dock-lands-page-renames": ("deny", "off-doctrine"),
     "recipe:card-becomes-the-chart": ("deny", "off-doctrine"),
 }
+# E99 s84: "THE QUEUE ANSWERS OF 2026-09-18 15:39-15:43" - the operator re-answered all six on the HG2 card, so the
+# live set is that hour's answers and every 09-17 answer is superseded (kept, never deleted).
+S84_FROM, S84_TO = "2026-09-18T15:39", "2026-09-18T15:44"
+# the operator's LATEST `plate-dock-wipe` answer (review-answers.jsonl, the third of three): "off-doctrine: You
+# literally  dokced and wiped then held a still frame for 30 seconds. ..." - it supersedes 09-17's "too-slow" and
+# 09-17's first "off-doctrine".
+WIPE_LATEST_AT = "2026-09-18T15:42:28-07:00"
 CARD = "lab-batch-t5-plate-carries-a-card"
 BATCH = "t5-r1"
 A = "lab:plate-carries-a-card:aaaaaaaa"
@@ -109,7 +116,7 @@ def test_the_operators_six_answers_derive_to_six_live_judgements_that_validate()
     for rec in live:
         assert rec["by"] == "operator"
         assert rec["proof"]["clip"] and rec["proof"]["t"] >= 0
-        assert rec["answer_at"].startswith("2026-09-17T")
+        assert S84_FROM <= rec["answer_at"] < S84_TO, rec    # s84's hour, not the superseded 09-17 answers
 
 
 def test_the_proof_is_the_cards_clip_at_its_t0_when_the_note_names_no_instant():
@@ -122,11 +129,12 @@ def test_the_proof_is_the_cards_clip_at_its_t0_when_the_note_names_no_instant():
 
 def test_a_later_answer_supersedes_the_earlier_and_the_earlier_is_kept():
     records, _ = LL.derive(ROOT)
-    wipe = [r for r in records if r["candidate"] == "recipe:plate-dock-wipe"]
-    assert len(wipe) == 2
-    early, late = sorted(wipe, key=lambda r: r["answer_at"])
-    assert early["superseded"] is True and early["reason"] == "too-slow"
-    assert "superseded" not in late and late["reason"] == "off-doctrine"
+    wipe = sorted((r for r in records if r["candidate"] == "recipe:plate-dock-wipe"), key=lambda r: r["answer_at"])
+    assert [(r["answer_at"][:10], r["reason"]) for r in wipe] == [
+        ("2026-09-17", "too-slow"), ("2026-09-17", "off-doctrine"), ("2026-09-18", "off-doctrine")]
+    *earlier, late = wipe
+    assert all(r["superseded"] is True for r in earlier)      # every earlier answer is kept, marked superseded
+    assert "superseded" not in late and late["answer_at"] == WIPE_LATEST_AT and late["reason"] == "off-doctrine"
 
 
 # ---------------------------------------------------------------- the instant a note names
