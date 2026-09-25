@@ -34,6 +34,8 @@ from jsonschema import Draft202012Validator
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
+import build_docs_index as BDI  # noqa: E402  (the DOCS-INDEX records of one file: a CAPABILITIES row is level 7)
+import build_effects_catalog as BEC  # noqa: E402  (the cards' `doctrine` resolver - `CAPABILITIES <title words>`)
 import derive_approved_mix as MIX  # noqa: E402
 from authoring import shapes as SH, table as T  # noqa: E402
 
@@ -67,7 +69,7 @@ TABLES = {
 PROOF_TABLES = {
     # E98 s7, the evidence door's first instance - the operator, 2026-09-14: "the door effect works well"
     "japan-door": f"{PROJECTS}/japan-tariff-trick/build_short_door.py",
-    # P61 T3d, the planted morph on a real scene: the object becomes the chart (CAPABILITIES.md:121)
+    # P61 T3d, the planted morph on a real scene (CAPABILITIES[The morph: the object becomes the chart])
     "tokyo-planted": f"{PROJECTS}/tokyo-tea-break/build-p61-planted/build_planted.py",
 }
 ALL_TABLES = {**TABLES, **PROOF_TABLES}
@@ -154,7 +156,90 @@ def signature_vocabulary() -> dict:
     return {w["const"]: w["description"] for w in _load(SCHEMA)["$defs"]["signature"]["oneOf"]}
 
 
-CITE_RE = re.compile(r"(record|cut)=([A-Za-z0-9_./-]+\.(?:md|py)):(\d+)(?:-(\d+))?")
+# --------------------------------------------------------------------------- a record cite names its ROW (P72 T29)
+#
+# R26-242 / R26-301: a `CAPABILITIES.md:<line>` cite broke on every inserted row, and four passed SILENTLY on a
+# neighbouring row that happened to say the token. A record cite now names the row by its TITLE - a span of the
+# row's bold title in square brackets after the document's name - and resolves the way the effects cards'
+# `doctrine` cites do (`build_effects_catalog.resolve_cite` over the file's `docs/DOCS-INDEX.jsonl` records, built
+# from the file's own text by `build_docs_index.file_records`, so a stale generated layer or a temp copy resolves
+# the same). A ruling is named by its id (and sub-entry), `OPERATOR-RULINGS[E99 s67]` (the heading or bold
+# paragraph that opens it). A `cut=` cite still names a shot-table LINE: the approved tables are the frozen record
+# of a watched cut.
+
+ROW_DOCS = {"CAPABILITIES": "docs/content-video-engine/CAPABILITIES.md",
+            "OPERATOR-RULINGS": "docs/portable/OPERATOR-RULINGS.md"}
+ROW_CITE_RE = re.compile(r"\b(CAPABILITIES|OPERATOR-RULINGS)\[([^\]\n]+)\]")
+RECORD_RE = re.compile(r"\brecord=(CAPABILITIES|OPERATOR-RULINGS)\[([^\]\n]+)\]")
+CUT_RE = re.compile(r"\bcut=([A-Za-z0-9_./-]+\.py):(\d+)(?:-(\d+))?")
+LINE_CITE_RE = re.compile(r"(?:CAPABILITIES|OPERATOR-RULINGS)\.md:\d+")
+
+# Every file that carries the vocabulary's or the kit's CAPABILITIES cites (R26-301's list).
+KIT_CITE_FILES = ("content/video_engine/configs/shape_skeleton.schema.json",
+                  "content/video_engine/scripts/authoring/shapes.py",
+                  "content/video_engine/scripts/derive_approved_mix.py",
+                  "content/video_engine/effects/skeletons/approved-mix.json",
+                  "content/video_engine/tests/test_shape_skeletons.py",
+                  "content/video_engine/tests/test_authoring_shapes.py")
+
+
+def resolve_row(doc: str, span: str, root: Path = ROOT) -> tuple[list[int], int | None]:
+    """(every line whose row title carries `span`, the line the resolver answers) for one title cite.
+
+    A CAPABILITIES span goes through `build_effects_catalog.resolve_cite` as `CAPABILITIES <span>` - the cards'
+    own lookup - over the file's level-7 row records; a ruling span is the heading (`## E67 ...`) or the bold
+    paragraph (`**E99 s67 - ...`) that opens it. The caller asserts exactly ONE row carries the span and the
+    resolver lands on it: a span two rows share is ambiguous, and an ambiguous cite is how a silent false pass
+    comes back."""
+    rel = ROW_DOCS[doc]
+    text = (root / rel).read_text(encoding="utf-8")
+    if doc == "CAPABILITIES":
+        rows = [r for r in BDI.file_records(rel, text) if r["level"] == BDI.ROW_LEVEL]
+        named = [r["line"] for r in rows if span.lower() in r["heading"].lower()]
+        return named, BEC.resolve_cite(f"CAPABILITIES {span}", rows)["line"]
+    opener = re.compile(r"^(?:\*\*|#+\s+)" + re.escape(span) + r"(?![\w.])")
+    named = [n for n, line in enumerate(text.splitlines(), 1) if opener.match(line)]
+    return named, (named[0] if named else None)
+
+
+def row_text(doc: str, line: int, root: Path = ROOT) -> str:
+    return (root / ROW_DOCS[doc]).read_text(encoding="utf-8").splitlines()[line - 1]
+
+
+def vocabulary_record_cites() -> dict[str, tuple[str, str]]:
+    """{word: (doc, span)} - each word's ONE `record=` title cite (an absent or doubled one is the test's to name)."""
+    out: dict[str, tuple[str, str]] = {}
+    for word, text in signature_vocabulary().items():
+        found = RECORD_RE.findall(text)
+        if len(found) == 1:
+            out[word] = found[0]
+    return out
+
+
+def kit_row_cites() -> list[tuple[str, str, str]]:
+    """(file, doc, span) for every title cite in the kit's files."""
+    return [(rel, doc, span) for rel in KIT_CITE_FILES
+            for doc, span in ROW_CITE_RE.findall((ROOT / rel).read_text(encoding="utf-8"))]
+
+
+def _copy_docs(tmp: Path) -> Path:
+    for rel in ROW_DOCS.values():
+        (tmp / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp / rel).write_text((ROOT / rel).read_text(encoding="utf-8"), encoding="utf-8")
+    return tmp
+
+
+def _insert_row(root: Path, doc: str, before: int, row: str) -> None:
+    path = root / ROW_DOCS[doc]
+    lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+    lines.insert(before - 1, row + "\n")
+    path.write_text("".join(lines), encoding="utf-8")
+
+
+# A row that says every signature's token - the decoy a by-line cite would read after a row moved under it.
+DECOY_ROW = ("| **A DECOY ROW INSERTED BY THE TEST, WIRED** (P72 T29) - it says " +
+             " ".join(sorted({tok for toks in SIGNATURE_TOKENS.values() for tok in toks})) +
+             " | nowhere | WIRED | none |")
 
 
 def test_the_library_is_not_empty():
@@ -207,19 +292,86 @@ def test_the_vocabulary_carries_every_word_the_record_names():
 def test_every_word_cites_the_record_and_a_table_and_both_still_say_it(word: str):
     """A vocabulary written from memory is refused (E99 s70): every word opens its own two citations.
 
-    `record=` is the CAPABILITIES row (or the ruling) that marks the mechanism LIVE or WIRED, `cut=` the line of a
-    real shot table that PLAYS it - both are opened at the line and grepped, as `effects_catalog_check.check_anchors`
-    greps a card's `lives`.
+    `record=` is the CAPABILITIES row (or the ruling) that marks the mechanism LIVE or WIRED, named by its TITLE
+    and resolved to its row (P72 T29); `cut=` the line of a real shot table that PLAYS it. Both are opened and
+    grepped, as `effects_catalog_check.check_anchors` greps a card's `lives`.
     """
     text = signature_vocabulary()[word]
-    cites = {kind: (rel, int(lo), int(hi or lo)) for kind, rel, lo, hi in CITE_RE.findall(text)}
-    assert set(cites) == {"record", "cut"}, f"{word}: {sorted(cites)} - a word with no citation is refused"
+    records, cuts = RECORD_RE.findall(text), CUT_RE.findall(text)
+    assert len(records) == 1 and len(cuts) == 1, (
+        f"{word}: {len(records)} record=<DOC>[<title>] and {len(cuts)} cut=<table>.py:<line> - a word with no "
+        f"citation is refused, and a record cite names its row by title, never by line (R26-242)")
+    assert not LINE_CITE_RE.search(text), f"{word}: {LINE_CITE_RE.findall(text)} - a record cite by LINE (R26-242)"
     tokens = SIGNATURE_TOKENS[word]
-    for kind, (rel, lo, hi) in cites.items():
-        body = (ROOT / rel).read_text(encoding="utf-8").splitlines()
-        assert lo <= len(body), f"{word}: {kind}={rel}:{lo} is past the end of the file"
-        cited = "\n".join(body[lo - 1:hi]).lower()
-        assert any(tok in cited for tok in tokens), f"{word}: {kind}={rel}:{lo}-{hi} no longer says {tokens}"
+    (doc, span), = records
+    named, line = resolve_row(doc, span)
+    assert len(named) == 1 and line == named[0], f"{word}: record={doc}[{span}] names rows {named}, resolves to {line}"
+    assert any(tok in row_text(doc, line).lower() for tok in tokens), f"{word}: {doc}[{span}] no longer says {tokens}"
+    (rel, lo, hi), = cuts
+    body = (ROOT / rel).read_text(encoding="utf-8").splitlines()
+    first, last = int(lo), int(hi or lo)
+    assert last <= len(body), f"{word}: cut={rel}:{lo} is past the end of the file"
+    cited = "\n".join(body[first - 1:last]).lower()
+    assert any(tok in cited for tok in tokens), f"{word}: cut={rel}:{lo}-{hi} no longer says {tokens}"
+
+
+def test_no_kit_file_cites_the_record_by_line():
+    """R26-301: the stale cites lived in the schema, `authoring/shapes.py`, the deriver, the mix and both test
+    files - none may cite CAPABILITIES (or the rulings) by line again."""
+    by_line = {rel: LINE_CITE_RE.findall((ROOT / rel).read_text(encoding="utf-8")) for rel in KIT_CITE_FILES}
+    assert not {rel: hits for rel, hits in by_line.items() if hits}, by_line
+
+
+def test_every_title_cite_in_the_kit_names_exactly_one_row():
+    """Every CAPABILITIES / OPERATOR-RULINGS title cite in the kit's files resolves through the index
+    to ONE row whose title carries the span - the vocabulary's twenty and the compiler's refusal messages alike."""
+    cites = kit_row_cites()
+    assert len({rel for rel, _doc, _span in cites}) == len(KIT_CITE_FILES), sorted({r for r, _d, _s in cites})
+    bad = {}
+    for rel, doc, span in cites:
+        named, line = resolve_row(doc, span)
+        if len(named) != 1 or line != named[0]:
+            bad[f"{rel}: {doc}[{span}]"] = (named, line)
+    assert not bad, bad
+
+
+def test_an_inserted_row_moves_no_cite(tmp_path: Path):
+    """Acceptance (2): a row inserted ABOVE every cited row (in a temp copy of the record) leaves every title cite
+    on its own row - each resolves one line lower, to the same title - and the vocabulary's tokens still read."""
+    root = _copy_docs(tmp_path)
+    cites = sorted({(doc, span) for _rel, doc, span in kit_row_cites()})
+    assert len(cites) >= 19, cites
+    before = {cite: resolve_row(*cite, root=root)[1] for cite in cites}
+    for doc in ROW_DOCS:
+        lines = [line for (d, _s), line in before.items() if d == doc and line]
+        if lines:
+            _insert_row(root, doc, min(lines), DECOY_ROW)
+    moved = {}
+    for (doc, span), was in before.items():
+        named, line = resolve_row(doc, span, root=root)
+        if named != [was + 1] or line != was + 1:
+            moved[f"{doc}[{span}]"] = (was, named, line)
+    assert not moved, moved
+    for word, (doc, span) in vocabulary_record_cites().items():
+        line = resolve_row(doc, span, root=root)[1]
+        assert any(tok in row_text(doc, line, root).lower() for tok in SIGNATURE_TOKENS[word]), (word, span)
+
+
+@pytest.mark.parametrize("word", ["cut", "card", "hold", "object-becomes-chart"])
+def test_the_four_silent_false_passes_are_gone(word: str, tmp_path: Path):
+    """Acceptance (3), R26-242's four: after the rows moved, `cut`, `card`, `hold` and `object-becomes-chart`
+    still found their token on the line - a DIFFERENT row. The drift is replayed here: a decoy that says every
+    token is inserted AT the cited row, so a by-line cite would now read the decoy and pass. The title cite reads
+    the real row, one line down, and the decoy is never it."""
+    root = _copy_docs(tmp_path)
+    doc, span = vocabulary_record_cites()[word]
+    assert doc == "CAPABILITIES", (word, doc)
+    was = resolve_row(doc, span, root=root)[1]
+    _insert_row(root, doc, was, DECOY_ROW)
+    assert any(tok in row_text(doc, was, root).lower() for tok in SIGNATURE_TOKENS[word])   # the by-line false pass
+    named, line = resolve_row(doc, span, root=root)
+    assert named == [was + 1] and line == was + 1, (word, span, was, named, line)
+    assert span.lower() in row_text(doc, line, root).lower() and "DECOY" not in row_text(doc, line, root)
 
 
 def test_a_word_with_no_skeleton_says_so_in_its_own_description():

@@ -537,7 +537,7 @@
     "note": "MELT / MELT_ENDINGS / meltOpts / meltHandRing (engine glue: paintMelt, meltMount, clearMelt)"
    },
    "doctrine": [
-    "CAPABILITIES melt row",
+    "CAPABILITIES THE MELT EXIT",
     "E88",
     "E88 s6",
     "E88 s7",
@@ -670,7 +670,7 @@
     "E47",
     "E73",
     "R26-75",
-    "CAPABILITIES slide row"
+    "CAPABILITIES THE SLIDE TRANSITION"
    ],
    "status": "draft",
    "backlog": [
@@ -831,7 +831,7 @@
    },
    "doctrine": [
     "R26-60",
-    "TRANSITIONS-REVIEW s4"
+    "TRANSITIONS-REVIEW 4. What the player paints"
    ],
    "status": "live",
    "proof": {

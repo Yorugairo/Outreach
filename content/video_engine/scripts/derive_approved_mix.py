@@ -100,7 +100,8 @@ METHOD = (
     "(9) this scene's own exit: suck -> suck, dip -> dip, every other token including the schema default "
     "wipe_left -> cut; (10) nothing brought it (the first frame) -> hold. "
     "BESIDE the arrivals, the TRANSFORM words are read from the scenes' own chart_to species: rescale, recast, "
-    "morph, remake, compare -> melt, park, and a park at scale 1.0 -> unpark (CAPABILITIES.md:120, the UN-PARK). "
+    "morph, remake, compare -> melt, park, and a park at scale 1.0 -> unpark "
+    "(CAPABILITIES[`park`: the chart makes room], the UN-PARK). "
     "`vocabulary` is the DISTINCT words a cut plays, arrivals and transforms together (E99 s70 Apply 5)."
 )
 
@@ -154,7 +155,8 @@ def scene_transforms(timeline: dict) -> list[list[str]]:
     """The TRANSFORM words every scene plays, in scene order - what the page DID while it stood.
 
     Read off the scenes' own `chart_to` species rather than off `recipe_walk`'s cards, because the
-    un-park is a park at `scale: 1.0` (CAPABILITIES.md:120) and only the species carries the scale.
+    un-park is a park at `scale: 1.0` (CAPABILITIES[`park`: the chart makes room]) and only the species carries
+    the scale.
     """
     out: list[list[str]] = []
     for scene in timeline.get("scenes") or []:

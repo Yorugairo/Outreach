@@ -89,7 +89,7 @@
    },
    "doctrine": [
     "E46 (dissolves and clips are valid tools)",
-    "CAPABILITIES:60 (a clip lands as a card, never as the world - the world clip is its own path)"
+    "CAPABILITIES Video dock (a clip lands as a card, never as the world - the world clip is its own path)"
    ],
    "status": "live",
    "implicit": true,
@@ -148,7 +148,7 @@
     "E49",
     "E99 s38 (a 2 px walk is not a difference the operator can see)",
     "E99 s55 + s63 (the amplitude is authored: 20 long form, 30-40 shorts)",
-    "CAPABILITIES idle"
+    "CAPABILITIES The idle, WIRED"
    ],
    "status": "live",
    "proof": {
@@ -414,7 +414,7 @@
    },
    "doctrine": [
     "E61",
-    "SPECIES-BY-SENTENCE row 15"
+    "SPECIES-BY-SENTENCE 2. The widened rows (row 15)"
    ],
    "status": "wired",
    "proof": {
@@ -749,7 +749,10 @@
     "E99 s55 (a plate's life is BOTH: the painted drift AND the alive water, composable)",
     "E99 s38 (the direction: bring life to the plates with our local capabilities)",
     "E98 s6 (a layer records its origin)",
-    "CAPABILITIES:143 the mask-pinned ambient lane; :145-147 the layered plate and the camera over it"
+    "CAPABILITIES Mask-pinned AMBIENT lane",
+    "CAPABILITIES The layered plate - generated",
+    "CAPABILITIES The plate library knows its layers",
+    "CAPABILITIES The camera over layers"
    ],
    "status": "live",
    "implicit": true,

@@ -196,7 +196,7 @@
       },
       "doctrine": [
         "CAPABILITIES checklist species",
-        "CAPABILITIES auto-fit",
+        "CAPABILITIES Chart self-containment gates (auto-fit)",
         "E93 #3",
         "BACKLOG R26-81",
         "BACKLOG R26-80",
@@ -355,7 +355,7 @@
         "note": "fillDock `if (C.shares)` mount + drawChart `b.share` branch"
       },
       "doctrine": [
-        "SPECIES-BY-SENTENCE row 4 (the share page)"
+        "SPECIES-BY-SENTENCE 1. The ten sentence acts (row 4, the share page)"
       ],
       "status": "live",
       "proof": {

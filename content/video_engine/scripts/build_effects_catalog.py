@@ -80,6 +80,8 @@ NAMED_DOCS = {
     "CHECK-RESPONSIBILITIES": "docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md",
 }
 BACKLOG_ROW = re.compile(r"^R\d{2}-\d+$")
+# Where a BACKLOG row goes when it leaves BACKLOG.md (P72 T29): a `BACKLOG R26-103` cite follows it there.
+BACKLOG_ARCHIVES = ("docs/content-video-engine/BACKLOG-HISTORY-*.md", "docs/content-video-engine/backlog/archive/*.md")
 RULING_ID = re.compile(r"^E\d+$")
 MEMORY_REL = "docs/agent-memory/operator/%s.md"
 
@@ -237,11 +239,25 @@ def _id_line(repo: Path | None, rel: str, ident: str) -> int | None:
     return next((n for n, line in enumerate(lines, 1) if pattern.match(line)), None)
 
 
+def _archived_row(repo: Path | None, ident: str) -> tuple[str | None, int | None]:
+    """(history file, line) of a BACKLOG row that left BACKLOG.md for a `BACKLOG_ARCHIVES` file (P72 T29: rows
+    are archived monthly, and a cite that names the row must follow it), else (None, None)."""
+    if repo is None:
+        return None, None
+    for path in sorted(p for pattern in BACKLOG_ARCHIVES for p in Path(repo).glob(pattern)):
+        line = _id_line(repo, path.relative_to(repo).as_posix(), ident)
+        if line:
+            return path.relative_to(repo).as_posix(), line
+    return None, None
+
+
 def _named_doc_cite(ref: str, rel: str, rest: str, index: list[dict], repo: Path | None) -> dict:
     words = rest.split()
     ident = words[0] if words else ""
     if BACKLOG_ROW.match(ident) or RULING_ID.match(ident):
         line = _id_line(repo, rel, ident)
+        if not line and BACKLOG_ROW.match(ident) and rel == NAMED_DOCS["BACKLOG"]:
+            rel, line = _archived_row(repo, ident)
         return {"ref": ref, "path": rel if line else None, "line": line}
     hit = _heading_containing([r for r in index if r["path"] == rel], rest)
     return {"ref": ref, "path": hit["path"] if hit else None, "line": hit["line"] if hit else None}

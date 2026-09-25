@@ -138,9 +138,9 @@
       },
       "doctrine": [
         "39 s10",
-        "CAPABILITIES record",
-        "CAPABILITIES record in portrait",
-        "SPECIES-BY-SENTENCE row 1"
+        "CAPABILITIES Record-document species",
+        "CAPABILITIES The record dock in PORTRAIT",
+        "SPECIES-BY-SENTENCE 1. The ten sentence acts (row 1)"
       ],
       "status": "live",
       "proof": {

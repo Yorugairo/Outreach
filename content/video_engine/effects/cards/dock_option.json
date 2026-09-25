@@ -771,7 +771,7 @@
         "note": "dockGeom; compiler read_place / read_over_build (E63)"
       },
       "doctrine": [
-        "SPECIES-BY-SENTENCE row 13",
+        "SPECIES-BY-SENTENCE 2. The widened rows (row 13)",
         "E63"
       ],
       "status": "wired",
@@ -918,8 +918,8 @@
       },
       "doctrine": [
         "29 s9.27 Push hand-off",
-        "SPECIES-BY-SENTENCE push",
-        "CAPABILITIES"
+        "SPECIES-BY-SENTENCE 4. The compiler's `when` on every kind (the push row)",
+        "CAPABILITIES The PRESS CARD dock and the STACK hand-off"
       ],
       "status": "wired",
       "proof": {

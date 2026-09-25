@@ -428,7 +428,8 @@ def test_the_parks_the_plan_names_are_emitted_in_portrait(tokyo):
     made = [(float(s["at"]), float(s["scale"])) for r in rows for s in r[6] or []
             if s.get("kind") == "chart_to" and s.get("to") == "park"]
     assert [s for _, s in made][:len(named)] == [s for _, s in named], (made, named)
-    assert SH.UNPARK_SCALE in [s for _, s in made], "the un-park is the park to 1.0 (CAPABILITIES.md:120)"
+    assert SH.UNPARK_SCALE in [s for _, s in made], (
+        "the un-park is the park to 1.0 (CAPABILITIES[`park`: the chart makes room])")
     # ... and any park BEYOND the plan's own is the placer making a room for a card that has none
     # (P66 T3e, the last row's tea cup): the row's `why` names every one it makes.
     extra = [t for t, _ in made[len(named):]]
@@ -929,7 +930,7 @@ def test_a_transform_that_would_render_nothing_is_refused_by_name():
 
 
 def test_a_transform_the_pages_form_does_not_admit_is_refused():
-    """CAPABILITIES.md:118 - a morph hands one LINE's area to another's; a line -> bars pair is the recast."""
+    """CAPABILITIES[`morph_to`] - a morph hands one LINE's area to another's; a line -> bars pair is the recast."""
     plan = _chained(moves=[{"kind": "chart_to", "at_word": "month", "dur": 1.4,
                             "options": {"to": "morph", "state": 1}}])
     with pytest.raises(SH.Refused) as e:
@@ -1293,7 +1294,7 @@ def test_every_page_row_of_the_tokyo_base_names_its_inks_in_why():
     pages = [(r, w) for r, w in zip(rows, why) if str(r[2]).startswith("ledger:")]
     assert pages, "the Tokyo plan carries ledger pages"
     for row, w in pages:
-        assert "E67, CAPABILITIES.md:34" in w["rule"], (row[2], w["rule"])
+        assert "E67, CAPABILITIES[THE CHART IS THE THUMBNAIL]" in w["rule"], (row[2], w["rule"])
         assert "predates E67" not in w["rule"], (row[2], w["rule"])
 
 
@@ -1403,7 +1404,8 @@ def test_the_generated_base_still_closes_on_the_outro_with_the_runtime_and_the_l
 # --- A SERIES IN ITS SIGN COLOUR IS NOT PRE-E67 (the sixth pass' review, finding 8) --------------
 
 def test_a_series_authored_in_its_sign_colour_is_not_warned_as_pre_e67():
-    """E67 / CAPABILITIES.md:34 names the sign colours on the field (`#3DDC84` up, `#FF4D4D` down) and
+    """E67 / CAPABILITIES[THE CHART IS THE THUMBNAIL] names the sign colours on the field (`#3DDC84` up,
+    `#FF4D4D` down) and
     the engine resolves `var(--lp-neg)` / `var(--lp-pos)` like any other ink - so they are not the old
     palette. The raw hex still WARNs (the test above)."""
     for ink in SH.E67_SIGN:
@@ -1532,16 +1534,17 @@ def test_the_variety_rule_never_sends_an_admissible_transform_to_a_dip():
 
 def test_the_pair_of_pages_refuses_recast_rescale_and_morph_by_name():
     """s74 Apply 1 names the chain for a page-to-page boundary: recast, rescale, morph, then
-    melt-then-splash. Each refusal is BY NAME with its own reason - CAPABILITIES.md:106 for the two
+    melt-then-splash. Each refusal is BY NAME with its own reason - the recast row
+    (CAPABILITIES[A CHART BECOMES ANOTHER CHART BY RE-WRITING]) and CAPABILITIES[`rescale`] for the two
     chart verbs (they retarget or re-form ONE page, inside its row), and no approved skeleton for the
     morph (E99 s70 Apply 2)."""
     plan = _pair_plan("ledger:ev-a-v1:line:12:right", "ledger:ev-b-v1:bars:0:right")
     t, chain = _chain_of(plan)
     assert t["pair"] == "page->page", t
     assert [c.split(":")[0] for c in chain[:4]] == ["recast", "rescale", "morph", "melt-then-splash"], chain
-    assert "REFUSED" in chain[0] and "CAPABILITIES.md:106" in chain[0]
-    assert "REFUSED" in chain[1] and "CAPABILITIES.md:106" in chain[1]
-    assert "REFUSED - no approved skeleton" in chain[2] and "CAPABILITIES.md:118" in chain[2]
+    assert "REFUSED" in chain[0] and "CAPABILITIES[A CHART BECOMES ANOTHER CHART BY RE-WRITING]" in chain[0]
+    assert "REFUSED" in chain[1] and "CAPABILITIES[`rescale`]" in chain[1]
+    assert "REFUSED - no approved skeleton" in chain[2] and "CAPABILITIES[`morph_to`]" in chain[2]
 
 
 def test_morph_is_refused_by_name_and_never_emitted(tokyo, japan):
@@ -1570,7 +1573,7 @@ def test_morph_is_refused_by_name_and_never_emitted(tokyo, japan):
 
 
 def test_the_melt_holds_onto_a_plate_and_is_refused_onto_a_clip():
-    """E88 / CAPABILITIES.md:37: a `splash:plate` paints the next NARRATIVE PLATE up through its stains,
+    """E88 / CAPABILITIES[THE MELT EXIT]: a `splash:plate` paints the next NARRATIVE PLATE up through its stains,
     so it holds page -> plate; a clip is not painted, and that refusal is by name."""
     t, chain = _chain_of(_pair_plan("ledger:ev-a-v1:line:12:right", "plate-desk"))
     assert t["pair"] == "page->plate" and t["exit"] == SH.MELT_PLATE, t
@@ -1615,12 +1618,12 @@ def test_a_plate_to_page_boundary_is_carried_by_the_arrival_and_never_by_a_dip()
 
 def test_a_plate_to_plate_boundary_keeps_the_dip_and_names_the_continuity_three():
     """E47 - the dip is the transition when the WORLD actually changes, and plate to plate is the pair it
-    is for. CAPABILITIES.md:108 (HF-15/16/17, the continuity three) is what could carry one plate into
+    is for. CAPABILITIES[The CONTINUITY three] (HF-15/16/17, the continuity three) is what could carry one plate into
     another instead, and each of the three is the PLAN's to name (E99 s70 Apply 2) - so the dip's own
     record names them as refused rather than pretending none exist."""
     t, chain = _chain_of(_pair_plan("plate-desk", "plate-vault"))
     assert t["pair"] == "plate->plate" and t["exit"] == SH.DIP_EXIT and t["kind"] == SH.LAST_RESORT, t
-    assert any("the continuity three: REFUSED" in c and "CAPABILITIES.md:108" in c for c in chain), chain
+    assert any("the continuity three: REFUSED" in c and "CAPABILITIES[The CONTINUITY three]" in c for c in chain), chain
 
 
 def test_the_variety_rule_defers_the_same_transform_twice_running_and_the_chain_goes_on():
@@ -1665,7 +1668,7 @@ def _door_plan():
 
 
 def test_the_door_is_taken_on_the_plate_row_that_consumes_the_page_the_card_became():
-    """E98 s7 / CAPABILITIES.md:38 and the reference cut's own `s07 exit:door:right`. The TAKEN branch was
+    """E98 s7 / CAPABILITIES[THE EVIDENCE DOOR] and the reference cut's own `s07 exit:door:right`. The TAKEN branch was
     unexercised by every earlier pass (the seventh pass' review M1): the only door assertion was a
     refusal. Here the outgoing page arrived by a SNAP, so there is a card to swing, and the door lands on
     the PLATE row - the row that consumes the page - never on the page's own row."""
@@ -1945,7 +1948,8 @@ def test_two_cards_moved_onto_one_instant_never_share_a_room():
 
 
 def test_a_page_is_never_left_parked_at_the_end_of_its_row():
-    """CAPABILITIES.md:120 - the un-park is how the chart RE-TAKES the stage; a page left at `park_scale`
+    """CAPABILITIES[`park`: the chart makes room] - the un-park is how the chart RE-TAKES the stage; a page left
+    at `park_scale`
     when its row ends plays the row's own exit on a stamp and hands the next world a parked chart. So the
     card LEAVES early enough for the un-park to land whole inside the row (it keeps its read and its park),
     and where even that does not fit the park is refused and the card is dropped BY NAME (the T3j review's

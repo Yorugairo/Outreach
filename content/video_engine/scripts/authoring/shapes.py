@@ -188,7 +188,8 @@ CHART_TO_KINDS = CHART_TO_TO_STATE + CHART_TO_DERIVED + CHART_TO_NO_STATE
 # `from: prop:<id>`), which leave the species list there and are never a chart state change.
 LINE_VARIANTS = ("line", "dense-line", "lines", "tiers")
 BARS_VARIANTS = ("bars", "signed-bars", "breakthrough")
-UNPARK_SCALE = 1.0               # CAPABILITIES.md:124 - a park to 1.0 is the UN-PARK: the chart re-takes the stage
+UNPARK_SCALE = 1.0               # CAPABILITIES[`park`: the chart makes room] - a park to 1.0 is the UN-PARK:
+                                 # the chart re-takes the stage
 TIME_HOLE = re.compile(r"^\{(t[01])\}([+-][0-9.]+)?$")
 HOLE = re.compile(r"\{([a-z0-9_]+)\}")
 DOCK_ID = re.compile(r"(?<!recipe:)\b(dock-[a-z0-9-]+)")   # `recipe:dock-...` is a RECIPE name, never a dock asset
@@ -388,10 +389,11 @@ def chart_to_error(sp: dict, plate: str, beat_n) -> str | None:
         there = variant_of(states[k - 1])
         if to == "morph" and not (here in LINE_VARIANTS and there in LINE_VARIANTS):
             return (f"{where} - a morph hands ONE LINE's area to another's; this page is {here!r} and state {k} is "
-                    f"{there!r} (CAPABILITIES.md:118 - the compiler refuses any other pair and points at the recast)")
+                    f"{there!r} (CAPABILITIES[`morph_to`] - the compiler refuses any other pair and points at the "
+                    f"recast)")
         if to == "remake" and not ({here, there} & set(LINE_VARIANTS) and {here, there} & set(BARS_VARIANTS)):
             return (f"{where} - a remake is admitted on a line <-> bars pair ONLY; this page is {here!r} and state "
-                    f"{k} is {there!r} (CAPABILITIES.md:119)")
+                    f"{k} is {there!r} (CAPABILITIES[THE WHOLE-CHART MORPH])")
         return None
     if "state" in sp:
         return f"{where} - `state` is not named on a {to}: the compiler derives it, or the verb has none"
@@ -547,7 +549,8 @@ SPECIES_DUR_S = 1.0      # the seconds a species with no `dur` of its own runs -
 
 def park_scale_at(species: list, t: float) -> float:
     """The scale the page's chart is PARKED to at `t` - 1.0 while it stands full size. The last
-    `chart_to park` at or before `t` decides, and a park to 1.0 is the UN-PARK (CAPABILITIES.md:124)."""
+    `chart_to park` at or before `t` decides, and a park to 1.0 is the UN-PARK
+    (CAPABILITIES[`park`: the chart makes room])."""
     scale = UNPARK_SCALE
     for sp in sorted((s for s in (species or []) if s.get("kind") == "chart_to" and s.get("to") == "park"),
                      key=lambda s: float(s["at"])):
@@ -881,7 +884,8 @@ def unpark_inside_the_row(card: list, at: float, out: float, guards: list, t1: f
     """`(the park, the un-park)` with the UN-PARK landing WHOLE inside the row - or None where it cannot
     and the card is dropped by name.
 
-    CAPABILITIES.md:124 / `build_short.py:394`: the un-park is how the chart RE-TAKES the stage. A page
+    CAPABILITIES[`park`: the chart makes room] / `build_short.py:394`: the un-park is how the chart RE-TAKES
+    the stage. A page
     whose un-park falls past its row's end is left standing at `park_scale` into the boundary - the row's
     own exit played on a stamp, and the next world handed a parked chart (the T3j review's MEDIUM 5, on
     arithmetic that clamps the card's exit to `t1` and then adds the lag to it). So the card LEAVES early
@@ -897,14 +901,15 @@ def unpark_inside_the_row(card: list, at: float, out: float, guards: list, t1: f
             and park_covers(at, round(leave + UNPARK_LAG_S, 2), guards) is None):
         notes.append(f"`{card[0]}` leaves at {leave:.2f}s and not at {float(card[3]):.2f}s, so the page's UN-PARK "
                      f"lands whole inside the row (it ends at {t1:.2f}s): the card still has its {need:.2f}s to read "
-                     "and park, and a page is never left standing parked into its own exit (CAPABILITIES.md:124)")
+                     "and park, and a page is never left standing parked into its own exit "
+                     "(CAPABILITIES[`park`: the chart makes room])")
         card[3] = leave
         return at, round(leave + UNPARK_LAG_S, 2)
     notes.append(f"`{card[0]}` is DROPPED: the page has no room clear of its ink for it, and the park that would make "
                  f"one could not UN-PARK inside the row - the card lands at {float(card[2]):.2f}s and needs "
                  f"{need:.2f}s to read and park, so the page would still be at `park_scale` when the row ends at "
                  f"{t1:.2f}s. A page left parked hands the next world a stamp, so the card goes and the page keeps "
-                 "the stage (CAPABILITIES.md:124; E65)")
+                 "the stage (CAPABILITIES[`park`: the chart makes room]; E65)")
     return None
 
 
@@ -941,7 +946,7 @@ def make_room(card: list, species: list, t1: float, d: dict, notes: list) -> flo
                     "scale": UNPARK_SCALE, "anchor": anchor})
     notes.append(f"the page UN-PARKS at {out:.2f}s, as the card leaves, and is back at full size by {out + PARK_DUR_S:.2f}s "
                  f"- inside the row's own end ({t1:.2f}s): the chart re-takes the stage rather than standing small "
-                 "under nothing (`build_short.py:394`; CAPABILITIES.md:124)")
+                 "under nothing (`build_short.py:394`; CAPABILITIES[`park`: the chart makes room])")
     return scale
 
 
@@ -1040,7 +1045,7 @@ def place_cards(docks: list, page: dict | None, aspect: str, notes: list,
 
 
 # --- E67: THE CHART'S INKS ARE ELECTRIC; THE CHART IS THE THUMBNAIL -----------------------------
-# (CAPABILITIES.md:34; OPERATOR-RULINGS.md:2176, the operator 2026-09-12: *"we need to use bolder
+# (CAPABILITIES[THE CHART IS THE THUMBNAIL]; OPERATOR-RULINGS[E67], the operator 2026-09-12: *"we need to use bolder
 # primary, high-contrast line colors for our default the chart instead of gray. that way our charts
 # can become our thumbnails ... the Teal and a Claude orange would work."*)
 #
@@ -1061,12 +1066,13 @@ def place_cards(docks: list, page: dict | None, aspect: str, notes: list,
 # every series is `deemph` (E67 Apply 3: grey is never a default, it is an author's de-emphasis).
 E67_CYCLE = ("teal", "crimson", "cobalt", "amber")   # LP_CYCLE's own order - what an undeclared series takes
 E67_DEEMPH = "deemph"
-E67_SIGN = ("var(--lp-neg)", "var(--lp-pos)")       # the SIGN colours on the field (E67, CAPABILITIES.md:34:
+E67_SIGN = ("var(--lp-neg)", "var(--lp-pos)")       # the SIGN colours on the field (E67,
+# CAPABILITIES[THE CHART IS THE THUMBNAIL]:
 # `#3DDC84` up / `#FF4D4D` down, E28 standing) - authored exactly this way, resolved by the engine's own `lpVarHex`
 # beside LP_INK (`PS_PAL = { ...LP_INK, neg: "var(--lp-neg)", pos: "var(--lp-pos)" }`), and what a LONE series takes
 # when it declares nothing. They are E67's, not the old palette, so they are never WARNed as predating it.
 E67_TOKENS = E67_CYCLE + (E67_DEEMPH,) + E67_SIGN
-E67_CITE = "E67, CAPABILITIES.md:34 (the chart is the thumbnail)"
+E67_CITE = "E67, CAPABILITIES[THE CHART IS THE THUMBNAIL]"
 INK_LISTS = ("series", "bars", "shares")             # the page-spec lists whose items may name a colour
 
 
@@ -1479,7 +1485,8 @@ def page_land_offset(entry: str | None, mount_s: float) -> float:
     if entry == "spiral":
         return MD.LP_SPIRAL_IN_S
     if entry in ("axes", "morph"):
-        # E99 s70 / CAPABILITIES.md:125: an `enter=morph` page is on screen from frame 0 as the
+        # E99 s70 / CAPABILITIES[The morph: the object becomes the chart]: an `enter=morph` page is on screen
+        # from frame 0 as the
         # traced silhouette it grew out of, and it is the DATA that builds - the axes entry's clock
         return MD.LP_BUILD_S
     if entry in ("built", "snap", "camera"):
@@ -1787,14 +1794,17 @@ def _windows(gs: list[dict], ws: list | None, exits: list[str], hold_s: float,
 # the dip INTO it (`outro_row`). Passes 1-6 put the token on the OUTGOING row, so every transition
 # landed one boundary early - the base played a dip INTO its own mount at 1.78 s, dropped the approved
 # suck, and could never emit a door at all.
-MELT_CHART = "melt:splash:chart"   # E88 / CAPABILITIES.md:37 - the ink balls up and the next CHART shows through the stains
+MELT_CHART = "melt:splash:chart"   # E88 / CAPABILITIES[THE MELT EXIT] - the ink balls up and the next CHART
+                                   # shows through the stains
 MELT_PLATE = "melt:splash:plate"   # ... and the next NARRATIVE PLATE springs up as if painted
 SUCK_EXIT = "suck"                 # P53 T2 / R26-60 - the outgoing page spins into a point (the approved `s03`)
-DOOR_EXIT = "door:right"           # E98 s7 / CAPABILITIES.md:38 - the hinge the door cut chose off its own 45.40s frame
+DOOR_EXIT = "door:right"           # E98 s7 / CAPABILITIES[THE EVIDENCE DOOR] - the hinge the door cut chose off
+                                   # its own 45.40s frame
 DIP_EXIT = "dip"
 CUT_EXIT = "cut"
 BUILT_ENTRY = "built"              # E88: a `splash:chart`'s page arrives OUT OF THE SPLATTER, not by its build
-PLANE_OPTS = ("depth=", "plane=")  # the page options a door and a melt are both refused over (CAPABILITIES.md:38, R26-132)
+PLANE_OPTS = ("depth=", "plane=")  # the page options a door and a melt are both refused over
+                                   # (CAPABILITIES[THE EVIDENCE DOOR], R26-132)
 TRANSFORM = "transform"            # how the flow read classes a boundary: a continuous move between two worlds
 ARRIVAL = "arrival"                # ... an arrival that carries the world in (its token is a cut; s74 Apply 2, tier 2)
 LAST_RESORT = "last resort"        # ... and a cut or a dip taken because every transform for the pair was refused
@@ -1811,7 +1821,7 @@ def pair_of(prev: dict, g: dict) -> str:
 
 def _has_plane(plate: str) -> bool:
     """Does this plate stand at a depth or on a plane? A door and a melt are both refused over one
-    (CAPABILITIES.md:38: "refused by name with `depth=`/`plane=` on the outgoing page"; R26-132)."""
+    (CAPABILITIES[THE EVIDENCE DOOR]: "refused by name with `depth=`/`plane=` on the outgoing page"; R26-132)."""
     return any(opt in str(plate) for opt in PLANE_OPTS)
 
 
@@ -1846,7 +1856,7 @@ def _refuse_arrival(name: str, entry: str | None) -> str:
 
 
 def _melt_hold(prev: dict, g: dict, pair: str) -> tuple[str | None, str]:
-    """The melt-then-splash, or the refusal by name - E88 / CAPABILITIES.md:37 and the compiler's own
+    """The melt-then-splash, or the refusal by name - E88 / CAPABILITIES[THE MELT EXIT] and the compiler's own
     boundary rules (`build_scene_timeline_f._melt_boundary`): the outgoing world must be a ledger PAGE
     (the whole-world melt is retired), a `splash:chart` hands the same board to a page and that page
     arrives `built`, a `splash:plate` paints a plate and is refused onto a page.
@@ -1868,14 +1878,14 @@ def _melt_hold(prev: dict, g: dict, pair: str) -> tuple[str | None, str]:
                           f"and the incoming world is a clip; a video is not painted")
         return MELT_PLATE, (f"melt-then-splash onto the plate: the page's ink sags, balls up and splashes, and "
                             f"{plate_of(g['plate'])} springs up through the stains as if painted (E88, "
-                            f"CAPABILITIES.md:37) - a world change with no cut and no cream in it; "
+                            f"CAPABILITIES[THE MELT EXIT]) - a world change with no cut and no cream in it; "
                             f"{_leaves_on_the_cut(prev['plate'])}")
     # ... and where the plan DECLARES this page's own arrival the splash is refused - by `_run_chain`, which
     # asks it of every candidate that DEMANDS an arrival (`entry_owed`), so the rule lives in one place and
     # the next transform to demand one cannot forget it (the T3j review's HIGH 1)
     return MELT_CHART, ("melt-then-splash into the chart: the page's ink balls up and the next chart shows THROUGH the "
                         "stains, arriving `built` out of the splatter rather than by its own build (E88, "
-                        "CAPABILITIES.md:37)")
+                        "CAPABILITIES[THE MELT EXIT])")
 
 
 def door_dock_error(prev: dict, g: dict, defaults: dict) -> str | None:
@@ -1907,7 +1917,7 @@ def door_dock_error(prev: dict, g: dict, defaults: dict) -> str | None:
 
 
 def _door_hold(prev: dict, g: dict, skeleton: dict, defaults: dict) -> tuple[str | None, str]:
-    """The evidence door, or the refusal by name (E98 s7 / CAPABILITIES.md:38, and the engine's own
+    """The evidence door, or the refusal by name (E98 s7 / CAPABILITIES[THE EVIDENCE DOOR], and the engine's own
     `door_boundary_error` - both of its rules, the second one through `door_dock_error`)."""
     name = "the door"
     if str(prev.get("entry") or "") not in BUILT_ON_ARRIVAL:
@@ -1915,7 +1925,7 @@ def _door_hold(prev: dict, g: dict, skeleton: dict, defaults: dict) -> tuple[str
                       f"`{prev.get('entry') or 'none'}`, not a snap or the camera, so there is no card to open")
     if _has_plane(prev["plate"]):
         return None, (f"{name}: REFUSED - `depth=`/`plane=` on the outgoing page; the door IS the plane's motion "
-                      f"(CAPABILITIES.md:38, R26-132)")
+                      f"(CAPABILITIES[THE EVIDENCE DOOR], R26-132)")
     err = door_dock_error(prev, g, defaults)
     if err:
         return None, (f"{name}: REFUSED - a door swings on an EVIDENCE-FREE boundary (doc 29 Part 6, the engine's own "
@@ -1923,7 +1933,8 @@ def _door_hold(prev: dict, g: dict, skeleton: dict, defaults: dict) -> tuple[str
     token = str(main_row(skeleton)["exit"] or "")
     token = token if token.split(":")[0] == "door" else DOOR_EXIT
     return token, (f"{name}: the page before this one landed flat as a card, so it swings open on its hinge onto "
-                   f"{plate_of(g['plate'])} instead of dipping to it (E98 s7, CAPABILITIES.md:38; the reference cut's "
+                   f"{plate_of(g['plate'])} instead of dipping to it (E98 s7, CAPABILITIES[THE EVIDENCE DOOR]; "
+                   f"the reference cut's "
                    f"own `s07 exit:door:right`, whose own s06 and s07 carry no dock at all - the evidence-free "
                    f"boundary the engine asks for)")
 
@@ -1942,7 +1953,8 @@ def _suck_hold(prev: dict, g: dict, skeleton: dict) -> tuple[str | None, str]:
 
 
 def _recast_hold(prev: dict, g: dict) -> tuple[str | None, str]:
-    """A recast is a `chart_to` INSIDE one row (CAPABILITIES.md:106): the page's own declared state
+    """A recast is a `chart_to` INSIDE one row (CAPABILITIES[A CHART BECOMES ANOTHER CHART BY RE-WRITING]): the
+    page's own declared state
     travels to the other form where it stands. Across a BOUNDARY it holds only where the incoming page is
     a state the outgoing page declares - and there it is owed as a row, never as a transition."""
     states = states_of(prev["plate"])
@@ -1950,29 +1962,31 @@ def _recast_hold(prev: dict, g: dict) -> tuple[str | None, str]:
     if want and want in [page_of(s if str(s).startswith("ledger:") else f"ledger:{s}") for s in states]:
         return None, ("recast: REFUSED (and OWED as a row, not a boundary) - the incoming page IS a state the outgoing "
                       "page declares, so the recast belongs INSIDE that row as a `chart_to` on the word that turns "
-                      "(CAPABILITIES.md:106); two rows would CUT the chart the verb exists to carry")
+                      "(CAPABILITIES[A CHART BECOMES ANOTHER CHART BY RE-WRITING]); two rows would CUT the chart "
+                      "the verb exists to carry")
     return None, (f"recast: REFUSED - the incoming page is not a state the outgoing page declares (`;then=` names "
                   f"{', '.join(states) or 'none'}), so a `chart_to {{to: recast}}` would redraw nothing "
-                  f"(CAPABILITIES.md:106; E99 s70 Apply 3)")
+                  f"(CAPABILITIES[A CHART BECOMES ANOTHER CHART BY RE-WRITING]; E99 s70 Apply 3)")
 
 
 def _rescale_hold(prev: dict, g: dict) -> tuple[str | None, str]:
-    """A rescale retargets THIS page's own axes to the window the sentence names (CAPABILITIES.md:106) -
+    """A rescale retargets THIS page's own axes to the window the sentence names (CAPABILITIES[`rescale`]) -
     one page, one row; a different page across a boundary is not a window of this one."""
     if page_of(prev["plate"]) == page_of(g["plate"]):
         return None, ("rescale: REFUSED (and OWED as a row, not a boundary) - it is the SAME page on both sides, so the "
                       "window it retargets to belongs inside the row as a `chart_to {to: rescale, window}` "
-                      "(CAPABILITIES.md:106)")
+                      "(CAPABILITIES[`rescale`])")
     return None, (f"rescale: REFUSED - a rescale retargets the axes of ONE page and the incoming page "
                   f"({page_of(g['plate'])}) is a different page, not a window of {page_of(prev['plate'])} "
-                  f"(CAPABILITIES.md:106)")
+                  f"(CAPABILITIES[`rescale`])")
 
 
 def _morph_hold() -> tuple[str | None, str]:
-    """`morph_to` is LIVE (CAPABILITIES.md:118) and no approved table plays it as a BEAT - the
+    """`morph_to` is LIVE (CAPABILITIES[`morph_to`]) and no approved table plays it as a BEAT - the
     survivorship read has it in no cut at all - so the library carries no skeleton for it and the
     compiler refuses it BY NAME rather than inventing one (E99 s70 Apply 2)."""
-    return None, ("morph: REFUSED - no approved skeleton. `morph_to` is LIVE (CAPABILITIES.md:118 - the area under one "
+    return None, ("morph: REFUSED - no approved skeleton. `morph_to` is LIVE (CAPABILITIES[`morph_to`] - the area "
+                  "under one "
                   "line becomes another's by ARAP) but no approved table plays it as a beat (the survivorship audit, "
                   "2026-09-17: in no cut), so a skeleton for it would be a vocabulary written from memory "
                   "(E99 s70 Apply 2)")
@@ -2098,8 +2112,9 @@ def choose_transition(prev: dict | None, g: dict, skeleton: dict,
                     ARRIVAL)
     if entry in BUILT_ON_ARRIVAL or entry == "morph":
         return take(str(arrival), CUT_EXIT, "the card the row before threw grows to the stage, so the arrival IS the "
-                    "transition and carries the world that was there into this one (E99 s70/s71, CAPABILITIES.md:76 "
-                    "and :84; the door cut's own `s02`/`s06` read `exit: cut`)", ARRIVAL)
+                    "transition and carries the world that was there into this one (E99 s70/s71, "
+                    "CAPABILITIES[Card-then-snap] "
+                    "and CAPABILITIES[The camera arrival]; the door cut's own `s02`/`s06` read `exit: cut`)", ARRIVAL)
 
     if pair == "page->page":
         got = _run_chain([("recast", lambda: _recast_hold(prev, g)),
@@ -2142,7 +2157,8 @@ def choose_transition(prev: dict | None, g: dict, skeleton: dict,
 
     chain.append("the continuity three: REFUSED - the plan names none of them for this pair. A mark threaded across "
                  "(`;thread=`), the next region ARRIVING from the frame's edge, or a foreground occluder is what "
-                 "carries one plate into another without a dip (CAPABILITIES.md:108, E59, HF-15/16/17) - and each is "
+                 "carries one plate into another without a dip (CAPABILITIES[The CONTINUITY three], E59, "
+                 "HF-15/16/17) - and each is "
                  "the plan's to name, never the compiler's to invent (E99 s70 Apply 2)")
     return take("the dip", DIP_EXIT, "the world itself changes, and plate to plate is the pair the dip is FOR (E47); "
                 "the continuity three were refused above", LAST_RESORT)
@@ -2460,7 +2476,8 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
 def _arrivals(gs: list[dict], ws) -> list:
     """When each group's page ARRIVES, for the groups that arrive BY A CARD - else None.
 
-    E99 s70 / CAPABILITIES.md:76 and :84: a `snap=<dock>` or `camera=<dock>` page is the card that was
+    E99 s70 / CAPABILITIES[Card-then-snap] and CAPABILITIES[The camera arrival]: a `snap=<dock>` or
+    `camera=<dock>` page is the card that was
     thrown a moment ago, grown or pushed to the stage. The approved cut throws the Fed card on
     *"The Fed still"* and lands the page on *"moved"* - `t_fed_still` / `t_moved`,
     the two words the approved cut's own table names (the skeleton `card-thrown-then-the-camera-pushes`
@@ -2783,7 +2800,8 @@ def _pick(gs: list[dict], lib: list[dict], d: dict, ws=None) -> list[dict]:
             # it rather than holding one to it, which it does only for an entry the PLAN wrote (`_move`)
             pick["notes"].append(f"the page arrives `{owed}` and not by {gs[i].get('entry')}: the transition into it "
                                  f"is a {pick['transition'].get('taken')}, and a splash's chart shows THROUGH the "
-                                 f"stains rather than building under them (E88, CAPABILITIES.md:37). This entry is "
+                                 f"stains rather than building under them (E88, CAPABILITIES[THE MELT EXIT]). "
+                                 f"This entry is "
                                  "the COMPILER's own, not the plan's - the plan declares none on this page - so a "
                                  "move that would fire before its landing is refused, not held to it (E99 s66)")
             gs[i]["entry"], gs[i]["entry_token"] = owed, owed
@@ -3052,7 +3070,8 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
     if thrown:
         notes.append(f"`{becomes}` keeps the throw the plan gave it and takes no room of this page's: it is the card "
                      "the NEXT world grows out of - the camera pushes to it, or it snaps up, on the row after this "
-                     "one (E99 s71; CAPABILITIES.md:76 and :84; `build_short.py:403-420`)")
+                     "one (E99 s71; CAPABILITIES[Card-then-snap] and CAPABILITIES[The camera arrival]; "
+                     "`build_short.py:403-420`)")
     page = _page_spec(plate, pages, notes)               # the page's own geometry - and its own INKS (E67)
     ink = ink_note(page)
     if ink:

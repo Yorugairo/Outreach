@@ -372,7 +372,7 @@
       "doctrine": [
         "29 s9.27",
         "29 s9.27 row Beat-freeze chart exit",
-        "SPECIES-BY-SENTENCE s5"
+        "SPECIES-BY-SENTENCE 5. Not built yet, by task"
       ],
       "status": "declared",
       "proof": {
@@ -1743,7 +1743,7 @@
       "doctrine": [
         "29 s9.27",
         "29 s9.27 row Push hand-off",
-        "SPECIES-BY-SENTENCE s5"
+        "SPECIES-BY-SENTENCE 5. Not built yet, by task"
       ],
       "status": "declared",
       "proof": {
@@ -1796,7 +1796,7 @@
       "doctrine": [
         "29 s9.27",
         "29 s9.27 row Radial reveal",
-        "SPECIES-BY-SENTENCE s5"
+        "SPECIES-BY-SENTENCE 5. Not built yet, by task"
       ],
       "status": "declared",
       "proof": {
@@ -1884,7 +1884,7 @@
         "symbol": "paintRing"
       },
       "doctrine": [
-        "CAPABILITIES RING",
+        "CAPABILITIES THE RING'S DASHED-ELLIPSE FORM",
         "E56"
       ],
       "status": "wired",

@@ -57,7 +57,7 @@
       },
       "doctrine": [
         "E73",
-        "SHORT-FORM-SHAPE s1"
+        "SHORT-FORM-SHAPE 1. The APEX READ"
       ],
       "status": "wired",
       "proof": {
@@ -733,7 +733,7 @@
         "29 s9.31",
         "E48 s2",
         "E47 s2",
-        "SHORT-FORM-SHAPE s3"
+        "SHORT-FORM-SHAPE 3. The TURN"
       ],
       "status": "live",
       "proof": {
@@ -781,7 +781,7 @@
       "doctrine": [
         "E88",
         "R26-60",
-        "SHORT-FORM-SHAPE s2"
+        "SHORT-FORM-SHAPE 2. The INSTANCES"
       ],
       "status": "wired",
       "implicit": true,

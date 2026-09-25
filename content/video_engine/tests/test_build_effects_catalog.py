@@ -16,6 +16,7 @@ member), and a candidate carries no proof and a zero count.
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -186,6 +187,28 @@ def test_a_backlog_row_id_resolves_to_the_rows_real_line_and_a_cite_with_no_matc
     assert doctrine[2] == {"ref": "BACKLOG R26-31", "path": None, "line": None}
     assert doctrine[3] == {"ref": "BACKLOG no such section", "path": None, "line": None}
     assert BEC.summary(records).endswith("2/4 cites resolved")
+
+
+HISTORY_REL = "docs/content-video-engine/BACKLOG-HISTORY-2026-09.md"
+
+
+def test_a_backlog_row_archived_to_the_history_still_resolves_to_its_row(tree):
+    """P72 T29: a row that leaves BACKLOG.md for BACKLOG-HISTORY-<month>.md moved - the cite follows it to the
+    row's line in the history; a row in neither file stays unresolved, never the history's first line."""
+    backlog = tree / BACKLOG_REL
+    backlog.parent.mkdir(parents=True, exist_ok=True)
+    backlog.write_text(BACKLOG_TEXT, encoding="utf-8")
+    (tree / HISTORY_REL).write_text("# BACKLOG HISTORY\n\n| id | row |\n|---|---|\n| **R26-103** | archived |\n",
+                                    encoding="utf-8")
+    write_cards(tree, "exit", [card("exit", "dip", doctrine=["BACKLOG R26-103", "R26-103", "BACKLOG R26-3",
+                                                             "BACKLOG R26-104"])])
+
+    doctrine = by_id(BEC.build(tree, WHEN))["exit:dip"]["doctrine"]
+
+    assert doctrine[0] == {"ref": "BACKLOG R26-103", "path": HISTORY_REL, "line": 5}
+    assert doctrine[1] == {"ref": "R26-103", "path": HISTORY_REL, "line": 5}
+    assert doctrine[2] == {"ref": "BACKLOG R26-3", "path": BACKLOG_REL, "line": 7}   # the live row wins
+    assert doctrine[3] == {"ref": "BACKLOG R26-104", "path": None, "line": None}
 
 
 def test_a_dials_module_that_does_not_exist_makes_check_exit_1_naming_the_card(tree, monkeypatch, capsys):
@@ -479,3 +502,26 @@ def test_the_real_species_cards_carry_the_compilers_when():
     # Assert
     assert records
     assert all(r["when"] == B.SPECIES_WHEN[r["token"]] for r in records)
+
+
+def test_every_real_capabilities_cite_names_exactly_one_row():
+    """P72 T29 (R26-242's class on the cards): `resolve_cite` takes the FIRST heading that contains a cite's words, so
+    a cite two rows share lands wherever the order puts it - `CAPABILITIES RING` resolved to the `Rendering &
+    playback` section and `CAPABILITIES press card` to the ART-embed row. Every real card's CAPABILITIES cite must
+    be carried by exactly ONE row title (read from the file's own DOCS-INDEX records, not the generated layer)."""
+    import build_docs_index as BDI
+
+    rel = BEC.NAMED_DOCS["CAPABILITIES"]
+    records = BDI.file_records(rel, (ROOT / rel).read_text(encoding="utf-8"))
+    loose = {}
+    for path in sorted(CARDS_DIR.glob("*.json")):
+        for entry in json.loads(path.read_text(encoding="utf-8"))["cards"]:
+            for ref in entry.get("doctrine") or []:
+                head, _, rest = ref.partition(" ")
+                if head != "CAPABILITIES":
+                    continue
+                needle = re.sub(r"\([^)]*\)", "", rest).strip().lower()
+                rows = [r["line"] for r in records if needle and needle in r["heading"].lower()]
+                if len(rows) != 1 or next(r for r in records if r["line"] == rows[0])["level"] != BDI.ROW_LEVEL:
+                    loose[f"{entry['id']}: {ref}"] = rows[:6]
+    assert not loose, loose
