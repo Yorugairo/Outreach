@@ -664,13 +664,13 @@ verbatim tails and are left pending.
 - Evidence: e416df5 (lane B): bind_report plays/retimed, landing_plays, on_contact (CUE_DP_S 0.01); H door byte-identical, 0 of 42 timelines move; compiler-form rack 586.32 -> 586.75; tests test_landing_sound_follows_the_landing.py (13)
 
 ### T85: A bars page with more than six bars finishes its build - the stagger scales to the bar count (row 22's finding)
-- Status: pending (lane B)
+- Status: done - lane B `ffa2877` (the stagger scales to the bar count; on lane A and lane B; closed by P72 T0, 2026-09-25)
 - Owner: implementation_luna
 - Depends on: none
 - Write set: `content/video_engine/samples/scene-evidence-engine.mjs` (`lpPaintChart`, the bar grow `expoOut(clamp01((cb - i*0.1)/0.55))` and its label `clamp01((cb - i*0.1 - 0.3)/0.2)` with `cb` capped at 1: bar 7's label stops at 0.5, bar 8's at 0 and bar 8 is drawn at ~97.7% on a FINISHED build; scale the stagger to n, e.g. `i * min(0.1, 0.45/(n-1))`), goldens re-pinned only where n > 6, tests
 - Acceptance: every bar and label of an n-bar page reaches 1 by the build's end for n up to the page's cap; pages with n <= 6 byte-identical (their goldens unchanged); row 22's trim proof (8 bars) shows 'Jul '25' at full ink and its 8th label
 - Validate: `python -m pytest content/video_engine/tests/test_bar_stagger.py content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: `ffa2877` (P69 T85, lane B; on lane A and lane B) - the stagger scales to the bar count
 
 ### T86: The retitle species takes a colour key (row 22: "The flip" in red)
 - Status: done
@@ -682,13 +682,13 @@ verbatim tails and are left pending.
 - Evidence: 6b1d26f (lane B): RETITLE_COLORS neg/pos + color_span (leading); RT_PAL / rtSpanGlyphs; H door byte-identical; tests test_retitle_color.py (27); also fixed test_surface_retitle_visibility's slice that T36 broke. Open: the relight's last-frame sunflower (base behaviour), its own slice
 
 ### T87: The gate measures an EMPTY PLOT - a chart frame with no ink held past ~1.5 s (row 22's first cut)
-- Status: pending (lane B)
+- Status: done - lane B `965c4e2` (M47 the empty plot; on lane A and lane B; closed by P72 T0, 2026-09-25)
 - Owner: implementation_luna
 - Depends on: none
 - Write set: `content/video_engine/scripts/gate_motion_density.py` (a new M row, or an M12/M25 extension: for every ledger page scene, the stretches where its plot box stands with zero drawn series/bars/marks - from the compiled timeline's build clocks, chart_to leaves and undraws, not pixels - WARN over 1.5 s, FAIL over 4 s; the number of seconds and the scene named), its registry row, tests
 - Acceptance: row 22's first cut (605.9-624, 18 s of axes with nothing drawn) FAILs; the committed H door (77c8921) passes or WARNs only at its ~1 s flip hand-over; every other committed door's gate line unchanged or the new finding listed and justified
 - Validate: `python -m pytest content/video_engine/tests/test_gate_empty_plot.py content/video_engine/tests/test_gate_motion_density.py -q` and `python content/video_engine/scripts/build_gates_registry.py --check`
-- Evidence: pending
+- Evidence: `965c4e2` (P69 T87, lane B; on lane A and lane B) - M47: a chart frame held with no ink WARNs past 1.5 s, FAILs past 4 s
 
 ### T83: The railway-share certificate plate (E99 s113) for row 18 (the H-3 host window)
 - Status: done

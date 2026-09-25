@@ -7,7 +7,7 @@ risk: standard
 owner: parent
 branch: main
 created: 2026-09-13
-updated: 2026-09-14
+updated: 2026-09-25 (P72 T0, 2026-09-25: T9 done; T7 moved to P72 T37; HG3 kept as its two steps)
 ---
 
 # The operator ledger
@@ -104,7 +104,7 @@ the bake-off brief and both builds of one beat.
 - **HG1** approve this plan.
 - **HG2** the triage digest: every `ruling-candidate`, `gate-candidate` and `conflict` is the operator's to rule
   (E-ids are written only from their words). Delivered as one digest grouped by subject, never one question per row.
-- **HG3** the bake-off brief before it is dispatched to Astra, and the verdict after the watch.
+- **HG3** the bake-off brief before it is dispatched to Astra, and the verdict after the watch. (P72 T0, 2026-09-25: the two steps are P72 T37's - step A the brief `BAKEOFF-ASTRA-FABLE.md` and the scope change, step B the verdict after the watch; queue `p54-hg3-astra-fable-bakeoff`.)
 - Push only on the operator's current word.
 
 ## Mandatory Reads
@@ -188,7 +188,7 @@ T1 (its quotes come from the ledger). T6 after T2, T4 and T5 exist. T7 last.
 - Evidence: pending
 
 ### T7: The bake-off - Astra with the pack, Fable, one beat
-- Status: pending
+- Status: moved to P72 T37 (P72 T0, 2026-09-25: merged with R26-175 and R26-135 (4); P54-HG3 keeps its two steps - (A) the bake-off brief before Astra's dispatch, (B) the verdict after the watch)
 - Owner: parent
 - Depends on: T6, HG3
 - Write set: `docs/runbooks/BAKEOFF-ASTRA-FABLE.md`, `content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-bakeoff-fable/`, `content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-bakeoff-astra/`
@@ -206,7 +206,7 @@ T1 (its quotes come from the ledger). T6 after T2, T4 and T5 exist. T7 last.
 - Evidence: `daa7506` "the stale portable claims fixed and the reasoning pass filed"; `docs/portable/DOCTRINE-CORE.md` is 9,852 characters (<= 10,000). Not re-audited claim by claim on 2026-09-14: a stale claim found later is a new row, not this slice.
 
 ### T9: Two gates the operator approved - the black frame at a seam (M32) and narration pointing at a visual that is not on stage (M33)
-- Status: wired 2026-09-13. EVIDENCE: `measure_seam_frames.py`, `measure_spoken_visuals.py`, `test_seam_and_spoken.py` (15 passed) integrated into main; measured on the approved Japan short (11 boundaries), the Tokyo remake (6) and the bridge review (5): no flash, no jump, no black outside a dip on any cut, suck or melt; near-black threshold 8 luma MEASURED on Japan's six approved dips (darkest 0-6; cuts never under 52); the only holds are the two approved outro dips into clips at luma ~18 (`dark_world`); one pointing phrase on Japan ("But look at what nobody explained", a figure of speech). Tiers from the approved shorts: M32 FAIL on flash / jump / outside / a hold over a normal world, INFO on a dark-world hold; M33 WARN on an uncovered pointer. `gate_motion_density.py` `_seam_gate` / `_spoken_visual_gate` + `test_m32_*` / `test_m33_*` (motion gate + seam + stamps: 128 passed). The measure also found the exit convention read backwards elsewhere (Deviations)
+- Status: done (wired 2026-09-13; closed by P72 T0, 2026-09-25). EVIDENCE: `measure_seam_frames.py`, `measure_spoken_visuals.py`, `test_seam_and_spoken.py` (15 passed) integrated into main; measured on the approved Japan short (11 boundaries), the Tokyo remake (6) and the bridge review (5): no flash, no jump, no black outside a dip on any cut, suck or melt; near-black threshold 8 luma MEASURED on Japan's six approved dips (darkest 0-6; cuts never under 52); the only holds are the two approved outro dips into clips at luma ~18 (`dark_world`); one pointing phrase on Japan ("But look at what nobody explained", a figure of speech). Tiers from the approved shorts: M32 FAIL on flash / jump / outside / a hold over a normal world, INFO on a dark-world hold; M33 WARN on an uncovered pointer. `gate_motion_density.py` `_seam_gate` / `_spoken_visual_gate` + `test_m32_*` / `test_m33_*` (motion gate + seam + stamps: 128 passed). The measure also found the exit convention read backwards elsewhere (Deviations)
 - Owner: parent + implementation_luna
 - Depends on: none
 - Write set: the two measure scripts, `test_seam_and_spoken.py`, `gate_motion_density.py` (M32, M33), the gates registry

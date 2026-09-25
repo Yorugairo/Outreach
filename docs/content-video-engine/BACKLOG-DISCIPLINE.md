@@ -1,6 +1,6 @@
 # Video-engine backlog discipline
 
-Status: current. Last reviewed 2026-09-23.
+Status: current. Last reviewed 2026-09-25 (the P72 T0 second pass).
 
 ## Board contract
 
@@ -101,6 +101,80 @@ triage signal, not proof that the work is complete.
 `backlog/archive/2026-09-completed.md`, and this worktree's existing
 `docs/WORKTREE-REGISTER.md` row. No engine, PRP, ruling, media, or generated
 docs-layer files were edited.
+
+## Second-pass report — P72 T0 (2026-09-25)
+
+The closing pass of `.claude/PRPs/plans/P72-THE-BACKLOG-BURNDOWN.plan.md` (T0). Its check is a live read, not a list:
+the universe is every `| **R26-N**` history row minus the archive's first column, plus the active board's IDs, plus
+every open task of P54 and P68-P72 and their human gates, plus every open review-queue item; each must map to a
+carrier (an archive row, an open slice that names it, a gate row, a `⏸️` row with its trigger, or another lane's
+owner). A row filed after the plan is in the universe by construction - R26-330 and R26-341..348 were found that way
+and carried by the plan at `0d2e705`.
+
+**Before (lane A `311aad7`):** `BACKLOG.md` 69 lines / 13,860 bytes; the active queue 17 rows (26 across the three
+tables), 85 unique first-column IDs (74 R26); the archive 32 IDs (the first pass's 30, `DOCS-BL-01`, R26-239); the live
+universe 449 items, 170 of them with no carrier.
+
+**After:** `BACKLOG.md` 81 lines / 19,850 bytes; the active queue 29 rows (38 across the three tables), 193 unique
+IDs (172 R26) - every open R26 ID listed once, under the plan or gate that carries it; the archive 178 IDs (+146:
+batch 1 70, batch 2 53, batch 3 20, part 2 3); the live universe 313 items, 0 with no carrier.
+
+**Archived IDs (146):** batch 1 (DONE-UNCLOSED): R26-0, R26-1, R26-3, R26-4,
+R26-5, R26-6, R26-7, R26-8, R26-10, R26-12, R26-13, R26-16, R26-17, R26-18,
+R26-19, R26-20, R26-22, R26-23, R26-24, R26-25, R26-26, R26-27, R26-28, R26-30,
+R26-32, R26-34, R26-37, R26-38, R26-39, R26-40, R26-41, R26-42, R26-46, R26-47,
+R26-48, R26-49, R26-50, R26-51, R26-53, R26-54, R26-55, R26-56, R26-58, R26-60,
+R26-76, R26-80, R26-82, R26-83, R26-84, R26-86, R26-87, R26-89, R26-91,
+R26-103, R26-104, R26-108, R26-109, R26-117, R26-118, R26-119, R26-120,
+R26-121, R26-122, R26-126, R26-127, R26-131, R26-133, R26-134, R26-156,
+R26-158. Batch 2 (DONE-UNCLOSED): R26-159, R26-172, R26-177, R26-179, R26-184,
+R26-190, R26-191, R26-201, R26-205, R26-210, R26-211, R26-213, R26-218,
+R26-220, R26-221, R26-222, R26-223, R26-224, R26-225, R26-226, R26-228,
+R26-230, R26-231, R26-232, R26-233, R26-234, R26-235, R26-236, R26-241,
+R26-245, R26-246, R26-247, R26-263, R26-272, R26-273, R26-276, R26-279,
+R26-280, R26-282, R26-290, R26-291, R26-293, R26-295, R26-296, R26-297,
+R26-298, R26-300, R26-305, R26-306, R26-308, R26-310, R26-312, R26-314 (R26-308
+/ 310 / 312 / 314 as code landed, read at P71-HG1 - a code change does not
+close a visual task). Batch 3 (CLOSE-STALE / -SUPERSEDED / -DUPLICATE): R26-11,
+R26-31, R26-45, R26-59, R26-62, R26-65, R26-81, R26-102, R26-124, R26-155,
+R26-180, R26-185, R26-186, R26-187, R26-192, R26-194, R26-196, R26-199,
+R26-204, R26-216. Part 2: R26-176, R26-181 (each with its leftover closed: P65
+T6 by D3 and the two lab cards withdrawn; P67 HG1's question folded into
+P69-HG4) and LEGACY-REVALIDATION-2026-09. Evidence per ID - the sha, file:line
+or ruling, every sha resolved with `git log -1` - is in
+[`backlog/archive/2026-09-completed.md`](backlog/archive/2026-09-completed.md).
+
+**`⏸️` IDs (7):** R26-44 ("Ask on the first cut that threads a line"), R26-52 and R26-137 ("Japan will be
+re-rendered eventually, but it's not a concern right now", E99 s34), R26-61 ("THE TRIGGER: the first short that asks
+a figure to gesture, bend or hold weight"), R26-15 ("The lessons named for a slice when a short asks"), R26-214 (c)
+(decision D4: no ambient-lane order until a cut asks) and R26-111 (blocked on an outside step: the operator's word or
+a cut that needs the plate). None of them is archived.
+
+**Moved to their verdicts:** R26-31, R26-45, R26-65 and R26-124 archived (batch 3; R26-124 records both race paths
+selectable and the engine's default `eased`); R26-35 and R26-36 active on P72 T20 and R26-43 on P72 T17 (open engine
+work, no longer `⏸️`); R26-57, R26-85 and R26-123 children of the P72 row (T27, T32, T27); R26-66 with R26-88 on the
+other lane's row (`MP-NORMAL-OUTREACH`); R26-52 a `⏸️` row; `LEGACY-REVALIDATION-2026-09` closed (archived).
+
+**Held open by rule (a half is open; its slice carries it):** R26-281 and R26-283 (the camera halves are done at
+`af869b7`; the row-1 and row-15 re-aims are P72 T36), R26-219 (T43, T3), R26-9 (TR-3, T27), R26-143 (T17), R26-36
+(T20, a listened pass), R26-132 (T7), R26-202 (T7 / T19 / T4), R26-229 ((a), T42).
+
+**The five parent decisions (P72 T0, each with its reason there):** D1 the long form keeps the `phone` preset (R26-316;
+`longform:phone` is the only preset that holds the brace's floor, R26-339); D2 build `rel: pin` only (R26-105; R26-267
+needs it); D3 P65 T6's promotion closed (recipes are proved as beats in proof doors; the defaults come from rulings);
+D4 no ambient-lane order for a breathing host until a cut asks (R26-214 (c), a `⏸️` row); D5 R26-102 closed on E99
+s13, R26-9 closed after its TR-3 lands in T27. Not a decision: M38 (R26-168) stays the interim WARN until the operator
+answers on P72-HG1's sheet.
+
+**Findings:** no inventory verdict was contradicted by its evidence. R26-1's history note ("the halo as such not
+built") is stale - `LP_HALO` is in the engine; R26-108's H timeline count moved to 27 scenes / 25 with species / 15
+with pages after row 24 and the outro landed (the claim holds); the inventory's grouped P50 wording ("SHIPPED with P50
+T<n>") is not literal on R26-27 / 30 / 39 / 40, so each archive row quotes its own closing phrase.
+
+**Files changed:** `BACKLOG.md`, this report, `backlog/archive/2026-09-completed.md` (batches 1-3, part 2 and the
+census paragraph reconciled), `review-queue.v1.json` (and the regenerated `REVIEW-QUEUE.md`), the plan status lines
+of P47, P48, P50, P51, P53, P54, P65, P67, P68 and P69, P72 itself, and `docs/WORKTREE-REGISTER.md` (lane B's row).
+The history file is not edited: its banner pins the source slice's sha256, so the archive row is the closure.
 
 ## History split audit — 2026-09
 

@@ -7,7 +7,7 @@ risk: standard
 owner: parent
 branch: main
 created: 2026-09-18
-updated: 2026-09-18 (approved with E99 s81)
+updated: 2026-09-25 (P72 T0, 2026-09-25: T4 done `6e78106`, T5b done; was: approved with E99 s81)
 ---
 
 # Steel and Paper H - the long-form shakedown on today's engine
@@ -329,7 +329,7 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
 - Evidence: 3a9d82e: BACKLOG R26-205..R26-217 (audit G-01..G-13), R26-204 the pointer; R26-210 BUILT in wave 4 (the 16:9 outro)
 
 ### T4: REBUILD-TREATMENT-H.md - the new shot table, row by row, with its cites
-- Status: pending
+- Status: done (`6e78106`, P68 T1 + T4; closed by P72 T0, 2026-09-25)
 - Owner: parent
 - Route: parent - this is the architecture of the cut, and E99 s72 makes a rebuild's treatment
   the thing the operator's judgement lands on
@@ -357,7 +357,7 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
   promise at 1:16) with the H row that closes it. The host's windows are reserved or refused
   per HG1's ruling. Nothing is built until the treatment is complete
 - Validate: `python content/video_engine/scripts/docs_find.py "<each mechanism the treatment names>"` with the hits quoted in the Recall block, then `python scripts/prp_validate.py .claude/PRPs/plans/P68-STEEL-AND-PAPER-H.plan.md`
-- Evidence: pending
+- Evidence: `6e78106` (P68 T1 + T4: REBUILD-TREATMENT-H.md)
 
 ### T5: The first 1:30 built - the unit of proof
 - Status: complete (the unit built and read; HG3 owed the critic and the card)
@@ -385,7 +385,7 @@ same instants -> a FROZEN copy served on its own port -> the critic -> the rende
 - Evidence: the 1:30 unit (frozen copies a-d, five rounds, four critics; HG3 read in part by the operator - E99 s82) then THE 30-SECOND BED on every engine door (E99 s82 (b)): `build_episode_h.py`, `SHOT-TABLE-H.md`, `build-h/` (`;domain=80,277`, `;build=lines:1.2`, full_stage + the anchored caption, `;idle=live` rendering, the certificate in the plot's room with no park, the melt-toss into the slate for the agenda; the type over the phone floor; the gate 4 FAIL all named - R26-232 + M11), `build-h/self-watch/bed.png` (the eight tiles the parent read - `PARENT-READ-H.md` passes six and seven), the frozen copy `build-h-frozen-e/` on :8780 with its critic; BACKLOG R26-218..232
 
 ### T5b: The engine doors the unit found missing, built before the body (parent's amendment 2026-09-18)
-- Status: running
+- Status: done (P72 T0, 2026-09-25: the owed list is closed - R26-220 BUILT; R26-222, R26-230 and R26-231 CLOSED by P69 T7; R26-224 / 225 CLOSED; R26-219's bracket half is P72 T43's and its note `keep` P72 T3's)
 - Owner: parent
 - Route: `implementation_luna` per pair of rows, each with a test, the source and the mirrored kinetics module edited together (`test_kinetics_sync`), reviewed before integration; the parent files the rows and orders them by what the body hits first
 - Depends on: T5

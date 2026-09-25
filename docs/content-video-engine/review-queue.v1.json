@@ -2294,7 +2294,7 @@
       ],
       "kind": "owed",
       "title": "The Astra-vs-Fable bake-off",
-      "judge": "The bake-off brief before dispatch, then the verdict after the (unlabelled) watch.",
+      "judge": "Two steps, carried by P72 T37. Step A, before Astra is dispatched: the bake-off brief (`docs/runbooks/BAKEOFF-ASTRA-FABLE.md`, written by T37) and the scope change to confirm - T37's three whole, labelled one-shots supersede P54 T7's one-beat, unlabelled watch. Step B, after the watch: the verdict - the three one-shots on one loop (one-shot #3 as Fable authored it, then Opus's, then Astra's; E99 s66's order) side by side on M35-M46 with the parent's read; R26-175, R26-135 (4) and P54 T7 answered by this one card.",
       "where": [
         {
           "label": "the bake-off brief docs/runbooks/BAKEOFF-ASTRA-FABLE.md (not on disk)",
@@ -2303,7 +2303,7 @@
       ],
       "options": [],
       "recommendation": null,
-      "blocks": "P54 T7 (pending) and completion",
+      "blocks": "Astra's dispatch for P72 T37 (step A); nothing after the watch (step B)",
       "sources": [
         ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:107",
         ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:190-195",
@@ -3609,7 +3609,7 @@
     },
     {
       "id": "lab-smoke-r2-plate-carries-a-card",
-      "status": "open",
+      "status": "ruled",
       "kind": "owed",
       "title": "P65 HG1 - the first batch: plate-carries-a-card, 1 candidate(s) side by side (batch smoke-r2)",
       "ids": [
@@ -3650,7 +3650,7 @@
         "docs/content-video-engine/BACKLOG.md (R26-176: the space is finite; the lab enumerates it)",
         "content/video_engine/effects/lab/batches/smoke-r2.jsonl (the gate rows behind every survivor)"
       ],
-      "ruling": "",
+      "ruling": "WITHDRAWN by the parent, not an operator ruling (P72 T0, 2026-09-25): the first batch was PULLED by the parent on 2026-09-17 (R26-176) and the operator said he cannot answer P65 HG1 until HG2 is resolved (2026-09-18: \"until resolved i dont think i can actually answer P65 HG1\", recorded on `lab-batch-r2-plate-carries-a-card`); E99 s84 ruled HG2 and E99 s82's process returns no candidate-by-candidate card. Never re-asked; P65 T6 is closed by P72 decision D3.",
       "was_kind": "",
       "owed": "PULLED 2026-09-17: superseded and pulled with batch-r1 for the same defects",
       "draw": {
@@ -3892,7 +3892,7 @@
     },
     {
       "id": "lab-batch-r1-plate-carries-a-card",
-      "status": "open",
+      "status": "ruled",
       "kind": "owed",
       "title": "P65 HG1 - the first batch: plate-carries-a-card, 12 candidate(s) side by side (batch batch-r1)",
       "ids": [
@@ -3977,7 +3977,7 @@
         "docs/content-video-engine/BACKLOG.md (R26-176: the space is finite; the lab enumerates it)",
         "content/video_engine/effects/lab/batches/batch-r1.jsonl (the gate rows behind every survivor)"
       ],
-      "ruling": "",
+      "ruling": "WITHDRAWN by the parent, not an operator ruling (P72 T0, 2026-09-25): the first batch was PULLED by the parent on 2026-09-17 (R26-176) and the operator said he cannot answer P65 HG1 until HG2 is resolved (2026-09-18: \"until resolved i dont think i can actually answer P65 HG1\", recorded on `lab-batch-r2-plate-carries-a-card`); E99 s84 ruled HG2 and E99 s82's process returns no candidate-by-candidate card. Never re-asked; P65 T6 is closed by P72 decision D3.",
       "was_kind": "",
       "owed": "PULLED 2026-09-17: the twelve renditions, read by the parent on their sheets after the operator's finding on HG2: three open on a BLACK frame (the window starts on the dip), the card outlives its row and floats on the next page's empty cream at 45.05 s, two candidates show no card inside the window at all - the lab's member-to-row translation and its window choice are the defects, not the combinations; the card returns when every rendition has been read and the mechanism is on the frame",
       "draw": {
@@ -4848,6 +4848,158 @@
       "ruling": "",
       "was_kind": "watch",
       "owed": "P71 T38 - the parent builds the proof door before the row opens"
+    },
+    {
+      "id": "p69-hg1-the-chip-landing-and-the-contact",
+      "status": "open",
+      "kind": "owed",
+      "title": "P69 HG1 - the chip's default landing and the stamp's contact instant",
+      "ids": [
+        "P69 HG1",
+        "P69 T13",
+        "E99 s121"
+      ],
+      "judge": "The chip's DEFAULT landing - `springPop` vs the stamp, one proof beat built twice - and whether the stamp's cue hits on the contact frame (`STAMP_CONTACT_S`). The ring-from-the-enter item is already closed by E99 s121 (3).",
+      "where": [
+        {
+          "label": "P69 T13's proof door (built by the slice, not on disk yet)",
+          "missing": true
+        }
+      ],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "the chip's default landing and one constant (`STAMP_CONTACT_S`)",
+      "sources": [
+        ".claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md (Human Gates, T13)",
+        ".claude/PRPs/plans/P72-THE-BACKLOG-BURNDOWN.plan.md (Human Gates, the P69-HG1 row)"
+      ],
+      "ruling": "",
+      "was_kind": "look",
+      "owed": "P69 T13 - the parent builds the proof door (the beat built twice) before the row opens"
+    },
+    {
+      "id": "p69-hg2-the-first-prop",
+      "status": "open",
+      "kind": "owed",
+      "title": "P69 HG2 - the first prop, on its own card",
+      "ids": [
+        "P69 HG2",
+        "P69 T23"
+      ],
+      "judge": "The first prop on its own card: row 15's Fed stamp, frozen, with its enter / contact / rest frames and its cue.",
+      "where": [
+        {
+          "label": "P69 T23's card (the frozen row-15 frames and cue, not on disk yet)",
+          "missing": true
+        }
+      ],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "nothing now (the rows are built; the operator reads it at the end)",
+      "sources": [
+        ".claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md (Human Gates)",
+        ".claude/PRPs/plans/P72-THE-BACKLOG-BURNDOWN.plan.md (Human Gates, the P69-HG2 row)"
+      ],
+      "ruling": "",
+      "was_kind": "look",
+      "owed": "P69 T23 - the parent frames the row-15 card before the row opens"
+    },
+    {
+      "id": "p69-hg3-the-s90-page-before-and-after",
+      "status": "open",
+      "kind": "owed",
+      "title": "P69 HG3 - one look for the whole H episode: the default profile vs the long form",
+      "ids": [
+        "P69 HG3",
+        "P69 T11",
+        "R26-259",
+        "R26-289",
+        "E99 s90"
+      ],
+      "judge": "ONE look: every page on the default profile vs every page in the long form, the whole H episode rendered twice from one build at the same instants - both sides from ONE lane-B sha, the lane-B head when P69 T11 runs (named on the card; P72's 'The HG3 pin' lists which P72 slices are in it). Folded in: the default page's sans face (R26-259, Inter vs the fallback) and row 7's card line names at half the phone floor (R26-289; if refused, a taller card).",
+      "where": [
+        {
+          "label": "P69 T11's build - the whole episode twice from one lane-B sha (not on disk yet)",
+          "missing": true
+        }
+      ],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "P69 T33 (the body adopts the s90 page, held for this look)",
+      "sources": [
+        ".claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md (Human Gates, T11)",
+        ".claude/PRPs/plans/P72-THE-BACKLOG-BURNDOWN.plan.md (Human Gates, the P69-HG3 row; The HG3 pin)"
+      ],
+      "ruling": "",
+      "was_kind": "look",
+      "owed": "P69 T11 - the parent builds the whole episode twice from one lane-B sha before the row opens"
+    },
+    {
+      "id": "p69-hg4-the-body-read",
+      "status": "open",
+      "kind": "owed",
+      "title": "P69 HG4 - the body read on frames beside build-f's",
+      "ids": [
+        "P69 HG4",
+        "P69 T34",
+        "P67 HG1"
+      ],
+      "judge": "The body read on frames beside build-f's at the same instants (sha-verified 1440p), the director-critic run once, the gates. Folded in: P67 HG1's question - did the critic's two scores say something the gates did not.",
+      "where": [
+        {
+          "label": "P69 T34's frozen body and its critic (not on disk yet)",
+          "missing": true
+        }
+      ],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "P68 T7 (the render) and P68-HG4",
+      "sources": [
+        ".claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md (Human Gates, T34)",
+        ".claude/PRPs/plans/P72-THE-BACKLOG-BURNDOWN.plan.md (Human Gates, the P69-HG4 row)"
+      ],
+      "ruling": "",
+      "was_kind": "look",
+      "owed": "P69 T34 - the whole body gated, frozen and critiqued before the row opens"
+    },
+    {
+      "id": "p72-hg1-the-backlog-burndown",
+      "status": "open",
+      "kind": "owed",
+      "title": "P72 HG1 - the closing gate sheet",
+      "ids": [
+        "P72 HG1",
+        "P72 T39",
+        "R26-257",
+        "R26-146",
+        "R26-147",
+        "P50 T7",
+        "R26-334",
+        "R26-335",
+        "R26-168",
+        "E99 s130"
+      ],
+      "judge": "The closing sheet, one line each, frames served: (1) s130 (1) the fill glow on the gauge and the primary bars at full size and at thumbnail width beside Bravos (a watch; the ruling is made); (2) R26-257 the extruded bar's shadow re-lit from the stage light, before / after; (3) R26-146 the ball's `body=blend` clip; (4) R26-147 the `melt:all` design sheet (a yes / no to build); (5) P50 T7's quarantined still `art-embed-washi-tv` (the frame read it waits on); (6) R26-334's pick - the balance's sign-ink pill, from T41's candidate sheet; (7) R26-335's read - the prop hatch's strength on charcoal at 1x, from T41's sheet; (8) M38's open question from `p65-hg2-the-reproved-set-and-m38` (R26-168: FAIL at 0.60, move, or stay the interim WARN) - asked here once, not twice; P72 T3 applied the operator's s84 recipe denials, which drops the Japan cut's M38 reading - and the reference - from 0.76 to 0.48; M38 is the interim WARN, so this matters only if the operator makes M38 a FAIL. Attached as reports, not asked: the burndown's final-state table (`coverage.py`'s output) and s130 (2)'s measured check (the seal's contrast at least 3.0:1 on a mid-tone photo, T11).",
+      "where": [
+        {
+          "label": "the closing sheet $SP/p72-t39/, served frozen on its own port (built by P72 T39)",
+          "missing": true
+        }
+      ],
+      "proofs": [],
+      "options": [],
+      "recommendation": "",
+      "blocks": "nothing inside P72",
+      "sources": [
+        ".claude/PRPs/plans/P72-THE-BACKLOG-BURNDOWN.plan.md (Human Gates, the P72-HG1 row; T39)"
+      ],
+      "ruling": "",
+      "was_kind": "look",
+      "owed": "P72 T39 - the parent builds and serves the closing sheet before the row opens"
     }
   ]
 }

@@ -207,30 +207,30 @@ the P72 slice that names it carries the half.
 | R26-204 | P68 audit pointer row. Closed by P72 T0 (CLOSE-DUPLICATE). | a pointer: its thirteen children are R26-205..217, each inventoried on its own line; `hist:647`. |
 | R26-216 | Ep1's report prints 16 of 35 rows (G-12). Closed by P72 T0 (CLOSE-DUPLICATE). | "nothing to fix ... the baseline H is measured against" - REV 1: a computation PRINTED on P68 HG4's card (the H report's motion rows diffed against `build-f`'s), never asked; `hist:659`. |
 
+### Part 2 - the rows closed with their leftovers (3 rows)
+
+| ID | Verified outcome | Evidence / follow-up |
+|---|---|---|
+| R26-176 | The recipe lab. Closed by P72 T0 (DONE-UNCLOSED) with its residual. | BUILT 09-17 P65 T1-T4/T7/T8 (`cf8a930`); the residual (P65 T6 promotion, HG1) is carried by the P65 items in section D - closed by P72 T0: P65 T6 closed by decision D3 (recipes are proved as beats in proof doors; the defaults come from rulings), P65 HG1's two cards `lab-smoke-r2-plate-carries-a-card` and `lab-batch-r1-plate-carries-a-card` withdrawn (E99 s82: no candidate-by-candidate cards; s84); `hist:620`. |
+| R26-181 | The verified receipt and the critic. Closed by P72 T0 (DONE-UNCLOSED) with its residual. | BUILT P67 T1-T6 (`4b0343d`); HG1's card `one-shot-3-fable-memory-calendar` is RULED (E99 s71). The P67 HG1 question ("did the two scores say something the gates did not") was not the question s71 answered; it folds into P69-HG4, where the critic's read sits (P72 Human Gates, the P69-HG4 row) and is asked once there; `hist:718`. |
+| LEGACY-REVALIDATION-2026-09 | The legacy rows revalidated; the board row closed by P72 T0. | P72's inventory section B read every non-archived R26 row against plan, commit, artifact and ruling evidence (the shas spot-checked with `git log -1`); batches 1-3 above archived its DONE and CLOSE rows, the five triggered rows are `⏸️` rows on the board with their triggers, and every still-open row points at the P72 slice that carries it. The second-pass report is in [`../../BACKLOG-DISCIPLINE.md`](../../BACKLOG-DISCIPLINE.md#second-pass-report--p72-t0-2026-09-25). |
+
 ## Remaining close-marked legacy rows
 
-This is a census for parent review, not a second archive and not a completion
-claim. The method is intentionally mechanical: among the 274 bold R26 detail
-row headers, identify trailing status cell(s) containing an explicit
-completion-like token (`CLOSED`, `DONE`, `BUILT`, `FIXED`, `RETIRED`,
-`APPROVED`, `ACCEPTED`, `SHIPPED`, `PROMOTED`, `RESOLVED`, `LANDED`,
-`COMPLETE`, or `WITHDRAWN`). It found 102 rows. R26-63/64/67/68/69/70/71/74/
-75/77/78/79/90/92/93/94/95-101/110/112-114/125/262 account for 29 of the 30
-archive IDs at the first pass; R26-107 was also archived on direct evidence although its trailing
-cell does not match this token list. R26-239 was subsequently closed on direct
-catalogue evidence above. R26-123 remains active because its
-compiler-default follow-up is unresolved. These 71 other close-marked rows
-remain unreconciled; a token alone does not prove closure:
+This was a census for parent review, not a second archive and not a completion
+claim: among the 274 bold R26 detail row headers it listed 71 close-marked rows
+(`CLOSED`, `DONE`, `BUILT` and the like in a trailing status cell) that the first
+pass left unreconciled, because a token alone does not prove closure.
 
-R26-13, R26-32, R26-37, R26-38, R26-41, R26-42, R26-46, R26-47, R26-48,
-R26-49, R26-50, R26-51, R26-53, R26-54, R26-55, R26-56, R26-58, R26-59,
-R26-60, R26-76, R26-80, R26-82, R26-84, R26-86, R26-87, R26-105, R26-109,
-R26-117, R26-118, R26-119, R26-120, R26-121, R26-122, R26-132, R26-133,
-R26-134, R26-135, R26-158, R26-159, R26-161, R26-168, R26-172, R26-175,
-R26-176, R26-177, R26-179, R26-180, R26-181, R26-191, R26-201, R26-218,
-R26-219, R26-220, R26-221, R26-222, R26-223, R26-224, R26-225, R26-226,
-R26-228, R26-230, R26-231, R26-232, R26-233, R26-234, R26-235, R26-236,
-R26-241, R26-245, R26-246, R26-247.
+**Reconciled by P72 T0 (2026-09-25).** Each of the 71 was read against its
+evidence. 64 are archived above, in the P72 T0 closing pass (batches 1-3 and part
+2), each with its sha, file:line or ruling. The other seven are open work with a
+carrier, and none of them is archived: R26-105 (P72 T19, `rel: pin` only, decision
+D2), R26-132 (its part 2, the depth card in frame, P72 T7), R26-135 (its item 4,
+the calibration one-shot, P72 T37), R26-161 (the fold, P72 T30), R26-168 (M38's
+open question, the operator's, on P72-HG1's sheet), R26-175 (the one-shot
+comparison, P72 T37 behind P54-HG3's two steps) and R26-219 (the bracket's label
+room, P72 T43, and the note's `keep`, P72 T3).
 
 The source also mentions R26-248 without a matching detail-row header. It stays
 an unresolved source anomaly; this pass does not synthesize a task from it.
