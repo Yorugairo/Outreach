@@ -2347,7 +2347,7 @@
    }
   }
  },
- "measured": "2026-09-24",
+ "measured": "2026-09-25",
  "note": "measured by scripts/measure_page_boxes.py - do not hand-edit",
  "pages": {
   "1cd30ecec2e0face": {
@@ -2473,6 +2473,175 @@
     ],
     "timeline": "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-h/steel-and-paper-h.timeline.json",
     "title": "Tech's share of ALL US investment - the railway yardstick"
+   }
+  },
+  "1eca65af9bc73d42": {
+   "16:9|full_stage": {
+    "axis": {
+     "x": {
+      "h": 32,
+      "w": 1160,
+      "x": 218,
+      "y": 829
+     },
+     "y": {
+      "h": 343,
+      "w": 49,
+      "x": 89,
+      "y": 365
+     }
+    },
+    "bands": {
+     "above": {
+      "h": 87,
+      "w": 1792,
+      "x": 64,
+      "y": 64
+     },
+     "below": {
+      "h": 99,
+      "w": 1792,
+      "x": 64,
+      "y": 861
+     },
+     "left": {
+      "h": 680,
+      "w": 87,
+      "x": 64,
+      "y": 198
+     }
+    },
+    "boxes": {
+     "chart": {
+      "h": 747,
+      "w": 1729,
+      "x": 58,
+      "y": 197
+     },
+     "key": {
+      "h": 47,
+      "w": 1492,
+      "x": 67,
+      "y": 151
+     },
+     "plot": {
+      "h": 650,
+      "w": 1343,
+      "x": 151,
+      "y": 211
+     },
+     "rail": {
+      "h": 0,
+      "w": 0,
+      "x": 67,
+      "y": 999
+     },
+     "source": {
+      "h": 22,
+      "w": 1813,
+      "x": 67,
+      "y": 960
+     },
+     "sub": {
+      "h": 29,
+      "w": 1813,
+      "x": 67,
+      "y": 102
+     },
+     "tag_boxes": [
+      {
+       "h": 36,
+       "w": 220,
+       "x": 1584,
+       "y": 299
+      },
+      {
+       "h": 36,
+       "w": 314,
+       "x": 1510,
+       "y": 579
+      },
+      {
+       "h": 36,
+       "w": 336,
+       "x": 1510,
+       "y": 763
+      },
+      {
+       "h": 36,
+       "w": 224,
+       "x": 1510,
+       "y": 696
+      }
+     ],
+     "title": {
+      "h": 48,
+      "w": 1813,
+      "x": 67,
+      "y": 44
+     }
+    },
+    "builder": "dense-line",
+    "data_mask": [
+     "0000000000000000",
+     "0000000000001100",
+     "0000000000011110",
+     "0000000000111111",
+     "0000000000110010",
+     "0000000000100000",
+     "0000000001100000",
+     "0000001111100000",
+     "0000011011000000",
+     "0011110000011110",
+     "0111110000110111",
+     "0110000001100010",
+     "1111111111000000",
+     "1111111111111111",
+     "1111111111101100",
+     "0000000000000000"
+    ],
+    "full_stage": true,
+    "ink": "1eca65af9bc73d42",
+    "tag_ink": [
+     [
+      "+613%",
+      "MEMORY MAKERS (hynix+Micron)",
+      712.52,
+      [
+       95.0,
+       1138.74
+      ]
+     ],
+     [
+      "+105%",
+      "SEMICONDUCTOR STOCKS",
+      204.62,
+      [
+       95.0,
+       1138.74
+      ]
+     ],
+     [
+      "+21%",
+      "MEGA-CAP TECH STOCKS",
+      120.75,
+      [
+       95.0,
+       1138.74
+      ]
+     ],
+     [
+      "+21%",
+      "S&P 500 (the market)",
+      121.49,
+      [
+       95.0,
+       1138.74
+      ]
+     ]
+    ],
+    "timeline": "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-h/steel-and-paper-h.timeline.json",
+    "title": "The sharpest chart on YouTube - plus the layer it needed"
    }
   },
   "1fc04e19c40debcb": {

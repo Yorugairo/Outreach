@@ -1043,13 +1043,13 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T32: Row 24 (13:00-13:43) - the close and the outro (dip 10)
-- Status: in_progress (dispatched 2026-09-25 on lane A 8f233a1)
+- Status: done - row 24 (765.17-811.78 s, BUILD-NOTES-H 24): dip 10 to the divergence page retitled 'Steel gets used. Paper gets believed.'; park to 0.34 and the agenda in the freed room; the tripwire board / the yardstick card / the test in one slot; un-park, rings on the memory tip and the S&P line; the certificate to the card; the outro on the approved shorts' method (outro_clock + stitch_brand_line, the brand line 0.7 s after the take, 13:31.8); gate 2 FAIL (M11, M31 - pre-existing) / 4 WARN unchanged. DEPARTURE: a dip into the card, not the plan's dissolve (every approved short dips; tokyo build_short.py:444). Operator items for HG4: dip or dissolve into the outro; the returning page wears the longform look (rows 1-5, 20 keep the old - HG3 / T33); legend chips stay full width on a parked page; the certificate small at 390 px; 12 dips vs the treatment's 10. Engine rows R26-341..346
 - Owner: implementation_luna
 - Depends on: T31
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
 - Acceptance: the shared body rules; the divergence page one last time; the agenda returns in its slot; the outro dissolves in as "desk" ends with the recorded brand line 0.7 s under the card (`CAPABILITIES.md:64`, `channel-assets/money-physics/outro/`) and `recipe:outro-clip-life`; runtime over 8:00 (E74)
 - Validate: the shared Validate
-- Evidence: pending
+- Evidence: `build-h/BUILD-NOTES-H.md` section 24; logs `build-h/logs/t32-*`
 
 ### T33: The body adopts the s90 page
 - Status: HELD for P69-HG3 (the operator, 2026-09-25: "hold it all for a clean hg3 view") - HG3 shows the whole H episode in both looks; the pick is applied to every row in one pass after it

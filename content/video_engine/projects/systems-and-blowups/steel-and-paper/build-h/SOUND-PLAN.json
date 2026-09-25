@@ -576,6 +576,59 @@
    }
   },
   {
+   "slot": "landing 26 (land, paper)",
+   "at": 775.38,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 775.42s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 26 (land, paper)",
+   "at": 780.64,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 780.68s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 26 (land, paper)",
+   "at": 785.1,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 785.14s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "landing 26 (land, paper)",
+   "at": 802.64,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3",
+    "B": "fs-page-roll-464302.mp3"
+   },
+   "note": "contact at 802.68s, the cue one frame early (the weight report Q5)"
+  },
+  {
+   "slot": "dip 26",
+   "at": 764.82,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-whoosh-3-648729.mp3"
+   }
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0073,
@@ -795,6 +848,17 @@
     "B": "suno-hook-A.mp3"
    },
    "note": "-28 LU under the VO (-28.0 LUFS measured); the long form's calibration"
+  },
+  {
+   "slot": "close bed",
+   "at": 773.94,
+   "gain": 0.0085,
+   "fade_in": 2.0,
+   "variants": {
+    "A": "suno-close-A.mp3",
+    "B": "suno-close-B.mp3"
+   },
+   "note": "-28 LU under the VO (-28.0 LUFS measured); the locked close pick (close=A), no extend"
   }
  ],
  "bound": "bound to steel-and-paper-h.timeline.json by lab_build.py after the embed (E99 s72): every cue whose effect does not fire at its instant is dropped; 1 dropped"

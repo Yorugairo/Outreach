@@ -82,6 +82,13 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
         20); the page melts back onto the press, the certificate RUNG round the whole card with its figure (RAIL_DROP,
         E99 s110 (2)); on "1845 is the proof"
         the railway index RETURNS built behind a blur-zoom and writes its -64% on "two-thirds".
+  page_close / OUTRO_*     row 24 (P69 T32): THE CLOSE - dip 10 and the divergence RETURNS by the spiral one last time,
+        all four lines on the memory line's scale; the page parks for the agenda ("three questions, thirty seconds")
+        and the board, the yardstick and the test land in its slot in turn; the un-park on "a copy of this chart", the
+        rings where it points and on the market; the opening's certificate landed back on "the certificate stays on the
+        desk"; then THE OUTRO - the build is the WHOLE take (UNIT_CUT_PHRASE None),
+        the Remotion kit's 16:9 card dipped in as "desk" ends and the recorded brand line stitched 0.7 s after it
+        (`authoring.audio.outro_clock` / `stitch_brand_line`, the approved shorts' clock; E41 - never the script's words).
 
 THE BODY'S PREFLIGHT (P69 T14, rows 7-24) is three constant tables, read before any body row is authored:
   BODY_ASSETS          every page object (with its builder), card, plate, prop, host still, cue file and outro part
@@ -202,8 +209,9 @@ def _assert_read_only(before: dict) -> None:
 # words (the test, T28's). P69 T28 authors row 20 (host window 2, the test) and moved it to row 21's first words (SK hynix,
 # T29's); P69 T29 authors row 21 (SK hynix, one panels page) and moved it to row 22's first words (the tripwires, T30's);
 # P69 T30 authors row 22 (the tripwires: the board, PROP 6, the monitor, the trim proof) and moves it on to row 23's first
-# words (the ring, T31's) - the take glues "So" to its dash.
-UNIT_CUT_PHRASE = "The steel gets used."   # row 24 (the close, T32)'s first words; the build stops at the cut BEFORE them
+# words (the ring, T31's) - the take glues "So" to its dash. P69 T32 authors row 24 (the close) and the cut is GONE: there
+# is no next row, so the build is the WHOLE take and ends on the outro card (main's outro clock, OUTRO_* below).
+UNIT_CUT_PHRASE = None                     # P69 T32: the whole take - row 24's first words are UNIT_CUT_ROW24 (dip 10)
 UNIT_CUT_ROW23 = "So— the certificate"     # row 23 (the ring, T31)'s first words - dip 7 (the take glues "So" to its dash)
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
@@ -2109,6 +2117,13 @@ def page_hynix_return() -> str:
     return "ledger:%s:line::right:spiral%s%s%s" % (HYNIX_PAGE, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM)
 
 
+def page_close() -> str:
+    """Row 24's page (P69 T32): the divergence RETURNS by the spiral one last time - all four lines drawn, on the scale
+    the memory line needs (row 4's rescale, as the argument left it), live, in the long form's profile (LONGFORM)."""
+    return ("ledger:%s:line:%d:right:spiral%s%s%s%s"
+            % (LAYER_PAGE, DIV_LAST, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM, PAGE_DOMAIN % (FULL_YMIN, FULL_YMAX)))
+
+
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
 AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}, {"n": 3, "text": "Used tomorrow?"}]
 # ... and the agenda's room is measured the same way: the caption's band ends at y 576 and the parked chart holds
@@ -2353,6 +2368,110 @@ SLOT_WHY = ("the ticket -> Karp -> Uber -> the COO: TAKEN the slot hand-off (E99
             "(SLOT_HANDOFF_ARRIVE); refused: a dip per quote (no world changes between them, E47), three worlds "
             "(build-f's memo / burndown / racks plates - the G31 listing risk the treatment closes on screen). The ticket "
             "leaves with its page at the melt; its corner box is NOT the records' slot (a record there types at ~8 px)")
+
+
+# ---------------------------------------------------------------- ROW 24 (P69 T32): THE CLOSE AND THE OUTRO
+# "The steel gets used. The paper gets believed." The treatment's row 24 (REBUILD-TREATMENT-H.md:84): dip 10 back to the
+# page on "The steel gets used", the divergence ONE LAST TIME, the anaphora in STAGE mode, the agenda back in its slot on
+# "three questions, thirty seconds", and the outro clip on the last word with the recorded brand line 0.7 s after it
+# (CAPABILITIES:64; E41 - the brand line is a CHANNEL ASSET stitched under the card, never a script's words). The page
+# RETURNS BY THE SPIRAL (E40 s4: unwound from its point, already drawn - row 20's return), this time as the argument
+# left it at 1:44 - all four lines on the scale the memory line needs (FULL_YMIN..FULL_YMAX, row 4's rescale), in the long
+# form's profile (LONGFORM: rows from 14 on; rows 1-5 and 20 keep theirs - the operator, 2026-09-25, "hold it all for a
+# clean hg3 view"). The CTA sentences are not left on a parked page for 17 s (E50 / E21): the page parks for the agenda
+# (SPECIES-BY-SENTENCE.md:51 - "three things" -> the page parks and the agenda takes the room) and each thing the voice
+# names then takes the agenda's slot in turn (E99 s80): the tripwire board (row 22's) on "either tripwire", the yardstick
+# (row 14's page, drawn as a card for its size) on "the yardstick reading", the test (row 20's) on "run the test".
+# On "a copy of this chart" the page grows back (the un-park) and its last two rings point where the sentence does; the
+# certificate of the opening (row 1's) LANDS back on "the certificate stays on the desk" and stays to the card.
+UNIT_CUT_ROW24 = "The steel gets used."        # row 24's first words - dip 10 (the take's first "The steel gets used")
+CLOSE_TITLE = "Steel gets used. Paper gets believed."   # the anaphora's own words, written back as the page lands
+# NO SPREAD on "the difference" - MEASURED, draft 2 (`p69-row24/d2t/S-tiles.png` c1-c2 vs `dxt/X-tiles.png`): the same
+# `spread` (mega -> memory, row 1's) paints on this page WITHOUT `readability=longform` and paints NOTHING with it (rows
+# 1 and 20 bleed; row 10's longform debt page bleeds too) - an ENGINE item; an authored event the frame never shows is
+# not shipped, so the third line of the anaphora rides the caption and the park follows 2.2 s later.
+CLOSE_PARK_PHRASE = "You now have"             # (the take glues "test" to its dash) the page parks for the agenda (E61) as the sentence SETS it
+CLOSE_PARK_SCALE, CLOSE_PARK_ANCHOR, CLOSE_PARK_S = 0.34, "left", 0.9   # the line held aside (row 22's HYNIX_ASIDE width)
+# MEASURED, draft 3 (`p69-row24/d3/GATES-MOTION.md` M25 / M27): parked at 0.40 the page's end tags reached ~x 0.42 and
+# the cards' left edge (0.40) stood on them; at 0.34 they end ~0.38, clear of a card from 0.41
+CLOSE_AGENDA_PHRASES = ("three questions", "thirty seconds", "any holding")   # a row per phrase (row 2's own words)
+CLOSE_AGENDA_BOX = {"kind": "region", "x0": 0.46, "y0": 0.22, "x1": 0.94, "y1": 0.60}   # the room the park frees
+CLOSE_SLOT = {"centre": True, "centre_w": 0.58, "centre_x": 0.70, "centre_y": 0.555,
+              "card_aspect": TEST_CARD_ASPECT}  # the agenda's room: the phone checklist's floor is 0.60 (T28b), 0.58 here
+# ... its centre at 0.555: MEASURED, draft 5 (`d5/layout-probe.json` 775.42) - a LANDING card starts ~140 px taller than
+# its rest box, and from 0.51 the board's first frames stood on the page's key rail (y 146-194, which the park does not
+# scale); from 0.555 it rests at y 346-852, clear of the rail as it drops and of the caption strip (878) as it sits
+CLOSE_BOARD_PHRASE = "either tripwire"         # the board LANDS on "tripwire" (HANDOFF_LEAD_S before it) - MEASURED, draft 4
+#   (M27 at 12:55): THROWN, its flight crossed the parked page's ink and key rail (row 22's CERT_BACK_SLOT finding)
+YARD_CARD = "dock-h-yardstick-card"            # row 14's page drawn as a card for its displayed size (T10c's card profile)
+YARD_CARD_SLOT = dict(CLOSE_SLOT, centre_w=0.52, centre_y=0.51, card_aspect=BRAVOS_ASPECT, arrive=SLOT_HANDOFF_ARRIVE,
+                      mass="paper")
+# ... at 0.52, not the checklists' 0.58: MEASURED, draft 3 (M25 at 13:02) - a 16:9 card at 0.58 is 0.58 of the stage tall
+# and its top stood on the page's key rail (the legend chips, which the park does not scale); at 0.52 it spans y 0.25-0.77
+YARD_CARD_W = round(YARD_CARD_SLOT["centre_w"] * 1920, 2)
+YARD_CARD_OBJECT_ID = "ev-yardstick-card-h24-v1"   # derived (`_yard_card_object`): the tech line alone
+YARD_CARD_TITLE = "The yardstick: tech's share of US investment"
+YARD_CARD_YMAX = 32
+CLOSE_YARD_PHRASE = "the yardstick reading"
+CLOSE_TEST_PHRASE = "run the test"
+# NO RINGS ON THE PARKED PAGE ("mine on memory", "the whole index"): MEASURED, draft 3 (M34 at 13:07) - a callout keeps
+# its stage size on a page parked to a third, so the ring on the market's tip was painted across the mega-cap tag, and
+# the memory ring read as a dot at a 390 px phone; the board ("Mine / RAM cheaper") and the test carry those words.
+CLOSE_UNPARK_PHRASE = "a copy of this chart"   # the page grows back to the stage as "this chart" is named
+CLOSE_UNPARK_LEAD_S = 0.3
+CLOSE_TEST_OFF_LEAD_S = 0.3                    # the test leaves this far before the un-park (a card never under a growing
+#   plot); MEASURED, draft 1 (`d1t/A-tiles.png` m-o): at 0.7 its third row had barely landed as it went
+CLOSE_POINT_PHRASE = "where it's pointing"     # the ring on the memory line's tip: where this chart points (the address)
+CLOSE_SAFETY_PHRASE = "sold to you as"         # ... and on the market's line as "sold to you as safety" is said
+CLOSE_CERT_PHRASE = "the certificate stays"
+CLOSE_CERT_CARD = "dock-h-railway-share-close"   # the opening's certificate under its own id (row 23's re-dock finding)
+CLOSE_CERT_SLOT = {"centre": True, "centre_w": 0.16, "centre_x": 0.20, "centre_y": 0.42, "card_aspect": CERT_ASPECT,
+                   "arrive": "land", "mass": "paper"}   # the page's empty upper left (every line starts at 100)
+# ... LANDED, not thrown: MEASURED, draft 4 (M27 at 13:22) - the throw's flight crossed the page's key rail
+# MEASURED, draft 1 (`d1t/B-tiles.png` v-x): at 0.20 centred (0.26, 0.36) the card's lower right stood on the memory
+# line's climb (stage ~x 700-790, y 520-560); at 0.16 centred (0.23, 0.36) it ends ~85 px above the line; draft 5 (M27 at
+# 13:22): LANDING from there its first frames stood on the axis title (y 207-239) - centred (0.20, 0.42) it rests at
+# y 342-564, under the title and left of the climb
+CLOSE_RING_GAP_S = 0.2
+DIV_SP = next(i for i, n in enumerate(DIV_NAMES) if n.startswith("S&P"))   # "S&P 500 (the market)"
+# the market's ring stands a few weeks in from its tip: MEASURED, draft 4 (M34 at 13:19) - on the tip itself the ring was
+# painted across the mega-cap line's "+21% matches the market" tag beside it (a ring names a line, never a word)
+DIV_SP_RING = DIV_LAST - 20
+# THE OUTRO (CAPABILITIES:64; `recipe:outro-clip-life`, effects/recipes/outro-clip-life.json): the Remotion kit's YouTube
+# card ("subscribe") at 16:9 24 fps (channel-assets/money-physics/outro/landscape/RENDER-NOTES.md: "Which one the build
+# should use: outro-yt-1920x1080-24fps.mov for the long-form cut"), made seekable into the build; its seconds are the
+# clip's own (probed, 6.208 s - not the portrait card's 6.2), `life` declared over them (the compiler's SPECIES_KINDS: a
+# self-animating world, credited as continuous). The clock is the approved shorts' own (`authoring.audio.outro_clock`,
+# Tokyo / japan-tariff / the calendar): the card starts OUTRO_LEAD before the take ends and the brand line plays BRAND_GAP
+# after it, under the card (`audio.stitch_brand_line`); the runtime is whichever finishes last. The way IN is the DIP
+# (OUTRO_DIP_WHY - every approved cut's own token: `tokyo-tea-break/build_short.py:444` "E47: the card is a world change
+# - the dip, not the dissolve"; `authoring/shapes.py` OUTRO_EXIT).
+OUTRO_DIR = REPO / "content/video_engine/channel-assets/money-physics/outro"   # gitignored media, on disk (T14 inventory)
+OUTRO_CLIP = OUTRO_DIR / "landscape/outro-yt-1920x1080-24fps.mov"
+OUTRO_MP4 = "outro-yt-1920x1080-24fps.mp4"
+OUTRO_WORLD = "clip:%s/clips/%s" % (BUILD_DIR, OUTRO_MP4)   # relative to the episode (build_scene_timeline_f.py:6805)
+BRAND_LINE = OUTRO_DIR / "vo/audio/brand-line-paced.mp3"      # "Not a panic. Not a plot. Mechanics." (BRAND-LINE.txt)
+BRAND_GAP, BRAND_TAIL, OUTRO_LEAD = 0.7, 1.0, 0.1             # the approved shorts' own (memory-trades-the-calendar:46-47)
+CLOSE_DIP_WHY = ("the newsroom -> the divergence, plate to page (a WORLD change, E47 - 'The steel gets used': the host "
+                 "hands back to the argument, one last time): TAKEN dip 10 (the treatment's own) and the page RETURNS by "
+                 "the spiral (E40 s4 - unwound from its point, already drawn, never rolled out and built again), all four "
+                 "lines on the memory line's scale as the argument left it at 1:44; refused: enter=axes / built (drawn "
+                 "like new, or pasted), the suck (spent into the desk at 7:44 and 8:33 - E99 s74 Apply 1), the melt's "
+                 "splash (a splash paints a PLATE; this world is a page), a recast (the newsroom is not a chart), the "
+                 "snap / throw-then-push (no card of this page is on the desk - the weight check is another object)")
+OUTRO_DIP_WHY = ("the divergence -> the outro card, page to clip (a WORLD change, E47 - the video ends and the channel's "
+                 "card begins): TAKEN the dip as 'desk' ends (the approved shorts' own token, `tokyo-tea-break/"
+                 "build_short.py:444`: 'the card is a world change - the dip, not the dissolve'; OUTRO_EXIT); refused: "
+                 "the dissolve (E46 (2) licenses it as 'the join into the outro card' and the treatment says 'dissolves' "
+                 "- but every approved cut dips, and E47 is the later ruling; named for the operator), a cut (a world "
+                 "change is the dip's case), the melt / suck (the card is not a place the page can collapse into)")
+CLOSE_SLOT_WHY = ("the agenda -> the tripwire board -> the yardstick -> the test, in ONE slot beside the parked page (P69 "
+                  "T32, 'three questions' / 'either tripwire' / 'the yardstick reading' / 'run the test'): TAKEN the park "
+                  "(E61, SPECIES-BY-SENTENCE.md:51 - the agenda sentence parks the page and the agenda takes the room) and "
+                  "the slot hand-off (E99 s80 - each thing the voice names takes the outgoing one's box; all three LAND - a "
+                  "throw's flight crossed the parked page's ink, M27), the un-park on 'a copy of this chart'; refused: the page parked through the CTA "
+                  "with nothing named (E50 - 17 s past its last mark; E21), a world per card (no world changes, E47), the "
+                  "cards over the line (a settled card on a line's data is M25's FAIL)")
 IN_ROW_WHY = (
     ("row 5 recast 3 (P69 T18, 'catches up with it')", DIV_RECAST_WHY),
     ("row 6 the one slot (P69 T19, 'Alex Karp' / 'Uber's CTO' / 'And their COO')", SLOT_WHY),
@@ -2372,6 +2491,8 @@ IN_ROW_WHY = (
     ("row 24 the line aside and the arithmetic (P69 T31, 'A memory fab takes')", ARITH_CARD_WHY),
     ("row 25 the certificate -> the weight check on the newsroom's desk (P69 T31, 'Nobody holding it')",
      NEWSROOM_SLOT_WHY),
+    ("row 26 the park, the agenda and the one slot (P69 T32, 'You now have the test' -> 'a copy of this chart')",
+     CLOSE_SLOT_WHY),
 )
 # (the P69 T16 first cut, before T15b, is kept for the record: it entered the index from the STUDIO by dip 1 and
 # refused recast / rescale / morph, the melt, the snap / throw-then-zoom / throw-then-push, object-becomes-chart, the
@@ -2399,6 +2520,8 @@ BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the tr
                 RING_PLATE: RING_DIP_WHY,                                    # row 23a, reset 3, dip 7 (P69 T31)
                 page_hynix_return(): HYNIX_RETURN_WHY,                       # row 23b, dip 8, the hynix page RETURNS
                 HOST3_PLATE: NEWSROOM_DIP_WHY,                               # row 23c, host window 3, dip 9
+                page_close(): CLOSE_DIP_WHY,                                 # row 24a, dip 10, the divergence one last time
+                OUTRO_WORLD: OUTRO_DIP_WHY,                                  # row 24b, the outro card (P69 T32)
                 SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
                               "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
@@ -2412,7 +2535,7 @@ CARD_CLEAR_S = 1.2  # ... and it is GONE before the page recasts, so the hand-ov
 CAMERA_ZOOM, CAMERA_IN_S, CAMERA_HOLD_S = 1.06, 1.2, 2.4   # 1.10 cut the page title by 9 px (M43, measured)
 
 
-def shot_table(ws: list, unit_end: float) -> list:
+def shot_table(ws: list, unit_end: float, t_outro: float | None = None) -> list:
     """The treatment's rows 1-11, timed from the take (P69 T15-T19 grow it one body row at a time). A cut or a dip is
     the last resort (E99 s74); each boundary and each transform inside a row names what it took and refused."""
     at = lambda p: T.at(ws, p)
@@ -2711,7 +2834,21 @@ def shot_table(ws: list, unit_end: float) -> list:
     r_is_cert = W.word_in(ws, "trade is the", "the")    # the certificate thrown as "is the certificate" is said
     r_nobody = round(at("Nobody holding it") - HANDOFF_LEAD_S, 2)   # the weight check takes its slot, down on "Nobody"
     r_accidental = at("accidental concentration")       # ... "accidental concentration, sold as safety" read on it
-    t_row23_end = unit_end
+    # -- row 24 (P69 T32): THE CLOSE - dip 10 onto the divergence on "The steel gets used." (the take's first one: the
+    # anaphora returns at 800.19, "The steel gets used,"), then the outro card from t_outro (main's outro clock)
+    t_row24 = cut(UNIT_CUT_ROW24)
+    t_row23_end = t_row24
+    c_park = at_from(CLOSE_PARK_PHRASE, t_row24)
+    c_agenda = [at_from(ph, c_park) for ph in CLOSE_AGENDA_PHRASES]
+    c_board = round(at_from(CLOSE_BOARD_PHRASE, c_park) - HANDOFF_LEAD_S, 2)   # down on "tripwire"
+    c_yard = round(at_from(CLOSE_YARD_PHRASE, c_board) - HANDOFF_LEAD_S, 2)
+    c_test = round(at_from(CLOSE_TEST_PHRASE, c_yard) - HANDOFF_LEAD_S, 2)
+    c_unpark = round(at_from(CLOSE_UNPARK_PHRASE, c_test) - CLOSE_UNPARK_LEAD_S, 2)
+    c_point = at_from(CLOSE_POINT_PHRASE, c_unpark)
+    c_safety = at_from(CLOSE_SAFETY_PHRASE, c_point)
+    c_cert = round(at_from(CLOSE_CERT_PHRASE, c_safety) - HANDOFF_LEAD_S, 2)   # down on "the certificate"
+    if t_outro is None:
+        raise SystemExit("FAIL: row 24 (P69 T32) ends on the outro - main owes the table its t_outro")
 
     return [
         # -- ROWS 1-6: THE PAGE IS THE WORLD (E58 / E61). One world, two chart states, two cards in one slot.
@@ -3217,7 +3354,36 @@ def shot_table(ws: list, unit_end: float) -> list:
              "label": WEIGHT_RING_LABEL, "points": WEIGHT_RING_PHRASE, "pad": 6, "label_scale": CERT_RING_LABEL_SCALE,
              "target": {"kind": "dock", "dock": WEIGHT_CARD, "box": list(WEIGHT_RING_BOX)}},
         ], {"keys": [], "attention": "landings"}),
-        # (-- ROW 24 is T32's; UNIT_CUT_PHRASE moves with it.)
+        # -- ROW 24a (P69 T32): THE CLOSE - dip 10 (CLOSE_DIP_WHY) and the divergence RETURNS by the spiral, all four lines
+        # drawn, retitled with the anaphora as it lands (no spread - the note above CLOSE_PARK_PHRASE); the page PARKS on
+        # "You now have the test" and the agenda lands in its room a row per phrase; the board, the yardstick and the test
+        # take that slot in turn (CLOSE_SLOT_WHY); it grows back on "a copy of this chart", rung where it points and on the
+        # market sold as safety; the opening's certificate lands back on "the certificate stays on the desk", to the card.
+        (t_row24, t_outro, page_close(), (0, 0, 0), [
+            (TRIPWIRE_CARD, 1, c_board, c_yard, dict(CLOSE_SLOT, arrive=SLOT_HANDOFF_ARRIVE, mass="paper")),
+            (YARD_CARD, 1, c_yard, c_test, dict(YARD_CARD_SLOT)),
+            (TEST_CARD, 1, c_test, round(c_unpark - CLOSE_TEST_OFF_LEAD_S, 2),
+             dict(CLOSE_SLOT, arrive=SLOT_HANDOFF_ARRIVE, mass="paper")),
+            (CLOSE_CERT_CARD, 0, c_cert, t_outro, dict(CLOSE_CERT_SLOT)),
+        ], "dip", [
+            {"kind": "retitle", "at": t_row24, "dur": DIV_RETURN_S, "text": CLOSE_TITLE},
+            {"kind": "chart_to", "at": c_park, "dur": CLOSE_PARK_S, "to": "park", "scale": CLOSE_PARK_SCALE,
+             "anchor": CLOSE_PARK_ANCHOR},
+            {"kind": "agenda", "at": c_agenda[0], "dur": round(c_board - 0.3 - c_agenda[0], 2),
+             "target": dict(CLOSE_AGENDA_BOX),
+             "rows": [dict(row, at=ta) for row, ta in zip(AGENDA_ROWS_H, c_agenda)]},
+            {"kind": "chart_to", "at": c_unpark, "dur": CLOSE_PARK_S, "to": "park", "scale": 1.0,
+             "anchor": CLOSE_PARK_ANCHOR},
+            {"kind": "callout", "at": c_point, "dur": round(c_safety - CLOSE_RING_GAP_S - c_point, 2),
+             "target": datum(DIV_LAST, DIV_MEMORY)},
+            {"kind": "callout", "at": c_safety, "dur": round(c_cert - CLOSE_RING_GAP_S - c_safety, 2),
+             "target": datum(DIV_SP_RING, DIV_SP)},
+        ], {"keys": []}),
+        # -- ROW 24b (P69 T32): THE OUTRO - the Remotion kit's YouTube card, dipped in as "desk" ends (OUTRO_DIP_WHY), its
+        # own life declared over its seconds (`recipe:outro-clip-life`); the brand line is in the audio, not on the table.
+        (t_outro, unit_end, OUTRO_WORLD, (0, 0, 0), [], "dip", [
+            {"kind": "life", "at": t_outro, "dur": round(unit_end - t_outro, 2)},
+        ]),
     ]
 
 
@@ -3233,9 +3399,12 @@ BED_LU = -28.0        # the LONG FORM's calibration (sound/SOUND-PLAN.json: "Bed
 VO_LUFS = -28.0       # vo-h-scratch/scratch-kokoro.mp3, measured with ffmpeg ebur128 on 2026-09-18
 BED_LUFS = -13.3      # sound/suno-hook-B.mp3, measured the same way
 BED_SWELL_DB, SNAP_S_BED = 4.0, 0.45
+CLOSE_BED_A, CLOSE_BED_B = "suno-close-A.mp3", "suno-close-B.mp3"   # the locked close pick is A (sound/SOUND-PLAN.json)
+CLOSE_BED_LUFS = -14.6    # sound/suno-close-A.mp3, measured with ffmpeg ebur128 on 2026-09-25 (B: -14.2)
+CLOSE_BED_PHRASE = "Subscribe for the watch"   # the CTA - where ep1's locked plan put the close bed (775.0 of 806.47 s)
 
 
-def sound_cues(rows: list) -> list:
+def sound_cues(rows: list, ws: list | None = None) -> list:
     """Which file plays where, and how loud - over the kit's own reading of the rows' transitions and arrivals."""
     stop = A.stop_dials()
     cues = []
@@ -3258,6 +3427,8 @@ def sound_cues(rows: list) -> list:
                          "at": round(contact - 1 / 24, 2), "gain": ACCENT, "fade_in": 0.0,
                          "variants": {"A": STROKE, "B": ROLL},
                          "note": "contact at %.2fs, the cue one frame early (the weight report Q5)" % contact})
+        if r[5] == "dip" and str(r[2]) == OUTRO_WORLD:   # P69 T32: no whoosh into the card - the brand line is its
+            continue                                      # sound (the approved shorts sound nothing into their outro)
         if r[5] == "dip":   # the world change's own accent (E47) - AT THE ROW'S START: a row's exit is the door INTO
             # it (the engine's `dipIn` reads `sc.exit` against the scene before, transitions.mjs:96 /
             # build_scene_timeline_f.py:2660). P69 T15 fixed `r[1]`, which sounded the whoosh at the row's END.
@@ -3267,6 +3438,14 @@ def sound_cues(rows: list) -> list:
     cues.append({"slot": "hook bed", "at": 0.0, "gain": A.bed_gain(VO_LUFS, BED_LU, BED_LUFS), "fade_in": 1.5,
                  "env": env, "variants": {"A": BED_HOOK_A, "B": BED_HOOK_B},
                  "note": "%+.0f LU under the VO (%.1f LUFS measured); the long form's calibration" % (BED_LU, VO_LUFS)})
+    # P69 T32: THE CLOSE BED - the project's locked pick (sound/SOUND-PLAN.json: "close=A (no extend)", its cue on the
+    # CTA at 775.0 of ep1's 806.47 s clock) on this take's own CTA, "Subscribe for the watch", at the same -28 LU
+    if ws and any(str(r[2]) == page_close() for r in rows):
+        cues.append({"slot": "close bed", "at": T.at(ws, CLOSE_BED_PHRASE),
+                     "gain": A.bed_gain(VO_LUFS, BED_LU, CLOSE_BED_LUFS), "fade_in": 2.0,
+                     "variants": {"A": CLOSE_BED_A, "B": CLOSE_BED_B},
+                     "note": "%+.0f LU under the VO (%.1f LUFS measured); the locked close pick (close=A), no extend"
+                             % (BED_LU, VO_LUFS)})
     return cues
 
 
@@ -3520,6 +3699,22 @@ BODY_DEPARTURES = (
     (23, "(additions)", "the railway index as a card on 'the certificates that financed it'; the VERDICT STACK on "
      "'Everything we checked holds' (doc 29 s9.24; four docked documents, burst on 'And the one number'); PROP 6 the RAM "
      "again after 'the price of memory'; the I-beam (prop-memory-steel-ibeam-v1) after 'They're the steel'"),
+    (24, "'Subscribe for the watch' the page parks (and holds to the outro)",
+     "the page parks on 'You now have the test' for the agenda (SPECIES-BY-SENTENCE.md:51) and grows back on 'a copy of "
+     "this chart': a page parked through the CTA's 17 s with nothing named is past E50's 12 s and E21 - so each thing the "
+     "CTA names takes the agenda's slot (CLOSE_SLOT_WHY)"),
+    (24, "the outro clip 'dissolves in' (the treatment; CAPABILITIES:64)",
+     "the DIP (OUTRO_DIP_WHY): every approved cut dips into its card (tokyo-tea-break/build_short.py:444, japan-tariff-"
+     "trick:322, memory-trades-the-calendar:266; authoring/shapes.py OUTRO_EXIT) - E46 (2) licenses the dissolve; "
+     "for the operator"),
+    (24, "the outro card (the portrait outro-v2.mov of the shorts)",
+     "the 16:9 YouTube card at 24 fps, outro-yt-1920x1080-24fps.mov ('subscribe'; RENDER-NOTES.md), 6.208 s probed"),
+    (24, "the anaphora 'in STAGE mode'",
+     "the page row's caption in the anchored strip (R26-205 - the page is full stage); the first line written back as "
+     "the page's title (CLOSE_TITLE)"),
+    (24, "(additions)", "the tripwire board (row 22's) on 'either tripwire', the yardstick (row 14's page as a card, "
+     "YARD_CARD) on 'the yardstick reading', the test (row 20's) on 'run the test' - each in the agenda's slot; rings on the memory line ('where it's pointing') and the market's ('sold to you as safety') once the page is back; the opening's certificate landed back on 'the certificate stays on "
+     "the desk'; the close bed (the locked close=A) on the CTA"),
 )
 
 # THE RULINGS THAT OVERRULE THE TREATMENT'S WORDING (REBUILD-TREATMENT-H.md predates them; a row obeys these).
@@ -3555,12 +3750,31 @@ TREATMENT_SUPERSEDED = (
 
 # ---------------------------------------------------------------- THE BUILD
 
-def _take_audio(unit_end: float) -> None:
-    """The take into the build - the UNIT's seconds only, so the clock the gates measure is the cut's own.
-    `vo-h-scratch/` is read and never written."""
+def _take_audio(unit_end: float | None) -> None:
+    """The take into the build - the UNIT's seconds only, so the clock the gates measure is the cut's own; with no
+    unit end (P69 T32, the whole take) the take is copied as it is, byte for byte, as the approved shorts copy theirs
+    before the brand line is stitched on. `vo-h-scratch/` is read and never written."""
     src = TAKE / (TAKE_STEM + ".mp3")
+    if unit_end is None:
+        import shutil
+        shutil.copyfile(src, EP.audio_master)
+        return
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-t", "%.3f" % unit_end,
                     "-c:a", "libmp3lame", "-q:a", "2", str(EP.audio_master)], check=True)
+
+
+def _outro_clock() -> tuple[float, float, float, float]:
+    """(t_vo_end, t_outro, t_line, runtime_s) for the whole take (P69 T32): the approved shorts' clock
+    (`authoring.audio.outro_clock`) on the take's own length, the card's seconds the clip's own (probed)."""
+    t_vo_end = round(A.probe_duration(EP.audio_master), 3)
+    line_s = A.probe_duration(BRAND_LINE)
+    outro_s = round(A.probe_duration(OUTRO_CLIP), 3)
+    if not (t_vo_end and line_s and outro_s):
+        raise SystemExit("FAIL: the outro clock needs the take, the brand line and the card on disk (%s, %s)"
+                         % (BRAND_LINE, OUTRO_CLIP))
+    t_outro, t_line, runtime_s = A.outro_clock(t_vo_end, line_s, outro_lead=OUTRO_LEAD, outro_s=outro_s,
+                                               brand_gap=BRAND_GAP, brand_tail=BRAND_TAIL)
+    return t_vo_end, t_outro, t_line, runtime_s
 
 
 def _hook_object() -> Path:
@@ -3591,6 +3805,33 @@ def _signpost_object() -> Path:
     obj = copy.deepcopy(obj)
     obj["series"][semis[0]]["card_name"] = SIGNPOST_SEMIS_NAME
     out = BUILD / "objects" / (SIGNPOST_OBJECT_ID + ".series.json")
+    out.write_text(json.dumps(obj, indent=1), encoding="utf-8")
+    return out
+
+
+def _yard_card_object() -> Path:
+    """Row 24a's yardstick card (P69 T32): ev-capital-formation-v1's tech line ALONE - its points, its "28%" tag and
+    its own "23%" dot-com mark verbatim - on a stated [0, YARD_CARD_YMAX] scale, titled with the object's own
+    "railway yardstick" (YARD_CARD_TITLE). MEASURED, draft 1 (`p69-row24/d1t/A-tiles.png` k-l): the whole object drawn
+    as a card cut its railway hline's label off the card's left edge ("s, 1844-47 - ~50% ...") and wrote it through
+    the scale line, and its two-line title took a third of the card - so the scale line and the hline (the comparator
+    row 14's page says) are not carried; the sentence is the READING, which is the tech line's last print. Records
+    `derived_from` and its basis. Written into the build dir only; returns the series path."""
+    import copy
+    src = json.loads((OBJECTS / (YARD_PAGE + ".series.json")).read_text(encoding="utf-8"))
+    tech = copy.deepcopy(src["series"][YARD_TECH])
+    assert tech["label"] == "28%" and tech["name"].startswith("COMPUTERS"), "the yardstick's tag is the object's"
+    assert max(p_[1] for p_ in tech["pts"]) < YARD_CARD_YMAX, "the stated scale holds the whole line"
+    obj = {"title": YARD_CARD_TITLE, "src": src["src"], "ymin": 0, "ymax": YARD_CARD_YMAX,
+           "yunit": src.get("yunit", "%"), "ylabel": src.get("ylabel", ""), "xticks": src.get("xticks", []),
+           "marks": copy.deepcopy(src.get("marks", [])), "series": [tech],
+           "derived_from": ["evidence/objects/" + YARD_PAGE + ".series.json"],
+           "basis": {"28%": "the object's tech series (COMPUTERS + SOFTWARE), its last print 2026 Q2 (28.18), verbatim",
+                     "23%": "the object's own dot-com high mark (2001 Q1), verbatim",
+                     "scale": "0-%d%%, stated on the card's own axis (the object's is 0-72 for its scale line)"
+                              % YARD_CARD_YMAX}}
+    out = BUILD / "objects" / (YARD_CARD_OBJECT_ID + ".series.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(obj, indent=1), encoding="utf-8")
     return out
 
@@ -3757,7 +3998,12 @@ TABLE_TREATMENT = {1: "treatment rows 1-5 (the page, 0:00-0:42)", 2: "treatment 
                    24: "treatment row 23, the bullish case: dip 8, the hynix page returns by the spiral, the I-beam, "
                        "the arithmetic beside the line (P69 T31)",
                    25: "treatment row 23, host window 3 - the newsroom: dip 9, the certificate, the weight check on "
-                       "the desk (P69 T31)"}
+                       "the desk (P69 T31)",
+                   26: "treatment row 24, the close: dip 10, the divergence one last time by the spiral, the park and "
+                       "the agenda, the board / the yardstick / the test in one slot, the un-park, the certificate "
+                       "(P69 T32)",
+                   27: "treatment row 24, the outro: the Remotion kit's YouTube card dipped in as 'desk' ends, the "
+                       "brand line stitched 0.7 s after it (P69 T32)"}
 
 
 def _flow_count(rows: list) -> tuple[int, int, int, int]:
@@ -3783,12 +4029,21 @@ def main() -> int:
     # THE UNIT ENDS ON A WHOLE SENTENCE (the critic's tail row: the trim left an orphan caption "So" on
     # the last frame). The cut before P12 is the boundary; the unit keeps every word up to the last HARD
     # STOP before it, and the audio runs UNIT_TAIL_S past that word so the line closes instead of snapping.
-    boundary = W.cut_before(ws_all, UNIT_CUT_PHRASE, exit="dip")
-    spoken = [w for w in ws_all if w["start_s"] < boundary]
-    last_stop = max(i for i, w in enumerate(spoken) if w["w"].rstrip().rstrip('"\u201d')[-1:] in W.HARD_STOPS)
-    ws = spoken[:last_stop + 1]
-    unit_end = round(ws[-1]["end_s"] + UNIT_TAIL_S, 2)
-    _take_audio(unit_end)
+    t_outro = None
+    if UNIT_CUT_PHRASE is None:   # P69 T32: the WHOLE take, then the outro card with the brand line stitched under it
+        ws = list(ws_all)
+        _take_audio(None)
+        t_vo_end, t_outro, t_line, unit_end = _outro_clock()
+        A.stitch_brand_line(EP.audio_master, BRAND_LINE, BRAND_GAP, unit_end)
+        print("  outro       : take %.2fs; the card at %.2fs; the brand line at %.2fs (%s); runtime %.2fs"
+              % (t_vo_end, t_outro, t_line, BRAND_LINE.name, unit_end))
+    else:
+        boundary = W.cut_before(ws_all, UNIT_CUT_PHRASE, exit="dip")
+        spoken = [w for w in ws_all if w["start_s"] < boundary]
+        last_stop = max(i for i, w in enumerate(spoken) if w["w"].rstrip().rstrip('"\u201d')[-1:] in W.HARD_STOPS)
+        ws = spoken[:last_stop + 1]
+        unit_end = round(ws[-1]["end_s"] + UNIT_TAIL_S, 2)
+        _take_audio(unit_end)
     W.write_timeline(EP, ws, unit_end)
     print("  take        : %s - the unit is 0.00-%.2fs (%d of %d words)"
           % (TAKE_STEM, unit_end, len(ws), len(ws_all)))
@@ -3831,7 +4086,11 @@ def main() -> int:
     D.register(ARITH_CARD, _arith_card_object())   # row 23b: the arithmetic - the checklist card, phone profile
     D.register(HOST3_PLATE_ID, HOST3_PLATE_FILE)   # row 23c: the H-3 newsroom, by id (as rows 7 and 20's stills)
     D.register(WEIGHT_CARD, _weight_card_object())   # row 23c: the weight check - the checklist card, phone profile
-    rows = shot_table(ws, unit_end)
+    D.chart_card(YARD_CARD, _yard_card_object(), BUILD, "line", card_w=YARD_CARD_W)   # row 24a: the yardstick card
+    D.register(CLOSE_CERT_CARD, BUILD / "docks" / (CERT_CARD + ".png"))   # row 24a: the opening's certificate, its own id
+    if t_outro is not None:
+        D.seekable_clip(OUTRO_MP4, OUTRO_CLIP, BUILD)   # row 24b: the card, re-encoded seekable into build-h/clips/
+    rows = shot_table(ws, unit_end, t_outro)
     karp_record(ws, T.at(ws, "Alex Karp"))   # row 11: the record's words are filled BEFORE the META is written
     meta = list(DOCK_META)
     if VERDICT_STACK_ON:   # row 23a: the verdict stack's payload, from the same times as its window
@@ -3863,7 +4122,7 @@ def main() -> int:
         return rc
 
     # R26-198: the cues are BOUND to what the compiled timeline fires, and only then is the report stamped
-    cues = sound_cues(rows)
+    cues = sound_cues(rows, ws)
     plan_path = BUILD / "SOUND-PLAN.json"
     plan_path.write_text(json.dumps(
         {"note": "derived by build_episode_h.py; the project's sound/SOUND-PLAN.json is untouched", "cues": cues},

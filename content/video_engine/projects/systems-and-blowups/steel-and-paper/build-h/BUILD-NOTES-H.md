@@ -2194,3 +2194,107 @@ Recall: `docs_find "verdict stack"` -> `CAPABILITIES.md:264` and doc 29 s9.24 (t
 - No gated command was piped.
 
 **Tiles** (`scratchpad/p69-row23/final/`, from build-h itself): `A-tiles.png` 677.0-695.5 (row 22's end, dip 7, the throw, the ring and -64%, the index taking the slot); `B-tiles.png` 696.3-714.5 (the test, the leases, the statement, the turn in stage captions, the RAM) + `r18a-c` 410.5 / 411.4 / 415.0 (row 18c's ring on the dock); `C-tiles.png` 716.6-743.3 (dip 8, the spiral return, the retitle, the I-beam, the line aside, the arithmetic, the line back, dip 9); `D-tiles.png` 742.9-764.9 (the newsroom, the certificate on the desk, the weight check, its ring, the row's end); `phone-390.png` / `phone-390-x2.png` (682.5 / 689.2 / 698.5 / 703.0 / 733.0 / 751.5 / 757.0 / 762.0). Drafts `d1..d7` (`d1t`: the verdict stack as built). No build-f reference frames were cut for this row.
+
+## 24. P69 T32 - row 24 (12:45-13:32): the close - dip 10, the divergence one last time, the agenda and the one slot, the certificate, and the outro - 2026-09-25
+
+The build runs 0.00-811.78 s: the WHOLE take (805.675 s) and the outro card. `UNIT_CUT_PHRASE` is `None` (there is no next row);
+row 24's first words are `UNIT_CUT_ROW24` ("The steel gets used.", dip 10). RED: before the slice the table ended at row 25
+(743.04-765.10). **`logs/t32-gate-before.log` 2 FAIL / 4 WARN / 22 PASS / 1 JUDGE / 6 INFO** on HEAD 8f233a1's build with a fresh
+probe (`t32-probe-before.log`) and frozen measure (`t32-frozen-before.log`, "no run of identical frames over 0.50s"). Treatment row
+24 compiles as TABLE rows 26 (the page) and 27 (the outro).
+
+Recall: `docs_find "outro"` -> `CAPABILITIES.md:64` (the Remotion kit outro: the card in as the last word ends, the brand line
+stitched 0.7 s after it, `life` declared), `recipe:outro-clip-life` (`effects/recipes/outro-clip-life.json`, proof
+japan-tariff-trick s12), gate S07 (`gate_opening_structure.py:633`, the brand line is the outro's), `51-THE-SHORTS-FORMAT.md:29`;
+the attach itself in the record: `authoring/audio.py` `outro_clock` / `stitch_brand_line`, `authoring/shapes.py` OUTRO_EXIT
+("dip") and OUTRO_IS_THE_AUTHORS, `tokyo-tea-break/build_short.py:444` ("E47: the card is a world change - the dip, not the
+dissolve"), `japan-tariff-trick/build_short.py:322`, `memory-trades-the-calendar/build_short.py:266` and `:334-336`;
+`channel-assets/money-physics/outro/landscape/RENDER-NOTES.md` ("Which one the build should use: outro-yt-1920x1080-24fps.mov for
+the long-form cut"); `OPERATOR-RULINGS.md` E41 (`:1273`, the brand line is a channel asset) and E46 (2) (`:1410`, "a dissolve is
+... the join into the outro card"); `docs_find "page park"` -> `SPECIES-BY-SENTENCE.md:51` ("three things" -> the page parks,
+`chart_to park`, and the agenda takes the room); `effects_card "park"` (`chart_to:park`, scale 1.0 is the un-park); E40 s4
+(`:1246`, a returning page unwinds from its point); `sound/SOUND-PLAN.json` ("close=A (no extend)", its close bed at 775.0 of
+ep1's 806.47 s clock).
+
+| table row | window | what |
+|---|---|---|
+| 26 `ledger:ev-divergence-v1:line:234:right:spiral:cut;idle=live;readability=longform;domain=95,1138.74` | 765.17-805.58 | **dip 10** on "The steel gets used." (CLOSE_DIP_WHY) and the divergence **RETURNS BY THE SPIRAL** one last time (E40 s4) - all four lines on the scale row 4's rescale reached (FULL_YMIN..FULL_YMAX), in the long form's profile (LONGFORM, rows 14 on; rows 1-5 and 20 keep theirs - the operator's 09-25 hold); retitled with the anaphora "Steel gets used. Paper gets believed." as it lands; on "You now have" (770.42) the page **PARKS** to 0.34 (left) and **the agenda** lands in the room it frees, a row on "three questions" (771.40), "thirty seconds" (772.20), "any holding" (772.94); then ONE SLOT (CLOSE_SLOT_WHY, E99 s80): **the tripwire board** (row 22's phone checklist) LANDS on "either tripwire" (775.10 enter, down ~776.0), **the yardstick** (row 14's page as a card, derived `ev-yardstick-card-h24-v1`) on "the yardstick reading" (780.36), **the test** (row 20's) on "run the test" (784.82), off 0.3 s before the **UN-PARK** on "a copy of this chart" (788.94); a **ring** on the memory line's tip on "where it's pointing" (793.05) and on the market's line (20 points in from its tip, DIV_SP_RING) on "sold to you as safety" (798.31); **the opening's certificate** (`dock-h-railway-share-close`, the same PNG under its own id) LANDS on "the certificate stays on the desk" (802.36 enter, down ~803.2) in the page's empty upper left and stands to the card |
+| 27 `clip:build-h/clips/outro-yt-1920x1080-24fps.mp4` + `life` | 805.58-811.78 | **THE OUTRO** (`recipe:outro-clip-life`): the Remotion kit's 16:9 YouTube card ("Thanks for watching - subscribe for the next teardown.", 24 fps, 6.208 s probed), dipped in as "desk" ends (OUTRO_DIP_WHY), `life` declared over its seconds; the clock is `authoring.audio.outro_clock` on the take's own length (card at t_vo_end - 0.1 = 805.58, runtime 811.78); **the brand line** ("Not a panic. Not a plot. Mechanics.", `brand-line-paced.mp3`) stitched into `audio/episode.mp3` at 806.38 (0.7 s after the take, under the card - `stitch_brand_line`); no whoosh into the card (the approved shorts sound nothing into their outro) |
+
+**Acceptance (P69 T32):**
+- *The divergence page one last time:* `scratchpad/p69-row24/final/A-tiles.png` c-e (the spiral 766.5, landed 767.3, live 769.5), `B-tiles.png` s-aa.
+- *The agenda returns in its slot:* `final/A-tiles.png` f-h (771.2 the park, 772.5 two rows, 773.8 three rows).
+- *The outro with the brand line 0.7 s under the card:* `final/B-tiles.png` aa-ad (805.4 the dip, 805.9 the card in, 807.0 / 811.0);
+  the master's volume (draft 6, the same audio): 805.0-805.6 -87 dB (the take's tail), 806.4-809.9 **-22.2 dB mean (the brand
+  line)**, 810.2-811.7 -91 dB. The "dissolve" is the DIP (BODY_DEPARTURES row 24) - for the operator.
+- *Runtime over 8:00 (E74):* 811.78 s = 13:31.8.
+- *Each dip names what it refused:* CLOSE_DIP_WHY, OUTRO_DIP_WHY. Flow count now **0 cuts, 12 dips, 1 arrival, 13 transforms**.
+- *Life:* **26 of 27 rows** by token (row 26 `idle=live`); row 27 carries no token - its life is the declared `life` species (the
+  clip's own drift; `T.life_tokens` reads tokens and kens only). `t32-frozen.log` "no run of identical frames over 0.50s".
+- *E50:* see M21 below (named, not closed).
+
+**Measured and fixed** (private drafts `scratchpad/p69-row24/d1..d6`, `STEEL_H_BUILD_DIR`):
+- **The yardstick card** (d1 `d1t/A-tiles.png` k-l): the whole object drawn as a card cut its railway hline's label off the card's
+  left edge ("s, 1844-47 - ~50% (one technology)") and wrote it through the scale line - the card is derived (`_yard_card_object`):
+  the tech line alone, its "28%" tag and points verbatim, a stated [0, 32] scale, the object's source (`d2t/A-tiles.png` k-l).
+- **The spread on "the difference"** paints NOTHING on this page (d2 `d2t/S-tiles.png` c1-c2) - and paints on the same page
+  without `readability=longform` (`dxt/X-tiles.png`, a diagnostic draft); rows 1 and 20 bleed, and row 10's longform debt page
+  bleeds too. Not shipped (an authored event the frame never shows); **ENGINE item** below.
+- **The park at 0.40** left the page's end tags reaching ~x 0.42, under the cards' left edge (d3 M25 / M27 FAIL) - 0.34.
+- **Rings on the parked page** ("mine on memory", "the whole index", d1-d3): a callout keeps its stage size on a page parked to a
+  third - the market's ring was painted across the mega-cap tag (d3 **M34 FAIL** at 13:07) and the memory ring read as a dot at
+  390 px. Cut; the board ("Mine / RAM cheaper") and the test carry those words.
+- **The market's ring on its tip** (d4 **M34 FAIL** at 13:19) was painted across "+21% matches the market" - moved 20 points in.
+- **The board and the certificate THROWN** (d4 **M27 FAIL** at 12:55 / 13:22): the flights crossed the parked page's ink and key
+  rail - both LAND (SLOT_HANDOFF_ARRIVE). A landing card starts ~140 px taller than its rest box (d5 `layout-probe.json` 775.42:
+  box [896, 160, 896, 674] vs rest [787, 298, 1114, 536]), so its first frames stood on the key rail (y 146-194, which the park
+  does not scale) - the slot's centre moved 0.51 -> 0.555 and the certificate's (0.23, 0.36) -> (0.20, 0.42), under the axis title.
+- **The yardstick at 0.58** (16:9, so 0.58 of the stage tall) stood on the key rail (d3 M25) - 0.52.
+- **The test's third row** had barely landed as it left (d1) - it leaves 0.3 s (not 0.7) before the un-park.
+- **The certificate at 0.20 (0.26, 0.36)** stood on the memory line's climb (d1 `d1t/B-tiles.png` v-x) - 0.16.
+
+**Named, not fixed:**
+- **M21 adds s26 38.8 s** (12:47 -> 13:26): the gate's E50 clock counts only `build_to` / `bracket` / a data `chart_to`, so a page
+  that RETURNS drawn has its landing as its only mark (rows 20 and 24 are the same class: s20 18.5, s24 24.6). On the frame the page
+  parks at +3.7 s for the agenda and the three cards, grows back at +22 s, is rung at +26 and +31 s and takes the certificate at
+  +36 s - no full-stage stretch without a new thing over ~5 s. M21 was WARN; it stays WARN (9 pages).
+- **M27 WARN adds the certificate** inside the plot's box, clear of the ink, on the finished chart (the class of the target-date
+  statement at 6:34).
+- **The slot stands empty ~0.8 s at each hand-off** (780.4-781.3, 784.8-785.7; `final/A-tiles.png` l) - row 23's finding (a landing
+  is first seen ~0.9 s after its enter), unchanged; the cards are down on their words.
+- **The spiral out of a plate reads ~1 s of dark board** (765.2-766.2, `final/A-tiles.png` b) - row 20's finding, unchanged.
+- **The park does not scale the page's key rail** (the legend chips stand full width over a page parked to a third,
+  `final/A-tiles.png` f-p) - for the operator's read.
+- **The returning page wears the longform profile; it left (rows 1-5, 20) in the old one** - it comes back looking different
+  (type, title face). The operator's 09-25 hold keeps the earlier rows; HG3 / T33 decides the look for all of them.
+- **Seams:** `t32-seams.log` 26 boundaries, 3 near-black holds: 743.04 (dip 9, pre-existing), 765.17 (dip 10, x3) and 805.58
+  (into the card, x4) - the dips' own cores (M32 INFO).
+- **Dips 12, not the treatment's 10:** the earlier rows already count 10 (section 23); dip 10 and the dip into the card are the
+  11th and 12th by count.
+- **The certificate at 0.16** reads as the certificate, its "RAILWAY SHARE" small at 390 px (`final/phone-390-x2.png` g).
+- **The close bed** (`suno-close-A.mp3`, the locked pick, -14.6 LUFS measured 09-25; B -14.2) at 773.94 ("Subscribe for the
+  watch"), gain 0.0085 (-28 LU), 24.5 s - it ends ~798.4, 7 s before the last word, as ep1's plan did (775.0 + 24.5 of 806.47).
+- **The page-box fixture:** `t32-measure-check.log` DRIFTED on this slice's new page (the divergence in the longform profile on the
+  full domain); `t32-measure-write.log` added ONE key (`1eca65af9bc73d42`, 22 project pages) and the `measured` date;
+  `t32-measure-check2.log` PASS.
+
+**The derived object** (build dir): `build-h/objects/ev-yardstick-card-h24-v1.series.json` from `ev-capital-formation-v1`: the tech
+series verbatim, its "23%" mark, the object's source, a stated 0-32 scale; `derived_from` and `basis` recorded.
+
+**The order of proof** (`logs/t32-*`, every browser step alone, in order; `scratchpad/p69-row24/chain.sh`):
+- `t32-door1.log` rc 0; `t32-measure-check.log` DRIFT -> `t32-measure-write.log` -> `t32-measure-check2.log` **PASS 7 builders x
+  21 geometr(ies) measured identical**; `t32-door2.log` rc 0, "15 page(s) MEASURED", cues **63 bound of 64 derived** (the one
+  dropped is row 17's `page enter (axes)`, pre-existing);
+- `t32-probe.log` 349 instants; `t32-frozen.log` **"no run of identical frames over 0.50s (whole frame)"**;
+- `t32-door-final.log`: sha256 **IDENTICAL** to `t32-door2.sha` (the timeline, player.html, player.json, SHOT-TABLE-H.md,
+  SHOT-TABLE-H.py);
+- `t32-seams.log` 26 boundaries, 3 faults (above); `t32-spoken.log` **8 pointing phrases, 0 uncovered**; `t32-stagegaps.log`
+  765.17 0.2 s and 805.58 0.0 s, licensed dips;
+- **`t32-gate.log` 2 FAIL / 4 WARN / 22 PASS / 1 JUDGE / 6 INFO** vs **`t32-gate-before.log` 2 FAIL / 4 WARN / 22 PASS / 1 JUDGE /
+  6 INFO**. FAIL M11 and M31, both pre-existing. WARN M02, M04 (24 plates), M21 (9 pages, +s26), M27 (9 cards, +the certificate).
+- No gated command was piped.
+
+**Tiles** (`scratchpad/p69-row24/final/`, from build-h itself): `A-tiles.png` 764.9-790.4 (the newsroom's end, dip 10, the spiral,
+the page, the park and the agenda, the board, the yardstick, the test, the un-park); `B-tiles.png` 793.5-811.0 (the two rings, the
+certificate, the dip, the card); `phone-390-x2.png` (the agenda, board, yardstick, test, the page, the certificate, the card at 390
+px).
