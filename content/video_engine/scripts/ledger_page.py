@@ -14,6 +14,9 @@ Input shapes (every one needs ``title`` and a non-empty ``src``):
            (P69 T8d: a value may be a RANGE [lo, hi] - the bar at its near end, a band to the far one, written "lo–hi")
            (P69 T45: a bar may carry "members": [{"name", "logo"?, "short"?}] - equal tiles naming who is in its ONE
            value, the page's "member_noun" writing what a tile is: "each tile = one company")
+           (P69 T64: a bar may carry "segments": [{"name", "value", "value_string"?, "color"?}] - a stack of VALUES that
+           sums to the bar's written total, one key per page; any other bar key is refused by name, BAR_FIELDS)
+  combo    story bars + ONE pts series; with segments, "line_unit" (+ "line_label", "ylabel") gives the line its own axis
   dense    {"series": [{"label"|"name", "color", "pts": [[x, y], ...]}], + AXES_KEYS}
            or {"panels": [{"sub", "series": [...]} | {"sub", "builder": "bars", "unit", "bars": [...]}]}
   tiers    {"tiers": [{"name", "unit", "series"|"pts"|"bars", + AXES_KEYS}], + AXES_KEYS}
@@ -445,6 +448,334 @@ def member_fit_warnings(spec: dict, aspect: str = "16:9") -> list[str]:
     return out
 
 
+# ---- P69 T64 (E99 s110 (1); s100; s102; s106; s109): THE STACKED BAR OF VALUES, AND THE STACKED-BAR-PLUS-LINE COMBO ---
+# s110 (1): "allowed, I think one legitimate case I can think of in finance is ... when you're looking at financial
+# metrics against business metrics ... where you could have a stacked bar and a line." A stack of VALUES is valid on
+# s109's honesty tests - s100's two: every segment drawn TRUE to its value, and the figures WRITTEN (each segment's, and
+# the bar's total). The bar's own `value` IS the total, written over it as any bar's is; its `segments` stand bottom-up
+# from zero inside it in ONE order and ONE set of colours for the page, named once by the page's key. Its home is the
+# COMBO: the stacks and ONE line over them, the line on the stacks' scale when its unit is theirs and on its OWN
+# labelled right axis when it is not (s102 (b)(c): each axis names its unit, its ticks in its own series' colour) - the
+# combo's own `line_unit` axis (P47 T9), never a third axis system. Refused as UNTRUE: segments that do not add up to
+# the written total, a negative segment (there is no signed baseline - the stack stands on zero, E28), two units on one
+# axis. A segment too thin to hold its figure is REPORTED (s106) and the engine writes its figure beside the bar on a
+# leader. A page with no `segments` is the page it was, to the byte.
+SEGMENTS_KEY = "segments"
+SEGMENT_KEY_KEY = "segment_key"
+LINE_LABEL_KEY = "line_label"
+SEGMENT_FIELDS = ("name", "value", "value_string", "color")
+# [DERIVED] two to four: one segment is the bar itself; past four the field's four electric inks (E67) repeat, and a
+# key of five names no longer fits the plot's head at the phone floor
+SEGMENTS_MIN, SEGMENTS_MAX = 2, 4
+SEGMENT_INKS = ("teal", "crimson", "cobalt", "amber")   # E67's cycle (the engine's LP_CYCLE), by the segment's place in the key
+SEGMENT_COLOURS = SEGMENT_INKS + ("deemph",)            # the field's tokens (LP_INK): deemph is explicit de-emphasis, declared only
+SEGMENT_BUILDERS = ("story", "combo")
+# every key a bar datum may carry; anything else is refused BY NAME (R26-307: `segments` - and any misspelt key - was
+# silently dropped). `value_string` stays legal: 27 bars on disk carry it (the record's own token, read by no builder);
+# `x` is P47 T9's combo bar on the lines' time axis (buildLedgerCombo reads a bar's own x)
+BAR_FIELDS = ("label", "value", "color", "note", "value_string", "x", MEMBERS_KEY, SEGMENTS_KEY)
+# the figure's box in the ENGINE's units (LPSEG, `lpSegBuild`): the value type, a line of it, the padding inside a segment
+SEGMENT_FIG = {"story": 26.0, "story_p": 44.0, "combo": 24.0, "combo_p": 30.0, "line": 1.25, "pad": 6.0,
+               "min": 0.8}   # a figure a little too wide for its part shrinks to fit it, never under 0.8 of its size (LPSEG.FIG_MIN)
+
+
+def _bar_lists(series: dict) -> list[tuple[str, list]]:
+    """Every bars list on the page with the address an error names: its own, each panel's, each tier's."""
+    own = [("", series.get("bars"))] if isinstance(series.get("bars"), list) else []
+    nested = [(f"panels[{k}] ", p.get("bars")) for k, p in enumerate(series.get("panels") or []) if isinstance(p, dict)]
+    nested += [(f"tiers[{k}] ", t.get("bars")) for k, t in enumerate(_tier_entries(series)) if isinstance(t, dict)]
+    return own + [(w, b) for w, b in nested if isinstance(b, list)]
+
+
+def _validate_bar_fields(series: dict) -> list[str]:
+    """P69 T64 / R26-307: a bar datum carries only the fields the form draws - anything else is refused by name."""
+    errors = []
+    for where, bars in _bar_lists(series):
+        for j, b in enumerate(bars):
+            unknown = sorted(k for k in b if k not in BAR_FIELDS) if isinstance(b, dict) else []
+            if unknown:
+                errors.append(f"{where}bars[{j}]: unknown key(s) {unknown} - a bar takes {', '.join(BAR_FIELDS)} "
+                              "(a key the form does not know would be dropped, and its page drawn without it)")
+    return errors
+
+
+def segment_bars(series: dict) -> list[int]:
+    """The indices of the page's bars that carry `segments`."""
+    return [i for i, b in enumerate(_bars(series)) if SEGMENTS_KEY in b]
+
+
+def _fmt_sum(x: float) -> str:
+    return f"{round(x, 6):g}"
+
+
+def segment_errors(where: str, bar: dict, unit: str) -> list[str]:
+    """One stacked bar: ONE positive total (never a range, never members), SEGMENTS_MIN..MAX segments, each a unique
+    name and a positive figure in the page's unit, and the figures adding up to the written total within their own
+    rounding (half a unit of each figure's finest place - s109: a stack that does not sum to its total is untrue)."""
+    errors, segs, v = [], bar.get(SEGMENTS_KEY), bar.get("value")
+    total = None if _is_range(v) else to_number(v)
+    if _is_range(v):
+        errors.append(f"{where} is a RANGE and carries segments: a stack stands on ONE written total, which its "
+                      "segments sum to (P69 T64)")
+    elif total is not None and total <= 0:
+        errors.append(f"{where} total {value_string(v)} is {'negative' if total < 0 else 'zero'}: a stacked bar stands "
+                      "bottom-up from zero, and a negative stack needs a signed baseline, which it does not draw (E28)")
+    if MEMBERS_KEY in bar:
+        errors.append(f"{where} carries members and segments: a bar is divided ONE way - WHO is in it (members, equal "
+                      "tiles, E99 s101) or what it is made of (segments, values, s110 (1))")
+    if not isinstance(segs, list):
+        return errors + [f"{where} segments {segs!r}: segments is a list of {{{', '.join(SEGMENT_FIELDS)}}} - one per "
+                         "stacked part"]
+    if not SEGMENTS_MIN <= len(segs) <= SEGMENTS_MAX:
+        errors.append(f"{where}: {len(segs)} segment(s) - a stacked bar holds {SEGMENTS_MIN} to {SEGMENTS_MAX} (one "
+                      "is the bar itself; past four the field's four inks repeat, E67)")
+    seen: set[str] = set()
+    figures = []
+    for j, s in enumerate(segs):
+        w = f"{where} segments[{j}]"
+        if not isinstance(s, dict):
+            errors.append(f"{w} {s!r} is an object {{{', '.join(SEGMENT_FIELDS)}}}")
+            continue
+        if "unit" in s and str(s["unit"]) != unit:
+            errors.append(f"{w} is in {s['unit']!r} on a page in {unit!r}: two units on one axis - a stack's segments "
+                          "stand on the bar's scale in the page's unit (E99 s102: a second unit takes its own labelled "
+                          "axis - the combo's line, never a segment)")
+        errors += [f"{w}: {k!r} is not a segment field ({'|'.join(SEGMENT_FIELDS)})" for k in s
+                   if k not in SEGMENT_FIELDS and not (k == "unit" and str(s["unit"]) != unit)]
+        name = s.get("name")
+        if not _text(name):
+            errors.append(f"{w} needs a name - the page's key writes it")
+        else:
+            key = str(name).strip().lower()
+            if key in seen:
+                errors.append(f"{where}: the segment {key!r} twice - each part of a stack is named once")
+            seen.add(key)
+        c = s.get("color")
+        if c is not None and c not in SEGMENT_COLOURS:
+            errors.append(f"{w}: color {c!r} is not one of {'|'.join(SEGMENT_COLOURS)} (the field's inks, E67)")
+        vs = s.get("value_string")
+        if vs is not None and not _text(vs):
+            errors.append(f"{w}: value_string {vs!r} is the figure as the source writes it - text")
+        sv = s.get("value")
+        n = None if _is_range(sv) else to_number(sv)
+        if n is None:
+            errors.append(f"{w} value {sv!r} is not numeric - a segment is a figure the page writes")
+            continue
+        if n < 0:
+            errors.append(f"{w} is a negative segment ({value_string(sv)}): a stacked bar stands bottom-up from zero, "
+                          "and a negative segment needs a signed baseline, which a stack does not draw (E28: the sign "
+                          "is geometry) - draw the negative part as a bar of its own")
+        elif n == 0:
+            errors.append(f"{w} is zero: a segment of zero has no height to hold its figure - leave it out and say "
+                          "so in the sub")
+        figures.append((n, sv))
+    if total is not None and figures and len(figures) == len(segs):
+        got = sum(n for n, _ in figures)
+        tol = sum(0.5 * 10 ** -_decimals(sv) for _, sv in figures) + 0.5 * 10 ** -_decimals(v) + 1e-9
+        if abs(got - total) > tol:
+            errors.append(f"{where}: its segments sum to {_fmt_sum(got)}, and the bar's written total is "
+                          f"{value_string(v)} - a stack that does not add up to its total is untrue (E99 s109; the "
+                          f"figures' own rounding allows {_fmt_sum(tol)})")
+    return errors
+
+
+def segment_key(series: dict) -> list[dict]:
+    """The page's ONE key: the first stacked bar's names in stack order (bottom-up), each in its colour - declared on
+    any bar (the first declaration), else E67's ink for its place."""
+    held = segment_bars(series)
+    if not held:
+        return []
+    segs = [s for s in _bars(series)[held[0]].get(SEGMENTS_KEY) or [] if isinstance(s, dict)]
+    declared: dict[str, str] = {}
+    for i in held:
+        for s in _bars(series)[i].get(SEGMENTS_KEY) or []:
+            if isinstance(s, dict) and _text(s.get("name")) and s.get("color") is not None:
+                declared.setdefault(str(s["name"]).strip().lower(), str(s["color"]))
+    return [{"name": str(s.get("name") or "").strip(),
+             "color": declared.get(str(s.get("name") or "").strip().lower(), SEGMENT_INKS[j % len(SEGMENT_INKS)])}
+            for j, s in enumerate(segs)]
+
+
+def _segment_key_errors(series: dict, held: list[int]) -> list[str]:
+    """The key is the page's: every stacked bar carries the same names in the same order, a name keeps ONE colour, and
+    no two names share one (they would read as one part)."""
+    errors, first, colour = [], None, {}
+    for i in held:
+        segs = _bars(series)[i].get(SEGMENTS_KEY)
+        if not isinstance(segs, list):
+            continue
+        names = [str(s.get("name") or "").strip() for s in segs if isinstance(s, dict)]
+        if first is None:
+            first = (i, names)
+        elif [n.lower() for n in names] != [n.lower() for n in first[1]]:
+            errors.append(f"bars[{i}] stacks {names} and bars[{first[0]}] stacks {first[1]}: the segments' order is the "
+                          "page's ONE key - every stacked bar carries the same names in the same order, bottom-up")
+        for s in segs:
+            if isinstance(s, dict) and _text(s.get("name")) and s.get("color") is not None:
+                nm = str(s["name"]).strip()
+                was = colour.setdefault(nm.lower(), (s["color"], i))
+                if was[0] != s["color"]:
+                    errors.append(f"bars[{i}] segment {nm!r} is {s['color']!r} and {was[0]!r} on bars[{was[1]}]: a "
+                                  "segment's colour is keyed once for the page")
+    inks = [k["color"] for k in segment_key(series)]
+    for c in sorted({c for c in inks if inks.count(c) > 1}):
+        errors.append(f"two segments in {c!r}: each part of the stack takes one colour of its own, or two parts read as "
+                      f"one - the key gives {[k['name'] for k in segment_key(series) if k['color'] == c]} one colour")
+    return errors
+
+
+def _stacked_combo_errors(series: dict) -> list[str]:
+    """s110 (1) + s102: the stacks and ONE line. One unit is one axis; two units are two axes, both NAMED - the stacks'
+    `ylabel` on the left, the line's `line_label` on its own right axis (written in the line's colour)."""
+    errors, lines = [], dense_series(series)
+    if len(lines) != 1:
+        errors.append(f"a stacked combo lays ONE line over its stacks (the business metric against the financial "
+                      f"ones, E99 s110 (1)) - this page carries {len(lines)}: give the others a page of their own")
+    if series.get("tiers") is True:
+        errors.append("tiers: true on a stacked combo: the line rides OVER the stacks on one plot (s110 (1)); two bands "
+                      "are not built for segments (P69 T64) - drop tiers")
+    unit, lu = series.get("unit"), series.get("line_unit")
+    if not _text(unit):
+        errors.append("a stacked combo's bars need their `unit`: each axis names its unit (E99 s102 (b)) and the "
+                      "stacks' axis writes it on its ticks")
+    two = _text(lu) and str(lu) != str(unit or "")
+    if two:
+        if not _text(series.get("ylabel")):
+            errors.append(f"the line is in {lu!r} and the stacks in {unit!r}: two units, two axes, and each axis names "
+                          "its unit (E99 s102 (b)) - the stacks' axis needs its `ylabel`")
+        if not _text(series.get(LINE_LABEL_KEY)):
+            errors.append(f"the line is in {lu!r} and the stacks in {unit!r}: two units, two axes, and each axis names "
+                          f"its unit (E99 s102 (b)) - the line's own right axis needs its `{LINE_LABEL_KEY}`")
+    elif series.get(LINE_LABEL_KEY) is not None:
+        errors.append(f"{LINE_LABEL_KEY} names the line's OWN right axis, and this line shares the stacks' scale (its "
+                      "unit is theirs) - one unit is one axis")
+    axis_unit = str(lu) if two else str(unit or "")
+    inks = {k["color"] for k in segment_key(series)}
+    for si, ln in enumerate(lines):
+        nm = ln.get("name") or ln.get("label") or f"series[{si}]"
+        col = ln.get("color") or SEGMENT_INKS[si % len(SEGMENT_INKS)]
+        if col in inks:
+            errors.append(f"the line {nm!r} is {col!r}, a segment's colour: the key gives each colour ONE meaning - give "
+                          "the line an ink of its own (E67)")
+        if "unit" in ln and str(ln["unit"]) != axis_unit:
+            errors.append(f"the line {nm!r} is in {ln['unit']!r} on an axis in {axis_unit!r}: two units on one axis - "
+                          "a second unit takes its own labelled axis (E99 s102), `line_unit`")
+    return errors
+
+
+def _validate_segments(series: dict, variant: str) -> list[str]:
+    """P69 T64: every `segments` on the page - a BARS page's bars or a COMBO's (never a panel's or a tier's, a progress
+    or a decline page's, a breakthrough's) - held to the honesty tests, one key for the page, and the combo's axes."""
+    errors = [f"{where}bars: a stacked bar (segments) is a BARS page's or a COMBO's (P69 T64) - a panel's or a tier's "
+              "bars stand alone; draw the stack on a page of its own"
+              for where, bars in _bar_lists(series)[(1 if isinstance(series.get("bars"), list) else 0):]
+              if any(isinstance(b, dict) and SEGMENTS_KEY in b for b in bars)]
+    held = segment_bars(series)
+    if not held:
+        return errors
+    builder = pick_builder(series, variant)
+    if not (builder == "combo" or (builder == "story" and variant == "bars")):
+        errors.append(f"bars{held} carry segments: a stacked bar is a bars page's (variant bars) or a combo's (bars + "
+                      f"one line) - this page draws {variant!r} as {builder!r}")
+    if series.get("overflow") is not None:
+        errors.append(f"bars{held} carry segments on a breakthrough page (overflow): the breakthrough shoots ONE bar past "
+                      "its stated scale, and a stack's segments are drawn true on the scale they stand on")
+    if member_bars(series) and set(member_bars(series)) != set(held):
+        errors.append(f"bars{member_bars(series)} carry members and bars{held} segments: a page divides its bars ONE "
+                      "way - who is in them (s101) or what they are made of (s110 (1))")
+    unit = str(series.get("unit") or "")
+    for i in held:
+        errors += segment_errors(f"bars[{i}]", _bars(series)[i], unit)
+    errors += _segment_key_errors(series, held)
+    if builder == "combo":
+        errors += _stacked_combo_errors(series)
+    return errors
+
+
+def _with_segments(block: dict, series: dict) -> dict:
+    """P69 T64: a bars block whose bars carry segments - per bar (None for a plain bar) each segment's name, value, the
+    figure as written, and its colour from the page's ONE key; and the key. A block with none is returned untouched."""
+    bars = _bars(series)
+    if not any(SEGMENTS_KEY in b for b in bars):
+        return block
+    key = segment_key(series)
+    ink = {k["name"].lower(): k["color"] for k in key}
+
+    def seg(s: dict) -> dict:
+        nm = str(s.get("name") or "").strip()
+        return {"name": nm, "value": to_number(s.get("value")),
+                "value_string": value_string(s["value_string"] if s.get("value_string") is not None else s.get("value")),
+                "color": ink.get(nm.lower(), SEGMENT_INKS[0])}
+
+    block[SEGMENTS_KEY] = [[seg(s) for s in b[SEGMENTS_KEY]] if SEGMENTS_KEY in b else None for b in bars]
+    block[SEGMENT_KEY_KEY] = key
+    return block
+
+
+def _stack_plot_px(spec: dict, aspect: str) -> tuple[float, float, float]:
+    """(plot height, one bar's width, chart units -> stage px) of a stacked page's bars, estimated the engine's way:
+    the bars builder's plot (buildLedgerBars: the 196 px cap, 0.34 air) or the combo's (buildLedgerCombo: y 110-470 of
+    560, x 96-806 of 1000, 0.62 of a slot). An estimate - the engine measures the drawn figure; this names the one
+    that cannot fit."""
+    chart = page_boxes(spec, aspect)["chart"]
+    n = max(1, len(spec.get("values") or []))
+    if spec.get("builder") == "combo":
+        k = chart["w"] / 1000.0
+        return chart["h"] * 360 / 560, (806 - 96) / n * 0.62 * k, k
+    if aspect == "9:16":
+        pw, ph, k = chart["w"] - 150 - 30, chart["h"] - 150 - 70, 1.0
+    else:
+        pw, ph, k = chart["w"] * 920 / 1000, chart["h"] * 350 / 560, chart["w"] / 1000.0
+    return ph, min(MEMBER_BAR_W_PX, pw / n * (1 - 0.34)), k
+
+
+def _stack_span(spec: dict) -> float:
+    """The value the plot's height stands for: the bars law's 14 % air, or the combo's 1.12 - over the line too, when it
+    shares the stacks' scale."""
+    vals = [float(v) for v in spec.get("values") or [] if v is not None]
+    if spec.get("builder") == "combo":
+        if not stacked_line_own_axis(spec):
+            vals += [float(p[1]) for s in spec.get("series") or [] for p in s.get("pts") or []]
+        return (max([0.0, *vals]) - min([0.0, *vals])) * 1.12 or 1.0
+    hi, lo = max([0.0, *vals]), min([0.0, *vals])
+    return (hi - lo) * (1 + BARS_PAD) or 1.0
+
+
+def stacked_line_own_axis(spec: dict) -> bool:
+    """A stacked combo's line takes its own right axis when its unit is not the stacks' (s102); else it shares theirs."""
+    lu = spec.get("line_unit")
+    return isinstance(lu, str) and bool(lu.strip()) and lu != str(spec.get("unit") or "")
+
+
+def segment_fit_warnings(spec: dict, aspect: str = "16:9") -> list[str]:
+    """P69 T64 (s106): a WARN - never a refusal - for each segment too short or too narrow to hold its own figure inside
+    it at the engine's value type: that figure is written BESIDE its bar on a leader (the engine's `lpSegBuild`), so no
+    figure is ever unwritten; the frame read decides whether the page still reads. Pure."""
+    segs = spec.get(SEGMENTS_KEY)
+    if not isinstance(segs, list) or not any(segs):
+        return []
+    ph, bw, k = _stack_plot_px(spec, aspect)
+    span, unit = _stack_span(spec), str(spec.get("unit") or "")
+    kind = ("combo" if spec.get("builder") == "combo" else "story") + ("_p" if aspect == "9:16" else "")
+    fs, pad = SEGMENT_FIG[kind] * k, SEGMENT_FIG["pad"] * k   # k is 1 on the portrait bars page (its units are stage px)
+    out = []
+    for i, ss in enumerate(segs):
+        for s in ss or []:
+            h = abs(float(s["value"])) / span * ph
+            text = ("$" + s["value_string"]) if unit == "$" else s["value_string"] + unit
+            tw = longform_text_px(text, "title", fs)
+            q = min(1.0, (bw - 2 * pad) / tw) if tw > 0 else 1.0
+            need_w, need_h = tw * SEGMENT_FIG["min"] + 2 * pad, fs * max(q, SEGMENT_FIG["min"]) * SEGMENT_FIG["line"] + 2 * pad
+            if q >= SEGMENT_FIG["min"] and h >= need_h:
+                continue
+            label = (spec.get("labels") or [None] * len(segs))[i]
+            out.append(f"WARN segment: {s['name']!r} on bar {i} ({label!r}) is {s['value_string']} - about {h:.0f} px "
+                       f"tall and {bw:.0f} px wide at {aspect}, and its figure {text!r} needs {need_w:.0f} x "
+                       f"{need_h:.0f} px: the figure is written beside the bar on a leader (E99 s106). REPORTED, the "
+                       "frame read decides")
+    return out
+
+
 def dense_series(series: dict) -> list[dict]:
     """Every pts-bearing series in the file, panels flattened in."""
     own = [s for s in series.get("series") or [] if isinstance(s, dict) and "pts" in s]
@@ -608,6 +939,8 @@ def validate(series: dict, variant: str) -> list[str]:
     errors += _validate_readability(series, variant)
     errors += _validate_break(series, variant)   # P69 T66: [] unless the object names a `break`
     errors += _validate_members(series, variant)   # P69 T45: a membership is a bars page's, and a tile carries no value
+    errors += _validate_bar_fields(series)          # P69 T64 / R26-307: a bar key the form does not know is refused by name
+    errors += _validate_segments(series, variant)   # P69 T64: a stack of values is true to its total, one key per page
     if "left_gutter" in series:
         gutter = series["left_gutter"]
         if isinstance(gutter, bool) or not isinstance(gutter, int) or not 60 <= gutter <= 300:
@@ -2092,6 +2425,8 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         spec.update(_story_block(series))
     if builder == "combo":
         spec.update({k: v for k, v in _dense_block(series).items() if k != "labels"})
+        if spec.get(SEGMENTS_KEY) and _text(series.get(LINE_LABEL_KEY)):   # P69 T64: the stacked combo's right axis, named (s102 (b))
+            spec[LINE_LABEL_KEY] = str(series[LINE_LABEL_KEY])
     if builder == "decline":
         spec.update(_decline_block(series, spec))
     if variant == "progress" and "denominator" in series:
@@ -2186,7 +2521,7 @@ def _story_block(series: dict) -> dict:
     block = {"labels": list(labels), "values": [to_number(v) for v in raw],
              "value_strings": [value_string(v) for v in raw], "colors": list(colors),
              **({"axes": axes} if axes else {})}
-    return _with_member_tiles(_with_ranges(block, _bars(series)), series)   # P69 T45: absent members, untouched
+    return _with_segments(_with_member_tiles(_with_ranges(block, _bars(series)), series), series)   # P69 T45 / T64: absent members and segments, untouched
 
 
 def _with_ranges(block: dict, bars: list[dict]) -> dict:

@@ -1143,6 +1143,130 @@ async function mount(doc) {
   /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
   if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.lit_stretch = paintLitStretch;
   /* KINETICS:END */
+  /* KINETICS:BEGIN solo */
+  /* SPACE: page */
+  /* species/solo.mjs - SOLO, THE ON-WORD ISOLATE (P69 T37; the Bravos harvest v2's rank 2: A12 "peers ghost, one series
+     stays lit", 8 of 9 videos, with A49 "one bar ignites, the rest dim"). SOURCE OF TRUTH, inlined into the scene-evidence
+     player by sync_kinetics.py between KINETICS:BEGIN solo and KINETICS:END, AFTER ease (it reads minJerk) and beside
+     lit_stretch's region, for the reason span.mjs gives: a PAGE species' math is called by the page's PERFORM layer, and
+     a const has to exist before the function that closes over it is built.
+
+     WHEN (`SPECIES_WHEN["solo"]`, build_scene_timeline_f.py): the sentence narrows to ONE series ("look at China's",
+     "Chipmakers doubling") or names ONE bar in a field ("the third largest") - and on that word every other series or
+     bar of the page mutes while the named one keeps its ink. Never when the comparison between them is the claim.
+
+     THE FRAME it was harvested from: JPN 05:23.5 (docs/research/runs/bravos-watch/nB1eXWQlW58/luna-recovery/
+     focus-05-treasury-holdings/frames/frame_0008.jpg) - Japan's line bright, China's and the UK's thin and dim, the
+     legend row, the axes and the title exactly as they were. So a solo reaches the OTHER marks' own ink and nothing
+     else: a line's stroke, its lead point and its end tag; a bar's rect, its range band and its value. The key, the
+     axes, a bar's category name, the title stay ("Keep the ghosted legend readable", the use-when guide, P JPN).
+
+     THE DIM was E67's 0.45 until the operator's call the long form's spec named ((c)9): E99 s117 (2), on our solo beside
+     Bravos JPN 05:20 / 05:23.5 - Bravos "fades theirs to a higher contrast", so "a SOLO lifts the named line's bloom
+     further and fades the others harder and thinner than E67's 0.45, so the contrast between the lit and the muted
+     matches Bravos's". Three dials, set from measure_line_bloom.py's read of the Bravos band
+     (content/video_engine/assets/bravos-line-bloom.v1.json; the numbers in tests/test_line_bloom.py): DIM, the muted
+     marks' alpha; THIN, a muted stroke's width at a full mute; LIFT, the named line's halo radius at a full lift (it eases
+     INTO the primary's three layers - the engine's lpSoloBloom - and a muted line's halo eases OUT: "a context or muted
+     line never blooms"). E67's HISTORY stays at 0.45 (E99 s78 (2)) - a different mark, and not this dial. P69 T45's
+     member `light` keeps its own 0.45 (LPMEMBER.DIM).
+
+     THE LAW, a pure function of t:
+       the events - every `solo` on the page names ONE key (`s:<series>` or `b:<bar>`); every `unsolo`, and every verb
+                    that REPLACES the page after the first solo (a recast, a morph, a remake - the lit stretch's own leave
+                    rule), names none. In time order; at one instant a release gives way to a solo.
+       the alpha  - a mark's alpha starts at 1 and each event, from its `at`, eases it on min-jerk over its `dur` toward
+                    its target: 1 for the named mark (and for every mark on a release), SOLO.DIM for every other mark of
+                    the SAME kind (a series solo never dims a bar). Each event starts from where the last one left the
+                    mark at its word, so a second solo HANDS OVER - no frame jumps - and an unsolo eases every mark back.
+       the write  - onto channels the chart's own paint never writes: a stroke's, a bar's and a band's `opacity`
+                    ATTRIBUTE (the chart writes their style, and the soft bars' feet and shadows already read the bar's
+                    attribute - lpBarSoftPaint), and `fill-opacity` on the lead point, the end tag and the value (the chart
+                    writes their `opacity`). At full ink the attribute is REMOVED, so every frame before the word - and
+                    every page with no solo at all - is the page it was, to the byte.
+       the light  - a lit stretch (species/lit_stretch.mjs) on a muted series mutes WITH its series: it is painted first
+                    in the frame and the solo multiplies what it wrote. A light on the named series keeps its ink. */
+
+  const SOLO = Object.freeze({
+    DIM: 0.42,     /* E99 s117 (2): the muted marks' alpha - harder than E67's 0.45: lit/muted 5.24 at 1024 px (Bravos 3.39-5.29; 0.30 read 5.9, over it) */
+    THIN: 0.45,    /* ... a muted stroke's width at a full mute, as a share of its own - thinner, so the lit line carries the plot */
+    LIFT: 1.5,     /* ... the named line's halo radius at a full lift: its share of the plot's contrast at 320 px 0.63 (Bravos 0.57-0.74) */
+    MIN_S: 0.2,    /* the mute's shortest ease: under it the dim is a flicker (build_scene_timeline_f.SOLO_DUR_S) */
+    MAX_S: 1.5,    /* ... and its longest: past it the isolate is a fade the word has left behind */
+    EPS: 5e-4,     /* an alpha this close to 1 is full ink: the attribute is removed, never written as 1.000 */
+  });
+
+  const solo01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* the ONE mark a solo names: a line page's series, or a bars page's bar; null for a release */
+  const soloKeyOf = (sp) => (sp && Number.isInteger(sp.bar) ? "b:" + sp.bar
+    : sp && Number.isInteger(sp.series) ? "s:" + sp.series : null);
+
+  /* THE EVENTS in time order: `solos` name their key, `releases` ({at, dur}: an unsolo, a verb that replaces the page)
+     name none; at one instant a release sorts first, so the solo at that instant is the state that stands */
+  const soloEvents = (solos, releases) => [
+    ...(solos || []).map((sp) => ({ at: +sp.at, dur: Math.max(0.001, +sp.dur || SOLO.MIN_S), key: soloKeyOf(sp) })),
+    ...(releases || []).map((r) => ({ at: +r.at, dur: Math.max(0.001, +r.dur || SOLO.MIN_S), key: null })),
+  ].filter((e) => Number.isFinite(e.at)).sort((a, b) => a.at - b.at || (a.key === null ? 0 : 1) - (b.key === null ? 0 : 1));
+
+  /* THE LEVEL of the mark `key` at t: from `start`, each event eases it from where the previous one left it at the event's
+     word toward its target - `named` for the mark it names, `other` for every other mark of the same kind, `release` on a
+     release (and for a mark of the other kind, which a solo never touches) */
+  const soloLevel = (evs, key, t, { start, named, other, release }) => {
+    let a = start;
+    for (let k = 0; k < (evs || []).length; k++) {
+      const e = evs[k];
+      if (t < e.at) break;
+      const nx = evs[k + 1], end = nx && nx.at <= t ? nx.at : t;
+      const want = e.key === null || e.key[0] !== String(key)[0] ? release : e.key === key ? named : other;
+      const u = solo01((end - e.at) / e.dur);
+      a = u >= 1 ? want : a + (want - a) * solo01(minJerk(u));   /* it LANDS exactly (1 + (0.45 - 1) is 0.44999999999999996) */
+    }
+    return a;
+  };
+
+  /* THE ALPHA of the mark `key` at t: 1, SOLO.DIM for the others on a solo, 1 again on a release */
+  const soloAlpha = (evs, key, t, dim = SOLO.DIM) => soloLevel(evs, key, t, { start: 1, named: 1, other: dim, release: 1 });
+
+  /* THE LIFT of the mark `key` at t (E99 s117 (2)): 0, then 1 for the named line while its solo stands, 0 on a release */
+  const soloLift = (evs, key, t) => soloLevel(evs, key, t, { start: 0, named: 1, other: 0, release: 0 });
+
+  /* one alpha onto one element's channel: full ink REMOVES the attribute (the page with no solo, to the byte) */
+  const soloWrite = (el, attr, a) => {
+    if (!el) return;
+    if (a >= 1 - SOLO.EPS) el.removeAttribute(attr);
+    else el.setAttribute(attr, Math.max(0, a).toFixed(3));
+  };
+
+  /* THE PAINTER (P69 T37). `sd` is the perform layer's built solo (`evs`, the page's `lits`), `st` the page state - every
+     chart state of it is written (a rescale's derived state carries the same series), so a seek into any state is the
+     play. It reads nothing from the engine but its arguments; `ctx` is the page species context - its `bloom` and `thin`
+     (P69 T37b) are the two engine writers a solo drives. */
+  const paintSolo = (sd, t, st, ctx) => {
+    const states = st && Array.isArray(st.states) && st.states.length ? st.states : [st];
+    for (const S of states) {
+      for (const pp of (S && S.paths) || []) {
+        const key = "s:" + (pp.si | 0), a = soloAlpha(sd.evs, key, t), m = solo01((1 - a) / (1 - SOLO.DIM));
+        soloWrite(pp.p, "opacity", a); soloWrite(pp.tip, "fill-opacity", a); soloWrite(pp.name, "fill-opacity", a);
+        /* E99 s117 (2): the named line's bloom lifts, a muted one's halo leaves and its stroke thins - the engine's DOM
+           work, handed in through the page context (absent, a bare test, the alpha above is the whole solo) */
+        if (ctx && ctx.bloom) ctx.bloom(S, pp, soloLift(sd.evs, key, t), m, SOLO.LIFT);
+        if (ctx && ctx.thin) ctx.thin(S, pp, m, SOLO.THIN);
+      }
+      ((S && S.bars) || []).forEach((b, i) => {
+        const a = soloAlpha(sd.evs, "b:" + (Number.isInteger(b.i) ? b.i : i), t);
+        soloWrite(b.bar, "opacity", a); soloWrite(b.band, "opacity", a); soloWrite(b.val, "fill-opacity", a);
+      });
+    }
+    for (const ld of sd.lits || []) {
+      const a = soloAlpha(sd.evs, "s:" + (ld.si | 0), t);
+      if (a < 1 - SOLO.EPS) ld.g.setAttribute("opacity", ((+ld.g.getAttribute("opacity") || 0) * a).toFixed(3));
+    }
+  };
+
+  /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
+  if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.solo = paintSolo;
+  /* KINETICS:END */
   /* KINETICS:BEGIN thread */
   /* species/thread.mjs - THE WIRE (P50 T15, HF-16: "the three threads - the wire, the ruler, the protagonist chip -
      one continuous line as the film's spine"). SOURCE OF TRUTH, inlined into the scene-evidence player by
@@ -6275,6 +6399,11 @@ async function mount(doc) {
      Nothing above or below changes for a build with no press dock: the two-slot loop skips this kind, and every
      existing golden renders byte-identically. */
   const PRESS_EL = Object.create(null);     /* the mounted card, per slide id */
+  /* P69 T65 / E99 s110 (2): the docks on the stage THIS frame, by asset id - their element and paint - written by the dock
+     loop in render and read by resolveTarget for a `dock` target, so a ring round a card or a prop is drawn at the box
+     the card or prop is drawn at (it parks, it is moved, the ring goes with it). Off the stage - not yet entered, or
+     past its exit - a dock is absent here, and a ring on it resolves to nothing. */
+  const DOCK_LIVE = Object.create(null);
   const PRESS_POSE = Object.create(null);   /* its live stage geometry and the phrase box in stage px - what resolveTarget reads for a `phrase` target */
   const PRESS_KIND = "press", PHRASE_KIND = "phrase", EMBED_KIND = "embed";   /* P50 T7: a declared surface, by name */
   const isPressDock = (d) => !!d && d.kind === PRESS_KIND;
@@ -8486,7 +8615,9 @@ async function mount(doc) {
     const f = LP_CARD.STROKE_X * LP_CARD.PAGE_UNIT * (S.cardK || 1) / (S.stagePx > 0 ? S.stagePx : 1);
     for (const pp of S.paths || []) {
       pp.p.style.strokeWidth = ((pp.muted ? 3 : 4) * f).toFixed(3);
-      if (!pp.muted) lpBloom(S, pp.p, pp.p.getAttribute("stroke"), LP_BLOOM_PX * f);
+      lpHotResize(S, pp.p);   /* E99 s117: the hot core erodes the card's own width */
+      if (pp.hot) { lpBloomHot(S, pp.p, pp.p.getAttribute("stroke"), lpHotUnit(S)); lpHotBase(pp.p, lpHotUnit(S), 1); }
+      else if (!pp.muted && !pp.context) lpBloom(S, pp.p, pp.p.getAttribute("stroke"), LP_BLOOM_PX * f);
       if (pp.tip) pp.tip.setAttribute("r", (6 * f).toFixed(3));
       if (pp.name && !pp.muted) pp.name.style.fill = pp.p.getAttribute("stroke");   /* the short badge in its line's own ink: the card has no key */
     }
@@ -10088,6 +10219,17 @@ async function mount(doc) {
       st.buildDur = st.mbBase + M.LEAD_S + (most - 1) * M.STEP_S + M.LAND_S;
     }
   };
+  /* P69 T85 (row 22, 2026-09-24) - THE BARS LAW'S STAGGER SCALES TO THE BAR COUNT. Bar i starts at i * step of its
+     build, grows over 0.55 of it (value written over its last tenth) and its name fades in 0.3 - 0.5 past its start;
+     the build's fraction is capped at 1. At the base's fixed step (0.1 on a bars page, 0.08 in a tiers band) a page
+     past six bars never FINISHED: on the trim proof's eight bars bar 7's name stood at 0.5, bar 8's at 0 and bar 8 at
+     97.7% of its height; on twelve, bars 11 and 12 never grew at all. Past six bars the whole stagger now fits in
+     SPREAD of the build - the last bar's grow closes at 0.99 and its name at 0.94. SPREAD is 0.44, not the 0.45 that
+     would close the grow exactly at 1: (1 - 0.45) / 0.55 is 0.99999... in floating point, and a bar would stand one
+     rounding short forever (the callout's own lesson, lpPaintChart). Six bars or fewer keep the base's step to the
+     byte - their goldens stand (the sixth bar's grow ends at expoOut(0.909) = 0.9982, sub-pixel, as it always has). */
+  const LPBAR_STAGGER = { HELD_N: 6, SPREAD: 0.44 };
+  const lpBarStep = (n, step) => (n <= LPBAR_STAGGER.HELD_N ? step : Math.min(step, LPBAR_STAGGER.SPREAD / (n - 1)));
   /* each frame, after the bars law: a tile lands once its bar stands (its value written) - on its species' word, or on
      the cascade `ts` seconds after the ordinary build - and a `light` keeps its tiles and dims the bar's others */
   const lpMemberPaint = (cs, cb, ts, scene, t) => {
@@ -10101,9 +10243,9 @@ async function mount(doc) {
     }
     const names = (sp, j) => sp.tile === "all" || (Array.isArray(sp.tile) ? sp.tile : [sp.tile]).some((v) => (v | 0) === j);
     const opOf = (sp, r) => (!sp || !sp.light ? 1 : names(sp, r.j) ? 1 : M.DIM);
-    const up = new Map();
+    const up = new Map(), step = lpBarStep(cs.bars.length, 0.1);   /* P69 T85: the bars law's own step - a tile is ready when its bar is */
     for (const r of T) {
-      const kb = expoOut(clamp01((cb - r.bar * 0.1) / 0.55)), ready = clamp01((kb - 0.9) / 0.1);
+      const kb = expoOut(clamp01((cb - r.bar * step) / 0.55)), ready = clamp01((kb - 0.9) / 0.1);
       const ul = r.land ? clamp01((t - r.land.at) / r.land.dur) : ts == null ? 0 : clamp01((ts - M.LEAD_S - r.dj * M.STEP_S) / M.LAND_S);
       const s = LPMEMBER.POP_FROM + (1 - LPMEMBER.POP_FROM) * springPop(ul), a = clamp01((ul * M.LAND_S) / M.FADE_S) * ready;
       const [prev, cur] = lights.get(r.bar) || [null, null], e = cur ? expoOut(clamp01((t - cur.at) / (+cur.dur || M.LAND_S))) : 1;
@@ -10116,6 +10258,222 @@ async function mount(doc) {
       up.set(r.bar, Math.max(up.get(r.bar) || 0, a));
     }
     for (const key of cs.memberKeys || []) key.el.setAttribute("opacity", (up.get(key.bar) || 0).toFixed(3));
+  };
+  /* P69 T64 - THE STACKED BAR OF VALUES (E99 s110 (1): "allowed ... when you're looking at financial metrics against
+     business metrics ... where you could have a stacked bar and a line"; s100; s106; s109). A bar whose datum carries
+     `segments` (ledger_page, which refuses a stack that does not add up to its written total) stands at its TOTAL exactly
+     as it did - its rect, its value over it, its pill - and its SEGMENTS stand over it bottom-up from zero, each drawn
+     TRUE to its value on the bar's own scale, in the page's ONE key's colours and order: each part a rect of its own
+     laid right after its bar (under every label), the top one carrying the bar's own corners (its rx, or the soft
+     shoulder), a charcoal hairline between parts. Each part's FIGURE is written - inside it when it holds the figure
+     at the value type, else BESIDE the bar on a leader in the part's colour (the compiler WARNs which, s106) - and the
+     key is written once, where it touches no other ink. Every frame the parts MIRROR their bar (lpSegPaint, after every
+     painter, beside the soft bars' feet): whatever grows, fades, drains or moves the bar carries its stack. The combo
+     (buildLedgerCombo) stacks the same way under its line. `segments` absent: nothing here runs. */
+  const LPSEG = Object.freeze({ SEP_PX: 2, PAD_PX: 6, LEAD_PX: 18, LEAD_GAP_PX: 6, LEAD_W_PX: 2, KEY_SW_PX: 20,
+    KEY_GAP_PX: 16, KEY_ITEM_PX: 30, KEY_MIN: 0.7, FIG_LINE: 1.25, FIG_MIN: 0.8, KEY_LINE_W_PX: 5,
+    LINE_CLEAR_PX: 8, AX_STEP: 0.05, AX_MAX: 2, NAME_GAP_PX: 10, SCAN_PX: 2 });
+  const LPSEG_INK = Object.freeze({ SEP: "#25313C", KEY: "#c9ced4" });   /* the board's charcoal between parts; the page's label ink */
+  const lpSegU = (st) => (px) => px / (st.stagePx > 0 ? st.stagePx : 1);   /* stage px -> this chart's units */
+  /* one bar's parts, bottom-up; laid TOP part first so each lower part covers the foot the one above hides under it */
+  const lpSegRects = (st, segs, g) => {
+    const u = lpSegU(st), out = new Array(segs.length);
+    let cum = 0;
+    const ys = segs.map((s) => { const a = cum; cum += Math.abs(+s.value || 0); return [g.my(a), g.my(cum)]; });
+    for (let j = segs.length - 1; j >= 0; j--) {
+      const s = segs[j], [yb, yt] = ys[j], top = j === segs.length - 1, foot = top && j > 0 ? g.rx : 0;
+      const r = lpEl("rect", "lp-seg", st.chart, { x: g.x.toFixed(1), y: yt.toFixed(2), width: g.bw.toFixed(1),
+        height: Math.max(0, yb - yt + foot).toFixed(2), rx: (top ? g.rx : 0).toFixed(3) });
+      r.style.fill = LP_PAL[s.color] || s.color; r.style.stroke = LPSEG_INK.SEP;
+      r.style.strokeWidth = u(LPSEG.SEP_PX).toFixed(3); r.setAttribute("vector-effect", "non-scaling-stroke");
+      r.style.transformOrigin = "0 " + g.base.toFixed(1) + "px"; r.style.transform = "scaleY(0)";
+      out[j] = { el: r, j, name: s.name, color: s.color, value: +s.value, vstr: s.value_string, y0: yb, y1: yt };
+    }
+    return out;
+  };
+  /* P69 T64 (the parent's frame read: "a line may never cross a total, a part figure, the key or the axis title"): does a
+     polyline's stroke pass through a box, padded by `pad` (half the stroke and air)? Sampled every `step` along each
+     segment, so a diagonal is read as drawn, never as its bounding box */
+  const lpSegPolyHits = (polys, boxes, pad, step) => {
+    for (const pts of polys) for (let k = 1; k < pts.length; k++) {
+      const [ax, ay] = pts[k - 1], [bx, by] = pts[k], nS = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / step));
+      for (let j = 0; j <= nS; j++) {
+        const x = ax + (bx - ax) * j / nS, y = ay + (by - ay) * j / nS;
+        for (const r of boxes) if (r && x > r.x - pad && x < r.x + r.w + pad && y > r.y - pad && y < r.y + r.h + pad) return true;
+      }
+    }
+    return false;
+  };
+  /* the highest the polylines reach (the smallest y) over [xa, xb] - where a total the line crosses must stand clear of */
+  const lpSegPolyTop = (polys, xa, xb, step) => {
+    let top = Infinity;
+    for (const pts of polys) for (let k = 1; k < pts.length; k++) {
+      const [ax, ay] = pts[k - 1], [bx, by] = pts[k], nS = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / step));
+      for (let j = 0; j <= nS; j++) { const x = ax + (bx - ax) * j / nS; if (x >= xa && x <= xb) top = Math.min(top, ay + (by - ay) * j / nS); }
+    }
+    return top;
+  };
+  const lpSegBox = (e) => { try { const r = e.getBBox(); return r.width > 0 ? { x: r.x, y: r.y, w: r.width, h: r.height } : null; } catch (_) { return null; } };
+  const lpSegMeets = (a, b, pad) => a.x - pad < b.x + b.w && b.x < a.x + a.w + pad && a.y - pad < b.y + b.h && b.y < a.y + a.h + pad;
+  /* each part's figure (inside, or beside on a leader) and the page's key - built once, after every label has found its
+     place (the totals, the pill, the ticks), so each is laid against the ink it must not touch */
+  const lpSegBuild = (st, pg, g) => {
+    const u = lpSegU(st), unit = g.unit, pad = u(LPSEG.PAD_PX), fs = g.fs;
+    const inks = [lpVarOn(st.chart, "--lp-char"), lpVarOn(st.chart, "--lp-cream")].filter(Boolean);
+    const lay = lpEl("g", "lp-seg-figs", st.chart);
+    const polys = g.linePolys || [], lpad = u(LPSEG.LINE_CLEAR_PX), sc = u(LPSEG.SCAN_PX);
+    const crossed = (r) => !!polys.length && !!r && lpSegPolyHits(polys, [r], lpad, sc);
+    for (const b of g.bars) {   /* a total the line still crosses (the axis rose to its cap) stands up clear of it, over its own bar */
+      const r = b.segs && b.val ? lpSegBox(b.val) : null;
+      if (!crossed(r)) continue;
+      const topY = lpSegPolyTop(polys, r.x - lpad, r.x + r.w + lpad, sc), dy = r.y + r.h - (topY - lpad);
+      if (dy > 0) b.val.setAttribute("y", (+b.val.getAttribute("y") - dy).toFixed(1));
+    }
+    const rects = [], ink = [];
+    let xrF = g.xr;   /* a leader figure's right bound (the page's inner edge, below) */   /* what a leader figure and the key must not touch: the bars, and every word on the page */
+    for (const b of g.bars) { rects.push({ x: b.x, y: b.end, w: b.bw, h: Math.abs(g.base - b.end) });
+      for (const e of [b.val, b.lab]) { const r = e && e.style.display !== "none" ? lpSegBox(e) : null; if (r) ink.push(r); } }
+    for (const e of g.more || []) { const r = e ? lpSegBox(e) : null; if (r) ink.push(r); }
+    if (st.callout) { const p = st.callout.querySelector("rect.cpill"); if (p) ink.push({ x: +p.getAttribute("x"), y: +p.getAttribute("y"), w: +p.getAttribute("width"), h: +p.getAttribute("height") }); }
+    /* ... the page's own words too (title, sub, source), read into this chart's units off the one screen matrix */
+    try { const M = st.chart.getScreenCTM(), inv = M && M.inverse();
+      if (inv && st.page) for (const el of st.page.querySelectorAll(".lp-title, .lp-sub, .lp-src")) {
+        const r = el.getBoundingClientRect(); if (!(r.width > 0)) continue;
+        const a = new DOMPoint(r.x, r.y).matrixTransform(inv), b = new DOMPoint(r.x + r.width, r.y + r.height).matrixTransform(inv);
+        ink.push({ x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), w: Math.abs(b.x - a.x), h: Math.abs(b.y - a.y) }); }
+      /* ... and the page's own inner edge: a leader figure may stand past the chart's box (a 9:16 chart is narrower than
+         its page) but never past the page, a figure's width of air inside it - on a BARS page; a combo's right column is its axis's */
+      const pr = inv && st.page && g.toPage ? st.page.getBoundingClientRect() : null;
+      if (pr && pr.width > 0) xrF = Math.max(g.xr, new DOMPoint(pr.right, pr.top).matrixTransform(inv).x - u(LPSEG.PAD_PX * 4)); } catch (_) { /* not laid out: the chart's own ink only */ }
+    const obst = { some: (f) => rects.some(f) || ink.some(f) };
+    st.segFigs = [];
+    for (const b of g.bars) {
+      if (!b.segs) continue;
+      const placed = [];
+      for (const s of b.segs) {
+        const text = lpWithUnit(s.vstr != null ? String(s.vstr) : lpFmt(s.value), unit), mid = (s.y0 + s.y1) / 2;
+        const t = lpEl("text", "lp-seg-fig", lay, { x: (b.x + b.bw / 2).toFixed(1), y: mid.toFixed(1), "text-anchor": "middle", "dominant-baseline": "central", opacity: 0 });
+        t.textContent = text; t.style.fontSize = fs.toFixed(2) + "px"; t.style.fontWeight = "700";
+        const w = lpInkW(t), hAv = s.y0 - s.y1 - 2 * pad, on = lfOnInk(lpFillOf(s.el), inks);
+        const q = w > 0 ? Math.min(1, (b.bw - 2 * pad) / w) : 1;   /* a figure a little too wide for its part shrinks to fit it, never under FIG_MIN */
+        let clearIn = q >= LPSEG.FIG_MIN && fs * q * LPSEG.FIG_LINE <= hAv && !!on;
+        if (clearIn) {
+          if (q < 1) t.style.fontSize = (fs * q).toFixed(2) + "px";
+          if (crossed(lpSegBox(t))) {   /* the line crosses it: the figure slides within its own part to the nearest clear height, else it takes its leader */
+            const half = fs * q * LPSEG.FIG_LINE / 2 + pad, ys = [];
+            for (let y = s.y1 + half; y <= s.y0 - half; y += sc) ys.push(y);
+            ys.sort((a, c) => Math.abs(a - mid) - Math.abs(c - mid));
+            clearIn = false;
+            for (const y of ys) { t.setAttribute("y", y.toFixed(1)); if (!crossed(lpSegBox(t))) { clearIn = true; break; } }
+            if (!clearIn) { t.setAttribute("y", mid.toFixed(1)); t.style.fontSize = fs.toFixed(2) + "px"; }
+          }
+        }
+        if (clearIn) {
+          t.style.fill = on.ink;
+          st.segFigs.push({ bar: b.i, j: s.j, el: t, lead: null, inside: true, text }); continue;
+        }
+        /* BESIDE on a leader: the right side unless it would touch the next bar or leave the plot, else the left;
+           a second figure beside one bar steps clear of the first */
+        const col = LP_PAL[s.color] || s.color, gap = u(LPSEG.LEAD_GAP_PX), len = u(LPSEG.LEAD_PX);
+        t.style.fill = col; t.setAttribute("style", t.getAttribute("style") + ";" + LP_HALO);
+        let y0 = mid;
+        for (const q of placed) if (Math.abs(q - y0) < fs * LPSEG.FIG_LINE) y0 = q + (y0 >= q ? 1 : -1) * fs * LPSEG.FIG_LINE;
+        const sides = [["start", b.x + b.bw + gap + len], ["end", b.x - gap - len]];
+        /* both sides, at its height then a step down (away from the total over the bar) or up, at its size then FIG_MIN of it: the first place clear of every
+           bar, word and the line; else the least-overlapping place the line does not cross (T64: the line never crosses a figure) */
+        const cands = [];
+        for (const f of [fs, fs * LPSEG.FIG_MIN]) for (const dy of [0, 1, -1, 2, -2]) for (const sd of sides) cands.push([sd, y0 + dy * f * LPSEG.FIG_LINE, f]);
+        let pick = null, least = null;
+        for (const [sd, yy, f] of cands) { t.style.fontSize = f.toFixed(2) + "px"; t.setAttribute("text-anchor", sd[0]); t.setAttribute("x", sd[1].toFixed(1)); t.setAttribute("y", yy.toFixed(1));
+          const r = lpSegBox(t) || { x: sd[0] === "start" ? sd[1] : sd[1] - w, y: yy - f / 2, w, h: f };
+          const inside = r.x >= g.x0 - 20 && r.x + r.w <= xrF, hitLine = crossed(r);
+          if (inside && !hitLine && !rects.some((o) => lpSegMeets(r, o, u(2))) && !ink.some((o) => lpSegMeets(r, o, u(LPSEG.PAD_PX)))) { pick = [sd, yy, f]; break; }   /* a word's air from every word (never jammed against a total); a bar's edge may stand close */
+          if (inside && !hitLine) { let a2 = 0; obst.some((o) => { a2 += Math.max(0, Math.min(r.x + r.w, o.x + o.w) - Math.max(r.x, o.x)) * Math.max(0, Math.min(r.y + r.h, o.y + o.h) - Math.max(r.y, o.y)); return false; });
+            if (!least || a2 < least.a) least = { a: a2, c: [sd, yy, f] }; } }
+        const [sdP, y, fP] = pick || (least ? least.c : [sides[0], y0, fs]);
+        t.style.fontSize = fP.toFixed(2) + "px"; t.setAttribute("text-anchor", sdP[0]); t.setAttribute("x", sdP[1].toFixed(1)); t.setAttribute("y", y.toFixed(1));
+        const pick2 = sdP;
+        const ex = pick2[0] === "start" ? b.x + b.bw : b.x, tx = pick2[0] === "start" ? pick2[1] - u(4) : pick2[1] + u(4);
+        const lead = lpEl("path", "lp-seg-lead", lay, { d: "M" + ex.toFixed(1) + " " + mid.toFixed(1) + " L" + (ex + (tx - ex) * 0.4).toFixed(1) + " " + y.toFixed(1) + " L" + tx.toFixed(1) + " " + y.toFixed(1), opacity: 0 });
+        lead.style.fill = "none"; lead.style.stroke = col; lead.style.strokeWidth = u(LPSEG.LEAD_W_PX).toFixed(3); lead.style.strokeLinecap = "round";
+        placed.push(y);
+        const r = lpSegBox(t); if (r) ink.push(r);
+        st.segFigs.push({ bar: b.i, j: s.j, el: t, lead, inside: false, text });
+      }
+    }
+    for (const f of st.segFigs) { const r = f.inside ? lpSegBox(f.el) : null; if (r) ink.push(r); }
+    /* a part too thin for its own figure is not a place for another number either: a label over it reads as its figure */
+    const thin = st.segFigs.filter((f) => !f.inside).map((f) => { const b = g.bars.find((q) => q.i === f.bar), sg = b.segs[f.j];
+      return { x: b.x, y: sg.y1, w: b.bw, h: sg.y0 - sg.y1 }; });
+    const parts = g.bars.filter((b) => b.segs).flatMap((b) => b.segs.map((sg) => ({ x: b.x, y: sg.y1, w: b.bw, h: sg.y0 - sg.y1 })));
+    if (g.clear) ink.push(...g.clear(ink.concat(thin), parts, g.bars));   /* the combo: its line's labels step clear of every figure and word, before the key is laid */
+    st.segKey = lpSegKey(st, (pg.segment_key || []).concat(g.lineKey ? [g.lineKey] : []), g, obst);
+    st.segs = { bars: g.bars.filter((b) => b.segs), figs: st.segFigs, key: st.segKey };
+  };
+  /* THE KEY: one row, in the stack's order (bottom part first), each a swatch in its colour and the part's name in the
+     label ink; laid over the plot's head - left, then right, then one line higher, at its size or down to KEY_MIN of it
+     - wherever it touches no bar, total, pill, figure, axis name or the chart's own edge */
+  const lpSegKey = (st, key, g, obst) => {
+    if (!key.length) return null;
+    const u = lpSegU(st), G = st.geom || { W: 1000, H: 560 };
+    const el = lpEl("g", "lp-seg-key", st.chart, { opacity: 0 });
+    const items = key.map((k) => {
+      const sw = lpEl("rect", "lp-seg-sw" + (k.line ? " lp-seg-sw-line" : ""), el, { rx: u(3).toFixed(2) }); sw.style.fill = LP_PAL[k.color] || k.color;
+      if (k.line) sw.dataset.line = "1";   /* the combo's line: a stroke in its ink, as it is drawn */
+      const tx = lpEl("text", "lp-seg-name", el, { "dominant-baseline": "central" }); tx.textContent = k.name; tx.style.fill = LPSEG_INK.KEY;
+      return { sw, tx };
+    });
+    const layAt = (x, yc, f, anchorEnd) => {
+      const sw = u(LPSEG.KEY_SW_PX) * f / g.fs0, gapI = u(LPSEG.KEY_ITEM_PX) * f / g.fs0;
+      let cx = x;
+      for (const it of items) { it.tx.style.fontSize = f.toFixed(2) + "px"; }
+      const widths = items.map((it) => sw + 0.4 * f + lpInkW(it.tx));
+      const total = widths.reduce((a, b) => a + b, 0) + gapI * (items.length - 1);
+      if (anchorEnd) cx = x - total;
+      items.forEach((it, j) => {
+        const lh = it.sw.dataset.line ? u(LPSEG.KEY_LINE_W_PX) * f / g.fs0 : sw;
+        it.sw.setAttribute("x", cx.toFixed(1)); it.sw.setAttribute("y", (yc - lh / 2).toFixed(1));
+        it.sw.setAttribute("width", sw.toFixed(1)); it.sw.setAttribute("height", lh.toFixed(1));
+        it.tx.setAttribute("x", (cx + sw + 0.4 * f).toFixed(1)); it.tx.setAttribute("y", yc.toFixed(1));
+        cx += widths[j] + gapI;
+      });
+      const r = lpSegBox(el); if (!r) return true;
+      if (r.x < 0 || r.x + r.w > G.W || r.y < 0) return false;
+      return !obst.some((o) => lpSegMeets(r, o, u(4)));
+    };
+    const f0 = g.fs0;
+    const y1 = g.keyY != null ? g.keyY : g.top - u(LPSEG.KEY_GAP_PX) - f0 * 0.6;   /* the combo lays it a row over its two axis names */
+    for (const q of [1, 0.85, LPSEG.KEY_MIN]) {
+      const f = f0 * q;
+      for (const [x, end, y] of [[g.x0 - 20, false, y1], [g.xr, true, y1], [g.x0 - 20, false, y1 - f * 1.4], [g.xr, true, y1 - f * 1.4],
+                                 ...(g.below != null ? [[g.x0 - 20, false, g.below + f * 0.6]] : [])])   /* ... else under the x labels */
+        if (layAt(x, y, f, end)) return el;
+    }
+    layAt(g.x0 - 20, y1, f0, false);   /* nowhere clear: over the plot's head, where a key is read first */
+    return el;
+  };
+  /* EVERY FRAME, after every painter: each part is its bar as drawn now (grown, faded, drained, moved) - and each figure
+     lands with its bar's own value (the bars law's 0.9 - 1.0 of the grow), the key with the first stack's */
+  const lpSegPaint = (S) => {
+    const G = S && S.segs; if (!G) return;
+    let keyOp = 0;
+    const byBar = new Map();
+    for (const b of G.bars) {
+      const bar = b.bar, opA = bar.getAttribute("opacity"), ta = bar.getAttribute("transform");
+      const op = (bar.style.opacity === "" ? 1 : +bar.style.opacity) * (opA == null ? 1 : +opA) * (bar.style.visibility === "hidden" || bar.style.display === "none" ? 0 : 1);
+      for (const s of b.segs) {
+        const r = s.el;
+        r.style.transformOrigin = bar.style.transformOrigin; r.style.transform = bar.style.transform;
+        if (ta) r.setAttribute("transform", ta); else r.removeAttribute("transform");
+        r.style.opacity = bar.style.opacity; if (opA == null) r.removeAttribute("opacity"); else r.setAttribute("opacity", opA);
+        r.style.display = bar.style.display; r.style.visibility = bar.style.visibility;
+      }
+      const m = /scaleY\(([-\d.e]+)\)/.exec(bar.style.transform || ""), k = m ? +m[1] : 1;
+      const a = clamp01((k - 0.9) / 0.1) * op;
+      byBar.set(b.i, a); keyOp = Math.max(keyOp, a);
+    }
+    for (const f of G.figs) { const a = (byBar.get(f.bar) || 0).toFixed(3); f.el.setAttribute("opacity", a); if (f.lead) f.lead.setAttribute("opacity", a); }
+    if (G.key) G.key.setAttribute("opacity", keyOp.toFixed(3));
   };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
@@ -10206,6 +10564,7 @@ async function mount(doc) {
       if (dcol) bar.style.fill = dcol;
       if (dcol && ex) ex.tint(dcol);   /* P58 T5: the prism's faces are the bar's OWN ink at a ratio - a declared colour rules them too */
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
+      const segs = Array.isArray(pg.segments) && Array.isArray(pg.segments[i]) ? lpSegRects(st, pg.segments[i], { x, bw, base, my, rx: SOFT || 6 }) : null;   /* P69 T64: the stack, under the labels */
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + XLAB, "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
       const vy = neg ? base + hr + (P ? 62 : 26) : base - hr - (P ? 22 : 14);   /* a range's value stands over its band's far end (hr: h without one) */
@@ -10214,6 +10573,7 @@ async function mount(doc) {
       const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + hr : base - hr, over, v, bx: x, bw, track, stamp, ex };
       if (foot) rec.foot = foot;
       if (band) { rec.band = band; rec.range = rg; }
+      if (segs) rec.segs = segs;   /* P69 T64 */
       if (over && btMode === "stack") {   /* the top gridline SNAPS as the bar passes: its two broken ends kick up beside the bar */
         const mk = (ax, bx2) => lpEl("line", "grid snap", st.chart, { x1: ax.toFixed(1), y1: top.toFixed(1), x2: bx2.toFixed(1), y2: (top - 16).toFixed(1), stroke: "var(--lp-chalk)", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 });
         rec.snap = [mk(x - 4, x - 24), mk(x + bw + 4, x + bw + 24)];
@@ -10363,6 +10723,8 @@ async function mount(doc) {
     if (capped) for (const b of st.bars) lpWrapBarLabel(b.lab, b.bw);   /* P69 T6c: a name wider than its capped bar takes two lines */
     st.tickFit = lpFitTicks(st);   /* R26-191b law 3, last: the callout's axis mount may have moved a month */
     if (Array.isArray(pg.members)) lpMemberBuild(st, pg, { base, P, LF, x0, x1 });   /* P69 T45: the membership tiles, in their bars */
+    if (st.bars.some((b) => b.segs)) lpSegBuild(st, pg, { base, top, x0, xr: x1 + 20, toPage: true, unit, below: bottom + XLAB + (P ? 40 : LF ? LF.tick : 26) * 0.6, fs: LF ? LF.value : P ? 44 : 26, fs0: LF ? LF.tick : P ? 40 : 22,
+      bars: st.bars.map((b) => ({ i: b.i, bar: b.bar, x: b.bx, bw: b.bw, end: b.end, val: b.val, lab: b.lab, segs: b.segs || null })) });   /* P69 T64: each part's figure, and the key */
   };
   /* THE FIELD'S INK (E67, operator 2026-09-12): "we need to use bolder primary, high-contrast line colors for our default
      the chart instead of gray. that way our charts can become our thumbnails, i think this is part of why bravos uses
@@ -10392,7 +10754,140 @@ async function mount(doc) {
     /* R26-228: `r` is an explicit radius in the chart's own user units - the pulsing halo a LIVE page writes per frame.
        Absent (every page that does not author `;idle=live`), the string is byte-for-byte the one E67 shipped. */
     const rad = r != null ? r.toFixed(2) : (st && st.portrait ? LP_BLOOM_PX * 2 : LP_BLOOM_PX);
-    p.style.filter = "drop-shadow(0 0 " + rad + "px " + lpInkA(lpVarHex(col), LINE_BLOOM) + ")"; };
+    p.style.filter = "drop-shadow(0 0 " + rad + "px " + lpInkA(lpVarHex(col), LINE_BLOOM) + ")"; p.__lpBase = p.style.filter; p.__lpR = +rad; };
+  /* E99 s117 (P69 T37b) - THE LINES BLOOM: A PRIMARY LINE IS EMISSIVE. The operator, on our solo beside Bravos JPN
+     05:20 / 05:23.5: "bravos uses a higher vibrancy/contrast/electricity than we do on their primary lines ... we still
+     need more electricity/glow to our lines". E67 already gave every live line a 6-unit neon; that is the MULTI-LINE
+     glow Bravos draws on every series (BRAVOS-LONGFORM-CHART-SPEC.md (b) "Multi-line, every series ... glow ~16.5 px"),
+     not its HERO line ("core 4.5 px, white-hot ... bloom +13 lum at 15 px, +3 at 45 px, gone at ~82 px"). So the ONE
+     line a page is about - its PRIMARY - blooms in three layers, the harvest's F18 carried to every page:
+       the core  a near-white hot centre along the stroke: the stroke's own ink ERODED to CORE_W of its width and mixed
+                 CORE_MIX of the way to white (an SVG filter on SourceGraphic, so one filter serves any ink and it rides
+                 the dasharray exactly as the stroke does - a drawing line is hot only where drawn);
+       the ink   the stroke itself, E67's hex, never changed;
+       the halo  two drop-shadows of that ink - an inner one (INNER_PX at INNER_A) and a WIDE soft outer one (OUTER_PX
+                 at OUTER_A) - in STAGE px, divided by the chart's own scale, so 16:9 and 9:16 draw the same glow.
+     The dials are set from measure_line_bloom.py's Bravos band (content/video_engine/assets/bravos-line-bloom.v1.json,
+     E38: thresholds from the reference) - the numbers the slice read are in content/video_engine/tests/test_line_bloom.py.
+     PRIMARY is read off the page, never authored twice: a dense-line page's FIRST live series that is not `deemph`
+     (a highlight_from page's live story window - its history never blooms), a decline's one line, a combo's first
+     line, each tier's first line; and on its word the SOLO'd series (species/solo.mjs lifts it through PAGE_CTX.bloom).
+     Every other live series keeps E67's own neon (lpBloom, byte for byte), a `deemph` series is CONTEXT and never
+     blooms, and a muted history never blooms (E67). LINE_BLOOM = 0 still turns every halo off. */
+  /* Measured at 1024 px wide (the Bravos frames' own width) on the solo golden's primary before its solo, against the
+     band's three 1024 px frames: halo r50 12.2 px @1080 (Bravos 11.1-35.8), area 575 (420-2403), edge 0.22
+     (0.07-0.52), core L* 89.8 at saturation 0.23 (61-100, 0.02-0.89). A tight bright ring first (4 px at 0.85 - the
+     first try) put the edge so high that the halo's half fell at 6 px: Bravos's glow is soft from the stroke out. */
+  const LP_HOT = Object.freeze({
+    CORE_W: 0.5,      /* the hot core's width as a share of the stroke's */
+    CORE_MIX: 0.55,   /* ... and how far it is mixed toward white: 0 is the ink, 1 is white */
+    INNER_PX: 10.0,   /* the inner halo round the stroke, STAGE px ... */
+    INNER_A: 0.8,     /* ... at this alpha of the ink */
+    OUTER_PX: 26.0,   /* the WIDE soft outer halo, STAGE px (it shadows the inner one: the tail) ... */
+    OUTER_A: 0.8,     /* ... at this alpha */
+  });
+  let lpHotN = 0;
+  /* ONE SVG FILTER per line path, built with the path (deterministic: the build order names it), carrying all three
+     layers: the core (the ink eroded to CORE_W of the stroke and mixed toward white, merged over the stroke) and the two
+     halos (the inner and the outer - each a gaussian of what is under it, flooded with the ink, the outer shadowing the
+     inner: a CSS drop-shadow list's own law). stdDeviation = the radius: MEASURED, this draws what Chromium's
+     `drop-shadow(0 0 <radius>px ...)` drew on the solo golden to the tool's last digit (r50 12.13, area 575.3), where
+     radius / 2 read half the reach. Written as PRIMITIVES, and the filter region is the chart's own box: a CSS
+     drop-shadow list, or a region past the chart, rastered the panels golden's grow differently on a forward play than
+     on a cold seek (1 level of 255 on 493 px - test_ledger_panels' seek law); this form is seek-exact. A secondary line
+     carries one too, referenced only while a solo lights it. */
+  const lpHotFilter = (st, p) => {
+    if (p.__lpHot) return p.__lpHot;
+    const svg = p.ownerSVGElement || st.chart, g = st.geom || { W: 1000, H: 560 };
+    const w = lpHotStroke(st, p);
+    const id = "lphot-" + (st.seed | 0) + "-" + (++lpHotN);
+    const defs = lpEl("defs", "", svg);
+    const f = lpEl("filter", "", defs, { id, filterUnits: "userSpaceOnUse", x: 0, y: 0, width: g.W, height: g.H,
+                                         "color-interpolation-filters": "sRGB" });
+    const mo = lpEl("feMorphology", "", f, { in: "SourceGraphic", operator: "erode", radius: (w * (1 - LP_HOT.CORE_W) / 2).toFixed(3), result: "thin" });
+    const cm = lpEl("feColorMatrix", "", f, { in: "thin", type: "matrix", result: "hot" });
+    const m0 = lpEl("feMerge", "", f, { result: "lit" }); lpEl("feMergeNode", "", m0, { in: "SourceGraphic" }); lpEl("feMergeNode", "", m0, { in: "hot" });
+    const halo = (src, n) => {
+      const b = lpEl("feGaussianBlur", "", f, { in: src, stdDeviation: 0, result: "b" + n });
+      const fl = lpEl("feFlood", "", f, { "flood-color": "#000", "flood-opacity": 0, result: "f" + n });
+      lpEl("feComposite", "", f, { in: "f" + n, in2: "b" + n, operator: "in", result: "s" + n });
+      return { b, fl };
+    };
+    const h1 = halo("lit", 1);
+    const m1 = lpEl("feMerge", "", f, { result: "g1" }); lpEl("feMergeNode", "", m1, { in: "s1" }); lpEl("feMergeNode", "", m1, { in: "lit" });
+    const h2 = halo("g1", 2);
+    const m2 = lpEl("feMerge", "", f); lpEl("feMergeNode", "", m2, { in: "s2" }); lpEl("feMergeNode", "", m2, { in: "g1" });
+    p.__lpHot = { id, mo, cm, w, h1, h2 };
+    return p.__lpHot;
+  };
+  /* the stroke's width in chart units: an inline width (a card's), else the template's (a page is built DETACHED, so
+     its computed style is empty: `.ser` is 4, 8 in portrait) */
+  const lpHotStroke = (st, p) => parseFloat(p.style.strokeWidth) || (st && st.portrait ? 8 : 4);
+  /* ... re-read when a builder re-sizes the stroke (a card's lpCardStrokes) */
+  const lpHotResize = (st, p) => { if (p.__lpHot) { p.__lpHot.w = lpHotStroke(st, p); p.__lpHot.mo.setAttribute("radius", (p.__lpHot.w * (1 - LP_HOT.CORE_W) / 2).toFixed(3)); } };
+  /* ... the core's strength c (0-1) into its matrix: each channel mixed c * CORE_MIX of the way to white */
+  const lpHotCore = (hf, c) => { const m = Math.max(0, Math.min(1, c)) * LP_HOT.CORE_MIX, k = (1 - m).toFixed(4), o = m.toFixed(4);
+    hf.cm.setAttribute("values", k + " 0 0 0 " + o + " 0 " + k + " 0 0 " + o + " 0 0 " + k + " 0 " + o + " 0 0 0 1 0"); };
+  /* one halo's radius (chart units) and alpha into its primitives, in the ink */
+  const lpHotHalo = (h, hx, r, a) => { h.b.setAttribute("stdDeviation", Math.max(0, r).toFixed(3));
+    h.fl.setAttribute("flood-color", hx); h.fl.setAttribute("flood-opacity", Math.max(0, Math.min(1, a)).toFixed(3)); };
+  /* the whole chain at once: the core's strength c, the inner halo (r1, a1), the outer (r2, a2) - written, then referenced */
+  const lpHotWrite = (st, p, col, c, r1, a1, r2, a2) => {
+    const hf = lpHotFilter(st, p), hx = lpVarHex(col);
+    lpHotCore(hf, c); lpHotHalo(hf.h1, hx, r1, a1); lpHotHalo(hf.h2, hx, r2, a2);
+    p.style.filter = "url(#" + hf.id + ")";
+    return p.style.filter;
+  };
+  /* THE PRIMARY'S FILTER: `u` chart units per stage px, `k` the halo's radius multiple (a live page's pulse, a solo's
+     lift), `a` its alpha multiple (a live page's glow pulse, a solo's fade), `c` the core's strength. */
+  const lpBloomHot = (st, p, col, u, k = 1, a = 1, c = 1) => {
+    if (!(LINE_BLOOM > 0)) return "";
+    const U = u > 0 ? u : (st && st.portrait ? 2 : 1);
+    return lpHotWrite(st, p, col, c, LP_HOT.INNER_PX * U * k, LP_HOT.INNER_A * a, LP_HOT.OUTER_PX * U * k, LP_HOT.OUTER_A * a);
+  };
+  /* the filter a builder (or a live page's pulse) wrote is the line's BASE: what a solo restores, and the units and pulse
+     it lifts from, so the lift is continuous with the frame it lands on */
+  const lpHotBase = (p, u, k, a = 1) => { p.__lpBase = p.style.filter; p.__lpU = u; p.__lpK = k; p.__lpA = a; };
+  /* THE SOLO'S BLOOM (E99 s117 (2); species/solo.mjs calls it through PAGE_CTX): on its word the named series eases INTO
+     the primary's three layers, its halo lifted `liftK` (`lift` 0-1), and a muted series' halo eases OUT (`fade` 0-1) -
+     at a full fade it has none ("a context or muted line never blooms"). At 0 and 0 the line wears its own base, to the
+     byte (the primary's attributes re-written from its base's numbers). A history never blooms, so it is never touched. */
+  const lpSoloBloom = (S, pp, lift, fade, liftK) => {
+    const p = pp && pp.p;
+    if (!p || pp.muted || pp.context || !(LINE_BLOOM > 0)) return;
+    const col = p.getAttribute("stroke") || p.style.stroke, on = 1 - fade, kk = (p.__lpK || 1) * (1 + (liftK - 1) * lift);
+    const U = p.__lpU > 0 ? p.__lpU : (lpHotUnit(S) || (S && S.portrait ? 2 : 1));
+    if (pp.hot) {
+      if (fade >= 1 - 1e-4) { p.style.filter = ""; return; }
+      lpBloomHot(S, p, col, U, kk, on * (p.__lpA || 1), on); return;
+    }
+    if (lift <= 1e-4 && fade <= 1e-4) { p.style.filter = p.__lpBase != null ? p.__lpBase : ""; return; }
+    if (fade >= 1 - 1e-4) { p.style.filter = ""; return; }
+    /* a live peer: E67's neon (radius r at LINE_BLOOM) eases into the primary's inner halo, the outer and the core in */
+    const r = p.__lpR != null ? p.__lpR : LP_BLOOM_PX * (S && S.portrait ? 2 : 1), c = lift * on;
+    lpHotWrite(S, p, col, c, r + (LP_HOT.INNER_PX * U * kk - r) * lift, (LINE_BLOOM + (LP_HOT.INNER_A - LINE_BLOOM) * lift) * on,
+               LP_HOT.OUTER_PX * U * kk, LP_HOT.OUTER_A * c);
+  };
+  /* ... and THINNER (s117 (2)): a muted stroke's width eases to `thin` of its own at a full mute. Its width at rest is
+     read once, before the first write (a card's inline width, else the template's), and a full-ink frame restores the
+     inline value it found - so every frame before the word is the page it was. */
+  const lpSoloW0 = new WeakMap();
+  const lpSoloThin = (S, pp, m, thin) => {
+    const p = pp && pp.p; if (!p) return;
+    let w0 = lpSoloW0.get(p);
+    if (m <= 1e-4) { if (w0) p.style.strokeWidth = w0.inline; return; }
+    if (!w0) { w0 = { inline: p.style.strokeWidth, w: lpHotStroke(S, p) * (pp.muted ? 0.75 : 1) }; lpSoloW0.set(p, w0); }
+    p.style.strokeWidth = (w0.w * (1 - (1 - thin) * Math.min(1, m))).toFixed(3);
+  };
+  /* chart units per stage px at rest (P69 T6c's own number); 0 where the page never measured it */
+  const lpHotUnit = (st) => (st && st.stagePx > 0 ? 1 / st.stagePx : 0);
+  /* a line record's own bloom at rest - the role the builder gave it - written and remembered as its base */
+  const lpBloomRole = (st, rec, col) => {
+    if (rec.muted || rec.context) return;
+    if (rec.hot) { lpBloomHot(st, rec.p, col, lpHotUnit(st)); lpHotBase(rec.p, lpHotUnit(st), 1); }
+    else lpBloom(st, rec.p, col);
+    lpHotFilter(st, rec.p);   /* every live line carries its core, lit only when it is (or is solo'd into) the primary */
+  };
   /* R26-228 (E99 s82's (e); the operator: "You also missed the sparking lead points from the line chart reference, which
      add chart life ... our chart lines have no glow/pulse") - THE PAGE'S INTERIOR AT ITS IDLE. Measured on frozen copy d
      at 16:9 against the approved 9:16 page (tests/R26-228-NOTE.md): the interior at 16:9 already moved MORE than the
@@ -10650,6 +11145,8 @@ async function mount(doc) {
         drawn.push({ ...s, pts: s.pts.slice(k0), muted: false, si, k0 });
       } else drawn.push({ ...s, muted: false, si, k0: 0 });
     });
+    /* E99 s117 (P69 T37b): the PRIMARY - the first live series that is not `deemph` (context never blooms) */
+    const primaryI = drawn.findIndex((q) => !q.muted && q.color !== "deemph");
     drawn.forEach((s, i) => {
       /* P58 T5: every datum through the ONE homography, once. The path, the travelling tip, the tip-riding pill,
          the terminal name and the species' targets then all ride the same projected geometry - a line drawn ON the
@@ -10671,7 +11168,8 @@ async function mount(doc) {
       const col = s.muted ? (declared ? lpInkA(declared, 0.45) : LP_MUTED) : live;
       const sHost = BK ? lpBreakHost(st, BK, s.pts) : st.chart;   /* P69 T66: a line across the cut is held out of the gap */
       const p = lpEl("path", "ser" + (s.muted ? " muted" : ""), sHost, { d, stroke: col });
-      if (!s.muted) lpBloom(st, p, col);   /* the live line blooms; the history never does */
+      const role = { p, muted: !!s.muted, context: !s.muted && s.color === "deemph", hot: i === primaryI };
+      lpBloomRole(st, role, col);   /* E99 s117: the primary is emissive, a live peer keeps E67's neon, context and the history never bloom */
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
       const tip = lpEl("circle", "", sHost, { r: 6, fill: col, opacity: 0 });
@@ -10714,8 +11212,13 @@ async function mount(doc) {
       }
       /* E53: the label at the LINE'S END - so on a tilted plane it stands at the end the line actually has, and
          upright (the text is never turned; only the marks lie on the plane). */
-      const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0, ...(PHONE ? { style: "font-size:" + lpTypeU(st, "tag") + "px" } : {}) }
-                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr).toFixed(1), y: ((PJ ? PE[1] : my(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(PHONE ? { style: "font-size:" + lpTypeU(st, "tag") + "px" } : {}) });
+      /* E99 s118 (P69 T37b): THE NAME WEARS ITS SERIES' INK. The `fill` attribute always carried the line's colour, but the
+         template's `.lp-chart text { fill: var(--lp-chalk) }` outranks a presentation attribute, so every end tag read in
+         plain white ("pretty low visibility"). The ink is written as the element's own STYLE, which outranks the class -
+         a teal line's name is teal. A page on a plate's cream surface keeps the chalk its surface rule inverts. */
+      const nameSt = (pg.surface_from ? "" : "fill:" + col + ";") + (PHONE ? "font-size:" + lpTypeU(st, "tag") + "px" : "");
+      const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0, ...(nameSt ? { style: nameSt } : {}) }
+                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr).toFixed(1), y: ((PJ ? PE[1] : my(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(nameSt ? { style: nameSt } : {}) });
       st.linePts.push(PT.map((q) => [q[0], q[1]]));   /* the exact datum positions, for the species' targets */
       name.textContent = s.muted ? "" : LFT && LFT.form !== "full" ? (s.label || s.name || "") : (s.label ? s.label + " " : "") + (s.name || "");   /* P69 T8: a tag the stage cannot hold keeps its value (T10's key takes the name) */   /* the muted history carries no name */
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
@@ -10724,7 +11227,7 @@ async function mount(doc) {
       if (chipT && !(LFT && LFT.form === "value")) { const tg = lpEl("tspan", "tagchip", name, { dx: LFT ? (LP_LONGFORM.CHIP_DX_PX / LFT.scale).toFixed(2) : 12, fill: col,
         ...(PHONE ? { style: "font-size:" + lpTypeU(st, "chip") + "px" } : {}) }); tg.textContent = chipT; }
       const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : my(last[1])) + 8,
-                     pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted,
+                     pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted, hot: role.hot, context: role.context,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
       if (ax.name_clear && !nameBelow) rec.ny = Math.min(rec.ny, clearY - (P ? 34 : 20));
       st.paths.push(rec);
@@ -11160,7 +11663,7 @@ async function mount(doc) {
     const ylab = lpYLabel(st, pg, L, 64, { opacity: 0 }); if (ylab) labels.push(ylab);   /* top-left, on the callout's row, clear of the ghost */
     const d = vals.map((v, i) => (i ? "L" : "M") + mx(xs[i]).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
     const p = lpEl("path", "ser", st.chart, { d, style: "stroke:" + LP_INK.crimson });   /* a fall is the negative token */
-    lpBloom(st, p, LP_INK.crimson);   /* E67 */
+    lpBloomRole(st, { p, hot: true }, LP_INK.crimson);   /* E67; E99 s117: the decline's one line is its primary */
     const len = p.getTotalLength ? p.getTotalLength() : 2000;
     p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
     const tip = lpEl("circle", "", st.chart, { r: 6, fill: LP_INK.crimson, opacity: 0 });
@@ -11204,7 +11707,13 @@ async function mount(doc) {
        lines' time axis; the lines take their OWN scale on a right axis with unit ticks; their points are registered so a
        bracket can measure them (the +80 bp on the ring). */
     const n = Math.max(1, st.vals.length), unit = lpUnit(pg), P = !!st.portrait;
-    const vmax = Math.max(0, ...st.vals.map((v) => +v)), vmin = Math.min(0, ...st.vals.map((v) => +v)), span = Math.max(1e-9, vmax - vmin) * 1.12;
+    /* P69 T64 (E99 s110 (1) + s102): STACKED bars under ONE line - the line on its OWN right axis only when its unit is not
+       the stacks' (both axes named, the right one in the line's colour), else on the stacks' own scale. No segments:
+       the combo it was, to the byte. */
+    const SEG = Array.isArray(pg.segments) && pg.segments.some(Boolean) ? pg.segments : null;
+    const own = !SEG || !!(pg.line_unit && pg.line_unit !== (pg.unit || ""));
+    const shared = own ? [] : (pg.series || []).flatMap((q) => (q.pts || []).map((p) => +p[1]));
+    const vmax = Math.max(0, ...st.vals.map((v) => +v), ...shared), vmin = Math.min(0, ...st.vals.map((v) => +v), ...shared), span = Math.max(1e-9, vmax - vmin) * 1.12;
     const top = 110, bot = 470, x0 = 96;
     let x1 = (pg.series || []).some((q) => q.pts && q.pts.length) ? 806 : 880;   /* the lines' right axis needs its own margin */
     /* TIERS (the macro-chart intake, 2026-09-07 - Cleveland & McGill's common-scale rule and the Economist's shared-x
@@ -11224,17 +11733,20 @@ async function mount(doc) {
     const slotW = (x1 - x0) / n, bw = Math.min(slotW * 0.62, barsIn.length && barsIn[0] && barsIn[0].x != null ? (x1 - x0) / Math.max(1, (xb - xa) * 12) * 0.62 : slotW * 0.62);
     const cx = (i) => (barsIn[i] && barsIn[i].x != null && xb > xa) ? x0 + (+barsIn[i].x - xa) / (xb - xa) * (x1 - x0) : x0 + slotW * (i + 0.5);
     lpYTicks(st, vmin * 1.12, vmax * 1.12, bmy, x0 - 20, x1 + 20, unit, x0 - 30, tiers ? 3 : 5);   /* a short band wants fewer ticks */
-    lpYLabel(st, pg, x0 - 20, (tiers ? barTop : top) - 16);   /* the unit belongs to the band it measures */
+    const yl = lpYLabel(st, pg, x0 - 20, (tiers ? barTop : top) - 16);   /* the unit belongs to the band it measures */
     const bars = st.vals.map((v, i) => {
       const h = Math.max(3, Math.abs(+v) / span * (barBot - barTop)), emph = i === st.emph, neg = +v < 0;
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (emph ? " emph" : ""), st.chart, { x: (cx(i) - bw / 2).toFixed(1), y: (neg ? base : base - h).toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 5 });
       bar.style.transformOrigin = "0 " + base + "px"; bar.style.transform = "scaleY(0)";
+      const segs = SEG && Array.isArray(SEG[i]) ? lpSegRects(st, SEG[i], { x: cx(i) - bw / 2, bw, base, my: bmy, rx: 5 }) : null;   /* P69 T64: the stack, under the labels */
       const lab = lpText(st.chart, "lab", cx(i), barBot + 34, "middle", String((pg.labels || [])[i] ?? ""), { opacity: 0 });
       const valY = neg ? Math.min(base + h + (P ? 30 : 26), barBot - 8) : base - h - 14;   /* a drop's value sits under its bar, never on the month labels */
-      const tells = emph || Math.abs(+v) >= LPX.COMBO_LABEL_SHARE * Math.max(1e-9, ...st.vals.map((q) => Math.abs(+q)));   /* E52: the chart reads without printing every number */
-      const val = tells ? lpText(st.chart, "val", cx(i), valY, "middle", st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v),
-        { opacity: 0, style: LP_HALO + (emph ? "fill:#F5B72E;font-size:30px;font-weight:700" : "") }) : null;
+      const tells = !!segs || emph || Math.abs(+v) >= LPX.COMBO_LABEL_SHARE * Math.max(1e-9, ...st.vals.map((q) => Math.abs(+q)));   /* E52: the chart reads without printing every number (T64: a stack's TOTAL is always written, s100) */
+      const vtx = st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v);
+      const val = tells ? lpText(st.chart, "val", cx(i), valY, "middle", segs ? lpWithUnit(vtx, unit) : vtx,   /* T64: a stack's total carries its unit, as its parts do */
+        { opacity: 0, style: LP_HALO + (emph ? "fill:#F5B72E;font-size:30px;font-weight:700" : "") + (segs && P ? ";font-size:44px" : "") }) : null;   /* T64: at 9:16 a stack's total at its figures' size, so the line's labels find room */
       const rec = { bar, lab, val, valY: tells ? valY : -1e9, cx: cx(i) };
+      if (segs) { rec.segs = segs; rec.end = neg ? base + h : base - h; }   /* P69 T64 */
       lpMark(st, "b:" + i, "bar", bar, { x: cx(i) - bw / 2, y: neg ? base : base - h, w: bw, h, base, cx: cx(i), end: neg ? base + h : base - h, neg, v: +v }, rec);
       lpMark(st, "xlab:" + i, "xlabel", lab, { x: cx(i), y: barBot + 34 });
       if (val) lpMark(st, "val:b:" + i, "value", val, { x: cx(i), y: valY, v: +v });
@@ -11242,40 +11754,70 @@ async function mount(doc) {
     });
     const cxOf = (b) => b.cx;
     const pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
-    const ly = (v) => lineBot - (+v - lo) / (hi - lo) * (lineBot - lineTop);   /* the lines' own band: no zero is faked, no gridline is fought */
+    if (SEG && own && lo + pad >= 0) lo = 0;   /* P69 T64: a stacked combo's own line axis stands on zero, the stacks' zero (a share read from nothing, E28) */
+    /* P69 T64 (the parent's frame read, 2026-09-24: the line ran through the Q1 '26 total): a stacked combo's line never
+       crosses a written total. Its OWN axis's top rises in AX_STEP of its span (to AX_MAX times it) until the line's path,
+       as drawn, clears every total's box - so each total stays where it is read, over its own bar, and the scale that
+       moved is written on the page (its ticks relabel). Past the cap the total itself stands clear (lpSegBuild). */
+    if (SEG && own && !tiers) {
+      const tb = bars.filter((b) => b.segs && b.val).map((b) => lpSegBox(b.val)).filter(Boolean), uu = lpSegU(st);
+      const at = (s2, x, k) => s2.pts.length === n ? cx(k) : x0 + (+x - xa) / (xb - xa || 1) * (x1 - x0);
+      const hits = (h2) => lpSegPolyHits(series.map((s2) => s2.pts.map(([x, v], k) => [at(s2, x, k), lineBot - (+v - lo) / (h2 - lo) * (lineBot - lineTop)])),
+        tb, uu(LPSEG.LINE_CLEAR_PX), uu(LPSEG.SCAN_PX));
+      const h0 = hi;
+      for (let k = 1; hits(hi) && k <= (LPSEG.AX_MAX - 1) / LPSEG.AX_STEP; k++) hi = h0 + (h0 - lo) * LPSEG.AX_STEP * k;
+    }
+    const ly = own ? (v) => lineBot - (+v - lo) / (hi - lo) * (lineBot - lineTop) : bmy;   /* the lines' own band: no zero is faked, no gridline is fought (T64: a line in the stacks' unit IS on their scale) */
     /* the lines' own axis, on the right, with the unit (pg.line_unit, else the first line's unit, else none) */
     const lunit = pg.line_unit != null ? pg.line_unit : "";
-    { const step = lpNiceStep(Math.max(1e-9, (hi - lo) / (tiers ? 2 : 4)));
+    const lcol = SEG ? LP_PAL[(series[0] || {}).color] || LP_PAL[LP_CYCLE[0]] : null;   /* P69 T64 / s102 (c): the right axis in its line's own colour */
+    const y2t = [];   /* T64: the right axis's words, which the line's labels and the key must not touch */
+    if (own) { const step = lpNiceStep(Math.max(1e-9, (hi - lo) / (tiers ? 2 : 4)));
       for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
         const v = Math.abs(tv) < step * 1e-6 ? 0 : tv;
         if (tiers) lpEl("line", "grid", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: ly(v).toFixed(1), y2: ly(v).toFixed(1) });   /* its own band, its own grid: the bands never overlap, so no prison bars */
-        else lpText(st.chart, "lab", x1 + 14, ly(v) + (P ? 14 : 8), "start", lpWithUnit(lpTick(v), lunit), { style: "fill:#aeb6be" });
+        else { const tk = lpText(st.chart, "lab" + (lcol ? " lp-y2" : ""), x1 + 14, ly(v) + (P ? 14 : 8), "start", lpWithUnit(lpTick(v), lunit), { style: "fill:" + (lcol || "#aeb6be") });
+          if (SEG) y2t.push(tk); }
       }
       /* the tier's scale is written ONCE, on its top gridline, instead of a whole second axis - the terminal labels carry the rest */
       if (tiers) lpText(st.chart, "lab", x0 - 30, ly(Math.floor(hi / step) * step) + (P ? 14 : 8), "end", lpWithUnit(lpTick(Math.floor(hi / step) * step), lunit), { style: "fill:#aeb6be" }); }
+    /* P69 T64 / s102 (b): the right axis NAMES its unit, over its ticks in its line's colour (kept inside the chart) */
+    const yl2 = SEG && own && pg.line_label ? lpText(st.chart, "lab lp-y2-name", x1 + 14, (tiers ? barTop : top) - 16, "start", String(pg.line_label),
+      { style: "font-size:" + (P ? 40 : 22) + "px;fill:" + lcol }) : null;
+    if (yl2 && y2t.length) {   /* T64: the name stands on a line of its own, NAME_GAP_PX clear of the axis's top tick */
+      const nb = lpSegBox(yl2), tt = y2t.map(lpSegBox).filter(Boolean), gapN = lpSegU(st)(LPSEG.NAME_GAP_PX);
+      const tickTop = tt.length ? Math.min(...tt.map((r) => r.y)) : Infinity;
+      if (nb && nb.y + nb.h > tickTop - gapN) yl2.setAttribute("y", (+yl2.getAttribute("y") - (nb.y + nb.h - (tickTop - gapN))).toFixed(1));
+    }
+    let nameRow = 0;   /* T64: when the two axis names meet on one row, the right one steps up a row (and the key over it) */
+    if (yl2) { const r = lpSegBox(yl2), W = st.geom ? st.geom.W : 1000; if (r && r.x + r.w > W - 4) { yl2.setAttribute("text-anchor", "end"); yl2.setAttribute("x", (W - 4).toFixed(1)); }
+      const a = yl ? lpSegBox(yl) : null, b2 = lpSegBox(yl2), fz = P ? 40 : 22;
+      if (a && b2 && lpSegMeets(a, b2, lpSegU(st)(12))) { nameRow = 1; yl2.setAttribute("text-anchor", "end"); yl2.setAttribute("x", (W - 4).toFixed(1));
+        yl2.setAttribute("y", (+yl2.getAttribute("y") - fz * 1.3).toFixed(1)); } }
     const lines = series.map((s, si) => {
       const aligned = s.pts.length === n, lx = (x, k) => aligned ? cx(k) : x0 + (+x - xa) / (xb - xa || 1) * (x1 - x0);   /* one point per bar sits on the bar */
       const pts = s.pts.map(([x, v], k) => [lx(x, k), ly(v), v]), col = LP_PAL[s.color] || LP_PAL[LP_CYCLE[si % LP_CYCLE.length]];   /* E67: undeclared takes the cycle by index - teal, then the orange */
       const p = lpEl("path", "ser", st.chart, { d: pts.map(([x, y], k) => (k ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" "), style: "stroke:" + col });
-      lpBloom(st, p, col);   /* E67 */
+      lpBloomRole(st, { p, hot: si === 0 && s.color !== "deemph", context: s.color === "deemph" }, col);   /* E67; E99 s117: the combo's first line is its primary */
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
       const dot = lpEl("circle", "", st.chart, { r: 7, fill: col, opacity: 0 });
       /* s9.23b: direct labels never overprint - a label that would land on its bar's value stacks above it instead */
       const labels = pts.map(([x, y], k) => {
         const by = aligned ? bars[k].valY : -1e9, ly0 = y - 18, yy = Math.abs(ly0 - by) < 32 ? by - (k === st.emph ? 38 : 30) : ly0;
-        return lpText(st.chart, "val", x, yy, "middle", "", { opacity: 0, style: LP_HALO + "fill:" + col + ";font-size:24px" });
+        return lpText(st.chart, "val", x, yy, "middle", "", { opacity: 0, style: LP_HALO + "fill:" + col + ";font-size:" + (SEG && P ? 36 : 24) + "px" });   /* T64: a stacked combo's labels read at 9:16 */
       });
       const last = pts[pts.length - 1];   /* the inline name: right of the last point when there is room, else above it, ending at it.
          A combo whose SUB names the lines by colour carries no inline name at all - it would repeat the sub and land in the bars
          (the fourth watch: "we need better handling on text/labels"); the sub is the legend and a bracket carries the number. */
       /* the intake (Economist / Axios): a DETACHED legend is the sin, a TERMINAL label is the cure. In tiers the line band has
          no right axis, so the label sits just past the line's end; on one plot it keeps the old rule. */
-      const room = tiers || x1 + 200 <= (st.geom ? st.geom.W : 1000), quiet = !!pg.legend_in_sub;
+      const room = tiers || x1 + 200 <= (st.geom ? st.geom.W : 1000), quiet = !!pg.legend_in_sub || !!SEG;   /* T64: a stacked combo names its line in the page's ONE key */
       const name = lpText(st.chart, "sname", room ? last[0] + (tiers ? 12 : 44) : last[0], room ? last[1] + 8 : last[1] - 26, room ? "start" : "end", quiet ? "" : (s.label ? s.label + " " : "") + (s.name || ""),
         { opacity: 0, style: LP_HALO + "fill:" + col + (tiers ? ";font-size:" + (P ? 30 : 19) + "px" : "") });   /* the gutter's label is a tag, not a headline */
       st.linePts.push(pts.map(([x, y]) => [x, y]));   /* the species' targets (a bracket on a line) */
       const rec = { p, len, dot, labels, name, pts, ny: room ? last[1] + 8 : last[1] - 26 };
+      if (SEG) rec.unit = own ? lunit : unit;   /* T64: its labels carry their axis's unit */
       lpMark(st, "s" + si, "line", p, { pts: pts.map(([x, y]) => [x, y]), vals: pts.map(([, , v]) => +v), len, k0: 0, muted: false, col }, rec);
       return rec;
     });
@@ -11295,6 +11837,43 @@ async function mount(doc) {
     for (const ln of lines) if (ln.pts.length > 2 * n) for (const lb of ln.labels) lb.remove(), ln.labels = [];
     st.combo = { bars, lines }; st.buildDur = LPX.COMBO_BUILD; st.paint = paintLedgerCombo;
     st.plot = { L: x0, R: st.geom ? st.geom.W - x1 : 1000 - x1, T: top, B: bot, W: st.geom ? st.geom.W : 1000, x0: xa, x1: xb, y0: lo, y1: hi, log: false };
+    if (SEG) st.segNames = [yl, yl2].filter(Boolean);   /* T64: the two axis names (a probe reads them against the line) */
+    if (SEG) for (const b of bars) if (b.segs && b.val) st.chart.appendChild(b.val);   /* T64: a stack's total over the line - its halo cuts the line where it passes */
+    if (SEG) lpSegBuild(st, pg, { base, top, x0, xr: x1 + 6, unit, fs: P ? 30 : 24, fs0: P ? 40 : 22, below: barBot + 34 + (P ? 40 : 26) * 0.6,   /* P69 T64: each part's figure, and the key */
+      bars: bars.map((b, i) => ({ i, bar: b.bar, x: b.cx - bw / 2, bw, end: b.end, val: b.val, lab: b.lab, segs: b.segs || null })),
+      more: [yl, yl2, ...y2t], keyY: Math.min((tiers ? barTop : top) - 16 - (P ? 40 : 22) * (1.5 + 1.3 * nameRow),
+        yl2 && lpSegBox(yl2) ? lpSegBox(yl2).y - lpSegU(st)(LPSEG.KEY_GAP_PX) - (P ? 40 : 22) * 0.6 : Infinity),
+      linePolys: lines.map((ln) => ln.pts.map(([x, y]) => [x, y])), lineKey: series.length ? { name: String(series[0].name || series[0].label || ""), color: series[0].color || LP_CYCLE[0], line: true } : null,
+      clear: (ink, parts, bs) => lpSegClearLabels(st, lines, ink, P, parts, bs) });
+  };
+  /* P69 T64: each of the stacked combo's line labels, at its final figure, takes the first place by its point - over it,
+     under it, then further out - that touches no part's figure, total, name or axis word (s9.23b: a label never
+     overprints); its halo keeps it legible where it crosses a part */
+  const lpSegClearLabels = (st, lines, ink, P, parts, bs) => {
+    const u = lpSegU(st), out = [];
+    const inPart = (q, x, y) => x >= q.x && x <= q.x + q.w && y >= q.y && y <= q.y + q.h;
+    for (const ln of lines) ln.labels.forEach((lb, k) => {
+      const [px, py, v] = ln.pts[k], d = P ? 1.4 : 1, side = (P ? 22 : 16);
+      lb.textContent = lpWithUnit(String(v), ln.unit || "");
+      /* over the point, beside it (right, then left, on its own height), under it, then further out */
+      const own = ln.pts.length === (bs || []).length ? bs[k] : null, gap = u(LPSEG.LEAD_GAP_PX) * 2;   /* the point's own bar (one point per bar) */
+      const cands = [[px, py - 18 * d, "middle"], [px + side, py + 8 * d, "start"], [px - side, py + 8 * d, "end"],
+                     ...(own ? [[own.x + own.bw + gap, py + 8 * d, "start"], [own.x - gap, py + 8 * d, "end"],   /* ... in the gap beside its bar, */
+                                [own.x + own.bw + gap, py + 40 * d, "start"], [own.x - gap, py + 40 * d, "end"]] : []),   /* level with it, then a step under */
+                     [px, py + 34 * d, "middle"], [px, py - 50 * d, "middle"], [px, py + 66 * d, "middle"], [px, py - 82 * d, "middle"]];
+      let got = null, least = null;
+      const over = (r) => ink.concat(out).reduce((a, o) => a + Math.max(0, Math.min(r.x + r.w, o.x + o.w) - Math.max(r.x, o.x)) * Math.max(0, Math.min(r.y + r.h, o.y + o.h) - Math.max(r.y, o.y)), 0);
+      for (const [xx, yy, an] of cands) { lb.setAttribute("x", xx.toFixed(1)); lb.setAttribute("y", yy.toFixed(1)); lb.setAttribute("text-anchor", an);
+        const r = lpSegBox(lb); if (!r) continue;   /* ... and a part that does not hold its own point is not its place (it would read as that part's figure) */
+        const foreign = (parts || []).some((q) => lpSegMeets(r, q, 0) && !inPart(q, px, py));
+        if (!ink.concat(out).some((o) => lpSegMeets(r, o, u(3))) && !foreign) { got = r; break; }
+        const a = over(r); if (!foreign && (!least || a < least.a)) least = { a, xx, yy, an }; }
+      if (!got) {   /* nowhere clear: the place it overlaps least (never a foreign part), else over its point */
+        const L = least || { xx: px, yy: py - 18 * d, an: "middle" };
+        lb.setAttribute("x", L.xx.toFixed(1)); lb.setAttribute("y", L.yy.toFixed(1)); lb.setAttribute("text-anchor", L.an); got = lpSegBox(lb); }
+      if (got) out.push(got);
+    });
+    return out;
   };
   const paintLedgerCombo = (st, c) => {
     const C = st.combo, nb = C.bars.length;
@@ -11314,7 +11893,8 @@ async function mount(doc) {
       ln.labels.forEach((lb, k) => {
         const r = clamp01((g - k / m) / 0.12);   /* appears as the dot arrives, counts to the token */
         lb.setAttribute("opacity", clamp01(r / 0.2).toFixed(2));
-        lb.textContent = r >= 1 ? String(ln.pts[k][2]) : lpFmt(+ln.pts[k][2] * pow2out(r));
+        const tx = r >= 1 ? String(ln.pts[k][2]) : lpFmt(+ln.pts[k][2] * pow2out(r));
+        lb.textContent = ln.unit != null ? lpWithUnit(tx, ln.unit) : tx;   /* P69 T64: a stacked combo's labels in their axis's unit */
       });
       ln.name.setAttribute("opacity", clamp01((g - 1) / 0.05).toFixed(2));
     });
@@ -11804,13 +12384,15 @@ async function mount(doc) {
           const col = LP_PAL[s.color] || LP_PAL[tr.color] || (n > 1 ? LP_PAL.cobalt : LP_PAL.crimson);
           const d = pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
           const p = lpEl("path", "ser", st.chart, { d, stroke: col });
-          lpBloom(st, p, col);   /* E67 */
+          const hot = !k && s.color !== "deemph";   /* E99 s117: each band's first line is that band's primary */
+          lpBloomRole(st, { p, hot, context: s.color === "deemph" }, col);   /* E67 */
+          if (!k && !pg.surface_from) nameEl.style.fill = col;   /* E99 s118: the band's name IS this line's name, in its ink */
           const len = p.getTotalLength ? p.getTotalLength() : 2000;
           p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
           const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
           /* the band's name IS this line's name (the line page's law): it writes as the band finishes drawing */
           const prec = { p, len, tip, name: k ? lpText(st.chart, "sname", L, band.y0 - TIERS.NAME_DY, "start", "", { opacity: 0 }) : nameEl,
-                         stagger: ti / Math.max(1, n), ny: band.y0 - TIERS.NAME_DY, pts, si: ti, k0: 0, muted: false,
+                         stagger: ti / Math.max(1, n), ny: band.y0 - TIERS.NAME_DY, pts, si: ti, k0: 0, muted: false, hot, context: s.color === "deemph",
                          data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };
           st.paths.push(prec);
           lpMark(st, "s" + ti + (k ? ":" + k : ""), "line", p, { pts, vals: s.pts.map((q) => +q[1]), len, k0: 0, muted: false, col }, prec);
@@ -11840,8 +12422,9 @@ async function mount(doc) {
       if (!bd.bars.length) continue;   /* a line band's name rides its line (lpPaintChart) */
       const k = tierBuildK(c, bd.ti, TT.n);
       bd.name.setAttribute("opacity", clamp01((k - 0.1) / 0.25).toFixed(2));
+      const step = lpBarStep(bd.bars.length, 0.08);   /* P69 T85: a band past six bars finishes too */
       bd.bars.forEach((bb, i) => {
-        const kk = expoOut(clamp01((k - i * 0.08) / 0.55));
+        const kk = expoOut(clamp01((k - i * step) / 0.55));
         bb.bar.style.transform = "scaleY(" + kk.toFixed(4) + ")";
         bb.val.setAttribute("opacity", clamp01((kk - 0.9) / 0.1).toFixed(2));
       });
@@ -13654,6 +14237,13 @@ async function mount(doc) {
         .filter((v) => v.at >= sp.at).sort((a, b) => a.at - b.at);
       return { sp, si, g, core, head, leave: takes.length ? { at: takes[0].at, dur: takes[0].dur || 1 } : null };
     });
+    /* SOLO (P69 T37; the Bravos harvest v2's A12 / A49): on its word every OTHER series or bar of the page mutes to E67's
+       dim and the named one keeps its ink; `unsolo` restores. species/solo.mjs owns the law and writes the chart's own marks,
+       so this is only its clock: the page's solos, and what releases them - every unsolo, and the first verb at or after the
+       first solo that REPLACES the page (the lit stretch's leave rule, above). null on a page with none: nothing paints. */
+    const soloSps = pageSpecies(scene, "solo");
+    const solo = soloSps.length ? { lits, evs: soloEvents(soloSps, [...pageSpecies(scene, "unsolo"),
+      ...pageSpecies(scene, "chart_to").filter((c) => (c.to === "recast" || c.to === "morph" || c.to === "remake") && c.at >= soloSps[0].at)]) } : null;
     /* E50 (P47 T6): a FIGURE - the number the sentence turns to, pinned to its datum by a dot and written by the hand beside
        it (to the right when the chart has room there, else to the left - a peak at the right edge writes leftward); `dy` moves
        it by lines of its own size; `sub` writes under it at the small size. The chart's next thing after an undraw. */
@@ -13768,7 +14358,7 @@ async function mount(doc) {
       const lg = [...String(sp.text || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
       return { sp, marks, label, lg };
     }).filter(Boolean);
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits };
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo };
   };
   /* the X's two strokes over the named cells, the cells dimming under them, and the share written by
      the hand: every number is species/treemap.mjs's, this is the call */
@@ -13848,7 +14438,8 @@ async function mount(doc) {
   /* THE PAGE SPECIES CONTEXT (R26-41): the one object a page painter reaches the engine through - built once here,
      where every helper it names already exists, and handed to every page painter by paintPerform. A pure bag: a
      painter that wants something new is given it here by name, and never as an identifier only the engine has. */
-  const PAGE_CTX = { pointsNow: lpPointsNow, datumNow: lpDatumNow, markDatum: lpMarkDatum, clamp: clamp01, el: lpEl, PS };
+  const PAGE_CTX = { pointsNow: lpPointsNow, datumNow: lpDatumNow, markDatum: lpMarkDatum, clamp: clamp01, el: lpEl, PS,
+                     bloom: lpSoloBloom, thin: lpSoloThin };   /* P69 T37b: the solo's lift and fade (E99 s117 (2)) */
   /* R26-219 (2026-09-18, the Steel and Paper H unit: the railway page's two notes and its -64% figure were still
      standing on the GDP page eight seconds after the recast) - THE PAGE'S OWN LEAVE, for what the hand WROTE on it.
      A note, a figure, a retitle, a bracket and a spread belong to the page they were written on, and a `chart_to`
@@ -13883,6 +14474,7 @@ async function mount(doc) {
        NEXT, in this order: `bracket`, `spread` - paintBracket and paintSpread still sit above as engine code. */
     for (const sd of PF.spans || []) { const p = PAGE_PAINTERS[sd.sp.kind || "span"]; if (p) p(sd, t, st, PAGE_CTX); }
     for (const ld of PF.lits || []) if (PAGE_PAINTERS.lit_stretch) PAGE_PAINTERS.lit_stretch(ld, t, st, PAGE_CTX);   /* P69 T36: the light that travels a stretch of the line on its word (species/lit_stretch.mjs) */
+    if (PF.solo && PAGE_PAINTERS.solo) PAGE_PAINTERS.solo(PF.solo, t, st, PAGE_CTX);   /* P69 T37: the others mute on the word (species/solo.mjs) - after the lights, so a light on a muted series mutes with it */
     for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) { PAGE_PAINTERS.figure(fg, t, st, PAGE_CTX);
       const lv = pageLeave(fg.sp, t);   /* R26-219: the hand wrote it at a datum of the page that has just been replaced */
       if (lv > 0) fg.g.setAttribute("opacity", ((+fg.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3));
@@ -14452,12 +15044,13 @@ async function mount(doc) {
          the run on the seconds after (bts); a page without one is exactly what it was (cb === c) */
       const cb = cs.bt ? clamp01(c * cs.buildDur / cs.btBase) : cs.mbBase ? clamp01(c * cs.buildDur / cs.mbBase) : c,   /* P69 T45: ... and a membership cascade's, the same way */
         bts = cs.bt ? c * cs.buildDur - cs.btBase : -1;
+      const step = lpBarStep(cs.bars.length, 0.1);   /* P69 T85: past six bars the stagger fits the build, so every bar and name finishes */
       cs.bars.forEach((bb, i) => {
-        const k = expoOut(clamp01((cb - i * 0.1) / 0.55));
+        const k = expoOut(clamp01((cb - i * step) / 0.55));
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
         if (bb.band) bb.band.style.transform = bb.bar.style.transform;   /* P69 T8d: the range's band grows with its bar, about the same zero */
         if (bb.ex) bb.ex.set(k);   /* P58 T5: the prism grows WITH its face - the same u, one clock, no second state */
-        bb.lab.setAttribute("opacity", clamp01((cb - i * 0.1 - 0.3) / 0.2).toFixed(2));
+        bb.lab.setAttribute("opacity", clamp01((cb - i * step - 0.3) / 0.2).toFixed(2));
         bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
       });
       if (cs.memberTiles) lpMemberPaint(cs, cb, cs.mbBase ? c * cs.buildDur - cs.mbBase : null, scene, t);   /* P69 T45 */
@@ -14561,7 +15154,9 @@ async function mount(doc) {
           pp.tip.setAttribute("r", rTip.toFixed(2));
           pp.tip.style.filter = "drop-shadow(0 0 " + (rTip * LP_LIFE.HALO_K).toFixed(2) + "px " + lpInkA(ink, LP_LIFE.HALO_A) + ")";
           /* R26-228 (b): the glow, at the share of the frame the APPROVED 9:16 page draws, pulsing on the tip's own clock */
-          lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * breath(lifeT(t), sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ }));
+          const pulse = breath(lifeT(t), sph, { BREATH_AMP: LP_LIFE.BLOOM_AMP, BREATH_HZ: LP_LIFE.TIP_HZ });
+          if (pp.hot) { lpBloomHot(cs, pp.p, pp.p.getAttribute("stroke"), 1 / ctmL, pulse, pulse); lpHotBase(pp.p, 1 / ctmL, pulse, pulse); }   /* E99 s117: the primary's halo pulses on the one clock - its reach AND its glow (a still page already draws the halo at rest, so a radius pulse alone read 26 % of the tip band against the life test's 35 % floor; the glow pulse reads it) */
+          else if (!pp.context) lpBloom(cs, pp.p, pp.p.getAttribute("stroke"), (LP_LIFE.BLOOM_PX / ctmL) * pulse);
         }
         pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
         if (pp.pill) lpPaintPill(pp, f, drawing);   /* P50 T11: the pill rides this same f - one clock, no second state */
@@ -15544,6 +16139,7 @@ async function mount(doc) {
        opacity with the base-axis reveal above. */
     paintPerform(st, scene, t, pg);
     for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b */
+    for (const S of st.states || [st]) if (S.segs) lpSegPaint(S);   /* P69 T64: each stack mirrors its bar */
     paintSurfaceFrame(st, frame);
     page.dataset.surfaceProgress = String(frame.progress);
   };
@@ -15774,6 +16370,7 @@ async function mount(doc) {
     lpShedPrisms(st, scene, t, pg);   /* P61 T4a: ... and the prisms come apart in that same drain - AFTER it, so the drain's particle cache is always taken from faces at home */
     if (scene.prop_morphs) lpPropMorphPaint(el, st, scene, t);   /* P69 T26e: props and marks becoming each other - BEFORE the soft bars read the marks */
     for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b: the soft bars' feet and shadows, off what every painter wrote at t */
+    for (const S of st.states || [st]) if (S.segs) lpSegPaint(S);   /* P69 T64: ... and each stack, off its bar as drawn at t */
   };
 
   /* ================= P69 T26f / E99 s108 - THE PAGE'S CHROME IS OBJECTS =================
@@ -15993,6 +16590,21 @@ async function mount(doc) {
   const spIO = (k) => { k = clamp01(k); return k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; };
   /* an element's box in STAGE px (the stage is scaled to fit the pane) */
   const stageBox = (el) => { const r = el.getBoundingClientRect(), sb = $("stage").getBoundingClientRect(); const k = STAGE_W / Math.max(1, sb.width); return { x: (r.left - sb.left) * k, y: (r.top - sb.top) * k, w: r.width * k, h: r.height * k }; };
+  const DOCK_TARGET_KIND = "dock";
+  /* the dock's box in STAGE px this frame: a press card's live pose (its pile, its park); a placed card or prop, its
+     PLACED box at t (its park, a prop's moves - dockGeom, the same box the element is written to); an unplaced card,
+     the element as laid out. A prop's ring hugs its PAINTED box (the compiler's `paint`, fractions of the cutout). */
+  const dockLiveBox = (aid) => {
+    const p = PRESS_POSE[aid];
+    if (p && p.card) return p.card;
+    const L = DOCK_LIVE[aid];
+    if (!L) return null;
+    const im = L.prop ? L.el.querySelector(".slide-frame img") || L.el.querySelector("img") : null;
+    const b = L.box || stageBox(im || L.el);
+    if (!(b.w > 0 && b.h > 0)) return null;
+    const q = L.prop && Array.isArray(L.paint) && L.paint.length === 4 ? L.paint : null;
+    return q ? { x: b.x + q[0] * b.w, y: b.y + q[1] * b.h, w: (q[2] - q[0]) * b.w, h: (q[3] - q[1]) * b.h } : b;
+  };
   const resolveTarget = (tg) => {
     if (!tg) return null;
     if (tg.kind === "point") return { x: tg.x * STAGE_W, y: tg.y * STAGE_H, w: 0, h: 0 };
@@ -16039,6 +16651,12 @@ async function mount(doc) {
       const b = Array.isArray(tg.quad) && tg.quad.length === 4
         ? quadBounds(tg.quad.map((p) => [p[0] * STAGE_W, p[1] * STAGE_H])) : null;
       return b && b.w > 0 && b.h > 0 ? b : null;
+    }
+    if (tg.kind === DOCK_TARGET_KIND) {   /* P69 T65 / E99 s110 (2): the THING the sentence points at - a card, a press
+         card or a prop - at its box as DRAWN this frame; `box` is its face, as fractions of that box */
+      const b = dockLiveBox(tg.dock);
+      const f = b && Array.isArray(tg.box) && tg.box.length === 4 ? tg.box : null;
+      return f ? { x: b.x + f[0] * b.w, y: b.y + f[1] * b.h, w: (f[2] - f[0]) * b.w, h: (f[3] - f[1]) * b.h } : b;
     }
     if (tg.kind === PHRASE_KIND) {   /* P50 T3: a region INSIDE a press card, resolved through that card's LIVE
          geometry - a parked or stacked card moves, and what points at it moves with it. Off stage: nothing. */
@@ -16252,8 +16870,16 @@ async function mount(doc) {
     LABEL_SIZE: 48,
     LABEL_GAP: 28,
     LABEL_LINE_H: 52,
+    /* P70 T1 (E99 s90): the label's size under `arrive: "stamp"` - the phone floor, 59.08 stage px [DERIVED:
+       ledger_page.CARD_TYPE_PX, 12 * 1920 / 390 to two places]; LABEL_GAP and LABEL_LINE_H scale with it. A stamp-form
+       chip WITHOUT the arrival keeps LABEL_SIZE (its bytes do not move) and the compiler WARNs that it is under the floor. */
+    LABEL_FLOOR: 59.08,
     MAX_LINES: 3,
     INK: Object.freeze({ cream: "#F4E6C7", charcoal: "#25313C" }),
+    /* P70 T1: the stamp arrival's impact ring is OUR ink, as the dock's is (scene-evidence-engine's `.dock-ring`): chalk
+       on the charcoal ledger page, charcoal on any other ground - never gold */
+    RING_INK: Object.freeze({ ledger: "#F2F2F2", ground: "#25313C" }),
+    MASS: "ink",       /* the mass the stamp lands at: the engine's own default for a stamp (`stampXf(d.mass || "ink", ...)`) */
   });
 
   const chip01 = (v) => Math.min(1, Math.max(0, v));
@@ -16274,8 +16900,34 @@ async function mount(doc) {
   /* the two strokes of the X from the cross's fraction: the first over its first half, the second over the second */
   const chipStrokes = (f) => [chip01(f * 2), chip01(f * 2 - 1)];
 
+  /* P70 T1: does this chip LAND AS A STAMP? Only the stamp FORM takes the arrival (the compiler refuses it anywhere else,
+     by name); a glyph chip, flow's node chips and the count array keep chipLand whatever they carry. */
+  const chipStamped = (sp) => !!sp && sp.form === "stamp" && sp.arrive === "stamp";
+
+  /* THE STAMP ARRIVAL on a chip (P70 T1; E99 s87): the pose at t - at is `stampXf`'s, with no dial of the chip's own -
+     the scale comes down from STAMP_ARRIVAL.FROM in area space and is exactly 1 from STAMP_LAND.tc (0.1542 s), the free
+     rotation overshoots and rests at LAND_DEG, off-square, the ink runs INK [1, 0.86], the opacity rides FADE, and the
+     impact ring is `stampRing` on its split curves (a multiplier of the chip's own radius, null before the contact and
+     once its life is spent: never held). The ring's peak and the approach are the compiler's fit, the dock stamp's own
+     law (`ring_to` / `from_to`: stamp_fit against ring_obstacles, round the mark AND its label), else the source's
+     RING_TO / FROM - capped there, never clipped here. The exit the landed mark owes (E50) is `stampExit`, run INSIDE the
+     chip's `dur` - it begins EXIT_S before the window closes, so the species leaves on its own curve and is gone at
+     at + dur; the ring is never drawn once the exit has begun. `ink` is carried for the record: a chip stamp has no
+     contact shadow for the pressure to darken, and a wash over the art is what the dock's own port refuses. */
+  const chipStampPose = (sp, t) => {
+    const fit = Object.assign({}, Number.isFinite(+sp.ring_to) && +sp.ring_to > 0 ? { RING_TO: +sp.ring_to } : {},
+      Number.isFinite(+sp.from_to) && +sp.from_to >= 1 ? { FROM: +sp.from_to } : {});   /* ... the approach it comes down from */
+    const at = +sp.at, sx = stampXf(CHIP_STAMP.MASS, t - at, fit);
+    const out = at + (Number.isFinite(+sp.dur) ? +sp.dur : 0) - STAMP_ARRIVAL.EXIT_S, leaving = t > out;
+    const ex = leaving ? stampExit(t - out) : 0;
+    return { u: sx.u, scale: sx.scale, rot: sx.rot, off_deg: sx.off_deg, dx: sx.x, dy: sx.y, alpha: sx.alpha, theta: sx.theta,
+             ink: sx.ink, fade: sx.opacity * (1 - ex), exit: ex, ring: leaving ? null : sx.ring, phase: sx.phase,
+             cross: 0, strokes: [0, 0], dim: 1 };
+  };
+
   /* ONE ENTRY: everything the painter draws at t, from the declaration alone. */
   const chipPose = (sp, t, o = {}) => {
+    if (chipStamped(sp)) return chipStampPose(sp, t);
     const P = Object.assign({}, CHIP, o), land = chipLand(t, +sp.at, P), cross = chipCrossF(sp, t, P);
     return { u: land.u, scale: land.scale, dy: land.dy, fade: land.fade,
              cross, strokes: chipStrokes(cross), dim: 1 - (1 - P.DIM) * cross };
@@ -16323,27 +16975,69 @@ async function mount(doc) {
     const requested = chipStampSize(sp.size);
     const side = Math.min(requested, b.w > 0 ? b.w : requested, b.h > 0 ? b.h : requested);
     const s = pose.scale * ix.scale;
-    const g = el("g", "chipstamp", svg, { opacity: pose.fade.toFixed(3),
-      transform: "translate(" + (cx + ix.dx).toFixed(1) + " " + (cy + pose.dy + ix.dy).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
+    const stamped = chipStamped(sp);
+    const g = stamped ? chipStampGroup(ctx, pose, ix, cx, cy, side, s)
+      : el("g", "chipstamp", svg, { opacity: pose.fade.toFixed(3),
+        transform: "translate(" + (cx + ix.dx).toFixed(1) + " " + (cy + pose.dy + ix.dy).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
+    const off = stamped ? chipStampPaint(sp, side).off : [0, 0];   /* the art about its PAINTED centre, the group's origin */
     el("image", "chipstampart", g, {
-      x: (-side / 2).toFixed(1), y: (-side / 2).toFixed(1), width: side.toFixed(1), height: side.toFixed(1),
+      x: (-side / 2 - off[0]).toFixed(1), y: (-side / 2 - off[1]).toFixed(1), width: side.toFixed(1), height: side.toFixed(1),
       href: src, preserveAspectRatio: "xMidYMid meet",
     });
     if (sp.label) {
       const lines = chipStampLabelLines(sp.label);
+      const L = chipStampLabelType(stamped);
       const lab = el("text", "chipstamplab", g, {
-        x: 0, y: (side / 2 + CHIP_STAMP.LABEL_GAP).toFixed(1), "text-anchor": "middle",
-        style: "font-family:Kalam,cursive;font-size:" + CHIP_STAMP.LABEL_SIZE + "px;font-weight:700;fill:" + chipStampInk(sp.ink)
+        x: stamped ? (-off[0]).toFixed(1) : 0, y: (side / 2 - off[1] + L.gap).toFixed(1), "text-anchor": "middle",
+        style: "font-family:Kalam,cursive;font-size:" + L.size + "px;font-weight:700;fill:" + chipStampInk(sp.ink)
           + ";paint-order:stroke;stroke:" + chipStampInk(sp.ink === "charcoal" ? "cream" : "charcoal")
           + ";stroke-width:4px;stroke-linejoin:round",
       });
       if (lines.length > 1) {
         lines.forEach((line, index) => {
-          const ts = el("tspan", "", lab, { x: 0, dy: index ? CHIP_STAMP.LABEL_LINE_H : 0 });
+          const ts = el("tspan", "", lab, { x: stamped ? (-off[0]).toFixed(1) : 0, dy: index ? L.line : 0 });
           ts.textContent = line;
         });
       } else lab.textContent = lines[0];
     }
+  }
+
+  /* P70 T1: the label's type - the floor under the stamp arrival (LABEL_FLOOR, the gap and the line step scaled with it),
+     today's LABEL_SIZE otherwise, written exactly as before */
+  const chipStampLabelType = (stamped) => {
+    if (!stamped) return { size: CHIP_STAMP.LABEL_SIZE, gap: CHIP_STAMP.LABEL_GAP, line: CHIP_STAMP.LABEL_LINE_H };
+    const k = CHIP_STAMP.LABEL_FLOOR / CHIP_STAMP.LABEL_SIZE;
+    return { size: CHIP_STAMP.LABEL_FLOOR, gap: +(CHIP_STAMP.LABEL_GAP * k).toFixed(2), line: +(CHIP_STAMP.LABEL_LINE_H * k).toFixed(2) };
+  };
+
+  /* P70 T1: the stamped chip's PAINTED box in its side x side square - the compiler's `paint` [x0, y0, x1, y1] (fractions of
+     the square: the UNION of the cutout's alpha box and the label's box, so it may run past [0, 1]), else the whole
+     square. `off` is that box's centre offset from the square's centre - the group turns about it - and `r` its
+     half-diagonal: the ring's base radius, as the dock's is, so the ring circles the mark and its name at every angle. */
+  const chipStampPaint = (sp, side) => {
+    const p = Array.isArray(sp.paint) && sp.paint.length === 4 && sp.paint.every((v) => Number.isFinite(+v)) ? sp.paint.map(Number) : [0, 0, 1, 1];
+    return { off: [side * ((p[0] + p[2]) / 2 - 0.5), side * ((p[1] + p[3]) / 2 - 0.5)],
+             r: 0.5 * Math.hypot(side * (p[2] - p[0]), side * (p[3] - p[1])) };
+  };
+
+  /* P70 T1: the stamped chip's group and its impact ring. The ring is drawn FIRST, in the species layer under the mark,
+     radiating from the contact point (the painted centre on the surface) at the art's own radius x ring.r - it does not
+     ride the mark's scale, turn or dip. The group carries the mark's pose as the dock's `stopCss` writes it: translate
+     (the receiver's dip), the free rotation, the clamped scale, the hit's squash frame; about the painted centre. */
+  function chipStampGroup(ctx, pose, ix, cx, cy, side, s) {
+    const { sp, svg, el, sc } = ctx;
+    const P = chipStampPaint(sp, side), pcx = cx + P.off[0] + ix.dx, pcy = cy + P.off[1] + ix.dy;
+    if (pose.ring) {
+      const ledger = !!(sc && sc.world && sc.world.kind === "ledger");
+      el("circle", "chipstampring", svg, { cx: pcx.toFixed(1), cy: pcy.toFixed(1), r: (P.r * pose.ring.r).toFixed(1), fill: "none",
+        stroke: ledger ? CHIP_STAMP.RING_INK.ledger : CHIP_STAMP.RING_INK.ground, "stroke-width": pose.ring.width.toFixed(2),
+        opacity: pose.ring.alpha.toFixed(3) });
+    }
+    const a = Math.abs(pose.alpha || 0), th = (pose.alpha || 0) < 0 ? (pose.theta || 0) + Math.PI / 2 : (pose.theta || 0);
+    const sq = a > 1e-6 ? " matrix(" + squashMatrix(th, a).map((v) => v.toFixed(4)).join(" ") + " 0 0)" : "";
+    return el("g", "chipstamp", svg, { opacity: pose.fade.toFixed(3),
+      transform: "translate(" + pcx.toFixed(1) + " " + (pcy + (pose.dy || 0)).toFixed(1) + ") rotate(" + pose.rot.toFixed(2)
+        + ") scale(" + s.toFixed(4) + ")" + sq });
   }
 
   /* THE PAINTER. ctx is the template's species context (see SPECIES_PAINTERS in the player): the declaration,
@@ -19862,6 +20556,7 @@ async function mount(doc) {
       pageContact.style.filter = "blur(" + (cs.blur * 3).toFixed(1) + "px)";
       worldAnswer.y += thr.ground + thr.follow; worldAnswer.x += thr.shake.x; worldAnswer.y += thr.shake.y;
     } else if (pageContact) pageContact.style.opacity = "0";
+    for (const k in DOCK_LIVE) delete DOCK_LIVE[k];   /* P69 T65: this frame's docks only */
     for (let s = 0; s < 2; s++) {
       const d = live.find((x) => x.slot === s && !isPressDock(x));   /* P50 T3: a press card is mounted by paintPress, not by a slot */
       const el = docks[s];
@@ -19893,6 +20588,11 @@ async function mount(doc) {
       el.style.width = G ? G.w.toFixed(2) + "px" : "";
       el.style.left = G ? G.x.toFixed(2) + "px" : "";
       el.style.top = G ? G.y.toFixed(2) + "px" : "";
+      /* P69 T65: a ring on this dock reads its box - the PLACED box at this t (the contact shadow's own, R26-58: a cold
+         seek mounts the image in this very frame, before it has decoded, so the layout's height is not yet the card's),
+         else the element as laid out. It leaves on the dock's leave: past its exit the dock is not here. */
+      if (t < d.exit) DOCK_LIVE[d.slide] = { el, prop: dockIsProp(d.slide), paint: d.paint,
+        box: G && d.place && d.place.w > 0 && d.place.h > 0 ? { x: G.x, y: G.y, w: G.w, h: G.w * d.place.h / d.place.w } : null };
 
       /* Card settle — the whole entrance. The document is simply present on
          the card; no mask, no drawing hand. Reference timing: a 0.75s

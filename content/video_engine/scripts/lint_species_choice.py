@@ -73,8 +73,8 @@ _TURNS = re.compile(TURNS_RE, re.I)
 # What the map lists as BUILT for each act (SPECIES-BY-SENTENCE.md s1-s2) ...
 ACT_SPECIES = {
     "QUOTES": ("record dock", "read->park"),
-    "RANKS": ("bars page", "callout", "burst"),
-    "COMPARES": ("line page", "tiers page", "build_to", "chart_to:rescale", "chart_to:extend", "figure"),   # P50 T9: N small multiples on one shared x - the same quantity across two, three or four subjects
+    "RANKS": ("bars page", "callout", "burst", "solo"),   # P69 T37: ONE bar named in a field - the rest dim (A49)
+    "COMPARES": ("line page", "tiers page", "build_to", "chart_to:rescale", "chart_to:extend", "figure", "solo"),   # P69 T37: the sentence narrows to ONE series (A12);   # P50 T9: N small multiples on one shared x - the same quantity across two, three or four subjects
     "DIVIDES": ("share page", "peel", "treemap page", "cross", "explode", "member"),   # P50 T6: the census, and the X's on its named subset; P69 T45: who is in ONE total, a tile on each name
     "NAMES": ("trace", "light", "arc", "stamp"),   # P50 T5: the vector map ships - a country lights, an arc crosses, a figure stamps
     "EXPLAINS": ("note", "plate use=bridge", "chip", "flow"),
@@ -275,6 +275,7 @@ PROPOSE_FILL = {
     "spread": (("from", "the series index the gap starts at"), ("to", "the second series' index (or `to_rule`)")),
     B.SPECIES_SPAN: (("from", _EDGE), ("to", _EDGE), ("label", "the stretch of time's own name")),
     B.SPECIES_LIT_STRETCH: (("from", _EDGE + "; the light leaves here"), ("to", _EDGE + "; ... and lands here")),
+    B.SPECIES_SOLO: (("series", "the ONE series the sentence names (a line page) - or `bar`, the ONE bar (a bars page)"),),
     B.SPECIES_CHIP: (("icon", "a SOURCED glyph under assets/icons"), ("label", "the thing the chip stands for")),
     B.SPECIES_FLOW: (("nodes", "2-6 {id, icon, label}"), ("edges", "the arrows, by node id")),
     B.SPECIES_CROSS: (("cells", "the treemap cells' own labels"), ("text", "the crossed share, written as a number")),

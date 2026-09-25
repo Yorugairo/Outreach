@@ -210,3 +210,125 @@ test("the stamp fails closed when the approved raster URI is absent", () => {
     hash: () => .5, idle: () => ({ scale: 1, dx: 0, dy: 0 }), seed: 1, si: 0 });
   assert.equal(made.length, 0);
 });
+
+// ---------------------------------------------------------------- P70 T1: the stamp form lands AS A STAMP (arrive: "stamp")
+// E99 s87's arrival on the chip's opt-in raster form: the pose is stopaction's `stampXf`, every motion number STAMP_ARRIVAL's.
+import * as CHIPMOD from "../../scripts/species/chip.mjs";
+import { STAMP_ARRIVAL, STAMP_LAND, STAMP_TURN, stampXf, stampRing, stampExit } from "../../scripts/kinetics/stopaction.mjs";
+
+const stampForm = (o = {}) => Object.assign({ kind: "chip", form: "stamp", at: 4, dur: 6, size: 260, _catalogue: "icons",
+  icon: "prop-icon-gpu-ai-accelerator-v1", label: "NVIDIA", target: { kind: "point", x: 0.5, y: 0.5 } }, o);
+// today's pose, written out from the law this slice must not move (chipLand + chipCrossF), for the byte-identity check
+const springPose = (sp, t) => {
+  const land = chipLand(t, +sp.at), cross = chipCrossF(sp, t);
+  return { u: land.u, scale: land.scale, dy: land.dy, fade: land.fade, cross, strokes: chipStrokes(cross), dim: 1 - (1 - CHIP.DIM) * cross };
+};
+const stub = () => {
+  const made = [];
+  const el = (tag, cls, parent, at) => { const e = { tag, cls, at: at || {}, kids: [], textContent: "", setAttribute(k, v) { this.at[k] = v; } };
+    made.push(e); if (parent && parent.kids) parent.kids.push(e); return e; };
+  return { made, el };
+};
+const paintAt = (sp, t, sc = { world: { kind: "ledger" } }) => {
+  const { made, el } = stub();
+  paintChip({ sp, t, sc, svg: { kids: [] }, el, A: { ["prop:" + sp.icon]: "data:image/png;base64,approved" },
+    resolveTarget: () => ({ x: 960, y: 540, w: 0, h: 0 }), hash: () => 0.5, idle: () => ({ scale: 1, dx: 0, dy: 0 }), seed: 1, si: 0 });
+  return made;
+};
+
+test("P70 T1: arrive stamp on the stamp form - the pose at t - at IS stampXf's (scale, turn, ink, fade, ring)", () => {
+  assert.equal(typeof CHIPMOD.chipStampPose, "function", "chip.mjs exports the stamp pose");
+  const sp = stampForm({ arrive: "stamp" });
+  for (let i = 0; i <= 120; i++) {
+    const t = sp.at + i * 0.01, ts = t - sp.at, p = chipPose(sp, t), sx = stampXf("ink", ts);   // the painter reads t - at
+    assert.ok(near(p.scale, sx.scale, 1e-12), `scale at ${ts}`);
+    assert.ok(near(p.rot, sx.rot, 1e-12), `rot at ${ts}`);
+    assert.ok(near(p.ink, sx.ink, 1e-12), `ink at ${ts}`);
+    assert.ok(near(p.fade, sx.opacity, 1e-12), `fade at ${ts}`);
+    assert.deepEqual(p.ring, stampRing(ts), `ring at ${ts}`);
+  }
+  assert.ok(near(chipPose(sp, sp.at).scale, STAMP_ARRIVAL.FROM, 1e-12), "it comes down from 2.1x");
+  for (const ts of [STAMP_LAND.tc + 1e-9, 0.2, 0.5, 2]) assert.equal(chipPose(sp, sp.at + ts).scale, 1, `exactly 1 from tc (${ts})`);
+  assert.ok(chipPose(sp, sp.at + STAMP_LAND.tc - 0.01).scale > 1, "... and not before");
+  const rest = chipPose(sp, sp.at + STAMP_TURN.ts + 0.05);
+  assert.ok(near(rest.rot, STAMP_ARRIVAL.LAND_DEG, 0.05) && rest.rot !== 0, "rests at LAND_DEG, off-square");
+  let low = 0; for (let i = 0; i <= 400; i++) low = Math.min(low, chipPose(sp, sp.at + i / 400).rot);
+  assert.ok(low < STAMP_ARRIVAL.LAND_DEG - 1, `the free rotation overshoots its rest (${low.toFixed(2)})`);
+  assert.equal(chipPose(sp, sp.at).ink, STAMP_ARRIVAL.INK[0]);
+  assert.ok(near(chipPose(sp, sp.at + 1).ink, STAMP_ARRIVAL.INK[1], 1e-12), "the ink eases back to 0.86");
+  assert.equal(chipPose(sp, sp.at).ring, null, "no ring before the contact");
+  assert.equal(chipPose(sp, sp.at + STAMP_ARRIVAL.SHOCK_S + 0.01).ring, null, "and never held past its life");
+});
+
+test("P70 T1: the ring's peak is the compiler's fitted ring_to, else the source's RING_TO", () => {
+  const ts = (4 + 0.3) - 4, fitted = chipPose(stampForm({ arrive: "stamp", ring_to: 1.4 }), 4 + 0.3).ring;
+  assert.deepEqual(fitted, stampRing(ts, { RING_TO: 1.4 }));
+  assert.ok(fitted.r < stampRing(ts).r);
+  assert.deepEqual(chipPose(stampForm({ arrive: "stamp" }), 4 + 0.3).ring, stampRing(ts));
+});
+
+test("P70 T1: the approach comes down from the compiler's fitted from_to, else the source's FROM - capped, never clipped", () => {
+  const fitted = stampForm({ arrive: "stamp", from_to: 1.6 });
+  assert.ok(near(chipPose(fitted, fitted.at).scale, 1.6, 1e-12), "the fall starts at the fitted scale");
+  for (let i = 0; i <= 60; i++) {
+    const t = fitted.at + i * 0.005;
+    assert.ok(near(chipPose(fitted, t).scale, stampXf("ink", t - fitted.at, { FROM: 1.6 }).scale, 1e-12), `at ${t}`);
+  }
+  assert.equal(chipPose(fitted, fitted.at + STAMP_LAND.tc + 1e-9).scale, 1, "and lands at the same contact");
+  assert.ok(near(chipPose(stampForm({ arrive: "stamp" }), 4).scale, STAMP_ARRIVAL.FROM, 1e-12));
+});
+
+test("P70 T1: the exit the landed mark owes runs INSIDE dur, on stampExit, and the ring is gone once it begins", () => {
+  const sp = stampForm({ arrive: "stamp" }), out = sp.at + sp.dur - STAMP_ARRIVAL.EXIT_S;
+  assert.equal(chipPose(sp, out).fade, 1, "at rest until the exit begins");
+  for (const u of [0.25, 0.5, 0.75]) {
+    const t = out + u * STAMP_ARRIVAL.EXIT_S;
+    assert.ok(near(chipPose(sp, t).fade, 1 - stampExit(t - out), 1e-12), `exit at ${u}`);
+  }
+  assert.ok(near(chipPose(sp, sp.at + sp.dur).fade, 0, 1e-12), "gone when the window closes");
+  const short = stampForm({ arrive: "stamp", dur: 0.5 });   // an exit that begins before the ring's life is spent
+  assert.equal(chipPose(short, short.at + 0.2).ring, null, "no ring once the exit has begun");
+});
+
+test("P70 T1: WITHOUT arrive the pose is today's over 200 instants - the stamp form, the glyph chip, and a glyph chip that carries arrive", () => {
+  const cases = [stampForm(), chip(), chip({ cross_at: 7 }), chip({ arrive: "stamp" }), stampForm({ arrive: "throw" }), stampForm({ ring_to: 1.2 })];
+  for (const sp of cases) for (let i = 0; i < 200; i++) {
+    const t = sp.at - 0.5 + i * 0.05;
+    assert.deepEqual(chipPose(sp, t), springPose(sp, t), `${JSON.stringify(sp)} at ${t}`);
+  }
+});
+
+test("P70 T1: the painter lands a stamped chip with its ring UNDER the mark, turned, and its label at the s90 floor", () => {
+  assert.equal(CHIP_STAMP.LABEL_FLOOR, 59.08, "the phone floor [DERIVED: ledger_page.CARD_TYPE_PX, 12 * 1920 / 390]");
+  const sp = stampForm({ arrive: "stamp", paint: [0, 0.1, 1, 0.9] });
+  const mid = paintAt(sp, sp.at + 0.254);   // contact + 0.10 s: the ring radiating, the rotation still off its rest
+  assert.deepEqual(mid.map((e) => e.tag), ["circle", "g", "image", "text"]);
+  const [ring, g, art, lab] = mid;
+  assert.equal(ring.cls, "chipstampring");
+  assert.equal(ring.at.stroke, "#F2F2F2", "chalk on the ledger page");
+  assert.equal(ring.at.fill, "none");
+  const rg = stampRing(0.254), r0 = 0.5 * Math.hypot(260, 260 * 0.8);
+  assert.equal(ring.at.r, (r0 * rg.r).toFixed(1), "the art's own PAINTED radius x the ring's multiplier");
+  assert.equal(ring.at["stroke-width"], rg.width.toFixed(2));
+  assert.equal(ring.at.opacity, rg.alpha.toFixed(3));
+  assert.equal(ring.at.cx, "960.0");
+  assert.equal(ring.at.cy, "540.0", "about the painted centre - here the square's own");
+  assert.match(g.at.transform, /^translate\(960\.0 540\.\d\) rotate\(-10\.39\) scale\(1\.0000\)$/);
+  assert.equal(art.cls, "chipstampart");
+  assert.match(lab.at.style, /font-size:59\.08px/);
+  assert.equal(lab.at.y, (130 + 28 * 59.08 / 48).toFixed(1), "the gap scales with the floor");
+  const plate = paintAt(sp, sp.at + 0.254, { world: { asset_id: "plate-plain" } });
+  assert.equal(plate[0].at.stroke, "#25313C", "charcoal on any other ground");
+  const two = paintAt(stampForm({ arrive: "stamp", label: "NVIDIA\nCHIPS" }), 4 + 2);
+  assert.equal(two.filter((e) => e.tag === "tspan")[1].at.dy, +(52 * 59.08 / 48).toFixed(2), "and the line step");
+  assert.deepEqual(paintAt(sp, sp.at + 2).map((e) => e.tag), ["g", "image", "text"], "the ring is never held");
+});
+
+test("P70 T1: a stamp-form chip WITHOUT arrive paints exactly what it painted - 48 px label, no ring, no turn", () => {
+  const made = paintAt(stampForm(), 4.2);
+  assert.deepEqual(made.map((e) => e.tag), ["g", "image", "text"]);
+  assert.doesNotMatch(made[0].at.transform, /rotate/);
+  assert.match(made[2].at.style, /font-size:48px/);
+  assert.equal(made[2].at.y, (130 + 28).toFixed(1));
+  assert.equal(made[2].at.x, 0);
+});

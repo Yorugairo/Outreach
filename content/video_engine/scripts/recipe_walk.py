@@ -86,7 +86,7 @@ DEFAULT_EXIT = "wipe_left"   # scene_evidence_timeline.schema.json: `scene.exit`
 # A species `kind` the catalogue carries on the page_species axis (derive_seeds.py PAGE_SPECIES_KINDS).
 PAGE_SPECIES_KINDS = frozenset({"build_to", "chart_to", "retitle", "figure", "note", "bracket",
                                 "span", "spread", "peel", "relight", "undraw", "cross",
-                                "lit_stretch", "explode", "member"})   # P69 T47: T36's card is page_species:lit_stretch - the walk named it species:
+                                "lit_stretch", "explode", "member", "solo", "unsolo"})   # P69 T47: T36's card is page_species:lit_stretch - the walk named it species:
 
 # Same-instant order: what a viewer meets first (derive_seeds.py KIND_RANK, widened for the classes it folded).
 CLS_RANK = {"cut": 0, "world": 1, "page_enter": 2, "idle": 3, "dock_enter": 5, "arrival": 6,
@@ -163,6 +163,14 @@ def chart_form(block: Mapping[str, Any]) -> str | None:
     if not isinstance(chart, Mapping):
         return None
     return next((form for form in CHART_FORMS if form in chart), None)
+
+
+def is_stamped_chip(sp: Any) -> bool:
+    """P70 T1: a chip that LANDS AS A STAMP - the stamp form carrying `arrive: "stamp"` (the only arrival it takes). The
+    ONE predicate: the walk's arrival, the motion gate's landing (`gate_motion_density._stamped_chips`) and the
+    compiler's fit (`build_scene_timeline_f.chip_is_stamped`) all read it, so they can never disagree."""
+    return (isinstance(sp, Mapping) and sp.get("kind") == "chip" and sp.get("form") == "stamp"
+            and sp.get("arrive") == "stamp")
 
 
 def species_card(kind: str) -> str:
@@ -282,6 +290,9 @@ def events(timeline: Mapping[str, Any], options: Mapping[str, str] | None = None
             cls = "page_species" if card.startswith("page_species:") else "species"
             at = float(t0 if sp.get("at") is None else sp["at"])
             add(at, cls, card, ref=(sp.get("target") or {}).get("kind"), i=i, scene=sid)
+            if is_stamped_chip(sp):   # P70 T1: the stamp form LANDS AS A STAMP - its arrival, as a dock's, so
+                # `authoring.audio.fired` pairs a landing cue to its contact (s116); the gate's own condition
+                add(at, "arrival", "arrival:stamp", ref=sp.get("icon"), i=i, scene=sid)
             if kind == "chart_to" and sp.get("to"):
                 add(at, "chart_to", f"chart_to:{sp['to']}", i=i, scene=sid)
             if sp.get("idle"):

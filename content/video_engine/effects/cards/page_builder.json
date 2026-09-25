@@ -452,6 +452,205 @@
       }
     },
     {
+      "id": "page_builder:bars+segments",
+      "axis": "page_builder",
+      "token": "bars+segments",
+      "title": "The stacked bar of values",
+      "aliases": [
+        {
+          "name": "stacked bar",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3351"
+        },
+        {
+          "name": "a stack of values",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3351"
+        },
+        {
+          "name": "segments",
+          "source": "content/video_engine/scripts/ledger_page.py"
+        }
+      ],
+      "does": "A bars page whose bar is STACKED: its parts stand bottom-up from zero inside it, each true to its value in the page's one key's order and colours, each part's figure written, the total over the bar.",
+      "when": "the sentence is what a total is MADE OF (paid by revenue vs borrowed; what capex took vs what was left) - s109's honesty tests: every part true to its value, every figure and the total written (E99 s110 (1), s100)",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:3351",
+      "author": {
+        "key": "series object bar datum \"segments\": [{\"name\", \"value\", \"value_string\"?, \"color\"?}] (2-4) on a bars page (ledger:<series-id>:bars); the bar's own \"value\" is the total",
+        "example": "{\"label\": \"Outlays\", \"value\": 6812, \"segments\": [{\"name\": \"Paid by revenue\", \"value\": 4845}, {\"name\": \"Borrowed\", \"value\": 1967}]}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py",
+        "check": "none"
+      },
+      "phases": [
+        {
+          "name": "the stack grows with its bar",
+          "does": "each part mirrors its bar every frame (grow, fade, drain, park) - one clock, the bars law's",
+          "trigger": "the page build",
+          "dials": {
+            "SEP_PX": "2"
+          }
+        },
+        {
+          "name": "the figures and the key land",
+          "does": "each part's figure (inside, shrunk to FIG_MIN, else on a leader) and the key land as the bar's value does (0.9-1.0 of its grow)",
+          "trigger": "the bar's own value landing",
+          "dials": {
+            "PAD_PX": "6",
+            "FIG_MIN": "0.8",
+            "LEAD_PX": "18"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "E99 s110 (1) a stack of values",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:3351",
+          "tie": "recorded"
+        },
+        {
+          "source": "E99 s100 area / proportion honesty",
+          "became": "the parts true to their values, the figures written",
+          "record": "docs/portable/OPERATOR-RULINGS.md:3331",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "segments",
+          "means": "a bar's `segments` [{name, value, value_string?, color?}] (2-4) summing to its written total; a mismatch, a negative or zero part, two units on one axis are refused",
+          "source_set": "SEGMENTS_KEY"
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpSegBuild",
+        "also": [
+          "lpSegRects",
+          "lpSegKey",
+          "lpSegPaint",
+          "LPSEG"
+        ],
+        "note": "buildLedgerBars lays each part after its bar; ledger_page._validate_segments / segment_fit_warnings; build_scene_timeline_f.check_segments"
+      },
+      "doctrine": [
+        "E99 s110",
+        "E99 s100",
+        "E99 s106",
+        "E53 s2"
+      ],
+      "status": "wired",
+      "implicit": true,
+      "proof": {
+        "golden": "stacked-outlays",
+        "test": "content/video_engine/tests/test_stacked_combo.py::test_each_part_stands_true_to_its_value_bottom_up_inside_its_bar",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "implicit: a bars object whose bar carries `segments` is this page (no plate token of its own)"
+      }
+    },
+    {
+      "id": "page_builder:combo+segments",
+      "axis": "page_builder",
+      "token": "combo+segments",
+      "title": "Stacked bars and a line, each on its own labelled scale",
+      "aliases": [
+        {
+          "name": "stacked-bar-plus-line combo",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3351"
+        },
+        {
+          "name": "stacked combo",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3351"
+        }
+      ],
+      "does": "The combo with STACKED bars under ONE line: the line on the stacks' scale when its unit is theirs, else on its own right axis on the same zero, named and written in its colour; the line keyed with the parts.",
+      "when": "financial metrics against a business metric - the stacks say what the money is made of, the line what it means (E99 s110 (1)); a second unit takes its own labelled axis only on s102's conditions",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:3351",
+      "author": {
+        "key": "series object with `bars` carrying `segments` + ONE `series` line; `unit` (the stacks), `ylabel`; a line in another unit names `line_unit` and `line_label` (its right axis)",
+        "example": "{\"unit\": \"$\", \"ylabel\": \"US$ billions per quarter\", \"line_unit\": \"%\", \"line_label\": \"capex, % of cash\"}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py",
+        "check": "none"
+      },
+      "phases": [
+        {
+          "name": "the stacks",
+          "does": "the stacked bars build in reading order, each total and part figure landing with its bar",
+          "trigger": "the page build (COMBO_BARS)",
+          "dials": {
+            "SEP_PX": "2"
+          }
+        },
+        {
+          "name": "the line",
+          "does": "the line draws on its own scale at one speed; each label, in its axis's unit, takes the first clear place by its point - never on a part that does not hold it",
+          "trigger": "the page build (COMBO_LINE)",
+          "dials": {
+            "KEY_LINE_W_PX": "5"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "E99 s110 (1) the stacked-bar-plus-line combo",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:3351",
+          "tie": "recorded"
+        },
+        {
+          "source": "E99 s102 a second axis",
+          "became": "the line's own labelled right axis, in its colour",
+          "record": "docs/portable/OPERATOR-RULINGS.md:3335",
+          "tie": "recorded"
+        },
+        {
+          "source": "P47 T9 the combo's line_unit axis",
+          "became": "the right axis it extends",
+          "record": "docs/content-video-engine/CAPABILITIES.md:77",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "line_label",
+          "means": "the line's OWN right axis's name (required when `line_unit` differs from `unit`; refused when they match - one unit is one axis)",
+          "source_set": "LINE_LABEL_KEY"
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildLedgerCombo",
+        "also": [
+          "lpSegBuild",
+          "lpSegClearLabels",
+          "lpSegPaint"
+        ],
+        "note": "ledger_page._stacked_combo_errors / stacked_line_own_axis; the line's labels step clear (lpSegClearLabels)"
+      },
+      "doctrine": [
+        "E99 s110",
+        "E99 s102",
+        "E99 s100",
+        "E28"
+      ],
+      "status": "wired",
+      "implicit": true,
+      "proof": {
+        "golden": "stacked-combo-funding",
+        "test": "content/video_engine/tests/test_stacked_combo.py::test_the_combos_line_takes_its_own_labelled_axis_in_its_own_colour",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "implicit: a bars + one line object whose bars carry `segments` is this page"
+      }
+    },
+    {
       "id": "page_builder:object",
       "axis": "page_builder",
       "token": "object",

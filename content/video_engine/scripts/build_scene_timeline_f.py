@@ -52,6 +52,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import build_render_f as R  # noqa: E402  (asset resolver + doc-29 durations)
 import gate_motion_density as MG  # noqa: E402  (E21 motion gate -> GATES-MOTION.md)
 import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, doc 29 s9.26)
+import series_inks as SINKS  # noqa: E402  (P69 T37b: a series name in its ink under the text floor WARNs)
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
 LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
@@ -199,6 +200,38 @@ STAMP_INKS = ("cream", "charcoal")
 STAMP_SIZE_MIN, STAMP_SIZE_MAX, STAMP_SIZE_DEFAULT = 180, 420, 260  # stage px
 STAMP_PROP_SIZE_MAX = 700  # approved finance-prop cutouts can occupy a full narrative beat
 STAMP_MAX_LINES = 3
+# P70 T1 (was P69 T12; E99 s87): the stamp FORM may LAND by the stamp arrival - `arrive: "stamp"` poses the art with
+# kinetics/stopaction.mjs `stampXf` (species/chip.mjs `chipStampPose`) instead of the chip's spring. The stamp form's
+# only; absent is the spring landing it always had, byte for byte.
+CHIP_ARRIVALS = ("stamp",)
+CHIP_STAMP_LABEL_SIZE = 48     # species/chip.mjs CHIP_STAMP.LABEL_SIZE - the label a stamp-form chip draws WITHOUT the arrival
+CHIP_STAMP_LABEL_FLOOR = round(LPG.CARD_TYPE_PX, 2)   # 59.08: CHIP_STAMP.LABEL_FLOOR, E99 s90's phone floor, drawn under `arrive: "stamp"`
+CHIP_STAMP_MASS = "ink"        # CHIP_STAMP.MASS: a stamped chip lands at the engine's own stamp mass
+STAMP_EXIT_S = 16 / 30         # kinetics/stopaction.mjs STAMP_ARRIVAL.EXIT_S (badge-stamp.tsx:62): the exit a landed mark owes
+CHIP_STAMP_MIN_DUR_S = MG.STAMP_CONTACT_S + STAMP_EXIT_S   # 0.6875: a stamped chip's landing and its owed exit, inside `dur`
+# THE LABEL'S BOX (the P70 T1 send-back: the ring hugs the mark AND its name, and the approach clears both). The label is
+# Kalam 700 at CHIP_STAMP_LABEL_FLOOR, MEASURED on the rendered face (scratchpad/p70-t1/logs/advance-probe.json: each
+# glyph ten times, `getComputedTextLength` / 10, in em): a word's advance is the sum of its glyphs' to 0.02 px (NVIDIA
+# 181.78 estimated, 181.77 drawn - no kerning), and its drawn box overhangs that by up to 0.10 em (BEAR MARKET +5.78 px).
+# The font box stands 1.07 em above the baseline and 0.54 em below it. A glyph the table does not know takes the widest.
+CHIP_STAMP_LABEL_ADVANCE_EM = {
+    ' ': 0.385, '!': 0.478, '"': 0.484, '#': 0.7799, '$': 0.5919, '%': 0.991, '&': 0.786, "'": 0.22, '(': 0.4779,
+    ')': 0.53, '*': 0.375, '+': 0.5999, ',': 0.262, '-': 0.531, '.': 0.237, '/': 0.282, '0': 0.513, '1': 0.302,
+    '2': 0.5829, '3': 0.547, '4': 0.545, '5': 0.506, '6': 0.542, '7': 0.472, '8': 0.59, '9': 0.5059, ':': 0.246,
+    ';': 0.306, '<': 0.4749, '=': 0.672, '>': 0.6159, '?': 0.608, '@': 1.078, 'A': 0.63, 'B': 0.6239, 'C': 0.617,
+    'D': 0.6659, 'E': 0.551, 'F': 0.5419, 'G': 0.597, 'H': 0.6509, 'I': 0.309, 'J': 0.486, 'K': 0.602, 'L': 0.546,
+    'M': 0.7559, 'N': 0.631, 'O': 0.6189, 'P': 0.5489, 'Q': 0.659, 'R': 0.601, 'S': 0.5519, 'T': 0.544, 'U': 0.5949,
+    'V': 0.532, 'W': 0.7849, 'X': 0.5849, 'Y': 0.561, 'Z': 0.6459, '[': 0.463, '\\': 0.5999, ']': 0.521, '^': 0.422,
+    '_': 0.6189, '`': 0.258, 'a': 0.51, 'b': 0.567, 'c': 0.489, 'd': 0.5389, 'e': 0.4879, 'f': 0.435, 'g': 0.481,
+    'h': 0.563, 'i': 0.26, 'j': 0.26, 'k': 0.4929, 'l': 0.266, 'm': 0.819, 'n': 0.5539, 'o': 0.456, 'p': 0.5379,
+    'q': 0.519, 'r': 0.3619, 's': 0.467, 't': 0.451, 'u': 0.486, 'v': 0.422, 'w': 0.71, 'x': 0.474, 'y': 0.52,
+    'z': 0.48, '{': 0.462, '|': 0.456, '}': 0.6259, '~': 0.586
+}
+CHIP_STAMP_LABEL_ADVANCE_MAX_EM = max(CHIP_STAMP_LABEL_ADVANCE_EM.values())
+CHIP_STAMP_LABEL_OVERHANG_EM = 0.10   # each side: the drawn box past the advance (measured up to 0.098 em)
+CHIP_STAMP_LABEL_ASC_EM, CHIP_STAMP_LABEL_DESC_EM = 1.08, 0.54   # the font box above / below the baseline (measured 1.07 / 0.54)
+CHIP_STAMP_LABEL_KEYLINE_PX = 2      # half the label's 4 px `paint-order: stroke` keyline, which lies outside the glyph
+CHIP_STAMP_LABEL_GAP, CHIP_STAMP_LABEL_LINE_H = 28, 52   # chip.mjs CHIP_STAMP.LABEL_GAP / LABEL_LINE_H, scaled by the floor under the arrival
 
 # P61 T8 (E93 / E94): THE OPERATOR'S OWN ICON CATALOGUE - the 44 woodblock cutouts, `review_state:
 # operator_approved`, `render_eligible: true`. A catalogued cutout is a PICTURE, not geometry, so it rides the
@@ -666,6 +699,26 @@ SPECIES_WHEN[SPECIES_LIT_STRETCH] = ("the sentence WALKS one stretch of a drawn 
                                      "is the claim, the stretch is undrawn, or the light would only sit")
 LIT_STRETCH_KEYS = ("kind", "at", "dur", "id", "from", "to", "series", "color", "comet", "panel")
 PANEL_SPECIES += (SPECIES_LIT_STRETCH,)   # P69 T36: a light travels a line on ONE panel of a panels page (`panel: <i>`; row 21)
+# P69 T37 - SOLO, THE ON-WORD ISOLATE (the Bravos harvest v2's rank 2: A12 "peers ghost, one series stays lit", 8 of 9
+# videos; A49 "one bar ignites, the rest dim"). A PAGE species: on its word every OTHER series of a line page, or every
+# other bar of a bars page, mutes to E67's 0.45 and the ONE it names keeps its ink; `unsolo` restores every mark on its
+# own word (and a verb that replaces the page releases it). Its law and painter are species/solo.mjs; this file owns its
+# grammar (`_validate_solo`) and the page it may stand on (`check_solo`). The WHENs are the use-when guide's A12
+# (BRAVOS-USE-WHEN.md:329, COMPARES, the turn, series x2+) and A49 (:189, RANKS, the turn, a ranking).
+SPECIES_SOLO, SPECIES_UNSOLO = "solo", "unsolo"
+SPECIES_KINDS += (SPECIES_SOLO, SPECIES_UNSOLO)
+PAGE_SPECIES += (SPECIES_SOLO, SPECIES_UNSOLO)
+SPECIES_WHEN[SPECIES_SOLO] = ("COMPARES / RANKS, at the turn: the sentence narrows to ONE series of several ('look at China's', "
+                              "'Chipmakers doubling') or names ONE bar in a field ('the third largest') - on the word the "
+                              "others mute to E67's dim and the named one keeps its ink; never when the comparison between "
+                              "them is the claim, or on a two-bar page (badge both)")
+SPECIES_WHEN[SPECIES_UNSOLO] = ("the sentence widens back out after a solo - the comparison is the claim again ('against the "
+                                "index', 'all of them') - and every muted series or bar restores its ink on the word; never "
+                                "without a solo before it (it restores nothing)")
+SOLO_KEYS = ("kind", "at", "dur", "series", "bar")
+UNSOLO_KEYS = ("kind", "at", "dur")
+SOLO_DUR_S = (0.2, 1.5)   # species/solo.mjs SOLO.MIN_S / MAX_S, mirrored: shorter is a flicker, longer a fade the word has left
+SOLO_BUILDERS = {"dense-line": "series", "story": "bar"}   # the two pages whose marks it re-inks: a line's series, a bars page's bars
 # P69 T49 (E99 s99: "a light that comes on as everything else STOPS is a punctuation beat - the freeze is the event") -
 # THE FREEZE BEAT. A STAGE species on any row: on its word every idle, drift and ambient life on the stage holds for
 # `dur` while ONE light comes on at the target (a datum; the box of a mark, a bar or a prop), then life resumes. Its law
@@ -1631,18 +1684,30 @@ SPECIES_TARGETS = {
 SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANELS by index, never a coordinate
 SPECIES_TARGETS[SPECIES_MEMBER] = ()   # P69 T45: a tile of a membership bar, by index - the page owns where it stands
 SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
+SPECIES_TARGETS[SPECIES_SOLO] = SPECIES_TARGETS[SPECIES_UNSOLO] = ()   # P69 T37: a solo names a series or a bar by index; the chart owns where it is
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
                                                                  # line's point, a bar), or a point / the box of a mark or a prop
 SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
                                                   # point would leave the strip's height to the painter, and the strip is the
                                                   # thing the caption has to be reconciled with (the strip law below)
 PHRASE_TARGET = "phrase"                      # P50 T3: a region INSIDE a press card - {"kind": "phrase", "dock": "<the press dock's asset id>"}.
-TARGET_KINDS_ALL = TARGET_KINDS + (PHRASE_TARGET, EMBED_TARGET) + MAP_TARGETS   # ... admitted for a CALLOUT alone, and only as the underline (E56's one exception); the
+DOCK_TARGET = "dock"                          # P69 T65 / E99 s110 (2): the THING the sentence points at - a docked card, a press card or a
+                                              # prop - {"kind": "dock", "dock": "<the dock's asset id>"[, "box": [x0, y0, x1, y1]]}
+                                              # (`box`: fractions of the card - its face; absent = the whole card, a prop's PAINTED box).
+                                              # Admitted for the two rings alone (RING_ON_DOCK_KINDS) and resolved by the player to the
+                                              # dock's box AT t (its placed box - the park, a prop's moves - else as laid out), so a card
+                                              # that parks or a prop that is moved carries its ring
+RING_ON_DOCK_KINDS = ("callout", SPECIES_RING)   # ... the hand's closed circle and the dashed form; no other species takes a dock
+DOCK_TARGET_KEYS = ("kind", "dock", "box")
+RING_POINTS_KEY = "points"                    # ... the phrase of the take that points at THAT thing ("look at that certificate again")
+S110_RING = "E99 s110 (2)"
+TARGET_KINDS_ALL = TARGET_KINDS + (PHRASE_TARGET, EMBED_TARGET, DOCK_TARGET) + MAP_TARGETS   # ... admitted for a CALLOUT alone, and only as the underline (E56's one exception); the
                                                      # compiler resolves it to the dock's declared phrase box, the player to stage px through
                                                      # the card's LIVE geometry (a parked or stacked card moves, and the underline moves with it)
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word"),
                  PHRASE_TARGET: (),   # its one field is `dock`, a name - checked in _validate_callout, where the row's press docks are known
+                 DOCK_TARGET: (),     # ... and a dock target's are `dock` (a name) and `box` - checked in _validate_dock_ring
                  EMBED_TARGET: (),    # ... and its one field is `name`, checked below and resolved to the plate's quad at the row
                  COUNTRY_TARGET: (), MAPPOINT_TARGET: ()}   # ... and a map target's fields are MAP units, not 0..1 fractions: _validate_map_target checks them against the map's own box
 FRACTION_FIELDS = ("x", "y", "x0", "y0", "x1", "y1")   # plate coordinates as fractions of the frame, 0..1
@@ -1932,7 +1997,7 @@ def check_target_series(world: dict, row_species: list) -> None:
         if not isinstance(sp, dict):
             continue
         named = ([(f, sp.get(f)) for f in TARGET_SERIES_FIELDS if f in sp]
-                 if sp.get("kind") in SERIES_NAMING_SPECIES + (SPECIES_LIT_STRETCH,) else [])   # P69 T36: a light names its series as a span does
+                 if sp.get("kind") in SERIES_NAMING_SPECIES + (SPECIES_LIT_STRETCH, SPECIES_SOLO) else [])   # P69 T36: a light names its series as a span does (T37: and a solo)
         tgt = sp.get("target")
         if isinstance(tgt, dict) and tgt.get("kind") == "datum" and "series" in tgt:
             named.append(("target series", tgt["series"]))
@@ -2474,6 +2539,13 @@ def _validate_chip(entry: dict) -> list[str]:
     form = entry.get("form")
     if form is not None and form not in CHIP_FORMS:
         errs.append(f"chip: form {form!r} is not one of {' | '.join(CHIP_FORMS)} (absent is the sourced SVG chip)")
+    if "arrive" in entry:   # P70 T1: the stamp FORM's arrival, refused by name anywhere else
+        if form != "stamp":
+            errs.append(f"chip: arrive {entry['arrive']!r} - the stamp arrival is the stamp form's (form: \"stamp\"); "
+                        "a glyph chip lands on the badge spring")
+        elif entry["arrive"] not in CHIP_ARRIVALS:
+            errs.append(f"chip stamp: arrive {entry['arrive']!r} is not one of CHIP_ARRIVALS ({' | '.join(CHIP_ARRIVALS)}) "
+                        "- absent is the chip's spring landing")
     if form == "stamp":
         icon = entry.get("icon")
         asset = None
@@ -2712,6 +2784,55 @@ def species_icons(entry) -> list[str]:
 
 
 CALLOUT_FORMS = (UNDERLINE_FORM,)   # P50 T3: the one form a callout takes besides the ring
+# P69 T65: E56's picture refusal names the one way a picture's THING may still be ringed (s110 (2)), after its own words
+E56_DOCK_ROUTE = (f" - or, when the sentence points at the docked card or prop ITSELF, ring THAT dock "
+                  f"({{'kind': 'dock', 'dock': '<asset id>'}}, its number as the label, `points` on the phrase - {S110_RING})")
+
+
+def _unit_box(v) -> bool:
+    """[x0, y0, x1, y1], each a 0..1 fraction (never a bool), x0 < x1 and y0 < y1."""
+    if not isinstance(v, (list, tuple)) or len(v) != 4:
+        return False
+    if any(isinstance(c, bool) or not isinstance(c, (int, float)) or not 0.0 <= c <= 1.0 for c in v):
+        return False
+    return v[0] < v[2] and v[1] < v[3]
+
+
+def _validate_dock_ring(kind: str, entry: dict) -> list[str]:
+    """P69 T65 / E99 s110 (2) as code: a ring on a DOCK - "a ring may circle a picture, a card or a prop when the
+    sentence points at THAT thing ("look at that certificate again") and carries its number beside it". The two
+    conditions are the ruling's own and each is refused by name: the NUMBER (a digit in the ring's `label` - the
+    figure it writes beside the thing) and the POINTING (`points`, the phrase of the take that points at it). Whether
+    the dock is on the row, on the stage at the ring's word, and whether that word IS the phrase, is `dock_ring_targets`,
+    run where the row's docks and the take are in hand. Pure."""
+    tgt, errs = entry["target"], []
+    dock = tgt.get("dock")
+    if not isinstance(dock, str) or not dock.strip():
+        errs.append(f"{kind}: target dock must name its card or prop - {{'kind': 'dock', 'dock': '<the dock's asset id>'}}")
+    if "box" in tgt and not _unit_box(tgt["box"]):
+        errs.append(f"{kind}: target dock 'box' is the card's face as [x0, y0, x1, y1] fractions of the card "
+                    "(0..1, x0 < x1, y0 < y1); absent = the whole card")
+    for extra in sorted(set(tgt) - set(DOCK_TARGET_KEYS)):
+        errs.append(f"{kind}: target dock {extra!r} is not a dock target's (it takes {'|'.join(DOCK_TARGET_KEYS[1:])})")
+    if not re.search(r"\d", str(entry.get("label", ""))):
+        errs.append(f"{kind}: a ring on a card or a prop carries its NUMBER beside it ({S110_RING}: \"carries its number "
+                    "beside it\") - write the figure as the ring's `label`; a picture's focus with no number is a light (E56)")
+    pts = entry.get(RING_POINTS_KEY)
+    if not isinstance(pts, str) or not pts.strip():
+        errs.append(f"{kind}: a ring on a card or a prop marks what the sentence POINTS AT ({S110_RING}: \"when the "
+                    "sentence points at THAT thing\") - `points` names the phrase of the take that points at it "
+                    "(\"that certificate\"), and the ring's `at` falls on it")
+    return errs
+
+
+def _validate_ring_points(kind: str, entry: dict) -> list[str]:
+    """`points` is the dock ring's key alone - on any other target it would do nothing, and a dial that does nothing
+    is worse than no dial."""
+    tgt = entry.get("target")
+    if RING_POINTS_KEY in entry and not (isinstance(tgt, dict) and tgt.get("kind") == DOCK_TARGET):
+        return [f"{kind}: `points` is the ring-on-a-dock's pointing phrase ({S110_RING}) - it takes a dock target, "
+                f"not a {tgt.get('kind') if isinstance(tgt, dict) else tgt!r}"]
+    return []
 
 
 def _validate_callout(entry: dict, press_docks: dict | None) -> list[str]:
@@ -2738,16 +2859,21 @@ def _validate_callout(entry: dict, press_docks: dict | None) -> list[str]:
                         "a phrase is a region of a press card (P50 T3)")
         if form != UNDERLINE_FORM:
             errs.append("callout: a ring circles a NUMBER or a POINT ON A CHART (E56) - on a press card the one exception is "
-                        f'form: "{UNDERLINE_FORM}" on the quoted phrase (the squiggle law, s9.27); a ring on a card is refused')
-        return errs
+                        f'form: "{UNDERLINE_FORM}" on the quoted phrase (the squiggle law, s9.27); a ring on a card is refused'
+                        + E56_DOCK_ROUTE)
+        return errs + _validate_ring_points("callout", entry)
     if form is not None:
         return [f"callout: form {form!r} is the press card's underline (P50 T3) - it takes a phrase target, "
                 f"not a {tgt.get('kind')}"]
+    if tgt.get("kind") == DOCK_TARGET:   # P69 T65 / E99 s110 (2): the thing the sentence points at, with its number
+        return _validate_dock_ring("callout", entry)
+    if points := _validate_ring_points("callout", entry):
+        return points
     if tgt.get("kind") != "datum" and not re.search(r"\d", str(entry.get("label", ""))):
         # a datum target IS a point on a chart; a stamp whose label is a number IS the number; a ring
         # around a picture's point or region is the cheap call-out the ruling refuses - the focus there is a light
         return [f"callout: a ring circles a NUMBER or a POINT ON A CHART (E56) - this one targets a {tgt.get('kind')} "
-                f"with no numeric label; use a spotlight (the light) on a picture"]
+                f"with no numeric label; use a spotlight (the light) on a picture" + E56_DOCK_ROUTE]
     return []
 
 
@@ -2949,9 +3075,13 @@ def _validate_ring(entry: dict) -> list[str]:
         errs.append(f"ring: 'form' must be one of {'|'.join(RING_FORMS)} - the ring's dashed form is what this kind is "
                     "(the hand's closed circle is a `callout`, E56's ring, unchanged)")
     tgt = entry.get("target")
-    if isinstance(tgt, dict) and tgt.get("kind") != "datum" and not re.search(r"\d", str(entry.get("label", ""))):
+    if isinstance(tgt, dict) and tgt.get("kind") == DOCK_TARGET:   # P69 T65 / E99 s110 (2): the named thing, with its number
+        errs += _validate_dock_ring("ring", entry)
+    elif points := _validate_ring_points("ring", entry):
+        errs += points
+    elif isinstance(tgt, dict) and tgt.get("kind") != "datum" and not re.search(r"\d", str(entry.get("label", ""))):
         errs.append(f"ring: a ring circles a NUMBER or a POINT ON A CHART (E56) - this one targets a {tgt.get('kind')} "
-                    f"with no numeric label; use a spotlight (the light) on a picture")
+                    f"with no numeric label; use a spotlight (the light) on a picture" + E56_DOCK_ROUTE)
     flag = entry.get("flag")
     if flag is not None:
         if not isinstance(flag, str) or not flag.strip():
@@ -2998,6 +3128,84 @@ def _validate_lit_stretch(entry: dict) -> list[str]:
         errs.append(f"lit_stretch: {', '.join(map(repr, extra))} - a lit stretch writes nothing and takes only "
                     f"{'|'.join(LIT_STRETCH_KEYS[4:])}; the words that name the stretch are a `figure` or a `span`")
     return errs
+
+
+def _validate_solo(entry: dict) -> list[str]:
+    """P69 T37: a `solo` names ONE mark - `series` (a line page's) or `bar` (a bars page's), never both, never neither -
+    and an `unsolo` names none (it restores every mark). Both ease over SOLO_DUR_S. Neither WRITES anything: the named
+    series' own end tag says what it is, and a figure writes a number. The page it stands on is `check_solo`'s."""
+    kind, errs = entry.get("kind"), []
+    d = entry.get("dur")
+    if _num(d) and not SOLO_DUR_S[0] <= float(d) <= SOLO_DUR_S[1]:
+        errs.append(f"{kind}: dur {d} is outside {SOLO_DUR_S[0]}-{SOLO_DUR_S[1]} s - the mute eases over "
+                    f"{SOLO_DUR_S[0]}-{SOLO_DUR_S[1]} s on its word (shorter is a flicker, longer a fade the word has left)")
+    if kind == SPECIES_UNSOLO:
+        extra = sorted(k for k in entry if k not in UNSOLO_KEYS + ROW_PATH_KEYS)
+        if extra:
+            errs.append(f"unsolo: {', '.join(map(repr, extra))} - an unsolo names nothing: it restores every muted series "
+                        f"or bar on its word, and takes only {'|'.join(UNSOLO_KEYS[1:])}")
+        return errs
+    has = [f for f in ("series", "bar") if f in entry]
+    if len(has) != 1:
+        errs.append("solo: names ONE mark - a series (a line page) or a bar (a bars page), "
+                    + ("not both" if has else "and this one names neither"))
+    for f in has:
+        if not _is_index(entry[f]):
+            errs.append(f"solo: {f} must be a non-negative integer {'series' if f == 'series' else 'bar'} index")
+    extra = sorted(k for k in entry if k not in SOLO_KEYS + ROW_PATH_KEYS)
+    if extra:
+        errs.append(f"solo: {', '.join(map(repr, extra))} - a solo writes nothing and takes only "
+                    f"{'|'.join(SOLO_KEYS[1:])}: the named mark keeps its own ink and tag, and a number is a `figure`")
+    return errs
+
+
+def check_solo(world: dict, row_species: list) -> None:
+    """P69 T37: a row's `solo` / `unsolo` on the page they re-ink. A solo names a SERIES on a line page or a BAR on a bars
+    page (any chart state of the row's page may be the one: a `then=` bars state takes a bar solo), inside the page's
+    marks (a series is R26-218's bound, `check_target_series`; a bar is bounded here), on a page with at least two of
+    them (one mark has nothing to dim). Refused by name: every other builder (a panels page moves focus between its
+    charts with `panel_focus`), an extruded bar (its prism's faces are not re-inked), a membership bar (its tiles are the
+    member species' `light`), and an unsolo before any solo. ValueError names it; a page with neither is untouched."""
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") in (SPECIES_SOLO, SPECIES_UNSOLO)]
+    if not sps or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return
+    states = [s for s in [world.get("page")] + list(world.get("page_states") or []) if isinstance(s, dict)]
+    builders = [str(s.get("builder")) for s in states]
+    first_solo = min((float(sp["at"]) for sp in sps if sp["kind"] == SPECIES_SOLO and _num(sp.get("at"))), default=None)
+    for sp in sps:
+        where = f"{sp['kind']} at {sp.get('at')}"
+        if sp["kind"] == SPECIES_UNSOLO:
+            if first_solo is None or not (_num(sp.get("at")) and float(sp["at"]) > first_solo):
+                raise ValueError(f"{where}: no solo stands before it - it restores nothing (P69 T37)")
+            continue
+        if LPG.PANELS in builders:
+            raise ValueError(f"{where}: a panels page moves its focus between charts with panel_focus (a panel recedes, "
+                             "dimmed); a solo re-inks the series or bars of ONE chart - build it on that chart's own page")
+        field = "bar" if "bar" in sp else "series"
+        drawn = [b for b in builders if b in SOLO_BUILDERS]
+        if not drawn:
+            raise ValueError(f"{where}: {builders[0] if builders else '?'} is not a page solo draws on - it re-inks a "
+                             f"LINE page's series or a BARS page's bars ({'|'.join(SOLO_BUILDERS)})")
+        if field not in {SOLO_BUILDERS[b] for b in drawn}:
+            raise ValueError(f"{where}: " + ("a LINE page's marks are its series - name `series`, not `bar`" if field == "bar"
+                                             else "a BARS page's marks are its bars - name `bar`, not `series`"))
+        pages = [s for s in states if SOLO_BUILDERS.get(str(s.get("builder"))) == field]
+        n = max(len(s.get("series" if field == "series" else "values") or []) for s in pages)
+        if n < 2:
+            raise ValueError(f"{where}: this page draws one {field} - there is nothing to dim (a solo mutes the OTHERS)")
+        if field == "bar":
+            v = sp["bar"]
+            if _is_index(v) and v >= n:
+                raise ValueError(f"solo: bar {v} is past the page's last bar ({n - 1})")
+            for s in pages:
+                form = s.get("form")
+                kind = (form or {}).get("kind") if isinstance(form, dict) else form
+                if kind == "extruded_bar":
+                    raise ValueError(f"{where}: form=extruded_bar - a solo re-inks a bar's face, band and value, and "
+                                     "the prism's side and cap would stand at full ink behind a muted face")
+                if any(s.get(LPG.MEMBERS_KEY) or []):
+                    raise ValueError(f"{where}: this bar is a membership stack - its tiles are lit by the member species' "
+                                     "`light` (P69 T45), and a solo would mute the bar out from under them")
 
 
 def _member_tiles(tile, n: int) -> list[int]:
@@ -3074,6 +3282,27 @@ def check_members(world: dict, row_species: list) -> None:
         past = [j for j in _member_tiles(sp.get("tile"), n) if j >= n]
         if past:
             raise ValueError(f"{where}: tile {past[0]} is past bar {bar}'s {n} tiles (0..{n - 1})")
+
+
+def check_segments(world: dict, row_species: list) -> None:
+    """P69 T64: a STACKED page's segments stand in their bars AS DRAWN (mirrored off each bar every frame), so - as a
+    membership's tiles do - they take a park (the whole chart moved as one affine transform) and nothing that moves,
+    re-values or re-draws the bars: no other `chart_to`, no then= state. ValueError names it; a page with no segments is
+    untouched."""
+    page = world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None
+    held = [i for i, s in enumerate((page or {}).get(LPG.SEGMENTS_KEY) or []) if s] if isinstance(page, dict) else []
+    states = [s for s in (world.get("page_states") or []) if isinstance(s, dict)] if isinstance(world, dict) else []
+    if not (held or any(s.get(LPG.SEGMENTS_KEY) for s in states)):
+        return
+    if states:
+        raise ValueError("a stacked bar stands on a page of its own chart: a then= state is drawn in the same box and "
+                         "would re-draw the bars its segments divide (P69 T64) - give the other chart its own page")
+    for sp in (row_species or []):
+        if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") not in MEMBER_CHART_TO:
+            raise ValueError(f"chart_to {sp.get('to')!r} at {sp.get('at')}: this page carries stacked bars, and each "
+                             "segment stands in its bar AS DRAWN - a transform that moves, re-values or re-draws the "
+                             f"bars would leave the stack behind (P69 T64); {'|'.join(MEMBER_CHART_TO)} is the chart_to "
+                             "it takes")
 
 
 def resolve_member_logos(page: dict) -> list[str]:
@@ -3185,6 +3414,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_newsreel(entry)
     if kind == SPECIES_LIT_STRETCH:   # P69 T36
         errs += _validate_lit_stretch(entry)
+    if kind in (SPECIES_SOLO, SPECIES_UNSOLO):   # P69 T37
+        errs += _validate_solo(entry)
     if kind == SPECIES_FREEZE:        # P69 T49
         errs += _validate_freeze(entry)
     if kind == SPECIES_MEMBER:        # P69 T45
@@ -3221,6 +3452,9 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
     if kind == "callout":   # E56 and P50 T3's one exception - see _validate_callout
         errs += _validate_callout(entry, press_docks)
     allowed = SPECIES_TARGETS[kind]
+    if kind in RING_ON_DOCK_KINDS and isinstance(entry.get("target"), dict) and entry["target"].get("kind") == DOCK_TARGET:
+        allowed = allowed + (DOCK_TARGET,)   # P69 T65: the rings alone take a dock - admitted where one is named, so every
+                                             # other refusal's "(takes ...)" list reads word for word what it did
     if not allowed:
         return errs
     if "target" not in entry:
@@ -4260,6 +4494,8 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_panels(world, row_species)          # P69 T8b: a panel's address, and the focus states, on the page they name
     check_broken_axis(world, row_species)     # P69 T66: a broken axis holds its page (no chart state, no form)
     check_members(world, row_species)         # P69 T45: a tile the membership bar has, and nothing that moves the bar
+    check_segments(world, row_species)        # P69 T64: a stacked page takes a park, and nothing that moves its bars
+    check_solo(world, row_species)            # P69 T37: a solo names ONE mark the page draws, on a page whose marks it re-inks
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
             if world.get("kind") != SPECIES_LEDGER:
@@ -4560,6 +4796,12 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
         notes = resolve_member_logos(page) + LPG.member_fit_warnings(page, ASPECT or "16:9")
         if notes:
             page["warnings"] = list(page.get("warnings") or []) + notes
+    if page.get(LPG.SEGMENTS_KEY):   # P69 T64 (s106): a segment too thin for its figure WARNs - the figure takes a leader
+        notes = LPG.segment_fit_warnings(page, ASPECT or "16:9")
+        if notes:
+            page["warnings"] = list(page.get("warnings") or []) + notes
+    for _w in SINKS.ink_contrast_warnings(page):   # P69 T37b (E99 s118): a name in its series' ink under the text floor - PRINTED, never stored (the page's bytes stay)
+        print(f"  [WARN] P69 T37b: {plate_id!r}: {_w}")
     return {"kind": SPECIES_LEDGER, "page": page,
             "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
 
@@ -6416,6 +6658,10 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         if page.get(LPG.MEMBERS_KEY) and spec["kind"] == "extruded_bar":   # P69 T45
             raise ValueError(f"{plate_id!r}: form=extruded_bar on a membership stack - its equal tiles divide the bar's "
                              "FACE, and a prism is three faces (P69 T45); draw it flat (bar_style=soft gives it weight)")
+        if page.get(LPG.SEGMENTS_KEY) and spec["kind"] == "extruded_bar":   # P69 T64
+            raise ValueError(f"{plate_id!r}: form=extruded_bar on a stacked bar - its segments are drawn true on the "
+                             "bar's FACE, and a prism's depth would add ink to none of them (P69 T64); draw the stack "
+                             "flat (bar_style=soft gives it weight)")
         page["form"] = spec
         try:
             check_broken_axis(world, [])   # P69 T66: a broken axis is drawn flat (E99 s111)
@@ -7665,6 +7911,59 @@ def _named_span(ws: list[dict], phrase: str, contact: float) -> tuple[str, float
     return best[1:] if best else None
 
 
+def _dock_ring_error(entry: dict, docks: list[dict], ws: list[dict] | None, where: str) -> str | None:
+    """Why one ring on a dock cannot be played on this row, or None: the dock is ON the row, ON the stage at the ring's
+    word (entered, not yet left), and that word is ON the phrase `points` names, as the take says it (E99 s110 (2))."""
+    tgt, at = entry["target"], float(entry["at"])
+    name, kind, pts = tgt["dock"], entry["kind"], entry[RING_POINTS_KEY]
+    tag = f"{where}: {kind} at {at:g}s on dock {name!r}"
+    d = next((x for x in docks if x.get("slide") == name), None)
+    if d is None:
+        return (f"{tag}, which is not on this row - a ring circles a thing ON the stage (the row's docks: "
+                f"{', '.join(repr(x.get('slide')) for x in docks) or 'none'})")
+    if at < float(d["enter"]) - 1e-9:
+        return f"{tag}: the dock has not arrived (it enters at {float(d['enter']):g}s) - a ring circles a thing on the stage"
+    if at >= float(d["exit"]) - 1e-9:
+        return f"{tag}: the dock has LEFT (at {float(d['exit']):g}s) - a ring on a thing that has left is refused"
+    if not ws:
+        return f"{tag}: `points` {pts!r} needs the build's words (timeline.json) to find the phrase ({S110_RING})"
+    span = _named_span(ws, pts, at)
+    if span is None:
+        return f"{tag}: `points` {pts!r} is not in the take - the ring marks what the sentence points at ({S110_RING})"
+    _p, a0, z0 = span
+    if not (a0 - MG.WORD_ANCHOR_TOL_S <= at <= z0 + 1e-9):
+        return (f"{tag}: the ring's word is the phrase that points at THAT thing ({S110_RING}) - {pts!r} is said "
+                f"{a0:.2f}-{z0:.2f}s; put the ring's `at` on it")
+    return None
+
+
+def dock_ring_targets(row_species, docks: list[dict], words, where: str) -> tuple[list, list[str]]:
+    """P69 T65 / E99 s110 (2): every ring on a DOCK checked against the row's COMPILED docks and the take, and ended on
+    its dock's leave. A thing that is not on the row, has not arrived, or has LEFT at the ring's word is refused by
+    name, and so is a word that is not the phrase `points` names (ValueError, every refusal of the row in one
+    message); a ring whose `dur` runs past the dock's exit is given the dock's exit (the ring leaves with the thing it
+    circles) on a COPY of its entry, and the clamp is reported. A row with no ring on a dock is returned AS IT WAS
+    (the same list), so every other row compiles byte-for-byte what it did. (species, notes)."""
+    rings = [n for n, e in enumerate(row_species or []) if isinstance(e, dict) and e.get("kind") in RING_ON_DOCK_KINDS
+             and isinstance(e.get("target"), dict) and e["target"].get("kind") == DOCK_TARGET]
+    if not rings:
+        return row_species, []
+    ws = _override_words(words)
+    errs = [x for x in (_dock_ring_error(row_species[n], docks, ws, where) for n in rings) if x]
+    if errs:
+        raise ValueError("; ".join(errs))
+    out, notes = list(row_species), []
+    for n in rings:
+        e = row_species[n]
+        d = next(x for x in docks if x.get("slide") == e["target"]["dock"])
+        room = round(float(d["exit"]) - float(e["at"]), 2)
+        if float(e["dur"]) > room + 1e-9:
+            out[n] = dict(e, dur=room)
+            notes.append(f"{e['kind']} at {float(e['at']):g}s on {d['slide']}: dur {float(e['dur']):g}s -> {room:g}s - "
+                         f"the ring leaves on the dock's leave ({float(d['exit']):g}s)")
+    return out, notes
+
+
 def _word_at_enter(ws: list[dict], enter: float) -> tuple[str, float, float] | None:
     """The word an unnamed stamp was put ON: the word whose onset is its enter (within the at() rounding - the door's
     `at` / `word_in` form), else the word spoken across its enter; None in a gap. The word before, ending on that same
@@ -7689,46 +7988,186 @@ def stamp_timing_advice(scenes: list[dict], words) -> list[dict]:
     scene landing while it still comes down or within STAMP_DATA_CLEAR_S of its contact (the gate's own landings: the
     chart's landing, a badge, a build_to / bracket / figure / note end, a chart_to data landing, a panel's reveal -
     never a dock). Each finding carries the word or the mark, the offset and the suggested contact and enter. Pure; it
-    reads, it never refuses."""
-    from authoring import docks as KD, words as KW
+    reads, it never refuses.
+    P70 T1: a STAMPED CHIP (`form: "stamp"`, `arrive: "stamp"`) is judged the same way from its `at` - the word it was
+    put on, its contact at + STAMP_CONTACT_S - and, like a dock, is never a data mark itself."""
     ws = _override_words(words) or []
     out: list[dict] = []
     for n, sc in enumerate(scenes or []):
         stamps = [d for d in sc.get("docks") or [] if d.get("arrive") == "stamp"]
-        if not stamps:
+        chips = [e for e in sc.get("species") or [] if chip_is_stamped(e)]
+        if not stamps and not chips:
             continue
-        marks = sorted([(float(t), lab) for t, lab in MG._landings(sc) if not str(lab).startswith("dock ")]
+        marks = sorted([(float(t), lab) for t, lab in MG._landings(sc) if not str(lab).startswith(("dock ", "chip "))]
                        + [(float(t), "a panel's reveal") for t in MG._panel_reveal_landings([sc])])
         for d in stamps:
-            contact = round(float(d["enter"]) + MG.STAMP_CONTACT_S, 4)
-            head = f"E99 s112: shot row {n + 1} ({sc.get('scene_id', '?')}) dock {d.get('slide', '?')}: the stamp's contact {contact:.2f}s"
-            base = {"row": n + 1, "scene": sc.get("scene_id"), "slide": d.get("slide"), "enter": float(d["enter"]),
-                    "contact": contact}
-            span = (_named_span(ws, d["names"], contact) if d.get("names") else _word_at_enter(ws, float(d["enter"]))) if ws else None
-            if span and contact < span[2] - 1e-9:
-                text, a, z = span
-                sug = round(z + KW.STAMP_AFTER_BEAT_S, 3)
-                kind = "inside" if contact >= a - 1e-9 else "before"
-                where = (f"lands INSIDE its word {text!r} ({a:.2f}-{z:.2f}s), {z - contact:.2f}s before it ends"
-                         if kind == "inside" else
-                         f"lands BEFORE the phrase it names, {text!r} ({a:.2f}-{z:.2f}s), {z - contact:.2f}s before it ends")
-                out.append({**base, "kind": kind, "word": text, "word_span": [round(a, 3), round(z, 3)],
-                            "named": bool(d.get("names")), "offset": round(contact - z, 3),
-                            "suggest_contact": sug, "suggest_enter": KD.stamp_enter(sug),
-                            "message": f"{head} {where} - the stamp is the punctuation after the thing, never during it: "
-                                       f"{_anchor_call(text)} puts the contact at {sug:.2f}s (enter {KD.stamp_enter(sug):.2f}s)"})
-            for t, lab in marks:   # a mark landing while the stamp still comes down, or within STAMP_DATA_CLEAR_S of its contact
-                if float(d["enter"]) - 1e-6 <= t <= contact or abs(contact - t) < STAMP_DATA_CLEAR_S - 1e-9:
-                    # the least that clears it: the fall begins after the mark has landed and the contact is
-                    # STAMP_DATA_CLEAR_S past it (the enter on the shot table's 0.01 s, the contact read off that enter)
-                    se = KD.stamp_enter(t + max(STAMP_DATA_CLEAR_S, MG.STAMP_CONTACT_S + 0.01))
-                    sug = round(se + MG.STAMP_CONTACT_S, 4)
-                    out.append({**base, "kind": "data", "mark": lab, "mark_at": round(t, 3), "offset": round(contact - t, 3),
-                                "suggest_contact": sug, "suggest_enter": se,
-                                "message": f"{head} lands {contact - t:+.2f}s from the {lab} at {t:.2f}s - one instant for "
-                                           "two things (the viewer is asked to read both at once): land it after the mark, "
-                                           f"the contact at {sug:.2f}s or later (enter {se:.2f}s)"})
+            base = {"row": n + 1, "scene": sc.get("scene_id"), "slide": d.get("slide"), "enter": float(d["enter"])}
+            out += _stamp_findings(ws, marks, float(d["enter"]), d.get("names"), base,
+                                   f"E99 s112: shot row {n + 1} ({sc.get('scene_id', '?')}) dock {d.get('slide', '?')}")
+        for e in chips:
+            base = {"row": n + 1, "scene": sc.get("scene_id"), "chip": e.get("icon"), "enter": float(e["at"])}
+            out += _stamp_findings(ws, marks, float(e["at"]), None, base,
+                                   f"E99 s112: shot row {n + 1} ({sc.get('scene_id', '?')}) chip {e.get('label')!r} ({e.get('icon')})")
     return out
+
+
+def _stamp_findings(ws: list[dict], marks: list[tuple[float, str]], enter: float, names, base: dict, who: str) -> list[dict]:
+    """One stamp's s112 findings - a dock's or a stamped chip's (P70 T1) - from its enter: the contact inside or before
+    its word, and every data mark landing while it comes down or within STAMP_DATA_CLEAR_S of its contact."""
+    from authoring import docks as KD, words as KW
+    out: list[dict] = []
+    contact = round(enter + MG.STAMP_CONTACT_S, 4)
+    head = f"{who}: the stamp's contact {contact:.2f}s"
+    base = {**base, "contact": contact}
+    span = (_named_span(ws, names, contact) if names else _word_at_enter(ws, enter)) if ws else None
+    if span and contact < span[2] - 1e-9:
+        text, a, z = span
+        sug = round(z + KW.STAMP_AFTER_BEAT_S, 3)
+        kind = "inside" if contact >= a - 1e-9 else "before"
+        where = (f"lands INSIDE its word {text!r} ({a:.2f}-{z:.2f}s), {z - contact:.2f}s before it ends"
+                 if kind == "inside" else
+                 f"lands BEFORE the phrase it names, {text!r} ({a:.2f}-{z:.2f}s), {z - contact:.2f}s before it ends")
+        out.append({**base, "kind": kind, "word": text, "word_span": [round(a, 3), round(z, 3)],
+                    "named": bool(names), "offset": round(contact - z, 3),
+                    "suggest_contact": sug, "suggest_enter": KD.stamp_enter(sug),
+                    "message": f"{head} {where} - the stamp is the punctuation after the thing, never during it: "
+                               f"{_anchor_call(text)} puts the contact at {sug:.2f}s (enter {KD.stamp_enter(sug):.2f}s)"})
+    for t, lab in marks:   # a mark landing while the stamp still comes down, or within STAMP_DATA_CLEAR_S of its contact
+        if enter - 1e-6 <= t <= contact or abs(contact - t) < STAMP_DATA_CLEAR_S - 1e-9:
+            # the least that clears it: the fall begins after the mark has landed and the contact is
+            # STAMP_DATA_CLEAR_S past it (the enter on the shot table's 0.01 s, the contact read off that enter)
+            se = KD.stamp_enter(t + max(STAMP_DATA_CLEAR_S, MG.STAMP_CONTACT_S + 0.01))
+            sug = round(se + MG.STAMP_CONTACT_S, 4)
+            out.append({**base, "kind": "data", "mark": lab, "mark_at": round(t, 3), "offset": round(contact - t, 3),
+                        "suggest_contact": sug, "suggest_enter": se,
+                        "message": f"{head} lands {contact - t:+.2f}s from the {lab} at {t:.2f}s - one instant for "
+                                   "two things (the viewer is asked to read both at once): land it after the mark, "
+                                   f"the contact at {sug:.2f}s or later (enter {se:.2f}s)"})
+    return out
+
+
+# ---- P70 T1 (was P69 T12): THE CHIP LANDS AS A STAMP -------------------------------------------------------------------
+# `arrive: "stamp"` on the chip's opt-in raster form (`form: "stamp"`) poses its art by kinetics/stopaction.mjs `stampXf`
+# (species/chip.mjs `chipStampPose`): every motion number STAMP_ARRIVAL's, no dial of the chip's own. The compiler (a)
+# refuses the arrival anywhere but the stamp form (`_validate_chip`), (b) FITS the impact ring's peak to the room at
+# compile time - `stamp_fit` against the page's (or the plate's) obstacles, the same rectangles `ring_obstacles` returns
+# - and writes it on the species as `ring_to` with the art's painted box `paint`, WARNing with its numbers where nothing
+# fits (s106: the chip stands where the author put it; this amends P69 T12's "or refused"); since the send-back the
+# APPROACH is fitted too (`from_to`), by the dock stamp's own `stamp_fit` + `_stamp_floors`, and the painted extent is the
+# mark AND its label, so the ring hugs both and the approach clears both; and (c) ADVISES the label's
+# size: a stamp-form chip without the arrival draws its label at 48 px, under E99 s90's floor. The gate counts its
+# landing at at + STAMP_CONTACT_S (gate_motion_density `_landings` / `_arrivals`), recipe_walk emits `arrival:stamp`
+# for it (so `authoring.audio.fired` pairs a landing cue to that contact, s116), and the s112 advice reads it.
+
+def chip_is_stamped(entry) -> bool:
+    """A chip that lands as a stamp: the stamp form carrying `arrive: "stamp"` (the only arrival it takes) - the walk's
+    ONE predicate (`recipe_walk.is_stamped_chip`, read through the motion gate), so the fit, the gate's landing and the
+    card walk's arrival can never disagree."""
+    return MG.is_stamped_chip(entry)
+
+
+def chip_stamp_dur_advice(entry) -> str | None:
+    """P70 T1 (the review; s106): a stamped chip owes its landing AND its exit inside `dur` (`chipStampPose` starts the
+    exit EXIT_S before the window closes), so a `dur` under STAMP_CONTACT_S + STAMP_EXIT_S leaves before it has landed
+    while the gate and the cue still count a landing - a WARN with its numbers, never a refusal. None otherwise."""
+    if not chip_is_stamped(entry) or not _finite(entry.get("dur")) or float(entry["dur"]) >= CHIP_STAMP_MIN_DUR_S - 1e-9:
+        return None
+    return (f"chip stamp {entry.get('label')!r} ({entry.get('icon')}): dur {float(entry['dur']):g}s is shorter than the "
+            f"landing and the exit it owes ({MG.STAMP_CONTACT_S:g}s + {STAMP_EXIT_S:.4f}s = {CHIP_STAMP_MIN_DUR_S:.4f}s) "
+            f"- the mark begins to leave before it has landed; give it at least {math.ceil(CHIP_STAMP_MIN_DUR_S * 100) / 100:.2f}s")
+
+
+def chip_stamp_label_advice(entry) -> str | None:
+    """P70 T1 (E99 s90, s106): the WARN a stamp-form chip WITHOUT the arrival earns - its label is drawn at
+    CHIP_STAMP_LABEL_SIZE, under the phone floor. None for a stamped chip (drawn at the floor) and for any other entry."""
+    if not (isinstance(entry, dict) and entry.get("kind") == SPECIES_CHIP and entry.get("form") == "stamp"):
+        return None
+    if chip_is_stamped(entry) or not (isinstance(entry.get("label"), str) and entry["label"].strip()):
+        return None
+    return (f"chip stamp {entry['label']!r} ({entry.get('icon')}): its label is drawn at {CHIP_STAMP_LABEL_SIZE} stage px, "
+            f"under the E99 s90 phone floor of {CHIP_STAMP_LABEL_FLOOR:g} px (ledger_page.CARD_TYPE_PX) - add "
+            f"`arrive: \"stamp\"` (the stamp arrival draws it at {CHIP_STAMP_LABEL_FLOOR:g} px)")
+
+
+def chip_stamp_label_box(label, side: float) -> dict | None:
+    """The stamped label's box in the art SQUARE's own centred coordinates (x right, y down, 0 at the square's centre),
+    as species/chip.mjs draws it under the arrival: `text-anchor: middle` at x 0, the first baseline at side / 2 + the
+    scaled gap, each further line one scaled line step down - its width the widest line's MEASURED advance (the table
+    above) plus the overhang, its height the font box, and the keyline round all of it. None for no label."""
+    lines = str(label).split("\n") if isinstance(label, str) and label.strip() else []
+    if not lines:
+        return None
+    size = CHIP_STAMP_LABEL_FLOOR
+    k = size / CHIP_STAMP_LABEL_SIZE
+    gap, step = round(CHIP_STAMP_LABEL_GAP * k, 2), round(CHIP_STAMP_LABEL_LINE_H * k, 2)
+    em = max(sum(CHIP_STAMP_LABEL_ADVANCE_EM.get(ch, CHIP_STAMP_LABEL_ADVANCE_MAX_EM) for ch in ln) for ln in lines)
+    half = (em / 2 + CHIP_STAMP_LABEL_OVERHANG_EM) * size + CHIP_STAMP_LABEL_KEYLINE_PX
+    base = side / 2 + gap
+    return {"x0": -half, "x1": half,
+            "y0": base - CHIP_STAMP_LABEL_ASC_EM * size - CHIP_STAMP_LABEL_KEYLINE_PX,
+            "y1": base + (len(lines) - 1) * step + CHIP_STAMP_LABEL_DESC_EM * size + CHIP_STAMP_LABEL_KEYLINE_PX}
+
+
+def chip_stamp_art(entry: dict, aspect: str | None, paint: dict) -> dict:
+    """Where the painter draws a stamp-form chip's MARK, in stage px, as species/chip.mjs `paintChipStamp` does: the
+    target's centre (a point, or the centre of a region), the side `min(size, region w, region h)`, the cutout drawn
+    `meet` in that square with its PAINTED box inside it (`paint`: painted_box of the file) - and, since the P70 T1
+    send-back, the label under it: the stamped chip's painted extent is the UNION of the art's painted box and the
+    label's box (`chip_stamp_label_box`), so the ring hugs the mark and its name and never crosses the name, and the
+    approach is fitted with the name it carries. Returns the side, `paint` - that union as fractions of the SQUARE
+    (what the engine reads, `chipStampPaint`: the group turns about its centre, the ring's radius its half-diagonal;
+    it may run past [0, 1] where the label is wider than the art or below it) - the union's centre and its size."""
+    sw, sh = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])
+    tg = entry.get("target") or {}
+    if tg.get("kind") == "region":
+        x, y, w, h = tg["x0"] * sw, tg["y0"] * sh, (tg["x1"] - tg["x0"]) * sw, (tg["y1"] - tg["y0"]) * sh
+    else:
+        x, y, w, h = float(tg.get("x", 0.5)) * sw, float(tg.get("y", 0.5)) * sh, 0.0, 0.0
+    size = entry.get("size", STAMP_SIZE_DEFAULT)
+    req = max(STAMP_SIZE_MIN, min(STAMP_PROP_SIZE_MAX, float(size))) if _finite(size) else float(STAMP_SIZE_DEFAULT)
+    side = min(req, w if w > 0 else req, h if h > 0 else req)
+    asp = float(paint.get("aspect") or 1.0)                     # the canvas's h / w, drawn `meet` in the square
+    cw, ch = (side, side * asp) if asp <= 1 else (side / asp, side)
+    ox, oy = (side - cw) / 2 - side / 2, (side - ch) / 2 - side / 2   # the canvas's top-left, centred coordinates
+    box = {"x0": ox + cw * paint["x0"], "y0": oy + ch * paint["y0"], "x1": ox + cw * paint["x1"], "y1": oy + ch * paint["y1"]}
+    lab = chip_stamp_label_box(entry.get("label"), side)
+    if lab:
+        box = {"x0": min(box["x0"], lab["x0"]), "y0": min(box["y0"], lab["y0"]),
+               "x1": max(box["x1"], lab["x1"]), "y1": max(box["y1"], lab["y1"])}
+    sq = [box["x0"] / side + 0.5, box["y0"] / side + 0.5, box["x1"] / side + 0.5, box["y1"] / side + 0.5]
+    cx, cy = x + w / 2, y + h / 2
+    return {"side": side, "paint": [round(v, 4) for v in sq], "label": lab,
+            "centre": (cx + side * ((sq[0] + sq[2]) / 2 - 0.5), cy + side * ((sq[1] + sq[3]) / 2 - 0.5)),
+            "painted": (side * (sq[2] - sq[0]), side * (sq[3] - sq[1]))}
+
+
+def chip_stamp_ring_fit(entry: dict, world: dict | None, aspect: str | None, paint: dict,
+                        reserve: list[dict] | None = None, where: str = "chip stamp") -> tuple[dict, list[str]]:
+    """P70 T1: a stamped chip's arrival FITTED to the room, by the dock stamp's own law - (a COPY of the entry with
+    `ring_to`, `from_to` and `paint`, [WARNs]).
+
+    The chip's painted extent is its mark AND its label (`chip_stamp_art`, the union). `stamp_fit` answers for that box
+    at its centre exactly as it answers for a stamped dock: the impact ring's peak `ring_to` = min(RING_TO, the clear
+    disc / the half-diagonal) and the APPROACH `from_to` = min(FROM, what the box's hull, turned through every angle
+    of the arrival, may grow to clear), both rounded DOWN - capped, never clipped - against the rectangles
+    `ring_obstacles` returns (the page's title, sub, source, rail, axes, measured end names and ink cells; on a plate
+    the frame's caption band; plus `reserve`) inside the safe box. Then the dock's `_stamp_floors`: a ring under its
+    floor (12 px outside the painted edge) or an approach under STAMP_APPROACH_MIN is drawn at that floor and WARNed
+    with its numbers - the chip stands where the author put it (s106), never refused; so is a fit blind to a page's
+    names. A non-stamped entry is returned AS IT WAS (the same object)."""
+    if not chip_is_stamped(entry):
+        return entry, []
+    page = (world or {}).get("page") if (world or {}).get("kind") == SPECIES_LEDGER else None
+    groups, bounds, blind = prop_obstacle_groups(page, aspect, reserve)
+    art = chip_stamp_art(entry, aspect, paint)
+    (pcx, pcy), (pw, ph) = art["centre"], art["painted"]
+    fit = stamp_fit(pcx, pcy, pw, {"aspect": ph / pw if pw > 0 else 1.0, "x0": 0.0, "y0": 0.0, "x1": 1.0, "y1": 1.0},
+                    _flat_obstacles(groups), bounds)
+    floors: list[str] = []
+    fit = _stamp_floors(fit, floors)
+    head = f"{where} (mark and label {pw:.0f}x{ph:.0f} px at ({pcx:.0f}, {pcy:.0f}))"
+    notes = [f"{where}: {b} (the arrival is fitted without it)" for b in blind] + [f"{head}: {w}" for w in floors]
+    return {**entry, "ring_to": fit["ring_to"], "from_to": fit["from_to"], "paint": art["paint"]}, notes
 
 
 def prop_moves(dopt: dict, paint: dict | float | None, fit: dict, aspect: str | None, enter: float, exitt: float,
@@ -9901,6 +10340,12 @@ def main() -> int:
                 except (TypeError, ValueError) as exc:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): chip stamp: {exc}") from exc
                 resolved_chip_stamps[e["icon"]] = stamp_asset
+                _label_warn = chip_stamp_label_advice(e)   # P70 T1 (E99 s90, s106): a stamp-form chip's label under the floor
+                if _label_warn:
+                    print(f"  [WARN] P70 T1: shot row {i + 1}: {_label_warn}")
+                _dur_warn = chip_stamp_dur_advice(e)       # ... and a stamped chip too short for its landing and its exit
+                if _dur_warn:
+                    print(f"  [WARN] P70 T1: shot row {i + 1}: {_dur_warn}")
         # P50 T2: a chip's SOURCED glyph rides the asset map exactly as a plate or a dock still does,
         # keyed `icon:<name>` - the geometry travels in the player, never a path to a file on disk.
         for e in row_species:
@@ -10026,6 +10471,22 @@ def main() -> int:
                                                      f"shot row {i + 1} ({a}-{b}s)", worlds=stamp_worlds)
         except ValueError as exc:
             raise SystemExit(f"FAIL: {exc}") from exc
+        # P70 T1: a STAMPED CHIP's impact ring is fitted to the room it lands in (the page state on screen at its `at`),
+        # clear of the newsreel strip and the row's stamped docks; written on a COPY of the entry as `ring_to` + `paint`.
+        # Nothing fits = a WARN with numbers, never a refusal (s106). A row with no stamped chip is untouched.
+        if any(chip_is_stamped(e) for e in row_species):
+            _chip_rows = []
+            for e in row_species:
+                if chip_is_stamped(e):
+                    e, _chip_notes = chip_stamp_ring_fit(
+                        e, page_on_screen(world, row_species, float(e["at"])), ASPECT,
+                        painted_box(resolved_chip_stamps[e["icon"]]["file"]),
+                        newsreel_boxes(row_species, ASPECT) + list(stamp_boxes),
+                        f"shot row {i + 1} ({a}-{b}s) chip stamp {e.get('label')!r}")
+                    for _n in _chip_notes:
+                        print(f"  [WARN] P70 T1: {_n}")
+                _chip_rows.append(e)
+            row_species = _chip_rows
         place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT), clear_of=stamp_boxes)   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
         for n_dock, (aid, slot, enter, exitt, *dextra) in enumerate(ds):
             dopt = row_opts[n_dock][1]
@@ -10205,6 +10666,14 @@ def main() -> int:
                                         handed=n_dock in _pm["handed"],   # P69 T26e: a prop handed to a morph on its exit word
                                         names=dopt.get("names") or dopt.get("after")))   # P69 T81: the word a stamp punctuates
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
+        # P69 T65 / E99 s110 (2): a ring on a DOCK - on the row, on the stage at its word, the word on the phrase that
+        # points at it - and it leaves on the dock's leave. A row with no such ring is the same list, untouched.
+        try:
+            row_species, _dr_notes = dock_ring_targets(row_species, docks, tl.get("words"), f"shot row {i + 1} ({a}-{b}s)")
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: {exc}") from exc
+        for _note in _dr_notes:
+            print(f"  ring on a dock: row {i + 1}: {_note}")
         pm_entries = []
         if _pm["morphs"] or _pm["enter_morph"]:   # P69 T26e: the state each prop morph is on, its mark, and its invariants (a WARN when they fail)
             try:

@@ -3480,6 +3480,61 @@ FRAME_T.update({
 })
 
 
+# ---- P70 T1 (was P69 T12): THE CHIP LANDS AS A STAMP - `arrive: "stamp"` on the stamp form, rendered both ways -------
+# Steel and Paper H row 7's chip, recast: "... and it isn't Nvidia" (take `isn't Nvidia` 58.35-59.60; the door's
+# NVIDIA_CHIP lands at 58.60 as the Lucide `cpu` glyph). Here it is the chip's stamp FORM on the icons catalogue's GPU
+# cutout (E94, approved; a PROXY, as every catalogued cutout in a golden is - E99 s31), label NVIDIA in charcoal, at the
+# stamp form's default size, breathing as the door's does (E49).
+# WHY A PLATE AND NOT ROW 7'S PAGE (the send-back): the stamped chip's painted extent is its mark AND its label, and the
+# arrival is fitted by the dock stamp's own law (`chip_stamp_ring_fit`: stamp_fit's ring and approach, `_stamp_floors`).
+# On the divergence page no point clears at any size the form allows (180-260, searched over the page's right half,
+# scratchpad/p70-t1/NOTES.md) - the fit WARNs everywhere, and a golden pins a clean arrival. On a CREAM plate (so the
+# charcoal ring reads, as it does on every light ground) the fit answers with its law at work and no finding: the ring
+# capped at 1.7508x and the approach at 1.9904x by the safe box's top. The page case rides the test bed, WARNs and all.
+# ONE source, two surfaces: they differ only in `arrive` - and in what the compiler's own door writes because of it,
+# `ring_to`, `from_to` and `paint`. Both are judged at the CONTACT + 0.10 s, the stamp's rotation still off its rest.
+from gate_motion_density import STAMP_CONTACT_S as _STAMP_CONTACT_S  # noqa: E402
+
+CHIP_STAMP_ENTRY = {"kind": "chip", "form": "stamp", "at": 10.0, "dur": 6.0, "icon": "prop-icon-gpu-ai-accelerator-v1",
+                    "label": "NVIDIA", "ink": "charcoal", "idle": "breath", "target": {"kind": "point", "x": 0.5, "y": 0.36}}
+CHIP_STAMP_PLATE = "plate-cream"
+CHIP_STAMP_CREAM = (244, 230, 199)   # CHIP_STAMP.INK.cream, the long form's ground
+
+
+def _chip_stamp(arrive: bool) -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    world = {"asset_id": CHIP_STAMP_PLATE, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    entry = dict(CHIP_STAMP_ENTRY, **({"arrive": "stamp"} if arrive else {}))
+    errs = BST.validate_species([entry], (0, 0, 0), CHIP_STAMP_PLATE)
+    assert not errs, errs
+    compiled, asset = BST._with_stamp_catalogue(entry)   # the compiled entry carries its catalogue, as the row loop writes it
+    compiled, notes = BST.chip_stamp_ring_fit(compiled, world, "16:9", BST.painted_box(asset["file"]), [],
+                                              "golden chip-stamp")
+    assert not notes, notes
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": [compiled]}]
+    tl = _timeline("Golden: the chip's stamp form - on its spring, or landing as a stamp (P70 T1)", scenes, {}, None)
+    # no captions: a build moves them to the quiet bottom rail while a labelled stamp chip is up
+    # (`_readable_species_during`); the harness's hand-written stage captions do not, and sat across the chip
+    tl["captions"], tl["caption_pages"] = [], []
+    uris = _base_uris()
+    uris[CHIP_STAMP_PLATE] = uri("image/png", png_solid(64, 36, CHIP_STAMP_CREAM))
+    uris[BST.PROP_PREFIX + entry["icon"]] = uri("image/png", png_proxy(asset["file"]))
+    return tl, uris
+
+
+SURFACES.update({
+    "chip-stamp-pop": lambda: _chip_stamp(False),       # the stamp form on the chip's spring, as it has always landed
+    "chip-stamp-arrival": lambda: _chip_stamp(True),    # ... and with `arrive: "stamp"`: stopaction's stampXf
+})
+FRAME_T.update({
+    # CONTACT + 0.10 s (10.254): the stamp's scale spring clamped at 1 since 10.154 while the free rotation is still
+    # 1.39 deg past its -9 deg rest (-10.39) and the capped ring radiates at 0.54 of its life round the mark and its
+    # name; the pop is 0.46 of its LAND_S into the spring, its label at 48 px, under the floor.
+    "chip-stamp-pop": round(CHIP_STAMP_ENTRY["at"] + _STAMP_CONTACT_S + 0.10, 3),
+    "chip-stamp-arrival": round(CHIP_STAMP_ENTRY["at"] + _STAMP_CONTACT_S + 0.10, 3),
+})
+
+
 # ---- P69 T26a / R26-273: A BAR CHANGES ITS OWN VALUE (E28) ---------------------------------------------------------
 # The halving beat test_compare_on_bars compiles (row 18 of Steel and Paper H): one bar at 20 on a full-stage bars
 # page, its figure written at its top (8.0), and a `chart_to compare` (melt, then splash) at 11.0 over 2.4 s that turns
@@ -3896,6 +3951,54 @@ FRAME_T.update({"freeze-trough": FREEZE_AT + FREEZE_DUR * 0.5})
 FRAME_T.update({"lit-stretch-crash": round(LIT_AT + 0.5 * LIT_DUR * 0.8, 3)})   # u 0.50 of the head's run (TRAVEL 0.8 of the word): 11.244
 
 
+# ---- P69 T37: SOLO - on "Chipmakers" the chips keep their ink and every other line mutes to E67's dim ----------------
+# Steel and Paper H row 10's own page and its own sentence: the verified divergence page (`ev-divergence-v1`, the four
+# lines - memory makers, semiconductors, mega-cap tech, the S&P 500 - the page row 10 recasts to under the sell ticket)
+# and "Chipmakers doubling while their customers sit flat at the index is textbook profit-taking." The H take's words
+# (`vo-h-scratch/scratch-kokoro.words.json`), shifted by -82.675 s so the page has built first: "Chipmakers" 94.675 ->
+# 12.00 (the chips' solo, over the word, 0.71 s), "customers" 96.263 -> 13.59 (the mute hands over to the mega-cap line,
+# 0.58 s) and "textbook" 98.338 -> 15.66 (unsolo: the comparison is the claim again, 0.54 s). The object is the
+# COMMITTED evidence sidecar, read in place; the harvested frame is JPN 05:23.5 (`docs/research/runs/bravos-watch/
+# nB1eXWQlW58/luna-recovery/focus-05-treasury-holdings/frames/frame_0008.jpg`). Judged once the chips' mute has
+# landed and holds (13.11): the semiconductor line, its lead point and its tag at full ink, the other three at 0.45.
+SOLO_PLATE = "ledger:ev-divergence-v1:line;idle=live"
+SOLO_SHIFT = -82.675
+SOLO_CHIPS, SOLO_CUSTOMERS = 1, 2        # ev-divergence-v1's SEMICONDUCTOR STOCKS and MEGA-CAP TECH STOCKS
+SOLO_CHIPS_AT, SOLO_CHIPS_DUR = 12.0, 0.71            # "Chipmakers" 94.675-95.388
+SOLO_CUSTOMERS_AT, SOLO_CUSTOMERS_DUR = 13.59, 0.58   # "customers" 96.263-96.838
+SOLO_UNSOLO_AT, SOLO_UNSOLO_DUR = 15.66, 0.54         # "textbook" 98.338-98.875
+SOLO_SPECIES = [
+    {"kind": "solo", "at": SOLO_CHIPS_AT, "dur": SOLO_CHIPS_DUR, "series": SOLO_CHIPS},            # "Chipmakers doubling"
+    {"kind": "solo", "at": SOLO_CUSTOMERS_AT, "dur": SOLO_CUSTOMERS_DUR, "series": SOLO_CUSTOMERS},  # "... while their customers sit flat"
+    {"kind": "unsolo", "at": SOLO_UNSOLO_AT, "dur": SOLO_UNSOLO_DUR},                               # "... is textbook profit-taking"
+]
+
+
+def solo_chipmakers() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    series = LPG.load_series(SERIES)
+    names = [s.get("name", "") for s in series["series"]]
+    assert names[SOLO_CHIPS].startswith("SEMICONDUCTOR") and names[SOLO_CUSTOMERS].startswith("MEGA-CAP"), names
+    species = [dict(e) for e in SOLO_SPECIES]
+    assert not BST.validate_species(species, (0, 0, 0), SOLO_PLATE), BST.validate_species(species, (0, 0, 0), SOLO_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(SOLO_PLATE, (0, 0, 0), LIT_PROJECT)
+        BST.stamp_full_stage(world["page"])
+        BST.check_target_series(world, species)
+        BST.check_solo(world, species)
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: on 'Chipmakers' the chips keep their ink and the rest mute (solo)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"solo-chipmakers": solo_chipmakers})
+FRAME_T.update({"solo-chipmakers": round(SOLO_CHIPS_AT + SOLO_CHIPS_DUR + 0.4, 3)})   # the chips' mute landed and holding: 13.11
+
+
 # ---- P69 T66 (E99 s111): THE BROKEN CROSS-ERA AXIS ------------------------------------------------------------------------
 #   broken-axis-two-eras  ONE x axis across two eras, the years between them cut out and the cut DRAWN: a `//` across the
 #                         axis, the gap written in the eras' own years ("2001 // 2021"), each era named over its own
@@ -3940,6 +4043,77 @@ def broken_axis_two_eras() -> tuple[dict, dict]:
 
 SURFACES.update({"broken-axis-two-eras": broken_axis_two_eras})
 FRAME_T.update({"broken-axis-two-eras": BROKEN_BUILD_T0 + BROKEN_BUILD_S + 1.6})   # both eras drawn and tagged (7.4), held
+
+
+# ---- P69 T64 / E99 s110 (1): THE STACKED BAR OF VALUES, AND THE STACKED-BAR-PLUS-LINE COMBO ---------------------------
+#   stacked-combo-funding  Steel and Paper H's row 17 ("the arithmetic"): the five biggest builders' operating cash in the
+#                          first quarter of each year, each bar STACKED - what cash capital spending took, and what was
+#                          left - with the capex share of that cash as ONE line over the stacks on its OWN labelled right
+#                          axis (%, in the line's colour; the bars' axis in US$ billions): 44 % -> 65 % -> 94 %
+#   stacked-outlays        a bars page of ONE stacked bar: federal outlays, October-August of fiscal 2026 - what revenue
+#                          paid for and what was borrowed (the deficit), the total written over the bar
+# Both are READ off committed objects, never re-typed: ev-capex-funding-v1's two filed series (Epoch AI - "what was left"
+# and "the share" are those two series' arithmetic, said in the source line) and cbo-interest-revenue's CBO facts. No
+# revenue or debt-funded split exists on disk for the builders (the plan's "cash-funded / debt-funded with the revenue
+# line"), so the golden draws the nearest real pair and the source line says what was computed.
+STACKED_FUNDING = MEMBERS_FUNDING
+STACKED_OUTLAYS = MEMBERS_OBJECTS / "american-debt-trap/evidence/objects/cbo-interest-revenue.series.json"
+STACKED_QUARTERS = ((2024.125, "Q1 2024"), (2025.125, "Q1 2025"), (2026.125, "Q1 2026"))   # the first quarter of each year
+
+
+def stacked_funding_series() -> dict:
+    obj = json.loads(STACKED_FUNDING.read_text(encoding="utf-8"))
+    by = {s.get("name"): {round(x, 3): y for x, y in s["pts"]} for s in obj["series"] if s.get("name")}
+    ocf, capex = by["CASH FROM OPERATIONS"], by["CASH CAPEX"]
+    bars, share = [], []
+    for x, label in STACKED_QUARTERS:
+        cash, spent = ocf[x], capex[x]
+        bars.append({"label": label, "value": cash, "color": "deemph",
+                     "segments": [{"name": "Cash capex", "value": spent, "color": "crimson"},
+                                  {"name": "Left over", "value": round(cash - spent, 1), "color": "deemph"}]})
+        share.append([x, round(100 * spent / cash)])
+    return {"title": "Who pays for the steel",
+            "sub": "The five biggest builders' cash from operations, first quarter of each year: what capital spending "
+                   "took, what was left - and the share it took",
+            "src": "Epoch AI (Jun 2026), filings: " + obj["src"].split(" - ")[1].split(";")[0] + "; the rest: our arithmetic",
+            "unit": "$", "ylabel": "US$ billions per quarter", "line_unit": "%", "line_label": "capex, % of cash",
+            "bars": bars, "series": [{"name": "CAPEX SHARE", "label": "", "color": "teal", "pts": share}]}
+
+
+def stacked_outlays_series() -> dict:
+    f = json.loads(STACKED_OUTLAYS.read_text(encoding="utf-8"))["facts"]
+    return {"title": "Where the spending came from",
+            "sub": "Federal outlays, October-August of fiscal 2026, US$ billions: what revenue paid for, and what was borrowed",
+            "src": "CBO Monthly Budget Review, September 9, 2026, Tables 1 and 3 (preliminary)",
+            "unit": "$",
+            "bars": [{"label": "Outlays", "value": f["outlays_usd_billions"], "color": "deemph",
+                      "segments": [{"name": "Paid by revenue", "value": f["revenue_usd_billions"], "color": "teal"},
+                                   {"name": "Borrowed", "value": f["deficit_usd_billions"], "color": "crimson"}]}]}
+
+
+def _stacked_page(series: dict, emphasize: int | None, title: str) -> tuple[dict, dict]:
+    """A stacked page through the compiler's own path: validated, built, stamped full stage."""
+    import build_scene_timeline_f as BST
+    assert LPG.validate(series, "bars") == [], LPG.validate(series, "bars")
+    page = BST.stamp_full_stage(LPG.build_spec(series, "bars", emphasize, "right"))
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    BST.check_segments(world, [])
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline(title, scenes, {}, None), _base_uris()
+
+
+def stacked_combo_funding() -> tuple[dict, dict]:
+    return _stacked_page(stacked_funding_series(), None,
+                         "Golden: stacked bars of operating cash with the capex share on its own labelled axis")
+
+
+def stacked_outlays() -> tuple[dict, dict]:
+    return _stacked_page(stacked_outlays_series(), 0, "Golden: one stacked bar - what revenue paid for, what was borrowed")
+
+
+SURFACES.update({"stacked-combo-funding": stacked_combo_funding, "stacked-outlays": stacked_outlays})
+FRAME_T.update({"stacked-combo-funding": 12.0,   # the stacks stood (7.4), the line drawn and its three shares written, held
+                "stacked-outlays": 12.0})        # the bar stood, both parts' figures, the total's pill and the key written, held
 
 
 def write_surface(name: str) -> list[Path]:

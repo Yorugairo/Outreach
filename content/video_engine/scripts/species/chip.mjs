@@ -26,6 +26,8 @@
    this module never invents geometry. The dials below are ours to tune (42 s42.5), not findings. */
 import { springPop } from "../kinetics/spring.mjs";
 import { idleXf } from "../kinetics/idle.mjs";
+import { squashMatrix } from "../kinetics/squash.mjs";
+import { STAMP_ARRIVAL, stampXf, stampExit } from "../kinetics/stopaction.mjs";
 
 export const CHIP = Object.freeze({
   SIZE: 168,        /* the card's side in STAGE px - a chip is read at a glance beside its neighbours, not studied */
@@ -55,8 +57,16 @@ export const CHIP_STAMP = Object.freeze({
   LABEL_SIZE: 48,
   LABEL_GAP: 28,
   LABEL_LINE_H: 52,
+  /* P70 T1 (E99 s90): the label's size under `arrive: "stamp"` - the phone floor, 59.08 stage px [DERIVED:
+     ledger_page.CARD_TYPE_PX, 12 * 1920 / 390 to two places]; LABEL_GAP and LABEL_LINE_H scale with it. A stamp-form
+     chip WITHOUT the arrival keeps LABEL_SIZE (its bytes do not move) and the compiler WARNs that it is under the floor. */
+  LABEL_FLOOR: 59.08,
   MAX_LINES: 3,
   INK: Object.freeze({ cream: "#F4E6C7", charcoal: "#25313C" }),
+  /* P70 T1: the stamp arrival's impact ring is OUR ink, as the dock's is (scene-evidence-engine's `.dock-ring`): chalk
+     on the charcoal ledger page, charcoal on any other ground - never gold */
+  RING_INK: Object.freeze({ ledger: "#F2F2F2", ground: "#25313C" }),
+  MASS: "ink",       /* the mass the stamp lands at: the engine's own default for a stamp (`stampXf(d.mass || "ink", ...)`) */
 });
 
 const chip01 = (v) => Math.min(1, Math.max(0, v));
@@ -77,8 +87,34 @@ export const chipCrossF = (sp, t, o = {}) => {
 /* the two strokes of the X from the cross's fraction: the first over its first half, the second over the second */
 export const chipStrokes = (f) => [chip01(f * 2), chip01(f * 2 - 1)];
 
+/* P70 T1: does this chip LAND AS A STAMP? Only the stamp FORM takes the arrival (the compiler refuses it anywhere else,
+   by name); a glyph chip, flow's node chips and the count array keep chipLand whatever they carry. */
+export const chipStamped = (sp) => !!sp && sp.form === "stamp" && sp.arrive === "stamp";
+
+/* THE STAMP ARRIVAL on a chip (P70 T1; E99 s87): the pose at t - at is `stampXf`'s, with no dial of the chip's own -
+   the scale comes down from STAMP_ARRIVAL.FROM in area space and is exactly 1 from STAMP_LAND.tc (0.1542 s), the free
+   rotation overshoots and rests at LAND_DEG, off-square, the ink runs INK [1, 0.86], the opacity rides FADE, and the
+   impact ring is `stampRing` on its split curves (a multiplier of the chip's own radius, null before the contact and
+   once its life is spent: never held). The ring's peak and the approach are the compiler's fit, the dock stamp's own
+   law (`ring_to` / `from_to`: stamp_fit against ring_obstacles, round the mark AND its label), else the source's
+   RING_TO / FROM - capped there, never clipped here. The exit the landed mark owes (E50) is `stampExit`, run INSIDE the
+   chip's `dur` - it begins EXIT_S before the window closes, so the species leaves on its own curve and is gone at
+   at + dur; the ring is never drawn once the exit has begun. `ink` is carried for the record: a chip stamp has no
+   contact shadow for the pressure to darken, and a wash over the art is what the dock's own port refuses. */
+export const chipStampPose = (sp, t) => {
+  const fit = Object.assign({}, Number.isFinite(+sp.ring_to) && +sp.ring_to > 0 ? { RING_TO: +sp.ring_to } : {},
+    Number.isFinite(+sp.from_to) && +sp.from_to >= 1 ? { FROM: +sp.from_to } : {});   /* ... the approach it comes down from */
+  const at = +sp.at, sx = stampXf(CHIP_STAMP.MASS, t - at, fit);
+  const out = at + (Number.isFinite(+sp.dur) ? +sp.dur : 0) - STAMP_ARRIVAL.EXIT_S, leaving = t > out;
+  const ex = leaving ? stampExit(t - out) : 0;
+  return { u: sx.u, scale: sx.scale, rot: sx.rot, off_deg: sx.off_deg, dx: sx.x, dy: sx.y, alpha: sx.alpha, theta: sx.theta,
+           ink: sx.ink, fade: sx.opacity * (1 - ex), exit: ex, ring: leaving ? null : sx.ring, phase: sx.phase,
+           cross: 0, strokes: [0, 0], dim: 1 };
+};
+
 /* ONE ENTRY: everything the painter draws at t, from the declaration alone. */
 export const chipPose = (sp, t, o = {}) => {
+  if (chipStamped(sp)) return chipStampPose(sp, t);
   const P = Object.assign({}, CHIP, o), land = chipLand(t, +sp.at, P), cross = chipCrossF(sp, t, P);
   return { u: land.u, scale: land.scale, dy: land.dy, fade: land.fade,
            cross, strokes: chipStrokes(cross), dim: 1 - (1 - P.DIM) * cross };
@@ -126,27 +162,69 @@ function paintChipStamp(ctx, b) {
   const requested = chipStampSize(sp.size);
   const side = Math.min(requested, b.w > 0 ? b.w : requested, b.h > 0 ? b.h : requested);
   const s = pose.scale * ix.scale;
-  const g = el("g", "chipstamp", svg, { opacity: pose.fade.toFixed(3),
-    transform: "translate(" + (cx + ix.dx).toFixed(1) + " " + (cy + pose.dy + ix.dy).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
+  const stamped = chipStamped(sp);
+  const g = stamped ? chipStampGroup(ctx, pose, ix, cx, cy, side, s)
+    : el("g", "chipstamp", svg, { opacity: pose.fade.toFixed(3),
+      transform: "translate(" + (cx + ix.dx).toFixed(1) + " " + (cy + pose.dy + ix.dy).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
+  const off = stamped ? chipStampPaint(sp, side).off : [0, 0];   /* the art about its PAINTED centre, the group's origin */
   el("image", "chipstampart", g, {
-    x: (-side / 2).toFixed(1), y: (-side / 2).toFixed(1), width: side.toFixed(1), height: side.toFixed(1),
+    x: (-side / 2 - off[0]).toFixed(1), y: (-side / 2 - off[1]).toFixed(1), width: side.toFixed(1), height: side.toFixed(1),
     href: src, preserveAspectRatio: "xMidYMid meet",
   });
   if (sp.label) {
     const lines = chipStampLabelLines(sp.label);
+    const L = chipStampLabelType(stamped);
     const lab = el("text", "chipstamplab", g, {
-      x: 0, y: (side / 2 + CHIP_STAMP.LABEL_GAP).toFixed(1), "text-anchor": "middle",
-      style: "font-family:Kalam,cursive;font-size:" + CHIP_STAMP.LABEL_SIZE + "px;font-weight:700;fill:" + chipStampInk(sp.ink)
+      x: stamped ? (-off[0]).toFixed(1) : 0, y: (side / 2 - off[1] + L.gap).toFixed(1), "text-anchor": "middle",
+      style: "font-family:Kalam,cursive;font-size:" + L.size + "px;font-weight:700;fill:" + chipStampInk(sp.ink)
         + ";paint-order:stroke;stroke:" + chipStampInk(sp.ink === "charcoal" ? "cream" : "charcoal")
         + ";stroke-width:4px;stroke-linejoin:round",
     });
     if (lines.length > 1) {
       lines.forEach((line, index) => {
-        const ts = el("tspan", "", lab, { x: 0, dy: index ? CHIP_STAMP.LABEL_LINE_H : 0 });
+        const ts = el("tspan", "", lab, { x: stamped ? (-off[0]).toFixed(1) : 0, dy: index ? L.line : 0 });
         ts.textContent = line;
       });
     } else lab.textContent = lines[0];
   }
+}
+
+/* P70 T1: the label's type - the floor under the stamp arrival (LABEL_FLOOR, the gap and the line step scaled with it),
+   today's LABEL_SIZE otherwise, written exactly as before */
+export const chipStampLabelType = (stamped) => {
+  if (!stamped) return { size: CHIP_STAMP.LABEL_SIZE, gap: CHIP_STAMP.LABEL_GAP, line: CHIP_STAMP.LABEL_LINE_H };
+  const k = CHIP_STAMP.LABEL_FLOOR / CHIP_STAMP.LABEL_SIZE;
+  return { size: CHIP_STAMP.LABEL_FLOOR, gap: +(CHIP_STAMP.LABEL_GAP * k).toFixed(2), line: +(CHIP_STAMP.LABEL_LINE_H * k).toFixed(2) };
+};
+
+/* P70 T1: the stamped chip's PAINTED box in its side x side square - the compiler's `paint` [x0, y0, x1, y1] (fractions of
+   the square: the UNION of the cutout's alpha box and the label's box, so it may run past [0, 1]), else the whole
+   square. `off` is that box's centre offset from the square's centre - the group turns about it - and `r` its
+   half-diagonal: the ring's base radius, as the dock's is, so the ring circles the mark and its name at every angle. */
+export const chipStampPaint = (sp, side) => {
+  const p = Array.isArray(sp.paint) && sp.paint.length === 4 && sp.paint.every((v) => Number.isFinite(+v)) ? sp.paint.map(Number) : [0, 0, 1, 1];
+  return { off: [side * ((p[0] + p[2]) / 2 - 0.5), side * ((p[1] + p[3]) / 2 - 0.5)],
+           r: 0.5 * Math.hypot(side * (p[2] - p[0]), side * (p[3] - p[1])) };
+};
+
+/* P70 T1: the stamped chip's group and its impact ring. The ring is drawn FIRST, in the species layer under the mark,
+   radiating from the contact point (the painted centre on the surface) at the art's own radius x ring.r - it does not
+   ride the mark's scale, turn or dip. The group carries the mark's pose as the dock's `stopCss` writes it: translate
+   (the receiver's dip), the free rotation, the clamped scale, the hit's squash frame; about the painted centre. */
+function chipStampGroup(ctx, pose, ix, cx, cy, side, s) {
+  const { sp, svg, el, sc } = ctx;
+  const P = chipStampPaint(sp, side), pcx = cx + P.off[0] + ix.dx, pcy = cy + P.off[1] + ix.dy;
+  if (pose.ring) {
+    const ledger = !!(sc && sc.world && sc.world.kind === "ledger");
+    el("circle", "chipstampring", svg, { cx: pcx.toFixed(1), cy: pcy.toFixed(1), r: (P.r * pose.ring.r).toFixed(1), fill: "none",
+      stroke: ledger ? CHIP_STAMP.RING_INK.ledger : CHIP_STAMP.RING_INK.ground, "stroke-width": pose.ring.width.toFixed(2),
+      opacity: pose.ring.alpha.toFixed(3) });
+  }
+  const a = Math.abs(pose.alpha || 0), th = (pose.alpha || 0) < 0 ? (pose.theta || 0) + Math.PI / 2 : (pose.theta || 0);
+  const sq = a > 1e-6 ? " matrix(" + squashMatrix(th, a).map((v) => v.toFixed(4)).join(" ") + " 0 0)" : "";
+  return el("g", "chipstamp", svg, { opacity: pose.fade.toFixed(3),
+    transform: "translate(" + pcx.toFixed(1) + " " + (pcy + (pose.dy || 0)).toFixed(1) + ") rotate(" + pose.rot.toFixed(2)
+      + ") scale(" + s.toFixed(4) + ")" + sq });
 }
 
 /* THE PAINTER. ctx is the template's species context (see SPECIES_PAINTERS in the player): the declaration,

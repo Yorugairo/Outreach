@@ -1,0 +1,626 @@
+{
+ "schema": "bravos-line-bloom.v1",
+ "purpose": "E99 s117 / s120 (P69 T37b): the Bravos band a primary line's bloom, a solo's lit/muted gap and the squint read are set from (E38 - thresholds from the reference, never fitted to ours). Written by measure_line_bloom.py's measure(); `python content/video_engine/scripts/measure_line_bloom.py --band content/video_engine/assets/bravos-line-bloom.v1.json --check --root <main checkout>` re-measures every frame.",
+ "frames_root": "the main checkout (docs/research/runs/bravos-watch is research, read-only)",
+ "resolution_note": "Bravos frames are JPEG stills at 512 (JPN) or 1024 px wide; geometry (stroke, halo radii) depends on the width, so OURS is compared at the same width (measure(..., at_width=W)). The two JPN stills at 512 px blur the core into the halo (core_sat stays high there) - the 1024 px frames carry the core and halo numbers; the JPN pair carries the isolate's ratio at its own width.",
+ "frames": [
+  {
+   "id": "jpn-0520",
+   "frame": "docs/research/runs/bravos-watch/nB1eXWQlW58/luna-recovery/focus-05-treasury-holdings/frames/frame_0001.jpg",
+   "what": "JPN 'Foreign Holdings of US Treasuries' 05:20.0 - Japan (magenta) redrawing, China / UK / Japan's own future already ghosted",
+   "ink": "#A5315E",
+   "box": [
+    118,
+    78,
+    404,
+    229
+   ],
+   "title_box": [
+    99,
+    33,
+    276,
+    49
+   ],
+   "label_box": [
+    166,
+    64,
+    189,
+    74
+   ],
+   "plot_words": 4,
+   "words_note": "the legend row: Japan, China, United Kingdom",
+   "ocr_words_cross_check": 0,
+   "size": [
+    512,
+    288
+   ],
+   "measured": {
+    "stroke_px1080": 15.0,
+    "core_lum": 0.1194,
+    "core_L": 41.12,
+    "core_sat": 0.682,
+    "ink_sat": 0.722,
+    "ink_chroma": 44.5,
+    "halo_edge": 0.077,
+    "halo_r50_px1080": 18.32,
+    "halo_r50_x_stroke": 1.22,
+    "halo_reach10_px1080": 3.75,
+    "halo_area_1080": 57.1,
+    "lit_muted_ratio": 1.61,
+    "lit_muted_excess": 1.73,
+    "lit_share": 0.283,
+    "title_cap_px": 5.0,
+    "label_cap_px": 3.12,
+    "plot_words": 4
+   },
+   "halo_profile": [
+    3.2,
+    2.7,
+    2.5,
+    2.0,
+    1.5,
+    0.8,
+    0.4,
+    0.3,
+    0.0,
+    0.3,
+    0.4,
+    0.4,
+    0.3,
+    0.3,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "id": "jpn-0523",
+   "frame": "docs/research/runs/bravos-watch/nB1eXWQlW58/luna-recovery/focus-05-treasury-holdings/frames/frame_0008.jpg",
+   "what": "JPN 05:23.5 - the isolate: Japan lit, China and UK muted to thin dim lines, the legend kept",
+   "ink": "#A5315E",
+   "box": [
+    118,
+    78,
+    404,
+    229
+   ],
+   "title_box": [
+    99,
+    33,
+    276,
+    49
+   ],
+   "label_box": [
+    166,
+    64,
+    189,
+    74
+   ],
+   "plot_words": 4,
+   "words_note": "the legend row: Japan, China, United Kingdom",
+   "ocr_words_cross_check": 0,
+   "size": [
+    512,
+    288
+   ],
+   "measured": {
+    "stroke_px1080": 15.0,
+    "core_lum": 0.1223,
+    "core_L": 41.58,
+    "core_sat": 0.705,
+    "ink_sat": 0.723,
+    "ink_chroma": 44.79,
+    "halo_edge": 0.088,
+    "halo_r50_px1080": 14.22,
+    "halo_r50_x_stroke": 0.95,
+    "halo_reach10_px1080": 3.75,
+    "halo_area_1080": 55.9,
+    "lit_muted_ratio": 1.64,
+    "lit_muted_excess": 1.77,
+    "lit_share": 0.458,
+    "title_cap_px": 5.0,
+    "label_cap_px": 3.12,
+    "plot_words": 4
+   },
+   "halo_profile": [
+    3.6,
+    3.0,
+    2.5,
+    1.6,
+    1.1,
+    0.8,
+    0.4,
+    0.3,
+    0.2,
+    0.3,
+    0.3,
+    0.4,
+    0.3,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "id": "ai-builders",
+   "frame": "docs/research/runs/bravos-watch/Jw8ykhoOVBQ/luna-recovery/focus-0004-0014-no-dedup/frames/frame_0011.jpg",
+   "what": "'AI Builders Versus AI Spenders' - Semiconductors (red) lit with a white-pink core, MAMAA drawn white beside it, both lines' futures ghosted",
+   "ink": "#E05360",
+   "box": [
+    230,
+    155,
+    809,
+    460
+   ],
+   "title_box": [
+    200,
+    69,
+    518,
+    95
+   ],
+   "label_box": [
+    568,
+    129,
+    747,
+    146
+   ],
+   "plot_words": 7,
+   "words_note": "the legend row: MAMAA Stocks Index (LHS), Semiconductors Index (RHS)",
+   "ocr_words_cross_check": 7,
+   "size": [
+    1024,
+    576
+   ],
+   "measured": {
+    "stroke_px1080": 13.52,
+    "core_lum": 0.5939,
+    "core_L": 81.51,
+    "core_sat": 0.282,
+    "ink_sat": 0.622,
+    "ink_chroma": 55.71,
+    "halo_edge": 0.074,
+    "halo_r50_px1080": 35.81,
+    "halo_r50_x_stroke": 2.65,
+    "halo_reach10_px1080": 1.88,
+    "halo_area_1080": 479.1,
+    "lit_muted_ratio": 3.86,
+    "lit_muted_excess": 3.69,
+    "lit_share": 0.617,
+    "title_cap_px": 5.0,
+    "label_cap_px": 3.12,
+    "plot_words": 7
+   },
+   "halo_profile": [
+    11.7,
+    13.1,
+    13.7,
+    12.5,
+    11.8,
+    11.3,
+    10.6,
+    10.2,
+    9.6,
+    9.0,
+    8.6,
+    8.1,
+    7.7,
+    7.3,
+    7.0,
+    6.8,
+    6.5,
+    6.2,
+    5.9,
+    5.5,
+    5.2,
+    5.1,
+    4.7,
+    4.5,
+    4.4,
+    4.2,
+    4.0,
+    3.5,
+    3.1,
+    3.0,
+    2.8,
+    2.6,
+    2.6,
+    2.2,
+    2.1,
+    1.8,
+    1.7,
+    1.6,
+    1.6,
+    1.3
+   ]
+  },
+  {
+   "id": "kospi-index",
+   "frame": "docs/research/runs/bravos-watch/4AkB4c0tTfU/luna-recovery/focus-kospi/frames/cue_0000.jpg",
+   "what": "'KOSPI Composite Index' - one electric blue line with a wide bloom, the 240% badge at its tip (a lone series: no muted)",
+   "ink": "#1895EB",
+   "box": [
+    230,
+    155,
+    809,
+    460
+   ],
+   "title_box": [
+    201,
+    69,
+    445,
+    95
+   ],
+   "label_box": [
+    822,
+    160,
+    862,
+    176
+   ],
+   "exclude": [
+    [
+     760,
+     155,
+     809,
+     185
+    ]
+   ],
+   "plot_words": 0,
+   "words_note": "no words on the plot - the title names the line, the tip carries the figure 240%",
+   "ocr_words_cross_check": 0,
+   "size": [
+    1024,
+    576
+   ],
+   "measured": {
+    "stroke_px1080": 13.52,
+    "core_lum": 0.2957,
+    "core_L": 61.28,
+    "core_sat": 0.888,
+    "ink_sat": 0.894,
+    "ink_chroma": 49.59,
+    "halo_edge": 0.241,
+    "halo_r50_px1080": 11.06,
+    "halo_r50_x_stroke": 0.82,
+    "halo_reach10_px1080": 15.25,
+    "halo_area_1080": 419.8,
+    "lit_muted_ratio": 3.39,
+    "lit_muted_excess": 5.83,
+    "lit_share": 0.743,
+    "title_cap_px": 5.0,
+    "label_cap_px": 2.5,
+    "plot_words": 0
+   },
+   "halo_profile": [
+    22.3,
+    19.4,
+    16.4,
+    14.2,
+    12.4,
+    11.0,
+    10.1,
+    9.3,
+    8.6,
+    8.0,
+    7.4,
+    7.1,
+    6.4,
+    5.9,
+    5.5,
+    5.0,
+    4.5,
+    4.4,
+    4.2,
+    3.7,
+    3.5,
+    3.3,
+    2.8,
+    2.7,
+    2.5,
+    2.5,
+    2.4,
+    2.0,
+    1.8,
+    1.7,
+    1.7,
+    1.7,
+    1.6,
+    1.6,
+    1.6,
+    1.3,
+    1.1,
+    0.8,
+    0.6,
+    0.5
+   ]
+  },
+  {
+   "id": "kospi-retail",
+   "frame": "docs/research/runs/bravos-watch/4AkB4c0tTfU/luna-recovery/focus-kospi/frames/cue_0003.jpg",
+   "what": "'Net Purchases of KOSPI' - retail lit WHITE with a wide soft halo, institutional amber and the retail history grey",
+   "ink": "#FFFFFF",
+   "box": [
+    333,
+    155,
+    912,
+    460
+   ],
+   "title_box": [
+    303,
+    69,
+    549,
+    91
+   ],
+   "label_box": [
+    402,
+    128,
+    582,
+    144
+   ],
+   "plot_words": 6,
+   "words_note": "the legend row: Domestic Retail Investors, Domestic Institutional Investors",
+   "ocr_words_cross_check": 6,
+   "size": [
+    1024,
+    576
+   ],
+   "measured": {
+    "stroke_px1080": 5.3,
+    "core_lum": 0.9925,
+    "core_L": 99.71,
+    "core_sat": 0.016,
+    "ink_sat": 0.031,
+    "ink_chroma": 2.3,
+    "halo_edge": 0.519,
+    "halo_r50_px1080": 11.57,
+    "halo_r50_x_stroke": 2.18,
+    "halo_reach10_px1080": 40.61,
+    "halo_area_1080": 2403.4,
+    "lit_muted_ratio": 5.29,
+    "lit_muted_excess": 3.23,
+    "lit_share": 0.572,
+    "title_cap_px": 5.0,
+    "label_cap_px": 3.44,
+    "plot_words": 6
+   },
+   "halo_profile": [
+    110.6,
+    82.8,
+    78.8,
+    70.7,
+    62.5,
+    56.1,
+    51.3,
+    47.2,
+    44.2,
+    40.3,
+    38.2,
+    35.3,
+    33.3,
+    31.2,
+    29.3,
+    28.2,
+    26.3,
+    25.2,
+    23.8,
+    22.6,
+    21.9,
+    21.0,
+    19.4,
+    18.4,
+    17.6,
+    16.9,
+    15.5,
+    15.0,
+    14.0,
+    14.0,
+    13.0,
+    13.0,
+    12.0,
+    11.6,
+    10.6,
+    10.0,
+    10.0,
+    9.0,
+    9.0,
+    8.1
+   ]
+  }
+ ],
+ "band_1024": {
+  "stroke_px1080": {
+   "min": 5.3,
+   "max": 13.52,
+   "n": 3
+  },
+  "core_lum": {
+   "min": 0.2957,
+   "max": 0.9925,
+   "n": 3
+  },
+  "core_L": {
+   "min": 61.28,
+   "max": 99.71,
+   "n": 3
+  },
+  "core_sat": {
+   "min": 0.016,
+   "max": 0.888,
+   "n": 3
+  },
+  "ink_sat": {
+   "min": 0.031,
+   "max": 0.894,
+   "n": 3
+  },
+  "ink_chroma": {
+   "min": 2.3,
+   "max": 55.71,
+   "n": 3
+  },
+  "halo_edge": {
+   "min": 0.074,
+   "max": 0.519,
+   "n": 3
+  },
+  "halo_r50_px1080": {
+   "min": 11.06,
+   "max": 35.81,
+   "n": 3
+  },
+  "halo_r50_x_stroke": {
+   "min": 0.82,
+   "max": 2.65,
+   "n": 3
+  },
+  "halo_reach10_px1080": {
+   "min": 1.88,
+   "max": 40.61,
+   "n": 3
+  },
+  "halo_area_1080": {
+   "min": 419.8,
+   "max": 2403.4,
+   "n": 3
+  },
+  "lit_muted_ratio": {
+   "min": 3.39,
+   "max": 5.29,
+   "n": 3
+  },
+  "lit_muted_excess": {
+   "min": 3.23,
+   "max": 5.83,
+   "n": 3
+  },
+  "lit_share": {
+   "min": 0.572,
+   "max": 0.743,
+   "n": 3
+  },
+  "title_cap_px": {
+   "min": 5.0,
+   "max": 5.0,
+   "n": 3
+  },
+  "label_cap_px": {
+   "min": 2.5,
+   "max": 3.44,
+   "n": 3
+  },
+  "plot_words": {
+   "min": 0,
+   "max": 7,
+   "n": 3
+  }
+ },
+ "band_512": {
+  "stroke_px1080": {
+   "min": 15.0,
+   "max": 15.0,
+   "n": 2
+  },
+  "core_lum": {
+   "min": 0.1194,
+   "max": 0.1223,
+   "n": 2
+  },
+  "core_L": {
+   "min": 41.12,
+   "max": 41.58,
+   "n": 2
+  },
+  "core_sat": {
+   "min": 0.682,
+   "max": 0.705,
+   "n": 2
+  },
+  "ink_sat": {
+   "min": 0.722,
+   "max": 0.723,
+   "n": 2
+  },
+  "ink_chroma": {
+   "min": 44.5,
+   "max": 44.79,
+   "n": 2
+  },
+  "halo_edge": {
+   "min": 0.077,
+   "max": 0.088,
+   "n": 2
+  },
+  "halo_r50_px1080": {
+   "min": 14.22,
+   "max": 18.32,
+   "n": 2
+  },
+  "halo_r50_x_stroke": {
+   "min": 0.95,
+   "max": 1.22,
+   "n": 2
+  },
+  "halo_reach10_px1080": {
+   "min": 3.75,
+   "max": 3.75,
+   "n": 2
+  },
+  "halo_area_1080": {
+   "min": 55.9,
+   "max": 57.1,
+   "n": 2
+  },
+  "lit_muted_ratio": {
+   "min": 1.61,
+   "max": 1.64,
+   "n": 2
+  },
+  "lit_muted_excess": {
+   "min": 1.73,
+   "max": 1.77,
+   "n": 2
+  },
+  "lit_share": {
+   "min": 0.283,
+   "max": 0.458,
+   "n": 2
+  },
+  "title_cap_px": {
+   "min": 5.0,
+   "max": 5.0,
+   "n": 2
+  },
+  "label_cap_px": {
+   "min": 3.12,
+   "max": 3.12,
+   "n": 2
+  },
+  "plot_words": {
+   "min": 4,
+   "max": 4,
+   "n": 2
+  }
+ },
+ "title_colour": {
+  "measured": "#CF8CA6 (p90 of the title's text pixels, ai-builders; #C78CA2 on both KOSPI frames, #B9879A on JPN at 512)",
+  "note": "the long form's #DB8497 (BRAVOS-LONGFORM-CHART-SPEC.md) is the same rose read on 1280 px frames"
+ }
+}
