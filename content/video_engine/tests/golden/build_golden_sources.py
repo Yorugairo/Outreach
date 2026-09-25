@@ -4603,6 +4603,63 @@ def equation_halving() -> tuple[dict, dict]:
 SURFACES.update({"equation-halving": equation_halving})
 FRAME_T.update({"equation-halving": 14.2})   # the result written whole (13.44 + WRITE_S x 0.69) and the "=" landed
 
+# ---- P70 T5 (was P69 T58; harvest v2 T24, Bravos RST 05:40): THE DECOMPOSITION BRACE - one total braced into its parts --
+#   brace-funding     Steel and Paper H row 17 (SHOT-TABLE-H #12): the Q1 2026 bar of T64's `stacked-combo-funding` - the
+#                     five biggest builders' cash from operations, stacked into cash capex and what was left - on a BARS
+#                     page of its own (the combo's share line is not this beat's). READ through `stacked_funding_series()`
+#                     (ev-capex-funding-v1's two filed series; "Left over" is their arithmetic, as the source line says),
+#                     never re-typed. The take (vo-h-scratch/scratch-kokoro.words.json) shifted by BRACE_SHIFT so the page
+#                     has built first (its bars grow 4.4-7.4 s): the brace draws on "every dollar these companies generate
+#                     from operations." (329.025-332.212) and writes the whole's name; "Left over" is written on
+#                     "investing its surplus" (334.10 - the plan's 333.45 is "not", the clause's first word; the name
+#                     lands on the word that means it) and "Cash capex" on "spending all of it" (336.325). Judged once
+#                     both names are written and the key has handed them over.
+BRACE_SHIFT = 321.0
+BRACE_AT = round(329.025 - BRACE_SHIFT, 2)                   # "every dollar these companies generate from operations."
+BRACE_DUR = round(332.212 - 329.025, 2)                      # ... to the end of "operations."
+BRACE_PARTS_AT = [round(336.325 - BRACE_SHIFT, 2),           # part 0, Cash capex: "spending all of it"
+                  round(334.10 - BRACE_SHIFT, 2)]            # part 1, Left over: "investing its surplus"
+BRACE_SPECIES = [{"kind": "bracket", "form": "brace", "at": BRACE_AT, "dur": BRACE_DUR, "bar": 0,
+                  "label": "Cash from operations", "parts_at": BRACE_PARTS_AT}]
+
+
+def brace_funding_series() -> dict:
+    """The Q1 2026 bar of `stacked_funding_series()`, alone on a bars page: its title and sub say what it is."""
+    s = stacked_funding_series()
+    return {"title": "Spending all of it",
+            "sub": "The five biggest builders' cash from operations, first quarter of 2026: what capital spending took, "
+                   "and what was left",
+            "src": s["src"], "unit": s["unit"], "ylabel": s["ylabel"], "bars": [s["bars"][-1]]}
+
+
+def brace_funding(extra: list | None = None, longform: str | None = None) -> tuple[dict, dict]:
+    """The golden's timeline; `extra` species (a probe's park) and `longform` (a preset: the row's own `middle`, or
+    `phone`) are for test_decomposition_brace's reads only - the committed golden is the plain call."""
+    import build_scene_timeline_f as BST
+    series = brace_funding_series()
+    assert LPG.validate(series, "bars") == [], LPG.validate(series, "bars")
+    species = [dict(e) for e in BRACE_SPECIES] + [dict(e) for e in (extra or [])]
+    plate = "ledger:golden-brace:bars"
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        page = BST.stamp_full_stage(LPG.build_spec(series, "bars", None, "right"))
+        if longform:
+            LPG.apply_longform(page, longform)   # the row's `;readability=longform[:<preset>]`
+        world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+        BST.check_segments(world, species)
+        BST.check_brace(page, species)   # the compiler's own truth: the bar has parts, the label names its whole
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: one total braced into its named parts (bracket form=brace)", scenes, {}, "16:9")
+    return tl, (dict(_base_uris(), **BST.longform_assets(tl)) if longform else _base_uris())
+
+
+SURFACES.update({"brace-funding": brace_funding})
+FRAME_T.update({"brace-funding": round(BRACE_PARTS_AT[0] + 1.0, 2)})   # both names written (the last at 15.33), the key handed over
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

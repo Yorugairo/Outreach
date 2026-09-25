@@ -10899,6 +10899,19 @@ async function mount(doc) {
     }
     for (const f of G.figs) { const a = (byBar.get(f.bar) || 0).toFixed(3); f.el.setAttribute("opacity", a); if (f.lead) f.lead.setAttribute("opacity", a); }
     if (G.key) G.key.setAttribute("opacity", keyOp.toFixed(3));
+    /* P70 T5: a part a brace has named beside its span hands its key entry over (the two would say it twice) - each
+       entry (its swatch and its name) fades by the MOST written of the names that name it this frame (S.keyHandoff,
+       written by paintBrace); a page with no brace carries no hand-off and is painted as it was */
+    const HO = G.key && S.keyHandoff;
+    if (HO) {
+      if (!G.keyEntries) G.keyEntries = [...G.key.querySelectorAll("text.lp-seg-name")].map((tx) => ({
+        part: String(tx.textContent || "").trim().toLowerCase(),
+        els: [tx.previousElementSibling && tx.previousElementSibling.classList.contains("lp-seg-sw") ? tx.previousElementSibling : null, tx].filter(Boolean) }));
+      for (const e of G.keyEntries) {
+        const w = HO[e.part] ? Math.max(0, ...Object.values(HO[e.part])) : 0;
+        for (const el of e.els) if (w > 0) el.setAttribute("opacity", (1 - w).toFixed(3)); else el.removeAttribute("opacity");
+      }
+    }
   };
   /* P70 T3 (was P69 T51) - THE FILL GAUGE (`;form=gauge`: a PROGRESS page's one share of one whole, harvest v2 T34,
      Bravos D40 17:24). The capsule IS the whole - its foot on zero, its top at the ceiling the compiler wrote
@@ -14979,6 +14992,132 @@ async function mount(doc) {
       }
     }
   };
+  /* P70 T5 (was P69 T58; harvest v2 T24; Bravos RST 05:40, "Long-Term Interest Rates" braced into its two stacked
+     components) - THE DECOMPOSITION BRACE: `bracket {form: "brace", bar, at, dur, label, sub?, parts_at?, side?}` braces
+     ONE stacked bar (P69 T64's `segments`) into its named parts. A curly brace stands beside the bar's side from zero
+     to its top, its cusp toward the label (the whole's name), with a notch at each boundary between two parts; each
+     part's NAME is written beside its own segment's span on the bar's OTHER side, on its word, in its segment's ink
+     (E99 s118 - the style fill that outranks the chart's text class, as the end tags take it). The parts' FIGURES stay
+     the segments' own (lpSegBuild's) and are never written again. The curve is GENERATED geometry, so it is four
+     clothoid curls (doc 42 s42.4 - an Euler spiral from the end to the spine and from the spine to the cusp, never a
+     cubic Bezier) joined by the two straight spines, drawn as one polyline the bracket's dash law draws on.
+       The geometry is read once, at build, off the bar's own mark (`b:<i>`: its side, its top, its base) and its parts'
+     rects (st.bars[i].segs: y0 the part's foot, y1 its head) - the stack stands on ONE chart (check_segments refuses a
+     then= state), and a park moves the chart the brace is drawn in, so it rides the park as a bracket does (R26-28).
+       The side is the author's (`side`, s106); else Bravos's order is tried first - the brace and the whole on the
+     left, the parts named on the right - then the other, and the first whose words meet no bar, figure, value, tick,
+     key or the page's edge is taken (else the least-crowded). Its words are the page's TAG role (a peer of the end
+     tags: on a long-form page the preset's, which is E99 s90's floor at `longform:phone`).
+       THE KEY YIELDS: a part named beside its own span no longer needs its key entry - the two would say the same
+     thing twice. As the brace writes a name it RECORDS how far on the page state (`st.keyHandoff`, keyed by the part's
+     name - the key's own key - and the brace); lpSegPaint, the key's one painter, fades that entry by it (it fades while
+     the name writes, is gone after, and returns if an undraw or a replacing verb takes the brace). The dials, in
+     the chart's units at the bracket's scale: GAP the bar's side to the brace's ends; R the curl's width (R_EM of the
+     words' size, at least R), CURL_K its height as a multiple of R; NOTCH_EM a notch's length; LABEL_EM / NAME_EM the
+     air before the label and a name; NAME_S a name's write; PART_GAP the stagger of names with no `parts_at` (after
+     the brace's own clock); LINE_EM two names' least pitch; OVERLAP the glyph law's (the last letter finishes with the
+     window); SUB_EM the sub's size. */
+  const LPBRACE = Object.freeze({ GAP: 16, R: 10, R_EM: 0.42, CURL_K: 1.6, NOTCH_EM: 0.34, LABEL_EM: 0.4, NAME_EM: 0.55,
+                                  NAME_S: 0.6, PART_GAP: 0.4, LINE_EM: 1.2, OVERLAP: 0.6, SUB_EM: 0.8, SAMPLES: 16 });
+  const lpBraceArea = (a, b) => Math.max(0, Math.min(a[0] + a[2], b[0] + b[2]) - Math.max(a[0], b[0]))
+    * Math.max(0, Math.min(a[1] + a[3], b[1] + b[3]) - Math.max(a[1], b[1]));
+  /* the curve: four clothoid curls - end -> spine, spine -> cusp, cusp -> spine, spine -> end - the spines their joins */
+  const lpBracePath = (xb, dir, yT, ym, yB, R, h) => {
+    const xs = xb + dir * R, xc = xb + dir * 2 * R, n = LPBRACE.SAMPLES;
+    const pts = [...clothoid({ x: xb, y: yT }, [dir, 0], { x: xs, y: yT + h }, [0, 1], n),
+                 ...clothoid({ x: xs, y: ym - h }, [0, 1], { x: xc, y: ym }, [dir, 0], n),
+                 ...clothoid({ x: xc, y: ym }, [-dir, 0], { x: xs, y: ym + h }, [0, 1], n),
+                 ...clothoid({ x: xs, y: yB - h }, [0, 1], { x: xb, y: yB }, [-dir, 0], n)];
+    return { pts, xs, xc };
+  };
+  const lpBraceXAt = (pts, y) => {   /* the brace's x at a height: its y never turns back, so the first pair spanning y is it */
+    for (let k = 1; k < pts.length; k++) { const a = pts[k - 1], b = pts[k];
+      if (a.y <= y && y <= b.y) return b.y > a.y ? a.x + (b.x - a.x) * (y - a.y) / (b.y - a.y) : b.x; }
+    return pts[pts.length - 1].x;
+  };
+  /* what the brace's words must not touch: every bar, every word the builders wrote, each part's figure, the key - and
+     the page's inner edge (a word may stand past the chart's box, whose overflow is visible, never past the page) */
+  const lpBraceInk = (st) => {
+    const G = st.geom || { W: 1000, H: 560 }, u = lpSegU(st);
+    const ink = (st.marks || []).filter((m) => m.role === "bar" && m.geom).map((m) => [m.geom.x, m.geom.y, m.geom.w, m.geom.h])
+      .concat(lpLabelBoxes(st), (st.segFigs || []).map((f) => lpSegBox(f.el)).filter(Boolean).map((r) => [r.x, r.y, r.w, r.h]));
+    const kb = st.segKey ? lpSegBox(st.segKey) : null; if (kb) ink.push([kb.x, kb.y, kb.w, kb.h]);
+    let bL = 0, bR = G.W;
+    try { const M = st.chart.getScreenCTM(), inv = M && M.inverse(), pr = inv && st.page ? st.page.getBoundingClientRect() : null;
+      if (pr && pr.width > 0) { bL = new DOMPoint(pr.left, pr.top).matrixTransform(inv).x + u(LPSEG.PAD_PX * 4);
+        bR = new DOMPoint(pr.right, pr.top).matrixTransform(inv).x - u(LPSEG.PAD_PX * 4); } } catch (_) { /* not laid out: the chart's box */ }
+    return { ink, bL, bR, H: G.H };
+  };
+  const lpBraceGlyphs = (cls, parent, text, size, fill) => {   /* a text written glyph by glyph, in its own ink (s118: the style fill) */
+    const el = lpEl("text", cls, parent, { style: "font-size:" + size.toFixed(2) + "px;fill:" + fill });
+    const gs = [...text].map((ch) => { const ts = lpEl("tspan", "", el, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
+    return { el, gs };
+  };
+  const lpBraceBuild = (st, sp, bi, surf, o) => {
+    const i = sp.bar | 0, rec = (st.bars || []).find((b) => b && b.i === i) || (st.bars || [])[i];
+    const BM = (st.markBy || {})["b:" + i], q = BM && BM.geom;
+    if (!rec || !Array.isArray(rec.segs) || !rec.segs.length || !q) return null;   /* the compiler refuses it (check_brace): nothing to divide */
+    const tfs = lpPhoneTypeOf(st) ? lpTypeU(st, "tag") : o.fs, tss = lpPhoneTypeOf(st) ? tfs * LPBRACE.SUB_EM : o.fss;
+    const base = q.base != null ? q.base : q.y + q.h, yT = Math.min(q.end, base), yB = Math.max(q.end, base), ym = (yT + yB) / 2;
+    const R = Math.min(Math.max(LPBRACE.R, LPBRACE.R_EM * tfs), (yB - yT) / (4 * LPBRACE.CURL_K)), h = LPBRACE.CURL_K * R;
+    const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)";
+    const segs = rec.segs.map((sg, j) => ({ j, name: String(sg.name || ""), color: sg.color, ink: LP_PAL[sg.color] || sg.color,
+                                            foot: Math.max(sg.y0, sg.y1), head: Math.min(sg.y0, sg.y1) }));
+    const { ink, bL, bR, H } = lpBraceInk(st);
+    const g = lpEl("g", "lp-bracket lp-brace main", surf, { opacity: 0 });
+    const lab = lpBraceGlyphs("bklab", g, String(sp.label || ""), tfs, col), lw = lpInkW(lab.el);
+    const sub = sp.sub ? lpBraceGlyphs("bksub", g, String(sp.sub), tss, col) : null, sw = sub ? lpInkW(sub.el) : 0;
+    const nms = segs.map((sg) => Object.assign(lpBraceGlyphs("bklab bkname", g, sg.name, tfs, sg.ink), { sg, w: 0 }));
+    for (const nm of nms) nm.w = lpInkW(nm.el);
+    const box = (x, y, w, fsz, anchor) => [anchor === "end" ? x - w : x, y - LPVAL.ASC * fsz, w, (LPVAL.ASC + LPVAL.LAB_DESC) * fsz];
+    const layoutFor = (side) => {
+      const dir = side === "right" ? 1 : -1, xb = (side === "right" ? q.x + q.w : q.x) + dir * LPBRACE.GAP, P0 = lpBracePath(xb, dir, yT, ym, yB, R, h);
+      const anchor = dir > 0 ? "start" : "end", lx = P0.xc + dir * LPBRACE.LABEL_EM * tfs, ly = ym + tfs * 0.35, sy = ly + tss * 1.3;
+      const nd = -dir, nAnchor = nd > 0 ? "start" : "end", nEdge = side === "right" ? q.x : q.x + q.w;
+      const names = nms.map((nm) => {   /* beside its own span - or beside its own figure where that stands on a leader on this side */
+        const f = (st.segFigs || []).find((ff) => ff.bar === i && ff.j === nm.sg.j && !ff.inside), fb = f ? lpSegBox(f.el) : null;
+        const onSide = fb && (nd > 0 ? fb.x >= q.x + q.w - 1 : fb.x + fb.w <= q.x + 1);
+        const x0 = onSide ? (nd > 0 ? fb.x + fb.w : fb.x) : nEdge;
+        return { nm, x: x0 + nd * LPBRACE.NAME_EM * tfs, y: onSide ? fb.y + fb.h / 2 : (nm.sg.foot + nm.sg.head) / 2 };
+      });
+      const byY = names.slice().sort((a, b) => a.y - b.y), pitch = LPBRACE.LINE_EM * tfs;   /* two thin parts' names never overprint */
+      for (let k = 1; k < byY.length; k++) if (byY[k].y - byY[k - 1].y < pitch) byY[k].y = byY[k - 1].y + pitch;
+      const words = [box(lx, ly, lw, tfs, anchor)].concat(sub ? [box(lx, sy, sw, tss, anchor)] : [],
+        names.map((n) => box(n.x, n.y + tfs * 0.35, n.nm.w, tfs, nAnchor)));
+      let cost = 0;
+      for (const w of words) { for (const o2 of ink) cost += lpBraceArea(w, o2);
+        cost += 4 * (Math.max(0, bL - w[0]) + Math.max(0, w[0] + w[2] - bR) + Math.max(0, -w[1]) + Math.max(0, w[1] + w[3] - H)) * w[3]; }
+      const strip = [Math.min(xb, P0.xc), yT, 2 * R, yB - yT];   /* ... and the curve itself: never through a part's leader figure or the next bar */
+      for (const o2 of ink) cost += lpBraceArea(strip, o2);
+      return { side, dir, xb, P0, anchor, lx, ly, sy, nAnchor, names, cost };
+    };
+    const order = sp.side === "left" || sp.side === "right" ? [sp.side] : ["left", "right"];   /* s106: the author's side is taken as written */
+    const lays = order.map(layoutFor), L = lays.find((l) => l.cost <= 0) || lays.reduce((a, b) => (b.cost < a.cost ? b : a));
+    const set = (el, x, y, anchor) => { el.setAttribute("x", x.toFixed(1)); el.setAttribute("y", y.toFixed(1)); el.setAttribute("text-anchor", anchor); };
+    set(lab.el, L.lx, L.ly, L.anchor); if (sub) set(sub.el, L.lx, L.sy, L.anchor);
+    for (const n of L.names) set(n.nm.el, n.x, n.y + tfs * 0.35, L.nAnchor);
+    const d = clothoidPath(L.P0.pts), bounds = segs.slice(0, -1).map((sg) => sg.head);   /* a boundary is the part below's head */
+    const side = (grp, stroke, label, subEl) => {
+      const line = lpEl("path", "bk", grp, { d, stroke });
+      const len = line.getTotalLength ? line.getTotalLength() : (yB - yT);
+      line.setAttribute("stroke-dasharray", len); line.setAttribute("stroke-dashoffset", len);
+      const nl = Math.min(LPBRACE.NOTCH_EM * tfs, R + LPBRACE.GAP * 0.5);
+      const notches = bounds.map((yb) => { const xN = lpBraceXAt(L.P0.pts, yb);
+        return { x: xN, y: yb, el: lpEl("path", "bk", grp, { d: "M" + xN.toFixed(1) + " " + yb.toFixed(1) + " l" + (-L.dir * nl).toFixed(1) + " 0", stroke,
+                                                             "transform-origin": xN.toFixed(1) + "px " + yb.toFixed(1) + "px", transform: "scale(0 1)" }) }; });
+      return { g: grp, line, len, label: label.el, lg: label.gs, sub: subEl ? subEl.el : null, sg: subEl ? subEl.gs : [], notches };
+    };
+    const main = side(g, col, lab, sub);
+    const gg = lpEl("g", "lp-bracket lp-brace glow", surf, { opacity: 0 });   /* the relight's sunflower twin: the brace and the whole, never the parts' inks */
+    const gl = lpBraceGlyphs("bklab", gg, String(sp.label || ""), tfs, PS.RELIGHT_COL); set(gl.el, L.lx, L.ly, L.anchor);
+    const gs = sp.sub ? lpBraceGlyphs("bksub", gg, String(sp.sub), tss, PS.RELIGHT_COL) : null; if (gs) set(gs.el, L.lx, L.sy, L.anchor);
+    const glow = side(gg, PS.RELIGHT_COL, gl, gs);
+    const pa = Array.isArray(sp.parts_at) && sp.parts_at.length === segs.length ? sp.parts_at : null, dur = Math.max(0.001, sp.dur || 1);
+    const names = L.names.map((n) => ({ j: n.nm.sg.j, el: n.nm.el, glyphs: n.nm.gs, ink: n.nm.sg.color, part: n.nm.sg.name.toLowerCase(),
+                                         at: pa ? +pa[n.nm.sg.j] : sp.at + dur + LPBRACE.PART_GAP * n.nm.sg.j }));
+    return { sp, brace: true, side: L.side, cusp: [L.P0.xc, ym], ends: [[L.xb, yT], [L.xb, yB]], R, x: L.xb, y0: yT, y1: yB,
+             A: [q.cx, yT], B: [q.cx, yB], fits: L.cost <= 0, main, glow, notches: main.notches, names, bi, si: 0, key: "" };
+  };
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -14993,6 +15132,7 @@ async function mount(doc) {
     const surf = st.surfaceMode ? surfaceLayerOf(st.performSvg || st.chart) : (st.performSvg || st.chart);
     const BRACKET_BAR_DESC = 0.4;   /* R26-272: a sub's descent below its baseline, in its own size - the room a stacked sub keeps over a bar's value */
     const brackets = pageSpecies(scene, "bracket").map((sp, bi) => {
+      if (sp.form === "brace") return lpBraceBuild(st, sp, bi, surf, { P, fs, fss, pg });   /* P70 T5: ONE bar braced into its parts - its own geometry */
       let pts = (st.linePts || [])[sp.series | 0] || [], barSide = 0, barInkTop = Infinity;
       /* P69 T50 / R26-272: a BARS page has no `linePts`, and a bracket from bar 0 to bar 1 used to build nothing. Its
          data are the bars' TOPS - the one datum rule lpMarkDatumOn reads for a bar (`b:<i>`: [cx, end]), series 0 only
@@ -15372,7 +15512,36 @@ async function mount(doc) {
     sd.path.setAttribute("d", d);
     sd.path.setAttribute("fill-opacity", (PS.SPREAD_A * clamp01(u / 0.35)).toFixed(3));
   };
+  /* P70 T5: the brace on the bracket's clock - the curve draws over BRACKET_DRAW of dur (one stroke, top end to bottom
+     end, through the cusp), the notches spring open over BRACKET_TICK, the label writes glyph by glyph from
+     BRACKET_LABEL and the sub after it; each part's name writes on its own word over NAME_S (the last letter with the
+     window). An undraw or a replacing verb after its word takes it on that verb's clock, the names with it; how far
+     each name is written is RECORDED for the key's painter (lpSegPaint), never painted on the key here. A pure
+     function of t: every frame writes every brace's share afresh. */
+  const paintBrace = (b, t, ud, st) => {
+    const sp = b.sp, dur = Math.max(0.001, sp.dur || 1);
+    let u = clamp01((t - sp.at) / dur), r = 1;
+    if (ud && t >= ud.at && ud.at >= sp.at) { r = 1 - segEase(clamp01((t - ud.at) / Math.max(0.001, ud.dur || 1))); u = Math.min(u, r); }
+    for (const side of [b.main, b.glow]) {
+      const draw = segEase(u / PS.BRACKET_DRAW);
+      side.line.setAttribute("stroke-dashoffset", (side.len * (1 - draw)).toFixed(1));
+      const tk = (kin("analytic_spring") ? springPop : stagePop)(clamp01((u - PS.BRACKET_DRAW) / PS.BRACKET_TICK));
+      for (const n of side.notches) n.el.setAttribute("transform", "scale(" + tk.toFixed(4) + " 1)");
+      const nl = Math.max(1, side.lg.length), perL = (1 - PS.BRACKET_LABEL) * 0.7 / nl, uL = u - PS.BRACKET_LABEL;
+      side.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uL - j * perL) / (perL * 1.6)).toFixed(3)));
+      const ns = Math.max(1, side.sg.length), perS = (1 - PS.BRACKET_LABEL) * 0.3 / ns, uS = u - PS.BRACKET_LABEL - (1 - PS.BRACKET_LABEL) * 0.7;
+      side.sg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uS - j * perS) / (perS * 1.6)).toFixed(3)));
+    }
+    b.main.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
+    for (const nm of b.names) {
+      const w = t >= sp.at ? Math.min(clamp01((t - nm.at) / LPBRACE.NAME_S), r) : 0, per = 1 / (nm.glyphs.length + LPBRACE.OVERLAP);
+      nm.glyphs.forEach((gl, j) => gl.setAttribute("opacity", clamp01((w - j * per) / (per * (1 + LPBRACE.OVERLAP))).toFixed(3)));
+      const H = st.keyHandoff || (st.keyHandoff = {});   /* the hand-off: this part's name, this brace, this frame */
+      (H[nm.part] || (H[nm.part] = {}))[b.bi] = w;
+    }
+  };
   const paintBracket = (b, t, ud, st) => {
+    if (b.brace) return paintBrace(b, t, ud, st);   /* P70 T5: one bar braced into its parts */
     const sp = b.sp, dur = Math.max(0.001, sp.dur || 1);
     if (st && (st.states || []).length > 1) {   /* R26-28: the two anchors and the series' points, this frame, on the active state (lerped across a rescale / extend) */
       const Ap = lpDatumNow(st, b.si, sp.from | 0), Bp = lpDatumNow(st, b.si, sp.to | 0);

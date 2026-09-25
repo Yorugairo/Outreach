@@ -245,7 +245,7 @@
       "token": "bracket",
       "title": "The bracket page species",
       "aliases": [],
-      "does": "The hand draws a measured span between two data, the number as its label - on a line, or on a bars page between two bar tops, beside the bars' sides (R26-272).",
+      "does": "The hand draws a measured span between two data, the number as its label - on a line, or on a bars page between two bar tops, beside the bars' sides (R26-272); as a brace, one stacked bar braced into its named parts (P70 T5).",
       "when": null,
       "when_source": null,
       "author": {
@@ -299,7 +299,13 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "brace",
+          "means": "`form: \"brace\"` (P70 T5): one stacked bar (`bar`) braced zero to top, cusp toward the label (a figure = the total), a notch per boundary, each part named on its word (`parts_at`) in its ink",
+          "source_set": null
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",
@@ -308,7 +314,8 @@
       },
       "doctrine": [
         "CAPABILITIES Build-on",
-        "BACKLOG R26-272"
+        "BACKLOG R26-272",
+        "P70 T5 (Bravos RST 05:40)"
       ],
       "status": "wired",
       "proof": {

@@ -522,8 +522,14 @@ SPECIES_KINDS += (SPECIES_CROSS,)   # Bravos shots 89-91). ONE species carries b
 TIER_SPECIES = ("build_to", "undraw", "figure", "bracket")   # P50 T9: the page species that may name a TIER - which on a
                               # tiers page IS a series index. One resolution, not two: `tier` is the word the author writes
                               # (a band, not a line), `series` is what the player reads, and the two may not disagree.
-BRACKET_FORMS = ("span", "bar")   # P50 T9 / Bravos shot 36: the same measured span drawn as a hairline with ticks, or as a
+BRACKET_FORMS = ("span", "bar", "brace")   # P50 T9 / Bravos shot 36: the same measured span drawn as a hairline with ticks, or as a
                               # BAR in the accent - the drop of one tier. A form, not a kind (P50 T3's precedent, the underline).
+                              # P70 T5 (Bravos RST 05:40): `brace` - ONE stacked bar braced into its named parts, from zero
+                              # to its top: it names `bar` (never two data), its cusp toward the whole's name, a part's
+                              # name written beside its own span on its word (`parts_at`) - check_brace holds its truth.
+BRACE_FORM = "brace"
+BRACE_SIDES = ("left", "right")   # the side of the bar the brace stands on (the author's; else the engine reads the room)
+BRACE_KEYS = ("bar", "parts_at", "side")   # a brace's own keys - on a span or bar bracket they would be dropped silently
 UNDERLINE_FORM = "underline"   # P50 T3: a callout's FORM - the hand-drawn underline under a press card's quoted phrase (E56's one
                                # exception, the squiggle law s9.27). Not a species kind: the grammar gains a form and a target, not a kind.
 SPECIES_COUNT_ARRAY, SPECIES_AGENDA, SPECIES_RING = "count_array", "agenda", "ring"
@@ -2425,6 +2431,28 @@ def _validate_retitle_color(entry: dict) -> list[str]:
     return errs
 
 
+def _validate_brace(entry: dict, is_idx) -> list[str]:
+    """P70 T5: a `form: "brace"` bracket's own fields - `bar` (the stacked bar it divides), no `from`/`to`, optional
+    `parts_at` (one time per part, bottom-up, at or after the brace's word) and `side` (left|right). The page's truth -
+    the bar has segments, a figure in the label is its total - is check_brace's."""
+    errs = []
+    if "from" in entry or "to" in entry:
+        errs.append("bracket: a brace divides ONE bar into its parts and names `bar`, never `from`/`to` - a measured span "
+                    "between two data is the span form (form: span, the default)")
+    if not is_idx(entry.get("bar")):
+        errs.append("bracket: a brace needs 'bar', a non-negative integer bar index - the stacked bar it divides (P70 T5)")
+    if "parts_at" in entry:
+        pa, at = entry["parts_at"], entry.get("at")
+        if not isinstance(pa, list) or not all(isinstance(x, (int, float)) and not isinstance(x, bool) for x in pa):
+            errs.append("bracket: parts_at must be a list of times (s) - one per part, bottom-up: the word that names it")
+        elif isinstance(at, (int, float)) and any(x < at for x in pa):
+            errs.append(f"bracket: parts_at {pa} names a part before the brace's own word ({at}) - a part is named at or "
+                        "after the brace that divides the whole")
+    if "side" in entry and entry["side"] not in BRACE_SIDES:
+        errs.append(f"bracket: side must be one of {'|'.join(BRACE_SIDES)} (the side of the bar the brace stands on)")
+    return errs
+
+
 def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     """P47 T2: the page species' own fields. bracket: integer `from`/`to` (data indices), a `label`, optional `sub`,
     `series`, `color`; retitle: a non-empty `text`, optional `color` (a page token) and `color_span` (its leading
@@ -2437,9 +2465,14 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
         elif kind not in PAGE_BOUND_SPECIES:
             errs.append(f"{kind}: keep is only for a page-bound species ({'|'.join(PAGE_BOUND_SPECIES)}) - nothing else leaves with the page")
     if kind == "bracket":
-        for f in ("from", "to"):
-            if not is_idx(entry.get(f)):
-                errs.append(f"bracket: {f!r} must be a non-negative integer datum index")
+        if entry.get("form") == BRACE_FORM:   # P70 T5: a brace names ONE bar, not two data - checked BEFORE the span's from/to
+            errs += _validate_brace(entry, is_idx)
+        else:
+            for f in ("from", "to"):
+                if not is_idx(entry.get(f)):
+                    errs.append(f"bracket: {f!r} must be a non-negative integer datum index")
+            errs += [f"bracket: {k!r} is the brace's (form: brace) - a span or bar bracket measures from/to and would "
+                     "drop it" for k in BRACE_KEYS if k in entry]
         if not isinstance(entry.get("label"), str) or not entry["label"].strip():
             errs.append("bracket: needs a non-empty string label (the measured span says what it measures)")
         if "sub" in entry and not isinstance(entry["sub"], str):
@@ -3959,6 +3992,51 @@ def check_segments(world: dict, row_species: list) -> None:
                              "segment stands in its bar AS DRAWN - a transform that moves, re-values or re-draws the "
                              f"bars would leave the stack behind (P69 T64); {'|'.join(MEMBER_CHART_TO)} is the chart_to "
                              "it takes")
+
+
+BRACE_FIGURE = re.compile(r"(?<![A-Za-z0-9.])[-+\u2212]?\d[\d,]*(?:\.\d+)?")   # the first FIGURE a brace's label writes -
+                              # a digit inside a word ("Q1", "H2") is a name, not a figure; a year reads as one (write it in the sub)
+
+
+def check_brace(page: dict | None, species: list) -> None:
+    """P70 T5 (E99 s109: the parts must sum to the total - T64's `segments` already refuse a stack that does not): a
+    `form: "brace"` bracket on its page. It stands on a single BARS page, on a bar the page has, which carries T64's
+    `segments`; `parts_at` names one time per part; a figure in the label must be the bar's written total at the
+    label's own precision - a brace names the whole its parts sum to, and a figure it does not total is untrue.
+    ValueError names it; a row with no brace is untouched."""
+    braces = [sp for sp in (species or []) if isinstance(sp, dict) and sp.get("kind") == "bracket"
+              and sp.get("form") == BRACE_FORM]
+    for sp in braces:
+        where = f"bracket (form: brace) at {sp.get('at')}"
+        vals = page.get("values") if isinstance(page, dict) and page.get("variant") == "bars" else None
+        if not isinstance(vals, list) or not vals or page.get("panels"):
+            raise ValueError(f"{where}: a brace stands on a bars page - it divides ONE bar into its parts (T64's "
+                             "`segments`); a line, a panels page or a plate has no bar to divide")
+        if page.get("builder") == "combo":
+            raise ValueError(f"{where}: a brace stands on a bars page of its own - the combo's stacks carry its line "
+                             "and a second axis, and the brace is not built there (P70 T5); give the braced bar its page")
+        bar = sp.get("bar")
+        if not (isinstance(bar, int) and not isinstance(bar, bool) and 0 <= bar < len(vals)):
+            raise ValueError(f"{where}: bar {bar} is not a bar of this page (0..{len(vals) - 1})")
+        segs = (page.get(LPG.SEGMENTS_KEY) or [None] * len(vals))[bar]
+        label = (page.get("labels") or [""] * len(vals))[bar]
+        if not segs:
+            raise ValueError(f"{where}: a brace divides a whole into its parts, and bar {bar} ({label!r}) carries no "
+                             "parts - give its datum T64's `segments` (the stacked bar of values, E99 s110 (1))")
+        pa = sp.get("parts_at")
+        if isinstance(pa, list) and len(pa) != len(segs):
+            raise ValueError(f"{where}: parts_at names {len(pa)} time(s) for {len(segs)} part(s) - one per segment, "
+                             f"bottom-up ({', '.join(str(s.get('name')) for s in segs)})")
+        m = BRACE_FIGURE.search(str(sp.get("label") or ""))
+        if m:
+            said = float(m.group(0).replace(",", "").replace("\u2212", "-"))
+            places = len(m.group(0).split(".")[1]) if "." in m.group(0) else 0
+            total = float(vals[bar])
+            written = (page.get("value_strings") or [None] * len(vals))[bar] or f"{total:g}"
+            if abs(round(total, places) - said) > 0.5 * 10 ** -places + 1e-9:
+                raise ValueError(f"{where}: the label says {m.group(0)} and bar {bar}'s written total is {written} - a "
+                                 "brace names the whole its parts sum to; a figure it does not total is untrue "
+                                 "(E99 s109, E28) - a year or a count the label names belongs in its sub")
 
 
 def resolve_member_logos(page: dict) -> list[str]:
@@ -5726,6 +5804,8 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_broken_axis(world, row_species)     # P69 T66: a broken axis holds its page (no chart state, no form)
     check_members(world, row_species)         # P69 T45: a tile the membership bar has, and nothing that moves the bar
     check_segments(world, row_species)        # P69 T64: a stacked page takes a park, and nothing that moves its bars
+    check_brace(world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None,
+                row_species)                  # P70 T5: a brace divides a bar the page has, which has parts; its label's truth
     check_solo(world, row_species)            # P69 T37: a solo names ONE mark the page draws, on a page whose marks it re-inks
     for _lj_note in check_level_join(world, row_species):   # P71 T10: a join's ends, its unit, its truth; a WARN on the rule
         print(f"  [WARN] {_lj_note.removeprefix('WARN ')}")
