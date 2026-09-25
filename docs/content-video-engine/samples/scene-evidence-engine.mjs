@@ -9538,8 +9538,26 @@ async function mount(doc) {
     if (!cuts.length) return s;
     const i = Math.min(...cuts); return s.slice(0, i + (s[i] === "." ? 1 : 0)).trim();
   };
-  /* a currency unit is a prefix ("$577", "-$40"); every other unit is a suffix ("12%") */
-  const lpWithUnit = (str, unit) => unit === "$" ? (String(str).startsWith("-") ? "-$" + String(str).slice(1) : "$" + str) : str + (unit || "");
+  /* a currency unit is a prefix ("$577", "-$40"); every other unit is a suffix ("12%").
+     P72 T13 (R26-274, E28: an axis states its unit): a WORD unit takes a space - it opens with a letter and runs three
+     letters or more ("20 years", "5 yen", "90 USD billions") - and a SYMBOL unit none ("12%", "3.2x", "96Mb", "480bn");
+     a unit the author already spaced (" years") is written as given. R26-287: a PREFIX AND A SUFFIX (`unit: "$"` +
+     `unit_suffix: "B"`, the page's `lpUnitOf`) arrives as { pre, suf } and writes "$480B", "-$40B". A string unit with no
+     letters-word in it writes exactly what it wrote before, to the byte. */
+  const LP_UNIT_WORD = /^(?=\p{L})[\s\S]*?\p{L}{3}/u;
+  const lpUnitGap = (unit) => (LP_UNIT_WORD.test(unit) ? " " : "");
+  const lpWithUnit = (str, unit) => {
+    if (unit && typeof unit === "object") {   /* R26-287: { pre, suf } */
+      const s = String(str), neg = s.startsWith("-"), pre = String(unit.pre || ""), suf = String(unit.suf || "");
+      return (neg ? "-" : "") + pre + (neg ? s.slice(1) : s) + lpUnitGap(suf) + suf;
+    }
+    return unit === "$" ? (String(str).startsWith("-") ? "-$" + String(str).slice(1) : "$" + str) : str + lpUnitGap(unit || "") + (unit || "");
+  };
+  /* the page's unit as lpWithUnit takes it: its string (every page without a suffix, byte for byte), or { pre, suf } */
+  const lpUnitOf = (pg) => {
+    const u = String((pg && pg.unit) || ""), suf = pg && pg.unit_suffix;
+    return typeof suf === "string" && suf ? { pre: u, suf } : u;
+  };
   const NSV = "http://www.w3.org/2000/svg";
   const lpEl = (tag, cls, parent, at) => {
     const e = tag === "svg" || (parent && parent.namespaceURI === NSV && tag !== "div" && tag !== "span")
@@ -11288,6 +11306,122 @@ async function mount(doc) {
       return { h, y: mx(v), line, lab, col };
     });
   };
+  /* P72 T13 (R26-274): THE TICK COLUMN NEVER LEAVES THE STAGE. A bars page writes its y ticks end-anchored LAB_DX left of
+     the plot, and a tick carries its unit ("20 years", "$600B"), so a wide unit ran the column off the stage's left edge
+     (the two-clocks page's "20 years" at x -20 on the default 16:9 page). The column is measured BEFORE the plot is laid
+     out - the strings lpYTicks will write, in its class and size - and the page's rest pose maps chart units to stage px
+     (the chart's own box and letterbox, then the punch about the board's centre, as lpStagePx and the painter take them);
+     a column whose left edge would stand inside EDGE_PX of the stage's edge moves the plot's left edge right by exactly
+     the shortfall. A column that clears returns the gutter it was given, so every page that fit builds to the byte. */
+  const LPBAR_TICKCOL = Object.freeze({
+    LAB_DX: 26,     /* buildLedgerBars' tick label column: end-anchored this many chart units left of the plot (x0 - 26) */
+    EDGE_PX: 12,    /* the stage px a tick label keeps from the stage's left edge [DERIVED: under the tightest page on file -
+                       the stacked-outlays golden's "$2000" at 13.9 px, bars-range's "100%" at 21.0 - so every page that
+                       stood on the stage builds to the byte; more air would move those two, the parent's call] */
+    DIVS: 6,        /* buildLedgerBars' own division count (the tariff short's reason, at the lpYTicks call) */
+  });
+  const lpStageLeftU = (st) => {   /* the chart unit that stands at stage x 0 at the page's rest pose, or null */
+    const ch = st.chart, G = st.geom, k = st.stagePx;
+    if (!ch || !G || !(k > 0)) return null;
+    const len = (v, full) => { const n = parseFloat(v); return !Number.isFinite(n) ? NaN : String(v).trim().endsWith("%") ? n / 100 * full : n; };
+    const L = len(ch.style.left, STAGE_W), w = len(ch.style.width, STAGE_W), h = len(ch.style.height, STAGE_H);
+    if (![L, w, h].every(Number.isFinite) || !(w > 0) || !(h > 0)) return null;
+    const m = Math.min(w / G.W, h / G.H), rest = k / m, ox = (w - G.W * m) / 2;   /* the svg's default xMidYMid meet */
+    const bx = STAGE_W * ((st.boardCentre || { x: 50 }).x / 100);
+    return ((0 - bx) / rest + bx - L - ox) / m;   /* invert: stage = bx + rest * (L + ox + m * u - bx) */
+  };
+  const lpTickColX0 = (st, x0, lo, hi, unit) => {
+    const left = lpStageLeftU(st);
+    if (left == null) return x0;
+    const step = lpNiceStep(Math.max(1e-9, (hi - lo) / LPBAR_TICKCOL.DIVS)), at = lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : undefined;
+    const probe = lpText(st.chart, "lab", 0, 0, "end", "", Object.assign({ opacity: 0 }, at || {}));
+    let wmax = 0;
+    for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
+      probe.textContent = lpWithUnit(lpTick(Math.abs(tv) < step * 1e-6 ? 0 : tv), unit);
+      wmax = Math.max(wmax, lpInkW(probe));
+    }
+    probe.remove();
+    const need = left + LPBAR_TICKCOL.EDGE_PX / st.stagePx + wmax + LPBAR_TICKCOL.LAB_DX;
+    return need > x0 ? Math.ceil(need) : x0;
+  };
+  /* P72 T13 (R26-250): A RULE'S LABEL IS NEVER WRITTEN OVER A BAR. A bars page names each comparator rule at the plot's
+     right end, end-anchored over the rule - and a bar standing there took the label across its face ("historically
+     2-4%" over the lone bar, P69 T6). The label now keeps its place when it clears every bar and every value (the page
+     builds to the byte); else, in this order: it SLIDES along its rule into the rightmost free ground between the bars
+     that is wide enough; it WRAPS onto two lines at the balanced space (both above the rule) and slides; it SHRINKS, to
+     MIN_K of its size at the least, into the widest free ground; and when no ground on the plot holds it, it is written
+     past the rule's right end - the rule's own end tag - when the stage has room there. A label that none of these
+     clears keeps its place and is reported (`st.ruleFit`), never silently dropped. Pure: geometry read at build. */
+  const LPRULE_FIT = Object.freeze({
+    PAD_U: 8,       /* the air a rule's label keeps from a bar or a value, chart units [DERIVED: a third of the default 24 px name] */
+    MIN_K: 0.7,     /* the smallest a rule's label shrinks to [DERIVED: 0.7 x 24 = 17 units, above the page's 16 px tick floor] */
+    LINE_H: 1.1,    /* a wrapped label's leading, in its own font sizes (the schematic's LINE_H) */
+    END_GAP_U: 10,  /* past the rule's end: the label's gap from the rule's last point */
+  });
+  /* a rule label's two lines, split at the space that balances them, both above the rule (the second on the old
+     baseline's line); returns the undo, which sets the one line back exactly as it was */
+  const lpRuleWrap = (lab, fs) => {
+    const text = lab.textContent, y0 = lab.getAttribute("y"), x = lab.getAttribute("x"), words = text.split(" ");
+    let best = null;
+    for (let k = 1; k < words.length; k++) {
+      const a = words.slice(0, k).join(" "), b = words.slice(k).join(" ");
+      lab.textContent = a; const wa = lpInkW(lab); lab.textContent = b; const wb = lpInkW(lab);
+      if (!best || Math.max(wa, wb) < best.w) best = { a, b, w: Math.max(wa, wb) };
+    }
+    const dy = LPRULE_FIT.LINE_H * fs;
+    lab.textContent = ""; lab.setAttribute("y", (+y0 - dy).toFixed(1));
+    lab.__wrapLines = [best.a, best.b].map((s2, j) => { const ts = lpEl("tspan", "", lab, { x, dy: j ? dy.toFixed(1) : 0 }); ts.textContent = s2; return ts; });
+    lab.__wrapDy = dy; lab.__wrapText = [best.a, best.b];
+    return () => {
+      lab.__wrapLines = null; lab.__wrapDy = null; lab.__wrapText = null;
+      while (lab.firstChild) lab.removeChild(lab.firstChild);
+      lab.textContent = text; lab.setAttribute("x", x); lab.setAttribute("y", y0);
+    };
+  };
+  /* what stands on the plot a rule's label must clear: every bar (a breaking bar to the top) and every written value */
+  const lpRuleBlocks = (st, base) => st.bars.flatMap((b) => {
+    const yt = b.over ? -1e9 : Math.min(base, b.end, b.neg ? base : base - b.h), yb = Math.max(base, b.end, b.neg ? base + b.h : base);
+    const vb = b.val && !b.thin && (b.val.textContent || "").length ? lpLabelBox(b.val) : null;
+    return [[b.bx, b.bx + b.bw, yt, yb], ...(vb ? [[vb[0], vb[0] + vb[2], vb[1], vb[1] + vb[3]]] : [])];
+  });
+  const lpRuleLabelsClear = (st, base, x0, x1) => {
+    const pad = LPRULE_FIT.PAD_U, blocks = lpRuleBlocks(st, base);
+    const hit = (bx) => blocks.some((k) => k[0] < bx[0] + bx[2] + pad && k[1] > bx[0] - pad && k[2] < bx[1] + bx[3] && k[3] > bx[1]);
+    const gaps = (y0, y1) => {   /* the free stretches of [x0, x1] at this band, left to right */
+      const cut = blocks.filter((k) => k[2] < y1 && k[3] > y0).map((k) => [k[0] - pad, k[1] + pad]).sort((a, b) => a[0] - b[0]);
+      const out = []; let from = x0;
+      for (const [a, b] of cut) { if (a > from) out.push([from, a]); from = Math.max(from, b); }
+      if (x1 > from) out.push([from, x1]);
+      return out;
+    };
+    const slide = (lab, box) => {   /* the rightmost stretch that holds the label: end-anchored at its right end */
+      const g = box && gaps(box[1], box[1] + box[3]).filter(([a, b]) => b - a >= box[2]).pop();
+      if (!g) return false;
+      lpSetTextXY(lab, g[1].toFixed(1), lab.getAttribute("y")); return true;
+    };
+    const place = (r) => {
+      const lab = r.lab, box0 = lab ? lpLabelBox(lab) : null;
+      if (!box0 || !hit(box0)) return null;   /* clear where it stands: untouched, to the byte */
+      const y0 = lab.getAttribute("y"), fs = parseFloat(getComputedStyle(lab).fontSize) || 24;
+      if (slide(lab, box0)) return { how: "slide" };
+      if (lab.textContent.indexOf(" ") > 0) { const undo = lpRuleWrap(lab, fs); if (slide(lab, lpLabelBox(lab))) return { how: "wrap" }; undo(); }
+      const widest = gaps(box0[1], box0[1] + box0[3]).reduce((m, g) => (g[1] - g[0] > m[1] - m[0] ? g : m), [0, 0]);
+      const k = (widest[1] - widest[0]) / box0[2];
+      if (k >= LPRULE_FIT.MIN_K) {
+        lab.style.fontSize = (fs * Math.min(1, k)).toFixed(2) + "px"; lpSetTextXY(lab, widest[1].toFixed(1), y0);
+        return { how: "shrink", k: +k.toFixed(3) };
+      }
+      const left = lpStageLeftU(st), roomU = left == null ? 0 : left + (STAGE_W - LPBAR_TICKCOL.EDGE_PX) / st.stagePx - x1 - LPRULE_FIT.END_GAP_U;
+      if (roomU >= box0[2]) {   /* the rule's own end tag: written past its right end, on its line */
+        lab.setAttribute("text-anchor", "start");
+        lpSetTextXY(lab, (x1 + LPRULE_FIT.END_GAP_U).toFixed(1), (r.y + 0.35 * fs).toFixed(1));
+        return { how: "end" };
+      }
+      return { how: "unplaced" };
+    };
+    st.ruleFit = [];
+    for (const r of st.hlines || []) { const f = place(r); if (f) st.ruleFit.push(Object.assign({ rule: r.h.label }, f)); }
+  };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
@@ -11330,7 +11464,8 @@ async function mount(doc) {
     const requestedGutter = Number((pg.axes || {}).left_gutter);
     const leftGutter = Number.isFinite(requestedGutter) ? Math.max(defaultGutter, requestedGutter) : defaultGutter;
     const PN = st.panel != null && !P;   /* P69 T8d: a landscape bars PANEL - its plot starts where a line panel's does, its ticks thinned by room */
-    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90, x0 = leftGutter, x1 = P ? G.W - 30 : st.panel != null || PH ? G.W - 20 : 980, gap = 0.34, unit = pg.unit || "";   /* P69 T8d: a panel's viewBox is its box's width */
+    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90, x0g = leftGutter, x1 = P ? G.W - 30 : st.panel != null || PH ? G.W - 20 : 980, gap = 0.34, unit = lpUnitOf(pg);   /* P69 T8d: a panel's viewBox is its box's width. P72 T13: the unit as lpWithUnit takes it (a string, or $...B) */
+    const x0 = GA || st.panel != null ? x0g : lpTickColX0(st, x0g, lo, hi, unit);   /* P72 T13 (R26-274): the tick column stays on the stage (a gauge's ticks and a panel's are their own) */
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
@@ -11461,6 +11596,7 @@ async function mount(doc) {
       }
       return { h, y: hy, line, lab, col };
     });
+    if (!GA) lpRuleLabelsClear(st, base, x0, x1);   /* P72 T13 (R26-250): a rule's label clears the bars and their values - before the values clear the rules */
     if (!GA) lpValsClearRules(st);   /* P70 T3: a gauge's figure stands beside its capsule, off every rule. P69 T6: a value is never struck through by a comparator rule - BEFORE the pill reads the values' boxes */
     const e = GA ? null : st.bars[Math.min(st.emph, st.bars.length - 1)];   /* P70 T3: no counting pill on a gauge - the figure is the fill's */
     if (e) {

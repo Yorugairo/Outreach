@@ -16,7 +16,9 @@ Input shapes (every one needs ``title`` and a non-empty ``src``):
            value, the page's "member_noun" writing what a tile is: "each tile = one company")
            (P69 T64: a bar may carry "segments": [{"name", "value", "value_string"?, "color"?}] - a stack of VALUES that
            sums to the bar's written total, one key per page; any other bar key is refused by name, BAR_FIELDS)
-  combo    story bars + ONE pts series; with segments, "line_unit" (+ "line_label", "ylabel") gives the line its own axis
+           (P72 T13: "unit": "$" + "unit_suffix": "B" writes "$480B" on the value, the ticks and the pill; a word unit
+           takes a space, "20 years" - `with_unit`, the engine's lpWithUnit)
+  combo   story bars + ONE pts series; with segments, "line_unit" (+ "line_label", "ylabel") gives the line its own axis
   dense    {"series": [{"label"|"name", "color", "pts": [[x, y], ...]}], + AXES_KEYS}
            or {"panels": [{"sub", "series": [...]} | {"sub", "builder": "bars", "unit", "bars": [...]}]}
            (P70 T4: a panel may name its "measure"; one measure in two units is an E79 / E53 s4 WARN)
@@ -507,6 +509,54 @@ def _validate_bar_fields(series: dict) -> list[str]:
     return errors
 
 
+# ---- P72 T13 (R26-274, R26-287; E28: an axis states its unit) - THE UNIT AS THE PAGE WRITES IT ------------------------
+# The engine's `lpWithUnit`, in Python: a PREFIX unit ("$") stands before the figure and its sign after ("-$40"); a WORD
+# unit takes a space - it opens with a letter and runs three letters or more ("20 years", "5 yen"); a SYMBOL unit none
+# ("12%", "3.2x", "96Mb"); a unit the author already spaced (" years") is written as given. R26-287: a prefix AND a
+# suffix - `unit: "$"` + `unit_suffix: "B"` writes "$480B" on the value, the ticks, the pill and the card. The suffix
+# completes a PREFIX, so it is refused beside any other unit, and it is refused by name when malformed (s106: a silent
+# drop is neither advice nor refusal).
+UNIT_SUFFIX_KEY = "unit_suffix"
+UNIT_PREFIXES = ("$",)            # the engine's one prefix unit (lpWithUnit)
+UNIT_SUFFIX_MAX = 8               # "B", "bn", "trillion": a magnitude word, never a phrase (the sub says what the bars show)
+UNIT_SUFFIX_BUILDERS = ("story",)  # the bars page (and its card) - the builder that writes a value, its ticks and its pill
+UNIT_WORD_RE = re.compile(r"^(?=[^\W\d_])[\s\S]*?[^\W\d_]{3}")   # the engine's LP_UNIT_WORD: /^(?=\p{L})[\s\S]*?\p{L}{3}/u
+
+
+def unit_gap(unit: str) -> str:
+    """" " before a WORD unit, "" before a symbol (and before a unit the author spaced). Pure."""
+    return " " if UNIT_WORD_RE.match(str(unit or "")) else ""
+
+
+def with_unit(text: str, unit: str, suffix: str = "") -> str:
+    """The figure as the engine writes it (`lpWithUnit`). Pure."""
+    s, u = str(text), str(unit or "")
+    if suffix:
+        neg = s.startswith("-")
+        return ("-" if neg else "") + u + (s[1:] if neg else s) + unit_gap(suffix) + suffix
+    if u in UNIT_PREFIXES:
+        return ("-" + u + s[1:]) if s.startswith("-") else u + s
+    return s + unit_gap(u) + u
+
+
+def _validate_unit_suffix(series: dict, variant: str) -> list[str]:
+    """R26-287: `unit_suffix` completes a prefix unit on a bars page; anything else is refused by name."""
+    if UNIT_SUFFIX_KEY not in series:
+        return []
+    suf, unit = series[UNIT_SUFFIX_KEY], str(series.get("unit") or "")
+    if not isinstance(suf, str) or not suf or suf != suf.strip() or not re.fullmatch(r"[^\W\d_]+", suf)             or len(suf) > UNIT_SUFFIX_MAX:
+        return [f"{UNIT_SUFFIX_KEY} {suf!r} must be the magnitude the figure is in - letters only, 1 to {UNIT_SUFFIX_MAX} "
+                "('B' writes $480B; the sub says what the bars show)"]
+    if unit not in UNIT_PREFIXES:
+        return [f"{UNIT_SUFFIX_KEY} {suf!r} completes a PREFIX unit ({', '.join(repr(u) for u in UNIT_PREFIXES)}); this "
+                f"page's unit is {unit!r}{' (a suffix already)' if unit else ''} - write the one unit (`unit`)"]
+    builder = pick_builder(series, variant)
+    if builder not in UNIT_SUFFIX_BUILDERS:
+        return [f"{UNIT_SUFFIX_KEY} is written by a bars page ({'|'.join(UNIT_SUFFIX_BUILDERS)}); this page draws "
+                f"{builder!r}, which would drop it - fold the magnitude into its `unit`, or draw it as bars"]
+    return []
+
+
 def segment_bars(series: dict) -> list[int]:
     """The indices of the page's bars that carry `segments`."""
     return [i for i, b in enumerate(_bars(series)) if SEGMENTS_KEY in b]
@@ -770,7 +820,7 @@ def segment_fit_warnings(spec: dict, aspect: str = "16:9") -> list[str]:
     for i, ss in enumerate(segs):
         for s in ss or []:
             h = abs(float(s["value"])) / span * ph
-            text = ("$" + s["value_string"]) if unit == "$" else s["value_string"] + unit
+            text = with_unit(s["value_string"], unit, str(spec.get(UNIT_SUFFIX_KEY) or ""))   # P72 T13: as lpWithUnit writes it
             tw = longform_text_px(text, "title", fs)
             q = min(1.0, (bw - 2 * pad) / tw) if tw > 0 else 1.0
             need_w, need_h = tw * SEGMENT_FIG["min"] + 2 * pad, fs * max(q, SEGMENT_FIG["min"]) * SEGMENT_FIG["line"] + 2 * pad
@@ -1266,6 +1316,7 @@ def validate(series: dict, variant: str) -> list[str]:
     errors += _validate_members(series, variant)   # P69 T45: a membership is a bars page's, and a tile carries no value
     errors += _validate_bar_fields(series)          # P69 T64 / R26-307: a bar key the form does not know is refused by name
     errors += _validate_segments(series, variant)   # P69 T64: a stack of values is true to its total, one key per page
+    errors += _validate_unit_suffix(series, variant)   # P72 T13 / R26-287: a prefix AND a suffix ($...B), refused by name when malformed
     if "left_gutter" in series:
         gutter = series["left_gutter"]
         if isinstance(gutter, bool) or not isinstance(gutter, int) or not 60 <= gutter <= 300:
@@ -1747,6 +1798,27 @@ def _x_text(sig: tuple | None) -> str:
     return f"{sig[1]:g}..{sig[2]:g}" if sig[0] == "num" else "|".join(sig[1])
 
 
+def _tier_band_px(series: dict) -> str:
+    """P72 T13 (R26-217): the band heights THIS page would get, per stage, as page_boxes lays them out - the ceiling's
+    reason measured on the stage the page renders on, not a portrait figure baked into the message."""
+    try:
+        spec = build_spec(series, "tiers")
+        per = {a: page_boxes(spec, a).get("bands") or [] for a in STAGE_PX}
+        return ("Its bands would stand " + " and ".join(f"{int(round(b[0]['h']))} px tall at {a}" for a, b in per.items() if b)
+                + f" (page_boxes; at the ceiling each of {TIERS_MAX} bands takes a quarter of the plot, " + " and ".join(
+                    f"{int(round(v))} px at {a}" for a, v in _tier_band_ceiling_px().items()) + ") ")
+    except Exception:   # the page is refused either way; a band it cannot lay out has no height to report
+        return ""
+
+
+def _tier_band_ceiling_px() -> dict[str, float]:
+    """The band height at the ceiling (TIERS_MAX bands), per stage, from page_boxes' own tiers layout."""
+    probe = {"title": "t", "src": "s", "tiers": [{"name": f"t{i}", "unit": "u", "pts": [[0, 0], [1, 1]]}
+                                                 for i in range(TIERS_MAX)]}
+    spec = build_spec(probe, "tiers")
+    return {a: page_boxes(spec, a)["bands"][0]["h"] for a in STAGE_PX}
+
+
 def _validate_tiers(series: dict) -> list[str]:
     """A tiers page's contract: N in [TIERS_MIN, TIERS_MAX], every band named, united and fed, one
     shared x. Every failure names the band it came from - a page of small multiples is only honest
@@ -1757,9 +1829,8 @@ def _validate_tiers(series: dict) -> list[str]:
                 "series|pts|bars}} - one band is a line page, and `tiers: true` is the two-band COMBO's key, not this"]
     errors: list[str] = []
     if len(tiers) > TIERS_MAX:
-        errors.append(f"{len(tiers)} tiers: the ceiling is {TIERS_MAX}. On a 9:16 stage the plot is ~1060 px tall, so "
-                      f"{TIERS_MAX} bands leave each about a quarter of it (~250 px) - a band under that cannot carry "
-                      "its own scale, its name and a readable line at once. Split the page.")
+        errors.append(f"{len(tiers)} tiers: the ceiling is {TIERS_MAX}. {_tier_band_px(series)}- a band under the "
+                      f"ceiling's cannot carry its own scale, its name and a readable line at once. Split the page.")
     sigs: list[tuple] = []
     for i, tier in enumerate(tiers):
         where = f"tiers[{i}]"
@@ -2289,6 +2360,22 @@ TREEMAP_LABEL_FONT = (18, 32)   # the label's clamp
 TREEMAP_PAD = 6                 # the cell's inner padding at 1080x1920 (research s2: glyph stems never touch a cell edge)
 TREEMAP_CHAR_W = 0.72           # the advance the font clamp assumes. The research's own figure is 0.65 em; our cell labels are BOLD, and at 0.65 "Japan" touched its cell's right edge in the rendered frame (2026-09-11)
 TREEMAP_LINE_H = {1: 1.5, 2: 2.2}   # the cell height one line of type needs, and two. The research's clamp divides by 2.2 whatever the line count, which contradicts the same document's 36 px single-line floor: at 2.2 a 44 px cell could never carry 18 px type. 2.2 is the TWO-line allowance; one line takes a line and a half
+# P72 T13 (R26-217, audit G-13): THE FLOORS ARE THE STAGE'S. The five px constants above were read off a 1080x1920 stage;
+# `treemap_floors(aspect)` resolves them for the stage a cell renders on, scaled by the stage's SHORT side. The 16:9
+# value is the same number, and that is a finding, not a default [DERIVED: a short plays upright and a long form plays
+# sideways, full screen, on the same phone - both stages put their 1080-px side across the phone's short side, so one
+# stage px is one physical size on both, and the research's handheld floor (ISO 9241-303, s1) is the same count of px].
+TREEMAP_STAGE_SHORT = 1080
+
+
+def treemap_floors(aspect: str = "9:16") -> dict:
+    """The treemap's legibility floors, in stage px, for this stage (unknown aspect -> the portrait reference). Pure."""
+    w, h = STAGE_PX.get(aspect, STAGE_PX["9:16"])
+    k = min(w, h) / TREEMAP_STAGE_SHORT
+    return {"min_cell": (TREEMAP_MIN_CELL[0] * k, TREEMAP_MIN_CELL[1] * k),
+            "two_line": (TREEMAP_TWO_LINE[0] * k, TREEMAP_TWO_LINE[1] * k),
+            "value_font": TREEMAP_VALUE_FONT * k, "label_font": (TREEMAP_LABEL_FONT[0] * k, TREEMAP_LABEL_FONT[1] * k),
+            "pad": TREEMAP_PAD * k}
 TREEMAP_MIN_SHARES = 2          # P69 T50: a whole broken into parts - one part is the whole, not a division (three was the census exception's TYPE bound; E99 s100)
 # E53 s1 -> E99 s100: a SIZE CLAIM is found in the page's own words, and REPORTED (`treemap_honesty_warnings`) unless
 # every figure it could compare is written on its cell.
@@ -2406,30 +2493,32 @@ def squarify(areas: list[float], x: float, y: float, dx: float, dy: float,
     return cells
 
 
-def _clamp_font(w: float, h: float, chars: int, lines: int) -> float:
+def _clamp_font(w: float, h: float, chars: int, lines: int, aspect: str = "9:16") -> float:
     """The research's dynamic font clamp (findings s2.3), for `lines` lines of `chars` characters."""
-    inner_w, inner_h = w - 2 * TREEMAP_PAD, h - 2 * TREEMAP_PAD
-    lo, hi = TREEMAP_LABEL_FONT
+    f = treemap_floors(aspect)
+    inner_w, inner_h = w - 2 * f["pad"], h - 2 * f["pad"]
+    lo, hi = f["label_font"]
     return max(0.0, min(hi, inner_w / max(1, chars) / TREEMAP_CHAR_W,
                         inner_h / TREEMAP_LINE_H.get(lines, 2.2 * lines / 2))) if inner_w > 0 and inner_h > 0 else 0.0
 
 
-def label_tier(w: float, h: float, label: str, value_text: str) -> dict:
+def label_tier(w: float, h: float, label: str, value_text: str, aspect: str = "9:16") -> dict:
     """The three-tier label degradation (research s1 and s5's teardown of Bravos 89-91):
       2 - two lines, the label and its value, both at or above the legible floor;
       1 - ONE stacked line: the label alone;
       0 - none. The cell is a tile and the part is counted in the legend instead.
     The floors are the cell's own size in STAGE pixels; the font clamp is what refuses a long name in
     a cell that is wide enough for a short one."""
-    lo = TREEMAP_LABEL_FONT[0]
-    if w >= TREEMAP_TWO_LINE[0] and h >= TREEMAP_TWO_LINE[1]:
+    f = treemap_floors(aspect)   # P72 T13 (R26-217): the floors of the stage the cell is drawn on
+    lo = f["label_font"][0]
+    if w >= f["two_line"][0] and h >= f["two_line"][1]:
         chars = max(len(label), len(value_text))
-        font = _clamp_font(w, h, chars, 2)
-        value_font = max(TREEMAP_VALUE_FONT, round(font * 0.72))
-        if font >= lo and value_font >= TREEMAP_VALUE_FONT and (font + value_font) * 1.15 <= h - 2 * TREEMAP_PAD:
+        font = _clamp_font(w, h, chars, 2, aspect)
+        value_font = max(f["value_font"], round(font * 0.72))
+        if font >= lo and value_font >= f["value_font"] and (font + value_font) * 1.15 <= h - 2 * f["pad"]:
             return {"tier": 2, "font": round(font, 1), "value_font": round(float(value_font), 1)}
-    if w >= TREEMAP_MIN_CELL[0] and h >= TREEMAP_MIN_CELL[1]:
-        font = _clamp_font(w, h, len(label), 1)
+    if w >= f["min_cell"][0] and h >= f["min_cell"][1]:
+        font = _clamp_font(w, h, len(label), 1, aspect)
         if font >= lo:
             return {"tier": 1, "font": round(font, 1), "value_font": 0.0}
     return {"tier": 0, "font": 0.0, "value_font": 0.0}
@@ -2454,7 +2543,7 @@ def treemap_cells(spec: dict, aspect: str) -> dict:
         label = str((spec.get("labels") or [None] * len(values))[i] or "")
         vs = str((spec.get("value_strings") or [None] * len(values))[i] or "")
         share = values[i] / total if total else 0.0
-        tier = label_tier(r["w"], r["h"], label, vs)
+        tier = label_tier(r["w"], r["h"], label, vs, aspect)
         cells.append({"index": i, "label": label, "value": values[i], "value_string": vs,
                       "share": round(share, 6),
                       "fx": round(r["x"] / max(1e-9, plot["w"]), 6), "fy": round(r["y"] / max(1e-9, plot["h"]), 6),
@@ -2807,6 +2896,8 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
     if variant == "progress" and "denominator" in series:
         spec["denominator"] = value_string(series["denominator"])
     spec["unit"] = str(series["unit"]) if _text(series.get("unit")) else ""
+    if isinstance(series.get(UNIT_SUFFIX_KEY), str) and series[UNIT_SUFFIX_KEY]:
+        spec[UNIT_SUFFIX_KEY] = series[UNIT_SUFFIX_KEY]   # P72 T13 / R26-287: "$480B" (absent: not one key)
     spec["judge"] = review_notes(series)
     spec["badges"] = badges_for(series)
     count = len(spec["labels"])
