@@ -23,6 +23,18 @@
               recast runs a build law backward - and the new glyph and label draw on IN THE SAME SPOT. The
               arrows stand: the mechanism did not change, one of its parts did. ONE event at swap.at.
      tag    - a year stamp in the box's corner, written last (the diagram is dated, not captioned).
+     ring   - P71 T11 (`layout: "ring"`, the Bravos loop, BUB frame_0058 / RST 9:30): the chain CLOSES on itself, so
+              the n nodes stand on the ellipse inscribed in the box, the first at 12 o'clock and the rest
+              clockwise, and each arrow leaves its card along the ring's own tangent - the loop reads as a
+              loop, not as a polygon. Absent `layout` is the row, byte for byte.
+     tokens - P71 T11 (`tokens: {from_at, n?, speed?, glyph?}`, A27 "money moving on the arrows", DOM 03:30,
+              BOOM 08:19): from `from_at` n tokens ride EVERY drawn arrow by ARC LENGTH, one after another from
+              its tail, at ONE speed per unit of arc across the diagram - never so fast that its shortest arrow
+              is crossed in under TOKEN_MIN_CROSS_S - fading in off the tail and out into the head. A token is
+              a plain DOT (A2a: never a generated coin), but a dot that reads as a THING riding the arrow, not
+              a joint in it: a chalk core, the arrow's ink as its rim, lpBloom's halo round it, six arrow
+              strokes across. The sourced glyph rides only when the row names it. No token moves on an arrow
+              before that arrow is drawn.
    Nothing is stored: every visual reads from t, sp.at and sp.swap.at, so a scrubbed frame is the played
    frame. The glyphs are SOURCED icons (assets/icons, A2a provenance) carried in the asset map as
    `icon:<name>`; this module never invents geometry. The dials below are ours to tune (42 s42.5). */
@@ -65,13 +77,91 @@ export const FLOW = Object.freeze({
   PHONE_TAG_PAD: 32,
   OPERATOR_SIZE: 30, /* connector-minus length in stage px */
   PHONE_OPERATOR_SIZE: 36,
+  RING_START: -Math.PI / 2, /* P71 T11: the ring's first node stands at 12 o'clock, the rest clockwise (screen y runs down, so + is clockwise) */
+  RING_LABEL_CLEAR: 8, /* on a ring an arrow leaves or enters a card THROUGH ITS LABEL when the ring runs vertically there (the 3 and 9 o'clock nodes): its anchor drops below the label's baseline by this much more than EDGE_GAP (read in the frame, 2026-09-24) */
+  RING_FIT_STEPS: 40,  /* the bisection that finds the largest diagram scale whose ring still clears every card - deterministic, no tolerance chase */
+  TOKEN_N: 2,          /* P71 T11: tokens on each arrow when the row names none - two read as a stream, one as a parcel */
+  TOKEN_SPEED: 240,    /* ... their speed along the arc in STAGE px per second when the row names none - capped by TOKEN_MIN_CROSS_S below */
+  TOKEN_MIN_CROSS_S: 0.49, /* [DERIVED: Bravos DOM 03:27 (PWMhM2_dj3s), the notes tracked at 30 fps - ~20 px/frame at 720p = ~900 stage px/s; the loop's top edge (443 stage px) crossed in 0.49 s, its left edge (651 px) in 0.72 s; notes ~52 x 30 stage px, ~390 px apart on a ~3 px edge] the reference's FASTEST per-edge crossing: no token crosses the diagram's SHORTEST arrow in less - the one speed is min(speed, shortest arc / this) */
+  TOKEN_R: 16,         /* [DERIVED: the parent's frame read - an 11 px dot in the arrow's ink read as a joint] the dot's radius in stage px (x the diagram's scale): 32 px across = 6.4 arrow strokes (the read asked >= 2.5); Bravos DOM's notes are ~52 x 30 stage px on a ~3 px edge */
+  TOKEN_RIM: 5,        /* the rim: the arrow's own ink at the arrow's own stroke width, so the token is visibly OF the arrow */
+  TOKEN_CORE: "#F2F2F2",      /* the core: the page chalk (--lp-chalk) - lighter than the arrow ink, so the token reads as a separate object over it */
+  TOKEN_BLOOM_PX: 10,  /* lpBloom's form (E67 / s117): a drop-shadow halo in the arrow ink round the token - its radius in stage px (x k) ... */
+  TOKEN_BLOOM_A: 0.55, /* ... and its alpha: above a line's 0.35 (LINE_BLOOM) because the token is the moving thing the beat is about */
+  PHONE_TOKEN_CORE: "#F4E6C7", /* the landscape-phone page's cream; its rim is PHONE_TOKEN_INK and it carries no halo (a dark halo on cream is a shadow) */
+  TOKEN_FADE: 0.12,    /* the share of an arrow's arc over which a token fades in off the tail and out into the head - no pop at either card */
+  TOKEN_GLYPH: 44,     /* a named glyph token's size in stage px (x the diagram's scale) - only when the row names one */
+  TOKEN_INK: "#F5B72E",       /* the arrow's own ink: the template's `.flowarrow` stroke (test_flow_loop pins the two together) */
+  PHONE_TOKEN_INK: "#25313C", /* ... and the landscape-phone arrow's */
 });
 
 const flow01 = (v) => Math.min(1, Math.max(0, v));
 
+/* THE RING (P71 T11): the point of node i on the ellipse (cx, cy, rx, ry) - the first at RING_START, the rest
+   clockwise at equal angles - and the ring's own tangent there, as an angle. */
+export const flowRingPoint = (ring, i, N) => {
+  const th = FLOW.RING_START + 2 * Math.PI * i / N;
+  return { x: ring.cx + ring.rx * Math.cos(th), y: ring.cy + ring.ry * Math.sin(th),
+           tangent: Math.atan2(ring.ry * Math.cos(th), -ring.rx * Math.sin(th)) };
+};
+
+/* the ring at diagram scale k: the ellipse inscribed in the box, pulled in by half a node's block (card + label,
+   with CROSS_K's breath) so every node stands INSIDE the box it was given */
+const flowRingAt = (box, k, block) => ({
+  cx: box.x + box.w / 2, cy: box.y + box.h / 2,
+  rx: box.w / 2 - CHIP.SIZE * k * FLOW.CROSS_K / 2, ry: box.h / 2 - block * k * FLOW.CROSS_K / 2,
+});
+
+/* does the ring at scale k leave every node its room? Adjacent nodes a PITCH_K card apart along their chord (the
+   card plus the arrow between them, the row's own rule), and no two node blocks overlapping at all. */
+const flowRingClears = (box, N, k, block) => {
+  const ring = flowRingAt(box, k, block);
+  if (!(ring.rx > 0 && ring.ry > 0)) return false;
+  const pts = [];
+  for (let i = 0; i < N; i++) pts.push(flowRingPoint(ring, i, N));
+  const w = CHIP.SIZE * k * FLOW.CROSS_K, h = block * k * FLOW.CROSS_K;
+  for (let i = 0; i < N; i++) {
+    const a = pts[i], b = pts[(i + 1) % N];
+    if (N > 1 && Math.hypot(b.x - a.x, b.y - a.y) < CHIP.SIZE * k * FLOW.PITCH_K) return false;
+    for (let j = i + 1; j < N; j++) if (Math.abs(pts[j].x - a.x) < w && Math.abs(pts[j].y - a.y) < h) return false;
+  }
+  return true;
+};
+
+/* the ring's layout: the largest scale in [MIN_K, 1] that clears (bisected - deterministic), the cells on the
+   ellipse with the card lifted so card + label centre on it, and each arrow's BOW - the angle between its chord
+   and the ring's tangent at its tail, so the arrow leaves its card along the loop. */
+const flowRingLayout = (box, N, block, below, labelDy) => {
+  let k = 1;
+  if (!flowRingClears(box, N, 1, block)) {
+    let lo = FLOW.MIN_K, hi = 1;
+    if (flowRingClears(box, N, lo, block)) {
+      for (let s = 0; s < FLOW.RING_FIT_STEPS; s++) {
+        const mid = 0.5 * (lo + hi);
+        if (flowRingClears(box, N, mid, block)) lo = mid; else hi = mid;
+      }
+    }
+    k = lo;
+  }
+  const ring = flowRingAt(box, k, block), lift = below * k / 2, cells = [], tangents = [];
+  for (let i = 0; i < N; i++) {
+    const p = flowRingPoint(ring, i, N);
+    cells.push({ x: p.x, y: p.y - lift });
+    tangents.push(p.tangent);
+  }
+  const bows = cells.map((a, i) => {
+    const b = cells[(i + 1) % N], chord = Math.atan2(b.y - a.y, b.x - a.x);
+    return Math.atan2(Math.sin(chord - tangents[i]), Math.cos(chord - tangents[i]));
+  });
+  return { k, column: false, ring: true, cells, bows, half: CHIP.SIZE * k / 2,
+           below: (labelDy + FLOW.RING_LABEL_CLEAR) * k,   /* the label under each card, which a ring arrow must clear */
+           cx: ring.cx, cy: ring.cy, rx: ring.rx, ry: ring.ry };
+};
+
 /* THE LAYOUT: where each node stands inside the declared box, and how big the whole diagram is drawn.
    A row inside the box; a COLUMN when the box is taller than it is wide (a portrait build's box is), which
-   is the same rule read from the geometry rather than from the aspect. */
+   is the same rule read from the geometry rather than from the aspect. P71 T11: `options.layout === "ring"`
+   lays them on the ring instead (flowRingLayout); absent, the row is byte for byte what it was. */
 export const flowLayout = (box, n, options = null) => {
   const N = Math.max(1, n | 0), column = box.h > box.w;
   const pitch = (column ? box.h : box.w) / N, across = column ? box.w : box.h;
@@ -83,7 +173,12 @@ export const flowLayout = (box, n, options = null) => {
   const labelDy = phone ? FLOW.PHONE_LABEL_DY : CHIP.LABEL_DY;
   const labelH = phone ? FLOW.PHONE_LABEL_LINE_H * labelLines : FLOW.LABEL_H;
   const block = CHIP.SIZE + labelDy + labelH;
-  const k = Math.max(FLOW.MIN_K, Math.min(1, pitch / (CHIP.SIZE * FLOW.PITCH_K), across / (block * FLOW.CROSS_K)));
+  if (options && options.layout === "ring") {
+    const out = flowRingLayout(box, N, block, labelDy + labelH, labelDy);
+    if (phone) Object.assign(out, { phone: true, labelDy, labelH, labelLines, labelLineH: FLOW.PHONE_LABEL_LINE_H });
+    return out;
+  }
+  const k =Math.max(FLOW.MIN_K, Math.min(1, pitch / (CHIP.SIZE * FLOW.PITCH_K), across / (block * FLOW.CROSS_K)));
   const lift = (labelDy + labelH) * k / 2;   /* the card sits above centre so card + label are centred together */
   const cells = [];
   for (let i = 0; i < N; i++) {
@@ -174,16 +269,34 @@ export const flowEdgeF = (sp, j, t) => {
 };
 
 /* THE ANCHORS of one arrow: the point on each card's square edge that faces the other, pushed out by
-   EDGE_GAP, and the two tangents the clothoid is fitted to. */
-export const flowAnchors = (a, b, half) => {
+   EDGE_GAP, and the two tangents the clothoid is fitted to. `bow` and `below` are P71 T11's ring: the bow is the
+   ring's tangent, and `below` extends the card's box DOWN over its label, so an arrow that leaves or enters
+   downward clears the words. Both absent: the square and FLOW.BOW, byte for byte. */
+export const flowAnchors = (a, b, half, bow = FLOW.BOW, below = 0) => {
   const dx = b.x - a.x, dy = b.y - a.y, chord = Math.atan2(dy, dx);
   const edge = (c, th) => {   /* the square's boundary in direction th, plus the air */
-    const cs = Math.cos(th), sn = Math.sin(th), m = Math.max(Math.abs(cs), Math.abs(sn)) || 1;
+    const cs = Math.cos(th), sn = Math.sin(th);
+    if (below > 0) {          /* the card + label box: the ray leaves by whichever side it meets first */
+      const ax = Math.abs(cs), ay = Math.abs(sn);
+      const r = Math.min(ax > 0 ? half / ax : Infinity, ay > 0 ? (sn > 0 ? half + below : half) / ay : Infinity) + FLOW.EDGE_GAP;
+      return { x: c.x + r * cs, y: c.y + r * sn };
+    }
+    const m = Math.max(Math.abs(cs), Math.abs(sn)) || 1;
     const r = half / m + FLOW.EDGE_GAP;
     return { x: c.x + r * cs, y: c.y + r * sn };
   };
-  const t0 = chord - FLOW.BOW, t1 = chord + FLOW.BOW * FLOW.ENTER_K;
+  const t0 = chord - bow, t1 = chord + bow * FLOW.ENTER_K;
   return { p0: edge(a, t0), t0, p1: edge(b, t1 + Math.PI), t1, chord };
+};
+
+/* ONE ARROW's polyline in a laid-out diagram: the clothoid between the two cards' anchors. On a ring (P71 T11) an
+   arrow from a node to the NEXT one bows by the ring's own tangent at its tail (lay.bows); every other arrow, and
+   every arrow of a row, bows by FLOW.BOW exactly as before. */
+export const flowEdgePts = (lay, ia, ib) => {
+  const N = lay.cells.length, around = lay.ring && ib === (ia + 1) % N;
+  const an = around ? flowAnchors(lay.cells[ia], lay.cells[ib], lay.half, lay.bows[ia], lay.below)
+                    : flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
+  return clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
 };
 
 /* the arrowhead's two strokes at the polyline's far end, along the tangent it arrives on */
@@ -283,6 +396,114 @@ export const flowEdgesAt = (sp, t) => {
   return flowSteadyEdges(sp, schedule.final, previous ? previous.stateIndex : -1);
 };
 
+/* THE TOKENS (P71 T11, A27). `sp.tokens = {from_at, n?, speed?, glyph?}`; everything below is a pure function of
+   t, sp and the laid-out diagram. */
+
+/* the instant tokens start on arrow j: `from_at`, but never before that arrow is drawn, head and all. Infinity =
+   never (no tokens, no from_at, or no such arrow). */
+export const flowTokenStart = (sp, j) => {
+  const tk = sp && sp.tokens, C = flowClock(sp || {});
+  if (!tk || !Number.isFinite(+tk.from_at) || C.edgeAt[j] === undefined) return Infinity;
+  return Math.max(+tk.from_at, C.edgeAt[j] + FLOW.EDGE_S);
+};
+
+/* the polyline's cumulative arc length, and the point (with its heading) at arc s along it */
+const flowArc = (pts) => {
+  const cum = [0];
+  for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y));
+  return cum;
+};
+const flowAlong = (pts, cum, s) => {
+  let i = 1;
+  while (i < pts.length - 1 && cum[i] < s) i++;
+  const a = pts[i - 1], b = pts[i], seg = cum[i] - cum[i - 1], u = seg > 0 ? flow01((s - cum[i - 1]) / seg) : 0;
+  return { x: a.x + (b.x - a.x) * u, y: a.y + (b.y - a.y) * u, heading: Math.atan2(b.y - a.y, b.x - a.x) };
+};
+
+/* every arrow a token can ride: its index, polyline, cumulative arc and length (a name that is not a node drops) */
+const flowTokenArcs = (sp, lay) => {
+  const out = [];
+  flowEdgeIndex(sp).forEach(([ia, ib], j) => {
+    if (ia < 0 || ib < 0 || ia === ib || !lay.cells[ia] || !lay.cells[ib]) return;
+    const pts = flowEdgePts(lay, ia, ib), cum = flowArc(pts), L = cum[cum.length - 1];
+    if (L > 0) out.push({ j, pts, cum, L });
+  });
+  return out;
+};
+
+/* THE ONE SPEED the tokens ride at, in stage px per second of arc: the row's (or TOKEN_SPEED), capped so the
+   diagram's SHORTEST arrow takes at least TOKEN_MIN_CROSS_S - one speed for every arrow, so a token never
+   changes pace between two of them. */
+export const flowTokenSpeed = (sp, lay) => {
+  const tk = (sp && sp.tokens) || {};
+  const asked = Number.isFinite(+tk.speed) && +tk.speed > 0 ? +tk.speed : FLOW.TOKEN_SPEED;
+  const arcs = lay && Array.isArray(lay.cells) ? flowTokenArcs(sp, lay) : [];
+  if (!arcs.length) return asked;
+  return Math.min(asked, Math.min(...arcs.map((a) => a.L)) / FLOW.TOKEN_MIN_CROSS_S);
+};
+
+/* EVERY TOKEN at t: on each drawn arrow, n tokens leave its tail one after another (token i a 1/n lap behind
+   token i-1) and ride it at `speed` stage px per second of arc, back to the tail when they reach the head - the
+   money keeps moving. `u` is the token's share of its arrow, `lap` how many times it has crossed it, `alpha` its
+   fade in off the tail and out into the head. Operators and edge_states carry no tokens (the compiler refuses the
+   pair by name). */
+export const flowTokens = (sp, t, lay) => {
+  const tk = sp && sp.tokens;
+  if (!tk || !lay || !Array.isArray(lay.cells)) return [];
+  if ((Array.isArray(sp.edge_states) && sp.edge_states.length) || (Array.isArray(sp.operators) && sp.operators.length)) return [];
+  const n = Number.isInteger(tk.n) && tk.n > 0 ? tk.n : FLOW.TOKEN_N;
+  const speed = flowTokenSpeed(sp, lay);
+  const out = [];
+  flowTokenArcs(sp, lay).forEach(({ j, pts, cum, L }) => {
+    const t0 = flowTokenStart(sp, j);
+    if (!(t >= t0)) return;
+    const run = speed * (t - t0);
+    for (let i = 0; i < n; i++) {
+      const travel = run - i * L / n;
+      if (travel < 0) continue;
+      const lap = Math.floor(travel / L), s = travel - lap * L, u = s / L;
+      const p = flowAlong(pts, cum, s);
+      out.push({ edge: j, i, s, u, lap, L, x: p.x, y: p.y, heading: p.heading,
+                 alpha: flow01(Math.min(u, 1 - u) / FLOW.TOKEN_FADE) });
+    }
+  });
+  return out;
+};
+
+/* "#RRGGBB" at alpha a -> "rgba(r,g,b,a)" (the halo's colour, as lpBloom writes lpInkA) */
+const flowInkA = (hex, a) => {
+  const h = String(hex).replace("#", ""), v = (i) => parseInt(h.slice(i, i + 2), 16);
+  return "rgba(" + v(0) + "," + v(2) + "," + v(4) + "," + a + ")";
+};
+
+/* the plain token's style: the chalk core, the arrow-ink rim at the arrow's width, and lpBloom's halo (dark page only) */
+export const flowTokenStyle = (k, phone) => phone
+  ? "fill:" + FLOW.PHONE_TOKEN_CORE + ";stroke:" + FLOW.PHONE_TOKEN_INK + ";stroke-width:" + (FLOW.TOKEN_RIM * k).toFixed(2)
+  : "fill:" + FLOW.TOKEN_CORE + ";stroke:" + FLOW.TOKEN_INK + ";stroke-width:" + (FLOW.TOKEN_RIM * k).toFixed(2)
+    + ";filter:drop-shadow(0 0 " + (FLOW.TOKEN_BLOOM_PX * k).toFixed(2) + "px " + flowInkA(FLOW.TOKEN_INK, FLOW.TOKEN_BLOOM_A) + ")";
+
+/* the tokens' paint: a plain dot that reads as a thing riding the arrow, or - only when the row names it - the
+   sourced glyph */
+const paintFlowTokens = (ctx, g, lay, phone) => {
+  const { sp, t, el, A } = ctx;
+  const ink = phone ? FLOW.PHONE_TOKEN_INK : FLOW.TOKEN_INK;
+  const geo = sp.tokens.glyph ? chipGeometry(A ? A["icon:" + sp.tokens.glyph] : null) : null;
+  const dotStyle = flowTokenStyle(lay.k, phone);
+  for (const tok of flowTokens(sp, t, lay)) {
+    if (!(tok.alpha > 0)) continue;
+    if (!geo) {
+      el("circle", "flowtoken", g, { cx: tok.x.toFixed(2), cy: tok.y.toFixed(2), r: (FLOW.TOKEN_R * lay.k).toFixed(2),
+                                     style: dotStyle, opacity: tok.alpha.toFixed(3) });
+      continue;
+    }
+    const size = FLOW.TOKEN_GLYPH * lay.k, vb = geo.vb || [0, 0, 24, 24], gk = size / Math.max(vb[2] || 1, vb[3] || 1);
+    const gg = el("g", "flowtoken", g, { opacity: tok.alpha.toFixed(3),
+      transform: "translate(" + (tok.x - size / 2).toFixed(2) + " " + (tok.y - size / 2).toFixed(2) + ") scale(" + gk.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")",
+      style: "fill:none;stroke:" + ink + ";stroke-width:2;stroke-linecap:round;stroke-linejoin:round" });
+    geo.el.forEach((q) => el(q.t, "", gg, q.a));   /* the sourced geometry verbatim */
+  }
+};
+
 /* THE PAINTER. ctx is the template's species context (see SPECIES_PAINTERS in the player). Everything is
    drawn in STAGE px into one group, in reading order: the frame, the arrows (under the cards, so their ends
    tuck beneath), the cards, the stamp. */
@@ -292,7 +513,9 @@ export function paintFlow(ctx) {
   if (!box || !(box.w > 0 && box.h > 0)) return;   /* the targeting law: a flow needs its room declared */
   const nodes = sp.nodes || [], phone = sp.readability === "landscape-phone";
   const labels = phone ? nodes.map((node) => node && node.label).concat(sp.swap && sp.swap.label ? [sp.swap.label] : []) : null;
-  const lay = flowLayout(box, nodes.length, phone ? { readability: "landscape-phone", labels } : null), C = flowClock(sp);
+  const ring = sp.layout === "ring";   /* P71 T11: absent layout passes the same options the row always had */
+  const layOpts = phone ? Object.assign({ readability: "landscape-phone", labels }, ring ? { layout: "ring" } : {}) : (ring ? { layout: "ring" } : null);
+  const lay = flowLayout(box, nodes.length, layOpts), C = flowClock(sp);
   const g = el("g", "flow", svg, {});
   const phoneBoxStyle = "fill:none;stroke:#25313C;stroke-width:3;stroke-linecap:round";
   const phoneArrowStyle = "fill:none;stroke:#25313C;stroke-width:5;stroke-linecap:round;stroke-linejoin:round";
@@ -327,8 +550,7 @@ export function paintFlow(ctx) {
         drawOn(p, f);
         return;
       }
-      const an = flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
-      const pts = clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
+      const pts = flowEdgePts(lay, ia, ib);   /* FLOW.BOW off a ring: the same anchors and fit as before */
       if (entry.phase === "retract") {
         drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts.slice().reverse()))), f);
         const head = flowHead(pts);
@@ -346,12 +568,13 @@ export function paintFlow(ctx) {
       if (ia < 0 || ib < 0 || ia === ib) return;
       const f = flowEdgeF(sp, j, t);
       if (f <= 0) return;
-      const an = flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
-      const pts = clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
+      const pts = flowEdgePts(lay, ia, ib);   /* FLOW.BOW off a ring: the same anchors and fit as before */
       drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts))), Math.min(1, f / FLOW.HEAD_F));
       if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, pathAttrs(flowHead(pts))), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
     });
   }
+  /* P71 T11: the tokens ride the arrows, under the cards so they leave and enter beneath them */
+  if (sp.tokens && !stateMode && !operatorMode) paintFlowTokens(ctx, g, lay, phone);
   /* the cards */
   nodes.forEach((node, i) => {
     const st = flowNodeAt(sp, i, t);

@@ -478,6 +478,15 @@ SPECIES_KINDS += (SPECIES_CHIP,)   # P50 T2: THE ICON CHIP (the Bravos icon boar
                                    # template's body; this file still owns its grammar, its targets and its glyph's provenance.
 SPECIES_KINDS += (SPECIES_FLOW, SPECIES_SPAN)   # P50 T4 (2026-09-11), both under the module rule
 FLOW_NODES = (2, 6)   # a mechanism with ONE part is a chip; with seven it is a diagram nobody reads at phone size
+# P71 T11: THE LOOP and THE TOKENS (the Bravos loop, BUB frame_0058 / RST 9:30; A27 money on the arrows, DOM 03:30, BOOM 08:19).
+FLOW_LAYOUTS = ("row", "ring")   # `layout`: absent IS the row (a column in a tall box); "ring" lays a CLOSED chain on an ellipse
+FLOW_RING_MIN = 3                # a two-node loop is the row's own pair of arrows bowing apart; a ring starts at three
+FLOW_TOKEN_KEYS = ("from_at", "n", "speed", "glyph")   # `tokens`: from_at is owed (the gate counts the start there)
+FLOW_TOKEN_N = (1, 4)            # tokens per arrow: one is a parcel, four a stream; five is noise on a 400 px arrow
+FLOW_TOKEN_SPEED = (60, 900)     # stage px per second of arc: under 60 reads as stuck, over 900 as a flicker
+FLOW_TOKEN_GLYPHS = ("coins",)   # a token is a plain DOT by default (A2a: never a generated coin); the sourced Lucide glyph only by name
+# species/flow.mjs's clock, mirrored (test_flow_loop pins the two): the instant arrow j is drawn, head and all
+FLOW_CLOCK = {"BOX_S": 0.9, "BOX_LEAD": 0.55, "NODE_STEP": 0.2, "LAND_S": 0.55, "EDGE_LAG": 0.1, "EDGE_S": 0.34}
 SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP = "light", "arc", "stamp"
 SPECIES_KINDS += (SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP)   # P50 T5: the three species of the VECTOR MAP world, and of no other world.
 VECMAP_SPECIES = (SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP)   # light: the country's fill rises to the accent and holds (the spotlight's cousin -
@@ -2707,6 +2716,8 @@ def _validate_flow_extensions(entry: dict, ids: list[str]) -> list[str]:
             errs.append("flow: formula edges must join adjacent nodes in declared order")
         if "edge_states" in entry:
             errs.append("flow: operators and edge_states are mutually exclusive")
+    errs += _validate_flow_layout(entry, ids)
+    errs += _validate_flow_tokens(entry)
     if "edge_states" not in entry:
         return errs
     states = entry["edge_states"]
@@ -2741,6 +2752,84 @@ def _validate_flow_extensions(entry: dict, ids: list[str]) -> list[str]:
         if stamp <= at or end > at + dur:
             errs.append(f"{prefix} complete change must fit inside the diagram window")
         previous_end = end
+    return errs
+
+
+def flow_edge_drawn(entry: dict, j: int) -> float:
+    """P71 T11: the instant arrow j of a flow is drawn, head and all - species/flow.mjs's flowClock (edgeAt[j] + EDGE_S)."""
+    c, n = FLOW_CLOCK, len(entry.get("nodes") or [])
+    landed = float(entry["at"]) + c["BOX_S"] * c["BOX_LEAD"] + max(0, n - 1) * c["NODE_STEP"] + c["LAND_S"]
+    return landed + c["EDGE_LAG"] + (j + 1) * c["EDGE_S"]
+
+
+def _validate_flow_layout(entry: dict, ids: list[str]) -> list[str]:
+    """P71 T11: `layout` names how the nodes stand. Absent (or "row") is the row; "ring" is a LOOP - the chain closes
+    on itself, so its edges must run node to node in declared order and back to the first. Refused by name."""
+    if "layout" not in entry:
+        return []
+    layout = entry["layout"]
+    if layout not in FLOW_LAYOUTS:
+        return [f"flow: layout {layout!r} is not one of {'|'.join(FLOW_LAYOUTS)} - absent is the row (a column in a "
+                "tall box); 'ring' lays a closed loop"]
+    if layout != "ring":
+        return []
+    nodes = entry.get("nodes")
+    if not isinstance(nodes, list) or len(ids) != len(nodes):
+        return []   # the nodes' own errors name what is wrong; the ring is judged on a sound node list
+    if len(ids) < FLOW_RING_MIN:
+        return [f"flow: layout 'ring' needs {FLOW_RING_MIN}+ nodes - a two-node loop is the row, whose two arrows "
+                "already bow apart"]
+    loop = [[a, b] for a, b in zip(ids, ids[1:] + ids[:1])]
+    edges = entry.get("edges")
+    got = [list(e) for e in edges] if isinstance(edges, list) and all(isinstance(e, (list, tuple)) for e in edges) else None
+    if got == loop:
+        return []
+    if got == loop[:-1]:
+        return [f"flow: layout 'ring' - a loop closes on itself: these edges stop at {ids[-1]!r} and never return to "
+                f"{ids[0]!r} (add [{ids[-1]!r}, {ids[0]!r}]); an open chain is the row"]
+    return [f"flow: layout 'ring' lays the nodes round in declared order, so its edges are that loop exactly: "
+            f"{loop} - got {edges!r}"]
+
+
+def _validate_flow_tokens(entry: dict) -> list[str]:
+    """P71 T11 (A27): `tokens: {from_at, n?, speed?, glyph?}` - money moving on the arrows. Every key is checked by
+    name; a token rides DRAWN arrows only, so `from_at` is refused before the first arrow is drawn and past the
+    diagram's window; operators (arithmetic) and edge_states (a changing graph) carry none."""
+    if "tokens" not in entry:
+        return []
+    tk = entry["tokens"]
+    if not isinstance(tk, dict):
+        return [f"flow: 'tokens' must be a dict {{{', '.join(FLOW_TOKEN_KEYS)}}} - the money moving on the arrows"]
+    finite = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
+    errs = [f"flow: tokens key {k!r} is not one of {'|'.join(FLOW_TOKEN_KEYS)}" for k in tk if k not in FLOW_TOKEN_KEYS]
+    if "operators" in entry:
+        errs.append("flow: tokens and operators are mutually exclusive - an operator is arithmetic, not a transfer")
+    if "edge_states" in entry:
+        errs.append("flow: tokens and edge_states are mutually exclusive - tokens ride the standing arrows, and a "
+                    "graph that re-draws itself carries none")
+    lo, hi = FLOW_TOKEN_N
+    if "n" in tk and (isinstance(tk["n"], bool) or not isinstance(tk["n"], int) or not lo <= tk["n"] <= hi):
+        errs.append(f"flow: tokens n must be a whole number {lo}-{hi} (tokens per arrow)")
+    lo, hi = FLOW_TOKEN_SPEED
+    if "speed" in tk and (not finite(tk["speed"]) or not lo <= tk["speed"] <= hi):
+        errs.append(f"flow: tokens speed must be {lo}-{hi} stage px per second of arc")
+    if "glyph" in tk:
+        if tk["glyph"] not in FLOW_TOKEN_GLYPHS:
+            errs.append(f"flow: tokens glyph must be one of {'|'.join(FLOW_TOKEN_GLYPHS)} (sourced) - absent, a token "
+                        "is a plain dot in the arrow's ink (A2a: never a generated coin)")
+        else:
+            errs += _validate_icon("flow: tokens glyph", tk["glyph"])
+    fa, at, dur, edges = tk.get("from_at"), entry.get("at"), entry.get("dur"), entry.get("edges")
+    if not finite(fa):
+        return errs + ["flow: tokens from_at must be a number (episode seconds - the word the money starts moving on)"]
+    if finite(at) and isinstance(edges, list) and edges:
+        first = flow_edge_drawn(entry, 0)
+        if fa < first - 1e-9:
+            errs.append(f"flow: tokens from_at {fa} is before the first arrow is drawn ({first:.3f}s) - a token rides "
+                        "a drawn arrow")
+    if finite(at) and finite(dur) and fa >= at + dur:
+        errs.append(f"flow: tokens from_at {fa} falls outside the diagram's window ({at}-{round(at + dur, 3)}s) - "
+                    "it would never move")
     return errs
 
 
@@ -2798,6 +2887,9 @@ def species_icons(entry) -> list[str]:
         sw = entry.get("swap")
         if isinstance(sw, dict) and isinstance(sw.get("icon"), str):
             out.append(sw["icon"])
+        tk = entry.get("tokens")   # P71 T11: a token's sourced glyph, only when the row names one
+        if isinstance(tk, dict) and isinstance(tk.get("glyph"), str):
+            out.append(tk["glyph"])
         return out
     return []
 

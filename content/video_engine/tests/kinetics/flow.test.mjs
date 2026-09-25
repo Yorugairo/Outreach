@@ -6,9 +6,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { CHIP, chipLand } from "../../scripts/species/chip.mjs";
-import { clothoidAt, clothoidFit, curvatureOf } from "../../scripts/kinetics/clothoid.mjs";
+import { clothoid, clothoidAt, clothoidFit, curvatureOf } from "../../scripts/kinetics/clothoid.mjs";
 import { FLOW, flowLayout, flowClock, flowBoxF, flowDashes, flowSwapPhase, flowNodeAt, flowPose,
-         flowEdgeF, flowAnchors, flowHead, flowEdgeIndex, paintFlow } from "../../scripts/species/flow.mjs";
+         flowEdgeF, flowAnchors, flowHead, flowEdgeIndex, paintFlow,
+         flowEdgePts, flowRingPoint, flowTokenStart, flowTokens, flowTokenSpeed, flowTokenStyle } from "../../scripts/species/flow.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 const BOX = { x: 200, y: 400, w: 1500, h: 420 };
@@ -247,4 +248,181 @@ test("the painter shows the diagram mid-build, and the swapped card at its own o
   const ops = mid.map((e) => +e.at.opacity);
   assert.ok(ops.some((v) => near(v, 0.5, 0.01)), `the un-drawing card is half gone: ${ops}`);
   assert.equal(ops.filter((v) => v > 0.99).length, 2, "the other two stand at full");
+});
+
+// ---------------------------------------------------------------- P71 T11: the ring and the tokens
+const RING_BOX = { x: 480, y: 130, w: 960, h: 900 };
+const IDS4 = ["capex", "chips", "cloud", "profit"];
+const loop = (n = 4, o = {}) => {
+  const ids = IDS4.concat(["rates", "banks"]).slice(0, n);
+  return flow(Object.assign({ layout: "ring", tag: undefined,
+    nodes: ids.map((id) => ({ id, icon: "factory", label: id.toUpperCase() })),
+    edges: ids.map((id, i) => [id, ids[(i + 1) % n]]), tokens: { from_at: 9, n: 2 } }, o));
+};
+const inCard = (p, c, half) => Math.abs(p.x - c.x) < half && Math.abs(p.y - c.y) < half;
+/* ... or in the label under it, down to its baseline (CHIP.LABEL_DY below the card), the label no wider than the card */
+const inLabel = (p, c, lay) => Math.abs(p.x - c.x) < lay.half && p.y >= c.y + lay.half && p.y <= c.y + lay.half + CHIP.LABEL_DY * lay.k;
+const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
+
+test("THE RING: n nodes on the ellipse inscribed in the box, the first at 12 o'clock, the rest clockwise at equal angles", () => {
+  for (const n of [3, 4, 5, 6]) {
+    const lay = flowLayout(RING_BOX, n, { layout: "ring" });
+    assert.equal(lay.ring, true);
+    assert.equal(lay.cells.length, n);
+    assert.ok(near(lay.cells[0].x, RING_BOX.x + RING_BOX.w / 2, 1e-9), "the first at 12 o'clock");
+    const lift = lay.cells[0].y - flowRingPoint(lay, 0, n).y;
+    lay.cells.forEach((c, i) => {   /* every cell is its ring point lifted by the same share - card + label centre on the ring */
+      const p = flowRingPoint(lay, i, n);
+      assert.ok(near(c.x, p.x, 1e-9) && near(c.y - p.y, lift, 1e-9), `node ${i} on the ring`);
+      assert.ok(c.x - lay.half >= RING_BOX.x && c.x + lay.half <= RING_BOX.x + RING_BOX.w, `node ${i} inside the box`);
+      assert.ok(c.y - lay.half >= RING_BOX.y && c.y + lay.half <= RING_BOX.y + RING_BOX.h, `node ${i} inside the box`);
+    });
+    /* clockwise on screen: the signed area of the polygon (y down) is positive */
+    let area = 0;
+    lay.cells.forEach((a, i) => { const b = lay.cells[(i + 1) % n]; area += a.x * b.y - b.x * a.y; });
+    assert.ok(area > 0, `clockwise (n ${n})`);
+  }
+});
+
+test("a ring in a box too small for it shrinks the diagram, never below MIN_K, and its nodes never overlap", () => {
+  const big = flowLayout(RING_BOX, 4, { layout: "ring" }), small = flowLayout({ x: 0, y: 0, w: 520, h: 480 }, 6, { layout: "ring" });
+  assert.equal(big.k, 1);
+  assert.ok(small.k < 1 && small.k >= FLOW.MIN_K, `k ${small.k}`);
+  for (let i = 0; i < 6; i++) for (let j = i + 1; j < 6; j++) {
+    const a = small.cells[i], b = small.cells[j];
+    assert.ok(Math.hypot(a.x - b.x, a.y - b.y) >= 2 * small.half, `cards ${i} and ${j} apart`);
+  }
+  assert.equal(flowLayout({ x: 0, y: 0, w: 60, h: 60 }, 5, { layout: "ring" }).k, FLOW.MIN_K, "the floor, as the row's");
+});
+
+test("a ring arrow leaves its card ALONG the ring (its bow is the ring's tangent) and crosses no card and no label, n 3-6, wide and tall", () => {
+  for (const box of [RING_BOX, { x: 150, y: 420, w: 1620, h: 600 }, { x: 300, y: 80, w: 700, h: 920 }]) {
+    for (const n of [3, 4, 5, 6]) {
+      const lay = flowLayout(box, n, { layout: "ring" });
+      for (let i = 0; i < n; i++) {
+        const j = (i + 1) % n, a = lay.cells[i], b = lay.cells[j];
+        const an = flowAnchors(a, b, lay.half, lay.bows[i]);
+        assert.ok(near(wrap(an.t0 - flowRingPoint(lay, i, n).tangent), 0, 1e-9), "the tangent");
+        assert.ok(lay.bows[i] > 0, `the arrow bows OUTWARD (n ${n}, edge ${i}: ${lay.bows[i]})`);
+        const pts = flowEdgePts(lay, i, j);
+        for (const p of pts) lay.cells.forEach((c, m) => assert.ok(!inCard(p, c, lay.half) && !inLabel(p, c, lay),
+          `STOP CONDITION: box ${JSON.stringify(box)} n ${n} edge ${i}->${j} (bow ${lay.bows[i].toFixed(3)} rad) crosses card ${m} or its label`));
+      }
+    }
+  }
+});
+
+test("off a ring, flowEdgePts is the arrow the painter always drew (FLOW.BOW, the same anchors, the same fit)", () => {
+  const lay = flowLayout(BOX, 3);
+  const an = flowAnchors(lay.cells[0], lay.cells[1], lay.half);
+  assert.deepEqual(flowEdgePts(lay, 0, 1), clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES));
+  assert.deepEqual(flowAnchors(lay.cells[0], lay.cells[1], lay.half), flowAnchors(lay.cells[0], lay.cells[1], lay.half, FLOW.BOW, 0));
+  const ring = flowLayout(RING_BOX, 4, { layout: "ring" }), down = flowAnchors(ring.cells[1], ring.cells[2], ring.half, ring.bows[1], ring.below);
+  assert.ok(down.p0.y > ring.cells[1].y + ring.half + CHIP.LABEL_DY, "the 3 o'clock arrow leaves BELOW its label");
+});
+
+test("THE TOKENS wait for from_at AND for their own arrow to be drawn", () => {
+  const sp = loop(4, { tokens: { from_at: 6.2, n: 2 } }), C = flowClock(sp), lay = flowLayout(RING_BOX, 4, { layout: "ring" });
+  assert.ok(C.edgeAt[0] + FLOW.EDGE_S < 6.2 && 6.2 < C.edgeAt[1] + FLOW.EDGE_S, "the fixture's from_at falls inside the arrows' own draw");
+  sp.edges.forEach((_, j) => assert.equal(flowTokenStart(sp, j), Math.max(6.2, C.edgeAt[j] + FLOW.EDGE_S)));
+  assert.deepEqual(flowTokens(sp, 6.199, lay), [], "nothing before from_at");
+  const t = C.edgeAt[1] + FLOW.EDGE_S + 0.2, edges = new Set(flowTokens(sp, t, lay).map((k) => k.edge));
+  assert.ok(edges.has(0) && edges.has(1) && !edges.has(2) && !edges.has(3), `only drawn arrows carry tokens: ${[...edges]}`);
+  assert.deepEqual(flowTokens(flow(), 20, lay), [], "no tokens declared, none drawn");
+  assert.equal(flowTokenStart(flow(), 0), Infinity);
+});
+
+test("a token moves at ONE speed per unit of arc, the n tokens a 1/n lap apart, and wraps to the tail at the head", () => {
+  const sp = loop(4, { tokens: { from_at: 9, n: 3, speed: 200 } }), lay = flowLayout(RING_BOX, 4, { layout: "ring" });
+  const v = flowTokenSpeed(sp, lay);
+  assert.ok(v > 0 && v <= 200, `the one speed ${v}`);
+  const t0 = flowTokenStart(sp, 0), L = flowTokens(sp, t0 + 0.01, lay).find((k) => k.edge === 0).L;
+  const at = (t) => flowTokens(sp, t, lay).filter((k) => k.edge === 0);
+  const a = at(t0 + 0.3).find((k) => k.i === 0), b = at(t0 + 0.7).find((k) => k.i === 0);
+  assert.ok(near(b.s - a.s, v * 0.4, 1e-9), `constant speed by arc: ${b.s - a.s}`);
+  assert.equal(at(t0 + 0.9 * L / v / 3).length, 1, "token 1 has not left the tail yet");
+  const steady = at(t0 + 2.5 * L / v);
+  assert.equal(steady.length, 3);
+  const ss = steady.map((k) => k.s).sort((x, y) => x - y);
+  assert.ok(near(ss[1] - ss[0], L / 3, 1e-6) && near(ss[2] - ss[1], L / 3, 1e-6), `evenly spaced: ${ss}`);
+  const lapped = at(t0 + 1.25 * L / v).find((k) => k.i === 0);
+  assert.equal(lapped.lap, 1);
+  assert.ok(near(lapped.u, 0.25, 1e-9), "back from the tail");
+});
+
+test("a token fades in off the tail and out into the head, full in between; its point lies ON its arrow", () => {
+  const sp = loop(4, { tokens: { from_at: 9, n: 1, speed: 200 } }), lay = flowLayout(RING_BOX, 4, { layout: "ring" });
+  const t0 = flowTokenStart(sp, 0), L = flowTokens(sp, t0, lay).find((k) => k.edge === 0).L, v = flowTokenSpeed(sp, lay);
+  const tok = (u) => flowTokens(sp, t0 + u * L / v, lay).find((k) => k.edge === 0);
+  assert.equal(tok(0).alpha, 0);
+  assert.ok(near(tok(FLOW.TOKEN_FADE / 2).alpha, 0.5, 1e-6));
+  assert.equal(tok(0.5).alpha, 1);
+  assert.ok(near(tok(1 - FLOW.TOKEN_FADE / 2).alpha, 0.5, 1e-6));
+  const pts = flowEdgePts(lay, 0, 1), m = tok(0.5);
+  const d = Math.min(...pts.slice(1).map((q, i) => { const p = pts[i], vx = q.x - p.x, vy = q.y - p.y;
+    const u = Math.max(0, Math.min(1, ((m.x - p.x) * vx + (m.y - p.y) * vy) / (vx * vx + vy * vy)));
+    return Math.hypot(m.x - p.x - u * vx, m.y - p.y - u * vy); }));
+  assert.ok(d < 1e-6, `on the polyline: ${d}`);
+});
+
+test("the tokens are a pure function of t: a seek IS the play, in any order, with nothing remembered", () => {
+  const sp = loop(), lay = flowLayout(RING_BOX, 4, { layout: "ring" }), ts = [14.2, 10.1, 12.73, 10.1, 14.2];
+  const once = ts.map((t) => JSON.stringify(flowTokens(sp, t, lay)));
+  assert.equal(once[0], once[4]);
+  assert.equal(once[1], once[3]);
+  const src = [flowTokens, flowTokenStart, flowEdgePts, flowRingPoint].map((f) => f.toString()).join("\n");
+  assert.ok(!/Math\.random|Date\.now|new Date|performance\./.test(src));
+});
+
+test("the painter lays a ring flow on its ring and draws each token as a plain DOT in the arrow's ink", () => {
+  const sp = loop(), t = flowTokenStart(sp, 3) + 0.9;
+  const made = stub(sp, t, RING_BOX), lay = flowLayout(RING_BOX, 4, { layout: "ring" });
+  const cards = made.filter((e) => e.tag === "g" && /translate/.test(e.at.transform || "") && e.at.opacity !== undefined && !e.cls);
+  assert.equal(cards.length, 4);
+  cards.forEach((g, i) => { const [x, y] = g.at.transform.match(/translate\(([-\d.]+) ([-\d.]+)\)/).slice(1).map(Number);
+    assert.ok(Math.abs(x - lay.cells[i].x) < 0.06 && Math.abs(y - lay.cells[i].y) < 0.06, `card ${i} on its ring cell`); });
+  assert.equal(made.filter((e) => e.cls === "flowarrow").length, 8, "four arrows, four heads");
+  const dots = made.filter((e) => e.cls === "flowtoken");
+  const live = flowTokens(sp, t, lay).filter((k) => k.alpha > 0);
+  assert.equal(dots.length, live.length);
+  assert.ok(dots.length >= 4);
+  dots.forEach((d) => { assert.equal(d.tag, "circle"); assert.equal(d.at.style, flowTokenStyle(lay.k, false));
+    assert.equal(+d.at.r, +(FLOW.TOKEN_R * lay.k).toFixed(2)); });
+  assert.match(dots[0].at.style, /^fill:#F2F2F2;stroke:#F5B72E;stroke-width:5\.00;filter:drop-shadow\(0 0 10\.00px rgba\(245,183,46,0\.55\)\)$/,
+    "a chalk core, the arrow ink as its rim, lpBloom's halo");
+  assert.ok(made.indexOf(dots[0]) < made.findIndex((e) => e.cls === "chipcard"), "under the cards");
+});
+
+test("a named glyph token draws the SOURCED icon, and a flow without tokens draws none", () => {
+  const sp = loop(4, { tokens: { from_at: 9, glyph: "coins" } }), t = flowTokenStart(sp, 3) + 0.9;
+  const made = stub(sp, t, RING_BOX), toks = made.filter((e) => e.cls === "flowtoken");
+  assert.ok(toks.length > 0 && toks.every((e) => e.tag === "g" && /stroke:#F5B72E/.test(e.at.style)));
+  assert.ok(toks.every((e) => e.kids.length === 1 && e.kids[0].at.d === "M12 16h.01"), "the geometry verbatim");
+  const plain = loop();
+  delete plain.tokens;
+  assert.equal(stub(plain, t, RING_BOX).filter((e) => e.cls === "flowtoken").length, 0);
+  assert.equal(stub(loop(4, { operators: ["-", "-", "-", "-"] }), t, RING_BOX).filter((e) => e.cls === "flowtoken").length, 0,
+    "an operator row carries none (the compiler refuses the pair)");
+});
+
+test("the token READS as a thing on the arrow: six arrow strokes across, a chalk core lighter than the arrow ink, the ink as its rim", () => {
+  assert.ok(2 * FLOW.TOKEN_R >= 2.5 * 5, "the parent's floor: >= 2.5 x the 5 px arrow stroke");
+  assert.ok(2 * FLOW.TOKEN_R / 5 >= 6, `${2 * FLOW.TOKEN_R / 5} strokes across`);
+  const lum = (hex) => { const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+    .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+  assert.ok(lum(FLOW.TOKEN_CORE) > lum(FLOW.TOKEN_INK), "the core is lighter than its rim");
+  assert.equal(FLOW.TOKEN_RIM, 5, "the rim at the arrow's own width");
+  assert.equal(flowTokenStyle(1, true), "fill:#F4E6C7;stroke:#25313C;stroke-width:5.00", "phone: cream core, charcoal rim, no halo");
+});
+
+test("no arrow is crossed in under TOKEN_MIN_CROSS_S: the one speed is capped by the SHORTEST arrow, and a slower row keeps its own", () => {
+  const lay = flowLayout(RING_BOX, 4, { layout: "ring" }), fast = loop(4, { tokens: { from_at: 9, speed: 900 } });
+  const Ls = [0, 1, 2, 3].map((j) => { const t = flowTokenStart(fast, j) + 0.001; return flowTokens(fast, t, lay).find((k) => k.edge === j).L; });
+  const v = flowTokenSpeed(fast, lay);
+  assert.ok(near(v, Math.min(...Ls) / FLOW.TOKEN_MIN_CROSS_S, 1e-9), `capped: ${v}`);
+  Ls.forEach((L) => assert.ok(L / v >= FLOW.TOKEN_MIN_CROSS_S - 1e-9, `an arrow of ${L} px in ${L / v} s`));
+  assert.equal(FLOW.TOKEN_MIN_CROSS_S, 0.49, "the floor is Bravos DOM 03:27's fastest measured edge crossing, never our own read");
+  const slow = loop(4, { tokens: { from_at: 9, speed: 60 } });
+  assert.equal(flowTokenSpeed(slow, lay), 60, "the row's own slower speed stands");
+  assert.equal(flowTokenSpeed(slow, null), 60);
 });

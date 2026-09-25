@@ -4217,6 +4217,38 @@ SURFACES.update({"companion-railway-yardstick": companion_railway_yardstick})
 FRAME_T.update({"companion-railway-yardstick": 14.5})   # both panels active, the bars built on their word (9.0) and valued, held
 
 
+# P71 T11 (was P69 T43): THE LOOP - a flow laid as a RING, money moving on its arrows (the Bravos loop BUB frame_0058 / RST
+# 9:30; A27's tokens DOM 03:30, BOOM 08:19). A TEST-BED beat, labelled as one: H row 16 ("who is paying") is the
+# candidate the parent confirms on the frame; no H row adopts the move before HG1 (rule f).
+LOOP_NODES = [("lenders", "landmark", "LENDERS"), ("builders", "factory", "BUILDERS"),
+              ("chips", "cpu", "CHIPS"), ("profits", "coins", "PROFITS")]
+LOOP_AT, LOOP_TOKENS_AT = 4.0, 7.2   # the four arrows are drawn by 7.105 s (flowClock); the money starts on the next word
+
+
+def flow_loop_tokens() -> tuple[dict, dict]:
+    """P71 T11: four nodes on the ring inscribed in the box - the first at 12 o'clock, clockwise - their four clothoid
+    arrows leaving each card along the ring, and from `tokens.from_at` two plain DOTS in the arrow's ink riding every
+    arrow by arc length (A2a: never a generated coin). Judged mid-run (FRAME_T 9.0: 1.8 s of travel)."""
+    import build_scene_timeline_f as BST
+    ids = [n[0] for n in LOOP_NODES]
+    species = [{"kind": "flow", "at": LOOP_AT, "dur": 18.0, "idle": "breath", "layout": "ring",
+                "target": {"kind": "region", "x0": 0.68, "y0": 0.06, "x1": 0.98, "y1": 0.94},   # the right third, clear of the golden's centred caption: a loop beside where a chart parks
+                "nodes": [{"id": i, "icon": icon, "label": label} for i, icon, label in LOOP_NODES],
+                "edges": [[a, b] for a, b in zip(ids, ids[1:] + ids[:1])],
+                "tokens": {"from_at": LOOP_TOKENS_AT, "n": 2}}]
+    assert not BST.validate_species(species, (0, 0, 0), "plate-plain"), BST.validate_species(species, (0, 0, 0), "plate-plain")
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    for name in sorted(BST.species_icons(species[0])):
+        uris[BST.ICON_PREFIX + name] = BST.icon_geometry(name)
+    return _timeline("Golden: the loop - a flow laid as a ring, tokens on its arrows (test-bed beat)", scenes, {}, None), uris
+
+
+SURFACES.update({"flow-loop-tokens": flow_loop_tokens})
+FRAME_T.update({"flow-loop-tokens": 9.0})   # the loop drawn (7.105), the tokens 1.8 s into their run - mid-run on every arrow
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

@@ -370,7 +370,8 @@ SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "en
                   "undraw": ("at", "end"), "figure": ("at", "end"), "note": ("at", "end"), "spread": ("at", "end"),
                   "peel": ("at", "end"),
                   "chart_to": ("at", "end")}   # P48: the chart leaving and the next one arriving are both motion, and the arrival is a landing (E51)   # P48 T4: the piece leaving is motion at both ends, and its landing is a push's tie (E51)   # E50 (P47 T6): the line unwinds; the figure writes; a note is handwriting
-SPECIES_EVENTS["flow"] = ("at", "swap.at")   # P50 T4: the diagram DRAWS on its word (the box, the chips, the arrows - one
+SPECIES_EVENTS["flow"] = ("at", "swap.at", "tokens.from_at")   # P50 T4: the diagram DRAWS on its word (the box, the chips, the arrows - one
+                                            # P71 T11: ... and its TOKENS start travelling the arrows at tokens.from_at - motion, counted once there (s99)
                                             # build) and ONE node SWAPS on a later one. "swap.at" is a DOTTED path: the edge
                                             # names a field inside a field, which _species_events walks.
 SPECIES_EVENTS["span"] = ("at",)            # ... and a span shades in on its word; it holds after that, so it has no end event
