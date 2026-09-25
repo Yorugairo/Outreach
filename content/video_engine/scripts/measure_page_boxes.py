@@ -126,6 +126,10 @@ PANELS_BARS = LPG.PANELS + LPG.REPRESENTATIVE_SEP + LPG.PANEL_BARS
 # the golden `gauge-94` (H row 17's PIMCO 94 page compiled as a progress page under the form).
 STORY_GAUGE = "story" + LPG.REPRESENTATIVE_SEP + "gauge"
 GAUGE_SURFACE = "gauge-94"
+# P70 T2: a dense-line page's SECOND representative - the SCHEMATIC (E99 s109 (1)): no y tick column, and the tag "a shape,
+# not a series" under the axis, measured as its own box. The golden's own page (`schematic-hype-trough`, the hype cycle).
+SCHEMATIC_LINE = "dense-line" + LPG.REPRESENTATIVE_SEP + LPG.SCHEMATIC_KEY
+SCHEMATIC_SURFACE = "schematic-hype-trough"
 
 
 def _panels_bars_series() -> dict:
@@ -254,6 +258,10 @@ READ_BOXES = r"""
   const tagEls = new Set((st.marks || []).filter((m) => m.role === 'name' && m.el).map((m) => m.el));
   out.tag_boxes = chart ? [...chart.querySelectorAll('text')].filter((el) => tagEls.has(el) && (el.textContent || '').trim()
     && +(el.getAttribute('opacity') || 1) > 0.05).map(R).filter((r) => r.w >= 1 && r.h >= 1) : [];
+  /* P70 T2: a schematic's tag (s109 (1): the page says it is a shape, not a series) - its own box, and part of the plot's
+     furniture band as the x tick labels are (a card never covers what the page says it is) */
+  const sch = wB.querySelector('.lp-schematic');
+  if (sch) { out.schematic = R(sch); if (out.plot) out.plot = U(out.plot, out.schematic); }
   out.stage = [stg.width, stg.height];
   return out;
 }
@@ -392,6 +400,13 @@ def representative(builder: str) -> dict:
         # the golden is COMPILED (world_for_plate stamps it full-stage); a representative is the declared page, and
         # variant_pages measures both 16:9 geometries off it, as it does for every other builder
         return {k: v for k, v in _strip(page).items() if k != "full_stage"}
+    if builder == SCHEMATIC_LINE:   # P70 T2: the golden's own schematic page, as DECLARED - the golden carries the
+        tl = json.loads((RB.SOURCES / f"{SCHEMATIC_SURFACE}.timeline.json").read_text(encoding="utf-8"))   # compiler's
+        page = _strip(next(s["world"]["page"] for s in tl["scenes"] if (s.get("world") or {}).get("page")))  # full-stage
+        page.pop("full_stage", None)   # stamp; stripped so the page is measured both ways, as every representative is
+        if page.get("caption") == "anchor":
+            page.pop("caption")
+        return page
     surface, state = GOLDEN_PAGES[builder]
     tl = json.loads((RB.SOURCES / f"{surface}.timeline.json").read_text(encoding="utf-8"))
     world = next(s["world"] for s in tl["scenes"] if (s.get("world") or {}).get("page"))
@@ -401,7 +416,7 @@ def representative(builder: str) -> dict:
     return _strip(page)
 
 
-BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE}))
+BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE, SCHEMATIC_LINE}))
 PROFILED = tuple(b for b in BUILDERS if b in LPG.READABILITY_BUILDERS[LPG.LONGFORM])   # N3: dense-line and story
 
 
@@ -516,6 +531,8 @@ def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: 
     axis = {k: (_box(dom["axis"][k]) if (dom.get("axis") or {}).get(k) else None) for k in ("x", "y")}
     out = {"page": page, "boxes": boxes, "axis": axis,
            "data_mask": data_mask(boxes["plot"], dom.get("data") or [])}
+    if dom.get(LPG.SCHEMATIC_BOX):   # P70 T2: a schematic's tag - beside the six boxes, as a panels page's panels are
+        out[LPG.SCHEMATIC_BOX] = _box(dom[LPG.SCHEMATIC_BOX])
     if dom.get(LPG.PANELS_KEY):   # P69 T8b: each panel's home box and plot, as drawn
         out[LPG.PANELS_KEY] = [{"hidden": True} if p.get("hidden") else {k: _box(v) for k, v in p.items() if v}
                                for p in dom[LPG.PANELS_KEY]]   # P69 T8e: a panel the first focus state hides
@@ -551,6 +568,11 @@ def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bo
         out[LPG.TAG_INK_KEY] = LPG.tag_ink(got["page"])
     if got.get(LPG.PANELS_KEY):   # P69 T8b: a panels page's panels, beside its six boxes (the boxes stay the six)
         out[LPG.PANELS_KEY] = got[LPG.PANELS_KEY]
+    if got.get(LPG.SCHEMATIC_BOX):   # P70 T2: a schematic's tag, beside the six
+        out[LPG.SCHEMATIC_BOX] = got[LPG.SCHEMATIC_BOX]
+    drawn_by = got["page"].get("builder")
+    if drawn_by != builder and drawn_by in LPG.LAND_TAG_BUILDERS:   # P70 T2: a second representative (`dense-line+
+        out["builder"] = drawn_by   # schematic`) names the builder whose end tags its tag_boxes are
     return out
 
 

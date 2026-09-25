@@ -5105,6 +5105,17 @@ def _cross_honesty(page: dict, sp: dict) -> list[str]:
     return notes
 
 
+def check_schematic(world: dict, row_species: list) -> None:
+    """P70 T2 / E99 s109 (1): on a SCHEMATIC page (a shape drawn with no data) a bracket, figure, note or span whose words
+    carry a digit is refused unless it names its `src` - "no figures it cannot source", a truth rule, so it is hard.
+    The rule is `ledger_page.schematic_text_errors` (one rule, pure); this is where the page and the row's species
+    meet. ValueError names every one; a page with no schematic is untouched."""
+    page = world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None
+    errs = LPG.schematic_text_errors(page if isinstance(page, dict) else {}, row_species)
+    if errs:
+        raise ValueError("; ".join(errs))
+
+
 def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path, sid: str | None = None) -> None:
     """Append one derived page state per `chart_to rescale` / `extend` on the row, in time order, and point each species
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
@@ -5118,6 +5129,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_solo(world, row_species)            # P69 T37: a solo names ONE mark the page draws, on a page whose marks it re-inks
     for _lj_note in check_level_join(world, row_species):   # P71 T10: a join's ends, its unit, its truth; a WARN on the rule
         print(f"  [WARN] {_lj_note.removeprefix('WARN ')}")
+    check_schematic(world, row_species)       # P70 T2: a schematic writes no figure it cannot source (E99 s109 (1))
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
             if world.get("kind") != SPECIES_LEDGER:

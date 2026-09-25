@@ -832,6 +832,8 @@ def pick_builder(series: dict, variant: str) -> str:
         return variant
     if variant == "line" and isinstance(series.get("panels"), list):   # P69 T8b: a PANELS object is a page of 2-4 plots
         return PANELS
+    if variant == "line" and isinstance(series.get(SCHEMATIC_KEY), dict):   # P70 T2: a schematic is a dense line it generates
+        return "dense-line"
     """Builder from the data shape and the variant (P35 Builder Architecture)."""
     if variant in ("race", "decline"):
         return variant
@@ -1041,8 +1043,209 @@ def bar_style_error(page: dict, value: Any, builder: str) -> str | None:
     return None
 
 
+# ---- P70 T2 (was P69 T46) / E99 s109 (1): THE SCHEMATIC - a shape drawn with no data, carrying the narrative ---------
+# The operator, 2026-09-23: "I think we can draw with no data - that is the art and narrative coming to life in the
+# world". s109 (1): a schematic (the hype cycle, the debt cycle, a mania arc, phase waves) "carries no axis values and no
+# figures it cannot source, and says it is a shape, not a series". The Bravos harvest v2 T7 (n=5; Jw8ykhoOVBQ 04:24).
+#   A LINE object carries `schematic: {shape, phases: [{name, from, to, side?}], n?, name?, color?}` IN PLACE OF
+# `series`: `schematic_series` GENERATES one dense series from the named closed form - fixed N points, x in [0, 1],
+# y in [0, 1], pure and deterministic - and the existing dense-line builder draws it, so T36's `lit_stretch`, `span` and
+# `bracket` address it unchanged (a phase's `from` / `to` IS the x-fraction they take). The spec keeps `schematic`
+# (shape, phases, the tag) so the player writes no value - no tick number on either axis, no end tag - and
+# writes the TAG and the phase names instead. Data beside a schematic is refused (`series`, `pts`, `bars`, a unit, a
+# rule, a tick, a domain ...): a schematic carries no data. A bracket, figure, note or span whose words carry a digit
+# is refused on a schematic page unless it names its `src` (`schematic_text_errors`, a truth rule - hard).
+#   E99 s125 (a REAL series laid over a schematic, on its own labelled axis) is P71's. Nothing here prevents it: the
+# shape is `spec.series[0]` on x in [0, 1], and `spec.schematic` names its phases in the same fractions.
+SCHEMATIC_KEY = "schematic"
+SCHEMATIC_SHAPES = ("hype", "waves", "debt_cycle")
+SCHEMATIC_NAMES = {"hype": "Hype cycle", "waves": "Phase waves", "debt_cycle": "Debt cycle"}   # the series' name (the record;
+#   the page writes no end tag - the title names the one shape, s120 (3))
+SCHEMATIC_N = 121                          # the generated points: x steps of 1/120 - a dense line, never a bars page
+SCHEMATIC_N_RANGE = (STORY_MAX_VALUES + 1, 401)   # fewer than the story ceiling would read as a story page's values
+SCHEMATIC_PHASES_MAX = 6
+SCHEMATIC_NAME_MAX = 40
+SCHEMATIC_FIELDS = ("shape", "phases", "n", "name", "color")
+SCHEMATIC_PHASE_FIELDS = ("name", "from", "to", "side")
+SCHEMATIC_SIDES = ("above", "below")      # a phase's name over or under the curve (absent: the engine's concavity rule)
+SCHEMATIC_INKS = ("teal", "crimson", "cobalt", "amber")   # E67's electric inks (the engine's LP_CYCLE)
+SCHEMATIC_INK = "teal"                    # declared, so the lone line never takes a SIGN colour: a shape rises, it gains nothing
+SCHEMATIC_DOMAIN = (-0.45, 1.3)   # the page's y domain round the shape's [0, 1]: [DERIVED, the first frame read] room UNDER the
+#                                   lowest stretch and OVER the peak for a two-line phase name at the s90 floor - never written
+SCHEMATIC_TAG = "a shape, not a series"   # s109 (1): the page says what it is (s125 (3): it keeps it under a real series)
+SCHEMATIC_BOX = "schematic"               # page_boxes' key for the tag's box
+SCHEMATIC_RULING = "E99 s109 (1)"
+SCHEMATIC_DATA_KEYS = ("series", "pts", "bars", "panels", "tiers", "shares", "props", "periods", "values", "unit",
+                       "denominator", "line_unit", "members")
+SCHEMATIC_AXES_KEPT = ("ylabel", "name_clear", "readability")   # words and the page's own profile; every other axes key is a value
+SCHEMATIC_TEXT_SPECIES = {"bracket": ("label", "sub"), "figure": ("text", "sub"), "note": ("text",), "span": ("label",)}
+DIGIT_RE = re.compile(r"\d")
+
+
+def _smooth01(u: float) -> float:
+    u = min(1.0, max(0.0, u))
+    return u * u * (3.0 - 2.0 * u)
+
+
+def _hype_y(x: float) -> float:
+    """Gartner's hype cycle: a Gaussian peak of expectations over a logistic rise to the plateau (the trough between)."""
+    return 0.06 + 0.84 * math.exp(-((x - 0.2) / 0.085) ** 2) + 0.5 / (1.0 + math.exp(-(x - 0.6) / 0.07))
+
+
+def _waves_y(x: float) -> float:
+    """Phase waves: two whole cycles from a trough, the phases the author names on them."""
+    return 0.5 - 0.4 * math.cos(4.0 * math.pi * x)
+
+
+def _debt_cycle_y(x: float) -> float:
+    """The long-term debt cycle: short cycles riding a rising burden to the top, then the deleveraging and a floor."""
+    rise = 0.12 + 0.72 * (min(x, 0.8) / 0.8) ** 1.6
+    fall = 0.5 * _smooth01((x - 0.8) / 0.1) - 0.12 * _smooth01((x - 0.9) / 0.1)
+    return rise - fall + 0.04 * math.sin(12.0 * math.pi * x) * (1.0 - 0.6 * _smooth01((x - 0.8) / 0.1))
+
+
+SCHEMATIC_FORMS = {"hype": _hype_y, "waves": _waves_y, "debt_cycle": _debt_cycle_y}
+
+
+def schematic_series(schematic: dict) -> dict:
+    """The ONE series a schematic draws: its closed form sampled at n points on x in [0, 1] (4 dp). No `label` (no value);
+    its `name` is the series' own for the record - the player writes no end tag on a schematic. Pure and deterministic."""
+    n = int(schematic.get("n") or SCHEMATIC_N)
+    f = SCHEMATIC_FORMS[str(schematic["shape"])]
+    xs = [i / (n - 1) for i in range(n)]
+    return {"name": str(schematic.get("name") or SCHEMATIC_NAMES[str(schematic["shape"])]),
+            "color": str(schematic.get("color") or SCHEMATIC_INK),
+            "pts": [[round(x, 4), round(min(1.0, max(0.0, f(x))), 4)] for x in xs]}
+
+
+def with_schematic(series: dict) -> dict:
+    """The object with its schematic's generated series in place (a new dict), or the object itself when it names none."""
+    sch = series.get(SCHEMATIC_KEY)
+    if not isinstance(sch, dict) or sch.get("shape") not in SCHEMATIC_SHAPES:
+        return series
+    return {**series, "series": [schematic_series(sch)]}
+
+
+def schematic_block(schematic: dict) -> dict:
+    """The spec's `schematic`: the shape, its tag and its phases with their edges as numbers (the file's tokens read)."""
+    phases = []
+    for p in schematic.get("phases") or []:
+        entry = {"name": str(p["name"]), "from": float(to_number(p["from"])), "to": float(to_number(p["to"]))}
+        if p.get("side") in SCHEMATIC_SIDES:
+            entry["side"] = p["side"]
+        phases.append(entry)
+    return {"shape": str(schematic["shape"]), "tag": SCHEMATIC_TAG, "phases": phases}
+
+
+def _schematic_phase_errors(phases: Any) -> list[str]:
+    if not isinstance(phases, list) or not 1 <= len(phases) <= SCHEMATIC_PHASES_MAX:
+        return [f"schematic: phases must be a list of 1 to {SCHEMATIC_PHASES_MAX} {{name, from, to}} - the model's named "
+                "stretches, each an x-fraction of the shape"]
+    errs: list[str] = []
+    prev_to = None
+    for i, p in enumerate(phases):
+        where = f"schematic: phases[{i}]"
+        if not isinstance(p, dict):
+            errs.append(f"{where} must be an object {{name, from, to}}")
+            continue
+        extra = sorted(k for k in p if k not in SCHEMATIC_PHASE_FIELDS)
+        if extra:
+            errs.append(f"{where}: {', '.join(map(repr, extra))} is not a phase key ({'|'.join(SCHEMATIC_PHASE_FIELDS)}) - "
+                        f"a phase is a name over a stretch of the shape, never a value ({SCHEMATIC_RULING})")
+        name = p.get("name")
+        if not isinstance(name, str) or not name.strip() or len(name) > SCHEMATIC_NAME_MAX:
+            errs.append(f"{where} needs a non-empty name of at most {SCHEMATIC_NAME_MAX} characters")
+        edges = {}
+        for f in ("from", "to"):
+            v = to_number(p.get(f)) if not isinstance(p.get(f), bool) else None
+            if v is None or not 0.0 <= v <= 1.0:
+                errs.append(f"{where}: {f!r} must be an x-fraction of the shape (0..1)")
+            else:
+                edges[f] = v
+        if len(edges) == 2:
+            if not edges["from"] < edges["to"]:
+                errs.append(f"{where}: from {value_string(p['from'])} is not before to {value_string(p['to'])} - a phase "
+                            "is a stretch, not a point")
+            elif prev_to is not None and edges["from"] < prev_to - 1e-9:
+                errs.append(f"{where} ({name!r}) overlaps the phase before it: phases run in order along the shape, "
+                            "each starting where (or after) the last one ends")
+            prev_to = edges["to"]
+        if "side" in p and p["side"] not in SCHEMATIC_SIDES:
+            errs.append(f"{where}: side must be above or below (the name over or under the curve; absent = the "
+                        "curve's own shape decides)")
+    return errs
+
+
+def _validate_schematic(series: dict, variant: str) -> list[str]:
+    """P70 T2: the schematic object's own rules - a LINE page's shape, no data beside it, a closed key list."""
+    sch = series.get(SCHEMATIC_KEY)
+    if not isinstance(sch, dict):
+        return [f"schematic must be an object {{shape, phases, n?, name?, color?}} ({SCHEMATIC_RULING})"]
+    errs: list[str] = []
+    if variant != "line":
+        errs.append(f"a schematic is a LINE page's shape (variant line), and this page asks for {variant!r} "
+                    f"({SCHEMATIC_RULING})")
+    data = [k for k in SCHEMATIC_DATA_KEYS if k in series]
+    if data:
+        errs.append(f"{', '.join(map(repr, data))} beside a schematic: a schematic carries no data ({SCHEMATIC_RULING}) - "
+                    "the shape is generated from its closed form; a measured series is a page of its own (laying one "
+                    "over a shape is E99 s125's, P71)")
+    axes = [k for k in AXES_KEYS if k in series and k not in SCHEMATIC_AXES_KEPT]
+    if axes:
+        errs.append(f"{', '.join(map(repr, axes))} on a schematic: a schematic carries no axis values "
+                    f"({SCHEMATIC_RULING}) - it keeps only {'|'.join(SCHEMATIC_AXES_KEPT)}")
+    extra = sorted(k for k in sch if k not in SCHEMATIC_FIELDS)
+    if extra:
+        errs += [f"schematic: {k!r} is not a schematic key ({'|'.join(SCHEMATIC_FIELDS)})" for k in extra]
+    if sch.get("shape") not in SCHEMATIC_SHAPES:
+        errs.append(f"schematic: shape {sch.get('shape')!r} is not one of {'|'.join(SCHEMATIC_SHAPES)}")
+    n = sch.get("n")
+    if n is not None and (isinstance(n, bool) or not isinstance(n, int) or not SCHEMATIC_N_RANGE[0] <= n < SCHEMATIC_N_RANGE[1]):
+        errs.append(f"schematic: n must be an integer from {SCHEMATIC_N_RANGE[0]} to {SCHEMATIC_N_RANGE[1] - 1} (the "
+                    f"generated points; absent = {SCHEMATIC_N})")
+    if "name" in sch and not (isinstance(sch["name"], str) and sch["name"].strip()):
+        errs.append("schematic: name must be a non-empty string (the series' name on record - never drawn; absent = the shape's own)")
+    if "color" in sch and sch["color"] not in SCHEMATIC_INKS:
+        errs.append(f"schematic: color must be one of {'|'.join(SCHEMATIC_INKS)} (absent = {SCHEMATIC_INK})")
+    return errs + _schematic_phase_errors(sch.get("phases"))
+
+
+def schematic_text_errors(page: dict, species: list) -> list[str]:
+    """P70 T2 / E99 s109 (1) - "no figures it cannot source", a TRUTH rule (hard): on a schematic page, a bracket, figure,
+    note or span whose words carry a digit is refused unless the species names its `src`. Words pass (a bracket may name
+    a lag in words). A page with no schematic returns [] whatever its species write. Pure."""
+    if not isinstance((page or {}).get(SCHEMATIC_KEY), dict):
+        return []
+    out: list[str] = []
+    for sp in species or []:
+        if not isinstance(sp, dict):
+            continue
+        kind = sp.get("kind")
+        fields = SCHEMATIC_TEXT_SPECIES.get(kind)
+        if not fields or _text(sp.get("src")):
+            continue
+        for f in fields:
+            v = sp.get(f)
+            if isinstance(v, str) and DIGIT_RE.search(v):
+                out.append(f"{kind} at {sp.get('at')}: its {f} {v!r} writes a figure on a schematic - a schematic carries "
+                           f"no figures it cannot source ({SCHEMATIC_RULING}): name the figure's `src` on the {kind}, or "
+                           "say it in words")
+    return out
+
+
+def schematic_tag_box(plot: dict) -> dict:
+    """The tag's box ESTIMATED from the plot (a page the fixture has not measured): the right half of the x tick band
+    under the axis, where the player writes it - the band carries no tick on a schematic."""
+    return _box(plot["x"] + plot["w"] / 2.0, plot["y"] + plot["h"] - XTICK_H, plot["w"] / 2.0, XTICK_H)
+
+
 def validate(series: dict, variant: str) -> list[str]:
     """Error strings; empty means the series is a page for this variant. Pure."""
+    if SCHEMATIC_KEY in series:   # P70 T2: the shape's own rules first; a clean one is validated as the line it generates
+        errs = _validate_schematic(series, variant)
+        if errs:
+            return errs
+        series = with_schematic(series)
     errors: list[str] = []
     errors += _validate_readability(series, variant)
     errors += _validate_break(series, variant)   # P69 T66: [] unless the object names a `break`
@@ -2508,6 +2711,7 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
     (P48 T2: a derived rescale state keeps the PAGE's builder even when its window holds too few points to read as dense)."""
     if quiet_zone not in QUIET_ZONES:
         raise ValueError(f"quiet_zone must be one of {'|'.join(QUIET_ZONES)}")
+    series = with_schematic(series)   # P70 T2: a schematic object draws the series it generates (itself when it names none)
     builder = builder or pick_builder(series, variant)
     spec: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION, "surface": "page", "builder": builder,
@@ -2575,6 +2779,9 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         spec.update(_race_block(series))
     elif builder == "dense-line":
         spec.update(_dense_block(series))
+        if isinstance(series.get(SCHEMATIC_KEY), dict):   # P70 T2: the shape, its phases and its tag (absent: not one key)
+            spec[SCHEMATIC_KEY] = schematic_block(series[SCHEMATIC_KEY])
+            spec["axes"]["domain"] = list(SCHEMATIC_DOMAIN)   # the shape floats with its names' room; no tick writes it
     else:
         spec.update(_story_block(series))
     if builder == "combo":
@@ -3986,6 +4193,8 @@ def page_ink_key(spec: dict) -> str:
         ink["left_gutter"] = spec["axes"]["left_gutter"]
     if ((spec.get("form") or {}).get("kind")) == "gauge":   # P70 T3: a gauge's plot is its capsules, not the bars' - keyed only on a gauge
         ink["form"] = "gauge"
+    if isinstance(spec.get(SCHEMATIC_KEY), dict):   # P70 T2: no tick column and the tag - keyed only on a schematic page
+        ink[SCHEMATIC_KEY] = True
     blob = json.dumps(ink, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 
@@ -4208,6 +4417,8 @@ def measured_boxes(spec: dict, aspect: str) -> dict | None:
     out = {k: dict(boxes[k]) for k in BOX_KEYS}
     if isinstance(boxes.get(KEY_BOX), dict):   # P69 T10: a longform page's key rail, when it was measured with one
         out[KEY_BOX] = dict(boxes[KEY_BOX])
+    if isinstance(entry.get(SCHEMATIC_BOX), dict):   # P70 T2: a schematic's tag, as drawn (beside the six, as panels are)
+        out[SCHEMATIC_BOX] = dict(entry[SCHEMATIC_BOX])
     if (isinstance(boxes.get(TAG_BOXES_KEY), list) and boxes[TAG_BOXES_KEY]   # P69 T6d: its end tags, each as drawn -
             and entry.get(TAG_INK_KEY) == tag_ink(spec)):                      # MN3: only for the tags they were drawn for
         out[TAG_BOXES_KEY] = [dict(b) for b in boxes[TAG_BOXES_KEY] if isinstance(b, dict)]
@@ -4285,6 +4496,8 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
             boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
         if spec.get("builder") == PANELS and not measured.get(PANELS_KEY):   # the panels re-cut on the measured chart
             boxes[PANELS_KEY] = panel_boxes(spec, boxes["chart"], aspect, floor)
+    if isinstance(spec.get(SCHEMATIC_KEY), dict) and not isinstance(boxes.get(SCHEMATIC_BOX), dict):
+        boxes[SCHEMATIC_BOX] = schematic_tag_box(boxes["plot"])   # P70 T2: s109 (1)'s tag, estimated where it is not measured
     sx, sy, sw, sh = SAFE_BOX[aspect]
     cx, cy, cw, ch = CAPTION_ANCHOR[aspect]
     out = {"aspect": aspect, "stage": _box(0, 0, w_s, h_s), "safe": _box(sx, sy, sw, sh),
