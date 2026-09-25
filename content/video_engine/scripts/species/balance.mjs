@@ -104,6 +104,19 @@ export const BALANCE = Object.freeze({
   EXIT_S: 0.35,         /* the last this-much of the window takes the whole object down */
   INK: CHIP_STAMP.INK,  /* `ink`: cream (the default: on the charcoal page) or charcoal (on a light ground) - the stamp's own pair */
   HATCH_GROUND: Object.freeze({ cream: "page", charcoal: "ground" }),   /* ... and PROP_SHADOW's ground for the hatch under it */
+  /* A SIDE'S SIGN INK (P72 T41, R26-334; Bravos CHN shots 113 / 114 - a coloured pill on each pan, threat red, opportunity
+     green): an opt-in `tone: neg | pos | neutral` on a side draws its NAME as a PILL in the palette's sign inks. Absent,
+     the name paints exactly as it did. The pill's sizes are the chip tab's (species/chip.mjs TAB_H over TAB_TYPE, TAB_PAD),
+     so a balance's pill and a chip's tab are one family. */
+  TONE: Object.freeze({
+    FORM: "filled",     /* THE PILL'S FORM - one of BALANCE_TONE_FORMS, the three candidates on the operator's sheet (P72-HG1 item 6); provisional until that pick sets it */
+    INK: Object.freeze({ neg: "#FF4D4D", pos: "#3DDC84", neutral: "#b8c4d0" }),   /* the template's --lp-neg / --lp-pos (E28's sign pair, the chip tab's TAB_INK) and LP_INK.deemph (the palette's explicit de-emphasis) - never a new ink (test_balance_tone pins all three) */
+    TEXT: "#25313C",    /* the word on a FILLED pill: charcoal, the chip tab's TAB_TEXT (>= 4.5:1 on every fill, pinned) */
+    H_K: 70 / 59.08,    /* the pill's height over its word's size: the chip tab's TAB_H over TAB_TYPE */
+    PAD_PX: 14,         /* the room each side of the word: the chip tab's TAB_PAD */
+    OUTLINE_W: 4,       /* the `outline` form's ring, drawn INSIDE the pill's box (the box is what the fit places) - the balance's own STROKE_W */
+    CAP_EM: Object.freeze({ kalam: 0.77, inter: 0.73 }),   /* the caps' height in em at weight 700 [MEASURED: canvas actualBoundingBoxAscent of "HTEOPRAMW" in the golden's own page, scratchpad/p72-t41/logs/measure-caps.json] - centres the word in its pill */
+  }),
 });
 
 const bal01 = (v) => Math.min(1, Math.max(0, v));
@@ -228,6 +241,34 @@ export const balanceNameRow = (g, pictured, loadY) => (pictured
 
 export const balanceInk = (sp) => (sp && sp.ink === "charcoal" ? "charcoal" : "cream");
 
+/* A SIDE'S SIGN INK (R26-334): the three tones a side may declare (the compiler refuses any other BY NAME), and the
+   pill's three candidate forms for the operator's pick:
+     filled   the pill in the tone's ink, the word in charcoal in the hand's face (Kalam 700) - ours, in Bravos's shape;
+     outline  the pill in the ground's ink ringed in the tone's, the word in the tone's ink - the s118 inked name, held;
+     sans     the pill in the tone's ink, the word in charcoal in the chip tab's face (Inter 700) - Bravos's own. */
+export const BALANCE_TONES = Object.freeze(["neg", "pos", "neutral"]);
+export const BALANCE_TONE_FORMS = Object.freeze(["filled", "outline", "sans"]);
+export const balanceTone = (L) => (L && BALANCE_TONES.includes(L.tone) ? L.tone : null);
+
+/* a name's PAINTED width over its advance `adv` (at LABEL_PX): the halo's NAME_PAD untoned, the pill's two pads toned */
+export const balanceNameWidth = (adv, tone) => adv + (tone ? 2 * BALANCE.TONE.PAD_PX : BALANCE.NAME_PAD);
+
+/* A TONED NAME'S ROW in its pan's frame, for a word of `size` px in `face`: a bare name's pill STANDS on its rim (its foot
+   RIM_LIFT above it, riding the load's drop - never in the solid bowl), a pictured load's pill hangs LABEL_GAP under the
+   bowl; the word's caps are centred in the pill. {top, h, baseline} */
+export const balanceToneRow = (g, pictured, loadY, size, face = "kalam") => {
+  const T = BALANCE.TONE, h = T.H_K * size, cap = T.CAP_EM[face] * size;
+  const top = pictured ? g.H + g.pd + BALANCE.LABEL_GAP : g.H - BALANCE.RIM_LIFT + loadY - h;
+  return { top, h, baseline: top + h / 2 + cap / 2 };
+};
+
+/* the pill's PAINT in a form, on the balance's other ink `ground` (the page's, under the cream balance) */
+export const balanceTonePaint = (tone, form, ground) => {
+  const T = BALANCE.TONE, ink = T.INK[tone];
+  if (form === "outline") return { fill: ground, stroke: ink, strokeW: T.OUTLINE_W, text: ink, face: "kalam" };
+  return { fill: ink, stroke: "none", strokeW: 0, text: T.TEXT, face: form === "sans" ? "inter" : "kalam" };
+};
+
 /* one POSE for the whole object at t, from the declaration alone - what the painter draws and a test reads */
 export const balancePose = (sp, t, b) => {
   const g = balanceGeom(b), deg = balanceAngle(sp, t);
@@ -297,8 +338,40 @@ export const balanceBase = (g) => {
 const balNameW = (lab, label) => (typeof lab.getComputedTextLength === "function" ? lab.getComputedTextLength()
   : BALANCE.LABEL_EM * BALANCE.LABEL_PX * String(label).length);
 
+/* a toned name's style: the form's face at `size`, in the form's word ink, no halo (the pill is its ground) */
+const balToneLabelStyle = (paint, size = BALANCE.LABEL_PX) => "font-family:" + (paint.face === "inter" ? "Inter,Arial,sans-serif" : "Kalam,cursive")
+  + ";font-size:" + +size.toFixed(2) + "px;font-weight:700;fill:" + paint.text + ";stroke:none";
+
+/* A TONED NAME (R26-334): the pill first, so the word paints over it; the word measured at LABEL_PX in the form's face,
+   fitted by the PILL's width (balanceNameWidth) through the same four steps, the pill centred where the fit put it and
+   the word centred in the pill (the hand face's slant carried as the untoned name carries it). Both take the name's
+   own fade. */
+const balTonedName = (ctx, side, L, pose, pan, E, b, g, other) => {
+  const { el, t } = ctx, B = BALANCE, tone = balanceTone(L), stageW = ctx.STAGE_W || 1920;
+  const paint = balanceTonePaint(tone, B.TONE.FORM, other);
+  const pill = el("rect", "bal-tone", pan.g, { fill: paint.fill, stroke: paint.stroke, "stroke-width": paint.strokeW });
+  const lab = el("text", "bal-label", pan.g, { x: 0, y: 0, "text-anchor": "middle", style: balToneLabelStyle(paint) });
+  lab.textContent = L.label;
+  const fit = balanceNameFit(side, E.x, balanceNameWidth(balNameW(lab, L.label), tone), b, g.cx, stageW);
+  if (fit.size !== B.LABEL_PX) lab.setAttribute("style", balToneLabelStyle(paint, fit.size));
+  const row = balanceToneRow(g, pan.pictured, pose.y, fit.size, paint.face), inset = paint.strokeW / 2;
+  const f2 = (v) => v.toFixed(2), ph = row.h - 2 * inset;
+  lab.setAttribute("x", f2(fit.x - (paint.face === "kalam" ? B.NAME_SLANT : 0) - E.x));
+  lab.setAttribute("y", f2(row.baseline));
+  Object.entries({ x: f2(fit.x - E.x - fit.w / 2 + inset), y: f2(row.top + inset), width: f2(fit.w - 2 * inset), height: f2(ph),
+                   rx: f2(ph / 2) }).forEach(([k, v]) => pill.setAttribute(k, v));
+  const op = (pan.pictured ? chipLand(t, +L.at + balanceContactS()).fade : pose.fade).toFixed(3);
+  lab.setAttribute("opacity", op);
+  pill.setAttribute("opacity", op);
+  lab.dataset.row = pan.pictured ? "pictured" : "bare";
+  lab.dataset.fit = fit.step;
+  lab.dataset.tone = pill.dataset.tone = tone;
+  pill.dataset.form = B.TONE.FORM;
+};
+
 /* THE NAMES, one pass after the pans: each is measured at LABEL_PX, fitted (balanceNameFit: fit, shrunk, overhang,
-   pinned) and given its row (balanceNameRow) - a bare name fades in with its load, a pictured load's as the load touches. */
+   pinned) and given its row (balanceNameRow) - a bare name fades in with its load, a pictured load's as the load touches.
+   A side with a `tone` wears its pill instead (balTonedName). */
 const balNames = (ctx, P, b, pans, inkKey) => {
   const { el, sp, t } = ctx, B = BALANCE, g = P.g, stageW = ctx.STAGE_W || 1920;
   const ink = B.INK[inkKey], other = B.INK[inkKey === "cream" ? "charcoal" : "cream"];
@@ -306,9 +379,10 @@ const balNames = (ctx, P, b, pans, inkKey) => {
     const L = sp[side] || {}, pose = P.loads[side], pan = pans[side];
     if (!pose || !pan || !(typeof L.label === "string" && L.label)) continue;
     const E = P.ends[side];
+    if (balanceTone(L)) { balTonedName(ctx, side, L, pose, pan, E, b, g, other); continue; }
     const lab = el("text", "bal-label", pan.g, { x: 0, y: 0, "text-anchor": "middle", style: balLabelStyle(ink, other) });
     lab.textContent = L.label;
-    const fit = balanceNameFit(side, E.x, balNameW(lab, L.label) + B.NAME_PAD, b, g.cx, stageW);   /* by its PAINTED width */
+    const fit = balanceNameFit(side, E.x, balanceNameWidth(balNameW(lab, L.label), null), b, g.cx, stageW);   /* by its PAINTED width */
     if (fit.size !== B.LABEL_PX) lab.setAttribute("style", balLabelStyle(ink, other, fit.size));
     lab.setAttribute("x", (fit.x - B.NAME_SLANT - E.x).toFixed(2));   /* its PAINTED box centred where the fit put it */
     lab.setAttribute("y", balanceNameRow(g, pan.pictured, pose.y).toFixed(2));

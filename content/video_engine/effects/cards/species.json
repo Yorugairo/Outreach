@@ -228,7 +228,7 @@
         "COMPARES"
       ],
       "author": {
-        "key": "species[] {\"kind\": \"balance\", \"at\", \"dur\", \"target\": region, \"left\": {label, at, icon? | prop?, mass?}, \"right\": {...}, \"tip\"?: {at, to: left | right}, \"idle\"?, \"ink\"?} (shot row 7th element); a label never carries a digit (two bars)",
+        "key": "species[] {\"kind\": \"balance\", \"at\", \"dur\", \"target\": region, \"left\": {label, at, icon? | prop?, mass?, tone?}, \"right\": {...}, \"tip\"?: {at, to: left | right}, \"idle\"?, \"ink\"?} (shot row 7th element); a label never carries a digit (two bars)",
         "example": "{\"kind\": \"balance\", \"at\": 11.43, \"dur\": 12.52, \"idle\": \"breath\", \"target\": {\"kind\": \"region\", \"x0\": 0.735, \"y0\": 0.22, \"x1\": 0.985, \"y1\": 0.84}, \"left\": {\"label\": \"MOAT\", \"icon\": \"factory\", \"at\": 12.76}, \"right\": {\"label\": \"PAPER\", \"icon\": \"landmark\", \"at\": 16.65}}",
         "example_source": "content/video_engine/tests/golden/build_golden_sources.py (balance-level)",
         "check": "species"
@@ -307,7 +307,13 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "tone",
+          "means": "`neg | pos | neutral` on a side (P72 T41, R26-334; Bravos CHN 113/114): its name as a PILL in the sign ink; opt-in, any other value refused by name; form = BALANCE.TONE.FORM",
+          "source_set": "BALANCE_TONES"
+        }
+      ],
       "dials": {
         "module": "content/video_engine/scripts/species/balance.mjs",
         "object": "BALANCE"

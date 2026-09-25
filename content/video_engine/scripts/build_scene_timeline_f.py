@@ -928,7 +928,15 @@ SPECIES_WHEN[SPECIES_BALANCE] = ("two forces are WEIGHED and the sentence says w
                                  "of figures (two bars)")
 BALANCE_SIDES = ("left", "right")
 BALANCE_KEYS = ("kind", "at", "dur", "target", "left", "right", "tip", "idle", "ink") + ROW_PATH_KEYS
-BALANCE_SIDE_KEYS = ("label", "at", "icon", "prop", "mass")
+BALANCE_SIDE_KEYS = ("label", "at", "icon", "prop", "mass", "tone")
+# P72 T41 (R26-334): a side's SIGN INK - `tone` draws its name as a pill in the palette's sign inks (species/balance.mjs
+# BALANCE_TONES / BALANCE.TONE, mirrored; test_balance_tone pins the pairs). Opt-in; any other value is refused by name.
+BALANCE_TONES = ("neg", "pos", "neutral")
+BALANCE_TONE_PAD_PX, BALANCE_TONE_H_K = 14, 70 / 59.08   # the pill's room each side of the word, its height over the word
+BALANCE_TONE_FORM = "filled"   # BALANCE.TONE.FORM, mirrored: the operator's pick (P72-HG1 item 6) sets both
+BALANCE_TONE_EM = {"filled": 0.55, "outline": 0.55, "sans": 0.68}   # a toned word's width estimate per form: Kalam's
+# BALANCE_LABEL_EM, and Inter 700's caps [DERIVED: the mean advance of THREAT / OPPORTUNITY / MOAT / PAPER, 0.678 em -
+# scratchpad/p72-t41/logs/measure-caps.json]
 BALANCE_TIP_KEYS = ("at", "to")
 BALANCE_INKS = ("cream", "charcoal")   # species/balance.mjs BALANCE.INK - the stamp's own pair: cream on the charcoal page, charcoal on a light ground
 # species/balance.mjs BALANCE, mirrored (test_balance_scale pins the pairs): the draw a load must wait for, the window a
@@ -4572,7 +4580,19 @@ def _balance_side_errors(entry: dict, side: str) -> list[str]:
                             "figures: a real balance of figures is two bars (BRAVOS-USE-WHEN :646)")
     if "mass" in L and L["mass"] not in MASSES:
         errs.append(f"{where}: mass {L['mass']!r} is not one of {'|'.join(MASSES)} (stopaction's materials)")
+    if "tone" in L and (not isinstance(L["tone"], str) or L["tone"] not in BALANCE_TONES):
+        errs.append(f"{where}: tone {L['tone']!r} must be one of {'|'.join(BALANCE_TONES)} - the side's sign ink, a pill in "
+                    "the palette's --lp-neg / --lp-pos or its neutral (R26-334); leave it out for the plain name")
     return errs
+
+
+def balance_name_est(L: dict) -> float:
+    """A name's ESTIMATED painted width at BALANCE_LABEL_PX (species/balance.mjs `balanceNameWidth` on the estimated
+    advance): the halo's pad untoned; the pill's two pads when the side declares a `tone` (R26-334), the word estimated in
+    the pill form's face."""
+    if L.get("tone") not in BALANCE_TONES:
+        return BALANCE_LABEL_EM * BALANCE_LABEL_PX * len(L["label"]) + BALANCE_NAME_PAD
+    return BALANCE_TONE_EM[BALANCE_TONE_FORM] * BALANCE_LABEL_PX * len(L["label"]) + 2 * BALANCE_TONE_PAD_PX
 
 
 def balance_figure(label: str) -> tuple[str, str] | None:
@@ -4667,7 +4687,7 @@ def balance_advice(entry: dict, aspect: str | None) -> list[str]:
         label = L.get("label") if isinstance(L, dict) else None
         if not isinstance(label, str) or not label.strip():
             continue
-        est = BALANCE_LABEL_EM * BALANCE_LABEL_PX * len(label) + BALANCE_NAME_PAD
+        est = balance_name_est(L)
         fit = balance_name_fit(side, est, room, sw)
         if fit["step"] == "fit":
             continue
@@ -4712,7 +4732,7 @@ def balance_post_crossings(entry: dict, aspect: str | None) -> list[str]:
         label = L.get("label") if isinstance(L, dict) else None
         if not isinstance(label, str) or not label.strip():
             continue
-        fit = balance_name_fit(side, BALANCE_LABEL_EM * BALANCE_LABEL_PX * len(label) + BALANCE_NAME_PAD, room, sw)
+        fit = balance_name_fit(side, balance_name_est(L), room, sw)
         if fit["step"] != "pinned":
             continue
         guard = cx - BALANCE_POST_CLEAR_PX if side == "left" else cx + BALANCE_POST_CLEAR_PX
@@ -4751,12 +4771,18 @@ def balance_footprint(entry: dict, aspect: str | None) -> dict | None:
         label = L.get("label") if isinstance(L, dict) else None
         if not isinstance(label, str) or not label.strip():
             continue
-        fit = balance_name_fit(side, BALANCE_LABEL_EM * BALANCE_LABEL_PX * len(label) + BALANCE_NAME_PAD, room, sw)
+        fit = balance_name_fit(side, balance_name_est(L), room, sw)
         x0, x1 = min(x0, fit["x0"]), max(x1, fit["x1"])
         pictured = bool(L.get("icon") or L.get("prop"))
         base = (py + rise + hang + pd + G_["LABEL_GAP"] + 0.8 * fit["size"]) if pictured else (py + rise + hang - G_["RIM_LIFT"])
         bottom = max(bottom, base + 0.25 * fit["size"])
         top = min(top, (py - rise + hang - G_["RIM_LIFT"] - 0.8 * fit["size"] - fall) if not pictured else top)
+        if L.get("tone") in BALANCE_TONES:   # R26-334: the pill, taller than the word - under the bowl, or standing on the rim
+            ph = BALANCE_TONE_H_K * fit["size"]
+            if pictured:
+                bottom = max(bottom, py + rise + hang + pd + G_["LABEL_GAP"] + ph)
+            else:
+                top = min(top, py - rise + hang - G_["RIM_LIFT"] - ph - fall)
     pad = BALANCE_FOOT_PAD_PX
     x0, y0 = max(0.0, x0 - pad), max(0.0, top - pad)
     x1, y1 = min(float(sw), x1 + pad), min(float(sh), bottom + pad)
