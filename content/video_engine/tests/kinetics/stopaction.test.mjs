@@ -152,3 +152,129 @@ test("the ground answers with a DIP for mass; the shake is violence and only a v
   assert.ok(landXf("metal", hit, { violent: true }).shake.x !== 0, "a violent hit shakes the stage");
   assert.ok(throwXf({ x: -400, y: -120 }, "paper", 0.1).h > 0 && landXf("metal", 0.05).h > STOP.DROP_PX, "the height above rest is reported for the shadow");
 });
+
+// ---- P70 T8 (was P69 T69; harvest v2 A35) - THE POOF: a prop appears at its place inside a ring of seeded puffs ------
+// Thresholds from the REFERENCE, measured before the module was written (Bravos "The Bubble's Final Phase Has Begun",
+// 11:58.0-12:00.3 at 10 fps, docs/research/runs/grill_pipeline-value/bravos-frames/poof.jpg; BRAVOS-RIG-VERIFIED.md:31):
+// the cloud's OUTER radius in units of the prop's half-size R, +0.1 .. +0.5 s after the fleck, and its opacity.
+import * as SA from "../../scripts/kinetics/stopaction.mjs";
+
+const BRAVOS_REACH = [[0.1, 0.94], [0.2, 1.31], [0.3, 1.66], [0.4, 1.74], [0.5, 1.79]];   // outer radius / R, by pixel difference
+const BRAVOS_ALPHA = [[0.4, 0.6], [0.5, 0.25], [0.6, 0.08]];                            // the lobes' opacity
+const outer = (p) => Math.max(0, ...p.puffs.map((q) => Math.hypot(q.x, q.y) + q.r));
+
+test("P70 T8: the poof's dials - a 1-2 frame burst, a dispersal of at least 12 frames at 24 fps (W&H p. 74), Bravos's reach", () => {
+  const P = SA.POOF;
+  assert.ok(P, "stopaction.mjs exports a POOF dial block");
+  assert.ok(P.EJECT_S >= 1 / 24 - 1e-9 && P.EJECT_S <= 2 / 24 + 1e-4, "the puffs leave the contact over 1-2 frames");
+  assert.ok(P.LIFE_S - P.COVER_S >= 0.5 - 1e-9, "the puff disperses over >= 12 frames at 24 fps (0.5 s)");
+  assert.ok(P.COVER_S > P.EJECT_S && P.OPEN_S > P.COVER_S && P.LIFE_S > P.OPEN_S, "burst -> cover -> open -> gone, in that order");
+  assert.ok(P.N >= 6 && P.N <= 10, "Bravos's cloud reads as 7-8 lobes");
+  assert.equal(P.POP_FROM, 0.6, "the prop springs from 0.6 (the plan's acceptance 1)");
+  assert.ok(P.REACH >= 1.5 && P.REACH <= 2.0, "the ring's outer radius at its widest, ~1.8 R with its lobes (Bravos +0.5 s)");
+});
+
+test("P70 T8: before its enter a poof draws nothing and the prop is not there", () => {
+  const p = SA.poofXf(-0.01);
+  assert.equal(p.opacity, 0); assert.equal(p.puffs.length, 0); assert.equal(p.scale, SA.POOF.POP_FROM); assert.equal(p.phase, "waiting");
+});
+
+test("P70 T8: the burst - within EJECT_S the cloud already reaches the prop's own size; the contact is EJECT_S", () => {
+  const P = SA.POOF;
+  assert.ok(outer(SA.poofXf(0)) < 0.2, "a fleck at the contact frame, not a cloud");
+  assert.ok(outer(SA.poofXf(P.EJECT_S)) >= 0.75, "two frames later the puffs have ejected over most of the prop (Bravos: 0.94 R by 0.1 s)");
+  assert.equal(SA.poofXf(0.3).contact, P.EJECT_S, "the contact the gate, the walk and the cue read");
+  assert.equal(SA.poofXf(P.EJECT_S / 2).phase, "burst");
+  assert.equal(SA.poofXf((P.EJECT_S + P.COVER_S) / 2).phase, "cover");
+  assert.equal(SA.poofXf((P.COVER_S + P.LIFE_S) / 2).phase, "disperse");
+  assert.equal(SA.poofXf(P.LIFE_S + 0.01).phase, "settled");
+});
+
+test("P70 T8: the puffs eject RADIALLY - each lobe keeps its bearing and only moves outward", () => {
+  const ts = Array.from({ length: 40 }, (_, i) => i * SA.POOF.LIFE_S / 40);
+  const runs = ts.map((t) => SA.poofXf(t).puffs);
+  const n = runs[1].length;
+  assert.equal(n, SA.POOF.N);
+  for (let i = 0; i < n; i++) {
+    const ang = runs.slice(1).map((ps) => Math.atan2(ps[i].y, ps[i].x));
+    const dist = runs.slice(1).map((ps) => Math.hypot(ps[i].x, ps[i].y));
+    assert.ok(ang.every((a) => near(a, ang[0], 1e-9)), `lobe ${i} keeps its bearing`);
+    assert.ok(dist.every((d, k) => k === 0 || d >= dist[k - 1] - 1e-9), `lobe ${i} only moves outward`);
+  }
+});
+
+test("P70 T8: the cover closes over the prop, then opens into a ring and lets it through (Bravos +0.2 / +0.3)", () => {
+  const P = SA.POOF;
+  const covers = (p) => p.puffs.some((q) => Math.hypot(q.x, q.y) < q.r);
+  assert.ok(covers(SA.poofXf(P.COVER_S)), "at the cover a lobe lies over the prop's centre");
+  const hole = (t) => Math.min(...SA.poofXf(t).puffs.map((q) => Math.hypot(q.x, q.y) - q.r));
+  assert.ok(hole(P.OPEN_S) > 0.4, "by OPEN_S the lobes have left the prop's heart: a ring, its hole 0.4 R and more");
+  assert.ok(hole(P.LIFE_S - 0.01) >= hole(P.OPEN_S) - 1e-9, "... and the hole never closes again");
+});
+
+test("P70 T8: the reach and the fade are Bravos's, within a fifth, frame by frame", () => {
+  for (const [t, r] of BRAVOS_REACH) {
+    const got = outer(SA.poofXf(t));
+    assert.ok(Math.abs(got - r) / r <= 0.2, `+${t}s: reach ${got.toFixed(2)} R against Bravos ${r} R`);
+  }
+  for (const [t, a] of BRAVOS_ALPHA) {
+    const got = SA.poofXf(t).puffs[0].alpha;
+    assert.ok(Math.abs(got - a) <= 0.15, `+${t}s: alpha ${got.toFixed(2)} against Bravos ~${a}`);
+  }
+});
+
+test("P70 T8: opaque through the cover, then fading every frame to nothing by LIFE_S", () => {
+  const P = SA.POOF;
+  assert.ok(SA.poofXf(0).puffs.every((q) => q.alpha === 1) && SA.poofXf(P.COVER_S).puffs.every((q) => q.alpha === 1));
+  let prev = 1;
+  for (let t = P.COVER_S + 1 / 24; t < P.LIFE_S; t += 1 / 24) {
+    const a = SA.poofXf(t).puffs[0].alpha;
+    assert.ok(a < prev, `the fade falls at ${t.toFixed(3)}`); prev = a;
+  }
+  assert.equal(SA.poofXf(P.LIFE_S).puffs.length, 0, "gone at LIFE_S: a puff is never held");
+  assert.equal(SA.poofXf(5).puffs.length, 0);
+});
+
+test("P70 T8: the prop is absent while the cloud forms, then springs 0.6 -> 1 in front of it and is whole as it opens", () => {
+  const P = SA.POOF, end = P.POP_AT + P.POP_S;
+  assert.ok(P.POP_AT > P.EJECT_S && P.POP_AT <= P.COVER_S, "it appears once the burst has formed, by the cover (Bravos +0.2)");
+  for (const t of [0, P.EJECT_S, P.POP_AT - 0.01]) assert.equal(SA.poofXf(t).opacity, 0, `no prop at +${t.toFixed(3)}s`);
+  assert.equal(SA.poofXf(P.POP_AT).scale, P.POP_FROM, "it appears at 0.6 of its size");
+  assert.equal(SA.poofXf(P.POP_AT + P.APPEAR_S).opacity, 1, "wholly there two frames later");
+  assert.ok(P.APPEAR_S <= 2 / 24 + 1e-4);
+  assert.equal(SA.poofXf(end).scale, 1, "the pop lands on exactly 1");
+  assert.equal(SA.poofXf(end + 0.4).scale, 1);
+  const peak = Math.max(...Array.from({ length: 60 }, (_, i) => SA.poofXf(P.POP_AT + i * P.POP_S / 60).scale));
+  assert.ok(peak > 1 && peak <= 1 + (1 - P.POP_FROM) * 0.06, "the pop's small overshoot (Mp 4 %), never a bounce");
+  assert.ok(end <= P.OPEN_S + 1e-9, "whole by the time the ring has opened (Bravos +0.3)");
+});
+
+test("P70 T8: the opened ring stays a ring - neighbouring lobes still touch round it (their pitch 2 pi d / N)", () => {
+  const P = SA.POOF;
+  for (const t of [P.OPEN_S, (P.OPEN_S + P.LIFE_S) / 2, P.LIFE_S - 0.02]) {
+    const ps = SA.poofXf(t).puffs.map((q) => ({ a: Math.atan2(q.y, q.x), d: Math.hypot(q.x, q.y), r: q.r })).sort((u, v) => u.a - v.a);
+    for (let i = 0; i < ps.length; i++) {
+      const u = ps[i], v = ps[(i + 1) % ps.length];
+      const gap = Math.hypot(u.d * Math.cos(u.a) - v.d * Math.cos(v.a), u.d * Math.sin(u.a) - v.d * Math.sin(v.a)) - u.r - v.r;
+      assert.ok(gap <= 0.25, `+${t.toFixed(2)}s: lobes ${i} and ${i + 1} stand ${gap.toFixed(2)} R apart - a ring, not bubbles`);
+    }
+  }
+});
+
+test("P70 T8: seeded, deterministic, a pure function of t - a seek is the play", () => {
+  const a = SA.poofXf(0.27, { SEED: 7 }), b = SA.poofXf(0.27, { SEED: 7 }), c = SA.poofXf(0.27, { SEED: 8 });
+  assert.deepEqual(a, b);
+  SA.poofXf(0.61, { SEED: 7 }); SA.poofXf(0.05, { SEED: 7 });
+  assert.deepEqual(SA.poofXf(0.27, { SEED: 7 }), a, "out of order, the same frame");
+  assert.notDeepEqual(a.puffs.map((q) => q.x), c.puffs.map((q) => q.x), "another seed is another cloud");
+});
+
+test("P70 T8: each lobe carries its shaded underside along the stage light's fall (the drop's LIGHT_DEG)", () => {
+  const p = SA.poofXf(0.15), th = (SA.PROP_SHADOW.LIGHT_DEG + 180) * Math.PI / 180;
+  for (const q of p.puffs) {
+    assert.ok(q.shade, "a shade circle per lobe");
+    const dx = q.shade.x - q.x, dy = q.shade.y - q.y;
+    assert.ok(near(Math.atan2(dy, dx), Math.atan2(Math.sin(th), Math.cos(th)), 1e-9), "offset down and to the right");
+    assert.ok(near(Math.hypot(dx, dy), SA.POOF.SHADE_OFF * q.r, 1e-9));
+  }
+});

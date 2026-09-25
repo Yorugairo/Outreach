@@ -111,6 +111,35 @@ def test_the_moved_cue_names_where_it_came_from_and_a_second_binding_moves_nothi
     assert again == kept and not dropped and A.retimed(kept, THREE) == [], "binding is idempotent"
 
 
+# P70 T8: THE POOF'S SOUND - its cue is a landing too (`WEIGHTED_ARRIVALS`), named with its mass, and it plays on the
+# poof's own contact (the enter + POOF.EJECT_S, the burst leaving the prop) - the plan names the whoosh, the poof its instant
+POOF_TL = _timeline(_scene("s01", 0.0, 30.0, docks=[
+    {"slide": "prop-ibeam", "enter": 10.81, "exit": 20.0, "arrive": "poof", "kind": "prop"}]))
+
+
+def test_a_poof_cue_authored_a_third_of_a_second_off_moves_onto_the_poofs_contact():
+    contact = _contact(POOF_TL, "poof")
+    assert contact == round(10.81 + A.poof_contact_s(), 2), "the poof's contact is its burst, not a landing's drop"
+    stale = _cue("landing 1 (poof, paper)", round(contact + 0.3, 2), variants={"A": "fs-whoosh-1-706679.mp3"})
+    kept, dropped = A.bind_cues([stale], POOF_TL)
+    assert not dropped and kept[0]["at"] == contact
+    assert kept[0]["variants"] == {"A": "fs-whoosh-1-706679.mp3"}, "the plan says WHICH"
+    assert A.retimed([stale], POOF_TL) == [{"slot": "landing 1 (poof, paper)", "what": "poof", "scene": "s01",
+                                            "from": round(contact + 0.3, 2), "to": contact}]
+    early = _cue("landing 1 (poof, paper)", round(contact - 0.3, 2))
+    assert A.bind_cues([early], POOF_TL)[0][0]["at"] == contact, "... from either side"
+
+
+def test_a_poof_cue_on_its_contact_or_one_frame_early_is_kept_and_a_metal_cue_does_not_play_over_it():
+    contact = _contact(POOF_TL, "poof")
+    assert contact == round(10.81 + A.poof_contact_s(), 2)
+    for at in (contact, round(contact - FRAME, 2)):
+        cue = _cue("landing 1 (poof, paper)", at)
+        assert A.bind_cues([cue], POOF_TL) == ([cue], [])
+    kept, dropped = A.bind_cues([_cue("landing 1 (poof, metal)", contact)], POOF_TL)
+    assert not kept and "lands paper" in dropped[0]["why"], "a poof names its mass: paper unless the row says otherwise"
+
+
 # ---------------------------------------------------------------- (2) nothing else changes
 
 def test_a_page_cue_off_its_instant_is_kept_where_it_was():

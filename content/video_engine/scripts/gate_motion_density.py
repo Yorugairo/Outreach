@@ -157,6 +157,7 @@ MORPH_INVARIANTS_NAME = "morph-invariants.json"   # written by measure_morph.py 
 SRC_M17 = "P47 T3 / the brief B4 [DERIVED: :390-396]: a morph reads as one thing changing when its centroid moves <= 6 % of W, its dominant axis turns <= 15 deg and its bounding area keeps >= 60 % - measured in the player by measure_morph.py"
 STOP_FLIGHT_S = 0.45       # P47 T1 [DERIVED: stopaction.mjs STOP.FLIGHT_S] - a thrown card lands this long after its enter
 STOP_LAND_S = 0.32         # P47 T1 [DERIVED: STOP.ANTIC_S + STOP.DROP_S] - a landed card hits its spot this long after its enter
+POOF_CONTACT_S = 0.0833    # P70 T8 [DERIVED: stopaction.mjs POOF.EJECT_S] - a poofed prop's puffs have left it (the burst, two frames at 24 fps) this long after its enter: its landing, its arrival and its cue's instant; POOFS ONLY (test_poof_arrival pins the mirror)
 STAMP_CONTACT_S = 0.1542   # P69 T2 (R26-247) [DERIVED: stopaction.mjs STAMP_LAND.tc] - a stamped mark reaches its own size (the clamped scale spring's crossing) this long after its enter; STAMPS ONLY
 STOP_ON1_PX_S = 154        # P47 T1, E99 s30 [mirrors CADENCE.ON1_PX_S: RED 1/7 picture width/s, cinema parity] - faster than this steps on 1s
 STOP_THROW_DX, STOP_THROW_DY, CARD_W_DEFAULT = 240, 160, 864   # the template's throw offsets and the .dock width, mirrored
@@ -3905,8 +3906,8 @@ def _deployed_lives(scenes: list[dict]) -> list[tuple[str, float, float, float]]
 
 def _landings(s: dict) -> list[tuple[float, str]]:
     """Every LANDING on a scene: the page's chart landing, each build_to / bracket / figure / note end, each dock's arrival
-    (its enter, plus a throw's flight, a land's anticipation + drop or a stamp's contact), each badge landing on a page,
-    and each chip that lands AS A STAMP at its contact (P70 T1)."""
+    (its enter, plus a throw's flight, a land's anticipation + drop, a stamp's contact or a poof's burst - P70 T8), each
+    badge landing on a page, and each chip that lands AS A STAMP at its contact (P70 T1)."""
     a = float(s["span"][0]) if s.get("span") else 0.0
     out: list[tuple[float, str]] = []
     if _is_page(s):
@@ -3924,6 +3925,8 @@ def _landings(s: dict) -> list[tuple[float, str]]:
         contact = float(d.get("enter", 0.0)) + (0.46 if arr == "throw" else 0.32 if arr == "land" else 0.0)
         if arr == "stamp":   # P69 T2 (R26-247): a stamp lands at its contact; throw / land above keep their own value
             contact = float(d.get("enter", 0.0)) + STAMP_CONTACT_S
+        elif arr == "poof":   # P70 T8: a poof lands when its burst has left the prop
+            contact = float(d.get("enter", 0.0)) + POOF_CONTACT_S
         out.append((contact, f"dock {d.get('slide', '?')} {arr or 'spring'}"))
     for sp in _stamped_chips(s):   # P70 T1: a chip that lands AS A STAMP lands at its contact, as a stamped dock does
         out.append((float(sp.get("at", 0.0)) + STAMP_CONTACT_S, f"chip {sp.get('icon', '?')} stamp"))
@@ -4085,8 +4088,8 @@ def _build_to_gate(scenes: list[dict]) -> Gate | None:
 
 def _arrivals(scenes: list[dict]) -> list[tuple[float, str, str, float]]:
     """(enter, slide, arrive, landing time) for every dock that arrives by a throw, a landing (P47 T1) or a stamp
-    (P69 T2, R26-247: its contact, STAMP_CONTACT_S after its enter) - and every chip that lands AS A STAMP (P70 T1: its
-    `at`, and its contact STAMP_CONTACT_S after it)."""
+    (P69 T2, R26-247: its contact, STAMP_CONTACT_S after its enter) or a poof (P70 T8: its burst, POOF_CONTACT_S after
+    its enter) - and every chip that lands AS A STAMP (P70 T1: its `at`, and its contact STAMP_CONTACT_S after it)."""
     out = []
     for sc in scenes:
         for d in sc.get("docks", []):
@@ -4095,6 +4098,8 @@ def _arrivals(scenes: list[dict]) -> list[tuple[float, str, str, float]]:
                 out.append((float(d["enter"]), str(d.get("slide", "?")), arr, float(d["enter"]) + (STOP_FLIGHT_S if arr == "throw" else STOP_LAND_S)))
             elif arr == "stamp":
                 out.append((float(d["enter"]), str(d.get("slide", "?")), arr, float(d["enter"]) + STAMP_CONTACT_S))
+            elif arr == "poof":   # P70 T8
+                out.append((float(d["enter"]), str(d.get("slide", "?")), arr, float(d["enter"]) + POOF_CONTACT_S))
         for sp in _stamped_chips(sc):   # P70 T1: a stamped chip arrives at its `at` and lands at its contact
             at = float(sp.get("at", 0.0))
             out.append((at, f"chip {sp.get('icon', '?')}", "stamp", at + STAMP_CONTACT_S))
@@ -4124,6 +4129,9 @@ def _cadence_gate(scenes: list[dict]) -> Gate | None:
             elif d.get("arrive") == "stamp":   # P69 T2 (R26-247): the mass defaults to the engine's own, `ink`
                 contact = float(d.get("enter", 0.0)) + STAMP_CONTACT_S
                 rows.append(f"{d.get('slide', '?')} stamp ({d.get('mass') or 'ink'}) - contact {STAMP_CONTACT_S:.2f}s after its enter, at {contact:.2f}s")
+            elif d.get("arrive") == "poof":   # P70 T8: the burst is its contact; its mass is named (the kit's POOF_MASS)
+                contact = float(d.get("enter", 0.0)) + POOF_CONTACT_S
+                rows.append(f"{d.get('slide', '?')} poof ({d.get('mass') or 'paper'}) - contact {POOF_CONTACT_S:.2f}s after its enter, at {contact:.2f}s")
         for sp in _stamped_chips(sc):   # P70 T1: a stamped chip rides along, at the engine's stamp mass
             contact = float(sp.get("at", 0.0)) + STAMP_CONTACT_S
             rows.append(f"chip {sp.get('icon', '?')} stamp (ink) - contact {STAMP_CONTACT_S:.2f}s after its at, at {contact:.2f}s")

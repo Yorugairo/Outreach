@@ -426,9 +426,10 @@ def test_every_wired_card_is_in_a_recipe():
 
     # These source-bound options and the paper handoff are callable and tested individually,
     # but no source-bound combination has earned a recipe yet. Keep the exception exact:
-    # a newly uncomposed wired card still fails this test. P69 T26d's authored prop place and moves
-    # (dock_option:place / dock_option:moves, 5c6871c) are tested alone in test_prop_free_placement.py; no committed
-    # beat plays them yet, so they wait here rather than in an invented recipe. P69 T8b's panel focus
+    # a newly uncomposed wired card still fails this test. P69 T26d's authored prop moves (dock_option:moves, 5c6871c)
+    # are tested alone in test_prop_free_placement.py; no committed beat plays them yet, so they wait here rather than
+    # in an invented recipe. Its authored PLACE (dock_option:place) is composed by P70 T8's candidate recipe:the-rig
+    # (the load's place authored on its support's top, then the poof), so it is no longer excepted. P69 T8b's panel focus
     # (page_species:panel_focus) is composed by P70 T4's recipe:companion-bars-beside-the-held-line (the line alone,
     # the bars made active beside it on their word, the line alone again), so it is no longer excepted. P69 T36's lit stretch
     # is composed by P69 T47's recipe:rings-in-turn-on-the-vertices (the valley lit), so it is no longer excepted.
@@ -459,7 +460,7 @@ def test_every_wired_card_is_in_a_recipe():
     # golden (H row 18's arithmetic); its recipe is the harvest's R25 "formula by spoken order" (P69 T44), not invented here.
     # P70 T7's balance scale (species:balance) is tested alone in test_balance_scale.py and pinned by the balance-level
     # golden (H row 18's "Both are true at once"); no committed beat plays it yet, so no recipe is invented for it here.
-    assert uncovered == ["dock_option:moves", "dock_option:place", "page_builder:bars+segments",
+    assert uncovered == ["dock_option:moves", "page_builder:bars+segments",
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress",
                          "page_enter:surface",

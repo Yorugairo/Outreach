@@ -105,7 +105,7 @@ PLATE_DRIFT_SHORTS = 40.0   # E99 s55: "it might work really well for shorts and
 # three-way proof (`review/assembly/r26-133-drift-idle-paints-nothing/`).
 PLATE_DRIFT_MAX = 90.0
 DRIFT_IDLES = ("drift", "live")   # the two idle kinds whose pose HAS a dx/dy for an amplitude to size
-ARRIVALS = ("spring", "throw", "land", "stamp")   # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)   # R26-20 / E99 s87: `stamp` is remotion-ui RU-2's badge-stamp, PORTED (kinetics/stopaction.mjs `stampXf`) - a clamped scale spring landing while a FREE trailing rotation spring is still unwinding, so the mark rests slightly OFF-SQUARE, with the impact ring on its split shock curves and the exit E50 owes it. It is a MOTION and says nothing about what it carries: a card, a badge or a bare prop may each be stamped. The vector map's `stamp` SPECIES (`SPECIES_STAMP` in `VECMAP_SPECIES`, "and of no other world") keeps its own name: one is an `arrive:` value, the other a species kind, and `test_the_stamp_arrival.py` pins that they never meet
+ARRIVALS = ("spring", "throw", "land", "stamp", "poof")   # P70 T8 (the Bravos harvest v2 A35): `poof` - a PROP appears at its authored place inside a ring of seeded puffs that eject, cover it and disperse over 12 frames while it springs 0.6 -> 1 (kinetics/stopaction.mjs `poofXf`, the dials read off Bravos BUB 11:58); a prop's arrival only (`dock_opts`), never a page pill's (PLATE_ARRIVALS_REFUSED)   # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)   # R26-20 / E99 s87: `stamp` is remotion-ui RU-2's badge-stamp, PORTED (kinetics/stopaction.mjs `stampXf`) - a clamped scale spring landing while a FREE trailing rotation spring is still unwinding, so the mark rests slightly OFF-SQUARE, with the impact ring on its split shock curves and the exit E50 owes it. It is a MOTION and says nothing about what it carries: a card, a badge or a bare prop may each be stamped. The vector map's `stamp` SPECIES (`SPECIES_STAMP` in `VECMAP_SPECIES`, "and of no other world") keeps its own name: one is an `arrive:` value, the other a species kind, and `test_the_stamp_arrival.py` pins that they never meet
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
 DOCK_INKS = ("own", "page")   # E99 s87, OPEN ON THE OPERATOR'S EYE: how a stamped PROP's art is laid down - `own` is the woodblock as it was generated, `page` lays it down in the page's own ink the way a real impression would (the page's ground decides which ink that is: chalk on the charcoal page, charcoal on cream). Both render; neither is the default until the frame is judged - a row that names none gets `own`, the art untouched
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
@@ -6725,7 +6725,7 @@ def longform_assets(timeline: dict) -> dict:
     return {}
 
 
-PLATE_ARRIVALS_REFUSED = ("stamp",)   # R26-20 send-back #2 (M1): the page's PILLS land or are thrown; no pill painter stamps, and a stamped pill rendered silently as a landing
+PLATE_ARRIVALS_REFUSED = ("stamp", "poof")   # R26-20 send-back #2 (M1): the page's PILLS land or are thrown; no pill painter stamps, and a stamped pill rendered silently as a landing   # P70 T8: ... nor poofs - the poof is a PROP dock's arrival
 
 
 def split_plate_opts(plate_id: str) -> tuple[str, dict]:
@@ -6743,6 +6743,9 @@ def split_plate_opts(plate_id: str) -> tuple[str, dict]:
             opts.setdefault("then", []).append(v)
             continue
         _check_opt(k, v, repr(plate_id))
+        if k == "arrive" and v == "poof":   # P70 T8: refused by name, as the stamp is
+            raise ValueError(f"{plate_id!r}: arrive=poof is a DOCK's arrival - a page's pills land or are thrown, and no "
+                             "pill painter poofs (put the poof on a prop: `prop: True, arrive: poof` in the row's dock options)")
         if k == "arrive" and v in PLATE_ARRIVALS_REFUSED:   # M1: refused by name rather than painted as another arrival
             raise ValueError(f"{plate_id!r}: arrive={v} is a DOCK's arrival - a page's pills land or are thrown, and no "
                              "pill painter stamps (put the stamp on a dock: `arrive: stamp` in the row's dock options)")
@@ -8295,6 +8298,10 @@ def dock_opts(raw) -> dict:
         for other, why in (("embed", "the surface's projection repaints the dock over the stamp's own transform, and its ring would be drawn round the unprojected box"),):
             if other in raw:
                 raise ValueError(f"dock: arrive=stamp and {other} cannot be combined ({why})")
+    if raw.get("arrive") == "poof" and not raw.get("prop"):   # P70 T8 / E99 s128: the poof is a PROP's arrival
+        raise ValueError("dock: arrive=poof is a PROP's arrival (`prop: True`) - a prop is an object in the world and may "
+                         "appear in it from a puff (E99 s128); a card is evidence and never appears from nowhere - throw, "
+                         "land or stamp it")
     if raw.get("prop"):   # E99 s87: a PROP is art in the world - it is not a document, not a person above a crawl, and not on a surface
         for other, why in (("press", "a press card's kind overwrites the prop's and the pile keys on it"),
                            ("stack", "the press stack is a pile of cards"),
@@ -12028,7 +12035,7 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         # fitted, so every other entry is byte-for-byte what it was.
         **({"ring_to": ring_to} if (ring_to is not None and arrive == "stamp") else {}),
         **({"from_to": from_to} if (from_to is not None and arrive == "stamp") else {}),   # ... and its approach
-        **({"paint": paint} if (paint is not None and arrive == "stamp") else {}),   # ... and the part of its box the mark PAINTS (fractions): the ring's centre, radius and the turn's pivot
+        **({"paint": paint} if (paint is not None and arrive in ("stamp", "poof")) else {}),   # ... and the part of its box the mark PAINTS (fractions): the ring's centre, radius and the turn's pivot (P70 T8: a poof's puff centre and size)
         # P69 T26d / E99 s106: a PROP's authored resting angle and its moves after it lands (whole canvas boxes in stage
         # px, `prop_moves`). Written only when the row authors them, so every other entry is byte-for-byte what it was.
         **({"rot": round(float(rot), 3)} if rot is not None else {}), **({"moves": moves} if moves else {}),
@@ -12988,7 +12995,7 @@ def main() -> int:
                                         prop=bool(dopt.get("prop")), ink=dopt.get("ink"),   # E99 s87: the bare payload and how its art is laid down
                                         ring_to=ring_fit["ring_to"] if ring_fit else None,   # R26-20 send-back: the ring as the room holds it
                                         from_to=ring_fit["from_to"] if ring_fit else None,   # ... and the approach
-                                        paint=ring_fit["paint"] if ring_fit else None,   # ... and its painted extent
+                                        paint=ring_fit["paint"] if ring_fit else (prop_fit or {}).get("paint") if dopt.get("arrive") == "poof" else None,   # ... and its painted extent (P70 T8: a poof's, off its authored place)
                                         rot=dopt.get("rot"), moves=prop_mv,   # P69 T26d: the prop's authored rest and its moves
                                         authored_place=dopt.get("place"), authored_moves=dopt.get("moves"),   # R26-298: as the author wrote them, for the read-back
                                         handed=n_dock in _pm["handed"],   # P69 T26e: a prop handed to a morph on its exit word

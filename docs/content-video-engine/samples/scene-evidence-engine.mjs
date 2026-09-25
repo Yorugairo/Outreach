@@ -2713,6 +2713,76 @@ async function mount(doc) {
              ground: st.ground, shake: P.violent ? groundShake(tk, mass) : still, ring: stampRing(tk, o) };
   };
 
+  /* P70 T8 (was P69 T69; the Bravos harvest v2 A35 "Poof arrival under a load", R16 "The rig") - THE POOF. A PROP appears
+     at its authored place inside a ring of SEEDED PUFFS: the puffs eject radially from the prop's painted centre, cover it,
+     open into a ring and disperse; the prop is not there while the cloud forms, and springs 0.6 -> 1 IN FRONT of it as it
+     peaks, the cloud opening into its ring BEHIND it (Bravos 58.6 -> 58.7: the ball's red glints small at the cloud's
+     heart, then stands whole before the ring). It does not fall, so nothing answers
+     under it (no dip, no squash, no contact shadow); its weight is the resting hatch (T6b), which the painter hands in as
+     the puff clears. THRESHOLDS FROM THE REFERENCE, measured BEFORE this was written - Bravos "The Bubble's Final Phase Has
+     Begun" 11:58.0-12:00.3 at 10 fps (docs/research/runs/grill_pipeline-value/bravos-frames/poof.jpg; BRAVOS-RIG-VERIFIED
+     .md:31), the cloud's outer half-width measured by pixel difference against 58.3 (below the lifted elephant's feet), in
+     units of the ball's half-size R: a fleck at the contact (+0.0), a lobed cloud 0.94 R out (+0.1), 1.31 R and OPAQUE over
+     the prop (+0.2), 1.66 R and opened into a ring of 7-8 lobes with the prop whole in front (+0.3), 1.74 R at ~0.6 opacity
+     (+0.4), 1.79 R at ~0.25 (+0.5), wisps (+0.6), gone (+0.7). No rotation, no drift. Whitaker & Halas 1981 p.
+     74 (WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:279): a dust puff "requires not less than 12 frames at 24 fps (500 ms) to
+     dissipate" - Bravos's cover-to-gone is exactly that. Dials, a starting reference (42 s42.5); P70-HG1 tunes them by eye. */
+  const POOF = Object.freeze({
+    EJECT_S: 0.0833,   /* THE BURST, and the poof's CONTACT: two frames at 24 fps (the plan's 1-2; Bravos is past the prop's size
+                          by its first sample, 0.1 s) - the gate (POOF_CONTACT_S), the walk and the landing cue read this instant */
+    COVER_S: 0.2,      /* the cloud stands OPAQUE over the prop until here (Bravos +0.2: the red glinting through) */
+    OPEN_S: 0.35,      /* ... and has opened into a ring by here (Bravos +0.3 shows the prop whole inside the lobes) */
+    LIFE_S: 0.7,       /* gone (Bravos +0.7); LIFE_S - COVER_S = 0.5 s = 12 frames, W&H's floor */
+    REACH: 1.7,        /* the ring's outer radius at its widest, in R, before the lobes' own jitter (which carries the widest
+                          lobe to Bravos's 1.79 R at +0.5), reached on an expo-out from the contact ... */
+    REACH_RATE: 7.4,   /* ... 1 - 2^(-RATE t / LIFE_S), the rate fitted to Bravos's +0.1 / +0.3 samples (0.94 R, 1.66 R) */
+    N: 8,              /* lobes (Bravos's cloud reads as 7-8) */
+    SHARE: [0.45, 0.68],   /* a lobe's centre as a share of the reach: a SOLID cloud (lobes overlapping the centre) -> a RING
+                              whose eight lobes still touch (their diameter spans the ring's pitch, 2 pi d / N) */
+    JITTER: { ANG: 0.12, REACH: 0.1, R: 0.12 },   /* seeded per lobe: bearing (rad), reach and radius (+- shares) - small
+                              enough that no two neighbours part (a ring of puffs, never a scatter of bubbles) */
+    FADE_POW: 1.5,     /* opacity (1 - u)^FADE_POW over COVER_S -> LIFE_S (Bravos +0.4 ~0.6, +0.5 ~0.25, +0.6 ~0.08) */
+    SHADE_OFF: 0.22,   /* each lobe's shaded underside, offset along the stage light's fall (PROP_SHADOW.LIGHT_DEG + 180) */
+    POP_AT: 0.15,      /* the prop APPEARS here, at the cloud's heart, as the cover peaks (Bravos +0.2: its red glinting small) ... */
+    APPEAR_S: 0.0833,  /* ... over two frames (its opacity), in front of the cloud ... */
+    POP_FROM: 0.6,     /* ... springing from this scale ... */
+    POP_S: 0.2,        /* ... to exactly 1 (springPop, E45's Mp 4 %) - whole by OPEN_S, as the ring opens behind it (Bravos +0.3) */
+  });
+  /* mulberry32: a seeded [0, 1) stream - the same seed is the same cloud on every seek */
+  const saRand = (seed) => {
+    let a = (Math.floor(seed) >>> 0) || 1;
+    return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  };
+  /* THE POSE at t seconds after the dock's enter: { scale, opacity (the prop's), phase, contact, reach, puffs: [{ x, y, r,
+     alpha, shade: { x, y } }] } - every length in R (the prop's painted half-size; the painter multiplies), y DOWN, about
+     the painted centre. The painter lays the puffs UNDER the prop: the prop is absent until POP_AT, so the cloud is seen
+     whole while it forms, and the prop then stands in front of it as it opens. Each lobe keeps its BEARING for its whole life and only moves outward (the ejection is radial);
+     the cloud is a pure function of (t, SEED). A t past LIFE_S draws no puff at all - a puff is never held. */
+  const poofXf = (t, o = {}) => {
+    const P = Object.assign({}, POOF, o), J = P.JITTER;
+    const base = { contact: P.EJECT_S };
+    if (t < 0) return Object.assign(base, { scale: P.POP_FROM, opacity: 0, phase: "waiting", reach: 0, puffs: [] });
+    const up = (t - P.POP_AT) / Math.max(1e-6, P.POP_S);
+    const scale = P.POP_FROM + (1 - P.POP_FROM) * springPop(up > 1 - 1e-9 ? 1 : up);   /* lands on exactly 1 at POP_AT + POP_S */
+    const opacity = sa01((t - P.POP_AT) / Math.max(1e-6, P.APPEAR_S));
+    const phase = t < P.EJECT_S ? "burst" : t < P.COVER_S ? "cover" : t < P.LIFE_S ? "disperse" : "settled";
+    if (t >= P.LIFE_S) return Object.assign(base, { scale, opacity, phase, reach: 0, puffs: [] });
+    const reach = P.REACH * (1 - Math.pow(2, -P.REACH_RATE * t / P.LIFE_S));
+    const share = P.SHARE[0] + (P.SHARE[1] - P.SHARE[0]) * saMinJerk((t - P.COVER_S) / Math.max(1e-6, P.OPEN_S - P.COVER_S));
+    const alpha = t <= P.COVER_S ? 1 : Math.pow(1 - sa01((t - P.COVER_S) / (P.LIFE_S - P.COVER_S)), P.FADE_POW);
+    const fall = (PROP_SHADOW.LIGHT_DEG + 180) * Math.PI / 180, fx = Math.cos(fall), fy = Math.sin(fall);
+    const rnd = saRand(P.SEED != null ? P.SEED : 1), turn = rnd() * 2 * Math.PI, puffs = [];
+    for (let i = 0; i < P.N; i++) {
+      const ang = turn + 2 * Math.PI * i / P.N + (rnd() * 2 - 1) * J.ANG;
+      const fr = 1 + (rnd() * 2 - 1) * J.REACH, fs = 1 + (rnd() * 2 - 1) * J.R;
+      const d = reach * share * fr, r = reach * (1 - share) * fs;
+      const x = d * Math.cos(ang), y = d * Math.sin(ang);
+      puffs.push({ x, y, r, alpha, shade: { x: x + P.SHADE_OFF * r * fx, y: y + P.SHADE_OFF * r * fy } });
+    }
+    return Object.assign(base, { scale, opacity, phase, reach, puffs });
+  };
+
   /* the CSS a painter appends: translate, the tumble, the area-preserving squash - fixed decimals. A negative alpha is a
      clamp (compress along the axis, stretch across it) and goes through the same tensor with the axis turned. */
   const stopCss = (s) => {
@@ -6724,7 +6794,9 @@ async function mount(doc) {
      spring settling while the free rotation spring is still unwinding under it (kinetics/stopaction.mjs stampXf,
      ported from remotion-ui badge-stamp.tsx). A stamp says nothing about what it carries - a card, a badge or a
      bare prop may each be stamped - so it reads the same switch and the same `mass`. */
-  const arriveOf = (o) => (kin("stop_action") && o && (o.arrive === "throw" || o.arrive === "land" || o.arrive === "stamp")) ? o.arrive : "spring";
+  /* P70 T8: ... and a POOFED prop appears at its place inside a ring of seeded puffs (kinetics/stopaction.mjs poofXf) - a
+     prop's arrival only (the compiler refuses it on a card and on a page's pills) */
+  const arriveOf = (o) => (kin("stop_action") && o && (o.arrive === "throw" || o.arrive === "land" || o.arrive === "stamp" || o.arrive === "poof")) ? o.arrive : "spring";
 
   /* the READING rectangle: the card's own CSS geometry, measured with no placement forced on it.
      Content-independent (width, left and top are all CSS), so it is measured once per dock. */
@@ -22642,6 +22714,7 @@ async function mount(doc) {
     if (arr === "stamp") { const sp = stampSprings(tl, sfit); c0 = sp.land_at; c1 = sp.rest_at; }
     else if (arr === "throw") { c0 = Math.max(0.05, STOP.FLIGHT_S); c1 = c0 + STOP.SETTLE_S; }
     else if (arr === "land") { c0 = STOP.ANTIC_S + STOP.DROP_S; c1 = c0 + STOP.SETTLE_S; }
+    else if (arr === "poof") { c0 = POOF.EJECT_S; c1 = POOF.LIFE_S; }   /* P70 T8: the weight comes in as the puff clears */
     else return 1;
     return minJerk((tl - c0) / Math.max(1e-6, c1 - c0));
   };
@@ -22653,6 +22726,33 @@ async function mount(doc) {
      light's fall, composited `destination-in` - the painted alpha, never a box), and the canvas is sized to that
      silhouette's own bounds, so no canvas edge ever cuts it. Its ink is the GROUND's, as the impact ring's is. It is
      drawn from the same decoded <img> the mark paints, synchronously, so a cold seek shows both or neither. */
+  /* P70 T8 - THE PUFF LAYER: an SVG in the dock layer UNDER the mark (the prop is absent while the cloud forms, then
+     stands in front of it as it opens into its ring - Bravos 58.6 -> 58.7), one shade circle and one body circle per lobe - the shade thrown along the stage light's fall, so
+     each lobe carries a shaded underside as Bravos's white puff does. Its ink is the impact ring's rule (P70 T1c): the ink
+     with the more contrast on the MEASURED ground under the puff's reach (chalk on a dark ground, charcoal on a light one),
+     the shade a third of the way to the other ink. The fade is the LAYER's opacity, never each circle's: the cloud fades as
+     ONE shape (per-circle alpha stacks at every overlap and the lobes read as bubbles). Hidden outside the puff's life: a
+     puff is never held. */
+  const poofHex = (hex) => [1, 3, 5].map((i) => parseInt(String(hex).slice(i, i + 2), 16));
+  const poofMix = (a, b, k) => "#" + poofHex(a).map((v, i) => Math.round(v + (poofHex(b)[i] - v) * k).toString(16).padStart(2, "0")).join("");
+  const poofPaint = (el, s, sx, cx, cy, R, ink, other, hidden) => {
+    let pf = el.parentNode ? el.parentNode.querySelector("#dock-poof-" + s) : null;
+    const puffs = sx && sx.puffs && !hidden ? sx.puffs : [];
+    if (!puffs.length) { if (pf) pf.style.display = "none"; return; }
+    if (!pf) {
+      pf = document.createElementNS("http://www.w3.org/2000/svg", "svg"); pf.setAttribute("class", "dock-poof"); pf.id = "dock-poof-" + s;
+      pf.style.cssText = "position:absolute;pointer-events:none;overflow:visible;";
+      el.parentNode.insertBefore(pf, el);
+    }
+    const ext = Math.max(...puffs.map((q) => Math.hypot(q.x, q.y) + q.r * (1 + POOF.SHADE_OFF))) * R + 2;
+    pf.style.display = ""; pf.style.visibility = el.style.visibility; pf.style.opacity = puffs[0].alpha.toFixed(3);
+    pf.style.left = (cx - ext).toFixed(1) + "px"; pf.style.top = (cy - ext).toFixed(1) + "px";
+    pf.setAttribute("width", (2 * ext).toFixed(1)); pf.setAttribute("height", (2 * ext).toFixed(1));
+    const shade = poofMix(ink, other, 0.35);
+    const c = (x, y, r, fill) => '<circle cx="' + (ext + x * R).toFixed(2) + '" cy="' + (ext + y * R).toFixed(2)
+      + '" r="' + Math.max(0, r * R).toFixed(2) + '" fill="' + fill + '"/>';
+    pf.innerHTML = puffs.map((q) => c(q.shade.x, q.shade.y, q.r, shade)).join("") + puffs.map((q) => c(q.x, q.y, q.r, ink)).join("");
+  };
   const PROP_HATCH_RUN = 4096;   /* half a hatch line's length in stage px: past the corner of any stage we draw (1920 x 1920's half-diagonal is 1358) */
   const propHatchLines = (c, x0, y0, W, H, deg, pitch, width) => {
     const th = deg * Math.PI / 180, ux = Math.cos(th), uy = Math.sin(th);
@@ -22881,7 +22981,7 @@ async function mount(doc) {
     return P.px ? P : null;
   };
   TL.scenes.forEach((s) => {   /* decode every plate a stamp lands on up front, so the first frame of its ring has it */
-    if (s.world && s.world.asset_id && ((s.docks || []).some((d) => d && d.arrive === "stamp")
+    if (s.world && s.world.asset_id && ((s.docks || []).some((d) => d && (d.arrive === "stamp" || d.arrive === "poof"))   /* P70 T8: a poof's ink reads the same ground */
         || (s.species || []).some((e) => e && e.kind === "ruler"))) ringPlate(s.world.asset_id);   /* P71 T14: and a ruler's ground */
   });
   if ((TL.caption_pages || []).length) TL.scenes.forEach((s) => {   /* P72 T14: and every picture plate a caption can sit on */
@@ -23446,6 +23546,7 @@ async function mount(doc) {
       if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; parkDockClips(el);
         const c0 = el.parentNode && el.parentNode.querySelector("#dock-contact-" + s); if (c0) c0.style.opacity = 0;   /* P47 T9: a card off its span takes its contact shadow with it (it lingered after the ring's snap) */
         const h0 = el.parentNode && el.parentNode.querySelector("#dock-hatch-" + s); if (h0) h0.style.opacity = 0;   /* P69 T6b: ... and a prop its hatched shadow */
+        const p0 = el.parentNode && el.parentNode.querySelector("#dock-poof-" + s); if (p0) p0.style.display = "none";   /* P70 T8: ... and its puff */
         continue; }
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       drawRecord(s, t);
@@ -23555,6 +23656,10 @@ async function mount(doc) {
                  dock's spring retract - E50: a landed mark owes an exit, and it is owed in the mark's own curve.
            `mass` still answers on the page: the receiver dips and the hit takes its squash frame, as for any landing. */
         const stamped = arr === "stamp";
+        /* P70 T8 - THE POOF: the prop does not travel and does not fall - it APPEARS at its place inside the puff, springing
+           0.6 -> 1 about its painted centre (poofXf), leaves on the dock's spring retract as a landed prop does, and casts
+           no contact shadow (nothing came down); its weight is the resting hatch, handed in over the puff's life */
+        const poofed = arr === "poof";
         const rk = !stamped && t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;   /* P49 T5: a camera page's card carries an exit past the match - the compiler extends it (extend_camera_cards) */
         const ex = stamped && t > d.exit ? stampExit(t - d.exit) : 0;
         const from = { x: (d.side === "l" ? -1 : 1) * ((el.offsetWidth || 800) + STOP_THROW_DX), y: -STOP_THROW_DY };
@@ -23565,15 +23670,16 @@ async function mount(doc) {
         const sfit = Object.assign({}, opts, d.ring_to ? { RING_TO: +d.ring_to } : {}, d.from_to ? { FROM: +d.from_to } : {},   /* ... and the approach it comes down from */
           stamped && d.rot != null ? { LAND_DEG: +d.rot } : {});   /* P69 T26d: an AUTHORED rest - the spring lands there (its wind and overshoot turn about it) */
         const sx = stamped ? stampXf(d.mass || "ink", t - d.enter, sfit)
+          : poofed ? poofXf(t - d.enter, { SEED: Math.round(d.enter * 100) + s })   /* seeded by the dock's own clock: a seek is the play */
           : arr === "throw" ? throwXf(from, d.mass || "paper", t - d.enter, opts) : landXf(d.mass || "paper", t - d.enter, opts);
         /* the mark turns about its PAINTED centre (the compiler's `paint`, fractions of the canvas - R26-20, the operator's
            round: the ring's centre, its radius and every overlap test are the painted extent, not the file's canvas) */
         if (isProp) propRest = propRestShare(arr, d, t, sfit);
-        const pbx = stamped && Array.isArray(d.paint) && d.paint.length === 4 ? d.paint : [0, 0, 1, 1];
-        if (stamped) el.style.transformOrigin = (50 * (pbx[0] + pbx[2])).toFixed(3) + "% " + (50 * (pbx[1] + pbx[3])).toFixed(3) + "%";
+        const pbx = (stamped || poofed) && Array.isArray(d.paint) && d.paint.length === 4 ? d.paint : [0, 0, 1, 1];
+        if (stamped || poofed) el.style.transformOrigin = (50 * (pbx[0] + pbx[2])).toFixed(3) + "% " + (50 * (pbx[1] + pbx[3])).toFixed(3) + "%";   /* P70 T8: a poof springs about its painted centre too */
         el.style.transform = stopCss(sx) + (stamped ? "" : " scale(" + (1 - (1 - DOCK_POP_FROM) * rk).toFixed(4) + ")")
           + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3, [d.enter, d.exit]);   /* P70 T13: a hold's span */
-        if (!swept) el.style.opacity = (stamped ? (sx.opacity || 0) * (1 - ex) : clamp01(1 - rk)) * (t >= d.enter ? 1 : 0);
+        if (!swept) el.style.opacity = (stamped ? (sx.opacity || 0) * (1 - ex) : poofed ? sx.opacity * clamp01(1 - rk) : clamp01(1 - rk)) * (t >= d.enter ? 1 : 0);
         /* HG2: the CONTACT SHADOW on the landing spot - far and faint while the card is high, tight and dark on the floor, spread by the
            hit's squash; it lives beneath the card in the dock layer and dies with the card */
         if (!contact) { contact = document.createElement("div"); contact.className = "dock-contact"; contact.id = "dock-contact-" + s; el.parentNode.insertBefore(contact, el); }
@@ -23593,7 +23699,7 @@ async function mount(doc) {
            darkness, 1 -> 0.86 as the seal settles. Every other arrival multiplies by exactly 1. */
         /* P69 T6b / E99 s92: a PROP's contact HANDS OVER to its resting shadow (1 - the share, 0 at settle) instead of
            vanishing at settle; a card's multiplies by exactly 1, as it always did */
-        contact.style.opacity = (t >= d.enter && sx.phase !== "settled" ? cs.alpha * (stamped ? sx.ink : 1) * clamp01(1 - rk) * (1 - ex) * (isProp ? 1 - propRest : 1) : 0).toFixed(3);
+        contact.style.opacity = (!poofed && t >= d.enter && sx.phase !== "settled" ? cs.alpha * (stamped ? sx.ink : 1) * clamp01(1 - rk) * (1 - ex) * (isProp ? 1 - propRest : 1) : 0).toFixed(3);   /* P70 T8: a poof came down from nowhere - no contact shadow */
         contact.style.visibility = el.style.visibility;   /* a card hidden for a snap takes its shadow with it */
         /* THE IMPACT RING (E99 s87; badge-stamp.tsx:98-117, :152-162) on its two curves - a LINEAR life that fades and
            thins it and an EASED expansion to twice the mark's own radius, "because a shockwave leaves the impact fast
@@ -23622,11 +23728,21 @@ async function mount(doc) {
             ring.style.visibility = el.style.visibility;
           } else ring.style.opacity = "0";
         } else if (ring) ring.style.opacity = "0";
+        /* P70 T8: the puff, about the prop's PAINTED centre, in units of its painted half-size - laid under the mark */
+        if (poofed || el.parentNode.querySelector("#dock-poof-" + s)) {
+          const R = 0.5 * Math.max(Wd * (pbx[2] - pbx[0]), Hd * (pbx[3] - pbx[1]));
+          const pcx = L + Wd * (pbx[0] + pbx[2]) / 2, pcy = T0 + Hd * (pbx[1] + pbx[3]) / 2;
+          const fall = onLedgerWorld ? STAMP_RING_INK.CHALK : STAMP_RING_INK.CHARCOAL;
+          const pink = poofed ? ringInkUnder(sc, wB, el.parentNode, pcx, pcy, R, POOF.REACH, fall) : fall;
+          poofPaint(el, s, poofed ? sx : null, pcx, pcy, R, pink,
+                    pink === STAMP_RING_INK.CHALK ? STAMP_RING_INK.CHARCOAL : STAMP_RING_INK.CHALK, !poofed || t < d.enter || t > d.exit);
+        }
         /* the ground ANSWERS with a DIP the card rides (mass), and only a violent hit shakes it */
         if (sx.ground) worldAnswer.y += sx.ground;
         if (sx.shake && (sx.shake.x || sx.shake.y)) { worldAnswer.x += sx.shake.x; worldAnswer.y += sx.shake.y; }
       } else if (G) {
         if (contact) contact.style.opacity = "0";
+        { const p1 = el.parentNode && el.parentNode.querySelector("#dock-poof-" + s); if (p1) p1.style.display = "none"; }   /* P70 T8 */
         const born = d.arrive === "morph";   /* P69 T26e: a prop BORN of a morph stands from its first frame - the mesh landed it there */
         const pk = born ? 1 : springPop(clamp01((t - d.enter) / DOCK_POP_S));
         if (born && isProp) propRest = clamp01((t - d.enter) / PROP_MORPH.BORN_HATCH_S);   /* ... and its resting shadow comes in under it */

@@ -457,6 +457,146 @@
         "today": true,
         "why": "any dock or prop; the gate (M01/M03/M07/M20/M29), the cues and the camera read its contact at 0.1542 s (P69 T2-T4, HG1 open on the instant); a blind page, no room or a mark under the floor is a WARN, not a refusal (T26d); refused only with embed or a place off the stage; s112 (P69 T81): `after` lands the contact just after its word, and a contact inside its word or on a data mark's instant is ADVISED with the suggested after-time; s116 (P69 T84): its landing cue plays on the COMPILED contact - the binder moves a paired cue onto it (on it or one frame early is kept) and names the move, so the plan names the sound and the stamp its instant"
       }
+    },
+    {
+      "id": "arrival:poof",
+      "axis": "arrival",
+      "token": "poof",
+      "title": "The poof arrival",
+      "aliases": [
+        {
+          "name": "poof arrival under a load (Bravos A35)",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md"
+        },
+        {
+          "name": "the puff of smoke",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST.md"
+        }
+      ],
+      "does": "A prop appears at its place from a puff: seeded lobes burst from it in two frames, cover it, then open into a ring behind it and fade over twelve, while it springs 0.6 to 1 in front of them.",
+      "when": "a METAPHOR PROP comes into the world with no flight and no fall - the load set onto its support (the rig); never a card, never a figure (a data claim is drawn on its chart)",
+      "when_source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md A35",
+      "author": {
+        "key": "dock opts {\"prop\": True, \"arrive\": \"poof\"} - refused on a card and on a page's pills; a ring or callout on a poofed prop takes the stamped prop's rule (s106: the poof adds no refusal)",
+        "example": "{'prop': True, 'arrive': 'poof', 'place': {'x': 0.5, 'y': 0.44, 'w': 0.2}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:4730",
+        "check": "arrival"
+      },
+      "phases": [
+        {
+          "name": "burst",
+          "does": "the lobes leave the prop's painted centre radially - the poof's CONTACT: the gate's landing, the walk's arrival and the landing cue all read this instant",
+          "trigger": "the dock's `enter`",
+          "dials": {
+            "EJECT_S": "0.0833",
+            "N": "8"
+          }
+        },
+        {
+          "name": "cover",
+          "does": "the cloud stands opaque, its lobes overlapping its heart; the reach runs on an expo-out to 1.7 R (R the prop's painted half-size; its widest lobe to ~1.8 R)",
+          "trigger": "EJECT_S elapsed",
+          "dials": {
+            "COVER_S": "0.2",
+            "REACH": "1.7",
+            "REACH_RATE": "7.4"
+          }
+        },
+        {
+          "name": "the prop appears",
+          "does": "absent while the cloud forms, it appears at its heart at 0.6 of its size and springs to 1 (springPop) in front of it",
+          "trigger": "POP_AT",
+          "dials": {
+            "POP_AT": "0.15",
+            "APPEAR_S": "0.0833",
+            "POP_FROM": "0.6",
+            "POP_S": "0.2"
+          }
+        },
+        {
+          "name": "the ring opens",
+          "does": "the lobes move outward on their own bearings into a ring behind the prop, neighbours still touching",
+          "trigger": "COVER_S",
+          "dials": {
+            "OPEN_S": "0.35",
+            "SHARE": "0.45 -> 0.68"
+          }
+        },
+        {
+          "name": "disperse",
+          "does": "the cloud fades as ONE shape, (1 - u)^1.5, over 12 frames - then nothing: a puff is never held",
+          "trigger": "COVER_S",
+          "dials": {
+            "LIFE_S": "0.7",
+            "FADE_POW": "1.5"
+          }
+        },
+        {
+          "name": "rest",
+          "does": "bare but weighted: the resting cross-hatch comes in under it as the puff clears (no contact shadow - nothing came down)",
+          "trigger": "EJECT_S -> LIFE_S"
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos BUB 11:58.0-12:00.3 at 10 fps (the ball's poof, measured before the module)",
+          "became": "the burst, the cover, the ring and the fade",
+          "record": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST.md:107",
+          "tie": "recorded"
+        },
+        {
+          "source": "Whitaker & Halas 1981 p. 74 (a dust puff needs 12 frames at 24 fps)",
+          "became": "the dispersal's floor",
+          "record": "docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:279",
+          "tie": "recorded"
+        },
+        {
+          "source": "Stop-action mechanics (P47 T1)",
+          "became": "the module, the seek-safe clock and the mass",
+          "record": "content/video_engine/scripts/kinetics/stopaction.mjs:523",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "prop",
+          "means": "the payload is BARE - a cutout added to the world (dock_kind:prop); a poof takes no other",
+          "source_set": "DOCK_OPTS"
+        },
+        {
+          "token": "place",
+          "means": "the prop's AUTHORED painted centre and width (s106) - the puff centres on it",
+          "source_set": "DOCK_OPTS"
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "object": "POOF"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "symbol": "poofXf",
+        "note": "painted by the engine's dock-arrival branch (poofPaint: an SVG under the mark in the ground's measured ink, ringInkUnder); the hatch hand-in is propRestShare"
+      },
+      "doctrine": [
+        "E99 s128",
+        "E99 s106",
+        "E99 s92",
+        "E99 s116",
+        "E81",
+        "E28"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "prop-poof",
+        "test": "content/video_engine/tests/test_poof_arrival.py",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "a prop dock only; the gate (M01/M03/M07/M20), the walk and the cue read its contact at 0.0833 s; its landing cue is `landing <n> (poof, <mass>)` (paper unless named), STARTED at E81's reference, 9 dB under the voice (authoring.audio.e81_gain), and the binder moves it onto the contact (s116); no camera pull reads a poof; the paper prop for the rig waits on P70-HG1"
+      }
     }
   ]
 }

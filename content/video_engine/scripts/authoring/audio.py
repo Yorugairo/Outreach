@@ -134,7 +134,7 @@ STAMP_SPRING = ("m", "k", "c")
 STAMP_CONTACT_DP = 4           # gate_motion_density.STAMP_CONTACT_S's own precision (0.1542): the cue and the gate read ONE instant
 STAMP_MASS = "ink"             # scene-evidence-engine.mjs:16969 `stampXf(d.mass || "ink", ...)` - the engine's own default, stamps only
 LANDING_MASS = "paper"         # a throw or a land that names no mass (the shipped cue plans' `opts.get("mass", "paper")`)
-WEIGHTED_ARRIVALS = ("throw", "land", STAMP)
+WEIGHTED_ARRIVALS = ("throw", "land", STAMP, "poof")   # P70 T8: + the POOF (POOF, POOF_MASS, poof_contact_s: the file's end)
 
 
 def stamp_spring(src: Path | None = None) -> dict:
@@ -165,19 +165,19 @@ def stamp_contact_s(src: Path | None = None) -> float:
 def landing_contact(t_enter: float, arrive: str, dials: dict, fps: int = FPS) -> float:
     """The frame the card touches down on. A THROW flies on the stepped clock (round(t * fps)), so
     its contact is the first frame at or past FLIGHT_S; a LAND is continuous - anticipation plus
-    drop; a STAMP is continuous too - its clamped scale spring's crossing (`stamp_contact_s`, P69 T3).
+    drop; a STAMP is continuous too - its clamped scale spring's crossing (`stamp_contact_s`, P69 T3); a POOF its burst (P70 T8).
     The cue goes ON that frame or one early, never two ahead (the weight report Q5)."""
     if arrive == "throw":
         return t_enter + math.ceil(dials["FLIGHT_S"] * fps - 1e-9) / fps
-    if arrive == STAMP:
-        return t_enter + stamp_contact_s()
+    if arrive in (STAMP, POOF):   # P70 T8: a poof's contact is POOF.EJECT_S after its enter (`poof_contact_s`)
+        return t_enter + (stamp_contact_s() if arrive == STAMP else poof_contact_s())
     return t_enter + dials["ANTIC_S"] + dials["DROP_S"]
 
 
 def arrival_mass(opts: dict) -> str:
     """The mass a weighted arrival lands at: its own `mass`, else the default for its kind - `ink` for a
-    stamp (the engine's own), `paper` for a throw or a land."""
-    return (opts or {}).get("mass") or (STAMP_MASS if (opts or {}).get("arrive") == STAMP else LANDING_MASS)
+    stamp (the engine's own), `paper` for a poof (POOF_MASS, NAMED - P70 T8), `paper` for a throw or a land."""
+    return (opts or {}).get("mass") or {STAMP: STAMP_MASS, POOF: POOF_MASS}.get((opts or {}).get("arrive"), LANDING_MASS)
 
 
 def row_arrivals(row, kinds: tuple[str, ...] = WEIGHTED_ARRIVALS):
@@ -547,3 +547,36 @@ def unsounded(cues: list[dict], timeline, tol: float | None = None) -> list[str]
         if note not in out:
             out.append(note)
     return out
+
+
+# --- P70 T8: THE POOF (kinetics/stopaction.mjs `poofXf`) ----------------------------------------------------------------
+# Written at the file's END on purpose: lane A's H door cites `audio.py:511` in its Recall receipt ("the cues the frame
+# plays, the cues dropped"), and a line added above it REFUSES that door - so nothing above it moves.
+POOF = "poof"                  # a prop appears at its place inside a ring of seeded puffs (a WEIGHTED_ARRIVALS member)
+POOF_MASS = "paper"            # ... and the mass its landing cue is named at when the row names none - named, not the fall-through
+
+
+def poof_contact_s(src: Path | None = None) -> float:
+    """A poof's CONTACT after its enter: `POOF.EJECT_S`, the instant its burst has left the prop - read from the
+    module like `stamp_spring`, rounded to the motion gate's mirror (`POOF_CONTACT_S`), so the cue, the gate and the
+    walk read one instant."""
+    text = Path(src or STOP_MODULE).read_text(encoding="utf-8")
+    block = text.split("export const POOF", 1)[1].split("});", 1)[0]
+    m = re.search(r"^\s*EJECT_S:\s*([0-9.]+)", block, flags=re.M)
+    assert m, "stopaction.mjs POOF no longer names EJECT_S"
+    return round(float(m.group(1)), STAMP_CONTACT_DP)
+
+
+E81_UNDER_DB = 9.0             # E81 apply 1: every video's foley and accents START 8-10 dB under the voice - the midpoint
+E81_RANGE_DB = (8.0, 10.0)
+
+
+def e81_gain(vo_lufs: float, cue_lufs: float, under_db: float = E81_UNDER_DB) -> float:
+    """The gain that STARTS an accent at E81's reference - `under_db` (8-10) under the voice, measured to measured:
+    `bed_gain`'s arithmetic with the accent's own integrated loudness. The poof's cue starts here (P70 T8); a departure
+    from the start is authored on the cue with its reason (E81 apply 2), never passed in here."""
+    lo, hi = E81_RANGE_DB
+    if not lo <= under_db <= hi:
+        raise ValueError(f"E81: an accent starts {lo:g}-{hi:g} dB under the voice, not {under_db:g} - a departure is "
+                         "written on the cue with its reason")
+    return bed_gain(vo_lufs, -under_db, cue_lufs)

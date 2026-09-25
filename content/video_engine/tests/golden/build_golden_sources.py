@@ -4729,6 +4729,48 @@ def balance_level() -> tuple[dict, dict]:
 SURFACES.update({"balance-level": balance_level})
 FRAME_T.update({"balance-level": round(460.29 + 0.5 - BAL_SHIFT, 2)})   # "Both are true at once" + 0.5 s: 20.79
 
+# ---- P70 T8 (was P69 T69; harvest v2 A35): THE POOF - a prop appears at its place inside a ring of seeded puffs --------
+#   prop-poof    Steel and Paper H row 17's anaphora, "The steel kept building. The paper just got heavier." (SHOT-TABLE-H #13,
+#                338.44-363.38; take "The steel" 350.70, "The paper" 352.30), the take shifted by -340.0 s: the catalogue's
+#                steel I-beam (`prop-memory-steel-ibeam-v1`, a PROXY as every catalogued cutout in a golden is - E99 s31)
+#                POOFS IN on "steel" (350.81 -> 10.81) at its AUTHORED place (s106: the author puts a prop; the fit only
+#                advises), bare on the plain charcoal plate. Read 0.30 s after its enter: the prop whole at its own size
+#                (the pop landed at 0.30), the cloud opened into its ring of eight lobes in the ground's chalk, fading
+#                (alpha 0.72) - Bravos BUB 11:58.7, the ball whole inside the lobes. The load ("the paper") is the rig's,
+#                and waits on its claim's approval at P70-HG1; this golden proves the arrival alone.
+POOF_CUTOUT = REPO / "content/video_engine/assets/props/cutouts/prop-memory-steel-ibeam-v1.png"
+POOF_SHIFT = 340.0
+POOF_ENTER = round(350.81 - POOF_SHIFT, 2)    # "steel" (350.812): the thing named appears on its noun
+POOF_EXIT = round(363.38 - POOF_SHIFT, 2)     # the row's end
+POOF_PLACE = {"x": 0.5, "y": 0.44, "w": 0.2}  # the painted centre and painted width, stage fractions (authored)
+
+
+def prop_poof() -> tuple[dict, dict]:
+    """The poof is placed by the compiler's own door for an AUTHORED prop (`prop_place_fit`, the one the row loop
+    calls), with the cutout's own PAINTED box, and the entry is written as the loop writes it (`dock_entry`, the painted
+    extent riding the poof so its puff centres on the art)."""
+    import build_scene_timeline_f as BST
+    aid = "ev-prop-ibeam"
+    world = {"asset_id": "plate-plain", "ken_burns": {"scale": 0, "x": 0, "y": 0}, "sha256": "0" * 64}
+    opts = BST.dock_opts({"prop": True, "arrive": "poof", "place": dict(POOF_PLACE)})   # validated as a build's are
+    fit = BST.prop_place_fit(None, "16:9", opts, BST.painted_box(POOF_CUTOUT), [], "golden prop-poof", [])
+    place = {k: fit[k] for k in ("x", "y", "w", "h", "room")}
+    dock = BST.dock_entry(aid, 0, POOF_ENTER, POOF_EXIT, 0, BST.DOCK_KIND_PROP, place, opts["arrive"], opts.get("mass"), True,
+                          prop=True, paint=fit["paint"], authored_place=opts["place"])
+    ev = {aid: {"title": "Memory Structural I-Beam", "source": "the props catalogue (prop-memory-steel-ibeam-v1)",
+                "species": "prop", "document": {"path": str(POOF_CUTOUT.relative_to(REPO)), "sha256": "0" * 64},
+                "badges": [], "kind": BST.DOCK_KIND_PROP}}
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [dock], "species": []}]
+    uris = _base_uris()
+    uris[aid] = uri("image/png", png_proxy(POOF_CUTOUT, PROP_PROXY_PX))
+    tl = _timeline("Golden: the poofed prop (arrive: poof)", scenes, ev, None)
+    tl["kinetics"] = {"stop_action": True}   # P47 T1's switch, as prop-stamp's
+    return tl, uris
+
+
+SURFACES.update({"prop-poof": prop_poof})
+FRAME_T.update({"prop-poof": round(POOF_ENTER + 0.30, 2)})   # 11.11: the prop whole, the cloud opened into its ring
+
 
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""

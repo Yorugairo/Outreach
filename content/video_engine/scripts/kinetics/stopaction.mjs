@@ -18,7 +18,7 @@
    MATERIALS are the brief's mass-spring-damper presets (:226-232, [DERIVED: m / k / c chosen for the stated overshoot and
    settle; sources not on file]); zeta = c / (2 sqrt(k m)), w0 = sqrt(k / m), evaluated by spring.mjs's closed form in
    real seconds - a seek is the play. Every dial here is a starting reference (42 s42.5); HG2 tunes them by eye. */
-import { springEval } from "./spring.mjs";
+import { springEval, springPop } from "./spring.mjs";
 import { squashAlpha, squashMatrix } from "./squash.mjs";
 
 export const CADENCE = Object.freeze({
@@ -505,6 +505,76 @@ export const stampXf = (mass, t, o = {}) => {
   return { x: 0, y: st.y, rot: sp.deg, scale: sp.scale, off_deg: sp.off_deg, ink: sp.ink, opacity: sp.opacity,
            alpha: st.alpha, theta: Math.PI / 2, phase: sp.settled ? "settled" : "stamp", u: sp.land, h,
            ground: st.ground, shake: P.violent ? groundShake(tk, mass) : still, ring: stampRing(tk, o) };
+};
+
+/* P70 T8 (was P69 T69; the Bravos harvest v2 A35 "Poof arrival under a load", R16 "The rig") - THE POOF. A PROP appears
+   at its authored place inside a ring of SEEDED PUFFS: the puffs eject radially from the prop's painted centre, cover it,
+   open into a ring and disperse; the prop is not there while the cloud forms, and springs 0.6 -> 1 IN FRONT of it as it
+   peaks, the cloud opening into its ring BEHIND it (Bravos 58.6 -> 58.7: the ball's red glints small at the cloud's
+   heart, then stands whole before the ring). It does not fall, so nothing answers
+   under it (no dip, no squash, no contact shadow); its weight is the resting hatch (T6b), which the painter hands in as
+   the puff clears. THRESHOLDS FROM THE REFERENCE, measured BEFORE this was written - Bravos "The Bubble's Final Phase Has
+   Begun" 11:58.0-12:00.3 at 10 fps (docs/research/runs/grill_pipeline-value/bravos-frames/poof.jpg; BRAVOS-RIG-VERIFIED
+   .md:31), the cloud's outer half-width measured by pixel difference against 58.3 (below the lifted elephant's feet), in
+   units of the ball's half-size R: a fleck at the contact (+0.0), a lobed cloud 0.94 R out (+0.1), 1.31 R and OPAQUE over
+   the prop (+0.2), 1.66 R and opened into a ring of 7-8 lobes with the prop whole in front (+0.3), 1.74 R at ~0.6 opacity
+   (+0.4), 1.79 R at ~0.25 (+0.5), wisps (+0.6), gone (+0.7). No rotation, no drift. Whitaker & Halas 1981 p.
+   74 (WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:279): a dust puff "requires not less than 12 frames at 24 fps (500 ms) to
+   dissipate" - Bravos's cover-to-gone is exactly that. Dials, a starting reference (42 s42.5); P70-HG1 tunes them by eye. */
+export const POOF = Object.freeze({
+  EJECT_S: 0.0833,   /* THE BURST, and the poof's CONTACT: two frames at 24 fps (the plan's 1-2; Bravos is past the prop's size
+                        by its first sample, 0.1 s) - the gate (POOF_CONTACT_S), the walk and the landing cue read this instant */
+  COVER_S: 0.2,      /* the cloud stands OPAQUE over the prop until here (Bravos +0.2: the red glinting through) */
+  OPEN_S: 0.35,      /* ... and has opened into a ring by here (Bravos +0.3 shows the prop whole inside the lobes) */
+  LIFE_S: 0.7,       /* gone (Bravos +0.7); LIFE_S - COVER_S = 0.5 s = 12 frames, W&H's floor */
+  REACH: 1.7,        /* the ring's outer radius at its widest, in R, before the lobes' own jitter (which carries the widest
+                        lobe to Bravos's 1.79 R at +0.5), reached on an expo-out from the contact ... */
+  REACH_RATE: 7.4,   /* ... 1 - 2^(-RATE t / LIFE_S), the rate fitted to Bravos's +0.1 / +0.3 samples (0.94 R, 1.66 R) */
+  N: 8,              /* lobes (Bravos's cloud reads as 7-8) */
+  SHARE: [0.45, 0.68],   /* a lobe's centre as a share of the reach: a SOLID cloud (lobes overlapping the centre) -> a RING
+                            whose eight lobes still touch (their diameter spans the ring's pitch, 2 pi d / N) */
+  JITTER: { ANG: 0.12, REACH: 0.1, R: 0.12 },   /* seeded per lobe: bearing (rad), reach and radius (+- shares) - small
+                            enough that no two neighbours part (a ring of puffs, never a scatter of bubbles) */
+  FADE_POW: 1.5,     /* opacity (1 - u)^FADE_POW over COVER_S -> LIFE_S (Bravos +0.4 ~0.6, +0.5 ~0.25, +0.6 ~0.08) */
+  SHADE_OFF: 0.22,   /* each lobe's shaded underside, offset along the stage light's fall (PROP_SHADOW.LIGHT_DEG + 180) */
+  POP_AT: 0.15,      /* the prop APPEARS here, at the cloud's heart, as the cover peaks (Bravos +0.2: its red glinting small) ... */
+  APPEAR_S: 0.0833,  /* ... over two frames (its opacity), in front of the cloud ... */
+  POP_FROM: 0.6,     /* ... springing from this scale ... */
+  POP_S: 0.2,        /* ... to exactly 1 (springPop, E45's Mp 4 %) - whole by OPEN_S, as the ring opens behind it (Bravos +0.3) */
+});
+/* mulberry32: a seeded [0, 1) stream - the same seed is the same cloud on every seek */
+const saRand = (seed) => {
+  let a = (Math.floor(seed) >>> 0) || 1;
+  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+};
+/* THE POSE at t seconds after the dock's enter: { scale, opacity (the prop's), phase, contact, reach, puffs: [{ x, y, r,
+   alpha, shade: { x, y } }] } - every length in R (the prop's painted half-size; the painter multiplies), y DOWN, about
+   the painted centre. The painter lays the puffs UNDER the prop: the prop is absent until POP_AT, so the cloud is seen
+   whole while it forms, and the prop then stands in front of it as it opens. Each lobe keeps its BEARING for its whole life and only moves outward (the ejection is radial);
+   the cloud is a pure function of (t, SEED). A t past LIFE_S draws no puff at all - a puff is never held. */
+export const poofXf = (t, o = {}) => {
+  const P = Object.assign({}, POOF, o), J = P.JITTER;
+  const base = { contact: P.EJECT_S };
+  if (t < 0) return Object.assign(base, { scale: P.POP_FROM, opacity: 0, phase: "waiting", reach: 0, puffs: [] });
+  const up = (t - P.POP_AT) / Math.max(1e-6, P.POP_S);
+  const scale = P.POP_FROM + (1 - P.POP_FROM) * springPop(up > 1 - 1e-9 ? 1 : up);   /* lands on exactly 1 at POP_AT + POP_S */
+  const opacity = sa01((t - P.POP_AT) / Math.max(1e-6, P.APPEAR_S));
+  const phase = t < P.EJECT_S ? "burst" : t < P.COVER_S ? "cover" : t < P.LIFE_S ? "disperse" : "settled";
+  if (t >= P.LIFE_S) return Object.assign(base, { scale, opacity, phase, reach: 0, puffs: [] });
+  const reach = P.REACH * (1 - Math.pow(2, -P.REACH_RATE * t / P.LIFE_S));
+  const share = P.SHARE[0] + (P.SHARE[1] - P.SHARE[0]) * saMinJerk((t - P.COVER_S) / Math.max(1e-6, P.OPEN_S - P.COVER_S));
+  const alpha = t <= P.COVER_S ? 1 : Math.pow(1 - sa01((t - P.COVER_S) / (P.LIFE_S - P.COVER_S)), P.FADE_POW);
+  const fall = (PROP_SHADOW.LIGHT_DEG + 180) * Math.PI / 180, fx = Math.cos(fall), fy = Math.sin(fall);
+  const rnd = saRand(P.SEED != null ? P.SEED : 1), turn = rnd() * 2 * Math.PI, puffs = [];
+  for (let i = 0; i < P.N; i++) {
+    const ang = turn + 2 * Math.PI * i / P.N + (rnd() * 2 - 1) * J.ANG;
+    const fr = 1 + (rnd() * 2 - 1) * J.REACH, fs = 1 + (rnd() * 2 - 1) * J.R;
+    const d = reach * share * fr, r = reach * (1 - share) * fs;
+    const x = d * Math.cos(ang), y = d * Math.sin(ang);
+    puffs.push({ x, y, r, alpha, shade: { x: x + P.SHADE_OFF * r * fx, y: y + P.SHADE_OFF * r * fy } });
+  }
+  return Object.assign(base, { scale, opacity, phase, reach, puffs });
 };
 
 /* the CSS a painter appends: translate, the tumble, the area-preserving squash - fixed decimals. A negative alpha is a

@@ -1,0 +1,47 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-rig",
+ "title": "The rig",
+ "aliases": [],
+ "acts": [
+  "EXPLAINS"
+ ],
+ "members": [
+  {
+   "card": "dock_kind:prop",
+   "offset_s": 0.0,
+   "role": "the SUPPORT is a catalogued prop, bare in the world - the thing the load will sit on (props from the catalogue only)"
+  },
+  {
+   "card": "arrival:land",
+   "offset_s": 0.0,
+   "role": "it comes down onto its place with its weight (or is stamped) - the rig's ground"
+  },
+  {
+   "card": "dock_option:place",
+   "offset_s": 1.6,
+   "role": "the LOAD's place is authored ON TOP of the support's box (s106: the author puts a prop; the fit only advises)"
+  },
+  {
+   "card": "arrival:poof",
+   "offset_s": 1.6,
+   "role": "the load appears on the support from a puff, on the word that names it - the risk sitting on its thin support"
+  },
+  {
+   "card": "species:chip",
+   "offset_s": 2.4,
+   "role": "each part NAMED by its word beside it, one at a time - a name, never a figure (the rig is a metaphor; a number is drawn on its chart)"
+  }
+ ],
+ "window_s": 4.0,
+ "does": "A metaphor carries a load: a support prop lands, the load poofs onto its top, and each part is named in turn - the risk sitting on a thin support, with no figure written on it.",
+ "doctrine": [
+  "E99 s128",
+  "E99 s106",
+  "E99 s60",
+  "E28"
+ ],
+ "status": "candidate",
+ "source": "Bravos BUB 11:58-12:22 (the elephant on a ball on a tightrope; BRAVOS-USE-WHEN R16). The golden prop-poof proves the poof alone; the rig's proof beat (Steel and Paper H row 17, 'The steel kept building. The paper just got heavier.') waits on the paper prop's approval at P70-HG1",
+ "count": 0
+}
