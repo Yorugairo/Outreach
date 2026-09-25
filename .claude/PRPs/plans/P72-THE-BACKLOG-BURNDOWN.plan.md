@@ -1,14 +1,14 @@
 ---
 id: P72-THE-BACKLOG-BURNDOWN
 title: The backlog burndown - every open backlog row and plan slice DONE with evidence, CLOSED with the reason, or a named human gate
-status: draft
+status: running
 operation: maintenance
 risk: standard
 owner: parent
 branch: claude/fable-p68 (the plan, the bookkeeping, lane-A docs); engine, gate and script slices land on claude/p69-s90 (lane B), one writer per function, after the P70 / P71 slice that owns the same function
 contract: tdd-v1
 created: 2026-09-25
-updated: 2026-09-25 (revision 1, architect_sol - the review's 18 findings applied as the parent ruled them; R26-331 .. R26-340 carried; lane B re-read at a469501)
+updated: 2026-09-25 (APPROVED by the operator: "/prp-implement P72"; running on lane B df678cc / lane A be6299e; revision 1, architect_sol - the review's 18 findings applied as the parent ruled them; R26-331 .. R26-340 carried; lane B re-read at a469501)
 ---
 
 # P72 - The backlog burndown
@@ -981,7 +981,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Status: pending
 - Owner: parent (an edit to P69's T33 / T34 pass lists; the rows themselves are P69's)
 - Depends on: the engine slice named per item
-- Items: now (the engine half landed at `af869b7`, P69 T26b's `camera_reach`) - row 1's push re-aimed to the reachable 1.02 (R26-281) and row 15's pull (R26-283), both rows-1-13-class retrofits held for P69-HG3 (P69 T33); after T27 - row 20's `TEST_SWEEP_WHY` / `BODY_DEPARTURES` text (R26-302); after T22 - row 23's `VERDICT_STACK_ON = True`; after T20 - row 23's 0.8 s hand-off lead removed (R26-329); after T19 - row 23's second asset id retired (R26-328); after T28 - the H door's R26-197 shim removed (if not done in T28); after T14 - rows 7 / 12 / 13 / 17 declare their caption room
+- Items: now (the engine half landed at `af869b7`, P69 T26b's `camera_reach`) - row 1's push re-aimed to the reachable 1.02 (R26-281) and row 15's pull (R26-283), both rows-1-13-class retrofits held for P69-HG3 (P69 T33); after T27 - row 20's `TEST_SWEEP_WHY` / `BODY_DEPARTURES` text (R26-302); after T22 - row 23's `VERDICT_STACK_ON = True`; after T20 - row 23's 0.8 s hand-off lead removed (R26-329); after T19 - row 23's second asset id retired (R26-328); after T28 - the H door's R26-197 shim removed (if not done in T28); after T14 - rows 7 / 12 / 13 / 17 declare their caption room; R26-347 (added 2026-09-25: H's 12 dips -> 10, each dip that is not a world change becomes the continuity transform it refused - build work, never an operator card; the operator's words are in the row)
 - Write set: `.claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md` (T33 / T34's lists), `docs/content-video-engine/BACKLOG.md` (the P69 umbrella's children)
 - Acceptance: each item is on P69's pass list with the P72 slice and sha that enabled it; none is built here (the body is held for P69-HG3).
 - Stop conditions: none.
@@ -1084,7 +1084,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T44: The bridge holds on a restart - R26-340's defects (1)-(5) and (7)
-- Status: pending
+- Status: done - lane A `78c884f` (ahead of approval: the operator raised it, "the bridge is freaking out"); defect (6) is in the same commit, so T31's R26-336 line is done too; the live daemon picks it up at the merge to main
 - Owner: implementation_luna (LANE A - the row names lane A the bridge scripts' owner); the parent reviews (a live send is the parent's)
 - Depends on: the operator's approval of this plan; wave 1, before T31 (the row: "fix before P72 T31")
 - Placement note (revision 1): R26-340 was filed after the parent's brief and found by the live universe read; the architect placed it here by its row's own owner and order. The parent confirms the placement.
