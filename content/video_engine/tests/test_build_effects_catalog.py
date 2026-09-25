@@ -432,6 +432,8 @@ def test_every_wired_card_is_in_a_recipe():
     # no recipe is invented for it here.
     # P70 T2's schematic (page_builder:line+schematic) is tested alone in test_schematic_page.py and pinned by the
     # schematic-hype-trough golden (H row 12's sentence); no committed beat plays it until P70-HG1, so no recipe is invented.
+    # P70 T6's equation row (species:equation) is tested alone in test_equation_row.py and pinned by the equation-halving
+    # golden (H row 18's arithmetic); its recipe is the harvest's R25 "formula by spoken order" (P69 T44), not invented here.
     assert uncovered == ["dock_option:moves", "dock_option:place", "page_builder:bars+segments",
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress",
@@ -439,7 +441,7 @@ def test_every_wired_card_is_in_a_recipe():
                          "page_species:axis_tag", "page_species:explode", "page_species:level_join", "page_species:member", "page_species:solo",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:domain", "plate_option:readability",
-                         "plate_option:room", "species:freeze"], uncovered
+                         "plate_option:room", "species:equation", "species:freeze"], uncovered
     assert excluded == ["kinetics:arap", "kinetics:camera", "kinetics:chartxf", "kinetics:clothoid", "kinetics:contour",
                         "kinetics:ease", "kinetics:homography", "kinetics:ink", "kinetics:labelfit",
                         "kinetics:morph_a", "kinetics:page_surface", "kinetics:spring", "kinetics:squash",

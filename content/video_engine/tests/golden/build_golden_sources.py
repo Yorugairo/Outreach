@@ -4551,6 +4551,57 @@ def decade_ruler_scroll() -> tuple[dict, dict]:
 SURFACES.update({"decade-ruler-scroll": decade_ruler_scroll})
 FRAME_T.update({"decade-ruler-scroll": 11.0})   # the ruler landed (6.5), the third chip landed (9.55) and at rest
 
+# ---- P70 T6 (was P69 T56): THE EQUATION ROW - the inputs, the relation and the signed result, in spoken order ------------
+# Steel and Paper H row 18's own arithmetic, on the halving page it precedes (`bar-value-morph`'s page, HALVING_OBJ - the
+# evidence object's values copied as that golden copies them, so no untracked series is read): the bar stands at 20, and
+# in the empty band above it the row is built on the take's words, shifted by
+# -390.18 s: "At a fifth" 400.18 -> 10.00 ("20%", the page's own figure, `src` + PLAUSIBLE), "fall by half" 402.38 ->
+# 12.20 ("−½", the sentence's own "if": a scenario), "erases ten percent" 403.62 -> 13.44 ("−10%", computed
+# by the compiler: 20 x -1/2). The "x" springs in just before 12.20, the "=" just before 13.44. Judged at 14.2: all
+# five items written whole, the result in the page's neg red. The compare that follows it on H is its own golden.
+# Review round (F7, E28 - the label is data): each term and the result carry a caption naming the number, under it at
+# the floor in the page's quiet ink. The labels take a line of their own, so the `figure` bar-value-morph writes at the
+# bar's top is left off here (the review's frame note: the same number twice in one column); the region is the band
+# between the subtitle and the bar's own "20%" (its `note`), which a labelled row at the floor just fits.
+EQUATION_SHIFT = 390.18
+EQUATION_TERMS = [
+    {"text": "20%", "value": 20, "at": round(400.18 - EQUATION_SHIFT, 2), "src": "ev-index-concentration-bars-v1",
+     "tier": "PLAUSIBLE", "label": "AI's weight"},
+    {"text": "−½", "value": -0.5, "at": round(402.38 - EQUATION_SHIFT, 2), "tier": "scenario", "label": "a halving"},
+]
+EQUATION_RESULT = {"text": "−10%", "value": -10, "at": round(403.62 - EQUATION_SHIFT, 2), "label": "the index"}
+EQUATION_SPECIES = [
+    {"kind": "equation", "at": EQUATION_TERMS[0]["at"], "dur": 6.0,
+     "target": {"kind": "region", "x0": 0.06, "y0": 0.13, "x1": 0.72, "y1": 0.296},   # the band between the subtitle and the bar's own "20%"
+     "terms": EQUATION_TERMS, "ops": ["×"], "result": EQUATION_RESULT},
+]
+
+
+def equation_halving() -> tuple[dict, dict]:
+    import tempfile
+    import build_scene_timeline_f as BST
+    plate = "ledger:fx-index-concentration-bars:bars"
+    species = json.loads(json.dumps(EQUATION_SPECIES))
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    assert BST.equation_advice(species[0]) == [], BST.equation_advice(species[0])   # named, a word apart: no WARN
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/fx-index-concentration-bars.series.json").write_text(json.dumps(HALVING_OBJ), encoding="utf-8")
+        saved = BST.ASPECT
+        BST.ASPECT = "16:9"
+        try:
+            world = BST.world_for_plate(plate, (0, 0, 0), ep)
+            BST.stamp_full_stage(world["page"])
+        finally:
+            BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the equation row - a fifth, halved, erases ten percent", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"equation-halving": equation_halving})
+FRAME_T.update({"equation-halving": 14.2})   # the result written whole (13.44 + WRITE_S x 0.69) and the "=" landed
 
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""

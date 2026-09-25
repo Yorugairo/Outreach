@@ -77,7 +77,7 @@ ACT_SPECIES = {
     "COMPARES": ("line page", "tiers page", "build_to", "chart_to:rescale", "chart_to:extend", "figure", "solo", "axis_tag"),   # P71 T9: the sentence NAMES a year on the chart (A10); P69 T37: the sentence narrows to ONE series (A12);   # P50 T9: N small multiples on one shared x - the same quantity across two, three or four subjects
     "DIVIDES": ("share page", "peel", "treemap page", "cross", "explode", "member"),   # P50 T6: the census, and the X's on its named subset; P69 T45: who is in ONE total, a tile on each name
     "NAMES": ("trace", "light", "arc", "stamp"),   # P50 T5: the vector map ships - a country lights, an arc crosses, a figure stamps
-    "EXPLAINS": ("note", "plate use=bridge", "chip", "flow"),
+    "EXPLAINS": ("note", "plate use=bridge", "chip", "flow", "equation"),   # P70 T6: the arithmetic IS the claim (A60)
     "TURNS": ("figure", "spotlight", "callout", "note", "freeze"),   # P69 T49: the stage STOPS on the number the turn lands on (E99 s99)
     "BREAKS": ("burst", "stack", "burst:stop", "placeholder", "axis capsule"),
     "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch", "level_join", "ruler"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)

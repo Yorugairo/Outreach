@@ -444,6 +444,11 @@ SPECIES_EVENTS["axis_tag"] = ("at",)
 # P71 T14: THE DECADE RULER - the strip TRAVELS on its word (it enters at the right edge and scrolls to its settle,
 # s99), so it is ONE event at its start; the held ruler after the landing is ground and earns nothing (s91).
 SPECIES_EVENTS["ruler"] = ("at",)
+# P70 T6: THE EQUATION ROW - each TERM is written on its own word and the RESULT on the word that says it: one event per
+# term ("terms" - each term's own `at`, read off the list the way the agenda's rows are) and one at "result.at". The
+# operators spring OP_LEAD before the next word, inside that word's own event, so they earn nothing of their own; the
+# row that then stands is an annotation (s91). The row's own `at` is its window opening, not an arrival.
+SPECIES_EVENTS["equation"] = ("terms", "result.at")
 COUNT_ARRAY_STEP = AGENDA_STEP = 0.34   # the default word pitch both kinds arrive on when the row names no `step`
                                         # - the same number the compiler holds (build_scene_timeline_f.COUNT_ARRAY_STEP /
                                         # AGENDA_STEP) and the modules' own dial (COUNT.STEP / AGENDA.STEP): 178 WPM.
@@ -975,6 +980,12 @@ def _species_events(scenes: list[dict]) -> list[float]:
                     if sp.get("pulse") is True and sp.get("state") == "lit":
                         ons = [at + CHIP_PULSE["land_s"] + k * CHIP_PULSE["s"] for k in range(CHIP_PULSE["n"])]
                         out += [round(w, 2) for w in ons if w < at + dur and keep(w)]
+                    continue
+                if edge == "terms":      # P70 T6: ... and an equation's terms are written one per word, each on its own `at`
+                    for term in sp.get("terms") or []:
+                        w = term.get("at") if isinstance(term, dict) else None
+                        if isinstance(w, (int, float)) and not isinstance(w, bool) and keep(float(w)):
+                            out.append(round(float(w), 2))
                     continue
                 if edge == "rows":       # P52 T8: ... and the agenda's rows are revealed one per word, each on its own `at`
                     for i, row in enumerate(sp.get("rows") or []):

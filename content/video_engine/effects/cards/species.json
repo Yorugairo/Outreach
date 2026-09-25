@@ -643,6 +643,135 @@
       }
     },
     {
+      "id": "species:equation",
+      "axis": "species",
+      "token": "equation",
+      "title": "The equation row, in spoken order",
+      "aliases": [
+        {
+          "name": "Equation row: inputs, relation, signed result",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:77 (T38)"
+        },
+        {
+          "name": "Equation built in spoken order",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:152 (A60)"
+        },
+        {
+          "name": "The equation row",
+          "source": ".claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md:1344 (T56; P70 T6)"
+        }
+      ],
+      "does": "2-3 sourced inputs written by the hand, each on its own word and optionally named, the operators set between, \"=\" with the signed result on its word - computed from the written text in its units; an untrue row is refused.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "EXPLAINS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"equation\", \"at\", \"dur\", \"target\": region, \"terms\": [{text, value, at, src (+ tier) | tier: scenario, label?}] (2-3), \"ops\": [x | \u2212 | + | \u00f7] (one fewer), \"result\": {text, at, value?, label?}, \"idle\"?} (shot row 7th element); units $ \u00a3 \u20ac \u00a5 % pts x and the scales K M B T",
+        "example": "{\"kind\": \"equation\", \"at\": 10.0, \"dur\": 6.0, \"target\": {\"kind\": \"region\", \"x0\": 0.06, \"y0\": 0.13, \"x1\": 0.72, \"y1\": 0.296}, \"terms\": [{\"text\": \"20%\", \"value\": 20, \"at\": 10.0, \"src\": \"ev-index-concentration-bars-v1\", \"tier\": \"PLAUSIBLE\", \"label\": \"AI's weight\"}, {\"text\": \"\u2212\u00bd\", \"value\": -0.5, \"at\": 12.2, \"tier\": \"scenario\", \"label\": \"a halving\"}], \"ops\": [\"\u00d7\"], \"result\": {\"text\": \"\u221210%\", \"value\": -10, \"at\": 13.44, \"label\": \"the index\"}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (equation-halving)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "a term is written",
+          "does": "on its own word the hand writes the input glyph by glyph (the figure's figureGlyph), in chalk at its slot",
+          "trigger": "each term's `at`; over WRITE_S",
+          "dials": {
+            "WRITE_S": "0.6",
+            "FLOOR_PX": "59.08"
+          }
+        },
+        {
+          "name": "an operator springs",
+          "does": "the operator (\u00d7, \u2212, +, \u00f7) pops in on springPop just before the next term's word, set in the sans (Inter), never the hand",
+          "trigger": "OP_LEAD before the next term's `at`; over OP_S",
+          "dials": {
+            "OP_LEAD": "0.12",
+            "OP_S": "0.34",
+            "POP_MP": "0.08"
+          }
+        },
+        {
+          "name": "= and the result",
+          "does": "\"=\" springs, and the signed result is written on its word - a negative one with its minus, in the page's neg token (E28)",
+          "trigger": "the result's `at`",
+          "dials": {
+            "NEG": "#FF4D4D"
+          }
+        },
+        {
+          "name": "a caption names it",
+          "does": "an optional label under a term or the result, in the page's quiet ink at the s90 floor, arriving with its item; the numbers stand a measured 1.5x cap step above it, and a tight region gives up daylight, never the numbers",
+          "trigger": "its item's `at`; over WRITE_S",
+          "dials": {
+            "LABEL_PX": "59.08",
+            "LABEL_INK": "#b8c4d0",
+            "LABEL_WEIGHT": "400",
+            "STEP": "1.5",
+            "DROP_MIN": "0.5",
+            "GAP_MIN": "0.15"
+          }
+        },
+        {
+          "name": "the row leaves",
+          "does": "the whole row fades over the window's last OUT_S",
+          "trigger": "OUT_S before at + dur",
+          "dials": {
+            "OUT_S": "0.25"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "the figure's hand (species/figure.mjs figureGlyph)",
+          "became": "each term's write",
+          "record": "content/video_engine/scripts/species/figure.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "the standing pop (kinetics/spring.mjs springPop)",
+          "became": "the operators' spring",
+          "record": "content/video_engine/scripts/kinetics/spring.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "the agenda's row halo (species/agenda.mjs)",
+          "became": "the row's halo over a bar or a line",
+          "record": "content/video_engine/scripts/species/agenda.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/equation.mjs",
+        "object": "EQUATION"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/equation.mjs",
+        "symbol": "paintEquation"
+      },
+      "doctrine": [
+        "E28",
+        "E99 s90",
+        "E99 s106",
+        "E99 s91",
+        "P70 T6"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "equation-halving",
+        "test": "content/video_engine/tests/kinetics/equation.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "species:flow",
       "axis": "species",
       "token": "flow",

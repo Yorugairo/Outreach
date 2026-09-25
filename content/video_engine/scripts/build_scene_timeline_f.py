@@ -863,6 +863,46 @@ RULER_YEAR_RE = re.compile(r"(?<!\d)(1\d{3}|2\d{3})(?!\d)")   # a year printed i
 # `ruler_caption_advice` holds against the stage caption's home strip (caption_home_box).
 RULER_Y_DEFAULT = {"16:9": 0.74, "9:16": 0.56}
 RULER_BAND_HALF_PX = 138 / 2 + 14 + 0.72 * 132
+# P70 T6 (was P69 T56; the Bravos harvest v2's T38 "Equation row: inputs, relation, signed result", DOM 09:30-09:39,
+# and A60 "Equation built in spoken order") - THE EQUATION ROW. A STAGE species laid out in a declared region: 2-3 terms,
+# each written by the hand on its own word, the operators springing in between, "=" landing with the signed result on
+# the word that says it. Its law and painter are species/equation.mjs; this file owns its grammar (`_validate_equation`)
+# and the ARITHMETIC TRUTH RULE, hard: the row is computed left to right as it is spoken (no precedence), a written
+# result that disagrees beyond its own text's precision is refused as untrue, a term whose text is not its value is
+# refused, and every term names its source - an evidence object (`src`) or a research tier (`tier`).
+SPECIES_EQUATION = "equation"
+SPECIES_KINDS += (SPECIES_EQUATION,)
+SPECIES_WHEN[SPECIES_EQUATION] = ("EXPLAINS: the arithmetic IS the claim ('real yield = coupon minus inflation', 'a fifth "
+                                  "of the index, halved, erases ten percent') - each input written on its own word, the "
+                                  "operators between, the signed result on the word that says it; never when an input is "
+                                  "unsourced or the result is not spoken")
+EQUATION_KEYS = ("kind", "at", "dur", "target", "terms", "ops", "result", "idle", *ROW_PATH_KEYS)
+EQUATION_TERM_KEYS = ("text", "value", "at", "src", "tier", "label")
+EQUATION_RESULT_KEYS = ("text", "value", "at", "label")   # computed, never sourced: the row's own inputs are its source
+EQUATION_TERMS = (2, 3)   # one input is a figure; a fourth is a table read aloud, not a sum a viewer follows
+EQUATION_OPS = {"\u00d7": "*", "x": "*", "\u2212": "-", "-": "-", "+": "+", "\u00f7": "/"}   # species/equation.mjs EQUATION_OPS
+EQUATION_TIERS = ("CONFIRMED", "PLAUSIBLE", "scenario")   # the research gate's two usable tiers, or the sentence's own "if"
+EQUATION_SRC_TIERS = ("CONFIRMED", "PLAUSIBLE")   # a research tier is the grade OF a source: it names its `src` (review F3)
+# THE UNITS (review F2), a CLOSED list. A number is its numeral times its scale (K/M/B/T scale) times its unit's factor
+# (% and pts are hundredths); its unit is the currency it is in, or %, pts, or a plain number (a multiple's x included).
+EQUATION_CURRENCIES = ("$", "\u00a3", "\u20ac", "\u00a5")
+EQUATION_SCALES = {"K": 1e3, "k": 1e3, "M": 1e6, "B": 1e9, "bn": 1e9, "T": 1e12, "tn": 1e12}
+EQUATION_UNITS = {"%": ("%", 0.01), "pts": ("pts", 0.01), "pt": ("pts", 0.01), "x": ("1", 1.0), "\u00d7": ("1", 1.0)}
+EQUATION_RATIO = "ratio"   # a unit divided by itself: written as a plain number, a multiple or a percent
+EQUATION_WORD_S = 0.34     # one word at 178 WPM (species/equation.mjs OP_S): terms closer than this WARN (s106, review F5)
+EQUATION_LABEL_MAX = 24    # a caption under a term reads at a glance; past this it is a sentence (a WARN, s106)
+# THE STEP over the captions (round 3), MIRRORED from species/equation.mjs EQUATION (test_equation_row pins them): the
+# two faces' measured caps per em, the step, the caption's size, and the daylight a tight region may give up. The
+# numbers of a named row are never smaller than EQUATION_TERM_MIN; a region that cannot hold that WARNs with numbers.
+EQUATION_TERM_CAP_K, EQUATION_LABEL_CAP_K, EQUATION_STEP, EQUATION_LABEL_PX = 0.7656, 0.6719, 1.5, 59.08
+EQUATION_DROP_MIN, EQUATION_LABEL_DESC, EQUATION_GAP_MIN = 0.5, 0.25, 0.15
+EQUATION_TERM_MIN = EQUATION_STEP * EQUATION_LABEL_PX * EQUATION_LABEL_CAP_K / EQUATION_TERM_CAP_K
+EQUATION_UPDN = 1.08 + 0.53   # species/figure.mjs FIGURE_UP + FIGURE_DOWN: the written row's glyph box, in type sizes
+EQUATION_CHAR_W, EQUATION_LABEL_CHAR_W = 0.62, 0.55   # the advances per character the painter falls back on (an estimate)
+EQUATION_SRC = re.compile(r"^ev-[a-z0-9][a-z0-9-]*$")      # an evidence object's id (evidence/objects/<id>.*)
+# species/equation.mjs EQUATION, MIRRORED (test_equation_row pins them): the write window, the operator's lead before
+# the next word, the row's leave, and the s90 floor every item is written at or above
+EQUATION_WRITE_S, EQUATION_OP_LEAD, EQUATION_OUT_S, EQUATION_FLOOR_PX = 0.6, 0.12, 0.25, 59.08
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -1801,6 +1841,7 @@ SPECIES_TARGETS[SPECIES_SOLO] = SPECIES_TARGETS[SPECIES_UNSOLO] = ()   # P69 T37
 SPECIES_TARGETS[SPECIES_AXIS_TAG] = ()   # P71 T9: a tag names its x as the page's own value (a tick, a datum, a bar); the chart owns where it is
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
                                                                  # line's point, a bar), or a point / the box of a mark or a prop
+SPECIES_TARGETS[SPECIES_EQUATION] = ("region",)   # P70 T6: the row's ROOM is declared - it is laid out and sized inside it
 SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
                                                   # point would leave the strip's height to the painter, and the strip is the
                                                   # thing the caption has to be reconciled with (the strip law below)
@@ -3973,6 +4014,326 @@ def _validate_freeze(entry: dict) -> list[str]:
     return errs
 
 
+_EQ_FRACTIONS = {"\u00bd": (1, 2), "\u00bc": (1, 4), "\u00be": (3, 4), "\u2153": (1, 3), "\u2154": (2, 3),
+                 "\u2155": (1, 5), "\u215b": (1, 8)}
+_EQ_NUMBER = re.compile(r"^(?P<sign>[+\-\u2212])?(?P<cur>[$\u00a3\u20ac\u00a5])?(?P<sign2>[+\-\u2212])?"
+                        r"(?:(?P<num>(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.(?P<dp>\d+))?|\.(?P<dp0>\d+))"
+                        r"(?:/(?P<den>[1-9]\d*))?)?(?P<vf>[\u00bd\u00bc\u00be\u2153\u2154\u2155\u215b])?"
+                        r"\s?(?P<suffix>[^\s\d.,/]+)?$")
+_EQ_UNIT_LIST = " | ".join([*EQUATION_CURRENCIES, *EQUATION_UNITS, *EQUATION_SCALES])
+
+
+def _equation_parse(text) -> dict | str:
+    """A term's or the result's TEXT, read as the viewer reads it: {num, ntol, mag, tol, dim, factor, suffix}, or the
+    reason it does not read. `num` is the numeral with its sign and `ntol` the half of its last written place (a
+    fraction is exact); `mag` is the QUANTITY - the numeral times its scale (K/M/B/T) times its unit's factor (% and
+    pts are hundredths) - with `tol` scaled the same way; `dim` its unit: a currency, "%", "pts", or "1" (a plain
+    number, a multiple's x included). The unit list is closed: anything else is refused by name (review F2)."""
+    if not isinstance(text, str):
+        return "is not text"
+    m = _EQ_NUMBER.match(text.strip())
+    if not m or (m["num"] is None and m["vf"] is None) or (m["sign"] and m["sign2"]) or (m["den"] and m["vf"]):
+        return "does not read as a number"
+    whole = float(m["num"].replace(",", "")) if m["num"] else 0.0
+    if m["den"]:
+        whole, exact = whole / int(m["den"]), True
+    elif m["vf"]:
+        a, d = _EQ_FRACTIONS[m["vf"]]
+        whole, exact = whole + a / d, True
+    else:
+        exact = False
+    num = (-1.0 if (m["sign"] or m["sign2"] or "") in ("-", "\u2212") else 1.0) * whole
+    ntol = 1e-9 * max(1.0, abs(num)) if exact else 0.5 * 10 ** -len(m["dp"] or m["dp0"] or "") + 1e-9 * max(1.0, abs(num))
+    cur, suf = m["cur"], m["suffix"] or ""
+    if not suf:
+        dim, factor = cur or "1", 1.0
+    elif suf in EQUATION_SCALES:
+        dim, factor = cur or "1", EQUATION_SCALES[suf]
+    elif suf in EQUATION_UNITS and not cur:
+        dim, factor = EQUATION_UNITS[suf]
+    else:
+        return f"writes the unit {((cur or '') + suf)!r}, which is not one the row takes - {_EQ_UNIT_LIST}"
+    return {"num": num, "ntol": ntol, "mag": num * factor, "tol": ntol * factor, "dim": dim, "factor": factor,
+            "prefix": cur or "", "suffix": (" " if " " + suf in text else "") + suf}
+
+
+def equation_number(text) -> tuple[float, float] | None:
+    """The NUMERAL a text writes and the precision it is written to - (value, tolerance) - or None when it does not
+    read (a unit off the closed list included). "$1,200B" writes 1200: `value` is the numeral as written."""
+    q = _equation_parse(text)
+    return (q["num"], q["ntol"]) if isinstance(q, dict) else None
+
+
+def equation_quantity(text) -> tuple[float, float, str] | None:
+    """The QUANTITY a text writes - (magnitude, tolerance, unit) - the number the arithmetic runs on: "$1.2B" is
+    1.2e9 in $, "10%" is 0.1 in %. None when it does not read."""
+    q = _equation_parse(text)
+    return (q["mag"], q["tol"], q["dim"]) if isinstance(q, dict) else None
+
+
+def equation_reads(text, value) -> bool:
+    """Does the TEXT write this VALUE at its own precision? ("20%" writes 20 and 20.4; never 21, or -20). A
+    cross-check on the author's `value` only - the row is computed from the text (review F1)."""
+    got = equation_number(text)
+    return got is not None and _num(value) and abs(got[0] - float(value)) <= got[1]
+
+
+def equation_compute(values: list, ops: list) -> float:
+    """THE ROW AS IT IS SPOKEN: left to right, no precedence - "two plus three, times four" is twenty. A division by
+    zero raises ZeroDivisionError, which the validator names."""
+    acc = float(values[0])
+    for op, v in zip(ops, values[1:]):
+        k, v = EQUATION_OPS[op], float(v)
+        acc = acc * v if k == "*" else acc - v if k == "-" else acc + v if k == "+" else acc / v
+    return acc
+
+
+def _eq_unit(d: str) -> str:
+    return "a plain number" if d == "1" else "a ratio" if d == EQUATION_RATIO else repr(d)
+
+
+def _equation_unit_step(acc: str, op: str, d: str) -> tuple[str | None, str | None]:
+    """One step of the row's UNIT, left to right (review F2): + and - add ONE unit; x takes the unit of what is
+    multiplied (a plain number or a ratio carries none, % of % is %, % of $ is $); / of a unit by itself is a ratio."""
+    k, plain = EQUATION_OPS[op], ("1", EQUATION_RATIO)
+    if k in "+-":
+        if acc == d or (acc == EQUATION_RATIO and d in ("1", "%")) or (d == EQUATION_RATIO and acc in ("1", "%")):
+            return (d if acc == EQUATION_RATIO else acc), None
+        return None, (f"it {'adds' if k == '+' else 'subtracts'} {_eq_unit(d)} and {_eq_unit(acc)} - a sum or a "
+                      "difference adds ONE unit, in every term and the result")
+    if k == "*":
+        if acc in plain or d in plain:
+            return (d if acc in plain else acc), None
+        if acc == d == "%":
+            return "%", None
+        if "%" in (acc, d) and ({acc, d} - {"%"}) <= set(EQUATION_CURRENCIES):
+            return (d if acc == "%" else acc), None
+        return None, f"{_eq_unit(acc)} times {_eq_unit(d)} has no unit the row can write"
+    if d in plain:
+        return acc, None
+    if acc == d:
+        return EQUATION_RATIO, None
+    if d == "%" and (acc == "1" or acc in EQUATION_CURRENCIES):
+        return acc, None
+    return None, f"{_eq_unit(acc)} divided by {_eq_unit(d)} has no unit the row can write"
+
+
+def _equation_label_error(where: str, it: dict) -> list[str]:
+    lab = it.get("label")
+    if lab is None or (isinstance(lab, str) and lab.strip()):
+        return []
+    return [f"{where}: 'label' must be a short non-empty caption naming what the number is ('AI's weight')"]
+
+
+def _equation_term_errors(i: int, tm, row_at) -> list[str]:
+    """One input: its text, its value, its word, its source - and the text writes the value (the truth rule)."""
+    where = f"equation: term {i + 1}"
+    if not isinstance(tm, dict):
+        return [f"{where} must be a dict {{text, value, at, src? | tier?, label?}}"]
+    errs = [f"{where}: {k!r} is not a term's - a term takes {'|'.join(EQUATION_TERM_KEYS)}"
+            for k in sorted(tm) if k not in EQUATION_TERM_KEYS]
+    if not isinstance(tm.get("text"), str) or not tm["text"].strip():
+        errs.append(f"{where}: 'text' must be the number as the hand writes it ('20%', '\u2212\u00bd')")
+    if not _num(tm.get("value")) or not math.isfinite(float(tm["value"])):
+        errs.append(f"{where}: 'value' must be a finite number - the numeral its text writes, checked against it")
+    if not _num(tm.get("at")):
+        errs.append(f"{where}: 'at' must be a number (episode seconds, the word it is written on)")
+    elif row_at is not None and float(tm["at"]) < row_at:
+        errs.append(f"{where}: written at {tm['at']:g}s, before the row's own at {row_at:g}s")
+    src, tier = tm.get("src"), tm.get("tier")
+    if src is None and tier is None:
+        errs.append(f"{where} is unsourced - it names an evidence object (`src`) or, for the sentence's own 'if', "
+                    "`tier: scenario`; an unsourced input is the don't")
+    if src is not None and not (isinstance(src, str) and EQUATION_SRC.match(src)):
+        errs.append(f"{where}: src {src!r} does not name an evidence object (an id like ev-index-concentration-bars-v1)")
+    if tier is not None and tier not in EQUATION_TIERS:
+        errs.append(f"{where}: tier {tier!r} is not one of {'|'.join(EQUATION_TIERS)} - an UNSOURCED or REJECTED figure "
+                    "is never an input")
+    elif tier in EQUATION_SRC_TIERS and src is None:
+        errs.append(f"{where}: tier {tier!r} grades a source and names none - write its `src` (only `scenario`, the "
+                    "sentence's own 'if', stands alone)")
+    errs += _equation_label_error(where, tm)
+    if isinstance(tm.get("text"), str) and tm["text"].strip():
+        q = _equation_parse(tm["text"])
+        if isinstance(q, str):
+            errs.append(f"{where}: text {tm['text']!r} {q}")
+        elif _num(tm.get("value")) and not equation_reads(tm["text"], tm["value"]):
+            errs.append(f"{where}: text {tm['text']!r} is not its value {tm['value']:g} at the precision it is written to")
+    return errs
+
+
+def _equation_order_errors(entry: dict, terms: list, result: dict) -> list[str]:
+    """A60, spoken order: every term on its own word, strictly in order and an operator's lead apart; the result last;
+    the result's write inside the window, before the row leaves."""
+    errs: list[str] = []
+    ats = [float(tm["at"]) for tm in terms if isinstance(tm, dict) and _num(tm.get("at"))]
+    if len(ats) == len(terms):
+        for i in range(1, len(ats)):
+            if ats[i] - ats[i - 1] < EQUATION_OP_LEAD - 1e-9:
+                errs.append(f"equation: term {i + 1} at {ats[i]:g}s is not after term {i} at {ats[i - 1]:g}s by the "
+                            f"operator's lead ({EQUATION_OP_LEAD:g}s) - one term per word, in order")
+    if not _num(result.get("at")):
+        return errs
+    r_at = float(result["at"])
+    if ats and r_at - max(ats) < EQUATION_OP_LEAD - 1e-9:
+        errs.append(f"equation: the result at {r_at:g}s is not after the last term at {max(ats):g}s - the result is "
+                    "written last, on its own word, with the '=' before it")
+    if _num(entry.get("at")) and _num(entry.get("dur")):
+        leave = float(entry["at"]) + float(entry["dur"]) - EQUATION_OUT_S
+        if r_at + EQUATION_WRITE_S > leave + 1e-9:
+            errs.append(f"equation: the result's write ends at {r_at + EQUATION_WRITE_S:g}s and the row leaves at "
+                        f"{leave:g}s (its window less {EQUATION_OUT_S:g}s) - a result that cannot be written whole is "
+                        "not written; widen dur")
+    return errs
+
+
+def _equation_truth_errors(terms: list, ops: list, result: dict) -> list[str]:
+    """THE ARITHMETIC TRUTH RULE (hard): the compiler computes the row FROM ITS WRITTEN TEXT - the numbers the viewer
+    reads, in their units (review F1, F2) - and holds the written result to it, unit and number."""
+    if not (all(isinstance(tm, dict) for tm in terms) and all(o in EQUATION_OPS for o in ops)
+            and len(ops) == len(terms) - 1 and isinstance(result.get("text"), str) and result["text"].strip()):
+        return []
+    qs = [_equation_parse(tm.get("text")) for tm in terms]
+    if not all(isinstance(q, dict) for q in qs):
+        return []   # the unreadable term is refused by its own line
+    r = _equation_parse(result["text"])
+    if isinstance(r, str):
+        return [f"equation: the result's text {result['text']!r} {r}"]
+    unit = qs[0]["dim"]
+    for op, q in zip(ops, qs[1:]):
+        unit, why = _equation_unit_step(unit, op, q["dim"])
+        if why:
+            return [f"equation: {why}"]
+    if not (r["dim"] == unit or (unit == EQUATION_RATIO and r["dim"] in ("1", "%"))):
+        return [f"equation: the result is written in {_eq_unit(r['dim'])} and the row makes {_eq_unit(unit)} - the "
+                "result is written in the unit its terms make"]
+    try:
+        got = equation_compute([q["mag"] for q in qs], ops)
+    except ZeroDivisionError:
+        return ["equation: the row divides by zero - it has no result to write"]
+    errs = []
+    if result.get("value") is not None and not equation_reads(result["text"], result["value"]):
+        errs.append(f"equation: the result's text {result['text']!r} is not its value {result['value']!r}")
+    if abs(r["mag"] - got) > r["tol"]:
+        val = got / r["factor"]
+        shown = ("\u2212" if val < 0 else "") + r["prefix"] + f"{abs(val):.6g}" + r["suffix"]
+        errs.append(f"equation: the result {result['text']!r} is untrue - the row computes {shown} left to right from "
+                    "what it writes, and a written result is held to its own text's precision")
+    return errs
+
+
+def _validate_equation(entry: dict) -> list[str]:
+    """P70 T6: the equation row's grammar - 2-3 sourced terms, one operator fewer, a result on a word of its own - in
+    spoken order (A60), and the ARITHMETIC TRUTH RULE: computed left to right from the written text in its units, a
+    result that disagrees beyond its text's precision is untrue, and so is a term whose text is not its value."""
+    errs = [f"equation: {k!r} is not an equation row's - it takes {'|'.join(EQUATION_KEYS[1:])}"
+            for k in sorted(entry) if k not in EQUATION_KEYS]
+    terms, ops, result = entry.get("terms"), entry.get("ops"), entry.get("result")
+    lo, hi = EQUATION_TERMS
+    if not isinstance(terms, list) or not lo <= len(terms) <= hi:
+        return errs + [f"equation: 'terms' must be a list of {lo} to {hi} inputs - one is a figure, {hi + 1} is a table"]
+    if not isinstance(ops, list) or len(ops) != len(terms) - 1:
+        errs.append(f"equation: 'ops' must name one fewer operator than the terms ({len(terms) - 1} for {len(terms)})")
+        ops = []
+    bad = [o for o in ops if not isinstance(o, str) or o not in EQUATION_OPS]
+    if bad:
+        errs.append(f"equation: operator {bad[0]!r} is not one of {' | '.join(EQUATION_OPS)}")
+    row_at = float(entry["at"]) if _num(entry.get("at")) else None
+    for i, tm in enumerate(terms):
+        errs += _equation_term_errors(i, tm, row_at)
+    if not isinstance(result, dict):
+        return errs + ["equation: 'result' must be a dict {text, at, value?, label?} - the signed result the row builds to"]
+    errs += [f"equation: the result's {k!r} is refused - the result is computed from the terms, never sourced or styled"
+             for k in sorted(result) if k not in EQUATION_RESULT_KEYS]
+    if not _num(result.get("at")):
+        errs.append("equation: the result has no 'at' - a result that is not spoken is the don't; write it on its word")
+    if not isinstance(result.get("text"), str) or not result["text"].strip():
+        errs.append("equation: the result's 'text' must be the signed number as it is written ('\u221210%')")
+    if result.get("value") is not None and not _num(result["value"]):
+        errs.append("equation: the result's 'value' must be a number when it is given (the text is what is written)")
+    errs += _equation_label_error("equation: the result", result)
+    errs += _equation_order_errors(entry, terms, result)
+    return errs + _equation_truth_errors(terms, ops, result)
+
+
+def _equation_room_advice(entry: dict, items: list, stage: tuple) -> list[str]:
+    """Round 3: a NAMED row's numbers stand a clear step over their captions (EQUATION_TERM_MIN), and the engine gives up
+    daylight, never the numbers - so a region too small for the row at that size, even with the least daylight, makes
+    it overflow. An ESTIMATE (the painter's per-character advances), so a WARN with the numbers (s106), never a refusal."""
+    tg = entry.get("target") or {}
+    try:
+        w = (float(tg["x1"]) - float(tg["x0"])) * stage[0]
+        h = (float(tg["y1"]) - float(tg["y0"])) * stage[1]
+    except (KeyError, TypeError, ValueError):
+        return []
+    fs, lp = EQUATION_TERM_MIN, EQUATION_LABEL_PX
+    widths = []
+    for it in items:
+        lab = it.get("label") if isinstance(it.get("label"), str) else ""
+        widths.append(max(len(str(it.get("text") or "")) * EQUATION_CHAR_W * fs, len(lab) * EQUATION_LABEL_CHAR_W * lp))
+    n = len(items) * 2 - 1   # the terms and the result, and an operator or "=" between each two
+    need_w = sum(widths) + (n - len(items)) * EQUATION_CHAR_W * fs + EQUATION_GAP_MIN * fs * (n - 1)
+    need_h = EQUATION_UPDN * fs + (EQUATION_DROP_MIN + EQUATION_LABEL_DESC) * lp
+    if need_w <= w + 1e-6 and need_h <= h + 1e-6:
+        return []
+    return [f"equation: the region is {w:.0f} x {h:.0f} px and the named row needs about {need_w:.0f} x {need_h:.0f} px - "
+            f"its numbers at {fs:.1f} px (a {EQUATION_STEP:g}x step over the {lp:g} px captions' cap) with the least "
+            "daylight; it will overflow its region: give it more room, or shorter captions"]
+
+
+def equation_advice(entry: dict, stage: tuple = (1920, 1080)) -> list[str]:
+    """The equation's WARNs (E99 s106: the engine advises, the author decides): terms closer than one word (review F5),
+    a row whose terms are not named (review F7, E28: the label is data), a caption too long to read at a glance, and a
+    named row its region cannot hold at the step over its captions (round 3). `stage` is the stage in px (16:9 default)."""
+    out: list[str] = []
+    items = [*(t for t in entry.get("terms") or [] if isinstance(t, dict)),
+             *([entry["result"]] if isinstance(entry.get("result"), dict) else [])]
+    ats = [float(it["at"]) for it in items if _num(it.get("at"))]
+    for i in range(1, len(ats)):
+        gap = ats[i] - ats[i - 1]
+        if gap < EQUATION_WORD_S - 1e-9:
+            out.append(f"equation: items {i} and {i + 1} are {gap:.2f}s apart - under one word ({EQUATION_WORD_S:g}s at "
+                       "178 WPM); each term is written on its OWN word")
+    if items and not any(isinstance(it.get("label"), str) and it["label"].strip() for it in items):
+        out.append("equation: no term is named - an equation reads at a glance when its terms are named (E28); give each "
+                   "term and the result a `label` ('AI's weight' x 'a halving' = 'the index')")
+    for it in items:
+        lab = it.get("label")
+        if isinstance(lab, str) and len(lab) > EQUATION_LABEL_MAX:
+            out.append(f"equation: the label {lab!r} is {len(lab)} characters long - over {EQUATION_LABEL_MAX}, a "
+                       "caption becomes a sentence; name the number in a few words")
+    if any(isinstance(it.get("label"), str) and it["label"].strip() for it in items):
+        out += _equation_room_advice(entry, items, stage)
+    return out
+
+
+def equation_missing_sources(entry: dict, dirs) -> list[str]:
+    """Each term's `src` must name an evidence object ON DISK (review F3): `<dir>/<src>.*` in the episode's
+    evidence/objects or the build's own objects dir (a derived object lives there, the hook's)."""
+    out: list[str] = []
+    for i, tm in enumerate(entry.get("terms") or []):
+        src = tm.get("src") if isinstance(tm, dict) else None
+        if not isinstance(src, str):
+            continue
+        if not any(Path(d).is_dir() and any(Path(d).glob(f"{src}.*")) for d in dirs):
+            out.append(f"equation: term {i + 1}: src {src!r} names no evidence object on disk (looked in "
+                       + ", ".join(str(d) for d in dirs) + ")")
+    return out
+
+
+def equation_row_checks(row_species, where: str, ep_dir, build_dir) -> None:
+    """main()'s ONE call for the equation (P70 T6): a src that names nothing on disk FAILS the build, and the WARNs
+    are printed. Only an `equation` entry is read; a row without one is untouched."""
+    for e in row_species or []:
+        if not (isinstance(e, dict) and e.get("kind") == SPECIES_EQUATION):
+            continue
+        missing = equation_missing_sources(e, (Path(ep_dir) / "evidence/objects", Path(build_dir) / "objects"))
+        if missing:
+            raise SystemExit(f"FAIL: {where}: " + "; ".join(missing))
+        for w in equation_advice(e, (1080, 1920) if ASPECT == "9:16" else (1920, 1080)):
+            print(f"  [WARN] P70 T6: {where}: {w}")
+
+
 # the kinds whose motion runs on through any window they span and that the player has no hold for: a camera move,
 # stepped plate life, a ticker, a declared self-animating world, the newsreel's crawl
 FREEZE_UNHELD = ("punch", "focus_zoom", "pull_back", "plate_life", "ticker", "life", "newsreel")
@@ -4044,6 +4405,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
     elif "settle" in entry:           # P71 T14: the ruler's own key, refused by name on any other kind
         errs.append(f"{kind}: 'settle' is the ruler's - the decades a `ruler` lands framed on; a {kind} has no scroll "
                     "to settle")
+    if kind == SPECIES_EQUATION:      # P70 T6
+        errs += _validate_equation(entry)
     if kind in VECMAP_SPECIES:
         errs += _validate_vecmap_species(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
@@ -11480,6 +11843,7 @@ def main() -> int:
                           + validate_newsreel_strip(row_species, ASPECT, bool(ds)))   # P52 T6: the strip law (gate 1)
         if species_errors:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))
+        equation_row_checks(row_species, f"shot row {i + 1} ({a}-{b}s)", EP, BUILD)   # P70 T6: src on disk; the WARNs
         resolved_chip_stamps = {}
         for n, e in enumerate(row_species):
             if isinstance(e, dict) and e.get("kind") == SPECIES_CHIP and e.get("form") == "stamp":
