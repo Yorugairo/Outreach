@@ -98,6 +98,8 @@ def test_every_member_of_the_badge_ladder_carries_a_need():
 
 def test_every_need_in_the_real_catalogue_is_a_word_from_the_table():
     for recipe in RX.load():
+        if recipe.get("status") == RX.DENIED:   # the record, never a preset (P72 T3) - refused by name, tested below
+            continue
         p = RX.preset(recipe["id"])
         assert [b["member"] for b in p["binds"]] == list(range(len(p["members"]))), recipe["id"]
         for bind in p["binds"]:
@@ -237,3 +239,29 @@ def test_the_module_refuses_to_be_an_allocator_in_writing():
     for phrase in ["NOT AN ALLOCATOR", "names no episode", "chooses nothing by count", "writes no shot table",
                    "the AUTHOR binds", "There is no allocator"]:
         assert phrase in doc, phrase
+
+
+# ---------------------------------------------------------------- a DENIED recipe is never offered (P72 T3, E99 s84)
+def _denied(rid: str, title: str) -> dict:
+    r = _recipe(rid, title, [_member("dock_kind:image")], status="denied")
+    r["ruled_by"], r["denied_reason"] = "E99 s84", "off-doctrine: the operator's words"
+    return r
+
+
+def test_for_act_never_offers_a_denied_recipe(tmp_path):
+    repo = _layer(tmp_path, [_card("dock_kind:image", "dock"), _denied("recipe:no", "The no"),
+                             _recipe("recipe:yes", "The yes", [_member("dock_kind:image")])])
+    assert [p["id"] for p in RX.for_act("EXPLAINS", repo)] == ["recipe:yes"]
+
+
+def test_a_denied_recipe_named_by_the_author_is_refused_with_its_ruling_and_words(tmp_path):
+    repo = _layer(tmp_path, [_card("dock_kind:image", "dock"), _denied("recipe:no", "The no")])
+    with pytest.raises(LookupError, match=r"denied by E99 s84.*off-doctrine: the operator's words"):
+        RX.preset("recipe:no", repo)
+
+
+def test_the_real_layer_offers_none_of_the_four_s84_denials():
+    denied = {"recipe:card-becomes-the-chart", "recipe:dock-lands-page-renames", "recipe:plate-dock-wipe",
+              "recipe:spotlight-held-past-the-cut"}
+    offered = {p["id"] for act in {a for r in RX.load() for a in r["acts"]} for p in RX.for_act(act)}
+    assert offered and not (offered & denied)

@@ -689,7 +689,7 @@ def test_every_steel_proven_recipe_uses_only_the_axes_the_long_form_can_speak():
     used = {r["id"]: sorted({m["card"].split(":")[0] for m in r["members"]}) for r in steel_recipes}
 
     # Assert
-    assert len(steel_recipes) == 5, sorted(used)
+    assert len(steel_recipes) == 4, sorted(used)     # P72 T3: plate-dock-wipe is denied (E99 s84), no longer proven
     assert all(set(axes) <= STEEL_SPEAKABLE_AXES for axes in used.values()), used
 
 

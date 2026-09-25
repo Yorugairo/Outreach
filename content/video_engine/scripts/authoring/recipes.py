@@ -39,6 +39,7 @@ CANDIDATE_REASON = "no approved cut has carried it (no proof)"
 LABEL_TOKENS = ("callout", "figure", "stamp", "chip")
 MEMBER_KEYS = ("card", "option", "offset_s", "role", "options", "optional", "title")
 PROVEN = "proven"
+DENIED = "denied"   # P72 T3 (E99 s84): the operator ruled it off - never offered, refused by name with the words
 
 # The option keys whose value is a PLACE on the world under the dock, so the author owes a target as well as an
 # asset: the reading box, an embed surface, a layer to sit behind (`dock_option:read` / `:embed` / `:behind`).
@@ -138,6 +139,11 @@ def preset(name: str, repo: Path | str | None = None, *, records: list[dict] | N
     equality, then a substring of the title, an alias or `does` (no recipe carries a token, so that tier is void)."""
     recipes, cards = _split(_records(repo, records))
     hits = effects.find(name, cards=recipes)
+    if len(hits) == 1 and hits[0].get("status") == DENIED:
+        r = hits[0]
+        raise LookupError(f"{r['id']} is denied by {r.get('ruled_by')}: \"{r.get('denied_reason')}\" - it is the record, "
+                          "never a preset")
+    hits = [r for r in hits if r.get("status") != DENIED] if len(hits) > 1 else hits
     if len(hits) == 1:
         return _preset(hits[0], cards)
     if hits:
@@ -146,9 +152,9 @@ def preset(name: str, repo: Path | str | None = None, *, records: list[dict] | N
 
 
 def for_act(act: str, repo: Path | str | None = None, *, records: list[dict] | None = None) -> list[dict]:
-    """Every recipe whose `acts` carry this act, as presets: proven first, then by `count` descending, then id.
+    """Every recipe whose `acts` carry this act, as presets (a DENIED recipe is never offered): proven first, then by `count` descending, then id.
     A list of CANDIDATES for the author to bind or delete - the order is the record's, never a recommendation."""
     recipes, cards = _split(_records(repo, records))
-    hits = [r for r in recipes if act in (r.get("acts") or [])]
+    hits = [r for r in recipes if act in (r.get("acts") or []) and r.get("status") != DENIED]
     hits.sort(key=lambda r: (r.get("status") != PROVEN, -(r.get("count") or 0), r["id"]))
     return [_preset(r, cards) for r in hits]

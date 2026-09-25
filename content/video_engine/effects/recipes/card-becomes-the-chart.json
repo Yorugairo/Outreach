@@ -38,9 +38,12 @@
     "BACKLOG R26-103",
     "E61",
     "E49",
-    "E99 s72"
+    "E99 s72",
+    "E99 s84"
   ],
-  "status": "proven",
+  "status": "denied",
+  "ruled_by": "E99 s84",
+  "denied_reason": "off-doctrine: there is no reason to fade/dip the card growth",
   "proof": {
     "project": "japan-tariff-trick",
     "build": "build-short",

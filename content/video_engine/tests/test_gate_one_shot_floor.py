@@ -216,8 +216,8 @@ def test_m38_prints_the_references_own_coverage_beside_the_threshold(tmp_path: P
 
 # ---------------------------------------------------------------- M38: the R26-168 interim reading (P65 T7)
 
-INTERIM_SENTENCE = ("interim (R26-168): the proven set is being re-proved on today's clocks by the recipe lab; "
-                    "this row does not stop a cut until P65 HG2, and M45 (parity by mechanism) is the floor "
+INTERIM_SENTENCE = ("interim (R26-168): whether M38 stops a cut is the operator's open question (P72-HG1 item 8); "
+                    "this row does not stop a cut until it is answered, and M45 (parity by mechanism) is the floor "
                     "meanwhile")
 
 
@@ -438,7 +438,9 @@ def test_japan_the_reference_reproduces_t2s_measures() -> None:
 def test_japans_m38_row_carries_the_threshold_and_its_own_measured_coverage() -> None:
     require_input(EFFECTS_CATALOG)   # absent, no recipe is proven: coverage 0.00 and the interim WARN
     r = floor_rows(JAPAN)
-    assert r["M38"].level in ("PASS", "FAIL")                 # the number moves while T8 re-members three proofs
+    # P72 T3 (E99 s84 applied, the coordinator's ruling (a)): the four denied recipes left the proven set and the
+    # approved cut's coverage reads 0.48, under the floor - the interim WARN while M38 stays interim (P72-HG1 item 8)
+    assert r["M38"].level in ("PASS", "FAIL") or (FLOOR.M38_INTERIM_WARN and r["M38"].level == "WARN")
     assert "the floor is 0.60" in r["M38"].message
     assert f"the reference {r['_ref'].name} measures {r['_ref'].coverage:.2f}" in r["M38"].message
     assert (f"proven-recipe coverage {r['_m'].coverage:.2f} spanning / {r['_m'].coverage_start:.2f} "

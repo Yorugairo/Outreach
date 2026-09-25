@@ -486,9 +486,35 @@ def proven() -> dict:
     return LB.load_proven(ROOT)
 
 
-def test_the_fifteen_proven_recipes_are_the_ones_the_lab_re_proves(proven: dict):
-    """R26-168's set, read from the recipe FILES (the source) and not from the catalogue (build output, P63)."""
-    assert len(proven) == 15 and all(r["status"] == "proven" and r.get("proof") for r in proven.values())
+DENIED_S84 = ("recipe:card-becomes-the-chart", "recipe:dock-lands-page-renames", "recipe:plate-dock-wipe",
+              "recipe:spotlight-held-past-the-cut")    # E99 s84: ruled off at P65 HG2 (P72 T3)
+
+
+def ruled_off_as_data(monkeypatch, *ids: str) -> None:
+    """The lab's MECHANICS on a recipe the operator denied (E99 s84): the refusal is pinned on its own below, so a
+    test of how the lab lays a snap, a wipe or a missing member out takes the denied record as DATA - the same
+    members, read as if proven - and never re-proves the ruling."""
+    proven = LB.load_proven(ROOT)
+    denied = LB.load_status(ROOT, "denied")
+    extra = {i: dict(denied[i], status="proven") for i in ids}
+    monkeypatch.setattr(LB, "load_proven", lambda repo: {**proven, **extra})
+
+
+def test_the_eleven_proven_recipes_are_the_ones_the_lab_re_proves(proven: dict):
+    """R26-168's set less the four E99 s84 denied, read from the recipe FILES (the source) and not from the
+    catalogue (build output, P63)."""
+    assert len(proven) == 11 and all(r["status"] == "proven" and r.get("proof") for r in proven.values())
+    assert not set(DENIED_S84) & set(proven)
+
+
+def test_the_lab_refuses_a_denied_recipe_by_name_with_the_operators_words():
+    """P72 T3: the lab never re-proves a recipe the operator ruled off - the refusal names it, the ruling and the
+    words, so nobody reads it as a typo."""
+    with pytest.raises(LB.LabBuildError) as exc:
+        LB.recipe_candidates(ROOT, ["recipe:plate-dock-wipe", "recipe:badge-ladder"])
+    text = str(exc.value)
+    assert "recipe:plate-dock-wipe (denied, E99 s84:" in text and "not being scene aware" in text
+    assert "recipe:badge-ladder" not in text, "a proven recipe beside it is not refused"
 
 
 def test_the_beat_is_chosen_by_the_recipes_own_acts_and_the_reason_is_carried(proven: dict):
@@ -568,6 +594,7 @@ def test_a_recipes_members_land_at_their_own_offsets_on_the_windows_clock(tmp_pa
 def test_a_world_change_inside_a_recipe_is_its_own_row_so_m44_can_measure_it(tmp_path, monkeypatch):
     """R26-168's first contradiction: `card-becomes-the-chart` is proven on a 3-5 s plate and M44 asks six. The
     plate is a ROW of its own with its own seconds - measurable - and the page snaps out of the landed card."""
+    ruled_off_as_data(monkeypatch, "recipe:card-becomes-the-chart")
     rc, runs = recipes(tmp_path, monkeypatch, ["recipe:card-becomes-the-chart"], batch="cbtc")
     assert rc == 0
     record = records_of(runs)[0]
@@ -596,6 +623,7 @@ def test_one_card_per_offset_and_the_box_is_handed_on(tmp_path, monkeypatch):
     """`plate-dock-wipe` asks for an image card whose PAYLOAD is a chart: one card, not two stacked on one another.
     `read-park-build-write` asks for a second card taking the same box: two cards, the first ending where the
     second begins."""
+    ruled_off_as_data(monkeypatch, "recipe:plate-dock-wipe")
     rc, _runs = recipes(tmp_path, monkeypatch, ["recipe:plate-dock-wipe", "recipe:read-park-build-write"], batch="d")
     assert rc == 0
     clip = next(r["clip"] for r in records_of(tmp_path / "d.jsonl") if r["recipe"] == "recipe:plate-dock-wipe")
@@ -783,6 +811,7 @@ def test_the_card_a_page_snaps_from_is_held_across_the_boundary(tmp_path, monkey
     """`card-becomes-the-chart`: the player MEASURES the card's rectangle off the card's own element at the instant
     the page grows out of it, so a dock tuple that ends ON the boundary leaves the page nothing to grow from - the
     page just appears. The card rides the veil into the page's row, for the snap's own clock."""
+    ruled_off_as_data(monkeypatch, "recipe:card-becomes-the-chart")
     rc, runs = recipes(tmp_path, monkeypatch, ["recipe:card-becomes-the-chart"], batch="snap")
     assert rc == 0
     rows = T.load_rows(tmp_path / "build-lab-snap" / LB.short_id("recipe:card-becomes-the-chart")
@@ -800,6 +829,7 @@ def test_the_card_a_page_snaps_from_is_held_across_the_boundary(tmp_path, monkey
 def test_a_page_with_no_landed_card_before_it_says_the_bed_has_not_got_the_member(tmp_path, monkeypatch):
     """`spotlight-held-past-the-cut` opens ON the snap, and the approved row before its beat carries no dock: the
     member is not realised, and E99 s69's third answer says exactly that instead of pretending the page snapped."""
+    ruled_off_as_data(monkeypatch, "recipe:spotlight-held-past-the-cut")
     rc, runs = recipes(tmp_path, monkeypatch, ["recipe:spotlight-held-past-the-cut"], batch="nosnap")
     assert rc == 0
     record = records_of(runs)[0]
@@ -903,6 +933,31 @@ def test_a_card_that_would_land_outside_its_row_is_refused_by_name():
     with pytest.raises(LB.LabBuildError) as exc:
         LB.check_lands("lab:x:1", "dock_kind:image", 44.9, LB.CARD_FLIGHT_S, 45.05)
     assert "lands at 45.35" in str(exc.value) and "DOCK_RETRACT_S" in str(exc.value)
+
+
+def test_a_stamp_candidate_lands_on_the_stamps_contact_with_ink(tmp_path, monkeypatch, candidates):
+    """R26-252 (P72 T3): the lab's arrival tables read the stamp from `authoring.audio` - its clock is the clamped
+    scale spring's contact (`landing_contact` -> STAMP_CONTACT_S, 0.1542 s), never a throw's 0.45 s flight, and its
+    mass is `arrival_mass`'s `ink`, never the `paper` fallback. The plate-carries-a-card candidate with its
+    `arrival:land` swapped for `arrival:stamp` is built through the lab's own batch path."""
+    import copy
+    import gate_motion_density as GMD
+    from authoring import audio as A
+    assert LB.member_lands_s("arrival:stamp") == GMD.STAMP_CONTACT_S == A.landing_contact(0.0, A.STAMP, {})
+    assert LB.member_lands_s("arrival:throw") == LB.CARD_FLIGHT_S, "the throw keeps the player's own flight"
+    cid = ONE_PER_SHAPE["plate-carries-a-card"]
+    stamp = copy.deepcopy(candidates[cid])
+    stamp["members"] = [dict(m, card="arrival:stamp") if m["card"] == "arrival:land" else m for m in stamp["members"]]
+    monkeypatch.setattr(LB, "run_tool", canned(CLEAN_ROWS))
+    records, _path = LB.run_batch(ROOT, "stamp", [cid], True, str(tmp_path / "stamp.jsonl"),
+                                  str(tmp_path / "build-lab-stamp"), known={cid: stamp})
+    rows = T.load_rows(tmp_path / "build-lab-stamp" / LB.short_id(cid) / LB.SHOT_TABLE_NAME)
+    dock = next(d for r in rows for d in (r[4] or []) if d[0] == "dock-i-fab-wafer" and d[4].get("arrive") == "stamp")
+    assert dock[4]["mass"] == "ink", f"the stamp lands at {dock[4]['mass']!r} - arrival_mass says ink"
+    landed = round(float(dock[2]) + GMD.STAMP_CONTACT_S, 2)
+    assert landed in records[0]["sheets"]["at"], (
+        f"the sheet reads {records[0]['sheets']['at']} - the stamp is read on its contact {landed}, not a flight later")
+    assert round(float(dock[2]) + LB.CARD_FLIGHT_S, 2) not in records[0]["sheets"]["at"]
 
 
 def test_a_chart_to_travels_to_a_state_the_page_actually_declares():

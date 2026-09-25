@@ -121,6 +121,7 @@ import ledger_page as LPG  # noqa: E402  (badges_for: a badge is the SERIES' own
 import recipe_walk as RW  # noqa: E402  (events / match / flatten: what a FIRE is, shared with the floor gate)
 import self_watch as SW  # noqa: E402  (parse_gate: the `[LEVEL] Mxx` protocol's own reader)
 from authoring import table as T  # noqa: E402  (the rows go through the kit's door, never a hand-written literal)
+from authoring import audio as A  # noqa: E402  (landing_contact / arrival_mass: the stamp's clock and mass, one source)
 
 BED_REL = "content/video_engine/projects/systems-and-blowups/tokyo-tea-break"   # the CANDIDATE lab's bed
 BED_SCRIPT = "build_short.py"      # ... and the file that makes any project a bed (the whole-table mode walks to it)
@@ -165,7 +166,10 @@ SNAP_HOLD_S = 0.45               # SNAP_S (player.html:2612): the page grows out
                                  # (player.html:5310), so a page that snaps needs its card still in the dock list at
                                  # the page's first frames - the landed card riding the veil (E99 s69's re-read of
                                  # recipe:card-becomes-the-chart; `held-dock-across-the-cut` holds a card the same way)
-ARRIVAL_LANDS_S = {"throw": CARD_FLIGHT_S, "land": CARD_DROP_S, "drop": CARD_DROP_S}
+ARRIVAL_LANDS_S = {"throw": CARD_FLIGHT_S, "land": CARD_DROP_S, "drop": CARD_DROP_S,
+                   # R26-252 (P72 T3): a STAMP lands on its clamped scale spring's contact (0.1542 s, the gate's
+                   # STAMP_CONTACT_S) - read from the kit, so the lab can never land a stamp on a throw's flight
+                   A.STAMP: A.landing_contact(0.0, A.STAMP, {})}
 FRAME_S = 0.033                  # one frame at the reference's 30 fps (GMD.DIP_S's own measurement)
 SPECIES_READ_S = 0.3             # a species is READ a moment after it fires, never on the frame it starts
 BADGE_IN_S = 0.36                # LP_BADGE_IN (player.html): a pill springs in over this - a badge stamp is read
@@ -207,7 +211,8 @@ DOCK_TAIL_S = CARD_LEAVE_S       # a card leaves before the window does, never o
                                  # finishes inside the row that carries it
 MIN_REMNANT_S = 0.5              # a remnant of an approved row shorter than this is a FLASH, not a plate (M44)
 BRACKET_LABEL = "-$122.6B"       # the bed's own bracket label (build_short.py, the V3 bracket) - never a new figure
-ARRIVAL_MASS = {"throw": "paper", "land": "metal"}   # the mass each arrival card's own `author.example` carries
+ARRIVAL_MASS = {"throw": "paper", "land": "metal",   # the mass each arrival card's own `author.example` carries
+                A.STAMP: A.arrival_mass({"arrive": A.STAMP})}   # R26-252: `ink`, the engine's own stamp default
 
 # THE SHAPE -> BEAT MAP. One or two Tokyo beats per shape, BY NUMBER, with the reason. This table is INTELLIGENCE
 # work (E99 s66) and is written by hand: a tool that picked the beat by a rule would be choosing a beat for a cut.
@@ -626,7 +631,7 @@ def candidate_rows(bed, cand: dict, beat: dict, ws: list[dict], dry_run: bool, b
     species: list[dict] = []
     row_exit: str | None = None
     arrival = next(({"arrive": str(m["card"]).split(":", 1)[1],
-                     "mass": m.get("option") or ARRIVAL_MASS.get(str(m["card"]).split(":", 1)[1], "paper")}
+                     "mass": m.get("option") or ARRIVAL_MASS.get(str(m["card"]).split(":", 1)[1], A.LANDING_MASS)}
                     for m in cand["members"] if str(m["card"]).startswith("arrival:")), None)
     on_page = parse_ledger(plate) is not None or any(
         str(m["card"]).split(":", 1)[0] in ("page_builder", "page_enter", "page_exit", "page_species", "chart_to")
@@ -1184,15 +1189,20 @@ def member_offset(m: Mapping, window_s: float) -> float:
     return round(hi if hi <= window_s + EPS else lo, 2)
 
 
-def load_proven(repo: Path) -> dict[str, dict]:
-    """The `proven` recipe FILES (`effects/recipes/*.json`), by id - the source, not `docs/EFFECTS-CATALOG.jsonl`,
-    which is build output (P63: never hand-edited, and it can lag its sources)."""
+def load_status(repo: Path, status: str) -> dict[str, dict]:
+    """The recipe FILES (`effects/recipes/*.json`) of one `status`, by id - the source, not
+    `docs/EFFECTS-CATALOG.jsonl`, which is build output (P63: never hand-edited, and it can lag its sources)."""
     out: dict[str, dict] = {}
     for path in sorted((Path(repo) / RECIPES_REL).glob("*.json")):
         rec = json.loads(path.read_text(encoding="utf-8"))
-        if rec.get("status") == "proven" and rec.get("id"):
+        if rec.get("status") == status and rec.get("id"):
             out[str(rec["id"])] = rec
     return out
+
+
+def load_proven(repo: Path) -> dict[str, dict]:
+    """The `proven` recipe files, by id: the set the lab re-proves."""
+    return load_status(repo, "proven")
 
 
 def recipe_shape(rec: Mapping) -> tuple[str, str]:
@@ -2266,9 +2276,14 @@ def recipe_candidates(repo: Path, ids: list[str]) -> dict[str, dict]:
     proven = load_proven(repo)
     wanted = sorted(proven) if ids == ["all-proven"] else ids
     unknown = [i for i in wanted if i not in proven]
+    denied = load_status(repo, "denied")
+    ruled = [f"{i} (denied, {denied[i].get('ruled_by')}: \"{denied[i].get('denied_reason')}\")"
+             for i in unknown if i in denied]
+    if ruled:           # P72 T3 / E99 s84: a recipe the operator ruled off is never re-proved - named, with the words
+        raise LabBuildError(f"the operator ruled these off and the lab never re-proves them: {'; '.join(ruled)}")
     if unknown:
-        raise LabBuildError(f"not a `proven` recipe file in {RECIPES_REL}: {', '.join(unknown)} - the fifteen are "
-                            f"{', '.join(sorted(proven))}")
+        raise LabBuildError(f"not a `proven` recipe file in {RECIPES_REL}: {', '.join(unknown)} - the "
+                            f"{len(proven)} are {', '.join(sorted(proven))}")
     out: dict[str, dict] = {}
     for rid in wanted:
         rec = proven[rid]

@@ -939,7 +939,13 @@
       },
       "phases": [],
       "blends": [],
-      "options": [],
+      "options": [
+        {
+          "token": "keep",
+          "means": "`keep: true` (R26-219): the note stays when a verb replaces its page (recast, morph, remake); absent, it leaves with the page over PAGE_LEAVE_S 1.0 s. A bool, page-bound species only",
+          "source_set": null
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",
@@ -951,7 +957,8 @@
         "note": "buildPerform / pageSpecies(scene, \"note\")"
       },
       "doctrine": [
-        "P47 T7 (compiler comment)"
+        "P47 T7 (compiler comment)",
+        "BACKLOG R26-219"
       ],
       "status": "wired",
       "proof": {

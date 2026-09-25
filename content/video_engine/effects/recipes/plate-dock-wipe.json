@@ -54,9 +54,12 @@
   "doctrine": [
     "E96",
     "BACKLOG R26-103",
-    "E61"
+    "E61",
+    "E99 s84"
   ],
-  "status": "proven",
+  "status": "denied",
+  "ruled_by": "E99 s84",
+  "denied_reason": "off-doctrine: You literally docked and wiped then held a still frame for 30 seconds. If it's an evidence dock it should re-choreograph not to be center, if it's meant to become the plate, then it should be snapping/zooming in on the evidence layer. we're not gaining anything by wiping to a narrative plate and docking a barely legible chart over the top, especially when the chart is docked over the center of the narrative plate, not being scene aware.",
   "proof": {
     "project": "steel-and-paper",
     "build": "build-f",

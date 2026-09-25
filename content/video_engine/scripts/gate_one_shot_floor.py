@@ -100,8 +100,8 @@ MIN_FORMS = 3                  # E96: at least three distinct chart forms in one
 MIN_CHART_TO = 1               # E96: at least one chart-to-chart transform
 MIN_DOCKS_PER_BEAT = 1 / 3     # E96: docks on at least a third of the beats
 MIN_RECIPE_COVERAGE = 0.60     # E96 + HG1: kept as the new reference's target, Japan's own printed beside it
-M38_INTERIM_WARN = True        # R26-168 - the fifteen proven recipes are being re-proved on today's clocks
-                               # by the recipe lab, P65 HG2 flips this back to False
+M38_INTERIM_WARN = True        # R26-168 - P65 HG2 ruled the recipes (E99 s84: four denied, 11 proven); whether M38
+                               # ever FAILs is the operator's open question (P72-HG1 item 8) - the WARN is the status quo
 MIN_NARR_CHART = 1.0           # E96: the narrative surfaces at least match the chart surfaces
 EPS = 0.005                    # the closed-interval slack
 BEAT_T_TOL = 0.05              # how near a beat's start a beat-plan record's `t0` must sit to BE that beat
@@ -597,8 +597,8 @@ def row_m38(m: Measures, ref: Measures | None, warn: str | None = None) -> Gate:
     ref_text = (f"the reference {ref.name} measures {ref.coverage:.2f}" if ref
                 else _ref_text(warn, "the reference is not on disk"))
     interim = "" if ok or not M38_INTERIM_WARN else (
-        " - interim (R26-168): the proven set is being re-proved on today's clocks by the recipe lab; "
-        "this row does not stop a cut until P65 HG2, and M45 (parity by mechanism) is the floor meanwhile")
+        " - interim (R26-168): whether M38 stops a cut is the operator's open question (P72-HG1 item 8); "
+        "this row does not stop a cut until it is answered, and M45 (parity by mechanism) is the floor meanwhile")
     return Gate("M38", "PASS" if ok and not warn else "WARN" if ok or M38_INTERIM_WARN else "FAIL",
                 f"proven-recipe coverage {m.coverage:.2f} spanning / {m.coverage_start:.2f} by the beat a fire "
                 f"starts in, of {m.n_beats} beats ({len(m.recipe_beats)} carry a recipe, "

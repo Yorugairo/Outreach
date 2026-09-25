@@ -64,7 +64,7 @@ AXIS_ORDER = ("species", "page_species", "chart_to", "page_builder", "overflow",
               "page_exit", "caption", "kinetics", "recipe")
 STATUS_ORDER = ("live", "wired", "draft", "declared", "planned", "retired")
 RECIPE_AXIS = "recipe"                      # P56: a combination, not an effect - the LAST axis
-RECIPE_STATUS_ORDER = ("proven", "candidate")
+RECIPE_STATUS_ORDER = ("proven", "candidate", "denied")   # P72 T3: denied = ruled off (E99 s84)
 DEFAULT_WINDOW_S = 6.0                      # effect_recipe.schema.json `window_s` default (the spike's WIN)
 
 # A cite that names a document rather than a numbered section: the rest of the cite is matched against that
@@ -324,6 +324,7 @@ def recipe_record_of(recipe: dict, titles: dict[str, str], index: list[dict], re
         "count": recipe["count"],
         "backlog": recipe.get("backlog") or [],
         **({"use_when": recipe["use_when"]} if recipe.get("use_when") else {}),
+        **{k: recipe[k] for k in ("ruled_by", "denied_reason", "use_notes") if recipe.get(k)},
     }
 
 
@@ -456,6 +457,10 @@ def recipe_block(record: dict) -> list[str]:
                  f" - **source** {record['source']}")
     if record.get("doctrine"):
         lines.append("- **doctrine** " + "; ".join(_cite_text(c) for c in record["doctrine"]))
+    if record.get("denied_reason"):
+        lines.append(f"- **DENIED** ({record.get('ruled_by')}): \"{record['denied_reason']}\"")
+    for note in record.get("use_notes") or []:
+        lines.append(f"- **note** \"{note['note']}\" ({note['source']})")
     if record.get("use_when"):
         uw = record["use_when"]
         lines.append(f"- **use when** {uw['act']} - {uw['moment']} - {uw['shape']}: {uw['use']}. **not** {uw['dont']}")

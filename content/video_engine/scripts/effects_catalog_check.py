@@ -26,6 +26,10 @@ P56 T4 adds four RECIPE checks - a recipe is an ordered combination of cards, so
                   must agree (a mismatch names both numbers); a `proven` recipe fired at least once and one that
                   fired exactly once is reported INFO as a decoration
 
+P72 T3 (E99 s84) adds the DENIED status: a recipe the operator ruled off is never counted proven, keeps its `proof` and
+`count` as the record of what was ruled (10 and 12 accept both on `denied` only - never on a candidate, and the proof
+is not re-walked: a record is not a claim), and a proven recipe that splices a denied one in as a member FAILs (9).
+
     python content/video_engine/scripts/effects_catalog_check.py [--repo <root>]
 
 Exit 1 on any failure. An example the gate cannot validate without a project is listed as SKIPPED_EXAMPLE, never
@@ -57,6 +61,7 @@ FRAMES_REL = "content/video_engine/tests/golden/frames"
 KINETICS_REL = "content/video_engine/scripts/kinetics"
 INVENTORY_REL = "docs/research/runs/p55-effects-inventory"
 MEMBERS_AT_TOL = 0.05          # how far a proof's stated instant may sit from the walk's own
+PROVEN, DENIED = "proven", "denied"   # effect_recipe.schema.json `status` (P72 T3: denied = ruled off, E99 s84)
 UNANCHORED_FORMS = ("compiler-only", "declared-unbuilt")
 PAINTED_FORMS = ("module", "inline")
 INVENTORY_AXIS_FOLD = {"camera_move": "species"}   # T3 merged the camera-move rows into the species cards
@@ -118,6 +123,7 @@ class Report:
     info: list[str] = field(default_factory=list)      # INFO: true, and not a failure (a decoration)
     recipes: int = 0
     proven: int = 0
+    denied: int = 0
 
 
 # --------------------------------------------------------------------------- inputs
@@ -487,7 +493,7 @@ def check_recipe_members(recipes: list[dict], cards: list[dict]) -> list[str]:
     The FIRST member is the anchor: every other offset is measured from it, so its own `offset_s` is 0 (or a range
     that opens at 0). A first member written at +0.5 s silently moved every other member (the P56 review)."""
     by_id = {c["id"]: c for c in cards}
-    recipe_ids = {r.get("id") for r in recipes}
+    status_of = {r.get("id"): r.get("status") for r in recipes}
     failures: list[str] = []
     for recipe in recipes:
         rid = recipe.get("id")
@@ -499,7 +505,10 @@ def check_recipe_members(recipes: list[dict], cards: list[dict]) -> list[str]:
                             f"the anchor every other offset is measured from, so its offset is 0")
         for n, member in enumerate(members, 1):
             card_id = member.get("card")
-            if card_id in recipe_ids and card_id != rid:
+            if card_id in status_of and card_id != rid:
+                if recipe.get("status") == PROVEN and status_of[card_id] == DENIED:
+                    failures.append(f"recipe: {rid}: member {n} splices {card_id}, which is denied - a proven "
+                                    f"recipe never carries a denied one into the coverage (E99 s84)")
                 continue
             card = by_id.get(card_id)
             if card is None:
@@ -559,7 +568,9 @@ def check_recipe_proof(recipes: list[dict], repo: Path, cards: list[dict], walk=
     for recipe in recipes:
         rid = recipe.get("id")
         proof = recipe.get("proof")
-        if recipe.get("status") != "proven":
+        if recipe.get("status") == DENIED:
+            continue                            # the proof is the RECORD of what was ruled, never re-walked
+        if recipe.get("status") != PROVEN:
             if proof:
                 failures.append(f"recipe: {rid}: a candidate carries a proof - it is proven, or the proof goes")
             continue
@@ -629,7 +640,9 @@ def check_recipe_count(recipes: list[dict], repo: Path | None = None, cards: lis
     info: list[str] = []
     for recipe in recipes:
         rid, count = recipe.get("id"), recipe.get("count")
-        if recipe.get("status") == "proven":
+        if recipe.get("status") == DENIED:
+            continue                            # the count is the record; a denied recipe is no decoration
+        if recipe.get("status") == PROVEN:
             walked = _walked_count(recipe, registry, walk)
             if walked is not None and walked != count:
                 failures.append(f"recipe: {rid}: count says {count!r}, the walk of "
@@ -664,7 +677,8 @@ def run(repo: Path = REPO, cards_dir: Path | None = None, inventory_dir: Path | 
     repo = Path(repo)
     cards = load_cards(cards_dir or repo / BEC.CARDS_REL)
     recipes = load_recipes(recipes_dir or repo / BEC.RECIPES_REL)
-    report = Report(recipes=len(recipes), proven=sum(1 for r in recipes if r.get("status") == "proven"))
+    report = Report(recipes=len(recipes), proven=sum(1 for r in recipes if r.get("status") == PROVEN),
+                    denied=sum(1 for r in recipes if r.get("status") == DENIED))
     report.failures += check_coverage(cards, repo) + check_phantoms(cards, repo)
     report.failures += check_anchors(cards, repo) + check_proof(cards, repo)
     failures, report.skipped = check_examples(cards)
@@ -699,7 +713,8 @@ def main(argv: list[str] | None = None) -> int:
     for failure in report.failures:
         print(f"effects_catalog_check: FAIL {failure}")
     print(f"effects_catalog_check: {len(report.failures)} failure(s), {len(report.skipped)} example(s) skipped, "
-          f"{report.recipes} recipe(s) ({report.proven} proven, {len(report.info)} decoration(s))")
+          f"{report.recipes} recipe(s) ({report.proven} proven, {report.denied} denied, "
+          f"{len(report.info)} decoration(s))")
     return 1 if report.failures else 0
 
 
