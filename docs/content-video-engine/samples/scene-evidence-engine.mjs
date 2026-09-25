@@ -7474,10 +7474,14 @@ async function mount(doc) {
      wash-off (the bare plate flashes fully bright), then the wipe - and the
      scene appears to repaste itself before turning. Snap those exits to the
      boundary so the turn carries card, wash and shadow in ONE motion. An
-     exit more than ~1.4s out is a deliberate early clear and still fades. */
+     exit more than ~1.4s out is a deliberate early clear and still fades.
+     P71 T6 / R26-309: this is a CARD's rule. A PROP, or a STAMPED mark, OWNS its exit (E50: a landed mark owes its exit
+     in its own curve; E99 s106: the author timed it on a word), so it is never snapped - snapped, a stamp's ease-in
+     began AT the turn and the mark stood over the incoming page (row 22's RAM, 1.0 s and 0.3 s before its slide). */
+  const dockOwnsExit = (d) => arriveOf(d) === "stamp" || ((TL.evidence || {})[d.slide] || {}).kind === "prop";
   const BOUNDS = TL.scenes.map((x) => x.span[0]);
   for (const d of DOCKS)
-    for (const b of BOUNDS)
+    for (const b of dockOwnsExit(d) ? [] : BOUNDS)
       if (d.enter < b && b - d.exit > 0.05 && b - d.exit <= 1.4 && !d.handed) { d.exit = b; break; }   /* P69 T26e: a HANDED prop leaves on its word, never snapped to the turn */
 
   /* P50 T3: every press card mounts HERE, at load, not on the frame it first paints. A card's image must be
@@ -23415,7 +23419,9 @@ async function mount(doc) {
          wiped) is carried off by the front - same edge, same progress, its
          shadow easing out beneath it. A card that survives the boundary is
          never touched: it holds while the world changes behind it. */
-      const swept = seaming && Math.abs(d.exit - boundary) < 0.35;
+      /* P71 T6: a dock that owns its exit (dockOwnsExit) and was told to leave BEFORE the boundary is already on its own
+         curve - the front never takes it back to full opacity; at or past the boundary it is swept like any card */
+      const swept = seaming && Math.abs(d.exit - boundary) < 0.35 && !(d.exit < boundary && dockOwnsExit(d));
       if (swept) {
         /* THE FRONT IS A STAGE POSITION; the card clip must be computed in
            the CARD's own space. inset(0 wk% 0 0) hides wk% OF THE CARD -
