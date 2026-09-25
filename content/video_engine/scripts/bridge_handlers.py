@@ -191,20 +191,48 @@ def extract_paths(text: str) -> list[str]:
     return seen
 
 
+_PACKET_STATE_ORDER = ("replied", "done", "sent", "queue")   # where a moved packet is most likely to be now
+
+
+def follow_moved_packet(path: Path) -> Path | None:
+    """R26-144: a path inside a bridge packet folder (`.../docs/research/runs/bridge/<state>/<id>/...`) that is not there,
+    found in the packet's CURRENT folder. The watcher moves a packet sent/ -> replied/ after the lane wrote a file beside
+    it, so the path the reply names is stale by the time tier 0 reads it. None when the path is outside a packet folder
+    or the file is in no state's folder."""
+    posix = Path(path).as_posix()
+    marker = f"{env_mod.BRIDGE_ROOT.as_posix()}/"
+    head, found, tail = posix.partition(marker)
+    if not found:
+        return None
+    state, _, rest = tail.partition("/")
+    if state not in env_mod.STATES or "/" not in rest:
+        return None
+    for other in _PACKET_STATE_ORDER:
+        candidate = Path(f"{head}{marker}{other}/{rest}")
+        if other != state and candidate.exists():
+            return candidate
+    return None
+
+
 def locate(raw: str, repo: Path, extra_dirs: Sequence[Path] = ()) -> tuple[Path, bool]:
-    """Where a named path actually is: absolute as given, else under the repo root, else under a named dir."""
+    """Where a named path actually is: absolute as given, else under the repo root, else under a named dir; a path
+    inside a packet folder the daemon has since moved is followed to the packet's current folder (R26-144)."""
 
     text = _clean(raw)
     if not text:
         return Path(repo), False
     direct = Path(text).expanduser()
     if _ABSOLUTE.match(text) or direct.is_absolute():
-        return direct, direct.exists()
+        if direct.exists():
+            return direct, True
+        moved = follow_moved_packet(direct)
+        return (moved, True) if moved else (direct, False)
     for base in (Path(repo), *extra_dirs):
         candidate = base / text
         if candidate.exists():
             return candidate, True
-    return Path(repo) / text, False
+    moved = follow_moved_packet(Path(repo) / text)
+    return (moved, True) if moved else (Path(repo) / text, False)
 
 
 def named_paths(order: dict[str, Any], text: str) -> list[str]:
