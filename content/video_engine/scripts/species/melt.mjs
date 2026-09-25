@@ -1591,10 +1591,11 @@ const meltGatherWrite = (parts, u, o) => {
   }
 };
 
-/* the overlay, mounted ONCE and kept on wA.__melt: the ink clone (a sibling right after the board, so it rides above
-   it), and an svg sibling holding the filters, the masks, the stains' rims, the droplets and the ball. Nothing here reads
-   time; the ink box and the colours are read once, from the page as it stands at the boundary. */
-const meltMount = (wA, el, id, o = {}) => {   /* P61 T5b: `o` is the exit's own opts - the BODY COLOUR is read here, once, where the ball's one gradient is built */
+/* the overlay, mounted ONCE PER BOUNDARY and kept on wA.__melt: the ink clone (a sibling right after the board, so it
+   rides above it), and an svg sibling holding the filters, the masks, the stains' rims, the droplets and the ball. Nothing
+   here reads time; the ink box and the colours are read once, from the page as it stands at the boundary. `key` names
+   that boundary (P71 T4 / R26-312: the arriving scene's span[0]) - paintMelt re-mounts when the frame's differs. */
+const meltMount = (wA, el, id, o = {}, key) => {   /* P61 T5b: `o` is the exit's own opts - the BODY COLOUR is read here, once, where the ball's one gradient is built */
   const doc = wA.ownerDocument;
   if (!doc.getElementById("meltcss")) { const s = doc.createElement("style"); s.id = "meltcss"; s.textContent = MELT_CSS; doc.head.appendChild(s); }
   const rect = meltInkRect(wA), hexes = meltInkColours(wA);
@@ -1615,7 +1616,7 @@ const meltMount = (wA, el, id, o = {}) => {   /* P61 T5b: `o` is the exit's own 
   const ink0 = meltInkOf(hexes, MELT.INK_DEEP);
   defs.querySelector("#" + id + "i feFlood").setAttribute("flood-color", ink0);
   const comps = defs.querySelectorAll("#" + id + "i feComposite");
-  const m = { id, svg, defs, ink, txt, rect, hexes, ink0, tintC: comps[comps.length - 1], toff: defs.querySelector("#" + id + "x feOffset"), tblur: defs.querySelector("#" + id + "x feGaussianBlur"),
+  const m = { id, key, svg, defs, ink, txt, rect, hexes, ink0, tintC: comps[comps.length - 1], toff: defs.querySelector("#" + id + "x feOffset"), tblur: defs.querySelector("#" + id + "x feGaussianBlur"),
               blur: defs.querySelector("#" + id + "f feGaussianBlur"), path: defs.querySelector("mask path"),
               iblur: defs.querySelector("#" + id + "i feGaussianBlur"), ioffs: [...defs.querySelectorAll("#" + id + "i feOffset")],
               stainG: defs.querySelector("#" + id + "r g"),
@@ -1647,9 +1648,16 @@ export const paintMelt = (ctx) => {
      depth does). `ctx.worldCss` is undefined for every melt that named no depth, so the string is the one it always
      was and every melt golden is byte-identical. */
   const wCss = typeof ctx.worldCss === "string" ? ctx.worldCss : wA.style.transform;
+  /* A STALE MOUNT - its clone and classes go first. Stale is detached, or taken at ANOTHER boundary (P71 T4 / R26-312;
+     E99 s74 - a transition carries the world it leaves): a melt exit is read on every frame of the scene it arrives into,
+     so a mount outlives its own window, and when the NEXT scene also arrives by a melt no melt-free frame clears it
+     between the two - the second melt then threw the first one's page (Steel and Paper H, 242.38 s, the railways page
+     over the yields page on screen). A frame's mount is the one keyed to its own boundary, so a seek and a play throw
+     the same PAGE (the same page, not the same bytes: the clone is taken on the frame that mounts it). Checked BEFORE
+     the page test below, so a stale mount over a world with no page is cleared and cut, never re-mounted empty. */
+  if (wA.__melt && (!(wA.__melt.svg && wA.__melt.svg.isConnected) || wA.__melt.key !== ctx.t0)) clearMelt(wA);
   if (!wA.__melt && !wA.querySelector(".lp-page")) return null;
-  if (wA.__melt && !(wA.__melt.svg && wA.__melt.svg.isConnected)) clearMelt(wA);   /* a stale mount: its clone and classes go first */
-  const m = wA.__melt ? wA.__melt : meltMount(wA, el, id, ctx.opts);   /* P61 T5b: the exit's own opts, so the ball's gradient is built in its authored BODY colour */
+  const m = wA.__melt ? wA.__melt : meltMount(wA, el, id, ctx.opts, ctx.t0);   /* P61 T5b: the exit's own opts, so the ball's gradient is built in its authored BODY colour */
   /* P61 T3: `ctx.hand` is the ARRIVING page's morph outline this frame, already in this world's px - the caller owns
      that carry because it is the one that knows both boxes. Undefined for every other melt, so `P.hand` is undefined
      and every string this painter writes is the string it wrote before. */
