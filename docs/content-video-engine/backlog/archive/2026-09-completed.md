@@ -234,3 +234,23 @@ room, P72 T43, and the note's `keep`, P72 T3).
 
 The source also mentions R26-248 without a matching detail-row header. It stays
 an unresolved source anomaly; this pass does not synthesize a task from it.
+
+## P72 closing pass - batch 4 (2026-09-25): rows closed by P72's landed slices
+
+| ID | Verified outcome | Evidence / follow-up |
+|---|---|---|
+| R26-116 | A melt recipe carries the melt stack. Closed by P72 T3. | lane B `80fa2f5`: `melt-then-rewrite` (a candidate, the compare `streak` form); neither approved cut plays it. |
+| R26-128 | The research profiles never run the layer regen. Closed by P72 T31. | lane B `8f8106b`: 'Tier 0 - never run the layer regen' in the four profiles, `test_research_profile_rules.py`; its second half (the verdict up front) is R26-354, the sync source R26-353 (P72 T45). |
+| R26-129 | The research ledger counts runs, not transport. Closed by P72 T31. | lane B `8f8106b`: `bridge/` is transport; 64 runs -> 63 over the main checkout. |
+| R26-141 | The drift gate validates the card schema. Closed by P72 T2. | lane B `a4bfe6a`: `effects_catalog_check` check 13, `test_effects_catalog_schema.py`. |
+| R26-144 | A moved packet's path resolves. Closed by P72 T31. | lane A `6e9ba30` follow_moved_packet (`test_bridge_moved_packet.py`). |
+| R26-162 | The committed-tree test reads HEAD, not the working copy. Closed by P72 T2. | lane B `a4bfe6a`: a scratch copy of HEAD; a planted dirty card no longer fails it. |
+| R26-174 | One host per cut is on the builder's checklist. Closed by P72 T4. | lane A `526096a`: `docs/runbooks/ONE-SHOT.md` 'One host per cut'. |
+| R26-195 | s74 / s75 / s76 are on the builder's checklist; the compiler is STOPPED. Closed by P72 T4. | lane A `526096a`: ONE-SHOT.md's editing rules; CAPABILITIES THE SHAPE COMPILER RETIRED (s77). |
+| R26-200 | s79 Apply 5 (idle tokens, the camera on named things, the axes open) is on the checklist. Closed by P72 T4. | lane A `526096a`. |
+| R26-237 | The four s84 denials leave the proven set. Closed by P72 T3. | lane B `80fa2f5`: `status: denied`, `ruled_by: E99 s84`, the words verbatim; 11 proven; M38 on the approved Japan cut 0.76 -> 0.48 on P72-HG1 item 8. |
+| R26-238 | Every `when` under the 260 ceiling. Closed by P72 T2. | lane B `a4bfe6a`: remake + six species trimmed, the strict xfail retired. |
+| R26-240 | The effects layer ranks by field. Closed by P72 T2. | lane B `a4bfe6a`: `docs_find "Ken Burns" --layer effects` puts `plate_option:ken` first. |
+| R26-244 | The lab-log pins read s84. Closed by P72 T2. | lane B `a4bfe6a`: `test_lab_log.py` 17 passed. |
+| R26-252 | The lab lands a stamp on a stamp's clock. Closed by P72 T3. | lane B `80fa2f5`: 0.1542 s with `ink`, read from `authoring.audio`. |
+| R26-337 | A dock never covers the schematic's plot at 9:16. Closed by P72 T40. | lane B `d509ed7`: the phase names counted as ink, a band outside the plot before the corner; test_video_dock 64 + 2 skip. |
