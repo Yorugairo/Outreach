@@ -654,6 +654,116 @@
       }
     },
     {
+      "id": "page_species:level_join",
+      "axis": "page_species",
+      "token": "level_join",
+      "title": "The level join: a dashed level from one datum to another",
+      "aliases": [
+        {
+          "name": "Dashed LEVEL rule drawn from one datum to another",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:101"
+        },
+        {
+          "name": "Dashed level from one datum to another",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:883"
+        }
+      ],
+      "does": "On its word a dashed rule draws at one datum's level to another datum (or to the value axis), a dashed ring lands at each end, and the gap the page's own numbers make is written beside the far ring, never on the rule.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "SPANS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"level_join\", \"at\", \"dur\", \"from\", \"to\": <datum> | {series, index} | {y}, \"label\", \"series\"?, \"color\"?, \"side\"?, \"dy\"?, \"panel\"?, \"keep\"?} on a ledger row (a line or bars page)",
+        "example": "{\"kind\": \"level_join\", \"at\": 11.63, \"dur\": 1.71, \"from\": 124, \"to\": 225, \"label\": \"+5 pts\"}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (level-join-half-a-point)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the rule travels",
+          "does": "the `from` ring draws dash by dash and the dashed rule draws by length at its level toward the far end (min-jerk); the far ring draws as it arrives",
+          "trigger": "the species' `at`, over RING_A / RULE / RING_B of `dur`",
+          "dials": {
+            "RING_A": "0.0-0.3",
+            "RULE": "0.12-0.66",
+            "RING_B": "0.58-0.84"
+          }
+        },
+        {
+          "name": "the figure writes",
+          "does": "the gap is written glyph by glyph beside the far ring at the end tags' size, on the first side clear of the rule, the page's labels and the points, inside the plot frame where one is drawn; then the join holds",
+          "trigger": "LABEL of `dur`",
+          "dials": {
+            "LABEL": "0.7-1.0",
+            "PAD_PX": "14",
+            "CLEAR_PX": "10",
+            "FRAME_AIR_PX": "8"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos harvest v2 A9 (5 videos): a dashed level from one datum to another",
+          "became": "the rule and its two ends",
+          "record": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:101",
+          "tie": "recorded"
+        },
+        {
+          "source": "the dashed ring's dash law (ringEllipse, ringDashes, RING.DASH / DASH_GAP)",
+          "became": "the rule's dash rhythm and the two end rings",
+          "record": "content/video_engine/scripts/species/ring.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "the bracket's hand (Kalam, glyph by glyph, the series' ink)",
+          "became": "the figure's write",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "to",
+          "means": "`to: <index>` another datum of the series, `{series, index}` a datum of another series in the same unit, `{y}` the value axis at `from`'s own level (the axis form).",
+          "source_set": null
+        },
+        {
+          "token": "side",
+          "means": "`side: right|left|above|below` (+ `dy`, lines): the author's place for the figure, honoured; a place on the rule is a WARN with its numbers (E99 s106).",
+          "source_set": null
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/species/level_join.mjs",
+        "object": "LEVEL"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/level_join.mjs",
+        "symbol": "paintLevelJoin"
+      },
+      "doctrine": [
+        "P71 T10",
+        "C14 (the harvest v2 conflict: the label never on the rule)",
+        "E53 addendum",
+        "E99 s99",
+        "E99 s106",
+        "E99 s109"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "level-join-half-a-point",
+        "test": "content/video_engine/tests/kinetics/level_join.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "page_species:lit_stretch",
       "axis": "page_species",
       "token": "lit_stretch",

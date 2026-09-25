@@ -1267,6 +1267,223 @@ async function mount(doc) {
   /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
   if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.solo = paintSolo;
   /* KINETICS:END */
+  /* KINETICS:BEGIN level_join */
+  /* SPACE: page */
+  /* species/level_join.mjs - THE LEVEL JOIN (P71 T10, was P69 T39; the Bravos harvest v2's A9 "a dashed LEVEL rule drawn
+     from one datum to another", n=5, rank 4). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py
+     between KINETICS:BEGIN level_join and KINETICS:END, AFTER ease (it reads minJerk). Its region sits with the page
+     species', before paintPerform closes over the painter, for the reason span.mjs gives.
+
+     WHEN (`SPECIES_WHEN["level_join"]`, build_scene_timeline_f.py; BRAVOS-USE-WHEN.md A9): the sentence SPANS two numbers
+     on one series - "higher than at the depth of 2008", "twenty-eight, the most it has ever been" against the dot-com 23 -
+     and the rule JOINS the two data, so the eye reads the gap as a distance. Don't: put the label on the rule (C14).
+
+     THE LAW, a pure function of t:
+       the rule   - one dashed HORIZONTAL rule at `from`'s level, from the `from` datum to the far end's x, drawn BY LENGTH
+                    from `from` on the min-jerk clock (a rule that travels is motion, E99 s99). The far end is the `to`
+                    datum (the same series, or `to: {series, index}` on another series in the same unit) - so the gap
+                    between the rule's end and that datum IS the difference, made a distance - or, `to: {y}`, the value
+                    AXIS at `from`'s own level (the harvest's DOM 00:50 / BOOM 00:41: from the endpoint to the axis).
+                    Its dash is the dashed ring's rhythm (species/ring.mjs RING.DASH / DASH_GAP, stage px), read by the
+                    builder: ring.mjs is a STAGE module whose region sits after paintPerform, so it cannot be imported
+                    here - the builder hands its law in (`sd.dash`, `sd.gap`, and the ring's own dashes, below).
+       the rings  - a dashed ring lands at each end: on `from` as the rule leaves it, on the far end as the rule arrives.
+                    They are the ring species' OWN dashes (ringDashes round a point: the MIN_RX x MIN_RY ellipse at
+                    RING_K, drawn dash by dash clockwise from the top), built once round the origin by the builder and
+                    moved here. A dash that would stand on one of the page's own words (an end tag beside the last datum,
+                    a tick label) is not drawn: the ring OPENS toward the word rather than strike through it.
+       the label  - the figure the claim turns on, written by the hand glyph by glyph as the far ring closes. It is placed
+                    OFF THE RULE BY CONSTRUCTION (C14; the E53 addendum's mislabel): beside the far ring, on the first
+                    side of right / the gap's own side (above when the far datum stands over the rule) / the other side /
+                    left whose box is clear of the rule, the page's own labels, the series' points and the chart's edge -
+                    least overlap when none is. An AUTHORED `side` (and `dy`, lines of its own size) is honoured as
+                    written (E99 s106: the engine advises, the author decides); the compiler WARNs, with its numbers, when
+                    the authored place lands on the rule. The side is decided ONCE, on the build's geometry, so a rescale
+                    moves the label with its ring and never flips it. It is a PEER OF THE END TAG, not a card: on a
+                    phone-type page (the long form) it is set at the end tags' own size for the active preset, and where
+                    the page draws a PLOT FRAME (the long form's panel) every side's box is nudged inside it, FRAME_AIR
+                    clear of the border - left / up first - before the side is chosen (frame read, 2026-09-24: at the
+                    phone floor it stood bigger than the end tags and half over the frame's border). A page with no frame
+                    (the flat face) is untouched.
+       the leave  - the page's own (the compiler's `leave_at`, a page-bound species, R26-219) and an undraw of the page's
+                    line (or of this series) at or after the word, on the undraw's own clock (the lit stretch's rule).
+     Re-read every frame (R26-28): both anchors come off the ACTIVE state's live points, so a rescale moves the join with
+     the data, and an end the window has dropped hides it rather than joining the wrong datum. The dials below are ours
+     to tune (42 s42.5), not findings. */
+
+  const LEVEL = Object.freeze({
+    RING_A: [0.0, 0.3],    /* the share of the word in which the `from` ring draws, dash by dash */
+    RULE: [0.12, 0.66],    /* ... the rule draws by length from `from` to the far end */
+    RING_B: [0.58, 0.84],  /* ... the far ring draws as the rule arrives */
+    LABEL: [0.7, 1.0],     /* ... and the label writes: it lands inside the word, never after it */
+    PAD_PX: 14,            /* the air between a ring's edge and the label, in stage px */
+    CLEAR_PX: 10,          /* how far the label's box keeps off the rule, in stage px (C14) */
+    ASC: 0.8,              /* the label's box above its baseline, in its own size (a Kalam cap + its ascenders) */
+    DESC: 0.22,            /* ... and below it */
+    MID: 0.3,              /* a label written BESIDE a ring centres its x-height on the ring: the baseline this far down */
+    RING_K: 0.55,          /* an end ring is the ring species' own round a point, at this scale: an END MARK (Bravos BUB 2:48 rings
+                              each end small), never a callout - at 1.0 the far ring stood over the line's own end tag */
+    OVERLAP: 1.6,          /* a glyph fades in over this many glyphs' share; the write is spread over n + OVERLAP - 1 shares so
+                              the LAST letter finishes with the window (compare.mjs's law; R26-314: never half-inked) */
+    FRAME_AIR_PX: 8,       /* where the page draws a plot frame, the label's box keeps this far inside its border, in stage px */
+    SIDES: Object.freeze(["right", "left", "above", "below"]),
+  });
+
+  const lv01 = (v) => Math.min(1, Math.max(0, v));
+  const winF = (u, w) => lv01((u - w[0]) / Math.max(1e-6, w[1] - w[0]));
+
+  /* THE CLOCK at t: the draw fraction of each phase (0..1). `on` is false before the word. */
+  const levelPose = (sp, t) => {
+    const dur = Math.max(0.001, +sp.dur || 1), u = (t - +sp.at) / dur;
+    return { on: u >= 0, ringA: winF(u, LEVEL.RING_A), rule: minJerk(winF(u, LEVEL.RULE)), ringB: winF(u, LEVEL.RING_B),
+             label: winF(u, LEVEL.LABEL) };
+  };
+
+  /* one dash's own share of its ring's draw (the ring species' per-dash law, ringDashF, restated for a fraction `f`) */
+  const levelDashF = (f, dash) => lv01((f - dash.t0) / Math.max(1e-6, dash.t1 - dash.t0));
+
+  /* each glyph's opacity for a write fraction `w` - the bracket's hand (a glyph fades in over OVERLAP of its own share),
+     spread so the last glyph is whole exactly when w reaches 1 (compareGlyph's `per = 1 / (n + OVERLAP - 1)`) */
+  const levelGlyphs = (w, n) => {
+    const per = 1 / (Math.max(1, n) + LEVEL.OVERLAP - 1);
+    return Array.from({ length: n }, (_, j) => lv01((w - j * per) / (per * LEVEL.OVERLAP)));
+  };
+
+  /* a ring dash's box round the origin, in the ring's own units (stage px): read once off its path ("M x y L x y ...") */
+  const levelDashBox = (d) => {
+    const n = String(d || "").replace(/[ML]/g, " ").trim().split(/\s+/).map(Number);
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (let j = 0; j + 1 < n.length; j += 2) { x0 = Math.min(x0, n[j]); x1 = Math.max(x1, n[j]); y0 = Math.min(y0, n[j + 1]); y1 = Math.max(y1, n[j + 1]); }
+    return [x0, y0, x1, y1];
+  };
+
+  /* does a dash, its ring centred at P and scaled 1/k into the chart, stand on one of the page's words? */
+  const levelDashYields = (box, P, k, words) => {
+    const b = [P[0] + box[0] / k, P[1] + box[1] / k, P[0] + box[2] / k, P[1] + box[3] / k];
+    return (words || []).some((w) => b[0] < w[2] && w[0] < b[2] && b[1] < w[3] && w[1] < b[3]);
+  };
+
+  /* THE RULE at a draw fraction: from A along the level to the far end's x. null when there is nothing to draw. */
+  const levelRuleD = (A, E, f) => {
+    if (!A || !E || !(f > 0)) return null;
+    const x = A[0] + (E[0] - A[0]) * lv01(f);
+    return "M" + A[0].toFixed(1) + " " + A[1].toFixed(1) + " L" + x.toFixed(1) + " " + A[1].toFixed(1);
+  };
+
+  /* the far end: the `to` datum, or - the axis form - the value axis at `from`'s own level */
+  const levelFarEnd = (A, B, axisX) => (B ? B : (A && Number.isFinite(+axisX) ? [+axisX, A[1]] : null));
+
+  /* THE NUDGE into a plot frame: the (dx, dy) that moves `box` inside `frame` ([x0, y0, x1, y1], chart units) with `air`
+     clear of its border - a box past the right or the top edge moves left / up, one past the left or the bottom right /
+     down. `inside` is false when the box is wider or taller than the frame's room (it is then aligned left / top). */
+  const levelNudge = (box, frame, air) => {
+    if (!frame) return { dx: 0, dy: 0, inside: true };
+    const a = +air || 0, fx0 = frame[0] + a, fy0 = frame[1] + a, fx1 = frame[2] - a, fy1 = frame[3] - a;
+    let dx = 0, dy = 0;
+    if (box[2] > fx1) dx = fx1 - box[2];
+    if (box[0] + dx < fx0) dx = fx0 - box[0];
+    if (box[1] < fy0) dy = fy0 - box[1];
+    else if (box[3] > fy1) dy = fy1 - box[3];
+    if (box[3] + dy > fy1 && box[1] + dy > fy0) dy = Math.max(fy0 - box[1], fy1 - box[3]);
+    return { dx, dy, inside: box[2] - box[0] <= fx1 - fx0 + 1e-9 && box[3] - box[1] <= fy1 - fy0 + 1e-9 };
+  };
+
+  /* A LABEL'S BOX for one side of the far ring, in the chart's units: {x, y (baseline), anchor, box: [x0, y0, x1, y1],
+     inside}. `g.frame` (the page's plot frame, or null) and `g.air` nudge it inside the frame (levelNudge). */
+  const levelLabelAt = (side, E, g) => {
+    const { rx, ry, pad, w, fs } = g, asc = fs * LEVEL.ASC, desc = fs * LEVEL.DESC, dy = (+g.dy || 0) * fs;
+    let x, y, anchor;
+    if (side === "right") { x = E[0] + rx + pad; y = E[1] + fs * LEVEL.MID; anchor = "start"; }
+    else if (side === "left") { x = E[0] - rx - pad; y = E[1] + fs * LEVEL.MID; anchor = "end"; }
+    else if (side === "above") { x = E[0]; y = E[1] - ry - pad - desc; anchor = "middle"; }
+    else { x = E[0]; y = E[1] + ry + pad + asc; anchor = "middle"; }
+    y += dy;
+    const x0 = anchor === "start" ? x : anchor === "end" ? x - w : x - w / 2, box = [x0, y - asc, x0 + w, y + desc];
+    const n = levelNudge(box, g.frame || null, g.air);
+    return { side, x: x + n.dx, y: y + n.dy, anchor, box: [box[0] + n.dx, box[1] + n.dy, box[2] + n.dx, box[3] + n.dy], inside: n.inside };
+  };
+
+  const hit = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+  const area = (a, b) => Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0])) * Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1]));
+
+  /* THE RULE'S BAND: the box the label may never enter (C14) - the rule's x span at its level, CLEAR either side */
+  const levelRuleBand = (A, E, clear) => [Math.min(A[0], E[0]), A[1] - clear, Math.max(A[0], E[0]), A[1] + clear];
+
+  /* is a label box ON the rule (C14)? */
+  const levelOnRule = (box, A, E, clear) => hit(box, levelRuleBand(A, E, clear));
+
+  /* the cost of one placement: on the rule dominates, then the page's labels, the series' points, the chart's edge */
+  const levelCost = (box, g) => {
+    const band = levelRuleBand(g.A, g.E, g.clear);
+    let c = hit(box, band) ? 1e6 + area(box, band) : 0;
+    for (const b of g.boxes || []) if (hit(box, b)) c += 1e3 + area(box, b);
+    for (const p of g.pts || []) if (p[0] >= box[0] && p[0] <= box[2] && p[1] >= box[1] && p[1] <= box[3]) c += 100;
+    const W = g.W, H = g.H;
+    if (Number.isFinite(W) && Number.isFinite(H)) {
+      const out = Math.max(0, -box[0]) + Math.max(0, box[2] - W) + Math.max(0, -box[1]) + Math.max(0, box[3] - H);
+      if (out > 0) c += 1e4 + out;
+    }
+    return c;
+  };
+
+  /* THE SIDE, decided once on the build's geometry: the authored one when there is one (s106), else the first clear
+     side in the auto order - right, the gap's own side, the other, left - else the cheapest. `g` carries A, E, the ring
+     radii, the pad, the label's width and size, the clear band, the page's label boxes, the series' points, W and H. */
+  const levelSide = (g, authored) => {
+    if (authored && LEVEL.SIDES.indexOf(authored) >= 0) return authored;
+    const up = g.E[1] <= g.A[1];   /* the far datum stands at or over the rule (svg y grows down) */
+    const order = ["right", up ? "above" : "below", up ? "below" : "above", "left"];
+    let best = order[0], bestC = Infinity;
+    for (const s of order) {
+      const c = levelCost(levelLabelAt(s, g.E, g).box, g);
+      if (c === 0) return s;
+      if (c < bestC) { best = s; bestC = c; }
+    }
+    return best;
+  };
+
+  /* THE LEAVE: `lv` is the builder's {at, dur} of the undraw (or the replacing verb) that takes the line, or null (it stands) */
+  const levelLeave = (lv, t) => (lv && Number.isFinite(+lv.at) ? minJerk(lv01((t - +lv.at) / Math.max(0.001, +lv.dur || 1))) : 0);
+
+  /* THE PAINTER (P71 T10). `sd` is the perform layer's built join: `g` (the group), `rule`, `ringA` / `ringB` ({g, dashes:
+     [{p, t0, t1, box}]}), `words` (the page's own label boxes, [x0, y0, x1, y1], measured once by the builder), `label` +
+     `lg` (its glyph tspans), the resolved `side`, the label geometry `lg0` ({rx, ry, pad, w, fs, dy}), the series `si`,
+     the far end `to` ({si, i} or {axis: true}), `leave` (the verb that takes the line, or null), `k` (stage px per
+     chart unit) and `frameOf(st)` (the active state's plot frame, [x0, y0, x1, y1], or null - a page with none).
+     `ctx` is the PAGE species context: `datumNow` is lpDatumNow, handed in by name, so `node --test` calls this with
+     recorders and no DOM; the builder's `sd.axisX(st)` is the active state's value-axis x (the axis form only). */
+  const paintLevelJoin = (sd, t, st, ctx) => {
+    const sp = sd.sp, pose = levelPose(sp, t), lv = levelLeave(sd.leave, t);
+    const hide = () => sd.g.setAttribute("opacity", 0);
+    if (!pose.on || lv >= 1) { hide(); return; }
+    const A = ctx.datumNow(st, sd.si, sp.from | 0);
+    const B = sd.to.axis ? null : ctx.datumNow(st, sd.to.si, sd.to.i);
+    const E = levelFarEnd(A, B, sd.to.axis && sd.axisX ? sd.axisX(st) : NaN);
+    if (!A || !E) { hide(); return; }   /* R26-28: an end the window dropped joins nothing */
+    sd.g.setAttribute("opacity", (1 - lv).toFixed(3));
+    const d = levelRuleD(A, E, pose.rule);
+    sd.rule.setAttribute("d", d || "M0 0");
+    sd.rule.setAttribute("opacity", d ? 1 : 0);
+    const ring = (R, P, f) => {
+      R.g.setAttribute("transform", "translate(" + P[0].toFixed(1) + " " + P[1].toFixed(1) + ") scale(" + (1 / sd.k).toFixed(5) + ")");
+      for (const dh of R.dashes) {
+        const q = levelDashF(f, dh), off = dh.box && levelDashYields(dh.box, P, sd.k, sd.words);   /* a dash on the page's words stays undrawn */
+        dh.p.setAttribute("stroke-dashoffset", (1 - q).toFixed(4));
+        dh.p.setAttribute("opacity", q > 0 && !off ? 1 : 0);
+      }
+    };
+    ring(sd.ringA, A, pose.ringA);
+    ring(sd.ringB, E, pose.ringB);
+    const at = levelLabelAt(sd.side, E, sd.frameOf ? Object.assign({}, sd.lg0, { frame: sd.frameOf(st) }) : sd.lg0);   /* the ACTIVE state's frame */
+    sd.label.setAttribute("x", at.x.toFixed(1)); sd.label.setAttribute("y", at.y.toFixed(1));
+    sd.label.setAttribute("text-anchor", at.anchor);
+    const ops = levelGlyphs(pose.label, sd.lg.length);
+    sd.lg.forEach((ts, j) => ts.setAttribute("opacity", ops[j].toFixed(3)));
+  };
+
+  /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
+  if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.level_join = paintLevelJoin;
+  /* KINETICS:END */
   /* KINETICS:BEGIN thread */
   /* species/thread.mjs - THE WIRE (P50 T15, HF-16: "the three threads - the wire, the ruler, the protagonist chip -
      one continuous line as the film's spine"). SOURCE OF TRUTH, inlined into the scene-evidence player by
@@ -12540,7 +12757,7 @@ async function mount(doc) {
     WIDE_EPS: 1e-4,                                                /* P69 T8c: a pose box this close to its home's aspect IS the home chart at another size (T8b's move) */
     WIDE_KEEP: 4,                                                  /* ... and at most this many re-laid-out builds are kept per panel (a cache: the frame is a function of the width alone) */
   });
-  const LP_PANEL_KINDS = Object.freeze(["build_to", "undraw", "figure", "bracket", "spread", "span", "chart_to", "relight", "lit_stretch", "axis_tag"]);   /* build_scene_timeline_f.PANEL_SPECIES (P69 T36: the light travels a line on its own panel) */
+  const LP_PANEL_KINDS = Object.freeze(["build_to", "undraw", "figure", "bracket", "spread", "span", "chart_to", "relight", "lit_stretch", "axis_tag", "level_join"]);   /* build_scene_timeline_f.PANEL_SPECIES (P69 T36: the light travels a line on its own panel; P71 T10: a level join reads both ends on its panel) */
   const lpPanelDefault = (n, portrait) => (portrait ? "stack" : n >= 4 ? "quad" : "row");
   const lpPanelCells = (layout, k, R) => {   /* `k` cells of a layout over R {x, y, w, h}, reading order (ledger_page.panel_cells) */
     if (!(k > 0)) return [];
@@ -14699,7 +14916,57 @@ async function mount(doc) {
       axisTags = { tags, labels, boxesOf, leaveOf: pageLeave };
     }
     /* P71 T9 axis_tag: END */
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags };
+    /* P71 T10 - THE LEVEL JOIN (the Bravos harvest v2's A9; was P69 T39). One dashed rule at `from`'s level, from the
+       `from` datum to the far end's x, a dashed ring at each end, the gap written beside the far ring and never on the
+       rule (C14). species/level_join.mjs owns the law and re-reads both ends on the ACTIVE state every frame, so this is
+       only its DOM, built once: the rule in the ring species' own dash rhythm (RING.DASH / DASH_GAP, stage px, in this
+       chart's units); the two rings as the ring species' OWN dashes round a point (ringDashes(ringEllipse(...)) at the
+       origin, stage px - the painter moves and scales them; ring.mjs is a stage module after paintPerform, so its law is
+       handed in here rather than imported); the figure as the bracket writes one (Kalam, glyph by glyph, in the series'
+       ink unless a colour is named; at the s90 floor in a phone profile). The SIDE is decided ONCE here on the build's
+       geometry (levelSide: the authored one, else the first side clear of the rule, the page's labels and the points),
+       so a rescale moves the figure with its ring and never flips it. The leave is the lit stretch's rule (an undraw of
+       the page's line or this series, or a verb that replaces the page, at or after the word, on its own clock); the
+       compiler's leave_at rides the dispatch (pageLeave). */
+    const levelJoins = pageSpecies(scene, "level_join").map((sp) => {
+      const si = sp.series | 0, k = st.stagePx > 0 ? st.stagePx : 1, to = sp.to;
+      const far = to && typeof to === "object" ? ("y" in to ? { axis: true } : { si: to.series | 0, i: to.index | 0 }) : { si, i: to | 0 };
+      const base = (st.paths || []).filter((pp) => (pp.si | 0) === si && !pp.muted).map((pp) => pp.p.getAttribute("stroke"))[0] || "var(--lp-chalk)";
+      const col = sp.color ? (PS_PAL[sp.color] || sp.color) : base;
+      const fsz = lpPhoneTypeOf(st) ? lpTypeU(st, "tag") : fs;   /* a PEER of the end tag: its size for the active preset (the flat face: the bracket's) */
+      const g = lpEl("g", "lp-level", surf, { opacity: 0 });
+      const rule = lpEl("path", "bk lp-level-rule", g, { d: "M0 0", stroke: col, opacity: 0,
+                                                       "stroke-dasharray": (RING.DASH / k).toFixed(2) + " " + (RING.DASH_GAP / k).toFixed(2) });
+      rule.style.strokeLinecap = "butt";
+      const sw = parseFloat(getComputedStyle(rule).strokeWidth) || (P ? 5 : 3), eR = ringEllipse({ x: 0, y: 0, w: 0, h: 0 });
+      const e0 = { cx: 0, cy: 0, rx: eR.rx * LEVEL.RING_K, ry: eR.ry * LEVEL.RING_K };   /* an END mark: the ring's own, smaller */
+      const mkRing = () => {
+        const rg = lpEl("g", "lp-level-ring", g, {});
+        return { g: rg, dashes: ringDashes(e0).map((dh) => {
+          const p = lpEl("path", "bk", rg, { d: dh.d, stroke: col, pathLength: 1, "stroke-dasharray": "1 1", "stroke-dashoffset": 1, opacity: 0 });
+          p.style.strokeWidth = (sw * k).toFixed(2) + "px";   /* the rule's own weight, drawn in the ring's stage px */
+          return { p, t0: dh.t0, t1: dh.t1, box: levelDashBox(dh.d) }; }) };
+      };
+      const ringA = mkRing(), ringB = mkRing();
+      const label = lpEl("text", "bklab", g, { x: 0, y: 0, "text-anchor": "start", style: "font-size:" + fsz + "px;fill:" + col });
+      const lg = [...String(sp.label || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
+      const axisX = (S0) => { const S = (S0.states && S0.states[S0.active | 0]) || S0; return S.plot ? S.plot.L : NaN; };
+      const frameOf = (S0) => { const S = (S0.states && S0.states[S0.active | 0]) || S0, r = S.lfPanelEl;   /* the long form's plot frame (lpLongformPlot), or none */
+        if (!r) return null; const x = +r.getAttribute("x"), y = +r.getAttribute("y");
+        return [x, y, x + +r.getAttribute("width"), y + +r.getAttribute("height")]; };
+      const lg0 = { air: LEVEL.FRAME_AIR_PX / k, rx: e0.rx / k, ry: e0.ry / k, pad: LEVEL.PAD_PX / k, w: figWidth(label, sp.label, fsz), fs: fsz, dy: +sp.dy || 0 };
+      const A0 = lpDatumNow(st, si, sp.from | 0), E0 = levelFarEnd(A0, far.axis ? null : lpDatumNow(st, far.si, far.i), far.axis ? axisX(st) : NaN);
+      const pts = []; for (let i = 0; i < (st.linePts || []).length; i++) for (const q of lpPointsNow(st, i)) pts.push(q.p);
+      const words = (st.labBoxes || []).map((b) => [b[0], b[1], b[0] + b[2], b[1] + b[3]]);   /* the page's own words, [x0, y0, x1, y1] */
+      const side = A0 && E0 ? levelSide(Object.assign({ A: A0, E: E0, clear: LEVEL.CLEAR_PX / k, pts, W: G.W, H: G.H, boxes: words }, lg0, { frame: frameOf(st) }), sp.side)
+        : (sp.side || "right");
+      const takes = [...pageSpecies(scene, "undraw").filter((u) => { const us = u.series ?? (u.target || {}).series; return us == null || (us | 0) === si; }),
+                     ...pageSpecies(scene, "chart_to").filter((c) => c.to === "recast" || c.to === "morph" || c.to === "remake")]
+        .filter((v) => v.at >= sp.at).sort((a, b) => a.at - b.at);
+      return { sp, si, to: far, g, rule, ringA, ringB, label, lg, side, lg0, k, axisX, words, frameOf,
+               leave: takes.length ? { at: takes[0].at, dur: takes[0].dur || 1 } : null };
+    });
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags, levelJoins };
   };
   /* the X's two strokes over the named cells, the cells dimming under them, and the share written by
      the hand: every number is species/treemap.mjs's, this is the call */
@@ -14815,6 +15082,7 @@ async function mount(doc) {
        NEXT, in this order: `bracket`, `spread` - paintBracket and paintSpread still sit above as engine code. */
     for (const sd of PF.spans || []) { const p = PAGE_PAINTERS[sd.sp.kind || "span"]; if (p) p(sd, t, st, PAGE_CTX); }
     for (const ld of PF.lits || []) if (PAGE_PAINTERS.lit_stretch) PAGE_PAINTERS.lit_stretch(ld, t, st, PAGE_CTX);   /* P69 T36: the light that travels a stretch of the line on its word (species/lit_stretch.mjs) */
+    for (const lj of PF.levelJoins || []) if (PAGE_PAINTERS.level_join) { PAGE_PAINTERS.level_join(lj, t, st, PAGE_CTX); const lv = pageLeave(lj.sp, t); if (lv > 0) lj.g.setAttribute("opacity", ((+lj.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3)); }   /* P71 T10: the dashed level from one datum to another, its figure off the rule (species/level_join.mjs); R26-219: it leaves with its page */
     if (PF.solo && PAGE_PAINTERS.solo) PAGE_PAINTERS.solo(PF.solo, t, st, PAGE_CTX);   /* P69 T37: the others mute on the word (species/solo.mjs) - after the lights, so a light on a muted series mutes with it */
     for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) { PAGE_PAINTERS.figure(fg, t, st, PAGE_CTX);
       const lv = pageLeave(fg.sp, t);   /* R26-219: the hand wrote it at a datum of the page that has just been replaced */

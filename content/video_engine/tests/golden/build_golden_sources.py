@@ -4285,6 +4285,63 @@ SURFACES.update({"axis-tag-two-thousand": axis_tag_two_thousand})
 FRAME_T.update({"axis-tag-two-thousand": round(AXTAG_AT + 0.4, 3)})   # the plan's 80.49 + 0.4 s: pill and guide landed
 
 
+# ---- P71 T10 (was P69 T39; harvest v2 A9): THE LEVEL JOIN - a dashed level from one datum to another --------------------
+#   level-join-half-a-point  Steel and Paper H row 14's yardstick page (`ledger:ev-capital-formation-v1:line:225:right`,
+#                     `idle=live`, full stage, 16:9, the PLAIN profile - the row's `;readability=longform` would inline the
+#                     1.17 MB long-form face into the committed uris, so `test_level_join` plays the same page long-form for
+#                     the s90 floor) and its own sentence: "At the dot-com peak it hit twenty-three cents on the dollar.
+#                     Today it's twenty-eight, the most it has ever been." The take's words shifted by -170.0 s so the page
+#                     has built first, as the row builds it (the scale line held at nothing, the tech line climbing to the
+#                     dot-com peak on "hit", the page's own 23% written there on "twenty-three", the last twenty-five years
+#                     drawn on "Today it's" landing on "twenty-eight"); then on "the most it has ever been" (181.625 -
+#                     183.338 -> 11.63 - 13.34) the dashed level runs from the dot-com high (datum 124, 23.028) to today
+#                     (datum 225, 28.184), a ring at each end, and "+5 pts" - the page's own arithmetic, 5.156 - is written
+#                     beside today's ring, off the rule. The plan's row-15 beat ("the Fed back above five and a half") has no
+#                     datum at the level it speaks (5.5 is a rule, not a point), so the golden takes row 14's (the plan's
+#                     own fallback); the name is the plan's. Judged at the figure's write end.
+LEVEL_PROJECT = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
+LEVEL_PLATE = "ledger:ev-capital-formation-v1:line:225:right;idle=live"
+LEVEL_SHIFT = 170.0
+LEVEL_AT = round(181.625 - LEVEL_SHIFT, 2)                   # "the most it has ever been"
+LEVEL_DUR = round(183.338 - 181.625, 2)                      # ... to the end of "been."
+LEVEL_SPECIES = [
+    {"kind": "build_to", "at": 0.0, "dur": 0.4, "series": 0, "target": {"kind": "datum", "index": 0}},    # the page lands on its axes
+    {"kind": "build_to", "at": 0.0, "dur": 0.4, "series": 1, "target": {"kind": "datum", "index": 0}},    # the scale line held at nothing
+    {"kind": "build_to", "at": 2.0, "dur": round(178.512 - LEVEL_SHIFT - 2.0, 2), "series": 0,
+     "target": {"kind": "datum", "index": 124}},                                                          # the pen climbs to the dot-com peak on "hit"
+    {"kind": "figure", "at": round(178.512 - LEVEL_SHIFT, 2), "dur": 1.4, "target": {"kind": "datum", "index": 124, "series": 0},
+     "text": "23%"},                                                                                      # "twenty-three": the object's own mark
+    {"kind": "build_to", "at": round(180.438 - LEVEL_SHIFT, 2), "dur": 0.5, "series": 0,
+     "target": {"kind": "datum", "index": 225}},                                                          # "Today it's" -> "twenty-eight"
+    {"kind": "level_join", "at": LEVEL_AT, "dur": LEVEL_DUR, "from": 124, "to": 225, "label": "+5 pts"},   # "the most it has ever been"
+]
+
+
+def level_join_half_a_point(extra: list | None = None, longform: bool = False) -> tuple[dict, dict]:
+    """The golden's timeline; `extra` species (a probe's rescale or undraw) and `longform` (the row's own profile) are for
+    test_level_join's reads only - the committed golden is the plain call."""
+    import build_scene_timeline_f as BST
+    species = [dict(e) for e in LEVEL_SPECIES] + [dict(e) for e in (extra or [])]
+    plate = LEVEL_PLATE + (";readability=longform" if longform else "")
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(plate, (0, 0, 0), LEVEL_PROJECT)
+        BST.stamp_full_stage(world["page"])
+        BST.derive_rescale_states(world, species, plate, LEVEL_PROJECT)   # the compiler's own page checks: check_level_join's truth
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: a dashed level from the dot-com high to today (level_join)", scenes, {}, "16:9")
+    return tl, (dict(_base_uris(), **BST.longform_assets(tl)) if longform else _base_uris())
+
+
+SURFACES.update({"level-join-half-a-point": level_join_half_a_point})
+FRAME_T.update({"level-join-half-a-point": round(LEVEL_AT + LEVEL_DUR, 2)})   # the figure's write end: 13.34
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

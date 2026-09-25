@@ -408,6 +408,10 @@ SPECIES_EVENTS["ring"] = ("at",)
 # are events: it leaves `from` on its word, and it lands at `to` inside the word (credited at the window's end). What it
 # does after that is an annotation (s91) and earns nothing.
 SPECIES_EVENTS["lit_stretch"] = ("at", "end")
+# P71 T10: THE LEVEL JOIN's rule TRAVELS - it draws by length from `from` to the far end over the word (s99) - so both
+# edges are events, as the lit stretch's are: it leaves on its word and lands (the far ring, the figure) at its end.
+# What it does after that is standing ink (s91) and earns nothing.
+SPECIES_EVENTS["level_join"] = ("at", "end")
 # P69 T48 / E99 s109 (4): the EXPLODE - the named slice leaves the pie along its bisector over the word: it moves, so
 # both edges are events (it starts on its word and lands out at its end).
 SPECIES_EVENTS["explode"] = ("at", "end")
@@ -3327,8 +3331,8 @@ EMPTY_PLOT_FAIL_S = 4.0    # ... and past four the chart has stopped proving any
 EMPTY_PLOT_EPS_S = 0.01    # two stretches of ink closer than this are one (the compiler's 2 dp clocks)
 # authoring/shapes.PLOT_MARKS less `undraw` (it takes ink, it lays none) - MIRRORED, since shapes imports this module
 PLOT_INK_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "span", "ring", "lit_stretch", "freeze",
-                  "explode", "member")
-PLOT_HELD_MARKS = ("lit_stretch",)       # authoring/shapes.HELD_MARKS: a light that has landed stands to the page's end
+                  "explode", "member", "level_join")   # P71 T10: the join is ink on the plot
+PLOT_HELD_MARKS = ("lit_stretch", "level_join")   # authoring/shapes.HELD_MARKS: a light that has landed stands to the page's end (P71 T10: and a join)
 NO_PLOT_BUILDERS = ("share", "treemap", "object")   # no axes: the engine's E64 axis hand-over has nothing to hand them
 LINE_INK_BUILDERS = ("dense-line", "story")         # the builders whose ink can be lines alone - capped, then undrawn
 STATELESS_VERBS = ("park", "compare")              # a transform on the standing chart, never a state change

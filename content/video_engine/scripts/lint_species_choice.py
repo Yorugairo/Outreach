@@ -80,7 +80,7 @@ ACT_SPECIES = {
     "EXPLAINS": ("note", "plate use=bridge", "chip", "flow"),
     "TURNS": ("figure", "spotlight", "callout", "note", "freeze"),   # P69 T49: the stage STOPS on the number the turn lands on (E99 s99)
     "BREAKS": ("burst", "stack", "burst:stop", "placeholder", "axis capsule"),
-    "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)
+    "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch", "level_join"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)
     "SETS": ("chart_to:park", "figure", "retitle"),
     "RETRACTS": ("retitle", "squiggle"),
 }
@@ -275,6 +275,8 @@ PROPOSE_FILL = {
     "spread": (("from", "the series index the gap starts at"), ("to", "the second series' index (or `to_rule`)")),
     B.SPECIES_SPAN: (("from", _EDGE), ("to", _EDGE), ("label", "the stretch of time's own name")),
     B.SPECIES_LIT_STRETCH: (("from", _EDGE + "; the light leaves here"), ("to", _EDGE + "; ... and lands here")),
+    B.SPECIES_LEVEL_JOIN: (("from", "the datum index whose LEVEL the rule holds"), ("to", "the other datum index (or {y}: the axis)"),
+                           ("label", "the gap the page's own numbers make, written off the rule")),   # P71 T10
     B.SPECIES_SOLO: (("series", "the ONE series the sentence names (a line page) - or `bar`, the ONE bar (a bars page)"),),
     B.SPECIES_AXIS_TAG: (("x", "the year the sentence names - a tick or a datum of the page (a bars page: the bar)"),),   # P71 T9
     B.SPECIES_CHIP: (("icon", "a SOURCED glyph under assets/icons"), ("label", "the thing the chip stands for")),

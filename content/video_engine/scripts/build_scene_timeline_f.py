@@ -791,6 +791,33 @@ AXIS_TAG_KEYS = (("kind", "at", "dur", "x", "label", "series", "guide", "panel",
 AXIS_TAG_MAX = 3   # the don't (USE-WHEN :323): "more than 2-3 tags in one hold"; species/axis_tag.mjs AXTAG.MAX_STANDING
 AXIS_TAG_LINE = ("dense-line", LPG.PANEL_LINE)   # the pages whose x axis carries values: a line page, a line panel ...
 AXIS_TAG_BARS = ("story", LPG.PANEL_BARS)        # ... and the pages whose x axis is the bars' categories
+# P71 T10 (was P69 T39; the Bravos harvest v2's A9 "a dashed LEVEL rule drawn from one datum to another", n=5, rank 4) -
+# THE LEVEL JOIN. A PAGE species: one dashed horizontal rule at `from`'s level, from the `from` datum to the far end's x -
+# the `to` datum (this series, or `{series, index}` on another series in the SAME unit), or `{y}`, the value axis at
+# `from`'s own level (DOM 00:50, BOOM 00:41) - a dashed ring at each end, and the figure the claim turns on written OFF
+# the rule, beside the far ring (C14; the E53 addendum's mislabel). Its law and painter are species/level_join.mjs; this
+# file owns its grammar (`_validate_level_join`) and the page it joins on (`check_level_join`: the ends the page has, one
+# unit, and the TRUTH rule - the gap the label writes is the page's own arithmetic, E28 / s109 - hard; an authored place
+# on the rule is a WARN with its numbers, E99 s106). It WRITES on its page, so it leaves with it (PAGE_BOUND_SPECIES).
+SPECIES_LEVEL_JOIN = "level_join"
+SPECIES_KINDS += (SPECIES_LEVEL_JOIN,)
+PAGE_SPECIES += (SPECIES_LEVEL_JOIN,)
+PANEL_SPECIES += (SPECIES_LEVEL_JOIN,)       # both anchors are read on the ONE panel it names (`panel: <i>`)
+PAGE_BOUND_SPECIES += (SPECIES_LEVEL_JOIN,)  # R26-219: a figure written on the page leaves with the page
+SPECIES_WHEN[SPECIES_LEVEL_JOIN] = ("the sentence SPANS TWO numbers on one series ('higher than at the depth of 2008', "
+                                    "'twenty-eight, the most it has ever been' against the dot-com 23) at the proof - a "
+                                    "dashed level joins the two data and the gap is written beside it; never on the rule")
+LEVEL_JOIN_KEYS = ("kind", "at", "dur", "from", "to", "label", "series", "color", "side", "dy", "panel", "keep",
+                   *ROW_PATH_KEYS, "leave_at", "leave_s", "leave_clamped")   # the last three: stamp_page_leave's own record
+LEVEL_JOIN_SIDES = ("right", "left", "above", "below")   # species/level_join.mjs LEVEL.SIDES
+LEVEL_JOIN_DY_MAX = 4.0                                  # an authored `dy` moves the figure by lines of its own size, this far
+LEVEL_JOIN_BUILDERS = {"dense-line": "series", "story": "bar"}   # the pages whose marks are data with a level: a line, bars
+# THE PLACEMENT ESTIMATE's dials, MIRRORED from species/level_join.mjs LEVEL (the engine's label law, pinned equal by
+# test_level_join) and species/ring.mjs RING.MIN_RX / MIN_RY (the ring round a point): stage px and em.
+LEVEL_JOIN_PAD_PX, LEVEL_JOIN_CLEAR_PX, LEVEL_JOIN_FRAME_AIR_PX = 14, 10, 8
+LEVEL_JOIN_ASC, LEVEL_JOIN_DESC, LEVEL_JOIN_MID = 0.8, 0.22, 0.3
+LEVEL_JOIN_RING_PX = (54.0 * 0.55, 40.0 * 0.55)   # RING.MIN_RX / MIN_RY at LEVEL.RING_K: an end mark, not a callout
+LEVEL_JOIN_EM_W = 0.52   # [DERIVED: Kalam 700's mean advance, the figure's own estimate] - a WARN's width, never a place
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -1723,6 +1750,7 @@ SPECIES_TARGETS = {
 SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANELS by index, never a coordinate
 SPECIES_TARGETS[SPECIES_MEMBER] = ()   # P69 T45: a tile of a membership bar, by index - the page owns where it stands
 SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
+SPECIES_TARGETS[SPECIES_LEVEL_JOIN] = ()   # P71 T10: a level join names its two ends as DATA; the chart owns where they are
 SPECIES_TARGETS[SPECIES_SOLO] = SPECIES_TARGETS[SPECIES_UNSOLO] = ()   # P69 T37: a solo names a series or a bar by index; the chart owns where it is
 SPECIES_TARGETS[SPECIES_AXIS_TAG] = ()   # P71 T9: a tag names its x as the page's own value (a tick, a datum, a bar); the chart owns where it is
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
@@ -3524,6 +3552,52 @@ def _member_tiles(tile, n: int) -> list[int]:
     return [int(v) for v in (tile if isinstance(tile, list) else [tile])]
 
 
+def _validate_level_join(entry: dict) -> list[str]:
+    """P71 T10: a `level_join`'s own fields. `from` is a datum index of its `series`; `to` is ONE far end - a datum index
+    of the same series, `{series, index}` on another series, or `{y}` (the value axis at `from`'s level); `label` is the
+    figure the claim turns on (checked against the page in `check_level_join`); `color` a bracket ink; `side` / `dy` the
+    author's place (s106: honoured, and WARNed when it lands on the rule). Nothing else: a key the join does not know is
+    refused by name rather than accepted and ignored (P71's review finding 7)."""
+    errs: list[str] = []
+    if not _is_index(entry.get("from")):
+        errs.append(f"level_join: 'from' must be a datum index (a non-negative integer) of its series, not {entry.get('from')!r}")
+    to = entry.get("to")
+    if isinstance(to, dict):
+        keys = set(to)
+        if keys == {"y"}:
+            if isinstance(to["y"], bool) or not isinstance(to["y"], (int, float)) or not math.isfinite(to["y"]):
+                errs.append(f"level_join: 'to': y must be a number - the level on the value axis, not {to['y']!r}")
+        elif keys == {"series", "index"}:
+            if not (_is_index(to["series"]) and _is_index(to["index"])):
+                errs.append("level_join: 'to': series and index must be non-negative integers - a datum on another series")
+            elif _is_index(entry.get("from")) and to["series"] == (entry.get("series") or 0) and to["index"] == entry["from"]:
+                errs.append(f"level_join: from and to are both datum {entry['from']} - a join needs two ends")
+        else:
+            errs.append(f"level_join: 'to' names ONE far end - a datum index, {{series, index}} or {{y}} - not {sorted(keys)}")
+    elif not _is_index(to):
+        errs.append(f"level_join: 'to' must be a datum index (a non-negative integer), {{series, index}} or {{y}}, not {to!r}")
+    elif _is_index(entry.get("from")) and to == entry["from"]:
+        errs.append(f"level_join: from and to are both datum {to} - a join needs two ends")
+    label = entry.get("label")
+    if not (isinstance(label, str) and label.strip()):
+        errs.append("level_join: label must be the figure the claim turns on, written beside the far ring (never on the rule, C14)")
+    if "series" in entry and not _is_index(entry["series"]):
+        errs.append("level_join: series must be a non-negative integer series index")
+    if "color" in entry and entry["color"] not in BRACKET_COLORS:
+        errs.append(f"level_join: color must be one of {'|'.join(BRACKET_COLORS)} (absent = the series' own ink)")
+    if "side" in entry and entry["side"] not in LEVEL_JOIN_SIDES:
+        errs.append(f"level_join: side must be one of {'|'.join(LEVEL_JOIN_SIDES)} - the side of the far ring the figure "
+                    "is written on (absent = the engine's first clear side, off the rule)")
+    dy = entry.get("dy")
+    if "dy" in entry and (isinstance(dy, bool) or not isinstance(dy, (int, float)) or abs(dy) > LEVEL_JOIN_DY_MAX):
+        errs.append(f"level_join: dy must be a number of lines of the figure's own size, within +-{LEVEL_JOIN_DY_MAX:g}")
+    extra = sorted(k for k in entry if k not in LEVEL_JOIN_KEYS)
+    if extra:
+        errs.append(f"level_join: {', '.join(map(repr, extra))} - a level join takes only "
+                    f"{'|'.join(k for k in LEVEL_JOIN_KEYS if k not in ('kind', 'at', 'dur'))}")
+    return errs
+
+
 def _validate_member(entry: dict) -> list[str]:
     """P69 T45: a `member` species' own fields - `tile` (an index, a list of them, or "all"), an optional `bar` index and
     `light` flag, and a `dur` in MEMBER_DUR_S. Nothing else: a tile carries no value (E99 s101). The page it lands on is
@@ -3731,6 +3805,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_member(entry)
     if kind == SPECIES_AXIS_TAG:      # P71 T9
         errs += _validate_axis_tag(entry)
+    if kind == SPECIES_LEVEL_JOIN:    # P71 T10
+        errs += _validate_level_join(entry)
     if kind in VECMAP_SPECIES:
         errs += _validate_vecmap_species(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
@@ -4760,6 +4836,239 @@ def derive_recast_key(A: dict, Bs: dict) -> tuple[object, list | None, str]:
     return (RECAST_DATA_KEY, key_map, "") if key_map else (None, None, why)
 
 
+_LJ_NUM = re.compile(r"([+\-\u2212]?)\s*(\d[\d,]*(?:\.\d+)?)\s*(x\b|\u00d7|%)?")
+
+
+def _lj_decimals(text: str) -> int:
+    return len(text.split(".")[1]) if "." in text else 0
+
+
+def _lj_state(world: dict, row_species: list, sp: dict) -> dict:
+    """The chart state standing at the join's word: the page, or the state the last page-REPLACING chart_to at or before
+    it recast / morphed / remade into (a rescale or an extend keeps the page's own datum indices)."""
+    states = [world.get("page") or {}] + list(world.get("page_states") or [])
+    at, k, when = float(sp.get("at") or 0.0), 0, None
+    for e in row_species or []:
+        if not (isinstance(e, dict) and e.get("kind") == "chart_to" and e.get("to") in PAGE_REPLACING_VERBS and _num(e.get("at"))):
+            continue
+        st = e.get("state", 0)
+        if _is_index(st) and 0 < st < len(states) and float(e["at"]) <= at and (when is None or float(e["at"]) >= when):
+            k, when = st, float(e["at"])
+    return states[k] if isinstance(states[k], dict) else {}
+
+
+def _lj_marks(page: dict, sp: dict, where: str) -> tuple[str, dict, str]:
+    """(the field - series | bar -, the chart the join lands on - the page or its panel -, the page's unit)."""
+    builder = str(page.get("builder") or "")
+    if builder == LPG.PANELS:
+        panels = page.get(LPG.PANELS_KEY) or []
+        pi = sp.get("panel", 0) if _is_index(sp.get("panel", 0)) else 0
+        chart = panels[pi] if pi < len(panels) and isinstance(panels[pi], dict) else {}
+        field = "bar" if chart.get("builder") == LPG.PANEL_BARS else "series"
+        unit = str(chart.get("unit") or (chart.get("axes") or {}).get("unit") or page.get("unit") or "")
+        return field, chart, unit
+    if builder not in LEVEL_JOIN_BUILDERS:
+        raise ValueError(f"{where}: a {builder or 'plate'} page has no level to join - a level join lands on a LINE page's "
+                         f"series or a BARS page's bars ({'|'.join(LEVEL_JOIN_BUILDERS)})")
+    ax = page.get("axes") or {}
+    return LEVEL_JOIN_BUILDERS[builder], page, str(page.get("unit") or ax.get("yunit") or ax.get("unit") or "")
+
+
+def _lj_value(chart: dict, field: str, si: int, i: int, where: str, name: str) -> tuple[float, str]:
+    """(the datum's value, its series' unit override or "") - refused by name when the chart does not have it."""
+    if field == "bar":
+        if si:
+            raise ValueError(f"{where}: {name} names series {si} on a bars chart - its bars are series 0")
+        vals = list(chart.get("values") or [])
+        if i >= len(vals):
+            raise ValueError(f"{where}: {name!r} {i} is past the chart's last bar ({len(vals) - 1})")
+        return float(vals[i]), ""
+    ser = chart.get("series") or []
+    if si >= len(ser):
+        raise ValueError(f"{where}: series {si} is past the page's last series ({len(ser) - 1})")
+    pts = ser[si].get("pts") or []
+    if i >= len(pts):
+        raise ValueError(f"{where}: {name!r} {i} is past series {si}'s last datum ({len(pts) - 1})")
+    return float(pts[i][1]), str(ser[si].get("unit") or ser[si].get("yunit") or "")
+
+
+def _lj_truth(sp: dict, where: str, a: float, b: float | None, level: float | None, page_unit: str) -> list[str]:
+    """THE TRUTH RULE (E28 / s109): the number the label writes is the page's own arithmetic at the label's precision -
+    the difference (b - a), or a ratio when it ends in x, or a relative change when it ends in % on a page not in % - and
+    a written sign says the direction. The axis form's label names the level. No number: a WARN with the gap (s106)."""
+    label = str(sp.get("label") or "")
+    m = _LJ_NUM.search(label)
+    if level is not None:
+        want, what = level, f"the level it joins is {level:g}"
+    else:
+        diff = b - a
+        if m is None:
+            return [f"WARN {where}: label {label!r} carries no number - the two data it joins differ by {diff:+.4g} "
+                    f"({a:g} -> {b:g}); write the figure the claim turns on (E99 s100 (b)). REPORTED, the frame read "
+                    "decides (E99 s106)"]
+    if m is None:
+        return []
+    sign, digits, suffix = m.group(1), m.group(2).replace(",", ""), m.group(3)
+    num, d = float(digits), _lj_decimals(digits)
+    tol = 0.5 * 10 ** -d + 1e-9
+    if level is None:
+        if suffix in ("x", "\u00d7"):
+            if a == 0:
+                raise ValueError(f"{where}: label {label!r} writes a ratio of a zero datum - there is none")
+            want, what = b / a, f"the two data it joins are {b / a:.4g}x ({a:g} -> {b:g})"
+            if abs(abs(want) - num) > tol:
+                raise ValueError(f"{where}: label {label!r} writes {digits}x but {what} - a figure the page states is the "
+                                 "page's own arithmetic (E28 / E99 s109)")
+            return []
+        if suffix == "%" and page_unit != "%":
+            if a == 0:
+                raise ValueError(f"{where}: label {label!r} writes a change from a zero datum - there is none")
+            want, what = (b - a) / abs(a) * 100.0, f"the change is {(b - a) / abs(a) * 100.0:+.4g}% ({a:g} -> {b:g})"
+        else:
+            want, what = b - a, f"the two data it joins differ by {b - a:.4g} ({a:g} -> {b:g})"
+        fall = sign in ("-", "\u2212")
+        if sign and want != 0 and fall != (want < 0):
+            said, went = ("FALL" if fall else "RISE"), ("rises" if want > 0 else "falls")
+            raise ValueError(f"{where}: label {label!r} writes a {said} ({sign!r}) but the join {went}: {what}")
+    if abs(abs(want) - num) > tol:
+        raise ValueError(f"{where}: label {label!r} writes {digits} but {what} - a figure the page states is the page's own "
+                         f"arithmetic (E28 / E99 s109); write {abs(want):.{d}f}")
+    return []
+
+
+def level_join_label_box(side: str, E: tuple, g: dict) -> tuple:
+    """species/level_join.mjs levelLabelAt, mirrored in stage px: the figure's box (x0, y0, x1, y1) beside the far ring."""
+    rx, ry, pad, w, fs = g["rx"], g["ry"], g["pad"], g["w"], g["fs"]
+    asc, desc, dy = fs * LEVEL_JOIN_ASC, fs * LEVEL_JOIN_DESC, float(g.get("dy") or 0.0) * fs
+    if side == "right":
+        x, y, x0 = E[0] + rx + pad, E[1] + fs * LEVEL_JOIN_MID, E[0] + rx + pad
+    elif side == "left":
+        x, y, x0 = E[0] - rx - pad, E[1] + fs * LEVEL_JOIN_MID, E[0] - rx - pad - w
+    elif side == "above":
+        x, y, x0 = E[0], E[1] - ry - pad - desc, E[0] - w / 2
+    else:
+        x, y, x0 = E[0], E[1] + ry + pad + asc, E[0] - w / 2
+    y += dy
+    return (x0, y - asc, x0 + w, y + desc)
+
+
+def _lj_figure_px(chart: dict) -> float:
+    """The figure's size in stage px for the estimate: a PEER OF THE END TAG - on a long-form page the end tags' own size
+    for its preset (ledger_page.longform_type, the engine's lpTypeU(st, "tag")); elsewhere the phone floor (a flat
+    face's figure is smaller, so the estimate errs wide)."""
+    if ((chart or {}).get("axes") or {}).get("readability") == LPG.LONGFORM:
+        return float(LPG.longform_type(chart)["tag"])
+    return float(LPG.CARD_TYPE_PX)
+
+
+def _lj_frame_warn(chart: dict, sp: dict, where: str) -> list[str]:
+    """The long form draws a PLOT FRAME and the engine nudges the figure inside it (species/level_join.mjs levelNudge,
+    FRAME_AIR_PX clear of the border). A figure the frame cannot hold at the end tags' size is REPORTED with its numbers
+    (E99 s106) - the engine then aligns it to the frame's left / top and it crosses the border."""
+    if ((chart or {}).get("axes") or {}).get("readability") != LPG.LONGFORM:
+        return []
+    try:
+        plot = LPG.page_boxes(chart, ASPECT if ASPECT in LPG.STAGE_PX else "16:9")["plot"]
+    except Exception:   # a chart page_boxes cannot lay out: no estimate, no finding
+        return []
+    fs = _lj_figure_px(chart)
+    w, h = LEVEL_JOIN_EM_W * fs * len(str(sp.get("label") or "")), fs * (LEVEL_JOIN_ASC + LEVEL_JOIN_DESC)
+    room_w, room_h = plot["w"] - 2 * LEVEL_JOIN_FRAME_AIR_PX, plot["h"] - 2 * LEVEL_JOIN_FRAME_AIR_PX
+    if w <= room_w and h <= room_h:
+        return []
+    return [f"WARN {where}: label {sp.get('label')!r} at the end tags' {fs:g} px is an estimated {w:.0f} x {h:.0f} px and the "
+            f"plot frame holds {room_w:.0f} x {room_h:.0f} px inside its border - it cannot be kept inside the frame; shorten "
+            "the figure. REPORTED, the frame read decides (E99 s106)"]
+
+
+def _lj_place_warn(chart: dict, field: str, sp: dict, si: int, a_i: int, far, where: str) -> list[str]:
+    """E99 s106: an AUTHORED place (`side` / `dy`) the estimate puts ON the rule is REPORTED with its numbers (C14's
+    mislabel), never refused. The estimate: the page's plot box (ledger_page.page_boxes, stage px), the data's x and y
+    extent mapped onto it, the figure at the end tags' size (`_lj_figure_px`). The engine's own automatic place is off
+    the rule by construction."""
+    if "side" not in sp and "dy" not in sp:
+        return []
+    side = sp.get("side") or "right"
+    try:
+        plot = LPG.page_boxes(chart, ASPECT if ASPECT in LPG.STAGE_PX else "16:9")["plot"]
+    except Exception:   # a chart page_boxes cannot lay out (a panel): no estimate, no finding
+        return []
+    if field == "bar":
+        vals = [float(v) for v in chart.get("values") or []]
+        n = max(1, len(vals))
+        lo, hi = min([0.0, *vals]), max([0.0, *vals]) or 1.0
+        px = lambda i, v: (plot["x"] + (i + 0.5) / n * plot["w"], plot["y"] + plot["h"] * (1 - (v - lo) / ((hi - lo) or 1.0)))
+        A = px(a_i, vals[a_i])
+        B = px(far[1], vals[far[1]]) if far[0] == "datum" else (plot["x"], A[1])
+    else:
+        ser = chart.get("series") or []
+        xs = [float(p[0]) for s in ser for p in s.get("pts") or []]
+        ys = [float(p[1]) for s in ser for p in s.get("pts") or []]
+        ax = chart.get("axes") or {}
+        lo = float(ax["ymin"]) if _num(ax.get("ymin")) or isinstance(ax.get("ymin"), str) else min(ys)
+        hi = float(ax["ymax"]) if _num(ax.get("ymax")) or isinstance(ax.get("ymax"), str) else max(ys)
+        x0, x1 = min(xs), max(xs)
+        px = lambda x, v: (plot["x"] + (x - x0) / ((x1 - x0) or 1.0) * plot["w"], plot["y"] + plot["h"] * (1 - (v - lo) / ((hi - lo) or 1.0)))
+        pa = ser[si]["pts"][a_i]
+        A = px(float(pa[0]), float(pa[1]))
+        if far[0] == "datum":
+            pb = ser[far[2]]["pts"][far[1]]
+            B = px(float(pb[0]), float(pb[1]))
+        else:
+            B = (plot["x"], A[1])
+    fs = _lj_figure_px(chart)
+    g = {"rx": LEVEL_JOIN_RING_PX[0], "ry": LEVEL_JOIN_RING_PX[1], "pad": LEVEL_JOIN_PAD_PX, "fs": fs,
+         "w": LEVEL_JOIN_EM_W * fs * len(str(sp.get("label") or "")), "dy": sp.get("dy") or 0.0}
+    box = level_join_label_box(side, B, g)
+    band = (min(A[0], B[0]), A[1] - LEVEL_JOIN_CLEAR_PX, max(A[0], B[0]), A[1] + LEVEL_JOIN_CLEAR_PX)
+    if not (box[0] < band[2] and band[0] < box[2] and box[1] < band[3] and band[1] < box[3]):
+        return []
+    return [f"WARN {where}: label {sp.get('label')!r} placed side={side} dy={float(sp.get('dy') or 0):g} lands ON the rule - "
+            f"its estimated box ({box[0]:.0f}, {box[1]:.0f})-({box[2]:.0f}, {box[3]:.0f}) px crosses the rule at y {A[1]:.0f} px "
+            f"(x {band[0]:.0f}-{band[2]:.0f}) within {LEVEL_JOIN_CLEAR_PX} px: C14 - a figure on the rule reads as the rule's "
+            "own label (the E53 addendum's mislabel); the engine's own place is off it. REPORTED, the frame read decides (E99 s106)"]
+
+
+def check_level_join(world: dict, row_species: list) -> list[str]:
+    """P71 T10: a row's `level_join`s on the page they join. Refused by name (ValueError, truth rules): a page with no
+    level (not a line or bars page), an end the chart does not have, a `to` on a series in ANOTHER unit, an axis-form `y`
+    that is not `from`'s own level, and a label whose number is not the page's arithmetic (`_lj_truth`). Returned as WARN
+    lines (E99 s106): a label with no number, an authored place the estimate puts on the rule, and a long-form figure
+    its plot frame cannot hold."""
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == SPECIES_LEVEL_JOIN
+           and not _validate_level_join(sp)]   # a malformed join is the grammar's to refuse (validate_species), by name
+    if not sps or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return []
+    notes: list[str] = []
+    for sp in sps:
+        where = f"level_join at {sp.get('at')}"
+        page = _lj_state(world, row_species, sp)
+        field, chart, unit = _lj_marks(page, sp, where)
+        si, a_i = int(sp.get("series") or 0), int(sp["from"])
+        a, a_unit = _lj_value(chart, field, si, a_i, where, "from")
+        to, b, level = sp.get("to"), None, None
+        if isinstance(to, dict) and "y" in to:
+            level = float(to["y"])
+            d = _lj_decimals(repr(float(to["y"]))) if not float(to["y"]).is_integer() else 0
+            if abs(a - level) > 0.5 * 10 ** -d + 1e-9:
+                raise ValueError(f"{where}: to: {{y: {to['y']:g}}} is not the level of datum {a_i} ({a:g}) - the axis form "
+                                 "runs the rule at `from`'s own level, so the level it names is that datum's (E28)")
+            far = ("axis",)
+        else:
+            tsi, t_i = (int(to["series"]), int(to["index"])) if isinstance(to, dict) else (si, int(to))
+            b, b_unit = _lj_value(chart, field, tsi, t_i, where, "to")
+            ua, ub = a_unit or unit, b_unit or unit
+            if ua != ub:
+                raise ValueError(f"{where}: 'to' is on series {tsi} in {ub!r} and 'from' on series {si} in {ua!r} - a level "
+                                 "joins two data on ONE scale; two units are E79's panels, never one rule")
+            far = ("datum", t_i, tsi)
+        notes += _lj_truth(sp, where, a, b, level, unit)
+        if field and page is (world.get("page") or {}) and page.get("builder") != LPG.PANELS:
+            notes += _lj_place_warn(chart, field, sp, si, a_i, far, where)
+            notes += _lj_frame_warn(chart, sp, where)
+    return notes
+
+
 def _cross_honesty(page: dict, sp: dict) -> list[str]:
     """P69 T50 / E99 s100 + s106: the census X on a treemap is judged by the two honesty tests, and a failure is a
     REPORT with its numbers, never a refusal (E53 s1's census exception (b) and (c) are superseded by them):
@@ -4807,6 +5116,8 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_members(world, row_species)         # P69 T45: a tile the membership bar has, and nothing that moves the bar
     check_segments(world, row_species)        # P69 T64: a stacked page takes a park, and nothing that moves its bars
     check_solo(world, row_species)            # P69 T37: a solo names ONE mark the page draws, on a page whose marks it re-inks
+    for _lj_note in check_level_join(world, row_species):   # P71 T10: a join's ends, its unit, its truth; a WARN on the rule
+        print(f"  [WARN] {_lj_note.removeprefix('WARN ')}")
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
             if world.get("kind") != SPECIES_LEDGER:
