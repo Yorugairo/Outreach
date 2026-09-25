@@ -172,3 +172,44 @@ def test_the_paper_column_writes_on_its_own_instant() -> None:
     assert pick(colat[1], believed)["o"] == 1, colat[1]                     # ... and written after it
     others = lambda cells: [c for c in cells if c["fill"] != "#ff8a8c"]    # noqa: E731 - every column but Believed
     assert others(colat[0]) == others(base[0]) and others(colat[1]) == others(base[1])
+
+
+# ---- R26-257: the prism takes the stage light ------------------------------------------------------------------------
+
+def _drop_light_deg() -> float:
+    m = re.search(r"^\s*LIGHT_DEG:\s*(-?[\d.]+),", DROP.read_text(encoding="utf-8"), re.M)
+    assert m, "kinetics/drop.mjs states DROP.LIGHT_DEG"
+    return float(m.group(1))
+
+
+def test_the_prism_light_is_the_stage_light() -> None:
+    src = ENGINE.read_text(encoding="utf-8")
+    block = src.split("const EXTRUDE = {", 1)[1].split("};", 1)[0]
+    assert re.search(r"^\s*LIGHT_DEG: DROP\.LIGHT_DEG,", block, re.M), "the prism's light is DROP's, not its own number"
+    assert re.search(r"^\s*VIEW_DEG: 35,", block, re.M), "the depth direction is the view's own dial"
+
+
+PRISMS = """() => {
+  const svg = [...document.querySelectorAll('svg')].find((s) => s.querySelector('.bx-shadow'));
+  if (!svg) return [];
+  const pts = (e) => e.getAttribute('points').trim().split(/\\s+/).map((p) => p.split(',').map(Number));
+  const bars = [...svg.querySelectorAll('rect.bar')], shadows = [...svg.querySelectorAll('.bx-shadow')];
+  return shadows.map((s, i) => { const b = bars[i];
+    return { shadow: pts(s), x: +b.getAttribute('x'), y: +b.getAttribute('y'), w: +b.getAttribute('width'),
+             h: +b.getAttribute('height'), neg: b.classList.contains('neg') }; });
+}"""
+
+
+@needs_browser
+def test_the_cast_shadow_falls_away_from_the_stage_light() -> None:
+    """Measured on the golden's own polygons: each positive bar's shadow is thrown from its face along
+    DROP.LIGHT_DEG + 180 (down and to the right, as the drop, the melt, a card's lift and a prop's rest are)."""
+    tl, uris = G.SURFACES["form-extruded-bar"]()
+    [(_, prisms)] = _render(tl, uris, [G.FRAME_T["form-extruded-bar"]], PRISMS)
+    pos = [p for p in prisms if not p["neg"] and p["h"] > 40]
+    assert len(pos) >= 3, prisms
+    want = (_drop_light_deg() + 180) % 360
+    for p in pos:
+        sx, sy = p["shadow"][0][0] - p["x"], p["shadow"][0][1] - p["y"]
+        got = math.degrees(math.atan2(sy, sx)) % 360
+        assert abs(got - want) < 1.0, (round(got, 2), want, p)

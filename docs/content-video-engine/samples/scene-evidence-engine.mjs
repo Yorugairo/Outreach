@@ -10247,24 +10247,27 @@ async function mount(doc) {
      shadow, no fake 3D blur"*. */
   const formOf = (pg, kind) => (pg && pg.form && pg.form.kind === kind ? pg.form : null);
   const EXTRUDE = {
-    LIGHT_DEG: 35,       /* THE PAGE'S ONE LIGHT, as a bearing clockwise from straight up: 35 deg is over the reader's right shoulder. It fixes the depth direction AND which faces are lit - one dial, not two */
+    VIEW_DEG: 35,        /* THE DEPTH DIRECTION, as a bearing clockwise from straight up: the prism recedes up and to the right, so the cap and the RIGHT side face are the faces the reader sees - the view's dial, and the prism's geometry exactly as it was */
+    LIGHT_DEG: DROP.LIGHT_DEG,   /* P72 T27 / R26-257 - THE STAGE LIGHT, drop.mjs's DROP.LIGHT_DEG (-125: degrees from +x, y DOWN - up and to the left), the one light the drop, the melt, a card's 12 px 12 px lift, a prop's resting shadow and the extruded pie already take (the parent's call, 2026-09-22: the stage light is DROP's). It lights the cap, which faces up, and leaves the right side face turned from it (CAP_LIGHT over SIDE_LIGHT), and the cast shadow is thrown along LIGHT_DEG + 180 - down and to the right. Until R26-257 the prism carried a light of its own at a 35 deg bearing (up and to the right) and cast down-LEFT, against every other shadow on the stage */
     D_PX: 16,            /* the prism's depth in the chart's own units (portrait doubles it, as the type and the bloom do) */
     D_SHARE: 0.26,       /* ... and never more than this share of the bar's OWN width: a thin bar's prism must not close the gap to its neighbour */
     CLEAR_PX: 4,         /* ... and never inside this of the value's own gutter: the extrusion is drawn BEHIND the face and never reaches the number (E28: the number stays as readable as the flat page's) */
     CAP_LIGHT: 0.80,     /* the cap face: the bar's OWN ink darkened to this share - a ratio on the fill the page already chose, never a second palette */
     SIDE_LIGHT: 0.58,    /* the side face, which faces away from the light */
     SHADOW_A: 0.20,      /* the hard-edge cast shadow's alpha (doc 29 s1.2 - a polygon, no blur, no filter) */
-    SHADOW_K: 0.55,      /* ... thrown this share of the depth vector, opposite the light, and CLIPPED at the zero line: a bar's shadow never crosses the axis it is measured from */
+    SHADOW_K: 0.55,      /* ... thrown this share of the depth's length along LIGHT_DEG + 180 (away from the stage light), and CLIPPED at the zero line: a bar's shadow never crosses the axis it is measured from */
   };
   const pPts = (q) => q.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
   /* THE DEPTH VECTOR. Its x is the light's, always; its y runs WITH THE VALUE - a rise's prism recedes up and
      right, a drop's down and right - so the mass an extrusion adds always goes the way the number goes and no
      extruded ink ever crosses the zero line. Sign is geometry (E28/E53): an extrusion that put a drop's mass
      above zero would be the failed form. */
-  const extrudeVec = (D, neg) => { const th = EXTRUDE.LIGHT_DEG * Math.PI / 180;
+  const extrudeVec = (D, neg) => { const th = EXTRUDE.VIEW_DEG * Math.PI / 180;
     return [D * Math.sin(th), (neg ? 1 : -1) * D * Math.cos(th)]; };
   const extrudeDepth = (bw, P) => Math.min(EXTRUDE.D_PX * (P ? 2 : 1), EXTRUDE.D_SHARE * bw,
-    Math.max(1, ((P ? 22 : 14) - EXTRUDE.CLEAR_PX) / Math.cos(EXTRUDE.LIGHT_DEG * Math.PI / 180)));
+    Math.max(1, ((P ? 22 : 14) - EXTRUDE.CLEAR_PX) / Math.cos(EXTRUDE.VIEW_DEG * Math.PI / 180)));
+  /* R26-257: the cast shadow's unit throw - away from the stage light, the same for a rise and a drop (one light) */
+  const EXTRUDE_THROW = [Math.cos((EXTRUDE.LIGHT_DEG + 180) * Math.PI / 180), Math.sin((EXTRUDE.LIGHT_DEG + 180) * Math.PI / 180)];
   /* One bar's prism: the cast shadow, the side face and the cap face, created BEFORE the bar's own rect so SVG
      paint order puts all three BEHIND the face. Nothing else is touched - the value, the x label, the capsule and
      the axis stand exactly where the flat page put them, which is the claim the label boxes prove. `set(k)` is a
@@ -10284,7 +10287,7 @@ async function mount(doc) {
       const hk = Math.max(0, o.h * k), tip = o.neg ? o.base + hk : o.base - hk, on = hk > 0.5;
       topFace.setAttribute("points", pPts([[o.x, tip], [x2, tip], [x2 + v[0], tip + v[1]], [o.x + v[0], tip + v[1]]]));
       side.setAttribute("points", pPts([[x2, tip], [x2, o.base], [x2 + v[0], o.base + v[1]], [x2 + v[0], tip + v[1]]]));
-      const sx = -v[0] * EXTRUDE.SHADOW_K, sy = -v[1] * EXTRUDE.SHADOW_K;
+      const sx = EXTRUDE_THROW[0] * D * EXTRUDE.SHADOW_K, sy = EXTRUDE_THROW[1] * D * EXTRUDE.SHADOW_K;
       shadow.setAttribute("points", pPts([[o.x + sx, clip(tip + sy)], [x2 + sx, clip(tip + sy)],
                                           [x2 + sx, clip(o.base + sy)], [o.x + sx, clip(o.base + sy)]]));
       topFace.setAttribute("opacity", on ? 1 : 0); side.setAttribute("opacity", on ? 1 : 0);
