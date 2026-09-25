@@ -838,7 +838,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T27: The small engine rows - one commit each
-- Status: pending
+- Status: running - T27a landed on lane B (R26-57 244f129, R26-142 83c3a98 at 16:9, R26-72 3a3924c, R26-360 4b54f77); R26-73 measured, not built (its default flip needs the compiler's strip law and the caption layer - resumed after T14); T27b (123 / 302 / 257 / 2 / 9 TR-3) returned, integrating; R26-106 a finding and R26-171 its own row (R26-365, T46)
 - Owner: junior_developer (LANE B), one row per commit; reviewer on R26-257 and R26-123 (a visible default)
 - Depends on: each row's named neighbour (below); none waits on a P70 / P71 function except where named
 - Items (each with its step (0) CONFIRM-OPEN):
@@ -1159,7 +1159,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Status: pending
 - Owner: implementation_luna (LANE B), then reviewer (R26-362 (b) is advice; s106 - WARNs, never refusals)
 - Depends on: P72 T11 (the seal), P71 T6 (43363ea), P72 T13, T17 (the compiler's print chain, for R26-362 (b)), P70 T8 / P71 T15 / T19 (the dock code, for R26-365 (b))
-- Items: R26-361 (a)-(c), R26-362 (a)-(c), R26-365 (a)-(c) (filed 2026-09-25 from the landings' findings); R26-368 (b) (`cadence()` in picture widths per second, E99 s30's own definition - added 2026-09-25)
+- Items: R26-361 (a)-(c), R26-362 (a)-(c), R26-365 (a)-(c) (filed 2026-09-25 from the landings' findings); R26-368 (b) (`cadence()` in picture widths per second, E99 s30's own definition - added 2026-09-25); R26-369 (the agenda page form at 9:16) and R26-370 (the tiers' shared scale as the compiler's default, `axes.domain` honoured) - added 2026-09-25
 - Write set: `scripts/species/chip.mjs` (the name's keyline), `build_scene_timeline_f.py` (`seal_gold`'s note; the owned-exit WARN), the engine (`paint` through `worldXfAt`; `strokeAt`'s width), `emit_choreography.py` (mirror rule 2), `authoring/shapes.py` (`dock_leave`'s description; `_aspect_clean`'s rail), the template's pill CSS (the rail), tests NEW `test_wave3_followups.py`
 - Acceptance: each row's clause closes with a test and, where visible, a before / after frame read by the parent; R26-362 (c) and R26-365 (c) may close on a written decision with its frame; the H door identical except the instants listed.
 - Stop conditions: a clause touches a function an in-flight slice owns (sequence it); the keyline change moves a committed golden (list it for the parent's read).
