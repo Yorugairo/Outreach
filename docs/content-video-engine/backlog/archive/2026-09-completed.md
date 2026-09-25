@@ -182,6 +182,31 @@ the P72 slice that names it carries the half.
 | R26-312 | The second melt shows the wrong page. Code landed (`7789afa`); the operator's read at P71-HG1. | `7789afa` (P71 T4); REV 1: archived as "code landed; the operator's read at P71-HG1"; `hist:918`. |
 | R26-314 | A figure's subtitle never writes its last letter. Code landed (`ef96cee`); the operator's read at P71-HG1. | `ef96cee` (P71 T1); REV 1: archived as "code landed; the operator's read at P71-HG1"; `hist:920`. |
 
+### Batch 3 - CLOSE-STALE / CLOSE-SUPERSEDED / CLOSE-DUPLICATE (20 rows)
+
+| ID | Verified outcome | Evidence / follow-up |
+|---|---|---|
+| R26-11 | The HyperFrames intake. Closed by P72 T0 (CLOSE-SUPERSEDED). | the harvest `hyperframes/HARVEST-2026-09-07.md` (R26-15) took it over; HF lessons ported per slice (P47 T1, P70 T13 drift-hold); `hist:527`. |
+| R26-31 | The Bravos exploration review, the next selection. Closed by P72 T0 (CLOSE-SUPERSEDED). | the selection was made: `BRAVOS-VOCABULARY-HARVEST-v2.md` -> P69 T36-T80 -> P70 / P71; `hist:513`. |
+| R26-45 | The approved shorts' pages placed by the estimate. Closed by P72 T0 (CLOSE-SUPERSEDED). | the approved cuts are frozen (E45); every new page is measured (P69 T1 fixture); H's unmeasured pages are R26-274; `hist:463`. |
+| R26-59 | The head above the newsreel. Closed by P72 T0 (CLOSE-SUPERSEDED). | RULED E99 s45 ("both should be options"); both exist (the card, and P53 T7's `cutout`); `hist:476`. |
+| R26-62 | The ground's physics, tracked. Closed by P72 T0 (CLOSE-SUPERSEDED). | deprioritised under E22 and 44 s44.3's JUDGE row (in the row); `hist:479`. |
+| R26-65 | The page CAN land built; a default. Closed by P72 T0 (CLOSE-SUPERSEDED). | E99 s67: "a chart never lands fully built: every page BUILDS ... then holds built" - the default is ruled; `enter=axes` shipped (P53 T1); E99 s9 "the opening register is the axes register"; `hist:483`. |
+| R26-81 | The three-question test card on a short. Closed by P72 T0 (CLOSE-STALE). | the card is live on H row 20 (`b449e9f`, `checklist.profile: "phone"`); a short uses it when a script asks; `hist:499`. |
+| R26-102 | The agentic-first production studio. Closed by P72 T0 (CLOSE-SUPERSEDED). | REV 1 citation: E99 s13 (`OPERATOR-RULINGS.md:2965`: "the 2026-09-13 readiness review is superseded; plans are written to be executed by either Claude or GPT"); parent confirms in T0 (D5); `hist:546`. |
+| R26-124 | The race path default. Closed by P72 T0 (CLOSE-STALE). | E99 s8 chose no default ("the race reads as separate rules"); the row's own next action allows "leave both selectable if no default was chosen" - T0 records both selectable and the engine's current default, no ask; recorded by P72 T0: both paths stay selectable and no default was ruled; the engine's current default is `eased` (`LPX.RACE_PATH: "eased"`, `docs/content-video-engine/samples/scene-evidence-engine.mjs:11313` at 0d2e705), `clothoid` opt-in by the page's `path`; `hist:568`. |
+| R26-155 | `melt:weight` rolls away from the landing. Closed by P72 T0 (CLOSE-STALE). | "left deliberately" in the row; REV 1 citation: E99 s56 (`OPERATOR-RULINGS.md:3230`, "P61 HG6-2 closed" on approval); `hist:599`. |
+| R26-180 | THE SHAPE COMPILER. Closed by P72 T0 (CLOSE-SUPERSEDED). | E99 s77 (`OPERATOR-RULINGS.md:3272`): "the compiler is stopped"; P66 plan status `retired`; its HG1 cards ruled (queue `p66-hg1-*` ruled); `hist:624`. |
+| R26-185 | The choreography vocabulary is the record's (s70). Closed by P72 T0 (CLOSE-SUPERSEDED). | E99 s77: the compiler is stopped; the engine truths it found are kept by s77 (2); the vocabulary now lives in CAPABILITIES + the Bravos USE-WHEN, cited by the receipt; `hist:628`. |
+| R26-186 | A light is never the move; the throw is a signature (s71). Closed by P72 T0 (CLOSE-SUPERSEDED). | the compiler/lab clause superseded by s77; throw-then-zoom is built (P69 T15b; R26-260 names it in forward play); the rule is in the rulings (s71, s76); `hist:629`. |
+| R26-187 | A rebuild of the original is not a base (s72). Closed by P72 T0 (CLOSE-SUPERSEDED). | E99 s77 stopped the base generator (P66 retired); the base rules (E67 inks, cues bound, outro, arrivals) are the builder's checklist - carried by R26-195's doc slice; `hist:630`. |
+| R26-192 | A SHORT PLATE IS FOLDED INTO ITS NEIGHBOUR (E99 s75, 2026-09-17). Closed by P72 T0 (CLOSE-DUPLICATE). | "RE-HOMED to R26-195" in each row (E99 s77); `hist:635`. |
+| R26-194 | A LIGHT ONLY WHERE THERE IS A SPECIFIC CALLOUT TO MAKE (E99 s76, 2026-09-17). Closed by P72 T0 (CLOSE-DUPLICATE). | "RE-HOMED to R26-195" in each row (E99 s77); `hist:637`. |
+| R26-196 | The re-proof's two faults before HG2. Closed by P72 T0 (CLOSE-SUPERSEDED). | HG2 RULED (s84): the faults on the four DENIED recipes are moot; the two approved recipes' notes (even pills; the retitle's edge) fold into R26-237's recipe edit; `hist:639`. |
+| R26-199 | Tokyo v2 approved to upload. Closed by P72 T0 (CLOSE-SUPERSEDED). | "AMENDED by s79"; v3b built, ruled and uploaded; `hist:642`. |
+| R26-204 | P68 audit pointer row. Closed by P72 T0 (CLOSE-DUPLICATE). | a pointer: its thirteen children are R26-205..217, each inventoried on its own line; `hist:647`. |
+| R26-216 | Ep1's report prints 16 of 35 rows (G-12). Closed by P72 T0 (CLOSE-DUPLICATE). | "nothing to fix ... the baseline H is measured against" - REV 1: a computation PRINTED on P68 HG4's card (the H report's motion rows diffed against `build-f`'s), never asked; `hist:659`. |
+
 ## Remaining close-marked legacy rows
 
 This is a census for parent review, not a second archive and not a completion
