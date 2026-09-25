@@ -18344,6 +18344,13 @@ async function mount(doc) {
     CONTRAST_MIN: 3.0,  /* the least contrast the seal's ink keeps on its ground [DERIVED: WCAG 2.x 1.4.11 non-text and 1.4.3
                            large text, 3:1] - the gold on the cream is 1.48:1, so there it is darkened until it reads */
     GROUND: Object.freeze({ dark: "#25313C", light: "#F4E6C7" }),   /* the grounds the name's ink names: charcoal, cream */
+    /* P72 T11 (E99 s130 (2)): WHERE THE GROUND UNDER A SEAL IS MEASURED - GROUND_ANGLES samples round each of GROUND_RADII
+       (fractions of the outer radius R): half-way in (the name's band under the art), the top arc (TOP_R / SRC_R), the inner
+       ring (INNER_R / SRC_R) and the outer ring - where the gold is drawn. The count is the bare-prop ring's (stopaction's
+       STAMP_RING_INK.ANGLES). Each is read on its own, ONCE, as the world stood at the seal's CONTACT (the engine's
+       groundLumThen), and the gold holds at the WORST of them: one gold per seal, the darkest ground wins (sealGoldReport). */
+    GROUND_ANGLES: 16,
+    GROUND_RADII: Object.freeze([0.5, 38 / 50, 44 / 50, 1]),
     /* Kalam 700's glyph ADVANCES in em, MEASURED on the player's face (P70 T1: scratchpad/p70-t1/logs/advance-probe.json -
        no kerning, the sum is the drawn length to 0.02 px); the compiler's CHIP_STAMP_LABEL_ADVANCE_EM, held equal by
        test_stamp_is_a_seal. An unknown glyph takes the widest. */
@@ -18367,18 +18374,62 @@ async function mount(doc) {
   const sealLum = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
     .map((c) => (c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)))
     .reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
-  const sealContrast = (a, b) => { const x = sealLum(a), y = sealLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  /* ... of a colour on a ground given as a luminance (a MEASURED ground is one) */
+  const sealOnLum = (hex, g) => { const l = sealLum(hex); return (Math.max(l, g) + 0.05) / (Math.min(l, g) + 0.05); };
+  const sealContrast = (a, b) => sealOnLum(a, sealLum(b));
   const sealHex = (rgb) => "#" + rgb.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0").toUpperCase()).join("");
-  /* THE SEAL'S INK on its ground: GOLD on the dark ground as it is; on the light ground GOLD's channels scaled down in 1 %
-     steps until it holds CONTRAST_MIN against the cream (#A07F4B at the default GOLD, 3.02:1) */
-  const sealGold = (sp, gold = CHIP_SEAL.GOLD) => {
-    if (!(sp && sp.ink === "charcoal")) return gold;
+  /* the measured luminances of a ground - one number or the samples under a seal - with every unmeasured one dropped */
+  const sealGrounds = (ground) => (Array.isArray(ground) ? ground : [ground])
+    .filter((g) => g != null && Number.isFinite(+g)).map(Number);
+  /* P72 T11 (E99 s130 (2)): THE SEAL'S INK ON A MEASURED GROUND - `ground` a WCAG luminance (0..1) or the samples under the
+     seal. ONE GOLD PER SEAL, THE DARKEST GROUND WINS (the plan's rule, the parent's reviews):
+       1. a candidate counts if it holds CONTRAST_MIN against EVERY sample, so the WORST one binds - the darkest ground for
+          a darkened gold, the lightest for a lightened one. GOLD as it is wherever it holds; else the LEAST change that
+          holds, in 1 % steps up to 99 (never white or black): GOLD's channels scaled down (the cream's law: #A07F4B at the
+          default GOLD, 3.02:1) or mixed toward white, whichever holds in fewer steps (a tie darkens);
+       2. a spread NO ink can hold (a dark photo with one highlight, a seal across a horizon) takes the gold of the DARKEST
+          sample alone - so a dark photo with one bright spot keeps #E8B86D, as the base did - and says so.
+     The report: { ink, min, max, n (the measured samples), worst (the ink's ratio at its worst sample), holds }. */
+  const SEAL_STEPS = 99;
+  const sealGoldSteps = (gs, gold) => {
+    const min = CHIP_SEAL.CONTRAST_MIN, worst = (hex) => Math.min(...gs.map((g) => sealOnLum(hex, g)));
+    if (worst(gold) >= min) return gold;
     const rgb = [1, 3, 5].map((i) => parseInt(gold.slice(i, i + 2), 16));
-    for (let n = 100; n >= 0; n--) {
-      const hex = sealHex(rgb.map((v) => v * n / 100));
-      if (sealContrast(hex, CHIP_SEAL.GROUND.light) >= CHIP_SEAL.CONTRAST_MIN) return hex;
+    let best = gold;
+    for (let s = 1; s <= SEAL_STEPS; s++) {
+      const down = sealHex(rgb.map((v) => v * (100 - s) / 100));
+      if (worst(down) >= min) return down;
+      const up = sealHex(rgb.map((v) => v + (255 - v) * s / 100));
+      if (worst(up) >= min) return up;
+      if (s === SEAL_STEPS) best = worst(down) >= worst(up) ? down : up;
     }
-    return sealHex([0, 0, 0]);
+    return gs.length === 1 ? best : null;   /* one ground always has an answer within the steps; a spread may have none */
+  };
+  const sealGoldReport = (ground, gold = CHIP_SEAL.GOLD) => {
+    const gs = sealGrounds(ground);
+    if (!gs.length) return { ink: gold, min: null, max: null, n: 0, worst: null, holds: null };
+    const lo = Math.min(...gs), hi = Math.max(...gs);
+    const ink = sealGoldSteps(gs, gold) || sealGoldSteps([lo], gold);
+    const worst = Math.min(...gs.map((g) => sealOnLum(ink, g)));
+    return { ink, min: lo, max: hi, n: gs.length, worst, holds: worst >= CHIP_SEAL.CONTRAST_MIN };
+  };
+  const sealGoldOn = (ground, gold = CHIP_SEAL.GOLD) => sealGoldReport(ground, gold).ink;
+  /* THE SEAL'S INK on its ground. P72 T11 (E99 s130 (2)): the ground MEASURED under the seal (`ground`, the luminances the
+     engine's groundLumAt reads at sealGroundSamples - or one luminance) when anything was measured, the darkest ground
+     winning; else the ground the row's `ink` names, as P70 T1b had it: GOLD on the dark ground as it is, darkened on the
+     light one until it holds CONTRAST_MIN against the cream. */
+  const sealGold = (sp, gold = CHIP_SEAL.GOLD, ground = null) => {
+    if (sealGrounds(ground).length) return sealGoldOn(ground, gold);
+    return sealGoldOn(sealLum(sp && sp.ink === "charcoal" ? CHIP_SEAL.GROUND.light : CHIP_SEAL.GROUND.dark), gold);
+  };
+  /* P72 T11: the ground's samples [[x, y], ...] about the seal's centre (cx, cy) at its outer radius R - GROUND_RADII x
+     GROUND_ANGLES, in the caller's own px */
+  const sealGroundSamples = (cx, cy, R) => {
+    const S = CHIP_SEAL, out = [];
+    for (const f of S.GROUND_RADII) {
+      for (let i = 0; i < S.GROUND_ANGLES; i++) { const a = 2 * Math.PI * i / S.GROUND_ANGLES; out.push([cx + R * f * Math.cos(a), cy + R * f * Math.sin(a)]); }
+    }
+    return out;
   };
 
   /* RING TEXT, GLYPH BY GLYPH (the parent's frame read: a textPath bunched and drifted): each glyph's CENTRE sits at its
@@ -18503,15 +18554,18 @@ async function mount(doc) {
      centre (the group's origin): `R` the outer ring - the compiler's `seal_r` (the room the authored mark reserved), else
      the inner ring 12 px outside the mark and its name (`rc`, their half-diagonal) at the source's r - 6 of r = 50 - `rIn`
      the inner ring, and every other length the source's fraction of R: the strokes, the ring text's size and tracking,
-     the top arc (baseline on it) and the bottom arc (baseline pushed out by dy). `ink` is the seal's gold on its ground. */
-  const chipSeal = (sp, side) => {
+     the top arc (baseline on it) and the bottom arc (baseline pushed out by dy). `ink` is the seal's gold on its ground -
+     P72 T11: `ground` the luminances MEASURED under it (sealGold), null when nothing was. */
+  const chipSeal = (sp, side, ground = null) => {
     if (!chipStamped(sp)) return null;
     const S = CHIP_SEAL, rc = chipStampPaint(sp, side).r;
     const R = Number.isFinite(+sp.seal_r) && +sp.seal_r > 0 ? +sp.seal_r : (rc + S.GAP_PX) * S.SRC_R / S.INNER_R;
     const u = R / S.SRC_R, size = S.TEXT_SIZE * u, track = S.TEXT_TRACK * u;
     const txt = (v) => (typeof v === "string" && v.trim() ? v : null);
     const top = txt(sp.ring_text), bot = txt(sp.ring_text_bottom);
-    return { rc, R, rIn: S.INNER_R * u, outerW: S.OUTER_W * u, innerW: S.INNER_W * u, size, track, ink: sealGold(sp),
+    const measured = sealGrounds(ground).length ? sealGoldReport(ground) : null;   /* P72 T11: the spread it was read on */
+    return { rc, R, rIn: S.INNER_R * u, outerW: S.OUTER_W * u, innerW: S.INNER_W * u, size, track, ink: sealGold(sp, CHIP_SEAL.GOLD, ground),
+             ground: measured,
              top: top ? Object.assign({ text: top, r: S.TOP_R * u }, sealGlyphs(top, S.TOP_R * u, size, track)) : null,
              bottom: bot ? Object.assign({ text: bot, r: S.BOTTOM_R * u, dy: S.BOTTOM_DY * u }, sealGlyphs(bot, S.BOTTOM_R * u, size, track)) : null };
   };
@@ -18567,11 +18621,12 @@ async function mount(doc) {
     const side = Math.min(requested, b.w > 0 ? b.w : requested, b.h > 0 ? b.h : requested);
     const s = pose.scale * ix.scale;
     const stamped = chipStamped(sp);
-    const g = stamped ? chipStampGroup(ctx, pose, ix, cx, cy, side, s)
+    const seal = stamped ? chipStampSeal(ctx, cx, cy, side) : null;   /* P72 T11: its gold on the ground under it at its contact */
+    const g = stamped ? chipStampGroup(ctx, pose, ix, cx, cy, side, s, seal)
       : el("g", "chipstamp", svg, { opacity: pose.fade.toFixed(3),
         transform: "translate(" + (cx + ix.dx).toFixed(1) + " " + (cy + pose.dy + ix.dy).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
     const off = stamped ? chipStampPaint(sp, side).off : [0, 0];   /* the art about its PAINTED centre, the group's origin */
-    if (stamped) paintChipSeal(ctx, g, chipSeal(sp, side), pose.ink);   /* P70 T1b: the seal, under the art, in the mark's group */
+    if (stamped) paintChipSeal(ctx, g, seal, pose.ink);   /* P70 T1b: the seal, under the art, in the mark's group */
     el("image", "chipstampart", g, {
       x: (-side / 2 - off[0]).toFixed(1), y: (-side / 2 - off[1]).toFixed(1), width: side.toFixed(1), height: side.toFixed(1),
       href: src, preserveAspectRatio: "xMidYMid meet",
@@ -18586,7 +18641,7 @@ async function mount(doc) {
           + ";stroke-width:4px;stroke-linejoin:round",
       };
       if (stamped) {   /* P70 T1b: the name is the SEAL's ink - gold (E99 s123) - and eases back with it (s121 (4)) */
-        labAt.style = labAt.style.replace("fill:" + chipStampInk(sp.ink) + ";", "fill:" + sealGold(sp) + ";");
+        labAt.style = labAt.style.replace("fill:" + chipStampInk(sp.ink) + ";", "fill:" + seal.ink + ";");
         labAt.opacity = pose.ink.toFixed(3);
       }
       const lab = el("text", "chipstamplab", g, labAt);
@@ -18617,20 +18672,38 @@ async function mount(doc) {
              r: 0.5 * Math.hypot(side * (p[2] - p[0]), side * (p[3] - p[1])) };
   };
 
+  /* P72 T11 (E99 s130 (2)): THE SEAL, ITS GOLD ON THE GROUND MEASURED UNDER IT, FIXED ONCE AT ITS CONTACT (the parent's
+     review): every frame of the seal's life - the approach, the squash, the rest, the exit - asks for the SAME ground, the
+     one under the seal at `at + STAMP_LAND.tc` (the instant the mark is its own size, stampXf's scale exactly 1): the
+     samples about the PAINTED centre at the contact's idle pose, at the seal's radius times the contact's scale, read by
+     the engine's ctx.groundLumThen(pts, t0) as the world STOOD at t0 (its Ken Burns and camera at the contact, so a push
+     or a slide under the seal never steps its gold). A pure function of the declaration, not a state: a seek is the play.
+     Each sample is its own luminance (null unmeasured), so the worst binds - one gold per seal, the darkest ground wins.
+     The rings, the ring text, the name and the shockwave all take it. Absent a reader (node): the row's authored ground. */
+  function chipStampSeal(ctx, cx, cy, side) {
+    const { sp, groundLumThen, idle, hash, seed, si } = ctx, P = chipStampPaint(sp, side), R = chipSeal(sp, side).R;
+    if (typeof groundLumThen !== "function") return chipSeal(sp, side, null);
+    const tc = +sp.at + STAMP_LAND.tc;
+    const ic = sp.idle && sp.idle !== "none" ? idle(sp.idle, tc, hash(seed | 0, si | 0, 997)) : { scale: 1, dx: 0, dy: 0 };
+    const pts = sealGroundSamples(cx + P.off[0] + ic.dx, cy + P.off[1] + ic.dy, R * ic.scale);
+    return chipSeal(sp, side, groundLumThen(pts, tc));
+  }
+
   /* P70 T1: the stamped chip's group and its impact ring. The ring is drawn FIRST, in the species layer under the mark,
      radiating from the contact point (the painted centre on the surface) at the art's own radius x ring.r - it does not
      ride the mark's scale, turn or dip. The group carries the mark's pose as the dock's `stopCss` writes it: translate
      (the receiver's dip), the free rotation, the clamped scale, the hit's squash frame; about the painted centre. */
-  function chipStampGroup(ctx, pose, ix, cx, cy, side, s) {
+  function chipStampGroup(ctx, pose, ix, cx, cy, side, s, seal) {
     const { sp, svg, el } = ctx;
     const P = chipStampPaint(sp, side), pcx = cx + P.off[0] + ix.dx, pcy = cy + P.off[1] + ix.dy;
-    const seal = chipSeal(sp, side), r0 = seal ? seal.R : P.r;   /* P70 T1b: thrown from the SEAL's border, as the source's is (:156 r * (1 + shock)) */
+    const r0 = seal ? seal.R : P.r;   /* P70 T1b: thrown from the SEAL's border, as the source's is (:156 r * (1 + shock)) */
     if (pose.ring) {
       /* P70 T1c (E99 s127 (2)): THE SHOCKWAVE IS THE SEAL'S GOLD, as the reference's is its seal's colour (badge-stamp.tsx:158
-         strokes the shock circle in `color`, the seal's one ink) - the seal's own ink, so darkened on the cream by the seal's
-         contrast law (sealGold) and never inked from the ground. Its timing is T1b's, unchanged. */
+         strokes the shock circle in `color`, the seal's one ink) - the seal's own ink, so it takes the seal's contrast law
+         (sealGold: P72 T11, on the ground measured under the seal) and is never the bare prop's chalk or charcoal. Its
+         timing is T1b's, unchanged. */
       el("circle", "chipstampring", svg, { cx: pcx.toFixed(1), cy: pcy.toFixed(1), r: (r0 * pose.ring.r).toFixed(1), fill: "none",
-        stroke: seal ? seal.ink : sealGold(sp), "stroke-width": pose.ring.width.toFixed(2),
+        stroke: seal.ink, "stroke-width": pose.ring.width.toFixed(2),
         opacity: pose.ring.alpha.toFixed(3) });
     }
     const a = Math.abs(pose.alpha || 0), th = (pose.alpha || 0) < 0 ? (pose.theta || 0) + Math.PI / 2 : (pose.theta || 0);
@@ -18650,8 +18723,10 @@ async function mount(doc) {
   function paintChipSeal(ctx, g, seal, ink) {
     if (!seal) return;
     const { el } = ctx, S = CHIP_SEAL, col = seal.ink, k = Number.isFinite(+ink) ? +ink : 1;
-    el("circle", "chipseal", g, { cx: 0, cy: 0, r: seal.R.toFixed(1), fill: "none", stroke: col,
-      "stroke-width": seal.outerW.toFixed(2), opacity: k.toFixed(3) });
+    const gr = seal.ground, named = gr ? { "data-ground-min": gr.min.toFixed(4), "data-ground-max": gr.max.toFixed(4),
+      "data-ground-worst": gr.worst.toFixed(3), "data-ground-holds": gr.holds ? "1" : "0" } : {};   /* P72 T11: the spread, for a probe */
+    el("circle", "chipseal", g, Object.assign({ cx: 0, cy: 0, r: seal.R.toFixed(1), fill: "none", stroke: col,
+      "stroke-width": seal.outerW.toFixed(2), opacity: k.toFixed(3) }, named));
     el("circle", "chipsealin", g, { cx: 0, cy: 0, r: seal.rIn.toFixed(1), fill: "none", stroke: col,
       "stroke-width": seal.innerW.toFixed(2), opacity: (k * S.INNER_A).toFixed(3) });
     [[seal.top, 1], [seal.bottom, -1]].forEach(([arc, side]) => {
@@ -22594,6 +22669,7 @@ async function mount(doc) {
                   camNow, idleOf,   /* P50 T5: a species ON A WORLD (the map's light, arc and stamp) rides the world's own camera and idle - the species layer is not the world div and carries neither by itself */
                   STAGE_W, STAGE_H, PORTRAIT,
                   groundLum: (pts) => groundLumAt(sc, pts),   /* P71 T14: the measured ground under stage-px samples (the ruler's ink) */
+                  groundLumThen: (pts, t0) => groundLumsThen(sc, pts, t0),   /* P72 T11: ... as the world stood at t0, per point (a seal's contact) */
                   propHatchLines });   /* P70 T7 / E99 s128: T6b's resting hatch, by the prop's own line law - a stage object IN the world (the balance) casts it; read at call time, so no painter's bytes move */
         return;
       }
@@ -22983,6 +23059,7 @@ async function mount(doc) {
   TL.scenes.forEach((s) => {   /* decode every plate a stamp lands on up front, so the first frame of its ring has it */
     if (s.world && s.world.asset_id && ((s.docks || []).some((d) => d && (d.arrive === "stamp" || d.arrive === "poof"))   /* P70 T8: a poof's ink reads the same ground */
         || (s.species || []).some((e) => e && e.kind === "ruler"))) ringPlate(s.world.asset_id);   /* P71 T14: and a ruler's ground */
+    if (s.world && s.world.asset_id && (s.species || []).some((e) => e && e.kind === "chip" && chipStamped(e))) ringPlate(s.world.asset_id);   /* P72 T11: and a seal's - its gold reads the ground under it; started here and not awaited, exactly as the stamp ring's and the ruler's (a cold seek before the decode lands reads the world's own ground - the shared exposure, filed) */
   });
   if ((TL.caption_pages || []).length) TL.scenes.forEach((s) => {   /* P72 T14: and every picture plate a caption can sit on */
     if (s.world && s.world.asset_id && !s.world.kind) ringPlate(s.world.asset_id);
@@ -23108,6 +23185,40 @@ async function mount(doc) {
     cap.style.right = ((1 - rx - rw) * STAGE_W).toFixed(1) + "px";
     cap.style.bottom = "auto";
     cap.style.top = (ry * STAGE_H + Math.max(0, (rh * STAGE_H - cap.offsetHeight) / 2)).toFixed(1) + "px";
+  };
+  /* P72 T11 (E99 s130 (2), the parent's review): THE GROUND AS THE WORLD STOOD AT t0 - what a seal's gold is fixed on, once,
+     at its contact, so the push and slide of a Ken Burns (or the camera) under it never step it. `worldXfAt` is the
+     current world element's transform at t0 as `paint` writes it mid-scene (the camera, then the rest: the authored Ken
+     Burns and the plate's idle; a page at a depth carries only the rest, a world in planes nothing) - a pure function of
+     the scene and t0, MIRRORING paint's three branches (paint is not re-routed through it; a change there is mirrored
+     here). The seek-free path: a stage point P under the seal at t0 is the world's own point inv(M(t0))(P); on THIS frame
+     that point is drawn at M(now) of it, read from the element, and ringRgbAt reads it there - so the pixel is the one
+     that was under the seal at its contact, whatever frame paints it. One luminance per point (null unmeasured). */
+  const worldXfAt = (scene, t0) => {
+    const w = scene.world || {}, isLedger = w.kind === "ledger", isClip = w.kind === "clip", isVecmap = w.kind === "vecmap";
+    if ((!isLedger && !isClip && !isVecmap && w.layers || []).some((l) => l && A[l.key])) return "";   /* the camera is on the planes */
+    const kb0 = w.ken_burns || { scale: 0, x: 0, y: 0 };
+    const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
+    const p = clamp01((lifeFrom(scene.span[0], t0) - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
+    const idlePose = (isLedger || isClip || isVecmap) ? { scale: 1, dx: 0, dy: 0 }
+      : idleXf(idleOf("plate", w.idle), lifeT(t0), lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleDriftPx(w.idle_drift_px, KIN.plate_idle_drift_px) });
+    const z = (1 + p * kb.scale) * idlePose.scale;
+    const rest = `translateX(${(0).toFixed(1)}px) scale(${z.toFixed(4)}) translate(${(p * kb.x).toFixed(1)}px, ${(p * kb.y).toFixed(1)}px)`
+      + (KIN.plate_idle_paints === true ? idleDriftCss(idlePose, PARALLAX.FLAT) : "");
+    return (isLedger && pageDepthOf(w.page)) ? rest : camCss(camNow(scene, t0)) + rest;
+  };
+  const cssMatrix = (css) => new DOMMatrix(css && css !== "none" ? css : "matrix(1, 0, 0, 1, 0, 0)");
+  const groundLumsThen = (sc, pts, t0) => {
+    if ((sc.world || {}).kind === "clip" || !wB) return (pts || []).map(() => null);
+    const cs = getComputedStyle(wB), o = String(cs.transformOrigin || "").split(" ").map(parseFloat);
+    const O = [wB.offsetLeft + (Number.isFinite(o[0]) ? o[0] : wB.offsetWidth / 2), wB.offsetTop + (Number.isFinite(o[1]) ? o[1] : wB.offsetHeight / 2)];
+    const K = cssMatrix(cs.transform).multiply(cssMatrix(worldXfAt(sc, t0)).inverse());
+    const lr = spTop.getBoundingClientRect(), kx = lr.width / STAGE_W, ky = lr.height / STAGE_H;
+    return (pts || []).map(([x, y]) => {
+      const q = K.transformPoint(new DOMPoint(x - O[0], y - O[1]));
+      const v = ringRgbAt(sc, wB, lr.left + (q.x + O[0]) * kx, lr.top + (q.y + O[1]) * ky);
+      return v ? stampRingLum(v) : null;
+    });
   };
   const render = (t) => {
     pmHideAll();   /* P69 T26e: a prop morph's mesh shows only on a frame that paints it */

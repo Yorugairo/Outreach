@@ -3512,9 +3512,10 @@ CHIP_STAMP_DARK_PLATE = "plate-charcoal"
 CHIP_STAMP_CHARCOAL = (37, 49, 60)   # CHIP_SEAL.GROUND.dark, the template's --charcoal
 
 
-def _chip_stamp(arrive: bool, ring: bool = False) -> tuple[dict, dict]:
+def _chip_stamp(arrive: bool, ring: bool = False, ground: tuple[str, bytes] | None = None) -> tuple[dict, dict]:
+    """`ground` (P72 T11): a plate id and its PNG in place of the flat cream / charcoal plate - the same source otherwise."""
     import build_scene_timeline_f as BST
-    plate = CHIP_STAMP_DARK_PLATE if ring else CHIP_STAMP_PLATE
+    plate = ground[0] if ground else (CHIP_STAMP_DARK_PLATE if ring else CHIP_STAMP_PLATE)
     world = {"asset_id": plate, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
     entry = dict(CHIP_STAMP_ENTRY, **({"arrive": "stamp"} if arrive else {}), **(CHIP_STAMP_RING_TEXT if ring else {}))
     errs = BST.validate_species([entry], (0, 0, 0), plate)
@@ -3530,7 +3531,7 @@ def _chip_stamp(arrive: bool, ring: bool = False) -> tuple[dict, dict]:
     # (`_readable_species_during`); the harness's hand-written stage captions do not, and sat across the chip
     tl["captions"], tl["caption_pages"] = [], []
     uris = _base_uris()
-    uris[plate] = uri("image/png", png_solid(64, 36, CHIP_STAMP_CHARCOAL if ring else CHIP_STAMP_CREAM))
+    uris[plate] = uri("image/png", ground[1] if ground else png_solid(64, 36, CHIP_STAMP_CHARCOAL if ring else CHIP_STAMP_CREAM))
     uris[BST.PROP_PREFIX + entry["icon"]] = uri("image/png", png_proxy(asset["file"]))
     return tl, uris
 
@@ -3550,6 +3551,52 @@ FRAME_T.update({
     # back to 0.86 - the two rings and the two arcs as they stay, the mark off-square at its -9 deg rest
     "chip-stamp-seal-text": round(CHIP_STAMP_ENTRY["at"] + 1.30, 3),
 })
+
+
+# ---- P72 T11 (E99 s130 (2)): A SEAL ON A PHOTO ADJUSTS ITS GOLD -------------------------------------------------------
+# The operator: "yes, a seal on a photo should adjust its gold". chip-stamp-seal-text's source exactly (the ring text, the
+# name's ink `cream`, the seal at rest 1.30 s after the enter) on a MID-TONE PHOTO PLATE instead of the charcoal: the
+# gold reads the luminance MEASURED under the seal (the engine's groundLumAt at each of chip.mjs's sealGroundSamples -
+# 64 points on the name's band, the top arc, the inner and the outer ring), not the row's authored ink. ONE GOLD PER SEAL,
+# THE DARKEST GROUND WINS: it holds CONTRAST_MIN at the worst of the 64 (here the darkest, 0.280 of a 0.280-0.373 spread).
+# #E8B86D reads 1.56:1 on this ground (the parent's finding, 1.55:1); the gold that holds is its channels scaled down,
+# #544227 (lightening cannot reach 3:1 on a mid-tone). The plate is a PROXY of a photograph (E99 s31: no approved
+# picture enters a golden): a warm mid-grey with a soft two-octave value noise and a fine grain, deterministic and
+# stdlib-only like png_scene, so its pixels are identical on any machine and the ground under the seal is a photo's
+# texture rather than one flat colour.
+SEAL_PHOTO_PLATE = "plate-photo-mid"
+SEAL_PHOTO_BASE = (158, 154, 146)   # the photo's mean: a warm mid-grey, WCAG luminance ~0.32 (#9A9A9A's)
+SEAL_PHOTO_AMP = (14, 3)            # the texture: +-14 levels of soft value noise (8 x 6 cells), +-3 of grain
+
+
+def png_photo(w: int, h: int, base: tuple[int, int, int], amp: tuple[int, int] = SEAL_PHOTO_AMP, seed: int = 7) -> bytes:
+    """A deterministic PHOTO PROXY: `base` plus a bilinear value noise on an 8 x 6 lattice (+-amp[0] levels, smoothstep
+    between lattice points) plus a per-pixel grain (+-amp[1]); the hash is integer arithmetic, so no library enters."""
+    def hv(x: int, y: int, k: int) -> float:   # a lattice value in [-1, 1]
+        n = (x * 374761393 + y * 668265263 + k * 2147483647 + seed * 144269504) & 0xFFFFFFFF
+        n = ((n ^ (n >> 13)) * 1274126177) & 0xFFFFFFFF
+        return ((n ^ (n >> 16)) & 0xFFFF) / 32767.5 - 1.0
+    cx, cy = 8, 6
+    raw = bytearray()
+    for y in range(h):
+        raw += b"\x00"
+        fy = y / h * cy
+        y0, ty = int(fy), fy - int(fy)
+        ty = ty * ty * (3 - 2 * ty)
+        for x in range(w):
+            fx = x / w * cx
+            x0, tx = int(fx), fx - int(fx)
+            tx = tx * tx * (3 - 2 * tx)
+            a = hv(x0, y0, 0) * (1 - tx) + hv(x0 + 1, y0, 0) * tx
+            b = hv(x0, y0 + 1, 0) * (1 - tx) + hv(x0 + 1, y0 + 1, 0) * tx
+            v = (a * (1 - ty) + b * ty) * amp[0] + hv(x, y, 1) * amp[1]
+            raw += bytes(max(0, min(255, int(round(c + v)))) for c in base)
+    return (b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
+            + png_chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + png_chunk(b"IEND", b""))
+
+
+SURFACES["seal-on-photo"] = lambda: _chip_stamp(True, ring=True, ground=(SEAL_PHOTO_PLATE, png_photo(240, 135, SEAL_PHOTO_BASE)))
+FRAME_T["seal-on-photo"] = FRAME_T["chip-stamp-seal-text"]   # the seal at rest, as its charcoal twin is read
 
 
 # ---- P69 T26a / R26-273: A BAR CHANGES ITS OWN VALUE (E28) ---------------------------------------------------------

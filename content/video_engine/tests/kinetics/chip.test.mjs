@@ -324,7 +324,7 @@ test("P70 T1: the painter lands a stamped chip with its ring UNDER the mark, tur
   assert.match(lab.at.style, /font-size:59\.08px/);
   assert.equal(lab.at.y, (130 + 28 * 59.08 / 48).toFixed(1), "the gap scales with the floor");
   const plate = paintAt(sp, sp.at + 0.254, { world: { asset_id: "plate-plain" } });
-  assert.equal(plate[0].at.stroke, CHIP_SEAL.GOLD, "P70 T1c: on any other world too - never inked from the ground");
+  assert.equal(plate[0].at.stroke, CHIP_SEAL.GOLD, "P70 T1c: on any other world too - the seal's gold, never the bare prop's chalk or charcoal (P72 T11: with no ground reader in ctx, the row's authored ground)");
   const two = paintAt(stampForm({ arrive: "stamp", label: "NVIDIA\nCHIPS" }), 4 + 2);
   assert.equal(two.filter((e) => e.tag === "tspan")[1].at.dy, +(52 * 59.08 / 48).toFixed(2), "and the line step");
   assert.deepEqual(paintAt(sp, sp.at + 2).map((e) => e.tag), ["g", "circle", "circle", "image", "text"], "the ring is never held (the seal stays)");
@@ -752,4 +752,228 @@ test("T12: a seek IS the play with every state on", () => {
   assert.deepEqual(bb, fb);
   const src = chipStates.toString() + chipLitF.toString() + chipTickF.toString() + chipCheckPose.toString() + chipTabPose.toString() + chipPulseOnsets.toString();
   assert.ok(!/Math\.random|Date\.now|new Date|performance\./.test(src), src);
+});
+
+// ---------------------------------------------------------------- P72 T11 (E99 s130 (2)): a seal's gold adjusts by the MEASURED ground
+// The operator: "yes, a seal on a photo should adjust its gold". The seal's gold (its rings, ring text, name and shockwave)
+// reads the luminance MEASURED under it (the engine's groundLumAt, P70 T1c / P71 T14's reader, handed in as ctx.groundLum,
+// read sample by sample), as the bare prop's ring already does - not the row's authored `ink`. ONE GOLD PER SEAL, THE
+// DARKEST GROUND WINS (the plan's rule, the parent's review): the gold holds CONTRAST_MIN against EVERY sample under the
+// seal - for a darkened gold the binding sample is the darkest ground, for a lightened one the lightest. Gold as it is
+// wherever it holds; else the least change that holds. On the charcoal ground it stays #E8B86D and on the cream #A07F4B.
+const wcagLum = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+  .map((c) => (c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)))
+  .reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
+const onGround = (hex, g) => { const l = wcagLum(hex); return (Math.max(l, g) + 0.05) / (Math.min(l, g) + 0.05); };
+// the grounds the acceptance names, as a photo's pixels read (WCAG luminance): a dark photo, a mid-tone one, a light one
+const GROUNDS = { charcoal: wcagLum("#25313C"), cream: wcagLum("#F4E6C7"), "dark photo": wcagLum("#3A3530"),
+                  "mid-tone photo": wcagLum("#9A9A9A"), "light photo": wcagLum("#C8C0B0") };
+
+test("P72 T11: the seal's gold holds CONTRAST_MIN against the MEASURED ground - a dark photo, a mid-tone photo, a light photo, the cream", (t) => {
+  assert.equal(typeof CHIPMOD.sealGoldOn, "function", "chip.mjs exports the gold on a measured luminance");
+  for (const [name, g] of Object.entries(GROUNDS)) {
+    const hex = CHIPMOD.sealGoldOn(g), was = onGround(CHIP_SEAL.GOLD, g), is = onGround(hex, g);
+    t.diagnostic(`${name} (lum ${g.toFixed(4)}): ${CHIP_SEAL.GOLD} ${was.toFixed(2)}:1 -> ${hex} ${is.toFixed(2)}:1`);
+    assert.ok(is >= CHIP_SEAL.CONTRAST_MIN, `${name}: ${hex} reads ${is.toFixed(2)}:1, under ${CHIP_SEAL.CONTRAST_MIN}`);
+  }
+  assert.ok(onGround(CHIP_SEAL.GOLD, GROUNDS["mid-tone photo"]) < 1.6, "the parent's finding: #E8B86D reads 1.55:1 on the mid-tone photo");
+  assert.equal(CHIPMOD.sealGoldOn(GROUNDS.charcoal), CHIP_SEAL.GOLD, "s127: #E8B86D on the charcoal page, unchanged");
+  assert.equal(CHIPMOD.sealGoldOn(GROUNDS.cream), "#A07F4B", "s127: on the cream the darkened gold it always was");
+  assert.equal(CHIPMOD.sealGoldOn(GROUNDS["dark photo"]), CHIP_SEAL.GOLD, "a dark photo the gold already reads on keeps it");
+  assert.equal(CHIPMOD.sealGoldOn(GROUNDS.cream, "#C79E5E"), "#9F7E4B", "the dial's other candidate, as sealGold darkens it");
+});
+
+test("P72 T11: every measured ground from black to white gets a gold that holds CONTRAST_MIN, and the least change that does", () => {
+  const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  for (let i = 0; i <= 200; i++) {
+    const g = i / 200, hex = CHIPMOD.sealGoldOn(g);
+    assert.match(hex, /^#[0-9A-F]{6}$/);
+    assert.ok(onGround(hex, g) >= CHIP_SEAL.CONTRAST_MIN, `lum ${g}: ${hex} ${onGround(hex, g).toFixed(3)}:1`);
+    if (onGround(CHIP_SEAL.GOLD, g) >= CHIP_SEAL.CONTRAST_MIN) assert.equal(hex, CHIP_SEAL.GOLD, `lum ${g}: the gold reads as it is`);
+  }
+  // a dim ground (lum 0.156, the gold 2.79:1): lightening reaches 3:1 in far fewer steps than darkening to near black
+  const dim = wcagLum("#6E6E6E"), up = CHIPMOD.sealGoldOn(dim);
+  assert.ok(wcagLum(up) > wcagLum(CHIP_SEAL.GOLD), `lightened, not blackened: ${up}`);
+  assert.ok(rgb(up).every((v, k) => v >= rgb(CHIP_SEAL.GOLD)[k]), "toward white, channel by channel");
+});
+
+test("P72 T11: sealGold reads the measured ground when there is one, and the row's authored ink only when nothing was measured", () => {
+  const sp = stampForm({ arrive: "stamp", ink: "charcoal" });
+  assert.equal(CHIPMOD.sealGold(sp), "#A07F4B", "nothing measured: the authored rule, unchanged");
+  assert.equal(CHIPMOD.sealGold({}), CHIP_SEAL.GOLD);
+  assert.equal(CHIPMOD.sealGold(sp, CHIP_SEAL.GOLD, null), "#A07F4B");
+  assert.equal(CHIPMOD.sealGold(sp, CHIP_SEAL.GOLD, NaN), "#A07F4B", "an unmeasured ground is no ground");
+  assert.equal(CHIPMOD.sealGold(sp, CHIP_SEAL.GOLD, GROUNDS.charcoal), CHIP_SEAL.GOLD, "the row says charcoal, the ground is dark: gold");
+  assert.equal(CHIPMOD.sealGold({ ink: "cream" }, CHIP_SEAL.GOLD, GROUNDS["mid-tone photo"]), CHIPMOD.sealGoldOn(GROUNDS["mid-tone photo"]),
+    "the row says cream, the ground is a mid-tone photo: the ground's gold");
+});
+
+test("P72 T11: the seal's ground samples lie where its gold is drawn - the name's band, the ring text, the inner and outer rings", () => {
+  assert.equal(typeof CHIPMOD.sealGroundSamples, "function");
+  const pts = CHIPMOD.sealGroundSamples(700, 400, 200);
+  assert.equal(pts.length, CHIP_SEAL.GROUND_RADII.length * CHIP_SEAL.GROUND_ANGLES);
+  assert.deepEqual(CHIP_SEAL.GROUND_RADII, [0.5, CHIP_SEAL.TOP_R / CHIP_SEAL.SRC_R, CHIP_SEAL.INNER_R / CHIP_SEAL.SRC_R, 1]);
+  const radii = [...new Set(pts.map(([x, y]) => Math.hypot(x - 700, y - 400).toFixed(6)))].map(Number).sort((a, b) => a - b);
+  assert.deepEqual(radii.map((r) => r.toFixed(3)), [100, 152, 176, 200].map((r) => r.toFixed(3)));
+  assert.ok(near(pts.reduce((a, [x]) => a + x, 0) / pts.length, 700, 1e-9) && near(pts.reduce((a, [, y]) => a + y, 0) / pts.length, 400, 1e-9), "about the centre");
+});
+
+test("P72 T11 (review): ONE GOLD PER SEAL, THE DARKEST GROUND WINS - the gold holds CONTRAST_MIN at the WORST sample under the seal", (t) => {
+  // the mid photo's measured spread under the seal (frames: 64 samples, 0.2802 .. 0.3728, median 0.3199)
+  const spread = [0.2802, 0.2931, 0.3199, 0.3530, 0.3728], hex = CHIPMOD.sealGoldOn(spread);
+  const worst = Math.min(...spread.map((g) => onGround(hex, g)));
+  t.diagnostic(`mid photo spread ${spread[0]}..${spread[4]}: ${hex} ${worst.toFixed(2)}:1 at the worst sample, `
+    + `${onGround(hex, 0.3199).toFixed(2)}:1 at the median (the median's own gold ${CHIPMOD.sealGoldOn(0.3199)} reads `
+    + `${onGround(CHIPMOD.sealGoldOn(0.3199), spread[0]).toFixed(2)}:1 at the darkest)`);
+  assert.equal(hex, "#544227", "darkened: the DARKEST ground binds");
+  assert.equal(hex, CHIPMOD.sealGoldOn(spread[0]), "... it is the gold of the darkest sample alone");
+  assert.ok(worst >= CHIP_SEAL.CONTRAST_MIN && near(worst, onGround(hex, spread[0]), 1e-12));
+  assert.ok(onGround(CHIPMOD.sealGoldOn(0.3199), spread[0]) < CHIP_SEAL.CONTRAST_MIN, "the median's gold would not hold at the darkest");
+  // lightened (a dim spread the gold fails on): the LIGHTEST ground binds
+  const dim = [0.10, 0.14, 0.17], up = CHIPMOD.sealGoldOn(dim);
+  assert.ok(wcagLum(up) > wcagLum(CHIP_SEAL.GOLD), `lightened: ${up}`);
+  assert.ok(dim.every((g) => onGround(up, g) >= CHIP_SEAL.CONTRAST_MIN), `${up} holds at every sample`);
+  assert.equal(up, CHIPMOD.sealGoldOn(Math.max(...dim)), "... it is the gold of the lightest sample alone");
+  // a flat ground reads the same as one luminance - charcoal and cream unchanged (s127)
+  assert.equal(CHIPMOD.sealGoldOn(new Array(64).fill(GROUNDS.cream)), "#A07F4B");
+  assert.equal(CHIPMOD.sealGoldOn(new Array(64).fill(GROUNDS.charcoal)), CHIP_SEAL.GOLD);
+  // a spread the gold holds on everywhere keeps the gold; an unmeasured sample is dropped, not read as black
+  assert.equal(CHIPMOD.sealGoldOn([GROUNDS.charcoal, GROUNDS["dark photo"]]), CHIP_SEAL.GOLD);
+  assert.equal(CHIPMOD.sealGoldOn([null, NaN, GROUNDS.cream]), "#A07F4B");
+  assert.equal(CHIPMOD.sealGold({ ink: "charcoal" }, CHIP_SEAL.GOLD, [null, NaN]), "#A07F4B", "nothing measured: the row's authored rule");
+});
+
+// the painter with the engine's measured-ground readers stubbed. `groundLumThen(pts, t0)` is the ground under stage-px
+// points AS THE WORLD STOOD AT t0 (one luminance per point); it records what it was asked and answers per point.
+// `groundLum` is the live frame's reader (the ruler's): a seal must never call it, so it answers a ground that would
+// move the gold if it were read.
+const paintOn = (sp, t, lum, idle = () => ({ scale: 1, dx: 0, dy: 0 })) => {
+  const { made, el } = stub(), asked = [], live = [];
+  paintChip({ sp, t, sc: { world: { asset_id: "plate-photo" } }, svg: { kids: [] }, el, A: { ["prop:" + sp.icon]: "data:image/png;base64,approved" },
+    resolveTarget: () => ({ x: 960, y: 540, w: 0, h: 0 }), hash: () => 0.5, idle, seed: 1, si: 0,
+    groundLum: (pts) => { live.push(pts); return 0.9; },
+    groundLumThen: (pts, t0) => { asked.push({ pts, t0 }); return pts.map((pt, i) => (typeof lum === "function" ? lum(pt, i, t0) : lum)); } });
+  return { made, asked, live };
+};
+
+test("P72 T11: the painter reads every sample AT THE CONTACT and inks the rings, the ring text, the name AND the shockwave with the one gold (s127 (2))", (t) => {
+  const sp = stampForm({ arrive: "stamp", paint: [0, 0.1, 1, 0.9], ring_text: "AI ACCELERATOR", ring_text_bottom: "GPU" });
+  const g = GROUNDS["mid-tone photo"], want = CHIPMOD.sealGoldOn(g);
+  const { made, asked, live } = paintOn(sp, sp.at + 0.254, g);
+  const R = CHIPMOD.chipSeal(sp, 260).R;
+  assert.equal(live.length, 0, "a seal never reads the live frame's ground");
+  assert.equal(asked.length, 1, "one read of the ground as it stood at the contact");
+  assert.equal(asked[0].t0, sp.at + STAMP_LAND.tc, "the contact instant: the seal is its own size there (stampXf scale 1)");
+  assert.deepEqual(asked[0].pts, CHIPMOD.sealGroundSamples(960, 540, R), "the samples about the PAINTED centre at the seal's own radius");
+  const inks = { shockwave: made.find((e) => e.cls === "chipstampring").at.stroke, outer: made.find((e) => e.cls === "chipseal").at.stroke,
+    inner: made.find((e) => e.cls === "chipsealin").at.stroke,
+    text: made.filter((e) => e.cls === "chipsealtext").map((e) => /fill:(#[0-9A-F]{6})/.exec(e.at.style)[1]),
+    name: /fill:(#[0-9A-F]{6});/.exec(made.find((e) => e.cls === "chipstamplab").at.style)[1] };
+  t.diagnostic(`mid-tone photo: every seal ink ${want}, ${onGround(want, g).toFixed(2)}:1 (was ${CHIP_SEAL.GOLD} ${onGround(CHIP_SEAL.GOLD, g).toFixed(2)}:1)`);
+  assert.deepEqual(inks, { shockwave: want, outer: want, inner: want, text: [want, want], name: want });
+  assert.notEqual(want, CHIP_SEAL.GOLD);
+  const none = paintOn(stampForm({ arrive: "stamp", ink: "charcoal" }), 6, null).made;
+  assert.equal(none.find((e) => e.cls === "chipseal").at.stroke, "#A07F4B", "nothing measured: the row's authored rule");
+  const dark = paintOn(stampForm({ arrive: "stamp", ink: "charcoal" }), 6, GROUNDS.charcoal).made;
+  assert.equal(dark.find((e) => e.cls === "chipseal").at.stroke, CHIP_SEAL.GOLD, "the measured charcoal wins over the row's word");
+  // a varied ground: half the samples at the mid photo's darkest, half at its lightest - the darkest wins
+  const varied = paintOn(sp, sp.at + 2, (pts, i) => (i % 2 ? 0.3728 : 0.2802)).made;
+  assert.equal(varied.find((e) => e.cls === "chipseal").at.stroke, "#544227", "one gold per seal, the darkest ground wins");
+  assert.equal(varied.find((e) => e.cls === "chipseal").at.stroke, CHIPMOD.sealGoldOn(0.2802));
+});
+
+test("P72 T11 (round 3): the gold is fixed ONCE, at the contact, and held for the seal's life - Ken Burns, the dip, the squash and the idle never step it", (t) => {
+  // the idle is live (a breath that scales and walks the seal every frame) and the ground answer depends on WHERE and WHEN
+  // it is asked: a seal that read the frame it paints would step; one that reads the contact holds one value
+  const sp = stampForm({ arrive: "stamp", idle: "breath", ring_text: "AI ACCELERATOR", ring_text_bottom: "GPU" });
+  const idle = (kind, tt) => ({ scale: 1 + 0.04 * Math.sin(3 * tt), dx: 6 * Math.sin(tt), dy: 4 * Math.cos(tt) });
+  const tc = sp.at + STAMP_LAND.tc, ic = idle("breath", tc), R = CHIPMOD.chipSeal(sp, 260).R;
+  const ground = (pt, i, t0) => 0.25 + 0.2 * ((Math.floor(pt[0] / 40) + Math.floor(pt[1] / 40)) % 2) + 0.01 * t0;   // a checkered photo
+  const seen = new Set(), ts = [];
+  for (let i = 0; i <= 120; i++) ts.push(sp.at + i * (sp.dur - 0.01) / 120);   // the approach, the contact, the squash, the rest, the exit
+  for (const tt of ts) {
+    const { made, asked, live } = paintOn(sp, tt, ground, idle);
+    assert.equal(live.length, 0);
+    assert.equal(asked.length, 1);
+    assert.equal(asked[0].t0, tc, `at ${tt.toFixed(3)}: the ground is the contact's`);
+    assert.deepEqual(asked[0].pts, CHIPMOD.sealGroundSamples(960 + ic.dx, 540 + ic.dy, R * ic.scale),
+      `at ${tt.toFixed(3)}: the samples at the contact's place and scale`);
+    const seal = made.find((e) => e.cls === "chipseal");
+    if (seal) seen.add(seal.at.stroke);
+  }
+  t.diagnostic(`gold across the seal's life (${ts.length} instants): ${[...seen].join(", ")}`);
+  assert.equal(seen.size, 1, `one gold for the seal's life: ${[...seen]}`);
+});
+
+test("P72 T11: no seal, no measure - the unstamped stamp form never asks for the ground and keeps its named ink", () => {
+  for (const sp of [stampForm(), stampForm({ arrive: "throw" })]) assert.equal(paintOn(sp, 6, 0.3).asked.length, 0, JSON.stringify(sp));
+  assert.match(paintOn(stampForm(), 6, 0.3).made.find((e) => e.cls === "chipstamplab").at.style, /fill:#F4E6C7;/,
+    "an unstamped name keeps CHIP_STAMP's cream ink");
+});
+
+test("P72 T11 (round 3): a spread NO ink can hold falls back to the DARKEST sample's own gold - never white or black - and says so", (t) => {
+  assert.equal(typeof CHIPMOD.sealGoldReport, "function", "chip.mjs exports the gold with its spread");
+  const cases = {
+    "dark photo + one highlight (63 x 0.03 + 0.6)": [...new Array(63).fill(0.03), 0.6],
+    "mid-tone + one shadow (63 x 0.32 + 0.02)": [...new Array(63).fill(0.32), 0.02],
+    "a horizon [0.05, 0.5]": [0.05, 0.5],
+    "a uniform ground (64 x 0.32)": new Array(64).fill(0.32),
+  };
+  for (const [name, gs] of Object.entries(cases)) {
+    const r = CHIPMOD.sealGoldReport(gs), lo = Math.min(...gs), hi = Math.max(...gs);
+    const worst = Math.min(...gs.map((g) => onGround(r.ink, g)));
+    t.diagnostic(`${name}: ${r.ink} holds ${r.holds} | spread ${r.min}..${r.max} (n ${r.n}) | ${r.worst.toFixed(2)}:1 at the worst sample`);
+    assert.ok(r.ink !== "#000000" && r.ink !== "#FFFFFF", `${name}: never white or black (${r.ink})`);
+    assert.deepEqual([r.min, r.max, r.n], [lo, hi, gs.length], `${name}: the spread is reported`);
+    assert.ok(near(r.worst, worst, 1e-12), `${name}: the ratio at the worst sample`);
+    assert.equal(r.holds, worst >= CHIP_SEAL.CONTRAST_MIN);
+    assert.equal(CHIPMOD.sealGoldOn(gs), r.ink, `${name}: sealGoldOn is the report's ink`);
+    if (!r.holds) assert.equal(r.ink, CHIPMOD.sealGoldOn(lo), `${name}: infeasible - the darkest ground wins, alone`);
+  }
+  assert.equal(CHIPMOD.sealGoldReport(cases["dark photo + one highlight (63 x 0.03 + 0.6)"]).ink, CHIP_SEAL.GOLD,
+    "a dark photo with one bright spot keeps #E8B86D, as the base did");
+  assert.equal(CHIPMOD.sealGoldReport(cases["a horizon [0.05, 0.5]"]).holds, false);
+  assert.equal(CHIPMOD.sealGoldReport(cases["a uniform ground (64 x 0.32)"]).holds, true);
+  assert.equal(CHIPMOD.sealGoldReport([]).n, 0, "nothing measured: an empty spread");
+  // a deterministic sweep of random spreads and single grounds: never white or black, and a feasible one always holds
+  let seed = 7;
+  const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+  for (let i = 0; i < 600; i++) {
+    const n = 1 + Math.floor(rnd() * 8), a = rnd(), w = rnd() * rnd();
+    const gs = Array.from({ length: n }, () => Math.min(1, a * (1 - w) + w * rnd()));
+    const r = CHIPMOD.sealGoldReport(gs);
+    assert.ok(r.ink !== "#000000" && r.ink !== "#FFFFFF", `${JSON.stringify(gs)} -> ${r.ink}`);
+    if (n === 1) assert.equal(r.holds, true, `a single ground always holds: ${gs[0]}`);
+  }
+  for (let i = 0; i <= 200; i++) assert.ok(!["#000000", "#FFFFFF"].includes(CHIPMOD.sealGoldOn(i / 200)), `lum ${i / 200}`);
+});
+
+test("P72 T11 (round 3): the seal carries its spread - the outer ring names it for a probe", () => {
+  const sp = stampForm({ arrive: "stamp" });
+  const r = CHIPMOD.chipSeal(sp, 260, [0.03, 0.6]);
+  assert.deepEqual([r.ground.min, r.ground.max, r.ground.holds], [0.03, 0.6, false]);
+  const outer = paintOn(sp, 6, (pt, i) => (i % 2 ? 0.6 : 0.03)).made.find((e) => e.cls === "chipseal");
+  assert.equal(outer.at["data-ground-min"], "0.0300");
+  assert.equal(outer.at["data-ground-max"], "0.6000");
+  assert.equal(outer.at["data-ground-holds"], "0");
+  assert.equal(outer.at["data-ground-worst"], CHIPMOD.sealGoldReport([0.03, 0.6]).worst.toFixed(3));
+  assert.equal(outer.at.stroke, CHIP_SEAL.GOLD);
+  const none = paintOn(stampForm({ arrive: "stamp", ink: "charcoal" }), 6, null).made.find((e) => e.cls === "chipseal");
+  assert.equal(none.at["data-ground-min"], undefined, "nothing measured: nothing named");
+});
+
+test("P72 T11 (round 3): the floor is on the INK - INFO: the ring as composited at its rest opacity", (t) => {
+  const k = STAMP_ARRIVAL.INK[1], ch = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  const over = (ink, ground) => "#" + ch(ink).map((v, i) => Math.round(k * v + (1 - k) * ch(ground)[i]).toString(16).padStart(2, "0")).join("").toUpperCase();
+  const rows = [["cream", "#F4E6C7"], ["charcoal", "#25313C"], ["mid-tone photo", "#9A9A9A"], ["light photo", "#C8C0B0"]];
+  for (const [name, ground] of rows) {
+    const g = wcagLum(ground), ink = CHIPMOD.sealGoldOn(g), px = over(ink, ground);
+    t.diagnostic(`INFO ${name}: ink ${ink} ${onGround(ink, g).toFixed(2)}:1 (the floor) | composited at ${k} -> ${px} ${onGround(px, g).toFixed(2)}:1`);
+    assert.ok(onGround(ink, g) >= CHIP_SEAL.CONTRAST_MIN, `${name}: the INK holds the floor`);
+  }
+  // the pin: the shipped cream seal is #A07F4B (acceptance (2)) and its composited pixel reads under 3:1 - a floor on the
+  // pixel would move it, so the floor is on the ink
+  const cream = wcagLum("#F4E6C7"), px = over("#A07F4B", "#F4E6C7");
+  assert.equal(CHIPMOD.sealGoldOn(cream), "#A07F4B");
+  assert.ok(onGround(px, cream) < CHIP_SEAL.CONTRAST_MIN, `composited ${px} ${onGround(px, cream).toFixed(2)}:1`);
 });
