@@ -544,7 +544,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - T0 evidence (the parent, 2026-09-24): (2) APPROVAL, the operator: `/prp-implement P71`. (1) base: lane B `cd0b630` (P70 T1b `50b2f85`, T4 `d0dd19b`, T1c `cd0b630` committed; no tracked dirty file); P70 T2 / T3 / T13 and P69 T37c are in flight on lane B as scratch patches - P71 slices that share their functions wait (T2 waits for T37c; T15 for P70 T8 + T13). (3) register row names P71 (this commit). (4) queue row `p71-hg1-the-bravos-verbs-wave-3` (this commit). (5) P69 stubs + a BACKLOG row point here (this commit). (6) BOOM: VERIFY.md folded in revision 2.
 
 ### T1: A figure writes its last letter - the sub's hand finishes when its word does (R26-314)
-- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t1/`)
+- Status: done - lane B `ef96cee` (R26-314; the sub's last glyph whole at the word's end; page-figure re-pinned; H: only inside the five subs' glyph boxes)
 - Owner: junior_developer (LANE B)
 - Depends on: T0
 - Bravos reference: none; this is a defect. For parity, HIS `Jw8ykhoOVBQ` 11:01, where the "$28 Billion" figure's
@@ -601,7 +601,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T2: A title relight clears on its last frame - the relight is a pure function of t (R26-308)
-- Status: pending
+- Status: done - lane B `11b94d1` (R26-308; H row 12's title no longer held sunflower ~5 s after its relight; no golden moved; the glow's colour-change repaint residue filed R26-324, the cold-vs-played row-12 frame R26-325)
 - Owner: junior_developer (LANE B)
 - Depends on: T0 for the code; P69 T37c merged for the golden re-pin and the frame read (both write the title goldens,
   and T37c sets the title's own ink that the relight must hand back to)
@@ -652,7 +652,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T3: A plain recast on the default clock never stands a half-written tick on an empty plot (R26-310)
-- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t3/`)
+- Status: done - lane B `e6aaa30` (R26-310; option 1: arriving labels written by 0.75, whole over an empty plot; 45-66 fragments per recast -> 0 on H's six plain recasts; the covering panel is T3b)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0
 - Bravos reference: Bravos builds inside a held frame, and its axes never show a fragment (46 §46.7; CAPABILITIES
@@ -718,8 +718,21 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Frame read: pending
 - Evidence: pending
 
+### T3b: A long-form plain recast carries the world it leaves - the target panel waits for the leaving data to un-draw; leaving labels leave whole over an empty plot (found by T3)
+- Status: in_progress (dispatched 2026-09-24 to T3's implementer, on cd0b630 + T3)
+- Owner: implementation_luna (LANE B)
+- Depends on: T3
+- Harvest: T3's frame read (`$SP/p71-t3/frames/sheet-flip.png`): on every long-form page the target state's opaque `rect.lp-panel` covers the leaving chart from the recast's FIRST frame (checked with `elementsFromPoint`), so at H 663.20 the bars vanish in one frame and the plot stands empty ~0.6 s; the leaving un-draw is never seen; the leaving labels still un-write letter by letter over the empty plot. The parent's ruling from the record: E99 s74 (a transition carries the world it leaves), E21 (never still), M47 (the empty plot).
+- Write set: `lpAxisHandOver` and the plain-recast call site T3 owns, plus the minimum that times the target panel's reveal; tests beside `tests/test_recast_axis_whole.py`.
+- Acceptance: (1) no frame where the leaving data is covered before it has un-drawn (bars flat / lines undrawn per `lpPlotEmpty`), then the panel comes up; (2) leaving labels leave whole over an empty plot, mirroring `PLAIN_AXIS_WRITE_END`; (3) row 22's flip and the five other plain recasts probed at 96 fps: 0 half-written labels leaving or arriving, M47 measured before/after with numbers; whether row 22's door workaround becomes unnecessary is stated; (4) door identity outside the six recast windows; goldens unchanged unless named.
+- Validate: `test_recast_axis_whole`, `test_chart_transitions`, `test_fed_axis_handoff`, `test_longform_profile`, `test_golden_frames`, each in its own process.
+- Red evidence: pending
+- Green evidence: pending
+- Evidence: pending
+
 ### T4: The second melt throws the page on screen, not a stale snapshot (R26-312)
-- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t4/`)
+- Deviation (review MERGE, 2026-09-24): the write set includes `species/melt.mjs` (the synced source of `meltMount` / `paintMelt` / `clearMelt`; editing the engine alone fails `sync_kinetics --check`). "Pure in t" is met on the DOM for still pages, not byte-for-byte (the clone captures the live idle - pre-existing, R26-321); `melt:morph`'s one-frame stale ring filed R26-322.
+- Status: done - lane B `7789afa` (R26-312; the mount keyed per boundary; H's melts at 104.31 / 242.38 / 303.54 throw the page on screen; reviewed MERGE; no golden moved)
 - Owner: implementation_luna (LANE B), then reviewer (a transition carries the world it leaves, s74)
 - Depends on: T0
 - Bravos reference: none (a defect).
@@ -770,7 +783,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T5: A stamped chip's seal is reserved - OTHER elements on its beat go round it; the stamp stays where it lands, over the chart (R26-313; E99 s128)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
 - Owner: junior_developer (LANE B), then reviewer (the stamp's room law, s128)
 - Depends on: P70 T1c committed (it edits the stamp ring's ink beside the compiler's chip fit, and T5's frame read must
   show T1c's gold shockwave, s127 (2)); P70 T1b is committed at `50b2f85` (the seal, `seal_r`)
@@ -873,7 +886,8 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T7: The squint gate - a held page and its caption, shrunk to thumbnail width, still say what they are about; M48 FAILs (P69 T88, the gate; E99 s120, s126)
-- Status: pending
+- Amended by E99 s129 (2026-09-25): words on the plot is INFO, never a FAIL; axis ticks and axis titles are not counted; M48 FAILs on lit share, title size, named-series size and caption size / contrast only.
+- Status: in_progress (built; M48 FAILs the committed H door - 402 faults: plot words on rows 1/4/9/12/15/20/22 and 324 of 391 quiet captions under Wealth Logic's floor; the parent's rulings: plot-word limit per PANEL on a panels page, all five Bravos frames kept; 9:16 captions INFO until a reference exists)
 - Owner: implementation_luna (LANE B), then reviewer (a new BLOCKING gate row)
 - Depends on: T0; P69 T37c merged (review finding 5: T37c writes `measure_line_bloom.py` and
   `bravos-line-bloom.v1.json` too; T7 sequences after it and extends its merged file). T37b is done (`557e1dc`:
@@ -961,7 +975,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T8: The H label diet - the divergence page's end tags are a name, not a name plus a sub-label (P69 T88, lane A; E99 s120 (3), s126)
-- Status: pending
+- Status: DROPPED (E99 s129, the operator 2026-09-25: "agreed, drop T8" - the plot-word limit it served is no longer a gate)
 - Owner: implementation_luna (LANE A; lane B only if step (0) picks the engine route)
 - Depends on: T7 merged into LANE A before T8 starts (lane A at `910ddd6` has neither M48 nor `--build`; review finding
   10); lane A's in-flight door work committed (`build_episode_h.py` is dirty in lane A at this revision); P70 T2 if the
@@ -1026,8 +1040,20 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Frame read: pending
 - Evidence: pending
 
+### T8b: The quiet caption reads at the squint - the long form's quiet strip raised to the reference's floor (E99 s126 (2); found by T7)
+- Status: pending (after T7 lands)
+- Owner: implementation_luna (LANE B)
+- Depends on: T7 (M48 and `caption-squint-floor.v1.json`)
+- Harvest: T7 ran M48 over the committed H door: 324 of 391 QUIET captions fail - 315 on cap height at 320 px (ours 4.00-4.21 px against Wealth Logic's measured 4.285 floor, n=82 frames) and 61 on contrast (as low as 1.79 against 3.97); the 53 STAGE captions all pass (7.56-8.43 px, contrast >= 6.98). The operator, s126: "we have this issue with our captions too".
+- Write set: the caption strip's quiet style (the template CSS / the engine's caption painter - locate by recall), its tests; the caption goldens it moves (on purpose).
+- Acceptance: (1) every H quiet caption passes M48's caption floor (size and contrast) at 320 px with numbers; (2) the strip's line breaks and pages are re-checked (the 25-28 character lines, two lines a page - E41; no new orphan lines), and the caption timing is unchanged; (3) the stage captions unchanged; (4) a before/after sheet at full size and at 320 px beside Wealth Logic's strip; (5) goldens that carry a quiet caption re-pinned on purpose, listed.
+- Validate: `test_squint_gate`, the caption tests (locate by recall), `test_golden_frames`, each in its own process.
+- Red evidence: pending
+- Green evidence: pending
+- Evidence: pending
+
 ### T9: `axis_tag` and the drop guide - the named year becomes an accent pill on the x axis (was P69 T38)
-- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t9/`)
+- Status: done - lane B `e96c6f6` (axis_tag + drop guide; two engine defects found and fixed on the test bed: the pop under a recast, the unmeasured label on play-through; golden axis-tag-two-thousand re-pinned on the title-glow engine)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0. Done: P69 T36 `104af07` (the page-species pattern) and T37b `557e1dc` (the series ink).
 - Harvest: v2 A10 "Axis tag: the named year / era / span replaces its tick as an accent pill", n=7 (BUB #14; CHN 39;
@@ -1091,7 +1117,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T10: `level_join` - a dashed rule from one datum to another, a ring at each end, the gap written off the rule (was P69 T39)
-- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t10/`)
+- Status: done - lane B `04ee3cd` (level_join; golden on row 14's dot-com-to-today join, '+5 pts'; the long-form figure sized as an end-tag peer and nudged inside the plot frame; merged beside T9's named blocks)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0
 - Harvest: v2 A9 "Dashed LEVEL rule drawn from one datum to another", n=5 (BUB 2:48; RST 7:00; DOM 00:50 "from the
@@ -1142,7 +1168,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T11: `loop` - a flow laid as a ring, money moving on its arrows (was P69 T43)
-- Status: in_progress (dispatched 2026-09-24 on lane B cd0b630, scratch patch `$SP/p71-t11/`)
+- Status: done - lane B `95e3da8` (ring layout + tokens; token look from the parent's frame read; `TOKEN_MIN_CROSS_S` 0.49 s DERIVED from Bravos DOM 03:27 - the parent's 1.0 s request was withdrawn as not from the reference; golden flow-loop-tokens)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0
 - Harvest: v2 T21 "Circular loop / flywheel", n=3 (BUB 11:22; RST 9:30; BOOM (G)): "`flowLayout` is a row or a column
@@ -1201,7 +1227,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T12: Chip states `lit` / `tick` / `sell` (and `buy`) (was P69 T42; A59's BUY folded in from P69 T60)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
 - Owner: implementation_luna (LANE B), then reviewer (the chip, after P70 T1b's seal)
 - Depends on: P70 T1c committed (it edits `species/chip.mjs`'s ring ink; P70 T1b, the seal, is committed at `50b2f85`)
 - Harvest:
@@ -1328,7 +1354,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T14: The decade ruler - a scrolling time-passage ground under a chip row (was P69 T55; RESCOPED by BOOM's frames)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0. (Draft 1's dependency on T9's pill is gone: the witnessed ruler pins nothing to a tick.)
 - Harvest: v2 T32 "Epoch ruler: a time axis with cards pinned to ticks", BOOM 05:50 (G) only. **VERIFY.md CORRECTED it

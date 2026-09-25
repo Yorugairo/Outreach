@@ -187,6 +187,12 @@ and `REVIEW-QUEUE.md` is regenerated. Rulings are written as `E99 s??` and numbe
 - **P69-HG3: the s90 page, before and after** (T11). The frames are the H bed page, one bars page and
   the representatives, each with the option off and on, and the three layout fixes measured. What it
   blocks: the default flip only. The body opts in per row either way (T33).
+  - **Amended (the operator, 2026-09-25: "hold it all for a clean hg3 view"):** H is currently split - rows 1-13 on
+    the default page (built before the long-form profile existed), row 14 onward in `;readability=longform`. Nothing
+    is retrofitted before HG3. HG3 is shown CLEAN: the WHOLE H episode rendered twice from one build - every page
+    on the default profile, and every page in the long form (badges + the key rail, P69 T9/T10) - at the same
+    instants, side by side, so the operator picks one look for the whole episode. The pick is applied to all rows
+    in one lane-A pass after HG3.
 - **P69-HG4: the body read on frames beside the reference** (T34).
   - What is shown: H's tiles at the instants that matter, beside build-f's frames at the same instants,
     extracted from the sha-verified `steel-and-paper-full-1440p.mp4`; the critic, run once; the gates.
@@ -1028,7 +1034,7 @@ verbatim tails and are left pending.
 - Evidence: row 22 built in lane A (this commit): the hynix line shrinks aside on "Bravos" (panel_focus region) for the tripwire board, grows back for the RAM stamp, the monitor slides in on "it reads what memory costs" and its prices draw on their words; +16.4% / +13.9% / -3.7% each naming its basis; the trim proof recast (8 bars) and the flip; the certificate on "The certificates wear". Gate 2 FAIL (M11, M31) / 5 WARN unchanged. Parent frame read twice (sent back once: 18 s empty plot, the -3.7% flash, wrong ticks at the flip - all fixed in the door). Open: "The flip" red waits on T86 in lane A; bars >6 on T85; the flip's half-written ticks ~0.3 s (R26-310); the take says "seventeen" for +16.4% (HG)
 
 ### T31: Row 23 (11:33-13:00) - the ring: reset 3, host window 3, dips 7-9
-- Status: pending
+- Status: done - row 23 (679.45-716.79 s; reset 3 on the certificate plate, T65's ring on the thrown railway share, the case in one slot, dip 8 to the hynix page, dip 9 to the newsroom); gate 2 FAIL (M11, M31 - pre-existing) / 4 WARN / 22 PASS; the verdict stack authored but OFF (the gate cannot see it - R26-326); operator items parked for HG4: "doubles" vs 80->192 GB (2.4x), the 80/192 GB figures untiered, two certificates on the newsroom frame, the I-beam prop, dip 8 on "More bullish"
 - Owner: implementation_luna
 - Depends on: T30
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build_episode_h.py`, `.../SHOT-TABLE-H.md`, `.../build-h/**`
@@ -1147,7 +1153,7 @@ verbatim tails and are left pending.
 - Evidence: pending
 
 ### T37c: The title is Claude orange, glows in its ink, and the shorts face goes bolder (E99 s122 amended; the size measured at parity)
-- Status: pending (lane B, after T37b)
+- Status: done - lane B `482a9f7` (the title glows in its own ink, on by default, seek-exact, 16% legibility bound - Bravos's titles carry no halo; size at parity; `ledger_page.TITLE_FACE` token; 96 goldens re-pinned). The colour (#FF8A4C / #FEA87D) and the face (heavy Kalam / Inter) wait on the operator's pick from the sheet.
 - Owner: implementation_luna
 - Depends on: T37b (`--lp-title-ink`, `measure_line_bloom.py`, the Bravos band)
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` and the player template (the title's size token for both page styles; `--lp-title-ink` default), `content/video_engine/scripts/measure_line_bloom.py` (a full-resolution title cap-height read: cap height / frame height), `content/video_engine/assets/bravos-line-bloom.v1.json` (the Bravos title size), `content/video_engine/scripts/build_scene_timeline_f.py` or `ledger_page.py` (the overrun WARN at the new size), tests, goldens re-pinned on purpose

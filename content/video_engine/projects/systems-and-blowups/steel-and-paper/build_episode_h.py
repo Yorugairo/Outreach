@@ -203,7 +203,8 @@ def _assert_read_only(before: dict) -> None:
 # T29's); P69 T29 authors row 21 (SK hynix, one panels page) and moved it to row 22's first words (the tripwires, T30's);
 # P69 T30 authors row 22 (the tripwires: the board, PROP 6, the monitor, the trim proof) and moves it on to row 23's first
 # words (the ring, T31's) - the take glues "So" to its dash.
-UNIT_CUT_PHRASE = "So— the certificate"   # row 23 (the ring, T31)'s first words; the build stops at the cut BEFORE them
+UNIT_CUT_PHRASE = "The steel gets used."   # row 24 (the close, T32)'s first words; the build stops at the cut BEFORE them
+UNIT_CUT_ROW23 = "So— the certificate"     # row 23 (the ring, T31)'s first words - dip 7 (the take glues "So" to its dash)
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -920,6 +921,18 @@ DOCK_META = [
      "badges": []},   # row 22 (P69 T30): the checklist card, the object's own source
     {"asset": RAM_PROP, "title": "A DRAM memory module",
      "source": "Money Physics - prop cutout " + RAM_PROP, "species": "prop", "badges": []},   # row 22: E99 s87 / s92
+    {"asset": "dock-h-railway-share-ring", "title": "A railway share certificate",
+     "source": "Money Physics - plate prop-railway-share-cert-v1b", "species": "deck", "badges": []},   # row 23a: CERT_CARD again
+    {"asset": "dock-h-railway-index-card", "title": "The railway index, 1843-1850",
+     "source": "Campbell & Turner railway index", "species": "chart", "badges": []},   # row 23a (P69 T31): row 9's page as a card
+    {"asset": "prop-memory-steel-ibeam-v1", "title": "Memory, the structural beam",
+     "source": "Money Physics - prop cutout prop-memory-steel-ibeam-v1", "species": "prop", "badges": []},   # row 23b
+    {"asset": "dock-h-memory-arithmetic", "title": "The arithmetic - run it yourself",
+     "source": "Fab build ~5 years (E99 s95); NVIDIA H100 80GB -> B200 192GB", "species": "chart",
+     "badges": []},   # row 23b: the checklist card (phone profile)
+    {"asset": "dock-h-weight-check", "title": "We checked. It's bigger.",
+     "source": "Bravos Research (attributed) - iShares Russell 3000 ETF holdings, 27 Aug 2026", "species": "chart",
+     "badges": []},   # row 23c: ev-weight-check-bars-v1 drawn as a card for its size
 ]
 
 
@@ -1904,6 +1917,198 @@ def page_monitor() -> str:
             % (MONITOR_PAGE, M_JUL, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM, TRIM_PAGE, MONITOR_PAGE))
 
 
+# ---------------------------------------------------------------- ROW 23 (P69 T31): THE RING - RESET 3, HOST WINDOW 3, DIPS 7-9
+# "So - the certificate, one more time: paper sold as safety, while the steel it paid for kept carrying trains." Three
+# worlds, each entered by a dip at a world change (E47): RESET 3 the spike and the paper (`world-spike-certificate-ring-v2`,
+# wave 1b, operator-approved 2026-08-29), the hynix page RETURNING for the bullish case (E40 s4 - it unwinds from its point,
+# never redrawn), and HOST WINDOW 3, the newsroom (the Flow order H-3 still, E99 s103 - it stands as generated).
+#
+# RESET 3: the certificate is THROWN onto the plate's own blank sheet on "the certificate" (s71 - the named thing
+# arrives), and RINGED on "paper sold as safety" with its figure, RAIL_DROP (E99 s110 (2), P69 T65's ring on a dock: the
+# sentence points at the certificate and carries its number); on "the certificates that financed it papered the walls" the
+# railway index - the certificates' own price, 1843-1850 - is thrown into the plate's dark upper left (RAIL_CARD, the page
+# of row 9 re-presented as a card); both leave in the breath before "Everything we checked holds", and the case is made
+# as THE VERDICT STACK (doc 29 s9.24, the operator's s68 evidence wall, CAPABILITIES "THE VERDICT STACK"): four documents
+# already docked in this cut fly in one per phrase - their chart ("Everything we checked"), the test ("sell scarcity ...
+# for cash"), the filings' lease commitments ("turned into debt"), the target-date statement ("A fifth of your index") -
+# and burst on the turn, "And the one number that would prove me wrong"; the RAM (PROP 6, row 22's) is stamped just after
+# "the price of memory" (E99 s87 / s112).
+RING_PLATE_ID = "world-spike-certificate-ring-v2"
+RING_PLATE = RING_PLATE_ID + ";use=reset"        # E61 the use; E99 s84 - Ken Burns ALONE on a long-form plate (R26-236)
+RING_KEN = (0.05, 10, -4)                        # the push toward the spike and the sheet (the plate's centre-right)
+# THE CERTIFICATE ON THE PLATE'S OWN BLANK SHEET: the plate (1536 x 1024) covers the 16:9 stage at 1.25x with 100 px cut
+# top and bottom, so its blank certificate stands at ~x 1100-1890, y 10-900 stage px, tilted; the railway share lands on
+# it at row 18's reading size (0.36 - "RAILWAY SHARE" reads at a 390 px phone, section 22.1), clear of the spike's head.
+# MEASURED, draft 1 (`p69-row23/d1t/A-tiles.png` b-i): the certificate came in at ROW 22's size and place (0.15 at (0.19,
+# 0.42)), not this row's - row 22 docks the same asset on the same slot 0 and the next scene's re-dock kept the old box
+# (the ring drew round the small card). On slot 1 it is laid out afresh (an engine item, for the parent).
+RING_CERT_CARD = "dock-h-railway-share-ring"      # THE SAME certificate under its own id (draft 3: slot 1 did not help)
+RING_SLOT = {"centre": True, "centre_x": 0.66, "centre_y": 0.45}   # the case's ONE slot: over the sheet, clear of the spike's head
+RING_CERT_SLOT = dict(RING_SLOT, centre_w=0.40, card_aspect=CERT_ASPECT, arrive="throw", mass="paper")
+RING_PHRASE = "paper sold as safety"             # the ring's pointing phrase (P69 T65: `points`, the ring's `at` on it)
+RAIL_CARD = "dock-h-railway-index-card"          # the railway index (row 9's page) drawn as a card for its size (T10c)
+# MEASURED, draft 1 (`d1t/A-tiles.png` g-i): thrown into the upper left at 0.34 the card's title took its height and the
+# line read as a strip (and it covered the ring's figure) - it takes the certificate's slot (s80) at 0.46 instead.
+RAIL_CARD_SLOT = dict(RING_SLOT, centre_w=0.46, card_aspect=BRAVOS_ASPECT, arrive=SLOT_HANDOFF_ARRIVE, mass="paper")
+RAIL_CARD_W = round(RAIL_CARD_SLOT["centre_w"] * 1920, 2)
+RING_OFF_LEAD_S = 0.6    # (the stack form) the certificate and the index leave this far before "Everything we checked holds"
+# THE CASE, ONE DOCUMENT PER PHRASE IN THE SLOT (the built form): each document already docked in this cut LANDS in the
+# slot the outgoing one held (s80) on its phrase - the railway index through "The owners of its paper paid the bill"; the
+# test (the LIVE phone checklist of row 20, re-filled as a recap - everything we checked) on "Everything we checked holds",
+# through "The builders sell scarcity, and they sell it for cash" (MEASURED, draft 2: landed on "The builders sell", the
+# index stood 9.0 s with no event - M05 FAIL at 11:29); the filings' lease
+# commitments on "In early twenty twenty-five"; the target-date statement on "A fifth of your index"; the slot clears on
+# the turn. THE VERDICT STACK (doc 29 s9.24) is the record's mechanism for this beat and it is authored below
+# (VERDICT_STACK_ON); MEASURED, draft 1 (`d1t/A-tiles.png` k-o - the wall flies in, recedes to its mosaic and bursts on
+# "And the one number"): the motion gate reads none of its beats - the host dock is ONE enter and the captions under a
+# live dock are the unpinned anchor - so M01 / M05 / M08 FAIL (13.7 s "with no visual event" at 11:35, `d1/GATES-MOTION.md`).
+# An engine item (the gate's stack beats), for the parent; until then the slot form ships.
+VERDICT_STACK_ON = False
+# THE HAND-OFF'S LEAD: MEASURED, draft 4 (`p69-row23/d4t/A-tiles.png` f-k, 696.5-697.4): a card LANDING in the slot the
+# outgoing one held is first seen ~0.9 s after its enter (the outgoing card's exit plays, the slot stands empty ~0.5 s,
+# then the new card drops in) - so each hand-off starts this far BEFORE its phrase and the card is down on the word.
+HANDOFF_LEAD_S = 0.8
+CASE_CARDS = ((TEST_CARD, "Everything we checked", 0.60, TEST_CARD_ASPECT),   # (asset, its phrase, width, aspect):
+              #                                                                     the phone profile's floor (T28b)
+              (LEASES_CARD, "In early twenty twenty-five", 0.64, LEASES_ASPECT),   # row 16b's reading width (its 8-9 px type at 0.50)
+              (ENVELOPE_CARD, "A fifth of your index", 0.30, ENVELOPE_ASPECT))
+# THE VERDICT STACK: the members are documents ALREADY DOCKED in this cut (doc 29 s9.24 - "the stack re-presents, it never
+# introduces"; the player resolves each member against the asset-data map, which holds only docked assets). The two phone
+# checklists (the test card, the board) are LIVE docks whose PNG is a placeholder, and the pages (the monitor, the
+# issuance) were never docked - so the test is the object's own scorecard PNG and the price of memory is carried by the
+# RAM after the burst (VERDICT_WHY).
+VERDICT_CARD = "dock-h-verdict-stack"            # the host dock: an invisible lifecycle anchor (s9.24)
+VERDICT_ITEMS = ((BRAVOS_CARD, "Everything we checked"),        # their chart - the one this video checked
+                 (TEST_CARD, "The builders sell scarcity"),     # scarce, cash: the test's steel answers
+                 (LEASES_CARD, "In early twenty twenty-five"),  # the money turned into debt: the lease commitments
+                 (ENVELOPE_CARD, "A fifth of your index"))      # the default your retirement sits in
+VERDICT_CLEAR_PHRASE = "And the one number"      # the pivot: the case is made, now what would prove it wrong
+MEMORY_PHRASE = ("the price of memory", "memory—")   # the RAM just after "memory" ends (the take glues the dash)
+RING_RAM_PLACE = {"x": 0.24, "y": 0.66, "w": 0.15}  # the plate's dark lower left, under the spike's shaft
+RAM_RING_OFF_LEAD_S = 2.5   # MEASURED, draft 1 (`d1t/B-tiles.png` b, 717.2): with its exit 1.2 s before dip 8 the RAM stood
+#                              through the dip's black (row 22's RAM_OFF_LEAD_S finding, R26-309)
+RING_DIP_WHY = ("the memory monitor -> the spike and the paper, page to plate (a WORLD change, E47 - 'So - the "
+                "certificate, one more time': the ring back to the opening's object): TAKEN dip 7; refused: the melt's "
+                "splash onto the plate (spent onto the press at 6:52 for the same certificate - the variety rule, E99 s74 "
+                "Apply 1), the suck (the monitor has no point on the plate to collapse into), the slide (a page to the "
+                "page beside it, not to a picture), a recast (a plate is not a chart state)")
+VERDICT_WHY = ("the certificate and the index -> the four documents of the case, over RESET 3: TAKEN the verdict stack "
+               "(doc 29 s9.24, the operator's s68 'the evidence is dancing around the world plate'): each document "
+               "flies in on its phrase, holds large while it is said, recedes to the mosaic, and the wall bursts on 'And "
+               "the one number that would prove me wrong' (the turn); refused: an agenda of the recap (the list is the "
+               "case's DOCUMENTS, already shown - the wall re-presents them), a page per claim (four world changes in "
+               "12 s), the price of memory as a fifth member (the board's PNG is a placeholder and the monitor was never "
+               "docked - the RAM is stamped on its word after the burst instead)")
+# THE HYNIX PAGE RETURNS for the bullish case - "builders with sold-out order books are not a house of cards. They're the
+# steel": dip 8 on "More bullish" (the treatment's dip 8 is on "The order books are booked solid", 6.6 s later - there the
+# plate would stand bare 7 s after the burst under the sentence the page answers; BODY_DEPARTURES row 23), the panels page
+# unwinding from its point with the line alone, retitled with the object's own verdict "Sold out, and paid for"; the I-beam
+# (MEMORY, `prop-memory-steel-ibeam-v1`, an ADDITION from the operator's prop sheet) stamped just after "the steel"; on
+# "A memory fab takes" the line shrinks aside (row 22's HYNIX_ASIDE) and THE ARITHMETIC is thrown into the room it frees -
+# ev-memory-arithmetic-v1's checklist in the phone profile (BODY_DEPARTURES row 23: two units, so a checklist card, not
+# bars), its five citing E99 s95; the line grows back as the card leaves.
+HYNIX_RETURN_PHRASE = "More bullish"
+HYNIX_RETURN_S = DIV_RETURN_S                     # the vortex's return, 1.6 s
+HYNIX_RETURN_ALONE = dict(HYNIX_ALONE)
+HYNIX_RETURN_ASIDE = dict(HYNIX_ALONE, region=list(HYNIX_ASIDE["region"]))
+IBEAM_PROP = "prop-memory-steel-ibeam-v1"
+IBEAM_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (IBEAM_PROP + ".png")
+IBEAM_OPTS = {"prop": True, "arrive": "stamp"}
+IBEAM_PLACE = {"x": 0.30, "y": 0.42, "w": 0.14}  # the line's empty upper left (PROP 4's and PROP 6's room on this page)
+ARITH_OBJECT = OBJECTS / "ev-memory-arithmetic-v1"
+ARITH_CARD = "dock-h-memory-arithmetic"
+ARITH_CARD_OBJECT_ID = "ev-memory-arithmetic-h23-v1"
+ARITH_S95 = "E99 s95"
+ARITH_CHECKLIST = {"profile": "phone", "head": ["Side", "The fact", "The number"],
+                   "rows": [{"cells": ["Supply", "a new memory fab", "~5 years"],
+                             "colors": ["#f4f6f8", "#dce3ea", "#3bc9b0"]},
+                            {"cells": ["Demand", "memory per chip", "80→192 GB"],
+                             "colors": ["#f4f6f8", "#dce3ea", "#ff8a8c"]},
+                            {"cells": ["2030?", "only if", "AI < factories"],
+                             "colors": ["#f4f6f8", "#dce3ea", "#f5b72e"]}]}
+ARITH_SRC = ("Fab build: ~5 years (the operator, E99 s95); memory per chip: NVIDIA H100 80GB -> B200 192GB; "
+             "capacity: 3 makers")
+ARITH_SLOT = dict(TRIPWIRE_SLOT, arrive="throw", mass="paper")
+ARITH_FROM_PHRASE_H = "A memory fab takes"
+ARITH_CARD_MAX_S = 9.8   # M12 caps a chart dock at 10 s - and under CHECKLIST.RECAP_S (12 s) its rows land as a RECAP
+HYNIX_RETURN_WHY = ("the spike and the paper -> the SK hynix page, plate to page (a WORLD change, E47 - 'More bullish: "
+                    "builders with sold-out order books'): TAKEN dip 8 and the page RETURNS by the spiral (E40 s4: it "
+                    "unwinds from its point, already drawn, never rolls out and builds again - row 21's page, the line "
+                    "alone); refused: a cut (a plate to a page is the dip's own case), `axes` (the line would be redrawn "
+                    "like new - E25), the melt's splash (a plate has no ink to melt), the arithmetic as its own page (two "
+                    "units - BODY_DEPARTURES row 23)")
+ARITH_CARD_WHY = ("the hynix line -> the arithmetic, on the returning page: TAKEN the line held aside (T8c's resize, row "
+                  "22's HYNIX_ASIDE) and the checklist thrown into the room it frees on 'A memory fab takes' (s71), the "
+                  "line growing back as the card leaves; refused: the card over the line (a settled card over a line's "
+                  "data is M25's FAIL), a card read row by row on its anchors (a hold past CHECKLIST.RECAP_S 12 s is past "
+                  "M12's 10 s - the rows land as a recap), a recast (a panels page is not a `then=` state)")
+# HOST WINDOW 3, THE NEWSROOM - "Decide for yourself which of those you believe." The H-3 still (Mike holding a share
+# certificate up in an empty newsroom, the left third kept empty "for a card to land" - its order), registered by id as
+# rows 7 and 20's stills are, Ken Burns alone (E99 s84). The railway share is thrown onto its desk on "is the
+# certificate" (the index they sold you IS the certificate), and the weight check - ev-weight-check-bars-v1, 20 vs 24.3,
+# PLAUSIBLE, E99 s93 lets it draw - takes its slot (s80) on "Nobody holding it", drawn as a card for its size (T10c); the
+# treatment's "accidental concentration, sold as safety" is read on it. The treatment's 'chart_to ev-weight-check-v1 on
+# "the index they sold you"' has no page to recast (the take says "Decide for yourself" first) - BODY_DEPARTURES row 23.
+HOST3_PLATE_ID = "world-h3-newsroom-v1"
+HOST3_PLATE_FILE = HERE / "host/H-3-newsroom.png"
+HOST3_PLATE = HOST3_PLATE_ID + ";use=landing"
+HOST3_KEN = (0.05, -10, 4)                       # the push toward Mike and the certificate he holds up
+HOST3_FROM_PHRASE = "Decide for yourself"
+WEIGHT_CARD = "dock-h-weight-check"
+WEIGHT_PAGE = "ev-weight-check-bars-v1"
+DESK_SLOT_H3 = {"centre": True, "centre_x": 0.25, "centre_y": 0.47}   # the plate's empty left third, over the desks
+HOST3_CERT_SLOT = dict(DESK_SLOT_H3, centre_w=0.36, card_aspect=CERT_ASPECT, arrive="throw", mass="paper")
+# MEASURED, draft 1 (`d1t/B-tiles.png` u-w): ev-weight-check-bars-v1 drawn as a card at 0.44 wrote its six y ticks on top
+# of each other and cut its second category ("Our check: the whole US") - the bars page's card profile at that size. The
+# card was then ev-weight-check-v1's shares PNG as a still (draft 5, `d5t/A-tiles.png` n-r): it read on the 16:9 stage but
+# its title stood ~5 px and its figures ~4 px at a 390 px phone (s90's floor is 59 stage px). So the weight check is the
+# CHECKLIST card in the PHONE profile (P69 T28b: <= 3 rows, 3 columns, no sub, readable at >= 0.60 of the stage) -
+# ev-weight-check-bars-v1's two figures and their two wholes, derived into the build dir (`_weight_card_object`); its
+# rows land as a recap (a hold under 12 s) - their number, then our check.
+WEIGHT_OBJECT_ID = "ev-weight-check-h23-v1"
+WEIGHT_CHECKLIST = {"profile": "phone", "head": ["Whose", "Share of", "Weight"],
+                    "rows": [{"cells": ["Bravos'", "the S&P 500", "20%"], "colors": ["#f4f6f8", "#dce3ea", "#5b8def"]},
+                             {"cells": ["Our check", "whole US market", "24.3%"],
+                              "colors": ["#f4f6f8", "#dce3ea", "#ff8a8c"]}]}
+# MEASURED, draft 6 (`d6t/C-tiles.png` b-f): at centre_y 0.62 the card's foot ran under the anchored caption; at 0.60 its
+# top meets only the lowest corner of the certificate Mike holds up (x 991-1245, y 211-429 stage px). 0.58 wide is the
+# phone profile's floor (60 px cells at the dock's scale vs s90's 59.08).
+# MEASURED on build-h's chain (`logs/t31-gate.log`, M25 FAIL at 12:35): at 0.60 its foot stood ~12 px in the anchored
+# caption strip (13,333 px, 20 % of the strip) - lifted to 0.585 (foot ~885 px), the left edge on the stage's edge.
+WEIGHT_CARD_SLOT = {"centre": True, "centre_x": 0.29, "centre_y": 0.585, "centre_w": 0.58, "card_aspect": TEST_CARD_ASPECT,
+                    "arrive": "land", "mass": "paper"}
+# "accidental concentration": the ring on the weight check's own bar (P69 T65 - the dock, its box the "our check" bar),
+# its number the object's own basis - 24.3% is the sum of SEVEN holdings (src_full) - the concentration the sentence names
+WEIGHT_RING_LABEL = "in 7 holdings"
+WEIGHT_RING_PHRASE = "accidental concentration"
+WEIGHT_RING_BOX = [0.03, 0.53, 0.97, 0.62]   # the card's "Our check" row, fractions of the card (read off the render)
+WEIGHT_CARD_W = round(WEIGHT_CARD_SLOT["centre_w"] * 1920, 2)
+NEWSROOM_DIP_WHY = ("the arithmetic on the hynix page -> the newsroom, page to plate (a WORLD change, E47 - 'Decide for "
+                    "yourself which of those you believe': the argument handed to the viewer, the host's third window): "
+                    "TAKEN dip 9; refused: the suck (spent into the desk at 7:44 and 8:33 - E99 s74 Apply 1), the melt's "
+                    "splash (spent onto the press at 6:52), a cut (a page to a plate is the dip's own case)")
+NEWSROOM_SLOT_WHY = ("the railway share -> the weight check, on the newsroom's desk: TAKEN the slot hand-off (E99 s80 - the "
+                     "weight check lands in the certificate's box: 'the index they sold you ... is the certificate', then "
+                     "what the index holds); refused: both at once (two cards in the host's empty third crowd it), a dip "
+                     "(no world change)")
+
+
+def verdict_stack(ws: list) -> tuple[dict, float, float]:
+    """Row 23a's verdict stack (doc 29 s9.24): the payload AND its host dock's window from ONE set of times (the
+    compiler's `stack_entry`, s9.24's 0.77 s dimming drift made mechanical) - each member on its phrase after "Everything
+    we checked", the burst on VERDICT_CLEAR_PHRASE. Called by the table (the window) and by main (the META)."""
+    import build_scene_timeline_f as C
+    t0 = W.at(ws, "Everything we checked")
+    items = [{"id": aid, "at": round(float(ws[W._phrase_from(ws, ph, t0)]["start_s"]), 2)} for aid, ph in VERDICT_ITEMS]
+    clear = round(float(ws[W._phrase_from(ws, VERDICT_CLEAR_PHRASE, t0)]["start_s"]), 2)
+    return C.stack_entry(items, clear, form="16:9")
+
+
+def page_hynix_return() -> str:
+    """Row 23's second world (P69 T31): row 21's panels page RETURNS by the spiral, built, live, in the long form's profile."""
+    return "ledger:%s:line::right:spiral%s%s%s" % (HYNIX_PAGE, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM)
+
+
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
 AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}, {"n": 3, "text": "Used tomorrow?"}]
 # ... and the agenda's room is measured the same way: the caption's band ends at y 576 and the parked chart holds
@@ -2162,6 +2367,11 @@ IN_ROW_WHY = (
      FOCUS_WHY),
     ("row 21 the wafer compare (P69 T29, 'Every accelerator')", WAFER_WHY),
     ("row 22 the trim proof and back (P69 T30, 'I trimmed some' / 'The flip')", TRIM_WHY),
+    ("row 23 the verdict stack over reset 3 (P69 T31, 'Everything we checked holds' -> 'And the one number')",
+     VERDICT_WHY),
+    ("row 24 the line aside and the arithmetic (P69 T31, 'A memory fab takes')", ARITH_CARD_WHY),
+    ("row 25 the certificate -> the weight check on the newsroom's desk (P69 T31, 'Nobody holding it')",
+     NEWSROOM_SLOT_WHY),
 )
 # (the P69 T16 first cut, before T15b, is kept for the record: it entered the index from the STUDIO by dip 1 and
 # refused recast / rescale / morph, the melt, the snap / throw-then-zoom / throw-then-push, object-becomes-chart, the
@@ -2186,6 +2396,9 @@ BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the tr
                 page_div_return(): DIV_RETURN_WHY,                           # row 20b, the divergence RETURNS
                 page_hynix(): HYNIX_MELT_WHY,                                # row 21, SK hynix (P69 T29)
                 page_monitor(): SLIDE_WHY,                                   # row 22, the tripwires (P69 T30)
+                RING_PLATE: RING_DIP_WHY,                                    # row 23a, reset 3, dip 7 (P69 T31)
+                page_hynix_return(): HYNIX_RETURN_WHY,                       # row 23b, dip 8, the hynix page RETURNS
+                HOST3_PLATE: NEWSROOM_DIP_WHY,                               # row 23c, host window 3, dip 9
                 SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
                               "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
@@ -2461,7 +2674,44 @@ def shot_table(ws: list, unit_end: float) -> list:
     m_trim = W.word_in(ws, "I trimmed", "trimmed")               # the trim proof thrown on its verb
     m_flip = at("The flip")                             # the page names the condition that proves the author wrong
     m_certs = at("The certificates wear")               # the certificate returns as it is named
-    t_row22_end = unit_end
+    # -- row 23 (P69 T31): THE RING - dip 7 onto RESET 3 on the cut before "So - the certificate" (the take glues "So" to
+    # its dash), dip 8 onto the returning hynix page on "More bullish", dip 9 onto the newsroom on "Decide for yourself"
+    def at_from(phrase: str, from_s: float) -> float:
+        """The phrase's first onset at or after `from_s` - row 23 re-says row 1's words ("paper sold as safety")."""
+        return round(float(ws[W._phrase_from(ws, phrase, from_s)]["start_s"]), 2)
+
+    t_row23 = cut(UNIT_CUT_ROW23)
+    t_row22_end = t_row23
+    r_cert = W.word_in(ws, "the certificate, one more", "the")   # thrown as "the certificate" is said
+    r_ring = at_from(RING_PHRASE, r_cert)               # RINGED on "paper sold as safety", its figure beside it (s110 (2))
+    r_financed = at("the certificates that financed")   # the certificates' own price is thrown on their name
+    r_checked = at("Everything we checked")             # the case: the verdict stack, one document per phrase
+    r_clear = at_from(VERDICT_CLEAR_PHRASE, r_checked)  # ... and the wall bursts on the turn
+    r_ring_off = round(r_checked - RING_OFF_LEAD_S, 2)
+    if VERDICT_STACK_ON:   # the record's form: the certificate and the index, then the wall (VERDICT_WHY)
+        ring_docks = [(RING_CERT_CARD, 1, r_cert, r_ring_off, dict(RING_CERT_SLOT)),
+                      (RAIL_CARD, 0, r_financed, r_ring_off, dict(RAIL_CARD_SLOT)),
+                      (VERDICT_CARD, 0, *verdict_stack(ws)[1:], {})]
+    else:                  # the built form: one slot, one document per phrase (CASE_CARDS), cleared on the turn
+        lands = ([round(r_financed - HANDOFF_LEAD_S, 2)]   # MEASURED on build-h's first pass (`final/A-tiles.png` i, 689.3):
+                 #   the index, entered ON "the certificates", was not yet down - it too takes the hand-off's lead
+                 + [round(at_from(ph, r_checked) - HANDOFF_LEAD_S, 2) for _, ph, _, _ in CASE_CARDS] + [r_clear])
+        ring_docks = [(RING_CERT_CARD, 1, r_cert, lands[0], dict(RING_CERT_SLOT)),
+                      (RAIL_CARD, 1, lands[0], lands[1], dict(RAIL_CARD_SLOT))]
+        ring_docks += [(aid, 1, a, b, dict(RING_SLOT, centre_w=w, card_aspect=asp, arrive=SLOT_HANDOFF_ARRIVE,
+                                           mass="paper"))
+                       for (aid, _, w, asp), a, b in zip(CASE_CARDS, lands[1:], lands[2:])]
+    r_ram = D.stamp_enter(W.after(ws, "the price of memory—", from_s=r_clear))   # just after "memory" ends
+    r_bullish = at(HYNIX_RETURN_PHRASE)                 # dip 8: the take runs "directions." into "More" (no gap - M13),
+    #                                                     so the dip is centred ON the onset (cut_before's own dip rule)
+    r_ibeam = D.stamp_enter(W.after(ws, "They're the steel—"))   # just after "the steel" ends
+    r_arith = at(ARITH_FROM_PHRASE_H)                   # the arithmetic thrown as the fab is named
+    r_arith_off = round(r_arith + ARITH_CARD_MAX_S, 2)
+    r_decide = at(HOST3_FROM_PHRASE)                    # dip 9 (the take runs "built." into "Decide": the onset, M13)
+    r_is_cert = W.word_in(ws, "trade is the", "the")    # the certificate thrown as "is the certificate" is said
+    r_nobody = round(at("Nobody holding it") - HANDOFF_LEAD_S, 2)   # the weight check takes its slot, down on "Nobody"
+    r_accidental = at("accidental concentration")       # ... "accidental concentration, sold as safety" read on it
+    t_row23_end = unit_end
 
     return [
         # -- ROWS 1-6: THE PAGE IS THE WORLD (E58 / E61). One world, two chart states, two cards in one slot.
@@ -2764,7 +3014,8 @@ def shot_table(ws: list, unit_end: float) -> list:
             (CERT_CARD, 0, t_cert_back, t_cert_off, dict(PRESS_CERT_SLOT)),
         ], MELT_EXIT % MEMO_MELT_S, [
             {"kind": "callout", "at": t_ring, "dur": round(t_cert_off - t_ring, 2), "label": RAIL_DROP,
-             "label_scale": CERT_RING_LABEL_SCALE, "pad": CERT_RING_PAD, "target": cert_face()},
+             "label_scale": CERT_RING_LABEL_SCALE, "pad": CERT_RING_PAD, "points": "that certificate",
+             "target": {"kind": "dock", "dock": CERT_CARD}},   # P69 T31: T65's ring on the dock (cert_face() retired)
         ], {"keys": [], "attention": "landings"}),
         # -- ROW 18d (P69 T26): "1845 IS THE PROOF" - the railway index RETURNS behind a blur-zoom (RAIL_RETURN_WHY),
         # BUILT (E25: a chart that comes back is never drawn like new); its own -64% is written at the trough as "the
@@ -2929,7 +3180,44 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"kind": "retitle", "at": round(m_flip + RETITLE_AFTER_S, 2), "dur": 1.6, "text": FLIP_TITLE,
              "color": "neg", "color_span": "The flip"},
         ], {"keys": []}),
-        # (-- ROWS 23-24 are T31-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
+        # -- ROW 23a (P69 T31): RESET 3, THE SPIKE AND THE PAPER - dip 7 (RING_DIP_WHY); the certificate thrown onto the
+        # plate's own blank sheet on "the certificate" and RINGED on "paper sold as safety" with RAIL_DROP (P69 T65 - the
+        # ring on the dock; cert_face() retired); the railway index thrown into the dark upper left on "the certificates
+        # that financed it"; both leave in the breath before the case, which is the VERDICT STACK (VERDICT_WHY), burst on
+        # "And the one number"; the RAM stamped just after "the price of memory". Ken Burns alone (E99 s84).
+        (t_row23, r_bullish, RING_PLATE, RING_KEN, ring_docks + [
+            (RAM_PROP, 0, r_ram, round(r_bullish - RAM_RING_OFF_LEAD_S, 2),
+             dict(RAM_OPTS, names="memory—", place=dict(RING_RAM_PLACE))),
+        ], "dip", [
+            {"kind": "callout", "at": r_ring, "dur": round(r_financed - HANDOFF_LEAD_S - r_ring, 2), "label": RAIL_DROP,
+             "label_scale": CERT_RING_LABEL_SCALE, "pad": CERT_RING_PAD, "points": RING_PHRASE,
+             "target": {"kind": "dock", "dock": RING_CERT_CARD}},
+        ], {"keys": [], "attention": "landings"}),
+        # -- ROW 23b (P69 T31): THE BULLISH CASE - dip 8 (HYNIX_RETURN_WHY) and row 21's page RETURNS by the spiral, the
+        # line alone, retitled with its own verdict; the I-beam stamped just after "the steel"; on "A memory fab takes"
+        # the line shrinks aside and the arithmetic is thrown into the room (ARITH_CARD_WHY); the line grows back as it goes.
+        (r_bullish, r_decide, page_hynix_return(), (0, 0, 0), [
+            (IBEAM_PROP, 0, r_ibeam, round(r_arith - 0.6, 2),
+             dict(IBEAM_OPTS, names="the steel—", place=dict(IBEAM_PLACE))),
+            (ARITH_CARD, 1, r_arith, r_arith_off, dict(ARITH_SLOT)),
+        ], "dip", [
+            dict(HYNIX_RETURN_ALONE, kind="panel_focus", at=r_bullish, dur=0.05),
+            {"kind": "retitle", "at": r_bullish, "dur": HYNIX_RETURN_S, "text": HYNIX_VERDICT_TITLE},
+            dict(HYNIX_RETURN_ASIDE, kind="panel_focus", at=round(r_arith - 0.6, 2), dur=FOCUS_S),
+            dict(HYNIX_RETURN_ALONE, kind="panel_focus", at=r_arith_off, dur=FOCUS_S),
+        ], {"keys": []}),
+        # -- ROW 23c (P69 T31): HOST WINDOW 3, THE NEWSROOM - dip 9 (NEWSROOM_DIP_WHY) on "Decide for yourself"; the
+        # railway share thrown onto the desk on "is the certificate"; the weight check takes its slot on "Nobody holding
+        # it" (NEWSROOM_SLOT_WHY); both gone before row 24. Ken Burns alone (E99 s84).
+        (r_decide, t_row23_end, HOST3_PLATE, HOST3_KEN, [
+            (CERT_CARD, 0, r_is_cert, r_nobody, dict(HOST3_CERT_SLOT)),
+            (WEIGHT_CARD, 0, r_nobody, round(t_row23_end - DOCKS_OFF_LEAD_S, 2), dict(WEIGHT_CARD_SLOT)),
+        ], "dip", [
+            {"kind": "callout", "at": r_accidental, "dur": round(t_row23_end - DOCKS_OFF_LEAD_S - r_accidental, 2),
+             "label": WEIGHT_RING_LABEL, "points": WEIGHT_RING_PHRASE, "pad": 6, "label_scale": CERT_RING_LABEL_SCALE,
+             "target": {"kind": "dock", "dock": WEIGHT_CARD, "box": list(WEIGHT_RING_BOX)}},
+        ], {"keys": [], "attention": "landings"}),
+        # (-- ROW 24 is T32's; UNIT_CUT_PHRASE moves with it.)
     ]
 
 
@@ -3087,7 +3375,8 @@ BODY_ASSETS = {
          ("card", "ev-memory-arithmetic-v1", _OBJ + "ev-memory-arithmetic-v1.png - PNG card / checklist dock"),
          ("page", "ev-weight-check-bars-v1", _OBJ + "ev-weight-check-bars-v1.series.json - story (H5); also the "
                                              "newsroom desk card via docks.chart_card"),
-         ("host", "H-3 (no id constant yet)", _PROJ + "host/H-3-newsroom.png - RE-ROLL before HG4 (H7)")),
+         ("host", "world-h3-newsroom-v1", _PROJ + "host/H-3-newsroom.png - stands as generated (E99 s103; the re-roll "
+                                             "withdrawn)")),
     24: (("page", LAYER_PAGE, "dense-line (one last time)"),
          ("card", "agenda", "AGENDA_ROWS_H (species agenda)"),
          ("outro", "outro clip", _OUTRO + "landscape/outro-yt-1920x1080-24fps.mov - gitignored, on disk"),
@@ -3208,8 +3497,29 @@ BODY_DEPARTURES = (
              "(an engine key, named for the parent)"),
     (22, "the certificate's '-66%' (returns)", "the card returns bare on 'certificates' - no badge, no ring: row 23 "
              "rings it with RAIL_DROP 2 s later, on the reset (T31)"),
-    (23, "ev-memory-arithmetic-v1:bars (two units; 'doubles' vs 80 -> 192 GB)", "PNG card or its checklist dock"),
-    (23, "the certificate's '-66%' ringed", "badge reading RAIL_DROP (-64%), the ring on the badge"),
+    (23, "ev-memory-arithmetic-v1:bars (two units; 'doubles' vs 80 -> 192 GB)",
+     "RESOLVED (P69 T31): its checklist dock, derived into the phone profile (ev-memory-arithmetic-h23-v1: Supply ~5 "
+     "years / Demand 80->192 GB / 2030? only if AI < factories), its five citing E99 s95 in the source line; thrown beside "
+     "the returning hynix line on 'A memory fab takes'; its rows land as a RECAP (a hold past 12 s is past M12's 10 s). "
+     "The voice says 'doubles', the card prints 80->192 GB (2.4x) - the object's figures"),
+    (23, "the certificate's '-66%' ringed",
+     "RESOLVED (P69 T31): P69 T65's ring on the DOCK with RAIL_DROP (-64%) as its label, `points` 'paper sold as "
+     "safety' - no badge (a badge and a ring would print it twice); row 18c's ring moved onto the dock too"),
+    (23, "dip 8 on 'The order books are booked solid through twenty twenty-six'",
+     "dip 8 on 'More bullish' (6.6 s earlier): the returning hynix page ('Sold out, and paid for') answers 'builders "
+     "with sold-out order books are not a house of cards', and the plate would stand bare ~7 s after the burst"),
+    (23, "`ev-memory-arithmetic-v1:bars` as the page dip 8 lands on", "row 21's panels page RETURNS by the spiral (E40 s4) "
+     "and carries the arithmetic as a card beside its line"),
+    (23, "'the index they sold you as the safe version' chart_to ev-weight-check-v1 (a fifth of the index ringed)",
+     "the take says 'Decide for yourself' FIRST, so the newsroom is already standing: no page to recast. The railway "
+     "share is thrown onto the desk on 'is the certificate', and the weight check (ev-weight-check-bars-v1, 20 vs 24.3) "
+     "takes its slot on 'Nobody holding it', read through 'accidental concentration, sold as safety'; no ring (its "
+     "number is printed on the bar)"),
+    (23, "`world-broadcast-set-v2;use=landing` + Mike (Flow order H-3)", "the H-3 still itself (Mike in the newsroom, "
+     "E99 s103), registered by id as rows 7 and 20's stills are; the broadcast set is not drawn"),
+    (23, "(additions)", "the railway index as a card on 'the certificates that financed it'; the VERDICT STACK on "
+     "'Everything we checked holds' (doc 29 s9.24; four docked documents, burst on 'And the one number'); PROP 6 the RAM "
+     "again after 'the price of memory'; the I-beam (prop-memory-steel-ibeam-v1) after 'They're the steel'"),
 )
 
 # THE RULINGS THAT OVERRULE THE TREATMENT'S WORDING (REBUILD-TREATMENT-H.md predates them; a row obeys these).
@@ -3327,6 +3637,62 @@ def _tripwire_card_object() -> Path:
     return png
 
 
+def _weight_card_object() -> Path:
+    """Row 23c's weight check (P69 T31): ev-weight-check-bars-v1's title and source; its two bars as the phone profile's
+    two rows (WEIGHT_CHECKLIST - each figure and each whole the object's own: 20 of the S&P 500, 24.3 of the whole US
+    market), no sub; the rows land as a recap. Records `derived_from` and its basis. Written with ev-weight-check-v1's PNG
+    (the same figures' static fallback) into the build dir only; returns the PNG."""
+    import copy
+    import shutil
+    src = json.loads((OBJECTS / (WEIGHT_PAGE + ".series.json")).read_text(encoding="utf-8"))
+    assert [b["note"] for b in src["bars"]] == ["20%", "24.3%"], "the card's figures are the object's"
+    assert "S&P 500" in src["bars"][0]["label"] and "whole US market" in src["bars"][1]["label"]
+    obj = {"title": src["title"], "src": src["src"], "checklist": copy.deepcopy(WEIGHT_CHECKLIST),
+           "research_tier": src["research_tier"],
+           "derived_from": ["evidence/objects/" + WEIGHT_PAGE + ".series.json"],
+           "basis": {"20%": "Bravos Research's number for the S&P 500 (attributed, the object's bar 1)",
+                     "24.3%": "the sum of seven holdings' weights in the iShares Russell 3000 holdings, 27 Aug 2026 "
+                              "(the object's bar 2 and its derivation)"}}
+    assert all(len("".join(r["cells"])) <= 32 for r in obj["checklist"]["rows"]), obj["checklist"]["rows"]
+    out = BUILD / "objects" / (WEIGHT_OBJECT_ID + ".series.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(obj, indent=1), encoding="utf-8")
+    png = out.with_name(WEIGHT_OBJECT_ID + ".png")
+    shutil.copyfile(OBJECTS / "ev-weight-check-v1.png", png)
+    return png
+
+
+def _arith_card_object() -> Path:
+    """Row 23b's arithmetic (P69 T31): ev-memory-arithmetic-v1's title; its checklist cut to the phone profile
+    (ARITH_CHECKLIST - Side / The fact / The number, every figure the object's: "4-5 years" as "~5 years" on E99 s95,
+    "80GB -> 192GB"), no sub; its source line names E99 s95 for the five (the coverage audit: "any drawn five cites E99
+    s95"); the rows land as a recap. Records `derived_from` and its basis. Written with the object's PNG (the static
+    fallback the compiler docks) into the build dir only; returns the PNG."""
+    import copy
+    import shutil
+    obj = copy.deepcopy(json.loads(ARITH_OBJECT.with_suffix(".series.json").read_text(encoding="utf-8")))
+    src_rows = obj["checklist"]["rows"]
+    assert [r["cells"][0] for r in src_rows] == ["SUPPLY", "DEMAND", "VERDICT"]
+    assert src_rows[0]["cells"][2] == "4-5 years" and src_rows[1]["cells"][2] == "80GB -> 192GB", "the object's figures"
+    assert src_rows[2]["cells"][2] == "AI < factories"
+    obj["checklist"] = copy.deepcopy(ARITH_CHECKLIST)
+    assert all(len("".join(r["cells"])) <= 32 for r in obj["checklist"]["rows"]), obj["checklist"]["rows"]
+    assert ARITH_S95 in ARITH_SRC
+    obj.pop("sub", None)
+    obj["src"] = ARITH_SRC
+    obj["derived_from"] = ["evidence/objects/ev-memory-arithmetic-v1.series.json"]
+    obj["basis"] = {"~5 years": "the source's '4-5 years' (SK hynix M15X 2026, Yongin ph.1 end-2027) on the operator's "
+                                "five (E99 s95, OPERATOR-RULINGS.md:3321)",
+                    "80\u2192192 GB": "the source's '80GB -> 192GB' (NVIDIA H100 -> B200), verbatim",
+                    "AI < factories": "the source's verdict cell, verbatim"}
+    out = BUILD / "objects" / (ARITH_CARD_OBJECT_ID + ".series.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(obj, indent=1), encoding="utf-8")
+    png = out.with_name(ARITH_CARD_OBJECT_ID + ".png")
+    shutil.copyfile(ARITH_OBJECT.with_suffix(".png"), png)
+    return png
+
+
 def _shot_table_md(rows: list) -> str:
     """SHOT-TABLE-H.md - the table a human reads: one row per window, its world, its use and idle, what fires."""
     out = ["# SHOT TABLE H - the bed (P68 T5) and the body, grown one P69 slice at a time (T15-T32); a row is a world",
@@ -3385,7 +3751,13 @@ TABLE_TREATMENT = {1: "treatment rows 1-5 (the page, 0:00-0:42)", 2: "treatment 
                        "then treatment row 22's opening - the tripwire board beside the line, PROP 6 the RAM (P69 T30)",
                    22: "treatment row 22, the tripwires: the memory monitor slid in on 'it reads what memory costs' "
                        "- the prices on their words with each figure's basis, the June print ringed, the trim proof, "
-                       "the flip, the certificate back (P69 T30; the board and PROP 6 the RAM stand on row 21's page)"}
+                       "the flip, the certificate back (P69 T30; the board and PROP 6 the RAM stand on row 21's page)",
+                   23: "treatment row 23, the ring: dip 7, reset 3 - the certificate thrown and ringed, the railway "
+                       "index, the verdict stack, the RAM (P69 T31)",
+                   24: "treatment row 23, the bullish case: dip 8, the hynix page returns by the spiral, the I-beam, "
+                       "the arithmetic beside the line (P69 T31)",
+                   25: "treatment row 23, host window 3 - the newsroom: dip 9, the certificate, the weight check on "
+                       "the desk (P69 T31)"}
 
 
 def _flow_count(rows: list) -> tuple[int, int, int, int]:
@@ -3452,9 +3824,22 @@ def main() -> int:
     D.register(RACK_PROP, RACK_PROP_FILE)        # row 21: the rack, stamped on "racks" (the answer to "Used tomorrow?")
     D.register(TRIPWIRE_CARD, _tripwire_card_object())   # row 22: the board - the checklist keyed to this take
     D.register(RAM_PROP, RAM_PROP_FILE)          # row 22: PROP 6, the RAM, stamped on "RAM"
+    D.register(RING_CERT_CARD, BUILD / "docks" / (CERT_CARD + ".png"))   # row 23a: the same certificate, its own id
+    D.chart_card(RAIL_CARD, OBJECTS / "ev-railway-index-v1.series.json", BUILD, "line", card_w=RAIL_CARD_W)   # row 23a
+    D.register(VERDICT_CARD, OBJECTS / "ev-holds-stack-v1.png")   # row 23a: the stack's host - an invisible anchor (s9.24)
+    D.register(IBEAM_PROP, IBEAM_PROP_FILE)      # row 23b: the I-beam, stamped just after "the steel"
+    D.register(ARITH_CARD, _arith_card_object())   # row 23b: the arithmetic - the checklist card, phone profile
+    D.register(HOST3_PLATE_ID, HOST3_PLATE_FILE)   # row 23c: the H-3 newsroom, by id (as rows 7 and 20's stills)
+    D.register(WEIGHT_CARD, _weight_card_object())   # row 23c: the weight check - the checklist card, phone profile
     rows = shot_table(ws, unit_end)
     karp_record(ws, T.at(ws, "Alex Karp"))   # row 11: the record's words are filled BEFORE the META is written
-    (BUILD / "evidence-dock.json").write_text(json.dumps(DOCK_META, indent=1), encoding="utf-8")
+    meta = list(DOCK_META)
+    if VERDICT_STACK_ON:   # row 23a: the verdict stack's payload, from the same times as its window
+        stack, _, _ = verdict_stack(ws)
+        meta.append({"asset": VERDICT_CARD, "species": "stack", "title": "Everything we checked holds",
+                     "source": "four documents of this episode - each shown with its own source earlier",
+                     "badges": [], "stack": stack})
+    (BUILD / "evidence-dock.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
     table = BUILD / TABLE_NAME
     T.write_shot_table(table, rows,
                        '"""Steel and Paper H - the 1:30 unit, GENERATED by build_episode_h.py. Do not hand-edit."""\n')

@@ -1,0 +1,58 @@
+{
+ "title": "The arithmetic - run it yourself",
+ "src": "Fab build: ~5 years (the operator, E99 s95); memory per chip: NVIDIA H100 80GB -> B200 192GB; capacity: 3 makers",
+ "checklist": {
+  "profile": "phone",
+  "head": [
+   "Side",
+   "The fact",
+   "The number"
+  ],
+  "rows": [
+   {
+    "cells": [
+     "Supply",
+     "a new memory fab",
+     "~5 years"
+    ],
+    "colors": [
+     "#f4f6f8",
+     "#dce3ea",
+     "#3bc9b0"
+    ]
+   },
+   {
+    "cells": [
+     "Demand",
+     "memory per chip",
+     "80\u2192192 GB"
+    ],
+    "colors": [
+     "#f4f6f8",
+     "#dce3ea",
+     "#ff8a8c"
+    ]
+   },
+   {
+    "cells": [
+     "2030?",
+     "only if",
+     "AI < factories"
+    ],
+    "colors": [
+     "#f4f6f8",
+     "#dce3ea",
+     "#f5b72e"
+    ]
+   }
+  ]
+ },
+ "derived_from": [
+  "evidence/objects/ev-memory-arithmetic-v1.series.json"
+ ],
+ "basis": {
+  "~5 years": "the source's '4-5 years' (SK hynix M15X 2026, Yongin ph.1 end-2027) on the operator's five (E99 s95, OPERATOR-RULINGS.md:3321)",
+  "80\u2192192 GB": "the source's '80GB -> 192GB' (NVIDIA H100 -> B200), verbatim",
+  "AI < factories": "the source's verdict cell, verbatim"
+ }
+}

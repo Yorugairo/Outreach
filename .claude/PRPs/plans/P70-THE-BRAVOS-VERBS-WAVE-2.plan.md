@@ -405,7 +405,7 @@ listed order.
 - Evidence: pending
 
 ### T1c: The seal's shockwave is gold; a bare prop's ring reads on any ground; the seal stays open (E99 s127 / s128)
-- Status: in_progress (dispatched 2026-09-24 on lane B 50b2f85, scratch patch)
+- Status: done - lane B `cd0b630` (seal ring gold; dock-stamp ring by the measured ground: charcoal plate 1.04 -> 4.29:1, photo 1.27 -> 2.76:1; seal open tested; H: only s19's phone ring changes; open: the gold seal reads 1.55:1 on a mid-tone photo)
 - Owner: implementation_luna (LANE B), then the parent's frame read
 - Depends on: T1b committed (`50b2f85`)
 - Harvest: the operator, 2026-09-24: "keep #E8B86D", "if reference is gold, make ours gold too" (s127); "i dont mind it being drawn over" (s128). T1b's finding: `RING_INK.ground` inks the ring charcoal on a dark non-ledger plate, where it nearly vanishes (`chip-stamp-seal-text`).
@@ -415,7 +415,7 @@ listed order.
 - Evidence: pending
 
 ### T2: The schematic - a shape drawn with no data, carrying the narrative (was P69 T46)
-- Status: in_progress (dispatched 2026-09-24 on lane B 50b2f85, scratch patch)
+- Status: in integration (rebased on 482a9f7, no end tag on a schematic; merging on lane B)
 - Owner: implementation_luna (LANE B)
 - Depends on: P70's base (T0), which carries T37b's bloom and T87's empty-plot gate; done P69 T36 `104af07` (the lit
   stretch), T50 `f63b569`. Nothing in P70.
@@ -495,7 +495,8 @@ listed order.
 - Evidence: pending
 
 ### T3: The fill gauge - one share of one whole fills a capsule on its word (was P69 T51)
-- Status: in_progress (dispatched 2026-09-24 on lane B 50b2f85, scratch patch)
+- Deviation (the parent, from the review 2026-09-24): acceptance 1's horizontal form `gauge:h` is REFUSED BY NAME, not drawn - M26 reads heights only; filed R26-319. The `whole` is named by the 100 hline's label (acceptance 3's second route); a `whole` key is not built. M26 cannot read long-form bars pages at all (pre-existing, R26-318); the gauge keeps its own rules visible so M26 reads it.
+- Status: done - lane B `e43c3d8` (the fill gauge; reviewed MERGE WITH FIXES, fixes applied - two-bar pitch, ceiling stubs, TRACK_A 0.19 off Bravos's 1.741:1, page-boxes representative, figure-ink WARN; golden gauge-94 on the title-glow engine; no fill glow - awaits the operator)
 - Owner: implementation_luna (LANE B), then reviewer (M26, a truth gate, must read the fill)
 - Depends on: P70's base (T0), which carries T85's stagger and T37b's series ink; done P69 T50 `f63b569`, T10b
   `91de567` (`bar_style=soft`), T8 (`longform`). Nothing in P70.
@@ -662,7 +663,7 @@ listed order.
 - Evidence: pending
 
 ### T5: The decomposition brace - one total braced into its named parts, on a stacked bar (was P69 T58)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
 - Owner: implementation_luna (LANE B)
 - Depends on: P70's base (T0); done P69 T50 `f63b569` (a bracket on bars), T64 `c0836b8` (`segments`). Integrated
   after wave 1.
@@ -736,7 +737,7 @@ listed order.
 - Evidence: pending
 
 ### T6: The equation row - the inputs, the relation and the signed result, in spoken order (was P69 T56)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
 - Owner: implementation_luna (LANE B), then reviewer (the gate's `SPECIES_EVENTS`, the arithmetic truth rule)
 - Depends on: P70's base (T0); done P69 T50. Integrated after wave 1.
 - Harvest: v2 T38 "Equation row: inputs, relation, signed result", MISSING, n=1 (DOM 09:30-09:39: 3 %, 5 %, "Real Yield"
@@ -810,7 +811,7 @@ listed order.
 - Evidence: pending
 
 ### T7: The balance scale, and the balance tips (was P69 T59)
-- Status: pending
+- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
 - Owner: implementation_luna (LANE B), then reviewer (the gate's `SPECIES_EVENTS`, the no-figures truth rule)
 - Depends on: P70's base (T0); done P69 T6b `041e2ff` (the hatch), T26d `5c6871c`. Integrated after T6 (they share only
   parent-merged registry lines).
@@ -1088,7 +1089,8 @@ listed order.
 - Evidence: pending
 
 ### T13: The drift-hold - a held chart card or evidence dock breathes, turns a fraction and catches a light, one whole cycle per hold (the operator, 2026-09-24; HyperFrames drift-hold)
-- Status: pending
+- Deviation (the parent, 2026-09-24): the acceptance (one cycle per HELD span; a light sweep) cannot be met inside the idle region - `idleCssFor` (engine, outside the region) passes no span and the idle runs on the life clock (only the engine knows the freeze windows), and nothing paints a light band on a card (the cited sheen/glint `~:1828` records 0 hits). APPROVED: T13 also edits the engine's dock painter (`idleCssFor` gains an optional span converted to the life clock; the 4 dock call sites pass `[d.enter, d.exit]`; a new `paintHoldLight`). T8 (which owns `render()`'s dock-arrival branch) has not started and builds on top. `hold` is a card-only idle kind (`IDLE_CARD_KINDS`), not in `IDLE_KINDS` (`test_idle_e49.py:65`). Press cards (`paintPress`) are not covered - filed.
+- Status: in integration (combined patch on 482a9f7 approved with the dock-painter deviation; queued behind P70 T2)
 - Owner: implementation_luna (LANE B)
 - Depends on: T37b (the page's inks) integrated; nothing else in P70
 - Harvest: the operator, 2026-09-24: "npx hyperframes add drift-hold i think this becomes an interesting reference to hold charts/evidence docks with". The component is already on disk, harvested 2026-09-07 as a reference only (fc71e49 - "nothing in the engine changes"): `content/video_engine/hyperframes/compositions/components/drift-hold.html` - sub-degree rotation, restrained scale breathing and a soft light sweep, each ONE complete sine cycle across the mounted duration, the endpoint phase wrapped so t=0 equals t=duration (loop-safe); intensities `whisper` / `standard`.
