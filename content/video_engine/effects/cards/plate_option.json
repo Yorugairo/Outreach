@@ -882,6 +882,27 @@
    "doctrine": ["E99 s92", "E99 s96", "P69 T10b", "P69-HG3"], "status": "wired",
    "proof": {"golden": null, "test": "content/video_engine/tests/test_bar_style.py::test_soft_is_a_named_row_option_on_a_bars_page", "first_use": null},
    "callable": {"today": true, "why": "accepted by PLATE_OPTS on bars pages, excluding extruded_bar"}
+  },
+  {
+   "id": "plate_option:caption_room",
+   "axis": "plate_option",
+   "token": "caption_room",
+   "title": "Picture-plate caption room",
+   "aliases": [],
+   "does": "A picture plate declares a stage-fraction rectangle its STAGE caption sits in, centred in it - off the plate's subject (the host's collar, the viaduct's paper edge), as `room=` places a card.",
+   "when": "a picture plate's subject sits where the 40 % stage caption would cross it (R26-268)",
+   "when_source": "content/video_engine/tests/test_plate_caption_room.py:1",
+   "author": {
+    "key": "`;caption_room=<x>,<y>,<w>,<h>` on a picture plate id",
+    "example": "'world-h1-studio-v1;idle=drift;caption_room=0.55,0.08,0.40,0.30'",
+    "example_source": "content/video_engine/tests/test_plate_caption_room.py:55",
+    "check": "plate"
+   },
+   "phases": [], "blends": [], "options": [], "dials": null,
+   "lives": {"form": "inline", "path": "content/video_engine/scripts/build_scene_timeline_f.py", "symbol": "plate_room_spec", "also": ["world_for_plate", "caption_room_advice"], "note": "engine captionInRoom (the stage caption only, no card band); a room shorter than the two-line strip WARNs (s106)"},
+   "doctrine": ["R26-268", "P72 T14", "E99 s106"], "status": "wired",
+   "proof": {"golden": null, "test": "content/video_engine/tests/test_plate_caption_room.py::test_a_declared_caption_room_places_the_stage_caption_inside_it", "first_use": null},
+   "callable": {"today": true, "why": "accepted by PLATE_OPTS on picture plates; refused by name on a page, a vector map or a clip, and when malformed"}
   }
  ]
 }

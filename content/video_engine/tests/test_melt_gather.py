@@ -555,15 +555,16 @@ def test_the_first_stain_IS_the_landing_point() -> None:
 
 @pytest.mark.parametrize("name,sha", [
     # THE THREE NEW PROOFS, on the surface the operator watched (PROOF_FRAMES in render_baseline.py)
-    ("melt-gather@proof-pickup", "b734ae334f940a2be9bcd625fa212bf627114512327aad82d041b45f500e12d9"),
-    ("melt-gather@proof-flight", "51a3063acf17595db514eeee9bb37b262b49e68ce5029bfcf4eb959764f14e86"),
-    ("melt-gather@proof-splat", "e90b95b1ff1c93e327aac04fe54c16823260f01555a05e115b142e584263e8c9"),
+    ("melt-gather@proof-pickup", "53fc710009c042c5a7fc468300d167d54d431801172a9b0788b00088f57d3abf"),
+    ("melt-gather@proof-flight", "2b07c94f026899392f9b2d6b5e38dd70b9586480b221866c8e25a912b67dcedf"),
+    ("melt-gather@proof-splat", "ef11563aa11841d5b27bc6f5dbb04008cdb785f5841c1a47a0274d4beba2f9cf"),
     # ... and the two instants of the ending that moved with it, 0.77 s later
-    ("melt-gather@proof-splash", "3570a95171ed67f5ff0bdebc5e6f7acb52f652a76d3095434819fbf359ff5131"),
-    ("melt-gather@proof-plate", "b31c39b3186cca9b26c90c72048e85d52d956be4f9e60a59de22ee15069666a2"),
-    # THE TWO THAT MUST NOT MOVE: the gather's own midpoint and the point - the frames E99 s51 approved
-    ("melt-gather", "78bbada0891a5f526afa205cf2478bdc3000cc4897c35c4735d9784835477a86"),
-    ("melt-gather@proof-point", "27192ed0ce1b3f96f213c03b9e7feed97a8b864baaa5eff927522438f2943908"),
+    ("melt-gather@proof-splash", "5d65b3e991e67e88d994e060a66919ee7b32ff368d998e6973920a2aa473c996"),
+    ("melt-gather@proof-plate", "5032c025fd742eed20d0e2a4b8c14cef9aed2f95e47021ef9cbcb477f7f857ab"),
+    # THE TWO THAT MUST NOT MOVE: the gather's own midpoint and the point - the frames E99 s51 approved (their melt;
+    # P72 T14 re-pinned all seven for the stage caption's backing only, inside the caption box x 630-1297 y 432-511)
+    ("melt-gather", "c90473a537df393390b759dbf507f45809e09c1adb835fadb3425c28495e07bd"),
+    ("melt-gather@proof-point", "d5d8351433201e32ce812ad454471dc9f0af3ac8c0f619445b6e91fb1b97a7b0"),
     # ... and the melts that name no splash, which have no pitch at all
     ("melt-page", "7c2a199da7ff00c3a27c64adf6503907fd9ebb9724a8462865331c654ac24455"),
     ("melt-morph", "47832a8548dcebe7e8e9b411ee97b7d24c1616effee6c0299d3dc719f841e18b"),

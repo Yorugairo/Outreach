@@ -465,7 +465,7 @@ def test_every_wired_card_is_in_a_recipe():
                          "page_enter:surface",
                          "page_species:axis_tag", "page_species:explode", "page_species:level_join", "page_species:member", "page_species:solo",
                          "plate_option:bar_style",
-                         "plate_option:build", "plate_option:domain", "plate_option:readability",
+                         "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:readability",
                          "plate_option:room", "species:balance", "species:equation", "species:freeze"], uncovered
     assert excluded == ["kinetics:arap", "kinetics:camera", "kinetics:chartxf", "kinetics:clothoid", "kinetics:contour",
                         "kinetics:ease", "kinetics:homography", "kinetics:ink", "kinetics:labelfit",

@@ -22884,6 +22884,9 @@ async function mount(doc) {
     if (s.world && s.world.asset_id && ((s.docks || []).some((d) => d && d.arrive === "stamp")
         || (s.species || []).some((e) => e && e.kind === "ruler"))) ringPlate(s.world.asset_id);   /* P71 T14: and a ruler's ground */
   });
+  if ((TL.caption_pages || []).length) TL.scenes.forEach((s) => {   /* P72 T14: and every picture plate a caption can sit on */
+    if (s.world && s.world.asset_id && !s.world.kind) ringPlate(s.world.asset_id);
+  });
   const ringOpaque = (c) => {
     const v = lfRgb(c), a = /^rgba\([^)]*,\s*([0-9.]+)\s*\)$/i.exec(String(c || "").trim());
     return v && !(a && +a[1] < 0.5) ? v : null;
@@ -22933,6 +22936,78 @@ async function mount(doc) {
       return v ? stampRingLum(v) : null;
     });
     return stampRingInk(lums, null).ground;
+  };
+  /* P72 T14 (R26-268): THE CAPTION'S BACKING, MEASURED AGAINST THE PLATE UNDER IT. The caption's words are light ink
+     (the spoken word white, the rest white at FILL) held off their ground by the template's soft shadow - which is not
+     enough on a bright picture plate: row 17's pale words on the pale cream desk wall, row 12's strip on the bright
+     desk. The ground is READ where the caption sits (ringRgbAt on the current world, the plate's own decoded pixels
+     with its Ken Burns in them - the stamp ring's and the ruler's measured ground), each sample's contrast taken
+     against the fill composited over it, and the worst PCT of them held against FLOOR - the reference's caption floor
+     (caption-squint-floor.v1.json: Wealth Logic's burned-in strip, 16:9 contrast.min; E38, never a number fitted to
+     ours; test_plate_caption_room pins the mirror). Below FLOOR x FULL the words take the backing, graded to its whole
+     strength at FLOOR, so a ground near the line never flickers. THE FORM IS THE REFERENCE'S: a dark stroke and halo
+     in the TEXT SHADOW (Wealth Logic's white caps in a black stroke) - doc 29 Part 5 and the portable pipeline hold
+     the long form's caption to "transparent glyphs plus text shadow; no pill, no panel", so it is never a box. The
+     STAGE caption on a PICTURE PLATE only: a page, a map and a clip carry their own grounds, and the anchored / quiet
+     strip is P71 T8b's (its size and its contrast on every world - on H the stroke also moved M48's cap read of the
+     33 px strip, measured, so the strip is left to the slice that sets its size). A ground that already holds the
+     floor, or one that cannot be read, paints exactly what it painted. */
+  const CAPTION_BACKING = Object.freeze({
+    FLOOR: 3.97,          /* caption-squint-floor.v1.json lanes["16:9"].contrast.min */
+    FULL: 1.25,           /* the backing starts below FLOOR x FULL and is whole at FLOOR */
+    FILL: 0.80,           /* the unspoken word's white (the template's #caption .cw) */
+    PCT: 0.25,            /* the worst quarter of the samples is the caption's ground */
+    COLS: 9, ROWS: 3,     /* the samples over the words' own box */
+    INK: "8,11,14",       /* the page's near-black (stopaction INK.page) */
+    STROKE_EM: 0.1,       /* the stroke's reach, in the caption's own em (6.4 px at 64, 3.3 px at 33) */
+    HALO_EM: [0.16, 0.34], /* a tight dark core under the stroke (painted twice), then the soft halo */
+  });
+  const captionGround = (sc, box) => {
+    if (!box || sc.world.kind || !sc.world.asset_id || !ringPlate(sc.world.asset_id)) return null;
+    const B = CAPTION_BACKING, cs = [];
+    for (let i = 0; i < B.COLS; i++) for (let j = 0; j < B.ROWS; j++) {
+      const v = ringRgbAt(sc, wB, box.left + box.width * (i + 0.5) / B.COLS, box.top + box.height * (j + 0.5) / B.ROWS);
+      if (!v) continue;
+      const g = stampRingLum(v), f = stampRingLum(v.map((c) => 255 * B.FILL + c * (1 - B.FILL)));
+      cs.push((Math.max(f, g) + 0.05) / (Math.min(f, g) + 0.05));
+    }
+    if (!cs.length) return null;
+    cs.sort((a, b) => a - b);
+    return cs[Math.min(cs.length - 1, Math.floor(cs.length * B.PCT))];
+  };
+  const captionBacking = (contrast) => {
+    const B = CAPTION_BACKING;
+    if (contrast == null) return "";
+    const k = Math.min(1, Math.max(0, (B.FLOOR * B.FULL - contrast) / (B.FLOOR * B.FULL - B.FLOOR)));
+    if (k <= 0) return "";
+    const a = k.toFixed(3), e = B.STROKE_EM, d = (e * 0.7071).toFixed(4), ink = (al) => "rgba(" + B.INK + "," + al + ")";
+    const stroke = [[e, 0], [-e, 0], [0, e], [0, -e], [d, d], [-d, d], [d, -d], [-d, -d]]
+      .map(([x, y]) => x + "em " + y + "em 0 " + ink(a)).join(", ");
+    const core = "0 0 " + B.HALO_EM[0] + "em " + ink(a);
+    return stroke + ", " + core + ", " + core + ", 0 0 " + B.HALO_EM[1] + "em " + ink((0.85 * k).toFixed(3))
+      + ", 0 2px 14px rgba(0,0,0,.94), 0 0 5px rgba(0,0,0,.85)";   /* ... over the template's own two */
+  };
+  /* the backing on this frame: the words' own box (a Range over the caption's text) read against the plate under it,
+     for a STAGE caption only. A short's PHRASE page keeps its own per-word shadow (CAPABILITIES "PHRASE captions"). */
+  const paintCaptionBacking = (sc, stage, phrase) => {
+    let box = null;
+    if (stage && !phrase && cap.firstChild && !sc.world.kind) {
+      const rg = document.createRange();
+      rg.selectNodeContents(cap);
+      const r = rg.getBoundingClientRect();
+      box = r.width > 1 && r.height > 1 ? r : null;
+    }
+    cap.style.textShadow = box ? captionBacking(captionGround(sc, box)) : "";
+  };
+  /* P72 T14 (R26-268): A PLATE'S CAPTION ROOM (`;caption_room=x,y,w,h`, fractions of the stage): the STAGE caption sits
+     in the rectangle the plate declares, centred in it - off the host's collar (row 7), off the viaduct's paper edge
+     (row 13) - as `;room=` places a card. Read only when the caption holds the stage with no card's band. */
+  const captionInRoom = (room) => {
+    const [rx, ry, rw, rh] = room;
+    cap.style.left = (rx * STAGE_W).toFixed(1) + "px";
+    cap.style.right = ((1 - rx - rw) * STAGE_W).toFixed(1) + "px";
+    cap.style.bottom = "auto";
+    cap.style.top = (ry * STAGE_H + Math.max(0, (rh * STAGE_H - cap.offsetHeight) / 2)).toFixed(1) + "px";
   };
   const render = (t) => {
     pmHideAll();   /* P69 T26e: a prop morph's mesh shows only on a frame that paints it */
@@ -23671,7 +23746,7 @@ async function mount(doc) {
       const yb = capY.caption_band && typeof capY.caption_band.y === "number" ? capY.caption_band : null;
       capBand = !carded ? yb : (yb && capBand ? (yb.y < capBand.y ? yb : capBand) : null);
     }
-    const quiet = (carded || !!capY) && !capBand;
+    const quiet = ((carded || !!capY) && !capBand) || !!pmOver;   /* R26-292 (P72 T14): the page before collapsing over this world keeps the caption in the strip until the prop lands */
     /* STAGE (s9.25 #2): the timeline declares it; the anchor is the shared-stage position only */
     /* a ledger page may pin its captions to the anchor (page.caption === "anchor"): a host plate's quiet zone is the host's (C5 addendum) */
     const PG = TL.caption_pages, CAP_LAST_HOLD_S = 0.4;
@@ -23817,8 +23892,11 @@ async function mount(doc) {
        (the caption is the viewer's layer and never rides the camera, E59), painted with no
        transition, exactly as the stage/anchor switch has always been: a wall-clock transition never
        lands in a captured frame, so a scrubbed render and a play-through must agree at the instant. */
+    const croom = stage && !sc.world.kind && Array.isArray(sc.world.caption_room) ? sc.world.caption_room : null;   /* P72 T14 */
     if (capBand) { cap.style.top = capBand.y + "px"; cap.style.bottom = "auto"; }
+    else if (croom) captionInRoom(croom);
     else if (cap.style.top || cap.style.bottom) { cap.style.top = ""; cap.style.bottom = ""; }
+    paintCaptionBacking(sc, stage, PHRASE);   /* P72 T14: read under the words where the stage caption now sits */
 
     [...chips.children].forEach((c, i) => c.classList.toggle("on", i === si));
   };
