@@ -20709,10 +20709,10 @@ async function mount(doc) {
                     `agendaRowRead`, which is the row's own word plus NUM_LEAD plus ROW_S.
                     The glyph is the OPERATOR'S OWN cutout carried in the asset map as `prop:<asset_id>` (PROP_KEY
                     here, PROP_PREFIX in the compiler) - this module never invents an image and never reads a path.
-     The page form paints NEW classes (`agplate`, `agmed`, `agtitle`, `agfig`, `agicon`) whose look is set by the
-     painter as presentation attributes rather than in the player's CSS, because P61 T8's write set does not carry
-     the template; the four dials PAGE_INK / PAGE_EDGE / PAGE_GOLD / PAGE_CHALK restate the template's own species
-     palette (#05131e, #8a94a0, #F5B72E, #F2F2F2) so the page form and the dock form are visibly one species.
+     The page form paints NEW classes (`agplate`, `agmed`, `agtitle`, `agfig`, `agicon`) whose palette lives in the
+     player's species CSS beside `.agnum` / `.agrow` (R26-142, P72 T27 - P61 T8 had written it here as presentation
+     attributes, the template outside its write set): the page form and the dock form are visibly one species, and a
+     colour is changed in one place. This module writes only the geometry, the sizes and the opacities.
      THE DOCK FORM IS UNTOUCHED: `form` absent takes exactly the code below, so every committed golden is
      byte-identical.
      Nothing is stored: every visual reads from t and the rows' own `at`, so a scrubbed frame is the played
@@ -20756,12 +20756,6 @@ async function mount(doc) {
     PAGE_SETTLE_S: 0.14,     /* ... and the squash relaxing after the impact */
     PAGE_SQUASH: 0.14,       /* the stop-motion squash ON IMPACT: wider by this much, and as much shorter */
     PAGE_FADE_S: 0.1,        /* the stamp's opacity ramp - never a pop out of nothing */
-    PAGE_INK: "#05131e",     /* the row plate's ground - the count array's own tile ink (the template's `.catile`) */
-    PAGE_EDGE: "#8a94a0",    /* ... and the muted-ink outline every species frame uses (the template's `.agrule`) */
-    PAGE_GOLD: "#F5B72E",    /* the medallion's ring: the numeral's own sunflower (the template's `.agnum`) */
-    PAGE_CHALK: "#F2F2F2",   /* the title's chalk (the template's `.agrow`) */
-    PAGE_HALO: "rgba(27,30,35,.85)",      /* the type's halo, as every species' type carries it */
-    PAGE_FACE: "Inter, Arial, sans-serif",  /* the house sans - set here because the new classes have no CSS */
   });
 
   const ag01 = (v) => Math.min(1, Math.max(0, v));
@@ -20925,9 +20919,7 @@ async function mount(doc) {
       const tf = ag01((t - +sp.at) / AGENDA.ROW_S);
       if (tf > 0) {
         const tt = el("text", "agtitle", g, { x: lay.titleX.toFixed(1), y: lay.titleY.toFixed(1), opacity: tf.toFixed(3),
-                                             "font-size": (AGENDA.PAGE_TITLE_SIZE * Math.min(lay.k, AGENDA.PAGE_TITLE_K)).toFixed(1), "font-family": AGENDA.PAGE_FACE,
-                                             "font-weight": "800", "letter-spacing": "1.5", fill: AGENDA.PAGE_CHALK,
-                                             "paint-order": "stroke", stroke: AGENDA.PAGE_HALO, "stroke-width": "9" });
+                                             "font-size": (AGENDA.PAGE_TITLE_SIZE * Math.min(lay.k, AGENDA.PAGE_TITLE_K)).toFixed(1) });
         tt.textContent = title;
         const d = "M" + lay.titleX.toFixed(1) + " " + lay.titleRuleY.toFixed(1) +
                   " L" + (lay.titleX + lay.w - 2 * AGENDA.PAGE_ROW_PAD).toFixed(1) + " " + lay.titleRuleY.toFixed(1);
@@ -20940,10 +20932,10 @@ async function mount(doc) {
       const ix = kind === "none" ? { scale: 1, dx: 0, dy: 0 } : idle(kind, t, hash(seed | 0, (si | 0) * 17 + i, 991));
       const rg = el("g", "", g, { transform: "translate(" + ix.dx.toFixed(2) + " " + (r.dy * lay.k + ix.dy).toFixed(2) + ")" });
       el("rect", "agplate", rg, { x: place.x.toFixed(1), y: place.top.toFixed(1), width: place.w.toFixed(1),
-                                  height: place.h.toFixed(1), rx: AGENDA.PAGE_PLATE_R, fill: AGENDA.PAGE_INK,
+                                  height: place.h.toFixed(1), rx: AGENDA.PAGE_PLATE_R,
                                   opacity: (r.num * AGENDA.PAGE_PLATE_A).toFixed(3) });
       drawOn(el("circle", "agmed", rg, { cx: place.medX.toFixed(1), cy: place.medY.toFixed(1), r: place.medR.toFixed(1),
-                                         fill: "none", stroke: AGENDA.PAGE_GOLD, "stroke-width": AGENDA.PAGE_MED_W }), r.num);
+                                         "stroke-width": AGENDA.PAGE_MED_W }), r.num);
       const num = el("text", "agnum", rg, { x: place.numX.toFixed(1), y: place.numY.toFixed(1), "text-anchor": "middle",
                                             opacity: r.num.toFixed(3), "font-size": (AGENDA.NUM_SIZE * lay.k * ix.scale).toFixed(1) });
       num.textContent = r.row.n;
@@ -20959,9 +20951,7 @@ async function mount(doc) {
       }
       if (r.fade > 0 && r.row.sub) {   /* R26-80: the sub is a FIGURE on a page, never grey furniture in a corner */
         const sb = el("text", "agfig", rg, { x: place.textX.toFixed(1), y: place.subY.toFixed(1), opacity: (r.fade * 0.95).toFixed(3),
-                                             "font-size": (AGENDA.SUB_SIZE * lay.k).toFixed(1), "font-family": AGENDA.PAGE_FACE,
-                                             "font-weight": "700", fill: AGENDA.PAGE_GOLD, "paint-order": "stroke",
-                                             stroke: AGENDA.PAGE_HALO, "stroke-width": "6" });
+                                             "font-size": (AGENDA.SUB_SIZE * lay.k).toFixed(1) });
         sb.textContent = r.row.sub;
       }
       const st = agendaStampF(sp, t, i);   /* E93: the icon, once the sentence has been read - and not one frame before */
