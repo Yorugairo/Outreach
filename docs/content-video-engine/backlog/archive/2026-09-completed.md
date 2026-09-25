@@ -269,3 +269,4 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-303 | A range is judged at both ends. Closed by P72 T6. | lane B `9dc5bb6` (`test_value_gate_longform.py` 80; three review rounds). |
 | R26-264 | A card's own badge is never page ink. Closed by P72 T6. | lane B `9dc5bb6` (`test_value_gate_longform.py` 80; three review rounds). |
 | R26-319 | The horizontal gauge is read by width; `gauge:h` admitted. Closed by P72 T6. | lane B `9dc5bb6` (`test_value_gate_longform.py` 80; three review rounds). |
+| R26-334 | A balance side carries its sign ink. Closed by P72 T41 (code landed). | lane B `a29e67a`: `tone: neg|pos|neutral`; the pill FORM is the operator's pick at P72-HG1 item (6) (sheet `_proofs/p72-sign-and-hatch/sheet-r26-334-pill-forms.png`). |

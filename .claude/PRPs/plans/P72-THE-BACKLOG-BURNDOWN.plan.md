@@ -1062,7 +1062,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T41: The balance's sign ink and the prop hatch - candidate sheets for the operator's pick and read
-- Status: pending
+- Status: done - lane B a29e67a: the opt-in `tone: neg|pos|neutral` pill; the two sheets at `content/video_engine/projects/_proofs/p72-sign-and-hatch/` (main checkout) for P72-HG1 items (6) the pill form and (7) the hatch strength
 - Owner: implementation_luna (LANE B for R26-334's opt-in key; a private test bed for both sheets)
 - Depends on: P70 T7 (the balance) merged - both rows came from its review; P69 T6b's `PROP_SHADOW` (landed)
 - Items: R26-334 (`hist:941`: Bravos labels each pan with a coloured pill - threat red, opportunity green, CHN 113 / 114 - and ours writes cream Kalam on cream pans; s118 inks names by their series and a balance side has none: a per-side `tone: neg|pos|neutral` drawn as a pill in the palette's sign inks, "with a candidate sheet for the operator"), R26-335 (`hist:942`: T6b's resting hatch, `PROP_SHADOW` alpha 1, reads at 3x but barely at 1x on charcoal; strengthening it changes the shadow law for every prop and moves their goldens - "a separate look pass ... the operator's read")
