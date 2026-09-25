@@ -63,9 +63,9 @@ export const CHIP_STAMP = Object.freeze({
   LABEL_FLOOR: 59.08,
   MAX_LINES: 3,
   INK: Object.freeze({ cream: "#F4E6C7", charcoal: "#25313C" }),
-  /* P70 T1: the stamp arrival's impact ring is OUR ink, as the dock's is (scene-evidence-engine's `.dock-ring`): chalk
-     on the charcoal ledger page, charcoal on any other ground - never gold */
-  RING_INK: Object.freeze({ ledger: "#F2F2F2", ground: "#25313C" }),
+  /* P70 T1c (E99 s127 (2)): the stamp arrival's impact ring is no longer inked from the ground (T1's RING_INK, chalk on
+     the ledger / charcoal elsewhere, is gone): a stamped chip is always a seal, and a seal's shockwave is the seal's gold
+     - `chipSeal(...).ink`, see chipStampGroup */
   MASS: "ink",       /* the mass the stamp lands at: the engine's own default for a stamp (`stampXf(d.mass || "ink", ...)`) */
   /* P70 T1b (the parent's round 3): A SEAL DOES NOT SQUASH. At mass "ink" the hit's ONE squash frame (STOP.IMPACT_SQUASH 0.22,
      contact + 0.021 .. + 0.063 s at 24 fps) turned the full-size seal into a vertical oval - a coin flipping, not a stamp; the
@@ -326,13 +326,15 @@ export const chipStampPaint = (sp, side) => {
    ride the mark's scale, turn or dip. The group carries the mark's pose as the dock's `stopCss` writes it: translate
    (the receiver's dip), the free rotation, the clamped scale, the hit's squash frame; about the painted centre. */
 function chipStampGroup(ctx, pose, ix, cx, cy, side, s) {
-  const { sp, svg, el, sc } = ctx;
+  const { sp, svg, el } = ctx;
   const P = chipStampPaint(sp, side), pcx = cx + P.off[0] + ix.dx, pcy = cy + P.off[1] + ix.dy;
   const seal = chipSeal(sp, side), r0 = seal ? seal.R : P.r;   /* P70 T1b: thrown from the SEAL's border, as the source's is (:156 r * (1 + shock)) */
   if (pose.ring) {
-    const ledger = !!(sc && sc.world && sc.world.kind === "ledger");
+    /* P70 T1c (E99 s127 (2)): THE SHOCKWAVE IS THE SEAL'S GOLD, as the reference's is its seal's colour (badge-stamp.tsx:158
+       strokes the shock circle in `color`, the seal's one ink) - the seal's own ink, so darkened on the cream by the seal's
+       contrast law (sealGold) and never inked from the ground. Its timing is T1b's, unchanged. */
     el("circle", "chipstampring", svg, { cx: pcx.toFixed(1), cy: pcy.toFixed(1), r: (r0 * pose.ring.r).toFixed(1), fill: "none",
-      stroke: ledger ? CHIP_STAMP.RING_INK.ledger : CHIP_STAMP.RING_INK.ground, "stroke-width": pose.ring.width.toFixed(2),
+      stroke: seal ? seal.ink : sealGold(sp), "stroke-width": pose.ring.width.toFixed(2),
       opacity: pose.ring.alpha.toFixed(3) });
   }
   const a = Math.abs(pose.alpha || 0), th = (pose.alpha || 0) < 0 ? (pose.theta || 0) + Math.PI / 2 : (pose.theta || 0);

@@ -430,6 +430,46 @@ export const stampRing = (ts, o = {}) => {
            alpha: P.RING_A * (1 - life) };
 };
 
+/* THE RING'S INK ON A BARE MARK (P70 T1c; E99 s127 (3)): a bare prop's impact ring keeps the PAGE's inks - chalk or
+   charcoal, never the seal's gold (s87: a bare prop stays bare) - but WHICH ink is picked by the MEASURED ground under
+   the ring's reach, not by the world's kind: T1b found the world-kind rule ("chalk on the ledger, charcoal on any other
+   ground") inking it charcoal on a dark non-ledger plate, where it vanished (1.04:1 measured on a charcoal plate). The
+   painter measures the ground's luminance at the reach's samples (`stampRingReach`: ANGLES points on each of RADII,
+   fractions of the way from the mark's own radius to the ring's peak - the annulus the ring sweeps) and hands them here:
+   the MEDIAN ground (so a few samples over a page's edge never flip it) takes whichever of the two inks holds the more
+   WCAG contrast on it; nothing measured keeps the caller's fallback. A seal's ring is the seal's gold (chip.mjs), never
+   this. */
+export const STAMP_RING_INK = Object.freeze({
+  CHALK: "#F2F2F2",      /* the template's --lp-chalk, the ring's ink on a dark ground */
+  CHARCOAL: "#25313C",   /* the template's --charcoal / --lp-char, its ink on a light ground */
+  ANGLES: 16,            /* samples round each circle of the reach */
+  RADII: Object.freeze([0, 0.5, 1]),   /* ... at the mark's radius, half-way, and the ring's peak */
+});
+const sriHex = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+/* WCAG 2.x relative luminance of an [r, g, b] in 0..255 */
+export const stampRingLum = (rgb) => rgb.map((v) => v / 255)
+  .map((c) => (c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)))
+  .reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
+/* the reach's samples [[x, y], ...] about the contact point (cx, cy), from the mark's radius r0 to r0 x ringTo */
+export const stampRingReach = (cx, cy, r0, ringTo = STAMP_ARRIVAL.RING_TO) => {
+  const I = STAMP_RING_INK, out = [];
+  for (const f of I.RADII) {
+    const r = r0 * (1 + (ringTo - 1) * f);
+    for (let i = 0; i < I.ANGLES; i++) { const a = 2 * Math.PI * i / I.ANGLES; out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); }
+  }
+  return out;
+};
+/* the ink from the measured luminances: { ink, ground (the median luminance, null when none), contrast, n } */
+export const stampRingInk = (lums, fallback) => {
+  const v = (lums || []).filter((x) => x != null && Number.isFinite(+x)).map(Number).sort((a, b) => a - b);
+  if (!v.length) return { ink: fallback, ground: null, contrast: null, n: 0 };
+  const g = v.length % 2 ? v[(v.length - 1) / 2] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2;
+  const con = (hex) => { const l = stampRingLum(sriHex(hex)); return (Math.max(l, g) + 0.05) / (Math.min(l, g) + 0.05); };
+  const ch = con(STAMP_RING_INK.CHALK), cc = con(STAMP_RING_INK.CHARCOAL);
+  return ch >= cc ? { ink: STAMP_RING_INK.CHALK, ground: g, contrast: ch, n: v.length }
+    : { ink: STAMP_RING_INK.CHARCOAL, ground: g, contrast: cc, n: v.length };
+};
+
 /* THE EXIT the landed mark owes (E50; the source's exitAtInFrames): 0 -> 1 on the ease-IN cubic, over EXIT_S from
    the instant the mark is told to leave. 1 - stampExit is the opacity, as :134 / :169 have it. */
 export const stampExit = (ts, o = {}) => {

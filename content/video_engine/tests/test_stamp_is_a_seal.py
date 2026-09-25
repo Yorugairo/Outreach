@@ -16,7 +16,11 @@ tests/kinetics/stopaction-stamp.test.mjs. What this file pins:
       a line that runs past the side of the ring is a WARN with its numbers and is not drawn (s106) - never clipped;
   (4) the seal is GOLD (E99 s123), darkened on the cream until it holds 3:1;
   (5) the dials the compiler mirrors are chip.mjs's;
-  (6) measured on the rendered frame: zero shockwave ink before the contact, on a dock stamp and on a stamped chip.
+  (6) measured on the rendered frame: zero shockwave ink before the contact, on a dock stamp and on a stamped chip;
+  (7) a seal does not squash;
+  (8) P70 T1c (E99 s127 / s128), measured on the frame: a SEAL's shockwave is the seal's gold; a BARE PROP's ring
+      picks chalk or charcoal by the measured ground under it and holds contrast on cream, the charcoal ledger, a
+      charcoal plate and a photo plate; the seal is OPEN - the chart shows through it.
 """
 from __future__ import annotations
 
@@ -350,3 +354,168 @@ def test_a_SEAL_does_not_squash_its_width_and_height_stay_equal_from_the_contact
     boxes = _seal_boxes(surface, instants)
     for t, (bw, bh) in boxes.items():
         assert abs(bw - bh) <= 0.5, f"{surface}: the seal is {bw:.1f} x {bh:.1f} px at {t} (contact + {t - enter - CONTACT:.3f} s) - squashed"
+
+
+# ---- (8) P70 T1c (E99 s127 / s128): the seal's shockwave is gold; a bare prop's ring reads on any ground; the seal ----
+# stays open. Measured on the rendered frame: the frame as drawn against the same frame with the rings (or the chip)
+# hidden, every other element identical.
+
+def _wcag(rgb):
+    import numpy as np
+    c = np.asarray(rgb, dtype=float) / 255.0
+    lin = np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+    return lin[..., 0] * 0.2126 + lin[..., 1] * 0.7152 + lin[..., 2] * 0.0722
+
+
+_DOM_PROBE = """() => {
+  const o = {}, st = document.getElementById('stage').getBoundingClientRect();
+  const c = document.querySelector('circle.chipstampring'); if (c) o.chip = c.getAttribute('stroke');
+  const r = document.querySelector('.dock-ring'); if (r) o.dock = getComputedStyle(r).borderTopColor;
+  const s = document.querySelector('circle.chipsealin');
+  if (s) { const b = s.getBoundingClientRect(); o.seal = [b.left + b.width / 2 - st.left, b.top + b.height / 2 - st.top, b.width / 2]; }
+  return o; }"""
+
+
+def frames(tl: dict, uris: dict, instants: list[float], hide_css: str) -> dict:
+    """{(hidden, t): RGB array, ("dom", t): the probe} - one browser, the page drawn as is and with `hide_css` applied."""
+    playwright = pytest.importorskip("playwright.sync_api")
+    import tempfile
+    import numpy as np
+    from PIL import Image
+    import render_baseline as RB
+    w, h = RB.STAGE[str(tl.get("aspect") or "16:9")]
+    shots: dict = {}
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "t1c.html"
+        html.write_text(RB.instantiate(tl, uris, RB.TEMPLATE), encoding="utf-8")
+        srv, port = RB.serve(html.parent)
+        try:
+            with playwright.sync_playwright() as pw:
+                try:
+                    br = pw.chromium.launch(headless=True)
+                except Exception as exc:   # noqa: BLE001 - no browser is a skip with its reason, never a pass
+                    pytest.skip(f"playwright chromium not installed: {exc}")
+                for hide in (False, True):
+                    page = br.new_context(viewport={"width": w, "height": h}, device_scale_factor=1).new_page()
+                    page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+                    RB.prepare_page(page, w, h)
+                    if hide:
+                        page.add_style_tag(content=hide_css)
+                    for t in instants:
+                        RB.frame_png(page, t, (w, h))
+                        page.wait_for_timeout(120)
+                        shots[(hide, t)] = np.asarray(Image.open(io.BytesIO(RB.frame_png(page, t, (w, h)))).convert("RGB"))
+                        if not hide:
+                            shots[("dom", t)] = page.evaluate(_DOM_PROBE)
+                    page.close()
+                br.close()
+        finally:
+            srv.shutdown()
+    return shots
+
+
+def ring_measure(shown, hidden) -> dict:
+    """The impact ring alone: the pixels it changes (> 2 in any channel), the WCAG contrast of each against the ground
+    drawn under it (the hidden frame's pixel), their median, and the ring's median warmth R - B."""
+    import numpy as np
+    d = np.abs(shown.astype(int) - hidden.astype(int)).max(axis=2) > 2
+    if not d.any():
+        return {"px": 0, "contrast": 0.0, "warmth": 0.0, "ground": None}
+    a, b = _wcag(shown[d]), _wcag(hidden[d])
+    con = (np.maximum(a, b) + 0.05) / (np.minimum(a, b) + 0.05)
+    warm = shown[d][:, 0].astype(int) - shown[d][:, 2].astype(int)
+    return {"px": int(d.sum()), "contrast": float(np.median(con)), "warmth": float(np.median(warm)),
+            "ground": "#%02X%02X%02X" % tuple(int(v) for v in np.median(hidden[d], axis=0))}
+
+
+def photo_png() -> bytes:
+    """A deterministic stand-in for a PHOTO plate: a dusk-toned gradient with grain (no gitignored input needed)."""
+    import numpy as np
+    from PIL import Image
+    rng = np.random.default_rng(127)
+    y, x = np.mgrid[0:180, 0:320]
+    base = np.stack([40 + 50 * x / 320, 52 + 40 * y / 180, 70 + 30 * (1 - x / 320)], axis=2)
+    img = np.clip(base + rng.normal(0, 14, base.shape), 0, 255).astype("uint8")
+    buf = io.BytesIO()
+    Image.fromarray(img, "RGB").save(buf, "PNG")
+    return buf.getvalue()
+
+
+def prop_on(ground: str, png: bytes | None = None) -> tuple[dict, dict]:
+    """The prop-stamp golden's own bare-prop stamp on the named ground: its charcoal ledger page as committed, or the
+    same dock (the same place, the same fit) on a cream plate, a charcoal plate or a photo plate."""
+    import copy
+    import render_baseline as RB
+    import build_golden_sources as BGS
+    tl, uris = RB.load_surface("prop-stamp")[:2]
+    if ground == "charcoal ledger":
+        return tl, uris
+    tl, uris = copy.deepcopy(tl), dict(uris)
+    if png is None:
+        png = {"cream plate": lambda: BGS.png_solid(64, 36, BGS.CHIP_STAMP_CREAM),
+               "charcoal plate": lambda: BGS.png_solid(64, 36, BGS.CHIP_STAMP_CHARCOAL),
+               "photo plate": photo_png}[ground]()
+    tl["scenes"][0]["world"] = {"asset_id": "plate-t1c", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    uris["plate-t1c"] = BGS.uri("image/png", png)
+    return tl, uris
+
+
+RING_FLOOR = 2.0   # the ring's median contrast on its ground at contact + 0.05 s, where its own alpha is 0.49 (RING_A 0.55 x
+                   # (1 - life)): the better of the page's two inks reaches ~3-4:1 there, a ring inked like its ground ~1:1
+
+
+@pytest.mark.parametrize("ground", ["cream plate", "charcoal ledger", "charcoal plate", "photo plate"])
+def test_a_BARE_PROPS_ring_reads_on_any_ground_its_ink_picked_by_the_MEASURED_ground(ground):
+    tl, uris = prop_on(ground)
+    t = round(10.0 + CONTACT + 0.05, 4)
+    f = frames(tl, uris, [t], _HIDE_RINGS)
+    m = ring_measure(f[(False, t)], f[(True, t)])
+    assert m["px"] > 500, f"{ground}: the ring is out ({m})"
+    assert m["contrast"] >= RING_FLOOR, f"{ground}: the ring's median contrast {m['contrast']:.2f}:1 on {m['ground']} is under {RING_FLOOR}:1 ({m})"
+    dock = f[("dom", t)].get("dock", "")
+    want = "rgb(37, 49, 60)" if ground == "cream plate" else "rgb(242, 242, 242)"
+    assert dock == want, f"{ground}: the ring inked {dock} - s87: the page's chalk or charcoal, never gold"
+
+
+@pytest.mark.parametrize("surface,gold", [("chip-stamp-arrival", "#A07F4B"), ("chip-stamp-seal-text", "#E8B86D")])
+def test_a_SEALS_shockwave_is_the_seals_gold_on_the_frame(surface, gold):
+    import render_baseline as RB
+    tl, uris = RB.load_surface(surface)[:2]
+    t = round(10.0 + CONTACT + 0.05, 4)
+    f = frames(tl, uris, [t], _HIDE_RINGS)
+    assert f[("dom", t)].get("chip") == gold, f"{surface}: the shockwave's stroke {f[('dom', t)]}"
+    m = ring_measure(f[(False, t)], f[(True, t)])
+    assert m["px"] > 500 and m["warmth"] > 30, f"{surface}: the ring reads warm - gold, not chalk or charcoal ({m})"
+
+
+def seal_over_chart() -> tuple[dict, dict]:
+    """The committed stamped chip (chip-stamp-arrival's entry, ink cream) placed over the plot of the prop-stamp golden's
+    charcoal ledger page, in place of the prop."""
+    import copy
+    import render_baseline as RB
+    tl, uris = RB.load_surface("prop-stamp")[:2]
+    ctl, curis = RB.load_surface("chip-stamp-arrival")[:2]
+    tl, uris = copy.deepcopy(tl), dict(uris, **{k: v for k, v in curis.items() if k.startswith("prop:")})
+    chip = dict(copy.deepcopy(ctl["scenes"][0]["species"][0]), ink="cream", target={"kind": "point", "x": 0.62, "y": 0.5})
+    tl["scenes"][0]["docks"], tl["scenes"][0]["species"] = [], [chip]
+    return tl, uris
+
+
+def test_the_seal_is_OPEN_the_chart_shows_through_it():
+    """E99 s128: 'i actually like the chart peeking through on the stamp' - a stamp is drawn OVER the world. Inside the
+    seal's inner ring, the chart pixels the chip leaves uncovered (its picture and its name aside) are the chart exactly
+    as drawn without the chip; a filled seal would leave none."""
+    import numpy as np
+    tl, uris = seal_over_chart()
+    t = 11.30
+    f = frames(tl, uris, [t], ".chipstamp { display: none !important; }")
+    cx, cy, r = f[("dom", t)]["seal"]
+    shown, hidden = f[(False, t)].astype(int), f[(True, t)].astype(int)
+    yy, xx = np.mgrid[0:shown.shape[0], 0:shown.shape[1]]
+    d2 = (xx - cx) ** 2 + (yy - cy) ** 2
+    inside = d2 <= (0.97 * r) ** 2
+    chart = inside & (hidden.max(axis=2) > 110)   # the chart's ink and grid on the charcoal field (~#25313C)
+    same = np.abs(shown - hidden).max(axis=2) <= 2
+    through = int((chart & same).sum())
+    assert chart.sum() > 200, f"the chip must stand over the chart: {int(chart.sum())} chart px inside the seal"
+    assert through > 100, f"the chart shows through the open seal at {through} of {int(chart.sum())} px - a filled seal shows none"

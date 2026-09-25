@@ -309,7 +309,7 @@ test("P70 T1: the painter lands a stamped chip with its ring UNDER the mark, tur
   assert.deepEqual(mid.map((e) => e.tag), ["circle", "g", "circle", "circle", "image", "text"]);   // P70 T1b: the seal's two rings in the mark's group
   const [ring, g, , , art, lab] = mid;
   assert.equal(ring.cls, "chipstampring");
-  assert.equal(ring.at.stroke, "#F2F2F2", "chalk on the ledger page");
+  assert.equal(ring.at.stroke, CHIP_SEAL.GOLD, "P70 T1c (E99 s127 (2)): the seal's gold, the shockwave in the seal's own colour");
   assert.equal(ring.at.fill, "none");
   const rg = stampRing(0.254 - STAMP_LAND.tc), r0 = 0.5 * Math.hypot(260, 260 * 0.8);   // P70 T1b: the ring's clock from the contact
   const R0 = (r0 + CHIP_SEAL.GAP_PX) * CHIP_SEAL.SRC_R / CHIP_SEAL.INNER_R;   // ... and its base the SEAL's outer ring (s121 (1))
@@ -324,7 +324,7 @@ test("P70 T1: the painter lands a stamped chip with its ring UNDER the mark, tur
   assert.match(lab.at.style, /font-size:59\.08px/);
   assert.equal(lab.at.y, (130 + 28 * 59.08 / 48).toFixed(1), "the gap scales with the floor");
   const plate = paintAt(sp, sp.at + 0.254, { world: { asset_id: "plate-plain" } });
-  assert.equal(plate[0].at.stroke, "#25313C", "charcoal on any other ground");
+  assert.equal(plate[0].at.stroke, CHIP_SEAL.GOLD, "P70 T1c: on any other world too - never inked from the ground");
   const two = paintAt(stampForm({ arrive: "stamp", label: "NVIDIA\nCHIPS" }), 4 + 2);
   assert.equal(two.filter((e) => e.tag === "tspan")[1].at.dy, +(52 * 59.08 / 48).toFixed(2), "and the line step");
   assert.deepEqual(paintAt(sp, sp.at + 2).map((e) => e.tag), ["g", "circle", "circle", "image", "text"], "the ring is never held (the seal stays)");
@@ -512,4 +512,41 @@ test("P70 T1b (fixes 1, 2): ring text at the SOURCE's proportion, glyph by glyph
   }
   assert.equal(paintAt(stampForm({ arrive: "stamp", ring_text: "AI" }), 6).filter((e) => e.cls === "chipsealtext").length, 1, "either arc is optional");
   assert.equal(paintAt(stampForm({ arrive: "stamp" }), 6).filter((e) => e.cls === "chipsealtext").length, 0, "absent = no ring text");
+});
+
+/* P70 T1c (E99 s127 (2)): A SEAL'S SHOCKWAVE IS THE SEAL'S GOLD - the reference's is its seal's colour - darkened on the
+   cream by the seal's own contrast law, and never inked from the ground. (s128): the seal is OPEN - no fill anywhere in
+   the mark's group but the picture and the name, so the chart shows through it. */
+test("T1c: the seal's impact ring is CHIP_SEAL.GOLD on the dark ground and the seal's darkened gold on the cream - on any world", async () => {
+  const { CHIP_SEAL, sealGold } = await import("../../scripts/species/chip.mjs");
+  const dark = stampForm({ arrive: "stamp", ink: "cream" }), light = stampForm({ arrive: "stamp", ink: "charcoal" });
+  for (const sc of [{ world: { kind: "ledger" } }, { world: { asset_id: "plate-plain" } }, { world: { asset_id: "plate-charcoal" } }]) {
+    const d = paintAt(dark, dark.at + 0.254, sc).find((e) => e.cls === "chipstampring");
+    const l = paintAt(light, light.at + 0.254, sc).find((e) => e.cls === "chipstampring");
+    assert.equal(d.at.stroke, CHIP_SEAL.GOLD, `the gold as it is on the dark ground (${JSON.stringify(sc.world)})`);
+    assert.equal(d.at.stroke, "#E8B86D", "E99 s127 (1): the seal is #E8B86D");
+    assert.equal(l.at.stroke, sealGold(light), "... and on the cream, the seal's own darkened gold");
+    assert.equal(l.at.stroke, "#A07F4B");
+    const seal = paintAt(dark, dark.at + 0.254, sc).find((e) => e.cls === "chipseal");
+    assert.equal(d.at.stroke, seal.at.stroke, "the shockwave is the seal's own colour, as the reference's is");
+  }
+  assert.equal(CHIP_STAMP.RING_INK, undefined, "no ground ink is left on the chip: a stamped chip is always a seal");
+});
+
+test("T1c (E99 s128): the seal is OPEN - nothing in the mark's group is filled but the picture and the name", () => {
+  for (const extra of [{}, { ring_text: "AI ACCELERATOR", ring_text_bottom: "GPU" }]) {
+    const sp = stampForm(Object.assign({ arrive: "stamp", ink: "cream" }, extra));
+    for (const t of [sp.at + 0.254, sp.at + 2]) {
+      const made = paintAt(sp, t);
+      const circles = made.filter((e) => e.tag === "circle");
+      assert.ok(circles.length >= 2, "the seal's two rings are drawn");
+      for (const c of circles) assert.equal(c.at.fill, "none", `${c.cls} is a stroke, never a disc`);
+      const filled = made.filter((e) => !["circle", "g", "image", "text", "tspan"].includes(e.tag));
+      assert.deepEqual(filled.map((e) => e.tag), [], "no rect, path or backdrop under the seal");
+      for (const g of made.filter((e) => e.tag === "g")) {
+        assert.equal(g.at.fill, undefined, "the group carries no fill");
+        assert.equal(g.at.filter, undefined, "... and no filter");
+      }
+    }
+  }
 });

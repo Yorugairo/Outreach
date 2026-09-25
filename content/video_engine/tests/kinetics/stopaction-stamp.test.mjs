@@ -264,3 +264,51 @@ test("fix 3 (s121 (3)'s law, on the receiver): no dip, no squash and no shake be
   assert.ok(stampXf("ink", tc + 0.02).ground > 0, "the page dips once the mark has touched it");
   assert.ok(stampXf("paper", tc + 1 / 24 + 1e-3).alpha > 0 || stampXf("paper", tc + 1 / 30 + 1e-3).alpha > 0, "the squash frame is the frame after the contact");
 });
+
+/* P70 T1c (E99 s127 (3)): A BARE PROP'S RING READS ON ANY GROUND. The ring keeps the page's own inks - chalk or
+   charcoal, never the seal's gold (s87: a bare prop stays bare) - but WHICH ink is picked by the MEASURED ground under
+   the ring's reach, not by the world's kind: T1b found the world-kind rule inking it charcoal on a dark non-ledger
+   plate, where it nearly vanished. */
+test("T1c: the ring's reach is sampled over the whole annulus it sweeps - from the mark's radius to the peak", async () => {
+  const SA = await import("../../scripts/kinetics/stopaction.mjs");
+  assert.equal(typeof SA.stampRingReach, "function", "stopaction exports the reach");
+  const pts = SA.stampRingReach(400, 300, 100, 1.8);
+  assert.equal(pts.length, SA.STAMP_RING_INK.ANGLES * SA.STAMP_RING_INK.RADII.length);
+  for (const [x, y] of pts) {
+    const r = Math.hypot(x - 400, y - 300);
+    assert.ok(r >= 100 - 1e-9 && r <= 180 + 1e-9, `a sample at ${r.toFixed(2)} px lies in the ring's sweep [100, 180]`);
+  }
+  const rs = new Set(pts.map(([x, y]) => Math.hypot(x - 400, y - 300).toFixed(6)));
+  assert.equal(rs.size, SA.STAMP_RING_INK.RADII.length, "one circle of samples per radius");
+  assert.deepEqual(SA.stampRingReach(0, 0, 50).map(([x, y]) => +Math.hypot(x, y).toFixed(6)).sort((a, b) => b - a)[0],
+    +(50 * STAMP_ARRIVAL.RING_TO).toFixed(6), "the default peak is the source's RING_TO");
+});
+
+test("T1c: the ink is the one of the page's two that holds the most contrast on the MEASURED ground - chalk on the dark, charcoal on the light", async () => {
+  const SA = await import("../../scripts/kinetics/stopaction.mjs");
+  const I = SA.STAMP_RING_INK;
+  assert.equal(I.CHALK, "#F2F2F2", "the template's --lp-chalk");
+  assert.equal(I.CHARCOAL, "#25313C", "the template's --charcoal / --lp-char");
+  const lum = (hex) => SA.stampRingLum([1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)));
+  const grounds = { cream: "#F4E6C7", "charcoal ledger field": "#25313C", "charcoal plate": "#1E262E", "dark photo": "#3A4A40", "light photo": "#B8C4CC" };
+  const want = { cream: I.CHARCOAL, "charcoal ledger field": I.CHALK, "charcoal plate": I.CHALK, "dark photo": I.CHALK, "light photo": I.CHARCOAL };
+  for (const [name, hex] of Object.entries(grounds)) {
+    const pick = SA.stampRingInk(new Array(48).fill(lum(hex)), "#000000");
+    assert.equal(pick.ink, want[name], `${name} (${hex})`);
+    assert.ok(pick.contrast >= 3, `${name}: the picked ink holds ${pick.contrast.toFixed(2)}:1 on the ground itself`);
+    const other = pick.ink === I.CHALK ? I.CHARCOAL : I.CHALK;
+    assert.ok(pick.contrast >= (Math.max(lum(other), lum(hex)) + 0.05) / (Math.min(lum(other), lum(hex)) + 0.05), `${name}: never the weaker ink`);
+  }
+});
+
+test("T1c: a ring crossing two grounds takes the MEDIAN ground - a few samples over the page's edge do not flip it; nothing measured keeps the fallback", async () => {
+  const SA = await import("../../scripts/kinetics/stopaction.mjs");
+  const I = SA.STAMP_RING_INK;
+  const dark = SA.stampRingLum([0x25, 0x31, 0x3C]), light = SA.stampRingLum([0xF4, 0xE6, 0xC7]);
+  const mostlyDark = [...new Array(30).fill(dark), ...new Array(18).fill(light)];
+  assert.equal(SA.stampRingInk(mostlyDark, I.CHARCOAL).ink, I.CHALK);
+  assert.equal(SA.stampRingInk([...new Array(18).fill(dark), ...new Array(30).fill(light)], I.CHALK).ink, I.CHARCOAL);
+  assert.equal(SA.stampRingInk([null, NaN, undefined], "#ABCDEF").ink, "#ABCDEF", "nothing measured: the caller's fallback");
+  assert.equal(SA.stampRingInk([], "#ABCDEF").ground, null);
+  assert.equal(SA.stampRingInk([dark, NaN, dark], I.CHARCOAL).n, 2, "an unmeasured sample is dropped, not read as black");
+});

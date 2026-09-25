@@ -2315,6 +2315,46 @@ async function mount(doc) {
              alpha: P.RING_A * (1 - life) };
   };
 
+  /* THE RING'S INK ON A BARE MARK (P70 T1c; E99 s127 (3)): a bare prop's impact ring keeps the PAGE's inks - chalk or
+     charcoal, never the seal's gold (s87: a bare prop stays bare) - but WHICH ink is picked by the MEASURED ground under
+     the ring's reach, not by the world's kind: T1b found the world-kind rule ("chalk on the ledger, charcoal on any other
+     ground") inking it charcoal on a dark non-ledger plate, where it vanished (1.04:1 measured on a charcoal plate). The
+     painter measures the ground's luminance at the reach's samples (`stampRingReach`: ANGLES points on each of RADII,
+     fractions of the way from the mark's own radius to the ring's peak - the annulus the ring sweeps) and hands them here:
+     the MEDIAN ground (so a few samples over a page's edge never flip it) takes whichever of the two inks holds the more
+     WCAG contrast on it; nothing measured keeps the caller's fallback. A seal's ring is the seal's gold (chip.mjs), never
+     this. */
+  const STAMP_RING_INK = Object.freeze({
+    CHALK: "#F2F2F2",      /* the template's --lp-chalk, the ring's ink on a dark ground */
+    CHARCOAL: "#25313C",   /* the template's --charcoal / --lp-char, its ink on a light ground */
+    ANGLES: 16,            /* samples round each circle of the reach */
+    RADII: Object.freeze([0, 0.5, 1]),   /* ... at the mark's radius, half-way, and the ring's peak */
+  });
+  const sriHex = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  /* WCAG 2.x relative luminance of an [r, g, b] in 0..255 */
+  const stampRingLum = (rgb) => rgb.map((v) => v / 255)
+    .map((c) => (c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)))
+    .reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
+  /* the reach's samples [[x, y], ...] about the contact point (cx, cy), from the mark's radius r0 to r0 x ringTo */
+  const stampRingReach = (cx, cy, r0, ringTo = STAMP_ARRIVAL.RING_TO) => {
+    const I = STAMP_RING_INK, out = [];
+    for (const f of I.RADII) {
+      const r = r0 * (1 + (ringTo - 1) * f);
+      for (let i = 0; i < I.ANGLES; i++) { const a = 2 * Math.PI * i / I.ANGLES; out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); }
+    }
+    return out;
+  };
+  /* the ink from the measured luminances: { ink, ground (the median luminance, null when none), contrast, n } */
+  const stampRingInk = (lums, fallback) => {
+    const v = (lums || []).filter((x) => x != null && Number.isFinite(+x)).map(Number).sort((a, b) => a - b);
+    if (!v.length) return { ink: fallback, ground: null, contrast: null, n: 0 };
+    const g = v.length % 2 ? v[(v.length - 1) / 2] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2;
+    const con = (hex) => { const l = stampRingLum(sriHex(hex)); return (Math.max(l, g) + 0.05) / (Math.min(l, g) + 0.05); };
+    const ch = con(STAMP_RING_INK.CHALK), cc = con(STAMP_RING_INK.CHARCOAL);
+    return ch >= cc ? { ink: STAMP_RING_INK.CHALK, ground: g, contrast: ch, n: v.length }
+      : { ink: STAMP_RING_INK.CHARCOAL, ground: g, contrast: cc, n: v.length };
+  };
+
   /* THE EXIT the landed mark owes (E50; the source's exitAtInFrames): 0 -> 1 on the ease-IN cubic, over EXIT_S from
      the instant the mark is told to leave. 1 - stampExit is the opacity, as :134 / :169 have it. */
   const stampExit = (ts, o = {}) => {
@@ -16907,9 +16947,9 @@ async function mount(doc) {
     LABEL_FLOOR: 59.08,
     MAX_LINES: 3,
     INK: Object.freeze({ cream: "#F4E6C7", charcoal: "#25313C" }),
-    /* P70 T1: the stamp arrival's impact ring is OUR ink, as the dock's is (scene-evidence-engine's `.dock-ring`): chalk
-       on the charcoal ledger page, charcoal on any other ground - never gold */
-    RING_INK: Object.freeze({ ledger: "#F2F2F2", ground: "#25313C" }),
+    /* P70 T1c (E99 s127 (2)): the stamp arrival's impact ring is no longer inked from the ground (T1's RING_INK, chalk on
+       the ledger / charcoal elsewhere, is gone): a stamped chip is always a seal, and a seal's shockwave is the seal's gold
+       - `chipSeal(...).ink`, see chipStampGroup */
     MASS: "ink",       /* the mass the stamp lands at: the engine's own default for a stamp (`stampXf(d.mass || "ink", ...)`) */
     /* P70 T1b (the parent's round 3): A SEAL DOES NOT SQUASH. At mass "ink" the hit's ONE squash frame (STOP.IMPACT_SQUASH 0.22,
        contact + 0.021 .. + 0.063 s at 24 fps) turned the full-size seal into a vertical oval - a coin flipping, not a stamp; the
@@ -17170,13 +17210,15 @@ async function mount(doc) {
      ride the mark's scale, turn or dip. The group carries the mark's pose as the dock's `stopCss` writes it: translate
      (the receiver's dip), the free rotation, the clamped scale, the hit's squash frame; about the painted centre. */
   function chipStampGroup(ctx, pose, ix, cx, cy, side, s) {
-    const { sp, svg, el, sc } = ctx;
+    const { sp, svg, el } = ctx;
     const P = chipStampPaint(sp, side), pcx = cx + P.off[0] + ix.dx, pcy = cy + P.off[1] + ix.dy;
     const seal = chipSeal(sp, side), r0 = seal ? seal.R : P.r;   /* P70 T1b: thrown from the SEAL's border, as the source's is (:156 r * (1 + shock)) */
     if (pose.ring) {
-      const ledger = !!(sc && sc.world && sc.world.kind === "ledger");
+      /* P70 T1c (E99 s127 (2)): THE SHOCKWAVE IS THE SEAL'S GOLD, as the reference's is its seal's colour (badge-stamp.tsx:158
+         strokes the shock circle in `color`, the seal's one ink) - the seal's own ink, so darkened on the cream by the seal's
+         contrast law (sealGold) and never inked from the ground. Its timing is T1b's, unchanged. */
       el("circle", "chipstampring", svg, { cx: pcx.toFixed(1), cy: pcy.toFixed(1), r: (r0 * pose.ring.r).toFixed(1), fill: "none",
-        stroke: ledger ? CHIP_STAMP.RING_INK.ledger : CHIP_STAMP.RING_INK.ground, "stroke-width": pose.ring.width.toFixed(2),
+        stroke: seal ? seal.ink : sealGold(sp), "stroke-width": pose.ring.width.toFixed(2),
         opacity: pose.ring.alpha.toFixed(3) });
     }
     const a = Math.abs(pose.alpha || 0), th = (pose.alpha || 0) < 0 ? (pose.theta || 0) + Math.PI / 2 : (pose.theta || 0);
@@ -20302,6 +20344,75 @@ async function mount(doc) {
     wB.style.clipPath = "inset(" + (-wB.offsetTop) + "px " + (-wB.offsetLeft) + "px)";   /* ... and only the stage's own region of it: the card's picture, never the world's overhang */
     wB.style.filter = el.style.filter || "";
   };
+  /* P70 T1c (E99 s127 (3)): THE GROUND UNDER A BARE MARK'S IMPACT RING, MEASURED. The dock's stamp ring keeps the page's
+     inks (s87: a bare prop stays bare - chalk or charcoal, never the seal's gold), and stopaction's `stampRingInk` picks
+     between them by the luminance of what is PAINTED under the ring's reach, not by the world's kind (T1b's finding: the
+     kind rule inked it charcoal on a dark non-ledger plate, 1.04:1). What each sample reads, in client pixels:
+       a LEDGER world - the page's charcoal field where the field is shown (E22: the field IS the board's `--lp-char`),
+         the page's own ground elsewhere on the page (the cream edge, a cream surface page, the long-form #14181E), the
+         world's own ground off the page;
+       a PICTURE plate - the plate's own pixels, decoded once into a small canvas (<= RING_PLATE_W px wide) and mapped as
+         the world draws it (background-size: cover, centred, in the world's client box, so its Ken Burns is in it);
+       a VECTOR MAP - its ground colour; a CLIP (a moving picture) - not measured.
+     A sample that reads nothing is dropped; a ring with nothing measured keeps the world-kind rule it always had. */
+  const RING_PLATE_W = 256, RING_PLATES = {};
+  const ringPlate = (id) => {
+    if (!id || !A[id]) return null;
+    let P = RING_PLATES[id];
+    if (!P) { const img = new Image(); img.src = A[id]; P = RING_PLATES[id] = { img, px: null }; }
+    if (!P.px && !P.bad && P.img.complete && P.img.naturalWidth > 0) {
+      const iw = P.img.naturalWidth, ih = P.img.naturalHeight, k = Math.min(1, RING_PLATE_W / iw);
+      const w = Math.max(1, Math.round(iw * k)), h = Math.max(1, Math.round(ih * k)), cv = document.createElement("canvas");
+      cv.width = w; cv.height = h;
+      try {
+        const c2 = cv.getContext("2d", { willReadFrequently: true });
+        c2.drawImage(P.img, 0, 0, w, h);
+        Object.assign(P, { px: c2.getImageData(0, 0, w, h).data, w, h, iw, ih });
+      } catch (e) { P.bad = true; }   /* a picture the canvas may not read is not measured - never a guess */
+    }
+    return P.px ? P : null;
+  };
+  TL.scenes.forEach((s) => {   /* decode every plate a stamp lands on up front, so the first frame of its ring has it */
+    if (s.world && s.world.asset_id && (s.docks || []).some((d) => d && d.arrive === "stamp")) ringPlate(s.world.asset_id);
+  });
+  const ringOpaque = (c) => {
+    const v = lfRgb(c), a = /^rgba\([^)]*,\s*([0-9.]+)\s*\)$/i.exec(String(c || "").trim());
+    return v && !(a && +a[1] < 0.5) ? v : null;
+  };
+  const ringIn = (r, x, y) => !!r && r.width > 1 && r.height > 1 && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+  const ringRgbAt = (sc, wl, X, Y) => {
+    const w = sc.world || {};
+    if (w.kind === "ledger") {
+      const page = wl.querySelector(".lp-page");
+      if (page && ringIn(page.getBoundingClientRect(), X, Y)) {
+        const field = page.querySelector(".lp-field");
+        if (field && getComputedStyle(field).display !== "none" && ringIn(field.getBoundingClientRect(), X, Y)) {
+          return ringOpaque(getComputedStyle(page).getPropertyValue("--lp-char"));
+        }
+        return ringOpaque(getComputedStyle(page).backgroundColor);
+      }
+      return ringOpaque(getComputedStyle(wl).backgroundColor);
+    }
+    if (w.kind === "clip") return null;
+    if (w.kind === "vecmap") return ringOpaque(getComputedStyle(wl).backgroundColor);
+    const P = ringPlate(w.asset_id);
+    if (!P) return ringOpaque(getComputedStyle(wl).backgroundColor);
+    const r = wl.getBoundingClientRect(), s = Math.max(r.width / P.iw, r.height / P.ih);
+    const ix = (X - (r.left + (r.width - P.iw * s) / 2)) / s, iy = (Y - (r.top + (r.height - P.ih * s) / 2)) / s;
+    const px = Math.min(P.w - 1, Math.max(0, Math.floor(ix * P.w / P.iw))), py = Math.min(P.h - 1, Math.max(0, Math.floor(iy * P.h / P.ih)));
+    const o = 4 * (py * P.w + px);
+    return [P.px[o], P.px[o + 1], P.px[o + 2]];
+  };
+  /* the ring's ink: the reach about (cx, cy) in the ring's own layer px, from the mark's radius r0 to r0 x ringTo */
+  const ringInkUnder = (sc, wl, layer, cx, cy, r0, ringTo, fallback) => {
+    if (!layer || !wl) return fallback;
+    const lr = layer.getBoundingClientRect(), k = lr.width / Math.max(1e-6, layer.offsetWidth || lr.width);
+    const lums = stampRingReach(cx, cy, r0, ringTo).map(([x, y]) => {
+      const v = ringRgbAt(sc, wl, lr.left + x * k, lr.top + y * k);
+      return v ? stampRingLum(v) : null;
+    });
+    return stampRingInk(lums, fallback).ink;
+  };
   const render = (t) => {
     pmHideAll();   /* P69 T26e: a prop morph's mesh shows only on a frame that paints it */
     let si = 0;
@@ -20891,8 +21002,8 @@ async function mount(doc) {
            and decelerates" and a ring that stops short "is under it the whole time it is worth seeing". It radiates
            from the CONTACT POINT on the surface (the centre of the landed box, in the dock layer under the mark), it
            is drawn only while its life is unspent - an impact cue can never be held, which is what keeps it clear of
-           E56's annotation ring - and it is OUR ink: chalk on the charcoal page, charcoal on a light ground, never a
-           gold ring. Its base radius is the mark's own circumscribed circle, so the ring starts on the mark's corners
+           E56's annotation ring - and it is OUR ink: chalk on a dark ground, charcoal on a light one, never a gold ring
+           (P70 T1c, E99 s127 (3): the ground MEASURED under the ring's reach; a seal's ring is the chip's, in gold). Its base radius is the mark's own circumscribed circle, so the ring starts on the mark's corners
            and clears it: the source starts its own at the seal's border for the same reason. */
         let ring = el.parentNode ? el.parentNode.querySelector("#dock-ring-" + s) : null;
         if (stamped) {
@@ -20901,10 +21012,14 @@ async function mount(doc) {
           const cx = L + Wd * (pbx[0] + pbx[2]) / 2, cy = T0 + Hd * (pbx[1] + pbx[3]) / 2;   /* ... about the painted centre */
           if (rg && t >= d.enter && !(t > d.exit)) {
             const r = r0 * rg.r;
+            /* P70 T1c (E99 s127 (3)): chalk or charcoal by the MEASURED ground under the ring's whole reach (ringInkUnder);
+               the world-kind rule is only the fallback when nothing under it could be measured */
+            const rink = ringInkUnder(sc, wB, ring.offsetParent || el.parentNode, cx, cy, r0, sfit.RING_TO || STAMP_ARRIVAL.RING_TO,
+              onLedgerWorld ? STAMP_RING_INK.CHALK : STAMP_RING_INK.CHARCOAL);
             ring.style.cssText = "position:absolute;pointer-events:none;border-radius:50%;box-sizing:border-box;"
               + "left:" + (cx - r).toFixed(1) + "px;top:" + (cy - r).toFixed(1) + "px;"
               + "width:" + (2 * r).toFixed(1) + "px;height:" + (2 * r).toFixed(1) + "px;"
-              + "border:" + rg.width.toFixed(2) + "px solid " + (onLedgerWorld ? "#F2F2F2" : "#25313C") + ";"   /* the template's own --lp-chalk / --charcoal, written as LITERALS: the ring lives in the dock layer, where neither custom property is in scope, and an unresolved var() makes the whole border declaration invalid - which is an impact ring nobody sees, measured 2026-09-22 */
+              + "border:" + rg.width.toFixed(2) + "px solid " + rink + ";"   /* the template's own --lp-chalk / --charcoal, written as LITERALS (STAMP_RING_INK): the ring lives in the dock layer, where neither custom property is in scope, and an unresolved var() makes the whole border declaration invalid - which is an impact ring nobody sees, measured 2026-09-22 */
               + "opacity:" + rg.alpha.toFixed(3) + ";";
             ring.style.visibility = el.style.visibility;
           } else ring.style.opacity = "0";
