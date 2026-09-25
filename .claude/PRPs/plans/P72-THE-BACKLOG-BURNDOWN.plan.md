@@ -614,7 +614,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T11: s130 (2) - a seal's gold adjusts by the measured ground under it
-- Status: pending
+- Status: done - lane B 6c7ff17: the seal's gold latched at its contact from 64 samples of the ground as the world stood then (`groundLumsThen` / `worldXfAt`); one gold per seal, the darkest ground wins (never white or black; the spread reported); mid photo #544227 3.02:1; three review rounds; golden `seal-on-photo`; follow-ups R26-361 (T46)
 - Owner: junior_developer (LANE B), then reviewer (the seal's contrast, s123 / s127)
 - Depends on: P71 T12 (in flight on `species/chip.mjs`); the parent orders it against P71 T18
 - Items: E99 s130 (2): "a SEAL's gold (rings, ring text, name, shockwave) adjusts by the MEASURED ground under it, as the bare-prop ring already does (P70 T1c `stampRingInk` / `ringInkUnder`), holding the seal's contrast floor on a photo plate"
@@ -629,7 +629,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T12: The panels page builds in view and holds at every preset
-- Status: pending
+- Status: done - lane B 1bbaded: `lpPanelBuildAt` (and a panel's figure on the same clock), `lpPanelOcclude`, the long form's bars at phone, a panels page at phone WARNed (s106); page-boxes regenerated; the build at phone is R26-366 (T47)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0 (D1, R26-316); P70 T4 landed (`d0dd19b`); R26-339's item after P70 T5 if P70 T5 is mid-flight on the stacked page (the parent orders them)
 - Items: R26-315 (a hidden panel's build waits for its reveal: the bars grow in view over ~1.5 s, Bravos DOM 06:02-06:04), R26-316 (the panels layout per readability preset - `phone` holds the s90 floor with the line alone, or the long form is refused at `phone` by name, per D1), R26-299 (a panel's tick text writes whole or not at all), R26-339 (a one-bar stacked page on `longform:phone`: the T64 key sits over the bar's total and the category label 'Q1 2026' wraps, `$SP/p70-t5/frames/probe-lf-phone.png` - the same long-form-on-phone layout class as the panels finding)
