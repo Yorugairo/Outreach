@@ -4995,18 +4995,32 @@ LONGFORM_FONT_ASSET = "font:inter-longform"
 LONGFORM_FONT_FILE = REPO / "content/video_engine/src/assets/fonts/Inter-Variable.ttf"
 
 
+def title_face_field(face: str | None = None) -> dict:
+    """P69 T37c (E99 s122 amended): ``{"title_face": <face>}`` for the timeline when the default page's title face
+    (ledger_page.TITLE_FACE) is not `hand`, else ``{}`` - a `hand` build is byte-identical."""
+    face = LPG.TITLE_FACE if face is None else face
+    if face not in LPG.TITLE_FACES:
+        raise ValueError(f"ledger_page.TITLE_FACE {face!r} is not one of {'|'.join(LPG.TITLE_FACES)}")
+    return {} if face == "hand" else {"title_face": face}
+
+
 def longform_assets(timeline: dict) -> dict:
     """``{LONGFORM_FONT_ASSET: data uri}`` when any scene's page (or chart state) is drawn under the
     `longform` profile, else ``{}``. Pure apart from reading the tracked font file. A 9:16 timeline carries
     none (REVIEW-P69-LANE-B-MERGE-2 N4): the player never draws the profile in portrait, so the 1.17 MB face
-    would ride a build that never sets a word in it."""
-    if (timeline.get("aspect") or "16:9") == "9:16":
+    would ride a build that never sets a word in it. P69 T37c: a timeline whose default page titles are set in
+    the `sans` face (`title_face`) carries it whenever it draws a page, in either aspect."""
+    face = lambda: {LONGFORM_FONT_ASSET: "data:font/ttf;base64," + base64.b64encode(LONGFORM_FONT_FILE.read_bytes()).decode()}  # noqa: E731 - read only when shipped
+    sans = timeline.get("title_face") == "sans"
+    if (timeline.get("aspect") or "16:9") == "9:16" and not sans:
         return {}
     for sc in timeline.get("scenes") or []:
         world = sc.get("world") or {}
         pages = [world.get("page")] + list(world.get("page_states") or [])
+        if sans and any(isinstance(p, dict) for p in pages):
+            return face()
         if any(isinstance(p, dict) and (p.get("axes") or {}).get("readability") == LPG.LONGFORM for p in pages):
-            return {LONGFORM_FONT_ASSET: "data:font/ttf;base64," + base64.b64encode(LONGFORM_FONT_FILE.read_bytes()).decode()}
+            return face()
     return {}
 
 
@@ -11136,6 +11150,7 @@ def main() -> int:
         # Absent when nothing was layered, so a build with no sidecar is byte-for-byte what it was.
         **({"overrides_applied": applied} if applied else {}),
         **({"caption_style": CAPTION_STYLE} if CAPTION_STYLE else {}),
+        **title_face_field(),   # P69 T37c: the default page's title face, only when it is not `hand`
     }
     # P51 T1: the SPLIT form. write_split writes the compiled timeline (byte for byte what this
     # line always wrote), assets.json, a copy of the engine module and the shell that fetches them,

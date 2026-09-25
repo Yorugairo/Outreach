@@ -80,7 +80,30 @@
     0.0,
     0.0,
     0.0
-   ]
+   ],
+   "title": {
+    "text": "Foreign Holdings of US Treasuries",
+    "chars": 33,
+    "measured": {
+     "method": "glyphs",
+     "glyphs": 29,
+     "capitals": 5,
+     "cap_px": 7.76,
+     "cap_frac": 0.02694,
+     "cap_px1080": 29.09,
+     "x_px": 5.76,
+     "x_frac": 0.01999,
+     "stroke_px": 2.0,
+     "stroke_frac": 0.00694
+    },
+    "halo": {
+     "glow_3_12": -1.94,
+     "halo_r50_px1080": 5.31,
+     "halo_area_1080": 80.4,
+     "halo_edge": 0.164,
+     "text_excess": 125.69
+    }
+   }
   },
   {
    "id": "jpn-0523",
@@ -158,7 +181,30 @@
     0.0,
     0.0,
     0.0
-   ]
+   ],
+   "title": {
+    "text": "Foreign Holdings of US Treasuries",
+    "chars": 33,
+    "measured": {
+     "method": "glyphs",
+     "glyphs": 29,
+     "capitals": 5,
+     "cap_px": 7.76,
+     "cap_frac": 0.02694,
+     "cap_px1080": 29.1,
+     "x_px": 5.76,
+     "x_frac": 0.01999,
+     "stroke_px": 2.0,
+     "stroke_frac": 0.00694
+    },
+    "halo": {
+     "glow_3_12": -1.91,
+     "halo_r50_px1080": 5.32,
+     "halo_area_1080": 81.0,
+     "halo_edge": 0.164,
+     "text_excess": 125.71
+    }
+   }
   },
   {
    "id": "ai-builders",
@@ -250,7 +296,30 @@
     1.6,
     1.6,
     1.3
-   ]
+   ],
+   "title": {
+    "text": "AI Builders Versus AI Spenders",
+    "chars": 30,
+    "measured": {
+     "method": "glyphs",
+     "glyphs": 26,
+     "capitals": 7,
+     "cap_px": 16.23,
+     "cap_frac": 0.02818,
+     "cap_px1080": 30.44,
+     "x_px": 12.23,
+     "x_frac": 0.02123,
+     "stroke_px": 2.83,
+     "stroke_frac": 0.00491
+    },
+    "halo": {
+     "glow_3_12": -2.09,
+     "halo_r50_px1080": 2.45,
+     "halo_area_1080": 29.2,
+     "halo_edge": 0.115,
+     "text_excess": 132.48
+    }
+   }
   },
   {
    "id": "kospi-index",
@@ -350,7 +419,30 @@
     0.8,
     0.6,
     0.5
-   ]
+   ],
+   "title": {
+    "text": "KOSPI Composite Index",
+    "chars": 21,
+    "measured": {
+     "method": "glyphs",
+     "glyphs": 19,
+     "capitals": 7,
+     "cap_px": 16.21,
+     "cap_frac": 0.02814,
+     "cap_px1080": 30.39,
+     "x_px": 12.24,
+     "x_frac": 0.02125,
+     "stroke_px": 2.83,
+     "stroke_frac": 0.00491
+    },
+    "halo": {
+     "glow_3_12": -2.04,
+     "halo_r50_px1080": 2.48,
+     "halo_area_1080": 32.9,
+     "halo_edge": 0.129,
+     "text_excess": 131.07
+    }
+   }
   },
   {
    "id": "kospi-retail",
@@ -442,7 +534,30 @@
     9.0,
     9.0,
     8.1
-   ]
+   ],
+   "title": {
+    "text": "Net Purchases of KOSPI",
+    "chars": 22,
+    "measured": {
+     "method": "glyphs",
+     "glyphs": 19,
+     "capitals": 7,
+     "cap_px": 16.22,
+     "cap_frac": 0.02815,
+     "cap_px1080": 30.41,
+     "x_px": 12.23,
+     "x_frac": 0.02123,
+     "stroke_px": 2.83,
+     "stroke_frac": 0.00491
+    },
+    "halo": {
+     "glow_3_12": -2.05,
+     "halo_r50_px1080": 2.5,
+     "halo_area_1080": 33.5,
+     "halo_edge": 0.135,
+     "text_excess": 129.99
+    }
+   }
   }
  ],
  "band_1024": {
@@ -622,5 +737,161 @@
  "title_colour": {
   "measured": "#CF8CA6 (p90 of the title's text pixels, ai-builders; #C78CA2 on both KOSPI frames, #B9879A on JPN at 512)",
   "note": "the long form's #DB8497 (BRAVOS-LONGFORM-CHART-SPEC.md) is the same rose read on 1280 px frames"
+ },
+ "title_size": {
+  "what": "E99 s122 (P69 T37c): Bravos's chart title read glyph by glyph at each frame's own resolution (measure_line_bloom.title_size): the capitals' median height (cap), the x letters' (x, round letters' ~5 % overshoot included), the stroke (2 x the median distance-to-edge on the skeleton), each as a share of the FRAME HEIGHT - the one size a 512, a 1024 and a 1920 px frame share. T37b's squint read (title_cap_px, whole px at 320 wide) quantised to 5.0 on every frame.",
+  "band_1024": {
+   "n": 3,
+   "frames": [
+    "ai-builders",
+    "kospi-index",
+    "kospi-retail"
+   ],
+   "cap_frac": {
+    "min": 0.02814,
+    "max": 0.02818,
+    "mean": 0.02816
+   },
+   "cap_px1080": {
+    "min": 30.39,
+    "max": 30.44,
+    "mean": 30.41
+   },
+   "x_frac": {
+    "min": 0.02123,
+    "max": 0.02125,
+    "mean": 0.02124
+   },
+   "stroke_frac": {
+    "min": 0.00491,
+    "max": 0.00491,
+    "mean": 0.00491
+   },
+   "chars": {
+    "min": 21,
+    "max": 30
+   }
+  },
+  "band_512": {
+   "n": 2,
+   "frames": [
+    "jpn-0520",
+    "jpn-0523"
+   ],
+   "cap_frac": {
+    "min": 0.02694,
+    "max": 0.02694,
+    "mean": 0.02694
+   },
+   "cap_px1080": {
+    "min": 29.09,
+    "max": 29.1,
+    "mean": 29.09
+   },
+   "x_frac": {
+    "min": 0.01999,
+    "max": 0.01999,
+    "mean": 0.01999
+   },
+   "stroke_frac": {
+    "min": 0.00694,
+    "max": 0.00694,
+    "mean": 0.00694
+   },
+   "chars": {
+    "min": 33,
+    "max": 33
+   }
+  },
+  "cross_check": "The same read on the spec's 1280 px China stills (BRAVOS-LONGFORM-CHART-SPEC.md, frames/china_t*.png, not on disk in the repo): at rest t300 / t380 / t520 / t530 / t1060 / t1072 cap 30.15-30.34 px @1080 (0.0279-0.0281) - the band's size; the camera pushed in (t1085 / t1088) 34.8 px (0.0322); pulled back (t140 23.1, t1078 24.6). Bravos's title has ONE size at rest; the push changes it.",
+  "halo": {
+   "what": "E99 s122 amended (P69 T37c): the s117 halo read in a TITLE mode (measure_line_bloom.title_halo): rings 1..40 px @1080 outside the title's text, the ground beyond them, every other mark left out; `glow_3_12` is the mean excess of rings 3..12 px @1080 - past the glyph's own antialiased edge (rings 1-2, which carry r50 and edge on a title with no halo).",
+   "band_1024": {
+    "n": 3,
+    "glow_3_12": {
+     "min": -2.09,
+     "max": -2.04
+    },
+    "halo_r50_px1080": {
+     "min": 2.45,
+     "max": 2.5
+    },
+    "halo_area_1080": {
+     "min": 29.2,
+     "max": 33.5
+    },
+    "halo_edge": {
+     "min": 0.115,
+     "max": 0.135
+    }
+   },
+   "band_512": {
+    "n": 2,
+    "glow_3_12": {
+     "min": -1.94,
+     "max": -1.91
+    },
+    "halo_r50_px1080": {
+     "min": 5.31,
+     "max": 5.32
+    },
+    "halo_area_1080": {
+     "min": 80.4,
+     "max": 81.0
+    },
+    "halo_edge": {
+     "min": 0.164,
+     "max": 0.164
+    }
+   },
+   "finding": "BRAVOS'S CHART TITLE HAS NO HALO: `glow_3_12` is at or under 0 on every band frame (JPEG ringing reads darker than the ground), r50 2.2-2.5 px @1080 is the antialiased edge; the spec's 1280 px China stills read the same (t530 / t300 glow -0.46 / -0.45); the luma 2-60 px above each band title equals the frame's corner to 0.3. A scan of all 2083 bravos-watch stills found a halo only around section PILLS (white on a red fill) and blurred transitions. So our title's glow cannot sit inside a Bravos band; its strength is our legibility bound (ours_candidates).",
+   "ours_candidates": {
+    "surface": "solo-chipmakers golden at #FF8A4C, the page's title text-shadow (--lp-title-glow)",
+    "legibility_bound": "gap_share_390 <= 0.16: the glow within 3 px of the letters at 390 px wide under 16 % of the ink's own excess (the counters stay open)",
+    "chosen": "g2",
+    "rows": {
+     "g0": {
+      "css": "none",
+      "glow_3_12": 0.0,
+      "halo_r50_px1080": 1.5,
+      "halo_area_1080": 15.7,
+      "halo_edge": 0.141,
+      "gap_share_390": 0.057
+     },
+     "g1": {
+      "css": "0 0 .12em currentColor, 0 0 .045em currentColor",
+      "glow_3_12": 1.18,
+      "halo_r50_px1080": 2.0,
+      "halo_area_1080": 72.0,
+      "halo_edge": 0.361,
+      "gap_share_390": 0.116
+     },
+     "g2": {
+      "css": "0 0 .18em currentColor, 0 0 .07em currentColor",
+      "glow_3_12": 3.84,
+      "halo_r50_px1080": 2.61,
+      "halo_area_1080": 112.3,
+      "halo_edge": 0.402,
+      "gap_share_390": 0.153
+     },
+     "g3": {
+      "css": "0 0 .29em currentColor, 0 0 .09em currentColor",
+      "glow_3_12": 7.98,
+      "halo_r50_px1080": 3.15,
+      "halo_area_1080": 160.8,
+      "halo_edge": 0.42,
+      "gap_share_390": 0.189
+     },
+     "g4": {
+      "css": "0 0 .47em currentColor, 0 0 .12em currentColor",
+      "glow_3_12": 12.41,
+      "halo_r50_px1080": 3.59,
+      "halo_area_1080": 216.4,
+      "halo_edge": 0.428,
+      "gap_share_390": 0.219
+     }
+    }
+   }
+  }
  }
 }

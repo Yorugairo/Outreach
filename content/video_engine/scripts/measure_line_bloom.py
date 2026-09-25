@@ -209,6 +209,154 @@ def cap_height(lu: np.ndarray, box) -> float | None:
     return float(base - top + 1)
 
 
+TITLE_COVER = 0.5                 # a text pixel: at least half the ink's excess over the ground (an antialiased edge)
+TITLE_X_LETTERS = set("acemnorsuvwxz")   # the x-height letters: no ascender, no descender, no dot (the round ones overshoot ~5 %)
+
+
+def _glyph_boxes(cov: np.ndarray) -> list[list[float]]:
+    """Each glyph's [x0, x1, top, bottom] in the crop, left to right; a dot over its stem is one glyph. The top and
+    bottom are sub-pixel: a flat edge covers the row just outside it by the fraction it reaches into it."""
+    lab, _ = ndimage.label(cov >= TITLE_COVER)
+    out = []
+    for i, sl in enumerate(ndimage.find_objects(lab), 1):
+        ys, xs = sl
+        if (lab[sl] == i).sum() < 3:
+            continue
+        cs = slice(xs.start, xs.stop)
+        above = float(cov[ys.start - 1, cs].max()) if ys.start > 0 else 0.0
+        below = float(cov[ys.stop, cs].max()) if ys.stop < cov.shape[0] else 0.0
+        out.append([xs.start, xs.stop, ys.start - (above if above < TITLE_COVER else 0.0),
+                    ys.stop + (below if below < TITLE_COVER else 0.0)])
+    out.sort()
+    merged: list[list[float]] = []
+    for g in out:
+        if merged:
+            p = merged[-1]
+            if min(p[1], g[1]) - max(p[0], g[0]) >= 0.5 * min(g[1] - g[0], p[1] - p[0]):
+                merged[-1] = [min(p[0], g[0]), max(p[1], g[1]), min(p[2], g[2]), max(p[3], g[3])]
+                continue
+        merged.append(list(g))
+    return merged
+
+
+def _map_glyphs(glyphs: list[list[float]], text: str) -> tuple[list[tuple[float, str]], str]:
+    """(height, character) pairs for the glyphs that map onto `text`. The whole line when the counts agree
+    ("glyphs"); else WORD BY WORD - the line split at its len(words) - 1 widest gaps, a word kept when its glyph count
+    is its letter count ("words k/n": a hand face's joined pair or a stray mark costs only its own word)."""
+    chars = text.replace(" ", "")
+    if glyphs and len(glyphs) == len(chars):
+        return [(g[3] - g[2], c) for g, c in zip(glyphs, chars)], "glyphs"
+    words = text.split()
+    if len(glyphs) < 2 or len(words) < 2:
+        return [], "cluster"
+    gaps = sorted(range(len(glyphs) - 1), key=lambda i: glyphs[i + 1][0] - glyphs[i][1], reverse=True)
+    cuts = sorted(gaps[:len(words) - 1])
+    runs, start = [], 0
+    for c in cuts:
+        runs.append(glyphs[start:c + 1])
+        start = c + 1
+    runs.append(glyphs[start:])
+    pairs, kept = [], 0
+    for run, word in zip(runs, words):
+        if len(run) == len(word):
+            pairs += [(g[3] - g[2], ch) for g, ch in zip(run, word)]
+            kept += 1
+    return (pairs, f"words {kept}/{len(words)}") if kept else ([], "cluster")
+
+
+def title_size(frame: str | Path, box, text: str) -> dict:
+    """E99 s122 (P69 T37c): a title's size read GLYPH BY GLYPH at the frame's own resolution - the capitals' height,
+    the x-height, the stroke - each also as a share of the frame height (the one size that compares a 512, a 1024
+    and a 1920 px frame). The glyphs map one to one onto `text` (spaces dropped): the cap is the median height of its
+    capitals, the x-height of its x letters. A title whose glyphs do not map (touching letters, a stray mark) falls
+    back to word-by-word mapping, then to the tall cluster (glyphs at least 85 % of the tallest standing on the
+    baseline - capitals AND ascenders), and says which in `method`."""
+    rgb = load_rgb(frame)
+    h = rgb.shape[0]
+    x0, y0, x1, y1 = (int(round(v)) for v in box)
+    lu = luma(rgb)[y0:y1 + 1, x0:x1 + 1]
+    ground = float(np.median(np.concatenate([lu[0], lu[-1], lu[:, 0], lu[:, -1]])))
+    diff = np.abs(lu - ground)
+    cov = np.clip(diff / max(float(np.percentile(diff, 99.5)), 1e-6), 0.0, 1.0)
+    glyphs = _glyph_boxes(cov)
+    heights = [g[3] - g[2] for g in glyphs]
+    pairs, method = _map_glyphs(glyphs, text)
+    if pairs:
+        caps = [hh for hh, c in pairs if c.isupper() and c not in "QJ"]
+        xs = [hh for hh, c in pairs if c in TITLE_X_LETTERS]
+    if not pairs or not caps:
+        method = "cluster"
+        bots = np.array([g[3] for g in glyphs])
+        base = float(np.median(bots)) if glyphs else 0.0
+        on = np.array([hh for hh, b in zip(heights, bots) if abs(b - base) <= 1.5]) if glyphs else np.array([])
+        top = float(np.percentile(on, 90)) if on.size else 0.0
+        caps = [float(v) for v in on if v >= 0.85 * top]
+        xs = [float(v) for v in on if 0.5 * top <= v < 0.85 * top]
+    mask = cov >= TITLE_COVER
+    skel = skeletonize(mask)
+    stroke = 2.0 * float(np.median(ndimage.distance_transform_edt(mask)[skel])) if skel.any() else None
+    cap = float(np.median(caps)) if caps else None
+    xh = float(np.median(xs)) if xs else None
+    frac = lambda v: round(v / h, 5) if v else None  # noqa: E731
+    return {"frame_h": h, "method": method, "chars": len(text), "glyphs": len(glyphs), "capitals": len(caps),
+            "cap_px": round(cap, 2) if cap else None, "cap_frac": frac(cap),
+            "cap_px1080": round(cap / h * 1080, 2) if cap else None,
+            "x_px": round(xh, 2) if xh else None, "x_frac": frac(xh),
+            "stroke_px": round(stroke, 2) if stroke else None, "stroke_frac": frac(stroke)}
+
+
+TITLE_RING_1080 = 40              # the title halo's reach, stage px at 1080 high (a line's is 96: text is smaller)
+TITLE_GLOW_FROM_1080 = 3          # rings from here out are GLOW - rings 1-2 hold the glyph's own antialiased edge
+TITLE_GLOW_TO_1080 = 12
+
+
+def title_halo(frame: str | Path, box, *, ring_1080: int = TITLE_RING_1080) -> dict:
+    """E99 s122 amended (P69 T37c): the s117 halo read, in a TITLE mode. The text is the title box's pixels at >= half
+    the ink's excess; the rings are 1..ring px outside it (px at 1080 high, scaled to the frame), inside the box grown
+    by the ring's reach plus 8; the ground is the median of that grown box beyond the reach. Every OTHER mark in the
+    grown box - a bright component that does not touch the text (a logo, a legend, a sub) - is left out of both; a
+    glow touches its text, so it stays in. Reported as the line read is: `r50` (where the profile halves from ring 1),
+    `edge` (ring 1's excess over the text's p90), `area` (sum of the profile, luma.px at 1080), `reach10`; and the
+    title's own number, `glow` - the mean excess of rings 3..12 px, past the glyph's antialiased edge (0 = no halo)."""
+    rgb = load_rgb(frame)
+    h, w = rgb.shape[:2]
+    k = h / 1080.0
+    lu = luma(rgb)
+    x0, y0, x1, y1 = (int(round(v)) for v in box)
+    crop = lu[y0:y1 + 1, x0:x1 + 1]
+    g0 = float(np.median(np.concatenate([crop[0], crop[-1], crop[:, 0], crop[:, -1]])))
+    diff = np.abs(crop - g0)
+    text = np.zeros(lu.shape, dtype=bool)
+    text[y0:y1 + 1, x0:x1 + 1] = diff >= TITLE_COVER * max(float(np.percentile(diff, 99.5)), 1e-6)
+    reach = max(4, int(round(ring_1080 * k)))
+    pad = reach + max(2, int(round(8 * k)))
+    grown = _box_mask(lu.shape, [x0 - pad, y0 - pad, x1 + pad, y1 + pad])
+    marks = grown & (np.abs(lu - g0) > MARK_LUMA) & ~text
+    lab, n = ndimage.label(marks | text, structure=np.ones((3, 3)))
+    touching = set(np.unique(lab[ndimage.binary_dilation(text, iterations=2)])) - {0}
+    other = marks & ~np.isin(lab, list(touching))
+    keep = grown & ~ndimage.binary_dilation(other, iterations=max(1, int(round(2 * k))))
+    dist = ndimage.distance_transform_edt(~text)
+    far = keep & (dist > reach)
+    g = float(np.median(lu[far])) if far.any() else g0
+    prof = []
+    for d in range(1, reach + 1):
+        ring = keep & (dist > d - 1) & (dist <= d)
+        prof.append(float(np.mean(lu[ring]) - g) if ring.any() else 0.0)
+    core = float(np.percentile(lu[text], 90)) - g
+    a = max(2, int(round(TITLE_GLOW_FROM_1080 * k)))            # never ring 1: at 288 px high that IS the antialiased edge
+    b = max(a + 1, int(round(TITLE_GLOW_TO_1080 * k)))
+    glow = float(np.mean(prof[a - 1:b])) if prof else 0.0
+    k1080 = 1.0 / k
+    return {"frame_h": h, "ground_luma": round(g, 2), "text_excess": round(core, 2),
+            "halo_edge": round(prof[0] / core, 3) if core > 0 else 0.0,
+            "halo_r50_px1080": round(_cross(prof, 0.5 * prof[0]) * k1080, 2),
+            "halo_reach10_px1080": round(_cross(prof, 0.10 * core) * k1080, 2),
+            "halo_area_1080": round(float(sum(max(v, 0.0) for v in prof)) * k1080, 1),
+            "glow_3_12": round(glow, 2),
+            "halo_profile": [round(v, 2) for v in prof]}
+
+
 def ocr_words(path: str | Path, box) -> int | None:
     """Words with a letter inside the box, by tesseract - only when pytesseract and its binary exist."""
     try:

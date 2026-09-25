@@ -8951,6 +8951,13 @@ async function mount(doc) {
      portrait layout MEASURES its ink (P41), so the faces are fetched up front and every page is rebuilt once they land */
   const LP_FACES = ["700 68px Kalam", "400 40px Kalam", "500 40px Kalam", "700 34px Kalam"];
   if (document.fonts && document.fonts.load) Promise.all(LP_FACES.map((f) => document.fonts.load(f))).then(() => { if (PORTRAIT) ledgerState.clear(); }).catch(() => {});   /* landscape pages are laid out in %, never measured: a rebuild there only shifts chart text a sub-pixel against the goldens */
+  /* E99 s122 amended (P69 T37c) - THE DEFAULT PAGE'S TITLE FACE: the timeline's `title_face` (ledger_page.TITLE_FACE, stamped
+     by the compiler only when it is not `hand`), carried as a class on every page that is not the long form's (whose title
+     is its own Inter): `hand` = Kalam 700 as it always was (no class, byte-identical), `heavy` = Kalam 700 thickened by an
+     ink stroke, `sans` = the long form's Inter 700 (its face shipped by longform_assets, so a `sans` page is rebuilt when
+     it lands). The template's `.lp-title-face-*` rules draw them; the size stays the page's own. */
+  const LP_TITLE_FACES = Object.freeze(["hand", "heavy", "sans"]);
+  const LP_TITLE_FACE = LP_TITLE_FACES.includes(TL.title_face) ? TL.title_face : "hand";
   /* P69 T8 / R26-259 - THE LONG FORM'S FACE: Inter, loaded. The compiler puts the tracked Inter-Variable.ttf in the
      asset map (build_scene_timeline_f.longform_assets) only when a page is drawn under the profile, and it is
      registered here under its OWN family name, so the captions and species that name "Inter" keep the face they
@@ -8959,7 +8966,7 @@ async function mount(doc) {
   if (A[LP_LONGFORM.FONT_ASSET] && typeof FontFace !== "undefined" && document.fonts) {
     const face = new FontFace(LP_LONGFORM.FACE, 'url("' + A[LP_LONGFORM.FONT_ASSET] + '")', { weight: "100 900", style: "normal" });
     document.fonts.add(face);
-    face.load().then(() => { for (const [key, S] of [...ledgerState]) if (S && (S.readability === LP_READABILITY.LONGFORM || S.readability === LP_READABILITY.CARD)) ledgerState.delete(key); }).catch(() => {});
+    face.load().then(() => { for (const [key, S] of [...ledgerState]) if (S && (LP_TITLE_FACE === "sans" || S.readability === LP_READABILITY.LONGFORM || S.readability === LP_READABILITY.CARD)) ledgerState.delete(key); }).catch(() => {});
   }
   /* PORTRAIT LAYOUT (P41): one column in stage px, measured top-down inside doc 49's zones - the title from y=140
      (zone 1), the chart in zone 2, the caption strip from 1340 (two 64px caption lines reach up to ~1290, so the page
@@ -9165,6 +9172,7 @@ async function mount(doc) {
     const title = lpEl("div", "lp-ink lp-title", page);
     const subEl = lpEl("div", "lp-ink lp-sub", page);
     const LF = lpLongformPage(pg);   /* P69 T8: the long form's page - the ground, the panel, Inter at the phone floor */
+    if (!LF && LP_TITLE_FACE !== "hand") page.classList.add("lp-title-face-" + LP_TITLE_FACE);   /* P69 T37c: the default page's title face */
     const cardP = !!LF && lpReadability(pg) === LP_READABILITY.CARD, cardK = cardP ? lpCardK(pg) : 1, cPad = cardP ? LP_CARD.PAD_PX * cardK : 0;   /* P69 T10c: a card, its scale and its margin (rendered px) */
     const src = lpEl("div", "lp-ink lp-src" + (pg.src_style === "compact" ? " compact" : ""), page);   /* the design pass: a citation takes minimal space */
     const subText = PORTRAIT ? lpFirstClause(pg.sub || "", true) : (pg.sub || ""), srcText = PORTRAIT ? lpFirstClause(pg.source || "", false) : (pg.source || "");

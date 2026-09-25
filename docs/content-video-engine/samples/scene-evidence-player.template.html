@@ -97,7 +97,28 @@
      one line `--lp-title-ink: <hex>;` in the `.lp` block, and every page's title - a retitle's too - takes it. A retitle's
      `color_span` (T86) still paints its own span. (A page drawn on a plate's CREAM surface would take the pick too -
      read that page on the frame before wiring it; with the dial unset every page draws exactly as before.) */
-  .lp-title { left: 8.4%; top: 10.4%; font-size: 34px; font-weight: 700; color: var(--lp-title-ink, var(--lp-chalk)); letter-spacing: -.01em; }
+  .lp-title { left: 8.4%; top: 10.4%; font-size: 34px; font-weight: 700; color: var(--lp-title-ink, var(--lp-chalk)); letter-spacing: -.01em;
+              text-shadow: var(--lp-title-glow, 0 0 .18em currentColor, 0 0 .07em currentColor); }
+  .lp-title .g { padding: var(--lp-title-glow-pad, .36em); margin: calc(-1 * var(--lp-title-glow-pad, .36em)); }   /* the glow's room: each glyph's mask box reaches past its ink by the pad, its margin gives the pad back (the layout is unchanged) */
+  /* E99 s122 amended (P69 T37c) - THE TITLE GLOWS IN ITS OWN INK, and THE SHORTS FACE GOES BOLDER. THE GLOW is one dial,
+     `--lp-title-glow` (a text-shadow list; `none` on `.lp` turns it off): two soft shadows in `currentColor`, so every word
+     glows in the ink it is written in (the title's, a retitle's `color_span` neg / pos) and the glow writes on with its
+     glyph; in ems, so it keeps its share of the letter at every size (34 px page, 68 px portrait, the long form's presets).
+     Each glyph's mask clips at its own box, so `.g` carries a PAD (`--lp-title-glow-pad`, >= the glow's reach)
+     given back by an equal negative margin: the glow is never cut at a letter, the layout never moves. A text-shadow,
+     not a CSS / SVG filter on the div: a filter over the glyphs painted forward play and a cold seek 1-8 levels apart
+     (T37c, page-life-still at 9.0 s); a text-shadow paints them alike (test_title_size). The strength is
+     OUR legibility bound, not a Bravos number - Bravos's chart title has no halo (measure_line_bloom.title_halo, the
+     band's `title_size.halo`): the strongest of five candidates whose glow in the gaps within 3 px of the letters at
+     390 px wide stays under 16 % of the ink's own excess (the counters stay open; T37c's table in the band).
+     The pad also shows the hand's overhang a glyph box used to cut (a tilted T's bar, a p's tail).
+     THE FACE is ledger_page.TITLE_FACE, stamped on the timeline and the page class by the engine: `hand` (today, Kalam 700 - Kalam's heaviest), `heavy` (Kalam 700 thickened by an ink stroke), `sans` (the
+     long form's Inter 700, the face shipped by longform_assets); the size is today's in every face (the cap height
+     within 5 %, s122: parity with Bravos). */
+  .lp-title-face-heavy .lp-title { -webkit-text-stroke: .06em currentColor; }   /* Kalam has no weight past 700: the ink stroke is the only heavier hand ... */
+  .lp-title-face-heavy .lp-title .g { font-size: 95%; }   /* ... and the stroke's own width is given back in size, so the cap stays within 5 % of the hand's (test_title_size) */
+  .lp-title-face-sans .lp-title { font-family: "Inter Longform", Inter, Arial, sans-serif; letter-spacing: 0; }
+  .lp-title-face-sans .lp-title .g { transform: none; }   /* a set face, not a hand: no per-glyph tilt */
   .lp-src { left: 6%; font-size: 22px; font-weight: 500; color: var(--lp-chalk); opacity: .85; }   /* the source sits under the chart box, clear of the anchor caption's band: chalk, not charcoal */
   /* E28: the sub carries the selection rule (which dates and why) - written under the title, wrapped by word */
   .lp-sub { font-size: 21px; font-weight: 400; line-height: 1.25; color: var(--lp-chalk); opacity: .8; white-space: normal; }

@@ -107,6 +107,13 @@ LANDSCAPE_PHONE = "landscape-phone"
 # widens the chart the way T17 does, for its own end tags.
 LONGFORM = "longform"
 READABILITY_PROFILES = (LANDSCAPE_PHONE, LONGFORM)
+# E99 s122 amended (P69 T37c): THE DEFAULT (shorts) PAGE'S TITLE FACE - the one token the operator's pick changes.
+# `hand` Kalam 700 (today; Kalam's heaviest weight), `heavy` Kalam 700 thickened by an ink stroke, `sans` the long
+# form's Inter 700. The compiler stamps it on the timeline (`title_face`) only when it is not `hand`, so a `hand`
+# build is byte-identical; `sans` also ships the long form's face (build_scene_timeline_f.longform_assets). The long
+# form's own title is Inter already and never takes it.
+TITLE_FACES = ("hand", "heavy", "sans")
+TITLE_FACE = "hand"
 # the builders each profile is legal on (T14's inventory: the body's pages are dense-line and bars/`story`)
 READABILITY_BUILDERS = {LANDSCAPE_PHONE: ("dense-line",), LONGFORM: ("dense-line", "story", PANELS)}   # P69 T8b: a panels page, each panel framed
 AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
