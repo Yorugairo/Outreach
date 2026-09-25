@@ -523,7 +523,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T4: The builder's checklist and the record - the editing rules s74-s79 where the builder reads them, the stopped compiler marked, the rows' remaining notes written
-- Status: pending
+- Status: done - lane A 526096a: ONE-SHOT.md's builder's checklist (s70/s74-s80, R26-347, R26-174, R26-214 (a)), the shape compiler STOPPED (s77), CRITIC-REPORT mechanisms 12-19, the calendar's REWRITE-ORDER-B (gap: no ruling gives the new ending's words)
 - Owner: parent (doctrine); junior_developer for the mechanical edits (LANE A)
 - Depends on: T0; T1 (both edit `CAPABILITIES.md` with line anchors - T4 re-reads its rows by title after T1 lands)
 - Items: R26-195 (s74 / s75 / s76 into `ONE-SHOT.md`'s checklist and the critic's table; CAPABILITIES' compiler row STOPPED), R26-200 (s79 Apply 5: idle tokens counted, the camera on named things, the axes open), R26-202 (c) (the slot rule yields to the room rule when the room is gone; (a) is T7, (b) is T19), R26-214 (a) (a host plate enters the library only when approved, with its layer sidecar; the quarantine rule unchanged; (c) is D4's `⏸️` row), R26-174 (one host rendering per cut), R26-193 (the calendar script's REWRITE ORDER, next letter - an order, never a patch), R26-124 (both race paths selectable; the current default written on the race row), P65's CAPABILITIES row `:96` (HG1 withdrawn, s84)
@@ -924,10 +924,10 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T31: The research tooling
-- Status: pending
+- Status: done - lane B 8f8106b (the ingester's scrub, the profiles' tier-0 rule, the ledger's transport) + lane A 6e9ba30 (R26-144 follow_moved_packet); R26-336 re-checked at 78c884f; findings R26-352..355
 - Owner: implementation_luna (the Claude research-tooling lane; LANE B scripts)
 - Depends on: T0; T44 (R26-340's row: "fix before P72 T31"). R26-127 is not here: it is closed (`bf539e3`, the `bridge_inbox` hook self-starts the daemon), and T0 archives it. The bridge items (R26-144, R26-336) land in LANE A after T44, because R26-340 names lane A the bridge scripts' owner - one writer for `bridge_*.py`. R26-336's fix also closes R26-340 (6) (the missing Astra branch, and `bridge_reply.resolve` sending Astra orders through the Gemini send).
-- Items: R26-254 (1) (`ingest_stock_research.py` strips Drive ids / URLs, refuses offering documents - term sheet, PPM, subscription - by name, and FAILS a docket whose body is a search listing), R26-128 (the research profile never runs our layer regen; a tier-0 rule), R26-129 (the research ledger does not count the bridge transport as a run), R26-144 (the daemon's paths-written check follows a packet to `replied/`), R26-336 (the bridge daemon calls the watcher with `--lane astra`, which accepts only `gemini|claude`, so it errors every 60 s and the three `lane: astra` packets in `docs/research/runs/bridge/sent/` - 20ae64c6dfa9, 6a3c72d239a2, e6e94125cdb2 - never land; `hist:943`). T37's Astra run over the bridge depends on R26-336.
+- Items: R26-254 (1) (`ingest_stock_research.py` strips Drive ids / URLs, refuses offering documents - term sheet, PPM, subscription - by name, and FAILS a docket whose body is a search listing), R26-128 (the research profile never runs our layer regen; a tier-0 rule), R26-129 (the research ledger does not count the bridge transport as a run), R26-144 (the daemon's paths-written check follows a packet to `replied/`), R26-336 (the bridge daemon calls the watcher with `--lane astra`, which accepts only `gemini|claude`, so it errors every 60 s and the three `lane: astra` packets in `docs/research/runs/bridge/sent/` - 20ae64c6dfa9, 6a3c72d239a2, e6e94125cdb2 - never land; `hist:943`). T37's Astra run over the bridge depends on R26-336.; R26-352, R26-353, R26-354, R26-355 (its findings - added 2026-09-25)
 - Write set: `content/video_engine/scripts/ingest_stock_research.py`, the research profile file the lane reads, the research-ledger builder, the bridge daemon and `bridge_watch` (R26-336's lane list), their tests
 - Acceptance: one line per item -
   - R26-254 (1): a re-run of the ingester on a copy writes no Drive id or Drive URL, refuses the term sheet, a PPM and a subscription document by name, and FAILS a planted docket whose body is a search listing;
