@@ -127,6 +127,8 @@ moved to T26 behind P71's `buildLedgerLine` slices. The numbers match the invent
 | T42 | R26-229 (a): the agenda beat's park-and-pan, authored on the 30 s bed in a private build, beside (b) on P68-HG3's card | LANE-A (production) | parent, implementation_luna | 3 | none on lane B; lane A at a slice boundary |
 | T43 | R26-219 (the bracket half), 338: the bracket's label room - measured at 16:9, a room WARN and an "above" fallback | ENGINE | implementation_luna, reviewer | 4 | P70 T5 (the brace, `check_brace` / `paintBracket`) merged; T13 |
 | T44 | R26-340 (1)-(5), (7): the bridge holds on a restart - one toast per tick, the printed conversation id, a reply newer than its follow-up, no futile repairs, the stranded original closed, replies written to the main checkout | TOOLING (lane A, the bridge scripts) | implementation_luna | 1 | the operator's approval of this plan; before T31 |
+| T46 | R26-361, 362, 365: the wave-3 follow-ups (the seal's keyline and twin, the owned exit's twin and advice, the stroke width, the 9:16 badge rail, the weak prints' values) | ENGINE | implementation_luna, reviewer | 5 | P72 T11, T13, T17; P71 T6; the dock slices |
+| T47 | R26-366: the panels page at phone, built (R26-316's build half) | ENGINE | implementation_luna, reviewer | 5 | P72 T12; P71 T13 |
 
 **Honest flags. Read them before approving.**
 1. **Counts are primary verdicts, and a half is never lost.** An item with two halves (e.g. R26-132: part 1 DONE, part 2
@@ -733,7 +735,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Status: pending
 - Owner: implementation_luna (LANE B)
 - Depends on: P70 T8 (`authoring/audio`)
-- Items: R26-286 (a cue for the suck from the existing library - the melt's / the throw's family - bound by the door's cue check), R26-329 (the slot hand-off's cue at the frame the card is first seen, E99 s116), R26-35 (the bed swell keyed to the arrival that lands - step (0): P69 T84 `e416df5` may already have moved it), R26-36 (one assertion: H's `:cut;then=` rows read as the author meant, the legacy suffix reading kept for the shipped plans, `authoring/audio.py:196-210`)
+- Items: R26-286 (a cue for the suck from the existing library - the melt's / the throw's family - bound by the door's cue check), R26-329 (the slot hand-off's cue at the frame the card is first seen, E99 s116), R26-35 (the bed swell keyed to the arrival that lands - step (0): P69 T84 `e416df5` may already have moved it), R26-36 (one assertion: H's `:cut;then=` rows read as the author meant, the legacy suffix reading kept for the shipped plans, `authoring/audio.py:196-210`); R26-363 (the shared landing gain 0.12 = 4.3 dB under the voice: each landing cue measured and started at E81's reference, `audio.e81_gain`, then tuned by ear - added 2026-09-25)
 - Write set: `content/video_engine/scripts/authoring/audio.py`, `content/video_engine/sound/` cue map (the suck), the slot hand-off clock if the fix is in the engine (one function), tests: `content/video_engine/tests/test_authoring_kit.py` (the cue binder's), `content/video_engine/tests/test_landing_sound_follows_the_landing.py` (P69 T84's), NEW `content/video_engine/tests/test_sound_follows_the_frame.py`
 - Acceptance: (1) `SOUND-PLAN.json` for H names a cue at every suck; (2) row 23's hand-off cues land within one frame of the card's first visible frame, and row 23's 0.8 s lead can be removed (a P69 T36 hand-off item); (3) the bed swell sits on the camera arrival in Tokyo's recorded plan (checked, not re-rendered - the cut is frozen, E45); (4) the approved shorts' cue plans are byte-identical; (5) R26-36 stays OPEN in this slice until a listened pass, which is the evidence the row names (BACKLOG-DISCIPLINE: R26-35 / 36 "sound fixes wait for a new listened pass"; the row's "it moves a cue the operator has heard"): the one assertion that H's `:cut;then=` rows are read as cuts (`authoring/audio.py:196-210`, `LEGACY_SUFFIX_OPTS` kept for the shipped plans), and the cue plan's before / after for those rows, played on the test bed beside the take. The row archives only on the listened pass that names it - P68-HG4's whole-cut watch, with the cue diff attached.
 - Stop conditions: fixing the hand-off moves an approved cut's cue (report - frozen cuts keep theirs).
@@ -1005,7 +1007,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Status: pending
 - Owner: parent (an edit to P69's T33 / T34 pass lists; the rows themselves are P69's)
 - Depends on: the engine slice named per item
-- Items: now (the engine half landed at `af869b7`, P69 T26b's `camera_reach`) - row 1's push re-aimed to the reachable 1.02 (R26-281) and row 15's pull (R26-283), both rows-1-13-class retrofits held for P69-HG3 (P69 T33); after T27 - row 20's `TEST_SWEEP_WHY` / `BODY_DEPARTURES` text (R26-302); after T22 - row 23's `VERDICT_STACK_ON = True`; after T20 - row 23's 0.8 s hand-off lead removed (R26-329); after T19 - row 23's second asset id retired (R26-328); after T28 - the H door's R26-197 shim removed (if not done in T28); after T14 - rows 7 / 12 / 13 / 17 declare their caption room; R26-347 (added 2026-09-25: H's 12 dips -> 10, each dip that is not a world change becomes the continuity transform it refused - build work, never an operator card; the operator's words are in the row); R26-346 (row 24's derived yardstick card: a lone '20' with no unit, '28%' at the card's edge - E28); R26-350 (the H door's words call the denied `card-becomes-the-chart` proven - added 2026-09-25)
+- Items: now (the engine half landed at `af869b7`, P69 T26b's `camera_reach`) - row 1's push re-aimed to the reachable 1.02 (R26-281) and row 15's pull (R26-283), both rows-1-13-class retrofits held for P69-HG3 (P69 T33); after T27 - row 20's `TEST_SWEEP_WHY` / `BODY_DEPARTURES` text (R26-302); after T22 - row 23's `VERDICT_STACK_ON = True`; after T20 - row 23's 0.8 s hand-off lead removed (R26-329); after T19 - row 23's second asset id retired (R26-328); after T28 - the H door's R26-197 shim removed (if not done in T28); after T14 - rows 7 / 12 / 13 / 17 declare their caption room; R26-347 (added 2026-09-25: H's 12 dips -> 10, each dip that is not a world change becomes the continuity transform it refused - build work, never an operator card; the operator's words are in the row); R26-346 (row 24's derived yardstick card: a lone '20' with no unit, '28%' at the card's edge - E28); R26-350 (the H door's words call the denied `card-becomes-the-chart` proven - added 2026-09-25); R26-364 (the capex page's `unit_suffix: "B"` and the two-clocks object back to "years", after P72 T13 - added 2026-09-25)
 - Write set: `.claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md` (T33 / T34's lists), `docs/content-video-engine/BACKLOG.md` (the P69 umbrella's children)
 - Acceptance: each item is on P69's pass list with the P72 slice and sha that enabled it; none is built here (the body is held for P69-HG3).
 - Stop conditions: none.
@@ -1150,4 +1152,32 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Expected RED: the new tests - a verdict-less report-landed reply passes tier 0; an astra packet stays in `sent/` with `watch-skip.json`
 - Validate: every `test_bridge_*` file, each in its own process; `bridge_daemon.py --once --dry-run` on a copy of the live bridge folder
 - TDD reserved (Red evidence, Failure attribution, Unrelated failures, Green evidence, Refactor evidence): pending
+- Evidence: pending
+
+### T46: The wave-3 follow-ups - the seal's keyline and twin, the owned exit's twin and advice, the stroke width, the 9:16 badge rail, the weak prints' values
+- Status: pending
+- Owner: implementation_luna (LANE B), then reviewer (R26-362 (b) is advice; s106 - WARNs, never refusals)
+- Depends on: P72 T11 (the seal), P71 T6 (43363ea), P72 T13, T17 (the compiler's print chain, for R26-362 (b)), P70 T8 / P71 T15 / T19 (the dock code, for R26-365 (b))
+- Items: R26-361 (a)-(c), R26-362 (a)-(c), R26-365 (a)-(c) (filed 2026-09-25 from the landings' findings)
+- Write set: `scripts/species/chip.mjs` (the name's keyline), `build_scene_timeline_f.py` (`seal_gold`'s note; the owned-exit WARN), the engine (`paint` through `worldXfAt`; `strokeAt`'s width), `emit_choreography.py` (mirror rule 2), `authoring/shapes.py` (`dock_leave`'s description; `_aspect_clean`'s rail), the template's pill CSS (the rail), tests NEW `test_wave3_followups.py`
+- Acceptance: each row's clause closes with a test and, where visible, a before / after frame read by the parent; R26-362 (c) and R26-365 (c) may close on a written decision with its frame; the H door identical except the instants listed.
+- Stop conditions: a clause touches a function an in-flight slice owns (sequence it); the keyline change moves a committed golden (list it for the parent's read).
+- Regression: `python -m pytest -q content/video_engine/tests/test_wave3_followups.py`
+- Expected RED: the keyline follows the authored ink on a photo; no WARN for an exit curve past its page; `strokeAt` has no caller; a 9:16 dock's badge rail is dropped.
+- Validate: the regression, then COMMON-TAIL
+- TDD reserved (Red evidence, Failure attribution, Unrelated failures, Green evidence, Refactor evidence, Frame read): pending
+- Evidence: pending
+
+### T47: The panels page at phone, built - R26-316's build half
+- Status: pending
+- Owner: implementation_luna (LANE B), then reviewer (a long-form preset's layout; findings WARN, s106)
+- Depends on: P72 T12 (the phone WARN, `lpPanelBuildAt`), P71 T13 (the second axis's phone read)
+- Items: R26-366 (R26-316's build half, filed 2026-09-25; T12 prints its WARN until this lands)
+- Write set: the engine's panels painter at `longform:phone`, `ledger_page.py` (`_longform_panel_scale`, the panel region), tests NEW `test_panels_at_phone.py`
+- Acceptance: at `longform:phone` a panels page's subs, ticks, rule names and bars clear the 59.08 px floor or the page takes the room it needs (measured by the probe); `_longform_panel_scale` reads the floor cut; T12's WARN stops printing for a page that now holds; every other preset byte-identical; frames at phone before / after.
+- Stop conditions: the page cannot hold by arithmetic even with the room (report the numbers; the WARN stays).
+- Regression: `python -m pytest -q content/video_engine/tests/test_panels_at_phone.py`
+- Expected RED: the companion page at phone gets 210 px against ~327; subs at 15.3 px.
+- Validate: the regression, `test_longform_phone_layout.py`, then COMMON-TAIL
+- TDD reserved (Red evidence, Failure attribution, Unrelated failures, Green evidence, Refactor evidence, Frame read): pending
 - Evidence: pending
