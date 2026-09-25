@@ -20,6 +20,8 @@
      domain  - each band's own y-scale, from an HONEST ZERO by default: a band whose zero is dropped
                exaggerates its own shape, and a page of small multiples is read shape against shape.
                A band may opt out (`from_zero: false` in its axes) and the page's judge row says so.
+               A page that carries `shared_tier_domains` (E79, R26-72) draws its same-unit bands on ONE
+               domain instead (`tierShared`); `independent` on the page or the band keeps a band's own.
      ticks   - TICKS gridlines a band, and the unit written once per band beside its own top tick:
                a band is a chart, and a chart with no unit is a number with no meaning.
      draw    - the bands draw IN TURN: band i starts at its own share of the build clock, and a
@@ -51,17 +53,33 @@ export const tierBands = (top, bot, n, gap = TIERS.GAP) => {
 };
 
 /* THE DOMAIN of one band: its own values, with the zero kept honest unless the band drops it. The
-   pad is one-sided on a from-zero band (the floor IS the claim) and two-sided when it is not. */
-export const tierDomain = (vals, fromZero = true) => {
+   pad is one-sided on a from-zero band (the floor IS the claim) and two-sided when it is not.
+   `shared` (R26-72, E79): the [lo, hi] a same-unit group draws on (`tierShared`), taken in place of the band's
+   own extent and padded by the same law - equal raw domains stay equal, so every tier of the unit is one scale. */
+export const tierDomain = (vals, fromZero = true, shared = null) => {
   /* a null or empty datum is NOT a zero (Number(null) is 0, which would put a floor under a band that has none) */
   const nums = (vals || []).filter((v) => v !== null && v !== undefined && v !== "" && Number.isFinite(+v)).map(Number);
-  if (!nums.length) return [0, 1];
-  let lo = Math.min(...nums), hi = Math.max(...nums);
-  if (fromZero) { lo = Math.min(0, lo); hi = Math.max(0, hi); }
+  if (!shared && !nums.length) return [0, 1];
+  let lo = shared ? shared[0] : Math.min(...nums), hi = shared ? shared[1] : Math.max(...nums);
+  if (fromZero && !shared) { lo = Math.min(0, lo); hi = Math.max(0, hi); }
   const span = hi - lo || Math.abs(hi) || 1;
   hi += span * TIERS.PAD;
   if (!fromZero) lo -= span * TIERS.PAD;
   return [lo, hi];
+};
+
+/* E79 (R26-72): THE SHARED SCALE a tier draws on - the page's `shared_tier_domains` ({unit: [lo, hi]}, the numbers
+   ledger_page.shared_tier_domains computes, before the pad) read by the tier's own unit, unless the page or the tier
+   declares `independent`. Null - the band's own extent, as before the row - on a page without the key, for a unit
+   it does not name, and for an entry that is not two finite numbers low to high. */
+export const tierShared = (pg, tr) => {
+  const all = pg && pg.shared_tier_domains;
+  if (!all || typeof all !== "object") return null;
+  if (((pg.axes || {}).independent === true) || (((tr || {}).axes || {}).independent === true)) return null;
+  const d = all[String((tr || {}).unit || "")];
+  if (!Array.isArray(d) || d.length !== 2) return null;
+  const lo = +d[0], hi = +d[1];
+  return d.every((v) => typeof v === "number") && Number.isFinite(lo) && Number.isFinite(hi) && hi > lo ? [lo, hi] : null;
 };
 
 /* a value's y inside its band */

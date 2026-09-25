@@ -154,3 +154,83 @@ def test_r26_142_the_agenda_page_paints_the_palette_it_always_did():
                 const cs = getComputedStyle(el); out[sel] = Object.fromEntries(Object.keys(props).map(k => [k, cs[k]]));
               } return out; }""", AGENDA_PAGE_CLASSES)
     assert got == AGENDA_PAGE_CLASSES, got
+
+
+# ---- R26-72: a tiers page draws its same-unit tiers on the shared domain it carries (E79) ----------------------
+# ledger_page computes E79's shared domain (`shared_tier_domains`) and WARNs when same-unit tiers differ, but the
+# engine's `tierDomain` read only its own band. A page that carries `shared_tier_domains` now draws every tier of
+# that unit on the one domain (a bar's pixel height is proportional to its value ACROSS tiers); `independent` on
+# the page or the tier keeps its own; a page without the key is the page it always was.
+
+def _tiers_bars_page(shared: bool) -> tuple[dict, dict]:
+    import build_golden_sources as G
+    import ledger_page as LPG
+    series = {"title": "Two banks, one unit", "sub": "synthetic", "src": "Synthetic series; not a figure about the world",
+              "tiers": [{"name": "SMALL", "unit": "bn", "bars": [{"label": "A", "value": 10}, {"label": "B", "value": 20}]},
+                        {"name": "LARGE", "unit": "bn", "bars": [{"label": "A", "value": 150}, {"label": "B", "value": 300}]}]}
+    page = LPG.build_spec(series, "tiers", None, "right")
+    if shared:
+        page["shared_tier_domains"] = {u: list(d) for u, d in LPG.shared_tier_domains(series).items()}
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, G.RUNTIME], "docks": [], "species": []}]
+    return G._timeline("tiers on one scale", scenes, {}, None), G._base_uris()
+
+
+def _bar_heights(tl: dict, uris: dict) -> list[list[float]]:
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "tiers.html"
+        html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+        with SP.served(html, *RB.STAGE["16:9"]) as (page, errs):
+            RB.frame_png(page, 12.0, RB.STAGE["16:9"])
+            assert not errs, errs
+            return page.evaluate("""() => { const out = {};
+              const chart = document.querySelector('.lp-chart');   /* the page as painted once (a world layer may hold a copy) */
+              chart.querySelectorAll('rect.bar').forEach(r => {   /* a band's bars share its base line */
+                const base = Math.round(+r.getAttribute('y') + +r.getAttribute('height'));
+                (out[base] = out[base] || []).push(+r.getAttribute('height')); });
+              return Object.keys(out).sort((a, b) => a - b).map(k => out[k]); }""")
+
+
+def _per_unit(heights: list[list[float]], values=((10, 20), (150, 300))) -> list[float]:
+    return [round(h / v, 4) for band, vals in zip(heights, values) for h, v in zip(band, vals)]
+
+
+@needs_chromium
+def test_r26_72_a_page_with_shared_tier_domains_draws_every_tier_on_one_scale():
+    heights = _bar_heights(*_tiers_bars_page(shared=True))
+    assert len(heights) == 2 and all(len(b) == 2 for b in heights), heights
+    k = _per_unit(heights)
+    assert max(k) - min(k) < 0.01, f"px per unit differ across the tiers on a shared scale: {k} ({heights})"
+
+
+@needs_chromium
+def test_r26_72_a_page_without_the_key_keeps_each_tiers_own_scale():
+    heights = _bar_heights(*_tiers_bars_page(shared=False))
+    k = _per_unit(heights)
+    assert k[0] > 5 * k[2], f"without the key each band fills its own height (small px/unit >> large): {k}"
+
+
+@needs_chromium
+def test_r26_72_an_independent_tier_leaves_the_shared_scale():
+    tl, uris = _tiers_bars_page(shared=True)
+    tl["scenes"][0]["world"]["page"]["tiers"][0]["axes"]["independent"] = True   # as _tiers_block carries a tier's key
+    k = _per_unit(_bar_heights(tl, uris))
+    assert k[0] > 5 * k[2], f"an independent tier keeps its own scale: {k}"
+
+
+def test_r26_72_tier_shared_reads_the_unit_and_drops_a_malformed_entry_to_the_bands_own():
+    import json
+    import subprocess
+    mod = (ROOT / "content/video_engine/scripts/species/tiers.mjs").as_uri()
+    js = (f"import {{ tierShared, tierDomain }} from '{mod}';"
+          "const pg = { shared_tier_domains: { bn: [0, 300], bad: [5, 1], nan: ['x', 2] }, axes: {} };"
+          "const out = [tierShared(pg, { unit: 'bn', axes: {} }), tierShared(pg, { unit: 'Mb', axes: {} }),"
+          " tierShared(pg, { unit: 'bad', axes: {} }), tierShared(pg, { unit: 'nan', axes: {} }),"
+          " tierShared({ shared_tier_domains: pg.shared_tier_domains, axes: { independent: true } }, { unit: 'bn', axes: {} }),"
+          " tierShared(pg, { unit: 'bn', axes: { independent: true } }), tierShared({}, { unit: 'bn' }),"
+          " tierDomain([10, 20], true, [0, 300]), tierDomain([10, 20], true)];"
+          "console.log(JSON.stringify(out));")
+    got = json.loads(subprocess.run(["node", "--input-type=module", "-e", js], capture_output=True, text=True,
+                                    check=True).stdout)
+    assert got[:7] == [[0, 300], None, None, None, None, None, None], got
+    assert got[7] == [0, 300 * 1.08] and got[8] == [0, 20 * 1.08], got
