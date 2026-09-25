@@ -228,7 +228,10 @@ READ_BOXES = r"""
      chain of its DRAWN segments. The mask over these is what says where the plot is empty. */
   /* `.lp-cell` is the TREEMAP's own cell (a <g> holding the tile and its labels): probe.py's M25
      selector does not name it, and a mask that misses it would call a full census page empty. */
-  const DATA = 'rect.bar, rect.bar-band, path.ser, path.wedge, text.val, text.callout, rect.cpill, .lp-cell';   /* P69 T8d: a range's band is data */
+  /* P72 T40 (R26-337): a SCHEMATIC has no data - its PHASE NAMES carry the narrative and its TAG says what the page is
+     (E99 s109 (1)) - so both are the data's ink here: a card in the plot's 'empty' room never covers either */
+  const DATA = 'rect.bar, rect.bar-band, path.ser, path.wedge, text.val, text.callout, rect.cpill, .lp-cell, '   /* P69 T8d: a range's band is data */
+    + 'text.lp-phase, text.lp-schematic';
   const SEG = 48;
   const dataBoxes = (el) => {
     const r = R(el);

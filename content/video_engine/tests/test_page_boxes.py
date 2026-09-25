@@ -803,3 +803,22 @@ def panels_on_stage(doc: dict) -> list[str]:
 
 def test_every_measured_panels_page_stands_on_the_stage():
     assert panels_on_stage(FIXTURE) == []
+
+
+# ---- P72 T40 (R26-337): a schematic's words are its ink - the mask reads its tag and its phase names ------------------
+def test_a_schematics_tag_is_ink_in_its_data_mask():
+    """s109 (1): a schematic has no data; its phase names carry the narrative and its tag says what the page is. The
+    measure reads both as the data's ink (`READ_BOXES`' DATA), so the plot's 'empty' room is never under either - here
+    held on the tag, whose box the fixture carries: every cell along its middle line is inked, in every geometry."""
+    entries = FIXTURE["builders"][M.SCHEMATIC_LINE]
+    assert entries, "the fixture holds no schematic page"
+    for key, e in entries.items():
+        tag, plot, mask = e[LPG.SCHEMATIC_BOX], e["boxes"]["plot"], e["data_mask"]
+        n = len(mask)
+        cw, ch = plot["w"] / n, plot["h"] / n
+        row = int((tag["y"] + tag["h"] / 2 - plot["y"]) // ch)
+        cols = range(int(-(-(tag["x"] - plot["x"]) // cw)), int((tag["x"] + tag["w"] - plot["x"]) // cw))
+        assert cols, f"{key}: the tag spans no whole cell"
+        blank = [c for c in cols if mask[row][c] != "1"]
+        assert not blank, f"{key}: the mask calls the tag's cells {blank} of row {row} empty - a card may cover it"
+    assert "text.lp-phase" in M.READ_BOXES and "text.lp-schematic" in M.READ_BOXES

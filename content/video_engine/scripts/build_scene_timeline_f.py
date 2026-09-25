@@ -8737,6 +8737,10 @@ def free_bands(boxes: dict, reserve: list[dict] | None = None) -> list[dict]:
 # recorded on the entry as `place_room` so the report, the gate and a reader can all see it.
 PLACE_FLOOR_H = {"9:16": 120, "16:9": 80}   # the legibility floor: a card shorter than this has stopped being evidence
 PLACE_ROOMS = ("outside", "empty", "axis", "corner")
+# P72 T40: the aspects whose placer takes a band OUTSIDE the plot at the legibility floor before the corner (step 3b). 9:16
+# only: a short's page leaves the title band above its plot, where E45 parks a card once the heading is read; at 16:9 the
+# page IS the plate (E99 s82) and its margins hold no card worth reading, so a 16:9 page keeps E65's four rooms to the byte
+FLOOR_BAND_ASPECTS = ("9:16",)
 
 
 def _floor_h(aspect: str | None) -> int:
@@ -8895,7 +8899,44 @@ def _pieces_clear_of(room: dict, taken: list[dict]) -> list[dict]:
     return pieces
 
 
-def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear_of: list[dict] | None = None) -> dict:
+def _outside_place(bands: list[dict], want: int, quiet: str | None, min_w: int) -> dict | None:
+    """E45 §1's OUTSIDE room: the widest card no narrower than `min_w` that one of `bands` holds, parked against the plot
+    at the quiet end (a side column hugs the page's margin), with `room: outside` - or None when no band holds it."""
+    best = None
+    for band in bands:
+        room_w, room_h = band["w"] - 2 * DOCK_PLACE_PAD, band["h"] - 2 * DOCK_PLACE_PAD
+        width = max(min_w, min(want, room_w, _card_w_for(room_h)))
+        if width > band["w"] - 2 or dock_card_h(width) > band["h"] - 2:
+            continue                       # even the floor card does not fit this band
+        key = (width, band["band"] == quiet, -DOCK_BAND_ORDER.index(band["band"]))
+        if best is None or key > best[0]:
+            best = (key, band, width)
+    if best is None:
+        return None
+    _, band, width = best
+    height = dock_card_h(width)
+    if band["band"] in ("left", "right"):   # a side column: hug the page's margin, centre vertically
+        x = band["x"] + DOCK_PLACE_PAD if band["band"] == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
+        y = band["y"] + (band["h"] - height) / 2
+    else:                                   # a horizontal band: park against the plot, quiet-zone end
+        x = band["x"] + DOCK_PLACE_PAD if quiet == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
+        y = band["y"] + band["h"] - DOCK_PLACE_PAD - height if band["band"] == "above" else band["y"] + DOCK_PLACE_PAD
+    x = min(max(x, band["x"]), band["x"] + band["w"] - width)
+    y = min(max(y, band["y"]), band["y"] + band["h"] - height)
+    return {"x": round(x), "y": round(y), "w": width, "h": height, "room": "outside"}
+
+
+def page_refused_at(page: dict, aspect: str) -> str | None:
+    """Why no build can draw this page at `aspect`, or None when one can. P69 T8d: a panels page with a BARS panel is
+    drawn at 16:9 only - `check_panels` refuses it on a 9:16 build, so its 9:16 geometry is one no frame shows."""
+    panels = page.get(LPG.PANELS_KEY) if isinstance(page, dict) and page.get("builder") == LPG.PANELS else None
+    if aspect == "9:16" and isinstance(panels, list) and any(isinstance(q, dict) and q.get("builder") == LPG.PANEL_BARS
+                                                             for q in panels):
+        return "a BARS panel is drawn on a 16:9 page (P69 T8d)"
+    return None
+
+
+def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear_of: list[dict] | None = None) -> dict | None:
     """The parked rectangle for a dock on this ledger page, in stage pixels (E45 §1, E65).
 
     ``{"x", "y", "w", "h", "room"}`` - ALWAYS: `room` is which of E65's four rooms it came from
@@ -8903,7 +8944,12 @@ def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear
     `clear_of` (P69 T5): rectangles the card may not touch anywhere - a stamp's fitted box, the mark and its ring's
     peak. Every room is cut round them (`_pieces_clear_of`) before it is scored, so the order and the scale-before-
     place rule are E65's own; only the last resort can still land on one, and the row loop refuses that by name
-    (`stamp_clash_error`). Absent or empty, every room is the room it always was, to the byte."""
+    (`stamp_clash_error`). Absent or empty, every room is the room it always was, to the byte.
+    P72 T40: None on a page no build draws at `aspect` (`page_refused_at`) - there is no page to place on; and before the
+    corner, a band outside the plot at the legibility floor (E65: the card's SCALE gives ground before its place does;
+    that band is never on the data, the corner may be)."""
+    if page_refused_at(page, aspect):
+        return None
     boxes = LPG.page_boxes(page, aspect)
     stage_w = boxes["stage"]["w"]
     want = round(DOCK_ON_PAGE_W * stage_w)
@@ -8915,27 +8961,10 @@ def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear
         return [p for r in rooms for p in _pieces_clear_of(r, taken)] if taken else rooms
 
     # (1) OUTSIDE: a band the page's ink leaves free - E45 §1, unchanged
-    best = None
-    for band in cut(free_bands(boxes, reserve)):   # P52 T6: `reserve` keeps the card out of a newsreel band's strip
-        room_w, room_h = band["w"] - 2 * DOCK_PLACE_PAD, band["h"] - 2 * DOCK_PLACE_PAD
-        width = max(DOCK_ON_PAGE_MIN_W, min(want, room_w, _card_w_for(room_h)))
-        if width > band["w"] - 2 or dock_card_h(width) > band["h"] - 2:
-            continue                       # even the floor card does not fit this band
-        key = (width, band["band"] == quiet, -DOCK_BAND_ORDER.index(band["band"]))
-        if best is None or key > best[0]:
-            best = (key, band, width)
-    if best is not None:
-        _, band, width = best
-        height = dock_card_h(width)
-        if band["band"] in ("left", "right"):   # a side column: hug the page's margin, centre vertically
-            x = band["x"] + DOCK_PLACE_PAD if band["band"] == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
-            y = band["y"] + (band["h"] - height) / 2
-        else:                                   # a horizontal band: park against the plot, quiet-zone end
-            x = band["x"] + DOCK_PLACE_PAD if quiet == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
-            y = band["y"] + band["h"] - DOCK_PLACE_PAD - height if band["band"] == "above" else band["y"] + DOCK_PLACE_PAD
-        x = min(max(x, band["x"]), band["x"] + band["w"] - width)
-        y = min(max(y, band["y"]), band["y"] + band["h"] - height)
-        return {"x": round(x), "y": round(y), "w": width, "h": height, "room": "outside"}
+    outside = cut(free_bands(boxes, reserve))   # P52 T6: `reserve` keeps the card out of a newsreel band's strip
+    got = _outside_place(outside, want, quiet, DOCK_ON_PAGE_MIN_W)
+    if got is not None:
+        return got
     plot = boxes["plot"]
     centre = (plot["x"] + plot["w"] / 2, plot["y"] + plot["h"] / 2)
     # (2) EMPTY: the largest rectangle the data does not touch, the quiet side first
@@ -8963,6 +8992,11 @@ def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear
             box = _corner_box(piece, w, h, quiet, centre)
             if mask_is_clear(boxes, box):
                 return {**box, "room": "axis"}
+    # (3b) P72 T40 (R26-337): OUTSIDE AT THE FLOOR - the card's scale gives ground before its place does (E65): a band
+    # outside the plot that holds a card no smaller than the legibility floor is never on the data; the corner may be
+    got = _outside_place(outside, want, quiet, _card_w_for(floor_h)) if aspect in FLOOR_BAND_ASPECTS else None
+    if got is not None:
+        return got
     # (4) THE CORNER, at the floor - and the build warns (the caller reads `room`)
     corner = emptiest_corner(boxes)
     w = _card_w_for(floor_h)
@@ -8977,7 +9011,8 @@ def dock_place(world: dict, aspect: str | None, reserve: list[dict] | None = Non
                clear_of: list[dict] | None = None) -> dict | None:
     """The placement every dock on this scene takes, or None on a plain plate (E45: "a dock on a
     plain plate keeps the solo card"). One rectangle per scene, from the page's geometry alone -
-    and on a ledger page there is ALWAYS one (E65); the rectangle carries the `room` it came from.
+    and on a ledger page there is ALWAYS one (E65; P72 T40: None on a page no build draws at this aspect,
+    `page_refused_at`); the rectangle carries the `room` it came from.
     `clear_of`: the row's stamps' fitted boxes, which the card is placed round (P69 T5, `page_place`)."""
     if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
         return None
@@ -10797,8 +10832,8 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
     # E65: no band outside the plot is tall enough to read a card in - take the page's own room
     # (the plot's empty rectangle, the axis band, the corner) rather than the stage's middle, which
     # is the chart. The card keeps the centred WIDTH it can, and the room decides where it sits.
-    if page:
-        got = page_place(page, aspect or "16:9", reserve)
+    got = page_place(page, aspect or "16:9", reserve) if page else None   # P72 T40: None on a page no build draws here
+    if got is not None:
         if got.get("room") != "corner" or not room:
             gw = min(w, got["w"]) if card_aspect else got["w"]
             gh = round(gw * card_aspect) if card_aspect else dock_card_h(gw)

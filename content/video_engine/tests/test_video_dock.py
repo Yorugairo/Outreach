@@ -661,3 +661,111 @@ def test_the_parked_card_and_the_centred_card_read_the_same_bands(builder, aspec
     assert any(bd["y"] - 1 <= centred["y"] and centred["y"] + centred["h"] <= bd["y"] + bd["h"] + 1
                for bd in bands if bd["band"] in ("above", "below", "foot")), (
         f"{builder} {aspect}: the centred card {centred} is in none of {bands}")
+
+
+# ---- P72 T40 (R26-337): the 9:16 fail set - a card never covers the plot when a band outside it holds the floor card ----
+# The schematic's 9:16 page left no band for the 240 px card, so the placer took the plot's "empty" room - which was not
+# empty: the mask never read the schematic's phase names or its tag, and the card stood on "Peak of inflated expectations".
+# Measured honestly, the plot has no room; E65's "the card's SCALE gives ground before its place does" then finds the
+# band above the plot at the legibility floor BEFORE the corner, which may stand on the data. And the panels+bars page at
+# 9:16 is a page the compiler refuses (`check_panels`: a BARS panel is drawn on a 16:9 page), so it has no place there.
+import copy  # noqa: E402
+
+
+def _no_room_inside(page: dict, aspect: str) -> dict:
+    """The schematic's own measured boxes with the whole plot inked: no empty room, no axis room - what is left is the
+    bands outside the plot and the corner."""
+    boxes = copy.deepcopy(LPG.page_boxes(page, aspect))
+    boxes["data_mask"] = ["1" * len(boxes["data_mask"])] * len(boxes["data_mask"])
+    return boxes
+
+
+def test_a_card_with_no_room_in_the_plot_takes_a_band_outside_it_at_the_floor_before_the_corner(monkeypatch):
+    page = MPB.representative(MPB.SCHEMATIC_LINE)
+    boxes = _no_room_inside(page, "9:16")
+    card_w, card_h = B.DOCK_ON_PAGE_MIN_W, B.dock_card_h(B.DOCK_ON_PAGE_MIN_W)
+    assert not any(card_w <= bd["w"] - 2 and card_h <= bd["h"] - 2 for bd in B.free_bands(boxes)), (
+        "the premise: no band outside the plot holds the 240 px card")
+    monkeypatch.setattr(LPG, "page_boxes", lambda _page, _aspect: copy.deepcopy(boxes))
+    place = B.page_place(page, "9:16")
+    assert place["room"] == "outside", f"a floor card fits above the plot, yet the card took the {place['room']}"
+    assert place["h"] >= B.PLACE_FLOOR_H["9:16"], f"the card {place} is under the legibility floor"
+    for forbidden in ("plot", "source", "rail", "caption_anchor"):
+        assert _overlap(place, boxes[forbidden]) == 0, f"the card {place} covers the {forbidden}"
+    assert any(_overlap(place, bd) == place["w"] * place["h"] for bd in B.free_bands(boxes))
+
+
+def test_a_card_with_no_band_at_the_floor_still_takes_the_corner(monkeypatch):
+    """The floor band is a step before the corner, never instead of it: E65's "no place is not an outcome" holds."""
+    page = MPB.representative(MPB.SCHEMATIC_LINE)
+    boxes = _no_room_inside(page, "9:16")
+    boxes["plot"] = dict(boxes["plot"], y=boxes["safe"]["y"] + 40, h=boxes["source"]["y"] - boxes["safe"]["y"] - 60)
+    monkeypatch.setattr(LPG, "page_boxes", lambda _page, _aspect: copy.deepcopy(boxes))
+    assert B.page_place(page, "9:16")["room"] == "corner"
+
+
+def test_a_landscape_page_keeps_e65s_four_rooms_and_takes_the_corner(monkeypatch):
+    """The floor band is a 9:16 step (`FLOOR_BAND_ASPECTS`): at 16:9 the page is the plate (E99 s82), so a page whose
+    only band outside the plot holds nothing but a floor card still takes the corner, and the build still warns."""
+    page = MPB.representative(MPB.SCHEMATIC_LINE)
+    boxes = _no_room_inside(page, "16:9")
+    safe = boxes["safe"]
+    boxes["plot"] = dict(boxes["plot"], x=safe["x"] + 40, y=safe["y"] + 120, w=safe["w"] - 80,
+                         h=boxes["source"]["y"] - safe["y"] - 130)
+    floor_w = B._card_w_for(B.PLACE_FLOOR_H["16:9"])
+    assert any(floor_w <= bd["w"] - 2 and B.dock_card_h(floor_w) <= bd["h"] - 2 for bd in B.free_bands(boxes)), (
+        "the premise: a band outside the plot holds the 16:9 floor card")
+    monkeypatch.setattr(LPG, "page_boxes", lambda _page, _aspect: copy.deepcopy(boxes))
+    assert "16:9" not in B.FLOOR_BAND_ASPECTS
+    assert B.page_place(page, "16:9")["room"] == "corner"
+
+
+def test_a_page_the_compiler_refuses_at_9_16_has_no_place_there(monkeypatch):
+    """A panels page with a BARS panel is 16:9 only (P69 T8d) - its 9:16 geometry is a page no build can draw, so the
+    placer names no place on it; at 16:9 it is placed as every page is."""
+    page = MPB.representative(MPB.PANELS_BARS)
+    monkeypatch.setattr(B, "ASPECT", "9:16")
+    with pytest.raises(ValueError, match="BARS panel"):
+        B.check_panels({"kind": B.SPECIES_LEDGER, "page": page}, [])
+    assert B.page_place(page, "9:16") is None
+    assert B.dock_place({"kind": B.SPECIES_LEDGER, "page": page}, "9:16") is None
+    assert B.page_place(page, "16:9")["room"] == "outside"
+
+
+def _phase_name_rects(page: dict, aspect: str) -> list[dict]:
+    """Every schematic phase name's rect in STAGE pixels, read in the player at the measured instant."""
+    from playwright.sync_api import sync_playwright
+    import tempfile
+    w, h = RB.STAGE[aspect]
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "phases.html"
+        tl = MPB._timeline(page, aspect)
+        html.write_text(RB.instantiate(tl, {"__audio__": MPB._silence(), **B.longform_assets(tl)}), encoding="utf-8")
+        srv, port = RB.serve(html.parent)
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+                pg = browser.new_context(viewport={"width": w, "height": h}, device_scale_factor=1).new_page()
+                pg.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+                RB.prepare_page(pg, w, h)
+                RB.frame_png(pg, MPB.MEASURE_T, (w, h))
+                rects = pg.evaluate("""() => { const st = document.getElementById('stage').getBoundingClientRect();
+                    return [...document.querySelectorAll('text.lp-phase')].map((el) => { const r = el.getBoundingClientRect();
+                      return {x: r.x - st.x, y: r.y - st.y, w: r.width, h: r.height}; }).filter((r) => r.w >= 1); }""")
+                browser.close()
+        finally:
+            srv.shutdown()
+    return rects
+
+
+@needs_browser
+@pytest.mark.parametrize("aspect", MPB.ASPECTS)
+def test_a_dock_on_a_schematic_never_covers_a_phase_name_or_its_tag(aspect):
+    """s109 (1): a schematic has no data - its phase names carry the narrative and its tag says what the page is. The
+    parked card, placed by the fixture's measured boxes, clears every phase name the player writes and the tag."""
+    page = MPB.representative(MPB.SCHEMATIC_LINE)
+    place = B.page_place(page, aspect)
+    names = _phase_name_rects(page, aspect)
+    assert names, "the player wrote no phase names - nothing was checked"
+    for r in names + [LPG.page_boxes(page, aspect)[LPG.SCHEMATIC_BOX]]:
+        assert _overlap(place, r) == 0, f"{aspect}: the card {place} covers {r}"
