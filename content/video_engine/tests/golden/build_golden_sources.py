@@ -4441,6 +4441,48 @@ SURFACES.update({"schematic-hype-trough": schematic_hype_trough})
 FRAME_T.update({"schematic-hype-trough": round(SCHEMATIC_LIT_AT + 0.5 * SCHEMATIC_LIT_DUR * 0.8, 3)})   # u 0.50 of the head's run (TRAVEL 0.8): 12.395
 
 
+# ---- P70 T13: THE DRIFT-HOLD on a real held card -------------------------------------------------------------------
+#   drift-hold-tripwire  Steel and Paper H row 22's board (dock-h-tripwire-board) as the chart card it is: the committed
+#                        object's own checklist (ev-tripwire-board-v1 - read, never re-typed), thrown (paper) into the
+#                        right 0.60 of the stage exactly as the H row places it (TRIPWIRE_SLOT), holding on `idle: hold`,
+#                        which the compiler grades WHISPER (a card carrying a chart). Its held span is the H card's own
+#                        length (605.83 -> 615.32 = 9.49 s), and a FREEZE BEAT stops the stage BEFORE the card enters, as
+#                        H's 549.12 freeze precedes it: the hold runs on the LIFE clock, so a span handed over in wall
+#                        time would be phase-shifted by the frozen 0.7 s - the golden pins the handover. Read at u 0.25
+#                        of the hold: the card turned, breathing, the light band across the board's middle columns.
+HOLD_CARD_OBJECT = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-tripwire-board-v1.series.json"
+HOLD_CARD_SLOT = {"centre": True, "centre_w": 0.60, "centre_x": 0.685, "centre_y": 0.50, "card_aspect": round(480 / 1056, 4)}   # H's TRIPWIRE_SLOT
+HOLD_ENTER, HOLD_LEN = 3.0, round(615.32 - 605.83, 2)   # the H card's own held span, 9.49 s
+HOLD_FREEZE = {"kind": "freeze", "at": 1.0, "dur": 0.7, "target": {"kind": "region", "x0": 0.05, "y0": 0.2, "x1": 0.3, "y1": 0.6}}   # H's own beat length (0.7 s), before the card
+
+
+def drift_hold_tripwire() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    card = "ev-golden-tripwire-board"
+    chart = json.loads(HOLD_CARD_OBJECT.read_text(encoding="utf-8"))
+    evidence = {card: {"title": chart["title"], "source": chart["src"], "species": "chart",
+                       "document": {"path": "golden", "sha256": "0" * 64}, "badges": [], "chart": chart}}
+    opts = BST.dock_opts(dict(HOLD_CARD_SLOT, arrive="throw", mass="paper", idle="hold"))   # the row's own options, validated
+    idle = BST.dock_idle(opts, evidence[card])
+    assert idle == "hold:whisper", idle   # a card carrying a chart holds at a whisper
+    place = BST.centred_place(None, None, opts["card_aspect"], None, opts["centre_w"], None, opts["centre_y"], opts["centre_x"])
+    docks = [BST.dock_entry(card, 0, HOLD_ENTER, HOLD_ENTER + HOLD_LEN, 0, BST.DOCK_KIND_IMAGE, place, opts["arrive"],
+                            opts["mass"], True, idle=idle)]
+    species = [dict(HOLD_FREEZE)]
+    assert not BST.validate_species(species, (0, 0, 0), "plate-plain")
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": species}]
+    uris = _base_uris()
+    uris[card] = uri("image/png", png_solid(64, 29, (22, 24, 28)))   # the static fallback: the card is DRAWN from its object
+    tl = _timeline("Golden: the drift-hold on a held chart card", scenes, evidence, None)
+    tl["kinetics"] = {"idle": True, "stop_action": True}   # E49 is on for every compiled timeline; the throw is P47 T1's switch
+    return tl, uris
+
+
+SURFACES.update({"drift-hold-tripwire": drift_hold_tripwire})
+FRAME_T.update({"drift-hold-tripwire": round(HOLD_ENTER + 0.25 * HOLD_LEN, 4)})   # u 0.25 of the hold (H: 608.20)
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

@@ -124,10 +124,14 @@ PAGE_IDLE_IS_THE_SUBJECT = {"page-life-still", "page-life-live", "page-build-lin
                             "page-rescale-follow", "page-rescale-follow-yield",
                             "freeze-trough"}   # P69 T49 / E99 s99: the freeze beat STOPS the page's life - with no life on, there is nothing to stop
 
+# P70 T13: one DOCK golden carries the switch for the same reason - its subject is the drift-hold, a dock's own idle
+# (`idle: hold`), which `idleOf` answers "none" for when E49's switch is off. Its plate stays at the class breath.
+DOCK_IDLE_IS_THE_SUBJECT = {"drift-hold-tripwire"}
+
 
 def test_golden_sources_carry_no_idle_flag_so_they_stay_byte_identical():
     for p in sorted(SOURCES.glob("*.timeline.json")):
-        if p.name[: -len(".timeline.json")] in IDLE_IS_THE_SUBJECT | PAGE_IDLE_IS_THE_SUBJECT:
+        if p.name[: -len(".timeline.json")] in IDLE_IS_THE_SUBJECT | PAGE_IDLE_IS_THE_SUBJECT | DOCK_IDLE_IS_THE_SUBJECT:
             continue
         tl = json.loads(p.read_text(encoding="utf-8"))
         assert not (tl.get("kinetics") or {}).get("idle"), p.name
@@ -139,7 +143,7 @@ def test_the_two_drift_goldens_are_the_only_sources_the_idle_is_the_subject_of()
     (R26-224 re-pin: R26-226 / R26-228 / R26-233 / R26-234, E99 s82-s83). The test name stays as it was."""
     carry = {p.name[: -len(".timeline.json")] for p in sorted(SOURCES.glob("*.timeline.json"))
              if (json.loads(p.read_text(encoding="utf-8")).get("kinetics") or {}).get("idle")}
-    assert carry == IDLE_IS_THE_SUBJECT | PAGE_IDLE_IS_THE_SUBJECT
+    assert carry == IDLE_IS_THE_SUBJECT | PAGE_IDLE_IS_THE_SUBJECT | DOCK_IDLE_IS_THE_SUBJECT
     for name in sorted(IDLE_IS_THE_SUBJECT):
         tl = json.loads((SOURCES / f"{name}.timeline.json").read_text(encoding="utf-8"))
         assert tl["kinetics"].get("plate_idle_paints") is True, f"{name}: the walk must PAINT (R26-133's cure)"
@@ -149,6 +153,10 @@ def test_the_two_drift_goldens_are_the_only_sources_the_idle_is_the_subject_of()
         world = tl["scenes"][0]["world"]
         assert world.get("kind") == "ledger", f"{name}: a page golden carries the switch for the PAGE's own life"
         assert not world.get("idle_drift_px"), f"{name}: a page golden is not a plate drift - no amplitude to paint"
+    for name in sorted(DOCK_IDLE_IS_THE_SUBJECT):   # P70 T13: a dock golden carries it for a dock that HOLDS
+        tl = json.loads((SOURCES / f"{name}.timeline.json").read_text(encoding="utf-8"))
+        assert [d.get("idle", "")[:4] for d in tl["scenes"][0]["docks"]] == ["hold"], f"{name}: the switch is for the held card"
+        assert not tl["scenes"][0]["world"].get("idle"), f"{name}: the plate is not the subject - no world idle authored"
 
 
 # ---- the gate: M18 frozen frames --------------------------------------------------------------

@@ -1968,7 +1968,8 @@ async function mount(doc) {
      Kinds: breath - a scale that inhales ABOVE rest and never below it (a plate shrinking under its box shows its
      edge); drift - a bounded Lissajous walk of a few px; pulse - a luminance dip; figure - the asymmetric breath doc 48
      s48.4 prescribes for a standing figure (inspiratory:expiratory 1:1.5-1:2, a post-expiratory pause) with its two-rate
-     sway; live - breath + drift; none - explicit stillness, declared.
+     sway; live - breath + drift; none - explicit stillness, declared. And one CARD kind outside IDLE_KINDS (the kinds a
+     plate, a page or a species may name): hold - the drift-hold of a held card (P70 T13, below; `holdGradeOf`).
      Every number below is a starting reference, tagged where it came from; the operator's eye moves them (42 s42.5). */
 
   const IDLE_KINDS = Object.freeze(["none", "breath", "drift", "pulse", "figure", "live"]);
@@ -2043,10 +2044,111 @@ async function mount(doc) {
             P.SWAY_PX * (0.5 * Math.sin(IDLE_TAU * (P.SWAY_HZ[1] * t + phase * 1.3 + w1)) + 0.5 * Math.sin(IDLE_TAU * (P.SWAY_HZ[0] * t + phase * 0.6 + w0)))];
   };
 
-  /* ONE ENTRY: the transform of a held thing of `kind` at t. {scale, dx, dy, lum}; `none` is the identity. */
+  /* THE DRIFT-HOLD (P70 T13; the operator, 2026-09-24: "npx hyperframes add drift-hold i think this becomes an interesting
+     reference to hold charts/evidence docks with"; E99 s124 as amended: a hovering dock holds on it). A held CARD - a chart
+     card or an evidence dock - turns under a degree, breathes and carries one soft light sweep, each ONE whole sine cycle
+     across its held span, the endpoint phase wrapped to a literal 0 so the pose at the span's start IS the pose at its end
+     (the reference's own seam). Every number is read off `content/video_engine/hyperframes/compositions/components/
+     drift-hold.html` (harvested fc71e49, a reference only), its `amplitudes` table and its `renderPose` phases, never
+     invented. Two differences from the reference, both forced by the card being a dock and not a whole composition:
+       (1) the reference's `cqw` are fractions of its 1920-wide FRAME and its card is 68 cqw wide, so the sweep's travel
+           and the band's width are re-expressed as fractions of the CARD's own width (42 / 68, 20 / 68): a dock is any size;
+       (2) the cycle is anchored to the dock's held span [t0, t1] (the caller's), never to a mounted duration; outside it
+           the pose holds the seam pose, so a card that arrives or retracts carries it continuously. A caller that passes
+           no span cycles on the reference's own mounted duration, FREE_S.
+     `whisper` for a card carrying a chart (it must stay readable), `standard` for a picture. The light is painted by the
+     caller from `holdLightCss`: the pose's transform half goes through idleCss like every other kind. */
+  const IDLE_HOLD = Object.freeze({
+    whisper: Object.freeze({
+      ROT_DEG: 0.24,          /* [DERIVED: drift-hold.html amplitudes.whisper.rotation 0.24 deg] */
+      SCALE: 0.006,           /* [DERIVED: drift-hold.html amplitudes.whisper.scale 0.006] */
+      SWEEP: 30 / 68,         /* [DERIVED: drift-hold.html amplitudes.whisper.sweep 30 cqw over its 68 cqw card] - card widths */
+      LIGHT: 0.04,            /* [DERIVED: drift-hold.html amplitudes.whisper.light 0.04] - the band's opacity swing */
+    }),
+    standard: Object.freeze({
+      ROT_DEG: 0.6,           /* [DERIVED: drift-hold.html amplitudes.standard.rotation 0.6 deg] */
+      SCALE: 0.015,           /* [DERIVED: drift-hold.html amplitudes.standard.scale 0.015] */
+      SWEEP: 42 / 68,         /* [DERIVED: drift-hold.html amplitudes.standard.sweep 42 cqw over its 68 cqw card] - card widths */
+      LIGHT: 0.08,            /* [DERIVED: drift-hold.html amplitudes.standard.light 0.08] */
+    }),
+    PH_ROT: Math.PI / 6,      /* [DERIVED: drift-hold.html renderPose, rotation = sin(phase + PI / 6)] */
+    PH_SCALE: Math.PI / 2,    /* [DERIVED: drift-hold.html renderPose, scale = 1 + sin(phase + PI / 2)] */
+    PH_SWEEP: -Math.PI / 2,   /* [DERIVED: drift-hold.html renderPose, sweepX = sin(phase - PI / 2)] */
+    PH_LIGHT: Math.PI / 3,    /* [DERIVED: drift-hold.html renderPose, sweepOpacity = 0.12 + sin(phase + PI / 3)] */
+    LIGHT_BASE: 0.12,         /* [DERIVED: drift-hold.html renderPose, the 0.12 the light swings about] */
+    BAND_LEFT: 0.42,          /* [DERIVED: drift-hold.html .dh-sweep left 42 % of the card] */
+    BAND_W: 20 / 68,          /* [DERIVED: drift-hold.html .dh-sweep width 20 cqw over its 68 cqw card] - card widths */
+    BAND_TILT_DEG: 14,        /* [DERIVED: drift-hold.html gsap.set(sweep, {rotation: 14})] - the band leans 14 deg off the vertical */
+    BAND_PEAK: 0.28,          /* [DERIVED: drift-hold.html .dh-sweep gradient 50 % stop, fg at 28 %] */
+    BAND_EDGE: 0.10,          /* [DERIVED: drift-hold.html .dh-sweep gradient 25 % / 75 % stops, accent at 10 %] */
+    INK: [242, 242, 242],     /* [DERIVED: the template's --lp-chalk #F2F2F2 (STAMP_RING_INK.CHALK) - the reference's light is its theme's fg
+                                 #f8fafc and sky accent; ours is the stage's one white] */
+    FREE_S: 4,                /* [DERIVED: drift-hold.html data-duration="4", the reference's mounted duration] - a span-less cycle */
+  });
+  const IDLE_HOLD_GRADES = Object.freeze(["whisper", "standard"]);
+  /* the CARD kinds: a dock names one of these (the compiler's DOCK_IDLES); none of them is a plate's or a species' kind */
+  const IDLE_CARD_KINDS = Object.freeze(["hold", "hold:whisper", "hold:standard"]);
+  const IDLE_HOLD_KIND = /^hold(?::(whisper|standard))?$/;
+
+  /* `hold`, `hold:whisper`, `hold:standard` -> the grade; anything else -> null (not a hold) */
+  const holdGradeOf = (kind) => {
+    const m = typeof kind === "string" ? IDLE_HOLD_KIND.exec(kind) : null;
+    return m ? (m[1] || "standard") : null;
+  };
+
+  /* the hold's PHASE at t in [0, 2 PI): one whole cycle across [t0, t1], the endpoint wrapped to a literal 0 (the
+     reference's own "Literal phase zero at the endpoint removes floating point residue"); held at 0 outside the span */
+  const holdPhase = (t, span, phase0 = 0, o = {}) => {
+    const P = Object.assign({}, IDLE_HOLD, o);
+    const a = span ? +span[0] : NaN, b = span ? +span[1] : NaN;
+    if (!(Number.isFinite(a) && Number.isFinite(b) && b > a)) return IDLE_TAU * idleFrac(t / P.FREE_S + phase0);
+    const u = (t - a) / (b - a);
+    return u <= 0 || u >= 1 ? 0 : IDLE_TAU * u;
+  };
+
+  /* THE POSE at a phase: {rot deg, scale, sweep (card widths from the band's rest), light (the band's opacity)} */
+  const holdPose = (phase, grade = "standard", o = {}) => {
+    const P = Object.assign({}, IDLE_HOLD, o), A = P[grade] || P.standard;
+    const p = phase === IDLE_TAU ? 0 : phase;
+    return { rot: Math.sin(p + P.PH_ROT) * A.ROT_DEG, scale: 1 + Math.sin(p + P.PH_SCALE) * A.SCALE,
+             sweep: Math.sin(p + P.PH_SWEEP) * A.SWEEP, light: P.LIGHT_BASE + Math.sin(p + P.PH_LIGHT) * A.LIGHT };
+  };
+
+  /* the band's PEAK alpha over the card - the brightest the light ever lays on the card's text (E28's check) */
+  const holdPeakAlpha = (grade = "standard", o = {}) => {
+    const P = Object.assign({}, IDLE_HOLD, o), A = P[grade] || P.standard;
+    return P.BAND_PEAK * (P.LIGHT_BASE + A.LIGHT);
+  };
+
+  /* THE LIGHT as a CSS background for an overlay the size of the card's box (w x h px): the reference's band - its
+     tent of edge / peak / edge stops, leaning BAND_TILT_DEG - as one linear-gradient across the box. The band's centre
+     is at (BAND_LEFT + BAND_W / 2 + sweep) card widths on the card's middle line; its stops are placed on the gradient
+     line (CSS: through the box's centre, length w cos + h sin of the lean), so the band keeps its own width at any
+     aspect. "" when the box has no size. Fixed decimals: two seeks to one t write one string. */
+  const holdLightCss = (pose, w, h, o = {}) => {
+    const P = Object.assign({}, IDLE_HOLD, o);
+    if (!(w > 0 && h > 0) || !pose) return "";
+    const th = P.BAND_TILT_DEG * Math.PI / 180, L = w * Math.cos(th) + h * Math.sin(th);
+    const c = 50 + ((P.BAND_LEFT + P.BAND_W / 2 + pose.sweep) * w - w / 2) * Math.cos(th) / L * 100;
+    const hw = (P.BAND_W * w / 2) / L * 100, a = Math.max(0, pose.light);
+    const ink = (k) => "rgba(" + P.INK.join(",") + "," + (k * a).toFixed(4) + ")";
+    const at = (x) => x.toFixed(2) + "%";
+    return "linear-gradient(" + (90 + P.BAND_TILT_DEG) + "deg, rgba(" + P.INK.join(",") + ",0) " + at(c - hw) + ", "
+      + ink(P.BAND_EDGE) + " " + at(c - hw / 2) + ", " + ink(P.BAND_PEAK) + " " + at(c) + ", "
+      + ink(P.BAND_EDGE) + " " + at(c + hw / 2) + ", rgba(" + P.INK.join(",") + ",0) " + at(c + hw) + ")";
+  };
+
+  /* ONE ENTRY: the transform of a held thing of `kind` at t. {scale, dx, dy, lum}; `none` is the identity. A `hold`
+     (or `hold:<grade>`) adds {rot, light} - the turn idleCss writes, and the band the caller paints (holdLightCss) - on
+     the span `o.HOLD_SPAN` = [t0, t1] (the caller's, on the same clock as t); `phase` only seeds a span-less cycle. */
   const idleXf = (kind, t, phase = 0, o = {}) => {
     const P = Object.assign({}, IDLE, o), tq = idleClock(t, P.STEP_FPS);
     const id = { scale: 1, dx: 0, dy: 0, lum: 1 };
+    const grade = holdGradeOf(kind);
+    if (grade) {
+      const x = holdPose(holdPhase(tq, P.HOLD_SPAN, phase), grade);
+      return Object.assign(id, { scale: x.scale, rot: x.rot, sweep: x.sweep, light: x.light });
+    }
     if (kind === "breath") return Object.assign(id, { scale: breath(tq, phase, P) });
     if (kind === "drift") { const d = drift(tq, phase, P); return Object.assign(id, { dx: d[0], dy: d[1] }); }
     if (kind === "pulse") return Object.assign(id, { lum: pulse(tq, phase, P) });
@@ -2059,9 +2161,11 @@ async function mount(doc) {
   };
 
   /* the CSS suffix a painter appends to the element's own transform - fixed decimals, so two seeks to one t write one
-     string. The identity writes an explicit no-op so a flagged-off render and a `none` render differ by nothing. */
-  const idleCss = (x) => (x.scale === 1 && x.dx === 0 && x.dy === 0) ? ""
-    : " translate(" + x.dx.toFixed(2) + "px," + x.dy.toFixed(2) + "px) scale(" + x.scale.toFixed(4) + ")";
+     string. The identity writes an explicit no-op so a flagged-off render and a `none` render differ by nothing. A pose
+     that TURNS (the hold's `rot`, deg) appends its rotate; a pose with no `rot` writes exactly the string it always has. */
+  const idleCss = (x) => (x.scale === 1 && x.dx === 0 && x.dy === 0 && !x.rot) ? ""
+    : " translate(" + x.dx.toFixed(2) + "px," + x.dy.toFixed(2) + "px) scale(" + x.scale.toFixed(4) + ")"
+      + (x.rot ? " rotate(" + x.rot.toFixed(3) + "deg)" : "");
 
   const IDLE_K = Object.freeze({ MIN: 0, MAX: 4 });   /* kinetics/camera.mjs PARALLAX.K_MIN / K_MAX, mirrored - a module imports nothing */
 
@@ -7164,7 +7268,7 @@ async function mount(doc) {
       g.phase = sx.phase;
     }
     const cx = (g.box.w / 2).toFixed(2), cy = (g.box.h / 2).toFixed(2);
-    const idle = idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + (d.slot | 0), 3);   /* E49, in the card's own plane */
+    const idle = idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + (d.slot | 0), 3, [d.enter, d.exit]);   /* E49, in the card's own plane (P70 T13: a hold's span) */
     el.style.transform = embedCam(d, t, g.box) + cssMatrix3d(m)
       + (idle ? " translate(" + cx + "px," + cy + "px)" + idle + " translate(-" + cx + "px,-" + cy + "px)" : "");
     /* THE CARD'S EDGE. On a PAPER the card lies on the surface and carries its own small shadow there. On a SCREEN
@@ -9147,7 +9251,24 @@ async function mount(doc) {
      (M01 / M10 / M16 count events); the frozen-frames row M18 is the idle's own check (measure_frozen_frames.py). */
   const IDLE_CLASS = Object.freeze({ page: "breath", plate: "breath", dock: "breath", pill: "breath", caption: "breath" });
   const idleOf = (cls, override) => (kin("idle") ? (override || IDLE_CLASS[cls] || "none") : "none");
-  const idleCssFor = (cls, override, t, seed, salt) => { const k = idleOf(cls, override); return k === "none" ? "" : idleCss(idleXf(k, lifeT(t), lpHash(seed | 0, salt | 0, 977))); };   /* P69 T49: on the LIFE clock - a freeze beat holds every class's idle (lifeT, declared with the freeze region) */
+  const idleCssFor = (cls, override, t, seed, salt, span) => { const k = idleOf(cls, override); return k === "none" ? "" : idleCss(idleXf(k, lifeT(t), lpHash(seed | 0, salt | 0, 977), holdSpanOf(span))); };
+  /* P70 T13 - THE DRIFT-HOLD'S SPAN AND ITS LIGHT. A `hold` (kinetics/idle.mjs) is ONE whole cycle across the card's held
+     span, so the painter hands the idle the dock's [enter, exit] - on the LIFE clock, as the idle's own t is (a freeze
+     beat holds every idle; lifeT subtracts every frozen second before t, so a wall-time span would be phase-shifted for
+     every card after one). `{}` for a caller that names no span: every older idle is the call it always was. */
+  const holdSpanOf = (span) => (span ? { HOLD_SPAN: [lifeT(+span[0]), lifeT(+span[1])] } : {});
+  /* ... and the LIGHT: one soft band across the card's face (holdLightCss), on an overlay the size of the card's padding
+     box, appended last so it lies over the picture and the rail alike (a light falls on the whole surface). Created only
+     for a card that holds, hidden when the slot's card does not: a build that names no hold never mounts it. */
+  const paintHoldLight = (el, d, t) => {
+    let lt = el.querySelector(":scope > .dock-hold-light");
+    const k = idleOf("dock", d.idle);
+    if (!holdGradeOf(k)) { if (lt) lt.style.display = "none"; return; }
+    if (!lt) { lt = document.createElement("div"); lt.className = "dock-hold-light"; el.appendChild(lt); }
+    const x = idleXf(k, lifeT(t), 0, holdSpanOf([d.enter, d.exit]));
+    lt.style.cssText = "position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:"
+      + holdLightCss(x, el.clientWidth, el.clientHeight) + ";";
+  };   /* P69 T49: on the LIFE clock - a freeze beat holds every class's idle (lifeT, declared with the freeze region) */
   /* R26-228 (E99 s82's (e), "LIFE IS SEEN, NOT PASSED: a page's `idle=live` must render the tip spark (E67's live ink),
      the line's glow/pulse and the labels' breath"): THE PAGE'S OWN IDLE KIND. The compiler writes a row's `;idle=<kind>`
      as `world["idle"]` (build_scene_timeline_f.py:3824 - "the player reads it for the page or the plate") and the page
@@ -22011,7 +22132,7 @@ async function mount(doc) {
         const pbx = stamped && Array.isArray(d.paint) && d.paint.length === 4 ? d.paint : [0, 0, 1, 1];
         if (stamped) el.style.transformOrigin = (50 * (pbx[0] + pbx[2])).toFixed(3) + "% " + (50 * (pbx[1] + pbx[3])).toFixed(3) + "%";
         el.style.transform = stopCss(sx) + (stamped ? "" : " scale(" + (1 - (1 - DOCK_POP_FROM) * rk).toFixed(4) + ")")
-          + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);
+          + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3, [d.enter, d.exit]);   /* P70 T13: a hold's span */
         if (!swept) el.style.opacity = (stamped ? (sx.opacity || 0) * (1 - ex) : clamp01(1 - rk)) * (t >= d.enter ? 1 : 0);
         /* HG2: the CONTACT SHADOW on the landing spot - far and faint while the card is high, tight and dark on the floor, spread by the
            hit's squash; it lives beneath the card in the dock layer and dies with the card */
@@ -22071,7 +22192,7 @@ async function mount(doc) {
         if (born && isProp) propRest = clamp01((t - d.enter) / PROP_MORPH.BORN_HATCH_S);   /* ... and its resting shadow comes in under it */
         const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;
         el.style.transform = "scale(" + (DOCK_POP_FROM + (1 - DOCK_POP_FROM) * (pk - rk)).toFixed(4) + ")"
-          + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);   /* E49: the parked card breathes */
+          + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3, [d.enter, d.exit]);   /* E49: the parked card breathes (P70 T13: a hold's span) */
         if (!swept) el.style.opacity = clamp01(1 - rk) * (born ? 1 : clamp01((t - d.enter) / DOCK_FADE_S));
       } else if (camArr && camArr.slide === d.slide) {   /* P49 T5: the landed card rides the arrival - screen = at + s (p - look), written about the card's own top-left */
         const st = camArr.state, L = el.offsetLeft, Tp = el.offsetTop;
@@ -22081,7 +22202,7 @@ async function mount(doc) {
       } else el.style.transform = ((xk && !swept)
         ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
         : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")")
-        + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);
+        + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3, [d.enter, d.exit]);   /* P70 T13: a hold's span */
       /* P69 T26d / E99 s106: a PROP's authored pose - the turn it rests at (a non-stamp arrival rests square, so the whole
          `rot` is turned here; a stamp's spring already rests at it) and every later key's turn - about its PAINTED centre
          (a stamp's own origin), prepended to the arrival's transform so the landing plays inside it. The camera's prefix and
@@ -22130,6 +22251,7 @@ async function mount(doc) {
         el.style.opacity = embedAlpha(d, t).toFixed(3);
         if (contact) contact.style.opacity = "0";
       } else embedUnfill(el);   /* a slot that carried a picture on a surface gets its card back */
+      paintHoldLight(el, d, t);   /* P70 T13: a held card's light - nothing mounts for a card that does not hold */
 
       const badges = (TL.evidence[d.slide] || {}).badges || [];
       /* THE CALLOUT IS THE CONCLUSION (remotion-ui comparison-bars,

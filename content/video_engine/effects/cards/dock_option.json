@@ -485,6 +485,77 @@
       }
     },
     {
+      "id": "dock_option:idle",
+      "axis": "dock_option",
+      "token": "idle",
+      "title": "The drift-hold",
+      "aliases": [
+        {
+          "name": "drift-hold",
+          "source": "content/video_engine/hyperframes/compositions/components/drift-hold.html"
+        },
+        {
+          "name": "the hold idle",
+          "source": "content/video_engine/scripts/kinetics/idle.mjs:IDLE_HOLD"
+        }
+      ],
+      "does": "A held card turns under a degree, breathes and carries one soft light sweep, each one whole sine cycle across its held span, so the pose it lands in is the pose it leaves in.",
+      "when": "Opt-in on a card that must hold while the sentence works on it: a chart card or an evidence dock (and the hover a dock holds on over a chart, E99 s124). Whisper on a chart, standard on a picture. Never on a prop (it lives in the world) or a stamp (it is drawn over it), E99 s128.",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:3379",
+      "author": {
+        "key": "dock option {'idle': 'hold'|'hold:whisper'|'hold:standard'} (DOCK_IDLES; an unqualified hold is graded by the payload - dock_idle)",
+        "example": "{'arrive': 'throw', 'idle': 'hold'}",
+        "example_source": null,
+        "check": "dock_option"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [
+        {
+          "token": "hold:whisper",
+          "means": "The reference's whisper amplitudes (0.24 deg, 0.6 %, a 30/68-card sweep, light 0.04) - a card carrying a chart.",
+          "source_set": null
+        },
+        {
+          "token": "hold:standard",
+          "means": "The reference's standard amplitudes (0.6 deg, 1.5 %, a 42/68-card sweep, light 0.08) - a picture.",
+          "source_set": null
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/idle.mjs",
+        "object": "IDLE_HOLD"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/idle.mjs",
+        "symbol": "holdPose",
+        "also": [
+          "holdPhase",
+          "holdLightCss",
+          "IDLE_HOLD"
+        ],
+        "note": "holdPose / holdPhase / holdLightCss in the idle region; the dock painter hands the held span on the life clock (holdSpanOf) and paints the band (paintHoldLight); compiler dock_idle"
+      },
+      "doctrine": [
+        "E49",
+        "E99 s124",
+        "E99 s128",
+        "E28",
+        "HyperFrames drift-hold"
+      ],
+      "status": "draft",
+      "proof": {
+        "golden": "drift-hold-tripwire",
+        "test": "content/video_engine/tests/test_dock_hold_idle.py::test_an_unqualified_hold_takes_its_grade_from_the_payload",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "dock_opts accepts it, the compiler writes the graded idle, the engine turns, breathes and lights the card over its held span (golden drift-hold-tripwire); it awaits the operator's watch in motion"
+      }
+    },
+    {
       "id": "dock_option:moves",
       "axis": "dock_option",
       "token": "moves",

@@ -116,7 +116,15 @@ PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use",
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves", "after", "after_beat", "names")   # P69 T81 / E99 s112: after="<phrase>" - a STAMP's contact lands just AFTER the phrase's last word ends (+ after_beat s, default authoring.words.STAMP_AFTER_BEAT_S), the enter resolved from that contact; names="<phrase>" - the word the stamp punctuates, for the advice (`stamp_timing_advice`)   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves", "after", "after_beat", "names", "idle")   # P69 T81 / E99 s112: after="<phrase>" - a STAMP's contact lands just AFTER the phrase's last word ends (+ after_beat s, default authoring.words.STAMP_AFTER_BEAT_S), the enter resolved from that contact; names="<phrase>" - the word the stamp punctuates, for the advice (`stamp_timing_advice`)   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+# P70 T13 - THE DRIFT-HOLD (the operator, 2026-09-24; HyperFrames drift-hold; E99 s124 as amended): `idle` on a dock names
+# the HOLD - the held card turns under a degree, breathes and carries one light sweep, each one whole cycle across its
+# held span (kinetics/idle.mjs IDLE_HOLD, its dials read off drift-hold.html). OPT-IN per dock: a dock that names none is
+# the entry it always was (the engine's class breath). An unqualified `hold` takes its grade from the payload - whisper
+# for a card carrying a chart, standard for a picture (`dock_idle`); `hold:<grade>` is the author's. Not a plate's or a
+# species' idle (IDLE_KINDS is unchanged), and not a prop's, a stamp's or a cutout's (E99 s128; `_check_dock_idle`).
+DOCK_HOLD_GRADES = ("whisper", "standard")          # kinetics/idle.mjs IDLE_HOLD_GRADES
+DOCK_IDLES = ("hold",) + tuple(f"hold:{g}" for g in DOCK_HOLD_GRADES)   # kinetics/idle.mjs IDLE_CARD_KINDS
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -7159,6 +7167,9 @@ def dock_opts(raw) -> dict:
         if k in STAMP_ANCHOR_OPTS:   # P69 T81 / E99 s112: a STAMP's word-END anchor and the word it punctuates
             _check_stamp_anchor(k, v, raw)
             continue
+        if k == "idle":   # P70 T13: the drift-hold, a held CARD's idle
+            _check_dock_idle(v, raw)
+            continue
         if k == "card_aspect":
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
                 raise ValueError("dock: card_aspect must be a positive number (the card's height over its width)")
@@ -8068,6 +8079,41 @@ STAMP_ANCHOR_OPTS = ("after", "after_beat", "names")
 STAMP_AFTER_BEAT_MAX_S = 1.0   # a beat past a second is no longer "just after" - it is the next thought's; name the next word instead
 STAMP_DATA_CLEAR_S = 0.15      # E99 s112: a stamp's contact this close to a data mark (a bar landing, a figure) lands as ONE thing with it -
                                # "we're asking them to process both at once" [DIAL: the operator's ~0.15 s; T81's brief]
+
+
+def _check_dock_idle(v, raw: dict) -> None:
+    """P70 T13: a dock's `idle` is the drift-hold - `hold`, `hold:whisper` or `hold:standard` - on a CARD. ValueError
+    names the values, or the kind of dock that is not a held card: a prop lives in the world and a stamp is drawn over
+    it (E99 s128), a cutout is a person with no card - the light sweep is laid across a card's face, and none has one."""
+    if not isinstance(v, str) or v not in DOCK_IDLES:
+        raise ValueError(f"dock: idle {v!r} is not one of {'|'.join(DOCK_IDLES)} - a dock names the DRIFT-HOLD (P70 T13); "
+                         "every other dock holds on its class breath (E49), which it never needs to name")
+    for other, on, why in (("prop", raw.get("prop"), "a prop is an object IN the world (E99 s128): it carries the stage "
+                            "light's resting shadow and moves on its authored place (s106), and a band of light across it "
+                            "would paint its transparent canvas"),
+                           ("stamp", raw.get("arrive") == "stamp", "a stamp is drawn OVER the world (E99 s128): it rests "
+                            "at its spring's angle and leaves on its own curve - punctuation, not a held card"),
+                           ("cutout", raw.get("cutout"), "a cutout is a person with no card - there is no face for the "
+                            "light to cross")):
+        if on:
+            raise ValueError(f"dock: idle={v} and {other} cannot be combined - the hold is a held CARD's idle ({why})")
+
+
+def dock_carries_chart(ev: dict | None) -> bool:
+    """A dock whose evidence IS a chart: a chart card (`species` chart), a live chart payload or a card-profile still."""
+    ev = ev or {}
+    return ev.get("species") == "chart" or "chart" in ev or "card" in ev
+
+
+def dock_idle(dopt: dict | None, ev: dict | None) -> str | None:
+    """P70 T13: the dock's RESOLVED idle for its entry - None when the row names none (the entry is untouched); an
+    authored grade as written; an unqualified `hold` graded by the payload: whisper on a chart, standard on a picture."""
+    v = (dopt or {}).get("idle")
+    if not v:
+        return None
+    if v != "hold":
+        return v
+    return "hold:" + ("whisper" if dock_carries_chart(ev) else "standard")
 
 
 def _check_stamp_anchor(k: str, v, raw: dict) -> None:
@@ -10577,7 +10623,7 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                embed: dict | None = None, cutout: bool = False, depth: float | None = None,
                rot: float | None = None, moves: list | None = None, handed: bool = False,
                authored_place: dict | None = None, authored_moves: list | None = None,
-               names: str | None = None) -> dict:
+               names: str | None = None, idle: str | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -10658,6 +10704,9 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         **({"read_moved": read_moved} if (place and read_moved) else {}),
         **({"read_deferred": True} if (place and read_deferred) else {}),
         **({"arrive": arrive} if arrive else {}), **({"mass": mass} if mass else {}),   # P47 T1: only when the row names them
+        # P70 T13: the drift-hold, resolved (`dock_idle`). Written only when the row names it, so every other entry is
+        # byte-for-byte what it was.
+        **({"idle": idle} if idle else {}),
         **({"centre": True} if (centre or (read_deferred and place)) and place else {}),   # the design pass: a centred card sits at its box from its first frame - no reading size, no park
     }
 
@@ -11536,7 +11585,8 @@ def main() -> int:
                                         rot=dopt.get("rot"), moves=prop_mv,   # P69 T26d: the prop's authored rest and its moves
                                         authored_place=dopt.get("place"), authored_moves=dopt.get("moves"),   # R26-298: as the author wrote them, for the read-back
                                         handed=n_dock in _pm["handed"],   # P69 T26e: a prop handed to a morph on its exit word
-                                        names=dopt.get("names") or dopt.get("after")))   # P69 T81: the word a stamp punctuates
+                                        names=dopt.get("names") or dopt.get("after"),   # P69 T81: the word a stamp punctuates
+                                        idle=dock_idle(dopt, evidence[aid])))   # P70 T13: the drift-hold, graded by the payload
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         # P69 T65 / E99 s110 (2): a ring on a DOCK - on the row, on the stage at its word, the word on the phrase that
         # points at it - and it leaves on the dock's leave. A row with no such ring is the same list, untouched.
