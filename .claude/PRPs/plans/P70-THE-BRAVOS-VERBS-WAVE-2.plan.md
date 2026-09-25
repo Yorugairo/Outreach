@@ -663,7 +663,7 @@ listed order.
 - Evidence: pending
 
 ### T5: The decomposition brace - one total braced into its named parts, on a stacked bar (was P69 T58)
-- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
+- Status: done - lane B 4a9a10e (the decomposition brace; the key hand-over through lpSegPaint)
 - Owner: implementation_luna (LANE B)
 - Depends on: P70's base (T0); done P69 T50 `f63b569` (a bracket on bars), T64 `c0836b8` (`segments`). Integrated
   after wave 1.
@@ -738,7 +738,7 @@ listed order.
 
 ### T6: The equation row - the inputs, the relation and the signed result, in spoken order (was P69 T56)
 - Amendment (the parent, from the review 2026-09-25): the truth rule computes from each term's WRITTEN text (not `value`); units are a closed list - `%` / `pts` count x0.01, + and - need one unit across the row, x and / give the derived unit, B/M/K/T scale; `tier: CONFIRMED|PLAUSIBLE` needs a `src` naming an existing evidence object (only `scenario` stands alone); a negative result's red comes from its text's sign; optional per-term and result `label` captions (a row with none WARNs, E28); operators in a sans. The page dim behind the row is P71 T15's.
-- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
+- Status: done - lane B 8a9fc02 (the equation row, computed from the written text)
 - Owner: implementation_luna (LANE B), then reviewer (the gate's `SPECIES_EVENTS`, the arithmetic truth rule)
 - Depends on: P70's base (T0); done P69 T50. Integrated after wave 1.
 - Harvest: v2 T38 "Equation row: inputs, relation, signed result", MISSING, n=1 (DOM 09:30-09:39: 3 %, 5 %, "Real Yield"
@@ -812,7 +812,7 @@ listed order.
 - Evidence: pending
 
 ### T7: The balance scale, and the balance tips (was P69 T59)
-- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
+- Status: done - lane B 4950a91 (the balance scale; placement advised, truth refused)
 - Owner: implementation_luna (LANE B), then reviewer (the gate's `SPECIES_EVENTS`, the no-figures truth rule)
 - Depends on: P70's base (T0); done P69 T6b `041e2ff` (the hatch), T26d `5c6871c`. Integrated after T6 (they share only
   parent-merged registry lines).
@@ -1091,7 +1091,7 @@ listed order.
 
 ### T13: The drift-hold - a held chart card or evidence dock breathes, turns a fraction and catches a light, one whole cycle per hold (the operator, 2026-09-24; HyperFrames drift-hold)
 - Deviation (the parent, 2026-09-24): the acceptance (one cycle per HELD span; a light sweep) cannot be met inside the idle region - `idleCssFor` (engine, outside the region) passes no span and the idle runs on the life clock (only the engine knows the freeze windows), and nothing paints a light band on a card (the cited sheen/glint `~:1828` records 0 hits). APPROVED: T13 also edits the engine's dock painter (`idleCssFor` gains an optional span converted to the life clock; the 4 dock call sites pass `[d.enter, d.exit]`; a new `paintHoldLight`). T8 (which owns `render()`'s dock-arrival branch) has not started and builds on top. `hold` is a card-only idle kind (`IDLE_CARD_KINDS`), not in `IDLE_KINDS` (`test_idle_e49.py:65`). Press cards (`paintPress`) are not covered - filed.
-- Status: in integration (combined patch on 482a9f7 approved with the dock-painter deviation; queued behind P70 T2)
+- Status: done - lane B 35a2130 (the drift-hold)
 - Owner: implementation_luna (LANE B)
 - Depends on: T37b (the page's inks) integrated; nothing else in P70
 - Harvest: the operator, 2026-09-24: "npx hyperframes add drift-hold i think this becomes an interesting reference to hold charts/evidence docks with". The component is already on disk, harvested 2026-09-07 as a reference only (fc71e49 - "nothing in the engine changes"): `content/video_engine/hyperframes/compositions/components/drift-hold.html` - sub-degree rotation, restrained scale breathing and a soft light sweep, each ONE complete sine cycle across the mounted duration, the endpoint phase wrapped so t=0 equals t=duration (loop-safe); intensities `whisper` / `standard`.

@@ -719,7 +719,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T3b: A long-form plain recast carries the world it leaves - the target panel waits for the leaving data to un-draw; leaving labels leave whole over an empty plot (found by T3)
-- Status: in_progress (dispatched 2026-09-24 to T3's implementer, on cd0b630 + T3)
+- Status: done - lane B a4bb9e1 (old data never under the new axis)
 - Owner: implementation_luna (LANE B)
 - Depends on: T3
 - Harvest: T3's frame read (`$SP/p71-t3/frames/sheet-flip.png`): on every long-form page the target state's opaque `rect.lp-panel` covers the leaving chart from the recast's FIRST frame (checked with `elementsFromPoint`), so at H 663.20 the bars vanish in one frame and the plot stands empty ~0.6 s; the leaving un-draw is never seen; the leaving labels still un-write letter by letter over the empty plot. The parent's ruling from the record: E99 s74 (a transition carries the world it leaves), E21 (never still), M47 (the empty plot).
@@ -783,7 +783,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T5: A stamped chip's seal is reserved - OTHER elements on its beat go round it; the stamp stays where it lands, over the chart (R26-313; E99 s128)
-- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
+- Status: done - lane B 3d6e8e5 (the seal reserved; legibility-first placement, words > ink > seals)
 - Owner: junior_developer (LANE B), then reviewer (the stamp's room law, s128)
 - Depends on: P70 T1c committed (it edits the stamp ring's ink beside the compiler's chip fit, and T5's frame read must
   show T1c's gold shockwave, s127 (2)); P70 T1b is committed at `50b2f85` (the seal, `seal_r`)
@@ -887,7 +887,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 
 ### T7: The squint gate - a held page and its caption, shrunk to thumbnail width, still say what they are about; M48 FAILs (P69 T88, the gate; E99 s120, s126)
 - Amended by E99 s129 (2026-09-25): words on the plot is INFO, never a FAIL; axis ticks and axis titles are not counted; M48 FAILs on lit share, title size, named-series size and caption size / contrast only.
-- Status: in_progress (built; M48 FAILs the committed H door - 402 faults: plot words on rows 1/4/9/12/15/20/22 and 324 of 391 quiet captions under Wealth Logic's floor; the parent's rulings: plot-word limit per PANEL on a panels page, all five Bravos frames kept; 9:16 captions INFO until a reference exists)
+- Status: done - lane B a469501 (M48 the squint gate, FAIL)
 - Owner: implementation_luna (LANE B), then reviewer (a new BLOCKING gate row)
 - Depends on: T0; P69 T37c merged (review finding 5: T37c writes `measure_line_bloom.py` and
   `bravos-line-bloom.v1.json` too; T7 sequences after it and extends its merged file). T37b is done (`557e1dc`:
@@ -1227,7 +1227,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T12: Chip states `lit` / `tick` / `sell` (and `buy`) (was P69 T42; A59's BUY folded in from P69 T60)
-- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
+- Status: done - lane B 96fa32c (chip states)
 - Owner: implementation_luna (LANE B), then reviewer (the chip, after P70 T1b's seal)
 - Depends on: P70 T1c committed (it edits `species/chip.mjs`'s ring ink; P70 T1b, the seal, is committed at `50b2f85`)
 - Harvest:
@@ -1354,7 +1354,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T14: The decade ruler - a scrolling time-passage ground under a chip row (was P69 T55; RESCOPED by BOOM's frames)
-- Status: in_progress (dispatched 2026-09-25 on lane B 7789afa, scratch patch)
+- Status: done - lane B df678cc (the decade ruler)
 - Owner: implementation_luna (LANE B)
 - Depends on: T0. (Draft 1's dependency on T9's pill is gone: the witnessed ruler pins nothing to a tick.)
 - Harvest: v2 T32 "Epoch ruler: a time axis with cards pinned to ticks", BOOM 05:50 (G) only. **VERIFY.md CORRECTED it
