@@ -49,10 +49,14 @@ The rules of the verdict:
 
 **The mechanism list until M45 lands (P66 T5 derives the list from the approved tables with `path:line` cites; this
 is the E99 s67 list plus the two approved shorts' mechanisms, and the critic cites it by date `list of 2026-09-16`):**
+Rows 12-19 were added 2026-09-25 (P72 T4) from E99 s77 Apply (3) ("they go into the one-shot runbook's checklist and the
+critic's table") and s79 Apply (5) ("the ONE-SHOT runbook's checklist and the critic's table gain three rows"); a report on a
+cut built after that date cites `list of 2026-09-25`. M45 still reads rows 1-11 only
+(`gate_one_shot_floor.py` `MECHANISMS_2026_09_16`); rows 12-19 are the critic's read until a gate carries them.
 
 | # | mechanism | the rule | source |
 |---|---|---|---|
-| 1 | the open STARTS ON THE CHART: the ledger page is the first frame, on its axes, its line drawing under the hook | s67 Apply 6; P53 T1 | `memory-trades-the-calendar/build_short.py` v9b R1; Tokyo `build_short.py` `shot_table` docstring; Japan `:170` |
+| 1 | the open STARTS ON THE CHART: the ledger page is the first frame, on its axes, its line drawing under the hook | s67 Apply 6; P53 T1; E99 s79 Apply 1, 5 ("the open on the axes"; E73) | `memory-trades-the-calendar/build_short.py` v9b R1; Tokyo `build_short.py` `shot_table` docstring; Japan `:170` |
 | 2 | every page BUILDS with the effects (axes entry, the mount's own build, `build_to`, bars in stagger, slices arriving) and HOLDS BUILT while its number is spoken; `enter=built` is not an answer | s67 Apply 2 | the three approved tables |
 | 3 | a page whose number lands 7 s or more in MOUNTS over the world (`mount=<s>`) and builds under the setup sentence | s67 Apply 5-6; E45 (the mount) | Japan `:172-174`; Tokyo `:235` |
 | 4 | the axes entry elsewhere (`:axes`) - a page enters by its own signature, never zoomed up from a card | s67 Apply 5 | `memory-trades-the-calendar/build_short.py:141-147` |
@@ -63,6 +67,14 @@ is the E99 s67 list plus the two approved shorts' mechanisms, and the critic cit
 | 9 | a plate carries its card for six seconds with directional life (Ken Burns + the drift), never a bare still | M44; E99 s65 | `PLATE-LIBRARY.md`; memory `plate-life-is-directional` |
 | 10 | a light is PUNCTUATION on a sentence that points, placed after the page's build - never filler for M16 | s67 Apply 1, 3; E56 | the casebook `the-thin-one-shot` |
 | 11 | old and new BLEND: a new mechanism (the compare melt, the ticker, the verdict wall) sits inside the approved shape and does not replace it | s67 Apply 8 | one-shot #3's rework (4473d62) |
+| 12 | FEWER CUTS: "the `why` of every cut and every dip names the transform it could not use and why"; a dip whose two sides are not a world change "becomes the continuity transform it refused" | E99 s74 Apply 1; s77 Apply 3; BACKLOG R26-347 | `docs/runbooks/ONE-SHOT.md` "The editing rules" |
+| 13 | a short plate FOLDED, never a flash: "no flash plates - a short plate is folded by the author (s75)" | E99 s75 Apply 3; s77 Apply 3 | `docs/runbooks/ONE-SHOT.md` "The editing rules" |
+| 14 | a collision FIXED before the card: "a legibility FAIL on a served page (M25, M28) is FIXED before the cut is carded, never listed as the plan's or the cut's" | E99 s75 Apply 1; s77 Apply 3 | `docs/runbooks/ONE-SHOT.md` "The editing rules" |
+| 15 | a light only on a named thing: "a spotlight, a focus_zoom, a callout or a ring is applied ONLY where the sentence names a specific thing on the picture to point at" | E99 s76 Apply 1; s77 Apply 3 | `docs/runbooks/ONE-SHOT.md` "The editing rules" |
+| 16 | the IDLE on every held thing, the tokens counted: "`idle=live` on EVERY page row and `idle=drift` on every plate (E49)"; the long form's plate is "KEN BURNS ALONE" (s84) | E99 s79 Apply 2, 5; s84 | `docs/runbooks/ONE-SHOT.md` "The editing rules" |
+| 17 | the CAMERA on the named things: "the camera where the sentence names the thing (s76)" - "never a pan on nothing" | E99 s79 Apply 3, 5 | `docs/runbooks/ONE-SHOT.md` "The editing rules" |
+| 18 | the served build is a FROZEN COPY: "a build is FROZEN AS A COPY the moment it is served for a card, and that copy is never rebuilt" | E99 s75 Apply 6; s77 Apply 3 | `docs/runbooks/ONE-SHOT.md` "The editing rules" |
+| 19 | the FRAMES read beside the reference: "a base or a cut is read on frames beside the reference before the operator sees it (s70)" | E99 s70 Apply 4; s77 Apply 3 | `docs/runbooks/ONE-SHOT.md` "The editing rules" |
 
 ## Table 2 - ATTRIBUTION QUALITY
 
