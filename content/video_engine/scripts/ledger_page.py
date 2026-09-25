@@ -19,6 +19,7 @@ Input shapes (every one needs ``title`` and a non-empty ``src``):
   combo    story bars + ONE pts series; with segments, "line_unit" (+ "line_label", "ylabel") gives the line its own axis
   dense    {"series": [{"label"|"name", "color", "pts": [[x, y], ...]}], + AXES_KEYS}
            or {"panels": [{"sub", "series": [...]} | {"sub", "builder": "bars", "unit", "bars": [...]}]}
+           (P70 T4: a panel may name its "measure"; one measure in two units is an E79 / E53 s4 WARN)
   tiers    {"tiers": [{"name", "unit", "series"|"pts"|"bars", + AXES_KEYS}], + AXES_KEYS}
            E79: same-unit tiers share ONE scale by default; ``independent: true`` (on the page, or on
            one tier) declares unrelated measures on their own scales. Undeclared same-unit tiers on
@@ -1770,10 +1771,12 @@ def _panel_domain(series: dict, panel: dict, shared: dict[str, list[float]]) -> 
 
 def panel_scale_warnings(series: dict) -> list[str]:
     """E79 on a panels page: a panel that DECLARES a domain of its own while it shares a unit with the grouped panels
-    (no `independent`) - the author's domain stands (E99 s106), and the build says so. Pure."""
+    (no `independent`) - the author's domain stands (E99 s106), and the build says so. P70 T4: and one `measure` drawn
+    in two units (`measure_unit_warnings`). Pure."""
     shared = shared_panel_domains(series)
+    measures = measure_unit_warnings(series)   # P70 T4: [] on every page whose panels name no measure
     if series.get("independent") is True or not shared:
-        return []
+        return measures
     page = series.get("id") or series.get("title") or "page"
     out = []
     for i, p in enumerate(_panel_entries(series)):
@@ -1786,6 +1789,48 @@ def panel_scale_warnings(series: dict) -> list[str]:
             out.append(f"E79 {page!s}: panels[{i}] {str(p.get('sub') or '')!r} declares y-domain {_dom_text(own)} while the "
                        f"other panels in {unit!r} share {_dom_text(tuple(dom))} - panels of the same "
                        "measure share one scale; if this is an unrelated measure, declare `independent: true` on it")
+    return out + measures
+
+
+# ---- P70 T4 (E79 apply 1; E53 s4 "the honest zero, and one unit before two"): ONE MEASURE, ONE UNIT -----------------
+# E79 groups panels by the unit STRING they measure (`_panel_groups`), so one measure written in two units - a share of
+# every dollar invested as "%" on the line and as "¢" on the bars beside it - falls into two groups and silently draws
+# two scales. A panel may NAME the quantity it draws (`measure`, text); panels naming one measure in different units
+# are a WARN with the units and the panels - one measure, one unit, one scale; re-express one panel. Advice, never a
+# refusal (E99 s106); there is no unit-equivalence table (the author names the measure). The key never reaches the
+# spec: a page whose panels name no measure builds the bytes it always did.
+PANEL_MEASURE = "measure"
+
+
+def _measure_key(value: str) -> str:
+    return " ".join(value.split()).casefold()   # one measure however it is cased or spaced
+
+
+def measure_unit_warnings(series: dict) -> list[str]:
+    """E79 / E53 s4 WARN rows: two or more panels naming one `measure` in different units; a `measure` that is not
+    text is named too (it groups nothing). Pure."""
+    page = series.get("id") or series.get("title") or "page"
+    names: dict[str, str] = {}
+    units: dict[str, dict[str, list[int]]] = {}
+    out: list[str] = []
+    for i, panel in enumerate(_panel_entries(series)):
+        if not isinstance(panel, dict) or PANEL_MEASURE not in panel:
+            continue
+        measure = panel[PANEL_MEASURE]
+        if not _text(measure):
+            out.append(f"E79 {page!s}: panels[{i}] measure {measure!r} is not a name - a panel's `measure` is the "
+                       "quantity it draws, written as text (or left out)")
+            continue
+        key = _measure_key(str(measure))
+        names.setdefault(key, " ".join(str(measure).split()))
+        units.setdefault(key, {}).setdefault(panel_unit(series, panel), []).append(i)
+    for key, by_unit in units.items():
+        if len(by_unit) < 2:
+            continue
+        drawn = " and ".join(repr(u) for u in by_unit)
+        where = "; ".join(f"{u!r}: panels {', '.join(str(i) for i in idx)}" for u, idx in by_unit.items())
+        out.append(f"E79 / E53 s4 {page!s}: {names[key]} is drawn in {drawn} ({where}) - one measure, one unit, one "
+                   "scale; re-express one panel")
     return out
 
 

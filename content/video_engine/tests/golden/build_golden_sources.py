@@ -4133,6 +4133,90 @@ FRAME_T.update({"stacked-combo-funding": 12.0,   # the stacks stood (7.4), the l
                 "stacked-outlays": 12.0})        # the bar stood, both parts' figures, the total's pill and the key written, held
 
 
+# ---- P70 T4 (was P69 T52; harvest v2 T39): COMPANION BARS BESIDE A HELD LINE --------------------------------------------
+#   companion-railway-yardstick  Steel and Paper H row 14's yardstick as a PANELS page that stands as its LINE alone
+#                     (tech's share of all US private investment, quarterly since 1970; the bars panel hidden), then on
+#                     "railways took roughly half" a `row` focus state makes both panels active: the line shrinks into
+#                     its slot and the bars build beside it - Britain's railways at ~50 against US tech's 28 - on the
+#                     line's ONE scale (E79 apply 1: one measure, one unit); on "closest run" the line stands alone again
+# READ from two committed objects, never re-typed: `ev-capital-formation-v1` (panel 0; its railway hline is dropped
+# because the bars panel carries the 50 - a value is drawn once, E53 addendum) and `ev-rail-vs-yardstick-bars-v1`
+# (panel 1), RE-EXPRESSED in the line's unit: cents per dollar ARE percent, so 50 and 28 carry over unchanged and the
+# source line says so (our arithmetic, E77). Its `domain` and `overflow: burst` stay off (a panel's scale is its unit
+# group's, E79). Both panels name the one `measure` (the line's own ylabel); compiled WITHOUT the re-expression ("¢"
+# bars) the page prints the E79 / E53 s4 WARN, with it none. The world carries the row's `idle=live`; the golden is
+# drawn in the PLAIN profile, as every panels golden is - the row's `;readability=longform` would inline the 1.17 MB
+# long-form face into the committed uris - and `test_companion_bars` plays the same page long-form for the s90 floor.
+# The golden's clock is the take's shifted by COMPANION_SHIFT: the reveal at 9.0 (the line alone has built by
+# 4.4 + 3.0 = 7.4, as on `panels-resize`) and the leave 7.2 s later, as spoken.
+COMPANION_OBJECTS = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects"
+COMPANION_LINE = COMPANION_OBJECTS / "ev-capital-formation-v1.series.json"
+COMPANION_BARS = COMPANION_OBJECTS / "ev-rail-vs-yardstick-bars-v1.series.json"
+COMPANION_SHIFT = 176.16   # vo-h-scratch/scratch-kokoro.words.json: "railways" 185.16 -> 9.0 on the golden's clock
+COMPANION_REVEAL_AT = round(185.16 - COMPANION_SHIFT, 2)   # "railways took roughly half"
+COMPANION_LEAVE_AT = round(192.36 - COMPANION_SHIFT, 2)    # "... and this is the closest run at it"
+COMPANION_DUR = 1.2                                          # the focus move (T8c's panels-resize dur)
+COMPANION_UNITS = ("¢", "%")   # the bars object's unit and the line's: cents per dollar written as percent
+
+
+def companion_series(re_express: bool = True) -> dict:
+    """The companion page's panels object, composed from the two committed objects. `re_express=False` keeps the bars
+    in the object's own cents - one measure in two units, the page E79 / E53 s4 WARNs on."""
+    line, bars = LPG.load_series(COMPANION_LINE), LPG.load_series(COMPANION_BARS)   # the tokens verbatim, as a door reads them
+    measure = line["ylabel"]
+    unit = line["yunit"] if re_express else bars["unit"]
+    cents, pct = COMPANION_UNITS
+    bar_rows = [dict(b, note=b["note"].replace(cents, pct)) if re_express else dict(b) for b in bars["bars"]]
+    src = line["src"] + ("; cents per dollar written as percent: our arithmetic" if re_express else "")
+    return {"title": line["title"], "sub": line["sub"], "src": src, "yunit": line["yunit"],
+            "ymin": line["ymin"], "ymax": line["ymax"], "xticks": line["xticks"],
+            "panels": [
+                {"sub": "US computing and software, quarterly since 1970", "measure": measure,
+                 "ylabel": line["ylabel"], "marks": line["marks"], "series": line["series"]},
+                {"sub": "One technology at its peak, against tech today", "builder": "bars", "unit": unit,
+                 "measure": measure, "bars": bar_rows}]}
+
+
+COMPANION_FOCUS = [
+    {"kind": "panel_focus", "at": 0.0, "dur": 0.05, "layout": "row", "roles": ["active", "hidden"]},       # the line alone
+    {"kind": "panel_focus", "at": COMPANION_REVEAL_AT, "dur": COMPANION_DUR, "layout": "row", "roles": ["active", "active"]},
+    {"kind": "panel_focus", "at": COMPANION_LEAVE_AT, "dur": COMPANION_DUR, "layout": "row", "roles": ["active", "hidden"]},
+]
+
+
+def companion_page(re_express: bool = True, longform: bool = False) -> tuple[dict, list]:
+    """(the world, its species) through the compiler's own doors: validated, built, stamped full stage (drawn in the
+    row's long form when `longform`, as the row path applies it), then `derive_rescale_states` (which runs
+    `check_panels` and normalises every focus state)."""
+    import build_scene_timeline_f as BST
+    series = companion_series(re_express)
+    assert LPG.validate(series, "line") == [], LPG.validate(series, "line")
+    species = [dict(e) for e in COMPANION_FOCUS]
+    plate = "ledger:golden-panels:line"
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        page = BST.stamp_full_stage(LPG.build_spec(series, "line", None, "right"))
+        if longform:
+            LPG.apply_longform(page, LPG.parse_readability(LPG.LONGFORM)[1])   # the row's `;readability=longform`
+        world = {"kind": "ledger", "page": page, "idle": "live", "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+        BST.derive_rescale_states(world, species, plate, REPO)
+    finally:
+        BST.ASPECT = saved
+    return world, species
+
+
+def companion_railway_yardstick() -> tuple[dict, dict]:
+    world, species = companion_page()
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: companion bars beside the held line - one measure, one unit", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"companion-railway-yardstick": companion_railway_yardstick})
+FRAME_T.update({"companion-railway-yardstick": 14.5})   # both panels active, the bars built on their word (9.0) and valued, held
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

@@ -406,7 +406,8 @@ def test_every_wired_card_is_in_a_recipe():
     # a newly uncomposed wired card still fails this test. P69 T26d's authored prop place and moves
     # (dock_option:place / dock_option:moves, 5c6871c) are tested alone in test_prop_free_placement.py; no committed
     # beat plays them yet, so they wait here rather than in an invented recipe. P69 T8b's panel focus
-    # (page_species:panel_focus) is tested alone in test_ledger_panels.py until row 21 plays it. P69 T36's lit stretch
+    # (page_species:panel_focus) is composed by P70 T4's recipe:companion-bars-beside-the-held-line (the line alone,
+    # the bars made active beside it on their word, the line alone again), so it is no longer excepted. P69 T36's lit stretch
     # is composed by P69 T47's recipe:rings-in-turn-on-the-vertices (the valley lit), so it is no longer excepted.
     # P69 T49's freeze beat (species:freeze) is tested alone in test_freeze_beat.py until a committed beat plays it
     # (the plan names row 18's turn); no recipe is invented for it here. P69 T48's explode (page_species:explode) is
@@ -423,7 +424,7 @@ def test_every_wired_card_is_in_a_recipe():
     # 10's divergence page); its recipe is the harvest's R24 `isolate-then-quantify-the-tail` (P69 T44), not invented here.
     assert uncovered == ["dock_option:moves", "dock_option:place", "page_builder:bars+segments",
                          "page_builder:combo+segments", "page_builder:line+break", "page_enter:surface",
-                         "page_species:explode", "page_species:member", "page_species:panel_focus", "page_species:solo",
+                         "page_species:explode", "page_species:member", "page_species:solo",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:domain", "plate_option:readability",
                          "plate_option:room", "species:freeze"], uncovered

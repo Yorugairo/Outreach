@@ -1,0 +1,69 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:companion-bars-beside-the-held-line",
+ "title": "Companion bars beside a held line",
+ "aliases": [
+  {
+   "name": "an in-page companion inset",
+   "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:78"
+  }
+ ],
+ "acts": [
+  "COMPARES"
+ ],
+ "members": [
+  {
+   "card": "page_builder:line",
+   "offset_s": 0.0,
+   "role": "the line is the world: a panels page lands and draws its line panel alone, whole before anything joins it"
+  },
+  {
+   "card": "page_species:panel_focus",
+   "offset_s": 0.0,
+   "role": "the page's first focus state at its own instant: the line active over the region, the bars panel hidden"
+  },
+  {
+   "card": "page_species:panel_focus",
+   "offset_s": [
+    7.4,
+    22.6
+   ],
+   "role": "on the comparison's word a row state makes both active: the line shrinks into its slot, the bars build beside it"
+  },
+  {
+   "card": "page_species:figure",
+   "offset_s": [
+    8.6,
+    28.6
+   ],
+   "optional": true,
+   "role": "a written multiple or gap on the bars panel (a bracket is refused on bars), after the bars have built"
+  },
+  {
+   "card": "page_species:panel_focus",
+   "offset_s": [
+    14.6,
+    29.8
+   ],
+   "role": "on the leave word the focus returns to the line alone: the bars go and the line re-grows over the region (T8c)"
+  }
+ ],
+ "window_s": 30.0,
+ "does": "A line stands alone; on the comparison's word a hidden bars panel turns active beside it, two bars building on the line's one scale and unit; on the leave word the line stands alone again. The window spans the line's hold.",
+ "use_when": {
+  "act": "COMPARES",
+  "moment": "proof",
+  "shape": "series + two numbers of the SAME measure, in the line's unit (a panels object: the line, then a hidden bars panel, both naming one `measure`)",
+  "use": "the line stays as context while two magnitudes are set against each other beside it - 'today it's twenty-eight ... railways took roughly half'",
+  "dont": "the bars cover the plot, ticks or source (E63, E45); the bars in another unit than the line's (re-express them, E79 / E53 s4 WARNs); a companion on a page with no panels (recipe:chart-parks-for-their-claim)"
+ },
+ "doctrine": [
+  "E79",
+  "E53",
+  "E99 s104",
+  "E99 s106"
+ ],
+ "status": "candidate",
+ "source": "P70 T4 (was P69 T52; harvest v2 T39, BRAVOS-USE-WHEN.md:287) - no new grammar: P69 T8b-T8e's panels page with a hidden bars panel revealed on its word; proved as the golden companion-railway-yardstick (tests/test_companion_bars.py) on H row 14's yardstick - offsets span the golden (reveal 9.0, leave 16.2) and row 14's take (22.56, 29.76); no approved cut carries it",
+ "count": 0
+}
