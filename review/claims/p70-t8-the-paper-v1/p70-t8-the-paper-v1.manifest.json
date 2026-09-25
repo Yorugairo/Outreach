@@ -1,0 +1,31 @@
+{
+  "schema_version": "review_manifest.v1",
+  "status": "review_only",
+  "render_eligible": false,
+  "style_family": "props-catalogue-woodblock-v1",
+  "source_prompt": "claim:p70-t8-the-paper-v1",
+  "assets": [
+    {
+      "asset_id": "prop-paper-bond-stack-v1a",
+      "path": "objects/prop-paper-bond-stack-v1a.png",
+      "sha256": "a9dea237b6906b2bc74ae23be5f82567747b49cb001c3f7bd23ec3c988694d0a",
+      "kind": "prop",
+      "semantic": "the paper: a heavy stack of engraved bond certificates, BOND on the top sheet",
+      "source": {
+        "path": "source/prop-paper-bond-stack-v1a-source.png",
+        "sha256": "5c12b279c3134d0a275d9e8dd64a2d2bab3a5fa110032861ac6bddfb57b57176"
+      }
+    },
+    {
+      "asset_id": "prop-paper-bond-stack-v1b",
+      "path": "objects/prop-paper-bond-stack-v1b.png",
+      "sha256": "a2e0ff94f373f53d4a3df934a33d30693276872eda2272acc640f3ff017f84c8",
+      "kind": "prop",
+      "semantic": "the paper: a heavy stack of engraved bond certificates, no text",
+      "source": {
+        "path": "source/prop-paper-bond-stack-v1b-source.png",
+        "sha256": "71944f470e3e1ea8b94b3d7c004aff6d1e88afea8fe66d030d4e414ac272896e"
+      }
+    }
+  ]
+}

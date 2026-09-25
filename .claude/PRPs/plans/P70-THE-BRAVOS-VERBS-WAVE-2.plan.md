@@ -889,7 +889,7 @@ listed order.
 - Evidence: pending
 
 ### T8: The rig - a prop arrives in a puff (`arrive: poof`), its sound, the paper prop's claim, and the candidate `recipe:the-rig` (was P69 T69)
-- Status: pending
+- Status: done - lane B ad55411: `arrive: poof` (Bravos-fitted), its cue at E81's start (9 dB under, `audio.e81_gain`), the ring rule = the stamped prop's (no refusal, s106), card `arrival:poof`, recipe `the-rig` (candidate), golden `prop-poof`; the paper = claim `review/claims/p70-t8-the-paper-v1` (2 clean cutouts, QUARANTINED for P70-HG1)
 - Owner: implementation_luna (LANE B for the arrival; the claim in lane A), then reviewer (an arrival: the gate, the
   sound)
 - Depends on: P70 T1 merged (it shares the gate's `_landings` / `_arrivals`); done P69 T26d, T6b, T84 `e416df5` (the

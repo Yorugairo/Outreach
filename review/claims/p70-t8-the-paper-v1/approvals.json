@@ -1,0 +1,17 @@
+{
+  "judge": "Codex gpt-6-astra",
+  "generation_attempts": {
+    "prop-paper-bond-stack-v1a": 1,
+    "prop-paper-bond-stack-v1b": 1
+  },
+  "extraction_attempts": {
+    "prop-paper-bond-stack-v1a": 1,
+    "prop-paper-bond-stack-v1b": 1
+  },
+  "approved": [
+    "prop-paper-bond-stack-v1a",
+    "prop-paper-bond-stack-v1b"
+  ],
+  "unresolved": [],
+  "notes": "Sources have a slight pale tonal variation in the ground; extraction removed it."
+}
