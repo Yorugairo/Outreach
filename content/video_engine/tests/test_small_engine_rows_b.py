@@ -213,3 +213,106 @@ def test_the_cast_shadow_falls_away_from_the_stage_light() -> None:
         sx, sy = p["shadow"][0][0] - p["x"], p["shadow"][0][1] - p["y"]
         got = math.degrees(math.atan2(sy, sx)) % 360
         assert abs(got - want) < 1.0, (round(got, 2), want, p)
+
+
+# ---- R26-2: the harmonisation pass on a composited cutout -----------------------------------------------------------
+
+HEAD = ROOT / "content/video_engine/tests/golden/inputs/head_bessent_cutout.png"
+GROUND = "#2b343c"   # the golden's plate-plain (43, 52, 60): the ground the sprite sits on, named by the build
+
+
+def test_the_harmonise_dial_is_named_and_off_by_default() -> None:
+    src = ENGINE.read_text(encoding="utf-8")
+    dials = src.split("const KINETICS_DIALS = Object.freeze({", 1)[1].split("});", 1)[0]
+    assert re.search(r"^\s*harmonise: \"", dials, re.M), "named in KINETICS_DIALS (a dial, not a capability flag)"
+    defaults = src.split("const KINETICS_DEFAULTS = Object.freeze({", 1)[1].split("});", 1)[0]
+    assert "harmonise" not in defaults
+    assert "const HARMONISE = Object.freeze({" in src and 'feTurbulence' in src
+
+
+@pytest.mark.parametrize("bad", ["cream", "#f4e6c", "f4e6c7", 1, None])
+def test_the_compiler_refuses_a_malformed_harmonise_by_name(bad, monkeypatch) -> None:
+    monkeypatch.setattr(BST, "KINETICS", {"harmonise": bad})
+    with pytest.raises(ValueError, match=r"KINETICS\['harmonise'\] is .* it must be true \(the cream ground\), false or a #rrggbb"):
+        BST.build_kinetics()
+
+
+def test_the_compiler_passes_the_three_good_forms(monkeypatch) -> None:
+    for v in (True, False, GROUND):
+        monkeypatch.setattr(BST, "KINETICS", {"harmonise": v})
+        assert BST.build_kinetics()["harmonise"] == v
+    monkeypatch.setattr(BST, "KINETICS", {})
+    assert "harmonise" not in BST.build_kinetics(), "absent is absent - no build carries the dial unless it asks"
+
+
+IMG_BOX = """() => { const st = document.getElementById('stage').getBoundingClientRect();
+  const im = document.querySelector('.dock.cutout .slide-frame img'); if (!im) return null;
+  const r = im.getBoundingClientRect();
+  return { x: r.x - st.x, y: r.y - st.y, w: r.width, h: r.height, filter: getComputedStyle(im).filter }; }"""
+
+
+def _lum(img):
+    import numpy as np
+    a = np.asarray(img.convert("RGB"), dtype=np.float64)
+    return 0.2126 * a[..., 0] + 0.7152 * a[..., 1] + 0.0722 * a[..., 2]
+
+
+def harmonise_measure(png_off: bytes, png_on: bytes, box: dict, ground: str = GROUND) -> dict:
+    """The acceptance's two numbers on one frame pair: the edge ring's mean distance to the ground (off, on) and the
+    interior's grain (the std of on/off - 1, and its mean). The ring is the cutout's alpha edge, 6 px deep, above
+    its foot fade; the interior is 14 px inside it."""
+    import io
+    import numpy as np
+    from PIL import Image, ImageFilter
+    off, on = (Image.open(io.BytesIO(p)).convert("RGB") for p in (png_off, png_on))
+    x, y, w, h = (int(round(box[k])) for k in ("x", "y", "w", "h"))
+    alpha = Image.open(HEAD).convert("RGBA").getchannel("A").resize((w, h), Image.BILINEAR)
+    solid = alpha.point(lambda v: 255 if v > 128 else 0)
+    core6, core14 = (solid.filter(ImageFilter.MinFilter(2 * r + 1)) for r in (6, 14))
+    S, C6, C14 = (np.asarray(m) > 0 for m in (solid, core6, core14))
+    keep = np.zeros_like(S)
+    keep[: int(h * 0.70)] = True                              # above the foot's dissolve (a bust's cue, not the pass)
+    ring, inner = S & ~C6 & keep, C14 & keep
+    Loff, Lon = (_lum(im.crop((x, y, x + w, y + h))) for im in (off, on))
+    g = [int(ground[i:i + 2], 16) for i in (1, 3, 5)]
+    Lg = 0.2126 * g[0] + 0.7152 * g[1] + 0.0722 * g[2]
+    lit = inner & (Loff > 24)
+    ratio = Lon[lit] / Loff[lit] - 1
+    return {"ring_px": int(ring.sum()), "inner_px": int(lit.sum()),
+            "edge_to_ground_off": float(np.abs(Loff[ring] - Lg).mean()),
+            "edge_to_ground_on": float(np.abs(Lon[ring] - Lg).mean()),
+            "grain_std": float(ratio.std()), "grain_mean": float(ratio.mean())}
+
+
+@needs_browser
+def test_the_pass_wraps_the_edge_toward_the_ground_and_grains_the_interior() -> None:
+    tl, uris = G.SURFACES["newsreel-band"]()
+    t = G.FRAME_T["newsreel-band"]
+    [(png_off, box_off)] = _render(tl, uris, [t], IMG_BOX)
+    [(png_on, box_on)] = _render(dict(tl, kinetics={"harmonise": GROUND}), uris, [t], IMG_BOX)
+    assert box_off and box_on and box_off["filter"] == "none" and "url(" in box_on["filter"], (box_off, box_on)
+    m = harmonise_measure(png_off, png_on, box_on)
+    assert m["ring_px"] > 500 and m["inner_px"] > 5000, m
+    assert m["edge_to_ground_on"] < m["edge_to_ground_off"] - 2.0, m     # the wrap: the edge moves toward its ground
+    assert 0.02 < m["grain_std"] < 0.12, m                               # the grain: present, inside kappa's reach
+    assert abs(m["grain_mean"]) < 0.03, m                                # ... and centred - it tints nothing
+
+
+@needs_browser
+def test_a_malformed_harmonise_is_ignored_by_name_and_paints_nothing() -> None:
+    import served_player as SP
+    tl, uris = G.SURFACES["newsreel-band"]()
+    tl = dict(tl, kinetics={"harmonise": "cream"})
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "bad.html"
+        html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+        w, h = RB.STAGE["16:9"]
+        with SP.served(html, w, h, prepare=False) as (page, errs):
+            logs: list[str] = []
+            page.on("console", lambda m: logs.append(m.text))
+            page.reload(wait_until="networkidle")
+            RB.prepare_page(page, w, h)
+            RB.frame_png(page, G.FRAME_T["newsreel-band"], (w, h))
+            box = page.evaluate(IMG_BOX)
+    assert box["filter"] == "none", box
+    assert any("kinetics: harmonise 'cream' is not true or a #rrggbb ground - ignored" in x for x in logs), logs

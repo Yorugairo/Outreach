@@ -12230,6 +12230,11 @@ def build_kinetics() -> dict:
     # names one is checked by the SAME refusal a row's `;drift=` gets, so the two ways of asking cannot disagree.
     if "plate_idle_drift_px" in k:
         k["plate_idle_drift_px"] = plate_drift_px(k["plate_idle_drift_px"], "KINETICS['plate_idle_drift_px']")
+    # P72 T27 / R26-2: the harmonisation dial - true (the cream ground), false, or the ground it names as #rrggbb
+    if "harmonise" in k and not (isinstance(k["harmonise"], bool)
+                                 or (isinstance(k["harmonise"], str) and re.fullmatch(r"#[0-9a-fA-F]{6}", k["harmonise"]))):
+        raise ValueError(f"KINETICS['harmonise'] is {k['harmonise']!r} - it must be true (the cream ground), false or "
+                         f"a #rrggbb ground (R26-2)")
     return k
 
 

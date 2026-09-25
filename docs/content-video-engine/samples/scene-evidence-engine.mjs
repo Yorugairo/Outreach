@@ -90,6 +90,9 @@ async function mount(doc) {
        20 is the named long-form setting (E99 s64 / s65), 30-40 the shorts one; a value under the floor is raised to it here and
        refused by name in the compiler. */
     plate_idle_drift_px: "the plate idle drift's half-width in stage px (absent = IDLE.DRIFT_PX 2.0, the floor; 30 long form, 40 shorts)",
+    /* P72 T27 / R26-2: the HARMONISATION PASS on a composited cutout (doc 48 s48.8 - "composited figures look pasted",
+       48.7). A dial and not a capability flag: it carries the GROUND the sprite sits on. Absent or false = no pass. */
+    harmonise: "the cutout's light wrap + substrate grain: true (the cream ground, #F4E6C7) | a #rrggbb ground | false",
   });
   const KIN = Object.assign({}, KINETICS_DEFAULTS,
     (TL.kinetics && typeof TL.kinetics === "object") ? TL.kinetics : {});
@@ -22878,9 +22881,65 @@ async function mount(doc) {
   /* ... and HOW the art is laid down (E99 s87, the dial the operator judges on the frame): `own` is the woodblock as
      it was generated; `page` lays it down in the page's OWN ink the way a real impression would - one ink, the
      ground deciding which (the ledger page is charcoal, so its ink is chalk; a light ground takes the charcoal). */
+  /* P72 T27 / R26-2 - THE HARMONISATION PASS (doc 48 s48.8, the fix for 48.7 "composited figures look pasted"): on a
+     CUTOUT dock (a person on the world) and only under the `harmonise` dial, two filters and one multiply on the picture:
+       LIGHT WRAP  the ground bled into the sprite's perimeter - the alpha's rim (the alpha less its erosion by WRAP_PX,
+                   inside 48's 4-12 px), softened, flooded with the ground and laid over the sprite inside its own alpha;
+       GRAIN       C = C_vector x [1 + KAPPA (T - 0.5)] (48's kappa 0.12-0.16), T a seeded fractal noise stretched about
+                   0.5 - a feComposite arithmetic on the premultiplied sprite, scaled by 1 / (1 + KAPPA / 2) so its alpha
+                   comes out exactly the sprite's, then the colour scaled back (feComponentTransfer, unpremultiplied).
+     THE LIMIT, named: the wrap bleeds the GROUND THE BUILD NAMES (`harmonise: true` = the ledger page's cream, #F4E6C7;
+     `harmonise: "#rrggbb"` = another), not the plate sampled under the sprite - a sampled wrap needs the measured ground
+     (ringRgbAt) and is its own row. Seeded noise, fixed dials: a pure function of the picture, the same at every t.
+     Off (absent / false) the picture's filter is the empty string it always was; a value that is neither true, false
+     nor a #rrggbb ground is warned by name here and refused by name by the compiler (build_kinetics). */
+  const HARMONISE = Object.freeze({
+    GROUND: "#F4E6C7",   /* `harmonise: true`: the ledger page's cream ground (48 s48.8, our token) */
+    WRAP_PX: 8,          /* the rim's depth into the sprite, px [DERIVED: the middle of 48 s48.8's 4-12 px] */
+    WRAP_BLUR: 3,        /* the rim's softness (the Gaussian's sigma, px) - a starting reference, tune by eye */
+    WRAP_A: 0.55,        /* the ground's share at the very edge - a starting reference, tune by eye */
+    KAPPA: 0.14,         /* the grain's modulation depth [DERIVED: the middle of 48 s48.8's 0.12-0.16] */
+    GRAIN_FREQ: 0.9,     /* the washi noise: base frequency (per px) ... */
+    GRAIN_OCT: 2,        /* ... octaves ... */
+    GRAIN_SEED: 7,       /* ... and seed - fixed, so every frame and every render paints the same grain */
+    GRAIN_GAIN: 2.2,     /* T = 0.5 + GAIN (noise - 0.5): fractal noise sits near 0.5, this spreads it toward 0 .. 1 */
+  });
+  const harmoniseGround = () => {
+    const v = KIN.harmonise;
+    if (v === true) return HARMONISE.GROUND;
+    return (typeof v === "string" && /^#[0-9a-f]{6}$/i.test(v)) ? v : null;
+  };
+  if (KIN.harmonise != null && KIN.harmonise !== false && !harmoniseGround())
+    console.warn("kinetics: harmonise '" + String(KIN.harmonise) + "' is not true or a #rrggbb ground - ignored");
+  const harmoniseFilter = () => {
+    const g = harmoniseGround();
+    if (!g) return "";
+    if (!document.getElementById("ev-harmonise")) {
+      const H = HARMONISE, s = 1 / (1 + H.KAPPA / 2), off = 0.5 - H.GRAIN_GAIN / 2, NS = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(NS, "svg");
+      svg.setAttribute("width", "0"); svg.setAttribute("height", "0"); svg.setAttribute("aria-hidden", "true");
+      svg.style.position = "absolute";
+      svg.innerHTML = '<filter id="ev-harmonise" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">'
+        + '<feMorphology in="SourceAlpha" operator="erode" radius="' + H.WRAP_PX + '" result="core"/>'
+        + '<feComposite in="SourceAlpha" in2="core" operator="out" result="rim"/>'
+        + '<feGaussianBlur in="rim" stdDeviation="' + H.WRAP_BLUR + '" result="soft"/>'
+        + '<feFlood flood-color="' + g + '" flood-opacity="' + H.WRAP_A + '" result="ground"/>'
+        + '<feComposite in="ground" in2="soft" operator="in" result="wrap0"/>'
+        + '<feComposite in="wrap0" in2="SourceAlpha" operator="in" result="wrap"/>'
+        + '<feTurbulence type="fractalNoise" baseFrequency="' + H.GRAIN_FREQ + '" numOctaves="' + H.GRAIN_OCT + '" seed="' + H.GRAIN_SEED + '" result="noise"/>'
+        + '<feColorMatrix in="noise" type="matrix" values="' + [H.GRAIN_GAIN, 0, 0, 0, off, H.GRAIN_GAIN, 0, 0, 0, off, H.GRAIN_GAIN, 0, 0, 0, off, 0, 0, 0, 0, 0.5].join(" ") + '" result="washi"/>'
+        + '<feComposite in="SourceGraphic" in2="washi" operator="arithmetic" k1="' + (2 * H.KAPPA * s) + '" k2="' + ((1 - H.KAPPA / 2) * s) + '" k3="0" k4="0" result="g0"/>'
+        + '<feComponentTransfer in="g0" result="grained"><feFuncR type="linear" slope="' + (1 / s) + '"/><feFuncG type="linear" slope="' + (1 / s) + '"/><feFuncB type="linear" slope="' + (1 / s) + '"/></feComponentTransfer>'
+        + '<feMerge><feMergeNode in="grained"/><feMergeNode in="wrap"/></feMerge></filter>';
+      document.body.appendChild(svg);
+    }
+    return "url(#ev-harmonise)";
+  };
+  /* the PICTURE's filter, written every frame by the dock painter: a prop in the page's ink (E99 s87), else the
+     harmonisation pass on a cutout when the build asks for it (R26-2), else nothing */
   const propInkCss = (d, onLedger) => (d && d.ink === "page")
     ? (onLedger ? "grayscale(1) invert(1) contrast(1.15) brightness(1.08)" : "grayscale(1) contrast(1.25) brightness(0.72)")
-    : "";
+    : ((d && dockIsCutout(d.slide)) ? harmoniseFilter() : "");
   /* P69 T6b / E99 s92 - A PROP IS BARE OF PAPER, NOT OF WEIGHT (the operator: "the props should have shadow added to them
      to give them some depth/weight"). THE HANDOVER: the resting shadow's share of the prop's weight, 0 -> 1 on one
      min-jerk over the arrival's OWN contact -> settle window (a stamp: the scale spring's crossing to the rotation

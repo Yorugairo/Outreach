@@ -54,6 +54,7 @@ FLAG_FRAMES = {
     "ledger-soak-page@analytic_spring": ("ledger-soak-page", {"analytic_spring": True}, 7.86),
     "ledger-soak-page@area_squash": ("ledger-soak-page", {"analytic_spring": True, "area_squash": True}, 7.86),
     "ledger-soak-page@idle": ("ledger-soak-page", {"idle": True}, 11.0),   # the page holding after its build: the breath is the only difference (E49)
+    "newsreel-band@harmonise": ("newsreel-band", {"harmonise": "#2b343c"}, 11.0),   # P72 T27 / R26-2: the cutout's light wrap + substrate grain, the wrap on the golden's own plate-plain ground (a DIAL, the ground it names)
 }
 # P52 T7 + T8, HUMAN GATE 3: THE PROOF FRAMES. A second dict with FLAG_FRAMES' own shape (surface, flags, t) and a
 # different claim: not "this capability changes the frame" but "this INSTANT of this surface is the one to judge".
