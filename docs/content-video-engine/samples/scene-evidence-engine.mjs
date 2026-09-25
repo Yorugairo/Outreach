@@ -16412,14 +16412,38 @@ async function mount(doc) {
      plot is placed whole in its turn instead (the hand still goes label by label; it never leaves a fragment). */
   const PLAIN_AXIS_WRITE_END = 0.75;   /* the share of the clock by which the arriving labels are all written [DERIVED: the leaving line under min_jerk still holds 10 % of its ink at 0.75 (H 80.49, the probe: 0.104) and the bars' last one 68 % (H 663.02: 0.681 at 0.76); the last label is whole at w = (n + 0.6) / (n + 1) of the window, 0.72 of the clock for five] */
   const AXIS_INK_GONE = 0.995;   /* a line is off the plot when its dash offset is this share of its length, a bar when its scale is under 1 - this: the phone path's own `lineGone` test */
-  const lpPlotEmpty = (S, over) => {   /* nothing of this state's data READS on the plot THIS frame (its law painted it before the hand-over runs): every line un-drawn and every bar flat, or `over` - the arriving chart, shown - lies above it with an opaque plot panel. A state with no line and no bar (a pie, a treemap) is never called gone: its leave is its own */
-    if (over && over.chart && S.chart && over.chart.style.opacity === "1" && over.chart.querySelector("rect.lp-panel")
-      && (S.chart.compareDocumentPosition(over.chart) & Node.DOCUMENT_POSITION_FOLLOWING)) return true;
+  const lpPlotEmpty = (S) => {   /* nothing of this state's data stands on the plot THIS frame (its law painted it before the hand-over runs): every line un-drawn and every bar flat. A state with no line and no bar (a pie, a treemap) is never called gone: its leave is its own. (T3b: the arriving panel no longer covers the leaving data, so what is drawn is what reads) */
     const paths = (S.paths || []).filter((pp) => pp.p && !pp.muted), bars = S.bars || [];
     if (!paths.length && !bars.length) return false;
     return paths.every((pp) => { const off = parseFloat(pp.p.getAttribute("stroke-dashoffset")); return !Number.isFinite(off) || off >= (pp.len || 0) * AXIS_INK_GONE; })
       && bars.every((bb) => { const m = /scaleY\(([-\d.e]+)\)/.exec(bb.bar.style.transform || ""); return !!m && +m[1] <= 1 - AXIS_INK_GONE; });
   };
+  /* P71 T3b - THE LEAVING CHART UN-DRAWS IN SIGHT (E99 s74: a transition carries the world it leaves; E21; M47). A
+     long-form state draws its own opaque plot panel (`rect.lp-panel`, lpLongformPlot) as its first child, and the hand-over
+     raised the arriving chart - panel and all - on the clock's first frame, over the leaving one: the trim bars vanished
+     in one frame at H 663.20 and the plot stood empty ~0.6 s while they "un-drew" unseen. On the default clock's plain
+     recast the arriving panel now waits until the standing data are off the plot (lpPlotEmpty), and the LEAVING panel
+     carries the plot's box to the arriving one's on the gridlines' own slide (k), so the ground never jumps when the
+     arriving panel comes up. Both are handed back when no recast is on (lpPanelRestore, every frame: a seek is the play).
+     ... AND THE AXES CHANGE HANDS ONLY OVER AN EMPTY PLOT (T3b round 2; E28, E99 s109): the leaving bars ("10.9%") stood
+     under the arriving ticks ("16", "8000", "USD per kilogram, log") at 663.4-663.5 - old data read against a new scale.
+     So while any standing data are drawn (`stand`) the standing axis stands WHOLE and unmoved (labels, gridlines) and
+     nothing of the arriving chart shows (labels, gridlines, panel - its whole layer); once the plot is empty the hand-over runs on its own
+     clocks - the leaving labels go whole in their turn (AXIS_HAND.OUT), the arriving ones come whole in theirs
+     (PLAIN_AXIS_WRITE_END), the gridlines slide and cross - and only then does the arriving data draw (its own build). */
+  const PANEL_BOX = ["x", "y", "width", "height"];
+  const lpPanelBox = (p) => p.__box || (p.__box = PANEL_BOX.map((n) => p.getAttribute(n)));   /* the panel as its page laid it */
+  const lpPanelHand = (A, Bs, k, empty) => {
+    const pa = A.lfPanelEl, pb = Bs.lfPanelEl;
+    if (!pb) return;
+    pb.style.opacity = empty ? "" : "0"; pb.__handed = true;
+    if (pa && A.chart.getAttribute("viewBox") === Bs.chart.getAttribute("viewBox")) {   /* one page, one viewBox: the two boxes are in the same units */
+      const a = lpPanelBox(pa), b = lpPanelBox(pb);
+      PANEL_BOX.forEach((n, i) => pa.setAttribute(n, xfLerp(+a[i], +b[i], k).toFixed(1))); pa.__handed = true;
+    }
+  };
+  const lpPanelRestore = (S) => { const p = S && S.lfPanelEl; if (!p || !p.__handed) return;
+    p.style.opacity = ""; if (p.__box) PANEL_BOX.forEach((n, i) => p.setAttribute(n, p.__box[i])); p.__handed = false; };
   const AXIS_LINES = ["tick", "rule", "axis"];     /* what SLIDES: the gridlines, the zero, a reference rule */
   const AXIS_LABELS = ["ylabel", "rulelabel", "xtick", "axislabel"];   /* what is WRITTEN: every string on the axes */
   const lpTickRanks = (S) => (S.marks || []).filter((m) => m.role === "tick" && m.el).sort((a, b) => (a.geom.y || 0) - (b.geom.y || 0));
@@ -16442,6 +16466,9 @@ async function mount(doc) {
     const ta = lpTickRanks(A), tb = lpTickRanks(Bs), k = segEase(phase);
     const out = clamp01(pu / AXIS_HAND.OUT), inn = plain ? phase : clamp01((pu - AXIS_HAND.IN) / ((whole ? PLAIN_AXIS_WRITE_END : 1) - AXIS_HAND.IN));
     const cross = plain ? phase : clamp01((pu - AXIS_HAND.CROSS) / (1 - AXIS_HAND.CROSS));
+    const empty = whole && lpPlotEmpty(A);   /* P71 T3 / T3b: the standing data are off the plot this frame */
+    const stand = whole && !empty, lineHand = stand ? 0 : cross;   /* T3b r2: ... or still drawn - their own axis stands with them */
+    if (whole) lpPanelHand(A, Bs, k, empty);
     const toY = (i) => {   /* the i-th standing gridline's place under the target's scale, by rank */
       if (!tb.length) return ta[i].geom.y;
       if (ta.length < 2 || tb.length < 2) return tb[Math.min(i, tb.length - 1)].geom.y;
@@ -16449,7 +16476,7 @@ async function mount(doc) {
       return xfLerp(tb[j].geom.y, tb[j + 1].geom.y, f - j);
     };
     const dy = {};   /* how far each tick travels, so its own label rides with it */
-    ta.forEach((m, i) => { const y = xfLerp(m.geom.y, toY(i), k); dy[m.key] = y - m.geom.y;
+    ta.forEach((m, i) => { const y = xfLerp(m.geom.y, toY(i), stand ? 0 : k); dy[m.key] = y - m.geom.y;
       m.el.setAttribute("y1", y.toFixed(1)); m.el.setAttribute("y2", y.toFixed(1)); });
     /* ONE HAND, not six: the labels of a role leave (and arrive) in their own order, each with its own slot of the
        share, exactly as writeGlyphs staggers a title's glyphs. Un-written all at once, six year labels became six
@@ -16457,28 +16484,28 @@ async function mount(doc) {
     const sweep = (S, w, ahead, held, placed = false) => { const seen = {};
       for (const m of S.marks || []) { if (!m.el || !AXIS_LABELS.includes(m.role)) continue;
         const i = (seen[m.role] = (seen[m.role] == null ? 0 : seen[m.role] + 1)), n = axisLabelN(S, m.role), share = clamp01((w * (n + 1) - i) / 1.6);
-        lpWriteText(m.el, held && held.has(m.key) ? (ahead ? 0 : 1) : (ahead ? (placed ? (share > 0 ? 1 : 0) : share) : 1 - share));
+        lpWriteText(m.el, held && held.has(m.key) ? (ahead ? 0 : 1) : (ahead ? (placed ? (share > 0 ? 1 : 0) : share) : (placed ? (share > 0 ? 0 : 1) : 1 - share)));   /* `placed` (T3 / T3b): over an empty plot a label arrives - and leaves - whole, in its turn */
         m.el.style.opacity = "";
       } };
     for (const m of A.marks || []) {
       const e = m.el; if (!e) continue;
       if (AXIS_LABELS.includes(m.role)) {   /* the hand takes the label away one glyph at a time - a fade would hide the writing this rule is about */
         if (m.role === "ylabel") { const d = dy["tick:" + String(m.key).split(":")[1]] || 0; e.setAttribute("y", ((+m.geom.y) + d).toFixed(1)); }
-      } else if (AXIS_LINES.includes(m.role)) e.style.opacity = (1 - cross).toFixed(3);   /* lit all the way to the target's place, then handed over where the two coincide */
+      } else if (AXIS_LINES.includes(m.role)) e.style.opacity = (1 - lineHand).toFixed(3);   /* lit all the way to the target's place, then handed over where the two coincide */
       else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(false, false, plain ? phase : pu).toFixed(3);
     }
-    sweep(A, out, false, hold && hold.a);
+    sweep(A, stand ? 0 : out, false, hold && hold.a, empty);
     /* the target's furniture is what the eye reads through the hand-over; its data wait for their own law. A target
        that HAS no axes (a pie, a treemap) has nothing to hand over and its layer is not raised for it: the recast into
        one is the hand-over it always was. */
-    if ((Bs.marks || []).some((m) => m.el && (AXIS_LINES.includes(m.role) || AXIS_LABELS.includes(m.role)))) Bs.chart.style.opacity = plain && !lineGone ? 0 : 1;
+    if ((Bs.marks || []).some((m) => m.el && (AXIS_LINES.includes(m.role) || AXIS_LABELS.includes(m.role)))) Bs.chart.style.opacity = (plain && !lineGone) || stand ? 0 : 1;   /* T3b r2: nothing of the arriving chart while the standing data are drawn */
     for (const m of Bs.marks || []) {
       const e = m.el; if (!e) continue;
       if (AXIS_LABELS.includes(m.role)) continue;
-      else if (AXIS_LINES.includes(m.role)) e.style.opacity = cross.toFixed(3);
+      else if (AXIS_LINES.includes(m.role)) e.style.opacity = lineHand.toFixed(3);
       else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(true, true, plain ? phase : pu).toFixed(3);
     }
-    sweep(Bs, inn, true, hold && hold.b, whole && lpPlotEmpty(A, Bs));   /* P71 T3: the plot reads empty now - an arriving label is whole or not yet placed */
+    sweep(Bs, stand ? 0 : inn, true, hold && hold.b, empty);
     A.xfDirty = true; Bs.xfDirty = true;
   };
   /* P50 T11 - the TAG form (`keyed: "tags"`, Bravos 104-105). The same hand-over keyed on the other mark: each
@@ -16915,6 +16942,7 @@ async function mount(doc) {
       if (pk) lpPaintPark(st, pk, t, pkFrom); else lpUnpark(st);
       st.active = 0; return;
     }
+    for (const S of states) lpPanelRestore(S);   /* P71 T3b: a panel the plain recast's hand holds is the page's again unless the hand holds it this frame */
     let cur = 0, cCur = cBase, leaving = false, xf = null, park = null, parkFrom = 1, hold = null, plain = null;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;

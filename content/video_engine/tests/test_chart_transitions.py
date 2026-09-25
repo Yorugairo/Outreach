@@ -1490,9 +1490,10 @@ def test_a_data_keyed_recast_seeks_exactly(tmp_path):
 
 @needs_browser
 def test_the_plain_recasts_axes_hand_over_too(tmp_path):
-    """E64: a recast the compiler could NOT key keeps its un-draw-then-draw, but its axes re-write rather than
-    swapping in one frame - the standing labels un-written, the arriving ones written, the gridlines lit and moved
-    on the default clock."""
+    """E64: a recast the compiler could NOT key keeps its un-draw-then-draw, and its axes re-write rather than
+    swapping in one frame - P71 T3b: only over an EMPTY plot. While the standing line is drawn its own axis stands whole
+    and unmoved and nothing of the arriving axis shows (E28: no datum read against the wrong scale); once the line is
+    gone the standing labels leave, the arriving ones stand whole and the gridlines slide."""
     ep, plate, _changes = _data_ep(tmp_path, bars_over=[3.0, 4.0, 5.0, 6.0])   # bars that are not the line's changes
     species = _data_species(ep, plate)
     assert species[0]["keyed"] is None and "key_map" not in species[0], "the compiler found no key - this is the plain recast"
@@ -1500,12 +1501,15 @@ def test_the_plain_recasts_axes_hand_over_too(tmp_path):
     assert world["page"]["axes"].get("readability") != "landscape-phone", "this fixture exercises E64's default path"
     at, errs, close = _keyed_player(ep, plate, species, probe=DK_PROBE)
     try:
-        mid = at(DK_AT + DK_S * 0.5)
-        assert all(len(a) < len(b) for a, b in zip(mid["yA"], mid["yAfull"])), "the standing labels are being un-written"
-        writing = [at(DK_AT + DK_S * f) for f in (0.4, 0.45, 0.5, 0.55)]   # P71 T3: the write ends by 0.75 of the clock now
-        assert any(any(0 < len(a) < len(b) for a, b in zip(w["yB"], w["yBfull"])) for w in writing),             "the arriving axes write on E64's default clock"
-        assert any(abs(t[0] - t[1]) > 1 for t in mid["tickA"]), "the gridlines have slid toward the new scale"
-        assert all(t[2] > 0.3 for t in mid["tickA"]), "and none of them blinked out to do it"
+        mid = at(DK_AT + DK_S * 0.5)   # the standing line still holds ~3 % of its ink
+        assert all(a == b for a, b in zip(mid["yA"], mid["yAfull"])), "the standing labels stand whole while their line does"
+        assert all(a == "" for a in mid["yB"]), "no arriving tick shows over the standing line"
+        assert all(abs(t[0] - t[1]) < 0.5 for t in mid["tickA"]), "the standing gridlines hold their places"
+        late = at(DK_AT + DK_S * 0.85)   # the line is gone: the axes hand over
+        assert all(len(a) < len(b) for a, b in zip(late["yA"], late["yAfull"])), "the standing labels have left"
+        assert all(a == b for a, b in zip(late["yB"], late["yBfull"])), "the arriving ticks stand whole"
+        assert any(abs(t[0] - t[1]) > 1 for t in late["tickA"]), "the gridlines have slid toward the new scale"
+        assert all(t[2] > 0.3 for t in late["tickA"]), "and none of them blinked out to do it"
         assert all(d[2] == 0 for d in mid["dots"]) if mid["dots"] else True, "no datum travels on a plain recast"
         assert all("scaleY(0" in s or s == "" for s in mid["barScale"]), "and no bar grows before the target's own build"
         a = at(DK_AT + DK_S * 0.5); at(2.0); b = at(DK_AT + DK_S * 0.5)
