@@ -265,3 +265,7 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-212 | The brand line in the long shape. Closed by P72 T8. | lane B `02e9b83`: S07 runs in both shapes. |
 | R26-242 | Cites resolve by row title. Closed by P72 T29. | lane B `47d87a0`: `resolve_cite`, the decoy-row test; 587 of 645 cites. |
 | R26-301 | The skeleton vocabulary's cites follow their rows. Closed by P72 T29. | lane B `47d87a0`. |
+| R26-318 | The value gate reads every page; an unreadable page FAILs by name. Closed by P72 T6. | lane B `9dc5bb6` (`test_value_gate_longform.py` 80; three review rounds). |
+| R26-303 | A range is judged at both ends. Closed by P72 T6. | lane B `9dc5bb6` (`test_value_gate_longform.py` 80; three review rounds). |
+| R26-264 | A card's own badge is never page ink. Closed by P72 T6. | lane B `9dc5bb6` (`test_value_gate_longform.py` 80; three review rounds). |
+| R26-319 | The horizontal gauge is read by width; `gauge:h` admitted. Closed by P72 T6. | lane B `9dc5bb6` (`test_value_gate_longform.py` 80; three review rounds). |

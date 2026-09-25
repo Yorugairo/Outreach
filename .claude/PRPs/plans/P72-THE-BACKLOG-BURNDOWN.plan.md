@@ -537,7 +537,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T6: The value gate reads every page - M26 finds the scale on a long-form bars page, reads a range as two ends, never counts a card's own badge as page ink, and reads a width
-- Status: pending
+- Status: done - lane B 9dc5bb6 (three review rounds, MERGE): every page read (declared rules, panels), an unreadable page FAILs by name, the hand-over excused only by its arriving state at rest, the veil only when it covers, ranges at both ends, `gauge:h` by width; H INFO -> PASS 46 values; 0 flips
 - Owner: implementation_luna (LANE B), then reviewer (a truth gate)
 - Depends on: the operator's approval of this plan only - not T0 (P70 T3 landed at `e43c3d8`). Wave 1, the first lane-B dispatch.
 - Step 1 (after CONFIRM-OPEN, before RED) - the flip list: at the slice's base, run M26 over every committed build dir that carries a probe file (step 1 lists them: `build-*` / `build*` dirs under `content/video_engine/projects/` with a probe JSON), with a read-only "cannot read" detector that records each page M26 skips today, without changing any verdict. Write `$SP/p72-t6/flips.txt`: one line per build, page and reason ("no scale", "a range", "a width"). These are the reports that turn FAIL when acceptance (2) lands. Stop condition for step 1: if the run passes 30 minutes of wall clock, or a flip lands on an approved (frozen) cut, stop and hand the partial list to the parent before GREEN. Approved cuts are never re-gated or re-rendered (E45); their flips are recorded as findings.
