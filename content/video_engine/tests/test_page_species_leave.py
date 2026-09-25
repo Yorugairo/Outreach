@@ -49,8 +49,10 @@ def _recast(at: float = 12.0, dur: float = 1.8) -> dict:
 # ---- the law, as constants ----------------------------------------------------------------------------
 
 
-def test_the_page_bound_species_are_the_five_the_hand_writes_on_a_page():
-    assert B.PAGE_BOUND_SPECIES == ("note", "figure", "retitle", "bracket", "spread")
+def test_the_page_bound_species_are_the_seven_the_hand_writes_on_a_page():
+    # the five the hand wrote first, then P71 T9's axis tag (a pill ON the page's axis) and P71 T10's level join (a
+    # rule and a figure ON its data) - each joins by its own `PAGE_BOUND_SPECIES +=` line (R26-219) and leaves with it
+    assert B.PAGE_BOUND_SPECIES == ("note", "figure", "retitle", "bracket", "spread", "axis_tag", "level_join")
     assert set(B.PAGE_BOUND_SPECIES) <= set(B.PAGE_SPECIES), "each one is painted by the page's own perform layer"
 
 
