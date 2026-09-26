@@ -1,0 +1,16 @@
+Snapshot 2026-09-26 (secondary)
+
+== Wikipedia "Hygon Information Technology": https://en.wikipedia.org/wiki/Hygon_Information_Technology
+"originally established in October 2014 under the name Tianjin Haiguang Advanced Technology Investment"
+2016 JVs: "Chengdu Haiguang Microelectronics (HM) and Chengdu Haiguang Integrated Circuit Design (HICD)"
+"The first microprocessor created from the JV partnership was the Hygon Dhyana system on a chip which went into the Chinese market in 2018."
+"On 24 June 2019, Hygon as well as its related entities including the joint ventures were added to the Bureau of Industry and Security Entity List."
+"On 12 August 2022, Hygon held its initial public offering (IPO) on the Shanghai Stock Exchange STAR Market" raising "10.6 billion yuan (US$1.6 billion)"
+"In May 2025, it was announced that Hygon would merge with Sugon." / "On 10 December 2025, it was reported that the deal was called off."
+
+== SCMP 2025-05-26: https://www.scmp.com/tech/tech-war/article/3311838/sugon-hygon-merger-latest-sign-consolidation-chinas-computing-sector
+"Hygon will absorb Sugon shares through a stock swap agreement and issue new mainland China-listed shares to Sugon's shareholders"
+
+== Market value (search snippets only): Caproasia 2025-06-11 headline "China $44 Billion Semiconductor Giant Hygon Information Technology Makes $16.1 Billion Merger Offer" https://www.caproasia.com/2025/06/11/... ; market cap ~316.4B yuan at the announcement; "587 billion yuan" by April 2026 (unattributed snippet). Tier: PLAUSIBLE ($43-44B May/Jun 2025) / UNSOURCED (587B yuan).
+
+Juxtaposition (my arithmetic from sources/20): AMD recognised $52M (2017) + $86M (2018) + $60M (2019) = $198M from the licence in its FY2019 10-K window; the headline licence value was $293M. 2016 recognition not captured.

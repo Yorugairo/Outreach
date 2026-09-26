@@ -1,0 +1,20 @@
+Snapshot 2026-09-26 (WebFetch text extracts; Chinese quoted verbatim as returned; English = fetcher translation)
+
+== SAMR announcement: 市场监管总局关于附加限制性条件批准超威半导体公司收购赛灵思公司股权案反垄断审查决定的公告
+Original SAMR URL (now 404): https://www.samr.gov.cn/fldes/tzgg/ftj/202204/t20220424_342166.html
+Mirror used (MOFCOM policy database): https://policy.mofcom.gov.cn/claw/clawContent.shtml?id=93197
+Decision date on the text: "2022年1月21日"; filing received 2021年1月19日; case accepted 2021-04-07; further review from 2021-05-07 (per search snippet of the same text)
+Concern: "对全球和中国境内CPU、GPU加速器、FPGA市场具有或可能具有排除、限制竞争效果"
+No bundling: "不得以任何方式强制进行搭售，或者附加任何其他不合理的交易条件"
+Supply (full sentence): "在与中国境内企业既有合作基础上，进一步推进相关合作，并依据公平、合理、无歧视原则，向中国境内市场继续供应超威CPU、超威GPU、赛灵思FPGA和相关软件、配件。"
+  (EN: "on the basis of existing cooperation with enterprises in China, further advance related cooperation, and, on fair, reasonable and non-discriminatory principles, continue to supply the Chinese domestic market with AMD CPUs, AMD GPUs, Xilinx FPGAs and related software and accessories.")
+  Fetcher reading: no explicit reference to applicable law / export control in this sentence.
+Interoperability: "上述互操作性水平不低于超威CPU、超威GPU与赛灵思FPGA的互操作性水平"
+FPGA: "确保赛灵思FPGA的灵活性和可编程性"; "继续开发并确保赛灵思FPGA产品系列的可获得性"
+Confidentiality: "与第三方CPU、GPU和FPGA制造商签订保密协议"; stored in "独立且互不相通的硬件系统中"
+Reporting: "自生效日起，交易双方和集中后实体应每半年向市场监管总局报告本承诺方案的履行情况"
+Duration: "自生效日起6年后" the merged entity may apply to lift the behavioural conditions.
+
+== Sina Tech, 2022-01-27: https://finance.sina.com.cn/tech/2022-01-27/doc-ikyamrmz7801271.shtml
+Reports the announcement on 2022-01-27; same condition text; price/delivery/service not less favourable than pre-deal (fetcher summary).
+== Ashurst newsletter: "On 27 January 2022, the SAMR conditionally approved the acquisition of Xilinx by Advanced Micro Devices" (search snippet) https://www.ashurst.com/en/insights/competition-law-newsletter-march-2022/cn09---samr-conditionally-approves-two-mergers-in-the-technology-sector/

@@ -1,0 +1,16 @@
+Snapshot 2026-09-26
+
+== Crowd Supply updates list: https://www.crowdsupply.com/puzhi/pzsdr-p047-rf-adc-and-rf-dac/updates
+2026-08-27 Campaign Ending, Boards in Hand; 2026-08-26 Multi-Board Synchronization; 2026-08-21 PYNQ Quick-Start (RFSoC Book examples); 2026-08-18 PYNQ Guide; 2026-08-11 ADC/DAC Test Report; 2026-07-20 Quick Start; 2026-06-10 We Are Live!
+No update after 2026-09-01 (i.e., nothing from Puzhi after Patel's post, as of 2026-09-26).
+
+== 2026-08-27 "Campaign Ending, Boards in Hand": https://www.crowdsupply.com/puzhi/pzsdr-p047-rf-adc-and-rf-dac/updates/campaign-ending-boards-in-hand
+"we have PZSDR P047 boards in hand"
+"we will affix labels to the products and transport them to the crowdfunding warehouse, from where they will be delivered to supporters"
+
+== 2026-08-26 "Multi-Board Synchronization": https://www.crowdsupply.com/puzhi/pzsdr-p047-rf-adc-and-rf-dac/updates/multi-board-synchronization
+Two boards; "8 transmit and 8 receive RF channels" per board; "no phase drift or timing deviation observed"
+Listed uses include "Phased Array Radar" and "Massive MIMO Phased Arrays", 5G, quantum computing control, spectrum monitoring.
+
+== RTL-SDR blog "The PZSDR Team Demonstrates 7-Board Phase Coherence" (Sept 2026, exact date not captured): https://www.rtl-sdr.com/the-pzsdr-team-demonstrate-7-board-phase-coherence/
+7 boards, 56 RF channels, "±3°" phase coherence; uses listed: phased-array radar ("Build multi-channel coherent receive/transmit arrays for radar-algorithm validation"), direction finding ("coherent-receiver arrays for radio-signal DF-algorithm research"), radio astronomy, 5G massive MIMO.

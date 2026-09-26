@@ -1,0 +1,33 @@
+Snapshot 2026-09-26 (WebFetch/WebSearch text extracts)
+
+== AMD 8-K, event 2025-04-15, filed 2025-04-16
+URL: https://ir.amd.com/financial-information/sec-filings/content/0000002488-25-000039/amd-20250415.htm
+"On April 15, 2025, Advanced Micro Devices, Inc. (the "Company") completed its initial assessment"
+"export of certain semiconductor products to China (including Hong Kong and Macau) and D:5 countries"
+"The Export Control applies to the Company's MI308 products."
+"The Company expects that the Export Control may result in charges of up to approximately $800 million in inventory, purchase commitments and related reserves."
+"The Company expects to apply for licenses but there is no assurance that licenses will be granted."
+
+== CBS News, 2025-08-11: https://www.cbsnews.com/news/nvidia-amd-chip-sales-china-15-percent-h20-mi308/
+FT reported first (Sunday 2025-08-10); a U.S. official confirmed the "broad strokes"
+Trump: "So I said, 'I want 20% if I'm going to approve it for you'" ... "'Will you make it 15%?' so we negotiated a little deal."
+"highly unusual as corporations typically do not pay the federal government a share of revenue from their export sales."
+"It is unclear how the Trump administration would use the money generated from the chip sales agreement."
+
+== Reuters via Yahoo Finance, 2025-12-04 (Wired conference, SF): https://finance.yahoo.com/news/amd-chief-says-company-ready-182759905.html
+Reuters paraphrase of Su: "the company has licenses to ship some of its MI 308 chips to China and is prepared to pay a 15% tax"
+
+== AMD 10-K FY2025 / 10-K/A language (search-snippet only; main doc truncated in fetcher, NOT captured verbatim):
+"U.S. government officials have expressed an expectation that the U.S. government will receive 15% of the revenue generated from licensed MI308 sales to China; however, to date, the U.S. government has not published a regulation establishing such requirement."
+URLs: https://www.sec.gov/Archives/edgar/data/2488/000000248826000018/amd-20251227.htm ; https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000021/0000002488-26-000021.pdf
+
+== TrendForce 2026-02-04 (citing Nikkei/Reuters): https://www.trendforce.com/news/2026/02/04/news-amd-1q-sales-to-slip-despite-100m-mi308-china-boost-next-gen-ai-chips-set-for-2h-ramp/
+Q4 2025 included $390M MI308 revenue in China (orders "very early in 2025", shipped Oct-Dec quarter); Q1 2026 forecast "about $100 million from MI308 AI chip sales to China"
+
+== AMD 10-Q Q1 2022, note Business Combinations: https://www.sec.gov/Archives/edgar/data/2488/000000248822000078/R20.htm
+Closing: "February 14, 2022"
+"$48.8 billion ($46.4 billion, net of cash acquired of $2.4 billion)"
+"429 million shares of the Company's common stock issued to Xilinx stockholders" (fair value $48.5B)
+"closing price of the Company's common stock on February 11, 2022 of $113.18 per share"
+Goodwill $22.794B; fair value of net assets acquired $25.999B (fetcher summary of table)
+Announced 2020-10-27 (AMD press release title "AMD Completes Acquisition of Xilinx", https://www.amd.com/en/newsroom/press-releases/2022-2-14-amd-completes-acquisition-of-xilinx.html - not fetched)

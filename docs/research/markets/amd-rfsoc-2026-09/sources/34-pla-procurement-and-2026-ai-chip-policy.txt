@@ -1,0 +1,14 @@
+Snapshot 2026-09-26
+
+== CSET "Silicon Twist: Managing the Chinese Military's Access to AI Chips", June 2022, Fedasiuk / Elmgren / Lu: https://cset.georgetown.edu/publication/silicon-twist/
+Reviewed "24 public contracts awarded by PLA units and state-owned defense enterprises in 2020"; identified "97 individual AI chips"
+"Nearly all of them were designed by Nvidia, Xilinx (now AMD), Intel, or Microsemi."
+PLA "often buys commercial off-the-shelf AI systems from Chinese academic institutions and private companies"
+(Note: CSET's "AI chips" category includes FPGAs; the RFSoC is not named in the summary captured.)
+
+== BIS press release 2026-01-13: https://www.bis.gov/press-release/department-commerce-revises-license-review-policy-semiconductors-exported-china
+Licence review for China moved to "case-by-case basis" for "Nvidia H200, AMD MI325X, and similar chips"; conditions: no reduction of U.S. availability; Chinese purchaser has compliance/customer screening; independent third-party U.S. testing. No mention of a revenue share in the release.
+FR rule effective/published 2026-01-15 (FR 2026-00789 per law-firm summaries: https://www.morganlewis.com/pubs/2026/01/bis-revises-export-review-policy-for-advanced-ai-chips-destined-for-china-and-macau) - not captured.
+25% share: Trump directive 2025-12-08 permitting H200-class exports to "approved customers" with a 25% cut (per Centre Law / Introl summaries) - PLAUSIBLE, primary not captured.
+
+== The RFSoC contrast (my framing, label as such): in the same year Washington moved to licence top AI GPUs to China case-by-case with a revenue cut, a 2019-era radio chip under 3A001.a.14 stays licence-required (pack 1).

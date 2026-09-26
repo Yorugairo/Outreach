@@ -1,0 +1,23 @@
+Snapshot 2026-09-26
+
+== AMD 10-K FY2022, R70.htm (Summary of Operations by Segment): https://www.sec.gov/Archives/edgar/data/2488/000000248823000047/R70.htm
+Net revenue ($M)   2022    2021    2020
+Client            6,201   6,887   5,189
+Datacenter        6,043   3,694   1,685
+Gaming            6,805   5,607   2,746
+Embedded          4,552     246     143
+Operating income ($M)
+Embedded          2,252      44     (11)
+Total revenue    23,601  16,434   9,763
+(Xilinx closed 2022-02-14; Embedded 2021 -> 2022 is the Xilinx step.)
+Pack 1: Embedded 5,321 (2023), 3,557 (2024), 3,454 (2025).
+
+== AMD 8-K Q2 2026 earnings release (2026-08-04): https://www.sec.gov/Archives/edgar/data/0000002488/000000248826000121/q22026991.htm
+"Second quarter revenue was $11.5 billion, gross margin was 54%, operating income was $2.0 billion"
+"Data Center segment revenue was $6.7 billion, up 107% year-over-year"
+"Embedded segment revenue was $977 million, up 19% year-over-year, as demand strengthened across multiple end markets."
+"Q2'25 results included $800 million in inventory and related charges due to the U.S. Government's export control on AMD Instinct MI308 data center GPU products"
+Q3 2026 outlook: "approximately $13 billion, plus or minus $300 million"
+Embedded operating income $386M vs $275M a year earlier; margin 40% vs 33% - search summary only (PLAUSIBLE).
+
+RFSoC revenue: AMD does not disclose revenue by product line within Embedded (no RFSoC figure found in any filing checked).

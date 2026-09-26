@@ -1,0 +1,37 @@
+Snapshot 2026-09-26
+
+== SemiAnalysis bio page: https://semianalysis.com/dylan-patel/
+Founder and CEO; founded 2020; "Institutional-grade intelligence for semiconductors, AI infrastructure, and datacenter economics"; newsletter "over 200,000 subscribers" (fetcher summary of page).
+
+== Substrate profile, Cat Tang, 2026-09-18 (the day before the post): https://substratemag.com/dylanpatel/
+Founded 2020 as a WordPress blog; "Revenue is projected to beat $100M this year"; "ending the year around 100 full-time employees"
+"counts the vast majority of the world's largest companies among their customers"; hyperscalers top customers; hedge funds prominent; <5% revenue from Substack, majority from models and consulting
+Jensen Huang cited SemiAnalysis data at GTC 2026; Vicor "Short Report" (stock fell ~20%); MI300X analysis prompted a 90-minute call from Lisa Su
+Raised $500M SemiAnalysis Capital Fund I (private investing); litigation with a former employee (Wei Zhou)
+Search snippet (The Information / other): Patel holds stakes in ~20 startups incl. Thinking Machines; earlier $50M SPV in Fluidstack's round; revenue "up from around $20 million last year"; ~90 people. (PLAUSIBLE; The Information paywalled)
+
+== SemiAnalysis, "MI300X vs H100 vs H200 Benchmark Part 1: Training - CUDA Moat Still Alive", 2024-12-22, Patel/Nishball/Knuhtsen: https://newsletter.semianalysis.com/p/mi300x-vs-h100-vs-h200-benchmark-part-1-training
+"The CUDA moat has yet to be crossed by AMD due to AMD's weaker-than-expected software Quality Assurance (QA) culture."
+"AMD's Out of the Box Experience is very difficult to work with"
+"Five-month long quest to settle the reality of MI300X."
+"We genuinely want to see another effective competitor to Nvidia and want to help AMD get to that spot."
+Recommendations addressed to Lisa Su (e.g., "AMD needs to hook up thousands more of MI300X, MI325X to PyTorch CI/CD")
+
+== Patel X post 2024-12-23 (see sources/28): met Lisa Su "for 1.5 hours"; "She acknowledged the gaps in AMD software stack"
+
+== SemiAnalysis, "AMD 2.0 - New Sense of Urgency | MI450X Chance to Beat Nvidia", 2025-04-23: https://newsletter.semianalysis.com/p/amd-2-0-new-sense-of-urgency-mi450x-chance-to-beat-nvidia-nvidias-new-moat
+"Lisa Su and her team expressed a strong desire for AMD to do better"; AMD "kicked into a higher gear"; "new sense of urgency as a massive positive"; AMD added MI300X to PyTorch CI/CD, launched developer relations under Anush Elangovan (fetcher summary).
+
+== Google "We Have No Moat" leak published by SemiAnalysis 2023-05-04: https://newsletter.semianalysis.com/p/google-we-have-no-moat-and-neither ; Simon Willison 2023-05-04 https://simonwillison.net/2023/May/4/no-moat/ (PLAUSIBLE; snippet)
+
+== EE Times, Sally Ward-Foxton, 2026-03-20: https://www.eetimes.com/gtc-2026-keynote-long-live-the-inference-king/
+"Crowned 'The Inference King' by SemiAnalysis, His Royal Highness Jensen Huang addressed his faithful subjects for more than two hours" (InferenceMAX title-belt bit on stage)
+
+== House Select Committee on the CCP DeepSeek report, 2025-04-18, cites SemiAnalysis (via TechPolicy.Press): https://www.techpolicy.press/us-house-select-committee-report-accuses-deepseek-of-spying-and-circumventing-export-controls-on-chips/
+"DeepSeek uses at least 60,000 Nvidia chips, including H100, H20, A100, and H800 chips" (SemiAnalysis Jan 2025 estimate as referenced). Committee PDF not captured (PLAUSIBLE).
+
+== Patel export-control hawkishness, X 2025-04-16 05:10:52 UTC (api.fxtwitter.com/dylan522p/status/1912373100668137883):
+"This is why banning H20 without banning tools and sub components is idiotic because Huawei is not far behind H20." Views 547,817.
+
+== Congressional testimony by Dylan Patel: NOT FOUND (web search of congress.gov/committee sites via search engine only).
+== Prior "treason" accusation by Patel against a chipmaker: NOT FOUND (search engine only; X search unavailable). Note the same post also says "Pharma companies are also similarly treasonous".

@@ -1,0 +1,33 @@
+Snapshot 2026-09-26 via api.fxtwitter.com (x.com blocks the fetcher). Text verbatim as returned by the API.
+
+== ROOT POST (re-fetched 2026-09-26): https://x.com/dylan522p/status/2101350877932212621
+API: https://api.fxtwitter.com/dylan522p/status/2101350877932212621
+created_at: Sat Sep 19 16:41:05 +0000 2026
+Views 392,528; likes 1,040; reposts 62; replies 91; quotes 35
+Full text:
+"US supply chains for electronics suck so much
+AMD found a business opportunity in dumping US military chips for 1/4 of the cost in China.
+US list price is $36k for this chip, with $4-5k to US companies at volume, but it's getting quoted $1k in China to crowdfunding campaigns
+AMD needs to be investigated for treason. it's not just export violations, but it's literally selling military end use components to an adversary for less than your home country....
+Pharma companies are also similarly treasonous"
+NOTE: the closing line "Pharma companies are also similarly treasonous" is NOT in pack 1's quote set.
+
+== FOLLOW-UP (quote-post of the root) - the post pack 1 could not find
+https://x.com/dylan522p/status/2102503347681210570
+API: https://api.fxtwitter.com/dylan522p/status/2102503347681210570
+created_at: Tue Sep 22 21:00:35 +0000 2026
+Views 72,397; likes 197; reposts 8; replies 23; bookmarks 48; quotes 5
+Full text:
+"Spoke with AMD, they did not ship / sell this dual use chip to this firm and they're investigating the sourcing. This violates their policies + they work with authorities to take action on violations I am very concerned about the fact that pricing discrepancy is so large. I have heard from multiple folks that there are bitstream compatible FPGAs not from AMD that are floating around too."
+Quoted status: 2101350877932212621 (the root)
+
+== Patel's timeline 2026-09-08..26 (API https://api.fxtwitter.com/2/profile/dylan522p/statuses): only the two posts above concern AMD/China export; no further AMD post through 2026-09-26 16:24 UTC. Other posts in the window: "Fentanyl Grade Compute" (2026-09-24), "China datacenter model" (2026-09-25), Citrini Research acquisition announcement (2026-09-12).
+
+== SemiAnalysis vs AMD history - Patel post 2024-12-23 20:13:05 UTC: https://x.com/dylan522p/status/1871287937268383867
+"Met with @LisaSu today for 1.5 hours as we went through everything
+She acknowledged the gaps in AMD software stack
+She took our specific recommendations seriously
+She asked her team and us a lot of questions
+Many changes are in flight already!
+Excited to see improvements coming"
+Views 597,719; likes 3,420.

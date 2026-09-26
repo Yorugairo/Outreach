@@ -1,0 +1,33 @@
+Snapshot 2026-09-26. Yahoo Finance chart API (raw arrays copied verbatim by the fetcher):
+https://query1.finance.yahoo.com/v8/finance/chart/AMD?period1=1789344000&period2=1790380800&interval=1d
+
+timestamp: [1789392600,1789479000,1789565400,1789651800,1789738200,1789997400,1790083800,1790170200,1790256600,1790343000]
+open:  [486.2799987792969,501.70001220703125,517.3900146484375,533.5999755859375,547.3699951171875,583.8800048828125,606.5700073242188,621.5,600.27001953125,634.5399780273438]
+close: [493.4100036621094,504.20001220703125,512.5,545.0900268554688,559.8200073242188,615.52001953125,623.77001953125,614.6099853515625,629.260009765625,630.6300048828125]
+high:  [498.3900146484375,513.6699829101562,527.25,551.4199829101562,559.9099731445312,616.6900024414062,624.52001953125,624.6900024414062,630.7999877929688,639.0]
+low:   [480.3299865722656,497.510009765625,506.04998779296875,527.5999755859375,541.530029296875,582.27001953125,606.3099975585938,608.0800170898438,599.239990234375,625.52001953125]
+volume:[24810100,17134000,22317700,28464700,31867300,44494300,28282800,16338200,25318900,17594900]
+regularMarketPrice: 630.63
+
+Timestamp decode (my arithmetic; 1789344000 = 2026-09-14 00:00 UTC; each stamp = 13:30 UTC = 09:30 ET open):
+Date        Close    Chg vs prior close
+2026-09-14  493.41
+2026-09-15  504.20   +2.19%
+2026-09-16  512.50   +1.65%
+2026-09-17  545.09   +6.36%
+2026-09-18  559.82   +2.70%   (Fri; last close before the Sat 2026-09-19 16:41 UTC post)
+2026-09-21  615.52   +9.95%   (Mon; first session after the post; volume 44.5M, the window's high)
+2026-09-22  623.77   +1.34%   (Patel follow-up 21:00 UTC, after the close)
+2026-09-23  614.61   -1.47%
+2026-09-24  629.26   +2.38%   (Tom's Hardware article 13:00 UTC)
+2026-09-25  630.63   +0.22%
+2026-09-14 -> 2026-09-25: +27.8%. 2026-09-18 -> 2026-09-25: +12.6%.
+Reading: the stock ROSE after the post. No causal link to the post is shown; the driver of the +9.95% on 09-21 is not identified here (see RESEARCH-2 open questions).
+
+== Why AMD rose on 2026-09-21 (press)
+Daily Caller, 2026-09-21: https://dailycaller.com/2026/09/21/amd-cracks-1-trillion-as-ai-frenzy-sends-chip-stocks-soaring/
+"AMD shares jumped roughly 9% Monday and hit a record high above $613, briefly pushing the chipmaker's valuation above the trillion-dollar threshold."
+"The popularity of Meta's new Muse AI agent contributed to Monday's rally"; Intel ~+13%, Philadelphia Semiconductor Index ~+3%. No mention of Patel/export/RFSoC.
+GuruFocus via Yahoo Finance, 2026-09-21 (Nauman Khan): https://finance.yahoo.com/markets/stocks/articles/amd-stock-jumps-record-chip-153544439.html
+"Renewed optimism around artificial-intelligence demand lifted semiconductor stocks across the market"; record South Korean chip exports (first 20 days of Sept); Piper Sandler on CPU/GPU demand; Nebius raising AMD EPYC Genoa capacity prices 25%; AMD Q2 data-center revenue +107% YoY to $6.7B (as reported there). No mention of Patel.
+Search summaries also mention an AMD acquisition of "Taalas" - NOT verified.

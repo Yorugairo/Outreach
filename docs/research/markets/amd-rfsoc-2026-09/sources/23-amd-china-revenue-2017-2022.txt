@@ -1,0 +1,28 @@
+Snapshot 2026-09-26. AMD revenue by customer billing location (USD millions). FY2023-25 are in pack 1 (sources/07).
+
+== AMD 10-K FY2019, R77.htm: https://www.sec.gov/Archives/edgar/data/2488/000000248820000008/R77.htm
+Geography            2019    2018    2017
+United States        1,764   1,327   1,360
+China (incl. HK)     1,736   1,319     974
+Japan                  840   1,225   1,215
+Europe                 762     470     263
+Taiwan                 719   1,197     738
+Singapore              597     728     550
+Other                  313     209     153
+Total                6,731   6,475   5,253
+
+== AMD 10-K FY2022, R72.htm: https://www.sec.gov/Archives/edgar/data/2488/000000248823000047/R72.htm
+Geography            2022    2021    2020
+Total               23,601  16,434   9,763
+United States        8,049   4,656   2,294
+China (incl. HK)     5,207   4,096   2,329
+Japan                4,177   2,381   1,033
+Europe               1,773   1,249   1,108
+Taiwan               2,369   2,091   1,187
+Singapore            1,380   1,389   1,096
+Other                  646     572     716
+
+Pack 1 (sources/07, FY2025 10-K R54): China incl HK 3,417 / 22,680 (2023); 6,231 / 25,785 (2024); 7,751 / 34,639 (2025)
+
+Derived China share (my arithmetic): 2017 18.5%; 2018 20.4%; 2019 25.8%; 2020 23.9%; 2021 24.9%; 2022 22.1%; 2023 15.1%; 2024 24.2%; 2025 22.4%.
+Caveat (AMD's own): billing location, not end use - e.g. a Chinese-billed PC maker's chips may end in laptops sold anywhere.
