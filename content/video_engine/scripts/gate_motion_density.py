@@ -1550,16 +1550,33 @@ def _in_frame_faults(scenes: list[dict], aspect: str) -> list[str]:
     return out
 
 
-def _in_frame_gate(scenes: list[dict], aspect: str) -> Gate | None:
-    """M24: no row unless a scene authors camera keys (the identity camera frames everything)."""
-    if not any(((s.get("camera") or {}).get("keys")) or (s.get("camera") or {}).get("attention") == "landings" for s in scenes):
+def _in_frame_gate(scenes: list[dict], aspect: str, layout: dict | str | None = None) -> Gate | None:
+    """M24: no row unless a scene authors camera keys (the identity camera frames everything) - or, since P72 T7
+    (R26-132 (2)), a card on a DEPTH plane stands on a scene whose camera lands zoomed in: that card rides the move,
+    and the row names it when the landing carries it off the frame (a WARN, s106 (4); the pointing species stay FAIL)."""
+    keyed = any(((s.get("camera") or {}).get("keys")) or (s.get("camera") or {}).get("attention") == "landings" for s in scenes)
+    depth = _has_depth_landing(scenes, aspect)
+    if not keyed and not depth:
         return None
-    faults = _in_frame_faults(scenes, aspect)
+    faults = _in_frame_faults(scenes, aspect) if keyed else []
+    dwarn, dmeas, dunmeas = _depth_card_faults(scenes, aspect, layout if isinstance(layout, dict) else None) if depth else ([], 0, 0)
+    tail = ""
+    if depth:
+        tail = (f" | depth cards: {len(dwarn)} of {dmeas} measured landing(s) off the frame"
+                + (": " + "; ".join(dwarn[:4]) + (" ..." if len(dwarn) > 4 else "") if dwarn else "")
+                + (f"; {dunmeas} landing(s) not measured - run probe.py <build> --gate (writes {LAYOUT_PROBE_NAME})"
+                   if dunmeas else "") + " (R26-132 (2): a card at a depth rides the camera)")
     if faults:
-        return Gate("M24", "FAIL", "; ".join(faults[:8]) + (" ..." if len(faults) > 8 else "") + " - a species points at what the eye cannot see: move the key, or the species", SRC_M24)
+        return Gate("M24", "FAIL", "; ".join(faults[:8]) + (" ..." if len(faults) > 8 else "") + " - a species points at what the eye cannot see: move the key, or the species" + tail, SRC_M24)
+    if dwarn:
+        return Gate("M24", "WARN", f"{len(dwarn)} settled depth card(s) carried off the frame by a camera landing" + tail
+                    + " - aim the move at the card's projected box, place it nearer, or give it less depth", SRC_M24)
+    if not keyed:   # only the depth cards to read: INFO until the probe has measured one, then what it measured
+        level = "PASS" if dmeas else "INFO"
+        return Gate("M24", level, "no keyed camera; the settled depth cards at its landings" + tail, SRC_M24)
     n = sum(1 for s in scenes for sp in s.get("species", []) if sp.get("kind") in POINTING_KINDS and isinstance(sp.get("target"), dict)
             and (((s.get("camera") or {}).get("keys")) or (s.get("camera") or {}).get("attention") == "landings"))
-    return Gate("M24", "PASS", f"{n} pointing species on moving-camera scenes, every target in frame when it fires", SRC_M24)
+    return Gate("M24", "PASS", f"{n} pointing species on moving-camera scenes, every target in frame when it fires" + tail, SRC_M24)
 
 
 def _build_gate(clashes: list[tuple[str, str]]) -> Gate:
@@ -1640,6 +1657,8 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     # P35 T7: targeted species fire as tabled in SPECIES_EVENTS (s9.27 gate column)
     events = _collect_events(tl, mp, spans, badges, page_beats, cap_rows, _species_events(scenes) + _arrival_events(scenes),   # P47 T1: a throw / a landing is motion
                              _video_dock_events(scenes, docks))   # E44: a live video dock is continuous motion
+    credited, credited_line = _credited_beats(tl)   # P72 T7 (R26-326 / R26-269): the verdict stack's poses, a record's typing
+    events.update(credited)
     ev, still = _sentinelled(events, runtime)
     # R26-232 (2): the PULSE ROWS (M05, M10, M16) read one term more - the sustained life of a page whose
     # resolved idle is `live`. It is kept out of `events` on purpose: M01/M02/M03/M07 count the frame's own
@@ -1673,7 +1692,7 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     return {"runtime": runtime, "events": ev, "still": still, "ev_gaps": ev_gaps, "plates": plate_ids,
             "pulse_events": pulse_ev, "pulse_still": pulse_still,          # R26-232 (2): M05 / M10 / M16 only
             "page_life": life, "live_spans": _live_page_spans(tl), "cap_counts": cap_counts,
-            "landings": _chart_landings(scenes),
+            "landings": _chart_landings(scenes), "credited_line": credited_line,
             "over_hold": over_hold, "wc": wc, "pages": pages, "dens": _per_minute(runtime, ev, entries),
             "spans": spans, "dock_source": dock_source, "n_pages": len(page_starts),
             "camera_clashes": _camera_clashes(scenes),
@@ -1684,7 +1703,7 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
 
 def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None = None, morph: dict | str | None = None,
         layout: dict | str | None = None, frame_layers: dict[str, list[dict] | str] | None = None,
-        squint: dict | str | None = None) -> tuple[list[Gate], dict]:
+        squint: dict | str | None = None, beat: tuple[float, float] | None = None) -> tuple[list[Gate], dict]:
     form_error = _timeline_form_error(tl)
     A = analyse(tl, docks, mp)
     R = A["runtime"]
@@ -1787,7 +1806,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g.append(_pulse_gate(tl, A))                                           # M16 (49 s49.6, shorts)
     # E24 / E25: the opening minute and the chart-as-proof rule
     g += [_opening_still_gate(A["pulse_still"], _life_term(A, OPENING_STILL_MAX_S)),   # R26-232 (2): a pulse row
-          _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
+          _first_chart_gate(tl, docks, mp, beat), _chart_hold_gate(tl, docks)]   # P72 T7 (R26-167): a beat's own window
     g.append(_frozen_gate(frames, frame_layers, layer_windows(A),
                           freeze_windows(tl.get("scenes", []))))     # M18 (E49: nothing ever goes truly still; R26-13: per layer; P69 T49: a freeze beat is punctuation)
     if (sg := _drop_window_sound_gate(tl, mp)) is not None:
@@ -1821,7 +1840,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(pg_)                                                     # M22 (E51: a push is tied to a landing)
     if (tg := _transition_gate(tl.get("scenes", []))) is not None:
         g.append(tg)                                                      # M23 (P48 T6: a chart changes state, never over a build, never at the edge)
-    if (ifg := _in_frame_gate(tl.get("scenes", []), str(tl.get("aspect") or "16:9"))) is not None:
+    if (ifg := _in_frame_gate(tl.get("scenes", []), str(tl.get("aspect") or "16:9"), layout)) is not None:
         g.append(ifg)                                                     # M24 (P49 T6: the target is in the camera's frame when the species fires)
     if (mg := _morph_gate(tl.get("scenes", []), morph)) is not None:
         g.append(mg)                                                      # M17 (P47 T3: the match-cut invariants per morph page)
@@ -1831,6 +1850,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     sg = _stage_gap_gate(BUILD_DIR[0] if BUILD_DIR else None, tl.get("scenes", []))             # M31 (R26-66 / P53 T2: the empty stage, measured)
     if sg is not None:
         g.append(sg)
+    if (fl := _flow_gate(tl.get("scenes", []))) is not None:
+        g.append(fl)                                                      # M50 (P72 T7 / R26-189: every cut and dip, the transform it refused)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
     return g, _stats(A, tot)
 
@@ -1959,16 +1980,26 @@ def _first_chart_window(tl: dict) -> tuple[float, float, str]:
     return PARADOX_S, FIRST_CHART_MAX_S, "E24 long form: the 8s paradox is paid before the chart enters"
 
 
-def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
+def _first_chart_gate(tl: dict, docks: list[dict], mp: dict, beat: tuple[float, float] | None = None) -> Gate:
     """M11: the first chart (chart/data dock, or ledger page) enters inside its window - 8-20s on long
     form (E24), 0-10s on a short (E44) - carries a targeted species within ANNOTATE_TOL_S, and a sound
-    cue within CUE_TOL_S (WARN). The row's message names the window and the ruling it applied."""
+    cue within CUE_TOL_S (WARN). The row's message names the window and the ruling it applied.
+
+    P72 T7 (R26-167): `beat` = (t0, t1) scores a TEST-BED BEAT on its own window. The opening's window is an
+    opening's rule and a beat is not an opening: the window IS the beat, the first chart that enters inside it is
+    judged on its own landing, annotation and cue exactly as above, and a beat with no chart entering is INFO."""
     charts, known = chart_docks(tl, docks)
-    lo, hi, mode = _first_chart_window(tl)
-    win = f"; window {lo:.0f}-{hi:.0f}s ({mode})"
+    lo, hi, mode = _first_chart_window(tl) if beat is None else (
+        beat[0], beat[1], "a beat's own window, R26-167: the opening's window is not a beat's")
+    win = f"; window {lo:.0f}-{hi:.0f}s ({mode})" if beat is None else f"; beat {lo:.2f}-{hi:.2f} ({mode})"
     pages = [{"enter": float(s["span"][0]), "asset": f"ledger:{s.get('scene_id', '?')}", "scene": s}
              for s in tl.get("scenes", []) if _is_page(s)]
     cands = sorted(charts + pages, key=lambda x: x["enter"])
+    if beat is not None:
+        cands = [c for c in cands if lo <= c["enter"] < hi]
+        if not cands:
+            return Gate("M11", "INFO", "no chart enters inside the window - a beat is not failed for want of the "
+                        "episode's first chart" + win, SRC_M11)
     if not cands:
         return Gate("M11", "FAIL", "no chart enters at all - no chart/data dock and no ledger page in the timeline" + win, SRC_M11)
     t, asset, scene = cands[0]["enter"], cands[0]["asset"], cands[0]["scene"]
@@ -4321,6 +4352,313 @@ def _morph_gate(scenes: list[dict], inv: dict | str | None) -> Gate | None:
     return Gate("M17", "PASS", "; ".join(rows), SRC_M17)
 
 
+# ---- P72 T7: THE CREDITS THE GATE OWED THE FRAME ------------------------------------------------------------------
+# "Frames inward, not tokens outward" (2026-09-17): every instant credited below is a change the PLAYER paints, read off
+# the painter's own clock and the payload the player itself reads (the timeline's `evidence` map - the engine's fillDock
+# reads `TL.evidence[aid]`), and only while the dock that mounts it is on stage: the engine calls drawRecord / drawStack
+# only for a LIVE dock (`live.find((x) => x.slot === s ...)`), so a beat outside [enter, exit) is never painted.
+#
+# THE VERDICT STACK (R26-326; species/verdict.mjs VERDICT / VERDICT_9X16 - two dial sets of ONE species, E99 s61; the
+# engine picks the set as `verdictDials(ev.stack.form ? form === "9:16" : PORTRAIT)`). Per proof i: the flight in from
+# depth at its `at` and its landing ENTER_S later (verdictPose's out-cubic reaches the focus pose); the recede at the
+# next proof's beat and the card on its rail RECEDE_S later (verdictNextAt: the LAST proof recedes LAST_RECEDE_LEAD
+# before the clear on the full frame, and never on a gathering form); the gather's start (GATHER_LEAD before the clear,
+# the vertical form only); each card's burst at clear_at + i x BURST_STAGGER and its end BURST_S later (verdictBurst).
+VERDICT_DIALS = {
+    "16:9": {"ENTER_S": 0.9, "RECEDE_S": 1.0, "LAST_RECEDE_LEAD": 0.9, "GATHER": False, "GATHER_LEAD": 0.9,
+             "BURST_STAGGER": 0.06, "BURST_S": 0.5},
+    "9:16": {"ENTER_S": 0.9, "RECEDE_S": 1.0, "LAST_RECEDE_LEAD": 0.9, "GATHER": True, "GATHER_LEAD": 0.9,
+             "BURST_STAGGER": 0.035, "BURST_S": 0.42},
+}
+STACK_FORMS = tuple(VERDICT_DIALS)
+# THE RECORD (R26-269; species/record.mjs RECORD): every word appears on ITS OWN onset (`recordTyped` - "there is no
+# characters/s anywhere in the file": the narrator's onsets ARE the character clock, each word string-sliced over 0.72
+# of its gap), and the paper's two feet land after the quotation's end - the attribution ATTR_AFTER, the source SRC_AFTER.
+RECORD_ATTR_AFTER_S, RECORD_SRC_AFTER_S = 0.15, 0.45
+
+
+def _num(v) -> bool:
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+
+def _live_docks(scenes: list[dict], evidence: dict, key: str) -> list[tuple[dict, dict]]:
+    """(timeline dock, its evidence entry) for every dock on the timeline whose evidence entry carries `key`."""
+    ev = evidence if isinstance(evidence, dict) else {}
+    return [(d, ev[d.get("slide")]) for s in scenes for d in (s.get("docks") or [])
+            if isinstance(ev.get(d.get("slide")), dict) and key in ev[d.get("slide")]]
+
+
+def _on_stage(d: dict, t: float) -> bool:
+    return float(d.get("enter", 0.0)) <= t < float(d.get("exit", 0.0))
+
+
+def _stack_error(st) -> str | None:
+    """Why a `stack` payload cannot be read as the painter reads it, else None (refused BY NAME, never dropped)."""
+    if not isinstance(st, dict):
+        return f"the payload is a {type(st).__name__}, not {{items, clear_at}}"
+    items = st.get("items")
+    if not isinstance(items, list) or not items:
+        return f"`items` is {str(items)[:40]!r} - a list of {{id, at}} is owed"
+    if any(not isinstance(i, dict) or not _num(i.get("at")) for i in items):
+        return "an item carries no numeric `at`"
+    if not _num(st.get("clear_at")):
+        return f"`clear_at` is {str(st.get('clear_at'))[:20]!r}, not a number"
+    if "form" in st and st["form"] not in STACK_FORMS:
+        return f"`form` is {str(st['form'])[:20]!r}, not one of {'|'.join(STACK_FORMS)}"
+    return None
+
+
+def _stack_poses(st: dict, V: dict) -> list[float]:
+    """The instants verdict.mjs changes a card's pose, for one payload and one dial set."""
+    items, clear = st["items"], float(st["clear_at"])
+    out: list[float] = []
+    for i, it in enumerate(items):
+        at = float(it["at"])
+        out += [at, at + V["ENTER_S"]]
+        last = i + 1 == len(items)
+        if not (last and V["GATHER"]):
+            nxt = clear - V["LAST_RECEDE_LEAD"] if last else float(items[i + 1]["at"])
+            out += [nxt, nxt + V["RECEDE_S"]]
+        b = clear + i * V["BURST_STAGGER"]
+        out += [b, b + V["BURST_S"]]
+    if V["GATHER"]:
+        out.append(clear - V["GATHER_LEAD"])
+    return out
+
+
+def _stack_beats(scenes: list[dict], evidence: dict, aspect: str) -> tuple[list[float], list[str]]:
+    """(events, refusals): every verdict-stack pose change the painter writes while its host dock is on stage."""
+    events: list[float] = []
+    notes: list[str] = []
+    for d, ev in _live_docks(scenes, evidence, "stack"):
+        st = ev["stack"]
+        why = _stack_error(st)
+        if why:
+            notes.append(f"{d.get('slide')}: stack refused - {why}")
+            continue
+        form = str(st["form"]) if "form" in st else ("9:16" if aspect == "9:16" else "16:9")
+        events += [round(t, 2) for t in _stack_poses(st, VERDICT_DIALS[form]) if _on_stage(d, t)]
+    return sorted(set(events)), notes
+
+
+def _record_error(r) -> str | None:
+    """Why a `record` payload cannot be read as the painter reads it, else None."""
+    if not isinstance(r, dict):
+        return f"the payload is a {type(r).__name__}, not {{words, end}}"
+    words = r.get("words")
+    if not isinstance(words, list) or any(not isinstance(w, (list, tuple)) or len(w) < 2 or not _num(w[1]) for w in words):
+        return "`words` must be [[word, onset], ...] with numeric onsets"
+    if "end" in r and not _num(r["end"]):
+        return f"`end` is {str(r['end'])[:20]!r}, not a number"
+    return None
+
+
+def _record_beats(scenes: list[dict], evidence: dict) -> tuple[list[float], list[str]]:
+    """(events, refusals): every word a record types on its own onset, and the paper's two feet, while the dock is on
+    stage. The typing IS motion a viewer watches (R26-269) - on any plate, in any register."""
+    events: list[float] = []
+    notes: list[str] = []
+    for d, ev in _live_docks(scenes, evidence, "record"):
+        r = ev["record"]
+        why = _record_error(r)
+        if why:
+            notes.append(f"{d.get('slide')}: record refused - {why}")
+            continue
+        ts = [float(w[1]) for w in r["words"]]
+        if _num(r.get("end")):
+            ts += [float(r["end"]) + RECORD_ATTR_AFTER_S, float(r["end"]) + RECORD_SRC_AFTER_S]
+        events += [round(t, 2) for t in ts if _on_stage(d, t)]
+    return sorted(set(events)), notes
+
+
+def _credited_beats(tl: dict) -> tuple[list[float], str | None]:
+    """The two credits together, and the stats line that names what was counted - None when the build carries
+    neither, so a report without them is the report it was."""
+    scenes, evidence = tl.get("scenes", []), tl.get("evidence") or {}
+    stack, s_notes = _stack_beats(scenes, evidence, str(tl.get("aspect") or "16:9"))
+    record, r_notes = _record_beats(scenes, evidence)
+    if not (stack or record or s_notes or r_notes):
+        return [], None
+    names = lambda key: ", ".join(sorted({str(d.get("slide")) for d, _e in _live_docks(scenes, evidence, key)}))
+    parts = ([f"verdict stack {len(stack)} pose change(s) ({names('stack')})"] if stack else []) \
+        + ([f"record typing {len(record)} word/foot instant(s) ({names('record')})"] if record else [])
+    line = "; ".join(parts) + " - the painters' own clocks, while the dock is on stage (P72 T7)" if parts else "none credited"
+    if s_notes or r_notes:
+        line += "; refused: " + "; ".join(s_notes + r_notes)
+    return sorted(set(stack) | set(record)), line
+
+
+# ---- R26-167: A BEAT IS JUDGED ON ITS OWN WINDOW ----------------------------------------------------------------
+def parse_beat(text: str) -> tuple[float, float]:
+    """`--beat t0,t1` -> (t0, t1); refused by name unless two finite seconds with 0 <= t0 < t1."""
+    parts = [p.strip() for p in str(text).split(",")]
+    try:
+        t0, t1 = (float(p) for p in parts)
+    except ValueError:
+        raise ValueError(f"--beat {text!r}: two seconds are owed, as t0,t1 (e.g. --beat 12.5,31)") from None
+    if not (0.0 <= t0 < t1 < float("inf")):
+        raise ValueError(f"--beat {text!r}: the window must run forward from 0 or later (0 <= t0 < t1)")
+    return t0, t1
+
+
+# ---- R26-189: M50, THE FLOW READ -------------------------------------------------------------------------------
+SRC_M50 = ("E99 s74 Apply 1 / 3 (the operator, 2026-09-17: \"the whole point of creating them was to improve our ability "
+           "to live with less cuts and to be able to keep a directional flow\"): a cut or a dip is the last resort and "
+           "its `why` names the transform it refused; the flow read lists every one of them beside the transforms taken. "
+           "INFO: the flow floor is the operator's, read off the base the operator accepts (R26-189)")
+FLOW_LAST_RESORT = ("cut", "dip")
+
+
+def _refused_of(scene: dict) -> str:
+    """The transform a boundary's `exit_why` names as refused, `(unnamed)` when the timeline carries none."""
+    why = scene.get("exit_why")
+    if why is None:
+        return "(unnamed)"
+    if not isinstance(why, str):
+        return f"(malformed exit_why: {type(why).__name__})"
+    k = why.lower().find("refused:")
+    if k < 0:
+        return "(unnamed)"
+    tail = why[k + len("refused:"):].strip()
+    for stop in (" (", ";", " - "):
+        tail = tail.split(stop)[0]
+    return tail.strip()[:80] or "(unnamed)"
+
+
+def _flow_gate(scenes: list[dict]) -> Gate | None:
+    """M50 (INFO): every world change into a scene (the player's law: a scene's `exit` names the move INTO it; absent is
+    the cut), the transforms counted by name, and every cut and dip listed with the transform it refused."""
+    rows = [(s, str(s.get("exit") or "cut").split(":")[0]) for i, s in enumerate(scenes) if i and s.get("span")]
+    if not rows:
+        return None
+    last = [(s, tok) for s, tok in rows if tok in FLOW_LAST_RESORT]
+    moves: dict[str, int] = {}
+    for _s, tok in rows:
+        if tok not in FLOW_LAST_RESORT:
+            moves[tok] = moves.get(tok, 0) + 1
+    named = ", ".join(f"{k} {v}" for k, v in sorted(moves.items())) or "none"
+    listed = "; ".join(f"{s.get('scene_id', '?')} {tok} at {_mm(float(s['span'][0]))} refused: {_refused_of(s)}"
+                       for s, tok in last)
+    unnamed = sum(1 for s, _t in last if _refused_of(s) == "(unnamed)")
+    return Gate("M50", "INFO", f"{len(rows)} world change(s): transforms {len(rows) - len(last)} ({named}); cuts+dips "
+                f"{len(last)}, {unnamed} with no refused transform named | {listed or 'no cut or dip'}", SRC_M50)
+
+
+# ---- R26-132 (2): A CARD AT A DEPTH RIDES THE CAMERA -----------------------------------------------------------
+def _dock_depth(d: dict) -> float:
+    """The plane a dock stands on (the engine's dockDepthOf): 0 = pinned to the frame, which rides no camera."""
+    k = d.get("depth")
+    return float(k) if _num(k) and float(k) > 0 else 0.0
+
+
+def _dock_contact(d: dict) -> float:
+    """The instant a dock's arrival meets its spot - `_landings`' own contact (a throw's flight, a land's anticipation
+    and drop, a stamp's contact, a poof's burst; the spring's pop is its enter)."""
+    return float(d.get("enter", 0.0)) + {"throw": 0.46, "land": 0.32, "stamp": STAMP_CONTACT_S,
+                                         "poof": POOF_CONTACT_S}.get(d.get("arrive"), 0.0)
+
+
+def _dock_settled(d: dict) -> float:
+    """When a card stops moving on its own: its read-and-park when it has the life for one (probe.gate_instants'
+    `parked` rule), else its arrival's contact."""
+    enter = float(d.get("enter", 0.0))
+    read_s, park_s = float(d.get("read_s") or 1.2), float(d.get("park_s") or 0.7)
+    if d.get("place") and float(d.get("exit", 0.0)) - enter >= read_s + park_s:
+        return enter + read_s + park_s
+    return _dock_contact(d)
+
+
+def _plane_project(st: dict, k: float, box: list[float]) -> list[float]:
+    """A box on the plane at k, as the camera state `st` puts it on screen (camProject after camLayerState)."""
+    p = plane_state(st, k)
+    (lx, ly), (ax, ay), s = p["look"], p["at"], p["s"]
+    return [ax + s * (box[0] - lx), ay + s * (box[1] - ly), s * box[2], s * box[3]]
+
+
+def _plane_unproject(st: dict, k: float, box: list[float]) -> list[float]:
+    """The inverse: a box on screen read back onto the plane at k."""
+    p = plane_state(st, k)
+    (lx, ly), (ax, ay), s = p["look"], p["at"], p["s"]
+    return [lx + (box[0] - ax) / s, ly + (box[1] - ay) / s, box[2] / s, box[3] / s]
+
+
+def _instant_camera(s: dict, inst: dict, sw: float, sh: float, aspect: str) -> dict:
+    """The camera a probe instant was read under: the probe's own zoom and look, and `at` = look for a species window
+    or a landings pull (camSpeciesState / camAttentionState both write at = look); on a keyed scene, the keys' state."""
+    if (s.get("camera") or {}).get("keys"):
+        return camera_state_at(s, float(inst["t"]), sw, sh, _page_plot(s, aspect))
+    cam = inst.get("camera") or {}
+    look = tuple(float(v) for v in (cam.get("look") or (sw / 2, sh / 2)))
+    return {"s": float(cam.get("zoom") or 1.0), "look": look, "at": look}
+
+
+def _landing_camera(s: dict, what: str, land: float, sw: float, sh: float, aspect: str) -> dict:
+    """The camera at a `_cam_landings` landing, as that row computes its frustum: a punch / focus zoom at its peak scale
+    about its target's centre, a key at its own state."""
+    plot = _page_plot(s, aspect)
+    for sp in s.get("species", []):
+        if sp.get("kind") in ("punch", "focus_zoom") and what == f"{sp['kind']} at {_mm(float(sp.get('at', 0.0)))}":
+            c = _cam_point(sp.get("target"), sw, sh, plot)
+            return {"s": CAM_PUNCH_SCALE if sp["kind"] == "punch" else CAM_FOCUS_SCALE, "look": c, "at": c}
+    return camera_state_at(s, land, sw, sh, plot)
+
+
+def _overshoot(box: list[float], sw: float, sh: float) -> list[tuple[str, float]]:
+    x0, y0, x1, y1 = box[0], box[1], box[0] + box[2], box[1] + box[3]
+    edges = (("left", -x0), ("top", -y0), ("right", x1 - sw), ("bottom", y1 - sh))
+    return [(e, px) for e, px in edges if px > CROP_EDGE_PX]
+
+
+def _depth_reads(layout, slide: str, a: float, z: float, land: float) -> list[tuple[dict, dict]]:
+    """(instant, the card's record) for every probe instant that read `slide` settled in [a, z) near the landing."""
+    insts = (layout or {}).get("instants") or [] if isinstance(layout, dict) else []
+    return [(i, b) for i in insts for b in (i.get("docks") or []) if b.get("id") == slide
+            and a - 1e-6 <= float(i.get("t", -1)) < z and abs(float(i["t"]) - land) <= CROP_INSTANT_S]
+
+
+def _depth_card_faults(scenes: list[dict], aspect: str, layout) -> tuple[list[str], int, int]:
+    """(WARN lines, landings measured, landings unmeasured) for every SETTLED card on a depth plane at every camera
+    landing on its scene (R26-132 (2), M24's sibling). The card's box is the FRAME's: the probe instant nearest the
+    landing after the card settled, read back onto its plane through the camera it was read under and carried to the
+    landing's camera - never the row's `place`, whose height is the compiler's prediction (dock-depth: 400 predicted,
+    462 painted). A card with no depth stands in screen space and rides nothing: it reads as before. s106 (4): a card
+    cut by the frame is a fit finding - a WARN with its numbers."""
+    sw, sh = (1080.0, 1920.0) if aspect == "9:16" else (1920.0, 1080.0)
+    lands: dict[str, list[tuple[str, float]]] = {}
+    for _s, sid, what, land, _fr in _cam_landings(scenes, aspect):
+        lands.setdefault(sid, []).append((what, land))
+    warns: list[str] = []
+    measured = unmeasured = 0
+    for s in scenes:
+        sid = str(s.get("scene_id", "?"))
+        for d in s.get("docks") or []:
+            k = _dock_depth(d)
+            a, z = _dock_settled(d), float(d.get("exit", 0.0))
+            for what, land in (lands.get(sid, []) if k else []):
+                if not a <= land < z:
+                    continue
+                reads = _depth_reads(layout, d.get("slide"), a, z, land)
+                if not reads:
+                    unmeasured += 1
+                    continue
+                measured += 1
+                inst, b = min(reads, key=lambda r: abs(float(r[0]["t"]) - land))
+                world = _plane_unproject(_instant_camera(s, inst, sw, sh, aspect), k, [float(v) for v in b["box"]])
+                shown = _plane_project(_landing_camera(s, what, land, sw, sh, aspect), k, world)
+                off = _overshoot(shown, sw, sh)
+                if off:
+                    warns.append(f"{sid} {d.get('slide')} at depth {k:g} under the {what} (landed {land:.2f}s): runs "
+                                 + ", ".join(f"{px:.0f} px off the {e}" for e, px in off)
+                                 + f" (on screen {shown[0]:.0f},{shown[1]:.0f} {shown[2]:.0f}x{shown[3]:.0f}; its box "
+                                 f"read at {float(inst['t']):.2f}s)")
+    return _dedupe(warns), measured, unmeasured
+
+
+def _has_depth_landing(scenes: list[dict], aspect: str) -> bool:
+    sids = {sid for _s, sid, _w, _l, _f in _cam_landings(scenes, aspect)}
+    return any(_dock_depth(d) for s in scenes if str(s.get("scene_id", "?")) in sids for d in s.get("docks") or [])
+
+
 def _stats(A: dict, still_total: float) -> dict:
     R = A["runtime"]
     mm = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
@@ -4339,7 +4677,8 @@ def _stats(A: dict, still_total: float) -> dict:
                               else "no page with idle=live - the pulse rows read the frame's own events alone",
             "docks": len(A["spans"]), "dock_source": A["dock_source"], "ledger_pages": A["n_pages"],
             "still_over_12s_share": f"{100 * still_total / R:.0f}%",
-            "per_minute": " ".join(f"{mm(lo)}:{n:.0f}/{nd:.0f}" for lo, n, nd in A["dens"])}
+            "per_minute": " ".join(f"{mm(lo)}:{n:.0f}/{nd:.0f}" for lo, n, nd in A["dens"]),
+            **({"credited_beats": A["credited_line"]} if A.get("credited_line") else {})}   # P72 T7: what the painters added
 
 
 REPORT_NAME = "GATES-MOTION.md"  # written beside the timeline by the build (P34 T4); consulted by render_episode.py
@@ -4388,16 +4727,27 @@ def write_report(build_dir: Path, timeline_name: str | None = None) -> tuple[Pat
     return out, n_fail
 
 
-def main() -> int:
+def _beat_arg(text: str) -> tuple[float, float]:
+    try:
+        return parse_beat(text)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from None
+
+
+def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("build", type=Path, help="episode build dir (build-f)")
     ap.add_argument("--timeline", help="timeline file name inside the build dir")
-    args = ap.parse_args()
+    ap.add_argument("--beat", type=_beat_arg, metavar="T0,T1",
+                    help="score a test-bed beat on its own window [t0, t1): M11 judges the window's own claim (R26-167)")
+    args = ap.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     tl, docks, mp = _load(args.build, args.timeline)
     gates, stats = run(tl, docks, mp, load_frames(args.build), load_morph_invariants(args.build), load_layout(args.build),
-                       load_frame_layers(args.build), load_squint(args.build))
+                       load_frame_layers(args.build), load_squint(args.build), beat=args.beat)
+    if args.beat:
+        stats = {**stats, "beat_window": f"{args.beat[0]:.2f}-{args.beat[1]:.2f}s - M11 reads the window's own claim (R26-167)"}
     print(report_text(gates, stats, args.build))
     return 1 if fail_count(gates) else 0
 

@@ -69,7 +69,8 @@ def test_ep1_report_is_the_four_fail_baseline(tmp_path: Path):
     # re-pinned 2026-09-13: the INFO count moved 6 -> 9 as further "not measured" rows landed on ep1 (no layout probe)
     # re-pinned 2026-09-18 (R26-224): + M44's FAIL, measured on the bed - 9 FAIL / 1 WARN / 5 PASS / 1 JUDGE / 9 INFO
     # re-pinned 2026-09-25 (P71 T7): + M48's INFO "not measured" (the bed has pages and captions, no squint.json): 10 INFO
-    assert "RESULT: 9 FAIL / 1 WARN / 5 PASS / 1 JUDGE / 10 INFO" in text, text[-400:]
+    # re-pinned 2026-09-25 (P72 T7): + M50's INFO row (the flow read: every cut and dip, the transform it refused): 11 INFO
+    assert "RESULT: 9 FAIL / 1 WARN / 5 PASS / 1 JUDGE / 11 INFO" in text, text[-400:]
     assert text.rstrip().splitlines()[-1] == "VERDICT: FAIL (9 FAIL)"
 
 
