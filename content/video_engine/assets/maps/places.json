@@ -1,0 +1,11 @@
+{
+ "source": {"dataset":"Natural Earth 1:10m Cultural Vectors - Populated Places (simple)","url":"https://raw.githubusercontent.com/nvkelso/natural-earth-vector/9380cca83db5f9aef52d5e762765100745f84b27/geojson/ne_10m_populated_places_simple.geojson","commit":"9380cca83db5f9aef52d5e762765100745f84b27","blob_sha1":"534edbb72fee39f476239e24fd4b24acf6f965d5","bytes":4932141,"license":"public domain (Natural Earth terms of use)","point":"the feature's own geometry (lon, lat)"},
+ "box": [1000,500],
+ "projection": "equirectangular (build_world_map.project)",
+ "places": {
+  "HKG": {"label":"Hong Kong","lon":114.183064,"lat":22.306927,"x":817.175,"y":188.036,"adm0_a3":"HKG","featurecla":"Admin-0 region capital","ne_id":1159151629},
+  "HSINCHU": {"label":"Hsinchu","lon":120.976739,"lat":24.816791,"x":836.046,"y":181.064,"adm0_a3":"TWN","featurecla":"Admin-1 capital","ne_id":1159146175},
+  "MAC": {"label":"Macau","lon":113.544375,"lat":22.189135,"x":815.401,"y":188.364,"adm0_a3":"MAC","featurecla":"Admin-0 region capital","ne_id":1159149085},
+  "SGP": {"label":"Singapore","lon":103.853875,"lat":1.294979,"x":788.483,"y":246.403,"adm0_a3":"SGP","featurecla":"Admin-0 capital","ne_id":1159151627}
+ }
+}

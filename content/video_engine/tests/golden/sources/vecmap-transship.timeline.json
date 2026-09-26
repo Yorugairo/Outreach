@@ -1,0 +1,125 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 4.0,
+     "dur": 20.0,
+     "idle": "breath",
+     "kind": "light",
+     "target": {
+      "id": "USA",
+      "kind": "country"
+     }
+    },
+    {
+     "at": 5.0,
+     "dur": 20.0,
+     "from": {
+      "id": "USA",
+      "kind": "country"
+     },
+     "kind": "arc",
+     "to": {
+      "id": "HKG",
+      "kind": "place",
+      "label": "Hong Kong",
+      "x": 817.175,
+      "y": 188.036
+     },
+     "tokens": {
+      "from_at": 8.4,
+      "n": 1
+     }
+    },
+    {
+     "at": 5.9,
+     "dur": 20.0,
+     "idle": "breath",
+     "kind": "light",
+     "ping": true,
+     "target": {
+      "id": "HKG",
+      "kind": "place",
+      "label": "Hong Kong",
+      "x": 817.175,
+      "y": 188.036
+     }
+    },
+    {
+     "at": 7.2,
+     "dur": 20.0,
+     "from": {
+      "id": "HKG",
+      "kind": "place",
+      "label": "Hong Kong",
+      "x": 817.175,
+      "y": 188.036
+     },
+     "kind": "arc",
+     "to": {
+      "id": "CHN",
+      "kind": "country"
+     },
+     "tokens": {
+      "from_at": 8.4,
+      "n": 1
+     }
+    },
+    {
+     "at": 8.1,
+     "dur": 20.0,
+     "idle": "breath",
+     "kind": "light",
+     "target": {
+      "id": "CHN",
+      "kind": "country"
+     }
+    }
+   ],
+   "world": {
+    "box": [
+     1000,
+     500
+    ],
+    "fit": "tight",
+    "focus": [
+     "USA",
+     "CHN"
+    ],
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "kind": "vecmap",
+    "map": "world-110m"
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: map points - the United States -> Hong Kong -> China transshipment route"
+}

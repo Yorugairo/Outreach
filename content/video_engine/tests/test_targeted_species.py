@@ -459,9 +459,9 @@ def test_a_light_on_a_country_that_is_not_in_the_map_is_refused_by_name():
     assert len(errs) == 1 and "country 'ATLANTIS' is not in world-110m" in errs[0] and "ISO A3" in errs[0], errs
     for bad in ({"kind": "country", "id": "irn"}, {"kind": "country"}, {"kind": "country", "id": 7}):
         assert any("is not in world-110m" in e for e in B.validate_species([_light(target=bad)], STILL, VECMAP)), bad
-    # a light lights a COUNTRY: a map point has no outline to fill
+    # a light lights a COUNTRY: a bare map point has no outline to fill (P73 T5: a NAMED place lights as a dot - test_map_places)
     errs = B.validate_species([_light(target=dict(GULF))], STILL, VECMAP)
-    assert errs == ["light: target kind 'mappoint' not allowed (takes country)"], errs
+    assert errs == ["light: target kind 'mappoint' not allowed (takes country|place)"], errs
     # ... and the world id itself refuses a name that is not a place
     with pytest.raises(ValueError, match="is not a country in world-110m"):
         B.parse_vecmap_id("vecmap:IRN,ATLANTIS")

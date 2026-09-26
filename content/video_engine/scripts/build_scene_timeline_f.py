@@ -238,6 +238,7 @@ VECMAP_PREFIX = re.compile(r"^vecmap(?::|;|$)")   # `vecmap`, `vecmap:IRN,USA,CH
 WORLD_MAP = "world-110m"                          # the one map on disk; the id names it so a second one is a new name, never a new branch
 MAP_PREFIX = "map:"                               # ... and its key in the asset map: `map:world-110m`, written once however many scenes use it
 MAPS_DIR = REPO / "content/video_engine/assets/maps"
+MAP_PLACES_FILE = MAPS_DIR / "places.json"        # P73 T5: the map's named POINTS (Hong Kong, Singapore, Macau, Hsinchu) - build_map_places.py
 VECMAP_FOCUS_MAX = 6                              # a focus set of seven countries is the whole world: drop the list (E59: a composition frames its places)
 VECMAP_FITS = ("tight",)                          # P72 T46d (R26-383): `;fit=tight` - species/vecmap.mjs VECMAP.TIGHT_PAD / TIGHT_ZOOM_MAX (CHN 02:21 frames Hormuz, not the continent)
 SPECIES_CLIP = "clip"              # world.kind for a clip; the player seeks a <video> to the scene clock
@@ -2304,7 +2305,12 @@ def share_slice_errors(world, cam, plate_id: str) -> list[str]:
                             f"page (0..{n - 1}) - on a share page a datum IS a slice")
     return errs
 COUNTRY_TARGET, MAPPOINT_TARGET = "country", "mappoint"   # P50 T5: a place on the VECTOR MAP - {"kind": "country", "id": "IRN"} (the
-MAP_TARGETS = (COUNTRY_TARGET, MAPPOINT_TARGET)           # outline's own centroid) or {"kind": "mappoint", "x": 640, "y": 165} in MAP BOX
+PLACE_TARGET = "place"                                    # P73 T5: ... or a NAMED POINT too small for the outlines - {"kind": "place", "id": "HKG"} -
+                                                          # read from assets/maps/places.json (Natural Earth 1:10m populated places, blob-pinned:
+                                                          # build_map_places.py); the compiler writes its x / y (map units) and label onto the target
+PLACE_SIDES = ("right", "below", "left", "above")         # ... and `side`, the author's: where its NAME sits (species/vecmap.mjs PLACE_SIDES, pinned
+                                                          # equal); absent, the first of these the frame does not cut
+MAP_TARGETS = (COUNTRY_TARGET, MAPPOINT_TARGET, PLACE_TARGET)   # outline's own centroid) or {"kind": "mappoint", "x": 640, "y": 165} in MAP BOX
                                                           # units, never stage fractions: the map is the coordinate system, so a declared
                                                           # point stays on the Gulf at either aspect and under any framing. Admitted for the
                                                           # three vecmap species alone - every other species names a stage coordinate.
@@ -2325,7 +2331,7 @@ SPECIES_TARGETS = {
     SPECIES_CHIP: ("point", "region"),   # P50 T2: a chip lands where the author declared it - a point, or centred in a region;
                                          # E56 does not reach it (a chip is a card with a glyph, never a ring around a picture)
     SPECIES_FLOW: ("region",),   # P50 T4: a diagram needs its ROOM declared - the box it draws itself inside; a point would leave its size to the painter
-    SPECIES_LIGHT: (COUNTRY_TARGET,),                  # P50 T5: a COUNTRY lights - a point cannot (the light is the outline's own fill)
+    SPECIES_LIGHT: (COUNTRY_TARGET, PLACE_TARGET),     # P50 T5: a COUNTRY lights - a bare point cannot (the light is the outline's own fill); P73 T5: a named PLACE lights as a dot and its name
     SPECIES_STAMP: MAP_TARGETS,                        # ... a stamp writes at a country's centroid or at a declared point (a year over the Gulf)
     SPECIES_ARC: (),                                   # ... and an arc names its two ENDS (`from` / `to`), not one target
     SPECIES_SPAN: (),            # ... and a span names its two edges as data, not as a coordinate: the chart owns where they are
@@ -2377,7 +2383,7 @@ TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  PHRASE_TARGET: (),   # its one field is `dock`, a name - checked in _validate_callout, where the row's press docks are known
                  DOCK_TARGET: (),     # ... and a dock target's are `dock` (a name) and `box` - checked in _validate_dock_ring
                  EMBED_TARGET: (),    # ... and its one field is `name`, checked below and resolved to the plate's quad at the row
-                 COUNTRY_TARGET: (), MAPPOINT_TARGET: ()}   # ... and a map target's fields are MAP units, not 0..1 fractions: _validate_map_target checks them against the map's own box
+                 COUNTRY_TARGET: (), MAPPOINT_TARGET: (), PLACE_TARGET: ()}   # ... and a map target's fields are MAP units, not 0..1 fractions: _validate_map_target checks them against the map's own box
 FRACTION_FIELDS = ("x", "y", "x0", "y0", "x1", "y1")   # plate coordinates as fractions of the frame, 0..1
 
 
@@ -3650,8 +3656,11 @@ def _validate_map_target(kind: str, field: str, tg, countries: dict, box: list) 
     map's own box are the two ways an author can aim at nothing, and both are named here rather than
     resolving to a silent no-paint in the player."""
     if not isinstance(tg, dict) or tg.get("kind") not in MAP_TARGETS:
-        return [f"{kind}: {field} must be a place on the map - {{'kind': 'country', 'id': '<ISO A3>'}} or "
+        return [f"{kind}: {field} must be a place on the map - {{'kind': 'country', 'id': '<ISO A3>'}}, "
+                f"{{'kind': 'place', 'id': '<a map place>'}} or "
                 f"{{'kind': 'mappoint', 'x': <0..{int(box[0])}>, 'y': <0..{int(box[1])}>}}"]
+    if tg["kind"] == PLACE_TARGET:
+        return _validate_place_target(kind, field, tg)
     if tg["kind"] == COUNTRY_TARGET:
         a3 = tg.get("id")
         if not isinstance(a3, str) or a3 not in countries:
@@ -3665,6 +3674,68 @@ def _validate_map_target(kind: str, field: str, tg, countries: dict, box: list) 
         elif not 0 <= v <= hi:
             errs.append(f"{kind}: {field} mappoint {f}={v} is outside the map's {int(box[0])} x {int(box[1])} box")
     return errs
+
+
+def map_places() -> dict:
+    """P73 T5: the map's named POINTS - ``{id: {label, lon, lat, x, y, ...}}`` from assets/maps/places.json (built by
+    scripts/build_map_places.py, pinned by tests/test_map_places.py). ValueError when the file is not there."""
+    return _map_places_file()["places"]
+
+
+@functools.lru_cache(maxsize=1)
+def _map_places_file() -> dict:
+    if not MAP_PLACES_FILE.is_file():
+        raise ValueError(f"no map places at {MAP_PLACES_FILE} - run scripts/build_map_places.py")
+    return json.loads(MAP_PLACES_FILE.read_text(encoding="utf-8"))
+
+
+def _validate_place_target(kind: str, field: str, tg: dict) -> list[str]:
+    """P73 T5: a named place, by its id. An id that is not in the gazetteer is refused BY NAME (aiming at nothing is a
+    truth rule, not a WARN); a point typed onto a place is refused unless it IS the gazetteer's (a resolved target
+    re-validates clean) - an unnamed point is a mappoint; and a label, when written, is a word."""
+    try:
+        places = map_places()
+    except ValueError as exc:
+        return [f"{kind}: {field} {exc}"]
+    pid = tg.get("id")
+    if not isinstance(pid, str) or pid not in places:
+        return [f"{kind}: {field} place {pid!r} is not a place on the map (known: {', '.join(sorted(places))}) - a "
+                "small place is added to scripts/build_map_places.py's PLACES from its sourced gazetteer, never typed "
+                "as a latitude; an unnamed point is a mappoint"]
+    errs, p = [], places[pid]
+    for f in ("x", "y"):
+        if f in tg and tg[f] != p[f]:
+            errs.append(f"{kind}: {field} place {pid} {f}={tg[f]!r} is not the gazetteer's ({p[f]}) - a place's point "
+                        "is its source's, never typed; for a point of your own, write a mappoint")
+    if "label" in tg and not (isinstance(tg["label"], str) and tg["label"].strip()):
+        errs.append(f"{kind}: {field} place {pid} label must be a non-empty string (absent: the gazetteer's "
+                    f"{p['label']!r})")
+    if "side" in tg and tg["side"] not in PLACE_SIDES:
+        errs.append(f"{kind}: {field} place {pid} side must be one of {'|'.join(PLACE_SIDES)} (where its name sits; "
+                    "absent: the first the frame does not cut)")
+    return errs
+
+
+def resolve_place_targets(row_species) -> None:
+    """P73 T5: every place a row's map species names - a light's or a stamp's target, an arc's `from` / `to` - gets its
+    point (map units) and its label (the gazetteer's unless the author wrote one) written onto the target, so the player
+    reads a point and never guesses one (the embed quad's rule, resolve_embed_targets). Idempotent. Raises ValueError
+    naming an unknown place (validate_species refuses it first)."""
+    places = None
+    for sp in row_species or []:
+        if not isinstance(sp, dict):
+            continue
+        for f in ("target", "from", "to"):
+            tg = sp.get(f)
+            if not isinstance(tg, dict) or tg.get("kind") != PLACE_TARGET:
+                continue
+            places = places if places is not None else map_places()
+            p = places.get(tg.get("id"))
+            if p is None:
+                raise ValueError(f"{sp.get('kind')}: {f} place {tg.get('id')!r} is not a place on the map "
+                                 f"(known: {', '.join(sorted(places))})")
+            tg["x"], tg["y"] = p["x"], p["y"]
+            tg.setdefault("label", p["label"])
 
 
 def _validate_vecmap_species(entry: dict) -> list[str]:
@@ -16543,6 +16614,8 @@ def main() -> int:
                    if world.get("asset_id") and world.get("kind") not in (SPECIES_CLIP, VECMAP_KIND) else {})
         try:
             resolve_embed_targets(row_species, _embeds, f"shot row {i + 1} ({a}-{b}s)")
+            if world.get("kind") == VECMAP_KIND:   # P73 T5: a named place's point and label, written for the player
+                resolve_place_targets(row_species)
         except ValueError as exc:
             raise SystemExit(f"FAIL: {exc}") from exc
         docks = []

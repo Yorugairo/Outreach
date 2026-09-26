@@ -300,6 +300,8 @@ PROOF_FRAMES = {
     # its light over - the article, two words on, not yet landed.
     "event-timeline@proof-first": ("event-timeline", {}, 6.8),   # 0.6 s after "the control" (6.2): landed (LAND_S 0.45) and lit
     "event-timeline@proof-post": ("event-timeline", {}, 11.6),   # 0.6 s after the post's word (11.0): the post lit, 27 Aug unlit
+    "vecmap-transship@proof-ping": ("vecmap-transship", {}, 6.6),   # P73 T5: Hong Kong's pulse half way out (5.9 + 0.35 -> + 0.67), the first leg drawn
+    "vecmap-place-singapore@proof-ping": ("vecmap-place-singapore", {}, 5.7),   # P73 T5: Singapore's pulse half way out (5.0 + 0.35 -> + 0.67), Hsinchu not yet lit
 }
 # P52 T18 / R26-55, HUMAN GATE 7: THE FACE OF A PULLED PHRASE. The phrase is live type now, so it has a face, and
 # the face is the OPERATOR's to choose - never ours. The `press_face` DIAL names one of the three candidates

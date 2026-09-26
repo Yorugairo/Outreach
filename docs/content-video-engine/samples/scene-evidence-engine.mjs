@@ -23742,6 +23742,13 @@ async function mount(doc) {
                    leaves the place as it lands and is gone (CHN 02:21.1 on the Strait of Hormuz; D40 13:56.5 as a
                    route lands on its destination) - a BLINK (s99), never a ring left standing on a region (E56 /
                    s110). A repeating sonar is not witnessed (step 0), so there is none.
+       THE PLACE (P73 T5, the AMD RFSoC route US -> Hong Kong -> China). Hong Kong, Singapore, Macau and Hsinchu have
+                   no shape at 1:110m. A `{kind: "place", id}` target is a NAMED POINT the compiler resolved from the
+                   gazetteer (assets/maps/places.json: Natural Earth 1:10m populated places, blob-pinned) and wrote onto
+                   the target as `x`, `y` (map units) and `label`: an arc's end and a stamp's place exactly as a mappoint
+                   is, and a `light` on it paints a DOT and the place's NAME in the light's ink on the light's own clock
+                   (there is no outline to fill), in plain stage px like the stamp's type, with T46d's ping (paintPing)
+                   leaving the point on `ping: true`.
 
      THE FRAME. Every one of them paints in the SAME coordinates - the map box through `fit` - and then rides
      the SAME two transforms as the world beneath it: the scene's CAMERA (screen = at + s (p - look), exactly
@@ -23801,6 +23808,16 @@ async function mount(doc) {
   });
 
   const STAMP_SIZES = Object.freeze({ figure: STAMP.FIGURE_PX, year: STAMP.YEAR_PX });
+
+  /* THE PLACE's light (P73 T5). Every dial is OURS (no reference frame measured a place's dot yet - Bravos's pin glows
+     inside its ring, CHN 02:21.4, R26-383): stated here, listed for the human gate (P73-HG1). */
+  const PLACE = Object.freeze({
+    DOT_R: 9,          /* the lit place's dot, stage px - inside the ping's R0 (27), so the pulse leaves the dot's edge, not its middle */
+    POP_FROM: 0.4,     /* the dot springs up from this share of its size on the badge spring (springPop, STAMP.IN_S) - never out of nothing */
+    GLOW_PX: 10,       /* the dot's halo, stage px, in its own ink (E99 s130: filled marks glow) - the ping's drop-shadow form, one notch down */
+    LABEL_PX: 30,      /* the name's type: a label, one notch under a year (32), read at phone size */
+    GAP: 12,           /* the dot's edge to the name, stage px */
+  });
 
   /* THE PING (P71 T22, A37 as the frames show it - scripts/measure_ping.py's radial ink profile about the point, per
      frame). One pulse, fired as the place lands; every dial below is the reference's, in stage px at 1920. */
@@ -23910,6 +23927,7 @@ async function mount(doc) {
     if (!tg || !data) return null;
     if (tg.kind === "country") { const c = data.countries[tg.id]; return c && c.centroid ? c.centroid : null; }
     if (tg.kind === "mappoint") return [+tg.x, +tg.y];
+    if (tg.kind === "place") return typeof tg.x === "number" && typeof tg.y === "number" ? [tg.x, tg.y] : null;   /* P73 T5: the compiler wrote the point */
     return null;
   };
 
@@ -24154,16 +24172,65 @@ async function mount(doc) {
                                   opacity: pose.alpha.toFixed(3) });
   };
 
+  /* THE PLACE's look, written INLINE as the ping's is (pingStyle) - the template's sheet is not touched, so a build with no
+     place compiles to the same shell. The dot: the light's ink (.vmlit's var(--sunflower)) with the stamp's charcoal rim
+     and its own halo - a filled mark glows (s130). The name: the light's ink on the stamp's charcoal stroke, Inter 600. */
+  const PLACE_RIM = "stroke:rgba(27,30,35,.85);";
+  const placeDotStyle = () => "fill:var(--sunflower);" + PLACE_RIM + "stroke-width:2;filter:drop-shadow(0 0 " + PLACE.GLOW_PX
+    + "px var(--sunflower)) drop-shadow(0 0 " + (PLACE.GLOW_PX / 3).toFixed(1) + "px var(--sunflower))";
+  const placeLabelStyle = () => "font:600 " + PLACE.LABEL_PX + "px Inter, Arial, sans-serif;fill:var(--sunflower);paint-order:stroke;"
+    + PLACE_RIM + "stroke-width:6px;text-rendering:geometricPrecision";
+
+  /* the place's NAME beside its dot, on the SIDE the target names (`side`, the author's - s106), else the first of
+     PLACE_SIDES the frame does not cut: right, then BELOW (read in the frame, 2026-09-26: Hong Kong's name flipped LEFT
+     lay over China's lit fill and across the arriving route's head), then left, then above; its box kept on the stage
+     (the stamp's EDGE and its CHAR_W estimate - the player measures nothing at paint time) */
+  const PLACE_SIDES = Object.freeze(["right", "below", "left", "above"]);
+  const placeLabelAt = (q, text, stageW, stageH, px = PLACE.LABEL_PX, side = null) => {
+    const w = String(text || "").length * px * STAMP.CHAR_W, off = PLACE.DOT_R + PLACE.GAP, m = STAMP.EDGE;
+    const midY = Math.min(Math.max(q.y + px * 0.35, m + px), stageH - m), midX = Math.min(Math.max(q.x, m + w / 2), stageW - m - w / 2);
+    const at = {
+      right: { x: q.x + off, y: midY, anchor: "start", fits: q.x + off + w <= stageW - m },
+      below: { x: midX, y: q.y + off + px * 0.8, anchor: "middle", fits: q.y + off + px * 0.8 <= stageH - m },
+      left: { x: q.x - off, y: midY, anchor: "end", fits: q.x - off - w >= m },
+      above: { x: midX, y: q.y - off - px * 0.2, anchor: "middle", fits: q.y - off - px * 1.0 >= m },
+    };
+    const pick = PLACE_SIDES.includes(side) ? side : (PLACE_SIDES.find((s) => at[s].fits) || "right");
+    const { x, y, anchor } = at[pick];
+    return { x, y, anchor, side: pick };
+  };
+
+  /* THE PLACE's LIGHT (P73 T5): the ping under (T46d's, called), the dot springing up at the point, the name beside it -
+     all on the light's own clock (its rise, its hold breathing, its leave) and in plain stage px */
+  const paintPlaceLight = (ctx, F, lx) => {
+    const { sp, t, svg, el, STAGE_W, STAGE_H } = ctx;
+    const p = vmTarget(F.data, sp.target); if (!p) return;
+    const a = Math.min(1, lightAlpha(t, +sp.at, +sp.dur, lx.scale) / LIGHT.MAX);
+    if (a <= 0) return;
+    if (sp.ping === true) paintPing(ctx, F, p);   /* the pulse leaves the point, under the dot */
+    const q = vmScreen(F.cam, F.ix, mapPoint(F.fit, p), STAGE_W, STAGE_H);
+    const e = springPop(vm01((t - +sp.at) / STAMP.IN_S)), r = PLACE.DOT_R * (PLACE.POP_FROM + (1 - PLACE.POP_FROM) * e);
+    el("circle", "vmplace", svg, { cx: q.x.toFixed(2), cy: q.y.toFixed(2), r: r.toFixed(2), style: placeDotStyle(), opacity: a.toFixed(3) });
+    const label = String(sp.target.label || "");
+    if (!label) return;
+    const L = placeLabelAt(q, label, STAGE_W, STAGE_H, PLACE.LABEL_PX, sp.target.side);
+    const tx = el("text", "vmplabel", svg, { x: L.x.toFixed(1), y: L.y.toFixed(1), "text-anchor": L.anchor, style: placeLabelStyle(),
+                                             opacity: a.toFixed(3) });
+    tx.textContent = label;
+  };
+
   /* THE LIGHT: the country's own outline filled to the accent (E56 - a picture's focus is a LIGHT; the
      spotlight's cousin, never a ring), rising over IN_S and holding, its fill breathing on the idle. */
   function paintLight(ctx) {
     const { sp, t, svg, el, idle, hash, seed, si } = ctx;
     const F = vmFrame(ctx); if (!F) return;
-    const c = F.data.countries[(sp.target || {}).id]; if (!c) return;
+    const isPlace = (sp.target || {}).kind === "place";   /* P73 T5: a named point has no outline - it lights as a dot and its name */
+    const c = isPlace ? null : F.data.countries[(sp.target || {}).id]; if (!c && !isPlace) return;
     /* the light's own breath, declared on the species exactly as the spotlight and the chip declare theirs
        (E49; the same seeded phase, salt 991) - the WORLD's idle above moves the map, this one moves the
        light, and a lit country is alive even where the map itself is declared still. */
     const lx = sp.idle && sp.idle !== "none" ? idle(sp.idle, t, hash(seed | 0, si | 0, 991)) : { scale: 1, dx: 0, dy: 0 };
+    if (isPlace) return paintPlaceLight(ctx, F, lx);
     const a = lightAlpha(t, +sp.at, +sp.dur, lx.scale);
     if (a <= 0) return;
     const g = el("g", "", svg, { transform: F.xf });

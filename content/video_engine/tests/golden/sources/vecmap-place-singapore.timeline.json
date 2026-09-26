@@ -1,0 +1,80 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 5.0,
+     "dur": 20.0,
+     "idle": "breath",
+     "kind": "light",
+     "ping": true,
+     "target": {
+      "id": "SGP",
+      "kind": "place",
+      "label": "Singapore",
+      "x": 788.483,
+      "y": 246.403
+     }
+    },
+    {
+     "at": 6.4,
+     "dur": 20.0,
+     "idle": "breath",
+     "kind": "light",
+     "target": {
+      "id": "HSINCHU",
+      "kind": "place",
+      "label": "Hsinchu",
+      "x": 836.046,
+      "y": 181.064
+     }
+    }
+   ],
+   "world": {
+    "box": [
+     1000,
+     500
+    ],
+    "fit": "tight",
+    "focus": [
+     "MYS",
+     "THA",
+     "VNM",
+     "TWN"
+    ],
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "kind": "vecmap",
+    "map": "world-110m"
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: map points - Singapore and Hsinchu lit (test-bed beat)"
+}

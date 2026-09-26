@@ -6236,6 +6236,68 @@ def press_post() -> tuple[dict, dict]:
 SURFACES.update({"press-post": press_post})
 
 
+# ---- P73 T5: MAP POINTS - Hong Kong and Singapore on the vector map (the AMD RFSoC episode's beat 4) ------------------
+# Hong Kong has no shape at 1:110m; it is a NAMED POINT from the gazetteer (assets/maps/places.json - Natural Earth 1:10m
+# populated places at the world map's own commit, blob-verified), resolved onto the target by the compiler's OWN
+# resolve_place_targets. The route is the MECHANISM BIS names ("Sometimes, a US export is routed through Hong Kong to avoid
+# US export regulations." - RESEARCH-2 C2, CONFIRMED): no figure on the map, so no tier is owed on screen. United States ->
+# Hong Kong -> China, framed `;fit=tight` on the two countries (the tightest box that holds the arc's origin - the map has
+# no central meridian, so the US sits at the left edge and the route crosses Europe and Asia).
+TRANSSHIP_USA_AT, TRANSSHIP_ROUTE_AT = 4.0, 5.0            # the maker lights; the route leaves it on the next word
+TRANSSHIP_HK_AT = TRANSSHIP_ROUTE_AT + 0.9                 # Hong Kong lights and pings on the word the route LANDS on it (+ ARC.DRAW_S)
+TRANSSHIP_ONWARD_AT, TRANSSHIP_CHN_AT = 7.2, 8.1           # the second leg leaves Hong Kong; China lights as it lands
+TRANSSHIP_TOKENS_AT = 8.4                                  # the part starts down both legs once the route is whole
+
+
+def _map_surface(plate: str, species: list[dict], title: str) -> tuple[dict, dict]:
+    """A vector-map golden through the compiler's own route: the world off the plate id, the species validated, every named
+    place resolved (resolve_place_targets), the map data under its one key. Captions off: the map frames its places at the
+    stage's centre, where the harness's caption sits (vecmap-route-tokens' rule)."""
+    import build_scene_timeline_f as BST
+    world = BST.world_for_plate(plate, (0, 0, 0), None)
+    errs = BST.validate_species(species, (0, 0, 0), plate)
+    assert not errs, errs
+    BST.resolve_place_targets(species)
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    uris[BST.MAP_PREFIX + world["map"]] = BST.world_map_json(world["map"])
+    tl = _timeline(title, scenes, {}, None)
+    tl["captions"], tl["caption_pages"] = [], []
+    return tl, uris
+
+
+def vecmap_transship() -> tuple[dict, dict]:
+    """P73 T5: the United States lights (4.0); the route leaves it (5.0) and lands on HONG KONG - a named point, lit as a
+    dot and its name and pinging as the route lands (5.9); the second leg leaves Hong Kong (7.2) and China lights as it
+    lands (8.1); one dot of the part rides each leg from 8.4. Judged at 9.4: both legs drawn, the three places lit, the
+    part on the route; the ping rides PROOF_FRAMES (@proof-ping, 6.6 - its pulse half way out)."""
+    usa, chn, hkg = {"kind": "country", "id": "USA"}, {"kind": "country", "id": "CHN"}, {"kind": "place", "id": "HKG"}
+    species = [{"kind": "light", "at": TRANSSHIP_USA_AT, "dur": 20.0, "idle": "breath", "target": dict(usa)},
+               {"kind": "arc", "at": TRANSSHIP_ROUTE_AT, "dur": 20.0, "from": dict(usa), "to": dict(hkg),
+                "tokens": {"from_at": TRANSSHIP_TOKENS_AT, "n": 1}},
+               {"kind": "light", "at": TRANSSHIP_HK_AT, "dur": 20.0, "idle": "breath", "ping": True, "target": dict(hkg)},
+               {"kind": "arc", "at": TRANSSHIP_ONWARD_AT, "dur": 20.0, "from": dict(hkg), "to": dict(chn),
+                "tokens": {"from_at": TRANSSHIP_TOKENS_AT, "n": 1}},
+               {"kind": "light", "at": TRANSSHIP_CHN_AT, "dur": 20.0, "idle": "breath", "target": dict(chn)}]
+    return _map_surface("vecmap:USA,CHN;fit=tight", species,
+                        "Golden: map points - the United States -> Hong Kong -> China transshipment route")
+
+
+def vecmap_place_singapore() -> tuple[dict, dict]:
+    """P73 T5: the second place, framed TIGHT on its region - Southeast Asia to Taiwan (`vecmap:MYS,THA,VNM,TWN;fit=tight`):
+    SINGAPORE lights and pings on its word (5.0) at the foot of the peninsula, and HSINCHU (Taiwan's science-park city, a
+    third named point) lights on a later one (6.4). A TEST-BED beat: two places on their words, no route and no figure
+    claimed. Judged at 7.5, both lit; Singapore's ping rides PROOF_FRAMES (@proof-ping, 5.7)."""
+    species = [{"kind": "light", "at": 5.0, "dur": 20.0, "idle": "breath", "ping": True, "target": {"kind": "place", "id": "SGP"}},
+               {"kind": "light", "at": 6.4, "dur": 20.0, "idle": "breath", "target": {"kind": "place", "id": "HSINCHU"}}]
+    return _map_surface("vecmap:MYS,THA,VNM,TWN;fit=tight", species, "Golden: map points - Singapore and Hsinchu lit (test-bed beat)")
+
+
+SURFACES.update({"vecmap-transship": vecmap_transship, "vecmap-place-singapore": vecmap_place_singapore})
+FRAME_T.update({"vecmap-transship": 9.4,         # both legs drawn (8.1), USA / Hong Kong / China lit, the part 1.0 s down each leg
+                "vecmap-place-singapore": 7.5})  # Singapore and Hsinchu lit, both past their pop
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:
