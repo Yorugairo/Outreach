@@ -4737,6 +4737,45 @@ async function mount(doc) {
                           heavy ball thrown OFF the stage along a low line; a ball thrown ONTO the canvas has to be seen to
                           leave the board and come back down onto it, so it sits between that and stopaction's own 0.22 for
                           a card: 76 px of lift on `melt-splash`'s 422 px chord [DERIVED] */
+    /* ---- P72 T23 / R26-157 / E99 s56 - THE OFF-SCREEN THROW (`melt:splash:...:offscreen`), all of it opt-in -----------
+       The operator on the thrown splash, 2026-09-16 (OPERATOR-RULINGS.md:3230): "approve. Add to backlog a variant where
+       we pick the ball off of the screen so it's not in camera view, then throw it with increased velocity." So the
+       pitch gains two beats between its pick-up and its flight, and the flight comes from somewhere else:
+         PICK UP  the approved pitch's own, to the pixel (`pickUpXf`: the press, the clamp, the lift)
+         CARRY    the ball is lifted straight UP and out of the top of the frame, gathering speed - picked off, not thrown
+         GONE     a beat of nothing: not one pixel of the ball in the frame, and no shadow on the board
+         FLIGHT   it is thrown back IN from off the frame on the seat's side, on a flatter arc, onto the same landing,
+                  its shadow arriving with it (faint and far as it enters, tight at the contact) - and splats
+       MEASURED FIRST, the approved throws on the goldens: the PITCH (E99 s51/s56) covers 422 px in FL_S 0.45 on
+       `melt-splash` (938 px/s; 944 pose to pose) and 581 px on `melt-gather` (1291 px/s); the THROW ending (the heavy ball
+       thrown OFF the stage, `melt-page@proof-075`, approved with E88) covers 1434 px from the seat to MELT.TO in 0.5616 s
+       = 2553 px/s (the ink rect probed off the golden, P72 T23's logs/golden-numbers).
+       "Increased velocity" is read against the second: a ball thrown back in from off the frame flies the way a ball
+       thrown out of it already does. */
+    OFF_S: 0.61,       /* WHAT THE OFF-SCREEN PITCH ADDS to a splash's default window, the way T_S does: OFF_UP_S +
+                          OFF_BEAT_S below, written out. The pick-up and the flight keep T_S's seconds [DERIVED] */
+    OFF_UP_S: 0.36,    /* THE CARRY's own seconds: the ball rises from its lift out of the top of the frame on an ease-in
+                          (y ~ k^2, so it leaves at twice its mean speed - it is plucked away, never floated). On the golden
+                          the rise is 953 px, a mean of 2648 px/s against the approved throw ending's 2553 [DERIVED] */
+    OFF_BEAT_S: 0.25,  /* THE BEAT OF NOTHING: six frames at 24 fps with no ball in the frame and no shadow on the board -
+                          long enough to read as "gone", short enough that the return is the same gesture [DERIVED] */
+    OFF_BEAT_MIN: 0.12,   /* ... and never shorter than three frames, however short a declared window is [DERIVED] */
+    OFF_FROM: [-0.08, 0.12],   /* WHERE IT COMES BACK FROM, in STAGE fractions: off the LEFT edge near the top, mirrored to the
+                          right edge when the ball's seat is right of the landing (it returns on the side it left from).
+                          At the golden's landing that is an 1187 px chord - 2.8x the pitch's 422 - flown in what the
+                          pitch's FL_S 0.45 (STOP.FLIGHT_S) leaves once the flight is put on a pose of the stepped clock:
+                          measured pose to pose the return runs 2766 px/s = 2.93x the approved pitch's 944 and 1.08x the
+                          approved throw ending's 2553. The increase is the CHORD, never a new clock [DERIVED] */
+    OFF_CLEAR: 0.35,   /* how far past the frame's edge the ball is placed, in its own radii beyond its own radius, so its
+                          disc (squash included) is wholly out of camera view [DERIVED: OFF_STRETCH 0.15 < 0.35] */
+    OFF_STRETCH: 0.15, /* the carry's stretch along its travel at the top of the rise (squash.mjs's area-kept tensor) */
+    OFF_ARC: 0.06,     /* FLATTER: the flight's lift as a share of the chord - the melt's own ARC for a heavy ball thrown
+                          along a low line, against the on-screen pitch's T_ARC 0.18 [DERIVED: MELT.ARC, cited] */
+    OFF_H: 160,        /* how high the ball is off the board as it re-enters, px - STOP.SHADOW_H_PX, the height at which
+                          the contact shadow is 'far', so the shadow arrives faint and wide and tightens onto the contact */
+    OFF_SHADOW_IN: 0.25,   /* ... and it fades IN over this share of the flight instead of appearing whole [DERIVED] */
+    OFF_T_MAX: 0.50,   /* the off-screen pitch may never take more than this share of a DECLARED window (T_MAX's 0.35 is
+                          for two beats; this pitch carries four) [DERIVED: (T_S + OFF_S) / the default 2.98 s = 0.46] */
     /* THE WEIGHT PHASE (R26-118), all of it opt-in behind `melt:weight` - not one of these is read by a melt that
        does not ask for it. The shares below are of the PHASE's own length, and the phase's length is W_S seconds. */
     W_S: 1.15,             /* how long the weight phase runs. A melt that asks for it and declares no length runs S + W_S
@@ -4915,6 +4954,44 @@ async function mount(doc) {
                               1.6 s melt is 0.48 s, and three turns in 0.48 s is a jump, not a swirl. With it the
                               gather runs MELT_END of (S + G_S) = 0.75 s [DERIVED, HG6]. A row that declares its own
                               length gets exactly that length, gather or not */
+    /* ---- P72 T23 / R26-139 - THE GATHER CURLS THE HAIRLINES TOO ---------------------------------------------------
+       A chart's `<line>` children (the axes, the zero rule, the grid) travelled as ONE particle each, so under the gather
+       they turned as rigid sticks while every series beside them curled (melt-gather-morph's own golden: straight
+       hairlines swung about the point). Doc 29 s9.31's retract redraws a series "point by point"; the same is done to a
+       hairline now - sampled once at G_LINE_N, carried as a path in the words' clone, redrawn through the map. */
+    G_LINE_CURL: true,     /* false is the stick the gather shipped with (every other melt never reads it) */
+    /* ---- P72 T23 / R26-146 / E99 s49 (2) - `body=blend`: THE INKS MERGE AND SWIRL ------------------------------------
+       The operator, 2026-09-16 (OPERATOR-RULINGS.md:3216): "If we actually let the ink colors merge, then it's orange and
+       green and gets merged to olive, so we could use a blend of the colors swirling with eachother, then the dark olive
+       becomes the shading." A candidate, not a ruling - the operator's eye on the clip (P72-HG1 (3)). The ball's ink is
+       the page's series inks MIXED by Kubelka-Munk (`meltMixInk`, the mean K/S - the soak's own subtractive law,
+       kinetics/ink.mjs `ksFromR`), its concentrated mix the SHADING (the gradient's core and the pit, whatever
+       `meltBodyInk` feeds them), and each series' own ink SWIRLS through that mix as one arm, turning on the window's
+       stepped clock and riding the living drop's surface (kinetics/drop.mjs `dropRadius` of its FLOOR modes). */
+    BLEND_BOARD: "#25313C",   /* a page with ONE series blends with the BOARD's ink: `--lp-char`, MELT_BODIES.slate's target */
+    SW_IN: 0.12,           /* an arm runs from this share of the ball's radius ... */
+    SW_OUT: 0.80,          /* ... to this one - inside the silhouette, so the drop's own rim stays the ball's edge */
+    SW_TWIST: 2.4,         /* how far an arm winds between its two ends, radians: a spiral arm, not a spoke [DERIVED] */
+    SW_HALF: 0.24,         /* an arm's angular half-width at its widest (its middle), radians - a comet stroke [DERIVED] */
+    SW_N: 18,              /* samples along an arm's centreline (each side) */
+    SW_RATE: 0.35,         /* the swirl's turns per second, on the window's stepped clock: a slow stir, well under the
+                              roll's own turn rate, so a rolled ball reads its roll first [DERIVED, HG1 (3) tunes it] */
+    SW_A: 0.55,            /* an arm's opacity over the mix: the inks show THROUGH the olive, they do not replace it */
+    SW_MAX: 4,             /* at most this many arms - the page's first four series, the palette's own four */
+    /* ---- P72 T23 / R26-389 - THE HANDED BALL'S INK IS TAKEN BY THE PAGE'S, NEVER MIXED WITH IT ------------------------
+       `melt-morph-two-inks` (P72 T24): half way through the hand the ball read orange -> muddy brown -> teal. MEASURED
+       on the frames (the shape's pixels, sRGB max-min chroma): the approved same-ink hand `melt-morph` (E99 s58) falls
+       200 -> 164 -> 121 -> 85 -> 53 -> 36 -> 33 at 16.6 ... 17.9, never under its own destination; the two-ink hand fell
+       to 17.5 at 17.5 s against a destination of 57 - the ball's orange at a fifth of its alpha over the rising teal and
+       the charcoal between them. THE RULE: before the ball fades, the page's ink TAKES the ball's paint - a front runs
+       across the body's own gradient from its shaded side to its lit spot, every stop either the ball's ink or the
+       page's (at that stop's own level, as a named body is), only the front's own narrow band between them; the alpha
+       law (M_FADE) is untouched. It acts only when there ARE two inks (a page whose ink is the ball's own - every
+       committed `melt:morph` but the two-ink golden - never reaches it) and only on an ink ball (chart, blend): an
+       achromatic body has no hue to muddy. */
+    HAND_INK_ON: true,     /* false is the cross-fade the hand shipped with */
+    HAND_INK_END: 0.45,    /* the share of the HAND by which the front has crossed the whole ball [DERIVED below, measured] */
+    HAND_INK_BAND: 0.04,   /* the front's half-width, in the gradient's own offsets (~12 px on the golden's shape) */
   });
 
   /* the authored endings - build_scene_timeline_f.MELT_ENDINGS is the same tuple, and test_melt_morph pins the pair.
@@ -4926,6 +5003,8 @@ async function mount(doc) {
   const MELT_MATERIALS = Object.freeze(["metal", "ink", "paper", "liquid"]);
   /* P61 T5b: the suffix that names the ball's BODY COLOUR - build_scene_timeline_f.BODY_SUFFIX */
   const MELT_BODY = "body=";
+  /* P72 T23 / R26-157: the pitch token that picks the ball off the frame - build_scene_timeline_f.OFFSCREEN_TOKEN */
+  const MELT_OFFSCREEN = "offscreen";
   /* P61 T5b / E99 s42: the body colours `melt:weight:...:body=<word>` may name, and the target each one melts to.
      A MATERIAL is the ball's mass and its damping (MELT_MATERIALS, above); a BODY is only its colour, which is why it
      is a suffix of its own and not a fifth material - test_transitions_e47 pins MELT_MATERIALS at the four it has.
@@ -4941,8 +5020,10 @@ async function mount(doc) {
                   PLAUSIBLE) - "Zero Diffuse Reflectance (k_d = 0) ... The albedo base color is pure black" and "The
                   droplet silhouette is near-black, illuminated strictly by intense, focused specular highlights". So
                   the target IS pure black and what makes the rendered ball near-black rather than black is the body
-                  gradient's own sheen stop and the specular spot over it, exactly as the finding describes. */
-  const MELT_BODIES = Object.freeze({ chart: null, slate: "#25313C", reference: "#000000" });
+                  gradient's own sheen stop and the specular spot over it, exactly as the finding describes.
+       blend      P72 T23 / R26-146 / E99 s49 (2): the page's inks MIXED by Kubelka-Munk (`meltBlendInk`) with each
+                  series' own ink swirling through the mix (`meltSwirlArms`). No single target - it is a mix. */
+  const MELT_BODIES = Object.freeze({ chart: null, slate: "#25313C", reference: "#000000", blend: null });
 
   const mc01 = (v) => (v <= 0 ? 0 : v >= 1 ? 1 : v);   /* the engine inlines every module into ONE scope, so a
      private helper carries the module's own prefix - `c01` is ink.mjs's */
@@ -4957,7 +5038,8 @@ async function mount(doc) {
   const meltOpts = (exit, o = {}) => {
     const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
     const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS, depth: 0, gather: false,
-                  wbody: null };   /* P61 T5c / E99 s49: the ball's body colour, UNSET here - the default is resolved once, below */
+                  wbody: null,   /* P61 T5c / E99 s49: the ball's body colour, UNSET here - the default is resolved once, below */
+                  offscreen: false };   /* P72 T23 / R26-157: the splash's pitch picked OFF the frame - a splash's alone */
     let said = false;   /* did the row declare its own length? a weight phase lengthens only the DEFAULT window */
     const setEnding = (e) => {
       if (out.ending) throw new Error("melt: two endings (" + out.ending + " and " + e + ") - a melt ends one way");
@@ -4976,6 +5058,10 @@ async function mount(doc) {
         out.depth = v; continue;
       }
       if (b === "gather") { out.gather = true; continue; }   /* P61 T6 / E99 s2: the sag becomes the vortex, gathered to one point */
+      if (b === MELT_OFFSCREEN) {   /* P72 T23 / R26-157 / E99 s56: the pitch picks the ball OFF the frame and throws it back in */
+        if (out.offscreen) throw new Error("melt: offscreen said twice - a ball is picked off the frame once");
+        out.offscreen = true; continue;
+      }
       if (b.indexOf(MELT_BODY) === 0) {   /* P61 T5b / E99 s42: the ball's BODY COLOUR - the compiler's own vocabulary and words */
         const w = b.slice(MELT_BODY.length);
         if (!Object.prototype.hasOwnProperty.call(MELT_BODIES, w)) {
@@ -4986,7 +5072,7 @@ async function mount(doc) {
       if (b === "weight") {   /* R26-118: the weight phase, and the material it is made of (metal unless it says) */
         out.weight = true;
         const nx = (bits[i + 1] || "").trim();
-        if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && nx !== "gather" && nx !== "morph" && nx.indexOf(MELT_DEPTH) !== 0 && nx.indexOf(MELT_BODY) !== 0 && !Number.isFinite(Number(nx))) {
+        if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && nx !== "gather" && nx !== "morph" && nx !== MELT_OFFSCREEN && nx.indexOf(MELT_DEPTH) !== 0 && nx.indexOf(MELT_BODY) !== 0 && !Number.isFinite(Number(nx))) {
           if (MELT_MATERIALS.indexOf(nx) < 0) {
             throw new Error("melt: " + nx + " is not a material - melt:weight takes " + MELT_MATERIALS.join(", "));
           }
@@ -5022,6 +5108,11 @@ async function mount(doc) {
       if (out.gather) out.secs += P.G_S;        /* P61 T6: and the travel needs its own - three turns in 0.48 s is a jump */
       if (out.ending === "morph") out.secs += P.M_S;   /* P61 T3: and so does the HAND - the arriving page's morph runs in it */
       if (out.ending.indexOf("splash") === 0) out.secs += P.T_S;   /* P61 T6b / E99 s51: ... and so does the THROW - the pick-up and the flight are their own phase, and the burst and the paint keep every second they had */
+      if (out.offscreen && out.ending.indexOf("splash") === 0) out.secs += P.OFF_S;   /* P72 T23: ... and the carry off and the beat of nothing */
+    }
+    if (out.offscreen && out.ending.indexOf("splash") !== 0) {
+      throw new Error("melt: offscreen is a splash's pitch (E99 s56: the ball is picked off the frame and thrown back in to "
+        + "splat) - say melt:splash:chart:offscreen or melt:splash:plate:offscreen; a " + out.ending + " never lands on the board");
     }
     if (out.to && out.ending !== "throw") throw new Error("melt: an x,y point is where a THROW goes - a splash lands on the board");
     out.to = out.to || [P.TO[0], P.TO[1]];
@@ -5041,6 +5132,7 @@ async function mount(doc) {
   const meltPitchShare = (secs, o = {}) => {
     const P = Object.assign({}, MELT, o), s = Math.max(0.05, +secs || P.S);
     if (String(P.ending || "").indexOf("splash") !== 0) return 0;
+    if (P.offscreen) return mc01(Math.min(P.T_S + P.OFF_S, P.OFF_T_MAX * s) / s);   /* P72 T23: four beats, their own cap */
     return mc01(Math.min(P.T_S, P.T_MAX * s) / s);
   };
   /* what is LEFT for the three phases that share it (the sag, the ball, the ending): one line, read everywhere */
@@ -5442,6 +5534,64 @@ async function mount(doc) {
              shadowX: was.x, shadowY: was.y + was.h };
   };
 
+  /* ---- P72 T23 / R26-157 / E99 s56: THE OFF-SCREEN PITCH ------------------------------------------------------------ */
+  /* WHERE IT GOES AND WHERE IT COMES BACK FROM, in the melting world's own px - a pure function of the ball's seat, the
+     landing, its radius and the stage box. `up` is the rise from the seat that puts the whole disc above the frame's top
+     edge; `from` is the entry point as an offset FROM THE LANDING (throwXf flies a thing from an offset onto its rest),
+     off the frame on the seat's own side; `chord` is that flight's length. */
+  const meltOffscreenGeom = (seat, land, r, sb, o = {}) => {
+    const P = Object.assign({}, MELT, o), clear = Math.max(1e-6, r) * (1 + P.OFF_CLEAR);
+    const left = seat[0] <= land[0], fx = left ? P.OFF_FROM[0] : 1 - P.OFF_FROM[0];
+    const ex = left ? Math.min(sb.x + fx * sb.w, sb.x - clear) : Math.max(sb.x + fx * sb.w, sb.x + sb.w + clear);
+    const ey = sb.y + P.OFF_FROM[1] * sb.h;
+    const from = { x: ex - land[0], y: ey - land[1] };
+    return { up: Math.min(0, sb.y - clear - seat[1]), from, chord: Math.hypot(from.x, from.y), left };
+  };
+  /* THE FOUR BEATS, a pure function of the phase's own seconds `tw`, its length `tsecs`, the radius, `to` (the landing as
+     an offset from the seat, as meltPitchAt takes it) and `g` (meltOffscreenGeom):
+       PICK UP   the approved pitch's own press and lift - meltPitchAt itself, run on the same pick-up seconds
+       CARRY     straight UP from the lift out of the top of the frame on an ease-in (plucked away), stretched along the
+                 rise; the contact shadow stays on the seat and goes out as the ball leaves it
+       GONE      the ball held above the frame: no pixel of it in view and NO shadow (null) - a beat of nothing
+       FLIGHT    throwXf from off the frame onto the landing, the flatter OFF_ARC, the pitch's own FL_S share of the time;
+                 the shadow arrives with it (height OFF_H at the entry, faded in over OFF_SHADOW_IN) and trails a frame
+     Returns meltPitchAt's own shape, so the caller writes it exactly as it writes the pitch. */
+  const meltOffscreenAt = (tw, tsecs, r, to, g, o = {}) => {
+    const P = Object.assign({}, MELT, o), T = Math.max(0.05, tsecs), mass = P.MASS;
+    const sum = P.PK_S + P.OFF_UP_S + P.OFF_BEAT_S + P.FL_S, sc = T / sum;
+    const pk = P.PK_S * sc, up = P.OFF_UP_S * sc;
+    const beat = Math.max(P.OFF_BEAT_MIN, P.OFF_BEAT_S * sc), step = P.HOLD / P.FPS;
+    /* the flight opens after the beat, ON a pose of the stepped clock - so its first pose is the entry itself, off the frame */
+    const t0 = Math.ceil((pk + up + beat) / step - 1e-9) * step;
+    const fl = Math.max(0.05, T - t0);   /* ... and lands exactly as the phase ends (a short declared window shortens it) */
+    const land = to || [0, 0], lift = P.T_LIFT_R * Math.max(1e-6, r);
+    const pose = (ts) => {
+      if (ts < pk) {   /* the approved pick-up, to the pixel: meltPitchAt on a clock whose pick-up is exactly `pk` long */
+        const s = meltPitchAt(ts, pk * (P.PK_S + P.FL_S) / P.PK_S, r, land, P);
+        return { beat: s.beat, x: 0, y: s.y, rot: 0, alpha: s.squash.a, theta: s.squash.theta, h: s.h, shade: 1 };
+      }
+      if (ts < pk + up) {
+        const k = mc01((ts - pk) / Math.max(1e-6, up)), y = -lift + (g.up + lift) * k * k;
+        return { beat: "carry", x: 0, y, rot: 0, alpha: P.OFF_STRETCH * k, theta: -Math.PI / 2, h: -y, shade: 1 - k };
+      }
+      if (ts < t0) return { beat: "gone", x: 0, y: g.up, rot: 0, alpha: 0, theta: Math.PI / 2, h: 0, shade: 0, none: true };
+      const s = throwXf(g.from, mass, ts - t0, { FLIGHT_S: fl, ARC: P.OFF_ARC, SPIN_DEG: P.SPIN_DEG }), u = mc01(s.u);
+      const h = P.OFF_H * (1 - u) + P.OFF_ARC * g.chord * 4 * u * (1 - u);
+      return { beat: "flight", x: land[0] + s.x, y: land[1] + s.y, rot: s.rot, alpha: s.alpha, theta: s.theta, h,
+               shade: mc01(u / Math.max(1e-6, P.OFF_SHADOW_IN)) };
+    };
+    const now = pose(tw), was = pose(Math.max(now.beat === "flight" ? t0 : 0, tw - STOP.LAG_FRAMES / P.FPS));
+    let shadow = null;
+    if (!now.none && now.shade > 0) {
+      const cs = contactShadow(now.h, Math.abs(now.alpha));
+      shadow = { scale: cs.scale, alpha: cs.alpha * now.shade, blur: cs.blur };
+    }
+    /* the carry's shadow stays ON THE SEAT (the ground under a ball rising straight up is where it was) */
+    const sx = now.beat === "carry" ? 0 : was.x, sy = now.beat === "carry" ? 0 : was.y + was.h;
+    return { beat: now.beat, x: now.x, y: now.y, rot: now.rot, h: now.h, squash: { a: now.alpha, theta: now.theta },
+             shadow, shadowX: sx, shadowY: sy };
+  };
+
   /* ---- the colour ------------------------------------------------------------------------------------------------- */
   const meltRFromKs = (ks) => { const k = Math.max(0, ks); return 1 + k - Math.sqrt(k * k + 2 * k); };
   /* THE INK THE BALL IS MADE OF: the marks' colours mixed by Kubelka-Munk (the mean K/S per channel - a subtractive mix, not
@@ -5539,7 +5689,7 @@ async function mount(doc) {
        weight   which beat of the weight phase (null: none)          turn      how far the ball has rolled, radians
        mark     the ink knot the roll turns (null: no weight)        hl        the specular highlight, pinned to the light
        shadow   the contact shadow's scale/alpha/blur                shadowX   where it is, a frame behind the ball */
-  const meltState = (t0, t, o = {}, rnd) => {
+  const meltStateCore = (t0, t, o = {}, rnd) => {
     const P = Object.assign({}, MELT, o), rect = P.rect, sb = P.stagebox || rect, to = P.to || P.TO;
     const ending = MELT_ENDINGS.indexOf(P.ending) >= 0 ? P.ending : "throw";
     const secs = Math.max(0.05, +P.secs || P.S), u = mc01((t - t0) / secs), ph = meltPhase(u, P);
@@ -5548,7 +5698,7 @@ async function mount(doc) {
                  squash: { a: 0, theta: 0 }, xf: null, drops: [], stains: [], cover: 1, rim: 0, reveal: false,
                  spring: 1, dropAlpha: 1, dropScale: 1, tint: 0, sats: [], textOpacity: 0, boardUp: true, gone: false,
                  weight: null, turn: 0, mark: null, hl: null, shadow: null, shadowX: 0, shadowY: 0, shake: { x: 0, y: 0 },
-                 mass: false, occl: null, gather: null, pitch: null };   /* P61 T6b: `pitch` is which beat of the
+                 mass: false, occl: null, gather: null, pitch: null, handK: null, swirl: null };   /* P61 T6b: `pitch` is which beat of the
                  pick-up-and-throw the frame is on (press | lift | flight), null for every frame that is not one - so a
                  melt with no splash ending never has one.
                  P61 T6: `gather` is the particles' clock and their
@@ -5680,7 +5830,10 @@ async function mount(doc) {
     if (ph.name === "pitch") {
       /* THE BALL IS PICKED UP AND THROWN. It wears the same ring it wore standing (the weight ball's living drop, the
          plain ball's circle), and nothing about the ending has opened yet: no droplet, no stain, the board whole. */
-      const pst = meltPitchAt(tq, span, b.r, toV, P);
+      /* P72 T23 / R26-157: `offscreen` carries it out of the frame first and throws it back in from off the frame */
+      const pst = P.offscreen
+        ? meltOffscreenAt(tq, span, b.r, toV, meltOffscreenGeom([b.centre[0] + restX, b.centre[1]], land, b.r, sb, P), P)
+        : meltPitchAt(tq, span, b.r, toV, P);
       st.bodyOutline = circle; st.body = morphAPath(circle);
       st.pitch = pst.beat;
       st.xf = { x: restX + pst.x, y: pst.y, rot: pst.rot, alpha: pst.squash.a, theta: pst.squash.theta,
@@ -5704,6 +5857,7 @@ async function mount(doc) {
       st.body = morphAPath(st.bodyOutline);
       st.bodyAlpha = 1 - mc01(kq / Math.max(1e-6, P.M_FADE));   /* LINEAR: an eased fade front-loads and the swap lands in a few frames */
       if (restX && !hand) st.xf = { x: restX, y: 0, rot: 0 };   /* a handed outline is already where it is */
+      if (hand) st.handK = kq;   /* P72 T23 / R26-389: the hand's own clock, for the ink rule the painter applies */
       /* THE BOARD HANDS OVER HERE, exactly as a throw's does at its release: the arriving page's charcoal has been the
          ground under this world since its own first frame (a morph page skips the roll, the savor and the soak), so the
          outgoing board steps aside and the page's rising ink is no longer behind it. The ball rides on, in the overlay
@@ -5756,6 +5910,19 @@ async function mount(doc) {
       st.dropAlpha = 1 - mEase(mc01(g * rate));   /* a drop IS its stain's first ink: it soaks away as the stain opens */
       if (ending === "splash:chart") st.dropScale = 1 - P.SPLAT_SHRINK * mEase(mc01(g * 2));
       if (ending === "splash:plate") st.spring = meltSpring(g, P);
+    }
+    return st;
+  };
+  /* P72 T23 / R26-146: a BLEND ball's swirl rides every frame its body is on screen - where the swirl stands (the window's
+     stepped clock at SW_RATE turns a second, plus whatever the roll turned the ball) and the drop's own FLOOR modes at that
+     clock, so the arms breathe with the living surface. Null on every other ball: no other melt ever mounts an arm. */
+  const meltState = (t0, t, o = {}, rnd) => {
+    const st = meltStateCore(t0, t, o, rnd);
+    const P = Object.assign({}, MELT, o);
+    if (P.wbody === "blend" && st.body && st.centre && !st.gone) {
+      const te = stepped(Math.max(0, t - t0), P.HOLD, P.FPS), r = st.bodyOutline ? meltRingR(st.bodyOutline) : st.r;
+      st.swirl = { turn: 2 * Math.PI * P.SW_RATE * te + (st.turn || 0), r,
+                   modes: dropModes(te, Math.max(1, st.r), meltWeightMass(P), [], { spin: st.turn || 0 }) };
     }
     return st;
   };
@@ -5828,22 +5995,108 @@ async function mount(doc) {
      is scaled by the stop's share of the LIT stop's luminance, so the light-to-core ramp the K-M concentration built is
      kept and only the hue and the level move. The lerp is in LINEAR light, like meltSheen and meltShade. */
   const mLum = (lin) => 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
+  /* P72 T23 / R26-146: THE BLEND - every series ink on the page mixed by Kubelka-Munk (the mean K/S, `meltMixInk`, the
+     soak's own subtractive law) and concentrated `density` times, so the lit stop is the mix and the core the darkest
+     mix. A page with one series has nothing to merge with but the board: it blends with the board's own ink. */
+  const mHexes = (hexes) => (hexes || []).filter((h) => /^#[0-9a-fA-F]{6}$/.test(h));
+  const meltBlendInk = (hexes, density = 1, o = {}) => {
+    const P = Object.assign({}, MELT, o), list = mHexes(hexes);
+    return meltMixInk(list.length === 1 ? list.concat([P.BLEND_BOARD]) : list, density);
+  };
   const meltBodyInk = (hexes, density, o = {}) => {
-    const P = Object.assign({}, MELT, o), ink = meltInkOf(hexes, density);
+    const P = Object.assign({}, MELT, o);
+    if (P.wbody === "blend") return meltBlendInk(hexes, density, P);
+    const ink = meltInkOf(hexes, density);
     const to = MELT_BODIES[P.wbody || "chart"];
     if (!to) return ink;
-    const a = hexToLin(ink), share = mLum(a) / Math.max(1e-6, mLum(hexToLin(meltInkOf(hexes, P.LIGHT))));
+    return meltRetarget(ink, meltInkOf(hexes, P.LIGHT), to, P);
+  };
+  /* a stop's ink taken to `to` AT ITS OWN LEVEL: the target scaled by the stop's share of the LIT stop's luminance, so
+     the light-to-core ramp survives and only the hue and the level move - linear light, like meltSheen and meltShade.
+     (P61 T5b's law for a named body; P72 T23 hands the ball's stops to the page's ink by the same law.) */
+  const meltRetarget = (ink, litInk, to, o = {}) => {
+    const P = Object.assign({}, MELT, o), a = hexToLin(ink), share = mLum(a) / Math.max(1e-6, mLum(hexToLin(litInk)));
     const t = hexToLin(to).map((v) => v * share), k = mc01(P.W_BODY_SHADE);
     return linToHex(a.map((v, i) => v + (t[i] - v) * k));
   };
-  /* the ball's body: THE INK, one small highlight up and to the left, the stroke, then concentrated toward its shaded side */
-  const meltBodyGradientMarkup = (id, hexes, o = {}) => {
+  /* THE BALL'S FOUR STOPS as [offset, colour]: one small highlight up and to the left, the stroke, then concentrated
+     toward its shaded side. meltBodyGradientMarkup writes exactly these; the hand's ink rule (R26-389) reads them. */
+  const meltBodyStops = (hexes, o = {}) => {
     const P = Object.assign({}, MELT, o), lit = meltBodyInk(hexes, P.LIGHT, P);
-    return '<radialGradient id="' + id + '" cx="0.34" cy="0.3" r="0.8" fx="0.32" fy="0.26">'
-      + '<stop offset="0" stop-color="' + meltSheen(lit, P.SHEEN) + '"/>'
-      + '<stop offset="0.14" stop-color="' + lit + '"/>'
-      + '<stop offset="0.55" stop-color="' + meltBodyInk(hexes, P.INK_DEEP, P) + '"/>'
-      + '<stop offset="1" stop-color="' + meltBodyInk(hexes, P.CORE, P) + '"/></radialGradient>';
+    return [[0, meltSheen(lit, P.SHEEN)], [0.14, lit], [0.55, meltBodyInk(hexes, P.INK_DEEP, P)], [1, meltBodyInk(hexes, P.CORE, P)]];
+  };
+  const mStopsMarkup = (stops) => stops.map((s) => '<stop offset="' + s[0] + '" stop-color="' + s[1] + '"/>').join("");
+  /* the ball's body: THE INK, one small highlight up and to the left, the stroke, then concentrated toward its shaded side */
+  const meltBodyGradientMarkup = (id, hexes, o = {}) =>
+    '<radialGradient id="' + id + '" cx="0.34" cy="0.3" r="0.8" fx="0.32" fy="0.26">' + mStopsMarkup(meltBodyStops(hexes, o))
+    + '</radialGradient>';
+
+  /* ---- P72 T23 / R26-146: THE SWIRL - each series' own ink as one arm turning through the blend -------------------- */
+  /* An arm is a comet stroke on a spiral: its centreline winds SW_TWIST radians from SW_IN to SW_OUT of the radius, its
+     width swells to SW_HALF at its middle and closes at both ends, and every point rides the living surface (the drop's
+     `dropRadius` of `modes`; [] is the plain circle). `turn` is where the swirl stands this frame (radians). One arm per
+     ink, at most SW_MAX, evenly spaced. Returns { d, fill, pts } per arm - pure: the same turn twice is the same arms. */
+  const meltSwirlArms = (c, r, inks, turn, modes, o = {}) => {
+    const P = Object.assign({}, MELT, o), list = mHexes(inks).slice(0, Math.max(0, P.SW_MAX | 0)), n = list.length;
+    const N = Math.max(4, P.SW_N | 0), R = Math.max(1e-6, r), out = [];
+    const at = (s, th) => { const rho = R * (P.SW_IN + (P.SW_OUT - P.SW_IN) * s) * dropRadius(th, modes || []);
+                            return [c[0] + rho * Math.cos(th), c[1] + rho * Math.sin(th)]; };
+    for (let i = 0; i < n; i++) {
+      const a0 = (+turn || 0) + 2 * Math.PI * i / n, lhs = [], rhs = [];
+      for (let j = 0; j <= N; j++) {
+        const s = j / N, th = a0 + P.SW_TWIST * s, w = P.SW_HALF * Math.sin(Math.PI * s);
+        lhs.push(at(s, th + w)); rhs.push(at(s, th - w));
+      }
+      const pts = lhs.concat(rhs.slice(1, -1).reverse());
+      out.push({ d: morphAPath(pts), fill: list[i], pts });
+    }
+    return out;
+  };
+
+  /* ---- P72 T23 / R26-389: THE HAND'S INK RULE - the page's ink takes the ball's, a front and never a mix ------------- */
+  /* Is there a second ink to hand to? Only when the page's area ink is not the ball's own source ink, and only on an INK
+     ball (chart, blend): an achromatic body (slate, reference) has no hue for a cross-fade to muddy. */
+  const meltHandInkOn = (pageHex, hexes, o = {}) => {
+    const P = Object.assign({}, MELT, o), body = P.wbody || "chart";
+    if (!P.HAND_INK_ON || !/^#[0-9a-fA-F]{6}$/.test(String(pageHex || ""))) return false;
+    if (body !== "chart" && body !== "blend") return false;
+    const own = body === "blend" ? meltBlendInk(hexes, 1, P) : (mHexes(hexes)[0] || P.INK_HEX);
+    return String(pageHex).toLowerCase() !== String(own).toLowerCase();
+  };
+  /* WHERE THE FRONT IS at the hand's own progress k (0 at the hand-over), in the body gradient's offsets: from past its
+     shaded rim (1 + band: nothing taken) to past its lit spot (-band: all of it taken) by HAND_INK_END, at a constant rate. */
+  const meltHandFront = (k, o = {}) => {
+    const P = Object.assign({}, MELT, o), b = P.HAND_INK_BAND;
+    return (1 + b) - (1 + 2 * b) * mc01(mc01(k) / Math.max(1e-6, P.HAND_INK_END));
+  };
+  /* the page's stops, at the ball's own offsets and levels: its sheen, its ink, and the ball's deep and core stops taken
+     to the page's ink at their own luminance share (meltRetarget) - the same ball, painted in the other ink */
+  const meltHandPageStops = (pageHex, ballStops, o = {}) => {
+    const P = Object.assign({}, MELT, o), lit = ballStops[1][1];
+    return ballStops.map((s, j) => [s[0], j === 0 ? meltSheen(pageHex, P.SHEEN) : j === 1 ? pageHex
+                                                  : meltRetarget(s[1], lit, pageHex, Object.assign({}, P, { W_BODY_SHADE: 1 }))]);
+  };
+  const mMixHex = (a, b, k) => {   /* the gradient's own interpolation (sRGB), for the two stops that sit ON the front */
+    const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16)), pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16));
+    return "#" + pa.map((v, i) => Math.round(v + (pb[i] - v) * mc01(k)).toString(16).padStart(2, "0")).join("");
+  };
+  const mStopAt = (stops, x) => {   /* a gradient's colour at offset x */
+    for (let j = 0; j + 1 < stops.length; j++) {
+      if (x <= stops[j + 1][0]) return mMixHex(stops[j][1], stops[j + 1][1], (x - stops[j][0]) / Math.max(1e-9, stops[j + 1][0] - stops[j][0]));
+    }
+    return stops[stops.length - 1][1];
+  };
+  /* THE STOPS THIS FRAME: the ball's inside the front (offset < F - band), the page's outside it (> F + band), and the
+     front itself as two stops - the ball's colour and the page's at its two edges. Exactly the ball's stops before it,
+     exactly the page's after it. */
+  const meltHandStops = (ball, page, F, o = {}) => {
+    const P = Object.assign({}, MELT, o), b = P.HAND_INK_BAND;
+    if (F - b >= 1) return ball.map((s) => [s[0], s[1]]);
+    if (F + b <= 0) return page.map((s) => [s[0], s[1]]);
+    const out = ball.filter((s) => s[0] < F - b).map((s) => [s[0], s[1]]);
+    if (F - b >= 0) out.push([+(F - b).toFixed(4), mStopAt(ball, F - b)]);
+    if (F + b <= 1) out.push([+(F + b).toFixed(4), mStopAt(page, F + b)]);
+    return out.concat(page.filter((s) => s[0] > F + b).map((s) => [s[0], s[1]]));
   };
   /* ---- P61 T5 / E99 s3: THE BALL'S SHADOWS - the three overlays' paint ---------------------------------------------
      Each of the three wears the BODY'S OWN path (`st.body`), so it is clipped to the living drop's silhouette exactly,
@@ -5960,7 +6213,8 @@ async function mount(doc) {
     + ".melttext .lp-page{background:transparent!important}"
     + ".melttext .lp-page *{visibility:hidden!important}"
     + ".melttext .lp-ink,.melttext .lp-ink *,.melttext .lp-rail,.melttext .lp-rail *,.melttext .lp-chart line,.melttext .lp-chart text,.melttext .lp-chart text *{visibility:visible!important}"
-    + ".melttext .lp-key,.melttext .lp-key *{visibility:visible!important}";
+    + ".melttext .lp-key,.melttext .lp-key *{visibility:visible!important}"
+    + ".melttext .lp-chart .meltaxis{visibility:visible!important}";   /* P72 T23 / R26-139: a hairline the gather made a path */
 
   /* the stage's box in the world's own px: `.world` overhangs the stage by 5% on every side */
   const meltStageBox = (wA) => ({ x: wA.offsetWidth / 22, y: wA.offsetHeight / 22,
@@ -6033,7 +6287,9 @@ async function mount(doc) {
         /* a PATH curls: it is sampled ONCE along its own length and redrawn point by point through the map every frame
            (s9.31's noodle). Everything else - a bar, a tick, a label - travels as one particle, as the retract's do. */
         const pts = el.tagName === "path" ? meltPathPoints(el, MELT.G_LINE_N) : null;
+        const hair = el.tagName === "line" ? meltLineAsPath(el, MELT.G_LINE_N) : null;   /* P72 T23 / R26-139: the axes curl too */
         if (pts && pts.length > 1) out.push({ el, pts, closed: /[zZ]\s*$/.test(el.getAttribute("d") || ""), c: cc, R: Rmax / k, svg: true, line: true });
+        else if (hair) out.push({ el: hair.el, pts: hair.pts, closed: false, c: cc, R: Rmax / k, svg: true, line: true });
         else out.push({ el, x: b.x + b.width / 2, y: b.y + b.height / 2, c: cc, R: Rmax / k, svg: true });
       }
     }
@@ -6051,6 +6307,31 @@ async function mount(doc) {
       pts.push([q.x, q.y]);
     }
     return pts;
+  };
+  /* P72 T23 / R26-139: A HAIRLINE's own points - n + 1 samples along the segment, its two ends exact. */
+  const meltLinePoints = (x1, y1, x2, y2, n) => {
+    const m = Math.max(1, n | 0), pts = [];
+    for (let i = 0; i <= m; i++) pts.push(i === 0 ? [x1, y1] : i === m ? [x2, y2] : [x1 + (x2 - x1) * i / m, y1 + (y2 - y1) * i / m]);
+    return pts;
+  };
+  /* ... and the hairline as a PATH that can curl. A `<line>` cannot take a `d`, so in the melt's OWN clone (never the
+     page) it is replaced by a path carrying its attributes, its computed stroke (a rule written against `line` no longer
+     matches the path) and the class the words' clone shows (MELT_CSS `.meltaxis`). Only a line the clone actually DRAWS
+     (visible, untransformed) is converted; any other travels as the particle it always was. Null when not converted. */
+  const MELT_LINE_STYLE = ["stroke", "stroke-width", "stroke-opacity", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "opacity", "vector-effect"];
+  const meltLineAsPath = (el, n) => {
+    if (!MELT.G_LINE_CURL || el.getAttribute("transform")) return null;
+    const view = el.ownerDocument.defaultView, cs = view && view.getComputedStyle(el);
+    if (!cs || cs.visibility !== "visible" || cs.display === "none") return null;
+    const v = (k) => { const a = el[k]; return a && a.baseVal ? a.baseVal.value : +el.getAttribute(k) || 0; };
+    const pts = meltLinePoints(v("x1"), v("y1"), v("x2"), v("y2"), n);
+    const p = el.ownerDocument.createElementNS(el.namespaceURI, "path");
+    for (const at of [...el.attributes]) if (["x1", "y1", "x2", "y2"].indexOf(at.name) < 0) p.setAttribute(at.name, at.value);
+    for (const k of MELT_LINE_STYLE) p.style.setProperty(k, cs.getPropertyValue(k));
+    p.style.setProperty("fill", "none");
+    p.classList.add("meltaxis");
+    el.replaceWith(p);
+    return { el: p, pts };
   };
   /* ONE frame of the travel: every particle to its pose at u. Pure per particle, so a seek writes what a play wrote. */
   const meltGatherWrite = (parts, u, o) => {
@@ -6116,6 +6397,55 @@ async function mount(doc) {
   const meltCircle = (dot, c) => {
     if (!c || c.r <= 0.2) { dot.setAttribute("r", "0"); return; }
     dot.setAttribute("cx", c.x.toFixed(1)); dot.setAttribute("cy", c.y.toFixed(1)); dot.setAttribute("r", c.r.toFixed(1));
+  };
+
+  /* P72 T23 / R26-146: THE SWIRL's arms, in the ball's own group (so they ride its throw, tumble and squash) right over
+     its body and under its shading, clipped to the body's own silhouette this frame. Mounted the first frame a blend
+     ball asks for it; a melt that never does has none of it - its defs and its DOM are the ones that shipped. */
+  const meltPaintSwirl = (m, st, el, id) => {
+    if (!st.swirl && !m.swirl) return;
+    if (!m.swirl) {
+      m.defs.insertAdjacentHTML("beforeend", '<clipPath id="' + id + 'sc"><path d=""/></clipPath>');
+      const g = el("g", "meltswirl", m.bodyG, { "clip-path": "url(#" + id + "sc)" });
+      m.bodyG.insertBefore(g, m.body.nextSibling);
+      m.swirl = { g, clip: m.defs.querySelector("#" + id + "sc path"), arms: [] };
+    }
+    const S = m.swirl, sw = st.swirl, arms = sw ? meltSwirlArms(st.centre, sw.r, m.hexes, sw.turn, sw.modes) : [];
+    S.clip.setAttribute("d", sw ? st.body : "");
+    meltDots(S.arms, arms.length, el, S.g, {}, "path").forEach((p, i) => {
+      const a = arms[i];
+      p.setAttribute("d", a ? a.d : "");
+      if (a) p.setAttribute("fill", a.fill);
+      p.setAttribute("opacity", a ? (MELT.SW_A * st.bodyAlpha).toFixed(3) : "0");
+    });
+  };
+  /* the arriving page's AREA ink - the morph path's own fill, as the browser computed it - or null before it exists */
+  const meltPageInk = (wB) => {
+    const p = wB && wB.querySelector ? wB.querySelector("svg.lp-morph path.morph") : null;
+    return p ? meltHex(wB.ownerDocument.defaultView.getComputedStyle(p).fill) : null;
+  };
+  /* P72 T23 / R26-389: THE HAND'S INK RULE, written. On a hand frame with two inks the body gradient's stops are the front's
+     (meltHandStops), and the ball's specular spot, its mark and its well change ink as the front passes them (the mark and
+     the well at mid-ball, the spot - on the lit side - last). Off the hand the ball's own stops are put back, so a seek
+     out of the hand is the ball as it always was. A hand with ONE ink never reaches the write: its markup is untouched. */
+  const meltPaintHandInk = (m, st, wB, opts) => {
+    const on = st.handK != null;
+    if (!on && !m.handSet) return;
+    const P = Object.assign({}, MELT, opts);
+    if (on && !m.handInk) m.handInk = meltPageInk(wB);
+    const ball = meltBodyStops(m.hexes, P), live = on && meltHandInkOn(m.handInk, m.hexes, P);
+    if (!live && !m.handSet) return;
+    const F = live ? meltHandFront(st.handK, P) : 2;
+    const page = live ? meltHandPageStops(m.handInk, ball, P) : ball;
+    m.defs.querySelector("#" + m.id + "g").innerHTML = mStopsMarkup(live ? meltHandStops(ball, page, F, P) : ball);
+    const mid = F <= 0.5, lit = F <= 0;
+    if (m.hl) m.hl.setAttribute("fill", meltSheen(lit ? page[1][1] : ball[1][1], P.HL_SHEEN));
+    if (m.mark) m.mark.setAttribute("fill", mid ? page[3][1] : meltBodyInk(m.hexes, P.CORE, P));
+    if (m.pit) {
+      const deep = meltShade(mid ? page[3][1] : meltBodyInk(m.hexes, P.CORE, P), P.W_PIT_SHADE);
+      m.defs.querySelectorAll("#" + m.id + "gp stop").forEach((s) => s.setAttribute("stop-color", deep));
+    }
+    m.handSet = live;
   };
 
   /* PAINT ONE FRAME. ctx: { wA, wB, t, t0, opts, rnd, el, id }. The state is meltState's; this only writes it down. A world
@@ -6262,6 +6592,8 @@ async function mount(doc) {
       m.hl.setAttribute("rx", h ? h.r.toFixed(2) : "0"); m.hl.setAttribute("ry", h ? (h.r * 0.72).toFixed(2) : "0");
       m.hl.setAttribute("opacity", h ? (st.bodyAlpha * 0.85).toFixed(3) : "0");
     }
+    meltPaintSwirl(m, st, el, id);   /* P72 T23 / R26-146: a blend ball's arms - nothing for any other ball */
+    meltPaintHandInk(m, st, wB, ctx.opts);   /* P72 T23 / R26-389: the page's ink takes the handed ball's - two inks only */
     /* THE SPLATTER: opaque ink splats with their tails and satellites, and the torn stains cut through the board */
     meltDots(m.splats, st.drops.length, el, m.drops, { fill: "url(#" + id + "w)" }, "path").forEach((p, i) => {
       const d = st.drops[i], k = st.dropScale;

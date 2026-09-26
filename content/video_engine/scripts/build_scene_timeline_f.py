@@ -6869,7 +6869,8 @@ MELT_ENDINGS = ("throw", "splash:chart", "splash:plate", "morph")   # E88 / R26-
 MELT_MATERIALS = ("metal", "ink", "paper", "liquid")       # R26-118 / E88 s7: what `melt:weight:<material>` may name - species/melt.mjs MELT_MATERIALS
 DEPTH_SUFFIX = "depth="   # P58 T6 (b) / E98 s4: the plane a MECHANISM happens at, as an exit suffix - `melt:...:depth=<k>` and `slide:<dir>[:<s>]:depth=<k_out>,<k_in>` (P58 T6 (c)); species/melt.mjs and the engine's slideOpts read the same string on the player's side
 BODY_SUFFIX = "body="     # P61 T5b / E99 s42: the ball's BODY COLOUR - `melt:weight:...:body=<word>`; species/melt.mjs MELT_BODY
-MELT_BODIES = ("chart", "slate", "reference")   # P61 T5b / E99 s42, default `reference` since P61 T5c / E99 s49: chart (the ball that shipped - the chart's own ink), slate (the BOARD's ink, `--lp-char: #25313C`, docs/content-video-engine/samples/scene-evidence-player.template.html:50), reference (the blueprint's near-black metal, LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md s3.3 :198-201 "the albedo base color is pure black", gate tier PLAUSIBLE); species/melt.mjs MELT_BODIES
+MELT_BODIES = ("chart", "slate", "reference", "blend")   # P61 T5b / E99 s42, default `reference` since P61 T5c / E99 s49: chart (the ball that shipped - the chart's own ink), slate (the BOARD's ink, `--lp-char: #25313C`, docs/content-video-engine/samples/scene-evidence-player.template.html:50), reference (the blueprint's near-black metal, LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md s3.3 :198-201 "the albedo base color is pure black", gate tier PLAUSIBLE), blend (P72 T23 / R26-146 / E99 s49 (2): the page's inks mixed by Kubelka-Munk, each series' own ink swirling through the mix - a candidate for the operator's eye, P72-HG1 (3)); species/melt.mjs MELT_BODIES
+OFFSCREEN_TOKEN = "offscreen"   # P72 T23 / R26-157 / E99 s56: a SPLASH's pitch picked OFF the frame and thrown back in faster - species/melt.mjs MELT_OFFSCREEN
 
 
 def _is_number(bit: str) -> bool:
@@ -6905,12 +6906,20 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
     ``slate``, the board's own ink; ``reference``, the blueprint's near-black metal). It is a suffix of its
     own and NOT a fifth material, because a material is the ball's mass and damping and a body is only its colour.
     A ball is one colour, so a row names at most one, and a word this engine does not have is refused BY NAME.
+    P72 T23 / R26-146 / E99 s49 (2) adds ``blend`` - the page's series inks MIXED by Kubelka-Munk, each one swirling
+    through the mix; a candidate the operator judges on its clip (P72-HG1 (3)), authored only by name.
+
+    P72 T23 / R26-157 / E99 s56 adds ``offscreen`` - a SPLASH's pitch that carries the ball out of the frame, holds a
+    beat of nothing and throws it back in from off the frame on a faster, flatter arc. It belongs to a splash alone
+    (the throw already leaves the frame; a morph never lands on the board), so any other ending is refused BY NAME, and
+    a splash that declares no length of its own runs its window plus species/melt.mjs MELT.OFF_S.
     P61 T5c / E99 s49 ("I like the reference") makes ``reference`` the DEFAULT for a WEIGHT ball that names no word;
     a melt with no ``weight`` token has no ball surface to shade and stays ``chart``, so its frames cannot move.
 
     species/melt.mjs ``meltOpts`` reads exactly this grammar on the player's side; the two have to agree, and
     test_transitions_e47 pins the pair. Returns (ending, the declared length or None for MELT_S, the declared
-    depth or None for the flat clone, whether the row asked for the gather, the body colour)."""
+    depth or None for the flat clone, whether the row asked for the gather, the body colour). ``offscreen`` is
+    validated here and read by ``melt_offscreen`` - the tuple every caller unpacks is the one it always was."""
     secs: float | None = None
     ending: str | None = None
     depth: float | None = None   # P58 T6 (b): validated here, carried to the player on the exit string itself
@@ -6918,6 +6927,7 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
     body: str | None = None      # P61 T5b / E99 s42: the ball's body colour, validated here and carried on the string
     weight = False               # P61 T5c / E99 s49: did the row ask for the ball? only a WEIGHT ball has a body to shade
     point = False
+    offscreen = False            # P72 T23 / R26-157: the splash's pitch picked off the frame, validated here, carried on the string
     bits = str(exit_id).split(":")[1:]
     i = 0
     while i < len(bits):
@@ -6950,6 +6960,11 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
         if bit == "gather":   # P61 T6 / E99 s2: the sag becomes the vortex, gathered to ONE point
             gather = True
             continue
+        if bit == OFFSCREEN_TOKEN:   # P72 T23 / R26-157 / E99 s56: the pitch picks the ball OFF the frame
+            if offscreen:
+                raise ValueError(f"exit {exit_id!r}: offscreen said twice - a ball is picked off the frame once")
+            offscreen = True
+            continue
         if bit.startswith(BODY_SUFFIX):   # P61 T5b / E99 s42: the ball's BODY COLOUR - species/melt.mjs meltOpts reads the same word
             if body is not None:
                 raise ValueError(f"exit {exit_id!r}: two body colours - a ball is one colour")
@@ -6960,7 +6975,7 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
         if bit == "weight":   # R26-118: the weight phase, and the material the ball is made of
             weight = True
             nxt = bits[i].strip() if i < len(bits) else ""
-            if nxt and "," not in nxt and nxt not in ("throw", "splash", "gather", "morph") and not nxt.startswith(DEPTH_SUFFIX) and not nxt.startswith(BODY_SUFFIX) and not _is_number(nxt):
+            if nxt and "," not in nxt and nxt not in ("throw", "splash", "gather", "morph", OFFSCREEN_TOKEN) and not nxt.startswith(DEPTH_SUFFIX) and not nxt.startswith(BODY_SUFFIX) and not _is_number(nxt):
                 if nxt not in MELT_MATERIALS:
                     raise ValueError(f"exit {exit_id!r}: {nxt!r} is not a material - melt:weight takes "
                                      + ", ".join(MELT_MATERIALS))
@@ -6989,6 +7004,10 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
     ending = ending or "throw"
     if point and ending != "throw":
         raise ValueError(f"exit {exit_id!r}: an x,y point is where a THROW goes - a splash lands on the board")
+    if offscreen and not ending.startswith("splash"):
+        raise ValueError(f"exit {exit_id!r}: offscreen is a splash's pitch (E99 s56: the ball is picked off the frame and "
+                         "thrown back in to splat) - say melt:splash:chart:offscreen or melt:splash:plate:offscreen; a "
+                         f"{ending} never lands on the board")
     # P61 T5c / E99 s49: the DEFAULT body, resolved in ONE place on this side (species/melt.mjs `meltOpts` resolves
     # the same one on the player's) - a WEIGHT ball with no word wears `reference`, everything else stays `chart`.
     return ending, secs, depth, gather, body or ("reference" if weight else "chart")
@@ -7007,6 +7026,15 @@ def melt_gather(exit_id: str | None) -> bool:
     if not exit_id or str(exit_id).split(":")[0] != "melt":
         return False
     return _melt_parts(str(exit_id))[3]
+
+
+def melt_offscreen(exit_id: str | None) -> bool:
+    """P72 T23 / R26-157 / E99 s56: is this melt's splash pitched OFF the frame? False for every other exit and for
+    every melt on the record - the pitch the operator approved is what a splash that does not ask for it renders."""
+    if not exit_id or str(exit_id).split(":")[0] != "melt":
+        return False
+    _melt_parts(str(exit_id))   # the grammar refuses a misplaced or repeated one BY NAME before it is read
+    return OFFSCREEN_TOKEN in [b.strip() for b in str(exit_id).split(":")[1:]]
 
 
 def melt_body(exit_id: str | None) -> str:
@@ -7276,7 +7304,7 @@ def door_boundary_error(prev: dict, sc: dict) -> str | None:
 
 def parse_exit(exit_id: str) -> tuple[str, float | None]:
     """``cut`` | ``dip[:<s>]`` | ``blurzoom[:<s>]`` | ``wipe_right`` | ``suck:<x>,<y>`` |
-    ``melt[:throw|:splash:chart|:splash:plate][:gather][:weight[:<material>]][:<s>][:<x>,<y>]`` | ``slide:<left|right|up|down>[:<s>][:depth=<k_out>,<k_in>]``
+    ``melt[:throw|:splash:chart|:splash:plate][:offscreen][:gather][:weight[:<material>]][:body=<word>][:<s>][:<x>,<y>]`` | ``slide:<left|right|up|down>[:<s>][:depth=<k_out>,<k_in>]``
     -> (name, seconds or None).
 
     Only dip, blurzoom, melt and slide read a suffix as a length; the suck's is the point it collapses

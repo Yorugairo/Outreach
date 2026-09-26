@@ -78,6 +78,11 @@ FRAME_T = {
     # --check` covers these two base frames, which is why each has one.
     "melt-ball-slate": 16.28,
     "melt-ball-reference": 16.28,
+    "melt-ball-blend": 16.28,       # P72 T23 / R26-146: the blend ball mid-roll, at the pair's own instant - its settle rides PROOF_FRAMES
+    "melt-splash-offscreen": 17.04,  # P72 T23 / R26-157: THE RETURN - the ball thrown back in from off the left edge,
+                                    # 0.165 s into its 0.375 s flight on the flatter arc (2766 px/s against the approved
+                                    # pitch's 944), its shadow fading in under it. The carry, the empty board and the
+                                    # splat ride PROOF_FRAMES
     "melt-plate": 17.21,            # E88 / R26-76: splash:plate - the PAINT: the stains have opened from the
                                    # landed drops and the plate shows through them over the charcoal, springing to rest
     "count-array": 8.0,             # P52 T7: all six icons landed (5.0 + 5 * 0.34 + LAND_S = 7.15) and the count written as the claim (+ CLAIM_LAG + CLAIM_S = 7.73) - the field as it is read
@@ -1270,7 +1275,7 @@ def _dock_pair(aspect: str | None) -> tuple[dict, dict]:
     return _timeline(f"Golden: dock pair {aspect or '16:9'}", scenes, ev, aspect), uris
 
 
-def melt_page(ending: str = "throw", weight: bool = False, body: str = "chart") -> tuple[dict, dict]:
+def melt_page(ending: str = "throw", weight: bool = False, body: str = "chart", offscreen: bool = False) -> tuple[dict, dict]:
     """P52 T9 / R26-15, reworked to E88 / R26-76 - THE MELT TAKES THE CHART, NOT THE BOARD.
 
     Scene 1 is the line page every other golden is built from, given the whole 15 s to draw itself, so what melts is a
@@ -1325,6 +1330,12 @@ def melt_page(ending: str = "throw", weight: bool = False, body: str = "chart") 
         import build_scene_timeline_f as BST
         assert body in BST.MELT_BODIES, body
         exit_id += ":body=" + body
+    if offscreen:
+        # P72 T23 / R26-157 / E99 s56: the splash's pitch picked OFF the frame - a splash's alone (the compiler refuses
+        # it anywhere else, by name), so the token is written only when asked and every other surface's string stands.
+        import build_scene_timeline_f as BST
+        exit_id += ":offscreen"
+        assert BST.melt_offscreen(exit_id), exit_id   # the COMPILER's own grammar, not a hand-written string
     scenes.append({"scene_id": "s02", "world": world2, "exit": exit_id,
                    "span": [MELT_CUT, RUNTIME], "docks": [], "species": []})
     return _timeline("Golden: the chart melts off its board and is " + ("rolled in its own weight and " if weight else "")
@@ -1919,6 +1930,14 @@ SURFACES = {
     # `melt-ball-roll@proof-settle` is one instant read three ways.
     "melt-ball-slate": lambda: melt_page("throw", weight=True, body="slate"),          # the BOARD's own ink (--lp-char #25313C)
     "melt-ball-reference": lambda: melt_page("throw", weight=True, body="reference"),  # the blueprint's near-black metal (s3.3)
+    # P72 T23 / R26-146 / E99 s49 (2): the ball's inks MERGED - the page's four series mixed by Kubelka-Munk, each one
+    # swirling through the mix - off the same two pages and at the same instants as the pair above, so the operator
+    # reads it beside the reference ball (P72-HG1 (3)); a candidate, authored only by name
+    "melt-ball-blend": lambda: melt_page("throw", weight=True, body="blend"),
+    # P72 T23 / R26-157 / E99 s56: `melt-splash` with its pitch picked OFF the frame and thrown back in faster -
+    # the numbers (the carry, the beat of nothing, the return's chord and speed against the approved pitch and throw)
+    # ride sources/melt-splash-offscreen.sidecar.json, and melt.test.mjs proves them current
+    "melt-splash-offscreen": lambda: melt_page("splash:chart", offscreen=True),
 }
 
 
@@ -2899,7 +2918,9 @@ def morph_planted_plates() -> tuple[dict, dict]:
 
 
 SURFACES.update({"melt-morph-two-inks": melt_morph_two_inks, "morph-planted-plates": morph_planted_plates})
-FRAME_T["melt-morph-two-inks"] = 17.25    # HALF WAY THROUGH THE HAND (16.595 -> 17.90): part ball, part teal area
+FRAME_T["melt-morph-two-inks"] = 17.25    # HALF WAY THROUGH THE HAND (16.595 -> 17.90). Since P72 T23 / R26-389 the page's
+                                          # teal has TAKEN the ball's orange by now (a front across the ball, never a mix):
+                                          # the one shape in the page's ink, the ball's paint still fading over the area
 FRAME_T["morph-planted-plates"] = 15.15   # a TENTH of the ground's 1.5 s: the inked plate half over the blank one
 
 

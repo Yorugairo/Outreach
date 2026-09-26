@@ -787,3 +787,191 @@ test("P61 T6: the core's growth, the two transform strings, and the state is a p
     assert.deepEqual(meltState(0, t, o, rnd), meltState(0, t, o, rnd), "two seeks at t = " + t);
   }
 });
+
+// ---- P72 T23 - THE MELT'S OPTIONS ---------------------------------------------------------------------------------
+// R26-157 (E99 s56, the operator 2026-09-16: "Add to backlog a variant where we pick the ball off of the screen so it's
+// not in camera view, then throw it with increased velocity"), R26-146 (E99 s49 (2): "let the ink colors merge, then
+// it's orange and green and gets merged to olive ... a blend of the colors swirling with eachother, then the dark olive
+// becomes the shading"), R26-139 (the gather curls the axes' hairlines too - doc 29 s9.31, "redrawn point by point")
+// and R26-389 (the handed ball's ink went muddy between two inks, `melt-morph-two-inks`, P72 T24).
+import * as M23 from "../../scripts/species/melt.mjs";
+
+const OFF = MELT.S + MELT.T_S + (MELT.OFF_S || 0);
+const offOPTS = (extra = {}) => OPTS(Object.assign({ ending: "splash:chart", secs: OFF, offscreen: true }, extra));
+const walk = (o) => {
+  const out = [];
+  for (let f = 0; f <= Math.round(o.secs * MELT.FPS); f++) out.push({ f, t: f / MELT.FPS, st: meltState(0, f / MELT.FPS, o, rnd) });
+  return out;
+};
+/* the ball's disc on the stage this frame, in the world's own px - the squash only ever widens it, so r * (1 + |a|) bounds it */
+const discOut = (st) => {
+  const x = st.centre[0] + (st.xf ? st.xf.x : 0), y = st.centre[1] + (st.xf ? st.xf.y : 0), r = st.r * (1 + Math.abs(st.squash.a || 0));
+  return x + r < SB.x || x - r > SB.x + SB.w || y + r < SB.y || y - r > SB.y + SB.h;
+};
+
+test("R26-157: `offscreen` is a splash's pitch - opt-in, in any order, its own seconds, refused by name on anything else", () => {
+  assert.equal(meltOpts("melt:splash:chart").offscreen, false, "the default is the pitch that shipped");
+  assert.equal(meltOpts("melt:splash:chart:offscreen").offscreen, true);
+  assert.equal(meltOpts("melt:offscreen:splash:plate").offscreen, true, "in any order after the name");
+  assert.ok(MELT.OFF_S > 0, "the carry off, the beat of nothing and the faster return need their own seconds");
+  assert.equal(meltOpts("melt:splash:chart:offscreen").secs, MELT.S + MELT.T_S + MELT.OFF_S);
+  assert.equal(meltOpts("melt:splash:plate:offscreen:2.4").secs, 2.4, "a declared length is exactly itself");
+  for (const bad of ["melt:offscreen", "melt:throw:offscreen", "melt:morph:offscreen", "melt:weight:offscreen"]) {
+    assert.throws(() => meltOpts(bad), /offscreen is a splash's pitch/, bad);
+  }
+  assert.throws(() => meltOpts("melt:splash:chart:offscreen:offscreen"), /offscreen/, "said twice");
+});
+
+test("R26-157: the ball is PICKED OFF the screen - it rises out of the frame, a beat of nothing, then it is thrown back in", () => {
+  const w = walk(offOPTS()).filter((r) => r.st.phase === "pitch");
+  const beats = [...new Set(w.map((r) => r.st.pitch))];
+  assert.deepEqual(beats, ["press", "lift", "carry", "gone", "flight"], "five beats, in this order: " + beats);
+  const seatX = w[0].st.centre[0];
+  const carry = w.filter((r) => r.st.pitch === "carry");
+  assert.ok(carry.every((r) => Math.abs(r.st.xf.x) < 1e-9), "it is carried straight UP - picked off, not thrown off");
+  for (let i = 1; i < carry.length; i++) assert.ok(carry[i].st.xf.y <= carry[i - 1].st.xf.y + 1e-9, "and it only rises");
+  const out = w.filter((r) => discOut(r.st));
+  assert.ok(out.length && out.every((r) => ["carry", "gone", "flight"].includes(r.st.pitch)), "out of frame only once it has left");
+  const gone = w.filter((r) => r.st.pitch === "gone");
+  assert.ok(gone.length >= 2 && gone.every((r) => discOut(r.st)), "the beat of nothing: not one pixel of the ball in the frame");
+  assert.ok(gone.every((r) => !r.st.shadow), "and no shadow on the board while nothing is over it");
+  assert.ok(gone.length / MELT.FPS >= MELT.OFF_BEAT_MIN - 1e-9, `the beat is ${gone.length} frames, under OFF_BEAT_MIN`);
+  const fl = w.filter((r) => r.st.pitch === "flight");
+  assert.ok(discOut(fl[0].st), "the throw starts OUT of the frame");
+  assert.ok(!discOut(fl[fl.length - 1].st), "and comes back into it");
+  const hit = walk(offOPTS()).find((r) => r.st.phase === "fly").st, land = meltLandingAt(SB, offOPTS());
+  assert.ok(Math.hypot(hit.centre[0] + hit.xf.x - land[0], hit.centre[1] + hit.xf.y - land[1]) < 8, "and it splats on the landing");
+  assert.ok(Math.abs(w[0].st.centre[0] - seatX) < 1e-9);
+});
+
+test("R26-157: the return is FASTER and FLATTER than the pitch the operator approved, and its shadow arrives with it", () => {
+  const speed = (o) => {
+    const fl = walk(o).filter((r) => r.st.phase === "pitch" && r.st.pitch === "flight");
+    const p = (r) => [r.st.centre[0] + r.st.xf.x, r.st.centre[1] + r.st.xf.y];
+    let d = 0;
+    for (let i = 1; i < fl.length; i++) d += Math.hypot(p(fl[i])[0] - p(fl[i - 1])[0], p(fl[i])[1] - p(fl[i - 1])[1]);
+    return d / Math.max(1e-9, (fl.length - 1) / MELT.FPS);
+  };
+  /* the approved throw ENDING's own speed on the same page: the heavy ball thrown OFF the stage (E88) - the speed a ball
+     leaving the frame already flies at, and the one the return is read against (MELT.OFF_FROM's derivation) */
+  const seat = meltState(0, 0.99 * MELT.S, OPTS({ ending: "throw" }), rnd).centre;
+  const tv = Math.hypot(SB.x + MELT.TO[0] * SB.w - seat[0], SB.y + MELT.TO[1] * SB.h - seat[1]) / ((1 - MELT.BALL_END) * MELT.S * (1 - MELT.ANTIC));
+  const on = speed(spOPTS()), off = speed(offOPTS());
+  assert.ok(off >= 2 * on, `the return is ${off.toFixed(0)} px/s against the approved pitch's ${on.toFixed(0)} px/s`);
+  assert.ok(Math.abs(off / tv - 1) < 0.35, `and it flies at the approved throw's own speed: ${off.toFixed(0)} vs ${tv.toFixed(0)} px/s`);
+  const g = M23.meltOffscreenGeom([700, 800], meltLandingAt(SB, offOPTS()), 80, SB, offOPTS());
+  assert.ok(g.chord > 0 && g.up < -(800 - SB.y), "the carry clears the top edge");
+  assert.ok(MELT.OFF_ARC < MELT.T_ARC, "flatter: the arc is a smaller share of the chord");
+  const fl = walk(offOPTS()).filter((r) => r.st.phase === "pitch" && r.st.pitch === "flight");
+  const alphas = fl.map((r) => (r.st.shadow ? r.st.shadow.alpha : 0));
+  assert.ok(alphas[0] < alphas[alphas.length - 1], "the shadow arrives WITH the ball: faint as it enters, full at the landing");
+  const lit = fl.filter((r) => r.st.shadow);
+  assert.ok(!fl[0].st.shadow, "no shadow while the ball is still off the frame at its entry");
+  assert.ok(lit[lit.length - 1].st.shadow.blur < lit[0].st.shadow.blur, "and it tightens as the ball comes down");
+});
+
+test("R26-157: the sag, the compile and the ending keep their seconds; the off-screen pitch is a pure function of t", () => {
+  const was = meltShares(spOPTS()).map((s) => s * SPS), now = meltShares(offOPTS()).map((s) => s * OFF);
+  for (const i of [0, 1, 4]) assert.ok(Math.abs(now[i] - was[i]) < 1e-9, `phase ${i}: ${was[i]} -> ${now[i]}`);
+  assert.ok(Math.abs(now[3] - (MELT.T_S + MELT.OFF_S)) < 1e-9);
+  const o = offOPTS();
+  for (const t of [1.2, 1.6, 1.9, 2.2, 2.5]) assert.deepEqual(meltState(0, t, o, rnd), meltState(0, t, o, rnd), "t " + t);
+});
+
+test("R26-146: `body=blend` - the page's inks MIXED by Kubelka-Munk, the darkest mix the shading", () => {
+  assert.ok(Object.prototype.hasOwnProperty.call(M23.MELT_BODIES, "blend"));
+  assert.equal(meltOpts("melt:weight:body=blend").wbody, "blend");
+  assert.equal(meltOpts("melt:body=blend").wbody, "blend", "any ball can be authored in it");
+  const og = ["#fe5a2d", "#5fb35f"];
+  assert.equal(M23.meltBodyInk(og, MELT.LIGHT, { wbody: "blend" }), meltMixInk(og, MELT.LIGHT), "the soak's mixing law, cited");
+  const [r, g, b] = hexToLin(M23.meltBodyInk(og, MELT.LIGHT, { wbody: "blend" }));
+  assert.ok(r > b && g > b, "orange and green merge to an olive: red and green over blue");
+  const lit = lum(M23.meltBodyInk(og, MELT.LIGHT, { wbody: "blend" })), core = lum(M23.meltBodyInk(og, MELT.CORE, { wbody: "blend" }));
+  assert.ok(core < lit, "the darkest mix is the shading");
+  assert.equal(M23.meltBodyInk(["#fe5a2d"], MELT.LIGHT, { wbody: "blend" }), meltMixInk(["#fe5a2d", MELT.BLEND_BOARD], MELT.LIGHT),
+               "a page with one series blends with the board's ink");
+});
+
+test("R26-146: the blend SWIRLS - one arm per ink, inside the ball, turning on the drop's clock, a pure function of t", () => {
+  const inks = ["#fe5a2d", "#5fb35f", "#3a7bd5"];
+  const a0 = M23.meltSwirlArms([500, 400], 80, inks, 0, [], {}), a1 = M23.meltSwirlArms([500, 400], 80, inks, 0.7, [], {});
+  assert.equal(a0.length, inks.length, "one arm per series ink");
+  assert.deepEqual(a0.map((a) => a.fill), inks, "each arm in its own series' ink - unmixed, swirling through the mix");
+  assert.notDeepEqual(a0.map((a) => a.d), a1.map((a) => a.d), "the arms turn");
+  assert.deepEqual(M23.meltSwirlArms([500, 400], 80, inks, 0.7, [], {}), a1);
+  for (const a of a0) for (const p of a.pts) assert.ok(Math.hypot(p[0] - 500, p[1] - 400) <= 80 * MELT.SW_OUT * 1.2 + 1e-6, "inside the ball");
+  const o = OPTS(meltOpts("melt:weight:body=blend")), n = OPTS(meltOpts("melt:weight"));
+  const t = MELT.S * 0.9;
+  assert.ok(meltState(0, t, o, rnd).swirl, "a blend ball carries its swirl's clock");
+  assert.equal(meltState(0, t, n, rnd).swirl, null, "and no other ball does");
+  assert.deepEqual(meltState(0, t, o, rnd), meltState(0, t, o, rnd));
+});
+
+test("R26-139: the gather CURLS a hairline - a line is sampled point by point, never turned as a stick", () => {
+  const pts = M23.meltLinePoints(100, 700, 1500, 700, MELT.G_LINE_N);
+  assert.equal(pts.length, MELT.G_LINE_N + 1);
+  assert.deepEqual(pts[0], [100, 700]); assert.deepEqual(pts[pts.length - 1], [1500, 700]);
+  const c = [900, 500], R = 900, u = 0.5;
+  const q = pts.map((p) => meltGatherAt(p[0], p[1], c, R, u));
+  const a = q[0], b = q[q.length - 1], L = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+  const dev = Math.max(...q.map((p) => Math.abs((b.x - a.x) * (a.y - p.y) - (a.x - p.x) * (b.y - a.y)) / L));
+  assert.ok(dev > 0.05 * Math.hypot(1400, 0), `the mapped line is a curl, not a stick: ${dev.toFixed(1)} px off its chord`);
+  assert.match(MELT_CSS, /\.melttext \.lp-chart \.meltaxis\{visibility:visible!important\}/, "the sampled hairline shows in the words' clone");
+});
+
+test("R26-389: the handed ball's ink is TAKEN by the page's - a front, never a mix of the two", () => {
+  const F = (k) => M23.meltHandFront(k);
+  assert.ok(F(0) >= 1, "nothing taken at the hand-over");
+  assert.ok(F(MELT.HAND_INK_END) <= 0, "all of it taken by HAND_INK_END of the hand");
+  for (let i = 1; i <= 20; i++) assert.ok(F(i / 20) <= F((i - 1) / 20) + 1e-12, "the front only advances");
+  const ball = [[0, "#ffd0b0"], [0.14, "#fe5a2d"], [0.55, "#fd3a18"], [1, "#fc1a08"]];
+  const page = [[0, "#c0f0ea"], [0.14, "#2a9d8f"], [0.55, "#1f7a6f"], [1, "#0f4f47"]];
+  assert.deepEqual(M23.meltHandStops(ball, page, F(0)), ball, "before the front: the ball's own stops, exactly");
+  assert.deepEqual(M23.meltHandStops(ball, page, F(1)), page, "after it: the page's");
+  const mid = M23.meltHandStops(ball, page, 0.5), inks = new Set([...ball, ...page].map((s) => s[1]));
+  const mixed = mid.filter((s) => !inks.has(s[1]));
+  assert.ok(mixed.length <= 2, "only the front's own two stops are not one ink or the other: " + JSON.stringify(mid));
+  for (const s of mixed) assert.ok(Math.abs(s[0] - 0.5) <= MELT.HAND_INK_BAND + 1e-9, "and they sit on the front");
+  assert.equal(M23.meltHandInkOn("#2a9d8f", ["#fe5a2d", "#2a9d8f"], { wbody: "chart" }), true, "two inks: the rule is on");
+  assert.equal(M23.meltHandInkOn("#FE5A2D", ["#fe5a2d", "#2a9d8f"], { wbody: "chart" }), false, "the ball's own ink: nothing to take");
+  assert.equal(M23.meltHandInkOn("#2a9d8f", ["#fe5a2d"], { wbody: "reference" }), false, "an achromatic ball has no ink to muddy");
+  assert.equal(M23.meltHandInkOn(null, ["#fe5a2d"], {}), false);
+});
+
+/* THE GOLDEN'S SIDECAR (acceptance (2) of P72 T23): `melt-splash-offscreen`'s numbers on its OWN geometry - the ink rect
+   the player measured off the golden page, the stage box - recomputed here from meltState and compared with the
+   committed sidecar, so the numbers the card quotes can never drift from the engine that paints them. */
+import { readFileSync } from "node:fs";
+const offNumbers = (rect, sb) => {
+  const run = (exit) => { const o = Object.assign({ rect, stagebox: sb }, meltOpts(exit)), out = [];
+    for (let f = 0; f <= Math.round(o.secs * MELT.FPS); f++) out.push({ t: f / MELT.FPS, st: meltState(0, f / MELT.FPS, o, rnd) });
+    return { o, out }; };
+  const pos = (st) => [st.centre[0] + (st.xf ? st.xf.x : 0), st.centre[1] + (st.xf ? st.xf.y : 0)];
+  const off = (st) => { const [x, y] = pos(st), r = st.r * (1 + Math.abs(st.squash.a || 0));
+    return x + r < sb.x || x - r > sb.x + sb.w || y + r < sb.y || y - r > sb.y + sb.h; };
+  const speed = (fl) => { let d = 0; for (let i = 1; i < fl.length; i++) d += Math.hypot(pos(fl[i].st)[0] - pos(fl[i - 1].st)[0], pos(fl[i].st)[1] - pos(fl[i - 1].st)[1]);
+    return d / ((fl.length - 1) / MELT.FPS); };
+  const r1 = (v) => Math.round(v * 10) / 10;
+  const pitch = run("melt:splash:chart").out.filter((r) => r.st.phase === "pitch" && r.st.pitch === "flight");
+  const thr = run("melt").out.find((r) => r.st.phase === "fly").st;
+  const throwV = Math.hypot(sb.x + MELT.TO[0] * sb.w - thr.centre[0], sb.y + MELT.TO[1] * sb.h - thr.centre[1]) / ((1 - MELT.BALL_END) * MELT.S * (1 - MELT.ANTIC));
+  const { o, out } = run("melt:splash:chart:offscreen"), p = out.filter((r) => r.st.phase === "pitch");
+  const by = (b) => p.filter((r) => r.st.pitch === b), land = meltLandingAt(sb, o);
+  const g = M23.meltOffscreenGeom(p[0].st.centre, land, p[0].st.r, sb, o), fl = by("flight"), gone = by("gone");
+  const hit = out.find((r) => r.st.phase === "fly");
+  return { window_s: +o.secs.toFixed(3), beats_s: Object.fromEntries(["press", "lift", "carry", "gone", "flight"].map((b) => [b, [+by(b)[0].t.toFixed(3), +by(b)[by(b).length - 1].t.toFixed(3)]])),
+           rise_px: r1(-g.up), entry: [r1(g.from.x + land[0]), r1(g.from.y + land[1])], landing: land.map(r1), return_chord_px: r1(g.chord),
+           gone_frames: gone.length, gone_all_out_of_frame: gone.every((r) => off(r.st)), gone_no_shadow: gone.every((r) => !r.st.shadow),
+           flight_first_pose_out: off(fl[0].st), flight_last_pose_in: !off(fl[fl.length - 1].st),
+           return_px_s: r1(speed(fl)), approved_pitch_px_s: r1(speed(pitch)), approved_throw_px_s: r1(throwV),
+           return_over_pitch: Math.round(speed(fl) / speed(pitch) * 100) / 100, return_over_throw: Math.round(speed(fl) / throwV * 100) / 100,
+           arc_share: MELT.OFF_ARC, approved_arc_share: MELT.T_ARC, splat_at: pos(hit.st).map(r1) };
+};
+
+test("R26-157: the golden's sidecar is current - the off-screen throw leaves the frame and returns faster, by its numbers", () => {
+  const url = new URL("../golden/sources/melt-splash-offscreen.sidecar.json", import.meta.url);
+  const side = JSON.parse(readFileSync(url, "utf-8"));
+  assert.deepEqual(offNumbers(side.geometry.rect, side.geometry.stagebox), side.numbers, "the sidecar is stale - rewrite it from offNumbers");
+  assert.ok(side.numbers.gone_all_out_of_frame && side.numbers.gone_no_shadow && side.numbers.gone_frames >= 3, "it leaves the frame");
+  assert.ok(side.numbers.return_over_pitch >= 2, "and comes back faster than the pitch the operator approved");
+});

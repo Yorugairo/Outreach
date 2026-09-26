@@ -562,9 +562,11 @@ def test_the_first_stain_IS_the_landing_point() -> None:
     ("melt-gather@proof-splash", "5d65b3e991e67e88d994e060a66919ee7b32ff368d998e6973920a2aa473c996"),
     ("melt-gather@proof-plate", "5032c025fd742eed20d0e2a4b8c14cef9aed2f95e47021ef9cbcb477f7f857ab"),
     # THE TWO THAT MUST NOT MOVE: the gather's own midpoint and the point - the frames E99 s51 approved (their melt;
-    # P72 T14 re-pinned all seven for the stage caption's backing only, inside the caption box x 630-1297 y 432-511)
-    ("melt-gather", "c90473a537df393390b759dbf507f45809e09c1adb835fadb3425c28495e07bd"),
-    ("melt-gather@proof-point", "d5d8351433201e32ce812ad454471dc9f0af3ac8c0f619445b6e91fb1b97a7b0"),
+    # P72 T14 re-pinned all seven for the stage caption's backing only, inside the caption box x 630-1297 y 432-511;
+    # P72 T23 / R26-139 re-pinned these two for the axes' hairlines only - curled with the series instead of swung as
+    # sticks: the midpoint 35,245 px (max 109), the point 240 px (max 2) where the hairlines amass as tiny paths)
+    ("melt-gather", "f107d49104e1555b990f0edf657426831ad6787919b562caed5aa1b01330cef8"),
+    ("melt-gather@proof-point", "e17c4b0a76eb24f5ce68c3609e6c6c73cddf568f089832827e94c8c0608aa035"),
     # ... and the melts that name no splash, which have no pitch at all
     ("melt-page", "7c2a199da7ff00c3a27c64adf6503907fd9ebb9724a8462865331c654ac24455"),
     ("melt-morph", "47832a8548dcebe7e8e9b411ee97b7d24c1616effee6c0299d3dc719f841e18b"),

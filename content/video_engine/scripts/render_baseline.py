@@ -178,6 +178,14 @@ PROOF_FRAMES = {
     "melt-splash@proof-pickup": ("melt-splash", {}, 16.13),    # PICKED UP: off the board by 39 px, stretched along the lift, the shadow left on the ground line under it - and not one pixel along the chord yet
     "melt-splash@proof-flight": ("melt-splash", {}, 16.39),    # THROWN FORWARD: 125 px of the 422 px chord, high over the board on the arc, the shadow 29 px behind and 124 px below it
     "melt-splash@proof-splat": ("melt-splash", {}, 16.76),     # SPLAT: at the board's own centre, the droplets out along their rays from the impact, the flattened ball still on top of them
+    # P72 T23 / R26-157 / E99 s56 - THE OFF-SCREEN PITCH at the three instants its base frame (the return) cannot show
+    "melt-splash-offscreen@proof-carry": ("melt-splash-offscreen", {}, 16.46),   # PICKED OFF: lifted straight up past the lift, stretched along the rise and leaving at speed, its shadow left fading on the seat
+    "melt-splash-offscreen@proof-gone": ("melt-splash-offscreen", {}, 16.71),    # THE BEAT OF NOTHING: the chart's board empty - not one pixel of the ball, no shadow
+    "melt-splash-offscreen@proof-splat": ("melt-splash-offscreen", {}, 17.33),   # ... AND IT SPLATS on the board's own centre, where the approved pitch lands it
+    # P72 T23 / R26-146: the blend ball at rest, beside `melt-ball-reference@proof-settle` (the same instant) - P72-HG1 (3)
+    "melt-ball-blend@proof-settle": ("melt-ball-blend", {}, 16.98),
+    # P72 T23 / R26-389: the two-ink hand at the instant the cross-fade went muddy (mean chroma 17.5 against a destination of 57)
+    "melt-morph-two-inks@proof-075": ("melt-morph-two-inks", {"arap_morph": True, "min_jerk": True}, 17.50),
     # P61 T3 / R26-117 - THE BALL BECOMES THE NEXT FULL CHART (`melt:morph`, a 2.9 s window off the cut at 15.0:
     # sag 15.00 -> 15.87, ball -> 16.595, HAND 16.595 -> 17.90, and the page's own build from there). The base frame
     # is the HAND-OVER itself; these are the three instants it cannot show. They carry `arap_morph` because the

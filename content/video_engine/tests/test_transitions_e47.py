@@ -366,7 +366,7 @@ def test_a_melt_may_name_the_ball_s_BODY_COLOUR_and_every_melt_without_one_is_th
     body; `chart` writes nothing on a plain melt, which has no ball surface to shade, so every melt on the record with
     no `weight` token parses to the tuple it always did and its frames cannot move. species/melt.mjs `meltOpts` reads
     the same word and resolves the same default, and test_ball_material pins the two lists to each other."""
-    assert B.MELT_BODIES == ("chart", "slate", "reference"), "species/melt.mjs MELT_BODIES"
+    assert B.MELT_BODIES == ("chart", "slate", "reference", "blend"), "species/melt.mjs MELT_BODIES"   # P72 T23 / R26-146: `blend`, authored only by name
     assert B.MELT_MATERIALS == ("metal", "ink", "paper", "liquid"), "a body is not a material - the four are the four"
     assert B.melt_body("melt") == "chart" and B.melt_body("melt:weight") == "reference"
     assert B.melt_body("melt:weight:metal") == "reference" and B.melt_body("dip") == "chart"

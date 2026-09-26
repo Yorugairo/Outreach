@@ -1,0 +1,69 @@
+{
+ "surface": "melt-splash-offscreen",
+ "what": "P72 T23 / R26-157 / E99 s56: the off-screen throw's numbers on the golden's own geometry (the ink rect the player measured off the golden page at the cut, the stage box), seconds from the melt's cut (15.0 on the golden). melt.test.mjs recomputes them from meltState and refuses a stale sidecar.",
+ "geometry": {
+  "rect": {
+   "x": 162.87379455566406,
+   "y": 97.86691284179688,
+   "w": 1163.697494506836,
+   "h": 962.1655578613281
+  },
+  "stagebox": {
+   "x": 96,
+   "y": 54,
+   "w": 1920,
+   "h": 1080
+  }
+ },
+ "numbers": {
+  "window_s": 2.98,
+  "beats_s": {
+   "press": [
+    0.917,
+    1.083
+   ],
+   "lift": [
+    1.125,
+    1.167
+   ],
+   "carry": [
+    1.208,
+    1.583
+   ],
+   "gone": [
+    1.625,
+    1.833
+   ],
+   "flight": [
+    1.875,
+    2.25
+   ]
+  },
+  "rise_px": 953.4,
+  "entry": [
+   -57.6,
+   183.6
+  ],
+  "landing": [
+   1056,
+   594
+  ],
+  "return_chord_px": 1186.8,
+  "gone_frames": 6,
+  "gone_all_out_of_frame": true,
+  "gone_no_shadow": true,
+  "flight_first_pose_out": true,
+  "flight_last_pose_in": true,
+  "return_px_s": 2766.3,
+  "approved_pitch_px_s": 944.2,
+  "approved_throw_px_s": 2552.8,
+  "return_over_pitch": 2.93,
+  "return_over_throw": 1.08,
+  "arc_share": 0.06,
+  "approved_arc_share": 0.18,
+  "splat_at": [
+   1056,
+   600
+  ]
+ }
+}
