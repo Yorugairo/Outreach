@@ -756,6 +756,14 @@ COMPARE_FORMS = ("melt", "streak", "collapse", "count")
 COMPARE_THENS = ("morph", "splash", "throw")
 COMPARE_BALL_FORM = "melt"
 COMPARE_SOURCE_TAGS = ("[DERIVED:", "[SOURCE:")   # E77's provenance label, required on the row
+# P71 T24 (was P69 T72; the Bravos harvest v2 A48, D40 11:43-11:52): THEN -> NOW, the compare's TWO-KEY PATH. A compare
+# that names `from` re-values its bar: the two states are `from` (the old value, with its own source `src`) and `metric`
+# (the bar's value today), and there is no comparator - so the comparator path's keys beside it are refused by name
+# (s106: a silent drop is neither advice nor refusal). species/compare.mjs REVALUE is the clock; the engine's
+# lpBarMorphs moves the bar and draws the levels.
+REVALUE_FROM_KEYS = ("value", "text", "label", "src")
+REVALUE_REFUSED = ("comparator", "inputs", "derive", "form", "then", "hold", "ghost")
+REVALUE_BUILDER = "bars"   # the plate form a re-value draws on: it moves a BAR (a figure on a line has no height to move)
 PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park; exactly 1.0 is an UN-PARK (2026-09-10)
 # SPECIES BY SENTENCE (P50 T1, 2026-09-11; the operator: "do we already have an understanding mapped in docs to how/where to
 # know when to use these capabilities?"). One line per kind: WHICH SENTENCE calls for it. The map is
@@ -2428,6 +2436,8 @@ def _validate_metric_comparator(entry: dict) -> list[str]:
     metric after the morph. Every
     refusal here is a figure the row could not stand behind: a number with no arithmetic, an arithmetic that does not
     reproduce it, a comparator nobody named, a provenance nobody wrote."""
+    if "from" in entry:
+        return _validate_revalue(entry)   # P71 T24: then -> now, the two-key path
     errs: list[str] = []
     num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
     met, cmp_ = entry.get("metric"), entry.get("comparator")
@@ -2507,6 +2517,81 @@ def _validate_metric_comparator(entry: dict) -> list[str]:
     if "state" in entry:
         errs.append("chart_to compare: 'state' is not named - the two numbers ARE the states (the quoted metric and the "
                     "comparator it derives)")
+    return errs
+
+
+def _revalue_text_errors(who: str, d: dict) -> list[str]:
+    """The printed text of one state must print its value: the figure counts from one to the other WITH the bar, so a
+    text whose numeral is not its value is a number drawn wrong at that end (E28, M26) - an untruth, refused."""
+    t = d.get("text")
+    if not isinstance(t, str) or not t.strip():
+        return [f"chart_to compare: {who}.text must be the figure AS WRITTEN at the bar's top ('$28B') - the figure "
+                "counts from one state's text to the other's as the bar moves (C14: the number at the top)"]
+    m = re.search(r"-?\d[\d,]*(?:\.\d+)?", t)
+    if not m:
+        return [f"chart_to compare: {who}.text {t!r} prints no number - the bar's height is a number"]
+    v = d.get("value")
+    if not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v):
+        return []   # the value's own refusal names it
+    printed = float(m.group(0).replace(",", ""))
+    if abs(printed - v) > COMPARE_TOL * max(abs(printed), abs(v), 1e-12):
+        return [f"chart_to compare: {who}.text {t!r} prints {printed:g} where {who}.value is {v:g} - the number at the "
+                "bar's top must be the height it is drawn to (E28, M26)"]
+    return []
+
+
+def _validate_revalue(entry: dict) -> list[str]:
+    """P71 T24 - THEN -> NOW: `chart_to compare` with `from: {value, text, label?, src}` beside `metric: {value, text,
+    label?}`. The bar moves from today to the old value on the compare's word, holds, and grows back to today as the
+    window closes (species/compare.mjs REVALUE, measured off Bravos D40). Both states are SOURCED: `from.src` names the
+    old value's source with E77's tag (BRAVOS-USE-WHEN A48: "don't - the old value is unsourced"), `source` today's.
+    Refused by name: a bare or unsourced `from`, an unknown key in it, a value that is not a number, the old value
+    equal to today or across zero, a printed text that is not its value, and the comparator path's keys."""
+    errs: list[str] = []
+    num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)  # noqa: E731
+    frm, met = entry.get("from"), entry.get("metric")
+    if not isinstance(frm, dict):
+        return [f"chart_to compare: from {frm!r} is refused - a then -> now compare names the old value WITH its "
+                "source: from = {value: <number>, text: '<as written, e.g. $28B>', label?: '<when>', src: "
+                f"'{COMPARE_SOURCE_TAGS[1]} <where it is read>]'}} (BRAVOS-USE-WHEN A48: the old value is never unsourced)"]
+    if not isinstance(met, dict):
+        errs.append("chart_to compare: 'metric' must be {value: <number>, text: '<as written>'} - the bar's own value "
+                    "today, the state the bar returns to")
+        met = {}
+    for k in sorted(set(frm) - set(REVALUE_FROM_KEYS), key=str):
+        errs.append(f"chart_to compare: from.{k} is not a key of the old value ({'|'.join(REVALUE_FROM_KEYS)})")
+    src_ = frm.get("src")
+    if not isinstance(src_, str) or not src_.strip().startswith(COMPARE_SOURCE_TAGS):
+        errs.append(f"chart_to compare: from.src is required and starts with {' or '.join(COMPARE_SOURCE_TAGS)} - the old "
+                    "value's source, read off the page's series file (E77; BRAVOS-USE-WHEN A48: \"the old value is "
+                    "unsourced\" is the move's don't)")
+    if not num(frm.get("value")):
+        errs.append("chart_to compare: from.value must be a number - the bar's height THEN, on the page's own scale")
+    if not num(met.get("value")):
+        errs.append("chart_to compare: metric.value must be a number - the bar's own value today")
+    if num(frm.get("value")) and num(met.get("value")):
+        fv, mv = float(frm["value"]), float(met["value"])
+        if abs(fv - mv) <= COMPARE_TOL * max(abs(fv), abs(mv), 1e-12):
+            errs.append(f"chart_to compare: from.value {fv:g} is today's value - there is nothing to re-value")
+        elif fv != 0 and (fv < 0) != (mv < 0):
+            errs.append(f"chart_to compare: from.value {fv:g} is across zero from today's {mv:g} - that is another bar, "
+                        "not this one then (a bar re-valued keeps its side of zero)")
+    errs += _revalue_text_errors("from", frm)
+    errs += _revalue_text_errors("metric", met)
+    for who, d in (("from", frm), ("metric", met)):
+        if "label" in d and (not isinstance(d["label"], str) or not d["label"].strip()):
+            errs.append(f"chart_to compare: {who}.label must be a non-empty string")
+    for k in REVALUE_REFUSED:
+        if k in entry:
+            errs.append(f"chart_to compare: {k!r} beside 'from' is refused - a then -> now compare's two states are "
+                        "`from` and `metric` (the bar moves between its own values; the number at its top counts with it), "
+                        f"and {k!r} belongs to the metric -> comparator path (P71 T24)")
+    src_now = entry.get("source")
+    if not isinstance(src_now, str) or not src_now.strip().startswith(COMPARE_SOURCE_TAGS):
+        errs.append("chart_to compare: 'source' is required and starts with "
+                    f"{' or '.join(COMPARE_SOURCE_TAGS)} - today's value's provenance (E77); the old value's is from.src")
+    if "state" in entry:
+        errs.append("chart_to compare: 'state' is not named - the two values ARE the states (then, and today)")
     return errs
 
 
@@ -6267,6 +6352,12 @@ def validate_species(row_species, ken, plate_id: str, pivot_span: tuple | None =
         # the check lands here, where the row's whole species list is known (a single entry cannot see its page's others)
         if not (isinstance(e, dict) and e.get("kind") == "chart_to" and e.get("to") == "compare"):
             continue
+        if "from" in e and str(plate_id).startswith(LEDGER_PREFIX):   # P71 T24: a re-value moves a BAR
+            form = (str(plate_id).split(";")[0].split(":") + ["", "", ""])[2]
+            if form != REVALUE_BUILDER:
+                errs.append(f"{plate_id}: chart_to compare names 'from' on a {form or '?'} page - a then -> now re-value "
+                            f"moves a BAR to its old value and back ({REVALUE_BUILDER} pages only); a figure on a "
+                            f"{form or '?'} page has no height to move, so its number would stop meaning its mark")
         quoted = (e.get("metric") or {}).get("text") if isinstance(e.get("metric"), dict) else None
         if not isinstance(quoted, str) or not quoted.strip():
             continue

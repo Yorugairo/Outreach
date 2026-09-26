@@ -124,6 +124,17 @@
           "does": "on a bars page the compared bar's height morphs to the comparator's value on the compare's own clock, its value and figure riding its top, the soft foot, hatch or prism following (E28)",
           "trigger": "the chart_to's `at`, over its `dur`, when the comparator changes the bar's value",
           "dials": null
+        },
+        {
+          "name": "the bar is re-valued, then to now",
+          "does": "`from: {value, text, src}` (the two-key path): the bar shrinks to its sourced old value, holds, and grows back to today as the window closes, the figure counting with it; a dashed level at the top it has left",
+          "trigger": "the chart_to's `at` (DOWN_S), and `at + dur` (the grow lands, UP_S)",
+          "dials": {
+            "REVALUE.DOWN_S": "0.83",
+            "REVALUE.UP_S": "0.70",
+            "REVALUE.MAX_SHARE": "0.4",
+            "REVALUE.LABEL_S": "0.9"
+          }
         }
       ],
       "blends": [],
@@ -191,7 +202,8 @@
           "compareThen",
           "compareShape",
           "comparePairGroups",
-          "compareBallR"
+          "compareBallR",
+          "compareRevalueFrame"
         ]
       },
       "doctrine": [
@@ -205,7 +217,8 @@
         "R26-190",
         "R26-273",
         "P69 T6",
-        "P69 T26a"
+        "P69 T26a",
+        "P71 T24"
       ],
       "status": "wired",
       "backlog": [

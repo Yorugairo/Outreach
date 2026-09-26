@@ -568,3 +568,80 @@ test("compareGroups reads a GLYPH off the rings: an outer and the holes inside i
   assert.equal(groups[0].holes.length, 0);
   assert.equal(groups[1].holes.length, 1, "and the hole belongs to the glyph it sits in");
 });
+
+// ---------------------------------------------------------------- P71 T24: THEN -> NOW, the two-key path
+// A compare naming `from` re-values its bar: now -> then on `at` (REVALUE.DOWN_S), a hold, then -> now landing at
+// `at + dur` (REVALUE.UP_S) - Bravos D40 11:43-11:52 measured. The figure COUNTS with the bar, so the number printed is
+// the value drawn at every frame (M26); these tests pin the frame the engine's bar and the figure both read.
+import * as REV from "../../scripts/species/compare.mjs";
+
+const revRow = (o = {}) => Object.assign({
+  kind: "chart_to", at: 11.0, dur: 6.0, to: "compare",
+  metric: { value: 150, text: "$150B", label: "this year, tracking toward" },
+  from: { value: 28, text: "$28B", label: "a year, 2020-24", src: "[SOURCE: ev-debt-issuance-line-v1]" },
+  source: "[SOURCE: ev-debt-issuance-line-v1]",
+}, o);
+
+test("P71 T24: the re-value's dials are the reference's, measured, and frozen", () => {
+  assert.ok(REV.REVALUE, "species/compare.mjs exports REVALUE");
+  assert.equal(REV.REVALUE.DOWN_S, 0.83, "D40 706.67-707.50");
+  assert.equal(REV.REVALUE.UP_S, 0.70, "D40 711.00-711.70");
+  assert.ok(REV.REVALUE.MAX_SHARE > 0 && REV.REVALUE.MAX_SHARE < 0.5, "two moves never fill the window: a hold is left");
+  assert.equal(Object.isFrozen(REV.REVALUE), true);
+});
+
+test("P71 T24: the ends are the AUTHORED strings - today before the word and after the landing, then through the hold", () => {
+  const sp = revRow(), F = (t) => REV.compareRevalueFrame(sp, t);
+  assert.equal(F(10.9).text, "$150B"); assert.equal(F(10.9).w, 0);
+  for (const t of [12.0, 14.0, 16.2]) { assert.equal(F(t).text, "$28B", "through the hold: " + t); assert.equal(F(t).w, 1); }
+  for (const t of [17.0, 18.0, 40.0]) { assert.equal(F(t).text, "$150B", "landed: " + t); assert.equal(F(t).w, 0); }
+});
+
+test("P71 T24: the number printed IS the value drawn at every frame, and each move is monotone (M26, E28)", () => {
+  const sp = revRow();
+  let last = Infinity;
+  for (let k = 0; k <= 40; k++) {
+    const t = 11.0 + 0.83 * k / 40, f = REV.compareRevalueFrame(sp, t);
+    assert.ok(f.value <= last + 1e-9, "the shrink only lowers the value: " + t); last = f.value;
+    const printed = parseFloat(f.text.replace(/[^\d.-]/g, ""));
+    assert.ok(Math.abs(printed - f.value) <= 0.5 + 1e-9, `t=${t}: prints ${f.text} for ${f.value}`);
+  }
+  last = -Infinity;
+  for (let k = 0; k <= 40; k++) {
+    const t = 16.3 + 0.7 * k / 40, f = REV.compareRevalueFrame(sp, t);
+    assert.ok(f.value >= last - 1e-9, "the grow only raises it: " + t); last = f.value;
+    assert.ok(Math.abs(parseFloat(f.text.replace(/[^\d.-]/g, "")) - f.value) <= 0.5 + 1e-9, f.text);
+  }
+});
+
+test("P71 T24: the frame is a pure function of t, and a short window keeps a hold", () => {
+  const sp = revRow();
+  for (const t of [11.3, 13.0, 16.6]) assert.deepEqual(REV.compareRevalueFrame(sp, t), REV.compareRevalueFrame(sp, t));
+  const short = revRow({ dur: 1.0 }), mid = REV.compareRevalueFrame(short, 11.5);
+  assert.equal(mid.w, 1, "moves capped at MAX_SHARE of a 1 s window leave its middle at then");
+});
+
+test("P71 T24: the levels - today's while the bar is below it, the old value's once it has grown off it, and it stays", () => {
+  const sp = revRow(), F = (t) => REV.compareRevalueFrame(sp, t);
+  assert.equal(F(10.0).now, 0); assert.equal(F(10.0).then, 0);
+  assert.equal(F(14.0).now, 1); assert.equal(F(14.0).then, 0);
+  assert.equal(F(18.0).now, 0); assert.equal(F(18.0).then, 1);
+});
+
+test("P71 T24: the painter counts the figure's own cells and writes `from.label` beneath; nothing is held beside it", () => {
+  const R = recorder(), ctx = { el: R.el }, sp = revRow();
+  const fg = figureFor("$150B", R);
+  REV.paintCompare({ sp, figures: [fg] }, 14.0, {}, ctx);
+  assert.equal(fg.__compare.cells.map((c) => c.text).join("").trim(), "$28B");
+  assert.equal(fg.__compare.sg.map((c) => c.text).join("").replace(/ /g, " "), "a year, 2020-24");
+  assert.equal(fg.__compare.sg.every((c) => c.at.opacity === "1.000"), true, "written through the hold");
+  assert.equal(fg.__compare.ghost.at.opacity, "0.000", "the bar's own top is where today stood - no held metric");
+  REV.paintCompare({ sp, figures: [fg] }, 18.0, {}, ctx);
+  assert.equal(fg.__compare.cells.map((c) => c.text).join("").trim(), "$150B");
+  assert.equal(fg.__compare.sg.every((c) => c.at.opacity === "0.000"), true, "the label leaves as the bar grows back");
+  const cold = figureFor("$150B", R), played = figureFor("$150B", R);
+  REV.paintCompare({ sp, figures: [cold] }, 16.6, {}, ctx);
+  for (let k = 0; k <= 30; k++) REV.paintCompare({ sp, figures: [played] }, 10.0 + 6.6 * k / 30, {}, ctx);
+  const read = (f) => f.__compare.cells.map((c) => [c.text, c.at.opacity]);
+  assert.deepEqual(read(cold), read(played), "a cold seek lands where the play does");
+});

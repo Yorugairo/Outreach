@@ -5450,6 +5450,65 @@ FRAME_T.update({"card-reads-in-the-empty-room": round(DATE_ENTER + 1.6, 2),   # 
                 "card-parks-at-its-date": round(DATE_ENTER + DATE_READ_S + 0.7 + 0.35 + 0.6, 2)})   # the park (0.7) and the leader (0.35) done, held 0.6 s
 
 
+# ---- P71 T24 (was P69 T72; the Bravos harvest v2 A48, D40 11:43-11:52): BARS RE-VALUED, THEN -> NOW ---------------
+# Steel and Paper H row 16's issuance, "twenty-eight" (the 2020-24 annual average) -> "a hundred and fifty" (the top of
+# the 2026 estimate range): one bar on a full-stage bars page, built at today's $150B with its figure written at its top
+# (8.0), and a `chart_to compare` that names `from` (the two-key path) at 11.0 over 6.0 s - the bar shrinks to $28B in
+# REVALUE.DOWN_S, holds, and grows back to $150B landing at 17.0, the figure counting with it. BOTH values are READ off
+# the page's own committed series file (`ev-debt-issuance-line-v1`: the issuance series' flat 2020-24 point and the
+# $150B series' 2026 point), never re-typed; the bar is labelled an estimate (E77). Read at rest after the grow: the bar
+# back at $150B, "$150B" on its top, the $28B level dashed across its face.
+REVALUE_SERIES = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-debt-issuance-line-v1.series.json"
+
+
+def revalue_issuance() -> tuple[dict, list[dict]]:
+    """(the bars object, the species) for the re-value golden - the values off the series file."""
+    debt = json.loads(REVALUE_SERIES.read_text(encoding="utf-8"))
+    by = {s["label"]: s["pts"] for s in debt["series"]}
+    then_v, now_v = by["issuance"][0][1], by["$150B"][-1][1]
+    obj = {"title": debt["title"],
+           "sub": "Hyperscaler bond issuance a year - 2026 is the top of the estimate range ($130-150B), 2020-24 an average",
+           "src": debt["src"], "unit": "$", "unit_suffix": "B",
+           "bars": [{"label": "2026E, top of the range", "value": now_v, "color": "crimson"}]}
+    now_t, then_t = "$%gB" % now_v, "$%gB" % then_v
+    species = [
+        {"kind": "figure", "at": 8.0, "dur": 1.5, "text": now_t, "target": {"kind": "datum", "index": 0}},
+        {"kind": "chart_to", "at": 11.0, "dur": 6.0, "to": "compare",
+         "metric": {"value": now_v, "text": now_t, "label": "this year, tracking toward"},
+         "from": {"value": then_v, "text": then_t, "label": "a year, 2020-24",
+                  "src": "[SOURCE: ev-debt-issuance-line-v1 - the 2020-24 annual average (Morgan Stanley IM, Mellon via the dossier)]"},
+         "source": "[SOURCE: ev-debt-issuance-line-v1 - the top of the 2026 projected range (PIMCO, Investing.com/LPL via the dossier)]"},
+    ]
+    return obj, species
+
+
+def bar_revalue_then_now() -> tuple[dict, dict]:
+    """P71 T24: the re-value AT REST after the grow (E28: the height is the number at every frame)."""
+    import tempfile
+    import build_scene_timeline_f as BST
+    plate = "ledger:fx-debt-issuance-bars:bars"
+    obj, species = revalue_issuance()
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/fx-debt-issuance-bars.series.json").write_text(json.dumps(obj), encoding="utf-8")
+        saved = BST.ASPECT
+        BST.ASPECT = "16:9"
+        try:
+            world = BST.world_for_plate(plate, (0, 0, 0), ep)
+            BST.stamp_full_stage(world["page"])
+        finally:
+            BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: a bar re-valued, then to now (H row 16's issuance)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"bar-revalue-then-now": bar_revalue_then_now})
+FRAME_T.update({"bar-revalue-then-now": 17.8})   # at rest: the grow landed at 17.0 (11.0 + 6.0), the $28B level at full ink
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

@@ -1,0 +1,57 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:revalue-then-the-ratio",
+  "title": "Bar re-value, then the ratio span",
+  "aliases": [
+    {
+      "name": "R28 Bar re-value, then the ratio span",
+      "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:1089"
+    }
+  ],
+  "acts": [
+    "COMPARES"
+  ],
+  "members": [
+    {
+      "card": "page_species:figure",
+      "offset_s": 0.0,
+      "role": "today's number is written at the bar's top first - the compare re-values the figure the page already wrote (E50)"
+    },
+    {
+      "card": "chart_to:compare",
+      "offset_s": 3.0,
+      "options": {
+        "dur": 6.0
+      },
+      "role": "the two-key path (`from`, sourced): the bar shrinks to its old value, holds, and grows back to today, the figure counting at its top"
+    },
+    {
+      "card": "page_species:bracket",
+      "offset_s": 10.0,
+      "options": {
+        "dur": 1.6
+      },
+      "role": "once today has landed, a bracket from the re-valued bar to its neighbour, the multiple written as its label (T50 on bars)"
+    }
+  ],
+  "window_s": 12.0,
+  "does": "Then and now on one bar - it drops to its sourced old value, holds, and grows back to today with the number at its top counting the height - then a bracket to its neighbour says how today compares.",
+  "use_when": {
+    "act": "COMPARES - the same data, then -> now on one bar, then -> a ratio (BRAVOS-USE-WHEN R28)",
+    "moment": "proof",
+    "shape": "before-after -> ratio: one bar's sourced old value and today's, and a neighbour on the same scale",
+    "use": "then-and-now on one bar, then how 'now' compares with its neighbour (BRAVOS-USE-WHEN.md:1089; D40 11:22-12:06, $47B in 2016 -> $94B, then '4x' to the 30-year)",
+    "dont": "the old value is unsourced (the guide's don't); the levels would carry labels (E53 addendum - the figures stand at the bar tops, C14); the neighbour is on another scale"
+  },
+  "doctrine": [
+    "E28",
+    "E53 addendum",
+    "E77",
+    "C14",
+    "E99 s109",
+    "P71 T24"
+  ],
+  "status": "candidate",
+  "source": "P71 T24 (harvest v2 R28 on A48): D40 (u70oUWgVoYU) 11:22-12:06 read off the video on disk, the re-value measured at 30 fps; the re-value is pinned by the golden bar-revalue-then-now, and the whole recipe proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t24.py (r28: H row 16's issuance, 2025 actual beside the 2026E bar, the bracket '+24%' computed 150/121) - no approved cut carries it",
+  "count": 0
+}

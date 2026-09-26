@@ -15446,6 +15446,42 @@ async function mount(doc) {
              ghost: cmp01((uu - COMPARE.SWAP) / (1 - COMPARE.SWAP)) * COMPARE.GHOST_A };
   };
 
+  /* ---- P71 T24 (was P69 T72; Bravos harvest v2 A48): THEN -> NOW, THE TWO-KEY PATH ---------------------------------
+     A compare that names `from` re-values its BAR: the two states are `from` (the old value, sourced - `from.src`) and
+     `metric` (the bar's own value today), and there is no comparator. Bravos D40 11:43-11:52 (P71 T24 step (0), read at
+     30 fps off the video): the $94B bar goes to its 2016 average ($47B) in 0.83 s, HOLDS 3.5 s while "In 2016" is
+     written, and grows back to today in 0.70 s - its height the number at every frame (5.79 px a billion at both ends).
+     So the bar moves on `at` (the old value's word), stands at then, and grows so that it LANDS as the window closes
+     (`at + dur`, on today's word); the figure at its top COUNTS WITH IT (C14: the number at the top, never on a rule),
+     in the clothes of the end it is nearer, so the printed number and the drawn height are one value at every frame
+     (M26, E28). `from.label` is written beneath while the bar stands at then and leaves as it grows. The engine's
+     lpBarMorphs moves the rect and draws the two unlabelled levels off the same frame.
+       DOWN_S / UP_S  the two moves [MEASURED: D40 706.67-707.50 s and 711.00-711.70 s, the lit bar's top per frame]
+       MAX_SHARE      a short window keeps a hold: neither move takes more than this share of it
+       LABEL_S        the old value's label written beneath, from the landing at then (the harvest's "In 2016" pill
+                      arrives ~0.9 s after the bar lands, 707.5 -> 708.4) */
+  const REVALUE = Object.freeze({ DOWN_S: 0.83, UP_S: 0.70, MAX_SHARE: 0.4, LABEL_S: 0.9 });
+
+  /* THE RE-VALUE'S FRAME at t - the whole state as numbers and one string, a pure function of t:
+       w      the share of the way from today to then (0 before the word and after the landing, 1 through the hold)
+       value  the bar's value this frame: metric + (from - metric) * w - the number printed AND the height drawn
+       text   today's text AS QUOTED at w 0, the old text AS QUOTED at w 1, else the counted value in the nearer end's clothes
+       sub    how far `from.label` has been written; subInk its ink (1 until the grow, 0 once it has landed)
+       now / then   the two levels' shares: today's while the bar is below it (w), the old value's once the bar has
+              grown off it (the grow's progress, and it stays) */
+  const compareRevalueFrame = (sp, t) => {
+    const S = sp || {}, F = S.from || {}, Q = S.metric || {};
+    const at = +S.at || 0, dur = Math.max(0.001, +S.dur || 1), s = (+t || 0) - at;
+    const down = Math.min(REVALUE.DOWN_S, REVALUE.MAX_SHARE * dur), up = Math.min(REVALUE.UP_S, REVALUE.MAX_SHARE * dur);
+    const d = s <= 0 ? 0 : minJerk(cmp01(s / down)), g = s <= 0 ? 0 : minJerk(cmp01((s - (dur - up)) / up));
+    const w = d * (1 - g), mv = +Q.value, fv = +F.value, value = mv + (fv - mv) * w;
+    const qt = Q.text == null ? "" : String(Q.text), ft = F.text == null ? "" : String(F.text);
+    const dress = compareSplit(w >= 0.5 ? ft : qt);
+    const text = w <= 0 ? qt : w >= 1 ? ft
+      : (Number.isFinite(value) && dress.num ? dress.pre + compareFmt(value, dress.dec, dress.group) + dress.post : (w >= 0.5 ? ft : qt));
+    return { w, value, text, sub: s <= 0 ? 0 : cmp01((s - down) / REVALUE.LABEL_S), subInk: 1 - g, now: w, then: g };
+  };
+
   /* ---- THE MORPH (the operator's first correction, P57 T12b): the take-away, then the hand ------------------------- */
   /* THE MORPH'S FRAME at u, for `streak` and `collapse` - the whole state as two clocks and one string:
        take   the take-away's own progress, 1 exactly at TAKE_SHARE (`streak` reads it off melt's STEPPED clock, so the
@@ -16013,6 +16049,27 @@ async function mount(doc) {
     compareBeside(fg, P, sp, F.text, before, F.ghost, (j, n2) => compareGlyph(F.sub, j, n2));
   };
 
+  /* THE RE-VALUE'S PAINT: every cell of the figure from the frame (the counted number, in full ink - it is a number in
+     transition, never a cut), and `from.label` beneath by the counter's own write. The morph's own elements are built by
+     compareEnsure off a row whose comparator is the old value, so the label's glyphs are `from.label`'s and the held
+     metric beside it is never inked (the bar's own top is where today stood). */
+  const compareRevalueRow = (sp) => {
+    const F = (sp || {}).from || {};
+    return { metric: (sp || {}).metric, comparator: { value: F.value, text: F.text, label: F.label }, hold: "gone" };
+  };
+  const paintCompareRevalue = (fg, sp, t, before, ctx) => {
+    const F = compareRevalueFrame(sp, t), R = compareRevalueRow(sp);
+    const P = compareEnsure(fg, R, ctx, Math.max(compareCapacity(R), F.text.length));
+    const chars = [...F.text];
+    P.cells.forEach((ts, j) => {
+      const ch = j < chars.length ? chars[j] : "";
+      ts.textContent = ch === " " ? " " : ch;
+      if (before) { if (j >= (fg.lg || []).length) ts.setAttribute("opacity", 0); return; }   /* the figure's own hand owns its glyphs until the word */
+      ts.setAttribute("opacity", (j >= chars.length ? 0 : 1).toFixed(3));
+    });
+    compareBeside(fg, P, R, F.text, before, 0, (j, n) => compareGlyph(F.sub, j, n) * F.subInk);
+  };
+
   /* THE PAINTER (the module rule's page half). Every number of it is the law above; this is the DOM. `sd` is what
      the engine's chart_to dispatch hands it - the row `sp` and the page's built figures - `st` the page state, and
      `ctx` the PAGE species context every page painter reaches the engine through (`el` is lpEl), so `node --test`
@@ -16021,6 +16078,7 @@ async function mount(doc) {
   const paintCompare = (sd, t, st, ctx) => {
     const sp = (sd || {}).sp || {}, fg = compareFigure((sd || {}).figures, sp);
     if (!fg || !fg.label) return;
+    if (sp.from != null && typeof sp.from === "object") { paintCompareRevalue(fg, sp, t, t < (+sp.at || 0), ctx); return; }   /* P71 T24: the two-key path */
     const form = compareForm(sp);
     const at = +sp.at || 0, u = cmp01((t - at) / Math.max(0.001, +sp.dur || 1)), before = t < at;
     if (form === "count") { paintCompareCount(fg, sp, u, before, ctx); return; }
@@ -16280,14 +16338,14 @@ async function mount(doc) {
     const q = m.geom, rec = m.rec || st.bars[i] || null, S = st.scale || {};
     const said = (v) => String(v == null ? "" : v).trim();
     const cmps = pageSpecies(scene, "chart_to").filter((c) => c.to === "compare" && said((c.metric || {}).text) === said(sp.text));
-    const num = Math.max(lpTextW(surf, sp.text, fs, "bklab"), ...cmps.map((c) => lpTextW(surf, (c.comparator || {}).text, fs, "bklab")));
+    const num = Math.max(lpTextW(surf, sp.text, fs, "bklab"), ...cmps.map((c) => lpTextW(surf, (c.comparator || c.from || {}).text, fs, "bklab")));
     const under = Math.max(sp.sub ? lpTextW(surf, sp.sub, fss, "bksub") : 0,
-                           ...cmps.map((c) => lpTextW(surf, (c.comparator || {}).label, fss, "bksub")));
-    const held = cmps.filter((c) => c.hold !== "gone").map((c) => lpTextW(surf, (c.metric || {}).text, fs * COMPARE.GHOST_F, "bksub"));
+                           ...cmps.map((c) => lpTextW(surf, (c.comparator || c.from || {}).label, fss, "bksub")));   /* P71 T24: a re-value's label is its old value's */
+    const held = cmps.filter((c) => c.hold !== "gone" && !c.from).map((c) => lpTextW(surf, (c.metric || {}).text, fs * COMPARE.GHOST_F, "bksub"));
     const half = Math.max(num, under) / 2, right = held.length ? Math.max(half, num / 2 + COMPARE.GAP + Math.max(...held)) : half;
     const lo = Number.isFinite(S.x0) ? S.x0 : 0, hi = Number.isFinite(S.x1) ? S.x1 : G.W;
     const x = Math.max(lo + half, Math.min(hi - right, q.cx));
-    const nSub = (sp.sub ? 1 : 0) + (cmps.some((c) => said((c.comparator || {}).label)) ? 1 : 0);
+    const nSub = (sp.sub ? 1 : 0) + (cmps.some((c) => said((c.comparator || c.from || {}).label)) ? 1 : 0);
     const up = FIGURE.FIGURE_UP * fs, down = nSub ? nSub * fss * FIGURE.SUB_DY + FIGURE.FIGURE_DOWN * fss : FIGURE.FIGURE_DOWN * fs;
     const air = LPVAL.GUT_FIG * fs, lift = (Number(sp.dy) || 0) * fs * FIGURE.LINE;
     let y = (q.neg ? q.end + air + up : q.end - air - down) + lift;
@@ -16332,10 +16390,40 @@ async function mount(doc) {
     GHOST_W: 2,          /* its stroke, in the chart's own units */
     GHOST_DASH: "7 6",   /* dashed: a solid rule is a comparator (E53 s6) */
     GHOST_TICK: 24,      /* the corners' reach down the old sides, in the chart's units (capped at a quarter of the fall) */
+    LEVEL_REACH: 14,     /* P71 T24: a re-value's level runs this far past each side of its bar (Bravos D40 runs it to the axis
+                            with a pill on it; ours is unlabelled - the E53 addendum - so it only needs to read as a LEVEL, not an edge) */
+    LEVEL_FADE: 0.6,     /* ... and today's level comes up only once the figure riding the top has passed below it, over this
+                            many figure sizes of the fall (it never stands through the number) */
   });
   const S0my = (st, v) => ((st.scale || {}).my ? st.scale.my(v) : 0);
   const lpMorphNum = (v) => typeof v === "number" && Number.isFinite(v);
   const lpMorphSame = (a, b) => Math.abs(a - b) <= LPMORPH.TOL * Math.max(Math.abs(a), Math.abs(b), 1e-12);
+  /* P71 T24 (was P69 T72; Bravos harvest v2 A48, D40 11:43-11:52) - THE RE-VALUE'S LEVELS. A compare that names `from`
+     moves its bar now -> then -> now (compare.mjs compareRevalueFrame: the same frame counts the figure, so the number at
+     the top IS the height drawn at every frame - M26, E28). A dashed level stands at the top the bar has LEFT: today's
+     while the bar is down (it comes up only once the figure riding the top has passed below it, and goes as the figure
+     climbs back to it), the old value's once the bar has grown off it - and that one stays, across the bar's face, as
+     Bravos keeps "In 2016" on the grown bar. Chalk, dashed, UNLABELLED (C14 / the E53 addendum: the numbers are the
+     figure's, at the top), one reach past each side. Both are built once, at opacity 0; every value from t. */
+  const lpRevalueText = (was, v) => {   /* a printed number re-counted in its own clothes (its affixes, decimals, grouping) */
+    const D = compareSplit(was);
+    return D.num && Number.isFinite(v) ? D.pre + compareFmt(v, D.dec, D.group) + D.post : String(was == null ? "" : was);
+  };
+  const lpRevalueLevels = (st, rec, c, fg) => {
+    const bar = rec.bar, x0 = +bar.getAttribute("x") - LPMORPH.LEVEL_REACH;
+    const x1 = +bar.getAttribute("x") + +bar.getAttribute("width") + LPMORPH.LEVEL_REACH;
+    const at = (y) => lpEl("path", "lp-bar-level", st.chart, { d: "M" + x0.toFixed(1) + " " + y.toFixed(1) + "H" + x1.toFixed(1),
+      fill: "none", stroke: "var(--lp-chalk)", "stroke-width": LPMORPH.GHOST_W, "stroke-dasharray": LPMORPH.GHOST_DASH,
+      "stroke-linecap": "round", opacity: 0 });
+    const fs = +fg.fs || 28;
+    return { now: at(rec.end), then: at(S0my(st, c)), clear: Math.abs(rec.end - (+fg.y || rec.end)) + fs, fade: LPMORPH.LEVEL_FADE * fs };
+  };
+  const lpPaintRevalueLevels = (M, bar, RV, fall) => {   /* fall: how far the top stands below today's, in the chart's units */
+    const L = M.levels;
+    for (const el of [L.now, L.then]) { el.style.transformOrigin = bar.style.transformOrigin; el.style.transform = bar.style.transform; }
+    L.now.setAttribute("opacity", (LPMORPH.GHOST_A * cmp01((fall - L.clear) / Math.max(1e-6, L.fade))).toFixed(3));
+    L.then.setAttribute("opacity", (LPMORPH.GHOST_A * RV.then).toFixed(3));
+  };
   const lpBarMorphs = (st, scene, PF) => {
     if (st.__barMorphs) return st.__barMorphs;
     const out = [];
@@ -16343,13 +16431,15 @@ async function mount(doc) {
       if (sp.to !== "compare") continue;
       const fg = compareFigure(PF.figures || [], sp), rec = fg && fg.bar;
       if (!rec || !rec.bar || rec.over || st.bt || rec.range) continue;   /* a breaking bar's height is the breakthrough's to write; a RANGE bar (P69 T8d) states two values, and one comparator is not both */
-      const m = (sp.metric || {}).value, c = (sp.comparator || {}).value;
+      const rv = sp.from != null && typeof sp.from === "object";   /* P71 T24: the two-key path - then -> now */
+      const m = (sp.metric || {}).value, c = rv ? sp.from.value : (sp.comparator || {}).value;
       if (!lpMorphNum(m) || !lpMorphNum(c) || !lpMorphNum(rec.v) || !lpMorphSame(m, rec.v) || lpMorphSame(m, c)) continue;
       if (c !== 0 && (c < 0) !== (rec.v < 0)) continue;   /* a comparator across zero is another bar, not this one moved */
       const bar = rec.bar, M = { sp, fg, rec, c, y0: bar.getAttribute("y"), h0: bar.getAttribute("height"),
         vy0: rec.val ? rec.val.getAttribute("y") : null, vt0: rec.val ? rec.val.textContent : null,
         pill: (st.bars[Math.min(st.emph, st.bars.length - 1)] === rec && st.callout) ? st.callout : null, ghost: null };
-      if (sp.ghost === "yes" || sp.ghost === true) {   /* the old far end and its two corners - never the whole outline, whose
+      if (rv) { M.rv = true; M.levels = lpRevalueLevels(st, rec, c, fg); }
+      else if (sp.ghost === "yes" || sp.ghost === true) {   /* the old far end and its two corners - never the whole outline, whose
                                                           sides would run through the figure that rides down between them */
         const x0 = +bar.getAttribute("x"), x1 = x0 + +bar.getAttribute("width"), e0 = rec.end;
         const tick = Math.min(LPMORPH.GHOST_TICK, Math.abs(rec.h - Math.abs(S0my(st, c) - S0my(st, 0))) / 4) * (rec.neg ? -1 : 1);
@@ -16369,10 +16459,12 @@ async function mount(doc) {
     const base = S.my(0);
     for (const M of list) {
       const { sp, fg, rec } = M, bar = rec.bar, at = +sp.at || 0;
-      const u = cmp01((t - at) / Math.max(0.001, +sp.dur || 1)), w = t < at ? 0 : minJerk(cmp01(u / COMPARE.COUNT));
+      const RV = M.rv ? compareRevalueFrame(sp, t) : null;   /* P71 T24: now -> then -> now on the compare's own window */
+      const u = cmp01((t - at) / Math.max(0.001, +sp.dur || 1)), w = RV ? RV.w : t < at ? 0 : minJerk(cmp01(u / COMPARE.COUNT));
       const k0 = /scaleY\(([-\d.e]+)\)/.exec(bar.style.transform || ""), k = k0 ? +k0[1] : 1;
       if (M.ghost) { M.ghost.style.transformOrigin = bar.style.transformOrigin; M.ghost.style.transform = bar.style.transform;
         M.ghost.setAttribute("opacity", (LPMORPH.GHOST_A * w).toFixed(3)); }
+      if (RV) lpPaintRevalueLevels(M, bar, RV, Math.abs(S.my(rec.v + (M.c - rec.v) * w) - rec.end));
       if (!(w > 0)) {   /* the page as it was built, to the attribute */
         bar.setAttribute("y", M.y0); bar.setAttribute("height", M.h0);   /* (the prism: lpPaintChart set it this frame, on the built h) */
         fg.g.removeAttribute("transform");
@@ -16388,8 +16480,9 @@ async function mount(doc) {
       if (M.pill) M.pill.setAttribute("transform", xf);
       if (rec.val) {
         rec.val.setAttribute("y", (parseFloat(M.vy0) + dy).toFixed(1));
-        rec.val.textContent = u >= COMPARE.SWAP ? String((sp.comparator || {}).text || M.vt0) : M.vt0;
+        rec.val.textContent = RV ? lpRevalueText(M.vt0, v) : u >= COMPARE.SWAP ? String((sp.comparator || {}).text || M.vt0) : M.vt0;
       }
+      if (RV && M.pill && st.cval) st.cval.textContent = lpRevalueText(st.cfinal, v);   /* the pill prints the height drawn too (M26 reads it) */
     }
   };
   /* P70 T5 (was P69 T58; harvest v2 T24; Bravos RST 05:40, "Long-Term Interest Rates" braced into its two stacked

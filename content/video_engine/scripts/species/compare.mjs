@@ -156,6 +156,42 @@ export const compareFrame = (sp, u) => {
            ghost: cmp01((uu - COMPARE.SWAP) / (1 - COMPARE.SWAP)) * COMPARE.GHOST_A };
 };
 
+/* ---- P71 T24 (was P69 T72; Bravos harvest v2 A48): THEN -> NOW, THE TWO-KEY PATH ---------------------------------
+   A compare that names `from` re-values its BAR: the two states are `from` (the old value, sourced - `from.src`) and
+   `metric` (the bar's own value today), and there is no comparator. Bravos D40 11:43-11:52 (P71 T24 step (0), read at
+   30 fps off the video): the $94B bar goes to its 2016 average ($47B) in 0.83 s, HOLDS 3.5 s while "In 2016" is
+   written, and grows back to today in 0.70 s - its height the number at every frame (5.79 px a billion at both ends).
+   So the bar moves on `at` (the old value's word), stands at then, and grows so that it LANDS as the window closes
+   (`at + dur`, on today's word); the figure at its top COUNTS WITH IT (C14: the number at the top, never on a rule),
+   in the clothes of the end it is nearer, so the printed number and the drawn height are one value at every frame
+   (M26, E28). `from.label` is written beneath while the bar stands at then and leaves as it grows. The engine's
+   lpBarMorphs moves the rect and draws the two unlabelled levels off the same frame.
+     DOWN_S / UP_S  the two moves [MEASURED: D40 706.67-707.50 s and 711.00-711.70 s, the lit bar's top per frame]
+     MAX_SHARE      a short window keeps a hold: neither move takes more than this share of it
+     LABEL_S        the old value's label written beneath, from the landing at then (the harvest's "In 2016" pill
+                    arrives ~0.9 s after the bar lands, 707.5 -> 708.4) */
+export const REVALUE = Object.freeze({ DOWN_S: 0.83, UP_S: 0.70, MAX_SHARE: 0.4, LABEL_S: 0.9 });
+
+/* THE RE-VALUE'S FRAME at t - the whole state as numbers and one string, a pure function of t:
+     w      the share of the way from today to then (0 before the word and after the landing, 1 through the hold)
+     value  the bar's value this frame: metric + (from - metric) * w - the number printed AND the height drawn
+     text   today's text AS QUOTED at w 0, the old text AS QUOTED at w 1, else the counted value in the nearer end's clothes
+     sub    how far `from.label` has been written; subInk its ink (1 until the grow, 0 once it has landed)
+     now / then   the two levels' shares: today's while the bar is below it (w), the old value's once the bar has
+            grown off it (the grow's progress, and it stays) */
+export const compareRevalueFrame = (sp, t) => {
+  const S = sp || {}, F = S.from || {}, Q = S.metric || {};
+  const at = +S.at || 0, dur = Math.max(0.001, +S.dur || 1), s = (+t || 0) - at;
+  const down = Math.min(REVALUE.DOWN_S, REVALUE.MAX_SHARE * dur), up = Math.min(REVALUE.UP_S, REVALUE.MAX_SHARE * dur);
+  const d = s <= 0 ? 0 : minJerk(cmp01(s / down)), g = s <= 0 ? 0 : minJerk(cmp01((s - (dur - up)) / up));
+  const w = d * (1 - g), mv = +Q.value, fv = +F.value, value = mv + (fv - mv) * w;
+  const qt = Q.text == null ? "" : String(Q.text), ft = F.text == null ? "" : String(F.text);
+  const dress = compareSplit(w >= 0.5 ? ft : qt);
+  const text = w <= 0 ? qt : w >= 1 ? ft
+    : (Number.isFinite(value) && dress.num ? dress.pre + compareFmt(value, dress.dec, dress.group) + dress.post : (w >= 0.5 ? ft : qt));
+  return { w, value, text, sub: s <= 0 ? 0 : cmp01((s - down) / REVALUE.LABEL_S), subInk: 1 - g, now: w, then: g };
+};
+
 /* ---- THE MORPH (the operator's first correction, P57 T12b): the take-away, then the hand ------------------------- */
 /* THE MORPH'S FRAME at u, for `streak` and `collapse` - the whole state as two clocks and one string:
      take   the take-away's own progress, 1 exactly at TAKE_SHARE (`streak` reads it off melt's STEPPED clock, so the
@@ -723,6 +759,27 @@ const paintCompareBall = (fg, sp, u, before, ctx, then_) => {
   compareBeside(fg, P, sp, F.text, before, F.ghost, (j, n2) => compareGlyph(F.sub, j, n2));
 };
 
+/* THE RE-VALUE'S PAINT: every cell of the figure from the frame (the counted number, in full ink - it is a number in
+   transition, never a cut), and `from.label` beneath by the counter's own write. The morph's own elements are built by
+   compareEnsure off a row whose comparator is the old value, so the label's glyphs are `from.label`'s and the held
+   metric beside it is never inked (the bar's own top is where today stood). */
+const compareRevalueRow = (sp) => {
+  const F = (sp || {}).from || {};
+  return { metric: (sp || {}).metric, comparator: { value: F.value, text: F.text, label: F.label }, hold: "gone" };
+};
+const paintCompareRevalue = (fg, sp, t, before, ctx) => {
+  const F = compareRevalueFrame(sp, t), R = compareRevalueRow(sp);
+  const P = compareEnsure(fg, R, ctx, Math.max(compareCapacity(R), F.text.length));
+  const chars = [...F.text];
+  P.cells.forEach((ts, j) => {
+    const ch = j < chars.length ? chars[j] : "";
+    ts.textContent = ch === " " ? " " : ch;
+    if (before) { if (j >= (fg.lg || []).length) ts.setAttribute("opacity", 0); return; }   /* the figure's own hand owns its glyphs until the word */
+    ts.setAttribute("opacity", (j >= chars.length ? 0 : 1).toFixed(3));
+  });
+  compareBeside(fg, P, R, F.text, before, 0, (j, n) => compareGlyph(F.sub, j, n) * F.subInk);
+};
+
 /* THE PAINTER (the module rule's page half). Every number of it is the law above; this is the DOM. `sd` is what
    the engine's chart_to dispatch hands it - the row `sp` and the page's built figures - `st` the page state, and
    `ctx` the PAGE species context every page painter reaches the engine through (`el` is lpEl), so `node --test`
@@ -731,6 +788,7 @@ const paintCompareBall = (fg, sp, u, before, ctx, then_) => {
 export const paintCompare = (sd, t, st, ctx) => {
   const sp = (sd || {}).sp || {}, fg = compareFigure((sd || {}).figures, sp);
   if (!fg || !fg.label) return;
+  if (sp.from != null && typeof sp.from === "object") { paintCompareRevalue(fg, sp, t, t < (+sp.at || 0), ctx); return; }   /* P71 T24: the two-key path */
   const form = compareForm(sp);
   const at = +sp.at || 0, u = cmp01((t - at) / Math.max(0.001, +sp.dur || 1)), before = t < at;
   if (form === "count") { paintCompareCount(fg, sp, u, before, ctx); return; }

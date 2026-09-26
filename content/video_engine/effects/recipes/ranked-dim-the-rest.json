@@ -1,0 +1,69 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:ranked-dim-the-rest",
+  "title": "Ranked dim-the-rest spotlight",
+  "aliases": [
+    {
+      "name": "R30 Ranked dim-the-rest spotlight",
+      "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:213"
+    }
+  ],
+  "acts": [
+    "RANKS"
+  ],
+  "members": [
+    {
+      "card": "page_builder:bars",
+      "offset_s": 0.0,
+      "role": "the ranked field rises and HOLDS - read whole before any one bar is named (D40 holds ~5 s; the guide's floor ~1 s)"
+    },
+    {
+      "card": "page_species:solo",
+      "offset_s": [
+        1.5,
+        7.0
+      ],
+      "options": {
+        "dur": 0.6
+      },
+      "role": "ONE bar keeps its ink while the rest dim to E67's dim (T37) - the bar the sentence names"
+    },
+    {
+      "card": "species:callout",
+      "offset_s": [
+        2.1,
+        7.6
+      ],
+      "role": "its pill names what the rank means ('3rd largest buyer'), on the lit bar's printed value (P72 T18's part: value)"
+    },
+    {
+      "card": "species:callout",
+      "offset_s": [
+        6.0,
+        13.0
+      ],
+      "role": "a second pill names a second bar of the field while the first stays lit",
+      "optional": true
+    }
+  ],
+  "window_s": 14.0,
+  "does": "A ranked field rises and holds long enough to be read whole, then one bar keeps its ink while the rest dim and a pill says what its rank means - and a second pill names another bar of the field.",
+  "use_when": {
+    "act": "RANKS - one member of a ranking (BRAVOS-USE-WHEN R30)",
+    "moment": "reveal",
+    "shape": "series (a ranking): three or more bars on one scale, sorted",
+    "use": "bars rise, hold ~1 s, ONE ignites while the rest dim, a leader pill, then a second pill (BRAVOS-USE-WHEN.md:215; D40 14:22-14:50, 'bought even more short-term bonds than Japan')",
+    "dont": "skip the hold (the field must be read first); the whole ranking is the claim (no one bar to name); the rank is typed rather than read off the sorted field"
+  },
+  "doctrine": [
+    "E67",
+    "E56",
+    "E99 s106",
+    "P69 T37",
+    "P72 T18",
+    "P71 T24"
+  ],
+  "status": "candidate",
+  "source": "P71 T24 (harvest v2 R30): D40 (u70oUWgVoYU) 14:18-14:54 read off the video on disk - rise 861-862 s, the field held to 868, the rest dim and bar 3 lit with '3rd Largest Buyer' at 869-870, a second pill at 875-877; proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t24.py (r30: ev-dram-contract-v1 sorted by value) - no approved cut carries it",
+  "count": 0
+}
