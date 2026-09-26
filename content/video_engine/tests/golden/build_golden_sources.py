@@ -4879,6 +4879,92 @@ FRAME_T.update({"dock-hover-over-ledger": round(UNDER_ENTER + 3.0, 2),   # the h
                 "dock-blur-over-plate": round(UNDER_ENTER + 3.0, 2)})    # the veil up (0.45 s) and holding
 
 
+# ---- P71 T13 (was P69 T43b; R26-307, E99 s102): A SECOND AXIS, AND AN INVERTED ONE, FOR A CO-MOVEMENT CLAIM -------------
+#   dual-axis-inverted  A REFERENCE beat (no H row: SCRIPT-H says no "these move together"): Bravos's own pairing (JPN 06:38,
+#                     "Foreign Holdings of US Treasuries & US 30-Year Treasury Yield") on two sourced series in unlike units
+#                     READ off committed files, never re-typed - Japan's holdings of US Treasuries (Tokyo's
+#                     `ev-japan-holdings-v1`, TIC Table 5, $bn, monthly) on the LEFT and the US 10-year yield (Tokyo's
+#                     `fred-DGS10.csv`, the month's mean of the daily prints, %) on its OWN right axis, INVERTED, from
+#                     January 2020: as the yield climbed from 1.8% to 4.5%, Japan's holdings fell from their 2021 top
+#                     (the monthly correlation over the window is -0.83), so on the inverted axis the two lines fall
+#                     together - the co-movement the claim names (`claim: "comove"`, s102 (a)). Each axis names its unit
+#                     and the inverted one says so on the page (s102 (b)); each axis's ticks wear their line's ink
+#                     (s102 (c)). Compiled through the compiler's own path (world_for_plate over a temporary object,
+#                     check_y2); judged built and held.
+DUAL_TOKYO = MEMBERS_OBJECTS / "tokyo-tea-break/evidence"
+DUAL_HOLDINGS = DUAL_TOKYO / "objects/ev-japan-holdings-v1.series.json"
+DUAL_YIELD = DUAL_TOKYO / "sources/fred-DGS10.csv"
+DUAL_FROM = 2020.0            # January 2020: the window the claim is read over
+DUAL_ID = "ref-japan-holdings-vs-10y"
+DUAL_PLATE = f"ledger:{DUAL_ID}:line::right"
+DUAL_YEARS = tuple(range(2020, 2027))
+
+
+def _month_of(x: float) -> tuple[int, int]:
+    """A TIC holdings x (year + (month - 1) / 12: 2000.1667 is March 2000, the object's `series_from`) -> (year, month)."""
+    y = int(math.floor(x + 1e-6))
+    return y, int(round((x - y) * 12)) + 1
+
+
+def _dgs10_monthly() -> dict[tuple[int, int], float]:
+    """FRED DGS10's daily prints, averaged per calendar month (a blank print skipped); the file is read, never re-typed."""
+    import csv
+    by: dict[tuple[int, int], list[float]] = {}
+    with DUAL_YIELD.open(encoding="utf-8", newline="") as fh:
+        for row in csv.DictReader(fh):
+            v = (row.get("DGS10") or "").strip()
+            if v and v != ".":
+                y, m, _d = row["observation_date"].split("-")
+                by.setdefault((int(y), int(m)), []).append(float(v))
+    return {k: sum(v) / len(v) for k, v in by.items()}
+
+
+def dual_axis_series() -> dict:
+    """The reference page's object, composed from the two committed sources (their months matched one to one)."""
+    obj = json.loads(DUAL_HOLDINGS.read_text(encoding="utf-8"))
+    held = [[x, v] for x, v in obj["series"][0]["pts"] if x >= DUAL_FROM - 1e-6]
+    yields = _dgs10_monthly()
+    ylds = [[x, round(yields[_month_of(x)], 2)] for x, _v in held]
+    return {"title": "Japan sells as the yield climbs",
+            "sub": "Reference beat: monthly since 2020, the yield inverted",
+            "src": "US Treasury TIC Table 5; FRED DGS10, monthly mean: our arithmetic",
+            "ylabel": "Japan's holdings, $bn", "claim": "comove",
+            "xticks": [[float(y), str(y)] for y in DUAL_YEARS],
+            "series": [{"name": "JAPAN'S HOLDINGS", "label": f"${held[-1][1]:,.0f}bn", "color": "teal", "pts": held},
+                       {"name": "US 10-YEAR YIELD", "label": f"{ylds[-1][1]:.2f}%", "color": "amber", "pts": ylds}],
+            "y2": {"series": [1], "unit": "%", "label": "10-year yield", "invert": True}}
+
+
+def dual_axis_inverted(longform: bool = False) -> tuple[dict, dict]:
+    """The golden's timeline (the plain profile; `longform` re-profiles the page as a `;readability=longform` row
+    compiles it, for test_dual_axis's reads only - the committed golden is the plain call)."""
+    import tempfile
+    import build_scene_timeline_f as BST
+    series = dual_axis_series()
+    assert LPG.validate(series, "line") == [], LPG.validate(series, "line")
+    plate = DUAL_PLATE + (";readability=longform" if longform else "")
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            objects = Path(td) / "evidence/objects"
+            objects.mkdir(parents=True)
+            (objects / f"{DUAL_ID}.series.json").write_text(json.dumps(series), encoding="utf-8")
+            world = BST.world_for_plate(plate, (0, 0, 0), Path(td))
+            BST.stamp_full_stage(world["page"])
+            BST.derive_rescale_states(world, [], plate, Path(td))   # the compiler's own page checks: check_y2
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: Japan's Treasuries against the 10-year on its own inverted right axis (y2)",
+                     scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"dual-axis-inverted": dual_axis_inverted})
+FRAME_T.update({"dual-axis-inverted": 12.0})   # both lines drawn and tagged, both axes written, held
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

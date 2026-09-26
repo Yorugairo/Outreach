@@ -1303,6 +1303,205 @@ def schematic_tag_box(plot: dict) -> dict:
     return _box(plot["x"] + plot["w"] / 2.0, plot["y"] + plot["h"] - XTICK_H, plot["w"] / 2.0, XTICK_H)
 
 
+# ---- P71 T13 (was P69 T43b; R26-307, E99 s102): A SECOND AXIS, AND AN INVERTED ONE, FOR A CO-MOVEMENT CLAIM ---------
+# R26-307: a page's `y2` was ACCEPTED AND IGNORED - validate returned [] and build_spec dropped it (E99 s106: "a silent drop
+# is neither advice nor refusal"). It now DRAWS on the one builder with a draw path (a dense line page: the right axis in
+# the engine's shared `lpRightAxis`, the block the combo's own right axis was lifted into) and is refused BY NAME on every
+# other page. s102's three conditions are truth rules, so they refuse: (a) the page states its `claim`, co-movement or
+# lead/lag; (b) each axis names its unit - the left by `ylabel`, the right by `unit` + `label` - and an inverted axis
+# writes "inverted" beside its unit (`y2_header`); (c) each axis's ticks wear their own line's ink (the engine's, T37b's
+# style fill). E28 binds every single-axis page: without `y2` not one key changes.
+Y2_KEY = "y2"
+Y2_FIELDS = ("series", "unit", "label", "invert")
+Y2_CLAIMS = ("comove", "lead_lag")     # s102 (a): "these move together" / "this one leads that one"
+Y2_RULING = "E99 s102"
+Y2_INVERTED = "inverted"               # s102 (b): the word an inverted axis writes beside its unit
+Y2_BOX = "y2"                          # page_boxes' key for the right axis's words (its ticks and its name)
+Y2_BUILDER = "dense-line"
+Y2_SIDES = ("LHS", "RHS")              # Bravos's own legend words ("S&P 500 (LHS)", "Dow Jones/S&P 500 (RHS)", BOOM 04:18)
+Y2_AXES = ("left", "right")            # a y2 page's reference rule names the axis it is read on (`hlines[i].axis`)
+Y2_HELD = {                            # page keys a second axis cannot follow yet - each refused by name
+    "log": "the left axis is a log scale and the right is linear: one page, two laws of the y - not built",
+    "break": "a broken x cuts both lines where the right axis's scale was fitted over the whole run - not built",
+    SCHEMATIC_KEY: "a real series over a shape on its own axis is E99 s125's (P71 T39), through this slice's right axis",
+    "form": "a 2.5D form lays the plot on a plane the right tick column does not follow - drawn flat",
+}
+Y2_TICK_ADV_EM = 0.58   # the chart face's mean figure advance, for the right column's ESTIMATED width (page_boxes' estimate)
+Y2_GAP_U = 14.0         # the engine's LP_Y2.GAP: chart units between the plot's right edge and its right tick column
+
+
+def y2_header(y2: dict) -> str:
+    """The right axis's name as the page writes it over its ticks: its label, then its unit and - when inverted - the word
+    (s102 (b): "an inverted axis says 'inverted' on the page"), e.g. "10-year yield (%, inverted)"."""
+    unit = str(y2.get("unit") or "").strip()
+    return f"{str(y2.get('label') or '').strip()} ({unit}{', ' + Y2_INVERTED if y2.get('invert') is True else ''})"
+
+
+def y2_side(series: dict, i: int) -> str | None:
+    """The axis series `i` is read on - "LHS", "RHS" or "RHS, inverted" - or None when the page has no second axis."""
+    y2 = series.get(Y2_KEY)
+    if not isinstance(y2, dict) or not isinstance(y2.get("series"), list):
+        return None
+    if i not in y2["series"]:
+        return Y2_SIDES[0]
+    return Y2_SIDES[1] + (f", {Y2_INVERTED}" if y2.get("invert") is True else "")
+
+
+def _y2_index_errors(series: dict, idx: Any) -> list[str]:
+    own = series.get("series") if isinstance(series.get("series"), list) else []
+    live = [i for i, s in enumerate(own) if isinstance(s, dict) and "pts" in s and not s.get("later")]
+    if not isinstance(idx, list) or not idx:
+        return ["y2: series must be a non-empty list of the page's series indices (the lines read on the right axis)"]
+    bad = [i for i in idx if isinstance(i, bool) or not isinstance(i, int) or i not in live]
+    if bad:
+        return [f"y2: series {bad!r} - not one of the page's drawn series ({live}); a second axis names the lines it carries"]
+    if len(set(idx)) != len(idx):
+        return [f"y2: series {idx!r} names a series twice"]
+    if not set(live) - set(idx):
+        return ["y2: every series is on the right axis - at least one line stays on the left (a page of one axis is "
+                "drawn without y2)"]
+    return []
+
+
+def _y2_nested_errors(series: dict) -> list[str]:
+    """A `y2` inside a series or a panel: an unbuilt path, refused by name (R26-307) - never dropped."""
+    errs = [f"series {i}: `y2` belongs to the PAGE (`y2: {{series: [{i}], ...}}`) - a series naming its own second axis is "
+            "not built (R26-307)" for i, q in enumerate(series.get("series") or []) if isinstance(q, dict) and Y2_KEY in q]
+    for k, p in enumerate(series.get("panels") or []):
+        if isinstance(p, dict) and (Y2_KEY in p or any(isinstance(q, dict) and Y2_KEY in q for q in p.get("series") or [])):
+            errs.append(f"panel {k}: a second axis on a panel is not built (R26-307) - a y2 draws on a line page of its own")
+    return errs
+
+
+def _y2_rules(series: dict) -> list:
+    return series.get("hlines") or ([series["hline"]] if isinstance(series.get("hline"), dict) else [])
+
+
+def _y2_rule_errors(series: dict) -> list[str]:
+    """A y2 page's reference rule is read on ONE of two scales, so it names which (`axis: left|right`) or it is refused -
+    an unnamed rule would read on the wrong scale. On a single-axis page an `axis` names nothing drawn: refused too."""
+    has_y2 = Y2_KEY in series
+    errs = []
+    for i, rule in enumerate(_y2_rules(series)):
+        if not isinstance(rule, dict):
+            continue
+        if has_y2 and rule.get("axis") not in Y2_AXES:
+            errs.append(f"hlines[{i}] on a y2 page: a rule names the axis it is read on - axis: {'|'.join(Y2_AXES)}, not "
+                        f"{rule.get('axis')!r} ({Y2_RULING}: two scales, one rule)")
+        elif not has_y2 and "axis" in rule:
+            errs.append(f"hlines[{i}]: `axis` names a side of a second axis, and this page has no `y2` - one axis, one scale")
+    return errs
+
+
+def _validate_y2(series: dict, variant: str) -> list[str]:
+    """R26-307 / s102: `y2` draws on a dense line page with its claim and both units named, or it is refused BY NAME.
+    Without `y2` a co-movement `claim` or a page-level `invert` is refused as well (each names what it would need)."""
+    y2, claim = series.get(Y2_KEY), series.get("claim")
+    nested = _y2_nested_errors(series) + _y2_rule_errors(series)
+    if Y2_KEY not in series:
+        errs = nested
+        if claim in Y2_CLAIMS:
+            errs.append(f"claim {claim!r} is a second axis's claim ({Y2_RULING} (a)) and this page names no `y2` - a "
+                        "co-movement drawn on one axis states nothing the page does not already draw")
+        if "invert" in series:
+            errs.append("`invert` belongs to the second axis: `y2: {series, unit, label, invert: true}` - a page-level "
+                        "invert is refused by name (E28: a single axis's drops go DOWN)")
+        return errs
+    if not isinstance(y2, dict):
+        return [f"y2 must be an object {{{', '.join(Y2_FIELDS)}?}} naming the lines drawn on a second (right) axis "
+                f"({Y2_RULING})"]
+    builder = SCHEMATIC_KEY if isinstance(series.get(SCHEMATIC_KEY), dict) else pick_builder(series, variant)
+    if builder != Y2_BUILDER:
+        return [f"y2 on a {builder} page: a second axis draws on a LINE page (dense-line) only (R26-307: a key nothing "
+                "draws is refused by name, never dropped)" + ("; a combo's line names its own right axis with "
+                                                              "`line_unit`" if builder == "combo" else "")]
+    errs = nested + [f"y2: {k!r} is not a y2 key ({'|'.join(Y2_FIELDS)})" for k in sorted(y2) if k not in Y2_FIELDS]
+    errs += [f"y2 with {k!r}: {why}" for k, why in Y2_HELD.items() if series.get(k) not in (None, False)]
+    if "invert" in series:
+        errs.append("`invert` beside y2 at the page's level: it belongs INSIDE the second axis, `y2: {..., invert: true}` "
+                    "(the left axis is never inverted - E28)")
+    if any(isinstance(s, dict) and s.get("later") for s in series.get("series") or []):
+        errs.append("y2 with a `later` series: a line that joins on an extend is a chart state, and a y2 page takes none "
+                    "(the right axis is fitted to the lines it carries)")
+    errs += _y2_index_errors(series, y2.get("series"))
+    if not _text(y2.get("unit")):
+        errs.append(f"y2: unit is required - each axis names its unit ({Y2_RULING} (b); E28)")
+    if not _text(y2.get("label")):
+        errs.append(f"y2: label is required - the right axis's name, written over its ticks ({Y2_RULING} (b))")
+    if "invert" in y2 and not isinstance(y2["invert"], bool):
+        errs.append("y2: invert must be true or false (an inverted axis writes 'inverted' beside its unit)")
+    if claim is None:
+        errs.append(f"y2 without a claim: a second axis is allowed only when the claim is co-movement or lead/lag - name "
+                    f"it, `claim: {'|'.join(Y2_CLAIMS)}` ({Y2_RULING} (a)); a level or a change stays on one axis (E28)")
+    elif claim not in Y2_CLAIMS:
+        errs.append(f"y2: claim {claim!r} is not one of {'|'.join(Y2_CLAIMS)} ({Y2_RULING} (a): a level or a change "
+                    "stays on one axis, E28)")
+    if not _text(series.get("ylabel")):
+        errs.append(f"y2 without a ylabel: the LEFT axis names its unit too ({Y2_RULING} (b); E28) - the page writes it "
+                    "over the left ticks")
+    return errs
+
+
+def y2_block(series: dict) -> dict:
+    """The spec's `y2`: the right axis's lines, its unit, its label, whether it is inverted, the claim, and the header the
+    page writes (one string, read by the engine and by page_boxes' estimate)."""
+    y2 = series[Y2_KEY]
+    return {"series": [int(i) for i in y2["series"]], "unit": str(y2["unit"]).strip(), "label": str(y2["label"]).strip(),
+            "invert": y2.get("invert") is True, "claim": str(series["claim"]), "header": y2_header(y2)}
+
+
+def _y2_left_names_unit(series: dict, unit: str) -> bool:
+    """The left axis is in `unit`: its `unit` / `yunit`, or its `ylabel` writing the unit as a word of its own ("10-year
+    yield, %", "rate (%)") - the ylabel is the field y2 requires, so the one that most often carries the unit."""
+    if unit in (str(series.get("unit") or "").strip(), str(series.get("yunit") or "").strip()):
+        return True
+    return bool(re.search(r"(^|[\s,(])" + re.escape(unit) + r"($|[\s,)])", str(series.get("ylabel") or "")))
+
+
+def y2_warnings(series: dict) -> list[str]:
+    """s106: WARNs, not refusals - (1) both axes in ONE unit put one measure on two scales (E75 s3: the gap between the
+    lines reads as a difference it is not; s102 allows it for co-movement, Bravos DOM 01:00: two yields, two scales);
+    (2) a right-axis line drawn MUTED: the right axis is fitted to a line the page shows as context."""
+    y2 = series.get(Y2_KEY)
+    if not isinstance(y2, dict):
+        return []
+    out, unit = [], str(y2.get("unit") or "").strip()
+    if unit and _y2_left_names_unit(series, unit):
+        out.append(f"{FORM_WARN} y2: both axes are in {unit!r} - one measure on two scales, so the gap between the lines is "
+                   f"not a reading (E75 s3); {Y2_RULING} allows it for a {series.get('claim')!r} claim - the frame read decides")
+    own = series.get("series") or []
+    muted = [i for i in y2.get("series") or [] if isinstance(i, int) and 0 <= i < len(own)
+             and isinstance(own[i], dict) and own[i].get("muted")]
+    if muted:
+        out.append(f"{FORM_WARN} y2: series {muted} on the right axis {'is' if len(muted) == 1 else 'are'} drawn muted - the "
+                   "axis's scale and ink come from a line the page shows as context")
+    return out
+
+
+def y2_extent(spec: dict) -> list[float] | None:
+    """The right axis's data extent (its lines' values), which sizes its tick column - the one data a y2 page's boxes
+    depend on, so the ink key carries it."""
+    y2 = spec.get(Y2_KEY)
+    if not isinstance(y2, dict):
+        return None
+    own = spec.get("series") or []
+    vals = [float(to_number(v)) for i in y2.get("series") or [] if 0 <= i < len(own)
+            for _x, v in (own[i] or {}).get("pts") or [] if to_number(v) is not None]
+    return [round(min(vals), 6), round(max(vals), 6)] if vals else None
+
+
+def y2_axis_box(spec: dict, plot: dict, aspect: str) -> dict:
+    """The right axis's box ESTIMATED (a page the fixture has not measured): its tick column right of the plot, as wide as
+    its widest tick written in the unit, from the plot's top (its name over it) to its bottom."""
+    y2 = spec[Y2_KEY]
+    ext = y2_extent(spec) or [0.0, 1.0]
+    chars = max(len(f"{v:g}") for v in ext) + len(str(y2.get("unit") or ""))
+    k = STAGE_PX[aspect][0] / LAND_VIEWBOX[0]
+    px = LAND_PHONE_FONT_PX if aspect == "9:16" else 24.0 * k
+    w = chars * Y2_TICK_ADV_EM * px + Y2_GAP_U * k
+    return _box(plot["x"] + plot["w"], plot["y"] - px, w, plot["h"] + px)
+
+
 def validate(series: dict, variant: str) -> list[str]:
     """Error strings; empty means the series is a page for this variant. Pure."""
     if SCHEMATIC_KEY in series:   # P70 T2: the shape's own rules first; a clean one is validated as the line it generates
@@ -1317,6 +1516,7 @@ def validate(series: dict, variant: str) -> list[str]:
     errors += _validate_bar_fields(series)          # P69 T64 / R26-307: a bar key the form does not know is refused by name
     errors += _validate_segments(series, variant)   # P69 T64: a stack of values is true to its total, one key per page
     errors += _validate_unit_suffix(series, variant)   # P72 T13 / R26-287: a prefix AND a suffix ($...B), refused by name when malformed
+    errors += _validate_y2(series, variant)         # P71 T13 / R26-307: a second axis draws (a line page) or is refused by name
     if "left_gutter" in series:
         gutter = series["left_gutter"]
         if isinstance(gutter, bool) or not isinstance(gutter, int) or not 60 <= gutter <= 300:
@@ -2728,6 +2928,11 @@ def badges_for(series: dict, extra: list | None = None) -> list[dict]:
         # a badge that keys a dense series becomes that line's DYNAMIC LABEL (operator, 2026-09-03:
         # 'grouped below the chart, or dynamic labels - not label + pill + captions on one real estate')
         bd["inline"] = bool(col) and any(e.get("color") == col for e in dense_series(series))
+        keyed = next((i for i, e in enumerate(series.get("series") or []) if col and isinstance(e, dict)
+                      and e.get("color") == col), None)
+        side = y2_side(series, keyed) if keyed is not None else None
+        if side:   # P71 T13: on a y2 page the badge says which axis its line is read on (Bravos's "(LHS)" / "(RHS)")
+            bd["label"] = f"{bd['label']} ({side})"
         out.append(bd)
     return out
 
@@ -2885,6 +3090,10 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         if isinstance(series.get(SCHEMATIC_KEY), dict):   # P70 T2: the shape, its phases and its tag (absent: not one key)
             spec[SCHEMATIC_KEY] = schematic_block(series[SCHEMATIC_KEY])
             spec["axes"]["domain"] = list(SCHEMATIC_DOMAIN)   # the shape floats with its names' room; no tick writes it
+        if isinstance(series.get(Y2_KEY), dict):   # P71 T13 / s102: the second axis (absent: not one key)
+            spec[Y2_KEY] = y2_block(series)
+            if y2_warnings(series):
+                spec["warnings"] = list(spec.get("warnings") or []) + y2_warnings(series)
     else:
         spec.update(_story_block(series))
     if builder == "combo":
@@ -3525,7 +3734,8 @@ def longform_key(spec: dict) -> list[dict]:
         extra = next((i for i, s in live if i not in keyed and text(s)), None)
         if extra is not None:
             keyed.add(extra)
-    return [{"series": i, "name": text(s)} for i, s in live if i in keyed]
+    sided = spec if isinstance(spec.get(Y2_KEY), dict) else None   # P71 T13: on a y2 page each pill names its axis
+    return [{"series": i, "name": text(s) + (f" ({y2_side(sided, i)})" if sided else "")} for i, s in live if i in keyed]
 
 
 def longform_key_pill_w(name: str, px: float) -> float:
@@ -4401,6 +4611,8 @@ def page_ink_key(spec: dict) -> str:
         ink["form"] = "gauge" + (":h" if (spec.get("form") or {}).get("dir") == "h" else "")   # P72 T6: a lying capsule's plot is its own
     if isinstance(spec.get(SCHEMATIC_KEY), dict):   # P70 T2: no tick column and the tag - keyed only on a schematic page
         ink[SCHEMATIC_KEY] = True
+    if isinstance(spec.get(Y2_KEY), dict):   # P71 T13: the right column's words and the data that sizes it - keyed only on a y2 page
+        ink[Y2_KEY] = {"header": spec[Y2_KEY].get("header"), "unit": spec[Y2_KEY].get("unit"), "extent": y2_extent(spec)}
     blob = json.dumps(ink, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 
@@ -4625,6 +4837,8 @@ def measured_boxes(spec: dict, aspect: str) -> dict | None:
         out[KEY_BOX] = dict(boxes[KEY_BOX])
     if isinstance(entry.get(SCHEMATIC_BOX), dict):   # P70 T2: a schematic's tag, as drawn (beside the six, as panels are)
         out[SCHEMATIC_BOX] = dict(entry[SCHEMATIC_BOX])
+    if isinstance(entry.get(Y2_BOX), dict):   # P71 T13: the right axis's words, as drawn
+        out[Y2_BOX] = dict(entry[Y2_BOX])
     if (isinstance(boxes.get(TAG_BOXES_KEY), list) and boxes[TAG_BOXES_KEY]   # P69 T6d: its end tags, each as drawn -
             and entry.get(TAG_INK_KEY) == tag_ink(spec)):                      # MN3: only for the tags they were drawn for
         out[TAG_BOXES_KEY] = [dict(b) for b in boxes[TAG_BOXES_KEY] if isinstance(b, dict)]
@@ -4704,6 +4918,11 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
             boxes[PANELS_KEY] = panel_boxes(spec, boxes["chart"], aspect, floor)
     if isinstance(spec.get(SCHEMATIC_KEY), dict) and not isinstance(boxes.get(SCHEMATIC_BOX), dict):
         boxes[SCHEMATIC_BOX] = schematic_tag_box(boxes["plot"])   # P70 T2: s109 (1)'s tag, estimated where it is not measured
+    if isinstance(spec.get(Y2_KEY), dict) and not isinstance(boxes.get(Y2_BOX), dict):   # P71 T13: the right axis, estimated:
+        y2box = y2_axis_box(spec, boxes["plot"], aspect)                                  # its column comes OUT of the plot
+        plot = boxes["plot"]
+        boxes["plot"] = _box(plot["x"], plot["y"], max(0.0, plot["w"] - y2box["w"]), plot["h"])
+        boxes[Y2_BOX] = dict(y2box, x=boxes["plot"]["x"] + boxes["plot"]["w"])
     sx, sy, sw, sh = SAFE_BOX[aspect]
     cx, cy, cw, ch = CAPTION_ANCHOR[aspect]
     out = {"aspect": aspect, "stage": _box(0, 0, w_s, h_s), "safe": _box(sx, sy, sw, sh),

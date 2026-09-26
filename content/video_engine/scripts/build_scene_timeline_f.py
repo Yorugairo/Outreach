@@ -2538,6 +2538,96 @@ def check_gauge_h(world: dict, row_species: list) -> None:
             raise ValueError(f"{kind!r} at {sp.get('at')}: " + why.format(what=f"a {kind} anchored on the page's data"))
 
 
+def _y2_rule_axis(page: dict, i) -> str:
+    """The axis reference rule `i` is read on (a y2 page's rules name theirs - ledger_page._y2_rule_errors); left else."""
+    axes = page.get("axes") or {}
+    rules = axes.get("hlines") or ([axes["hline"]] if isinstance(axes.get("hline"), dict) else [])
+    rule = rules[i] if isinstance(i, int) and 0 <= i < len(rules) and isinstance(rules[i], dict) else {}
+    return str(rule.get("axis") or LPG.Y2_AXES[0])
+
+
+def _y2_species_error(sp: dict, right: set, inverted: bool, page: dict) -> str | None:
+    """The one reason a species cannot be drawn truthfully across a y2 page's two scales, or None.
+    - a `level_join` or a `spread` whose two edges are read on the two axes: a level or a gap across two scales is no
+      reading (E75 s3);
+    - a `level_join` to the axis (`{y}`) from a right-axis line: its rule ends on the LEFT axis (the engine's axis form
+      runs to the plot's left edge), so the right line's level would be read in the left's units;
+    - a `bracket`, a `level_join` or a `spread` on the INVERTED line: a rise is drawn as a fall there, and s102 keeps E28
+      binding on any level or change claim."""
+    kind, at = sp.get("kind"), sp.get("at")
+
+    def side(i) -> str:
+        return LPG.Y2_AXES[1] if i in right else LPG.Y2_AXES[0]
+    if kind == SPECIES_LEVEL_JOIN:
+        a, to = int(sp.get("series") or 0), sp.get("to")
+        if isinstance(to, dict) and "series" in to and side(a) != side(to["series"]):
+            return (f"level_join at {at}: series {a} and series {to['series']} are read on the two axes of a y2 page "
+                    f"({LPG.Y2_RULING}) - a level across two scales is no reading")
+        if isinstance(to, dict) and "y" in to and a in right:
+            return (f"level_join at {at}: a join to the axis from series {a} (the right axis) - its rule ends on the LEFT "
+                    f"axis, where {to['y']} would be read in the left line's units ({LPG.Y2_RULING}; E28)")
+        edges = [a]
+    elif kind == "spread":
+        a = sp.get("from")
+        b_side = side(sp["to"]) if "to" in sp else _y2_rule_axis(page, sp.get("to_rule"))
+        if side(a) != b_side:
+            other = f"series {sp['to']}" if "to" in sp else f"rule {sp.get('to_rule')} (the {b_side} axis)"
+            return (f"spread at {at}: series {a} and {other} are read on the two axes of a y2 page ({LPG.Y2_RULING}) - a "
+                    "gap filled between two scales is no reading (E75 s3)")
+        edges = [a] + ([sp["to"]] if "to" in sp else [])
+    elif kind == "bracket":
+        edges = [int(sp.get("series") or 0)]
+    else:
+        return None
+    if inverted and any(e in right for e in edges):
+        return (f"{kind} at {at}: a level or a change measured on the inverted right axis - there a rise is drawn as a fall, and "
+                f"{LPG.Y2_RULING} keeps E28 binding on any level or change claim; measure it on an upright axis, or say it "
+                "in words")
+    return None
+
+
+def check_y2(world: dict, row_species: list) -> None:
+    """P71 T13 / E99 s102: a page with a SECOND AXIS holds its page. Its right axis is fitted to the lines it carries and
+    every chart-state verb (rescale, extend, recast, morph, remake, compare) re-projects the page on ONE y scale - the
+    right-axis lines would be drawn on the left's numbers, a value drawn wrong. A later chart state of the page is refused
+    the same way (P72 T26 owns a page's later states). It is drawn flat (a 2.5D plane the right tick column does not
+    follow) and it is NOT BUILT at 9:16 (R26-307: the frame read, P71 T13 round 2 - drawn there, its two axis names share
+    one row and the portrait end tags stand over the lines). A species that would read across the two scales, or read a
+    level or a change on the inverted line, is refused (`_y2_species_error`). A page with no `y2` is untouched.
+    ValueError names the verb; the caller names the row."""
+    if (world or {}).get("kind") != SPECIES_LEDGER:
+        return
+    page = world.get("page") or {}
+    states = [s for s in (world.get("page_states") or []) if isinstance(s, dict)]
+    if not isinstance(page.get(LPG.Y2_KEY), dict):
+        if any(isinstance(s.get(LPG.Y2_KEY), dict) for s in states):
+            raise ValueError(f"a chart state with a second axis ({LPG.Y2_RULING}): a y2 page is a page of its own - cut to "
+                             "it; a transition into it would re-project the right axis's lines on one scale")
+        return
+    if ASPECT == "9:16":
+        raise ValueError(f"a second axis ({LPG.Y2_RULING}) is not built at 9:16 (R26-307) - it is drawn on a 16:9 page; "
+                         "carry the pair as a 16:9 page (the 9:16 draw is P71 T13's open item)")
+    if page.get("form"):
+        kind = (page["form"] or {}).get("kind") if isinstance(page["form"], dict) else page["form"]
+        raise ValueError(f"form={kind}: a second axis ({LPG.Y2_RULING}) is drawn flat - the right tick column stands beside "
+                         "the plot, and a form lays the plot on a plane it does not follow")
+    if states:
+        raise ValueError(f"then=: a y2 page ({LPG.Y2_RULING}) holds its page - a chart state is drawn on one y scale; "
+                         "cut to the next page")
+    y2 = page[LPG.Y2_KEY]
+    right, inverted = set(y2.get("series") or []), y2.get("invert") is True
+    for sp in (row_species or []):
+        if not isinstance(sp, dict):
+            continue
+        if sp.get("kind") == "chart_to":
+            raise ValueError(f"chart_to {sp.get('to')!r} at {sp.get('at')}: a y2 page ({LPG.Y2_RULING}) holds its page - a "
+                             "chart state re-projects every line on ONE y scale, so the right axis's lines would be drawn "
+                             "on the left's numbers. Cut to the next page, or build the claim's words on this one")
+        err = _y2_species_error(sp, right, inverted, page)
+        if err:
+            raise ValueError(err)
+
+
 def check_panels(world: dict, row_species: list) -> None:
     """P69 T8b: a row's species on a PANELS page - every `panel` (and datum `target.panel`) inside the page's panels,
     every series a panel species names inside ITS panel, a `chart_to` only by a verb a one-state panel can do, and
@@ -6312,6 +6402,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_panels(world, row_species)          # P69 T8b: a panel's address, and the focus states, on the page they name
     check_broken_axis(world, row_species)     # P69 T66: a broken axis holds its page (no chart state, no form)
     check_gauge_h(world, row_species)         # P72 T6: the lying capsule holds its page (nothing that reads its y scale)
+    check_y2(world, row_species)              # P71 T13: a second axis holds its page (16:9, flat, no chart state)
     check_members(world, row_species)         # P69 T45: a tile the membership bar has, and nothing that moves the bar
     check_segments(world, row_species)        # P69 T64: a stacked page takes a park, and nothing that moves its bars
     check_brace(world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None,

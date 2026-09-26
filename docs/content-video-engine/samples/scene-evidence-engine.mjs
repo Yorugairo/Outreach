@@ -12036,7 +12036,12 @@ async function mount(doc) {
     /* portrait (P41): stage px; no right margin for an inline name - it sits above the line's end.
        T17 changes only the closed phone profile's local face/box law; legacy values stay byte-stable. */
     const LFT = P ? null : st.lfType;   /* P69 T8: the long form's preset geometry (null keeps T17's and the legacy page's) */
-    const L = P ? 150 : LFT ? LFT.plot_l : PHONE ? LP_PHONE.PLOT_L : 70, R = P ? 70 : 220, T = P ? 90 : 40, B = P ? G.H - 80 : LFT ? LFT.line_b : (PHONE ? 458 : 470), W = G.W;
+    const L = P ? 150 : LFT ? LFT.plot_l : PHONE ? LP_PHONE.PLOT_L : 70, T = P ? 90 : 40, B = P ? G.H - 80 : LFT ? LFT.line_b : (PHONE ? 458 : 470), W = G.W;
+    /* P69 T10: a long form's linear axis steps as coarse as a short plot needs (5 divisions whenever it has the room) */
+    const yDivs = LFT ? Math.max(1, Math.min(5, Math.floor((B - T) / (2 * LP_LONGFORM.TICK_SPACE * LFT.tick)))) : undefined;
+    /* P71 T13 / E99 s102: the second axis, planned before the plot's right edge - its column comes out of the plot (null: today's page, to the byte) */
+    const Y2 = lpY2Plan(st, pg, series, { T, B, divs: yDivs || 5, PAL });
+    const R = (P ? 70 : 220) + (Y2 ? Y2.shift : 0);
     const Y = (v) => ax.log ? Math.log10(v) : v;
     /* REFERENCE RULES (the fifth watch, 2026-09-07). A POLICY rate is a constant, not a series: drawn as a line it is a step,
        and a step at this scale reads as a fault. `axes.hlines: [{y, label, color}]` draws it as what it is - a labelled rule
@@ -12045,8 +12050,11 @@ async function mount(doc) {
     const TF = formOf(pg, "tilted_line");   /* P58 T5: opt-in (`;form=tilted_line`); null is today's page, to the byte */
     const SCH = pg.schematic && typeof pg.schematic === "object" ? pg.schematic : null;   /* P70 T2: a shape, not a series - null is today's page, to the byte */
     let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
-    for (const s of series) for (const [x, v] of s.pts) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, Y(v)); y1 = Math.max(y1, Y(v)); }
-    for (const h of HL) { y0 = Math.min(y0, Y(+h.y)); y1 = Math.max(y1, Y(+h.y)); }
+    for (const s of series) for (const [x, v] of s.pts) { x0 = Math.min(x0, x); x1 = Math.max(x1, x);
+      if (Y2 && Y2.objs.has(s)) continue;   /* P71 T13: a right-axis line shares the x, never the left scale */
+      y0 = Math.min(y0, Y(v)); y1 = Math.max(y1, Y(v)); }
+    for (const h of HL) { if (Y2 && h.axis === "right") continue;   /* P71 T13: a right-axis rule is on the right's scale */
+      y0 = Math.min(y0, Y(+h.y)); y1 = Math.max(y1, Y(+h.y)); }
     const pad = (y1 - y0) * 0.06 || 1; y0 -= pad; y1 += pad;
     if (ax.from_zero && !ax.log) y0 = 0;   /* E28 (operator, 2026-09-05): a truncated axis made a tenth look like a fall to nothing - the series declares its zero */
     /* P48 T2: a DERIVED rescale state names its exact domain - the y bounds (`axes.domain`) and the x window (`axes.xdomain`) -
@@ -12079,7 +12087,7 @@ async function mount(doc) {
     if (PJ) tiltRule(axEl, pj, L, B, W - R, B);   /* THE RULED BASELINE, on the plane, converging with it */
     lpMark(st, "axis", "axis", axEl, { x1: L, x2: W - R, y: B });
     st.hlines = HL.map((h, hix) => {
-      const col = PAL[h.color] || h.color || PAL.cobalt, y = my(+h.y);
+      const col = PAL[h.color] || h.color || PAL.cobalt, y = (Y2 && h.axis === "right" ? Y2.my : my)(+h.y);   /* P71 T13: the rule reads on the axis it names */
       const line = lpEl("line", "hrule", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1), stroke: col });
       const pe = PJ ? tiltRule(line, pj, L, y, W - R, y) : null;   /* the comparator is a rule ON the page: it lies on the plane too (E53 s6) */
       const ry = pe ? pe[1][1] : y;                                /* ... and its name stands upright at its projected right end */
@@ -12103,9 +12111,9 @@ async function mount(doc) {
         lpMark(st, "tick:" + n, "tick", gl, { v: tv, y, x1: L, x2: W - R });
         lpMark(st, "ylab:" + n, "ylabel", lpText(st.chart, "lab", pe ? L - 10 + (pe[0][0] - L) : L - 10, pe ? pe[0][1] + 8 : y + 8, "end", lpTick(tv) + (ax.unit || ""),
           lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : undefined), { v: tv, x: pe ? L - 10 + (pe[0][0] - L) : L - 10, y: pe ? pe[0][1] + 8 : y + 8 }); n++; } tv *= 2; }
-    } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10,
-                    LFT ? Math.max(1, Math.min(5, Math.floor((B - T) / (2 * LP_LONGFORM.TICK_SPACE * LFT.tick)))) : undefined, PJ ? pj : null);   /* P69 T10: ... and a linear axis steps as coarse as a short plot needs (5 divisions whenever it has the room) */
+    } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10, Y2 ? lpY2Divs(y0, y1, yDivs || 5) : yDivs, PJ ? pj : null);   /* P71 T13: a y2 page's left axis states its range too */
     lpYLabel(st, pg, L, T - (LFT ? LFT.ylab_gap : 12));
+    if (Y2) lpY2Draw(st, Y2, { L, R, T, B, W, P, LFT });   /* P71 T13: the right axis's ticks placed, both axes inked, its name written */
     const brkFs = PHONE ? lpTypeU(st, "tick") : P ? 40 : 24;   /* P69 T66: the x ticks' own size, in units (the template's .lab, or the phone type) */
     (ax.xticks || []).forEach(([x, lab], i) => { if (BK && lpBreakHides(BK, mx(x), lab, brkFs)) return;   /* P69 T66: the written gap carries the years at the cut */
       const pe = PJ ? pj(mx(x), B) : null;   /* P58 T5: the x label stands at its own place ON the baseline, and upright */
@@ -12130,7 +12138,8 @@ async function mount(doc) {
       /* P58 T5: every datum through the ONE homography, once. The path, the travelling tip, the tip-riding pill,
          the terminal name and the species' targets then all ride the same projected geometry - a line drawn ON the
          plane, not a flat line with a picture of a plane behind it. Unprojected, `PT` is exactly `mx`/`my`. */
-      const PT = PJ ? s.pts.map(([x, v]) => PJ(mx(x), my(v))) : s.pts.map(([x, v]) => [mx(x), my(v)]);
+      const myS = lpY2Of(Y2, s.si, my);   /* P71 T13: a right-axis line is drawn on the right's scale (no y2: `my` itself) */
+      const PT = PJ ? s.pts.map(([x, v]) => PJ(mx(x), myS(v))) : s.pts.map(([x, v]) => [mx(x), myS(v)]);
       const PE = PT[PT.length - 1] || [0, 0];
       const d = PT.map(([qx, qy], k) => (k ? "L" : "M") + qx.toFixed(1) + " " + qy.toFixed(1)).join(" ");
       /* a single-metric line takes its SIGN colour (blood red down, green up); multi-line pages keep their series key */
@@ -12160,13 +12169,13 @@ async function mount(doc) {
       /* s9.23b / E53 s8: the name lives at the line's END - but anchored "end" it is written LEFTWARD, across
          whatever the line already drew. On the tariff short's holdings page that put "-9.9% Japan" straight over the
          muted history. Lift it clear of every point it would span. */
-      const nameBelow = P && drawn.length === 1 && !HL.length && my(last[1]) < T + 0.35 * (B - T);
+      const nameBelow = P && drawn.length === 1 && !HL.length && myS(last[1]) < T + 0.35 * (B - T);
       /* OPT-IN (`axes.name_clear`): lifting the name changes where it sits on every page that already draws one,
          and the goldens are the contract - four moved when this was unconditional. A page asks for it. */
       const spanX = P ? 330 : 210, xEnd = mx(last[0]);
-      let clearY = my(last[1]);
+      let clearY = myS(last[1]);
       if (ax.name_clear) for (const q of drawn) for (const [qx, qv] of q.pts) { const px2 = mx(qx);
-        if (px2 >= xEnd - spanX && px2 <= xEnd) clearY = Math.min(clearY, my(qv)); }
+        if (px2 >= xEnd - spanX && px2 <= xEnd) clearY = Math.min(clearY, lpY2Of(Y2, q.si, my)(qv)); }
       /* TIP CLEAR (normal-for-which-bridge review-v1, 2026-09-12): the last datum is the most-marked point on a line - a ring,
          a callout - and the name ended 8 px from it, so the dashed ring at 0:57 sat on "x3.9 Federal debt". A page whose
          ring or callout marks the tip (`tip_mark: [series]`, stamped by the compiler off the species' own targets) ends
@@ -12175,16 +12184,17 @@ async function mount(doc) {
       /* THE SIDE AWAY FROM A NEIGHBOUR (the same review, 0:19): on a two-line page the name sits 30 px over its own tip, and
          "10-year" was written on the 30-year line above it. A name whose box would cross ANOTHER series' line goes
          UNDER its own line instead, when that room is clear - the name stays beside the line it names. */
-      let nameY = nameBelow ? B - 28 : (PJ ? PE[1] : my(last[1])) - 30;
+      let nameY = nameBelow ? B - 28 : (PJ ? PE[1] : myS(last[1])) - 30;
       const nameXEnd = nameBelow ? W - R : (PJ ? PE[0] : Math.min(mx(last[0]), mx(prev[0]))) - 8 - tipClr;
       if (P && !nameBelow && drawn.length > 1) {
   /* the name's OWN width, not spanX: at 330 px the room under a dipping line read as taken (review 0:20.8, "10-year" 155 px wide) */
   const nameW = Math.max(60, ((s.label ? s.label + " " : "") + (s.name || "")).length * 23);
         const inSpan = (px2) => px2 >= nameXEnd - nameW && px2 <= nameXEnd + 8;
-        const crosses = (y) => drawn.some((q) => (q.si | 0) !== (s.si | 0) && q.pts.some(([qx, qv]) => inSpan(mx(qx)) && my(qv) >= y - 44 && my(qv) <= y + 12));
+        const crosses = (y) => drawn.some((q) => { const mq = lpY2Of(Y2, q.si, my);
+          return (q.si | 0) !== (s.si | 0) && q.pts.some(([qx, qv]) => inSpan(mx(qx)) && mq(qv) >= y - 44 && mq(qv) <= y + 12); });
         if (crosses(nameY)) {
-          let own = my(last[1]);
-          for (const [qx, qv] of s.pts) if (inSpan(mx(qx))) own = Math.max(own, my(qv));
+          let own = myS(last[1]);
+          for (const [qx, qv] of s.pts) if (inSpan(mx(qx))) own = Math.max(own, myS(qv));
           const under = own + 52;
           if (under <= B - 12 && !crosses(under)) nameY = under;
         }
@@ -12196,8 +12206,10 @@ async function mount(doc) {
          plain white ("pretty low visibility"). The ink is written as the element's own STYLE, which outranks the class -
          a teal line's name is teal. A page on a plate's cream surface keeps the chalk its surface rule inverts. */
       const nameSt = (pg.surface_from ? "" : "fill:" + col + ";") + (PHONE ? "font-size:" + lpTypeU(st, "tag") + "px" : "");
+      /* P71 T13: a line that reaches the plot's right edge has the right tick column beside its end - its tag stands past it */
+      const y2dx = Y2 && mx(last[0]) >= W - R - 0.5 ? Y2.shift : 0;
       const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0, ...(nameSt ? { style: nameSt } : {}) }
-                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr).toFixed(1), y: ((PJ ? PE[1] : my(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(nameSt ? { style: nameSt } : {}) });
+                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr + y2dx).toFixed(1), y: ((PJ ? PE[1] : myS(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(nameSt ? { style: nameSt } : {}) });
       st.linePts.push(PT.map((q) => [q[0], q[1]]));   /* the exact datum positions, for the species' targets */
       name.textContent = s.muted ? "" : LFT && LFT.form !== "full" ? (s.label || s.name || "") : (s.label ? s.label + " " : "") + (s.name || "");   /* P69 T8: a tag the stage cannot hold keeps its value (T10's key takes the name) */   /* the muted history carries no name */
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
@@ -12205,7 +12217,7 @@ async function mount(doc) {
       const ib = (st.inlineBadges || {})[s.color], chipT = (ib && ib.tag) || s.card_name || "";   /* a card's short name rides where a badge's tag would */
       if (chipT && !(LFT && LFT.form === "value")) { const tg = lpEl("tspan", "tagchip", name, { dx: LFT ? (LP_LONGFORM.CHIP_DX_PX / LFT.scale).toFixed(2) : 12, fill: col,
         ...(PHONE ? { style: "font-size:" + lpTypeU(st, "chip") + "px" } : {}) }); tg.textContent = chipT; }
-      const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : my(last[1])) + 8,
+      const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : myS(last[1])) + 8,
                      pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted, hot: role.hot, context: role.context,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
       if (ax.name_clear && !nameBelow) rec.ny = Math.min(rec.ny, clearY - (P ? 34 : 20));
@@ -12222,6 +12234,7 @@ async function mount(doc) {
     /* P69 T10: a long form's names stand a line of their OWN size apart (at `phone` 50 units is under one, and the key's band
        shortens the plot) - as far as the chart's own room holds them: the top name's box may climb into the band the page
        keeps over the plot (lpLongformBox's `above`, the y label's row - empty on the right) and never past it into the key */
+    if (Y2 && Y2.head) lpY2TagFloor(Y2, order);   /* P71 T13: the right axis's name owns its row - the top tag stands under it */
     for (let i = 1; i < order.length; i++)
       if (order[i].ny - order[i - 1].ny < gap) order[i].ny = order[i - 1].ny + gap;
     const over = order.length ? order[order.length - 1].ny - tagFoot : 0;   /* a name never sits on the axis line: lift the group */
@@ -12423,6 +12436,100 @@ async function mount(doc) {
     const size = st.portrait ? 40 : (lpPhoneTypeOf(st) ? lpTypeU(st, "tick") : 22);
     const e = lpText(st.chart, "lab", x, y, "start", String(t), { style: "font-size:" + size + "px;fill:#aeb6be", ...(at || {}) });
     lpMark(st, "axislabel", "axislabel", e, { x, y }); return e; };
+  /* ---- P71 T13 (was P69 T43b; R26-307, E99 s102): THE SECOND AXIS --------------------------------------------------
+     A line page's RIGHT value axis for a co-movement or lead/lag claim (s102 (a)), fitted to the lines it carries and
+     INVERTED when the page says so (a larger value written lower). `lpRightAxis` is the ONE right-axis tick writer, lifted
+     from buildLedgerCombo's own block (the combo calls it and draws what it always drew, to the byte); the line page calls
+     it through `lpY2Plan` (the scale, the ticks in the line's ink, the column's measured width - planned BEFORE the plot's
+     right edge is fixed, so the column comes out of the plot and the end tags keep their room) and `lpY2Draw` (the ticks
+     placed, the LEFT ticks inked in the left line's ink - s102 (c), T37b's style fill - and the axis's name over its ticks:
+     its label, its unit and, inverted, the word - s102 (b)). A page naming no `y2` creates not one element. */
+  const LP_Y2 = Object.freeze({
+    GAP: 14,     /* chart units from the plot's right edge to the right tick column: the combo's own `x1 + 14` (Bravos BOOM 04:18: 19 px of 1920) */
+    PAD: 0.06,   /* the right scale's air over and under its lines: the left scale's own `(y1 - y0) * 0.06` */
+    NAME_GAP: 6, /* chart units an end tag keeps under the right axis's name */
+    TAG_DX: 12,  /* the end tag's own offset past a line's end (buildLedgerLine's `+ 12`) */
+    MIN_TICKS: 2, MAX_DIVS: 10,   /* each axis writes at least two labelled ticks - its range, not one value (E28) */
+  });
+  /* o: {lo, hi, ly (value -> y), x, unit, divs, cls, style, grid?: [x1, x2] (a gridline per tick instead of a label), out?: [],
+     vs?: []} -> the step. The label law is the combo's: `lpTick` in the unit, `start`-anchored at x, 8 under its value (14 portrait) */
+  const lpRightAxis = (st, o) => {
+    const step = lpNiceStep(Math.max(1e-9, (o.hi - o.lo) / o.divs)), dy = st.portrait ? 14 : 8;
+    for (let tv = Math.ceil(o.lo / step - 1e-9) * step; tv <= o.hi + 1e-9; tv += step) {
+      const v = Math.abs(tv) < step * 1e-6 ? 0 : tv;
+      if (o.grid) { lpEl("line", "grid", st.chart, { x1: o.grid[0], x2: o.grid[1], y1: o.ly(v).toFixed(1), y2: o.ly(v).toFixed(1) }); continue; }
+      const tk = lpText(st.chart, o.cls, o.x, o.ly(v) + dy, "start", lpWithUnit(lpTick(v), o.unit), { style: o.style });
+      if (o.out) o.out.push(tk);
+      if (o.vs) o.vs.push(v);
+    }
+    return step;
+  };
+  /* an axis states its RANGE (E28): on a y2 page each axis writes at least MIN_TICKS labels - a short long-form plot's one
+     coarse division (P69 T10's rule) can leave a single tick, which names a value, not a range. The fewest divisions that do. */
+  const lpY2Divs = (lo, hi, d) => {
+    for (let k = d; k <= LP_Y2.MAX_DIVS; k++) { const st = lpNiceStep(Math.max(1e-9, (hi - lo) / k));
+      if (Math.floor(hi / st + 1e-9) - Math.ceil(lo / st - 1e-9) + 1 >= LP_Y2.MIN_TICKS) return k; }
+    return d;
+  };
+  /* the end tag's font size in chart units - measured on a throwaway tag in the tags' own class and size (the phone type's
+     `tag`, else the class), so the gap is the tag's em on every profile */
+  const lpY2TagEm = (st) => {
+    const probe = lpText(st.chart, "sname", 0, 0, "start", "0", !st.portrait && lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tag") + "px" } : undefined);
+    const em = parseFloat(getComputedStyle(probe).fontSize) || LP_Y2.TAG_DX;
+    probe.remove();
+    return em;
+  };
+  const lpY2Of = (Y2, si, my) => (Y2 && Y2.idx.has(si | 0) ? Y2.my : my);   /* the scale series `si` is drawn on */
+  /* g: {T, B, divs, PAL}. null unless the page's spec carries `y2` (ledger_page.y2_block, validated there) */
+  const lpY2Plan = (st, pg, series, g) => {
+    const y2 = pg.y2;
+    if (!y2 || typeof y2 !== "object" || !Array.isArray(y2.series) || !y2.series.length) return null;
+    const idx = new Set(y2.series.map((i) => i | 0)), objs = new Set([...idx].map((i) => series[i]).filter(Boolean));
+    let lo = Infinity, hi = -Infinity;
+    for (const q of objs) for (const [, v] of (q.pts || [])) { lo = Math.min(lo, +v); hi = Math.max(hi, +v); }
+    const ax = pg.axes || {};   /* ... and the reference rules that name the right axis (ledger_page._y2_rule_errors) */
+    for (const h of (ax.hlines || (ax.hline ? [ax.hline] : []))) if (h && h.axis === "right" && Number.isFinite(+h.y)) { lo = Math.min(lo, +h.y); hi = Math.max(hi, +h.y); }
+    if (!(hi >= lo)) return null;
+    const pad = (hi - lo) * LP_Y2.PAD || 1; lo -= pad; hi += pad;
+    const inv = y2.invert === true, T = g.T, B = g.B;
+    const my = inv ? (v) => T + (+v - lo) / (hi - lo) * (B - T) : (v) => T + (1 - (+v - lo) / (hi - lo)) * (B - T);
+    /* each axis's ink is its FIRST line's - the ink that line is drawn in (E67: declared, else the cycle by index) */
+    const ink = (i) => g.PAL[(series[i] || {}).color] || g.PAL[LP_CYCLE[i % LP_CYCLE.length]];
+    const first = Math.min(...idx), left = series.findIndex((q, i) => !idx.has(i));
+    const phone = lpPhoneTypeOf(st), style = (c) => "fill:" + c + (phone ? ";font-size:" + lpTypeU(st, "tick") + "px" : "");
+    const col = ink(first), out = [], vs = [];
+    lpRightAxis(st, { lo, hi, ly: my, x: 0, unit: String(y2.unit || ""), divs: lpY2Divs(lo, hi, g.divs), cls: "lab lp-y2", style: style(col), out, vs });
+    const colW = Math.max(0, ...out.map((e) => { const b = lpSegBox(e); return b ? b.w : 0; }));
+    /* an end tag past the column stands one EM (its own size) clear of it, never "4% $1,117bn": the plot gives up the
+       difference over the tag's own offset, so the tags keep the place the page's tag fit reckoned with */
+    const em = lpY2TagEm(st), extra = Math.max(0, em - LP_Y2.TAG_DX);
+    return { idx, objs, lo, hi, invert: inv, my, col, colL: ink(Math.max(0, left)), ticks: out.map((el, k) => ({ el, v: vs[k] })),
+             colW, shift: LP_Y2.GAP + colW + extra, header: String(y2.header || y2.label || "") };
+  };
+  /* the top written end tag's baseline at least NAME_GAP under the right axis's name (the tags settle downward from it;
+     a plot too short to hold them there still lifts the group off its axis line, as every page does) */
+  const lpY2TagFloor = (Y2, order) => {
+    const hb = lpSegBox(Y2.head), top = order.find((pp) => String(pp.name.textContent || "").trim());
+    const nb = top ? lpSegBox(top.name) : null;
+    if (!hb || !nb) return;
+    const floor = hb.y + hb.h + LP_Y2.NAME_GAP + (+top.name.getAttribute("y") - nb.y);
+    if (top.ny < floor) top.ny = floor;
+  };
+  /* g: {L, R, T, B, W, P, LFT}: the plot is fixed. The ticks stand in their column, the left ticks take the left line's ink,
+     the name is written over the right ticks (inside the chart: end-anchored at its right edge when it would run past it) */
+  const lpY2Draw = (st, Y2, g) => {
+    const x = g.W - g.R + LP_Y2.GAP;
+    Y2.ticks.forEach(({ el, v }, n) => { el.setAttribute("x", x.toFixed(1)); lpMark(st, "y2lab:" + n, "y2label", el, { v, x, y: +el.getAttribute("y") }); });
+    /* s102 (c): the left ticks - and the left axis's name, the right name's peer - wear the left line's ink */
+    for (const m of (st.marks || [])) if ((m.role === "ylabel" || m.role === "axislabel") && m.el) m.el.style.fill = Y2.colL;
+    const size = g.P ? 40 : (lpPhoneTypeOf(st) ? lpTypeU(st, "tick") : 22), hy = g.T - (g.LFT ? g.LFT.ylab_gap : 12);   /* lpYLabel's own size and row: the two axis names are peers */
+    const head = lpText(st.chart, "lab lp-y2-name", x, hy, "start", Y2.header, { style: "font-size:" + size + "px;fill:" + Y2.col });
+    const b = lpSegBox(head);
+    if (b && b.x + b.w > g.W - 4) { head.setAttribute("text-anchor", "end"); head.setAttribute("x", (g.W - 4).toFixed(1)); }
+    Y2.head = head;
+    lpMark(st, "y2name", "y2name", head, { x: +head.getAttribute("x"), y: hy });
+    st.y2 = { series: [...Y2.idx], lo: Y2.lo, hi: Y2.hi, invert: Y2.invert, my: Y2.my };
+  };
   /* ---- P70 T2 (was P69 T46) / E99 s109 (1): THE SCHEMATIC - a shape drawn with no data, carrying the narrative -------
      The page's one series is GENERATED by ledger_page.schematic_series from a named closed form on x in [0, 1]; the line
      builder draws it like any line (so T36's lit stretch, the span and the bracket address it by x-fraction), and writes
@@ -12896,13 +13003,10 @@ async function mount(doc) {
     const lunit = pg.line_unit != null ? pg.line_unit : "";
     const lcol = SEG ? LP_PAL[(series[0] || {}).color] || LP_PAL[LP_CYCLE[0]] : null;   /* P69 T64 / s102 (c): the right axis in its line's own colour */
     const y2t = [];   /* T64: the right axis's words, which the line's labels and the key must not touch */
-    if (own) { const step = lpNiceStep(Math.max(1e-9, (hi - lo) / (tiers ? 2 : 4)));
-      for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
-        const v = Math.abs(tv) < step * 1e-6 ? 0 : tv;
-        if (tiers) lpEl("line", "grid", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: ly(v).toFixed(1), y2: ly(v).toFixed(1) });   /* its own band, its own grid: the bands never overlap, so no prison bars */
-        else { const tk = lpText(st.chart, "lab" + (lcol ? " lp-y2" : ""), x1 + 14, ly(v) + (P ? 14 : 8), "start", lpWithUnit(lpTick(v), lunit), { style: "fill:" + (lcol || "#aeb6be") });
-          if (SEG) y2t.push(tk); }
-      }
+    if (own) {   /* P71 T13: the ONE right-axis writer (lpRightAxis), which this block was lifted into - the same ticks, to the byte */
+      const step = lpRightAxis(st, { lo, hi, ly, x: x1 + 14, unit: lunit, divs: tiers ? 2 : 4, cls: "lab" + (lcol ? " lp-y2" : ""),
+                                     style: "fill:" + (lcol || "#aeb6be"), out: SEG ? y2t : null,
+                                     grid: tiers ? [x0 - 20, x1 + 20] : null });   /* tiers: its own band, its own grid - the bands never overlap, so no prison bars */
       /* the tier's scale is written ONCE, on its top gridline, instead of a whole second axis - the terminal labels carry the rest */
       if (tiers) lpText(st.chart, "lab", x0 - 30, ly(Math.floor(hi / step) * step) + (P ? 14 : 8), "end", lpWithUnit(lpTick(Math.floor(hi / step) * step), lunit), { style: "fill:#aeb6be" }); }
     /* P69 T64 / s102 (b): the right axis NAMES its unit, over its ticks in its line's colour (kept inside the chart) */

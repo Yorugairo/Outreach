@@ -130,6 +130,10 @@ GAUGE_SURFACE = "gauge-94"
 # not a series" under the axis, measured as its own box. The golden's own page (`schematic-hype-trough`, the hype cycle).
 SCHEMATIC_LINE = "dense-line" + LPG.REPRESENTATIVE_SEP + LPG.SCHEMATIC_KEY
 SCHEMATIC_SURFACE = "schematic-hype-trough"
+# P71 T13: a dense-line page's THIRD representative - the SECOND AXIS (E99 s102): the right tick column comes out of the plot
+# and its words (the ticks and the axis's name) are measured as their own box. The golden's own page (`dual-axis-inverted`).
+DUAL_LINE = "dense-line" + LPG.REPRESENTATIVE_SEP + LPG.Y2_KEY
+DUAL_SURFACE = "dual-axis-inverted"
 
 
 def _panels_bars_series() -> dict:
@@ -223,6 +227,9 @@ READ_BOXES = r"""
       const r = R(mk.el); if (r.w >= 1 || r.h >= 1) u = U(u, r); } return u; };
   /* `tick` is the GRIDLINE (it spans the plot) - furniture the data is drawn over, never a band. */
   out.axis = {x: roleBox(['xtick', 'xlabel']), y: roleBox(['ylabel'])};
+  /* P71 T13: a second axis's words - its ticks and its name - as one box (a y2 page only) */
+  const y2box = roleBox(['y2label', 'y2name']);
+  if (y2box) out.y2 = y2box;
   /* THE DATA'S OWN INK (E65), read exactly as probe.py's M25 reads it: a bar or a number is its box;
      a SERIES is a thin wiggle whose bounding box is mostly empty air, so a path is returned as the
      chain of its DRAWN segments. The mask over these is what says where the plot is empty. */
@@ -403,6 +410,13 @@ def representative(builder: str) -> dict:
         # the golden is COMPILED (world_for_plate stamps it full-stage); a representative is the declared page, and
         # variant_pages measures both 16:9 geometries off it, as it does for every other builder
         return {k: v for k, v in _strip(page).items() if k != "full_stage"}
+    if builder == DUAL_LINE:   # P71 T13: the golden's own y2 page, as DECLARED (its full-stage stamp stripped, as below)
+        tl = json.loads((RB.SOURCES / f"{DUAL_SURFACE}.timeline.json").read_text(encoding="utf-8"))
+        page = _strip(next(s["world"]["page"] for s in tl["scenes"] if (s.get("world") or {}).get("page")))
+        page.pop("full_stage", None)
+        if page.get("caption") == "anchor":
+            page.pop("caption")
+        return page
     if builder == SCHEMATIC_LINE:   # P70 T2: the golden's own schematic page, as DECLARED - the golden carries the
         tl = json.loads((RB.SOURCES / f"{SCHEMATIC_SURFACE}.timeline.json").read_text(encoding="utf-8"))   # compiler's
         page = _strip(next(s["world"]["page"] for s in tl["scenes"] if (s.get("world") or {}).get("page")))  # full-stage
@@ -419,7 +433,7 @@ def representative(builder: str) -> dict:
     return _strip(page)
 
 
-BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE, SCHEMATIC_LINE}))
+BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE, SCHEMATIC_LINE, DUAL_LINE}))
 PROFILED = tuple(b for b in BUILDERS if b in LPG.READABILITY_BUILDERS[LPG.LONGFORM])   # N3: dense-line and story
 
 
@@ -536,6 +550,8 @@ def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: 
            "data_mask": data_mask(boxes["plot"], dom.get("data") or [])}
     if dom.get(LPG.SCHEMATIC_BOX):   # P70 T2: a schematic's tag - beside the six boxes, as a panels page's panels are
         out[LPG.SCHEMATIC_BOX] = _box(dom[LPG.SCHEMATIC_BOX])
+    if dom.get(LPG.Y2_BOX):   # P71 T13: a second axis's words - beside the six boxes
+        out[LPG.Y2_BOX] = _box(dom[LPG.Y2_BOX])
     if dom.get(LPG.PANELS_KEY):   # P69 T8b: each panel's home box and plot, as drawn
         out[LPG.PANELS_KEY] = [{"hidden": True} if p.get("hidden") else {k: _box(v) for k, v in p.items() if v}
                                for p in dom[LPG.PANELS_KEY]]   # P69 T8e: a panel the first focus state hides
@@ -573,6 +589,8 @@ def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bo
         out[LPG.PANELS_KEY] = got[LPG.PANELS_KEY]
     if got.get(LPG.SCHEMATIC_BOX):   # P70 T2: a schematic's tag, beside the six
         out[LPG.SCHEMATIC_BOX] = got[LPG.SCHEMATIC_BOX]
+    if got.get(LPG.Y2_BOX):   # P71 T13: a second axis's words, beside the six
+        out[LPG.Y2_BOX] = got[LPG.Y2_BOX]
     drawn_by = got["page"].get("builder")
     if drawn_by != builder and drawn_by in LPG.LAND_TAG_BUILDERS:   # P70 T2: a second representative (`dense-line+
         out["builder"] = drawn_by   # schematic`) names the builder whose end tags its tag_boxes are
