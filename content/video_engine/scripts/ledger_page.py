@@ -116,6 +116,27 @@ READABILITY_PROFILES = (LANDSCAPE_PHONE, LONGFORM)
 # form's own title is Inter already and never takes it.
 TITLE_FACES = ("hand", "heavy", "sans")
 TITLE_FACE = "hand"
+# P71 T30 (the Bravos harvest v2's S10 and S11; was P69 T78): TWO LONG-FORM CHROME OPTIONS on the series file - each an
+# option and never a default, each the long form's alone (refused by name off it: `_validate_longform_chrome` for the
+# file, `readability_error` for a row that draws the page in another profile). `source_lines` is the two-line source
+# (BRAVOS-LONGFORM-CHART-SPEC.md (b) `source: {lines: ["Date: ...", "Source: ..."]}`; STK 04:14, BOOM, D40): two lines
+# written as two, which between them carry the page's `src` and each projection's source, so the page still cites
+# what its provenance says. `title_style: capsule` is the title in the page's accent capsule (D40 04:16, measured:
+# 304 x 79 px round 45 px of type - pad 17 v / 22 h, a ~2 px corner - so its pads are ems of the title's own size;
+# BOOM's capsules are its SUBTITLES', a finding, not built). The engine's LP_TITLE_CAPSULE is TITLE_CAPSULE_EM.
+SOURCE_LINES_KEY = "source_lines"
+SOURCE_LINES_N = 2
+TITLE_STYLE_KEY = "title_style"
+TITLE_STYLES = ("capsule",)
+TITLE_CAPSULE_EM = {"pad_v": 0.37, "pad_h": 0.48, "radius": 0.05}
+# ... and their ROOM (found on the frame: the long fixture at `longform:phone` with both options drew its chart box 99 px
+# tall, the plot a strip and the end tags on each other). Each option takes height from the chart; past this share of
+# the chart box the page carries a WARN with its numbers (s106: the author's call - drop one, or a smaller preset).
+# The share is ours to tune, set off the fixture's own M28 read (no reference measures it): at `middle` the capsule
+# takes 4 % and M28 is clean; at `phone` the capsule alone takes 22 % and the end tags already meet (M28 FAIL), the two
+# lines 33 %, both 55 % - so a sixth is the line.
+CHROME_WARN = "WARN chrome:"
+CHROME_ROOM_SHARE = 0.15
 # the builders each profile is legal on (T14's inventory: the body's pages are dense-line and bars/`story`)
 READABILITY_BUILDERS = {LANDSCAPE_PHONE: ("dense-line",), LONGFORM: ("dense-line", "story", PANELS)}   # P69 T8b: a panels page, each panel framed
 AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
@@ -1059,6 +1080,11 @@ def readability_error(page: dict, value: Any, builder: str) -> str | None:
         return (f"readability {value!r} is not one of {LANDSCAPE_PHONE}|{LONGFORM}"
                 f"[:{'|'.join(LONGFORM_PRESETS)}]")
     value, preset = parsed
+    chrome = [k for k in (SOURCE_LINES_KEY, TITLE_STYLE_KEY) if k in page]
+    if chrome and value != LONGFORM:   # P71 T30: the long form's chrome is never accepted and ignored
+        return (f"{', '.join(chrome)}: the long form's chrome (P71 T30) - readability={value!r} draws this page in "
+                f"another profile, which writes one plain source line and a plain title; draw it '{LONGFORM}' or drop "
+                "the key")
     legal = READABILITY_BUILDERS[value]
     if builder not in legal:
         if value == LANDSCAPE_PHONE:
@@ -1629,6 +1655,43 @@ def projection_source(series: dict) -> str | None:
     return out
 
 
+def _source_lines_ok(value: Any) -> bool:
+    """Is `value` the two-line source's shape - exactly two non-empty strings? Pure."""
+    return (isinstance(value, list) and len(value) == SOURCE_LINES_N
+            and all(isinstance(x, str) and x.strip() for x in value))
+
+
+def _validate_longform_chrome(series: dict) -> list[str]:
+    """P71 T30: `source_lines` and `title_style`, each refused BY NAME when malformed or placed off the long form (the
+    base accepted and ignored both). The two lines must carry the page's `src` and every projection's own source -
+    the words its provenance names - so the two-line form never cites less than the one line did. A file naming
+    another profile is refused by `readability_error`; one naming none is refused here. Pure."""
+    named = [k for k in (SOURCE_LINES_KEY, TITLE_STYLE_KEY) if k in series]
+    if not named:
+        return []
+    errors: list[str] = []
+    if SOURCE_LINES_KEY in series:
+        lines = series[SOURCE_LINES_KEY]
+        if not _source_lines_ok(lines):
+            errors.append(f"{SOURCE_LINES_KEY} {lines!r} is not the two-line source: exactly {SOURCE_LINES_N} non-empty "
+                          "strings, 'Date: ...' then 'Source: ...' (BRAVOS-LONGFORM-CHART-SPEC.md (b), P71 T30)")
+        else:
+            said = " ".join(lines)
+            owed = [series.get("src")] + [s[PROJECTION_KEY].get("src") for s in series.get("series") or []
+                                          if isinstance(s, dict) and isinstance(s.get(PROJECTION_KEY), dict)]
+            missing = [x for x in owed if _text(x) and x not in said]
+            if missing:
+                errors.append(f"{SOURCE_LINES_KEY} never names {', '.join(repr(x) for x in missing)} - the two lines are "
+                              "the page's source, so they carry its src and each projection's source word for word")
+    if TITLE_STYLE_KEY in series and series[TITLE_STYLE_KEY] not in TITLE_STYLES:
+        errors.append(f"{TITLE_STYLE_KEY} {series[TITLE_STYLE_KEY]!r} is not one of {'|'.join(TITLE_STYLES)} "
+                      "(the title in the page's accent capsule, P71 T30)")
+    if (series.get("readability") or (series.get("axes") or {}).get("readability")) is None:
+        errors.append(f"{', '.join(named)}: the long form's chrome (P71 T30) - this series file names no profile; give "
+                      f"it readability '{LONGFORM}' (a long form page) or drop the key")
+    return errors
+
+
 def projection_line(own: list, i: int) -> dict:
     """The series a projection is DRAWN as: its tag writes the projection's label (never a value, never the series'
     own name), in its line's ink when it names none. A copy; the file is never mutated."""
@@ -1657,6 +1720,7 @@ def validate(series: dict, variant: str) -> list[str]:
     errors += _validate_unit_suffix(series, variant)   # P72 T13 / R26-287: a prefix AND a suffix ($...B), refused by name when malformed
     errors += _validate_y2(series, variant)         # P71 T13 / R26-307: a second axis draws (a line page) or is refused by name
     errors += _validate_projection(series, variant)   # P71 T16 / E77: a projection is labelled, tiered, sourced and opens from the last actual
+    errors += _validate_longform_chrome(series)       # P71 T30: the two-line source and the title capsule, the long form's alone
     if "left_gutter" in series:
         gutter = series["left_gutter"]
         if isinstance(gutter, bool) or not isinstance(gutter, int) or not 60 <= gutter <= 300:
@@ -3167,6 +3231,8 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         "variant": variant, "title": series.get("title"), "sub": series.get("sub", ""),
         "source": series.get("src"), "quiet_zone": quiet_zone,
         **({"src_style": series["src_style"]} if series.get("src_style") in ("compact",) else {}),   # the design pass (2026-09-07): a citation takes minimal space
+        **({SOURCE_LINES_KEY: [str(x) for x in series[SOURCE_LINES_KEY]]} if _source_lines_ok(series.get(SOURCE_LINES_KEY)) else {}),   # P71 T30: the long form's two-line source (absent: not one key)
+        **({TITLE_STYLE_KEY: series[TITLE_STYLE_KEY]} if series.get(TITLE_STYLE_KEY) in TITLE_STYLES else {}),   # P71 T30: the title in the accent capsule (absent: not one key)
         **({"line_unit": series["line_unit"]} if isinstance(series.get("line_unit"), str) else {}),   # P47 T9: a combo's lines take their own right axis in this unit
         **({"legend_in_sub": True} if series.get("legend_in_sub") else {}),   # the sub names the lines by colour: no inline name (it would repeat and collide)
         **({"tiers": True} if series.get("tiers") is True else {}),   # the macro-chart intake: bars and lines in two bands sharing one x, each on its own scale (a `tiers` LIST is the N-tier builder below, not this key)
@@ -4066,7 +4132,7 @@ def apply_longform(page: dict, preset: str | None = None) -> dict:
     else:
         axes.pop("tag_form", None)
     if page.get("builder") == PANELS:   # P69 T8b: each panel's end tags fitted to ITS box; one key for the page
-        return _apply_longform_panels(page)
+        return _chrome_room(_apply_longform_panels(page))
     key = longform_key(page)   # P69 T10: the names the end tags gave up, and the size their one row is set in
     axes.pop("key_px", None)
     if key:
@@ -4074,6 +4140,30 @@ def apply_longform(page: dict, preset: str | None = None) -> dict:
         axes["key_px"] = longform_key_px(page)
     else:
         axes.pop("key", None)
+    return _chrome_room(page)
+
+
+def _chrome_room(page: dict) -> dict:
+    """P71 T30: a page naming the long form's chrome carries a WARN (CHROME_WARN) when the two options take more than
+    CHROME_ROOM_SHARE of its chart box - the box with them against the box without, both the estimate's
+    (`_longform_full_boxes`, held to the engine's page by test_longform_chrome). Re-fitted on every call (a stale finding
+    is dropped); a page naming neither option is never touched. In place; the page is returned."""
+    named = [k for k in (SOURCE_LINES_KEY, TITLE_STYLE_KEY) if page.get(k)]
+    if not named:
+        return page
+    kept = [w for w in page.get("warnings") or [] if not str(w).startswith(CHROME_WARN)]
+    w_s, h_s = STAGE_PX["16:9"]
+    h_on = _longform_full_boxes(page, w_s, h_s)["chart"]["h"]
+    h_off = _longform_full_boxes({k: v for k, v in page.items() if k not in named}, w_s, h_s)["chart"]["h"]
+    if h_off > 0 and h_on < (1 - CHROME_ROOM_SHARE) * h_off:
+        preset = (page.get("axes") or {}).get("type_scale") or LONGFORM_DEFAULT_PRESET
+        kept.append(f"{CHROME_WARN} {' and '.join(named)} at longform:{preset} leave the chart box {h_on:.0f} px of the "
+                    f"{h_off:.0f} it has without them ({100 * (1 - h_on / h_off):.0f} % taken, over "
+                    f"{100 * CHROME_ROOM_SHARE:.0f} %) - read the frame; drop one, or take a smaller preset (P71 T30, s106)")
+    if kept:
+        page["warnings"] = kept
+    else:
+        page.pop("warnings", None)
     return page
 
 
@@ -4575,12 +4665,21 @@ def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     room = int(spec.get(CHAPTER_ROOM_KEY) or 0)   # P70 T9: the whole CSS px the title moves down for a chapter pill
     title_y = _punch_pt(title_frac) * h_s + room * PUNCH_SCALE   # a room of 0 adds 0.0: the page it always was, to the bit
     ink_w = LAND_PHONE_SAFE_RIGHT * w_s - ink_x
+    # P71 T30: the title's capsule pads its box (CSS px, ems of the title's own size) and outdents it by its side pad, so
+    # its words keep the column's left and its right edge stays inside the safe column; a page naming none pads 0
+    cap = spec.get(TITLE_STYLE_KEY) == "capsule"
+    pad_v, pad_h = ((round(TITLE_CAPSULE_EM[k] * round(t["title"] / PUNCH_SCALE, 3), 3) if cap else 0.0)
+                    for k in ("pad_v", "pad_h"))
+    wrap_w = {"title": ink_w - pad_h * PUNCH_SCALE, "sub": ink_w, "source": ink_w}
     # the engine lays the ink out in the page's own CSS px and READS it back whole (offsetTop / offsetHeight), so the
     # layout's heights are snapped to whole CSS px here too; the boxes report the ink's own (unsnapped) extent
-    lines = {role: (max(1, longform_lines(spec.get(key), role, t[size], ink_w)) if str(spec.get(key) or "").strip() else 0)
+    lines = {role: (max(1, longform_lines(spec.get(key), role, t[size], wrap_w[role])) if str(spec.get(key) or "").strip() else 0)
              for role, key, size in (("title", "title", "title"), ("sub", "sub", "sub"), ("source", "source", "src"))}
+    if _source_lines_ok(spec.get(SOURCE_LINES_KEY)):   # P71 T30: two lines written as two, each wrapping in the column
+        lines["source"] = sum(max(1, longform_lines(ln, "source", t["src"], ink_w)) for ln in spec[SOURCE_LINES_KEY])
     css_h = {role: lines[role] * round(t[size] / PUNCH_SCALE, 3) * LONGFORM_LINE_H
              for role, size in (("title", "title"), ("sub", "sub"), ("source", "src"))}
+    css_h["title"] += 2 * pad_v
     whole = lambda v: math.floor(v + 0.5)  # noqa: E731
     rend = lambda css_y: h_s / 2 + (css_y - h_s / 2) * PUNCH_SCALE  # noqa: E731
     title_top = whole(title_frac * h_s) + room
@@ -4606,7 +4705,7 @@ def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
         floor, foot = g["bars_b"], g["bars_b"] + g["xlab_dy"] + 1.4 * g["tick"]
     ylab = LONGFORM_YLAB_GAP_PX + LONGFORM_ASCENT * t["tick"] if (spec.get("axes") or {}).get("ylabel") else 0.0
     out = {
-        "title": _box(ink_x, title_y, ink_w, title_h),
+        "title": _box(ink_x - pad_h * PUNCH_SCALE, title_y, ink_w + pad_h * PUNCH_SCALE, title_h),   # P71 T30: a capsule's outdent
         "sub": _box(ink_x, sub_y, ink_w, sub_h),
         "chart": _box(cx, top, vw * s, bot - top),
         "plot": _box(cx + left * s, top + tu * s - ylab, (vw - left - right) * s, (foot - tu) * s + ylab),
@@ -4928,6 +5027,9 @@ def page_ink_key(spec: dict) -> str:
         "ylabel": (spec.get("axes") or {}).get("ylabel"),
         "tiers_n": len(spec.get("tiers")) if isinstance(spec.get("tiers"), list) else 0,
     }
+    for k in (SOURCE_LINES_KEY, TITLE_STYLE_KEY):   # P71 T30: the two-line source and the capsule move boxes (keyed only when named)
+        if spec.get(k):
+            ink[k] = spec[k]
     if spec.get("builder") == PANELS:   # P69 T8b: the panel count lays the boxes out (keyed only here: every other key stands)
         ink["panels_n"] = len(spec.get(PANELS_KEY) or [])
         kinds = [str(p.get("builder") or PANEL_LINE) for p in spec.get(PANELS_KEY) or [] if isinstance(p, dict)]

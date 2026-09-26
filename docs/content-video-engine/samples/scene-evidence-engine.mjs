@@ -1188,7 +1188,25 @@ async function mount(doc) {
                     writes their `opacity`). At full ink the attribute is REMOVED, so every frame before the word - and
                     every page with no solo at all - is the page it was, to the byte.
        the light  - a lit stretch (species/lit_stretch.mjs) on a muted series mutes WITH its series: it is painted first
-                    in the frame and the solo multiplies what it wrote. A light on the named series keeps its ink. */
+                    in the frame and the solo multiplies what it wrote. A light on the named series keeps its ink.
+
+     THE LONG FORM'S CHROME (P71 T30; the Bravos harvest v2's S9, "the legend chip turns accent when its series is
+     isolated": STK 04:14, BOOM 00:55 / 01:04 / 01:07 / 15:32 / 15:58.5). JPN keeps its legend; STK and BOOM fill the
+     named series' legend LABEL with the page's one accent - whatever the series' colour (BOOM 00:56: the teal "Dotcom
+     Boom" in crimson) - and leave its dash its colour. So on a LONG-FORM page (the state carries `lfType`) the solo also
+     reaches the key and the end badge, on its own clock; a short's page has neither and is left exactly as it was:
+       the key pill  - the named series' pill fills with the page's accent at its LIFT (SOLO_ACCENT.FILL, `--lp-acc`: the
+                       sunflower callout capsule with charcoal type - P71 T9's axis_tag made the same mapping), laid as an
+                       inset box-shadow, a channel the pill's build and the badge ladder never write, removed at rest; its
+                       dot keeps its line's colour. Every other pill takes the solo's alpha on its opacity (the ladder
+                       rewrites it every frame, before the perform layer runs - the lit stretch's own pattern).
+       the end badge - the named line's end tag (its value and its chip) turns the page's accent, its type easing
+                       from its series' ink to the accent at the lift; the others mute with their series (fill-opacity,
+                       above). A capsule drawn by the tag's own stroke was tried and read as letter-shaped blobs on the
+                       frame (the first cut's frame read), and a boxed badge needs a rect the line builder does not
+                       draw - so the badge's light is its ink. Its style is stashed on the element at the first lit
+                       frame (SOLO_ACCENT.STASH) and handed back to the attribute at rest - so an unsolo, or a seek back
+                       before the word, is the page it was. */
 
   const SOLO = Object.freeze({
     DIM: 0.42,     /* E99 s117 (2): the muted marks' alpha - harder than E67's 0.45: lit/muted 5.24 at 1024 px (Bravos 3.39-5.29; 0.30 read 5.9, over it) */
@@ -1197,6 +1215,12 @@ async function mount(doc) {
     MIN_S: 0.2,    /* the mute's shortest ease: under it the dim is a flicker (build_scene_timeline_f.SOLO_DUR_S) */
     MAX_S: 1.5,    /* ... and its longest: past it the isolate is a fade the word has left behind */
     EPS: 5e-4,     /* an alpha this close to 1 is full ink: the attribute is removed, never written as 1.000 */
+  });
+
+  /* P71 T30: the long form's chrome on a solo - the key pill and the end badge take the page's accent */
+  const SOLO_ACCENT = Object.freeze({
+    FILL: "var(--lp-acc)",   /* the page's one accent (#F5B72E, the template's callout capsule `rect.cpill`); the pill's name keeps its charcoal KEY_INK */
+    STASH: "data-solo-style",   /* an end badge's own style attribute, kept while it is lit ("" = it had none) */
   });
 
   const solo01 = (v) => Math.min(1, Math.max(0, v));
@@ -1241,6 +1265,43 @@ async function mount(doc) {
     else el.setAttribute(attr, Math.max(0, a).toFixed(3));
   };
 
+  /* P71 T30: one colour at a share `u` of its full ink - the colour itself at full (so a landed light is the accent's own) */
+  const soloMix = (col, u) => (u >= 1 - SOLO.EPS ? col : "color-mix(in srgb, " + col + " " + (100 * solo01(u)).toFixed(1) + "%, transparent)");
+
+  /* ... one element's STYLE lit by `props` ([property, value] pairs), or handed back at rest (`props` null): the first lit
+     write stashes the attribute on the element, the rest restores it to the byte - a pure function of t over the DOM */
+  const soloStyle = (el, props) => {
+    if (!el || !el.style) return;
+    const had = el.getAttribute(SOLO_ACCENT.STASH);
+    if (!props) {
+      if (had === null) return;
+      if (had === "") el.removeAttribute("style"); else el.setAttribute("style", had);
+      el.removeAttribute(SOLO_ACCENT.STASH);
+      return;
+    }
+    if (had === null) el.setAttribute(SOLO_ACCENT.STASH, el.getAttribute("style") || "");
+    for (const [k, v] of props) el.style.setProperty(k, v);
+  };
+
+  /* ... the END BADGE at lift `u`: its words (the value and its chip's) ease from their series' ink to the accent */
+  const soloBadge = (pp, u) => {
+    const nm = pp && pp.name, chip = nm && nm.querySelector ? nm.querySelector("tspan.tagchip") : null;
+    if (!nm) return;
+    if (u <= SOLO.EPS) { soloStyle(nm, null); soloStyle(chip, null); return; }
+    const ink = (own) => (u >= 1 - SOLO.EPS ? SOLO_ACCENT.FILL
+      : "color-mix(in srgb, " + SOLO_ACCENT.FILL + " " + (100 * u).toFixed(1) + "%, " + (own || "currentColor") + ")");
+    soloStyle(nm, [["fill", ink(nm.getAttribute("fill"))]]);
+    soloStyle(chip, [["fill", ink(chip && chip.getAttribute("fill"))]]);
+  };
+
+  /* ... a KEY PILL at alpha `a` and lift `u`: the others fade with their series, the named one fills with the accent */
+  const soloKey = (kp, a, u) => {
+    if (!kp || !kp.el || !kp.el.style) return;
+    if (a < 1 - SOLO.EPS) kp.el.style.opacity = ((+kp.el.style.opacity || 0) * a).toFixed(3);
+    if (u > SOLO.EPS) kp.el.style.setProperty("box-shadow", "inset 0 0 0 999px " + soloMix(SOLO_ACCENT.FILL, u));
+    else kp.el.style.removeProperty("box-shadow");
+  };
+
   /* THE PAINTER (P69 T37). `sd` is the perform layer's built solo (`evs`, the page's `lits`), `st` the page state - every
      chart state of it is written (a rescale's derived state carries the same series), so a seek into any state is the
      play. It reads nothing from the engine but its arguments; `ctx` is the page species context - its `bloom` and `thin`
@@ -1248,13 +1309,20 @@ async function mount(doc) {
   const paintSolo = (sd, t, st, ctx) => {
     const states = st && Array.isArray(st.states) && st.states.length ? st.states : [st];
     for (const S of states) {
+      const lf = !!(S && S.lfType);   /* P71 T30: a long-form page's chrome follows the solo too */
       for (const pp of (S && S.paths) || []) {
-        const key = "s:" + (pp.si | 0), a = soloAlpha(sd.evs, key, t), m = solo01((1 - a) / (1 - SOLO.DIM));
+        const key = "s:" + (pp.si | 0), a = soloAlpha(sd.evs, key, t), m = solo01((1 - a) / (1 - SOLO.DIM)), lift = soloLift(sd.evs, key, t);
         soloWrite(pp.p, "opacity", a); soloWrite(pp.tip, "fill-opacity", a); soloWrite(pp.name, "fill-opacity", a);
         /* E99 s117 (2): the named line's bloom lifts, a muted one's halo leaves and its stroke thins - the engine's DOM
            work, handed in through the page context (absent, a bare test, the alpha above is the whole solo) */
-        if (ctx && ctx.bloom) ctx.bloom(S, pp, soloLift(sd.evs, key, t), m, SOLO.LIFT);
+        if (ctx && ctx.bloom) ctx.bloom(S, pp, lift, m, SOLO.LIFT);
         if (ctx && ctx.thin) ctx.thin(S, pp, m, SOLO.THIN);
+        if (lf) soloBadge(pp, lift);
+      }
+      if (lf) for (const kp of (S && S.keyPills) || []) {
+        if (kp.panel != null) continue;   /* a panels page's key follows its panel focus (lpPaintPanelKey), not a series solo */
+        const key = "s:" + (kp.series | 0);
+        soloKey(kp, soloAlpha(sd.evs, key, t), soloLift(sd.evs, key, t));
       }
       ((S && S.bars) || []).forEach((b, i) => {
         const a = soloAlpha(sd.evs, "b:" + (Number.isInteger(b.i) ? b.i : i), t);
@@ -10019,6 +10087,10 @@ async function mount(doc) {
     const cf = toF(c), r = P.reduce((s, p) => s + Math.hypot(...[0, 1].map((k) => toF(p)[k] - cf[k])), 0) / P.length;
     return { x: Math.min(fw, Math.max(0, cf[0])), y: Math.min(fh, Math.max(0, cf[1])), r };   /* r: the splotch's own mean radius, the size the seed stain starts at */
   };
+  /* P71 T30 (the Bravos harvest v2's S11; D40 04:16 - the TITLE "Obligations" in a crimson capsule, 304 x 79 px round
+     45 px of type: pad 17 v / 22 h, a ~2 px corner): a long-form page's `title_style: capsule` sets its title in the page's
+     accent capsule - ledger_page.TITLE_CAPSULE_EM, value for value, in ems of the title's own size */
+  const LP_TITLE_CAPSULE = Object.freeze({ pad_v: 0.37, pad_h: 0.48, radius: 0.05 });
   const buildLedger = (el, scene) => {
     const pg = scene.world.page || {}, seed = 0x1B1EEDCA ^ (scene.scene_id || "").length;
     el.querySelectorAll(".lp").forEach((x) => x.remove());
@@ -10136,9 +10208,15 @@ async function mount(doc) {
     const cardP = !!LF && lpReadability(pg) === LP_READABILITY.CARD, cardK = cardP ? lpCardK(pg) : 1, cPad = cardP ? LP_CARD.PAD_PX * cardK : 0;   /* P69 T10c: a card, its scale and its margin (rendered px) */
     const src = lpEl("div", "lp-ink lp-src" + (pg.src_style === "compact" ? " compact" : ""), page);   /* the design pass: a citation takes minimal space */
     const subText = PORTRAIT ? lpFirstClause(pg.sub || "", true) : (pg.sub || ""), srcText = PORTRAIT ? lpFirstClause(pg.source || "", false) : (pg.source || "");
+    /* P71 T30 (S10; BRAVOS-LONGFORM-CHART-SPEC.md (b) `source: {lines: [...]}`): a long-form page's `source_lines` - "Date:
+       ..." then "Source: ..." - is written as TWO lines, each its own block wrapping by word in the source's column; the
+       stack (lpLongformBox) measures the two as the source's height, so they stand clear of the caption strip */
+    const SRC2 = LF && !cardP && Array.isArray(pg.source_lines) && pg.source_lines.length === 2 ? pg.source_lines.map(String) : null;
     const glyphs = PORTRAIT
       ? [...lpGlyphsWrap(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, subText, seed + 2), ...lpGlyphsWrap(src, srcText, seed + 1)]
-      : [...(LF ? lpGlyphsWrap : lpGlyphs)(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, subText, seed + 2), ...(LF ? lpGlyphsWrap : lpGlyphs)(src, srcText, seed + 1)];   /* LF: the title and the source WRAP in their column, by word */
+      : [...(LF ? lpGlyphsWrap : lpGlyphs)(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, subText, seed + 2),
+         ...(SRC2 ? SRC2.flatMap((ln, k) => lpGlyphsWrap(lpEl("div", "lp-src-line", src), ln, seed + 1 + 5 * k))   /* P71 T30: two lines, written in turn */
+           : (LF ? lpGlyphsWrap : lpGlyphs)(src, srcText, seed + 1))];   /* LF: the title and the source WRAP in their column, by word */
     /* chart area inside the field, leaving the declared quiet zone for docks (s9.28 B3/C2) */
     const qz = pg.quiet_zone || null;
     const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
@@ -10203,6 +10281,16 @@ async function mount(doc) {
         for (const [el, px] of [[title, T.title], [subEl, T.sub], [src, T.src]]) {
           el.style.fontSize = (px / ps).toFixed(3) + "px"; el.style.lineHeight = String(LP_LONGFORM.LINE_H);
           el.style.width = col; el.style.whiteSpace = "normal"; el.style.left = title.style.left;
+        }
+        /* P71 T30: the capsule hugs the title's words and pads them (so the sub, the key and the chart stand under its
+           foot), outdented by its side pad so the words keep the column's left while its right edge stays inside the
+           safe column; charcoal on the accent, and T37c's glow off inside it (Bravos's capsule type carries none) */
+        if (!cardP && pg.title_style === "capsule") {
+          const f = +(T.title / ps).toFixed(3), pv = +(LP_TITLE_CAPSULE.pad_v * f).toFixed(3), ph = +(LP_TITLE_CAPSULE.pad_h * f).toFixed(3);
+          Object.assign(title.style, { width: "fit-content", maxWidth: "calc(" + col + " + " + ph + "px)", padding: pv + "px " + ph + "px",
+                                       marginLeft: -ph + "px", background: "var(--lp-acc)", color: "var(--lp-char)",
+                                       borderRadius: +(LP_TITLE_CAPSULE.radius * f).toFixed(3) + "px" });
+          title.style.setProperty("--lp-title-glow", "none");
         }
         /* P70 T9 (option A): a page inside a chapter's window makes ROOM for the pill - its title moves down by the
            compiler's `chapter_room` (whole CSS px: the pill's height and Bravos's 16 px under it), and the sub, the key

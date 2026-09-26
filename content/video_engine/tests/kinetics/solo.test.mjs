@@ -4,7 +4,7 @@
 // function of t, continuous across a hand-over), the painter's writes and the module rule.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { SOLO, soloKeyOf, soloEvents, soloAlpha, soloLift, soloWrite, paintSolo } from "../../scripts/species/solo.mjs";
+import { SOLO, SOLO_ACCENT, soloKeyOf, soloEvents, soloAlpha, soloLift, soloWrite, paintSolo } from "../../scripts/species/solo.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 const solo = (o = {}) => Object.assign({ kind: "solo", at: 10, dur: 0.5, series: 1 }, o);
@@ -165,4 +165,72 @@ test("the painter hands the engine each line's lift and mute - the named line li
   calls.length = 0;
   paintSolo({ evs: soloEvents([solo()], []), lits: [] }, 9, st, ctx);
   assert.ok(calls.every((c) => (c[0] === "bloom" ? c[2] === 0 && c[3] === 0 : c[2] === 0)), "before the word: every line at its own base");
+});
+
+// ---------------------------------------------------------------- P71 T30: the long form's key pill and end badge (S9)
+const styled = (init = {}, style = null) => {
+  const el = rec(init), props = {};
+  el.style = { setProperty: (k, v) => { props[k] = String(v); }, removeProperty: (k) => { delete props[k]; }, props,
+               get opacity() { return props.opacity || ""; }, set opacity(v) { props.opacity = String(v); } };
+  if (style !== null) el.a.style = style;
+  return el;
+};
+const lfPage = () => {
+  const chip = (si) => styled({ fill: "#C" + si });
+  const pp = (si) => { const name = styled({ fill: "#N" + si, opacity: "1" }, "fill:#N" + si + ";"), c = chip(si);
+    name.querySelector = (sel) => (sel === "tspan.tagchip" ? c : null); return { si, muted: false, p: rec(), tip: rec(), name, chip: c }; };
+  const kp = (series, panel = null) => { const el = styled(); el.style.opacity = "1"; return { el, series, panel }; };
+  const st = { paths: [pp(0), pp(1), pp(2)], bars: [], lfType: { form: "value" }, keyPills: [kp(0), kp(1), kp(2)] };
+  st.states = [st];
+  return st;
+};
+
+test("P71 T30: on a long-form page the named series' key pill fills with the accent and the others fade with their series", () => {
+  const st = lfPage(), sd = { evs: soloEvents([solo()], [{ at: 20, dur: 1 }]), lits: [] };
+  paintSolo(sd, 9, st, {});
+  for (const kp of st.keyPills) assert.ok(!("box-shadow" in kp.el.style.props) && kp.el.style.opacity === "1", "before the word: the key it was");
+  for (const kp of st.keyPills) kp.el.style.opacity = "1";   /* the badge ladder rewrites the opacity every frame */
+  paintSolo(sd, 11, st, {});
+  assert.equal(st.keyPills[1].el.style.props["box-shadow"], "inset 0 0 0 999px " + SOLO_ACCENT.FILL, "landed: the accent's own colour");
+  assert.equal(st.keyPills[1].el.style.opacity, "1");
+  for (const i of [0, 2]) {
+    assert.equal(st.keyPills[i].el.style.opacity, SOLO.DIM.toFixed(3));
+    assert.ok(!("box-shadow" in st.keyPills[i].el.style.props));
+  }
+  for (const kp of st.keyPills) kp.el.style.opacity = "1";
+  paintSolo(sd, 10.25, st, {});
+  assert.match(st.keyPills[1].el.style.props["box-shadow"], /color-mix\(in srgb, var\(--lp-acc\) 50\.0%, transparent\)/, "half the word, half the fill");
+  for (const kp of st.keyPills) kp.el.style.opacity = "1";
+  paintSolo(sd, 22, st, {});
+  for (const kp of st.keyPills) assert.ok(!("box-shadow" in kp.el.style.props) && kp.el.style.opacity === "1", "a release hands the key back");
+});
+
+test("P71 T30: the named line's end badge turns the accent; a release restores its style to the byte", () => {
+  const st = lfPage(), sd = { evs: soloEvents([solo()], [{ at: 20, dur: 1 }]), lits: [] };
+  paintSolo(sd, 11, st, {});
+  const nm = st.paths[1].name, chip = st.paths[1].chip;
+  assert.equal(nm.style.props.fill, SOLO_ACCENT.FILL, "landed: the accent's own colour");
+  assert.ok(!("stroke" in nm.style.props), "its light is its ink - no capsule stroke");
+  assert.equal(chip.style.props.fill, SOLO_ACCENT.FILL, "the chip's words turn with the tag's");
+  assert.equal(nm.getAttribute(SOLO_ACCENT.STASH), "fill:#N1;", "the tag's own style is kept while it is lit");
+  assert.equal(chip.getAttribute(SOLO_ACCENT.STASH), "", "a chip with no style of its own keeps that too");
+  for (const i of [0, 2]) assert.ok(!("fill" in st.paths[i].name.style.props) && st.paths[i].name.getAttribute(SOLO_ACCENT.STASH) === null);
+  paintSolo(sd, 10.25, st, {});
+  assert.equal(nm.style.props.fill, "color-mix(in srgb, var(--lp-acc) 50.0%, #N1)", "half the word, half the way to the accent");
+  paintSolo(sd, 22, st, {});
+  assert.equal(nm.getAttribute("style"), "fill:#N1;");
+  assert.equal(nm.getAttribute(SOLO_ACCENT.STASH), null);
+  assert.equal(chip.getAttribute("style"), null, "the chip had no style attribute, and has none again");
+});
+
+test("P71 T30: a short's page (no long-form type) and a panels page's key are left exactly as they were", () => {
+  const st = lfPage();
+  delete st.lfType;
+  paintSolo({ evs: soloEvents([solo()], []), lits: [] }, 11, st, {});
+  for (const pp of st.paths) assert.ok(!("fill" in pp.name.style.props) && pp.name.getAttribute(SOLO_ACCENT.STASH) === null);
+  for (const kp of st.keyPills) assert.ok(!("box-shadow" in kp.el.style.props) && kp.el.style.opacity === "1");
+  const lf = lfPage();
+  for (const kp of lf.keyPills) kp.panel = 0;
+  paintSolo({ evs: soloEvents([solo()], []), lits: [] }, 11, lf, {});
+  for (const kp of lf.keyPills) assert.ok(!("box-shadow" in kp.el.style.props) && kp.el.style.opacity === "1");
 });
