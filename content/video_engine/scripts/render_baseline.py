@@ -50,6 +50,7 @@ HAND_FACE_URL = re.compile(r"url\((fonts/kalam/[a-z0-9-]+\.woff2)\)")
 FLAG_FRAMES = {
     "chart-callout@curvature_stroke": ("chart-callout", {"curvature_stroke": True}, 10.3),
     "ledger-page-mid-build@curvature_stroke": ("ledger-page-mid-build", {"curvature_stroke": True}, 5.6),
+    "chart-callout@stroke_width": ("chart-callout", {"curvature_stroke": True, "stroke_width": True}, 10.3),   # P72 T46b / R26-106 (a): the ring mid-draw as its width profile (the pen's clock and its pooled ink)
     "ledger-soak-page@km_ink": ("ledger-soak-page", {"km_ink": True}, 2.7),
     "ledger-soak-page@analytic_spring": ("ledger-soak-page", {"analytic_spring": True}, 7.86),
     "ledger-soak-page@area_squash": ("ledger-soak-page", {"analytic_spring": True, "area_squash": True}, 7.86),

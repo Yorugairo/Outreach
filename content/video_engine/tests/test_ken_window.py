@@ -245,12 +245,15 @@ def test_a_ken_with_no_window_runs_the_scene_clock_it_always_ran(ken_reads):
 
 
 def test_the_seal_ground_reads_the_same_ken_clock_as_the_paint():
-    """P72 T11's `worldXfAt` mirrors paint's pose ("a change there is mirrored here"): both read ONE ken clock."""
+    """P72 T11's `worldXfAt` and paint's pose read ONE ken clock - since P72 T46b (R26-361 (c)) through one function,
+    `worldPoseAt`, which both call."""
     src = ENGINE.read_text(encoding="utf-8")
     body = src[src.index("const worldXfAt = "):src.index("const cssMatrix = ")]
-    assert "kenProgress(scene, t0)" in body, "worldXfAt reads the ken through the shared windowed clock"
+    assert "worldPoseAt(scene, t0)" in body, "worldXfAt reads the pose paint writes"
+    pose = src[src.index("const worldPoseAt = "):src.index("const worldXfAt = ")]
+    assert "kenProgress(scene, t)" in pose, "... and the pose reads the ken through the shared windowed clock"
     paint = src[src.index("const paint = (el, scene, dx = 0) => {"):src.index("paintPlanes(el, plies, camXfNow")]
-    assert "kenProgress(scene, t)" in paint
+    assert "worldPoseAt(scene, t, dx)" in paint
     clock = src[src.index("const kenProgress = "):src.index("const worldXfAt = ")]
     assert src.count("clamp01((lifeFrom(scene.span[0], t") == 1 and "clamp01((lifeFrom(scene.span[0], t" in clock, \
         "the scene's own ken clock lives in kenProgress alone - no second, unwindowed copy is left"
@@ -315,8 +318,10 @@ def test_a_flat_plates_bare_drift_is_the_walk_it_always_was():
     """R26-164's own line: "a bare drift stays the flat plate's" - the flat plate's pose is idleDriftCss of the free walk."""
     src = ENGINE.read_text(encoding="utf-8")
     paint = src[src.index("const paint = (el, scene, dx = 0) => {"):src.index("paintPlanes(el, plies, camXfNow")]
-    assert 'const idleDrift = (k) => (KIN.plate_idle_paints === true ? idleDriftCss(idlePose, k) : "");' in paint
-    assert "const restFlat = worldRest + idleDrift(PARALLAX.FLAT);" in paint, "the flat world's rest is the free walk"
+    pose = src[src.index("const worldPoseAt = "):src.index("const worldXfAt = ")]   # P72 T46b: paint's pose lives here
+    assert 'const idleDrift = (k) => (KIN.plate_idle_paints === true ? idleDriftCss(idlePose, k) : "");' in pose
+    assert "const restFlat = worldRest + idleDrift(PARALLAX.FLAT);" in pose, "the flat world's rest is the free walk"
+    assert "worldPoseAt(scene, t, dx)" in paint
     assert "const planePose = plies.length ? driftAlongCam(idlePose, camXfNow, idleAmp) : null;" in paint
     assert "paintPlanes(el, plies, camXfNow, worldRest, planeDrift," in src, "the planes read the walk that follows"
 

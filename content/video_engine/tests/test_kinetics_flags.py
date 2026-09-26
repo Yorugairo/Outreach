@@ -32,7 +32,8 @@ CAPABILITIES = ["curvature_stroke", "analytic_spring", "area_squash", "arap_morp
                 "km_ink",      # + Kubelka-Munk on overlapping ink (44 s44.1, P43 T3, 2026-09-05)
                 "camera",      # + P49 T2 the persistent camera (2026-09-10)
                 "idle",        # + the named subtle idle on every held thing (E49, P47 T5, 2026-09-06)
-                "stop_action"] # + the arrivals: throw / land with a mass (P47 T1, 2026-09-06; authored per dock, so no flag golden)
+                "stop_action", # + the arrivals: throw / land with a mass (P47 T1, 2026-09-06; authored per dock, so no flag golden)
+                "stroke_width"] # + the true vector brush: a hand-drawn stroke's width profile, prof.w (R26-106 (a), P72 T46b, 2026-09-26)
 
 
 def _defaults_block() -> dict[str, str]:

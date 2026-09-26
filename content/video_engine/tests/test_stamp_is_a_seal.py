@@ -9,7 +9,7 @@ tests/kinetics/stopaction-stamp.test.mjs. What this file pins:
 
   (1) the grammar: `ring_text` / `ring_text_bottom` are a STAMPED chip's (the stamp form landing by the stamp arrival);
       anywhere else they are refused by name, and a dock stamp asking for a seal is refused naming s87 / s121 - a bare
-      prop stays bare, and no dock payload is a badge or a verdict today;
+      prop stays bare, and a dock's verdict is a chart card's tile (P71 T19), never a seal (P72 T46b, R26-391 (b));
   (2) the seal is the room the AUTHORED mark reserves (`seal_r`) and the art GROWS to fill it by its painted pixels
       (THE MARK TAKES THE ROOM); the fit's ring and approach are read round the SEAL, where the impact ring is thrown from;
   (3) ring text is drawn at the SOURCE's proportion and never widens the seal - under the s90 floor a WARN with numbers;
@@ -91,7 +91,7 @@ def test_a_DOCK_stamp_asking_for_a_seal_is_REFUSED_by_name_citing_s87_and_s121(k
         B.dock_opts(opts)
     msg = str(exc.value)
     assert f"dock option {key!r}" in msg and "E99 s87" in msg and "E99 s121" in msg, msg
-    assert "a bare prop stays bare" in msg and "no dock payload is a badge or a verdict" in msg, msg
+    assert "a bare prop stays bare" in msg and "a chart card's `verdict` tile (P71 T19)" in msg, msg
 
 
 # ---- (2) the seal is the room the authored mark reserves, and the mark grows to fill it -----------------------------

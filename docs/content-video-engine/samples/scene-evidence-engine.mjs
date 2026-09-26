@@ -57,6 +57,7 @@ async function mount(doc) {
     idle:             false,   // E49 the named subtle idle on every held thing - page, plate, dock, pill, caption (P47 T5)
     camera:           false,   // P49 T2 the persistent camera: the three species through kinetics/camera.mjs (pixel-identical), authored keys per scene, the __camera probe
     stop_action:      false,   // P47 T1 the arrivals: a dock or a pill declared arrive: throw | land with a mass
+    stroke_width:     false,   // R26-106 (a) the true vector brush: a hand-drawn stroke is its width profile (prof.w), a filled outline (P72 T46b)
   });
   /* THE DIALS (R26-55, 2026-09-12). The same map carries a second, smaller thing: a name whose VALUE is read, not
      a switch that is on or off - `press_face`, which of the three candidate display faces a pulled phrase is set
@@ -413,7 +414,10 @@ async function mount(doc) {
     for (let i = 1; i < n; i++) t[i] = t[i - 1] + (s[i] - s[i - 1]) * 0.5 * (1 / v[i - 1] + 1 / v[i]);
     const T = n > 1 && t[n - 1] > 0 ? t[n - 1] : 1;
     for (let i = 0; i < n; i++) t[i] /= T;
-    return { n, L: n ? s[n - 1] : 0, s, kappa, v, w, t, vMax };
+    let wArea = 0;   /* P72 T46b: the width's arclength-weighted mean - the stroke's own weight, which the brush holds at its authored width */
+    for (let i = 1; i < n; i++) wArea += (s[i] - s[i - 1]) * 0.5 * (w[i - 1] + w[i]);
+    const L = n ? s[n - 1] : 0, wMean = L > 0 ? wArea / L : (n ? w[0] : 1);
+    return { n, L, s, kappa, v, w, t, vMax, wMean };
   };
 
   const bracket = (arr, x, n) => { let lo = 0, hi = n - 1; while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (arr[mid] <= x) lo = mid; else hi = mid; } return [lo, hi]; };
@@ -434,6 +438,41 @@ async function mount(doc) {
     if (x >= s[n - 1]) return arr[n - 1];
     const [lo, hi] = bracket(s, x, n), ds = s[hi] - s[lo];
     return ds > 0 ? arr[lo] + (x - s[lo]) * (arr[hi] - arr[lo]) / ds : arr[lo];
+  };
+
+  /* P72 T46b (R26-106 (a) / R26-365 (a), grill Q4 (a)) - THE WIDTH THE PEN DRAWS. `pts` the profile's own samples along the
+     path (the caller's equal-arclength points, strokeProfile's input), `s1` the arclength drawn so far, `sw` the stroke's
+     authored width, `tip` the path's own point at s1 (else the chord between the two samples about it). The drawn prefix is
+     every sample short of s1 and the tip; each carries a HALF-width sw / 2 x w(s) / wMean - prof.w (the same profile the
+     pen's speed comes from, read at the sample by strokeAt) about its arclength-weighted mean, so the WHOLE stroke carries
+     the authored weight (its ink area is the constant-width stroke's) and the profile only moves ink out of the fast
+     straights into the slow curves, where the nib pools. DOM-free. */
+  const strokeWidths = (prof, pts, s1, sw, tip = null) => {
+    const L = prof.L, x = Math.max(0, Math.min(L, +s1 || 0)), out = [], hw = [], half = (+sw || 0) / 2, wm = prof.wMean || 1;
+    if (!(x > 0) || prof.n < 2) return { pts: out, s: 0, hw };
+    for (let i = 0; i < prof.n && prof.s[i] < x - 1e-9; i++) { out.push({ x: pts[i].x, y: pts[i].y }); hw.push(half * strokeAt(prof, prof.w, prof.s[i]) / wm); }
+    let q = tip;
+    if (!q) {
+      const [lo, hi] = bracket(prof.s, x, prof.n), ds = prof.s[hi] - prof.s[lo], u = ds > 0 ? (x - prof.s[lo]) / ds : 0;
+      q = { x: pts[lo].x + u * (pts[hi].x - pts[lo].x), y: pts[lo].y + u * (pts[hi].y - pts[lo].y) };
+    }
+    out.push({ x: q.x, y: q.y }); hw.push(half * strokeAt(prof, prof.w, x) / wm);
+    return { pts: out, s: x, hw };
+  };
+
+  /* ... and its OUTLINE: each point offset along its normal by its half-width, out along one side and back along the other
+     (the tangent a central difference, one-sided at the ends; a repeated point keeps the tangent before it). The caller
+     closes it with a round cap at each end - the marker's nib. */
+  const strokeOutline = (pts, hw) => {
+    const n = pts.length, left = [], right = [];
+    let tx = 1, ty = 0;
+    for (let i = 0; i < n; i++) {
+      const a = pts[Math.max(0, i - 1)], b = pts[Math.min(n - 1, i + 1)], dx = b.x - a.x, dy = b.y - a.y, m = Math.hypot(dx, dy);
+      if (m > 1e-9) { tx = dx / m; ty = dy / m; }
+      left.push({ x: pts[i].x - ty * hw[i], y: pts[i].y + tx * hw[i] });
+      right.push({ x: pts[i].x + ty * hw[i], y: pts[i].y - tx * hw[i] });
+    }
+    return left.concat(right.reverse());
   };
   /* KINETICS:END */
   /* KINETICS:BEGIN clothoid */
@@ -20996,20 +21035,63 @@ async function mount(doc) {
      every frame, so the cache is keyed by the d attribute) and inverted per frame. strokeFrac returns the drawn fraction of
      the path, or null when the flag is off so each caller keeps its own ease as the else branch - byte-identical goldens. */
   const STROKE_PROFILES = new Map();
-  const strokeProf = (path, len) => {
+  /* P72 T46b: the cache holds the samples beside the profile (the brush regrows its outline from them); the profile is
+     computed exactly as it was, so strokeFrac's clock is byte-identical */
+  const strokeGeom = (path, len) => {
     const key = path.getAttribute("d") + "|" + len.toFixed(2);
-    let prof = STROKE_PROFILES.get(key);
-    if (!prof) {
+    let g = STROKE_PROFILES.get(key);
+    if (!g) {
       if (STROKE_PROFILES.size > 96) STROKE_PROFILES.clear();
       const n = Math.max(STROKE.MIN_N, Math.min(STROKE.MAX_N, Math.round(len / STROKE.SAMPLE_PX))), pts = [];
       for (let i = 0; i < n; i++) { const q = path.getPointAtLength(len * i / (n - 1)); pts.push({ x: q.x, y: q.y }); }
-      STROKE_PROFILES.set(key, prof = strokeProfile(pts));
+      STROKE_PROFILES.set(key, g = { prof: strokeProfile(pts), pts });
     }
-    return prof;
+    return g;
   };
+  const strokeProf = (path, len) => strokeGeom(path, len).prof;
   const strokeFrac = (path, len, u) => { if (!kin("curvature_stroke") || !path.getPointAtLength || !(len > 0)) return null;
     const prof = strokeProf(path, len); return prof.L > 0 ? strokeS(prof, u) / prof.L : u; };
-  const drawOn = (path, k) => { const len = path.getTotalLength ? path.getTotalLength() : 1000; path.setAttribute("stroke-dasharray", len);
+  /* P72 T46b (R26-106 (a) / R26-365 (a), grill Q4 (a)) - THE TRUE VECTOR BRUSH, the hand-drawn species first (the callout's
+     ring, the squiggle and the underline - classes .co and .sq, which the crossed chip's X shares). kinetics/stroke.mjs has
+     always computed the pen's WIDTH beside its speed (prof.w, nib pooling: the ink pools where the pen slows into
+     curvature), and nothing drew it - drawOn offsets a dash on a constant-width stroke. Under kinetics.stroke_width the
+     stroke is a FILLED OUTLINE regrown from the drawn prefix every frame: the samples short of the drawn length and the
+     path's own point at it (strokeWidths, each half-width sw / 2 x w(s) / wMean by strokeAt - the whole stroke keeps the
+     authored weight and the ink moves from the straights into the curves), offset along their normals (strokeOutline)
+     and closed by a round cap at each end - the
+     marker, the brush that shipped. The drawn length is the one the dash drew: the pen's clock under curvature_stroke,
+     the species ease otherwise. The outline is the centreline's sibling (`hand-brush`), filled in its computed stroke ink;
+     the centreline itself is hidden. Flag off, drawOn is the dash-offset it always was (the goldens byte-identical). A pure
+     function of t: the outline is rebuilt from the path and k alone. Pen/nib, highlighter, charcoal and dry brush, the
+     chart's own series (b) and whole-image draw-reveals (c) are R26-106's later orders. */
+  const HAND_BRUSH = new Set(["co", "sq"]);
+  const BRUSHES = new WeakMap();
+  const brushD = (w) => {
+    if (w.pts.length < 2) return "";
+    const f = (v) => v.toFixed(2), o = strokeOutline(w.pts, w.hw), n = w.pts.length, hE = w.hw[n - 1], h0 = w.hw[0];
+    let d = "M" + f(o[0].x) + " " + f(o[0].y);
+    for (let i = 1; i < n; i++) d += " L" + f(o[i].x) + " " + f(o[i].y);
+    d += " A" + f(hE) + " " + f(hE) + " 0 0 0 " + f(o[n].x) + " " + f(o[n].y);   /* the cap round the tip */
+    for (let i = n + 1; i < 2 * n; i++) d += " L" + f(o[i].x) + " " + f(o[i].y);
+    return d + " A" + f(h0) + " " + f(h0) + " 0 0 0 " + f(o[0].x) + " " + f(o[0].y) + " Z";   /* ... and round the start */
+  };
+  const drawBrush = (path, len, k) => {
+    const g = strokeGeom(path, len), f = strokeFrac(path, len, clamp01(k)), s1 = len * (f === null ? spEase(k) : f);
+    const cs = getComputedStyle(path), sw = parseFloat(cs.strokeWidth) || 1;
+    const w = strokeWidths(g.prof, g.pts, s1 * g.prof.L / len, sw, s1 > 0 && s1 < len ? path.getPointAtLength(s1) : null);
+    let b = BRUSHES.get(path);
+    if (!b || b.parentNode !== path.parentNode) { b = document.createElementNS(path.namespaceURI, "path"); BRUSHES.set(path, b); path.parentNode.insertBefore(b, path.nextSibling); }
+    b.setAttribute("class", (path.getAttribute("class") || "") + " hand-brush");
+    b.style.fill = cs.stroke; b.style.fillOpacity = cs.strokeOpacity; b.style.stroke = "none";
+    b.setAttribute("d", brushD(w));
+    const ws = w.hw.map((h) => 2 * h);
+    b.dataset.wMin = (ws.length ? Math.min(...ws) : 0).toFixed(3); b.dataset.wMax = (ws.length ? Math.max(...ws) : 0).toFixed(3);
+    b.dataset.drawn = s1.toFixed(2);
+    path.style.visibility = "hidden";   /* the centreline is the outline's guide, never ink */
+  };
+  const drawOn = (path, k) => { const len = path.getTotalLength ? path.getTotalLength() : 1000;
+    if (kin("stroke_width") && HAND_BRUSH.has(path.getAttribute("class")) && path.getPointAtLength && len > 0) return drawBrush(path, len, k);
+    path.setAttribute("stroke-dasharray", len);
     const f = strokeFrac(path, len, clamp01(k)); path.setAttribute("stroke-dashoffset", (len * (1 - (f === null ? spEase(k) : f))).toFixed(1)); };
   /* THE SPECIES PAINTER REGISTRY (P50 T2; the operator's module rule, 2026-09-11: "no new species is written into
      the template's body"). Every species from T2 on is a module under content/video_engine/scripts/species/, inlined
@@ -21472,6 +21554,19 @@ async function mount(doc) {
              bottom: bot ? Object.assign({ text: bot, r: S.BOTTOM_R * u, dy: S.BOTTOM_DY * u }, sealGlyphs(bot, S.BOTTOM_R * u, size, track)) : null };
   };
 
+  /* P72 T46b (R26-361 (a)): THE NAME'S KEYLINE READS THE GROUND THE GOLD LATCHED. The name is set in the seal's ink on a
+     keyline in one of the two named grounds; the keyline followed the row's AUTHORED ink (charcoal under a cream row), so on
+     a mid-tone photo, where the measured ground turns the gold bronze (#544227 on #9A9A9A), the bronze sat in a charcoal
+     keyline at ~1.6:1 - mud. The keyline is the ground the ink was chosen AGAINST: where the seal's ink is darker than the
+     darkest ground measured under it (the gold was darkened to read on a light ground) the keyline is the cream, else the
+     charcoal - one read of the same latched spread (`seal.ground`, sealGoldReport's), fixed at the contact as the gold is.
+     Nothing measured (node, a clip): the authored ink's keyline, byte for byte. */
+  const sealKeyline = (sp, seal) => {
+    const gr = seal && seal.ground;
+    if (gr && gr.n > 0 && Number.isFinite(gr.min)) return sealLum(seal.ink) < gr.min ? CHIP_STAMP.INK.cream : CHIP_STAMP.INK.charcoal;
+    return CHIP_STAMP.INK[sp && sp.ink === "charcoal" ? "cream" : "charcoal"];
+  };
+
   /* ONE ENTRY: everything the painter draws at t, from the declaration alone. */
   const chipPose = (sp, t, o = {}) => {
     if (chipStamped(sp)) return chipStampPose(sp, t);
@@ -21539,7 +21634,7 @@ async function mount(doc) {
       const labAt = {
         x: stamped ? (-off[0]).toFixed(1) : 0, y: (side / 2 - off[1] + L.gap).toFixed(1), "text-anchor": "middle",
         style: "font-family:Kalam,cursive;font-size:" + L.size + "px;font-weight:700;fill:" + chipStampInk(sp.ink)
-          + ";paint-order:stroke;stroke:" + chipStampInk(sp.ink === "charcoal" ? "cream" : "charcoal")
+          + ";paint-order:stroke;stroke:" + (stamped ? sealKeyline(sp, seal) : chipStampInk(sp.ink === "charcoal" ? "cream" : "charcoal"))   /* P72 T46b: a seal's keyline reads its latched ground */
           + ";stroke-width:4px;stroke-linejoin:round",
       };
       if (stamped) {   /* P70 T1b: the name is the SEAL's ink - gold (E99 s123) - and eases back with it (s121 (4)) */
@@ -26487,8 +26582,8 @@ async function mount(doc) {
      at its contact, so the push and slide of a Ken Burns (or the camera) under it never step it. `worldXfAt` is the
      current world element's transform at t0 as `paint` writes it mid-scene (the camera, then the rest: the authored Ken
      Burns and the plate's idle; a page at a depth carries only the rest, a world in planes nothing) - a pure function of
-     the scene and t0, MIRRORING paint's three branches (paint is not re-routed through it; a change there is mirrored
-     here). The seek-free path: a stage point P under the seal at t0 is the world's own point inv(M(t0))(P); on THIS frame
+     the scene and t0, read off worldPoseAt, the one function paint writes its pose from (P72 T46b, R26-361 (c): it was a
+     mirror of paint's three branches). The seek-free path: a stage point P under the seal at t0 is the world's own point inv(M(t0))(P); on THIS frame
      that point is drawn at M(now) of it, read from the element, and ringRgbAt reads it there - so the pixel is the one
      that was under the seal at its contact, whatever frame paints it. One luminance per point (null unmeasured). */
   /* P72 T25 (R26-165) - THE KEN'S CLOCK, the one `paint` and `worldXfAt` both read. With no window (the ken the compiler
@@ -26504,18 +26599,56 @@ async function mount(doc) {
       return clamp01((lifeFrom(scene.span[0], t) - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
     return clamp01((lifeFrom(t0, t) - t0) / Math.max(0.001, lifeFrom(t0, t1) - t0));
   };
-  const worldXfAt = (scene, t0) => {
-    const w = scene.world || {}, isLedger = w.kind === "ledger", isClip = w.kind === "clip", isVecmap = w.kind === "vecmap";
-    if ((!isLedger && !isClip && !isVecmap && w.layers || []).some((l) => l && A[l.key])) return "";   /* the camera is on the planes */
-    const kb0 = w.ken_burns || { scale: 0, x: 0, y: 0 };
+  /* P72 T46b (R26-361 (c)) - THE WORLD'S POSE AT t, ONE FUNCTION. `paint` writes it onto the world element every frame and
+     `worldXfAt` hands it to groundLumsThen (the seal's ground, read as the world stood at its contact, P72 T11); P72 T11
+     wrote worldXfAt as a MIRROR of paint's block ("a change there is mirrored here"), and a mirror is a second copy
+     waiting to drift. Both now read this: the ken's clock, the idle and its amplitude, the scale, the camera, the rest
+     term and its drift - the lines paint carried, moved here verbatim, so every string is the one it wrote. Pure in t;
+     `dx` is the incoming world's slide offset (paint's third argument), 0 for a pose read at another instant. */
+  const worldPoseAt = (scene, t, dx = 0) => {
+    const isLedger = scene.world.kind === "ledger", isClip = scene.world.kind === "clip", isVecmap = scene.world.kind === "vecmap";
+    const plies = ((!isLedger && !isClip && !isVecmap && scene.world.layers) || []).filter((l) => l && A[l.key]);
+    const kb0 = scene.world.ken_burns || { scale: 0, x: 0, y: 0 };
     const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
-    const p = kenProgress(scene, t0);   /* P72 T25: the ken's one clock (windowed or the scene's own) */
+    const p = kenProgress(scene, t);   /* P69 T49: the push holds through a freeze beat; P72 T25: on its window, when the row names one */
+    /* THE WORLD LEANS IN WITH THE ARGUMENT (Gemini showcase: worldScale
+       steps 1.02 -> 1.08 across a build). Each evidence event in this
+       scene - a card landing, a badge stamping - eases the plate in one
+       more notch on top of the authored drift. The world reacts to the
+       evidence (doc 29 s2.4); drift alone reads as weather. */
+    /* The lean-in is CUT until proven (operator, 2026-08-29): it ships
+       nothing this episode and returns, if ever, as a side-by-side A/B
+       of one scene judged in isolation. The authored Ken Burns is the
+       only world motion. */
+    /* E49: an IMAGE plate that holds, holds at its idle - a ledger page and a clip carry their own motion */
+    /* E99 s55: the amplitude the walk is sized at - the ROW's `;drift=<px>` first (per scene, the shot-table
+       grammar), then the build's `plate_idle_drift_px` dial, then the module's own DRIFT_PX. Named neither, this
+       is 2.0 and `Object.assign({}, IDLE, {DRIFT_PX: 2.0})` is IDLE: the pose, and every string below it, is the
+       one the engine has always written. */
+    const idleAmp = idleDriftPx(scene.world.idle_drift_px, KIN.plate_idle_drift_px);
     const idlePose = (isLedger || isClip || isVecmap) ? { scale: 1, dx: 0, dy: 0 }
-      : idleXf(idleOf("plate", w.idle), lifeT(t0), lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleDriftPx(w.idle_drift_px, KIN.plate_idle_drift_px) });
-    const z = (1 + p * kb.scale) * idlePose.scale;
-    const rest = `translateX(${(0).toFixed(1)}px) scale(${z.toFixed(4)}) translate(${(p * kb.x).toFixed(1)}px, ${(p * kb.y).toFixed(1)}px)`
-      + (KIN.plate_idle_paints === true ? idleDriftCss(idlePose, PARALLAX.FLAT) : "");
-    return (isLedger && pageDepthOf(w.page)) ? rest : camCss(camNow(scene, t0)) + rest;
+      : idleXf(idleOf("plate", scene.world.idle), lifeT(t), lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleAmp });   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
+    const zi = idlePose.scale;
+    /* R26-133: this block read the plate's idle for its `.scale` ALONE, so `drift` ({scale: 1, dx, dy}) delivered
+       nothing and a plate authored `;idle=drift` held perfectly still. The dx/dy now PAINT - on the world's rest
+       term, and on a layered plate per plane at its own share k - behind the `plate_idle_paints` dial, because the
+       day it goes on the five drift plates of an APPROVED cut start moving: that is the operator's eye to give,
+       not a silent patch. Off (absent), every string written below is the string it has always been. */
+    const idleDrift = (k) => (KIN.plate_idle_paints === true ? idleDriftCss(idlePose, k) : "");
+    const z = (1 + p * kb.scale) * zi;
+    const camXfNow = camNow(scene, t);
+    const worldRest = `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
+      + `translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
+    const restFlat = worldRest + idleDrift(PARALLAX.FLAT);   /* the flat world's rest, and the k = 1 pose camDepthSwap and worldPose read */
+    /* P58 T4: a page at a DEPTH takes the camera itself, at its own k (paintLedger), so the element must not
+       carry it a second time - the same hand-off the planes make below, one element instead of four. */
+    const pageK = isLedger ? pageDepthOf(scene.world.page) : 0;
+    return { plies, idleAmp, idlePose, idleDrift, camXfNow, worldRest, restFlat, pageK };
+  };
+  const worldXfAt = (scene, t0) => {
+    const P = worldPoseAt(scene, t0);
+    if (P.plies.length) return "";   /* the camera is on the planes */
+    return P.pageK ? P.restFlat : camCss(P.camXfNow) + P.restFlat;
   };
   const cssMatrix = (css) => new DOMMatrix(css && css !== "none" ? css : "matrix(1, 0, 0, 1, 0, 0)");
   const groundLumsThen = (sc, pts, t0) => {
@@ -26726,45 +26859,13 @@ async function mount(doc) {
         if (surfaceDestination) paintSurfaceLedger(el, surfaceDestination, t);
       }
       if (!isClip) parkClips(el);   /* back to the pool, never destroyed */
-      const kb0 = scene.world.ken_burns || { scale: 0, x: 0, y: 0 };
-      const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
-      const p = kenProgress(scene, t);   /* P69 T49: the push holds through a freeze beat; P72 T25: on its window, when the row names one */
-      /* THE WORLD LEANS IN WITH THE ARGUMENT (Gemini showcase: worldScale
-         steps 1.02 -> 1.08 across a build). Each evidence event in this
-         scene - a card landing, a badge stamping - eases the plate in one
-         more notch on top of the authored drift. The world reacts to the
-         evidence (doc 29 s2.4); drift alone reads as weather. */
-      /* The lean-in is CUT until proven (operator, 2026-08-29): it ships
-         nothing this episode and returns, if ever, as a side-by-side A/B
-         of one scene judged in isolation. The authored Ken Burns is the
-         only world motion. */
-      /* E49: an IMAGE plate that holds, holds at its idle - a ledger page and a clip carry their own motion */
-      /* E99 s55: the amplitude the walk is sized at - the ROW's `;drift=<px>` first (per scene, the shot-table
-         grammar), then the build's `plate_idle_drift_px` dial, then the module's own DRIFT_PX. Named neither, this
-         is 2.0 and `Object.assign({}, IDLE, {DRIFT_PX: 2.0})` is IDLE: the pose, and every string below it, is the
-         one the engine has always written. */
-      const idleAmp = idleDriftPx(scene.world.idle_drift_px, KIN.plate_idle_drift_px);
-      const idlePose = (isLedger || isClip || isVecmap) ? { scale: 1, dx: 0, dy: 0 }
-        : idleXf(idleOf("plate", scene.world.idle), lifeT(t), lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleAmp });   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
-      const zi = idlePose.scale;
-      /* R26-133: this block read the plate's idle for its `.scale` ALONE, so `drift` ({scale: 1, dx, dy}) delivered
-         nothing and a plate authored `;idle=drift` held perfectly still. The dx/dy now PAINT - on the world's rest
-         term, and on a layered plate per plane at its own share k - behind the `plate_idle_paints` dial, because the
-         day it goes on the five drift plates of an APPROVED cut start moving: that is the operator's eye to give,
-         not a silent patch. Off (absent), every string written below is the string it has always been. */
-      const idleDrift = (k) => (KIN.plate_idle_paints === true ? idleDriftCss(idlePose, k) : "");
-      const z = (1 + p * kb.scale) * zi;
-      const camXfNow = camNow(scene, t);
+      /* P72 T46b (R26-361 (c)): the world's pose - the ken's clock, the idle, the scale, the camera and the rest term - is
+         worldPoseAt's, the one function worldXfAt reads too (see it for the rulings each line carries) */
+      const { idleAmp, idlePose, camXfNow, worldRest, restFlat, pageK } = worldPoseAt(scene, t, dx);
       /* P72 T25 (R26-164, E99 s65): on a LAYERED plate the walk follows the camera (driftAlongCam) or is off - the planes
          and the k = 1 pose read this, never the free walk; a flat plate keeps its bare walk (idleDrift, as it was). */
       const planePose = plies.length ? driftAlongCam(idlePose, camXfNow, idleAmp) : null;
       const planeDrift = (k) => (KIN.plate_idle_paints === true && planePose ? idleDriftCss(planePose, k) : "");
-      const worldRest = `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
-        + `translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
-      const restFlat = worldRest + idleDrift(PARALLAX.FLAT);   /* the flat world's rest, and the k = 1 pose camDepthSwap and worldPose read */
-      /* P58 T4: a page at a DEPTH takes the camera itself, at its own k (paintLedger), so the element must not
-         carry it a second time - the same hand-off the planes make below, one element instead of four. */
-      const pageK = isLedger ? pageDepthOf(scene.world.page) : 0;
       if (plies.length) {
         /* P58 T3: the camera moves ONTO the planes. The element keeps everything the planes SHARE (the wipe's clip,
            the blur-zoom's scale, the suck's spin, the slide's push - each of which still prepends to it and so still

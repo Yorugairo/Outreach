@@ -453,6 +453,19 @@ export const chipSeal = (sp, side, ground = null) => {
            bottom: bot ? Object.assign({ text: bot, r: S.BOTTOM_R * u, dy: S.BOTTOM_DY * u }, sealGlyphs(bot, S.BOTTOM_R * u, size, track)) : null };
 };
 
+/* P72 T46b (R26-361 (a)): THE NAME'S KEYLINE READS THE GROUND THE GOLD LATCHED. The name is set in the seal's ink on a
+   keyline in one of the two named grounds; the keyline followed the row's AUTHORED ink (charcoal under a cream row), so on
+   a mid-tone photo, where the measured ground turns the gold bronze (#544227 on #9A9A9A), the bronze sat in a charcoal
+   keyline at ~1.6:1 - mud. The keyline is the ground the ink was chosen AGAINST: where the seal's ink is darker than the
+   darkest ground measured under it (the gold was darkened to read on a light ground) the keyline is the cream, else the
+   charcoal - one read of the same latched spread (`seal.ground`, sealGoldReport's), fixed at the contact as the gold is.
+   Nothing measured (node, a clip): the authored ink's keyline, byte for byte. */
+export const sealKeyline = (sp, seal) => {
+  const gr = seal && seal.ground;
+  if (gr && gr.n > 0 && Number.isFinite(gr.min)) return sealLum(seal.ink) < gr.min ? CHIP_STAMP.INK.cream : CHIP_STAMP.INK.charcoal;
+  return CHIP_STAMP.INK[sp && sp.ink === "charcoal" ? "cream" : "charcoal"];
+};
+
 /* ONE ENTRY: everything the painter draws at t, from the declaration alone. */
 export const chipPose = (sp, t, o = {}) => {
   if (chipStamped(sp)) return chipStampPose(sp, t);
@@ -520,7 +533,7 @@ function paintChipStamp(ctx, b) {
     const labAt = {
       x: stamped ? (-off[0]).toFixed(1) : 0, y: (side / 2 - off[1] + L.gap).toFixed(1), "text-anchor": "middle",
       style: "font-family:Kalam,cursive;font-size:" + L.size + "px;font-weight:700;fill:" + chipStampInk(sp.ink)
-        + ";paint-order:stroke;stroke:" + chipStampInk(sp.ink === "charcoal" ? "cream" : "charcoal")
+        + ";paint-order:stroke;stroke:" + (stamped ? sealKeyline(sp, seal) : chipStampInk(sp.ink === "charcoal" ? "cream" : "charcoal"))   /* P72 T46b: a seal's keyline reads its latched ground */
         + ";stroke-width:4px;stroke-linejoin:round",
     };
     if (stamped) {   /* P70 T1b: the name is the SEAL's ink - gold (E99 s123) - and eases back with it (s121 (4)) */

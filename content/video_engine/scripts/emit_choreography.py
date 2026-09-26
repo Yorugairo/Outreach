@@ -30,6 +30,14 @@ BUILD = EP / "build-f"
 DOCK_JOIN, SNAP, WASH_BRIDGE, EXIT, WIPE = 2.5, 1.4, 1.2, 0.72, 0.62
 
 
+def owns_exit(dock) -> bool:
+    """The player's `dockOwnsExit` on a shot-table dock tuple `(slide, slot, enter, exit[, options])`: a dock that STAMPS
+    (`arrive: "stamp"`) or is a PROP (`prop: True`, the evidence kind the compiler writes from it) owns its exit - E50, a
+    landed mark owes its exit in its own curve; E99 s106, the author timed it on a word - so the boundary snap is not its."""
+    opts = dock[4] if len(dock) > 4 and isinstance(dock[4], dict) else {}
+    return opts.get("arrive") == "stamp" or bool(opts.get("prop"))
+
+
 def load_model():
     sp = importlib.util.spec_from_file_location("shot", EP / "SHOT-TABLE-F.py")
     shot = importlib.util.module_from_spec(sp); sp.loader.exec_module(shot)
@@ -42,7 +50,7 @@ def load_model():
         scenes.append({"i": i + 1, "span": (a, b2), "plate": plate,
                        "exit": exits.get(a) or ("wipe" if ds else "cut"),
                        "docks": [{"slide": d[0], "slot": d[1],
-                                  "enter": d[2], "exit": d[3]} for d in ds]})
+                                  "enter": d[2], "exit": d[3], "owns": owns_exit(d)} for d in ds]})
     # mirror rule 1: coalesce same-slide docks. GROUP BY SLIDE first -
     # consecutive-only merging breaks when a DIFFERENT slide interleaves
     # the time sort (this gate caught it: pairing the scorecard between
@@ -62,10 +70,11 @@ def load_model():
                 cur = d
                 out.append(d)
     out.sort(key=lambda d: d["enter"])
-    # mirror rule 2: snap near-boundary exits
+    # mirror rule 2: snap near-boundary exits - a CARD's rule. A prop, or a stamped mark, OWNS its exit and is never
+    # snapped (the player's `dockOwnsExit`, P71 T6 / R26-309; P72 T46b / R26-362 (a) mirrors it here)
     bounds = [s["span"][0] for s in scenes]
     for d in out:
-        for b in bounds:
+        for b in ([] if d.get("owns") else bounds):
             if d["enter"] < b and 0.05 < b - d["exit"] <= SNAP:
                 d["exit"] = b; break
     # mirror rule 3: stable side per solo dock
@@ -98,7 +107,8 @@ def main() -> int:
     for d in docks:
         boundary = any(abs(d["exit"] - b) < 0.05 for b in
                        [s["span"][0] for s in scenes])
-        how = "carried by the wipe front" if boundary else "fades in place"
+        how = ("carried by the wipe front" if boundary else "leaves on its own curve (it owns its exit)" if d.get("owns")
+               else "fades in place")
         ev.append((d["enter"], f"ENTER  {d['slide']}  slot {d['slot']} "
                    f"side {d['side']}  holds {d['exit']-d['enter']:.1f}s"))
         ev.append((d["exit"], f"EXIT   {d['slide']}  {how}"))
@@ -120,7 +130,7 @@ def main() -> int:
             fails.append(f"{mmss(d['enter'])} {d['slide']}: drive-by - "
                          f"{hold:.1f}s dock on a {plate_len:.1f}s plate "
                          f"(cadence: under ~8s, one piece or none)")
-        for b in [s["span"][0] for s in scenes]:
+        for b in ([] if d.get("owns") else [s["span"][0] for s in scenes]):   # an owned exit is never snapped (rule 2)
             if 0.05 < b - d["exit"] <= SNAP:
                 fails.append(f"{mmss(d['exit'])} {d['slide']}: exit in the "
                              f"awkward zone {b - d['exit']:.2f}s before a "

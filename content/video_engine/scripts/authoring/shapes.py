@@ -1539,10 +1539,13 @@ def dock_leave(t_in: float, t1: float, options: dict, defaults: dict) -> tuple[f
 
     THE RULING (the parent, on `build-p66-cal` v2): *"a dock's `leave` ends at or before its row's `t1`,
     and a card never rides a `cut`/`axes` boundary"*. The player retracts a card FROM its `exit` over
-    `DOCK_LEAVE_S`, and it SNAPS an `exit` within `DOCK_SNAP_S` of a scene boundary onto that boundary -
+    `DOCK_LEAVE_S`, and it SNAPS a CARD's `exit` within `DOCK_SNAP_S` of a scene boundary onto that boundary -
     so a card whose `exit` was the row's end (E65's "parks in the page's own room and stays") was still
     fading 0.72 s into the next world, over its title, wherever the boundary was not a dip that hid it.
-    The deliberate early clear the player itself names is `DOCK_CLEAR_S` before the end.
+    The deliberate early clear the player itself names is `DOCK_CLEAR_S` before the end. A PROP, or a
+    STAMPED mark, owns its exit since P71 T6 (R26-309; the player's `dockOwnsExit`): it is never snapped,
+    and leaves on its own curve from the exit written here - the compiler ADVISES when that curve runs past
+    the row's end (`owned_exit_notes`, P72 T46b / R26-362 (b), a WARN, E99 s106).
 
     Where the row has not got those seconds the card keeps its own READ + PARK clock instead and the
     shortfall is NAMED (E99 s69 - a gate guides; the answer to a card with no room is a longer beat, and

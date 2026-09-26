@@ -4629,6 +4629,11 @@ STACK_FORMS = tuple(VERDICT_DIALS)
 # characters/s anywhere in the file": the narrator's onsets ARE the character clock, each word string-sliced over 0.72
 # of its gap), and the paper's two feet land after the quotation's end - the attribution ATTR_AFTER, the source SRC_AFTER.
 RECORD_ATTR_AFTER_S, RECORD_SRC_AFTER_S = 0.15, 0.45
+# THE VERDICT TILE (R26-391 (a), P72 T46b; the engine's paintDockVerdict, P71 T19): a chart card's `verdict` ({state, at})
+# LANDS on its word - the tick / cross disc on the badge spring (chipLand) or the BUY / SELL tab (chipTabPose), both from
+# `at` - an arrival on a held card, one event at `at`, while the card is on stage (the painter mounts nothing before `at`,
+# and the compiler refuses an `at` outside the tile's life). The states are the engine's DOCK_VERDICT.STATES.
+VERDICT_TILE_STATES = ("tick", "cross", "buy", "sell")
 
 
 def _num(v) -> bool:
@@ -4725,21 +4730,54 @@ def _record_beats(scenes: list[dict], evidence: dict) -> tuple[list[float], list
     return sorted(set(events)), notes
 
 
+def _verdict_error(v) -> str | None:
+    """Why a dock's `verdict` cannot be read as paintDockVerdict reads it, else None (refused BY NAME, never dropped)."""
+    if not isinstance(v, dict):
+        return f"the verdict is a {type(v).__name__}, not {{state, at}}"
+    if v.get("state") not in VERDICT_TILE_STATES:
+        return f"`state` is {str(v.get('state'))[:20]!r}, not one of {'|'.join(VERDICT_TILE_STATES)}"
+    if not _num(v.get("at")):
+        return f"`at` is {str(v.get('at'))[:20]!r}, not a number"
+    return None
+
+
+def _verdict_beats(scenes: list[dict]) -> tuple[list[float], list[str], list[str]]:
+    """(events, refusals, slides): each verdict tile's landing on its word while its card is on stage (R26-391 (a))."""
+    events: list[float] = []
+    notes: list[str] = []
+    slides: set[str] = set()
+    for s in scenes:
+        for d in s.get("docks") or []:
+            if "verdict" not in d:
+                continue
+            why = _verdict_error(d["verdict"])
+            if why:
+                notes.append(f"{d.get('slide')}: verdict refused - {why}")
+                continue
+            at = float(d["verdict"]["at"])
+            if _on_stage(d, at):
+                events.append(round(at, 2))
+                slides.add(str(d.get("slide")))
+    return sorted(set(events)), notes, sorted(slides)
+
+
 def _credited_beats(tl: dict) -> tuple[list[float], str | None]:
-    """The two credits together, and the stats line that names what was counted - None when the build carries
-    neither, so a report without them is the report it was."""
+    """The painters' credits together, and the stats line that names what was counted - None when the build carries
+    none of them, so a report without them is the report it was."""
     scenes, evidence = tl.get("scenes", []), tl.get("evidence") or {}
     stack, s_notes = _stack_beats(scenes, evidence, str(tl.get("aspect") or "16:9"))
     record, r_notes = _record_beats(scenes, evidence)
-    if not (stack or record or s_notes or r_notes):
+    tiles, v_notes, v_slides = _verdict_beats(scenes)   # P72 T46b (R26-391 (a)): a verdict tile lands on its word
+    if not (stack or record or tiles or s_notes or r_notes or v_notes):
         return [], None
     names = lambda key: ", ".join(sorted({str(d.get("slide")) for d, _e in _live_docks(scenes, evidence, key)}))
     parts = ([f"verdict stack {len(stack)} pose change(s) ({names('stack')})"] if stack else []) \
-        + ([f"record typing {len(record)} word/foot instant(s) ({names('record')})"] if record else [])
+        + ([f"record typing {len(record)} word/foot instant(s) ({names('record')})"] if record else []) \
+        + ([f"verdict tile {len(tiles)} landing(s) ({', '.join(v_slides)})"] if tiles else [])
     line = "; ".join(parts) + " - the painters' own clocks, while the dock is on stage (P72 T7)" if parts else "none credited"
-    if s_notes or r_notes:
-        line += "; refused: " + "; ".join(s_notes + r_notes)
-    return sorted(set(stack) | set(record)), line
+    if s_notes or r_notes or v_notes:
+        line += "; refused: " + "; ".join(s_notes + r_notes + v_notes)
+    return sorted(set(stack) | set(record) | set(tiles)), line
 
 
 # ---- R26-167: A BEAT IS JUDGED ON ITS OWN WINDOW ----------------------------------------------------------------

@@ -305,6 +305,7 @@ CHIP_STAMP_LABEL_SIZE = 48     # species/chip.mjs CHIP_STAMP.LABEL_SIZE - the la
 CHIP_STAMP_LABEL_FLOOR = round(LPG.CARD_TYPE_PX, 2)   # 59.08: CHIP_STAMP.LABEL_FLOOR, E99 s90's phone floor, drawn under `arrive: "stamp"`
 CHIP_STAMP_MASS = "ink"        # CHIP_STAMP.MASS: a stamped chip lands at the engine's own stamp mass
 STAMP_EXIT_S = 16 / 30         # kinetics/stopaction.mjs STAMP_ARRIVAL.EXIT_S (badge-stamp.tsx:62): the exit a landed mark owes
+PROP_RETRACT_S = 0.35          # the engine's DOCK_RETRACT_S: the spring retract a PROP that does not stamp leaves on (P72 T46b)
 STAMP_SHOCK_S = 14 / 30        # kinetics/stopaction.mjs STAMP_ARRIVAL.SHOCK_S (badge-stamp.tsx:106): the shockwave's life, from the contact
 # P70 T1b (the parent's fix 4): a stamped chip's landing, its shockwave's whole life and its owed exit, inside `dur` - 1.1542 s:
 # the exit begins EXIT_S before the window closes and the ring is not drawn once it has, so a shorter `dur` leaves with its
@@ -10558,7 +10559,8 @@ def dock_opts(raw) -> dict:
             raise ValueError(f"dock option {k!r}: a dock stamp carries no seal - a bare prop stays bare, the stamp motion, its "
                              "shockwave and its shadow, no border (E99 s87; E99 s121 (2)); the seal and its ring text are a "
                              "seal-type stamp's - a stamped chip (form: \"stamp\", arrive: \"stamp\", E99 s121 (1)) - and "
-                             "no dock payload is a badge or a verdict today")
+                             "a dock's verdict is a chart card's `verdict` tile (P71 T19) - a state on the card, landing on its "
+                             "word, never a seal (E99 s121)")
         if k not in DOCK_OPTS:
             raise ValueError(f"dock option {k!r} is not one of {'|'.join(DOCK_OPTS)}")
         if k == "behind":   # HF-17: the plate's foreground layer this card goes behind; the plate is checked at the row
@@ -12818,6 +12820,10 @@ CHIP_SEAL_TEXT_ASC_EM, CHIP_SEAL_TEXT_DESC_EM = 0.81, 0.25   # chip.mjs CHIP_SEA
 CHIP_SEAL_GOLD = "#E8B86D"                    # chip.mjs CHIP_SEAL.GOLD (E99 s123; badge-stamp.tsx:57) - THE dial
 CHIP_SEAL_CONTRAST_MIN = 3.0                  # chip.mjs CHIP_SEAL.CONTRAST_MIN [DERIVED: WCAG 1.4.11 / 1.4.3 large, 3:1]
 CHIP_SEAL_GROUND = {"dark": "#25313C", "light": "#F4E6C7"}   # chip.mjs CHIP_SEAL.GROUND
+CHIP_SEAL_GROUND_ANGLES = 16                  # chip.mjs CHIP_SEAL.GROUND_ANGLES (P72 T11): samples round each radius
+CHIP_SEAL_GROUND_RADII = (0.5, 38 / 50, 44 / 50, 1)   # chip.mjs CHIP_SEAL.GROUND_RADII: fractions of the outer radius R
+CHIP_SEAL_STEPS = 99                          # chip.mjs SEAL_STEPS: the gold's 1 % steps, never white or black
+SEAL_PLATE_W = 256                            # the engine's RING_PLATE_W: the width a plate is decoded at to be measured
 CHIP_SEAL_TURNS = (-90.0, 90.0)               # a circle's hull is the same at every angle: turned through a half turn, a
                                               # square of half-diagonal R has half-extent R on both axes - the seal's own
 
@@ -12835,8 +12841,9 @@ def seal_contrast(a: str, b: str) -> float:
 
 
 def seal_gold(entry: dict, gold: str = CHIP_SEAL_GOLD) -> tuple[str, str]:
-    """(the seal's ink, its ground) as chip.mjs `sealGold` paints it: GOLD on the dark ground; on the light ground (the
-    row says `ink: "charcoal"`) GOLD's channels scaled down in 1 % steps until it holds CONTRAST_MIN on the cream."""
+    """(the seal's ink, its ground) as chip.mjs `sealGold` paints it WHERE NOTHING WAS MEASURED: GOLD on the dark ground; on
+    the light ground (the row says `ink: "charcoal"`) GOLD's channels scaled down in 1 % steps until it holds CONTRAST_MIN
+    on the cream. A picture under the seal is read by `seal_ground_lums` and `seal_gold_report` (P72 T46b)."""
     if entry.get("ink") != "charcoal":
         return gold, CHIP_SEAL_GROUND["dark"]
     rgb = [int(gold[i:i + 2], 16) for i in (1, 3, 5)]
@@ -12845,6 +12852,94 @@ def seal_gold(entry: dict, gold: str = CHIP_SEAL_GOLD) -> tuple[str, str]:
         if seal_contrast(hex_, CHIP_SEAL_GROUND["light"]) >= CHIP_SEAL_CONTRAST_MIN:
             return hex_, CHIP_SEAL_GROUND["light"]
     return "#000000", CHIP_SEAL_GROUND["light"]
+
+
+def _seal_on_lum(hex_: str, g: float) -> float:
+    lum = _seal_lum(hex_)
+    return (max(lum, g) + 0.05) / (min(lum, g) + 0.05)
+
+
+def _seal_hex(rgb) -> str:
+    return "#" + "".join(f"{max(0, min(255, math.floor(v + 0.5))):02X}" for v in rgb)   # JS Math.round, not banker's
+
+
+def _seal_steps(gs: list[float], gold: str) -> str | None:
+    """chip.mjs `sealGoldSteps`: GOLD where it holds CONTRAST_MIN against EVERY sample; else the least 1 % step that does,
+    down (the channels scaled) or up (mixed toward white), a tie darkening; one ground always answers, a spread may not."""
+    def worst(h: str) -> float:
+        return min(_seal_on_lum(h, g) for g in gs)
+    if worst(gold) >= CHIP_SEAL_CONTRAST_MIN:
+        return gold
+    rgb = [int(gold[i:i + 2], 16) for i in (1, 3, 5)]
+    best = gold
+    for st in range(1, CHIP_SEAL_STEPS + 1):
+        down = _seal_hex([v * (100 - st) / 100 for v in rgb])
+        if worst(down) >= CHIP_SEAL_CONTRAST_MIN:
+            return down
+        up = _seal_hex([v + (255 - v) * st / 100 for v in rgb])
+        if worst(up) >= CHIP_SEAL_CONTRAST_MIN:
+            return up
+        if st == CHIP_SEAL_STEPS:
+            best = down if worst(down) >= worst(up) else up
+    return best if len(gs) == 1 else None
+
+
+def seal_gold_report(ground, gold: str = CHIP_SEAL_GOLD) -> dict:
+    """P72 T46b (R26-361 (b)): chip.mjs `sealGoldReport`, the seal's ink on a MEASURED ground - `ground` one WCAG luminance
+    or the samples under the seal (an unmeasured one, None, dropped). ONE GOLD PER SEAL, THE DARKEST GROUND WINS; a spread
+    no ink can hold takes the darkest sample's gold and says so (`holds` False). {ink, min, max, n, worst, holds}."""
+    gs = [float(g) for g in (ground if isinstance(ground, (list, tuple)) else [ground])
+          if g is not None and not isinstance(g, bool) and math.isfinite(float(g))]
+    if not gs:
+        return {"ink": gold, "min": None, "max": None, "n": 0, "worst": None, "holds": None}
+    lo, hi = min(gs), max(gs)
+    ink = _seal_steps(gs, gold) or _seal_steps([lo], gold)
+    worst = min(_seal_on_lum(ink, g) for g in gs)
+    return {"ink": ink, "min": lo, "max": hi, "n": len(gs), "worst": worst, "holds": worst >= CHIP_SEAL_CONTRAST_MIN}
+
+
+def seal_ground_samples(cx: float, cy: float, R: float) -> list[tuple[float, float]]:
+    """chip.mjs `sealGroundSamples`: GROUND_RADII x GROUND_ANGLES points about the seal's centre at its outer radius R."""
+    return [(cx + R * f * math.cos(2 * math.pi * i / CHIP_SEAL_GROUND_ANGLES),
+             cy + R * f * math.sin(2 * math.pi * i / CHIP_SEAL_GROUND_ANGLES))
+            for f in CHIP_SEAL_GROUND_RADII for i in range(CHIP_SEAL_GROUND_ANGLES)]
+
+
+@functools.lru_cache(maxsize=16)
+def _seal_plate(path: str, mtime: float):
+    """A picture plate decoded as the engine measures it (ringPlate: SEAL_PLATE_W wide), as (w, h, iw, ih, pixels)."""
+    from PIL import Image
+    with Image.open(path) as im:
+        iw, ih = im.size
+        k = min(1.0, SEAL_PLATE_W / iw)
+        w, h = max(1, round(iw * k)), max(1, round(ih * k))
+        rgb = im.convert("RGB").resize((w, h), Image.BILINEAR)
+        return w, h, iw, ih, rgb.load()
+
+
+def seal_ground_lums(world: dict | None, aspect: str | None, centre: tuple[float, float], radius: float) -> list[float] | None:
+    """P72 T46b (R26-361 (b)): the luminances under a seal on a PICTURE plate, read as the engine's ringRgbAt reads it (the
+    plate cover-fitted to the stage, decoded SEAL_PLATE_W wide) at the seal's samples - AT REST: the engine reads the world
+    as it stood at the contact (its Ken Burns and camera), which the compiler does not replay, so this is the plate
+    before its lean. None where nothing can be read: a page, a map or a clip (their grounds are drawn, not a picture), or
+    a plate that does not resolve."""
+    world = world or {}
+    if world.get("kind") or not world.get("asset_id"):
+        return None
+    path = R.find_asset(str(world["asset_id"]))
+    if path is None or not Path(path).exists():
+        return None
+    w, h, iw, ih, px = _seal_plate(str(path), Path(path).stat().st_mtime)
+    sw, sh = LPG.STAGE_PX.get(aspect or "16:9", LPG.STAGE_PX["16:9"])
+    k = max(sw / iw, sh / ih)
+    out = []
+    for x, y in seal_ground_samples(centre[0], centre[1], radius):
+        ix, iy = (x - (sw - iw * k) / 2) / k, (y - (sh - ih * k) / 2) / k
+        c = px[min(w - 1, max(0, math.floor(ix * w / iw))), min(h - 1, max(0, math.floor(iy * h / ih)))]
+        c = [v / 255 for v in c[:3]]
+        c = [v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4 for v in c]
+        out.append(0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2])
+    return out
 
 
 def chip_stamp_seal_r(art: dict) -> float:
@@ -13093,11 +13188,21 @@ def chip_stamp_ring_fit(entry: dict, world: dict | None, aspect: str | None, pai
                     _flat_obstacles(groups), bounds, turns=CHIP_SEAL_TURNS)
     floors: list[str] = []
     fit = _stamp_floors(fit, floors)
-    ink, ground = seal_gold(entry)
-    ratio = seal_contrast(ink, ground)
-    if ratio < CHIP_SEAL_CONTRAST_MIN - 1e-9:
-        notes.append(f"{where}: the seal's gold {ink} on its ground {ground} is {ratio:.2f}:1, under the "
-                     f"{CHIP_SEAL_CONTRAST_MIN:g}:1 floor (E99 s123) - read the frame")
+    lums = seal_ground_lums(world, aspect, (pcx, pcy), R)   # P72 T46b (R26-361 (b)): the picture under the seal, as the engine reads it
+    if lums:
+        rep = seal_gold_report(lums)
+        if not rep["holds"]:
+            notes.append(f"{where}: the seal's gold {rep['ink']} on the picture under it (luminance {rep['min']:.3f}-"
+                         f"{rep['max']:.3f} over {rep['n']} samples, read at rest - before the plate's Ken Burns) is "
+                         f"{rep['worst']:.2f}:1 at its worst sample, under the {CHIP_SEAL_CONTRAST_MIN:g}:1 floor (E99 s123): "
+                         "no one gold holds across that spread, so the darkest sample's gold is drawn - read the frame "
+                         "(a WARN, s106)")
+    else:
+        ink, ground = seal_gold(entry)
+        ratio = seal_contrast(ink, ground)
+        if ratio < CHIP_SEAL_CONTRAST_MIN - 1e-9:
+            notes.append(f"{where}: the seal's gold {ink} on its ground {ground} is {ratio:.2f}:1, under the "
+                         f"{CHIP_SEAL_CONTRAST_MIN:g}:1 floor (E99 s123) - read the frame")
     head = (f"{where} (mark and label {pw:.0f}x{ph:.0f} px in a seal of radius {R:.0f} px "
             f"at ({pcx:.0f}, {pcy:.0f}))")
     notes = ([f"{where}: {b} (the arrival is fitted without it)" for b in blind] + [f"{head}: {w}" for w in floors]
@@ -15151,6 +15256,31 @@ def dock_card_profile(asset: Path) -> dict:
     return {"card": {k: meta[k] for k in sorted(meta)}}
 
 
+def owned_exit_notes(docks: list[dict], evidence: dict, page_end: float, where: str) -> list[str]:
+    """P72 T46b (R26-362 (b); E99 s106 - the engine advises, the author decides): the docks on a row whose OWNED exit
+    (the player's `dockOwnsExit`: a stamped mark, or a prop - P71 T6 honours it to the frame, never snapping it to the
+    turn) leaves on a curve that runs PAST the row's end - a stamp's ease-in over STAMP_EXIT_S, a spring prop's retract
+    over PROP_RETRACT_S - so the mark finishes leaving over the next page's first frames. Honoured, never refused: each
+    note names the dock, its exit, the page's end, the curve and the overrun, and the frame to read (the page's end +
+    0.1 s). A card (snapped to the turn and carried off), a handed prop (it leaves on its morph) and an exit on or past
+    the page's end (the turn's own: swept or dipped) are not advised."""
+    notes = []
+    for d in docks:
+        ev = evidence.get(d.get("slide")) or {}
+        stamped, prop = d.get("arrive") == "stamp", (ev.get("kind") or d.get("kind")) == DOCK_KIND_PROP
+        if not (stamped or prop) or d.get("handed"):
+            continue
+        exitt, end = float(d["exit"]), float(page_end)
+        curve = STAMP_EXIT_S if stamped else PROP_RETRACT_S
+        if not (exitt < end - 1e-9 and exitt + curve > end + 1e-9):
+            continue
+        notes.append(f"{where}: dock {d['slide']} owns its exit at {exitt:.2f}s and leaves on its "
+                     f"{'stamp' if stamped else 'spring'} curve of {curve:.2f}s, which runs {exitt + curve - end:.2f}s past "
+                     f"the page's end at {end:.2f}s - it finishes leaving over the next page (honoured, E50; advice, "
+                     f"E99 s106): read the frame at {end + 0.1:.2f}s, or exit it {exitt + curve - end:.2f}s earlier")
+    return notes
+
+
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
                centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,
@@ -16282,6 +16412,8 @@ def main() -> int:
                                                  "side": _pk["side"], "anchor": _pk["ay"]} if _pk else None,   # P71 T23: the join
                                         throw_side=dopt.get("side"), rel=dopt.get("rel")))   # P72 T19: the throw's edge (R26-202 (b)); the dock it rides (R26-267)
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
+        for _w in owned_exit_notes(docks, evidence, b, f"shot row {i + 1} ({a}-{b}s)"):   # P72 T46b / R26-362 (b): advice (s106)
+            print(f"  [WARN] P72 T46b: {_w}")
         _fz_errs, _fz_warns = dock_freeze_errors(docks, row_species, evidence, f"shot row {i + 1} ({a}-{b}s)")   # P72 T22 / R26-304
         if _fz_errs:
             raise SystemExit("FAIL: " + "; ".join(_fz_errs))
