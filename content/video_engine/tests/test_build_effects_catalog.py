@@ -468,6 +468,9 @@ def test_every_wired_card_is_in_a_recipe():
     # P71 T20's datum badge (page_species:datum_badge) is tested alone in test_schematic_illustrations.py and pinned by the
     # schematic-motif golden (H row 24's "not a house of cards", the X on the motif's troughs); no committed beat plays it
     # and no recipe composes it before P71-HG1 (its candidate recipes are R14's two verdict panels and R19, P71 T34 / T35).
+    # P71 T18's unknown (species:unknown, the large "?") is tested alone in test_unknown_prompt.py and pinned by the
+    # unknown-decide golden (H row 23's "Decide for yourself"); no committed beat plays it before P71-HG1, and its recipe
+    # is P71 T33's inset echo (the plot parks, the twins stack, then the "?"), not invented here.
     assert uncovered == ["camera:pedestal", "dock_option:moves", "page_builder:bars+segments",
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress",
@@ -475,7 +478,8 @@ def test_every_wired_card_is_in_a_recipe():
                          "page_species:datum_badge", "page_species:explode", "page_species:lens", "page_species:member",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:readability",
-                         "plate_option:room", "species:balance", "species:chapter", "species:equation", "species:freeze"], uncovered
+                         "plate_option:room", "species:balance", "species:chapter", "species:equation", "species:freeze",
+                         "species:unknown"], uncovered
     assert excluded == ["kinetics:arap", "kinetics:camera", "kinetics:chartxf", "kinetics:clothoid", "kinetics:contour",
                         "kinetics:ease", "kinetics:homography", "kinetics:ink", "kinetics:labelfit",
                         "kinetics:morph_a", "kinetics:page_surface", "kinetics:spring", "kinetics:squash",

@@ -977,3 +977,101 @@ test("P72 T11 (round 3): the floor is on the INK - INFO: the ring as composited 
   assert.equal(CHIPMOD.sealGoldOn(cream), "#A07F4B");
   assert.ok(onGround(px, cream) < CHIP_SEAL.CONTRAST_MIN, `composited ${px} ${onGround(px, cream).toFixed(2)}:1`);
 });
+
+// ---------------------------------------------------------------- P71 T18: the "?" - the chip's glyph and the unknown species
+import { FLOW } from "../../scripts/species/flow.mjs";
+const { QMARK, qmarkPop, chipQmarkPose, unknownPulseOnsets, unknownPose, paintUnknown } = CHIPMOD;
+
+test("T18: the unknown's pop IS BOOM's - the same spring T17 measured off BOOM's failed-link disc", () => {
+  assert.deepEqual([QMARK.POP_FROM, QMARK.MP, QMARK.POP_S], [FLOW.FAIL_POP_FROM, FLOW.FAIL_MP, FLOW.FAIL_POP_S]);
+  for (let i = 0; i <= 40; i++) {
+    const t = 5 + i * 0.03, p = unknownPose({ at: 5, dur: 4 }, t);
+    const want = FLOW.FAIL_POP_FROM + (1 - FLOW.FAIL_POP_FROM) * springPop(Math.min(1, (t - 5) / FLOW.FAIL_POP_S), FLOW.FAIL_MP);
+    assert.ok(near(p.scale, want, 1e-12), `t=${t}`);
+  }
+  const peak = Math.max(...Array.from({ length: 200 }, (_, i) => unknownPose({ at: 5, dur: 4 }, 5 + i / 200).scale));
+  assert.ok(near(peak, 1.21, 0.005), `BOOM's first overshoot, 146 / 122 px: ${peak}`);
+});
+
+test("T18: before its word nothing; held it stands at 1 and full; it leaves inside its window on its own fade", () => {
+  const sp = { at: 5, dur: 4 };
+  assert.equal(unknownPose(sp, 4.99).fade, 0);
+  assert.ok(near(unknownPose(sp, 7).scale, 1, 1e-3) && unknownPose(sp, 7).fade === 1);
+  assert.equal(unknownPose(sp, 9 - QMARK.LEAVE_S).fade, 1);
+  assert.ok(unknownPose(sp, 9 - QMARK.LEAVE_S / 2).fade > 0 && unknownPose(sp, 9 - QMARK.LEAVE_S / 2).fade < 1);
+  assert.equal(unknownPose(sp, 9).fade, 0, "gone as its window closes");
+  assert.equal(unknownPose(sp, 7).h, QMARK.SIZE);
+  assert.equal(unknownPose(Object.assign({ size: 285 }, sp), 7).h, 285);
+  assert.equal(unknownPose(sp, 7).ink, QMARK.INKS.neg);
+  assert.equal(unknownPose(Object.assign({ ink: "chalk" }, sp), 7).ink, QMARK.INKS.chalk);
+});
+
+test("T18: pulse blinks PULSE_N times from the settle, a swell of PULSE_AMP at each middle; held never swells", () => {
+  const sp = { at: 5, dur: 4, pulse: true };
+  const ons = unknownPulseOnsets(sp);
+  assert.deepEqual(ons, [0, 1, 2].map((k) => 5 + QMARK.SETTLE_S + k * CHIP.PULSE_S));
+  assert.deepEqual(unknownPulseOnsets({ at: 5, dur: 4 }), [], "held: no blinks");
+  for (const a of ons) {
+    const mid = unknownPose(sp, a + CHIP.PULSE_S / 2), rest = unknownPose({ at: 5, dur: 4 }, a + CHIP.PULSE_S / 2);
+    assert.ok(near(mid.scale, rest.scale * (1 + QMARK.PULSE_AMP), 1e-9), `blink at ${a}`);
+    assert.ok(near(unknownPose(sp, a).scale, unknownPose({ at: 5, dur: 4 }, a).scale, 1e-9), "each blink starts from the rest");
+  }
+  const late = 5 + QMARK.SETTLE_S + 2 * CHIP.PULSE_S + CHIP.PULSE_S / 2;   // the third blink's middle; its onset 6.4 is past the 6.0 end
+  assert.ok(near(unknownPose({ at: 5, dur: 1, pulse: true }, late).scale, unknownPose({ at: 5, dur: 1 }, late).scale, 1e-9),
+    "no blink whose onset is past the window");
+});
+
+test("T18: the chip's '?' is HIS's - 0.38 of the card tall, its foot 0.146 above the top edge, the chalk, its own pop", () => {
+  const sp = chip({ glyph: "?", glyph_at: 7 });
+  assert.equal(chipQmarkPose(chip(), 9), null, "no glyph, no '?'");
+  const held = chipQmarkPose(sp, 9, CHIP.SIZE), phone = chipQmarkPose(sp, 9, 110);
+  assert.ok(near(held.h, 0.38 * CHIP.SIZE, 1e-9) && near(held.gap, 0.146 * CHIP.SIZE, 1e-9) && held.ink === QMARK.INKS.chalk);
+  assert.ok(near(phone.h, 0.38 * 110, 1e-9), "the phone card scales it");
+  assert.equal(chipQmarkPose(sp, 6.99).fade, 0, "not before glyph_at");
+  assert.equal(chipQmarkPose(chip({ glyph: "?" }), 4).at, 4, "no glyph_at: with the chip");
+  const u97 = chipQmarkPose(sp, 7 + 0.372 * QMARK.CHIP_POP_S).scale;
+  assert.ok(near(u97, QMARK.CHIP_FROM + (1 - QMARK.CHIP_FROM) * springPop(0.372, QMARK.CHIP_MP), 1e-9));
+  assert.ok(Math.abs(u97 - (QMARK.CHIP_FROM + (1 - QMARK.CHIP_FROM) * 0.97)) < 0.01, "97 % at +0.27 s, HIS's");
+});
+
+test("T18: the chip's '?' is the group's LAST child, centred above the card; absent it the painter is today's", () => {
+  const made = glyphCtx(chip({ glyph: "?", glyph_at: 7 }), 9);
+  const g = made[0], qg = g.kids[g.kids.length - 1];
+  assert.equal(qg.cls, "chipqmark");
+  const h = 0.38 * CHIP.SIZE, cy = -CHIP.SIZE / 2 - 0.146 * CHIP.SIZE - h / 2;
+  assert.equal(qg.at.transform, "translate(0 " + cy.toFixed(1) + ") scale(1.0000)");
+  const q = qg.kids[0];
+  assert.equal(q.tag, "text"); assert.equal(q.textContent, "?");
+  assert.equal(+q.at.y, +(h / 2).toFixed(1), "its baseline h / 2 below the ink's centre");
+  assert.ok(q.at.style.includes("font-size:" + (h / QMARK.INK_EM).toFixed(2) + "px") && q.at.style.includes("fill:" + QMARK.INKS.chalk));
+  assert.equal(glyphCtx(chip({ glyph: "?", glyph_at: 7 }), 6.9).filter((e) => e.cls === "chipqmark").length, 0, "not before its word");
+  for (const sp of [chip(), chip({ cross_at: 9 }), chip({ state: "lit" }), chip({ tab: "sell" })])
+    assert.equal(glyphCtx(sp, 9.4).filter((e) => e.cls === "chipqmark" || e.cls === "qmark").length, 0);
+});
+
+test("T18: the unknown's painter - nothing unresolved, then one group on its point, the '?' sized by its ink, in its ink", () => {
+  const made = [];
+  const el = (tag, cls, parent, at) => { const e = { tag, cls, at: at || {}, kids: [], textContent: "" }; made.push(e); if (parent && parent.kids) parent.kids.push(e); return e; };
+  const ctx = (target, t, extra = {}) => ({ sp: Object.assign({ kind: "unknown", at: 5, dur: 4, target }, extra), t, svg: { kids: [] }, el,
+    resolveTarget: (tg) => (tg ? (tg.kind === "region" ? { x: 100, y: 200, w: 400, h: 300 } : { x: 250, y: 450, w: 0, h: 0 }) : null),
+    hash: () => 0.5, idle: () => ({ scale: 1, dx: 0, dy: 0 }), seed: 1, si: 0 });
+  paintUnknown(ctx(null, 7));
+  paintUnknown(ctx({ kind: "point", x: 0.13, y: 0.42 }, 4.9));
+  assert.equal(made.length, 0, "no target, or before its word: nothing");
+  paintUnknown(ctx({ kind: "point", x: 0.13, y: 0.42 }, 7));
+  assert.deepEqual(made.map((e) => [e.tag, e.cls]), [["g", "unknown"], ["text", "qmark"]]);
+  assert.equal(made[0].at.transform, "translate(250.0 450.0) scale(1.0000)");
+  assert.ok(made[1].at.style.includes("font-size:" + (QMARK.SIZE / QMARK.INK_EM).toFixed(2) + "px") && made[1].at.style.includes("fill:" + QMARK.INKS.neg));
+  made.length = 0;
+  paintUnknown(ctx({ kind: "region" }, 7, { size: 200 }));
+  assert.equal(made[0].at.transform, "translate(300.0 350.0) scale(1.0000)", "centred in its region");
+  assert.ok(made[1].at.style.includes("font-size:" + (200 / QMARK.INK_EM).toFixed(2) + "px"));
+});
+
+test("T18: a seek IS the play - the same t gives the same bits, in any order", () => {
+  const sp = { at: 5, dur: 4, pulse: true, size: 200 }, csp = chip({ glyph: "?", glyph_at: 7 });
+  const f = [], b = [];
+  for (let i = 0; i <= 240; i++) f.push(JSON.stringify([unknownPose(sp, i / 20), chipQmarkPose(csp, i / 20)]));
+  for (let i = 240; i >= 0; i--) b.unshift(JSON.stringify([unknownPose(sp, i / 20), chipQmarkPose(csp, i / 20)]));
+  assert.deepEqual(f, b);
+});

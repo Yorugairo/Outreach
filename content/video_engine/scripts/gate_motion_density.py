@@ -404,13 +404,19 @@ SPECIES_EVENTS["stamp"] = ("at",)
 SPECIES_EVENTS["cross"] = ("at",)   # P50 T6: the census's X marks strike on their word - the named cells are struck, dimmed
                                     # and their share written, all on one clock; like a span or a light it holds after that,
                                     # so it has no end event (what happens next is the park, which is its own row).
-SPECIES_EVENTS["chip"] = ("at", "cross_at", "tick_at", "tab_at", "pulse")   # P50 T2: a chip LANDS on its word (an event) and is CROSSED on a later one (another).
+SPECIES_EVENTS["chip"] = ("at", "cross_at", "tick_at", "tab_at", "pulse", "glyph_at")   # P50 T2: a chip LANDS on its word (an event) and is CROSSED on a later one (another).
                                               # "cross_at" is neither an edge of the window nor its end: it names the row's own field,
                                               # and _species_events credits any such name at the instant that field holds.
                                               # P71 T12: ... and so are its TICK (tick_at) and its TAB (tab_at), each landing on its word;
                                               # a held `state: "lit"` halo is an annotation, 0 events (E99 s91), but `pulse: true` BLINKS
                                               # it - one event per blink onset (E99 s99), on CHIP_PULSE's clock ("pulse", below).
 CHIP_PULSE = {"land_s": 0.55, "n": 3, "s": 0.5}   # [DERIVED: species/chip.mjs CHIP.LAND_S / PULSE_N / PULSE_S] the blinks run from at + LAND_S
+# P71 T18: ... and the chip's "?" LANDS on its word (glyph_at, a field edge; absent, it lands with the chip - one landing).
+# THE UNKNOWN - a large "?" - LANDS once (a named thing arrives); HELD after that it is an annotation, 0 events (E99 s91);
+# `pulse: true` BLINKS it - one event per onset (E99 s99), on UNKNOWN_PULSE's clock ("qpulse", below). Its veil
+# (`under: "blur"`) rides the same landing and earns nothing of its own.
+SPECIES_EVENTS["unknown"] = ("at", "qpulse")
+UNKNOWN_PULSE = {"settle_s": 0.4, "n": 3, "s": 0.5}   # [DERIVED: species/chip.mjs QMARK.SETTLE_S, CHIP.PULSE_N / PULSE_S] from at + SETTLE_S
 # P52 T6: THE NEWSREEL BAND is a STANDING element with a LIFE. It arrives once (one event, on its word) and then
 # CRAWLS - continuous motion for exactly as long as it stands, which is its `hold` plus the retreat when the author
 # gave it one, else its whole window. It is credited like a `life` (one event per LIFE_CONTINUOUS_S), and never like
@@ -1005,6 +1011,11 @@ def _species_events(scenes: list[dict]) -> list[float]:
                 if edge == "pulse":      # P71 T12: a lit chip's blinks - one event per onset, inside its window only
                     if sp.get("pulse") is True and sp.get("state") == "lit":
                         ons = [at + CHIP_PULSE["land_s"] + k * CHIP_PULSE["s"] for k in range(CHIP_PULSE["n"])]
+                        out += [round(w, 2) for w in ons if w < at + dur and keep(w)]
+                    continue
+                if edge == "qpulse":     # P71 T18: an unknown's blinks - one event per onset, inside its window only
+                    if sp.get("pulse") is True:
+                        ons = [at + UNKNOWN_PULSE["settle_s"] + k * UNKNOWN_PULSE["s"] for k in range(UNKNOWN_PULSE["n"])]
                         out += [round(w, 2) for w in ons if w < at + dur and keep(w)]
                     continue
                 if edge == "terms":      # P70 T6: ... and an equation's terms are written one per word, each on its own `at`

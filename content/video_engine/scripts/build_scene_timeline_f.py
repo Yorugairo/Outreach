@@ -258,6 +258,15 @@ CHIP_LAND_S, CHIP_CROSS_S = 0.55, 0.5          # species/chip.mjs CHIP.LAND_S / 
 CHIP_PULSE_N, CHIP_PULSE_S = 3, 0.5            # chip.mjs CHIP.PULSE_N / PULSE_S: the blinks run from at + LAND_S
 # a tab that is a NUMBER (a price, a size, a share count) would read as a trade record (A59's don't): refused by name
 CHIP_TAB_NUMBER = re.compile(r"^[\s$\u20ac\u00a3\u00a5+\-\u2212(]*\d[\d\s,.%)]*[kKmMbBxX]?\s*$")
+# P71 T18 (was P69 T53; Bravos A61, HIS 01:48): THE CHIP'S "?" - `glyph: "?"` is a TEXT mark in the page face above the card
+# (never an icon: A2a), popping on `glyph_at` (else with the chip). The open question is its whole use: a chip whose label
+# STATES a figure (CHIP_FIGURE), and a "?" on it is USE-WHEN :792's don't - refused by name, with the tick, the tab and
+# the cross (one mark per chip; asked or failed, not both). The glyph chip's only: the stamp form refuses both by name.
+CHIP_GLYPHS = ("?",)
+CHIP_QMARK_KEYS = ("glyph", "glyph_at")
+# a label that STATES A FIGURE: a price ($150), a share (12%), a multiple (2x), a size (3bn, 40k), a decimal (1.5) or a
+# grouped number (10,000) - never a NAME that carries a digit (S&P 500, G7, Q3), which is a thing, not a figure
+CHIP_FIGURE = re.compile("[$\\u20ac\\u00a3\\u00a5]\\s*\\d|\\d\\s*(%|x\\b|\\u00d7|k\\b|m\\b|bn\\b|b\\b|tn\\b|t\\b)|\\d\\.\\d|\\d{1,3}(,\\d{3})+", re.I)
 CHIP_FORMS = ("stamp",)            # opt-in raster prop form; absent keeps the sourced SVG chip contract
 STAMP_INKS = ("cream", "charcoal")
 STAMP_SIZE_MIN, STAMP_SIZE_MAX, STAMP_SIZE_DEFAULT = 180, 420, 260  # stage px
@@ -1039,6 +1048,26 @@ RULER_YEAR_RE = re.compile(r"(?<!\d)(1\d{3}|2\d{3})(?!\d)")   # a year printed i
 # `ruler_caption_advice` holds against the stage caption's home strip (caption_home_box).
 RULER_Y_DEFAULT = {"16:9": 0.74, "9:16": 0.56}
 RULER_BAND_HALF_PX = 138 / 2 + 14 + 0.72 * 132
+# P71 T18 (was P69 T53; the Bravos harvest v2's A61 "\"?\" prompt at the unknown", n=5; F12 "Collage dissolves into \"?\"")
+# - THE UNKNOWN. A STAGE species: on its word a LARGE "?" lands at a point or in a region of the room - BOOM 08:52.5's
+# crimson "?" beside the plot, HIS's over a node, the newsroom's empty third on "Decide for yourself" - on BOOM's pop,
+# HELD (an annotation after its landing, s91) or PULSING (`pulse: true`, one event per blink, s99). `under: "blur"` is
+# F12: what it rises over - the press pile standing, else the page (its words kept) or the plate - recedes under T15's
+# blur law (the engine's paintUnknownVeil). Its law and painter are species/chip.mjs (QMARK, unknownPose, paintUnknown);
+# this file owns its grammar (`_validate_unknown`, every key refused by name). Its truth: a "?" is for what we cannot
+# state, so it is never put ON a datum - the chart states that figure (USE-WHEN :792's don't) - but beside it, in the room.
+SPECIES_UNKNOWN = "unknown"
+SPECIES_KINDS += (SPECIES_UNKNOWN,)
+SPECIES_WHEN[SPECIES_UNKNOWN] = ("TURNS, at the turn or the close: the open question IS the sentence ('decide for yourself', "
+                                 "'what survives it') - a large '?' lands in the room it asks about; never where we can "
+                                 "state a figure (write it), and never on a datum (the chart states that one)")
+UNKNOWN_KEYS = ("kind", "at", "dur", "target", "size", "ink", "pulse", "under", "idle", *ROW_PATH_KEYS)
+UNKNOWN_SIZE_DEFAULT = 122                        # species/chip.mjs QMARK.SIZE [MEASURED: BOOM 08:52.5] - the "?"'s ink height
+UNKNOWN_SIZE_MIN = round(LPG.CARD_TYPE_PX, 2)     # QMARK.SIZE_MIN: the smallest "?" is a label at the s90 floor
+UNKNOWN_SIZE_MAX = 400                            # QMARK.SIZE_MAX
+UNKNOWN_INKS = ("neg", "chalk")                   # QMARK.INKS: the template's --lp-neg crimson, or its chalk
+UNKNOWN_UNDER = ("blur",)                         # F12: T15's blur - a hover is a card's, never a mark's
+UNKNOWN_SETTLE_S = 0.4                            # QMARK.SETTLE_S: a pulse's first blink starts here (test_unknown_prompt pins them)
 # P70 T6 (was P69 T56; the Bravos harvest v2's T38 "Equation row: inputs, relation, signed result", DOM 09:30-09:39,
 # and A60 "Equation built in spoken order") - THE EQUATION ROW. A STAGE species laid out in a declared region: 2-3 terms,
 # each written by the hand on its own word, the operators springing in between, "=" landing with the signed result on
@@ -2222,6 +2251,8 @@ SPECIES_TARGETS[SPECIES_AXIS_TAG] = ()   # P71 T9: a tag names its x as the page
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
                                                                  # line's point, a bar), or a point / the box of a mark or a prop
 SPECIES_TARGETS[SPECIES_EQUATION] = ("region",)   # P70 T6: the row's ROOM is declared - it is laid out and sized inside it
+SPECIES_TARGETS[SPECIES_UNKNOWN] = ("point", "region")   # P71 T18: the "?" stands in the ROOM - a point, or centred in a region; a
+                                                         # datum is refused by name (the chart states it, _validate_unknown)
 SPECIES_TARGETS[SPECIES_CHAPTER] = ()   # P70 T9: the pill is chrome over an act - it points at nothing and stands at the page's ink origin
 SPECIES_TARGETS[SPECIES_BALANCE] = ("region",)   # P70 T7: a balance needs its ROOM declared - the box it stands in; a point would leave its size to the painter
 SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
@@ -3569,6 +3600,10 @@ def _validate_chip(entry: dict) -> list[str]:
             if key in entry:
                 errs.append(f"chip stamp: {key} is not supported - a stamped chip is a seal, and a seal carries its verdict "
                             "in its ring text (E99 s121), never a state; the states are the glyph chip's (P71 T12)")
+        for key in CHIP_QMARK_KEYS:   # P71 T18: the "?" is the glyph chip's too
+            if key in entry:
+                errs.append(f"chip stamp: {key} is not supported - a stamped chip is a seal, and a seal says what it says in "
+                            "its ring text (E99 s121); the \"?\" is the glyph chip's (P71 T18), or a large `unknown` beside it")
         return errs
     if "readability" in entry and entry["readability"] != "landscape-phone":
         errs.append("chip: readability must be 'landscape-phone'")
@@ -3589,7 +3624,37 @@ def _validate_chip(entry: dict) -> list[str]:
             errs.append("chip: 'cross_at' must be a number (episode seconds, the word the claim is retracted on)")
         elif isinstance(entry.get("at"), (int, float)) and not isinstance(entry.get("at"), bool) and ca <= entry["at"]:
             errs.append(f"chip: cross_at {ca} is not after at {entry['at']} - a chip is crossed out on a LATER word")
-    return errs + _validate_chip_states(entry)
+    return errs + _validate_chip_states(entry) + _validate_chip_qmark(entry)
+
+
+def _validate_chip_qmark(entry: dict) -> list[str]:
+    """P71 T18: the glyph chip's "?", refused BY NAME when malformed or misplaced (rule (h); at 7263013 both keys were
+    accepted and ignored). `glyph` is "?" and nothing else; `glyph_at` times a "?" the chip names, on a later word inside
+    its window; the "?" shares the top edge with no check and no tab, never stands on a crossed chip, and never on a
+    label that states a figure (USE-WHEN :792, "don't: where we can state a figure")."""
+    errs: list[str] = []
+    has = "glyph" in entry
+    if has and entry["glyph"] not in CHIP_GLYPHS:
+        errs.append(f"chip: glyph must be \"?\" - the open question, a text mark in the page face (P71 T18); the chip's "
+                    f"picture is its `icon`, a sourced glyph (A2a) - not {entry['glyph']!r}")
+    if "glyph_at" in entry:
+        if not has:
+            errs.append("chip: glyph_at times a \"?\", and the chip names none (glyph: \"?\")")
+        errs += _chip_clock(entry, "glyph_at", "asked")
+    if not has:
+        return errs
+    if "tick_at" in entry:
+        errs.append("chip: glyph and tick_at on one chip - the \"?\" and the check badge both stand on the card's top edge; "
+                    "one mark per chip (a thing asked about is not yet a thing that held)")
+    if "tab" in entry:
+        errs.append("chip: glyph and tab on one chip - the \"?\" and the tab both stand on the card's top edge; one mark per chip")
+    if "cross_at" in entry or entry.get("state") == "crossed":
+        errs.append("chip: glyph with cross_at (or state: \"crossed\") - an open question or a failed claim, not both")
+    label = entry.get("label")
+    if isinstance(label, str) and CHIP_FIGURE.search(label):
+        errs.append(f"chip: glyph \"?\" on a label that states a figure ({label!r}) - the \"?\" is for what we cannot state "
+                    "(USE-WHEN :792, \"don't: where we can state a figure\"); write the figure, or ask on a chip that names none")
+    return errs
 
 
 def _chip_clock(entry: dict, key: str, what: str) -> list[str]:
@@ -4901,6 +4966,43 @@ def _validate_ruler(entry: dict) -> list[str]:
     if extra:
         errs.append(f"ruler: {', '.join(map(repr, extra))} - a ruler takes only "
                     f"{'|'.join(k for k in RULER_KEYS if k not in ('kind', 'at', 'dur', *ROW_PATH_KEYS))}")
+    return errs
+
+
+def _validate_unknown(entry: dict) -> list[str]:
+    """P71 T18: an `unknown`'s own fields, every one refused BY NAME when malformed or misplaced (P71's review finding 7).
+    `size` is the "?"'s ink height in stage px; `ink` neg | chalk; `pulse` true (with room for its blinks) or absent (held);
+    `under` "blur" (F12); `idle` a named kind (checked by _validate_entry). A datum target is refused as what it is: the
+    chart states that figure, and USE-WHEN :792's don't is "where we can state a figure"."""
+    errs: list[str] = []
+    tg = entry.get("target")
+    if isinstance(tg, dict) and tg.get("kind") == "datum":
+        errs.append("unknown: a datum is a figure the chart states - a '?' on it asks what the page has just drawn (USE-WHEN "
+                    ":792, \"don't: where we can state a figure\"); stand the '?' at a point beyond the data or in a region "
+                    "of the room")
+    if "size" in entry:
+        v = entry["size"]
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or not UNKNOWN_SIZE_MIN <= v <= UNKNOWN_SIZE_MAX:
+            errs.append(f"unknown: size must be the '?''s ink height in stage px, {UNKNOWN_SIZE_MIN}-{UNKNOWN_SIZE_MAX} "
+                        f"(absent = {UNKNOWN_SIZE_DEFAULT}, BOOM 08:52.5's) - not {v!r}")
+    if "ink" in entry and entry["ink"] not in UNKNOWN_INKS:
+        errs.append(f"unknown: ink must be one of {' | '.join(UNKNOWN_INKS)} (the template's --lp-neg crimson, or its chalk) "
+                    f"- not {entry['ink']!r}")
+    if "pulse" in entry:
+        if entry["pulse"] is not True:
+            errs.append(f"unknown: pulse must be true (the '?' blinks {CHIP_PULSE_N} times, E99 s99) - absent, it is held, "
+                        f"an annotation (s91) - not {entry['pulse']!r}")
+        dur, need = entry.get("dur"), round(UNKNOWN_SETTLE_S + CHIP_PULSE_N * CHIP_PULSE_S, 3)
+        if _num(dur) and dur < need:
+            errs.append(f"unknown: pulse needs {need} s of the window (the pop settles at {UNKNOWN_SETTLE_S} s, then "
+                        f"{CHIP_PULSE_N} blinks of {CHIP_PULSE_S} s); dur {dur:g} ends before its last blink")
+    if "under" in entry and entry["under"] not in UNKNOWN_UNDER:
+        errs.append(f"unknown: under must be \"blur\" - what the '?' rises over recedes under T15's blur (F12); a hover is "
+                    f"a card's, never a mark's - not {entry['under']!r}")
+    extra = sorted(k for k in entry if k not in UNKNOWN_KEYS)
+    if extra:
+        errs.append(f"unknown: {', '.join(map(repr, extra))} - an unknown takes only "
+                    f"{'|'.join(k for k in UNKNOWN_KEYS if k not in ('kind', 'at', 'dur', *ROW_PATH_KEYS))}")
     return errs
 
 
@@ -6315,6 +6417,13 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
                     "to settle")
     if kind == SPECIES_EQUATION:      # P70 T6
         errs += _validate_equation(entry)
+    if kind == SPECIES_UNKNOWN:       # P71 T18
+        errs += _validate_unknown(entry)
+    elif "under" in entry:            # P71 T18: a species' `under` is the unknown's (a DOCK's `under` is the dock's own, P71 T15)
+        errs.append(f"{kind}: 'under' is the unknown's - the blur the collage recedes under while a large '?' rises (F12); "
+                    f"a {kind} veils nothing (a dock's `under` is the dock's option, P71 T15)")
+    if kind != SPECIES_CHIP and "glyph_at" in entry:   # P71 T18: the chip's own key, refused by name elsewhere
+        errs.append(f"{kind}: 'glyph_at' is the chip's - the word its '?' lands on (P71 T18); a {kind} carries no '?' to time")
     if kind in VECMAP_SPECIES:
         errs += _validate_vecmap_species(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing

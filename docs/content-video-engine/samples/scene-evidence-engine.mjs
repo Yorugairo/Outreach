@@ -7268,6 +7268,40 @@ async function mount(doc) {
     dockveil.style.backdropFilter = css; dockveil.style.webkitBackdropFilter = css;
     dockveil.style.clipPath = k > 0.001 ? dockVeilClip(world) : "none";
   };
+  /* ---- P71 T18 (F12, CHN 0:35: "a hook's collage of claims resolves into the open question") - THE COLLAGE RECEDES ----
+     An `unknown` (the large "?", species/chip.mjs paintUnknown) that names `under: "blur"` lays T15's veil under itself:
+     the same law - DOCK_VEIL.BLUR on a min-jerk up over IN_S from its word, and down over OUT_S so it has cleared as the
+     "?" leaves at the end of its window - on #unkveil, a div of its own just below #species: above the docks, the press
+     pile and the plate, below the "?" (which paints in #species) and the caption. What recedes is what the "?" rises over:
+     the PRESS PILE standing (the live cards' boxes as posed this frame, PRESS_POSE, grown by the blur's reach) - else the
+     page, its words kept sharp (T15's dockVeilClip), else the whole plate. The collage's SHRINK (CHN: x0.47 over 0.6 s) is
+     the pile's own pose (paintPress / pressStack) and is not drawn here. The element exists only when the timeline asks
+     for it, so a build without one has the base's DOM; pure in t: the envelope reads t and the entry, the boxes the frame.
+       REACH 3 [DERIVED: a Gaussian's visible spread is about three sigma - the card's blurred edge is kept inside the cut]. */
+  const UNKNOWN_VEIL = Object.freeze({ REACH: 3 });
+  const unkveil = (TL.scenes || []).some((s) => (s.species || []).some((sp) => sp && sp.kind === "unknown" && sp.under === "blur"))
+    ? (() => { const v = document.createElement("div"), sp = $("species"); v.id = "unkveil";
+               v.style.cssText = "position:absolute;inset:0;pointer-events:none"; sp.parentNode.insertBefore(v, sp); return v; })()
+    : null;
+  const unknownVeilK = (sp, t) => {   /* the veil's share at t: 0 outside the "?"'s window */
+    const a = +sp.at, z = a + (+sp.dur || 0);
+    if (!(t >= a && t <= z)) return 0;
+    return minJerk((t - a) / DOCK_VEIL.IN_S) * (t > z - DOCK_VEIL.OUT_S ? 1 - minJerk((t - (z - DOCK_VEIL.OUT_S)) / DOCK_VEIL.OUT_S) : 1);
+  };
+  const unknownVeilClip = (sc) => {   /* the live press cards' boxes, else the page's words cut out, else none */
+    const p = DOCK_VEIL.BLUR * UNKNOWN_VEIL.REACH, f = (v) => v.toFixed(1);
+    const cards = Object.keys(PRESS_POSE).map((k) => PRESS_POSE[k].card).filter((b) => b && b.w > 0 && b.h > 0);
+    if (cards.length) return 'path("' + cards.map((b) => "M" + f(b.x - p) + " " + f(b.y - p) + "h" + f(b.w + 2 * p) + "v" + f(b.h + 2 * p)
+      + "h" + f(-(b.w + 2 * p)) + "Z").join("") + '")';
+    return sc.world && sc.world.kind === "ledger" ? dockVeilClip(wB) : "none";
+  };
+  const paintUnknownVeil = (sc, t) => {
+    if (!unkveil) return;
+    const k = (sc.species || []).reduce((m, sp) => (sp && sp.kind === "unknown" && sp.under === "blur" ? Math.max(m, unknownVeilK(sp, t)) : m), 0);
+    const css = k > 0.001 ? "blur(" + (DOCK_VEIL.BLUR * k).toFixed(2) + "px)" : "none";
+    unkveil.style.backdropFilter = css; unkveil.style.webkitBackdropFilter = css;
+    unkveil.style.clipPath = k > 0.001 ? unknownVeilClip(sc) : "none";
+  };
 
   /* the READING rectangle: the card's own CSS geometry, measured with no placement forced on it.
      Content-independent (width, left and top are all CSS), so it is measured once per dock. */
@@ -20046,6 +20080,14 @@ async function mount(doc) {
                 hugging it. A tab names a MOVE, never a trade record: no number.
        None of the three is a stamped chip's: a seal carries its verdict in its ring text (E99 s121), and the compiler
        refuses a state on the stamp form by name. Absent, the chip paints exactly what it painted.
+       P71 T18 (was P69 T53; Bravos A61), THE "?" - the open question as a TEXT mark in the page face (no icon: A2a):
+       ?      - `glyph: "?"` on a chip: a "?" centred ABOVE the card in the glyph's chalk (HIS 01:48, the "?" over the ROI
+                node), popping on `glyph_at` (else with the chip) and held - an annotation of the thing, which it rides.
+                A chip carries one mark on its top edge (a "?", a check or a tab) and is asked or failed, never both.
+       unknown - the `unknown` species (paintUnknown below): a LARGE "?" at a point or a region, in the neg crimson (BOOM
+                08:52.5) or the chalk, on BOOM's pop (the one T17 measured off BOOM's failed-link disc), held (s91) or
+                pulsing (`pulse: true`, s99), leaving on its own fade inside its window. The veil it may rise over
+                (`under: "blur"`, F12) is the engine's (paintUnknownVeil), on T15's blur law.
      Nothing is stored: every visual reads from t, sp.at and sp.cross_at, so a scrubbed frame is the played
      frame. The glyph is a SOURCED icon (assets/icons, A2a provenance) carried in the asset map as `icon:<name>`;
      this module never invents geometry. The dials below are ours to tune (42 s42.5), not findings. */
@@ -20089,6 +20131,39 @@ async function mount(doc) {
     TAB_INK: Object.freeze({ sell: "#FF4D4D", buy: "#3DDC84" }),   /* E28's sign inks: the template's --lp-neg / --lp-pos (pinned by a test) */
     TAB_TEXT: "#25313C",  /* the word on the tab: charcoal, the ink with the higher WCAG contrast on BOTH fills (pinned by a test) */
     TAB_EM: Object.freeze({ SELL: 2.56, BUY: 2.12 }),   /* the word's advance in em at weight 700 [MEASURED: getComputedTextLength in the golden's own page, SELL 151.0 / BUY 124.75 px at 59.08 px - scratchpad/p71-t12/logs/measure-tab-word.json] - sizes the tab */
+  });
+
+  /* P71 T18: THE "?" - one mark, two places. Sized by its INK height (the glyph's cap-to-baseline, what a frame shows), so
+     a dial means what it measures: the font size is h / INK_EM. Measured off Bravos with one tool (scratchpad p71-t18
+     scripts/measure_q.py, logs/measure-q.json) - E38, the reference first. */
+  const QMARK = Object.freeze({
+    FACE: "Inter, Arial, sans-serif",   /* the page face - the chip label's own stack (.chiplab) */
+    WEIGHT: 800,          /* Bravos's "?" is a heavy geometric sans (BOOM 08:52.5; HIS 01:48) */
+    INK_EM: 0.728,        /* the "?"'s ink from the baseline to its top, in em, centred on the anchor to 0.000 em [MEASURED: the player's
+                             resolved Inter at 800, rasterised at 1000 px - scratchpad p71-t18 scripts/measure_qmark_em.py] */
+    /* the `unknown` species - BOOM 08:52.5 (jx3Ll-GJtMY, 1920 x 1080) */
+    SIZE: 122,            /* the ink height, stage px [MEASURED: BOOM 08:52.5, the settled "?" 122 px of 1080 (bbox 1550-1629 x 346-467)] */
+    SIZE_MIN: 59.08,      /* the smallest "?" is a label at the s90 floor [DERIVED: ledger_page.CARD_TYPE_PX] */
+    SIZE_MAX: 400,        /* ... and the largest a third of the stage [DERIVED: CHN 0:35's biggest "?" is 0.26 of the height, 285 px] */
+    INKS: Object.freeze({ neg: "#FF4D4D", chalk: "#F2F2F2" }),   /* the template's --lp-neg (BOOM's crimson, rgb(201,30,62), is the ink
+                             T17 matched to it - FLOW.FAIL_INK) and --lp-chalk (HIS's white); pinned by a test */
+    POP_FROM: 0.3,        /* its first-seen size [MEASURED: BOOM 08:52.5, 42 px on its settled 122 (0.34) - T17's FLOW.FAIL_POP_FROM, the same pop] */
+    MP: 0.3,              /* its overshoot [MEASURED: the peak 146 px, 1.197 x the settled size = 0.3 + 0.7 x (1 + Mp)] */
+    POP_S: 0.83,          /* its spring's clock: at Mp 0.3 springPop peaks at u 0.201, so the peak lands 0.167 s in, BOOM's (FLOW.FAIL_POP_S) */
+    SETTLE_S: 0.4,        /* when it stands [MEASURED: BOOM, 122 px from +0.4 s after the dip to 118] - a pulse's first blink starts here */
+    PULSE_AMP: 0.12,      /* `pulse: true`: each blink swells the "?" by this share, on a sine square, CHIP.PULSE_N times of CHIP.PULSE_S
+                             [DERIVED: no Bravos "?" pulses on disk (BOOM's holds 2.8 s) - HG1 reads it] */
+    GLOW_K: 0.08,         /* the halo in its own ink, as a share of its height [DERIVED: CHN 0:35 / BOOM 13:52's soft rim, the frame read] */
+    GLOW_A: 0.55,         /* ... at this alpha */
+    LEAVE_S: 0.25,        /* it fades out over the last LEAVE_S of its window [DERIVED: BOOM's "?" leaves with its page, a cut we do not own] */
+    /* the chip's "?" - HIS 01:48 (Jw8ykhoOVBQ, 1280 x 720) */
+    CHIP_H: 0.38,         /* its ink height in card sides [MEASURED: 62-64 px on the 164 px node card] */
+    CHIP_GAP: 0.146,      /* its ink's foot above the card's top edge, in card sides [MEASURED: 24 px] - centred on the card to 0.5 px */
+    CHIP_FROM: 0.2,       /* its first-seen size [MEASURED: 13 px on its settled 64] */
+    CHIP_MP: 0.04,        /* its overshoot: the house POP [MEASURED: the peak 64 on the settled 62, ~3 %] */
+    CHIP_POP_S: 0.72,     /* its clock [MEASURED: 97 % at +0.23 s after first seen; springPop(u, 0.04) reaches 0.97 at u 0.372] */
+    KEYLINE: "rgba(27,30,35,.85)",   /* the chip's "?" wears the chip label's keyline (.chiplab), so the chalk reads on any ground */
+    KEYLINE_W: 6,
   });
 
   /* OPT-IN STAMP FORM (P62): an approved woodblock raster prop freely placed on a
@@ -20334,6 +20409,43 @@ async function mount(doc) {
   /* P71 T12: the states at t, beside chipPose (which stays today's, field for field): the halo, the check and the tab. */
   const chipStates = (sp, t, cardSize = CHIP.SIZE, o = {}) =>
     ({ lit: chipLitF(sp, t, o), check: chipCheckPose(sp, t, cardSize, o), tab: chipTabPose(sp, t, cardSize, o) });
+
+  /* P71 T18: THE "?"'s POP at t for a mark whose word is `at`: the spring from `from` with overshoot `mp` over `popS`, the
+     fade on the chip's FADE_S; nothing before its word. */
+  const qmarkPop = (t, at, from, mp, popS) => {
+    const u = chip01((t - at) / popS);
+    return { u, scale: from + (1 - from) * springPop(u, mp), fade: chip01((t - at) / CHIP.FADE_S) };
+  };
+  const qNum = (v) => typeof v === "number" && Number.isFinite(v);
+
+  /* P71 T18: THE CHIP'S "?" at t, or null on a chip that names no `glyph: "?"`: HIS's pop on `glyph_at` (else the chip's own
+     `at`), its ink height and its foot's gap above the card, both in the card's sides. */
+  const chipQmarkPose = (sp, t, cardSize = CHIP.SIZE, o = {}) => {
+    const Q = Object.assign({}, QMARK, o);
+    if (!sp || sp.glyph !== "?") return null;
+    const at = qNum(sp.glyph_at) ? sp.glyph_at : +sp.at, pop = qmarkPop(t, at, Q.CHIP_FROM, Q.CHIP_MP, Q.CHIP_POP_S);
+    return { at, scale: pop.scale, fade: pop.fade, h: Q.CHIP_H * cardSize, gap: Q.CHIP_GAP * cardSize, ink: Q.INKS.chalk };
+  };
+
+  /* P71 T18: THE UNKNOWN's blink onsets (none unless `pulse: true`): CHIP.PULSE_N of them from the settle (at + SETTLE_S),
+     CHIP.PULSE_S apart - the gate credits one event at each (gate_motion_density's "qpulse" edge, UNKNOWN_PULSE). */
+  const unknownPulseOnsets = (sp, o = {}) => {
+    const Q = Object.assign({}, QMARK, o);
+    if (!(sp && sp.pulse === true)) return [];
+    return Array.from({ length: CHIP.PULSE_N }, (_, k) => +sp.at + Q.SETTLE_S + k * CHIP.PULSE_S);
+  };
+
+  /* P71 T18: THE UNKNOWN at t - BOOM's pop, a blink's swell (pulse only), the leave inside its window; its ink height and
+     ink. Everything from the declaration and t. */
+  const unknownPose = (sp, t, o = {}) => {
+    const Q = Object.assign({}, QMARK, o), at = +sp.at, end = at + (qNum(sp.dur) ? sp.dur : 0);
+    const pop = qmarkPop(t, at, Q.POP_FROM, Q.MP, Q.POP_S);
+    const on = unknownPulseOnsets(sp, Q).find((a) => t >= a && t < a + CHIP.PULSE_S && a < end);
+    const w = on === undefined ? 0 : Math.sin(Math.PI * (t - on) / CHIP.PULSE_S);
+    const leave = chip01((t - (end - Q.LEAVE_S)) / Q.LEAVE_S);
+    return { at, scale: pop.scale * (1 + Q.PULSE_AMP * w * w), fade: pop.fade * (1 - leave), leave,
+             h: qNum(sp.size) ? sp.size : Q.SIZE, ink: Q.INKS[sp.ink] || Q.INKS.neg };
+  };
 
   /* P70 T1: does this chip LAND AS A STAMP? Only the stamp FORM takes the arrival (the compiler refuses it anywhere else,
      by name); a glyph chip, flow's node chips and the count array keep chipLand whatever they carry. */
@@ -20613,6 +20725,42 @@ async function mount(doc) {
     }
     if (st.check && st.check.fade > 0) paintChipCheck(el, g, h, st.check, drawOn);   /* P71 T12: the badge; the card keeps its ink */
     if (st.tab && st.tab.fade > 0) paintChipTab(el, g, h, st.tab);
+    const qm = chipQmarkPose(sp, t, cardSize);   /* P71 T18: the "?" above the card; null on a chip without it */
+    if (qm && qm.fade > 0) paintChipQmark(el, g, h, qm);
+  }
+
+  /* P71 T18: THE "?" as a TEXT mark: its ink's centre at the group's origin (its baseline h / 2 below), so the pop scales
+     it about its own middle. */
+  function qmarkText(el, g, h, style) {
+    const q = el("text", "qmark", g, { x: 0, y: (h / 2).toFixed(1), "text-anchor": "middle",
+      style: "font-family:" + QMARK.FACE + ";font-size:" + (h / QMARK.INK_EM).toFixed(2) + "px;font-weight:" + QMARK.WEIGHT + ";" + style });
+    q.textContent = "?";
+    return q;
+  }
+
+  /* P71 T18: THE CHIP'S "?" centred above the card (HIS 01:48), in the chip's group (it rides the landing and the idle). */
+  function paintChipQmark(el, g, h, qm) {
+    const cy = -h - qm.gap - qm.h / 2;
+    const qg = el("g", "chipqmark", g, { opacity: qm.fade.toFixed(3),
+      transform: "translate(0 " + cy.toFixed(1) + ") scale(" + qm.scale.toFixed(4) + ")" });
+    qmarkText(el, qg, qm.h, "fill:" + qm.ink + ";paint-order:stroke;stroke:" + QMARK.KEYLINE + ";stroke-width:" + QMARK.KEYLINE_W + "px");
+  }
+
+  /* P71 T18 - THE UNKNOWN's PAINTER (the module rule: registered below, beside the chip's). A large "?" centred on its
+     point, or in its region; the idle a held thing owes (E49) is the chip's, applied the same way. It paints on the layer
+     paintSpecies chose - a point or a region is #species, above the docks, so it stands over the collage it resolves. */
+  function paintUnknown(ctx) {
+    const { sp, t, svg, el, resolveTarget, hash, idle, seed, si } = ctx;
+    const b = resolveTarget(sp.target);
+    if (!b) return;   /* the targeting law: no resolved target, nothing painted */
+    const p = unknownPose(sp, t);
+    if (!(p.fade > 0)) return;
+    const ix = sp.idle && sp.idle !== "none" ? idle(sp.idle, t, hash(seed | 0, si | 0, 991)) : { scale: 1, dx: 0, dy: 0 };
+    const cx = b.x + b.w / 2 + ix.dx, cy = b.y + b.h / 2 + ix.dy;
+    const g = el("g", "unknown", svg, { opacity: p.fade.toFixed(3),
+      transform: "translate(" + cx.toFixed(1) + " " + cy.toFixed(1) + ") scale(" + (p.scale * ix.scale).toFixed(4) + ")" });
+    const a = Math.round(QMARK.GLOW_A * 255).toString(16).padStart(2, "0");
+    qmarkText(el, g, p.h, "fill:" + p.ink + ";filter:drop-shadow(0 0 " + (QMARK.GLOW_K * p.h).toFixed(1) + "px " + p.ink + a + ")");
   }
 
   /* P71 T12: THE CHECK BADGE centred ON the card's top edge (HIS 06:13), in the chip's group (it rides the landing and the
@@ -20654,6 +20802,7 @@ async function mount(doc) {
   /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can
      import this file for the math above without the template's registry */
   if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.chip = paintChip;
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.unknown = paintUnknown;   /* P71 T18: the large "?" shares the chip's mark */
   /* KINETICS:END */
   /* KINETICS:BEGIN press */
   /* species/press.mjs - THE PRESS CARD STACK (P50 T3; doc 29 §9.27 rows "Push hand-off" and "Squiggle marks";
@@ -26450,6 +26599,7 @@ async function mount(doc) {
     paintSpecies(sc, t);
     paintDockJoins(live, t);   /* P71 T23: the leader and the ring of a card joined to its date - on the chart's layer */
     paintChapters(t);   /* P70 T9: the acts, over every scene they cover (a timeline with none returns at once) */
+    paintUnknownVeil(sc, t);   /* P71 T18: F12 - what a large "?" rises over recedes under T15's blur (a timeline with none returns at once) */
     /* on a LEDGER PAGE the stage caption sits in the page's declared quiet zone (s9.25 #2, s9.28 C2:
        never over the emphasized datum); elsewhere it is centred */
     const qz = stage && sc.world.kind === "ledger" && sc.world.page ? sc.world.page.quiet_zone : null;

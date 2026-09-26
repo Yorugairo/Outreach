@@ -5674,6 +5674,63 @@ FRAME_T.update({"fill-below-zero": 7.0,     # at rest: the bleed and the deepen 
                 "fill-underwater": 14.0})   # the label written whole (the word ends 13.4), the fill and its glow at rest
 
 
+# ---- P71 T18 (was P69 T53; Bravos A61): THE "?" AT THE UNKNOWN - H row 23's own beat --------------------------------------
+# Steel and Paper H row 23c: dip 9 into HOST WINDOW 3, the newsroom, on "Decide for yourself which of those you believe"
+# (the take 743.04-744.10, shifted by -735.04 so "Decide" lands at 8.00). The open question IS the sentence: a large "?"
+# lands on "Decide" in the room's EMPTY LEFT THIRD (the H plate world-h3-newsroom-v1 is black there, the host stands
+# right of centre with the certificate) - BOOM 08:52.5's crimson "?", placed where Bravos places it, beside the subject,
+# never on it - and holds (an annotation, s91) until the certificate is thrown on "is the certificate". The H plate is a
+# GENERATED image (gitignored, E99 s31), so the golden paints a STAND-IN: the room's dark blue, its black left third, a
+# figure in the host's suit right of centre. Judged at 9.0: the pop settled (+0.4 s) and standing.
+UNKNOWN_SHIFT = 735.04
+UNKNOWN_DECIDE = {"kind": "unknown", "at": round(743.04 - UNKNOWN_SHIFT, 2), "dur": 3.0, "size": 240,
+                  "target": {"kind": "point", "x": 0.13, "y": 0.42}}   # size: the row's - the room's empty third takes a
+                                                                         # "?" twice BOOM's chart-side 122 (the frame read on the H plate)
+NEWSROOM_STANDIN = [(0.0, 0.0, 0.245, 1.0),                                   # the black left third (the H plate's)
+                    (0.66, 0.06, 0.70, 0.15), (0.63, 0.15, 0.73, 0.55),      # the host's head and suit
+                    (0.64, 0.55, 0.675, 0.93), (0.685, 0.55, 0.72, 0.93),    # ... his legs
+                    (0.30, 0.52, 0.52, 0.60), (0.80, 0.52, 1.0, 0.60)]       # the desks either side
+
+
+def png_newsroom_standin(w: int, h: int) -> bytes:
+    """The newsroom as shapes: a dark blue room, a black left third, the host and two desks - a committed input, not art."""
+    import struct as _s
+    room, black, suit, desk = (36, 48, 66), (8, 10, 14), (46, 70, 140), (58, 64, 74)
+    inks = [black, suit, suit, suit, suit, desk, desk]
+    raw = bytearray()
+    for y in range(h):
+        line = bytearray(b"\x00")
+        for x in range(w):
+            c = room
+            for (x0, y0, x1, y1), ink in zip(NEWSROOM_STANDIN, inks):
+                if x0 * w <= x < x1 * w and y0 * h <= y < y1 * h:
+                    c = ink
+                    break
+            line += bytes(c)
+        raw += line
+
+    def chunk(tag: bytes, data: bytes) -> bytes:
+        return _s.pack(">I", len(data)) + tag + data + _s.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", _s.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + chunk(b"IEND", b""))
+
+
+def unknown_decide() -> tuple[dict, dict]:
+    """The "?" on "Decide for yourself": one `unknown`, held, in the newsroom stand-in's empty third."""
+    import build_scene_timeline_f as BST
+    species = [dict(UNKNOWN_DECIDE)]
+    assert not BST.validate_species(species, (0, 0, 0), "plate-newsroom"), BST.validate_species(species, (0, 0, 0), "plate-newsroom")
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-newsroom", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    uris["plate-newsroom"] = uri("image/png", png_newsroom_standin(320, 180))
+    return _timeline("Golden: the \"?\" lands on \"Decide for yourself\" in the room's empty third", scenes, {}, "16:9"), uris
+
+
+SURFACES.update({"unknown-decide": unknown_decide})
+FRAME_T.update({"unknown-decide": 9.0})   # "Decide" at 8.0: the pop settled (+0.4) and the "?" standing (it leaves at 11.0)
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

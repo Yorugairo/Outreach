@@ -736,6 +736,17 @@
             "TAB_PAD": "14",
             "LAND_S": "0.55"
           }
+        },
+        {
+          "name": "question",
+          "does": "a \"?\" in the page face centred ABOVE the card (HIS 01:48), 0.38 of the card tall, its foot 0.146 above the top edge, in the glyph's chalk with the label's keyline; it pops from 0.2 on the house spring and holds",
+          "trigger": "`glyph: \"?\"` - on `glyph_at`, else with the chip (never with a tick, a tab or a cross)",
+          "dials": {
+            "CHIP_H": "0.38",
+            "CHIP_GAP": "0.146",
+            "CHIP_FROM": "0.2",
+            "CHIP_POP_S": "0.72"
+          }
         }
       ],
       "blends": [
@@ -773,6 +784,12 @@
           "source": "Bravos A59 - BUY / SELL state tabs (JPN 04:08, 05:34; DOM 17:30)",
           "became": "the tab",
           "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:667",
+          "tie": "recorded"
+        },
+        {
+          "source": "Bravos A61 - the \"?\" over the ROI node (HIS 01:48; BOOM 13:52's \"???\" over an investors chip)",
+          "became": "the question",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:789",
           "tie": "recorded"
         }
       ],
@@ -816,6 +833,16 @@
           "token": "tab_at",
           "means": "the tab's own word, a later one inside the window; absent, the tab lands with the chip; refused without a `tab`",
           "source_set": "CHIP_STATE_KEYS"
+        },
+        {
+          "token": "glyph",
+          "means": "`glyph: \"?\"` only (P71 T18, A61): the open question above the card; refused by name with a tick, a tab or a cross, on a label that states a figure (a price, a share, a multiple) and on the stamp form",
+          "source_set": "CHIP_GLYPHS"
+        },
+        {
+          "token": "glyph_at",
+          "means": "the \"?\"'s own word, a later one inside the window; absent, it lands with the chip; refused without a `glyph` and on any other kind",
+          "source_set": "CHIP_QMARK_KEYS"
         }
       ],
       "dials": {
@@ -838,7 +865,8 @@
         "P71 T12",
         "E99 s91",
         "E99 s99",
-        "E28"
+        "E28",
+        "P71 T18"
       ],
       "status": "wired",
       "proof": {
@@ -2660,6 +2688,150 @@
           "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
           "t": 9.22
         }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:unknown",
+      "axis": "species",
+      "token": "unknown",
+      "title": "The \"?\" at the unknown",
+      "aliases": [
+        {
+          "name": "\"?\" prompt at the unknown",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:789"
+        },
+        {
+          "name": "Collage dissolves into \"?\"",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:1007"
+        }
+      ],
+      "does": "A large \"?\" lands on its word at a point or in a region of the room - beside the subject, never on a datum - on BOOM's pop, then holds or pulses; `under: blur` recedes what it rises over (a press pile, a page, a plate) under T15's blur.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "TURNS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"unknown\", \"at\", \"dur\", \"target\": point|region, \"size\"?, \"ink\"?: neg|chalk, \"pulse\"?: true, \"under\"?: \"blur\", \"idle\"?} (shot row 7th element); a datum target is refused (the chart states that figure)",
+        "example": "{\"kind\": \"unknown\", \"at\": 8.0, \"dur\": 3.0, \"target\": {\"kind\": \"point\", \"x\": 0.13, \"y\": 0.42}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (unknown-decide)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the landing",
+          "does": "the \"?\" (Inter 800, sized by its INK height) pops from 0.3 to a 1.21 overshoot and settles, fading up on the chip's FADE_S - BOOM 08:52.5's pop, the one T17 measured off BOOM's failed-link disc",
+          "trigger": "the species' `at`, over POP_S",
+          "dials": {
+            "SIZE": "122",
+            "POP_FROM": "0.3",
+            "MP": "0.3",
+            "POP_S": "0.83"
+          }
+        },
+        {
+          "name": "the hold or the pulse",
+          "does": "held it is an annotation (0 events, s91) and takes a named idle (E49); `pulse: true` swells it by PULSE_AMP CHIP.PULSE_N times from the settle, an event per onset (s99)",
+          "trigger": "at + SETTLE_S",
+          "dials": {
+            "SETTLE_S": "0.4",
+            "PULSE_AMP": "0.12",
+            "PULSE_N": "3",
+            "PULSE_S": "0.5"
+          }
+        },
+        {
+          "name": "the recede (F12)",
+          "does": "`under: blur`: #unkveil blurs what the \"?\" rises over - the live press cards' boxes, else the page with its words kept, else the plate - on T15's DOCK_VEIL law, clearing as the \"?\" leaves",
+          "trigger": "the species' `at` (IN_S up), at + dur - OUT_S (down)",
+          "dials": {
+            "DOCK_VEIL.BLUR": "8",
+            "REACH": "3"
+          }
+        },
+        {
+          "name": "the leave",
+          "does": "it fades out over the last LEAVE_S of its window",
+          "trigger": "at + dur - LEAVE_S",
+          "dials": {
+            "LEAVE_S": "0.25"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos A61 - BOOM 08:52.5, the crimson \"?\" beside the plot on 'the most important question' (VERIFY.md row A61)",
+          "became": "the mark, its ink, its size and its pop",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:789",
+          "tie": "recorded"
+        },
+        {
+          "source": "Bravos F12 - CHN 0:35, the press collage shrinks and blurs while three \"?\" rise over it",
+          "became": "the recede under the blur (the shrink is the pile's pose, not built)",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:1007",
+          "tie": "recorded"
+        },
+        {
+          "source": "P71 T17's failed-link disc pop (flow.mjs FLOW.FAIL_POP_FROM / FAIL_MP / FAIL_POP_S), measured off the same video",
+          "became": "the landing's spring",
+          "record": "content/video_engine/scripts/species/flow.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "P71 T15's dock veil (DOCK_VEIL, the blurzoom's backdrop-filter law)",
+          "became": "the recede",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "size",
+          "means": "the \"?\"'s ink height in stage px, 59.08-400 (absent = 122, BOOM 08:52.5's)",
+          "source_set": "UNKNOWN_SIZE_DEFAULT"
+        },
+        {
+          "token": "ink",
+          "means": "`neg` (the template's --lp-neg crimson, default) or `chalk` (HIS's white)",
+          "source_set": "UNKNOWN_INKS"
+        },
+        {
+          "token": "pulse",
+          "means": "`pulse: true`: it blinks CHIP.PULSE_N times from the settle (s99); refused when not true or when the window cannot hold the blinks",
+          "source_set": "UNKNOWN_KEYS"
+        },
+        {
+          "token": "under",
+          "means": "`under: \"blur\"` (F12): what it rises over recedes under T15's blur; a hover is a card's, refused; `under` on any other species is refused by name",
+          "source_set": "UNKNOWN_UNDER"
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/species/chip.mjs",
+        "object": "QMARK"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/chip.mjs",
+        "symbol": "paintUnknown"
+      },
+      "doctrine": [
+        "P71 T18",
+        "E99 s91",
+        "E99 s99",
+        "E99 s106",
+        "E49",
+        "E38"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "unknown-decide",
+        "test": "content/video_engine/tests/test_unknown_prompt.py",
+        "first_use": null
       },
       "callable": {
         "today": true,

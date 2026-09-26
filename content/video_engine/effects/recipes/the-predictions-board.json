@@ -1,0 +1,44 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-predictions-board",
+ "title": "The predictions board, struck one by one",
+ "aliases": [
+  {
+   "name": "Predictions board",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:1011"
+  }
+ ],
+ "acts": [
+  "RETRACTS"
+ ],
+ "members": [
+  {
+   "card": "dock_kind:press",
+   "offset_s": 0.0,
+   "role": "each prediction's SOURCE first: its press card (or record) on the word that quotes it - the board carries no claim the row has not sourced"
+  },
+  {
+   "card": "species:chip",
+   "offset_s": 1.0,
+   "role": "then its chip in the rail beside it (one per prediction, on its word, the label naming the claim); on 'six months later' each is crossed in turn (cross_at, a word apart)"
+  }
+ ],
+ "window_s": 14.0,
+ "does": "Other people's predictions land one per word - each its press card, then its chip on the rail - and on 'six months later' the chips are struck in turn: the board is read back as a record of what did not happen.",
+ "use_when": {
+  "act": "RETRACTS - a set of forecasts judged after the fact",
+  "moment": "hook",
+  "shape": "named things: 2-4 sourced predictions (who said what), then the date that judged them",
+  "use": "other people's predictions lined up, then struck on 'six months later' (CHN 1:28-1:55: oil at $150-200, flights cancelled, recession)",
+  "dont": "the predictions are unsourced (each names its press card or record); a prediction that has not been judged yet (a '?', not an X)"
+ },
+ "doctrine": [
+  "P71 T18",
+  "E99 s99",
+  "E99 s106",
+  "E99 s109"
+ ],
+ "status": "candidate",
+ "source": "P71 T18 (was P69 T53; Bravos R13, CHN 1:28-1:55 - chips beside the broadcast that made each claim, struck on '6 months later'). Its members are proved by the goldens press-stack (the sourced cards) and chip-board (chips crossed on their words); the composed beat was read as a private test-bed strip for the next hook (scratchpad p71-t18 frames/strip r13), labelled as one; no approved cut carries it",
+ "count": 0
+}
