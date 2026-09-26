@@ -534,9 +534,16 @@ def test_real_docs_own_their_ids_and_reach_the_body_vocabulary() -> None:
     assert "E41" in entries["docs/portable/OPERATOR-RULINGS.md"]["defines"]
     caps = entries["docs/content-video-engine/CAPABILITIES.md"]["defines"]
     assert any("G2 short mode" in title for title in caps)
+    # The body vocabulary is the JSONL's: the Markdown's ladder sheds terms as the tree grows (its sixth,
+    # Kubelka, left doc 44's line when the cf49d44 merge put the file on the 5-term rung), so the MD is
+    # pinned to carry the document's line, and the term is pinned where docs_find reads it (P72 T51c)
+    doc44 = "docs/content-video-engine/44-INK-AND-SURFACE.md"
+    lines = (ROOT / BDM.JSONL_REL).read_text(encoding="utf-8").splitlines()
+    hits = [json.loads(line)["path"] for line in lines if "kubelka" in line.lower()]
+    assert doc44 in hits, hits
+    assert any("kubelka" in term.lower() for term in entries[doc44]["key_terms"])
     text = BDM.render_md(list(entries.values()))
-    hits = [line for line in text.splitlines() if "kubelka" in line.lower()]
-    assert any("44-INK-AND-SURFACE.md" in line for line in hits), hits
+    assert sum(1 for line in text.splitlines() if line.startswith(f"- {doc44} — ")) == 1
 
 
 def test_real_heading_phrases_reach_their_document_through_the_jsonl() -> None:

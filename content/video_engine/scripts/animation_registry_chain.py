@@ -32,6 +32,10 @@ DOCS_DIR = "docs/content-video-engine"
 SOURCES_DIR = "content/video_engine/sources/reference_analyses"
 RESEARCH_INDEX_REL = f"{DOCS_DIR}/RESEARCH-INDEX.md"   # research heading -> the doc section it became
 ROW_FILES = (f"{DOCS_DIR}/BACKLOG.md", f"{DOCS_DIR}/47-FINDINGS-TO-CHECKS.md")
+# Where BACKLOG.md's rows went when it was split (0f68e28, 2026-09-23: lines 55-921 moved byte for byte).
+# The rows kept their verdicts there - R26-63 WITHDRAWN, R26-64 RULED, D9 deferred with a trigger - so
+# reading BACKLOG.md alone turned tracked and retired records orphaned (P72 T51c).
+ROW_ARCHIVES = (f"{DOCS_DIR}/BACKLOG-HISTORY-*.md",)
 EXTRA_DOCS = (f"{DOCS_DIR}/FINDING-the-animation-math-and-what-it-changes.md",
               f"{DOCS_DIR}/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md")
 DOC_NUMBERS = (29, *range(42, 54))
@@ -161,13 +165,20 @@ def norm_heading(text: str) -> str:
     return text.strip().rstrip(":").casefold()
 
 
-def table_rows(root: Path) -> list[tuple[str, int, str]]:
-    """(path, line, text) for every Markdown table row of BACKLOG.md and 47-FINDINGS-TO-CHECKS.md.
+def row_files(root: Path) -> tuple[str, ...]:
+    """The live row files, then each BACKLOG history ledger on disk (sorted, so the order is stable)."""
+    archived = sorted({rel_of(root, p) for pattern in ROW_ARCHIVES for p in Path(root).glob(pattern)})
+    return ROW_FILES + tuple(rel for rel in archived if rel not in ROW_FILES)
 
-    The docs index carries level-7 rows for BACKLOG only - 47 is not one of its row files - so both
+
+def table_rows(root: Path) -> list[tuple[str, int, str]]:
+    """(path, line, text) for every Markdown table row of BACKLOG.md, 47-FINDINGS-TO-CHECKS.md and the
+    BACKLOG history ledgers (`row_files`).
+
+    The docs index carries level-7 rows for BACKLOG only - 47 is not one of its row files - so all
     are parsed here the same way, from the source, and the two sets agree on BACKLOG."""
     out = []
-    for rel in ROW_FILES:
+    for rel in row_files(root):
         for i, line in unfenced(split_lines(read_text(root, rel))):
             if line.lstrip().startswith("|") and not TABLE_SEP.match(line):
                 out.append((rel, i + 1, line))

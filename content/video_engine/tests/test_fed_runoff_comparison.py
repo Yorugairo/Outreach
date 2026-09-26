@@ -77,7 +77,10 @@ def test_renderer_has_opt_in_gutter_with_legacy_defaults() -> None:
     renderer = (ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs").read_text(encoding="utf-8")
     block = renderer[renderer.index("const buildLedgerBars"):renderer.index("const buildLedgerLine")]
     assert "left_gutter" in block
-    assert "P ? 150 : 60" in block
+    # the legacy defaults, portrait 150 and landscape 60; P69 T8 (58c5f86, E99 s97) put the long form's profile
+    # gutter between them, and that profile's gutter never drops under the landscape 60
+    assert "const defaultGutter = P ? 150 : LF ? LF.gutter : 60;" in block
+    assert "gutter: Math.max(60, " in renderer
     assert "Math.max(defaultGutter, requestedGutter)" in block
 
 

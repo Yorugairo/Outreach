@@ -89,6 +89,7 @@ paid with awareness. Three rules and one checklist, no tools beyond git:
   4. If the engine moved on either side: the goldens re-pinned ONCE, in one commit, the sha table in the message.
   5. From main: `git merge --ff-only <branch>`; then update the lane's row in `docs/WORKTREE-REGISTER.md` (last merge).
   6. Never `--force`, never amend after a push, never delete a branch or a worktree without the operator's word, never `git add -A`; deletions in an index-only commit. Push only on the operator's fresh word in chat.
+- **The whole suite, file by file** (a lane head's green claim, P72 T51): `python content/video_engine/scripts/run_full_suite.py --skip-goldens`, run in the lane's own worktree (never an export, so no gitignored input is missing) - every `tests/test_*.py` and `tests/kinetics/*.test.mjs` in its own process, a failing file rerun alone once (a pass is a flake, reported apart), a log per file and `SUMMARY.md` under `content/video_engine/runtime/suite/<stamp>/`, exit 1 on a real failure; it ends only the processes it started.
 
 The lane write sets (one checkout or several - the boundary is the same):
 

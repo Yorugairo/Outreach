@@ -50,7 +50,10 @@ def _timeline(path: Path, *, aspect: str, pages: list[dict]) -> Path:
 
 
 def _fake_entry(calls: list, builder: str, aspect: str, page: dict | None = None,
-                *, full_stage: bool | None = None) -> dict:
+                *, full_stage: bool | None = None, focus: dict | None = None) -> dict:
+    # `entry`'s signature, stubbed: P69 T8e (eb58794) gave it `focus` - a panels page's first focus state, which
+    # build_pages passes for every page (None off a panels page). These pages have no panels, so no focus.
+    assert focus is None, focus
     rendered = dict(page or _page())
     if full_stage is True:
         rendered["full_stage"] = True

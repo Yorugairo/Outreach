@@ -608,8 +608,30 @@ def test_the_three_citation_orphans_the_triage_found_are_implemented_through_the
 def test_the_two_handed_chains_row_tracks_it_and_the_word_closed_in_its_title_does_not_retire_it(real) -> None:
     hits = _at(real, "09_2d", "Closed Kinematic Chains")
 
-    # TRIAGE T12: `BACKLOG.md` defers D9 with a trigger; the retire keyword was reading the title
+    # TRIAGE T12: `BACKLOG.md` defers D9 with a trigger; the retire keyword was reading the title. The row
+    # lives in the history ledger since the split (0f68e28), and it still tracks the section (P72 T51c)
     assert {r["status"] for r in hits} == {"tracked"}
+    assert all(any("BACKLOG-HISTORY-" in e for e in r["status_evidence"]) for r in hits)
+
+
+def test_a_row_the_backlog_split_moved_into_a_history_ledger_is_still_a_row(tmp_path: Path) -> None:
+    docs = tmp_path / "docs/content-video-engine"
+    docs.mkdir(parents=True)
+    (docs / "BACKLOG.md").write_text("| id | row |\n|---|---|\n| R1 | live |\n", encoding="utf-8")
+    (docs / "BACKLOG-HISTORY-2026-09.md").write_text(
+        "# History\n\n| id | row |\n|---|---|\n| R2 | **WITHDRAWN** `STROBE_PX_S` |\n", encoding="utf-8")
+    (docs / "NOT-A-BACKLOG-HISTORY.md").write_text("| id | row |\n|---|---|\n| R3 | elsewhere |\n", encoding="utf-8")
+
+    rows = BAR.table_rows(tmp_path)
+
+    # 0f68e28 moved BACKLOG.md's rows byte for byte into BACKLOG-HISTORY-2026-09.md; read from BACKLOG.md alone,
+    # R26-63's withdrawal, R26-64's dial and D9's deferral stopped being rows and three records went orphaned
+    assert BAR.row_files(tmp_path)[:2] == BAR.ROW_FILES
+    assert ("docs/content-video-engine/BACKLOG-HISTORY-2026-09.md", 5,
+            "| R2 | **WITHDRAWN** `STROBE_PX_S` |") in rows
+    assert [r[2] for r in rows] == ["| id | row |", "| R1 | live |", "| id | row |",
+                                    "| R2 | **WITHDRAWN** `STROBE_PX_S` |"]
+    assert BAR.row_status(None, [r for r in rows if "R2" in r[2]])[0] == "retired"
 
 
 def test_every_formula_record_carries_one_of_the_three_provenances(real) -> None:

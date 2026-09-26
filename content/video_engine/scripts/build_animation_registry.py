@@ -57,11 +57,11 @@ from animation_registry_render import (  # noqa: E402  (the Markdown face, split
 # is `animation_registry_chain`, split out at the same cap. It is imported back whole, so every
 # public name of the registry is still importable from here.
 from animation_registry_chain import (  # noqa: E402,F401  (re-exported: see above)
-    CHAIN_ARROW, EXPR_MAX, NAME_MAX, RESEARCH_INDEX_REL, RETIRED_WORD, ROW_FILES, SOURCES_DIR,
-    Research, chain_hits, chain_reach, chain_roots, doc_of, file_headings, formula_files,
+    CHAIN_ARROW, EXPR_MAX, NAME_MAX, RESEARCH_INDEX_REL, RETIRED_WORD, ROW_ARCHIVES, ROW_FILES,
+    SOURCES_DIR, Research, chain_hits, chain_reach, chain_roots, doc_of, file_headings, formula_files,
     graduation_target, header_comment, header_lines, heading_map, heading_spans, norm_heading,
-    prose_lines, provenance, read_text, rel_of, research_index_edges, retirement, section_matcher,
-    split_lines, status_text, strip_markdown, table_rows, truncate, unfenced)
+    prose_lines, provenance, read_text, rel_of, research_index_edges, retirement, row_files,
+    section_matcher, split_lines, status_text, strip_markdown, table_rows, truncate, unfenced)
 
 JSONL_REL = "docs/ANIMATION-REGISTRY.jsonl"
 MD_REL = "docs/ANIMATION-REGISTRY.md"
@@ -249,6 +249,7 @@ class Corpus:
         self.use_scans = self.module_scans + [self.template_scan]
         self.scans = {scan.rel: scan for scan in self.use_scans}
         self.test_tokens = {rel: word_tokens(text) for rel, text in self.tests.items()}
+        self.row_files = row_files(self.root)
         self.rows = table_rows(self.root)
         self.research = Research(self.root, formula_files(self.root))
         self._bodies: dict[str, list[tuple[str, str, int, int]]] = {}
@@ -778,7 +779,7 @@ def formula_status(rec: dict, corpus: Corpus, code: list[dict], rows: list[tuple
     if strong and status != "retired":
         return "implemented", strong
     cited = [f"{e['from']['path']}:{e['from']['line']}" for e in corpus.citations
-             if anchor and e["from"]["path"] in ROW_FILES and e.get("to")
+             if anchor and e["from"]["path"] in corpus.row_files and e.get("to")
              and f"{e['to']['path']}:{e['to']['line']}" == anchor]
     if status == "orphaned":
         # a gate chain speaks only here, where nothing else does: a check is not a build
