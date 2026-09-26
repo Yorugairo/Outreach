@@ -317,8 +317,8 @@ def fired(timeline, dials: dict | None = None) -> list[dict]:
     `what` the page's own entry, `roll-out` when it declares none), a page RETRACT over the scene's
     last `LP_RETRACT_S` where the page does not leave on the cut (`whirl` when it arrived by spiral,
     `flip` otherwise - the bed's own map), a LANDING at each weighted dock's CONTACT frame
-    (`landing_contact`, so the sound cannot drift from the motion), and a SUCK at a scene that ends
-    on one. These are the instants a cue may be bound to; every other instant is silence the map
+    (`landing_contact`, so the sound cannot drift from the motion), and a SUCK at the START of the scene
+    that arrives by one (P72 T20). These are the instants a cue may be bound to; every other instant is silence the map
     never mapped."""
     W, G = walk(), gates()
     scenes = list((timeline or {}).get("scenes") or [])
@@ -340,11 +340,11 @@ def fired(timeline, dials: dict | None = None) -> list[dict]:
                             "scene": e.scene, "ref": e.ref})
         elif e.cls == "arrival":
             arrive = str(e.card).split(":", 1)[1]
-            contact = round(landing_contact(e.t, arrive, dials), 2)
+            contact = round(seen_contact(timeline, e, landing_contact(e.t, arrive, dials)), 2)   # P72 T20: a hand-off's first frame
             out.append({"kind": "landing", "what": arrive, "at": contact, "until": contact,
                         "scene": e.scene, "ref": e.ref, "mass": arrival_mass({"arrive": arrive, "mass": e.option})})
         elif e.cls == "exit" and str(e.ref or "").split(":", 1)[0] == SUCK:
-            out.append({"kind": SUCK, "what": SUCK, "at": round(t1, 2), "until": round(t1, 2),
+            out.append({"kind": SUCK, "what": SUCK, "at": round(float(span[0]), 2), "until": round(float(span[0]) + suck_s(), 2),
                         "scene": e.scene, "ref": e.ref})
     return sorted(out, key=lambda r: (r["at"], r["kind"], r["what"]))
 
@@ -580,3 +580,166 @@ def e81_gain(vo_lufs: float, cue_lufs: float, under_db: float = E81_UNDER_DB) ->
         raise ValueError(f"E81: an accent starts {lo:g}-{hi:g} dB under the voice, not {under_db:g} - a departure is "
                          "written on the cue with its reason")
     return bed_gain(vo_lufs, -under_db, cue_lufs)
+
+
+# --- P72 T20: THE SOUND FOLLOWS THE FRAME (E99 s116; E81; R26-286, R26-329, R26-35, R26-363) --------------------------------
+# At the file's END for P70 T8's reason: lane A's H door cites `audio.py:511`, so nothing above it moves. `fired` (above) calls
+# `suck_s` and `seen_contact` from here in two lines edited in place.
+ENGINE_SRC = Path(__file__).resolve().parents[4] / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+_ENGINE_TEXT: dict[str, str] = {}
+SNAP_EXIT_S = (0.05, 1.4)      # the engine's near-boundary exit snap (:7661 `b - d.exit > 0.05 && b - d.exit <= 1.4`), a literal there
+SEEK_DP = 2                    # the player's `#scrub` step (0.01 s): every captured frame is seeked through it (render_baseline)
+PRESS_KIND = "press"           # the engine's `PRESS_KIND`: a press card is mounted by paintPress and holds no slot
+
+
+def engine_dial(name: str, src: Path | None = None) -> float:
+    """One number the ENGINE declares (`const NAME = <n>` or `..., NAME = <n>` in one const line), read from the source so
+    the cue and the frame share one clock - the way `stop_dials` reads the kinetics module. The text is read once per path."""
+    path = Path(src or ENGINE_SRC)
+    text = _ENGINE_TEXT.get(str(path))
+    if text is None:
+        text = _ENGINE_TEXT.setdefault(str(path), path.read_text(encoding="utf-8"))
+    m = re.search(r"^\s*const\s+(?:[A-Za-z_]\w*\s*=\s*[^,;\n]+,\s*)*" + re.escape(name) + r"\s*=\s*([0-9.]+)\s*[,;]",
+                  text, flags=re.M)
+    assert m, f"scene-evidence-engine.mjs no longer declares {name}"
+    return float(m.group(1))
+
+
+def suck_s(src: Path | None = None) -> float:
+    """The suck's seconds (`SUCK_S`): the outgoing world spins into its point over this from the start of the scene whose
+    exit reads `suck:<x>,<y>` (engine `su = (t - sc.span[0]) / SUCK_S`)."""
+    return engine_dial("SUCK_S", src)
+
+
+def dock_exit_s(src: Path | None = None) -> float:
+    """How long a dock stays LIVE past its exit (`EXIT`): the engine's `live` filter, `t < d.exit + (d.handed ? 0 : EXIT)`."""
+    return engine_dial("EXIT", src)
+
+
+def dock_join_s(src: Path | None = None) -> float:
+    """The engine's `DOCK_JOIN`: one slide re-authored within this of its exit is ONE card (the coalesce)."""
+    return engine_dial("DOCK_JOIN", src)
+
+
+def _owns_exit(d: dict, timeline) -> bool:
+    """The engine's `dockOwnsExit`: a stamp (under stop_action) or a prop keeps its exit - never snapped to the turn."""
+    stop = ((timeline or {}).get("kinetics") or {}).get("stop_action") is True
+    kind = (((timeline or {}).get("evidence") or {}).get(d.get("slide")) or {}).get("kind")
+    return (stop and d.get("arrive") == STAMP) or kind == "prop"
+
+
+def _coalesced(timeline) -> list[dict]:
+    """Every scene's docks as copies, one slide re-authored within DOCK_JOIN of its exit merged into ONE card (engine :7603)."""
+    groups: dict[str, list[dict]] = {}
+    for sc in (timeline or {}).get("scenes") or []:
+        for d in sc.get("docks") or []:
+            groups.setdefault(str(d.get("slide")), []).append(dict(d, enter=float(d["enter"]), exit=float(d["exit"])))
+    join, merged = dock_join_s(), []
+    for ds in groups.values():
+        cur = None
+        for d in sorted(ds, key=lambda x: x["enter"]):
+            if cur is not None and d["enter"] - cur["exit"] <= join and not cur.get("handed") and d.get("arrive") != "morph":
+                cur["exit"] = max(cur["exit"], d["exit"])
+            else:
+                cur = d
+                merged.append(d)
+    return sorted(merged, key=lambda x: x["enter"])
+
+
+def slot_docks(timeline) -> list[dict]:
+    """The engine's DOCKS as its slot painter reads them (scene-evidence-engine.mjs :7583-:7661), mirrored: coalesced, sorted
+    by enter (stable), a card exiting 0.05-1.4 s before a scene turn held to the turn. Each carries `leave` - how long it
+    stays live past its exit (0 for a handed prop, else EXIT)."""
+    docks = _coalesced(timeline)
+    bounds = [float(sc["span"][0]) for sc in (timeline or {}).get("scenes") or []]
+    lo, hi = SNAP_EXIT_S
+    for d in docks:
+        for b in ([] if _owns_exit(d, timeline) else bounds):
+            if d["enter"] < b and lo < b - d["exit"] <= hi and not d.get("handed"):
+                d["exit"] = b
+                break
+        d["leave"] = 0.0 if d.get("handed") else dock_exit_s()
+    return docks
+
+
+def _frame_at_or_after(t: float, fps: int = FPS) -> float:
+    """The first frame the RENDER paints at or after `t`. A frame f is captured at f / fps SEEKED THROUGH the player's
+    scrubber (`render_baseline.frame_png` sets `#scrub`, a range input of `step="0.01"`), so the engine reads
+    round(f / fps, SEEK_DP): measured on H, a card freed at 755.21 is painted on frame 755.2083 and one freed at 785.54 on
+    785.5833, not 785.5417."""
+    f = math.floor(t * fps) - 1
+    while round(f / fps, SEEK_DP) < t:
+        f += 1
+    return f / fps
+
+
+def first_seen(timeline, slide: str, enter: float, fps: int = FPS) -> float | None:
+    """The first instant the engine PAINTS this dock's card (R26-329): its enter, unless an earlier card still holds its
+    slot - the slot painter shows the FIRST live card (`live.find(x => x.slot === s)`), so a card handed on in one slot is
+    first seen on the first frame after the outgoing card has left `live` (its exit + EXIT), already settled. None when the
+    timeline carries no such dock, or its slot never frees while it is live - a card the frame never shows."""
+    docks = slot_docks(timeline)
+    idx = next((i for i, d in enumerate(docks)
+                if str(d.get("slide")) == str(slide) and abs(d["enter"] - float(enter)) < 1e-3), None)
+    if idx is None:
+        return None
+    d = docks[idx]
+    if d.get("slot") is None or d.get("kind") == PRESS_KIND:
+        return d["enter"]
+    before = [p for p in docks[:idx] if p.get("slot") == d.get("slot") and p.get("kind") != PRESS_KIND]
+    t = d["enter"]
+    while True:
+        held = [p["exit"] + p["leave"] for p in before if p["enter"] <= t < p["exit"] + p["leave"]]
+        if not held:
+            break
+        t = max(held)
+    if t == d["enter"]:
+        return t
+    return _frame_at_or_after(t, fps) if t < d["exit"] + d["leave"] else None
+
+
+def seen_contact(timeline, e, contact: float) -> float:
+    """A weighted arrival's landing AS THE FRAME PLAYS IT (`fired`): its contact, or - when its card is first painted after
+    it (a slot hand-off, R26-329) - that first frame, where the card appears already down. E99 s116: the cue follows it."""
+    seen = first_seen(timeline, e.ref, e.t)
+    return max(contact, seen) if seen is not None else contact
+
+
+def suck_cues(rows, variants: dict, gain: float, *, fade_in: float = 0.0) -> list[dict]:
+    """One `suck N` cue per row whose exit reads `suck:<x>,<y>`, on the row's START - where the engine plays it and where
+    `fired` books it (R26-286). The door names the sound and the gain (the episode owns its files and levels; E81: start
+    the gain at `e81_gain` off the file's measured loudness); a missing sound
+    or a gain outside (0, 1] is refused by name (s106: a silent drop is neither advice nor refusal)."""
+    if not isinstance(variants, dict) or not variants or not all(isinstance(v, str) and v for v in variants.values()):
+        raise ValueError(f"suck_cues: variants must name at least one sound file, got {variants!r}")
+    if isinstance(gain, bool) or not isinstance(gain, (int, float)) or not 0 < gain <= 1:
+        raise ValueError(f"suck_cues: gain must be in (0, 1], got {gain!r}")
+    return [{"slot": f"{SUCK} {i + 1}", "at": round(float(r[0]), 2), "gain": gain, "fade_in": fade_in,
+             "variants": dict(variants),
+             "note": f"the suck: the outgoing world spins into its point over SUCK_S {suck_s():g} s from the row's start"}
+            for i, r in enumerate(rows) if isinstance(r[5], str) and r[5].startswith(SUCK)]
+
+
+def _env_at(env, t: float) -> float:
+    keys = sorted((float(k[0]), float(k[1])) for k in env)
+    if t <= keys[0][0]:
+        return keys[0][1]
+    for (t0, v0), (t1, v1) in zip(keys, keys[1:]):
+        if t0 <= t <= t1:
+            return v0 if t1 == t0 else v0 + (v1 - v0) * (t - t0) / (t1 - t0)
+    return keys[-1][1]
+
+
+def swell_holds(env, swell_db: float, t0: float, t1: float) -> bool:
+    """Whether a bed envelope (`bed_envelope`'s [[t, dB], ...], linear between keys) holds its full swell over [t0, t1] -
+    R26-35's check that the swell sits on the arrival that lands. Linear pieces: the ends and the keys between decide it."""
+    if not env:
+        return False
+    probes = [t0, t1] + [float(k[0]) for k in env if t0 < float(k[0]) < t1]
+    return all(_env_at(env, t) >= swell_db - 1e-9 for t in probes)
+
+
+def accent_level(vo_lufs: float, cue_lufs: float, gain: float) -> dict:
+    """An accent's level against the voice at a gain, measured to measured: `{voice, cue, under_db}` (R26-363's table)."""
+    cue = cue_lufs + 20 * math.log10(gain)
+    return {"voice": vo_lufs, "cue": round(cue, 2), "under_db": round(vo_lufs - cue, 2)}
