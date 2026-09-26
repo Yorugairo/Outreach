@@ -5947,6 +5947,53 @@ FRAME_T.update({"enter-trace": 3.3,   # the trace done (the build, 3.0 s), the f
                 "ink-from-crash": round(INK_CRASH_AT + INK_CRASH_S + 0.5, 2)})   # 11.70: the fall landed red 0.5 s ago
 
 
+
+# ---- P71 T29 (was P69 T77; harvest v2 F2, BUB #3): GLOW EDGES - a glow outline on the named bar -----------------------
+#   glow-outline-bar  Steel and Paper H row 18b's concentration page - the row's own plate string (CHAPTER_PAGE: one
+#                     bar, 20 (%), the long form, live, soft-shouldered) and its own figure ("20%" written as the bar
+#                     grows, the row's `figure` on the page's word) - with the take's words shifted by -384.12 s so
+#                     the page lands at 0.0. On "twenty percent" (385.21 -> 1.09) the 20 bar is LIT: a glow outline
+#                     lands on it - an edge in its crimson burning near-white round the bar, the fill glow's two halos
+#                     in that edge's light (BUB #3's lit region, the one glow system: lpFillGlow on the outline's
+#                     stroke). No body row adopts it before HG1 (common rule (f)); this is the beat the plan names.
+#                     Judged at 4.0: the bar stood (the page draws 0.0-3.0), the glow held (an annotation, 0 events -
+#                     no `pulse`).
+GLOW_SHIFT = 384.12
+GLOW_AT = round(385.21 - GLOW_SHIFT, 2)          # "twenty percent"
+GLOW_DUR = round(385.89 - 385.21, 2)             # ... the word
+GLOW_SPECIES = [
+    {"kind": "figure", "at": 0.0, "dur": 1.2, "target": {"kind": "datum", "index": 0}, "text": "20%"},   # the row's own: "20%" as it stands
+    {"kind": "glow", "at": GLOW_AT, "dur": GLOW_DUR, "bar": 0},                                       # "twenty percent": the 20 bar lit
+]
+
+
+def glow_outline_bar(glow: dict | None = None, extra: list | None = None) -> tuple[dict, dict]:
+    """The golden's timeline; `glow` (the glow row's keys, or {} for NO glow) and `extra` species are test_glow_edges'
+    reads only - the committed golden is the plain call."""
+    import build_scene_timeline_f as BST
+    species = [dict(GLOW_SPECIES[0])]
+    if glow != {}:
+        species.append(dict(GLOW_SPECIES[1], **(glow or {})))
+    species += [dict(e) for e in (extra or [])]
+    assert not BST.validate_species([dict(e) for e in species], (0, 0, 0), CHAPTER_PAGE),         BST.validate_species([dict(e) for e in species], (0, 0, 0), CHAPTER_PAGE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(CHAPTER_PAGE, (0, 0, 0), CHAPTER_PROJECT)
+        BST.stamp_full_stage(world["page"])
+        BST.derive_rescale_states(world, species, CHAPTER_PAGE, CHAPTER_PROJECT)   # the compiler's own page checks: check_glow's truth
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: the named bar lit - a glow outline on the 20 (glow)", scenes, {}, "16:9")
+    return tl, dict(_base_uris(), **BST.longform_assets(tl))
+
+
+SURFACES.update({"glow-outline-bar": glow_outline_bar})
+FRAME_T.update({"glow-outline-bar": 4.0})   # the bar stood (its page draws 0.0-3.0), the glow held since 1.09 + its fade
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

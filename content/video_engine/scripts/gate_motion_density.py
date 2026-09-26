@@ -445,6 +445,10 @@ SPECIES_EVENTS["level_join"] = ("at", "end")
 # P71 T20: THE DATUM BADGE springs in on its word (a list sweeps in over ~0.2 s, one landing) - ONE event; what it does
 # after that is a mark standing on the data (s91) and earns nothing.
 SPECIES_EVENTS["datum_badge"] = ("at",)
+# P71 T29: THE GLOW EDGE is the chip's `lit` light on a page's mark (chipLitF, the one light grammar): HELD it is an
+# annotation and earns nothing, not even its landing (E99 s91 - a light that sits); `pulse: true` BLINKS it - one event
+# per blink onset (E99 s99), on CHIP_PULSE's clock, as the lit chip's ("pulse", below).
+SPECIES_EVENTS["glow"] = ("pulse",)
 # P71 T32: THE LENS's glass TRAVELS - it rises onto the line on its word, walks the stretch and leaves by its end (s99): both
 # edges are events. The magnified line inside it is the page's own ink seen closer, and earns nothing of its own.
 SPECIES_EVENTS["lens"] = ("at", "end")
@@ -1009,7 +1013,7 @@ def _species_events(scenes: list[dict]) -> list[float]:
                         out += [round(at + i * gap, 2) for i in range(1, n) if keep(at + i * gap)]
                     continue
                 if edge == "pulse":      # P71 T12: a lit chip's blinks - one event per onset, inside its window only
-                    if sp.get("pulse") is True and sp.get("state") == "lit":
+                    if sp.get("pulse") is True and (sp.get("state") == "lit" or sp.get("kind") == "glow"):   # P71 T29: a glow IS lit
                         ons = [at + CHIP_PULSE["land_s"] + k * CHIP_PULSE["s"] for k in range(CHIP_PULSE["n"])]
                         out += [round(w, 2) for w in ons if w < at + dur and keep(w)]
                     continue
@@ -3789,8 +3793,8 @@ EMPTY_PLOT_FAIL_S = 4.0    # ... and past four the chart has stopped proving any
 EMPTY_PLOT_EPS_S = 0.01    # two stretches of ink closer than this are one (the compiler's 2 dp clocks)
 # authoring/shapes.PLOT_MARKS less `undraw` (it takes ink, it lays none) - MIRRORED, since shapes imports this module
 PLOT_INK_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "span", "ring", "lit_stretch", "freeze",
-                  "explode", "member", "level_join", "datum_badge")   # P71 T10: the join is ink on the plot; P71 T20: the badge on its datum
-PLOT_HELD_MARKS = ("lit_stretch", "level_join", "datum_badge")   # authoring/shapes.HELD_MARKS: a light that has landed stands to the page's end (P71 T10: and a join)
+                  "explode", "member", "level_join", "datum_badge", "glow")   # P71 T10: the join is ink on the plot; P71 T20: the badge on its datum; P71 T29: the edge on its bar
+PLOT_HELD_MARKS = ("lit_stretch", "level_join", "datum_badge", "glow")   # authoring/shapes.HELD_MARKS: a light that has landed stands to the page's end (P71 T10: and a join)
 NO_PLOT_BUILDERS = ("share", "treemap", "object")   # no axes: the engine's E64 axis hand-over has nothing to hand them
 LINE_INK_BUILDERS = ("dense-line", "story")         # the builders whose ink can be lines alone - capped, then undrawn
 STATELESS_VERBS = ("park", "compare")              # a transform on the standing chart, never a state change

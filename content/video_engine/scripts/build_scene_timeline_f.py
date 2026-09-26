@@ -1046,6 +1046,27 @@ DATUM_BADGE_TARGETS = ("datum", "vertex")   # a line page's datum, a schematic's
 DATUM_BADGE_MAX = 12                        # [DERIVED: JPN 09:09's eight, with room] past this a row is a table, not a verdict
 DATUM_BADGE_STAGGER_S = 0.03                # [MEASURED: JPN 09:09.50-09:09.70, eight discs left to right in ~0.2 s] - the engine's LP_BADGE.STAGGER_S
 DATUM_BADGE_BUILDERS = ("dense-line",)      # the pages whose marks are data on a drawn line (a schematic is one)
+# P71 T29 (was P69 T77; the Bravos harvest v2's F2 "glow outline on a region or bar", BUB #3's hidden block) - GLOW
+# EDGES. A PAGE species: on its word the ONE mark the sentence names is LIT - an edge burns round it (its own ink mixed
+# toward white) with the fill glow's two halos in that edge's light: a BARS page's bar (`bar: <i>`), or the row's k-th
+# `span` (`span: <k>`, the REGION - the shaded stretch, counted in time order). The light is the chip's `lit` (P71 T12):
+# held, it is an annotation (0 events, E99 s91); `pulse: true` blinks it, motion (s99). It is ink on its page's mark, so
+# it leaves with the page (PAGE_BOUND_SPECIES). Its truth (hard, `check_glow`): a mark the page / row has, on a page
+# whose marks are plain bars (a gauge's fill already glows, E99 s130; an extruded bar's prism is not one rect). Its
+# advice (WARN, s106): more than one glow on a row (BRAVOS-USE-WHEN F14's don't: "every card - the glow stops meaning
+# anything"), and a glow landing before its region has shaded in (E99 s71: a light is never the move when its thing
+# should arrive). F14 (a red perimeter on a card) is DROPPED and F19 (the bevelled stamp slab) RETIRED by the plan -
+# neither is a key here.
+SPECIES_GLOW = "glow"
+SPECIES_KINDS += (SPECIES_GLOW,)
+PAGE_SPECIES += (SPECIES_GLOW,)
+PAGE_BOUND_SPECIES += (SPECIES_GLOW,)   # R26-219: an edge on the page's mark leaves with the page
+SPECIES_WHEN[SPECIES_GLOW] = ("RANKS, at the reveal: the ONE bar (or shaded stretch) the sentence names must read as LIT, "
+                              "not just coloured ('twenty percent' on the index's 20 bar) - one per row, never a light "
+                              "standing in for a thing that should ARRIVE (E99 s71)")
+GLOW_KEYS = ("kind", "at", "dur", "bar", "span", "pulse", "keep", *ROW_PATH_KEYS, "leave_at", "leave_s", "leave_clamped")
+GLOW_BUILDERS = ("story",)                        # a `bar` glow: the pages whose marks are plain bars
+GLOW_REFUSED_FORMS = ("gauge", "extruded_bar")    # ... and not these forms of them (a capsule's fill, a prism)
 
 # P71 T14 (was P69 T55; RESCOPED by the BOOM frame verification, VERIFY.md row T32) - THE DECADE RULER. A STAGE species:
 # a full-width ruler (a tick a year, a taller one each five, the tallest each decade under a large faded numeral) enters
@@ -2271,6 +2292,7 @@ SPECIES_TARGETS[SPECIES_LEVEL_JOIN] = ()   # P71 T10: a level join names its two
 SPECIES_TARGETS[SPECIES_RULER] = ()   # P71 T14: the ruler is the stage's full width at its line - it points at nothing
 SPECIES_TARGETS[SPECIES_LENS] = ()   # P71 T32: a lens names its stands as DATA (`from`, `to`); the chart owns where they are
 SPECIES_TARGETS[SPECIES_DATUM_BADGE] = ()   # P71 T20: a badge names its datum or vertex itself (`_validate_datum_badge`); the chart owns where it is
+SPECIES_TARGETS[SPECIES_GLOW] = ()   # P71 T29: a glow names its bar or span by index (`_validate_glow`); the page owns where it is
 SPECIES_TARGETS[SPECIES_SOLO] = SPECIES_TARGETS[SPECIES_UNSOLO] = ()   # P69 T37: a solo names a series or a bar by index; the chart owns where it is
 SPECIES_TARGETS[SPECIES_AXIS_TAG] = ()   # P71 T9: a tag names its x as the page's own value (a tick, a datum, a bar); the chart owns where it is
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
@@ -6590,6 +6612,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_lens(entry)
     if kind == SPECIES_DATUM_BADGE:   # P71 T20
         errs += _validate_datum_badge(entry)
+    if kind == SPECIES_GLOW:          # P71 T29
+        errs += _validate_glow(entry)
     if kind == SPECIES_BALANCE:       # P70 T7
         errs += _validate_balance(entry)
     if kind == SPECIES_RULER:         # P71 T14
@@ -8118,6 +8142,80 @@ def _validate_datum_badge(entry: dict) -> list[str]:
     return errs
 
 
+def _validate_glow(entry: dict) -> list[str]:
+    """P71 T29: a `glow`'s own fields - the ONE mark it lights (`bar: <i>` or `span: <k>`, never both, never neither) and
+    `pulse` (`true` blinks it; absent it holds). The edge's ink is its mark's own and its light is the chip's, so any
+    other key (a colour, a target, a panel, a `blink`) is refused by name (P71's review finding 7). The page it lands on is
+    `check_glow`'s."""
+    errs: list[str] = []
+    named = [k for k in ("bar", "span") if k in entry]
+    if len(named) != 1:
+        errs.append("glow: a glow names ONE mark - `bar: <i>` (a bars page's bar) or `span: <k>` (the row's k-th span, the "
+                    "region) - " + ("not both" if named else "name one"))
+    for k in named:
+        if not _is_index(entry[k]):
+            errs.append(f"glow: {k} must be a non-negative integer - the {k} it lights, not {entry[k]!r}")
+    if "pulse" in entry and entry["pulse"] is not True:
+        errs.append(f"glow: pulse is `true` or absent - `true` blinks the edge (the chip's lit pulse: motion, E99 s99); "
+                    f"absent, it holds (an annotation, s91); not {entry['pulse']!r}")
+    extra = sorted(k for k in entry if k not in GLOW_KEYS)
+    if extra:
+        errs.append(f"glow: {', '.join(map(repr, extra))} - an edge wears its mark's own ink and the chip's light; it takes "
+                    f"only {'|'.join(k for k in GLOW_KEYS if k not in ('kind', 'at', 'dur') + tuple(ROW_PATH_KEYS))} "
+                    "(`pulse`, never `blink`)")
+    return errs
+
+
+def check_glow(world: dict, row_species: list) -> list[str]:
+    """P71 T29: a row's `glow`s on the page they land on. TRUTH, refused by name (ValueError): a glow stands on a ledger
+    page; a `bar` names a bar of a BARS page (the page standing at its word, a recast's included) that the page has, and
+    not a gauge's capsule or an extruded prism; a `span` names a span the row shades (its k-th, in time order). ADVICE
+    (s106), returned as WARN lines with their numbers: more than one glow on the row (F14's don't - with every mark lit,
+    the glow stops meaning anything), and a glow landing before its span has shaded in (E99 s71). A malformed glow is the
+    grammar's to refuse (validate_species), by name."""
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == SPECIES_GLOW
+           and not _validate_glow(sp)]
+    if not sps:
+        return []
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        raise ValueError(f"glow at {sps[0].get('at')}: a glow edges a mark on a ledger page - this row's world is a "
+                         f"{(world or {}).get('kind') or 'plate'}")
+    spans = sorted((sp for sp in row_species if isinstance(sp, dict) and sp.get("kind") == "span" and _num(sp.get("at"))),
+                   key=lambda e: float(e["at"]))
+    notes: list[str] = []
+    for sp in sps:
+        where = f"glow at {sp.get('at')}"
+        if "span" in sp:
+            k = int(sp["span"])
+            if k >= len(spans):
+                raise ValueError(f"{where}: span {k} is not on the row (it shades {len(spans)} span(s)"
+                                 + (f", 0..{len(spans) - 1}" if spans else "") + ") - a glow edges a region the row shades")
+            if float(spans[k]["at"]) > float(sp["at"]):
+                notes.append(f"{where}: span {k} shades in at {float(spans[k]['at']):.1f} - the edge lands before its region "
+                             f"has arrived ({float(sp['at']):.1f}); a light is never the move when its thing should arrive "
+                             f"(E99 s71) - land it at or after {float(spans[k]['at']):.1f}")
+            continue
+        page = _lj_state(world, row_species, sp)
+        builder = str(page.get("builder") or "")
+        if builder not in GLOW_BUILDERS:
+            kind = "a line page" if builder == "dense-line" else f"a {builder or 'plate'} page"
+            raise ValueError(f"{where}: {kind} - a `bar` glow edges a BARS page's bar ({'|'.join(GLOW_BUILDERS)}); a line "
+                             "page's region is a `span` (shade it, then name it)")
+        form = page.get("form")
+        fk = (form or {}).get("kind") if isinstance(form, dict) else form
+        if fk in GLOW_REFUSED_FORMS:
+            raise ValueError(f"{where}: a {fk} page - " + ("its fill already glows in its own ink (E99 s130); the capsule "
+                             "is not a bar to edge" if fk == "gauge" else "its prism is three faces, not one rect to edge"))
+        n, i = len(page.get("values") or []), int(sp["bar"])
+        if i >= n:
+            raise ValueError(f"{where}: bar {i} is not on the page (its bars are 0..{n - 1})")
+    if len(sps) > 1:
+        notes.append(f"{len(sps)} glows on one row (at {', '.join(str(s.get('at')) for s in sps)}) - one lit mark a row "
+                     "(BRAVOS-USE-WHEN F14's don't: with every mark lit, the glow stops meaning anything); keep the one "
+                     "the sentence names")
+    return notes
+
+
 def check_datum_badge(world: dict, row_species: list) -> None:
     """P71 T20: a row's `datum_badge`s on the page they land on - TRUTH rules, refused by name (ValueError): the badge
     stands on a ledger LINE page (the page standing at its word, a recast's included); a datum target names a series and
@@ -8370,6 +8468,8 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     for _sp_note in check_spread_levels(world, row_species):   # P71 T21: a peak's level is its datum's; its time under water computed
         print(f"  [WARN] {_sp_note.removeprefix('WARN ')}")
     check_datum_badge(world, row_species)     # P71 T20: a badge lands on a datum the page has, or a turning point the shape has
+    for _gl_note in check_glow(world, row_species):   # P71 T29: an edge on a mark the page has; one a row; never before its region
+        print(f"  [WARN] {_gl_note}" + (f" [scene {sid}]" if sid else ""))
     check_schematic(world, row_species)       # P70 T2: a schematic writes no figure it cannot source (E99 s109 (1))
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":

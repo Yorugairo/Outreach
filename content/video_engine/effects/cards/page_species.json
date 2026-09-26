@@ -1873,6 +1873,133 @@
         "today": true,
         "why": null
       }
+    },
+    {
+      "id": "page_species:glow",
+      "axis": "page_species",
+      "token": "glow",
+      "title": "Glow edges: the named bar (or shaded stretch) lit",
+      "aliases": [
+        {
+          "name": "Glow outline on a region or bar",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:195"
+        },
+        {
+          "name": "Glow outline on a region or bar (F2)",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:167"
+        }
+      ],
+      "does": "On its word the ONE bar (or shaded stretch) the sentence names is lit: an edge in its ink, burning near-white, round it as it is drawn, with the fill glow's two halos in its light. Held an annotation; `pulse` blinks it.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "RANKS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"glow\", \"at\", \"dur\", \"bar\": <i> | \"span\": <k>, \"pulse\"?: true, \"keep\"?} on a ledger row (a `bar` on a bars page, never a gauge or an extruded bar; a `span` the row shades, its k-th in time order)",
+        "example": "{\"kind\": \"glow\", \"at\": 1.09, \"dur\": 0.68, \"bar\": 0}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (glow-outline-bar)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the edge comes up",
+          "does": "a stroke round the mark as drawn now (its grow, its morph, a soft bar's square foot; a span's rect) in its ink mixed toward white, the fill glow's two halos in that edge's light, up on the chip's landing fade",
+          "trigger": "the species' `at`",
+          "dials": {
+            "STROKE_PX": "7.5",
+            "CORE_MIX": "0.87",
+            "INNER_PX": "6",
+            "INNER_A": "1",
+            "OUTER_PX": "12",
+            "OUTER_A": "1",
+            "FADE_S": "0.14"
+          }
+        },
+        {
+          "name": "it holds, or it blinks",
+          "does": "held, it stands with its mark to the page's end - an annotation, 0 events (s91); `pulse: true` dips it to PULSE_LOW and back PULSE_N times - motion, one event a blink (s99); a solo muting its bar takes it (s130)",
+          "trigger": "`pulse` from at + CHIP.LAND_S; the page's leave; a solo's word",
+          "dials": {
+            "PULSE_N": "3",
+            "PULSE_S": "0.5",
+            "PULSE_LOW": "0.2",
+            "LAND_S": "0.55"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos BUB #3 (RUH3BPQ5fTo 00:24-00:36): the hidden block edged in a near-white line with a halo in its own pink",
+          "became": "the edge, its near-white stroke (CORE_MIX) and its halos - measured by measure_line_bloom's LINE mode at 512 px",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:195",
+          "tie": "recorded"
+        },
+        {
+          "source": "P72 T10's fill glow (lpFillGlow / lpFillFilter, LP_FILL_GLOW) and P72 T49's dial form (LP_SPREAD_GLOW)",
+          "became": "the halos - the one glow system, on the edge's own dial object (LP_GLOW_EDGE)",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "P71 T12's lit chip (species/chip.mjs chipLitF, CHIP.PULSE_*)",
+          "became": "the light's grammar: the landing fade, the hold, the pulse",
+          "record": "content/video_engine/scripts/species/chip.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "bar",
+          "means": "the i-th bar of a bars page (the page standing at the glow's word).",
+          "source_set": "GLOW_KEYS"
+        },
+        {
+          "token": "span",
+          "means": "the row's k-th `span` (in time order) - the REGION, its shaded stretch.",
+          "source_set": "GLOW_KEYS"
+        },
+        {
+          "token": "pulse",
+          "means": "`true` blinks the edge (the chip's lit pulse: motion); absent, it holds (an annotation).",
+          "source_set": "GLOW_KEYS"
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpPaintGlowEdges",
+        "also": [
+          "lpBuildGlowEdges",
+          "lpGlowEdgeBox",
+          "lpGlowEdgePath",
+          "lpGlowEdgeInk",
+          "LP_GLOW_EDGE"
+        ],
+        "note": "build_scene_timeline_f._validate_glow / check_glow; the halos are lpFillGlow's (P72 T10), the light chipLitF's (P71 T12)"
+      },
+      "doctrine": [
+        "P71 T29",
+        "E99 s130",
+        "E99 s117",
+        "E99 s91",
+        "E99 s99",
+        "E99 s71",
+        "E99 s106",
+        "E38",
+        "R26-219"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "glow-outline-bar",
+        "test": "content/video_engine/tests/test_glow_edges.py::test_the_edge_lands_on_its_word_round_the_bar_as_it_is_drawn_and_holds",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
     }
   ]
 }

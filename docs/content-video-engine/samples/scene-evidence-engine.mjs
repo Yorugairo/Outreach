@@ -12809,6 +12809,96 @@ async function mount(doc) {
     }
     if (k > 1e-4 || p.__lpFill) lpFillGlow(st, p, p.getAttribute("fill"), null, k, LP_SPREAD_GLOW);
   };
+  /* P71 T29 (was P69 T77; the Bravos harvest v2's F2 "glow outline on a region or bar", BUB #3 00:24-00:36 "the hidden
+     block") - GLOW EDGES. `species[] {kind: "glow", at, dur, bar: <i> | span: <k>, pulse?}`: on its word the named bar
+     (or the row's k-th span, the REGION) is LIT - an edge round it as it is drawn now, in its ink burning toward white,
+     with the fill glow's two halos in that edge's own light (BUB's glow is the hot line's, measured: near-white). It is
+     THE ONE GLOW SYSTEM (E99 s130, s117): the halos are lpFillGlow's (T10's filter, lpFillFilter, the chart's box as the
+     region - a bar that grows, halves or is re-valued keeps its glow), on the dial object in T49's form (LP_GLOW_EDGE).
+     What an outline adds over a fill is its STROKE and that stroke's colour - the ink mixed CORE_MIX toward white, a
+     paint colour on the stroke (BUB's edge is the region's pink at 0.87 to white), never a second core filter (T37b's
+     lpHotCore stays the line's). The LIGHT's grammar is the chip's `lit` (P71 T12, chipLitF): it comes up on the chip's
+     landing fade and HOLDS - an annotation, 0 events (E99 s91); `pulse: true` blinks it CHIP.PULSE_N times from the
+     settle - motion, one event per blink (E99 s99). It leaves with its page (pageLeave, R26-219), and a bar a solo mutes
+     sheds it on the solo's own ease (s130: a muted bar carries no glow). A pure function of t: every frame writes the
+     edge's path, its level and its filter from t alone. */
+  /* Measured with measure_line_bloom.py's LINE mode - the edge IS a stroke with a core and a halo - on BUB #3's lit region
+     (RUH3BPQ5fTo frame_0003.jpg, 512 px, the bottom edge, the region's inside left out): stroke 2.0 px = 7.5 stage px,
+     core L* 93.7 at saturation 0.096, halo edge 0.546, r50 10.2 stage px (reach10 29.4 / area 1948 carry the strip under the
+     edge - a gradient from ~81 to ~69 luma - and are not pinned). Ours is read by the same tool at the same 512 px on the
+     golden glow-outline-bar's lit 20 (tests/test_glow_edges.py). CHN t530's China bar end is a DASHED ink outline over a
+     translucent fill - the projected part (P71 T25), not F2's lit edge - and pins nothing here. */
+  const LP_GLOW_EDGE = Object.freeze({
+    STROKE_PX: 7.5,   /* the edge's stroke, STAGE px [MEASURED: BUB #3 (RUH3BPQ5fTo frame_0003, 512 px) - its edge reads 2.0 px there = 7.5 stage px; ours 2.0] */
+    CORE_MIX: 0.87,   /* ... its colour: the ink mixed this far toward white [MEASURED: BUB #3 - the edge's centre (255,231,238) over its region's ink (204,76,111), 0.87; core L* 93.7 sat 0.096, ours 92.5 / 0.086] */
+    INNER_PX: 6,      /* the inner halo round the edge, STAGE px - LP_FILL_GLOW's own [MEASURED: BUB #3 - halo edge 0.546 at 512, ours 0.556] ... */
+    INNER_A: 1,       /* ... at this alpha of the edge's ink - a thin stroke's gaussian is a third of a fill's at its edge, so the edge's halo runs at full [MEASURED: BUB #3] */
+    OUTER_PX: 12,     /* the outer halo, STAGE px - BUB's glow is TIGHT [MEASURED: BUB #3 - r50 10.22 stage px, ours 10.54; its local-ground reach ~18, ours 18.8] ... */
+    OUTER_A: 1,       /* ... at this alpha [MEASURED: BUB #3 - 0.9 read edge 0.531 / r50 10.27, 5 @ 1 + 12 @ 1 0.541 / 9.66: p71-t29/logs/fit.jsonl] */
+  });
+  /* the mark's ink as a hex - a declared bar colour reads back from its style as rgb(), a sign colour is a template var
+     (lpVarHex) - and that ink mixed `m` of the way to white: the edge's burning colour */
+  const lpGlowEdgeHex = (col) => {
+    const c = String(lpVarHex(col)).trim(), h = /^#([0-9a-f]{6})$/i.exec(c), r = /^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i.exec(c);
+    return h ? "#" + h[1].toLowerCase() : r ? "#" + [r[1], r[2], r[3]].map((v) => (+v).toString(16).padStart(2, "0")).join("") : null;
+  };
+  const lpGlowEdgeInk = (hex, m) => "#" + [1, 3, 5].map((i) => { const c = parseInt(hex.slice(i, i + 2), 16); return Math.round(c + (255 - c) * m).toString(16).padStart(2, "0"); }).join("");
+  /* the named mark's box NOW, in the chart's units, and its ink: a bar's rect under its grow (scaleY about its base, the
+     transform-origin the builder wrote) and its morph (y / height, lpPaintBarMorphs), its rounded corners and - under a
+     soft shoulder's foot (T10b) - its square zero end; a span's rect as paintSpan wrote it. null: nothing drawn to edge. */
+  const lpGlowEdgeBox = (PF, g, st) => {
+    if (g.span != null) {
+      const sd = (PF.spans || [])[g.span], r = sd && sd.rect;
+      if (!r || !(+r.getAttribute("fill-opacity") > 0)) return null;
+      const x = +r.getAttribute("x"), y = +r.getAttribute("y"), w = +r.getAttribute("width"), h = +r.getAttribute("height");
+      if (!(w > 0.5 && h > 0.5)) return null;
+      return { x, y, w, h, r: 0, sq: "", ink: sd.sp.color ? (PS_PAL[sd.sp.color] || sd.sp.color) : "var(--lp-chalk)", at: r, vis: 1 };
+    }
+    const S = (st.states && st.states[st.active | 0]) || st, rec = (S.bars || [])[g.bar], b = rec && rec.bar;
+    if (!b || b.style.display === "none" || b.style.visibility === "hidden") return null;
+    const x = +b.getAttribute("x"), w = +b.getAttribute("width"), y = +b.getAttribute("y"), h = +b.getAttribute("height");
+    const km = /scaleY\(([-\d.e]+)\)/.exec(b.style.transform || ""), k = km ? +km[1] : 1;
+    const om = /([-\d.e]+)px\s*$/.exec(b.style.transformOrigin || ""), base = om ? +om[1] : (rec.neg ? y : y + h);
+    const ya = base + (y - base) * k, yb = base + (y + h - base) * k;
+    if (!(Math.abs(yb - ya) > 0.5)) return null;
+    const opA = b.getAttribute("opacity"), vis = (b.style.opacity === "" ? 1 : +b.style.opacity) * (opA == null ? 1 : +opA);
+    return { x, y: Math.min(ya, yb), w, h: Math.abs(yb - ya), r: +b.getAttribute("rx") || 0, sq: rec.foot ? (rec.neg ? "t" : "b") : "",
+             ink: b.style.fill || (rec.neg ? "var(--lp-neg)" : "var(--lp-pos)"), at: lpGlowOf(b), vis };
+  };
+  /* the edge's path: the box with its corners rounded at r (clamped to the box), square on the `sq` side */
+  const lpGlowEdgePath = (B) => {
+    const r = Math.max(0, Math.min(B.r, B.w / 2, B.h / 2)), rt = B.sq === "t" ? 0 : r, rb = B.sq === "b" ? 0 : r, f = (v) => v.toFixed(2);
+    const x0 = B.x, x1 = B.x + B.w, y0 = B.y, y1 = B.y + B.h;
+    return "M" + f(x0 + rt) + " " + f(y0) + "H" + f(x1 - rt) + (rt ? "A" + f(rt) + " " + f(rt) + " 0 0 1 " + f(x1) + " " + f(y0 + rt) : "")
+      + "V" + f(y1 - rb) + (rb ? "A" + f(rb) + " " + f(rb) + " 0 0 1 " + f(x1 - rb) + " " + f(y1) : "")
+      + "H" + f(x0 + rb) + (rb ? "A" + f(rb) + " " + f(rb) + " 0 0 1 " + f(x0) + " " + f(y1 - rb) : "")
+      + "V" + f(y0 + rt) + (rt ? "A" + f(rt) + " " + f(rt) + " 0 0 1 " + f(x0 + rt) + " " + f(y0) : "") + "Z";
+  };
+  /* the DOM, built once: one stroked path per glow, in the perform surface until its mark is drawn; each frame stands it
+     directly over its mark (above the bar's glow group, under the page's words and figures - a mark sits on the layer of
+     what it annotates, 2026-09-08) */
+  const lpBuildGlowEdges = (st, scene, surf) => pageSpecies(scene, "glow").map((sp) => ({
+    sp, bar: Number.isInteger(sp.bar) ? sp.bar : null, span: Number.isInteger(sp.span) ? sp.span : null,
+    path: lpEl("path", "lp-glow-edge", surf, { d: "", fill: "none", opacity: 0, "stroke-linejoin": "round" }) }));
+  const lpPaintGlowEdges = (PF, t, st) => {
+    for (const g of PF.glows || []) {
+      const B = g.bar != null || g.span != null ? lpGlowEdgeBox(PF, g, st) : null;
+      let k = B ? chipLitF({ state: "lit", pulse: g.sp.pulse === true, at: +g.sp.at }, t) * (1 - pageLeave(g.sp, t)) * B.vis : 0;
+      if (k > 1e-4 && g.bar != null && PF.solo) k *= 1 - Math.min(1, Math.max(0, (1 - soloAlpha(PF.solo.evs, "b:" + g.bar, t)) / (1 - SOLO.DIM)));
+      if (!(k > 1e-4)) { g.path.setAttribute("opacity", 0); if (g.path.__lpFill) lpFillGlow(st, g.path, g.ink || "#000000", null, 0, LP_GLOW_EDGE); continue; }
+      if (B.at && B.at.parentNode && g.path.previousSibling !== B.at) B.at.parentNode.insertBefore(g.path, B.at.nextSibling);
+      const U = lpHotUnit(st) || (st && st.portrait ? 2 : 1);
+      const ink = lpGlowEdgeHex(B.ink) || "#f2f2f2";   /* (the chalk: a mark whose ink is not a colour the page declared) */
+      g.ink = ink;
+      g.path.setAttribute("d", lpGlowEdgePath(B));
+      const edge = lpGlowEdgeInk(ink, LP_GLOW_EDGE.CORE_MIX);   /* the edge burns: its ink toward white - and its halos are ITS ink (BUB's glow is the hot line's own light) */
+      g.path.setAttribute("stroke", edge);
+      g.path.setAttribute("stroke-width", (LP_GLOW_EDGE.STROKE_PX * U).toFixed(3));
+      g.path.setAttribute("opacity", 1);
+      g.path.setAttribute("stroke-opacity", k.toFixed(3));   /* the edge AND its halos ride the one level: the halos are the stroke's own gaussian, so a stroke at k lights them at k (the filter at 1) - never the element's opacity over a filter, which a played frame composites a level apart from a cold seek */
+      lpFillGlow(st, g.path, edge, null, 1, LP_GLOW_EDGE);
+    }
+  };
   /* R26-228 (E99 s82's (e); the operator: "You also missed the sparking lead points from the line chart reference, which
      add chart life ... our chart lines have no glow/pulse") - THE PAGE'S INTERIOR AT ITS IDLE. Measured on frozen copy d
      at 16:9 against the approved 9:16 page (tests/R26-228-NOTE.md): the interior at 16:9 already moved MORE than the
@@ -17639,6 +17729,7 @@ async function mount(doc) {
        ring, the neck and the handle in the reference's inks (LENS.RING_INK / HANDLE_INK). Its outer radius is LENS.R_PX
        stage px, carried into chart units by the page's rest scale. Built last, so the glass stands over the page's marks. */
     const datumBadges = lpBuildDatumBadges(st, scene, surf);   /* P71 T20: the tick / cross on its datum or turning point */
+    const glows = lpBuildGlowEdges(st, scene, surf);   /* P71 T29: the named bar's (or span's) glow outline */
     const lenses = pageSpecies(scene, "lens").map((sp) => {
       const k = st.stagePx > 0 ? st.stagePx : 1, S = (st.states && st.states[st.active | 0]) || st, id = "lp-lens-" + (++lpLensSeq);
       const g = lpEl("g", "lp-lens", surf, { opacity: 0 });
@@ -17665,7 +17756,7 @@ async function mount(doc) {
       const handle = lpEl("rect", "lp-lens-handle", g, { fill: LENS.HANDLE_INK });
       return { sp, si: sp.series | 0, zoom: lensZoom(sp), r: LENS.R_PX / k, g, clip, disc, lines, ring, neck, handle };
     });
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags, levelJoins, lenses, datumBadges };
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags, levelJoins, lenses, datumBadges, glows };
   };
   /* the X's two strokes over the named cells, the cells dimming under them, and the share written by
      the hand: every number is species/treemap.mjs's, this is the call */
@@ -17975,6 +18066,7 @@ async function mount(doc) {
        figures so the morph owns the glyphs its own clock is writing. */
     for (const sp of pageSpecies(scene, "chart_to")) if (sp.to === "compare" && PAGE_PAINTERS.compare) PAGE_PAINTERS.compare({ sp, figures: PF.figures || [] }, t, st, PAGE_CTX);
     lpPaintBarMorphs(st, scene, t, PF);   /* P69 T26a: ... and a bar whose figure the compare re-values moves to the comparator (E28) */
+    lpPaintGlowEdges(PF, t, st);   /* P71 T29: the glow outline on the bar (or span) as it is drawn NOW - after the grow, the morph and the solo */
     for (const cr of PF.crosses || []) paintCross(cr, t);        /* P50 T6: the census's X marks and the share they cross */
     for (const nt of PF.notes || []) { const lv = pageLeave(nt.sp, t);   /* R26-219: a note in the page's quiet zone is the page's */
       nt.div.style.opacity = t < nt.sp.at ? "0" : (lv > 0 ? (1 - lv).toFixed(3) : "");
