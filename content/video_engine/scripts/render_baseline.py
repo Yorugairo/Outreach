@@ -311,6 +311,9 @@ PROOF_FRAMES = {
 # `frames/press-stack.png` (house), and these two.
 FLAG_FRAMES["press-stack@face-serif"] = ("press-stack", {"press_face": "serif"}, 11.4)
 FLAG_FRAMES["press-stack@face-condensed"] = ("press-stack", {"press_face": "condensed"}, 11.4)
+# P73 T3: THE POST CARD's second instant - AMD's reply landed (11.0 + LAND_S) as the second card of the pile, its
+# underline drawn (11.6 + SQUIG_DRAW), the post pushed one step back and dimmed with its post header read above it
+PROOF_FRAMES["press-post@proof-reply"] = ("press-post", {}, 12.6)
 
 
 # P51 T1 - THE TWO FORMS OF ONE PAGE. The engine is a module on disk (scene-evidence-engine.mjs);

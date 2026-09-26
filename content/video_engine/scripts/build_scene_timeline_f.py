@@ -9359,6 +9359,125 @@ def split_idle(plate_id: str) -> tuple[str, str | None]:
 
 PHRASE_KEYS = ("x0", "y0", "x1", "y1")
 
+# P73 T3 - THE POST CARD: a press card whose header is a SOCIAL POST (`style: "post"` on the card's meta; the masthead
+# stays the default). The author TYPES the header off the source record - the display name, the handle, when it was
+# posted and any count - and the compiler writes the display strings; nothing is fetched. We quote the post; we do not
+# impersonate the platform, so its marks are refused by name. A count is a snapshot and carries the day it was read.
+PRESS_STYLES = ("masthead", "post")
+POST_KEYS = ("name", "handle", "posted", "counts", "url")      # `url` is provenance: it stays on disk, off the timeline
+POST_MARKS = ("logo", "avatar", "verified", "platform_mark", "icon", "badge", "brand")
+POST_COUNT_KEYS = ("label", "value", "as_of")
+POST_COUNTS_MAX = 3
+POST_NAME_MAX = 60
+POST_HANDLE_RE = re.compile(r"^@[A-Za-z0-9_.\-]{1,60}(@[A-Za-z0-9_.\-]{1,120})?$")   # @user, or @user@host
+POST_POSTED_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})(?:(?:T| )(\d{2}):(\d{2})(?:Z| UTC))?$")
+POST_POSTED_LOCAL_RE = re.compile(r"^\d{4}-\d{2}-\d{2}(?:T| )\d{2}:\d{2}$")
+
+
+def _post_day(s: str, what: str):
+    """A 'YYYY-MM-DD' the calendar has, as a date - or the ValueError naming `what`."""
+    import datetime as _dt
+    try:
+        return _dt.date.fromisoformat(s)
+    except (TypeError, ValueError):
+        raise ValueError(f"dock: press post {what} {s!r} is not a real YYYY-MM-DD date") from None
+
+
+POST_MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")   # never the locale's
+
+
+def _post_date_text(day) -> str:
+    return f"{day.day} {POST_MONTHS[day.month - 1]} {day.year}"
+
+
+def _post_counts(counts, posted_day) -> str | None:
+    """The counts as one sourced line ('392,513 views, 62 reposts as of 26 Sep 2026'), or None when there are none.
+    Every count is an int the author read off the post on ONE day, no earlier than the post itself."""
+    if counts is None:
+        return None
+    if not isinstance(counts, list) or not 1 <= len(counts) <= POST_COUNTS_MAX:
+        raise ValueError(f"dock: press post counts must be a list of 1..{POST_COUNTS_MAX} "
+                         "{label, value, as_of} - a header, not a dashboard")
+    parts, days = [], set()
+    for c in counts:
+        if not isinstance(c, dict):
+            raise ValueError("dock: press post counts entries are {label, value, as_of}")
+        extra = [k for k in c if k not in POST_COUNT_KEYS]
+        if extra:
+            raise ValueError(f"dock: press post count key {extra[0]!r} is not one of {', '.join(POST_COUNT_KEYS)}")
+        label, value = c.get("label"), c.get("value")
+        if not isinstance(label, str) or not label.strip():
+            raise ValueError("dock: press post count needs a 'label' (views, reposts, ...) - the word the number counts")
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise ValueError(f"dock: press post count {label!r} 'value' must be a whole number >= 0 as the source "
+                             "showed it (the compiler writes the thousands separators)")
+        if "as_of" not in c:
+            raise ValueError(f"dock: press post count {label!r} needs 'as_of' (YYYY-MM-DD) - a count is a snapshot "
+                             "and says the day it was read")
+        day = _post_day(c["as_of"], "count as_of")
+        if day < posted_day:
+            raise ValueError(f"dock: press post count {label!r} as_of {c['as_of']} is before the post itself")
+        days.add(day)
+        parts.append(f"{value:,} {' '.join(label.split())}")
+    if len(days) != 1:
+        raise ValueError("dock: press post counts are one snapshot - every count carries the same as_of")
+    return f"{', '.join(parts)} as of {_post_date_text(days.pop())}"
+
+
+def _post_when(posted) -> tuple:
+    """The post's day and its display time ('19 Sep 2026, 16:41 UTC', or '19 Sep 2026' for a date-only post). A time
+    is written in UTC or it is refused - a local time with no zone would be a different instant for every reader."""
+    if not isinstance(posted, str):
+        raise ValueError("dock: press post needs 'posted' - YYYY-MM-DD, or YYYY-MM-DDTHH:MMZ in UTC")
+    if POST_POSTED_LOCAL_RE.match(posted):
+        raise ValueError(f"dock: press post 'posted' {posted!r} has a time with no zone - write it in UTC "
+                         "(YYYY-MM-DDTHH:MMZ or 'YYYY-MM-DD HH:MM UTC')")
+    m = POST_POSTED_RE.match(posted)
+    if not m:
+        raise ValueError(f"dock: press post 'posted' {posted!r} must be YYYY-MM-DD or YYYY-MM-DDTHH:MMZ (UTC)")
+    day = _post_day(m.group(1), "posted")
+    if m.group(2) is None:
+        return day, _post_date_text(day)
+    hh, mm = int(m.group(2)), int(m.group(3))
+    if hh > 23 or mm > 59:
+        raise ValueError(f"dock: press post 'posted' {posted!r} is not a real time of day")
+    return day, f"{_post_date_text(day)}, {hh:02d}:{mm:02d} UTC"
+
+
+def press_post(meta: dict) -> dict | None:
+    """The POST header of a press card's meta, as the display strings the player sets: {name, handle, when,
+    counts?}; None for a masthead card (no `style`, or `style: "masthead"`). ValueError names the field."""
+    style = meta.get("style")
+    post = meta.get("post")
+    if style is not None and style not in PRESS_STYLES:
+        raise ValueError(f"dock: press style {style!r} is not one of {', '.join(PRESS_STYLES)} "
+                         "(masthead, the default: the source line; post: a social post's header)")
+    if style != "post":
+        if post is not None:
+            raise ValueError("dock: press 'post' is the header of a `style: post` card - name the style, or drop the post")
+        return None
+    if not isinstance(post, dict):
+        raise ValueError("dock: press style: post needs 'post': {name, handle, posted, counts?} typed from the source")
+    for k in post:
+        if k in POST_MARKS:
+            raise ValueError(f"dock: press post {k!r} is refused - the card QUOTES the post; it does not impersonate "
+                             "the platform (no logo, brand mark, badge or avatar - a face is a head, E68)")
+        if k not in POST_KEYS:
+            raise ValueError(f"dock: press post key {k!r} is not one of {', '.join(POST_KEYS)}")
+    name, handle = post.get("name"), post.get("handle")
+    if not isinstance(name, str) or not name.strip() or len(name.strip()) > POST_NAME_MAX:
+        raise ValueError(f"dock: press post 'name' must be the display name as posted (1..{POST_NAME_MAX} characters)")
+    if not isinstance(handle, str) or not POST_HANDLE_RE.match(handle):
+        raise ValueError(f"dock: press post 'handle' must be the handle as posted, starting with @ and without spaces "
+                         f"(got {handle!r})")
+    day, when = _post_when(post.get("posted"))
+    src = str(meta.get("source") or "")
+    if handle.lower() not in src.lower():
+        raise ValueError(f"dock: press source {src!r} must name the post's handle {handle} - the citation and the "
+                         "header are one attribution")
+    counts = _post_counts(post.get("counts"), day)
+    return {"name": " ".join(name.split()), "handle": handle, "when": when, **({"counts": counts} if counts else {})}
+
 
 def press_meta(raw) -> dict:
     """A PRESS dock's card meta: the dict ``press_card.py`` wrote, or the path to that JSON.
@@ -9401,11 +9520,14 @@ def press_meta(raw) -> dict:
         cw, chh = card
         if isinstance(cw, (int, float)) and isinstance(chh, (int, float)) and cw > 0 and chh > 0:
             aspect = round(float(chh) / float(cw), 5)
+    post = press_post(meta)   # P73 T3: a POST card's header, or None for the masthead (the default)
     return {"kind": DOCK_KIND_PRESS, "source": src.strip(),
             "phrase": {k: round(float(ph[k]), 5) for k in PHRASE_KEYS},
             # R26-55, written ONLY when the card carries them, so a card cut before it compiles unchanged
             **({"phrase_text": " ".join(words.split())} if words else {}),
-            **({"img": aspect} if aspect else {})}
+            **({"img": aspect} if aspect else {}),
+            # P73 T3, written ONLY for a post card, so every masthead card compiles unchanged
+            **({"style": "post", "post": post} if post else {})}
 
 
 # HF-17 (P50 T15) - THE FOREGROUND OCCLUDER. "Occlusion beats blur as the depth cue" (the intake, against doc
@@ -10968,6 +11090,9 @@ def dock_opts(raw) -> dict:
         out["press"] = press_meta(out["press"])   # a path resolves here, so every caller downstream sees the dict
     elif out.get("stack"):
         raise ValueError("dock: stack is the PRESS stack - it belongs to a dock that carries `press` (the push hand-off, doc 29 s9.27)")
+    if out.get(EMBED_KEY) and (out.get("press") or {}).get("style") == "post":   # P73 T3: embedReflow lays out a masthead
+        raise ValueError("dock: a press card with style: post cannot take embed= yet - the surface's reflow splits a "
+                         "MASTHEAD's source line and does not know the post header; dock it in the pile")
     if out.get(EMBED_KEY) and out.get("stack"):   # P50 T7: a card on a surface has no pile - the surface is the park
         raise ValueError("dock: embed and stack are two different arrivals - a card that lands ON a surface is not "
                          "pushed into a pile (E45's park is the surface itself)")
@@ -15651,6 +15776,8 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         **({"kind": DOCK_KIND_PRESS, "source": press["source"], "phrase": press["phrase"],
             **({"phrase_text": press["phrase_text"]} if press.get("phrase_text") else {}),
             **({"img": press["img"]} if press.get("img") else {}),
+            # P73 T3: a POST card's header (the display strings press_post wrote); a masthead card carries neither key
+            **({"style": press["style"], "post": dict(press["post"])} if press.get("post") else {}),
             **({"_stack": True} if stack else {})} if press else {}),
         **({"place": place, "read_s": rs, "park_s": ps,
             "park": span >= rs + ps} if place else {}),

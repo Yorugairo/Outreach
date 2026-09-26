@@ -460,6 +460,20 @@
     text-transform: uppercase; color: #6b665c; }
   /* portrait: the same strip at the record paper's portrait size - 13px on a phone is not a source line, it is a smudge */
   html[data-aspect="9:16"] .dock.press .pmast { font-size: 22px; letter-spacing: .12em; padding-bottom: 12px; }
+  /* THE POST CARD (P73 T3): a press card whose header is a social post. The poster's row - the display name in the
+     house display weight and the handle in the masthead's own ink - sits over the masthead strip, which now carries
+     the post's date and time on the left and its dated counts on the right. Type only: no logo, no avatar, no badge
+     (we quote the post; we do not impersonate the platform). A long name ends in an ellipsis, never a second line. */
+  .dock.press .ppost { display: flex; align-items: baseline; gap: 12px; padding: 0 2px 5px; white-space: nowrap;
+    overflow: hidden; font-family: Inter, "Segoe UI", system-ui, sans-serif; font-size: 27px; line-height: 1.2;
+    color: #17150f; }
+  .dock.press .ppost .pname { font-weight: 800; overflow: hidden; text-overflow: ellipsis; }
+  .dock.press .ppost .phandle { font-weight: 500; color: #6b665c; flex: 0 0 auto; }
+  html[data-aspect="9:16"] .dock.press .ppost { font-size: 36px; gap: 14px; padding-bottom: 7px; }
+  /* the post's meta row breaks BETWEEN its two cells (the time, then the counts) and never inside one: on a phone
+     "16:41 UTC" and "as of 26 Sep 2026" each stay whole */
+  .dock.press.post .pmast { flex-wrap: wrap; row-gap: 4px; }
+  .dock.press.post .pmast span { white-space: nowrap; }
   /* LIVE CHART (data-document motion pattern): the line is drawn, not
      pasted. Dark chart ground inside the washi frame, like the PNG. */
   .dock.chart .slide-frame img { display: none; }

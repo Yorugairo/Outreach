@@ -175,6 +175,11 @@
           "token": "press",
           "means": "press (the press-card meta): Marks the dock as a press card and carries press_card.py's meta (source, phrase box, phrase words).",
           "source_set": "DOCK_OPTS"
+        },
+        {
+          "token": "style:post",
+          "means": "Post card (P73 T3): a social post's header - name, handle, UTC time, dated counts (typed, never fetched) - over the crop; no platform mark. Absent = the masthead, unchanged. Golden press-post.",
+          "source_set": null
         }
       ],
       "dials": {
@@ -187,7 +192,9 @@
         "symbol": "PRESS",
         "also": [
           "pressStack",
-          "underlineFrac"
+          "underlineFrac",
+          "pressHeader",
+          "pressFaceFor"
         ],
         "note": "PRESS / pressStack / underlineFrac (the law, inlined by sync_kinetics) + engine paintPressCard / pressPose / pressMount (the DOM painter, inline); a real row passes the meta JSON path"
       },

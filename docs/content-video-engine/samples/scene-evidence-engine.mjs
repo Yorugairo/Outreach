@@ -7961,7 +7961,8 @@ async function mount(doc) {
   const PRESS_TYPE = Object.create(null);    /* per card: the face, the size, the lines, what it reads as on a phone */
   const PRESS_W1 = Object.create(null);      /* the measured per-px word widths, per card and face */
   const PRESS_REF = 100;                     /* the reference size the words are measured at */
-  const pressFaceNow = () => pressFace(KIN && KIN.press_face);   /* the DIAL, not a flag: it names one of three faces */
+  /* the DIAL, not a flag: it names one of three faces. P73 T3: a POST card keeps PRESS.POST_FACE whatever it says */
+  const pressFaceNow = (d) => pressFaceFor(d, KIN && KIN.press_face);
   let PRESS_RULER = null;
   const pressRuler = () => {
     if (PRESS_RULER) return PRESS_RULER;
@@ -7995,7 +7996,7 @@ async function mount(doc) {
      the fit, or null when the card carries no words or there is no paper to set them in. */
   const pressSetPhrase = (el, d, availW, availH) => {
     if (!d.phrase_text) return null;
-    const face = pressFaceNow(), m = pressWidths(d, face);
+    const face = pressFaceNow(d), m = pressWidths(d, face);
     const fit = pressPhraseFit(m.w1, m.space1, availW, availH);
     const ph = pressPhraseNode(el);
     if (!fit) { ph.style.display = "none"; delete PRESS_TYPE[d.slide]; return null; }
@@ -8030,7 +8031,7 @@ async function mount(doc) {
   window.__pressType = () => JSON.parse(JSON.stringify(PRESS_TYPE));
   const PRESS_LAID = Object.create(null);
   const pressColumnLayout = (el, d) => {
-    const face = pressFaceNow();
+    const face = pressFaceNow(d);
     if (!d.phrase_text || PRESS_LAID[d.slide] === face.id) return;
     const frame = el.querySelector(".slide-frame"), im = el.querySelector("img");
     if (!frame || !im) return;
@@ -8075,6 +8076,14 @@ async function mount(doc) {
            .sort((a, b) => a.enter - b.enter || (a.stack_index | 0) - (b.stack_index | 0))
     : [d]);
 
+  /* P73 T3: a POST card's step also clears its own two-row header (species/press.mjs pressHeadStep): the header's
+     bottom is the meta strip's, read from the layout (border + offsets), so the date and the counts stay read above
+     the card in front. 0 for a masthead card, whose step is exactly what it was. */
+  const pressPostHeadStep = (el, d) => {
+    const m = pressHeader(d).poster ? el.querySelector(".pmast") : null;
+    return m ? pressHeadStep(el.offsetHeight, (el.clientTop || 0) + m.offsetTop + m.offsetHeight) : 0;
+  };
+
   /* the card's pose at t: its place in the pile, the newest card's landing clock, and the fades its own span owns.
      A card past its exit holds the pose it LEFT in (the pile read one instant before it went) and retracts on the
      dock's own spring - never a dissolve. */
@@ -8084,7 +8093,8 @@ async function mount(doc) {
     if (i < 0) return null;
     const newest = pile[pile.length - 1];
     const el = PRESS_EL[d.slide];   /* the fan's step is the CARD'S own height, so a pile of any card reads the same */
-    const step = el && el.offsetHeight > 2 ? { STEP_PX: Math.max(PRESS.STEP_PX, el.offsetHeight * PRESS.STEP_H) } : {};
+    const step = el && el.offsetHeight > 2
+      ? { STEP_PX: Math.max(PRESS.STEP_PX, el.offsetHeight * PRESS.STEP_H, pressPostHeadStep(el, d)) } : {};
     const pose = pressStack(i, pile.length, clamp01((tp - newest.enter) / PRESS.LAND_S), step);
     const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;
     pose.i = i; pose.n = pile.length;
@@ -8092,8 +8102,31 @@ async function mount(doc) {
     return pose;
   };
 
+  /* P73 T3 - THE POST HEADER. A card whose meta says `style: post` swaps the masthead strip for a post's two rows:
+     the poster's name and handle over the post's date and its dated counts (species/press.mjs pressHeader). Type
+     only, set as textContent - we quote the post and never draw the platform's marks. Set ONCE, on the card's first
+     paint and before its column is laid out (the mount runs at load, above the press module's inlined region, so it
+     may not call into it); a masthead card is never touched and paints exactly as it did. */
+  const pressHeaderSet = (el, d) => {
+    if (el.querySelector(".ppost")) return;
+    const hd = pressHeader(d);
+    if (!hd.poster) return;
+    const mast = el.querySelector(".pmast");
+    const row = document.createElement("div");
+    row.className = "ppost";
+    row.innerHTML = '<span class="pname"></span><span class="phandle"></span>';
+    row.firstChild.textContent = hd.poster[0];
+    row.lastChild.textContent = hd.poster[1];
+    mast.innerHTML = '<span class="pwhen"></span><span class="pcount"></span>';
+    mast.firstChild.textContent = hd.meta[0];
+    mast.lastChild.textContent = hd.meta[1];
+    el.insertBefore(row, mast);
+    el.classList.add("post");
+  };
+
   const paintPressCard = (d, t) => {
     const el = pressMount(d);
+    pressHeaderSet(el, d);
     if (embedOf(d)) return paintEmbeddedPress(el, d, t);   /* P50 T7: a card that lands ON a surface has no pile and no park */
     pressColumnLayout(el, d);   /* R26-55: the card's column, once per card and face - BEFORE the pile reads its height */
     const pose = t >= d.enter && t < d.exit + EXIT ? pressPose(d, t) : null;
@@ -22579,6 +22612,8 @@ async function mount(doc) {
     PROV_SHARE: 0.3,  /* the provenance strip's share of the paper left under the type rows (the raster, still cited) */
     PROV_GAP: 0.04,   /* ... and the air between the phrase and that strip, on the same paper */
     PHONE_FLOOR: 17,  /* E62's quiet-caption floor in CSS px on a phone - what a proof frame is READ against, never clamped to */
+    POST_FACE: "house", /* P73 T3: the face a POST card's pulled phrase is set in, whatever `press_face` says - E89 gave the
+                           serif to "the news", and a post is not print (its alternative, "serif", is listed for the gate) */
   });
 
   /* ================= THE FACES OFFERED (human gate 7 - the operator's choice, never ours) =================
@@ -22604,7 +22639,37 @@ async function mount(doc) {
   /* the face a name asks for; an unknown name (or none at all) is the house face, so a typo can never blank a card */
   const pressFace = (name) => PRESS_FACES[String(name == null ? "" : name).toLowerCase()] || PRESS_FACES[PRESS.FACE];
 
-  const p01 = (v) => Math.min(1, Math.max(0, v));
+  /* ================= THE POST CARD (P73 T3) =================
+     A press card whose header is a SOCIAL POST rather than a newspaper masthead: the author's display name and handle
+     on the poster's row, the date and time it was posted and any count (views) on the meta row, each written by the
+     compiler from fields the author typed off the source record (`press_meta`, never fetched). The crop stays the
+     evidence; the header only frames it. We quote the post, we do not impersonate the platform: no logo, brand mark,
+     badge or avatar is ever drawn (the compiler refuses those keys by name). A card that names no style - or a style
+     with no post fields - is the masthead card it always was. */
+  const pressIsPost = (d) => !!(d && d.style === "post" && d.post && typeof d.post === "object");
+
+  /* the face a card's pulled phrase is set in: a post keeps PRESS.POST_FACE, every other card follows the dial */
+  const pressFaceFor = (d, dial) => (pressIsPost(d) ? PRESS_FACES[PRESS.POST_FACE] : pressFace(dial));
+
+  /* THE HEADER'S ROWS, in reading order: `poster` [name, handle] (null on a masthead card) over `meta` - the post's
+     [when, counts] (counts "" when the author gave none), or the masthead's one cell, the source line */
+  const pressHeader = (d) => (pressIsPost(d)
+    ? { style: "post", poster: [String(d.post.name || ""), String(d.post.handle || "")],
+        meta: [String(d.post.when || ""), String(d.post.counts || "")] }
+    : { style: "masthead", poster: null, meta: [String((d && d.source) || "")] });
+
+  /* THE STEP THAT KEEPS A WHOLE HEADER READ. A post's header is TWO rows, and at 9:16 the fan's step (STEP_H of the
+     card's height) cleared only the first: the reply in front covered the post's date and counts. One step back, a
+     card rises by `step` and shrinks about its bottom edge to s1 = max(BACK_SCALE, 1 - STEP_SCALE), so a point `hb`
+     below its top sits at top + (1 - s1) * H + s1 * hb - step - and the card in front starts at the same top (the pile
+     has one box). The step that keeps the header's bottom `hb` above that edge is therefore (1 - s1) * H + s1 * hb; 0
+     when either length is unknown. The painter takes it for a POST card only, so every masthead pile is unchanged. */
+  const pressHeadStep = (H, hb, o = {}) => {
+    const P = Object.assign({}, PRESS, o), s1 = Math.max(P.BACK_SCALE, 1 - P.STEP_SCALE);
+    return +H > 0 && +hb > 0 ? (1 - s1) * +H + s1 * +hb : 0;
+  };
+
+  const p01 =(v) => Math.min(1, Math.max(0, v));
 
   /* THE RESTING POSE of the card d steps behind the newest: the fan, with its two floors. */
   const pressRest = (d, o = {}) => {

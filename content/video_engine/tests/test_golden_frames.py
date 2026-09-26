@@ -27,6 +27,7 @@ import render_baseline as RB  # noqa: E402
 SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pair-9x16", "ledger-soak-page",
             "chip-board",   # P50 T2: the icon chip, three of them, the middle one crossed
             "press-stack",  # P50 T3: three press cards stacked, the newest lit, the underline drawn on its phrase
+            "press-post",   # P73 T3: THE POST CARD - a press card whose header is a social post (the poster's name and handle over the post's UTC time and its dated view count, no platform mark), the pulled phrase underlined; AMD's reply stacking on it rides PROOF_FRAMES (press-post@proof-reply)
             "chip-states-sell",   # P71 T12: H row 10's "sell" - a SELL tab in the negative ink lands on the NVIDIA chip's top edge on the badge spring, its word at the s90 floor, the board breathing
             "flow-loop-tokens",   # P71 T11: THE LOOP - a four-node flow laid as a RING (the first at 12 o'clock, clockwise, each arrow leaving its card along the ring) with two plain dots in the arrow's ink riding every arrow mid-run (A27); a test-bed beat
             "hub-spoke-fail",   # P71 T17: HUB AND SPOKE - the bond market at the centre, five borrowers on the ring round it, a straight spoke to each drawn on its word with one dot of money riding it; the link to UTILITIES FAILED under a neg-ink disc with a white X, reddened and severed, its node standing; a test-bed beat

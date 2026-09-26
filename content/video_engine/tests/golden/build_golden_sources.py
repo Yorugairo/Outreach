@@ -6174,6 +6174,68 @@ FRAME_T.update({"event-timeline": 17.0,         # every event landed, the ship d
                 "event-timeline-9x16": 17.0})   # the same instant on the portrait page: the axis upright, the column beside it
 
 
+# ---- P73 T3: THE POST CARD - a press card whose header is a social post -----------------------------------------
+# Proved on the AMD RFSoC story's post (research sources/01, retrieved 2026-09-26 through the public embed API): Dylan
+# Patel, @dylan522p, 2026-09-19 16:41 UTC, 392,513 views at retrieval, the post's own words. The CROPS are stand-ins
+# DRAWN here by the bars writer (the text lines as ink bars) - no screenshot of the real post or article is committed
+# (generated images stay out of git). AMD's reply lands AFTER it as the second card of a PRESS STACK: the spokesperson's
+# words as Tom's Hardware printed them (sources/04, PLAUSIBLE - the recipient's own report) under that paper's masthead.
+# The reply is a press card and not a `record` because a record dock is a SLOT dock: at 16:9 every slot box intersects
+# the press card's centre box and the post card paints over the typed words (P73 T3's finding) - the pile of two is
+# the composition the grammar has.
+POST_SLIDE = "ev-post-patel"
+POST_CROP = PRESS_CROP                    # the default headline crop's aspect - the post card asks no new dock geometry
+POST_PAPER = (253, 253, 251)              # a post's own white, not the newsprint cream the masthead cards are cut on
+POST_BARS = [(0.05, 0.14, 0.62, 0.40), (0.645, 0.14, 0.95, 0.40), (0.05, 0.58, 0.93, 0.84)]   # line 1: the phrase, then the rest; line 2
+POST_PHRASE = {"x0": 0.04, "y0": 0.1, "x1": 0.63, "y1": 0.44}
+POST_META = {"kind": "press", "source": "X / @dylan522p, 19 Sep 2026",
+             "phrase": POST_PHRASE, "phrase_text": "AMD needs to be investigated for treason.",
+             "card": list(POST_CROP), "style": "post",
+             "post": {"name": "Dylan Patel", "handle": "@dylan522p", "posted": "2026-09-19T16:41Z",
+                      "counts": [{"label": "views", "value": 392513, "as_of": "2026-09-26"}],
+                      "url": "https://x.com/dylan522p/status/2101350877932212621"}}
+POST_UNDERLINE_AT = 7.0                   # the word "treason" on the golden's own clock
+REPLY_SLIDE = "ev-press-amd-reply"
+REPLY_ENTER = 11.0
+REPLY_UNDERLINE_AT = 11.6                 # the word "unrelated"
+REPLY_BARS = [(0.05, 0.12, 0.40, 0.36), (0.42, 0.12, 0.93, 0.36), (0.05, 0.50, 0.66, 0.74), (0.05, 0.84, 0.48, 0.96)]
+REPLY_META = {"kind": "press", "source": "Tom's Hardware, 24 Sep 2026",
+              "phrase": {"x0": 0.40, "y0": 0.08, "x1": 0.95, "y1": 0.40},
+              "phrase_text": "This recent instance is unrelated to any direct AMD sales or shipments.",
+              "card": list(POST_CROP)}
+FRAME_T["press-post"] = 9.0               # the post card landed (5.0 + LAND_S) and held, its underline under the phrase fully drawn (7.0 + SQUIG_DRAW); the reply not yet entered
+
+
+def press_post() -> tuple[dict, dict]:
+    """P73 T3: ONE POST CARD on a bare plate - the press card with `style: post`, its header the poster's row (name,
+    handle) over the post's date and its dated view count, the crop under the pulled phrase as provenance, the
+    underline under the phrase on its word - then AMD's reply as the SECOND card of the pile (`press-post@proof-reply`):
+    the post pushed one step back and dimmed, its post header still read above the reply. The press keys are the
+    compiler's own (press_meta + dock_entry + assign_press_stack), so the golden is what two rows write."""
+    import build_scene_timeline_f as BST
+    evidence, uris, docks = {}, _base_uris(), []
+    for aid, enter, meta, bars, paper in ((POST_SLIDE, 5.0, POST_META, POST_BARS, POST_PAPER),
+                                          (REPLY_SLIDE, REPLY_ENTER, REPLY_META, REPLY_BARS, (250, 247, 240))):
+        press = BST.press_meta(meta)
+        evidence[aid] = {"title": press["source"], "source": press["source"], "species": "press",
+                         "document": {"path": "golden", "sha256": "0" * 64}, "badges": []}
+        uris[aid] = uri("image/png", png_bars(POST_CROP[0], POST_CROP[1], paper, bars))
+        d = BST.dock_entry(aid, 0, enter, RUNTIME, 0, press=press, stack=True)
+        d["badge_at"] = []
+        docks.append(d)
+    BST.assign_press_stack(docks)
+    species = [{"kind": "callout", "form": "underline", "at": POST_UNDERLINE_AT, "dur": 2.0,
+                "target": {"kind": "phrase", "dock": POST_SLIDE}},
+               {"kind": "callout", "form": "underline", "at": REPLY_UNDERLINE_AT, "dur": 2.0,
+                "target": {"kind": "phrase", "dock": REPLY_SLIDE}}]
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": species}]
+    return _timeline("Golden: the post card and the reply, a pile of two", scenes, evidence, None), uris
+
+
+SURFACES.update({"press-post": press_post})
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

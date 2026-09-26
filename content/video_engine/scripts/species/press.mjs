@@ -61,6 +61,8 @@ export const PRESS = Object.freeze({
   PROV_SHARE: 0.3,  /* the provenance strip's share of the paper left under the type rows (the raster, still cited) */
   PROV_GAP: 0.04,   /* ... and the air between the phrase and that strip, on the same paper */
   PHONE_FLOOR: 17,  /* E62's quiet-caption floor in CSS px on a phone - what a proof frame is READ against, never clamped to */
+  POST_FACE: "house", /* P73 T3: the face a POST card's pulled phrase is set in, whatever `press_face` says - E89 gave the
+                         serif to "the news", and a post is not print (its alternative, "serif", is listed for the gate) */
 });
 
 /* ================= THE FACES OFFERED (human gate 7 - the operator's choice, never ours) =================
@@ -86,7 +88,37 @@ export const PRESS_FACES = Object.freeze({
 /* the face a name asks for; an unknown name (or none at all) is the house face, so a typo can never blank a card */
 export const pressFace = (name) => PRESS_FACES[String(name == null ? "" : name).toLowerCase()] || PRESS_FACES[PRESS.FACE];
 
-const p01 = (v) => Math.min(1, Math.max(0, v));
+/* ================= THE POST CARD (P73 T3) =================
+   A press card whose header is a SOCIAL POST rather than a newspaper masthead: the author's display name and handle
+   on the poster's row, the date and time it was posted and any count (views) on the meta row, each written by the
+   compiler from fields the author typed off the source record (`press_meta`, never fetched). The crop stays the
+   evidence; the header only frames it. We quote the post, we do not impersonate the platform: no logo, brand mark,
+   badge or avatar is ever drawn (the compiler refuses those keys by name). A card that names no style - or a style
+   with no post fields - is the masthead card it always was. */
+const pressIsPost = (d) => !!(d && d.style === "post" && d.post && typeof d.post === "object");
+
+/* the face a card's pulled phrase is set in: a post keeps PRESS.POST_FACE, every other card follows the dial */
+export const pressFaceFor = (d, dial) => (pressIsPost(d) ? PRESS_FACES[PRESS.POST_FACE] : pressFace(dial));
+
+/* THE HEADER'S ROWS, in reading order: `poster` [name, handle] (null on a masthead card) over `meta` - the post's
+   [when, counts] (counts "" when the author gave none), or the masthead's one cell, the source line */
+export const pressHeader = (d) => (pressIsPost(d)
+  ? { style: "post", poster: [String(d.post.name || ""), String(d.post.handle || "")],
+      meta: [String(d.post.when || ""), String(d.post.counts || "")] }
+  : { style: "masthead", poster: null, meta: [String((d && d.source) || "")] });
+
+/* THE STEP THAT KEEPS A WHOLE HEADER READ. A post's header is TWO rows, and at 9:16 the fan's step (STEP_H of the
+   card's height) cleared only the first: the reply in front covered the post's date and counts. One step back, a
+   card rises by `step` and shrinks about its bottom edge to s1 = max(BACK_SCALE, 1 - STEP_SCALE), so a point `hb`
+   below its top sits at top + (1 - s1) * H + s1 * hb - step - and the card in front starts at the same top (the pile
+   has one box). The step that keeps the header's bottom `hb` above that edge is therefore (1 - s1) * H + s1 * hb; 0
+   when either length is unknown. The painter takes it for a POST card only, so every masthead pile is unchanged. */
+export const pressHeadStep = (H, hb, o = {}) => {
+  const P = Object.assign({}, PRESS, o), s1 = Math.max(P.BACK_SCALE, 1 - P.STEP_SCALE);
+  return +H > 0 && +hb > 0 ? (1 - s1) * +H + s1 * +hb : 0;
+};
+
+const p01 =(v) => Math.min(1, Math.max(0, v));
 
 /* THE RESTING POSE of the card d steps behind the newest: the fan, with its two floors. */
 export const pressRest = (d, o = {}) => {
