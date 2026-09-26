@@ -311,6 +311,13 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-217 | The treemap / tiers legibility constants ignore the stage. Closed by P72 T13. | lane B `6c349b0`: treemap floors per stage; the tiers ceiling states its measure. |
 | R26-164 | A layered plate's drift ignores the camera. Closed by P72 T25. | lane B `2b37127`: the walk projected onto the camera's move, on its side; off with a WARN when the camera gives none; a flat plate keeps its free drift (s65). |
 | R26-165 | A ken has no window - a lean cannot start on a word. Closed by P72 T25. | lane B `2b37127`: `(scale, x, y, t0, t1)`; holds, leans, holds; a freeze pauses the lean; the clash check's window is R26-392. |
+| R26-21 | The snap's card box is not a pure function of t. Closed by P72 T21. | lane B `7263013`: with R26-260 - the page grows from the card's placed box, about its own origin. |
+| R26-260 | Forward play and a cold seek disagree at the snap (+137 / +100 px). Closed by P72 T21. | lane B `7263013`: a stale `transform-origin: 0 0` after the snap; now about the page's origin. |
+| R26-294 | The dock slot's state is not pure (H 306.34 on a jump seek). Closed by P72 T21. | lane B `7263013`: a stamp's pivot leaked into the next card; reset every frame. |
+| R26-321 | The melt's clone is taken from the live frame. Closed by P72 T21. | lane B `7263013`: the page as painted at `span[0]`; no melt golden moved. |
+| R26-322 | `melt:morph`'s hand ring is read before the outgoing page paints. Closed by P72 T21. | lane B `7263013`: read after `paint(wA, prev)`, from a mount keyed to this boundary. |
+| R26-324 | The title glow is not repainted after a colour change (6/255). Closed by P72 T21. | lane B `7263013`: the title leaves layout and returns in the same frame. |
+| R26-376 | The dock-depth card seeks 69 px higher than it plays. Closed by P72 T21. | lane B `7263013`: `dockCam` from the placed height; its badge row off the stage is R26-398. |
 | R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
 | R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
 | R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |
