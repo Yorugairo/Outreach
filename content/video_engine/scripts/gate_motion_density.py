@@ -398,7 +398,7 @@ SPECIES_EVENTS["span"] = ("at",)            # ... and a span shades in on its wo
 # like a span, it has no end event, because a light that leaves is the next composition's business. An arc draws on
 # its word AND is CUT on a later one ("crossed", a field edge like the chip's cross_at). A stamp lands once.
 SPECIES_EVENTS["light"] = ("at",)
-SPECIES_EVENTS["arc"] = ("at", "crossed")
+SPECIES_EVENTS["arc"] = ("at", "crossed", "tokens.from_at")   # P71 T22: a route's TOKENS start riding it at tokens.from_at - motion, counted once there (the ping fires 0.35 s after its species' `at`: no event of its own)
 SPECIES_EVENTS["stamp"] = ("at",)
 SPECIES_EVENTS["cross"] = ("at",)   # P50 T6: the census's X marks strike on their word - the named cells are struck, dimmed
                                     # and their share written, all on one clock; like a span or a light it holds after that,

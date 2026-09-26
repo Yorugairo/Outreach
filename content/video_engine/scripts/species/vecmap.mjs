@@ -16,6 +16,15 @@
                  spotlight's cousin, a FILL, never a ring - E56), `arc` (a clothoid from one centroid to
                  another, drawn by length with the nib, an X at its midpoint when the flow is CUT) and
                  `stamp` (a figure, or a year at the smaller size, written at a centroid or a declared point).
+     THE ROUTE MAP (P71 T22, BOOM 04:06-04:08.5 / 05:22.5: tower nodes pop, then the routes grow out of them IN
+                 TURN, flat - the tilt is dropped on VERIFY.md's frames). Routes lighting in turn are N arcs on their
+                 own words; what this file adds is the money ON a route: `tokens: {from_at, n?, speed?}` on an arc
+                 rides T11's law (species/flow.mjs, A27) - n dots by ARC LENGTH from the tail once the arc is drawn,
+                 never faster than FLOW.TOKEN_MIN_CROSS_S across it, fading in and out at the ends, in the flow
+                 token's own look, stopping as the flow is CUT. And `ping: true` on a light or a stamp: ONE ring
+                 leaves the place as it lands and is gone (CHN 02:21.1 on the Strait of Hormuz; D40 13:56.5 as a
+                 route lands on its destination) - a BLINK (s99), never a ring left standing on a region (E56 /
+                 s110). A repeating sonar is not witnessed (step 0), so there is none.
 
    THE FRAME. Every one of them paints in the SAME coordinates - the map box through `fit` - and then rides
    the SAME two transforms as the world beneath it: the scene's CAMERA (screen = at + s (p - look), exactly
@@ -29,6 +38,7 @@ import { springPop } from "../kinetics/spring.mjs";
 import { idleXf } from "../kinetics/idle.mjs";
 import { clothoid, clothoidPath } from "../kinetics/clothoid.mjs";
 import { chipStrokes } from "./chip.mjs";
+import { FLOW, flowTokenStyle } from "./flow.mjs";
 
 export const VECMAP = Object.freeze({
   MARGIN: 0.055,     /* the air around the framed box, as a share of the stage's SHORT side - the map never touches the frame */
@@ -70,6 +80,23 @@ export const STAMP = Object.freeze({
 });
 
 export const STAMP_SIZES = Object.freeze({ figure: STAMP.FIGURE_PX, year: STAMP.YEAR_PX });
+
+/* THE PING (P71 T22, A37 as the frames show it - scripts/measure_ping.py's radial ink profile about the point, per
+   frame). One pulse, fired as the place lands; every dial below is the reference's, in stage px at 1920. */
+export const PING = Object.freeze({
+  LAG_S: 0.35,       /* [DERIVED: Bravos CHN 02:20.75 -> 02:21.10 (1ZS5_txbOsc, 29.97 fps): the pin's first ink to the ring leaving it] the ping fires once the place has LANDED, not on the same frame */
+  EXPAND_S: 0.67,    /* [DERIVED: CHN 02:21.10 -> 02:21.77: the ring from the pin's edge to its last radius; D40 13:56.53 -> 13:57.1 (u70oUWgVoYU) ~0.55] */
+  R0: 27,            /* [DERIVED: CHN: 18 px at 720p] the radius it leaves at - the edge of the thing that landed */
+  R1: 69,            /* [DERIVED: CHN: 46 px at 720p; D40 45 px at 1080p] the radius it is gone at - about 2.5 x where it began */
+  FADE_POW: 3,       /* [DERIVED: between the two witnesses - CHN holds its ink (0.91 of peak at u 0.5, 0.64 at 0.97, then gone), D40 fades throughout] alpha = 1 - u^3 */
+  STROKE: 5,         /* the arc's own stroke width (template .vmarc), so the ping and the route are one hand */
+});
+
+/* "#RRGGBB" at alpha a -> "rgba(r,g,b,a)" (the halo's colour, as the flow token's is written) */
+const vmInkA = (hex, a) => {
+  const h = String(hex).replace("#", ""), v = (i) => parseInt(h.slice(i, i + 2), 16);
+  return "rgba(" + v(0) + "," + v(2) + "," + v(4) + "," + a + ")";
+};
 
 const vm01 = (v) => Math.min(1, Math.max(0, v));
 
@@ -214,6 +241,70 @@ export const arcCrossPaths = (mid, arm = ARC.CROSS_ARM) =>
   ["M" + (mid.x - arm).toFixed(1) + " " + (mid.y - arm).toFixed(1) + " L" + (mid.x + arm).toFixed(1) + " " + (mid.y + arm).toFixed(1),
    "M" + (mid.x + arm).toFixed(1) + " " + (mid.y - arm).toFixed(1) + " L" + (mid.x - arm).toFixed(1) + " " + (mid.y + arm).toFixed(1)];
 
+/* THE ROUTE'S TOKENS (P71 T22; T11's law, A27): `sp.tokens = {from_at, n?, speed?}` on an arc. Everything below is
+   a pure function of t, the declaration and the arc's own polyline (its points carry their arc length `s`). */
+
+/* the instant tokens start on the route: `from_at`, but never before the arc is drawn, head and all. Infinity = never. */
+export const arcTokenStart = (sp) => {
+  const tk = sp && sp.tokens;
+  if (!tk || !Number.isFinite(+tk.from_at)) return Infinity;
+  return Math.max(+tk.from_at, +sp.at + ARC.DRAW_S);
+};
+
+/* the point (and its heading) at arc length s along the clothoid's polyline, read off each sample's own `s` */
+export const arcAlong = (pts, s) => {
+  let i = 1;
+  while (i < pts.length - 1 && pts[i].s < s) i++;
+  const a = pts[i - 1], b = pts[i], seg = b.s - a.s, u = seg > 0 ? vm01((s - a.s) / seg) : 0;
+  return { x: a.x + (b.x - a.x) * u, y: a.y + (b.y - a.y) * u, heading: Math.atan2(b.y - a.y, b.x - a.x) };
+};
+
+/* the route's speed in stage px per second of arc: the row's (or FLOW.TOKEN_SPEED), never crossing the route in
+   under FLOW.TOKEN_MIN_CROSS_S (Bravos DOM's fastest measured crossing) */
+export const arcTokenSpeed = (sp, L) => {
+  const tk = (sp && sp.tokens) || {};
+  const asked = Number.isFinite(+tk.speed) && +tk.speed > 0 ? +tk.speed : FLOW.TOKEN_SPEED;
+  return L > 0 ? Math.min(asked, L / FLOW.TOKEN_MIN_CROSS_S) : asked;
+};
+
+/* EVERY TOKEN on the route at t: n leave the tail one after another (token i a 1/n lap behind), ride it by arc
+   length, and start again at the tail when they reach the head. `alpha` fades them in off the tail and out into the
+   head over FLOW.TOKEN_FADE of the arc, and takes them out as the route is CUT (the X's own clock) - the money stops. */
+export const arcTokens = (sp, t, pts) => {
+  const tk = sp && sp.tokens;
+  if (!tk || !Array.isArray(pts) || pts.length < 2) return [];
+  const t0 = arcTokenStart(sp);
+  if (!(t >= t0)) return [];
+  const L = +pts[pts.length - 1].s, cut = 1 - arcCrossF(sp, t);
+  if (!(L > 0) || cut <= 0) return [];
+  const n = Number.isInteger(tk.n) && tk.n > 0 ? tk.n : FLOW.TOKEN_N;
+  const run = arcTokenSpeed(sp, L) * (t - t0), out = [];
+  for (let i = 0; i < n; i++) {
+    const travel = run - i * L / n;
+    if (travel < 0) continue;
+    const lap = Math.floor(travel / L), s = travel - lap * L, u = s / L, p = arcAlong(pts, s);
+    out.push({ i, s, u, lap, L, x: p.x, y: p.y, heading: p.heading,
+               alpha: vm01(Math.min(u, 1 - u) / FLOW.TOKEN_FADE) * cut });
+  }
+  return out;
+};
+
+/* THE PING at t (P71 T22, A37): null unless the species declares `ping: true` and the one pulse is in flight. The
+   radius eases out (the measured ring slows as it grows: half its travel by a quarter of its clock), the ink holds
+   and then goes. */
+export const pingAt = (sp) => +sp.at + PING.LAG_S;
+export const pingPose = (sp, t) => {
+  if (!sp || sp.ping !== true) return null;
+  const u = (t - pingAt(sp)) / PING.EXPAND_S;
+  if (!(u >= 0 && u < 1)) return null;
+  const e = 1 - (1 - u) * (1 - u);
+  return { u, r: PING.R0 + (PING.R1 - PING.R0) * e, alpha: 1 - Math.pow(u, PING.FADE_POW) };
+};
+
+/* the ring's look: the route's ink at the route's width, with the flow token's halo (lpBloom's form) */
+export const pingStyle = () => "fill:none;stroke:" + FLOW.TOKEN_INK + ";stroke-width:" + PING.STROKE
+  + ";filter:drop-shadow(0 0 " + FLOW.TOKEN_BLOOM_PX + "px " + vmInkA(FLOW.TOKEN_INK, FLOW.TOKEN_BLOOM_A) + ")";
+
 /* THE STAMP at t: the badge spring's landing, its fade and the size its `size` field names. The page's own
    figure law (the hand writing at a datum) is NOT reachable from here - it is a mask wipe over .lp-ink spans
    inside the ledger page's DOM, and this overlay is an svg on the stage - so a stamp lands the way the flow
@@ -292,6 +383,17 @@ const vmFrame = (ctx) => {
   return { data, fit, ix, cam, xf: vmGroupXf(cam, ix, STAGE_W, STAGE_H) };
 };
 
+/* THE PING's paint: the place through the map's frame, the RING in plain stage px (like the stamp's type - a camera
+   zoom moves the pulse with its place and never magnifies it), one circle, nothing when no pulse is in flight */
+const paintPing = (ctx, F, p) => {
+  const { sp, t, svg, el, STAGE_W, STAGE_H } = ctx;
+  const pose = pingPose(sp, t);
+  if (!pose || !p) return;
+  const q = vmScreen(F.cam, F.ix, mapPoint(F.fit, p), STAGE_W, STAGE_H);
+  el("circle", "vmping", svg, { cx: q.x.toFixed(2), cy: q.y.toFixed(2), r: pose.r.toFixed(2), style: pingStyle(),
+                                opacity: pose.alpha.toFixed(3) });
+};
+
 /* THE LIGHT: the country's own outline filled to the accent (E56 - a picture's focus is a LIGHT; the
    spotlight's cousin, never a ring), rising over IN_S and holding, its fill breathing on the idle. */
 export function paintLight(ctx) {
@@ -307,6 +409,7 @@ export function paintLight(ctx) {
   const g = el("g", "", svg, { transform: F.xf });
   const inner = el("g", "", g, { transform: fitXf(F.fit), "fill-opacity": a.toFixed(3) });
   for (const d of c.paths || []) el("path", "vmlit", inner, { d });
+  if (sp.ping === true) paintPing(ctx, F, c.centroid);   /* P71 T22: the one pulse as the country lands */
 }
 
 /* THE ARC: the clothoid drawn by length with the nib from one centroid to the other, the head landing last,
@@ -322,6 +425,12 @@ export function paintArc(ctx) {
   const g = el("g", "", svg, { transform: F.xf, opacity: arcDim(cross).toFixed(3) });
   drawOn(el("path", "vmarc", g, { d: arc.d }), Math.min(1, f / ARC.HEAD_F));
   if (f > ARC.HEAD_F) drawOn(el("path", "vmarc", g, { d: arcHead(arc.pts) }), (f - ARC.HEAD_F) / (1 - ARC.HEAD_F));
+  if (sp.tokens) {   /* P71 T22: the money on the route, in the flow token's own look, riding the arc's frame */
+    const style = flowTokenStyle(1, false), r = FLOW.TOKEN_R.toFixed(2);
+    for (const tok of arcTokens(sp, t, arc.pts)) {
+      if (tok.alpha > 0) el("circle", "vmtoken", g, { cx: tok.x.toFixed(2), cy: tok.y.toFixed(2), r, style, opacity: tok.alpha.toFixed(3) });
+    }
+  }
   if (cross > 0) {
     const strokes = chipStrokes(cross), paths = arcCrossPaths(arc.mid);
     const x = el("g", "", svg, { transform: F.xf });   /* the X is struck ON the arc and does not dim with it */
@@ -336,6 +445,7 @@ export function paintStamp(ctx) {
   const F = vmFrame(ctx); if (!F) return;
   const p = vmTarget(F.data, sp.target); if (!p) return;
   const pose = stampPose(sp, t); if (pose.fade <= 0) return;
+  if (sp.ping === true) paintPing(ctx, F, p);   /* P71 T22: the pulse leaves the PLACE, under the figure */
   /* the place goes through the map's frame; the TYPE does not - it is drawn in plain stage px at its own
      size, so a camera zoom moves the figure with its place and never magnifies the number (doc 50's type
      floors are stage px), and the clamp above keeps it on the frame. */

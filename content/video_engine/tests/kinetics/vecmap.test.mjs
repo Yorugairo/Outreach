@@ -270,3 +270,139 @@ test("the idle is the WORLD's - the same kind, the same phase, so a light cannot
   const ix = { scale: 1.01, dx: 2, dy: -1 };
   assert.equal(vmGroupXf(null, ix, 1000, 500), "translate(502.00 249.00) scale(1.01000) translate(-500.00 -250.00)");
 });
+
+// ---------------------------------------------------------------- P71 T22: THE ROUTE MAP - tokens on a route, the ping
+// The money on a route rides T11's law (species/flow.mjs) on the arc's own polyline; the ping is ONE pulse at a place as
+// it lands (CHN 02:21.1, D40 13:56.5 - measured, step 0). Both are opt-in: absent, the painters emit what they did.
+import {
+  PING, arcTokenStart, arcAlong, arcTokenSpeed, arcTokens, pingAt, pingPose, pingStyle,
+  paintArc, paintLight, paintStamp,
+} from "../../scripts/species/vecmap.mjs";
+import { FLOW, flowTokenStyle } from "../../scripts/species/flow.mjs";
+
+const ROUTE_FOCUS = ["KOR", "CHN", "VNM", "TWN"];
+const routeFit = () => mapFit(DATA.box, bboxes(ROUTE_FOCUS), ...LAND);
+const kor = () => DATA.countries.KOR.centroid;
+const route = (to = "VNM") => arcPath(routeFit(), kor(), DATA.countries[to].centroid, ARC.BOW, arcBowSign(DATA.box, kor(), DATA.countries[to].centroid));
+const arcSp = (extra = {}) => ({ kind: "arc", at: 6.0, dur: 12.0, from: { kind: "country", id: "KOR" }, to: { kind: "country", id: "VNM" }, ...extra });
+
+test("T22: a token waits for its route to be drawn, head and all - never before at + DRAW_S", () => {
+  assert.equal(arcTokenStart(arcSp()), Infinity, "no tokens, no start");
+  assert.equal(arcTokenStart(arcSp({ tokens: { n: 2 } })), Infinity, "no from_at, no start");
+  assert.equal(arcTokenStart(arcSp({ tokens: { from_at: 9.0 } })), 9.0);
+  assert.equal(arcTokenStart(arcSp({ tokens: { from_at: 6.2 } })), 6.0 + ARC.DRAW_S, "an early word waits for the drawn arc");
+  assert.deepEqual(arcTokens(arcSp({ tokens: { from_at: 9.0 } }), 8.99, route().pts), []);
+});
+
+test("T22: the clothoid's samples carry their own arc length, and arcAlong walks it end to end", () => {
+  const { pts } = route();
+  const L = pts[pts.length - 1].s;
+  assert.ok(L > 100, "a real route has a real length in stage px");
+  const a = arcAlong(pts, 0), b = arcAlong(pts, L);
+  assert.ok(near(a.x, pts[0].x, 1e-9) && near(a.y, pts[0].y, 1e-9), "s = 0 is the tail");
+  assert.ok(near(b.x, pts[pts.length - 1].x, 1e-9) && near(b.y, pts[pts.length - 1].y, 1e-9), "s = L is the head");
+  const m = arcAlong(pts, pts[10].s);
+  assert.ok(near(m.x, pts[10].x, 1e-9) && near(m.y, pts[10].y, 1e-9), "a sample's own s lands on the sample");
+});
+
+test("T22: tokens ride BY ARC LENGTH at one speed, a 1/n lap apart, and lap back to the tail", () => {
+  const { pts } = route(), L = pts[pts.length - 1].s;
+  const sp = arcSp({ tokens: { from_at: 9.0, n: 2 } });
+  const v = arcTokenSpeed(sp, L);
+  assert.equal(v, Math.min(FLOW.TOKEN_SPEED, L / FLOW.TOKEN_MIN_CROSS_S), "T11's speed and T11's floor");
+  const dt = 0.4, toks = arcTokens(sp, 9.0 + dt, pts);
+  assert.equal(toks.length, 1, "the second token is still a half lap behind the tail");
+  assert.ok(near(toks[0].s, v * dt, 1e-9), "the first token has travelled speed x time of ARC");
+  const later = 9.0 + (L / v) * 1.25;   // a lap and a quarter
+  const both = arcTokens(sp, later, pts);
+  assert.equal(both.length, 2);
+  assert.equal(both[0].lap, 1, "the first token is on its second lap - the money keeps moving");
+  assert.ok(near(both[0].s, 0.25 * L, 1e-6) && near(both[1].s, 0.75 * L, 1e-6), "token i rides a 1/n lap behind");
+});
+
+test("T22: a token fades in off the tail and out into the head, and leaves as the flow is CUT", () => {
+  const { pts } = route(), L = pts[pts.length - 1].s;
+  const sp = arcSp({ tokens: { from_at: 9.0, n: 1 } }), v = arcTokenSpeed(sp, L);
+  const at = (u) => arcTokens(sp, 9.0 + (u * L) / v, pts)[0];
+  assert.ok(at(0.01).alpha < 1 && at(0.5).alpha === 1 && at(0.99).alpha < 1, "no pop at either place");
+  assert.ok(near(at(FLOW.TOKEN_FADE / 2).alpha, 0.5, 1e-6), "T11's fade share, at the tail");
+  const cut = arcSp({ tokens: { from_at: 9.0, n: 1 }, crossed: 11.0 });
+  const mid = arcTokens(cut, 11.0 + ARC.CROSS_S / 2, pts)[0], clear = arcTokens(cut, 11.0 + ARC.CROSS_S + 1e-6, pts);   // a microsecond past the strike (0.45 / 0.45 is not 1.0 in floats)
+  assert.ok(mid && mid.alpha < arcTokens(sp, 11.0 + ARC.CROSS_S / 2, pts)[0].alpha, "the X's clock takes the tokens out");
+  assert.deepEqual(clear, [], "once the X is struck, no money moves on the route");
+});
+
+test("T22: the ping's dials are the reference's (CHN 02:21.1, D40 13:56.5), never ours", () => {
+  assert.deepEqual({ ...PING }, { LAG_S: 0.35, EXPAND_S: 0.67, R0: 27, R1: 69, FADE_POW: 3, STROKE: 5 });
+  assert.equal(PING.STROKE, 5, "the route's own width: the ping and the route are one hand");
+});
+
+test("T22: ONE pulse - it leaves the place as it lands, eases out, and is gone; nothing without `ping: true`", () => {
+  const sp = { kind: "light", at: 5.0, dur: 10.0, ping: true, target: { kind: "country", id: "KOR" } };
+  assert.equal(pingAt(sp), 5.0 + PING.LAG_S);
+  assert.equal(pingPose(sp, pingAt(sp) - 0.001), null, "not before the place has landed");
+  const p0 = pingPose(sp, pingAt(sp));
+  assert.ok(near(p0.r, PING.R0) && near(p0.alpha, 1), "it leaves at the pin's edge, in full ink");
+  const q = pingPose(sp, pingAt(sp) + PING.EXPAND_S / 4);
+  assert.ok(near((q.r - PING.R0) / (PING.R1 - PING.R0), 1 - 0.75 * 0.75), "ease-out: most of its travel early, as measured");
+  assert.ok(pingPose(sp, pingAt(sp) + PING.EXPAND_S * 0.999).r < PING.R1 + 1e-9);
+  assert.equal(pingPose(sp, pingAt(sp) + PING.EXPAND_S + 1e-6), null, "gone at its end");
+  assert.equal(pingPose(sp, pingAt(sp) + 5), null, "and it does not come back - no repeating sonar (step 0 withdrew it)");
+  for (const v of [undefined, false, "yes", 1, {}]) assert.equal(pingPose({ ...sp, ping: v }, pingAt(sp) + 0.1), null, String(v));
+  assert.match(pingStyle(), /^fill:none;stroke:#F5B72E;stroke-width:5;filter:drop-shadow\(0 0 10px rgba\(245,183,46,0.55\)\)$/);
+});
+
+// the painters, on a recorder: what each emits with the new keys ABSENT is what it emitted before them
+const recorder = () => {
+  const out = [];
+  const el = (tag, cls, parent, attrs = {}) => { const n = { tag, cls, attrs, kids: [] }; (parent ? parent.kids : out).push(n); return n; };
+  const flat = (ns) => ns.flatMap((n) => [n, ...flat(n.kids)]);
+  return { out, el, all: () => flat(out) };
+};
+const paintCtx = (sp, t, rec) => ({
+  sp, t, svg: null, el: rec.el, drawOn: () => {}, sc: { span: [0, 30], world: { kind: "vecmap", map: "world-110m", focus: ROUTE_FOCUS } },
+  A: { "map:world-110m": RAW }, camNow: null, idle: idleXf, hash: () => 0, idleOf: null, seed: 1, si: 0, STAGE_W: LAND[0], STAGE_H: LAND[1],
+});
+
+test("T22: absent keys paint nothing new - no token, no ping, on any of the three species", () => {
+  for (const [paint, sp, t] of [
+    [paintArc, arcSp({ crossed: 12.0 }), 12.2], [paintArc, arcSp(), 9.5],
+    [paintLight, { kind: "light", at: 5.0, dur: 10.0, target: { kind: "country", id: "KOR" } }, 5.6],
+    [paintStamp, { kind: "stamp", at: 5.0, dur: 10.0, text: "1996", target: { kind: "country", id: "KOR" } }, 5.6],
+  ]) {
+    const rec = recorder();
+    paint(paintCtx(sp, t, rec));
+    assert.ok(rec.all().length > 0, `${sp.kind} painted something`);
+    assert.deepEqual(rec.all().filter((n) => n.cls === "vmtoken" || n.cls === "vmping"), [], sp.kind);
+  }
+});
+
+test("T22: tokens paint in the FLOW token's own look, inside the arc's frame, after the head", () => {
+  const rec = recorder(), sp = arcSp({ tokens: { from_at: 9.0, n: 3 } });
+  paintArc(paintCtx(sp, 9.0 + 4.0, rec));
+  const toks = rec.all().filter((n) => n.cls === "vmtoken");
+  assert.equal(toks.length, 3);
+  for (const n of toks) {
+    assert.equal(n.tag, "circle");
+    assert.equal(n.attrs.style, flowTokenStyle(1, false), "one token look across the episode (T11's)");
+    assert.equal(n.attrs.r, FLOW.TOKEN_R.toFixed(2));
+  }
+  const g = rec.out[0];
+  assert.ok(g.kids.includes(toks[0]), "a token rides the arc's own group - the camera and the idle carry it with the route");
+});
+
+test("T22: the ping paints ONE circle at the place in plain stage px, under a stamp's type", () => {
+  for (const [paint, sp] of [[paintLight, { kind: "light", at: 5.0, dur: 10.0, ping: true, target: { kind: "country", id: "KOR" } }],
+                             [paintStamp, { kind: "stamp", at: 5.0, dur: 10.0, ping: true, text: "customs", target: { kind: "country", id: "KOR" } }]]) {
+    const rec = recorder(), t = pingAt(sp) + PING.EXPAND_S / 2;
+    paint(paintCtx(sp, t, rec));
+    const rings = rec.all().filter((n) => n.cls === "vmping");
+    assert.equal(rings.length, 1, sp.kind);
+    const want = mapPoint(routeFit(), kor()), ix = idleXf("breath", t, 0);
+    const q = vmScreen(null, ix, want, ...LAND);
+    assert.equal(rings[0].attrs.cx, q.x.toFixed(2));
+    assert.equal(rings[0].attrs.cy, q.y.toFixed(2));
+    assert.equal(rings[0].attrs.r, pingPose(sp, t).r.toFixed(2));
+    if (sp.kind === "stamp") assert.ok(rec.out.indexOf(rings[0]) < rec.out.findIndex((n) => n.cls === "vmstamp"), "the pulse is under the figure");
+  }
+});

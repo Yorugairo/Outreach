@@ -1,0 +1,125 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 5.0,
+     "dur": 14.0,
+     "idle": "breath",
+     "kind": "light",
+     "ping": true,
+     "target": {
+      "id": "KOR",
+      "kind": "country"
+     }
+    },
+    {
+     "at": 6.0,
+     "dur": 12.0,
+     "from": {
+      "id": "KOR",
+      "kind": "country"
+     },
+     "kind": "arc",
+     "to": {
+      "id": "CHN",
+      "kind": "country"
+     },
+     "tokens": {
+      "from_at": 7.5,
+      "n": 2
+     }
+    },
+    {
+     "at": 6.3,
+     "dur": 12.0,
+     "from": {
+      "id": "KOR",
+      "kind": "country"
+     },
+     "kind": "arc",
+     "to": {
+      "id": "VNM",
+      "kind": "country"
+     },
+     "tokens": {
+      "from_at": 7.5,
+      "n": 2
+     }
+    },
+    {
+     "at": 6.6,
+     "dur": 12.0,
+     "from": {
+      "id": "KOR",
+      "kind": "country"
+     },
+     "kind": "arc",
+     "to": {
+      "id": "TWN",
+      "kind": "country"
+     },
+     "tokens": {
+      "from_at": 7.5,
+      "n": 2
+     }
+    },
+    {
+     "at": 7.5,
+     "dur": 10.0,
+     "idle": "breath",
+     "kind": "light",
+     "ping": true,
+     "target": {
+      "id": "TWN",
+      "kind": "country"
+     }
+    }
+   ],
+   "world": {
+    "box": [
+     1000,
+     500
+    ],
+    "focus": [
+     "KOR",
+     "CHN",
+     "VNM",
+     "TWN"
+    ],
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "kind": "vecmap",
+    "map": "world-110m"
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the route map - routes in turn, tokens on them, the ping (test-bed beat)"
+}

@@ -533,6 +533,12 @@ VECMAP_SPECIES = (SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP)   # light: the coun
                           # its midpoint when the flow is CUT. stamp: a figure written at a place, or a YEAR at the smaller size - `year` is not a
                           # fourth kind, it is `size: "year"` on a stamp (one act - a number put on a place - is one kind, one `when`, one event edge).
 STAMP_SIZES = ("figure", "year")
+# P71 T22: THE ROUTE MAP. Tokens ride an arc on T11's law (FLOW_TOKEN_N / FLOW_TOKEN_SPEED hold for a route too); a
+# route token is the plain dot - the sourced glyph is a flow's. A light or a stamp may `ping`: one pulse at the place
+# as it lands (CHN 02:21.1, D40 13:56.5 - one each; a repeating sonar is not witnessed, so `ping` is true or absent).
+ARC_TOKEN_KEYS = ("from_at", "n", "speed")
+VECMAP_ARC_DRAW_S = 0.9            # species/vecmap.mjs ARC.DRAW_S mirrored (test_route_map pins the two): the instant a route is drawn
+PING_KINDS = ("light", "stamp")    # a ping belongs to a PLACE; a route's arrival pings by lighting its destination on the landing
 SPECIES_CROSS = "cross"       # P50 T6: the CENSUS's X marks on a TREEMAP page (E53 s1's second amendment, 2026-09-10;
 SPECIES_KINDS += (SPECIES_CROSS,)   # Bravos shots 89-91). ONE species carries both halves of the exception - the named
                               # cells take an X (a), and the share they add up to is WRITTEN on the page as a number (b) -
@@ -3105,7 +3111,57 @@ def _validate_vecmap_species(entry: dict) -> list[str]:
             errs.append(f"stamp: size must be one of {'|'.join(STAMP_SIZES)} (a year is a stamp at the smaller size, not a fourth species)")
     if kind in (SPECIES_LIGHT, SPECIES_STAMP) and isinstance(entry.get("target"), dict) and entry["target"].get("kind") in MAP_TARGETS:
         errs += _validate_map_target(kind, "target", entry["target"], countries, box)
+    if kind == SPECIES_ARC:
+        errs += _validate_arc_tokens(entry)
+    return errs + _validate_map_ping(entry)
+
+
+def _validate_arc_tokens(entry: dict) -> list[str]:
+    """P71 T22 (A27 on a route; T11's law): `tokens: {from_at, n?, speed?}` on an arc. Every key is checked by name (at
+    4e077e4 the key was ACCEPTED AND IGNORED); a token rides a DRAWN route, so `from_at` is refused before the arc is
+    drawn, past its window, and at or after the word that CUTS the flow."""
+    if "tokens" not in entry:
+        return []
+    tk = entry["tokens"]
+    if not isinstance(tk, dict):
+        return [f"arc: 'tokens' must be a dict {{{', '.join(ARC_TOKEN_KEYS)}}} - the money moving on the route"]
+    finite = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
+    errs = [f"arc: tokens key {k!r} is not one of {'|'.join(ARC_TOKEN_KEYS)}"
+            + (" - a route token is the plain dot; the sourced glyph is a flow's" if k == "glyph" else "")
+            for k in tk if k not in ARC_TOKEN_KEYS]
+    lo, hi = FLOW_TOKEN_N
+    if "n" in tk and (isinstance(tk["n"], bool) or not isinstance(tk["n"], int) or not lo <= tk["n"] <= hi):
+        errs.append(f"arc: tokens n must be a whole number {lo}-{hi} (tokens on the route)")
+    lo, hi = FLOW_TOKEN_SPEED
+    if "speed" in tk and (not finite(tk["speed"]) or not lo <= tk["speed"] <= hi):
+        errs.append(f"arc: tokens speed must be {lo}-{hi} stage px per second of arc")
+    fa, at, dur, crossed = tk.get("from_at"), entry.get("at"), entry.get("dur"), entry.get("crossed")
+    if not finite(fa):
+        return errs + ["arc: tokens from_at must be a number (episode seconds - the word the money starts moving on)"]
+    if finite(at) and fa < at + VECMAP_ARC_DRAW_S - 1e-9:
+        errs.append(f"arc: tokens from_at {fa} is before the route is drawn ({at + VECMAP_ARC_DRAW_S:.3f}s) - a token "
+                    "rides a drawn route")
+    if finite(at) and finite(dur) and fa >= at + dur:
+        errs.append(f"arc: tokens from_at {fa} falls outside the arc's window ({at}-{round(at + dur, 3)}s) - it would "
+                    "never move")
+    if finite(crossed) and fa >= crossed:
+        errs.append(f"arc: tokens from_at {fa} is not before crossed {crossed} - the money stops when the flow is cut")
     return errs
+
+
+def _validate_map_ping(entry: dict) -> list[str]:
+    """P71 T22 (A37 as the frames show it): `ping: true` on a light or a stamp - one pulse at the place as it lands. A
+    ping anywhere else, or any other value, is refused by name (at 4e077e4 it was accepted and ignored)."""
+    if "ping" not in entry:
+        return []
+    kind, val = entry.get("kind"), entry["ping"]
+    if kind not in PING_KINDS:
+        return [f"{kind}: ping is a place's ({' | '.join(PING_KINDS)}) - for a route's arrival, light its destination "
+                "with ping on the word the route lands"]
+    if val is not True:
+        return [f"{kind}: ping must be true or absent, not {val!r} - ONE pulse as the place lands (CHN 02:21.1, D40 "
+                "13:56.5); a repeating sonar is not witnessed"]
+    return []
 
 
 def _validate_chip(entry: dict) -> list[str]:

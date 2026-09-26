@@ -40,6 +40,7 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "treemap-cross",  # P50 T6: the census page - a squarified treemap, three partners crossed on a word and their share written
             "tags-to-bars",   # P50 T11: two terminal tags mid-flight into their two bars, the lines un-drawing beneath them
             "data-to-bars",  # E64 / R26-49: the DATA-keyed recast mid-flight (the derived key, the four data in the air, the axes handing over)
+            "vecmap-route-tokens",   # P71 T22: THE ROUTE MAP - three routes out of Korea drawn in turn, two plain dots in the route's ink riding each (T11's law and look), Taiwan pinging as the last route lands; flat (the tilt is dropped); a test-bed beat
             "vecmap-arc",   # P50 T5: the vector map in PORTRAIT - Iran lit, the arc from the Gulf to the US cut by its X, "1996" and "1.4 Billion Barrels" stamped, China lit
             "thread-baseline",   # P50 T15 / HF-16: THE WIRE - the line page's first series still standing under the bars page after the cut, mid-recede
             "art-embed",    # P50 T7: a press card projected onto the plate's declared poster and a still card on its paper - the ART world, the room darkened around them

@@ -5042,6 +5042,44 @@ FRAME_T.update({"chapter-swap": round(SWAP_ENTRY["swap"][0]["at"] + 0.43 + 0.21,
 FRAME_T.update({"chapter-held": round(CHAPTER_CUT + 3.0, 2)})   # after the cut: the page's ink written under the held pill (27.12)
 
 
+# P71 T22 (was P69 T63): THE ROUTE MAP - routes lighting IN TURN with money on them, and the one ping as a place lands
+# (BOOM 04:06-04:08.5: nodes pop, routes grow out of them staggered, FLAT - the tilt is dropped; A37 as CHN 02:21.1 and
+# D40 13:56.5 show it: one pulse, never a repeating sonar). A TEST-BED beat, labelled as one: H row 22 ("what memory
+# costs leaving Korea, by the kilo, straight off customs export data", take 625.02-626.94) is the candidate the parent
+# confirms on the frame. The three DESTINATIONS are the test bed's, NOT sourced (research gate: UNSOURCED-editorial) -
+# a body row names its routes from the customs data itself. No H row adopts the move before HG1 (rule f).
+ROUTE_AT = (6.0, 6.3, 6.6)          # the three routes leave Korea one after another (BOOM's stagger, on their words)
+ROUTE_TO = ("CHN", "VNM", "TWN")
+ROUTE_TOKENS_AT = 7.5               # "by the kilo": the money starts as the last route is drawn (6.6 + DRAW_S = 7.5); the earlier two wait for it
+
+
+def vecmap_route_tokens() -> tuple[dict, dict]:
+    """P71 T22: Korea LIGHTS and pings as it lands (5.0); three routes leave it in turn (6.0 / 6.3 / 6.6), each a
+    clothoid drawn by length; the last route's destination lights on the word the route lands and pings (7.5 - D40's
+    arrival form); from 7.5 two plain DOTS in the route's ink - T11's token look - ride every route by arc length.
+    Judged at 8.3: Taiwan's pulse half way out (u 0.52) and the money 0.8 s into its run on all three routes."""
+    import build_scene_timeline_f as BST
+    world = BST.world_for_plate("vecmap:KOR,CHN,VNM,TWN", (0, 0, 0), None)
+    kor = {"kind": "country", "id": "KOR"}
+    species = [{"kind": "light", "at": 5.0, "dur": 14.0, "idle": "breath", "ping": True, "target": kor}]
+    species += [{"kind": "arc", "at": at, "dur": 12.0, "from": kor, "to": {"kind": "country", "id": to},
+                 "tokens": {"from_at": ROUTE_TOKENS_AT, "n": 2}} for at, to in zip(ROUTE_AT, ROUTE_TO)]
+    species += [{"kind": "light", "at": 7.5, "dur": 10.0, "idle": "breath", "ping": True,
+                 "target": {"kind": "country", "id": "TWN"}}]
+    errs = BST.validate_species(species, (0, 0, 0), "vecmap:KOR,CHN,VNM,TWN")
+    assert not errs, errs
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    uris[BST.MAP_PREFIX + world["map"]] = BST.world_map_json(world["map"])
+    tl = _timeline("Golden: the route map - routes in turn, tokens on them, the ping (test-bed beat)", scenes, {}, None)
+    tl["captions"], tl["caption_pages"] = [], []   # the map frames its places at the stage's centre, where the harness's caption sits
+    return tl, uris
+
+
+SURFACES.update({"vecmap-route-tokens": vecmap_route_tokens})
+FRAME_T.update({"vecmap-route-tokens": 8.3})   # TWN's ping at u 0.52 (7.5 + 0.35 -> + 0.67), the tokens 0.8 s into their run - spread along every route
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

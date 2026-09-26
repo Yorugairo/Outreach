@@ -121,7 +121,7 @@
       "token": "arc",
       "title": "The vector map arc species",
       "aliases": [],
-      "does": "A clothoid arc draws from one place to another on the word, struck with an X when the flow is cut.",
+      "does": "A clothoid arc draws from one place to another on the word, struck with an X when the flow is cut; tokens can ride it - money moving on the route.",
       "when": null,
       "when_source": null,
       "author": {
@@ -155,6 +155,18 @@
             "CROSS_S": "0.45",
             "DIM": "0.42"
           }
+        },
+        {
+          "name": "tokens ride",
+          "does": "from tokens.from_at, n dots in the flow token's look ride the drawn route by arc length at T11's speed, never crossing it faster than Bravos (0.49 s), fading at each end, gone as the route is cut",
+          "trigger": "`tokens.from_at`, never before the route is drawn (at + DRAW_S) and before `crossed`",
+          "dials": {
+            "TOKEN_N": "2",
+            "TOKEN_SPEED": "240",
+            "TOKEN_MIN_CROSS_S": "0.49",
+            "TOKEN_R": "16",
+            "TOKEN_FADE": "0.12"
+          }
         }
       ],
       "blends": [
@@ -175,9 +187,21 @@
           "became": "the whole arc",
           "record": "docs/content-video-engine/CAPABILITIES.md:92",
           "tie": "recorded"
+        },
+        {
+          "source": "Bravos routes lighting in turn (BOOM 04:06-04:08.5, 05:22.5) and T11's tokens (A27)",
+          "became": "the tokens",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:527",
+          "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "tokens",
+          "means": "`tokens: {from_at, n?, speed?}` (P71 T22, A27 on a route): money moving on the route - T11's plain dot in the route's ink; from_at after the route is drawn and before `crossed`",
+          "source_set": "ARC_TOKEN_KEYS"
+        }
+      ],
       "dials": {
         "module": "content/video_engine/scripts/species/vecmap.mjs",
         "object": "ARC"
@@ -189,7 +213,8 @@
         "note": "from = VECMAP_GULF written out (golden :565); plate must be vecmap"
       },
       "doctrine": [
-        "CAPABILITIES VECTOR MAP"
+        "CAPABILITIES VECTOR MAP",
+        "P71 T22"
       ],
       "status": "wired",
       "proof": {
@@ -1451,6 +1476,18 @@
           "dials": {
             "OUT_S": "0.35"
           }
+        },
+        {
+          "name": "ping",
+          "does": "ONE ring in the route's ink leaves the country's centroid as it lights, easing out from R0 to R1 while its ink holds and goes - a blink (s99), never a ring left standing (E56 / s110); no repeat",
+          "trigger": "`ping: true`, LAG_S after the species' `at`",
+          "dials": {
+            "LAG_S": "0.35",
+            "EXPAND_S": "0.67",
+            "R0": "27",
+            "R1": "69",
+            "FADE_POW": "3"
+          }
         }
       ],
       "blends": [
@@ -1471,9 +1508,21 @@
           "became": "the whole arc",
           "record": "docs/portable/OPERATOR-RULINGS.md:1815",
           "tie": "recorded"
+        },
+        {
+          "source": "Bravos ping (CHN 02:21.1, D40 13:56.5 - measured, one pulse)",
+          "became": "the ping",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:539",
+          "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "ping",
+          "means": "`ping: true` (P71 T22, A37): one pulse at the place as it lands - a light's country or a stamp's place; for a route's arrival, light its destination on the landing word",
+          "source_set": "PING_KINDS"
+        }
+      ],
       "dials": {
         "module": "content/video_engine/scripts/species/vecmap.mjs",
         "object": "LIGHT"
@@ -1485,7 +1534,8 @@
       },
       "doctrine": [
         "CAPABILITIES VECTOR MAP",
-        "E56"
+        "E56",
+        "P71 T22"
       ],
       "status": "wired",
       "proof": {
@@ -2316,16 +2366,41 @@
         "example_source": "content/video_engine/tests/golden/build_golden_sources.py:589",
         "check": "species"
       },
-      "phases": [],
+      "phases": [
+        {
+          "name": "ping",
+          "does": "ONE ring in the route's ink leaves the stamped place, under the figure, easing out from R0 to R1 while its ink holds and goes - a blink (s99), never a ring left standing (E56 / s110); no repeat",
+          "trigger": "`ping: true`, LAG_S after the species' `at`",
+          "dials": {
+            "LAG_S": "0.35",
+            "EXPAND_S": "0.67",
+            "R0": "27",
+            "R1": "69",
+            "FADE_POW": "3"
+          }
+        }
+      ],
       "blends": [
         {
           "source": "the badge spring (springPop)",
           "became": "the effect",
           "record": "docs/content-video-engine/42-DRAWING-KINETICS.md:63",
           "tie": "recorded"
+        },
+        {
+          "source": "Bravos ping (CHN 02:21.1, D40 13:56.5 - measured, one pulse)",
+          "became": "the ping",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:539",
+          "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "ping",
+          "means": "`ping: true` (P71 T22, A37): one pulse at the place as it lands - a light's country or a stamp's place; for a route's arrival, light its destination on the landing word",
+          "source_set": "PING_KINDS"
+        }
+      ],
       "dials": {
         "module": "content/video_engine/scripts/species/vecmap.mjs",
         "object": "STAMP"
@@ -2337,7 +2412,8 @@
         "note": "plate must be vecmap"
       },
       "doctrine": [
-        "CAPABILITIES VECTOR MAP"
+        "CAPABILITIES VECTOR MAP",
+        "P71 T22"
       ],
       "status": "wired",
       "proof": {

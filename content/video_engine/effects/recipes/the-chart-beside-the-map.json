@@ -1,0 +1,47 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:the-chart-beside-the-map",
+  "title": "The chart beside the map",
+  "aliases": [],
+  "acts": [
+    "NAMES"
+  ],
+  "members": [
+    {
+      "card": "chart_dock:series",
+      "offset_s": 0.0,
+      "role": "the series the sentence is about, drawn in a card on the map's empty half - it HOLDS while the place is named"
+    },
+    {
+      "card": "species:light",
+      "option": "ping",
+      "offset_s": 1.0,
+      "role": "the named place lights on its word beside the held chart, one pulse leaving it as it lands"
+    },
+    {
+      "card": "species:stamp",
+      "option": "ping",
+      "offset_s": 2.4,
+      "role": "the figure the place carries, written at it (the pulse on the place, under the figure)",
+      "optional": true
+    }
+  ],
+  "window_s": 9.7,
+  "does": "The chart and the place on one screen and one clock: the series holds in a card on one side while, on the other, the place the sentence names lights and pings - no cut between the number and the ground it happened on.",
+  "use_when": {
+    "act": "NAMES - a place, with the series it moved",
+    "moment": "proof",
+    "shape": "series + a place",
+    "use": "the chart and the place on one clock (BRAVOS-USE-WHEN.md:557): the series already drawn, the place named beside it (CHN 02:20.8-02:30.5, the Strait of Hormuz beside Global Oil Supply and Demand)",
+    "dont": "to sync the ping to the line's move - the frames show the chart HOLDING while the place pings, the dip lit only after the map leaves; or when no sentence names a place (a map is not a background)"
+  },
+  "doctrine": [
+    "E56",
+    "E99 s99",
+    "E99 s110",
+    "P71 T22"
+  ],
+  "status": "candidate",
+  "source": "P71 T22 step (0): Bravos CHN (1ZS5_txbOsc) 02:20.8-02:30.5 read off the video on disk, the ping measured at 02:21.1 and D40 13:56.5; the pinging light is pinned by the golden vecmap-route-tokens; the chart card beside the map is unproven (a scene has one world, and no cut carries it)",
+  "count": 0
+}
