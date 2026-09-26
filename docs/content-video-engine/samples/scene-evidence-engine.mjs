@@ -7200,6 +7200,17 @@ async function mount(doc) {
      above; a LANDED card drops onto its spot (STOP.DROP_PX) after selling its weight. Both behind kinetics.stop_action
      and only when the dock entry declares `arrive`; the shadow of either reads the clock one frame late (HF-2). */
   const STOP_THROW_DX = 240, STOP_THROW_DY = 160;
+  /* P72 T19 / R26-202 (b): WHERE A THROW COMES FROM. The row's `side` (the compiler's `throw_side`) is an EDGE OF THE STAGE:
+     the card starts STOP_THROW_DX past it - left of x 0 or right of the stage's width, level with the lift the default
+     takes; below the stage's foot for `bottom` - and flies to its box (L, T0, W: its placed box) on the throw's own arc. A
+     throw that names none keeps the alternation it always had: past its own width, on its solo side (`flip++ % 2`). */
+  const dockThrowFrom = (d, L, T0, W) => {
+    const sd = d.throw_side;
+    if (sd === "left") return { x: -(L + W + STOP_THROW_DX), y: -STOP_THROW_DY };
+    if (sd === "right") return { x: STAGE_W - L + STOP_THROW_DX, y: -STOP_THROW_DY };
+    if (sd === "bottom") return { x: 0, y: STAGE_H - T0 + STOP_THROW_DY };
+    return { x: (d.side === "l" ? -1 : 1) * (W + STOP_THROW_DX), y: -STOP_THROW_DY };
+  };
   /* R26-20 / E99 s87: ... and a STAMPED one comes down onto its spot oversized and over-rotated, its clamped scale
      spring settling while the free rotation spring is still unwinding under it (kinetics/stopaction.mjs stampXf,
      ported from remotion-ui badge-stamp.tsx). A stamp says nothing about what it carries - a card, a badge or a
@@ -7374,10 +7385,33 @@ async function mount(doc) {
     return { x: P.x + m.now[0] - m.home[0], y: P.y + m.now[1] - m.home[1], w: P.w, h: P.h };
   };
 
+  /* P72 T19 / R26-267 - THE PINNED BOX. The child keeps the point of its target's box it landed on: its own box's centre at
+     its enter, as fractions (u, v) of the target's box at that instant (dockGeom at the place's aspect - the read, the
+     park, a park at a datum), carried to the target's box at t. E97: translation only by default - the child keeps its own
+     width - and `inherit: [translate, scale]` scales it by the target's width, uniformly. A pure function of t. */
+  const dockPinBox = (o, t) => {
+    const G = dockGeom(docks[o.slot | 0], o, t);
+    return G && G.w > 0 && o.place.w > 0 ? { x: G.x, y: G.y, w: G.w, h: G.w * o.place.h / o.place.w } : null;
+  };
+  const dockPinGeom = (d, t) => {
+    const P = d.place, B0 = dockPinBox(d.pinTo, d.enter), Bt = dockPinBox(d.pinTo, t);
+    if (!B0 || !Bt) return { x: P.x, y: P.y, w: P.w };
+    const u = (P.x + P.w / 2 - B0.x) / B0.w, v = (P.y + P.h / 2 - B0.y) / B0.h;
+    const w = (d.rel.inherit || []).includes("scale") ? P.w * Bt.w / B0.w : P.w, h = w * P.h / P.w;
+    return { x: Bt.x + u * Bt.w - w / 2, y: Bt.y + v * Bt.h - h / 2, w };
+  };
+  /* ... and the slots' ORDER this frame: a pinned dock in slot 0 whose target stands in slot 1 is painted after it, so the
+     target's element carries its own frame's classes when its reading box is first measured (dockReadRect). */
+  const dockSlotOrder = (live) => {
+    const c = live.find((x) => x.slot === 0 && !isPressDock(x));
+    return c && c.pinTo && (c.pinTo.slot | 0) === 1 && live.includes(c.pinTo) ? [1, 0] : [0, 1];
+  };
+
   /* the placed card's layout box at t: reading size, then the minimum-jerk park. `parks` is
      recomputed from the LIVE span because the coalescer above can extend a dock's exit. */
   const dockGeom = (el, d, t) => {
     if (!d.place) return null;
+    if (d.pinTo) return dockPinGeom(d, t);   /* P72 T19 / R26-267: a pinned dock rides its target's box */
     const R = dockReadRect(el, d), P = d.park_at ? dockParkBox(d, d.place) : d.place;   /* P71 T23: a card joined to its date parks at its datum's chip */
     if (d.centre && !d.read_place && d.moves) { const q = propPose(d, t, 0); return { x: q.x, y: q.y, w: q.w }; }   /* P69 T26d: a prop that MOVES after it lands */
     if (d.centre && !d.read_place) return { x: P.x, y: P.y, w: P.w };   /* a CENTRED card (the design pass): its box from the first frame, whatever its life - unless the row named a reading box it pops at first */
@@ -7569,6 +7603,11 @@ async function mount(doc) {
        (x carrying the squeeze), then the lean. Written to the element, so the card's own layout box is untouched. */
     el.style.transform = "translate(" + pose.dx.toFixed(2) + "px," + pose.dy.toFixed(2) + "px) scale("
       + (pose.scale * pose.sx).toFixed(5) + "," + pose.scale.toFixed(5) + ") skewX(" + pose.skew.toFixed(3) + "deg)";
+    /* P72 T19 / R26-320: a press card the row HOLDS (`idle: hold`) takes the drift-hold on its own span - the hand-over
+       across [enter, exit] on the life clock - and its light band, as a slot's held card does (P70 T13). A press card
+       that names no hold is the card it was: the class breath is not added here. */
+    if (holdGradeOf(idleOf("dock", d.idle))) el.style.transform += idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + (d.stack_index | 0), 3, [d.enter, d.exit]);
+    paintHoldLight(el, d, t /* the press card's own band - a second caller beside the dock loop's */);
     const sh = 12 * expoOut(clamp01((t - d.enter) / CARD_IN));
     el.style.boxShadow = sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
     /* THE LIVE GEOMETRY the underline rides: the card's LAYOUT box (offsets - transform-free) carried through the
@@ -7864,7 +7903,8 @@ async function mount(doc) {
     let m = g.m;
     if (arriveOf(d) === "throw") {   /* P47 T1's own throw, landing ON the plane: the impact squash is taken in the
          CARD'S space about its foot (the hit reads as the card meeting the wall), the flight in the room's. */
-      const from = { x: (d.side === "l" ? -1 : 1) * (g.box.w + STOP_THROW_DX), y: -STOP_THROW_DY };
+      const from = d.throw_side === "bottom" ? { x: 0, y: STAGE_H + STOP_THROW_DY }   /* P72 T19 / R26-202 (b): the side the row named (on a surface: past the foot, or across by the card's own width) */
+        : { x: (d.throw_side ? (d.throw_side === "left" ? -1 : 1) : (d.side === "l" ? -1 : 1)) * (g.box.w + STOP_THROW_DX), y: -STOP_THROW_DY };
       const sx = throwXf(from, d.mass || "paper", t - d.enter);
       const a = Math.abs(sx.alpha || 0);
       if (a > 1e-6) {
@@ -8047,6 +8087,11 @@ async function mount(doc) {
      DOCK_JOIN into a single span. The world wipes underneath it; the card
      does not move. */
   const DOCK_JOIN = 2.5;
+  /* P72 T19 / R26-328: ... and ONE BOX. Two dockings of one id at different boxes are two dockings - the coalescer kept the
+     FIRST's place for both (on either slot), so a card docked again on the next scene drew at the scene before's box (H row
+     23's certificate took row 22's small box; the row had to dock it under a second id). A card that holds through the
+     boundary at the SAME box (the case above) still never leaves. The box is the compiled `place` and `read_place`. */
+  const dockBoxKey = (d) => [d.place, d.read_place].map((b) => (b ? [b.x, b.y, b.w, b.h].join(",") : "")).join("|");
   /* GROUP BY SLIDE, then merge - consecutive-only merging breaks when a
      DIFFERENT slide interleaves the time sort (pairing a card between two
      rows of the same document made it "re-enter"; the choreography gate
@@ -8062,7 +8107,7 @@ async function mount(doc) {
       ds.sort((a, b) => a.enter - b.enter);
       let cur = null;
       for (const d of ds) {
-        if (cur && d.enter - cur.exit <= DOCK_JOIN && !cur.handed && d.arrive !== "morph") {   /* P69 T26e: a prop handed to a morph, or born of one, keeps its own span */
+        if (cur && d.enter - cur.exit <= DOCK_JOIN && !cur.handed && d.arrive !== "morph" && dockBoxKey(cur) === dockBoxKey(d)) {   /* P69 T26e: a prop handed to a morph, or born of one, keeps its own span */
           cur.exit = Math.max(cur.exit, d.exit);
           cur.badge_at = [...new Set([...(cur.badge_at || []), ...(d.badge_at || [])])];
         } else { cur = d; merged.push(d); }
@@ -8107,9 +8152,36 @@ async function mount(doc) {
      began AT the turn and the mark stood over the incoming page (row 22's RAM, 1.0 s and 0.3 s before its slide). */
   const dockOwnsExit = (d) => arriveOf(d) === "stamp" || ((TL.evidence || {})[d.slide] || {}).kind === "prop";
   const BOUNDS = TL.scenes.map((x) => x.span[0]);
+  /* P72 T19 / R26-285: the snap never moves an exit ACROSS A LANDING - a card that lands in the same slot between the
+     authored exit and the turn is the one the slot shows (the snapped card stood over it to the boundary). */
+  const dockLandsBetween = (d, a, b) => DOCKS.some((o) => o !== d && (o.slot | 0) === (d.slot | 0) && !isPressDock(o) && o.enter > a + 1e-6 && o.enter < b - 1e-6);
   for (const d of DOCKS)
     for (const b of dockOwnsExit(d) ? [] : BOUNDS)
-      if (d.enter < b && b - d.exit > 0.05 && b - d.exit <= 1.4 && !d.handed) { d.exit = b; break; }   /* P69 T26e: a HANDED prop leaves on its word, never snapped to the turn */
+      if (d.enter < b && b - d.exit > 0.05 && b - d.exit <= 1.4 && !d.handed) { if (!dockLandsBetween(d, d.exit, b)) d.exit = b; break; }   /* P69 T26e: a HANDED prop leaves on its word, never snapped to the turn */
+  /* P72 T19 / R26-285 - THE DIP TAKES THE OUTGOING DOCKS. A wipe carries a card that ends on its boundary off with its front
+     (`swept`); a dip left it standing: its exit began AT the turn, so it retracted over the incoming scene as the black rose
+     (row 17's desk docks had to end 1.5 s early). A dock whose exit is on a boundary a DIP enters by (within the sweep's own
+     0.35 s, and not one that owns its exit and has already left) goes down to the black with the world - the veil is above
+     every layer - and is gone from the boundary on: the black frame is where it leaves, as the front is for a wipe. Its
+     wash goes with it. `dipAt` is that boundary, or null; a dock that survives the turn is untouched. */
+  const DIP_SWEEP_S = 0.35;
+  const dipBoundaryAt = (x) => { for (let i = 1; i < TL.scenes.length; i++) { const b = TL.scenes[i].span[0];
+    if (Math.abs(x - b) < DIP_SWEEP_S && exitName(TL.scenes[i].exit) === "dip") return b; } return null; };
+  for (const d of DOCKS) {
+    const b = dipBoundaryAt(d.exit);
+    d.dipAt = b != null && d.enter < b && !(d.exit < b && dockOwnsExit(d)) ? b : null;
+  }
+  const WASH_DIP = WASHES.map((w) => dipBoundaryAt(w[1]));
+  const dockDipped = (d, t) => d.dipAt != null && t >= d.dipAt;
+
+  /* P72 T19 / R26-267 - A PIN (E97's `pin`, the compiler's `rel`): the dock rides the docking of its target on the stage when
+     it lands (the latest to enter by then, after the coalescer). The compiler refused a target absent, later or unplaced. */
+  for (const d of DOCKS) {
+    if (!d.rel || !d.rel.pin || !d.place) continue;
+    let to = null;
+    for (const o of DOCKS) if (o !== d && o.slide === d.rel.pin && o.place && !o.rel && o.enter <= d.enter + 1e-6 && d.enter < o.exit + 1e-6 && (!to || o.enter > to.enter)) to = o;
+    d.pinTo = to;
+  }
 
   /* P50 T3: every press card mounts HERE, at load, not on the frame it first paints. A card's image must be
      decoded before the first frame asks how tall it is - the fan's step and the phrase box are both read off the
@@ -19574,9 +19646,27 @@ async function mount(doc) {
         el.style.transformOrigin = "0 0"; el.style.transform = "translate(0px," + dy.toFixed(1) + "px) scale(" + sc.toFixed(4) + ")";
       });
     }
+    lpParkKey(S, sc, sp.anchor || "top");
     S.parked = { u, scale: sc, anchor: sp.anchor || "top" };
   };
+  /* P72 T19 / R26-343: THE KEY RIDES THE PARK. The long form's key rail stands over the chart in the page's top band - a
+     sibling of the chart, so the park's scale left it full size over a page shrunk to a third. It takes the same scale
+     about the SAME point: the chart's park anchor (PARK_ORIGIN), written in the rail's own box (both laid out in % of the
+     page). A page with no key does nothing; lpUnpark returns it. */
+  const lpKeyEl = (S) => (S && S.keyPills && S.keyPills.length && S.keyPills[0].el.parentNode) || null;
+  const lpParkKey = (S, sc, anchor) => {
+    const kel = lpKeyEl(S);
+    if (!kel || !S.page) return;
+    if (Math.abs(sc - 1) < 1e-6) { kel.style.transform = ""; kel.style.transformOrigin = ""; return; }   /* an un-park stands the rail as it was built (a scale(1) layer re-rasters its words) */
+    const pw = S.page.clientWidth || 0, ph = S.page.clientHeight || 0;
+    const len = (v, full) => { const q = String(v || "").trim(), n = parseFloat(q); return Number.isFinite(n) ? (q.endsWith("%") ? n / 100 * full : n) : 0; };
+    const cx = len(S.chart.style.left, pw) + (anchor === "right" ? len(S.chart.style.width, pw) : 0);
+    const cy = len(S.chart.style.top, ph) + (anchor === "bottom" ? len(S.chart.style.height, ph) : 0);
+    kel.style.transformOrigin = (cx - len(kel.style.left, pw)).toFixed(2) + "px " + (cy - len(kel.style.top, ph)).toFixed(2) + "px";
+    kel.style.transform = "scale(" + sc.toFixed(4) + ")";
+  };
   const lpUnpark = (S) => { if (S && S.parked) { S.chart.style.transform = ""; S.chart.style.transformOrigin = ""; S.parked = null;
+    { const kel = lpKeyEl(S); if (kel) { kel.style.transform = ""; kel.style.transformOrigin = ""; } }   /* P72 T19 / R26-343 */
     if (S.page) S.page.querySelectorAll(".lp-src").forEach((el) => { el.style.transform = ""; el.style.transformOrigin = ""; }); } };
   /* the page's chart states over time. A `chart_to` is not a cut: the standing state runs its law BACKWARDS over the
      transition's own clock, then the named state draws on by its own envelope. Before the first chart_to, and on a page
@@ -25673,17 +25763,22 @@ async function mount(doc) {
     pf.innerHTML = puffs.map((q) => c(q.shade.x, q.shade.y, q.r, shade)).join("") + puffs.map((q) => c(q.x, q.y, q.r, ink)).join("");
   };
   const PROP_HATCH_RUN = 4096;   /* half a hatch line's length in stage px: past the corner of any stage we draw (1920 x 1920's half-diagonal is 1358) */
-  const propHatchLines = (c, x0, y0, W, H, deg, pitch, width) => {
+  const propHatchLines = (c, x0, y0, W, H, deg, pitch, width, cam) => {
     const th = deg * Math.PI / 180, ux = Math.cos(th), uy = Math.sin(th);
-    const cs = [[x0, y0], [x0 + W, y0], [x0 + W, y0 + H], [x0, y0 + H]];
+    let cs = [[x0, y0], [x0 + W, y0], [x0 + W, y0 + H], [x0, y0 + H]];
+    /* P72 T19 / R26-271: under the dock's camera (`cam`, stage px -> stage px) the lines are laid on the PAGE the camera is
+       looking at, so they zoom and pan with the prop instead of swimming across it: the canvas's corners are taken back
+       into the page to find the lines that cover them, and the lines go out through the camera. No camera: the stage. */
+    if (cam) { const iv = cam.inverse(); cs = cs.map(([x, y]) => [iv.a * x + iv.c * y + iv.e, iv.b * x + iv.d * y + iv.f]); }
     const across = cs.map(([x, y]) => -x * uy + y * ux);
-    c.setTransform(ux, uy, -uy, ux, -x0, -y0);   /* (along, across) -> stage px -> this canvas */
+    if (cam) { const M = new DOMMatrix([1, 0, 0, 1, -x0, -y0]).multiply(cam).multiply(new DOMMatrix([ux, uy, -uy, ux, 0, 0])); c.setTransform(M.a, M.b, M.c, M.d, M.e, M.f); }
+    else c.setTransform(ux, uy, -uy, ux, -x0, -y0);   /* (along, across) -> stage px -> this canvas */
     /* each line runs the whole stage (+-PROP_HATCH_RUN along it), so its geometry is the PAGE's, never this canvas's:
        ends fitted to the canvas would move with the mark's bounds and re-round the line's edges from frame to frame */
     for (let i = Math.floor(Math.min(...across) / pitch) - 1, n = Math.ceil(Math.max(...across) / pitch) + 1; i <= n; i++)
       c.fillRect(-PROP_HATCH_RUN, i * pitch - width / 2, 2 * PROP_HATCH_RUN, width);
   };
-  const propHatchPaint = (el, s, isProp, onLedger, k, wipe, deferred) => {
+  const propHatchPaint = (el, s, isProp, onLedger, k, wipe, deferred, camPre) => {
     let cv = el.parentNode ? el.parentNode.querySelector("#dock-hatch-" + s) : null;
     if (!isProp) { if (cv) cv.style.opacity = "0"; return; }   /* a card that follows a prop in its slot carries nothing of it */
     const img = el.querySelector(".slide-frame img");
@@ -25704,7 +25799,7 @@ async function mount(doc) {
       if (!deferred && img.getAttribute("src")) {
         const p = img.decode().catch(() => {}).then(() => {
           clipSeeks.delete(p);
-          if (+cv.dataset.seq === seq) propHatchPaint(el, s, isProp, onLedger, k, wipe, true);
+          if (+cv.dataset.seq === seq) propHatchPaint(el, s, isProp, onLedger, k, wipe, true, camPre);
         });
         clipSeeks.add(p);
       }
@@ -25729,8 +25824,11 @@ async function mount(doc) {
     const c = cv.getContext("2d");
     c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = "source-over"; c.clearRect(0, 0, W, H);
     c.fillStyle = "rgb(" + P.INK[g].join(",") + ")";
-    propHatchLines(c, x0, y0, W, H, P.LIGHT_DEG, H8.PITCH_PX, H8.WIDTH_PX);   /* the primary family, along the light */
-    propHatchLines(c, x0, y0, W, H, P.LIGHT_DEG + H8.CROSS_DEG, H8.CROSS_PITCH_PX, H8.CROSS_WIDTH_PX);   /* ... crossed, sparser */
+    /* P72 T19 / R26-271: the camera's share of the mark's transform, in stage px about the mark's own origin (as F is) */
+    const cam = camPre ? new DOMMatrix().translate(el.offsetLeft + ox, el.offsetTop + oy).multiply(new DOMMatrix(camPre))
+      .translate(-(el.offsetLeft + ox), -(el.offsetTop + oy)) : null;
+    propHatchLines(c, x0, y0, W, H, P.LIGHT_DEG, H8.PITCH_PX, H8.WIDTH_PX, cam);   /* the primary family, along the light */
+    propHatchLines(c, x0, y0, W, H, P.LIGHT_DEG + H8.CROSS_DEG, H8.CROSS_PITCH_PX, H8.CROSS_WIDTH_PX, cam);   /* ... crossed, sparser */
     c.globalCompositeOperation = "destination-in";   /* ... cut to the mark's own silhouette, thrown along the light's fall */
     c.setTransform(F.a, F.b, F.c, F.d, F.e + dx - x0, F.f + dy - y0);
     c.drawImage(img, 0, 0, w, h);
@@ -25744,6 +25842,7 @@ async function mount(doc) {
     }
     c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = "source-over";
     cv.style.opacity = (P.ALPHA[g] * op).toFixed(3);
+    if ((cv.style.filter || "") !== (el.style.filter || "")) cv.style.filter = el.style.filter || "";   /* P72 T19 (review F7): the arrival's blur takes the hatch with the mark */
     /* the PAGE WIPE takes it with the mark: the same front, at the same stage x */
     cv.style.clipPath = !wipe ? "none" : wipe.right ? "inset(0 " + Math.max(0, x0 + W - wipe.fx).toFixed(1) + "px 0 0)"
       : "inset(0 0 0 " + Math.max(0, wipe.fx - x0).toFixed(1) + "px)";
@@ -26619,8 +26718,8 @@ async function mount(doc) {
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * STAGE_W}px)`;
 
     /* LAYER 2/3 — docks live on their own schedule */
-    const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + (d.handed ? 0 : EXIT));   /* P69 T26e: a HANDED prop leaves on its word - the morph's mesh carries its pixels from that frame */
-    const washOn = WASHES.some(([a, b]) => t >= a && t < b + EXIT);
+    const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + (d.handed ? 0 : EXIT) && !dockDipped(d, t));   /* P69 T26e: a HANDED prop leaves on its word - the morph's mesh carries its pixels from that frame */   /* P72 T19 / R26-285: a dock the dip took is gone from its black on */
+    const washOn = WASHES.some(([a, b], i) => t >= a && t < b + EXIT && !(WASH_DIP[i] != null && t >= WASH_DIP[i]));   /* ... and its wash with it */
     wash.classList.toggle("on", washOn);
     spot.classList.toggle("on", washOn);
 
@@ -26674,7 +26773,7 @@ async function mount(doc) {
       worldAnswer.y += thr.ground + thr.follow; worldAnswer.x += thr.shake.x; worldAnswer.y += thr.shake.y;
     } else if (pageContact) pageContact.style.opacity = "0";
     for (const k in DOCK_LIVE) delete DOCK_LIVE[k];   /* P69 T65: this frame's docks only */
-    for (let s = 0; s < 2; s++) {
+    for (const s of dockSlotOrder(live)) {   /* P72 T19: a pinned dock is painted after its target */
       const d = live.find((x) => x.slot === s && !isPressDock(x));   /* P50 T3: a press card is mounted by paintPress, not by a slot */
       const el = docks[s];
       if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; parkDockClips(el);
@@ -26803,7 +26902,8 @@ async function mount(doc) {
         const poofed = arr === "poof";
         const rk = !stamped && t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;   /* P49 T5: a camera page's card carries an exit past the match - the compiler extends it (extend_camera_cards) */
         const ex = stamped && t > d.exit ? stampExit(t - d.exit) : 0;
-        const from = { x: (d.side === "l" ? -1 : 1) * ((el.offsetWidth || 800) + STOP_THROW_DX), y: -STOP_THROW_DY };
+        const from = d.throw_side ? dockThrowFrom(d, G ? G.x : el.offsetLeft, G ? G.y : el.offsetTop, G ? G.w : (el.offsetWidth || 800))
+          : { x: (d.side === "l" ? -1 : 1) * ((el.offsetWidth || 800) + STOP_THROW_DX), y: -STOP_THROW_DY };   /* P72 T19 / R26-202 (b): an authored edge */
         const opts = d.violent ? { violent: true } : {};   /* a stage shake reads as violence, not mass - opt-in per dock (the report Q3) */
         /* R26-20 send-back: the ring's peak and the approach's scale are the ones the compiler FITTED to the room
            (`ring_to` / `from_to`, stamp_ring_fit) - capped there, never clipped here; an entry with neither keeps the
@@ -26921,18 +27021,20 @@ async function mount(doc) {
          inside it) and INSIDE the camera's prefix and the card's plane below, which compose outside it */
       const hov = dockHover(d, t, dockContactAt(d));
       if (hov.k > 0) el.style.transform = "translateY(" + (-hov.lift).toFixed(2) + "px) scale(" + hov.step.toFixed(4) + ") " + el.style.transform;
+      let camPre = "";   /* P72 T19 / R26-271: the CAMERA's share of the dock's transform - the arrival's prefix and the plane's - which the hatch rides */
       if (camArr && camArr.slide === d.slide) {   /* P49 T5: the landed card rides the arrival - screen = at + s (p - look), composed BEFORE the card's own transform about the card's own centre (its origin) */
         /* the prefix composes about the card's OWN transform-origin (a thrown card's is its bottom edge, the squash's contact
            edge - the first cut scaled about the centre and the card climbed 250 px off the top at the match) */
         const st = camArr.state, org = (getComputedStyle(el).transformOrigin || "").split(" ").map(parseFloat);
         const Cx = el.offsetLeft + (Number.isFinite(org[0]) ? org[0] : (el.offsetWidth || 0) / 2), Cy = el.offsetTop + (Number.isFinite(org[1]) ? org[1] : (el.offsetHeight || 0) / 2);
-        el.style.transform = "translate(" + (st.ax + st.s * (Cx - st.ox) - Cx).toFixed(2) + "px, " + (st.ay + st.s * (Cy - st.oy) - Cy).toFixed(2) + "px) scale(" + st.s.toFixed(5) + ") " + el.style.transform;
+        camPre = "translate(" + (st.ax + st.s * (Cx - st.ox) - Cx).toFixed(2) + "px, " + (st.ay + st.s * (Cy - st.oy) - Cy).toFixed(2) + "px) scale(" + st.s.toFixed(5) + ") ";
+        el.style.transform = camPre + el.style.transform;
         const blur = SNAP_BLUR * 4 * camArr.u * (1 - camArr.u); el.style.filter = blur > 0.2 ? "blur(" + blur.toFixed(2) + "px)" : "";
         if (cardHandK > 0) el.style.opacity = ((el.style.opacity === "" ? 1 : +el.style.opacity) * (1 - cardHandK)).toFixed(4);   /* P69 T10c: the card gives way to its page */
       } else if (el.style.filter) el.style.filter = "";
       /* P58 T6 (a): THE CARD'S OWN PLANE, prepended last so the whole choreography above rides it (a card on a
          declared surface is refused a depth by the compiler - the surface is already its plane). */
-      { const dcam = embedOf(d) ? "" : dockCam(d, t, el); if (dcam) el.style.transform = dcam + el.style.transform; }
+      { const dcam = embedOf(d) ? "" : dockCam(d, t, el); if (dcam) { el.style.transform = dcam + el.style.transform; camPre = dcam + camPre; } }
       const shk = arr !== "spring" ? expoOut(clamp01((lag(t) - d.enter) / CARD_IN)) : ck;   /* HF-2: a thrown or landed card's shadow settles one frame after it */
       const sh = 12 * shk * (swept ? (1 - wk) : 1);   // light leaves with the page
       /* P53 T7: a CUTOUT casts no card's lift - the hard offset shadow drew a ghost card edge down the right and along the
@@ -26945,7 +27047,7 @@ async function mount(doc) {
       /* P69 T6b / E99 s92: the prop's RESTING shadow, cross-hatched under it, painted once the mark's whole transform
          (the camera's prefix included) is written; a card never creates one */
       propHatchPaint(el, s, isProp, onLedgerWorld, propRest,
-                     swept ? { fx: (sc.exit === "wipe_right" ? (1 - wk) : wk) * STAGE_W, right: sc.exit === "wipe_right" } : null);
+                     swept ? { fx: (sc.exit === "wipe_right" ? (1 - wk) : wk) * STAGE_W, right: sc.exit === "wipe_right" } : null, false, camPre);
       if (embedOf(d)) {   /* P50 T7: a STILL card on a declared surface. The reading pop and the park above are
            REPLACED by the projection (the surface is the park), and the landing spot's contact shadow belongs to a
            card that lands on the floor - this one is on a wall, carrying its own shadow on the plane. */

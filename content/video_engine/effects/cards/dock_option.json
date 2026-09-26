@@ -870,6 +870,68 @@
       }
     },
     {
+      "id": "dock_option:rel",
+      "axis": "dock_option",
+      "token": "rel",
+      "title": "A dock pinned to another dock",
+      "aliases": [
+        {
+          "name": "pin a stamp to a card",
+          "source": "docs/content-video-engine/BACKLOG-HISTORY-2026-09.md:709"
+        },
+        {
+          "name": "the relation layer's pin",
+          "source": "docs/portable/OPERATOR-RULINGS.md:2815"
+        }
+      ],
+      "does": "The dock rides another dock's pose: it keeps the point of the target's box it landed on through the target's read, park and a park at a datum; translation only by default (E97), `inherit: [translate, scale]` to shrink and grow with it.",
+      "when": "A mark lands ON a card on its own word and must stay on it while the card reads and parks - a SELL stamped on the ticket (R26-267, P69 T18). The target is a placed dock on the stage when it lands; not on a press card, a card on a surface, a card joined to its date, or a prop that moves.",
+      "when_source": "docs/content-video-engine/BACKLOG-HISTORY-2026-09.md:709",
+      "author": {
+        "key": "dock option {'rel': {'pin': <asset id>, 'inherit'?: ['translate'] | ['translate', 'scale']}} beside `place` (a prop) or `centre` (a card) (REL_VERBS, REL_INHERIT; dock_pin_errors)",
+        "example": "{'prop': True, 'arrive': 'stamp', 'place': {'x': 0.78, 'y': 0.47, 'w': 0.12}, 'rel': {'pin': 'dock-h-sell-ticket'}}",
+        "example_source": "content/video_engine/tests/test_docks_keep_their_box.py:_pin_bed",
+        "check": "dock_option"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [
+        {
+          "token": "pin",
+          "means": "The target's asset id: the child keeps the point of the target's box it landed on. Refused by name: a target absent, later, gone, unplaced or pinned; the other E97 verbs (not built).",
+          "source_set": null
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "dockPinGeom",
+        "also": [
+          "dockPinBox",
+          "dockSlotOrder"
+        ],
+        "note": "dockGeom returns a pinned dock's box from its target's (dockPinBox, a pure function of t); the compiler writes `rel` with its inherit spelled out and dock_pin_errors checks the targets across the cut"
+      },
+      "doctrine": [
+        "P72 T19",
+        "E97",
+        "R26-105",
+        "R26-267",
+        "E99 s106"
+      ],
+      "status": "draft",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_docks_keep_their_box.py::test_a_pinned_stamp_rides_its_cards_read_then_park",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "dock_opts accepts it, the compiler writes the entry and refuses a bad target, the engine rides the target's box; no committed row names it - H row 10's SELL is P69 T33's (held for HG3)"
+      }
+    },
+    {
       "id": "dock_option:stack",
       "axis": "dock_option",
       "token": "stack",

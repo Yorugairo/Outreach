@@ -265,6 +265,21 @@
           "token": "paper",
           "means": "Mass: paper: A card: one squash frame, a low hop, a flutter.",
           "source_set": "MASSES"
+        },
+        {
+          "token": "left",
+          "means": "Side: left: `side: left` on the throw - the card enters past the stage's LEFT edge and flies to its box on the throw's arc (P72 T19, R26-202 (b)).",
+          "source_set": "THROW_SIDES"
+        },
+        {
+          "token": "right",
+          "means": "Side: right: past the stage's RIGHT edge - a card thrown to a right slot comes from the right. With no side the throw keeps the engine's alternation (solo docks: right, left, ...).",
+          "source_set": "THROW_SIDES"
+        },
+        {
+          "token": "bottom",
+          "means": "Side: bottom: up from below the stage's foot. `top` is refused by name - a card from above is a drop (arrive=land).",
+          "source_set": "THROW_SIDES"
         }
       ],
       "dials": {

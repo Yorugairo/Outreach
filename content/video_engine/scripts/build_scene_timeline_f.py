@@ -122,7 +122,7 @@ PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use",
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves", "after", "after_beat", "names", "idle", "under", "verdict", "park_at")   # P71 T23 / A19: park_at={datum, series?, side?, anchor?} - the read card parks to a chip AT its datum, a leader joining them (PARK_AT_KEYS)   # P71 T19: verdict={state: tick|cross|buy|sell, at} - a CHART CARD's state, landing on its word (DOCK_VERDICTS)   # P71 T15 / E99 s124 amended: under=hover|blur - the author's choice, by the beat's goal, of what a dock does to the chart it sits over (DOCK_UNDER)   # P69 T81 / E99 s112: after="<phrase>" - a STAMP's contact lands just AFTER the phrase's last word ends (+ after_beat s, default authoring.words.STAMP_AFTER_BEAT_S), the enter resolved from that contact; names="<phrase>" - the word the stamp punctuates, for the advice (`stamp_timing_advice`)   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves", "after", "after_beat", "names", "idle", "under", "verdict", "park_at", "side", "rel")   # P72 T19 / R26-202 (b): side=left|right|bottom - the edge a THROW enters from (THROW_SIDES); rel={pin: <dock>, inherit?} - the dock rides another dock's pose (REL_VERBS, E97)   # P71 T23 / A19: park_at={datum, series?, side?, anchor?} - the read card parks to a chip AT its datum, a leader joining them (PARK_AT_KEYS)   # P71 T19: verdict={state: tick|cross|buy|sell, at} - a CHART CARD's state, landing on its word (DOCK_VERDICTS)   # P71 T15 / E99 s124 amended: under=hover|blur - the author's choice, by the beat's goal, of what a dock does to the chart it sits over (DOCK_UNDER)   # P69 T81 / E99 s112: after="<phrase>" - a STAMP's contact lands just AFTER the phrase's last word ends (+ after_beat s, default authoring.words.STAMP_AFTER_BEAT_S), the enter resolved from that contact; names="<phrase>" - the word the stamp punctuates, for the advice (`stamp_timing_advice`)   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 # P70 T13 - THE DRIFT-HOLD (the operator, 2026-09-24; HyperFrames drift-hold; E99 s124 as amended): `idle` on a dock names
 # the HOLD - the held card turns under a degree, breathes and carries one light sweep, each one whole cycle across its
 # held span (kinetics/idle.mjs IDLE_HOLD, its dials read off drift-hold.html). OPT-IN per dock: a dock that names none is
@@ -168,6 +168,26 @@ PARK_AT_SIDES = ("right", "left", "above", "below")   # the side of its datum th
 PARK_AT_GAP_PX = 75          # the engine's DOCK_PARK_AT.GAP_PX - one dial written twice; test_card_at_its_date holds the pair
 PARK_AT_ANCHORS = (0.44, 0.2, 0.8, 0.0, 1.0)   # `anchor`: where along the chip's near edge the datum stands (its height beside, its width above or below), tried in order (BOOM's 0.44 first)
 PARK_AT_REFUSED = ("prop", "cutout", "press", "embed", "centre", "centre_x", "centre_y", "centre_w", "centre_band", "moves")
+# P72 T19 / R26-202 (b) - THE THROW'S SIDE. A thrown card's entry side was the engine's own alternation (`flip++ % 2`, solo
+# docks in order: right, left, right ...) and nobody could author it: a card thrown to a RIGHT slot could fly in from the
+# left across the page. `side` on a throw names the EDGE OF THE STAGE it enters from - the card starts just past that edge
+# and flies to its box on the throw's own arc. `top` is refused by name: a card from above is a DROP (`arrive: land`). A
+# throw that names no side keeps the alternation, and its entry is byte-for-byte what it was (`throw_side` unwritten).
+THROW_SIDES = ("left", "right", "bottom")
+# P72 T19 / R26-267 - THE RELATION LAYER'S FIRST VERB (E97, the operator 2026-09-13: "If relations is feasible then that's
+# clearly the winner"; R26-105's parent decision: build `pin` now). `rel: {pin: <asset id>}` parents a dock to ANOTHER
+# dock's pose: the child keeps the point of the parent's box it LANDED on (its own box at its enter, against the
+# parent's box at that instant) through everything the parent's box does after - its read, its park, a park at a datum
+# (P71 T23) - so a stamp lands ON a card on its own word and rides the card's read-then-park (H row 10's SELL, P69 T18).
+# E97's defaults: translation only (`inherit: ["translate"]`, written out on the entry); `["translate", "scale"]` widens
+# it, uniformly (the child's width by the parent's). Closed form: the parent's box is a pure function of t, so a seek is
+# the play. The target is checked across the WHOLE cut (`dock_pin_errors`): absent, docking later, gone before the child
+# lands, or placed nowhere - each refused by name. The other E97 verbs are refused by name until a sentence asks for them.
+REL_VERBS = ("pin",)
+REL_VERBS_UNBUILT = ("aim", "group", "path", "derive", "camera", "weight", "parent")
+REL_INHERIT = ("translate", "scale")
+REL_REFUSED = (("press", "a press card is posed by its pile"), ("embed", "a card on a surface stands on that surface"),
+               ("park_at", "a card joined to its date parks at its datum"), ("moves", "a prop's moves are its own place"))
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -10564,6 +10584,12 @@ def dock_opts(raw) -> dict:
         if k == "park_at":   # P71 T23: the read card parks at its datum
             _check_dock_park_at(v, raw)
             continue
+        if k == "side":   # P72 T19 / R26-202 (b): the edge a throw enters from
+            _check_dock_side(v, raw)
+            continue
+        if k == "rel":   # P72 T19 / R26-267: the dock rides another dock's pose
+            _check_dock_rel(v, raw)
+            continue
         if k == "card_aspect":
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
                 raise ValueError("dock: card_aspect must be a positive number (the card's height over its width)")
@@ -11862,6 +11888,80 @@ def _check_dock_idle(v, raw: dict) -> None:
                             "light to cross")):
         if on:
             raise ValueError(f"dock: idle={v} and {other} cannot be combined - the hold is a held CARD's idle ({why})")
+
+
+def _check_dock_side(v, raw: dict) -> None:
+    """P72 T19 / R26-202 (b): a dock's `side` is the EDGE a THROW enters from. ValueError names the values, `top` (a card
+    from above is a drop), or the dock that is not thrown."""
+    if v == "top":
+        raise ValueError("dock: side 'top' is refused - a card that comes down from above is a DROP (arrive=land), not a "
+                         f"throw; a throw enters from {'|'.join(THROW_SIDES)}")
+    if not isinstance(v, str) or v not in THROW_SIDES:
+        raise ValueError(f"dock: side {v!r} is not one of {'|'.join(THROW_SIDES)} - the edge of the stage a THROW enters from")
+    if raw.get("arrive") != "throw":
+        raise ValueError(f"dock: side is a THROW's entry side - it needs arrive=throw (this dock arrives by "
+                         f"{raw.get('arrive') or 'spring'!r})")
+    if raw.get("press"):
+        raise ValueError("dock: side and press cannot be combined - a press card lands in its pile (P50 T3), it is not "
+                         "thrown across the stage")
+
+
+def _check_dock_rel(v, raw: dict) -> None:
+    """P72 T19 / R26-267: a dock's `rel` is `{pin: <asset id>, inherit?: [translate(, scale)]}` (E97). ValueError names the
+    malformed key, a verb not built yet, a placement it cannot share, or a dock with no box of its own to pin."""
+    if not isinstance(v, dict) or not v:
+        raise ValueError(f"dock: rel must be {{pin: <asset id>, inherit?: [{', '.join(REL_INHERIT)}]}} (E97), not {v!r}")
+    for key in v:
+        if key in REL_VERBS_UNBUILT:
+            raise ValueError(f"dock: rel {key!r} is an E97 relation that is not built - only {'|'.join(REL_VERBS)} is "
+                             "(P72 T19); the others wait for a sentence that asks for them")
+        if key not in REL_VERBS + ("inherit",):
+            raise ValueError(f"dock: rel key {key!r} is not one of {'|'.join(REL_VERBS + ('inherit',))} (E97)")
+    pin = v.get("pin")
+    if not isinstance(pin, str) or not pin.strip():
+        raise ValueError(f"dock: rel.pin must NAME the dock (its asset id) this one rides, not {pin!r}")
+    if "inherit" in v:
+        inh = v["inherit"]
+        if (not isinstance(inh, (list, tuple)) or not inh or any(x not in REL_INHERIT for x in inh)
+                or len(set(inh)) != len(inh) or "translate" not in inh):
+            raise ValueError(f"dock: rel.inherit must list {' and '.join(REL_INHERIT)} - translation always (the child "
+                             f"keeps its point on the parent), scale to widen it (E97), not {inh!r}")
+    for other, why in REL_REFUSED:
+        if raw.get(other) is not None:
+            raise ValueError(f"dock: rel and {other} cannot be combined - a pinned dock's box is its parent's ({why})")
+    if raw.get("place") is None and not raw.get("centre"):
+        raise ValueError("dock: rel.pin needs a box of the dock's own to pin - a `place` (a prop) or `centre` (a card): "
+                         "the point of the parent it lands on is where that box stands at its enter")
+
+
+def dock_pin_errors(scenes: list[dict]) -> list[str]:
+    """P72 T19 / R26-267: every `rel.pin` in the cut against the docks it names. The target must be a PLACED dock on the
+    stage when the child lands (its enter in [target enter, target exit)): refused by name when no dock carries the id
+    (absent), when it only docks later, when every docking of it has left before the child lands, or when it has no
+    box. A pin to a pinned dock is refused (chains are not built)."""
+    docks = [d for sc in scenes for d in sc.get("docks", [])]
+    errs = []
+    for d in docks:
+        rel = d.get("rel")
+        if not rel:
+            continue
+        pin, at = rel.get("pin"), float(d["enter"])
+        who = f"dock {d['slide']!r} at {at:g}s"
+        same = [o for o in docks if o is not d and o.get("slide") == pin]
+        live = [o for o in same if float(o["enter"]) <= at + 1e-6 and at < float(o["exit"]) - 1e-6]
+        if not same:
+            errs.append(f"{who}: rel.pin {pin!r} is absent - no dock in the cut carries that id")
+        elif not live and all(float(o["enter"]) > at + 1e-6 for o in same):
+            errs.append(f"{who}: rel.pin {pin!r} docks later ({min(float(o['enter']) for o in same):g}s) - a dock rides "
+                        "a card that is already on the stage when it lands")
+        elif not live:
+            errs.append(f"{who}: rel.pin {pin!r} is absent when it lands - every docking of it has left by then")
+        elif not live[-1].get("place"):
+            errs.append(f"{who}: rel.pin {pin!r} is not placed - a dock with no box has no pose to ride (a card on a plain "
+                        "plate with no centre=)")
+        elif live[-1].get("rel"):
+            errs.append(f"{who}: rel.pin {pin!r} is itself pinned - a chain of pins is not built (E97, P72 T19)")
+    return errs
 
 
 def _check_dock_under(v, raw: dict) -> None:
@@ -15035,7 +15135,7 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                authored_place: dict | None = None, authored_moves: list | None = None,
                names: str | None = None, idle: str | None = None, under: str | None = None,
                verdict: dict | None = None,
-               park_at: dict | None = None) -> dict:
+               park_at: dict | None = None, throw_side: str | None = None, rel: dict | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -15129,6 +15229,10 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         # anchor}, `park_at_place`), so the cut reads back as the option it was; the engine moves the chip by the datum's
         # travel and draws the leader. Written only when the row names it, so every other entry is byte-for-byte what it was.
         **({"park_at": dict(park_at)} if park_at else {}),
+        # P72 T19 / R26-202 (b): the edge a THROW enters from, and R26-267: the dock this one rides (E97's default spelled
+        # out: translation only). Written only when the row names them, so every other entry is byte-for-byte what it was.
+        **({"throw_side": throw_side} if throw_side else {}),
+        **({"rel": {"pin": rel["pin"], "inherit": list(rel.get("inherit") or ["translate"])}} if rel else {}),
         **({"centre": True} if (centre or (read_deferred and place)) and place else {}),   # the design pass: a centred card sits at its box from its first frame - no reading size, no park
     }
 
@@ -16147,7 +16251,8 @@ def main() -> int:
                                         under=dopt.get("under"),   # P71 T15: hover or blur, the author's choice
                                         verdict=dopt.get("verdict"),   # P71 T19: a chart card's state on its word
                                         park_at={"datum": dopt["park_at"]["datum"], "series": dopt["park_at"].get("series", 0),
-                                                 "side": _pk["side"], "anchor": _pk["ay"]} if _pk else None))   # P71 T23: the join
+                                                 "side": _pk["side"], "anchor": _pk["ay"]} if _pk else None,   # P71 T23: the join
+                                        throw_side=dopt.get("side"), rel=dopt.get("rel")))   # P72 T19: the throw's edge (R26-202 (b)); the dock it rides (R26-267)
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         _fz_errs, _fz_warns = dock_freeze_errors(docks, row_species, evidence, f"shot row {i + 1} ({a}-{b}s)")   # P72 T22 / R26-304
         if _fz_errs:
@@ -16248,6 +16353,8 @@ def main() -> int:
         validate_page_build_spans(scenes)
     except ValueError as exc:
         raise SystemExit(f"FAIL: {exc}") from exc
+    if _pin_errs := dock_pin_errors(scenes):   # P72 T19 / R26-267: a pin names a placed dock on the stage when it lands
+        raise SystemExit("FAIL: " + "; ".join(_pin_errs))
     _perr = [e for sc in scenes for e in pedestal_errors(sc)]   # P71 T32 / M14: a pedestal moves after the build has settled
     if _perr:
         raise SystemExit("FAIL: " + "; ".join(_perr))
