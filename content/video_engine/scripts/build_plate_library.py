@@ -22,8 +22,18 @@ filters by channel; the resolver refuses cross-channel plates outright.
 
 **Status comes from the manifest, never from the path** (ruling E10).
 
+**A rebuild never loses a record silently** (R26-130, P72 T28): P58 T2 found
+`plate-p-viewers-desk` - operator-approved, in the SHIPPED index - reproduced by
+no scanner, so every rebuild dropped it and nothing said so. A rebuild that would
+drop a record the shipped `PLATE-LIBRARY.json` carries is REFUSED by the plate's
+id and writes nothing; a real removal is named (`--drop <id>`). `--sweep` lists
+every OPERATOR-approved plate (a stills `APPROVALS.json`, a plate claim wave's
+`operator_approved`) that has no library record, each by id and path.
+
 Usage:
     python build_plate_library.py                 # rebuild the index
+    python build_plate_library.py --drop <id>     # rebuild, taking a named loss
+    python build_plate_library.py --sweep         # approved plates with no record
     python build_plate_library.py "memory stack"  # search it
 """
 from __future__ import annotations
@@ -521,34 +531,37 @@ def scan_project_plates(repo: Path) -> list[dict]:
     return out
 
 
-def main() -> int:
-    if len(sys.argv) > 1:
-        lib = json.loads(OUT.read_text(encoding="utf-8"))
-        q = " ".join(sys.argv[1:]).lower()
-        chan = None
-        if "--channel" in sys.argv:
-            i = sys.argv.index("--channel"); chan = sys.argv[i + 1]
-            q = " ".join(a for a in sys.argv[1:] if a not in ("--channel", chan)).lower()
-        hits = [p for p in lib["plates"]
-                if (q in p["id"].lower() or q in p["semantic"].lower())
-                and (chan is None or p.get("channel") == chan)]
-        print(f"{len(hits)} of {len(lib['plates'])} plates match {q!r}\n")
-        for p in hits[:40]:
-            print(f"  {p['id'][:40]:<42}{p.get('channel','?')[:14]:<16}"
-                  f"{p['semantic'][:52]}")
-        return 0
+def search(argv: list[str], out: Path = OUT) -> int:
+    lib = json.loads(out.read_text(encoding="utf-8"))
+    q = " ".join(argv).lower()
+    chan = None
+    if "--channel" in argv:
+        i = argv.index("--channel"); chan = argv[i + 1]
+        q = " ".join(a for a in argv if a not in ("--channel", chan)).lower()
+    hits = [p for p in lib["plates"]
+            if (q in p["id"].lower() or q in p["semantic"].lower())
+            and (chan is None or p.get("channel") == chan)]
+    print(f"{len(hits)} of {len(lib['plates'])} plates match {q!r}\n")
+    for p in hits[:40]:
+        print(f"  {p['id'][:40]:<42}{p.get('channel','?')[:14]:<16}"
+              f"{p['semantic'][:52]}")
+    return 0
 
+
+CLAIMS_REL = "content/video_engine/projects/systems-and-blowups/review/claims"
+PILOT_REL = "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets"
+
+
+def collect(repo: Path = REPO, codex: Path = CODEX) -> list[dict]:
+    """Every scanner over `repo` (and the pilot in the `codex` checkout, when it is on disk), one record per id."""
     plates = []
-    plates += scan_claim_waves(
-        REPO / "content/video_engine/projects/systems-and-blowups/review/claims",
-        "steel-and-paper", "woodblock-vox-newsprint")
-    plates += scan_martial_matters(REPO)
-    pilot = CODEX / ("content/video_engine/projects/systems-and-blowups/"
-                     "pilots/current-bubble-mechanism/assets")
+    plates += scan_claim_waves(repo / CLAIMS_REL, "steel-and-paper", "woodblock-vox-newsprint")
+    plates += scan_martial_matters(repo)
+    pilot = codex / PILOT_REL
     if pilot.is_dir():
         sem = pilot_semantics(pilot.parent / "edit")
         plates += scan_pilot(pilot, sem)
-    plates += scan_project_plates(REPO)
+    plates += scan_project_plates(repo)
 
     # a keyed (chroma) plate is the same subject as its alpha twin
     by_id = {p["id"]: p for p in plates}
@@ -563,13 +576,58 @@ def main() -> int:
         if p["id"] not in seen:
             seen.add(p["id"])
             uniq.append(p)
+    return uniq
+
+
+def shipped_records(out: Path) -> list[dict]:
+    """The records the index on disk carries - what every consumer resolves against until the next write."""
+    if not Path(out).is_file():
+        return []
+    try:
+        return list(json.loads(Path(out).read_text(encoding="utf-8")).get("plates") or [])
+    except ValueError as exc:
+        raise SystemExit(f"FAIL: {out} is not JSON ({exc}) - the shipped index cannot be compared, so nothing is "
+                         "rebuilt over it") from None
+
+
+def lost_records(shipped: list[dict], rebuilt: list[dict]) -> list[dict]:
+    """Every shipped record whose id the rebuild no longer carries, in the shipped order."""
+    kept = {p["id"] for p in rebuilt}
+    return [p for p in shipped if p.get("id") not in kept]
+
+
+def loss_refusals(lost: list[dict], drops: tuple[str, ...]) -> list[str]:
+    """One line per lost record not named by `--drop`, and one per `--drop` that names no lost record."""
+    lost_ids = {p.get("id") for p in lost}
+    out = [f"REFUSED lost record {p.get('id')} ({p.get('source', '?')}, state {p.get('state', '?')}): the shipped "
+           f"index carries it and no scanner reproduces it - register it (a project's assets/plates/plates.json may "
+           f"name it by `path`) or take the loss by name: --drop {p.get('id')}"
+           for p in lost if p.get("id") not in drops]
+    out += [f"REFUSED --drop {d}: the shipped index has no record {d!r} that this rebuild loses - nothing to drop"
+            for d in drops if d not in lost_ids]
+    return out
+
+
+def rebuild(repo: Path = REPO, out: Path = OUT, codex: Path = CODEX, drops: tuple[str, ...] = ()) -> int:
+    """Scan, compare with the shipped index, and write - or refuse by name and write nothing (R26-130)."""
+    uniq = collect(repo, codex)
+    lost = lost_records(shipped_records(out), uniq)
+    blocked = loss_refusals(lost, tuple(drops))
+    if blocked:
+        for line in blocked:
+            print(f"  {line}")
+        print(f"PLATE LIBRARY - NOT WRITTEN: {len(blocked)} refusal(s); {Path(out).name} is unchanged")
+        return 1
+    for p in lost:
+        print(f"  dropped by name: {p.get('id')} ({p.get('source', '?')})")
 
     # every record now reads LAYERED or FLAT, and a layer PNG is never a plate (P58 T2)
     uniq, refusals = index_layers(uniq)
 
     from collections import Counter
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({
+    target = Path(out)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps({
         "schema_version": "plate_library.v2",
         "built": "2026-08-29",
         "note": "Status comes from the MANIFEST, never the path (ruling E10). "
@@ -580,7 +638,7 @@ def main() -> int:
         "count": len(uniq), "plates": uniq,
     }, indent=1), encoding="utf-8")
 
-    print(f"PLATE LIBRARY — {len(uniq)} plates indexed -> {OUT.name}\n")
+    print(f"PLATE LIBRARY — {len(uniq)} plates indexed -> {target.name}\n")
     for k, v in Counter(p["register"] for p in uniq).most_common():
         print(f"  {v:4d}  {k}")
     print()
@@ -596,6 +654,122 @@ def main() -> int:
     for msg in refusals:
         print(f"  REFUSED  {msg}")
     return 1 if refusals else 0
+
+
+# ---------------------------------------------------------------- the sweep (R26-130)
+STILLS_SCHEMA = "stills_approval.v1"
+APPROVALS_GLOBS = tuple("content/video_engine/projects/" + "*/" * n + "APPROVALS.json" for n in range(1, 5))
+CLAIM_ROOT_GLOBS = ("content/video_engine/projects/*/review/claims", "content/video_engine/projects/*/*/review/claims",
+                    "review/claims")
+REPO_ANCHORS = ("content/video_engine/", "review/")
+
+
+def repo_key(path: str | Path) -> str:
+    """A path as the repo sees it, whichever checkout wrote it: from `content/video_engine/` (or `review/`) on,
+    forward slashes, lower case - so a record written in the main checkout matches a file in a worktree."""
+    text = "/" + str(path).replace("\\", "/").lower().lstrip("./")   # a repo-relative path reads like an absolute one
+    hits = [i for i in (text.find("/" + a) for a in REPO_ANCHORS) if i >= 0]
+    return text[min(hits) + 1:] if hits else text[1:]
+
+
+def _still_file(approvals: Path, rel: str) -> Path | None:
+    """An approved still's file: its path is relative to the project, so the nearest ancestor that holds it."""
+    rel = rel.replace("\\", "/")
+    for base in list(approvals.parents)[:4]:
+        if (base / rel).is_file():
+            return base / rel
+    return None
+
+
+def approved_stills(repo: Path) -> list[dict]:
+    """Every still a `stills_approval.v1` file marks `approved: true` (set by the operator only)."""
+    out = []
+    for pattern in APPROVALS_GLOBS:
+        for f in sorted(repo.glob(pattern)):
+            d = load(f)
+            if d.get("schema_version") != STILLS_SCHEMA:
+                continue
+            for e in d.get("stills") or []:
+                if e.get("approved") is not True or not e.get("approved_path"):
+                    continue
+                png = _still_file(f, str(e["approved_path"]))
+                out.append({"id": str(e.get("shot") or Path(str(e["approved_path"])).stem),
+                            "file": png, "rel": str(e["approved_path"]).replace("\\", "/"),
+                            "where": f.relative_to(repo).as_posix()})
+    return out
+
+
+def approved_wave_plates(repo: Path) -> list[dict]:
+    """Every asset a PLATE claim wave's manifest lists as `operator_approved` (an agent's `approved` never counts)."""
+    out = []
+    for pattern in CLAIM_ROOT_GLOBS:
+        for root in sorted(repo.glob(pattern)):
+            for wave in sorted(root.glob("*plate*")):
+                for f in sorted(wave.glob("*.json")):
+                    for aid in load(f).get("operator_approved") or []:
+                        png = wave / "objects" / f"{aid}.png"
+                        out.append({"id": str(aid), "file": png if png.is_file() else None,
+                                    "rel": f"objects/{aid}.png", "where": f.relative_to(repo).as_posix()})
+    return out
+
+
+def sweep(repo: Path, library: dict) -> list[dict]:
+    """Every operator-approved plate whose file no library record points at: [{id, path, where}], path repo-relative
+    (or the approval's own path when the file is not on disk)."""
+    records = library.get("plates") or []
+    have = {repo_key(p.get("path", "")) for p in records}
+    by_id = {p.get("id"): repo_key(p.get("path", "")) for p in records}
+    found, seen = [], set()
+    for a in approved_stills(repo) + approved_wave_plates(repo):
+        rel = a["file"].relative_to(repo).as_posix() if a["file"] is not None else a["rel"]
+        key = repo_key(rel)
+        if key in have or key in seen:
+            continue
+        seen.add(key)
+        found.append({"id": a["id"], "path": printable(rel), "where": a["where"] + _why_uncovered(a, rel, by_id)})
+    return found
+
+
+def printable(text: str) -> str:
+    """A control character shown as its escape - a path mis-written into JSON (a BEL where `\\a` was meant) must be
+    SEEN, never printed invisibly."""
+    return "".join(c if c.isprintable() else f"\\x{ord(c):02x}" for c in text)
+
+
+def _why_uncovered(approval: dict, rel: str, by_id: dict) -> str:
+    notes = []
+    if approval["file"] is None:
+        notes.append("the file is not on disk")
+    if printable(rel) != rel:
+        notes.append("its approved path carries a control character - a backslash written unescaped")
+    if approval["id"] in by_id:
+        notes.append(f"a record {approval['id']} exists at {by_id[approval['id']]} - the approval does not point at it")
+    return "".join(f" ({n})" for n in notes)
+
+
+def run_sweep(repo: Path = REPO, out: Path = OUT) -> int:
+    found = sweep(repo, {"plates": shipped_records(out)})
+    print(f"PLATE LIBRARY SWEEP - {len(found)} approved plate(s) with no library record ({Path(out).name})")
+    for f in found:
+        print(f"  UNCOVERED {f['id']}  {f['path']}  (approved in {f['where']})")
+    return 1 if found else 0
+
+
+def main(argv: list[str] | None = None, repo: Path = REPO, out: Path = OUT) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv[:1] == ["--sweep"]:
+        return run_sweep(repo, out)
+    drops: list[str] = []
+    while "--drop" in argv:
+        i = argv.index("--drop")
+        if i + 1 >= len(argv) or argv[i + 1].startswith("--"):
+            print("REFUSED --drop names no plate id: --drop <id>")
+            return 2
+        drops.append(argv[i + 1])
+        del argv[i:i + 2]
+    if argv:
+        return search(argv, out)
+    return rebuild(repo, out, CODEX, tuple(drops))
 
 
 if __name__ == "__main__":

@@ -263,10 +263,28 @@ def test_the_gates_the_docs_cite_are_in_the_registry(real: list[dict], gate_id: 
     assert all(r["levels"] for r in rows)
 
 
-def test_m13_is_not_a_built_gate(real: list[dict]) -> None:
-    """47 s208: M13 is settled from the reference but "the gate lands with the edit pass"."""
-    assert not [r for r in real if r["id"] == "M13"], (
-        "M13 now emits rows - the registry is right and this canary is stale")
+def test_m13_is_the_cut_doors_refusal_and_not_yet_a_motion_gate_row(real: list[dict]) -> None:
+    """R26-136 (3) (P72 T28): M13 is ENFORCED - `authoring/words.py` `cut_before` refuses a cut with no acoustic gap -
+    so it has its registry row, level FAIL, with the door as its tool. 47 s208's half still holds: the motion gate emits
+    no M13 row of its own ("the gate lands with the edit pass") - the canary for that half stays."""
+    rows = [r for r in real if r["id"] == "M13"]
+    assert rows and {r["tool"] for r in rows} == {"authoring/words.py"}, rows
+    assert all(r["family"] == "motion" and r["levels"] == ["FAIL"] for r in rows)
+    assert any("no cut point before" in r["rule"] and r["rule"].endswith("(M13)") for r in rows)
+    assert all(r["source"]["path"] == "content/video_engine/scripts/authoring/words.py" for r in rows)
+
+
+def test_a_doors_refusal_that_names_an_id_is_a_fail_row_and_one_that_names_none_is_not() -> None:
+    import ast
+    src = ('def cut(gap, min_gap):\n'
+           '    if gap < min_gap:\n'
+           '        raise SystemExit(f"no cut point: gap {gap:.2f}s < {min_gap}s (M13)")\n'
+           '    if gap > 9:\n'
+           '        raise ValueError("a gap this long is a pause, not a cut")\n')
+    mod = BGR.Module("authoring/words.py", ast.parse(src), src)
+    [row] = BGR.enforcer_rows(mod, "authoring/words.py")
+    assert (row.ident, row.levels, row.family, row.line) == ("M13", ("FAIL",), "motion", 3)
+    assert row.rule == "no cut point: gap {gap}s < {min_gap}s (M13)"
 
 
 def test_s02_cites_the_shorts_format_doc(real: list[dict]) -> None:
@@ -286,7 +304,7 @@ def test_every_checker_contributes_rows(real: list[dict]) -> None:
 
     assert {"opening-long", "opening-short", "opening-shared", "motion", "audit",
             "lint", "viewer"} <= families
-    assert {r["tool"] for r in real} == set(BGR.FAMILY)
+    assert {r["tool"] for r in real} == set(BGR.FAMILY) | set(BGR.ENFORCERS)   # R26-136 (3): the doors' refusals too
 
 
 def test_the_opening_gate_carries_at_least_sixty_ids(real: list[dict]) -> None:

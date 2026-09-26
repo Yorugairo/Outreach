@@ -551,6 +551,9 @@ def refuse_by_name(build: Path, bed: Path | None = None) -> None:
 def bind_build_cues(build: Path, timeline_name: str, project: Path | None = None) -> int:
     """The build's cues bound to its compiled timeline, in the plan AND in the timeline. Exit 0."""
     refuse_by_name(build, project)
+    foreign = A.foreign_timeline(build, timeline_name)   # R26-198 (c): the build's OWN compiled timeline, never another
+    if foreign:
+        raise Refused(f"FAIL: {foreign}")
     tl_path = build / timeline_name
     if not tl_path.is_file():
         raise Refused(f"FAIL: no {rel(tl_path)} - the cues are bound to what the COMPILED timeline plays, "

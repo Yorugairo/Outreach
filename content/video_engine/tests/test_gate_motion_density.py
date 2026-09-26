@@ -2121,3 +2121,43 @@ def test_the_gates_panel_reveal_is_the_players_lpPanelStart_T8e():
             '!== "hidden") return sp.at;') in lines
     assert "const t0 = t - (t3 - LP.PUNCH);   /* the scene second the page's build opens */" in lines
     assert G.PAGE_BEAT_OFFSETS[4] == pytest.approx(4.4), "the build opens after the roll, the savor, the field and the punch"
+
+
+# ---- R26-198 (b) (P72 T28): the gate CLI's `--write` lands a hand re-measure on disk; without it nothing is written ---
+
+def _cli_bed(tmp_path: Path) -> Path:
+    import json
+    sys.path.insert(0, str(ROOT / "content/video_engine/tests"))
+    from test_motion_gate_credits import _beat_bed
+    b = tmp_path / "bed"
+    b.mkdir()
+    (b / "bed.timeline.json").write_text(json.dumps(_beat_bed()), encoding="utf-8")
+    return b
+
+
+def test_the_gate_cli_writes_nothing_without_write(tmp_path: Path, capsys) -> None:
+    b = _cli_bed(tmp_path)
+    before = sorted(p.name for p in b.iterdir())
+    G.main([str(b)])
+    assert "RESULT:" in capsys.readouterr().out
+    assert sorted(p.name for p in b.iterdir()) == before
+
+
+def test_the_gate_cli_write_writes_the_report_it_names_and_prints_its_path(tmp_path: Path, capsys) -> None:
+    b = _cli_bed(tmp_path)
+    G.main([str(b)])
+    printed = capsys.readouterr().out
+    rc = G.main([str(b), "--write"])
+    out = capsys.readouterr().out
+    report = b / G.REPORT_NAME
+    assert report.is_file() and f"report: {report}" in out
+    assert out.startswith(printed.rstrip("\n"))                 # the same report on stdout as without the flag
+    body = report.read_text(encoding="utf-8")
+    assert printed.rstrip("\n") in body and "TIMELINE: bed.timeline.json sha256:" in body
+    assert ("VERDICT: FAIL" in body) == (rc == 1) and ("VERDICT: PASS" in body) == (rc == 0)
+
+
+def test_the_gate_cli_refuses_write_with_a_beat_window_by_name(tmp_path: Path, capsys) -> None:
+    b = _cli_bed(tmp_path)
+    assert G.main([str(b), "--beat", "0,15", "--write"]) == 2
+    assert "--write" in capsys.readouterr().out and not (b / G.REPORT_NAME).exists()

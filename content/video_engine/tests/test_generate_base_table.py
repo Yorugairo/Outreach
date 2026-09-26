@@ -625,3 +625,19 @@ def test_the_bare_form_still_writes_where_no_table_exists_yet(bed):
     assert not (project / G.TABLE_NAME).exists()
     assert G.main([str(project), str(build)]) == 0
     assert (project / G.TABLE_NAME).is_file()
+
+
+def test_bind_cues_refuses_a_timeline_that_is_not_the_builds_own_by_name(bed, capsys):
+    """R26-198 (c) (P72 T28): the build's gate report names its compiled timeline; `--timeline timeline.json` (the word
+    timeline) is refused with both paths printed and nothing rewritten; the build's own binds."""
+    project, build = bed
+    own = sounded(build, [cue("page enter 1 (spiral)", 0.0)])
+    (build / "GATES-MOTION.md").write_text(f"TIMELINE: {own.name} sha256:{'0' * 64}\nVERDICT: PASS (0 FAIL)\n",
+                                           encoding="utf-8")
+    (build / "timeline.json").write_text(json.dumps({"words": [], "sentences": []}), encoding="utf-8")
+    before = {p.name: p.read_bytes() for p in build.iterdir() if p.is_file()}
+    assert G.main([str(project), str(build), "--bind-cues", "--timeline", "timeline.json"]) == 1
+    err = capsys.readouterr().err
+    assert "R26-198" in err and str(build / "timeline.json") in err and str(build / own.name) in err
+    assert {p.name: p.read_bytes() for p in build.iterdir() if p.is_file()} == before
+    assert G.main([str(project), str(build), "--bind-cues"]) == 0

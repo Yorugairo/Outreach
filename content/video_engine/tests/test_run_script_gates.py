@@ -308,3 +308,17 @@ def test_is_short_routes_on_a_measured_clock(tmp_path):
     assert RG.is_short(ns(short=True)) and not RG.is_short(ns(short=False))
     assert not RG.is_short(ns())                                         # an estimated clock never routes to the short mode
     assert RG.is_short(ns(timeline=tl)) == (RG.G.load_timeline(tl)[-1]["e"] < RG.G.SHORT_MAX_S)
+
+
+# ---- R26-227 (P72 T28): the runner's report carries the take's MEASURED rate, never the estimator's --------------
+
+def test_the_report_carries_the_measured_wpm_of_the_word_timeline(tmp_path):
+    import json
+    script = _script_with_viewer(tmp_path)
+    tl = tmp_path / "timeline.json"
+    words = [{"w": f"w{i}", "start": 1.0 + i * 0.36, "end": 1.0 + (i + 1) * 0.36} for i in range(500)]   # 180 s
+    tl.write_text(json.dumps({"words": words + [{"w": "-", "start": 181.0, "end": 181.2}]}), encoding="utf-8")
+    ok = [RG.ToolResult("x", 0, "", {"fail": 0}, "x")] * 4
+    body = RG.render_report(script, ok, "measured", stamp="s", timeline=tl)
+    assert "measured_rate: 166.7 wpm (500 words / 180.0 s spoken, timeline.json)" in body
+    assert "measured_rate:" not in RG.render_report(script, ok, "measured", stamp="s")   # no clock, no claim

@@ -489,3 +489,25 @@ def test_a_cut_with_no_recipe_and_a_build_with_no_timeline_never_crash(tmp_path)
     assert SW.write_recipe_sheets(build, [], {}, {}) == ([], [])
     shots, misses = SW.recipe_shots(tmp_path / "proj" / "nothing-here", catalog=cat)
     assert shots == [] and misses and misses[0].startswith("the fires could not be walked: SystemExit")
+
+
+# ---- R26-183 (P72 T28): what `self_watch.py` writes, `verdict_line` reads back ------------------------------------
+
+@pytest.mark.parametrize("rows", [
+    [("motion gate (M01-M24)", "PASS", "clean")],
+    [("motion gate (M01-M24)", "FAIL", "M12 a still over 12 s"), ("the one-shot floor (M37)", "FAIL", "one recipe")],
+])
+def test_verdict_line_reads_back_the_verdict_self_watch_writes(tmp_path, rows):
+    build = tmp_path / "build-x"
+    build.mkdir()
+    md = SW.render(build, tmp_path, "S", "short", "abc", "demo.timeline.json", 12.0, "9:16", rows, [], [0.0],
+                   "2026-09-25")
+    report = build / SW.REPORT_NAME
+    report.write_text(md, encoding="utf-8")
+    assert SW.verdict_line(report) == SW.verdict(rows) == SW.parse_report(md)["verdict"]
+
+
+def test_verdict_line_keeps_reading_a_verdict_line_after_a_verdict_heading(tmp_path):
+    p = tmp_path / "x-GATES.md"
+    p.write_text("## 3. Verdict\n\nNOT CLEAN - a row\n\nlater\n**VERDICT:** PASS\n", encoding="utf-8")
+    assert SW.verdict_line(p) == "VERDICT: PASS"          # the LAST verdict wins, whichever shape it has

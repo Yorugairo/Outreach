@@ -35,6 +35,10 @@ HOW IT READS THE TOOLS (`ast` only - the tools are never imported or executed):
      `E24`) resolve against `docs/DOCS-INDEX.jsonl` to a path:line; unresolved cites
      keep a null path rather than disappearing.
   7. Tests: every file under `content/video_engine/tests/` whose text mentions the id.
+  8. REFUSALS (R26-136 (3), P72 T28): a rule no checker emits as a row but a DOOR refuses on is read from
+     the door's `raise <Error>("... (<ID>)")` - the id is the one the refusal's own text names, the level
+     FAIL (a refusal stops the build), the rule the message as the code states it. `ENFORCERS` names the
+     doors: M13 (a cut lands only in an acoustic gap) is `authoring/words.py` `cut_before`.
 
 A gate whose rule text differs between branches (G31 states three different rules)
 gets one record per distinct rule text, all under the same id - the code is the truth.
@@ -71,6 +75,9 @@ FAMILY = {
     "viewer_score.py": "viewer",
     "gate_thumbnail_text.py": "package",   # G49 (ledger 3570a6280d20): the thumbnail's text against the frame edges
 }
+# The doors whose REFUSALS are rules (step 8): the tool and the family its ids belong to.
+ENFORCERS = {"authoring/words.py": "motion"}          # M13 - `cut_before` refuses a cut with no acoustic gap
+REFUSAL_ID_RE = re.compile(r"\(([A-Z]\d{2}[a-z]?)\)")
 OPENING_FAMILY = {"run": "opening-long", "run_short": "opening-short"}
 OPENING_SHARED = "opening-shared"
 RUNNER = "run_script_gates.py"
@@ -522,6 +529,21 @@ def tool_rows(mod: Module, tool: str) -> tuple[list[Raw], list[str]]:
     return rows, unparsed
 
 
+def enforcer_rows(mod: Module, tool: str) -> list[Raw]:
+    """Step 8: every `raise <Error>(<message>)` in a door whose message names a gate id `(<ID>)` - one FAIL row each."""
+    consts = bindings(mod.tree)
+    rows: list[Raw] = []
+    for node in ast.walk(mod.tree):
+        if not (isinstance(node, ast.Raise) and isinstance(node.exc, ast.Call) and node.exc.args):
+            continue
+        rule = rule_text(node.exc.args[0], mod, consts, node.lineno)
+        ids = REFUSAL_ID_RE.findall(rule or "")
+        if rule is None or not ids:
+            continue
+        rows.append(Raw(tool, node.lineno, ENFORCERS[tool], ids[-1], None, rule, ("FAIL",), ids[-1]))
+    return sorted(rows, key=lambda r: r.line)
+
+
 def _emitter_roles(helpers: list[Emitter], name: str, line: int) -> tuple[str | None, ...] | None:
     hits = [e for e in helpers if e.name == name]
     if not hits:
@@ -539,27 +561,31 @@ def build(repo_root: Path = REPO) -> list[dict]:
     sources = read_tests(root)
     tokens = test_tokens(sources)
     records: dict[tuple[str, str, str], dict] = {}
+    raws: list[Raw] = []
     for tool in sorted(FAMILY):
         path = root / SCRIPTS_REL / tool
-        if not path.is_file():
+        if path.is_file():
+            raws += tool_rows(_parse(path, tool), tool)[0]
+    for tool in sorted(ENFORCERS):                      # step 8: the doors' refusals (R26-136 (3))
+        path = root / SCRIPTS_REL / tool
+        if path.is_file():
+            raws += enforcer_rows(_parse(path, tool), tool)
+    for row in raws:
+        base = (FAMILY.get(row.tool) or ENFORCERS[row.tool]).split("-")[0]
+        ident = row.ident or f"{base}:{slug(row.code or row.rule)}"
+        key = (row.family, ident, row.rule)
+        record = records.get(key)
+        if record is None:
+            records[key] = {
+                "id": ident, "tool": row.tool, "family": row.family, "rule": row.rule,
+                "levels": list(row.levels),
+                "cites": find_cites(row.rule, index),
+                "tests": tests_naming(row.token, sources, tokens),
+                "source": {"path": f"{SCRIPTS_REL}/{row.tool}", "line": row.line},
+            }
             continue
-        rows, _ = tool_rows(_parse(path, tool), tool)
-        for row in rows:
-            base = FAMILY[row.tool].split("-")[0]
-            ident = row.ident or f"{base}:{slug(row.code or row.rule)}"
-            key = (row.family, ident, row.rule)
-            record = records.get(key)
-            if record is None:
-                records[key] = {
-                    "id": ident, "tool": row.tool, "family": row.family, "rule": row.rule,
-                    "levels": list(row.levels),
-                    "cites": find_cites(row.rule, index),
-                    "tests": tests_naming(row.token, sources, tokens),
-                    "source": {"path": f"{SCRIPTS_REL}/{row.tool}", "line": row.line},
-                }
-                continue
-            record["levels"] = _ordered_levels(record["levels"] + list(row.levels))
-            record["source"]["line"] = min(record["source"]["line"], row.line)
+        record["levels"] = _ordered_levels(record["levels"] + list(row.levels))
+        record["source"]["line"] = min(record["source"]["line"], row.line)
     return [records[k] for k in sorted(records)]
 
 
@@ -679,6 +705,11 @@ def render_md(records: list[dict], repo_root: Path = REPO) -> str:
           "`gate_vertical_safe_box.py` and `judge_muted_caption.py`.",
         "",
     ]
+    doors = sorted({r["tool"] for r in records if r["tool"] in ENFORCERS})
+    if doors:                                   # step 8, said where the reader looks (R26-136 (3))
+        head += ["**Refusals (R26-136 (3)).** A rule no checker emits as a row but a door REFUSES on is listed "
+                 "under its id's family with the door as its tool, level FAIL: " + ", ".join(f"`{d}`" for d in doors)
+                 + ".", ""]
     body: list[str] = []
     for family in FAMILIES:
         rows = [r for r in records if r["family"] == family]

@@ -564,11 +564,44 @@ def build_dir(project: Path, build: str | None) -> Path:
     return named if named.is_dir() and (named / "timeline.json").is_file() else project / named
 
 
+def build_table_name(build: Path) -> str:
+    """The table a build dir's name implies: `build-h` -> SHOT-TABLE-H.py, `build-short` -> SHOT-TABLE-SHORT.py (R26-215)."""
+    suffix = build.name[len("build-"):] if build.name.startswith("build-") else build.name
+    return f"SHOT-TABLE-{suffix.upper()}.py"
+
+
+def _tables_found(project: Path, build: Path) -> list[str]:
+    names = {p.name for d in (project, build) if d.is_dir() for p in d.glob("SHOT-TABLE-*.py")}
+    return sorted(names)
+
+
+def resolve_table(project: Path, build: Path, table: Path | None) -> Path:
+    """R26-215: the table the lint reads. `--table` as given when it is a file; a BARE name (no directory part) is
+    resolved in the project, then in the build dir (both holding different bytes is refused, both named). With no
+    `--table`: the historical default (`<project>/SHOT-TABLE-SHORT.py`) where it exists, else the build's own name
+    (`build_table_name`) inside the build, then beside it. A miss names every table it did find."""
+    if table is not None:
+        if table.is_file() or table.parent != Path("."):
+            candidates = [table]
+        else:
+            candidates = [d / table.name for d in (project, build) if (d / table.name).is_file()] or [table]
+            if len(candidates) == 2 and candidates[0].read_bytes() != candidates[1].read_bytes():
+                raise ValueError(f"--table {table.name} names two different tables: {candidates[0]} and "
+                                 f"{candidates[1]} - pass the path")
+    else:
+        own = build_table_name(build)
+        candidates = [project / TABLE_NAME, build / own, project / own]
+    hit = next((c for c in candidates if c.is_file()), None)
+    if hit is not None:
+        return hit
+    found = _tables_found(project, build)
+    raise FileNotFoundError(f"no shot table at {candidates[0]} (the build {build.name} writes {build_table_name(build)}; "
+                            f"--table takes a path or a bare name; found here: {', '.join(found) or 'none'})")
+
+
 def resolve_inputs(project: Path, build: str | None, table: Path | None, words: Path | None) -> tuple[Path, Path]:
-    table = table or project / TABLE_NAME
+    table = resolve_table(project, build_dir(project, build), table)
     words = words or build_dir(project, build) / "timeline.json"
-    if not table.is_file():
-        raise FileNotFoundError(f"no shot table at {table} (the build writes {TABLE_NAME}; --table names another)")
     if not words.is_file():
         raise FileNotFoundError(f"no timeline.json at {words} (--build names the build dir; --words names the file)")
     return table, words

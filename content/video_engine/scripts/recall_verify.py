@@ -14,6 +14,13 @@ minus one: a one-line window doubles the false-accept surface for the short span
 and the docs layers are build output that moves. The strict check repairs itself instead - on a miss it scans the
 whole file and refuses with "the span moved to <path>:<N> - cite that", which costs the author one edit.
 
+THE RECEIPT IN A MODULE (R26-197, P72 T28). A project with no `PRODUCTION-LEDGER.md` may carry the block in its build
+script's own MODULE DOCSTRING (a door whose write set holds no ledger): the script is then the receipt's home and is read
+exactly as a ledger is - the same grammar, the same exact-line check. Which script: the one running (`__main__`, a door
+compiling itself) when it lives in the project dir and its docstring carries a `## Recall` heading; else the project's
+ONLY such script; two or more with none running is refused naming each (pass the script's path). A ledger, when there
+is one, always outranks a docstring. No door shims `resolve_ledger` any more.
+
 A legacy `- Recall: ...` line (the 2026-09-08 commit-receipt form, no stage) parses with `stage=None` and is
 reported UNSTAGED - never silently dropped, never counted for a stage, and never verified as a staged
 citation (the pre-P67 form carries no span).
@@ -27,6 +34,7 @@ This module names no episode and no project, and never writes.
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import re
@@ -45,6 +53,9 @@ MIN_SPAN = 12
 
 HEADING_RE = re.compile(r"^##(?!#)\s*Recall")
 ANY_H2_RE = re.compile(r"^##(?!#)\s")
+# R26-197: a docstring receipt's block ends where the docstring does - a line that is only the closing quotes - so the
+# block (and its sha) is the receipt, never the module's code below it (an edit to the code moved the sha before).
+DOC_CLOSE_RE = re.compile(r'^\s*(?:"""|\'\'\')\s*$')
 LINE_RE = re.compile(r"^\s*[-*]\s*Recall(?:\(\s*([A-Za-z_]+)\s*\))?\s*:\s*(.+?)\s*$")
 ZERO_RE = re.compile(r"^docs_find\s+0\s+hits?\s+for\s+(?:\"([^\"]+)\"|([^\"(]+?))\s*(?:\(([^)]*)\))?\s*$", re.I)
 CITE_RE = re.compile(
@@ -125,7 +136,8 @@ def _parse_line(stage: str | None, body: str, raw: str, lineno: int) -> Citation
 
 
 def parse_block(text: str) -> RecallBlock:
-    """The LAST `## Recall` heading's block (to the next `## ` heading or EOF), one record per `Recall` line."""
+    """The LAST `## Recall` heading's block (to the next `## ` heading, a docstring's closing-quotes line, or EOF), one
+    record per `Recall` line."""
     lines = text.splitlines()
     starts = [i for i, ln in enumerate(lines) if HEADING_RE.match(ln)]
     if not starts:
@@ -133,7 +145,7 @@ def parse_block(text: str) -> RecallBlock:
     start = starts[-1]
     end = len(lines)
     for i in range(start + 1, len(lines)):
-        if ANY_H2_RE.match(lines[i]):
+        if ANY_H2_RE.match(lines[i]) or DOC_CLOSE_RE.match(lines[i]):
             end = i
             break
     body = lines[start:end]
@@ -151,10 +163,49 @@ def parse_block(text: str) -> RecallBlock:
     return block
 
 
+def running_script() -> Path | None:
+    """The script this process is running (`__main__`'s file), or None - a REPL, `python -c`, a frozen app."""
+    main = sys.modules.get("__main__")
+    name = getattr(main, "__file__", None)
+    return Path(name).resolve() if name else None
+
+
+def docstring_has_receipt(script: Path) -> bool:
+    """The MODULE docstring of `script` carries a `## Recall` heading (a string in the code below it never counts)."""
+    try:
+        tree = ast.parse(Path(script).read_text(encoding="utf-8", errors="replace"))
+    except (OSError, SyntaxError, ValueError):
+        return False
+    doc = ast.get_docstring(tree, clean=False)
+    return bool(doc) and any(HEADING_RE.match(ln) for ln in doc.splitlines())
+
+
+def docstring_receipts(project: Path) -> list[Path]:
+    """Every build script directly in `project` whose module docstring carries the `## Recall` block (R26-197)."""
+    return [p for p in sorted(Path(project).glob("*.py")) if docstring_has_receipt(p)]
+
+
+def _docstring_home(project: Path) -> Path | None:
+    """The running door when it is one of the project's docstring receipts, else the project's only one."""
+    homes = docstring_receipts(project)
+    running = running_script()
+    if running is not None and any(running == h.resolve() for h in homes):
+        return running
+    return homes[0] if len(homes) == 1 else None
+
+
 def resolve_ledger(target: Path) -> Path:
-    """An episode dir or the ledger path itself."""
+    """An episode dir, the ledger path itself, or - when the dir carries no ledger - the build script whose own module
+    docstring is the receipt's home (R26-197: see the module docstring for which script). With neither, the ledger's
+    path, which `verify` refuses by name."""
     target = Path(target)
-    return target / LEDGER_NAME if target.is_dir() else target
+    if not target.is_dir():
+        return target
+    ledger = target / LEDGER_NAME
+    if ledger.is_file():
+        return ledger
+    home = _docstring_home(target)
+    return home if home is not None else ledger
 
 
 def docs_find_hits(repo: Path, term: str) -> list[dict]:
@@ -254,6 +305,17 @@ def _stage_refusals(block: RecallBlock) -> list[str]:
     return out
 
 
+def _no_home(rel: str, target: Path) -> str:
+    """The refusal when no receipt file was found: both homes named, and every candidate door when there are several."""
+    head = (f"REFUSED - no ledger at {rel}: the receipt lives in the project's {LEDGER_NAME}, or in its build "
+            f"script's own module docstring under a `## Recall` heading (R26-197)")
+    homes = docstring_receipts(target) if target.is_dir() else []
+    if len(homes) > 1:
+        head += (f"; {len(homes)} scripts here carry one ({', '.join(h.name for h in homes)}) and none of them is "
+                 f"running - pass the script's path")
+    return head
+
+
 def verify(repo: Path, ledger: Path) -> tuple[bool, list[str]]:
     """Re-read every citation of the ledger's last `## Recall` block. Returns (ok, the report lines)."""
     repo = Path(repo)
@@ -264,7 +326,7 @@ def verify(repo: Path, ledger: Path) -> tuple[bool, list[str]]:
         rel = path.as_posix()
     lines = [f"Recall receipt: {rel}"]
     if not path.is_file():
-        lines.append(f"REFUSED - no ledger at {rel}: the receipt lives in the project's {LEDGER_NAME}")
+        lines.append(_no_home(rel, Path(ledger)))
         return False, lines
     block = parse_block(path.read_text(encoding="utf-8", errors="replace"))
     if not block.found:

@@ -232,3 +232,51 @@ def test_bind_embedded_cues_leaves_a_timeline_with_nothing_to_move_byte_for_byte
     before = tl_path.read_bytes()
     assert LB.bind_embedded_cues(tmp_path, plan, tl_path.name) == []
     assert tl_path.read_bytes() == before
+
+
+# ---- R26-198 (c) (P72 T28): the bind door binds the build's OWN compiled timeline, never another --------------------
+# The Tokyo v2 render: `--bind-cues --timeline timeline.json` bound the plan against the WORD timeline (0 cues, other
+# events) and rewrote the frozen copy's SOUND-PLAN.json down to 2 cues. The build names its own compiled timeline twice -
+# the motion gate's report (`TIMELINE: <name> sha256:`) and the compile manifest (`player.json` compile.timeline_name).
+
+def _named_build(tmp_path: Path, report: str | None = "short.timeline.json", manifest: str | None = None) -> Path:
+    build = tmp_path / "build-v9"
+    build.mkdir()
+    if report:
+        (build / A.GATE_REPORT_NAME).write_text(f"# MOTION GATE\n\nTIMELINE: {report} sha256:{'0' * 64}\nVERDICT: PASS "
+                                                "(0 FAIL)\n", encoding="utf-8")
+    if manifest:
+        (build / A.COMPILE_MANIFEST_NAME).write_text(json.dumps({"compile": {"timeline_name": manifest}}),
+                                                     encoding="utf-8")
+    return build
+
+
+def test_the_builds_own_timeline_passes_the_bind_door(tmp_path):
+    build = _named_build(tmp_path, manifest="short.timeline.json")
+    assert A.own_timelines(build) == {A.GATE_REPORT_NAME: "short.timeline.json",
+                                      A.COMPILE_MANIFEST_NAME: "short.timeline.json"}
+    assert A.foreign_timeline(build, "short.timeline.json") is None
+
+
+def test_a_timeline_that_is_not_the_builds_own_is_refused_by_name_with_both_paths(tmp_path):
+    build = _named_build(tmp_path)
+    why = A.foreign_timeline(build, "timeline.json")
+    assert why is not None and "R26-198" in why
+    assert str(build / "timeline.json") in why and str(build / "short.timeline.json") in why
+    assert A.GATE_REPORT_NAME in why
+
+
+def test_the_manifest_names_the_timeline_when_no_report_is_written_yet(tmp_path):
+    build = _named_build(tmp_path, report=None, manifest="base.timeline.json")
+    assert A.foreign_timeline(build, "base.timeline.json") is None
+    assert "base.timeline.json" in (A.foreign_timeline(build, "timeline.json") or "")
+
+
+def test_a_build_that_names_no_timeline_is_not_judged_here(tmp_path):
+    assert A.foreign_timeline(_named_build(tmp_path, report=None), "base.timeline.json") is None
+
+
+def test_a_build_whose_records_disagree_is_refused_naming_each(tmp_path):
+    build = _named_build(tmp_path, report="a.timeline.json", manifest="b.timeline.json")
+    why = A.foreign_timeline(build, "a.timeline.json") or ""
+    assert "a.timeline.json" in why and "b.timeline.json" in why and "disagree" in why

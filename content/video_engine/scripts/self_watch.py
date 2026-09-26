@@ -139,15 +139,25 @@ def run_floor(build: Path, project: Path | None = None) -> list[dict]:
     return rows
 
 
+VERDICT_HEADING_RE = re.compile(r"^#{1,6}\s*(?:\d+\.\s*)?verdict\s*$", re.I)   # `## 3. Verdict` - render()'s own shape
+
+
 def verdict_line(path: Path) -> str:
-    """The LAST verdict line of a report (`VERDICT: PASS`, `**Verdict** ...`), `absent` when there is no file."""
+    """The LAST verdict of a report, `absent` when there is no file. Two shapes: a verdict LINE (`VERDICT: PASS`,
+    `**Verdict** ...`), and a `## N. Verdict` HEADING whose verdict is the next non-empty line - the shape `render`
+    writes, so this reads back what `self_watch.py` itself writes (R26-183; it once could not)."""
     if not path.is_file():
         return "absent"
     lines = [l.strip() for l in path.read_text(encoding="utf-8", errors="replace").splitlines()]
-    for l in reversed(lines):
-        if re.match(r"^\W*verdict\b", l, re.I):
-            return re.sub(r"\*+", "", l).strip("# ").strip()
-    return "present, no verdict line"
+    found = None
+    for i, l in enumerate(lines):
+        if VERDICT_HEADING_RE.match(l):
+            nxt = next((x for x in lines[i + 1:] if x), "")
+            if nxt and not nxt.startswith("#"):
+                found = nxt
+        elif re.match(r"^\W*verdict\b", l, re.I):
+            found = re.sub(r"\*+", "", l).strip("# ").strip()
+    return found if found is not None else "present, no verdict line"
 
 
 def level_of(line: str) -> str:

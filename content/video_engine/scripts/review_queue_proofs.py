@@ -5,11 +5,14 @@ An item reaches the operator only with a proof framed for a viewer. This file ma
   (a) CLIPS - an mp4 of a window of a player, captured the way render_baseline captures a golden frame (headless
       Chromium seeks #scrub to t and screenshots #stage) but in ONE browser across the window, piped to ffmpeg. The
       source is either a golden surface (`surface` + `flags`, instantiated from tests/golden/sources/) or a served-form
-      build directory (`build` + `page`). Silent; written to `content/video_engine/review/queue/clips/` (gitignored).
+      build directory (`build` + `page`). Silent unless the proof carries its take (`audio`, R26-178 - a whole-cut watch
+      needs the voice): then the take's own window [t0, t1) is muxed in. Written to `content/video_engine/review/queue/clips/`
+      (gitignored).
   (b) CROPS - the bounding box of the pixels that differ between a before and an after frame, plus a margin, with the
       caption strip excluded: a pair that differs only inside the caption box is refused (it proves nothing).
 
     python content/video_engine/scripts/review_queue_proofs.py --clips [--only ITEM_ID] [--force]
+    python content/video_engine/scripts/review_queue_proofs.py --clips --only ITEM_ID --audio <take.mp3>   # with the voice
     python content/video_engine/scripts/review_queue_proofs.py --confirm      # GET every player proof, print the codes
 
 Clip rendering is slow (seconds per clip-second), so the builder never renders; it shows a rendered clip and marks a
@@ -112,7 +115,7 @@ def _clip_source(proof: dict, tmp: Path) -> tuple[Path, str, str]:
     return ROOT / proof["build"], proof.get("page", "player.html"), proof.get("aspect", "16:9")
 
 
-CLIP_KEYS = ("surface", "build", "page", "aspect", "t0", "t1", "flags", "mp4")
+CLIP_KEYS = ("surface", "build", "page", "aspect", "t0", "t1", "flags", "mp4", "audio")
 
 
 def clip_source_sha(proof: dict, root: Path = ROOT) -> str | None:
@@ -152,7 +155,29 @@ def clip_key(proof: dict, root: Path = ROOT) -> dict:
     sha = clip_source_sha(proof, root)
     if sha:
         key["source_sha256"] = sha
+    take = audio_path(proof, root)
+    if take is not None and take.is_file():         # a re-take under the same name is a different clip (R26-178)
+        import hashlib
+        key["audio_sha256"] = hashlib.sha256(take.read_bytes()).hexdigest()
     return key
+
+
+def audio_path(proof: dict, root: Path | None = None) -> Path | None:
+    """The take a clip proof carries (`audio`, repo-relative or absolute), or None for a silent proof."""
+    rel = proof.get("audio")
+    if not rel:
+        return None
+    return Path(rel) if Path(rel).is_absolute() else Path(ROOT if root is None else root) / rel
+
+
+def mux_audio(video: Path, take: Path, t0: float, t1: float, out_mp4: Path) -> Path:
+    """The silent clip with the take's own window [t0, t1) under it: the video stream copied, the voice as AAC."""
+    code = subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(video), "-ss", f"{t0:.3f}", "-t", f"{t1 - t0:.3f}",
+                           "-i", str(take), "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac",
+                           "-b:a", "160k", "-shortest", "-movflags", "+faststart", str(out_mp4)]).returncode
+    if code != 0:
+        raise RuntimeError(f"ffmpeg failed ({code}) muxing {take} into {out_mp4}")
+    return out_mp4
 
 
 def clip_sidecar(out_mp4: Path) -> Path:
@@ -171,11 +196,25 @@ def clip_is_current(proof: dict, out_mp4: Path) -> bool:
 
 
 def render_clip(proof: dict, out_mp4: Path) -> Path:
-    """Capture [t0, t1) at CLIP_FPS from one browser and encode a silent H.264 mp4 at card width."""
-    import render_baseline as RB
-    from playwright.sync_api import sync_playwright
+    """Capture [t0, t1) at CLIP_FPS from one browser and encode an H.264 mp4 at card width - silent, or with the take's
+    own window under it when the proof carries `audio` (R26-178)."""
     t0, t1 = float(proof["t0"]), float(proof["t1"])
+    take = audio_path(proof)
+    if take is not None and not take.is_file():
+        raise FileNotFoundError(f"clip proof names a take that is not on disk: {proof['audio']}")
     out_mp4.parent.mkdir(parents=True, exist_ok=True)
+    if take is None:
+        return _render_video(proof, out_mp4, t0, t1)
+    silent = out_mp4.with_name(out_mp4.stem + ".silent" + out_mp4.suffix)
+    try:
+        _render_video(proof, silent, t0, t1)
+        return mux_audio(silent, take, t0, t1, out_mp4)
+    finally:
+        silent.unlink(missing_ok=True)
+
+
+def _render_video(proof: dict, out_mp4: Path, t0: float, t1: float) -> Path:
+    """The picture: an mp4 already on disk carried as it is, or [t0, t1) captured at CLIP_FPS and encoded silent."""
     if proof.get("mp4"):   # already rendered elsewhere (E99 s38's three-way proof): the queue carries it as it is
         import shutil
         src = ROOT / proof["mp4"]
@@ -183,6 +222,8 @@ def render_clip(proof: dict, out_mp4: Path) -> Path:
             raise FileNotFoundError(f"clip proof names an mp4 that is not on disk: {proof['mp4']}")
         shutil.copyfile(src, out_mp4)
         return out_mp4
+    import render_baseline as RB
+    from playwright.sync_api import sync_playwright
     with tempfile.TemporaryDirectory() as td:
         directory, page_name, aspect = _clip_source(proof, Path(td))
         w, h = RB.STAGE[aspect]
@@ -234,7 +275,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--force", action="store_true", help="re-render clips that exist")
     ap.add_argument("--data", type=Path, default=ROOT / DATA_REL)
     ap.add_argument("--clips-dir", type=Path, default=ROOT / CLIPS_REL)
+    ap.add_argument("--audio", default=None, metavar="TAKE",
+                    help="with --only: mux this take (repo-relative or absolute) under the item's clips - a whole-cut "
+                         "watch needs the voice (R26-178)")
     args = ap.parse_args(argv)
+    if args.audio is not None and not args.only:
+        print("REFUSED --audio: a take belongs to ONE whole-cut item - pass --only ITEM_ID with it")
+        return 2
     data = json.loads(args.data.read_text(encoding="utf-8"))
     if args.confirm:
         bad = 0
@@ -244,6 +291,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{'answers' if ok else 'NO ANSWER'}: {url}")
         return 1 if bad else 0
     for item, n, proof in clip_proofs(data, args.only):
+        if args.audio is not None:
+            proof = {**proof, "audio": args.audio}
         out = args.clips_dir / clip_name(item["id"], n)
         if clip_is_current(proof, out) and not args.force:
             print(f"have  {out.name}")

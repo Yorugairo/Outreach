@@ -743,3 +743,52 @@ def accent_level(vo_lufs: float, cue_lufs: float, gain: float) -> dict:
     """An accent's level against the voice at a gain, measured to measured: `{voice, cue, under_db}` (R26-363's table)."""
     cue = cue_lufs + 20 * math.log10(gain)
     return {"voice": vo_lufs, "cue": round(cue, 2), "under_db": round(vo_lufs - cue, 2)}
+
+
+# ---------------------------------------------------------------- the bind door's timeline (R26-198 (c), P72 T28)
+# A short's render (2026-09-17, R26-198): `--bind-cues --timeline timeline.json` bound the plan against the WORD timeline (0 cues,
+# other events) and rewrote the frozen copy's SOUND-PLAN.json down to 2 cues. A build names its own compiled timeline in
+# two records; the door binds that one and refuses any other by name, both paths printed.
+GATE_REPORT_NAME = "GATES-MOTION.md"      # `gate_motion_density.REPORT_NAME` - its `TIMELINE: <name> sha256:` line
+COMPILE_MANIFEST_NAME = "player.json"     # `authoring.table.MANIFEST_NAME` - its `compile.timeline_name`
+_REPORT_TIMELINE_RE = re.compile(r"^TIMELINE: (\S+) sha256:[0-9a-f]{64}\s*$", re.M)
+
+
+def own_timelines(build: Path) -> dict:
+    """{record: timeline file name} for each record that names the build's own compiled timeline - the motion gate's
+    report and the compile manifest. Empty when neither is on disk (a build not yet compiled or gated)."""
+    import json
+    build, out = Path(build), {}
+    report = build / GATE_REPORT_NAME
+    if report.is_file():
+        m = _REPORT_TIMELINE_RE.search(report.read_text(encoding="utf-8", errors="replace"))
+        if m:
+            out[GATE_REPORT_NAME] = m.group(1)
+    manifest = build / COMPILE_MANIFEST_NAME
+    if manifest.is_file():
+        try:
+            name = (json.loads(manifest.read_text(encoding="utf-8")).get("compile") or {}).get("timeline_name")
+        except ValueError:
+            name = None
+        if isinstance(name, str) and name:
+            out[COMPILE_MANIFEST_NAME] = name
+    return out
+
+
+def foreign_timeline(build: Path, timeline_name: str) -> str | None:
+    """None when `timeline_name` is the build's own compiled timeline (or the build names none yet); else the refusal:
+    the named path and the build's own, each printed, and which record says so."""
+    build = Path(build)
+    named = own_timelines(build)
+    if not named:
+        return None
+    if len(set(named.values())) > 1:
+        return (f"REFUSED: the build's records disagree on its compiled timeline - "
+                + "; ".join(f"{k} names {build / v}" for k, v in named.items())
+                + f" - re-gate the build before binding its cues (R26-198 (c))")
+    own = next(iter(named.values()))
+    if timeline_name == own:
+        return None
+    return (f"REFUSED --timeline {build / timeline_name}: not this build's own compiled timeline - "
+            f"{' and '.join(named)} name {build / own}; the cues are bound to the timeline the report measured "
+            f"(R26-198 (c): a foreign timeline rewrote a frozen copy's SOUND-PLAN.json down to 2 cues)")

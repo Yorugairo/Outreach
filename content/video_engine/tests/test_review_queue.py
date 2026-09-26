@@ -787,3 +787,75 @@ def test_the_live_queue_still_validates_and_warns_on_exactly_its_whole_cut_watch
     assert BRQ.main(["--check"]) == 0, "the live data validates: with CRITIC_REQUIRED True nothing may be owed"
     out = capsys.readouterr().out
     assert out.count("WARN ") == len(expected)
+
+
+# ---- R26-178 (P72 T28): a whole-cut watch needs the voice - a clip proof may carry its take ------------------------
+# The operator, 2026-09-16: "without audio i can't watch the short and understand what's happening". A clip proof with an
+# `audio` key (or the CLI's `--audio` for one item) is muxed with that take over its own window [t0, t1); ffprobe reads the
+# audio stream. The inputs are made here by ffmpeg (lavfi) - no browser runs.
+
+def _ffprobe_streams(path: Path) -> list[str]:
+    import subprocess
+    out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=codec_type", "-of", "csv=p=0", str(path)],
+                         capture_output=True, text=True, check=True)
+    return [s.strip() for s in out.stdout.splitlines() if s.strip()]
+
+
+def _media(tmp_path: Path) -> tuple[Path, Path]:
+    """A 3 s silent H.264 clip (the `mp4` route's input) and a 20 s tone standing in for a take."""
+    import subprocess
+    video, take = tmp_path / "silent.mp4", tmp_path / "take.mp3"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "testsrc=size=160x90:rate=15:duration=3",
+                    "-pix_fmt", "yuv420p", "-c:v", "libx264", str(video)], check=True)
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=20",
+                    "-c:a", "libmp3lame", str(take)], check=True)
+    return video, take
+
+
+def test_a_clip_proof_with_audio_carries_an_audio_stream(tmp_path, monkeypatch):
+    video, take = _media(tmp_path)
+    monkeypatch.setattr(RQP, "ROOT", tmp_path)
+    out = tmp_path / "clips" / "item-0.mp4"
+    RQP.render_clip({"type": "clip", "mp4": video.name, "audio": take.name, "t0": 5.0, "t1": 8.0}, out)
+    assert _ffprobe_streams(out) == ["video", "audio"]
+
+
+def test_a_clip_proof_without_audio_stays_silent(tmp_path, monkeypatch):
+    video, _take = _media(tmp_path)
+    monkeypatch.setattr(RQP, "ROOT", tmp_path)
+    out = tmp_path / "clips" / "item-0.mp4"
+    RQP.render_clip({"type": "clip", "mp4": video.name, "t0": 0.0, "t1": 3.0}, out)
+    assert _ffprobe_streams(out) == ["video"]
+
+
+def test_a_clip_proof_whose_audio_is_not_on_disk_is_refused_by_name(tmp_path, monkeypatch):
+    video, _take = _media(tmp_path)
+    monkeypatch.setattr(RQP, "ROOT", tmp_path)
+    with pytest.raises(FileNotFoundError, match="no-such-take.mp3"):
+        RQP.render_clip({"type": "clip", "mp4": video.name, "audio": "no-such-take.mp3", "t0": 0.0, "t1": 3.0},
+                        tmp_path / "clips" / "x.mp4")
+
+
+def test_the_take_is_part_of_what_a_clip_is(tmp_path):
+    (tmp_path / "a.mp3").write_bytes(b"one take")
+    proof = {"type": "clip", "mp4": "v.mp4", "audio": "a.mp3", "t0": 0.0, "t1": 3.0}
+    key = RQP.clip_key(proof, tmp_path)
+    assert key["audio"] == "a.mp3" and key["audio_sha256"]
+    (tmp_path / "a.mp3").write_bytes(b"a re-take")
+    assert RQP.clip_key(proof, tmp_path) != key, "a new take re-renders the clip"
+
+
+def test_the_cli_audio_names_one_item_and_reaches_its_clip(tmp_path, monkeypatch, capsys):
+    video, take = _media(tmp_path)
+    monkeypatch.setattr(RQP, "ROOT", tmp_path)
+    data = tmp_path / "queue.json"
+    data.write_text(json.dumps({"items": [{"id": "watch-1", "proofs": [
+        {"type": "clip", "mp4": video.name, "t0": 2.0, "t1": 5.0}]}]}), encoding="utf-8")
+    clips = tmp_path / "clips"
+    assert RQP.main(["--clips", "--data", str(data), "--clips-dir", str(clips), "--audio", take.name]) == 2
+    assert "--only" in capsys.readouterr().out                 # a take belongs to ONE whole-cut item
+    assert RQP.main(["--clips", "--data", str(data), "--clips-dir", str(clips), "--only", "watch-1",
+                     "--audio", take.name]) == 0
+    assert _ffprobe_streams(clips / "watch-1-0.mp4") == ["video", "audio"]
+    side = json.loads((clips / "watch-1-0.mp4.json").read_text(encoding="utf-8"))
+    assert side["audio"] == take.name

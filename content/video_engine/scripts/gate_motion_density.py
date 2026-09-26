@@ -4849,9 +4849,21 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--timeline", help="timeline file name inside the build dir")
     ap.add_argument("--beat", type=_beat_arg, metavar="T0,T1",
                     help="score a test-bed beat on its own window [t0, t1): M11 judges the window's own claim (R26-167)")
+    ap.add_argument("--write", action="store_true",
+                    help=f"also write <build>/{REPORT_NAME} - the report render_episode reads - and print its path "
+                         "(R26-198 (b): a hand re-measure lands on disk); without it nothing is written")
     args = ap.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if args.write and args.beat:
+        print(f"REFUSED --write with --beat: {REPORT_NAME} is the whole cut's report (render_episode refuses a render "
+              "on it) - a beat window's score is printed, never written over it")
+        return 2
+    if args.write:   # the build's own writer, one run: its fenced report printed as the plain CLI prints it
+        out, n_fail = write_report(args.build, args.timeline)
+        print(out.read_text(encoding="utf-8").split("```text\n", 1)[1].split("\n```", 1)[0])
+        print(f"report: {out}")
+        return 1 if n_fail else 0
     tl, docks, mp = _load(args.build, args.timeline)
     gates, stats = run(tl, docks, mp, load_frames(args.build), load_morph_invariants(args.build), load_layout(args.build),
                        load_frame_layers(args.build), load_squint(args.build), beat=args.beat)

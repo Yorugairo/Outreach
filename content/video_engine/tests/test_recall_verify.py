@@ -292,3 +292,90 @@ def test_the_verifier_writes_nothing(repo: Path):
     assert RV.verify(repo, repo / "proj")[0]
     after = {p: p.stat().st_mtime_ns for p in sorted(repo.rglob("*")) if p.is_file()}
     assert before == after
+
+
+# ---------------------------------------------------------------- R26-197: the receipt in a module (P72 T28)
+# A project with no PRODUCTION-LEDGER.md whose door carries its `## Recall` block in its own module docstring: the
+# door's docstring IS the receipt's home - no shim, no monkeypatch of `resolve_ledger`.
+
+def door_text(rows: list[str], doc_head: str = "The door - a fixture build script.") -> str:
+    body = "\n".join(rows)
+    return f'"""{doc_head}\n\n## Recall\n{body}\n"""\nfrom __future__ import annotations\n\nVALUE = 1\n'
+
+
+def write_door(repo: Path, rows: list[str], name: str = "build_door.py") -> Path:
+    path = repo / "proj" / name
+    path.write_text(door_text(rows), encoding="utf-8")
+    return path
+
+
+def as_main(monkeypatch, path: Path | None) -> None:
+    """The running script (`__main__`'s file) - what a door is when it compiles itself."""
+    monkeypatch.setattr(RV, "running_script", lambda: path, raising=False)   # raising=False: the RED run reads the base
+
+
+def test_a_docstring_receipt_in_the_running_door_verifies_with_no_ledger(repo: Path, monkeypatch):
+    door = write_door(repo, good_rows())
+    as_main(monkeypatch, door)
+    assert RV.resolve_ledger(repo / "proj") == door
+    ok, lines = RV.verify(repo, repo / "proj")
+    assert ok, "\n".join(lines)
+    assert lines[0] == "Recall receipt: proj/build_door.py"
+
+
+def test_a_docstring_receipt_is_found_when_it_is_the_projects_only_one(repo: Path, monkeypatch):
+    door = write_door(repo, good_rows())
+    (repo / "proj" / "helper.py").write_text('"""a helper with no receipt."""\n', encoding="utf-8")
+    as_main(monkeypatch, None)                      # the CLI or a test harness: not the door itself
+    assert RV.resolve_ledger(repo / "proj") == door
+    assert RV.verify(repo, repo / "proj")[0]
+
+
+def test_two_docstring_receipts_follow_the_running_door_else_are_refused_by_name(repo: Path, monkeypatch):
+    v2 = write_door(repo, good_rows(), "build_v2.py")
+    v3 = write_door(repo, good_rows(), "build_v3.py")
+    as_main(monkeypatch, v3)
+    assert RV.resolve_ledger(repo / "proj") == v3
+    as_main(monkeypatch, None)
+    ok, lines = RV.verify(repo, repo / "proj")
+    report = "\n".join(lines)
+    assert not ok
+    assert "build_v2.py" in report and "build_v3.py" in report and "docstring" in report
+    assert RV.verify(repo, v2)[0]                   # naming the script is the way out
+
+
+def test_a_ledger_outranks_a_docstring_receipt(repo: Path, monkeypatch):
+    path = write_ledger(repo, good_rows())
+    door = write_door(repo, good_rows())
+    as_main(monkeypatch, door)
+    assert RV.resolve_ledger(repo / "proj") == path
+
+
+def test_a_docstring_receipt_is_still_read_line_by_line(repo: Path, monkeypatch):
+    rows = [r for r in good_rows() if "Recall(world)" not in r]
+    as_main(monkeypatch, write_door(repo, rows))
+    ok, lines = RV.verify(repo, repo / "proj")
+    assert not ok and any('stage "world"' in ln for ln in lines)
+
+
+def test_a_script_whose_code_mentions_recall_is_not_a_docstring_receipt(repo: Path, monkeypatch):
+    (repo / "proj" / "tool.py").write_text('"""no receipt here."""\nTEXT = """\n## Recall\n"""\n', encoding="utf-8")
+    as_main(monkeypatch, None)
+    assert RV.resolve_ledger(repo / "proj") == repo / "proj" / RV.LEDGER_NAME
+    ok, lines = RV.verify(repo, repo / "proj")
+    assert not ok and "no ledger" in lines[1]
+
+
+def test_no_ledger_and_no_docstring_receipt_names_both_homes(repo: Path, monkeypatch):
+    as_main(monkeypatch, None)
+    ok, lines = RV.verify(repo, repo / "proj")
+    assert not ok and RV.LEDGER_NAME in lines[1] and "docstring" in lines[1]
+
+
+def test_a_docstring_receipts_block_ends_with_the_docstring_so_a_code_edit_keeps_its_sha(repo: Path):
+    door = write_door(repo, good_rows())
+    before = RV.parse_block(door.read_text(encoding="utf-8"))
+    door.write_text(door.read_text(encoding="utf-8") + "\n\ndef another_edit():\n    return 2\n", encoding="utf-8")
+    after = RV.parse_block(door.read_text(encoding="utf-8"))
+    assert before.sha256() == after.sha256() and len(after.citations) == 9
+    assert "VALUE = 1" not in after.text and after.text.rstrip().endswith('(why it was read)')

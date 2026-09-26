@@ -350,3 +350,44 @@ def test_the_report_is_a_verbatim_prefix_of_the_tariffs_proposal_sheet(capsys):
     assert out[:len(report)] == report                             # the report: byte for byte what it was
     assert L.PROPOSE_RECIPES_HEADER in out
     assert any("recipe:" in l and "[proven]" in l and "proof: " in l for l in out)
+
+
+# ---------------------------------------------------------------- R26-215 (P72 T28): the table a long form's lint reads
+# The measured miss (P68 T3): `--table SHOT-TABLE-F.py` exited 2 (a bare name read against the cwd) and the default looked
+# for SHOT-TABLE-SHORT.py beside a project whose build writes build-h/SHOT-TABLE-H.py. Two runs lost.
+
+def _long_project(tmp_path: Path) -> Path:
+    project = _write_project(tmp_path, "[(0.0, 6.0, 'plate-a;idle=drift', (0, 0, 0), [], None, None)]", 6.0)
+    (project / L.TABLE_NAME).rename(project / "SHOT-TABLE-F.py")
+    build = project / "build-h"
+    build.mkdir()
+    (project / L.DEFAULT_BUILD / "timeline.json").rename(build / "timeline.json")
+    (build / "SHOT-TABLE-H.py").write_text('"""h"""\nW = [(0.0, 6.0, \'plate-h;idle=drift\', (0, 0, 0), [], None, None)]\n',
+                                          encoding="utf-8")
+    return project
+
+
+def test_a_bare_table_name_resolves_inside_the_project_and_lints_the_same_as_its_path(tmp_path, monkeypatch):
+    project = _long_project(tmp_path)
+    monkeypatch.chdir(tmp_path)                                     # the cwd holds no such file
+    bare, _ = L.report(project, build="build-h", table=Path("SHOT-TABLE-F.py"))
+    full, _ = L.report(project, build="build-h", table=project / "SHOT-TABLE-F.py")
+    assert bare == full and "plate:plate-a" in "\n".join(bare)
+    inside, _ = L.report(project, build="build-h", table=Path("SHOT-TABLE-H.py"))   # the build's own dir too
+    assert "plate:plate-h" in "\n".join(inside)
+    assert L.main([str(project), "--build", "build-h", "--table", "SHOT-TABLE-F.py"]) == 0
+
+
+def test_with_no_table_the_lint_reads_the_builds_own(tmp_path, monkeypatch):
+    project = _long_project(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    lines, _ = L.report(project, build="build-h")
+    assert "SHOT-TABLE-H.py" in lines[0] and "plate:plate-h" in "\n".join(lines)
+
+
+def test_a_missing_table_names_the_tables_it_did_find(tmp_path, capsys):
+    project = _long_project(tmp_path)
+    (project / "build-h" / "SHOT-TABLE-H.py").unlink()
+    assert L.main([str(project), "--build", "build-h"]) == 2
+    err = capsys.readouterr().err
+    assert "SHOT-TABLE-F.py" in err and "--table" in err

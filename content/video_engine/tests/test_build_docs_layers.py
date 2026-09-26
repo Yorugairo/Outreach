@@ -325,7 +325,8 @@ def test_the_committed_tree_passes_check(tmp_path, monkeypatch):
     seed_layers(ROOT, copy)
     DL.ensure(None, copy)                    # the copy's own builders; the live checkout is only read
     monkeypatch.setattr(BDL, "SCRIPTS", copy / DL.SCRIPTS_REL)
-    assert BDL.main(["--check", "--repo", str(copy)]) == 0
+    # the committed tree's layers are the subject; this machine's live memories are not (R26-188's step has its own tests)
+    assert BDL.main(["--check", "--repo", str(copy), "--no-memory-mirror"]) == 0
 
 
 # --- --refresh, --status and the child's --then-recheck (P64 T1) ----------------------------------
@@ -429,3 +430,62 @@ def test_only_takes_a_comma_separated_list_and_ensure_without_recheck_is_unchang
 
     assert recorder.names("--write") == ["stub_first.py", "stub_second.py"]
     assert "rebuilt first, second" in capsys.readouterr().out
+
+
+# --- R26-188's mirror (P72 T28): the operator-memory mirror is one step of --check ---------------------------------
+
+MIRROR_REL = "docs/agent-memory/operator"   # `sync_operator_memory.DEFAULT_DST`, repo-relative
+
+def _memory(name: str, body: str) -> bytes:
+    return f"---\r\nname: {name}\r\ndescription: test\r\n---\r\n\r\n{body}\r\n".encode("utf-8")
+
+
+@pytest.fixture()
+def mirrored(tmp_path: Path, monkeypatch) -> tuple[Path, Path]:
+    """A repo whose layers are current (the digest pass is not this step's subject) and a memory folder with its
+    mirror exported by the real `sync_operator_memory.py`."""
+    repo, src = tmp_path / "repo", tmp_path / "memory"
+    src.mkdir()
+    (src / "MEMORY.md").write_bytes(b"- [Alpha](alpha-file.md) - index line\r\n")
+    (src / "alpha-file.md").write_bytes(_memory("alpha", "See [[beta]]."))
+    (src / "beta-file.md").write_bytes(_memory("beta", "Back to [[alpha]]."))
+    dst = repo / MIRROR_REL
+    import sync_operator_memory as som
+    assert som.main(["--export", "--src", str(src), "--dst", str(dst)]) == 0
+    monkeypatch.setattr(BDL, "digest_pass", lambda *_a, **_k: [])
+    return repo, src
+
+
+def test_check_passes_when_the_memory_mirror_is_in_sync(mirrored, capsys):
+    repo, src = mirrored
+    assert BDL.main(["--check", "--repo", str(repo), "--memory-src", str(src)]) == 0
+    out = capsys.readouterr().out
+    assert "ok      memory-mirror" in out and "in sync (3 files)" in out
+
+
+def test_check_fails_naming_the_mirror_when_a_copy_is_stale(mirrored, capsys):
+    repo, src = mirrored
+    (repo / MIRROR_REL / "beta-file.md").write_bytes(_memory("beta", "an older copy."))   # planted stale
+    assert BDL.main(["--check", "--repo", str(repo), "--memory-src", str(src)]) == 1
+    out = capsys.readouterr().out
+    assert "STALE   memory-mirror" in out and "drifted: beta-file.md" in out
+    assert "sync_operator_memory.py --export" in out
+
+
+def test_check_fails_when_a_memory_has_no_copy_yet(mirrored, capsys):
+    repo, src = mirrored
+    (src / "gamma-file.md").write_bytes(_memory("gamma", "new today."))
+    assert BDL.main(["--check", "--repo", str(repo), "--memory-src", str(src)]) == 1
+    assert "missing: gamma-file.md" in capsys.readouterr().out
+
+
+def test_the_mirror_step_is_skipped_and_said_where_there_is_nothing_to_compare(mirrored, tmp_path, capsys):
+    repo, src = mirrored
+    assert BDL.main(["--check", "--repo", str(repo), "--memory-src", str(tmp_path / "no-memory-here")]) == 0
+    assert "SKIP    memory-mirror   no operator memory on this machine" in capsys.readouterr().out
+    assert BDL.main(["--check", "--repo", str(repo), "--memory-src", str(src), "--no-memory-mirror"]) == 0
+    assert "SKIP    memory-mirror   --no-memory-mirror" in capsys.readouterr().out
+    bare = tmp_path / "bare-repo"
+    bare.mkdir()
+    assert BDL.main(["--check", "--repo", str(bare), "--memory-src", str(src)]) == 0
+    assert "carries no mirror" in capsys.readouterr().out

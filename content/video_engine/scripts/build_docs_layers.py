@@ -44,6 +44,13 @@ layers from it. Three passes, three different questions:
     | 8     | doc-overlap    | report_doc_overlap.py   | docs/DOC-OVERLAP.jsonl + .md        |
     | 8     | docs-standard  | audit_docs_standard.py  | docs/DOCS-STANDARD.md               |
 
+THE MEMORY MIRROR (R26-188, E99 s73; P72 T28). After the digests, `--check` runs one more step:
+`sync_operator_memory.py --check` of the operator memories against the repo's mirror
+(`docs/agent-memory/operator/`) - a stale mirror is a stale doc, so it FAILS the check, and the fix is
+`sync_operator_memory.py --export`. The memories live outside the repo, so the step is SKIPPED, said,
+where there is nothing to compare: no memory folder on this machine (`--memory-src`), no mirror in this
+checkout, or `--no-memory-mirror` (a caller that checks a committed tree, not this machine's memory).
+
 A tool that is not in the tree yet is SKIPPED with a printed note, never silently: the stack grows
 a layer at a time and a missing script is a fact about this checkout, not a failure. The audit
 writes a report rather than a checkable artifact, so its TOOL runs in `--write` only - its digest
@@ -63,9 +70,13 @@ from docs_layers import (  # noqa: E402  (the table and the digest live there; t
     LAYERS, REFRESH_ROUNDS, REPORT_REL, Layer, LayerError, clear_lock, digest, ensure, last_line,
     last_log_line, live_lock, lock_path, log_path, read_lock, refresh, run_script, script_path,
     stale, stamp, stored_digest, write_lock)
+from sync_operator_memory import DEFAULT_SRC as MEMORY_SRC  # noqa: E402  (R26-188: the mirror's source)
 
 SCRIPTS = Path(__file__).resolve().parent
 REPO = SCRIPTS.parents[2]
+MEMORY_SCRIPT = "sync_operator_memory.py"
+MEMORY_MIRROR_REL = "docs/agent-memory/operator"
+MEMORY_STEP = "memory-mirror"
 
 
 def run_layer(layer: Layer, args: tuple[str, ...], repo: Path, scripts_dir: Path) -> tuple[int, str]:
@@ -117,6 +128,37 @@ def digest_pass(layers, repo: Path, scripts_dir: Path) -> list[str]:
                if stored is None else f"inputs moved: {stored[:12]} -> {current[:12]}")
         break            # the first stale layer stops the pass: the ones after it read its artifact
     return behind
+
+
+def _mirror_skip(script: Path, src: Path | None, dst: Path) -> str | None:
+    """Why the memory-mirror step has nothing to compare here, or None when it runs."""
+    if not script.is_file():
+        return f"{MEMORY_SCRIPT} not in this checkout yet"
+    if src is None:
+        return "--no-memory-mirror: the operator memories are not compared"
+    if not Path(src).is_dir():
+        return f"no operator memory on this machine ({src}) - the mirror is checked where the memories live"
+    if not dst.is_dir():
+        return f"this checkout carries no mirror ({MEMORY_MIRROR_REL})"
+    return None
+
+
+def memory_mirror_pass(repo: Path, src: Path | None, scripts_dir: Path) -> bool:
+    """R26-188's mirror: `sync_operator_memory.py --check` as one step of `--check`. One line; False only when the
+    mirror is stale (drifted / missing / extra copies, or a memory the secret scan blocks)."""
+    script, dst = Path(scripts_dir) / MEMORY_SCRIPT, Path(repo) / MEMORY_MIRROR_REL
+    skip = _mirror_skip(script, src, dst)
+    if skip:
+        print(f"build_docs_layers: {'SKIP':<7} {MEMORY_STEP:<15} {skip}")
+        return True
+    code, output = run_script(script, ("--check", "--src", str(src), "--dst", str(dst)), repo)
+    if code == 0:
+        print(f"build_docs_layers: {'ok':<7} {MEMORY_STEP:<15} {last_line(output)}")
+        return True
+    problems = [ln.strip() for ln in output.splitlines() if ln.strip()]
+    print(f"build_docs_layers: {'STALE':<7} {MEMORY_STEP:<15} {len(problems)} problem(s), first: "
+          f"{problems[0] if problems else '(no output)'} - run {MEMORY_SCRIPT} --export")
+    return False
 
 
 def ensure_pass(repo: Path, names, scripts_dir: Path, layers, then_recheck: bool = False) -> int:
@@ -210,6 +252,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--only", metavar="LAYER[,LAYER...]", default=None,
                     help="with --ensure/--refresh: these layers and their upstream, not the whole stack")
     ap.add_argument("--repo", type=Path, default=REPO, help="repository root (default: this checkout)")
+    ap.add_argument("--memory-src", type=Path, default=MEMORY_SRC,
+                    help="with --check: the operator memories the mirror is checked against (R26-188)")
+    ap.add_argument("--no-memory-mirror", action="store_true",
+                    help="with --check: skip the memory-mirror step, said (a committed tree, not this machine)")
     a = ap.parse_args(argv)
     repo = Path(a.repo).resolve()
     scripts_dir = SCRIPTS
@@ -245,6 +291,9 @@ def main(argv: list[str] | None = None) -> int:
     if behind:
         print(f"build_docs_layers: {behind[0]} is stale - "
               f"run build_docs_layers.py --ensure (or --write for a full pass)")
+        return 1
+    if not memory_mirror_pass(repo, None if a.no_memory_mirror else a.memory_src, scripts_dir):
+        print(f"build_docs_layers: the {MEMORY_STEP} is stale - run {MEMORY_SCRIPT} --export")
         return 1
     print(f"build_docs_layers: every layer in sync ({len(layers)} layers)")
     return 0

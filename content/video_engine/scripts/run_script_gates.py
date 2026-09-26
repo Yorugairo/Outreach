@@ -37,6 +37,7 @@ import audit_script_doctrine as A          # noqa: E402
 import enumerate_strength_screens as S      # noqa: E402
 import gate_opening_structure as G          # noqa: E402
 import lint_script_pattern as L             # noqa: E402
+import scratch_take as ST                   # noqa: E402  R26-227: the take's rate, measured
 import script_review as R                    # noqa: E402
 import script_review_contract as SRC         # noqa: E402
 
@@ -520,6 +521,19 @@ def viewer_block(script: Path, gating: bool) -> tuple[list[str], int, int]:
     return (out, sum(1 for l, _, _ in rows if l == "FAIL"), sum(1 for l, _, _ in rows if l == "WARN"))
 
 
+def measured_rate_line(timeline: Path) -> str:
+    """R26-227 (E99 s82): the take's rate MEASURED off the word clock the gates read - words over spoken seconds -
+    never an estimator's or the dial the take was asked with."""
+    try:
+        rate = ST.measure(G.load_timeline(Path(timeline)))
+    except (OSError, ValueError, TypeError, AttributeError) as exc:
+        return f"measured_rate: unreadable ({exc})"
+    if not rate.words:
+        return f"measured_rate: no timed words in {Path(timeline).name}"
+    return (f"measured_rate: {rate.wpm:.1f} wpm ({rate.words:,} words / {rate.spoken_s:.1f} s spoken, "
+            f"{Path(timeline).name})")
+
+
 def render_report(script: Path, results: list[ToolResult], timing: str,
                   stamp: str | None = None, viewer: list[str] | None = None,
                   viewer_fails: int = 0, form: str | None = None,
@@ -551,6 +565,7 @@ def render_report(script: Path, results: list[ToolResult], timing: str,
         out.append(f"narrative_map: {narrative_map.resolve()}")
     if timeline is not None:
         out.append(f"word_timeline: {timeline.resolve()}")
+        out.append(measured_rate_line(timeline))
     if scratch_take is not None:
         out.append(f"scratch_take: {scratch_take.resolve()}")
     if viewer_artifact is not None:
@@ -668,6 +683,8 @@ def main(argv: list[str] | None = None) -> int:
     for r in results:
         print(f"  {r.name}: exit {r.exit}")
     print(f"  report: {path}")
+    if args.timeline is not None:
+        print(f"  {measured_rate_line(args.timeline)}")
     status = clearance_status(results, vfail, review)
     print(mechanical_line(results, vfail))
     print(f"REVIEW COMPLETENESS: {'COMPLETE' if review_complete(review) else 'INCOMPLETE'}")
