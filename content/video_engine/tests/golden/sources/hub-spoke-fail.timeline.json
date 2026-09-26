@@ -1,0 +1,126 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 4.0,
+     "dur": 18.0,
+     "edges": [
+      [
+       "market",
+       "cloud"
+      ],
+      [
+       "market",
+       "builders"
+      ],
+      [
+       "market",
+       "utilities"
+      ],
+      [
+       "market",
+       "shippers"
+      ],
+      [
+       "market",
+       "chips"
+      ]
+     ],
+     "fail": {
+      "at": 8.6,
+      "edge": [
+       "market",
+       "utilities"
+      ]
+     },
+     "idle": "breath",
+     "kind": "flow",
+     "layout": "hub",
+     "nodes": [
+      {
+       "icon": "landmark",
+       "id": "market",
+       "label": "BOND MARKET"
+      },
+      {
+       "at": 5.4,
+       "icon": "cpu",
+       "id": "cloud",
+       "label": "CLOUD"
+      },
+      {
+       "at": 5.8,
+       "icon": "factory",
+       "id": "builders",
+       "label": "BUILDERS"
+      },
+      {
+       "at": 6.2,
+       "icon": "factory",
+       "id": "utilities",
+       "label": "UTILITIES"
+      },
+      {
+       "at": 6.6,
+       "icon": "ship",
+       "id": "shippers",
+       "label": "SHIPPERS"
+      },
+      {
+       "at": 7.0,
+       "icon": "cpu",
+       "id": "chips",
+       "label": "CHIPS"
+      }
+     ],
+     "target": {
+      "kind": "region",
+      "x0": 0.06,
+      "x1": 0.94,
+      "y0": 0.03,
+      "y1": 0.97
+     },
+     "tokens": {
+      "from_at": 7.5,
+      "n": 1
+     }
+    }
+   ],
+   "world": {
+    "asset_id": "plate-plain",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: hub and spoke - one institution to many, and a link that fails (test-bed beat)"
+}

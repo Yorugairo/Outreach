@@ -518,7 +518,8 @@ SPECIES_KINDS += (SPECIES_CHIP,)   # P50 T2: THE ICON CHIP (the Bravos icon boar
 SPECIES_KINDS += (SPECIES_FLOW, SPECIES_SPAN)   # P50 T4 (2026-09-11), both under the module rule
 FLOW_NODES = (2, 6)   # a mechanism with ONE part is a chip; with seven it is a diagram nobody reads at phone size
 # P71 T11: THE LOOP and THE TOKENS (the Bravos loop, BUB frame_0058 / RST 9:30; A27 money on the arrows, DOM 03:30, BOOM 08:19).
-FLOW_LAYOUTS = ("row", "ring")   # `layout`: absent IS the row (a column in a tall box); "ring" lays a CLOSED chain on an ellipse
+FLOW_LAYOUTS = ("row", "ring", "hub")   # `layout`: absent IS the row (a column in a tall box); "ring" lays a CLOSED chain on an
+                                        # ellipse; P71 T17's "hub" stands node 0 at the centre and the rest on that ellipse
 FLOW_RING_MIN = 3                # a two-node loop is the row's own pair of arrows bowing apart; a ring starts at three
 FLOW_TOKEN_KEYS = ("from_at", "n", "speed", "glyph")   # `tokens`: from_at is owed (the gate counts the start there)
 FLOW_TOKEN_N = (1, 4)            # tokens per arrow: one is a parcel, four a stream; five is noise on a 400 px arrow
@@ -526,6 +527,10 @@ FLOW_TOKEN_SPEED = (60, 900)     # stage px per second of arc: under 60 reads as
 FLOW_TOKEN_GLYPHS = ("coins",)   # a token is a plain DOT by default (A2a: never a generated coin); the sourced Lucide glyph only by name
 # species/flow.mjs's clock, mirrored (test_flow_loop pins the two): the instant arrow j is drawn, head and all
 FLOW_CLOCK = {"BOX_S": 0.9, "BOX_LEAD": 0.55, "NODE_STEP": 0.2, "LAND_S": 0.55, "EDGE_LAG": 0.1, "EDGE_S": 0.34}
+# P71 T17: HUB AND SPOKE (v2 T31, Bravos DOM 04:22-04:30) and A LINK THAT FAILS (A26, BOOM 04:41).
+FLOW_HUB_NODES = (4, 9)          # one hub and 3-8 on its rim (DOM's IMF has six); the row and the ring keep FLOW_NODES' 2-6
+FLOW_FAIL_KEYS = ("edge", "at")  # `fail`: the declared edge that breaks, and the word it breaks on
+FLOW_FAIL_S = 0.5                # species/chip.mjs CHIP.CROSS_S, mirrored: the X's two strokes and the edge's retract (pinned)
 SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP = "light", "arc", "stamp"
 SPECIES_KINDS += (SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP)   # P50 T5: the three species of the VECTOR MAP world, and of no other world.
 VECMAP_SPECIES = (SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP)   # light: the country's fill rises to the accent and holds (the spotlight's cousin -
@@ -3311,8 +3316,12 @@ def _validate_flow(entry: dict) -> list[str]:
     is checked by name, so a typo in an edge is a build error and never a diagram missing an arrow."""
     errs: list[str] = []
     num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
-    nodes, lo, hi = entry.get("nodes"), *FLOW_NODES
+    hub = entry.get("layout") == "hub"   # P71 T17: a hub carries one centre and 3-8 on its rim
+    nodes, lo, hi = entry.get("nodes"), *(FLOW_HUB_NODES if hub else FLOW_NODES)
     if not isinstance(nodes, list) or not lo <= len(nodes) <= hi:
+        if hub:
+            return [f"flow: layout 'hub' needs one hub and {lo - 1}-{hi - 1} rim nodes ({lo}-{hi} {{id, icon, label}}, the "
+                    "hub first) - under three it is a row, over eight a spoke is too short to read"]
         return [f"flow: 'nodes' must be a list of {lo}-{hi} {{id, icon, label}} - one thing is a chip, seven is a diagram nobody reads"]
     ids: list[str] = []
     for i, n in enumerate(nodes):
@@ -3387,6 +3396,8 @@ def _validate_flow_extensions(entry: dict, ids: list[str]) -> list[str]:
             errs.append("flow: operators and edge_states are mutually exclusive")
     errs += _validate_flow_layout(entry, ids)
     errs += _validate_flow_tokens(entry)
+    errs += _validate_flow_node_words(entry, ids)
+    errs += _validate_flow_fail(entry)
     if "edge_states" not in entry:
         return errs
     states = entry["edge_states"]
@@ -3424,8 +3435,45 @@ def _validate_flow_extensions(entry: dict, ids: list[str]) -> list[str]:
     return errs
 
 
+def flow_hub_clock(entry: dict) -> dict:
+    """P71 T17: species/flow.mjs's flowHubClock, mirrored (test_hub_and_spoke pins the two). The hub (node 0) lands where a
+    row's first node does; each spoke runs on its rim node's word - its own `at`, else D, EDGE_LAG after the hub has landed
+    (Bravos draws every unnamed spoke together). OUT: the spoke on the word, the node EDGE_S later; IN: the node on the
+    word, its spoke EDGE_S later."""
+    c = FLOW_CLOCK
+    finite = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
+    nodes = entry.get("nodes") or []
+    edges = entry.get("edges") or []
+    ids = [n.get("id") if isinstance(n, dict) else None for n in nodes]
+    hub = ids[0] if ids else None
+    first = float(entry["at"]) + c["BOX_S"] * c["BOX_LEAD"]
+    d = first + c["LAND_S"] + c["EDGE_LAG"]
+    word = lambda i: float(nodes[i]["at"]) if isinstance(nodes[i], dict) and finite(nodes[i].get("at")) else d
+    node_at = [first if i == 0 else word(i) for i in range(len(nodes))]
+    edge_at: list[float] = []
+    for e in edges:
+        pair = isinstance(e, (list, tuple)) and len(e) == 2
+        out = pair and e[0] == hub
+        other = (e[1] if out else e[0]) if pair else None
+        r = ids.index(other) if other is not None and other in ids else -1
+        if r <= 0:
+            edge_at.append(d)   # not a spoke: refused by _validate_flow_hub; timed as the module times it
+            continue
+        w = word(r)
+        if out:
+            node_at[r] = w + c["EDGE_S"]
+            edge_at.append(w)
+        else:
+            node_at[r] = w
+            edge_at.append(w + c["EDGE_S"])
+    return {"nodeAt": node_at, "edgeAt": edge_at, "hubLanded": first + c["LAND_S"]}
+
+
 def flow_edge_drawn(entry: dict, j: int) -> float:
-    """P71 T11: the instant arrow j of a flow is drawn, head and all - species/flow.mjs's flowClock (edgeAt[j] + EDGE_S)."""
+    """P71 T11: the instant arrow j of a flow is drawn, head and all - species/flow.mjs's flowClock (edgeAt[j] + EDGE_S).
+    P71 T17: a hub's spoke on its rim node's word (flow_hub_clock)."""
+    if entry.get("layout") == "hub":
+        return flow_hub_clock(entry)["edgeAt"][j] + FLOW_CLOCK["EDGE_S"]
     c, n = FLOW_CLOCK, len(entry.get("nodes") or [])
     landed = float(entry["at"]) + c["BOX_S"] * c["BOX_LEAD"] + max(0, n - 1) * c["NODE_STEP"] + c["LAND_S"]
     return landed + c["EDGE_LAG"] + (j + 1) * c["EDGE_S"]
@@ -3440,6 +3488,8 @@ def _validate_flow_layout(entry: dict, ids: list[str]) -> list[str]:
     if layout not in FLOW_LAYOUTS:
         return [f"flow: layout {layout!r} is not one of {'|'.join(FLOW_LAYOUTS)} - absent is the row (a column in a "
                 "tall box); 'ring' lays a closed loop"]
+    if layout == "hub":
+        return _validate_flow_hub(entry, ids)
     if layout != "ring":
         return []
     nodes = entry.get("nodes")
@@ -3492,13 +3542,117 @@ def _validate_flow_tokens(entry: dict) -> list[str]:
     if not finite(fa):
         return errs + ["flow: tokens from_at must be a number (episode seconds - the word the money starts moving on)"]
     if finite(at) and isinstance(edges, list) and edges:
-        first = flow_edge_drawn(entry, 0)
+        first = min(flow_edge_drawn(entry, j) for j in range(len(edges)))   # P71 T17: a hub's spokes run on their own words
         if fa < first - 1e-9:
             errs.append(f"flow: tokens from_at {fa} is before the first arrow is drawn ({first:.3f}s) - a token rides "
                         "a drawn arrow")
     if finite(at) and finite(dur) and fa >= at + dur:
         errs.append(f"flow: tokens from_at {fa} falls outside the diagram's window ({at}-{round(at + dur, 3)}s) - "
                     "it would never move")
+    return errs
+
+
+def _validate_flow_hub(entry: dict, ids: list[str]) -> list[str]:
+    """P71 T17 (v2 T31): `layout: "hub"` - ONE institution to many. Node 0 is the hub; every edge is a SPOKE joining it to
+    one rim node (either way: the money out, or in), and every rim node has exactly one. A rim-to-rim link is a chain, and
+    a hub neither re-draws its graph (edge_states) nor does arithmetic (operators). Refused by name."""
+    nodes = entry.get("nodes")
+    if not isinstance(nodes, list) or len(ids) != len(nodes):
+        return []   # the nodes' own errors name what is wrong; the hub is judged on a sound node list
+    errs = [f"flow: layout 'hub' and {k} are mutually exclusive - a hub's spokes stand (tokens may ride them, one may fail)"
+            for k in ("edge_states", "operators") if k in entry]
+    edges = entry.get("edges")
+    if not isinstance(edges, list):
+        return errs
+    hub, count = ids[0], {r: 0 for r in ids[1:]}
+    for j, e in enumerate(edges):
+        if not (isinstance(e, (list, tuple)) and len(e) == 2) or e[0] == e[1]:
+            continue   # _validate_flow names a malformed edge
+        if (e[0] == hub) == (e[1] == hub):
+            errs.append(f"flow: a hub's edges are spokes - edge {j} {list(e)!r} does not join {hub!r} to one rim node; a "
+                        "rim-to-rim link is a chain (use the row or the ring)")
+            continue
+        rim = e[1] if e[0] == hub else e[0]
+        if rim in count:
+            count[rim] += 1
+    for rim, k in count.items():
+        if k == 0:
+            errs.append(f"flow: layout 'hub' - rim node {rim!r} has no spoke - a hub joins every node on its rim")
+        elif k > 1:
+            errs.append(f"flow: layout 'hub' - rim node {rim!r} has {k} spokes - one link per rim node (its direction is "
+                        "the money's)")
+    return errs
+
+
+def _validate_flow_node_words(entry: dict, ids: list[str]) -> list[str]:
+    """P71 T17: a node's own `at` is a HUB RIM's word - the word that names it: an outward spoke draws on it and its node
+    lands as it arrives, an inward one lands its node on it and draws EDGE_S later. The hub itself lands on the diagram's
+    own clock, and a row's or a ring's nodes land in order on it, so `at` anywhere else is refused by name."""
+    nodes = entry.get("nodes")
+    if not isinstance(nodes, list) or len(ids) != len(nodes):
+        return []
+    finite = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
+    hub = entry.get("layout") == "hub"
+    named = [(i, n) for i, n in enumerate(nodes) if isinstance(n, dict) and "at" in n]
+    if not hub:
+        return [f"flow: node {n.get('id')!r}: a node's own 'at' is a hub rim's word - under the row and the ring the nodes "
+                "land in order on the diagram's clock" for _, n in named]
+    errs: list[str] = []
+    at, dur = entry.get("at"), entry.get("dur")
+    clock = flow_hub_clock(entry) if finite(at) else None
+    ends: dict[str, float] = {}   # each rim node's spoke drawn, head and all - its last instant (its node starts no later)
+    if clock:
+        for j, e in enumerate(entry.get("edges") or []):
+            if isinstance(e, (list, tuple)) and len(e) == 2:
+                rim = e[1] if e[0] == ids[0] else e[0]
+                ends[rim] = max(ends.get(rim, -math.inf), clock["edgeAt"][j] + FLOW_CLOCK["EDGE_S"])
+    for i, n in named:
+        nid, w = n.get("id"), n["at"]
+        if i == 0:
+            errs.append(f"flow: node {nid!r}: the hub lands on the diagram's own clock (its `at`) - only a rim node carries "
+                        "its own word")
+            continue
+        if not finite(w):
+            errs.append(f"flow: rim node {nid!r}: 'at' must be a number (episode seconds - the word that names it)")
+            continue
+        if clock and w < clock["hubLanded"] - 1e-9:
+            errs.append(f"flow: rim node {nid!r}: at {w} is before its hub has landed ({clock['hubLanded']:.3f}s) - a rim "
+                        "node lands after its hub")
+        if clock and finite(dur) and nid in ends and ends[nid] > at + dur + 1e-9:
+            errs.append(f"flow: rim node {nid!r}: at {w} leaves its spoke unfinished inside the diagram's window "
+                        f"({at}-{round(at + dur, 3)}s)")
+    return errs
+
+
+def _validate_flow_fail(entry: dict) -> list[str]:
+    """P71 T17 (A26): `fail: {edge, at}` - the LINK breaks, not the node. The edge is one the diagram declares, the word
+    comes after that edge is drawn and leaves the X its CROSS_S inside the window; a changing graph (edge_states) or
+    arithmetic (operators) carries no failure. Refused by name."""
+    if "fail" not in entry:
+        return []
+    f = entry["fail"]
+    if not isinstance(f, dict):
+        return [f"flow: 'fail' must be a dict {{{', '.join(FLOW_FAIL_KEYS)}}} - the link that breaks, and its word"]
+    finite = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
+    errs = [f"flow: fail key {k!r} is not one of {'|'.join(FLOW_FAIL_KEYS)}" for k in f if k not in FLOW_FAIL_KEYS]
+    errs += [f"flow: fail and {k} are mutually exclusive - a failed link severs a standing arrow" for k in ("edge_states", "operators")
+             if k in entry]
+    edges = entry.get("edges") if isinstance(entry.get("edges"), list) else []
+    fe = f.get("edge")
+    declared = [list(e) for e in edges if isinstance(e, (list, tuple))]
+    j = declared.index(list(fe)) if isinstance(fe, (list, tuple)) and list(fe) in declared else -1
+    if j < 0:
+        errs.append(f"flow: fail edge {fe!r} is not one of this diagram's edges - name a declared [from, to]")
+    fa, at, dur = f.get("at"), entry.get("at"), entry.get("dur")
+    if not finite(fa):
+        return errs + ["flow: fail at must be a number (episode seconds - the word the link breaks on)"]
+    if j >= 0 and finite(at):
+        drawn = flow_edge_drawn(entry, j)
+        if fa < drawn - 1e-9:
+            errs.append(f"flow: fail at {fa} is before its link is drawn ({drawn:.3f}s) - a link breaks once it stands")
+    if finite(at) and finite(dur) and fa + FLOW_FAIL_S > at + dur + 1e-9:
+        errs.append(f"flow: fail at {fa} leaves the X unstruck inside the diagram's window ({at}-{round(at + dur, 3)}s) - "
+                    f"its two strokes take {FLOW_FAIL_S}s")
     return errs
 
 

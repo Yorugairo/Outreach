@@ -5080,6 +5080,44 @@ SURFACES.update({"vecmap-route-tokens": vecmap_route_tokens})
 FRAME_T.update({"vecmap-route-tokens": 8.3})   # TWN's ping at u 0.52 (7.5 + 0.35 -> + 0.67), the tokens 0.8 s into their run - spread along every route
 
 
+# P71 T17 (was P69 T57): HUB AND SPOKE - one institution to many (v2 T31, Bravos DOM 04:30: the IMF, dashed spokes to six
+# governments) - and A LINK THAT FAILS (A26, BOOM 04:41 "Investors X Utility Companies"). A TEST-BED beat, labelled as
+# one: H row 16 ("bond market" 273.45-274.56 / "who is paying" 244.72-245.43) is the candidate the parent confirms on the
+# frame - the bond market the hub, the borrowers its rim; no H row adopts the move before HG1 (rule f).
+HUB_NODES = [("market", "landmark", "BOND MARKET", None), ("cloud", "cpu", "CLOUD", 5.4), ("builders", "factory", "BUILDERS", 5.8),
+             ("utilities", "factory", "UTILITIES", 6.2), ("shippers", "ship", "SHIPPERS", 6.6), ("chips", "cpu", "CHIPS", 7.0)]
+HUB_AT, HUB_TOKENS_AT, HUB_FAIL_AT = 4.0, 7.5, 8.6   # each rim lands on its own word (the last spoke drawn by 7.34 s); the
+                                                     # money leaves the market on the next; the utilities' link breaks on its word
+
+
+def hub_spoke_fail() -> tuple[dict, dict]:
+    """P71 T17: the bond market at the centre and five borrowers on T11's ring round it, each STRAIGHT spoke drawn on its
+    borrower's word and the borrower landing at its end; one plain dot per spoke carrying the money out (T11's tokens);
+    then the link to UTILITIES FAILS - a neg-ink disc with a white X springs in at its middle, the spoke reddens and its
+    halves retract, the node stays. Judged 1.0 s after the failure (FRAME_T 9.6): the disc settled, both strokes struck."""
+    import build_scene_timeline_f as BST
+    species = [{"kind": "flow", "at": HUB_AT, "dur": 18.0, "idle": "breath", "layout": "hub",
+                "target": {"kind": "region", "x0": 0.06, "y0": 0.03, "x1": 0.94, "y1": 0.97},   # the whole stage, as DOM 04:30 gives it
+                "nodes": [dict({"id": i, "icon": icon, "label": label}, **({"at": w} if w is not None else {}))
+                          for i, icon, label, w in HUB_NODES],
+                "edges": [["market", n[0]] for n in HUB_NODES[1:]],
+                "tokens": {"from_at": HUB_TOKENS_AT, "n": 1},
+                "fail": {"edge": ["market", "utilities"], "at": HUB_FAIL_AT}}]
+    assert not BST.validate_species(species, (0, 0, 0), "plate-plain"), BST.validate_species(species, (0, 0, 0), "plate-plain")
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    for name in sorted(BST.species_icons(species[0])):
+        uris[BST.ICON_PREFIX + name] = BST.icon_geometry(name)
+    tl = _timeline("Golden: hub and spoke - one institution to many, and a link that fails (test-bed beat)", scenes, {}, None)
+    tl["captions"], tl["caption_pages"] = [], []   # the harness's centred caption would sit on the hub: the diagram is the frame
+    return tl, uris
+
+
+SURFACES.update({"hub-spoke-fail": hub_spoke_fail})
+FRAME_T.update({"hub-spoke-fail": 9.6})   # the spokes drawn (7.34), the money on them, the failure 1.0 s old - disc settled, X struck
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

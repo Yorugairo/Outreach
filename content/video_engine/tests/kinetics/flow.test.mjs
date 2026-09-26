@@ -9,7 +9,9 @@ import { CHIP, chipLand } from "../../scripts/species/chip.mjs";
 import { clothoid, clothoidAt, clothoidFit, curvatureOf } from "../../scripts/kinetics/clothoid.mjs";
 import { FLOW, flowLayout, flowClock, flowBoxF, flowDashes, flowSwapPhase, flowNodeAt, flowPose,
          flowEdgeF, flowAnchors, flowHead, flowEdgeIndex, paintFlow,
-         flowEdgePts, flowRingPoint, flowTokenStart, flowTokens, flowTokenSpeed, flowTokenStyle } from "../../scripts/species/flow.mjs";
+         flowEdgePts, flowRingPoint, flowTokenStart, flowTokens, flowTokenSpeed, flowTokenStyle,
+         flowFailIndex, flowFailAt, flowFailSplit, flowFailInk } from "../../scripts/species/flow.mjs";
+import { springPop } from "../../scripts/kinetics/spring.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 const BOX = { x: 200, y: 400, w: 1500, h: 420 };
@@ -425,4 +427,164 @@ test("no arrow is crossed in under TOKEN_MIN_CROSS_S: the one speed is capped by
   const slow = loop(4, { tokens: { from_at: 9, speed: 60 } });
   assert.equal(flowTokenSpeed(slow, lay), 60, "the row's own slower speed stands");
   assert.equal(flowTokenSpeed(slow, null), 60);
+});
+
+// ---------------------------------------------------------------- P71 T17: the hub and the failed link
+const HUB_BOX = { x: 480, y: 90, w: 960, h: 930 };
+const RIMS = ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8"];
+const hubFlow = (rim = 4, o = {}) => flow(Object.assign({ layout: "hub", tag: undefined,
+  nodes: [{ id: "market", icon: "coins", label: "MARKET" }].concat(RIMS.slice(0, rim).map((id) => ({ id, icon: "factory", label: id.toUpperCase() }))),
+  edges: RIMS.slice(0, rim).map((id) => ["market", id]) }, o));
+
+test("THE HUB: node 0 at the box's centre, the rim on T11's ellipse - the first at 12 o'clock, clockwise - 3 to 8 of them, none overlapping", () => {
+  for (const box of [HUB_BOX, { x: 150, y: 300, w: 1620, h: 720 }, { x: 300, y: 60, w: 760, h: 960 }]) {
+    for (let rim = 3; rim <= 8; rim++) {
+      const lay = flowLayout(box, rim + 1, { layout: "hub" });
+      assert.equal(lay.hub, true);
+      assert.equal(lay.cells.length, rim + 1);
+      const lift = (box.y + box.h / 2) - lay.cells[0].y;
+      assert.ok(near(lay.cells[0].x, box.x + box.w / 2, 1e-9) && lift > 0, "the hub at the centre, card + label centred on it");
+      assert.ok(near(lay.cells[1].x, lay.cells[0].x, 1e-9) && lay.cells[1].y < lay.cells[0].y, "the first rim node at 12 o'clock");
+      lay.cells.slice(1).forEach((c, i) => {
+        const p = flowRingPoint(lay, i, rim);
+        assert.ok(near(c.x, p.x, 1e-9) && near(c.y + lift, p.y, 1e-9), `rim ${i} on the ring, lifted as the hub is`);
+        assert.ok(c.x - lay.half >= box.x - 1e-9 && c.x + lay.half <= box.x + box.w + 1e-9 && c.y - lay.half >= box.y - 1e-9, `rim ${i} inside the box`);
+      });
+      let area = 0;
+      const r = lay.cells.slice(1);
+      r.forEach((a, i) => { const b = r[(i + 1) % rim]; area += a.x * b.y - b.x * a.y; });
+      assert.ok(area > 0, `clockwise (rim ${rim})`);
+      for (let i = 0; i <= rim; i++) for (let j = i + 1; j <= rim; j++) {
+        const a = lay.cells[i], b = lay.cells[j];
+        assert.ok(Math.abs(a.x - b.x) >= 2 * lay.half || Math.abs(a.y - b.y) >= 2 * lay.half, `cards ${i} and ${j} apart (rim ${rim})`);
+      }
+      assert.ok(lay.k >= FLOW.MIN_K && lay.k <= 1);
+    }
+  }
+});
+
+test("a SPOKE is straight - no bow, so a set of spokes never reads as a pinwheel - and crosses no card and no label, rim 3-8", () => {
+  for (const box of [HUB_BOX, { x: 150, y: 300, w: 1620, h: 720 }]) {
+    for (let rim = 3; rim <= 8; rim++) {
+      const lay = flowLayout(box, rim + 1, { layout: "hub" });
+      for (let i = 1; i <= rim; i++) for (const [a, b] of [[0, i], [i, 0]]) {
+        const pts = flowEdgePts(lay, a, b), p0 = pts[0], p1 = pts[pts.length - 1];
+        const dev = Math.max(...pts.map((p) => Math.abs((p1.x - p0.x) * (p.y - p0.y) - (p1.y - p0.y) * (p.x - p0.x)) / Math.hypot(p1.x - p0.x, p1.y - p0.y)));
+        assert.ok(dev < 0.01, `spoke ${a}->${b} straight (${dev})`);
+        for (const p of pts) lay.cells.forEach((c, m) => assert.ok(!inCard(p, c, lay.half) && !inLabel(p, c, lay),
+          `box ${JSON.stringify(box)} rim ${rim} spoke ${a}->${b} crosses card ${m} or its label`));
+      }
+    }
+  }
+});
+
+test("THE HUB'S CLOCK: the hub lands first; unnamed spokes draw together (Bravos DOM 04:22); a named rim word draws its spoke then lands its node (out) or lands its node then draws its spoke (in)", () => {
+  const sp = hubFlow(4), C = flowClock(sp), first = sp.at + FLOW.BOX_S * FLOW.BOX_LEAD, D = first + CHIP.LAND_S + FLOW.EDGE_LAG;
+  assert.equal(C.hub, true);
+  assert.ok(near(C.nodeAt[0], first, 1e-12));
+  C.edgeAt.forEach((a) => assert.ok(near(a, D, 1e-12), "every unnamed spoke on the same instant"));
+  C.nodeAt.slice(1).forEach((a) => assert.ok(near(a, D + FLOW.EDGE_S, 1e-12), "each rim node lands as its spoke arrives"));
+  const named = hubFlow(4, { edges: [["market", "b1"], ["b2", "market"], ["market", "b3"], ["b4", "market"]] });
+  named.nodes[1].at = 7.0; named.nodes[2].at = 7.8;
+  const N = flowClock(named);
+  assert.ok(near(N.edgeAt[0], 7.0, 1e-12) && near(N.nodeAt[1], 7.0 + FLOW.EDGE_S, 1e-12), "out: the spoke on the word, the node at its end");
+  assert.ok(near(N.nodeAt[2], 7.8, 1e-12) && near(N.edgeAt[1], 7.8 + FLOW.EDGE_S, 1e-12), "in: the node on the word, then its spoke");
+  assert.ok(near(N.edgeAt[3], D + FLOW.EDGE_S, 1e-12) && near(N.nodeAt[4], D, 1e-12), "an unnamed inward rim takes the default word");
+  assert.ok(near(N.tagAt, Math.max(...N.edgeAt) + FLOW.EDGE_S + FLOW.TAG_LAG, 1e-12));
+  assert.ok(near(flowEdgeF(named, 0, 7.0 + FLOW.EDGE_S / 2), 0.5, 1e-9), "a spoke draws over EDGE_S (DOM 04:22 measured ~0.35 s)");
+  assert.deepEqual(Object.keys(flowClock(flow())).sort(), ["box", "edgeAt", "landed", "nodeAt", "tagAt", "tagEnd"], "a row's clock is what it was");
+});
+
+test("T11's tokens ride the spokes, each from its own spoke drawn", () => {
+  const sp = hubFlow(4, { tokens: { from_at: 5.0, n: 1 } }), lay = flowLayout(HUB_BOX, 5, { layout: "hub" });
+  sp.nodes[3].at = 7.0;
+  const C = flowClock(sp);
+  sp.edges.forEach((_, j) => assert.equal(flowTokenStart(sp, j), Math.max(5.0, C.edgeAt[j] + FLOW.EDGE_S)));
+  const t = C.edgeAt[0] + FLOW.EDGE_S + 0.3, on = new Set(flowTokens(sp, t, lay).map((k) => k.edge));
+  assert.ok(on.has(0) && on.has(1) && on.has(3) && !on.has(2), `the late spoke carries none yet: ${[...on]}`);
+});
+
+const FAIL_AT = 9.0;
+const failing = (o = {}) => hubFlow(4, Object.assign({ fail: { edge: ["market", "b2"], at: FAIL_AT }, tokens: { from_at: 5.0, n: 2 } }, o));
+
+test("THE FAILED LINK's clock: nothing before its word; the disc springs in on BOOM's measured pop, the X in the chip's two strokes, the edge reddening and retracting over CROSS_S", () => {
+  const sp = failing();
+  assert.equal(flowFailIndex(sp), 1);
+  assert.equal(flowFailIndex(hubFlow(4)), -1);
+  assert.equal(flowFailIndex(failing({ fail: { edge: ["b1", "b2"], at: FAIL_AT } })), -1, "an edge the diagram does not draw fails nothing");
+  assert.equal(flowFailAt(sp, FAIL_AT - 1e-6), null);
+  assert.equal(flowFailAt(hubFlow(4), 20), null);
+  const peak = flowFailAt(sp, FAIL_AT + 0.167);
+  assert.ok(Math.abs(peak.scale - (FLOW.FAIL_POP_FROM + (1 - FLOW.FAIL_POP_FROM) * springPop(0.167 / FLOW.FAIL_POP_S, FLOW.FAIL_MP))) < 1e-12);
+  let best = 0, tBest = 0;
+  for (let i = 0; i <= 900; i++) { const f = flowFailAt(sp, FAIL_AT + i / 1000); if (f.scale > best) { best = f.scale; tBest = i / 1000; } }
+  assert.ok(Math.abs(best - 1.21) < 0.01, `the overshoot BOOM measured (55 / 46 px): ${best}`);
+  assert.ok(Math.abs(tBest - 0.167) < 0.01, `the peak where BOOM's is (0.167 s): ${tBest}`);
+  const half = flowFailAt(sp, FAIL_AT + CHIP.CROSS_S / 2);
+  assert.deepEqual(half.strokes, [1, 0], "the first stroke done at half, the second not begun - the chip's law");
+  assert.ok(near(half.u, 0.5, 1e-12));
+  const done = flowFailAt(sp, FAIL_AT + 5);
+  assert.deepEqual(done.strokes, [1, 1]);
+  assert.equal(done.u, 1);
+  assert.ok(near(done.scale, 1, 1e-12) && done.fade === 1);
+});
+
+test("the failed edge SEVERS: its two halves each retract FAIL_RETRACT of their own length from the middle, and the disc sits in the gap at the arc's midpoint", () => {
+  const lay = flowLayout(HUB_BOX, 5, { layout: "hub" }), pts = flowEdgePts(lay, 0, 2);
+  const L = (q) => q.slice(1).reduce((s, p, i) => s + Math.hypot(p.x - q[i].x, p.y - q[i].y), 0), whole = L(pts);
+  const cut = flowFailSplit(pts, 1);
+  assert.ok(near(L(cut.a), whole / 2 * (1 - FLOW.FAIL_RETRACT), 1e-6) && near(L(cut.b), whole / 2 * (1 - FLOW.FAIL_RETRACT), 1e-6));
+  assert.ok(near(cut.a[0].x, pts[0].x, 1e-9) && near(cut.b[cut.b.length - 1].x, pts[pts.length - 1].x, 1e-9), "the ends stay at their cards");
+  const g = Math.hypot(cut.b[0].x - cut.a[cut.a.length - 1].x, cut.b[0].y - cut.a[cut.a.length - 1].y);
+  assert.ok(g > 0 && near(g, whole * FLOW.FAIL_RETRACT, 0.5), `the gap: ${g}`);
+  const none = flowFailSplit(pts, 0);
+  assert.ok(near(L(none.a) + L(none.b), whole, 1e-6), "u 0: whole");
+  assert.ok(Math.hypot(cut.mid.x - (cut.a[cut.a.length - 1].x + cut.b[0].x) / 2, cut.mid.y - (cut.a[cut.a.length - 1].y + cut.b[0].y) / 2) < 0.5, "the disc in the gap");
+  assert.equal(flowFailInk(false, 0), FLOW.TOKEN_INK.toLowerCase());
+  assert.equal(flowFailInk(false, 1), FLOW.FAIL_INK.toLowerCase());
+  assert.equal(flowFailInk(true, 1), FLOW.FAIL_INK.toLowerCase());
+  assert.equal(flowFailInk(true, 0), FLOW.PHONE_TOKEN_INK.toLowerCase());
+});
+
+test("the disc is BOOM's measured badge: 0.198 of the card, the X 0.53 of its radius, a white X on the neg ink", () => {
+  assert.equal(FLOW.FAIL_D, 0.198);
+  assert.equal(FLOW.FAIL_INK, "#FF4D4D", "the template's --lp-neg (chip.mjs's TAB_INK.sell)");
+  assert.equal(FLOW.FAIL_MARK, "#FFFFFF");
+  assert.ok(FLOW.FAIL_X > 0.4 && FLOW.FAIL_X < 0.7 && FLOW.FAIL_X_W > 0.05 && FLOW.FAIL_X_W < 0.2);
+});
+
+test("the painter: before the word the failing flow paints exactly what the plain one does; after it, two red halves, the head, the disc and its X; the nodes stay", () => {
+  const sp = failing(), plain = hubFlow(4, { tokens: { from_at: 5.0, n: 2 } });
+  const strip = (m) => JSON.stringify(m.map((e) => [e.tag, e.cls, e.at, e.textContent]));
+  for (const t of [2, 5.5, 7, FAIL_AT - 0.001]) assert.equal(strip(stub(sp, t, HUB_BOX)), strip(stub(plain, t, HUB_BOX)), `t ${t}`);
+  const made = stub(sp, FAIL_AT + 2, HUB_BOX);
+  const arrows = made.filter((e) => e.cls === "flowarrow");
+  assert.equal(arrows.length, 9, "three whole spokes with heads, and the failed one's two halves and its head");
+  const red = arrows.filter((e) => /stroke:#ff4d4d/i.test(e.at.style || ""));
+  assert.equal(red.length, 3, "the failed spoke's two halves and its head, in the neg ink");
+  assert.equal(made.filter((e) => e.cls === "chipcard").length, 5, "its nodes stay");
+  const disc = made.filter((e) => e.cls === "flowfaildisc"), marks = made.filter((e) => e.cls === "flowfailmark");
+  assert.equal(disc.length, 1);
+  assert.match(disc[0].at.style, /fill:#FF4D4D/);
+  assert.equal(marks.length, 2);
+  assert.ok(marks.every((m) => /stroke:#FFFFFF/.test(m.at.style)));
+  assert.ok(made.indexOf(disc[0]) > made.map((e) => e.cls).lastIndexOf("chipcard"), "the disc over the world, after the cards");
+  const lay = flowLayout(HUB_BOX, 5, { layout: "hub" });
+  assert.equal(made.filter((e) => e.cls === "flowtoken").length, flowTokens(sp, FAIL_AT + 2, lay).filter((k) => k.alpha > 0).length);
+  assert.ok(flowTokens(sp, FAIL_AT + 2, lay).every((k) => k.edge !== 1), "a severed link carries no money");
+  const mid = flowTokens(sp, FAIL_AT + CHIP.CROSS_S / 2, lay).filter((k) => k.edge === 1);
+  const before = flowTokens(plain, FAIL_AT + CHIP.CROSS_S / 2, lay).filter((k) => k.edge === 1);
+  assert.equal(mid.length, before.length);
+  mid.forEach((k, i) => assert.ok(near(k.alpha, before[i].alpha * 0.5, 1e-12), "its tokens fade on the retract"));
+});
+
+test("the hub and its failure are a pure function of t: a seek IS the play", () => {
+  const sp = failing(), lay = flowLayout(HUB_BOX, 5, { layout: "hub" });
+  const read = (t) => JSON.stringify([flowClock(sp), flowFailAt(sp, t), flowTokens(sp, t, lay), [0, 1, 2, 3].map((j) => flowEdgeF(sp, j, t))]);
+  const fwd = [], back = [];
+  for (let i = 0; i <= 300; i++) fwd.push(read(i / 25));
+  for (let i = 300; i >= 0; i--) back.unshift(read(i / 25));
+  assert.deepEqual(back, fwd);
+  const src = [flowFailAt, flowFailSplit, flowFailInk, flowFailIndex].map((f) => f.toString()).join("\n");
+  assert.ok(!/Math\.random|Date\.now|new Date|performance\./.test(src));
 });

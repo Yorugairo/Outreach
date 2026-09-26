@@ -19883,6 +19883,19 @@ async function mount(doc) {
                 a joint in it: a chalk core, the arrow's ink as its rim, lpBloom's halo round it, six arrow
                 strokes across. The sourced glyph rides only when the row names it. No token moves on an arrow
                 before that arrow is drawn.
+       hub    - P71 T17 (`layout: "hub"`, v2 T31, Bravos DOM 04:22-04:30 - the IMF with dashed spokes to six governments):
+                ONE institution to many. Node 0 stands at the box's centre and the other 3-8 on T11's ellipse round it
+                (the first at 12 o'clock, clockwise); every edge is a SPOKE between the hub and one rim node, drawn
+                STRAIGHT (no bow - a bowed set reads as a pinwheel; Bravos's spokes are straight). A rim node's own `at`
+                is the word that names it: an outward spoke draws on it and its node lands as it arrives (DOM: the
+                spoke ~0.35 s = EDGE_S, the tile popping at its end); an inward one lands its node on it and draws its
+                spoke EDGE_S later - tail, arrow, head. Unnamed rim nodes take Bravos's default: every spoke together,
+                EDGE_LAG after the hub lands.
+       fail   - P71 T17 (`fail: {edge, at}`, A26, BOOM 04:41 "Investors X Utility Companies"): the LINK breaks, not the
+                node. On `at` a disc in the neg ink springs in at the edge's arc midpoint on BOOM's measured pop and its
+                white X is struck in the chip's two strokes; over the same CROSS_S the edge reddens to the neg ink and
+                its two halves retract FAIL_RETRACT of their own length from the middle. Its nodes stay; its tokens
+                fade out with the retract and ride it no more.
      Nothing is stored: every visual reads from t, sp.at and sp.swap.at, so a scrubbed frame is the played
      frame. The glyphs are SOURCED icons (assets/icons, A2a provenance) carried in the asset map as
      `icon:<name>`; this module never invents geometry. The dials below are ours to tune (42 s42.5). */
@@ -19937,6 +19950,21 @@ async function mount(doc) {
     TOKEN_GLYPH: 44,     /* a named glyph token's size in stage px (x the diagram's scale) - only when the row names one */
     TOKEN_INK: "#F5B72E",       /* the arrow's own ink: the template's `.flowarrow` stroke (test_flow_loop pins the two together) */
     PHONE_TOKEN_INK: "#25313C", /* ... and the landscape-phone arrow's */
+    /* P71 T17: THE FAILED LINK - the disc [MEASURED: Bravos BOOM 04:39-04:42, scratch/jx3Ll_full.mp4 at 1920x1080 = stage px,
+       p71-t17/logs/measure-boom-fail.json] */
+    FAIL_D: 0.198,       /* the disc's diameter in card sides: 46 px on BOOM's 232 px tile (T12's HIS tick badge measured 0.224) */
+    FAIL_X: 0.53,        /* the X's reach along x and along y in the disc's radii: +-12 px on its 23 px radius */
+    FAIL_X_W: 0.12,      /* the X's stroke in the disc's radii: ~2.5-2.75 px on 23 */
+    FAIL_INK: "#FF4D4D", /* the disc and the reddened edge: the template's --lp-neg (chip.mjs's TAB_INK.sell, E28's sign ink) */
+    FAIL_MARK: "#FFFFFF", /* the X on the disc: BOOM's white (255,247,255) - 3.27:1 on the neg ink, over WCAG 1.4.11's 3:1 for a mark */
+    FAIL_POP_FROM: 0.3,  /* the disc's first-seen size: 13.7 px area-diameter on its settled 42.8 (0.32) */
+    FAIL_MP: 0.3,        /* its overshoot: the peak 1.21 x its settled size (bbox 55 / 46 px) = 0.3 + 0.7 x (1 + Mp) */
+    FAIL_POP_S: 0.83,    /* its spring's clock: at Mp 0.3 springPop peaks at u 0.201, so 0.83 s puts the peak at 0.167 s, BOOM's */
+    HUB_REACH: 2.56,     /* [MEASURED: Bravos DOM 04:30 (PWMhM2_dj3s), six tiles round the IMF - centre-to-hub 271-391 px on tiles 79-117 px,
+                            2.56-4.95 sides, mean 3.56 - p71-t17/logs/measure-dom-hub.json] a rim node stands at least Bravos's SHORTEST
+                            reach from the hub, in card sides, so every spoke has room to be seen (the one scale shrinks to keep it) */
+    FAIL_RETRACT: 0.12,  /* [the plan's, P71 T17] each half of the failed edge retracts this share of its own length from the middle -
+                            BOOM keeps its dashed edge whole and white under the disc (a finding for the parent) */
   });
 
   const flow01 = (v) => Math.min(1, Math.max(0, v));
@@ -20002,10 +20030,48 @@ async function mount(doc) {
              cx: ring.cx, cy: ring.cy, rx: ring.rx, ry: ring.ry };
   };
 
+  /* THE HUB (P71 T17): does the rim at scale k (R nodes on T11's ring) clear itself - the ring's own rule - AND the hub at
+     the centre? Every rim node HUB_REACH cards from the hub (Bravos's shortest spoke), no rim block over the hub's. */
+  const flowHubClears = (box, R, k, block) => {
+    if (!flowRingClears(box, R, k, block)) return false;
+    const ring = flowRingAt(box, k, block), w = CHIP.SIZE * k * FLOW.CROSS_K, h = block * k * FLOW.CROSS_K;
+    for (let i = 0; i < R; i++) {
+      const p = flowRingPoint(ring, i, R), dx = p.x - ring.cx, dy = p.y - ring.cy;
+      if (Math.hypot(dx, dy) < CHIP.SIZE * k * FLOW.HUB_REACH || (Math.abs(dx) < w && Math.abs(dy) < h)) return false;
+    }
+    return true;
+  };
+
+  /* the hub's layout: the largest scale in [MIN_K, 1] that clears (bisected, as the ring's), node 0 at the centre and the
+     R = N - 1 rim nodes on the ring, every card lifted so card + label centre on its point. Spokes are straight (no bows). */
+  const flowHubLayout = (box, N, block, below, labelDy) => {
+    const R = Math.max(1, N - 1);
+    let k = 1;
+    if (!flowHubClears(box, R, 1, block)) {
+      let lo = FLOW.MIN_K, hi = 1;
+      if (flowHubClears(box, R, lo, block)) {
+        for (let s = 0; s < FLOW.RING_FIT_STEPS; s++) {
+          const mid = 0.5 * (lo + hi);
+          if (flowHubClears(box, R, mid, block)) lo = mid; else hi = mid;
+        }
+      }
+      k = lo;
+    }
+    const ring = flowRingAt(box, k, block), lift = below * k / 2, cells = [{ x: ring.cx, y: ring.cy - lift }];
+    for (let i = 0; i < R; i++) {
+      const p = flowRingPoint(ring, i, R);
+      cells.push({ x: p.x, y: p.y - lift });
+    }
+    return { k, column: false, hub: true, cells, half: CHIP.SIZE * k / 2,
+             below: (labelDy + FLOW.RING_LABEL_CLEAR) * k,   /* the label under each card, which a spoke must clear */
+             cx: ring.cx, cy: ring.cy, rx: ring.rx, ry: ring.ry };
+  };
+
   /* THE LAYOUT: where each node stands inside the declared box, and how big the whole diagram is drawn.
      A row inside the box; a COLUMN when the box is taller than it is wide (a portrait build's box is), which
      is the same rule read from the geometry rather than from the aspect. P71 T11: `options.layout === "ring"`
-     lays them on the ring instead (flowRingLayout); absent, the row is byte for byte what it was. */
+     lays them on the ring instead (flowRingLayout), and P71 T17's `"hub"` the hub at the centre with the rest on that
+     ring (flowHubLayout); absent, the row is byte for byte what it was. */
   const flowLayout = (box, n, options = null) => {
     const N = Math.max(1, n | 0), column = box.h > box.w;
     const pitch = (column ? box.h : box.w) / N, across = column ? box.w : box.h;
@@ -20017,8 +20083,8 @@ async function mount(doc) {
     const labelDy = phone ? FLOW.PHONE_LABEL_DY : CHIP.LABEL_DY;
     const labelH = phone ? FLOW.PHONE_LABEL_LINE_H * labelLines : FLOW.LABEL_H;
     const block = CHIP.SIZE + labelDy + labelH;
-    if (options && options.layout === "ring") {
-      const out = flowRingLayout(box, N, block, labelDy + labelH, labelDy);
+    if (options && (options.layout === "ring" || options.layout === "hub")) {   /* P71 T17: the hub beside T11's ring */
+      const out = (options.layout === "hub" ? flowHubLayout : flowRingLayout)(box, N, block, labelDy + labelH, labelDy);
       if (phone) Object.assign(out, { phone: true, labelDy, labelH, labelLines, labelLineH: FLOW.PHONE_LABEL_LINE_H });
       return out;
     }
@@ -20037,6 +20103,7 @@ async function mount(doc) {
   /* THE CLOCK: every instant the declaration implies, in episode seconds. One place, so the painter, the tests
      and the gate all read the same schedule. */
   const flowClock = (sp) => {
+    if (sp && sp.layout === "hub") return flowHubClock(sp);   /* P71 T17; every other flow reads the lines below, unchanged */
     const at = +sp.at, nodes = sp.nodes || [], edges = sp.edges || [];
     const first = at + FLOW.BOX_S * FLOW.BOX_LEAD;
     const nodeAt = nodes.map((_, i) => first + i * FLOW.NODE_STEP);
@@ -20044,6 +20111,30 @@ async function mount(doc) {
     const edgeAt = edges.map((_, j) => landed + FLOW.EDGE_LAG + j * FLOW.EDGE_S);
     const tagAt = (edgeAt.length ? edgeAt[edgeAt.length - 1] + FLOW.EDGE_S : landed) + FLOW.TAG_LAG;
     return { box: [at, at + FLOW.BOX_S], nodeAt, landed, edgeAt, tagAt, tagEnd: tagAt + FLOW.TAG_S };
+  };
+
+  /* P71 T17: THE HUB'S CLOCK. The hub (node 0) lands where a row's first node does. Each spoke joins the hub and ONE rim
+     node, and runs on that rim node's word - its own `at`, or D (EDGE_LAG after the hub has landed: Bravos draws every
+     unnamed spoke together). OUT (hub -> rim): the spoke draws on the word and the node lands as it arrives, EDGE_S later.
+     IN (rim -> hub): the node lands on the word and its spoke draws EDGE_S later. The tag follows the last spoke drawn.
+     The compiler mirrors this (build_scene_timeline_f.flow_hub_clock; test_hub_and_spoke pins the two). */
+  const flowHubClock = (sp) => {
+    const at = +sp.at, nodes = sp.nodes || [], edges = sp.edges || [];
+    const ids = nodes.map((n) => n && n.id), hubId = ids[0];
+    const first = at + FLOW.BOX_S * FLOW.BOX_LEAD, D = first + CHIP.LAND_S + FLOW.EDGE_LAG;
+    const word = (i) => (nodes[i] && typeof nodes[i].at === "number" && Number.isFinite(nodes[i].at) ? nodes[i].at : D);
+    const nodeAt = nodes.map((_, i) => (i === 0 ? first : word(i)));
+    const edgeAt = edges.map((e) => {
+      const out = !!e && e[0] === hubId, r = ids.indexOf(e && (out ? e[1] : e[0]));
+      if (r <= 0) return D;   /* not a spoke: the compiler refuses it; drawn on the default word, never on a made-up one */
+      const w = word(r);
+      if (out) { nodeAt[r] = w + FLOW.EDGE_S; return w; }
+      nodeAt[r] = w;
+      return w + FLOW.EDGE_S;
+    });
+    const landed = Math.max(first, ...nodeAt) + CHIP.LAND_S;
+    const tagAt = (edgeAt.length ? Math.max(...edgeAt) + FLOW.EDGE_S : landed) + FLOW.TAG_LAG;
+    return { box: [at, at + FLOW.BOX_S], nodeAt, landed, edgeAt, tagAt, tagEnd: tagAt + FLOW.TAG_S, hub: true };
   };
 
   /* the box's draw at t, 0..1 - and, from it, the dash that is under the nib */
@@ -20137,6 +20228,10 @@ async function mount(doc) {
      arrow from a node to the NEXT one bows by the ring's own tangent at its tail (lay.bows); every other arrow, and
      every arrow of a row, bows by FLOW.BOW exactly as before. */
   const flowEdgePts = (lay, ia, ib) => {
+    if (lay.hub) {   /* P71 T17: a SPOKE is straight (bow 0) and clears the label under either card, as a ring arrow does */
+      const an = flowAnchors(lay.cells[ia], lay.cells[ib], lay.half, 0, lay.below);
+      return clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
+    }
     const N = lay.cells.length, around = lay.ring && ib === (ia + 1) % N;
     const an = around ? flowAnchors(lay.cells[ia], lay.cells[ib], lay.half, lay.bows[ia], lay.below)
                       : flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
@@ -20296,22 +20391,88 @@ async function mount(doc) {
     if (!tk || !lay || !Array.isArray(lay.cells)) return [];
     if ((Array.isArray(sp.edge_states) && sp.edge_states.length) || (Array.isArray(sp.operators) && sp.operators.length)) return [];
     const n = Number.isInteger(tk.n) && tk.n > 0 ? tk.n : FLOW.TOKEN_N;
-    const speed = flowTokenSpeed(sp, lay);
+    const speed = flowTokenSpeed(sp, lay), failed = flowFailIndex(sp);
     const out = [];
     flowTokenArcs(sp, lay).forEach(({ j, pts, cum, L }) => {
       const t0 = flowTokenStart(sp, j);
       if (!(t >= t0)) return;
       const run = speed * (t - t0);
+      const cut = j === failed ? flowFailAt(sp, t) : null;   /* P71 T17: a failing link's money fades on its retract */
+      if (cut && cut.u >= 1) return;
       for (let i = 0; i < n; i++) {
         const travel = run - i * L / n;
         if (travel < 0) continue;
         const lap = Math.floor(travel / L), s = travel - lap * L, u = s / L;
-        const p = flowAlong(pts, cum, s);
-        out.push({ edge: j, i, s, u, lap, L, x: p.x, y: p.y, heading: p.heading,
-                   alpha: flow01(Math.min(u, 1 - u) / FLOW.TOKEN_FADE) });
+        const p = flowAlong(pts, cum, s), alpha = flow01(Math.min(u, 1 - u) / FLOW.TOKEN_FADE);
+        out.push({ edge: j, i, s, u, lap, L, x: p.x, y: p.y, heading: p.heading, alpha: cut ? alpha * (1 - cut.u) : alpha });
       }
     });
     return out;
+  };
+
+  /* P71 T17: THE FAILED LINK (A26). `sp.fail = {edge: [from, to], at}` names one DECLARED edge; everything below is a pure
+     function of t and sp. */
+
+  /* the failed edge's index in sp.edges (as declared), or -1: no fail, or an edge the diagram does not draw */
+  const flowFailIndex = (sp) => {
+    const f = sp && sp.fail;
+    if (!f || !Array.isArray(f.edge) || f.edge.length !== 2) return -1;
+    return (sp.edges || []).findIndex((e) => Array.isArray(e) && e[0] === f.edge[0] && e[1] === f.edge[1]);
+  };
+
+  /* the failure at t, or null before its word: `u` runs the X's two strokes (the chip's law, over CHIP.CROSS_S) and, on
+     the same clock, the edge's reddening and retract; the disc springs in on BOOM's measured pop (scale) and fades up on
+     the chip's FADE_S */
+  const flowFailAt = (sp, t) => {
+    const j = flowFailIndex(sp), at = j >= 0 ? sp.fail.at : NaN;
+    if (typeof at !== "number" || !Number.isFinite(at) || !(t >= at)) return null;
+    const d = t - at, u = flow01(d / CHIP.CROSS_S);
+    return { j, at, u, strokes: chipStrokes(u), fade: flow01(d / CHIP.FADE_S),
+             scale: FLOW.FAIL_POP_FROM + (1 - FLOW.FAIL_POP_FROM) * springPop(flow01(d / FLOW.FAIL_POP_S), FLOW.FAIL_MP) };
+  };
+
+  /* the part of a polyline between arc lengths s0 and s1 (cum = its cumulative arc) */
+  const flowSub = (pts, cum, s0, s1) => {
+    const out = [flowAlong(pts, cum, s0)];
+    for (let i = 1; i < pts.length - 1; i++) if (cum[i] > s0 && cum[i] < s1) out.push({ x: pts[i].x, y: pts[i].y });
+    out.push(flowAlong(pts, cum, s1));
+    return out.map((p) => ({ x: p.x, y: p.y }));
+  };
+
+  /* THE SEVERED EDGE at retract u: its two halves, each shortened by FAIL_RETRACT x u of its own length from the middle
+     (the ends stay at their cards), and the arc's midpoint - where the disc sits, in the gap */
+  const flowFailSplit = (pts, u) => {
+    const cum = flowArc(pts), L = cum[cum.length - 1], r = FLOW.FAIL_RETRACT * flow01(u) * L / 2, m = flowAlong(pts, cum, L / 2);
+    return { a: flowSub(pts, cum, 0, L / 2 - r), b: flowSub(pts, cum, L / 2 + r, L), mid: { x: m.x, y: m.y } };
+  };
+
+  /* the failing edge's ink at u: the arrow's own ink (the phone's charcoal) mixed toward the neg ink, "#rrggbb" */
+  const flowFailInk = (phone, u) => {
+    const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    const a = rgb(phone ? FLOW.PHONE_TOKEN_INK : FLOW.TOKEN_INK), b = rgb(FLOW.FAIL_INK), k = flow01(u);
+    return "#" + a.map((v, i) => Math.round(v + (b[i] - v) * k).toString(16).padStart(2, "0")).join("");
+  };
+
+  /* the failed edge's paint: the two halves and the head, whole (the compiler refuses a fail before its edge is drawn), in
+     the reddening ink */
+  const paintFlowFailedEdge = (el, g, pts, cut, phone, drawOn) => {
+    const ink = flowFailInk(phone, cut.u), cutp = flowFailSplit(pts, cut.u);
+    const style = "fill:none;stroke:" + ink + ";stroke-width:5;stroke-linecap:round;stroke-linejoin:round";
+    for (const half of [cutp.a, cutp.b]) drawOn(el("path", "flowarrow", g, { d: clothoidPath(half), style }), 1);
+    drawOn(el("path", "flowarrow", g, { d: flowHead(pts), style }), 1);
+  };
+
+  /* the disc and its X at the failed edge's midpoint, OVER the world (after the cards): a neg-ink disc springing in about
+     its centre, and the white X struck in two strokes */
+  const paintFlowFail = (el, g, at, cut, lay, drawOn) => {
+    const r = FLOW.FAIL_D * CHIP.SIZE * lay.k / 2, a = FLOW.FAIL_X * r, f = (v) => v.toFixed(2);   /* a: each arm's x and y reach */
+    const fg = el("g", "flowfail", g, { opacity: cut.fade.toFixed(3),
+      transform: "translate(" + f(at.x) + " " + f(at.y) + ") scale(" + cut.scale.toFixed(4) + ")" });
+    el("circle", "flowfaildisc", fg, { cx: 0, cy: 0, r: f(r), style: "fill:" + FLOW.FAIL_INK + ";stroke:none" });
+    const style = "fill:none;stroke:" + FLOW.FAIL_MARK + ";stroke-width:" + f(FLOW.FAIL_X_W * r) + ";stroke-linecap:round";
+    [["M" + f(-a) + " " + f(-a) + " L" + f(a) + " " + f(a), cut.strokes[0]],
+     ["M" + f(a) + " " + f(-a) + " L" + f(-a) + " " + f(a), cut.strokes[1]]]
+      .forEach(([d, k]) => { if (k > 0) drawOn(el("path", "flowfailmark", fg, { d, style }), k); });
   };
 
   /* "#RRGGBB" at alpha a -> "rgba(r,g,b,a)" (the halo's colour, as lpBloom writes lpInkA) */
@@ -20357,8 +20518,8 @@ async function mount(doc) {
     if (!box || !(box.w > 0 && box.h > 0)) return;   /* the targeting law: a flow needs its room declared */
     const nodes = sp.nodes || [], phone = sp.readability === "landscape-phone";
     const labels = phone ? nodes.map((node) => node && node.label).concat(sp.swap && sp.swap.label ? [sp.swap.label] : []) : null;
-    const ring = sp.layout === "ring";   /* P71 T11: absent layout passes the same options the row always had */
-    const layOpts = phone ? Object.assign({ readability: "landscape-phone", labels }, ring ? { layout: "ring" } : {}) : (ring ? { layout: "ring" } : null);
+    const laid = sp.layout === "ring" || sp.layout === "hub";   /* P71 T11 / T17: absent layout passes the same options the row always had */
+    const layOpts = phone ? Object.assign({ readability: "landscape-phone", labels }, laid ? { layout: sp.layout } : {}) : (laid ? { layout: sp.layout } : null);
     const lay = flowLayout(box, nodes.length, layOpts), C = flowClock(sp);
     const g = el("g", "flow", svg, {});
     const phoneBoxStyle = "fill:none;stroke:#25313C;stroke-width:3;stroke-linecap:round";
@@ -20379,6 +20540,9 @@ async function mount(doc) {
        set in declaration order. Operators are a separate short minus at the connector midpoint - no arrow path/head. */
     const stateMode = Array.isArray(sp.edge_states) && sp.edge_states.length;
     const operatorMode = !stateMode && Array.isArray(sp.operators) && sp.operators.length;
+    /* P71 T17: the failed link, from its word (never beside edge_states / operators - the compiler refuses the pair) */
+    const failCut = stateMode || operatorMode ? null : flowFailAt(sp, t);
+    let failMid = null;
     if (stateMode || operatorMode) {
       const state = flowEdgesAt(sp, t);
       state.edges.forEach((entry) => {
@@ -20413,6 +20577,11 @@ async function mount(doc) {
         const f = flowEdgeF(sp, j, t);
         if (f <= 0) return;
         const pts = flowEdgePts(lay, ia, ib);   /* FLOW.BOW off a ring: the same anchors and fit as before */
+        if (failCut && j === failCut.j) {       /* P71 T17: from its word the failed link reddens and severs */
+          failMid = flowFailSplit(pts, failCut.u).mid;
+          paintFlowFailedEdge(el, g, pts, failCut, phone, drawOn);
+          return;
+        }
         drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts))), Math.min(1, f / FLOW.HEAD_F));
         if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, pathAttrs(flowHead(pts))), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
       });
@@ -20451,6 +20620,8 @@ async function mount(doc) {
         } else lab.textContent = st.label;
       }
     });
+    /* P71 T17: the failed link's disc and X, over the world */
+    if (failCut && failMid) paintFlowFail(el, g, failMid, failCut, lay, drawOn);
     /* the year stamp in the box's corner */
     if (sp.tag && t >= C.tagAt) {
       const u = flow01((t - C.tagAt) / FLOW.TAG_S), e = springPop(u);

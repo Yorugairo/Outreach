@@ -1083,7 +1083,7 @@
           "source": "docs/content-video-engine/CAPABILITIES.md:89"
         }
       ],
-      "does": "Two to six named things and the clothoid arrows between them draw on - in a row, or on a RING when the chain closes; later one node swaps while the rest stands, and tokens can ride the arrows.",
+      "does": "Two to nine named things and the clothoid arrows between them draw on - a row, a RING when the chain closes, or a HUB of straight spokes; one node can swap while the rest stand, tokens ride the arrows, one link can fail.",
       "when": null,
       "when_source": null,
       "author": {
@@ -1122,6 +1122,15 @@
           }
         },
         {
+          "name": "spokes draw",
+          "does": "a hub's STRAIGHT spokes draw on their rim nodes' words - out: the spoke, then its node lands at its end; in: the node, then its spoke; unnamed rim nodes all together (Bravos DOM 04:22: ~0.35 s a spoke)",
+          "trigger": "a rim node's own `at`, else EDGE_LAG after the hub lands",
+          "dials": {
+            "EDGE_S": "0.34",
+            "EDGE_LAG": "0.1"
+          }
+        },
+        {
           "name": "tokens ride",
           "does": "from tokens.from_at, n dots (a chalk core, the arrow ink as rim, a bloom halo) ride every DRAWN arrow by arc length at one speed, no arrow crossed faster than Bravos (0.49 s), fading at each end",
           "trigger": "`tokens.from_at`, never before each arrow is drawn",
@@ -1150,6 +1159,18 @@
             "SWAP_OUT_S": "0.3",
             "SWAP_IN_S": "0.45"
           }
+        },
+        {
+          "name": "a link fails",
+          "does": "a neg-ink disc springs in at the edge's arc midpoint on BOOM 04:41's measured pop, its white X struck in the chip's two strokes; the edge reddens and its two halves retract from the middle; its nodes stay and its tokens fade out",
+          "trigger": "`fail.at`, never before that edge is drawn",
+          "dials": {
+            "FAIL_D": "0.198",
+            "FAIL_POP_S": "0.83",
+            "FAIL_MP": "0.3",
+            "FAIL_RETRACT": "0.12",
+            "CROSS_S": "0.5"
+          }
         }
       ],
       "blends": [
@@ -1176,18 +1197,35 @@
           "became": "the ring and the tokens",
           "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:583",
           "tie": "recorded"
+        },
+        {
+          "source": "Bravos hub and spoke (DOM 04:30, the IMF and six governments)",
+          "became": "the hub layout",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:521",
+          "tie": "recorded"
+        },
+        {
+          "source": "Bravos failed link (BOOM 04:41, Investors X Utility Companies)",
+          "became": "the failed link",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:607",
+          "tie": "recorded"
         }
       ],
       "options": [
         {
           "token": "layout",
-          "means": "`layout: \"ring\"` (P71 T11): a CLOSED chain on the ellipse in the box, first node at 12 o'clock, clockwise, each arrow leaving along the ring; an open chain is refused. Absent is the row",
+          "means": "`ring` (P71 T11): a CLOSED chain on the box's ellipse, first node at 12, clockwise; an open chain is refused. `hub` (P71 T17): node 0 at the centre, 3-8 round it, one straight spoke each. Absent: row",
           "source_set": "FLOW_LAYOUTS"
         },
         {
           "token": "tokens",
           "means": "`tokens: {from_at, n?, speed?, glyph?}` (P71 T11, A27): money moving on the arrows - a plain dot in the arrow's ink (A2a), the sourced coins glyph only by name; one event at from_at",
           "source_set": "FLOW_TOKEN_KEYS"
+        },
+        {
+          "token": "fail",
+          "means": "`fail: {edge, at}` (P71 T17, A26): the LINK breaks, not the node - the edge reddens and severs under a neg-ink disc with a white X, after it is drawn; one event at fail.at",
+          "source_set": "FLOW_FAIL_KEYS"
         }
       ],
       "dials": {
@@ -1202,7 +1240,8 @@
       "doctrine": [
         "CAPABILITIES FLOW DIAGRAM",
         "42 s42.4",
-        "P71 T11"
+        "P71 T11",
+        "P71 T17"
       ],
       "status": "wired",
       "proof": {
