@@ -45,7 +45,7 @@ workflow, the RETURN). The slice orders: `$SP/p73-slices.md`.
   `event-timeline`, `event-timeline-9x16` + two proofs; `tests/test_event_timeline.py` (47). Human gate: P73-HG1 (2).
 
 ### T3: The post card
-- Status: done - lane B (this wave's head): a press card's `style: "post"` header (name, @handle, UTC time, dated
+- Status: done - lane B `9c2b39c` (goldens 243/243 with T1-T4): a press card's `style: "post"` header (name, @handle, UTC time, dated
   counts; no platform mark). Golden `press-post` + `@proof-reply`; `tests/test_press_post.py` (45). Human gate:
   P73-HG1 (3).
 
