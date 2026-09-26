@@ -45,6 +45,10 @@ ALLOW = (
     # wide, 12 x 1920 / 390 - mirrored from ledger_page.CARD_TYPE_PX (= CARD_PHONE_FLOOR * 1920 / CARD_PHONE_W). The
     # 1920 is the long-form frame the floor was measured on, not this stage's width; lpCardK scales it to the stage.
     "TYPE_PX: 12 * 1920 / 390",
+    # P72 T46e (7f5ead9, R26-368 (b)): the ones-cadence rule MEASURED on the 1080 stage (154 px/s), written as the fraction
+    # of a picture's width it is - 154 / 1080 is the rule's own definition, not this stage's width; cadence() multiplies it
+    # by the stage_w the caller passes (STAGE_W in the engine), so a portrait stage gets its own threshold.
+    "ON1_PW_S: 154 / 1080",
 )
 
 
