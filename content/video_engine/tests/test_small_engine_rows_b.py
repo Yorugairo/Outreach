@@ -316,3 +316,79 @@ def test_a_malformed_harmonise_is_ignored_by_name_and_paints_nothing() -> None:
             box = page.evaluate(IMG_BOX)
     assert box["filter"] == "none", box
     assert any("kinetics: harmonise 'cream' is not true or a #rrggbb ground - ignored" in x for x in logs), logs
+
+
+# ---- R26-123: the caption-life default ----------------------------------------------------------------------------
+
+def test_an_unauthored_build_takes_the_blend() -> None:
+    """E99 s6: the caption default is the blend. Silence now means the blend; `base` pins what Steel and Paper shipped."""
+    assert BST.CAPTION_LIFE_DEFAULT == "blend"
+    keep = BST.CAPTION_LIFE
+    try:
+        for asked in (None, "", "   "):
+            BST.CAPTION_LIFE = asked
+            assert BST._caption_life() == "blend", asked
+        BST.CAPTION_LIFE = "base"
+        assert BST._caption_life() is None, "the pin: no field is written, the shipped caption"
+        for asked in ("pop", "stagger", "blend"):
+            BST.CAPTION_LIFE = asked
+            assert BST._caption_life() == asked
+        BST.CAPTION_LIFE = "Base"
+        with pytest.raises(SystemExit, match=r"caption life 'Base' is not one of .*'base'"):
+            BST._caption_life()
+    finally:
+        BST.CAPTION_LIFE = keep
+
+
+# the golden test card's stage strip: its second word ("frame") is the page's keyword; read at rest (0.6 s after it
+# is spoken - the rise settled, a box, where one is painted, fully swept)
+KW_PROBE = """() => [...document.querySelectorAll('#caption .cw')].map((e) => ({ w: e.textContent, cls: e.className,
+  bg: getComputedStyle(e).backgroundImage, color: getComputedStyle(e).color, transform: e.style.transform }))"""
+
+
+def _caption_surface(life: str | None, phrase: bool) -> tuple[dict, dict, float]:
+    tl, uris, _, _ = RB.load_surface("test-card")
+    tl = dict(tl, caption_modes=["stage", "anchor"],
+              caption_pages=[dict(pg, cap_mode="stage") for pg in tl["caption_pages"]],
+              scenes=[dict(sc, docks=[]) for sc in tl["scenes"]])   # no card on the stage: the strip stays a STAGE caption
+    if life:
+        tl["caption_life"] = life
+    if phrase:
+        tl["caption_style"] = "phrase"
+    kw = next(x for x in tl["caption_pages"][0]["t"] if x.get("k"))
+    return tl, uris, float(kw["s"]) + 0.6
+
+
+def _keyword(tl: dict, uris: dict, t: float) -> dict:
+    [(_, words)] = _render(tl, uris, [t], KW_PROBE)
+    return next(w for w in words if " ck" in " " + w["cls"])
+
+
+@needs_browser
+def test_the_blend_paints_no_keyword_box_on_the_plain_stage_caption() -> None:
+    """The parent's ruling on R26-123 (2026-09-25): E99 s6 approved the blend's MOTION (the rise and the stagger the P57 HG2
+    card showed on "it's been"), never a keyword box - the card carried no keyword - and the box fails the caption floor
+    3.97 at 1.25:1 behind H's orange. So on the plain stage caption (the long form's) the blend keeps the keyword's ink
+    and paints no box, exactly as the caption with no life does."""
+    base = _keyword(*_caption_surface(None, phrase=False))
+    blend = _keyword(*_caption_surface("blend", phrase=False))
+    assert base["bg"] == "none" and blend["bg"] == "none", (base, blend)
+    assert blend["color"] == base["color"], (base, blend)          # the keyword's ink is unchanged
+    assert "lit" not in blend["cls"].split(), blend
+
+
+@needs_browser
+def test_the_blend_keeps_the_box_where_the_phrase_caption_already_paints_one() -> None:
+    """The shorts' phrase caption paints the box with no life at all, and keeps it under the blend."""
+    base = _keyword(*_caption_surface(None, phrase=True))
+    blend = _keyword(*_caption_surface("blend", phrase=True))
+    assert "linear-gradient" in base["bg"] and "linear-gradient" in blend["bg"], (base, blend)
+
+
+@needs_browser
+@pytest.mark.parametrize("life", ["pop", "stagger"])
+def test_pop_and_stagger_are_unchanged(life: str) -> None:
+    """Only the blend's box policy moved: pop and stagger paint the keyword's box as they did (on both captions)."""
+    for phrase in (False, True):
+        assert "linear-gradient" in _keyword(*_caption_surface(life, phrase))["bg"], (life, phrase)
+

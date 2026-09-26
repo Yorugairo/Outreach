@@ -4,9 +4,10 @@ The composition itself (the three settings, the channel-by-channel blend, the le
 `tests/kinetics/stagger.test.mjs` - kinetics/stagger.mjs is the source of truth and node tests it. What is pinned
 HERE is everything python owns:
 
-  the DEFAULT      `cap_life` is absent unless a build asks. No field, no timeline key, no engine branch taken -
-                   which is why every golden and both approved shorts compile and render byte-identical to their
-                   pre-slice selves. E90 s1: what Steel and Paper shipped is the base and it is not replaced.
+  the DEFAULT      P72 T27 / R26-123 (E99 s6): an unauthored build takes the BLEND. `base` pins the caption Steel and
+                   Paper shipped (no field, no timeline key, no engine branch - E90 s1: the base is not replaced). The
+                   goldens build their own caption pages and never read the setting; an approved cut is never
+                   re-rendered (E45), so its frozen player keeps the caption it was approved with.
   the DECLARATION  the compiler stamps the life on every caption page and on the timeline, and REFUSES a setting
                    it does not know by name (a typo must not silently ship the base).
   the ENGINE       reads the page's setting, paints it from the MODULE (`lifeAt`), keeps the blur on the word
@@ -38,15 +39,18 @@ LIVES = ("pop", "stagger", "blend")
 
 # ---- the default: nothing is declared, nothing changes -----------------------------------------
 
-def test_the_life_is_absent_by_default_and_only_silence_means_the_base() -> None:
-    """Unlike the arrival, "pop" is a real setting and IS written - it is the shipped pop a notch stronger."""
+def test_unauthored_is_the_blend_and_only_base_means_the_shipped_caption() -> None:
+    """R26-123 / E99 s6: silence is the blend. "pop" is a real setting and IS written - the shipped pop a notch stronger."""
     assert BST.CAPTION_LIFE is None, "the compiler ships with no life declared"
     assert BST.CAPTION_LIVES == LIVES
     keep = BST.CAPTION_LIFE
     try:
         for asked in (None, "", "   "):
             BST.CAPTION_LIFE = asked
-            assert BST._caption_life() is None, asked
+            assert BST._caption_life() == "blend", asked
+        BST.CAPTION_LIFE = "base"
+        assert BST._caption_life() is None, "the pin writes no field"
+
         for asked in LIVES:
             BST.CAPTION_LIFE = asked
             assert BST._caption_life() == asked
@@ -76,7 +80,10 @@ def test_the_compiler_stamps_the_page_beside_cap_mode_and_the_timeline_beside_ca
 
 
 def _timelines() -> list[Path]:
-    return sorted(TOKYO.glob("build-short*/*.timeline.json")) + sorted(STEEL.glob("build-*/*.timeline.json"))
+    # R26-123: the H episode (build-h*) is in production and takes the default on its next compile - it is no
+    # approved cut, so it is not held here; every other build on disk is a frozen one
+    return sorted(TOKYO.glob("build-short*/*.timeline.json")) + sorted(
+        p for p in STEEL.glob("build-*/*.timeline.json") if not p.parent.name.startswith("build-h"))
 
 
 def test_no_build_on_disk_carries_a_life_so_every_rebuild_is_clock_identical() -> None:

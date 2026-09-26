@@ -69,8 +69,13 @@ CAPTION_ARRIVE: str | None = None   # timeline.caption_arrive + page.cap_arrive 
                                     # every build shipped before the slice, and NO field is written, so every golden and both shorts compile byte-identical.
 CAPTION_ARRIVALS = ("pop", "fade_up")   # "fade_up" [DERIVED: HyperFrames staggered-fade-up]: ONE envelope, per-word offsets - y 22 px -> 0, scale 0.92 -> 1,
                                         # blur 5 px -> 0, stagger 0.055 s (kinetics/stagger.mjs) - the quiet register, "more caption motion without overcrowding"
-CAPTION_LIFE: str | None = None     # timeline.caption_life + page.cap_life - the caption's LIFE (E90, P57 T14). None = the caption Steel and
-                                    # Paper shipped; no field is written, so every golden and both approved shorts compile byte-identical.
+CAPTION_LIFE: str | None = None     # timeline.caption_life + page.cap_life - the caption's LIFE (E90, P57 T14). None = UNAUTHORED, which is
+                                    # CAPTION_LIFE_DEFAULT (P72 T27 / R26-123: E99 s6 ruled the blend the default). `base` PINS the caption
+                                    # Steel and Paper shipped - no field is written - for a build that must compile as it did before the
+                                    # default moved. The goldens build their own caption pages and never read this; an approved cut is
+                                    # never re-rendered (E45), so its frozen player keeps the caption it was approved with.
+CAPTION_LIFE_DEFAULT = "blend"      # E99 s6 (REVIEWED 2026-09-14, R26-123): "the caption default is the blend"
+CAPTION_LIFE_BASE = "base"          # the pin: the shipped caption, written as no field at all (E90 s1: the base is not replaced)
 CAPTION_LIVES = ("pop", "stagger", "blend")   # "pop" = the shipped pop one notch stronger (kinetics/stagger.mjs LIFE.POP_LEAD 1.22 against the base's
                                     # 1.16); "stagger" = P52 T10's envelope alone; "blend" = the pop's scale and tilt riding ON TOP of the stagger's
                                     # 22 px rise, no blur (E90 s2 "a blend, not a switch"), the held page breathing under it (E49). All three renderable
@@ -11488,15 +11493,19 @@ def _caption_life() -> str | None:
     """P57 T14 / E90: the LIFE a stage page's words carry, or None for the caption as it shipped.
 
     Unlike the arrival, "pop" is a REAL setting here and is written: it is the shipped pop made a notch stronger
-    (E90 s2 "maybe add more pop effect"), so a build that asks for it must get it. Only silence means the base -
-    and silence is what every build on disk says, which is the byte-identity of the goldens and of both approved
-    shorts. An unknown setting is refused by name: a typo silently shipping the base is the failure mode this
-    exists to stop (the same rule `_caption_arrive` has)."""
+    (E90 s2 "maybe add more pop effect"), so a build that asks for it must get it. P72 T27 / R26-123: silence is no
+    longer the base - an unauthored build takes CAPTION_LIFE_DEFAULT, the blend E99 s6 ruled - and the base is
+    asked for by name (`base`, CAPTION_LIFE_BASE), which writes no field. An unknown setting is refused by name: a
+    typo silently shipping a caption nobody asked for is the failure mode this exists to stop (the same rule
+    `_caption_arrive` has)."""
     a = (CAPTION_LIFE or "").strip() or None
     if a is None:
+        return CAPTION_LIFE_DEFAULT
+    if a == CAPTION_LIFE_BASE:
         return None
     if a not in CAPTION_LIVES:
-        raise SystemExit(f"caption life {a!r} is not one of {CAPTION_LIVES} (build_scene_timeline_f.CAPTION_LIFE)")
+        raise SystemExit(f"caption life {a!r} is not one of {CAPTION_LIVES} or {CAPTION_LIFE_BASE!r} (the shipped caption, "
+                         f"no field) (build_scene_timeline_f.CAPTION_LIFE)")
     return a
 
 
@@ -13260,8 +13269,8 @@ def main() -> int:
     # that never asks; that absence is the byte-identity of every golden and both shorts)
     if _caption_arrive():
         pages = [{**pg, "cap_arrive": _caption_arrive()} for pg in pages]
-    # P57 T14 / E90: and the LIFE each page's words carry, beside the arrival - written only when the build asks,
-    # for exactly the same reason (an absent field is the shipped caption, and no build on disk carries one)
+    # P57 T14 / E90: and the LIFE each page's words carry, beside the arrival - written unless the build pins the
+    # base (P72 T27 / R26-123: an unauthored build takes the blend, E99 s6; an absent field is the shipped caption)
     if _caption_life():
         pages = [{**pg, "cap_life": _caption_life()} for pg in pages]
     # E62: and the BAND each card leaves the caption free - the demotion under a card is in position,
@@ -13344,7 +13353,7 @@ def main() -> int:
         # (a page's own `cap_arrive` wins). Omitted entirely when the build does not ask - see CAPTION_ARRIVE.
         **({"caption_arrive": _caption_arrive()} if _caption_arrive() else {}),
         # P57 T14 / E90: the LIFE the stage words carry (a page's own `cap_life` wins). Omitted entirely when the
-        # build does not ask - see CAPTION_LIFE.
+        # build pins the base - see CAPTION_LIFE (R26-123: unauthored is the blend).
         **({"caption_life": _caption_life()} if _caption_life() else {}),
         "sound": sound_cues,
         "evidence": evidence,

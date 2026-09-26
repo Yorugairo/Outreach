@@ -24405,7 +24405,12 @@ async function mount(doc) {
              keyword's box sweep, the spoken word's lift and the phrase mode's boil on a landed word. No cursor, no flash, no
              per-word highlight - the caption-energy lessons - and the HELD page's own life is E49's breath on the strip below. */
             const f = lifeAt(t, x.s, lifeKind), e = f.e;
-            const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;                 /* the keyword's box sweeps in when spoken, stays */
+            /* the keyword's box sweeps in when spoken, stays - except that the BLEND paints it only where the caption already
+               paints one, the shorts' PHRASE caption (P72 T27 / R26-123, the parent's ruling 2026-09-25: E99 s6 approved the
+               blend's MOTION on a card that carried no keyword; on the plain stage caption the box fails the 3.97 caption floor
+               at 1.25:1 behind the keyword's orange). So a plain stage page under the blend keeps its keyword's ink and gets no
+               box, as the caption with no life does; pop and stagger are unchanged. */
+            const hk = (x.k && (PHRASE || lifeKind !== "blend")) ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;
             const tick = Math.floor(lifeT(t) * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;
             const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
             const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
