@@ -24565,6 +24565,28 @@ async function mount(doc) {
      depth ASCENDING toward the viewer. HF-17's `#fgover` cutout still sits ABOVE all of them - it is mounted over
      the dock layer, outside `.world` entirely - and so do the docks, the species and the caption. */
   const WLY = "wly";
+  /* P72 T25 (R26-164; E99 s65, the operator: "the parallax + drift can read as random motion, whereas ken burns+ drift
+     gives us directionally controlled motion") - A LAYERED PLATE'S DRIFT FOLLOWS THE CAMERA, OR IS OFF. Each plane took
+     its share k of ONE free Lissajous walk, so the planes slid against each other in a direction nothing on screen gave
+     them. Here the walk is PROJECTED onto the camera's own displacement of the stage centre D (camShift: the camera maps
+     P -> at + s (P - look)) and lifted onto the camera's side: `along` = (walk . u + reach) / 2 lies in [0, reach], where
+     reach is the walk's own extent along u (DRIFT_PX in x, Y_SHARE of it in y - the walk's shape, idle.mjs `drift`), so
+     the planes only ever lead the camera's move, never run against it or across it, and the nearer plane leads further
+     (paintPlanes' share k). It is weighted by min(1, |D| / amp): it opens from zero as the camera leaves the identity and
+     reaches its whole walk once the camera has moved amp px, and it is OFF - null - where the camera gives no direction
+     (|D| under EPS_PX: a locked eye, or a zoom about the stage's own centre). Pure in (pose, xf). */
+  const DRIFT_ALONG = Object.freeze({ Y_SHARE: 0.6, EPS_PX: 0.5 });
+  const camShift = (xf) => {
+    const ax = xf.ax != null ? xf.ax : xf.ox, ay = xf.ay != null ? xf.ay : xf.oy;
+    return [ax - STAGE_W / 2 + xf.s * (STAGE_W / 2 - xf.ox), ay - STAGE_H / 2 + xf.s * (STAGE_H / 2 - xf.oy)];
+  };
+  const driftAlongCam = (pose, xf, amp) => {
+    const D = camShift(xf), n = Math.hypot(D[0], D[1]);
+    if (!(n > DRIFT_ALONG.EPS_PX) || !(amp > 0)) return null;
+    const ux = D[0] / n, uy = D[1] / n, reach = amp * (Math.abs(ux) + DRIFT_ALONG.Y_SHARE * Math.abs(uy));
+    const along = Math.max(0, ((+pose.dx || 0) * ux + (+pose.dy || 0) * uy + reach) / 2) * Math.min(1, n / amp);
+    return { scale: 1, dx: along * ux, dy: along * uy };
+  };
   const paintPlanes = (el, plies, xf, rest, idleAt, tLocal) => {
     let els = Array.prototype.slice.call(el.querySelectorAll("." + WLY));
     if (els.length !== plies.length || els.some((e, i) => e.dataset.key !== plies[i].key)) {
@@ -24780,12 +24802,25 @@ async function mount(doc) {
      here). The seek-free path: a stage point P under the seal at t0 is the world's own point inv(M(t0))(P); on THIS frame
      that point is drawn at M(now) of it, read from the element, and ringRgbAt reads it there - so the pixel is the one
      that was under the seal at its contact, whatever frame paints it. One luminance per point (null unmeasured). */
+  /* P72 T25 (R26-165) - THE KEN'S CLOCK, the one `paint` and `worldXfAt` both read. With no window (the ken the compiler
+     has always written, `{scale, x, y}`) it is the scene's own 0 -> 1 on the life clock - exactly the expression both
+     sites carried, so every unwindowed frame is the frame it was. With `t0, t1` (the row's `(scale, x, y, t0, t1)`, in
+     episode seconds like the authored camera key) it is 0 until t0 - the plate holds - the same LINEAR lean across the
+     window, and 1 from t1 on, held: linear so the first moving frame IS t0's next frame (an ease-in would spend its first
+     frames under a pixel). The window runs on the life clock counted from t0 and is normalised by the window's own life
+     length, so a freeze beat inside it holds the lean and it still lands on t1. Pure in t. */
+  const kenProgress = (scene, t) => {
+    const kb = (scene.world || {}).ken_burns || {}, t0 = +kb.t0, t1 = +kb.t1;
+    if (!(Number.isFinite(t0) && Number.isFinite(t1) && t1 > t0))
+      return clamp01((lifeFrom(scene.span[0], t) - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
+    return clamp01((lifeFrom(t0, t) - t0) / Math.max(0.001, lifeFrom(t0, t1) - t0));
+  };
   const worldXfAt = (scene, t0) => {
     const w = scene.world || {}, isLedger = w.kind === "ledger", isClip = w.kind === "clip", isVecmap = w.kind === "vecmap";
     if ((!isLedger && !isClip && !isVecmap && w.layers || []).some((l) => l && A[l.key])) return "";   /* the camera is on the planes */
     const kb0 = w.ken_burns || { scale: 0, x: 0, y: 0 };
     const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
-    const p = clamp01((lifeFrom(scene.span[0], t0) - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
+    const p = kenProgress(scene, t0);   /* P72 T25: the ken's one clock (windowed or the scene's own) */
     const idlePose = (isLedger || isClip || isVecmap) ? { scale: 1, dx: 0, dy: 0 }
       : idleXf(idleOf("plate", w.idle), lifeT(t0), lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleDriftPx(w.idle_drift_px, KIN.plate_idle_drift_px) });
     const z = (1 + p * kb.scale) * idlePose.scale;
@@ -24975,7 +25010,7 @@ async function mount(doc) {
       if (!isClip) parkClips(el);   /* back to the pool, never destroyed */
       const kb0 = scene.world.ken_burns || { scale: 0, x: 0, y: 0 };
       const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
-      const p = clamp01((lifeFrom(scene.span[0], t) - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));   /* P69 T49: the push holds through a freeze beat */
+      const p = kenProgress(scene, t);   /* P69 T49: the push holds through a freeze beat; P72 T25: on its window, when the row names one */
       /* THE WORLD LEANS IN WITH THE ARGUMENT (Gemini showcase: worldScale
          steps 1.02 -> 1.08 across a build). Each evidence event in this
          scene - a card landing, a badge stamping - eases the plate in one
@@ -25002,6 +25037,10 @@ async function mount(doc) {
       const idleDrift = (k) => (KIN.plate_idle_paints === true ? idleDriftCss(idlePose, k) : "");
       const z = (1 + p * kb.scale) * zi;
       const camXfNow = camNow(scene, t);
+      /* P72 T25 (R26-164, E99 s65): on a LAYERED plate the walk follows the camera (driftAlongCam) or is off - the planes
+         and the k = 1 pose read this, never the free walk; a flat plate keeps its bare walk (idleDrift, as it was). */
+      const planePose = plies.length ? driftAlongCam(idlePose, camXfNow, idleAmp) : null;
+      const planeDrift = (k) => (KIN.plate_idle_paints === true && planePose ? idleDriftCss(planePose, k) : "");
       const worldRest = `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
         + `translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
       const restFlat = worldRest + idleDrift(PARALLAX.FLAT);   /* the flat world's rest, and the k = 1 pose camDepthSwap and worldPose read */
@@ -25013,10 +25052,10 @@ async function mount(doc) {
            the blur-zoom's scale, the suck's spin, the slide's push - each of which still prepends to it and so still
            applies to every plane at once); each plane carries the camera at its own k, so at k = 1, and under a
            LOCKED camera at any k, the string a plane gets is exactly the string the flat world gets. */
-        el.dataset.worldPose = camCss(camXfNow) + restFlat;
+        el.dataset.worldPose = camCss(camXfNow) + worldRest + planeDrift(PARALLAX.FLAT);   /* P72 T25: the k = 1 plane's own pose */
         if (el.dataset.worldRest !== undefined) delete el.dataset.worldRest;   /* P58 T6: the camera is on the planes, not under this element */
         el.style.transform = "";
-        paintPlanes(el, plies, camXfNow, worldRest, idleDrift, Math.max(0, lifeFrom(scene.span[0], t) - scene.span[0]));   /* P69 T49: the alive plane holds */
+        paintPlanes(el, plies, camXfNow, worldRest, planeDrift, Math.max(0, lifeFrom(scene.span[0], t) - scene.span[0]));   /* P69 T49: the alive plane holds; P72 T25: the drift that follows the camera */
       } else if (pageK) {
         /* the page took the camera down onto its own plane; the element keeps what the page's GROUND shares with it
            - the authored Ken Burns and the wipe's push - and `data-world-pose` carries the k = 1 pose, so

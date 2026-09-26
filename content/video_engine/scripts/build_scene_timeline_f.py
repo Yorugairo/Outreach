@@ -493,6 +493,65 @@ def species_props(entry) -> list[str]:
 # so the eye separates narrative world from evidence data with no labelling.
 KEN = {"scale": 0.04, "x": 14, "y": -10}
 
+# P72 T25 (R26-165): THE KEN'S WINDOW. A row's ken is `(scale, x, y)` - the lean across the scene's own 0 -> 1 clock -
+# or `(scale, x, y, t0, t1)`: the same lean across [t0, t1] in EPISODE seconds (the authored camera key's clock), still
+# before t0 and held after t1, so a lean can start on its word (P61 T14c matched the zoom but not its timing). Only the
+# window is new: the first three keep their meaning, and a three-tuple writes the dict it always wrote. Every other
+# shape is refused by name (s106) - at the base a five-tuple was truncated to its first three, a silent drop.
+KEN_ARITY, KEN_WINDOW_ARITY = 3, 5
+
+
+def ken_window_of(ken) -> tuple[float, float] | None:
+    """The ken's (t0, t1) window, or None for a ken that names none (a three-tuple). Assumes a well-formed ken
+    (`ken_window_errors` says so)."""
+    return (float(ken[3]), float(ken[4])) if ken is not None and len(ken) == KEN_WINDOW_ARITY else None
+
+
+def _ken_pushes(ken, world: dict | None) -> bool:
+    """Does the ken move anything on this world? A page leans on its scale alone (the player drops a page's x / y)."""
+    scale = float(ken[0] or 0)
+    if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER:
+        return scale > 0
+    return scale > 0 or float(ken[1] or 0) != 0 or float(ken[2] or 0) != 0
+
+
+def ken_window_errors(ken, span: tuple, world: dict | None) -> list[str]:
+    """P72 T25 (R26-165): a row's ken, read against its row's span [a, b] (the scene's: it runs to the next row) and
+    the world it moves. [] for a three-tuple and for a well-formed window; each refusal names the fix. Pure."""
+    if ken is None or not hasattr(ken, "__len__"):
+        return []
+    if len(ken) not in (KEN_ARITY, KEN_WINDOW_ARITY):
+        return [f"ken_burns takes (scale, x, y) or (scale, x, y, t0, t1) - got {len(ken)} values {tuple(ken)!r}. "
+                "The lean's direction is its x / y; its window is t0, t1 in episode seconds (P72 T25, R26-165)"]
+    if len(ken) == KEN_ARITY:
+        return []
+    errs = [f"ken_burns window: {name} must be a finite number of episode seconds, got {v!r}"
+            for name, v in (("t0", ken[3]), ("t1", ken[4]))
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v)]
+    if errs:
+        return errs
+    t0, t1 = float(ken[3]), float(ken[4])
+    a, b = float(span[0]), float(span[1])
+    where = f"ken_burns window {t0:.2f}-{t1:.2f}s"
+    if t1 <= t0:
+        errs.append(f"{where} runs backwards - t1 is the instant the lean lands, after t0 (its word)")
+    if t0 < a - 1e-6 or t1 > b + 1e-6:
+        errs.append(f"{where} runs past its row ({a:.2f}-{b:.2f}s) - the lean belongs to the row whose plate it moves")
+    if isinstance(world, dict) and world.get("kind") == VECMAP_KIND:
+        errs.append(f"{where}: a vector map takes no Ken Burns - the camera moves between its focal points (E59)")
+    elif not _ken_pushes(ken, world):
+        need = ("a scale (a page leans on its scale alone)" if (world or {}).get("kind") == SPECIES_LEDGER
+                else "a scale or an x / y")
+        errs.append(f"{where} on no push - a window times a lean, so the ken needs {need}")
+    return errs
+
+
+def ken_burns_windowed(ken_burns: dict, ken) -> dict:
+    """The world's ken_burns with the row's window written after the three it always carried - a NEW dict; the same
+    dict's content for a ken with no window (so an unwindowed world is byte-identical)."""
+    win = ken_window_of(ken)
+    return dict(ken_burns) if win is None else {**ken_burns, "t0": win[0], "t1": win[1]}
+
 # TARGETED SPECIES (doc 29 s9.27 MOTION MENU, P35 T7). A shot-table row's
 # optional 7th element is a list of {"kind", "at", "dur", "target"} dicts;
 # `at` and `dur` are episode seconds on the same clock as dock enter/exit.
@@ -9758,6 +9817,23 @@ def plate_idle_error(world: dict | None, plate_id: str) -> str | None:
             "(R26-214 (b))")
 
 
+def layered_drift_warnings(world: dict | None, row_species: list, camera: dict | None) -> list[str]:
+    """P72 T25 (R26-164, E99 s65): the drift on a LAYERED plate follows the camera - the player projects the walk onto the
+    camera's own displacement of the stage, on the camera's side - so on a row whose camera never moves the planes'
+    drift is OFF. Said here by name (s106: a WARN, never a refusal) for a layered plate that names a walking idle on a
+    row with no camera move: no camera species, no keys, no landings, no pedestal. A flat plate keeps its bare drift and
+    is never named. Pure."""
+    if not isinstance(world, dict) or not world.get("layers") or world.get("idle") not in DRIFT_IDLES:
+        return []
+    cam = camera if isinstance(camera, dict) else {}
+    if any(isinstance(sp, dict) and sp.get("kind") in CAMERA_MOVES for sp in row_species or []) \
+            or cam.get("keys") or cam.get("attention") == "landings" or cam.get("pedestal"):
+        return []
+    return [f"{world.get('asset_id')!r}: idle={world['idle']} on a LAYERED plate with no camera move - its drift is OFF "
+            "(R26-164, E99 s65: parallax planes under a free drift read as random motion; the drift follows the camera "
+            "or is off). The planes hold at the camera; give the row a move with a direction, or name the flat plate"]
+
+
 # R26-149 (P72 T17): THE MORPH'S SERIES. A page ENTERING by morph (a named prop, a planted poly, the melt's ball) becomes
 # the area under ONE line; the engine took the page's first drawn line, so a page whose first series is not the one the
 # sentence is about morphed into the wrong area. `;morph_series=<n>` names it (default 0, the page's own order); refused
@@ -14554,6 +14630,11 @@ def main() -> int:
                     print(f"  [WARN] P72 T12: shot row {i + 1} ({a}-{b}s): {_w}")
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        _ken_errs = ken_window_errors(ken, (a, b), world)   # P72 T25 (R26-165): the lean's window, on the scene's own span
+        if _ken_errs:
+            raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(_ken_errs))
+        if ken_window_of(ken) is not None:   # a ken with no window leaves the world's dict exactly as it was
+            world["ken_burns"] = ken_burns_windowed(world["ken_burns"], ken)
         if morph_prop_id((world or {}).get("morph")) is not None:   # P69 T26e: `;morph=prop:<id>` - the prop standing at the boundary
             _pid = morph_prop_id(world["morph"])
             world["morph"], _mnotes = resolve_morph_prop(world, scenes[-1] if scenes else None, a, f"shot row {i + 1} ({a}-{b}s)",
@@ -14625,6 +14706,8 @@ def main() -> int:
                                     **({"clip": True} if p.get("clip") else {})} for p in _planes]
                 for _p, _ly in zip(_planes, world["layers"]):
                     uris[_ly["key"]] = data_uri(Path(_p["file"]))   # RAW: the capped path would drop the alpha
+                for _w in layered_drift_warnings(world, row_species, row_camera):   # P72 T25 (R26-164): the drift the camera turns off
+                    print(f"  [WARN] P72 T25: shot row {i + 1} ({a}-{b}s): {_w}")
         # P50 T7: the SURFACES this plate declares, read once - the docks below land on them and the camera aims at
         # them by name. A world that is not a plate has none, and only a row that names one gets an error.
         _embeds = (plate_embeds(R.find_asset(world["asset_id"]))
