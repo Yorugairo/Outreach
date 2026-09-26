@@ -25,3 +25,5 @@ transform it could not use. Carry-forward order: transforms + continuity moves f
 defaults), then the arrivals, then the universal set. Owed: a flow read beside M46 (BACKLOG R26-189). Never present
 a survival matrix as a ranking again. See [rebuild-is-not-a-base](rebuild-is-not-a-base.md), [frames-inward-not-tokens-outward](frames-inward-not-tokens-outward.md),
 [dip-is-a-world-change](dip-is-a-world-change.md).
+
+**2026-09-25 addendum - never ask the operator about FEWER dips:** row 24 reported "12 dips vs the treatment's 10" as an operator item; the operator: "you dont need my approval for less dips, we already have agreed that dips are used as the option when our other transitions that maintain continuity don't make sense, if we're going from 12 to 10 that means we gained continuity." Cutting a dip to a continuity transform is build work, done without asking; only ADDING a dip past the plan needs its `why` (the transform refused). Filed as R26-347.

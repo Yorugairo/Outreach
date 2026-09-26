@@ -23,3 +23,5 @@ rule, and the sub must say it on the page; when reviewing any chart,
 read it as a stranger for two seconds first and say what it says before
 checking the numbers. See [chart-proof-not-homework](chart-proof-not-homework.md),
 [ledger-page-signature](ledger-page-signature.md).
+
+**2026-09-22 (P69 T6 frames):** "that bar can't be that wide, that doesn't read like a bar chart it reads like a giant block" - a bar's width is capped at a normal multi-bar page's width; fewer bars stay that wide and are centred, never stretched. Then (s96): "The two bar width is also still way too much" - the cap is a FIVE-bar page's width (~13% of the plot). And a number never sits on the far side of a rule its value doesn't pass (a 94 above the 100 line reads as >100).

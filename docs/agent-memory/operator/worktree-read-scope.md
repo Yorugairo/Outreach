@@ -24,3 +24,5 @@ storage - durable output merges to main when its stage completes.
 Related: [worktree-sprawl](worktree-sprawl.md), [recall-system](recall-system.md).
 
 **2026-09-16 (P62):** every checkout has a row in `docs/WORKTREE-REGISTER.md`; read it at start. The four August worktrees are dormant (their unmerged counts on the rows); the parent's session cwd (sweet-villani) is one of them - its work lands in main. See [worktree-sprawl](worktree-sprawl.md).
+
+**2026-09-24 (BOOM):** a harvest said "no frames on disk" for Bravos BOOM (`jx3Ll-GJtMY`) and P71 gated 8 items on a Gemini fetch - the video + transcript sat in the MAIN checkout's `scratch/` since 09-23. Before commissioning any fetch, `find` every checkout (incl. `scratch/`, repo root) for the id. Reading the real frames showed Gemini's timings off by up to ~11 s and two of its effects (a travelling ring, a phase slide) invented - a G-only witness is a lead, never a spec. Note: worktree sessions are blocked from writing the main checkout; write gitignored run output in the worktree.

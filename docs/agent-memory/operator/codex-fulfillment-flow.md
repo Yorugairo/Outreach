@@ -61,3 +61,5 @@ thumb scale, three rejected rounds). What the eye means by
 shining gold traces + wafer sheen. When an image is dark and the ask
 was vivid, ban the darkness explicitly ("if a letter reads mostly dark
 at small size, it is wrong") - the winning round did exactly that.
+
+**2026-09-22:** for `gpt-6-luna` use the desktop app's newer CLI `~/.codex/plugins/.plugin-appserver/codex.exe` (0.155); the older `~/.codex/.sandbox-bin/codex.exe` (0.154) rejects gpt-6-luna on the ChatGPT account ("model is not supported"). Luna runs the shared `watch` skill itself (`codex exec -m gpt-6-luna ... "use your watch skill on <url>"`) - the cheap broad-watch lane (Bravos reviews, docs/research/runs/bravos-watch/).

@@ -17,7 +17,7 @@ assets). Every rule on the sheet cites its governing file: the style spine
 `configs/style_packs/woodblock.json`, doc 29, DOCTRINE-CORE.
 
 Three registers, by decision: world plates = woodblock vox newsprint
-(six fixed hex tokens, no text on plates, no washi/collage, host in-world);
+(six fixed hex tokens, no text on plates unless named + verified (E99 s113, 2026-09-24), no washi/collage, host in-world);
 evidence = near-black real charts with the source printed; packaging =
 YouTube's own register (Impact-class outlined type, robo host, white
 ground). `style-profile.v1.json` (crinkle-cut collage) is retired.

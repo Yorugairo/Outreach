@@ -28,3 +28,5 @@ a sine micro-pan; the isometric silo array + satellites; the dual-lane stage + a
 the bloom + tip-riding pills). Mapped in REPORT.claude.md; R26-32/33/34 for the absent three. Its two camera claims (a DoF
 push-in at 17:15, a track-left at 8:22) are NOT in the frames - compositions 99 and 53 are still. Lesson: file the chat, not
 just the doc; then check every camera claim against camera.json before it becomes doctrine.
+
+**E99 s97 (2026-09-22):** "go much more tighter in their direction. Your style looks more like from our shorts but the chart style in long format is sharper, more electric, and more professional." Long-form pages get a MEASURED `longform` profile (narrow flat bars + category pill + glowing value badge, no y-axis/gridlines; neon lines with bloom in a thin framed plot; bold sans title; dark negative space). Shorts style (Kalam hand titles, heavy fills, full axes) is NOT the long-form look. Spec: BRAVOS-LONGFORM-CHART-SPEC.md (P69).

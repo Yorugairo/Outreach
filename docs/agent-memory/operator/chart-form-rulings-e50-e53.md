@@ -40,3 +40,7 @@ cannot fit builds to the comparator's level, holds, then shoots to its number wh
 move, measured at 8:02 of the SPR chart). Never a break glyph (a broken-axis mark says "abbreviated"). `overflow: "burst"` is
 the breakthrough; `"stack"` (one comparator per step, off the page) is an option; the stop-motion blend is R26-30. The
 compiler checks an overflow page (`_validate_overflow`). Operator: "the re-scale is the way ... But this works."
+
+**E99 s100 (2026-09-23) - amends E53 s1:** "Area is still valid, we just have to use it when appropriate, and storytelling is the more important thing as long as we are being truthful. Making videos that nobody watches is useless." The perception hierarchy is GUIDANCE, not a refusal list. An area form (pyramid, iceberg, treemap, bubble, donut) is chosen when it tells the story better; it is truthful when areas are in true proportion and the figures are written. Don't cite the hierarchy to refuse a form - cite truth. E53 s2 (stacks) and E28 unchanged. Engine refusal owed: R26-263.
+
+**E99 s101-s102 (2026-09-23):** the MEMBERSHIP STACK (equal unvalued tiles naming who is in ONE bar, total written) is not a stacked bar. A SECOND / INVERTED axis is fair when the claim is co-movement or lead-lag, each axis names its unit, an inverted one says "inverted", ticks coloured by series - I had read Bravos's inverted axis as "a rise drawn as a fall"; its outcome is two inverse series tracking together.

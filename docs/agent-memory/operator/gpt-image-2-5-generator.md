@@ -20,7 +20,7 @@ composition, a transparent RGBA asset (PNG/WebP, `background: "transparent"`), a
 LAYER as a separate transparent asset with a shared camera brief and a reference image, then clean the alpha, derive the depth, assign
 the roles and author the camera path in our compositor. Prompt pattern: "Create ONLY the foreground subject as an isolated transparent
 PNG asset. Match the supplied composition reference exactly: 50mm eye-level camera, subject centered at x=62%, lower edge at y=92%,
-full silhouette visible. No background, no ground plane, no cast shadow, no text. Designed for 2.5D parallax compositing; clean edge
+full silhouette visible. No background, no ground plane, no cast shadow, no text unless the narrative names it (E99 s113: named, spelled exactly, verified on the frame). Designed for 2.5D parallax compositing; clean edge
 separation and no cropped limbs."
 
 **The operator's takeaway (E98 s5):** every layer prompt is adapted to our style and the specific plate AND states the intent - "designed for 2.5D parallax compositing" - because the generator's reasoning makes the intent's choices only when told.

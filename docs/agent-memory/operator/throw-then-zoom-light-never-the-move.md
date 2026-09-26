@@ -17,3 +17,5 @@ over the world plate, not the throw.
 **How to apply:** per sentence read the act (SPECIES-BY-SENTENCE), MOTION-GRAMMAR and the capability's Use-when before choosing a move; a
 beat with only a light is a hole; a thrown page-sized card becomes the page by zoom or push (the card-becomes-the-chart family). See
 [frames-inward-not-tokens-outward](frames-inward-not-tokens-outward.md), [rings-retired-e56](rings-retired-e56.md).
+
+**Missed again 2026-09-22 (P69 T15, row 7):** the parent passed a row where the Bravos chart card was thrown and left at ~1/3 frame (6-8 px labels) then parked on the desk; the operator: "Those charts still seem tough to read to me." On every frame read, ask first: is any CHART on screen smaller than a full page? If yes it must throw-then-zoom/push into the page (s71) or not be a chart.
