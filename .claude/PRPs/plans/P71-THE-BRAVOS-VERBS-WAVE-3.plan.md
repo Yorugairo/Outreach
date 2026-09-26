@@ -1290,7 +1290,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T13: A second axis, and an inverted one, for a co-movement claim - and `y2` refused until it draws (was P69 T43b; R26-307)
-- Status: pending
+- Status: done - lane B f956fd7: `y2` draws on a dense line page with its claim (inverted when asked); refused by name elsewhere and wherever a reading would cross the scales (the reviewer's round 2); golden `dual-axis-inverted` (TIC vs DGS10, r -0.83, a labelled reference beat)
 - Owner: implementation_luna (LANE B), then reviewer (s102's truth conditions)
 - Depends on: P70 T2 committed (it owns `buildLedgerLine`'s tick and tag writes)
 - Harvest: v2 T14 "Dual-axis line over line (LHS/RHS, sometimes inverted)", n=7 (BUB #74; RST 7:00; HIS 00:00; DOM
