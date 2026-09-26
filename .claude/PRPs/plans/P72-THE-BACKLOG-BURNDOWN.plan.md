@@ -1220,3 +1220,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Write set: per item - the test or the code it names, never both without saying which is wrong; a pinned test is re-pinned only when the change it catches was intended (name the commit)
 - Acceptance: the full sweep (every `test_*.py` and node test, each alone, sequentially) reports 0 real failures at the lane head; each fix says whether the TEST or the CODE was wrong, with the commit that broke it.
 - Evidence: pending
+
+### T52: The suite's standing failures (R26-405)
+- Status: pending
+- The first `run_full_suite.py` on lane B (c0b42c4): 30 failures, none from wave 9 or P73; classified in R26-405 (missing gitignored inputs, Blender's path, CRLF working copies, six pre-existing unowned, the register). Build: the runner stages or skips absent inputs with the reason; LF for byte-compared fixtures; a short-path Blender run; each pre-existing failure diagnosed at its cause.

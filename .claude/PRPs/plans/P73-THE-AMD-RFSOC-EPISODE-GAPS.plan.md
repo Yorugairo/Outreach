@@ -54,15 +54,16 @@ workflow, the RETURN). The slice orders: `$SP/p73-slices.md`.
   `tests/test_icons_intake.py` (24). Human gate: P73-HG1 (4).
 
 ### T5: Hong Kong and Singapore on the map
-- Status: pending - dispatch now that P72 T46d (the map's framing and ping, lane B `095c3ad`) has landed.
-  `world-110m.paths.json` has no HKG / SGP: add them as map POINTS (a sourced lat/long that can light and ping) and
-  prove a transshipment arc US -> HKG -> CN.
+- Status: done - lane B (the T5 commit): map POINTS (`{kind: place, id}`: HKG, SGP, MAC, HSINCHU from Natural Earth 1:10m, the map's own commit) light, ping and end arcs; goldens `vecmap-transship`, `vecmap-place-singapore` + proofs; `tests/test_map_places.py` (23). Human gate: P73-HG1 (5). The Atlantic route is R26-406 (T6).
+
+### T6: A Pacific-centred map (R26-406)
+- Status: pending - a plate option `;meridian=<deg>` re-centres the vector map's projection (the countries the seam cuts split; places projected the same way), so a United States -> Hong Kong arc crosses the Pacific.
 
 ## Human gates
 
 | Gate | What to judge, and where |
 |---|---|
-| **P73-HG1** | (1) the claimed figure: the outline (default) or the hatch; the name-over-figure's weight; the audit wording (`scratchpad/p73-t1/frames/SHEET-claim-bar.png`). (2) the timeline: at 16:9 the full-stage chart box uses ~0.69 of the width (the right third empty) - widen it when no dock stands?; the hollow pin + "reported"; teal as the lit ink; the axis-run for a moved date (`scratchpad/p73-t2/frames/sheet-16x9.png`, `sheet-9x16.png`). (3) the post card: AMD's reply as a second press card in the pile (built) or the hand-off (the post leaves, the record types); the header's size at 16:9; sans or serif (`scratchpad/p73-t3/frames/contact-sheet.png`). (4) the route: six nodes is the flow's cap (a phone-legibility rule) - merge two stops (built) or split a seven-stop route into two rows? |
+| **P73-HG1** | (1) the claimed figure: the outline (default) or the hatch; the name-over-figure's weight; the audit wording (`scratchpad/p73-t1/frames/SHEET-claim-bar.png`). (2) the timeline: at 16:9 the full-stage chart box uses ~0.69 of the width (the right third empty) - widen it when no dock stands?; the hollow pin + "reported"; teal as the lit ink; the axis-run for a moved date (`scratchpad/p73-t2/frames/sheet-16x9.png`, `sheet-9x16.png`). (3) the post card: AMD's reply as a second press card in the pile (built) or the hand-off (the post leaves, the record types); the header's size at 16:9; sans or serif (`scratchpad/p73-t3/frames/contact-sheet.png`). (4) the route: six nodes is the flow's cap (a phone-legibility rule) - merge two stops (built) or split a seven-stop route into two rows? (5) the map points: the dot 9 px, glow 10 px, label 30 px Inter 600, the side order right / below / left / above - all unmeasured dials; the ping ring crosses a label placed below for ~0.67 s (`scratchpad/p73-t5/frames/SHEET.png`). |
 
 ## Validation
 
