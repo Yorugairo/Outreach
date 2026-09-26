@@ -989,6 +989,29 @@ BALANCE_FIGURE_SIGNS = "%$£€¥¢‰"
 BALANCE_DATE_WORDS = frozenset((
     "calendar calendars date dates january february march april may june july august september october november december "
     "jan feb mar apr jun jul aug sep sept oct nov dec").split())
+# P70 T9 (was P69 T61; the Bravos harvest v2's A34 "Chapter pill held over an act's charts", BUB 12:22) - THE CHAPTER
+# PILL. A long form's named ACT as one pill of chrome: it lands on the act's first word, HOLDS over every scene inside
+# the act - recasts, parks, returns, dips, world changes - and leaves on the word that ends it. Measured off BUB itself
+# (1920x1080; the scratch record p70-t9/bravos): "Strength of the Narrative" held 12:30.6 -> 15:03.6 over a line page, a
+# bars page, two title-less species scenes and a blur, never landing again, 38 px tall in the page's top-left corner
+# with the page's title standing 16 px UNDER it. The page makes room for its act (the parent's ruling, 2026-09-25:
+# option A; ledger_page.CHAPTER_ROOM_KEY); the look is ours - the key rail's white capsule (CAPABILITIES "Badges are the
+# key") at the key's `phone` preset, the smallest of its sizes at or above the s90 floor. Painted by the engine's
+# `paintChapters` off the timeline's `chapters`; the scene that declares it keeps a compiled copy the gate credits.
+SPECIES_CHAPTER = "chapter"
+SPECIES_KINDS += (SPECIES_CHAPTER,)
+SPECIES_WHEN[SPECIES_CHAPTER] = ("a LONG FORM has named acts and each chart should say which act it is in ('the turn'): "
+                                 "one pill lands on the act's first word, holds over every scene inside it and leaves on "
+                                 "the word that ends it; never on a short (a short has no acts)")
+CHAPTER_KEYS = ("kind", "at", "until", "text") + ROW_PATH_KEYS
+CHAPTER_PX = LPG.LONGFORM_KEY_PX["phone"]        # 61.4: the key rail's phone preset, the smallest key size >= the floor
+CHAPTER_FLOOR_PX = round(LPG.CARD_TYPE_PX, 2)    # 59.08: E99 s90's phone floor, which the pill's name never sets under
+CHAPTER_PAD_EM = LPG.LONGFORM_KEY_EM["pad_r"]    # the key pill's name pad, both ends (a chapter carries no series dot)
+CHAPTER_H_EM = LPG.LONGFORM_KEY_EM["h"]          # the key pill's height, in ems of its type
+CHAPTER_GAP_PX = 16          # BUB 12:35.0 / 15:12.0 (1920x1080): the pill's foot at 121 px, the page's title top at 137
+CHAPTER_LAND_S = 0.36        # the engine's LP_BADGE_IN: the key rail's spring, the pill's landing
+CHAPTER_EXIT_S = 16 / 30     # stopaction's STAMP_ARRIVAL.EXIT_S: E50's exit (the ease-in cubic), the pill's leave
+CHAPTER_WORD_TOL_S = MG.WORD_ANCHOR_TOL_S   # an `at` / `until` is ON a word within the shared 2 dp rounding
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -1976,6 +1999,7 @@ SPECIES_TARGETS[SPECIES_AXIS_TAG] = ()   # P71 T9: a tag names its x as the page
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
                                                                  # line's point, a bar), or a point / the box of a mark or a prop
 SPECIES_TARGETS[SPECIES_EQUATION] = ("region",)   # P70 T6: the row's ROOM is declared - it is laid out and sized inside it
+SPECIES_TARGETS[SPECIES_CHAPTER] = ()   # P70 T9: the pill is chrome over an act - it points at nothing and stands at the page's ink origin
 SPECIES_TARGETS[SPECIES_BALANCE] = ("region",)   # P70 T7: a balance needs its ROOM declared - the box it stands in; a point would leave its size to the painter
 SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
                                                   # point would leave the strip's height to the painter, and the strip is the
@@ -5121,11 +5145,158 @@ def _validate_balance(entry: dict) -> list[str]:
     return errs
 
 
+def _validate_chapter(entry: dict) -> list[str]:
+    """P70 T9: ONE chapter pill - `{kind: "chapter", at, until, text}`. It lands on `at`, holds to `until` and owes its
+    exit after it (E50), so a window too short for the landing and the leave is refused; a key it does not take is
+    refused by name (a `dur` - its end is `until` -, a `target` - it points at nothing -, a colour - the look is the key
+    rail's). The table-wide law (the words, the rows, the overlaps, a short) is `chapter_errors`."""
+    errs: list[str] = []
+    extra = sorted(k for k in entry if k not in CHAPTER_KEYS)
+    if extra:
+        errs.append(f"chapter: {', '.join(map(repr, extra))} - a chapter takes only at|until|text: it is chrome over an "
+                    "act that lands on `at` and holds to `until` (never a `dur`), points at nothing, and wears the key "
+                    "rail's capsule")
+    for f in ("at", "until"):
+        if not _num(entry.get(f)):
+            errs.append(f"chapter: {f!r} must be a number (episode seconds - a word of the take)")
+    at, until = entry.get("at"), entry.get("until")
+    need = CHAPTER_LAND_S + CHAPTER_EXIT_S
+    if _num(at) and _num(until) and until < at + need - 1e-9:
+        errs.append(f"chapter: until {until:g}s comes {until - at:.2f}s after at {at:g}s - a pill needs {need:.2f}s to "
+                    f"land ({CHAPTER_LAND_S:g}s) and leave ({CHAPTER_EXIT_S:.2f}s); a chapter is an ACT")
+    text = entry.get("text")
+    if not isinstance(text, str) or not text.strip() or "\n" in text:
+        errs.append("chapter: 'text' must name the act on one line ('The turn') - an unnamed pill marks nothing")
+    return errs
+
+
+def compiled_chapter(entry):
+    """The copy of a chapter its DECLARING scene keeps: the entry with `dur` = until - at, so everything that reads a
+    scene's species by (at, dur) - the gate's events first - reads it as it reads every species. Anything else is
+    returned as given."""
+    if not (isinstance(entry, dict) and entry.get("kind") == SPECIES_CHAPTER and _num(entry.get("at")) and _num(entry.get("until"))):
+        return entry
+    return {**entry, "dur": round(float(entry["until"]) - float(entry["at"]), 2)}
+
+
+def chapter_box(text: str) -> dict:
+    """The pill's box in stage px (16:9): at the long-form page's ink origin - its column's left edge, its title's top
+    before the page made room (`LPG.longform_ink_origin`) - the key pill's height, its name's Inter Medium advances at
+    CHAPTER_PX (the engine sets it with no kerning, as the key rail's names) and its pads."""
+    x, y = LPG.longform_ink_origin(*LPG.STAGE_PX["16:9"])
+    w = LPG.longform_text_px(str(text), "key", CHAPTER_PX) + 2 * CHAPTER_PAD_EM * CHAPTER_PX
+    return {"x": round(x, 2), "y": round(y, 2), "w": round(w, 2), "h": round(CHAPTER_H_EM * CHAPTER_PX, 2)}
+
+
+def chapter_room_css() -> int:
+    """The whole CSS px a long-form page's title moves down for a chapter pill: its height and Bravos's 16 px under it,
+    un-punched (the page is drawn at LPG.PUNCH_SCALE), rounded UP so the gap is never less than the reference's."""
+    return math.ceil((CHAPTER_H_EM * CHAPTER_PX + CHAPTER_GAP_PX) / LPG.PUNCH_SCALE)
+
+
+def collect_chapters(plan, runtime: float) -> list[dict]:
+    """Every chapter in the shot table, in time order: [{"row": index, "span": (row start, next row's start), "entry"}].
+    The first pass of `main()` - a chapter is read before any row is compiled, because it reaches rows after its own."""
+    out = []
+    for i, row in enumerate(plan):
+        species = row[6] if len(row) > 6 and row[6] is not None else []
+        end = float(plan[i + 1][0]) if i + 1 < len(plan) else float(runtime)
+        for n, e in enumerate(species):
+            if isinstance(e, dict) and e.get("kind") == SPECIES_CHAPTER:
+                out.append({"row": i, "span": (float(row[0]), end),
+                            "entry": {**e, "id": e.get("id") or species_row_id(scene_row_id(i), n)}})
+    return sorted(out, key=lambda c: (float(c["entry"].get("at") or 0.0), c["row"]))
+
+
+def chapter_errors(chapters: list[dict], words, runtime: float, aspect: str | None) -> list[str]:
+    """P70 T9: the table-wide law. A short has no acts (the don't); a chapter lands inside the row that carries it; its
+    `at` and `until` fall on words of the take (`until` may be the take's end); no two chapters' windows - each pill's
+    hold and its exit - overlap; and the pill fits the long-form page's ink column. Every entry passed
+    `_validate_chapter` first (the row's own validation)."""
+    if not chapters:
+        return []
+    bad = [f"shot row {c['row'] + 1}: {e}" for c in chapters for e in _validate_chapter(c["entry"])]
+    if bad:
+        return bad
+    if (aspect or "16:9") == "9:16":
+        return [f"chapter {c['entry'].get('text')!r}: a chapter is a LONG FORM's act - a short has no acts "
+                "(BRAVOS-USE-WHEN A34's don't)" for c in chapters]
+    errs: list[str] = []
+    onsets = [float(w["start_s"]) for w in (_override_words(words) or [])]
+    on_word = lambda t: any(abs(t - o) <= CHAPTER_WORD_TOL_S for o in onsets)  # noqa: E731
+    col = LPG._longform_ink_col(LPG.STAGE_PX["16:9"][0])[1]
+    for c in chapters:
+        e, (a, b) = c["entry"], c["span"]
+        name, at, until = e.get("text"), float(e["at"]), float(e["until"])
+        where = f"shot row {c['row'] + 1} ({a:g}-{b:g}s) chapter {name!r}"
+        if not (a - 1e-9 <= at < b):
+            errs.append(f"{where}: at {at:g}s is outside the row that carries it - author a chapter on the row its first "
+                        "word is spoken in")
+        if not on_word(at):
+            errs.append(f"{where}: at {at:g}s is not on a word of the take - a pill lands on the act's first word")
+        if not (on_word(until) or abs(until - float(runtime)) <= CHAPTER_WORD_TOL_S):
+            errs.append(f"{where}: until {until:g}s is not on a word of the take (nor its end at {float(runtime):g}s) - "
+                        "a pill leaves on the word that ends its act")
+        w = chapter_box(name)["w"]
+        if w > col:
+            errs.append(f"{where}: the pill is {w:.0f} px wide at {CHAPTER_PX:g} px and the page's ink column is "
+                        f"{col:.0f} px - name the act in fewer words")
+    for c0, c1 in zip(chapters, chapters[1:]):
+        leave = float(c0["entry"]["until"]) + CHAPTER_EXIT_S
+        if float(c1["entry"]["at"]) < leave - 1e-9:
+            errs.append(f"chapter {c1['entry'].get('text')!r} at {float(c1['entry']['at']):g}s overlaps chapter "
+                        f"{c0['entry'].get('text')!r}, which is still leaving until {leave:.2f}s (until "
+                        f"{float(c0['entry']['until']):g}s + its {CHAPTER_EXIT_S:.2f}s exit) - one act at a time")
+    return errs
+
+
+def chapters_over(chapters: list[dict], a: float, b: float, leave: bool = True) -> list[dict]:
+    """The chapters on screen at some instant of [a, b): each one's WINDOW runs from `at` through its exit (`leave`),
+    or - the ACT, which is what a page makes room for - from `at` to `until` (`leave=False`): a page that arrives on the
+    word that ends the act sees only the pill leave, and keeps its own layout."""
+    tail = CHAPTER_EXIT_S if leave else 0.0
+    return [c for c in chapters
+            if float(c["entry"]["at"]) < b and float(c["entry"]["until"]) + tail > a + 1e-9]
+
+
+def chapter_reserve(over: list[dict]) -> list[dict]:
+    """The pills' boxes a row reserves - handed to every placer with the newsreel's strip (stamps, props, cards)."""
+    return [chapter_box(c["entry"]["text"]) for c in over]
+
+
+def chapter_page_room(world: dict | None, over: list[dict]) -> list[str]:
+    """P70 T9 (option A): a LONG-FORM full-stage page on screen with a chapter makes room for it - `chapter_room` on
+    the page and on every chart state it can become, so every box read off it (the fit, the placer, the probe's
+    reference) is the page as drawn. A page that cannot make room (the plain profile, a card) is ADVISED (E99 s106): the
+    pill stands over its title. A plate has no ink to move. Returns the WARN notes."""
+    if not over or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
+        return []
+    page = world["page"]
+    axes = page.get("axes") or {}
+    if axes.get("readability") != LPG.LONGFORM or not page.get("full_stage"):
+        names = ", ".join(repr(c["entry"]["text"]) for c in over)
+        return [f"chapter {names}: this page is not a full-stage long-form page (readability "
+                f"{axes.get('readability') or 'plain'!r}) - it does not make room, so the pill stands over its title: "
+                "read the frame, or take `;readability=longform`"]
+    room = chapter_room_css()
+    for pg in [page] + [s for s in (world.get("page_states") or []) if isinstance(s, dict)]:
+        pg[LPG.CHAPTER_ROOM_KEY] = room
+    return []
+
+
+def timeline_chapters(chapters: list[dict]) -> list[dict]:
+    """The timeline's `chapters`: each lifted with the box the engine stands it in."""
+    return [{"id": c["entry"].get("id"), "text": c["entry"]["text"], "at": float(c["entry"]["at"]),
+             "until": float(c["entry"]["until"]), "box": chapter_box(c["entry"]["text"])} for c in chapters]
+
+
 def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
     """Errors for one species entry: known kind, numeric at/dur, a target where the law requires one."""
     if not isinstance(entry, dict) or entry.get("kind") not in SPECIES_KINDS:
         return [f"species entry {entry!r}: kind must be one of {'|'.join(SPECIES_KINDS)}"]
     kind = entry["kind"]
+    if kind == SPECIES_CHAPTER:       # P70 T9: `until`, never a `dur`, and no target - its own grammar, whole
+        return _validate_chapter(entry)
     errs = [f"{kind}: {f!r} must be a number (episode seconds)" for f in ("at", "dur")
             if isinstance(entry.get(f), bool) or not isinstance(entry.get(f), (int, float))]
     if not errs and entry["dur"] <= 0:
@@ -7004,6 +7175,8 @@ def longform_assets(timeline: dict) -> dict:
     would ride a build that never sets a word in it. P69 T37c: a timeline whose default page titles are set in
     the `sans` face (`title_face`) carries it whenever it draws a page, in either aspect."""
     face = lambda: {LONGFORM_FONT_ASSET: "data:font/ttf;base64," + base64.b64encode(LONGFORM_FONT_FILE.read_bytes()).decode()}  # noqa: E731 - read only when shipped
+    if timeline.get("chapters"):   # P70 T9: the chapter pill is set in the long form's own face, on any world
+        return face()
     sans = timeline.get("title_face") == "sans"
     if (timeline.get("aspect") or "16:9") == "9:16" and not sans:
         return {}
@@ -13149,6 +13322,12 @@ def main() -> int:
     ledger_rows: list[int] = []     # the rows carrying a ledger page, so the report can say how many were MEASURED
     prev_world = None   # E47 corrected: the outgoing row's world, for `world_changed`
     pm_warn_rows = []   # P69 T26e: the rows whose prop morphs the invariants advised on
+    # P70 T9: THE CHAPTERS are read before any row is compiled - an act reaches every row its window covers (the page
+    # makes room for its pill, the row reserves its box). A table with no chapter reads none and nothing below moves.
+    chapters = collect_chapters(plan, tl["runtime_s"])
+    _chapter_errs = chapter_errors(chapters, tl.get("words"), tl["runtime_s"], ASPECT)
+    if _chapter_errs:
+        raise SystemExit("FAIL: " + "; ".join(_chapter_errs))
     for i, row in enumerate(plan):
         # exit style is HYBRID (operator, 2026-08-29): mechanical default
         # (E47, 2026-09-06: docks -> DIP, bare -> cut; it was docks -> wipe),
@@ -13241,6 +13420,7 @@ def main() -> int:
                           + validate_newsreel_strip(row_species, ASPECT, bool(ds)))   # P52 T6: the strip law (gate 1)
         if species_errors:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))
+        row_species = [compiled_chapter(e) for e in row_species]   # P70 T9: the chapter's copy carries its dur (a no-op on every other kind)
         equation_row_checks(row_species, f"shot row {i + 1} ({a}-{b}s)", EP, BUILD)   # P70 T6: src on disk; the WARNs
         resolved_chip_stamps = {}
         for n, e in enumerate(row_species):
@@ -13307,6 +13487,11 @@ def main() -> int:
                 print(f"  [WARN] P71 T9: shot row {i + 1}: {_w}")
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        # P70 T9 (option A): the acts on screen in this row - a long-form page makes room for each pill (a page that
+        # cannot is advised), and every placer below reserves its box with the newsreel's strip
+        for _w in chapter_page_room(world, chapters_over(chapters, a, b, leave=False)):   # the page makes room for the ACT
+            print(f"  [WARN] P70 T9: shot row {i + 1} ({a}-{b}s): {_w}")
+        _chapter_reserve = chapter_reserve(chapters_over(chapters, a, b))   # ... and nothing is placed under its exit either
         # P69 T26f (E99 s108): the page's chrome as objects - its camera relation and its moves, each `at` read on the
         # take's own words. A camera that names no chrome is the camera it was (compile_chrome returns it as given).
         try:
@@ -13389,7 +13574,7 @@ def main() -> int:
         stamp_worlds = {n: page_on_screen(world, row_species, float(ds[n][2]))   # P69 T26d (R26-279): the state each stamp LANDS on
                         for n, (_aid, _o, _p) in enumerate(row_opts) if _o.get("arrive") == "stamp"}
         try:   # R26-20 send-back #2: every stamp is fitted to the box the engine draws (P69 T26d: only a place off the stage fails the row)
-            stamp_fits, stamp_boxes = row_stamp_fits(world, ASPECT, row_opts, plate_room, newsreel_boxes(row_species, ASPECT),
+            stamp_fits, stamp_boxes = row_stamp_fits(world, ASPECT, row_opts, plate_room, (newsreel_boxes(row_species, ASPECT) + _chapter_reserve),
                                                      f"shot row {i + 1} ({a}-{b}s)", worlds=stamp_worlds)
         except ValueError as exc:
             raise SystemExit(f"FAIL: {exc}") from exc
@@ -13402,7 +13587,7 @@ def main() -> int:
         # for what it is drawn over; a seal that meets an earlier stamp is a WARN with its numbers (s106).
         if any(chip_is_stamped(e) for e in row_species):
             _chip_rows, _chips, _enters = list(row_species), [], [float(d[2]) for d in ds]
-            _news, _row = newsreel_boxes(row_species, ASPECT), f"shot row {i + 1} ({a}-{b}s)"
+            _news, _row = (newsreel_boxes(row_species, ASPECT) + _chapter_reserve), f"shot row {i + 1} ({a}-{b}s)"
             try:
                 for _j in chip_stamp_fit_order(row_species):
                     e, _where = row_species[_j], f"{_row} chip stamp {row_species[_j].get('label')!r}"
@@ -13421,14 +13606,14 @@ def main() -> int:
             except ValueError as exc:
                 raise SystemExit(f"FAIL: {exc}") from exc
             row_species = _chip_rows
-        place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT), clear_of=stamp_boxes)   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
+        place = dock_place(world, ASPECT, (newsreel_boxes(row_species, ASPECT) + _chapter_reserve), clear_of=stamp_boxes)   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
         for n_dock, (aid, slot, enter, exitt, *dextra) in enumerate(ds):
             dopt = row_opts[n_dock][1]
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
             auto_centre = solo_centre_by_clock(world, ASPECT, len(ds), slot, enter, a, dopt)   # R26-22: E50's clock centres a solo card on a MEASURED page
             centred = bool(dopt.get("centre")) or auto_centre
-            dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (place and centred) else place   # the third watch: a card centred on the page
+            dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x"), (newsreel_boxes(row_species, ASPECT) + _chapter_reserve)) if (place and centred) else place   # the third watch: a card centred on the page
             if place is None:   # R26-221: a PICTURE PLATE - the row's own box, or the room the plate declared (None = E45's solo card)
                 try:
                     dplace = plate_dock_place(plate_room, ASPECT, dopt, f"shot row {i + 1} ({a}-{b}s) dock {aid}")
@@ -13439,7 +13624,7 @@ def main() -> int:
             if not stamp_fit and dopt.get("place") is not None:
                 try:
                     prop_fit = prop_place_fit(page_on_screen(world, row_species, float(enter)), ASPECT, dopt, row_opts[n_dock][2],
-                                              newsreel_boxes(row_species, ASPECT), f"shot row {i + 1} ({a}-{b}s) dock {aid}", stamp_boxes)
+                                              (newsreel_boxes(row_species, ASPECT) + _chapter_reserve), f"shot row {i + 1} ({a}-{b}s) dock {aid}", stamp_boxes)
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: {exc}") from exc
                 dplace, centred = {k: prop_fit[k] for k in ("x", "y", "w", "h", "room")}, True
@@ -13479,7 +13664,7 @@ def main() -> int:
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
             # R26-221: `dplace` rather than `place` is the test - a card on a picture plate is placed by its own box
             # (the page's `place` is None there), and a read the compiler drops is a card that never pops
-            rplace = None if (stamp_fit or prop_fit) else centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (dplace and rd) else None
+            rplace = None if (stamp_fit or prop_fit) else centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), (newsreel_boxes(row_species, ASPECT) + _chapter_reserve)) if (dplace and rd) else None
             # E63 (widened): a card never READS over the page's plot, drawing or finished. The read box is the row's
             # own when it named one, the card's solo CSS box otherwise; a centred card with no `read` has no pop at all
             # (it takes its parked box from its first frame), so there is nothing to move and the entry is untouched.
@@ -13890,6 +14075,7 @@ def main() -> int:
         "sound": sound_cues,
         "evidence": evidence,
         "scenes": (extend_camera_cards(scenes) and scenes) or scenes,   # P49 T5: a camera page's card stays up to the match
+        **({"chapters": timeline_chapters(chapters)} if chapters else {}),   # P70 T9: the acts, painted over every scene they cover
         # every species present (the ledger world + the targeted kinds), so
         # downstream (gate, render) can see it
         "species": timeline_species(scenes),

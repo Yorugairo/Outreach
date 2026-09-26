@@ -253,7 +253,7 @@ VALUE_OVERSHOOT = 0.05     # (b) THE BURST'S OVERSHOOT (LPX.BT_OVER, mirrored he
                            # dials): during the shoot a breaking bar is drawn this much PAST its own number on purpose (E60)
                            # and settles back. It is a share of the bar's own height, so the band is the sum: 4 % of the top
                            # tick plus 5 % of the number printed. Anything outside that is the page lying about its data.
-LAYOUT_INK = ("page.source", "page.note", "page.title", "page.sub", "pill", "page.key")   # page.key: REVIEW-P69-LANE-B-MERGE-3 M2, a longform page's key rail   # a LINE of ink; `page.plot` / `page.chart` are
+LAYOUT_INK = ("page.source", "page.note", "page.title", "page.sub", "pill", "page.key", "page.chapter")   # page.key: REVIEW-P69-LANE-B-MERGE-3 M2, a longform page's key rail   # a LINE of ink; `page.plot` / `page.chart` are
                            # rectangles the probe reports for context - a card beside a parked chart sits inside the plot box
                            # by design, and only the DATA in it is protected
 SAFE_WARN_SHARE = 0.10     # a settled card with more than a tenth of itself inside a Shorts chrome band (top 12 %, bottom 20 %,
@@ -461,6 +461,7 @@ SPECIES_EVENTS["axis_tag"] = ("at",)
 # P71 T14: THE DECADE RULER - the strip TRAVELS on its word (it enters at the right edge and scrolls to its settle,
 # s99), so it is ONE event at its start; the held ruler after the landing is ground and earns nothing (s91).
 SPECIES_EVENTS["ruler"] = ("at",)
+SPECIES_EVENTS["chapter"] = ("at",)   # P70 T9: the pill LANDS on the act's first word (one event); the hold is chrome, never credited as motion
 # P70 T6: THE EQUATION ROW - each TERM is written on its own word and the RESULT on the word that says it: one event per
 # term ("terms" - each term's own `at`, read off the list the way the agenda's rows are) and one at "result.at". The
 # operators spring OP_LEAD before the next word, inside that word's own event, so they earn nothing of their own; the
@@ -2715,7 +2716,7 @@ def _layout_faults(doc: dict, scenes: list[dict] | None = None) -> tuple[list[st
 
 def _ink_name(key: str) -> str:
     return {"page.source": "the page's source line", "page.note": "a note", "page.title": "the title", "page.sub": "the sub",
-            "page.key": "the key rail",
+            "page.key": "the key rail", "page.chapter": "the chapter pill",
             "pill": "a pill", "chart.lab": "an axis label", "chart.val": "a value", "chart.callout": "a callout",
             "chart.sname": "a series name", "chart.bklab": "a bracket label", "chart.bksub": "a bracket's sub line",
             "chart.spanlab": "a span's label", "chart.wlab": "a wedge label"}.get(key, key)
@@ -3415,6 +3416,7 @@ CAM_FOCUS_LAND_K = 1 / 1.8  # [mirrors camSpeciesState: focus_zoom eases over mi
 CROP_EDGE_PX = 2.0         # a glyph box carries a pixel or two of antialiasing padding (probe.py's own note): a box
                            # whose worst edge hangs this far outside the frame is flush with it, not cropped
 LABEL_NAME_MAX = 40       # enough of a run to recognise the line the author wrote, short enough for one row
+STAGE_CHROME_ROLES = ("chapter",)   # P70 T9: labels the probe reads on the STAGE, not in the world - the camera never frames them
 CROP_INSTANT_S = 1.5       # how far from the landing an identity-camera probe instant may stand and still be read as
                            # "the page at that landing" - the punch's own clock (PUNCH_IN + the hold) rounded up
 
@@ -3466,7 +3468,7 @@ def _cam_landings(scenes: list[dict], aspect: str) -> list[tuple[dict, str, str,
 def _instant_texts(inst: dict) -> list[tuple[str, list[float]]]:
     """Every TEXT box the probe recorded at an instant: the page's own runs (title, sub, source, note) and every
     label the chart and the perform layer wrote. A dock is a card and a caption is chrome over the stage - neither
-    rides the world the camera moves, so neither is here."""
+    rides the world the camera moves, so neither is here; nor is the chapter pill (P70 T9), the stage's own chrome."""
     out: list[tuple[str, list[float]]] = []
     for k in ("title", "sub", "source", "note"):
         b = (inst.get("page") or {}).get(k)
@@ -3474,7 +3476,7 @@ def _instant_texts(inst: dict) -> list[tuple[str, list[float]]]:
             out.append((f"page.{k}", [float(v) for v in b]))
     for la in inst.get("labels") or []:
         b = la.get("box")
-        if b:
+        if b and la.get("role") not in STAGE_CHROME_ROLES:
             out.append((f"{la.get('role', 'label')}:{(la.get('text') or '')[:LABEL_NAME_MAX]}", [float(v) for v in b]))
     return out
 

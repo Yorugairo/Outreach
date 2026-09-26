@@ -858,7 +858,8 @@ def test_the_row_loop_fits_the_stamps_first_then_places_the_other_docks_round_th
     src = (ROOT / "content/video_engine/scripts/build_scene_timeline_f.py").read_text(encoding="utf-8")
     body = src[src.index("        stamp_fits, stamp_boxes = row_stamp_fits("):]
     body = body[:body.index("assign_press_stack(docks)")]
-    i_place = body.index("place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT), clear_of=stamp_boxes)")
+    # P70 T9: the page's place reserves the newsreel's strip AND the chapter pills on screen in the row
+    i_place = body.index("place = dock_place(world, ASPECT, (newsreel_boxes(row_species, ASPECT) + _chapter_reserve), clear_of=stamp_boxes)")
     i_loop = body.index("for n_dock, (aid, slot, enter, exitt, *dextra) in enumerate(ds):")
     i_slot = body.index("eplace = dplace if (slot == 0 or centred")
     i_clash = body.index("_clash = stamp_clash_error(")

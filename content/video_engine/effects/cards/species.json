@@ -493,6 +493,116 @@
       }
     },
     {
+      "id": "species:chapter",
+      "axis": "species",
+      "token": "chapter",
+      "title": "The chapter pill held over an act",
+      "aliases": [
+        {
+          "name": "Chapter pill held over an act's charts",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md (A34, BUB 12:22)"
+        },
+        {
+          "name": "The chapter pill",
+          "source": ".claude/PRPs/plans/P70-THE-BRAVOS-VERBS-WAVE-2.plan.md (T9)"
+        }
+      ],
+      "does": "A long form's named act as one white key-rail pill: it lands on the act's first word, holds over every scene in the act without landing again, and leaves on the word that ends it; each page under it makes room.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "SETS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"chapter\", \"at\", \"until\", \"text\"} (shot row 7th element, on the row its first word is spoken in; lifted into the timeline's `chapters`); never a `dur`, a target or a colour; never on a short",
+        "example": "{\"kind\": \"chapter\", \"at\": 363.38, \"until\": 431.01, \"text\": \"The turn\"}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (chapter-held)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the pill lands",
+          "does": "the white capsule springs in at the page's ink origin, rising 18 px from 0.94",
+          "trigger": "the chapter's `at` (the act's first word)",
+          "dials": {
+            "LP_BADGE_IN": "0.36",
+            "RISE_PX": "18"
+          }
+        },
+        {
+          "name": "the page makes room",
+          "does": "every long-form page in the window sets its title the pill's height and 16 px lower; the sub, key and chart follow",
+          "trigger": "every scene the window covers",
+          "dials": {
+            "CHAPTER_GAP_PX": "16",
+            "chapter_room": "117"
+          }
+        },
+        {
+          "name": "held over the act",
+          "does": "the pill holds on E49's pill idle across every cut, park, recast and dip",
+          "trigger": "continuous"
+        },
+        {
+          "name": "the pill leaves",
+          "does": "the pill fades out on E50's ease-in cubic",
+          "trigger": "the chapter's `until` (the word that ends the act)",
+          "dials": {
+            "EXIT_S": "0.5333"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "the key rail's pill (lpLongformKey, CAPABILITIES \"Badges are the key\")",
+          "became": "the capsule's fill, ink, face, ems and landing spring",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "stopaction's exit (kinetics/stopaction.mjs stampExit, E50)",
+          "became": "the pill's leave",
+          "record": "content/video_engine/scripts/kinetics/stopaction.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "the long-form page's layout (ledger_page._longform_full_boxes)",
+          "became": "the room the page makes",
+          "record": "content/video_engine/scripts/ledger_page.py",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintChapters",
+        "also": [
+          "chapterMount"
+        ],
+        "note": "the stage's #chapters layer (z 55); the room is the LF title's `pg.chapter_room` and ledger_page's CHAPTER_ROOM_KEY"
+      },
+      "doctrine": [
+        "E99 s90",
+        "E99 s106",
+        "E99 s113",
+        "E50",
+        "E49",
+        "P70 T9"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "chapter-held",
+        "test": "content/video_engine/tests/test_chapter_pill.py",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "species:chip",
       "axis": "species",
       "token": "chip",

@@ -239,6 +239,15 @@ READ_DOM = r"""
        lpFitValues fits with half a figure of air. A rail of capsules keeps its own gutter. */
     if (wpills.has(p)) out.labels.push({ role: 'capsule', text: txt(p), box: b });
   }
+  /* P70 T9: THE CHAPTER PILL is the stage's chrome, over every world - ink a card may not cover (`page.chapter`, M25), a
+     label among the page's labels (M28, role `chapter`: the page's title under it is text on text) and type the floor
+     reads. It stands outside the world, so it is read whether or not a page is up. */
+  for (const cp of document.querySelectorAll('#chapters .lp-chpill')) {
+    if (eff(cp) <= 0.05) continue;
+    const b = R(cp); if (b[2] < 1 || b[3] < 1) continue;
+    out.items.push({ k: 'chapter', box: b, px: fs(cp), s: sc(cp), txt: txt(cp) });
+    out.labels.push({ role: 'chapter', text: txt(cp), box: b });
+  }
   /* a NOTE carries .lp-sub too (it is the page's ink at the sub's size): named once, as a note */
   const PAGE = { '.lp-title': 'title', '.lp-sub:not(.lp-note)': 'sub', '.lp-src': 'source', '.lp-note': 'note' };
   if (world) {
@@ -784,7 +793,7 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
     plot = _union([p["box"] for p in dom.get("plots") or []])
     data = _union(dom.get("data") or [])
     page: dict = {}
-    for k in ("title", "sub", "source", "rail", "note", "key"):   # M2: the key rail's pills, as one box
+    for k in ("title", "sub", "source", "rail", "note", "key", "chapter"):   # M2: the key rail's pills, as one box (P70 T9: and the chapter pill)
         b = _union([i["box"] for i in dom["items"] if i["k"] == k])
         if b:
             page[k] = [int(round(v)) for v in b]
@@ -827,7 +836,7 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
     # P72 T6 (R26-264): a pill INSIDE a card carries `own` - the card's element id - and is that card's own ink: never paired
     # against the card it belongs to (the sell ticket's SELL badge read as page ink under the ticket)
     solids = [(d["name"], d["box"], d.get("own"), d.get("el")) for d in dom["docks"]]
-    ink = [(("page." + i["k"]) if i["k"] in ("title", "sub", "source", "note", "key") else i["k"], i["box"], i.get("own"))
+    ink = [(("page." + i["k"]) if i["k"] in ("title", "sub", "source", "note", "key", "chapter") else i["k"], i["box"], i.get("own"))
            for i in dom["items"] if i["k"] != "caption"]
     if plot:
         ink.append(("page.plot", plot, None))

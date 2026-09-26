@@ -460,6 +460,9 @@ def test_every_wired_card_is_in_a_recipe():
     # golden (H row 18's arithmetic); its recipe is the harvest's R25 "formula by spoken order" (P69 T44), not invented here.
     # P70 T7's balance scale (species:balance) is tested alone in test_balance_scale.py and pinned by the balance-level
     # golden (H row 18's "Both are true at once"); no committed beat plays it yet, so no recipe is invented for it here.
+    # P70 T9's chapter pill (species:chapter) is tested alone in test_chapter_pill.py and pinned by the chapter-held golden
+    # (H's act "The turn", held across the cut into row 15); no H body row adopts act markers before P70-HG1 (harvest v2
+    # :274), so no recipe is invented for it here.
     assert uncovered == ["dock_option:moves", "page_builder:bars+segments",
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress",
@@ -467,7 +470,7 @@ def test_every_wired_card_is_in_a_recipe():
                          "page_species:axis_tag", "page_species:explode", "page_species:level_join", "page_species:member", "page_species:solo",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:readability",
-                         "plate_option:room", "species:balance", "species:equation", "species:freeze"], uncovered
+                         "plate_option:room", "species:balance", "species:chapter", "species:equation", "species:freeze"], uncovered
     assert excluded == ["kinetics:arap", "kinetics:camera", "kinetics:chartxf", "kinetics:clothoid", "kinetics:contour",
                         "kinetics:ease", "kinetics:homography", "kinetics:ink", "kinetics:labelfit",
                         "kinetics:morph_a", "kinetics:page_surface", "kinetics:spring", "kinetics:squash",

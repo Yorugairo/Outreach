@@ -238,7 +238,8 @@ def test_the_row_loop_fits_a_stamped_chip_after_the_stamps_and_before_the_cards_
     body = COMPILER.read_text(encoding="utf-8").split("def main() -> int:", 1)[1]
     i_fit = body.index("stamp_fits, stamp_boxes = row_stamp_fits(")
     i_chip = body.index("e, _chip_notes = chip_stamp_ring_fit(")
-    i_place = body.index("place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT), clear_of=stamp_boxes)")
+    # P70 T9: the page's place reserves the newsreel's strip AND the chapter pills on screen in the row
+    i_place = body.index("place = dock_place(world, ASPECT, (newsreel_boxes(row_species, ASPECT) + _chapter_reserve), clear_of=stamp_boxes)")
     assert 0 < i_fit < i_chip < i_place
     assert 'print(f"  [WARN] P70 T1: {_n}")' in body
 

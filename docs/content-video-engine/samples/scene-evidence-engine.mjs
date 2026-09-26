@@ -9810,6 +9810,10 @@ async function mount(doc) {
           el.style.fontSize = (px / ps).toFixed(3) + "px"; el.style.lineHeight = String(LP_LONGFORM.LINE_H);
           el.style.width = col; el.style.whiteSpace = "normal"; el.style.left = title.style.left;
         }
+        /* P70 T9 (option A): a page inside a chapter's window makes ROOM for the pill - its title moves down by the
+           compiler's `chapter_room` (whole CSS px: the pill's height and Bravos's 16 px under it), and the sub, the key
+           and the chart follow off the title's own box. ledger_page._longform_full_boxes is the same law. */
+        if (+pg.chapter_room > 0 && !cardP) title.style.top = "calc(" + title.style.top + " + " + (+pg.chapter_room) + "px)";
         subEl.style.top = ((title.offsetTop + title.offsetHeight + LP_LONGFORM.SUB_GAP) / PH * 100).toFixed(3) + "%";
         const subBottom = subText.trim() ? rend(subEl.offsetTop + subEl.offsetHeight) : rend(title.offsetTop + title.offsetHeight);
         rail.style.maxWidth = col;   /* N1: the rail's rows are measured in the column it will stand in */
@@ -23833,6 +23837,65 @@ async function mount(doc) {
       return v ? stampRingLum(v) : null;
     });
   };
+  /* P70 T9 (was P69 T61; the Bravos harvest v2's A34 "Chapter pill held over an act's charts", BUB 12:22) - THE
+     CHAPTER PILL, HELD OVER AN ACT. The timeline's `chapters` ([{id, text, at, until, box}], build_scene_timeline_f's
+     `timeline_chapters`) are the stage's CHROME: one layer (#chapters, mounted on the first frame that has any) above
+     the viewer's caption (z 50) and under E47's two veils (z 60), so a dip takes the pill down with the frame and it
+     comes back up WITHOUT landing again; outside every world, so no recast, park, return or world change touches it.
+     Measured off BUB (1920x1080): "Strength of the Narrative" held 12:30.6 -> 15:03.6 over five kinds of scene, the
+     page's title 16 px under it - the page makes room (`pg.chapter_room`, above). The look is ours: the key rail's
+     white capsule (lpLongformKey's fill, ink, face and ems) at the key's `phone` size, the s90 floor's.
+       the landing - on `at`, by the key rail's own spring (the page pillAt's law: springPop, or stagePop without the
+                     analytic spring, over LP_BADGE_IN; an 18 px rise, 0.94 -> 1, the travel's squash);
+       the hold    - E49's pill idle, at the pill's own phase;
+       the leave   - from `until`, stampExit: E50's ease-in cubic over STAMP_ARRIVAL.EXIT_S (a landed mark owes an exit).
+     A pure function of t; a timeline with no chapter mounts nothing and every frame is the frame it was. */
+  const CHAPTER = Object.freeze({ PX: LP_LONGFORM.KEY_PX.phone, H: LP_LONGFORM.KEY_EM.h, PAD: LP_LONGFORM.KEY_EM.pad_r,
+                                  RISE_PX: 18, Z: 55, SEED: 0xC4A9 });
+  let chLayer = null, chPills = [];
+  const chapterMount = (list) => {
+    for (const x of stage.querySelectorAll(":scope > #chapters")) x.remove();   /* a re-mount never stacks a second layer */
+    chLayer = document.createElement("div");
+    chLayer.id = "chapters";
+    chLayer.style.cssText = "position:absolute;left:0;top:0;width:" + STAGE_W + "px;height:" + STAGE_H + "px;pointer-events:none;z-index:" + CHAPTER.Z;
+    stage.appendChild(chLayer);
+    const px = CHAPTER.PX, f = (v) => (v * px).toFixed(3) + "px";
+    chPills = list.map((c) => {
+      const el = document.createElement("div");
+      el.className = "lp-chpill";
+      el.style.cssText = "position:absolute;left:" + (+c.box.x).toFixed(2) + "px;top:" + (+c.box.y).toFixed(2) + "px;"
+        + "display:flex;align-items:center;box-sizing:border-box;white-space:nowrap;opacity:0;visibility:hidden;transform-origin:0 100%;"
+        + "height:" + f(CHAPTER.H) + ";border-radius:" + f(CHAPTER.H / 2) + ";padding:0 " + f(CHAPTER.PAD) + ";"
+        + "background:" + LP_LONGFORM.KEY_FILL + ";color:" + LP_LONGFORM.KEY_INK + ";"
+        + "font-family:\"" + LP_LONGFORM.FACE + "\", Inter, Arial, sans-serif;font-weight:500;font-size:" + px.toFixed(3) + "px;"
+        + "line-height:1;letter-spacing:0;font-kerning:none;font-variant-ligatures:none;font-feature-settings:\"kern\" 0, \"liga\" 0, \"calt\" 0";
+      const nm = document.createElement("span");
+      nm.className = "lp-chname";
+      nm.textContent = String(c.text || "");
+      el.appendChild(nm);
+      chLayer.appendChild(el);
+      return el;
+    });
+  };
+  const paintChapters = (t) => {
+    const list = TL.chapters;
+    if (!Array.isArray(list) || !list.length) return;
+    if (!chLayer || !chLayer.isConnected) chapterMount(list);
+    list.forEach((c, i) => {
+      const el = chPills[i], u0 = t - c.at, gone = stampExit(t - c.until);
+      if (u0 < 0 || gone >= 1) { el.style.opacity = "0"; el.style.visibility = "hidden"; el.style.transform = ""; return; }
+      const ub = clamp01(u0 / LP_BADGE_IN), e = (kin("analytic_spring") ? springPop : stagePop)(ub);
+      const sq = kin("area_squash") && kin("analytic_spring") && ub > 0 && ub < 1
+        ? " matrix(" + squashMatrix(Math.PI / 2, springSquash(ub, POP, CHAPTER.RISE_PX, LP_BADGE_IN)).map((v) => v.toFixed(4)).join(",") + ",0,0)" : "";
+      el.style.visibility = "visible";
+      el.style.opacity = (Math.min(1, e * 1.4) * (1 - gone)).toFixed(3);
+      el.style.transform = "translateY(" + (CHAPTER.RISE_PX * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")" + sq
+        + idleCssFor("pill", undefined, t, CHAPTER.SEED + i, 60 + i);
+    });
+  };
+  /* ... and the copy its DECLARING scene keeps (the compiler's `compiled_chapter`, so the gate credits its landing) is
+     owned by a painter that draws nothing: the stage layer above is the chapter's only painter */
+  SPECIES_PAINTERS.chapter = () => {};
   const render = (t) => {
     pmHideAll();   /* P69 T26e: a prop morph's mesh shows only on a frame that paints it */
     let si = 0;
@@ -24736,6 +24799,7 @@ async function mount(doc) {
     cap.classList.toggle("stage", stage);
     cap.classList.toggle("phrase", stage && PHRASE);
     paintSpecies(sc, t);
+    paintChapters(t);   /* P70 T9: the acts, over every scene they cover (a timeline with none returns at once) */
     /* on a LEDGER PAGE the stage caption sits in the page's declared quiet zone (s9.25 #2, s9.28 C2:
        never over the emphasized datum); elsewhere it is centred */
     const qz = stage && sc.world.kind === "ledger" && sc.world.page ? sc.world.page.quiet_zone : null;

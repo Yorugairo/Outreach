@@ -81,7 +81,7 @@ ACT_SPECIES = {
     "TURNS": ("figure", "spotlight", "callout", "note", "freeze"),   # P69 T49: the stage STOPS on the number the turn lands on (E99 s99)
     "BREAKS": ("burst", "stack", "burst:stop", "placeholder", "axis capsule"),
     "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch", "level_join", "ruler"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)
-    "SETS": ("chart_to:park", "figure", "retitle"),
+    "SETS": ("chart_to:park", "figure", "retitle", "chapter"),   # P70 T9: a long form's named act, one pill held over it (A34)
     "RETRACTS": ("retitle", "squiggle"),
 }
 # ... and what it names as pending, by task (s5), so the line says where the better species is.

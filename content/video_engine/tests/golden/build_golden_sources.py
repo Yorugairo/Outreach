@@ -4965,6 +4965,53 @@ SURFACES.update({"dual-axis-inverted": dual_axis_inverted})
 FRAME_T.update({"dual-axis-inverted": 12.0})   # both lines drawn and tagged, both axes written, held
 
 
+# ---- P70 T9 (was P69 T61, A34; BUB 12:22-15:06): THE CHAPTER PILL, HELD OVER AN ACT ------------------------------------
+#   chapter-held     Steel and Paper H's act "The turn" across the cut from row 14 into row 15, the take's words shifted by
+#                    -360.0 s: the pill lands on "It was never the AI stocks" (363.38 -> 3.38) over the reset plate (the
+#                    plain plate stands in for the press - a golden embeds no project plate), holds across the cut, and
+#                    stands over row 15's own page (`ledger:ev-index-concentration-bars-v1:bars::right:axes:cut`,
+#                    `idle=live;readability=longform;bar_style=soft` - the row's plate string, the LONG FORM, because only
+#                    a long-form page makes room: the face rides the uris with the chapter, as it rides every compiled
+#                    build that has one). The page arrives at 384.12 (24.12) with its title moved down by the room, the
+#                    pill standing in the band Bravos keeps for it (BUB 12:35: the pill, 16 px, the title). Judged 3.0 s
+#                    after the cut: the page's ink written, the pill held since 3.74 without landing again. Every piece is
+#                    the compiler's own: `collect_chapters`, `chapter_page_room`, `timeline_chapters`, `compiled_chapter`.
+CHAPTER_SHIFT = 360.0
+CHAPTER_PAGE = "ledger:ev-index-concentration-bars-v1:bars::right:axes:cut;idle=live;readability=longform;bar_style=soft"
+CHAPTER_PROJECT = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
+CHAPTER_ENTRY = {"kind": "chapter", "at": round(363.38 - CHAPTER_SHIFT, 2), "until": RUNTIME, "text": "The turn"}
+CHAPTER_CUT = round(384.12 - CHAPTER_SHIFT, 2)
+
+
+def chapter_held() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    entry = dict(CHAPTER_ENTRY, id="s01.species.0")
+    assert not BST.validate_species([dict(entry)], (0, 0, 0), "plate-plain"), BST.validate_species([dict(entry)], (0, 0, 0), "plate-plain")
+    plan = [(0.0, CHAPTER_CUT, "plate-plain", (0, 0, 0), [], "cut", [entry]),
+            (CHAPTER_CUT, RUNTIME, CHAPTER_PAGE, (0, 0, 0), [], "cut", [])]
+    chapters = BST.collect_chapters(plan, RUNTIME)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(CHAPTER_PAGE, (0, 0, 0), CHAPTER_PROJECT)
+        BST.stamp_full_stage(world["page"])
+        assert BST.chapter_page_room(world, BST.chapters_over(chapters, CHAPTER_CUT, RUNTIME)) == []   # the page makes room
+    finally:
+        BST.ASPECT = saved
+    plate = {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    scenes = [{"scene_id": "s01", "world": plate, "exit": "cut", "span": [0.0, CHAPTER_CUT], "docks": [],
+               "species": [BST.compiled_chapter(entry)]},
+              {"scene_id": "s02", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}), "exit": "cut",
+               "span": [CHAPTER_CUT, RUNTIME], "docks": [], "species": []}]
+    tl = _timeline("Golden: the chapter pill held over an act, across the cut (chapter)", scenes, {}, "16:9")
+    tl["chapters"] = BST.timeline_chapters(chapters)   # flagless (test_idle_e49): the pill's life is not this golden's subject
+    return tl, dict(_base_uris(), **BST.longform_assets(tl))
+
+
+SURFACES.update({"chapter-held": chapter_held})
+FRAME_T.update({"chapter-held": round(CHAPTER_CUT + 3.0, 2)})   # after the cut: the page's ink written under the held pill (27.12)
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

@@ -4237,16 +4237,36 @@ def _longform_ink_col(w_s: int = 1920) -> tuple[float, float]:
     return ink_x, LAND_PHONE_SAFE_RIGHT * w_s - ink_x
 
 
+# P70 T9 (was P69 T61, A34; the parent's ruling 2026-09-25, option A) - A PAGE MAKES ROOM FOR ITS ACT. Bravos's
+# chapter pill stands where our long-form page writes its title (BUB 12:35: the pill 84-121 px, the title from 137), so
+# a long-form page inside a chapter's window carries `chapter_room` - the whole CSS px its title moves DOWN (the pill's
+# height and Bravos's 16 px under it; the compiler's `chapter_room_css`) - and the sub, the key, the chart and the
+# stack under it follow, exactly as the engine lays them out off the title's own box. A page without the key is the
+# page it always was.
+CHAPTER_ROOM_KEY = "chapter_room"
+
+
+def _longform_title_frac() -> float:
+    """The long-form title's top as the engine writes it (a CSS stage fraction, toFixed(2) %)."""
+    bx, by, bw, bh = LAND_BOARD
+    vy = by + bh / 2 - 0.5 / PUNCH_SCALE
+    return round(max(by + 0.024, vy + 0.035) * 100, 2) / 100
+
+
+def longform_ink_origin(w_s: int = 1920, h_s: int = 1080) -> tuple[float, float]:
+    """The long-form page's INK ORIGIN in rendered stage px: its column's left edge and its title's top as laid out
+    with no room - where a chapter pill stands (P70 T9)."""
+    return _longform_ink_col(w_s)[0], _punch_pt(_longform_title_frac()) * h_s
+
+
 def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     """A longform page's boxes, ESTIMATED the way the engine lays it out (the fixture measures and outranks it; N3:
     held to the engine's own boxes at every preset by `test_longform_profile` and `test_page_boxes`)."""
     t, dense = longform_type(spec), spec.get("builder") == "dense-line"
-    bx, by, bw, bh = LAND_BOARD
-    half = 0.5 / PUNCH_SCALE
-    vx, vy = bx + bw / 2 - half, by + bh / 2 - half
     ink_x = _longform_ink_col(w_s)[0]
-    title_frac = round(max(by + 0.024, vy + 0.035) * 100, 2) / 100   # the engine writes the title's top toFixed(2) %
-    title_y = _punch_pt(title_frac) * h_s
+    title_frac = _longform_title_frac()   # the engine writes the title's top toFixed(2) %
+    room = int(spec.get(CHAPTER_ROOM_KEY) or 0)   # P70 T9: the whole CSS px the title moves down for a chapter pill
+    title_y = _punch_pt(title_frac) * h_s + room * PUNCH_SCALE   # a room of 0 adds 0.0: the page it always was, to the bit
     ink_w = LAND_PHONE_SAFE_RIGHT * w_s - ink_x
     # the engine lays the ink out in the page's own CSS px and READS it back whole (offsetTop / offsetHeight), so the
     # layout's heights are snapped to whole CSS px here too; the boxes report the ink's own (unsnapped) extent
@@ -4256,7 +4276,7 @@ def _longform_full_boxes(spec: dict, w_s: int, h_s: int) -> dict:
              for role, size in (("title", "title"), ("sub", "sub"), ("source", "src"))}
     whole = lambda v: math.floor(v + 0.5)  # noqa: E731
     rend = lambda css_y: h_s / 2 + (css_y - h_s / 2) * PUNCH_SCALE  # noqa: E731
-    title_top = whole(title_frac * h_s)
+    title_top = whole(title_frac * h_s) + room
     sub_top = title_top + whole(css_h["title"]) + LONGFORM_SUB_GAP
     title_h, sub_h, src_h = (css_h[r] * PUNCH_SCALE for r in ("title", "sub", "source"))
     sub_y = rend(sub_top)
@@ -4902,7 +4922,8 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
         boxes[PANELS_KEY] = panel_boxes(spec, boxes["chart"], aspect, floor)
         boxes["plot"] = _union([p["box"] for p in boxes[PANELS_KEY]])
         boxes.pop(TAGS_KEY, None)   # no page-wide end-tag column: every panel's tags stand inside its own box
-    measured = measured_boxes(spec, aspect)
+    # P70 T9: a page that made room for a chapter pill was never measured with its room - its estimate stands
+    measured = None if spec.get(CHAPTER_ROOM_KEY) else measured_boxes(spec, aspect)
     if measured:                      # the player's own numbers for this ink win over every estimate above
         tags = boxes.get(TAGS_KEY)    # ... except the end tag column, which the fixture does not measure as a column
         boxes.update(measured)
