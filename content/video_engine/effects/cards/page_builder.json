@@ -99,14 +99,18 @@
         "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
         "symbol": "buildLedger",
         "also": [
-          "paintLedgerCombo"
+          "paintLedgerCombo",
+          "lpBarGlow",
+          "lpFillGlowSolo",
+          "LP_FILL_GLOW"
         ],
         "note": "buildLedger / builder \"story\" / \"combo\" (pick_builder); paintLedgerCombo for bars + a line"
       },
       "doctrine": [
         "29 s9.26",
         "E22",
-        "E53"
+        "E53",
+        "E99 s130"
       ],
       "status": "live",
       "proof": {
@@ -826,14 +830,17 @@
           "lpGaugeCapsule",
           "lpGaugeTicks",
           "lpGaugeFigure",
-          "LPGAUGE"
+          "LPGAUGE",
+          "lpFillGlow",
+          "LP_FILL_GLOW"
         ],
         "note": "the story builder's `formOf(pg, \"gauge\")` branch; pick_builder resolves progress to story, bounded by ledger_page PROGRESS_MAX / the denominator; the whole's rule: ledger_page.gauge_error"
       },
       "doctrine": [
         "29 s9.26",
         "E28",
-        "P70 T3"
+        "P70 T3",
+        "E99 s130"
       ],
       "status": "wired",
       "proof": {

@@ -11161,7 +11161,9 @@ async function mount(doc) {
     const track = lpEl("path", "lp-gauge-track", grp, { d, fill: "var(--lp-chalk)", "fill-opacity": LPGAUGE.TRACK_A });
     const id = "lpgauge-" + (st.seed | 0) + "-" + (++lpGaugeN);
     lpEl("path", "", lpEl("clipPath", "", lpEl("defs", "", grp), { id, clipPathUnits: "userSpaceOnUse" }), { d });
-    return { grp, track, fill: lpEl("g", "lp-gauge-fill", grp, { "clip-path": "url(#" + id + ")" }) };
+    const glow = lpEl("g", "lp-gauge-glow", grp);   /* P72 T10: the fill's halo rides OUTSIDE its clip (a filtered clipped group is cut to the clip) */
+    return { grp, track, glow, box: { x: g.x, y: g.top, w: g.bw, h: g.base - g.top },
+             fill: lpEl("g", "lp-gauge-fill", glow, { "clip-path": "url(#" + id + ")" }) };
   };
   /* the printed scale: the zero rule under the capsules (Bravos's baseline, overhanging) and the ceiling, each labelled.
      They are the GAUGE's furniture, not gridlines: the long form's sheet hides every `.grid` and an `.ax` on its panel's
@@ -11274,6 +11276,7 @@ async function mount(doc) {
         { x: cy.toFixed(1), y: (myL(0) - h).toFixed(1), width: capU.toFixed(1), height: h.toFixed(1), rx: 0 });
       const dcol = LP_PAL[(pg.colors || [])[i]];
       if (dcol) bar.style.fill = dcol;
+      lpFillGlow(st, gz.glow, dcol || (neg ? "var(--lp-neg)" : "var(--lp-pos)"), gz.box);   /* P72 T10 (E99 s130 (1)): the gauge's fill glows in its own ink */
       bar.style.transformOrigin = "0 " + myL(0).toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
       const lab = labs[i];
       lpSetX(lab, XA - ov - lgap);
@@ -11525,6 +11528,7 @@ async function mount(doc) {
       if (gz) { bar.setAttribute("rx", 0); gz.fill.appendChild(bar); }   /* P70 T3: the fill is square, cut to its capsule */
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
       const segs = Array.isArray(pg.segments) && Array.isArray(pg.segments[i]) ? lpSegRects(st, pg.segments[i], { x, bw, base, my, rx: SOFT || 6 }) : null;   /* P69 T64: the stack, under the labels */
+      if (gz || (i === st.emph && !over && !ex)) lpBarGlow(st, gz ? gz.glow : bar, gz ? null : segs, x, bw, dcol || (neg ? "var(--lp-neg)" : "var(--lp-pos)"), gz ? gz.box : null);   /* P72 T10 (E99 s130 (1)): a gauge's fill and the PRIMARY bar glow in their own ink (a stack per part); a breaking bar keeps its breakthrough's own glow law (the burst's, none on the stack); an EXTRUDED bar none - its halo lay over its own prism's side face and cap and flattened the 2.5D shading (frames/r3, round 3) */
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + XLAB, "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
       const vy = neg ? base + hr + (P ? 62 : 26) : base - hr - (P ? 22 : 14);   /* a range's value stands over its band's far end (hr: h without one) */
@@ -11863,6 +11867,123 @@ async function mount(doc) {
     if (rec.hot) { lpBloomHot(st, rec.p, col, lpHotUnit(st)); lpHotBase(rec.p, lpHotUnit(st), 1); }
     else lpBloom(st, rec.p, col);
     lpHotFilter(st, rec.p);   /* every live line carries its core, lit only when it is (or is solo'd into) the primary */
+  };
+  /* P72 T10 (E99 s130 (1)) - FILLED MARKS GLOW. The operator: "a fill gauge's fill and bars (the lit / primary ones)
+     carry an emissive halo in their own ink, measured off Bravos's fills first (the `measure_line_bloom` band, E38),
+     seek-exact like `lpHotFilter`, a solo / focus still widening the lit-vs-muted gap". The PRIMARY line's two halos
+     (LP_HOT), without its core - a fill is its own ink, never lightened: an inner halo (INNER_PX at INNER_A) and a WIDE
+     soft outer one (OUTER_PX at OUTER_A) shadowing it, in STAGE px divided by the chart's scale. What glows: a gauge's
+     fill (on the capsule's glow group, OUTSIDE its clip - under the clip a halo is cut to the capsule) and a bars
+     page's PRIMARY bar - the emphasized one, and on its word the solo'd one (lpFillGlowSolo); every other bar none, a
+     muted bar none (Bravos D40 14:28 -> 14:32: the same bar carries no halo until it is THE bar). Built as the line's
+     is - SVG primitives, the filter region fixed at build (the chart's box; a capsule's box grown by the outer reach) -
+     so a cold seek and a played frame paint the same pixels; a level of 0 removes the filter, so a bar that sheds its
+     glow is the bar it was, to the byte.
+     The dials are MEASURED: measure_line_bloom.py --fill reads the halo across a fill's long edges, the Bravos band is
+     `content/video_engine/assets/bravos-line-bloom.v1.json` `fills` (BOOM 11:00 / 11:05, D40 17:30 and 14:32), and ours
+     is read by the same tool (tests/test_fill_glow.py). */
+  /* Fitted on the band's four frames by the same tool, 1920 | 256 px: gauge-94 edge 0.517 | 0.465, r50 7.35 | 13.41 px,
+     reach10 21.1 | 25.6, area 5.57 | 6.53 fill-px; the two-bar page's emphasized bar 0.446 | 0.342, 8.63 | 14.56, 20.8 |
+     23.9, 5.44 | 5.27; the H capex page's $690 (the long form's darker ground) 0.406 | 0.422, 9.13 | 13.60, 19.5 | 24.4,
+     5.16 | 6.09 - all inside Bravos's (1920: edge 0.398-0.522, r50 4.1-10.2, reach10 7.0-36.1, area 2.1-9.1; 256:
+     0.18-0.61, 11.8-18.0, 11.3-41.5, 1.6-12.1). The two ends of the band bind the inner alpha from both sides: at 0.45
+     the H bar's edge fell to 0.392 (under Bravos's 0.398), at 0.5 the gauge's is 0.517 (under 0.522). A brighter try
+     (5 @ 0.40 + 24 @ 0.70) left the band at both edges. The D40 capsule (17:30, the same 110 px form) reads 0.522 /
+     8.74 / 21.4 / 6.34. */
+  const LP_FILL_GLOW = Object.freeze({
+    INNER_PX: 6,     /* the inner halo round the fill's edge, STAGE px [MEASURED: bravos-u70oUWgVoYU-1730 (D40 17:30, the capsule): its edge 0.522, ours 0.517] ... */
+    INNER_A: 0.5,   /* ... at this alpha of the ink [MEASURED: bravos-u70oUWgVoYU-1730] */
+    OUTER_PX: 22,    /* the WIDE soft outer halo, STAGE px [MEASURED: bravos-u70oUWgVoYU-1432 (D40 14:32, the lit bar) and -1730: reach10 21.4-36.1, ours 20.8-21.1] ... */
+    OUTER_A: 0.55,   /* ... at this alpha [MEASURED: bravos-u70oUWgVoYU-1432] */
+  });
+  let lpFillN = 0;
+  /* ONE SVG FILTER per glowing fill, built on its first glow: the two halos over SourceGraphic, each a gaussian of what is
+     under it flooded with the ink (lpHotFilter's halo, the same primitives). `box` - the fill's own reach in the
+     element's user space (a capsule: the fill never leaves it); absent, the chart's box (a bar that rescales or morphs) */
+  const lpFillFilter = (st, el, box) => {
+    if (el.__lpFill) return el.__lpFill;
+    const svg = el.ownerSVGElement || st.chart, G = st.geom || { W: 1000, H: 560 };
+    const U = lpHotUnit(st) || (st && st.portrait ? 2 : 1), m = 3 * LP_FILL_GLOW.OUTER_PX * U;
+    const mt = box && box.t === false ? box.tpad || 0 : m, mb = box && box.b === false ? 0 : m;   /* a stack's inner seam: closed (its top by `tpad`) */
+    const R = box ? [box.x - m, box.y - mt, box.w + 2 * m, box.h + mt + mb] : [0, 0, G.W, G.H];
+    const id = "lpfill-" + (st.seed | 0) + "-" + (++lpFillN);
+    const f = lpEl("filter", "", lpEl("defs", "", svg), { id, filterUnits: "userSpaceOnUse", x: R[0].toFixed(1), y: R[1].toFixed(1),
+      width: R[2].toFixed(1), height: R[3].toFixed(1), "color-interpolation-filters": "sRGB" });
+    const halo = (src, n) => {
+      const b = lpEl("feGaussianBlur", "", f, { in: src, stdDeviation: 0, result: "b" + n });
+      const fl = lpEl("feFlood", "", f, { "flood-color": "#000", "flood-opacity": 0, result: "f" + n });
+      lpEl("feComposite", "", f, { in: "f" + n, in2: "b" + n, operator: "in", result: "s" + n });
+      return { b, fl };
+    };
+    const h1 = halo("SourceGraphic", 1);
+    const m1 = lpEl("feMerge", "", f, { result: "g1" }); lpEl("feMergeNode", "", m1, { in: "s1" }); lpEl("feMergeNode", "", m1, { in: "SourceGraphic" });
+    const h2 = halo("g1", 2);
+    const m2 = lpEl("feMerge", "", f, box && box.tpad > 0 ? { result: "all" } : {}); lpEl("feMergeNode", "", m2, { in: "s2" }); lpEl("feMergeNode", "", m2, { in: "g1" });
+    if (box && box.tpad > 0) {   /* the half-separator strip over the seam: the part's own stroke there, never its halo */
+      lpEl("feFlood", "", f, { x: box.x.toFixed(2), y: (box.y - box.tpad).toFixed(3), width: box.w.toFixed(2), height: box.tpad.toFixed(3),
+                               "flood-color": "#000", "flood-opacity": 1, result: "cut" });
+      lpEl("feComposite", "", f, { in: "all", in2: "cut", operator: "out", result: "keep" });
+      lpEl("feComposite", "", f, { in: "SourceGraphic", in2: "cut", operator: "in", result: "seam" });
+      const m3 = lpEl("feMerge", "", f); lpEl("feMergeNode", "", m3, { in: "keep" }); lpEl("feMergeNode", "", m3, { in: "seam" });
+    }
+    el.__lpFill = { id, h1, h2, U };
+    return el.__lpFill;
+  };
+  /* THE FILL'S GLOW at `level` (0-1: a solo's hand-over; 1 the glow at rest). 0 removes it (the element as it was). */
+  const lpFillGlow = (st, el, col, box, level = 1) => {
+    if (!el || !(LINE_BLOOM > 0)) return "";
+    const k = Math.max(0, Math.min(1, level));
+    if (k <= 1e-4) { if (el.__lpFill) el.style.filter = ""; return ""; }
+    const hf = lpFillFilter(st, el, box), hx = lpVarHex(col);
+    lpHotHalo(hf.h1, hx, LP_FILL_GLOW.INNER_PX * hf.U, LP_FILL_GLOW.INNER_A * k);
+    lpHotHalo(hf.h2, hx, LP_FILL_GLOW.OUTER_PX * hf.U, LP_FILL_GLOW.OUTER_A * k);
+    el.style.filter = "url(#" + hf.id + ")";
+    return el.style.filter;
+  };
+  /* A BAR'S GLOW: a plain bar (or a gauge's fill) is one ink; a STACKED bar (P69 T64's parts, laid over it) glows PER PART,
+     each in its own ink, and the bar under the parts carries none. Each part's filter region spans exactly its own
+     height, so no part's halo lies over its neighbour - only the stack's head and its foot let the halo past them; the
+     halo stands beside the stack in each part's own colour. (A pad of the separator's width let each part's halo out
+     under its seam as a hairline shelf across the halo - the first read; the seam's separator is whole without it: each
+     side keeps its own inner half of the one stroke.) */
+  const lpBarGlow = (st, el, segs, x, bw, col, box, level = 1) => {
+    if (!segs || !segs.length) return lpFillGlow(st, box || !el.classList.contains("bar") ? el : lpGlowWrap(el), col, box, level);
+    const top = segs.length - 1, U = lpHotUnit(st) || (st && st.portrait ? 2 : 1);
+    /* the seam under the TOP part: the top part runs its foot under the one below and draws no stroke there, so the lower
+       part's top stroke is the seam's only separator - its region opens by HALF of it (review round 3; the full width let
+       a hairline shelf of halo out, r2a), so the separator keeps its whole width */
+    for (const sg of segs) lpFillGlow(st, sg.el, sg.el.style.fill, { x, y: sg.y1, w: bw, h: sg.y0 - sg.y1, t: sg.j === top, b: sg.j === 0,
+                                                                   tpad: sg.j === top - 1 ? LPSEG.SEP_PX / 2 * U : 0 }, level);
+    return "";
+  };
+  /* A PLAIN BAR's glow rides a wrapper group, as a gauge's does (review round 3): on the rect itself the halo took the
+     grow's scaleY and stood squashed until the bar landed; on the group it is drawn round the bar as it is drawn now.
+     The group takes the rect's place (the paint order is the page's), built once, on the bar's first glow. */
+  const lpGlowWrap = (bar) => {
+    const p = bar.parentNode;
+    if (p && p.classList && p.classList.contains("lp-bar-glow")) return p;
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("class", "lp-bar-glow");
+    p.insertBefore(g, bar); g.appendChild(bar);
+    return g;
+  };
+  const lpGlowOf = (bar) => { const p = bar.parentNode; return p && p.classList && p.classList.contains("lp-bar-glow") ? p : bar; };
+  const lpHasGlow = (b) => !!(lpGlowOf(b.bar).__lpFill || (b.segs || []).some((sg) => sg.el.__lpFill));
+  /* THE SOLO'S HAND-OVER on a bars page, read off the solo's own law (soloLift / soloAlpha, species/solo.mjs): the named
+     bar eases INTO the glow as it keeps its ink, the emphasized bar sheds it as it mutes (a muted bar carries none), and
+     an unsolo gives it back. A gauge's fill keeps its own. A pure function of t: the level is written every frame. */
+  const lpFillGlowSolo = (sd, t, st) => {
+    const states = st && Array.isArray(st.states) && st.states.length ? st.states : [st];
+    for (const S of states) ((S && S.bars) || []).forEach((b, i) => {
+      if (!b || !b.bar || b.over || b.ex) return;   /* a breaking bar keeps the breakthrough's own glow law; an extruded bar has none (review round 3) */
+      const key = "b:" + (Number.isInteger(b.i) ? b.i : i), a = soloAlpha(sd.evs, key, t);
+      const mute = Math.min(1, Math.max(0, (1 - a) / (1 - SOLO.DIM)));
+      const ink = b.bar.style.fill || (b.neg ? "var(--lp-neg)" : "var(--lp-pos)");
+      /* a GAUGE's fill glows at rest; muted, it sheds the glow with its mute (acceptance (4)); named, it keeps it */
+      if (b.gauge) { lpFillGlow(S, b.gauge.glow, ink, b.gauge.box, Math.max(1 - mute, soloLift(sd.evs, key, t))); return; }
+      const k = Math.max(b.i === S.emph ? 1 - mute : 0, soloLift(sd.evs, key, t));
+      if (k > 1e-4 || lpHasGlow(b)) lpBarGlow(S, b.bar, b.segs, b.bx, b.bw, ink, null, k);
+    });
   };
   /* R26-228 (E99 s82's (e); the operator: "You also missed the sparking lead points from the line chart reference, which
      add chart life ... our chart lines have no glow/pulse") - THE PAGE'S INTERIOR AT ITS IDLE. Measured on frozen copy d
@@ -15551,7 +15672,7 @@ async function mount(doc) {
         M.ghost = lpEl("path", "lp-bar-ghost", st.chart, { d: "M" + x0.toFixed(1) + " " + (e0 + tick).toFixed(1) + "V" + e0.toFixed(1)
             + "H" + x1.toFixed(1) + "V" + (e0 + tick).toFixed(1), fill: "none", stroke: lpFillOf(bar) || "var(--lp-chalk)",
           "stroke-width": LPMORPH.GHOST_W, "stroke-dasharray": LPMORPH.GHOST_DASH, "stroke-linecap": "round", opacity: 0 });
-        st.chart.insertBefore(M.ghost, rec.foot || bar);   /* behind the bar it stood as */
+        st.chart.insertBefore(M.ghost, rec.foot || lpGlowOf(bar));   /* behind the bar it stood as (P72 T10: a glowing bar stands in its glow group) */
       }
       out.push(M);
     }
@@ -16213,6 +16334,7 @@ async function mount(doc) {
     for (const ld of PF.lits || []) if (PAGE_PAINTERS.lit_stretch) PAGE_PAINTERS.lit_stretch(ld, t, st, PAGE_CTX);   /* P69 T36: the light that travels a stretch of the line on its word (species/lit_stretch.mjs) */
     for (const lj of PF.levelJoins || []) if (PAGE_PAINTERS.level_join) { PAGE_PAINTERS.level_join(lj, t, st, PAGE_CTX); const lv = pageLeave(lj.sp, t); if (lv > 0) lj.g.setAttribute("opacity", ((+lj.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3)); }   /* P71 T10: the dashed level from one datum to another, its figure off the rule (species/level_join.mjs); R26-219: it leaves with its page */
     if (PF.solo && PAGE_PAINTERS.solo) PAGE_PAINTERS.solo(PF.solo, t, st, PAGE_CTX);   /* P69 T37: the others mute on the word (species/solo.mjs) - after the lights, so a light on a muted series mutes with it */
+    if (PF.solo) lpFillGlowSolo(PF.solo, t, st);   /* P72 T10: on its word the named bar takes the glow, a muted bar sheds it */
     for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) {
       /* P72 T12 (R26-315, H row 21's "3x"): a figure on a REVEALED panel runs its clock from no earlier than the panel's
          build (lpPanelBuildAt, written by lpPaintPanels as st.panelBuildAt) - written on the reveal's word, it stood over

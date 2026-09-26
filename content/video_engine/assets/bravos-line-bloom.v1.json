@@ -981,5 +981,223 @@
    "max": 7,
    "n": 5
   }
+ },
+ "fills": {
+  "what": "E99 s130 (1) (P72 T10): the Bravos band a FILLED mark's glow is set from - a gauge's fill and a lit bar (E38: thresholds from the reference). Read by measure_line_bloom.py --fill (measure_fill): the halo ACROSS the fill's long edges, row by row over the middle 60 % of its length, the lower side at each distance; each frame at 1920 (`measured`) and downsampled to the 256 px thumbnail (`measured_thumb`). A frame is its video at `t` (BRAVOS-FRAME, `ffmpeg -ss <t> -i <video> -frames:v 1`), both videos gitignored under the main checkout; `frame_sha256` is the decoded frame's. The BOX RULE, on Bravos and on ours alike: a gauge's column is its fill +- 130 px, from 60 px over the whole's head to its foot; a bar's is the bar +- 130 px from 10 px over its top to its foot (a bar's pill and value above it are its annotation, not its column). `--band <this> --check --root <main checkout>` re-extracts and re-measures every frame.",
+  "thumb_w": 256,
+  "keys": [
+   "halo_edge",
+   "halo_r50_px1080",
+   "halo_reach10_px1080",
+   "halo_area_x_fill"
+  ],
+  "frames": [
+   {
+    "id": "boom-return-1100",
+    "video": "scratch/jx3Ll_full.mp4",
+    "t": 660.0,
+    "frame_sha256": "666dc3c103c1c5d8e834acc62fd3d0b21b2238258163220ff299de1c8fd3377f",
+    "what": "BOOM 11:00 (VERIFY.md T34 CORRECTED 10:59.0-11:06; Gemini's 10:55 is the sine before it) - the 'Return' capsule (green) filled to ~80 % under its white head, a tight glow",
+    "ink": "#66D88E",
+    "box": [
+     1050,
+     165,
+     1388,
+     415
+    ],
+    "measured": {
+     "fill_px1080": 80.0,
+     "fill_luma": 162.41,
+     "halo_edge": 0.478,
+     "halo_r50_px1080": 4.26,
+     "halo_reach10_px1080": 7.84,
+     "halo_area_1080": 380.4,
+     "halo_area_x_fill": 2.34,
+     "lit_muted_ratio": 0.56,
+     "lit_muted_excess": 0.7,
+     "thumb_lit_share": 0.655,
+     "thumb_lit_muted_ratio": 0.6
+    },
+    "measured_thumb": {
+     "halo_edge": 0.177,
+     "halo_r50_px1080": 11.86,
+     "halo_reach10_px1080": 11.3,
+     "halo_area_x_fill": 1.56
+    }
+   },
+   {
+    "id": "boom-losses-1105",
+    "video": "scratch/jx3Ll_full.mp4",
+    "t": 665.0,
+    "frame_sha256": "a33f8cbff946ad381dc89d0def3fc9db598f3737770771a4b447963f0860835f",
+    "what": "BOOM 11:05 - the 'Losses' capsule (pink) filled beside the 'AI / Leverage' chip, a tight glow",
+    "ink": "#EF4177",
+    "box": [
+     718,
+     165,
+     1058,
+     412
+    ],
+    "measured": {
+     "fill_px1080": 80.0,
+     "fill_luma": 82.31,
+     "halo_edge": 0.398,
+     "halo_r50_px1080": 4.1,
+     "halo_reach10_px1080": 7.04,
+     "halo_area_1080": 170.4,
+     "halo_area_x_fill": 2.07,
+     "lit_muted_ratio": 0.28,
+     "lit_muted_excess": 0.36,
+     "thumb_lit_share": 0.552,
+     "thumb_lit_muted_ratio": 0.51
+    },
+    "measured_thumb": {
+     "halo_edge": 0.236,
+     "halo_r50_px1080": 11.81,
+     "halo_reach10_px1080": 12.46,
+     "halo_area_x_fill": 2.04
+    }
+   },
+   {
+    "id": "d40-gauge-1730",
+    "video": "docs/research/runs/bravos-watch/u70oUWgVoYU/video_1080p.mp4",
+    "t": 1050.0,
+    "frame_sha256": "60de7c437f02ce97f70ee38339cfe1d08cededf32fe5cc40552d815ad62a6355",
+    "what": "D40 17:30 (P70 T3's gauge at rest; the plan's -ss 1044 = 17:24 lands on the page before it) - the 'Stablecoins' capsule two-thirds filled, a wide soft glow; the brace beside it left out",
+    "ink": "#F14A85",
+    "box": [
+     563,
+     205,
+     933,
+     790
+    ],
+    "exclude": [
+     [
+      822,
+      255,
+      945,
+      615
+     ]
+    ],
+    "measured": {
+     "fill_px1080": 110.0,
+     "fill_luma": 90.18,
+     "halo_edge": 0.522,
+     "halo_r50_px1080": 8.74,
+     "halo_reach10_px1080": 21.41,
+     "halo_area_1080": 571.9,
+     "halo_area_x_fill": 6.34,
+     "lit_muted_ratio": 2.87,
+     "lit_muted_excess": 2.1,
+     "thumb_lit_share": 0.793,
+     "thumb_lit_muted_ratio": 2.88
+    },
+    "measured_thumb": {
+     "halo_edge": 0.273,
+     "halo_r50_px1080": 17.99,
+     "halo_reach10_px1080": 22.4,
+     "halo_area_x_fill": 4.71
+    }
+   },
+   {
+    "id": "d40-litbar-1432",
+    "video": "docs/research/runs/bravos-watch/u70oUWgVoYU/video_1080p.mp4",
+    "t": 872.0,
+    "frame_sha256": "0a300db43a300716d5dcbf930937c574a4ea668b757e2d1ea8eea4b9d2469807",
+    "what": "D40 14:32 (harvest A49 / F11) - 'Buyers of Short-Term US Government Bonds', the Stablecoins bar lit on '3rd Largest Buyer', the rest dimmed; its neighbours left out of the halo read (still muted marks). At 14:28 (868 s) the same bar at full ink BEFORE the isolate carries NO halo (reach10 1.0, lit/muted 1.01): Bravos lights a bar only when it is THE bar",
+    "ink": "#DD3764",
+    "box": [
+     474,
+     436,
+     766,
+     757
+    ],
+    "halo_exclude": [
+     [
+      524,
+      300,
+      562,
+      760
+     ],
+     [
+      676,
+      555,
+      716,
+      760
+     ],
+     [
+      753,
+      580,
+      790,
+      760
+     ]
+    ],
+    "measured": {
+     "fill_px1080": 30.0,
+     "fill_luma": 52.39,
+     "halo_edge": 0.421,
+     "halo_r50_px1080": 10.2,
+     "halo_reach10_px1080": 36.11,
+     "halo_area_1080": 475.2,
+     "halo_area_x_fill": 9.07,
+     "lit_muted_ratio": 2.48,
+     "lit_muted_excess": 3.38,
+     "thumb_lit_share": 0.727,
+     "thumb_lit_muted_ratio": 2.55
+    },
+    "measured_thumb": {
+     "halo_edge": 0.609,
+     "halo_r50_px1080": 13.08,
+     "halo_reach10_px1080": 41.52,
+     "halo_area_x_fill": 12.12
+    }
+   }
+  ],
+  "band": {
+   "full": {
+    "halo_edge": {
+     "min": 0.398,
+     "max": 0.522,
+     "n": 4
+    },
+    "halo_r50_px1080": {
+     "min": 4.1,
+     "max": 10.2,
+     "n": 4
+    },
+    "halo_reach10_px1080": {
+     "min": 7.04,
+     "max": 36.11,
+     "n": 4
+    },
+    "halo_area_x_fill": {
+     "min": 2.07,
+     "max": 9.07,
+     "n": 4
+    }
+   },
+   "thumb": {
+    "halo_edge": {
+     "min": 0.177,
+     "max": 0.609,
+     "n": 4
+    },
+    "halo_r50_px1080": {
+     "min": 11.81,
+     "max": 17.99,
+     "n": 4
+    },
+    "halo_reach10_px1080": {
+     "min": 11.3,
+     "max": 41.52,
+     "n": 4
+    },
+    "halo_area_x_fill": {
+     "min": 1.56,
+     "max": 12.12,
+     "n": 4
+    }
+   }
+  }
  }
 }

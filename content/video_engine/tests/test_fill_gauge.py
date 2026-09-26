@@ -451,14 +451,24 @@ def test_the_ceiling_rules_are_stubs_at_the_capsules_edges(h_gauge) -> None:
 @needs_browser
 def test_the_empty_part_reads_at_bravos_tone(h_gauge) -> None:
     """TRACK_A: the capsule's empty part against the ground at Bravos D40's measured 1.741:1 (rgb 60,65,76 on 20,24,30),
-    read off the rendered frame - the track just under the capsule's top, the ground at the same height, 2.5 capsules left."""
+    read off the rendered frame - on the track, the ground at the same height, 2.5 capsules left.
+
+    P72 T10 (E99 s130 (1)) re-aimed the read. The fill now glows, and so does Bravos's: on D40 17:30 its own halo spills
+    onto its track - under the fill's edge the track reads #A43556 at 6 px, #7D394E at 12 px, #503F4C at 30 px, and is the
+    bare #3C414C only from ~50 px - so TRACK_A's 1.741 was a reading of the track PAST the halo. E38: ours is read the way
+    the reference was. At the hold the 94 fill leaves ~26 px of track (all of it inside the glow), so the read is taken on
+    a MID-BUILD frame, where the unfilled track is long, at least TRACK_CLEAR_PX above the fill's edge."""
     from io import BytesIO
 
     from PIL import Image
-    d = h_gauge.read(REST_T)
-    im = Image.open(BytesIO(h_gauge.p.png(REST_T))).convert("RGB")
+    TRACK_CLEAR_PX = 60                                                   # past D40's ~50 px, where its track is bare
+    mids = [(t, h_gauge.read(t)) for t in (round(3.8 + 0.1 * k, 2) for k in range(0, 25))]
+    t, d = next((t, m) for t, m in mids if 0.3 < _fill_share(m) < 0.6)    # the fill mid-rise: a long empty track above it
+    im = Image.open(BytesIO(h_gauge.p.png(t))).convert("RGB")
     sx, sy, sw, sh = d["capsScreen"][0]
-    y = int(sy + 0.03 * sh)                                               # inside the 6 % the fill leaves
+    fill_top = sy + sh * (1 - _fill_share(d))                             # the fill's edge in stage px
+    y = int(fill_top - TRACK_CLEAR_PX)
+    assert y > sy + 10, (t, sy, fill_top)                                 # still on the track, clear of the capsule's top
     def med(x0: int) -> tuple:
         px = sorted((im.getpixel((x, y + dy)) for x in range(x0 - 3, x0 + 4) for dy in (-1, 0, 1)), key=sum)
         return px[len(px) // 2]
@@ -469,7 +479,7 @@ def test_the_empty_part_reads_at_bravos_tone(h_gauge) -> None:
     track, ground = med(int(sx + sw / 2)), med(int(sx - 2.5 * sw))   # the ground clear of the "100%" label
     a, b = lum(track), lum(ground)
     ratio = (max(a, b) + 0.05) / (min(a, b) + 0.05)
-    assert 1.70 <= ratio <= 1.85, (track, ground, ratio)
+    assert 1.70 <= ratio <= 1.85, (t, track, ground, ratio)
 
 
 @needs_browser

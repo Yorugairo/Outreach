@@ -488,14 +488,14 @@ def ocr_words(path: str | Path, box) -> int | None:
     return sum(1 for w in words if any(c.isalpha() for c in w) and len(w.strip("()[]|.,:;")) >= 2)
 
 
-def squint(rgb: np.ndarray, box, lit_zone: np.ndarray, g: float) -> float:
-    """The lit line's share of the plot's visible contrast at 320 px wide."""
+def squint(rgb: np.ndarray, box, lit_zone: np.ndarray, g: float, width: int = SQUINT_W) -> float:
+    """The lit line's share of the plot's visible contrast at 320 px wide (P72 T10: a fill's at the 256 px thumbnail)."""
     h, w = rgb.shape[:2]
-    sh = round(h * SQUINT_W / w)
-    small = np.asarray(Image.fromarray((rgb * 255).round().astype(np.uint8)).resize((SQUINT_W, sh), Image.LANCZOS))
+    sh = round(h * width / w)
+    small = np.asarray(Image.fromarray((rgb * 255).round().astype(np.uint8)).resize((width, sh), Image.LANCZOS))
     lu = luma(small.astype(np.float64) / 255.0)
-    zone = np.asarray(Image.fromarray(lit_zone.astype(np.float32)).resize((SQUINT_W, sh), Image.BOX))
-    k = SQUINT_W / w
+    zone = np.asarray(Image.fromarray(lit_zone.astype(np.float32)).resize((width, sh), Image.BOX))
+    k = width / w
     sbox = _box_mask(lu.shape, [box[0] * k, box[1] * k, box[2] * k, box[3] * k])
     c = np.abs(lu - g) * sbox
     tot = float(c.sum())
@@ -598,6 +598,230 @@ def check_band(band_path: Path, root: Path) -> list[str]:
             tol = max(BAND_TOL * abs(want), BAND_ABS.get(key, 0.0), 0.05)
             if abs(have - want) > tol:
                 bad.append(f"{e['id']}.{key}: recorded {want}, measured {have} (tol {tol:.3f})")
+    return bad
+
+
+# ---- P72 T10 (E99 s130 (1)): a FILLED mark's halo - a gauge's fill, a lit bar ------------------------------------
+# The ruling: "a fill gauge's fill and bars (the lit / primary ones) carry an emissive halo in their own ink, measured
+# off Bravos's fills first". A fill has no stroke and no core: what glows is its EDGE. The read is the halo ACROSS the
+# fill's long edges - the two sides of a standing bar, the top and bottom of a lying one - row by row over the middle of
+# its length (FILL_SPAN), so a capsule's track, a callout's dot and a zero rule at its ends never enter it, and at each
+# distance the LOWER of the two sides (a neighbour or a brace beside one side only raises that side). `halo_exclude`
+# boxes are out of the halo read only: a neighbouring bar is still a MUTED mark for the lit / muted read.
+FILL_VAL = 0.85            # a fill pixel: this share of the ink's value (its own halo falls under it)
+FILL_SPAN = (0.2, 0.8)     # the middle of the fill's length the side profile reads
+FILL_RULE_1080 = 4.0       # a mark this thin (stage px) is a rule or a stub, not a muted fill
+OUTLINE_1080 = 4.0         # a mark's own outline (a stack's separator) is this thin at most: the halo is read past it
+THUMB_W = 256              # the thumbnail a fill is also read at (T10's frame acceptance: the sheet at 256 px wide)
+FILL_KEYS = ("halo_edge", "halo_r50_px1080", "halo_reach10_px1080", "halo_area_x_fill")   # the band: at 1920 AND at THUMB_W
+FILL_ABS = {"halo_edge": 0.03, "halo_r50_px1080": 0.5, "halo_reach10_px1080": 1.0, "halo_area_x_fill": 0.2,
+            "thumb_lit_share": 0.03, "lit_muted_ratio": 0.1, "lit_muted_excess": 0.1, "thumb_lit_muted_ratio": 0.1}
+
+
+def fill_mask(rgb: np.ndarray, ink: str, box, exclude=()) -> np.ndarray:
+    """The largest connected region of the ink inside the box, its holes filled (a dot or a word on it stays in it)."""
+    h, s, v = hsv(rgb)
+    ih, is_, iv = (float(c.ravel()[0]) for c in hsv(hex_rgb(ink)[None, None, :]))
+    if is_ < NEUTRAL_SAT:
+        raise ValueError(f"a fill's ink is a colour; {ink} is neutral (a white fill has no hue to find it by)")
+    inside = _box_mask(s.shape, box)
+    for ex in exclude:
+        inside &= ~_box_mask(s.shape, ex)
+    dh = np.abs((h - ih + 180.0) % 360.0 - 180.0)
+    m = (dh <= HUE_TOL) & (s >= SAT_FLOOR * is_) & (v >= FILL_VAL * iv) & inside
+    lab, n = ndimage.label(m, structure=np.ones((3, 3)))
+    if not n:
+        return m
+    sizes = ndimage.sum(m, lab, index=np.arange(1, n + 1))
+    return ndimage.binary_fill_holes(lab == int(np.argmax(sizes)) + 1)
+
+
+def _side_rows(L: np.ndarray, F: np.ndarray, H: np.ndarray, ring_max: int) -> tuple[np.ndarray, np.ndarray]:
+    """Per row of the fill's middle span: the luma 1..ring_max px out of its first and its last column (NaN outside
+    the halo mask). A standing fill is read as is; a lying one comes in transposed."""
+    rows = np.nonzero(F.any(axis=1))[0]
+    a = rows[0] + int(FILL_SPAN[0] * (rows[-1] - rows[0]))
+    b = rows[0] + int(np.ceil(FILL_SPAN[1] * (rows[-1] - rows[0])))
+    out = np.full((2, b - a + 1, ring_max), np.nan)
+    steps = np.arange(1, ring_max + 1)
+    for k, r in enumerate(range(a, b + 1)):
+        cols = np.nonzero(F[r])[0]
+        if not cols.size:
+            continue
+        for side, idx in enumerate((cols[0] - steps, cols[-1] + steps)):
+            ok = (idx >= 0) & (idx < L.shape[1])
+            vals = np.full(ring_max, np.nan)
+            vals[ok] = np.where(H[r, idx[ok]], L[r, idx[ok]], np.nan)
+            out[side, k] = vals
+    return out[0], out[1]
+
+
+def side_profile(lu: np.ndarray, fill: np.ndarray, halo_m: np.ndarray, ring_max: int) -> np.ndarray:
+    """The halo across the fill's long edges: per distance, the lower side's median over the rows (NaN: no data)."""
+    import warnings
+    ys, xs = np.nonzero(fill)
+    standing = (ys.max() - ys.min()) >= (xs.max() - xs.min())
+    L, F, H = (lu, fill, halo_m) if standing else (lu.T, fill.T, halo_m.T)
+    left, right = _side_rows(L, F, H, ring_max)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)   # an all-NaN distance (past the box on both sides) stays NaN
+        return np.fmin(np.nanmedian(left, axis=0), np.nanmedian(right, axis=0))
+
+
+def fill_marks(lu: np.ndarray, box_m: np.ndarray, lit_zone: np.ndarray, g: float, k1080: float) -> np.ndarray:
+    """Every other visible mark in the box - the muted bars, a capsule's track - with the thin rules and stubs out."""
+    marks = box_m & ~lit_zone & (lu > g + MARK_LUMA)
+    lab, _n = ndimage.label(marks, structure=np.ones((3, 3)))
+    thin = FILL_RULE_1080 / k1080
+    for i, sl in enumerate(ndimage.find_objects(lab), start=1):
+        if sl is None:
+            continue
+        hh, ww = sl[0].stop - sl[0].start, sl[1].stop - sl[1].start
+        if min(hh, ww) <= thin or (lab[sl] == i).sum() < SPECK_PX:
+            marks[sl] &= lab[sl] != i
+    return marks
+
+
+def _lit_muted(yl: np.ndarray, lu: np.ndarray, lit: np.ndarray, marks: np.ndarray, g: float) -> dict:
+    if marks.sum() < SPECK_PX * 4 or not lit.any():
+        return {"lit_muted_ratio": None, "lit_muted_excess": None}
+    ly, my = float(np.percentile(yl[lit], 90)), float(np.percentile(yl[marks], 90))
+    ll, ml = float(np.percentile(lu[lit], 90)), float(np.percentile(lu[marks], 90))
+    return {"lit_muted_ratio": round((ly + 0.05) / (my + 0.05), 2),
+            "lit_muted_excess": round((ll - g) / max(ml - g, 1e-6), 2)}
+
+
+def _thumb(rgb: np.ndarray, box, fill: np.ndarray, zone: np.ndarray, marks: np.ndarray, g: float) -> dict:
+    """The fill at THUMB_W: its zone's share of the box's contrast, and its lit / muted ratio there."""
+    h, w = rgb.shape[:2]
+    sh = round(h * THUMB_W / w)
+    small = np.asarray(Image.fromarray((rgb * 255).round().astype(np.uint8)).resize((THUMB_W, sh), Image.LANCZOS))
+    s01 = small.astype(np.float64) / 255.0
+    cov = lambda m: np.asarray(Image.fromarray(m.astype(np.float32)).resize((THUMB_W, sh), Image.BOX))  # noqa: E731
+    lm = _lit_muted(rel_lum(s01), luma(s01), cov(fill) >= 0.99, cov(marks) >= 0.5, g)
+    return {"width": THUMB_W, "lit_share": round(squint(rgb, box, zone, g, THUMB_W), 3),
+            "lit_muted_ratio": lm["lit_muted_ratio"]}
+
+
+def _fill_ground(lu: np.ndarray, fill: np.ndarray, halo_m: np.ndarray, ring_max: int) -> float:
+    far = halo_m & (ndimage.distance_transform_edt(~fill) > ring_max)
+    return float(np.median(lu[far] if far.any() else lu[halo_m]))
+
+
+def _fill_halo(lu: np.ndarray, fill: np.ndarray, halo_m: np.ndarray, ring_max: int, g: float, k1080: float) -> list[float]:
+    """The side profile less the ground, cut where the read runs out of box (its first NaN). A mark with an OUTLINE of
+    its own (a stack's part: a charcoal separator stroke round it) reads dark at its first rings; the halo starts at
+    the profile's peak within OUTLINE_1080 of the edge - on an unstroked fill that peak is the edge itself (ring 1)."""
+    raw = side_profile(lu, fill, halo_m, ring_max)
+    n = int(np.argmax(np.isnan(raw))) if np.isnan(raw).any() else len(raw)
+    prof = [float(v) - g for v in raw[:n]] or [0.0]
+    head = prof[:max(1, int(round(OUTLINE_1080 / k1080)) + 1)]
+    return prof[int(np.argmax(head)):]
+
+
+def measure_fill(frame: str | Path, ink: str, box, *, exclude=(), halo_exclude=(), at_width: int | None = None) -> dict:
+    """Every number for one lit FILL (a gauge's, a bar's). Boxes are in the frame's OWN px; `at_width` scales them."""
+    native_w = Image.open(frame).width
+    rgb = load_rgb(frame, at_width)
+    h, w = rgb.shape[:2]
+    ks, k1080 = w / native_w, STAGE_W / w
+    sc = lambda b: [v * ks for v in b]  # noqa: E731
+    box, exclude, halo_exclude = sc(box), [sc(e) for e in exclude], [sc(e) for e in halo_exclude]
+    fill = fill_mask(rgb, ink, box, exclude)
+    if not fill.any():
+        raise ValueError(f"{frame}: no fill of ink {ink} inside the box {box}")
+    box_m = _box_mask((h, w), box)
+    for ex in exclude:
+        box_m &= ~_box_mask((h, w), ex)
+    halo_m = box_m & ~fill
+    for ex in halo_exclude:
+        halo_m &= ~_box_mask((h, w), ex)
+    lu, yl = luma(rgb), rel_lum(rgb)
+    ring_max = max(8, round(RING_MAX_1080 / k1080))
+    g = _fill_ground(lu, fill, halo_m, ring_max)
+    prof = _fill_halo(lu, fill, halo_m, ring_max, g, k1080)
+    body = ndimage.binary_erosion(fill, iterations=max(1, round(2 / k1080)))
+    fl = float(np.median(lu[body if body.any() else fill])) - g
+    r50, reach10 = _cross(prof, 0.5 * prof[0]), _cross(prof, 0.10 * fl)
+    area = float(sum(max(v, 0.0) for v in prof))
+    zone = ndimage.binary_dilation(fill, iterations=max(1, int(round(reach10)) + 1))
+    marks = fill_marks(lu, box_m, zone, g, k1080)
+    th = _thumb(rgb, box, fill, zone, marks, g)
+    return {
+        "mode": "fill", "frame": str(frame).replace("\\", "/"), "size": [w, h], "ink": ink.upper(),
+        "box": [round(v, 1) for v in box], "ground_luma": round(g, 2),
+        "fill_px1080": round(2.0 * float(ndimage.distance_transform_edt(fill).max()) * k1080, 1),
+        "fill_luma": round(fl, 2), "halo_edge": round(prof[0] / fl, 3) if fl > 0 else 0.0,
+        "halo_r50_px1080": round(r50 * k1080, 2), "halo_reach10_px1080": round(reach10 * k1080, 2),
+        "halo_area_1080": round(area * k1080, 1), "halo_area_x_fill": round(area * k1080 / fl, 2) if fl > 0 else 0.0,
+        "halo_read_px1080": round(len(prof) * k1080, 1), "halo_profile": [round(v, 1) for v in prof],
+        "lit_lum": round(float(np.percentile(yl[fill], 90)), 4), "muted_px": int(marks.sum()),
+        **_lit_muted(yl, lu, fill, marks, g),
+        "thumb_lit_share": th["lit_share"], "thumb_lit_muted_ratio": th["lit_muted_ratio"], "thumb": th,
+    }
+
+
+def bravos_fill_frame(entry: dict, root: Path, out_dir: Path) -> tuple[Path, str]:
+    """A fills entry's frame, extracted from its video at its instant (BRAVOS-FRAME: ffmpeg -ss <t> -i <video>)."""
+    import hashlib
+    import subprocess
+    video = resolve(entry["video"], root)
+    if not video.exists():
+        raise FileNotFoundError(f"{entry['id']}: video not on disk ({video})")
+    png = out_dir / f"{entry['id']}.png"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(entry["t"]), "-i", str(video), "-frames:v", "1", str(png)],
+                   check=True)
+    return png, hashlib.sha256(png.read_bytes()).hexdigest()
+
+
+def measure_fill_entry(entry: dict, png: Path, at_width: int | None = None) -> dict:
+    return measure_fill(png, entry["ink"], entry["box"], exclude=entry.get("exclude", ()),
+                        halo_exclude=entry.get("halo_exclude", ()), at_width=at_width)
+
+
+def fills_band(frames: list[dict]) -> dict:
+    """The band a fill is judged against: each FILL_KEYS number's min and max over the recorded Bravos fills, read at
+    the frame's own 1920 (`full`) and at THUMB_W (`thumb`, the tool run on the frame downsampled)."""
+    out = {}
+    for side, rec in (("full", "measured"), ("thumb", "measured_thumb")):
+        out[side] = {}
+        for k in FILL_KEYS:
+            v = [f[rec][k] for f in frames if f[rec].get(k) is not None]
+            out[side][k] = {"min": min(v), "max": max(v), "n": len(v)}
+    return out
+
+
+def _fill_drift(e: dict, rec: str, got: dict, sha: str) -> list[str]:
+    bad = []
+    for key, want in e[rec].items():
+        have = got.get(key)
+        if want is None or have is None:
+            if want != have:
+                bad.append(f"{e['id']}.{rec}.{key}: recorded {want}, measured {have}")
+            continue
+        tol = max(BAND_TOL * abs(want), FILL_ABS.get(key, 0.05))
+        if abs(have - want) > tol:
+            why = "" if sha == e["frame_sha256"] else " (the decoded frame differs from the recorded one)"
+            bad.append(f"{e['id']}.{rec}.{key}: recorded {want}, measured {have} (tol {tol:.3f}){why}")
+    return bad
+
+
+def check_fills(band_path: Path, root: Path) -> list[str]:
+    """Re-extract and re-measure every recorded Bravos fill; a number that no longer reproduces is a finding."""
+    import tempfile
+    fb = json.loads(band_path.read_text(encoding="utf-8")).get("fills")
+    if not fb:
+        return []
+    bad = [] if fb["band"] == fills_band(fb["frames"]) else ["fills.band: not the recorded frames' own min / max"]
+    with tempfile.TemporaryDirectory() as td:
+        for e in fb["frames"]:
+            try:
+                png, sha = bravos_fill_frame(e, root, Path(td))
+            except FileNotFoundError as err:
+                bad.append(str(err))
+                continue
+            bad += _fill_drift(e, "measured", measure_fill_entry(e, png), sha)
+            bad += _fill_drift(e, "measured_thumb", measure_fill_entry(e, png, THUMB_W), sha)
     return bad
 
 
@@ -1003,6 +1227,8 @@ def main(argv=None) -> int:
     ap.add_argument("--timeline", help="--build: the timeline file name inside the build dir")
     ap.add_argument("--at", type=float, nargs="+", help="--build: only these instants (the page and the caption at each)")
     ap.add_argument("--frames", type=Path, help="--build: keep the rendered frames in this dir")
+    ap.add_argument("--fill", action="store_true", help="P72 T10: read a FILLED mark's halo (a gauge's fill, a lit bar)")
+    ap.add_argument("--halo-exclude", action="append", default=[], help="--fill: a box left out of the halo read only")
     a = ap.parse_args(argv)
     if a.build:
         out = measure_build(a.build, timeline_name=a.timeline, at=a.at, frames_dir=a.frames)
@@ -1010,12 +1236,17 @@ def main(argv=None) -> int:
         print(f"{out}: {len(doc['pages'])} held page(s), {len(doc['captions'])} caption(s) at {SQUINT_W} px wide")
         return 0
     if a.check and (a.band or a.caption_floor):
-        bad = (check_band(a.band, a.root) + check_squint_band(a.band, a.root) if a.band else []) \
+        bad = (check_band(a.band, a.root) + check_squint_band(a.band, a.root) + check_fills(a.band, a.root)
+               if a.band else []) \
             + (check_caption_floor(a.caption_floor, a.root) if a.caption_floor else [])
         print("\n".join(bad) if bad else f"{a.band or a.caption_floor}: every recorded frame reproduces")
         return 1 if bad else 0
     if not (a.frame and a.ink and a.box):
         ap.error("a frame, --ink and --box (or --band --check)")
+    if a.fill:
+        print(json.dumps(measure_fill(a.frame, a.ink, _box(a.box), exclude=[_box(x) for x in a.exclude],
+                                      halo_exclude=[_box(x) for x in a.halo_exclude]), indent=1))
+        return 0
     got = measure(a.frame, a.ink, _box(a.box), exclude=[_box(x) for x in a.exclude], title_box=_box(a.title_box),
                   label_box=_box(a.label_box), words=a.words, words_box=_box(a.words_box))
     print(json.dumps(got, indent=1))
