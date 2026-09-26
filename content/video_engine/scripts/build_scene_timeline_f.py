@@ -648,11 +648,36 @@ SPECIES_KINDS += (SPECIES_CROSS,)   # Bravos shots 89-91). ONE species carries b
 TIER_SPECIES = ("build_to", "undraw", "figure", "bracket")   # P50 T9: the page species that may name a TIER - which on a
                               # tiers page IS a series index. One resolution, not two: `tier` is the word the author writes
                               # (a band, not a line), `series` is what the player reads, and the two may not disagree.
-BRACKET_FORMS = ("span", "bar", "brace")   # P50 T9 / Bravos shot 36: the same measured span drawn as a hairline with ticks, or as a
+BRACKET_FORMS = ("span", "bar", "brace", "elbow")   # P50 T9 / Bravos shot 36: the same measured span drawn as a hairline with ticks, or as a
                               # BAR in the accent - the drop of one tier. A form, not a kind (P50 T3's precedent, the underline).
                               # P70 T5 (Bravos RST 05:40): `brace` - ONE stacked bar braced into its named parts, from zero
                               # to its top: it names `bar` (never two data), its cusp toward the whole's name, a part's
                               # name written beside its own span on its word (`parts_at`) - check_brace holds its truth.
+                              # P71 T27 (harvest v2 A53; BOOM 16:27): `elbow` - the LAG across two series (below).
+# P71 T27 (was P69 T75; harvest v2 A53, VERIFY.md: BOOM 16:12.5 "1-2 Years" crest to crest, 16:25.5-16:27 the "1.5 Years"
+# elbow): THE LAG - a bracket whose two ends are data of TWO series, `from: {series, datum}` / `to: {series, datum}`. Its
+# label IS the lag, the time between the two data's x (a line page's x is a decimal year): written by the compiler when
+# the author types none (`check_lead_lag`), and a typed one that disagrees is refused (E99 s109: a figure drawn wrong).
+# Two forms: `span` (the default) - the LEVEL, a bar over both ends, crest to crest - and `elbow`, from `from` along
+# its x to `to`'s level, then across to `to`. A52 (the travelling ring) and A54 (the phase slide) were NOT FOUND in
+# BOOM's frames (VERIFY.md) and are not built. On a second-axis page, ends on the two axes need s102's lead/lag claim.
+LAG_FORM = "elbow"
+LAG_FORMS = ("span", LAG_FORM)
+LAG_END_KEYS = ("series", "datum")
+LAG_OWN_KEYS = ("series", "tier")   # a one-series bracket's series fields: a lag's ends name their own
+LAG_DAYS = 365.25
+LAG_UNITS = (("day", 1.0), ("week", 7.0), ("month", LAG_DAYS / 12), ("quarter", LAG_DAYS / 4), ("year", LAG_DAYS))
+LAG_WORD = {"d": "day", "day": "day", "days": "day", "w": "week", "wk": "week", "wks": "week", "week": "week",
+            "weeks": "week", "mo": "month", "mos": "month", "month": "month", "months": "month", "q": "quarter",
+            "qtr": "quarter", "qtrs": "quarter", "quarter": "quarter", "quarters": "quarter", "y": "year", "yr": "year",
+            "yrs": "year", "year": "year", "years": "year"}
+LAG_FIGURE = re.compile(r"(\d+(?:\.\d+)?)(?:\s*[-\u2013]\s*(\d+(?:\.\d+)?))?\s*(" + "|".join(sorted(LAG_WORD, key=len, reverse=True))
+                        + r")\b", re.IGNORECASE)
+LAG_LEVEL_SKEW = 0.10   # [DERIVED: BOOM 16:13.0 - the level's two crests stand level (374 / 374 px) and its ticks reach 9 px
+                        # under a bar 30 px over them; two data more than 2 x 30 px apart in a ~600 px plot (0.10 of its
+                        # height) leave one tick over air] - a level over them is WARNED toward the elbow (E99 s106)
+LAG_WEEKS_UNDER_D, LAG_DAYS_UNDER_D, LAG_MONTHS_UNDER_Y = 91.0, 14.0, 2.0   # the unit the computed lag is written in: days
+                              # under two weeks, weeks under a quarter, months under two years, years past (one decimal)
 BRACE_FORM = "brace"
 BRACE_SIDES = ("left", "right")   # the side of the bar the brace stands on (the author's; else the engine reads the room)
 BRACE_KEYS = ("bar", "parts_at", "side")   # a brace's own keys - on a span or bar bracket they would be dropped silently
@@ -3004,6 +3029,14 @@ def _y2_species_error(sp: dict, right: set, inverted: bool, page: dict) -> str |
             return (f"spread at {at}: series {a} and {other} are read on the two axes of a y2 page ({LPG.Y2_RULING}) - a "
                     "gap filled between two scales is no reading (E75 s3)")
         edges = [a] + ([sp["to"]] if "to" in sp else [])
+    elif kind == "bracket" and is_lag(sp):   # P71 T27: the lag - read on the ONE x, never on a y
+        a, b = (sp.get(f) if isinstance(sp.get(f), dict) else {} for f in ("from", "to"))
+        claim = (page.get(LPG.Y2_KEY) or {}).get("claim")
+        if side(a.get("series")) != side(b.get("series")) and claim != "lead_lag":
+            return (f"bracket at {at}: a lag from series {a.get('series')} to series {b.get('series')} across the two axes "
+                    f"of a y2 page claiming {claim!r} - {LPG.Y2_RULING} (a) allows two scales for the claim the bracket "
+                    "makes, 'this one leads that one': name the page's claim lead_lag")
+        return None   # a time on the x: no level or change is read on either axis, the inverted one included
     elif kind == "bracket":
         edges = [int(sp.get("series") or 0)]
     else:
@@ -3226,6 +3259,45 @@ def _validate_brace(entry: dict, is_idx) -> list[str]:
     return errs
 
 
+def is_lag(entry: dict) -> bool:
+    """P71 T27: a bracket across two series - either end named as an object (`{series, datum}`)."""
+    return isinstance(entry, dict) and (isinstance(entry.get("from"), dict) or isinstance(entry.get("to"), dict))
+
+
+def _validate_lag(entry: dict, is_idx) -> list[str]:
+    """P71 T27: a two-series bracket's own fields - both ends `{series, datum}` on two different series, no top-level
+    `series` / `tier` (each end names its own), a `form` of LAG_FORMS, no brace key, and a label that is a non-empty string
+    when written. The page's truth - the ends exist, the lag is not zero, a typed lag is the computed one - is
+    check_lead_lag's."""
+    errs: list[str] = []
+    ends = {}
+    for f in ("from", "to"):
+        e = entry.get(f)
+        if not isinstance(e, dict):
+            errs.append(f"bracket: {f!r} is {e!r} and the other end names a series - a lag names both ends the same way, "
+                        "{series, datum} (P71 T27), or neither (a span's two datum indices on one series)")
+            continue
+        errs += [f"bracket: {k!r} is not a lag end's key ({'|'.join(LAG_END_KEYS)})" for k in sorted(e) if k not in LAG_END_KEYS]
+        if not (is_idx(e.get("series")) and is_idx(e.get("datum"))):
+            errs.append(f"bracket: {f!r} must name {{series, datum}} - two non-negative integers, the series and its datum")
+        else:
+            ends[f] = e
+    if len(ends) == 2 and ends["from"]["series"] == ends["to"]["series"]:
+        errs.append(f"bracket: both ends on series {ends['from']['series']} - a lag spans TWO series; one series' two data "
+                    "are the span (`from` / `to` as datum indices)")
+    errs += [f"bracket: {k!r} is each end's own on a lag (from.series / to.series) - it would be dropped" for k in LAG_OWN_KEYS
+             if k in entry]
+    errs += [f"bracket: {k!r} is the brace's (form: brace) - a lag spans two series and would drop it" for k in BRACE_KEYS
+             if k in entry]
+    if "form" in entry and entry["form"] not in LAG_FORMS:
+        errs.append(f"bracket: form {entry['form']!r} on two series - a lag is drawn as the level (form: span, the default) "
+                    f"or the elbow (form: elbow): {'|'.join(LAG_FORMS)}")
+    if "label" in entry and (not isinstance(entry["label"], str) or not entry["label"].strip()):
+        errs.append("bracket: a lag bracket's label, when written, is a non-empty string - its lag; omit it and the "
+                    "compiler writes the lag it computes")
+    return errs
+
+
 def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     """P47 T2: the page species' own fields. bracket: integer `from`/`to` (data indices), a `label`, optional `sub`,
     `series`, `color`; retitle: a non-empty `text`, optional `color` (a page token) and `color_span` (its leading
@@ -3240,14 +3312,20 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     if kind == "bracket":
         if entry.get("form") == BRACE_FORM:   # P70 T5: a brace names ONE bar, not two data - checked BEFORE the span's from/to
             errs += _validate_brace(entry, is_idx)
+        elif is_lag(entry):   # P71 T27: two series - its own ends, its own forms, its label computed
+            errs += _validate_lag(entry, is_idx)
         else:
             for f in ("from", "to"):
                 if not is_idx(entry.get(f)):
                     errs.append(f"bracket: {f!r} must be a non-negative integer datum index")
             errs += [f"bracket: {k!r} is the brace's (form: brace) - a span or bar bracket measures from/to and would "
                      "drop it" for k in BRACE_KEYS if k in entry]
-        if not isinstance(entry.get("label"), str) or not entry["label"].strip():
+        lag_label = is_lag(entry) and entry.get("form") != BRACE_FORM   # P71 T27: a lag's label is _validate_lag's (absent: computed)
+        if not lag_label and (not isinstance(entry.get("label"), str) or not entry["label"].strip()):
             errs.append("bracket: needs a non-empty string label (the measured span says what it measures)")
+        if entry.get("form") == LAG_FORM and not is_lag(entry):
+            errs.append("bracket: the elbow joins TWO series (P71 T27, BOOM 16:27) - name each end {series, datum}; one "
+                        "series' two data are the span (form: span, the default) or the bar")
         if "sub" in entry and not isinstance(entry["sub"], str):
             errs.append("bracket: sub must be a string")
         if "series" in entry and not is_idx(entry["series"]):
@@ -5205,6 +5283,106 @@ def check_brace(page: dict | None, species: list, aspect: str | None = None) -> 
     return bracket_room_notes(page, species, ASPECT if aspect is None else aspect)
 
 
+def lag_text(years: float) -> str:
+    """P71 T27: a lag written in the unit its length calls for - days under two weeks, weeks under a quarter, months under
+    two years, years (one decimal) past that. Pure."""
+    days = abs(float(years)) * LAG_DAYS
+    plural = lambda n, w: f"{n} {w}" + ("" if n == "1" else "s")   # noqa: E731
+    if days < LAG_DAYS_UNDER_D:
+        return plural(str(round(days)), "day")
+    if days < LAG_WEEKS_UNDER_D:
+        return plural(str(round(days / 7)), "week")
+    if abs(years) < LAG_MONTHS_UNDER_Y:
+        return plural(str(round(abs(years) * 12)), "month")
+    return plural(f"{abs(years):.1f}".rstrip("0").rstrip("."), "year")
+
+
+def _lag_said(label: str) -> tuple[float, float, float, str] | None:
+    """(low, high, half a unit of the last digit written - all in days -, the figure as written) of the first lag figure a
+    label writes ("6 weeks", "1.5 years", "1-2 months"), else None."""
+    m = LAG_FIGURE.search(str(label or ""))
+    if not m:
+        return None
+    unit = dict(LAG_UNITS)[LAG_WORD[m.group(3).lower()]]
+    lo, hi = m.group(1), m.group(2) or m.group(1)
+    places = max(len(v.split(".")[1]) if "." in v else 0 for v in (lo, hi))
+    return float(lo) * unit, float(hi) * unit, 0.5 * 10 ** -places * unit, m.group(0)
+
+
+def check_lead_lag(world: dict, row_species: list) -> list[str]:
+    """P71 T27: a row's two-series brackets (the lag) on the page they span. Refused by name (ValueError, truth rules): a
+    page that is not a line page of its own (a bars, a panels or a schematic page - a schematic's x is a shape, not time,
+    s109 (1)), an end the chart does not have, a zero lag, a label that writes no lag, and a typed lag that is not the
+    computed one at the label's own precision (a range holds it inside). A lag with no label is WRITTEN its computed lag
+    here (`lag_text`), as the page's leave is stamped - the timeline carries the figure the player writes. The chart read
+    is the one standing at the bracket's word (a recast's, as the level join does). Returned as WARN lines (E99 s106): a
+    LEVEL over two data more than LAG_LEVEL_SKEW of the plot's height apart on one axis - its tick over the lower one
+    points at air, and the elbow joins two levels."""
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == "bracket" and is_lag(sp)
+           and sp.get("form") != BRACE_FORM and not _validate_lag(sp, _is_index)]
+    if not sps or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return []
+    notes: list[str] = []
+    for sp in sps:
+        where = f"bracket (a lag) at {sp.get('at')}"
+        page = _lj_state(world, row_species, sp)
+        series = page.get("series") if page.get("variant") == "line" else None
+        if not isinstance(series, list) or len(series) < 2 or page.get("builder") == LPG.PANELS:
+            raise ValueError(f"{where}: a lag stands on a line page of its own that draws two series or more - it spans "
+                             "two series' data (P71 T27); a bars page, a panels page or a plate has none to span")
+        if page.get(LPG.SCHEMATIC_KEY):
+            raise ValueError(f"{where}: a schematic's x is a shape, not time (E99 s109 (1)) - the lag it would compute is "
+                             "no measured interval; write the lag in words (a note), or bracket a real series")
+        xs, vs = [], []
+        for f in ("from", "to"):
+            si, i = sp[f]["series"], sp[f]["datum"]
+            if si >= len(series):
+                raise ValueError(f"{where}: {f}: series {si} is past the page's last series ({len(series) - 1})")
+            pts = series[si].get("pts") if isinstance(series[si], dict) else None
+            if not pts or i >= len(pts):
+                raise ValueError(f"{where}: {f}: datum {i} is past series {si}'s last datum ({len(pts or []) - 1})")
+            xs.append(float(pts[i][0]))
+            vs.append(float(pts[i][1]))
+        lag = abs(xs[1] - xs[0])
+        skew = _lag_level_skew(page, (sp["from"]["series"], sp["to"]["series"]), vs) if sp.get("form") != LAG_FORM else None
+        if skew is not None and skew > LAG_LEVEL_SKEW:
+            notes.append(f"WARN {where}: the level form stands over data {skew:.0%} of the plot's height apart ({vs[0]:g} and "
+                         f"{vs[1]:g}) - its tick over the lower one points at air; the elbow (form: elbow) joins two "
+                         "levels. REPORTED (E99 s106)")
+        if lag * LAG_DAYS < 0.5:
+            raise ValueError(f"{where}: the two data stand at one x ({xs[0]:g}) - there is no lag to bracket")
+        if "label" not in sp:
+            sp["label"] = lag_text(lag)
+            continue
+        said = _lag_said(sp["label"])
+        if said is None:
+            raise ValueError(f"{where}: {sp['label']!a} - a lag bracket's label IS its lag, a figure and its unit "
+                             f"({lag_text(lag)} here); put the words in its sub, or omit the label for the computed lag")
+        lo, hi, half, fig = said
+        days = lag * LAG_DAYS
+        if not lo - half - 1e-9 <= days <= hi + half + 1e-9:
+            raise ValueError(f"{where}: the label says {fig} and the two data are {days:.0f} days apart ({lag_text(lag)}; "
+                             f"x {xs[0]:.4f} -> {xs[1]:.4f}) - a typed lag must be the computed one at its own precision "
+                             "(E99 s109: a figure drawn wrong); omit the label for the computed lag")
+    return notes
+
+
+def _lag_level_skew(page: dict, ends: tuple, vs: list) -> float | None:
+    """How far apart two ends stand, as a share of the plot's height (its domain, else its data; on the log scale when the
+    page is), or None when they are read on the two axes of a y2 page (two scales: no one height to compare)."""
+    right = set((page.get(LPG.Y2_KEY) or {}).get("series") or [])
+    if (ends[0] in right) != (ends[1] in right):
+        return None
+    axes = page.get("axes") or {}
+    on = [float(p[1]) for i, s in enumerate(page.get("series") or []) if isinstance(s, dict) and (i in right) == (ends[0] in right)
+          for p in s.get("pts") or []]
+    dom = axes.get("domain") if ends[0] not in right and isinstance(axes.get("domain"), list) and len(axes["domain"]) == 2 else None
+    lo, hi = (float(dom[0]), float(dom[1])) if dom else (min(on + vs), max(on + vs))
+    log = bool(axes.get("log")) and lo > 0 and min(vs) > 0
+    f = math.log if log else float
+    return abs(f(vs[0]) - f(vs[1])) / ((f(hi) - f(lo)) or 1.0)
+
+
 # P72 T43 (R26-219's bracket half, R26-338): THE BRACKET'S LABEL ROOM, estimated at 16:9 against the page's boxes. The
 # engine measures its own words (paintBracket's `geomOf`, lpBraceBuild's layouts) and the compiler cannot measure type,
 # so it ESTIMATES the room the way it sizes a tip pill (R26-43): the engine's own layout law in chart units, the text at an
@@ -5405,6 +5583,8 @@ def bracket_room_notes(page: dict | None, species: list, aspect: str | None) -> 
     for sp in brackets:
         if sp.get("form") == BRACE_FORM:
             note = _brace_room_note(page, boxes, sp) if page.get("variant") == "bars" else None
+        elif is_lag(sp):
+            note = None   # P71 T27: a lag's label is laid out by its own geometry (over its bar, or beside its elbow)
         elif page.get("variant") == "line" and page.get("series"):
             note = _span_room_note(page, boxes, sp)
         else:
@@ -8065,6 +8245,8 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     for _bk_note in check_brace(world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER
                                 else None, row_species):   # P70 T5: a brace's bar, its parts, its label's truth; P72 T43 the room
         print(f"  [WARN] {_bk_note}" + (f" [scene {sid}]" if sid else ""))
+    for _ll_note in check_lead_lag(world, row_species):   # P71 T27: a lag's ends, its label the computed lag (written when absent)
+        print(f"  [WARN] {_ll_note.removeprefix('WARN ')}" + (f" [scene {sid}]" if sid else ""))
     check_solo(world, row_species)            # P69 T37: a solo names ONE mark the page draws, on a page whose marks it re-inks
     check_value_targets(world, row_species)   # P72 T18: a ring on a bar's value names a value the page prints (R26-288)
     for _lj_note in check_level_join(world, row_species):   # P71 T10: a join's ends, its unit, its truth; a WARN on the rule

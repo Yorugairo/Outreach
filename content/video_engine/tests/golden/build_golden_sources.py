@@ -5731,6 +5731,81 @@ def unknown_decide() -> tuple[dict, dict]:
 SURFACES.update({"unknown-decide": unknown_decide})
 FRAME_T.update({"unknown-decide": 9.0})   # "Decide" at 8.0: the pop settled (+0.4) and the "?" standing (it leaves at 11.0)
 
+
+# ---- P71 T27 (was P69 T75; harvest v2 A53): THE LEAD-LAG BRACKET - a bracket across two series, its label the lag -----
+#   lead-lag-bracket  A REFERENCE beat (the plan's H row 9 - "seven percent" in 2000 to AI's "eight" - has no object on
+#                     disk that carries a 7 or an 8: the H door's own page_rail docstring, BODY_DEPARTURES row 9, E77; and
+#                     ev-bravos-original-v1 is SOURCES-TO-VERIFY, the operator's "re-read the source before this file is
+#                     cited for anything"). Two series READ off the VERIFIED divergence object (ev-divergence-v1, H's own
+#                     OPEN_PAGE, names corrected 2026-09-03), never re-typed, composed into a two-line page of their own
+#                     (T13's precedent: a temporary object through the compiler's own path) on H's hook domain (80 ..
+#                     1.06 x the pair's max, the door's own read): the semiconductor stocks topped at 261.08 on datum 188
+#                     (x 2026.4709) and the mega-caps at 123.16 on datum 217 (x 2026.5886), 43 days later. The semis' top
+#                     is ringed (the `ring` species' dashed form - E56: a datum on a chart), then BOOM's ELBOW (16:27.0)
+#                     runs from under that ring down to the mega-caps' level and across to their top, and the compiler
+#                     WRITES the lag it computes from the two x - "6 weeks" (check_lead_lag; no label is typed). Judged
+#                     landed and held. `form` / `extra` are for test_lead_lag's reads only (the level form, a relight) -
+#                     the committed golden is the plain call.
+LAG_OBJECT = LEVEL_PROJECT / "evidence/objects/ev-divergence-v1.series.json"
+LAG_FROM_SERIES = (1, 2)                # the object's SEMICONDUCTOR STOCKS and MEGA-CAP TECH STOCKS ...
+LAG_TOPS = (188, 217)                   # ... and their tops (each series' own maximum, checked below)
+LAG_ID = "ref-semis-lead-megacaps"
+LAG_PLATE = f"ledger:{LAG_ID}:line::right;idle=live;domain=%g,%g"
+LAG_AT, LAG_DUR, LAG_RING_AT = 8.0, 1.6, 6.6
+LAG_RISE_PX = 30                        # the engine's LPLAG.RISE_PX (BOOM 16:13.0) - the level form's read in test_lead_lag
+RING_MIN_RY_PX = 40                     # species/ring.mjs RING.MIN_RY: the ring on a bare datum the elbow's tip clears
+
+
+def lead_lag_series() -> dict:
+    """The reference page's object: the two lines off the committed file, their tops asserted, their words the file's."""
+    obj = json.loads(LAG_OBJECT.read_text(encoding="utf-8"))
+    lines = []
+    for si, top in zip(LAG_FROM_SERIES, LAG_TOPS):
+        s = obj["series"][si]
+        assert max(range(len(s["pts"])), key=lambda j: s["pts"][j][1]) == top, (si, top)
+        lines.append({k: s[k] for k in ("name", "label", "color", "pts")})
+    return {"title": "The chips topped first", "sub": "Reference beat: " + lines[0]["name"].lower() + " against "
+            + lines[1]["name"].lower() + ", 100 = Aug '25, log scale", "src": obj["src"], "log": True,
+            "ylabel": obj["ylabel"], "xticks": obj["xticks"], "series": lines}
+
+
+def lead_lag_bracket(form: str | None = None, extra: list | None = None) -> tuple[dict, dict]:
+    import tempfile
+    import build_scene_timeline_f as BST
+    series = lead_lag_series()
+    assert LPG.validate(series, "line") == [], LPG.validate(series, "line")
+    plate = LAG_PLATE % (80.0, float(round(max(v for s in series["series"] for _x, v in s["pts"]) * 1.06)))
+    last = len(series["series"][0]["pts"]) - 1
+    species = [
+        {"kind": "build_to", "at": 0.5, "dur": 5.0, "series": 0, "target": {"kind": "datum", "index": last}},
+        {"kind": "build_to", "at": 0.5, "dur": 5.0, "series": 1, "target": {"kind": "datum", "index": last}},
+        {"kind": "ring", "at": LAG_RING_AT, "dur": round(RUNTIME - LAG_RING_AT, 2), "form": "dashed",
+         "target": {"kind": "datum", "index": LAG_TOPS[0], "series": 0}},
+        {"kind": "bracket", "at": LAG_AT, "dur": LAG_DUR, "from": {"series": 0, "datum": LAG_TOPS[0]},
+         "to": {"series": 1, "datum": LAG_TOPS[1]}, "form": form or "elbow"},
+    ] + [dict(e) for e in (extra or [])]
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            objects = Path(td) / "evidence/objects"
+            objects.mkdir(parents=True)
+            (objects / f"{LAG_ID}.series.json").write_text(json.dumps(series), encoding="utf-8")
+            world = BST.world_for_plate(plate, (0, 0, 0), Path(td))
+            BST.stamp_full_stage(world["page"])
+            BST.derive_rescale_states(world, species, plate, Path(td))   # the compiler's own checks: check_lead_lag writes the lag
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the semis topped six weeks before the mega-caps (a lead-lag bracket)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"lead-lag-bracket": lead_lag_bracket})
+FRAME_T.update({"lead-lag-bracket": round(LAG_AT + LAG_DUR + 0.4, 2)})   # landed and held: the elbow, its heads and "6 weeks"
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

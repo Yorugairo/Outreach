@@ -16634,6 +16634,99 @@ async function mount(doc) {
       if (RV && M.pill && st.cval) st.cval.textContent = lpRevalueText(st.cfinal, v);   /* the pill prints the height drawn too (M26 reads it) */
     }
   };
+  /* P71 T27 (was P69 T75; harvest v2 A53) - THE LAG: a bracket across TWO series, `from: {series, datum}` to `to: {series,
+     datum}`, its label the lag the compiler computed from the two data's x (build_scene_timeline_f.check_lead_lag: absent,
+     it WRITES it; typed, it must agree - this painter only writes what the timeline says). BOOM draws it twice (VERIFY.md,
+     the frame verification): at 16:13.0 the LEVEL - a bar over the two waves' crests, crest to crest, "1-2 Years" centred
+     over it (`form: "span"`, the default) - and at 16:27.0 the ELBOW - from a ring on the yield curve's end up to the PMI's
+     level and across to it, a head at both tips, "1.5 Years" beside the vertical (`form: "elbow"`). Its own geometry, as
+     the brace has its own (lpBraceBuild): the span's geomOf measures one series' two data on a vertical beside them; this
+     measures two series' data ALONG the x. The level stands over the highest ink of its two series between its ends (and
+     over a ring on either end), so it never draws through a line or a ring; two ends far apart in height are the elbow's
+     (the compiler WARNs a level over them, check_lead_lag). The elbow's vertical stands on `from`'s x, its horizontal on `to`'s level; a tip stops
+     GAP short of its datum, or RING_AIR short of a `ring` authored on that datum (E56: a datum on a chart - BOOM's arrow
+     stops short of its ring). The figure stands beside the vertical at its middle, on the side away from the horizontal,
+     and crosses to the other side only when the chart's edge is in the way. Dials in STAGE px, over st.stagePx.
+     [MEASURED: BOOM jx3Ll 16:13.0 and 16:27.0 at 1920x1080 - p71-t27 logs/bravos-measure.json]
+       RISE_PX      30   the level bar over the crests (rows 343-344; the crests at 374)
+       TICK_PX       9   the level's end tick, each way about the bar (335..353)
+       AIR_PX       13   the level's label ink over the bar (its box 306..330)
+       GAP_PX        8   a tip short of a bare datum (the PMI's end 1132 -> the head's tip 1139)
+       RING_AIR_PX  10   ... and short of a ring on its datum (the ring's top 668 -> the tip 658)
+       HEAD_PX       9   the arrowhead's length along its leg (the chevron 1139..1147)
+       HEAD_W_PX     9   ... and its width across (rows 450..458)
+       DX_PX        16   the elbow's figure off the vertical (the leg 1181 -> the figure 1197)
+       STROKE_PX     3   the legs and the bar (3 px across the vertical, 1180..1182; the level's core ~2.4 + its halo)
+       HALO_PX       4   the level bar's soft halo (the ground 70 -> 128 at 3 px -> 80 at 9 px)
+     [DERIVED: BOOM 16:25.0-25.8 at 0.2 s, p71-t27 frames/seq] VERT 0.6 - the elbow's vertical takes this share of the
+     draw, growing from its MIDDLE both ways with a head at each tip, then the horizontal runs out of the corner with its
+     own. The phases are the span's (PS.BRACKET_DRAW / TICK / LABEL of `dur`); it leaves as the span does (`ud`). */
+  const LPLAG = Object.freeze({ RISE_PX: 30, TICK_PX: 9, AIR_PX: 13, GAP_PX: 8, RING_AIR_PX: 10, HEAD_PX: 9, HEAD_W_PX: 9,
+                                DX_PX: 16, STROKE_PX: 3, HALO_PX: 4, HALO_A: 0.55, VERT: 0.6 });
+  const lpLagEnds = (st, sp) => [sp.from, sp.to].map((e) => lpDatumNow(st, e.series | 0, e.datum | 0));
+  const lpLagTop = (st, sp, A, B) => {   /* the highest ink of the two series between the ends (y grows down) */
+    const lo = Math.min(A[0], B[0]) - 1e-6, hi = Math.max(A[0], B[0]) + 1e-6;
+    let top = Math.min(A[1], B[1]);
+    for (const e of [sp.from, sp.to]) for (const q of lpPointsNow(st, e.series | 0)) if (q.p[0] >= lo && q.p[0] <= hi) top = Math.min(top, q.p[1]);
+    return top;
+  };
+  const lpLagRingAir = (scene, e, k) => {   /* a `ring` authored on this datum: the tip clears it (its bare-datum ellipse) */
+    const on = ((scene && scene.species) || []).some((r) => r && r.kind === "ring" && r.target && r.target.kind === "datum"
+      && (r.target.series | 0) === (e.series | 0) && (r.target.index | 0) === (e.datum | 0));
+    return on ? { on, ry: RING.MIN_RY / k, v: (RING.MIN_RY + LPLAG.RING_AIR_PX) / k, h: (RING.MIN_RX + LPLAG.RING_AIR_PX) / k }
+              : { on, ry: 0, v: LPLAG.GAP_PX / k, h: LPLAG.GAP_PX / k };
+  };
+  const lpLagGeom = (form, A, B, top, k, airA, airB) => {   /* pure: the drawn geometry, chart units */
+    if (form !== "elbow") return { form: "span", y: Math.min(top, A[1] - airA.ry, B[1] - airB.ry) - LPLAG.RISE_PX / k, x0: A[0], x1: B[0] };   /* over a ring on an end, too */
+    const dv = Math.sign(B[1] - A[1]) || -1, dh = Math.sign(B[0] - A[0]) || 1;
+    const yA = dv > 0 ? Math.min(A[1] + airA.v, B[1]) : Math.max(A[1] - airA.v, B[1]);
+    return { form, x: A[0], yA, yB: B[1], xB: B[0] - dh * airB.h, dv, dh };
+  };
+  const lpLagHead = (parent, col) => lpEl("path", "bkhead", parent, { d: "M0 0 L-1 -0.5 L-1 0.5 Z", style: "fill:" + col + ";stroke:none", opacity: 0 });
+  const lpLagBuild = (st, sp, bi, surf, o, scene) => {
+    const k = st.stagePx > 0 ? st.stagePx : 1, [A, B] = lpLagEnds(st, sp);
+    if (!A || !B) return null;   /* the compiler refuses an end the page does not have (check_lead_lag) */
+    const form = sp.form === "elbow" ? "elbow" : "span", airA = lpLagRingAir(scene, sp.from, k), airB = lpLagRingAir(scene, sp.to, k);
+    const tfs = lpPhoneTypeOf(st) ? lpTypeU(st, "tag") : o.fs, tss = lpPhoneTypeOf(st) ? tfs * LPBRACE.SUB_EM : o.fss;
+    const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)";   /* a lag belongs to neither line: the chalk, as BOOM's white */
+    const W = (st.geom || {}).W || 1000, sw = (LPLAG.STROKE_PX / k).toFixed(2);
+    const mk = (cls, stroke) => {
+      const g = lpEl("g", "lp-bracket lp-lag " + cls, surf, { opacity: 0 });
+      const line = lpEl("path", "bk", g, { d: "", stroke }), hline = form === "elbow" ? lpEl("path", "bk", g, { d: "", stroke }) : null;
+      if (cls === "main") { line.style.strokeWidth = sw + "px"; if (hline) hline.style.strokeWidth = sw + "px"; }
+      if (cls === "main" && form !== "elbow") line.style.filter = "drop-shadow(0 0 " + (LPLAG.HALO_PX / k).toFixed(2) + "px " + lpInkA(lpVarHex(stroke), LPLAG.HALO_A) + ")";
+      const ticks = form === "elbow" ? [] : [0, 1].map(() => lpEl("path", "bk", g, { d: "", stroke, style: cls === "main" ? "stroke-width:" + sw + "px" : "" }));
+      const heads = form === "elbow" ? [0, 1, 2].map(() => lpLagHead(g, stroke)) : [];
+      const label = lpEl("text", "bklab", g, { style: "font-size:" + tfs + "px;fill:" + stroke });
+      const lg = [...String(sp.label || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? " " : ch; return ts; });
+      let sub = null, sg = [];
+      if (sp.sub) { sub = lpEl("text", "bksub", g, { style: "font-size:" + tss + "px;fill:" + stroke });
+        sg = [...String(sp.sub)].map((ch) => { const ts = lpEl("tspan", "", sub, { opacity: 0 }); ts.textContent = ch === " " ? " " : ch; return ts; }); }
+      return { g, line, hline, ticks, heads, label, lg, sub, sg, len: 0 };
+    };
+    const main = mk("main", col), glow = mk("glow", PS.RELIGHT_COL);
+    const lw = Math.max(lpInkW(main.label), main.sub ? lpInkW(main.sub) : 0);
+    const place = (q) => {   /* the words' place for a geometry: over the level's middle, or beside the elbow's vertical */
+      if (q.form !== "elbow") {
+        const sy = q.y - LPLAG.AIR_PX / k - LPVAL.LAB_DESC * (sp.sub ? tss : tfs);
+        return { lx: (q.x0 + q.x1) / 2, anchor: "middle", ly: sp.sub ? sy - tss * 1.3 : sy, sy };
+      }
+      const ym = (q.yA + q.yB) / 2, side = (q.x - q.dh * (LPLAG.DX_PX / k + lw) < 0 || q.x - q.dh * (LPLAG.DX_PX / k + lw) > W) ? -q.dh : q.dh;
+      const lx = q.x - side * LPLAG.DX_PX / k, ly = ym + tfs * 0.35 - (sp.sub ? tss * 0.65 : 0);
+      return { lx, anchor: side < 0 ? "start" : "end", ly, sy: ly + tss * 1.3 };
+    };
+    const geoOf = (Ap, Bp) => { const q = lpLagGeom(form, Ap, Bp, lpLagTop(st, sp, Ap, Bp), k, airA, airB); return Object.assign(q, place(q)); };
+    const g0 = geoOf(A, B);
+    for (const side of [main, glow]) {
+      side.label.setAttribute("x", g0.lx.toFixed(1)); side.label.setAttribute("y", g0.ly.toFixed(1)); side.label.setAttribute("text-anchor", g0.anchor);
+      if (side.sub) { side.sub.setAttribute("x", g0.lx.toFixed(1)); side.sub.setAttribute("y", g0.sy.toFixed(1)); side.sub.setAttribute("text-anchor", g0.anchor); }
+    }
+    const ys = form === "elbow" ? [g0.yA, g0.yB] : [g0.y, g0.y];
+    return { sp, lag: { form, si: [sp.from.series | 0, sp.to.series | 0], ends: [sp.from.datum | 0, sp.to.datum | 0], hline: main.hline,
+                        heads: main.heads.slice(0, 2), corner: main.heads[2] || null, ticks: main.ticks },
+             geo: g0, geoOf, x: form === "elbow" ? g0.x : g0.x0, y0: Math.min(...ys), y1: Math.max(...ys), A, B, fits: true, main, glow, bi,
+             si: sp.from.series | 0, key: "" };
+  };
   /* P70 T5 (was P69 T58; harvest v2 T24; Bravos RST 05:40, "Long-Term Interest Rates" braced into its two stacked
      components) - THE DECOMPOSITION BRACE: `bracket {form: "brace", bar, at, dur, label, sub?, parts_at?, side?}` braces
      ONE stacked bar (P69 T64's `segments`) into its named parts. A curly brace stands beside the bar's side from zero
@@ -16866,6 +16959,7 @@ async function mount(doc) {
     const BRACKET_BAR_DESC = 0.4;   /* R26-272: a sub's descent below its baseline, in its own size - the room a stacked sub keeps over a bar's value */
     const brackets = pageSpecies(scene, "bracket").map((sp, bi) => {
       if (sp.form === "brace") return lpBraceBuild(st, sp, bi, surf, { P, fs, fss, pg });   /* P70 T5: ONE bar braced into its parts - its own geometry */
+      if ((sp.from && typeof sp.from === "object") || (sp.to && typeof sp.to === "object")) return lpLagBuild(st, sp, bi, surf, { P, fs, fss, pg }, scene);   /* P71 T27: two series - the lag, its own geometry */
       let pts = (st.linePts || [])[sp.series | 0] || [], barSide = 0, barInkTop = Infinity;
       /* P69 T50 / R26-272: a BARS page has no `linePts`, and a bracket from bar 0 to bar 1 used to build nothing. Its
          data are the bars' TOPS - the one datum rule lpMarkDatumOn reads for a bar (`b:<i>`: [cx, end]), series 0 only
@@ -17368,6 +17462,53 @@ async function mount(doc) {
     sd.path.setAttribute("d", d);
     sd.path.setAttribute("fill-opacity", (PS.SPREAD_A * clamp01(u / 0.35)).toFixed(3));
   };
+  /* P71 T27: THE LAG's paint (lpLagBuild) - a pure function of t. The level: `from`'s tick springs open on the word, the
+     bar draws from `from` to `to` over BRACKET_DRAW, `to`'s tick opens as it lands. The elbow: the vertical grows from its
+     middle both ways over VERT of the draw, a head riding each tip, then the horizontal runs out of the corner to `to` with
+     its head, the corner's head gone. The label writes from BRACKET_LABEL, the sub after it (the span's law). An undraw or a
+     replacing verb after its word takes it on that verb's clock; on a page with chart states its two data are re-read every
+     frame on the active state (R26-28) and it hides while either is off the window. */
+  const lpLagHeadAt = (el, x, y, deg, k, on) => {
+    el.setAttribute("transform", "translate(" + x.toFixed(2) + " " + y.toFixed(2) + ") rotate(" + deg + ") scale(" + (LPLAG.HEAD_PX / k).toFixed(3) + " " + (LPLAG.HEAD_W_PX / k).toFixed(3) + ")");
+    el.setAttribute("opacity", on ? 1 : 0);
+  };
+  const paintLag = (b, t, ud, st) => {
+    const sp = b.sp, dur = Math.max(0.001, sp.dur || 1), k = st && st.stagePx > 0 ? st.stagePx : 1;
+    if (st && (st.states || []).length > 1) {
+      const [Ap, Bp] = lpLagEnds(st, sp);
+      if (!Ap || !Bp) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); b.hidden = true; return; }
+      b.hidden = false; b.geo = b.geoOf(Ap, Bp); b.A = Ap; b.B = Bp;
+      for (const side of [b.main, b.glow]) { side.label.setAttribute("x", b.geo.lx.toFixed(1)); side.label.setAttribute("y", b.geo.ly.toFixed(1));
+        if (side.sub) { side.sub.setAttribute("x", b.geo.lx.toFixed(1)); side.sub.setAttribute("y", b.geo.sy.toFixed(1)); } }
+    }
+    const q = b.geo;
+    let u = clamp01((t - sp.at) / dur);
+    if (ud && t >= ud.at && ud.at >= sp.at) u = Math.min(u, 1 - segEase(clamp01((t - ud.at) / Math.max(0.001, ud.dur || 1))));
+    const pop = kin("analytic_spring") ? springPop : stagePop, f = (v) => v.toFixed(2);
+    for (const side of [b.main, b.glow]) {
+      if (q.form !== "elbow") {
+        const draw = segEase(u / PS.BRACKET_DRAW), xe = q.x0 + (q.x1 - q.x0) * draw;
+        side.line.setAttribute("d", draw > 0 ? "M" + f(q.x0) + " " + f(q.y) + " L" + f(xe) + " " + f(q.y) : "");
+        const T = LPLAG.TICK_PX / k;
+        [[q.x0, clamp01(u / PS.BRACKET_TICK)], [q.x1, clamp01((u - PS.BRACKET_DRAW) / PS.BRACKET_TICK)]].forEach(([x, w], j) => {
+          const tk = side.ticks[j]; tk.setAttribute("d", "M" + f(x) + " " + f(q.y - T) + " L" + f(x) + " " + f(q.y + T));
+          tk.setAttribute("transform-origin", f(x) + "px " + f(q.y) + "px"); tk.setAttribute("transform", "scale(1 " + pop(w).toFixed(4) + ")"); });
+      } else {
+        const v = segEase(clamp01(u / (PS.BRACKET_DRAW * LPLAG.VERT))), h = segEase(clamp01((u - PS.BRACKET_DRAW * LPLAG.VERT) / (PS.BRACKET_DRAW * (1 - LPLAG.VERT))));
+        const ym = (q.yA + q.yB) / 2, ta = ym + (q.yA - ym) * v, tc = ym + (q.yB - ym) * v, xe = q.x + (q.xB - q.x) * h;
+        side.line.setAttribute("d", v > 0 ? "M" + f(q.x) + " " + f(ta) + " L" + f(q.x) + " " + f(tc) : "");
+        side.hline.setAttribute("d", h > 0 ? "M" + f(q.x) + " " + f(q.yB) + " L" + f(xe) + " " + f(q.yB) : "");
+        lpLagHeadAt(side.heads[0], q.x, ta, q.dv > 0 ? -90 : 90, k, v > 0);                 /* at `from`: pointing back at its datum */
+        lpLagHeadAt(side.heads[2], q.x, tc, q.dv > 0 ? 90 : -90, k, v > 0 && h <= 0);       /* the growing vertical's other tip, until the corner turns */
+        lpLagHeadAt(side.heads[1], xe, q.yB, q.dh > 0 ? 0 : 180, k, h > 0);                  /* at `to`: pointing at its datum */
+      }
+      const nl = Math.max(1, side.lg.length), perL = (1 - PS.BRACKET_LABEL) * 0.7 / nl, uL = u - PS.BRACKET_LABEL;
+      side.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uL - j * perL) / (perL * 1.6)).toFixed(3)));
+      const ns = Math.max(1, side.sg.length), perS = (1 - PS.BRACKET_LABEL) * 0.3 / ns, uS = u - PS.BRACKET_LABEL - (1 - PS.BRACKET_LABEL) * 0.7;
+      side.sg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uS - j * perS) / (perS * 1.6)).toFixed(3)));
+    }
+    b.main.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
+  };
   /* P70 T5: the brace on the bracket's clock - the curve draws over BRACKET_DRAW of dur (one stroke, top end to bottom
      end, through the cusp), the notches spring open over BRACKET_TICK, the label writes glyph by glyph from
      BRACKET_LABEL and the sub after it; each part's name writes on its own word over NAME_S (the last letter with the
@@ -17398,6 +17539,7 @@ async function mount(doc) {
   };
   const paintBracket = (b, t, ud, st) => {
     if (b.brace) return paintBrace(b, t, ud, st);   /* P70 T5: one bar braced into its parts */
+    if (b.lag) return paintLag(b, t, ud, st);       /* P71 T27: two series - the lag */
     const sp = b.sp, dur = Math.max(0.001, sp.dur || 1);
     if (st && (st.states || []).length > 1) {   /* R26-28: the two anchors and the series' points, this frame, on the active state (lerped across a rescale / extend) */
       const Ap = lpDatumNow(st, b.si, sp.from | 0), Bp = lpDatumNow(st, b.si, sp.to | 0);

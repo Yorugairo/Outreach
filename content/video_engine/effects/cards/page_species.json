@@ -245,7 +245,7 @@
       "token": "bracket",
       "title": "The bracket page species",
       "aliases": [],
-      "does": "The hand draws a measured span between two data, the number as its label - on a line, or on a bars page between two bar tops, beside the bars' sides (R26-272); as a brace, one stacked bar braced into its named parts (P70 T5).",
+      "does": "The hand draws a measured span between two data, its number the label - on a line, or between two bar tops beside the bars (R26-272); a brace splits one stacked bar into its parts (P70 T5); a lag spans two series (P71 T27).",
       "when": null,
       "when_source": null,
       "author": {
@@ -304,6 +304,16 @@
           "token": "brace",
           "means": "`form: \"brace\"` (P70 T5): one stacked bar (`bar`) braced zero to top, cusp toward the label (a figure = the total), a notch per boundary, each part named on its word (`parts_at`) in its ink",
           "source_set": null
+        },
+        {
+          "token": "lag",
+          "means": "`from` / `to` as `{series, datum}` on two series (A53): the level (default), a bar crest to crest (BOOM 16:13); its label the lag computed from the two x; across two axes the claim is lead_lag (s102)",
+          "source_set": null
+        },
+        {
+          "token": "elbow",
+          "means": "`form: \"elbow\"` on a lag (BOOM 16:27): from `from` along its x to `to`'s level, then across, a head at each tip, the vertical grown from its middle; the figure beside it; a tip clears a ring",
+          "source_set": null
         }
       ],
       "dials": null,
@@ -315,7 +325,8 @@
       "doctrine": [
         "CAPABILITIES Build-on",
         "BACKLOG R26-272",
-        "P70 T5 (Bravos RST 05:40)"
+        "P70 T5 (Bravos RST 05:40)",
+        "P71 T27 (Bravos BOOM 16:13 / 16:27, VERIFY.md A53)"
       ],
       "status": "wired",
       "proof": {
