@@ -122,7 +122,8 @@ IDLE_IS_THE_SUBJECT = {"plate-drift", "plate-alive"}
 # The rest of the wall stays flagless, which is what keeps it byte-identical - that is unchanged.
 PAGE_IDLE_IS_THE_SUBJECT = {"page-life-still", "page-life-live", "page-build-lines", "page-build-lines-4th",
                             "page-rescale-follow", "page-rescale-follow-yield",
-                            "freeze-trough"}   # P69 T49 / E99 s99: the freeze beat STOPS the page's life - with no life on, there is nothing to stop
+                            "freeze-trough",   # P69 T49 / E99 s99: the freeze beat STOPS the page's life - with no life on, there is nothing to stop
+                            "enter-trace", "ink-from-crash"}   # P71 T28: H's railway page as H draws it, authored `idle=live` (E99 s79: every page row lives); its life is in the pinned pixels (switch off: ~455k / ~494k px differ)
 
 # P70 T13: one DOCK golden carries the switch for the same reason - its subject is the drift-hold, a dock's own idle
 # (`idle: hold`), which `idleOf` answers "none" for when E49's switch is off. Its plate stays at the class breath.
