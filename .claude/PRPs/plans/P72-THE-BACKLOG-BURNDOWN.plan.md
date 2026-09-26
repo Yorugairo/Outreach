@@ -689,7 +689,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T17: The compiler says what it drops - spans, warnings, twins, WARNs by name
-- Status: pending
+- Status: done - lane B 79c075f: all ten item groups in ONE commit (deviation: the compiler's hand-merge with T12 / T13 / T14 is verified as a whole; the body lists every group); R26-143's pair REFUSED (the probe showed a dropped state); R26-249 a WARN (s106); replay over 43 timelines + H clean
 - Owner: implementation_luna (LANE B); one commit per item group, one compiler writer at a time
 - Depends on: T0 (R26-44 is no longer here: it is the operator's, a `⏸️` row triggered by the first cut that threads a line)
 - Items: R26-249 (every page's entry + build + leave checked against its row, authored or not), R26-317 (a door prints the page's E79 WARN from `ledger_page.measure_unit_warnings`), R26-154 (`MELT_T_S`, `MELT_M_S` twins beside `MELT_S` `:124`, pinned by `test_transitions_e47`), R26-43 (a tag wider than its chart WARNs by name instead of dropping its tip pill), R26-149 (`world.morph` takes a `series` word, refused by name out of range), R26-214 (b) (`;idle=figure` refused on a `plate_option:world` plate, `IDLE_KINDS` `:87`), R26-209 (an INFO line: the open zoom at every scene boundary; a key set that never returns to identity names the next row's carry or WARNs), R26-258 (`dock_place` pads a `dock_kind:prop` box by `PROP_SHADOW`'s reach toward the light's fall), R26-143's second half (`compare` authored beside a `remake` on one page - "neither refused nor proven", `hist:587`), R26-333 (a decade ruler whose 1.5 s scroll overlaps a `freeze` beat is neither refused nor warned; the check belongs in `_freeze_row_errors`, P69 T49's function - `hist:940`)
