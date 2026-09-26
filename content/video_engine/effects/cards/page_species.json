@@ -1603,7 +1603,7 @@
       "token": "spread",
       "title": "The spread page species",
       "aliases": [],
-      "does": "The region between two drawn series bleeds full of ink on a word.",
+      "does": "The region between two drawn series bleeds full of ink on a word; against a reference rule it may keep ONE side of it - the dip below zero, the stretch under a prior peak.",
       "when": null,
       "when_source": null,
       "author": {
@@ -1626,7 +1626,17 @@
           "does": "the fill's alpha ramps to SPREAD_A",
           "trigger": "the species' `at`, over 0.35 of `dur`",
           "dials": {
-            "SPREAD_A": "0.30"
+            "SPREAD_A": "0.51"
+          }
+        },
+        {
+          "name": "keep a side",
+          "does": "with `side`, only the region where the series is on that side of its rule bleeds (each excursion closed along the rule); a peak spread stops at the regain and its time under water writes over the fill",
+          "trigger": "the same bleed; the label from SPREAD_BLEED to the word's end",
+          "dials": {
+            "LABEL_DY": "20",
+            "EPS": "0.001",
+            "OVERLAP": "1.6"
           }
         }
       ],
@@ -1638,7 +1648,23 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "side",
+          "means": "`side: below|above` on a `to_rule` spread (A46 / R29): the fill is kept to where the series is on that side of the rule, bounded by the true series and rule; the glow rings the clipped fill.",
+          "source_set": null
+        },
+        {
+          "token": "peak",
+          "means": "`peak: true` + side below + `from_index` at the peak (A45): the rule must be that datum's value (E28, refused otherwise); the fill ends where the series regains the level.",
+          "source_set": null
+        },
+        {
+          "token": "label",
+          "means": "a peak spread's words with `{years}` or `{months}`: the compiler computes the time under water (\"+\" when never regained) and writes it over the fill; a typed digit is refused.",
+          "source_set": null
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",
@@ -1650,7 +1676,7 @@
       ],
       "status": "wired",
       "proof": {
-        "golden": null,
+        "golden": "fill-below-zero",
         "test": "content/video_engine/tests/test_chart_transitions.py::test_a_spread_follows_the_active_state_across_a_rescale",
         "first_use": {
           "project": "systems-and-blowups",

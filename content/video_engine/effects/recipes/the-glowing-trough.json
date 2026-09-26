@@ -1,0 +1,65 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-glowing-trough",
+ "title": "The glowing trough",
+ "aliases": [
+  {
+   "name": "Negative spike and its glowing trough",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:831"
+  },
+  {
+   "name": "Fill below zero at a negative spike",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:777"
+  }
+ ],
+ "acts": [
+  "TURNS"
+ ],
+ "members": [
+  {
+   "card": "page_species:spread",
+   "offset_s": 0.0,
+   "options": {
+    "dur": 1.2,
+    "side": "below"
+   },
+   "role": "on the word only the dip bleeds full of neg ink, from the line to its rule (zero, or a prior peak with `peak`) - the stretch over the rule stays unfilled - glowing round its edge"
+  },
+  {
+   "card": "page_species:lit_stretch",
+   "offset_s": 0.2,
+   "options": {
+    "dur": 1.2
+   },
+   "role": "the dip's own edge lights as the fill lands, from where the line left the rule to where it returns (D40's gold segment, BOOM's lit price edge)"
+  },
+  {
+   "card": "species:ring",
+   "offset_s": 1.2,
+   "options": {
+    "dur": 2.4,
+    "form": "dashed"
+   },
+   "role": "a dashed ring lands on the trough datum as the light arrives and holds (E56: a ring on a chart circles a datum)"
+  }
+ ],
+ "window_s": 3.6,
+ "does": "A line dips under its rule and on the word only the dip bleeds full of ink to the line's true low, its edge lights and a dashed ring lands on the trough: the low reads as a place.",
+ "use_when": {
+  "act": "TURNS - a series read down to one number under a level (BRAVOS-USE-WHEN A46, R29)",
+  "moment": "reveal",
+  "shape": "one signed series and its zero (A46), or a series and a prior level it fell under (R29's soft month: the prior print is the level)",
+  "use": "a record low below zero, or a single weak print the sentence names ('one soft month in June'): fill the dip to its level, light its edge, ring the trough",
+  "dont": "a positive series against zero (the sign colour carries it, E28); a low that is not a record where a ring alone says it; a dip under a hundredth of the plot's height - rescale to it first, the fill will not read (H row 22's June on the log monitor)"
+ },
+ "doctrine": [
+  "E28",
+  "E56",
+  "E99 s60",
+  "E99 s130",
+  "P72 T49"
+ ],
+ "status": "candidate",
+ "source": "P71 T21 (harvest v2 A46 / R29; D40 12:46-13:08 read 2026-09-26: the flow line filled to zero, the last negative spike filled BELOW zero only in bright gold, its segment lit, a dashed ring on the trough); proved as private test-bed beats by projects/_proofs/p71-recipes/proof_t21.py (the fed reserves' spring 2025 dip below zero; H row 22's soft June under May's print; H row 5's railway under water) - golden fill-below-zero; no approved cut carries it",
+ "count": 0
+}

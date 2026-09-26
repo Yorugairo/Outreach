@@ -17017,7 +17017,18 @@ async function mount(doc) {
       const col = PS_PAL[sp.color] || sp.color || "var(--lp-neg)";
       const path = lpEl("path", "lp-spread", surf, { fill: col, "fill-opacity": 0, stroke: "none" });
       surf.insertBefore(path, surf.firstChild);   /* under every line and label: it is ground, not ink on top */
-      return { sp, hi, lo, path };
+      /* P71 T21: an underwater fill's time under water (`text`, the compiler's - check_spread_levels computed it from
+         the `label` the author wrote), written by the hand at the end tags' size, as a level join's figure is - in
+         CHALK with the field's halo, never the fill's ink: it may stand inside the fill (a peak at the plot's top has
+         no room above its rule), where the ink would vanish into its own ground; Bravos writes it white on a dark
+         pill (BOOM 02:49.5's "25 Years"). Only a side-kept spread carries one (the compiler refuses it elsewhere) */
+      const lab = spreadSideOf(sp) && typeof sp.text === "string" && sp.text ? (() => {
+        const fsz = lpPhoneTypeOf(st) ? lpTypeU(st, "tag") : fs, k = st.stagePx > 0 ? st.stagePx : 1;
+        const label = lpEl("text", "bklab lp-spread-lab", surf, { x: 0, y: 0, "text-anchor": "middle", opacity: 0, style: LP_HALO + "font-size:" + fsz + "px;fill:var(--lp-chalk)" });
+        const lg = [...sp.text].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
+        return { label, lg, fsz, k };
+      })() : null;
+      return lab ? { sp, hi, lo, path, lab } : { sp, hi, lo, path };
     }).filter(Boolean);
     /* THE SPAN (P50 T4; R26-25, the intake's Archetype 5; Bravos 107-110's "Decades"). A shaded stretch of TIME
        behind the chart with its NAME above it. The geometry is not built here: species/span.mjs rebuilds the band
@@ -17227,20 +17238,92 @@ async function mount(doc) {
     const w = treemapWrite(cr.sp, t);
     cr.lg.forEach((ts, j) => ts.setAttribute("opacity", treemapGlyph(w, j, cr.lg.length).toFixed(3)));
   };
+  /* P71 T21 (was P69 T73; the Bravos harvest v2's A46 / R29 - D40 12:46-13:08 - and A45 - BOOM 02:23.0 / 02:48.5) -
+     FILLS TO A LEVEL. A spread against a reference rule (`to_rule`) that names a `side` keeps only the region where its
+     series stands strictly on that side of the rule: the dip below zero, the stretch under a prior peak. The clip is
+     GEOMETRIC - each excursion its own closed region, from the rule down the series and back along the rule, the
+     crossings interpolated on the drawn segments - so the fill's bounds are the true series and the true rule, and
+     P72 T49's glow (lpSpreadGlow: the halo cut to the path's own OUTSIDE) rings the clipped fill: never inside it, and
+     a clipped spread still blooms. `peak: true` (A45, the underwater fill: the rule IS the from_index datum's level -
+     the compiler checks it) ends the fill where the series first stands back at the level: a later fall under an old
+     high is not the same stretch under water. The bleed, the deepen and the leave are the spread's own. A spread naming
+     no side never comes here: the painter below is the one it always was. */
+  const SPREAD_SIDE = Object.freeze({
+    EPS: 1e-3,       /* chart units: a point this close to the rule stands ON it (the peak datum is the rule's own y) */
+    LABEL_DY: 20,    /* the time under water's box stands this far off the rule, stage px [MEASURED: BOOM 02:49.5 (jx3Ll t 169.5): the "25 Years" pill's bottom 22 px above the 1929 level at 1080p; 02:23.5's "Lost Decade" 17 px] */
+    ASC: 0.8,        /* the label's box above its baseline, in its own size (level_join's LEVEL.ASC: a Kalam cap) */
+    DESC: 0.22,      /* ... and below it (LEVEL.DESC) */
+    OVERLAP: 1.6,    /* a glyph fades in over this many glyphs' share; the write spans n + OVERLAP - 1 shares so the last letter lands with the word (compare.mjs's law, R26-314) */
+  });
+  const spreadSideOf = (sp) => (sp && (sp.side === "below" || sp.side === "above") ? sp.side : null);
+  /* is a point strictly on the kept side? SVG y runs down: below the rule is a LARGER y */
+  const spreadOnSide = (y, ry, below) => (below ? y > ry + SPREAD_SIDE.EPS : y < ry - SPREAD_SIDE.EPS);
+  /* the kept regions of a polyline against the rule at ry: a list of closed runs, each starting and ending ON the rule */
+  const spreadSideRuns = (pts, ry, below) => {
+    const runs = []; let cur = null;
+    for (let i = 0; i < pts.length; i++) {
+      const [x, y] = pts[i], on = spreadOnSide(y, ry, below);
+      if (i > 0) {
+        const [px, py] = pts[i - 1], pon = spreadOnSide(py, ry, below);
+        const across = on !== pon && Math.abs(py - ry) > SPREAD_SIDE.EPS && Math.abs(y - ry) > SPREAD_SIDE.EPS;
+        const cx = across ? px + (x - px) * ((ry - py) / (y - py)) : null;   /* the segment crosses the rule strictly */
+        if (on && !cur) cur = [[across ? cx : px, ry]];                      /* it leaves the rule: from the crossing, or the point on it */
+        if (!on && cur) { cur.push([across ? cx : x, ry]); runs.push(cur); cur = null; }   /* ... and returns to it */
+      } else if (on) cur = [[x, ry]];                                         /* the series starts on the kept side: down from the rule at its first x */
+      if (on) cur.push([x, y]);
+    }
+    if (cur) { cur.push([cur[cur.length - 1][0], ry]); runs.push(cur); }    /* the series ends on the kept side: up to the rule at its last x */
+    return runs;
+  };
+  /* A45: the stretch under water ends at the first point back at (or over) the peak's level - that point included,
+     so the crossing into it closes the last run */
+  const spreadUntilRegain = (pts, ry, below) => {
+    for (let j = 1; j < pts.length; j++) if (!spreadOnSide(pts[j][1], ry, below)) return pts.slice(0, j + 1);
+    return pts;
+  };
+  const paintSpreadSide = (sd, hi, ry, u, st) => {
+    const sp = sd.sp, below = sp.side === "below";
+    const pts = sp.peak === true ? spreadUntilRegain(hi, ry, below) : hi;
+    const k = minJerk(clamp01(u / PS.SPREAD_BLEED)), m = Math.max(2, Math.round(k * pts.length));
+    const runs = spreadSideRuns(pts.slice(0, m), ry, below);
+    const d = runs.map((r) => r.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ") + " Z").join(" ");
+    sd.path.setAttribute("d", d || "M0 0");
+    sd.path.setAttribute("fill-opacity", (PS.SPREAD_A * clamp01(u / 0.35)).toFixed(3));
+    if (sd.lab) paintSpreadLabel(sd, spreadSideRuns(pts, ry, below), ry, u, below, st);
+  };
+  /* the time under water, centred over the WHOLE stretch it names (BOOM 02:49.5: "25 Years" over the 1929-54 fill) -
+     the stretch's extent at rest, so it never slides with the bleed - standing LABEL_DY off the rule on the side the
+     fill is not (above an underwater fill), or inside the fill when the plot has no room there. Written glyph by glyph
+     from the bleed's end to the word's. */
+  const paintSpreadLabel = (sd, runs, ry, u, below, st) => {
+    const L = sd.lab, xs = runs.flat().map((q) => q[0]);
+    if (!xs.length) { L.label.setAttribute("opacity", 0); return; }
+    const S = (st && st.states && st.states[st.active | 0]) || st || {}, top = S.plot ? S.plot.T : -Infinity;
+    const gap = SPREAD_SIDE.LABEL_DY / L.k, asc = SPREAD_SIDE.ASC * L.fsz, desc = SPREAD_SIDE.DESC * L.fsz;
+    const out = below ? ry - gap - desc : ry + gap + asc;                     /* off the rule, on the fill's far side */
+    const y = below && out - asc < top ? ry + gap + asc : !below && out > (S.plot ? S.plot.B : Infinity) ? ry - gap - desc : out;
+    L.label.setAttribute("x", ((Math.min(...xs) + Math.max(...xs)) / 2).toFixed(1));
+    L.label.setAttribute("y", y.toFixed(1));
+    L.label.setAttribute("opacity", 1);
+    const w = clamp01((u - PS.SPREAD_BLEED) / Math.max(1e-3, 1 - PS.SPREAD_BLEED)), n = L.lg.length;
+    const per = 1 / (n + SPREAD_SIDE.OVERLAP - 1);
+    L.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((w - j * per) / (SPREAD_SIDE.OVERLAP * per)).toFixed(3)));
+  };
   /* the bleed: the region grows left to right over SPREAD_BLEED of the word, the ink deepens over the rest */
   const paintSpread = (sd, t, st) => {
     const sp = sd.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
-    if (u <= 0) { sd.path.setAttribute("fill-opacity", 0); return; }
+    if (u <= 0) { sd.path.setAttribute("fill-opacity", 0); if (sd.lab) sd.lab.label.setAttribute("opacity", 0); return; }
     let hi = sd.hi, lo = sd.lo;
     if (st && (st.states || []).length > 1) {   /* R26-28: the two edges this frame - the active state's points (lerped across a rescale / extend), the rule's y re-projected */
       const A0 = lpPointsNow(st, sp.from | 0), fromI = Number.isInteger(sp.from_index) ? sp.from_index : -Infinity;
       const A = A0.filter((e) => e.i >= fromI).map((e) => e.p);
       const rule = Number.isInteger(sp.to_rule) ? lpRuleYNow(st, sp.to_rule) : null;
       const B = Number.isInteger(sp.to_rule) ? (rule == null ? null : [[-1e9, rule], [1e9, rule]]) : lpPointsNow(st, sp.to | 0).map((e) => e.p);
-      if (!A || !B || A.length < 2 || B.length < 2) { sd.path.setAttribute("fill-opacity", 0); return; }
+      if (!A || !B || A.length < 2 || B.length < 2) { sd.path.setAttribute("fill-opacity", 0); if (sd.lab) sd.lab.label.setAttribute("opacity", 0); return; }
       const dense = A.length >= B.length ? A : B; hi = dense === A ? A : B; lo = dense === A ? B : A;   /* walk the denser edge; read the other at its x */
       if (Number.isInteger(sp.to_rule)) { hi = A; lo = B; }
     }
+    if (spreadSideOf(sp) && Number.isInteger(sp.to_rule)) { paintSpreadSide(sd, hi, lo[0][1], u, st); return; }   /* P71 T21: one side of the rule */
     const k = minJerk(clamp01(u / PS.SPREAD_BLEED)), n = hi.length, m = Math.max(2, Math.round(k * n));
     const yAt = (pts, x) => { let i = 1; while (i < pts.length - 1 && pts[i][0] < x) i++;
       const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return x1 === x0 ? y1 : y0 + (y1 - y0) * ((x - x0) / (x1 - x0)); };
@@ -17371,6 +17454,7 @@ async function mount(doc) {
     for (const sd of PF.spreads || []) { paintSpread(sd, t, st);   /* the fifth watch: the gap between the lines, bled full; R26-28: on the active state */
       const lv = pageLeave(sd.sp, t);   /* R26-219: the bled gap was measured between THAT page's lines */
       if (lv > 0) sd.path.setAttribute("fill-opacity", ((+sd.path.getAttribute("fill-opacity") || 0) * (1 - lv)).toFixed(3));
+      if (lv > 0 && sd.lab) sd.lab.label.setAttribute("opacity", ((+sd.lab.label.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3));   /* P71 T21 */
       lpSpreadGlow(sd, t, st, PF.solo); }   /* P72 T49: the gap glows in its own ink - after its bleed and its leave, on the solo's ease */
     /* THE PAGE REGISTRY HOOK (P52 T5; R26-41) - the only page painting written in this layer. The kind comes off the
        DECLARATION, so the registry routes it; `span` (P50 T4: the named stretch of time, shaded behind the chart on the

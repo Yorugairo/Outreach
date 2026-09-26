@@ -3402,6 +3402,7 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append(f"spread: color must be one of {'|'.join(BRACKET_COLORS)}")
         if "from_index" in entry and not is_idx(entry["from_index"]):
             errs.append("spread: from_index must be a non-negative integer datum index (where the fill begins)")
+        errs += _validate_spread_level(entry, has_rule)   # P71 T21: side, peak, label - a fill to a level
     return errs
 
 
@@ -7622,6 +7623,138 @@ def _validate_lens(entry: dict) -> list[str]:
     return errs
 
 
+# ---- P71 T21 (was P69 T73): FILLS TO A LEVEL ---------------------------------------------------------------------------
+# A spread against a reference rule (`to_rule`) keeps ONE SIDE of it: the dip below zero (the Bravos harvest v2's A46,
+# D40 12:54; R29's glowing trough), the stretch under a prior peak (A45, BOOM 02:23.0 / 02:48.5). The engine clips the
+# fill to where the series is strictly on that side (paintSpread); here: the keys, refused by name, and the page's
+# truth - the underwater fill's rule IS the peak datum's level (E28, level_join's `to: {y}` rule) and its time under
+# water is COMPUTED, never typed.
+SPREAD_SIDES = ("below", "above")
+SPREAD_DURATIONS = ("years", "months")   # a peak spread's label placeholders: the time under water in that unit
+_SPREAD_PH = re.compile(r"\{([^{}]*)\}")
+
+
+def _validate_spread_level(entry: dict, has_rule: bool) -> list[str]:
+    """P71 T21: a spread's `side` (below|above, a reference rule's side), `peak` (true: the underwater fill - side
+    below, a rule at the from_index datum's level) and `label` (a peak spread's, its duration a placeholder), each
+    refused by name when malformed or misplaced (P71's review finding 7: at 7263013 all three were accepted and
+    ignored). `text` is the compiler's own - written from `label` by check_spread_levels - and refused without one."""
+    errs: list[str] = []
+    side = entry.get("side")
+    if "side" in entry:
+        if side not in SPREAD_SIDES:
+            errs.append(f"spread: side must be one of {'|'.join(SPREAD_SIDES)} - the side of its reference rule the fill "
+                        f"keeps, not {side!r}")
+        elif not has_rule:
+            errs.append("spread: side names a side of a REFERENCE RULE (`to_rule`) - between two series there is no side "
+                        "to keep, the gap is the fill")
+    if "peak" in entry:
+        if entry["peak"] is not True:
+            errs.append(f"spread: peak must be true (the rule IS the prior peak's level - the underwater fill), not "
+                        f"{entry['peak']!r}")
+        elif side != "below" or not has_rule or "from_index" not in entry:
+            errs.append("spread: peak (the underwater fill, A45) takes side 'below', a `to_rule` standing at the peak's "
+                        "level and `from_index` = the peak's datum - the fill runs from the peak under its level")
+    if "label" in entry:
+        label = entry["label"]
+        found = _SPREAD_PH.findall(label) if isinstance(label, str) else []
+        if entry.get("peak") is not True:
+            errs.append("spread: label writes the time under water, and only a peak spread (peak: true) has one")
+        elif not (isinstance(label, str) and label.strip()):
+            errs.append("spread: label must be a non-empty string - the stretch's words, its number a placeholder")
+        elif any(f not in SPREAD_DURATIONS for f in found):
+            errs.append(f"spread: label placeholder {found!r} - a duration is written as "
+                        f"{' or '.join('{' + u + '}' for u in SPREAD_DURATIONS)}")
+        elif len(found) > 1:
+            errs.append("spread: label carries one duration placeholder - one number, in one unit")
+        elif re.search(r"\d", _SPREAD_PH.sub("", label)):
+            errs.append(f"spread: label {label!r} types a number - a duration is computed, never typed: write "
+                        "{years} or {months} where the number goes")
+    if "text" in entry and "label" not in entry:
+        errs.append("spread: text is the compiler's - written from `label` (its duration computed); write label")
+    return errs
+
+
+def _spread_dated(page: dict) -> bool:
+    """The page's x is a DATED axis (decimal years): an x tick whose words name its own year, 'YYYY' or 'YY."""
+    for tk in (page.get("axes") or {}).get("xticks") or []:
+        try:
+            x, lab = float(tk[0]), str(tk[1])
+        except (TypeError, ValueError, IndexError):
+            continue
+        yr = int(math.floor(x))
+        if re.search(rf"(?<!\d){yr}(?!\d)", lab) or f"'{yr % 100:02d}" in lab:
+            return True
+    return False
+
+
+def _spread_duration(label: str, x0: float, x1: float, regained: bool, where: str) -> str:
+    """The time under water written into `label`: whole units, rounded when the level was regained; floored with a "+"
+    when it never was (the record ends under water - "at least")."""
+    m = _SPREAD_PH.search(label)
+    if not m:
+        return label
+    unit = m.group(1)
+    span = (x1 - x0) * (12.0 if unit == "months" else 1.0)
+    n = int(math.floor(span + 0.5)) if regained else int(math.floor(span))
+    if n < 1:
+        raise ValueError(f"{where}: under water {span:.2f} {unit} - {{{unit}}} would write {n}; name a smaller unit "
+                         "({months}) or leave the number out")
+    return label[:m.start()] + (f"{n}" if regained else f"{n}+") + label[m.end():]
+
+
+def check_spread_levels(world: dict, row_species: list) -> list[str]:
+    """P71 T21: a row's PEAK spreads on the page they fill. Refused by name (ValueError, truth rules): a page with no
+    line, a peak datum or rule the page does not have, a rule that is not the peak datum's value at the rule's written
+    precision (E28), and a duration on an x axis that is not dated. WARNs (E99 s106): the datum is not the series' high
+    to that point, or the series never goes under the level. A peak spread's `label` is resolved into `text`: the time
+    under water from the peak datum to the first datum back at the level, or to the last datum with a "+". A spread
+    without `peak` is untouched."""
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == "spread"
+           and sp.get("peak") is True and not _validate_page_fields("spread", sp)]
+    if not sps or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return []
+    notes: list[str] = []
+    for sp in sps:
+        where = f"spread at {sp.get('at')}"
+        page = _lj_state(world, row_species, sp)
+        if str(page.get("builder") or "") != "dense-line":
+            raise ValueError(f"{where}: peak - a {page.get('builder') or 'plate'} page has no line to fill under its peak")
+        si, i, k = int(sp["from"]), int(sp["from_index"]), int(sp["to_rule"])
+        a, _unit = _lj_value(page, "series", si, i, where, "from_index")
+        axes = page.get("axes") or {}
+        rules = axes.get("hlines") or ([axes["hline"]] if isinstance(axes.get("hline"), dict) else [])
+        if k >= len(rules) or not isinstance(rules[k], dict) or not _num(rules[k].get("y")):
+            raise ValueError(f"{where}: to_rule {k} is not one of the page's {len(rules)} reference rule(s)")
+        ytxt = str(rules[k]["y"])
+        y = float(ytxt)
+        tol = 0.5 * 10 ** -_lj_decimals(ytxt) + 1e-9
+        if abs(a - y) > tol:
+            raise ValueError(f"{where}: peak - rule {k} stands at {ytxt} but datum {i} (the peak) is {a:g}: the underwater "
+                             f"fill's level is the peak's own, read from the datum (E28) - the rule's y is {a:g}")
+        if rules[k].get("label"):
+            notes.append(f"WARN {where}: peak - rule {k} is labelled {rules[k]['label']!r}: A45's don't (C14) - the peak's "
+                         "level is not named as a rule; the fill's own words name the stretch. REPORTED (E99 s106)")
+        pts = page["series"][si].get("pts") or []
+        vals = [float(p[1]) for p in pts]
+        hi = max(range(i + 1), key=lambda j: vals[j])
+        if vals[hi] > a + tol:
+            notes.append(f"WARN {where}: peak - datum {i} ({a:g}) is not the series' high to that point ({vals[hi]:g} at "
+                         f"datum {hi}): an underwater fill measures from the PRIOR PEAK. REPORTED, the frame read decides "
+                         "(E99 s106)")
+        back = next((j for j in range(i + 1, len(vals)) if vals[j] >= a), None)
+        end = back if back is not None else len(vals) - 1
+        if not any(vals[j] < a for j in range(i + 1, end + 1)):
+            notes.append(f"WARN {where}: peak - the series never goes under {a:g} after datum {i}: the fill is empty. "
+                         "REPORTED (E99 s106)")
+        if "label" in sp:
+            if _SPREAD_PH.search(sp["label"]) and not _spread_dated(page):
+                raise ValueError(f"{where}: label - the page's x is not a dated axis (no x tick names its own year), so "
+                                 "no duration can be computed; write the stretch's words without a number")
+            sp["text"] = _spread_duration(sp["label"], float(pts[i][0]), float(pts[end][0]), back is not None, where)
+    return notes
+
+
 def check_lens(world: dict, row_species: list) -> list[str]:
     """P71 T32: a row's `lens`es on the page they magnify. Refused by name (ValueError): a page with no drawn line (not a
     dense-line page), a series or a datum the page does not have. The lens reads the chart state standing at its word
@@ -7828,6 +7961,8 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     for _lj_note in check_level_join(world, row_species):   # P71 T10: a join's ends, its unit, its truth; a WARN on the rule
         print(f"  [WARN] {_lj_note.removeprefix('WARN ')}")
     check_lens(world, row_species)            # P71 T32: a lens magnifies a line the page draws, at data it has
+    for _sp_note in check_spread_levels(world, row_species):   # P71 T21: a peak's level is its datum's; its time under water computed
+        print(f"  [WARN] {_sp_note.removeprefix('WARN ')}")
     check_datum_badge(world, row_species)     # P71 T20: a badge lands on a datum the page has, or a turning point the shape has
     check_schematic(world, row_species)       # P70 T2: a schematic writes no figure it cannot source (E99 s109 (1))
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use

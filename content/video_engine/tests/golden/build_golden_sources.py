@@ -5605,6 +5605,75 @@ SURFACES.update({"bar-revalue-then-now": bar_revalue_then_now})
 FRAME_T.update({"bar-revalue-then-now": 17.8})   # at rest: the grow landed at 17.0 (11.0 + 6.0), the $28B level at full ink
 
 
+
+# ---- P71 T21 (was P69 T73; harvest v2 A46 / R29 / A45): FILLS TO A LEVEL - a spread that keeps one side of its rule --
+#   fill-below-zero  A REFERENCE BEAT (no H row carries a signed series: row 22's customs line is a level, its soft
+#                    month a dip under the PRIOR print - A45's form): fed-liquidity-pressure's COMMITTED DERIVED object
+#                    `fed-assets-reserves-history` (FRED H.4.1: the change in bank reserves since 1 June 2022, weekly,
+#                    read in place), total assets held at nothing, a zero rule named on the page (`axes.hlines: [{y: 0}]`,
+#                    D40 12:54's zero is a plain rule too), and on the word the spread from the last print at zero
+#                    (datum 116, 2024-08-21, +$0.002T) keeps only what lies BELOW the rule - the autumn 2024 slide, the
+#                    year-end record low (-$0.465T, 2025-01-01) and the spring 2025 dip - and leaves the February-April
+#                    hump over zero unfilled, in the neg ink, with P72 T49's glow round the clipped fill. At rest (7.0).
+#   fill-underwater  Steel and Paper H row 5's railway index (`ledger:ev-railway-index-v1:line:139:right`, the lit
+#                    stretch's page and its clock): the fall drawn on "crashed" (10.0-11.2), then the underwater fill
+#                    under the October 1845 high - the rule at datum 53's own value (2057.5, READ from the series here,
+#                    never typed; the compiler checks it) and unlabelled (A45's don't: C14) - from the peak to the end of
+#                    the record, which never regains it; its time under water COMPUTED by the compiler ("4+ years", the
+#                    last print 4.46 years on) and written over the fill. Judged with the label written (14.0).
+FILL_FED_PROJECT = REPO / "content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure"
+FILL_FED_PLATE = "ledger:fed-assets-reserves-history:line;idle=live;domain=-0.5,0.3"
+FILL_AT, FILL_DUR = 4.0, 2.0
+FILL_WATER_AT, FILL_WATER_DUR = 11.4, 2.0
+
+
+def _fill_world(plate: str, project: Path) -> dict:
+    import build_scene_timeline_f as BST
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(plate, (0, 0, 0), project)
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    return world
+
+
+def fill_below_zero() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    world = _fill_world(FILL_FED_PLATE, FILL_FED_PROJECT)
+    world["page"].setdefault("axes", {})["hlines"] = [{"y": 0, "color": "deemph"}]   # the page's zero, named as a rule
+    d = lambda i, s: {"kind": "datum", "index": i, "series": s}  # noqa: E731
+    species = [{"kind": "build_to", "at": 0.0, "dur": 0.4, "series": s, "target": d(0, s)} for s in (0, 1)]
+    species += [{"kind": "build_to", "at": 0.6, "dur": 2.4, "series": 1, "target": d(158, 1)},
+                {"kind": "spread", "at": FILL_AT, "dur": FILL_DUR, "from": 1, "to_rule": 0, "side": "below", "from_index": 116}]
+    assert not BST.validate_species(species, (0, 0, 0), FILL_FED_PLATE), BST.validate_species(species, (0, 0, 0), FILL_FED_PLATE)
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden (reference beat): the dip below zero, filled to the rule (spread side)", scenes, {}, "16:9"), _base_uris()
+
+
+def fill_underwater() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    world = _fill_world(LIT_PLATE, LIT_PROJECT)
+    peak = float(world["page"]["series"][0]["pts"][53][1])   # the October 1845 high, READ off the datum
+    axes = world["page"].setdefault("axes", {})
+    axes["hlines"] = [dict(axes["hline"]), {"y": peak, "color": "deemph"}]   # the 1843 level (the object's) + the peak's
+    species = [dict(e) for e in LIT_SPECIES[:2]] + [
+        {"kind": "spread", "at": FILL_WATER_AT, "dur": FILL_WATER_DUR, "from": 0, "to_rule": 1, "side": "below", "peak": True,
+         "from_index": 53, "label": "{years} years below the peak"}]
+    assert not BST.validate_species(species, (0, 0, 0), LIT_PLATE), BST.validate_species(species, (0, 0, 0), LIT_PLATE)
+    assert BST.check_spread_levels(world, species) == []   # the compiler's own page check: the peak's level, the duration
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: under water since the 1845 high (spread side + peak)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"fill-below-zero": fill_below_zero, "fill-underwater": fill_underwater})
+FRAME_T.update({"fill-below-zero": 7.0,     # at rest: the bleed and the deepen landed at 6.0, the glow round the dip
+                "fill-underwater": 14.0})   # the label written whole (the word ends 13.4), the fill and its glow at rest
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:
