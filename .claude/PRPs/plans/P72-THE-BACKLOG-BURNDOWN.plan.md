@@ -838,7 +838,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T27: The small engine rows - one commit each
-- Status: running - landed on lane B: T27a R26-57 244f129, R26-142 83c3a98 (16:9; 9:16 = R26-369), R26-72 3a3924c (default = R26-370), R26-360 4b54f77; T27b R26-9 TR-3 b5fb270, R26-302 fe65732 (engine; its H-row half is T36's), R26-257 73625e2 (for HG1 item 2), R26-2 033d418. Open: R26-73 (building on 4b54f77), R26-123 (HELD - the blend's keyword box stays where it already paints, the shorts' phrase mode; E99 s6 judged no keyword; revising). R26-106 is a finding, R26-171 its own row (R26-365, T46)
+- Status: done - lane B: R26-57 244f129, R26-142 83c3a98 (16:9; 9:16 = R26-369), R26-72 3a3924c (default = R26-370), R26-360 4b54f77, R26-9 TR-3 b5fb270, R26-302 fe65732 (engine; the H-row half stays T36's), R26-257 73625e2 (P72-HG1 item 2), R26-2 033d418, R26-123 2a6d887 (the blend's keyword box on the shorts' phrase caption only), R26-73 19f5546; R26-106 a finding and R26-171 its own row (R26-365, T46)
 - Owner: junior_developer (LANE B), one row per commit; reviewer on R26-257 and R26-123 (a visible default)
 - Depends on: each row's named neighbour (below); none waits on a P70 / P71 function except where named
 - Items (each with its step (0) CONFIRM-OPEN):
