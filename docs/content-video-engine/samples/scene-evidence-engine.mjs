@@ -13006,6 +13006,152 @@ async function mount(doc) {
     p.setAttribute = (k, v) => { set(k, v); if (k === "d") { twin.setAttribute("d", v); fit(); } };   /* the twin follows the path */
     return twin;
   };
+  /* ---- P71 T28 (was P69 T76; the Bravos harvest v2 A41 and A21): THE LINE PAINTER ----------------------------------
+     (1) `enter=trace` - TRACE FIRST, FURNITURE AFTER (A41; USE-WHEN :347 "the SHAPE is the hook"). Bravos HIS 00:00-00:06,
+     read at 5 and 15 fps (frames/bravos/sheet-scan0, sheet-scan5): the two series trace on the bare ground for ~3.1 s -
+     no title, no axes, no box, no key - and only then does the furniture land, STAGGERED over ~0.9 s: the plot's frame
+     first (5.40-5.73), the tick labels after it (5.60-5.93), the title writing across both (5.40-6.27), the key last
+     (5.93-6.33). HIS 05:50 is the same order on a new page (the box 350.9-351.1, the ticks 351.1-351.5). Ours: the
+     page's own BUILD beat is the trace (LP.BUILD 3.0 s - Bravos's ~3.1 s), on the axes enter's clock (the ground is there
+     on frame 0 and the build runs from it), and the furniture lands after it on these dials, in seconds from the build's
+     end: the frame (the axis rule, the grid, the axis names) over FRAME_S; the tick labels from LABELS_AT over LABELS_S;
+     the title, sub and source written over INK; the end tags (E53 s8: the line's key) from KEY_AT over KEY_S; the key
+     rail's pills keep their own clock (LP_BADGE0 after the build - already after the trace). Opt-in: a page that names
+     no `trace` paints exactly as it did. Bravos's ground also lifts from black and its bloom drops as the furniture lands:
+     not taken - the charcoal ground is E22's and the bloom is T37b's (s117).
+     (2) `ink_from: {x, color}` on a series - THE LINE CHANGES INK AT A POINT (A21; HIS 05:58-06:01.4, sheet-scan360: the
+     stroke from the peak re-draws in the fall's red, glowing red, forward from the peak over ~0.9 s). The stroke is
+     split at x by a TWIN: a second path in the new ink, carrying its OWN bloom (T37b's filter pieces cannot be shared -
+     each halo floods ONE ink - so the twin carries a second filter chain: the cost is one group, one path, two masks, a
+     gradient and one filter chain per re-inked line, nothing on any other page), written right over the line. The
+     twin's mask cuts its stroke at x and its group blooms what is left; the line's own output fades out past x (a line's
+     x is its date, so a vertical split IS the path's split). The twin follows the line: once per paint,
+     after every painter has run, it takes the path's d, dash, opacity, transform, clip, width and bloom (the halo's
+     numbers, in its own ink), and the split x is re-read off the path's own vertices (a rescale, an extend and the
+     spiral re-project it). So the stretch past x draws in the new ink on whatever draws it - the build, or the build_to
+     that crosses x on its word - and a cold seek paints what play paints. */
+  const LP_TRACE = Object.freeze({ FRAME_S: 0.33, LABELS_AT: 0.2, LABELS_S: 0.33, INK: 0.87, KEY_AT: 0.53, KEY_S: 0.4,
+                                   RULE_A: 0.9 });   /* RULE_A: the template's own `.lp-chart .hrule` opacity, which the reveal scales */
+  const LP_TRACE_FRAME = ["axis", "tick", "axislabel", "y2name"], LP_TRACE_LABELS = ["ylabel", "xtick", "xlabel", "y2label"];
+  /* a furniture mark's reveal k (0-1) as its own `opacity` attribute; at 1 the attribute it was built with, to the byte */
+  const lpTraceOp = (el, k) => {
+    if (el.__trOp === undefined) el.__trOp = el.getAttribute("opacity");
+    const v = k >= 1 ? el.__trOp : k.toFixed(3);
+    if (v == null) { if (el.hasAttribute("opacity")) el.removeAttribute("opacity"); }
+    else if (el.getAttribute("opacity") !== v) el.setAttribute("opacity", v);
+  };
+  /* the page's FIRST chart's furniture, `tb` seconds past its build (negative: the line is still tracing) */
+  const lpTraceFurniture = (st, pg, tb) => {
+    const S = (st.states || [st])[0];
+    const kF = minJerk(clamp01(tb / LP_TRACE.FRAME_S)), kL = minJerk(clamp01((tb - LP_TRACE.LABELS_AT) / LP_TRACE.LABELS_S));
+    const kK = minJerk(clamp01((tb - LP_TRACE.KEY_AT) / LP_TRACE.KEY_S));
+    for (const m of S.marks || []) {
+      const k = LP_TRACE_FRAME.includes(m.role) ? kF : LP_TRACE_LABELS.includes(m.role) ? kL : null;
+      if (k != null && m.el) lpTraceOp(m.el, k);
+    }
+    const panel = S.chart && S.chart.querySelector(":scope > rect.lp-panel");   /* the long form's plot panel (lpLongformPlot): the box */
+    if (panel) lpTraceOp(panel, kF);
+    /* the end tags and a reference rule's line and name: lpPaintChart wrote this frame's value for every state it painted
+       (all of them, when no transition is on) - scaled here, never replaced */
+    const scale = (el, k, dp) => { if (el && k < 1) el.setAttribute("opacity", (+(el.getAttribute("opacity") || 0) * k).toFixed(dp)); };
+    if (!st.xfNow) {
+      for (const pp of S.paths || []) scale(pp.name, kK, 2);
+      for (const hr of S.hlines || []) {
+        /* the rule's line wears the template's CSS opacity (.hrule .9), which outranks an attribute: its STYLE carries the
+           reveal, handed back ("") once landed - the value lpRestoreState writes after a rescale */
+        const v = kF < 1 ? (LP_TRACE.RULE_A * kF).toFixed(3) : "";
+        if (hr.line.style.opacity !== v) hr.line.style.opacity = v;
+        scale(hr.lab, kL, 2);
+      }
+    }
+    const title = (st.inkEls || [])[0];   /* P71 T30's capsule is the title's own box: it stands with the first letter, never empty over the trace */
+    if (title && pg.title_style === "capsule") { const v = tb >= 0 ? "" : "hidden"; if (title.style.visibility !== v) title.style.visibility = v; }
+  };
+  let lpInkFromN = 0;
+  /* THE TWIN: the stroke past `x` in the new ink, over its own line and under the nib. Its mask cuts the STROKE at x and
+     its GROUP carries the bloom, so the new ink's glow opens round the stroke's own start (a filter on the masked path
+     itself would bloom first and be cut after: a glow standing on a vertical line). The line's own output keeps its
+     side and FADES OUT over the halo's reach past x (FEATHER outer halos) rather than stopping on a line; under the
+     twin's opaque stroke the fade of the line itself never shows - only its glow's, which is the point. */
+  const LP_INK_FROM = Object.freeze({ FEATHER: 2 });
+  const lpInkFrom = (st, rec, s, PAL, host) => {
+    const f = s.ink_from || {}, x = +f.x, tok = f.color;
+    const col = PAL[tok] || (tok === "pos" ? "var(--lp-pos)" : tok === "neg" ? "var(--lp-neg)" : null), D = rec.data;
+    let k = -1;
+    for (let j = 0; j + 1 < D.length; j++) if (D[j][0] <= x && x <= D[j + 1][0]) { k = j; break; }
+    if (!col || k < 0) return null;
+    const u = D[k + 1][0] > D[k][0] ? (x - D[k][0]) / (D[k + 1][0] - D[k][0]) : 0;
+    const defs = lpEl("defs", "", st.chart), id = "inkfrom-" + (st.seed | 0) + "-" + (++lpInkFromN);   /* deterministic: the build order names it */
+    const R = { x: -10000, y: -10000, width: 20000, height: 20000 };
+    const fade = lpEl("linearGradient", "", defs, { id: id + "g", gradientUnits: "userSpaceOnUse", x1: 0, y1: 0, x2: 1, y2: 0 });
+    lpEl("stop", "", fade, { offset: 0, "stop-color": "#fff" }); lpEl("stop", "", fade, { offset: 1, "stop-color": "#000" });
+    lpEl("rect", "", lpEl("mask", "", defs, { id: id + "a", maskUnits: "userSpaceOnUse", ...R }), { ...R, fill: "url(#" + id + "g)" });
+    const after = lpEl("rect", "", lpEl("mask", "", defs, { id: id + "b", maskUnits: "userSpaceOnUse", ...R }), { ...R, width: 0, fill: "#fff" });
+    const g = lpEl("g", "ink-from", host);
+    host.insertBefore(g, rec.p.nextSibling);   /* over its own line, under the nib */
+    const q = lpEl("path", "ser", g, { d: rec.p.getAttribute("d"), stroke: col, mask: "url(#" + id + "b)" });
+    rec.p.setAttribute("mask", "url(#" + id + "a)");
+    if (rec.p.__lpHot) lpHotFilter(st, q);   /* the twin's own three layers (T37b's pieces flood ONE ink each): the sync writes the line's numbers in the new ink */
+    st.inkFrom = true;
+    return { q, g, k, u, x, col, col0: rec.p.getAttribute("stroke"), fade, after, st, d: null, X: 0, pf: null, hx: null };
+  };
+  /* the split x on the path as drawn this frame: its vertex k and k + 1 (one vertex per datum, whatever re-projected it) */
+  const lpInkFromX = (d, k, u) => {
+    const n = String(d || "").match(/-?\d+(?:\.\d+)?/g) || [], vx = (i) => +n[2 * i];
+    if (n.length < 2 * (k + 2)) return n.length >= 2 ? vx((n.length >> 1) - 1) : 0;
+    return vx(k) + (vx(k + 1) - vx(k)) * u;
+  };
+  const LP_INK_FROM_ATTRS = ["d", "stroke-dasharray", "stroke-dashoffset", "opacity", "transform", "clip-path"];
+  const LP_INK_FROM_STYLE = ["opacity", "strokeWidth", "strokeLinecap", "strokeOpacity", "display", "visibility"];
+  /* the new ink as a hex: a sign token lives on `.lp` (the template), not on :root where lpVarHex looks - and a flood-color
+     attribute cannot take a var() - so the twin reads its own computed value once it stands in the page */
+  const lpInkFromHex = (q, I) => {
+    if (I.hx) return I.hx;
+    const m = /^var\((--[\w-]+)\)$/.exec(String(I.col).trim());
+    let v = "";
+    if (m && q.isConnected) try { v = (getComputedStyle(q).getPropertyValue(m[1]) || "").trim(); } catch (e) { v = ""; }
+    if (m && !v) return lpVarHex(I.col);   /* not yet in the page: this frame only */
+    I.hx = v || lpVarHex(I.col);
+    return I.hx;
+  };
+  /* the line's bloom, in the twin's ink, on the twin's group: the primary's three layers by their numbers (every frame - a
+     live page pulses them under one url), E67's neon rebuilt at the line's own radius whenever the line's filter changes */
+  const lpInkFromBloom = (p, q, I) => {
+    const pf = p.style.filter || "";
+    if (p.__lpHot && q.__lpHot && pf.indexOf(p.__lpHot.id) >= 0) {
+      const a = p.__lpHot, b = q.__lpHot, hx = lpInkFromHex(q, I);
+      const cp = (from, to, key) => { const v = from.getAttribute(key); if (v != null && to.getAttribute(key) !== v) to.setAttribute(key, v); };
+      cp(a.mo, b.mo, "radius"); cp(a.cm, b.cm, "values");
+      for (const h of ["h1", "h2"]) { cp(a[h].b, b[h].b, "stdDeviation"); cp(a[h].fl, b[h].fl, "flood-opacity");
+        if (b[h].fl.getAttribute("flood-color") !== hx) b[h].fl.setAttribute("flood-color", hx); }
+      if (I.pf !== pf) { I.pf = pf; I.g.style.filter = "url(#" + b.id + ")"; }
+      return;
+    }
+    if (I.pf === pf) return;
+    I.pf = pf;
+    I.g.style.filter = pf ? "drop-shadow(0 0 " + (+p.__lpR || LP_BLOOM_PX).toFixed(2) + "px " + lpInkA(lpInkFromHex(q, I), LINE_BLOOM) + ")" : "";
+  };
+  const lpInkFromSync = (S) => {
+    for (const pp of S.paths || []) {
+      const I = pp.inkFrom; if (!I) continue;
+      const p = pp.p, q = I.q;
+      for (const a of LP_INK_FROM_ATTRS) { const v = p.getAttribute(a);
+        if (v == null) { if (q.hasAttribute(a)) q.removeAttribute(a); } else if (q.getAttribute(a) !== v) q.setAttribute(a, v); }
+      for (const k of LP_INK_FROM_STYLE) if (q.style[k] !== p.style[k]) q.style[k] = p.style[k];
+      if (I.g.hasAttribute("transform")) I.g.removeAttribute("transform");   /* the spiral drain curls the line's own d, which the twin wears: its group never moves on its own */
+      lpInkFromBloom(p, q, I);
+      const d = p.getAttribute("d");
+      if (d !== I.d) {
+        I.d = d; I.X = lpInkFromX(d, I.k, I.u);
+        const reach = LP_INK_FROM.FEATHER * LP_HOT.OUTER_PX * (lpHotUnit(S) || (S.portrait ? 2 : 1));   /* the outer halo's reach, in chart units */
+        I.fade.setAttribute("x1", I.X.toFixed(2)); I.fade.setAttribute("x2", (I.X + reach).toFixed(2));
+        I.after.setAttribute("x", I.X.toFixed(2)); I.after.setAttribute("width", (10000 - I.X).toFixed(2));
+      }
+      /* the nib wears the ink of the stroke it is drawing */
+      const tf = +pp.tip.getAttribute("opacity") > 0 && +pp.tip.getAttribute("cx") >= I.X ? I.col : I.col0;
+      if (pp.tip.getAttribute("fill") !== tf) pp.tip.setAttribute("fill", tf);
+    }
+  };
   const buildLedgerLine = (st, pg) => {
     const ax = pg.axes || {}, series = pg.series || [];
     const PAL = pg.surface_from ? { ...LP_INK, cobalt: "#1769C2", teal: "#087D68", crimson: "#B53A28" } : LP_INK;
@@ -13204,8 +13350,9 @@ async function mount(doc) {
       const cont = !P && !s.projection && !s.muted ? drawn.find((q) => q.projection && q.pts.length > 1 && +q.pts[0][0] === +last[0] && +q.pts[0][1] === +last[1]) : null;   /* P71 T16 */
       if (cont) rec.ny += (myS(+cont.pts[1][1]) < myS(+last[1]) ? 1 : -1) * LP_PROJ.TAG_K * (LFT ? LFT.tag : PHONE ? lpTypeU(st, "tag") : 24);
       st.paths.push(rec);
+      if (s.ink_from && !s.muted) rec.inkFrom = lpInkFrom(st, rec, s, PAL, sHost);   /* P71 T28: the stroke past x in its new ink (null: absent, to the byte) */
       lpMark(st, "s" + rec.si + (rec.muted ? ":h" : ""), "line", p, { pts: rec.pts, vals: s.pts.map(([, v]) => +v), len, k0: rec.k0, muted: rec.muted, col,
-        ...(s.projection ? { projection: true } : {}) }, rec);   /* P71 T16: a probe or a gate tells an estimate from a datum */
+        ...(s.projection ? { projection: true } : {}), ...(rec.inkFrom ? { ink_from: { x: rec.inkFrom.x, col: rec.inkFrom.col } } : {}) }, rec);   /* P71 T16: a probe or a gate tells an estimate from a datum; P71 T28: and a re-inked stretch */
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
     /* REVIEW-P69-LANE-B-MERGE-4 N2: on a CARD the x labels run under the end tags' column (a range label is set from the
@@ -19603,6 +19750,8 @@ async function mount(doc) {
        drawing the chart and starting the analysis, that gives us the first initial frame of motion"): the page's clock starts at the PUNCH's end,
        so the paper, the ruled line, the ink (title, labels, axes) and the punch are all behind it on frame 0 and the BUILD runs from there. The
        hook's register - `built` is the same arrival with the data already on it, and it is still. */
+    const traceIn = pg.enter === "trace";   /* P71 T28 (A41): the axes enter's clock - the ground on frame 0, the build from it - with the
+       furniture (the frame, the ticks, the title, the end tags) landing AFTER the line has traced (lpTraceFurniture) */
     const snap = pg.enter === "snap";   /* the third watch: the thrown card BECOMES the world - the page arrives built and grows from the card's rectangle to the stage over SNAP_S */
     const camIn = pg.enter === "camera";   /* P49 T5: the page arrives built and the EYE went to the card - it shows at the match, at identity */
     const card = pg.card === true || (pg.card !== false && (pg.enter === "snap" || camIn));   /* a snapped (or camera-arrived) page is a card unless told otherwise */
@@ -19615,7 +19764,7 @@ async function mount(doc) {
        the whole page flies in on the pills' own kinetics (throwXf: a ballistic chord, the tumble, the material's squash and settle) and arrives built */
     const mount = pg.enter === "mount" || (pg.enter === "morph" && !morphOn);   /* a morph with its flag off is a mount of the same length */
     const mountS = mount ? (pg.mount_s || pg.morph_s || LP.FIELD) : 0;   /* R26-50: mount_s is the SOAK's own seconds - the page's clock, never the page that left */
-    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || camIn || built || thrown || dropped) ? Math.max(LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1), lpKeyBuilt(st)) : axesIn ? LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH : mount ? LP.ROLL + LP.SAVOR + (LP.FIELD - mountS) : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2) on the PAGE's own clock (R26-50): the cream is the ground on its first frame and the SOAK starts there, over mount_s - the roll and the savor are already behind it, and the ink, the punch and the build follow at their own LP offsets; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
+    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || camIn || built || thrown || dropped) ? Math.max(LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1), lpKeyBuilt(st)) : axesIn || traceIn ? LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH : mount ? LP.ROLL + LP.SAVOR + (LP.FIELD - mountS) : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2) on the PAGE's own clock (R26-50): the cream is the ground on its first frame and the SOAK starts there, over mount_s - the roll and the savor are already behind it, and the ink, the punch and the build follow at their own LP offsets; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
     /* beat 1: roll-out */
     const rk = (mount || morphOn || snap) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) on MOUNT_STEPS over its soak */
     /* HF-16: the wire recedes from the instant the CHART layer comes up - the build drives that layer's opacity, so a
@@ -19681,8 +19830,9 @@ async function mount(doc) {
     if (st.fieldPlate) st.fieldPlate.style.opacity = expoOut(b).toFixed(3);   /* the inked plate arrives over the cream */
     /* beat 4: ink writes title/source once the field has soaked - no outline (E22 addendum 7: the deckle is the edge) */
     const t3 = tr - LP.ROLL - LP.SAVOR - LP.FIELD;
-    const n = Math.max(1, st.glyphs.length), per = LP.INK / n;
-    st.glyphs.forEach((g, j) => setW(g, clamp01((t3 - j * per) / (per * 1.6))));   /* R26-46: the page's own ink records what it wrote, so the title's erase scales that and not its own last answer */
+    const n = Math.max(1, st.glyphs.length), per = (traceIn ? LP_TRACE.INK : LP.INK) / n;
+    const tInk = traceIn ? t3 - LP.PUNCH - (st.buildDur || LP.BUILD) : t3;   /* P71 T28: a traced page writes its words after its line */
+    st.glyphs.forEach((g, j) => setW(g, clamp01((tInk - j * per) / (per * 1.6))));   /* R26-46: the page's own ink records what it wrote, so the title's erase scales that and not its own last answer */
     /* beat 5: PUNCH IN on the board - the line and the deckle margin are the room we spend (E22 addendum 6) */
     /* P61 T3 / R26-117: a page HANDED THE MELT'S BALL arrives on a board that never left - the melt took the chart's
        ink and the board stayed (E88) - so its ground is the punched board from its first frame, exactly as the roll,
@@ -19796,6 +19946,7 @@ async function mount(doc) {
     if (morphOn) paintMorph(st, pg, scene.world, clamp01((t - scene.span[0]) / morphS), c, bRect, scene.scene_id);   /* P47 T3: the prop becomes the area under the line, then the line draws over it. P61 T3b: `bRect` is the GROUND's last beat - the prop stays the ink it was traced from until the board it stands on is charcoal */
     /* badges: floored at the build's end, each springs in over LP_BADGE_IN with the dock's back-out overshoot */
     const tb = t3 - LP.PUNCH - (st.buildDur || LP.BUILD);
+    if (traceIn) lpTraceFurniture(st, pg, tb);   /* P71 T28: the furniture lands after the trace */
     const arrP = arriveOf(scene.world), massP = scene.world.mass || "paper";   /* P47 T1: the page's pills may ARRIVE by a throw or a landing (`;arrive=land;mass=metal` on the plate id - the compiler writes it on the world) */
     /* one pill `u0` s past its own onset (P69 T10: the page's badges and its key rail's pills spring by the one law) */
     const pillAt = (el, u0, bi, phase) => {
@@ -19828,6 +19979,7 @@ async function mount(doc) {
     if (scene.prop_morphs) lpPropMorphPaint(el, st, scene, t);   /* P69 T26e: props and marks becoming each other - BEFORE the soft bars read the marks */
     for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b: the soft bars' feet and shadows, off what every painter wrote at t */
     for (const S of st.states || [st]) if (S.segs) lpSegPaint(S);   /* P69 T64: ... and each stack, off its bar as drawn at t */
+    for (const S of st.states || [st]) if (S.inkFrom) lpInkFromSync(S);   /* P71 T28: LAST - the twin wears what every painter wrote on its line */
   };
 
   /* ================= P69 T26f / E99 s108 - THE PAGE'S CHROME IS OBJECTS =================

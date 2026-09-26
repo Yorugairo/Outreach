@@ -57,7 +57,7 @@ import series_inks as SINKS  # noqa: E402  (P69 T37b: a series name in its ink u
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
 LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
-LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built", "throw", "drop", "camera", "axes", "surface")   # enter=axes (P53 T1, the operator 2026-09-12): the charcoal page lands with its ground, its ruled line, its title, its labels and its AXES already drawn, and the CHART draws from the first frame - "that gives us the first initial frame of motion". `built` is its still sibling: the whole page, data included, at frame 0.   # enter=camera=<dock>: P49 T5 - the page arrives BUILT and the EYE goes to the landed card (the camera zooms the outgoing world and the card until the card fills the stage, then the world is the page) - the snap's opposite number, opt-in until HG2   # enter=drop: the page FALLS into the frame from above and lands as the world (the dock's landXf) - "is falling down into the frame easier?" (operator, 2026-09-08)   # enter=throw (2026-09-08): the whole page is THROWN onto the world and arrives built - the transition IS the plate entering the world   # enter=built: the page ARRIVES with its chart already drawn, by the row's own transition - it NEVER mounts (operator, 2026-09-08: mount is cream coming through over the scene, then drawing). `surface=<paper>,<lead_s>` is the registered paper handoff; the binder supplies its destination spec and native-wide geometry.
+LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built", "throw", "drop", "camera", "axes", "surface", "trace")   # enter=trace (P71 T28; harvest v2 A41 "trace first, furniture after", Bravos HIS 00:00-00:06 / 05:50): the line page's SHAPE is the hook - the series draws on the bare ground first (the axes enter's clock: the ground is there on frame 0 and the build runs from it), then the title, the axes and the key land. Opt-in: E73 still opens row 1 on its axes; a dense line page only.   # enter=axes (P53 T1, the operator 2026-09-12): the charcoal page lands with its ground, its ruled line, its title, its labels and its AXES already drawn, and the CHART draws from the first frame - "that gives us the first initial frame of motion". `built` is its still sibling: the whole page, data included, at frame 0.   # enter=camera=<dock>: P49 T5 - the page arrives BUILT and the EYE goes to the landed card (the camera zooms the outgoing world and the card until the card fills the stage, then the world is the page) - the snap's opposite number, opt-in until HG2   # enter=drop: the page FALLS into the frame from above and lands as the world (the dock's landXf) - "is falling down into the frame easier?" (operator, 2026-09-08)   # enter=throw (2026-09-08): the whole page is THROWN onto the world and arrives built - the transition IS the plate entering the world   # enter=built: the page ARRIVES with its chart already drawn, by the row's own transition - it NEVER mounts (operator, 2026-09-08: mount is cream coming through over the scene, then drawing). `surface=<paper>,<lead_s>` is the registered paper handoff; the binder supplies its destination spec and native-wide geometry.
 # The build is a device, not an obligation - five builds in one short is repetition, and a page that arrives complete spends
 # its whole span being read instead of being drawn (operator, 2026-09-08: "maybe chart 1 doesn't actually need a build, it
 # could enter built, the deconstruction/transformation is its own thing"). E49 keeps it alive; the transformation is the
@@ -8598,6 +8598,9 @@ def page_is_full_stage(world: dict | None, aspect: str | None) -> bool:
     return isinstance(page, dict) and LPG.full_stage(page, aspect or "16:9")
 
 
+PAGE_ENTER_TRACE = "trace"   # P71 T28: the line before its furniture (LEDGER_ENTERS)
+
+
 def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | None = None) -> dict:
     """The LEDGER PAGE world for a ``ledger:`` plate id: ``world.page`` is the
     ``ledger_page.v1`` spec from ``<ep_dir>/evidence/objects/<series>.series.json``
@@ -8621,6 +8624,13 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     if enter:
         if enter == "surface":
             raise ValueError(f"{plate_id!r}: surface= must name a paper surface and positive lead seconds")
+        if enter.split("=")[0] == PAGE_ENTER_TRACE:   # P71 T28: the trace is a line's, and it carries no value
+            if enter != PAGE_ENTER_TRACE:
+                raise ValueError(f"{plate_id!r}: enter {enter!r} - the trace takes no value (it draws on the page's own "
+                                 "build clock); write `trace`")
+            if page.get("builder") != "dense-line":
+                raise ValueError(f"{plate_id!r}: enter=trace draws a LINE on the bare ground before its furniture; this page "
+                                 f"is {page.get('builder')!r} (P71 T28: a dense line page only)")
         if enter.startswith("surface="):
             if page.get("builder") != "dense-line":
                 raise ValueError(f"{plate_id!r}: surface= is only allowed on a dense-line page (this page is "
@@ -9918,7 +9928,7 @@ def page_build_duration_s(page: dict) -> float:
 def _page_entry_build_s(page: dict, build_s: float) -> float:
     """Return the gate's entry-to-build landing using the actual player clock."""
     enter = page.get("enter")
-    if enter in (None, "axes", "mount", "morph"):
+    if enter in (None, "axes", "mount", "morph", "trace"):   # P71 T28: the trace runs the axes enter's clock
         # MG owns mount/morph/axes offsets and the default page beats.  Its
         # `extra` intentionally floors short authored builds at LP.BUILD, so
         # apply the actual renderer delta explicitly for those entry modes.

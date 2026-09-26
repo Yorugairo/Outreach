@@ -5862,6 +5862,91 @@ SURFACES.update({"projected-overtake": projected_overtake})
 FRAME_T.update({"projected-overtake": 14.2})   # at rest: the extend ends at 13.5 (11.0 + 2.5), the bracket and its gap landed
 
 
+
+# ---- P71 T28 (was P69 T76; the Bravos harvest v2 A41 and A21): THE LINE PAINTER ------------------------------------
+# Both on Steel and Paper H's railway page - the COMMITTED `ev-railway-index-v1` object, read in place, never re-typed
+# (its one crimson series, 442 railway companies 1843-1850, the peak at datum 53 and the trough at 139) - in the long
+# form, live, on a full stage, as H draws it.
+#   enter-trace     A41 "trace first, furniture after" (Bravos HIS 00:00-00:06): the page ENTERS BY ITS TRACE - the
+#                   railway mania's shape (the climb and the crash) draws on the bare charcoal over the page's build
+#                   (3.0 s), and only then does the furniture land: the frame, the tick labels, the title written, the
+#                   end tag, the key. Judged 0.3 s past the trace (3.30): the whole line drawn, its frame landed, its
+#                   tick labels arriving, the title a third written, the tag and the key still to come - the order, in one frame.
+#   ink-from-crash  A21 "the line changes ink at a point" (HIS 05:58 "red after the peak"): H row 9's own sentence, the
+#                   take's words shifted by -67.46 s as the lit-stretch golden's are ("crashed" 77.46 -> 10.00): the
+#                   build beat draws the climb to the PEAK (datum 53), and on "crashed" (1.2 s) the fall draws from
+#                   it in the fall's own ink (`ink_from: {x: the peak's x}` - no colour named, so the stretch's SIGN:
+#                   it falls, so blood red, E28), glowing in the new ink (T37b's layers). Judged 0.5 s after the landing.
+TRACE_OBJECT = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-railway-index-v1.series.json"
+TRACE_OPTS = ";idle=live;readability=longform"
+TRACE_PLATE = f"ledger:ref-rail-trace:line::right:trace{TRACE_OPTS}"
+INK_PLATE = f"ledger:ref-rail-ink:line:139:right:axes{TRACE_OPTS}"
+TRACE_KINETICS = {"idle": True, "min_jerk": True, "curvature_stroke": True}   # the flags a compiled cut carries that these
+#   frames read (build_kinetics; the H timeline's own): the trace's PACE is the pen law (curvature_stroke - without it the
+#   build falls back to expoOut, 80 % of the line down in its first half-second), the caps' clock (min_jerk), the page's life
+INK_SHIFT = 67.46
+INK_CRASH_AT, INK_CRASH_S = round(77.46 - INK_SHIFT, 2), 1.2   # "crashed", RAIL_CRASH_S (build_episode_h.py)
+INK_SPECIES = [
+    {"kind": "build_to", "at": 0.0, "dur": 0.4, "series": 0, "target": {"kind": "datum", "index": 53}},   # the build beat draws to the peak
+    {"kind": "build_to", "at": INK_CRASH_AT, "dur": INK_CRASH_S, "series": 0, "target": {"kind": "datum", "index": 139}},   # "crashed"
+]
+
+
+def rail_series(ink_from: bool = False) -> dict:
+    """The committed railway object, as a page reads it; with `ink_from`, the stroke re-inks from its PEAK (the datum
+    the object's own max is, read off its points) and names no colour - the stretch's sign draws it."""
+    obj = json.loads(TRACE_OBJECT.read_text(encoding="utf-8"))
+    if ink_from:
+        pts = obj["series"][0]["pts"]
+        peak = max(range(len(pts)), key=lambda i: pts[i][1])
+        assert peak == 53, peak
+        obj["series"][0]["ink_from"] = {"x": pts[peak][0]}
+    return obj
+
+
+def _rail_surface(plate: str, obj: dict, species: list, title: str) -> tuple[dict, dict]:
+    import tempfile
+    import build_scene_timeline_f as BST
+    assert LPG.validate(obj, "line") == [], LPG.validate(obj, "line")
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            objects = Path(td) / "evidence/objects"
+            objects.mkdir(parents=True)
+            (objects / f"{plate.split(':')[1]}.series.json").write_text(json.dumps(obj), encoding="utf-8")
+            world = BST.world_for_plate(plate, (0, 0, 0), Path(td))
+            BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline(title, scenes, {}, "16:9")
+    tl["kinetics"] = dict(TRACE_KINETICS)
+    return tl, dict(_base_uris(), **BST.longform_assets(tl))
+
+
+def trace_surface(enter: str = "trace") -> tuple[dict, dict]:
+    """The railway page entering by `enter` (the test's control is `axes`: the same page with its furniture on frame 0)."""
+    return _rail_surface(TRACE_PLATE.replace(":trace", ":" + enter), rail_series(), [],
+                         f"Golden: the line traces before its furniture (enter={enter})")
+
+
+def enter_trace() -> tuple[dict, dict]:
+    return trace_surface()
+
+
+def ink_from_crash() -> tuple[dict, dict]:
+    return _rail_surface(INK_PLATE, rail_series(ink_from=True), [dict(e) for e in INK_SPECIES],
+                         "Golden: the line changes ink at the peak - red after it (ink_from)")
+
+
+SURFACES.update({"enter-trace": enter_trace, "ink-from-crash": ink_from_crash})
+FRAME_T.update({"enter-trace": 3.3,   # the trace done (the build, 3.0 s), the frame landed (0.33), the labels arriving, the title a third written
+                "ink-from-crash": round(INK_CRASH_AT + INK_CRASH_S + 0.5, 2)})   # 11.70: the fall landed red 0.5 s ago
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

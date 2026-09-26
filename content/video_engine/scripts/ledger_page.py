@@ -2052,6 +2052,122 @@ def _validate_longform_chrome(series: dict) -> list[str]:
     return errors
 
 
+# ---- P71 T28 (was P69 T76; harvest v2 A21, n=3: HIS 05:58 "red after the peak", BUB 19:45, BOOM (G)): THE LINE CHANGES
+# INK AT A POINT. A dense line page's series may carry `ink_from: {x, color}`: from x on, its stroke is drawn in the new
+# ink - the stroke AND its bloom (P69 T37b's layers, s117) - so the stretch past x draws in it on the word that draws it
+# (the page's own build, or the `build_to` that crosses x: H row 9's "crashed"). `color` is E67's four electric inks or a
+# SIGN ink (pos / neg, the phase ink's own list, P71 T20); absent, the stretch takes its SIGN (E28: a rise green, a fall
+# blood red). E53 s7: a declared colour outranks the default - but only where it does not lie (E28, "sign is colour too"):
+# a sign ink on the wrong sign is refused with its numbers. Byte-identical absent the key.
+INK_FROM_KEY = "ink_from"
+INK_FROM_FIELDS = ("x", "color")
+INK_FROM_INKS = SCHEMATIC_PHASE_INKS   # teal|crimson|cobalt|amber|pos|neg
+INK_FROM_SIGN = {"pos": 1, "neg": -1}
+INK_FROM_RULING = "E28 / E53 s7"
+
+
+def _value_at(pts: list, x: float) -> float | None:
+    """The series' value at x, read along its own straight segments (the stroke the page draws). Pure."""
+    xy = [(to_number(p[0]), to_number(p[1])) for p in pts]
+    for (xa, ya), (xb, yb) in zip(xy, xy[1:]):
+        if None in (xa, ya, xb, yb):
+            return None
+        if xa <= x <= xb:
+            return ya if xb == xa else ya + (yb - ya) * (x - xa) / (xb - xa)
+    return None
+
+
+def ink_from_sign(series_entry: dict) -> tuple[int, float, float] | None:
+    """The stretch from `ink_from.x` to the series' last datum: its sign (+1 rises, -1 falls, 0 flat), its value at x
+    and its last value - E28's read, end against start. None when x is off the line. Pure."""
+    inkf, pts = series_entry.get(INK_FROM_KEY), _points(series_entry)
+    x = to_number(inkf.get("x")) if isinstance(inkf, dict) else None
+    if x is None or not pts:
+        return None
+    v0, v1 = _value_at(pts, x), to_number(pts[-1][1])
+    if v0 is None or v1 is None:
+        return None
+    return (1 if v1 > v0 else -1 if v1 < v0 else 0), v0, v1
+
+
+def ink_from_color(series_entry: dict) -> str | None:
+    """The ink the stretch past x is drawn in: the declared one, else the stretch's sign ink (None: flat). Pure."""
+    inkf = series_entry.get(INK_FROM_KEY)
+    if not isinstance(inkf, dict):
+        return None
+    if inkf.get("color") is not None:
+        return inkf["color"]
+    sign = ink_from_sign(series_entry)
+    return None if not sign or sign[0] == 0 else ("pos" if sign[0] > 0 else "neg")
+
+
+def _ink_from_errors(where: str, s: dict) -> list[str]:
+    inkf = s[INK_FROM_KEY]
+    if not isinstance(inkf, dict):
+        return [f"{where}: ink_from is an object {{x, color?}} - the x the stroke changes ink at, and its new ink "
+                f"({'|'.join(INK_FROM_INKS)}; absent, the stretch's sign) - not {inkf!r}"]
+    errs = [f"{where}: `{k}` is not an ink_from key ({'|'.join(INK_FROM_FIELDS)})" for k in inkf if k not in INK_FROM_FIELDS]
+    if s.get(PROJECTION_KEY) is not None:
+        errs.append(f"{where}: a projection never changes ink - an estimate is context, drawn dashed in its line's ink "
+                    "(P71 T16, E77)")
+    raw, pts = inkf.get("x"), _points(s)
+    x = None if isinstance(raw, bool) else to_number(raw)   # a series file's numbers load as tokens (load_series)
+    xs = [to_number(p[0]) for p in pts]
+    if x is None:
+        errs.append(f"{where}: ink_from.x must be a number on the series' own x (a date the line passes), not {raw!r}")
+    elif len(xs) < 2 or None in xs or not xs[0] < x < xs[-1]:
+        span = f"{xs[0]}..{xs[-1]}" if len(xs) >= 2 and None not in (xs[0], xs[-1]) else "no x span"
+        errs.append(f"{where}: ink_from.x {x} is not inside the line ({span}) - the ink changes AT A POINT the line "
+                    "passes; a whole line in one ink is its `color`")
+    col = inkf.get("color")
+    if col is not None and col not in INK_FROM_INKS:
+        errs.append(f"{where}: ink_from.color must be one of {'|'.join(INK_FROM_INKS)} (E67's inks or a sign ink), "
+                    f"not {col!r}")
+    if errs:
+        return errs
+    sign, v0, v1 = ink_from_sign(s)
+    if col in INK_FROM_SIGN and INK_FROM_SIGN[col] != sign:
+        moves = "rises" if sign > 0 else "falls" if sign < 0 else "neither rises nor falls"
+        errs.append(f"{where}: ink_from paints the stretch from x {x} in the {col} ink, and it {moves} "
+                    f"({value_string(round(v0, 4))} -> {value_string(v1)}) - a sign ink on the wrong sign lies "
+                    f"({INK_FROM_RULING}: a drop is blood red, a rise green); name an electric ink, or drop the colour "
+                    "for the stretch's own sign")
+    if col is None and sign == 0:
+        errs.append(f"{where}: ink_from names no colour and the stretch from x {x} is flat "
+                    f"({value_string(round(v0, 4))} -> {value_string(v1)}) - it has no sign to take; name an ink "
+                    f"({'|'.join(INK_FROM_INKS)})")
+    return errs
+
+
+def _validate_ink_from(series: dict, variant: str) -> list[str]:
+    """P71 T28: `ink_from` on a dense line page's series, whole and truthful, or refused BY NAME (s106: before this slice
+    it was accepted and ignored). [] when no series names it."""
+    errs = [f"panels[{pi}].series[{si}]: ink_from is not built on a panel - a panel's lines draw with the page's build "
+            "(P71 T28)" for pi, p in enumerate(series.get("panels") or []) if isinstance(p, dict)
+            for si, s in enumerate(p.get("series") or []) if isinstance(s, dict) and INK_FROM_KEY in s]
+    hits = [i for i, s in enumerate(series.get("series") or []) if isinstance(s, dict) and INK_FROM_KEY in s]
+    if not hits:
+        return errs
+    builder = pick_builder(series, variant)
+    if builder != "dense-line":
+        return errs + [f"series[{i}]: ink_from changes the ink of a dense line page's stroke; this page draws as "
+                       f"{builder!r} (P71 T28)" for i in hits]
+    if series.get("highlight_from") is not None:
+        return errs + [f"series[{i}]: ink_from beside highlight_from - the highlight already re-inks this line's story "
+                       "window; one change of ink per line (P71 T28)" for i in hits]
+    for i in hits:
+        errs += _ink_from_errors(f"series[{i}]", series["series"][i])
+    return errs
+
+
+def ink_from_line(s: dict) -> dict:
+    """The series as the page DRAWS it: its ink_from with the colour resolved (the stretch's sign when it names none).
+    A copy; the file is never mutated."""
+    out = copy.deepcopy(s)
+    out[INK_FROM_KEY]["color"] = ink_from_color(s)
+    return out
+
+
 def projection_line(own: list, i: int) -> dict:
     """The series a projection is DRAWN as: its tag writes the projection's label (never a value, never the series'
     own name), in its line's ink when it names none. A copy; the file is never mutated."""
@@ -2083,6 +2199,7 @@ def validate(series: dict, variant: str) -> list[str]:
     errors += _validate_unit_suffix(series, variant)   # P72 T13 / R26-287: a prefix AND a suffix ($...B), refused by name when malformed
     errors += _validate_y2(series, variant)         # P71 T13 / R26-307: a second axis draws (a line page) or is refused by name
     errors += _validate_projection(series, variant)   # P71 T16 / E77: a projection is labelled, tiered, sourced and opens from the last actual
+    errors += _validate_ink_from(series, variant)     # P71 T28 / E28: the line changes ink at a point - never a sign ink on the wrong sign
     errors += _validate_longform_chrome(series)       # P71 T30: the two-line source and the title capsule, the long form's alone
     if "left_gutter" in series:
         gutter = series["left_gutter"]
@@ -3800,6 +3917,9 @@ def _dense_block(series: dict) -> dict:
     if any(isinstance(s, dict) and isinstance(s.get(PROJECTION_KEY), dict) for s in own):   # P71 T16: its tag is its label (absent: not one byte)
         series = dict(series, series=[projection_line(own, i) if isinstance(s, dict) and isinstance(s.get(PROJECTION_KEY), dict)
                                       else s for i, s in enumerate(own)])
+    if any(isinstance(s, dict) and isinstance(s.get(INK_FROM_KEY), dict) for s in series.get("series") or []):   # P71 T28 (absent: not one byte)
+        series = dict(series, series=[ink_from_line(s) if isinstance(s, dict) and isinstance(s.get(INK_FROM_KEY), dict) else s
+                                      for s in series.get("series") or []])
     return {"labels": [s.get("name") or s.get("label") for s in dense_series(series) if not s.get("later")],
             "series": copy.deepcopy([s for s in (series.get("series") or []) if not (isinstance(s, dict) and s.get("later"))]),
             "axes": {k: copy.deepcopy(series[k]) for k in AXES_KEYS if k in series}}

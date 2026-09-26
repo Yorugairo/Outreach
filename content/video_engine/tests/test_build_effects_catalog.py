@@ -471,10 +471,12 @@ def test_every_wired_card_is_in_a_recipe():
     # P71 T18's unknown (species:unknown, the large "?") is tested alone in test_unknown_prompt.py and pinned by the
     # unknown-decide golden (H row 23's "Decide for yourself"); no committed beat plays it before P71-HG1, and its recipe
     # is P71 T33's inset echo (the plot parks, the twins stack, then the "?"), not invented here.
+    # P71 T28's trace enter (page_enter:trace) is tested alone in test_line_painter.py and pinned by the enter-trace golden
+    # (H's railway page entering by its shape); no body row adopts it before P71-HG1 (E73 still opens row 1 on its axes).
     assert uncovered == ["camera:pedestal", "dock_option:moves", "page_builder:bars+segments",
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress",
-                         "page_enter:surface",
+                         "page_enter:surface", "page_enter:trace",
                          "page_species:datum_badge", "page_species:explode", "page_species:lens", "page_species:member",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:readability",

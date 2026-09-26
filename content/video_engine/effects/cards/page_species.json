@@ -381,7 +381,13 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "ink_from",
+          "means": "A21 (USE-WHEN :341): a series naming `ink_from: {x, color?}` draws its stretch past x in the new ink and glow on the build_to that crosses it; a sign ink on the wrong sign is refused (E28).",
+          "source_set": null
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",

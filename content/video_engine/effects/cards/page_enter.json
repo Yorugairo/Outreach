@@ -1036,6 +1036,99 @@
         "today": true,
         "why": "accepted by LEDGER_ENTERS for source-bound dense-line pages"
       }
+    },
+    {
+      "id": "page_enter:trace",
+      "axis": "page_enter",
+      "token": "trace",
+      "title": "The trace page enter: the line before its furniture",
+      "aliases": [
+        {
+          "name": "Trace first, furniture after",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:347"
+        }
+      ],
+      "does": "The line page's series draws on the bare charcoal ground first - no title, no axes, no key - and only then does the furniture land: the frame, the tick labels, the title written, the end tags, the key.",
+      "when": "the SHAPE is the hook, before the viewer knows what it is; not when the chart needs its unit to mean anything (then the axes enter: Bravos's Domino opener builds the frame first).",
+      "when_source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:347",
+      "author": {
+        "key": "ledger id 6th part ':trace' (validator: parse_ledger_id; ledger_world: a dense line page only, no value)",
+        "example": "'ledger:ev-railway-index-v1:line::right:trace;idle=live;readability=longform'",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (enter-trace)",
+        "check": "enter"
+      },
+      "phases": [
+        {
+          "name": "the trace",
+          "does": "the ground is there on frame 0 (the axes enter's clock) and the series draws over the page's build on the bare ground",
+          "trigger": "the scene boundary",
+          "dials": {
+            "BUILD": "3.0"
+          }
+        },
+        {
+          "name": "the frame lands",
+          "does": "the axis rule, the grid and the axis names fade up",
+          "trigger": "the build's end",
+          "dials": {
+            "FRAME_S": "0.33"
+          }
+        },
+        {
+          "name": "the words land",
+          "does": "the tick labels fade up while the title, sub and source write",
+          "trigger": "LABELS_AT after the build",
+          "dials": {
+            "LABELS_AT": "0.2",
+            "LABELS_S": "0.33",
+            "INK": "0.87"
+          }
+        },
+        {
+          "name": "the key lands",
+          "does": "the end tags (E53 s8) last; the key rail's pills on their own clock after the build",
+          "trigger": "KEY_AT after the build",
+          "dials": {
+            "KEY_AT": "0.53",
+            "KEY_S": "0.4"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos HIS 00:00-00:06 (Jw8ykhoOVBQ): the two series trace on the bare ground for ~3.1 s, then the box, the tick labels, the title and the key land over ~0.9 s",
+          "became": "the order and the dials",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:347",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpTraceFurniture",
+        "also": [
+          "LP_TRACE",
+          "lpTraceOp"
+        ],
+        "note": "paintLedger const traceIn (the axes enter's tr offset; the glyph clock after the build); build_scene_timeline_f.ledger_world (a dense line page only)"
+      },
+      "doctrine": [
+        "P71 T28",
+        "E73",
+        "E53 s8"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "enter-trace",
+        "test": "content/video_engine/tests/test_line_painter.py::test_the_trace_draws_the_line_then_the_furniture_lands",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "in LEDGER_ENTERS; opt-in on a dense line page whose shape is the hook (E73 still opens row 1 on its axes)"
+      }
     }
   ]
 }

@@ -688,7 +688,7 @@ def _page_events(scenes: list[dict]) -> tuple[list[float], list[float]]:
         # E69's M05 now decides on). `axes` plays the build alone: the page is there, the data draws. (P53 T1)
         enter = page.get("enter")
         offs = ((0.0, LP_SPIRAL_IN_S) if spiral else (0.0,) if enter in ARRIVES_BUILT
-                else (0.0, LP_BUILD_S) if enter == "axes" else PAGE_BEAT_OFFSETS)
+                else (0.0, LP_BUILD_S) if enter in ("axes", "trace") else PAGE_BEAT_OFFSETS)   # P71 T28: the trace draws on the axes enter's clock
         beats += [round(a + off, 2) for off in offs if a + off < z]
         # the retract: the colours start winding in, then the charcoal - two beats at the page's end (none on exit=cut)
         if (s.get("world", {}).get("page") or {}).get("exit") != "cut":
@@ -2012,7 +2012,7 @@ def _page_land_offset(scene: dict) -> float:
         return LP_SPIRAL_IN_S
     if page.get("enter") in ARRIVES_BUILT:   # a returning page, a card become the world (P47 T7; P49 T5 by the eye), or a page that mounts with its chart already drawn: arrives built
         return 0.0
-    if page.get("enter") == "axes":   # P53 T1: the page is there on frame 0 and the DATA is what builds - the chart lands one build later
+    if page.get("enter") in ("axes", "trace"):   # P53 T1: the page is there on frame 0 and the DATA is what builds - the chart lands one build later (P71 T28: the trace too - its furniture lands after)
         return LP_BUILD_S + extra
     return PAGE_BUILD_END_S + extra
 
