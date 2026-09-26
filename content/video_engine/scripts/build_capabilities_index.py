@@ -35,6 +35,10 @@ REPO = SCRIPTS.parents[2]
 CAP_REL = "docs/content-video-engine/CAPABILITIES.md"
 JSONL_REL = "docs/CAPABILITIES-INDEX.jsonl"
 MD_REL = "docs/CAPABILITIES-INDEX.md"
+# R26-136 (5) (P72 T46e): the natural terms a row's own words never say as a phrase ("blind viewer" for "The viewer
+# (P36)"). Each entry names its row by a span of the row's NAME (never a line: rows move), exactly one row, else the
+# build fails naming it; the terms land on that record's `aliases`, which docs_find searches right after the name.
+ALIASES_REL = "content/video_engine/configs/capability-aliases.json"
 
 WHAT_MAX = 100          # characters in `what`, the ellipsis included; cut at a word. 2026-09-25: 120 -> 110 (P72 T1) -> 100 (P72 T2, lane B's 245 records: 44,439 bytes at 110, 42,583 at 100 - room for the lanes' merge) -
                         # P72 T1 fits the page under MD_MAX_BYTES by compacting each line, never by raising
@@ -335,8 +339,40 @@ def render_jsonl(records: list[dict]) -> str:
     return "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in records)
 
 
+def alias_problem(entry) -> str | None:
+    """Why an aliases entry cannot be applied, or None: `row` a non-empty span, `terms` a non-empty list of strings."""
+    if not isinstance(entry, dict) or not isinstance(entry.get("row"), str) or not entry["row"].strip():
+        return f"aliases: an entry names no `row` span - {entry!r} (R26-136)"
+    terms = entry.get("terms")
+    if not isinstance(terms, list) or not terms or not all(isinstance(t, str) and t.strip() for t in terms):
+        return f"aliases: {entry['row']!r} - `terms` must be a non-empty list of strings, got {terms!r} (R26-136)"
+    return None
+
+
+def apply_aliases(parsed: Parsed, root: Path) -> None:
+    """Each entry of `ALIASES_REL` onto the ONE record whose name carries its `row` span (case-insensitive) - a span
+    that names no row or two is a failure by name, as a malformed entry is. No file: every record as it always was."""
+    path = Path(root) / ALIASES_REL
+    if not path.is_file():
+        return
+    entries = json.loads(path.read_text(encoding="utf-8")).get("aliases") or []
+    for entry in entries:
+        problem = alias_problem(entry)
+        if problem:
+            parsed.failures.append(problem)
+            continue
+        rows = [r for r in parsed.records if entry["row"].strip().lower() in r["name"].lower()]
+        if len(rows) != 1:
+            parsed.failures.append(f"aliases: {entry['row']!r} names {len(rows)} rows - a span names exactly one row "
+                                   f"({', '.join(r['name'] for r in rows[:3]) or 'none'}) (R26-136)")
+            continue
+        rows[0]["aliases"] = unique([*rows[0].get("aliases", []), *(t.strip() for t in entry["terms"])])
+
+
 def build(root: Path = REPO) -> Parsed:
-    return parse((Path(root) / CAP_REL).read_text(encoding="utf-8"))
+    parsed = parse((Path(root) / CAP_REL).read_text(encoding="utf-8"))
+    apply_aliases(parsed, root)
+    return parsed
 
 
 def problems_of(parsed: Parsed, strict: bool) -> list[str]:

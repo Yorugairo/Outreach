@@ -10,7 +10,7 @@
       "aliases": [
         {
           "name": "THE NUMBERED AGENDA",
-          "source": "docs/content-video-engine/CAPABILITIES.md:37"
+          "source": "CAPABILITIES[THE NUMBERED AGENDA]"
         }
       ],
       "does": "Two to four numbered rows are revealed one per word and hold at a named idle; form \"page\" gives the same list a plate of its own, each row stamped with its catalogued icon once its sentence has been read.",
@@ -179,13 +179,13 @@
         {
           "source": "the chip's X strokes (chipStrokes)",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:87",
+          "record": "CAPABILITIES[The icon CHIP]",
           "tie": "recorded"
         },
         {
           "source": "Bravos world map, shots 57-80",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:92",
+          "record": "CAPABILITIES[The VECTOR MAP]",
           "tie": "recorded"
         },
         {
@@ -661,7 +661,7 @@
       "aliases": [
         {
           "name": "The icon CHIP",
-          "source": "docs/content-video-engine/CAPABILITIES.md:87"
+          "source": "CAPABILITIES[The icon CHIP]"
         },
         {
           "name": "icon board",
@@ -753,7 +753,7 @@
         {
           "source": "Bravos icon board, shots 26-28",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:87",
+          "record": "CAPABILITIES[The icon CHIP]",
           "tie": "recorded"
         },
         {
@@ -887,7 +887,7 @@
       "aliases": [
         {
           "name": "THE ISOMETRIC COUNT ARRAY",
-          "source": "docs/content-video-engine/CAPABILITIES.md:36"
+          "source": "CAPABILITIES[THE ISOMETRIC COUNT ARRAY]"
         }
       ],
       "does": "N identical sourced icons arrive in reading order on a 2:1 rhombus lattice and the count is written under them.",
@@ -937,7 +937,7 @@
         {
           "source": "the chip's landing law",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:87",
+          "record": "CAPABILITIES[The icon CHIP]",
           "tie": "recorded"
         },
         {
@@ -1108,7 +1108,7 @@
       "aliases": [
         {
           "name": "The FLOW DIAGRAM",
-          "source": "docs/content-video-engine/CAPABILITIES.md:89"
+          "source": "CAPABILITIES[The FLOW DIAGRAM - chips, clothoid arrows, the swap]"
         }
       ],
       "does": "Two to nine named things and the clothoid arrows between them draw on - a row, a RING when the chain closes, or a HUB of straight spokes; one node can swap while the rest stand, tokens ride the arrows, one link can fail.",
@@ -1205,7 +1205,7 @@
         {
           "source": "Bravos flow diagram, shots 82-86",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:89",
+          "record": "CAPABILITIES[The FLOW DIAGRAM - chips, clothoid arrows, the swap]",
           "tie": "recorded"
         },
         {
@@ -1217,7 +1217,7 @@
         {
           "source": "the chip's landing",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:87",
+          "record": "CAPABILITIES[The icon CHIP]",
           "tie": "recorded"
         },
         {
@@ -1567,7 +1567,7 @@
         {
           "source": "Bravos world map, shots 57-80",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:92",
+          "record": "CAPABILITIES[The VECTOR MAP]",
           "tie": "recorded"
         },
         {
@@ -1623,7 +1623,7 @@
       "aliases": [
         {
           "name": "THE NEWSREEL BAND",
-          "source": "docs/content-video-engine/CAPABILITIES.md:39"
+          "source": "CAPABILITIES[THE NEWSREEL BAND, AND THE SURFACE ABOVE IT]"
         }
       ],
       "does": "The sourced headlines crawl in a band in the lower 40 % under a surface that shows who said it.",
@@ -2076,7 +2076,7 @@
       "aliases": [
         {
           "name": "THE RING'S DASHED-ELLIPSE FORM",
-          "source": "docs/content-video-engine/CAPABILITIES.md:38"
+          "source": "CAPABILITIES[THE RING'S DASHED-ELLIPSE FORM WITH ITS FLAG CHIP]"
         }
       ],
       "does": "A dashed ellipse draws round a datum, with an optional flag chip naming it.",
@@ -2274,7 +2274,7 @@
         },
         {
           "name": "The light HOLDS",
-          "source": "docs/content-video-engine/CAPABILITIES.md:70"
+          "source": "CAPABILITIES[The light HOLDS]"
         }
       ],
       "does": "The frame dims except a feathered light that lands on a picture or datum and holds for the sentence.",
@@ -2327,7 +2327,7 @@
         {
           "source": "E25 amended: the light holds",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:70",
+          "record": "CAPABILITIES[The light HOLDS]",
           "tie": "recorded"
         }
       ],
@@ -2620,7 +2620,7 @@
       "aliases": [
         {
           "name": "Trace HOPS",
-          "source": "docs/content-video-engine/CAPABILITIES.md:71"
+          "source": "CAPABILITIES[Trace HOPS + stacked stamps + the UNDER species layer]"
         }
       ],
       "does": "A route draws between named points on a still, with hops, and stamps collect at each named point.",
@@ -2659,7 +2659,7 @@
         {
           "source": "Trace HOPS + stacked stamps",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:71",
+          "record": "CAPABILITIES[Trace HOPS + stacked stamps + the UNDER species layer]",
           "tie": "recorded"
         }
       ],

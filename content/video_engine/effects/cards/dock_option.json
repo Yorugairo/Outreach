@@ -10,7 +10,7 @@
       "aliases": [
         {
           "name": "stop-action throw",
-          "source": "docs/content-video-engine/CAPABILITIES.md:69"
+          "source": "CAPABILITIES[Stop-action mechanics: throw and land with weight]"
         }
       ],
       "does": "Names how the card arrives: the spring pop (the default), a stop-action throw, or a landing.",
@@ -131,7 +131,7 @@
       "aliases": [
         {
           "name": "the occluder",
-          "source": "docs/content-video-engine/CAPABILITIES.md:99"
+          "source": "CAPABILITIES[The CONTINUITY three]"
         }
       ],
       "does": "The plate's own foreground cutout paints over the card, so the card sits in the room behind a real object - depth by occlusion, not blur.",
@@ -176,12 +176,12 @@
       "aliases": [
         {
           "name": "A centred dock in an AUTHORED box",
-          "source": "docs/content-video-engine/CAPABILITIES.md:75"
+          "source": "CAPABILITIES[A centred dock in an AUTHORED box, and a ring inside it]"
         }
       ],
       "does": "The card sits centred on the page in an authored or computed box, clear of the page's ink, instead of the dock slot; without `read` it holds that box from its first frame.",
       "when": "the card must sit where the page's ink leaves room and the sentence rings a number ON the card's chart",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:75",
+      "when_source": "CAPABILITIES[A centred dock in an AUTHORED box, and a ring inside it]",
       "author": {
         "key": "dock option {'centre': True}",
         "example": "{'centre': True, 'card_aspect': 0.86, 'centre_y': 0.4021, 'centre_x': 0.4407, 'centre_w': 0.7407}",
@@ -353,7 +353,7 @@
       "aliases": [
         {
           "name": "THE ART-EMBED SURFACE",
-          "source": "docs/content-video-engine/CAPABILITIES.md:31"
+          "source": "CAPABILITIES[THE ART-EMBED SURFACE]"
         },
         {
           "name": "the tv surface",
@@ -370,7 +370,7 @@
       ],
       "does": "The card lands ON a surface the plate declares, projected onto its four corners; a bare still or clip COVERS its surface by default, while a card carrying badges, a record, a chart or proofs stays a reflowed card (E95).",
       "when": "a press quote or a record lands in the ART world - on the poster, the TV, the laptop, the paper of an approved plate; never a chart.",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:31",
+      "when_source": "CAPABILITIES[THE ART-EMBED SURFACE]",
       "author": {
         "key": "dock option {'embed': '<surface name in <plate>.layers.json embed>'}",
         "example": "{\"embed\": \"tv\", \"press\": {\"source\": \"THE HERALD\", \"phrase\": {\"x0\": 0.1, \"y0\": 0.2, \"x1\": 0.6, \"y1\": 0.4}}}",
@@ -939,7 +939,7 @@
       "aliases": [
         {
           "name": "STACK hand-off",
-          "source": "docs/content-video-engine/CAPABILITIES.md:88"
+          "source": "CAPABILITIES[The PRESS CARD dock and the STACK hand-off]"
         },
         {
           "name": "the press STACK",
@@ -956,7 +956,7 @@
       ],
       "does": "Press cards flagged on one scene form a lit pile: the newest springs in while each older card is shoved one step back on a lean-and-squeeze pulse, fanning, shrinking and dimming; a card that leaves retracts and the pile closes.",
       "when": "the stack when three claims land in a row",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:88",
+      "when_source": "CAPABILITIES[The PRESS CARD dock and the STACK hand-off]",
       "author": {
         "key": "dock option {'press': <meta>, 'stack': True}",
         "example": "{\"press\": {\"kind\": \"press\", \"source\": \"The Herald, 4 Mar 2026\", \"phrase\": {\"x0\": 0.12, \"y0\": 0.2, \"x1\": 0.66, \"y1\": 0.44}, \"phrase_text\": \"the historic normal was never normal\", \"card\": [1056, 313]}, \"stack\": True}",

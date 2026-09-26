@@ -164,7 +164,7 @@ def asset_detail(record: dict) -> str:
 
 LAYERS: tuple[Layer, ...] = (
     Layer(
-        "capabilities", CAPABILITIES_REL, ("name", "what", "where", "cards", "state", "terms"),
+        "capabilities", CAPABILITIES_REL, ("name", "aliases", "what", "where", "cards", "state", "terms"),   # aliases: R26-136 (5)
         name_of=lambda r: str(r.get("name") or ""),
         detail_of=lambda r: f"{r.get('state') or ''} - {r.get('what') or ''}",
         path_of=lambda r: CAPABILITIES_DOC,

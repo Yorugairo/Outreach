@@ -14,6 +14,11 @@ joins those cards to the truths they must never copy:
      `docs/DOCS-INDEX.jsonl` to a path:line (the gates-registry forms, plus the named docs below); a BACKLOG row id
      or a ruling id is found in the document's own text (`| **R26-30** |`, `## E88`); an unresolved cite keeps a null
      path rather than disappearing, and is never pointed at the document's first line.
+  4. the ROW CITES (P72 T46e, R26-356) - an alias's `source`, a blend's `record`, the card's `when_source` - name a
+     CAPABILITIES row by its title, `CAPABILITIES[<a span of the row's bold name>]`, and resolve here over the doc's own
+     rows (`build_docs_index.file_records`, the kit's reading - a stale index never moves them) to `row_cites`; a span that
+     names no row or two, or a `CAPABILITIES.md:<line>` cite (it drifted silently as rows moved: 86 of 92 had), is a
+     CatalogError naming the card and the field.
 
     python content/video_engine/scripts/build_effects_catalog.py [--write | --check] [--repo <root>]
 
@@ -80,6 +85,9 @@ NAMED_DOCS = {
     "CHECK-RESPONSIBILITIES": "docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md",
 }
 BACKLOG_ROW = re.compile(r"^R\d{2}-\d+$")
+# P72 T46e (R26-356): the fields that cite a CAPABILITIES row, and the two forms such a cite can take
+ROW_CITE = re.compile(r"^CAPABILITIES\[([^\]\n]+)\]$")
+CAP_BY_LINE = re.compile(r"CAPABILITIES\.md:\d+")
 # Where a BACKLOG row goes when it leaves BACKLOG.md (P72 T29): a `BACKLOG R26-103` cite follows it there.
 BACKLOG_ARCHIVES = ("docs/content-video-engine/BACKLOG-HISTORY-*.md", "docs/content-video-engine/backlog/archive/*.md")
 RULING_ID = re.compile(r"^E\d+$")
@@ -299,10 +307,54 @@ def dial_values(repo: Path, dials: dict | None, card_id: str = "?") -> dict[str,
     return {key: " ".join(value.split()) for key, value, _ in BAR.object_entries(text, *span)}
 
 
-def record_of(card: dict, when: dict, index: list[dict], repo: Path) -> dict:
-    """The card, plus the pulled `when`, the resolved `doctrine` and the module's `dials_values`."""
+def row_cite_fields(card: dict) -> list[tuple[str, str]]:
+    """(field, value) for every field of a card that may cite a CAPABILITIES row: each alias's `source`, each blend's
+    `record`, the card's own `when_source`."""
+    out = [(f"aliases[{i}].source", a.get("source")) for i, a in enumerate(card.get("aliases") or [])]
+    out += [(f"blends[{i}].record", b.get("record")) for i, b in enumerate(card.get("blends") or [])]
+    out.append(("when_source", card.get("when_source")))
+    return [(field, value) for field, value in out if isinstance(value, str)]
+
+
+def capabilities_rows(repo: Path) -> list[dict]:
+    """The CAPABILITIES doc's row records, read from its own text (the kit's `resolve_row` reading)."""
+    import build_docs_index as BDI  # the row reader, defined once there
+
+    path = Path(repo) / NAMED_DOCS["CAPABILITIES"]
+    if not path.is_file():
+        return []
+    return [r for r in BDI.file_records(NAMED_DOCS["CAPABILITIES"], path.read_text(encoding="utf-8"))
+            if r["level"] == BDI.ROW_LEVEL]
+
+
+def row_cites(card: dict, rows_of) -> list[dict]:
+    """{field, ref, path, line} for every CAPABILITIES title cite on the card; a by-line cite, or a span that names no
+    row or more than one, is a CatalogError naming the card and the field (R26-356). `rows_of()` gives the rows."""
+    out = []
+    for field, value in row_cite_fields(card):
+        if CAP_BY_LINE.search(value):
+            raise CatalogError(f"{card['id']}: {field} cites CAPABILITIES by line ({value}) - a row moves and the cite "
+                               f"drifts silently; name the row by title, CAPABILITIES[<span of its name>] (R26-356)")
+        match = ROW_CITE.match(value.strip())
+        if not match:
+            continue
+        needle = re.sub(r"\([^)]*\)", "", match.group(1)).strip().lower()   # `_heading_containing`'s own reading
+        named = [r for r in rows_of() if needle and needle in r["heading"].lower()]
+        if len(named) != 1:
+            raise CatalogError(f"{card['id']}: {field} {value} names {len(named)} rows - a title cite names exactly one "
+                               f"CAPABILITIES row (R26-356)")
+        out.append({"field": field, "ref": value.strip(), "path": named[0]["path"], "line": named[0]["line"]})
+    return out
+
+
+def record_of(card: dict, when: dict, index: list[dict], repo: Path, rows_of=None) -> dict:
+    """The card, plus the pulled `when`, the resolved `doctrine`, the resolved `row_cites` (only when it has any) and
+    the module's `dials_values`."""
     record = dict(card)
     table = PULLED_WHEN.get(card["axis"])
+    cites = row_cites(card, rows_of or (lambda: capabilities_rows(repo)))
+    if cites:
+        record["row_cites"] = cites
     if table:
         record["when"] = when.get(table, {}).get(card["token"])
         record["when_source"] = f"{SCRIPTS_REL}/{COMPILER}.py {table}"
@@ -359,7 +411,14 @@ def build(repo: Path = REPO, when: dict | None = None) -> list[dict]:
     cards = load_cards(repo)
     pulled = when if when is not None else compiler_when(repo)
     index = BGR.load_docs_index(repo)
-    records = [record_of(card, pulled, index, repo) for card in cards]
+    cached: dict[str, list[dict]] = {}
+
+    def rows_of() -> list[dict]:   # the CAPABILITIES rows, read once and only when a card cites one (R26-356)
+        if "rows" not in cached:
+            cached["rows"] = capabilities_rows(repo)
+        return cached["rows"]
+
+    records = [record_of(card, pulled, index, repo, rows_of) for card in cards]
     recipes = load_recipes(repo)
     titles = {r["id"]: r["title"] for r in records}
     titles.update({r["id"]: r["title"] for r in recipes})
@@ -434,6 +493,9 @@ def card_block(record: dict) -> list[str]:
         lines.append("- **doctrine** " + "; ".join(_cite_text(c) for c in record["doctrine"]))
     if record["aliases"]:
         lines.append("- **aliases** " + "; ".join(f"\"{a['name']}\" ({a['source']})" for a in record["aliases"]))
+    if record.get("row_cites"):   # R26-356: each CAPABILITIES title cite, resolved to the row it names today
+        lines.append("- **row cites** " + "; ".join(f"{c['field']} {c['ref']} -> {c['path']}:{c['line']}"
+                                                    for c in record["row_cites"]))
     return lines + [""]
 
 

@@ -289,7 +289,7 @@
         {
           "source": "Build-on (P47 T2)",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:67",
+          "record": "CAPABILITIES[Build-on: the page performs on a word]",
           "tie": "recorded"
         },
         {
@@ -425,7 +425,7 @@
       "aliases": [
         {
           "name": "A CHART BECOMES ANOTHER CHART BY RE-WRITING",
-          "source": "docs/content-video-engine/CAPABILITIES.md:27"
+          "source": "CAPABILITIES[A CHART BECOMES ANOTHER CHART BY RE-WRITING]"
         }
       ],
       "does": "The page's chart becomes another state of the same data - rescaled, extended, recast, parked or morphed - with no cut.",
@@ -478,7 +478,7 @@
       "aliases": [
         {
           "name": "the census exception",
-          "source": "docs/content-video-engine/CAPABILITIES.md:94"
+          "source": "CAPABILITIES[The TREEMAP page with X marks - the census exception]"
         }
       ],
       "does": "The named cells of a treemap page take an X on the word and their combined share is written; a cross writing no share, or on a cell the page cannot name, is REPORTED with its numbers (E99 s100, s106).",
@@ -972,7 +972,7 @@
         {
           "source": "R26-228 the electric (lpBloom's halo, the relight's sunflower)",
           "became": "the lit core's look",
-          "record": "docs/content-video-engine/CAPABILITIES.md:76",
+          "record": "CAPABILITIES[THE PAGE LIVES]",
           "tie": "recorded"
         }
       ],
@@ -1178,13 +1178,13 @@
         {
           "source": "the verdict stack's recede to the mosaic",
           "became": "the receded role",
-          "record": "docs/content-video-engine/CAPABILITIES.md:248",
+          "record": "CAPABILITIES[THE VERDICT STACK - the operator's]",
           "tie": "recorded"
         },
         {
           "source": "the park's box-to-box move",
           "became": "the box move",
-          "record": "docs/content-video-engine/CAPABILITIES.md:91",
+          "record": "CAPABILITIES[`park`: the chart makes room by one affine transform]",
           "tie": "recorded"
         }
       ],
@@ -1370,7 +1370,7 @@
         {
           "source": "Build-on (P47 T2)",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:67",
+          "record": "CAPABILITIES[Build-on: the page performs on a word]",
           "tie": "recorded"
         }
       ],
@@ -1538,7 +1538,7 @@
       "aliases": [
         {
           "name": "The SPAN - a shaded stretch of time",
-          "source": "docs/content-video-engine/CAPABILITIES.md:91"
+          "source": "CAPABILITIES[The SPAN]"
         }
       ],
       "does": "A shaded stretch of time sits behind the chart with its name above it. The shade is DARKER than the page by default (E99 s46: span_tone dark at span_alpha 0.30); span_tone light is the old chalk wash, by name.",
@@ -1575,7 +1575,7 @@
         {
           "source": "Bravos 107-110 'the decades'",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:91",
+          "record": "CAPABILITIES[The SPAN]",
           "tie": "recorded"
         },
         {

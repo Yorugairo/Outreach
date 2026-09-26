@@ -242,7 +242,7 @@
       "aliases": [
         {
           "name": "`extend`: new points",
-          "source": "docs/content-video-engine/CAPABILITIES.md:107"
+          "source": "CAPABILITIES[`extend`: new points]"
         },
         {
           "name": "A17 dashed path past the last real point (`projection`)",
@@ -361,7 +361,7 @@
       "aliases": [
         {
           "name": "`morph_to`: the area under the line",
-          "source": "docs/content-video-engine/CAPABILITIES.md:109"
+          "source": "CAPABILITIES[`morph_to`: the area]"
         }
       ],
       "does": "The area under one line becomes another line's area mid-page by as-rigid-as-possible morphing.",
@@ -474,7 +474,7 @@
       "aliases": [
         {
           "name": "`park`: the chart makes room",
-          "source": "docs/content-video-engine/CAPABILITIES.md:110"
+          "source": "CAPABILITIES[`park`: the chart makes room by one affine transform]"
         },
         {
           "name": "UN-PARK",
@@ -545,7 +545,7 @@
       "aliases": [
         {
           "name": "`recast` keyed: n lines become n bars",
-          "source": "docs/content-video-engine/CAPABILITIES.md:108"
+          "source": "CAPABILITIES[`recast` keyed: n lines become n bars, by series]"
         },
         {
           "name": "the hand-over",
@@ -783,7 +783,7 @@
       "aliases": [
         {
           "name": "`rescale`: the chart's axes retarget",
-          "source": "docs/content-video-engine/CAPABILITIES.md:106"
+          "source": "CAPABILITIES[`rescale`: the chart's axes retarget on one clock]"
         }
       ],
       "does": "The chart's axes retarget on one clock to the window the story is about.",

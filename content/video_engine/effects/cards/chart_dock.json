@@ -78,7 +78,7 @@
         },
         {
           "name": "Checklist species",
-          "source": "docs/content-video-engine/CAPABILITIES.md:189"
+          "source": "CAPABILITIES[Checklist species = THE TEST CARD]"
         },
         {
           "name": "the scorecard",
@@ -86,7 +86,7 @@
         },
         {
           "name": "tripwire board",
-          "source": "docs/content-video-engine/CAPABILITIES.md:189"
+          "source": "CAPABILITIES[Checklist species = THE TEST CARD]"
         },
         {
           "name": "CHECKLIST v2",
@@ -99,7 +99,7 @@
       ],
       "does": "A procedure table lands row by row on the narration: each question types on letter by letter, the other cells fade in, and the answer cells take a chisel-edged marker sweep; re-docked for under 12 s it replays as a recap.",
       "when": "the sentence walks a PROCEDURE (a question, its answer) - rows land keyed to the narration",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:189",
+      "when_source": "CAPABILITIES[Checklist species = THE TEST CARD]",
       "author": {
         "key": "`checklist: {head: [...], rows: [{cells: [...], colors?}], profile?: \"phone\"}` in the dock asset's .series.json",
         "example": "(\"ev-test-scorecard-v1\",0,492.3,543.0)",

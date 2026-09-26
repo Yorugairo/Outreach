@@ -143,7 +143,7 @@
    "aliases": [
     {
      "name": "Idle `live`: nothing truly still",
-     "source": "docs/content-video-engine/CAPABILITIES.md:72"
+     "source": "CAPABILITIES[Idle `live`: nothing truly still]"
     }
    ],
    "does": "Breath plus drift together: the held page inhales a little and walks a pixel or two, so even a chart at the page centre is never still (E49).",

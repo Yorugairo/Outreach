@@ -18,12 +18,12 @@
         },
         {
           "name": "THE CAPTION MOVES UNDER A CARD",
-          "source": "docs/content-video-engine/CAPABILITIES.md:24"
+          "source": "CAPABILITIES[THE CAPTION MOVES UNDER A CARD]"
         }
       ],
       "does": "A caption page whose first word falls while a dock is live is stamped anchor: under a card it keeps its stage size in the band the page leaves free (E62) and drops to the quiet lower third only when no band fits.",
       "when": "the stage size in the free band under a card, quiet only when no band fits",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:22",
+      "when_source": "CAPABILITIES[Kinetic + quiet captions]",
       "author": {
         "key": "compiler-stamped `cap_mode: \"anchor\"` (no row key)",
         "example": "cap_mode: 'anchor'",
@@ -86,12 +86,12 @@
       "aliases": [
         {
           "name": "PHRASE captions (shorts)",
-          "source": "docs/content-video-engine/CAPABILITIES.md:59"
+          "source": "CAPABILITIES[PHRASE captions]"
         }
       ],
       "does": "The whole caption page lands as one readable phrase (a 30 ms stagger), every word legible at once; only keywords re-pop and take the red box at their spoken time; landed words boil.",
       "when": "a short - the strip is read as one phrase, never chased word by word",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:59",
+      "when_source": "CAPABILITIES[PHRASE captions]",
       "author": {
         "key": "`caption_style=\"phrase\"` passed by build_short.py to the compiler (CAPTION_STYLE)",
         "example": "caption_style=\"phrase\",",
@@ -134,7 +134,7 @@
       "aliases": [
         {
           "name": "Caption STAGE mode",
-          "source": "docs/content-video-engine/CAPABILITIES.md:23"
+          "source": "CAPABILITIES[Caption STAGE mode]"
         },
         {
           "name": "STAGE mode",
@@ -150,12 +150,12 @@
         },
         {
           "name": "ONE STAGGER ENVELOPE",
-          "source": "docs/content-video-engine/CAPABILITIES.md:40"
+          "source": "CAPABILITIES[THE CAPTION'S ARRIVAL AS ONE STAGGER ENVELOPE]"
         }
       ],
       "does": "With no card up the caption IS the motion: centred in the page's quiet zone at 64 px / 800, each word popping at its own spoken time with a settling tilt, keywords in the accent.",
       "when": "no dock is up and the plate or page holds - the words carry the motion",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:23",
+      "when_source": "CAPABILITIES[Caption STAGE mode]",
       "author": {
         "key": "compiler-stamped `cap_mode: \"stage\"` per caption page + timeline `caption_modes: [\"stage\", \"anchor\"]` (no row key)",
         "example": "caption_modes: ['stage', 'anchor']",

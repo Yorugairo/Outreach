@@ -21,6 +21,10 @@ Enforces retrieval standards per GEMINI.md, audit_docs_standard.py, and build_do
    - FAILS a docket whose body is a Drive SEARCH LISTING (third-party records, not research) instead of writing it;
      the run exits 1 when any docket failed.
    It reads the operator's named folder (SOURCE_DIR, `*.docx`, not recursive) and nothing else.
+8. Re-applies the operator's HAND scrub (R26-352, P72 T46e): `scrub-terms.txt` in the operator's folder - outside the
+   repo, so the names it lists never enter git - holds one term per line (`#` comments, blank lines skipped), or
+   `term => what the hand scrub left`; every term is replaced (whole word, any case) in every file before it is
+   written and verified gone after, and the run never prints a term. A malformed line refuses the run by its line.
 """
 from __future__ import annotations
 
@@ -116,6 +120,45 @@ def scrub_drive_refs(text: str) -> str:
     """The text with each Drive URL and Drive id replaced by a mark that names what was removed."""
     text = DRIVE_URL.sub(DRIVE_URL_MARK, text)
     return DRIVE_TOKEN.sub(lambda m: DRIVE_ID_MARK if _is_drive_id(m.group(0)) else m.group(0), text)
+
+
+# --- R26-352: the operator's hand scrub, re-applied from a terms file that never enters git ------------------------
+
+SCRUB_TERMS_FILE = "scrub-terms.txt"     # read from SOURCE_DIR (the operator's folder), never from the repo
+SCRUB_TERM_MARK = "[name removed]"
+SCRUB_TERM_MIN = 3                        # a shorter term would scrub inside ordinary words and tickers
+
+
+def load_scrub_terms(path: Path) -> list[tuple[re.Pattern, str]]:
+    """(the term's whole-word, case-blind pattern, its replacement) per line of the terms file, longest term first; []
+    when the file is absent. A line that names no term, or one under SCRUB_TERM_MIN, is a ValueError naming its line
+    number and never its text (the file holds the names the scrub keeps out)."""
+    if not path.is_file():
+        return []
+    terms: list[tuple[str, str]] = []
+    for n, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        term, sep, repl = (part.strip() for part in line.partition("=>"))
+        if len(term) < SCRUB_TERM_MIN:
+            raise ValueError(f"{SCRUB_TERMS_FILE}:{n}: a scrub term must be at least {SCRUB_TERM_MIN} characters "
+                             f"(`term` or `term => replacement`) - the run writes nothing (R26-352)")
+        terms.append((term, repl if sep else SCRUB_TERM_MARK))
+    terms.sort(key=lambda tr: -len(tr[0]))
+    return [(re.compile(r"(?<![A-Za-z0-9])" + re.escape(t) + r"(?![A-Za-z0-9])", re.IGNORECASE), r) for t, r in terms]
+
+
+def scrub_terms(text: str, terms: list[tuple[re.Pattern, str]]) -> str:
+    """The text with every scrub term replaced (longest first)."""
+    for pattern, repl in terms:
+        text = pattern.sub(lambda _m, r=repl: r, text)
+    return text
+
+
+def terms_left(text: str, terms: list[tuple[re.Pattern, str]]) -> int:
+    """How many of the terms still stand in the text - 0 is the only writable answer."""
+    return sum(1 for pattern, _repl in terms if pattern.search(text))
 
 
 def offering_refusal(name: str, title: str) -> str | None:
@@ -571,8 +614,14 @@ def main() -> int:
     TARGET_MARKETS_DIR.mkdir(parents=True, exist_ok=True)
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
     print(f"=== Sovereign Compute Ingestion Engine (Target: {TARGET_MARKETS_DIR.relative_to(REPO_ROOT)}) ===")
+    try:
+        terms = load_scrub_terms(SOURCE_DIR / SCRUB_TERMS_FILE)
+    except ValueError as err:
+        print(f"FAIL {err}")
+        return 1
     docx_files = sorted(SOURCE_DIR.glob("*.docx"))
-    print(f"Found {len(docx_files)} source docx file(s) in {SOURCE_DIR}\n")
+    print(f"Found {len(docx_files)} source docx file(s) in {SOURCE_DIR}"
+          + (f"; {len(terms)} scrub term(s) from {SCRUB_TERMS_FILE} (R26-352)" if terms else "") + "\n")
 
     catalog_entries = []
     screener_dataset = []
@@ -598,7 +647,7 @@ def main() -> int:
             screener_table = tables[0]
             header = [re.sub(r"\*+", "", h).strip() for h in screener_table[0]]
             for row in screener_table[1:]:
-                clean_row = [re.sub(r"\*+", "", c).strip() for c in row]
+                clean_row = [scrub_terms(re.sub(r"\*+", "", c).strip(), terms) for c in row]
                 if len(clean_row) == len(header):
                     screener_dataset.append(dict(zip(header, clean_row)))
 
@@ -635,11 +684,16 @@ def main() -> int:
             else:
                 body_content = body
 
-        full_md_doc = scrub_drive_refs("\n".join(frontmatter) + body_content.strip() + "\n")
+        full_md_doc = scrub_terms(scrub_drive_refs("\n".join(frontmatter) + body_content.strip() + "\n"), terms)
         left = drive_refs(full_md_doc)
         if left:   # the scrub is verified before anything is written; a miss is a FAIL, never a silent write
             failed.append(docx_path.name)
             print(f"FAIL {docx_path.name}: {len(left)} Drive reference(s) survived the scrub - not written (R26-254)")
+            continue
+        survived = terms_left(full_md_doc, terms)
+        if survived:   # R26-352: a replacement that re-says a term is a FAIL, never a write
+            failed.append(docx_path.name)
+            print(f"FAIL {docx_path.name}: {survived} scrub term(s) survived - not written (R26-352)")
             continue
 
         # Write Tier 2 raw extract
@@ -673,7 +727,7 @@ def main() -> int:
         json_path.write_text(json.dumps(screener_dataset, indent=2), encoding="utf-8")
         print(f"\n[OK] Wrote screener dataset ({len(screener_dataset)} tickers) to {csv_path.name} & {json_path.name}")
 
-    write_catalog(catalog_entries)
+    write_catalog(catalog_entries, terms)
     print(f"\ningest_stock_research: {len(catalog_entries)} written, {len(refused)} refused, {len(failed)} failed")
     return 1 if failed else 0
 
@@ -696,7 +750,7 @@ def keep_written_links(lines: list[str], written: set[str]) -> list[str]:
     return out
 
 
-def write_catalog(catalog_entries: list[dict]) -> None:
+def write_catalog(catalog_entries: list[dict], terms: list[tuple[re.Pattern, str]] | None = None) -> None:
     count = len(catalog_entries)
     written = {c["filename"] for c in catalog_entries}
     print("\n--- Generating Master Catalog (00_SOVEREIGN_COMPUTE_MASTER_CATALOG.md) ---")
@@ -787,7 +841,8 @@ def write_catalog(catalog_entries: list[dict]) -> None:
     ])
 
     catalog_path = TARGET_MARKETS_DIR / "00_SOVEREIGN_COMPUTE_MASTER_CATALOG.md"
-    catalog_path.write_text("\n".join(keep_written_links(catalog_md, written)) + "\n", encoding="utf-8")
+    catalog_path.write_text(scrub_terms("\n".join(keep_written_links(catalog_md, written)) + "\n", terms or []),
+                            encoding="utf-8")
     print(f"[OK] Generated Master Catalog at {catalog_path.relative_to(REPO_ROOT)}")
 
 

@@ -592,6 +592,35 @@ def ken_window_errors(ken, span: tuple, world: dict | None) -> list[str]:
     return errs
 
 
+# P72 T46e (R26-392): THE CLASH READS THE WINDOW. s9.28 C3 - one camera move per window, never over a Ken Burns drift -
+# is a rule about TIME: a windowed ken leans only across its (t0, t1) and is still before and held after, so a camera
+# move that ends before t0 or starts after t1 shares no window with it. A ken with no window leans across the whole
+# scene, and every camera move on its row clashes, as it always did. Mirrored by gate_motion_density `_camera_clashes`.
+KEN_CLASH_MOVE_S = 1.2   # mirrors gate_motion_density.CAMERA_MOVE_S: a camera move with no declared dur is read this long
+
+
+def ken_lean_window(ken) -> tuple[float, float] | None:
+    """The window a ken leans across, or None when it leans across the whole scene (a three-tuple, or a window that
+    `ken_window_errors` refuses by name - never read as a narrower window than the lean really has)."""
+    if ken is None or not hasattr(ken, "__len__") or len(ken) != KEN_WINDOW_ARITY:
+        return None
+    t0, t1 = ken[3], ken[4]
+    if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in (t0, t1)):
+        return None
+    return (float(t0), float(t1)) if t1 > t0 else None
+
+
+def shares_ken_window(start: float, end: float, window: tuple[float, float] | None) -> bool:
+    """Does a camera move over [start, end] move while the ken leans? Always, when the lean has no window."""
+    return window is None or (start < window[1] and end > window[0])
+
+
+def _camera_move_span(e: dict) -> tuple[float, float]:
+    at = float(e.get("at", 0.0)) if isinstance(e.get("at"), (int, float)) else 0.0
+    dur = e.get("dur")
+    return at, at + (float(dur) if isinstance(dur, (int, float)) and dur > 0 else KEN_CLASH_MOVE_S)
+
+
 def ken_burns_windowed(ken_burns: dict, ken) -> dict:
     """The world's ken_burns with the row's window written after the three it always carried - a NEW dict; the same
     dict's content for a ken with no window (so an unwindowed world is byte-identical)."""
@@ -6740,8 +6769,13 @@ def validate_species(row_species, ken, plate_id: str, pivot_span: tuple | None =
     moves = [e["kind"] for e in row_species if isinstance(e, dict) and e.get("kind") in CAMERA_MOVES]
     if len(moves) > 1:
         errs.append(f"{plate_id}: {' + '.join(moves)} on one row - one camera move per window (s9.28 C3)")
-    elif moves and ken and ken[0] > 0:
-        errs.append(f"{plate_id}: {moves[0]} over Ken Burns scale {ken[0]} - a camera move and Ken Burns never share a window (s9.28 C3)")
+    elif moves and ken and ken[0] > 0:   # P72 T46e (R26-392): only a move inside the lean's window shares it
+        win = ken_lean_window(ken)
+        hit = [e["kind"] for e in row_species if isinstance(e, dict) and e.get("kind") in CAMERA_MOVES
+               and shares_ken_window(*_camera_move_span(e), win)]
+        lean = f" (its lean {win[0]:.2f}-{win[1]:.2f}s)" if win else ""
+        if hit:
+            errs.append(f"{plate_id}: {hit[0]} over Ken Burns scale {ken[0]}{lean} - a camera move and Ken Burns never share a window (s9.28 C3)")
     if pivot_span:
         p0, p1 = pivot_span
         for e in row_species:

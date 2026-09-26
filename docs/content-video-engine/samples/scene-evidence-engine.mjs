@@ -2539,6 +2539,10 @@ async function mount(doc) {
                           No evidence-backed value exists yet: the law is speed x edge sharpness (Watson 1986), so that gate needs a
                           sharpness term before it can state a ceiling */
     FPS: 24,           /* the base frame rate the holds are counted in (on-1s = 24, on-2s = 12, on-3s = 8) */
+    STAGE_W_REF: 1080, /* P72 T46e (R26-368 (b)): the stage ON1_PX_S is stated on. E99 s30 defined the rule as a share of the
+                          PICTURE - 1/7 of its width per second - so a speed is read against the width of the stage it is
+                          measured on (`cadence`'s `stage_w`): 154 px/s on the 1080 stage is 274 px/s on H's 1920 one */
+    ON1_PW_S: 154 / 1080,   /* the rule itself, in picture widths per second (1/7, as 154 rounds it on the 1080 stage) */
   });
   /* MATERIALS. m, k, c [DERIVED: the brief :226-232] -> the spring's zeta and w0 (the report Q4: dense = critically damped, no
      overshoot - metal 0.88 and ink 0.98 sit there; paper 0.67 flutters; liquid 1.34 is overdamped). impact: how hard the hit reads on
@@ -2634,13 +2638,18 @@ async function mount(doc) {
   const saMinJerk = (u) => { u = sa01(u); return u * u * u * (10 - 15 * u + 6 * u * u); };
   const saEaseIn = (u) => { u = sa01(u); return u * u * u; };
 
-  /* THE CADENCE RULE: which hold a motion piece steps on. kind: "camera" | "boil" | anything else (a translation). */
+  /* THE CADENCE RULE: which hold a motion piece steps on. kind: "camera" | "boil" | anything else (a translation).
+     `o.stage_w` (P72 T46e, R26-368 (b)): the width of the picture `v_px_s` is measured on - the threshold is ON1_PW_S of it
+     per second (ON1_PX_S scaled from STAGE_W_REF, so the 1080 stage reads exactly 154 as it always did). Absent: the 1080
+     stage the rule was stated on, so a caller that names no stage steps as it always stepped. */
   const cadence = (v_px_s, kind = "translate", o = {}) => {
     const P = Object.assign({}, CADENCE, o);
     if (kind === "camera") return { hold: 1, fps: P.FPS, why: "a camera move steps every frame" };
     if (kind === "boil") return { hold: 3, fps: P.FPS / 3, why: "a background boil steps on 3s" };
-    if (v_px_s > P.ON1_PX_S) return { hold: 1, fps: P.FPS, why: `${Math.round(v_px_s)} px/s > ${P.ON1_PX_S}: on 1s` };
-    return { hold: 2, fps: P.FPS / 2, why: `${Math.round(v_px_s)} px/s <= ${P.ON1_PX_S}: on 2s` };
+    const sw = P.stage_w > 0 ? P.stage_w : P.STAGE_W_REF, on1 = P.ON1_PX_S * sw / P.STAGE_W_REF;
+    const said = sw === P.STAGE_W_REF ? `${P.ON1_PX_S}` : `${Math.round(on1)} (1/7 of the ${Math.round(sw)} stage)`;
+    if (v_px_s > on1) return { hold: 1, fps: P.FPS, why: `${Math.round(v_px_s)} px/s > ${said}: on 1s` };
+    return { hold: 2, fps: P.FPS / 2, why: `${Math.round(v_px_s)} px/s <= ${said}: on 2s` };
   };
   /* the stepped clock on the INTEGER frame index (HF-1): frame = round(t * fps), step = floor(frame / hold) */
   const stepped = (t, hold = 2, fps = CADENCE.FPS) => {
@@ -2708,7 +2717,7 @@ async function mount(doc) {
      Returns { x, y, rot, alpha, theta, phase, u, hold } - theta is the squash axis (radians, vertical = pi/2). */
   const throwXf = (from, mass, t, o = {}) => {
     const P = Object.assign({}, STOP, o), F = Math.max(0.05, P.FLIGHT_S);
-    const chord = Math.hypot(from.x, from.y), v = chord / F, cad = cadence(v, "translate");
+    const chord = Math.hypot(from.x, from.y), v = chord / F, cad = cadence(v, "translate", { stage_w: P.stage_w });   /* R26-368 (b): the caller's stage */
     const tq = stepped(Math.max(0, t), cad.hold, cad.fps), u = sa01(tq / F);
     if (t < 0) return { x: from.x, y: from.y, rot: 0, alpha: 0, theta: Math.PI / 2, phase: "waiting", u: 0, hold: cad.hold, h: -from.y, ground: 0, shake: { x: 0, y: 0 } };
     if (u < 1) {
@@ -8276,7 +8285,7 @@ async function mount(doc) {
          CARD'S space about its foot (the hit reads as the card meeting the wall), the flight in the room's. */
       const from = d.throw_side === "bottom" ? { x: 0, y: STAGE_H + STOP_THROW_DY }   /* P72 T19 / R26-202 (b): the side the row named (on a surface: past the foot, or across by the card's own width) */
         : { x: (d.throw_side ? (d.throw_side === "left" ? -1 : 1) : (d.side === "l" ? -1 : 1)) * (g.box.w + STOP_THROW_DX), y: -STOP_THROW_DY };
-      const sx = throwXf(from, d.mass || "paper", t - d.enter);
+      const sx = throwXf(from, d.mass || "paper", t - d.enter, { stage_w: STAGE_W });   /* R26-368 (b): the cadence on this stage */
       const a = Math.abs(sx.alpha || 0);
       if (a > 1e-6) {
         const th = (sx.alpha || 0) < 0 ? (sx.theta || 0) + Math.PI / 2 : (sx.theta || 0), q = squashMatrix(th, a);
@@ -20443,7 +20452,7 @@ async function mount(doc) {
       st.throw = { h, u: clamp01(tt / Ds), phase: sx.phase, landed: tt >= Ds, ground: sx.ground || 0, shake: sx.shake || { x: 0, y: 0 }, follow: 0 };
     } else if (thrown) {   /* THROW_FROM is where the flight starts, as an offset from the page's rest (px); the arc lifts against it */
       const from = THROW_FROM[pg.throw_from] || THROW_FROM.below, F = +pg.throw_s > 0 ? +pg.throw_s : THROW_S, tt = t - scene.span[0];
-      const sx = throwXf(from, scene.world.mass || "paper", tt, { FLIGHT_S: F, ARC: THROW_ARC, SPIN_DEG: THROW_SPIN });
+      const sx = throwXf(from, scene.world.mass || "paper", tt, { FLIGHT_S: F, ARC: THROW_ARC, SPIN_DEG: THROW_SPIN, stage_w: STAGE_W });
       const u = clamp01(tt / F), landed = tt >= F;
       /* THE CARD LEAVES THE FRAME (operator, 2026-09-08, on the depth-arc draft that passed the camera at 1.8x: "it shouldn't cut and
          clip like that ... what it's supposed to do is LEAVE the frame, not cut and clip ON the frame"). So the page is a CARD for the
@@ -20505,7 +20514,7 @@ async function mount(doc) {
     /* one pill `u0` s past its own onset (P69 T10: the page's badges and its key rail's pills spring by the one law) */
     const pillAt = (el, u0, bi, phase) => {
       if (arrP !== "spring") {
-        const sx = arrP === "throw" ? throwXf({ x: -(STOP_THROW_DX + 80 * bi), y: -STOP_THROW_DY }, massP, u0) : landXf(massP, u0);
+        const sx = arrP === "throw" ? throwXf({ x: -(STOP_THROW_DX + 80 * bi), y: -STOP_THROW_DY }, massP, u0, { stage_w: STAGE_W }) : landXf(massP, u0);
         el.style.opacity = u0 >= 0 ? "1" : "0";
         el.style.transform = stopCss(sx) + idleCssFor("pill", pgPillKind(scene, pg), t, st.seed, phase);   /* R26-228: the ROW's kind, so a `none` page's badges are still (R26-234: and a `live` page's BREATHE - they never drift) */
         return;
@@ -27346,7 +27355,7 @@ async function mount(doc) {
           stamped && d.rot != null ? { LAND_DEG: +d.rot } : {});   /* P69 T26d: an AUTHORED rest - the spring lands there (its wind and overshoot turn about it) */
         const sx = stamped ? stampXf(d.mass || "ink", t - d.enter, sfit)
           : poofed ? poofXf(t - d.enter, { SEED: Math.round(d.enter * 100) + s })   /* seeded by the dock's own clock: a seek is the play */
-          : arr === "throw" ? throwXf(from, d.mass || "paper", t - d.enter, opts) : landXf(d.mass || "paper", t - d.enter, opts);
+          : arr === "throw" ? throwXf(from, d.mass || "paper", t - d.enter, Object.assign({ stage_w: STAGE_W }, opts)) : landXf(d.mass || "paper", t - d.enter, opts);   /* R26-368 (b) */
         /* the mark turns about its PAINTED centre (the compiler's `paint`, fractions of the canvas - R26-20, the operator's
            round: the ring's centre, its radius and every overlap test are the painted extent, not the file's canvas) */
         if (isProp) propRest = propRestShare(arr, d, t, sfit);

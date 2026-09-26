@@ -57,7 +57,7 @@
       "aliases": [
         {
           "name": "The camera: one persistent 2D similarity",
-          "source": "docs/content-video-engine/CAPABILITIES.md:78"
+          "source": "CAPABILITIES[The camera: one persistent 2D similarity per timeline]"
         }
       ],
       "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
@@ -152,7 +152,7 @@
       "aliases": [
         {
           "name": "The CLOTHOID fitter",
-          "source": "docs/content-video-engine/CAPABILITIES.md:89"
+          "source": "CAPABILITIES[The CLOTHOID fitter - Euler spirals for generated geometry]"
         },
         {
           "name": "Euler spirals",
@@ -456,7 +456,7 @@
       "aliases": [
         {
           "name": "Kubelka-Munk ink",
-          "source": "docs/content-video-engine/CAPABILITIES.md:53"
+          "source": "CAPABILITIES[Kubelka-Munk ink]"
         }
       ],
       "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
@@ -503,7 +503,7 @@
       "aliases": [
         {
           "name": "Morph METHOD A (vertex-based)",
-          "source": "docs/content-video-engine/CAPABILITIES.md:96"
+          "source": "CAPABILITIES[Morph METHOD A]"
         }
       ],
       "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
@@ -550,7 +550,7 @@
       "aliases": [
         {
           "name": "The full spring",
-          "source": "docs/content-video-engine/CAPABILITIES.md:54"
+          "source": "CAPABILITIES[The full spring]"
         },
         {
           "name": "The settle",
@@ -601,7 +601,7 @@
       "aliases": [
         {
           "name": "Area-preserving squash",
-          "source": "docs/content-video-engine/CAPABILITIES.md:55"
+          "source": "CAPABILITIES[Area-preserving squash]"
         }
       ],
       "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
@@ -648,7 +648,7 @@
       "aliases": [
         {
           "name": "STAGGER ENVELOPE",
-          "source": "docs/content-video-engine/CAPABILITIES.md:40"
+          "source": "CAPABILITIES[THE CAPTION'S ARRIVAL AS ONE STAGGER ENVELOPE]"
         }
       ],
       "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
@@ -737,11 +737,11 @@
       "aliases": [
         {
           "name": "Curvature stroke",
-          "source": "docs/content-video-engine/CAPABILITIES.md:52"
+          "source": "CAPABILITIES[Curvature stroke]"
         },
         {
           "name": "two-thirds law",
-          "source": "docs/content-video-engine/CAPABILITIES.md:52"
+          "source": "CAPABILITIES[Curvature stroke]"
         }
       ],
       "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",

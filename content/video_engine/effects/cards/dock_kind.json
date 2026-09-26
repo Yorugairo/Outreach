@@ -10,7 +10,7 @@
       "aliases": [
         {
           "name": "cutout dock",
-          "source": "docs/content-video-engine/CAPABILITIES.md:33"
+          "source": "CAPABILITIES[EXTERNAL MATERIAL AS COMMENTARY]"
         },
         {
           "name": "a `cutout` dock kind",
@@ -116,7 +116,7 @@
       "aliases": [
         {
           "name": "PRESS CARD dock",
-          "source": "docs/content-video-engine/CAPABILITIES.md:88"
+          "source": "CAPABILITIES[The PRESS CARD dock and the STACK hand-off]"
         },
         {
           "name": "the press card",
@@ -125,7 +125,7 @@
       ],
       "does": "A headline cropped from its screenshot lands in the stage's centre box with its masthead source line and the quoted phrase, underlined as it is said; alone it lands, holds and retracts.",
       "when": "the sentence QUOTES a headline or a claim with a masthead (row 1) - THEIR claim never pages (B1); one card for one claim, the stack when three claims land in a row",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:88",
+      "when_source": "CAPABILITIES[The PRESS CARD dock and the STACK hand-off]",
       "author": {
         "key": "dock option {'press': <press_card.py meta dict or its JSON path>}",
         "example": "{\"press\": {\"kind\": \"press\", \"source\": \"The Herald, 4 Mar 2026\", \"phrase\": {\"x0\": 0.12, \"y0\": 0.2, \"x1\": 0.66, \"y1\": 0.44}, \"phrase_text\": \"the historic normal was never normal\", \"card\": [1056, 313]}}",
@@ -217,12 +217,12 @@
       "aliases": [
         {
           "name": "Video dock",
-          "source": "docs/content-video-engine/CAPABILITIES.md:60"
+          "source": "CAPABILITIES[Video dock]"
         }
       ],
       "does": "A silent generated clip plays inside the card's frame over the standing page, seeked to the scene clock, instead of a still.",
       "when": "a generated clip depicts or proves the sentence over a standing page - it lands as a card, never as the world",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:60",
+      "when_source": "CAPABILITIES[Video dock]",
       "author": {
         "key": "a dock asset whose file ends .mp4/.webm (VIDEO_SUFFIXES); the kind is the asset's, not a row key",
         "example": "('dock-c-blue-ties-panel', 0, 9.09, 18.95, {'arrive': 'throw', 'mass': 'paper'})",

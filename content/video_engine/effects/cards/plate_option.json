@@ -61,12 +61,12 @@
    "aliases": [
     {
      "name": "a clip world",
-     "source": "docs/content-video-engine/CAPABILITIES.md:60"
+     "source": "CAPABILITIES[Video dock]"
     }
    ],
    "does": "A generated clip IS the scene: the timeline marks it `world.kind: \"clip\"` beside `world.asset_id` / `clip_path`, and the player seeks one pooled <video> to the scene clock instead of painting a still.",
    "when": "the beat is motion itself - the opening shot, the outro card - and a still would be the weaker frame; a clip that PROVES a sentence is a dock, never the world",
-   "when_source": "docs/content-video-engine/CAPABILITIES.md:60",
+   "when_source": "CAPABILITIES[Video dock]",
    "author": {
     "key": "the shot row's 3rd element `clip:<path to a silent mp4>` (CLIP_PREFIX) -> `world.kind: \"clip\"`",
     "example": "(79.076, 85.276, 'clip:C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/clips/outro-v2.mp4', (0, 0, 0), [], 'dip', [{'kind': 'life', 'at': 79.076, 'dur': 6.2}])",
@@ -115,7 +115,7 @@
    "aliases": [],
    "does": "Names the subtle idle a held plate or page carries (none, breath, drift, pulse, figure, live) - nothing held goes truly still - and, for the kinds that WALK, how far: `;drift=<px>`.",
    "when": "always (E49) - every held thing names its idle; `none` only on purpose",
-   "when_source": "docs/content-video-engine/CAPABILITIES.md:64",
+   "when_source": "CAPABILITIES[The idle]",
    "author": {
     "key": "plate id suffix `;idle=<kind>` (IDLE_KINDS), with `;drift=<px>` beside it on `drift` / `live`",
     "example": "'world-tokyo-customs-dock-v1-alive;idle=drift;drift=20'",
@@ -231,7 +231,7 @@
    "aliases": [
     {
      "name": "the tip-riding pill",
-     "source": "docs/content-video-engine/CAPABILITIES.md:97"
+     "source": "CAPABILITIES[Line-end TAGS become]"
     }
    ],
    "does": "A dense-line page carries a value pill riding the line's tip, popping at a named datum (yes | no | <datum index>).",
@@ -320,7 +320,7 @@
    "aliases": [
     {
      "name": "the thread",
-     "source": "docs/content-video-engine/CAPABILITIES.md:99"
+     "source": "CAPABILITIES[The CONTINUITY three]"
     }
    ],
    "does": "One mark of the page before (a series, a bar or a rule) survives the cut and is the arriving page's ground.",

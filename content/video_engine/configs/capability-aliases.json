@@ -1,0 +1,11 @@
+{
+  "schema": "capability-aliases.v1",
+  "purpose": "R26-136 (5) (P72 T46e): the natural terms an agent searches that a CAPABILITIES row never says as a phrase. build_capabilities_index.py writes each entry's terms onto the ONE record whose name carries `row` (a span of the row's name, never a line); docs_find.py searches `aliases` right after the name. A span that names no row or two fails the build by name. Add a term only after `docs_find.py \"<term>\"` returns no right hit (step (0) of the row that adds it).",
+  "aliases": [
+    {
+      "row": "The viewer (P36)",
+      "terms": ["blind viewer", "blind viewer test", "blind read"],
+      "why": "R26-136 (5): 'blind viewer' returned only project receipts at lane B 151636d; the row says 'a blind, windowed perception test'"
+    }
+  ]
+}

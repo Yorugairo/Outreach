@@ -10,7 +10,7 @@
       "aliases": [
         {
           "name": "BAR charts",
-          "source": "docs/content-video-engine/CAPABILITIES.md:20"
+          "source": "CAPABILITIES[Live-chart species]"
         }
       ],
       "does": "A ledger page whose bars grow in stagger with their values landing.",
@@ -245,11 +245,11 @@
       "aliases": [
         {
           "name": "LEDGER PAGE species",
-          "source": "docs/content-video-engine/CAPABILITIES.md:49"
+          "source": "CAPABILITIES[LEDGER PAGE species]"
         },
         {
           "name": "line draw",
-          "source": "docs/content-video-engine/CAPABILITIES.md:20"
+          "source": "CAPABILITIES[Live-chart species]"
         }
       ],
       "does": "A cream ledger page rolls out and its line series draws on in ink.",
@@ -750,7 +750,7 @@
         {
           "source": "P47 T9 the combo's line_unit axis",
           "became": "the right axis it extends",
-          "record": "docs/content-video-engine/CAPABILITIES.md:77",
+          "record": "CAPABILITIES[Build-on: the page performs on a word]",
           "tie": "recorded"
         }
       ],
@@ -1107,7 +1107,7 @@
       "aliases": [
         {
           "name": "N-TIER pages - small multiples",
-          "source": "docs/content-video-engine/CAPABILITIES.md:93"
+          "source": "CAPABILITIES[N-TIER pages - small multiples on one shared x]"
         }
       ],
       "does": "Two or more bands share one x, each with its own scale and honest zero, each drawn on its own word.",

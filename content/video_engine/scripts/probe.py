@@ -476,7 +476,10 @@ READ_DOM = r"""
         if (eff(el) <= 0.05) continue;
         const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) continue;
         const cls = (el.getAttribute('class') || 'text').split(' ')[0];
-        out.items.push({ k: 'chart.' + cls, box: R(el), px: fs(el), s: sc(el), txt: txt(el) });
+        /* P72 T46e (R26-349): a SCHEMATIC's phase names and its tag are `lab` runs by their first class, but no axis -
+           the phase names carry the narrative and the tag says what the page is (E99 s109 (1)): M25 names them so */
+        const ink = el.classList.contains('lp-phase') ? 'phase' : el.classList.contains('lp-schematic') ? 'schematic' : cls;
+        out.items.push({ k: 'chart.' + ink, box: R(el), px: fs(el), s: sc(el), txt: txt(el) });
         /* M28: the same run as a LABEL - its role, what it says, the box it takes on screen. A callout's
            box is the PILL it is printed inside (rect.cpill is the ink; the glyphs are its content). A
            label mid-write still counts - the frame is the frame - and one with no box at all (nothing

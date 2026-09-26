@@ -127,16 +127,16 @@
       "aliases": [
         {
           "name": "The camera arrival",
-          "source": "docs/content-video-engine/CAPABILITIES.md:77"
+          "source": "CAPABILITIES[The camera arrival: the eye goes to the landed card]"
         },
         {
           "name": "the eye goes to the landed card",
-          "source": "docs/content-video-engine/CAPABILITIES.md:77"
+          "source": "CAPABILITIES[The camera arrival: the eye goes to the landed card]"
         }
       ],
       "does": "The card lands on the previous scene, the camera zooms the outgoing world and the card together over 0.45 s until the card fills the stage, and the page shows at the match.",
       "when": "a thrown card becomes the world (E59 reason 3) - the eye goes to it",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:77",
+      "when_source": "CAPABILITIES[The camera arrival: the eye goes to the landed card]",
       "author": {
         "key": "ledger id 6th part ':camera=<dock asset>' (validator: parse_ledger_id (after split_plate_opts)); extend_camera_cards",
         "example": "'ledger:ev-fed-vs-yields-v1:line:0:right:camera=dock-h-fed-vs-yields:cut'",
@@ -296,7 +296,7 @@
         },
         {
           "name": "The morph: the object becomes the chart",
-          "source": "docs/content-video-engine/CAPABILITIES.md:111"
+          "source": "CAPABILITIES[The morph: the object becomes the chart]"
         }
       ],
       "does": "The page's prop outline - a named shape, a PLANTED element's traced silhouette, or the melt's own ball - deforms by ARAP into the area under its series while the page's GROUND arrives under it by its field entry; then the build lands.",
@@ -450,7 +450,7 @@
         },
         {
           "name": "THE DANCE",
-          "source": "docs/content-video-engine/CAPABILITIES.md:57"
+          "source": "CAPABILITIES[Page MOUNT entry + the short's sound map]"
         },
         {
           "name": "fade/mount transition",
@@ -564,12 +564,12 @@
       "aliases": [
         {
           "name": "Card-then-snap",
-          "source": "docs/content-video-engine/CAPABILITIES.md:69"
+          "source": "CAPABILITIES[Card-then-snap: the chart]"
         }
       ],
       "does": "The page arrives built, grown from the landed chart card's rectangle to the stage over SNAP_S 0.45 s with a velocity blur.",
       "when": "the hook's own chart must be on screen inside a second and then BECOME the world",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:69",
+      "when_source": "CAPABILITIES[Card-then-snap: the chart]",
       "author": {
         "key": "ledger id 6th part ':snap=<dock asset>' (validator: parse_ledger_id (after split_plate_opts))",
         "example": "'ledger:ev-japan-holdings-v1:line:315:right:snap=dock-b-holdings:cut;idle=live'",
@@ -609,7 +609,7 @@
         {
           "source": "the Tokyo dock throw reused for the card",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:69",
+          "record": "CAPABILITIES[Card-then-snap: the chart]",
           "tie": "recorded"
         }
       ],
@@ -715,7 +715,7 @@
         {
           "source": "Analytic in t (FINDING-the-animation-math s3)",
           "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:50",
+          "record": "CAPABILITIES[The page VORTEX]",
           "tie": "recorded"
         }
       ],

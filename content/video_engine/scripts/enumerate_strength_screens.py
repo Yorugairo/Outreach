@@ -35,9 +35,9 @@ from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import audit_script_doctrine as A          # noqa: E402  (load_timings: a take on disk beats the estimate)
 import beat_tags                            # noqa: E402  (the ONLY tag parser)
-import gate_opening_structure as G          # noqa: E402  (window verdicts are the gate's, never re-derived)
+import gate_opening_structure as G          # noqa: E402  (window verdicts are the gate's, never re-derived; the
+                                            # project's take through its project_take / take_refusal - R26-358)
 
 # Tag -> owning gate id(s), read from gate_opening_structure.run() 2026-09-02:
 #   G37 archetype . G07 stakes . G08 payoff . G09 promise . G12 (P1) / G32 (P2)
@@ -177,10 +177,23 @@ def declared_section(text: str, timeline: list[dict] | None,
     return out, len(found)
 
 
+# ---- the take: this script's, or refused (R26-358 / R26-203) ---------------
+def screens_take(src: Path) -> tuple[list[dict] | None, str | None]:
+    """(the project's take, None) when it is THIS script's - the opening gate's in-order overlap clears
+    TAKE_OVERLAP_MIN - else (None, the gate's own refusal, naming the take and its overlap): the screens then estimate,
+    as the opening gate does, instead of reading another script's clock by position (R26-358, P72 T46e)."""
+    timeline, take = G.project_take(src)
+    refused = G.take_refusal(src.read_text(encoding="utf-8"), timeline, take)
+    return (None, refused) if refused else (timeline, None)
+
+
 # ---- entry -----------------------------------------------------------------
 def build_screens(src: Path, timeline: list[dict] | None = None, ring: str | None = None,
                   counterparty: str | None = None) -> tuple[Path, dict]:
     raw = src.read_text(encoding="utf-8")
+    refused = None
+    if timeline is None:
+        timeline, refused = screens_take(src)
     sents = sentences(raw)
     out = [f"# STRENGTH SCREENS — {src.name}",
            "",
@@ -191,8 +204,8 @@ def build_screens(src: Path, timeline: list[dict] | None = None, ring: str | Non
            ""]
     lex, counts = _lexical_sections(sents)
     out += lex + _cadence_section(raw)
-    if timeline is None:
-        timeline = A.load_timings(src)
+    if refused:
+        out += ["", f"TIMING: estimated - {refused}"]
     decl, n_decl = declared_section(raw, timeline, ring, counterparty)
     out += [""] + decl
     counts = {**counts, "declared": n_decl}
@@ -209,6 +222,10 @@ def main() -> int:
     ap.add_argument("--counterparty", help="named counterparty, e.g. Bravos (passed to the opening gate)")
     args = ap.parse_args()
     tl = G.load_timeline(args.timeline) if args.timeline else None
+    refused = G.take_refusal(args.script.read_text(encoding="utf-8"), tl, args.timeline) if tl else None
+    if refused:   # the caller NAMED another script's take: the run is refused, as the opening gate refuses it (R26-358)
+        print(f"enumerate_strength_screens: {refused}", file=sys.stderr)
+        return 2
     dest, c = build_screens(args.script, tl, args.ring, args.counterparty)
     print(f"{dest.name}: X1={c['X1']} deixis={c['deixis']} junctions={c['junctions']} "
           f"anchors={c['anchors']} declared={c['declared']}")

@@ -141,6 +141,21 @@ def _norm(s: str) -> str:
     return re.sub(r"[^a-z0-9 ]", "", s.lower()).strip()
 
 
+SCENE_WORDS = re.compile(r"scene_(\d+)\.words\.json")
+
+
+def take_groups(vo: Path) -> list[list[Path]]:
+    """The takes one `vo*` dir holds, in the order they are tried: its NUMBERED scenes (`scene_<n>.words.json`) as one
+    take joined in numeric order, then each NAMED words file (`scene_kokoro.words.json` - another engine's take of the
+    whole text) as a take of its own, by name. R26-359 (P72 T46e): a named file crashed the numeric sort key, and read
+    as a scene it would have glued a second take onto the first."""
+    files = list(vo.rglob("scene_*.words.json"))
+    numbered = sorted((p for p in files if SCENE_WORDS.fullmatch(p.name)),
+                      key=lambda p: int(SCENE_WORDS.fullmatch(p.name).group(1)))
+    named = sorted(p for p in files if not SCENE_WORDS.fullmatch(p.name))
+    return ([numbered] if numbered else []) + [[p] for p in named]
+
+
 def load_timings(script: Path, first_sentence: str = "") -> list[dict] | None:
     """Real word timings for this episode, if a take has been recorded.
 
@@ -156,12 +171,8 @@ def load_timings(script: Path, first_sentence: str = "") -> list[dict] | None:
     # directory name is a convention, the text match is the actual proof.
     cands = []
     for vo in sorted(script.parent.glob("vo*")):
-        if not vo.is_dir():
-            continue
-        files = sorted(vo.rglob("scene_*.words.json"),
-                       key=lambda p: int(re.search(r"\d+", p.name).group()))
-        if files:
-            cands.append(files)
+        if vo.is_dir():
+            cands += take_groups(vo)
     if not cands:
         return None
     files = None

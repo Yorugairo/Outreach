@@ -63,7 +63,7 @@
       "aliases": [
         {
           "name": "Record-document species",
-          "source": "docs/content-video-engine/CAPABILITIES.md:19"
+          "source": "CAPABILITIES[Record-document species]"
         },
         {
           "name": "typewriter + highlighter",
@@ -76,7 +76,7 @@
       ],
       "does": "A paper document mounts in the card and TYPES its quotation word by word on the narrator's own word times, a highlighter sweeping through the pulled phrase as each word is said, then the attribution and the source line appear.",
       "when": "the sentence QUOTES someone's claim and the words themselves are the proof - the record types the line and the highlighter lands on the phrase as it is said",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:19",
+      "when_source": "CAPABILITIES[Record-document species]",
       "author": {
         "key": "the dock META entry's `record` {hdr, kicker, words, hl, end, attr, src} in <build>/evidence-dock.json (kit: authoring/docks.py record_words + record_asset + meta_set)",
         "example": "(\"ev-doc-karp\",0,226.6,235.3)",
@@ -181,7 +181,7 @@
         },
         {
           "name": "nine-proof wall",
-          "source": "docs/content-video-engine/CAPABILITIES.md:169"
+          "source": "CAPABILITIES[THE VERDICT STACK - the operator's]"
         },
         {
           "name": "the verdict pile-up",
@@ -198,7 +198,7 @@
       ],
       "does": "Proofs fly in from depth one at a time on their phrases, each held large near centre, then receding in READING ORDER to a rail spot; the mosaic idles and bursts radially. On 9:16 only: the last lands centre and the wall gathers first.",
       "when": "the sentence lists N proofs of one claim in a row ('three things say so') - each flies in on its word; a list, not one chart",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:169",
+      "when_source": "CAPABILITIES[THE VERDICT STACK - the operator's]",
       "author": {
         "key": "dock META entry `species: \"stack\"` with `stack: {items: [{id, at}], clear_at}` in <build>/evidence-dock.json, docked by a shot-table tuple whose window runs past clear_at",
         "example": "(\"ev-holds-stack-v1\",0,701.73,727.63)",

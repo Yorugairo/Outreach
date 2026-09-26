@@ -165,6 +165,8 @@ STOP_LAND_S = 0.32         # P47 T1 [DERIVED: STOP.ANTIC_S + STOP.DROP_S] - a la
 POOF_CONTACT_S = 0.0833    # P70 T8 [DERIVED: stopaction.mjs POOF.EJECT_S] - a poofed prop's puffs have left it (the burst, two frames at 24 fps) this long after its enter: its landing, its arrival and its cue's instant; POOFS ONLY (test_poof_arrival pins the mirror)
 STAMP_CONTACT_S = 0.1542   # P69 T2 (R26-247) [DERIVED: stopaction.mjs STAMP_LAND.tc] - a stamped mark reaches its own size (the clamped scale spring's crossing) this long after its enter; STAMPS ONLY
 STOP_ON1_PX_S = 154        # P47 T1, E99 s30 [mirrors CADENCE.ON1_PX_S: RED 1/7 picture width/s, cinema parity] - faster than this steps on 1s
+STOP_STAGE_W_REF = 1080    # P72 T46e (R26-368 (b)) [mirrors CADENCE.STAGE_W_REF]: the stage 154 is stated on - the rule is a share of
+                           # the PICTURE's width, so a 16:9 build's 1920 stage steps on 1s above 154 x 1920 / 1080 = 273.8 px/s
 STOP_THROW_DX, STOP_THROW_DY, CARD_W_DEFAULT = 240, 160, 864   # the template's throw offsets and the .dock width, mirrored
 SRC_M20 = "P47 T1 + E99 s30 (the cadence rule, cinema parity): a throw steps on 1s above 154 px/s, on 2s below - reported, not scored, until HG2 tunes it"
 DEPLOY_AVG_S, DEPLOY_MAX_S = 8.0, 12.0   # E50 [OPERATOR 2026-09-07]: a chart's deployed life - 6-8 s from its LAST data mark on average, 12 s at most
@@ -763,12 +765,20 @@ def _advances_the_line(scene: dict, x: dict) -> bool:
     return False
 
 
+# P72 T46e (R26-403): the keys an `extend` brings new data by - a line's later series drawn on (`from_series`), and a BARS
+# page's field arriving (`field: true`, the scale-out) or one bar surging past the rest (`bar: k`, the projected overtake;
+# P71 T25). The window grown past its standing end (`to_index` > `from_index`) is read below.
+EXTEND_NEW_DATA = (("from_series", lambda v: v is not None), ("field", lambda v: v is True),
+                   ("bar", lambda v: isinstance(v, int) and not isinstance(v, bool)))
+
+
 def _brings_new_data(scene: dict, x: dict) -> bool:
-    """Data past the old domain: an extend's later series drawn on or its window grown past its standing end, or - a
-    rescale's or an extend's - a `build_to` in its landing window advancing the drawn line (`_advances_the_line`)."""
+    """Data past the old domain: an extend's later series drawn on, a bars page's field or surging bar (`EXTEND_NEW_DATA`),
+    or its window grown past its standing end, or - a rescale's or an extend's - a `build_to` in its landing window
+    advancing the drawn line (`_advances_the_line`)."""
     if x.get("to") not in ("rescale", "extend"):
         return False
-    if x.get("to") == "extend" and x.get("from_series") is not None:
+    if x.get("to") == "extend" and any(ok(x.get(key)) for key, ok in EXTEND_NEW_DATA):
         return True
     to_i, from_i = x.get("to_index"), x.get("from_index")
     if x.get("to") == "extend" and to_i is not None and from_i is not None and int(to_i) > int(from_i):
@@ -1277,13 +1287,35 @@ def _transition_events(scenes: list[dict]) -> list[float]:
     return out
 
 
+def _ken_window(s: dict) -> tuple[float, float] | None:
+    """P72 T46e (R26-392): the (t0, t1) a windowed ken leans across (P72 T25 writes them on `ken_burns`), else None - the
+    lean runs the whole scene. Mirrors the compiler's `ken_lean_window`."""
+    kb = (s.get("world") or {}).get("ken_burns") or {}
+    t0, t1 = kb.get("t0"), kb.get("t1")
+    if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in (t0, t1)):
+        return None
+    return (float(t0), float(t1)) if t1 > t0 else None
+
+
+def _in_ken_window(spans: list[tuple[float, float, str]], win: tuple[float, float] | None) -> bool:
+    """Does any of these camera moves move while the ken leans? Always, when the lean has no window."""
+    return win is None or any(a < win[1] and b > win[0] for a, b, *_ in spans)
+
+
+def _species_move_spans(s: dict) -> list[tuple[float, float, str]]:
+    return [(float(sp.get("at", 0.0)), float(sp.get("at", 0.0)) + float(sp.get("dur", CAMERA_MOVE_S) or CAMERA_MOVE_S),
+             sp["kind"]) for sp in s.get("species", []) if sp.get("kind") in CAMERA_MOVES]
+
+
 def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
     """(scene_id, why) for every scene that stacks two camera moves, or one over
-    a Ken Burns drift (scale > 0) - s9.27 precedence / s9.28 C3."""
+    a Ken Burns drift (scale > 0) - s9.27 precedence / s9.28 C3. A windowed ken (P72 T25's t0 / t1) clashes only with a
+    move inside its window (P72 T46e, R26-392): the lean is still before t0 and held after t1."""
     out = []
     for s in scenes:
         moves = [sp.get("kind") for sp in s.get("species", []) if sp.get("kind") in CAMERA_MOVES]
         scale = float(s.get("world", {}).get("ken_burns", {}).get("scale", 0) or 0)
+        win = _ken_window(s)
         sid = s.get("scene_id", "?")
         keyed = bool(_camera_key_segments(s))   # P49 T6: an authored key segment is a camera move
         landings = (s.get("camera") or {}).get("attention") == "landings"   # P49 T4: the landing IS the move
@@ -1293,15 +1325,15 @@ def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
             out.append((sid, f"camera keys + {moves[0]}"))
         elif moves and landings:
             out.append((sid, f"attention landings + {moves[0]}"))
-        elif moves and scale > 0:
+        elif moves and scale > 0 and _in_ken_window(_species_move_spans(s), win):
             out.append((sid, f"{moves[0]} over Ken Burns scale {scale:g}"))
-        elif keyed and scale > 0:
+        elif keyed and scale > 0 and _in_ken_window(_camera_key_segments(s), win):
             out.append((sid, f"camera keys over Ken Burns scale {scale:g}"))
         if _pedestal_moves(s):   # P71 T32: the pedestal is the row's ONE camera move (the compiler refuses the pairs by name)
             other = moves[:1] or (["camera keys"] if keyed else []) or (["attention landings"] if landings else [])
             if other:
                 out.append((sid, f"camera pedestal + {other[0]}"))
-            elif scale > 0:
+            elif scale > 0 and _in_ken_window(_pedestal_moves(s), win):
                 out.append((sid, f"camera pedestal over Ken Burns scale {scale:g}"))
     return out
 
@@ -1899,7 +1931,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
                               BUILD_DIR[0] if BUILD_DIR else None))   # M48 (P71 T7: the page and the caption at thumbnail width)
     if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
-    if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
+    if (cg := _cadence_gate(tl.get("scenes", []), str(tl.get("aspect") or "16:9"))) is not None:
         g.append(cg)                                                      # M20 (P47 T1: the cadence rule per arrival, INFO)
     if (dg := _deployed_gate(tl.get("scenes", []))) is not None:
         g.append(dg)                                                      # M21 (E50: the chart's deployed life per page)
@@ -2825,7 +2857,8 @@ def _ink_name(key: str) -> str:
             "page.key": "the key rail", "page.chapter": "the chapter pill",
             "pill": "a pill", "chart.lab": "an axis label", "chart.val": "a value", "chart.callout": "a callout",
             "chart.sname": "a series name", "chart.bklab": "a bracket label", "chart.bksub": "a bracket's sub line",
-            "chart.spanlab": "a span's label", "chart.wlab": "a wedge label"}.get(key, key)
+            "chart.spanlab": "a span's label", "chart.wlab": "a wedge label",
+            "chart.phase": "a phase name", "chart.schematic": "the schematic's tag"}.get(key, key)   # R26-349 (P72 T46e)
 
 
 def _dedupe(lines: list[str]) -> list[str]:
@@ -4428,19 +4461,22 @@ def _arrival_events(scenes: list[dict]) -> list[float]:
     return [round(t, 2) for e, _s, _a, t in _arrivals(scenes)]
 
 
-def _cadence_gate(scenes: list[dict]) -> Gate | None:
+def _cadence_gate(scenes: list[dict], aspect: str | None = None) -> Gate | None:
     """M20 (INFO): the cadence rule per thrown card - the flight's speed and the hold it steps on; a landing's and a
-    stamp's contact (P69 T2) ride along."""
+    stamp's contact (P69 T2) ride along. `aspect` (P72 T46e, R26-368 (b)): the build's - the threshold is read on its
+    stage's width, as the player's `cadence` reads it; None is the 1080 stage the rule was stated on."""
     arr = _arrivals(scenes)
     if not arr:
         return None
+    stage_w = 1920.0 if aspect == "16:9" else float(STOP_STAGE_W_REF)
+    on1 = STOP_ON1_PX_S * stage_w / STOP_STAGE_W_REF
     rows = []
     for sc in scenes:
         for d in sc.get("docks", []):
             if d.get("arrive") == "throw":
                 w = float((d.get("place") or {}).get("w") or CARD_W_DEFAULT)
                 v = ((w + STOP_THROW_DX) ** 2 + STOP_THROW_DY ** 2) ** 0.5 / STOP_FLIGHT_S
-                rows.append(f"{d.get('slide', '?')} throw ~{v:.0f} px/s -> on {1 if v > STOP_ON1_PX_S else 2}s")
+                rows.append(f"{d.get('slide', '?')} throw ~{v:.0f} px/s -> on {1 if v > on1 else 2}s")
             elif d.get("arrive") == "land":
                 rows.append(f"{d.get('slide', '?')} land ({d.get('mass', 'paper')}) - weight sold {STOP_LAND_S:.2f}s before the impact")
             elif d.get("arrive") == "stamp":   # P69 T2 (R26-247): the mass defaults to the engine's own, `ink`
