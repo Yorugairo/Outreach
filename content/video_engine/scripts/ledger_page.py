@@ -1757,6 +1757,58 @@ def _validate_projection(series: dict, variant: str) -> list[str]:
     return errs
 
 
+# P72 T46a (R26-386): a series' `dash` - an SVG dash pattern in the chart's own units, the key the chart species has always
+# honoured (`sr.dash`) - was ACCEPTED AND IGNORED on a ledger line page (three committed objects drew solid: the debt
+# line's $150B / $130B, the capex funding's cash in / capex, the memory monitor's 12m avg). The line page now draws it
+# through the projection's mask (the line's own dasharray is its draw state), and a malformed or misplaced one is
+# refused BY NAME (s106): 1-6 positive numbers (a string, space- or comma-separated, or one number), on a line series
+# the page draws as a line (a dense line, or a panel's line), never on a projection (its dashes are its own law).
+DASH_KEY = "dash"
+DASH_MAX_PARTS = 6
+DASH_BUILDERS = ("dense-line", PANELS)
+
+
+def dash_pattern(value) -> str | None:
+    """The authored dash as the engine writes it ("7 6"), or None when it is not 1-6 positive numbers."""
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        parts = [float(value)]
+    elif isinstance(value, str):
+        toks = [t for t in value.replace(",", " ").split() if t]
+        try:
+            parts = [float(t) for t in toks]
+        except ValueError:
+            return None
+    else:
+        return None
+    if not parts or len(parts) > DASH_MAX_PARTS or not all(v > 0 and v == v and v != float("inf") for v in parts):
+        return None
+    return " ".join(f"{v:g}" for v in parts)
+
+
+def _validate_series_dash(series: dict, variant: str) -> list[str]:
+    """R26-386: [] when no series names `dash`; else each one well-formed and on a series the page draws dashed."""
+    own = [(f"series[{i}]", s) for i, s in enumerate(series.get("series") or []) if isinstance(s, dict) and DASH_KEY in s]
+    own += [(f"panels[{pi}].series[{si}]", s) for pi, p in enumerate(series.get("panels") or []) if isinstance(p, dict)
+            for si, s in enumerate(p.get("series") or []) if isinstance(s, dict) and DASH_KEY in s]
+    if not own:
+        return []
+    builder = pick_builder(series, variant)
+    errs = []
+    for where, s in own:
+        if dash_pattern(s[DASH_KEY]) is None:
+            errs.append(f"{where}: `dash` is an SVG dash pattern - 1-{DASH_MAX_PARTS} positive numbers in the chart's units "
+                        f"(\"7 6\"), not {s[DASH_KEY]!r} (R26-386)")
+        elif PROJECTION_KEY in s:
+            errs.append(f"{where}: `dash` on a projection - a projection is dashed by its own law (LP_PROJ, measured off "
+                        "Bravos); drop `dash` (R26-386)")
+        elif builder not in DASH_BUILDERS:
+            errs.append(f"{where}: `dash` draws a LINE series dashed; this page draws as {builder!r}, where nothing would "
+                        "read it (R26-386, s106: a silent drop is neither advice nor refusal)")
+    return errs
+
+
 def projection_warnings(series: dict) -> list[str]:
     """s106 advice: a label that carries no estimate word ('2026E', 'consensus', 'forecast', 'if ...') may still read as
     a name; the frame read decides."""
@@ -2199,6 +2251,7 @@ def validate(series: dict, variant: str) -> list[str]:
     errors += _validate_unit_suffix(series, variant)   # P72 T13 / R26-287: a prefix AND a suffix ($...B), refused by name when malformed
     errors += _validate_y2(series, variant)         # P71 T13 / R26-307: a second axis draws (a line page) or is refused by name
     errors += _validate_projection(series, variant)   # P71 T16 / E77: a projection is labelled, tiered, sourced and opens from the last actual
+    errors += _validate_series_dash(series, variant)   # P72 T46a / R26-386: a series' dash, well-formed and drawn
     errors += _validate_ink_from(series, variant)     # P71 T28 / E28: the line changes ink at a point - never a sign ink on the wrong sign
     errors += _validate_longform_chrome(series)       # P71 T30: the two-line source and the title capsule, the long form's alone
     if "left_gutter" in series:

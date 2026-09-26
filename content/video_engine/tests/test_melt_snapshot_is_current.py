@@ -15,8 +15,9 @@ What this file pins, on a three-scene surface where page A melts into page B and
   1. THE PLAY-THROUGH   every frame from inside B to inside the second melt: the clone thrown is B's.
   2. THE SEEK           straight from the first melt's window into the second's: the clone is B's.
   3. PURE IN t          the second melt's stage is the same DOM on the played path and on a cold page. (These pages
-                        hold still; a page with a LIVE idle is cloned as it stands on the mount's frame - the
-                        boundary when played, t when seeked cold - which this slice leaves as it was for every melt.)
+                        hold still; a page with a LIVE idle is cloned as it stood at the boundary, span[0], on both
+                        paths - P72 T21 (7263013) paints span[0] first when a frame inside the melt finds no mount keyed
+                        to it (boundaryFirst); before it, a cold seek cloned the page as it stood at t.)
   4. THE FIRST MELT     still throws A, the same stage cold and played (its goldens are test_golden_frames').
   5. THE KEY            the mount names the boundary it melts; one mount per melt, never two clones in the stage.
 """

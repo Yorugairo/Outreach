@@ -19,9 +19,11 @@ history, not of t; it is printed with both PNGs written beside the build and the
     python determinism_check.py <build> --against <old>.timeline.json    # the instants ITS diff names
     python determinism_check.py <build> --all                     # every instant the layout gate looks at
 
-The one known exception is R26-21: a cold seek into the 0.45 s `snap` window shows the page full
-for one frame, because the snapped page reads its card box from the dock loop's layout offsets.
-The check NAMES that class where it fires (it never hides it); `--strict` fails on it anyway.
+There is no known exception. R26-21 was one until P72 T21 (7263013): a cold seek into the 0.45 s
+`snap` window showed the page full, because the snapped page read its card box from the dock loop's
+layout offsets; the snap now reads the card's DECLARED box (snapCardBox) and render() paints the frame
+before the window first (boundaryFirst). So the check's "known R26-21" class and its `--strict` were
+retired with it (P72 T46a, R26-399): every warm/cold mismatch is a mismatch.
 """
 from __future__ import annotations
 
@@ -38,7 +40,6 @@ import probe as P  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
 WARM_LEAD = (0.60, 0.30, 0.12)   # the approach to an instant: three seeks, as play would arrive
-SNAP_S = 0.45                    # the engine's SNAP_S - R26-21's window (scene-evidence-engine.mjs)
 OUT_DIR = "determinism"          # <build>/determinism/<t>-warm.png, -cold.png
 TICK = 50                        # instants are deduped to 1/50 s, as the probe's gate instants are
 
@@ -138,25 +139,6 @@ def changed_instants(old: dict, new: dict) -> list[tuple[float, str]]:
     return [v for _k, v in sorted(out.items())]
 
 
-def snap_windows(tl: dict) -> list[tuple[float, float, str]]:
-    """R26-21's windows: a page that enters by `snap`/`camera` grows from a landed card's LAYOUT
-    box, which a cold seek into the first 0.45 s has not recorded yet."""
-    out = []
-    for s in tl.get("scenes") or []:
-        pg = (s.get("world") or {}).get("page") or {}
-        if pg.get("snap_from") and str(pg.get("enter", "")).split("=")[0] in ("snap", "camera"):
-            a = float((s.get("span") or [0.0])[0])
-            out.append((a, a + SNAP_S, str(s.get("scene_id"))))
-    return out
-
-
-def known_class(t: float, windows: list[tuple[float, float, str]]) -> str | None:
-    for a, b, sid in windows:
-        if a <= t <= b:
-            return f"KNOWN R26-21 (a cold seek into {sid}'s {SNAP_S:.2f} s snap window)"
-    return None
-
-
 # ---- the two arrivals --------------------------------------------------------------------------------------------
 
 class Frames:
@@ -235,7 +217,7 @@ def _hash(png: bytes) -> str:
 
 
 def run(build: Path, instants: list[tuple[float, str]], timeline_name: str | None = None,
-        strict: bool = False, max_instants: int = 0, log=print) -> dict:
+        max_instants: int = 0, log=print) -> dict:
     """Render every instant warm and cold and compare. Returns the report; writes the two PNGs of
     any mismatch to <build>/determinism/."""
     build = Path(build)
@@ -246,40 +228,35 @@ def run(build: Path, instants: list[tuple[float, str]], timeline_name: str | Non
         instants = instants[:max_instants]
     rows: list[dict] = []
     if not instants:
-        return {"build": str(build), "instants": [], "ok": True, "mismatches": 0, "known": 0,
+        return {"build": str(build), "instants": [], "ok": True, "mismatches": 0,
                 "truncated": 0, "summary": "ok (no instant to check)"}
     with Frames(build, timeline_name) as F:
-        windows = snap_windows(F.tl)
         log(f"determinism_check {build.name}  ({F.tl_path.name}, {F.aspect}, {len(instants)} instant(s))")
         for t, why in instants:
             warm, cold = F.warm(t), F.cold(t)
             hw, hc = _hash(warm), _hash(cold)
-            row = {"t": t, "why": why, "warm": hw, "cold": hc, "match": hw == hc, "known": None}
+            row = {"t": t, "why": why, "warm": hw, "cold": hc, "match": hw == hc}
             if hw != hc:
-                row["known"] = known_class(t, windows)
                 d = build / OUT_DIR
                 d.mkdir(parents=True, exist_ok=True)
                 (d / f"{t:.2f}-warm.png").write_bytes(warm)
                 (d / f"{t:.2f}-cold.png").write_bytes(cold)
                 row["frames"] = [str(d / f"{t:.2f}-warm.png"), str(d / f"{t:.2f}-cold.png")]
                 log(f"  [MISMATCH] {t:7.2f}  {why}  warm {hw[:12]} cold {hc[:12]}"
-                    + (f"  {row['known']}" if row["known"] else "")
                     + f"\n             frames: {row['frames'][0]}  {row['frames'][1]}")
             else:
                 log(f"  [ ok      ] {t:7.2f}  {why}  {hw[:12]}")
             rows.append(row)
         if F.errs:
             log(f"  page errors: {F.errs[:3]}")
-    hard = [r for r in rows if not r["match"] and (strict or not r["known"])]
-    known = [r for r in rows if not r["match"] and r["known"] and not strict]
-    summary = ("mismatch at " + ", ".join(f"{r['t']:.2f}" for r in hard)) if hard else (
-        f"ok ({len(known)} known R26-21 at " + ", ".join(f"{r['t']:.2f}" for r in known) + ")" if known else "ok")
+    hard = [r for r in rows if not r["match"]]
+    summary = ("mismatch at " + ", ".join(f"{r['t']:.2f}" for r in hard)) if hard else "ok"
     if truncated:
         summary += f" [+{truncated} instant(s) not checked]"
-    log(f"determinism: {sum(1 for r in rows if r['match'])} ok, {len(hard)} mismatch, {len(known)} known"
+    log(f"determinism: {sum(1 for r in rows if r['match'])} ok, {len(hard)} mismatch"
         + (f", {truncated} not checked" if truncated else ""))
     return {"build": str(build), "instants": rows, "ok": not hard, "mismatches": len(hard),
-            "known": len(known), "truncated": truncated, "summary": summary}
+            "truncated": truncated, "summary": summary}
 
 
 def instants_for(build: Path, against: Path | None, explicit: list[float] | None,
@@ -305,7 +282,6 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--instants", type=float, nargs="*", help="the instants to check, in seconds")
     ap.add_argument("--all", action="store_true", help="every instant the layout gate looks at")
     ap.add_argument("--timeline", help="the compiled timeline's file name (default: the only one in the build)")
-    ap.add_argument("--strict", action="store_true", help="fail on the known R26-21 class too")
     ap.add_argument("--max", type=int, default=0, help="check at most N instants (0: all of them)")
     ap.add_argument("--json", action="store_true", help="the report as JSON on stdout")
     a = ap.parse_args(argv)
@@ -313,7 +289,7 @@ def main(argv: list[str] | None = None) -> int:
     if not instants:
         print("no instant to check - pass --instants, --against <old timeline> or --all")
         return 0
-    rep = run(a.build, instants, a.timeline, strict=a.strict, max_instants=a.max,
+    rep = run(a.build, instants, a.timeline, max_instants=a.max,
               log=(lambda *_a, **_k: None) if a.json else print)
     if a.json:
         print(json.dumps(rep, indent=1))

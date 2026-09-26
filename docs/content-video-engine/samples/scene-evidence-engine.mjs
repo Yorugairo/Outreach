@@ -11798,6 +11798,15 @@ async function mount(doc) {
     }
     S.lfPanelEl = r;
   };
+  /* P72 T46a (R26-341): GROUND IS LAID ON THE PANEL, NEVER UNDER IT. A layer that is the chart's ground (a spread's fill)
+     went in as the svg's FIRST child - under every line and label, as it should - but on a long-form page the first child
+     is the opaque plot panel, so the fill was painted beneath it and never showed (ev-divergence-v1: the same spread
+     bled on the default profile and painted nothing on the long form). It now goes in just above the panel when the
+     chart has one; a chart with none takes it first, exactly as before. */
+  const lpGroundInsert = (svg, el) => {
+    const panel = svg.querySelector(":scope > rect.lp-panel");
+    svg.insertBefore(el, panel ? panel.nextSibling : svg.firstChild);
+  };
   const lpStagePx = (chart, geom, rest) => {
     const len = (v, full) => { const n = parseFloat(v); return !Number.isFinite(n) ? 0 : String(v).trim().endsWith("%") ? n / 100 * full : n; };
     const w = len(chart && chart.style.width, STAGE_W), h = len(chart && chart.style.height, STAGE_H);
@@ -13101,9 +13110,31 @@ async function mount(doc) {
   const lpInkA = (hex, a) => { const h = String(hex).replace("#", ""); return h.length === 6 ? "rgba(" + [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)).join(",") + "," + a + ")" : hex; };
   /* a sign colour is authored as `var(--lp-neg)`; the bloom needs its CHANNELS to take an alpha. This reads the one
      value the template declares - no second copy of it in here to drift (E67). */
+  /* P72 T46a (R26-401): ... WHERE THE TEMPLATE DECLARES IT. The page's palette (--lp-pos, --lp-neg, --lp-chalk ...) lives on
+     `.lp`, not on :root, so the root read answered "" for every one of them and a lone sign-inked primary line's halos got
+     the raw "var(--lp-pos)" string - an invalid flood-color, which Chromium drops for its default, black. A page is built
+     DETACHED (no computed style of its own yet), so the value is read off the template's `.lp` rule on a hidden probe in
+     the document, once per name (the template is a constant: E67's one source, no copy of it here). :root still wins when
+     it declares the name. */
+  const LP_VAR_SEEN = {};
+  const lpTemplateVar = (name) => {
+    if (LP_VAR_SEEN[name]) return LP_VAR_SEEN[name];
+    let v = "";
+    try {
+      const probe = document.createElement("div");
+      probe.className = "lp"; probe.style.cssText = "position:absolute;visibility:hidden;width:0;height:0;left:0;top:0";
+      document.body.appendChild(probe);
+      v = (getComputedStyle(probe).getPropertyValue(name) || "").trim();
+      probe.remove();
+    } catch (e) { v = ""; }
+    if (v) LP_VAR_SEEN[name] = v;
+    return v;
+  };
   const lpVarHex = (c) => { const m = /^var\((--[\w-]+)\)$/.exec(String(c).trim());
     if (!m) return c;
-    try { return (getComputedStyle(document.documentElement).getPropertyValue(m[1]) || "").trim() || c; } catch (e) { return c; } };
+    let v = "";
+    try { v = (getComputedStyle(document.documentElement).getPropertyValue(m[1]) || "").trim(); } catch (e) { v = ""; }
+    return v || lpTemplateVar(m[1]) || c; };
   const LP_BLOOM_PX = 6;   /* [DERIVED: Bravos' yield lines, measured at 1080p] the halo's radius in the chart's own units; portrait doubles it, as the stroke does */
   /* THE NEON BLOOM (E67): a blurred copy of the stroke UNDER the crisp one, in the line's own colour. It is a filter on
      the path itself, so it rides the drawn length (the dasharray) exactly - a line drawing on blooms only where drawn -
@@ -13683,12 +13714,22 @@ async function mount(doc) {
     const n = Math.max(1, Math.round((len + g) / (d + g))), k = len > 0 ? (len + g) / (n * (d + g)) : 1;   /* n whole dashes fill the path */
     return (d * k).toFixed(2) + " " + (g * k).toFixed(2);
   };
-  const lpProjectionDash = (st, p, w) => {
+  /* P72 T46a (R26-386): ... and an AUTHORED dash rides the same twin. A series' `dash` ("7 6" - an SVG dash pattern in the
+     chart's units, the key the chart species has always honoured as `sr.dash`) was accepted and ignored on a line page:
+     three committed objects drew solid. Its twin carries the pattern AS WRITTEN (no fit - the author named the rhythm,
+     the projection's whole-dash law is the projection's own); the line still draws on by its own dash state beneath the
+     mask. ledger_page.dash_pattern writes the same normal form and refuses a malformed one by name. */
+  const lpDashPattern = (v) => {
+    if (typeof v === "boolean") return null;
+    const parts = typeof v === "number" ? [v] : typeof v === "string" ? v.replace(/,/g, " ").split(/\s+/).filter(Boolean).map(Number) : [];
+    return parts.length && parts.length <= 6 && parts.every((x) => Number.isFinite(x) && x > 0) ? parts.map((x) => String(+x)).join(" ") : null;
+  };
+  const lpProjectionDash = (st, p, w, pattern = null) => {
     const defs = lpEl("defs", "", st.chart), id = "projmask-" + (st.seed | 0) + "-" + (++lpClipN);   /* deterministic: the build order names it */
     const mask = lpEl("mask", "", defs, { id, maskUnits: "userSpaceOnUse", x: -10000, y: -10000, width: 20000, height: 20000 });
     const twin = lpEl("path", "", mask, { d: p.getAttribute("d"), fill: "none", stroke: "#fff", "stroke-width": (LP_PROJ.MASK_K * w).toFixed(2),
                                           "stroke-linecap": "butt", "stroke-linejoin": "round" });
-    const fit = () => twin.setAttribute("stroke-dasharray", lpProjDashArray(twin.getTotalLength ? twin.getTotalLength() : 0, w));
+    const fit = () => twin.setAttribute("stroke-dasharray", pattern || lpProjDashArray(twin.getTotalLength ? twin.getTotalLength() : 0, w));
     fit();
     p.setAttribute("mask", "url(#" + id + ")");
     const set = p.setAttribute.bind(p);
@@ -13975,6 +14016,7 @@ async function mount(doc) {
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
       if (s.projection) lpProjectionDash(st, p, (p.isConnected && parseFloat(getComputedStyle(p).strokeWidth)) || (P ? 8 : 4));   /* P71 T16: dashed (S3) */
+      else if (lpDashPattern(s.dash)) lpProjectionDash(st, p, (p.isConnected && parseFloat(getComputedStyle(p).strokeWidth)) || (P ? 8 : 4), lpDashPattern(s.dash));   /* P72 T46a / R26-386: the authored dash */
       const tip = lpEl("circle", "", sHost, { r: 6, fill: col, opacity: 0 });
       const last = s.pts[s.pts.length - 1];
       const prev = s.pts.length > 1 ? s.pts[s.pts.length - 2] : last;   /* portrait: the name ends left of the last segment so a steep drop never runs through it */
@@ -18187,7 +18229,7 @@ async function mount(doc) {
         const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return x1 === x0 ? y1 : y0 + (y1 - y0) * ((x - x0) / (x1 - x0)); };
       const col = PS_PAL[sp.color] || sp.color || "var(--lp-neg)";
       const path = lpEl("path", "lp-spread", surf, { fill: col, "fill-opacity": 0, stroke: "none" });
-      surf.insertBefore(path, surf.firstChild);   /* under every line and label: it is ground, not ink on top */
+      lpGroundInsert(surf, path);   /* under every line and label: it is ground, not ink on top - on the long form's panel, not under it (R26-341) */
       /* P71 T21: an underwater fill's time under water (`text`, the compiler's - check_spread_levels computed it from
          the `label` the author wrote), written by the hand at the end tags' size, as a level join's figure is - in
          CHALK with the field's halo, never the fill's ink: it may stand inside the fill (a peak at the plot's top has
@@ -18816,6 +18858,14 @@ async function mount(doc) {
      render is one flag away. The three match-cut invariants (the brief B4) are computed by __morphInvariants for M17. */
   const MORPH = { S: 2.0, FILL_A: 0.28, COLS: 48, TEAR: 14, TAB_W: 0.92, TAB_H: 0.85,
                   GROUND: 0.75, GROUND_MIN_S: 0.6, SEED_LAG: 0.6, SEED_R: 0.6, SEED_POW: 0.7, INK: "#25313C" };   /* dials (42 s42.5): the morph's seconds, the fill, the strip's columns, the tab's tear (viewBox px) and its size as a share of the target's box */
+  /* P72 T46a (R26-390): THE PLATE'S GROUND UNDER A MORPH IS ENTERED, NOT SWITCHED ON. A page whose field is the two-plate
+     cross-fade (`field: plates`) lays its inked plate over the cream on expoOut(b); under a morph b runs from the scene's
+     FIRST frame (the ground's window, MORPH.S x MORPH.GROUND), and expoOut's steepest rate is at b = 0 - so the page's
+     first frame already carried 0.087 of the board (morph-planted-plates), over E99 s52's twentieth. Under a morph the
+     plate's expoOut is entered over the first IN of the window on a linear ramp: 0.012 of the board on a 50 fps first
+     frame (0.049 on a 24 fps one), no frame more than ~0.105 (s52's eighth is 0.125), half the board 0.15 s in and whole
+     when the window closes - the arrival P72 T24 pinned. A page with no morph keeps expoOut(b) exactly. */
+  const MORPH_PLATE = Object.freeze({ IN: 0.1 });   /* the share of the ground's window over which the plate's curve is entered [DERIVED: the s52 bounds above, at 50 and 24 fps] */
   /* P61 T3b / E99 s52 - THE GROUND'S OWN THREE DIALS. The operator, on the planted morph: "the actual morph is fine,
      but going from the ink splotch to the full fill on the board instantly around it is the problem here."
        GROUND    the share of the morph's OWN seconds the page's field takes to arrive. 0.75 of the 2.0 s default is
@@ -19474,7 +19524,10 @@ async function mount(doc) {
         pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
         if (pp.pill) lpPaintPill(pp, f, drawing);   /* P50 T11: the pill rides this same f - one clock, no second state */
       });
-      for (const hr of cs.hlines || []) { const k = clamp01(c / 0.25); hr.line.setAttribute("opacity", (0.9 * k).toFixed(3)); if (hr.lab) hr.lab.setAttribute("opacity", clamp01((c - 0.25) / 0.2).toFixed(2)); }
+      /* P72 T46a (R26-402): the rule's reveal is written on its STYLE - the template's `.lp-chart .hrule { opacity: .9 }` outranks
+         an attribute, so the fade-in never showed (the rule stood at .9 from the page's first frame). Whole (k 1) the style is
+         handed back ("") and the template's .9 stands, exactly as before; the attribute keeps its value for its readers. */
+      for (const hr of cs.hlines || []) { const k = clamp01(c / 0.25); hr.line.setAttribute("opacity", (0.9 * k).toFixed(3)); { const v = k < 1 ? (0.9 * k).toFixed(3) : ""; if (hr.line.style.opacity !== v) hr.line.style.opacity = v; } if (hr.lab) hr.lab.setAttribute("opacity", clamp01((c - 0.25) / 0.2).toFixed(2)); }
       if (cs.paint) cs.paint(cs, c, t3);   /* the builder's own build step (race / decline / combo / share) */
       if (cs.share) {   /* P48 T4: the piece the sentence is about leaves the pie on its word */
         let pu = 0;
@@ -19666,6 +19719,15 @@ async function mount(doc) {
       else if (m.role === "rule" || m.role === "rulelabel" || m.role === "axislabel") e.style.opacity = xfFade(true, true, u).toFixed(3);
       else if (m.role === "name" || m.role === "line" || m.role === "bar" || m.role === "value" || m.role === "xlabel") e.style.opacity = "0";
     }
+    /* P72 T46a (R26-385): THE STANDING CHART IS NEVER UNDER THE ARRIVING PANEL. A long-form state lays its own opaque plot
+       panel (`rect.lp-panel`) as its first child, and the target's chart is raised above the standing one from the
+       clock's first frame (u > 0) - so on every long-form page the moving line (an extend's rescale phase, a rescale,
+       a bars extend's shift) was painted UNDER the arriving panel and the plot read empty for the whole phase
+       (project-issuance-2026e 8.00-8.53 s; the plain profile, with no panel, drew it). The plain recast's hand does the
+       same job (P71 T3b): the arriving panel stays down and the STANDING panel carries the plot's box to the target's on
+       this clock, so at u = 1 the target's own panel stands exactly where the carried one ended. lpPaintStates hands
+       both back every frame (lpPanelRestore), so a seek is the play. A page with no panel is untouched. */
+    lpPanelHand(A, Bs, u, false);
     return u;   /* R26-233: the clock the frame was actually painted on - the caller's `xfNow` carries it to the perform layer */
   };
   /* P48 T3 - EXTEND. Two phases on one clock: the shared marks RESCALE to the target's scale over the first XF_EXTEND.RESCALE
@@ -20617,7 +20679,7 @@ async function mount(doc) {
        instant the BOARD becomes charcoal is the instant a shape drawn in charcoal stops standing out of it. */
     const bRect = clamp01((b - 0.78) / 0.22);
     st.rect.setAttribute("opacity", bRect.toFixed(2));
-    if (st.fieldPlate) st.fieldPlate.style.opacity = expoOut(b).toFixed(3);   /* the inked plate arrives over the cream */
+    if (st.fieldPlate) st.fieldPlate.style.opacity = (expoOut(b) * (morphOn && !handed ? clamp01(b / MORPH_PLATE.IN) : 1)).toFixed(3);   /* the inked plate arrives over the cream - entered under a morph (R26-390) */
     /* beat 4: ink writes title/source once the field has soaked - no outline (E22 addendum 7: the deckle is the edge) */
     const t3 = tr - LP.ROLL - LP.SAVOR - LP.FIELD;
     const n = Math.max(1, st.glyphs.length), per = (traceIn ? LP_TRACE.INK : LP.INK) / n;
@@ -27181,6 +27243,12 @@ async function mount(doc) {
        separate layer behind it. Its parallax never moves the paper, so it
        runs continuously and independently of any reveal. */
     const paint = (el, scene, dx = 0) => {
+      /* P72 T46a (R26-399): the world's ORIGIN is the frame's own. This closure writes the world's transform fresh every
+         frame, but the writers after it that turn it about another point (the suck's drain point on wA, the downward
+         answer's bottom edge on wA - `50% 100%` - and the blur-zoom's centre on wB) set an origin nothing took back: after
+         a landing's dip wA kept `50% 100%` on the played path (a cold seek past it had none), so its next transform turned
+         about a stale point. Cleared here, before any of them writes; each sets its own again on the frames it runs. */
+      if (el.style.transformOrigin) el.style.transformOrigin = "";
       /* LEDGER PAGE species: the world is drawn, not an image. The page
          paints itself from t; the authored Ken Burns still applies below,
          capped to a slow push (s9.26 rules). */
@@ -27742,10 +27810,17 @@ async function mount(doc) {
         contact.style.filter = "blur(" + cs.blur.toFixed(2) + "px)";   /* the depth cue: wide high up, a slit at contact */
         /* badge-stamp.tsx:96 "Ink strength: heavy on impact, easing back as the pressure comes off": on a PICTURE the
            ink is never a wash over the art (a prop is art), so it is the PRESSURE under it - the contact shadow's own
-           darkness, 1 -> 0.86 as the seal settles. Every other arrival multiplies by exactly 1. */
+           darkness, 1 -> 0.86 as the seal settles - on a stamped CARD (a prop's contact is its weight: R26-400 below).
+           Every other arrival multiplies by exactly 1. */
         /* P69 T6b / E99 s92: a PROP's contact HANDS OVER to its resting shadow (1 - the share, 0 at settle) instead of
            vanishing at settle; a card's multiplies by exactly 1, as it always did */
-        contact.style.opacity = (!poofed && t >= d.enter && sx.phase !== "settled" ? cs.alpha * (stamped ? sx.ink : 1) * clamp01(1 - rk) * (1 - ex) * (isProp ? 1 - propRest : 1) : 0).toFixed(3);   /* P70 T8: a poof came down from nowhere - no contact shadow */
+        /* P72 T46a (R26-400): ... and a PROP's contact never takes the stamp's ink. Its contact is one half of the prop's
+           WEIGHT (the other is the hatch, propRestShare), and since P70 T1b threw the ink's ease-back from the contact
+           (1 -> 0.86 over ~0.09 s AFTER it, while the hatch's share is still near 0) the weight sagged to 0.870 in the
+           first frames after the prop landed - a prop that goes lighter as it lands. The seal (E99 s121 (4)) keeps its
+           ink: the chip's seal paints `stampInk` on its own layer (chipStampGroup), untouched here. */
+        const pressed = stamped && !isProp ? sx.ink : 1;
+        contact.style.opacity = (!poofed && t >= d.enter && sx.phase !== "settled" ? cs.alpha * pressed * clamp01(1 - rk) * (1 - ex) * (isProp ? 1 - propRest : 1) : 0).toFixed(3);   /* P70 T8: a poof came down from nowhere - no contact shadow */
         contact.style.visibility = el.style.visibility;   /* a card hidden for a snap takes its shadow with it */
         /* THE IMPACT RING (E99 s87; badge-stamp.tsx:98-117, :152-162) on its two curves - a LINEAR life that fades and
            thins it and an EASED expansion to twice the mark's own radius, "because a shockwave leaves the impact fast

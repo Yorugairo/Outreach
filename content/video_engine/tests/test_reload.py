@@ -283,7 +283,7 @@ def test_a_stateful_bug_is_caught_as_a_warm_cold_mismatch(tmp_path):
     rep = DC.run(build, [(PARKING, "the card mid-park")], TL_NAME, log=lambda *_a: None)
     assert not rep["ok"] and rep["mismatches"] == 1, rep["summary"]
     row = rep["instants"][0]
-    assert row["warm"] != row["cold"] and row["known"] is None, row
+    assert row["warm"] != row["cold"] and "known" not in row, row   # P72 T46a / R26-399: no class excuses a mismatch
     assert rep["summary"] == f"mismatch at {PARKING:.2f}", rep["summary"]
     warm, cold = (build / DC.OUT_DIR / f"{PARKING:.2f}-warm.png"), (build / DC.OUT_DIR / f"{PARKING:.2f}-cold.png")
     assert warm.exists() and cold.exists() and warm.read_bytes() != cold.read_bytes()
@@ -304,13 +304,10 @@ def test_the_diff_names_the_instants_a_change_touched(tmp_path):
     assert DC.changed_instants(tl, flagged) == [(0.0, "s01 kinetics changed")]
 
 
-def test_the_known_class_is_named_not_hidden():
-    """R26-21: a cold seek into the 0.45 s snap window reads the page full for one frame. The check
-    must call that mismatch by its name - and only inside the window it belongs to."""
-    tl = {"runtime_s": 20.0, "scenes": [
-        {"scene_id": "s01", "span": [0.0, 10.0], "world": {"page": {"enter": "snap", "snap_from": "ev-a"}}},
-        {"scene_id": "s02", "span": [10.0, 20.0], "world": {"page": {"enter": "mount"}}}]}
-    assert DC.snap_windows(tl) == [(0.0, DC.SNAP_S, "s01")]
-    assert "KNOWN R26-21" in (DC.known_class(0.2, DC.snap_windows(tl)) or "")
-    assert DC.known_class(0.6, DC.snap_windows(tl)) is None
-    assert DC.known_class(10.2, DC.snap_windows(tl)) is None
+def test_no_mismatch_is_excused_by_a_known_class():
+    """P72 T46a / R26-399 (replaces `test_the_known_class_is_named_not_hidden`): the check named a cold seek into a snap
+    window "KNOWN R26-21" and passed it unless --strict. P72 T21 (7263013) made that window pure in t, so the class,
+    its windows and --strict are retired: the report carries no `known` count and a mismatch anywhere fails."""
+    assert not hasattr(DC, "known_class") and not hasattr(DC, "snap_windows") and not hasattr(DC, "SNAP_S")
+    import inspect
+    assert "strict" not in inspect.signature(DC.run).parameters
