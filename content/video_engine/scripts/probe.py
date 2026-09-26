@@ -245,8 +245,10 @@ READ_DOM = r"""
   for (const cp of document.querySelectorAll('#chapters .lp-chpill')) {
     if (eff(cp) <= 0.05) continue;
     const b = R(cp); if (b[2] < 1 || b[3] < 1) continue;
-    out.items.push({ k: 'chapter', box: b, px: fs(cp), s: sc(cp), txt: txt(cp) });
-    out.labels.push({ role: 'chapter', text: txt(cp), box: b });
+    /* P70 T10: a swapping pill carries every name it wears; the one showing is the one not hidden */
+    const nm = [...cp.querySelectorAll('.lp-chname')].find((n) => getComputedStyle(n).visibility !== 'hidden') || cp;
+    out.items.push({ k: 'chapter', box: b, px: fs(cp), s: sc(cp), txt: txt(nm) });
+    out.labels.push({ role: 'chapter', text: txt(nm), box: b });
   }
   /* a NOTE carries .lp-sub too (it is the page's ink at the sub's size): named once, as a note */
   const PAGE = { '.lp-title': 'title', '.lp-sub:not(.lp-note)': 'sub', '.lp-src': 'source', '.lp-note': 'note' };

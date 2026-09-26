@@ -299,7 +299,7 @@ def test_a_timeline_with_a_chapter_carries_the_long_form_face():
 
 
 def test_the_gate_credits_the_landing():
-    assert G.SPECIES_EVENTS["chapter"] == ("at",)
+    assert G.SPECIES_EVENTS["chapter"][0] == "at"   # P70 T10 adds "swaps" (test_chapter_swap); a chapter with none credits its landing alone
     scenes = [{"span": [363.38, 384.12], "species": [B.compiled_chapter(dict(CH))]}]
     assert G._species_events(scenes) == [363.38]
 

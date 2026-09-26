@@ -461,7 +461,7 @@ SPECIES_EVENTS["axis_tag"] = ("at",)
 # P71 T14: THE DECADE RULER - the strip TRAVELS on its word (it enters at the right edge and scrolls to its settle,
 # s99), so it is ONE event at its start; the held ruler after the landing is ground and earns nothing (s91).
 SPECIES_EVENTS["ruler"] = ("at",)
-SPECIES_EVENTS["chapter"] = ("at",)   # P70 T9: the pill LANDS on the act's first word (one event); the hold is chrome, never credited as motion
+SPECIES_EVENTS["chapter"] = ("at", "swaps")   # P70 T9: the pill LANDS on the act's first word (one event); the hold is chrome, never credited as motion; P70 T10: each swap renames it on its word
 # P70 T6: THE EQUATION ROW - each TERM is written on its own word and the RESULT on the word that says it: one event per
 # term ("terms" - each term's own `at`, read off the list the way the agenda's rows are) and one at "result.at". The
 # operators spring OP_LEAD before the next word, inside that word's own event, so they earn nothing of their own; the
@@ -1004,6 +1004,14 @@ def _species_events(scenes: list[dict]) -> list[float]:
                     for term in sp.get("terms") or []:
                         w = term.get("at") if isinstance(term, dict) else None
                         if isinstance(w, (int, float)) and not isinstance(w, bool) and keep(float(w)):
+                            out.append(round(float(w), 2))
+                    continue
+                if edge == "swaps":      # P70 T10: ... and a chapter's swaps rename the pill on their words - wherever the act
+                    # has got to: the pill holds across the cut and one scene carries its only copy, so the scene's span does
+                    # not bound it (its own window, at .. at + dur, does)
+                    for s in sp.get("swap") or []:
+                        w = s.get("at") if isinstance(s, dict) else None
+                        if isinstance(w, (int, float)) and not isinstance(w, bool) and at <= float(w) <= at + dur:
                             out.append(round(float(w), 2))
                     continue
                 if edge == "rows":       # P52 T8: ... and the agenda's rows are revealed one per word, each on its own `at`

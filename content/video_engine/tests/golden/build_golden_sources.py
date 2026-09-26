@@ -5009,6 +5009,36 @@ def chapter_held() -> tuple[dict, dict]:
 
 
 SURFACES.update({"chapter-held": chapter_held})
+
+
+# ---- P70 T10 (was P69 T61, A44; BOOM 02:26.47-02:27.35): THE IN-PLACE SWAP on the chapter pill ------------------------
+#   chapter-swap     Steel and Paper H's own rename of the act's subject, the take's words shifted by -360.0 s: "It was
+#                    never the AI stocks. The bubble isn't in the steel. It's in the PAPER wrapped around the steel." -
+#                    the pill "The bubble" lands on the act's first word (363.38 -> 3.38) and is swapped in place to "The
+#                    paper" on "paper" (367.38 -> 7.38): the same period renamed (BRAVOS-USE-WHEN A44), the pill never
+#                    moving. Over the plain plate (the press stands in) - the swap is the pill's own motion, whatever
+#                    world it stands over. Judged MID-OPEN, as BOOM's own witness frame (02:27.0, "st Dec"): the old name
+#                    gone, the box half sprung from its slot, the new name half written. The beat is PROPOSED for the
+#                    parent to name (the plan: "the parent names the H beat once the BOOM frame is read").
+SWAP_ENTRY = {"kind": "chapter", "at": round(363.38 - CHAPTER_SHIFT, 2), "until": RUNTIME, "text": "The bubble",
+              "swap": [{"at": round(367.38 - CHAPTER_SHIFT, 2), "text": "The paper"}]}
+
+
+def chapter_swap() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    entry = dict(json.loads(json.dumps(SWAP_ENTRY)), id="s01.species.0")
+    assert not BST.validate_species([json.loads(json.dumps(entry))], (0, 0, 0), "plate-plain")
+    chapters = BST.collect_chapters([(0.0, RUNTIME, "plate-plain", (0, 0, 0), [], "cut", [entry])], RUNTIME)
+    plate = {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    scenes = [{"scene_id": "s01", "world": plate, "exit": "cut", "span": [0.0, RUNTIME], "docks": [],
+               "species": [BST.compiled_chapter(entry)]}]
+    tl = _timeline("Golden: the chapter pill renamed in place (chapter swap)", scenes, {}, "16:9")
+    tl["chapters"] = BST.timeline_chapters(chapters)   # flagless (test_idle_e49), as chapter-held
+    return tl, dict(_base_uris(), **BST.longform_assets(tl))
+
+
+SURFACES.update({"chapter-swap": chapter_swap})
+FRAME_T.update({"chapter-swap": round(SWAP_ENTRY["swap"][0]["at"] + 0.43 + 0.21, 2)})   # mid-open: 8.02
 FRAME_T.update({"chapter-held": round(CHAPTER_CUT + 3.0, 2)})   # after the cut: the page's ink written under the held pill (27.12)
 
 

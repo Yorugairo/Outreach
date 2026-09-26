@@ -505,6 +505,10 @@
         {
           "name": "The chapter pill",
           "source": ".claude/PRPs/plans/P70-THE-BRAVOS-VERBS-WAVE-2.plan.md (T9)"
+        },
+        {
+          "name": "In-place badge swap: the pill's text flips, the pill stays",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md (A44, BOOM 02:23 -> 02:27)"
         }
       ],
       "does": "A long form's named act as one white key-rail pill: it lands on the act's first word, holds over every scene in the act without landing again, and leaves on the word that ends it; each page under it makes room.",
@@ -544,6 +548,15 @@
           "trigger": "continuous"
         },
         {
+          "name": "a swap renames the act",
+          "does": "the old name erases as the box closes to a slot, then the new name writes as it springs open, in place",
+          "trigger": "each swap's `at` (the word that says the new name)",
+          "dials": {
+            "SWAP_CLOSE_S": "0.43",
+            "SWAP_OPEN_S": "0.42"
+          }
+        },
+        {
           "name": "the pill leaves",
           "does": "the pill fades out on E50's ease-in cubic",
           "trigger": "the chapter's `until` (the word that ends the act)",
@@ -570,9 +583,21 @@
           "became": "the room the page makes",
           "record": "content/video_engine/scripts/ledger_page.py",
           "tie": "recorded"
+        },
+        {
+          "source": "the retitle's glyph law (lpGlyphs, eraseFactor, writeGlyphs)",
+          "became": "the swap's erase and write",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+          "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "swap",
+          "means": "`[{at, text}]` (P70 T10, A44; BOOM 02:27): the act renamed in place on its word - the old name erases as the box closes to a slot, the new one writes as it opens; never moves at/until",
+          "source_set": "CHAPTER_SWAP_KEYS"
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",
@@ -589,7 +614,8 @@
         "E99 s113",
         "E50",
         "E49",
-        "P70 T9"
+        "P70 T9",
+        "P70 T10"
       ],
       "status": "wired",
       "proof": {

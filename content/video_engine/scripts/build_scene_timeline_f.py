@@ -1003,7 +1003,8 @@ SPECIES_KINDS += (SPECIES_CHAPTER,)
 SPECIES_WHEN[SPECIES_CHAPTER] = ("a LONG FORM has named acts and each chart should say which act it is in ('the turn'): "
                                  "one pill lands on the act's first word, holds over every scene inside it and leaves on "
                                  "the word that ends it; never on a short (a short has no acts)")
-CHAPTER_KEYS = ("kind", "at", "until", "text") + ROW_PATH_KEYS
+CHAPTER_KEYS = ("kind", "at", "until", "text", "swap") + ROW_PATH_KEYS
+CHAPTER_SWAP_KEYS = ("at", "text")   # P70 T10: a swap renames the act on a word; it has no `until` - a new period is a new chapter
 CHAPTER_PX = LPG.LONGFORM_KEY_PX["phone"]        # 61.4: the key rail's phone preset, the smallest key size >= the floor
 CHAPTER_FLOOR_PX = round(LPG.CARD_TYPE_PX, 2)    # 59.08: E99 s90's phone floor, which the pill's name never sets under
 CHAPTER_PAD_EM = LPG.LONGFORM_KEY_EM["pad_r"]    # the key pill's name pad, both ends (a chapter carries no series dot)
@@ -1012,6 +1013,11 @@ CHAPTER_GAP_PX = 16          # BUB 12:35.0 / 15:12.0 (1920x1080): the pill's foo
 CHAPTER_LAND_S = 0.36        # the engine's LP_BADGE_IN: the key rail's spring, the pill's landing
 CHAPTER_EXIT_S = 16 / 30     # stopaction's STAMP_ARRIVAL.EXIT_S: E50's exit (the ease-in cubic), the pill's leave
 CHAPTER_WORD_TOL_S = MG.WORD_ANCHOR_TOL_S   # an `at` / `until` is ON a word within the shared 2 dp rounding
+# P70 T10 (was P69 T61, A44) - THE IN-PLACE SWAP, measured on BOOM's real frames at its native 29.97 fps (jx3Ll-GJtMY
+# 02:26.47-02:27.35; the scratch record p70-t9/bravos/boom): the old box CLOSES to a slot as its name is cut away, then
+# OPENS to the new name's width as the new name writes in - the pill never leaves its place. The engine's CHAPTER mirrors.
+CHAPTER_SWAP_CLOSE_S = 0.43   # 146.47 -> 146.90 s: the old name erased, the box closed to a slot
+CHAPTER_SWAP_OPEN_S = 0.42    # 146.93 -> 147.35 s: the box open at the new name's width, the new name written
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -5153,9 +5159,9 @@ def _validate_chapter(entry: dict) -> list[str]:
     errs: list[str] = []
     extra = sorted(k for k in entry if k not in CHAPTER_KEYS)
     if extra:
-        errs.append(f"chapter: {', '.join(map(repr, extra))} - a chapter takes only at|until|text: it is chrome over an "
-                    "act that lands on `at` and holds to `until` (never a `dur`), points at nothing, and wears the key "
-                    "rail's capsule")
+        errs.append(f"chapter: {', '.join(map(repr, extra))} - a chapter takes only at|until|text|swap: it is chrome "
+                    "over an act that lands on `at` and holds to `until` (never a `dur`), points at nothing, and wears the "
+                    "key rail's capsule")
     for f in ("at", "until"):
         if not _num(entry.get(f)):
             errs.append(f"chapter: {f!r} must be a number (episode seconds - a word of the take)")
@@ -5167,7 +5173,62 @@ def _validate_chapter(entry: dict) -> list[str]:
     text = entry.get("text")
     if not isinstance(text, str) or not text.strip() or "\n" in text:
         errs.append("chapter: 'text' must name the act on one line ('The turn') - an unnamed pill marks nothing")
+    return errs + _chapter_swap_errors(entry)
+
+
+def _chapter_swap_errors(entry: dict) -> list[str]:
+    """P70 T10: a chapter's `swap: [{at, text}]` - the act RENAMED in place (BRAVOS-USE-WHEN A44: "the same period is
+    renamed"). Each swap names the act anew on its word and never moves it: a swap takes no `until` (a new period is a new
+    chapter). It waits for the pill to land, leaves room for its close and its open before the next swap and before the
+    act's leave, and names something other than the name it replaces."""
+    if "swap" not in entry:
+        return []
+    swaps = entry["swap"]
+    if not isinstance(swaps, list) or not swaps:
+        return ["chapter: swap must be a list of {at, text} - each a new name for the same act, on its word"]
+    errs: list[str] = []
+    need = CHAPTER_SWAP_CLOSE_S + CHAPTER_SWAP_OPEN_S
+    at, until = entry.get("at"), entry.get("until")
+    prev_at, prev_text = (float(at) if _num(at) else None), entry.get("text")
+    for n, sw in enumerate(swaps):
+        where = f"chapter: swap {n}"
+        if not isinstance(sw, dict):
+            errs.append(f"{where} must be a dict {{at, text}}")
+            continue
+        extra = sorted(k for k in sw if k not in CHAPTER_SWAP_KEYS)
+        if extra:
+            errs.append(f"{where}: {', '.join(map(repr, extra))} - a swap takes only at|text: it renames the SAME period "
+                        "and never moves it (the pill's `at` and `until` are the chapter's) - a new period is a new chapter")
+        text, sat = sw.get("text"), sw.get("at")
+        if not isinstance(text, str) or not text.strip() or "\n" in text:
+            errs.append(f"{where}: 'text' must name the act anew on one line")
+        elif isinstance(prev_text, str) and text.strip() == prev_text.strip():
+            errs.append(f"{where}: {text!r} is the same name it replaces - a swap to the same name is no swap")
+        if not _num(sat):
+            errs.append(f"{where}: 'at' must be a number (episode seconds - the word that renames the act)")
+            continue
+        sat = float(sat)
+        if n == 0 and prev_at is not None and sat < prev_at + CHAPTER_LAND_S - 1e-9:
+            errs.append(f"{where} at {sat:g}s comes before the pill has landed ({prev_at:g}s + {CHAPTER_LAND_S:g}s) - a "
+                        "name is swapped on a pill that stands")
+        elif n > 0 and prev_at is not None and sat < prev_at + need - 1e-9:
+            errs.append(f"{where} at {sat:g}s comes {sat - prev_at:.2f}s after swap {n - 1} - a swap needs {need:.2f}s "
+                        f"to close ({CHAPTER_SWAP_CLOSE_S:g}s) and open ({CHAPTER_SWAP_OPEN_S:g}s), in order")
+        if _num(until) and sat + need > float(until) + 1e-9:
+            errs.append(f"{where} at {sat:g}s runs past the act's until {float(until):g}s - it needs {need:.2f}s to close "
+                        "and open before the pill leaves")
+        prev_at, prev_text = sat, text
     return errs
+
+
+def chapter_names(entry: dict) -> list[str]:
+    """Every name the pill wears over its act, in order: its text, then each swap's (P70 T10)."""
+    return [str(entry.get("text"))] + [str(s.get("text")) for s in entry.get("swap") or [] if isinstance(s, dict)]
+
+
+def _chapter_widest_box(entry: dict) -> dict:
+    """The pill's box at its WIDEST name - the room it can take at any instant of its act (the reserve, the lift)."""
+    return max((chapter_box(n) for n in chapter_names(entry)), key=lambda b: b["w"])
 
 
 def compiled_chapter(entry):
@@ -5237,10 +5298,15 @@ def chapter_errors(chapters: list[dict], words, runtime: float, aspect: str | No
         if not (on_word(until) or abs(until - float(runtime)) <= CHAPTER_WORD_TOL_S):
             errs.append(f"{where}: until {until:g}s is not on a word of the take (nor its end at {float(runtime):g}s) - "
                         "a pill leaves on the word that ends its act")
-        w = chapter_box(name)["w"]
-        if w > col:
-            errs.append(f"{where}: the pill is {w:.0f} px wide at {CHAPTER_PX:g} px and the page's ink column is "
-                        f"{col:.0f} px - name the act in fewer words")
+        for nm in chapter_names(e):   # P70 T10: every name the pill wears fits the column
+            w = chapter_box(nm)["w"]
+            if w > col:
+                errs.append(f"{where}: the pill is {w:.0f} px wide at {CHAPTER_PX:g} px for {nm!r} and the page's ink "
+                            f"column is {col:.0f} px - name the act in fewer words")
+        for n, sw in enumerate(e.get("swap") or []):   # ... and each swap renames it on a word of the take
+            if not on_word(float(sw["at"])):
+                errs.append(f"{where}: swap {n} at {float(sw['at']):g}s is not on a word of the take - a swap renames the "
+                            "act on the word that says the new name")
     for c0, c1 in zip(chapters, chapters[1:]):
         leave = float(c0["entry"]["until"]) + CHAPTER_EXIT_S
         if float(c1["entry"]["at"]) < leave - 1e-9:
@@ -5261,7 +5327,7 @@ def chapters_over(chapters: list[dict], a: float, b: float, leave: bool = True) 
 
 def chapter_reserve(over: list[dict]) -> list[dict]:
     """The pills' boxes a row reserves - handed to every placer with the newsreel's strip (stamps, props, cards)."""
-    return [chapter_box(c["entry"]["text"]) for c in over]
+    return [_chapter_widest_box(c["entry"]) for c in over]
 
 
 def chapter_page_room(world: dict | None, over: list[dict]) -> list[str]:
@@ -5287,7 +5353,9 @@ def chapter_page_room(world: dict | None, over: list[dict]) -> list[str]:
 def timeline_chapters(chapters: list[dict]) -> list[dict]:
     """The timeline's `chapters`: each lifted with the box the engine stands it in."""
     return [{"id": c["entry"].get("id"), "text": c["entry"]["text"], "at": float(c["entry"]["at"]),
-             "until": float(c["entry"]["until"]), "box": chapter_box(c["entry"]["text"])} for c in chapters]
+             "until": float(c["entry"]["until"]), "box": _chapter_widest_box(c["entry"]),
+             **({"swap": [{"at": float(s["at"]), "text": s["text"]} for s in c["entry"]["swap"]]} if c["entry"].get("swap") else {})}
+            for c in chapters]
 
 
 def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:

@@ -23849,9 +23849,16 @@ async function mount(doc) {
                      analytic spring, over LP_BADGE_IN; an 18 px rise, 0.94 -> 1, the travel's squash);
        the hold    - E49's pill idle, at the pill's own phase;
        the leave   - from `until`, stampExit: E50's ease-in cubic over STAMP_ARRIVAL.EXIT_S (a landed mark owes an exit).
-     A pure function of t; a timeline with no chapter mounts nothing and every frame is the frame it was. */
+     A pure function of t; a timeline with no chapter mounts nothing and every frame is the frame it was.
+     P70 T10 (was P69 T61, A44; BOOM 02:26.47-02:27.35 at 29.97 fps) - THE IN-PLACE SWAP: a chapter's `swap: [{at, text}]`
+     renames the act where it stands. On a swap's word the old name ERASES glyph by glyph (the retitle's eraseFactor) as
+     the box closes to a slot - its own height, a circle - over SWAP_CLOSE_S; then the new name WRITES (writeGlyphs) as
+     the box springs open (springPop) to the new name's width over SWAP_OPEN_S. The pill's left edge never moves (it stands
+     in its corner; BOOM's label was centred on its span). Only a chapter WITH a swap is built as glyph names; one without
+     is the pill above, to the byte. */
   const CHAPTER = Object.freeze({ PX: LP_LONGFORM.KEY_PX.phone, H: LP_LONGFORM.KEY_EM.h, PAD: LP_LONGFORM.KEY_EM.pad_r,
-                                  RISE_PX: 18, Z: 55, SEED: 0xC4A9 });
+                                  RISE_PX: 18, Z: 55, SEED: 0xC4A9,
+                                  SWAP_CLOSE_S: 0.43, SWAP_OPEN_S: 0.42 });   /* build_scene_timeline_f.CHAPTER_SWAP_CLOSE_S / _OPEN_S (BOOM, measured) */
   let chLayer = null, chPills = [];
   const chapterMount = (list) => {
     for (const x of stage.querySelectorAll(":scope > #chapters")) x.remove();   /* a re-mount never stacks a second layer */
@@ -23869,13 +23876,50 @@ async function mount(doc) {
         + "background:" + LP_LONGFORM.KEY_FILL + ";color:" + LP_LONGFORM.KEY_INK + ";"
         + "font-family:\"" + LP_LONGFORM.FACE + "\", Inter, Arial, sans-serif;font-weight:500;font-size:" + px.toFixed(3) + "px;"
         + "line-height:1;letter-spacing:0;font-kerning:none;font-variant-ligatures:none;font-feature-settings:\"kern\" 0, \"liga\" 0, \"calt\" 0";
+      chLayer.appendChild(el);
+      if (Array.isArray(c.swap) && c.swap.length) {   /* P70 T10: every name the act wears, as glyphs in one clipped box */
+        el.style.overflow = "hidden";
+        el.__names = [String(c.text || ""), ...c.swap.map((s) => String(s.text || ""))].map((txt, k) => {
+          const nm = lpEl("span", "lp-ink lp-chname", el);
+          nm.style.cssText = "position:absolute;left:" + f(CHAPTER.PAD) + ";top:0;height:100%;display:flex;align-items:center;"
+            + "font-family:inherit;white-space:nowrap;visibility:hidden";
+          const glyphs = lpGlyphs(nm, txt, CHAPTER.SEED + k);
+          for (const g of glyphs) g.style.setProperty("--tilt", "0deg");   /* a set face, not a hand */
+          return { nm, glyphs };
+        });
+        return el;
+      }
       const nm = document.createElement("span");
       nm.className = "lp-chname";
       nm.textContent = String(c.text || "");
       el.appendChild(nm);
-      chLayer.appendChild(el);
       return el;
     });
+  };
+  /* P70 T10: a swapping pill at t - which name shows, how much of it is written, and the box's width */
+  const chapterSwap = (c, el, t) => {
+    const N = el.__names, S = c.swap, pad = CHAPTER.PAD * CHAPTER.PX, slot = CHAPTER.H * CHAPTER.PX;
+    const wOf = (i) => N[i].nm.offsetWidth + 2 * pad;
+    const show = (i, fn) => { N[i].nm.style.visibility = "visible"; N[i].glyphs.forEach(fn); };
+    N.forEach((n) => { n.nm.style.visibility = "hidden"; for (const g of n.glyphs) setW(g, 0); });
+    let k = 0;
+    while (k < S.length && t >= S[k].at) k++;
+    const d = k ? t - S[k - 1].at : Infinity, CL = CHAPTER.SWAP_CLOSE_S, OP = CHAPTER.SWAP_OPEN_S;
+    let w;
+    if (d < CL) {   /* the old name erases as the box closes to the slot */
+      const u = d / CL, n = N[k - 1].glyphs.length;
+      w = wOf(k - 1) + (slot - wOf(k - 1)) * minJerk(u);
+      show(k - 1, (g, j) => setW(g, eraseFactor(n, j, u)));
+    } else if (d < CL + OP) {   /* the new name writes as the box springs open */
+      const u = (d - CL) / OP, n = N[k].glyphs.length;
+      w = slot + (wOf(k) - slot) * springPop(u);
+      N[k].nm.style.visibility = "visible";
+      writeGlyphs(N[k].glyphs, u * OP, OP * n / (n + 0.6));   /* the last glyph whole as the box opens */
+    } else {
+      w = wOf(k);
+      show(k, (g) => setW(g, 1));
+    }
+    el.style.width = w.toFixed(2) + "px";
   };
   const paintChapters = (t) => {
     const list = TL.chapters;
@@ -23888,6 +23932,7 @@ async function mount(doc) {
       const sq = kin("area_squash") && kin("analytic_spring") && ub > 0 && ub < 1
         ? " matrix(" + squashMatrix(Math.PI / 2, springSquash(ub, POP, CHAPTER.RISE_PX, LP_BADGE_IN)).map((v) => v.toFixed(4)).join(",") + ",0,0)" : "";
       el.style.visibility = "visible";
+      if (el.__names) chapterSwap(c, el, t);   /* P70 T10 */
       el.style.opacity = (Math.min(1, e * 1.4) * (1 - gone)).toFixed(3);
       el.style.transform = "translateY(" + (CHAPTER.RISE_PX * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")" + sq
         + idleCssFor("pill", undefined, t, CHAPTER.SEED + i, 60 + i);
