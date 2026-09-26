@@ -11092,7 +11092,8 @@ async function mount(doc) {
     lpMark(st, "title", "title", title, {}); lpMark(st, "sub", "sub", subEl, {}); lpMark(st, "src", "src", src, {});   /* P48 T1: the page's own ink is a mark too - a retitle and a recast both move it */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo, share: buildLedgerShare,
-                       tiers: buildLedgerTiers, treemap: buildLedgerTreemap, panels: buildLedgerPanels };   /* P50 T9 / T6; P69 T8b */
+                       tiers: buildLedgerTiers, treemap: buildLedgerTreemap, panels: buildLedgerPanels,   /* P50 T9 / T6; P69 T8b */
+                       timeline: buildLedgerTimeline };   /* P73 T2: the dated event timeline */
     if (st.kind === "panels" && !PORTRAIT && pg.full_stage && !pg.chart_box && !pg.board && pg.punch !== false)
       st.panelFloor = lfBox ? lfBox.floor : LP_LONGFORM.CAPTION_TOP;   /* P69 T8b: the caption strip's top, or the long form's first ink under the chart */
     if (Array.isArray(pg.members)) st.memberSp = pageSpecies(scene, "member");   /* P69 T45: the tiles a row lands on their words */
@@ -14273,6 +14274,7 @@ async function mount(doc) {
     SHARE_PEEL_OUT: 0.17,   /* [DERIVED] how far the piece slides from the pie, as a share of the radius: clear of its neighbours, still obviously OF the circle */
     TIERS_BUILD: 4.5,       /* [DERIVED, P50 T9] N bands in turn: the combo's envelope, because it is the same amount of ink - a page that wants a band per WORD puts a build_to on each tier instead */
     TREEMAP_BUILD: 3.6,     /* [DERIVED, P50 T6] the mosaic lands in layout order over this; longer reads as a loading screen, shorter and the eye cannot follow the biggest cells arriving first */
+    TIMELINE_BUILD: 3.6,    /* [DERIVED, P73 T2] the axis over its first LPTL.AXIS_END, the events in turn over the rest - the treemap's envelope; a row that lands them on its words keeps the axis's share of it (build_scene_timeline_f.PAGE_INTRINSIC_BUILDERS mirrors it) */
   };
   const LP_PAL = LP_INK;   /* the field's own tokens - E67's electric set, declared once above buildLedgerLine */
   const pow2out = (x) => 1 - (1 - x) * (1 - x);
@@ -16137,6 +16139,250 @@ async function mount(doc) {
       if (cc.val) cc.val.setAttribute("opacity", lk);
     });
     if (TM.legend) TM.legend.setAttribute("opacity", clamp01((c - 0.85) / 0.15).toFixed(3));
+  };
+  /* ---- THE DATED EVENT TIMELINE (P73 T2; the AMD RFSoC episode's beat 5; E28 (2); E99 s130) ----
+     Dated EVENTS on one date axis with no series. The layout is the COMPILER's (ledger_page.timeline_layout, both
+     aspects, at build time): the stretches between the cuts, each stretch's ticks and the rule it writes ("1 tick =
+     1 month"), the cut's `//` and its length, today, and every item's pin, block and leader - in the plot's own units,
+     fitted here isotropically (the treemap's rule: one ratio, never a re-layout). 16:9 lays the axis across, the
+     blocks in lanes above it and below its tick band; 9:16 stands the axis UPRIGHT with the blocks in a column beside it.
+     THE WORD: a `build_to` naming event i (`target: {kind: datum, index: i}`) lands it - and every earlier event not
+     yet landed, LPTL.STAGGER_S apart - and LIGHTS it; the newest thing named is the lit one, the one before hands its
+     light over (the one glow system, lpFillGlow). A later build_to naming a landed event lights it again - or, on an
+     event whose date MOVED, strikes the date and runs the axis to the new one, which lands and takes the light. With
+     no build_to on the row the items land in turn over the page's own build. A pure function of (c, t). */
+  const LPTL = Object.freeze({
+    MARGIN: { "16:9": [24, 8, 24, 8], "9:16": [0, 12, 0, 12] },   /* ledger_page.TIMELINE_GEOM[aspect].margin - one law */
+    AXIS_END: 0.4,     /* the axis draws over the build's first 0.4 (the ticks, the rules, the cut and today as the pen passes) */
+    LAND_S: 0.45,      /* [DERIVED] an item's landing: the pin pops, the leader draws, the words write - a badge's spring window */
+    STAGGER_S: 0.12,   /* events one word lands together (it names the last of them) arrive this far apart, left to right */
+    LIGHT_S: 0.3,      /* the light's hand-over, both ways at once - E67's lit-vs-muted gap on one clock */
+    MOVE_AFTER: 1.0,   /* a moved date no second word names strikes this long after its event lands */
+    STRIKE_S: 0.35,    /* the strike across the old date */
+    RUN_S: 0.6,        /* the axis lights from the old date to the new one; the new item lands at RUN_AT of it */
+    RUN_AT: 0.6,
+    PIN_R: { "16:9": 6.5, "9:16": 9 },   /* the pin's radius, in the plot's own units */
+    TICK: { "16:9": 7, "9:16": 9 },      /* a tick's half length across the axis */
+    REST_A: 0.82,      /* a landed, unlit item's words */
+    RULE_INK: "#aeb6be",   /* the rules' and the cut's words - they state the axis, they are not the story (the treemap legend's grey) */
+  });
+  const lptlNamed = (sp) => sp && sp.target && sp.target.kind === "datum" && Number.isInteger(sp.target.index) ? sp.target.index : null;
+  /* each item's landing, strike and naming times: on the row's words (`build_to`), or over the page's own build */
+  const lptlClock = (TL, scene, buildDur) => {
+    const items = TL.items, n = TL.nEvents, caps = pageSpecies(scene, "build_to").filter((sp) => lptlNamed(sp) != null);
+    const land = {}, names = {}, strike = {};
+    const key = (e, kind) => e + ":" + kind;
+    const moved = (e) => items.some((it) => it.event === e && it.kind === "moved_to");
+    if (caps.length) {
+      let next = 0;
+      for (const sp of caps) {
+        const idx = Math.min(n - 1, lptlNamed(sp)), at = +sp.at;
+        if (idx >= next) {
+          for (let e = next; e <= idx; e++) land[key(e, "event")] = at + (e - next) * LPTL.STAGGER_S;
+          (names[key(idx, "event")] = names[key(idx, "event")] || []).push(land[key(idx, "event")]);
+          next = idx + 1;
+        } else if (moved(idx) && strike[idx] == null) strike[idx] = at;
+        else (names[key(idx, "event")] = names[key(idx, "event")] || []).push(at);
+      }
+    } else {
+      const slots = items.length, a = LPTL.AXIS_END * buildDur, span = Math.max(0.1, buildDur - LPTL.LAND_S - a);
+      items.forEach((it, j) => {
+        const at = a + span * j / Math.max(1, slots - 1);
+        if (it.kind === "moved_to") strike[it.event] = at - LPTL.RUN_S * LPTL.RUN_AT;
+        else { land[key(it.event, "event")] = at; names[key(it.event, "event")] = [at]; }
+      });
+    }
+    for (const e of Object.keys(strike).map(Number)) {   /* the new date lands as the run reaches it, and is named there */
+      const at = strike[e] + LPTL.RUN_S * LPTL.RUN_AT;
+      land[key(e, "moved_to")] = at; names[key(e, "moved_to")] = [at];
+    }
+    for (const it of items) if (it.kind === "event" && it.moved && strike[it.event] == null && land[key(it.event, "event")] != null)
+      { strike[it.event] = land[key(it.event, "event")] + LPTL.MOVE_AFTER;
+        const at = strike[it.event] + LPTL.RUN_S * LPTL.RUN_AT; land[key(it.event, "moved_to")] = at; names[key(it.event, "moved_to")] = [at]; }
+    return { land, names, strike, key };
+  };
+  /* who is lit at `now`, and each item's light level: the newest naming wins; the one it took the light from fades */
+  const lptlLight = (TL, clk, now) => {
+    const last = TL.items.map((it) => {
+      const ns = (clk.names[clk.key(it.event, it.kind)] || []).filter((x) => x <= now);
+      return ns.length ? Math.max(...ns) : -Infinity;
+    });
+    let lit = -1;
+    last.forEach((x, i) => { if (x > -Infinity && (lit < 0 || x > last[lit])) lit = i; });
+    const lev = TL.items.map(() => 0);
+    if (lit < 0) return lev;
+    const up = clamp01((now - last[lit]) / LPTL.LIGHT_S);
+    lev[lit] = up;
+    let prev = -1, prevAt = -Infinity;   /* the item named most recently BEFORE the lit one took it */
+    TL.items.forEach((it, i) => {
+      if (i === lit) return;
+      const ns = (clk.names[clk.key(it.event, it.kind)] || []).filter((x) => x <= last[lit]);
+      const x = ns.length ? Math.max(...ns) : -Infinity;
+      if (x > prevAt) { prevAt = x; prev = i; }
+    });
+    if (prev >= 0) lev[prev] = 1 - up;
+    return lev;
+  };
+  const buildLedgerTimeline = (st, pg) => {
+    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait, asp = P ? "9:16" : "16:9";
+    const lay = (pg.layout || {})[asp] || (pg.layout || {})["16:9"];
+    if (!lay) return;
+    const M = LPTL.MARGIN[asp];
+    const avail = { x: M[0], y: M[1], w: G.W - M[0] - M[2], h: G.H - M[1] - M[3] };
+    const want = lay.plot.w / Math.max(1, lay.plot.h);
+    let pw = avail.w, ph = pw / want;
+    if (ph > avail.h) { ph = avail.h; pw = ph * want; }
+    const ox = avail.x + (avail.w - pw) / 2, oy = avail.y + (avail.h - ph) / 2, sc = pw / Math.max(1, lay.plot.w);
+    const X = (v) => ox + v * sc, Y = (v) => oy + v * sc, F = lay.fonts, lh = lay.line || 1.2;
+    const V = !!lay.vertical, ax = lay.axis;
+    /* a point along the axis at position p, and a point off it (d: across) */
+    const at = (p, d = 0) => (V ? [X(ax + d), Y(p)] : [X(p), Y(ax + d)]);
+    const g0 = lpEl("g", "lp-timeline", st.chart);
+    const txt = (x, y, anchor, text, size, extra) => lpText(g0, "tl", x, y, anchor, text,
+      Object.assign({ opacity: 0, style: "font-size:" + (size * sc).toFixed(1) + "px" + ((extra && extra.css) || "") }, (extra && extra.at) || {}));
+    const axis = lay.stretches.map((s) => {
+      const [x1, y1] = at(s.a), [x2, y2] = at(s.b), len = Math.hypot(x2 - x1, y2 - y1);
+      return Object.assign(lpEl("line", "ax", g0, { x1: x1.toFixed(1), y1: y1.toFixed(1), x2: x2.toFixed(1), y2: y2.toFixed(1),
+        "stroke-dasharray": len.toFixed(1), "stroke-dashoffset": len.toFixed(1) }), { __len: len, __a: s.a, __b: s.b });
+    });
+    const T = LPTL.TICK[asp];
+    const tickEls = [], tickMarks = [];
+    for (const tk of lay.ticks) {
+      const [a1, b1] = at(tk.p, -T), [a2, b2] = at(tk.p, T);
+      tickMarks.push(Object.assign(lpEl("line", "ax", g0, { x1: a1.toFixed(1), y1: b1.toFixed(1), x2: a2.toFixed(1), y2: b2.toFixed(1), opacity: 0 }), { __p: tk.p }));
+      if (tk.hidden) continue;
+      const el = V ? txt(X(ax - 14), Y(tk.p) + F.tick * 0.35 * sc, "end", tk.text, F.tick)
+                   : txt(X(tk.p), Y(ax + 8) + F.tick * 0.85 * sc, "middle", tk.text, F.tick);
+      el.__p = tk.p; tickEls.push(el);
+    }
+    const yearEls = (lay.years || []).map((yr) => Object.assign(txt(X(yr.p), Y(ax + 8 + F.tick * 1.1) + F.year * 0.85 * sc, "middle", yr.text, F.year,
+      { css: ";font-weight:600" }), { __p: yr.p }));
+    const muted = ";font-style:italic;fill:" + LPTL.RULE_INK;
+    const ruleEls = lay.rules.map((r) => Object.assign(V
+      ? txt(X(ax - 14), Y(r.p), "end", r.text, F.rule, { css: muted })
+      : txt(X(r.p), Y(ax + 8 + F.tick * 1.1 + F.year * 1.1) + F.rule * 0.9 * sc, "middle", r.text, F.rule, { css: muted }), { __p: r.p }));
+    const slashes = [], cutEls = [];
+    for (const c of lay.cuts) {
+      for (const d of [-5, 5]) {
+        const [cx, cy] = at(c.p + d), k = 9 * sc, e = 4 * sc;
+        slashes.push(Object.assign(lpEl("line", "ax", g0, V
+          ? { x1: (cx - k).toFixed(1), y1: (cy + e).toFixed(1), x2: (cx + k).toFixed(1), y2: (cy - e).toFixed(1), opacity: 0 }
+          : { x1: (cx - e).toFixed(1), y1: (cy + k).toFixed(1), x2: (cx + e).toFixed(1), y2: (cy - k).toFixed(1), opacity: 0 }), { __p: c.p }));
+      }
+      cutEls.push(Object.assign(V ? txt(X(ax - 14), Y(c.p) + F.rule * 0.3 * sc, "end", c.text, F.rule, { css: muted })
+                                  : txt(X(c.p), Y(ax + 8) + F.rule * 0.9 * sc, "middle", c.text, F.rule, { css: muted }), { __p: c.p }));
+    }
+    const tb = lay.today.box, tg = lpEl("g", "lp-tl-today", g0, { opacity: 0 });
+    lpEl("rect", "", tg, { x: X(tb[0]).toFixed(1), y: Y(tb[1]).toFixed(1), width: ((tb[2] - tb[0]) * sc).toFixed(1),
+      height: ((tb[3] - tb[1]) * sc).toFixed(1), rx: (6 * sc).toFixed(1), fill: lpInkA(LP_INK.amber, 0.16), stroke: LP_INK.amber, "stroke-width": (1.5 * sc).toFixed(2) });
+    const [ta1, tb1] = at(lay.today.p, -T * 1.6), [ta2, tb2] = at(lay.today.p, T * 1.6);
+    lpEl("line", "", tg, { x1: ta1.toFixed(1), y1: tb1.toFixed(1), x2: ta2.toFixed(1), y2: tb2.toFixed(1), stroke: LP_INK.amber, "stroke-width": (2.5 * sc).toFixed(2) });
+    const todayText = lpText(tg, "tl", X((tb[0] + tb[2]) / 2), Y((tb[1] + tb[3]) / 2) + F.today * 0.36 * sc, "middle", lay.today.text,
+      { style: "font-size:" + (F.today * sc).toFixed(1) + "px;font-weight:700;fill:" + LP_INK.amber });
+    const R = LPTL.PIN_R[asp] * sc, nEvents = lay.items.filter((it) => it.kind === "event").length;
+    const items = lay.items.map((it) => {
+      const g = lpEl("g", "lp-tl-item", g0, { opacity: 0 });
+      const [px, py] = [X(it.pin[0]), Y(it.pin[1])], L = it.leader;
+      const leader = lpEl("line", "", g, { x1: X(L[0]).toFixed(1), y1: Y(L[1]).toFixed(1), x2: X(L[2]).toFixed(1), y2: Y(L[3]).toFixed(1),
+        stroke: "#8a94a0", "stroke-width": (1.4 * sc).toFixed(2) });
+      const llen = Math.hypot((L[2] - L[0]) * sc, (L[3] - L[1]) * sc);
+      leader.setAttribute("stroke-dasharray", llen.toFixed(1));
+      const hollow = it.tier !== "CONFIRMED";
+      const pin = lpEl("circle", "", g, { cx: px.toFixed(1), cy: py.toFixed(1), r: R.toFixed(2),
+        fill: hollow ? "#1b2128" : LP_INK.deemph, stroke: hollow ? LP_INK.deemph : "none", "stroke-width": (2 * sc).toFixed(2) });
+      const b = it.box, words = lpEl("g", "", g, { opacity: 0 });
+      let date, first;
+      if (V) {   /* the date at the head of the first line, the label after it */
+        first = lpText(words, "tl", X(b[0]), Y(b[1]) + F.label * 0.95 * sc, "start", "", {});
+        date = lpEl("tspan", "", first, { style: "font-size:" + (F.date * sc).toFixed(1) + "px;font-weight:700" });
+        date.textContent = it.date_text;
+        if (it.tier_word) { const tw = lpEl("tspan", "", first, { style: "font-size:" + (F.date * 0.8 * sc).toFixed(1) + "px;font-style:italic;fill:" + LP_INK.amber }); tw.textContent = " · " + it.tier_word; }
+        if (it.lines[0]) { const l0 = lpEl("tspan", "", first, { style: "font-size:" + (F.label * sc).toFixed(1) + "px" }); l0.textContent = "  " + it.lines[0]; }
+        it.lines.slice(1).forEach((s, j) => lpText(words, "tl", X(b[0]), Y(b[1]) + (F.label * 0.95 + F.label * lh * (j + 1)) * sc, "start", s,
+          { style: "font-size:" + (F.label * sc).toFixed(1) + "px" }));
+      } else {   /* the date over the label */
+        first = lpText(words, "tl", X(b[0]), Y(b[1]) + F.date * 0.9 * sc, "start", "", {});
+        date = lpEl("tspan", "", first, { style: "font-size:" + (F.date * sc).toFixed(1) + "px;font-weight:700" });
+        date.textContent = it.date_text;
+        if (it.tier_word) { const tw = lpEl("tspan", "", first, { style: "font-size:" + (F.date * 0.85 * sc).toFixed(1) + "px;font-style:italic;fill:" + LP_INK.amber }); tw.textContent = " · " + it.tier_word; }
+        it.lines.forEach((s, j) => lpText(words, "tl", X(b[0]), Y(b[1]) + (F.date * lh + F.label * 0.9 + F.label * lh * j) * sc, "start", s,
+          { style: "font-size:" + (F.label * sc).toFixed(1) + "px" }));
+      }
+      let strike = null;
+      if (it.moved) {   /* the struck date: a rule across the date as written, drawn left to right */
+        const sy = V ? Y(b[1]) + F.label * 0.95 * sc - F.date * 0.33 * sc : Y(b[1]) + F.date * 0.9 * sc - F.date * 0.33 * sc;
+        strike = lpEl("line", "", g, { x1: X(b[0]).toFixed(1), y1: sy.toFixed(1), x2: (X(b[0]) + it.date_w * sc).toFixed(1), y2: sy.toFixed(1),
+          stroke: LP_INK.crimson, "stroke-width": (2.6 * sc).toFixed(2), opacity: 0, "stroke-dasharray": (it.date_w * sc).toFixed(1) });
+      }
+      return { event: it.event, kind: it.kind, moved: !!it.moved, g, pin, leader, llen, words, date, strike, lit: 0,
+               glowBox: { x: px - R, y: py - R, w: 2 * R, h: 2 * R }, p: V ? it.pin[1] : it.pin[0] };
+    });
+    /* the run from a moved date to the new one: along the axis itself, in the lit ink, so it crosses no word */
+    const runs = {};
+    for (const it of items) if (it.kind === "moved_to") {
+      const from = items.find((o) => o.event === it.event && o.kind === "event");
+      const [x1, y1] = at(from.p), [x2, y2] = at(it.p), len = Math.hypot(x2 - x1, y2 - y1);
+      runs[it.event] = Object.assign(lpEl("line", "", g0, { x1: x1.toFixed(1), y1: y1.toFixed(1), x2: x2.toFixed(1), y2: y2.toFixed(1),
+        stroke: LP_INK.teal, "stroke-width": (3.5 * sc).toFixed(2), "stroke-linecap": "round", opacity: 0, "stroke-dasharray": len.toFixed(1),
+        "stroke-dashoffset": len.toFixed(1) }), { __len: len });
+    }
+    for (const it of items) g0.appendChild(it.g);   /* the pins over the run */
+    st.timeline = { vertical: V, axis, tickEls, tickMarks, yearEls, ruleEls, slashes, cutEls, today: { g: tg, text: todayText, p: lay.today.p },
+                    items, runs, nEvents, len: V ? lay.plot.h : lay.plot.w };
+    st.buildDur = LPX.TIMELINE_BUILD; st.paint = paintLedgerTimeline;
+    st.plot = { L: ox, R: G.W - (ox + pw), T: oy, B: oy + ph, W: G.W, x0: 0, x1: 1, y0: 0, y1: 1, log: false };
+  };
+  const paintLedgerTimeline = (st, c, _t3, scene, t) => {
+    const TL = st.timeline; if (!TL) return;
+    const pen = clamp01(c / LPTL.AXIS_END), live = clamp01(c / LPTL.AXIS_END);
+    const reach = pen * TL.len;   /* the pen's position along the axis, in the plot's units */
+    for (const a of TL.axis) {
+      const f = clamp01((reach - a.__a) / Math.max(1e-6, a.__b - a.__a));
+      a.setAttribute("stroke-dashoffset", (a.__len * (1 - f)).toFixed(1));
+    }
+    const past = (p) => clamp01((reach - p) / (0.04 * TL.len) + 0.001);
+    for (const e of TL.tickMarks) e.setAttribute("opacity", past(e.__p).toFixed(3));
+    for (const e of TL.tickEls) e.setAttribute("opacity", past(e.__p).toFixed(3));
+    for (const e of TL.yearEls) e.setAttribute("opacity", past(e.__p).toFixed(3));
+    for (const e of TL.slashes) e.setAttribute("opacity", past(e.__p).toFixed(3));
+    for (const e of TL.cutEls) e.setAttribute("opacity", past(e.__p).toFixed(3));
+    const ruleK = clamp01((c - LPTL.AXIS_END) / 0.1);
+    for (const e of TL.ruleEls) e.setAttribute("opacity", ruleK.toFixed(3));
+    TL.today.g.setAttribute("opacity", past(TL.today.p).toFixed(3));
+    /* the items: on the row's words (absolute t), or over the page's own build (c's seconds) */
+    const caps = pageSpecies(scene, "build_to").some((sp) => lptlNamed(sp) != null);
+    const now = caps ? t : c * (st.buildDur || LPTL.AXIS_END);
+    const clk = lptlClock(TL, scene, st.buildDur || 1), lev = lptlLight(TL, clk, now);
+    TL.items.forEach((it, i) => {
+      const la = clk.land[clk.key(it.event, it.kind)], k = la == null ? 0 : clamp01((now - la) / LPTL.LAND_S);
+      it.g.setAttribute("opacity", (clamp01(k / 0.3) * live).toFixed(3));
+      it.pin.setAttribute("transform", "translate(" + (+it.pin.getAttribute("cx")).toFixed(1) + " " + (+it.pin.getAttribute("cy")).toFixed(1) + ") scale("
+        + springPop(k).toFixed(4) + ") translate(" + (-it.pin.getAttribute("cx")).toFixed(1) + " " + (-it.pin.getAttribute("cy")).toFixed(1) + ")");
+      it.leader.setAttribute("stroke-dashoffset", (it.llen * (1 - clamp01((k - 0.1) / 0.5))).toFixed(1));
+      const lit = lev[i];
+      it.lit = +lit.toFixed(3);
+      it.words.setAttribute("opacity", (clamp01((k - 0.4) / 0.6) * (LPTL.REST_A + (1 - LPTL.REST_A) * lit)).toFixed(3));
+      it.date.style.fill = lit > 0.5 ? LP_INK.teal : "";
+      if (it.pin.getAttribute("stroke") === "none") it.pin.setAttribute("fill", lit > 0.5 ? LP_INK.teal : LP_INK.deemph);
+      else it.pin.setAttribute("stroke", lit > 0.5 ? LP_INK.teal : LP_INK.deemph);
+      lpFillGlow(st, it.pin, LP_INK.teal, it.glowBox, lit);   /* E99 s130: the lit mark glows - the one glow system */
+      if (it.strike) {
+        const s0 = clk.strike[it.event], u = s0 == null ? 0 : clamp01((now - s0) / LPTL.STRIKE_S);
+        /* the rule runs across the date AS SET - its measured length (the layout's estimate until the type reports in) */
+        const dw = it.date.getComputedTextLength ? it.date.getComputedTextLength() : 0;
+        const sw = dw > 0 ? dw : +it.strike.getAttribute("stroke-dasharray");
+        it.strike.setAttribute("x2", (+it.strike.getAttribute("x1") + sw).toFixed(1));
+        it.strike.setAttribute("stroke-dasharray", sw.toFixed(1));
+        it.strike.setAttribute("opacity", (u > 0 ? 1 : 0).toString());
+        it.strike.setAttribute("stroke-dashoffset", (sw * (1 - u)).toFixed(1));
+        const run = TL.runs[it.event];
+        if (run) {
+          const r = s0 == null ? 0 : clamp01((now - s0 - LPTL.STRIKE_S * 0.5) / LPTL.RUN_S);
+          run.setAttribute("opacity", (r > 0 ? 0.9 * live : 0).toFixed(3));
+          run.setAttribute("stroke-dashoffset", (run.__len * (1 - minJerk(r))).toFixed(1));
+        }
+      }
+    });
   };
   /* the piece leaves on its word (the `peel` species): it slides out along its own bisector, goes blood red, and its
      figure writes beside it. u is a pure function of t, so a seek lands the identical frame. */
@@ -19623,7 +19869,7 @@ async function mount(doc) {
          an attribute, so the fade-in never showed (the rule stood at .9 from the page's first frame). Whole (k 1) the style is
          handed back ("") and the template's .9 stands, exactly as before; the attribute keeps its value for its readers. */
       for (const hr of cs.hlines || []) { const k = clamp01(c / 0.25); hr.line.setAttribute("opacity", (0.9 * k).toFixed(3)); { const v = k < 1 ? (0.9 * k).toFixed(3) : ""; if (hr.line.style.opacity !== v) hr.line.style.opacity = v; } if (hr.lab) hr.lab.setAttribute("opacity", clamp01((c - 0.25) / 0.2).toFixed(2)); }
-      if (cs.paint) cs.paint(cs, c, t3);   /* the builder's own build step (race / decline / combo / share) */
+      if (cs.paint) cs.paint(cs, c, t3, scene, t);   /* the builder's own build step (race / decline / combo / share); P73 T2: the timeline's events land on the row's words, so it reads the scene and t (every other painter ignores them) */
       if (cs.share) {   /* P48 T4: the piece the sentence is about leaves the pie on its word */
         let pu = 0;
         for (const sp of pageSpecies(scene, "peel")) pu = Math.max(pu, (t - sp.at) / Math.max(0.001, sp.dur || 1));

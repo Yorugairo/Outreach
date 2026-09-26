@@ -1234,6 +1234,88 @@
         "today": true,
         "why": null
       }
+    },
+    {
+      "id": "page_builder:timeline",
+      "axis": "page_builder",
+      "token": "timeline",
+      "title": "The dated event timeline ledger page",
+      "aliases": [],
+      "does": "Dated events on one date axis, no series: an empty stretch CUT and drawn `//` with its length, each stretch writing its tick (E28), today marked; events land on their words, the newest lit; a moved date struck.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "ledger plate id  ledger:<series-id>:timeline[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]; each word a `build_to` with target {kind: datum, index: <event>}",
+        "example": "'ledger:amd-rfsoc-timeline:timeline'",
+        "example_source": null,
+        "check": "chart"
+      },
+      "phases": [
+        {
+          "name": "axis draws",
+          "does": "the axis draws stretch by stretch; ticks, the cut's // and its length, and today appear as the pen passes; each stretch's rule writes",
+          "trigger": "the build's first AXIS_END (TIMELINE_BUILD)",
+          "dials": {
+            "TIMELINE_BUILD": "3.6",
+            "AXIS_END": "0.4"
+          }
+        },
+        {
+          "name": "event lands",
+          "does": "the pin pops, its leader draws, its date and label write; events one word lands arrive in turn",
+          "trigger": "a build_to naming the event (or, with none on the row, in turn over the build)",
+          "dials": {
+            "LAND_S": "0.45",
+            "STAGGER_S": "0.12"
+          }
+        },
+        {
+          "name": "light",
+          "does": "the newest named event glows and takes the lit ink; the one before hands its light over",
+          "trigger": "the naming word",
+          "dials": {
+            "LIGHT_S": "0.3"
+          }
+        },
+        {
+          "name": "moved date",
+          "does": "the old date is struck, the axis lights from it to the new date, and the new one lands and takes the light",
+          "trigger": "the second build_to naming the moved event (else MOVE_AFTER after it lands)",
+          "dials": {
+            "MOVE_AFTER": "1.0",
+            "STRIKE_S": "0.35",
+            "RUN_S": "0.6"
+          }
+        }
+      ],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintLedgerTimeline",
+        "also": [
+          "buildLedgerTimeline",
+          "lptlClock",
+          "lptlLight"
+        ]
+      },
+      "doctrine": [
+        "E28",
+        "E99 s130",
+        "E99 s106"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "event-timeline",
+        "test": "content/video_engine/tests/test_event_timeline.py",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
     }
   ]
 }

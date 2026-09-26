@@ -73,7 +73,7 @@ EXIT_INVALID = 2
 SCHEMA_VERSION = "ledger_page.v1"
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 YEAR_RANGE = (1900, 2100)   # a decimal x outside this is a number, not a date
-VARIANTS = ("line", "bars", "race", "decline", "progress", "share", "object", "tiers", "treemap")
+VARIANTS = ("line", "bars", "race", "decline", "progress", "share", "object", "tiers", "treemap", "timeline")   # P73 T2: + the dated event timeline
 CHART_VARIANTS = ("line", "bars", "race", "decline", "progress", "share")
 # `tiers` (P50 T9, R26-24; Bravos shots 35-36): N SMALL MULTIPLES on one page - N series, each in its
 # own band with its own y-scale and its own honest zero (E53 s4), sharing ONE x. Two metrics whose
@@ -901,7 +901,7 @@ def pick_builder(series: dict, variant: str) -> str:
         return "object"
     if variant == "share":
         return "share"
-    if variant in ("tiers", "treemap"):   # P50 T9 / T6: the file's shape is the variant's own - there is nothing to infer
+    if variant in ("tiers", "treemap", TIMELINE):   # P50 T9 / T6; P73 T2: the file's shape is the variant's own - nothing to infer
         return variant
     if variant == "line" and isinstance(series.get("panels"), list):   # P69 T8b: a PANELS object is a page of 2-4 plots
         return PANELS
@@ -2535,6 +2535,8 @@ def validate(series: dict, variant: str) -> list[str]:
         return errors + _validate_panels(series)
     if variant == "treemap":
         return errors + _validate_treemap(series)
+    if variant == TIMELINE:   # P73 T2: dated events on one axis, no values
+        return errors + _validate_timeline(series)
     has_race = any(r["values"] for r in race_rows(series))
     if variant != "share" and "shares" in series and not (_bars(series) or dense_series(series)):
         return errors + [UNCHARTABLE["shares"]]
@@ -3843,6 +3845,615 @@ def _treemap_block(series: dict) -> dict:
             **({"total_string": value_string(series["total"])} if series.get("total") is not None else {})}
 
 
+# ---- P73 T2: THE DATED EVENT TIMELINE PAGE ----------------------------------------------------------------------------
+# The AMD RFSoC episode's gap #2 (CAPABILITY-MAP "GAPS"): dated EVENTS on one real date axis with no series - the rule,
+# the chip, the campaign, the post, the article, the ship date that moved. The agenda is ordered but undated, the decade
+# ruler lands on decades only, a line page's `marks` need a sourced series under them and the broken axis is a line
+# page's. `ledger:<id>:timeline` is its own VARIANT and BUILDER: the object carries `events` (3-10, each a date, a short
+# label, an optional research tier and an optional `moved_to`), `today`, and optionally `cuts`.
+#   THE AXIS STATES ITS RULE (E28 (2): "Dates with uneven gaps are noise until the page says which dates and why"). A gap
+# that dwarfs the rest is CUT - drawn `//` with its length written under it - and never hidden; each stretch between cuts
+# is linear on its own tick unit and WRITES it ("1 tick = 1 month"), so a stretch drawn finer than another says so. The
+# author may name the cuts (`cuts: [[from, to]]`) or none (`cuts: []`: one linear axis); a cut over a dated thing is an
+# untruth and is refused. The layout is decided HERE at build time for both aspects, as the treemap's is (E58: nothing
+# is laid out per frame): 16:9 is a horizontal axis with the labels in lanes above it on leaders; 9:16 is a VERTICAL axis
+# (dates run down) with the labels in a column beside it - a portrait layout, not a squeezed one.
+#   ON THE WORD: `build_to` names an EVENT on this page (`target: {kind: datum, index: i}` - as a share page's datum is a
+# slice): it lands on its word, and the newest thing named is LIT (the one glow system, `lpFillGlow`, E99 s130). A row
+# with no build_to lands the events in turn on the page's own build. An event with `moved_to` strikes its date and
+# writes the new one on the SECOND build_to naming it (or TL.MOVE_AFTER s after it lands).
+TIMELINE = "timeline"
+TIMELINE_EVENTS = (3, 10)            # under 3 a timeline is a span or a ruler; past 10 no label reads at 9:16 (the operator's 8-10)
+TIMELINE_EVENT_FIELDS = ("date", "label", "tier", "moved_to", "src")
+TIMELINE_MOVED_FIELDS = ("date", "label", "tier", "src")
+TIMELINE_TIERS = ("CONFIRMED", "PLAUSIBLE", "UNSOURCED")   # the research gate's tiers a page may carry; REJECTED never
+TIMELINE_TIER_WORDS = {"PLAUSIBLE": "reported", "UNSOURCED": "unsourced"}   # what the date line writes (CONFIRMED: nothing)
+TIMELINE_LABEL_MAX = 44
+TIMELINE_MOVED_LABEL = "moved to"
+TIMELINE_DATA_KEYS = SCHEMATIC_DATA_KEYS + (SCHEMATIC_KEY, "axes", "form", "overflow")
+TIMELINE_RULING = "E28 (2)"
+TIMELINE_DATE_RE = re.compile(r"^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$")
+TIMELINE_CUT_SHARE = 0.35            # auto-cut a gap this share of the whole span ...
+TIMELINE_CUT_RATIO = 3.0             # ... that is also this many times the next widest gap (a sparse run is not a cut)
+TIMELINE_PAD = (0.06, 0.12)          # a stretch's air at each end: this share of its span, at least this many years
+TIMELINE_STRETCH_MIN = 0.22          # no stretch under this share of the axis (a lone event still has room for its tick)
+# THE TICK UNITS, finest first, in months: a stretch takes the finest whose ticks stand TL_TICK_GAP apart
+TIMELINE_UNITS = ((1, "1 tick = 1 month"), (3, "1 tick = 3 months"), (12, "1 tick = 1 year"),
+                  (24, "1 tick = 2 years"), (60, "1 tick = 5 years"), (120, "1 tick = 10 years"))
+# the geometry, per aspect, in the PLOT's own units: 16:9 the chart's 1000x560 viewBox, 9:16 stage px (the engine's
+# LPTL mirrors every number here - one law)
+TIMELINE_GEOM = {
+    "16:9": {"margin": (24, 8, 24, 8), "font": {"date": 18, "label": 20, "tick": 20, "year": 18, "rule": 16, "today": 17},
+             "adv": 0.58, "line": 1.2, "wrap": 250, "tick_gap": 44, "lanes": (3, 2), "lane_gap": 10, "axis_foot": 84,
+             "cut": 64, "inset": 4, "gap": 12, "clear": 6, "search": 60000},
+    "9:16": {"margin": (0, 12, 0, 12), "font": {"date": 30, "label": 32, "tick": 28, "year": 28, "rule": 22, "today": 24},
+             "adv": 0.56, "line": 1.2, "axis_x": 190, "col_gap": 36, "tick_gap": 34, "cut": 64, "rule_h": 30, "gap": 10},
+}
+MONTH_ABBR = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+
+def timeline_date(value: Any) -> tuple[int, int | None, int | None] | None:
+    """(year, month | None, day | None) for 'YYYY', 'YYYY-MM' or 'YYYY-MM-DD'; None when it is not a real date. Pure."""
+    m = TIMELINE_DATE_RE.match(str(value)) if isinstance(value, str) else None
+    if not m:
+        return None
+    y, mo, d = int(m.group(1)), (int(m.group(2)) if m.group(2) else None), (int(m.group(3)) if m.group(3) else None)
+    if not YEAR_RANGE[0] <= y <= YEAR_RANGE[1] or (mo is not None and not 1 <= mo <= 12):
+        return None
+    if d is not None:
+        leap = y % 4 == 0 and (y % 100 != 0 or y % 400 == 0)
+        dim = (31, 29 if leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)[mo - 1]
+        if not 1 <= d <= dim:
+            return None
+    return y, mo, d
+
+
+def timeline_decimal(value: Any) -> float:
+    """The date as a decimal year at the MIDDLE of what it states (a month at its middle, a year at July): a date is
+    drawn where it is, never earlier than it could be. Pure; the date must be valid."""
+    y, mo, d = timeline_date(value)
+    if mo is None:
+        return y + 0.5
+    if d is None:
+        return y + (mo - 0.5) / 12
+    leap = y % 4 == 0 and (y % 100 != 0 or y % 400 == 0)
+    days = (31, 29 if leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+    return y + (sum(days[:mo - 1]) + d - 0.5) / (366 if leap else 365)
+
+
+def timeline_date_text(value: Any) -> str:
+    """The date as the page writes it, at the precision the source states: '15 Aug 2017', 'Jun 2026', '2016'. Pure."""
+    y, mo, d = timeline_date(value)
+    if mo is None:
+        return str(y)
+    return f"{d} {MONTH_ABBR[mo - 1]} {y}" if d is not None else f"{MONTH_ABBR[mo - 1]} {y}"
+
+
+def _timeline_events(series: dict) -> list:
+    ev = series.get("events")
+    return ev if isinstance(ev, list) else []
+
+
+def _timeline_tier_errors(where: str, tier: Any) -> list[str]:
+    if tier is None or tier in TIMELINE_TIERS:
+        return []
+    if str(tier).upper().startswith("REJECTED"):
+        return [f"{where}: tier {tier!r} - a REJECTED claim never goes on the page (the research gate); drop the event"]
+    return [f"{where}: tier {tier!r} is not one of {'|'.join(TIMELINE_TIERS)}"]
+
+
+def _timeline_event_errors(i: int, ev: Any) -> list[str]:
+    where = f"events[{i}]"
+    if not isinstance(ev, dict):
+        return [f"{where}: an event is an object {{date, label, tier?, moved_to?}}"]
+    errs = [f"{where}: key {k!r} is not an event's ({'|'.join(TIMELINE_EVENT_FIELDS)})" for k in ev if k not in TIMELINE_EVENT_FIELDS]
+    if timeline_date(ev.get("date")) is None:
+        errs.append(f"{where}: date {ev.get('date')!r} is not YYYY, YYYY-MM or YYYY-MM-DD (a real date)")
+    label = ev.get("label")
+    if not _text(label):
+        errs.append(f"{where}: an event names what happened ('label')")
+    elif len(str(label)) > TIMELINE_LABEL_MAX:
+        errs.append(f"{where}: label is {len(str(label))} characters - an event's label is at most {TIMELINE_LABEL_MAX} "
+                    "(two lines on a phone); the sentence carries the rest")
+    errs += _timeline_tier_errors(where, ev.get("tier"))
+    mv = ev.get("moved_to")
+    if mv is not None:
+        if not isinstance(mv, dict):
+            return errs + [f"{where}: moved_to is an object {{date, label?, tier?}}"]
+        errs += [f"{where}.moved_to: key {k!r} is not one of {'|'.join(TIMELINE_MOVED_FIELDS)}" for k in mv
+                 if k not in TIMELINE_MOVED_FIELDS]
+        if timeline_date(mv.get("date")) is None:
+            errs.append(f"{where}.moved_to: date {mv.get('date')!r} is not YYYY, YYYY-MM or YYYY-MM-DD")
+        elif timeline_date(ev.get("date")) is not None and timeline_decimal(mv["date"]) == timeline_decimal(ev["date"]):
+            errs.append(f"{where}.moved_to: the date did not move ({mv['date']!r})")
+        if mv.get("label") is not None and (not _text(mv["label"]) or len(str(mv["label"])) > TIMELINE_LABEL_MAX):
+            errs.append(f"{where}.moved_to: label must be 1-{TIMELINE_LABEL_MAX} characters")
+        errs += _timeline_tier_errors(f"{where}.moved_to", mv.get("tier"))
+    return errs
+
+
+def _timeline_cut_errors(series: dict, dated: list[float]) -> list[str]:
+    cuts = series.get("cuts")
+    if cuts is None or cuts == "auto":
+        return []
+    if not isinstance(cuts, list):
+        return ["cuts: a list of [from, to] date pairs ([] draws one linear axis; absent or \"auto\" cuts the gaps that "
+                "dwarf the rest)"]
+    errs, spans = [], []
+    for j, c in enumerate(cuts):
+        if not (isinstance(c, list) and len(c) == 2 and all(timeline_date(v) is not None for v in c)):
+            errs.append(f"cuts[{j}]: a cut is [from, to], two dates")
+            continue
+        a, b = timeline_decimal(c[0]), timeline_decimal(c[1])
+        if not a < b:
+            errs.append(f"cuts[{j}]: {c[0]!r} is not before {c[1]!r}")
+            continue
+        inside = [d for d in dated if a <= d <= b]
+        if inside:
+            errs.append(f"cuts[{j}]: {c[0]} -> {c[1]} would hide {len(inside)} dated thing(s) - a cut is time where "
+                        f"nothing on the page happened ({TIMELINE_RULING}: drawn and labelled, never hiding an event)")
+        spans.append((a, b))
+    spans.sort()
+    if any(s[1] >= t[0] for s, t in zip(spans, spans[1:])):
+        errs.append("cuts: two cuts overlap - name one cut per empty stretch")
+    return errs
+
+
+def _validate_timeline(series: dict) -> list[str]:
+    """A timeline object's own rules, refused by name. Pure."""
+    errs = [f"{k!r}: a timeline page draws DATES, not values - no {k} on it (a dated thing on a sourced series is a line "
+            "page's `marks`)" for k in TIMELINE_DATA_KEYS if k in series]
+    events = _timeline_events(series)
+    if not isinstance(series.get("events"), list):
+        return errs + ["a timeline page needs `events`: a list of {date, label, tier?, moved_to?}"]
+    lo, hi = TIMELINE_EVENTS
+    if not lo <= len(events) <= hi:
+        errs.append(f"events: {len(events)} - a timeline page carries {lo}-{hi} events (fewer is a span or a ruler, more "
+                    "is two pages)")
+    for i, ev in enumerate(events):
+        errs += _timeline_event_errors(i, ev)
+    today = series.get("today")
+    td = timeline_date(today)
+    if td is None or td[2] is None:
+        errs.append(f"today: {today!r} - the page marks today, so it states it as YYYY-MM-DD (the day the page was built)")
+    if errs:
+        return errs
+    decs = [timeline_decimal(e["date"]) for e in events]
+    back = [i for i in range(1, len(decs)) if decs[i] < decs[i - 1]]
+    if back:
+        errs.append(f"events[{back[0]}]: {events[back[0]]['date']} is before events[{back[0] - 1}]'s "
+                    f"{events[back[0] - 1]['date']} - the file lists them in time order (the order they land)")
+    dated = decs + [timeline_decimal(e["moved_to"]["date"]) for e in events if isinstance(e.get("moved_to"), dict)]
+    return errs + _timeline_cut_errors(series, dated + [timeline_decimal(today)])
+
+
+def _timeline_items(series: dict) -> list[dict]:
+    """Every dated thing the page draws, in the file's order: each event, then (right after it) its moved_to."""
+    items = []
+    for i, ev in enumerate(_timeline_events(series)):
+        tier = ev.get("tier") or "CONFIRMED"
+        items.append({"event": i, "kind": "event", "date": str(ev["date"]), "x": timeline_decimal(ev["date"]),
+                      "date_text": timeline_date_text(ev["date"]), "label": str(ev["label"]), "tier": tier,
+                      "tier_word": TIMELINE_TIER_WORDS.get(tier, ""), "moved": isinstance(ev.get("moved_to"), dict)})
+        mv = ev.get("moved_to")
+        if isinstance(mv, dict):
+            mt = mv.get("tier") or "CONFIRMED"
+            items.append({"event": i, "kind": "moved_to", "date": str(mv["date"]), "x": timeline_decimal(mv["date"]),
+                          "date_text": timeline_date_text(mv["date"]), "label": str(mv.get("label") or TIMELINE_MOVED_LABEL),
+                          "tier": mt, "tier_word": TIMELINE_TIER_WORDS.get(mt, ""), "moved": False})
+    return items
+
+
+def timeline_cuts(series: dict) -> list[tuple[float, float]]:
+    """The stretches of time the axis cuts, as decimal-year pairs: the author's, or the gaps that dwarf the rest. The
+    auto cut takes a gap that is TIMELINE_CUT_SHARE of the whole span AND TIMELINE_CUT_RATIO times the next widest gap -
+    and leaves room for each side's pad, so a cut never swallows a stretch's air. Pure."""
+    cuts = series.get("cuts")
+    if isinstance(cuts, list):
+        return sorted((timeline_decimal(a), timeline_decimal(b)) for a, b in cuts)
+    pts = sorted({it["x"] for it in _timeline_items(series)} | {timeline_decimal(series["today"])})
+    if len(pts) < 3:
+        return []
+    span = pts[-1] - pts[0]
+    gaps = sorted(((pts[k + 1] - pts[k], k) for k in range(len(pts) - 1)), reverse=True)
+    out = []
+    for g, k in gaps:
+        others = [h for h, j in gaps if j != k]
+        if g >= TIMELINE_CUT_SHARE * span and (not others or g >= TIMELINE_CUT_RATIO * max(others)):
+            out.append((pts[k], pts[k + 1]))
+    return sorted(out)
+
+
+def _stretch_pad(span: float) -> float:
+    return max(TIMELINE_PAD[0] * span, TIMELINE_PAD[1])
+
+
+def timeline_stretches(series: dict) -> list[dict]:
+    """The axis's stretches between the cuts: each its own [lo, hi] domain (decimal years, padded) and its WEIGHT - how
+    many dated things it carries - which is its share of the axis. Pure."""
+    xs = sorted([it["x"] for it in _timeline_items(series)] + [timeline_decimal(series["today"])])
+    edges = [xs[0]]
+    for a, b in timeline_cuts(series):
+        edges += [a, b]
+    edges.append(xs[-1])
+    out = []
+    for k in range(0, len(edges), 2):
+        a0, b0 = edges[k], edges[k + 1]
+        inside = [x for x in xs if a0 - 1e-9 <= x <= b0 + 1e-9]
+        lo, hi = min(inside), max(inside)
+        pad = _stretch_pad(hi - lo)
+        out.append({"lo": lo - pad, "hi": hi + pad, "weight": len(inside)})
+    for k in range(1, len(out)):   # a pad never reaches across a cut: a narrow cut splits its own width between them
+        a, b = edges[2 * k - 1], edges[2 * k]
+        if out[k]["lo"] <= out[k - 1]["hi"]:
+            out[k - 1]["hi"], out[k]["lo"] = a + (b - a) / 3, b - (b - a) / 3
+    return out
+
+
+def _month_of(x: float) -> int:
+    """The month index (year * 12 + month0) a decimal year falls in."""
+    return int(math.floor(x * 12 + 1e-9))
+
+
+def _stretch_ticks(lo: float, hi: float, length: float, gap: float) -> tuple[int, list[float]]:
+    """(unit in months, tick decimal years) - the finest unit whose ticks stand `gap` apart along `length`."""
+    for months, _rule in TIMELINE_UNITS:
+        if length / max(1e-9, (hi - lo) * 12 / months) >= gap:
+            first = int(math.ceil(lo * 12 / months - 1e-9)) * months
+            ticks = [m / 12 for m in range(first, int(math.floor(hi * 12 + 1e-9)) + 1, months)]
+            if ticks:
+                return months, ticks
+    months = TIMELINE_UNITS[-1][0]
+    return months, [round(lo + (hi - lo) / 2)]
+
+
+def _tick_text(x: float, months: int, first: bool, portrait: bool) -> str:
+    m = _month_of(x)
+    y, mo = divmod(m, 12)
+    if months >= 12:
+        return str(y)
+    if portrait and (first or mo == 0):
+        return f"{MONTH_ABBR[mo]} {y}"
+    return MONTH_ABBR[mo]
+
+
+def _text_w(text: str, size: float, adv: float) -> float:
+    return len(text) * size * adv
+
+
+def _wrap(text: str, size: float, adv: float, width: float, first_used: float = 0.0) -> list[str]:
+    """Greedy word wrap at the estimated advance; the first line may start `first_used` in (9:16: after the date)."""
+    lines, cur, room = [], "", width - first_used
+    for w in str(text).split():
+        cand = (cur + " " + w).strip()
+        if cur and _text_w(cand, size, adv) > room:
+            lines.append(cur)
+            cur, room = w, width
+        else:
+            cur = cand
+    return lines + ([cur] if cur else [])
+
+
+def _two_line_wrap(text: str, size: float, adv: float, width: float) -> list[str]:
+    """The label in at most TWO lines: wrapped at `width`, or - when that takes three - at the narrowest width that
+    takes two (a label is never cut short: every word the author wrote is on the page)."""
+    lines = _wrap(text, size, adv, width)
+    w = width
+    while len(lines) > 2:
+        w += size * adv
+        lines = _wrap(text, size, adv, w)
+    return lines
+
+
+def timeline_plot(chart: dict, aspect: str) -> dict:
+    """The rect a TIMELINE is laid out in, in STAGE px: the chart box (16:9: its letterboxed 1000x560 viewBox) less the
+    timeline's own margins - the engine's LPTL.MARGIN, one law."""
+    L, T, R, B = TIMELINE_GEOM[aspect]["margin"]
+    if aspect == "9:16":
+        return _box(chart["x"] + L, chart["y"] + T, chart["w"] - L - R, chart["h"] - T - B)
+    vw, vh = LAND_VIEWBOX
+    s = min(chart["w"] / vw, chart["h"] / vh)
+    ox, oy = chart["x"] + (chart["w"] - vw * s) / 2, chart["y"] + (chart["h"] - vh * s) / 2
+    return _box(ox + L * s, oy + T * s, (vw - L - R) * s, (vh - T - B) * s)
+
+
+def _plot_units(spec: dict, aspect: str) -> tuple[float, float]:
+    """The plot's size in the layout's units: 16:9 the viewBox's (fixed), 9:16 the page's own chart box in px."""
+    L, T, R, B = TIMELINE_GEOM[aspect]["margin"]
+    if aspect == "16:9":
+        return float(LAND_VIEWBOX[0] - L - R), float(LAND_VIEWBOX[1] - T - B)
+    chart = page_boxes(spec, aspect)["chart"]
+    return float(chart["w"] - L - R), float(chart["h"] - T - B)
+
+
+def _axis_map(stretches: list[dict], start: float, length: float, cut: float) -> tuple[list[dict], Any]:
+    """Each stretch's [a, b] along the axis (by weight, never under TIMELINE_STRETCH_MIN) and the date -> position map."""
+    n = len(stretches)
+    room = length - cut * (n - 1)
+    total = sum(s["weight"] for s in stretches)
+    shares = [max(TIMELINE_STRETCH_MIN, s["weight"] / total) if n > 1 else 1.0 for s in stretches]
+    shares = [v / sum(shares) for v in shares]
+    pos, out = start, []
+    for s, sh in zip(stretches, shares):
+        out.append(dict(s, a=pos, b=pos + sh * room))
+        pos += sh * room + cut
+
+    def at(x: float) -> float:
+        for s in out:
+            if s["lo"] - 1e-9 <= x <= s["hi"] + 1e-9:
+                return s["a"] + (x - s["lo"]) / (s["hi"] - s["lo"]) * (s["b"] - s["a"])
+        raise ValueError(f"date {x} falls in a cut")
+    return out, at
+
+
+def _cut_text(lo: float, hi: float) -> str:
+    months = (hi - lo) * 12
+    return f"{round(months / 12)} yrs" if months >= 18 else f"{round(months)} mo"
+
+
+def _overlap(a: tuple, b: tuple, gap: float = 0.0) -> bool:
+    return a[0] < b[2] + gap and b[0] < a[2] + gap and a[1] < b[3] + gap and b[1] < a[3] + gap
+
+
+def _hide_ticks(ticks: list[dict], boxes: list[tuple]) -> None:
+    """A tick label under the today pill or a cut's length gives way (in place): the named thing wins, as the axis tag's
+    pill swallows the tick it covers. Neighbouring ticks that collide keep the earlier one."""
+    kept = []
+    for t in ticks:
+        box = t["box"]
+        if any(_overlap(box, b, 4) for b in boxes) or any(_overlap(box, k["box"], 4) for k in kept):
+            t["hidden"] = True
+        else:
+            kept.append(t)
+
+
+def _lane_box(it: dict, side: int, lane: int, hang: int, G: dict, pw: float, axis_y: float, pitch: float) -> list[float]:
+    """The block's box for one option: side 0 above the axis / 1 below the tick band; hang 0 to the pin's right / 1 left.
+    The words start `inset` clear of their own leader, so the leader runs up beside them like a flag's pole."""
+    w, h = it["w"], it["h"]
+    left = it["px"] + G["inset"] if hang == 0 else it["px"] - G["inset"] - w
+    left = min(max(0.0, left), pw - w)
+    if side == 0:
+        bottom = axis_y - G["gap"] - lane * pitch
+        return [left, bottom - h, left + w, bottom]
+    top = axis_y + G["axis_foot"] + lane * pitch
+    return [left, top, left + w, top + h]
+
+
+def _lane_ok(it: dict, opt: tuple, box: list[float], placed: list[dict], obstacles: list[tuple], G: dict) -> bool:
+    """May this block stand here? Its lane's blocks clear of it, its leader clear of every nearer block of its side (and,
+    below, of the tick band's words), and no standing leader of a farther lane under it."""
+    side, lane = opt[0], opt[1]
+    x = it["px"]
+    if side == 1 and any(o[0] - 3 <= x <= o[2] + 3 for o in obstacles):
+        return False
+    for p in placed:
+        if p["side"] != side:
+            continue
+        if p["lane"] == lane and _overlap(tuple(box), tuple(p["box"]), G["gap"]):
+            return False
+        if p["lane"] < lane and p["box"][0] - G["clear"] <= x <= p["box"][2] + G["clear"]:
+            return False
+        if p["lane"] > lane and box[0] - G["clear"] <= p["px"] <= box[2] + G["clear"]:
+            return False
+    return True
+
+
+def _landscape_lanes(items: list[dict], G: dict, pw: float, axis_y: float, obstacles: list[tuple],
+                     warns: list[str]) -> None:
+    """16:9: every item's block in a lane ABOVE the axis or BELOW its tick band, on a leader from its pin (in place).
+    A small search, right to left: each block takes the first option (nearest lane first, above before below, hanging
+    right before left) where it overlaps no block of its lane, its leader crosses no nearer block of its side (nor, below,
+    the tick band's words), and it covers no standing leader of a farther lane - the staircase a cluster reads as, on
+    both sides of the axis. No arrangement inside the budget: the fewest collisions, REPORTED (s106)."""
+    f, adv, lh = G["font"], G["adv"], G["line"]
+    pitch = f["date"] * lh + 2 * f["label"] * lh + G["lane_gap"]
+    for it in items:
+        it["date_line"] = it["date_text"] + (f" · {it['tier_word']}" if it["tier_word"] else "")
+        it["lines"] = _two_line_wrap(it["label"], f["label"], adv, G["wrap"])
+        it["w"] = max(_text_w(it["date_line"], f["date"], adv + 0.04), max(_text_w(s, f["label"], adv) for s in it["lines"]))
+        it["h"] = f["date"] * lh + len(it["lines"]) * f["label"] * lh
+        it["date_w"] = round(_text_w(it["date_text"], f["date"], adv + 0.04), 2)   # the strike's length (a moved date)
+    order = sorted(items, key=lambda d: -d["px"])
+    opts = [(side, lane, hang) for lane in range(max(G["lanes"])) for side in (0, 1) if lane < G["lanes"][side]
+            for hang in (0, 1)]
+    placed: list[dict] = []
+    budget = [G["search"]]
+
+    def dfs(k: int) -> bool:
+        if k == len(order):
+            return True
+        it = order[k]
+        for opt in opts:
+            budget[0] -= 1
+            if budget[0] < 0:
+                return False
+            box = _lane_box(it, opt[0], opt[1], opt[2], G, pw, axis_y, pitch)
+            if _lane_ok(it, opt, box, placed, obstacles, G):
+                placed.append({"px": it["px"], "side": opt[0], "lane": opt[1], "box": box, "it": it})
+                if dfs(k + 1):
+                    return True
+                placed.pop()
+        return False
+
+    if not dfs(0):
+        placed.clear()
+        for it in order:   # the fewest collisions, each reported
+            best = None
+            for opt in opts:
+                box = _lane_box(it, opt[0], opt[1], opt[2], G, pw, axis_y, pitch)
+                bad = 0 if _lane_ok(it, opt, box, placed, obstacles, G) else 1
+                if best is None or bad < best[0]:
+                    best = (bad, opt, box)
+            placed.append({"px": it["px"], "side": best[1][0], "lane": best[1][1], "box": best[2], "it": it})
+            if best[0]:
+                warns.append(f"WARN timeline: {it['date_text']} {it['label']!r} found no clear lane at 16:9 - it crosses "
+                             "another label; fewer events in the cluster, or shorter labels")
+    for p in placed:
+        it, box = p["it"], p["box"]
+        end = box[3] if p["side"] == 0 else box[1]
+        it.update(side="above" if p["side"] == 0 else "below", lane=p["lane"], box=[round(v, 2) for v in box],
+                  leader=[round(it["px"], 2), round(axis_y, 2), round(it["px"], 2), round(end, 2)])
+        it.pop("w", None)
+
+
+def _portrait_column(items: list[dict], G: dict, pw: float, ph: float, warns: list[str]) -> None:
+    """9:16: every item's block in the column right of the vertical axis (in place): the date bold at the head of the
+    first line, the label after it, wrapped; blocks at their dates' heights, pushed apart down then up so none overlap."""
+    f, adv, lh = G["font"], G["adv"], G["line"]
+    x0 = G["axis_x"] + G["col_gap"]
+    width = pw - x0
+    for it in items:
+        date_line = it["date_text"] + (f" · {it['tier_word']}" if it["tier_word"] else "")
+        used = _text_w(date_line + "  ", f["date"], adv + 0.04)
+        lines = _wrap(it["label"], f["label"], adv, width, used)
+        if len(lines) > 1 and len(lines[0].split()) == 1:   # one word stranded after the date: the label starts a line
+            lines = [""] + _wrap(it["label"], f["label"], adv, width)
+        it.update(date_line=date_line, lines=lines, h=len(lines) * f["label"] * lh, head_w=used,
+                  date_w=round(_text_w(it["date_text"], f["date"], adv + 0.04), 2))
+    order = sorted(items, key=lambda d: d["py"])
+    tops = []
+    for it in order:
+        want = it["py"] - f["label"] * lh / 2
+        tops.append(max(want, (tops[-1] + order[len(tops) - 1]["h"] + G["gap"]) if tops else 0.0))
+    for k in range(len(order) - 1, -1, -1):   # ... and back up from the foot
+        limit = ph - order[k]["h"] if k == len(order) - 1 else tops[k + 1] - G["gap"] - order[k]["h"]
+        tops[k] = min(tops[k], limit)
+    if tops and tops[0] < -0.5:
+        warns.append(f"WARN timeline: {len(items)} labels need {sum(o['h'] for o in order):.0f} px of a {ph:.0f} px "
+                     "column at 9:16 - they overlap; fewer events, or shorter labels")
+    for it, top in zip(order, tops):
+        w = max(it["head_w"] + _text_w(it["lines"][0], f["label"], adv),
+                max(_text_w(s, f["label"], adv) for s in it["lines"]))
+        it.update(box=[round(x0, 2), round(top, 2), round(x0 + min(w, width), 2), round(top + it["h"], 2)],
+                  leader=[round(G["axis_x"], 2), round(it["py"], 2), round(x0 - 6, 2), round(top + f["label"] * lh / 2, 2)])
+
+
+def _stretch_marks(stretches: list[dict], at: Any, G: dict, portrait: bool, axis_c: float) -> tuple[list, list, list]:
+    """Each stretch's ticks (on its own unit), its YEAR row under month ticks (16:9) and the rule it writes; sets each
+    stretch's `unit` and `rule` (in place). Every word carries its box, so the axis's own words can give way. Pure but for that."""
+    f = G["font"]
+    ticks, rules, year_marks = [], [], []
+    for k, s in enumerate(stretches):
+        a = s["a"] + (G["rule_h"] if portrait else 0.0)
+        months, xs = _stretch_ticks(s["lo"], s["hi"], s["b"] - a, G["tick_gap"])
+        rule = dict(TIMELINE_UNITS)[months]
+        s.update(unit=months, rule=rule)
+        for j, x in enumerate(xs):
+            p = at(x) if not portrait else a + (x - s["lo"]) / (s["hi"] - s["lo"]) * (s["b"] - a)
+            text = _tick_text(x, months, j == 0, portrait)
+            tw = _text_w(text, f["tick"], G["adv"])
+            box = ((G["axis_x"] - 14 - tw, p - f["tick"] * 0.7, G["axis_x"] - 14, p + f["tick"] * 0.3) if portrait else
+                   (p - tw / 2, axis_c + 8, p + tw / 2, axis_c + 8 + f["tick"] * 1.1))
+            ticks.append({"stretch": k, "x": round(x, 5), "p": round(p, 2), "text": text, "box": [round(v, 2) for v in box]})
+        if not portrait and months < 12:   # 16:9 month ticks: the YEAR written once under its months
+            for y in range(int(math.floor(s["lo"])), int(math.floor(s["hi"])) + 1):
+                own = [t["p"] for t in ticks if t["stretch"] == k and int(math.floor(t["x"] + 1e-9)) == y]
+                if own:
+                    year_marks.append({"stretch": k, "text": str(y), "p": round((min(own) + max(own)) / 2, 2)})
+        rp = ((s["a"] + s["b"]) / 2) if not portrait else s["a"] + f["rule"]
+        rw = _text_w(rule, f["rule"], G["adv"])
+        rbox = ((G["axis_x"] - 14 - rw, s["a"], G["axis_x"] - 14, s["a"] + G["rule_h"]) if portrait else
+                (rp - rw / 2, axis_c + 8 + f["tick"] * 1.1 + f["year"] * 1.1, rp + rw / 2,
+                 axis_c + 8 + f["tick"] * 1.1 + f["year"] * 1.1 + f["rule"] * 1.2))
+        rules.append({"stretch": k, "text": rule, "p": round(rp, 2), "box": [round(v, 2) for v in rbox]})
+    return ticks, rules, year_marks
+
+
+def timeline_layout(spec: dict, aspect: str) -> dict:
+    """Everything the painter draws, placed: the stretches, their ticks and rules, the cuts, today, each item's pin, block
+    and leader - in the plot's own units, relative to its origin (16:9: viewBox units; 9:16: the chart box's px). Pure."""
+    G = TIMELINE_GEOM[aspect]
+    portrait = aspect == "9:16"
+    pw, ph = _plot_units(spec, aspect)
+    series = {"events": spec[TIMELINE]["events_in"], "today": spec[TIMELINE]["today"], "cuts": spec[TIMELINE].get("cuts_in")}
+    f, warns = G["font"], []
+    if portrait:
+        start, length = 0.0, ph
+        axis_c = G["axis_x"]
+    else:
+        start, length = 0.0, pw
+        pitch = f["date"] * G["line"] + 2 * f["label"] * G["line"] + G["lane_gap"]
+        axis_c = ph - G["axis_foot"] - G["lanes"][1] * pitch
+    stretches, at = _axis_map(timeline_stretches(series), start, length, G["cut"])
+    ticks, rules, year_marks = _stretch_marks(stretches, at, G, portrait, axis_c)
+    cuts = []
+    for k in range(len(stretches) - 1):
+        a, b = stretches[k]["b"], stretches[k + 1]["a"]
+        text = _cut_text(stretches[k]["hi"], stretches[k + 1]["lo"])
+        cuts.append({"a": round(a, 2), "b": round(b, 2), "p": round((a + b) / 2, 2), "text": text,
+                     "from": round(stretches[k]["hi"], 4), "to": round(stretches[k + 1]["lo"], 4)})
+    today_x = timeline_decimal(spec[TIMELINE]["today"])
+    tp = at(today_x) if not portrait else _portrait_at(stretches, today_x, G)
+    tw = _text_w("today", f["today"], G["adv"]) + 16
+    today = {"x": round(today_x, 5), "p": round(tp, 2), "text": "today",
+             "box": ([round(G["axis_x"] - 14 - tw, 2), round(tp - f["today"] * 0.75, 2), round(G["axis_x"] - 14, 2),
+                      round(tp + f["today"] * 0.45, 2)] if portrait else
+                     [round(tp - tw / 2, 2), round(axis_c + 8, 2), round(tp + tw / 2, 2), round(axis_c + 8 + f["today"] * 1.25, 2)])}
+    cut_boxes = []
+    for c in cuts:
+        cw = _text_w(c["text"], f["rule"], G["adv"])
+        c["box"] = ([round(G["axis_x"] - 14 - cw, 2), round(c["p"] - f["rule"] * 0.7, 2), round(G["axis_x"] - 14, 2),
+                     round(c["p"] + f["rule"] * 0.3, 2)] if portrait else
+                    [round(c["p"] - cw / 2, 2), round(axis_c + 8, 2), round(c["p"] + cw / 2, 2), round(axis_c + 8 + f["rule"] * 1.2, 2)])
+        cut_boxes.append(tuple(c["box"]))
+    _hide_ticks(ticks, [tuple(today["box"])] + cut_boxes + ([tuple(r["box"]) for r in rules] if portrait else []))
+    items = _timeline_items(series)
+    for it in items:
+        if portrait:
+            it["py"] = _portrait_at(stretches, it["x"], G)
+        else:
+            it["px"] = at(it["x"])
+    if portrait:
+        _portrait_column(items, G, pw, ph, warns)
+    else:   # a leader below the axis crosses the tick band: the named words there are obstacles, a tick gives way
+        obstacles = [tuple(today["box"])] + cut_boxes + [tuple(r["box"]) for r in rules] + [
+            (y["p"] - _text_w(y["text"], f["year"], G["adv"]) / 2, 0, y["p"] + _text_w(y["text"], f["year"], G["adv"]) / 2, 0)
+            for y in year_marks]
+        _landscape_lanes(items, G, pw, axis_c, obstacles, warns)
+        for t in ticks:
+            if any(it["side"] == "below" and t["box"][0] - 3 <= it["leader"][0] <= t["box"][2] + 3 for it in items):
+                t["hidden"] = True
+    for it in items:
+        it["pin"] = [round(axis_c, 2), round(it["py"], 2)] if portrait else [round(it["px"], 2), round(axis_c, 2)]
+        for k in ("px", "py", "h", "head_w"):
+            it.pop(k, None)
+    return {"aspect": aspect, "plot": {"w": round(pw, 2), "h": round(ph, 2)}, "vertical": portrait,
+            "axis": round(axis_c, 2), "fonts": dict(f), "line": G["line"],
+            "stretches": [{k: (round(v, 4) if isinstance(v, float) else v) for k, v in s.items()} for s in stretches],
+            "ticks": ticks, "years": year_marks, "rules": rules, "cuts": cuts, "today": today, "items": items,
+            "warnings": warns}
+
+
+def _portrait_at(stretches: list[dict], x: float, G: dict) -> float:
+    """9:16: the date's y - each stretch runs from below its rule line to its foot."""
+    for s in stretches:
+        if s["lo"] - 1e-9 <= x <= s["hi"] + 1e-9:
+            a = s["a"] + G["rule_h"]
+            return a + (x - s["lo"]) / (s["hi"] - s["lo"]) * (s["b"] - a)
+    raise ValueError(f"date {x} falls in a cut")
+
+
+def _timeline_block(series: dict) -> dict:
+    """The events verbatim (the file's order is the landing order) and today; the layout is added per aspect by
+    `build_spec`. `labels` are the events' own, so a species naming an event by index reads what the page says."""
+    events = _timeline_events(series)
+    return {"labels": [str(e.get("label")) for e in events], "values": [], "value_strings": [], "colors": [],
+            TIMELINE: {"events_in": copy.deepcopy(events), "today": str(series["today"]),
+                       **({"cuts_in": copy.deepcopy(series["cuts"])} if isinstance(series.get("cuts"), list) else {}),
+                       "items": len(_timeline_items(series))}}
+
+
+def timeline_notes(spec: dict) -> list[str]:
+    """E28 (2)'s JUDGE row for the operator: the axis's rule, as the page writes it - every cut with its length, every
+    stretch with its tick, so the reviewer checks that the sub says which dates and why. Pure."""
+    lay = (spec.get("layout") or {}).get("16:9") or {}
+    parts = [f"{s['rule']}" for s in lay.get("stretches") or []]
+    cuts = [f"cut {c['text']} ({c['from']:.2f} -> {c['to']:.2f})" for c in lay.get("cuts") or []]
+    return [f"{TIMELINE_RULING}: a date axis with uneven gaps - " + "; ".join(parts + cuts)
+            + " - check the sub says which dates and why"]
+
+
 def _validate_object(series: dict) -> list[str]:
     """An object page's contract. No values, so no sign geometry and no badge keying -
     but a prop that carries a FIGURE still owes a source, because a number drawn in ink
@@ -4110,6 +4721,17 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
             honesty = treemap_honesty_warnings(series, spec)   # P69 T50: only a size claim with a figure unwritten
             if honesty:
                 spec["warnings"] = honesty
+        return spec
+    if builder == TIMELINE:   # P73 T2: the events and today; laid out HERE for both aspects, as the treemap is (E58)
+        spec.update(_timeline_block(series))
+        spec["unit"] = ""
+        spec["badges"] = badges_for(series)
+        spec["emphasize"] = None
+        spec["layout"] = {aspect: timeline_layout(spec, aspect) for aspect in STAGE_PX}
+        spec["judge"] = review_notes(series) + timeline_notes(spec)
+        warns = [w for aspect in STAGE_PX for w in spec["layout"][aspect]["warnings"]]
+        if warns:   # s106: a label with no clear room is REPORTED, never refused
+            spec["warnings"] = warns
         return spec
     if builder == PANELS:   # P69 T8b: 2-4 line plots on one page, one scale by default (E79)
         spec.update(_panels_block(series))
@@ -6242,6 +6864,8 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
         boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
     if spec.get("builder") == "treemap":
         boxes["plot"] = treemap_plot(boxes["chart"], aspect)
+    if spec.get("builder") == TIMELINE:   # P73 T2: the timeline's own margins inside the chart box
+        boxes["plot"] = timeline_plot(boxes["chart"], aspect)
     floor = boxes.pop("_floor", None)
     if spec.get("builder") == PANELS:   # P69 T8b: the chart is the panels' box (to the safe edge); the plot every panel's box
         rx, ry, rw, _rh = _panels_region(spec, boxes["chart"], aspect)
@@ -6300,6 +6924,8 @@ def infer_variant(series: dict) -> str | None:
     not in the file, so it is never guessed."""
     if isinstance(series.get("tiers"), list):
         return "tiers"
+    if isinstance(series.get("events"), list):   # P73 T2: a list of dated events is a timeline page
+        return TIMELINE
     if isinstance(series.get("props"), list) and series["props"]:
         return "object"
     if isinstance(series.get("shares"), list):

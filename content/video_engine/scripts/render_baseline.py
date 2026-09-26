@@ -295,6 +295,11 @@ PROOF_FRAMES = {
     # P73 T1: A CLAIMED FIGURE AT ITS WORD - the solo on Patel's "$1k" (12.0 + 0.6) landed: his figure and his name lit,
     # every other bar muted. No flag: the solo is authored on the row.
     "claim-bar@proof-word": ("claim-bar", {}, 12.8),
+    # P73 T2 - THE DATED EVENT TIMELINE at two of its words: the first event landed and lit on its own (the axis drawn,
+    # every later event not yet on the page), and Patel's post lit with the event before it (the campaign's end) handing
+    # its light over - the article, two words on, not yet landed.
+    "event-timeline@proof-first": ("event-timeline", {}, 6.8),   # 0.6 s after "the control" (6.2): landed (LAND_S 0.45) and lit
+    "event-timeline@proof-post": ("event-timeline", {}, 11.6),   # 0.6 s after the post's word (11.0): the post lit, 27 Aug unlit
 }
 # P52 T18 / R26-55, HUMAN GATE 7: THE FACE OF A PULLED PHRASE. The phrase is live type now, so it has a face, and
 # the face is the OPERATOR's to choose - never ours. The `press_face` DIAL names one of the three candidates

@@ -477,9 +477,12 @@ def test_every_wired_card_is_in_a_recipe():
     # golden (H row 18b's 20 bar lit on "twenty percent"); no body row adopts it and no recipe composes it before P71-HG1.
     # P72 T46d's tight map framing (plate_option:fit) is tested alone in test_wave3_page_marks.py; no recipe composes it
     # before P72-HG1 (the AMD RFSoC episode's route map is its first use).
+    # P73 T2's dated event timeline (page_builder:timeline) is tested alone in test_event_timeline.py and pinned by the
+    # event-timeline goldens (the AMD RFSoC story's dates); no committed beat plays it until that episode's row, so no recipe
+    # is invented for it here.
     assert uncovered == ["camera:pedestal", "dock_option:moves", "page_builder:bars+segments",
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
-                         "page_builder:progress",
+                         "page_builder:progress", "page_builder:timeline",
                          "page_enter:surface", "page_enter:trace",
                          "page_species:datum_badge", "page_species:explode", "page_species:glow", "page_species:lens", "page_species:member",
                          "plate_option:bar_style",

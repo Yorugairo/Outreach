@@ -1,0 +1,1610 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [
+  {
+   "e": 3.8,
+   "s": 1.0,
+   "t": [
+    {
+     "e": 1.4,
+     "k": false,
+     "s": 1.0,
+     "w": "the"
+    },
+    {
+     "e": 1.7999999999999998,
+     "k": true,
+     "s": 1.4,
+     "w": "frame"
+    },
+    {
+     "e": 2.2,
+     "k": false,
+     "s": 1.8,
+     "w": "under"
+    },
+    {
+     "e": 2.6,
+     "k": false,
+     "s": 2.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 6.8,
+   "s": 4.0,
+   "t": [
+    {
+     "e": 4.4,
+     "k": false,
+     "s": 4.0,
+     "w": "the"
+    },
+    {
+     "e": 4.800000000000001,
+     "k": true,
+     "s": 4.4,
+     "w": "frame"
+    },
+    {
+     "e": 5.2,
+     "k": false,
+     "s": 4.8,
+     "w": "under"
+    },
+    {
+     "e": 5.6000000000000005,
+     "k": false,
+     "s": 5.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 9.8,
+   "s": 7.0,
+   "t": [
+    {
+     "e": 7.4,
+     "k": false,
+     "s": 7.0,
+     "w": "the"
+    },
+    {
+     "e": 7.800000000000001,
+     "k": true,
+     "s": 7.4,
+     "w": "frame"
+    },
+    {
+     "e": 8.200000000000001,
+     "k": false,
+     "s": 7.8,
+     "w": "under"
+    },
+    {
+     "e": 8.600000000000001,
+     "k": false,
+     "s": 8.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 12.8,
+   "s": 10.0,
+   "t": [
+    {
+     "e": 10.4,
+     "k": false,
+     "s": 10.0,
+     "w": "the"
+    },
+    {
+     "e": 10.8,
+     "k": true,
+     "s": 10.4,
+     "w": "frame"
+    },
+    {
+     "e": 11.200000000000001,
+     "k": false,
+     "s": 10.8,
+     "w": "under"
+    },
+    {
+     "e": 11.600000000000001,
+     "k": false,
+     "s": 11.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 15.8,
+   "s": 13.0,
+   "t": [
+    {
+     "e": 13.4,
+     "k": false,
+     "s": 13.0,
+     "w": "the"
+    },
+    {
+     "e": 13.8,
+     "k": true,
+     "s": 13.4,
+     "w": "frame"
+    },
+    {
+     "e": 14.200000000000001,
+     "k": false,
+     "s": 13.8,
+     "w": "under"
+    },
+    {
+     "e": 14.600000000000001,
+     "k": false,
+     "s": 14.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 18.8,
+   "s": 16.0,
+   "t": [
+    {
+     "e": 16.4,
+     "k": false,
+     "s": 16.0,
+     "w": "the"
+    },
+    {
+     "e": 16.799999999999997,
+     "k": true,
+     "s": 16.4,
+     "w": "frame"
+    },
+    {
+     "e": 17.2,
+     "k": false,
+     "s": 16.8,
+     "w": "under"
+    },
+    {
+     "e": 17.599999999999998,
+     "k": false,
+     "s": 17.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 21.8,
+   "s": 19.0,
+   "t": [
+    {
+     "e": 19.4,
+     "k": false,
+     "s": 19.0,
+     "w": "the"
+    },
+    {
+     "e": 19.799999999999997,
+     "k": true,
+     "s": 19.4,
+     "w": "frame"
+    },
+    {
+     "e": 20.2,
+     "k": false,
+     "s": 19.8,
+     "w": "under"
+    },
+    {
+     "e": 20.599999999999998,
+     "k": false,
+     "s": 20.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 24.8,
+   "s": 22.0,
+   "t": [
+    {
+     "e": 22.4,
+     "k": false,
+     "s": 22.0,
+     "w": "the"
+    },
+    {
+     "e": 22.799999999999997,
+     "k": true,
+     "s": 22.4,
+     "w": "frame"
+    },
+    {
+     "e": 23.2,
+     "k": false,
+     "s": 22.8,
+     "w": "under"
+    },
+    {
+     "e": 23.599999999999998,
+     "k": false,
+     "s": 23.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 27.8,
+   "s": 25.0,
+   "t": [
+    {
+     "e": 25.4,
+     "k": false,
+     "s": 25.0,
+     "w": "the"
+    },
+    {
+     "e": 25.799999999999997,
+     "k": true,
+     "s": 25.4,
+     "w": "frame"
+    },
+    {
+     "e": 26.2,
+     "k": false,
+     "s": 25.8,
+     "w": "under"
+    },
+    {
+     "e": 26.599999999999998,
+     "k": false,
+     "s": 26.2,
+     "w": "test"
+    }
+   ]
+  }
+ ],
+ "captions": [
+  {
+   "at": 1.0,
+   "text": "the frame under test",
+   "until": 3.8
+  },
+  {
+   "at": 4.0,
+   "text": "the frame under test",
+   "until": 6.8
+  },
+  {
+   "at": 7.0,
+   "text": "the frame under test",
+   "until": 9.8
+  },
+  {
+   "at": 10.0,
+   "text": "the frame under test",
+   "until": 12.8
+  },
+  {
+   "at": 13.0,
+   "text": "the frame under test",
+   "until": 15.8
+  },
+  {
+   "at": 16.0,
+   "text": "the frame under test",
+   "until": 18.8
+  },
+  {
+   "at": 19.0,
+   "text": "the frame under test",
+   "until": 21.8
+  },
+  {
+   "at": 22.0,
+   "text": "the frame under test",
+   "until": 24.8
+  },
+  {
+   "at": 25.0,
+   "text": "the frame under test",
+   "until": 27.8
+  }
+ ],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 6.2,
+     "dur": 0.5,
+     "kind": "build_to",
+     "target": {
+      "index": 0,
+      "kind": "datum"
+     }
+    },
+    {
+     "at": 7.4,
+     "dur": 0.5,
+     "kind": "build_to",
+     "target": {
+      "index": 1,
+      "kind": "datum"
+     }
+    },
+    {
+     "at": 8.6,
+     "dur": 0.5,
+     "kind": "build_to",
+     "target": {
+      "index": 2,
+      "kind": "datum"
+     }
+    },
+    {
+     "at": 9.8,
+     "dur": 0.5,
+     "kind": "build_to",
+     "target": {
+      "index": 3,
+      "kind": "datum"
+     }
+    },
+    {
+     "at": 11.0,
+     "dur": 0.5,
+     "kind": "build_to",
+     "target": {
+      "index": 4,
+      "kind": "datum"
+     }
+    },
+    {
+     "at": 12.2,
+     "dur": 0.5,
+     "kind": "build_to",
+     "target": {
+      "index": 5,
+      "kind": "datum"
+     }
+    },
+    {
+     "at": 13.4,
+     "dur": 0.5,
+     "kind": "build_to",
+     "target": {
+      "index": 6,
+      "kind": "datum"
+     }
+    },
+    {
+     "at": 14.8,
+     "dur": 0.5,
+     "kind": "build_to",
+     "target": {
+      "index": 6,
+      "kind": "datum"
+     }
+    }
+   ],
+   "world": {
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "kind": "ledger",
+    "page": {
+     "badges": [],
+     "builder": "timeline",
+     "caption": "anchor",
+     "colors": [],
+     "emphasize": null,
+     "field": "scribble",
+     "full_stage": true,
+     "judge": [
+      "E28 (2): a date axis with uneven gaps - 1 tick = 1 year; 1 tick = 1 month; cut 7 yrs (2019.26 -> 2026.34) - check the sub says which dates and why"
+     ],
+     "labels": [
+      "US control on RFSoC-type chips (3A001.a.14)",
+      "Xilinx announces Gen 3 RFSoC",
+      "Puzhi board on Crowd Supply",
+      "Campaign ends",
+      "Patel's post on X",
+      "Tom's Hardware, AMD's reply",
+      "Board ships"
+     ],
+     "layout": {
+      "16:9": {
+       "aspect": "16:9",
+       "axis": 300.8,
+       "cuts": [
+        {
+         "a": 197.33,
+         "b": 261.33,
+         "box": [
+          206.13,
+          308.8,
+          252.53,
+          328.0
+         ],
+         "from": 2019.2584,
+         "p": 229.33,
+         "text": "7 yrs",
+         "to": 2026.3383
+        }
+       ],
+       "fonts": {
+        "date": 18,
+        "label": 20,
+        "rule": 16,
+        "tick": 20,
+        "today": 17,
+        "year": 18
+       },
+       "items": [
+        {
+         "box": [
+          17.47,
+          384.8,
+          295.87,
+          454.4
+         ],
+         "date": "2017-08-15",
+         "date_line": "15 Aug 2017",
+         "date_text": "15 Aug 2017",
+         "date_w": 122.76,
+         "event": 0,
+         "kind": "event",
+         "label": "US control on RFSoC-type chips (3A001.a.14)",
+         "lane": 0,
+         "leader": [
+          13.47,
+          300.8,
+          13.47,
+          384.8
+         ],
+         "lines": [
+          "US control on RFSoC-type",
+          "chips (3A001.a.14)"
+         ],
+         "moved": false,
+         "pin": [
+          13.47,
+          300.8
+         ],
+         "side": "below",
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2017.6205479452055
+        },
+        {
+         "box": [
+          0.0,
+          219.2,
+          232.0,
+          288.8
+         ],
+         "date": "2019-02-20",
+         "date_line": "20 Feb 2019",
+         "date_text": "20 Feb 2019",
+         "date_w": 122.76,
+         "event": 1,
+         "kind": "event",
+         "label": "Xilinx announces Gen 3 RFSoC",
+         "lane": 0,
+         "leader": [
+          183.86,
+          300.8,
+          183.86,
+          288.8
+         ],
+         "lines": [
+          "Xilinx announces Gen",
+          "3 RFSoC"
+         ],
+         "moved": false,
+         "pin": [
+          183.86,
+          300.8
+         ],
+         "side": "above",
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2019.1383561643836
+        },
+        {
+         "box": [
+          338.97,
+          384.8,
+          570.97,
+          454.4
+         ],
+         "date": "2026-06",
+         "date_line": "Jun 2026 \u00b7 reported",
+         "date_text": "Jun 2026",
+         "date_w": 89.28,
+         "event": 2,
+         "kind": "event",
+         "label": "Puzhi board on Crowd Supply",
+         "lane": 0,
+         "leader": [
+          334.97,
+          300.8,
+          334.97,
+          384.8
+         ],
+         "lines": [
+          "Puzhi board on Crowd",
+          "Supply"
+         ],
+         "moved": false,
+         "pin": [
+          334.97,
+          300.8
+         ],
+         "side": "below",
+         "tier": "PLAUSIBLE",
+         "tier_word": "reported",
+         "x": 2026.4583333333333
+        },
+        {
+         "box": [
+          299.89,
+          243.2,
+          450.69,
+          288.8
+         ],
+         "date": "2026-08-27",
+         "date_line": "27 Aug 2026",
+         "date_text": "27 Aug 2026",
+         "date_w": 122.76,
+         "event": 3,
+         "kind": "event",
+         "label": "Campaign ends",
+         "lane": 0,
+         "leader": [
+          454.69,
+          300.8,
+          454.69,
+          288.8
+         ],
+         "lines": [
+          "Campaign ends"
+         ],
+         "moved": false,
+         "pin": [
+          454.69,
+          300.8
+         ],
+         "side": "above",
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2026.6534246575343
+        },
+        {
+         "box": [
+          292.16,
+          163.6,
+          489.36,
+          209.2
+         ],
+         "date": "2026-09-19",
+         "date_line": "19 Sep 2026",
+         "date_text": "19 Sep 2026",
+         "date_w": 122.76,
+         "event": 4,
+         "kind": "event",
+         "label": "Patel's post on X",
+         "lane": 1,
+         "leader": [
+          493.36,
+          300.8,
+          493.36,
+          209.2
+         ],
+         "lines": [
+          "Patel's post on X"
+         ],
+         "moved": false,
+         "pin": [
+          493.36,
+          300.8
+         ],
+         "side": "above",
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2026.7164383561644
+        },
+        {
+         "box": [
+          505.76,
+          139.6,
+          749.36,
+          209.2
+         ],
+         "date": "2026-09-24",
+         "date_line": "24 Sep 2026",
+         "date_text": "24 Sep 2026",
+         "date_w": 122.76,
+         "event": 5,
+         "kind": "event",
+         "label": "Tom's Hardware, AMD's reply",
+         "lane": 1,
+         "leader": [
+          501.76,
+          300.8,
+          501.76,
+          209.2
+         ],
+         "lines": [
+          "Tom's Hardware, AMD's",
+          "reply"
+         ],
+         "moved": false,
+         "pin": [
+          501.76,
+          300.8
+         ],
+         "side": "above",
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2026.7301369863014
+        },
+        {
+         "box": [
+          578.06,
+          243.2,
+          812.42,
+          288.8
+         ],
+         "date": "2026-11-06",
+         "date_line": "6 Nov 2026 \u00b7 reported",
+         "date_text": "6 Nov 2026",
+         "date_w": 111.6,
+         "event": 6,
+         "kind": "event",
+         "label": "Board ships",
+         "lane": 0,
+         "leader": [
+          574.06,
+          300.8,
+          574.06,
+          288.8
+         ],
+         "lines": [
+          "Board ships"
+         ],
+         "moved": true,
+         "pin": [
+          574.06,
+          300.8
+         ],
+         "side": "above",
+         "tier": "PLAUSIBLE",
+         "tier_word": "reported",
+         "x": 2026.8479452054794
+        },
+        {
+         "box": [
+          840.4,
+          243.2,
+          952.0,
+          288.8
+         ],
+         "date": "2027-05-06",
+         "date_line": "6 May 2027",
+         "date_text": "6 May 2027",
+         "date_w": 111.6,
+         "event": 6,
+         "kind": "moved_to",
+         "label": "Ships now",
+         "lane": 0,
+         "leader": [
+          878.36,
+          300.8,
+          878.36,
+          288.8
+         ],
+         "lines": [
+          "Ships now"
+         ],
+         "moved": false,
+         "pin": [
+          878.36,
+          300.8
+         ],
+         "side": "above",
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2027.3438356164384
+        }
+       ],
+       "line": 1.2,
+       "plot": {
+        "h": 544.0,
+        "w": 952.0
+       },
+       "rules": [
+        {
+         "box": [
+          29.07,
+          350.6,
+          168.27,
+          369.8
+         ],
+         "p": 98.67,
+         "stretch": 0,
+         "text": "1 tick = 1 year"
+        },
+        {
+         "box": [
+          532.43,
+          350.6,
+          680.91,
+          369.8
+         ],
+         "p": 606.67,
+         "stretch": 1,
+         "text": "1 tick = 1 month"
+        }
+       ],
+       "stretches": [
+        {
+         "a": 0.0,
+         "b": 197.3333,
+         "hi": 2019.2584,
+         "lo": 2017.5005,
+         "rule": "1 tick = 1 year",
+         "unit": 12,
+         "weight": 2
+        },
+        {
+         "a": 261.3333,
+         "b": 952.0,
+         "hi": 2027.4638,
+         "lo": 2026.3383,
+         "rule": "1 tick = 1 month",
+         "unit": 1,
+         "weight": 7
+        }
+       ],
+       "ticks": [
+        {
+         "box": [
+          32.87,
+          308.8,
+          79.27,
+          330.8
+         ],
+         "p": 56.07,
+         "stretch": 0,
+         "text": "2018",
+         "x": 2018.0
+        },
+        {
+         "box": [
+          145.13,
+          308.8,
+          191.53,
+          330.8
+         ],
+         "p": 168.33,
+         "stretch": 0,
+         "text": "2019",
+         "x": 2019.0
+        },
+        {
+         "box": [
+          292.0,
+          308.8,
+          326.8,
+          330.8
+         ],
+         "p": 309.4,
+         "stretch": 1,
+         "text": "Jun",
+         "x": 2026.41667
+        },
+        {
+         "box": [
+          343.14,
+          308.8,
+          377.94,
+          330.8
+         ],
+         "p": 360.54,
+         "stretch": 1,
+         "text": "Jul",
+         "x": 2026.5
+        },
+        {
+         "box": [
+          394.28,
+          308.8,
+          429.08,
+          330.8
+         ],
+         "p": 411.68,
+         "stretch": 1,
+         "text": "Aug",
+         "x": 2026.58333
+        },
+        {
+         "box": [
+          445.42,
+          308.8,
+          480.22,
+          330.8
+         ],
+         "hidden": true,
+         "p": 462.82,
+         "stretch": 1,
+         "text": "Sep",
+         "x": 2026.66667
+        },
+        {
+         "box": [
+          496.55,
+          308.8,
+          531.35,
+          330.8
+         ],
+         "hidden": true,
+         "p": 513.95,
+         "stretch": 1,
+         "text": "Oct",
+         "x": 2026.75
+        },
+        {
+         "box": [
+          547.69,
+          308.8,
+          582.49,
+          330.8
+         ],
+         "p": 565.09,
+         "stretch": 1,
+         "text": "Nov",
+         "x": 2026.83333
+        },
+        {
+         "box": [
+          598.83,
+          308.8,
+          633.63,
+          330.8
+         ],
+         "p": 616.23,
+         "stretch": 1,
+         "text": "Dec",
+         "x": 2026.91667
+        },
+        {
+         "box": [
+          649.97,
+          308.8,
+          684.77,
+          330.8
+         ],
+         "p": 667.37,
+         "stretch": 1,
+         "text": "Jan",
+         "x": 2027.0
+        },
+        {
+         "box": [
+          701.1,
+          308.8,
+          735.9,
+          330.8
+         ],
+         "p": 718.5,
+         "stretch": 1,
+         "text": "Feb",
+         "x": 2027.08333
+        },
+        {
+         "box": [
+          752.24,
+          308.8,
+          787.04,
+          330.8
+         ],
+         "p": 769.64,
+         "stretch": 1,
+         "text": "Mar",
+         "x": 2027.16667
+        },
+        {
+         "box": [
+          803.38,
+          308.8,
+          838.18,
+          330.8
+         ],
+         "p": 820.78,
+         "stretch": 1,
+         "text": "Apr",
+         "x": 2027.25
+        },
+        {
+         "box": [
+          854.52,
+          308.8,
+          889.32,
+          330.8
+         ],
+         "p": 871.92,
+         "stretch": 1,
+         "text": "May",
+         "x": 2027.33333
+        },
+        {
+         "box": [
+          905.65,
+          308.8,
+          940.45,
+          330.8
+         ],
+         "p": 923.05,
+         "stretch": 1,
+         "text": "Jun",
+         "x": 2027.41667
+        }
+       ],
+       "today": {
+        "box": [
+         472.48,
+         308.8,
+         537.78,
+         330.05
+        ],
+        "p": 505.13,
+        "text": "today",
+        "x": 2026.73562
+       },
+       "vertical": false,
+       "warnings": [],
+       "years": [
+        {
+         "p": 462.81,
+         "stretch": 1,
+         "text": "2026"
+        },
+        {
+         "p": 795.21,
+         "stretch": 1,
+         "text": "2027"
+        }
+       ]
+      },
+      "9:16": {
+       "aspect": "9:16",
+       "axis": 190,
+       "cuts": [
+        {
+         "a": 165.33,
+         "b": 229.33,
+         "box": [
+          114.4,
+          181.93,
+          176,
+          203.93
+         ],
+         "from": 2019.2584,
+         "p": 197.33,
+         "text": "7 yrs",
+         "to": 2026.3383
+        }
+       ],
+       "fonts": {
+        "date": 30,
+        "label": 32,
+        "rule": 22,
+        "tick": 28,
+        "today": 24,
+        "year": 28
+       },
+       "items": [
+        {
+         "box": [
+          226,
+          20.04,
+          745.68,
+          96.84
+         ],
+         "date": "2017-08-15",
+         "date_line": "15 Aug 2017",
+         "date_text": "15 Aug 2017",
+         "date_w": 198.0,
+         "event": 0,
+         "kind": "event",
+         "label": "US control on RFSoC-type chips (3A001.a.14)",
+         "leader": [
+          190,
+          39.24,
+          220,
+          39.24
+         ],
+         "lines": [
+          "US control on",
+          "RFSoC-type chips (3A001.a.14)"
+         ],
+         "moved": false,
+         "pin": [
+          190,
+          39.24
+         ],
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2017.6205479452055
+        },
+        {
+         "box": [
+          226,
+          136.89,
+          746.72,
+          213.69
+         ],
+         "date": "2019-02-20",
+         "date_line": "20 Feb 2019",
+         "date_text": "20 Feb 2019",
+         "date_w": 198.0,
+         "event": 1,
+         "kind": "event",
+         "label": "Xilinx announces Gen 3 RFSoC",
+         "leader": [
+          190,
+          156.09,
+          220,
+          156.09
+         ],
+         "lines": [
+          "Xilinx announces",
+          "Gen 3 RFSoC"
+         ],
+         "moved": false,
+         "pin": [
+          190,
+          156.09
+         ],
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2019.1383561643836
+        },
+        {
+         "box": [
+          226,
+          298.63,
+          709.84,
+          375.43
+         ],
+         "date": "2026-06",
+         "date_line": "Jun 2026 \u00b7 reported",
+         "date_text": "Jun 2026",
+         "date_w": 144.0,
+         "event": 2,
+         "kind": "event",
+         "label": "Puzhi board on Crowd Supply",
+         "leader": [
+          190,
+          317.83,
+          220,
+          317.83
+         ],
+         "lines": [
+          "",
+          "Puzhi board on Crowd Supply"
+         ],
+         "moved": false,
+         "pin": [
+          190,
+          317.83
+         ],
+         "tier": "PLAUSIBLE",
+         "tier_word": "reported",
+         "x": 2026.4583333333333
+        },
+        {
+         "box": [
+          226,
+          393.74,
+          692.96,
+          432.14
+         ],
+         "date": "2026-08-27",
+         "date_line": "27 Aug 2026",
+         "date_text": "27 Aug 2026",
+         "date_w": 198.0,
+         "event": 3,
+         "kind": "event",
+         "label": "Campaign ends",
+         "leader": [
+          190,
+          412.94,
+          220,
+          412.94
+         ],
+         "lines": [
+          "Campaign ends"
+         ],
+         "moved": false,
+         "pin": [
+          190,
+          412.94
+         ],
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2026.6534246575343
+        },
+        {
+         "box": [
+          226,
+          442.14,
+          764.64,
+          480.54
+         ],
+         "date": "2026-09-19",
+         "date_line": "19 Sep 2026",
+         "date_text": "19 Sep 2026",
+         "date_w": 198.0,
+         "event": 4,
+         "kind": "event",
+         "label": "Patel's post on X",
+         "leader": [
+          190,
+          443.65,
+          220,
+          461.34
+         ],
+         "lines": [
+          "Patel's post on X"
+         ],
+         "moved": false,
+         "pin": [
+          190,
+          443.65
+         ],
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2026.7164383561644
+        },
+        {
+         "box": [
+          226,
+          490.54,
+          728.8,
+          567.34
+         ],
+         "date": "2026-09-24",
+         "date_line": "24 Sep 2026",
+         "date_text": "24 Sep 2026",
+         "date_w": 198.0,
+         "event": 5,
+         "kind": "event",
+         "label": "Tom's Hardware, AMD's reply",
+         "leader": [
+          190,
+          450.33,
+          220,
+          509.74
+         ],
+         "lines": [
+          "Tom's Hardware,",
+          "AMD's reply"
+         ],
+         "moved": false,
+         "pin": [
+          190,
+          450.33
+         ],
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2026.7301369863014
+        },
+        {
+         "box": [
+          226,
+          577.34,
+          640.0,
+          654.14
+         ],
+         "date": "2026-11-06",
+         "date_line": "6 Nov 2026 \u00b7 reported",
+         "date_text": "6 Nov 2026",
+         "date_w": 180.0,
+         "event": 6,
+         "kind": "event",
+         "label": "Board ships",
+         "leader": [
+          190,
+          507.76,
+          220,
+          596.54
+         ],
+         "lines": [
+          "",
+          "Board ships"
+         ],
+         "moved": true,
+         "pin": [
+          190,
+          507.76
+         ],
+         "tier": "PLAUSIBLE",
+         "tier_word": "reported",
+         "x": 2026.8479452054794
+        },
+        {
+         "box": [
+          226,
+          730.3,
+          603.28,
+          768.7
+         ],
+         "date": "2027-05-06",
+         "date_line": "6 May 2027",
+         "date_text": "6 May 2027",
+         "date_w": 180.0,
+         "event": 6,
+         "kind": "moved_to",
+         "label": "Ships now",
+         "leader": [
+          190,
+          749.5,
+          220,
+          749.5
+         ],
+         "lines": [
+          "Ships now"
+         ],
+         "moved": false,
+         "pin": [
+          190,
+          749.5
+         ],
+         "tier": "CONFIRMED",
+         "tier_word": "",
+         "x": 2027.3438356164384
+        }
+       ],
+       "line": 1.2,
+       "plot": {
+        "h": 808.0,
+        "w": 800.0
+       },
+       "rules": [
+        {
+         "box": [
+          -8.8,
+          0.0,
+          176,
+          30.0
+         ],
+         "p": 22.0,
+         "stretch": 0,
+         "text": "1 tick = 1 year"
+        },
+        {
+         "box": [
+          -21.12,
+          229.33,
+          176,
+          259.33
+         ],
+         "p": 251.33,
+         "stretch": 1,
+         "text": "1 tick = 1 month"
+        }
+       ],
+       "stretches": [
+        {
+         "a": 0.0,
+         "b": 165.3333,
+         "hi": 2019.2584,
+         "lo": 2017.5005,
+         "rule": "1 tick = 1 year",
+         "unit": 12,
+         "weight": 2
+        },
+        {
+         "a": 229.3333,
+         "b": 808.0,
+         "hi": 2027.4638,
+         "lo": 2026.3383,
+         "rule": "1 tick = 1 month",
+         "unit": 1,
+         "weight": 7
+        }
+       ],
+       "ticks": [
+        {
+         "box": [
+          113.28,
+          48.85,
+          176,
+          76.85
+         ],
+         "p": 68.45,
+         "stretch": 0,
+         "text": "2018",
+         "x": 2018.0
+        },
+        {
+         "box": [
+          113.28,
+          125.84,
+          176,
+          153.84
+         ],
+         "p": 145.44,
+         "stretch": 0,
+         "text": "2019",
+         "x": 2019.0
+        },
+        {
+         "box": [
+          50.56,
+          277.92,
+          176,
+          305.92
+         ],
+         "p": 297.52,
+         "stretch": 1,
+         "text": "Jun 2026",
+         "x": 2026.41667
+        },
+        {
+         "box": [
+          128.96,
+          318.54,
+          176,
+          346.54
+         ],
+         "p": 338.14,
+         "stretch": 1,
+         "text": "Jul",
+         "x": 2026.5
+        },
+        {
+         "box": [
+          128.96,
+          359.17,
+          176,
+          387.17
+         ],
+         "p": 378.77,
+         "stretch": 1,
+         "text": "Aug",
+         "x": 2026.58333
+        },
+        {
+         "box": [
+          128.96,
+          399.79,
+          176,
+          427.79
+         ],
+         "p": 419.39,
+         "stretch": 1,
+         "text": "Sep",
+         "x": 2026.66667
+        },
+        {
+         "box": [
+          128.96,
+          440.42,
+          176,
+          468.42
+         ],
+         "hidden": true,
+         "p": 460.02,
+         "stretch": 1,
+         "text": "Oct",
+         "x": 2026.75
+        },
+        {
+         "box": [
+          128.96,
+          481.04,
+          176,
+          509.04
+         ],
+         "p": 500.64,
+         "stretch": 1,
+         "text": "Nov",
+         "x": 2026.83333
+        },
+        {
+         "box": [
+          128.96,
+          521.66,
+          176,
+          549.66
+         ],
+         "p": 541.26,
+         "stretch": 1,
+         "text": "Dec",
+         "x": 2026.91667
+        },
+        {
+         "box": [
+          50.56,
+          562.29,
+          176,
+          590.29
+         ],
+         "p": 581.89,
+         "stretch": 1,
+         "text": "Jan 2027",
+         "x": 2027.0
+        },
+        {
+         "box": [
+          128.96,
+          602.91,
+          176,
+          630.91
+         ],
+         "p": 622.51,
+         "stretch": 1,
+         "text": "Feb",
+         "x": 2027.08333
+        },
+        {
+         "box": [
+          128.96,
+          643.53,
+          176,
+          671.53
+         ],
+         "p": 663.13,
+         "stretch": 1,
+         "text": "Mar",
+         "x": 2027.16667
+        },
+        {
+         "box": [
+          128.96,
+          684.16,
+          176,
+          712.16
+         ],
+         "p": 703.76,
+         "stretch": 1,
+         "text": "Apr",
+         "x": 2027.25
+        },
+        {
+         "box": [
+          128.96,
+          724.78,
+          176,
+          752.78
+         ],
+         "p": 744.38,
+         "stretch": 1,
+         "text": "May",
+         "x": 2027.33333
+        },
+        {
+         "box": [
+          128.96,
+          765.41,
+          176,
+          793.41
+         ],
+         "p": 785.01,
+         "stretch": 1,
+         "text": "Jun",
+         "x": 2027.41667
+        }
+       ],
+       "today": {
+        "box": [
+         92.8,
+         435.0,
+         176,
+         463.8
+        ],
+        "p": 453.0,
+        "text": "today",
+        "x": 2026.73562
+       },
+       "vertical": true,
+       "warnings": [],
+       "years": []
+      }
+     },
+     "quiet_zone": "right",
+     "schema_version": "ledger_page.v1",
+     "source": "Federal Register 2017-16904; Xilinx (2019-02-20); CNX; Crowd Supply; X (Patel); Tom's Hardware (2026-09-24)",
+     "sub": "The dates this story turns on - to scale inside each stretch; the empty years between are cut",
+     "surface": "page",
+     "timeline": {
+      "events_in": [
+       {
+        "date": "2017-08-15",
+        "label": "US control on RFSoC-type chips (3A001.a.14)",
+        "tier": "CONFIRMED"
+       },
+       {
+        "date": "2019-02-20",
+        "label": "Xilinx announces Gen 3 RFSoC",
+        "tier": "CONFIRMED"
+       },
+       {
+        "date": "2026-06",
+        "label": "Puzhi board on Crowd Supply",
+        "tier": "PLAUSIBLE"
+       },
+       {
+        "date": "2026-08-27",
+        "label": "Campaign ends",
+        "tier": "CONFIRMED"
+       },
+       {
+        "date": "2026-09-19",
+        "label": "Patel's post on X",
+        "tier": "CONFIRMED"
+       },
+       {
+        "date": "2026-09-24",
+        "label": "Tom's Hardware, AMD's reply",
+        "tier": "CONFIRMED"
+       },
+       {
+        "date": "2026-11-06",
+        "label": "Board ships",
+        "moved_to": {
+         "date": "2027-05-06",
+         "label": "Ships now",
+         "tier": "CONFIRMED"
+        },
+        "tier": "PLAUSIBLE"
+       }
+      ],
+      "items": 8,
+      "today": "2026-09-26"
+     },
+     "title": "From the rule to the post",
+     "unit": "",
+     "value_strings": [],
+     "values": [],
+     "variant": "timeline"
+    }
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the dated event timeline"
+}

@@ -10247,6 +10247,7 @@ PAGE_INTRINSIC_BUILDERS = {
     "share": 3.2,
     "tiers": 4.5,
     "treemap": 3.6,
+    "timeline": 3.6,   # P73 T2: the axis draws over the first 0.4, the events land over the rest (or on their words)
 }
 # These are the player's LPX clocks (`scene-evidence-engine.mjs:8985-9014`).  The
 # compiler cannot import the browser module, so the intrinsic builders' clocks

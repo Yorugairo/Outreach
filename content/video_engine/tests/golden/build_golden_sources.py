@@ -6117,6 +6117,63 @@ SURFACES.update({"claim-bar": claim_bar})
 FRAME_T.update({"claim-bar": 8.0})   # at rest: every bar built and written, both claims his; the solo waits for 12.0
 
 
+# ---- P73 T2: THE DATED EVENT TIMELINE PAGE (the AMD RFSoC episode's beat 5) -------------------------------------------
+# The research pack's section 2 (`scratchpad/amd-rfsoc/research/RESEARCH.md`), each date at its stated precision and
+# tier: the control (FR 2017-16904), the chip family announced (Xilinx, 2019-02-20), the campaign live by June 2026
+# (PLAUSIBLE - CNX), its end (Crowd Supply), Patel's post (X), the article (Tom's Hardware, its feed date), and the ship
+# date Tom's reported (2026-11-06, PLAUSIBLE) that the Crowd Supply page now shows as 6 May 2027 (CONFIRMED).
+TIMELINE_STORY = {
+    "title": "From the rule to the post",
+    "sub": "The dates this story turns on - to scale inside each stretch; the empty years between are cut",
+    "src": "Federal Register 2017-16904; Xilinx (2019-02-20); CNX; Crowd Supply; X (Patel); Tom's Hardware (2026-09-24)",
+    "today": "2026-09-26",
+    "events": [
+        {"date": "2017-08-15", "label": "US control on RFSoC-type chips (3A001.a.14)", "tier": "CONFIRMED"},
+        {"date": "2019-02-20", "label": "Xilinx announces Gen 3 RFSoC", "tier": "CONFIRMED"},
+        {"date": "2026-06", "label": "Puzhi board on Crowd Supply", "tier": "PLAUSIBLE"},
+        {"date": "2026-08-27", "label": "Campaign ends", "tier": "CONFIRMED"},
+        {"date": "2026-09-19", "label": "Patel's post on X", "tier": "CONFIRMED"},
+        {"date": "2026-09-24", "label": "Tom's Hardware, AMD's reply", "tier": "CONFIRMED"},
+        {"date": "2026-11-06", "label": "Board ships", "tier": "PLAUSIBLE",
+         "moved_to": {"date": "2027-05-06", "label": "Ships now", "tier": "CONFIRMED"}},
+    ],
+}
+# one `build_to` per event on its word (the ship date named twice: its landing, then its move)
+TIMELINE_WORDS = [{"kind": "build_to", "at": at, "dur": 0.5, "target": {"kind": "datum", "index": i}}
+                  for i, at in ((0, 6.2), (1, 7.4), (2, 8.6), (3, 9.8), (4, 11.0), (5, 12.2), (6, 13.4), (6, 14.8))]
+# (the page's build opens at ~4.4 s - the roll, the savour and the field - and its axis is drawn by ~5.8 s: the first word
+# comes after it, as a row's first event does)
+TIMELINE_PLATE = "ledger:amd-rfsoc-timeline:timeline"
+
+
+def _event_timeline(aspect: str) -> tuple[dict, dict]:
+    """P73 T2: the story's dates on one axis - two stretches (a tick a year, a tick a month) and the seven empty years
+    between them cut and written, today marked, each event landing on its word and lit, the ship date struck and moved.
+    Built as an episode row builds it: at 16:9 the page is the plate (`stamp_full_stage`)."""
+    import build_scene_timeline_f as BST
+    page = LPG.build_spec(TIMELINE_STORY, "timeline", None, "right")
+    page["field"] = "scribble"
+    species = [dict(w) for w in TIMELINE_WORDS]
+    errs = BST.validate_species(species, (0, 0, 0), TIMELINE_PLATE)
+    assert not errs, errs
+    saved = BST.ASPECT
+    BST.ASPECT = aspect
+    try:
+        BST.stamp_full_stage(page)
+        world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+        BST.derive_rescale_states(world, species, TIMELINE_PLATE, REPO)
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the dated event timeline", scenes, {}, aspect if aspect != "16:9" else None), _base_uris()
+
+
+SURFACES.update({"event-timeline": lambda: _event_timeline("16:9"),
+                 "event-timeline-9x16": lambda: _event_timeline("9:16")})
+FRAME_T.update({"event-timeline": 17.0,         # every event landed, the ship date struck at 14.8 and moved, "Ships now" lit
+                "event-timeline-9x16": 17.0})   # the same instant on the portrait page: the axis upright, the column beside it
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:
