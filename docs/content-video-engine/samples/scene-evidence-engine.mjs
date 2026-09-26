@@ -6073,7 +6073,10 @@ async function mount(doc) {
   /* the overlay, mounted ONCE PER BOUNDARY and kept on wA.__melt: the ink clone (a sibling right after the board, so it
      rides above it), and an svg sibling holding the filters, the masks, the stains' rims, the droplets and the ball. Nothing
      here reads time; the ink box and the colours are read once, from the page as it stands at the boundary. `key` names
-     that boundary (P71 T4 / R26-312: the arriving scene's span[0]) - paintMelt re-mounts when the frame's differs. */
+     that boundary (P71 T4 / R26-312: the arriving scene's span[0]) - paintMelt re-mounts when the frame's differs.
+     P72 T21 / R26-321: "as it stands at the boundary" is literal - the caller mounts on the boundary's OWN frame. The
+     engine's render() paints span[0] first whenever a frame inside the melt finds no mount keyed to it (boundaryFirst),
+     so the clone is the page painted at span[0], its live idle and all, whether the frame was played or sought. */
   const meltMount = (wA, el, id, o = {}, key) => {   /* P61 T5b: `o` is the exit's own opts - the BODY COLOUR is read here, once, where the ball's one gradient is built */
     const doc = wA.ownerDocument;
     if (!doc.getElementById("meltcss")) { const s = doc.createElement("style"); s.id = "meltcss"; s.textContent = MELT_CSS; doc.head.appendChild(s); }
@@ -6132,7 +6135,8 @@ async function mount(doc) {
        so a mount outlives its own window, and when the NEXT scene also arrives by a melt no melt-free frame clears it
        between the two - the second melt then threw the first one's page (Steel and Paper H, 242.38 s, the railways page
        over the yields page on screen). A frame's mount is the one keyed to its own boundary, so a seek and a play throw
-       the same PAGE (the same page, not the same bytes: the clone is taken on the frame that mounts it). Checked BEFORE
+       the same PAGE - and, since P72 T21 (R26-321), the same BYTES: the mount is made on the boundary's own frame (the
+       caller paints span[0] first when a frame finds none), never on the live frame that first asked. Checked BEFORE
        the page test below, so a stale mount over a world with no page is cleared and cut, never re-mounted empty. */
     if (wA.__melt && (!(wA.__melt.svg && wA.__melt.svg.isConnected) || wA.__melt.key !== ctx.t0)) clearMelt(wA);
     if (!wA.__melt && !wA.querySelector(".lp-page")) return null;
@@ -7803,9 +7807,17 @@ async function mount(doc) {
     if (!k || !d.scene) return "";
     const cam = camCssAt(camNow(d.scene, t), k);
     if (!cam) return "";
-    const org = (getComputedStyle(el).transformOrigin || "").split(" ").map(parseFloat);
+    const cs = getComputedStyle(el), org = (cs.transformOrigin || "").split(" ").map(parseFloat);
     const ox = el.offsetLeft + (Number.isFinite(org[0]) ? org[0] : (el.offsetWidth || 0) / 2);
-    const oy = el.offsetTop + (Number.isFinite(org[1]) ? org[1] : (el.offsetHeight || 0) / 2);
+    /* P72 T21 / R26-376: the origin's height is the card's PLACED height (the place's aspect at the laid-out width - the
+       box DOCK_LIVE and the contact shadow read, R26-58), taken at the SHARE of the border box the computed origin names
+       (read against the unrounded used height - offsetHeight rounds). The layout's own height is not the card's until
+       its image has decoded, and a cold seek reads it in the very frame that mounts the image: the depth card sat 69 px
+       higher sought than played. */
+    const px = (v) => parseFloat(v) || 0;
+    const lh = px(cs.height) + (cs.boxSizing === "border-box" ? 0 : px(cs.paddingTop) + px(cs.paddingBottom) + px(cs.borderTopWidth) + px(cs.borderBottomWidth));
+    const P = d.place, pw = el.offsetWidth || 0, ph = P && P.w > 0 && P.h > 0 && pw > 0 ? pw * P.h / P.w : lh;
+    const oy = el.offsetTop + (Number.isFinite(org[1]) && lh > 0 ? ph * org[1] / lh : ph / 2);
     const cx = STAGE_W / 2 - ox, cy = STAGE_H / 2 - oy;
     return "translate(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px) " + cam
       + "translate(" + (-cx).toFixed(2) + "px," + (-cy).toFixed(2) + "px) ";
@@ -7974,6 +7986,26 @@ async function mount(doc) {
   window.__lpSnap = () => ({ rect: SNAP_RECT, from: Object.keys(SNAP_FROM) });   /* P47 T7: the snap's recorded card box, for the tests */
   TL.scenes.forEach((sc, si) => (sc.docks || []).forEach((d) => DOCKS.push({ ...d, si, scene: sc })));
   TL.scenes.forEach((sc) => { const pg = sc.world && sc.world.page; if (pg && (pg.enter === "snap" || pg.enter === "camera") && pg.snap_from) SNAP_FROM[pg.snap_from] = sc; });   /* P49 T5: a camera page's card is registered the same way */
+  /* P72 T21 / R26-21 + R26-260: THE CARD'S BOX IS DECLARED, NOT RECORDED. The box a snapping page grows from is the card's
+     PLACED box at the snap's start - dockGeom (E45's reading pop and park, a pure function of t) at the place's own aspect,
+     the box DOCK_LIVE and the contact shadow already read a card by (R26-58: the layout's height is not the card's until
+     its image has decoded) - so a cold seek into the 0.45 s window grows the page out of the box a play does. A card
+     still READING at the snap needs its reading rectangle, which the dock loop measures once (dockReadRect): until it
+     has, render() paints the frame before the snap first (boundaryFirst). A card with no place keeps the box the dock
+     loop recorded, as before. */
+  const snapDockOf = (scene) => {
+    const slide = scene.world.page.snap_from, t0 = scene.span[0];
+    let best = null;
+    for (const d of DOCKS) if (d.slide === slide && d.enter <= t0 + 1e-6 && (!best || d.enter > best.enter)) best = d;
+    return best;
+  };
+  const snapNeedsRead = (d) => !!d && !!d.place && !d.read_place && !d._read && !d.centre;
+  const snapCardBox = (scene) => {
+    const d = snapDockOf(scene), P = d && d.place;
+    if (!P || !(P.w > 0 && P.h > 0) || snapNeedsRead(d)) return SNAP_RECT[scene.world.page.snap_from] || null;
+    const G = dockGeom(docks[d.slot | 0], d, scene.span[0]);
+    return G && G.w > 0 ? { x: G.x, y: G.y, w: G.w, h: G.w * P.h / P.w } : null;
+  };
   /* COALESCE. A document that holds through three scenes is authored as one
      dock per scene, so it used to exit and re-enter at every boundary - the
      entrance re-running on a card that never left. Evidence that persists
@@ -17389,7 +17421,18 @@ async function mount(doc) {
     if (titleRelit) {
       const titles = [{ glyphs: st.titleGlyphs || [], at: -Infinity }, ...PF.retitles.map((r) => ({ glyphs: r.glyphs, at: r.sp.at }))];
       const standing = titles.reduce((s, c) => (c.at <= t ? c : s), titles[0]);
-      for (const c of titles) for (const g of c.glyphs) g.style.color = titleLit && c === standing ? PS.RELIGHT_COL : (g.__col || "");
+      /* P72 T21 / R26-324: a title whose colour CHANGED this frame repaints WHOLE. With T37c's glow (a currentColor
+         text-shadow) Chromium repaints only part of a glowing glyph after a colour change, leaving up to 6/255 in a thin
+         band along the glyph tops that a fresh page never paints - so a played frame after a relight was not the sought
+         one. Taking the title out of the layout and back (display none -> its own) in the same frame repaints its whole
+         box, shadow and all; a frame whose colours did not change touches nothing. */
+      const flipped = new Set();
+      for (const c of titles) for (const g of c.glyphs) {
+        const col = titleLit && c === standing ? PS.RELIGHT_COL : (g.__col || "");
+        if (g.__lit !== col) flipped.add(g.closest(".lp-title") || g.parentNode);
+        g.style.color = col; g.__lit = col;
+      }
+      for (const tEl of flipped) if (tEl) { const d0 = tEl.style.display; tEl.style.display = "none"; void tEl.offsetHeight; tEl.style.display = d0; }
     }
     for (const b of PF.brackets) if (b.hidden) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); }   /* R26-28: a bracket whose data left the window stays hidden through the relight */
     if (PF.retitles.length) {
@@ -19220,19 +19263,32 @@ async function mount(doc) {
     const bdc = st.boardCentre || { x: 50, y: 50 };
     st.page.style.transformOrigin = bdc.x.toFixed(2) + "% " + bdc.y.toFixed(2) + "%";
     let snapCss = "";
-    if (snap) {   /* the page's own charcoal board (measured once, untransformed) onto the card's box (from the dock loop): board -> card at u = 0, the page itself at u = 1 */
+    if (snap) {   /* the page's own charcoal board (measured once, untransformed) onto the card's box: board -> card at u = 0, the page itself at u = 1 */
       if (!st.snapBoard) {
         const stage = document.getElementById("stage").getBoundingClientRect(), k = stage.width / (PORTRAIT ? 1080 : 1920);
         const saved = st.page.style.transform; st.page.style.transform = "none";
-        const bd = st.field.getBoundingClientRect(); st.page.style.transform = saved;
+        const bd = st.field.getBoundingClientRect(), pr = st.page.getBoundingClientRect(); st.page.style.transform = saved;
         st.snapBoard = { x: (bd.x - stage.x) / k, y: (bd.y - stage.y) / k, w: bd.width / k, h: bd.height / k };
+        st.snapPage = { x: (pr.x - stage.x) / k, y: (pr.y - stage.y) / k, w: pr.width / k, h: pr.height / k };   /* P72 T21: the box the page's origin is a share of */
       }
-      const S = { board: st.snapBoard, card: SNAP_RECT[pg.snap_from] || null }, u = minJerk(clamp01((t - scene.span[0]) / SNAP_S));
-      if (S.card && S.board.w > 0 && S.board.h > 0) {
-        const sx0 = S.card.w / S.board.w, sy0 = S.card.h / S.board.h;
+      /* P72 T21 / R26-260 + R26-21: the card's box is DECLARED (snapCardBox), and the snap turns about the page's OWN origin.
+         It used to write transform-origin "0 0" whenever the dock loop had recorded the card - at u = 1 too, where the snap
+         is the identity - so the page's punch (and everything inside the snap) turned about the page's corner instead of
+         its board centre: forward play landed the page (+137, +100) px off, a cold seek (no card recorded yet) landed it
+         right and showed it FULL inside the window. Now the snap is written about the origin every other frame uses (O,
+         the board centre): it takes the board AS PUNCHED this frame onto the card at u = 0 and is the identity at u = 1,
+         so the frame after the window is the frame a seek paints. */
+      const u = minJerk(clamp01((t - scene.span[0]) / SNAP_S)), B = st.snapBoard, Pg = st.snapPage;
+      const card = u < 1 ? snapCardBox(scene) : null;
+      if (card && B.w > 0 && B.h > 0 && Pg) {
+        const P = 1 + (LP.PUNCH_SCALE - 1) * pk;   /* the punch the page carries inside the snap, about its origin */
+        const O = { x: Pg.x + Pg.w * bdc.x / 100, y: Pg.y + Pg.h * bdc.y / 100 };
+        const bx = O.x + (B.x - O.x) * P, by = O.y + (B.y - O.y) * P;   /* the board as punched, stage px */
+        const sx0 = card.w / (B.w * P), sy0 = card.h / (B.h * P);
         const sx = sx0 + (1 - sx0) * u, sy = sy0 + (1 - sy0) * u;
-        const tx = (S.card.x - S.board.x * sx0) * (1 - u), ty = (S.card.y - S.board.y * sy0) * (1 - u);
-        st.page.style.transformOrigin = "0 0";
+        /* the page's transform-origin (O) already wraps the whole chain, so the snap written here acts ABOUT O: a point q
+           of the punched page goes to O + t + s (q - O), and at u = 0 the punched board's corner lands on the card's */
+        const tx = (card.x - O.x - (bx - O.x) * sx0) * (1 - u), ty = (card.y - O.y - (by - O.y) * sy0) * (1 - u);
         snapCss = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + sx.toFixed(5) + "," + sy.toFixed(5) + ") ";
         /* THE WHOOSH (operator, 2026-09-08: "zoom pan frame would work if the zoom is fast with a woosh to full size"): a motion blur
            on a VELOCITY envelope - 4u(1-u), exactly 0 at both ends and peaking where the snap moves fastest - the mechanism ported from
@@ -25357,7 +25413,36 @@ async function mount(doc) {
   /* ... and the copy its DECLARING scene keeps (the compiler's `compiled_chapter`, so the gate credits its landing) is
      owned by a painter that draws nothing: the stage layer above is the chapter's only painter */
   SPECIES_PAINTERS.chapter = () => {};
+  /* P72 T21 - A BOUNDARY'S INPUTS ARE READ AT THE BOUNDARY (R26-321, R26-21). Two things a transition takes from the world
+     as it stands are read ONCE and kept: the melt's ink clone (meltMount: the page as painted - its live idle and all) and
+     the reading rectangle of a card a page snaps out of while the card is still reading (dockReadRect, measured once per
+     dock by the dock loop). Read on whatever frame first needed them, a play (the boundary's own frame) and a cold seek
+     (the frame asked for) read different things. So when a frame INSIDE such a transition finds its input not yet read,
+     render() paints the frame the input belongs to FIRST - the melt's span[0], the frame before the snap - and then the
+     frame asked for: every frame then reads the one input, played or sought. One extra paint per boundary visit. */
+  const boundaryFirst = (t) => {
+    let si = 0;
+    for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
+    const sc = TL.scenes[si], prev = TL.scenes[si - 1], t0 = sc.span[0];
+    if (!prev || !(t > t0)) return null;
+    if (exitName(sc.exit) === "melt" && prev.world && prev.world.kind === "ledger") {
+      let o;
+      try { o = Object.assign({}, MELT, meltOpts(sc.exit)); } catch (e) { return null; }   /* a form the player cannot read is a cut: nothing to mount */
+      if (t - t0 >= Math.max(0.05, +o.secs || MELT.S)) return null;   /* past its window the melt is `gone` - nothing of the clone shows */
+      const m = wA.__melt;
+      return m && m.key === t0 && m.svg && m.svg.isConnected ? null : t0;
+    }
+    const pg = sc.world && sc.world.kind === "ledger" && sc.world.page;
+    if (pg && pg.enter === "snap" && t - t0 < SNAP_S) {
+      const d = snapDockOf(sc), tr = t0 - 1 / 48;
+      return snapNeedsRead(d) && d.enter <= tr ? tr : null;
+    }
+    return null;
+  };
+  let MELT_HAND_LAST = null;   /* P72 T21 / R26-322: the ring the arriving page was handed this frame, for the tests */
+  window.__lpMeltHand = () => MELT_HAND_LAST;
   const render = (t) => {
+    { const pre = boundaryFirst(t); if (pre !== null) render(pre); }   /* P72 T21: a boundary's inputs are read AT the boundary */
     pmHideAll();   /* P69 T26e: a prop morph's mesh shows only on a frame that paints it */
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
@@ -25513,14 +25598,19 @@ async function mount(doc) {
     const meltRnd = (k) => lpHash(0x3E17 ^ ((sc.scene_id || "").length * 131), k, 977);
     const handOn = !!(meltOn && meltOn.ending === "morph" && sc.world && sc.world.kind === "ledger");
     const handDelay = handOn ? meltHandDelay(meltOn, true) : 0;
-    const handProp = handOn ? (() => {
-      const rect = (wA.__melt && wA.__melt.rect) || meltInkRect(wA);
+    /* P72 T21 / R26-322: READ AFTER THE OUTGOING PAGE HAS PAINTED THIS FRAME (called below, between paint(wA) and
+       paint(wB)), and off a mount only when it is THIS boundary's - read before, on a morph's first frame it was the box
+       of the page the world showed a frame earlier (or a previous melt's mount), not of the page the ball is made of. */
+    const handPropNow = () => {
+      if (!handOn) return null;
+      const mt = wA.__melt && wA.__melt.key === sc.span[0] ? wA.__melt : null;
+      const rect = (mt && mt.rect) || meltInkRect(wA);
       if (!rect) return null;
       const h = meltHandRing(Object.assign({ rect, stagebox: meltStageBox(wA) }, meltOn), meltRnd);
       if (!h || !h.ring || h.ring.length < 3) return null;
       const sb = meltStageBox(wA);
       return { poly: h.ring.map((p) => [(p[0] - sb.x) / sb.w, (p[1] - sb.y) / sb.h]), hand: true };
-    })() : null;
+    };
     /* E47 (operator 2026-09-06): DIP and BLURZOOM straddle the boundary, so a scene reads its OWN exit for the
        half after its start and the NEXT scene's exit for the half before its end. `exit` names the transition INTO
        the scene it sits on - the same law the wipe, the suck and the dissolve above already follow. The switch
@@ -25608,6 +25698,8 @@ async function mount(doc) {
     wB.style.clipPath = sc.exit === "wipe_right"
       ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
     paint(wA, prev || sc);
+    const handProp = handPropNow();   /* P72 T21 / R26-322: the ring off the page as it stands THIS frame */
+    MELT_HAND_LAST = handProp;
     /* E88: under a throw the next chart draws once the ball has launched - its page's clock starts meltDelay later.
        P61 T3: under a MORPH the same hold runs to the hand-over, and the page's morph is given the melt's remaining
        seconds and the ball's ring as its prop - one clock, one shape, no cut. */
@@ -25888,6 +25980,12 @@ async function mount(doc) {
       const onLedgerWorld = !!(sc.world && sc.world.kind === "ledger");   /* E22: the ledger page is CHARCOAL, so the hand's mark on it is chalk; every other ground takes the charcoal */
       el.dataset.slide = d.slide;
       el.style.visibility = "";
+      /* P72 T21 / R26-294: THE SLOT'S PIVOT IS THIS FRAME'S. A stamp or a poof turns its mark about its painted centre and
+         the camera arrival about the card's corner, each by writing the slot element's transform-origin - which nothing
+         cleared, so a card that took the slot after a stamp (H's leases record after the data-centre prop, 306.34 s)
+         breathed about the stamp's pivot in play and about its own on a cold seek: ~1 px. Every frame starts from the
+         template's origin; the branches below write theirs again. */
+      if (el.style.transformOrigin) el.style.transformOrigin = "";
       const snapSc = SNAP_FROM[d.slide];   /* the card a snapping page grows from: record its layout box, hide it once the page has it */
       el.classList.toggle("card-page", !!snapSc);   /* a card the page will become: rounded, no frame, the cream is the edge */
       if (snapSc) {

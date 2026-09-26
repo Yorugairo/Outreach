@@ -1594,7 +1594,10 @@ const meltGatherWrite = (parts, u, o) => {
 /* the overlay, mounted ONCE PER BOUNDARY and kept on wA.__melt: the ink clone (a sibling right after the board, so it
    rides above it), and an svg sibling holding the filters, the masks, the stains' rims, the droplets and the ball. Nothing
    here reads time; the ink box and the colours are read once, from the page as it stands at the boundary. `key` names
-   that boundary (P71 T4 / R26-312: the arriving scene's span[0]) - paintMelt re-mounts when the frame's differs. */
+   that boundary (P71 T4 / R26-312: the arriving scene's span[0]) - paintMelt re-mounts when the frame's differs.
+   P72 T21 / R26-321: "as it stands at the boundary" is literal - the caller mounts on the boundary's OWN frame. The
+   engine's render() paints span[0] first whenever a frame inside the melt finds no mount keyed to it (boundaryFirst),
+   so the clone is the page painted at span[0], its live idle and all, whether the frame was played or sought. */
 const meltMount = (wA, el, id, o = {}, key) => {   /* P61 T5b: `o` is the exit's own opts - the BODY COLOUR is read here, once, where the ball's one gradient is built */
   const doc = wA.ownerDocument;
   if (!doc.getElementById("meltcss")) { const s = doc.createElement("style"); s.id = "meltcss"; s.textContent = MELT_CSS; doc.head.appendChild(s); }
@@ -1653,7 +1656,8 @@ export const paintMelt = (ctx) => {
      so a mount outlives its own window, and when the NEXT scene also arrives by a melt no melt-free frame clears it
      between the two - the second melt then threw the first one's page (Steel and Paper H, 242.38 s, the railways page
      over the yields page on screen). A frame's mount is the one keyed to its own boundary, so a seek and a play throw
-     the same PAGE (the same page, not the same bytes: the clone is taken on the frame that mounts it). Checked BEFORE
+     the same PAGE - and, since P72 T21 (R26-321), the same BYTES: the mount is made on the boundary's own frame (the
+     caller paints span[0] first when a frame finds none), never on the live frame that first asked. Checked BEFORE
      the page test below, so a stale mount over a world with no page is cleared and cut, never re-mounted empty. */
   if (wA.__melt && (!(wA.__melt.svg && wA.__melt.svg.isConnected) || wA.__melt.key !== ctx.t0)) clearMelt(wA);
   if (!wA.__melt && !wA.querySelector(".lp-page")) return null;
