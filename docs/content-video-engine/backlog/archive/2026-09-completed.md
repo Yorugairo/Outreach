@@ -300,6 +300,22 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-189 | No gate row names the transform a cut refused. Closed by P72 T7. | lane B `9fe66e9`: M50 (INFO) lists every cut and dip with `refused: <x>` off `exit_why`; `(unnamed)` everywhere until the compiler writes the why. |
 | R26-132 | A dock at a depth overshoots the move that aimed at it. Closed (the gate) by P72 T7. | lane B `9fe66e9`: M24 WARNs a settled depth card carried off the frame, measured off the probe (dock-depth: 79 px); the seek purity and the placement it implies are R26-376 (T21). |
 | R26-338 | A braced middle bar's label lands on its neighbour. Closed by P72 T43. | lane B `a0396db`: with no clean side the label goes above the bar; `check_brace` WARNs the room by number; every golden unchanged; the loose ends are R26-375 (T46). |
+| R26-342 | M21 counts only build marks. Closed by P72 T7b. | lane B `8c699a6`: a park ends a chart's life, an un-park starts one; rings and cards restart nothing (E50). |
+| R26-345 | The life count misses a declared life species. Closed by P72 T7b. | lane B `8c699a6`: `life_tokens` names `life <dur>s`; H reads Life 27 of 27. |
+| R26-253 | The E65 room lands on the page's words. Closed by P72 T15. | lane B `400cf89`: `page_boxes` carries the basis and the bar names; the room is cut round them (the card was fixed by `3d6e8e5`). |
+| R26-270 | A wrapped bar name is not measured. Closed by P72 T15. | lane B `400cf89`: bar names measured; one into the source or caption band WARNs (the 9:16 room is R26-380). |
+| R26-274 | Pages without measured boxes. Closed (both halves). | the fixture half by d11e919 / 54bd650 (P72 T15's step 0); the units half by P72 T13 `6c349b0`. |
+| R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
+| R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
+| R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |
+| R26-256 | The pill and the figure are both up. Closed by P72 T18. | lane B `4b07424`: the pill yields on the figure's clock. |
+| R26-366 | The panels page at phone is not built. Closed by P72 T47 (where it holds). | lane B `9c4cac1`: the two-era page holds; four panels cannot (R26-381). |
+| R26-227 | The take's rate is not measured. Closed by P72 T28. | lane B `c7f133c`: `scratch_take.py --measure --wpm`; the runner reports `measured_rate:`. |
+| R26-215 | `--table` takes no bare name. Closed by P72 T28. | lane B `c7f133c`: resolves in the project, then the build; the default follows the build. |
+| R26-130 | A plate-library rebuild loses records silently. Closed by P72 T28. | lane B `c7f133c`: refused by plate id; `--drop`, `--sweep`. |
+| R26-183 | `verdict_line` misreads the heading. Closed by P72 T28. | lane B `c7f133c`: the `## N. Verdict` shape read; a round-trip test. |
+| R26-188 | The door cut / survivorship order; the mirror check. Closed. | the P66 parts superseded, doc 50 s50.7 exists; the mirror check by P72 T28 `c7f133c` (+ `33c6d9c`). |
+| R26-33 | The dual-lane map and the sonar ping. Closed by P71 T22. | lane B `28eddf5`: `ping: true` - ONE ring as a place lands (CHN 02:21.1 / D40 13:56.5 measured; the repeating sonar withdrawn on the frames); the chart-beside-the-map layout is R26-382 (T46). |
 | R26-123 | The caption-life default is not the blend. Closed by P72 T27. | lane B `2a6d887`: an unauthored build writes `cap_life: blend` (E99 s6), `base` pins the shipped caption; the blend's keyword box stays on the shorts' phrase caption (E99 s6 judged no keyword; on H the box under #c98500 was 1.25:1) - the long form gets the rise and stagger only. Follow-ups R26-371 / 372. |
 | R26-73 | The newsreel's 9:16 default contradicts E84. Closed by P72 T27. | lane B `19f5546`: a crawl with no target takes the top of the bottom third; the caption goes one strip above it, docked or not; the two refusals E84 retires are gone; authored bands stand. E84 (1) not built. |
 | R26-367 | A ring authored at a stage point misses the line it means (the operator's question). Closed by P72 T48. | lane B `dcf1b8d`: a datum on a docked chart (`{kind: datum, dock, series, index}`) rings the card's own drawn line, drawn above the card; the chart-callout golden bound (0.1 px from datum 152, was 39.6 px above); M49 WARNs a point mark off every drawn line; follow-ups R26-373 (T46). |

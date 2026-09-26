@@ -556,7 +556,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T7: The motion gate credits what moves - the verdict stack's beats, a record's typing, and a window's own claim; the cuts counted with the transform each refused
-- Status: running - landed on lane B: `9fe66e9` (R26-326 the stack's poses, R26-269 a record's typing, R26-167 `--beat`, R26-189 M50 the flow read, R26-132 (2) M24 on a depth card) and `e16e393` (R26-202 (a) M27 at rest); no FAIL level moves on the 46 committed builds; ep1's counts move by design (the wall and the record credited). Open: R26-342 and R26-345 (added after the dispatch) - T7b building on e16e393
+- Status: done - lane B `9fe66e9` + `e16e393` (T7) and `8c699a6` (T7b: R26-342 M21 reads a park / un-park; R26-345 the life count names a `life` species); rings and cards restart nothing (E50 s1 / s2); no FAIL level moves on any build
 - Owner: implementation_luna (LANE B), then reviewer (a motion gate)
 - Depends on: P70 T8 (`_landings`, `_arrivals`); P71 T7 (`squint=`, landed `a469501` - the `run` change is unioned on top of it); acceptance (7) only after P71 T15 merges (it owns `_over_build_faults`) - that item is its own commit
 - Items: R26-326 (the stack's flights, recede and burst as events; a live host anchors the captions), R26-269 (a record's character clock counts on any plate), R26-167 (a `--beat` window mode that scores the window's own claim), R26-189 (an INFO row: every cut and dip, the transform it refused - s74), R26-132 (2) (a dock at a depth overshoots the move that aimed at it: an in-frame row for a settled depth card at every landing, M24's sibling in `_in_frame_faults`), R26-202 (a) (M27 judges a card at rest: a flight's frames are its path, listed as INFO, never a FAIL); R26-342 (M21 counts only build marks: a page that returns drawn, parks, un-parks and is rung reads as deployed) and R26-345 (`T.life_tokens` misses a declared `life` species) - added 2026-09-25
@@ -674,7 +674,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T15: page_boxes carries every text box, and the E65 room keeps them clear
-- Status: pending
+- Status: done - lane B `400cf89`: R26-253 (`page_boxes` carries the basis label and each bar's name; the E65 room is cut round the page's words; the card itself was fixed by P71 T5's `3d6e8e5`), R26-270 (a bar name into the source or the caption band WARNs), R26-274's fixture half already done (d11e919 / 54bd650); R26-349, R26-357 moved to T46 unbuilt; the loose ends are R26-380
 - Owner: implementation_luna (LANE B), then reviewer (placement; findings are WARNs, s106)
 - Depends on: T13 (the same pages' labels); T40 (it edits `page_boxes` and the 9:16 band choice first - T15 rebases on it)
 - Items: R26-253 (the basis label, source, title, sub and end tags stay out of the `empty` room), R26-270 (a wrapped bar name's box, measured against the source foot and the caption band), R26-274's fixture half (the four unmeasured pages - `ev-debt-issuance-line-v1`, `ev-index-concentration-bars-v1`, `ev-hbm-wafer-ratio-bars-v1`, `ev-two-clocks-bars-v1` - measured into `page-boxes.v1.json` by the parent); R26-349 (M25's ink list misses a schematic's phase names and tag - added 2026-09-25); R26-357 (H's page source line inside the controls band - added 2026-09-25)
@@ -703,7 +703,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T18: Figures and rings on a bars page - a figure that double-prints its bar's value is WARNed by name, a ring can circle the value, a centred figure keeps its anchor, the pill yields
-- Status: pending
+- Status: done - lane B `4b07424`: R26-284 / R26-256 (a figure on a built bar hands over in place; M28's double print FAIL -> PASS on a private row 17), R26-255 (the figure rides its bar through a rescale), R26-288 (`part: value` rings the printed value); H rows 15 / 21 WARN a figure that restates its bar's value (frames unchanged)
 - Owner: implementation_luna (LANE B), then reviewer (E77 / E56: truth and the ring's one use)
 - Depends on: T13
 - Items: R26-284 (a figure that restates the bar's own value WARNs by name - a double-print is legibility (M28), not a truth rule, so under s106 it advises and never refuses - or the hand-over is a true in-place morph), R26-288 (a `value` target on a bar: the value label's box; after P69 T26a it reads the morphed top), R26-255 (`paintFigure` keeps a centred bar figure's anchor on a page with chart states), R26-256 (an emphasized bar's pill yields to its figure on the figure's clock)
@@ -877,7 +877,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T28: Scripts that cost runs or say the wrong thing
-- Status: pending
+- Status: done - lane B `c7f133c` (+ the mirror `33c6d9c`): R26-227, 215, 197 (the receipt half), 198 (b, c), 178, 130, 183, 136 (3), 188's mirror. HELD for the lane merge: the H door's shim removal (`scratchpad/p72-t28/door/h-door-shim.diff`); the Tokyo shim stays (a frozen cut's door). R26-330, R26-341, R26-352, R26-356, R26-358, R26-359 moved to T46 unbuilt
 - Owner: implementation_luna (LANE B for the scripts; the H-door shim removal is a one-line lane-A edit after P69 T32)
 - Depends on: T0; T7 (it edits `gate_motion_density.py`'s `main` - R26-198 (b)'s `--write` rebases on T7's window arguments); T20 (it edits `authoring/audio.py` - R26-198 (c)'s bind entry rebases on T20's cue binder); R26-197's H half after P69 T32 (lane A is writing `build_episode_h.py`). Wave 5.
 - Items: R26-227 (`scratch_take.py` prints words / spoken seconds and the ask, exit 2 outside the band; the runner's report carries the measured wpm), R26-215 (`lint_species_choice.py --table` takes a bare name resolved in the project; the default follows the build), R26-197 (`recall_verify.resolve_ledger` accepts a build script's own docstring as the receipt's home; the shims in `tokyo-tea-break/build_short_v2.py` and `build_episode_h.py:3849-3851` removed), R26-198 (b) the gate CLI grows `--write`, (c) `--bind-cues` refuses a `--timeline` that is not the build's own), R26-178 (a whole-cut watch card carries its frozen player link with the audio, or the clip route takes `--audio`), R26-130 (a plate-library rebuild that loses a shipped record refuses by name; the sweep for uncovered approved plates), R26-183 (`self_watch.verdict_line` reads what `self_watch.py` writes - a round-trip test), R26-136 (3) (M13 enforced in `authoring/words.py` `cut_before` gets its registry row), R26-188's mirror (`sync_operator_memory.py --check` as a docs-layer step); R26-330 (the spiral out of a plate shows ~1 s of dark board, rows 20 and 23 - added 2026-09-25 from T0's coverage read) and R26-341 (a `spread` paints nothing on `ev-divergence-v1` under `readability=longform`); R26-352 (the ingester's entity-name scrub: a gitignored terms file from the operator's folder - added 2026-09-25 from T31); R26-356 (the cards' 92 by-line cites), R26-358 (the screens borrow a take), R26-359 (load_timings on a kokoro words file) - added 2026-09-25
@@ -1159,7 +1159,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Status: pending
 - Owner: implementation_luna (LANE B), then reviewer (R26-362 (b) is advice; s106 - WARNs, never refusals)
 - Depends on: P72 T11 (the seal), P71 T6 (43363ea), P72 T13, T17 (the compiler's print chain, for R26-362 (b)), P70 T8 / P71 T15 / T19 (the dock code, for R26-365 (b))
-- Items: R26-361 (a)-(c), R26-362 (a)-(c), R26-365 (a)-(c) (filed 2026-09-25 from the landings' findings); R26-368 (b) (`cadence()` in picture widths per second, E99 s30's own definition - added 2026-09-25); R26-369 (the agenda page form at 9:16) and R26-370 (the tiers' shared scale as the compiler's default, `axes.domain` honoured) - added 2026-09-25; R26-371 (the shorts' keyword on its crimson box under 3.97 - a measured candidate sheet for the operator's pick) and R26-372 (M48's caption reader counts the word's shadow as its ground) - added 2026-09-25; R26-106 (the stroke's width profile - its discovery landed in T27b's finding, the build is R26-365 (a)) and R26-171 (the 9:16 dock's badge rail - R26-365 (b)), moved from T27 when T27 closed; R26-373 (M49 on bars pages, a dock datum before its line is drawn, punch / focus_zoom on a dock datum) - added 2026-09-25; R26-219's span (the railway bracket's span stands in the end-tag gutter, through "741 RAILWAY SHARE PRICES": the engine moves it out, or the compiler refuses the edge) and R26-375 (a)-(c) (the brace's point toward its lifted label, a pin that the compiler's copied bar constants match the engine, the non-ASCII `[WARN]` prints) - added 2026-09-25 from P72 T43
+- Items: R26-361 (a)-(c), R26-362 (a)-(c), R26-365 (a)-(c) (filed 2026-09-25 from the landings' findings); R26-368 (b) (`cadence()` in picture widths per second, E99 s30's own definition - added 2026-09-25); R26-369 (the agenda page form at 9:16) and R26-370 (the tiers' shared scale as the compiler's default, `axes.domain` honoured) - added 2026-09-25; R26-371 (the shorts' keyword on its crimson box under 3.97 - a measured candidate sheet for the operator's pick) and R26-372 (M48's caption reader counts the word's shadow as its ground) - added 2026-09-25; R26-106 (the stroke's width profile - its discovery landed in T27b's finding, the build is R26-365 (a)) and R26-171 (the 9:16 dock's badge rail - R26-365 (b)), moved from T27 when T27 closed; R26-373 (M49 on bars pages, a dock datum before its line is drawn, punch / focus_zoom on a dock datum) - added 2026-09-25; R26-219's span (the railway bracket's span stands in the end-tag gutter, through "741 RAILWAY SHARE PRICES": the engine moves it out, or the compiler refuses the edge) and R26-375 (a)-(c) (the brace's point toward its lifted label, a pin that the compiler's copied bar constants match the engine, the non-ASCII `[WARN]` prints) - added 2026-09-25 from P72 T43; R26-349, R26-357, R26-330, R26-341, R26-352, R26-356, R26-358, R26-359 (moved from T15 / T28 unbuilt) and R26-379..387 (the level's axis pill, page_boxes' loose ends, four panels at phone, the chart beside the map, the map's framing and the ping's glow, the hub's fail badge and DOM's look, the line vanishing in an extend's rescale, the ignored `dash` key, the lens over the tags) - added 2026-09-25; R26-136 (5) (the search misses for natural terms - index aliases; its (3) landed in T28) - added 2026-09-25
 - Write set: `scripts/species/chip.mjs` (the name's keyline), `build_scene_timeline_f.py` (`seal_gold`'s note; the owned-exit WARN), the engine (`paint` through `worldXfAt`; `strokeAt`'s width), `emit_choreography.py` (mirror rule 2), `authoring/shapes.py` (`dock_leave`'s description; `_aspect_clean`'s rail), the template's pill CSS (the rail), tests NEW `test_wave3_followups.py`
 - Acceptance: each row's clause closes with a test and, where visible, a before / after frame read by the parent; R26-362 (c) and R26-365 (c) may close on a written decision with its frame; the H door identical except the instants listed.
 - Stop conditions: a clause touches a function an in-flight slice owns (sequence it); the keyline change moves a committed golden (list it for the parent's read).
@@ -1170,7 +1170,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T47: The panels page at phone, built - R26-316's build half
-- Status: pending
+- Status: done - lane B `9c4cac1`: R26-366 - the two-era panels page holds at `longform:phone` (0.9 px to spare); four-panel pages and the companion keep T12's WARN with the reason (R26-381)
 - Owner: implementation_luna (LANE B), then reviewer (a long-form preset's layout; findings WARN, s106)
 - Depends on: P72 T12 (the phone WARN, `lpPanelBuildAt`), P71 T13 (the second axis's phone read)
 - Items: R26-366 (R26-316's build half, filed 2026-09-25; T12 prints its WARN until this lands)
@@ -1196,3 +1196,16 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Validate: the regression, `test_ring_on_the_named_thing.py`, then COMMON-TAIL
 - TDD reserved (Red evidence, Failure attribution, Unrelated failures, Green evidence, Refactor evidence, Frame read): pending
 - Evidence: pending
+
+
+### T49: The spread's glow, a dial measured off D40 (R26-378)
+- Status: running - dispatched on lane B 861d8de (the operator, 2026-09-25: "their red fill has more of a bloom than ours t36, but that should just be a dial not a recipe change")
+- Owner: implementation_luna (LANE B)
+- Items: R26-378 (the `spread` fill gains a halo in its own ink, measured off D40 04:48 with `measure_line_bloom.py`'s fills method; the recipe unchanged)
+- Write set: the engine's spread painter (T10's filter helpers), `measure_line_bloom.py` (CRLF), `bravos-line-bloom.v1.json`, NEW `tests/test_spread_glow.py`
+
+### T50: The capabilities index page fits its budget
+- Status: running - `docs/CAPABILITIES-INDEX.md` 49.6 KB over `MD_MAX_BYTES` 44,000 after tonight's rows; the operator, 2026-09-25: "the index should probably be expanded at this point, unless we have significant verifiable bloat that can be cut" - measure the bloat, cut only what is verifiably redundant, else raise the cap with the reason
+- Owner: junior_developer (LANE B)
+- Items: the page over its cap (`build_capabilities_index.py --check`, `test_build_docs_layers`)
+- Write set: `content/video_engine/scripts/build_capabilities_index.py`, its tests; `docs_find.py`'s capability line if it copies the page's format

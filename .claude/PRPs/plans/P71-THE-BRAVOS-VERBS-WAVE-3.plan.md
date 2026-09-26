@@ -1534,7 +1534,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T16: `project` - a labelled dashed continuation past the last real point (was P69 T41)
-- Status: pending
+- Status: done - lane B `7595f34`: `projection: {label, tier, src}` drawn dashed at Bravos's measured dash from the last real point, never blooming, refused by name as data (E77); golden `project-issuance-2026e`; found R26-385 / R26-386
 - Owner: implementation_luna (LANE B), then reviewer (E77: an estimate is never data)
 - Depends on: T13 (`buildLedgerLine`, wave 3)
 - Harvest:
@@ -1592,7 +1592,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T17: Hub and spoke - one institution to many, and a link that fails (was P69 T57)
-- Status: pending
+- Status: done - lane B `f28a084`: `layout: hub` and `fail: {edge, at}` (BOOM's spring, the edge reddens); golden `hub-spoke-fail`; the badge's size and DOM's look are R26-384
 - Owner: implementation_luna (LANE B)
 - Depends on: T11 (`flowLayout`, tokens)
 - Harvest: v2 T31 "Hub-and-spoke network", n=2 (DOM 04:30 "IMF seal, dashed spokes to six governments"; D40 09:04 (G)).
@@ -1860,7 +1860,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T22: The route map - routes lighting in turn with tokens on them; the chart beside the map and the ping frame-checked; the tilted plane DROPPED (was P69 T63)
-- Status: pending
+- Status: done - lane B `28eddf5`: tokens ride a route by length, one `ping` as a place lands (CHN / D40 measured; the sonar withdrawn); golden `vecmap-route-tokens`; candidate `the-chart-beside-the-map` (R17's layout is R26-382; the framing and the ping's glow R26-383)
 - Owner: implementation_luna (LANE B)
 - Depends on: T11 (tokens on an edge)
 - Harvest: the witnesses are thin, and each is checked before it is built:
@@ -2372,7 +2372,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T32: The camera - a pedestal down through the waterline, and the magnifier lens (was P69 T80)
-- Status: pending
+- Status: done - lane B `d7cf74d`: the pedestal (camera.mjs) and the lens (zoom default 1 - Bravos's glass does not magnify); golden `lens-over-the-line`; the sky above y 0 is T34's; the lens over the tags is R26-387
 - Owner: implementation_luna (LANE B), then reviewer (M14: the camera never moves over a build)
 - Depends on: T0. Done: T26f (the camera free of the chrome). **The circle is broken here:** P69 T80 depended on T44's
   hidden base, and T44's hidden base depended on T80. T32 builds the pedestal on its own proof (a stage taller than the
@@ -2581,7 +2581,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T36: Line recipes - the trace to its level, the divergence spread, and today's boom against past booms (was P69 T71)
-- Status: pending
+- Status: running - lane B `861d8de`: `recipe:trace-to-the-level` (R21) and `recipe:the-divergence-spread` (R27), candidate, proved as beats; R32 waits on its evidence (R26-377); the spread's bloom is a dial (R26-378, P72 T49); the level's axis pill R26-379
 - Owner: implementation_luna (LANE B)
 - Depends on: T9 (the axis tag), T10 (the level join). Done: T37 (`solo`), T50 (the bracket on the gap).
 - Harvest:
